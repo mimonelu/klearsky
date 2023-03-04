@@ -1,0 +1,32 @@
+{
+  "en": {
+    "bpiu-title": "Bluesky Profile Images Uploader",
+    "bpiu-description": "This service sets up profile images for Bluesky.\n(mainly intended for PC users)",
+    "bpiu-server": "Server URL",
+    "bpiu-email": "Email",
+    "bpiu-password": "Password",
+    "bpiu-thumbnail": "Thumbnail",
+    "bpiu-thumbnail-description": "(Maximum resolution: 500px * 500px)",
+    "bpiu-banner": "Banner",
+    "bpiu-banner-description": "(Maximum resolution: 1500px * 500px)",
+    "bpiu-submit": "Send",
+    "bpiu-wait": "Please wait a moment...",
+    "bpiu-error": "An error has occurred.",
+    "bpiu-success": "The process has been successfully completed."
+  },
+  "ja": {
+    "bpiu-title": "Bluesky Profile Images Uploader",
+    "bpiu-description": "Bluesky のプロファイル画像を設定するサービスです。\n主に PC ユーザーの利用を想定しています。",
+    "bpiu-server": "サーバ URL",
+    "bpiu-email": "メールアドレス",
+    "bpiu-password": "パスワード",
+    "bpiu-thumbnail": "サムネイル画像",
+    "bpiu-thumbnail-description": "（最大解像度: 500px * 500px）",
+    "bpiu-banner": "バナー画像",
+    "bpiu-banner-description": "（最大解像度: 1500px * 500px）",
+    "bpiu-submit": "送信する",
+    "bpiu-wait": "しばらくお待ちください…",
+    "bpiu-error": "エラーが発生しました。",
+    "bpiu-success": "処理が正常に完了しました。"
+  }
+}

@@ -1,0 +1,38 @@
+*, * > * {
+  line-height: 1;
+}
+
+:root {
+  font-size: calc(0.375vmax + 10px);
+}
+
+body {
+  --bg-color: 240, 240, 240;
+  --fg-color: 32, 32, 32;
+  --accent-color: 0, 128, 255;
+  --notice-color: 240, 32, 32;
+
+  background-color: rgb(var(--bg-color));
+  color: rgb(var(--fg-color));
+  font-feature-settings: "palt";
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  user-select: none;
+  @include scroll-bar();
+}
+
+::selection {
+  background-color: rgba(var(--accent-color), 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --bg-color: 16, 16, 16;
+    --fg-color: 192, 192, 192;
+    --accent-color: 0, 192, 255;
+    --notice-color: 240, 32, 32;
+  }
+}

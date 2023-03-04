@@ -1,0 +1,39 @@
+<template>
+  <div class="loader">
+    <div v-for="_ of Array(5)" />
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.loader {
+  background-color: rgba(var(--bg-color), 0.5);
+  cursor: wait;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-gap: 1rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  & > div {
+    animation: loader-animation 250ms ease-in-out infinite alternate-reverse;
+    background-color: rgb(var(--fg-color));
+    border-radius: 50%;
+    width: 0.5rem;
+    height: 2rem;
+  }
+  @for $i from 1 through 5 {
+    & > div:nth-child(#{$i}) {
+      animation-delay: #{$i * 100}ms;
+    }
+  }
+}
+
+@keyframes loader-animation {
+  0% { transform: scaleY(25%); }
+  100% { transform: scaleY(100%); }
+}
+</style>

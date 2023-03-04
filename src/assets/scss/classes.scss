@@ -1,0 +1,41 @@
+.textlink {
+  color: rgb(var(--accent-color));
+  &:focus, &:hover {
+    text-decoration: underline;
+  }
+}
+
+.textbox {
+  --color: var(--fg-color);
+  &:focus, &:hover {
+    --color: var(--accent-color);
+  }
+  background-color: rgba(var(--color), 0.125);
+  border: 1px solid transparent;
+  border-bottom-color: rgb(var(--color));
+  border-radius: 1px 1px 0 0;
+  color: rgb(var(--color));
+  line-height: 1.5;
+  padding: 0.5rem 0.5rem;
+  &::placeholder {
+    color: rgba(var(--color), 0.5);
+  }
+}
+
+.button {
+  --color: var(--fg-color);
+  &:focus, &:hover {
+    --color: var(--accent-color);
+  }
+  background-color: rgb(var(--color));
+  border: 1px solid transparent;
+  border-radius: 1px;
+  color: rgb(var(--bg-color));
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  line-height: 1.5;
+  padding: 0.5rem 2rem;
+}
