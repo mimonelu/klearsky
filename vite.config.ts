@@ -12,6 +12,7 @@ export default defineConfig({
   },
   base: "/klear-sky",
   build: {
+    commonjsOptions: { include: [] },
     outDir: "docs",
   },
   css: {
@@ -20,5 +21,8 @@ export default defineConfig({
         require("autoprefixer"),
       ],
     },
+  },
+  optimizeDeps: {
+    disabled: false,
   },
 })
