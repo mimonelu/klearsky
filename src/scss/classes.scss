@@ -5,6 +5,7 @@
   }
 }
 
+.textarea,
 .textbox {
   --color: var(--fg-color);
   &:focus, &:hover {
@@ -20,6 +21,9 @@
   &::placeholder {
     color: rgba(var(--color), 0.5);
   }
+}
+.textarea {
+  @include scroll-bar;
 }
 
 .button {

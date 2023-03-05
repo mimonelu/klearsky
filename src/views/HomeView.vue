@@ -15,6 +15,10 @@ import SVGIcon from "@/components/SVGIcon.vue"
         to="upload-profile-images-form"
         class="button"
       >Upload Profile Images Form for Bluesky</router-link>
+      <router-link
+        to="post-record-form"
+        class="button"
+      >Post Record Form for Bluesky</router-link>
     </menu>
     <Copyright />
   </div>

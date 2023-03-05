@@ -2,28 +2,41 @@
 import { reactive } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
-defineProps<{
+const props = defineProps<{
   accept?: string
+  multiple?: boolean
+  maxNumber?: number
 }>()
 
 const state = reactive<{
-  image: null | string
+  previews: Array<string>
 }>({
-  image: null,
+  previews: [],
 })
 
 const onChange = (event: Event) => {
-  setImage(event)
-  emit("change", event)
+  const files: null | Array<File> = getFiles(event)
+  if (files == null) return
+  setPreviews(files)
+  emit("change", files)
 }
 
-const setImage = (event: Event) => {
-  const files: null | FileList = (event.target as HTMLInputElement)?.files ?? null
-  if (files == null || files.length === 0) return
-  state.image = window.URL.createObjectURL(files[0])
+const getFiles = (event: Event): null | Array<File> => {
+  const fileList: null | FileList = (event.target as HTMLInputElement)?.files ?? null
+  if (fileList == null) return null
+  const files: Array<File> = Array.from(fileList)
+  if (props.maxNumber != null) files.splice(props.maxNumber)
+  return files
 }
 
-const emit = defineEmits<{(event: "change", value: Event): void}>()
+const setPreviews = (files: Array<File>) => {
+  if (files.length === 0) return
+  state.previews.splice(0, state.previews.length, ...files.map((file: File) => {
+    return window.URL.createObjectURL(file)
+  }))
+}
+
+const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
 </script>
 
 <template>
@@ -35,14 +48,16 @@ const emit = defineEmits<{(event: "change", value: Event): void}>()
       <input
         type="file"
         :accept="accept"
+        :multiple="multiple"
         @change="onChange"
       />
       <SVGIcon name="plus" />
     </label>
     <div
+      v-for="preview of state.previews"
       class="image-box"
-      :data-has-image="state.image != null"
-      :style="{ 'background-image': `url(${state.image})` }"
+      :data-has-image="preview != null"
+      :style="{ 'background-image': `url(${preview})` }"
     />
   </div>
 </template>
@@ -50,6 +65,7 @@ const emit = defineEmits<{(event: "change", value: Event): void}>()
 <style lang="scss" scoped>
 .filebox {
   display: flex;
+  flex-wrap: wrap;
   grid-gap: 0.5rem;
 
   input {
@@ -61,7 +77,7 @@ const emit = defineEmits<{(event: "change", value: Event): void}>()
     height: 5rem;
 
     .svg-icon:deep() {
-      fill: black;
+      fill: rgb(var(--bg-color));
       opacity: 0.5;
       min-width: 1rem;
       height: 1rem;
@@ -74,7 +90,8 @@ const emit = defineEmits<{(event: "change", value: Event): void}>()
     background-size: cover;
     border: 1px solid rgb(var(--fg-color));
     border-radius: 1px;
-    width: 5rem;
+    min-width: 5rem;
+    height: 5rem;
     &[data-has-image="false"] {
       display: none;
     }

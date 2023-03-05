@@ -9,15 +9,17 @@ const state = reactive<{
   service: string
   identifier: string
   password: string
-  avatar: null | File
-  banner: null | File
+  text: string
+  images: Array<File>
+  alts: Array<string>
   step: "" | "wait" | "error" | "success"
 }>({
   service: "https://bsky.social",
   identifier: "",
   password: "",
-  avatar: null,
-  banner: null,
+  text: "",
+  images: [],
+  alts: [],
   step: ""
 })
 
@@ -25,21 +27,19 @@ const atp = new AtpClass()
 
 const submit = async () => {
   state.step = "wait"
-  state.step = await atp.updateProfile(state) ? "success" : "error"
+  state.step = await atp.postRecord(state) ? "success" : "error"
 }
 
-const changeImage = (files: Array<File>, type: "avatar" | "banner") => {
-  if (files.length === 0) return
-  if (type === "avatar") state.avatar = files[0]
-  else if (type === "banner") state.banner = files[0]
+const changeImage = (files: Array<File>) => {
+  state.images.splice(0, state.images.length, ...files)
 }
 </script>
 
 <template>
   <div class="page">
-    <h1>Upload Profile Images Form for Bluesky</h1>
+    <h1>Post Record Form for Bluesky</h1>
     <p>
-      {{ $t("upif-description") }}<br>
+      {{ $t("prf-description") }}<br>
       <a
         class="textlink"
         href="https://github.com/mimonelu/klear-sky"
@@ -52,7 +52,7 @@ const changeImage = (files: Array<File>, type: "avatar" | "banner") => {
       spellcheck="false"
     >
       <dl>
-        <dt>{{ $t("upif-service") }}</dt>
+        <dt>{{ $t("prf-service") }}</dt>
         <input
           v-model="state.service"
           class="textbox"
@@ -62,7 +62,7 @@ const changeImage = (files: Array<File>, type: "avatar" | "banner") => {
         />
       </dl>
       <dl>
-        <dt>{{ $t("upif-identifier") }}</dt>
+        <dt>{{ $t("prf-identifier") }}</dt>
         <input
           v-model="state.identifier"
           class="textbox"
@@ -73,7 +73,7 @@ const changeImage = (files: Array<File>, type: "avatar" | "banner") => {
         />
       </dl>
       <dl>
-        <dt>{{ $t("upif-password") }}</dt>
+        <dt>{{ $t("prf-password") }}</dt>
         <input
           v-model="state.password"
           class="textbox"
@@ -83,32 +83,44 @@ const changeImage = (files: Array<File>, type: "avatar" | "banner") => {
         />
       </dl>
       <dl>
-        <dt>{{ $t("upif-thumbnail") }}<small>{{ $t("upif-thumbnail-description") }}</small></dt>
-        <FileBox
-          accept="image/png, image/jpeg"
-          @change="changeImage($event, 'avatar')"
+        <dt>{{ $t("prf-text") }}<small>{{ $t("prf-text-description") }}</small></dt>
+        <textarea
+          v-model="state.text"
+          class="textarea"
+          placeholder="Waht's up?"
         />
       </dl>
       <dl>
-        <dt>{{ $t("upif-banner") }}<small>{{ $t("upif-banner-description") }}</small></dt>
+        <dt>{{ $t("prf-images") }}<small>{{ $t("prf-images-description") }}</small></dt>
         <FileBox
-          accept="image/png, image/jpeg"
-          @change="changeImage($event, 'banner')"
+          :multiple="true"
+          :maxNumber="4"
+          @change="changeImage"
+        />
+      </dl>
+      <dl v-if="state.images.length > 0">
+        <dt>{{ $t("prf-alts") }}</dt>
+        <input
+          v-for="_, index of state.images"
+          v-model="state.alts[index]"
+          class="textbox"
+          type="text"
+          :placeholder="`ALT text ${index + 1}`"
         />
       </dl>
       <div
         v-if="state.step === 'wait'"
         class="wait"
-      >{{ $t("upif-wait") }}</div>
+      >{{ $t("prf-wait") }}</div>
       <div
         v-else-if="state.step === 'error'"
         class="error"
-      >{{ $t("upif-error") }}</div>
+      >{{ $t("prf-error") }}</div>
       <div
         v-else-if="state.step === 'success'"
         class="success"
-      >{{ $t("upif-success") }}</div>
-      <button class="button">{{ $t("upif-submit") }}</button>
+      >{{ $t("prf-success") }}</div>
+      <button class="button">{{ $t("prf-submit") }}</button>
       <Loader v-if="state.step === 'wait'" />
     </form>
     <Copyright />
