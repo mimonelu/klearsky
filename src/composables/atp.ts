@@ -9,6 +9,7 @@ import type {
   AtpSessionEvent,
   ComAtprotoBlobUpload
 } from "@atproto/api"
+import type { Entity } from "@atproto/api/dist/client/types/app/bsky/feed/post.d"
 import { getFileAsUint8Array } from "@/composables/misc"
 
 export default class {
@@ -94,8 +95,32 @@ export default class {
     await this.agent.login({ identifier, password })
     if (this.session == null) return false
 
+    const entities: Array<Entity> = []
+    const entityRegExps: { [k: string]: RegExp } = {
+      // mention: new RegExp("(?:^|\\s)(@[\\w\\.\\-]+)", "g"),
+      // hashtag: new RegExp("(?:^|\\s)(#\\w+)", "g"),
+      link: new RegExp("(?:^|\\s)(https?:\\/\\/[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-]+)", "g"),
+    }
+    for (const type in entityRegExps) {
+      const regexp: RegExp = entityRegExps[type]
+      while (true) {
+        const current = regexp.exec(text)
+        if (current == null) break
+        entities.push({
+          index: {
+            start: current.index + 1,
+            end: current.index + 1 + current[1].length,
+          },
+          type,
+          value: current[1],
+        })
+      }
+    }
+    console.log(entities)
+
     const record: AppBskyFeedPost.Record = {
       createdAt: this.makeCreatedAt(),
+      entities,
       text,
     }
 
