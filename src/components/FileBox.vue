@@ -61,7 +61,7 @@ const emit = defineEmits<{(event: "change", value: Event): void}>()
     width: 5rem;
     height: 5rem;
 
-    .svg-icon:deep {
+    .svg-icon:deep() {
       fill: black;
       opacity: 0.5;
       min-width: 1rem;

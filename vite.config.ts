@@ -12,7 +12,10 @@ export default defineConfig({
   },
   base: "/klear-sky",
   build: {
+    // for `TypeError: xx is not a constructor`
+    // SEE: stackoverflow.com/a/73470097
     commonjsOptions: { include: [] },
+
     outDir: "docs",
   },
   css: {
@@ -22,6 +25,9 @@ export default defineConfig({
       ],
     },
   },
+
+  // for `TypeError: xx is not a constructor`
+  // SEE: stackoverflow.com/a/73470097
   optimizeDeps: {
     disabled: false,
   },

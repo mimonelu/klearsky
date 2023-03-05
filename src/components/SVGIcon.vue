@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import plus from "@/assets/svg/plus.svg?raw"
+import plus from "@/svg/plus.svg?raw"
 
 const icons: { [key: string]: string } = {
   plus,
