@@ -2,8 +2,8 @@
   "en": {
     "bpiu-title": "Bluesky Profile Images Uploader",
     "bpiu-description": "This service sets up profile images for Bluesky.\n(mainly intended for PC users)",
-    "bpiu-server": "Server URL",
-    "bpiu-email": "Email",
+    "bpiu-service": "Service",
+    "bpiu-identifier": "Email or Username or did:plc:",
     "bpiu-password": "Password",
     "bpiu-thumbnail": "Thumbnail",
     "bpiu-thumbnail-description": "(Maximum resolution: 500px * 500px)",
@@ -17,8 +17,8 @@
   "ja": {
     "bpiu-title": "Bluesky Profile Images Uploader",
     "bpiu-description": "Bluesky のプロファイル画像を設定するサービスです。\n主に PC ユーザーの利用を想定しています。",
-    "bpiu-server": "サーバ URL",
-    "bpiu-email": "メールアドレス",
+    "bpiu-service": "サービス",
+    "bpiu-identifier": "メールアドレスまたはユーザーネームまたは did:plc:",
     "bpiu-password": "パスワード",
     "bpiu-thumbnail": "サムネイル画像",
     "bpiu-thumbnail-description": "（最大解像度: 500px * 500px）",

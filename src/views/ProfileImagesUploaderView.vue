@@ -7,14 +7,14 @@ import AtpClass from "@/composables/atp"
 
 const state = reactive<{
   service: string
-  email: string
+  identifier: string
   password: string
   avatar: null | File
   banner: null | File
   step: "" | "wait" | "error" | "success"
 }>({
   service: "https://bsky.social",
-  email: "",
+  identifier: "",
   password: "",
   avatar: null,
   banner: null,
@@ -48,9 +48,12 @@ const changeImage = (event: Event, type: "avatar" | "banner") => {
         target="_blank"
       >GitHub</a>
     </p>
-    <form @submit.prevent="submit">
+    <form
+      @submit.prevent="submit"
+      spellcheck="false"
+    >
       <dl>
-        <dt>{{ $t("bpiu-server") }}</dt>
+        <dt>{{ $t("bpiu-service") }}</dt>
         <input
           v-model="state.service"
           class="textbox"
@@ -60,14 +63,14 @@ const changeImage = (event: Event, type: "avatar" | "banner") => {
         />
       </dl>
       <dl>
-        <dt>{{ $t("bpiu-email") }}</dt>
+        <dt>{{ $t("bpiu-identifier") }}</dt>
         <input
-          v-model="state.email"
+          v-model="state.identifier"
           class="textbox"
-          type="email"
+          type="text"
           required="true"
-          placeholder="your@email.address"
-          autocomplete="email"
+          placeholder="your@email.address, you.bsky.social, did:plc:xxx..."
+          autocomplete="username"
         />
       </dl>
       <dl>

@@ -20,7 +20,6 @@ const onChange = (event: Event) => {
 const setImage = (event: Event) => {
   const files: null | FileList = (event.target as HTMLInputElement)?.files ?? null
   if (files == null || files.length === 0) return
-  console.log(files[0])
   state.image = window.URL.createObjectURL(files[0])
 }
 
