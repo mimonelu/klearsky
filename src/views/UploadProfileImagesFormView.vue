@@ -38,9 +38,9 @@ const changeImage = (event: Event, type: "avatar" | "banner") => {
 
 <template>
   <div class="page">
-    <h1>Bluesky Profile Images Uploader</h1>
+    <h1>Upload Profile Images Form for Bluesky</h1>
     <p>
-      {{ $t("bpiu-description") }}<br>
+      {{ $t("upif-description") }}<br>
       <a
         class="textlink"
         href="https://github.com/mimonelu/klear-sky"
@@ -53,7 +53,7 @@ const changeImage = (event: Event, type: "avatar" | "banner") => {
       spellcheck="false"
     >
       <dl>
-        <dt>{{ $t("bpiu-service") }}</dt>
+        <dt>{{ $t("upif-service") }}</dt>
         <input
           v-model="state.service"
           class="textbox"
@@ -63,7 +63,7 @@ const changeImage = (event: Event, type: "avatar" | "banner") => {
         />
       </dl>
       <dl>
-        <dt>{{ $t("bpiu-identifier") }}</dt>
+        <dt>{{ $t("upif-identifier") }}</dt>
         <input
           v-model="state.identifier"
           class="textbox"
@@ -74,7 +74,7 @@ const changeImage = (event: Event, type: "avatar" | "banner") => {
         />
       </dl>
       <dl>
-        <dt>{{ $t("bpiu-password") }}</dt>
+        <dt>{{ $t("upif-password") }}</dt>
         <input
           v-model="state.password"
           class="textbox"
@@ -84,14 +84,14 @@ const changeImage = (event: Event, type: "avatar" | "banner") => {
         />
       </dl>
       <dl>
-        <dt>{{ $t("bpiu-thumbnail") }}<small>{{ $t("bpiu-thumbnail-description") }}</small></dt>
+        <dt>{{ $t("upif-thumbnail") }}<small>{{ $t("upif-thumbnail-description") }}</small></dt>
         <FileBox
           accept="image/png, image/jpeg"
           @change="changeImage($event, 'avatar')"
         />
       </dl>
       <dl>
-        <dt>{{ $t("bpiu-banner") }}<small>{{ $t("bpiu-banner-description") }}</small></dt>
+        <dt>{{ $t("upif-banner") }}<small>{{ $t("upif-banner-description") }}</small></dt>
         <FileBox
           accept="image/png, image/jpeg"
           @change="changeImage($event, 'banner')"
@@ -100,16 +100,16 @@ const changeImage = (event: Event, type: "avatar" | "banner") => {
       <div
         v-if="state.step === 'wait'"
         class="wait"
-      >{{ $t("bpiu-wait") }}</div>
+      >{{ $t("upif-wait") }}</div>
       <div
         v-else-if="state.step === 'error'"
         class="error"
-      >{{ $t("bpiu-error") }}</div>
+      >{{ $t("upif-error") }}</div>
       <div
         v-else-if="state.step === 'success'"
         class="success"
-      >{{ $t("bpiu-success") }}</div>
-      <button class="button">{{ $t("bpiu-submit") }}</button>
+      >{{ $t("upif-success") }}</div>
+      <button class="button">{{ $t("upif-submit") }}</button>
       <Loader v-if="state.step === 'wait'" />
     </form>
     <Copyright />

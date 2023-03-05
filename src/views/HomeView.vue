@@ -12,9 +12,9 @@ import SVGIcon from "@/components/SVGIcon.vue"
     <p>Applications for Bluesky will be added.</p>
     <menu>
       <router-link
-        to="profile-images-uploader"
+        to="upload-profile-images-form"
         class="button"
-      >Bluesky Profile Images Uploader</router-link>
+      >Upload Profile Images Form for Bluesky</router-link>
     </menu>
     <Copyright />
   </div>

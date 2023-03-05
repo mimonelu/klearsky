@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 import HomeView from "@/views/HomeView.vue"
-import ProfileImagesUploaderView from "@/views/ProfileImagesUploaderView.vue"
+import UploadProfileImagesFormView from "@/views/UploadProfileImagesFormView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -11,9 +11,9 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: "/profile-images-uploader",
-      name: "profile-images-uploader",
-      component: ProfileImagesUploaderView,
+      path: "/upload-profile-images-form",
+      name: "upload-profile-images-form",
+      component: UploadProfileImagesFormView,
     },
   ],
 })
