@@ -49,7 +49,7 @@ const changeImage = (files: Array<File>, type: "avatar" | "banner") => {
       {{ $t("upif-description") }}<br>
       <a
         class="textlink"
-        href="https://github.com/mimonelu/klear-sky"
+        href="https://github.com/mimonelu/klearsky"
         rel="noreferrer"
         target="_blank"
       >GitHub</a>
