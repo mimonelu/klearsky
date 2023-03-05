@@ -13,6 +13,7 @@ const state = reactive<{
   images: Array<File>
   alts: Array<string>
   step: "" | "wait" | "error" | "success"
+  error: any
 }>({
   service: "https://bsky.social",
   identifier: "",
@@ -20,14 +21,20 @@ const state = reactive<{
   text: "",
   images: [],
   alts: [],
-  step: ""
+  step: "",
+  error: null
 })
 
 const atp = new AtpClass()
 
 const submit = async () => {
   state.step = "wait"
-  state.step = await atp.postRecord(state) ? "success" : "error"
+  try {
+    state.step = await atp.postRecord(state) ? "success" : "error"
+  } catch (error: any) {
+    state.step = "error"
+    state.error = error
+  }
 }
 
 const changeImage = (files: Array<File>) => {
@@ -115,7 +122,7 @@ const changeImage = (files: Array<File>) => {
       <div
         v-else-if="state.step === 'error'"
         class="error"
-      >{{ $t("prf-error") }}</div>
+      >{{ $t("prf-error") }}<br>{{ state.error }}</div>
       <div
         v-else-if="state.step === 'success'"
         class="success"
@@ -171,7 +178,6 @@ form {
   border-radius: 1px;
   line-height: 1.5;
   padding: 1rem;
-  text-align: center;
   white-space: pre-wrap;
 }
 .wait {
