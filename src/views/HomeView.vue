@@ -1,14 +1,51 @@
+<script lang="ts" setup>
+import Copyright from "@/components/Copyright.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
+</script>
+
 <template>
-  <div class="sushi">🍣</div>
+  <div class="page">
+    <h1>
+      <SVGIcon name="shimmer" />
+      <span>Klearsky</span>
+    </h1>
+    <p>Applications for Bluesky will be added.</p>
+    <menu>
+      <router-link
+        to="profile-images-uploader"
+        class="button"
+      >Bluesky Profile Images Uploader</router-link>
+    </menu>
+    <Copyright />
+  </div>
 </template>
 
-<style scoped>
-.sushi {
+<style lang="scss" scoped>
+.page {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 8rem;
+  grid-gap: 2rem;
   width: 100vw;
   height: 100vh;
+
+  h1 {
+    display: flex;
+    align-items: baseline;
+    grid-gap: 1rem;
+    font-size: 3rem;
+
+    .svg-icon {
+      fill: rgb(var(--accent-color));
+      font-size: 2rem;
+    }
+  }
+
+  menu {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 1rem;
+  }
 }
 </style>

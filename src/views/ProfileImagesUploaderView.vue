@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { reactive } from "vue"
+import Copyright from "@/components/Copyright.vue"
 import FileBox from "@/components/FileBox.vue"
 import Loader from "@/components/Loader.vue"
 import AtpClass from "@/composables/atp"
@@ -108,27 +109,7 @@ const changeImage = (event: Event, type: "avatar" | "banner") => {
       <button class="button">{{ $t("bpiu-submit") }}</button>
       <Loader v-if="state.step === 'wait'" />
     </form>
-    <footer>
-      <small>&copy; 2023 mimonelu</small>
-      <a
-        class="textlink"
-        href="https://blue.amazingca.dev/?username=mimonelu.bsky.social"
-        rel="noreferrer"
-        target="_blank"
-      >Bluesky@mimonelu.bsky.social</a>
-      <a
-        class="textlink"
-        href="https://iris.to/mimonelu@mimonelu.github.io"
-        rel="noreferrer"
-        target="_blank"
-      >Nostr@mimonelu</a>
-      <a
-        class="textlink"
-        href="https://twitter.com/mimonelu"
-        rel="noreferrer"
-        target="_blank"
-      >Twitter@mimonelu</a>
-    </footer>
+    <Copyright />
   </div>
 </template>
 
@@ -195,12 +176,5 @@ form {
 p {
   line-height: 1.5;
   white-space: pre-wrap;
-}
-
-footer {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  grid-gap: 1rem;
 }
 </style>

@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import plus from "@/svg/plus.svg?raw"
+import shimmer from "@/svg/shimmer.svg?raw"
 
 const icons: { [key: string]: string } = {
   plus,
+  shimmer,
 }
 
 defineProps<{
