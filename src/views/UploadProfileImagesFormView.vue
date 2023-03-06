@@ -3,7 +3,7 @@ import { reactive } from "vue"
 import Copyright from "@/components/Copyright.vue"
 import FileBox from "@/components/FileBox.vue"
 import Loader from "@/components/Loader.vue"
-import AtpClass from "@/composables/atp"
+import Atp from "@/composables/atp"
 
 const state = reactive<{
   service: string
@@ -23,7 +23,7 @@ const state = reactive<{
   error: null
 })
 
-const atp = new AtpClass()
+const atp = new Atp()
 
 const submit = async () => {
   state.step = "wait"

@@ -1,5 +1,7 @@
 import AtpAgent from "@atproto/api"
 import type {
+  AppBskyActorGetProfile,
+  AppBskyActorProfile,
   AppBskyActorUpdateProfile,
   // AppBskyEmbedExternal,
   AppBskyEmbedImages,
@@ -7,28 +9,91 @@ import type {
   AppBskyFeedPost,
   AtpSessionData,
   AtpSessionEvent,
-  ComAtprotoBlobUpload
+  ComAtprotoBlobUpload,
+  ComAtprotoSessionGet
 } from "@atproto/api"
 import type { Entity } from "@atproto/api/dist/client/types/app/bsky/feed/post.d"
 import { getFileAsUint8Array } from "@/composables/misc"
 
 export default class {
+  service: null | string = null
   agent: null | AtpAgent = null
   session: null | AtpSessionData = null
 
   contsructor () {
+    this.service = null
     this.agent = null
     this.session = null
   }
 
-  createAgent (service: string) {
+  createAgent (service?: string): boolean {
+    if (service == null) {
+      if (this.service == null) {
+        this.service = localStorage.getItem("service")
+        if (this.service == null) this.service = "https://bsky.social"
+      }
+    } else {
+      this.service = service
+    }
+    localStorage.setItem("service", this.service)
     this.agent = new AtpAgent({
-      service,
+      service: this.service,
       persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
         if (event !== "create" && event !== "update") return
         this.session = session ?? null
       },
     })
+    return this.agent != null
+  }
+
+  canLogin (): boolean {
+    return localStorage.getItem("session") != null
+  }
+
+  hasLogin (): boolean {
+    return this.session != null
+  }
+
+  async login (identifier?: string, password?: string): Promise<boolean> {
+    if (this.agent == null) return false
+    if (identifier == null || password == null) await this.resumeSession()
+    else await this.agent.login({ identifier, password })
+    if (this.session == null) return false
+    this.saveSessionData()
+    return true
+  }
+
+  async resumeSession (): Promise<boolean> {
+    if (this.agent == null) return false
+    this.loadSessionData()
+    if (this.session == null) return false
+    const response: ComAtprotoSessionGet.Response = await this.agent.resumeSession(this.session)
+    return response.success
+  }
+
+  async fetchProfile (): Promise<null | AppBskyActorProfile.View> {
+    if (this.agent == null) return null
+    if (this.session == null) return null
+    const response: AppBskyActorGetProfile.Response = await this.agent.api.app.bsky.actor.getProfile({
+      actor: this.session.did,
+    })
+    if (!response.success) return null
+    return response.data
+  }
+
+  saveSessionData () {
+    if (this.session == null) return null
+    const string = JSON.stringify(this.session)
+    localStorage.setItem("session", string)
+  }
+
+  loadSessionData () {
+    const string: null | string = localStorage.getItem("session")
+    if (string == null) {
+      this.session = null
+      return
+    }
+    this.session = JSON.parse(string)
   }
 
   async updateProfile ({
@@ -44,15 +109,11 @@ export default class {
     avatar: null | File
     banner: null | File
   }): Promise<boolean> {
-    this.createAgent(service)
-    if (this.agent == null) return false
+    if (!this.createAgent(service)) return false
+    if (!await this.login(identifier, password)) return false
 
-    await this.agent.login({ identifier, password })
-    if (this.session == null) return false
-
-    const profile = (await this.agent.api.app.bsky.actor.getProfile({
-      actor: this.session.did,
-    })).data
+    const profile = await this.fetchProfile()
+    if (profile == null) return false
 
     const fileSchemas: Array<null | FileSchema> = await Promise.all([
       avatar != null ? this.fetchFileSchema(avatar) : null,
@@ -69,8 +130,8 @@ export default class {
     if (avatarSchema != null) profileSchema.avatar = avatarSchema
     if (bannerSchema != null) profileSchema.banner = bannerSchema
 
-    const response: AppBskyActorUpdateProfile.Response =
-      await this.agent.api.app.bsky.actor.updateProfile(profileSchema)
+    const response: null | AppBskyActorUpdateProfile.Response =
+      await this.agent?.api.app.bsky.actor.updateProfile(profileSchema) ?? null
 
     return response?.success ?? false
   }
