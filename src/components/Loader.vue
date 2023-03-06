@@ -19,7 +19,7 @@
   height: 100%;
 
   & > div {
-    animation: loader-animation 250ms ease-in-out infinite alternate-reverse;
+    animation: loader-animation 125ms ease-in-out infinite alternate-reverse;
     background-color: rgb(var(--fg-color));
     border-radius: 50%;
     width: 0.5rem;
@@ -27,7 +27,7 @@
   }
   @for $i from 1 through 5 {
     & > div:nth-child(#{$i}) {
-      animation-delay: #{$i * 100}ms;
+      animation-delay: #{$i * 50}ms;
     }
   }
 }

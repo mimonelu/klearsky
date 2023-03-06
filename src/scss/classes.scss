@@ -43,3 +43,44 @@
   line-height: 1.5;
   padding: 0.5rem 2rem;
 }
+
+.popup-overlay {
+  background-color: rgba(var(--fg-color), 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.popup {
+  background-color: rgb(var(--bg-color));
+  display: flex;
+  flex-direction: column;
+  grid-gap: 2rem;
+  margin: 3rem;
+  padding: 3rem;
+  position: relative;
+}
+
+.popup-closer {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 4rem;
+  height: 4rem;
+  &:focus, &:hover {
+    background-color: rgba(var(--fg-color), 0.125);
+  }
+
+  & > .svg-icon {
+    fill: rgb(var(--fg-color));
+  }
+}

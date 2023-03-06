@@ -12,10 +12,12 @@ declare const window: {
 
 export default {
   install (app: App, messages: Messages) {
-    app.config.globalProperties.$t = (key: string): string => {
+    const $t = (key: string): string => {
       const language = window.navigator.language
       const message = messages[language] ?? messages.en
       return message[key] ?? messages.en[key] ?? ""
     }
+    app.config.globalProperties.$t = $t
+    app.provide("$t", $t)
   }
 }

@@ -8,6 +8,8 @@ const props = defineProps<{
   maxNumber?: number
 }>()
 
+const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
+
 const state = reactive<{
   previews: Array<string>
 }>({
@@ -35,8 +37,6 @@ const setPreviews = (files: Array<File>) => {
     return window.URL.createObjectURL(file)
   }))
 }
-
-const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
 </script>
 
 <template>
