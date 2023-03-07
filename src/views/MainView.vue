@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onErrorCaptured, onMounted, provide, reactive, ref } from "vue"
+import { onErrorCaptured, onMounted, provide, reactive } from "vue"
 import { RouterView } from "vue-router"
 import ErrorPopup from "@/components/ErrorPopup.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
@@ -36,8 +36,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="main">
-    <RouterView />
+  <div class="page">
+    <div class="main">
+      <div class="left">
+        <div class="menu"></div>
+      </div>
+      <RouterView class="center" />
+      <div class="right"></div>
+    </div>
     <LoginPopup v-if="state.mounted && !state.hasLogin" />
     <ErrorPopup
       v-if="state.mounted && state.error != null"
@@ -47,4 +53,45 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
+.main {
+  display: flex;
+  margin: auto;
+  max-width: 1024px;
+  min-height: 100vh;
+}
+
+.left {
+  position: relative;
+  min-width: 5rem;
+  @media (min-width: 1024px) {
+    border-left: 1px solid rgba(var(--fg-color), 0.25);
+  }
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+}
+
+.center {
+  border-left: 1px solid rgba(var(--fg-color), 0.25);
+  padding: 1rem 0;
+  max-width: 640px;
+  @media (min-width: 1024px) {
+    min-width: 640px;
+  }
+  @media (min-width: calc(640px + 5rem)) {
+    border-right: 1px solid rgba(var(--fg-color), 0.25);
+  }
+}
+
+.right {
+  flex-grow: 1;
+  @media (max-width: 1024px) {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    border-right: 1px solid rgba(var(--fg-color), 0.25);
+  }
+}
 </style>

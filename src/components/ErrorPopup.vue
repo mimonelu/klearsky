@@ -2,7 +2,7 @@
 import { inject } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
-const rootState: MainState = inject("state") as MainState
+const mainState: MainState = inject("state") as MainState
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -15,7 +15,7 @@ const close = () => {
   <div class="popup-overlay error-popup">
     <div class="popup">
       <h2 class="header">{{ $t("error") }}</h2>
-      <pre class="message">{{ rootState.error }}</pre>
+      <pre class="message">{{ mainState.error }}</pre>
       <button
         @click.prevent="close"
         class="popup-closer"

@@ -13,12 +13,12 @@ const state = reactive<{
   password: ""
 })
 
-const rootState: MainState = inject("state") as MainState
+const mainState: MainState = inject("state") as MainState
 
 const $t = inject("$t") as Function
 
 const submitCallback = async () => {
-  rootState.hasLogin = await rootState.atp.login(state.identifier, state.password)
+  mainState.hasLogin = await mainState.atp.login(state.identifier, state.password)
 }
 
 const easyFormProps = {

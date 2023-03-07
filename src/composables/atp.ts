@@ -6,6 +6,7 @@ import type {
   // AppBskyEmbedExternal,
   AppBskyEmbedImages,
   // AppBskyEmbedRecord,
+  AppBskyFeedGetTimeline,
   AppBskyFeedPost,
   AtpSessionData,
   AtpSessionEvent,
@@ -79,6 +80,17 @@ export default class {
     })
     if (!response.success) return null
     return response.data
+  }
+
+  async fetchFeeds (limit: number, cursor?: string): Promise<null | AppBskyFeedGetTimeline.OutputSchema> {
+    if (this.agent == null) return null
+    if (this.session == null) return null
+    const response: AppBskyFeedGetTimeline.Response = await this.agent.api.app.bsky.feed.getTimeline({
+      // algorithm: "", // TODO: 要調査
+      limit,
+      before: cursor,
+    })
+    return response.success ? response.data : null
   }
 
   saveSessionData () {

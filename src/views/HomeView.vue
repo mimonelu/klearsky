@@ -12,7 +12,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
     <p>Applications for Bluesky will be added.</p>
     <menu>
       <router-link
-        to="profile"
+        to="timeline"
         class="button"
       >Klearsky</router-link>
       <router-link

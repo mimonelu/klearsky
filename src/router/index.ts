@@ -3,7 +3,7 @@ import HomeView from "@/views/HomeView.vue"
 import MainView from "@/views/MainView.vue"
 import PostRecordFormView from "@/views/PostRecordFormView.vue"
 import UploadProfileImagesFormView from "@/views/UploadProfileImagesFormView.vue"
-import ProfileView from "@/views/main/ProfileView.vue"
+import TimelineView from "@/views/main/TimelineView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -19,9 +19,9 @@ const router = createRouter({
       component: MainView,
       children: [
         {
-          path: "/profile",
-          name: "profile",
-          component: ProfileView,
+          path: "/timeline",
+          name: "timeline",
+          component: TimelineView,
         },
       ],
     },

@@ -2,12 +2,20 @@
 // SEE: https://pictogrammers.com/library/mdi/
 import cross from "@/svg/cross.svg?raw"
 import plus from "@/svg/plus.svg?raw"
+import post from "@/svg/post.svg?raw"
+import repost from "@/svg/repost.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
+import thumbUp from "@/svg/thumb-up.svg?raw"
+import thumbDown from "@/svg/thumb-down.svg?raw"
 
 const icons: { [key: string]: string } = {
   cross,
   plus,
+  post,
+  repost,
   shimmer,
+  thumbUp,
+  thumbDown,
 }
 
 defineProps<{
