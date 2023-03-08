@@ -2,6 +2,7 @@
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import type { MainState } from "@/@types/app.d"
 
 const state = reactive<{
   service: string

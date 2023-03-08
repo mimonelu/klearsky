@@ -6,6 +6,7 @@ import type {
   // AppBskyEmbedExternal,
   AppBskyEmbedImages,
   // AppBskyEmbedRecord,
+  AppBskyFeedFeedViewPost,
   AppBskyFeedGetTimeline,
   AppBskyFeedPost,
   AtpSessionData,
@@ -15,6 +16,7 @@ import type {
 } from "@atproto/api"
 import type { Entity } from "@atproto/api/dist/client/types/app/bsky/feed/post.d"
 import { getFileAsUint8Array } from "@/composables/misc"
+import type { Feed, FileSchema } from "@/@types/atp.d"
 
 export default class {
   service: null | string = null
@@ -57,8 +59,13 @@ export default class {
 
   async login (identifier?: string, password?: string): Promise<boolean> {
     if (this.agent == null) return false
-    if (identifier == null || password == null) await this.resumeSession()
-    else await this.agent.login({ identifier, password })
+    try {
+      if (identifier == null || password == null) await this.resumeSession()
+      else await this.agent.login({ identifier, password })
+    } catch (error: any) {
+      localStorage.removeItem("session")
+      return false
+    }
     if (this.session == null) return false
     this.saveSessionData()
     return true
@@ -82,7 +89,7 @@ export default class {
     return response.data
   }
 
-  async fetchFeeds (limit: number, cursor?: string): Promise<null | AppBskyFeedGetTimeline.OutputSchema> {
+  async fetchTimeline (limit: number, cursor?: string): Promise<null | AppBskyFeedGetTimeline.OutputSchema> {
     if (this.agent == null) return null
     if (this.session == null) return null
     const response: AppBskyFeedGetTimeline.Response = await this.agent.api.app.bsky.feed.getTimeline({
@@ -90,7 +97,38 @@ export default class {
       limit,
       before: cursor,
     })
-    return response.success ? response.data : null
+    if (!response.success) return null
+    return response.data
+  }
+
+  async fetchFeeds (
+    limit: number,
+    oldFeeds: Array<Feed>,
+    cursor?: string
+  ): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
+    const response: null | AppBskyFeedGetTimeline.OutputSchema = await this.fetchTimeline(limit, cursor)
+    if (response == null) return null
+
+    const newFeeds: Array<Feed> = [...oldFeeds]
+    response.feed.forEach((newFeed: Feed) => {
+      const oldFeedIndex: number = newFeeds.findIndex((oldFeed: Feed) =>
+        oldFeed.post.cid === newFeed.post.cid)
+      if (oldFeedIndex === - 1) {
+        newFeeds.push(newFeed)
+      } else {
+        newFeeds[oldFeedIndex] = newFeed
+      }
+    })
+    newFeeds.sort((a: Feed, b: Feed) => {
+      const aIndexedAt = new Date(a.post.indexedAt)
+      const bIndexedAt = new Date(b.post.indexedAt)
+      return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? - 1 : 0
+    })
+
+    return {
+      feeds: newFeeds,
+      cursor: response.cursor,
+    }
   }
 
   saveSessionData () {

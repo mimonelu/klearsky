@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
 import cross from "@/svg/cross.svg?raw"
+import hand from "@/svg/hand.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import repost from "@/svg/repost.svg?raw"
@@ -10,6 +11,7 @@ import thumbDown from "@/svg/thumb-down.svg?raw"
 
 const icons: { [key: string]: string } = {
   cross,
+  hand,
   plus,
   post,
   repost,
@@ -32,7 +34,12 @@ defineProps<{
 
 <style lang="scss" scoped>
 .svg-icon {
+  position: relative;
   width: 1em;
   height: 1em;
+
+  &:deep(svg) {
+    height: 100%;
+  }
 }
 </style>

@@ -2,7 +2,7 @@ import { watch } from "vue"
 import format from "date-fns/format"
 
 export const formatDate = (date: string): string => {
-  return format(new Date(date), "MM/dd HH:ii")
+  return format(new Date(date), "MM/dd HH:mm:ss")
 }
 
 export const getFileAsUint8Array = (file: File): Promise<null | Uint8Array> =>

@@ -35,6 +35,7 @@ type MainState = {
 ```
 
 ## Tasks
+* background-image を使わずに img を使い、 LazyLoad に対応する
 * テンプレート構文内の `$t` がLintに引っかかる。対策したいが方法が不明
 * `.vue` の型宣言が見つからないという警告に対応すること
 * MainStateの型定義が無視されたりされなかったりする。 `atp` にも型付けすること

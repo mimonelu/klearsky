@@ -4,12 +4,16 @@ import { RouterView } from "vue-router"
 import ErrorPopup from "@/components/ErrorPopup.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
 import Atp from "@/composables/atp"
+import type { MainState } from "@/@types/app.d"
+import type { Feed } from "@/composables/atp"
 
 const state = reactive<MainState>({
   atp: new Atp(),
   mounted: false,
   hasLogin: false,
-  error: null
+  error: null,
+  timelineFeeds: [],
+  timelineCursor: undefined,
 })
 
 provide("state", state)
@@ -18,6 +22,12 @@ const login = async () => {
   if (state.hasLogin) return
   if (!state.atp.createAgent()) return
   if (state.atp.canLogin()) state.hasLogin = await state.atp.login()
+}
+
+const updateFeeds = (result: null | { feeds: Array<Feed>; cursor?: string }) => {
+  if (result == null) return
+  state.timelineFeeds = result.feeds
+  state.timelineCursor = result.cursor
 }
 
 const closeErrorPopup = () => {
@@ -41,7 +51,10 @@ onMounted(async () => {
       <div class="left">
         <div class="menu"></div>
       </div>
-      <RouterView class="center" />
+      <RouterView
+        class="center"
+        @updateFeeds="updateFeeds"
+      />
       <div class="right"></div>
     </div>
     <LoginPopup v-if="state.mounted && !state.hasLogin" />
@@ -75,7 +88,6 @@ onMounted(async () => {
 
 .center {
   border-left: 1px solid rgba(var(--fg-color), 0.25);
-  padding: 1rem 0;
   max-width: 640px;
   @media (min-width: 1024px) {
     min-width: 640px;

@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  grid-gap: 1rem;
+  grid-gap: 0.75em;
   position: absolute;
   left: 0;
   top: 0;
@@ -19,15 +19,15 @@
   height: 100%;
 
   & > div {
-    animation: loader-animation 125ms ease-in-out infinite alternate-reverse;
-    background-color: rgb(var(--fg-color));
+    animation: loader-animation 250ms ease-in-out infinite alternate-reverse;
+    background-color: rgb(var(--accent-color));
     border-radius: 50%;
-    width: 0.5rem;
-    height: 2rem;
+    width: 0.75em;
+    height: 0.75em;
   }
   @for $i from 1 through 5 {
     & > div:nth-child(#{$i}) {
-      animation-delay: #{$i * 50}ms;
+      animation-delay: #{$i * 100}ms;
     }
   }
 }

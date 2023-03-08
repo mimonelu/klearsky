@@ -1,67 +1,35 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, watch } from "vue"
-import Post from "@/components/Post.vue"
+import { inject, onMounted, reactive, ref } from "vue"
+import FeedList from "@/components/FeedList.vue"
 import { waitProp } from "@/composables/misc"
+import type { MainState } from "@/@types/app.d"
+import type { Feed } from "@/composables/atp"
 
-const state = reactive<{
-  feeds: Array<any>;
-  cursor: null | string;
-}>({
-  feeds: [],
-  cursor: null,
-})
+const emit = defineEmits<{(event: string, value: any): void}>()
 
 const mainState: MainState = inject("state") as MainState
 
+const feedList = ref()
+
+const updateFeeds = (result: null | { feeds: Array<Feed>; cursor?: string }) => {
+  emit("updateFeeds", result)
+}
+
 onMounted(async () => {
   if (!mainState.hasLogin) await waitProp(() => mainState.hasLogin, true)
-  const response: any = await mainState.atp.fetchFeeds(30)
-  state.feeds.push(...response.feed)
-  state.cursor = response.cursor
-  console.log(state.feeds)
+  feedList.value?.fetchFeeds(mainState.timelineFeeds, "new")
 })
 </script>
 
 <template>
-  <div class="feeds">
-    <div
-      v-for="feed of state.feeds"
-      class="feed"
-    >
-      <Post
-        v-if="feed.reply?.root && feed.post.cid !== feed.reply?.root?.cid"
-        type="root"
-        :post="feed.reply.root"
-      />
-      <Post
-        v-if="feed.reply?.parent && feed.post.cid !== feed.reply?.parent?.cid && feed.reply?.root?.cid !== feed.reply?.parent?.cid"
-        type="parent"
-        :post="feed.reply.parent"
-      />
-      <Post
-        type="post"
-        :post="feed.post"
-      />
-    </div>
+  <div class="timeline">
+    <FeedList
+      ref="feedList"
+      type="timeline"
+      :feeds="mainState.timelineFeeds"
+      :cursor="mainState.timelineCursor"
+      :limit="10"
+      @updateFeeds="updateFeeds"
+    />
   </div>
 </template>
-
-<style lang="scss" scoped>
-.feeds {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 1rem;
-}
-
-.feed {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  &:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-    padding-bottom: 1rem;
-  }
-}
-</style>
