@@ -7,6 +7,7 @@ import type {
   AppBskyEmbedImages,
   // AppBskyEmbedRecord,
   AppBskyFeedFeedViewPost,
+  AppBskyFeedGetPostThread,
   AppBskyFeedGetTimeline,
   AppBskyFeedPost,
   AtpSessionData,
@@ -97,16 +98,41 @@ export default class {
       limit,
       before: cursor,
     })
+    console.log(response)
     if (!response.success) return null
     return response.data
   }
 
+  async fetchPost (feeds: Array<Feed>, uri: string, depth?: number): Promise<null | Array<Feed>> {
+    if (this.agent == null) return null
+    if (this.session == null) return null
+    const response: AppBskyFeedGetPostThread.Response =
+      await this.agent.api.app.bsky.feed.getPostThread({ uri, depth })
+    console.log(response)
+    if (!response.success) return null
+
+    const posts: Array<any> = [
+      response.data.thread.post,
+      ...(response.data.thread.replies as Array<any>).map((reply: any): any => reply.post)
+    ]
+    posts.sort((a: any, b: any) => {
+      const aIndexedAt = new Date(a.indexedAt)
+      const bIndexedAt = new Date(b.indexedAt)
+      return aIndexedAt > bIndexedAt ? 1 : aIndexedAt < bIndexedAt ? - 1 : 0
+    })
+
+    return posts.map((post: any) => ({ post }))
+  }
+
   async fetchFeeds (
+    type: "timeline" | "post",
     limit: number,
     oldFeeds: Array<Feed>,
     cursor?: string
   ): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
-    const response: null | AppBskyFeedGetTimeline.OutputSchema = await this.fetchTimeline(limit, cursor)
+    const response: null | AppBskyFeedGetTimeline.OutputSchema = type === "timeline"
+      ? await this.fetchTimeline(limit, cursor)
+      : await this.fetchPost(limit, cursor)
     if (response == null) return null
 
     const newFeeds: Array<Feed> = [...oldFeeds]

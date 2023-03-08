@@ -12,7 +12,8 @@ const props = defineProps<{
   type: "timline" | "post";
   feeds: Array<Feed>;
   cursor?: string;
-  limit: number;
+  limit?: number;
+  hasFetchButton?: boolean;
 }>()
 
 const state = reactive<{
@@ -28,7 +29,8 @@ const fetchFeeds = async (direction: "old" | "new") => {
   state.processing = true
   try {
     const result: null | { feeds: Array<Feed>; cursor?: string } = await mainState.atp.fetchFeeds(
-      props.limit,
+      props.type,
+      props.limit ?? 10,
       props.feeds,
       direction === "old" ? props.cursor : undefined
     )
@@ -38,14 +40,28 @@ const fetchFeeds = async (direction: "old" | "new") => {
   }
 }
 
+const fetchPost = async (feeds: Array<Feed>, uri: string) => {
+  if (state.processing) return
+  state.processing = true
+  try {
+    const result: null | Array<Feed> = await mainState.atp.fetchPost(feeds, uri)
+    if (result == null) return
+    emit("updateFeeds", result)
+  } finally {
+    state.processing = false
+  }
+}
+
 defineExpose({
   fetchFeeds,
+  fetchPost,
 })
 </script>
 
 <template>
   <div class="feed-list">
     <button
+      v-if="hasFetchButton"
       class="fetch-feeds-button"
       @click.prevent="fetchFeeds('new')"
     >
@@ -74,6 +90,7 @@ defineExpose({
       </div>
     </div>
     <button
+      v-if="hasFetchButton"
       class="fetch-feeds-button"
       @click.prevent="fetchFeeds('old')"
     >
@@ -120,18 +137,13 @@ defineExpose({
 .feeds {
   display: flex;
   flex-direction: column;
-  grid-gap: 1rem;
 }
 
 .feed {
   display: flex;
   flex-direction: column;
-  grid-gap: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
   &:not(:last-child) {
     border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-    padding-bottom: 1rem;
   }
 }
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useRouter } from "vue-router"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { formatDate } from "@/composables/misc"
@@ -7,12 +8,19 @@ const props = defineProps<{
   type: "post" | "root" | "parent" | "repost";
   post: any;
 }>()
+
+const router = useRouter()
+
+const openPost = async (uri: string) => {
+  await router.push({ name: "post", query: { uri } })
+}
 </script>
 
 <template>
   <div
     class="post"
     :data-type="type"
+    @click.prevent.stop="openPost(props.post.uri)"
   >
     <a
       class="avatar"
@@ -100,6 +108,7 @@ const props = defineProps<{
 
   display: flex;
   grid-gap: 1em;
+  padding: 1em;
   position: relative;
 
   &[data-type="root"],
@@ -109,10 +118,10 @@ const props = defineProps<{
       content: "";
       display: block;
       position: absolute;
-      top: calc(var(--avatar-size) + 2px);
-      left: calc(1.5em - 1px);
+      top: calc(1em + var(--avatar-size) + 2px);
+      left: calc(2.5em - 1px);
       width: 2px;
-      height: calc(100% - var(--avatar-size) + 1em - 4px);
+      height: calc(100% - var(--avatar-size) - 4px);
     }
   }
 
@@ -160,7 +169,10 @@ const props = defineProps<{
   grid-area: r;
   border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: 1px;
-  padding: 0.875em;
+
+  & > .post {
+    padding: 0.875em;
+  }
 }
 
 .images {

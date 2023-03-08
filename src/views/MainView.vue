@@ -88,6 +88,7 @@ onMounted(async () => {
 
 .center {
   border-left: 1px solid rgba(var(--fg-color), 0.25);
+  flex-grow: 1;
   max-width: 640px;
   @media (min-width: 1024px) {
     min-width: 640px;

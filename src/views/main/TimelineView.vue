@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, ref } from "vue"
+import { inject, onMounted, ref } from "vue"
 import FeedList from "@/components/FeedList.vue"
 import { waitProp } from "@/composables/misc"
 import type { MainState } from "@/@types/app.d"
@@ -29,6 +29,7 @@ onMounted(async () => {
       :feeds="mainState.timelineFeeds"
       :cursor="mainState.timelineCursor"
       :limit="10"
+      :hasFetchButton="true"
       @updateFeeds="updateFeeds"
     />
   </div>
