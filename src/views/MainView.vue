@@ -48,8 +48,8 @@ const processPage = async (pageName?: null | RouteRecordName) => {
         break
       }
       state.currentProfile = null
-      state.currentProfile = await state.atp.fetchProfile(did)
       state.pageFeeds?.splice(0)
+      state.currentProfile = await state.atp.fetchProfile(did)
       const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, did, 10)
       if (result == null) return
       state.pageFeeds = result.feeds
