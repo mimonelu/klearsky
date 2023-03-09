@@ -211,6 +211,7 @@ export default class {
     if (!this.createAgent(service)) return false
     if (!await this.login(identifier, password)) return false
 
+    if (this.session == null) return false
     const profile = await this.fetchProfile(this.session.did)
     if (profile == null) return false
 

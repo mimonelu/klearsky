@@ -2,9 +2,30 @@
 import { inject } from "vue"
 import format from "date-fns/format"
 import FeedList from "@/components/FeedList.vue"
+import splitter from "@/composables/splitter"
 import type { MainState } from "@/@types/app.d"
 
 const mainState: MainState = inject("state") as MainState
+
+const splitTextToHtml = (text: string): string => {
+  let html = ""
+  splitter(text).forEach((data: any) => {
+    if (data.type === "text") {
+      html += data.value
+    } else if (data.type === "url") {
+      html += `<a
+        class="textlink"
+        href="${data.value}"
+        target="_blank"
+        rel="noreferrer"
+      >${data.value}</a>`
+    } else if (data.type === "tag") {
+      // TODO: タグが機能し出したら変更すること
+      html += data.value
+    }
+  })
+  return html
+}
 
 const getIndexedAt = (indexedAt?: null | string): string => {
   return indexedAt == null ? "" : format(new Date(indexedAt), "yyyy/MM/dd")
@@ -39,7 +60,10 @@ const getIndexedAt = (indexedAt?: null | string): string => {
       <div class="right">
         <div class="display-name">{{ mainState.currentProfile?.displayName }}</div>
         <div class="handle">{{ mainState.currentProfile?.handle }}</div>
-        <div class="description">{{ mainState.currentProfile?.description }}</div>
+        <div
+          class="description"
+          v-html="splitTextToHtml(mainState.currentProfile?.description ?? '')"
+        />
         <dl class="indexed-at">
           <dt>利用開始日</dt>
           <dd>{{ getIndexedAt(mainState.currentProfile?.indexedAt) }}</dd>
@@ -133,6 +157,7 @@ const getIndexedAt = (indexedAt?: null | string): string => {
 
 .description {
   line-height: 1.5;
+  white-space: pre-wrap;
   word-break: break-all;
 }
 

@@ -1,7 +1,7 @@
 .textlink {
   color: rgb(var(--accent-color));
   &:focus, &:hover {
-    text-decoration: underline;
+    filter: brightness(1.25);
   }
 }
 
