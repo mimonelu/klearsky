@@ -15,7 +15,7 @@ import Logo from "@/components/Logo.vue"
   display: flex;
   flex-direction: column;
   grid-gap: 2rem;
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 3rem 1rem 1rem 1rem;
 }
 
 .copyright {

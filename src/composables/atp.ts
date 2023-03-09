@@ -1,12 +1,11 @@
 import AtpAgent from "@atproto/api"
 import type {
   AppBskyActorGetProfile,
-  AppBskyActorProfile,
   AppBskyActorUpdateProfile,
   // AppBskyEmbedExternal,
   AppBskyEmbedImages,
   // AppBskyEmbedRecord,
-  AppBskyFeedFeedViewPost,
+  AppBskyFeedGetAuthorFeed,
   AppBskyFeedGetPostThread,
   AppBskyFeedGetTimeline,
   AppBskyFeedPost,
@@ -17,7 +16,7 @@ import type {
 } from "@atproto/api"
 import type { Entity } from "@atproto/api/dist/client/types/app/bsky/feed/post.d"
 import { getFileAsUint8Array } from "@/composables/misc"
-import type { Feed, FileSchema } from "@/@types/atp.d"
+import type { Feed, FileSchema, Profile } from "@/@types/atp.d"
 
 export default class {
   service: null | string = null
@@ -80,35 +79,57 @@ export default class {
     return response.success
   }
 
-  async fetchProfile (): Promise<null | AppBskyActorProfile.View> {
+  saveSessionData () {
+    if (this.session == null) return null
+    const string = JSON.stringify(this.session)
+    localStorage.setItem("session", string)
+  }
+
+  loadSessionData () {
+    const string: null | string = localStorage.getItem("session")
+    if (string == null) {
+      this.session = null
+      return
+    }
+    this.session = JSON.parse(string)
+  }
+
+  async fetchProfile (actor: string): Promise<Profile> {
     if (this.agent == null) return null
     if (this.session == null) return null
     const response: AppBskyActorGetProfile.Response = await this.agent.api.app.bsky.actor.getProfile({
-      actor: this.session.did,
+      actor,
     })
+    console.log("getProfile", response)
     if (!response.success) return null
     return response.data
   }
 
-  async fetchTimeline (limit: number, cursor?: string): Promise<null | AppBskyFeedGetTimeline.OutputSchema> {
+  async fetchTimeline (oldFeeds: Array<Feed>, limit: number, cursor?: string): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
     if (this.agent == null) return null
     if (this.session == null) return null
-    const response: AppBskyFeedGetTimeline.Response = await this.agent.api.app.bsky.feed.getTimeline({
-      // algorithm: "", // TODO: 要調査
-      limit,
-      before: cursor,
-    })
-    console.log(response)
+    const response: AppBskyFeedGetTimeline.Response =
+      await this.agent.api.app.bsky.feed.getTimeline({
+        // algorithm: "", // TODO: 要調査
+        limit,
+        before: cursor,
+      })
+    console.log("getTimeline", response)
     if (!response.success) return null
-    return response.data
+    const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed)
+    this.sortFeeds(newFeeds)
+    return {
+      feeds: newFeeds,
+      cursor: response.data.cursor,
+    }
   }
 
-  async fetchPost (uri: string, depth?: number): Promise<null | Array<Feed>> {
+  async fetchPostThread (uri: string, depth?: number): Promise<null | Array<Feed>> {
     if (this.agent == null) return null
     if (this.session == null) return null
     const response: AppBskyFeedGetPostThread.Response =
       await this.agent.api.app.bsky.feed.getPostThread({ uri, depth })
-    console.log(response)
+    console.log("getPostThread", response)
     if (!response.success) return null
 
     const posts: Array<any> = [
@@ -124,19 +145,37 @@ export default class {
     return posts.map((post: any) => ({ post }))
   }
 
-  async fetchFeeds (
-    type: "timeline" | "post",
-    limit: number,
-    oldFeeds: Array<Feed>,
-    cursor?: string
-  ): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
-    const response: null | AppBskyFeedGetTimeline.OutputSchema = type === "timeline"
-      ? await this.fetchTimeline(limit, cursor)
-      : await this.fetchPost(limit, cursor)
-    if (response == null) return null
+  async fetchAuthorFeed (oldFeeds: Array<Feed>, author: string, limit?: number, cursor?: string): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
+    if (this.agent == null) return null
+    if (this.session == null) return null
+    const response: AppBskyFeedGetAuthorFeed.Response =
+      await this.agent.api.app.bsky.feed.getAuthorFeed({ author, limit, before: cursor })
+    console.log("getAuthorFeed", response)
+    if (!response.success) return null
+    const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed)
+    this.sortFeeds(newFeeds)
+    return {
+      feeds: newFeeds,
+      cursor: response.data.cursor,
+    }
+  }
 
-    const newFeeds: Array<Feed> = [...oldFeeds]
-    response.feed.forEach((newFeed: Feed) => {
+  async fetchFileSchema (file: File): Promise<null | FileSchema> {
+    if (this.agent == null) return null
+    if (file == null) return null
+    const data: null | Uint8Array = await getFileAsUint8Array(file)
+    if (data == null) return null
+    const response: ComAtprotoBlobUpload.Response =
+      await this.agent.api.com.atproto.blob.upload(data, { encoding: file.type })
+    return {
+      cid: response.data.cid,
+      mimeType: file.type,
+    }
+  }
+
+  mergeFeeds (oldFeeds: null | Array<Feed>, targetFeeds: Array<Feed>): Array<Feed> {
+    const newFeeds: Array<Feed> = oldFeeds != null ? [...oldFeeds] : []
+    targetFeeds.forEach((newFeed: Feed) => {
       const oldFeedIndex: number = newFeeds.findIndex((oldFeed: Feed) =>
         oldFeed.post.cid === newFeed.post.cid)
       if (oldFeedIndex === - 1) {
@@ -145,31 +184,15 @@ export default class {
         newFeeds[oldFeedIndex] = newFeed
       }
     })
-    newFeeds.sort((a: Feed, b: Feed) => {
+    return newFeeds
+  }
+
+  sortFeeds (feeds: Array<Feed>): Array<Feed> {
+    return feeds.sort((a: Feed, b: Feed) => {
       const aIndexedAt = new Date(a.post.indexedAt)
       const bIndexedAt = new Date(b.post.indexedAt)
       return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? - 1 : 0
     })
-
-    return {
-      feeds: newFeeds,
-      cursor: response.cursor,
-    }
-  }
-
-  saveSessionData () {
-    if (this.session == null) return null
-    const string = JSON.stringify(this.session)
-    localStorage.setItem("session", string)
-  }
-
-  loadSessionData () {
-    const string: null | string = localStorage.getItem("session")
-    if (string == null) {
-      this.session = null
-      return
-    }
-    this.session = JSON.parse(string)
   }
 
   async updateProfile ({
@@ -188,7 +211,7 @@ export default class {
     if (!this.createAgent(service)) return false
     if (!await this.login(identifier, password)) return false
 
-    const profile = await this.fetchProfile()
+    const profile = await this.fetchProfile(this.session.did)
     if (profile == null) return false
 
     const fileSchemas: Array<null | FileSchema> = await Promise.all([
@@ -283,19 +306,6 @@ export default class {
     await this.agent.api.app.bsky.feed.post.create({ did: this.session.did }, record)
 
     return true
-  }
-
-  async fetchFileSchema (file: File): Promise<null | FileSchema> {
-    if (this.agent == null) return null
-    if (file == null) return null
-    const data: null | Uint8Array = await getFileAsUint8Array(file)
-    if (data == null) return null
-    const response: ComAtprotoBlobUpload.Response =
-      await this.agent.api.com.atproto.blob.upload(data, { encoding: file.type })
-    return {
-      cid: response.data.cid,
-      mimeType: file.type,
-    }
   }
 
   makeCreatedAt (): string {

@@ -4,6 +4,7 @@ import MainView from "@/views/MainView.vue"
 import PostRecordFormView from "@/views/PostRecordFormView.vue"
 import UploadProfileImagesFormView from "@/views/UploadProfileImagesFormView.vue"
 import PostView from "@/views/main/PostView.vue"
+import ProfileView from "@/views/main/ProfileView.vue"
 import TimelineView from "@/views/main/TimelineView.vue"
 
 const router = createRouter({
@@ -23,6 +24,11 @@ const router = createRouter({
           path: "/timeline",
           name: "timeline",
           component: TimelineView,
+        },
+        {
+          path: "/profile",
+          name: "profile",
+          component: ProfileView,
         },
         {
           path: "/post",

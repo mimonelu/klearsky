@@ -1,4 +1,5 @@
 import type {
+  AppBskyActorProfile,
   AppBskyFeedFeedViewPost
 } from "@atproto/api"
 
@@ -8,3 +9,5 @@ export type FileSchema = {
   cid: string;
   mimeType: string;
 }
+
+export type Profile = null | AppBskyActorProfile.View

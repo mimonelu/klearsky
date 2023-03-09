@@ -41,6 +41,21 @@ const manualLogin = async (identifier: string, password: string) => {
 const processPage = async (pageName?: null | RouteRecordName) => {
   switch (pageName) {
     case "timeline": break
+    case "profile": {
+      const did = router.currentRoute.value.query.did as LocationQueryValue
+      if (did == null) {
+        await router.push({ name: "timeline" })
+        break
+      }
+      state.currentProfile = null
+      state.currentProfile = await state.atp.fetchProfile(did)
+      state.pageFeeds?.splice(0)
+      const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, did, 10)
+      if (result == null) return
+      state.pageFeeds = result.feeds
+      state.pageCursor = result.cursor
+      break
+    }
     case "post": {
       const uri = router.currentRoute.value.query.uri as LocationQueryValue
       if (uri == null) {
@@ -48,7 +63,7 @@ const processPage = async (pageName?: null | RouteRecordName) => {
         break
       }
       state.pageFeeds?.splice(0)
-      state.pageFeeds = await state.atp.fetchPost(uri)
+      state.pageFeeds = await state.atp.fetchPostThread(uri)
       break
     }
   }
@@ -58,10 +73,9 @@ const fetchTimeline = async (direction: "old" | "new") => {
   if (state.processing) return
   state.processing = true
   try {
-    const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchFeeds(
-      "timeline",
-      10,
+    const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchTimeline(
       state.timelineFeeds,
+      10,
       direction === "old" ? state.timelineCursor : undefined
     )
     if (result == null) return
@@ -96,7 +110,9 @@ const state = reactive<MainState>({
   error: null,
   timelineFeeds: [],
   timelineCursor: undefined,
+  currentProfile: null,
   pageFeeds: null,
+  pageCursor: null,
   fetchFeeds,
   processing: false,
 })

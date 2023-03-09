@@ -1,4 +1,4 @@
-import type { Feed } from "@/types/atp"
+import type { Feed, Profile } from "@/types/atp"
 
 export type MainState = {
   atp: any;
@@ -7,6 +7,8 @@ export type MainState = {
   error: any;
   timelineFeeds: Array<Feed>;
   timelineCursor?: string;
+  currentProfile: Profile;
   pageFeeds: null | Array<Feed>;
+  pageCursor: null | string;
   processing: boolean;
 }

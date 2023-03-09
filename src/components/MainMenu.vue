@@ -10,6 +10,7 @@ const mainState: MainState = inject("state") as MainState
     <a class="avatar">
       <img
         loading="lazy"
+        :src="'/img/void.png'"
       >
     </a>
   </div>

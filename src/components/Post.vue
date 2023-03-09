@@ -14,6 +14,10 @@ const router = useRouter()
 const openPost = async (uri: string) => {
   await router.push({ name: "post", query: { uri } })
 }
+
+const openProfile = async (did: string) => {
+  await router.push({ name: "profile", query: { did } })
+}
 </script>
 
 <template>
@@ -22,16 +26,25 @@ const openPost = async (uri: string) => {
     :data-type="type"
     @click.prevent.stop="openPost(props.post.uri)"
   >
-    <a class="avatar">
+    <a
+      class="avatar"
+      @click.stop="openProfile(props.post.author.did)"
+    >
       <img
         loading="lazy"
-        :src="props.post.author.avatar"
+        :src="props.post.author.avatar ?? '/img/void.png'"
       >
     </a>
     <div class="right">
       <div class="header">
-        <div class="display_name">{{ props.post.author.displayName }}</div>
-        <div class="handle">{{ props.post.author.handle }}</div>
+        <a
+          class="display_name"
+          @click.stop="openProfile(props.post.author.did)"
+        >{{ props.post.author.displayName }}</a>
+        <a
+          class="handle"
+          @click.stop="openProfile(props.post.author.did)"
+        >{{ props.post.author.handle }}</a>
         <div
           v-if="props.post.indexedAt"
           class="indexed_at"
@@ -134,6 +147,7 @@ const openPost = async (uri: string) => {
 }
 
 .avatar {
+  cursor: pointer;
   display: block;
   height: var(--avatar-size);
 
@@ -237,6 +251,7 @@ const openPost = async (uri: string) => {
 }
 
 .display_name {
+  cursor: pointer;
   font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -245,6 +260,7 @@ const openPost = async (uri: string) => {
 
 .handle {
   color: rgba(var(--fg-color), 0.5);
+  cursor: pointer;
   font-size: 0.75em;
   overflow: hidden;
   text-overflow: ellipsis;
