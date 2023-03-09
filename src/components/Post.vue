@@ -22,10 +22,12 @@ const openPost = async (uri: string) => {
     :data-type="type"
     @click.prevent.stop="openPost(props.post.uri)"
   >
-    <a
-      class="avatar"
-      :style="`background-image: url(${props.post.author.avatar});`"
-    />
+    <a class="avatar">
+      <img
+        loading="lazy"
+        :src="props.post.author.avatar"
+      >
+    </a>
     <div class="right">
       <div class="header">
         <div class="display_name">{{ props.post.author.displayName }}</div>
@@ -132,13 +134,16 @@ const openPost = async (uri: string) => {
 }
 
 .avatar {
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: 1px;
   display: block;
-  min-width: var(--avatar-size);
   height: var(--avatar-size);
+
+  & > img {
+    border: 1px solid rgba(var(--fg-color), 0.25);
+    border-radius: 1px;
+    object-fit: cover;
+    min-width: var(--avatar-size);
+    height: var(--avatar-size);
+  }
 }
 
 .right {

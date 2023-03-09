@@ -94,6 +94,7 @@ const fetchFeeds = async (direction: "new" | "old") => {
 .feeds {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .feed {

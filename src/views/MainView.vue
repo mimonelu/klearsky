@@ -5,6 +5,8 @@ import type { LocationQueryValue, RouteLocationNormalized, RouteRecordName } fro
 import ErrorPopup from "@/components/ErrorPopup.vue"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
+import MainMenu from "@/components/MainMenu.vue"
+import SubMenu from "@/components/SubMenu.vue"
 import Atp from "@/composables/atp"
 import type { MainState } from "@/@types/app.d"
 import type { Feed } from "@/composables/atp"
@@ -100,12 +102,14 @@ onMounted(async () => {
   <div class="page">
     <div class="main">
       <div class="left">
-        <div class="menu"></div>
+        <MainMenu />
       </div>
       <div class="center">
         <RouterView @fetchFeeds="fetchFeeds" />
       </div>
-      <div class="right"></div>
+      <div class="right">
+        <SubMenu />
+      </div>
     </div>
     <LoginPopup v-if="state.mounted && !state.hasLogin" />
     <Loader v-if="state.processing" />
@@ -136,15 +140,17 @@ onMounted(async () => {
   @media (min-width: 1024px) {
     border-left: 1px solid rgba(var(--fg-color), 0.25);
   }
-}
 
-.menu {
-  position: fixed;
-  top: 0;
+  & > .main-menu {
+    position: fixed;
+    top: 0;
+  }
 }
 
 .center {
   border-left: 1px solid rgba(var(--fg-color), 0.25);
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   max-width: 640px;
   @media (min-width: 1024px) {
@@ -152,6 +158,10 @@ onMounted(async () => {
   }
   @media (min-width: calc(640px + 5rem)) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
+  }
+
+  & > .feed-list {
+    flex-grow: 1;
   }
 }
 

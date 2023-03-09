@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import Logo from "@/components/Logo.vue"
 import type { MainState } from "@/@types/app.d"
 
 const state = reactive<{
@@ -59,29 +59,8 @@ const easyFormProps = {
 <template>
   <div class="popup-overlay login-popup">
     <div class="popup">
-      <h1 class="header">
-        <SVGIcon name="shimmer" />
-        <span>{{ $t("title") }}</span>
-      </h1>
+      <Logo />
       <EasyForm v-bind="easyFormProps" />
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.header {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  grid-gap: 0.5rem;
-
-  & > .svg-icon {
-    fill: rgb(var(--accent-color));
-    font-size: 1.25rem;
-  }
-
-  & > span {
-    font-size: 2rem;
-  }
-}
-</style>

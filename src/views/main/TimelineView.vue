@@ -7,11 +7,9 @@ const mainState: MainState = inject("state") as MainState
 </script>
 
 <template>
-  <div class="timeline">
-    <FeedList
-      type="timeline"
-      :feeds="mainState.timelineFeeds"
-      :hasFetchButton="true"
-    />
-  </div>
+  <FeedList
+    type="timeline"
+    :feeds="mainState.timelineFeeds"
+    :hasFetchButton="true"
+  />
 </template>
