@@ -57,6 +57,7 @@ const openPost = async (uri: string) => {
           target="_blank"
           :title="image.alt"
           :style="`background-image: url(${image.thumb});`"
+          @click.stop
         />
       </div>
       <div
@@ -204,7 +205,6 @@ const openPost = async (uri: string) => {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: 1px;
   display: block;
 }

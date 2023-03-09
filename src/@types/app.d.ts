@@ -7,4 +7,6 @@ export type MainState = {
   error: any;
   timelineFeeds: Array<Feed>;
   timelineCursor?: string;
+  pageFeeds: null | Array<Feed>;
+  processing: boolean;
 }

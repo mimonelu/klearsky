@@ -103,7 +103,7 @@ export default class {
     return response.data
   }
 
-  async fetchPost (feeds: Array<Feed>, uri: string, depth?: number): Promise<null | Array<Feed>> {
+  async fetchPost (uri: string, depth?: number): Promise<null | Array<Feed>> {
     if (this.agent == null) return null
     if (this.session == null) return null
     const response: AppBskyFeedGetPostThread.Response =

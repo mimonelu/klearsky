@@ -1,61 +1,21 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
-import Loader from "@/components/Loader.vue"
+import { inject } from "vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import type { Feed } from "@/composables/atp"
 import type { MainState } from "@/@types/app.d"
-
-const emit = defineEmits<{(event: string, value: any): void}>()
+import type { Feed } from "@/composables/atp"
 
 const props = defineProps<{
   type: "timline" | "post";
-  feeds: Array<Feed>;
-  cursor?: string;
-  limit?: number;
+  feeds: null | Array<Feed>;
   hasFetchButton?: boolean;
 }>()
 
-const state = reactive<{
-  processing: boolean;
-}>({
-  processing: false,
-})
-
 const mainState: MainState = inject("state") as MainState
 
-const fetchFeeds = async (direction: "old" | "new") => {
-  if (state.processing) return
-  state.processing = true
-  try {
-    const result: null | { feeds: Array<Feed>; cursor?: string } = await mainState.atp.fetchFeeds(
-      props.type,
-      props.limit ?? 10,
-      props.feeds,
-      direction === "old" ? props.cursor : undefined
-    )
-    emit("updateFeeds", result)
-  } finally {
-    state.processing = false
-  }
+const fetchFeeds = async (direction: "new" | "old") => {
+  await mainState.fetchFeeds(props.type, direction)
 }
-
-const fetchPost = async (feeds: Array<Feed>, uri: string) => {
-  if (state.processing) return
-  state.processing = true
-  try {
-    const result: null | Array<Feed> = await mainState.atp.fetchPost(feeds, uri)
-    if (result == null) return
-    emit("updateFeeds", result)
-  } finally {
-    state.processing = false
-  }
-}
-
-defineExpose({
-  fetchFeeds,
-  fetchPost,
-})
 </script>
 
 <template>
@@ -66,7 +26,6 @@ defineExpose({
       @click.prevent="fetchFeeds('new')"
     >
       <SVGIcon name="hand"/>
-      <Loader v-if="state.processing" />
     </button>
     <div class="feeds">
       <div
@@ -95,7 +54,6 @@ defineExpose({
       @click.prevent="fetchFeeds('old')"
     >
       <SVGIcon name="hand"/>
-      <Loader v-if="state.processing" />
     </button>
   </div>
 </template>
@@ -104,7 +62,6 @@ defineExpose({
 .feed-list {
   display: flex;
   flex-direction: column;
-  grid-gap: 1rem;
 }
 
 .fetch-feeds-button {
