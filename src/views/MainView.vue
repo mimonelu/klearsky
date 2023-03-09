@@ -14,17 +14,31 @@ import type { Feed } from "@/composables/atp"
 const router = useRouter()
 
 router.afterEach(async (to: RouteLocationNormalized) => {
+  state.processing = true
   await processPage(to.name)
+  state.processing = false
 })
 
-const login = async () => {
+const autoLogin = async () => {
   if (state.hasLogin) return
   if (!state.atp.createAgent()) return
   if (state.atp.canLogin()) state.hasLogin = await state.atp.login()
 }
 
+const manualLogin = async (identifier: string, password: string) => {
+  try {
+    state.processing = true
+    state.hasLogin = await state.atp.login(identifier, password)
+    if (!state.hasLogin) throw new Error("Login failed")
+    await processPage(router.currentRoute.value.name)
+    state.processing = false
+    await fetchTimeline("new")
+  } finally {
+    state.processing = false
+  }
+}
+
 const processPage = async (pageName?: null | RouteRecordName) => {
-  state.processing = true
   switch (pageName) {
     case "timeline": break
     case "post": {
@@ -38,7 +52,6 @@ const processPage = async (pageName?: null | RouteRecordName) => {
       break
     }
   }
-  state.processing = false
 }
 
 const fetchTimeline = async (direction: "old" | "new") => {
@@ -64,7 +77,12 @@ const fetchFeeds = async (type: string, direction: "new" | "old") => {
     await fetchTimeline(direction)
     return
   }
-  await processPage(type)
+  state.processing = true
+  try {
+    await processPage(type)
+  } finally {
+    state.processing = false
+  }
 }
 
 const closeErrorPopup = () => {
@@ -91,10 +109,16 @@ onErrorCaptured((error: any) => {
 
 onMounted(async () => {
   state.hasLogin = state.atp.hasLogin()
-  await login()
-  await processPage(router.currentRoute.value.name)
-  await fetchTimeline("new")
-  state.mounted = true
+  try {
+    state.processing = true
+    await autoLogin()
+    await processPage(router.currentRoute.value.name)
+    state.processing = false
+    await fetchTimeline("new")
+  } finally {
+    state.mounted = true
+    state.processing = false
+  }
 })
 </script>
 
@@ -111,7 +135,10 @@ onMounted(async () => {
         <SubMenu />
       </div>
     </div>
-    <LoginPopup v-if="state.mounted && !state.hasLogin" />
+    <LoginPopup
+      v-if="state.mounted && !state.hasLogin"
+      @login="manualLogin"
+    />
     <Loader v-if="state.processing" />
     <ErrorPopup
       v-if="state.mounted && state.error != null"
