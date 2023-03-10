@@ -18,6 +18,10 @@ const back = () => {
   if (state.canBack) router.back()
 }
 
+const openUserProfile = async () => {
+  await router.push({ name: "profile", query: { did: mainState.atp.session?.did } })
+}
+
 onMounted(() => {
   state.canBack = history.state.back != null
 })
@@ -38,10 +42,13 @@ onMounted(() => {
     >
       <SVGIcon name="shimmer" />
     </div>
-    <a class="avatar">
+    <a
+      class="avatar"
+      @click.stop="openUserProfile"
+    >
       <img
         loading="lazy"
-        :src="'/img/void.png'"
+        :src="mainState.userProfile?.avatar ?? '/img/void.png'"
       >
     </a>
   </div>
@@ -78,6 +85,7 @@ onMounted(() => {
   min-height: 3rem;
 
   & > .svg-icon {
+    fill: transparent;
     stroke: rgba(var(--fg-color), 0.25);
     stroke-width: 2px;
   }

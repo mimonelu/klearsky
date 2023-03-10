@@ -31,6 +31,7 @@ const manualLogin = async (identifier: string, password: string) => {
     state.hasLogin = await state.atp.login(identifier, password)
     if (!state.hasLogin) throw new Error("Login failed")
     await processPage(router.currentRoute.value.name)
+    await fetchUserProfile()
     state.processing = false
     await fetchTimeline("new")
   } finally {
@@ -50,6 +51,9 @@ const processPage = async (pageName?: null | RouteRecordName) => {
       state.currentProfile = null
       state.pageFeeds?.splice(0)
       state.currentProfile = await state.atp.fetchProfile(did)
+      if (did === state.atp.session?.did) {
+        state.userProfile = state.currentProfile
+      }
       const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, did, 10)
       if (result == null) return
       state.pageFeeds = result.feeds
@@ -67,6 +71,10 @@ const processPage = async (pageName?: null | RouteRecordName) => {
       break
     }
   }
+}
+
+const fetchUserProfile = async () => {
+  state.userProfile = await state.atp.fetchProfile(state.atp.session?.did)
 }
 
 const fetchTimeline = async (direction: "old" | "new") => {
@@ -110,6 +118,7 @@ const state = reactive<MainState>({
   error: null,
   timelineFeeds: [],
   timelineCursor: undefined,
+  userProfile: null,
   currentProfile: null,
   pageFeeds: null,
   pageCursor: null,
@@ -129,6 +138,7 @@ onMounted(async () => {
     state.processing = true
     await autoLogin()
     await processPage(router.currentRoute.value.name)
+    await fetchUserProfile()
     state.processing = false
     await fetchTimeline("new")
   } finally {
