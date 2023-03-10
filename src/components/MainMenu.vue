@@ -22,15 +22,6 @@ const mainState: MainState = inject("state") as MainState
 }
 
 .avatar {
-  display: block;
-  height: var(--avatar-size);
-
-  & > img {
-    border: 1px solid rgba(var(--fg-color), 0.25);
-    border-radius: 1px;
-    object-fit: cover;
-    min-width: 3rem;
-    height: 3rem;
-  }
+  @include avatar-link(3rem);
 }
 </style>

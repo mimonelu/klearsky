@@ -1,5 +1,5 @@
 @import "the-new-css-reset";
-@import "./fonts.scss";
-@import "./variables.scss";
-@import "./elements.scss";
-@import "./classes.scss";
+@import "@/scss/fonts";
+@import "@/scss/variables";
+@import "@/scss/elements";
+@import "@/scss/classes";

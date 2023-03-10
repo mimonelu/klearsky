@@ -1,0 +1,21 @@
+@mixin scroll-bar () {
+  &::-webkit-scrollbar {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--fg-color), 0.25);
+  }
+}
+
+@mixin avatar-link ($size: 3rem) {
+  display: block;
+  height: $size;
+
+  & > img {
+    border: 1px solid rgba(var(--fg-color), 0.25);
+    border-radius: 1px;
+    object-fit: cover;
+    min-width: $size;
+    min-height: $size;
+  }
+}

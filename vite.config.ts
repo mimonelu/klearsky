@@ -19,6 +19,12 @@ export default defineConfig({
     outDir: "docs",
   },
   css: {
+    preprocessorOptions: {
+      scss: {
+        // NOTICE: 実体のある CSS を読み込まないこと
+        additionalData: "@import '@/scss/_variables.scss';",
+      },
+    },
     postcss: {
       plugins: [
         require("autoprefixer"),

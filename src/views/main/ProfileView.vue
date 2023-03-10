@@ -111,17 +111,7 @@ const getIndexedAt = (indexedAt?: null | string): string => {
 }
 
 .avatar {
-  display: block;
-  min-width: 6rem;
-  height: 6rem;
-
-  & > img {
-    border: 1px solid rgba(var(--fg-color), 0.25);
-    border-radius: 1px;
-    display: block;
-    min-width: 6rem;
-    height: 6rem;
-  }
+  @include avatar-link(6rem);
 }
 
 .right {

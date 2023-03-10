@@ -117,8 +117,6 @@ const openProfile = async (did: string) => {
 </template>
 
 <style lang="scss" scoped>
-@import "../scss/variables.scss";
-
 .post {
   --avatar-size: 3em;
 
@@ -147,17 +145,7 @@ const openProfile = async (did: string) => {
 }
 
 .avatar {
-  cursor: pointer;
-  display: block;
-  height: var(--avatar-size);
-
-  & > img {
-    border: 1px solid rgba(var(--fg-color), 0.25);
-    border-radius: 1px;
-    object-fit: cover;
-    min-width: var(--avatar-size);
-    height: var(--avatar-size);
-  }
+  @include avatar-link(var(--avatar-size));
 }
 
 .right {
