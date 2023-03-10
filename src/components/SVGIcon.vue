@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
 import cross from "@/svg/cross.svg?raw"
+import cursorLeft from "@/svg/cursor-left.svg?raw"
+import cursorRight from "@/svg/cursor-right.svg?raw"
 import hand from "@/svg/hand.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
@@ -11,6 +13,8 @@ import thumbDown from "@/svg/thumb-down.svg?raw"
 
 const icons: { [key: string]: string } = {
   cross,
+  cursorLeft,
+  cursorRight,
   hand,
   plus,
   post,

@@ -212,6 +212,7 @@ const openProfile = async (did: string) => {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
+  outline: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: 1px;
   display: block;
 }

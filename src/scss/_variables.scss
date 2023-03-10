@@ -8,11 +8,12 @@
 }
 
 @mixin avatar-link ($size: 3rem) {
+  cursor: pointer;
   display: block;
   height: $size;
 
   & > img {
-    border: 1px solid rgba(var(--fg-color), 0.25);
+    outline: 1px solid rgba(var(--fg-color), 0.25);
     border-radius: 1px;
     object-fit: cover;
     min-width: $size;

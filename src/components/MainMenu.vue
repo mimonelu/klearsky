@@ -1,12 +1,43 @@
 <script lang="ts" setup>
-import { inject, ref } from "vue"
+import { inject, onMounted, reactive } from "vue"
+import { useRouter } from "vue-router"
+import SVGIcon from "@/components/SVGIcon.vue"
 import type { MainState } from "@/@types/app.d"
 
+const router = useRouter()
+
 const mainState: MainState = inject("state") as MainState
+
+const state = reactive<{
+  canBack: boolean;
+}>({
+  canBack: false,
+})
+
+const back = () => {
+  if (state.canBack) router.back()
+}
+
+onMounted(() => {
+  state.canBack = history.state.back != null
+})
 </script>
 
 <template>
   <div class="main-menu">
+    <button
+      v-if="state.canBack"
+      class="link-button"
+      @click="back"
+    >
+      <SVGIcon name="cursorLeft" />
+    </button>
+    <div
+      v-else
+      class="small-logo"
+    >
+      <SVGIcon name="shimmer" />
+    </div>
     <a class="avatar">
       <img
         loading="lazy"
@@ -18,7 +49,38 @@ const mainState: MainState = inject("state") as MainState
 
 <style lang="scss" scoped>
 .main-menu {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
   padding: 1rem;
+}
+
+.small-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  min-width: 3rem;
+  min-height: 3rem;
+
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.25);
+  }
+}
+
+.link-button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  min-width: 3rem;
+  min-height: 3rem;
+
+  & > .svg-icon {
+    stroke: rgba(var(--fg-color), 0.25);
+    stroke-width: 2px;
+  }
 }
 
 .avatar {

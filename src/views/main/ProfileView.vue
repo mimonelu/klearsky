@@ -65,20 +65,20 @@ const getIndexedAt = (indexedAt?: null | string): string => {
           v-html="splitTextToHtml(mainState.currentProfile?.description ?? '')"
         />
         <dl class="indexed-at">
-          <dt>利用開始日</dt>
+          <dt>{{ $t("startedAt") }}</dt>
           <dd>{{ getIndexedAt(mainState.currentProfile?.indexedAt) }}</dd>
         </dl>
         <div class="statistics">
           <dl class="follows-count">
-            <dt>フォロー数</dt>
+            <dt>{{ $t("following") }}</dt>
             <dd>{{ mainState.currentProfile?.followsCount?.toLocaleString() }}</dd>
           </dl>
           <dl class="followers-count">
-            <dt>フォロワー数</dt>
+            <dt>{{ $t("followers") }}</dt>
             <dd>{{ mainState.currentProfile?.followersCount?.toLocaleString() }}</dd>
           </dl>
           <dl class="posts-count">
-            <dt>ポスト数</dt>
+            <dt>{{ $t("posts") }}</dt>
             <dd>{{ mainState.currentProfile?.postsCount?.toLocaleString() }}</dd>
           </dl>
         </div>
@@ -97,13 +97,18 @@ const getIndexedAt = (indexedAt?: null | string): string => {
   flex-grow: 1;
 }
 
-.banner > img {
-  aspect-ratio: 3/1;
-  object-fit: cover;
-  width: 100%;
+.banner {
+  display: block;
+
+  & > img {
+    aspect-ratio: 3/1;
+    object-fit: cover;
+    width: 100%;
+  }
 }
 
 .profile {
+  border-top: 1px solid rgba(var(--fg-color), 0.25);
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   grid-gap: 1rem;
@@ -117,7 +122,6 @@ const getIndexedAt = (indexedAt?: null | string): string => {
 .right {
   display: flex;
   flex-direction: column;
-  grid-gap: 1rem;
 
   dl {
     display: flex;
@@ -136,29 +140,33 @@ const getIndexedAt = (indexedAt?: null | string): string => {
 
 .display-name {
   font-size: 2rem;
+  margin-bottom: 0.5rem;
   word-break: break-all;
 }
 
 .handle {
   color: rgba(var(--fg-color), 0.75);
   font-size: 0.875rem;
+  margin-bottom: 1rem;
   word-break: break-all;
 }
 
 .description {
   line-height: 1.5;
+  margin-bottom: 1rem;
   white-space: pre-wrap;
   word-break: break-all;
 }
 
 .indexed-at {
+  margin-bottom: 0.5rem;
   word-break: break-all;
 }
 
 .statistics {
   display: flex;
   flex-wrap: wrap;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem 1rem;
 }
 
 .follows-count {}
