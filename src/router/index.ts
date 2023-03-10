@@ -4,6 +4,7 @@ import MainView from "@/views/MainView.vue"
 import PostRecordFormView from "@/views/PostRecordFormView.vue"
 import UploadProfileImagesFormView from "@/views/UploadProfileImagesFormView.vue"
 import PostView from "@/views/main/PostView.vue"
+import EditProfileView from "@/views/main/EditProfileView.vue"
 import ProfileView from "@/views/main/ProfileView.vue"
 import TimelineView from "@/views/main/TimelineView.vue"
 
@@ -29,6 +30,11 @@ const router = createRouter({
           path: "/profile",
           name: "profile",
           component: ProfileView,
+        },
+        {
+          path: "/edit-profile",
+          name: "edit-profile",
+          component: EditProfileView,
         },
         {
           path: "/post",

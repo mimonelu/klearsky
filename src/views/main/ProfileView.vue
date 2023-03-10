@@ -1,11 +1,18 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, reactive } from "vue"
 import format from "date-fns/format"
 import FeedList from "@/components/FeedList.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 import splitter from "@/composables/splitter"
 import type { MainState } from "@/@types/app.d"
 
 const mainState: MainState = inject("state") as MainState
+
+const state = reactive<{
+  isUserProfile: boolean;
+}>({
+  isUserProfile: false,
+})
 
 const splitTextToHtml = (text: string): string => {
   let html = ""
@@ -46,17 +53,27 @@ const getIndexedAt = (indexedAt?: null | string): string => {
       >
     </a>
     <div class="profile">
-      <a
-        class="avatar"
-        :href="mainState.currentProfile?.avatar"
-        rel="noreferrer"
-        target="_blank"
-      >
-        <img
-          loading="lazy"
-          :src="mainState.currentProfile?.avatar ?? '/img/void.png'"
+      <div class="left">
+        <a
+          class="avatar"
+          :href="mainState.currentProfile?.avatar"
+          rel="noreferrer"
+          target="_blank"
         >
-      </a>
+          <img
+            loading="lazy"
+            :src="mainState.currentProfile?.avatar ?? '/img/void.png'"
+          >
+        </a>
+        <RouterLink
+          v-if="mainState.isUserProfile"
+          to="edit-profile"
+          class="button"
+        >
+          <SVGIcon name="edit" />
+          <span>{{ $t("edit") }}</span>
+        </RouterLink>
+      </div>
       <div class="right">
         <div class="display-name">{{ mainState.currentProfile?.displayName }}</div>
         <div class="handle">{{ mainState.currentProfile?.handle }}</div>
@@ -113,6 +130,17 @@ const getIndexedAt = (indexedAt?: null | string): string => {
   display: flex;
   grid-gap: 1rem;
   padding: 1rem;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 0.5rem;
+
+  & > .button {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
 }
 
 .avatar {

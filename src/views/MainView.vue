@@ -11,6 +11,25 @@ import Atp from "@/composables/atp"
 import type { MainState } from "@/@types/app.d"
 import type { Feed } from "@/composables/atp"
 
+onMounted(async () => {
+  state.hasLogin = state.atp.hasLogin()
+  try {
+    state.processing = true
+    await autoLogin()
+    await processPage(router.currentRoute.value.name)
+    await fetchUserProfile()
+    state.processing = false
+    await fetchTimeline("new")
+  } finally {
+    state.mounted = true
+    state.processing = false
+  }
+})
+
+onErrorCaptured((error: any) => {
+  state.error = error
+})
+
 const router = useRouter()
 
 router.afterEach(async (to: RouteLocationNormalized) => {
@@ -40,28 +59,25 @@ const manualLogin = async (identifier: string, password: string) => {
 }
 
 const processPage = async (pageName?: null | RouteRecordName) => {
+  state.query = router.currentRoute.value.query
+  const did = state.query.did as LocationQueryValue
+  state.isUserProfile = did === state.atp.session?.did
+
   switch (pageName) {
-    case "timeline": break
     case "profile": {
-      const did = router.currentRoute.value.query.did as LocationQueryValue
+      const did = state.query.did as LocationQueryValue
       if (did == null) {
         await router.push({ name: "timeline" })
         break
       }
-      state.currentProfile = null
-      state.pageFeeds?.splice(0)
-      state.currentProfile = await state.atp.fetchProfile(did)
-      if (did === state.atp.session?.did) {
-        state.userProfile = state.currentProfile
-      }
-      const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, did, 10)
-      if (result == null) return
-      state.pageFeeds = result.feeds
-      state.pageCursor = result.cursor
+      await Promise.all([
+        fetchCurrentProfile(),
+        fetchCurrentAuthorFeed()
+      ])
       break
     }
     case "post": {
-      const uri = router.currentRoute.value.query.uri as LocationQueryValue
+      const uri = state.query.uri as LocationQueryValue
       if (uri == null) {
         await router.push({ name: "timeline" })
         break
@@ -75,6 +91,26 @@ const processPage = async (pageName?: null | RouteRecordName) => {
 
 const fetchUserProfile = async () => {
   state.userProfile = await state.atp.fetchProfile(state.atp.session?.did)
+}
+
+const fetchCurrentProfile = async () => {
+  const did = state.query.did as LocationQueryValue
+  if (did == null) return
+  state.currentProfile = null
+  state.currentProfile = await state.atp.fetchProfile(did)
+  if (did === state.atp.session?.did) {
+    state.userProfile = state.currentProfile
+  }
+}
+
+const fetchCurrentAuthorFeed = async () => {
+  const did = state.query.did as LocationQueryValue
+  if (did == null) return
+  state.pageFeeds?.splice(0)
+  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, did, 10)
+  if (result == null) return
+  state.pageFeeds = result.feeds
+  state.pageCursor = result.cursor
 }
 
 const fetchTimeline = async (direction: "old" | "new") => {
@@ -123,29 +159,15 @@ const state = reactive<MainState>({
   pageFeeds: null,
   pageCursor: null,
   fetchFeeds,
+  fetchUserProfile,
+  fetchCurrentProfile,
+  fetchCurrentAuthorFeed,
+  isUserProfile: false,
+  query: {},
   processing: false,
 })
 
 provide("state", state)
-
-onErrorCaptured((error: any) => {
-  state.error = error
-})
-
-onMounted(async () => {
-  state.hasLogin = state.atp.hasLogin()
-  try {
-    state.processing = true
-    await autoLogin()
-    await processPage(router.currentRoute.value.name)
-    await fetchUserProfile()
-    state.processing = false
-    await fetchTimeline("new")
-  } finally {
-    state.mounted = true
-    state.processing = false
-  }
-})
 </script>
 
 <template>

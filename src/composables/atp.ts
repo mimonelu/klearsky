@@ -196,43 +196,32 @@ export default class {
   }
 
   async updateProfile ({
-    service,
-    identifier,
-    password,
+    displayName,
+    description,
     avatar,
     banner
   }: {
-    service: string
-    identifier: string
-    password: string
-    avatar: null | File
-    banner: null | File
+    displayName: string;
+    description: string;
+    avatar: null | Array<File>;
+    banner: null | Array<File>;
   }): Promise<boolean> {
-    if (!this.createAgent(service)) return false
-    if (!await this.login(identifier, password)) return false
-
+    if (this.agent == null) return false
     if (this.session == null) return false
-    const profile = await this.fetchProfile(this.session.did)
-    if (profile == null) return false
-
     const fileSchemas: Array<null | FileSchema> = await Promise.all([
-      avatar != null ? this.fetchFileSchema(avatar) : null,
-      banner != null ? this.fetchFileSchema(banner) : null,
+      avatar != null && avatar[0] != null ? this.fetchFileSchema(avatar[0]) : null,
+      banner != null && banner[0] != null ? this.fetchFileSchema(banner[0]) : null,
     ])
-
     const avatarSchema: null | FileSchema = fileSchemas[0]
     const bannerSchema: null | FileSchema = fileSchemas[1]
-
     const profileSchema: AppBskyActorUpdateProfile.InputSchema = {
-      displayName: profile.displayName,
-      description: profile.description,
+      displayName,
+      description,
     }
     if (avatarSchema != null) profileSchema.avatar = avatarSchema
     if (bannerSchema != null) profileSchema.banner = bannerSchema
-
     const response: null | AppBskyActorUpdateProfile.Response =
       await this.agent?.api.app.bsky.actor.updateProfile(profileSchema) ?? null
-
     return response?.success ?? false
   }
 

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue"
+import FileBox from "@/components/FileBox.vue"
 import Loader from "@/components/Loader.vue"
 
 const props = defineProps<{
@@ -36,6 +37,10 @@ const makeItemId = (index: number) => `easy-form--${props.id ?? 'default'}__${in
 const inputList = [ "password", "text", "url" ]
 const isInput = (type?: string): boolean => type != null ? inputList.includes(type) : true
 
+function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
+  data.state[data.model] = files
+}
+
 onMounted(() => {
   props.data.forEach((prop: any, index: number) => {
     if (prop.focus) {
@@ -66,6 +71,22 @@ onMounted(() => {
           :autocomplete="data.autocomplete ?? ''"
           class="textbox"
         >
+        <FileBox
+          v-else-if="data.type === 'file'"
+          :accept="data.accept"
+          :multiple="data.isMultipleFile"
+          :maxNumber="data.maxNumberOfFile"
+          @change="(files: Array<File>) => { onChangeFile(files, data) }"
+        />
+        <textarea
+          v-else-if="data.type === 'textarea'"
+          v-model="data.state[data.model]"
+          :id="makeItemId(index)"
+          :required="data.required ?? false"
+          :placeholder="data.placeholder ?? ''"
+          class="textarea"
+          rows="8"
+        />
       </dd>
     </dl>
     <button class="button">{{ props.submitButtonLabel ?? $t("submit") }}</button>
@@ -88,7 +109,8 @@ onMounted(() => {
       display: flex;
       align-items: center;
 
-      & > input {
+      & > input,
+      & > textarea {
         display: block;
         flex-grow: 1;
       }

@@ -39,9 +39,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  grid-gap: 0.5em;
   font-weight: bold;
   line-height: 1.5;
-  padding: 0.5rem 2rem;
+  padding: 0.5em 1em;
+
+  & > .svg-icon {
+    fill: rgb(var(--bg-color));
+    font-size: 0.75em;
+  }
 }
 
 .popup-overlay {
