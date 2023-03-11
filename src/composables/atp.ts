@@ -226,11 +226,15 @@ export default class {
   }
 
   async postRecord ({
+    type,
+    post,
     text,
     url,
     images,
     alts
   }: {
+    type: "post" | "reply"
+    post?: any;
     text: string;
     url: string;
     images: Array<File>;
@@ -295,6 +299,21 @@ export default class {
       record.embed = {
         $type: "app.bsky.embed.images",
         images: imageObjects,
+      }
+    }
+
+    if (type === "reply") {
+      record.reply = {
+        // TODO: おそらく間違っている。要修正
+        root: {
+          cid: post?.cid,
+          uri: post?.uri,
+        },
+
+        parent: {
+          cid: post?.cid,
+          uri: post?.uri,
+        },
       }
     }
 

@@ -7,8 +7,6 @@ import type { MainState } from "@/@types/app.d"
 
 const router = useRouter()
 
-const emit = defineEmits<{(emit: string): void}>()
-
 const mainState: MainState = inject("state") as MainState
 
 const state = reactive<{
@@ -27,7 +25,7 @@ const openUserProfile = async () => {
 
 const openSendPostPopup = () => {
   blurElement()
-  emit("openSendPostPopup")
+  mainState.openSendPostPopup("post")
 }
 
 onMounted(() => {

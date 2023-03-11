@@ -13,7 +13,7 @@ const router = useRouter()
 const emit = defineEmits<{(event: string, post: any): void}>()
 
 const props = defineProps<{
-  type: "post" | "root" | "parent" | "repost";
+  type: "post" | "root" | "parent" | "repost" | "preview";
   post: any;
 }>()
 
@@ -31,6 +31,10 @@ const openPost = async (uri: string) => {
 
 const openProfile = async (did: string) => {
   await router.push({ name: "profile", query: { did } })
+}
+
+const reply = async () => {
+  mainState.openSendPostPopup("reply", props.post)
 }
 
 const upvote = async () => {
@@ -117,7 +121,7 @@ const openSource = () => {
           <button
             class="footer-button reply_count"
             :data-has="props.post.replyCount > 0"
-            @click.stop
+            @click.stop="reply"
           >
             <SVGIcon name="post" />
             <span>{{ props.post.replyCount > 0 ? props.post.replyCount : "" }}</span>
@@ -186,6 +190,16 @@ const openSource = () => {
 
   &[data-type="repost"] {
     font-size: 0.875rem;
+  }
+
+  &[data-type="preview"] {
+    font-size: 0.875rem;
+    pointer-events: none;
+
+    .images,
+    .footer {
+      display: none;
+    }
   }
 }
 

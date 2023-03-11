@@ -85,7 +85,7 @@ function close () {
 .popup-body {
   display: flex;
   flex-direction: column;
-  grid-gap: 2rem;
+  grid-gap: 1rem;
   overflow-y: auto;
   padding: 0 2rem 2rem 2rem;
   @include scroll-bar();

@@ -160,12 +160,14 @@ const closeErrorPopup = () => {
   state.error = null
 }
 
-const openSendPostPopup = () => {
-  state.sendPostPopupVisibility = true
+const openSendPostPopup = (type: "post" | "reply", post?: any) => {
+  state.sendPostPopupProps.visibility = true
+  state.sendPostPopupProps.type = type
+  state.sendPostPopupProps.post = post
 }
 
 const closeSendPostPopup = () => {
-  state.sendPostPopupVisibility = false
+  state.sendPostPopupProps.visibility = false
 }
 
 const state = reactive<MainState>({
@@ -187,7 +189,12 @@ const state = reactive<MainState>({
   isUserProfile: false,
   query: {},
   processing: false,
-  sendPostPopupVisibility: false,
+  openSendPostPopup,
+  sendPostPopupProps: {
+    visibility: false,
+    type: "",
+    post: null,
+  },
 })
 
 provide("state", state)
@@ -197,7 +204,7 @@ provide("state", state)
   <div class="page">
     <div class="main">
       <div class="left">
-        <MainMenu @openSendPostPopup="openSendPostPopup" />
+        <MainMenu />
       </div>
       <div class="center">
         <RouterView @fetchFeeds="fetchFeeds" />
@@ -207,7 +214,9 @@ provide("state", state)
       </div>
     </div>
     <SendPostPopup
-      v-if="state.sendPostPopupVisibility"
+      v-if="state.sendPostPopupProps.visibility"
+      :type="state.sendPostPopupProps.type"
+      :post="state.sendPostPopupProps.post"
       @close="closeSendPostPopup"
     />
     <LoginPopup

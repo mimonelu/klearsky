@@ -3,10 +3,16 @@ import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Loader from "@/components/Loader.vue"
 import Popup from "@/components/Popup.vue"
+import Post from "@/components/Post.vue"
 import { blurElement } from "@/composables/misc"
 import type { MainState } from "@/@types/main-state.d"
 
 const emit = defineEmits<{(event: string): void}>()
+
+const props = defineProps<{
+  type: "post" | "reply";
+  post?: any;
+}>()
 
 const mainState: MainState = inject("state") as MainState
 
@@ -64,7 +70,11 @@ async function submitCallback () {
   if (state.processing) return
   state.processing = true
   try {
-    await mainState.atp.postRecord(state)
+    await mainState.atp.postRecord({
+      ...state,
+      type: props.type,
+      post: props.post,
+    })
   } finally {
     state.processing = false
     emit("close")
@@ -82,6 +92,11 @@ async function submitCallback () {
       <h2>{{ $t("post") }}</h2>
     </template>
     <template v-slot:body>
+      <Post
+        v-if="props.type === 'reply'"
+        type="preview"
+        :post="props.post"
+      />
       <EasyForm v-bind="easyFormProps">
         <template v-slot:after>
           <dl v-if="state.images.length > 0">
