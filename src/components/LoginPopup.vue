@@ -63,3 +63,9 @@ const easyFormProps = {
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.logo {
+  font-size: 2rem;
+}
+</style>

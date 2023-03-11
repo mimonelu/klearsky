@@ -14,15 +14,11 @@ import SVGIcon from "@/components/SVGIcon.vue"
   display: flex;
   align-items: baseline;
   justify-content: center;
-  grid-gap: 0.5rem;
+  grid-gap: 0.25em;
 
-  &>.svg-icon {
+  & > .svg-icon {
     fill: rgb(var(--accent-color));
-    font-size: 1.25rem;
-  }
-
-  &>span {
-    font-size: 2rem;
+    font-size: 0.75em;
   }
 }
 </style>
