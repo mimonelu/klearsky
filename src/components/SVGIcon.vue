@@ -7,6 +7,7 @@ import edit from "@/svg/edit.svg?raw"
 import hand from "@/svg/hand.svg?raw"
 import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
+import json from "@/svg/json.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import repost from "@/svg/repost.svg?raw"
@@ -21,6 +22,7 @@ const icons: { [key: string]: string } = {
   hand,
   heart,
   heartBroken,
+  json,
   plus,
   post,
   repost,
@@ -43,7 +45,7 @@ defineProps<{
 <style lang="scss" scoped>
 .svg-icon {
   position: relative;
-  width: 1em;
+  min-width: 1em;
   height: 1em;
 
   &:deep(svg) {

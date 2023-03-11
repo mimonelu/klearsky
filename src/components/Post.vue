@@ -18,6 +18,11 @@ const openPost = async (uri: string) => {
 const openProfile = async (did: string) => {
   await router.push({ name: "profile", query: { did } })
 }
+
+const openSource = () => {
+  const windowObject = window.open()
+  windowObject?.document.write(`<pre>${JSON.stringify(props.post, null, 2)}</pre>`)
+}
 </script>
 
 <template>
@@ -79,32 +84,45 @@ const openProfile = async (did: string) => {
         v-if="type !== 'repost'"
         class="footer"
       >
-        <button
-          class="footer-button reply_count"
-          :data-has="props.post.replyCount > 0"
-        >
-          <SVGIcon name="post" />
-          <span>{{ props.post.replyCount > 0 ? props.post.replyCount : "" }}</span>
-        </button>
-        <button
-          class="footer-button repost_count"
-          :data-has="props.post.repostCount > 0"
-        >
-          <SVGIcon name="repost" />
-          <span>{{ props.post.repostCount > 0 ? props.post.repostCount : "" }}</span>
-        </button>
-        <button
-          class="footer-button upvote_count"
-          :data-has="props.post.upvoteCount > 0"
-        >
-          <SVGIcon name="heart" />
-          <span>{{ props.post.upvoteCount > 0 ? props.post.upvoteCount : "" }}</span>
-        </button>
+        <div>
+          <button
+            class="footer-button reply_count"
+            :data-has="props.post.replyCount > 0"
+            @click.stop
+          >
+            <SVGIcon name="post" />
+            <span>{{ props.post.replyCount > 0 ? props.post.replyCount : "" }}</span>
+          </button>
+        </div>
+        <div>
+          <button
+            class="footer-button repost_count"
+            :data-has="props.post.repostCount > 0"
+            @click.stop
+          >
+            <SVGIcon name="repost" />
+            <span>{{ props.post.repostCount > 0 ? props.post.repostCount : "" }}</span>
+          </button>
+        </div>
+        <div>
+          <button
+            class="footer-button upvote_count"
+            :data-has="props.post.upvoteCount > 0"
+            @click.stop
+          >
+            <SVGIcon name="heart" />
+            <span>{{ props.post.upvoteCount > 0 ? props.post.upvoteCount : "" }}</span>
+          </button>
+        </div>
+        <div>
+          <button
+            class="footer-button source"
+            @click.stop="openSource"
+          >
+            <SVGIcon name="json" />
+          </button>
+        </div>
       </div>
-      <pre
-        v-if="false"
-        class="source"
-      >{{ JSON.stringify(props.post, null, 2) }}</pre>
     </div>
   </div>
 </template>
@@ -155,6 +173,29 @@ const openProfile = async (did: string) => {
   grid-template-columns: max-content auto min-content;
   grid-gap: 0.5em;
   overflow: hidden;
+}
+
+.display_name {
+  cursor: pointer;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.handle {
+  color: rgba(var(--fg-color), 0.5);
+  cursor: pointer;
+  font-size: 0.75em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.indexed_at {
+  color: rgba(var(--fg-color), 0.5);
+  font-size: 0.75em;
+  white-space: nowrap;
 }
 
 .text {
@@ -215,54 +256,18 @@ const openProfile = async (did: string) => {
 
 .footer {
   grid-area: f;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr;
   align-items: center;
-  grid-gap: 1em;
-  margin-top: 0.5em;
-  overflow: hidden;
-}
-
-.source {
-  background-color: rgba(var(--fg-color), 0.125);
-  font-size: 0.875em;
-  line-height: 1.375;
-  margin-top: 0.5em;
-  padding: 1em;
-  overflow: scroll;
-  max-height: 8rem;
-  word-break: break-all;
-  white-space: pre-wrap;
-  @include scroll-bar();
-}
-
-.display_name {
-  cursor: pointer;
-  font-weight: bold;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.handle {
-  color: rgba(var(--fg-color), 0.5);
-  cursor: pointer;
-  font-size: 0.75em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.indexed_at {
-  color: rgba(var(--fg-color), 0.5);
-  font-size: 0.75em;
-  white-space: nowrap;
 }
 
 .footer-button {
+  cursor: pointer;
   display: flex;
   align-items: center;
   grid-gap: 0.5em;
   font-size: 0.875em;
+  padding: 0.5em 1em;
 
   &[data-has="true"] > .svg-icon {
     fill: rgba(var(--fg-color), 0.75);
@@ -270,17 +275,19 @@ const openProfile = async (did: string) => {
   &[data-has="false"] > .svg-icon {
     fill: rgba(var(--fg-color), 0.25);
   }
+  &:focus, &:hover {
+    color: rgb(var(--accent-color));
+
+    & > .svg-icon {
+      fill: rgb(var(--accent-color));
+    }
+  }
 }
 
-.reply_count {
-  width: 4em;
-}
-
-.repost_count {
-  width: 4em;
-}
-
-.upvote_count {
-  width: 4em;
+.source {
+  margin-left: auto;
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.25);
+  }
 }
 </style>
