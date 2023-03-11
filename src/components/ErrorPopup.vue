@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-
-const mainState: MainState = inject("state") as MainState
+import type { MainState } from "@/@types/main-state.d"
 
 const emit = defineEmits<{(event: string): void}>()
+
+const mainState: MainState = inject("state") as MainState
 
 const close = () => {
   emit("close")
@@ -36,7 +37,8 @@ const close = () => {
   background-color: rgba(var(--notice-color), 0.125);
   color: rgb(var(--notice-color));
   line-height: 1.5;
-  padding: 1rem;
+  padding: 1rem 2rem;
+  user-select: text;
   white-space: pre-wrap;
   word-break: break-all;
 }
