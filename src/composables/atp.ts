@@ -226,24 +226,23 @@ export default class {
   }
 
   async postRecord ({
-    service,
-    identifier,
-    password,
     text,
+    url,
     images,
     alts
   }: {
-    service: string
-    identifier: string
-    password: string
-    text: string
-    images: Array<File>
-    alts: Array<string>
+    text: string;
+    url: string;
+    images: Array<File>;
+    alts: Array<string>;
   }): Promise<boolean> {
-    this.createAgent(service)
     if (this.agent == null) return false
-    await this.agent.login({ identifier, password })
     if (this.session == null) return false
+
+    const record: AppBskyFeedPost.Record = {
+      createdAt: (new Date()).toISOString(),
+      text,
+    }
 
     const entities: Array<Entity> = []
     const entityRegExps: { [k: string]: RegExp } = {
@@ -266,12 +265,18 @@ export default class {
         })
       }
     }
-    console.log(entities)
+    if (entities.length > 0) record.entities = entities
 
-    const record: AppBskyFeedPost.Record = {
-      createdAt: this.makeCreatedAt(),
-      entities,
-      text,
+    if (url) {
+      record.embed = {
+        $type: "app.bsky.embed.external",
+        external: {
+          uri: url,
+          title: "",
+          description: "",
+          // thumb: { cid: string; mimeType: string; [k: string]: unknown },
+        },
+      }
     }
 
     const fileSchemas: Array<null | FileSchema> =
@@ -296,10 +301,6 @@ export default class {
     await this.agent.api.app.bsky.feed.post.create({ did: this.session.did }, record)
 
     return true
-  }
-
-  makeCreatedAt (): string {
-    return (new Date()).toISOString()
   }
 
   async setVote (uri: string, cid: string, direction: "none" | "up" | "down"): Promise<boolean> {

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue"
 import FileBox from "@/components/FileBox.vue"
-import Loader from "@/components/Loader.vue"
 import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{
@@ -20,6 +19,7 @@ const state = reactive<{
 const emit = defineEmits<{(event: string): void}>()
 
 const submit = async () => {
+  blurElement()
   if (state.processing) return
   if (props.submitCallback == null) {
     emit("submit")
@@ -30,7 +30,6 @@ const submit = async () => {
     await props.submitCallback()
   } finally {
     state.processing = false
-    blurElement()
   }
 }
 
@@ -86,18 +85,19 @@ onMounted(() => {
           :id="makeItemId(index)"
           :required="data.required ?? false"
           :placeholder="data.placeholder ?? ''"
+          :rows="data.rows ?? ''"
           class="textarea"
-          rows="8"
         />
       </dd>
     </dl>
+    <slot name="after" />
     <button class="button">{{ props.submitButtonLabel ?? $t("submit") }}</button>
-    <Loader v-if="state.processing" />
   </form>
 </template>
 
 <style lang="scss" scoped>
-.easy-form {
+// `slot` 用に `:deep()` を付与している
+.easy-form:deep() {
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
@@ -118,9 +118,5 @@ onMounted(() => {
       }
     }
   }
-}
-
-.loader {
-  position: fixed;
 }
 </style>

@@ -55,6 +55,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overscroll-behavior: none;
   position: fixed;
   left: 0;
   top: 0;
@@ -71,8 +72,10 @@
   flex-direction: column;
   grid-gap: 2rem;
   margin: 3rem;
+  overscroll-behavior: none;
   padding: 3rem;
   position: relative;
+  width: 640px;
 }
 
 .popup-closer {

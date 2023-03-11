@@ -41,6 +41,7 @@ const easyFormProps = {
       model: "description",
       label: $t("description"),
       type: "textarea",
+      rows: 8,
     },
     {
       state,

@@ -18,6 +18,10 @@
     "description": "Description",
     "avatar": "Avatar",
     "banner": "Banner",
+    "text": "Message",
+    "linkBox": "Link box",
+    "imageBoxes": "Image boxes",
+    "alts": "ALT texts",
 
     "prf-title": "Post Record Form for Bluesky",
     "prf-description": "This service posts a record for Bluesky.\n(mainly intended for PC users)",
@@ -67,6 +71,10 @@
     "description": "紹介文",
     "avatar": "アバター",
     "banner": "バナー",
+    "text": "本文",
+    "linkBox": "リンクボックス",
+    "imageBoxes": "イメージボックス",
+    "alts": "代替テキスト",
 
     "prf-title": "Post Record Form for Bluesky",
     "prf-description": "Bluesky にレコードを投稿するサービスです。\n主に PC ユーザーの利用を想定しています。",

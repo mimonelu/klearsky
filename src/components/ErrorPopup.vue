@@ -28,6 +28,10 @@ const close = () => {
 </template>
 
 <style lang="scss" scoped>
+.popup {
+  width: 320px;
+}
+
 .header {
   color: rgb(var(--notice-color));
   font-size: 2rem;

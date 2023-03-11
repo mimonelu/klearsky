@@ -2,9 +2,12 @@
 import { inject, onMounted, reactive } from "vue"
 import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
+import { blurElement } from "@/composables/misc"
 import type { MainState } from "@/@types/app.d"
 
 const router = useRouter()
+
+const emit = defineEmits<{(emit: string): void}>()
 
 const mainState: MainState = inject("state") as MainState
 
@@ -20,6 +23,11 @@ const back = () => {
 
 const openUserProfile = async () => {
   await router.push({ name: "profile", query: { did: mainState.atp.session?.did } })
+}
+
+const openSendPostPopup = () => {
+  blurElement()
+  emit("openSendPostPopup")
 }
 
 onMounted(() => {
@@ -57,6 +65,12 @@ onMounted(() => {
     >
       <SVGIcon name="timeline" />
     </RouterLink>
+    <button
+      class="link-button--post"
+      @click="openSendPostPopup"
+    >
+      <SVGIcon name="post" />
+    </button>
   </div>
 </template>
 
@@ -82,7 +96,8 @@ onMounted(() => {
 }
 
 .link-button,
-.link-button--outline {
+.link-button--outline,
+.link-button--post {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -109,6 +124,15 @@ onMounted(() => {
   &:focus > .svg-icon,
   &:hover > .svg-icon {
     stroke: rgba(var(--fg-color), 0.5);
+  }
+}
+.link-button--post {
+  & > .svg-icon {
+    fill: rgba(var(--accent-color), 1);
+  }
+  &:focus > .svg-icon,
+  &:hover > .svg-icon {
+    filter: brightness(1.25);
   }
 }
 

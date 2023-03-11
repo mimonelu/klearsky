@@ -6,6 +6,7 @@ import ErrorPopup from "@/components/ErrorPopup.vue"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
 import MainMenu from "@/components/MainMenu.vue"
+import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import Atp from "@/composables/atp"
 import type { MainState } from "@/@types/app.d"
@@ -150,6 +151,14 @@ const closeErrorPopup = () => {
   state.error = null
 }
 
+const openSendPostPopup = () => {
+  state.sendPostPopupVisibility = true
+}
+
+const closeSendPostPopup = () => {
+  state.sendPostPopupVisibility = false
+}
+
 const state = reactive<MainState>({
   atp: new Atp(),
   mounted: false,
@@ -168,6 +177,7 @@ const state = reactive<MainState>({
   isUserProfile: false,
   query: {},
   processing: false,
+  sendPostPopupVisibility: false,
 })
 
 provide("state", state)
@@ -177,7 +187,7 @@ provide("state", state)
   <div class="page">
     <div class="main">
       <div class="left">
-        <MainMenu />
+        <MainMenu @openSendPostPopup="openSendPostPopup" />
       </div>
       <div class="center">
         <RouterView @fetchFeeds="fetchFeeds" />
@@ -186,6 +196,10 @@ provide("state", state)
         <SubMenu />
       </div>
     </div>
+    <SendPostPopup
+      v-if="state.sendPostPopupVisibility"
+      @close="closeSendPostPopup"
+    />
     <LoginPopup
       v-if="state.mounted && !state.hasLogin"
       @login="manualLogin"
