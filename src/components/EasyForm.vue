@@ -2,6 +2,7 @@
 import { onMounted, reactive } from "vue"
 import FileBox from "@/components/FileBox.vue"
 import Loader from "@/components/Loader.vue"
+import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{
   id?: string
@@ -29,6 +30,7 @@ const submit = async () => {
     await props.submitCallback()
   } finally {
     state.processing = false
+    blurElement()
   }
 }
 

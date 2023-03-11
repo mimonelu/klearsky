@@ -4,6 +4,7 @@ import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import type { MainState } from "@/@types/app.d"
 import type { Feed } from "@/composables/atp"
+import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{
   type: "timline" | "post";
@@ -14,6 +15,7 @@ const props = defineProps<{
 const mainState: MainState = inject("state") as MainState
 
 const fetchFeeds = async (direction: "new" | "old") => {
+  blurElement()
   await mainState.fetchFeeds(props.type, direction)
 }
 </script>

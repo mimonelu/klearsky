@@ -1,6 +1,10 @@
 import { watch } from "vue"
 import format from "date-fns/format"
 
+export function blurElement () {
+  (document.activeElement as null | HTMLElement)?.blur()
+}
+
 export const formatDate = (date: string): string => {
   return format(new Date(date), "MM/dd HH:mm:ss")
 }
