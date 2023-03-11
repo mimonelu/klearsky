@@ -7,9 +7,9 @@
 }
 
 body {
-  --bg-color: 240, 240, 240;
+  --bg-color: 255, 255, 255;
   --fg-color: 32, 32, 32;
-  --accent-color: 0, 128, 255;
+  --accent-color: 0, 112, 224;
   --notice-color: 240, 32, 32;
 
   background-color: rgb(var(--bg-color));
@@ -29,7 +29,7 @@ body {
   background-color: rgba(var(--accent-color), 0.25);
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: d2ark) {
   body {
     --bg-color: 16, 16, 16;
     --fg-color: 192, 192, 192;
