@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import Popup from "@/components/Popup.vue"
 import type { MainState } from "@/@types/main-state.d"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -13,28 +13,30 @@ const close = () => {
 </script>
 
 <template>
-  <div class="popup-overlay error-popup">
-    <div class="popup">
-      <h2 class="header">{{ $t("error") }}</h2>
+  <Popup
+    class="error-popup"
+    :hasCloseButton="true"
+    @close="close"
+  >
+    <template v-slot:header>
+      <h2>{{ $t("error") }}</h2>
+    </template>
+    <template v-slot:body>
       <pre class="message">{{ mainState.error }}</pre>
-      <button
-        @click.prevent="close"
-        class="popup-closer"
-      >
-        <SVGIcon name="cross" />
-      </button>
-    </div>
-  </div>
+    </template>
+  </Popup>
 </template>
 
 <style lang="scss" scoped>
-.popup {
-  width: 320px;
-}
+.error-popup:deep() {
+  .popup {
+    border-color: rgba(var(--notice-color), 0.5);
+    width: 320px;
+  }
 
-.header {
-  color: rgb(var(--notice-color));
-  font-size: 2rem;
+  .popup-header {
+    color: rgb(var(--notice-color));
+  }
 }
 
 .message {

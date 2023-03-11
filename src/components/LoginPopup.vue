@@ -2,6 +2,7 @@
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Logo from "@/components/Logo.vue"
+import Popup from "@/components/Popup.vue"
 
 const emit = defineEmits<{(event: string, identifier: string, password: string): void}>()
 
@@ -56,12 +57,15 @@ const easyFormProps = {
 </script>
 
 <template>
-  <div class="popup-overlay login-popup">
-    <div class="popup">
+  <Popup
+    class="login-popup"
+    :hasCloseButton="true"
+  >
+    <template v-slot:body>
       <Logo />
       <EasyForm v-bind="easyFormProps" />
-    </div>
-  </div>
+    </template>
+  </Popup>
 </template>
 
 <style lang="scss" scoped>

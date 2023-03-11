@@ -2,7 +2,7 @@
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Loader from "@/components/Loader.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import Popup from "@/components/Popup.vue"
 import { blurElement } from "@/composables/misc"
 import type { MainState } from "@/@types/main-state.d"
 
@@ -73,8 +73,15 @@ async function submitCallback () {
 </script>
 
 <template>
-  <div class="popup-overlay send-post-popup">
-    <div class="popup">
+  <Popup
+    class="send-post-popup"
+    :hasCloseButton="true"
+    @close="close"
+  >
+    <template v-slot:header>
+      <h2>{{ $t("post") }}</h2>
+    </template>
+    <template v-slot:body>
       <EasyForm v-bind="easyFormProps">
         <template v-slot:after>
           <dl v-if="state.images.length > 0">
@@ -90,13 +97,9 @@ async function submitCallback () {
           </dl>
         </template>
       </EasyForm>
-      <button
-        @click.prevent="close"
-        class="popup-closer"
-      >
-        <SVGIcon name="cross" />
-      </button>
+    </template>
+    <template v-slot:footer>
       <Loader v-if="state.processing" />
-    </div>
-  </div>
+    </template>
+  </Popup>
 </template>
