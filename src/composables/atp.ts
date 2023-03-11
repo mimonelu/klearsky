@@ -301,4 +301,14 @@ export default class {
   makeCreatedAt (): string {
     return (new Date()).toISOString()
   }
+
+  async setVote (uri: string, cid: string, direction: "none" | "up" | "down"): Promise<boolean> {
+    if (this.agent == null) return false
+    if (this.session == null) return false
+    const response = await this.agent.api.app.bsky.feed.setVote({
+      subject: { uri, cid },
+      direction,
+    })
+    return response.success
+  }
 }

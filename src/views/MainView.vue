@@ -34,8 +34,11 @@ const router = useRouter()
 
 router.afterEach(async (to: RouteLocationNormalized) => {
   state.processing = true
-  await processPage(to.name)
-  state.processing = false
+  try {
+    await processPage(to.name)
+  } finally {
+    state.processing = false
+  }
 })
 
 const autoLogin = async () => {
@@ -66,7 +69,7 @@ const processPage = async (pageName?: null | RouteRecordName) => {
   switch (pageName) {
     case "profile": {
       const did = state.query.did as LocationQueryValue
-      if (did == null) {
+      if (!did) {
         await router.push({ name: "timeline" })
         break
       }
@@ -78,7 +81,7 @@ const processPage = async (pageName?: null | RouteRecordName) => {
     }
     case "post": {
       const uri = state.query.uri as LocationQueryValue
-      if (uri == null) {
+      if (!uri) {
         await router.push({ name: "timeline" })
         break
       }
@@ -95,7 +98,7 @@ const fetchUserProfile = async () => {
 
 const fetchCurrentProfile = async () => {
   const did = state.query.did as LocationQueryValue
-  if (did == null) return
+  if (!did) return
   state.currentProfile = null
   state.currentProfile = await state.atp.fetchProfile(did)
   if (did === state.atp.session?.did) {
@@ -105,7 +108,7 @@ const fetchCurrentProfile = async () => {
 
 const fetchCurrentAuthorFeed = async () => {
   const did = state.query.did as LocationQueryValue
-  if (did == null) return
+  if (!did) return
   state.pageFeeds?.splice(0)
   const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, did, 10)
   if (result == null) return
@@ -248,5 +251,9 @@ provide("state", state)
   @media (min-width: 1024px) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
   }
+}
+
+.loader {
+  position: fixed;
 }
 </style>

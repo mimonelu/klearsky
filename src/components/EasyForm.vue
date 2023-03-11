@@ -119,4 +119,8 @@ onMounted(() => {
     }
   }
 }
+
+.loader {
+  position: fixed;
+}
 </style>

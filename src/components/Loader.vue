@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
   grid-gap: 0.75em;
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   z-index: 2;

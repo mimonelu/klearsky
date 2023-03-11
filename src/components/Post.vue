@@ -1,15 +1,29 @@
 <script lang="ts" setup>
+import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
+import Loader from "@/components/Loader.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { formatDate } from "@/composables/misc"
+import { blurElement, formatDate } from "@/composables/misc"
+import type { MainState } from "@/@types/app.d"
+import type { Feed } from "@/@types/atp.d"
+
+const router = useRouter()
+
+const emit = defineEmits<{(event: string, post: any): void}>()
 
 const props = defineProps<{
   type: "post" | "root" | "parent" | "repost";
   post: any;
 }>()
 
-const router = useRouter()
+const mainState: MainState = inject("state") as MainState
+
+const state = reactive<{
+  processing: boolean;
+}>({
+  processing: false,
+})
 
 const openPost = async (uri: string) => {
   await router.push({ name: "post", query: { uri } })
@@ -17,6 +31,21 @@ const openPost = async (uri: string) => {
 
 const openProfile = async (did: string) => {
   await router.push({ name: "profile", query: { did } })
+}
+
+const upvote = async () => {
+  if (state.processing) return
+  state.processing = true
+  try {
+    blurElement()
+    const voted = props.post.viewer.upvote != null
+    await mainState.atp.setVote(props.post.uri, props.post.cid, voted ? "none" : "up")
+    const posts: null | Array<Feed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
+    if (posts == null || posts.length === 0) return
+    emit("update", posts[0])
+  } finally {
+    state.processing = false
+  }
 }
 
 const openSource = () => {
@@ -108,7 +137,8 @@ const openSource = () => {
           <button
             class="footer-button upvote_count"
             :data-has="props.post.upvoteCount > 0"
-            @click.stop
+            :data-voted="!!props.post.viewer.upvote"
+            @click.stop="upvote"
           >
             <SVGIcon name="heart" />
             <span>{{ props.post.upvoteCount > 0 ? props.post.upvoteCount : "" }}</span>
@@ -124,6 +154,10 @@ const openSource = () => {
         </div>
       </div>
     </div>
+    <Loader
+      v-if="state.processing"
+      @click.stop
+    />
   </div>
 </template>
 
@@ -139,7 +173,7 @@ const openSource = () => {
   &[data-type="root"],
   &[data-type="parent"] {
     &::before {
-      background-color: rgba(var(--fg-color), 0.5);
+      background-color: rgba(var(--fg-color), 0.25);
       content: "";
       display: block;
       position: absolute;
@@ -276,11 +310,15 @@ const openSource = () => {
     fill: rgba(var(--fg-color), 0.25);
   }
   &:focus, &:hover {
-    color: rgb(var(--accent-color));
+    filter: brightness(1.5);
+  }
+}
 
-    & > .svg-icon {
-      fill: rgb(var(--accent-color));
-    }
+.upvote_count[data-voted="true"] {
+  color: rgb(var(--pink));
+
+  & > .svg-icon {
+    fill: rgb(var(--pink));
   }
 }
 
