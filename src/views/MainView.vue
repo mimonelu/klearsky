@@ -147,6 +147,15 @@ const fetchFeeds = async (type: string, direction: "new" | "old") => {
   }
 }
 
+const updateProfile = async (profile: any) => {
+  state.processing = true
+  try {
+    await state.atp.updateProfile(profile)
+  } finally {
+    state.processing = false
+  }
+}
+
 const closeErrorPopup = () => {
   state.error = null
 }
@@ -174,6 +183,7 @@ const state = reactive<MainState>({
   fetchUserProfile,
   fetchCurrentProfile,
   fetchCurrentAuthorFeed,
+  updateProfile,
   isUserProfile: false,
   query: {},
   processing: false,

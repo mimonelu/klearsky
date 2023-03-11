@@ -2,7 +2,7 @@
 import { inject, onMounted, reactive } from "vue"
 import { useRouter } from "vue-router"
 import EasyForm from "@/components/EasyForm.vue"
-import { waitProp } from "@/composables/misc"
+import { blurElement, waitProp } from "@/composables/misc"
 import type { MainState } from "@/@types/app.d"
 
 const router = useRouter()
@@ -73,9 +73,11 @@ onMounted(async () => {
 })
 
 async function submit () {
+  blurElement()
+  if (state.processing) return
   state.processing = true
   try {
-    await mainState.atp.updateProfile(state)
+    await mainState.updateProfile(state)
     await router.push({ name: "profile", query: { did: mainState.atp.session?.did } })
   } finally {
     state.processing = false
