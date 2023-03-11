@@ -123,7 +123,7 @@ const fetchTimeline = async (direction: "old" | "new") => {
   try {
     const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchTimeline(
       state.timelineFeeds,
-      10,
+      20,
       direction === "old" ? state.timelineCursor : undefined
     )
     if (result == null) return
@@ -160,7 +160,7 @@ const closeErrorPopup = () => {
   state.error = null
 }
 
-const openSendPostPopup = (type: "post" | "reply", post?: any) => {
+const openSendPostPopup = (type: "post" | "reply" | "repost", post?: any) => {
   state.sendPostPopupProps.visibility = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post

@@ -10,7 +10,7 @@ import type { MainState } from "@/@types/main-state.d"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  type: "post" | "reply";
+  type: "post" | "reply" | "repost";
   post?: any;
 }>()
 
@@ -93,7 +93,7 @@ async function submitCallback () {
     </template>
     <template v-slot:body>
       <Post
-        v-if="props.type === 'reply'"
+        v-if="props.type === 'reply' || props.type === 'repost'"
         type="preview"
         :post="props.post"
       />

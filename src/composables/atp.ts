@@ -189,6 +189,10 @@ export default class {
 
   sortFeeds (feeds: Array<Feed>): Array<Feed> {
     return feeds.sort((a: Feed, b: Feed) => {
+      // NOTICE: リポストの indexedAt はリポストした時の時間ではないため、
+      // そのままソートするとリポストがポストされた時間でソートされてしまう。以下はその暫定的な対策
+      if (a.post.viewer.repost != null || b.post.viewer.repost != null) return 0
+
       const aIndexedAt = new Date(a.post.indexedAt)
       const bIndexedAt = new Date(b.post.indexedAt)
       return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? - 1 : 0
@@ -233,7 +237,7 @@ export default class {
     images,
     alts
   }: {
-    type: "post" | "reply"
+    type: "post" | "reply" | "repost"
     post?: any;
     text: string;
     url: string;
@@ -244,7 +248,7 @@ export default class {
     if (this.session == null) return false
 
     const record: AppBskyFeedPost.Record = {
-      createdAt: (new Date()).toISOString(),
+      createdAt: this.makeCreatedAt(),
       text,
     }
 
@@ -278,7 +282,6 @@ export default class {
           uri: url,
           title: "",
           description: "",
-          // thumb: { cid: string; mimeType: string; [k: string]: unknown },
         },
       }
     }
@@ -317,9 +320,40 @@ export default class {
       }
     }
 
-    await this.agent.api.app.bsky.feed.post.create({ did: this.session.did }, record)
+    if (type === "repost" && text !== "") {
+      record.embed = {
+        $type: "app.bsky.embed.record",
+        record: {
+          cid: post?.cid,
+          uri: post?.uri,
+        },
+      }
+    }
+
+    if (type === "repost" && text === "") {
+      await this.agent.api.app.bsky.feed.repost.create({
+        did: this.session.did,
+      }, {
+        subject: {
+          cid: post?.cid,
+          uri: post?.uri,
+        },
+        createdAt: this.makeCreatedAt(),
+      })
+    } else {
+      await this.agent.api.app.bsky.feed.post.create({ did: this.session.did }, record)
+    }
 
     return true
+  }
+
+  async undoRepost (uri: string) {
+    if (this.agent == null) return
+    if (this.session == null) return
+    await this.agent.api.app.bsky.feed.repost.delete({
+      did: this.session.did,
+      rkey: uri.split("/").pop(),
+    })
   }
 
   async setVote (uri: string, cid: string, direction: "none" | "up" | "down"): Promise<boolean> {
@@ -330,5 +364,9 @@ export default class {
       direction,
     })
     return response.success
+  }
+
+  makeCreatedAt (): string {
+    return (new Date()).toISOString()
   }
 }

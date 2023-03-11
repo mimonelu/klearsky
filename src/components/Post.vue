@@ -37,6 +37,22 @@ const reply = async () => {
   mainState.openSendPostPopup("reply", props.post)
 }
 
+const repost = async () => {
+  const reposted = props.post.viewer.repost != null
+  if (!reposted) {
+    mainState.openSendPostPopup("repost", props.post)
+    // TODO: 通常リポストが成功した場合、 updatePost を呼び出すこと
+  } else {
+    state.processing = true
+    try {
+      await mainState.atp.undoRepost(props.post.viewer.repost)
+      await updatePost()
+    } finally {
+      state.processing = false
+    }
+  }
+}
+
 const upvote = async () => {
   if (state.processing) return
   state.processing = true
@@ -44,12 +60,16 @@ const upvote = async () => {
     blurElement()
     const voted = props.post.viewer.upvote != null
     await mainState.atp.setVote(props.post.uri, props.post.cid, voted ? "none" : "up")
-    const posts: null | Array<Feed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
-    if (posts == null || posts.length === 0) return
-    emit("update", posts[0])
+    await updatePost()
   } finally {
     state.processing = false
   }
+}
+
+const updatePost = async () => {
+  const posts: null | Array<Feed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
+  if (posts == null || posts.length === 0) return
+  emit("update", posts[0])
 }
 
 const openSource = () => {
@@ -131,7 +151,8 @@ const openSource = () => {
           <button
             class="footer-button repost_count"
             :data-has="props.post.repostCount > 0"
-            @click.stop
+            :data-reposted="!!props.post.viewer.repost"
+            @click.stop="repost"
           >
             <SVGIcon name="repost" />
             <span>{{ props.post.repostCount > 0 ? props.post.repostCount : "" }}</span>
@@ -325,6 +346,14 @@ const openSource = () => {
   }
   &:focus, &:hover {
     filter: brightness(1.5);
+  }
+}
+
+.repost_count[data-reposted="true"] {
+  color: rgb(var(--green));
+
+  & > .svg-icon {
+    fill: rgb(var(--green));
   }
 }
 
