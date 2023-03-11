@@ -5,12 +5,12 @@ import cursorLeft from "@/svg/cursor-left.svg?raw"
 import cursorRight from "@/svg/cursor-right.svg?raw"
 import edit from "@/svg/edit.svg?raw"
 import hand from "@/svg/hand.svg?raw"
+import heart from "@/svg/heart.svg?raw"
+import heartBroken from "@/svg/heart-broken.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import repost from "@/svg/repost.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
-import thumbUp from "@/svg/thumb-up.svg?raw"
-import thumbDown from "@/svg/thumb-down.svg?raw"
 import timeline from "@/svg/timeline.svg?raw"
 
 const icons: { [key: string]: string } = {
@@ -19,12 +19,12 @@ const icons: { [key: string]: string } = {
   cursorRight,
   edit,
   hand,
+  heart,
+  heartBroken,
   plus,
   post,
   repost,
   shimmer,
-  thumbUp,
-  thumbDown,
   timeline,
 }
 

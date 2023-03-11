@@ -79,34 +79,27 @@ const openProfile = async (did: string) => {
         v-if="type !== 'repost'"
         class="footer"
       >
-        <div
-          class="reply_count"
+        <button
+          class="footer-button reply_count"
           :data-has="props.post.replyCount > 0"
         >
           <SVGIcon name="post" />
           <span>{{ props.post.replyCount > 0 ? props.post.replyCount : "" }}</span>
-        </div>
-        <div
-          class="repost_count"
+        </button>
+        <button
+          class="footer-button repost_count"
           :data-has="props.post.repostCount > 0"
         >
           <SVGIcon name="repost" />
           <span>{{ props.post.repostCount > 0 ? props.post.repostCount : "" }}</span>
-        </div>
-        <div
-          class="upvote_count"
+        </button>
+        <button
+          class="footer-button upvote_count"
           :data-has="props.post.upvoteCount > 0"
         >
-          <SVGIcon name="thumbUp" />
+          <SVGIcon name="heart" />
           <span>{{ props.post.upvoteCount > 0 ? props.post.upvoteCount : "" }}</span>
-        </div>
-        <div
-          class="downvote_count"
-          :data-has="props.post.downvoteCount > 0"
-        >
-          <SVGIcon name="thumbDown" />
-          <span>{{ props.post.downvoteCount > 0 ? props.post.downvoteCount : "" }}</span>
-        </div>
+        </button>
       </div>
       <pre
         v-if="false"
@@ -265,17 +258,14 @@ const openProfile = async (did: string) => {
   white-space: nowrap;
 }
 
-.reply_count,
-.repost_count,
-.upvote_count,
-.downvote_count {
+.footer-button {
   display: flex;
   align-items: center;
   grid-gap: 0.5em;
   font-size: 0.875em;
 
   &[data-has="true"] > .svg-icon {
-    fill: rgb(var(--fg-color));
+    fill: rgba(var(--fg-color), 0.75);
   }
   &[data-has="false"] > .svg-icon {
     fill: rgba(var(--fg-color), 0.25);
@@ -291,10 +281,6 @@ const openProfile = async (did: string) => {
 }
 
 .upvote_count {
-  width: 4em;
-}
-
-.downvote_count {
   width: 4em;
 }
 </style>
