@@ -19,4 +19,8 @@
     min-width: $size;
     min-height: $size;
   }
+  &:focus > img,
+  &:hover > img {
+    outline-color: rgba(var(--fg-color), 0.5);
+  }
 }

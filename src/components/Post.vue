@@ -26,7 +26,7 @@ const openProfile = async (did: string) => {
     :data-type="type"
     @click.prevent.stop="openPost(props.post.uri)"
   >
-    <a
+    <button
       class="avatar"
       @click.stop="openProfile(props.post.author.did)"
     >
@@ -34,7 +34,7 @@ const openProfile = async (did: string) => {
         loading="lazy"
         :src="props.post.author.avatar ?? '/img/void.png'"
       >
-    </a>
+    </button>
     <div class="right">
       <div class="header">
         <a
@@ -187,7 +187,7 @@ const openProfile = async (did: string) => {
   grid-area: i;
   aspect-ratio: 1.91 / 1;
   display: grid;
-  grid-gap: 1px;
+  grid-gap: 3px;
   &:has(:nth-child(2)) {
     grid-template-areas: "a b";
     & > .image:nth-child(1) { grid-area: a; }
@@ -215,6 +215,9 @@ const openProfile = async (did: string) => {
   outline: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: 1px;
   display: block;
+  &:focus, &:hover {
+    outline-color: rgba(var(--fg-color), 0.5);
+  }
 }
 
 .footer {
