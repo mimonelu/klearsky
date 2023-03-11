@@ -11,6 +11,7 @@ import repost from "@/svg/repost.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
 import thumbUp from "@/svg/thumb-up.svg?raw"
 import thumbDown from "@/svg/thumb-down.svg?raw"
+import timeline from "@/svg/timeline.svg?raw"
 
 const icons: { [key: string]: string } = {
   cross,
@@ -24,6 +25,7 @@ const icons: { [key: string]: string } = {
   shimmer,
   thumbUp,
   thumbDown,
+  timeline,
 }
 
 defineProps<{

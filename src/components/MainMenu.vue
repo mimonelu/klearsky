@@ -31,7 +31,7 @@ onMounted(() => {
   <div class="main-menu">
     <button
       v-if="state.canBack"
-      class="link-button"
+      class="link-button--outline"
       @click="back"
     >
       <SVGIcon name="cursorLeft" />
@@ -42,7 +42,7 @@ onMounted(() => {
     >
       <SVGIcon name="shimmer" />
     </div>
-    <a
+    <button
       class="avatar"
       @click.stop="openUserProfile"
     >
@@ -50,7 +50,13 @@ onMounted(() => {
         loading="lazy"
         :src="mainState.userProfile?.avatar ?? '/img/void.png'"
       >
-    </a>
+    </button>
+    <RouterLink
+      class="link-button"
+      to="timeline"
+    >
+      <SVGIcon name="timeline" />
+    </RouterLink>
   </div>
 </template>
 
@@ -75,7 +81,8 @@ onMounted(() => {
   }
 }
 
-.link-button {
+.link-button,
+.link-button--outline {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -83,11 +90,25 @@ onMounted(() => {
   font-size: 1.5rem;
   min-width: 3rem;
   min-height: 3rem;
-
+}
+.link-button {
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.25);
+  }
+  &:focus > .svg-icon,
+  &:hover > .svg-icon {
+    fill: rgba(var(--fg-color), 0.5);
+  }
+}
+.link-button--outline {
   & > .svg-icon {
     fill: transparent;
     stroke: rgba(var(--fg-color), 0.25);
     stroke-width: 2px;
+  }
+  &:focus > .svg-icon,
+  &:hover > .svg-icon {
+    stroke: rgba(var(--fg-color), 0.5);
   }
 }
 
