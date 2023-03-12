@@ -45,7 +45,7 @@ const repost = async () => {
   } else {
     state.processing = true
     try {
-      await mainState.atp.undoRepost(props.post.viewer.repost)
+      await mainState.atp.deleteRepost(props.post.viewer.repost)
       await updatePost()
     } finally {
       state.processing = false
@@ -59,7 +59,7 @@ const upvote = async () => {
   try {
     blurElement()
     const voted = props.post.viewer.upvote != null
-    await mainState.atp.setVote(props.post.uri, props.post.cid, voted ? "none" : "up")
+    await mainState.atp.updateVote(props.post.uri, props.post.cid, voted ? "none" : "up")
     await updatePost()
   } finally {
     state.processing = false

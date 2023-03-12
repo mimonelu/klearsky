@@ -2,13 +2,12 @@ import AtpAgent from "@atproto/api"
 import type {
   AppBskyActorGetProfile,
   AppBskyActorUpdateProfile,
-  // AppBskyEmbedExternal,
   AppBskyEmbedImages,
-  // AppBskyEmbedRecord,
   AppBskyFeedGetAuthorFeed,
   AppBskyFeedGetPostThread,
   AppBskyFeedGetTimeline,
   AppBskyFeedPost,
+  AppBskyFeedSetVote,
   AtpSessionData,
   AtpSessionEvent,
   ComAtprotoBlobUpload,
@@ -30,24 +29,41 @@ export default class {
     this.session = null
   }
 
-  createAgent (service?: string): boolean {
-    if (service == null) {
-      if (this.service == null) {
-        this.service = storage.load("service")
-        if (this.service == null) this.service = "https://bsky.social"
-      }
-    } else {
-      this.service = service
-    }
+  setService (service?: string) {
+    this.service = service ?? storage.load("service") ?? "https://bsky.social"
     storage.save("service", this.service)
-    this.agent = new AtpAgent({
-      service: this.service,
-      persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
-        if (event !== "create" && event !== "update") return
-        this.session = session ?? null
-      },
-    })
-    return this.agent != null
+  }
+
+  createAgent (): boolean {
+    try {
+      this.agent = new AtpAgent({
+        service: this.service as string,
+        persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
+          switch (event) {
+            case "create": {
+              this.session = session ?? null
+              break
+            }
+            case "create-failed": {
+              this.logout()
+              break
+            }
+            case "update": {
+              this.session = session ?? null
+              break
+            }
+            case "expired": {
+              this.logout()
+              break
+            }
+          }
+        },
+      })
+      return this.agent != null
+    } catch (error: any) {
+      console.error(error)
+      return false
+    }
   }
 
   canLogin (): boolean {
@@ -64,14 +80,23 @@ export default class {
       if (identifier == null || password == null) await this.resumeSession()
       else await this.agent.login({ identifier, password })
     } catch (error: any) {
-      storage.remove("handle")
-      storage.remove(this.session?.handle ?? "")
+      console.error("[klearsky/login]", error)
+      this.logout()
       return false
     }
+    // ここで persistSession が入る
     if (this.session == null) return false
     storage.save("handle", this.session.handle)
     storage.save(this.session.handle, this.session)
     return true
+  }
+
+  logout () {
+    storage.remove("handle")
+    if (this.session != null) {
+      storage.remove(this.session.handle)
+      this.session = null
+    }
   }
 
   async resumeSession (): Promise<boolean> {
@@ -80,73 +105,108 @@ export default class {
     if (handle == null) return false
     this.session = storage.load(handle)
     if (this.session == null) return false
-    const response: ComAtprotoSessionGet.Response = await this.agent.resumeSession(this.session)
-    return response.success
+    try {
+      const response: ComAtprotoSessionGet.Response =
+        await this.agent.resumeSession(this.session)
+      return response.success
+    } catch (error: any) {
+      console.error("[klearsky/resumeSession]", error)
+      return false
+    }
   }
 
-  async fetchProfile (actor: string): Promise<Profile> {
+  async fetchProfile (actor: string): Promise<null | Profile> {
     if (this.agent == null) return null
     if (this.session == null) return null
-    const response: AppBskyActorGetProfile.Response = await this.agent.api.app.bsky.actor.getProfile({
-      actor,
-    })
-    console.log("getProfile", response)
-    if (!response.success) return null
-    return response.data
+    try {
+      const response: AppBskyActorGetProfile.Response =
+        await this.agent.api.app.bsky.actor.getProfile({ actor })
+      console.log("[klearsky/getProfile]", response)
+      if (!response.success) return null
+      return response.data
+    } catch (error: any) {
+      console.error("[klearsky/fetchProfile]", error)
+      return null
+    }
   }
 
-  async fetchTimeline (oldFeeds: Array<Feed>, limit: number, cursor?: string): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
+  async fetchTimeline (oldFeeds: Array<Feed>, limit?: number, cursor?: string): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
     if (this.agent == null) return null
     if (this.session == null) return null
-    const response: AppBskyFeedGetTimeline.Response =
-      await this.agent.api.app.bsky.feed.getTimeline({
-        // algorithm: "", // TODO: 要調査
-        limit,
-        before: cursor,
-      })
-    console.log("getTimeline", response)
-    if (!response.success) return null
-    const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed)
-    this.sortFeeds(newFeeds)
-    return {
-      feeds: newFeeds,
-      cursor: response.data.cursor,
+    const query: AppBskyFeedGetTimeline.QueryParams = {
+      // algorithm: "", // TODO: 要調査
+    }
+    if (limit != null) query.limit = limit
+    if (cursor != null) query.before = cursor
+    try {
+      const response: AppBskyFeedGetTimeline.Response =
+        await this.agent.api.app.bsky.feed.getTimeline(query)
+      console.log("[klearsky/getTimeline]", response)
+      if (!response.success) return null
+
+      // TODO:
+      const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed)
+      this.sortFeeds(newFeeds)
+      return {
+        feeds: newFeeds,
+        cursor: response.data.cursor,
+      }
+    } catch (error: any) {
+      console.error("[klearsky/fetchTimeline]", error)
+      return null
     }
   }
 
   async fetchPostThread (uri: string, depth?: number): Promise<null | Array<Feed>> {
     if (this.agent == null) return null
     if (this.session == null) return null
-    const response: AppBskyFeedGetPostThread.Response =
-      await this.agent.api.app.bsky.feed.getPostThread({ uri, depth })
-    console.log("getPostThread", response)
-    if (!response.success) return null
+    const query: AppBskyFeedGetPostThread.QueryParams = { uri }
+    if (depth != null) query.depth = depth
+    try {
+      const response: AppBskyFeedGetPostThread.Response =
+        await this.agent.api.app.bsky.feed.getPostThread(query)
+      console.log("[klearsky/getPostThread]", response)
+      if (!response.success) return null
 
-    const posts: Array<any> = [
-      response.data.thread.post,
-      ...(response.data.thread.replies as Array<any>).map((reply: any): any => reply.post)
-    ]
-    posts.sort((a: any, b: any) => {
-      const aIndexedAt = new Date(a.indexedAt)
-      const bIndexedAt = new Date(b.indexedAt)
-      return aIndexedAt > bIndexedAt ? 1 : aIndexedAt < bIndexedAt ? - 1 : 0
-    })
-
-    return posts.map((post: any) => ({ post }))
+      // TODO:
+      const posts: Array<any> = [
+        response.data.thread.post,
+        ...(response.data.thread.replies as Array<any>).map((reply: any): any => reply.post)
+      ]
+      posts.sort((a: any, b: any) => {
+        const aIndexedAt = new Date(a.indexedAt)
+        const bIndexedAt = new Date(b.indexedAt)
+        return aIndexedAt > bIndexedAt ? 1 : aIndexedAt < bIndexedAt ? - 1 : 0
+      })
+      return posts.map((post: any) => ({ post }))
+    } catch (error: any) {
+      console.error("[klearsky/fetchPostThread]", error)
+      return null
+    }
   }
 
   async fetchAuthorFeed (oldFeeds: Array<Feed>, author: string, limit?: number, cursor?: string): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
     if (this.agent == null) return null
     if (this.session == null) return null
-    const response: AppBskyFeedGetAuthorFeed.Response =
-      await this.agent.api.app.bsky.feed.getAuthorFeed({ author, limit, before: cursor })
-    console.log("getAuthorFeed", response)
-    if (!response.success) return null
-    const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed)
-    this.sortFeeds(newFeeds)
-    return {
-      feeds: newFeeds,
-      cursor: response.data.cursor,
+    const query: AppBskyFeedGetAuthorFeed.QueryParams = { author }
+    if (limit != null) query.limit = limit
+    if (cursor != null) query.before = cursor
+    try {
+      const response: AppBskyFeedGetAuthorFeed.Response =
+        await this.agent.api.app.bsky.feed.getAuthorFeed(query)
+      console.log("[klearsky/getAuthorFeed]", response)
+      if (!response.success) return null
+
+      // TODO:
+      const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed)
+      this.sortFeeds(newFeeds)
+      return {
+        feeds: newFeeds,
+        cursor: response.data.cursor,
+      }
+    } catch (error: any) {
+      console.error("[klearsky/fetchAuthorFeed]", error)
+      return null
     }
   }
 
@@ -155,11 +215,18 @@ export default class {
     if (file == null) return null
     const data: null | Uint8Array = await getFileAsUint8Array(file)
     if (data == null) return null
-    const response: ComAtprotoBlobUpload.Response =
-      await this.agent.api.com.atproto.blob.upload(data, { encoding: file.type })
-    return {
-      cid: response.data.cid,
-      mimeType: file.type,
+    try {
+      const response: ComAtprotoBlobUpload.Response =
+        await this.agent.api.com.atproto.blob.upload(data, { encoding: file.type })
+      console.log("[klearsky/fetchFileSchema]", response)
+      if (!response.success) return null
+      return {
+        cid: response.data.cid,
+        mimeType: file.type,
+      }
+    } catch (error: any) {
+      console.error("[klearsky/fetchFileSchema]", error)
+      return null
     }
   }
 
@@ -214,12 +281,18 @@ export default class {
     }
     if (avatarSchema != null) profileSchema.avatar = avatarSchema
     if (bannerSchema != null) profileSchema.banner = bannerSchema
-    const response: null | AppBskyActorUpdateProfile.Response =
-      await this.agent?.api.app.bsky.actor.updateProfile(profileSchema) ?? null
-    return response?.success ?? false
+    try {
+      const response: AppBskyActorUpdateProfile.Response =
+        await this.agent?.api.app.bsky.actor.updateProfile(profileSchema) ?? null
+      console.log("[klearsky/updateProfile]", response)
+      return response.success
+    } catch (error: any) {
+      console.error("[klearsky/updateProfile]", error)
+      return false
+    }
   }
 
-  async postRecord ({
+  async createRecord ({
     type,
     post,
     text,
@@ -227,7 +300,7 @@ export default class {
     images,
     alts
   }: {
-    type: "post" | "reply" | "repost"
+    type: "post" | "reply" | "repost";
     post?: any;
     text: string;
     url: string;
@@ -237,11 +310,17 @@ export default class {
     if (this.agent == null) return false
     if (this.session == null) return false
 
+    // TODO:
+    if (type === "repost" && text === "") {
+      return await this.createRepost(post)
+    }
+
     const record: AppBskyFeedPost.Record = {
       createdAt: this.makeCreatedAt(),
       text,
     }
 
+    // TODO:
     const entities: Array<Entity> = []
     const entityRegExps: { [k: string]: RegExp } = {
       // mention: new RegExp("(?:^|\\s)(@[\\w\\.\\-]+)", "g"),
@@ -265,7 +344,8 @@ export default class {
     }
     if (entities.length > 0) record.entities = entities
 
-    if (url) {
+    // TODO:
+    if (url?.length > 0) {
       record.embed = {
         $type: "app.bsky.embed.external",
         external: {
@@ -289,15 +369,17 @@ export default class {
           }
         })
         .filter((image: null | AppBskyEmbedImages.Image) => image != null)
-      record.embed = {
-        $type: "app.bsky.embed.images",
-        images: imageObjects,
+      if (imageObjects.length > 0) {
+        record.embed = {
+          $type: "app.bsky.embed.images",
+          images: imageObjects,
+        }
       }
     }
 
     if (type === "reply") {
       record.reply = {
-        // TODO: おそらく間違っている。要修正
+        // TODO: Feed.root == Feed.parent であればこれで良いが、でなければ誤り。要修正
         root: {
           cid: post?.cid,
           uri: post?.uri,
@@ -310,7 +392,7 @@ export default class {
       }
     }
 
-    if (type === "repost" && text !== "") {
+    if (type === "repost") {
       record.embed = {
         $type: "app.bsky.embed.record",
         record: {
@@ -320,8 +402,22 @@ export default class {
       }
     }
 
-    if (type === "repost" && text === "") {
-      await this.agent.api.app.bsky.feed.repost.create({
+    try {
+      const response =
+        await this.agent.api.app.bsky.feed.post.create({ did: this.session.did }, record)
+      console.log("[klearsky/createRecord]", response)
+    } catch (error: any) {
+      console.error("[klearsky/createRecord]", error)
+      return false
+    }
+    return true
+  }
+
+  async createRepost (post?: any): Promise<boolean> {
+    if (this.agent == null) return false
+    if (this.session == null) return false
+    try {
+      const response = await this.agent.api.app.bsky.feed.repost.create({
         did: this.session.did,
       }, {
         subject: {
@@ -330,30 +426,43 @@ export default class {
         },
         createdAt: this.makeCreatedAt(),
       })
-    } else {
-      await this.agent.api.app.bsky.feed.post.create({ did: this.session.did }, record)
+      console.log("[klearsky/createRepost]", response)
+      return true
+    } catch (error: any) {
+      console.error("[klearsky/createRepost]", error)
+      return false
     }
-
-    return true
   }
 
-  async undoRepost (uri: string) {
-    if (this.agent == null) return
-    if (this.session == null) return
-    await this.agent.api.app.bsky.feed.repost.delete({
-      did: this.session.did,
-      rkey: uri.split("/").pop(),
-    })
-  }
-
-  async setVote (uri: string, cid: string, direction: "none" | "up" | "down"): Promise<boolean> {
+  async deleteRepost (uri: string): Promise<boolean> {
     if (this.agent == null) return false
     if (this.session == null) return false
-    const response = await this.agent.api.app.bsky.feed.setVote({
-      subject: { uri, cid },
-      direction,
-    })
-    return response.success
+    try {
+      await this.agent.api.app.bsky.feed.repost.delete({
+        did: this.session.did,
+        rkey: uri.split("/").pop(),
+      })
+      return true
+    } catch (error: any) {
+      console.error("[klearsky/deleteRepost]", error)
+      return false
+    }
+  }
+
+  async updateVote (uri: string, cid: string, direction: "none" | "up" | "down"): Promise<boolean> {
+    if (this.agent == null) return false
+    if (this.session == null) return false
+    try {
+      const response: AppBskyFeedSetVote.Response =
+        await this.agent.api.app.bsky.feed.setVote({
+          subject: { uri, cid },
+          direction,
+        })
+      return response.success
+    } catch (error: any) {
+      console.error("[klearsky/updateVote]", error)
+      return false
+    }
   }
 
   makeCreatedAt (): string {

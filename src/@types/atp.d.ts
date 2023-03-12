@@ -10,4 +10,4 @@ export type FileSchema = {
   mimeType: string;
 }
 
-export type Profile = null | AppBskyActorProfile.View
+export type Profile = AppBskyActorProfile.View

@@ -44,6 +44,7 @@ router.afterEach(async (to: RouteLocationNormalized) => {
 
 const autoLogin = async () => {
   if (state.hasLogin) return
+  state.atp.setService()
   if (!state.atp.createAgent()) return
   if (state.atp.canLogin()) state.hasLogin = await state.atp.login()
 }
