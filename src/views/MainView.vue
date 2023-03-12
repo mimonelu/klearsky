@@ -9,8 +9,6 @@ import MainMenu from "@/components/MainMenu.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import Atp from "@/composables/atp"
-import type { MainState } from "@/@types/app.d"
-import type { Feed } from "@/composables/atp"
 
 onMounted(async () => {
   state.hasLogin = state.atp.hasLogin()
@@ -115,7 +113,7 @@ const fetchCurrentAuthorFeed = async () => {
   const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, did, 10)
   if (result == null) return
   state.pageFeeds = result.feeds
-  state.pageCursor = result.cursor
+  state.pageCursor = result.cursor ?? null
 }
 
 const fetchTimeline = async (direction: "old" | "new") => {

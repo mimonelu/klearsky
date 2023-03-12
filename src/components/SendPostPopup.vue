@@ -5,7 +5,6 @@ import Loader from "@/components/Loader.vue"
 import Popup from "@/components/Popup.vue"
 import Post from "@/components/Post.vue"
 import { blurElement } from "@/composables/misc"
-import type { MainState } from "@/@types/main-state.d"
 
 const emit = defineEmits<{(event: string): void}>()
 

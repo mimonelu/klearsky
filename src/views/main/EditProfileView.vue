@@ -3,7 +3,6 @@ import { inject, onMounted, reactive } from "vue"
 import { useRouter } from "vue-router"
 import EasyForm from "@/components/EasyForm.vue"
 import { blurElement, waitProp } from "@/composables/misc"
-import type { MainState } from "@/@types/app.d"
 
 const router = useRouter()
 

@@ -1,6 +1,7 @@
 import AtpAgent from "@atproto/api"
 import type {
   AppBskyActorGetProfile,
+  AppBskyActorProfile,
   AppBskyActorUpdateProfile,
   AppBskyEmbedImages,
   AppBskyFeedGetAuthorFeed,
@@ -16,7 +17,6 @@ import type {
 import type { Entity } from "@atproto/api/dist/client/types/app/bsky/feed/post.d"
 import storage from "@/composables/storage"
 import { getFileAsUint8Array } from "@/composables/misc"
-import type { Feed, FileSchema, Profile } from "@/@types/atp.d"
 
 export default class {
   service: null | string = null
@@ -115,7 +115,7 @@ export default class {
     }
   }
 
-  async fetchProfile (actor: string): Promise<null | Profile> {
+  async fetchProfile (actor: string): Promise<null | AppBskyActorProfile.View> {
     if (this.agent == null) return null
     if (this.session == null) return null
     try {
@@ -145,7 +145,7 @@ export default class {
       if (!response.success) return null
 
       // TODO:
-      const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed)
+      const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
       this.sortFeeds(newFeeds)
       return {
         feeds: newFeeds,
@@ -198,7 +198,7 @@ export default class {
       if (!response.success) return null
 
       // TODO:
-      const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed)
+      const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
       this.sortFeeds(newFeeds)
       return {
         feeds: newFeeds,

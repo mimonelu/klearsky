@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import Popup from "@/components/Popup.vue"
-import type { MainState } from "@/@types/main-state.d"
 
 const emit = defineEmits<{(event: string): void}>()
 

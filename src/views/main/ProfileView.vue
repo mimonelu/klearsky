@@ -1,18 +1,11 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject } from "vue"
 import format from "date-fns/format"
 import FeedList from "@/components/FeedList.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import splitter from "@/composables/splitter"
-import type { MainState } from "@/@types/app.d"
 
 const mainState: MainState = inject("state") as MainState
-
-const state = reactive<{
-  isUserProfile: boolean;
-}>({
-  isUserProfile: false,
-})
 
 const splitTextToHtml = (text: string): string => {
   let html = ""

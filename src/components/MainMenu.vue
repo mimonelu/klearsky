@@ -3,7 +3,6 @@ import { inject, onMounted, reactive } from "vue"
 import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
-import type { MainState } from "@/@types/app.d"
 
 const router = useRouter()
 

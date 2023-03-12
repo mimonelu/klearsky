@@ -2,8 +2,6 @@
 import { inject } from "vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import type { MainState } from "@/@types/app.d"
-import type { Feed } from "@/composables/atp"
 import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{

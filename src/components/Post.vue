@@ -5,8 +5,6 @@ import Loader from "@/components/Loader.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement, formatDate } from "@/composables/misc"
-import type { MainState } from "@/@types/app.d"
-import type { Feed } from "@/@types/atp.d"
 
 const router = useRouter()
 
