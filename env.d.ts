@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
-declare module "@/@types/*";
-declare module "@/composables/*";
+import type { ComponentCustomProperties } from "vue";
 
-declare module "*.vue" {
-  import Vue from "vue";
-  export default Vue;
-}
+declare module "@vue/runtime-core" {
+  interface ComponentCustomProperties {
+    $t: Function;
+  }
+};

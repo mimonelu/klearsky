@@ -1,3 +1,8 @@
+declare module "*.vue";
+declare module "crypto-js";
+
+declare module "@/composables/*";
+
 type MainState = {
   atp: any;
   mounted: boolean;
