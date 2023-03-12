@@ -15,6 +15,7 @@ import type {
   ComAtprotoSessionGet
 } from "@atproto/api"
 import type { Entity } from "@atproto/api/dist/client/types/app/bsky/feed/post.d"
+import storage from "@/composables/storage"
 import { getFileAsUint8Array } from "@/composables/misc"
 import type { Feed, FileSchema, Profile } from "@/@types/atp.d"
 
@@ -32,13 +33,13 @@ export default class {
   createAgent (service?: string): boolean {
     if (service == null) {
       if (this.service == null) {
-        this.service = localStorage.getItem("service")
+        this.service = storage.load("service")
         if (this.service == null) this.service = "https://bsky.social"
       }
     } else {
       this.service = service
     }
-    localStorage.setItem("service", this.service)
+    storage.save("service", this.service)
     this.agent = new AtpAgent({
       service: this.service,
       persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
@@ -50,7 +51,7 @@ export default class {
   }
 
   canLogin (): boolean {
-    return localStorage.getItem("session") != null
+    return storage.load("handle") != null
   }
 
   hasLogin (): boolean {
@@ -63,35 +64,24 @@ export default class {
       if (identifier == null || password == null) await this.resumeSession()
       else await this.agent.login({ identifier, password })
     } catch (error: any) {
-      localStorage.removeItem("session")
+      storage.remove("handle")
+      storage.remove(this.session?.handle ?? "")
       return false
     }
     if (this.session == null) return false
-    this.saveSessionData()
+    storage.save("handle", this.session.handle)
+    storage.save(this.session.handle, this.session)
     return true
   }
 
   async resumeSession (): Promise<boolean> {
     if (this.agent == null) return false
-    this.loadSessionData()
+    const handle = storage.load("handle")
+    if (handle == null) return false
+    this.session = storage.load(handle)
     if (this.session == null) return false
     const response: ComAtprotoSessionGet.Response = await this.agent.resumeSession(this.session)
     return response.success
-  }
-
-  saveSessionData () {
-    if (this.session == null) return null
-    const string = JSON.stringify(this.session)
-    localStorage.setItem("session", string)
-  }
-
-  loadSessionData () {
-    const string: null | string = localStorage.getItem("session")
-    if (string == null) {
-      this.session = null
-      return
-    }
-    this.session = JSON.parse(string)
   }
 
   async fetchProfile (actor: string): Promise<Profile> {
