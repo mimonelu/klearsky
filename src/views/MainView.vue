@@ -63,13 +63,13 @@ const manualLogin = async (identifier: string, password: string) => {
 
 const processPage = async (pageName?: null | RouteRecordName) => {
   state.query = router.currentRoute.value.query
-  const did = state.query.did as LocationQueryValue
-  state.isUserProfile = did === state.atp.session?.did
+  const handle = state.query.handle as LocationQueryValue
+  state.isUserProfile = handle === state.atp.session?.handle
 
   switch (pageName) {
     case "profile": {
-      const did = state.query.did as LocationQueryValue
-      if (!did) {
+      const handle = state.query.handle as LocationQueryValue
+      if (!handle) {
         await router.push({ name: "timeline" })
         break
       }
@@ -93,24 +93,24 @@ const processPage = async (pageName?: null | RouteRecordName) => {
 }
 
 const fetchUserProfile = async () => {
-  state.userProfile = await state.atp.fetchProfile(state.atp.session?.did)
+  state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle)
 }
 
 const fetchCurrentProfile = async () => {
-  const did = state.query.did as LocationQueryValue
-  if (!did) return
+  const handle = state.query.handle as LocationQueryValue
+  if (!handle) return
   state.currentProfile = null
-  state.currentProfile = await state.atp.fetchProfile(did)
-  if (did === state.atp.session?.did) {
+  state.currentProfile = await state.atp.fetchProfile(handle)
+  if (handle === state.atp.session?.handle) {
     state.userProfile = state.currentProfile
   }
 }
 
 const fetchCurrentAuthorFeed = async () => {
-  const did = state.query.did as LocationQueryValue
-  if (!did) return
+  const handle = state.query.handle as LocationQueryValue
+  if (!handle) return
   state.pageFeeds?.splice(0)
-  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, did, 10)
+  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, handle, 10)
   if (result == null) return
   state.pageFeeds = result.feeds
   state.pageCursor = result.cursor ?? null

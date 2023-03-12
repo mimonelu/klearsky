@@ -27,8 +27,8 @@ const openPost = async (uri: string) => {
   await router.push({ name: "post", query: { uri } })
 }
 
-const openProfile = async (did: string) => {
-  await router.push({ name: "profile", query: { did } })
+const openProfile = async (handle: string) => {
+  await router.push({ name: "profile", query: { handle } })
 }
 
 const reply = async () => {
@@ -84,7 +84,7 @@ const openSource = () => {
   >
     <button
       class="avatar"
-      @click.stop="openProfile(props.post.author.did)"
+      @click.stop="openProfile(props.post.author.handle)"
     >
       <img
         loading="lazy"
@@ -95,18 +95,21 @@ const openSource = () => {
       <div class="header">
         <a
           class="display_name"
-          @click.stop="openProfile(props.post.author.did)"
+          @click.stop="openProfile(props.post.author.handle)"
         >{{ props.post.author.displayName }}</a>
         <a
           class="handle"
-          @click.stop="openProfile(props.post.author.did)"
+          @click.stop="openProfile(props.post.author.handle)"
         >{{ props.post.author.handle }}</a>
         <div
           v-if="props.post.indexedAt"
           class="indexed_at"
         >{{ formatDate(props.post.indexedAt, "") }}</div>
       </div>
-      <div class="text">{{ props.post.record.text }}</div>
+      <div
+        class="text"
+        v-html="props.post.record.html"
+      />
       <div
         v-if="props.post.embed?.record"
         class="repost"

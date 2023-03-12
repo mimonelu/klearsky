@@ -4,8 +4,7 @@
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue",
-    "src/@types/**/*.ts",
-    "node_modules/vue-router/dist/vue-router.d.ts"
+    "src/@types/**/*.ts"
   ],
   "compilerOptions": {
     "baseUrl": ".",

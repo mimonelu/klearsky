@@ -17,6 +17,16 @@ import type {
 import type { Entity } from "@atproto/api/dist/client/types/app/bsky/feed/post.d"
 import storage from "@/composables/storage"
 import { getFileAsUint8Array } from "@/composables/misc"
+import text2html from "@/composables/text2html"
+
+function traverse (json: any, callback: (key: string, value: any, parent: any) => void) {
+  for (const key in json) {
+    callback(key, json[key], json)
+    if (json[key] instanceof Object) {
+      traverse(json[key], callback)
+    }
+  }
+}
 
 export default class {
   service: null | string = null
@@ -123,6 +133,10 @@ export default class {
         await this.agent.api.app.bsky.actor.getProfile({ actor })
       console.log("[klearsky/getProfile]", response)
       if (!response.success) return null
+
+      // TODO:
+      response.data.descriptionHtml = text2html(response.data.description ?? "")
+
       return response.data
     } catch (error: any) {
       console.error("[klearsky/fetchProfile]", error)
@@ -145,6 +159,7 @@ export default class {
       if (!response.success) return null
 
       // TODO:
+      this.text2htmlAtFeeds(response.data.feed as Array<Feed>)
       const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
       this.sortFeeds(newFeeds)
       return {
@@ -171,14 +186,17 @@ export default class {
       // TODO:
       const posts: Array<any> = [
         response.data.thread.post,
+        // TODO: replies の入れ子構造に対応すること
+        // SEE: http://localhost:5173/klearsky/#/post?uri=at://did:plc:fporki4626psbdnxzeh7lhg5/app.bsky.feed.post/3jqq5xx7tmc2y
         ...(response.data.thread.replies as Array<any>).map((reply: any): any => reply.post)
       ]
+      this.text2htmlAtFeeds(posts)
       posts.sort((a: any, b: any) => {
         const aIndexedAt = new Date(a.indexedAt)
         const bIndexedAt = new Date(b.indexedAt)
         return aIndexedAt > bIndexedAt ? 1 : aIndexedAt < bIndexedAt ? - 1 : 0
       })
-      return posts.map((post: any) => ({ post }))
+      return posts.map((post: Post) => ({ post }))
     } catch (error: any) {
       console.error("[klearsky/fetchPostThread]", error)
       return null
@@ -198,6 +216,7 @@ export default class {
       if (!response.success) return null
 
       // TODO:
+      this.text2htmlAtFeeds(response.data.feed as Array<Feed>)
       const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
       this.sortFeeds(newFeeds)
       return {
@@ -228,6 +247,14 @@ export default class {
       console.error("[klearsky/fetchFileSchema]", error)
       return null
     }
+  }
+
+  text2htmlAtFeeds (feeds: Array<Feed>) {
+    traverse(feeds, (key: string, value: any, parent: any) => {
+      if (key === "text") {
+        parent.html = text2html(value)
+      }
+    })
   }
 
   mergeFeeds (oldFeeds: null | Array<Feed>, targetFeeds: Array<Feed>): Array<Feed> {

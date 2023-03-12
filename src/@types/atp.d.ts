@@ -10,9 +10,20 @@ type Author = {
   avatar: string;
   viewer: {
     muted: boolean;
+    following?: string;
+    followedBy?: string;
     [k: string]: unknown;
   };
   [k: string]: unknown;
+}
+
+type Entity = {
+  type: "link";
+  index: {
+    end: number;
+    start: number;
+  };
+  value: string;
 }
 
 type Post = {
@@ -30,9 +41,10 @@ type Post = {
   },
   record: {
     text: string;
+    html: string; // Injected
     $type: string;
     createdAt: string;
-    embed: {
+    embed?: {
       $type: string;
       images?: Array<{
         alt: string;
@@ -43,6 +55,7 @@ type Post = {
       }>;
       [k: string]: unknown;
     };
+    entities?: Array<Entity>;
     [k: string]: unknown;
   };
   replyCount: number;
@@ -66,7 +79,11 @@ type Feed = {
     parent: Post;
     [k: string]: unknown;
   };
-  reason?: unknown;
+  reason?: {
+    $type: string;
+    by: unknown;
+    indexedAt: string;
+  };
   [k: string]: unknown;
 }
 
@@ -78,7 +95,8 @@ type Profile = {
   };
   handle: string;
   displayName: string;
-  description: string;
+  description?: string;
+  descriptionHtml: string; // Injected
   avatar: string;
   banner: string;
   followsCount: number;

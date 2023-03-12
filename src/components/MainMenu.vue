@@ -15,11 +15,13 @@ const state = reactive<{
 })
 
 const back = () => {
+  blurElement()
   if (state.canBack) router.back()
 }
 
 const openUserProfile = async () => {
-  await router.push({ name: "profile", query: { did: mainState.atp.session?.did } })
+  blurElement()
+  await router.push({ name: "profile", query: { handle: mainState.atp.session?.handle } })
 }
 
 const openSendPostPopup = () => {
