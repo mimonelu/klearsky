@@ -1,5 +1,10 @@
+<script lang="ts" setup>
+import Package from "../../package.json"
+</script>
+
 <template>
   <div class="copyright">
+    <div>{{ $t("title") }} v{{ Package.version }}</div>
     <small>&copy; 2023 mimonelu</small>
     <a
       class="textlink"
