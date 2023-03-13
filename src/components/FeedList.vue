@@ -22,7 +22,7 @@ function updatePost (newFeed: Feed) {
 
   // MEMO: フィード内の全同一ポストに最新のデータを反映する
   // WANT: このために「画面には1つのフィードのみ表示する」としているが、何とかしたい
-  props.feeds?.some((feed: Feed) => {
+  props.feeds?.forEach((feed: Feed) => {
     if (feed.post?.cid === newFeed.post.cid) {
       feed.post = newFeed.post
     }
@@ -47,7 +47,7 @@ function updatePost (newFeed: Feed) {
     </button>
     <div class="feeds">
       <div
-        v-for="feed, feedIndex of props.feeds"
+        v-for="feed of props.feeds"
         class="feed"
       >
         <Post

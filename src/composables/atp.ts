@@ -137,7 +137,7 @@ export default class {
       if (!response.success) return null
 
       // TODO:
-      response.data.descriptionHtml = text2html(response.data.description ?? "")
+      response.data.__descriptionHtml = text2html(response.data.description ?? "")
 
       return response.data
     } catch (error: any) {
@@ -256,9 +256,7 @@ export default class {
 
   text2htmlAtFeeds (feeds: Array<Feed>) {
     traverse(feeds, (key: string, value: any, parent: any) => {
-      if (key === "text") {
-        parent.html = text2html(value)
-      }
+      if (key === "text") parent.__textHtml = text2html(value)
     })
   }
 

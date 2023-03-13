@@ -93,7 +93,8 @@ async function submitCallback () {
     <template v-slot:body>
       <Post
         v-if="props.type === 'reply' || props.type === 'repost'"
-        type="preview"
+        type="post"
+        mode="preview"
         :post="props.post"
       />
       <EasyForm v-bind="easyFormProps">

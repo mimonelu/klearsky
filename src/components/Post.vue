@@ -11,7 +11,8 @@ const router = useRouter()
 const emit = defineEmits<{(event: string, post: any): void}>()
 
 const props = defineProps<{
-  type: "post" | "root" | "parent" | "repost" | "preview";
+  type: "post" | "root" | "parent" | "repost";
+  mode?: "preview";
   post: any;
 }>()
 
@@ -108,7 +109,7 @@ const openSource = () => {
       </div>
       <div
         class="text"
-        v-html="props.post.record.html"
+        v-html="props.post.record.__textHtml"
       />
       <div
         v-if="props.post.embed?.record"

@@ -41,7 +41,7 @@ type Post = {
   },
   record: {
     text: string;
-    html: string; // Injected
+    __textHtml: string; // Injected
     $type: string;
     createdAt: string;
     embed?: {
@@ -96,7 +96,7 @@ type Profile = {
   handle: string;
   displayName: string;
   description?: string;
-  descriptionHtml: string; // Injected
+  __descriptionHtml: string; // Injected
   avatar: string;
   banner: string;
   followsCount: number;

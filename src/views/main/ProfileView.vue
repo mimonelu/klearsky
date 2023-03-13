@@ -51,7 +51,7 @@ const getIndexedAt = (indexedAt?: null | string): string => {
         <div class="handle">{{ mainState.currentProfile?.handle }}</div>
         <div
           class="description"
-          v-html="mainState.currentProfile?.descriptionHtml ?? ''"
+          v-html="mainState.currentProfile?.__descriptionHtml ?? ''"
         />
         <dl class="indexed-at">
           <dt>{{ $t("startedAt") }}</dt>
