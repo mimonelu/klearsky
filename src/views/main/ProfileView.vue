@@ -74,9 +74,9 @@ const getIndexedAt = (indexedAt?: null | string): string => {
       </div>
     </div>
     <FeedList
-      type="post"
+      type="author"
       :feeds="mainState.pageFeeds"
-      :hasFetchButton="false"
+      :hasFetchButton="true"
     />
   </div>
 </template>

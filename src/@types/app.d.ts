@@ -17,7 +17,7 @@ type MainState = {
   fetchUserProfile: Function;
   fetchCurrentProfile: Function;
   fetchCurrentAuthorFeed: Function;
-  updateProfile: Function;
+  updateUserProfile: Function;
   openSendPostPopup: Function;
   sendPostPopupProps: {
     visibility: boolean;

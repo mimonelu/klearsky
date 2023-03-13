@@ -5,7 +5,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{
-  type: "timline" | "post";
+  type: "timline" | "post" | "author";
   feeds: null | Array<Feed>;
   hasFetchButton?: boolean;
 }>()

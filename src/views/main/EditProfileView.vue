@@ -76,7 +76,7 @@ async function submit () {
   if (state.processing) return
   state.processing = true
   try {
-    await mainState.updateProfile(state)
+    await mainState.updateUserProfile(state)
     await router.push({ name: "profile", query: { did: mainState.atp.session?.did } })
   } finally {
     state.processing = false

@@ -20,6 +20,34 @@ import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import Atp from "@/composables/atp"
 
+const state = reactive<MainState>({
+  atp: new Atp(),
+  mounted: false,
+  hasLogin: false,
+  timelineFeeds: [],
+  timelineCursor: undefined,
+  userProfile: null,
+  currentProfile: null,
+  pageFeeds: null,
+  pageCursor: null,
+  fetchFeeds,
+  fetchUserProfile,
+  fetchCurrentProfile,
+  fetchCurrentAuthorFeed,
+  updateUserProfile,
+  isUserProfile: false,
+  query: {},
+  processing: false,
+  openSendPostPopup,
+  sendPostPopupProps: {
+    visibility: false,
+    type: "",
+    post: null,
+  },
+})
+
+provide("state", state)
+
 onMounted(async () => {
   state.hasLogin = state.atp.hasLogin()
   try {
@@ -27,8 +55,6 @@ onMounted(async () => {
     await autoLogin()
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()
-    state.processing = false
-    await fetchTimeline("new")
   } finally {
     state.mounted = true
     state.processing = false
@@ -37,7 +63,16 @@ onMounted(async () => {
 
 const router = useRouter()
 
+router.beforeEach(() => {
+  state.currentProfile = null
+  state.pageFeeds?.splice(0)
+  state.pageCursor = null
+})
+
 router.afterEach(async (to: RouteLocationNormalized) => {
+  // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
+  if (to.name === "timeline" && state.timelineFeeds.length > 0) return
+
   state.processing = true
   try {
     await processPage(to.name)
@@ -46,28 +81,26 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   }
 })
 
-const autoLogin = async () => {
+async function autoLogin () {
   if (state.hasLogin) return
   state.atp.setService()
   if (!state.atp.createAgent()) return
   if (state.atp.canLogin()) state.hasLogin = await state.atp.login()
 }
 
-const manualLogin = async (identifier: string, password: string) => {
+async function manualLogin (identifier: string, password: string) {
   try {
     state.processing = true
     state.hasLogin = await state.atp.login(identifier, password)
     if (!state.hasLogin) throw new Error("Login failed")
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()
-    state.processing = false
-    await fetchTimeline("new")
   } finally {
     state.processing = false
   }
 }
 
-const processPage = async (pageName?: null | RouteRecordName) => {
+async function processPage (pageName?: null | RouteRecordName) {
   state.query = router.currentRoute.value.query
   const handle = state.query.handle as LocationQueryValue
   state.isUserProfile = handle === state.atp.session?.handle
@@ -81,8 +114,12 @@ const processPage = async (pageName?: null | RouteRecordName) => {
       }
       await Promise.all([
         fetchCurrentProfile(),
-        fetchCurrentAuthorFeed()
+        fetchCurrentAuthorFeed("new")
       ])
+      break
+    }
+    case "timeline": {
+      await fetchTimeline("new")
       break
     }
     case "post": {
@@ -98,61 +135,23 @@ const processPage = async (pageName?: null | RouteRecordName) => {
   }
 }
 
-const fetchUserProfile = async () => {
-  state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle)
-}
-
-const fetchCurrentProfile = async () => {
-  const handle = state.query.handle as LocationQueryValue
-  if (!handle) return
-  state.currentProfile = null
-  state.currentProfile = await state.atp.fetchProfile(handle)
-  if (handle === state.atp.session?.handle) {
-    state.userProfile = state.currentProfile
-  }
-}
-
-const fetchCurrentAuthorFeed = async () => {
-  const handle = state.query.handle as LocationQueryValue
-  if (!handle) return
-  state.pageFeeds?.splice(0)
-  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, handle, 10)
-  if (result == null) return
-  state.pageFeeds = result.feeds
-  state.pageCursor = result.cursor ?? null
-}
-
-const fetchTimeline = async (direction: "old" | "new") => {
-  if (state.processing) return
-  state.processing = true
-  try {
-    const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchTimeline(
+async function fetchTimeline (direction: "old" | "new") {
+  const result: null | { feeds: Array<Feed>; cursor?: string } =
+    await state.atp.fetchTimeline(
       state.timelineFeeds,
       20,
       direction === "old" ? state.timelineCursor : undefined
     )
-    if (result == null) return
-    state.timelineFeeds = result.feeds
-    state.timelineCursor = result.cursor
-  } finally {
-    state.processing = false
-  }
+  if (result == null) return
+  state.timelineFeeds = result.feeds
+  state.timelineCursor = result.cursor
 }
 
-const fetchFeeds = async (type: string, direction: "new" | "old") => {
-  if (type === "timeline") {
-    await fetchTimeline(direction)
-    return
-  }
-  state.processing = true
-  try {
-    await processPage(type)
-  } finally {
-    state.processing = false
-  }
+async function fetchUserProfile () {
+  state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle)
 }
 
-const updateProfile = async (profile: any) => {
+async function updateUserProfile (profile: any) {
   state.processing = true
   try {
     await state.atp.updateProfile(profile)
@@ -161,43 +160,58 @@ const updateProfile = async (profile: any) => {
   }
 }
 
-const openSendPostPopup = (type: "post" | "reply" | "repost", post?: any) => {
+async function fetchCurrentProfile () {
+  const handle = state.query.handle as LocationQueryValue
+  if (!handle) return
+  state.currentProfile = await state.atp.fetchProfile(handle)
+  if (handle === state.atp.session?.handle) {
+    state.userProfile = state.currentProfile
+  }
+}
+
+async function fetchCurrentAuthorFeed (direction: "new" | "old") {
+  const handle = state.query.handle as LocationQueryValue
+  if (!handle) return
+  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, handle, 10, direction === "old" ? state.pageCursor : undefined)
+  if (result == null) return
+  state.pageFeeds = result.feeds
+  state.pageCursor = result.cursor ?? null
+}
+
+async function fetchFeeds (type: string, direction: "new" | "old") {
+  state.processing = true
+  try {
+    switch (type) {
+      case "author":
+      case "profile": {
+        await fetchCurrentAuthorFeed(direction)
+        break
+      }
+      case "timeline": {
+        await fetchTimeline(direction)
+        break
+      }
+      case "post": {
+        const uri = state.query.uri as LocationQueryValue
+        if (!uri) return
+        state.pageFeeds = await state.atp.fetchPostThread(uri)
+        break
+      }
+    }
+  } finally {
+    state.processing = false
+  }
+}
+
+function openSendPostPopup (type: "post" | "reply" | "repost", post?: any) {
   state.sendPostPopupProps.visibility = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post
 }
 
-const closeSendPostPopup = () => {
+function closeSendPostPopup () {
   state.sendPostPopupProps.visibility = false
 }
-
-const state = reactive<MainState>({
-  atp: new Atp(),
-  mounted: false,
-  hasLogin: false,
-  timelineFeeds: [],
-  timelineCursor: undefined,
-  userProfile: null,
-  currentProfile: null,
-  pageFeeds: null,
-  pageCursor: null,
-  fetchFeeds,
-  fetchUserProfile,
-  fetchCurrentProfile,
-  fetchCurrentAuthorFeed,
-  updateProfile,
-  isUserProfile: false,
-  query: {},
-  processing: false,
-  openSendPostPopup,
-  sendPostPopupProps: {
-    visibility: false,
-    type: "",
-    post: null,
-  },
-})
-
-provide("state", state)
 </script>
 
 <template>
