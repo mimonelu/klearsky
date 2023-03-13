@@ -19,7 +19,7 @@ const state = reactive<{
 const $t = inject("$t") as Function
 
 const submitCallback = async () => {
-  emit("login", state.identifier, state.password)
+  emit("login", state.service, state.identifier, state.password)
 }
 
 const easyFormProps = {

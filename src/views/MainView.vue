@@ -83,15 +83,13 @@ router.afterEach(async (to: RouteLocationNormalized) => {
 
 async function autoLogin () {
   if (state.hasLogin) return
-  state.atp.setService()
-  if (!state.atp.createAgent()) return
   if (state.atp.canLogin()) state.hasLogin = await state.atp.login()
 }
 
-async function manualLogin (identifier: string, password: string) {
+async function manualLogin (service: string, identifier: string, password: string) {
   try {
     state.processing = true
-    state.hasLogin = await state.atp.login(identifier, password)
+    state.hasLogin = await state.atp.login(service, identifier, password)
     if (!state.hasLogin) throw new Error("Login failed")
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()

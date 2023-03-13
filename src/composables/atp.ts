@@ -84,7 +84,9 @@ export default class {
     return this.session != null
   }
 
-  async login (identifier?: string, password?: string): Promise<boolean> {
+  async login (service?: string, identifier?: string, password?: string): Promise<boolean> {
+    this.setService(service)
+    if (!this.createAgent()) return false
     if (this.agent == null) return false
     try {
       if (identifier == null || password == null) await this.resumeSession()
