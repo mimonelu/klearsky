@@ -180,19 +180,18 @@ async function fetchFeeds (type: string, direction: "new" | "old") {
   state.processing = true
   try {
     switch (type) {
-      case "author":
-      case "profile": {
+      case "author": {
         await fetchCurrentAuthorFeed(direction)
-        break
-      }
-      case "timeline": {
-        await fetchTimeline(direction)
         break
       }
       case "post": {
         const uri = state.query.uri as LocationQueryValue
         if (!uri) return
         state.pageFeeds = await state.atp.fetchPostThread(uri)
+        break
+      }
+      case "timeline": {
+        await fetchTimeline(direction)
         break
       }
     }

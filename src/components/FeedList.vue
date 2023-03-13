@@ -5,19 +5,19 @@ import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{
-  type: "timline" | "post" | "author";
+  type: "author" | "post" | "timline";
   feeds: null | Array<Feed>;
   hasFetchButton?: boolean;
 }>()
 
 const mainState: MainState = inject("state") as MainState
 
-const fetchFeeds = async (direction: "new" | "old") => {
+async function fetchFeeds (direction: "new" | "old") {
   blurElement()
   await mainState.fetchFeeds(props.type, direction)
 }
 
-const updatePost = (newFeed: Feed) => {
+function updatePost (newFeed: Feed) {
   if (props.feeds == null) return
 
   // MEMO: フィード内の全同一ポストに最新のデータを反映する

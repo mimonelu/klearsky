@@ -39,6 +39,41 @@ export default class {
     this.session = null
   }
 
+  canLogin (): boolean {
+    return storage.load("handle") != null
+  }
+
+  hasLogin (): boolean {
+    return this.session != null
+  }
+
+  async login (service?: string, identifier?: string, password?: string): Promise<boolean> {
+    this.setService(service)
+    if (!this.createAgent()) return false
+    if (this.agent == null) return false
+    try {
+      if (identifier == null || password == null) await this.resumeSession()
+      else await this.agent.login({ identifier, password })
+    } catch (error: any) {
+      console.error("[klearsky/login]", error)
+      this.logout()
+      return false
+    }
+    // ここで persistSession が入る
+    if (this.session == null) return false
+    storage.save("handle", this.session.handle)
+    storage.save(this.session.handle, this.session)
+    return true
+  }
+
+  logout () {
+    storage.remove("handle")
+    if (this.session != null) {
+      storage.remove(this.session.handle)
+      this.session = null
+    }
+  }
+
   setService (service?: string) {
     this.service = service ?? storage.load("service") ?? "https://bsky.social"
     storage.save("service", this.service)
@@ -73,41 +108,6 @@ export default class {
     } catch (error: any) {
       console.error(error)
       return false
-    }
-  }
-
-  canLogin (): boolean {
-    return storage.load("handle") != null
-  }
-
-  hasLogin (): boolean {
-    return this.session != null
-  }
-
-  async login (service?: string, identifier?: string, password?: string): Promise<boolean> {
-    this.setService(service)
-    if (!this.createAgent()) return false
-    if (this.agent == null) return false
-    try {
-      if (identifier == null || password == null) await this.resumeSession()
-      else await this.agent.login({ identifier, password })
-    } catch (error: any) {
-      console.error("[klearsky/login]", error)
-      this.logout()
-      return false
-    }
-    // ここで persistSession が入る
-    if (this.session == null) return false
-    storage.save("handle", this.session.handle)
-    storage.save(this.session.handle, this.session)
-    return true
-  }
-
-  logout () {
-    storage.remove("handle")
-    if (this.session != null) {
-      storage.remove(this.session.handle)
-      this.session = null
     }
   }
 
@@ -186,11 +186,14 @@ export default class {
       if (!response.success) return null
 
       // TODO:
+      // SEE: http://localhost:5173/klearsky/#/post?uri=at://did:plc:fporki4626psbdnxzeh7lhg5/app.bsky.feed.post/3jqq5xx7tmc2y
+      const replies: Array<Post> = []
+      traverse(response.data.thread.replies, (key: string, value: any) => {
+        if (key === "post") replies.push(value)
+      })
       const posts: Array<any> = [
         response.data.thread.post,
-        // TODO: replies の入れ子構造に対応すること
-        // SEE: http://localhost:5173/klearsky/#/post?uri=at://did:plc:fporki4626psbdnxzeh7lhg5/app.bsky.feed.post/3jqq5xx7tmc2y
-        ...(response.data.thread.replies as Array<any>).map((reply: any): any => reply.post)
+        ...replies
       ]
       this.text2htmlAtFeeds(posts)
       posts.sort((a: any, b: any) => {
