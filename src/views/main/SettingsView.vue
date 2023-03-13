@@ -19,7 +19,7 @@ async function logout () {
 
 <template>
   <div class="settings-view">
-    <PageHeader :title="$t('setting')" />
+    <PageHeader :title="$t('settings')" />
     <div class="body">
       <div class="body__section">
         <button
