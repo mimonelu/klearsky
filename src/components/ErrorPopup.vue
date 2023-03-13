@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { inject } from "vue"
 import Popup from "@/components/Popup.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
-const mainState: MainState = inject("state") as MainState
+const props = defineProps<{
+  error: unknown;
+}>()
 
 const close = () => {
   emit("close")
@@ -21,7 +22,7 @@ const close = () => {
       <h2>{{ $t("error") }}</h2>
     </template>
     <template v-slot:body>
-      <pre class="message">{{ mainState.error }}</pre>
+      <pre class="message">{{ props.error }}</pre>
     </template>
   </Popup>
 </template>

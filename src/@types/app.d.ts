@@ -7,7 +7,6 @@ type MainState = {
   atp: any;
   mounted: boolean;
   hasLogin: boolean;
-  error: any;
   timelineFeeds: Array<Feed>;
   timelineCursor?: string;
   userProfile: null | Profile;

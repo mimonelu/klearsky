@@ -1,8 +1,18 @@
 <script setup lang="ts">
-import { onErrorCaptured, onMounted, provide, reactive } from "vue"
-import { useRouter, RouterView } from "vue-router"
-import type { LocationQueryValue, RouteLocationNormalized, RouteRecordName } from "vue-router"
-import ErrorPopup from "@/components/ErrorPopup.vue"
+import {
+  onMounted,
+  provide,
+  reactive
+} from "vue"
+import {
+  useRouter,
+  RouterView
+} from "vue-router"
+import type {
+  LocationQueryValue,
+  RouteLocationNormalized,
+  RouteRecordName
+} from "vue-router"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
 import MainMenu from "@/components/MainMenu.vue"
@@ -23,10 +33,6 @@ onMounted(async () => {
     state.mounted = true
     state.processing = false
   }
-})
-
-onErrorCaptured((error: any) => {
-  state.error = error
 })
 
 const router = useRouter()
@@ -155,10 +161,6 @@ const updateProfile = async (profile: any) => {
   }
 }
 
-const closeErrorPopup = () => {
-  state.error = null
-}
-
 const openSendPostPopup = (type: "post" | "reply" | "repost", post?: any) => {
   state.sendPostPopupProps.visibility = true
   state.sendPostPopupProps.type = type
@@ -173,7 +175,6 @@ const state = reactive<MainState>({
   atp: new Atp(),
   mounted: false,
   hasLogin: false,
-  error: null,
   timelineFeeds: [],
   timelineCursor: undefined,
   userProfile: null,
@@ -223,10 +224,6 @@ provide("state", state)
       @login="manualLogin"
     />
     <Loader v-if="state.processing" />
-    <ErrorPopup
-      v-if="state.mounted && state.error != null"
-      @close="closeErrorPopup"
-    />
   </div>
 </template>
 
