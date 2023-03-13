@@ -14,6 +14,10 @@ const state = reactive<{
   canBack: false,
 })
 
+onMounted(() => {
+  state.canBack = history.state.back != null
+})
+
 function back () {
   blurElement()
   if (state.canBack) router.back()
@@ -36,10 +40,6 @@ async function openSettings () {
   blurElement()
   await router.push({ name: "settings" })
 }
-
-onMounted(() => {
-  state.canBack = history.state.back != null
-})
 </script>
 
 <template>
@@ -73,16 +73,16 @@ onMounted(() => {
       <SVGIcon name="timeline" />
     </RouterLink>
     <button
-      class="link-button--post"
-      @click.prevent="openSendPostPopup"
-    >
-      <SVGIcon name="post" />
-    </button>
-    <button
       class="link-button"
       @click.prevent="openSettings"
     >
       <SVGIcon name="setting" />
+    </button>
+    <button
+      class="link-button--post"
+      @click.prevent="openSendPostPopup"
+    >
+      <SVGIcon name="post" />
     </button>
   </div>
 </template>
