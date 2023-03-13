@@ -1,8 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 import HomeView from "@/views/HomeView.vue"
 import MainView from "@/views/MainView.vue"
-import PostRecordFormView from "@/views/PostRecordFormView.vue"
-import UploadProfileImagesFormView from "@/views/UploadProfileImagesFormView.vue"
 import PostView from "@/views/main/PostView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
 import ProfileView from "@/views/main/ProfileView.vue"
@@ -40,19 +38,9 @@ const router = createRouter({
           path: "/post",
           name: "post",
           component: PostView,
-        },
+        }
       ],
-    },
-    {
-      path: "/post-record-form",
-      name: "post-record-form",
-      component: PostRecordFormView,
-    },
-    {
-      path: "/upload-profile-images-form",
-      name: "upload-profile-images-form",
-      component: UploadProfileImagesFormView,
-    },
+    }
   ],
 })
 

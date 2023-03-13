@@ -6,20 +6,11 @@ import Logo from "@/components/Logo.vue"
 <template>
   <div class="page">
     <Logo />
-    <p>Applications for Bluesky will be added.</p>
     <menu>
       <RouterLink
         to="timeline"
-        class="button"
-      >Klearsky</RouterLink>
-      <RouterLink
-        to="upload-profile-images-form"
-        class="button"
-      >Upload Profile Images Form for Bluesky</RouterLink>
-      <RouterLink
-        to="post-record-form"
-        class="button"
-      >Post Record Form for Bluesky</RouterLink>
+        class="button--large"
+      >Launch Klearsky</RouterLink>
     </menu>
     <Copyright />
   </div>
