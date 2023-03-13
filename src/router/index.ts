@@ -1,9 +1,10 @@
 import { createRouter, createWebHashHistory } from "vue-router"
+import EditProfileView from "@/views/main/EditProfileView.vue"
 import HomeView from "@/views/HomeView.vue"
 import MainView from "@/views/MainView.vue"
 import PostView from "@/views/main/PostView.vue"
-import EditProfileView from "@/views/main/EditProfileView.vue"
 import ProfileView from "@/views/main/ProfileView.vue"
+import SettingsView from "@/views/main/SettingsView.vue"
 import TimelineView from "@/views/main/TimelineView.vue"
 
 const router = createRouter({
@@ -19,6 +20,11 @@ const router = createRouter({
       name: "main",
       component: MainView,
       children: [
+        {
+          path: "/settings",
+          name: "settings",
+          component: SettingsView,
+        },
         {
           path: "/timeline",
           name: "timeline",

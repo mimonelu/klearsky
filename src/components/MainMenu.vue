@@ -14,19 +14,27 @@ const state = reactive<{
   canBack: false,
 })
 
-const back = () => {
+function back () {
   blurElement()
   if (state.canBack) router.back()
 }
 
-const openUserProfile = async () => {
+async function openUserProfile () {
   blurElement()
-  await router.push({ name: "profile", query: { handle: mainState.atp.session?.handle } })
+  await router.push({
+    name: "profile",
+    query: { handle: mainState.atp.session?.handle },
+  })
 }
 
-const openSendPostPopup = () => {
+function openSendPostPopup () {
   blurElement()
   mainState.openSendPostPopup("post")
+}
+
+async function openSettings () {
+  blurElement()
+  await router.push({ name: "settings" })
 }
 
 onMounted(() => {
@@ -39,7 +47,7 @@ onMounted(() => {
     <button
       v-if="state.canBack"
       class="link-button--outline"
-      @click="back"
+      @click.prevent="back"
     >
       <SVGIcon name="cursorLeft" />
     </button>
@@ -66,9 +74,15 @@ onMounted(() => {
     </RouterLink>
     <button
       class="link-button--post"
-      @click="openSendPostPopup"
+      @click.prevent="openSendPostPopup"
     >
       <SVGIcon name="post" />
+    </button>
+    <button
+      class="link-button"
+      @click.prevent="openSettings"
+    >
+      <SVGIcon name="setting" />
     </button>
   </div>
 </template>

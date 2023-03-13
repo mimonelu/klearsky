@@ -7,6 +7,7 @@
     "identifier": "Email or Username or did:plc:",
     "password": "Password",
     "login": "Login",
+    "logout": "Logout",
     "edit": "Edit",
     "startedAt": "Started on",
     "following": "Following",
@@ -23,6 +24,7 @@
     "linkBox": "Link box",
     "imageBoxes": "Image boxes",
     "alts": "ALT texts",
+    "setting": "Settings",
 
     "prf-title": "Post Record Form for Bluesky",
     "prf-description": "This service posts a record for Bluesky.\n(mainly intended for PC users)",
@@ -61,6 +63,7 @@
     "identifier": "ユーザー名／メールアドレス／ did:plc:",
     "password": "パスワード",
     "login": "ログイン",
+    "logout": "ログアウト",
     "edit": "編集",
     "startedAt": "利用開始日",
     "following": "フォロー数",
@@ -77,6 +80,7 @@
     "linkBox": "リンクボックス",
     "imageBoxes": "イメージボックス",
     "alts": "代替テキスト",
+    "setting": "設定",
 
     "prf-title": "Post Record Form for Bluesky",
     "prf-description": "Bluesky にレコードを投稿するサービスです。\n主に PC ユーザーの利用を想定しています。",

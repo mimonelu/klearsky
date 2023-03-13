@@ -12,6 +12,7 @@ import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import repost from "@/svg/repost.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
+import setting from "@/svg/setting.svg?raw"
 import timeline from "@/svg/timeline.svg?raw"
 
 const icons: { [key: string]: string } = {
@@ -26,6 +27,7 @@ const icons: { [key: string]: string } = {
   plus,
   post,
   repost,
+  setting,
   shimmer,
   timeline,
 }

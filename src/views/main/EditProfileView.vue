@@ -2,6 +2,7 @@
 import { inject, onMounted, reactive } from "vue"
 import { useRouter } from "vue-router"
 import EasyForm from "@/components/EasyForm.vue"
+import PageHeader from "@/components/PageHeader.vue"
 import { blurElement, waitProp } from "@/composables/misc"
 
 const router = useRouter()
@@ -86,19 +87,12 @@ async function submit () {
 
 <template>
   <div class="edit-profile-view">
-    <header class="header">
-      <h1>{{ $t("editProfile") }}</h1>
-    </header>
+    <PageHeader :title="$t('editProfile')" />
     <EasyForm v-bind="easyFormProps" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.header {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-  padding: 1rem;
-}
-
 .easy-form {
   padding: 2rem;
 }
