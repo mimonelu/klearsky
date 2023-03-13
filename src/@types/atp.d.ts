@@ -69,6 +69,7 @@ type Post = {
     downvote?: string;
     [k: string]: unknown;
   };
+  __reason?: unknown; // Injected
   [k: string]: unknown;
 }
 

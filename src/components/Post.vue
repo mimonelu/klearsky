@@ -8,12 +8,12 @@ import { blurElement, formatDate } from "@/composables/misc"
 
 const router = useRouter()
 
-const emit = defineEmits<{(event: string, post: any): void}>()
+const emit = defineEmits<{(event: string, post: Post): void}>()
 
 const props = defineProps<{
-  type: "post" | "root" | "parent" | "repost";
+  type: "post" | "root" | "parent" | "postInPost";
   mode?: "preview";
-  post: any;
+  post: Post;
 }>()
 
 const mainState: MainState = inject("state") as MainState
@@ -81,103 +81,117 @@ const openSource = () => {
   <div
     class="post"
     :data-type="type"
-    @click.prevent.stop="openPost(props.post.uri)"
+    :data-mode="mode"
+    :data-repost="post.__reason != null"
+    @click.prevent.stop="openPost(post.uri)"
   >
-    <button
-      class="avatar"
-      @click.stop="openProfile(props.post.author.handle)"
+    <div
+      v-if="post.__reason != null"
+      class="reposter"
     >
-      <img
-        loading="lazy"
-        :src="props.post.author.avatar ?? '/img/void.png'"
+      <SVGIcon name="repost" />
+      <a
+        class="textlink reposter__display-name"
+        @click.stop="openProfile(post.__reason.by?.handle)"
+      >{{ post.__reason.by?.displayName }}</a>
+      <div class="reposter__handle">{{ post.__reason.by?.handle }}</div>
+    </div>
+    <div class="body">
+      <button
+        class="avatar"
+        @click.stop="openProfile(post.author.handle)"
       >
-    </button>
-    <div class="right">
-      <div class="header">
-        <a
-          class="display_name"
-          @click.stop="openProfile(props.post.author.handle)"
-        >{{ props.post.author.displayName }}</a>
-        <a
-          class="handle"
-          @click.stop="openProfile(props.post.author.handle)"
-        >{{ props.post.author.handle }}</a>
+        <img
+          loading="lazy"
+          :src="post.author.avatar ?? '/img/void.png'"
+        >
+      </button>
+      <div class="right">
+        <div class="header">
+          <a
+            class="textlink display-name"
+            tabindex="0"
+            @click.stop="openProfile(post.author.handle)"
+          >{{ post.author.displayName }}</a>
+          <div class="handle">{{ post.author.handle }}</div>
+          <div
+            v-if="post.indexedAt"
+            class="indexed_at"
+          >{{ formatDate(post.indexedAt, "") }}</div>
+        </div>
         <div
-          v-if="props.post.indexedAt"
-          class="indexed_at"
-        >{{ formatDate(props.post.indexedAt, "") }}</div>
-      </div>
-      <div
-        class="text"
-        v-html="props.post.record.__textHtml"
-      />
-      <div
-        v-if="props.post.embed?.record"
-        class="repost"
-      >
-        <Post
-          type="repost"
-          :post="props.post.embed.record"
+          class="text"
+          v-html="post.record.__textHtml"
         />
-      </div>
-      <div
-        v-if="props.post.embed?.images"
-        class="images"
-      >
-        <a
-          v-for="image of props.post.embed.images"
-          class="image"
-          :href="image.fullsize"
-          rel="noreferrer"
-          target="_blank"
-          :title="image.alt"
-          :style="`background-image: url(${image.thumb});`"
-          @click.stop
-        />
-      </div>
-      <div
-        v-if="type !== 'repost'"
-        class="footer"
-      >
-        <div>
-          <button
-            class="footer-button reply_count"
-            :data-has="props.post.replyCount > 0"
-            @click.stop="reply"
-          >
-            <SVGIcon name="post" />
-            <span>{{ props.post.replyCount > 0 ? props.post.replyCount : "" }}</span>
-          </button>
+        <div
+          v-if="post.embed?.record"
+          class="repost"
+        >
+          <Post
+            type="postInPost"
+            :post="post.embed.record"
+          />
         </div>
-        <div>
-          <button
-            class="footer-button repost_count"
-            :data-has="props.post.repostCount > 0"
-            :data-reposted="!!props.post.viewer.repost"
-            @click.stop="repost"
-          >
-            <SVGIcon name="repost" />
-            <span>{{ props.post.repostCount > 0 ? props.post.repostCount : "" }}</span>
-          </button>
+        <div
+          v-if="post.embed?.images"
+          class="images"
+        >
+          <a
+            v-for="image of post.embed.images"
+            class="image"
+            :href="image.fullsize"
+            rel="noreferrer"
+            target="_blank"
+            tabindex="0"
+            :title="image.alt"
+            :style="`background-image: url(${image.thumb});`"
+            @click.stop
+          />
         </div>
-        <div>
-          <button
-            class="footer-button upvote_count"
-            :data-has="props.post.upvoteCount > 0"
-            :data-voted="!!props.post.viewer.upvote"
-            @click.stop="upvote"
-          >
-            <SVGIcon name="heart" />
-            <span>{{ props.post.upvoteCount > 0 ? props.post.upvoteCount : "" }}</span>
-          </button>
-        </div>
-        <div>
-          <button
-            class="footer-button source"
-            @click.stop="openSource"
-          >
-            <SVGIcon name="json" />
-          </button>
+        <div
+          v-if="type !== 'postInPost'"
+          class="footer"
+        >
+          <div>
+            <button
+              class="footer-button reply_count"
+              :data-has="post.replyCount > 0"
+              @click.stop="reply"
+            >
+              <SVGIcon name="post" />
+              <span>{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
+            </button>
+          </div>
+          <div>
+            <button
+              class="footer-button repost_count"
+              :data-has="post.repostCount > 0"
+              :data-reposted="!!post.viewer.repost"
+              @click.stop="repost"
+            >
+              <SVGIcon name="repost" />
+              <span>{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
+            </button>
+          </div>
+          <div>
+            <button
+              class="footer-button upvote_count"
+              :data-has="post.upvoteCount > 0"
+              :data-voted="!!post.viewer.upvote"
+              @click.stop="upvote"
+            >
+              <SVGIcon name="heart" />
+              <span>{{ post.upvoteCount > 0 ? post.upvoteCount : "" }}</span>
+            </button>
+          </div>
+          <div>
+            <button
+              class="footer-button source"
+              @click.stop="openSource"
+            >
+              <SVGIcon name="json" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -193,7 +207,7 @@ const openSource = () => {
   --avatar-size: 3em;
 
   display: flex;
-  grid-gap: 1em;
+  flex-direction: column;
   padding: 1em;
   position: relative;
 
@@ -211,11 +225,11 @@ const openSource = () => {
     }
   }
 
-  &[data-type="repost"] {
+  &[data-type="postInPost"] {
     font-size: 0.875rem;
   }
 
-  &[data-type="preview"] {
+  &[data-mode="preview"] {
     font-size: 0.875rem;
     pointer-events: none;
 
@@ -224,6 +238,41 @@ const openSource = () => {
       display: none;
     }
   }
+}
+
+.reposter {
+  display: grid;
+  grid-template-columns: max-content auto 1fr;
+  align-items: center;
+  grid-gap: 0.5em;
+  margin-bottom: 1em;
+
+  & > .svg-icon {
+    fill: rgb(var(--green));
+    font-size: 0.875em;
+  }
+
+  &__display-name {
+    color: rgb(var(--green));
+    cursor: pointer;
+    font-size: 0.875em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__handle {
+    color: rgba(var(--green), 0.5);
+    font-size: 0.75em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.body {
+  display: flex;
+  grid-gap: 1em;
 }
 
 .avatar {
@@ -246,7 +295,8 @@ const openSource = () => {
   overflow: hidden;
 }
 
-.display_name {
+.display-name {
+  color: rgb(var(--fg-color));
   cursor: pointer;
   font-weight: bold;
   overflow: hidden;
@@ -256,7 +306,6 @@ const openSource = () => {
 
 .handle {
   color: rgba(var(--fg-color), 0.5);
-  cursor: pointer;
   font-size: 0.75em;
   overflow: hidden;
   text-overflow: ellipsis;

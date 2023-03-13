@@ -161,6 +161,7 @@ export default class {
       if (!response.success) return null
 
       // TODO:
+      this.injectReason(response.data.feed as Array<Feed>)
       this.text2htmlAtFeeds(response.data.feed as Array<Feed>)
       const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
       this.sortFeeds(newFeeds)
@@ -221,6 +222,7 @@ export default class {
       if (!response.success) return null
 
       // TODO:
+      this.injectReason(response.data.feed as Array<Feed>)
       this.text2htmlAtFeeds(response.data.feed as Array<Feed>)
       const newFeeds = this.mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
       this.sortFeeds(newFeeds)
@@ -254,6 +256,13 @@ export default class {
     }
   }
 
+  injectReason (feeds: Array<Feed>) {
+    feeds.forEach((feed: Feed) => {
+      if (feed.reason == null) return
+      feed.post.__reason = feed.reason
+    })
+  }
+
   text2htmlAtFeeds (feeds: Array<Feed>) {
     traverse(feeds, (key: string, value: any, parent: any) => {
       if (key === "text") parent.__textHtml = text2html(value)
@@ -276,12 +285,8 @@ export default class {
 
   sortFeeds (feeds: Array<Feed>): Array<Feed> {
     return feeds.sort((a: Feed, b: Feed) => {
-      // NOTICE: リポストの indexedAt はリポストした時の時間ではないため、
-      // そのままソートするとリポストがポストされた時間でソートされてしまう。以下はその暫定的な対策
-      if (a.post.viewer.repost != null || b.post.viewer.repost != null) return 0
-
-      const aIndexedAt = new Date(a.post.indexedAt)
-      const bIndexedAt = new Date(b.post.indexedAt)
+      const aIndexedAt = new Date(a.post.__reason?.indexedAt ?? a.post.indexedAt)
+      const bIndexedAt = new Date(b.post.__reason?.indexedAt ?? b.post.indexedAt)
       return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? - 1 : 0
     })
   }
