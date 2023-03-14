@@ -3,7 +3,7 @@ import { inject } from "vue"
 import format from "date-fns/format"
 import FeedList from "@/components/FeedList.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
+import { blurElement, showJson } from "@/composables/misc"
 
 const mainState: MainState = inject("state") as MainState
 
@@ -31,6 +31,10 @@ async function toggleFollow () {
 
 function getIndexedAt (indexedAt?: null | string): string {
   return indexedAt == null ? "" : format(new Date(indexedAt), "yyyy/MM/dd")
+}
+
+function openSource () {
+  showJson(mainState.currentProfile)
 }
 </script>
 
@@ -113,6 +117,12 @@ function getIndexedAt (indexedAt?: null | string): string {
             <dt>{{ $t("startedAt") }}</dt>
             <dd>{{ getIndexedAt(mainState.currentProfile?.indexedAt) }}</dd>
           </dl>
+          <button
+            class="icon-button source"
+            @click.stop="openSource"
+          >
+            <SVGIcon name="json" />
+          </button>
         </div>
       </div>
     </div>
@@ -232,4 +242,8 @@ function getIndexedAt (indexedAt?: null | string): string {
 .posts-count {}
 
 .indexed-at {}
+
+.source {
+  margin-left: auto;
+}
 </style>

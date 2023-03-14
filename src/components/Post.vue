@@ -4,7 +4,7 @@ import { useRouter } from "vue-router"
 import Loader from "@/components/Loader.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement, formatDate } from "@/composables/misc"
+import { blurElement, formatDate, showJson } from "@/composables/misc"
 
 const router = useRouter()
 
@@ -72,8 +72,7 @@ const updatePost = async () => {
 }
 
 const openSource = () => {
-  const windowObject = window.open()
-  windowObject?.document.write(`<pre>${JSON.stringify(props.post, null, 2)}</pre>`)
+  showJson(props.post)
 }
 </script>
 
@@ -154,7 +153,7 @@ const openSource = () => {
         >
           <div>
             <button
-              class="footer-button reply_count"
+              class="icon-button reply_count"
               :data-has="post.replyCount > 0"
               @click.stop="reply"
             >
@@ -164,7 +163,7 @@ const openSource = () => {
           </div>
           <div>
             <button
-              class="footer-button repost_count"
+              class="icon-button repost_count"
               :data-has="post.repostCount > 0"
               :data-reposted="!!post.viewer.repost"
               @click.stop="repost"
@@ -175,7 +174,7 @@ const openSource = () => {
           </div>
           <div>
             <button
-              class="footer-button upvote_count"
+              class="icon-button upvote_count"
               :data-has="post.upvoteCount > 0"
               :data-voted="!!post.viewer.upvote"
               @click.stop="upvote"
@@ -186,7 +185,7 @@ const openSource = () => {
           </div>
           <div>
             <button
-              class="footer-button source"
+              class="icon-button source"
               @click.stop="openSource"
             >
               <SVGIcon name="json" />
@@ -218,10 +217,10 @@ const openSource = () => {
       content: "";
       display: block;
       position: absolute;
-      top: calc(1em + var(--avatar-size) + 2px);
+      top: calc(1em + var(--avatar-size) + 8px);
       left: calc(2.5em - 1px);
       width: 2px;
-      height: calc(100% - var(--avatar-size) - 4px);
+      height: calc(100% - var(--avatar-size) - 16px);
     }
   }
 
@@ -298,6 +297,7 @@ const openSource = () => {
 .display-name {
   color: rgb(var(--fg-color));
   cursor: pointer;
+  font-size: 0.875em;
   font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -379,25 +379,7 @@ const openSource = () => {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 2fr;
   align-items: center;
-}
-
-.footer-button {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  grid-gap: 0.5em;
-  font-size: 0.875em;
-  padding: 0.5em 1em;
-
-  &[data-has="true"] > .svg-icon {
-    fill: rgba(var(--fg-color), 0.75);
-  }
-  &[data-has="false"] > .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
-  }
-  &:focus, &:hover {
-    filter: brightness(1.5);
-  }
+  margin-top: 0.5em;
 }
 
 .repost_count[data-reposted="true"] {
@@ -418,6 +400,7 @@ const openSource = () => {
 
 .source {
   margin-left: auto;
+
   & > .svg-icon {
     fill: rgba(var(--fg-color), 0.25);
   }

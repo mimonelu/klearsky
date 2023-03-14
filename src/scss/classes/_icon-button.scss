@@ -1,0 +1,27 @@
+.icon-button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  grid-gap: 0.5em;
+  fill: rgba(var(--fg-color), 0.25);
+  margin: -0.75em;
+  padding: 0.75em;
+  &:focus,
+  &:hover {
+    filter: brightness(1.5);
+  }
+
+  & > .svg-icon {
+    font-size: 0.875em;
+  }
+  &[data-has="true"] > .svg-icon {
+    fill: rgba(var(--fg-color), 0.75);
+  }
+  &[data-has="false"] > .svg-icon {
+    fill: rgba(var(--fg-color), 0.25);
+  }
+
+  & > span {
+    font-size: 0.75em;
+  }
+}
