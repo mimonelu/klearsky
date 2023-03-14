@@ -29,7 +29,7 @@ const openPost = async (uri: string) => {
 }
 
 const openProfile = async (handle: string) => {
-  await router.push({ name: "profile", query: { handle } })
+  await router.push({ name: "profile-post", query: { handle } })
 }
 
 const reply = async () => {

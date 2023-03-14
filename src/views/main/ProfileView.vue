@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import { RouterView, useRouter } from "vue-router"
 import format from "date-fns/format"
-import FeedList from "@/components/FeedList.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement, showJson } from "@/composables/misc"
 
 const mainState: MainState = inject("state") as MainState
+
+const router = useRouter()
 
 function isFollowing (): boolean {
   return mainState.currentProfile?.viewer?.following != null
@@ -35,6 +37,13 @@ function getIndexedAt (indexedAt?: null | string): string {
 
 function openSource () {
   showJson(mainState.currentProfile)
+}
+
+function openProfileChildPage (pageName: string) {
+  router.push({
+    name: pageName,
+    query: { handle: mainState.currentProfile?.handle },
+  })
 }
 </script>
 
@@ -101,6 +110,10 @@ function openSource () {
           v-html="mainState.currentProfile?.__descriptionHtml ?? ''"
         />
         <div class="statistics">
+          <dl class="posts-count">
+            <dt>{{ $t("postsCount") }}</dt>
+            <dd>{{ mainState.currentProfile?.postsCount?.toLocaleString() }}</dd>
+          </dl>
           <dl class="follows-count">
             <dt>{{ $t("followingCount") }}</dt>
             <dd>{{ mainState.currentProfile?.followsCount?.toLocaleString() }}</dd>
@@ -108,10 +121,6 @@ function openSource () {
           <dl class="followers-count">
             <dt>{{ $t("followersCount") }}</dt>
             <dd>{{ mainState.currentProfile?.followersCount?.toLocaleString() }}</dd>
-          </dl>
-          <dl class="posts-count">
-            <dt>{{ $t("postsCount") }}</dt>
-            <dd>{{ mainState.currentProfile?.postsCount?.toLocaleString() }}</dd>
           </dl>
           <dl class="indexed-at">
             <dt>{{ $t("startedAt") }}</dt>
@@ -126,11 +135,21 @@ function openSource () {
         </div>
       </div>
     </div>
-    <FeedList
-      type="author"
-      :feeds="mainState.pageFeeds"
-      :hasFetchButton="true"
-    />
+    <div class="tab">
+      <button
+        class="tab-button"
+        @click.prevent="blurElement(); openProfileChildPage('profile-post')"
+      >Posts</button>
+      <button
+        class="tab-button"
+        @click.prevent="blurElement(); openProfileChildPage('profile-following')"
+      >Followings</button>
+      <button
+        class="tab-button"
+        @click.prevent="blurElement(); openProfileChildPage('profile-follower')"
+      >Followers</button>
+    </div>
+    <RouterView />
   </div>
 </template>
 
@@ -245,5 +264,25 @@ function openSource () {
 
 .source {
   margin-left: auto;
+}
+
+.tab {
+  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  display: flex;
+}
+
+.tab-button {
+  color: rgba(var(--fg-color), 0.5);
+  cursor: pointer;
+  flex-grow: 1;
+  padding: 1rem;
+  width: 33.333%;
+  text-align: center;
+  &:not(:last-child) {
+    border-right: 1px solid rgba(var(--fg-color), 0.25);
+  }
+  &:focus, &:hover {
+    color: rgb(var(--fg-color));
+  }
 }
 </style>

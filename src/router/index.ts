@@ -6,6 +6,9 @@ import PostView from "@/views/main/PostView.vue"
 import ProfileView from "@/views/main/ProfileView.vue"
 import SettingsView from "@/views/main/SettingsView.vue"
 import TimelineView from "@/views/main/TimelineView.vue"
+import AuthorPostView from "@/views/main/profile/AuthorPostView.vue"
+import FollowerListView from "@/views/main/profile/FollowerListView.vue"
+import FollowingListView from "@/views/main/profile/FollowingListView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -31,11 +34,6 @@ const router = createRouter({
           component: TimelineView,
         },
         {
-          path: "/profile",
-          name: "profile",
-          component: ProfileView,
-        },
-        {
           path: "/edit-profile",
           name: "edit-profile",
           component: EditProfileView,
@@ -44,6 +42,28 @@ const router = createRouter({
           path: "/post",
           name: "post",
           component: PostView,
+        },
+        {
+          path: "/profile",
+          name: "profile",
+          component: ProfileView,
+          children: [
+            {
+              path: "/profile-post",
+              name: "profile-post",
+              component: AuthorPostView,
+            },
+            {
+              path: "/profile-follower",
+              name: "profile-follower",
+              component: FollowerListView,
+            },
+            {
+              path: "/profile-following",
+              name: "profile-following",
+              component: FollowingListView,
+            },
+          ],
         }
       ],
     }

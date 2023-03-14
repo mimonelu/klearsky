@@ -78,7 +78,10 @@ async function submit () {
   state.processing = true
   try {
     await mainState.updateUserProfile(state)
-    await router.push({ name: "profile", query: { did: mainState.atp.session?.did } })
+    await router.push({
+      name: "profile-post",
+      query: { handle: mainState.atp.session?.handle }
+    })
   } finally {
     state.processing = false
   }

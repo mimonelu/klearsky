@@ -26,7 +26,7 @@ function back () {
 async function openUserProfile () {
   blurElement()
   await router.push({
-    name: "profile",
+    name: "profile-post",
     query: { handle: mainState.atp.session?.handle },
   })
 }

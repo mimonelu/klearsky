@@ -66,7 +66,6 @@ onMounted(async () => {
 const router = useRouter()
 
 router.beforeEach(() => {
-  state.currentProfile = null
   state.pageFeeds?.splice(0)
   state.pageCursor = null
 })
@@ -106,16 +105,40 @@ async function processPage (pageName?: null | RouteRecordName) {
   state.isUserProfile = handle === state.atp.session?.handle
 
   switch (pageName) {
-    case "profile": {
+    case "profile-post": {
       const handle = state.query.handle as LocationQueryValue
       if (!handle) {
         await router.push({ name: "timeline" })
         break
       }
-      await Promise.all([
-        fetchCurrentProfile(),
-        fetchCurrentAuthorFeed("new")
-      ])
+      const tasks: Array<Promise<void>> = [fetchCurrentAuthorFeed("new")]
+      if (handle !== state.currentProfile?.handle)
+       tasks.push(fetchCurrentProfile())
+      await Promise.all(tasks)
+      break
+    }
+    case "profile-following": {
+      const handle = state.query.handle as LocationQueryValue
+      if (!handle) {
+        await router.push({ name: "timeline" })
+        break
+      }
+      const tasks: Array<Promise<void>> = []
+      if (handle !== state.currentProfile?.handle)
+       tasks.push(fetchCurrentProfile())
+      await Promise.all(tasks)
+      break
+    }
+    case "profile-follower": {
+      const handle = state.query.handle as LocationQueryValue
+      if (!handle) {
+        await router.push({ name: "timeline" })
+        break
+      }
+      const tasks: Array<Promise<void>> = []
+      if (handle !== state.currentProfile?.handle)
+       tasks.push(fetchCurrentProfile())
+      await Promise.all(tasks)
       break
     }
     case "timeline": {
@@ -163,6 +186,7 @@ async function updateUserProfile (profile: any) {
 async function fetchCurrentProfile () {
   const handle = state.query.handle as LocationQueryValue
   if (!handle) return
+  state.currentProfile = null
   state.currentProfile = await state.atp.fetchProfile(handle)
   if (handle === state.atp.session?.handle) {
     state.userProfile = state.currentProfile
