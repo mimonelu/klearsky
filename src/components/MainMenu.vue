@@ -83,7 +83,7 @@ async function openSettings () {
       class="link-button--post"
       @click.prevent="openSendPostPopup"
     >
-      <SVGIcon name="post" />
+      <SVGIcon name="sendPost" />
     </button>
   </div>
 </template>

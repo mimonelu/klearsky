@@ -13,8 +13,9 @@ import json from "@/svg/json.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import repost from "@/svg/repost.svg?raw"
-import shimmer from "@/svg/shimmer.svg?raw"
+import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
+import shimmer from "@/svg/shimmer.svg?raw"
 
 const icons: { [key: string]: string } = {
   cross,
@@ -30,6 +31,7 @@ const icons: { [key: string]: string } = {
   plus,
   post,
   repost,
+  sendPost,
   setting,
   shimmer,
 }
