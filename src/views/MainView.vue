@@ -36,6 +36,8 @@ const state = reactive<MainState>({
   fetchCurrentAuthorFeed,
   updateUserProfile,
   isUserProfile: false,
+  follow,
+  unfollow,
   query: {},
   processing: false,
   openSendPostPopup,
@@ -195,6 +197,24 @@ async function fetchFeeds (type: string, direction: "new" | "old") {
         break
       }
     }
+  } finally {
+    state.processing = false
+  }
+}
+
+async function follow (did: string, declarationCid: string) {
+  state.processing = true
+  try {
+    await state.atp.follow(did, declarationCid)
+  } finally {
+    state.processing = false
+  }
+}
+
+async function unfollow (uri: string) {
+  state.processing = true
+  try {
+    await state.atp.unfollow(uri)
   } finally {
     state.processing = false
   }

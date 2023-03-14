@@ -3,10 +3,33 @@ import { inject } from "vue"
 import format from "date-fns/format"
 import FeedList from "@/components/FeedList.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import { blurElement } from "@/composables/misc"
 
 const mainState: MainState = inject("state") as MainState
 
-const getIndexedAt = (indexedAt?: null | string): string => {
+function isFollowing (): boolean {
+  return mainState.currentProfile?.viewer?.following != null
+}
+
+function isFollowed (): boolean {
+  return mainState.currentProfile?.viewer?.followedBy != null
+}
+
+async function toggleFollow () {
+  if (mainState.currentProfile == null) return
+  blurElement()
+  if (isFollowing()) {
+    await mainState.unfollow(mainState.currentProfile.viewer.following as string)
+  } else {
+    await mainState.follow(
+      mainState.currentProfile.did,
+      mainState.currentProfile.declaration.cid as string
+    )
+  }
+  await mainState.fetchCurrentProfile()
+}
+
+function getIndexedAt (indexedAt?: null | string): string {
   return indexedAt == null ? "" : format(new Date(indexedAt), "yyyy/MM/dd")
 }
 </script>
@@ -24,51 +47,71 @@ const getIndexedAt = (indexedAt?: null | string): string => {
         :src="mainState.currentProfile?.banner ?? '/img/void.png'"
       >
     </a>
-    <div class="profile">
-      <div class="left">
-        <a
-          class="avatar"
-          :href="mainState.currentProfile?.avatar"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <img
-            loading="lazy"
-            :src="mainState.currentProfile?.avatar ?? '/img/void.png'"
+    <div class="details">
+      <div class="top">
+        <div class="left">
+          <a
+            class="avatar"
+            :href="mainState.currentProfile?.avatar"
+            rel="noreferrer"
+            target="_blank"
           >
-        </a>
-        <RouterLink
-          v-if="mainState.isUserProfile"
-          to="edit-profile"
-          class="button"
-        >
-          <SVGIcon name="edit" />
-          <span>{{ $t("edit") }}</span>
-        </RouterLink>
+            <img
+              loading="lazy"
+              :src="mainState.currentProfile?.avatar ?? '/img/void.png'"
+            >
+          </a>
+        </div>
+        <div class="right">
+          <div class="display-name">{{ mainState.currentProfile?.displayName }}</div>
+          <div class="handle">{{ mainState.currentProfile?.handle }}</div>
+          <div class="right-bottom">
+            <RouterLink
+              v-if="mainState.isUserProfile"
+              to="edit-profile"
+              class="button"
+            >
+              <SVGIcon name="edit" />
+              <span>{{ $t("edit") }}</span>
+            </RouterLink>
+            <template v-else>
+              <button
+                class="button"
+                :data-is-following="isFollowing()"
+                @click.prevent="toggleFollow"
+              >
+                <span v-if="isFollowing()">{{ $t("following") }}</span>
+                <span v-else>{{ $t("follow") }}</span>
+              </button>
+              <div
+                v-if="isFollowed()"
+                class="followed"
+              >{{ $t("followed") }}</div>
+            </template>
+          </div>
+        </div>
       </div>
-      <div class="right">
-        <div class="display-name">{{ mainState.currentProfile?.displayName }}</div>
-        <div class="handle">{{ mainState.currentProfile?.handle }}</div>
+      <div class="bottom">
         <div
           class="description"
           v-html="mainState.currentProfile?.__descriptionHtml ?? ''"
         />
-        <dl class="indexed-at">
-          <dt>{{ $t("startedAt") }}</dt>
-          <dd>{{ getIndexedAt(mainState.currentProfile?.indexedAt) }}</dd>
-        </dl>
         <div class="statistics">
           <dl class="follows-count">
-            <dt>{{ $t("following") }}</dt>
+            <dt>{{ $t("followingCount") }}</dt>
             <dd>{{ mainState.currentProfile?.followsCount?.toLocaleString() }}</dd>
           </dl>
           <dl class="followers-count">
-            <dt>{{ $t("followers") }}</dt>
+            <dt>{{ $t("followersCount") }}</dt>
             <dd>{{ mainState.currentProfile?.followersCount?.toLocaleString() }}</dd>
           </dl>
           <dl class="posts-count">
-            <dt>{{ $t("posts") }}</dt>
+            <dt>{{ $t("postsCount") }}</dt>
             <dd>{{ mainState.currentProfile?.postsCount?.toLocaleString() }}</dd>
+          </dl>
+          <dl class="indexed-at">
+            <dt>{{ $t("startedAt") }}</dt>
+            <dd>{{ getIndexedAt(mainState.currentProfile?.indexedAt) }}</dd>
           </dl>
         </div>
       </div>
@@ -86,6 +129,15 @@ const getIndexedAt = (indexedAt?: null | string): string => {
   flex-grow: 1;
 }
 
+.details {
+  border-top: 1px solid rgba(var(--fg-color), 0.25);
+  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+  padding: 1rem;
+}
+
 .banner {
   display: block;
 
@@ -96,24 +148,12 @@ const getIndexedAt = (indexedAt?: null | string): string => {
   }
 }
 
-.profile {
-  border-top: 1px solid rgba(var(--fg-color), 0.25);
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+.top {
   display: flex;
   grid-gap: 1rem;
-  padding: 1rem;
 }
 
-.left {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 0.5rem;
-
-  & > .button {
-    font-size: 0.875rem;
-    padding: 0.5rem;
-  }
-}
+.left {}
 
 .avatar {
   @include avatar-link(6rem);
@@ -122,6 +162,53 @@ const getIndexedAt = (indexedAt?: null | string): string => {
 .right {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  grid-gap: 0.5rem;
+}
+
+.display-name {
+  font-size: 2rem;
+  word-break: break-all;
+}
+
+.handle {
+  color: rgba(var(--fg-color), 0.75);
+  font-size: 0.875rem;
+  word-break: break-all;
+}
+
+.right-bottom {
+  display: flex;
+  align-items: center;
+  grid-gap: 0.5rem;
+  margin-top: auto;
+
+  .button {
+    font-size: 0.875rem;
+  }
+}
+
+.followed {
+  color: rgb(var(--pink));
+  font-size: 0.875rem;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+}
+
+.description {
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.statistics {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 0.5rem 1rem;
 
   dl {
     display: flex;
@@ -138,40 +225,11 @@ const getIndexedAt = (indexedAt?: null | string): string => {
   }
 }
 
-.display-name {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  word-break: break-all;
-}
-
-.handle {
-  color: rgba(var(--fg-color), 0.75);
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-  word-break: break-all;
-}
-
-.description {
-  line-height: 1.5;
-  margin-bottom: 1rem;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.indexed-at {
-  margin-bottom: 0.5rem;
-  word-break: break-all;
-}
-
-.statistics {
-  display: flex;
-  flex-wrap: wrap;
-  grid-gap: 0.5rem 1rem;
-}
-
 .follows-count {}
 
 .followers-count {}
 
 .posts-count {}
+
+.indexed-at {}
 </style>

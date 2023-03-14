@@ -25,6 +25,8 @@ type MainState = {
     post: null | Post;
   };
   isUserProfile: boolean;
+  follow: (did: string, declarationCid: string) => Promise<void>;
+  unfollow: (uri: string) => Promise<void>;
   query: LocationQuery;
   processing: boolean;
 }

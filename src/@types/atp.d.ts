@@ -106,9 +106,12 @@ type Profile = {
   creator: string;
   indexedAt: string;
   viewer: {
+    followedBy?: string;
+    following?: string;
     muted: boolean;
   };
   myState: {
+    follow?: string;
     muted: boolean;
   };
   [k: string]: unknown;

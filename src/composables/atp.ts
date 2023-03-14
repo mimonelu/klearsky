@@ -14,6 +14,7 @@ import type {
   ComAtprotoBlobUpload,
   ComAtprotoSessionGet
 } from "@atproto/api"
+import { AtUri } from "@atproto/uri"
 import type { Entity } from "@atproto/api/dist/client/types/app/bsky/feed/post.d"
 import storage from "@/composables/storage"
 import { getFileAsUint8Array } from "@/composables/misc"
@@ -323,6 +324,37 @@ export default class {
       return response.success
     } catch (error: any) {
       console.error("[klearsky/updateProfile]", error)
+      return false
+    }
+  }
+
+  async follow (did: string, declarationCid: string): Promise<boolean> {
+    if (this.agent == null) return false
+    if (this.session == null) return false
+    try {
+      await this.agent.api.app.bsky.graph.follow.create(
+        { did: this.session.did },
+        {
+          subject: { did, declarationCid },
+          createdAt: this.makeCreatedAt(),
+        }
+      )
+      return true
+    } catch (error: any) {
+      console.error("[klearsky/follow]", error)
+      return false
+    }
+  }
+
+  async unfollow (uri: string): Promise<boolean> {
+    const { host, rkey } = new AtUri(uri)
+    if (this.agent == null) return false
+    if (this.session == null) return false
+    try {
+      await this.agent.api.app.bsky.graph.follow.delete({ did: host, rkey })
+      return true
+    } catch (error: any) {
+      console.error("[klearsky/unfollow]", error)
       return false
     }
   }
