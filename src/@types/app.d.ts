@@ -13,6 +13,9 @@ type MainState = {
   currentProfile: null | Profile;
   pageFeeds: null | Array<Feed>;
   pageCursor: null | string;
+  currentCursor: null | string;
+  currentFollowings: null | Array<Following>;
+  currentFollowers: null | Array<Follower>;
   fetchFeeds: Function;
   fetchUserProfile: Function;
   fetchCurrentProfile: Function;

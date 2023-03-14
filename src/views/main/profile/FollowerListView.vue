@@ -5,5 +5,10 @@ const mainState: MainState = inject("state") as MainState
 </script>
 
 <template>
-  Follower
+  <div class="follower-list">
+    <div
+      v-for="follower of mainState.currentFollowers"
+      class="follower"
+    >{{ follower }}</div>
+  </div>
 </template>

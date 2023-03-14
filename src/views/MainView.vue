@@ -30,6 +30,9 @@ const state = reactive<MainState>({
   currentProfile: null,
   pageFeeds: null,
   pageCursor: null,
+  currentCursor: null,
+  currentFollowings: null,
+  currentFollowers: null,
   fetchFeeds,
   fetchUserProfile,
   fetchCurrentProfile,
@@ -113,7 +116,7 @@ async function processPage (pageName?: null | RouteRecordName) {
       }
       const tasks: Array<Promise<void>> = [fetchCurrentAuthorFeed("new")]
       if (handle !== state.currentProfile?.handle)
-       tasks.push(fetchCurrentProfile())
+       tasks.push(fetchCurrentProfile(handle))
       await Promise.all(tasks)
       break
     }
@@ -123,9 +126,9 @@ async function processPage (pageName?: null | RouteRecordName) {
         await router.push({ name: "timeline" })
         break
       }
-      const tasks: Array<Promise<void>> = []
+      const tasks: Array<Promise<void>> = [fetchFollowings(handle)]
       if (handle !== state.currentProfile?.handle)
-       tasks.push(fetchCurrentProfile())
+       tasks.push(fetchCurrentProfile(handle))
       await Promise.all(tasks)
       break
     }
@@ -135,9 +138,9 @@ async function processPage (pageName?: null | RouteRecordName) {
         await router.push({ name: "timeline" })
         break
       }
-      const tasks: Array<Promise<void>> = []
+      const tasks: Array<Promise<void>> = [fetchFollowers(handle)]
       if (handle !== state.currentProfile?.handle)
-       tasks.push(fetchCurrentProfile())
+       tasks.push(fetchCurrentProfile(handle))
       await Promise.all(tasks)
       break
     }
@@ -183,9 +186,7 @@ async function updateUserProfile (profile: any) {
   }
 }
 
-async function fetchCurrentProfile () {
-  const handle = state.query.handle as LocationQueryValue
-  if (!handle) return
+async function fetchCurrentProfile (handle: string) {
   state.currentProfile = null
   state.currentProfile = await state.atp.fetchProfile(handle)
   if (handle === state.atp.session?.handle) {
@@ -200,6 +201,27 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   if (result == null) return
   state.pageFeeds = result.feeds
   state.pageCursor = result.cursor ?? null
+}
+
+async function fetchFollowings (handle: string) {
+  const response: null | {
+    cursor?: string;
+    followings: Array<Following>;
+  } = await state.atp.fetchFollowings(handle, 50)
+  if (response == null) return
+  state.currentCursor = response.cursor ?? null
+  state.currentFollowings = response.followings
+}
+
+async function fetchFollowers (handle: string) {
+  const response: null | {
+    cursor?: string;
+    followers: Array<Follower>;
+  } = await state.atp.fetchFollowers(handle, 50)
+  if (response == null) return
+  state.currentCursor = response.cursor ?? null
+  state.currentFollowers = response.followers
+  console.log(response.followers)
 }
 
 async function fetchFeeds (type: string, direction: "new" | "old") {

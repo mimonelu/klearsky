@@ -121,3 +121,21 @@ type FileSchema = {
   cid: string;
   mimeType: string;
 }
+
+type Following = {
+  avatar: string;
+  declaration: {
+    actorType: string;
+    cid: string;
+  };
+  did: string;
+  displayName: string;
+  handle: string;
+  viewer: {
+    followedBy?: string;
+    following?: string;
+    muted: boolean;
+  };
+}
+
+type Follower = Following

@@ -9,6 +9,8 @@ import type {
   AppBskyFeedGetTimeline,
   AppBskyFeedPost,
   AppBskyFeedSetVote,
+  AppBskyGraphGetFollowers,
+  AppBskyGraphGetFollows,
   AtpSessionData,
   AtpSessionEvent,
   ComAtprotoBlobUpload,
@@ -219,7 +221,7 @@ export default class {
     try {
       const response: AppBskyFeedGetAuthorFeed.Response =
         await this.agent.api.app.bsky.feed.getAuthorFeed(query)
-      console.log("[klearsky/getAuthorFeed]", response)
+      console.log("[klearsky/fetchAuthorFeed]", response)
       if (!response.success) return null
 
       // TODO:
@@ -253,6 +255,54 @@ export default class {
       }
     } catch (error: any) {
       console.error("[klearsky/fetchFileSchema]", error)
+      return null
+    }
+  }
+
+  async fetchFollowings (handle: string, limit?: number, before?: string): Promise<null | {
+    cursor?: string;
+    followings: Array<Following>;
+  }> {
+    if (this.agent == null) return null
+    if (this.session == null) return null
+    const query: AppBskyGraphGetFollows.QueryParams = { user: handle }
+    if (limit != null) query.limit = limit
+    if (before != null) query.before = before
+    try {
+      const response: AppBskyGraphGetFollows.Response =
+        await this.agent.api.app.bsky.graph.getFollows(query)
+      console.log("[klearsky/fetchFollowings]", response)
+      if (!response.success) return null
+      return {
+        cursor: response.data.cursor,
+        followings: response.data.follows as Array<Following>,
+      }
+    } catch (error: any) {
+      console.error("[klearsky/fetchFollowings]", error)
+      return null
+    }
+  }
+
+  async fetchFollowers (handle: string, limit?: number, before?: string): Promise<null | {
+    cursor?: string;
+    followers: Array<Following>;
+  }> {
+    if (this.agent == null) return null
+    if (this.session == null) return null
+    const query: AppBskyGraphGetFollowers.QueryParams = { user: handle }
+    if (limit != null) query.limit = limit
+    if (before != null) query.before = before
+    try {
+      const response: AppBskyGraphGetFollowers.Response =
+        await this.agent.api.app.bsky.graph.getFollowers(query)
+      console.log("[klearsky/fetchFollowers]", response)
+      if (!response.success) return null
+      return {
+        cursor: response.data.cursor,
+        followers: response.data.followers as Array<Following>,
+      }
+    } catch (error: any) {
+      console.error("[klearsky/fetchFollowers]", error)
       return null
     }
   }
