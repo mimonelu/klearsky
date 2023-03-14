@@ -43,7 +43,7 @@ function updatePost (newFeed: Feed) {
       class="fetch-feeds-button"
       @click.prevent="fetchFeeds('new')"
     >
-      <SVGIcon name="hand"/>
+      <SVGIcon name="cursorUp"/>
     </button>
     <div class="feeds">
       <div
@@ -74,7 +74,7 @@ function updatePost (newFeed: Feed) {
       class="fetch-feeds-button"
       @click.prevent="fetchFeeds('old')"
     >
-      <SVGIcon name="hand"/>
+      <SVGIcon name="cursorDown"/>
     </button>
   </div>
 </template>
@@ -90,7 +90,7 @@ function updatePost (newFeed: Feed) {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 0.75rem;
   position: relative;
   &:first-child {
     border-bottom: 1px solid rgba(var(--fg-color), 0.25);
@@ -100,14 +100,15 @@ function updatePost (newFeed: Feed) {
   }
 
   & > .svg-icon {
-    fill: rgb(var(--fg-color));
+    fill: transparent;
+    font-size: 1.5rem;
+    stroke: rgba(var(--fg-color), 0.25);
+    stroke-width: 2px;
   }
 
   &:focus, &:hover {
-    background-color: rgba(var(--accent-color), 0.125);
-
     & > .svg-icon {
-      fill: rgb(var(--accent-color));
+      stroke: rgba(var(--fg-color), 0.75);
     }
   }
 }

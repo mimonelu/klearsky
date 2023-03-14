@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
 import cross from "@/svg/cross.svg?raw"
+import cursorDown from "@/svg/cursor-down.svg?raw"
 import cursorLeft from "@/svg/cursor-left.svg?raw"
 import cursorRight from "@/svg/cursor-right.svg?raw"
+import cursorUp from "@/svg/cursor-up.svg?raw"
 import edit from "@/svg/edit.svg?raw"
-import hand from "@/svg/hand.svg?raw"
 import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
 import json from "@/svg/json.svg?raw"
@@ -17,10 +18,11 @@ import timeline from "@/svg/timeline.svg?raw"
 
 const icons: { [key: string]: string } = {
   cross,
+  cursorDown,
   cursorLeft,
   cursorRight,
+  cursorUp,
   edit,
-  hand,
   heart,
   heartBroken,
   json,

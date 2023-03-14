@@ -59,7 +59,7 @@ async function openSettings () {
     </div>
     <button
       class="avatar"
-      @click.stop="openUserProfile"
+      @click.prevent="openUserProfile"
     >
       <img
         loading="lazy"
@@ -69,6 +69,7 @@ async function openSettings () {
     <RouterLink
       class="link-button"
       to="timeline"
+      @click="blurElement"
     >
       <SVGIcon name="timeline" />
     </RouterLink>
