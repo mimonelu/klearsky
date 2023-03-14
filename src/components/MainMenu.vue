@@ -71,7 +71,7 @@ async function openSettings () {
       to="timeline"
       @click="blurElement"
     >
-      <SVGIcon name="timeline" />
+      <SVGIcon name="home" />
     </RouterLink>
     <button
       class="link-button"

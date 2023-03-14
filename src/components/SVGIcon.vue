@@ -8,13 +8,13 @@ import cursorUp from "@/svg/cursor-up.svg?raw"
 import edit from "@/svg/edit.svg?raw"
 import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
+import home from "@/svg/home.svg?raw"
 import json from "@/svg/json.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import repost from "@/svg/repost.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
 import setting from "@/svg/setting.svg?raw"
-import timeline from "@/svg/timeline.svg?raw"
 
 const icons: { [key: string]: string } = {
   cross,
@@ -25,13 +25,13 @@ const icons: { [key: string]: string } = {
   edit,
   heart,
   heartBroken,
+  home,
   json,
   plus,
   post,
   repost,
   setting,
   shimmer,
-  timeline,
 }
 
 defineProps<{
