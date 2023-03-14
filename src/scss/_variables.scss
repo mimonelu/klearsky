@@ -13,7 +13,7 @@
   height: $size;
 
   & > img {
-    outline: 1px solid rgba(var(--fg-color), 0.25);
+    border: 1px solid rgba(var(--fg-color), 0.25);
     border-radius: 1px;
     object-fit: cover;
     min-width: $size;
@@ -21,6 +21,6 @@
   }
   &:focus > img,
   &:hover > img {
-    outline-color: rgba(var(--fg-color), 0.5);
+    border-color: rgba(var(--fg-color), 0.5);
   }
 }

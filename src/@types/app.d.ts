@@ -14,8 +14,7 @@ type MainState = {
   pageFeeds: null | Array<Feed>;
   pageCursor: null | string;
   currentCursor: null | string;
-  currentFollowings: null | Array<Following>;
-  currentFollowers: null | Array<Follower>;
+  currentUsers: null | Array<Following> | Array<Follower>;
   fetchFeeds: Function;
   fetchUserProfile: Function;
   fetchCurrentProfile: Function;

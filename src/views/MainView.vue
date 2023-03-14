@@ -31,8 +31,7 @@ const state = reactive<MainState>({
   pageFeeds: null,
   pageCursor: null,
   currentCursor: null,
-  currentFollowings: null,
-  currentFollowers: null,
+  currentUsers: null,
   fetchFeeds,
   fetchUserProfile,
   fetchCurrentProfile,
@@ -126,6 +125,7 @@ async function processPage (pageName?: null | RouteRecordName) {
         await router.push({ name: "timeline" })
         break
       }
+      state.currentUsers = null
       const tasks: Array<Promise<void>> = [fetchFollowings(handle)]
       if (handle !== state.currentProfile?.handle)
        tasks.push(fetchCurrentProfile(handle))
@@ -138,6 +138,7 @@ async function processPage (pageName?: null | RouteRecordName) {
         await router.push({ name: "timeline" })
         break
       }
+      state.currentUsers = null
       const tasks: Array<Promise<void>> = [fetchFollowers(handle)]
       if (handle !== state.currentProfile?.handle)
        tasks.push(fetchCurrentProfile(handle))
@@ -210,7 +211,7 @@ async function fetchFollowings (handle: string) {
   } = await state.atp.fetchFollowings(handle, 50)
   if (response == null) return
   state.currentCursor = response.cursor ?? null
-  state.currentFollowings = response.followings
+  state.currentUsers = response.followings
 }
 
 async function fetchFollowers (handle: string) {
@@ -220,8 +221,7 @@ async function fetchFollowers (handle: string) {
   } = await state.atp.fetchFollowers(handle, 50)
   if (response == null) return
   state.currentCursor = response.cursor ?? null
-  state.currentFollowers = response.followers
-  console.log(response.followers)
+  state.currentUsers = response.followers
 }
 
 async function fetchFeeds (type: string, direction: "new" | "old") {
