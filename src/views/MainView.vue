@@ -21,7 +21,7 @@ import SubMenu from "@/components/SubMenu.vue"
 import AtpWrapper from "@/composables/atp-wrapper"
 
 const state = reactive<MainState>({
-  // tslint:disable-next-line
+  // @ts-ignore // TODO:
   atp: new AtpWrapper(),
   mounted: false,
   hasLogin: false,
@@ -179,7 +179,7 @@ async function fetchUserProfile () {
   state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle)
 }
 
-async function updateUserProfile (profile: any) {
+async function updateUserProfile (profile: UpdateProfileParams) {
   state.processing = true
   try {
     await state.atp.updateProfile(profile)
@@ -199,7 +199,7 @@ async function fetchCurrentProfile (handle: string) {
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   const handle = state.query.handle as LocationQueryValue
   if (!handle) return
-  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds as Array<Feed>, handle, 10, direction === "old" ? state.pageCursor : undefined)
+  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds as Array<Feed>, handle, 10, direction === "old" ? state.pageCursor ?? undefined : undefined)
   if (result == null) return
   state.pageFeeds = result.feeds
   state.pageCursor = result.cursor ?? null

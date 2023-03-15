@@ -1,32 +1,18 @@
 import type { AppBskyEmbedImages, AppBskyFeedPost } from "@atproto/api"
 import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
-export default async function (this: AbstractAtpWrapper, {
-  type,
-  post,
-  text,
-  url,
-  images,
-  alts
-}: {
-  type: "post" | "reply" | "repost";
-  post?: any;
-  text: string;
-  url: string;
-  images: Array<File>;
-  alts: Array<string>;
-}): Promise<boolean> {
+export default async function (this: AbstractAtpWrapper, params: CreatePostParams): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
 
   // TODO:
-  if (type === "repost" && text === "") {
-    return await this.createRepost(post)
+  if (params.type === "repost" && params.text === "") {
+    return await this.createRepost(params.post)
   }
 
   const record: AppBskyFeedPost.Record = {
     createdAt: makeCreatedAt(),
-    text,
+    text: params.text,
   }
 
   // TODO:
@@ -39,7 +25,7 @@ export default async function (this: AbstractAtpWrapper, {
   for (const type in entityRegExps) {
     const regexp: RegExp = entityRegExps[type]
     while (true) {
-      const current = regexp.exec(text)
+      const current = regexp.exec(params.text)
       if (current == null) break
       entities.push({
         index: {
@@ -54,11 +40,11 @@ export default async function (this: AbstractAtpWrapper, {
   if (entities.length > 0) record.entities = entities
 
   // TODO:
-  if (url?.length > 0) {
+  if (params.url?.length > 0) {
     record.embed = {
       $type: "app.bsky.embed.external",
       external: {
-        uri: url,
+        uri: params.url,
         title: "",
         description: "",
       },
@@ -66,7 +52,7 @@ export default async function (this: AbstractAtpWrapper, {
   }
 
   const fileSchemas: Array<null | FileSchema> =
-    await Promise.all(images.map((file: File): Promise<null | FileSchema> => {
+    await Promise.all(params.images.map((file: File): Promise<null | FileSchema> => {
       return this.fetchFileSchema(file)
     }))
   if (fileSchemas.length > 0) {
@@ -74,7 +60,7 @@ export default async function (this: AbstractAtpWrapper, {
       .map((fileSchema: null | FileSchema, index: number): null | AppBskyEmbedImages.Image => {
         return fileSchema == null ? null : {
           image: fileSchema,
-          alt: alts[index] ?? "",
+          alt: params.alts[index] ?? "",
         }
       })
       .filter((image: null | AppBskyEmbedImages.Image) => image != null)
@@ -86,27 +72,27 @@ export default async function (this: AbstractAtpWrapper, {
     }
   }
 
-  if (type === "reply") {
+  if (params.type === "reply" && params.post != null) {
     record.reply = {
       // TODO: Feed.root == Feed.parent であればこれで良いが、でなければ誤り。要修正
       root: {
-        cid: post?.cid,
-        uri: post?.uri,
+        cid: params.post.cid,
+        uri: params.post.uri,
       },
 
       parent: {
-        cid: post?.cid,
-        uri: post?.uri,
+        cid: params.post.cid,
+        uri: params.post.uri,
       },
     }
   }
 
-  if (type === "repost") {
+  if (params.type === "repost") {
     record.embed = {
       $type: "app.bsky.embed.record",
       record: {
-        cid: post?.cid,
-        uri: post?.uri,
+        cid: params.post?.cid,
+        uri: params.post?.uri,
       },
     }
   }

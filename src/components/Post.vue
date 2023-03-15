@@ -37,8 +37,7 @@ async function reply () {
 }
 
 async function repost () {
-  const reposted = props.post.viewer.repost != null
-  if (!reposted) {
+  if (props.post.viewer.repost == null) {
     mainState.openSendPostPopup("repost", props.post)
     // TODO: 通常リポストが成功した場合、 updatePost を呼び出すこと
   } else {

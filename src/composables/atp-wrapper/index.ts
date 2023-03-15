@@ -7,7 +7,8 @@ import deleteFollow from "@/composables/atp-wrapper/delete-follow"
 import deleteRepost from "@/composables/atp-wrapper/delete-repost"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
 import fetchFileSchema from "@/composables/atp-wrapper/fetch-file-schema"
-import { fetchFollowers, fetchFollowings } from "@/composables/atp-wrapper/fetch-followers-and-followings"
+import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
+import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
 import fetchTimeline from "@/composables/atp-wrapper/fetch-timeline"
@@ -18,7 +19,7 @@ import setService from "@/composables/atp-wrapper/set-service"
 import updateProfile from "@/composables/atp-wrapper/update-profile"
 import updateVote from "@/composables/atp-wrapper/update-vote"
 
-// tslint:disable-next-line
+// @ts-ignore // TODO:
 class AtpWrapper implements AbstractAtpWrapper {
   contsructor (this: AbstractAtpWrapper) {
     this.service = null

@@ -1,27 +1,21 @@
 import type { AppBskyActorUpdateProfile } from "@atproto/api"
 
-export default async function (this: AbstractAtpWrapper, {
-  displayName,
-  description,
-  avatar,
-  banner
-}: {
-  displayName: string;
-  description: string;
-  avatar: null | Array<File>;
-  banner: null | Array<File>;
-}): Promise<boolean> {
+export default async function (this: AbstractAtpWrapper, params: UpdateProfileParams): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
   const fileSchemas: Array<null | FileSchema> = await Promise.all([
-    avatar != null && avatar[0] != null ? this.fetchFileSchema(avatar[0]) : null,
-    banner != null && banner[0] != null ? this.fetchFileSchema(banner[0]) : null,
+    params.avatar != null && params.avatar[0] != null
+      ? this.fetchFileSchema(params.avatar[0])
+      : null,
+    params.banner != null && params.banner[0] != null
+      ? this.fetchFileSchema(params.banner[0])
+      : null,
   ])
   const avatarSchema: null | FileSchema = fileSchemas[0]
   const bannerSchema: null | FileSchema = fileSchemas[1]
   const profileSchema: AppBskyActorUpdateProfile.InputSchema = {
-    displayName,
-    description,
+    displayName: params.displayName,
+    description: params.description,
   }
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
