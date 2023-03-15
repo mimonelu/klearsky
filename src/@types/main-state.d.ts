@@ -16,6 +16,10 @@ type MainState = {
   fetchCurrentAuthorFeed: Function;
   updateUserProfile: Function;
   openSendPostPopup: Function;
+  challengingAccount?: {
+    service?: string;
+    handle?: string;
+  };
   sendPostPopupProps: {
     visibility: boolean;
     type: "post" | "reply" | "repost";

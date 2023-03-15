@@ -15,12 +15,16 @@ type UpdateProfileParams = {
 }
 
 interface AbstractAtpWrapper {
-  service: null | string = null
-  agent: null | AtpAgent = null
-  session: null | AtpSessionData = null
+  service: null | string
+  agent: null | AtpAgentstring
+  session: null | AtpSessionDatastring
+  accounts: { [handle: string]: {
+    service: string;
+    handle: string;
+  } }
 
   canLogin(this: AbstractAtpWrapper): boolean
-  createAgent(this: AbstractAtpWrapper)
+  createAgent(this: AbstractAtpWrapper): boolean
   createFollow(this: AbstractAtpWrapper, did: string, declarationCid: string): Promise<boolean>
   createPost(this: AbstractAtpWrapper, params: CreatePostParams): Promise<boolean>
   createRepost(this: AbstractAtpWrapper, post?: Post): Promise<boolean>
@@ -46,9 +50,9 @@ interface AbstractAtpWrapper {
     cursor?: string;
   }>
   hasLogin(this: AbstractAtpWrapper): boolean
-  login(this: AbstractAtpWrapper, service?: string, identifier?: string, password?: string)
+  login(this: AbstractAtpWrapper, service?: string, identifier?: string, password?: string): Promise<boolean>
   logout(this: AbstractAtpWrapper)
-  resumeSession(this: AbstractAtpWrapper)
+  resumeSession(this: AbstractAtpWrapper, handle?: string): Promise<boolean>
   setService(this: AbstractAtpWrapper, service?: string)
   updateProfile(this: AbstractAtpWrapper, params: UpdateProfileParams): Promise<boolean>
   updateVote(this: AbstractAtpWrapper, uri: string, cid: string, direction: "none" | "up" | "down"): Promise<boolean>

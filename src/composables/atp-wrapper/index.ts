@@ -25,6 +25,7 @@ class AtpWrapper implements AbstractAtpWrapper {
     this.service = null
     this.agent = null
     this.session = null
+    this.accounts = {}
   }
 }
 
