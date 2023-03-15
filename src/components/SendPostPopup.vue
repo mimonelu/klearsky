@@ -13,7 +13,9 @@ const props = defineProps<{
   post?: any;
 }>()
 
-const mainState: MainState = inject("state") as MainState
+const $t = inject("$t") as Function
+
+const mainState = inject("state") as MainState
 
 const state = reactive<{
   text: string;
@@ -28,8 +30,6 @@ const state = reactive<{
   alts: [],
   processing: false,
 })
-
-const $t = inject("$t") as Function
 
 const easyFormProps = {
   submitButtonLabel: $t("submit"),
@@ -92,10 +92,10 @@ async function submitCallback () {
     </template>
     <template v-slot:body>
       <Post
-        v-if="props.type === 'reply' || props.type === 'repost'"
+        v-if="type === 'reply' || type === 'repost'"
         type="post"
         mode="preview"
-        :post="props.post"
+        :post="post"
       />
       <EasyForm v-bind="easyFormProps">
         <template v-slot:after>

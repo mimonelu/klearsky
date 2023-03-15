@@ -3,7 +3,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
-const props = defineProps<{
+defineProps<{
   hasCloseButton?: boolean;
 }>()
 
@@ -21,7 +21,7 @@ function close () {
       >
         <slot name="header" />
         <button
-          v-if="props.hasCloseButton"
+          v-if="hasCloseButton"
           class="popup-closer"
           @click.prevent="close"
         >

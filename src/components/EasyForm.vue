@@ -3,6 +3,8 @@ import { onMounted, reactive } from "vue"
 import FileBox from "@/components/FileBox.vue"
 import { blurElement } from "@/composables/misc"
 
+const emit = defineEmits<{(event: string): void}>()
+
 const props = defineProps<{
   id?: string
   data: Array<{ [k: string]: any }>
@@ -16,9 +18,18 @@ const state = reactive<{
   processing: false,
 })
 
-const emit = defineEmits<{(event: string): void}>()
+onMounted(() => {
+  props.data.forEach((prop: any, index: number) => {
+    if (prop.focus) {
+      const itemId: string = makeItemId(index)
+      const itemElement: null | HTMLElement = document.getElementById(itemId)
+      if (itemElement == null) return
+      itemElement.focus()
+    }
+  })
+})
 
-const submit = async () => {
+async function submit () {
   blurElement()
   if (state.processing) return
   if (props.submitCallback == null) {
@@ -33,25 +44,18 @@ const submit = async () => {
   }
 }
 
-const makeItemId = (index: number) => `easy-form--${props.id ?? 'default'}__${index}`
+function makeItemId (index: number) {
+  return `easy-form--${props.id ?? 'default'}__${index}`
+}
 
 const inputList = [ "password", "text", "url" ]
-const isInput = (type?: string): boolean => type != null ? inputList.includes(type) : true
+function isInput (type?: string): boolean {
+  return type != null ? inputList.includes(type) : true
+}
 
 function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
   data.state[data.model] = files
 }
-
-onMounted(() => {
-  props.data.forEach((prop: any, index: number) => {
-    if (prop.focus) {
-      const itemId: string = makeItemId(index)
-      const itemElement: null | HTMLElement = document.getElementById(itemId)
-      if (itemElement == null) return
-      itemElement.focus()
-    }
-  })
-})
 </script>
 
 <template>
@@ -59,39 +63,39 @@ onMounted(() => {
     class="easy-form"
     @submit.prevent="submit"
   >
-    <dl v-for="data, index of props.data">
-      <dt>{{ data.label }}</dt>
+    <dl v-for="item, index of data">
+      <dt>{{ item.label }}</dt>
       <dd>
         <input
-          v-if="isInput(data.type)"
-          v-model="data.state[data.model]"
+          v-if="isInput(item.type)"
+          v-model="item.state[item.model]"
           :id="makeItemId(index)"
-          :type="data.type ?? 'text'"
-          :required="data.required ?? false"
-          :placeholder="data.placeholder ?? ''"
-          :autocomplete="data.autocomplete ?? ''"
+          :type="item.type ?? 'text'"
+          :required="item.required ?? false"
+          :placeholder="item.placeholder ?? ''"
+          :autocomplete="item.autocomplete ?? ''"
           class="textbox"
         >
         <FileBox
-          v-else-if="data.type === 'file'"
-          :accept="data.accept"
-          :multiple="data.isMultipleFile"
-          :maxNumber="data.maxNumberOfFile"
-          @change="(files: Array<File>) => { onChangeFile(files, data) }"
+          v-else-if="item.type === 'file'"
+          :accept="item.accept"
+          :multiple="item.isMultipleFile"
+          :maxNumber="item.maxNumberOfFile"
+          @change="(files: Array<File>) => { onChangeFile(files, item) }"
         />
         <textarea
-          v-else-if="data.type === 'textarea'"
-          v-model="data.state[data.model]"
+          v-else-if="item.type === 'textarea'"
+          v-model="item.state[item.model]"
           :id="makeItemId(index)"
-          :required="data.required ?? false"
-          :placeholder="data.placeholder ?? ''"
-          :rows="data.rows ?? ''"
+          :required="item.required ?? false"
+          :placeholder="item.placeholder ?? ''"
+          :rows="item.rows ?? ''"
           class="textarea"
         />
       </dd>
     </dl>
     <slot name="after" />
-    <button class="button">{{ props.submitButtonLabel ?? $t("submit") }}</button>
+    <button class="button">{{ submitButtonLabel ?? $t("submit") }}</button>
   </form>
 </template>
 

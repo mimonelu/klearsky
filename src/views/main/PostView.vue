@@ -2,7 +2,7 @@
 import { inject } from "vue"
 import FeedThread from "@/components/FeedThread.vue"
 
-const mainState: MainState = inject("state") as MainState
+const mainState = inject("state") as MainState
 </script>
 
 <template>

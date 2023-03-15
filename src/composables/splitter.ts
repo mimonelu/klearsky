@@ -9,10 +9,10 @@ const urlString = "[" + [
   "\\x61-\\x7a",
   "\\x7e"
 ].join() + "]"
-const something = "[^\\s\\(\\)\\[\\]]"
+const tagString = "[^\\s\\(\\)\\[\\]]"
 const pattern: { [k: string]: string } = {
   url: `(${protocol}${urlString}+)`,
-  tag: `((?<=^|\\s)#${something}+)`,
+  tag: `((?<=^|\\s)#${tagString}+)`,
   mention: `((?<=^|\\s)@[\\w\\.]+)`,
 }
 

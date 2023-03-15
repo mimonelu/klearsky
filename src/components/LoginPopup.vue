@@ -4,7 +4,14 @@ import EasyForm from "@/components/EasyForm.vue"
 import Logo from "@/components/Logo.vue"
 import Popup from "@/components/Popup.vue"
 
-const emit = defineEmits<{(event: string, identifier: string, password: string): void}>()
+const emit = defineEmits<{(
+  event: string,
+  service: string,
+  identifier: string,
+  password: string
+): void}>()
+
+const $t = inject("$t") as Function
 
 const state = reactive<{
   service: string
@@ -15,12 +22,6 @@ const state = reactive<{
   identifier: "",
   password: ""
 })
-
-const $t = inject("$t") as Function
-
-const submitCallback = async () => {
-  emit("login", state.service, state.identifier, state.password)
-}
 
 const easyFormProps = {
   submitButtonLabel: $t("login"),
@@ -53,6 +54,10 @@ const easyFormProps = {
       autocomplete: "current-password",
     }
   ],
+}
+
+async function submitCallback () {
+  emit("login", state.service, state.identifier, state.password)
 }
 </script>
 

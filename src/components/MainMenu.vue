@@ -4,15 +4,15 @@ import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
-const router = useRouter()
-
-const mainState: MainState = inject("state") as MainState
+const mainState = inject("state") as MainState
 
 const state = reactive<{
   canBack: boolean;
 }>({
   canBack: false,
 })
+
+const router = useRouter()
 
 onMounted(() => {
   state.canBack = history.state.back != null
@@ -69,7 +69,7 @@ async function openSettings () {
     <RouterLink
       class="link-button"
       to="timeline"
-      @click="blurElement"
+      @click.prevent="blurElement"
     >
       <SVGIcon name="home" />
     </RouterLink>

@@ -45,7 +45,7 @@ const state = reactive<MainState>({
   openSendPostPopup,
   sendPostPopupProps: {
     visibility: false,
-    type: "",
+    type: "post",
     post: null,
   },
 })
@@ -278,7 +278,7 @@ function closeSendPostPopup () {
 </script>
 
 <template>
-  <div class="page">
+  <div class="main-view">
     <div class="main">
       <div class="left">
         <MainMenu />
@@ -305,7 +305,7 @@ function closeSendPostPopup () {
 </template>
 
 <style lang="scss" scoped>
-.page {
+.main-view {
   & > .loader {
     position: fixed;
   }

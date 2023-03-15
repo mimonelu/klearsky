@@ -1,13 +1,13 @@
 import type { App } from "vue"
 
-type Messages = {
-  [key: string]: {
-    [key: string]: string;
-  };
-}
-
 declare const window: {
   navigator: any;
+}
+
+type Messages = {
+  [k: string]: {
+    [k: string]: string;
+  };
 }
 
 export default {
@@ -15,7 +15,7 @@ export default {
     const $t = (key: string): string => {
       const language = window.navigator.language
       const message = messages[language] ?? messages.en
-      return message[key] ?? messages.en[key] ?? ""
+      return message[key] ?? messages.en[key] ?? key
     }
     app.config.globalProperties.$t = $t
     app.provide("$t", $t)

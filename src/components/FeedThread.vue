@@ -5,7 +5,7 @@ const props = defineProps<{
   feeds: null | Array<Feed>;
 }>()
 
-function getType (feedIndex: number): string {
+function getPostType (feedIndex: number): "post" | "root" | "parent" | "postInPost" {
   if (props.feeds == null) return "post"
   return props.feeds.length === 0 || feedIndex === props.feeds.length - 1
     ? "post"
@@ -31,11 +31,11 @@ function updatePost (newFeed: Feed) {
 <template>
   <div class="feed-thread">
     <div
-      v-for="feed, feedIndex of props.feeds"
+      v-for="feed, feedIndex of feeds"
       class="feed"
     >
       <Post
-        :type="getType(feedIndex)"
+        :type="getPostType(feedIndex)"
         :post="feed.post"
         @update="updatePost"
       />

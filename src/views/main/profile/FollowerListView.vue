@@ -2,9 +2,9 @@
 import { inject } from "vue"
 import { useRouter } from "vue-router"
 
-const router = useRouter()
+const mainState = inject("state") as MainState
 
-const mainState: MainState = inject("state") as MainState
+const router = useRouter()
 
 async function openProfile (handle: string) {
   await router.push({ name: "profile-post", query: { handle } })
@@ -22,7 +22,7 @@ async function openProfile (handle: string) {
         @click.prevent="openProfile(user.handle)"
       >
         <img
-          :src="user.avatar"
+          :src="user.avatar ?? '/img/void.png'"
           loading="lazy"
         >
       </div>

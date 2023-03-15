@@ -3,11 +3,11 @@ import Popup from "@/components/Popup.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
-const props = defineProps<{
+defineProps<{
   error: unknown;
 }>()
 
-const close = () => {
+function close () {
   emit("close")
 }
 </script>
@@ -22,7 +22,7 @@ const close = () => {
       <h2>{{ $t("error") }}</h2>
     </template>
     <template v-slot:body>
-      <pre class="message">{{ props.error }}</pre>
+      <pre class="message">{{ error }}</pre>
     </template>
   </Popup>
 </template>

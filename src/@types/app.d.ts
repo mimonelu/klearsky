@@ -1,10 +1,9 @@
 declare module "*.vue";
 declare module "crypto-js";
-
 declare module "@/composables/*";
 
 type MainState = {
-  atp: any;
+  atp: any;// TODO:
   mounted: boolean;
   hasLogin: boolean;
   timelineFeeds: Array<Feed>;
@@ -23,7 +22,7 @@ type MainState = {
   openSendPostPopup: Function;
   sendPostPopupProps: {
     visibility: boolean;
-    type: string;
+    type: "post" | "reply" | "repost";
     post: null | Post;
   };
   isUserProfile: boolean;

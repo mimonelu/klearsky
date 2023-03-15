@@ -2,7 +2,7 @@
 import { inject } from "vue"
 import FeedList from "@/components/FeedList.vue"
 
-const mainState: MainState = inject("state") as MainState
+const mainState = inject("state") as MainState
 </script>
 
 <template>

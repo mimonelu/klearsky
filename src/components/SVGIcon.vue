@@ -17,7 +17,7 @@ import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
 
-const icons: { [key: string]: string } = {
+const icons: { [k: string]: string } = {
   cross,
   cursorDown,
   cursorLeft,

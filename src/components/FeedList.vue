@@ -5,12 +5,12 @@ import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{
-  type: "author" | "post" | "timline";
+  type: "author" | "post" | "timeline";
   feeds: null | Array<Feed>;
   hasFetchButton?: boolean;
 }>()
 
-const mainState: MainState = inject("state") as MainState
+const mainState = inject("state") as MainState
 
 async function fetchFeeds (direction: "new" | "old") {
   blurElement()
@@ -47,7 +47,7 @@ function updatePost (newFeed: Feed) {
     </button>
     <div class="feeds">
       <div
-        v-for="feed of props.feeds"
+        v-for="feed of feeds"
         class="feed"
       >
         <Post

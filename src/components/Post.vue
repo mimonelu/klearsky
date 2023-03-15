@@ -6,9 +6,7 @@ import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement, formatDate, showJson } from "@/composables/misc"
 
-const router = useRouter()
-
-const emit = defineEmits<{(event: string, post: Post): void}>()
+const emit = defineEmits<{(event: string, feed: Feed): void}>()
 
 const props = defineProps<{
   type: "post" | "root" | "parent" | "postInPost";
@@ -16,7 +14,7 @@ const props = defineProps<{
   post: Post;
 }>()
 
-const mainState: MainState = inject("state") as MainState
+const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean;
@@ -24,19 +22,21 @@ const state = reactive<{
   processing: false,
 })
 
-const openPost = async (uri: string) => {
+const router = useRouter()
+
+async function openPost (uri: string) {
   await router.push({ name: "post", query: { uri } })
 }
 
-const openProfile = async (handle: string) => {
+async function openProfile (handle: string) {
   await router.push({ name: "profile-post", query: { handle } })
 }
 
-const reply = async () => {
+async function reply () {
   mainState.openSendPostPopup("reply", props.post)
 }
 
-const repost = async () => {
+async function repost () {
   const reposted = props.post.viewer.repost != null
   if (!reposted) {
     mainState.openSendPostPopup("repost", props.post)
@@ -52,7 +52,7 @@ const repost = async () => {
   }
 }
 
-const upvote = async () => {
+async function upvote () {
   if (state.processing) return
   state.processing = true
   try {
@@ -65,13 +65,13 @@ const upvote = async () => {
   }
 }
 
-const updatePost = async () => {
+async function updatePost () {
   const posts: null | Array<Feed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
   if (posts == null || posts.length === 0) return
   emit("update", posts[0])
 }
 
-const openSource = () => {
+function openSource () {
   showJson(props.post)
 }
 </script>
@@ -91,9 +91,9 @@ const openSource = () => {
       <SVGIcon name="repost" />
       <a
         class="textlink reposter__display-name"
-        @click.stop="openProfile(post.__reason.by?.handle)"
-      >{{ post.__reason.by?.displayName }}</a>
-      <div class="reposter__handle">{{ post.__reason.by?.handle }}</div>
+        @click.stop="openProfile(post.__reason?.by?.handle as string)"
+      >{{ post.__reason?.by?.displayName }}</a>
+      <div class="reposter__handle">{{ post.__reason?.by?.handle }}</div>
     </div>
     <div class="body">
       <button
@@ -116,7 +116,7 @@ const openSource = () => {
           <div
             v-if="post.indexedAt"
             class="indexed_at"
-          >{{ formatDate(post.indexedAt, "") }}</div>
+          >{{ formatDate(post.indexedAt) }}</div>
         </div>
         <div
           class="text"
@@ -128,7 +128,7 @@ const openSource = () => {
         >
           <Post
             type="postInPost"
-            :post="post.embed.record"
+            :post="post.embed.record as Post"
           />
         </div>
         <div

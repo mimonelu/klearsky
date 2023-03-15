@@ -4,7 +4,7 @@ import { useRouter } from "vue-router"
 import PageHeader from "@/components/PageHeader.vue"
 import { blurElement } from "@/composables/misc"
 
-const mainState: MainState = inject("state") as MainState
+const mainState = inject("state") as MainState
 
 const router = useRouter()
 

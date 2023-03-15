@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-const props = defineProps<{
+defineProps<{
   title?: string;
 }>()
 </script>
 
 <template>
   <header class="page-header">
-    <h1 v-if="props.title">{{ props.title }}</h1>
+    <h1 v-if="title">{{ title }}</h1>
   </header>
 </template>
 

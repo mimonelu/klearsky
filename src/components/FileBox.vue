@@ -2,13 +2,13 @@
 import { reactive } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
+const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
+
 const props = defineProps<{
   accept?: string
   multiple?: boolean
   maxNumber?: number
 }>()
-
-const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
 
 const state = reactive<{
   previews: Array<string>
@@ -16,14 +16,14 @@ const state = reactive<{
   previews: [],
 })
 
-const onChange = (event: Event) => {
+function onChange (event: Event) {
   const files: null | Array<File> = getFiles(event)
   if (files == null) return
   setPreviews(files)
   emit("change", files)
 }
 
-const getFiles = (event: Event): null | Array<File> => {
+function getFiles (event: Event): null | Array<File> {
   const fileList: null | FileList = (event.target as HTMLInputElement)?.files ?? null
   if (fileList == null) return null
   const files: Array<File> = Array.from(fileList)
@@ -31,7 +31,7 @@ const getFiles = (event: Event): null | Array<File> => {
   return files
 }
 
-const setPreviews = (files: Array<File>) => {
+function setPreviews (files: Array<File>) {
   if (files.length === 0) return
   state.previews.splice(0, state.previews.length, ...files.map((file: File) => {
     return window.URL.createObjectURL(file)
@@ -71,30 +71,30 @@ const setPreviews = (files: Array<File>) => {
   input {
     display: none;
   }
+}
 
-  .button {
-    width: 5rem;
-    height: 5rem;
+.button {
+  width: 5rem;
+  height: 5rem;
 
-    .svg-icon:deep() {
-      fill: rgb(var(--bg-color));
-      opacity: 0.5;
-      min-width: 1rem;
-      height: 1rem;
-    }
+  .svg-icon:deep() {
+    fill: rgb(var(--bg-color));
+    opacity: 0.5;
+    min-width: 1rem;
+    height: 1rem;
   }
+}
 
-  .image-box {
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border: 1px solid rgb(var(--fg-color));
-    border-radius: 1px;
-    min-width: 5rem;
-    height: 5rem;
-    &[data-has-image="false"] {
-      display: none;
-    }
+.image-box {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid rgb(var(--fg-color));
+  border-radius: 1px;
+  min-width: 5rem;
+  height: 5rem;
+  &[data-has-image="false"] {
+    display: none;
   }
 }
 </style>

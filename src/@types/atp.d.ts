@@ -26,6 +26,26 @@ type Entity = {
   value: string;
 }
 
+type Reason = {
+  $type: string;
+  by: {
+    did: string;
+    declaration: {
+      actorType: string;
+      cid: string;
+    };
+    handle: string;
+    displayName: string;
+    avatar: string;
+    viewer: {
+      muted: boolean;
+      following?: string;
+      followedBy?: string;
+    };
+  };
+  indexedAt: string;
+};
+
 type Post = {
   uri: string;
   cid: string;
@@ -69,7 +89,7 @@ type Post = {
     downvote?: string;
     [k: string]: unknown;
   };
-  __reason?: unknown; // Injected
+  __reason?: Reason; // Injected
   [k: string]: unknown;
 }
 
@@ -80,13 +100,32 @@ type Feed = {
     parent: Post;
     [k: string]: unknown;
   };
-  reason?: {
-    $type: string;
-    by: unknown;
-    indexedAt: string;
-  };
+  reason?: Reason;
   [k: string]: unknown;
 }
+
+type FileSchema = {
+  cid: string;
+  mimeType: string;
+}
+
+type Follower = {
+  avatar: string;
+  declaration: {
+    actorType: string;
+    cid: string;
+  };
+  did: string;
+  displayName: string;
+  handle: string;
+  viewer: {
+    followedBy?: string;
+    following?: string;
+    muted: boolean;
+  };
+}
+
+type Following = Follower
 
 type Profile = {
   did: string;
@@ -116,26 +155,3 @@ type Profile = {
   };
   [k: string]: unknown;
 }
-
-type FileSchema = {
-  cid: string;
-  mimeType: string;
-}
-
-type Following = {
-  avatar: string;
-  declaration: {
-    actorType: string;
-    cid: string;
-  };
-  did: string;
-  displayName: string;
-  handle: string;
-  viewer: {
-    followedBy?: string;
-    following?: string;
-    muted: boolean;
-  };
-}
-
-type Follower = Following

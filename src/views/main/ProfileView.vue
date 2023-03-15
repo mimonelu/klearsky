@@ -5,7 +5,7 @@ import format from "date-fns/format"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement, showJson } from "@/composables/misc"
 
-const mainState: MainState = inject("state") as MainState
+const mainState = inject("state") as MainState
 
 const router = useRouter()
 

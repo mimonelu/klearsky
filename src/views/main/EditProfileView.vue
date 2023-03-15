@@ -5,9 +5,9 @@ import EasyForm from "@/components/EasyForm.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import { blurElement, waitProp } from "@/composables/misc"
 
-const router = useRouter()
+const $t = inject("$t") as Function
 
-const mainState: MainState = inject("state") as MainState
+const mainState = inject("state") as MainState
 
 const state = reactive<{
   displayName: string,
@@ -23,7 +23,7 @@ const state = reactive<{
   processing: false,
 })
 
-const $t = inject("$t") as Function
+const router = useRouter()
 
 const easyFormProps = {
   submitButtonLabel: $t("apply"),

@@ -19,7 +19,7 @@ export default function (text: string): string {
     } else if (data.type === "mention") {
       html += `<a
         class="textlink"
-        href="/klearsky/#/profile?handle=${data.value.slice(1)}"
+        href="/klearsky/#/profile-post?handle=${data.value.slice(1)}"
         onclick="event?.stopPropagation()"
       >${data.value}</a>`
     }

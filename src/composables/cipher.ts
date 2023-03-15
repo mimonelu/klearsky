@@ -1,5 +1,6 @@
 import CryptoJS from "crypto-js"
 
+// TODO:
 const key = "way_to_reach_there_is_hard"
 
 export function encryptAsHash (text: string): string {

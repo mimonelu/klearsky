@@ -4,7 +4,7 @@ import Logo from "@/components/Logo.vue"
 </script>
 
 <template>
-  <div class="page">
+  <div class="home-view">
     <Logo />
     <menu>
       <RouterLink
@@ -17,7 +17,7 @@ import Logo from "@/components/Logo.vue"
 </template>
 
 <style lang="scss" scoped>
-.page {
+.home-view {
   display: flex;
   flex-direction: column;
   align-items: center;
