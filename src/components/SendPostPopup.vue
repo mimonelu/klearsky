@@ -69,7 +69,7 @@ async function submitCallback () {
   if (state.processing) return
   state.processing = true
   try {
-    await mainState.atp.createRecord({
+    await mainState.atp.createPost({
       ...state,
       type: props.type,
       post: props.post,

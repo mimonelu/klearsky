@@ -1,0 +1,20 @@
+import storage from "@/composables/storage"
+
+export default async function (this: AbstractAtpWrapper, service?: string, identifier?: string, password?: string): Promise<boolean> {
+  this.setService(service)
+  if (!this.createAgent()) return false
+  if (this.agent == null) return false
+  try {
+    if (identifier == null || password == null) await this.resumeSession()
+    else await this.agent.login({ identifier, password })
+  } catch (error: any) {
+    console.error("[klearsky/login]", error)
+    this.logout()
+    return false
+  }
+  // ここで persistSession が入る
+  if (this.session == null) return false
+  storage.save("handle", this.session.handle)
+  storage.save(this.session.handle, this.session)
+  return true
+}

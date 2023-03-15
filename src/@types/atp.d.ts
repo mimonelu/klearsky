@@ -18,7 +18,7 @@ type Author = {
 }
 
 type Entity = {
-  type: "link";
+  type: string;
   index: {
     end: number;
     start: number;

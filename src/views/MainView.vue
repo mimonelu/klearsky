@@ -18,10 +18,11 @@ import LoginPopup from "@/components/LoginPopup.vue"
 import MainMenu from "@/components/MainMenu.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
-import Atp from "@/composables/atp"
+import AtpWrapper from "@/composables/atp-wrapper"
 
 const state = reactive<MainState>({
-  atp: new Atp(),
+  // tslint:disable-next-line
+  atp: new AtpWrapper(),
   mounted: false,
   hasLogin: false,
   timelineFeeds: [],
@@ -38,8 +39,8 @@ const state = reactive<MainState>({
   fetchCurrentAuthorFeed,
   updateUserProfile,
   isUserProfile: false,
-  follow,
-  unfollow,
+  createFollow,
+  deleteFollow,
   query: {},
   processing: false,
   openSendPostPopup,
@@ -198,7 +199,7 @@ async function fetchCurrentProfile (handle: string) {
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   const handle = state.query.handle as LocationQueryValue
   if (!handle) return
-  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds, handle, 10, direction === "old" ? state.pageCursor : undefined)
+  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds as Array<Feed>, handle, 10, direction === "old" ? state.pageCursor : undefined)
   if (result == null) return
   state.pageFeeds = result.feeds
   state.pageCursor = result.cursor ?? null
@@ -248,19 +249,19 @@ async function fetchFeeds (type: string, direction: "new" | "old") {
   }
 }
 
-async function follow (did: string, declarationCid: string) {
+async function createFollow (did: string, declarationCid: string) {
   state.processing = true
   try {
-    await state.atp.follow(did, declarationCid)
+    await state.atp.createFollow(did, declarationCid)
   } finally {
     state.processing = false
   }
 }
 
-async function unfollow (uri: string) {
+async function deleteFollow (uri: string) {
   state.processing = true
   try {
-    await state.atp.unfollow(uri)
+    await state.atp.deleteFollow(uri)
   } finally {
     state.processing = false
   }
