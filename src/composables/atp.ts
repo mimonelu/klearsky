@@ -316,7 +316,9 @@ export default class {
 
   text2htmlAtFeeds (feeds: Array<Feed>) {
     traverse(feeds, (key: string, value: any, parent: any) => {
-      if (key === "text") parent.__textHtml = text2html(value)
+      if (key !== "text") return
+      value = (value + "").replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      parent.__textHtml = text2html(value)
     })
   }
 
