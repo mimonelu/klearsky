@@ -6,11 +6,19 @@ import {
   text2htmlAtFeeds
 } from "@/composables/atp-wrapper/services"
 
-export default async function (this: AbstractAtpWrapper, oldFeeds: Array<Feed>, limit?: number, cursor?: string): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
+export default async function (
+  this: AbstractAtpWrapper,
+  oldFeeds: Array<Feed>,
+  limit?: number,
+  cursor?: string
+): Promise<null | {
+  feeds: Array<Feed>;
+  cursor?: string;
+}> {
   if (this.agent == null) return null
   if (this.session == null) return null
   const query: AppBskyFeedGetTimeline.QueryParams = {
-    // algorithm: "", // TODO: 要調査
+    // algorithm: "reverse-chronological", // TODO: 要調査
   }
   if (limit != null) query.limit = limit
   if (cursor != null) query.before = cursor

@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
+import format from "date-fns/format"
 import Loader from "@/components/Loader.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement, formatDate, showJson } from "@/composables/misc"
+import displayJson from "@/composables/display-json"
+import { blurElement } from "@/composables/misc"
 
 const emit = defineEmits<{(event: string, feed: Feed): void}>()
 
@@ -23,6 +25,10 @@ const state = reactive<{
 })
 
 const router = useRouter()
+
+function formatDate (date: string): string {
+  return format(new Date(date), "MM/dd HH:mm:ss")
+}
 
 async function openPost (uri: string) {
   await router.push({ name: "post", query: { uri } })
@@ -71,7 +77,7 @@ async function updatePost () {
 }
 
 function openSource () {
-  showJson(props.post)
+  displayJson(props.post)
 }
 </script>
 

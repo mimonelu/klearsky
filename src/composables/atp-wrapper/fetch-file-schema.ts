@@ -1,5 +1,5 @@
 import type { ComAtprotoBlobUpload } from "@atproto/api"
-import { getFileAsUint8Array } from "@/composables/misc"
+import { getFileAsUint8Array } from "@/composables/atp-wrapper/services"
 
 export default async function (this: AbstractAtpWrapper, file: File): Promise<null | FileSchema> {
   if (this.agent == null) return null

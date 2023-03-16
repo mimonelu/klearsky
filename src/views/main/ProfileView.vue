@@ -4,7 +4,8 @@ import { RouterView, useRouter } from "vue-router"
 import type { LocationQueryValue } from "vue-router"
 import format from "date-fns/format"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement, showJson } from "@/composables/misc"
+import displayJson from "@/composables/display-json"
+import { blurElement } from "@/composables/misc"
 
 const mainState = inject("state") as MainState
 
@@ -38,7 +39,7 @@ function getIndexedAt (indexedAt?: null | string): string {
 }
 
 function openSource () {
-  showJson(mainState.currentProfile)
+  displayJson(mainState.currentProfile)
 }
 
 function openProfileChildPage (pageName: string) {
