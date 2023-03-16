@@ -58,8 +58,13 @@ defineProps<{
 
 <style lang="scss" scoped>
 .svg-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   position: relative;
   min-width: 1em;
+  max-width: 1em;
   height: 1em;
 
   &:deep(svg) {

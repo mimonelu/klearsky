@@ -6,6 +6,9 @@
   & > .tab-button--outline {
     color: rgba(var(--fg-color), 0.5);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-grow: 1;
     padding: 1rem;
     width: 33.333%;
