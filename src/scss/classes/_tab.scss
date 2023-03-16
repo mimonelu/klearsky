@@ -1,0 +1,27 @@
+.tab {
+  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  display: flex;
+
+  & > .tab-button {
+    color: rgba(var(--fg-color), 0.5);
+    cursor: pointer;
+    flex-grow: 1;
+    padding: 1rem;
+    width: 33.333%;
+    text-align: center;
+    &:not(:last-child) {
+      border-right: 1px solid rgba(var(--fg-color), 0.25);
+    }
+    &:focus, &:hover {
+      color: rgb(var(--fg-color));
+    }
+
+    & > .svg-icon {
+      fill: rgba(var(--fg-color), 0.5);
+    }
+    &:focus > .svg-icon,
+    &:hover > .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
+  }
+}

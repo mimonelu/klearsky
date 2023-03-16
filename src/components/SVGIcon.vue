@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
+import at from "@/svg/at.svg?raw"
+import bell from "@/svg/bell.svg?raw"
 import cross from "@/svg/cross.svg?raw"
 import cursorDown from "@/svg/cursor-down.svg?raw"
 import cursorLeft from "@/svg/cursor-left.svg?raw"
@@ -10,6 +12,8 @@ import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
 import home from "@/svg/home.svg?raw"
 import json from "@/svg/json.svg?raw"
+import mail from "@/svg/mail.svg?raw"
+import person from "@/svg/person.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import repost from "@/svg/repost.svg?raw"
@@ -18,6 +22,8 @@ import setting from "@/svg/setting.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
 
 const icons: { [k: string]: string } = {
+  at,
+  bell,
   cross,
   cursorDown,
   cursorLeft,
@@ -28,6 +34,8 @@ const icons: { [k: string]: string } = {
   heartBroken,
   home,
   json,
+  mail,
+  person,
   plus,
   post,
   repost,

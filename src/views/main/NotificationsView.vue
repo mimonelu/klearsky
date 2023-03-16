@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { RouterView, useRouter } from "vue-router"
+import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
 const router = useRouter()
@@ -16,27 +17,39 @@ function openChildPage (pageName: string) {
       <button
         class="tab-button"
         @click.prevent="openChildPage('reply-notifications')"
-      >Reply</button>
+      >
+        <SVGIcon name="post" />
+      </button>
       <button
         class="tab-button"
         @click.prevent="openChildPage('repost-notifications')"
-      >Repost</button>
+      >
+        <SVGIcon name="repost" />
+      </button>
       <button
         class="tab-button"
         @click.prevent="openChildPage('vote-notifications')"
-      >Vote</button>
+      >
+        <SVGIcon name="heart" />
+      </button>
       <button
         class="tab-button"
         @click.prevent="openChildPage('mention-notifications')"
-      >Mention</button>
+      >
+        <SVGIcon name="at" />
+      </button>
       <button
         class="tab-button"
         @click.prevent="openChildPage('follow-notifications')"
-      >Follow</button>
+      >
+        <SVGIcon name="person" />
+      </button>
       <button
         class="tab-button"
         @click.prevent="openChildPage('invite-notifications')"
-      >Invite</button>
+      >
+        <SVGIcon name="mail" />
+      </button>
     </div>
     <RouterView />
   </div>

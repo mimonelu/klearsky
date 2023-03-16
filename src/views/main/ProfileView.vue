@@ -47,7 +47,8 @@ function openSource () {
   displayJson(mainState.currentProfile)
 }
 
-function openProfileChildPage (pageName: string) {
+function openChildPage (pageName: string) {
+  blurElement()
   router.push({
     name: pageName,
     query: { handle: mainState.currentProfile?.handle },
@@ -146,15 +147,15 @@ function openProfileChildPage (pageName: string) {
     <div class="tab">
       <button
         class="tab-button"
-        @click.prevent="blurElement(); openProfileChildPage('profile-post')"
+        @click.prevent="openChildPage('profile-post')"
       >Posts</button>
       <button
         class="tab-button"
-        @click.prevent="blurElement(); openProfileChildPage('profile-following')"
+        @click.prevent="openChildPage('profile-following')"
       >Followings</button>
       <button
         class="tab-button"
-        @click.prevent="blurElement(); openProfileChildPage('profile-follower')"
+        @click.prevent="openChildPage('profile-follower')"
       >Followers</button>
     </div>
     <RouterView />
@@ -272,25 +273,5 @@ function openProfileChildPage (pageName: string) {
 
 .source {
   margin-left: auto;
-}
-
-.tab {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-  display: flex;
-}
-
-.tab-button {
-  color: rgba(var(--fg-color), 0.5);
-  cursor: pointer;
-  flex-grow: 1;
-  padding: 1rem;
-  width: 33.333%;
-  text-align: center;
-  &:not(:last-child) {
-    border-right: 1px solid rgba(var(--fg-color), 0.25);
-  }
-  &:focus, &:hover {
-    color: rgb(var(--fg-color));
-  }
 }
 </style>

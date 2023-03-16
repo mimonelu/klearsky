@@ -73,6 +73,13 @@ async function openSettings () {
     >
       <SVGIcon name="home" />
     </RouterLink>
+    <RouterLink
+      class="link-button"
+      to="reply-notifications"
+      @click.prevent="blurElement"
+    >
+      <SVGIcon name="bell" />
+    </RouterLink>
     <button
       class="link-button"
       @click.prevent="openSettings"
