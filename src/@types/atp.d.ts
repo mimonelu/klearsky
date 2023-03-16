@@ -1,157 +1,157 @@
 type Author = {
-  did: string;
+  did: string
   declaration: {
-    actorType: string;
-    cid: string;
-    [k: string]: unknown;
-  };
-  handle: string;
-  displayName: string;
-  avatar: string;
+    actorType: string
+    cid: string
+    [k: string]: unknown
+  }
+  handle: string
+  displayName: string
+  avatar: string
   viewer: {
-    muted: boolean;
-    following?: string;
-    followedBy?: string;
-    [k: string]: unknown;
-  };
-  [k: string]: unknown;
+    muted: boolean
+    following?: string
+    followedBy?: string
+    [k: string]: unknown
+  }
+  [k: string]: unknown
 }
 
 type Entity = {
-  type: string;
+  type: string
   index: {
-    end: number;
-    start: number;
-  };
-  value: string;
+    end: number
+    start: number
+  }
+  value: string
 }
 
 type Reason = {
-  $type: string;
+  $type: string
   by: {
-    did: string;
+    did: string
     declaration: {
-      actorType: string;
-      cid: string;
-    };
-    handle: string;
-    displayName: string;
-    avatar: string;
+      actorType: string
+      cid: string
+    }
+    handle: string
+    displayName: string
+    avatar: string
     viewer: {
-      muted: boolean;
-      following?: string;
-      followedBy?: string;
-    };
-  };
-  indexedAt: string;
-};
+      muted: boolean
+      following?: string
+      followedBy?: string
+    }
+  }
+  indexedAt: string
+}
 
 type Post = {
-  uri: string;
-  cid: string;
-  author: Author;
+  uri: string
+  cid: string
+  author: Author
   embed?: {
-    $type: string,
+    $type: string
     images: Array<{
-      thumb: string;
-      fullsize: string;
-      alt: string;
-    }>;
-    [k: string]: unknown;
-  },
+      thumb: string
+      fullsize: string
+      alt: string
+    }>
+    [k: string]: unknown
+  }
   record: {
-    text: string;
-    __textHtml: string; // Injected
-    $type: string;
-    createdAt: string;
+    text: string
+    __textHtml: string // Injected
+    $type: string
+    createdAt: string
     embed?: {
-      $type: string;
+      $type: string
       images?: Array<{
-        alt: string;
+        alt: string
         image: {
-          cid: string;
-          mimeType: string;
-        };
-      }>;
-      [k: string]: unknown;
-    };
-    entities?: Array<Entity>;
-    [k: string]: unknown;
-  };
-  replyCount: number;
-  repostCount: number;
-  upvoteCount: number;
-  downvoteCount: number;
-  indexedAt: string;
+          cid: string
+          mimeType: string
+        }
+      }>
+      [k: string]: unknown
+    }
+    entities?: Array<Entity>
+    [k: string]: unknown
+  }
+  replyCount: number
+  repostCount: number
+  upvoteCount: number
+  downvoteCount: number
+  indexedAt: string
   viewer: {
-    repost?: string;
-    upvote?: string;
-    downvote?: string;
-    [k: string]: unknown;
-  };
-  __reason?: Reason; // Injected
-  [k: string]: unknown;
+    repost?: string
+    upvote?: string
+    downvote?: string
+    [k: string]: unknown
+  }
+  __reason?: Reason // Injected
+  [k: string]: unknown
 }
 
 type Feed = {
-  post: Post;
+  post: Post
   reply?: {
-    root: Post;
-    parent: Post;
-    [k: string]: unknown;
-  };
-  reason?: Reason;
-  [k: string]: unknown;
+    root: Post
+    parent: Post
+    [k: string]: unknown
+  }
+  reason?: Reason
+  [k: string]: unknown
 }
 
 type FileSchema = {
-  cid: string;
-  mimeType: string;
+  cid: string
+  mimeType: string
 }
 
 type Follower = {
-  avatar: string;
+  avatar: string
   declaration: {
-    actorType: string;
-    cid: string;
-  };
-  did: string;
-  displayName: string;
-  handle: string;
+    actorType: string
+    cid: string
+  }
+  did: string
+  displayName: string
+  handle: string
   viewer: {
-    followedBy?: string;
-    following?: string;
-    muted: boolean;
-  };
+    followedBy?: string
+    following?: string
+    muted: boolean
+  }
 }
 
 type Following = Follower
 
 type Profile = {
-  did: string;
+  did: string
   declaration: {
-    actorType: string;
-    cid: string;
-  };
-  handle: string;
-  displayName: string;
-  description?: string;
-  __descriptionHtml: string; // Injected
-  avatar: string;
-  banner: string;
-  followsCount: number;
-  followersCount: number;
-  postsCount: number;
-  creator: string;
-  indexedAt: string;
+    actorType: string
+    cid: string
+  }
+  handle: string
+  displayName: string
+  description?: string
+  __descriptionHtml: string // Injected
+  avatar: string
+  banner: string
+  followsCount: number
+  followersCount: number
+  postsCount: number
+  creator: string
+  indexedAt: string
   viewer: {
-    followedBy?: string;
-    following?: string;
-    muted: boolean;
-  };
+    followedBy?: string
+    following?: string
+    muted: boolean
+  }
   myState: {
-    follow?: string;
-    muted: boolean;
-  };
-  [k: string]: unknown;
+    follow?: string
+    muted: boolean
+  }
+  [k: string]: unknown
 }

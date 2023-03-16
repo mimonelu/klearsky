@@ -1,3 +1,3 @@
-declare module "*.vue";
-declare module "crypto-js";
-declare module "@/composables/**/*";
+declare module "*.vue"
+declare module "crypto-js"
+declare module "@/composables/**/*"
