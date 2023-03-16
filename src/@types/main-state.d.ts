@@ -10,6 +10,8 @@ type MainState = {
   currentCursor: null | string
   currentQuery: LocationQuery
   currentUsers: null | Array<Following> | Array<Follower>
+  notifications: Array<KNotification>
+  notificationCursor?: string
   processing: boolean
   challengingAccount?: {
     service?: string
@@ -25,6 +27,7 @@ type MainState = {
   fetchUserProfile: Function
   fetchCurrentProfile: Function
   fetchCurrentAuthorFeed: Function
+  fetchNotifications: Function
   fetchFeeds: Function
   updateUserProfile: Function
   openSendPostPopup: Function

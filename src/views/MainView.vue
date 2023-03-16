@@ -33,6 +33,8 @@ const state = reactive<MainState>({
   currentCursor: null,
   currentUsers: null,
   currentQuery: {},
+  notifications: [],
+  notificationCursor: undefined, // TODO:
   processing: false,
   challengingAccount: {},
   sendPostPopupProps: {
@@ -60,6 +62,7 @@ onMounted(async () => {
     await autoLogin()
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()
+    await fetchNotifications("new")
   } finally {
     state.mounted = true
     state.processing = false
@@ -220,6 +223,11 @@ async function fetchFollowers (handle: string) {
   if (response == null) return
   state.currentCursor = response.cursor ?? null
   state.currentUsers = response.followers
+}
+
+async function fetchNotifications (direction: "new" | "old") {
+  state.notificationCursor =
+    await state.atp.fetchNotifications(state.notifications, 20, direction === "new" ? undefined : state.notificationCursor)
 }
 
 async function fetchFeeds (type: string, direction: "new" | "old") {

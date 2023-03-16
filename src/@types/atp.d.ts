@@ -127,6 +127,23 @@ type Follower = {
 
 type Following = Follower
 
+type KNotification = {
+  avatar?: string
+  cid: string
+  displayName?: string
+  handle: string
+  indexedAt: string
+  reason:
+    | "reply"
+    | "mention"
+    | "repost"
+    | "vote"
+    | "follow"
+    | "invite"
+    | (string & {})
+  reasonSubject?: string
+}
+
 type Profile = {
   did: string
   declaration: {

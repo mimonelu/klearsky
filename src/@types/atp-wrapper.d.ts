@@ -71,6 +71,12 @@ interface AbstractAtpWrapper {
     cursor?: string
     followers: Array<Following>
   }>
+  fetchNotifications(
+    this: AbstractAtpWrapper,
+    values: Array<KNotification>,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
   fetchProfile(this: AbstractAtpWrapper, actor: string): Promise<null | Profile>
   fetchPostThread(
     this: AbstractAtpWrapper,
