@@ -3,7 +3,7 @@ import {
   injectReason,
   mergeFeeds,
   sortFeeds,
-  text2htmlAtFeeds
+  text2htmlAtFeeds,
 } from "@/composables/atp-wrapper/services"
 
 export default async function (
@@ -12,13 +12,15 @@ export default async function (
   limit?: number,
   cursor?: string
 ): Promise<null | {
-  feeds: Array<Feed>;
-  cursor?: string;
+  feeds: Array<Feed>
+  cursor?: string
 }> {
   if (this.agent == null) return null
   if (this.session == null) return null
   const query: AppBskyFeedGetTimeline.QueryParams = {
-    // algorithm: "reverse-chronological", // TODO: 要調査
+    // TODO: 要調査
+    // FYI: https://github.com/bluesky-social/atproto/blob/main/packages/pds/tests/views/timeline.test.ts
+    // algorithm: "reverse-chronological",
   }
   if (limit != null) query.limit = limit
   if (cursor != null) query.before = cursor
@@ -33,6 +35,7 @@ export default async function (
     text2htmlAtFeeds(response.data.feed as Array<Feed>)
     const newFeeds = mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
     sortFeeds(newFeeds)
+
     return {
       feeds: newFeeds,
       cursor: response.data.cursor,

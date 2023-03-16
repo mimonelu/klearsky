@@ -1,7 +1,10 @@
 import type { AppBskyActorGetProfile } from "@atproto/api"
 import text2html from "@/composables/text2html"
 
-export default async function (this: AbstractAtpWrapper, actor: string): Promise<null | Profile> {
+export default async function (
+  this: AbstractAtpWrapper,
+  actor: string
+): Promise<null | Profile> {
   if (this.agent == null) return null
   if (this.session == null) return null
   try {

@@ -1,6 +1,10 @@
 import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
-export default async function (this: AbstractAtpWrapper, did: string, declarationCid: string): Promise<boolean> {
+export default async function (
+  this: AbstractAtpWrapper,
+  did: string,
+  declarationCid: string
+): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
   try {

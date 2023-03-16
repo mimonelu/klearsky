@@ -64,9 +64,9 @@ const router = createRouter({
               component: FollowingListView,
             },
           ],
-        }
+        },
       ],
-    }
+    },
   ],
 })
 

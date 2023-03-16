@@ -3,10 +3,16 @@ import {
   injectReason,
   mergeFeeds,
   sortFeeds,
-  text2htmlAtFeeds
+  text2htmlAtFeeds,
 } from "@/composables/atp-wrapper/services"
 
-export default async function (this: AbstractAtpWrapper, oldFeeds: Array<Feed>, author: string, limit?: number, cursor?: string): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
+export default async function (
+  this: AbstractAtpWrapper,
+  oldFeeds: Array<Feed>,
+  author: string,
+  limit?: number,
+  cursor?: string
+): Promise<null | { feeds: Array<Feed>; cursor?: string }> {
   if (this.agent == null) return null
   if (this.session == null) return null
   const query: AppBskyFeedGetAuthorFeed.QueryParams = { author }

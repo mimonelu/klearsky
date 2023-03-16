@@ -1,6 +1,8 @@
 export default function (json: unknown) {
   const windowObject = window.open()
-  const jsonHtml = JSON.stringify(json, null, 2).replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  const jsonHtml = JSON.stringify(json, null, 2)
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
   windowObject?.document.write(`
 <style>
 * {

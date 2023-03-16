@@ -1,12 +1,8 @@
-import {
-  encryptAsHash,
-  encrypt,
-  decrypt
-} from "@/composables/cipher"
+import { encryptAsHash, encrypt, decrypt } from "@/composables/cipher"
 import SafeJSON from "@/composables/safe-json"
 
 export default {
-  save (key: string, json: null | any) {
+  save(key: string, json: null | any) {
     if (json == null) return
     const jsonString: null | string = SafeJSON.stringify(json)
     if (jsonString == null) return
@@ -15,7 +11,7 @@ export default {
     localStorage.setItem(cryptedKey, cryptedJson)
   },
 
-  load (key: string): null | any {
+  load(key: string): null | any {
     const cryptedKey = encryptAsHash(key)
     const cryptedJson: null | string = localStorage.getItem(cryptedKey)
     if (cryptedJson == null) return null
@@ -23,8 +19,8 @@ export default {
     return SafeJSON.parse(jsonString)
   },
 
-  remove (key: string) {
+  remove(key: string) {
     const cryptedKey = encryptAsHash(key)
     localStorage.removeItem(cryptedKey)
-  }
+  },
 }

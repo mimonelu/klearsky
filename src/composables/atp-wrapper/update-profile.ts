@@ -1,6 +1,9 @@
 import type { AppBskyActorUpdateProfile } from "@atproto/api"
 
-export default async function (this: AbstractAtpWrapper, params: UpdateProfileParams): Promise<boolean> {
+export default async function (
+  this: AbstractAtpWrapper,
+  params: UpdateProfileParams
+): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
   const fileSchemas: Array<null | FileSchema> = await Promise.all([
@@ -21,7 +24,8 @@ export default async function (this: AbstractAtpWrapper, params: UpdateProfilePa
   if (bannerSchema != null) profileSchema.banner = bannerSchema
   try {
     const response: AppBskyActorUpdateProfile.Response =
-      await this.agent?.api.app.bsky.actor.updateProfile(profileSchema) ?? null
+      (await this.agent?.api.app.bsky.actor.updateProfile(profileSchema)) ??
+      null
     console.log("[klearsky/updateProfile]", response)
     return response.success
   } catch (error: any) {

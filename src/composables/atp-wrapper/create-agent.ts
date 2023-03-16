@@ -1,8 +1,5 @@
 import { AtpAgent } from "@atproto/api"
-import type {
-  AtpSessionData,
-  AtpSessionEvent
-} from "@atproto/api"
+import type { AtpSessionData, AtpSessionEvent } from "@atproto/api"
 
 export default function (this: AbstractAtpWrapper): boolean {
   try {

@@ -1,6 +1,9 @@
 import { AtUri } from "@atproto/uri"
 
-export default async function (this: AbstractAtpWrapper, uri: string): Promise<boolean> {
+export default async function (
+  this: AbstractAtpWrapper,
+  uri: string
+): Promise<boolean> {
   const { host, rkey } = new AtUri(uri)
   if (this.agent == null) return false
   if (this.session == null) return false

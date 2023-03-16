@@ -1,7 +1,10 @@
 import type { ComAtprotoSessionGet } from "@atproto/api"
 import storage from "@/composables/storage"
 
-export default async function (this: AbstractAtpWrapper, newHandle?: string): Promise<boolean> {
+export default async function (
+  this: AbstractAtpWrapper,
+  newHandle?: string
+): Promise<boolean> {
   if (this.agent == null) return false
   const handle = newHandle ?? storage.load("handle")
   if (handle == null) return false

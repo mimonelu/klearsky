@@ -10,7 +10,8 @@ export default async function (
   if (!this.createAgent()) return false
   if (this.agent == null) return false
   try {
-    if (identifier == null || password == null) await this.resumeSession(identifier ?? undefined)
+    if (identifier == null || password == null)
+      await this.resumeSession(identifier ?? undefined)
     else await this.agent.login({ identifier, password })
   } catch (error: any) {
     console.error("[klearsky/login]", error)
@@ -23,10 +24,11 @@ export default async function (
 
   this.accounts = storage.load("accounts") ?? this.accounts
   if (this.accounts == null) this.accounts = {}
-  if (this.accounts[handle] == null) this.accounts[handle] = {
-    service: this.service ?? "",
-    handle,
-  }
+  if (this.accounts[handle] == null)
+    this.accounts[handle] = {
+      service: this.service ?? "",
+      handle,
+    }
   storage.save("accounts", this.accounts)
 
   storage.save("handle", handle)

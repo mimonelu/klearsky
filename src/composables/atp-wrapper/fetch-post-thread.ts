@@ -1,10 +1,14 @@
 import type { AppBskyFeedGetPostThread } from "@atproto/api"
 import {
   text2htmlAtFeeds,
-  traverseJson
+  traverseJson,
 } from "@/composables/atp-wrapper/services"
 
-export default async function (this: AbstractAtpWrapper, uri: string, depth?: number): Promise<null | Array<Feed>> {
+export default async function (
+  this: AbstractAtpWrapper,
+  uri: string,
+  depth?: number
+): Promise<null | Array<Feed>> {
   if (this.agent == null) return null
   if (this.session == null) return null
   const query: AppBskyFeedGetPostThread.QueryParams = { uri }
@@ -16,20 +20,16 @@ export default async function (this: AbstractAtpWrapper, uri: string, depth?: nu
     if (!response.success) return null
 
     // TODO:
-    // SEE: http://localhost:5173/klearsky/#/post?uri=at://did:plc:fporki4626psbdnxzeh7lhg5/app.bsky.feed.post/3jqq5xx7tmc2y
     const replies: Array<Post> = []
     traverseJson(response.data.thread.replies, (key: string, value: any) => {
       if (key === "post") replies.push(value)
     })
-    const posts: Array<any> = [
-      response.data.thread.post,
-      ...replies
-    ]
+    const posts: Array<any> = [response.data.thread.post, ...replies]
     text2htmlAtFeeds(posts)
     posts.sort((a: any, b: any) => {
       const aIndexedAt = new Date(a.indexedAt)
       const bIndexedAt = new Date(b.indexedAt)
-      return aIndexedAt > bIndexedAt ? 1 : aIndexedAt < bIndexedAt ? - 1 : 0
+      return aIndexedAt > bIndexedAt ? 1 : aIndexedAt < bIndexedAt ? -1 : 0
     })
     return posts.map((post: Post) => ({ post }))
   } catch (error: any) {

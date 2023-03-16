@@ -1,4 +1,7 @@
-export default async function (this: AbstractAtpWrapper, uri: string): Promise<boolean> {
+export default async function (
+  this: AbstractAtpWrapper,
+  uri: string
+): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
   try {

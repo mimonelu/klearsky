@@ -1,8 +1,13 @@
 import type { AppBskyGraphGetFollowers } from "@atproto/api"
 
-export default async function (this: AbstractAtpWrapper, handle: string, limit?: number, before?: string): Promise<null | {
-  cursor?: string;
-  followers: Array<Following>;
+export default async function (
+  this: AbstractAtpWrapper,
+  handle: string,
+  limit?: number,
+  before?: string
+): Promise<null | {
+  cursor?: string
+  followers: Array<Following>
 }> {
   if (this.agent == null) return null
   if (this.session == null) return null

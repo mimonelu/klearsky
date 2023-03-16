@@ -1,6 +1,6 @@
 import text2html from "@/composables/text2html"
 
-export function getFileAsUint8Array (file: File): Promise<null | Uint8Array> {
+export function getFileAsUint8Array(file: File): Promise<null | Uint8Array> {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader()
     fileReader.onload = (event: ProgressEvent) => {
@@ -14,23 +14,27 @@ export function getFileAsUint8Array (file: File): Promise<null | Uint8Array> {
   })
 }
 
-export function injectReason (feeds: Array<Feed>) {
+export function injectReason(feeds: Array<Feed>) {
   feeds.forEach((feed: Feed) => {
     if (feed.reason == null) return
     feed.post.__reason = feed.reason
   })
 }
 
-export function makeCreatedAt (): string {
-  return (new Date()).toISOString()
+export function makeCreatedAt(): string {
+  return new Date().toISOString()
 }
 
-export function mergeFeeds (oldFeeds: null | Array<Feed>, targetFeeds: Array<Feed>): Array<Feed> {
+export function mergeFeeds(
+  oldFeeds: null | Array<Feed>,
+  targetFeeds: Array<Feed>
+): Array<Feed> {
   const newFeeds: Array<Feed> = oldFeeds != null ? [...oldFeeds] : []
   targetFeeds.forEach((newFeed: Feed) => {
-    const oldFeedIndex: number = newFeeds.findIndex((oldFeed: Feed) =>
-      oldFeed.post.cid === newFeed.post.cid)
-    if (oldFeedIndex === - 1) {
+    const oldFeedIndex: number = newFeeds.findIndex(
+      (oldFeed: Feed) => oldFeed.post.cid === newFeed.post.cid
+    )
+    if (oldFeedIndex === -1) {
       newFeeds.push(newFeed)
     } else {
       newFeeds[oldFeedIndex] = newFeed
@@ -39,23 +43,26 @@ export function mergeFeeds (oldFeeds: null | Array<Feed>, targetFeeds: Array<Fee
   return newFeeds
 }
 
-export function sortFeeds (feeds: Array<Feed>): Array<Feed> {
+export function sortFeeds(feeds: Array<Feed>): Array<Feed> {
   return feeds.sort((a: Feed, b: Feed) => {
     const aIndexedAt = new Date(a.post.__reason?.indexedAt ?? a.post.indexedAt)
     const bIndexedAt = new Date(b.post.__reason?.indexedAt ?? b.post.indexedAt)
-    return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? - 1 : 0
+    return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
   })
 }
 
-export function text2htmlAtFeeds (feeds: Array<Feed>) {
+export function text2htmlAtFeeds(feeds: Array<Feed>) {
   traverseJson(feeds, (key: string, value: any, parent: any) => {
     if (key !== "text") return
-    value = (value + "").replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    value = (value + "").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     parent.__textHtml = text2html(value)
   })
 }
 
-export function traverseJson (json: any, callback: (key: string, value: any, parent: any) => void) {
+export function traverseJson(
+  json: any,
+  callback: (key: string, value: any, parent: any) => void
+) {
   for (const key in json) {
     callback(key, json[key], json)
     if (json[key] instanceof Object) {

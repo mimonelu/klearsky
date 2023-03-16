@@ -1,7 +1,10 @@
 import type { AppBskyEmbedImages, AppBskyFeedPost } from "@atproto/api"
 import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
-export default async function (this: AbstractAtpWrapper, params: CreatePostParams): Promise<boolean> {
+export default async function (
+  this: AbstractAtpWrapper,
+  params: CreatePostParams
+): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
 
@@ -20,7 +23,10 @@ export default async function (this: AbstractAtpWrapper, params: CreatePostParam
   const entityRegExps: { [k: string]: RegExp } = {
     // mention: new RegExp("(?:^|\\s)(@[\\w\\.\\-]+)", "g"),
     // hashtag: new RegExp("(?:^|\\s)(#\\w+)", "g"),
-    link: new RegExp("(?:^|\\s)(https?:\\/\\/[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-]+)", "g"),
+    link: new RegExp(
+      "(?:^|\\s)(https?:\\/\\/[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-]+)",
+      "g"
+    ),
   }
   for (const type in entityRegExps) {
     const regexp: RegExp = entityRegExps[type]
@@ -51,18 +57,26 @@ export default async function (this: AbstractAtpWrapper, params: CreatePostParam
     }
   }
 
-  const fileSchemas: Array<null | FileSchema> =
-    await Promise.all(params.images.map((file: File): Promise<null | FileSchema> => {
+  const fileSchemas: Array<null | FileSchema> = await Promise.all(
+    params.images.map((file: File): Promise<null | FileSchema> => {
       return this.fetchFileSchema(file)
-    }))
+    })
+  )
   if (fileSchemas.length > 0) {
     const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileSchemas
-      .map((fileSchema: null | FileSchema, index: number): null | AppBskyEmbedImages.Image => {
-        return fileSchema == null ? null : {
-          image: fileSchema,
-          alt: params.alts[index] ?? "",
+      .map(
+        (
+          fileSchema: null | FileSchema,
+          index: number
+        ): null | AppBskyEmbedImages.Image => {
+          return fileSchema == null
+            ? null
+            : {
+                image: fileSchema,
+                alt: params.alts[index] ?? "",
+              }
         }
-      })
+      )
       .filter((image: null | AppBskyEmbedImages.Image) => image != null)
     if (imageObjects.length > 0) {
       record.embed = {
@@ -98,8 +112,10 @@ export default async function (this: AbstractAtpWrapper, params: CreatePostParam
   }
 
   try {
-    const response =
-      await this.agent.api.app.bsky.feed.post.create({ did: this.session.did }, record)
+    const response = await this.agent.api.app.bsky.feed.post.create(
+      { did: this.session.did },
+      record
+    )
     console.log("[klearsky/createRecord]", response)
   } catch (error: any) {
     console.error("[klearsky/createRecord]", error)
