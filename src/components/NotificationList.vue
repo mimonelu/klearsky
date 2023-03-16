@@ -23,7 +23,7 @@ const iconMap: { [reason: string]: string } = {
   follow: "person",
   invite: "mail",
   mention: "at",
-  reply: "reply",
+  reply: "post",
   repost: "repost",
   vote: "heart",
 }
@@ -50,17 +50,12 @@ async function openSubject (notification: KNotification) {
       break
     }
     case "mention": {
-      // TODO:
-      break
-    }
-    case "reply": {
+      console.log(notification)
       await router.push({ name: "post", query: { uri: notification.reasonSubject } })
       break
     }
-    case "repost": {
-      await router.push({ name: "post", query: { uri: notification.reasonSubject } })
-      break
-    }
+    case "reply":
+    case "repost":
     case "vote": {
       await router.push({ name: "post", query: { uri: notification.reasonSubject } })
       break

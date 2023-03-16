@@ -32,7 +32,10 @@ export default async function (
           handle: notification.author.handle,
           indexedAt: notification.indexedAt,
           reason: notification.reason,
-          reasonSubject: notification.reasonSubject,
+          reasonSubject:
+            notification.reason === "mention"
+              ? notification.uri
+              : notification.reasonSubject,
         })
       }
     )

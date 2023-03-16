@@ -47,6 +47,7 @@ const state = reactive<MainState>({
   fetchUserProfile,
   fetchCurrentProfile,
   fetchCurrentAuthorFeed,
+  fetchNotifications,
   fetchFeeds,
   updateUserProfile,
   openSendPostPopup,
