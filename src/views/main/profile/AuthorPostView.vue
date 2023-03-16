@@ -8,7 +8,7 @@ const mainState = inject("state") as MainState
 <template>
   <FeedList
     type="author"
-    :feeds="mainState.pageFeeds"
+    :feeds="mainState.currentFeeds"
     :hasFetchButton="true"
   />
 </template>

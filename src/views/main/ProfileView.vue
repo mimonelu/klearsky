@@ -11,6 +11,11 @@ const mainState = inject("state") as MainState
 
 const router = useRouter()
 
+function isUserProfile (): boolean {
+  const handle = mainState.currentQuery.handle as LocationQueryValue
+  return handle === mainState.atp.session?.handle
+}
+
 function isFollowing (): boolean {
   return mainState.currentProfile?.viewer?.following != null
 }
@@ -30,7 +35,7 @@ async function toggleFollow () {
       mainState.currentProfile.declaration.cid as string
     )
   }
-  const handle = router.currentRoute.value.query.handle as LocationQueryValue
+  const handle = mainState.currentQuery.handle as LocationQueryValue
   await mainState.fetchCurrentProfile(handle)
 }
 
@@ -83,7 +88,7 @@ function openProfileChildPage (pageName: string) {
           <div class="handle">{{ mainState.currentProfile?.handle }}</div>
           <div class="right-bottom">
             <RouterLink
-              v-if="mainState.isUserProfile"
+              v-if="isUserProfile()"
               to="edit-profile"
               class="button"
             >

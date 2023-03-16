@@ -7,6 +7,6 @@ const mainState = inject("state") as MainState
 
 <template>
   <div class="post-view">
-    <FeedThread :feeds="mainState.pageFeeds" />
+    <FeedThread :feeds="mainState.currentFeeds" />
   </div>
 </template>

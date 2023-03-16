@@ -25,35 +25,35 @@ const state = reactive<MainState>({
   atp: new AtpWrapper(),
   mounted: false,
   hasLogin: false,
-  timelineFeeds: [],
-  timelineCursor: undefined,
   userProfile: null,
+  timelineFeeds: [],
+  timelineCursor: undefined, // TODO:
   currentProfile: null,
-  pageFeeds: null,
-  pageCursor: null,
+  currentFeeds: null,
   currentCursor: null,
   currentUsers: null,
-  fetchFeeds,
-  fetchUserProfile,
-  fetchCurrentProfile,
-  fetchCurrentAuthorFeed,
-  updateUserProfile,
-  isUserProfile: false,
-  createFollow,
-  deleteFollow,
-  query: {},
+  currentQuery: {},
   processing: false,
-  openSendPostPopup,
+  challengingAccount: {},
   sendPostPopupProps: {
     visibility: false,
     type: "post",
     post: null,
   },
+  createFollow,
+  deleteFollow,
+  fetchUserProfile,
+  fetchCurrentProfile,
+  fetchCurrentAuthorFeed,
+  fetchFeeds,
+  updateUserProfile,
+  openSendPostPopup,
 })
 
 provide("state", state)
 
 onMounted(async () => {
+  state.currentQuery = router.currentRoute.value.query
   state.hasLogin = state.atp.hasLogin()
   try {
     state.processing = true
@@ -69,11 +69,12 @@ onMounted(async () => {
 const router = useRouter()
 
 router.beforeEach(() => {
-  state.pageFeeds?.splice(0)
-  state.pageCursor = null
+  state.currentFeeds?.splice(0)
+  state.currentCursor = null
 })
 
 router.afterEach(async (to: RouteLocationNormalized) => {
+  state.currentQuery = router.currentRoute.value.query
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "timeline" && state.timelineFeeds.length > 0) return
 
@@ -103,13 +104,9 @@ async function manualLogin (service: string, identifier: string, password: strin
 }
 
 async function processPage (pageName?: null | RouteRecordName) {
-  state.query = router.currentRoute.value.query
-  const handle = state.query.handle as LocationQueryValue
-  state.isUserProfile = handle === state.atp.session?.handle
-
   switch (pageName) {
     case "profile-post": {
-      const handle = state.query.handle as LocationQueryValue
+      const handle = state.currentQuery.handle as LocationQueryValue
       if (!handle) {
         await router.push({ name: "timeline" })
         break
@@ -121,7 +118,7 @@ async function processPage (pageName?: null | RouteRecordName) {
       break
     }
     case "profile-following": {
-      const handle = state.query.handle as LocationQueryValue
+      const handle = state.currentQuery.handle as LocationQueryValue
       if (!handle) {
         await router.push({ name: "timeline" })
         break
@@ -134,7 +131,7 @@ async function processPage (pageName?: null | RouteRecordName) {
       break
     }
     case "profile-follower": {
-      const handle = state.query.handle as LocationQueryValue
+      const handle = state.currentQuery.handle as LocationQueryValue
       if (!handle) {
         await router.push({ name: "timeline" })
         break
@@ -151,13 +148,13 @@ async function processPage (pageName?: null | RouteRecordName) {
       break
     }
     case "post": {
-      const uri = state.query.uri as LocationQueryValue
+      const uri = state.currentQuery.uri as LocationQueryValue
       if (!uri) {
         await router.push({ name: "timeline" })
         break
       }
-      state.pageFeeds?.splice(0)
-      state.pageFeeds = await state.atp.fetchPostThread(uri)
+      state.currentFeeds?.splice(0)
+      state.currentFeeds = await state.atp.fetchPostThread(uri)
       break
     }
   }
@@ -197,12 +194,12 @@ async function fetchCurrentProfile (handle: string) {
 }
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
-  const handle = state.query.handle as LocationQueryValue
+  const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.pageFeeds as Array<Feed>, handle, 10, direction === "old" ? state.pageCursor ?? undefined : undefined)
+  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.currentFeeds as Array<Feed>, handle, 10, direction === "old" ? state.currentCursor ?? undefined : undefined)
   if (result == null) return
-  state.pageFeeds = result.feeds
-  state.pageCursor = result.cursor ?? null
+  state.currentFeeds = result.feeds
+  state.currentCursor = result.cursor ?? null
 }
 
 async function fetchFollowings (handle: string) {
@@ -234,9 +231,9 @@ async function fetchFeeds (type: string, direction: "new" | "old") {
         break
       }
       case "post": {
-        const uri = state.query.uri as LocationQueryValue
+        const uri = state.currentQuery.uri as LocationQueryValue
         if (!uri) return
-        state.pageFeeds = await state.atp.fetchPostThread(uri)
+        state.currentFeeds = await state.atp.fetchPostThread(uri)
         break
       }
       case "timeline": {
