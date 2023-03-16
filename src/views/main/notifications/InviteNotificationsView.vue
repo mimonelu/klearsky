@@ -1,0 +1,3 @@
+<template>
+  Invite Notifications
+</template>

@@ -1,0 +1,3 @@
+<template>
+  Follow Notifications
+</template>

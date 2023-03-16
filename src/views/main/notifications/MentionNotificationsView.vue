@@ -1,0 +1,3 @@
+<template>
+  Mention Notifications
+</template>
