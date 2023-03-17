@@ -78,6 +78,11 @@ router.beforeEach(() => {
 })
 
 router.afterEach(async (to: RouteLocationNormalized) => {
+  // ページフォワード時はページトップへスクロール
+  if (window.history.state.forward == null) {
+    window.scrollTo(0, 0)
+  }
+
   state.currentQuery = router.currentRoute.value.query
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "timeline" && state.timelineFeeds.length > 0) return
