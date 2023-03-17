@@ -1,14 +1,18 @@
 import { createRouter, createWebHashHistory } from "vue-router"
-import EditProfileView from "@/views/main/EditProfileView.vue"
 import HomeView from "@/views/HomeView.vue"
+import NotFoundView from "@/views/NotFoundView.vue"
+
 import MainView from "@/views/MainView.vue"
+import EditProfileView from "@/views/main/EditProfileView.vue"
 import PostView from "@/views/main/PostView.vue"
-import ProfileView from "@/views/main/ProfileView.vue"
 import SettingsView from "@/views/main/SettingsView.vue"
 import TimelineView from "@/views/main/TimelineView.vue"
+
+import ProfileView from "@/views/main/ProfileView.vue"
 import AuthorPostView from "@/views/main/profile/AuthorPostView.vue"
 import FollowerListView from "@/views/main/profile/FollowerListView.vue"
 import FollowingListView from "@/views/main/profile/FollowingListView.vue"
+
 import NotificationsView from "@/views/main/NotificationsView.vue"
 import FollowNotificationsView from "@/views/main/notifications/FollowNotificationsView.vue"
 import InviteNotificationsView from "@/views/main/notifications/InviteNotificationsView.vue"
@@ -110,6 +114,11 @@ const router = createRouter({
           ],
         },
       ],
+    },
+    {
+      path: "/:catchAll(.*)",
+      name: "not-found",
+      component: NotFoundView,
     },
   ],
 })
