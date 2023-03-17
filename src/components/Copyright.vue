@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import Package from "../../package.json"
+
+const yyyy = (new Date).getFullYear()
 </script>
 
 <template>
   <div class="copyright">
     <div class="kebab-header">{{ $t("title") }} v{{ Package.version }}</div>
-    <small>&copy; 2023 mimonelu</small>
+    <small>&copy; {{ yyyy }} mimonelu</small>
     <a
       class="textlink"
       href="https://blue.amazingca.dev/?username=mimonelu.bsky.social"
@@ -26,7 +28,7 @@ import Package from "../../package.json"
     >Twitter@mimonelu</a>
     <div />
     <div class="kebab-header">Bluesky</div>
-    <small>&copy; 2023 Bluesky PBLLC</small>
+    <small>&copy; {{ yyyy }} Bluesky PBLLC</small>
     <a
       class="textlink"
       href="https://blueskyweb.xyz/"
