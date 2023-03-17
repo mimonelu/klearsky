@@ -66,6 +66,15 @@ type Post = {
     createdAt: string
     embed?: {
       $type: string
+      external?: {
+        uri: string
+        thumb?: {
+          cid: string
+          mimeType: string
+        }
+        title?: string
+        description?: string
+      }
       images?: Array<{
         alt: string
         image: {

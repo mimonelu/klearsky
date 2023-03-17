@@ -128,15 +128,18 @@ function openSource () {
           class="text"
           v-html="post.record.__textHtml"
         />
-        <div
-          v-if="post.embed?.record"
-          class="repost"
+        <a
+          v-if="post.embed?.external"
+          class="external"
+          :href="post.embed.external.uri"
+          rel="noreferrer"
+          target="_blank"
+          @click.stop="blurElement"
         >
-          <Post
-            type="postInPost"
-            :post="post.embed.record as Post"
-          />
-        </div>
+          <div class="external__title">{{ post.embed.external.title ?? '' }}</div>
+          <div class="external__uri">{{ post.embed.external.uri }}</div>
+          <div class="external__description">{{ post.embed.external.description ?? '' }}</div>
+        </a>
         <div
           v-if="post.embed?.images"
           class="images"
@@ -147,7 +150,6 @@ function openSource () {
             :href="image.fullsize"
             rel="noreferrer"
             target="_blank"
-            tabindex="0"
             @click.stop="blurElement"
           >
             <img
@@ -156,6 +158,15 @@ function openSource () {
               :alt="image.alt"
             />
           </a>
+        </div>
+        <div
+          v-if="post.embed?.record"
+          class="repost"
+        >
+          <Post
+            type="postInPost"
+            :post="post.embed.record as Post"
+          />
         </div>
         <div
           v-if="type !== 'postInPost'"
@@ -337,13 +348,35 @@ function openSource () {
   }
 }
 
-.repost {
-  grid-area: r;
+.external {
   border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: 1px;
+  cursor: pointer;
+  display: grid;
+  grid-gap: 0.25em;
+  grid-template-rows: auto auto auto;
+  padding: 1em;
+  &:focus, &:hover {
+    border-color: rgba(var(--fg-color), 0.5);
+  }
 
-  & > .post {
-    padding: 0.875em;
+  &__title,
+  &__uri,
+  &__description {
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &__title {
+    font-weight: bold;
+  }
+  &__uri {
+    color: rgba(var(--fg-color), 0.5);
+    font-size: 0.875em;
+  }
+  &__description {
+    font-size: 0.875em;
   }
 }
 
@@ -369,6 +402,16 @@ function openSource () {
     & > .image:nth-child(2) { grid-area: b; }
     & > .image:nth-child(3) { grid-area: c; }
     & > .image:nth-child(4) { grid-area: d; }
+  }
+}
+
+.repost {
+  grid-area: r;
+  border: 1px solid rgba(var(--fg-color), 0.25);
+  border-radius: 1px;
+
+  & > .post {
+    padding: 0.875em;
   }
 }
 
