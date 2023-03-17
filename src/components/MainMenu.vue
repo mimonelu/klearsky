@@ -49,7 +49,9 @@ async function openSettings () {
       class="link-button--outline"
       @click.prevent="back"
     >
-      <SVGIcon name="cursorLeft" />
+      <div class="icon">
+        <SVGIcon name="cursorLeft" />
+      </div>
     </button>
     <div
       v-else
@@ -58,39 +60,53 @@ async function openSettings () {
       <SVGIcon name="shimmer" />
     </div>
     <button
-      class="avatar"
+      class="link-button"
       @click.prevent="openUserProfile"
     >
       <img
+        class="image"
         loading="lazy"
         :src="mainState.userProfile?.avatar ?? '/img/void.png'"
       >
+      <div class="label">{{ mainState.userProfile?.handle }}</div>
     </button>
     <RouterLink
       class="link-button"
       to="timeline"
       @click.prevent="blurElement"
     >
-      <SVGIcon name="home" />
+      <div class="icon">
+        <SVGIcon name="home" />
+      </div>
+      <div class="label">Home</div>
     </RouterLink>
     <RouterLink
       class="link-button"
       to="reply-notifications"
       @click.prevent="blurElement"
     >
-      <SVGIcon name="bell" />
+      <div class="icon">
+        <SVGIcon name="bell" />
+      </div>
+      <div class="label">Notification</div>
     </RouterLink>
     <button
       class="link-button"
       @click.prevent="openSettings"
     >
-      <SVGIcon name="setting" />
+      <div class="icon">
+        <SVGIcon name="setting" />
+      </div>
+      <div class="label">Settings</div>
     </button>
     <button
-      class="link-button--post"
+      class="link-button send-post-button"
       @click.prevent="openSendPostPopup"
     >
-      <SVGIcon name="sendPost" />
+      <div class="icon">
+        <SVGIcon name="sendPost" />
+      </div>
+      <div class="label">Post</div>
     </button>
   </div>
 </template>
@@ -99,8 +115,18 @@ async function openSettings () {
 .main-menu {
   display: flex;
   flex-direction: column;
-  grid-gap: 1rem;
   padding: 1rem;
+
+  @media (max-width: $max-width-with-scrollbar) {
+    .link-button,
+    .link-button--outline {
+      grid-template-columns: min-content;
+    }
+
+    .label {
+      display: none;
+    }
+  }
 }
 
 .small-logo {
@@ -109,55 +135,85 @@ async function openSettings () {
   justify-content: center;
   font-size: 1.5rem;
   min-width: 3rem;
-  min-height: 3rem;
+  min-height: calc(3rem + 1rem);
 
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
+  .svg-icon {
+    fill: rgba(var(--fg-color), 0.5);
   }
 }
 
 .link-button,
-.link-button--outline,
-.link-button--post {
+.link-button--outline {
   cursor: pointer;
-  display: flex;
+  display: grid;
+  grid-template-columns: min-content 1fr;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  min-width: 3rem;
-  min-height: 3rem;
+  grid-gap: 1rem;
+  padding: 0.5rem 0;
+  width: 100%;
+  &:focus, &:hover {
+    .label {
+      color: rgb(var(--fg-color));
+    }
+  }
+
+  .image {
+    border-radius: 1px;
+    object-fit: cover;
+    min-width: 3rem;
+    max-width: 3rem;
+    min-height: 3rem;
+    max-height: 3rem;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    min-height: 3rem;
+
+    .svg-icon {
+      font-size: 1.75rem;
+    }
+  }
+
+  .label {
+    color: rgba(var(--fg-color), 0.5);
+    font-size: 1.25rem;
+    overflow: hidden;
+    padding-right: 0.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+  }
 }
 .link-button {
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
-  }
-  &:focus > .svg-icon,
-  &:hover > .svg-icon {
+  .svg-icon {
     fill: rgba(var(--fg-color), 0.5);
+  }
+  &:focus, &:hover {
+    .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
   }
 }
 .link-button--outline {
-  & > .svg-icon {
+  .svg-icon {
     fill: transparent;
     stroke: rgba(var(--fg-color), 0.25);
     stroke-width: 2px;
   }
-  &:focus > .svg-icon,
-  &:hover > .svg-icon {
-    stroke: rgba(var(--fg-color), 0.5);
+  &:focus , &:hover {
+    .svg-icon {
+      stroke: rgb(var(--fg-color));
+    }
   }
 }
-.link-button--post {
-  & > .svg-icon {
-    fill: rgba(var(--accent-color), 1);
+.send-post-button {
+  .svg-icon {
+    fill: rgb(var(--accent-color));
   }
-  &:focus > .svg-icon,
-  &:hover > .svg-icon {
-    filter: brightness(1.25);
-  }
-}
-
-.avatar {
-  @include avatar-link(3rem);
 }
 </style>

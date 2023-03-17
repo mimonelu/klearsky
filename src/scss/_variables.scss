@@ -1,3 +1,9 @@
+$max-width: 1192px;
+$max-width-with-scrollbar: 1222px;
+$menu-max-width: 276px;
+$main-menu-min-width: 5rem;
+$router-view-width: 640px;
+
 @mixin scroll-bar () {
   &::-webkit-scrollbar {
     background-color: transparent;

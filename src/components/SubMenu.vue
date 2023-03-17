@@ -14,7 +14,7 @@ import Logo from "@/components/Logo.vue"
 .sub-menu {
   display: flex;
   flex-direction: column;
-  grid-gap: 2rem;
+  grid-gap: 3rem;
   padding: 3rem 1rem 1rem 1rem;
 }
 

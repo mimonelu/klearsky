@@ -292,13 +292,13 @@ function closeSendPostPopup () {
 <template>
   <div class="main-view">
     <div class="main">
-      <div class="left">
+      <div class="main-menu-wrapper">
         <MainMenu />
       </div>
-      <div class="center">
+      <div class="router-view-wrapper">
         <RouterView @fetchFeeds="fetchFeeds" />
       </div>
-      <div class="right">
+      <div class="sub-menu-wrapper">
         <SubMenu />
       </div>
     </div>
@@ -325,34 +325,41 @@ function closeSendPostPopup () {
 
 .main {
   display: flex;
+  justify-content: center;
   margin: auto;
-  max-width: 1024px;
+  max-width: $max-width;
   min-height: 100vh;
 }
 
-.left {
+.main-menu-wrapper {
+  overflow: hidden;
   position: relative;
-  min-width: 5rem;
-  @media (min-width: 1024px) {
+  @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     border-left: 1px solid rgba(var(--fg-color), 0.25);
+  }
+  @media (max-width: $max-width-with-scrollbar) {
+    min-width: $main-menu-min-width;
+    max-width: $main-menu-min-width;
+  }
+  @media not (max-width: $max-width-with-scrollbar) {
+    min-width: $menu-max-width;
+    max-width: $menu-max-width;
   }
 
   & > .main-menu {
     position: fixed;
     top: 0;
+    max-width: $menu-max-width;
   }
 }
 
-.center {
+.router-view-wrapper {
   border-left: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  max-width: 640px;
-  @media (min-width: 1024px) {
-    min-width: 640px;
-  }
-  @media (min-width: calc(640px + 5rem)) {
+  max-width: $router-view-width;
+  @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
   }
 
@@ -361,13 +368,14 @@ function closeSendPostPopup () {
   }
 }
 
-.right {
-  flex-grow: 1;
+.sub-menu-wrapper {
   @media (max-width: 1024px) {
     display: none;
   }
-  @media (min-width: 1024px) {
+  @media not (max-width: 1024px) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
+    flex-grow: 1;
+    max-width: $menu-max-width;
   }
 }
 
