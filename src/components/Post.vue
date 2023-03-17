@@ -148,10 +148,14 @@ function openSource () {
             rel="noreferrer"
             target="_blank"
             tabindex="0"
-            :title="image.alt"
-            :style="`background-image: url(${image.thumb});`"
-            @click.stop
-          />
+            @click.stop="blurElement"
+          >
+            <img
+              loading="lazy"
+              :src="image.thumb ?? '/img/void.png'"
+              :alt="image.alt"
+            />
+          </a>
         </div>
         <div
           v-if="type !== 'postInPost'"
@@ -347,7 +351,7 @@ function openSource () {
   grid-area: i;
   aspect-ratio: 1.91 / 1;
   display: grid;
-  grid-gap: 3px;
+  grid-gap: 1px;
   &:has(:nth-child(2)) {
     grid-template-areas: "a b";
     & > .image:nth-child(1) { grid-area: a; }
@@ -369,14 +373,22 @@ function openSource () {
 }
 
 .image {
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  outline: 1px solid rgba(var(--fg-color), 0.25);
+  border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: 1px;
   display: block;
   &:focus, &:hover {
-    outline-color: rgba(var(--fg-color), 0.5);
+    border-color: transparent;
+  }
+
+  & > img {
+    aspect-ratio: 1.91 / 1;
+    object-fit: cover;
+    height: 100%;
+  }
+  &:focus, &:hover {
+    & > img {
+      object-fit: contain;
+    }
   }
 }
 
