@@ -78,7 +78,7 @@ async function openSettings () {
       <div class="icon">
         <SVGIcon name="home" />
       </div>
-      <div class="label">Home</div>
+      <div class="label">{{ $t("home") }}</div>
     </RouterLink>
     <RouterLink
       class="link-button"
@@ -88,7 +88,7 @@ async function openSettings () {
       <div class="icon">
         <SVGIcon name="bell" />
       </div>
-      <div class="label">Notification</div>
+      <div class="label">{{ $t("notifications") }}</div>
     </RouterLink>
     <button
       class="link-button"
@@ -97,7 +97,7 @@ async function openSettings () {
       <div class="icon">
         <SVGIcon name="setting" />
       </div>
-      <div class="label">Settings</div>
+      <div class="label">{{ $t("settings") }}</div>
     </button>
     <button
       class="link-button send-post-button"
@@ -106,7 +106,7 @@ async function openSettings () {
       <div class="icon">
         <SVGIcon name="sendPost" />
       </div>
-      <div class="label">Post</div>
+      <div class="label">{{ $t("sendPost") }}</div>
     </button>
   </div>
 </template>
