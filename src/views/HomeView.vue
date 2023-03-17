@@ -5,13 +5,14 @@ import Logo from "@/components/Logo.vue"
 
 <template>
   <div class="home-view">
-    <Logo />
-    <menu>
-      <RouterLink
-        to="timeline"
-        class="button--large"
-      >Launch Klearsky</RouterLink>
-    </menu>
+    <div class="header">
+      <Logo />
+      <div>Unofficial Web Client for Bluesky</div>
+    </div>
+    <RouterLink
+      to="timeline"
+      class="button--large"
+    >Launch Klearsky</RouterLink>
     <Copyright />
   </div>
 </template>
@@ -21,18 +22,18 @@ import Logo from "@/components/Logo.vue"
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  grid-gap: 2rem;
-  height: 100vh;
+  grid-gap: 4rem;
+  padding: 4rem;
+}
 
-  menu {
-    display: flex;
-    flex-direction: column;
-    grid-gap: 1rem;
-  }
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  grid-gap: 1rem;
 }
 
 .logo {
-  font-size: 3rem;
+  font-size: 4rem;
 }
 </style>
