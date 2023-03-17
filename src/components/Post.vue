@@ -77,6 +77,7 @@ async function updatePost () {
 }
 
 function openSource () {
+  blurElement()
   displayJson(props.post)
 }
 </script>
@@ -388,26 +389,26 @@ function openSource () {
 }
 
 .repost_count[data-reposted="true"] {
-  color: rgb(var(--green));
-
   & > .svg-icon {
     fill: rgb(var(--green));
+  }
+
+  & > span {
+    color: rgb(var(--green));
   }
 }
 
 .upvote_count[data-voted="true"] {
-  color: rgb(var(--pink));
-
   & > .svg-icon {
     fill: rgb(var(--pink));
+  }
+
+  & > span {
+    color: rgb(var(--pink));
   }
 }
 
 .source {
   margin-left: auto;
-
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
-  }
 }
 </style>

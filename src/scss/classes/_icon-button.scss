@@ -3,25 +3,24 @@
   display: flex;
   align-items: center;
   grid-gap: 0.5em;
-  fill: rgba(var(--fg-color), 0.25);
   margin: -0.75em;
   padding: 0.75em;
-  &:focus,
-  &:hover {
-    filter: brightness(1.5);
+  &:focus, &:hover {
+    & > .svg-icon {
+      fill: rgb(var(--fg-color), 1);
+    }
+    & > span {
+      color: rgb(var(--fg-color), 1);
+    }
   }
 
   & > .svg-icon {
-    font-size: 0.875em;
-  }
-  &[data-has="true"] > .svg-icon {
-    fill: rgba(var(--fg-color), 0.75);
-  }
-  &[data-has="false"] > .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
+    fill: rgba(var(--fg-color), 0.5);
+    font-size: 1em;
   }
 
   & > span {
-    font-size: 0.75em;
+    color: rgba(var(--fg-color), 0.5);
+    font-size: 0.875em;
   }
 }
