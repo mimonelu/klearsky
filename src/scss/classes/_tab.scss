@@ -4,17 +4,21 @@
 
   & > .tab-button,
   & > .tab-button--outline {
+    border-bottom: 2px solid transparent;
     color: rgba(var(--fg-color), 0.5);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    padding: 1rem;
+    padding: 1rem 0.5rem;
     width: 33.333%;
     text-align: center;
     &:not(:last-child) {
       border-right: 1px solid rgba(var(--fg-color), 0.25);
+    }
+    &[data-selected="true"] {
+      border-bottom: 2px solid rgb(var(--accent-color));
     }
     &:focus, &:hover {
       color: rgb(var(--fg-color));
@@ -24,9 +28,10 @@
     & > .svg-icon {
       fill: rgba(var(--fg-color), 0.5);
     }
-    &:focus > .svg-icon,
-    &:hover > .svg-icon {
-      fill: rgb(var(--fg-color));
+    &:focus, &:hover {
+      & > .svg-icon {
+        fill: rgb(var(--fg-color));
+      }
     }
   }
   & > .tab-button--outline {
@@ -35,11 +40,12 @@
       stroke: rgba(var(--fg-color), 0.5);
       stroke-width: 2px;
     }
-    &:focus > .svg-icon,
-    &:hover > .svg-icon {
-      fill: transparent;
-      stroke: rgb(var(--fg-color));
-      stroke-width: 2px;
+    &:focus, &:hover {
+      & > .svg-icon {
+        fill: transparent;
+        stroke: rgb(var(--fg-color));
+        stroke-width: 2px;
+      }
     }
   }
 }

@@ -35,36 +35,42 @@ function openChildPage (pageName: string) {
       </button>
       <button
         class="tab-button"
+        :data-selected="router.currentRoute.value.name === 'reply-notifications'"
         @click.prevent="openChildPage('reply-notifications')"
       >
         <SVGIcon name="post" />
       </button>
       <button
         class="tab-button"
+        :data-selected="router.currentRoute.value.name === 'repost-notifications'"
         @click.prevent="openChildPage('repost-notifications')"
       >
         <SVGIcon name="repost" />
       </button>
       <button
         class="tab-button"
+        :data-selected="router.currentRoute.value.name === 'vote-notifications'"
         @click.prevent="openChildPage('vote-notifications')"
       >
         <SVGIcon name="heart" />
       </button>
       <button
         class="tab-button"
+        :data-selected="router.currentRoute.value.name === 'mention-notifications'"
         @click.prevent="openChildPage('mention-notifications')"
       >
         <SVGIcon name="at" />
       </button>
       <button
         class="tab-button"
+        :data-selected="router.currentRoute.value.name === 'follow-notifications'"
         @click.prevent="openChildPage('follow-notifications')"
       >
         <SVGIcon name="person" />
       </button>
       <button
         class="tab-button"
+        :data-selected="router.currentRoute.value.name === 'invite-notifications'"
         @click.prevent="openChildPage('invite-notifications')"
       >
         <SVGIcon name="mail" />

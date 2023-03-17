@@ -147,14 +147,17 @@ function openChildPage (pageName: string) {
     <div class="tab">
       <button
         class="tab-button"
+        :data-selected="router.currentRoute.value.name === 'profile-post'"
         @click.prevent="openChildPage('profile-post')"
       >Posts</button>
       <button
         class="tab-button"
+        :data-selected="router.currentRoute.value.name === 'profile-following'"
         @click.prevent="openChildPage('profile-following')"
       >Followings</button>
       <button
         class="tab-button"
+        :data-selected="router.currentRoute.value.name === 'profile-follower'"
         @click.prevent="openChildPage('profile-follower')"
       >Followers</button>
     </div>
