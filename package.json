@@ -17,7 +17,6 @@
     "autoprefixer": "^10.4.13",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.29.3",
-    "pinia": "^2.0.28",
     "sass": "^1.58.3",
     "the-new-css-reset": "^1.8.4",
     "vue": "^3.2.45",
