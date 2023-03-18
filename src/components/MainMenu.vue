@@ -31,14 +31,9 @@ async function openUserProfile () {
   })
 }
 
-function openSendPostPopup () {
+async function openSendPostPopup () {
   blurElement()
-  mainState.openSendPostPopup("post")
-}
-
-async function openSettings () {
-  blurElement()
-  await router.push({ name: "settings" })
+  await mainState.openSendPostPopup("post")
 }
 </script>
 
@@ -100,15 +95,16 @@ async function openSettings () {
       </div>
       <div class="label">{{ $t("notifications") }}</div>
     </RouterLink>
-    <button
+    <RouterLink
       class="link-button"
-      @click.prevent="openSettings"
+      to="settings"
+      @click.prevent="blurElement"
     >
       <div class="icon">
         <SVGIcon name="setting" />
       </div>
       <div class="label">{{ $t("settings") }}</div>
-    </button>
+    </RouterLink>
     <RouterLink
       class="link-button"
       to="accounts"

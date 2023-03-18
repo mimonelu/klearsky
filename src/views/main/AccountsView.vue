@@ -26,8 +26,8 @@ async function logout () {
 </script>
 
 <template>
-  <div class="settings-view">
-    <PageHeader :title="`${$t('settings')} - ${mainState.atp.session?.handle ?? ''}`" />
+  <div class="accounts-view">
+    <PageHeader :title="`${$t('accounts')} - ${mainState.atp.session?.handle ?? ''}`" />
     <div class="body">
       <div class="body__section">
         <div

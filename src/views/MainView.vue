@@ -64,11 +64,14 @@ onMounted(async () => {
   try {
     await autoLogin()
     await processPage(router.currentRoute.value.name)
-    await fetchUserProfile()
-    await fetchNotifications("new")
   } finally {
-    state.mounted = true
-    state.processing = false
+    try {
+      await fetchUserProfile()
+      await fetchNotifications("new")
+    } finally {
+      state.mounted = true
+      state.processing = false
+    }
   }
 })
 
