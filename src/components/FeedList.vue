@@ -14,7 +14,25 @@ const mainState = inject("state") as MainState
 
 async function fetchFeeds (direction: "new" | "old") {
   blurElement()
-  await mainState.fetchFeeds(props.type, direction)
+  mainState.processing = true
+  try {
+    switch (props.type) {
+      case "author": {
+        await mainState.fetchCurrentAuthorFeed(direction)
+        break
+      }
+      case "post": {
+        await mainState.fetchPostThread()
+        break
+      }
+      case "timeline": {
+        await mainState.fetchTimeline(direction)
+        break
+      }
+    }
+  } finally {
+    mainState.processing = false
+  }
 }
 
 function updatePost (newFeed: Feed) {

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
-import Loader from "@/components/Loader.vue"
 import Popup from "@/components/Popup.vue"
 import Post from "@/components/Post.vue"
 import { blurElement } from "@/composables/misc"
@@ -22,13 +21,11 @@ const state = reactive<{
   url: string;
   images: Array<File>;
   alts: Array<string>;
-  processing: boolean;
 }>({
   text: "",
   url: "",
   images: [],
   alts: [],
-  processing: false,
 })
 
 const easyFormProps = {
@@ -66,8 +63,8 @@ function close () {
 
 async function submitCallback () {
   blurElement()
-  if (state.processing) return
-  state.processing = true
+  if (mainState.processing) return
+  mainState.processing = true
   try {
     await mainState.atp.createPost({
       ...state,
@@ -76,7 +73,7 @@ async function submitCallback () {
     })
     emit("close")
   } finally {
-    state.processing = false
+    mainState.processing = false
   }
 }
 </script>
@@ -112,9 +109,6 @@ async function submitCallback () {
           </dl>
         </template>
       </EasyForm>
-    </template>
-    <template v-slot:footer>
-      <Loader v-if="state.processing" />
     </template>
   </Popup>
 </template>

@@ -18,13 +18,12 @@ type MainState = {
     type: "post" | "reply" | "repost"
     post: null | Post
   }
-  createFollow: (did: string, declarationCid: string) => Promise<void>
-  deleteFollow: (uri: string) => Promise<void>
   fetchUserProfile: Function
   fetchCurrentProfile: Function
   fetchCurrentAuthorFeed: Function
+  fetchTimeline: Function
+  fetchPostThread: Function
   fetchNotifications: Function
-  fetchFeeds: Function
   updateUserProfile: Function
   openSendPostPopup: Function
 }

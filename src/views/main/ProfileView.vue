@@ -27,16 +27,21 @@ function isFollowed (): boolean {
 async function toggleFollow () {
   if (mainState.currentProfile == null) return
   blurElement()
-  if (isFollowing()) {
-    await mainState.deleteFollow(mainState.currentProfile.viewer.following as string)
-  } else {
-    await mainState.createFollow(
-      mainState.currentProfile.did,
-      mainState.currentProfile.declaration.cid as string
-    )
+  mainState.processing = true
+  try {
+    if (isFollowing()) {
+      await mainState.atp.deleteFollow(mainState.currentProfile.viewer.following as string)
+    } else {
+      await mainState.atp.createFollow(
+        mainState.currentProfile.did,
+        mainState.currentProfile.declaration.cid as string
+      )
+    }
+    const handle = mainState.currentQuery.handle as LocationQueryValue
+    await mainState.fetchCurrentProfile(handle)
+  } finally {
+    mainState.processing = false
   }
-  const handle = mainState.currentQuery.handle as LocationQueryValue
-  await mainState.fetchCurrentProfile(handle)
 }
 
 function getIndexedAt (indexedAt?: null | string): string {

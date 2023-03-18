@@ -8,14 +8,14 @@ const mainState = inject("state") as MainState
 
 const router = useRouter()
 
-async function fetchNewNotifications () {
+async function fetchNotifications (direction: "new" | "old") {
   blurElement()
-  await mainState.fetchNotifications("new")
-}
-
-async function fetchOldNotifications () {
-  blurElement()
-  await mainState.fetchNotifications("old")
+  mainState.processing = true
+  try {
+    await mainState.fetchNotifications(direction)
+  } finally {
+    mainState.processing = false
+  }
 }
 
 function openChildPage (pageName: string) {
@@ -29,7 +29,7 @@ function openChildPage (pageName: string) {
     <div class="tab">
       <button
         class="tab-button--outline"
-        @click.prevent="fetchNewNotifications"
+        @click.prevent="fetchNotifications('new')"
       >
         <SVGIcon name="cursorUp" />
       </button>
@@ -77,7 +77,7 @@ function openChildPage (pageName: string) {
       </button>
       <button
         class="tab-button--outline"
-        @click.prevent="fetchOldNotifications"
+        @click.prevent="fetchNotifications('old')"
       >
         <SVGIcon name="cursorDown" />
       </button>

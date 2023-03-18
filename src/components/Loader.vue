@@ -6,7 +6,7 @@
 
 <style lang="scss" scoped>
 .loader {
-  background-color: rgba(var(--bg-color), 0.5);
+  background-color: rgba(var(--bg-color), 0.25);
   cursor: wait;
   display: flex;
   align-items: center;

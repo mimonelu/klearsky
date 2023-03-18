@@ -41,13 +41,12 @@ const state = reactive<MainState>({
     type: "post",
     post: null,
   },
-  createFollow,
-  deleteFollow,
   fetchUserProfile,
   fetchCurrentProfile,
   fetchCurrentAuthorFeed,
+  fetchTimeline,
+  fetchPostThread,
   fetchNotifications,
-  fetchFeeds,
   updateUserProfile,
   openSendPostPopup,
 })
@@ -57,8 +56,8 @@ provide("state", state)
 onMounted(async () => {
   state.currentQuery = router.currentRoute.value.query
   state.hasLogin = state.atp.hasLogin()
+  state.processing = true
   try {
-    state.processing = true
     await autoLogin()
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()
@@ -100,10 +99,10 @@ async function autoLogin () {
 }
 
 async function manualLogin (service: string, identifier: string, password: string) {
+  state.processing = true
   try {
-    state.processing = true
     state.hasLogin = await state.atp.login(service, identifier, password)
-    if (!state.hasLogin) throw new Error("Login failed")
+    if (!state.hasLogin) return
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()
   } finally {
@@ -180,6 +179,12 @@ async function fetchTimeline (direction: "old" | "new") {
   state.timelineCursor = result.cursor
 }
 
+async function fetchPostThread () {
+  const uri = state.currentQuery.uri as LocationQueryValue
+  if (!uri) return
+  state.currentFeeds = await state.atp.fetchPostThread(uri)
+}
+
 async function fetchUserProfile () {
   state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle)
 }
@@ -196,15 +201,20 @@ async function updateUserProfile (profile: UpdateProfileParams) {
 async function fetchCurrentProfile (handle: string) {
   state.currentProfile = null
   state.currentProfile = await state.atp.fetchProfile(handle)
-  if (handle === state.atp.session?.handle) {
+  if (handle === state.atp.session?.handle)
     state.userProfile = state.currentProfile
-  }
 }
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const result: null | { feeds: Array<Feed>; cursor?: string } = await state.atp.fetchAuthorFeed(state.currentFeeds as Array<Feed>, handle, 10, direction === "old" ? state.currentCursor ?? undefined : undefined)
+  const result: null | { feeds: Array<Feed>; cursor?: string } =
+    await state.atp.fetchAuthorFeed(
+      state.currentFeeds as Array<Feed>,
+      handle,
+      10,
+      direction === "old" ? state.currentCursor ?? undefined : undefined
+    )
   if (result == null) return
   state.currentFeeds = result.feeds
   state.currentCursor = result.cursor ?? null
@@ -235,48 +245,6 @@ async function fetchNotifications (direction: "new" | "old") {
     await state.atp.fetchNotifications(state.notifications, 20, direction === "new" ? undefined : state.notificationCursor)
 }
 
-async function fetchFeeds (type: string, direction: "new" | "old") {
-  state.processing = true
-  try {
-    switch (type) {
-      case "author": {
-        await fetchCurrentAuthorFeed(direction)
-        break
-      }
-      case "post": {
-        const uri = state.currentQuery.uri as LocationQueryValue
-        if (!uri) return
-        state.currentFeeds = await state.atp.fetchPostThread(uri)
-        break
-      }
-      case "timeline": {
-        await fetchTimeline(direction)
-        break
-      }
-    }
-  } finally {
-    state.processing = false
-  }
-}
-
-async function createFollow (did: string, declarationCid: string) {
-  state.processing = true
-  try {
-    await state.atp.createFollow(did, declarationCid)
-  } finally {
-    state.processing = false
-  }
-}
-
-async function deleteFollow (uri: string) {
-  state.processing = true
-  try {
-    await state.atp.deleteFollow(uri)
-  } finally {
-    state.processing = false
-  }
-}
-
 function openSendPostPopup (type: "post" | "reply" | "repost", post?: any) {
   state.sendPostPopupProps.visibility = true
   state.sendPostPopupProps.type = type
@@ -295,7 +263,7 @@ function closeSendPostPopup () {
         <MainMenu />
       </div>
       <div class="router-view-wrapper">
-        <RouterView @fetchFeeds="fetchFeeds" />
+        <RouterView />
       </div>
       <div class="sub-menu-wrapper">
         <SubMenu />
