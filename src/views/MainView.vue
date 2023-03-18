@@ -36,7 +36,6 @@ const state = reactive<MainState>({
   notifications: [],
   notificationCursor: undefined, // TODO:
   processing: false,
-  challengingAccount: {},
   sendPostPopupProps: {
     visibility: false,
     type: "post",

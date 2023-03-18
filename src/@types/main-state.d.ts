@@ -13,10 +13,6 @@ type MainState = {
   notifications: Array<KNotification>
   notificationCursor?: string
   processing: boolean
-  challengingAccount?: {
-    service?: string
-    handle?: string
-  }
   sendPostPopupProps: {
     visibility: boolean
     type: "post" | "reply" | "repost"

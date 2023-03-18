@@ -1,4 +1,4 @@
-import { canLogin, hasLogin } from "@/composables/atp-wrapper/states"
+import { canLogin, hasLogin, saveServiceAndHandle } from "@/composables/atp-wrapper/services"
 import createAgent from "@/composables/atp-wrapper/create-agent"
 import createFollow from "@/composables/atp-wrapper/create-follow"
 import createPost from "@/composables/atp-wrapper/create-post"
@@ -63,6 +63,7 @@ class AtpWrapper implements AbstractAtpWrapper {
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).logout = logout
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).resumeSession =
   resumeSession
+;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).saveServiceAndHandle = saveServiceAndHandle
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).setService = setService
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).updateProfile =
   updateProfile

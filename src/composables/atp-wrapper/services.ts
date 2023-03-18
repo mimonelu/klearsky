@@ -1,4 +1,9 @@
+import storage from "@/composables/storage"
 import text2html from "@/composables/text2html"
+
+export function canLogin(this: AbstractAtpWrapper): boolean {
+  return storage.load("handle") != null
+}
 
 export function getFileAsUint8Array(file: File): Promise<null | Uint8Array> {
   return new Promise((resolve, reject) => {
@@ -12,6 +17,10 @@ export function getFileAsUint8Array(file: File): Promise<null | Uint8Array> {
     }
     fileReader.readAsArrayBuffer(file)
   })
+}
+
+export function hasLogin(this: AbstractAtpWrapper): boolean {
+  return this.session != null
 }
 
 export function injectReason(feeds: Array<Feed>) {
@@ -41,6 +50,11 @@ export function mergeFeeds(
     }
   })
   return newFeeds
+}
+
+export function saveServiceAndHandle(service: string, handle: string) {
+  storage.save("service", service)
+  storage.save("handle", handle)
 }
 
 export function sortFeeds(feeds: Array<Feed>): Array<Feed> {

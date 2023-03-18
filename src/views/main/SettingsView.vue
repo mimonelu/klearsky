@@ -10,9 +10,9 @@ const router = useRouter()
 
 async function login (account: { [k: string]: string }) {
   blurElement()
-  mainState.atp.logout()
-  mainState.challengingAccount = account
-  mainState.hasLogin = await mainState.atp.login(account.service, account.handle)
+  // TODO: セッションが切れているケースにも対応すること
+  //       LoginPopup に Service と Handle を設定して表示する
+  mainState.atp.saveServiceAndHandle(account.service, account.handle)
   if (mainState.hasLogin) router.go(0)
 }
 

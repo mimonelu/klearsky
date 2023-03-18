@@ -13,15 +13,13 @@ const emit = defineEmits<{(
 
 const $t = inject("$t") as Function
 
-const mainState = inject("state") as MainState
-
 const state = reactive<{
   service: string
   identifier: string
   password: string
 }>({
-  service: mainState.challengingAccount?.service ?? "https://bsky.social",
-  identifier: mainState.challengingAccount?.handle ?? "",
+  service: "https://bsky.social",
+  identifier: "",
   password: ""
 })
 

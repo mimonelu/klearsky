@@ -101,6 +101,7 @@ interface AbstractAtpWrapper {
   ): Promise<boolean>
   logout(this: AbstractAtpWrapper)
   resumeSession(this: AbstractAtpWrapper, handle?: string): Promise<boolean>
+  saveServiceAndHandle(service: string, handle: string)
   setService(this: AbstractAtpWrapper, service?: string)
   updateProfile(
     this: AbstractAtpWrapper,
