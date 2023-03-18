@@ -119,13 +119,13 @@ type FileSchema = {
 }
 
 type Follower = {
-  avatar: string
+  avatar?: string
   declaration: {
     actorType: string
     cid: string
   }
   did: string
-  displayName: string
+  displayName?: string
   handle: string
   viewer: {
     followedBy?: string

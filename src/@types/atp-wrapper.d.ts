@@ -55,22 +55,18 @@ interface AbstractAtpWrapper {
   ): Promise<null | FileSchema>
   fetchFollowings(
     this: AbstractAtpWrapper,
+    users: Array<Follower> | Array<Following>,
     handle: string,
     limit?: number,
     before?: string
-  ): Promise<null | {
-    cursor?: string
-    followings: Array<Following>
-  }>
+  ): Promise<undefined | string>
   fetchFollowers(
     this: AbstractAtpWrapper,
+    users: Array<Follower> | Array<Following>,
     handle: string,
     limit?: number,
     before?: string
-  ): Promise<null | {
-    cursor?: string
-    followers: Array<Following>
-  }>
+  ): Promise<undefined | string>
   fetchNotifications(
     this: AbstractAtpWrapper,
     values: Array<KNotification>,

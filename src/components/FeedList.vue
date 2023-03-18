@@ -58,7 +58,7 @@ function updatePost (newFeed: Feed) {
   <div class="feed-list">
     <button
       v-if="hasFetchButton"
-      class="fetch-feeds-button"
+      class="fetch-button"
       @click.prevent="fetchFeeds('new')"
     >
       <SVGIcon name="cursorUp"/>
@@ -89,7 +89,7 @@ function updatePost (newFeed: Feed) {
     </div>
     <button
       v-if="hasFetchButton"
-      class="fetch-feeds-button"
+      class="fetch-button"
       @click.prevent="fetchFeeds('old')"
     >
       <SVGIcon name="cursorDown"/>
@@ -101,34 +101,6 @@ function updatePost (newFeed: Feed) {
 .feed-list {
   display: flex;
   flex-direction: column;
-}
-
-.fetch-feeds-button {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem;
-  position: relative;
-  &:first-child {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-  }
-  &:last-child {
-    border-top: 1px solid rgba(var(--fg-color), 0.25);
-  }
-
-  & > .svg-icon {
-    fill: transparent;
-    font-size: 1.5rem;
-    stroke: rgba(var(--fg-color), 0.25);
-    stroke-width: 2px;
-  }
-
-  &:focus, &:hover {
-    & > .svg-icon {
-      stroke: rgba(var(--fg-color), 0.75);
-    }
-  }
 }
 
 .feeds {

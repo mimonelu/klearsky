@@ -172,6 +172,8 @@ function openChildPage (pageName: string) {
 
 <style lang="scss" scoped>
 .profile-view {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
 }
 
@@ -281,5 +283,10 @@ function openChildPage (pageName: string) {
 
 .source {
   margin-left: auto;
+}
+
+.feed-list,
+.user-list {
+  flex-grow: 1;
 }
 </style>

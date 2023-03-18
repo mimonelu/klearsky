@@ -30,8 +30,8 @@ const state = reactive<MainState>({
   timelineCursor: undefined, // TODO:
   currentProfile: null,
   currentFeeds: null,
-  currentCursor: null,
-  currentUsers: null,
+  currentCursor: undefined, // TODO:
+  currentUsers: [],
   currentQuery: {},
   notifications: [],
   notificationCursor: undefined, // TODO:
@@ -47,6 +47,8 @@ const state = reactive<MainState>({
   fetchTimeline,
   fetchPostThread,
   fetchNotifications,
+  fetchFollowers,
+  fetchFollowings,
   updateUserProfile,
   openSendPostPopup,
 })
@@ -72,7 +74,7 @@ const router = useRouter()
 
 router.beforeEach(() => {
   state.currentFeeds?.splice(0)
-  state.currentCursor = null
+  state.currentCursor = undefined
 })
 
 router.afterEach(async (to: RouteLocationNormalized) => {
@@ -111,42 +113,39 @@ async function manualLogin (service: string, identifier: string, password: strin
 }
 
 async function processPage (pageName?: null | RouteRecordName) {
+  let handle: null | string = null
   switch (pageName) {
-    case "profile-post": {
-      const handle = state.currentQuery.handle as LocationQueryValue
+    case "profile-post":
+    case "profile-following":
+    case "profile-follower": {
+      handle = state.currentQuery.handle as LocationQueryValue
       if (!handle) {
         await router.push({ name: "timeline" })
         break
       }
+      break
+    }
+  }
+
+  switch (pageName) {
+    case "profile-post": {
       const tasks: Array<Promise<void>> = [fetchCurrentAuthorFeed("new")]
       if (handle !== state.currentProfile?.handle)
-       tasks.push(fetchCurrentProfile(handle))
+       tasks.push(fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
     case "profile-following": {
-      const handle = state.currentQuery.handle as LocationQueryValue
-      if (!handle) {
-        await router.push({ name: "timeline" })
-        break
-      }
-      state.currentUsers = null
-      const tasks: Array<Promise<void>> = [fetchFollowings(handle)]
+      const tasks: Array<Promise<void>> = [fetchFollowings("new")]
       if (handle !== state.currentProfile?.handle)
-       tasks.push(fetchCurrentProfile(handle))
+       tasks.push(fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
     case "profile-follower": {
-      const handle = state.currentQuery.handle as LocationQueryValue
-      if (!handle) {
-        await router.push({ name: "timeline" })
-        break
-      }
-      state.currentUsers = null
-      const tasks: Array<Promise<void>> = [fetchFollowers(handle)]
+      const tasks: Array<Promise<void>> = [fetchFollowers("new")]
       if (handle !== state.currentProfile?.handle)
-       tasks.push(fetchCurrentProfile(handle))
+       tasks.push(fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
@@ -200,6 +199,7 @@ async function updateUserProfile (profile: UpdateProfileParams) {
 
 async function fetchCurrentProfile (handle: string) {
   state.currentProfile = null
+  state.currentUsers.splice(0)
   state.currentProfile = await state.atp.fetchProfile(handle)
   if (handle === state.atp.session?.handle)
     state.userProfile = state.currentProfile
@@ -213,31 +213,25 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
       state.currentFeeds as Array<Feed>,
       handle,
       10,
-      direction === "old" ? state.currentCursor ?? undefined : undefined
+      direction === "old" ? state.currentCursor : undefined
     )
   if (result == null) return
   state.currentFeeds = result.feeds
-  state.currentCursor = result.cursor ?? null
+  state.currentCursor = result.cursor
 }
 
-async function fetchFollowings (handle: string) {
-  const response: null | {
-    cursor?: string;
-    followings: Array<Following>;
-  } = await state.atp.fetchFollowings(handle, 50)
-  if (response == null) return
-  state.currentCursor = response.cursor ?? null
-  state.currentUsers = response.followings
+async function fetchFollowings (direction: "new" | "old") {
+  const handle = state.currentQuery.handle as LocationQueryValue
+  if (!handle) return
+  const cursor: undefined | string = await state.atp.fetchFollowings(state.currentUsers, handle, 50, direction === "new" ? undefined : state.currentCursor)
+  state.currentCursor = cursor
 }
 
-async function fetchFollowers (handle: string) {
-  const response: null | {
-    cursor?: string;
-    followers: Array<Follower>;
-  } = await state.atp.fetchFollowers(handle, 50)
-  if (response == null) return
-  state.currentCursor = response.cursor ?? null
-  state.currentUsers = response.followers
+async function fetchFollowers (direction: "new" | "old") {
+  const handle = state.currentQuery.handle as LocationQueryValue
+  if (!handle) return
+  const cursor: undefined | string = await state.atp.fetchFollowers(state.currentUsers, handle, 50, direction === "new" ? undefined : state.currentCursor)
+  state.currentCursor = cursor
 }
 
 async function fetchNotifications (direction: "new" | "old") {

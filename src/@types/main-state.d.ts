@@ -7,9 +7,9 @@ type MainState = {
   timelineCursor?: string
   currentProfile: null | Profile
   currentFeeds: null | Array<Feed>
-  currentCursor: null | string
+  currentCursor?: string
   currentQuery: LocationQuery
-  currentUsers: null | Array<Following> | Array<Follower>
+  currentUsers: Array<Following> | Array<Follower>
   notifications: Array<KNotification>
   notificationCursor?: string
   processing: boolean
@@ -24,6 +24,8 @@ type MainState = {
   fetchTimeline: Function
   fetchPostThread: Function
   fetchNotifications: Function
+  fetchFollowers: Function
+  fetchFollowings: Function
   updateUserProfile: Function
   openSendPostPopup: Function
 }
