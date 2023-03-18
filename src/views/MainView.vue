@@ -19,6 +19,7 @@ import MainMenu from "@/components/MainMenu.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import AtpWrapper from "@/composables/atp-wrapper"
+import waitProp from "@/composables/wait-prop"
 
 const state = reactive<MainState>({
   // @ts-ignore // TODO:
@@ -40,7 +41,7 @@ const state = reactive<MainState>({
   sendPostPopupProps: {
     visibility: false,
     type: "post",
-    post: null,
+    post: undefined,
   },
   fetchUserProfile,
   fetchCurrentProfile,
@@ -241,13 +242,18 @@ async function fetchNotifications (direction: "new" | "old") {
     await state.atp.fetchNotifications(state.notifications, 20, direction === "new" ? undefined : state.notificationCursor)
 }
 
-function openSendPostPopup (type: "post" | "reply" | "repost", post?: any) {
+let isSendPostDone = false
+
+async function openSendPostPopup (type: "post" | "reply" | "repost", post?: Post): Promise<boolean> {
   state.sendPostPopupProps.visibility = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post
+  await waitProp(() => state.sendPostPopupProps.visibility, false)
+  return isSendPostDone
 }
 
-function closeSendPostPopup () {
+function closeSendPostPopup (done: boolean) {
+  isSendPostDone = done
   state.sendPostPopupProps.visibility = false
 }
 </script>

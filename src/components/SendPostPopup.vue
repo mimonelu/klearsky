@@ -5,11 +5,11 @@ import Popup from "@/components/Popup.vue"
 import Post from "@/components/Post.vue"
 import { blurElement } from "@/composables/misc"
 
-const emit = defineEmits<{(event: string): void}>()
+const emit = defineEmits<{(event: string, done: boolean): void}>()
 
 const props = defineProps<{
   type: "post" | "reply" | "repost";
-  post?: any;
+  post?: Post;
 }>()
 
 const $t = inject("$t") as Function
@@ -58,7 +58,7 @@ const easyFormProps = {
 }
 
 function close () {
-  emit("close")
+  emit("close", false)
 }
 
 async function submitCallback () {
@@ -71,7 +71,7 @@ async function submitCallback () {
       type: props.type,
       post: props.post,
     })
-    emit("close")
+    emit("close", true)
   } finally {
     mainState.processing = false
   }
@@ -92,7 +92,7 @@ async function submitCallback () {
         v-if="type === 'reply' || type === 'repost'"
         type="post"
         mode="preview"
-        :post="post"
+        :post="post as Post"
       />
       <EasyForm v-bind="easyFormProps">
         <template v-slot:after>

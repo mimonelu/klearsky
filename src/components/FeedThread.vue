@@ -10,12 +10,11 @@ function getPostType (feedIndex: number): "post" | "root" | "parent" | "postInPo
   return props.feeds.length === 0 || feedIndex === props.feeds.length - 1
     ? "post"
     : feedIndex === 0
-      ? 'root'
-      : 'parent'
+      ? "root"
+      : "parent"
 }
 
-// TODO: 不要であれば削除すること
-function updatePost (newFeed: Feed) {
+function updateThisPost (newFeed: Feed) {
   if (props.feeds == null) return
 
   // MEMO: フィード内の全同一ポストに最新のデータを反映する
@@ -37,7 +36,7 @@ function updatePost (newFeed: Feed) {
       <Post
         :type="getPostType(feedIndex)"
         :post="feed.post"
-        @update="updatePost"
+        @updateThisPost="updateThisPost"
       />
     </div>
   </div>

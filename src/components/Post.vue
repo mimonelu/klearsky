@@ -39,18 +39,31 @@ async function openProfile (handle: string) {
 }
 
 async function reply () {
-  mainState.openSendPostPopup("reply", props.post)
+  blurElement()
+  const done = await mainState.openSendPostPopup("reply", props.post)
+  state.processing = true
+  try {
+    if (done) await mainState.fetchPostThread()
+  } finally {
+    state.processing = false
+  }
 }
 
 async function repost () {
+  blurElement()
   if (props.post.viewer.repost == null) {
-    mainState.openSendPostPopup("repost", props.post)
-    // TODO: 通常リポストが成功した場合、 updatePost を呼び出すこと
+    const done = await mainState.openSendPostPopup("repost", props.post)
+    state.processing = true
+    try {
+      if (done) await updateThisPost()
+    } finally {
+      state.processing = false
+    }
   } else {
     state.processing = true
     try {
       await mainState.atp.deleteRepost(props.post.viewer.repost)
-      await updatePost()
+      await updateThisPost()
     } finally {
       state.processing = false
     }
@@ -64,16 +77,16 @@ async function upvote () {
   try {
     const voted = props.post.viewer.upvote != null
     await mainState.atp.updateVote(props.post.uri, props.post.cid, voted ? "none" : "up")
-    await updatePost()
+    await updateThisPost()
   } finally {
     state.processing = false
   }
 }
 
-async function updatePost () {
+async function updateThisPost () {
   const posts: null | Array<Feed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
   if (posts == null || posts.length === 0) return
-  emit("update", posts[0])
+  emit("updateThisPost", posts[0])
 }
 
 function openSource () {

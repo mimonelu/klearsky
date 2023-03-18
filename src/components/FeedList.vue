@@ -35,7 +35,7 @@ async function fetchFeeds (direction: "new" | "old") {
   }
 }
 
-function updatePost (newFeed: Feed) {
+function updateThisPost (newFeed: Feed) {
   if (props.feeds == null) return
 
   // MEMO: フィード内の全同一ポストに最新のデータを反映する
@@ -72,18 +72,18 @@ function updatePost (newFeed: Feed) {
           v-if="feed.reply?.root && feed.post.cid !== feed.reply?.root?.cid"
           type="root"
           :post="feed.reply.root"
-          @update="updatePost"
+          @updateThisPost="updateThisPost"
         />
         <Post
           v-if="feed.reply?.parent && feed.post.cid !== feed.reply?.parent?.cid && feed.reply?.root?.cid !== feed.reply?.parent?.cid"
           type="parent"
           :post="feed.reply.parent"
-          @update="updatePost"
+          @updateThisPost="updateThisPost"
         />
         <Post
           type="post"
           :post="feed.post"
-          @update="updatePost"
+          @updateThisPost="updateThisPost"
         />
       </div>
     </div>

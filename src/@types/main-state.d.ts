@@ -17,7 +17,7 @@ type MainState = {
   sendPostPopupProps: {
     visibility: boolean
     type: "post" | "reply" | "repost"
-    post: null | Post
+    post?: Post
   }
   fetchUserProfile: Function
   fetchCurrentProfile: Function

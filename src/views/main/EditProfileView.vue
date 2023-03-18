@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, watch } from "vue"
+import { inject, onMounted, reactive } from "vue"
 import { useRouter } from "vue-router"
 import EasyForm from "@/components/EasyForm.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import { blurElement } from "@/composables/misc"
+import waitProp from "@/composables/wait-prop"
 
 const $t = inject("$t") as Function
 
@@ -71,14 +72,6 @@ onMounted(async () => {
   state.description = mainState.userProfile?.description ?? ""
   state.processing = false
 })
-
-function waitProp (getter: Function, value: any): Promise<boolean> {
-  return new Promise((resolve) => {
-    watch(getter, (newValue: any) => {
-      if (newValue === value) resolve(true)
-    })
-  })
-}
 
 async function submit () {
   blurElement()
