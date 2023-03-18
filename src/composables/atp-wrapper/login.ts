@@ -9,15 +9,10 @@ export default async function (
   this.setService(service)
   if (!this.createAgent()) return false
   if (this.agent == null) return false
-  try {
-    if (identifier == null || password == null)
-      await this.resumeSession(identifier ?? undefined)
-    else await this.agent.login({ identifier, password })
-  } catch (error: any) {
-    console.error("[klearsky/login]", error)
-    this.logout()
-    return false
-  }
+  if (identifier == null || password == null)
+    await this.resumeSession(identifier ?? undefined)
+  else await this.agent.login({ identifier, password })
+
   // ここで persistSession が入る
   if (this.session == null) return false
   const handle: string = this.session.handle

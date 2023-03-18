@@ -18,23 +18,19 @@ export default async function (
   const query: AppBskyFeedGetAuthorFeed.QueryParams = { author }
   if (limit != null) query.limit = limit
   if (cursor != null) query.before = cursor
-  try {
-    const response: AppBskyFeedGetAuthorFeed.Response =
-      await this.agent.api.app.bsky.feed.getAuthorFeed(query)
-    console.log("[klearsky/fetchAuthorFeed]", response)
-    if (!response.success) return null
+  const response: AppBskyFeedGetAuthorFeed.Response =
+    await this.agent.api.app.bsky.feed.getAuthorFeed(query)
+  console.log("[klearsky/fetchAuthorFeed]", response)
+  if (!response.success) return null
 
-    // TODO:
-    injectReason(response.data.feed as Array<Feed>)
-    text2htmlAtFeeds(response.data.feed as Array<Feed>)
-    const newFeeds = mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
-    sortFeeds(newFeeds)
-    return {
-      feeds: newFeeds,
-      cursor: response.data.cursor,
-    }
-  } catch (error: any) {
-    console.error("[klearsky/fetchAuthorFeed]", error)
-    return null
+  // TODO:
+  injectReason(response.data.feed as Array<Feed>)
+  text2htmlAtFeeds(response.data.feed as Array<Feed>)
+  const newFeeds = mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
+  sortFeeds(newFeeds)
+
+  return {
+    feeds: newFeeds,
+    cursor: response.data.cursor,
   }
 }

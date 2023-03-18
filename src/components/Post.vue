@@ -59,9 +59,9 @@ async function repost () {
 
 async function upvote () {
   if (state.processing) return
+  blurElement()
   state.processing = true
   try {
-    blurElement()
     const voted = props.post.viewer.upvote != null
     await mainState.atp.updateVote(props.post.uri, props.post.cid, voted ? "none" : "up")
     await updatePost()

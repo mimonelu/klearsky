@@ -9,19 +9,14 @@ export default async function (
   if (file == null) return null
   const data: null | Uint8Array = await getFileAsUint8Array(file)
   if (data == null) return null
-  try {
-    const response: ComAtprotoBlobUpload.Response =
-      await this.agent.api.com.atproto.blob.upload(data, {
-        encoding: file.type,
-      })
-    console.log("[klearsky/fetchFileSchema]", response)
-    if (!response.success) return null
-    return {
-      cid: response.data.cid,
-      mimeType: file.type,
-    }
-  } catch (error: any) {
-    console.error("[klearsky/fetchFileSchema]", error)
-    return null
+  const response: ComAtprotoBlobUpload.Response =
+    await this.agent.api.com.atproto.blob.upload(data, {
+      encoding: file.type,
+    })
+  console.log("[klearsky/fetchFileSchema]", response)
+  if (!response.success) return null
+  return {
+    cid: response.data.cid,
+    mimeType: file.type,
   }
 }

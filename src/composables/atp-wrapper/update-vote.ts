@@ -8,15 +8,10 @@ export default async function (
 ): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
-  try {
-    const response: AppBskyFeedSetVote.Response =
-      await this.agent.api.app.bsky.feed.setVote({
-        subject: { uri, cid },
-        direction,
-      })
-    return response.success
-  } catch (error: any) {
-    console.error("[klearsky/updateVote]", error)
-    return false
-  }
+  const response: AppBskyFeedSetVote.Response =
+    await this.agent.api.app.bsky.feed.setVote({
+      subject: { uri, cid },
+      direction,
+    })
+  return response.success
 }

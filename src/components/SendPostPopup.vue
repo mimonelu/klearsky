@@ -74,9 +74,9 @@ async function submitCallback () {
       type: props.type,
       post: props.post,
     })
+    emit("close")
   } finally {
     state.processing = false
-    emit("close")
   }
 }
 </script>
@@ -118,3 +118,11 @@ async function submitCallback () {
     </template>
   </Popup>
 </template>
+
+<style lang="scss" scoped>
+.send-post-popup:deep() {
+  .popup {
+    width: $router-view-width;
+  }
+}
+</style>

@@ -11,44 +11,39 @@ export default async function (
   const query: AppBskyNotificationList.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.before = cursor
-  try {
-    const response: AppBskyNotificationList.Response =
-      await this.agent.api.app.bsky.notification.list(query)
-    console.log("[klearsky/fetchNotifications]", response)
-    if (!response.success) return undefined
+  const response: AppBskyNotificationList.Response =
+    await this.agent.api.app.bsky.notification.list(query)
+  console.log("[klearsky/fetchNotifications]", response)
+  if (!response.success) return undefined
 
-    response.data.notifications.forEach(
-      (notification: AppBskyNotificationList.Notification) => {
-        const existence: undefined | KNotification = values.find(
-          (value: KNotification) => {
-            return value.cid === notification.cid
-          }
-        )
-        if (existence != null) return
-        values.push({
-          avatar: notification.author.avatar,
-          cid: notification.cid,
-          displayName: notification.author.displayName,
-          handle: notification.author.handle,
-          indexedAt: notification.indexedAt,
-          reason: notification.reason,
-          reasonSubject:
-            notification.reason === "mention"
-              ? notification.uri
-              : notification.reasonSubject,
-        })
-      }
-    )
+  response.data.notifications.forEach(
+    (notification: AppBskyNotificationList.Notification) => {
+      const existence: undefined | KNotification = values.find(
+        (value: KNotification) => {
+          return value.cid === notification.cid
+        }
+      )
+      if (existence != null) return
+      values.push({
+        avatar: notification.author.avatar,
+        cid: notification.cid,
+        displayName: notification.author.displayName,
+        handle: notification.author.handle,
+        indexedAt: notification.indexedAt,
+        reason: notification.reason,
+        reasonSubject:
+          notification.reason === "mention"
+            ? notification.uri
+            : notification.reasonSubject,
+      })
+    }
+  )
 
-    values.sort((a: KNotification, b: KNotification) => {
-      const aIndexedAt = new Date(a.indexedAt)
-      const bIndexedAt = new Date(b.indexedAt)
-      return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
-    })
+  values.sort((a: KNotification, b: KNotification) => {
+    const aIndexedAt = new Date(a.indexedAt)
+    const bIndexedAt = new Date(b.indexedAt)
+    return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
+  })
 
-    return response.data.cursor
-  } catch (error: any) {
-    console.error("[klearsky/fetchNotifications]", error)
-    return undefined
-  }
+  return response.data.cursor
 }

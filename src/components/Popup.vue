@@ -38,7 +38,7 @@ function close () {
 
 <style lang="scss" scoped>
 .popup-overlay {
-  background-color: rgba(var(--bg-color), 0.75);
+  background-color: rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,10 +63,8 @@ function close () {
   overflow: hidden;
   overscroll-behavior: none;
   position: relative;
-  min-width: 320px;
-  width: 640px;
-  max-width: calc(100vw - 6rem);
-  max-height: calc(100vh - 6rem);
+  max-width: calc(100vw - 4rem);
+  max-height: calc(100vh - 4rem);
 }
 
 .popup-header {

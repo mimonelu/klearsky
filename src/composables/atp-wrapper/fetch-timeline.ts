@@ -24,24 +24,19 @@ export default async function (
   }
   if (limit != null) query.limit = limit
   if (cursor != null) query.before = cursor
-  try {
-    const response: AppBskyFeedGetTimeline.Response =
-      await this.agent.api.app.bsky.feed.getTimeline(query)
-    console.log("[klearsky/fetchTimeline]", response)
-    if (!response.success) return null
+  const response: AppBskyFeedGetTimeline.Response =
+    await this.agent.api.app.bsky.feed.getTimeline(query)
+  console.log("[klearsky/fetchTimeline]", response)
+  if (!response.success) return null
 
-    // TODO:
-    injectReason(response.data.feed as Array<Feed>)
-    text2htmlAtFeeds(response.data.feed as Array<Feed>)
-    const newFeeds = mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
-    sortFeeds(newFeeds)
+  // TODO:
+  injectReason(response.data.feed as Array<Feed>)
+  text2htmlAtFeeds(response.data.feed as Array<Feed>)
+  const newFeeds = mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
+  sortFeeds(newFeeds)
 
-    return {
-      feeds: newFeeds,
-      cursor: response.data.cursor,
-    }
-  } catch (error: any) {
-    console.error("[klearsky/fetchTimeline]", error)
-    return null
+  return {
+    feeds: newFeeds,
+    cursor: response.data.cursor,
   }
 }

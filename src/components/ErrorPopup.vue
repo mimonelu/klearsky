@@ -31,7 +31,7 @@ function close () {
 .error-popup:deep() {
   .popup {
     border-color: rgba(var(--notice-color), 0.5);
-    width: 320px;
+    width: calc($router-view-width - 4rem);
   }
 
   .popup-header {
@@ -43,7 +43,7 @@ function close () {
   background-color: rgba(var(--notice-color), 0.125);
   color: rgb(var(--notice-color));
   line-height: 1.5;
-  padding: 1rem 2rem;
+  padding: 1rem;
   user-select: text;
   white-space: pre-wrap;
   word-break: break-all;

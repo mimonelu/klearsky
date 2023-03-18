@@ -22,14 +22,9 @@ export default async function (
   }
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
-  try {
-    const response: AppBskyActorUpdateProfile.Response =
-      (await this.agent?.api.app.bsky.actor.updateProfile(profileSchema)) ??
-      null
-    console.log("[klearsky/updateProfile]", response)
-    return response.success
-  } catch (error: any) {
-    console.error("[klearsky/updateProfile]", error)
-    return false
-  }
+  const response: AppBskyActorUpdateProfile.Response =
+    (await this.agent?.api.app.bsky.actor.updateProfile(profileSchema)) ??
+    null
+  console.log("[klearsky/updateProfile]", response)
+  return response.success
 }

@@ -76,6 +76,12 @@ async function submitCallback () {
 </template>
 
 <style lang="scss" scoped>
+.login-popup:deep() {
+  .popup {
+    width: $router-view-width;
+  }
+}
+
 .logo {
   font-size: 2rem;
 }

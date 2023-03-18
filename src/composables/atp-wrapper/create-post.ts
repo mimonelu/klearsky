@@ -111,15 +111,10 @@ export default async function (
     }
   }
 
-  try {
-    const response = await this.agent.api.app.bsky.feed.post.create(
-      { did: this.session.did },
-      record
-    )
-    console.log("[klearsky/createRecord]", response)
-  } catch (error: any) {
-    console.error("[klearsky/createRecord]", error)
-    return false
-  }
+  const response = await this.agent.api.app.bsky.feed.post.create(
+    { did: this.session.did },
+    record
+  )
+  console.log("[klearsky/createRecord]", response)
   return true
 }
