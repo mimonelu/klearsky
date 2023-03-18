@@ -22,7 +22,7 @@ async function openProfile (handle: string) {
         @click.prevent="openProfile(user.handle)"
       >
         <img
-          :src="user.avatar ?? '/img/void.png'"
+          :src="user.avatar ?? '/img/void-avatar.png'"
           loading="lazy"
         >
       </div>

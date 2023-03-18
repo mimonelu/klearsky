@@ -91,7 +91,7 @@ function formatDate (dateString: string): string {
       >
         <img
           loading="lazy"
-          :src="notification.avatar ?? '/img/void.png'"
+          :src="notification.avatar ?? '/img/void-avatar.png'"
         >
       </button>
       <div class="display-name">{{ notification.displayName }}</div>

@@ -108,7 +108,7 @@ function openSource () {
       >
         <img
           loading="lazy"
-          :src="post.author.avatar ?? '/img/void.png'"
+          :src="post.author.avatar ?? '/img/void-avatar.png'"
         >
       </button>
       <div class="right">

@@ -66,7 +66,7 @@ async function openSettings () {
       <img
         class="image"
         loading="lazy"
-        :src="mainState.userProfile?.avatar ?? '/img/void.png'"
+        :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'"
       >
       <div class="label">{{ mainState.userProfile?.handle }}</div>
     </button>

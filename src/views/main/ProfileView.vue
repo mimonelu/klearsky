@@ -85,7 +85,7 @@ function openChildPage (pageName: string) {
           >
             <img
               loading="lazy"
-              :src="mainState.currentProfile?.avatar ?? '/img/void.png'"
+              :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
             >
           </a>
         </div>
