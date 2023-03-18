@@ -82,6 +82,16 @@ async function openSettings () {
     </RouterLink>
     <RouterLink
       class="link-button"
+      to="search"
+      @click.prevent="blurElement"
+    >
+      <div class="icon">
+        <SVGIcon name="search" />
+      </div>
+      <div class="label">{{ $t("search") }}</div>
+    </RouterLink>
+    <RouterLink
+      class="link-button"
       to="reply-notifications"
       @click.prevent="blurElement"
     >
@@ -99,6 +109,16 @@ async function openSettings () {
       </div>
       <div class="label">{{ $t("settings") }}</div>
     </button>
+    <RouterLink
+      class="link-button"
+      to="accounts"
+      @click.prevent="blurElement"
+    >
+      <div class="icon">
+        <SVGIcon name="person" />
+      </div>
+      <div class="label">{{ $t("accounts") }}</div>
+    </RouterLink>
     <button
       class="link-button send-post-button"
       @click.prevent="openSendPostPopup"
@@ -115,6 +135,7 @@ async function openSettings () {
 .main-menu {
   display: flex;
   flex-direction: column;
+  grid-gap: 0.25rem;
   padding: 1rem;
 
   @media (max-width: $max-width-with-scrollbar) {
@@ -150,7 +171,6 @@ async function openSettings () {
   align-items: center;
   justify-content: center;
   grid-gap: 1rem;
-  padding: 0.5rem 0;
   width: 100%;
   &:focus, &:hover {
     .label {
@@ -160,11 +180,12 @@ async function openSettings () {
 
   .image {
     border-radius: 1px;
+    margin: 0.5rem;
     object-fit: cover;
-    min-width: 3rem;
-    max-width: 3rem;
-    min-height: 3rem;
-    max-height: 3rem;
+    min-width: 2rem;
+    max-width: 2rem;
+    min-height: 2rem;
+    max-height: 2rem;
   }
 
   .icon {
@@ -175,7 +196,7 @@ async function openSettings () {
     min-height: 3rem;
 
     .svg-icon {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
     }
   }
 

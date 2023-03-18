@@ -17,6 +17,7 @@ import person from "@/svg/person.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import repost from "@/svg/repost.svg?raw"
+import search from "@/svg/search.svg?raw"
 import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
@@ -39,6 +40,7 @@ const icons: { [k: string]: string } = {
   plus,
   post,
   repost,
+  search,
   sendPost,
   setting,
   shimmer,

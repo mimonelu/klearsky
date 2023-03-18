@@ -1,5 +1,6 @@
 {
   "en": {
+    "accounts": "Accounts",
     "alts": "ALT texts",
     "apply": "Apply",
     "avatar": "Avatar",
@@ -25,6 +26,7 @@
     "password": "Password",
     "post": "Post",
     "postsCount": "Posts",
+    "search": "Search",
     "sendPost": "New Post",
     "settings": "Settings",
     "service": "Service",
@@ -34,6 +36,7 @@
     "title": "Klearsky"
   },
   "ja": {
+    "accounts": "アカウント",
     "alts": "代替テキスト",
     "apply": "適用",
     "avatar": "アバター",
@@ -59,6 +62,7 @@
     "password": "パスワード",
     "post": "ポスト",
     "postsCount": "ポスト数",
+    "search": "検索",
     "sendPost": "ポストを投稿する",
     "settings": "設定",
     "service": "サービス",
