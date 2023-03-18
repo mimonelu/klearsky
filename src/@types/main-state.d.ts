@@ -6,10 +6,11 @@ type MainState = {
   timelineFeeds: Array<Feed>
   timelineCursor?: string
   currentProfile: null | Profile
-  currentFeeds: null | Array<Feed>
+  currentFeeds: Array<Feed>
   currentCursor?: string
   currentQuery: LocationQuery
-  currentUsers: Array<Following> | Array<Follower>
+  currentFollowers: Array<Follower>
+  currentFollowings: Array<Following>
   notifications: Array<KNotification>
   notificationCursor?: string
   processing: boolean

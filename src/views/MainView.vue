@@ -29,9 +29,10 @@ const state = reactive<MainState>({
   timelineFeeds: [],
   timelineCursor: undefined, // TODO:
   currentProfile: null,
-  currentFeeds: null,
+  currentFeeds: [],
   currentCursor: undefined, // TODO:
-  currentUsers: [],
+  currentFollowers: [],
+  currentFollowings: [],
   currentQuery: {},
   notifications: [],
   notificationCursor: undefined, // TODO:
@@ -160,7 +161,7 @@ async function processPage (pageName?: null | RouteRecordName) {
         break
       }
       state.currentFeeds?.splice(0)
-      state.currentFeeds = await state.atp.fetchPostThread(uri)
+      state.currentFeeds = await state.atp.fetchPostThread(uri) ?? []
       break
     }
   }
@@ -181,7 +182,7 @@ async function fetchTimeline (direction: "old" | "new") {
 async function fetchPostThread () {
   const uri = state.currentQuery.uri as LocationQueryValue
   if (!uri) return
-  state.currentFeeds = await state.atp.fetchPostThread(uri)
+  state.currentFeeds = await state.atp.fetchPostThread(uri) ?? []
 }
 
 async function fetchUserProfile () {
@@ -199,7 +200,8 @@ async function updateUserProfile (profile: UpdateProfileParams) {
 
 async function fetchCurrentProfile (handle: string) {
   state.currentProfile = null
-  state.currentUsers.splice(0)
+  state.currentFollowers.splice(0)
+  state.currentFollowings.splice(0)
   state.currentProfile = await state.atp.fetchProfile(handle)
   if (handle === state.atp.session?.handle)
     state.userProfile = state.currentProfile
@@ -223,14 +225,14 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
 async function fetchFollowings (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchFollowings(state.currentUsers, handle, 50, direction === "new" ? undefined : state.currentCursor)
+  const cursor: undefined | string = await state.atp.fetchFollowings(state.currentFollowings, handle, 50, direction === "new" ? undefined : state.currentCursor)
   state.currentCursor = cursor
 }
 
 async function fetchFollowers (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchFollowers(state.currentUsers, handle, 50, direction === "new" ? undefined : state.currentCursor)
+  const cursor: undefined | string = await state.atp.fetchFollowers(state.currentFollowers, handle, 50, direction === "new" ? undefined : state.currentCursor)
   state.currentCursor = cursor
 }
 

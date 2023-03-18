@@ -12,6 +12,10 @@ const mainState = inject("state") as MainState
 
 const router = useRouter()
 
+const currentUsers = props.type === "follower"
+  ? mainState.currentFollowers
+  : mainState.currentFollowings
+
 async function fetchUsers (direction: "new" | "old") {
   blurElement()
   mainState.processing = true
@@ -46,7 +50,7 @@ async function openProfile (handle: string) {
     </button>
     <div class="main">
       <div
-        v-for="user of mainState.currentUsers"
+        v-for="user of currentUsers"
         class="user"
       >
         <div
