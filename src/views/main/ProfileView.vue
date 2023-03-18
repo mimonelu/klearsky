@@ -68,6 +68,7 @@ function openChildPage (pageName: string) {
       :href="mainState.currentProfile?.banner"
       rel="noreferrer"
       target="_blank"
+      :data-has-banner="!!mainState.currentProfile?.banner"
     >
       <img
         loading="lazy"
@@ -154,17 +155,17 @@ function openChildPage (pageName: string) {
         class="tab-button"
         :data-selected="router.currentRoute.value.name === 'profile-post'"
         @click.prevent="openChildPage('profile-post')"
-      >Posts</button>
+      >{{ $t("post") }}</button>
       <button
         class="tab-button"
         :data-selected="router.currentRoute.value.name === 'profile-following'"
         @click.prevent="openChildPage('profile-following')"
-      >Followings</button>
+      >{{ $t("following") }}</button>
       <button
         class="tab-button"
         :data-selected="router.currentRoute.value.name === 'profile-follower'"
         @click.prevent="openChildPage('profile-follower')"
-      >Followers</button>
+      >{{ $t("follower") }}</button>
     </div>
     <RouterView />
   </div>
@@ -178,7 +179,6 @@ function openChildPage (pageName: string) {
 }
 
 .details {
-  border-top: 1px solid rgba(var(--fg-color), 0.25);
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
@@ -188,6 +188,15 @@ function openChildPage (pageName: string) {
 
 .banner {
   display: block;
+  &[data-has-banner="false"] {
+    background-image:
+      linear-gradient(45deg, rgba(var(--fg-color), 0.1) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(var(--fg-color), 0.1) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(var(--fg-color), 0.1) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(var(--fg-color), 0.1) 75%);
+    background-position: 0 0, 0 1rem, 1rem -1rem, -1rem 0;
+    background-size: 2rem 2rem;
+  }
 
   & > img {
     aspect-ratio: 3/1;
