@@ -19,14 +19,15 @@ $router-view-width: 640px;
   height: $size;
 
   & > img {
-    border: 1px solid rgba(var(--fg-color), 0.25);
+    border: 1px solid transparent;
     border-radius: 1px;
     object-fit: cover;
     min-width: $size;
     min-height: $size;
   }
-  &:focus > img,
-  &:hover > img {
-    border-color: transparent;
+  &:focus, &:hover {
+    & > img {
+      border-color: rgba(var(--fg-color), 0.5);
+    }
   }
 }

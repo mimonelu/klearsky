@@ -353,7 +353,6 @@ function openSource () {
   border-radius: 1px;
   cursor: pointer;
   display: grid;
-  grid-gap: 0.25em;
   grid-template-rows: auto auto auto;
   padding: 1em;
   &:focus, &:hover {
@@ -363,7 +362,7 @@ function openSource () {
   &__title,
   &__uri,
   &__description {
-    line-height: 1.25;
+    line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

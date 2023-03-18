@@ -52,7 +52,16 @@ type Post = {
   author: Author
   embed?: {
     $type: string
-    images: Array<{
+    external?: {
+      uri: string
+      thumb?: {
+        cid: string
+        mimeType: string
+      }
+      title?: string
+      description?: string
+    }
+    images?: Array<{
       thumb: string
       fullsize: string
       alt: string
@@ -66,15 +75,6 @@ type Post = {
     createdAt: string
     embed?: {
       $type: string
-      external?: {
-        uri: string
-        thumb?: {
-          cid: string
-          mimeType: string
-        }
-        title?: string
-        description?: string
-      }
       images?: Array<{
         alt: string
         image: {
