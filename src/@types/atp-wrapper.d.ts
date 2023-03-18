@@ -88,6 +88,13 @@ interface AbstractAtpWrapper {
     feeds: Array<Feed>
     cursor?: string
   }>
+  fetchUserSearch(
+    this: AbstractAtpWrapper,
+    users: Array<User>,
+    term: string,
+    limit?: number,
+    before?: string
+  ): Promise<undefined | string>
   hasLogin(this: AbstractAtpWrapper): boolean
   login(
     this: AbstractAtpWrapper,

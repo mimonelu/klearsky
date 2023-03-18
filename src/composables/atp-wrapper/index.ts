@@ -13,6 +13,7 @@ import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
 import fetchTimeline from "@/composables/atp-wrapper/fetch-timeline"
+import fetchUserSearch from "@/composables/atp-wrapper/fetch-user-search"
 import login from "@/composables/atp-wrapper/login"
 import logout from "@/composables/atp-wrapper/logout"
 import resumeSession from "@/composables/atp-wrapper/resume-session"
@@ -40,7 +41,7 @@ class AtpWrapper implements AbstractAtpWrapper {
   createRepost
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteFollow =
   deleteFollow
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteRepost =
+;;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteRepost =
   deleteRepost
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchAuthorFeed =
   fetchAuthorFeed
@@ -58,6 +59,7 @@ class AtpWrapper implements AbstractAtpWrapper {
   fetchProfile
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchTimeline =
   fetchTimeline
+;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchUserSearch = fetchUserSearch
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).hasLogin = hasLogin
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).login = login
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).logout = logout

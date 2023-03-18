@@ -1,4 +1,4 @@
-type Author = {
+type User = {
   did: string
   declaration: {
     actorType: string
@@ -7,7 +7,7 @@ type Author = {
   }
   handle: string
   displayName: string
-  avatar: string
+  avatar?: string
   viewer: {
     muted: boolean
     following?: string
@@ -16,6 +16,8 @@ type Author = {
   }
   [k: string]: unknown
 }
+
+type Author = User
 
 type Entity = {
   type: string
