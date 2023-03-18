@@ -90,7 +90,7 @@ router.afterEach(async (to: RouteLocationNormalized) => {
 
   state.currentQuery = router.currentRoute.value.query
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
-  if (to.name === "timeline" && state.timelineFeeds.length > 0) return
+  if (to.name === "home" && state.timelineFeeds.length > 0) return
 
   state.processing = true
   try {
@@ -125,7 +125,7 @@ async function processPage (pageName?: null | RouteRecordName) {
     case "profile-follower": {
       handle = state.currentQuery.handle as LocationQueryValue
       if (!handle) {
-        await router.push({ name: "timeline" })
+        await router.push({ name: "home" })
         break
       }
       break
@@ -154,14 +154,14 @@ async function processPage (pageName?: null | RouteRecordName) {
       await Promise.all(tasks)
       break
     }
-    case "timeline": {
+    case "home": {
       await fetchTimeline("new")
       break
     }
     case "post": {
       const uri = state.currentQuery.uri as LocationQueryValue
       if (!uri) {
-        await router.push({ name: "timeline" })
+        await router.push({ name: "home" })
         break
       }
       state.currentFeeds?.splice(0)

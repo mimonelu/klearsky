@@ -40,8 +40,8 @@ const router = createRouter({
           component: AccountsView,
         },
         {
-          path: "/timeline",
-          name: "timeline",
+          path: "/home",
+          name: "home",
           component: TimelineView,
         },
         {

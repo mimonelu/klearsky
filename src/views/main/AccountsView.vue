@@ -20,7 +20,7 @@ async function logout () {
   blurElement()
   mainState.atp.logout()
   mainState.timelineFeeds?.splice(0)
-  await router.push({ name: "timeline" })
+  await router.push({ name: "home" })
   router.go(0)
 }
 </script>

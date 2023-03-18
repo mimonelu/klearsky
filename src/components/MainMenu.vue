@@ -67,7 +67,7 @@ async function openSendPostPopup () {
     </button>
     <RouterLink
       class="link-button"
-      to="timeline"
+      to="home"
       @click.prevent="blurElement"
     >
       <div class="icon">
