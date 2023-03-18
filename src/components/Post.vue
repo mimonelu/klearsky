@@ -384,6 +384,7 @@ function openSource () {
   aspect-ratio: 1.91 / 1;
   display: grid;
   grid-gap: 1px;
+  overflow: hidden;
   &:has(:nth-child(2)) {
     grid-template-areas: "a b";
     & > .image:nth-child(1) { grid-area: a; }
@@ -404,26 +405,18 @@ function openSource () {
   }
 }
 
-.repost {
-  grid-area: r;
-  border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: 1px;
-
-  & > .post {
-    padding: 0.875em;
-  }
-}
-
 .image {
-  border: 1px solid rgba(var(--fg-color), 0.25);
+  border: 1px solid transparent;
   border-radius: 1px;
   display: block;
+  overflow: hidden;
   &:focus, &:hover {
-    border-color: transparent;
+    border-color: rgba(var(--fg-color), 0.25);
   }
 
   & > img {
     aspect-ratio: 1.91 / 1;
+    display: block;
     object-fit: cover;
     height: 100%;
   }
@@ -431,6 +424,16 @@ function openSource () {
     & > img {
       object-fit: contain;
     }
+  }
+}
+
+.repost {
+  grid-area: r;
+  border: 1px solid rgba(var(--fg-color), 0.25);
+  border-radius: 1px;
+
+  & > .post {
+    padding: 0.875em;
   }
 }
 
