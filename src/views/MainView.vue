@@ -28,15 +28,19 @@ const state = reactive<MainState>({
   hasLogin: false,
   userProfile: null,
   timelineFeeds: [],
-  timelineCursor: undefined, // TODO:
+  timelineCursor: undefined,
   currentProfile: null,
   currentFeeds: [],
-  currentCursor: undefined, // TODO:
+  currentCursor: undefined,
   currentFollowers: [],
   currentFollowings: [],
+  currentSearchUsers: [],
+  currentSearchUsersCursor: undefined,
+  currentSearchUserTerm: "",
+  currentSearchLastUserTerm: "",
   currentQuery: {},
   notifications: [],
-  notificationCursor: undefined, // TODO:
+  notificationCursor: undefined,
   processing: false,
   sendPostPopupProps: {
     visibility: false,

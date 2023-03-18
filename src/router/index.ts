@@ -6,6 +6,7 @@ import MainView from "@/views/MainView.vue"
 import AccountsView from "@/views/main/AccountsView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
 import PostView from "@/views/main/PostView.vue"
+import SearchView from "@/views/main/SearchView.vue"
 import TimelineView from "@/views/main/TimelineView.vue"
 
 import ProfileView from "@/views/main/ProfileView.vue"
@@ -38,6 +39,11 @@ const router = createRouter({
           path: "/accounts",
           name: "accounts",
           component: AccountsView,
+        },
+        {
+          path: "/search",
+          name: "search",
+          component: SearchView,
         },
         {
           path: "/home",

@@ -18,9 +18,13 @@ export default async function (
   console.log("[klearsky/fetchUserSearch]", response)
   if (!response.success) return
 
+  const newUsers: Array<User> = []
   ;(response.data.users as Array<User>).forEach((target: User) => {
-    if (!users.some((user: Follower) => user.did === target.did)) users.push(target)
+    if (!users.some((user: Follower) => user.did === target.did))
+      newUsers.push(target)
   })
+  if (before == null) users.unshift(...newUsers)
+  else users.push(...newUsers)
 
   return response.data.cursor
 }
