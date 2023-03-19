@@ -9,6 +9,7 @@ import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
 import fetchFileSchema from "@/composables/atp-wrapper/fetch-file-schema"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
+import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
@@ -51,6 +52,8 @@ class AtpWrapper implements AbstractAtpWrapper {
   fetchFollowers
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchFollowings =
   fetchFollowings
+;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchKeywordSearch =
+  fetchKeywordSearch
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchNotifications =
   fetchNotifications
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchPostThread =

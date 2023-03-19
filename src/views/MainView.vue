@@ -34,10 +34,15 @@ const state = reactive<MainState>({
   currentCursor: undefined,
   currentFollowers: [],
   currentFollowings: [],
+
+  currentSearchKeywordTerm: "",
+  currentSearchKeywordResults: [],
+
   currentSearchUsers: [],
   currentSearchUsersCursor: undefined,
   currentSearchUserTerm: "",
   currentSearchLastUserTerm: "",
+
   currentQuery: {},
   notifications: [],
   notificationCursor: undefined,

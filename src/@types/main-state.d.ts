@@ -11,10 +11,15 @@ type MainState = {
   currentQuery: LocationQuery
   currentFollowers: Array<Follower>
   currentFollowings: Array<Following>
+
+  currentSearchKeywordTerm: string
+  currentSearchKeywordResults: Array<any>
+
   currentSearchUsers: Array<User>
   currentSearchUsersCursor?: string
   currentSearchUserTerm: string
   currentSearchLastUserTerm: string
+
   notifications: Array<KNotification>
   notificationCursor?: string
   processing: boolean

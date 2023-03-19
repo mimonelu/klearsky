@@ -26,6 +26,7 @@ import FollowingListView from "@/views/main/profile/FollowingListView.vue"
 
 // Main - Search
 import SearchView from "@/views/main/SearchView.vue"
+import KeywordSearchView from "@/views/main/search/KeywordSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
 
 const router = createRouter({
@@ -125,6 +126,11 @@ const router = createRouter({
           name: "search",
           component: SearchView,
           children: [
+            {
+              path: "/keyword-search",
+              name: "keyword-search",
+              component: KeywordSearchView,
+            },
             {
               path: "/user-search",
               name: "user-search",

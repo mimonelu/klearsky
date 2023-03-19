@@ -67,6 +67,10 @@ interface AbstractAtpWrapper {
     limit?: number,
     before?: string
   ): Promise<undefined | string>
+  fetchKeywordSearch(
+    this: AbstractAtpWrapper,
+    query: string
+  ): Promise<undefined | any>
   fetchNotifications(
     this: AbstractAtpWrapper,
     values: Array<KNotification>,
