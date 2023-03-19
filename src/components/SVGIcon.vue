@@ -2,6 +2,7 @@
 // SEE: https://pictogrammers.com/library/mdi/
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
+import clipboard from "@/svg/clipboard.svg?raw"
 import cross from "@/svg/cross.svg?raw"
 import cursorDown from "@/svg/cursor-down.svg?raw"
 import cursorLeft from "@/svg/cursor-left.svg?raw"
@@ -13,18 +14,22 @@ import heartBroken from "@/svg/heart-broken.svg?raw"
 import home from "@/svg/home.svg?raw"
 import json from "@/svg/json.svg?raw"
 import mail from "@/svg/mail.svg?raw"
+import menu from "@/svg/menu.svg?raw"
 import person from "@/svg/person.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
+import remove from "@/svg/remove.svg?raw"
 import repost from "@/svg/repost.svg?raw"
 import search from "@/svg/search.svg?raw"
 import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
+import translate from "@/svg/translate.svg?raw"
 
 const icons: { [k: string]: string } = {
   at,
   bell,
+  clipboard,
   cross,
   cursorDown,
   cursorLeft,
@@ -36,14 +41,17 @@ const icons: { [k: string]: string } = {
   home,
   json,
   mail,
+  menu,
   person,
   plus,
   post,
+  remove,
   repost,
   search,
   sendPost,
   setting,
   shimmer,
+  translate,
 }
 
 defineProps<{

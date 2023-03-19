@@ -1,0 +1,36 @@
+.menu-ticker {
+  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.25);
+  display: none;
+  z-index: 1;
+
+  & > menu {
+    background-color: rgb(var(--bg-color));
+    border: 1px solid rgba(var(--fg-color), 0.25);
+    border-radius: 1px;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 0.25rem;
+    padding: 0.5rem 0;
+
+    & > button {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      grid-gap: 1rem;
+      padding: 0.5rem 1rem;
+      white-space: nowrap;
+      &:focus, &:hover {
+        color: rgb(var(--accent-color));
+      }
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color));
+      }
+      &:focus, &:hover {
+        & > .svg-icon {
+          fill: rgb(var(--accent-color));
+        }
+      }
+    }
+  }
+}

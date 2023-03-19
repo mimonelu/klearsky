@@ -5,6 +5,7 @@ import format from "date-fns/format"
 import Loader from "@/components/Loader.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Ticker from "@/components/Ticker.vue"
 import displayJson from "@/composables/display-json"
 import { blurElement } from "@/composables/misc"
 
@@ -87,6 +88,17 @@ async function updateThisPost () {
   const posts: null | Array<Feed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
   if (posts == null || posts.length === 0) return
   emit("updateThisPost", posts[0])
+}
+
+function translateText () {
+  blurElement()
+  const language = window.navigator.language
+  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${props.post.record.text}&op=translate`)
+}
+
+function copyText () {
+  blurElement()
+  navigator.clipboard.writeText(props.post.record.text)
 }
 
 function openSource () {
@@ -219,10 +231,30 @@ function openSource () {
           </div>
           <div>
             <button
-              class="icon-button source"
-              @click.stop="openSource"
+              class="icon-button menu-button"
+              @click.stop
             >
-              <SVGIcon name="json" />
+              <SVGIcon name="menu" />
+              <Ticker class="menu-ticker">
+                <menu>
+                  <button @click.stop="translateText">
+                    <SVGIcon name="translate" />
+                    <span>{{ $t("translate") }}</span>
+                  </button>
+                  <button @click.stop="copyText">
+                    <SVGIcon name="clipboard" />
+                    <span>{{ $t("copyPostText") }}</span>
+                  </button>
+                  <button v-if="post.author.did === mainState.atp.session.did">
+                    <SVGIcon name="remove" />
+                    <span>{{ $t("deletePost") }}</span>
+                  </button>
+                  <button @click.stop="openSource">
+                    <SVGIcon name="json" />
+                    <span>{{ $t("showSource") }}</span>
+                  </button>
+                </menu>
+              </Ticker>
             </button>
           </div>
         </div>
@@ -478,7 +510,16 @@ function openSource () {
   }
 }
 
-.source {
+.menu-button {
   margin-left: auto;
+
+  &:hover .menu-ticker {
+    display: unset;
+  }
+}
+
+.menu-ticker {
+  bottom: -1px;
+  right: -1px;
 }
 </style>

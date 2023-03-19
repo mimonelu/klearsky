@@ -5,6 +5,8 @@
     "apply": "Apply",
     "avatar": "Avatar",
     "banner": "Banner",
+    "copyPostText": "Copy post text",
+    "deletePost": "Delete post",
     "description": "Description",
     "displayName": "Display Name",
     "edit": "Edit",
@@ -31,10 +33,12 @@
     "sendPost": "New Post",
     "settings": "Settings",
     "service": "Service",
+    "showSource": "Show source",
     "startedAt": "Started on",
     "submit": "Submit",
     "text": "Message",
     "title": "Klearsky",
+    "translate": "Translate",
     "userSearch": "User Search"
   },
   "ja": {
@@ -43,6 +47,8 @@
     "apply": "適用",
     "avatar": "アバター",
     "banner": "バナー",
+    "copyPostText": "テキストをコピーする",
+    "deletePost": "ポストを削除する",
     "description": "紹介文",
     "displayName": "名前",
     "edit": "編集",
@@ -69,10 +75,12 @@
     "sendPost": "ポストを投稿する",
     "settings": "設定",
     "service": "サービス",
+    "showSource": "ソースを表示する",
     "startedAt": "利用開始日",
     "submit": "送信",
     "text": "本文",
     "title": "Klearsky",
+    "translate": "翻訳する",
     "userSearch": "ユーザー検索"
   }
 }
