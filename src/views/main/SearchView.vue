@@ -33,6 +33,11 @@ function openChildPage (pageName: string) {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  &:deep() {
+    .textbox {
+      border-bottom-style: none;
+    }
+  }
 }
 
 .child-view {
