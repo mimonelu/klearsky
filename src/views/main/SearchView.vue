@@ -3,6 +3,7 @@ import { inject, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import PageHeader from "@/components/PageHeader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import UserBox from "@/components/UserBox.vue"
 import { blurElement } from "@/composables/misc"
 
 const mainState = inject("state") as MainState
@@ -81,24 +82,12 @@ async function openProfile (handle: string) {
         <SVGIcon name="cursorUp"/>
       </button>
       <div class="users">
-        <div
+        <UserBox
           v-for="user of mainState.currentSearchUsers"
           class="user"
+          :user="user"
           @click.prevent="openProfile(user.handle)"
-        >
-          <button
-            class="avatar"
-            @click.stop="openProfile(user.handle)"
-          >
-            <img
-              loading="lazy"
-              :src="user.avatar ?? '/img/void-avatar.png'"
-            >
-          </button>
-          <div class="display-name">{{ user.displayName }}</div>
-          <div class="handle">{{ user.handle }}</div>
-          <div class="description">{{ user.description }}</div>
-        </div>
+        >{{ user.description }}</UserBox>
       </div>
       <button
         class="fetch-button"
@@ -126,6 +115,7 @@ async function openProfile (handle: string) {
   flex-direction: column;
   flex-grow: 1;
 }
+
 .users {
   display: flex;
   flex-direction: column;
@@ -134,49 +124,7 @@ async function openProfile (handle: string) {
   padding: 1rem 0;
 }
 
-.user {
+.user-box {
   cursor: pointer;
-  display: grid;
-  grid-gap: 0 0.5rem;
-  grid-template-columns: min-content max-content 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas:
-    "a n h"
-    "a d d";
-  align-items: center;
-  padding: 0 1rem;
-}
-
-.avatar {
-  grid-area: a;
-  @include avatar-link(3rem);
-}
-
-.display-name {
-  grid-area: n;
-  color: rgba(var(--fg-color), 0.75);
-  font-size: 0.875rem;
-  font-weight: bold;
-  line-height: 1.25;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.handle {
-  grid-area: h;
-  color: rgba(var(--fg-color), 0.5);
-  font-size: 0.75rem;
-  line-height: 1.25;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.description {
-  grid-area: d;
-  line-height: 1.25;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 </style>
