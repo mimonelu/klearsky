@@ -1,4 +1,8 @@
-import { canLogin, hasLogin, saveServiceAndHandle } from "@/composables/atp-wrapper/services"
+import {
+  canLogin,
+  hasLogin,
+  saveServiceAndHandle,
+} from "@/composables/atp-wrapper/services"
 import createAgent from "@/composables/atp-wrapper/create-agent"
 import createFollow from "@/composables/atp-wrapper/create-follow"
 import createPost from "@/composables/atp-wrapper/create-post"
@@ -43,8 +47,7 @@ class AtpWrapper implements AbstractAtpWrapper {
   createRepost
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteFollow =
   deleteFollow
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deletePost =
-  deletePost
+;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deletePost = deletePost
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteRepost =
   deleteRepost
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchAuthorFeed =
@@ -65,13 +68,15 @@ class AtpWrapper implements AbstractAtpWrapper {
   fetchProfile
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchTimeline =
   fetchTimeline
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchUserSearch = fetchUserSearch
+;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchUserSearch =
+  fetchUserSearch
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).hasLogin = hasLogin
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).login = login
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).logout = logout
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).resumeSession =
   resumeSession
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).saveServiceAndHandle = saveServiceAndHandle
+;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).saveServiceAndHandle =
+  saveServiceAndHandle
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).setService = setService
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).updateProfile =
   updateProfile

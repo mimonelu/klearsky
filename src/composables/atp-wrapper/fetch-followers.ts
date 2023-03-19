@@ -16,10 +16,12 @@ export default async function (
     await this.agent.api.app.bsky.graph.getFollowers(query)
   console.log("[klearsky/fetchFollowers]", response)
   if (!response.success) return undefined
-
-  ;(response.data.followers as Array<Follower>).forEach((follower: Follower) => {
-    if (!users.some((user: Follower) => user.did === follower.did)) users.push(follower)
-  })
+  ;(response.data.followers as Array<Follower>).forEach(
+    (follower: Follower) => {
+      if (!users.some((user: Follower) => user.did === follower.did))
+        users.push(follower)
+    }
+  )
 
   return response.data.cursor
 }

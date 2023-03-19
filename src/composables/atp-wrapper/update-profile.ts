@@ -23,8 +23,7 @@ export default async function (
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
   const response: AppBskyActorUpdateProfile.Response =
-    (await this.agent?.api.app.bsky.actor.updateProfile(profileSchema)) ??
-    null
+    (await this.agent?.api.app.bsky.actor.updateProfile(profileSchema)) ?? null
   console.log("[klearsky/updateProfile]", response)
   return response.success
 }
