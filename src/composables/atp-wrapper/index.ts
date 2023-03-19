@@ -4,6 +4,7 @@ import createFollow from "@/composables/atp-wrapper/create-follow"
 import createPost from "@/composables/atp-wrapper/create-post"
 import createRepost from "@/composables/atp-wrapper/create-repost"
 import deleteFollow from "@/composables/atp-wrapper/delete-follow"
+import deletePost from "@/composables/atp-wrapper/delete-post"
 import deleteRepost from "@/composables/atp-wrapper/delete-repost"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
 import fetchFileSchema from "@/composables/atp-wrapper/fetch-file-schema"
@@ -42,7 +43,9 @@ class AtpWrapper implements AbstractAtpWrapper {
   createRepost
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteFollow =
   deleteFollow
-;;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteRepost =
+;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deletePost =
+  deletePost
+;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteRepost =
   deleteRepost
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchAuthorFeed =
   fetchAuthorFeed

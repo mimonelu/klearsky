@@ -52,6 +52,17 @@ function updateThisPost (newFeed: Feed) {
     }
   })
 }
+
+function removeThisPost (uri: string) {
+  props.feeds?.forEach((feed: Feed) => {
+    // @ts-ignore // TODO:
+    if (feed.post?.uri === uri) delete feed.post
+    // @ts-ignore // TODO:
+    if (feed.reply?.parent?.uri === uri) delete feed.reply.parent
+    // @ts-ignore // TODO:
+    if (feed.reply?.root?.uri === uri) delete feed.reply.root
+  })
+}
 </script>
 
 <template>
@@ -69,21 +80,25 @@ function updateThisPost (newFeed: Feed) {
         class="feed"
       >
         <Post
-          v-if="feed.reply?.root && feed.post.cid !== feed.reply?.root?.cid"
+          v-if="feed.reply?.root && feed.post?.cid !== feed.reply?.root?.cid"
           type="root"
           :post="feed.reply.root"
           @updateThisPost="updateThisPost"
+          @removeThisPost="removeThisPost"
         />
         <Post
-          v-if="feed.reply?.parent && feed.post.cid !== feed.reply?.parent?.cid && feed.reply?.root?.cid !== feed.reply?.parent?.cid"
+          v-if="feed.reply?.parent && feed.post?.cid !== feed.reply?.parent?.cid && feed.reply?.root?.cid !== feed.reply?.parent?.cid"
           type="parent"
           :post="feed.reply.parent"
           @updateThisPost="updateThisPost"
+          @removeThisPost="removeThisPost"
         />
         <Post
+          v-if="feed.post != null"
           type="post"
           :post="feed.post"
           @updateThisPost="updateThisPost"
+          @removeThisPost="removeThisPost"
         />
       </div>
     </div>
@@ -112,7 +127,7 @@ function updateThisPost (newFeed: Feed) {
 .feed {
   display: flex;
   flex-direction: column;
-  &:not(:last-child) {
+  &:not(:empty):not(:last-child) {
     border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   }
 }

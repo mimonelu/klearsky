@@ -25,6 +25,17 @@ function updateThisPost (newFeed: Feed) {
     }
   })
 }
+
+function removeThisPost (uri: string) {
+  props.feeds?.forEach((feed: Feed) => {
+    // @ts-ignore // TODO:
+    if (feed.post?.uri === uri) delete feed.post
+    // @ts-ignore // TODO:
+    if (feed.reply?.parent?.uri === uri) delete feed.reply.parent
+    // @ts-ignore // TODO:
+    if (feed.reply?.root?.uri === uri) delete feed.reply.root
+  })
+}
 </script>
 
 <template>
@@ -34,9 +45,11 @@ function updateThisPost (newFeed: Feed) {
       class="feed"
     >
       <Post
+        v-if="feed.post != null"
         :type="getPostType(feedIndex)"
         :post="feed.post"
         @updateThisPost="updateThisPost"
+        @removeThisPost="removeThisPost"
       />
     </div>
   </div>

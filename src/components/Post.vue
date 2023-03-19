@@ -9,7 +9,7 @@ import Ticker from "@/components/Ticker.vue"
 import displayJson from "@/composables/display-json"
 import { blurElement } from "@/composables/misc"
 
-const emit = defineEmits<{(event: string, feed: Feed): void}>()
+const emit = defineEmits<{(event: string, params: any): void}>()
 
 const props = defineProps<{
   type: "post" | "root" | "parent" | "postInPost";
@@ -99,6 +99,16 @@ function translateText () {
 function copyText () {
   blurElement()
   navigator.clipboard.writeText(props.post.record.text)
+}
+
+async function deletePost () {
+  state.processing = true
+  try {
+    await mainState.atp.deletePost(props.post.uri)
+    emit("removeThisPost", props.post.uri)
+  } finally {
+    state.processing = false
+  }
 }
 
 function openSource () {
@@ -245,7 +255,10 @@ function openSource () {
                     <SVGIcon name="clipboard" />
                     <span>{{ $t("copyPostText") }}</span>
                   </button>
-                  <button v-if="post.author.did === mainState.atp.session.did">
+                  <button
+                    v-if="post.author.did === mainState.atp.session.did"
+                    @click.stop="deletePost"
+                  >
                     <SVGIcon name="remove" />
                     <span>{{ $t("deletePost") }}</span>
                   </button>

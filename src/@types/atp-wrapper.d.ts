@@ -38,6 +38,7 @@ interface AbstractAtpWrapper {
   ): Promise<boolean>
   createRepost(this: AbstractAtpWrapper, post?: Post): Promise<boolean>
   deleteFollow(this: AbstractAtpWrapper, uri: string): Promise<boolean>
+  deletePost(this: AbstractAtpWrapper, uri: string): Promise<boolean>
   deleteRepost(this: AbstractAtpWrapper, uri: string): Promise<boolean>
   fetchAuthorFeed(
     this: AbstractAtpWrapper,

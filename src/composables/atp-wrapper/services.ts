@@ -41,7 +41,7 @@ export function mergeFeeds(
   const newFeeds: Array<Feed> = oldFeeds != null ? [...oldFeeds] : []
   targetFeeds.forEach((newFeed: Feed) => {
     const oldFeedIndex: number = newFeeds.findIndex(
-      (oldFeed: Feed) => oldFeed.post.cid === newFeed.post.cid
+      (oldFeed: Feed) => oldFeed.post?.cid === newFeed.post?.cid
     )
     if (oldFeedIndex === -1) {
       newFeeds.push(newFeed)
@@ -59,8 +59,8 @@ export function saveServiceAndHandle(service: string, handle: string) {
 
 export function sortFeeds(feeds: Array<Feed>): Array<Feed> {
   return feeds.sort((a: Feed, b: Feed) => {
-    const aIndexedAt = new Date(a.post.__reason?.indexedAt ?? a.post.indexedAt)
-    const bIndexedAt = new Date(b.post.__reason?.indexedAt ?? b.post.indexedAt)
+    const aIndexedAt = new Date(a.post?.__reason?.indexedAt ?? a.post?.indexedAt)
+    const bIndexedAt = new Date(b.post?.__reason?.indexedAt ?? b.post?.indexedAt)
     return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
   })
 }
