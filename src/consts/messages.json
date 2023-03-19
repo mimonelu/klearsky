@@ -19,6 +19,7 @@
     "home": "Home",
     "identifier": "Email or Username or did:plc:",
     "imageBoxes": "Image boxes",
+    "keywordSearch": "Keyword Search",
     "linkBox": "Link box",
     "login": "Login",
     "logout": "Logout",
@@ -33,7 +34,8 @@
     "startedAt": "Started on",
     "submit": "Submit",
     "text": "Message",
-    "title": "Klearsky"
+    "title": "Klearsky",
+    "userSearch": "User Search"
   },
   "ja": {
     "accounts": "アカウント",
@@ -55,6 +57,7 @@
     "home": "ホーム",
     "identifier": "ユーザー名／メールアドレス／ did:plc:",
     "imageBoxes": "イメージボックス",
+    "keywordSearch": "キーワード検索（仮）",
     "linkBox": "リンクボックス",
     "login": "ログイン",
     "logout": "ログアウト",
@@ -69,6 +72,7 @@
     "startedAt": "利用開始日",
     "submit": "送信",
     "text": "本文",
-    "title": "Klearsky"
+    "title": "Klearsky",
+    "userSearch": "ユーザー検索"
   }
 }

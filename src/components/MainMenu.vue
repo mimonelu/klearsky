@@ -77,7 +77,7 @@ async function openSendPostPopup () {
     </RouterLink>
     <RouterLink
       class="link-button"
-      to="search"
+      to="user-search"
       @click.prevent="blurElement"
     >
       <div class="icon">
