@@ -10,7 +10,7 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  base: "/klearsky",
+  base: process.env.VUE_APP_BASE || "/klearsky",
   build: {
     // for `TypeError: xx is not a constructor`
     // SEE: stackoverflow.com/a/73470097
