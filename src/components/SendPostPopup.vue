@@ -8,7 +8,7 @@ import { blurElement } from "@/composables/misc"
 const emit = defineEmits<{(event: string, done: boolean): void}>()
 
 const props = defineProps<{
-  type: "post" | "reply" | "repost";
+  type: "post" | "reply" | "quoteRepost";
   post?: Post;
 }>()
 
@@ -28,33 +28,38 @@ const state = reactive<{
   alts: [],
 })
 
-const easyFormProps = {
+const easyFormProps: KEasyForm = {
   submitButtonLabel: $t("submit"),
   submitCallback,
-  data: [
-    {
-      state,
-      model: "text",
-      label: $t("text"),
-      type: "textarea",
-      rows: 4,
-      focus: true,
-    },
-    {
-      state,
-      model: "url",
-      label: $t("linkBox"),
-      type: "text",
-    },
-    {
-      state,
-      model: "images",
-      label: $t("imageBoxes"),
-      type: "file",
-      isMultipleFile: true,
-      maxNumberOfFile: 4,
-    },
-  ],
+  data: (() => {
+    const result: Array<KEasyFormItem> = [
+      {
+        state,
+        model: "text",
+        label: $t("text"),
+        type: "textarea",
+        rows: 4,
+        focus: true,
+      },
+    ]
+    if (props.type !== "quoteRepost") {
+      result.push({
+        state,
+        model: "url",
+        label: $t("linkBox"),
+        type: "text",
+      })
+      result.push({
+        state,
+        model: "images",
+        label: $t("imageBoxes"),
+        type: "file",
+        isMultipleFile: true,
+        maxNumberOfFile: 4,
+      })
+    }
+    return result
+  })(),
 }
 
 function close () {
@@ -85,11 +90,11 @@ async function submitCallback () {
     @close="close"
   >
     <template v-slot:header>
-      <h2>{{ $t("post") }}</h2>
+      <h2>{{ $t(type) }}</h2>
     </template>
     <template v-slot:body>
       <Post
-        v-if="type === 'reply' || type === 'repost'"
+        v-if="type === 'reply' || type === 'quoteRepost'"
         type="post"
         mode="preview"
         :post="post as Post"
@@ -107,6 +112,10 @@ async function submitCallback () {
               />
             </dd>
           </dl>
+          <p
+            v-if="props.type !== 'quoteRepost'"
+            class="note"
+          >{{ $t("sendPostNote") }}</p>
         </template>
       </EasyForm>
     </template>

@@ -1,5 +1,5 @@
 type CreatePostParams = {
-  type: "post" | "reply" | "repost"
+  type: "post" | "reply" | "quoteRepost"
   post?: Post
   text: string
   url: string

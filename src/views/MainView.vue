@@ -256,7 +256,7 @@ async function fetchNotifications (direction: "new" | "old") {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (type: "post" | "reply" | "repost", post?: Post): Promise<boolean> {
+async function openSendPostPopup (type: "post" | "reply" | "quoteRepost", post?: Post): Promise<boolean> {
   state.sendPostPopupProps.visibility = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post

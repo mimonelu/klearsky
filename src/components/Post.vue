@@ -60,7 +60,7 @@ async function repost () {
   state.processing = true
   try {
     const result = await mainState.atp.createPost({
-      type: "repost",
+      type: "quoteRepost",
       post: props.post,
       text: "",
       url: "",
@@ -76,7 +76,7 @@ async function repost () {
 async function quoteRepost () {
   blurElement()
   state.repostMenuDisplay = false
-  const done = await mainState.openSendPostPopup("repost", props.post)
+  const done = await mainState.openSendPostPopup("quoteRepost", props.post)
   state.processing = true
   try {
     if (done) await updateThisPost()

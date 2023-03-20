@@ -23,7 +23,7 @@ const state = reactive<{
   password: ""
 })
 
-const easyFormProps = {
+const easyFormProps: KEasyForm = {
   submitButtonLabel: $t("login"),
   submitCallback,
   data: [

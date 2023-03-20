@@ -7,7 +7,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   id?: string
-  data: Array<{ [k: string]: any }>
+  data: Array<KEasyFormItem>
   submitButtonLabel?: string
   submitCallback?: Function
 }>()
@@ -19,7 +19,7 @@ const state = reactive<{
 })
 
 onMounted(() => {
-  props.data.forEach((prop: any, index: number) => {
+  props.data.forEach((prop: KEasyFormItem, index: number) => {
     if (prop.focus) {
       const itemId: string = makeItemId(index)
       const itemElement: null | HTMLElement = document.getElementById(itemId)
@@ -121,6 +121,11 @@ function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
         flex-grow: 1;
       }
     }
+  }
+
+  .note {
+    font-size: 0.875rem;
+    line-height: 1.375;
   }
 }
 </style>

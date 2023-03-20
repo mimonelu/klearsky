@@ -26,7 +26,7 @@ const state = reactive<{
 
 const router = useRouter()
 
-const easyFormProps = {
+const easyFormProps: KEasyForm = {
   submitButtonLabel: $t("apply"),
   submitCallback: submit,
   data: [

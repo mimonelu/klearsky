@@ -9,7 +9,7 @@ export default async function (
   if (this.session == null) return false
 
   // TODO:
-  if (params.type === "repost" && params.text === "") {
+  if (params.type === "quoteRepost" && params.text === "") {
     return await this.createRepost(params.post)
   }
 
@@ -101,7 +101,7 @@ export default async function (
     }
   }
 
-  if (params.type === "repost") {
+  if (params.type === "quoteRepost") {
     record.embed = {
       $type: "app.bsky.embed.record",
       record: {
