@@ -10,7 +10,7 @@ const yyyy = (new Date).getFullYear()
     <small>&copy; {{ yyyy }} mimonelu</small>
     <a
       class="textlink"
-      href="https://blue.amazingca.dev/?username=mimonelu.bsky.social"
+      href="https://staging.bsky.app/profile/mimonelu.bsky.social"
       rel="noreferrer"
       target="_blank"
     >Bluesky@mimonelu.bsky.social</a>
