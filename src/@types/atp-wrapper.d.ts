@@ -27,6 +27,12 @@ interface AbstractAtpWrapper {
 
   canLogin(this: AbstractAtpWrapper): boolean
   createAgent(this: AbstractAtpWrapper): boolean
+  createFileSchema(
+    this: AbstractAtpWrapper,
+    file: File,
+    maxWidth: number,
+    maxHeight: number
+  ): Promise<null | FileSchema>
   createFollow(
     this: AbstractAtpWrapper,
     did: string,
@@ -50,10 +56,6 @@ interface AbstractAtpWrapper {
     feeds: Array<Feed>
     cursor?: string
   }>
-  fetchFileSchema(
-    this: AbstractAtpWrapper,
-    file: File
-  ): Promise<null | FileSchema>
   fetchFollowings(
     this: AbstractAtpWrapper,
     users: Array<Follower> | Array<Following>,

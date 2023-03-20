@@ -8,10 +8,10 @@ export default async function (
   if (this.session == null) return false
   const fileSchemas: Array<null | FileSchema> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
-      ? this.fetchFileSchema(params.avatar[0])
+      ? this.createFileSchema(params.avatar[0], 2000, 2000)
       : null,
     params.banner != null && params.banner[0] != null
-      ? this.fetchFileSchema(params.banner[0])
+      ? this.createFileSchema(params.banner[0], 2000, 2000)
       : null,
   ])
   const avatarSchema: null | FileSchema = fileSchemas[0]

@@ -4,6 +4,7 @@ import {
   saveServiceAndHandle,
 } from "@/composables/atp-wrapper/services"
 import createAgent from "@/composables/atp-wrapper/create-agent"
+import createFileSchema from "@/composables/atp-wrapper/create-file-schema"
 import createFollow from "@/composables/atp-wrapper/create-follow"
 import createPost from "@/composables/atp-wrapper/create-post"
 import createRepost from "@/composables/atp-wrapper/create-repost"
@@ -11,7 +12,6 @@ import deleteFollow from "@/composables/atp-wrapper/delete-follow"
 import deletePost from "@/composables/atp-wrapper/delete-post"
 import deleteRepost from "@/composables/atp-wrapper/delete-repost"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
-import fetchFileSchema from "@/composables/atp-wrapper/fetch-file-schema"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
@@ -40,6 +40,8 @@ class AtpWrapper implements AbstractAtpWrapper {
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).canLogin = canLogin
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).createAgent =
   createAgent
+;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).createFileSchema =
+  createFileSchema
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).createFollow =
   createFollow
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).createPost = createPost
@@ -52,8 +54,6 @@ class AtpWrapper implements AbstractAtpWrapper {
   deleteRepost
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchAuthorFeed =
   fetchAuthorFeed
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchFileSchema =
-  fetchFileSchema
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchFollowers =
   fetchFollowers
 ;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchFollowings =

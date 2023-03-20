@@ -59,7 +59,7 @@ export default async function (
 
   const fileSchemas: Array<null | FileSchema> = await Promise.all(
     params.images.map((file: File): Promise<null | FileSchema> => {
-      return this.fetchFileSchema(file)
+      return this.createFileSchema(file, 2000, 2000)
     })
   )
   if (fileSchemas.length > 0) {

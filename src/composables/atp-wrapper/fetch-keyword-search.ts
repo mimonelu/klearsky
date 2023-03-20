@@ -19,4 +19,3 @@ export default async function (
   console.log("[klearsky/fetchKeywordSearch]", json)
   return json
 }
-
