@@ -3,9 +3,9 @@ import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
 import format from "date-fns/format"
 import Loader from "@/components/Loader.vue"
+import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Ticker from "@/components/Ticker.vue"
 import displayJson from "@/composables/display-json"
 import { blurElement } from "@/composables/misc"
 
@@ -20,8 +20,10 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  postMenuDisplay: boolean;
   processing: boolean;
 }>({
+  postMenuDisplay: false,
   processing: false,
 })
 
@@ -90,15 +92,22 @@ async function updateThisPost () {
   emit("updateThisPost", posts[0])
 }
 
+function openPostMenu () {
+  blurElement()
+  state.postMenuDisplay = !state.postMenuDisplay
+}
+
 function translateText () {
   blurElement()
   const language = window.navigator.language
   window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${props.post.record.text}&op=translate`)
+  state.postMenuDisplay = false
 }
 
 function copyText () {
   blurElement()
   navigator.clipboard.writeText(props.post.record.text)
+  state.postMenuDisplay = false
 }
 
 async function deletePost () {
@@ -108,12 +117,14 @@ async function deletePost () {
     emit("removeThisPost", props.post.uri)
   } finally {
     state.processing = false
+    state.postMenuDisplay = false
   }
 }
 
 function openSource () {
   blurElement()
   displayJson(props.post)
+  state.postMenuDisplay = false
 }
 </script>
 
@@ -242,32 +253,30 @@ function openSource () {
           <div>
             <button
               class="icon-button menu-button"
-              @click.stop
+              @click.stop="openPostMenu"
             >
               <SVGIcon name="menu" />
-              <Ticker class="menu-ticker">
-                <menu>
-                  <button @click.stop="translateText">
-                    <SVGIcon name="translate" />
-                    <span>{{ $t("translate") }}</span>
-                  </button>
-                  <button @click.stop="copyText">
-                    <SVGIcon name="clipboard" />
-                    <span>{{ $t("copyPostText") }}</span>
-                  </button>
-                  <button
-                    v-if="post.author.did === mainState.atp.session.did"
-                    @click.stop="deletePost"
-                  >
-                    <SVGIcon name="remove" />
-                    <span>{{ $t("deletePost") }}</span>
-                  </button>
-                  <button @click.stop="openSource">
-                    <SVGIcon name="json" />
-                    <span>{{ $t("showSource") }}</span>
-                  </button>
-                </menu>
-              </Ticker>
+              <MenuTicker v-if="state.postMenuDisplay">
+                <button @click.stop="translateText">
+                  <SVGIcon name="translate" />
+                  <span>{{ $t("translate") }}</span>
+                </button>
+                <button @click.stop="copyText">
+                  <SVGIcon name="clipboard" />
+                  <span>{{ $t("copyPostText") }}</span>
+                </button>
+                <button
+                  v-if="post.author.did === mainState.atp.session.did"
+                  @click.stop="deletePost"
+                >
+                  <SVGIcon name="remove" />
+                  <span>{{ $t("deletePost") }}</span>
+                </button>
+                <button @click.stop="openSource">
+                  <SVGIcon name="json" />
+                  <span>{{ $t("showSource") }}</span>
+                </button>
+              </MenuTicker>
             </button>
           </div>
         </div>
@@ -525,14 +534,12 @@ function openSource () {
 
 .menu-button {
   margin-left: auto;
-
-  &:hover .menu-ticker {
-    display: unset;
-  }
+  position: relative;
 }
 
-.menu-ticker {
-  bottom: -1px;
-  right: -1px;
+.menu-ticker:deep() {
+  .menu-ticker--inner {
+    right: 2.5em;
+  }
 }
 </style>
