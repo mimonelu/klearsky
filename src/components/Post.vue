@@ -21,9 +21,11 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   postMenuDisplay: boolean;
+  repostMenuDisplay: boolean;
   processing: boolean;
 }>({
   postMenuDisplay: false,
+  repostMenuDisplay: false,
   processing: false,
 })
 
@@ -54,22 +56,32 @@ async function reply () {
 
 async function repost () {
   blurElement()
-  if (props.post.viewer.repost == null) {
-    const done = await mainState.openSendPostPopup("repost", props.post)
-    state.processing = true
-    try {
-      if (done) await updateThisPost()
-    } finally {
-      state.processing = false
-    }
-  } else {
-    state.processing = true
-    try {
-      await mainState.atp.deleteRepost(props.post.viewer.repost)
-      await updateThisPost()
-    } finally {
-      state.processing = false
-    }
+  state.repostMenuDisplay = false
+  state.processing = true
+  try {
+    const result = await mainState.atp.createPost({
+      type: "repost",
+      post: props.post,
+      text: "",
+      url: "",
+      images: [],
+      alts: [],
+    })
+    if (result) await updateThisPost()
+  } finally {
+    state.processing = false
+  }
+}
+
+async function quoteRepost () {
+  blurElement()
+  state.repostMenuDisplay = false
+  const done = await mainState.openSendPostPopup("repost", props.post)
+  state.processing = true
+  try {
+    if (done) await updateThisPost()
+  } finally {
+    state.processing = false
   }
 }
 
@@ -90,6 +102,24 @@ async function updateThisPost () {
   const posts: null | Array<Feed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
   if (posts == null || posts.length === 0) return
   emit("updateThisPost", posts[0])
+}
+
+async function openRepostMenu () {
+  blurElement()
+
+  // リポスト済みであればリポストメニューを開閉する
+  if (props.post.viewer.repost == null) {
+    state.repostMenuDisplay = !state.repostMenuDisplay
+  } else {
+    state.repostMenuDisplay = false
+    state.processing = true
+    try {
+      await mainState.atp.deleteRepost(props.post.viewer.repost)
+      await updateThisPost()
+    } finally {
+      state.processing = false
+    }
+  }
 }
 
 function openPostMenu () {
@@ -233,10 +263,20 @@ function openSource () {
               class="icon-button repost_count"
               :data-has="post.repostCount > 0"
               :data-reposted="!!post.viewer.repost"
-              @click.stop="repost"
+              @click.stop="openRepostMenu"
             >
               <SVGIcon name="repost" />
               <span>{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
+              <MenuTicker v-if="state.repostMenuDisplay">
+                <button @click.stop="repost">
+                  <SVGIcon name="repost" />
+                  <span>{{ $t("sendRepost") }}</span>
+                </button>
+                <button @click.stop="quoteRepost">
+                  <SVGIcon name="quoteRepost" />
+                  <span>{{ $t("sendQuoteRepost") }}</span>
+                </button>
+              </MenuTicker>
             </button>
           </div>
           <div>
@@ -313,11 +353,11 @@ function openSource () {
   }
 
   &[data-type="postInPost"] {
-    font-size: 0.875rem;
+    font-size: 0.875em;
   }
 
   &[data-mode="preview"] {
-    font-size: 0.875rem;
+    font-size: 0.875em;
     pointer-events: none;
 
     .images,
@@ -512,13 +552,22 @@ function openSource () {
   margin-top: 0.5em;
 }
 
-.repost_count[data-reposted="true"] {
-  & > .svg-icon {
-    fill: rgb(var(--green));
+.repost_count {
+  position: relative;
+  &[data-reposted="true"] {
+    & > .svg-icon {
+      fill: rgb(var(--green));
+    }
+
+    & > span {
+      color: rgb(var(--green));
+    }
   }
 
-  & > span {
-    color: rgb(var(--green));
+  .menu-ticker:deep() {
+    .menu-ticker--inner {
+      left: 3em;
+    }
   }
 }
 
@@ -535,11 +584,11 @@ function openSource () {
 .menu-button {
   margin-left: auto;
   position: relative;
-}
 
-.menu-ticker:deep() {
-  .menu-ticker--inner {
-    right: 2.5em;
+  .menu-ticker:deep() {
+    .menu-ticker--inner {
+      right: 2.5em;
+    }
   }
 }
 </style>

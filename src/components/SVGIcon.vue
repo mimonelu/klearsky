@@ -18,6 +18,7 @@ import menu from "@/svg/menu.svg?raw"
 import person from "@/svg/person.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
+import quoteRepost from "@/svg/quote-repost.svg?raw"
 import remove from "@/svg/remove.svg?raw"
 import repost from "@/svg/repost.svg?raw"
 import search from "@/svg/search.svg?raw"
@@ -45,6 +46,7 @@ const icons: { [k: string]: string } = {
   person,
   plus,
   post,
+  quoteRepost,
   remove,
   repost,
   search,

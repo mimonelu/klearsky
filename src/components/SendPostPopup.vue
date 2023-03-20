@@ -66,12 +66,12 @@ async function submitCallback () {
   if (mainState.processing) return
   mainState.processing = true
   try {
-    await mainState.atp.createPost({
+    const result = await mainState.atp.createPost({
       ...state,
       type: props.type,
       post: props.post,
     })
-    emit("close", true)
+    if (result) emit("close", true)
   } finally {
     mainState.processing = false
   }
