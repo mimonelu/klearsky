@@ -10,7 +10,7 @@ import Logo from "@/components/Logo.vue"
       <div>Unofficial Web Client for Bluesky</div>
     </div>
     <RouterLink
-      to="home"
+      to="/home"
       class="button--large"
     >Launch Klearsky</RouterLink>
     <Copyright />

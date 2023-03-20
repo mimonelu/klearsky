@@ -41,6 +41,7 @@ const router = createRouter({
       path: "/main",
       name: "main",
       component: MainView,
+      redirect: "/home",
       children: [
         {
           path: "/accounts",
@@ -53,7 +54,7 @@ const router = createRouter({
           component: TimelineView,
         },
         {
-          path: "/edit-profile",
+          path: "/profile/edit",
           name: "edit-profile",
           component: EditProfileView,
         },
@@ -66,34 +67,35 @@ const router = createRouter({
           path: "/notifications",
           name: "notifications",
           component: NotificationsView,
+          redirect: "/notifications/reply",
           children: [
             {
-              path: "/follow-notifications",
+              path: "follow",
               name: "follow-notifications",
               component: FollowNotificationsView,
             },
             {
-              path: "/invite-notifications",
+              path: "invite",
               name: "invite-notifications",
               component: InviteNotificationsView,
             },
             {
-              path: "/mention-notifications",
+              path: "mention",
               name: "mention-notifications",
               component: MentionNotificationsView,
             },
             {
-              path: "/reply-notifications",
+              path: "reply",
               name: "reply-notifications",
               component: ReplyNotificationsView,
             },
             {
-              path: "/repost-notifications",
+              path: "repost",
               name: "repost-notifications",
               component: RepostNotificationsView,
             },
             {
-              path: "/vote-notifications",
+              path: "vote",
               name: "vote-notifications",
               component: VoteNotificationsView,
             },
@@ -103,19 +105,20 @@ const router = createRouter({
           path: "/profile",
           name: "profile",
           component: ProfileView,
+          redirect: "/profile/post",
           children: [
             {
-              path: "/profile-post",
+              path: "post",
               name: "profile-post",
               component: AuthorPostView,
             },
             {
-              path: "/profile-follower",
+              path: "follower",
               name: "profile-follower",
               component: FollowerListView,
             },
             {
-              path: "/profile-following",
+              path: "following",
               name: "profile-following",
               component: FollowingListView,
             },
@@ -125,14 +128,15 @@ const router = createRouter({
           path: "/search",
           name: "search",
           component: SearchView,
+          redirect: "/search/user",
           children: [
             {
-              path: "/keyword-search",
+              path: "keyword",
               name: "keyword-search",
               component: KeywordSearchView,
             },
             {
-              path: "/user-search",
+              path: "user",
               name: "user-search",
               component: UserSearchView,
             },

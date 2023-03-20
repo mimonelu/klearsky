@@ -96,7 +96,7 @@ function openChildPage (pageName: string) {
           <div class="right-bottom">
             <RouterLink
               v-if="isUserProfile()"
-              to="edit-profile"
+              to="/profile/edit"
               class="button"
             >
               <SVGIcon name="edit" />

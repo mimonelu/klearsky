@@ -67,7 +67,7 @@ async function openSendPostPopup () {
     </button>
     <RouterLink
       class="link-button"
-      to="home"
+      to="/home"
       @click.prevent="blurElement"
     >
       <div class="icon">
@@ -77,7 +77,7 @@ async function openSendPostPopup () {
     </RouterLink>
     <RouterLink
       class="link-button"
-      to="user-search"
+      to="/search/user"
       @click.prevent="blurElement"
     >
       <div class="icon">
@@ -87,7 +87,7 @@ async function openSendPostPopup () {
     </RouterLink>
     <RouterLink
       class="link-button"
-      to="reply-notifications"
+      to="/notifications/reply"
       @click.prevent="blurElement"
     >
       <div class="icon">
@@ -97,7 +97,7 @@ async function openSendPostPopup () {
     </RouterLink>
     <RouterLink
       class="link-button"
-      to="settings"
+      to="/settings"
       @click.prevent="blurElement"
     >
       <div class="icon">
@@ -107,7 +107,7 @@ async function openSendPostPopup () {
     </RouterLink>
     <RouterLink
       class="link-button"
-      to="accounts"
+      to="/accounts"
       @click.prevent="blurElement"
     >
       <div class="icon">
