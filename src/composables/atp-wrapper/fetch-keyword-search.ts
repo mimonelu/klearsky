@@ -5,7 +5,7 @@ export default async function (
   if (this.agent == null) return
   if (this.session == null) return
   const request = new Request(
-    `http://mimonelu.net:4649/https://search.${this.agent.service.host}/search/posts?q=${query}`,
+    `https://mimonelu.net:4649/https://search.${this.agent.service.host}/search/posts?q=${query}`,
     { headers: { "user-agent": "Klearsky" } }
   )
   const response = await fetch(request)
@@ -19,3 +19,4 @@ export default async function (
   console.log("[klearsky/fetchKeywordSearch]", json)
   return json
 }
+
