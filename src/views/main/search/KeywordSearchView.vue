@@ -42,9 +42,12 @@ function formatDate (date?: string): string {
       <input
         v-model="mainState.currentSearchKeywordTerm"
         id="keyword-term-textbox"
-        type="text"
+        type="search"
         :placeholder="$t('keywordSearch')"
-        autocomplete="keyword"
+        autocapitalize="off"
+        autocomplete="on"
+        inputmode="search"
+        spellcheck="false"
         class="textbox"
       >
     </form>

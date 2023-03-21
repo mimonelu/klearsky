@@ -66,9 +66,12 @@ async function openProfile (handle: string) {
       <input
         v-model="mainState.currentSearchUserTerm"
         id="user-term-textbox"
-        type="text"
+        type="search"
         :placeholder="$t('userSearch')"
-        autocomplete="user"
+        autocapitalize="off"
+        autocomplete="on"
+        inputmode="search"
+        spellcheck="false"
         class="textbox"
       >
     </form>

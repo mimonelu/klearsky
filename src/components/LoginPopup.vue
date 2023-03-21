@@ -34,6 +34,8 @@ const easyFormProps: KEasyForm = {
       type: "url",
       required: true,
       placeholder: "https://bsky.social",
+      autocomplete: "url",
+      inputmode: "url",
     },
     {
       state,
@@ -42,7 +44,8 @@ const easyFormProps: KEasyForm = {
       type: "text",
       required: true,
       placeholder: "you.bsky.social, your@email.address, did:plc:xxx...",
-      autocomplete: "username",
+      autocomplete: "on",
+      inputmode: "email",
       focus: true,
     },
     {
@@ -51,7 +54,8 @@ const easyFormProps: KEasyForm = {
       label: $t("password"),
       type: "password",
       required: true,
-      autocomplete: "current-password",
+      autocomplete: "off",
+      inputmode: "text",
     }
   ],
 }

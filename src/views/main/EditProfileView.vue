@@ -35,6 +35,7 @@ const easyFormProps: KEasyForm = {
       model: "displayName",
       label: $t("displayName"),
       type: "text",
+      autocomplete: "name",
       focus: true,
     },
     {

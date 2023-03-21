@@ -17,6 +17,16 @@ type KEasyFormItem = {
   required?: boolean
   placeholder?: string
   autocomplete?: string
+  inputmode?:
+    | "text"
+    | "url"
+    | "none"
+    | "tel"
+    | "email"
+    | "numeric"
+    | "decimal"
+    | "search"
+    | undefined
   rows?: number
   focus?: boolean
   accept?: string

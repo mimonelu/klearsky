@@ -73,7 +73,10 @@ function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
           :type="item.type ?? 'text'"
           :required="item.required ?? false"
           :placeholder="item.placeholder ?? ''"
+          autocapitalize="off"
           :autocomplete="item.autocomplete ?? ''"
+          :inputmode="item.inputmode ?? undefined"
+          spellcheck="false"
           class="textbox"
         >
         <FileBox
@@ -89,7 +92,9 @@ function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
           :id="makeItemId(index)"
           :required="item.required ?? false"
           :placeholder="item.placeholder ?? ''"
+          autocapitalize="off"
           :rows="item.rows ?? ''"
+          spellcheck="false"
           class="textarea"
         />
       </dd>

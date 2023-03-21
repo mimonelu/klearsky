@@ -47,7 +47,9 @@ const easyFormProps: KEasyForm = {
         state,
         model: "url",
         label: $t("linkBox"),
-        type: "text",
+        type: "url",
+        autocomplete: "url",
+        inputmode: "url",
       })
       result.push({
         state,
@@ -108,6 +110,9 @@ async function submitCallback () {
                 v-for="_, index of state.images"
                 v-model="state.alts[index]"
                 type="text"
+                autocapitalize="off"
+                autocomplete="on"
+                spellcheck="false"
                 class="textbox"
               />
             </dd>
