@@ -2,12 +2,12 @@
   // Web 版 Twitter と極力等しくする
   font-family: "Segoe UI", Meiryo, system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
 
-  font-size: calc(0.375vmax + 10px);
+  font-size: calc(0.125vmax + 13px);
 }
 
 input, textarea {
   font-size: calc(0.125vmax + 16px);
   &::placeholder {
-    font-size: calc(0.375vmax + 10px);
+    font-size: calc(0.125vmax + 13px);
   }
 }
