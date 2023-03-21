@@ -11,8 +11,9 @@
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    padding: 1rem 0.5rem;
+    padding: 0.75rem 0.5rem;
     width: 33.333%;
+    min-height: 3rem;
     text-align: center;
     &:not(:last-child) {
       border-right: 1px solid rgba(var(--fg-color), 0.25);

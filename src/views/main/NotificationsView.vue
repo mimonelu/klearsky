@@ -90,4 +90,11 @@ function openChildPage (pageName: string) {
 .notifications-view {
   flex-grow: 1;
 }
+
+.tab {
+  .tab-button,
+  .tab-button--outline {
+    border-right-style: none;
+  }
+}
 </style>
