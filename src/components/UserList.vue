@@ -51,11 +51,11 @@ async function fetchUsers (direction: "new" | "old") {
           <div
             v-if="user.viewer.following"
             class="you-following"
-          >Following</div>
+          >{{ $t("following") }}</div>
           <div
             v-if="user.viewer.followedBy"
             class="you-followed"
-          >Followed</div>
+          >{{ $t("followed") }}</div>
         </div>
       </UserBox>
     </div>
@@ -87,7 +87,7 @@ async function fetchUsers (direction: "new" | "old") {
 .relations {
   grid-area: r;
   display: flex;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
 }
 
 .you-following,
@@ -95,7 +95,6 @@ async function fetchUsers (direction: "new" | "old") {
   display: flex;
   align-items: center;
   font-size: 0.875rem;
-  font-weight: bold;
   line-height: 1.25;
 }
 
