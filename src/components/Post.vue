@@ -130,7 +130,7 @@ function openPostMenu () {
 function translateText () {
   blurElement()
   const language = window.navigator.language
-  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(props.post.record.text)}&op=translate`)
+  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(props.post.record.text as string)}&op=translate`)
   state.postMenuDisplay = false
 }
 
