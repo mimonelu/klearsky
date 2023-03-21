@@ -220,19 +220,19 @@ function openChildPage (pageName: string) {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  grid-gap: 0.5rem;
 }
 
 .display-name {
   font-size: 2rem;
   line-height: 1.25;
-  word-break: break-all;
+  margin-bottom: 0.25rem;
+  word-break: break-word;
 }
 
 .handle {
   color: rgba(var(--fg-color), 0.75);
-  font-size: 0.875rem;
   line-height: 1.25;
+  margin-bottom: 0.75rem;
   word-break: break-all;
 }
 
@@ -251,6 +251,7 @@ function openChildPage (pageName: string) {
   color: rgb(var(--pink));
   font-size: 0.875rem;
   line-height: 1.25;
+  word-break: break-all;
 }
 
 .bottom {

@@ -552,12 +552,14 @@ function openSource () {
 .footer {
   grid-area: f;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 2fr;
   align-items: center;
   margin-top: 0.5em;
 
-  & > div:not(:last-child) {
-    min-width: 6em;
+  @media (min-width: calc($router-view-width + $main-menu-min-width)) {
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+  }
+  @media not all and (min-width: calc($router-view-width + $main-menu-min-width)) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
 
@@ -575,7 +577,8 @@ function openSource () {
 
   .menu-ticker:deep() {
     .menu-ticker--inner {
-      left: 3em;
+      left: 0;
+      bottom: 2.5em;
     }
   }
 }
