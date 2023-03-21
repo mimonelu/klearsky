@@ -330,7 +330,10 @@ function closeSendPostPopup (done: boolean) {
   & > .main-menu {
     position: fixed;
     top: 0;
-    max-width: $menu-max-width;
+    @media not all and (max-width: $max-width-with-scrollbar) {
+      min-width: $menu-max-width;
+      max-width: $menu-max-width;
+    }
   }
 }
 

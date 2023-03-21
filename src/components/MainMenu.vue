@@ -35,13 +35,22 @@ async function openSendPostPopup () {
   blurElement()
   await mainState.openSendPostPopup("post")
 }
+
+function moveToBottom () {
+  blurElement()
+  window.scrollTo({
+    left: 0,
+    top: document.body.clientHeight,
+    behavior: "smooth",
+  })
+}
 </script>
 
 <template>
   <div class="main-menu">
     <button
       v-if="state.canBack"
-      class="link-button--outline"
+      class="move-button"
       @click.prevent="back"
     >
       <div class="icon">
@@ -124,6 +133,14 @@ async function openSendPostPopup () {
       </div>
       <div class="label">{{ $t("sendPost") }}</div>
     </button>
+    <button
+      class="move-button move-to-bottom-button"
+      @click.prevent="moveToBottom"
+    >
+      <div class="icon">
+        <SVGIcon name="cursorDown" />
+      </div>
+    </button>
   </div>
 </template>
 
@@ -132,15 +149,22 @@ async function openSendPostPopup () {
   display: flex;
   flex-direction: column;
   grid-gap: 0.25rem;
-  padding: 1rem;
 
   @media (max-width: $max-width-with-scrollbar) {
-    .link-button,
-    .link-button--outline {
+    padding: 0.75rem 0.5rem;
+
+    .link-button {
       grid-template-columns: min-content;
     }
 
     .label {
+      display: none;
+    }
+  }
+  @media not all and (max-width: $max-width-with-scrollbar) {
+    padding: 1.25rem 1rem;
+
+    .move-to-bottom-button {
       display: none;
     }
   }
@@ -152,15 +176,34 @@ async function openSendPostPopup () {
   justify-content: center;
   font-size: 1.5rem;
   min-width: 3rem;
-  min-height: calc(3rem + 1rem);
+  min-height: 3rem;
 
   .svg-icon {
     fill: rgba(var(--fg-color), 0.5);
   }
 }
 
-.link-button,
-.link-button--outline {
+.move-button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  min-height: 3rem;
+
+  .svg-icon {
+    fill: transparent;
+    stroke: rgba(var(--fg-color), 0.25);
+    stroke-width: 2px;
+  }
+  &:focus , &:hover {
+    .svg-icon {
+      stroke: rgb(var(--fg-color));
+    }
+  }
+}
+
+.link-button {
   cursor: pointer;
   display: grid;
   grid-template-columns: min-content 1fr;
@@ -213,18 +256,6 @@ async function openSendPostPopup () {
   &:focus, &:hover {
     .svg-icon {
       fill: rgb(var(--fg-color));
-    }
-  }
-}
-.link-button--outline {
-  .svg-icon {
-    fill: transparent;
-    stroke: rgba(var(--fg-color), 0.25);
-    stroke-width: 2px;
-  }
-  &:focus , &:hover {
-    .svg-icon {
-      stroke: rgb(var(--fg-color));
     }
   }
 }

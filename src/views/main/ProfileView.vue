@@ -250,6 +250,7 @@ function openChildPage (pageName: string) {
 .followed {
   color: rgb(var(--pink));
   font-size: 0.875rem;
+  line-height: 1.25;
 }
 
 .bottom {

@@ -128,7 +128,7 @@ function removeThisPost (uri: string) {
   display: flex;
   flex-direction: column;
   &:not(:empty):not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
   }
 }
 </style>
