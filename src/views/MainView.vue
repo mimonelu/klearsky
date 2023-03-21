@@ -322,7 +322,7 @@ function closeSendPostPopup (done: boolean) {
     min-width: $main-menu-min-width;
     max-width: $main-menu-min-width;
   }
-  @media not (max-width: $max-width-with-scrollbar) {
+  @media not all and (max-width: $max-width-with-scrollbar) {
     min-width: $menu-max-width;
     max-width: $menu-max-width;
   }
@@ -353,7 +353,7 @@ function closeSendPostPopup (done: boolean) {
   @media (max-width: 1024px) {
     display: none;
   }
-  @media not (max-width: 1024px) {
+  @media not all and (max-width: 1024px) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
     flex-grow: 1;
     max-width: $menu-max-width;
