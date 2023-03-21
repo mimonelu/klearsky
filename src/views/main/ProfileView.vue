@@ -63,7 +63,7 @@ function openPostMenu () {
 function translateText () {
   blurElement()
   const language = window.navigator.language
-  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${mainState.currentProfile?.description}&op=translate`)
+  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(mainState.currentProfile?.description)}&op=translate`)
   state.postMenuDisplay = false
 }
 
