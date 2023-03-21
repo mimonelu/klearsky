@@ -16,7 +16,7 @@ const tagString = "[^\\s\\(\\)\\[\\]]"
 const pattern: { [k: string]: string } = {
   url: `(${protocol}${urlString}+)`,
   tag: `(^|\\s)(#${tagString}+)`,
-  mention: `(^|\\s)(@[\\w\\.]+)`,
+  mention: `(^|\\s)(@[\\w\\-]+\\.[\\w\\-\\.]+)`,
 }
 
 const regex: { [k: string]: RegExp } = {
