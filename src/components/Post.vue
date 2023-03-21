@@ -555,6 +555,10 @@ function openSource () {
   grid-template-columns: 1fr 1fr 1fr 2fr;
   align-items: center;
   margin-top: 0.5em;
+
+  & > div:not(:last-child) {
+    min-width: 6em;
+  }
 }
 
 .repost_count {
