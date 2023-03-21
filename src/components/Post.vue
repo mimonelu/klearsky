@@ -219,6 +219,7 @@ function openSource () {
         <div
           v-if="post.embed?.images"
           class="images"
+          :data-number-of-images="post.embed?.images.length"
         >
           <a
             v-for="image of post.embed.images"
@@ -492,18 +493,18 @@ function openSource () {
   display: grid;
   grid-gap: 1px;
   overflow: hidden;
-  &:has(:nth-child(2)) {
+  &[data-number-of-images="2"] {
     grid-template-areas: "a b";
     & > .image:nth-child(1) { grid-area: a; }
     & > .image:nth-child(2) { grid-area: b; }
   }
-  &:has(:nth-child(3)) {
+  &[data-number-of-images="3"] {
     grid-template-areas: "a b" "a c";
     & > .image:nth-child(1) { grid-area: a; }
     & > .image:nth-child(2) { grid-area: b; }
     & > .image:nth-child(3) { grid-area: c; }
   }
-  &:has(:nth-child(4)) {
+  &[data-number-of-images="4"] {
     grid-template-areas: "a b" "c d";
     & > .image:nth-child(1) { grid-area: a; }
     & > .image:nth-child(2) { grid-area: b; }
