@@ -32,7 +32,7 @@ async function openPostThread (uri: string) {
 
 function formatDate (date?: string): string {
   if (date == null) return ""
-  return format(new Date(date), "MM/dd HH:mm:ss")
+  return format(new Date(date), "MM/dd HH:mm")
 }
 </script>
 
@@ -108,6 +108,6 @@ function formatDate (date?: string): string {
 .text {
   line-height: 1.5;
   white-space: pre-wrap;
-  word-break: break-all;
+  word-break: break-word;
 }
 </style>

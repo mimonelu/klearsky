@@ -46,6 +46,6 @@ function close () {
   padding: 1rem;
   user-select: text;
   white-space: pre-wrap;
-  word-break: break-all;
+  word-break: break-word;
 }
 </style>

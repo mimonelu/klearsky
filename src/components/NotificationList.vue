@@ -68,7 +68,7 @@ async function openProfile (handle: string) {
 }
 
 function formatDate (dateString: string): string {
-  return format(new Date(dateString), "MM/dd HH:mm:ss")
+  return format(new Date(dateString), "MM/dd HH:mm")
 }
 </script>
 
@@ -105,7 +105,7 @@ function formatDate (dateString: string): string {
 .notification {
   cursor: pointer;
   display: grid;
-  grid-template-columns: min-content min-content max-content auto max-content;
+  grid-template-columns: min-content min-content auto 1fr max-content;
   align-items: center;
   grid-gap: 0.5rem;
   overflow: hidden;

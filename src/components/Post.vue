@@ -32,7 +32,7 @@ const state = reactive<{
 const router = useRouter()
 
 function formatDate (date: string): string {
-  return format(new Date(date), "MM/dd HH:mm:ss")
+  return format(new Date(date), "MM/dd HH:mm")
 }
 
 async function openPost (uri: string) {
@@ -384,6 +384,7 @@ function openSource () {
     color: rgb(var(--green));
     cursor: pointer;
     font-size: 0.875em;
+    line-height: 1.25;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -392,6 +393,7 @@ function openSource () {
   &__handle {
     color: rgba(var(--green), 0.5);
     font-size: 0.75em;
+    line-height: 1.25;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -418,7 +420,7 @@ function openSource () {
   grid-area: h;
   display: grid;
   align-items: baseline;
-  grid-template-columns: max-content auto min-content;
+  grid-template-columns: auto 1fr min-content;
   grid-gap: 0.5em;
   overflow: hidden;
 }
@@ -428,6 +430,7 @@ function openSource () {
   cursor: pointer;
   font-size: 0.875em;
   font-weight: bold;
+  line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -436,6 +439,7 @@ function openSource () {
 .handle {
   color: rgba(var(--fg-color), 0.5);
   font-size: 0.75em;
+  line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -450,7 +454,7 @@ function openSource () {
 .text {
   line-height: 1.375;
   white-space: pre-wrap;
-  word-break: break-all;
+  word-break: break-word;
   &:empty {
     display: contents;
   }

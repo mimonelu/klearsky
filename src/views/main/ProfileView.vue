@@ -225,12 +225,14 @@ function openChildPage (pageName: string) {
 
 .display-name {
   font-size: 2rem;
+  line-height: 1.25;
   word-break: break-all;
 }
 
 .handle {
   color: rgba(var(--fg-color), 0.75);
   font-size: 0.875rem;
+  line-height: 1.25;
   word-break: break-all;
 }
 
@@ -259,7 +261,7 @@ function openChildPage (pageName: string) {
 .description {
   line-height: 1.5;
   white-space: pre-wrap;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .statistics {
