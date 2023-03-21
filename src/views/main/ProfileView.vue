@@ -1,13 +1,20 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, reactive } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import type { LocationQueryValue } from "vue-router"
 import format from "date-fns/format"
+import MenuTicker from "@/components/MenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import displayJson from "@/composables/display-json"
 import { blurElement } from "@/composables/misc"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  postMenuDisplay: boolean;
+}>({
+  postMenuDisplay: false,
+})
 
 const router = useRouter()
 
@@ -46,6 +53,24 @@ async function toggleFollow () {
 
 function getIndexedAt (indexedAt?: null | string): string {
   return indexedAt == null ? "" : format(new Date(indexedAt), "yyyy/MM/dd")
+}
+
+function openPostMenu () {
+  blurElement()
+  state.postMenuDisplay = !state.postMenuDisplay
+}
+
+function translateText () {
+  blurElement()
+  const language = window.navigator.language
+  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${mainState.currentProfile?.description}&op=translate`)
+  state.postMenuDisplay = false
+}
+
+function copyText () {
+  blurElement()
+  navigator.clipboard.writeText(mainState.currentProfile?.description as string)
+  state.postMenuDisplay = false
 }
 
 function openSource () {
@@ -142,10 +167,24 @@ function openChildPage (pageName: string) {
             <dd>{{ getIndexedAt(mainState.currentProfile?.indexedAt) }}</dd>
           </dl>
           <button
-            class="icon-button source"
-            @click.stop="openSource"
+            class="menu-button"
+            @click.stop="openPostMenu"
           >
-            <SVGIcon name="json" />
+            <SVGIcon name="menu" />
+            <MenuTicker v-if="state.postMenuDisplay">
+              <button @click.stop="translateText">
+                <SVGIcon name="translate" />
+                <span>{{ $t("translate") }}</span>
+              </button>
+              <button @click.stop="copyText">
+                <SVGIcon name="clipboard" />
+                <span>{{ $t("copyPostText") }}</span>
+              </button>
+              <button @click.stop="openSource">
+                <SVGIcon name="json" />
+                <span>{{ $t("showSource") }}</span>
+              </button>
+            </MenuTicker>
           </button>
         </div>
       </div>
@@ -176,14 +215,7 @@ function openChildPage (pageName: string) {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-}
-
-.details {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-  display: flex;
-  flex-direction: column;
-  grid-gap: 1rem;
-  padding: 1rem;
+  position: relative;
 }
 
 .banner {
@@ -203,6 +235,14 @@ function openChildPage (pageName: string) {
     object-fit: cover;
     width: 100%;
   }
+}
+
+.details {
+  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+  padding: 1rem;
 }
 
 .top {
@@ -270,6 +310,8 @@ function openChildPage (pageName: string) {
   display: flex;
   flex-wrap: wrap;
   grid-gap: 0.5rem 1rem;
+  padding-right: 2rem;
+  position: relative;
 
   dl {
     display: flex;
@@ -294,8 +336,29 @@ function openChildPage (pageName: string) {
 
 .indexed-at {}
 
-.source {
-  margin-left: auto;
+.menu-button {
+  cursor: pointer;
+  margin: -1rem;
+  padding: 1rem;
+  position: absolute;
+  bottom: 0rem;
+  right: 0;
+
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.5);
+  }
+  &:focus, &:hover {
+    & > .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
+  }
+
+  .menu-ticker:deep() {
+    .menu-ticker--inner {
+      top: 0;
+      right: 3em;
+    }
+  }
 }
 
 .feed-list,
