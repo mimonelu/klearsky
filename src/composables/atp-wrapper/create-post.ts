@@ -47,12 +47,24 @@ export default async function (
 
   // TODO:
   if (params.url?.length > 0) {
+    const response = await fetch(
+      `https://mimonelu.net:4649/${params.url}`,
+      { headers: { "user-agent": "Klearsky" } }
+    )
+    const htmlString: string = await response.text()
+    const parser = new DOMParser()
+    const html = parser.parseFromString(htmlString, "text/html")
+    const titleElement = html.querySelector("title")
+    const descriptionElement = html.querySelector("meta[name='description']")
+    const title = titleElement?.innerHTML ?? ""
+    const description = descriptionElement?.getAttribute("content") ?? ""
+
     record.embed = {
       $type: "app.bsky.embed.external",
       external: {
         uri: params.url,
-        title: "",
-        description: "",
+        title,
+        description,
       },
     }
   }
