@@ -104,8 +104,8 @@ function openChildPage (pageName: string) {
           </a>
         </div>
         <div class="right">
-          <div class="display-name">{{ mainState.currentProfile?.displayName }}</div>
-          <div class="handle">{{ mainState.currentProfile?.handle }}</div>
+          <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
+          <div class="handle">{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</div>
           <div class="right-bottom">
             <RouterLink
               v-if="isUserProfile()"
@@ -135,7 +135,7 @@ function openChildPage (pageName: string) {
       <div class="bottom">
         <div
           class="description"
-          v-html="mainState.currentProfile?.__descriptionHtml ?? ''"
+          v-html="mainState.currentProfile?.__descriptionHtml ?? '&nbsp;'"
         />
         <div class="statistics">
           <dl class="posts-count">
