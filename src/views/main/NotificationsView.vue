@@ -92,8 +92,13 @@ function openChildPage (pageName: string) {
 }
 
 .tab {
-  .tab-button,
-  .tab-button--outline {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  & > .tab-button,
+  & > .tab-button--outline {
+    background-color: rgb(var(--bg-color));
     border-right-style: none;
   }
 }

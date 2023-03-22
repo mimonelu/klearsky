@@ -40,6 +40,16 @@ function openChildPage (pageName: string) {
   }
 }
 
+.tab {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  &-button {
+    background-color: rgb(var(--bg-color));
+  }
+}
+
 .child-view {
   display: flex;
   flex-direction: column;
