@@ -13,6 +13,7 @@ import type {
   RouteLocationNormalized,
   RouteRecordName
 } from "vue-router"
+import ImagePopup from "@/components/ImagePopup.vue"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
 import MainMenu from "@/components/MainMenu.vue"
@@ -47,11 +48,18 @@ const state = reactive<MainState>({
   notifications: [],
   notificationCursor: undefined,
   processing: false,
+
   sendPostPopupProps: {
     visibility: false,
     type: "post",
     post: undefined,
   },
+
+  imagePopupProps: {
+    display: false,
+    uri: "",
+  },
+
   fetchUserProfile,
   fetchCurrentProfile,
   fetchCurrentAuthorFeed,
@@ -283,6 +291,11 @@ function closeSendPostPopup (done: boolean) {
         <SubMenu />
       </div>
     </div>
+    <ImagePopup
+      v-if="state.imagePopupProps.display"
+      :uri="state.imagePopupProps.uri"
+      @close="state.imagePopupProps.display = false"
+    />
     <SendPostPopup
       v-if="state.sendPostPopupProps.visibility"
       :type="state.sendPostPopupProps.type"

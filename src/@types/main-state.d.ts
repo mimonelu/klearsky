@@ -34,6 +34,11 @@ type MainState = {
     post?: TTPost
   }
 
+  imagePopupProps: {
+    display: boolean
+    uri: string
+  }
+
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>
   fetchCurrentAuthorFeed: (direction: "new" | "old") => Promise<void>

@@ -30,6 +30,11 @@ function isFollowed (): boolean {
   return mainState.currentProfile?.viewer?.followedBy != null
 }
 
+function openImagePopup (uri: string) {
+  mainState.imagePopupProps.uri = uri
+  mainState.imagePopupProps.display = true
+}
+
 async function toggleFollow () {
   if (mainState.currentProfile == null) return
   blurElement()
@@ -76,32 +81,28 @@ function openChildPage (pageName: string) {
 
 <template>
   <div class="profile-view">
-    <a
+    <div
       class="banner"
-      :href="mainState.currentProfile?.banner"
-      rel="noreferrer"
-      target="_blank"
       :data-has-banner="!!mainState.currentProfile?.banner"
+      @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
     >
       <img
         loading="lazy"
         :src="mainState.currentProfile?.banner ?? '/img/void.png'"
       >
-    </a>
+    </div>
     <div class="details">
       <div class="top">
         <div class="left">
-          <a
+          <div
             class="avatar"
-            :href="mainState.currentProfile?.avatar"
-            rel="noreferrer"
-            target="_blank"
+            @click="openImagePopup(mainState.currentProfile?.avatar ?? '')"
           >
             <img
               loading="lazy"
               :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
             >
-          </a>
+          </div>
         </div>
         <div class="right">
           <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
@@ -337,8 +338,9 @@ function openChildPage (pageName: string) {
   top: 0;
   z-index: 1;
 
-  &-button {
+  & > .tab-button {
     background-color: rgb(var(--bg-color));
+    border-right-style: none;
   }
 }
 

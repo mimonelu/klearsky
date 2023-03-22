@@ -43,6 +43,11 @@ async function openProfile (handle: string) {
   await router.push({ name: "profile-post", query: { handle } })
 }
 
+function openImagePopup (uri: string) {
+  mainState.imagePopupProps.uri = uri
+  mainState.imagePopupProps.display = true
+}
+
 async function reply () {
   blurElement()
   const done = await mainState.openSendPostPopup("reply", props.post)
@@ -198,20 +203,17 @@ function removeThisPost (uri: string) {
           class="images"
           :data-number-of-images="post.embed?.images.length"
         >
-          <a
+          <div
             v-for="image of post.embed.images"
             class="image"
-            :href="image.fullsize"
-            rel="noreferrer"
-            target="_blank"
-            @click.stop="blurElement"
+            @click.stop="openImagePopup(image.fullsize)"
           >
             <img
               loading="lazy"
               :src="image.thumb ?? '/img/void.png'"
               :alt="image.alt"
             />
-          </a>
+          </div>
         </div>
         <div
           v-if="post.embed?.record"
@@ -538,6 +540,7 @@ function removeThisPost (uri: string) {
 .image {
   border: 1px solid transparent;
   border-radius: 1px;
+  cursor: pointer;
   display: block;
   overflow: hidden;
   &:focus, &:hover {
@@ -549,11 +552,6 @@ function removeThisPost (uri: string) {
     display: block;
     object-fit: cover;
     height: 100%;
-  }
-  &:focus, &:hover {
-    & > img {
-      object-fit: contain;
-    }
   }
 }
 
