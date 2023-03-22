@@ -382,6 +382,7 @@ function removeThisPost (uri: string) {
 
   & > .svg-icon {
     fill: rgba(var(--accent-color), 0.75);
+    transform: scaleX(-1.0);
   }
 
   &__display-name {
