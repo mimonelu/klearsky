@@ -66,23 +66,27 @@ const easyFormProps: KEasyForm = {
   ],
 }
 
-onMounted(async () => {
+onMounted(setDefaultValues)
+
+async function setDefaultValues () {
   state.processing = true
   if (!mainState.mounted) await waitProp(() => mainState.mounted, true)
   state.displayName = mainState.userProfile?.displayName ?? ""
   state.description = mainState.userProfile?.description ?? ""
   state.processing = false
-})
+}
 
 async function submit () {
   blurElement()
   if (state.processing) return
   state.processing = true
   try {
-    await mainState.updateUserProfile(state)
+    await mainState.updateUserProfile(state as UpdateProfileParams)
+    const handle = mainState.atp.session?.handle
+    await mainState.fetchCurrentProfile(handle)
     await router.push({
       name: "profile-post",
-      query: { handle: mainState.atp.session?.handle }
+      query: { handle }
     })
   } finally {
     state.processing = false

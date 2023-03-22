@@ -37,7 +37,9 @@ async function toggleFollow () {
   mainState.processing = true
   try {
     if (isFollowing()) {
-      await mainState.atp.deleteFollow(mainState.currentProfile.viewer.following as string)
+      await mainState.atp.deleteFollow(
+        mainState.currentProfile.viewer.following as string
+      )
     } else {
       await mainState.atp.createFollow(
         mainState.currentProfile.did,
@@ -45,7 +47,7 @@ async function toggleFollow () {
       )
     }
     const handle = mainState.currentQuery.handle as LocationQueryValue
-    await mainState.fetchCurrentProfile(handle)
+    if (handle != null) await mainState.fetchCurrentProfile(handle)
   } finally {
     mainState.processing = false
   }

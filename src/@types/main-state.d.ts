@@ -28,14 +28,14 @@ type MainState = {
     type: "post" | "reply" | "quoteRepost"
     post?: Post
   }
-  fetchUserProfile: Function
-  fetchCurrentProfile: Function
-  fetchCurrentAuthorFeed: Function
-  fetchTimeline: Function
-  fetchPostThread: Function
-  fetchNotifications: Function
-  fetchFollowers: Function
-  fetchFollowings: Function
-  updateUserProfile: Function
-  openSendPostPopup: Function
+  fetchUserProfile: () => Promise<void>
+  fetchCurrentProfile: (handle: string) => Promise<void>
+  fetchCurrentAuthorFeed: (direction: "new" | "old") => Promise<void>
+  fetchTimeline: (direction: "old" | "new") => Promise<void>
+  fetchPostThread: () => Promise<void>
+  fetchNotifications: (direction: "new" | "old") => Promise<void>
+  fetchFollowers: (direction: "new" | "old") => Promise<void>
+  fetchFollowings: (direction: "new" | "old") => Promise<void>
+  updateUserProfile: (profile: UpdateProfileParams) => Promise<void>
+  openSendPostPopup: (type: "post" | "reply" | "quoteRepost", post?: Post) => Promise<boolean>
 }
