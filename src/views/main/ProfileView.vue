@@ -3,17 +3,16 @@ import { inject, reactive } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import type { LocationQueryValue } from "vue-router"
 import format from "date-fns/format"
-import MenuTicker from "@/components/MenuTicker.vue"
+import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import displayJson from "@/composables/display-json"
 import { blurElement } from "@/composables/misc"
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  postMenuDisplay: boolean;
+  profileMenuDisplay: boolean;
 }>({
-  postMenuDisplay: false,
+  profileMenuDisplay: false,
 })
 
 const router = useRouter()
@@ -59,24 +58,11 @@ function getIndexedAt (indexedAt?: null | string): string {
 
 function openPostMenu () {
   blurElement()
-  state.postMenuDisplay = !state.postMenuDisplay
+  state.profileMenuDisplay = !state.profileMenuDisplay
 }
 
-function translateText () {
-  blurElement()
-  const language = window.navigator.language
-  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(mainState.currentProfile?.description ?? "")}&op=translate`)
-  state.postMenuDisplay = false
-}
-
-function copyText () {
-  blurElement()
-  navigator.clipboard.writeText(mainState.currentProfile?.description as string)
-  state.postMenuDisplay = false
-}
-
-function openSource () {
-  displayJson(mainState.currentProfile)
+function closePostMenu () {
+  state.profileMenuDisplay = false
 }
 
 function openChildPage (pageName: string) {
@@ -173,20 +159,13 @@ function openChildPage (pageName: string) {
             @click.stop="openPostMenu"
           >
             <SVGIcon name="menu" />
-            <MenuTicker v-if="state.postMenuDisplay">
-              <button @click.stop="translateText">
-                <SVGIcon name="translate" />
-                <span>{{ $t("translate") }}</span>
-              </button>
-              <button @click.stop="copyText">
-                <SVGIcon name="clipboard" />
-                <span>{{ $t("copyPostText") }}</span>
-              </button>
-              <button @click.stop="openSource">
-                <SVGIcon name="json" />
-                <span>{{ $t("showSource") }}</span>
-              </button>
-            </MenuTicker>
+            <PostAndProfileMenuTicker
+              v-if="state.profileMenuDisplay"
+              :translateText="mainState.currentProfile?.description"
+              :copyText="mainState.currentProfile?.description"
+              :openSource="mainState.currentProfile"
+              @close="closePostMenu"
+            />
           </button>
         </div>
       </div>
@@ -251,8 +230,6 @@ function openChildPage (pageName: string) {
   display: flex;
   grid-gap: 1rem;
 }
-
-.left {}
 
 .avatar {
   @include avatar-link(6rem);
@@ -329,14 +306,6 @@ function openChildPage (pageName: string) {
     }
   }
 }
-
-.follows-count {}
-
-.followers-count {}
-
-.posts-count {}
-
-.indexed-at {}
 
 .menu-button {
   cursor: pointer;

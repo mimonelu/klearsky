@@ -5,8 +5,8 @@ import format from "date-fns/format"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
+import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import displayJson from "@/composables/display-json"
 import { blurElement } from "@/composables/misc"
 
 const emit = defineEmits<{(event: string, params: any): void}>()
@@ -127,34 +127,12 @@ function openPostMenu () {
   state.postMenuDisplay = !state.postMenuDisplay
 }
 
-function translateText () {
-  blurElement()
-  const language = window.navigator.language
-  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(props.post.record.text as string)}&op=translate`)
+function closePostMenu () {
   state.postMenuDisplay = false
 }
 
-function copyText () {
-  blurElement()
-  navigator.clipboard.writeText(props.post.record.text)
-  state.postMenuDisplay = false
-}
-
-async function deletePost () {
-  state.processing = true
-  try {
-    await mainState.atp.deletePost(props.post.uri)
-    emit("removeThisPost", props.post.uri)
-  } finally {
-    state.processing = false
-    state.postMenuDisplay = false
-  }
-}
-
-function openSource () {
-  blurElement()
-  displayJson(props.post)
-  state.postMenuDisplay = false
+function removeThisPost (uri: string) {
+  emit("removeThisPost", uri)
 }
 </script>
 
@@ -297,27 +275,17 @@ function openSource () {
               @click.stop="openPostMenu"
             >
               <SVGIcon name="menu" />
-              <MenuTicker v-if="state.postMenuDisplay">
-                <button @click.stop="translateText">
-                  <SVGIcon name="translate" />
-                  <span>{{ $t("translate") }}</span>
-                </button>
-                <button @click.stop="copyText">
-                  <SVGIcon name="clipboard" />
-                  <span>{{ $t("copyPostText") }}</span>
-                </button>
-                <button
-                  v-if="post.author.did === mainState.atp.session.did"
-                  @click.stop="deletePost"
-                >
-                  <SVGIcon name="remove" />
-                  <span>{{ $t("deletePost") }}</span>
-                </button>
-                <button @click.stop="openSource">
-                  <SVGIcon name="json" />
-                  <span>{{ $t("showSource") }}</span>
-                </button>
-              </MenuTicker>
+              <PostAndProfileMenuTicker
+                v-if="state.postMenuDisplay"
+                :translateText="post.record.text"
+                :copyText="post.record.text"
+                :deletePostUri="post.author.did === mainState.atp.session.did
+                  ? post.uri
+                  : undefined"
+                :openSource="post"
+                @close="closePostMenu"
+                @removeThisPost="removeThisPost"
+              />
             </button>
           </div>
         </div>
