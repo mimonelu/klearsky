@@ -22,7 +22,7 @@
   & > div {
     animation: loader-animation 250ms ease-in-out infinite alternate-reverse;
     background-color: rgb(var(--accent-color));
-    border-radius: 50%;
+    // border-radius: 50%;
     width: 0.75em;
     height: 0.75em;
   }
