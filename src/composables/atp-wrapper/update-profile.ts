@@ -1,12 +1,12 @@
 import type { AppBskyActorUpdateProfile } from "@atproto/api"
 
 export default async function (
-  this: AbstractAtpWrapper,
-  params: UpdateProfileParams
+  this: TIAtpWrapper,
+  params: TTUpdateProfileParams
 ): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
-  const fileSchemas: Array<null | FileSchema> = await Promise.all([
+  const fileSchemas: Array<null | TTFileSchema> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
       ? this.createFileSchema(params.avatar[0], 2000, 2000)
       : null,
@@ -14,8 +14,8 @@ export default async function (
       ? this.createFileSchema(params.banner[0], 2000, 2000)
       : null,
   ])
-  const avatarSchema: null | FileSchema = fileSchemas[0]
-  const bannerSchema: null | FileSchema = fileSchemas[1]
+  const avatarSchema: null | TTFileSchema = fileSchemas[0]
+  const bannerSchema: null | TTFileSchema = fileSchemas[1]
   const profileSchema: AppBskyActorUpdateProfile.InputSchema = {
     displayName: params.displayName,
     description: params.description,

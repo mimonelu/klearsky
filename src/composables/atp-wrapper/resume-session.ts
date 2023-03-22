@@ -2,7 +2,7 @@ import type { ComAtprotoSessionGet } from "@atproto/api"
 import storage from "@/composables/storage"
 
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   newHandle?: string
 ): Promise<boolean> {
   if (this.agent == null) return false

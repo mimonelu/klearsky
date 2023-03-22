@@ -7,7 +7,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   id?: string
-  data: Array<KEasyFormItem>
+  data: Array<TTEasyFormItem>
   submitButtonLabel?: string
   submitCallback?: Function
 }>()
@@ -19,7 +19,7 @@ const state = reactive<{
 })
 
 onMounted(() => {
-  props.data.forEach((prop: KEasyFormItem, index: number) => {
+  props.data.forEach((prop: TTEasyFormItem, index: number) => {
     if (prop.focus) {
       const itemId: string = makeItemId(index)
       const itemElement: null | HTMLElement = document.getElementById(itemId)

@@ -1,20 +1,22 @@
-type CreatePostParams = {
-  type: "post" | "reply" | "quoteRepost"
-  post?: Post
+type TTPostType = "post" | "reply" | "quoteRepost"
+
+type TTCreatePostParams = {
+  type: TTPostType
+  post?: TTPost
   text: string
   url: string
   images: Array<File>
   alts: Array<string>
 }
 
-type UpdateProfileParams = {
+type TTUpdateProfileParams = {
   displayName: string
   description: string
   avatar: null | Array<File>
   banner: null | Array<File>
 }
 
-interface AbstractAtpWrapper {
+interface TIAtpWrapper {
   service: null | string
   agent: null | AtpAgentstring
   session: null | AtpSessionDatastring
@@ -25,100 +27,103 @@ interface AbstractAtpWrapper {
     }
   }
 
-  canLogin(this: AbstractAtpWrapper): boolean
-  createAgent(this: AbstractAtpWrapper): boolean
+  canLogin(this: TIAtpWrapper): boolean
+  createAgent(this: TIAtpWrapper): boolean
   createFileSchema(
-    this: AbstractAtpWrapper,
+    this: TIAtpWrapper,
     file: File,
     maxWidth: number,
     maxHeight: number
-  ): Promise<null | FileSchema>
+  ): Promise<null | TTFileSchema>
   createFollow(
-    this: AbstractAtpWrapper,
+    this: TIAtpWrapper,
     did: string,
     declarationCid: string
   ): Promise<boolean>
   createPost(
-    this: AbstractAtpWrapper,
-    params: CreatePostParams
+    this: TIAtpWrapper,
+    params: TTCreatePostParams
   ): Promise<boolean>
-  createRepost(this: AbstractAtpWrapper, post?: Post): Promise<boolean>
-  deleteFollow(this: AbstractAtpWrapper, uri: string): Promise<boolean>
-  deletePost(this: AbstractAtpWrapper, uri: string): Promise<boolean>
-  deleteRepost(this: AbstractAtpWrapper, uri: string): Promise<boolean>
+  createRepost(this: TIAtpWrapper, post?: TTPost): Promise<boolean>
+  deleteFollow(this: TIAtpWrapper, uri: string): Promise<boolean>
+  deletePost(this: TIAtpWrapper, uri: string): Promise<boolean>
+  deleteRepost(this: TIAtpWrapper, uri: string): Promise<boolean>
   fetchAuthorFeed(
-    this: AbstractAtpWrapper,
-    oldFeeds: Array<Feed>,
+    this: TIAtpWrapper,
+    oldFeeds: Array<TTFeed>,
     author: string,
     limit?: number,
     cursor?: string
   ): Promise<null | {
-    feeds: Array<Feed>
+    feeds: Array<TTFeed>
     cursor?: string
   }>
   fetchFollowings(
-    this: AbstractAtpWrapper,
-    users: Array<Follower> | Array<Following>,
+    this: TIAtpWrapper,
+    users: Array<TTUser> | Array<TTUser>,
     handle: string,
     limit?: number,
     before?: string
   ): Promise<undefined | string>
   fetchFollowers(
-    this: AbstractAtpWrapper,
-    users: Array<Follower> | Array<Following>,
+    this: TIAtpWrapper,
+    users: Array<TTUser> | Array<TTUser>,
     handle: string,
     limit?: number,
     before?: string
   ): Promise<undefined | string>
   fetchKeywordSearch(
-    this: AbstractAtpWrapper,
+    this: TIAtpWrapper,
     query: string
   ): Promise<undefined | any>
   fetchNotifications(
-    this: AbstractAtpWrapper,
-    values: Array<KNotification>,
+    this: TIAtpWrapper,
+    values: Array<TTNotification>,
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
-  fetchProfile(this: AbstractAtpWrapper, actor: string): Promise<null | Profile>
+  fetchProfile(
+    this: TIAtpWrapper,
+    actor: string
+  ): Promise<null | TTProfile>
   fetchPostThread(
-    this: AbstractAtpWrapper,
+    this: TIAtpWrapper,
     uri: string,
     depth?: number
-  ): Promise<null | Array<Feed>>
+  ): Promise<null | Array<TTFeed>>
   fetchTimeline(
-    this: AbstractAtpWrapper,
-    oldFeeds: Array<Feed>,
+    this: TIAtpWrapper,
+    oldFeeds: Array<TTFeed>,
     limit?: number,
     cursor?: string
   ): Promise<null | {
-    feeds: Array<Feed>
+    feeds: Array<TTFeed>
     cursor?: string
   }>
   fetchUserSearch(
-    this: AbstractAtpWrapper,
-    users: Array<User>,
+    this: TIAtpWrapper,
+    users: Array<TTUser>,
     term: string,
     limit?: number,
     before?: string
   ): Promise<undefined | string>
-  hasLogin(this: AbstractAtpWrapper): boolean
+  hasLogin(this: TIAtpWrapper): boolean
   login(
-    this: AbstractAtpWrapper,
+    this: TIAtpWrapper,
     service?: string,
     identifier?: string,
     password?: string
   ): Promise<boolean>
-  logout(this: AbstractAtpWrapper)
-  resumeSession(this: AbstractAtpWrapper, handle?: string): Promise<boolean>
+  logout(this: TIAtpWrapper)
+  resumeSession(this: TIAtpWrapper, handle?: string): Promise<boolean>
   saveServiceAndHandle(service: string, handle: string)
-  setService(this: AbstractAtpWrapper, service?: string)
+  setService(this: TIAtpWrapper, service?: string)
   updateProfile(
-    this: AbstractAtpWrapper,
-    params: UpdateProfileParams
+    this: TIAtpWrapper,
+    params: TTUpdateProfileParams
   ): Promise<boolean>
   updateVote(
-    this: AbstractAtpWrapper,
+    this: TIAtpWrapper,
     uri: string,
     cid: string,
     direction: "none" | "up" | "down"

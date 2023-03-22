@@ -1,7 +1,7 @@
 import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   post?: any
 ): Promise<boolean> {
   if (this.agent == null) return false

@@ -26,7 +26,7 @@ const state = reactive<{
 
 const router = useRouter()
 
-const easyFormProps: KEasyForm = {
+const easyFormProps: TTEasyForm = {
   submitButtonLabel: $t("apply"),
   submitCallback: submit,
   data: [
@@ -81,7 +81,7 @@ async function submit () {
   if (state.processing) return
   state.processing = true
   try {
-    await mainState.updateUserProfile(state as UpdateProfileParams)
+    await mainState.updateUserProfile(state as TTUpdateProfileParams)
     const handle = mainState.atp.session?.handle
     await mainState.fetchCurrentProfile(handle)
     await router.push({

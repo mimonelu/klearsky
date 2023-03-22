@@ -1,8 +1,8 @@
 import type { AppBskyActorSearch } from "@atproto/api"
 
 export default async function (
-  this: AbstractAtpWrapper,
-  users: Array<User>,
+  this: TIAtpWrapper,
+  users: Array<TTUser>,
   term: string,
   limit?: number,
   before?: string
@@ -18,9 +18,9 @@ export default async function (
   console.log("[klearsky/fetchUserSearch]", response)
   if (!response.success) return
 
-  const newUsers: Array<User> = []
-  ;(response.data.users as Array<User>).forEach((target: User) => {
-    if (!users.some((user: Follower) => user.did === target.did))
+  const newUsers: Array<TTUser> = []
+  ;(response.data.users as Array<TTUser>).forEach((target: TTUser) => {
+    if (!users.some((user: TTUser) => user.did === target.did))
       newUsers.push(target)
   })
   if (before == null) users.unshift(...newUsers)

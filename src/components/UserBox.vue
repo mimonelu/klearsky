@@ -3,7 +3,7 @@ import { useRouter } from "vue-router"
 import { blurElement } from "@/composables/misc"
 
 defineProps<{
-  user: User
+  user: TTUser
 }>()
 
 const router = useRouter()

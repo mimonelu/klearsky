@@ -7,12 +7,12 @@ import {
 } from "@/composables/atp-wrapper/services"
 
 export default async function (
-  this: AbstractAtpWrapper,
-  oldFeeds: Array<Feed>,
+  this: TIAtpWrapper,
+  oldFeeds: Array<TTFeed>,
   limit?: number,
   cursor?: string
 ): Promise<null | {
-  feeds: Array<Feed>
+  feeds: Array<TTFeed>
   cursor?: string
 }> {
   if (this.agent == null) return null
@@ -30,9 +30,9 @@ export default async function (
   if (!response.success) return null
 
   // TODO:
-  injectReason(response.data.feed as Array<Feed>)
-  text2htmlAtFeeds(response.data.feed as Array<Feed>)
-  const newFeeds = mergeFeeds(oldFeeds, response.data.feed as Array<Feed>)
+  injectReason(response.data.feed as Array<TTFeed>)
+  text2htmlAtFeeds(response.data.feed as Array<TTFeed>)
+  const newFeeds = mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
   sortFeeds(newFeeds)
 
   return {

@@ -1,7 +1,7 @@
 import type { AppBskyFeedSetVote } from "@atproto/api"
 
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   uri: string,
   cid: string,
   direction: "none" | "up" | "down"

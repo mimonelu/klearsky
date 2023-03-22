@@ -8,8 +8,8 @@ import { blurElement } from "@/composables/misc"
 const emit = defineEmits<{(event: string, done: boolean): void}>()
 
 const props = defineProps<{
-  type: "post" | "reply" | "quoteRepost";
-  post?: Post;
+  type: TTPostType;
+  post?: TTPost;
 }>()
 
 const $t = inject("$t") as Function
@@ -28,11 +28,11 @@ const state = reactive<{
   alts: [],
 })
 
-const easyFormProps: KEasyForm = {
+const easyFormProps: TTEasyForm = {
   submitButtonLabel: $t("submit"),
   submitCallback,
   data: (() => {
-    const result: Array<KEasyFormItem> = [
+    const result: Array<TTEasyFormItem> = [
       {
         state,
         model: "text",
@@ -99,7 +99,7 @@ async function submitCallback () {
         v-if="type === 'reply' || type === 'quoteRepost'"
         type="post"
         mode="preview"
-        :post="post as Post"
+        :post="post as TTPost"
       />
       <EasyForm v-bind="easyFormProps">
         <template v-slot:after>

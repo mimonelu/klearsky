@@ -1,8 +1,8 @@
 import type { AppBskyNotificationList } from "@atproto/api"
 
 export default async function (
-  this: AbstractAtpWrapper,
-  values: Array<KNotification>,
+  this: TIAtpWrapper,
+  values: Array<TTNotification>,
   limit?: number,
   cursor?: string
 ): Promise<undefined | string> {
@@ -18,8 +18,8 @@ export default async function (
 
   response.data.notifications.forEach(
     (notification: AppBskyNotificationList.Notification) => {
-      const existence: undefined | KNotification = values.find(
-        (value: KNotification) => {
+      const existence: undefined | TTNotification = values.find(
+        (value: TTNotification) => {
           return value.cid === notification.cid
         }
       )
@@ -39,7 +39,7 @@ export default async function (
     }
   )
 
-  values.sort((a: KNotification, b: KNotification) => {
+  values.sort((a: TTNotification, b: TTNotification) => {
     const aIndexedAt = new Date(a.indexedAt)
     const bIndexedAt = new Date(b.indexedAt)
     return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0

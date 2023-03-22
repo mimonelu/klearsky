@@ -2,8 +2,8 @@ import type { AppBskyEmbedImages, AppBskyFeedPost } from "@atproto/api"
 import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
 export default async function (
-  this: AbstractAtpWrapper,
-  params: CreatePostParams
+  this: TIAtpWrapper,
+  params: TTCreatePostParams
 ): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
@@ -19,7 +19,7 @@ export default async function (
   }
 
   // TODO:
-  const entities: Array<Entity> = []
+  const entities: Array<TTEntity> = []
   const entityRegExps: { [k: string]: RegExp } = {
     // mention: new RegExp("(?:^|\\s)(@[\\w\\.\\-]+)", "g"),
     // hashtag: new RegExp("(?:^|\\s)(#\\w+)", "g"),
@@ -57,8 +57,8 @@ export default async function (
     }
   }
 
-  const fileSchemas: Array<null | FileSchema> = await Promise.all(
-    params.images.map((file: File): Promise<null | FileSchema> => {
+  const fileSchemas: Array<null | TTFileSchema> = await Promise.all(
+    params.images.map((file: File): Promise<null | TTFileSchema> => {
       return this.createFileSchema(file, 2000, 2000)
     })
   )
@@ -66,7 +66,7 @@ export default async function (
     const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileSchemas
       .map(
         (
-          fileSchema: null | FileSchema,
+          fileSchema: null | TTFileSchema,
           index: number
         ): null | AppBskyEmbedImages.Image => {
           return fileSchema == null

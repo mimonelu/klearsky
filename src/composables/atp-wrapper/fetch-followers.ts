@@ -1,8 +1,8 @@
 import type { AppBskyGraphGetFollowers } from "@atproto/api"
 
 export default async function (
-  this: AbstractAtpWrapper,
-  users: Array<Follower>,
+  this: TIAtpWrapper,
+  users: Array<TTUser>,
   handle: string,
   limit?: number,
   before?: string
@@ -16,9 +16,9 @@ export default async function (
     await this.agent.api.app.bsky.graph.getFollowers(query)
   console.log("[klearsky/fetchFollowers]", response)
   if (!response.success) return undefined
-  ;(response.data.followers as Array<Follower>).forEach(
-    (follower: Follower) => {
-      if (!users.some((user: Follower) => user.did === follower.did))
+  ;(response.data.followers as Array<TTUser>).forEach(
+    (follower: TTUser) => {
+      if (!users.some((user: TTUser) => user.did === follower.did))
         users.push(follower)
     }
   )

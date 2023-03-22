@@ -28,8 +28,8 @@ import updateProfile from "@/composables/atp-wrapper/update-profile"
 import updateVote from "@/composables/atp-wrapper/update-vote"
 
 // @ts-ignore // TODO:
-class AtpWrapper implements AbstractAtpWrapper {
-  contsructor(this: AbstractAtpWrapper) {
+class AtpWrapper implements TIAtpWrapper {
+  contsructor(this: TIAtpWrapper) {
     this.service = null
     this.agent = null
     this.session = null
@@ -37,49 +37,49 @@ class AtpWrapper implements AbstractAtpWrapper {
   }
 }
 
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).canLogin = canLogin
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).createAgent =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).canLogin = canLogin
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).createAgent =
   createAgent
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).createFileSchema =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).createFileSchema =
   createFileSchema
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).createFollow =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).createFollow =
   createFollow
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).createPost = createPost
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).createRepost =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).createPost = createPost
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).createRepost =
   createRepost
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteFollow =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).deleteFollow =
   deleteFollow
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deletePost = deletePost
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).deleteRepost =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).deletePost = deletePost
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).deleteRepost =
   deleteRepost
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchAuthorFeed =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchAuthorFeed =
   fetchAuthorFeed
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchFollowers =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchFollowers =
   fetchFollowers
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchFollowings =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchFollowings =
   fetchFollowings
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchKeywordSearch =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchKeywordSearch =
   fetchKeywordSearch
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchNotifications =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchNotifications =
   fetchNotifications
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchPostThread =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchPostThread =
   fetchPostThread
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchProfile =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchProfile =
   fetchProfile
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchTimeline =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchTimeline =
   fetchTimeline
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).fetchUserSearch =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchUserSearch =
   fetchUserSearch
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).hasLogin = hasLogin
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).login = login
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).logout = logout
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).resumeSession =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).hasLogin = hasLogin
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).login = login
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).logout = logout
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).resumeSession =
   resumeSession
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).saveServiceAndHandle =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).saveServiceAndHandle =
   saveServiceAndHandle
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).setService = setService
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).updateProfile =
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).setService = setService
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).updateProfile =
   updateProfile
-;(AtpWrapper.prototype as unknown as AbstractAtpWrapper).updateVote = updateVote
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).updateVote = updateVote
 
 export default AtpWrapper

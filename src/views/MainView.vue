@@ -181,7 +181,7 @@ async function processPage (pageName?: null | RouteRecordName) {
 }
 
 async function fetchTimeline (direction: "old" | "new") {
-  const result: null | { feeds: Array<Feed>; cursor?: string } =
+  const result: null | { feeds: Array<TTFeed>; cursor?: string } =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
       20,
@@ -202,7 +202,7 @@ async function fetchUserProfile () {
   state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle)
 }
 
-async function updateUserProfile (profile: UpdateProfileParams) {
+async function updateUserProfile (profile: TTUpdateProfileParams) {
   state.processing = true
   try {
     await state.atp.updateProfile(profile)
@@ -223,9 +223,9 @@ async function fetchCurrentProfile (handle: string) {
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const result: null | { feeds: Array<Feed>; cursor?: string } =
+  const result: null | { feeds: Array<TTFeed>; cursor?: string } =
     await state.atp.fetchAuthorFeed(
-      state.currentFeeds as Array<Feed>,
+      state.currentFeeds as Array<TTFeed>,
       handle,
       10,
       direction === "old" ? state.currentCursor : undefined
@@ -256,7 +256,7 @@ async function fetchNotifications (direction: "new" | "old") {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (type: "post" | "reply" | "quoteRepost", post?: Post): Promise<boolean> {
+async function openSendPostPopup (type: TTPostType, post?: TTPost): Promise<boolean> {
   state.sendPostPopupProps.visibility = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post

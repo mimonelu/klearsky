@@ -1,5 +1,5 @@
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   query: string
 ): Promise<undefined | Array<any>> {
   if (this.agent == null) return

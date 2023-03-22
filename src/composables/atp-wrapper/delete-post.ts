@@ -1,5 +1,5 @@
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   uri: string
 ): Promise<boolean> {
   if (this.agent == null) return false

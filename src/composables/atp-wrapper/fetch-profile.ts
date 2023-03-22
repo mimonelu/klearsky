@@ -2,9 +2,9 @@ import type { AppBskyActorGetProfile } from "@atproto/api"
 import text2html from "@/composables/text2html"
 
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   actor: string
-): Promise<null | Profile> {
+): Promise<null | TTProfile> {
   if (this.agent == null) return null
   if (this.session == null) return null
   const response: AppBskyActorGetProfile.Response =
@@ -15,5 +15,5 @@ export default async function (
   // TODO:
   response.data.__descriptionHtml = text2html(response.data.description ?? "")
 
-  return response.data as Profile
+  return response.data as TTProfile
 }

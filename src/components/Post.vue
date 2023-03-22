@@ -14,7 +14,7 @@ const emit = defineEmits<{(event: string, params: any): void}>()
 const props = defineProps<{
   type: "post" | "root" | "parent" | "postInPost";
   mode?: "preview";
-  post: Post;
+  post: TTPost;
 }>()
 
 const mainState = inject("state") as MainState
@@ -99,7 +99,7 @@ async function upvote () {
 }
 
 async function updateThisPost () {
-  const posts: null | Array<Feed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
+  const posts: null | Array<TTFeed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
   if (posts == null || posts.length === 0) return
   emit("updateThisPost", posts[0])
 }
@@ -220,7 +220,7 @@ function removeThisPost (uri: string) {
         >
           <Post
             type="postInPost"
-            :post="post.embed.record as Post"
+            :post="post.embed.record as TTPost"
           />
         </div>
         <div

@@ -1,7 +1,7 @@
 import { AtUri } from "@atproto/uri"
 
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   uri: string
 ): Promise<boolean> {
   const { host, rkey } = new AtUri(uri)

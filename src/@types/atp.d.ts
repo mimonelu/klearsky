@@ -1,4 +1,4 @@
-type User = {
+type TTUser = {
   did: string
   declaration: {
     actorType: string
@@ -17,9 +17,7 @@ type User = {
   [k: string]: unknown
 }
 
-type Author = User
-
-type Entity = {
+type TTEntity = {
   type: string
   index: {
     end: number
@@ -28,7 +26,7 @@ type Entity = {
   value: string
 }
 
-type Reason = {
+type TTReason = {
   $type: string
   by: {
     did: string
@@ -48,10 +46,10 @@ type Reason = {
   indexedAt: string
 }
 
-type Post = {
+type TTPost = {
   uri: string
   cid: string
-  author: Author
+  author: TTUser
   embed?: {
     $type: string
     external?: {
@@ -86,7 +84,7 @@ type Post = {
       }>
       [k: string]: unknown
     }
-    entities?: Array<Entity>
+    entities?: Array<TTEntity>
     [k: string]: unknown
   }
   replyCount: number
@@ -100,45 +98,27 @@ type Post = {
     downvote?: string
     [k: string]: unknown
   }
-  __reason?: Reason // Injected
+  __reason?: TTReason // Injected
   [k: string]: unknown
 }
 
-type Feed = {
-  post: Post
+type TTFeed = {
+  post: TTPost
   reply?: {
-    root: Post
-    parent: Post
+    root: TTPost
+    parent: TTPost
     [k: string]: unknown
   }
-  reason?: Reason
+  reason?: TTReason
   [k: string]: unknown
 }
 
-type FileSchema = {
+type TTFileSchema = {
   cid: string
   mimeType: string
 }
 
-type Follower = {
-  avatar?: string
-  declaration: {
-    actorType: string
-    cid: string
-  }
-  did: string
-  displayName?: string
-  handle: string
-  viewer: {
-    followedBy?: string
-    following?: string
-    muted: boolean
-  }
-}
-
-type Following = Follower
-
-type KNotification = {
+type TTNotification = {
   avatar?: string
   cid: string
   displayName?: string
@@ -155,7 +135,7 @@ type KNotification = {
   reasonSubject?: string
 }
 
-type Profile = {
+type TTProfile = {
   did: string
   declaration: {
     actorType: string

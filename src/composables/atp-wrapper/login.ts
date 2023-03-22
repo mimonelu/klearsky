@@ -1,7 +1,7 @@
 import storage from "@/composables/storage"
 
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   service?: string,
   identifier?: string,
   password?: string

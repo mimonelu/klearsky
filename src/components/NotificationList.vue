@@ -12,7 +12,7 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  notifications: Array<KNotification>
+  notifications: Array<TTNotification>
 }>({
   notifications: [],
 })
@@ -32,13 +32,13 @@ watch(mainState.notifications, updateNotifications)
 
 updateNotifications(mainState.notifications)
 
-function updateNotifications (notifications: Array<KNotification>) {
+function updateNotifications (notifications: Array<TTNotification>) {
   state.notifications =
-    notifications.filter((notification: KNotification) =>
+    notifications.filter((notification: TTNotification) =>
       notification.reason === props.reason)
 }
 
-async function openSubject (notification: KNotification) {
+async function openSubject (notification: TTNotification) {
   blurElement()
   switch (props.reason) {
     case "follow": {

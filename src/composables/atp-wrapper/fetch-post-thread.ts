@@ -5,10 +5,10 @@ import {
 } from "@/composables/atp-wrapper/services"
 
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   uri: string,
   depth?: number
-): Promise<null | Array<Feed>> {
+): Promise<null | Array<TTFeed>> {
   if (this.agent == null) return null
   if (this.session == null) return null
   const query: AppBskyFeedGetPostThread.QueryParams = { uri }
@@ -19,7 +19,7 @@ export default async function (
   if (!response.success) return null
 
   // TODO:
-  const replies: Array<Post> = []
+  const replies: Array<TTPost> = []
   traverseJson(response.data.thread.replies, (key: string, value: any) => {
     if (key === "post") replies.push(value)
   })
@@ -30,5 +30,5 @@ export default async function (
     const bIndexedAt = new Date(b.indexedAt)
     return aIndexedAt > bIndexedAt ? 1 : aIndexedAt < bIndexedAt ? -1 : 0
   })
-  return posts.map((post: Post) => ({ post }))
+  return posts.map((post: TTPost) => ({ post }))
 }

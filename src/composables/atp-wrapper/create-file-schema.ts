@@ -75,11 +75,11 @@ function getCanvasBlob(
 }
 
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   file: File,
   maxWidth: number,
   minWidth: number
-): Promise<null | FileSchema> {
+): Promise<null | TTFileSchema> {
   if (this.agent == null) return null
   if (file == null) return null
   const dataArrayBuffer: null | string | ArrayBuffer =

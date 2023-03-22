@@ -6,7 +6,7 @@ import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{
   type: "author" | "post" | "timeline";
-  feeds: null | Array<Feed>;
+  feeds: null | Array<TTFeed>;
   hasFetchButton?: boolean;
 }>()
 
@@ -35,12 +35,12 @@ async function fetchFeeds (direction: "new" | "old") {
   }
 }
 
-function updateThisPost (newFeed: Feed) {
+function updateThisPost (newFeed: TTFeed) {
   if (props.feeds == null) return
 
   // MEMO: フィード内の全同一ポストに最新のデータを反映する
   // WANT: このために「画面には1つのフィードのみ表示する」としているが、何とかしたい
-  props.feeds?.forEach((feed: Feed) => {
+  props.feeds?.forEach((feed: TTFeed) => {
     if (feed.post?.cid === newFeed.post.cid) {
       feed.post = newFeed.post
     }
@@ -54,7 +54,7 @@ function updateThisPost (newFeed: Feed) {
 }
 
 function removeThisPost (uri: string) {
-  props.feeds?.forEach((feed: Feed) => {
+  props.feeds?.forEach((feed: TTFeed) => {
     // @ts-ignore // TODO:
     if (feed.post?.uri === uri) delete feed.post
     // @ts-ignore // TODO:

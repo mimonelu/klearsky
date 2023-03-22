@@ -1,16 +1,16 @@
 import storage from "@/composables/storage"
 import text2html from "@/composables/text2html"
 
-export function canLogin(this: AbstractAtpWrapper): boolean {
+export function canLogin(this: TIAtpWrapper): boolean {
   return storage.load("handle") != null
 }
 
-export function hasLogin(this: AbstractAtpWrapper): boolean {
+export function hasLogin(this: TIAtpWrapper): boolean {
   return this.session != null
 }
 
-export function injectReason(feeds: Array<Feed>) {
-  feeds.forEach((feed: Feed) => {
+export function injectReason(feeds: Array<TTFeed>) {
+  feeds.forEach((feed: TTFeed) => {
     if (feed.reason == null) return
     feed.post.__reason = feed.reason
   })
@@ -21,13 +21,13 @@ export function makeCreatedAt(): string {
 }
 
 export function mergeFeeds(
-  oldFeeds: null | Array<Feed>,
-  targetFeeds: Array<Feed>
-): Array<Feed> {
-  const newFeeds: Array<Feed> = oldFeeds != null ? [...oldFeeds] : []
-  targetFeeds.forEach((newFeed: Feed) => {
+  oldFeeds: null | Array<TTFeed>,
+  targetFeeds: Array<TTFeed>
+): Array<TTFeed> {
+  const newFeeds: Array<TTFeed> = oldFeeds != null ? [...oldFeeds] : []
+  targetFeeds.forEach((newFeed: TTFeed) => {
     const oldFeedIndex: number = newFeeds.findIndex(
-      (oldFeed: Feed) => oldFeed.post?.cid === newFeed.post?.cid
+      (oldFeed: TTFeed) => oldFeed.post?.cid === newFeed.post?.cid
     )
     if (oldFeedIndex === -1) {
       newFeeds.push(newFeed)
@@ -43,8 +43,8 @@ export function saveServiceAndHandle(service: string, handle: string) {
   storage.save("handle", handle)
 }
 
-export function sortFeeds(feeds: Array<Feed>): Array<Feed> {
-  return feeds.sort((a: Feed, b: Feed) => {
+export function sortFeeds(feeds: Array<TTFeed>): Array<TTFeed> {
+  return feeds.sort((a: TTFeed, b: TTFeed) => {
     const aIndexedAt = new Date(
       a.post?.__reason?.indexedAt ?? a.post?.indexedAt
     )
@@ -55,7 +55,7 @@ export function sortFeeds(feeds: Array<Feed>): Array<Feed> {
   })
 }
 
-export function text2htmlAtFeeds(feeds: Array<Feed>) {
+export function text2htmlAtFeeds(feeds: Array<TTFeed>) {
   traverseJson(feeds, (key: string, value: any, parent: any) => {
     if (key !== "text") return
     value = (value + "").replace(/</g, "&lt;").replace(/>/g, "&gt;")

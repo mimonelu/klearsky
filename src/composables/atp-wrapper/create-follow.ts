@@ -1,7 +1,7 @@
 import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
 export default async function (
-  this: AbstractAtpWrapper,
+  this: TIAtpWrapper,
   did: string,
   declarationCid: string
 ): Promise<boolean> {
