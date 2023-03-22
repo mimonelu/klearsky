@@ -144,15 +144,14 @@ function removeThisPost (uri: string) {
     :data-repost="post.__reason != null"
     @click.prevent.stop="openPost(post.uri)"
   >
+    <slot name="before" />
     <div
       v-if="post.__reason != null"
       class="reposter"
+      @click.stop="openProfile(post.__reason?.by?.handle as string)"
     >
       <SVGIcon name="repost" />
-      <a
-        class="textlink reposter__display-name"
-        @click.stop="openProfile(post.__reason?.by?.handle as string)"
-      >{{ post.__reason?.by?.displayName }}</a>
+      <div class="reposter__display-name">{{ post.__reason?.by?.displayName }}</div>
       <div class="reposter__handle">{{ post.__reason?.by?.handle }}</div>
     </div>
     <div class="body">
@@ -291,6 +290,7 @@ function removeThisPost (uri: string) {
         </div>
       </div>
     </div>
+    <slot name="after" />
     <Loader
       v-if="state.processing"
       @click.stop
@@ -307,8 +307,10 @@ function removeThisPost (uri: string) {
   padding: 1em;
   position: relative;
 
-  &[data-type="root"],
-  &[data-type="parent"] {
+  .feed-list &[data-type="root"]:not(:last-child),
+  .feed-list &[data-type="parent"]:not(:last-child),
+  .feed-thread &[data-type="root"],
+  .feed-thread &[data-type="parent"] {
     &::before {
       background-color: rgba(var(--fg-color), 0.25);
       content: "";
@@ -336,35 +338,82 @@ function removeThisPost (uri: string) {
   }
 }
 
+:deep() .replier,
 .reposter {
+  cursor: pointer;
   display: grid;
-  grid-template-columns: max-content auto 1fr;
+  grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
-  margin-bottom: 1em;
+  margin: -1em -1em 0 -1em;
+  padding: 1em;
 
   & > .svg-icon {
-    fill: rgb(var(--green));
     font-size: 0.875em;
+  }
+
+  &__display-name,
+  &__handle {
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &__display-name {
+    font-size: 0.875em;
+  }
+  &__handle {
+    font-size: 0.875em;
+  }
+}
+:deep() .replier {
+  &:focus, &:hover {
+    & > .svg-icon {
+      fill: rgb(var(--accent-color));
+    }
+
+    .replier__display-name {
+      color: rgb(var(--accent-color));
+    }
+    .replier__handle {
+      color: rgba(var(--accent-color), 0.75);
+    }
+  }
+
+  & > .svg-icon {
+    fill: rgba(var(--accent-color), 0.75);
   }
 
   &__display-name {
-    color: rgb(var(--green));
-    cursor: pointer;
-    font-size: 0.875em;
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    color: rgba(var(--accent-color), 0.75);
+  }
+  &__handle {
+    color: rgba(var(--accent-color), 0.5);
+  }
+}
+.reposter {
+  &:focus, &:hover {
+    & > .svg-icon {
+      fill: rgb(var(--green));
+    }
+
+    .reposter__display-name {
+      color: rgb(var(--green));
+    }
+    .reposter__handle {
+      color: rgba(var(--green), 0.75);
+    }
   }
 
+  & > .svg-icon {
+    fill: rgba(var(--green), 0.75);
+  }
+
+  &__display-name {
+    color: rgba(var(--green), 0.75);
+  }
   &__handle {
     color: rgba(var(--green), 0.5);
-    font-size: 0.75em;
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 

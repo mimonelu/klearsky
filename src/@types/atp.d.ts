@@ -110,6 +110,7 @@ type TTFeed = {
     [k: string]: unknown
   }
   reason?: TTReason
+  __replyDisplay?: boolean // Injected
   [k: string]: unknown
 }
 

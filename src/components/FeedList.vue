@@ -79,27 +79,42 @@ function removeThisPost (uri: string) {
         v-for="feed of feeds"
         class="feed"
       >
-        <Post
-          v-if="feed.reply?.root && feed.post?.cid !== feed.reply?.root?.cid"
-          type="root"
-          :post="feed.reply.root"
-          @updateThisPost="updateThisPost"
-          @removeThisPost="removeThisPost"
-        />
-        <Post
-          v-if="feed.reply?.parent && feed.post?.cid !== feed.reply?.parent?.cid && feed.reply?.root?.cid !== feed.reply?.parent?.cid"
-          type="parent"
-          :post="feed.reply.parent"
-          @updateThisPost="updateThisPost"
-          @removeThisPost="removeThisPost"
-        />
+        <template v-if="feed.__replyDisplay && (feed.reply?.root != null || feed.reply?.parent != null)">
+          <Post
+            v-if="feed.reply?.root != null"
+            type="root"
+            :post="feed.reply.root"
+            @updateThisPost="updateThisPost"
+            @removeThisPost="removeThisPost"
+          />
+          <Post
+            v-if="feed.reply?.parent != null
+              && (feed.reply.parent as TTPost)?.cid !== (feed.reply.root as TTPost)?.cid"
+            type="parent"
+            :post="feed.reply.parent"
+            @updateThisPost="updateThisPost"
+            @removeThisPost="removeThisPost"
+          />
+        </template>
         <Post
           v-if="feed.post != null"
           type="post"
           :post="feed.post"
           @updateThisPost="updateThisPost"
           @removeThisPost="removeThisPost"
-        />
+        >
+          <template v-slot:before>
+            <div
+              v-if="feed.reply?.root != null || feed.reply?.parent != null"
+              class="replier"
+              @click.stop="feed.__replyDisplay = !feed.__replyDisplay"
+            >
+              <SVGIcon name="post" />
+              <div class="replier__display-name">{{ feed.reply?.parent.author.displayName }}</div>
+              <div class="replier__handle">{{ feed.reply?.parent.author.handle }}</div>
+            </div>
+          </template>
+        </Post>
       </div>
     </div>
     <button
