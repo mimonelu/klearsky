@@ -2,11 +2,15 @@ import storage from "@/composables/storage"
 import text2html from "@/composables/text2html"
 
 export function canLogin(this: TIAtpWrapper): boolean {
-  return storage.load("handle") != null
+  return this.data.sessions[this.data.did] != null
 }
 
 export function hasLogin(this: TIAtpWrapper): boolean {
   return this.session != null
+}
+
+export function saveData(this: TIAtpWrapper) {
+  storage.save("atp", this.data)
 }
 
 export function injectReason(feeds: Array<TTFeed>) {
@@ -45,11 +49,6 @@ export function mergeFeeds(
     }
   })
   return results
-}
-
-export function saveServiceAndHandle(service: string, handle: string) {
-  storage.save("service", service)
-  storage.save("handle", handle)
 }
 
 export function sortFeeds(feeds: Array<TTFeed>): Array<TTFeed> {

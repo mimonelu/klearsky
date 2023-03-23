@@ -1,16 +1,12 @@
-import type { ComAtprotoSessionGet } from "@atproto/api"
-import storage from "@/composables/storage"
+import type { AtpSessionData, ComAtprotoSessionGet } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
-  newHandle?: string
+  session: AtpSessionData
 ): Promise<boolean> {
   if (this.agent == null) return false
-  const handle = newHandle ?? storage.load("handle")
-  if (handle == null) return false
-  this.session = storage.load(handle)
-  if (this.session == null) return false
   const response: ComAtprotoSessionGet.Response =
-    await this.agent.resumeSession(this.session)
+    await this.agent.resumeSession(session)
+  console.log("[klearsky/resumeSession]", response)
   return response.success
 }

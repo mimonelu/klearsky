@@ -1,11 +1,8 @@
 <script lang="ts" setup>
 import { inject, onMounted } from "vue"
-import { useRouter } from "vue-router"
 import format from "date-fns/format"
 
 const mainState = inject("state") as MainState
-
-const router = useRouter()
 
 onMounted(() => {
   const formItem = document.getElementById("keyword-term-textbox")
@@ -24,10 +21,6 @@ async function fetchNewResults () {
   } finally {
     mainState.processing = false
   }
-}
-
-async function openPostThread (uri: string) {
-  await router.push({ name: "post", query: { uri } })
 }
 
 function formatDate (date?: string): string {

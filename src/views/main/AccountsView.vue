@@ -8,12 +8,17 @@ const mainState = inject("state") as MainState
 
 const router = useRouter()
 
-async function login (account: { [k: string]: string }) {
+function newLogin () {
+  // mainState.atp.data.did = ""
+  // mainState.atp.session = undefined
+  mainState.loginPopupDisplay = true
+}
+
+async function login (session: TTSession) {
   blurElement()
-  // TODO: セッションが切れているケースにも対応すること
-  //       LoginPopup に Service と Handle を設定して表示する
-  mainState.atp.saveServiceAndHandle(account.service, account.handle)
-  if (mainState.hasLogin) router.go(0)
+  mainState.atp.data.did = session.did
+  mainState.atp.saveData()
+  if (mainState.atp.hasLogin()) router.go(0)
 }
 
 async function logout () {
@@ -31,24 +36,30 @@ async function logout () {
     <div class="body">
       <div class="body__section">
         <div
-          v-for="account in mainState.atp.accounts"
+          v-for="session in mainState.atp.data.sessions"
           class="account"
         >
           <button
             class="button"
-            @click.prevent="login(account)"
+            @click.prevent="login(session)"
           >{{ $t("login") }}</button>
           <div class="account__right">
-            <div class="account__handle">{{ account.handle }}</div>
-            <div class="account__service">{{ account.service }}</div>
+            <div class="account__handle">{{ session.handle }}</div>
+            <div class="account__service">{{ session.__service }}</div>
           </div>
         </div>
       </div>
       <div class="body__section">
-        <button
-          class="button"
-          @click.prevent="logout"
-        >{{ $t("logout") }}</button>
+        <div class="button-container">
+          <button
+            class="button"
+            @click.prevent="newLogin()"
+          >{{ $t("login") }}</button>
+          <button
+            class="button"
+            @click.prevent="logout"
+          >{{ $t("logout") }}</button>
+        </div>
       </div>
     </div>
   </div>
@@ -97,5 +108,11 @@ async function logout () {
     word-break: break-all;
     white-space: pre-wrap;
   }
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  grid-gap: 1rem;
 }
 </style>

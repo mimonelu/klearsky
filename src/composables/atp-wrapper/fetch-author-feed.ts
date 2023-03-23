@@ -14,7 +14,6 @@ export default async function (
   cursor?: string
 ): Promise<null | { feeds: Array<TTFeed>; cursor?: string }> {
   if (this.agent == null) return null
-  if (this.session == null) return null
   const query: AppBskyFeedGetAuthorFeed.QueryParams = { author }
   if (limit != null) query.limit = limit
   if (cursor != null) query.before = cursor

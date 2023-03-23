@@ -16,19 +16,26 @@ type TTUpdateProfileParams = {
   banner: null | Array<File>
 }
 
+type TTSession = {
+  accessJwt: string
+  did: string
+  handle: string
+  refreshJwt: string
+  __service?: string // Injected
+}
+
+type TTData = {
+  did: string
+  sessions: { [did: string]: TTSession }
+}
+
 interface TIAtpWrapper {
-  service: null | string
   agent: null | AtpAgentstring
-  session: null | AtpSessionDatastring
-  accounts: {
-    [handle: string]: {
-      service: string
-      handle: string
-    }
-  }
+  data: TTData
+  session?: TTSession
 
   canLogin(this: TIAtpWrapper): boolean
-  createAgent(this: TIAtpWrapper): boolean
+  createAgent(this: TIAtpWrapper, service?: string): boolean
   createFileSchema(
     this: TIAtpWrapper,
     file: File,
@@ -40,10 +47,7 @@ interface TIAtpWrapper {
     did: string,
     declarationCid: string
   ): Promise<boolean>
-  createPost(
-    this: TIAtpWrapper,
-    params: TTCreatePostParams
-  ): Promise<boolean>
+  createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
   createRepost(this: TIAtpWrapper, post?: TTPost): Promise<boolean>
   deleteFollow(this: TIAtpWrapper, uri: string): Promise<boolean>
   deletePost(this: TIAtpWrapper, uri: string): Promise<boolean>
@@ -82,10 +86,7 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
-  fetchProfile(
-    this: TIAtpWrapper,
-    actor: string
-  ): Promise<null | TTProfile>
+  fetchProfile(this: TIAtpWrapper, actor: string): Promise<null | TTProfile>
   fetchPostThread(
     this: TIAtpWrapper,
     uri: string,
@@ -115,9 +116,8 @@ interface TIAtpWrapper {
     password?: string
   ): Promise<boolean>
   logout(this: TIAtpWrapper)
-  resumeSession(this: TIAtpWrapper, handle?: string): Promise<boolean>
-  saveServiceAndHandle(service: string, handle: string)
-  setService(this: TIAtpWrapper, service?: string)
+  resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
+  saveData(this: TIAtpWrapper)
   updateProfile(
     this: TIAtpWrapper,
     params: TTUpdateProfileParams

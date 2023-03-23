@@ -8,7 +8,6 @@ export default async function (
   before?: string
 ): Promise<undefined | string> {
   if (this.agent == null) return
-  if (this.session == null) return
   const response: AppBskyActorSearch.Response =
     await this.agent.api.app.bsky.actor.search({
       term,

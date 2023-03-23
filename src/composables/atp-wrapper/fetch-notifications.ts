@@ -7,7 +7,6 @@ export default async function (
   cursor?: string
 ): Promise<undefined | string> {
   if (this.agent == null) return undefined
-  if (this.session == null) return undefined
   const query: AppBskyNotificationList.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.before = cursor

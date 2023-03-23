@@ -9,7 +9,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   canBack: boolean;
 }>({
-  canBack: false,
+  canBack: history.state.back != null,
 })
 
 const router = useRouter()

@@ -28,6 +28,8 @@ type MainState = {
   notifications: Array<TTNotification>
   notificationCursor?: string
 
+  loginPopupDisplay: boolean
+
   sendPostPopupProps: {
     visibility: boolean
     type: TTPostType

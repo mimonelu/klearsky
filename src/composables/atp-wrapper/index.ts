@@ -1,7 +1,7 @@
 import {
   canLogin,
   hasLogin,
-  saveServiceAndHandle,
+  saveData,
 } from "@/composables/atp-wrapper/services"
 import createAgent from "@/composables/atp-wrapper/create-agent"
 import createFileSchema from "@/composables/atp-wrapper/create-file-schema"
@@ -23,17 +23,20 @@ import fetchUserSearch from "@/composables/atp-wrapper/fetch-user-search"
 import login from "@/composables/atp-wrapper/login"
 import logout from "@/composables/atp-wrapper/logout"
 import resumeSession from "@/composables/atp-wrapper/resume-session"
-import setService from "@/composables/atp-wrapper/set-service"
 import updateProfile from "@/composables/atp-wrapper/update-profile"
 import updateVote from "@/composables/atp-wrapper/update-vote"
+import storage from "@/composables/storage"
 
 // @ts-ignore // TODO:
 class AtpWrapper implements TIAtpWrapper {
-  contsructor(this: TIAtpWrapper) {
-    this.service = null
+  // @ts-ignore // TODO:
+  constructor(this: TIAtpWrapper) {
     this.agent = null
-    this.session = null
-    this.accounts = {}
+    this.data = storage.load("atp") ?? {
+      did: "",
+      sessions: {},
+    }
+    this.session = undefined
   }
 }
 
@@ -75,9 +78,8 @@ class AtpWrapper implements TIAtpWrapper {
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).logout = logout
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).resumeSession =
   resumeSession
-;(AtpWrapper.prototype as unknown as TIAtpWrapper).saveServiceAndHandle =
-  saveServiceAndHandle
-;(AtpWrapper.prototype as unknown as TIAtpWrapper).setService = setService
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).saveData =
+  saveData
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).updateProfile =
   updateProfile
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).updateVote = updateVote

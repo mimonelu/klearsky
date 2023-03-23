@@ -7,7 +7,6 @@ export default async function (
   direction: "none" | "up" | "down"
 ): Promise<boolean> {
   if (this.agent == null) return false
-  if (this.session == null) return false
   const response: AppBskyFeedSetVote.Response =
     await this.agent.api.app.bsky.feed.setVote({
       subject: { uri, cid },

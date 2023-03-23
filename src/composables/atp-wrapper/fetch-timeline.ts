@@ -16,7 +16,6 @@ export default async function (
   cursor?: string
 }> {
   if (this.agent == null) return null
-  if (this.session == null) return null
   const query: AppBskyFeedGetTimeline.QueryParams = {
     // TODO: 要調査
     // FYI: https://github.com/bluesky-social/atproto/blob/main/packages/pds/tests/views/timeline.test.ts

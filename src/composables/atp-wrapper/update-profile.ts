@@ -5,7 +5,6 @@ export default async function (
   params: TTUpdateProfileParams
 ): Promise<boolean> {
   if (this.agent == null) return false
-  if (this.session == null) return false
   const fileSchemas: Array<null | TTFileSchema> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
       ? this.createFileSchema(params.avatar[0], 2000, 2000)

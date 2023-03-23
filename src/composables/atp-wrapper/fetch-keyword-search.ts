@@ -3,7 +3,6 @@ export default async function (
   query: string
 ): Promise<undefined | Array<any>> {
   if (this.agent == null) return
-  if (this.session == null) return
   const request = new Request(
     `https://mimonelu.net:4649/https://search.${this.agent.service.host}/search/posts?q=${query}`,
     { headers: { "user-agent": "Klearsky" } }

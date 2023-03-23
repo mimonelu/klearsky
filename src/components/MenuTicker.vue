@@ -18,7 +18,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 2;
   }
 
   &--inner {
@@ -31,7 +31,7 @@
     grid-gap: 0.25rem;
     padding: 0.5rem 0;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
 
     &:deep() > button {
       cursor: pointer;

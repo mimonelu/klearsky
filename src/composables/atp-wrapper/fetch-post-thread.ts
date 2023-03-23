@@ -10,7 +10,6 @@ export default async function (
   depth?: number
 ): Promise<null | Array<TTFeed>> {
   if (this.agent == null) return null
-  if (this.session == null) return null
   const query: AppBskyFeedGetPostThread.QueryParams = { uri }
   if (depth != null) query.depth = depth
   const response: AppBskyFeedGetPostThread.Response =

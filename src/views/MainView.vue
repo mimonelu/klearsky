@@ -26,7 +26,6 @@ const state = reactive<MainState>({
   // @ts-ignore // TODO:
   atp: new AtpWrapper(),
   mounted: false,
-  hasLogin: false,
   userProfile: null,
   timelineFeeds: [],
   timelineCursor: undefined,
@@ -48,6 +47,8 @@ const state = reactive<MainState>({
   notifications: [],
   notificationCursor: undefined,
   processing: false,
+
+  loginPopupDisplay: false,
 
   sendPostPopupProps: {
     visibility: false,
@@ -76,7 +77,6 @@ provide("state", state)
 
 onMounted(async () => {
   state.currentQuery = router.currentRoute.value.query
-  state.hasLogin = state.atp.hasLogin()
   state.processing = true
   try {
     await autoLogin()
@@ -118,15 +118,16 @@ router.afterEach(async (to: RouteLocationNormalized) => {
 })
 
 async function autoLogin () {
-  if (state.hasLogin) return
-  if (state.atp.canLogin()) state.hasLogin = await state.atp.login()
+  if (state.atp.hasLogin()) return
+  if (state.atp.canLogin()) await state.atp.login()
 }
 
 async function manualLogin (service: string, identifier: string, password: string) {
   state.processing = true
   try {
-    state.hasLogin = await state.atp.login(service, identifier, password)
-    if (!state.hasLogin) return
+    await state.atp.login(service, identifier, password)
+    if (!state.atp.hasLogin()) return
+    state.loginPopupDisplay = false
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()
   } finally {
@@ -207,7 +208,7 @@ async function fetchPostThread () {
 }
 
 async function fetchUserProfile () {
-  state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle)
+  state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle as string)
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
@@ -303,7 +304,7 @@ function closeSendPostPopup (done: boolean) {
       @close="closeSendPostPopup"
     />
     <LoginPopup
-      v-if="state.mounted && !state.hasLogin"
+      v-if="state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)"
       @login="manualLogin"
     />
     <Loader v-if="state.processing" />

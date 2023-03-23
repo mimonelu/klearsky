@@ -1,25 +1,22 @@
 import { AtpAgent } from "@atproto/api"
 import type { AtpSessionData, AtpSessionEvent } from "@atproto/api"
 
-export default function (this: TIAtpWrapper): boolean {
+export default function (this: TIAtpWrapper, service: string): boolean {
   this.agent = new AtpAgent({
-    service: this.service as string,
+    service,
     persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
       switch (event) {
-        case "create": {
-          this.session = session ?? null
-          break
-        }
-        case "create-failed": {
-          this.logout()
-          break
-        }
+        case "create":
         case "update": {
-          this.session = session ?? null
+          this.data.did = session?.did ?? ""
+          this.data.sessions[this.data.did] = session as TTSession
+          this.data.sessions[this.data.did].__service = service
+          this.session = session
           break
         }
+        case "create-failed":
         case "expired": {
-          this.logout()
+          // this.logout()
           break
         }
       }

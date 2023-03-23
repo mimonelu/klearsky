@@ -6,7 +6,6 @@ export default async function (
   actor: string
 ): Promise<null | TTProfile> {
   if (this.agent == null) return null
-  if (this.session == null) return null
   const response: AppBskyActorGetProfile.Response =
     await this.agent.api.app.bsky.actor.getProfile({ actor })
   console.log("[klearsky/fetchProfile]", response)
