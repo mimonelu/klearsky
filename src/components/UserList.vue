@@ -103,6 +103,6 @@ async function fetchUsers (direction: "new" | "old") {
 }
 
 .you-followed {
-  color: rgb(var(--pink));
+  color: rgb(var(--like-color));
 }
 </style>

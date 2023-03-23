@@ -268,7 +268,7 @@ function openChildPage (pageName: string) {
 }
 
 .followed {
-  color: rgb(var(--pink));
+  color: rgb(var(--like-color));
   font-size: 0.875rem;
   line-height: 1.25;
   word-break: break-all;

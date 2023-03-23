@@ -129,10 +129,10 @@ function formatDate (dateString: string): string {
     fill: rgb(var(--accent-color));
   }
   [data-reason="repost"] & {
-    fill: rgb(var(--green));
+    fill: rgb(var(--share-color));
   }
   [data-reason="vote"] & {
-    fill: rgb(var(--pink));
+    fill: rgb(var(--like-color));
   }
 }
 

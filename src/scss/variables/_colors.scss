@@ -3,8 +3,8 @@ body {
   --fg-color: 32, 32, 32;
   --accent-color: 0, 160, 255;
   --notice-color: 240, 32, 32;
-  --pink: 240, 64, 128;
-  --green: 48, 192, 96;
+  --like-color: 240, 64, 128;
+  --share-color: 48, 192, 96;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,5 +13,7 @@ body {
     --fg-color: 224, 224, 224;
     --accent-color: 0, 160, 255;
     --notice-color: 240, 32, 32;
+    --like-color: 240, 64, 128;
+    --share-color: 48, 192, 96;
   }
 }

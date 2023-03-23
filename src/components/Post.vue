@@ -397,26 +397,26 @@ function removeThisPost (uri: string) {
 .reposter {
   &:focus, &:hover {
     & > .svg-icon {
-      fill: rgb(var(--green));
+      fill: rgb(var(--share-color));
     }
 
     .reposter__display-name {
-      color: rgb(var(--green));
+      color: rgb(var(--share-color));
     }
     .reposter__handle {
-      color: rgba(var(--green), 0.75);
+      color: rgba(var(--share-color), 0.75);
     }
   }
 
   & > .svg-icon {
-    fill: rgba(var(--green), 0.75);
+    fill: rgba(var(--share-color), 0.75);
   }
 
   &__display-name {
-    color: rgba(var(--green), 0.75);
+    color: rgba(var(--share-color), 0.75);
   }
   &__handle {
-    color: rgba(var(--green), 0.5);
+    color: rgba(var(--share-color), 0.5);
   }
 }
 
@@ -583,11 +583,11 @@ function removeThisPost (uri: string) {
   position: relative;
   &[data-reposted="true"] {
     & > .svg-icon {
-      fill: rgb(var(--green));
+      fill: rgb(var(--share-color));
     }
 
     & > span {
-      color: rgb(var(--green));
+      color: rgb(var(--share-color));
     }
   }
 
@@ -601,11 +601,11 @@ function removeThisPost (uri: string) {
 
 .upvote_count[data-voted="true"] {
   & > .svg-icon {
-    fill: rgb(var(--pink));
+    fill: rgb(var(--like-color));
   }
 
   & > span {
-    color: rgb(var(--pink));
+    color: rgb(var(--like-color));
   }
 }
 
