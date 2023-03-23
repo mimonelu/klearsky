@@ -26,7 +26,8 @@ function startDrag (event: MouseEvent | TouchEvent) {
   state.x = (e.clientX / window.innerWidth)
   state.y = (e.clientY / window.innerHeight)
   // TODO: やや危険、別の方法を模索すること
-  window.document.body.style.overflow = "hidden"
+  window.document.body.style.overflowX = "hidden"
+  window.document.body.style.overflowY = "hidden"
 }
 
 function moveDrag (event: MouseEvent | TouchEvent) {
@@ -46,7 +47,8 @@ function endDrag () {
   state.y = 0.5
   state.mode = false
   // TODO: やや危険、別の方法を模索すること
-  window.document.body.style.overflow = "unset"
+  window.document.body.style.overflowX = "unset"
+  window.document.body.style.overflowY = "scroll"
 }
 
 function close () {
