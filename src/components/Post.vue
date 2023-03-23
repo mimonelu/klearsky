@@ -280,7 +280,7 @@ function removeThisPost (uri: string) {
                 v-if="state.postMenuDisplay"
                 :translateText="post.record.text"
                 :copyText="post.record.text"
-                :deletePostUri="post.author.did === mainState.atp.session.did
+                :deletePostUri="post.author.did === mainState.atp.session?.did
                   ? post.uri
                   : undefined"
                 :openSource="post"
