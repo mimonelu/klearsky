@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive } from "vue"
+import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
@@ -14,7 +14,7 @@ const state = reactive<{
 
 const router = useRouter()
 
-onMounted(() => {
+router.afterEach(() => {
   state.canBack = history.state.back != null
 })
 
