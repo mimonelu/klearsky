@@ -1,0 +1,17 @@
+body {
+  --bg-color: 255, 255, 255;
+  --fg-color: 32, 32, 32;
+  --accent-color: 0, 160, 255;
+  --notice-color: 240, 32, 32;
+  --pink: 240, 64, 128;
+  --green: 48, 192, 96;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --bg-color: 24, 24, 24;
+    --fg-color: 224, 224, 224;
+    --accent-color: 0, 160, 255;
+    --notice-color: 240, 32, 32;
+  }
+}

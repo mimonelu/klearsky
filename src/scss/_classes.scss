@@ -3,10 +3,4 @@
 @import "@/scss/classes/icon-button";
 @import "@/scss/classes/form";
 @import "@/scss/classes/tab";
-
-.textlink {
-  color: rgb(var(--accent-color));
-  &:focus, &:hover {
-    filter: brightness(1.25);
-  }
-}
+@import "@/scss/classes/textlink";

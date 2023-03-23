@@ -1,0 +1,18 @@
+@mixin avatar-link ($size: 3rem) {
+  cursor: pointer;
+  display: block;
+  height: $size;
+
+  & > img {
+    border: 1px solid transparent;
+    border-radius: 1px;
+    object-fit: cover;
+    min-width: $size;
+    min-height: $size;
+  }
+  &:focus, &:hover {
+    & > img {
+      border-color: rgba(var(--fg-color), 0.5);
+    }
+  }
+}

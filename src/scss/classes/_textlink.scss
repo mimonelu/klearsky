@@ -1,0 +1,6 @@
+.textlink {
+  color: rgb(var(--accent-color));
+  &:focus, &:hover {
+    filter: brightness(1.25);
+  }
+}

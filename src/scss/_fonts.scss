@@ -1,11 +1,22 @@
 :root {
   // Web 版 Twitter と極力等しくする
-  font-family: "Segoe UI", Meiryo, system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    "Segoe UI",
+    Meiryo,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
 
   font-size: calc(0.125vmax + 13px);
 }
 
-input, textarea {
+// iOS における font-size: 16px; 未満のフォームパーツにフォーカスするとビューポートがスケーリングされる仕様対策
+input,
+textarea {
   font-size: calc(0.125vmax + 16px);
   &::placeholder {
     font-size: calc(0.125vmax + 13px);

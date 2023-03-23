@@ -1,33 +1,4 @@
-$max-width: 1192px;
-$max-width-with-scrollbar: 1222px;
-$menu-max-width: 276px;
-$main-menu-min-width: 4rem;
-$router-view-width: 640px;
-
-@mixin scroll-bar () {
-  &::-webkit-scrollbar {
-    background-color: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(var(--fg-color), 0.25);
-  }
-}
-
-@mixin avatar-link ($size: 3rem) {
-  cursor: pointer;
-  display: block;
-  height: $size;
-
-  & > img {
-    border: 1px solid transparent;
-    border-radius: 1px;
-    object-fit: cover;
-    min-width: $size;
-    min-height: $size;
-  }
-  &:focus, &:hover {
-    & > img {
-      border-color: rgba(var(--fg-color), 0.5);
-    }
-  }
-}
+@import "@/scss/variables/colors";
+@import "@/scss/variables/numericals";
+@import "@/scss/variables/scroll-bar";
+@import "@/scss/variables/avatar-link";
