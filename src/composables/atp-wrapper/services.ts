@@ -24,18 +24,27 @@ export function mergeFeeds(
   oldFeeds: null | Array<TTFeed>,
   targetFeeds: Array<TTFeed>
 ): Array<TTFeed> {
-  const newFeeds: Array<TTFeed> = oldFeeds != null ? [...oldFeeds] : []
-  targetFeeds.forEach((newFeed: TTFeed) => {
-    const oldFeedIndex: number = newFeeds.findIndex(
-      (oldFeed: TTFeed) => oldFeed.post?.cid === newFeed.post?.cid
+  const results: Array<TTFeed> = oldFeeds != null ? [...oldFeeds] : []
+  targetFeeds.forEach((targetFeed: TTFeed) => {
+    const index: number = results.findIndex(
+      (oldFeed: TTFeed) => oldFeed.post?.cid === targetFeed.post?.cid
     )
-    if (oldFeedIndex === -1) {
-      newFeeds.push(newFeed)
-    } else {
-      newFeeds[oldFeedIndex] = newFeed
+    if (index === - 1) results.push(targetFeed)
+    else if (results[index].post == null) results[index] = targetFeed
+    else if (targetFeed.post == null) return
+    else {
+      const oldDate = new Date(
+        results[index].post.__reason?.indexedAt
+        ?? results[index].post.indexedAt
+      )
+      const targetDate = new Date(
+        targetFeed.post.__reason?.indexedAt
+        ?? targetFeed.post.indexedAt
+      )
+      if (oldDate <= targetDate) results[index] = targetFeed
     }
   })
-  return newFeeds
+  return results
 }
 
 export function saveServiceAndHandle(service: string, handle: string) {
