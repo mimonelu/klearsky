@@ -2,8 +2,9 @@
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
 
-  & > .tab-button,
-  & > .tab-button--outline {
+  &__button,
+  &__button--outline {
+    background-color: rgb(var(--bg-color));
     border-bottom: 2px solid transparent;
     color: rgba(var(--fg-color), 0.5);
     cursor: pointer;
@@ -15,9 +16,6 @@
     width: 33.333%;
     min-height: 3rem;
     text-align: center;
-    &:not(:last-child) {
-      border-right: 1px solid rgba(var(--fg-color), 0.25);
-    }
     &[data-selected="true"] {
       border-bottom: 2px solid rgb(var(--accent-color));
     }
@@ -25,7 +23,7 @@
       color: rgb(var(--fg-color));
     }
   }
-  & > .tab-button {
+  &__button {
     & > .svg-icon {
       fill: rgba(var(--fg-color), 0.5);
     }
@@ -35,7 +33,7 @@
       }
     }
   }
-  & > .tab-button--outline {
+  &__button--outline {
     & > .svg-icon {
       fill: transparent;
       stroke: rgba(var(--fg-color), 0.5);

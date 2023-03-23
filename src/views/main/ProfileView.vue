@@ -173,17 +173,17 @@ function openChildPage (pageName: string) {
     </div>
     <div class="tab">
       <button
-        class="tab-button"
+        class="tab__button"
         :data-selected="router.currentRoute.value.name === 'profile-post'"
         @click.prevent="openChildPage('profile-post')"
       >{{ $t("post") }}</button>
       <button
-        class="tab-button"
+        class="tab__button"
         :data-selected="router.currentRoute.value.name === 'profile-following'"
         @click.prevent="openChildPage('profile-following')"
       >{{ $t("following") }}</button>
       <button
-        class="tab-button"
+        class="tab__button"
         :data-selected="router.currentRoute.value.name === 'profile-follower'"
         @click.prevent="openChildPage('profile-follower')"
       >{{ $t("follower") }}</button>
@@ -337,11 +337,6 @@ function openChildPage (pageName: string) {
   position: sticky;
   top: 0;
   z-index: 1;
-
-  & > .tab-button {
-    background-color: rgb(var(--bg-color));
-    border-right-style: none;
-  }
 }
 
 .feed-list,

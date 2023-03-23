@@ -14,12 +14,12 @@ function openChildPage (pageName: string) {
   <div class="search-view">
     <div class="tab">
       <button
-        class="tab-button"
+        class="tab__button"
         :data-selected="router.currentRoute.value.name === 'user-search'"
         @click.prevent="openChildPage('user-search')"
       >{{ $t("userSearch") }}</button>
       <button
-        class="tab-button"
+        class="tab__button"
         :data-selected="router.currentRoute.value.name === 'keyword-search'"
         @click.prevent="openChildPage('keyword-search')"
       >{{ $t("keywordSearch") }}</button>
@@ -44,10 +44,6 @@ function openChildPage (pageName: string) {
   position: sticky;
   top: 0;
   z-index: 1;
-
-  &-button {
-    background-color: rgb(var(--bg-color));
-  }
 }
 
 .child-view {
