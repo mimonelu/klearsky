@@ -111,7 +111,7 @@ async function submitCallback () {
                 v-model="state.alts[index]"
                 type="text"
                 autocapitalize="off"
-                autocomplete="on"
+                autocomplete="off"
                 spellcheck="false"
                 class="textbox"
               />

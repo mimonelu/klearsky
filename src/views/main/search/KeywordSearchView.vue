@@ -38,7 +38,7 @@ function formatDate (date?: string): string {
         type="search"
         :placeholder="$t('keywordSearch')"
         autocapitalize="off"
-        autocomplete="on"
+        autocomplete="off"
         inputmode="search"
         spellcheck="false"
         class="textbox"

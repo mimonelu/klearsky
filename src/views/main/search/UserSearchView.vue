@@ -69,7 +69,7 @@ async function openProfile (handle: string) {
         type="search"
         :placeholder="$t('userSearch')"
         autocapitalize="off"
-        autocomplete="on"
+        autocomplete="off"
         inputmode="search"
         spellcheck="false"
         class="textbox"
