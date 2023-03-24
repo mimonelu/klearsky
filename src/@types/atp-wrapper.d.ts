@@ -115,7 +115,7 @@ interface TIAtpWrapper {
     identifier?: string,
     password?: string
   ): Promise<boolean>
-  logout(this: TIAtpWrapper)
+  logout(this: TIAtpWrapper, did?: string)
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
   updateProfile(

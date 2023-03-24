@@ -1,13 +1,5 @@
-.button,
-.button--large {
-  --color: var(--fg-color);
-
-  &:focus,
-  &:hover {
-    --color: var(--accent-color);
-  }
-
-  background-color: rgb(var(--color));
+.button {
+  background-color: rgba(var(--fg-color), 0.875);
   border: 1px solid transparent;
   border-radius: 1px;
   color: rgb(var(--bg-color));
@@ -20,13 +12,25 @@
   line-height: 1.5;
   padding: 0.5em 1em;
   white-space: nowrap;
+  &:focus, &:hover {
+    background-color: rgb(var(--fg-color));
+  }
 
-  &>.svg-icon {
+  & > .svg-icon {
     fill: rgb(var(--bg-color));
     font-size: 0.75em;
   }
 }
+
 .button--large {
   font-size: 1.25rem;
   padding: 0.5em 2em;
+}
+
+.button--important {
+  background-color: rgba(var(--notice-color), 0.875);
+  color: rgb(var(--bg-color));
+  &:focus, &:hover {
+    background-color: rgb(var(--notice-color));
+  }
 }

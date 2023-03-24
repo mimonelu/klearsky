@@ -11,7 +11,7 @@ import Logo from "@/components/Logo.vue"
     </div>
     <RouterLink
       to="/home"
-      class="button--large"
+      class="button button--large"
     >Launch Klearsky</RouterLink>
     <Copyright />
   </div>

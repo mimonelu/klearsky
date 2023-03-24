@@ -79,6 +79,8 @@ async function submitCallback () {
 
 <style lang="scss" scoped>
 .login-popup:deep() {
+  background-color: rgb(var(--bg-color));
+
   .popup {
     width: $router-view-width;
   }
