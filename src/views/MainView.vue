@@ -26,41 +26,17 @@ const state = reactive<MainState>({
   // @ts-ignore // TODO:
   atp: new AtpWrapper(),
   mounted: false,
-  userProfile: null,
-  timelineFeeds: [],
-  timelineCursor: undefined,
-  currentProfile: null,
-  currentFeeds: [],
-  currentCursor: undefined,
-  currentFollowers: [],
-  currentFollowings: [],
-
-  currentSearchKeywordTerm: "",
-  currentSearchKeywordResults: [],
-
-  currentSearchUsers: [],
-  currentSearchUsersCursor: undefined,
-  currentSearchUserTerm: "",
-  currentSearchLastUserTerm: "",
-
-  currentQuery: {},
-  notifications: [],
-  notificationCursor: undefined,
   processing: false,
-
   loginPopupDisplay: false,
-
   sendPostPopupProps: {
-    visibility: false,
+    display: false,
     type: "post",
     post: undefined,
   },
-
   imagePopupProps: {
     display: false,
     uri: "",
   },
-
   fetchUserProfile,
   fetchCurrentProfile,
   fetchCurrentAuthorFeed,
@@ -72,6 +48,8 @@ const state = reactive<MainState>({
   updateUserProfile,
   openSendPostPopup,
 })
+
+resetState()
 
 provide("state", state)
 
@@ -117,6 +95,26 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   }
 })
 
+function resetState () {
+  state.userProfile = null
+  state.timelineFeeds = []
+  state.timelineCursor = undefined
+  state.currentProfile = null
+  state.currentFeeds = []
+  state.currentCursor = undefined
+  state.currentFollowers = []
+  state.currentFollowings = []
+  state.currentSearchKeywordTerm = ""
+  state.currentSearchKeywordResults = []
+  state.currentSearchUsers = []
+  state.currentSearchUsersCursor = undefined
+  state.currentSearchUserTerm = ""
+  state.currentSearchLastUserTerm = ""
+  state.currentQuery = {}
+  state.notifications = []
+  state.notificationCursor = undefined
+}
+
 async function autoLogin () {
   if (state.atp.hasLogin()) return
   if (state.atp.canLogin()) await state.atp.login()
@@ -128,6 +126,7 @@ async function manualLogin (service: string, identifier: string, password: strin
     await state.atp.login(service, identifier, password)
     if (!state.atp.hasLogin()) return
     state.loginPopupDisplay = false
+    resetState()
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()
   } finally {
@@ -266,16 +265,16 @@ async function fetchNotifications (direction: "new" | "old") {
 let isSendPostDone = false
 
 async function openSendPostPopup (type: TTPostType, post?: TTPost): Promise<boolean> {
-  state.sendPostPopupProps.visibility = true
+  state.sendPostPopupProps.display = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post
-  await waitProp(() => state.sendPostPopupProps.visibility, false)
+  await waitProp(() => state.sendPostPopupProps.display, false)
   return isSendPostDone
 }
 
 function closeSendPostPopup (done: boolean) {
   isSendPostDone = done
-  state.sendPostPopupProps.visibility = false
+  state.sendPostPopupProps.display = false
 }
 </script>
 
@@ -298,7 +297,7 @@ function closeSendPostPopup (done: boolean) {
       @close="state.imagePopupProps.display = false"
     />
     <SendPostPopup
-      v-if="state.sendPostPopupProps.visibility"
+      v-if="state.sendPostPopupProps.display"
       :type="state.sendPostPopupProps.type"
       :post="state.sendPostPopupProps.post"
       @close="closeSendPostPopup"

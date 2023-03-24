@@ -31,7 +31,7 @@ type MainState = {
   loginPopupDisplay: boolean
 
   sendPostPopupProps: {
-    visibility: boolean
+    display: boolean
     type: TTPostType
     post?: TTPost
   }
