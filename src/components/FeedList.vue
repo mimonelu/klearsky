@@ -100,21 +100,11 @@ function removeThisPost (uri: string) {
           v-if="feed.post != null"
           type="post"
           :post="feed.post"
+          :replyTo="feed.reply?.parent"
+          @onClickReplier="feed.__replyDisplay = !feed.__replyDisplay"
           @updateThisPost="updateThisPost"
           @removeThisPost="removeThisPost"
-        >
-          <template v-slot:before>
-            <div
-              v-if="feed.reply?.root != null || feed.reply?.parent != null"
-              class="replier"
-              @click.stop="feed.__replyDisplay = !feed.__replyDisplay"
-            >
-              <SVGIcon name="post" />
-              <div class="replier__display-name">{{ feed.reply?.parent.author.displayName }}</div>
-              <div class="replier__handle">{{ feed.reply?.parent.author.handle }}</div>
-            </div>
-          </template>
-        </Post>
+        />
       </div>
     </div>
     <button

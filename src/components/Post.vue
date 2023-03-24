@@ -9,12 +9,13 @@ import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
-const emit = defineEmits<{(event: string, params: any): void}>()
+const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
   type: "post" | "root" | "parent" | "postInPost";
   mode?: "preview";
   post: TTPost;
+  replyTo?: TTPost;
 }>()
 
 const mainState = inject("state") as MainState
@@ -33,6 +34,10 @@ const router = useRouter()
 
 function formatDate (date: string): string {
   return format(new Date(date), "MM/dd HH:mm")
+}
+
+function onClickReplier () {
+  emit("onClickReplier")
 }
 
 async function openPost (uri: string) {
@@ -149,15 +154,25 @@ function removeThisPost (uri: string) {
     :data-repost="post.__reason != null"
     @click.prevent.stop="openPost(post.uri)"
   >
-    <slot name="before" />
-    <div
-      v-if="post.__reason != null"
-      class="reposter"
-      @click.stop="openProfile(post.__reason?.by?.handle as string)"
-    >
-      <SVGIcon name="repost" />
-      <div class="reposter__display-name">{{ post.__reason?.by?.displayName }}</div>
-      <div class="reposter__handle">{{ post.__reason?.by?.handle }}</div>
+    <div class="header">
+      <div
+        v-if="replyTo != null"
+        class="replier"
+        @click.stop="onClickReplier"
+      >
+        <SVGIcon name="post" />
+        <div class="replier__display-name">{{ replyTo?.author.displayName }}</div>
+        <div class="replier__handle">{{ replyTo?.author.handle }}</div>
+      </div>
+      <div
+        v-if="post.__reason != null"
+        class="reposter"
+        @click.stop="openProfile(post.__reason?.by?.handle as string)"
+      >
+        <SVGIcon name="repost" />
+        <div class="reposter__display-name">{{ post.__reason?.by?.displayName }}</div>
+        <div class="reposter__handle">{{ post.__reason?.by?.handle }}</div>
+      </div>
     </div>
     <div class="body">
       <button
@@ -169,8 +184,8 @@ function removeThisPost (uri: string) {
           :src="post.author.avatar ?? '/img/void-avatar.png'"
         >
       </button>
-      <div class="right">
-        <div class="header">
+      <div class="body__right">
+        <div class="body__header">
           <a
             class="textlink display-name"
             tabindex="0"
@@ -226,7 +241,7 @@ function removeThisPost (uri: string) {
         </div>
         <div
           v-if="type !== 'postInPost'"
-          class="footer"
+          class="body__footer"
         >
           <div>
             <button
@@ -292,7 +307,6 @@ function removeThisPost (uri: string) {
         </div>
       </div>
     </div>
-    <slot name="after" />
     <Loader
       v-if="state.processing"
       @click.stop
@@ -334,20 +348,26 @@ function removeThisPost (uri: string) {
     pointer-events: none;
 
     .images,
-    .footer {
+    .body__footer {
       display: none;
     }
   }
 }
 
-:deep() .replier,
+.header:not(:empty) {
+  display: flex;
+  grid-gap: 1em;
+  margin-bottom: 1em;
+}
+
+.replier,
 .reposter {
   cursor: pointer;
   display: grid;
   grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
-  margin: -1em -1em 0 -1em;
+  margin: -1em;
   padding: 1em;
 
   & > .svg-icon {
@@ -368,7 +388,7 @@ function removeThisPost (uri: string) {
     font-size: 0.875em;
   }
 }
-:deep() .replier {
+.replier {
   &:focus, &:hover {
     & > .svg-icon {
       fill: rgb(var(--accent-color));
@@ -429,14 +449,14 @@ function removeThisPost (uri: string) {
   @include avatar-link(var(--avatar-size));
 }
 
-.right {
+.body__right {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   grid-gap: 0.5em;
 }
 
-.header {
+.body__header {
   grid-area: h;
   display: grid;
   align-items: baseline;
@@ -566,7 +586,7 @@ function removeThisPost (uri: string) {
   }
 }
 
-.footer {
+.body__footer {
   grid-area: f;
   display: grid;
   align-items: center;
