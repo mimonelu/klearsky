@@ -40,8 +40,12 @@ function onClickReplier () {
   emit("onClickReplier")
 }
 
-async function openPost (uri: string) {
-  await router.push({ name: "post", query: { uri } })
+async function openPostThread (post: TTPost) {
+  const rootUri: undefined | string = post.record.reply?.root?.uri
+  await router.push({ name: "post", query: {
+    uri: rootUri != null ? rootUri : post.uri,
+    postUri: post.uri,
+  } })
 }
 
 async function openProfile (handle: string) {
@@ -152,7 +156,7 @@ function removeThisPost (uri: string) {
     :data-type="type"
     :data-mode="mode"
     :data-repost="post.__reason != null"
-    @click.prevent.stop="openPost(post.uri)"
+    @click.prevent.stop="openPostThread(post)"
   >
     <div class="header">
       <div

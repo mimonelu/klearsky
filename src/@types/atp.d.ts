@@ -73,6 +73,16 @@ type TTPost = {
     __textHtml: string // Injected
     $type: string
     createdAt: string
+    reply?: {
+      root?: {
+        cid: string
+        uri: string
+      }
+      parent?: {
+        cid: string
+        uri: string
+      }
+    }
     embed?: {
       $type: string
       images?: Array<{

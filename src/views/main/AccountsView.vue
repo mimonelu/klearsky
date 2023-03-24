@@ -121,7 +121,7 @@ function deleteAccount (session: TTSession) {
     }
   }
   &[data-is-me="true"] &__left {
-    background-color: rgba(var(--accent-color), 0.25);
+    background-color: rgba(var(--accent-color), 0.125);
   }
 
   &__image {
