@@ -57,10 +57,12 @@ function close () {
 </script>
 
 <template>
-  <div class="image-popup">
+  <div
+    class="image-popup"
+    :data-mode="state.mode"
+  >
     <div
       class="image"
-      :data-mode="state.mode"
       :style="`
         background-image: url(${uri ?? '/img/void'});
         background-position: ${state.x * 100}% ${state.y * 100}%
@@ -93,8 +95,8 @@ function close () {
   left: 0;
   top: 0;
   z-index: 1;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 
 .image {
@@ -105,12 +107,13 @@ function close () {
   width: 100%;
   height: 100%;
   transition: background-position 100ms ease-out;
-  &[data-mode="false"] {
+  [data-mode="false"] & {
     background-size: contain;
   }
 }
 
 .closer {
+  background-color: rgba(var(--bg-color), 0.25);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -118,12 +121,15 @@ function close () {
   position: absolute;
   right: 0;
   top: 0;
-  width: 6rem;
-  min-height: 6rem;
+  width: 5rem;
+  min-height: 5rem;
+  [data-mode="true"] & {
+    display: none;
+  }
 
   & > .svg-icon {
     fill: rgba(var(--fg-color), 0.75);
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 
   &:focus, &:hover {

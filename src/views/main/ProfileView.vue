@@ -202,6 +202,9 @@ function openChildPage (pageName: string) {
 
 .banner {
   display: block;
+  &[data-has-banner="true"] {
+    cursor: pointer;
+  }
   &[data-has-banner="false"] {
     background-image:
       linear-gradient(45deg, rgba(var(--fg-color), 0.1) 25%, transparent 25%),
