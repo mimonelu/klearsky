@@ -61,7 +61,7 @@ const yyyy = (new Date).getFullYear()
 
   &::before,
   &::after {
-    background-color: rgba(var(--fg-color), 0.25);
+    background-color: rgba(var(--fg-color), 0.125);
     content: "";
     display: block;
     flex-grow: 1;
