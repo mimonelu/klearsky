@@ -551,6 +551,7 @@ function removeThisPost (uri: string) {
     aspect-ratio: 1.91 / 1;
     display: block;
     object-fit: cover;
+    width: 100%;
     height: 100%;
   }
 }
