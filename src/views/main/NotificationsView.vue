@@ -1,26 +1,17 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import { RouterView, useRouter } from "vue-router"
+import { RouterView } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
 
 const mainState = inject("state") as MainState
 
-const router = useRouter()
-
 async function fetchNotifications (direction: "new" | "old") {
-  blurElement()
   mainState.processing = true
   try {
     await mainState.fetchNotifications(direction)
   } finally {
     mainState.processing = false
   }
-}
-
-function openChildPage (pageName: string) {
-  blurElement()
-  router.push({ name: pageName })
 }
 </script>
 
@@ -33,48 +24,48 @@ function openChildPage (pageName: string) {
       >
         <SVGIcon name="cursorUp" />
       </button>
-      <button
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'reply-notifications'"
-        @click.prevent="openChildPage('reply-notifications')"
+        to="/notifications/reply"
+        @click.prevent
       >
         <SVGIcon name="post" />
-      </button>
-      <button
+      </RouterLink>
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'repost-notifications'"
-        @click.prevent="openChildPage('repost-notifications')"
+        to="/notifications/repost"
+        @click.prevent
       >
         <SVGIcon name="repost" />
-      </button>
-      <button
+      </RouterLink>
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'vote-notifications'"
-        @click.prevent="openChildPage('vote-notifications')"
+        to="/notifications/vote"
+        @click.prevent
       >
         <SVGIcon name="heart" />
-      </button>
-      <button
+      </RouterLink>
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'mention-notifications'"
-        @click.prevent="openChildPage('mention-notifications')"
+        to="/notifications/mention"
+        @click.prevent
       >
         <SVGIcon name="at" />
-      </button>
-      <button
+      </RouterLink>
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'follow-notifications'"
-        @click.prevent="openChildPage('follow-notifications')"
+        to="/notifications/follow"
+        @click.prevent
       >
         <SVGIcon name="person" />
-      </button>
-      <button
+      </RouterLink>
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'invite-notifications'"
-        @click.prevent="openChildPage('invite-notifications')"
+        to="/notifications/invite"
+        @click.prevent
       >
         <SVGIcon name="mail" />
-      </button>
+      </RouterLink>
       <button
         class="tab__button--outline"
         @click.prevent="fetchNotifications('old')"

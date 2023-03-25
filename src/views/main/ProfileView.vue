@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import { RouterView, useRouter } from "vue-router"
+import { RouterView } from "vue-router"
 import type { LocationQueryValue } from "vue-router"
 import format from "date-fns/format"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
@@ -14,8 +14,6 @@ const state = reactive<{
 }>({
   profileMenuDisplay: false,
 })
-
-const router = useRouter()
 
 function isUserProfile (): boolean {
   const handle = mainState.currentQuery.handle as LocationQueryValue
@@ -62,20 +60,11 @@ function getIndexedAt (indexedAt?: null | string): string {
 }
 
 function openPostMenu () {
-  blurElement()
   state.profileMenuDisplay = !state.profileMenuDisplay
 }
 
 function closePostMenu () {
   state.profileMenuDisplay = false
-}
-
-function openChildPage (pageName: string) {
-  blurElement()
-  router.push({
-    name: pageName,
-    query: { handle: mainState.currentProfile?.handle },
-  })
 }
 </script>
 
@@ -172,21 +161,21 @@ function openChildPage (pageName: string) {
       </div>
     </div>
     <div class="tab">
-      <button
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'profile-post'"
-        @click.prevent="openChildPage('profile-post')"
-      >{{ $t("post") }}</button>
-      <button
+        :to="{ path: '/profile/post', query: { handle: mainState.currentProfile?.handle } }"
+        @click.prevent
+      >{{ $t("post") }}</RouterLink>
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'profile-following'"
-        @click.prevent="openChildPage('profile-following')"
-      >{{ $t("following") }}</button>
-      <button
+        :to="{ path: '/profile/following', query: { handle: mainState.currentProfile?.handle } }"
+        @click.prevent
+      >{{ $t("following") }}</RouterLink>
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'profile-follower'"
-        @click.prevent="openChildPage('profile-follower')"
-      >{{ $t("follower") }}</button>
+        :to="{ path: '/profile/follower', query: { handle: mainState.currentProfile?.handle } }"
+        @click.prevent
+      >{{ $t("follower") }}</RouterLink>
     </div>
     <RouterView />
   </div>

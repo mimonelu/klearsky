@@ -17,7 +17,6 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 function translateText () {
-  blurElement()
   if (props.translateText == null) return
   const language = window.navigator.language
   window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(props.translateText)}&op=translate`)
@@ -25,7 +24,6 @@ function translateText () {
 }
 
 async function copyText () {
-  blurElement()
   if (props.copyText == null) return
   await navigator.clipboard.writeText(props.copyText)
   emit("close")
@@ -45,7 +43,6 @@ async function deletePost () {
 }
 
 function openSource () {
-  blurElement()
   if (props.openSource == null) return
   displayJson(props.openSource)
   emit("close")

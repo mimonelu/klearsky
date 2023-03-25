@@ -1,28 +1,20 @@
 <script lang="ts" setup>
-import { RouterView, useRouter } from "vue-router"
-import { blurElement } from "@/composables/misc"
-
-const router = useRouter()
-
-function openChildPage (pageName: string) {
-  blurElement()
-  router.push({ name: pageName })
-}
+import { RouterView } from "vue-router"
 </script>
 
 <template>
   <div class="search-view">
     <div class="tab">
-      <button
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'user-search'"
-        @click.prevent="openChildPage('user-search')"
-      >{{ $t("userSearch") }}</button>
-      <button
+        to="/search/user"
+        @click.prevent
+      >{{ $t("userSearch") }}</RouterLink>
+      <RouterLink
         class="tab__button"
-        :data-selected="router.currentRoute.value.name === 'keyword-search'"
-        @click.prevent="openChildPage('keyword-search')"
-      >{{ $t("keywordSearch") }}</button>
+        to="/search/keyword"
+        @click.prevent
+      >{{ $t("keywordSearch") }}</RouterLink>
     </div>
     <RouterView class="child-view" />
   </div>

@@ -5,7 +5,6 @@
   &__button,
   &__button--outline {
     background-color: rgb(var(--bg-color));
-    border-bottom: 2px solid transparent;
     color: rgba(var(--fg-color), 0.5);
     cursor: pointer;
     display: flex;
@@ -16,8 +15,8 @@
     width: 33.333%;
     min-height: 3rem;
     text-align: center;
-    &[data-selected="true"] {
-      border-bottom: 2px solid rgb(var(--accent-color));
+    &.router-link-active {
+      background-color: rgba(var(--accent-color), 0.125);
     }
     &:focus, &:hover {
       color: rgb(var(--fg-color));

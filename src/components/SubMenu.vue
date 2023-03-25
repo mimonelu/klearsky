@@ -2,10 +2,8 @@
 import CopyRight from "@/components/Copyright.vue"
 import Logo from "@/components/Logo.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
 
 function moveToTop () {
-  blurElement()
   window.scrollTo({
     left: 0,
     top: 0,
@@ -14,7 +12,6 @@ function moveToTop () {
 }
 
 function moveToBottom () {
-  blurElement()
   window.scrollTo({
     left: 0,
     top: document.body.clientHeight,

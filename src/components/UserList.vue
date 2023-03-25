@@ -2,7 +2,6 @@
 import { inject } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
-import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{
   type: "follower" | "following"
@@ -15,7 +14,6 @@ const currentUsers = props.type === "follower"
   : mainState.currentFollowings
 
 async function fetchUsers (direction: "new" | "old") {
-  blurElement()
   mainState.processing = true
   try {
     switch (props.type) {

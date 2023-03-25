@@ -115,8 +115,6 @@ async function updateThisPost () {
 }
 
 async function openRepostMenu () {
-  blurElement()
-
   // リポスト済みであればリポストメニューを開閉する
   if (props.post.viewer.repost == null) {
     state.repostMenuDisplay = !state.repostMenuDisplay
@@ -207,7 +205,7 @@ function removeThisPost (uri: string) {
           :href="post.embed.external.uri"
           rel="noreferrer"
           target="_blank"
-          @click.stop="blurElement"
+          @click.stop
         >
           <div class="external__title">{{ post.embed.external.title ?? '' }}</div>
           <div class="external__uri">{{ post.embed.external.uri }}</div>

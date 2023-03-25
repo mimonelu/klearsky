@@ -19,7 +19,6 @@ router.afterEach(() => {
 })
 
 function back () {
-  blurElement()
   if (state.canBack) router.back()
 }
 
@@ -29,7 +28,6 @@ async function openSendPostPopup () {
 }
 
 function moveToBottom () {
-  blurElement()
   window.scrollTo({
     left: 0,
     top: document.body.clientHeight,
@@ -62,7 +60,7 @@ function moveToBottom () {
         mainState.currentPath.startsWith('/profile/') &&
         mainState.currentQuery.handle === mainState.atp.session?.handle
       "
-      @click.prevent="blurElement"
+      @click.prevent
     >
       <img
         class="image"
@@ -74,7 +72,7 @@ function moveToBottom () {
     <RouterLink
       class="link-button"
       to="/home"
-      @click.prevent="blurElement"
+      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="home" />
@@ -85,7 +83,7 @@ function moveToBottom () {
       class="link-button"
       to="/search/user"
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
-      @click.prevent="blurElement"
+      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="search" />
@@ -96,7 +94,7 @@ function moveToBottom () {
       class="link-button"
       to="/notifications/reply"
       :data-is-focus="mainState.currentPath.startsWith('/notifications/')"
-      @click.prevent="blurElement"
+      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="bell" />
@@ -106,7 +104,7 @@ function moveToBottom () {
     <RouterLink
       class="link-button"
       to="/settings"
-      @click.prevent="blurElement"
+      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="setting" />
@@ -116,7 +114,7 @@ function moveToBottom () {
     <RouterLink
       class="link-button"
       to="/accounts"
-      @click.prevent="blurElement"
+      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="person" />

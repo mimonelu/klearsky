@@ -1,30 +1,21 @@
 <script lang="ts" setup>
-import { useRouter } from "vue-router"
-import { blurElement } from "@/composables/misc"
-
 defineProps<{
   user: TTUser
 }>()
-
-const router = useRouter()
-
-async function openProfile (handle: string) {
-  blurElement()
-  await router.push({ name: "profile-post", query: { handle } })
-}
 </script>
 
 <template>
   <div class="user-box">
-    <button
+    <RouterLink
       class="avatar"
-      @click.stop="openProfile(user.handle)"
+      :to="{ path: '/profile/post', query: { handle: user.handle } }"
+      @click.prevent
     >
       <img
         loading="lazy"
         :src="user.avatar ?? '/img/void-avatar.png'"
       >
-    </button>
+    </RouterLink>
     <div class="display-name">{{ user.displayName }}</div>
     <div class="handle">{{ user.handle }}</div>
     <div class="description">
