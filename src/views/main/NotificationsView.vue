@@ -1,14 +1,20 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, onMounted } from "vue"
 import { RouterView } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
 
-async function fetchNotifications (direction: "new" | "old") {
+onMounted(async () => {
+  if (mainState.notificationCount <= 0) return
+  mainState.notificationCount = 0
+  await mainState.atp.updateNotificationSeen()
+})
+
+async function fetchNotifications (limit: number, direction: "new" | "old") {
   mainState.processing = true
   try {
-    await mainState.fetchNotifications(direction)
+    await mainState.fetchNotifications(limit, direction, false)
   } finally {
     mainState.processing = false
   }
@@ -20,7 +26,7 @@ async function fetchNotifications (direction: "new" | "old") {
     <div class="tab">
       <button
         class="tab__button--outline"
-        @click.prevent="fetchNotifications('new')"
+        @click.prevent="fetchNotifications(25, 'new')"
       >
         <SVGIcon name="cursorUp" />
       </button>
@@ -68,7 +74,7 @@ async function fetchNotifications (direction: "new" | "old") {
       </RouterLink>
       <button
         class="tab__button--outline"
-        @click.prevent="fetchNotifications('old')"
+        @click.prevent="fetchNotifications(25, 'old')"
       >
         <SVGIcon name="cursorDown" />
       </button>

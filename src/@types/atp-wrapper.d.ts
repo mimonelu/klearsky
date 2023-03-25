@@ -86,12 +86,17 @@ interface TIAtpWrapper {
     rootUri?: null | string,
     parentUri?: null | string
   ): Promise<Array<TTFeed>>
+  fetchNotificationCount(this: TIAtpWrapper): Promise<null | number>
   fetchNotifications(
     this: TIAtpWrapper,
     values: Array<TTNotification>,
     limit?: number,
+    cursor?: string,
+    noNewProp?: boolean
+  ): Promise<null | {
     cursor?: string
-  ): Promise<undefined | string>
+    newNotificationCount: number
+  }>
   fetchProfile(this: TIAtpWrapper, actor: string): Promise<null | TTProfile>
   fetchPostThread(
     this: TIAtpWrapper,
@@ -124,6 +129,7 @@ interface TIAtpWrapper {
   logout(this: TIAtpWrapper, did?: string)
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
+  updateNotificationSeen(this: TIAtpWrapper): Promise<boolean>
   updateProfile(
     this: TIAtpWrapper,
     params: TTUpdateProfileParams

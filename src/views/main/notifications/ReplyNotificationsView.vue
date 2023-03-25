@@ -7,9 +7,3 @@ import NotificationList from "@/components/NotificationList.vue"
     <NotificationList reason="reply" />
   </div>
 </template>
-
-<style lang="scss" scoped>
-.reply-notifications-view {
-  padding: 0.5rem 0;
-}
-</style>

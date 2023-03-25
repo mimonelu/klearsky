@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive, watch } from "vue"
+import { inject, onBeforeUnmount, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import format from "date-fns/format"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -27,6 +27,12 @@ const iconMap: { [reason: string]: string } = {
   repost: "repost",
   vote: "heart",
 }
+
+onBeforeUnmount(() => {
+  state.notifications.forEach((notification: TTNotification) => {
+    notification.__new = false
+  })
+})
 
 watch(mainState.notifications, updateNotifications)
 
@@ -57,7 +63,7 @@ async function openSubject (notification: TTNotification) {
     case "reply":
     case "repost":
     case "vote": {
-      await router.push({ name: "post", query: { uri: notification.reasonSubject } })
+      await router.push({ name: "post", query: { postUri: notification.reasonSubject } })
       break
     }
   }
@@ -79,6 +85,7 @@ function formatDate (dateString: string): string {
       class="notification"
       tabindex="0"
       :data-reason="props.reason"
+      :data-is-new="notification.__new"
       @click="openSubject(notification)"
     >
       <SVGIcon
@@ -110,6 +117,15 @@ function formatDate (dateString: string): string {
   grid-gap: 0.5rem;
   overflow: hidden;
   padding: 0.5rem 1rem;
+  &:first-child {
+    padding-top: 1rem;
+  }
+  &:last-child {
+    padding-bottom: 1rem;
+  }
+  &[data-is-new="true"] {
+    background-color: rgba(var(--share-color), 0.125);
+  }
   &:focus, &:hover {
     filter: brightness(1.25);
   }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   onMounted,
+  onUnmounted,
   provide,
   reactive
 } from "vue"
@@ -53,21 +54,35 @@ resetState()
 
 provide("state", state)
 
+let notificationTimer: null | number = null
+
 onMounted(async () => {
   state.currentPath = router.currentRoute.value.fullPath
   state.currentQuery = router.currentRoute.value.query
   state.processing = true
   try {
     await autoLogin()
+
+    await updateNotification(true)
+    notificationTimer = setInterval(() => {
+      updateNotification(false)
+    }, 1000 * 60)
+
     await processPage(router.currentRoute.value.name)
   } finally {
     try {
       await fetchUserProfile()
-      await fetchNotifications("new")
     } finally {
       state.mounted = true
       state.processing = false
     }
+  }
+})
+
+onUnmounted(() => {
+  if (notificationTimer != null) {
+    clearInterval(notificationTimer)
+    notificationTimer = null
   }
 })
 
@@ -116,6 +131,7 @@ function resetState () {
   state.currentQuery = {}
   state.notifications = []
   state.notificationCursor = undefined
+  state.notificationCount = 0
 }
 
 async function autoLogin () {
@@ -260,9 +276,28 @@ async function fetchFollowers (direction: "new" | "old") {
   state.currentCursor = cursor
 }
 
-async function fetchNotifications (direction: "new" | "old") {
-  state.notificationCursor =
-    await state.atp.fetchNotifications(state.notifications, 20, direction === "new" ? undefined : state.notificationCursor)
+async function fetchNotifications (limit: number, direction: "new" | "old", noNewProp?: boolean) {
+  const result: null | {
+    cursor?: string
+    newNotificationCount: number
+  } = await state.atp.fetchNotifications(
+    state.notifications,
+    limit,
+    direction === "new" ? undefined : state.notificationCursor,
+    noNewProp
+  )
+  if (result == null) return
+  state.notificationCursor = result.cursor
+  // TODO: いったん据え置き
+  // state.notificationCount += result.newNotificationCount
+}
+
+async function updateNotification (forceUpdate: boolean) {
+  const count = await state.atp.fetchNotificationCount() ?? 0
+  state.notificationCount = count
+  if (count > 0 || forceUpdate) {
+    await state.fetchNotifications(forceUpdate ? 50 : Math.min(50, count), "new", forceUpdate)
+  }
 }
 
 let isSendPostDone = false

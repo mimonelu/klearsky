@@ -144,6 +144,7 @@ type TTNotification = {
     | "invite"
     | (string & {})
   reasonSubject?: string
+  __new: boolean // Injected
 }
 
 type TTProfile = {

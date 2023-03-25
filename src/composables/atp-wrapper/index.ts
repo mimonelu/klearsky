@@ -16,6 +16,7 @@ import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
 import fetchMultiplePostThreads from "@/composables/atp-wrapper/fetch-multiple-post-threads"
+import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
@@ -24,6 +25,7 @@ import fetchUserSearch from "@/composables/atp-wrapper/fetch-user-search"
 import login from "@/composables/atp-wrapper/login"
 import logout from "@/composables/atp-wrapper/logout"
 import resumeSession from "@/composables/atp-wrapper/resume-session"
+import updateNotificationSeen from "@/composables/atp-wrapper/update-notification-seen"
 import updateProfile from "@/composables/atp-wrapper/update-profile"
 import updateVote from "@/composables/atp-wrapper/update-vote"
 import storage from "@/composables/storage"
@@ -66,6 +68,8 @@ class AtpWrapper implements TIAtpWrapper {
   fetchKeywordSearch
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchMultiplePostThreads =
   fetchMultiplePostThreads
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchNotificationCount =
+  fetchNotificationCount
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchNotifications =
   fetchNotifications
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchPostThread =
@@ -83,6 +87,8 @@ class AtpWrapper implements TIAtpWrapper {
   resumeSession
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).saveData =
   saveData
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).updateNotificationSeen =
+  updateNotificationSeen
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).updateProfile =
   updateProfile
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).updateVote = updateVote

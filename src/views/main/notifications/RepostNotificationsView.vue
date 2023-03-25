@@ -7,9 +7,3 @@ import NotificationList from "@/components/NotificationList.vue"
     <NotificationList reason="repost" />
   </div>
 </template>
-
-<style lang="scss" scoped>
-.repost-notifications-view {
-  padding: 0.5rem 0;
-}
-</style>

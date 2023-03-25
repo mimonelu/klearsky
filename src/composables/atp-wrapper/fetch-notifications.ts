@@ -4,16 +4,22 @@ export default async function (
   this: TIAtpWrapper,
   values: Array<TTNotification>,
   limit?: number,
+  cursor?: string,
+  noNewProp?: boolean
+): Promise<null | {
   cursor?: string
-): Promise<undefined | string> {
-  if (this.agent == null) return undefined
+  newNotificationCount: number
+}> {
+  if (this.agent == null) return null
   const query: AppBskyNotificationList.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.before = cursor
   const response: AppBskyNotificationList.Response =
     await this.agent.api.app.bsky.notification.list(query)
   console.log("[klearsky/fetchNotifications]", response)
-  if (!response.success) return undefined
+  if (!response.success) return null
+
+  let newNotificationCount = 0
 
   response.data.notifications.forEach(
     (notification: AppBskyNotificationList.Notification) => {
@@ -23,6 +29,7 @@ export default async function (
         }
       )
       if (existence != null) return
+      if (cursor == null) newNotificationCount ++
       values.push({
         avatar: notification.author.avatar,
         cid: notification.cid,
@@ -34,6 +41,7 @@ export default async function (
           notification.reason === "mention"
             ? notification.uri
             : notification.reasonSubject,
+        __new: noNewProp ? false : cursor == null,
       })
     }
   )
@@ -44,5 +52,8 @@ export default async function (
     return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
   })
 
-  return response.data.cursor
+  return {
+    cursor: response.data.cursor,
+    newNotificationCount,
+  }
 }

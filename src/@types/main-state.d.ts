@@ -28,6 +28,7 @@ type MainState = {
 
   notifications: Array<TTNotification>
   notificationCursor?: string
+  notificationCount: number
 
   loginPopupDisplay: boolean
 
@@ -47,7 +48,11 @@ type MainState = {
   fetchCurrentAuthorFeed: (direction: "new" | "old") => Promise<void>
   fetchTimeline: (direction: "old" | "new") => Promise<void>
   fetchPostThread: () => Promise<void>
-  fetchNotifications: (direction: "new" | "old") => Promise<void>
+  fetchNotifications: (
+    limit: number,
+    direction: "new" | "old",
+    noNewProp?: boolean
+  ) => Promise<void>
   fetchFollowers: (direction: "new" | "old") => Promise<void>
   fetchFollowings: (direction: "new" | "old") => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>

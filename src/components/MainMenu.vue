@@ -98,6 +98,10 @@ function moveToBottom () {
     >
       <div class="icon">
         <SVGIcon name="bell" />
+        <div
+          v-if="mainState.notificationCount > 0"
+          class="notification-count"
+        >{{ mainState.notificationCount }}</div>
       </div>
       <div class="label">{{ $t("notifications") }}</div>
     </RouterLink>
@@ -224,6 +228,7 @@ function moveToBottom () {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     min-width: 3rem;
     min-height: 3rem;
 
@@ -262,5 +267,18 @@ function moveToBottom () {
   &:not([data-is-focus]).router-link-active {
     background-color: rgba(var(--accent-color), 0.125);
   }
+}
+
+.notification-count {
+  background-color: rgb(var(--notice-color));
+  border: 1px solid rgb(var(--bg-color));
+  border-radius: 1px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0.125rem 0.25rem;
+  position: absolute;
+  right: 0.25rem;
+  top: 0.25rem;
 }
 </style>
