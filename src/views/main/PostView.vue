@@ -9,7 +9,7 @@ const mainState = inject("state") as MainState
   <div class="post-view">
     <FeedThread
       :feeds="mainState.currentFeeds"
-      :focusUri="mainState.currentQuery.postUri as undefined | string"
+      :postUri="mainState.currentQuery.postUri as undefined | string"
     />
   </div>
 </template>

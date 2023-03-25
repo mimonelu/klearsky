@@ -80,6 +80,12 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     query: string
   ): Promise<undefined | any>
+  fetchMultiplePostThreads(
+    this: TIAtpWrapper,
+    postUri: string,
+    rootUri?: null | string,
+    parentUri?: null | string
+  ): Promise<Array<TTFeed>>
   fetchNotifications(
     this: TIAtpWrapper,
     values: Array<TTNotification>,

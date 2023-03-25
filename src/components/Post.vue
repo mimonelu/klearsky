@@ -42,8 +42,10 @@ function onClickReplier () {
 
 async function openPostThread (post: TTPost) {
   const rootUri: undefined | string = post.record.reply?.root?.uri
+  const parentUri: undefined | string = post.record.reply?.parent?.uri
   await router.push({ name: "post", query: {
-    uri: rootUri != null ? rootUri : post.uri,
+    rootUri,
+    parentUri,
     postUri: post.uri,
   } })
 }
@@ -332,15 +334,31 @@ function removeThisPost (uri: string) {
   .feed-thread &[data-type="root"],
   .feed-thread &[data-type="parent"] {
     &::before {
-      background-color: rgba(var(--fg-color), 0.25);
+      border-left: 2px solid rgba(var(--fg-color), 0.25);
       content: "";
       display: block;
       position: absolute;
       top: calc(1em + var(--avatar-size) + 8px);
       left: calc(2.5em - 1px);
-      width: 2px;
+      width: 0;
       height: calc(100% - var(--avatar-size) - 16px);
     }
+  }
+  .feed-list &[data-type="root"]:not(:last-child),
+  .feed-thread &[data-type="root"] {
+    &::before {
+      border-left-style: dotted;
+    }
+  }
+  .feed-thread &[data-type="root"],
+  .feed-thread &[data-type="parent"] {
+    &::before {
+      border-left-color: rgba(var(--fg-color), 0.125);
+    }
+  }
+
+  .feed-thread &[data-type="root"] {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   }
 
   &[data-type="postInPost"] {

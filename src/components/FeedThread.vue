@@ -3,7 +3,7 @@ import Post from "@/components/Post.vue"
 
 const props = defineProps<{
   feeds: null | Array<TTFeed>;
-  focusUri?: string;
+  postUri?: string;
 }>()
 
 function getPostType (feedIndex: number): "post" | "root" | "parent" | "postInPost" {
@@ -44,7 +44,7 @@ function removeThisPost (uri: string) {
     <div
       v-for="feed, feedIndex of feeds"
       class="feed"
-      :data-focus="feed.post.uri === focusUri"
+      :data-focus="feed.post.uri === postUri"
     >
       <Post
         v-if="feed.post != null"

@@ -15,6 +15,7 @@ import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
+import fetchMultiplePostThreads from "@/composables/atp-wrapper/fetch-multiple-post-threads"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
@@ -63,6 +64,8 @@ class AtpWrapper implements TIAtpWrapper {
   fetchFollowings
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchKeywordSearch =
   fetchKeywordSearch
+;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchMultiplePostThreads =
+  fetchMultiplePostThreads
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchNotifications =
   fetchNotifications
 ;(AtpWrapper.prototype as unknown as TIAtpWrapper).fetchPostThread =

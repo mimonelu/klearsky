@@ -179,13 +179,15 @@ async function processPage (pageName?: null | RouteRecordName) {
       break
     }
     case "post": {
-      const uri = state.currentQuery.uri as LocationQueryValue
-      if (!uri) {
+      const rootUri = state.currentQuery.rootUri as LocationQueryValue
+      const parentUri = state.currentQuery.parentUri as LocationQueryValue
+      const postUri = state.currentQuery.postUri as LocationQueryValue
+      if (!postUri) {
         await router.push({ name: "home" })
         break
       }
       state.currentFeeds?.splice(0)
-      state.currentFeeds = await state.atp.fetchPostThread(uri) ?? []
+      state.currentFeeds = await state.atp.fetchMultiplePostThreads(postUri, rootUri, parentUri)
       break
     }
   }
