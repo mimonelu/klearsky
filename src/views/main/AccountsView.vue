@@ -17,7 +17,7 @@ async function login (session: TTSession) {
   blurElement()
   mainState.atp.data.did = session.did
   mainState.atp.saveData()
-  if (mainState.atp.hasLogin()) router.go(0)
+  if (mainState.atp.hasLogin()) location.reload()
 }
 
 async function logout () {
@@ -25,13 +25,13 @@ async function logout () {
   mainState.atp.logout()
   mainState.timelineFeeds?.splice(0)
   await router.push({ name: "home" })
-  router.go(0)
+  location.reload()
 }
 
 function deleteAccount (session: TTSession) {
   blurElement()
   mainState.atp.logout(session.did)
-  if (mainState.atp.session?.did === session.did) router.go(0)
+  if (mainState.atp.session?.did === session.did) location.reload()
 }
 </script>
 
