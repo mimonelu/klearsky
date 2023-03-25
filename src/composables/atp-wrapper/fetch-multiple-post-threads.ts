@@ -1,3 +1,5 @@
+// TODO: 現状未使用。不要であれば削除すること
+
 import {
   mergeFeeds,
   sortFeeds

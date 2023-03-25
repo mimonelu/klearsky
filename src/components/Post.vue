@@ -41,13 +41,7 @@ function onClickReplier () {
 }
 
 async function openPostThread (post: TTPost) {
-  const rootUri: undefined | string = post.record.reply?.root?.uri
-  const parentUri: undefined | string = post.record.reply?.parent?.uri
-  await router.push({ name: "post", query: {
-    rootUri,
-    parentUri,
-    postUri: post.uri,
-  } })
+  await router.push({ name: "post", query: { postUri: post.uri } })
 }
 
 async function openProfile (handle: string) {
@@ -349,16 +343,6 @@ function removeThisPost (uri: string) {
     &::before {
       border-left-style: dotted;
     }
-  }
-  .feed-thread &[data-type="root"],
-  .feed-thread &[data-type="parent"] {
-    &::before {
-      border-left-color: rgba(var(--fg-color), 0.125);
-    }
-  }
-
-  .feed-thread &[data-type="root"] {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   }
 
   &[data-type="postInPost"] {
