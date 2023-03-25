@@ -12,6 +12,7 @@ type MainState = {
   currentProfile: null | TTProfile
   currentFeeds: Array<TTFeed>
   currentCursor?: string
+  currentPath: string
   currentQuery: LocationQuery
 
   currentFollowers: Array<TTUser>

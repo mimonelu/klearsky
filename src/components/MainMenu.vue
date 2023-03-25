@@ -23,14 +23,6 @@ function back () {
   if (state.canBack) router.back()
 }
 
-async function openUserProfile () {
-  blurElement()
-  await router.push({
-    name: "profile-post",
-    query: { handle: mainState.atp.session?.handle },
-  })
-}
-
 async function openSendPostPopup () {
   blurElement()
   await mainState.openSendPostPopup("post")
@@ -63,9 +55,14 @@ function moveToBottom () {
     >
       <SVGIcon name="shimmer" />
     </div>
-    <button
+    <RouterLink
       class="link-button"
-      @click.prevent="openUserProfile"
+      :to="{ name: 'profile-post', query: { handle: mainState.atp.session?.handle } }"
+      :data-is-focus="
+        mainState.currentPath.startsWith('/profile/') &&
+        mainState.currentQuery.handle === mainState.atp.session?.handle
+      "
+      @click.prevent="blurElement"
     >
       <img
         class="image"
@@ -73,7 +70,7 @@ function moveToBottom () {
         :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'"
       >
       <div class="label">{{ mainState.userProfile?.handle }}</div>
-    </button>
+    </RouterLink>
     <RouterLink
       class="link-button"
       to="/home"
@@ -87,6 +84,7 @@ function moveToBottom () {
     <RouterLink
       class="link-button"
       to="/search/user"
+      :data-is-focus="mainState.currentPath.startsWith('/search/')"
       @click.prevent="blurElement"
     >
       <div class="icon">
@@ -97,6 +95,7 @@ function moveToBottom () {
     <RouterLink
       class="link-button"
       to="/notifications/reply"
+      :data-is-focus="mainState.currentPath.startsWith('/notifications/')"
       @click.prevent="blurElement"
     >
       <div class="icon">
@@ -204,6 +203,7 @@ function moveToBottom () {
 }
 
 .link-button {
+  border-radius: 1px;
   cursor: pointer;
   display: grid;
   grid-template-columns: min-content 1fr;
@@ -211,11 +211,6 @@ function moveToBottom () {
   justify-content: center;
   grid-gap: 1rem;
   width: 100%;
-  &:focus, &:hover {
-    .label {
-      color: rgb(var(--fg-color));
-    }
-  }
 
   .image {
     border-radius: 1px;
@@ -235,6 +230,7 @@ function moveToBottom () {
     min-height: 3rem;
 
     .svg-icon {
+      fill: rgba(var(--fg-color), 0.5);
       font-size: 1.5rem;
     }
   }
@@ -248,20 +244,25 @@ function moveToBottom () {
     white-space: nowrap;
     word-break: break-all;
   }
-}
-.link-button {
-  .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
+
+  &.send-post-button {
+    .svg-icon {
+      fill: rgb(var(--accent-color));
+    }
   }
+
   &:focus, &:hover {
     .svg-icon {
       fill: rgb(var(--fg-color));
     }
+
+    .label {
+      color: rgb(var(--fg-color));
+    }
   }
-}
-.send-post-button {
-  .svg-icon {
-    fill: rgb(var(--accent-color));
+  &[data-is-focus="true"],
+  &:not([data-is-focus]).router-link-active {
+    background-color: rgba(var(--accent-color), 0.125);
   }
 }
 </style>

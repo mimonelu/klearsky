@@ -54,6 +54,7 @@ resetState()
 provide("state", state)
 
 onMounted(async () => {
+  state.currentPath = router.currentRoute.value.fullPath
   state.currentQuery = router.currentRoute.value.query
   state.processing = true
   try {
@@ -83,6 +84,7 @@ router.afterEach(async (to: RouteLocationNormalized) => {
     window.scrollTo(0, 0)
   }
 
+  state.currentPath = router.currentRoute.value.fullPath
   state.currentQuery = router.currentRoute.value.query
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "home" && state.timelineFeeds.length > 0) return
@@ -110,6 +112,7 @@ function resetState () {
   state.currentSearchUsersCursor = undefined
   state.currentSearchUserTerm = ""
   state.currentSearchLastUserTerm = ""
+  state.currentPath = ""
   state.currentQuery = {}
   state.notifications = []
   state.notificationCursor = undefined
