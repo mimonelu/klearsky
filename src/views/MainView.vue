@@ -74,11 +74,7 @@ onMounted(async () => {
     await autoLogin()
     state.saveSettings()
     state.updateSettings()
-    await updateNotification(true)
-    notificationTimer = setInterval(() => {
-      updateNotification(false)
-    }, 1000 * 60)
-
+    await setupNotificationInterval()
     await processPage(router.currentRoute.value.name)
   } finally {
     try {
@@ -91,10 +87,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  if (notificationTimer != null) {
-    clearInterval(notificationTimer)
-    notificationTimer = null
-  }
+  clearNotificationInterval()
 })
 
 const router = useRouter()
@@ -189,7 +182,9 @@ async function manualLogin (service: string, identifier: string, password: strin
     if (!state.atp.hasLogin()) return
     state.loginPopupDisplay = false
     resetState()
+    state.saveSettings()
     state.updateSettings()
+    await setupNotificationInterval()
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()
   } finally {
@@ -318,6 +313,21 @@ async function fetchFollowers (direction: "new" | "old") {
   if (!handle) return
   const cursor: undefined | string = await state.atp.fetchFollowers(state.currentFollowers, handle, 50, direction === "new" ? undefined : state.currentCursor)
   state.currentCursor = cursor
+}
+
+function clearNotificationInterval () {
+  if (notificationTimer != null) {
+    clearInterval(notificationTimer)
+    notificationTimer = null
+  }
+}
+
+async function setupNotificationInterval () {
+  clearNotificationInterval()
+  await updateNotification(true)
+  notificationTimer = setInterval(() => {
+    updateNotification(false)
+  }, 1000 * 60)
 }
 
 async function fetchNotifications (limit: number, direction: "new" | "old", noNewProp?: boolean) {
