@@ -8,6 +8,7 @@ import AccountsView from "@/views/main/AccountsView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
 import NotificationsView from "@/views/main/NotificationsView.vue"
 import PostView from "@/views/main/PostView.vue"
+import SettingsView from "@/views/main/SettingsView.vue"
 import TimelineView from "@/views/main/TimelineView.vue"
 
 // Main - Profile
@@ -59,6 +60,11 @@ const router = createRouter({
           path: "/post",
           name: "post",
           component: PostView,
+        },
+        {
+          path: "/settings",
+          name: "settings",
+          component: SettingsView,
         },
         {
           path: "/profile",

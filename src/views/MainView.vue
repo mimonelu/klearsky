@@ -38,6 +38,7 @@ const state = reactive<MainState>({
     display: false,
     uri: "",
   },
+  forceUpdate,
   fetchUserProfile,
   fetchCurrentProfile,
   fetchCurrentAuthorFeed,
@@ -113,6 +114,7 @@ router.afterEach(async (to: RouteLocationNormalized) => {
 })
 
 function resetState () {
+  state.updateKey = 0
   state.userProfile = null
   state.timelineFeeds = []
   state.timelineCursor = undefined
@@ -132,6 +134,10 @@ function resetState () {
   state.notifications = []
   state.notificationCursor = undefined
   state.notificationCount = 0
+}
+
+function forceUpdate () {
+  state.updateKey = Math.random()
 }
 
 async function autoLogin () {
@@ -317,7 +323,10 @@ function closeSendPostPopup (done: boolean) {
 </script>
 
 <template>
-  <div class="main-view">
+  <div
+    class="main-view"
+    :key="state.updateKey"
+  >
     <div class="main">
       <div class="main-menu-wrapper">
         <MainMenu />

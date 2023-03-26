@@ -1,6 +1,7 @@
 type MainState = {
   atp: TIAtpWrapper
   mounted: boolean
+  updateKey: number
   hasLogin: boolean
   processing: boolean
 
@@ -43,6 +44,7 @@ type MainState = {
     uri: string
   }
 
+  forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>
   fetchCurrentAuthorFeed: (direction: "new" | "old") => Promise<void>
