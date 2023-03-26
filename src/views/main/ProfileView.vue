@@ -2,7 +2,6 @@
 import { inject, reactive } from "vue"
 import { RouterView } from "vue-router"
 import type { LocationQueryValue } from "vue-router"
-import format from "date-fns/format"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
@@ -53,10 +52,6 @@ async function toggleFollow () {
   } finally {
     mainState.processing = false
   }
-}
-
-function getIndexedAt (indexedAt?: null | string): string {
-  return indexedAt == null ? "" : format(new Date(indexedAt), "yyyy/MM/dd")
 }
 
 function openPostMenu () {
@@ -139,10 +134,6 @@ function closePostMenu () {
           <dl class="followers-count">
             <dt>{{ $t("followersCount") }}</dt>
             <dd>{{ mainState.currentProfile?.followersCount?.toLocaleString() }}</dd>
-          </dl>
-          <dl class="indexed-at">
-            <dt>{{ $t("startedAt") }}</dt>
-            <dd>{{ getIndexedAt(mainState.currentProfile?.indexedAt) }}</dd>
           </dl>
           <button
             class="menu-button"

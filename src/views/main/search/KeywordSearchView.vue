@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted } from "vue"
-import format from "date-fns/format"
+import dateLabel from "@/composables/date-label"
 
 const mainState = inject("state") as MainState
 
@@ -21,11 +21,6 @@ async function fetchNewResults () {
   } finally {
     mainState.processing = false
   }
-}
-
-function formatDate (date?: string): string {
-  if (date == null) return ""
-  return format(new Date(date), "MM/dd HH:mm")
 }
 </script>
 
@@ -51,7 +46,7 @@ function formatDate (date?: string): string {
           :to="{ name: 'post', query: { uri: `at://${result.user?.did}/${result.tid}` } }"
           class="item"
         >
-          <div class="created-at">{{ formatDate(result.post?.createdAt) }}</div>
+          <div class="created-at">{{ dateLabel(result.post?.createdAt) }}</div>
           <div class="text">{{ result.post?.text }}</div>
         </RouterLink>
       </div>

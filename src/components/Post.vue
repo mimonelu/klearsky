@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
-import format from "date-fns/format"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import dateLabel from "@/composables/date-label"
 import { blurElement } from "@/composables/misc"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
@@ -31,10 +31,6 @@ const state = reactive<{
 })
 
 const router = useRouter()
-
-function formatDate (date: string): string {
-  return format(new Date(date), "MM/dd HH:mm")
-}
 
 function onClickReplier () {
   emit("onClickReplier")
@@ -193,7 +189,7 @@ function removeThisPost (uri: string) {
           <div
             v-if="post.indexedAt"
             class="indexed_at"
-          >{{ formatDate(post.indexedAt) }}</div>
+          >{{ dateLabel(post.indexedAt) }}</div>
         </div>
         <div
           class="text"

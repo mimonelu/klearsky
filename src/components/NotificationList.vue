@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import { useRouter } from "vue-router"
-import format from "date-fns/format"
 import SVGIcon from "@/components/SVGIcon.vue"
+import dateLabel from "@/composables/date-label"
 import { blurElement } from "@/composables/misc"
 
 const mainState = inject("state") as MainState
@@ -41,10 +41,6 @@ async function openSubject (notification: TTNotification) {
     }
   }
 }
-
-function formatDate (dateString: string): string {
-  return format(new Date(dateString), "MM/dd HH:mm")
-}
 </script>
 
 <template>
@@ -73,7 +69,7 @@ function formatDate (dateString: string): string {
       </RouterLink>
       <div class="display-name">{{ notification.displayName }}</div>
       <div class="handle">{{ notification.handle }}</div>
-      <div class="indexed-at">{{ formatDate(notification.indexedAt) }}</div>
+      <div class="indexed-at">{{ dateLabel(notification.indexedAt) }}</div>
     </div>
   </div>
 </template>
