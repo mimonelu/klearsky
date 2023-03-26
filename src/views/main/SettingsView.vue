@@ -1,22 +1,13 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject } from "vue"
 import languages from "@/consts/languages.json"
 import PageHeader from "@/components/PageHeader.vue"
 
-const $setI18n = inject("$setI18n") as Function
-const $getI18n = inject("$getI18n") as Function
-
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  language: string;
-}>({
-  language: $getI18n(),
-})
-
 function changeLanguage () {
-  $setI18n(state.language)
-  mainState.forceUpdate()
+  mainState.saveSettings()
+  mainState.updateSettings()
 }
 </script>
 
@@ -28,13 +19,13 @@ function changeLanguage () {
         <div class="section__header">言語</div>
         <div class="section__body">
           <select
-            v-model="state.language"
+            v-model="mainState.currentSetting.language"
             @change="changeLanguage"
           >
             <option
               v-for="language in languages"
               :value="language.value"
-              :selected="language.value === state.language"
+              :selected="language.value === mainState.currentSetting.language"
             >{{ $t(language.label) }}</option>
           </select>
         </div>

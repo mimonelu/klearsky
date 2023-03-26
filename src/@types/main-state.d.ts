@@ -1,3 +1,11 @@
+type TTSetting = {
+  language?: string
+}
+
+type TTSettings = {
+  [did: string]: TTSetting
+}
+
 type MainState = {
   atp: TIAtpWrapper
   mounted: boolean
@@ -43,6 +51,11 @@ type MainState = {
     display: boolean
     uri: string
   }
+
+  settings: TTSettings
+  currentSetting: TTSetting
+  saveSettings: () => void
+  updateSettings: () => void
 
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>

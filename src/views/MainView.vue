@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  inject,
   onMounted,
   onUnmounted,
   provide,
@@ -21,7 +22,11 @@ import MainMenu from "@/components/MainMenu.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import AtpWrapper from "@/composables/atp-wrapper"
+import storage from "@/composables/storage"
 import waitProp from "@/composables/wait-prop"
+
+const $setI18n = inject("$setI18n") as Function
+const $getI18n = inject("$getI18n") as Function
 
 const state = reactive<MainState>({
   // @ts-ignore // TODO:
@@ -38,6 +43,7 @@ const state = reactive<MainState>({
     display: false,
     uri: "",
   },
+  settings: {},
   forceUpdate,
   fetchUserProfile,
   fetchCurrentProfile,
@@ -47,6 +53,8 @@ const state = reactive<MainState>({
   fetchNotifications,
   fetchFollowers,
   fetchFollowings,
+  saveSettings,
+  updateSettings,
   updateUserProfile,
   openSendPostPopup,
 })
@@ -60,10 +68,12 @@ let notificationTimer: null | number = null
 onMounted(async () => {
   state.currentPath = router.currentRoute.value.fullPath
   state.currentQuery = router.currentRoute.value.query
+  state.settings = storage.load("settings") ?? {}
   state.processing = true
   try {
     await autoLogin()
-
+    state.saveSettings()
+    state.updateSettings()
     await updateNotification(true)
     notificationTimer = setInterval(() => {
       updateNotification(false)
@@ -131,9 +141,36 @@ function resetState () {
   state.currentSearchLastUserTerm = ""
   state.currentPath = ""
   state.currentQuery = {}
+  state.currentSetting = {}
   state.notifications = []
   state.notificationCursor = undefined
   state.notificationCount = 0
+}
+
+function saveSettings () {
+  const did = state.atp.session?.did
+  if (did == null) return
+  if (state.settings[did] == null)
+    state.settings[did] = {
+      language: $getI18n(),
+    }
+  else {
+    if (state.settings[did].language == null)
+      state.settings[did].language = $getI18n()
+  }
+  state.currentSetting = state.settings[did]
+  storage.save("settings", state.settings)
+}
+
+function updateSettings () {
+  const did = state.atp.session?.did
+  if (did == null) return
+  const settings = state.settings[did]
+  if (settings == null) return
+  if (settings.language != null) {
+    $setI18n(settings.language)
+    state.forceUpdate()
+  }
 }
 
 function forceUpdate () {
@@ -152,6 +189,7 @@ async function manualLogin (service: string, identifier: string, password: strin
     if (!state.atp.hasLogin()) return
     state.loginPopupDisplay = false
     resetState()
+    state.updateSettings()
     await processPage(router.currentRoute.value.name)
     await fetchUserProfile()
   } finally {
