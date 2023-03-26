@@ -18,16 +18,18 @@ function changeLanguage () {
       <div class="section">
         <div class="section__header">言語</div>
         <div class="section__body">
-          <select
-            v-model="mainState.currentSetting.language"
-            @change="changeLanguage"
-          >
-            <option
-              v-for="language in languages"
-              :value="language.value"
-              :selected="language.value === mainState.currentSetting.language"
-            >{{ $t(language.label) }}</option>
-          </select>
+          <label class="selectbox">
+            <select
+              v-model="mainState.currentSetting.language"
+              @change="changeLanguage"
+            >
+              <option
+                v-for="language in languages"
+                :value="language.value"
+                :selected="language.value === mainState.currentSetting.language"
+              >{{ $t(language.label) }}</option>
+            </select>
+          </label>
         </div>
       </div>
     </div>

@@ -4,3 +4,39 @@
 @import "@/scss/classes/form";
 @import "@/scss/classes/tab";
 @import "@/scss/classes/textlink";
+
+.selectbox {
+  position: relative;
+
+  & > select {
+    border: 1px solid rgba(var(--fg-color), 0.25);
+    border-radius: 1px;
+    cursor: pointer;
+    padding: 0.5em 2.5em 0.5em 1em;
+    line-height: 1.5;
+    &:focus {
+      background-color: rgba(var(--accent-color), 0.125);
+    }
+    &:hover {
+      border-color: rgb(var(--fg-color));
+    }
+  }
+
+  &::after {
+    color: rgba(var(--fg-color), 0.25);
+    content: "▽";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -0.5em;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    right: 0.75em;
+    width: 1em;
+    height: 1em;
+  }
+  &:hover::after {
+    color: rgb(var(--fg-color));
+  }
+}
