@@ -43,7 +43,7 @@ async function fetchNewResults () {
       <div class="results">
         <RouterLink
           v-for="result of mainState.currentSearchKeywordResults"
-          :to="{ name: 'post', query: { uri: `at://${result.user?.did}/${result.tid}` } }"
+          :to="{ name: 'post', query: { postUri: `at://${result.user?.did}/${result.tid}` } }"
           class="item"
         >
           <div class="created-at">{{ dateLabel(result.post?.createdAt) }}</div>

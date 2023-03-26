@@ -30,7 +30,7 @@ async function openSubject (notification: TTNotification) {
       break
     }
     case "mention": {
-      await router.push({ name: "post", query: { uri: notification.reasonSubject } })
+      await router.push({ name: "post", query: { postUri: notification.reasonSubject } })
       break
     }
     case "reply":
