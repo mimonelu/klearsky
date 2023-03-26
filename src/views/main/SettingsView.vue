@@ -16,7 +16,7 @@ function changeLanguage () {
     <PageHeader :title="`${$t('settings')} - ${mainState.atp.session?.handle ?? ''}`" />
     <div class="section-container">
       <div class="section">
-        <div class="section__header">言語</div>
+        <div class="section__header">{{ $t("language") }}</div>
         <div class="section__body">
           <label class="selectbox">
             <select
