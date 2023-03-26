@@ -69,7 +69,10 @@ async function openSubject (notification: TTNotification) {
       </RouterLink>
       <div class="display-name">{{ notification.displayName }}</div>
       <div class="handle">{{ notification.handle }}</div>
-      <div class="indexed-at">{{ dateLabel(notification.indexedAt) }}</div>
+      <div class="indexed-at">{{ dateLabel(
+        notification.indexedAt,
+        mainState.currentSetting.language
+      ) }}</div>
     </div>
   </div>
 </template>

@@ -46,7 +46,10 @@ async function fetchNewResults () {
           :to="{ name: 'post', query: { postUri: `at://${result.user?.did}/${result.tid}` } }"
           class="item"
         >
-          <div class="created-at">{{ dateLabel(result.post?.createdAt) }}</div>
+          <div class="created-at">{{ dateLabel(
+            result.post?.createdAt,
+            mainState.currentSetting.language
+          ) }}</div>
           <div class="text">{{ result.post?.text }}</div>
         </RouterLink>
       </div>

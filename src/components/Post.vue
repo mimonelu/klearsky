@@ -189,7 +189,7 @@ function removeThisPost (uri: string) {
           <div
             v-if="post.indexedAt"
             class="indexed_at"
-          >{{ dateLabel(post.indexedAt) }}</div>
+          >{{ dateLabel(post.indexedAt, mainState.currentSetting.language) }}</div>
         </div>
         <div
           class="text"
