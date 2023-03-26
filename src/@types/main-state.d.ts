@@ -1,5 +1,6 @@
 type TTSetting = {
   language?: string
+  colorTheme?: string
 }
 
 type TTSettings = {

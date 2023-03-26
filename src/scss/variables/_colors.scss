@@ -17,3 +17,12 @@ body {
     --share-color: 32, 192, 64;
   }
 }
+
+body[data-color-theme="warmsand"] {
+  --bg-color: 240, 224, 192;
+  --fg-color: 64, 48, 32;
+  --accent-color: 240, 64, 128;
+  --notice-color: 240, 32, 32;
+  --like-color: 240, 64, 128;
+  --share-color: 0, 160, 32;
+}

@@ -144,13 +144,11 @@ function saveSettings () {
   const did = state.atp.session?.did
   if (did == null) return
   if (state.settings[did] == null)
-    state.settings[did] = {
-      language: $getI18n(),
-    }
-  else {
-    if (state.settings[did].language == null)
-      state.settings[did].language = $getI18n()
-  }
+    state.settings[did] = {}
+  if (state.settings[did].language == null)
+    state.settings[did].language = $getI18n()
+  if (state.settings[did].colorTheme == null)
+    state.settings[did].colorTheme = "auto"
   state.currentSetting = state.settings[did]
   storage.save("settings", state.settings)
 }
@@ -163,6 +161,12 @@ function updateSettings () {
   if (settings.language != null) {
     $setI18n(settings.language)
     state.forceUpdate()
+  }
+  if (settings.colorTheme != null) {
+    window.document.body.setAttribute(
+      "data-color-theme",
+      state.currentSetting.colorTheme as string
+    )
   }
 }
 
