@@ -6,13 +6,9 @@ import PageHeader from "@/components/PageHeader.vue"
 
 const mainState = inject("state") as MainState
 
-function changeLanguage () {
+function changeSetting () {
   mainState.saveSettings()
   mainState.updateSettings()
-}
-
-function changeColorTheme () {
-  mainState.saveSettings()
 }
 </script>
 
@@ -27,7 +23,7 @@ function changeColorTheme () {
           <label class="selectbox">
             <select
               v-model="mainState.currentSetting.language"
-              @change="changeLanguage"
+              @change="changeSetting"
             >
               <option
                 v-for="language in languages"
@@ -46,7 +42,7 @@ function changeColorTheme () {
           <label class="selectbox">
             <select
               v-model="mainState.currentSetting.colorTheme"
-              @change="changeColorTheme"
+              @change="changeSetting"
             >
               <option
                 v-for="colorTheme in colorThemes"
@@ -55,6 +51,19 @@ function changeColorTheme () {
               >{{ $t(colorTheme.label) }}</option>
             </select>
           </label>
+        </div>
+      </div>
+
+      <!-- 背景画像 -->
+      <div class="section">
+        <div class="section__header">{{ $t("backgroundImage") }}</div>
+        <div class="section__body">
+          <input
+            v-model="mainState.currentSetting.backgroundImage"
+            class="textbox"
+            type="url"
+            @change="changeSetting"
+          >
         </div>
       </div>
     </div>
@@ -79,5 +88,9 @@ function changeColorTheme () {
   font-size: 1.25rem;
 }
 
-.section__body {}
+.section__body {
+  input {
+    width: 100%;
+  }
+}
 </style>

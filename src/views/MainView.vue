@@ -149,24 +149,27 @@ function saveSettings () {
     state.settings[did].language = $getI18n()
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
+  if (state.settings[did].backgroundImage == null)
+    state.settings[did].backgroundImage = ""
   state.currentSetting = state.settings[did]
   storage.save("settings", state.settings)
 }
 
 function updateSettings () {
-  const did = state.atp.session?.did
-  if (did == null) return
-  const settings = state.settings[did]
-  if (settings == null) return
-  if (settings.language != null) {
-    $setI18n(settings.language)
+  if (state.currentSetting == null) return
+  if (state.currentSetting.language != null) {
+    $setI18n(state.currentSetting.language)
     state.forceUpdate()
   }
-  if (settings.colorTheme != null) {
+  if (state.currentSetting.colorTheme != null) {
     window.document.body.setAttribute(
       "data-color-theme",
       state.currentSetting.colorTheme as string
     )
+  }
+  if (state.currentSetting.backgroundImage != null) {
+    window.document.body.style.backgroundImage =
+      `url(${state.currentSetting.backgroundImage})`
   }
 }
 
@@ -417,6 +420,7 @@ function closeSendPostPopup (done: boolean) {
 }
 
 .main {
+  background-color: rgba(var(--bg-color), 0.875);
   display: flex;
   justify-content: center;
   margin: auto;

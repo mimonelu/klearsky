@@ -49,7 +49,7 @@ function moveToBottom () {
 }
 
 .move-button {
-  background-color: rgb(var(--bg-color));
+  backdrop-filter: blur(8px);
   cursor: pointer;
   display: flex;
   align-items: center;

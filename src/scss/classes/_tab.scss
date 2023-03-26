@@ -1,11 +1,10 @@
 .tab {
-  background-color: rgba(var(--bg-color));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
 
   &__button,
   &__button--outline {
-    background-color: rgb(var(--bg-color));
+    backdrop-filter: blur(8px);
     color: rgba(var(--fg-color), 0.5);
     cursor: pointer;
     display: flex;

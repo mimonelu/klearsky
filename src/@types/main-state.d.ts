@@ -1,6 +1,7 @@
 type TTSetting = {
   language?: string
   colorTheme?: string
+  backgroundImage?: string
 }
 
 type TTSettings = {

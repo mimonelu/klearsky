@@ -3,7 +3,11 @@
 }
 
 body {
+  background-attachment: fixed;
   background-color: rgb(var(--bg-color));
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
   color: rgb(var(--fg-color));
   font-feature-settings: "palt";
   -moz-osx-font-smoothing: grayscale;
