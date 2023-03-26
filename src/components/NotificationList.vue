@@ -1,21 +1,11 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, reactive, watch } from "vue"
+import { inject } from "vue"
 import { useRouter } from "vue-router"
 import format from "date-fns/format"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
-const props = defineProps<{
-  reason: string
-}>()
-
 const mainState = inject("state") as MainState
-
-const state = reactive<{
-  notifications: Array<TTNotification>
-}>({
-  notifications: [],
-})
 
 const router = useRouter()
 
@@ -28,25 +18,9 @@ const iconMap: { [reason: string]: string } = {
   vote: "heart",
 }
 
-onBeforeUnmount(() => {
-  state.notifications.forEach((notification: TTNotification) => {
-    notification.__new = false
-  })
-})
-
-watch(mainState.notifications, updateNotifications)
-
-updateNotifications(mainState.notifications)
-
-function updateNotifications (notifications: Array<TTNotification>) {
-  state.notifications =
-    notifications.filter((notification: TTNotification) =>
-      notification.reason === props.reason)
-}
-
 async function openSubject (notification: TTNotification) {
   blurElement()
-  switch (props.reason) {
+  switch (notification.reason) {
     case "follow": {
       await router.push({ name: "profile-post", query: { handle: notification.handle } })
       break
@@ -56,7 +30,6 @@ async function openSubject (notification: TTNotification) {
       break
     }
     case "mention": {
-      console.log(notification)
       await router.push({ name: "post", query: { uri: notification.reasonSubject } })
       break
     }
@@ -69,10 +42,6 @@ async function openSubject (notification: TTNotification) {
   }
 }
 
-async function openProfile (handle: string) {
-  await router.push({ name: "profile-post", query: { handle } })
-}
-
 function formatDate (dateString: string): string {
   return format(new Date(dateString), "MM/dd HH:mm")
 }
@@ -81,26 +50,27 @@ function formatDate (dateString: string): string {
 <template>
   <div class="notification-list">
     <div
-      v-for="notification of state.notifications"
+      v-for="notification of mainState.notifications"
       class="notification"
       tabindex="0"
-      :data-reason="props.reason"
+      :data-reason="notification.reason"
       :data-is-new="notification.__new"
       @click="openSubject(notification)"
     >
       <SVGIcon
         class="icon"
-        :name="iconMap[props.reason]"
+        :name="iconMap[notification.reason]"
       />
-      <button
+      <RouterLink
         class="avatar"
-        @click.stop="openProfile(notification.handle)"
+        :to="{ path: '/profile/post', query: { handle: notification.handle } }"
+        @click.prevent.stop
       >
         <img
           loading="lazy"
           :src="notification.avatar ?? '/img/void-avatar.png'"
         >
-      </button>
+      </RouterLink>
       <div class="display-name">{{ notification.displayName }}</div>
       <div class="handle">{{ notification.handle }}</div>
       <div class="indexed-at">{{ formatDate(notification.indexedAt) }}</div>

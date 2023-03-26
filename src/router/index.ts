@@ -6,17 +6,9 @@ import NotFoundView from "@/views/NotFoundView.vue"
 import MainView from "@/views/MainView.vue"
 import AccountsView from "@/views/main/AccountsView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
+import NotificationsView from "@/views/main/NotificationsView.vue"
 import PostView from "@/views/main/PostView.vue"
 import TimelineView from "@/views/main/TimelineView.vue"
-
-// Main - Notifications
-import NotificationsView from "@/views/main/NotificationsView.vue"
-import FollowNotificationsView from "@/views/main/notifications/FollowNotificationsView.vue"
-import InviteNotificationsView from "@/views/main/notifications/InviteNotificationsView.vue"
-import MentionNotificationsView from "@/views/main/notifications/MentionNotificationsView.vue"
-import ReplyNotificationsView from "@/views/main/notifications/ReplyNotificationsView.vue"
-import RepostNotificationsView from "@/views/main/notifications/RepostNotificationsView.vue"
-import VoteNotificationsView from "@/views/main/notifications/VoteNotificationsView.vue"
 
 // Main - Profile
 import ProfileView from "@/views/main/ProfileView.vue"
@@ -49,57 +41,24 @@ const router = createRouter({
           component: AccountsView,
         },
         {
-          path: "/home",
-          name: "home",
-          component: TimelineView,
-        },
-        {
           path: "/profile/edit",
           name: "edit-profile",
           component: EditProfileView,
         },
         {
-          path: "/post",
-          name: "post",
-          component: PostView,
+          path: "/home",
+          name: "home",
+          component: TimelineView,
         },
         {
           path: "/notifications",
           name: "notifications",
           component: NotificationsView,
-          redirect: "/notifications/reply",
-          children: [
-            {
-              path: "follow",
-              name: "follow-notifications",
-              component: FollowNotificationsView,
-            },
-            {
-              path: "invite",
-              name: "invite-notifications",
-              component: InviteNotificationsView,
-            },
-            {
-              path: "mention",
-              name: "mention-notifications",
-              component: MentionNotificationsView,
-            },
-            {
-              path: "reply",
-              name: "reply-notifications",
-              component: ReplyNotificationsView,
-            },
-            {
-              path: "repost",
-              name: "repost-notifications",
-              component: RepostNotificationsView,
-            },
-            {
-              path: "vote",
-              name: "vote-notifications",
-              component: VoteNotificationsView,
-            },
-          ],
+        },
+        {
+          path: "/post",
+          name: "post",
+          component: PostView,
         },
         {
           path: "/profile",

@@ -92,8 +92,7 @@ function moveToBottom () {
     </RouterLink>
     <RouterLink
       class="link-button"
-      to="/notifications/reply"
-      :data-is-focus="mainState.currentPath.startsWith('/notifications/')"
+      to="/notifications"
       @click.prevent
     >
       <div class="icon">
