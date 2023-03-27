@@ -71,7 +71,14 @@ export default async function (
 
   const fileSchemas: Array<null | TTFileSchema> = await Promise.all(
     params.images.map((file: File): Promise<null | TTFileSchema> => {
-      return this.createFileSchema(file, 2000, 2000)
+      return this.createFileSchema({
+        file,
+        mimeType: "image/jpeg",
+        maxWidth: 2000,
+        maxHeight: 2000,
+        maxSize: 976560,
+        // quality: 0.8,
+      })
     })
   )
   if (fileSchemas.length > 0) {

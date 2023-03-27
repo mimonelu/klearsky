@@ -38,9 +38,14 @@ interface TIAtpWrapper {
   createAgent(this: TIAtpWrapper, service?: string): boolean
   createFileSchema(
     this: TIAtpWrapper,
-    file: File,
-    maxWidth: number,
-    maxHeight: number
+    params: {
+      file: File,
+      mimeType: string
+      maxWidth: number
+      maxHeight: number
+      maxSize: number
+      quality?: number
+    }
   ): Promise<null | TTFileSchema>
   createFollow(
     this: TIAtpWrapper,
