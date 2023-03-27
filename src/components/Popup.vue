@@ -55,7 +55,7 @@ function close () {
 .popup {
   background-color: rgb(var(--bg-color));
   border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;

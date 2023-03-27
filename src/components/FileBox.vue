@@ -90,7 +90,7 @@ function setPreviews (files: Array<File>) {
   background-repeat: no-repeat;
   background-size: cover;
   border: 1px solid rgb(var(--fg-color));
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   min-width: 5rem;
   height: 5rem;
   &[data-has-image="false"] {

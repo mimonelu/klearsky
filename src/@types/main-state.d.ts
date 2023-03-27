@@ -51,7 +51,8 @@ type MainState = {
 
   imagePopupProps: {
     display: boolean
-    uri: string
+    largeUri: string
+    smallUri: string
   }
 
   settings: TTSettings

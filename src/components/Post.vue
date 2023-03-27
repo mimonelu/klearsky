@@ -44,8 +44,9 @@ async function openProfile (handle: string) {
   await router.push({ name: "profile-post", query: { handle } })
 }
 
-function openImagePopup (uri: string) {
-  mainState.imagePopupProps.uri = uri
+function openImagePopup (largeUri: string, smallUri: string) {
+  mainState.imagePopupProps.largeUri = largeUri
+  mainState.imagePopupProps.smallUri = smallUri
   mainState.imagePopupProps.display = true
 }
 
@@ -216,7 +217,7 @@ function removeThisPost (uri: string) {
           <div
             v-for="image of post.embed.images"
             class="image"
-            @click.stop="openImagePopup(image.fullsize)"
+            @click.stop="openImagePopup(image.fullsize, image.thumb)"
           >
             <img
               loading="lazy"
@@ -504,7 +505,7 @@ function removeThisPost (uri: string) {
 
 .external {
   border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: grid;
   grid-template-rows: auto auto auto;
@@ -560,7 +561,7 @@ function removeThisPost (uri: string) {
 }
 
 .image {
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: block;
   overflow: hidden;
@@ -577,7 +578,7 @@ function removeThisPost (uri: string) {
 .repost {
   grid-area: r;
   border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
 
   & > .post {
     padding: 0.875em;

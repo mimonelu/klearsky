@@ -41,7 +41,8 @@ const state = reactive<MainState>({
   },
   imagePopupProps: {
     display: false,
-    uri: "",
+    largeUri: "",
+    smallUri: "",
   },
   settings: {},
   forceUpdate,
@@ -395,7 +396,8 @@ function closeSendPostPopup (done: boolean) {
     </div>
     <ImagePopup
       v-if="state.imagePopupProps.display"
-      :uri="state.imagePopupProps.uri"
+      :largeUri="state.imagePopupProps.largeUri"
+      :smallUri="state.imagePopupProps.smallUri"
       @close="state.imagePopupProps.display = false"
     />
     <SendPostPopup

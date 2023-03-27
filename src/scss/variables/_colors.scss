@@ -5,6 +5,8 @@
   --notice-color: 240, 32, 32;
   --like-color: 240, 64, 128;
   --share-color: 0, 160, 32;
+
+  --border-radius: 2px;
 }
 
 @mixin color-theme-dark {
@@ -14,6 +16,8 @@
   --notice-color: 240, 32, 32;
   --like-color: 240, 64, 128;
   --share-color: 32, 192, 64;
+
+  --border-radius: 2px;
 }
 
 @mixin color-theme-warmsand {
@@ -23,4 +27,6 @@
   --notice-color: 240, 32, 32;
   --like-color: 240, 64, 128;
   --share-color: 0, 160, 32;
+
+  --border-radius: 2px;
 }

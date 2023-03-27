@@ -10,7 +10,7 @@
   background-color: rgba(var(--color), 0.125);
   border: 1px solid transparent;
   border-bottom-color: rgb(var(--color));
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   color: rgb(var(--color));
   line-height: 1.5;
   padding: 0.5rem 0.5rem;

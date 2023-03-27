@@ -1,7 +1,7 @@
 .button {
   background-color: rgba(var(--fg-color), 0.875);
   border: 1px solid transparent;
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   color: rgb(var(--bg-color));
   cursor: pointer;
   display: flex;

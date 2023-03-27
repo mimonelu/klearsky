@@ -5,7 +5,8 @@ import SVGIcon from "@/components/SVGIcon.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  uri: string;
+  largeUri: string;
+  smallUri: string;
 }>()
 
 const state = reactive<{
@@ -64,8 +65,8 @@ function close () {
     <div
       class="image"
       :style="`
-        background-image: url(${uri ?? '/img/void'});
-        background-position: ${state.x * 100}% ${state.y * 100}%
+        background-image: url(${smallUri ?? '/img/void'});
+        background-position: ${state.x * 100}% ${state.y * 100}%;
       `"
       @mousedown="startDrag"
       @touchstart.passive="startDrag"
@@ -73,7 +74,15 @@ function close () {
       @touchmove.passive="moveDrag"
       @mouseup="endDrag"
       @touchend.passive="endDrag"
-    />
+    >
+      <div
+        class="image"
+        :style="`
+          background-image: url(${largeUri ?? '/img/void'});
+          background-position: ${state.x * 100}% ${state.y * 100}%;
+        `"
+      />
+    </div>
     <button
       class="closer"
       @click.prevent="close"
@@ -85,7 +94,7 @@ function close () {
 
 <style lang="scss" scoped>
 .image-popup {
-  background-color: rgba(var(--fg-color), 0.25);
+  background-color: rgba(0, 0, 0, 0.75);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -97,44 +106,52 @@ function close () {
   z-index: 1;
   width: 100%;
   height: 100%;
+  &[data-mode="false"] {
+    padding: 1rem;
+  }
 }
 
 .image {
   background-position: 50% 50%;
   background-repeat: no-repeat;
-  cursor: pointer;
+  cursor: grabbing;
   overscroll-behavior: none;
+  position: relative;
   width: 100%;
   height: 100%;
   transition: background-position 100ms ease-out;
   [data-mode="false"] & {
     background-size: contain;
+    cursor: grab;
   }
 }
 
 .closer {
-  background-color: rgba(var(--bg-color), 0.25);
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 5rem;
-  min-height: 5rem;
+  right: 1rem;
+  top: 1rem;
+  width: 4rem;
+  min-height: 4rem;
   [data-mode="true"] & {
     display: none;
   }
 
   & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.75);
-    font-size: 2.5rem;
+    fill: rgba(255, 255, 255, 0.75);
+    font-size: 2rem;
   }
 
   &:focus, &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+
     & > .svg-icon {
-      fill: rgb(var(--fg-color));
+      fill: rgb(255, 255, 255);
     }
   }
 }

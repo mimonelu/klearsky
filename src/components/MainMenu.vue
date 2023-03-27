@@ -205,7 +205,7 @@ function moveToBottom () {
 }
 
 .link-button {
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: grid;
   grid-template-columns: min-content 1fr;
@@ -215,7 +215,7 @@ function moveToBottom () {
   width: 100%;
 
   .image {
-    border-radius: $border-radius;
+    border-radius: var(--border-radius);
     margin: 0.5rem;
     object-fit: cover;
     min-width: 2rem;
@@ -278,7 +278,7 @@ function moveToBottom () {
 .notification-count {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   color: white;
   font-size: 0.75rem;
   font-weight: bold;
