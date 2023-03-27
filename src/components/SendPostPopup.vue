@@ -131,7 +131,7 @@ async function submitCallback () {
 <style lang="scss" scoped>
 .send-post-popup:deep() {
   .popup {
-    width: $router-view-width;
+    width: calc($router-view-width - 2rem);
   }
 }
 </style>

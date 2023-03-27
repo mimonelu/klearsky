@@ -384,9 +384,10 @@ function removeThisPost (uri: string) {
   }
   &__display-name {
     font-size: 0.875em;
+    font-weight: bold;
   }
   &__handle {
-    font-size: 0.875em;
+    font-size: 0.75em;
   }
 }
 .replier {
@@ -467,7 +468,7 @@ function removeThisPost (uri: string) {
 }
 
 .display-name {
-  color: rgb(var(--fg-color));
+  color: rgba(var(--fg-color), 0.75);
   cursor: pointer;
   font-size: 0.875em;
   font-weight: bold;
@@ -503,7 +504,7 @@ function removeThisPost (uri: string) {
 
 .external {
   border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: 1px;
+  border-radius: $border-radius;
   cursor: pointer;
   display: grid;
   grid-template-rows: auto auto auto;
@@ -559,7 +560,7 @@ function removeThisPost (uri: string) {
 }
 
 .image {
-  border-radius: 1px;
+  border-radius: $border-radius;
   cursor: pointer;
   display: block;
   overflow: hidden;
@@ -576,7 +577,7 @@ function removeThisPost (uri: string) {
 .repost {
   grid-area: r;
   border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: 1px;
+  border-radius: $border-radius;
 
   & > .post {
     padding: 0.875em;

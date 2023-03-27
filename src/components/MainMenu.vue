@@ -19,6 +19,7 @@ router.afterEach(() => {
 })
 
 function back () {
+  blurElement()
   if (state.canBack) router.back()
 }
 
@@ -204,7 +205,7 @@ function moveToBottom () {
 }
 
 .link-button {
-  border-radius: 1px;
+  border-radius: $border-radius;
   cursor: pointer;
   display: grid;
   grid-template-columns: min-content 1fr;
@@ -214,7 +215,7 @@ function moveToBottom () {
   width: 100%;
 
   .image {
-    border-radius: 1px;
+    border-radius: $border-radius;
     margin: 0.5rem;
     object-fit: cover;
     min-width: 2rem;
@@ -232,25 +233,20 @@ function moveToBottom () {
     min-height: 3rem;
 
     .svg-icon {
-      fill: rgba(var(--fg-color), 0.5);
+      fill: rgba(var(--fg-color), 0.75);
       font-size: 1.5rem;
     }
   }
 
   .label {
-    color: rgba(var(--fg-color), 0.5);
+    color: rgba(var(--fg-color), 0.75);
     font-size: 1.25rem;
+    line-height: 1.25;
     overflow: hidden;
     padding-right: 0.25rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     word-break: break-all;
-  }
-
-  &.send-post-button {
-    .svg-icon {
-      fill: rgb(var(--accent-color));
-    }
   }
 
   &:focus, &:hover {
@@ -266,12 +262,23 @@ function moveToBottom () {
   &:not([data-is-focus]).router-link-active {
     background-color: rgba(var(--accent-color), 0.125);
   }
+
+  &.send-post-button {
+    .svg-icon {
+      fill: rgba(var(--accent-color), 0.75);
+    }
+    &:focus, &:hover {
+      .svg-icon {
+        fill: rgb(var(--accent-color));
+      }
+    }
+  }
 }
 
 .notification-count {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
-  border-radius: 1px;
+  border-radius: $border-radius;
   color: white;
   font-size: 0.75rem;
   font-weight: bold;

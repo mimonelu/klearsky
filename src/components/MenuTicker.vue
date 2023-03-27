@@ -25,7 +25,7 @@
     background-color: rgb(var(--fg-color));
     color: rgba(var(--bg-color), 0.75);
     border: 1px solid rgba(var(--bg-color), 0.25);
-    border-radius: 1px;
+    border-radius: $border-radius;
     display: flex;
     flex-direction: column;
     grid-gap: 0.25rem;

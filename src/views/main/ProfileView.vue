@@ -181,6 +181,7 @@ function closePostMenu () {
 }
 
 .banner {
+  aspect-ratio: 3/1;
   display: block;
   &[data-has-banner="true"] {
     cursor: pointer;
@@ -197,6 +198,7 @@ function closePostMenu () {
 
   & > img {
     aspect-ratio: 3/1;
+    display: block;
     object-fit: cover;
     width: 100%;
   }
@@ -281,11 +283,11 @@ function closePostMenu () {
 
   dl {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     grid-gap: 0.5rem;
 
     & > dt {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
     }
 
     & > dd {

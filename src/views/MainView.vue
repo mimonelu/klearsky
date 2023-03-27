@@ -420,7 +420,6 @@ function closeSendPostPopup (done: boolean) {
 }
 
 .main {
-  background-color: rgba(var(--bg-color), 0.875);
   display: flex;
   justify-content: center;
   margin: auto;
@@ -432,7 +431,7 @@ function closeSendPostPopup (done: boolean) {
   overflow: hidden;
   position: relative;
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
-    border-left: 1px solid rgba(var(--fg-color), 0.25);
+    // border-left: 1px solid rgba(var(--fg-color), 0.25);
   }
   @media (max-width: $max-width-with-scrollbar) {
     min-width: $main-menu-min-width;
@@ -454,6 +453,7 @@ function closeSendPostPopup (done: boolean) {
 }
 
 .router-view-wrapper {
+  background-color: rgba(var(--bg-color), 0.875);
   border-left: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
@@ -473,7 +473,7 @@ function closeSendPostPopup (done: boolean) {
     display: none;
   }
   @media not all and (max-width: 1024px) {
-    border-right: 1px solid rgba(var(--fg-color), 0.25);
+    // border-right: 1px solid rgba(var(--fg-color), 0.25);
     flex-grow: 1;
     max-width: $menu-max-width;
   }

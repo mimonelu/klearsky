@@ -10,7 +10,7 @@
 
   & > select {
     border: 1px solid rgba(var(--fg-color), 0.25);
-    border-radius: 1px;
+    border-radius: $border-radius;
     cursor: pointer;
     padding: 0.5em 2.5em 0.5em 1em;
     line-height: 1.5;

@@ -105,7 +105,7 @@ function deleteAccount (session: TTSession) {
 
   &__left {
     border: 1px solid rgba(var(--fg-color), 0.125);
-    border-radius: 1px;
+    border-radius: $border-radius;
     cursor: pointer;
     display: grid;
     flex-grow: 1;

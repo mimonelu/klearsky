@@ -4,7 +4,7 @@
   height: $size;
 
   & > img {
-    border-radius: 1px;
+    border-radius: $border-radius;
     object-fit: cover;
     min-width: $size;
     min-height: $size;

@@ -48,23 +48,23 @@ function close () {
   left: 0;
   top: 0;
   z-index: 2;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
 }
 
 .popup {
   background-color: rgb(var(--bg-color));
   border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: 1px;
+  border-radius: $border-radius;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
-  margin: 3rem;
+  margin: 1rem;
   overflow: hidden;
   overscroll-behavior: none;
   position: relative;
-  max-width: calc(100vw - 4rem);
-  max-height: calc(100vh - 4rem);
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 2rem);
 }
 
 .popup-header {

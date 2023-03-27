@@ -2,8 +2,10 @@
 import CopyRight from "@/components/Copyright.vue"
 import Logo from "@/components/Logo.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import { blurElement } from "@/composables/misc"
 
 function moveToTop () {
+  blurElement()
   window.scrollTo({
     left: 0,
     top: 0,
@@ -12,6 +14,7 @@ function moveToTop () {
 }
 
 function moveToBottom () {
+  blurElement()
   window.scrollTo({
     left: 0,
     top: document.body.clientHeight,
@@ -44,12 +47,11 @@ function moveToBottom () {
   display: flex;
   flex-direction: column;
   grid-gap: 3rem;
-  padding-top: 6rem;
+  padding-top: 3rem;
   position: relative;
 }
 
 .move-button {
-  backdrop-filter: blur(8px);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -57,7 +59,8 @@ function moveToBottom () {
   font-size: 1.5rem;
   padding: 0.75rem;
   position: fixed;
-  width: calc($menu-max-width - 1px);
+  right: 0;
+  min-width: 3rem;
   min-height: 3rem;
   z-index: 1;
 
@@ -73,11 +76,9 @@ function moveToBottom () {
   }
 }
 .move-button:first-child {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   top: 0;
 }
 .move-button:last-child {
-  border-top: 1px solid rgba(var(--fg-color), 0.25);
   bottom: 0;
 }
 
