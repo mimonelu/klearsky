@@ -19,6 +19,23 @@ body {
   user-select: none;
   @include scroll-bar();
 }
+body {
+  @include color-theme-light;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    @include color-theme-dark;
+  }
+}
+body[data-color-theme="light"] {
+  @include color-theme-light;
+}
+body[data-color-theme="dark"] {
+  @include color-theme-dark;
+}
+body[data-color-theme="warmsand"] {
+  @include color-theme-warmsand;
+}
 
 ::selection {
   background-color: rgba(var(--accent-color), 0.5);
