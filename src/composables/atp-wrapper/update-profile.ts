@@ -7,10 +7,22 @@ export default async function (
   if (this.agent == null) return false
   const fileSchemas: Array<null | TTFileSchema> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
-      ? this.createFileSchema(params.avatar[0], 2000, 2000)
+      ? this.createFileSchema({
+        file: params.avatar[0],
+        maxWidth: 2000,
+        maxHeight: 2000,
+        maxSize: 976560,
+        // quality: 0.8,
+      })
       : null,
     params.banner != null && params.banner[0] != null
-      ? this.createFileSchema(params.banner[0], 2000, 2000)
+      ? this.createFileSchema({
+        file: params.banner[0],
+        maxWidth: 2000,
+        maxHeight: 2000,
+        maxSize: 976560,
+        // quality: 0.8,
+      })
       : null,
   ])
   const avatarSchema: null | TTFileSchema = fileSchemas[0]

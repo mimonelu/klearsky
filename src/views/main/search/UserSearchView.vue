@@ -103,7 +103,8 @@ async function openProfile (handle: string) {
 <style lang="scss" scoped>
 .user-search-view {
   form {
-    display: contents;
+    display: grid;
+    padding: 1rem;
   }
 }
 
@@ -111,6 +112,10 @@ async function openProfile (handle: string) {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+
+.fetch-button:first-child {
+  border-top: 1px solid rgb(var(--fg-color), 0.25);
 }
 
 .users {

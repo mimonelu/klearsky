@@ -2,16 +2,13 @@
 .textbox {
   --color: var(--fg-color);
 
-  &:focus,
-  &:hover {
+  &:focus {
     --color: var(--accent-color);
   }
 
   background-color: rgba(var(--color), 0.125);
-  border: 1px solid transparent;
-  border-bottom-color: rgb(var(--color));
   border-radius: var(--border-radius);
-  color: rgb(var(--color));
+  color: rgb(var(--fg-color));
   line-height: 1.5;
   padding: 0.5rem 0.5rem;
 

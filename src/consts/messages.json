@@ -27,7 +27,7 @@
     "followingCount": "Following",
     "followersCount": "Followers",
     "home": "Home",
-    "identifier": "Email or Handle or did:plc:",
+    "identifier": "Email or Handle or DID",
     "imageBoxes": "Image boxes",
     "japanese": "Japanese",
     "keywordSearch": "Keyword Search",
@@ -56,7 +56,8 @@
     "text": "Message",
     "title": "Klearsky",
     "translate": "Translate",
-    "userSearch": "User Search"
+    "userSearch": "User Search",
+    "yourAccounts": "Your Accounts"
   },
   "ja": {
     "accounts": "アカウント",
@@ -86,7 +87,7 @@
     "followingCount": "フォロー数",
     "followersCount": "フォロワー数",
     "home": "ホーム",
-    "identifier": "ハンドル／メールアドレス／ did:plc:",
+    "identifier": "ハンドル／メールアドレス／ DID",
     "imageBoxes": "イメージボックス",
     "japanese": "日本語",
     "keywordSearch": "キーワード検索（仮）",
@@ -115,6 +116,7 @@
     "text": "本文",
     "title": "Klearsky",
     "translate": "翻訳する",
-    "userSearch": "ユーザー検索"
+    "userSearch": "ユーザー検索",
+    "yourAccounts": "あなたのアカウント"
   }
 }

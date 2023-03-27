@@ -432,9 +432,6 @@ function closeSendPostPopup (done: boolean) {
 .main-menu-wrapper {
   overflow: hidden;
   position: relative;
-  @media (min-width: calc($router-view-width + $main-menu-min-width)) {
-    // border-left: 1px solid rgba(var(--fg-color), 0.25);
-  }
   @media (max-width: $max-width-with-scrollbar) {
     min-width: $main-menu-min-width;
     max-width: $main-menu-min-width;
@@ -475,7 +472,6 @@ function closeSendPostPopup (done: boolean) {
     display: none;
   }
   @media not all and (max-width: 1024px) {
-    // border-right: 1px solid rgba(var(--fg-color), 0.25);
     flex-grow: 1;
     max-width: $menu-max-width;
   }

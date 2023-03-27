@@ -60,7 +60,8 @@ async function fetchNewResults () {
 <style lang="scss" scoped>
 .keyword-search-view {
   form {
-    display: contents;
+    display: grid;
+    padding: 1rem;
   }
 }
 
@@ -77,17 +78,15 @@ async function fetchNewResults () {
 }
 
 .item {
+  border-top: 1px solid rgba(var(--fg-color), 0.125);
   border-left: 2px solid transparent;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   grid-gap: 0.25rem;
   padding: 1rem;
-  &:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-  }
   &:focus, &:hover {
-    border-left-color: rgb(var(--accent-color));
+    background-color: rgba(var(--accent-color), 0.125);
   }
 }
 
