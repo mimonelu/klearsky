@@ -56,6 +56,7 @@ const easyFormProps: TTEasyForm = {
         model: "images",
         label: $t("imageBoxes"),
         type: "file",
+        accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
         isMultipleFile: true,
         maxNumberOfFile: 4,
       })

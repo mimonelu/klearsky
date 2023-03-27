@@ -40,7 +40,6 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     params: {
       file: File,
-      mimeType: string
       maxWidth: number
       maxHeight: number
       maxSize: number

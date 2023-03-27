@@ -16,7 +16,7 @@ function convertBlobToArrayBuffer (blob: Blob): Promise<null | ArrayBuffer> {
 
 function compressFileToBlob (params: {
   file: File,
-  // mimeType: string,
+  mimeType: string,
   maxWidth: number,
   maxHeight: number,
   maxSize: number,
@@ -26,9 +26,10 @@ function compressFileToBlob (params: {
     // SEE: https://github.com/fengyuanchen/compressorjs#options
     new Compressor(params.file, {
       convertSize: params.maxSize,
-      // convertTypes: params.mimeType,
+      convertTypes: params.mimeType,
       maxWidth: params.maxWidth,
       maxHeight: params.maxHeight,
+      mimeType: params.mimeType,
       quality: params.quality,
       success: resolve,
       error: reject,
@@ -36,11 +37,14 @@ function compressFileToBlob (params: {
   })
 }
 
+const convertMap: { [mimeType: string]: string } = {
+  "image/bmp": "image/jpeg",
+}
+
 export default async function (
   this: TIAtpWrapper,
   params: {
     file: File,
-    mimeType: string,
     maxWidth: number,
     maxHeight: number,
     maxSize: number,
@@ -49,19 +53,20 @@ export default async function (
 ): Promise<null | TTFileSchema> {
   if (this.agent == null) return null
   if (params.file == null) return null
-  const blob: Error | Blob = await compressFileToBlob(params)
+  const mimeType = convertMap[params.file.type] ?? params.file.type
+  const blob: Error | Blob = await compressFileToBlob({ ...params, mimeType })
   if (blob instanceof Error) return null
   const arrayBuffer = await convertBlobToArrayBuffer(blob)
   if (arrayBuffer == null) return null
   const uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)
   const response: ComAtprotoBlobUpload.Response =
     await this.agent.api.com.atproto.blob.upload(uint8Array, {
-      encoding: params.mimeType,
+      encoding: mimeType,
     })
   console.log("[klearsky/createFileSchema]", response)
   if (!response.success) return null
   return {
     cid: response.data.cid,
-    mimeType: params.mimeType,
+    mimeType,
   }
 }
