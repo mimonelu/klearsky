@@ -111,9 +111,10 @@ async function updateThisPost () {
 }
 
 async function openRepostMenu () {
-  // リポスト済みであればリポストメニューを開閉する
+  // 未リポストであればリポストメニューを開閉する
   if (props.post.viewer.repost == null) {
     state.repostMenuDisplay = !state.repostMenuDisplay
+  // リポスト済みであればリポストを削除する
   } else {
     state.repostMenuDisplay = false
     state.processing = true
@@ -357,7 +358,7 @@ function removeThisPost (uri: string) {
 .header:not(:empty) {
   display: flex;
   grid-gap: 1em;
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
 }
 
 .replier,
@@ -367,8 +368,8 @@ function removeThisPost (uri: string) {
   grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
-  margin: -1em;
-  padding: 1em;
+  margin: -1em -1em -0.5em;
+  padding: 1em 1em 0.5em;
 
   & > .svg-icon {
     font-size: 0.875em;
@@ -533,7 +534,7 @@ function removeThisPost (uri: string) {
 
 .images {
   grid-area: i;
-  aspect-ratio: 1.91 / 1;
+  aspect-ratio: 16 / 9;
   display: grid;
   grid-gap: 1px;
   overflow: hidden;
@@ -558,17 +559,13 @@ function removeThisPost (uri: string) {
 }
 
 .image {
-  border: 1px solid transparent;
   border-radius: 1px;
   cursor: pointer;
   display: block;
   overflow: hidden;
-  &:focus, &:hover {
-    border-color: rgba(var(--fg-color), 0.25);
-  }
 
   & > img {
-    aspect-ratio: 1.91 / 1;
+    aspect-ratio: 16 / 9;
     display: block;
     object-fit: cover;
     width: 100%;
@@ -590,7 +587,7 @@ function removeThisPost (uri: string) {
   grid-area: f;
   display: grid;
   align-items: center;
-  margin-top: 0.5em;
+  margin-top: 0.25em;
 
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     grid-template-columns: 1fr 1fr 1fr 2fr;

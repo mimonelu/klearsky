@@ -12,7 +12,6 @@
   display: contents;
 
   &--overlay {
-    // background-color: rgba(var(--bg-color), 0.25);
     position: fixed;
     left: 0;
     top: 0;
@@ -23,8 +22,9 @@
 
   &--inner {
     box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.25);
-    background-color: rgb(var(--bg-color));
-    border: 1px solid rgba(var(--fg-color), 0.25);
+    background-color: rgb(var(--fg-color));
+    color: rgba(var(--bg-color), 0.75);
+    border: 1px solid rgba(var(--bg-color), 0.25);
     border-radius: 1px;
     display: flex;
     flex-direction: column;
@@ -41,15 +41,15 @@
       padding: 0.5rem 1rem;
       white-space: nowrap;
       &:focus, &:hover {
-        color: rgb(var(--accent-color));
+        color: rgb(var(--bg-color));
       }
 
       & > .svg-icon {
-        fill: rgb(var(--fg-color));
+        fill: rgba(var(--bg-color), 0.75);
       }
       &:focus, &:hover {
         & > .svg-icon {
-          fill: rgb(var(--accent-color));
+          fill: rgb(var(--bg-color));
         }
       }
     }
