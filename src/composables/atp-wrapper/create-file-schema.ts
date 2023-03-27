@@ -27,6 +27,8 @@ async function getResizedImage(
     | string
   if (dataURL == null) return null
   const image = await getImage(dataURL)
+  if (image.width <= maxWidth && image.height <= maxHeight)
+    return (await getFileAs(file, "arrayBuffer")) as null | ArrayBuffer
   const canvas = document.createElement("canvas")
   const context = canvas.getContext("2d")
   let width = image.width
