@@ -39,6 +39,9 @@ function compressFileToBlob (params: {
 
 const convertMap: { [mimeType: string]: string } = {
   "image/bmp": "image/jpeg",
+  "image/gif": "image/jpeg",
+  "image/png": "image/jpeg",
+  "image/webp": "image/jpeg",
 }
 
 export default async function (
