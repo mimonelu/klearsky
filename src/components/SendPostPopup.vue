@@ -36,8 +36,10 @@ const easyFormProps: TTEasyForm = {
       {
         state,
         model: "text",
-        label: $t("text"),
         type: "textarea",
+        placeholder: $t("text"),
+        maxlength: 256,
+        maxLengthIndicator: true,
         rows: 4,
         focus: true,
       },
@@ -46,19 +48,28 @@ const easyFormProps: TTEasyForm = {
       result.push({
         state,
         model: "url",
-        label: $t("linkBox"),
         type: "url",
+        placeholder: $t("linkBox"),
         autocomplete: "url",
         inputmode: "url",
       })
       result.push({
         state,
         model: "images",
-        label: $t("imageBoxes"),
         type: "file",
+        placeholder: $t("imageBoxes"),
         accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
         isMultipleFile: true,
         maxNumberOfFile: 4,
+        onChange (_: TTEasyFormItem, form: TTEasyForm) {
+          // ファイルがひとつ以上選択されているか否かでリンクボックスの表示状態を切り替える
+          const urlItem = form.data.find((item: TTEasyFormItem) => item.model === "url")
+          if (urlItem == null) return
+          urlItem.display = state.images.length === 0
+
+          // WANT: 意図しない alt が削除される不具合を修正したい
+          state.alts.splice(state.images.length)
+        },
       })
     }
     return result
@@ -105,23 +116,18 @@ async function submitCallback () {
       <EasyForm v-bind="easyFormProps">
         <template v-slot:after>
           <dl v-if="state.images.length > 0">
-            <dt>{{ $t("alts") }}</dt>
-            <dd>
+            <dd v-for="_, index of state.images">
               <input
-                v-for="_, index of state.images"
                 v-model="state.alts[index]"
                 type="text"
                 autocapitalize="off"
                 autocomplete="off"
+                :placeholder="`${$t('alts')} ${index + 1}`"
                 spellcheck="false"
                 class="textbox"
               />
             </dd>
           </dl>
-          <p
-            v-if="props.type !== 'quoteRepost'"
-            class="note"
-          >{{ $t("sendPostNote") }}</p>
         </template>
       </EasyForm>
     </template>
@@ -132,6 +138,10 @@ async function submitCallback () {
 .send-post-popup:deep() {
   .popup {
     width: calc($router-view-width - 2rem);
+
+    &-header {
+      font-weight: bold;
+    }
   }
 }
 </style>

@@ -53,8 +53,13 @@ function isInput (type?: string): boolean {
   return type != null ? inputList.includes(type) : true
 }
 
-function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
-  data.state[data.model] = files
+function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
+  item.state[item.model] = files
+  if (item.onChange != null) item.onChange(item, props)
+}
+
+function onInputTextarea (item: TTEasyFormItem) {
+  if (item.onInput != null) item.onInput(item, props)
 }
 </script>
 
@@ -63,15 +68,21 @@ function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
     class="easy-form"
     @submit.prevent="submit"
   >
-    <dl v-for="item, index of data">
-      <dt>{{ item.label }}</dt>
+    <dl
+      v-for="item, index of data"
+      v-show="item.display !== false"
+    >
+      <dt v-if="item.label != null">{{ item.label }}</dt>
       <dd>
         <input
           v-if="isInput(item.type)"
           v-model="item.state[item.model]"
           :id="makeItemId(index)"
           :type="item.type ?? 'text'"
+          :disabled="item.disabled ?? false"
           :required="item.required ?? false"
+          :pattern="item.pattern"
+          :maxlength="item.maxlength"
           :placeholder="item.placeholder ?? ''"
           autocapitalize="off"
           autocorrect="off"
@@ -91,14 +102,22 @@ function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
           v-else-if="item.type === 'textarea'"
           v-model="item.state[item.model]"
           :id="makeItemId(index)"
+          :disabled="item.disabled ?? false"
           :required="item.required ?? false"
+          :pattern="item.pattern"
+          :maxlength="item.maxlength"
+          :rows="item.rows ?? ''"
           :placeholder="item.placeholder ?? ''"
           autocapitalize="off"
           autocorrect="off"
-          :rows="item.rows ?? ''"
           spellcheck="false"
           class="textarea"
+          @input="onInputTextarea(item)"
         />
+        <div
+          v-if="item.maxLengthIndicator"
+          class="max-length-indicator"
+        >{{ item.state[item.model].length }} / {{ item.maxlength }}</div>
       </dd>
     </dl>
     <slot name="after" />
@@ -120,7 +139,9 @@ function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
 
     & > dd  {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      // align-items: center;
+      position: relative;
 
       & > input,
       & > textarea {
@@ -129,10 +150,12 @@ function onChangeFile (files: Array<File>, data: { [k: string]: any }) {
       }
     }
   }
+}
 
-  .note {
-    font-size: 0.875rem;
-    line-height: 1.375;
-  }
+.max-length-indicator {
+  color: rgb(var(--fg-color));
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  text-align: right;
 }
 </style>

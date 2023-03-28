@@ -10,7 +10,13 @@ type TTEasyFormItem = {
   model: string
   label?: string
   type: string
+  display?: boolean
+  disabled?: boolean
   required?: boolean
+  pattern?: string
+  maxlength?: number
+  maxLengthIndicator?: boolean
+  rows?: number
   placeholder?: string
   autocomplete?: string
   inputmode?:
@@ -23,9 +29,10 @@ type TTEasyFormItem = {
     | "decimal"
     | "search"
     | undefined
-  rows?: number
-  focus?: boolean
   accept?: string
   isMultipleFile?: boolean
   maxNumberOfFile?: number
+  focus?: boolean
+  onChange?: (item: TTEasyFormItem, form: TTEasyForm) => void
+  onInput?: (item: TTEasyFormItem, form: TTEasyForm) => void
 }

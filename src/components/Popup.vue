@@ -104,12 +104,13 @@ function close () {
   min-height: 4rem;
 
   & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
+    fill: rgba(var(--fg-color), 0.75);
   }
 
-  &:focus,
-  &:hover {
-    filter: brightness(1.5);
+  &:focus, &:hover {
+    & > .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
   }
 }
 </style>

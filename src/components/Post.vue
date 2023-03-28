@@ -347,6 +347,7 @@ function removeThisPost (uri: string) {
 
   &[data-mode="preview"] {
     font-size: 0.875em;
+    padding: 0;
     pointer-events: none;
 
     .images,

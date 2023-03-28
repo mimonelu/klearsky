@@ -11,38 +11,46 @@ const props = defineProps<{
 }>()
 
 const state = reactive<{
+  files: Array<File>
   previews: Array<string>
 }>({
+  files: [],
   previews: [],
 })
 
 function onChange (event: Event) {
-  const files: null | Array<File> = getFiles(event)
-  if (files == null) return
-  setPreviews(files)
-  emit("change", files)
+  const newFiles = getFiles(event)
+  if (newFiles == null) return
+  // WANT: 同一ファイルを追加できないようにしたい
+  state.files.push(...newFiles)
+  if (props.maxNumber != null) state.files.splice(props.maxNumber)
+  setPreviews(state.files)
+  emit("change", state.files)
 }
 
 function getFiles (event: Event): null | Array<File> {
-  const fileList: null | FileList = (event.target as HTMLInputElement)?.files ?? null
+  const fileList = (event.target as HTMLInputElement)?.files ?? null
   if (fileList == null) return null
-  const files: Array<File> = Array.from(fileList)
-  if (props.maxNumber != null) files.splice(props.maxNumber)
-  return files
+  return Array.from(fileList)
 }
 
 function setPreviews (files: Array<File>) {
   if (files.length === 0) return
-  state.previews.splice(0, state.previews.length, ...files.map((file: File) => {
-    return window.URL.createObjectURL(file)
-  }))
+  const objectUrls = files.map((file: File) => window.URL.createObjectURL(file))
+  state.previews.splice(0, state.previews.length, ...objectUrls)
+}
+
+function deleteFile (index: number) {
+  state.files.splice(index, 1)
+  state.previews.splice(index, 1)
+  emit("change", state.files)
 }
 </script>
 
 <template>
   <div class="filebox">
     <label
-      class="button"
+      class="button add-button"
       tabindex="0"
     >
       <input
@@ -54,11 +62,18 @@ function setPreviews (files: Array<File>) {
       <SVGIcon name="plus" />
     </label>
     <div
-      v-for="preview of state.previews"
-      class="image-box"
+      v-for="preview, index of state.previews"
+      class="preview-box"
       :data-has-image="preview != null"
       :style="{ 'background-image': `url(${preview})` }"
-    />
+    >
+      <button
+        class="delete-button"
+        @click.prevent="deleteFile(index)"
+      >
+        <SVGIcon name="cross" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -67,34 +82,55 @@ function setPreviews (files: Array<File>) {
   display: flex;
   flex-wrap: wrap;
   grid-gap: 0.5rem;
-
-  input {
-    display: none;
-  }
 }
 
-.button {
+.add-button {
   width: 5rem;
   height: 5rem;
 
-  .svg-icon:deep() {
+  & > input {
+    display: none;
+  }
+
+  & > .svg-icon {
     fill: rgb(var(--bg-color));
-    opacity: 0.5;
     min-width: 1rem;
     height: 1rem;
   }
 }
 
-.image-box {
+.preview-box {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
   border: 1px solid rgb(var(--fg-color));
   border-radius: var(--border-radius);
+  position: relative;
   min-width: 5rem;
   height: 5rem;
   &[data-has-image="false"] {
     display: none;
+  }
+}
+
+.delete-button {
+  background-color: rgb(var(--fg-color));
+  border-radius: 0 0 0 var(--border-radius);
+  padding: 0.5rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  & > .svg-icon {
+    fill: rgba(var(--bg-color), 0.75);
+  }
+
+  &:focus, &:hover {
+    cursor: pointer;
+
+    & > .svg-icon {
+      fill: rgb(var(--bg-color));
+    }
   }
 }
 </style>
