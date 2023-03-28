@@ -116,7 +116,7 @@ $width: 800px;
 }
 
 .logo {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 .description {

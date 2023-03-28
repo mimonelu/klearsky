@@ -34,6 +34,6 @@ import Logo from "@/components/Logo.vue"
 }
 
 .logo {
-  font-size: 4rem;
+  font-size: 2rem;
 }
 </style>
