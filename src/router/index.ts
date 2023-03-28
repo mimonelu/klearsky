@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from "vue-router"
-import HomeView from "@/views/HomeView.vue"
 import NotFoundView from "@/views/NotFoundView.vue"
 
 // Main
@@ -27,11 +26,6 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "top",
-      component: HomeView,
-    },
-    {
-      path: "/main",
       name: "main",
       component: MainView,
       redirect: "/home",
