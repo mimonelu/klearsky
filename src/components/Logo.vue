@@ -16,12 +16,13 @@ import SVGIcon from "@/components/SVGIcon.vue"
 <style lang="scss" scoped>
 .logo {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  grid-gap: 0.5em;
+  grid-gap: 0.25em;
 
   & > .svg-icon {
     fill: rgb(var(--accent-color));
+    height: 0.75em;
   }
 
   &__svg {

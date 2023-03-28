@@ -83,7 +83,7 @@ function moveToBottom () {
 }
 
 .logo {
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .copyright {
