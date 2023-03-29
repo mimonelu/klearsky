@@ -353,9 +353,11 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
 
 async function updateNotification (forceUpdate: boolean) {
   const count = await state.atp.fetchNotificationCount() ?? 0
-  if (count > 0) state.notificationCount = count
-  if (count > 0 || forceUpdate)
-    await state.fetchNotifications(forceUpdate ? 50 : Math.min(50, count), "new")
+  if (count > state.notificationCount) {
+    state.notificationCount = count
+    if (forceUpdate)
+      await state.fetchNotifications(forceUpdate ? 50 : Math.min(50, count), "new")
+  }
 }
 
 let isSendPostDone = false
