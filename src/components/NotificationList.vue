@@ -79,7 +79,6 @@ async function openSubject (notification: TTNotification) {
 
 <style lang="scss" scoped>
 .notification {
-  cursor: pointer;
   display: grid;
   grid-template-columns: min-content min-content auto 1fr max-content;
   align-items: center;
@@ -87,10 +86,11 @@ async function openSubject (notification: TTNotification) {
   overflow: hidden;
   padding: 0.5rem 1rem;
   &[data-is-new="true"] {
-    background-color: rgba(var(--like-color), 0.25);
+    background-color: rgba(var(--like-color), 0.125);
   }
   &:focus, &:hover {
-    filter: brightness(1.25);
+    background-color: rgba(var(--accent-color), 0.125);
+    cursor: pointer;
   }
 }
 
@@ -120,6 +120,7 @@ async function openSubject (notification: TTNotification) {
 }
 
 .display-name {
+  line-height: 1.25;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -127,6 +128,7 @@ async function openSubject (notification: TTNotification) {
 .handle {
   color: rgba(var(--fg-color), 0.5);
   font-size: 0.875rem;
+  line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -135,6 +137,7 @@ async function openSubject (notification: TTNotification) {
 .indexed-at {
   color: rgba(var(--fg-color), 0.5);
   font-size: 0.875rem;
+  line-height: 1.25;
   overflow: hidden;
   white-space: nowrap;
 }
