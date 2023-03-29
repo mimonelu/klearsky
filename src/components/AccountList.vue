@@ -13,7 +13,7 @@ async function login (session: TTSession) {
   blurElement()
   mainState.atp.data.did = session.did
   mainState.atp.saveData()
-  if (mainState.atp.hasLogin()) location.reload()
+  location.reload()
 }
 
 function deleteAccount (session: TTSession) {

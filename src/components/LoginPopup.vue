@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import AccountList from "@/components/AccountList.vue"
-import Copyright from "@/components/Copyright.vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Logo from "@/components/Logo.vue"
 import Popup from "@/components/Popup.vue"
@@ -15,13 +14,18 @@ const emit = defineEmits<{(
 
 const $t = inject("$t") as Function
 
+const mainState = inject("state") as MainState
+
+const currentSession: undefined | TTSession =
+  mainState.atp.data.sessions[mainState.atp.data.did]
+
 const state = reactive<{
   service: string
   identifier: string
   password: string
 }>({
-  service: "https://bsky.social",
-  identifier: "",
+  service: currentSession?.__service ?? "https://bsky.social",
+  identifier: currentSession?.handle ?? "",
   password: ""
 })
 
@@ -48,7 +52,7 @@ const easyFormProps: TTEasyForm = {
       placeholder: "your@email.address, you.bsky.social, did:plc:xxx...",
       autocomplete: "on",
       inputmode: "email",
-      focus: true,
+      focus: currentSession == null,
     },
     {
       state,
@@ -58,6 +62,7 @@ const easyFormProps: TTEasyForm = {
       required: true,
       autocomplete: "off",
       inputmode: "text",
+      focus: currentSession != null,
     }
   ],
 }
