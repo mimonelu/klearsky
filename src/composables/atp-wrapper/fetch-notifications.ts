@@ -4,8 +4,7 @@ export default async function (
   this: TIAtpWrapper,
   values: Array<TTNotification>,
   limit?: number,
-  cursor?: string,
-  noNewProp?: boolean
+  cursor?: string
 ): Promise<null | {
   cursor?: string
   newNotificationCount: number
@@ -23,12 +22,10 @@ export default async function (
 
   response.data.notifications.forEach(
     (notification: AppBskyNotificationList.Notification) => {
-      const existence: undefined | TTNotification = values.find(
-        (value: TTNotification) => {
-          return value.cid === notification.cid
-        }
+      const existence = values.some(
+        (value: TTNotification) => value.cid === notification.cid
       )
-      if (existence != null) return
+      if (existence) return
       if (cursor == null) newNotificationCount ++
       values.push({
         avatar: notification.author.avatar,
@@ -41,7 +38,6 @@ export default async function (
           notification.reason === "mention"
             ? notification.uri
             : notification.reasonSubject,
-        __new: noNewProp ? false : cursor == null,
       })
     }
   )

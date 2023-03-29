@@ -95,8 +95,7 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     values: Array<TTNotification>,
     limit?: number,
-    cursor?: string,
-    noNewProp?: boolean
+    cursor?: string
   ): Promise<null | {
     cursor?: string
     newNotificationCount: number

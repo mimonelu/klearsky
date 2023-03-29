@@ -46,11 +46,11 @@ async function openSubject (notification: TTNotification) {
 <template>
   <div class="notification-list">
     <div
-      v-for="notification of mainState.notifications"
+      v-for="notification, index of mainState.notifications"
       class="notification"
       tabindex="0"
       :data-reason="notification.reason"
-      :data-is-new="notification.__new"
+      :data-is-new="mainState.notificationCount >= index + 1"
       @click="openSubject(notification)"
     >
       <SVGIcon
@@ -86,14 +86,8 @@ async function openSubject (notification: TTNotification) {
   grid-gap: 0.5rem;
   overflow: hidden;
   padding: 0.5rem 1rem;
-  &:first-child {
-    padding-top: 1rem;
-  }
-  &:last-child {
-    padding-bottom: 1rem;
-  }
   &[data-is-new="true"] {
-    background-color: rgba(var(--share-color), 0.125);
+    background-color: rgba(var(--like-color), 0.25);
   }
   &:focus, &:hover {
     filter: brightness(1.25);

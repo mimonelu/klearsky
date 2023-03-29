@@ -68,8 +68,7 @@ type MainState = {
   fetchPostThread: () => Promise<void>
   fetchNotifications: (
     limit: number,
-    direction: "new" | "old",
-    noNewProp?: boolean
+    direction: "new" | "old"
   ) => Promise<void>
   fetchFollowers: (direction: "new" | "old") => Promise<void>
   fetchFollowings: (direction: "new" | "old") => Promise<void>

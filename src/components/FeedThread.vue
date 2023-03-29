@@ -44,7 +44,7 @@ function removeThisPost (uri: string) {
     <div
       v-for="feed, feedIndex of feeds"
       class="feed"
-      :data-focus="feed.post.uri === postUri"
+      :data-focus="feed.post?.uri === postUri"
     >
       <Post
         v-if="feed.post != null"

@@ -6,21 +6,18 @@ import SVGIcon from "@/components/SVGIcon.vue"
 const mainState = inject("state") as MainState
 
 onBeforeUnmount(() => {
-  mainState.notifications.forEach((notification: TTNotification) => {
-    notification.__new = false
-  })
+  mainState.notificationCount = 0
 })
 
 onMounted(async () => {
   if (mainState.notificationCount <= 0) return
-  mainState.notificationCount = 0
   await mainState.atp.updateNotificationSeen()
 })
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
   mainState.processing = true
   try {
-    await mainState.fetchNotifications(limit, direction, false)
+    await mainState.fetchNotifications(limit, direction)
   } finally {
     mainState.processing = false
   }

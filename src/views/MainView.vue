@@ -338,28 +338,24 @@ async function setupNotificationInterval () {
   }, 1000 * 60)
 }
 
-async function fetchNotifications (limit: number, direction: "new" | "old", noNewProp?: boolean) {
+async function fetchNotifications (limit: number, direction: "new" | "old") {
   const result: null | {
     cursor?: string
     newNotificationCount: number
   } = await state.atp.fetchNotifications(
     state.notifications,
     limit,
-    direction === "new" ? undefined : state.notificationCursor,
-    noNewProp
+    direction === "new" ? undefined : state.notificationCursor
   )
   if (result == null) return
   state.notificationCursor = result.cursor
-  // TODO: いったん据え置き
-  // state.notificationCount += result.newNotificationCount
 }
 
 async function updateNotification (forceUpdate: boolean) {
   const count = await state.atp.fetchNotificationCount() ?? 0
-  state.notificationCount = count
-  if (count > 0 || forceUpdate) {
-    await state.fetchNotifications(forceUpdate ? 50 : Math.min(50, count), "new", forceUpdate)
-  }
+  if (count > 0) state.notificationCount = count
+  if (count > 0 || forceUpdate)
+    await state.fetchNotifications(forceUpdate ? 50 : Math.min(50, count), "new")
 }
 
 let isSendPostDone = false
