@@ -55,7 +55,10 @@ async function reply () {
   const done = await mainState.openSendPostPopup("reply", props.post)
   state.processing = true
   try {
-    if (done) await mainState.fetchPostThread()
+    if (done) {
+      if (mainState.currentPath.startsWith("/post")) await mainState.fetchPostThread()
+      else await updateThisPost()
+    }
   } finally {
     state.processing = false
   }

@@ -267,7 +267,7 @@ async function fetchTimeline (direction: "old" | "new") {
 }
 
 async function fetchPostThread () {
-  const uri = state.currentQuery.uri as LocationQueryValue
+  const uri = state.currentQuery.postUri as LocationQueryValue
   if (!uri) return
   state.currentFeeds = await state.atp.fetchPostThread(uri) ?? []
 }
