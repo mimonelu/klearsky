@@ -27,13 +27,13 @@ defineProps<{
 <style lang="scss" scoped>
 .user-box {
   display: grid;
-  grid-gap: 0 0.5rem;
+  grid-gap: 0.25rem 0.5rem;
   grid-template-columns: min-content auto 1fr;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
     "a n h"
     "a d d";
-  align-items: center;
+  align-items: flex-end;
   padding: 0 1rem;
 }
 

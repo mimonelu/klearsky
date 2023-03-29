@@ -2,9 +2,9 @@
 import { inject, reactive } from "vue"
 import { RouterView } from "vue-router"
 import type { LocationQueryValue } from "vue-router"
+import FollowButton from "@/components/FollowButton.vue"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
 
 const mainState = inject("state") as MainState
 
@@ -19,10 +19,6 @@ function isUserProfile (): boolean {
   return handle === mainState.atp.session?.handle
 }
 
-function isFollowing (): boolean {
-  return mainState.currentProfile?.viewer?.following != null
-}
-
 function isFollowed (): boolean {
   return mainState.currentProfile?.viewer?.followedBy != null
 }
@@ -31,28 +27,6 @@ function openImagePopup (uri: string) {
   mainState.imagePopupProps.largeUri = uri
   mainState.imagePopupProps.smallUri = ""
   mainState.imagePopupProps.display = true
-}
-
-async function toggleFollow () {
-  if (mainState.currentProfile == null) return
-  blurElement()
-  mainState.processing = true
-  try {
-    if (isFollowing()) {
-      await mainState.atp.deleteFollow(
-        mainState.currentProfile.viewer.following as string
-      )
-    } else {
-      await mainState.atp.createFollow(
-        mainState.currentProfile.did,
-        mainState.currentProfile.declaration.cid as string
-      )
-    }
-    const handle = mainState.currentQuery.handle as LocationQueryValue
-    if (handle != null) await mainState.fetchCurrentProfile(handle)
-  } finally {
-    mainState.processing = false
-  }
 }
 
 function openPostMenu () {
@@ -102,14 +76,12 @@ function closePostMenu () {
               <span>{{ $t("edit") }}</span>
             </RouterLink>
             <template v-else>
-              <button
-                class="button"
-                :data-is-following="isFollowing()"
-                @click.prevent="toggleFollow"
-              >
-                <span v-if="isFollowing()">{{ $t("following") }}</span>
-                <span v-else>{{ $t("follow") }}</span>
-              </button>
+              <FollowButton
+                v-if="mainState.currentProfile != null"
+                :viewer="mainState.currentProfile.viewer"
+                :did="mainState.currentProfile.did"
+                :declarationCid="mainState.currentProfile.declaration.cid"
+              />
               <div
                 v-if="isFollowed()"
                 class="followed"

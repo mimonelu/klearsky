@@ -1,3 +1,10 @@
+type TTUserViewer = {
+  muted: boolean
+  following?: string
+  followedBy?: string
+  [k: string]: unknown
+}
+
 type TTUser = {
   did: string
   declaration: {
@@ -8,12 +15,7 @@ type TTUser = {
   handle: string
   displayName: string
   avatar?: string
-  viewer: {
-    muted: boolean
-    following?: string
-    followedBy?: string
-    [k: string]: unknown
-  }
+  viewer: TTUserViewer
   [k: string]: unknown
 }
 
@@ -37,11 +39,7 @@ type TTReason = {
     handle: string
     displayName: string
     avatar: string
-    viewer: {
-      muted: boolean
-      following?: string
-      followedBy?: string
-    }
+    viewer: TTUserViewer
   }
   indexedAt: string
 }
@@ -163,11 +161,7 @@ type TTProfile = {
   postsCount: number
   creator: string
   indexedAt: string
-  viewer: {
-    followedBy?: string
-    following?: string
-    muted: boolean
-  }
+  viewer: TTUserViewer
   myState: {
     follow?: string
     muted: boolean

@@ -50,7 +50,7 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     did: string,
     declarationCid: string
-  ): Promise<boolean>
+  ): Promise<null | string>
   createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
   createRepost(this: TIAtpWrapper, post?: TTPost): Promise<boolean>
   deleteFollow(this: TIAtpWrapper, uri: string): Promise<boolean>

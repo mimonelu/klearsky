@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import FollowButton from "@/components/FollowButton.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
 
@@ -46,10 +47,11 @@ async function fetchUsers (direction: "new" | "old") {
         :user="user as TTUser"
       >
         <div class="relations">
-          <div
-            v-if="user.viewer.following"
-            class="you-following"
-          >{{ $t("following") }}</div>
+          <FollowButton
+            :viewer="user.viewer"
+            :did="user.did"
+            :declarationCid="user.declaration.cid"
+          />
           <div
             v-if="user.viewer.followedBy"
             class="you-followed"
@@ -88,19 +90,17 @@ async function fetchUsers (direction: "new" | "old") {
   grid-gap: 0.5rem;
 }
 
-.you-following,
-.you-followed {
-  display: flex;
-  align-items: center;
+.follow-button {
   font-size: 0.875rem;
-  line-height: 1.25;
-}
-
-.you-following {
-  color: rgb(var(--accent-color));
+  padding: 0.25rem 0;
+  min-width: 8rem;
 }
 
 .you-followed {
   color: rgb(var(--like-color));
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  line-height: 1.25;
 }
 </style>
