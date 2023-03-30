@@ -169,8 +169,12 @@ function updateSettings () {
     )
   }
   if (state.currentSetting.backgroundImage != null) {
+    const backgroundImage = state.currentSetting.backgroundImage
+      .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;")
     window.document.body.style.backgroundImage =
-      `url(${state.currentSetting.backgroundImage})`
+      backgroundImage.match(/^\/|^\w+:\/+/)
+        ? `url(${backgroundImage})`
+        : backgroundImage
   }
 }
 
