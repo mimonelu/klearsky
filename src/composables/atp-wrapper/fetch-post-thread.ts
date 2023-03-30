@@ -1,6 +1,5 @@
 import type { AppBskyFeedGetPostThread } from "@atproto/api"
 import {
-  sortFeeds,
   text2htmlAtFeeds,
   traverseJson,
 } from "@/composables/atp-wrapper/services"
@@ -9,7 +8,7 @@ export default async function (
   this: TIAtpWrapper,
   uri: string,
   depth?: number
-): Promise<null | Array<TTFeed>> {
+): Promise<null | Array<TTPost>> {
   if (this.agent == null) return null
   const query: AppBskyFeedGetPostThread.QueryParams = { uri }
   if (depth != null) query.depth = depth
@@ -23,10 +22,13 @@ export default async function (
   traverseJson(response.data.thread, (key: string, value: any) => {
     if (key === "post") posts.push(value)
   })
-  const feeds: Array<TTFeed> = posts.map((post: TTPost): TTFeed => ({ post }))
-  text2htmlAtFeeds(feeds)
-  sortFeeds(feeds)
-  feeds.reverse()
+  text2htmlAtFeeds(posts)
+  posts.sort((a: TTPost, b: TTPost) => {
+    const aIndexedAt = new Date(a.__reason?.indexedAt ?? a.indexedAt)
+    const bIndexedAt = new Date(b.__reason?.indexedAt ?? b.indexedAt)
+    return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
+  })
+  posts.reverse()
 
-  return feeds
+  return posts
 }

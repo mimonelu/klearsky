@@ -63,7 +63,7 @@ export function sortFeeds(feeds: Array<TTFeed>): Array<TTFeed> {
   })
 }
 
-export function text2htmlAtFeeds(feeds: Array<TTFeed>) {
+export function text2htmlAtFeeds(feeds: Array<any>) {
   traverseJson(feeds, (key: string, value: any, parent: any) => {
     if (key !== "text") return
     value = (value + "").replace(/</g, "&lt;").replace(/>/g, "&gt;")

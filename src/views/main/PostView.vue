@@ -4,70 +4,55 @@ import Post from "@/components/Post.vue"
 
 const mainState = inject("state") as MainState
 
-const postUri = mainState.currentQuery.postUri as undefined | string
+function updateThisPost (newPosts: Array<TTPost>) {
+  const posts = mainState.currentPosts
+  if (posts == null) return
 
-function getPostType (feedIndex: number): "post" | "root" | "parent" | "postInPost" {
-  const feeds = mainState.currentFeeds
-  if (feeds == null) return "post"
-  return feeds.length === 0 || feedIndex === feeds.length - 1
-    ? "post"
-    : feedIndex === 0
-      ? "root"
-      : "parent"
-}
-
-function updateThisPost (newFeed: TTFeed) {
-  const feeds = mainState.currentFeeds
-  if (feeds == null) return
-
-  // MEMO: フィード内の全同一ポストに最新のデータを反映する
-  // WANT: このために「画面には1つのフィードのみ表示する」としているが、何とかしたい
-  feeds?.forEach((feed: TTFeed) => {
-    if (feed.post?.cid === newFeed.post.cid) {
-      feed.post = newFeed.post
-    }
+  // MEMO: ポストスレッドの全同一ポストに最新のデータを反映する
+  posts.forEach((post: TTPost, index: number) => {
+    const newPost = newPosts.find((newPost: TTPost) =>
+      post?.cid === newPost.cid)
+    if (newPost != null) posts[index] = newPost
   })
 }
 
 function removeThisPost (uri: string) {
-  const feeds = mainState.currentFeeds
-  feeds?.forEach((feed: TTFeed) => {
-    // @ts-ignore // TODO:
-    if (feed.post?.uri === uri) delete feed.post
-    // @ts-ignore // TODO:
-    if (feed.reply?.parent?.uri === uri) delete feed.reply.parent
-    // @ts-ignore // TODO:
-    if (feed.reply?.root?.uri === uri) delete feed.reply.root
-  })
+  mainState.currentPosts = mainState.currentPosts.filter((post: TTPost) =>
+    post.uri !== uri)
 }
 </script>
 
 <template>
   <div class="post-view">
-    <div class="feed-thread">
-      <div
-        v-for="feed, feedIndex of mainState.currentFeeds"
-        class="feed"
-        :data-focus="feed.post?.uri === postUri"
-      >
-        <Post
-          v-if="feed.post != null"
-          :type="getPostType(feedIndex)"
-          :post="feed.post"
-          @updateThisPost="updateThisPost"
-          @removeThisPost="removeThisPost"
-        />
-      </div>
-    </div>
+    <template v-for="post, postIndex of mainState.currentPosts">
+      <Post
+        type="post"
+        :post="post"
+        :data-focus="post.uri === mainState.currentQuery.postUri"
+        :data-has-child="post.cid === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.cid"
+        @updateThisPost="updateThisPost"
+        @removeThisPost="removeThisPost"
+      />
+    </template>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.feed {
-  display: flex;
-  flex-direction: column;
+.post {
   &[data-focus="true"] {
     background-color: rgba(var(--accent-color), 0.125);
+  }
+  &[data-has-child="true"] {
+    &::before {
+      border-left: 2px solid rgba(var(--fg-color), 0.25);
+      content: "";
+      display: block;
+      position: absolute;
+      top: calc(1em + var(--avatar-size) + 8px);
+      left: calc(2.5em - 1px);
+      width: 0;
+      height: calc(100% - var(--avatar-size) - 16px);
+    }
   }
 }
 </style>

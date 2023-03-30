@@ -96,6 +96,7 @@ const router = useRouter()
 router.beforeEach(() => {
   state.currentFeeds?.splice(0)
   state.currentCursor = undefined
+  state.currentPosts?.splice(0)
 })
 
 router.afterEach(async (to: RouteLocationNormalized) => {
@@ -125,6 +126,7 @@ function resetState () {
   state.currentProfile = null
   state.currentFeeds = []
   state.currentCursor = undefined
+  state.currentPosts = []
   state.currentFollowers = []
   state.currentFollowings = []
   state.currentSearchKeywordTerm = ""
@@ -251,8 +253,8 @@ async function processPage (pageName?: null | RouteRecordName) {
         await router.push({ name: "home" })
         break
       }
-      state.currentFeeds?.splice(0)
-      state.currentFeeds = await state.atp.fetchPostThread(postUri) ?? []
+      state.currentPosts?.splice(0)
+      state.currentPosts = await state.atp.fetchPostThread(postUri) ?? []
       break
     }
   }
@@ -273,7 +275,7 @@ async function fetchTimeline (direction: "old" | "new") {
 async function fetchPostThread () {
   const uri = state.currentQuery.postUri as LocationQueryValue
   if (!uri) return
-  state.currentFeeds = await state.atp.fetchPostThread(uri) ?? []
+  state.currentPosts = await state.atp.fetchPostThread(uri) ?? []
 }
 
 async function fetchUserProfile () {

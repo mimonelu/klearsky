@@ -84,12 +84,6 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     query: string
   ): Promise<undefined | any>
-  fetchMultiplePostThreads(
-    this: TIAtpWrapper,
-    postUri: string,
-    rootUri?: null | string,
-    parentUri?: null | string
-  ): Promise<Array<TTFeed>>
   fetchNotificationCount(this: TIAtpWrapper): Promise<null | number>
   fetchNotifications(
     this: TIAtpWrapper,
@@ -105,7 +99,7 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     uri: string,
     depth?: number
-  ): Promise<null | Array<TTFeed>>
+  ): Promise<null | Array<TTPost>>
   fetchTimeline(
     this: TIAtpWrapper,
     oldFeeds: Array<TTFeed>,

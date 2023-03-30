@@ -109,9 +109,10 @@ async function upvote () {
 }
 
 async function updateThisPost () {
-  const posts: null | Array<TTFeed> = await mainState.atp.fetchPostThread(props.post.uri, 1)
+  const posts: null | Array<TTPost> =
+    await mainState.atp.fetchPostThread(props.post.uri, 1)
   if (posts == null || posts.length === 0) return
-  emit("updateThisPost", posts[0])
+  emit("updateThisPost", posts)
 }
 
 async function openRepostMenu () {
@@ -321,28 +322,6 @@ function removeThisPost (uri: string) {
   flex-direction: column;
   padding: 1em;
   position: relative;
-
-  .feed-list &[data-type="root"]:not(:last-child),
-  .feed-list &[data-type="parent"]:not(:last-child),
-  .feed-thread &[data-type="root"],
-  .feed-thread &[data-type="parent"] {
-    &::before {
-      border-left: 2px solid rgba(var(--fg-color), 0.25);
-      content: "";
-      display: block;
-      position: absolute;
-      top: calc(1em + var(--avatar-size) + 8px);
-      left: calc(2.5em - 1px);
-      width: 0;
-      height: calc(100% - var(--avatar-size) - 16px);
-    }
-  }
-  .feed-list &[data-type="root"]:not(:last-child),
-  .feed-thread &[data-type="root"] {
-    &::before {
-      border-left-style: dotted;
-    }
-  }
 
   &[data-type="postInPost"] {
     font-size: 0.875em;

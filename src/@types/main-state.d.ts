@@ -23,6 +23,7 @@ type MainState = {
   currentProfile: null | TTProfile
   currentFeeds: Array<TTFeed>
   currentCursor?: string
+  currentPosts: Array<TTPost>
   currentPath: string
   currentQuery: LocationQuery
 
