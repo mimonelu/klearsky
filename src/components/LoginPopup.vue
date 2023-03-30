@@ -82,7 +82,10 @@ async function submitCallback () {
       <div class="description">Unofficial Web Client for Bluesky</div>
     </template>
     <template v-slot:body>
-      <div class="body">
+      <div
+        class="body"
+        :data-has-accounts="Object.keys(mainState.atp.data.sessions).length > 0"
+      >
         <EasyForm v-bind="easyFormProps" />
         <div class="body__right">
           <div class="account-header">{{ $t("yourAccounts") }}</div>
@@ -137,6 +140,12 @@ $width: 800px;
   @media not all and (max-width: $width) {
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+  &[data-has-accounts="false"] {
+    grid-template-columns: unset;
+  }
+  &[data-has-accounts="false"] &__right {
+    display: none;
   }
 
   &__right {
