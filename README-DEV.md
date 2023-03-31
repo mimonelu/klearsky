@@ -1,7 +1,7 @@
 # Klearsky Dev Memo
 
 ## 仕様
-### 投稿画像の制約
+### ポスト画像の制約（2023/03/31現在）
 * ポスト画像は最終的にすべてJPEGに変換される
 * ポスト画像の最大幅は縦横2000px
 * アバター画像も最大幅は縦横2000pxだが、アップロード後に長辺を基準に1000pxにリサイズされ、さらに短辺も1000pxにトリムされる
@@ -9,7 +9,7 @@
 * 画像の最大ファイルサイズは976.56KB
 
 ## 設定
-### 背景画像URL
+### 背景画像URLの挙動
 * URLプロトコルから始まる場合は `background-image: url(...);` として設定
   * 例: `https://images.pexels.com/photos/376368/pexels-photo-376368.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2`
 * その他は `background-image: ...;` として設定

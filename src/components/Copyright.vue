@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Package from "../../package.json"
+import Package from "@/../package.json"
 
 const yyyy = (new Date).getFullYear()
 </script>
@@ -10,22 +10,20 @@ const yyyy = (new Date).getFullYear()
     <small>&copy; {{ yyyy }} mimonelu</small>
     <a
       class="textlink"
-      href="https://staging.bsky.app/profile/mimonelu.bsky.social"
-      rel="noreferrer"
-      target="_blank"
+      href="/#/profile/post?handle=mimonelu.bsky.social"
     >Bluesky@mimonelu.bsky.social</a>
-    <a
-      class="textlink"
-      href="https://iris.to/mimonelu@mimonelu.github.io"
-      rel="noreferrer"
-      target="_blank"
-    >Nostr@mimonelu</a>
     <a
       class="textlink"
       href="https://twitter.com/mimonelu"
       rel="noreferrer"
       target="_blank"
     >Twitter@mimonelu</a>
+    <a
+      class="textlink"
+      href="https://iris.to/mimonelu@mimonelu.github.io"
+      rel="noreferrer"
+      target="_blank"
+    >Nostr@mimonelu</a>
     <div />
     <div class="kebab-header">Bluesky</div>
     <small>&copy; {{ yyyy }} Bluesky PBLLC</small>
