@@ -24,6 +24,7 @@ import SubMenu from "@/components/SubMenu.vue"
 import AtpWrapper from "@/composables/atp-wrapper"
 import storage from "@/composables/storage"
 import waitProp from "@/composables/wait-prop"
+import consts from "@/consts/consts.json"
 
 const $setI18n = inject("$setI18n") as Function
 const $getI18n = inject("$getI18n") as Function
@@ -264,7 +265,7 @@ async function fetchTimeline (direction: "old" | "new") {
   const result: null | { feeds: Array<TTFeed>; cursor?: string } =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
-      20,
+      consts.limitOfFetchTimeline,
       direction === "old" ? state.timelineCursor : undefined
     )
   if (result == null) return
@@ -307,7 +308,7 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
     await state.atp.fetchAuthorFeed(
       state.currentFeeds as Array<TTFeed>,
       handle,
-      10,
+      consts.limitOfFetchAuthorFeeds,
       direction === "old" ? state.currentCursor : undefined
     )
   if (result == null) return
@@ -318,14 +319,14 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
 async function fetchFollowings (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchFollowings(state.currentFollowings, handle, 50, direction === "new" ? undefined : state.currentCursor)
+  const cursor: undefined | string = await state.atp.fetchFollowings(state.currentFollowings, handle, consts.limitOfFetchFollows, direction === "new" ? undefined : state.currentCursor)
   state.currentCursor = cursor
 }
 
 async function fetchFollowers (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchFollowers(state.currentFollowers, handle, 50, direction === "new" ? undefined : state.currentCursor)
+  const cursor: undefined | string = await state.atp.fetchFollowers(state.currentFollowers, handle, consts.limitOfFetchFollows, direction === "new" ? undefined : state.currentCursor)
   state.currentCursor = cursor
 }
 
@@ -341,7 +342,7 @@ async function setupNotificationInterval () {
   await updateNotification(true)
   notificationTimer = setInterval(() => {
     updateNotification(false)
-  }, 1000 * 60)
+  }, consts.intervalOfFetchNotifications)
 }
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
@@ -361,7 +362,10 @@ async function updateNotification (forceUpdate: boolean) {
   const count = await state.atp.fetchNotificationCount() ?? 0
   if (count > 0) state.notificationCount = count
   if (count > 0 || forceUpdate)
-    await state.fetchNotifications(forceUpdate ? 50 : Math.min(50, count), "new")
+    await state.fetchNotifications(forceUpdate
+      ? consts.limitOfFetchNotifications
+      : Math.min(consts.limitOfFetchNotifications, count)
+    , "new")
 }
 
 let isSendPostDone = false

@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
 import { blurElement } from "@/composables/misc"
+import consts from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
@@ -25,7 +26,7 @@ async function fetchNewResults () {
       await mainState.atp.fetchUserSearch(
         mainState.currentSearchUsers,
         mainState.currentSearchUserTerm,
-        25
+        consts.limitOfFetchUserSearch
       )
   } finally {
     mainState.processing = false
@@ -47,7 +48,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
       await mainState.atp.fetchUserSearch(
         mainState.currentSearchUsers,
         mainState.currentSearchUserTerm,
-        25,
+        consts.limitOfFetchUserSearch,
         direction === "new" ? undefined : mainState.currentSearchUsersCursor
       )
   } finally {
