@@ -1,6 +1,6 @@
 {
   "name": "klearsky",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
     "format": "npx prettier --write src/@types/**/* && npx prettier --write src/composables/**/*"
   },
   "dependencies": {
-    "@atproto/api": "^0.1.3",
+    "@atproto/api": "^0.2.0",
     "@atproto/uri": "^0.0.1",
     "compressorjs": "^1.2.1",
     "crypto-js": "^4.1.1",

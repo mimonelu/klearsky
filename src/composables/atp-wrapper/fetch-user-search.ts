@@ -1,20 +1,21 @@
-import type { AppBskyActorSearch } from "@atproto/api"
+import type { BskyAgent, AppBskyActorSearchActors } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
   users: Array<TTUser>,
   term: string,
   limit?: number,
-  before?: string
+  cursor?: string
 ): Promise<undefined | string> {
   if (this.agent == null) return
-  const response: AppBskyActorSearch.Response =
-    await this.agent.api.app.bsky.actor.search({
-      term,
-      limit,
-      before,
-    })
-  console.log("[klearsky/fetchUserSearch]", response)
+  const query: AppBskyActorSearchActors.QueryParams = {
+    term,
+    limit,
+    cursor,
+  }
+  const response: AppBskyActorSearchActors.Response =
+    await (this.agent as BskyAgent).searchActors(query)
+  console.log("[klearsky/searchActors]", response)
   if (!response.success) return
 
   const newUsers: Array<TTUser> = []
@@ -22,7 +23,7 @@ export default async function (
     if (!users.some((user: TTUser) => user.did === target.did))
       newUsers.push(target)
   })
-  if (before == null) users.unshift(...newUsers)
+  if (cursor == null) users.unshift(...newUsers)
   else users.push(...newUsers)
 
   return response.data.cursor

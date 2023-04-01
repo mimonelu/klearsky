@@ -1,4 +1,4 @@
-import type { AppBskyActorGetProfile } from "@atproto/api"
+import type { AppBskyActorGetProfile, BskyAgent } from "@atproto/api"
 import text2html from "@/composables/text2html"
 
 export default async function (
@@ -7,8 +7,8 @@ export default async function (
 ): Promise<null | TTProfile> {
   if (this.agent == null) return null
   const response: AppBskyActorGetProfile.Response =
-    await this.agent.api.app.bsky.actor.getProfile({ actor })
-  console.log("[klearsky/fetchProfile]", response)
+    await (this.agent as BskyAgent).getProfile({ actor })
+  console.log("[klearsky/getProfile]", response)
   if (!response.success) return null
 
   // TODO:

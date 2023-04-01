@@ -123,7 +123,7 @@ type TTFeed = {
 }
 
 type TTFileSchema = {
-  cid: string
+  blob: BlobRef
   mimeType: string
 }
 

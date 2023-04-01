@@ -18,7 +18,7 @@ async function toggleFollow () {
       await mainState.atp.deleteFollow(props.viewer.following)
       props.viewer.following = undefined
     } else {
-      const uri = await mainState.atp.createFollow(props.did, props.declarationCid)
+      const uri = await mainState.atp.createFollow(props.declarationCid)
       if (uri != null) props.viewer.following = uri
     }
   } finally {

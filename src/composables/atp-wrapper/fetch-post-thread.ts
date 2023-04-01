@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetPostThread } from "@atproto/api"
+import type { AppBskyFeedGetPostThread, BskyAgent } from "@atproto/api"
 import {
   text2htmlAtFeeds,
   traverseJson,
@@ -13,8 +13,8 @@ export default async function (
   const query: AppBskyFeedGetPostThread.QueryParams = { uri }
   if (depth != null) query.depth = depth
   const response: AppBskyFeedGetPostThread.Response =
-    await this.agent.api.app.bsky.feed.getPostThread(query)
-  console.log("[klearsky/fetchPostThread]", response)
+    await (this.agent as BskyAgent).getPostThread(query)
+  console.log("[klearsky/getPostThread]", response)
   if (!response.success) return null
 
   // TODO:
