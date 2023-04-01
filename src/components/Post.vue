@@ -521,7 +521,7 @@ function removeThisPost (uri: string) {
   grid-area: i;
   aspect-ratio: 16 / 9;
   display: grid;
-  grid-gap: 1px;
+  grid-gap: 2px;
   overflow: hidden;
   &[data-number-of-images="2"] {
     grid-template-areas: "a b";

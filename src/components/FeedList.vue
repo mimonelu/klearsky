@@ -135,8 +135,11 @@ function removeThisPost (uri: string) {
 .feed {
   display: flex;
   flex-direction: column;
-  &:not(:empty):not(:last-child) {
+  &:not(:empty):not(:last-child)::after {
     border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+    content: "";
+    display: block;
+    margin: 0 1rem;
   }
 }
 
