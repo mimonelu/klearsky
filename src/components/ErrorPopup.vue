@@ -4,7 +4,7 @@ import Popup from "@/components/Popup.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  error: unknown;
+  error?: unknown;
 }>()
 
 function close () {
@@ -22,7 +22,8 @@ function close () {
       <h2>{{ $t("error") }}</h2>
     </template>
     <template v-slot:body>
-      <pre class="message">{{ error }}</pre>
+      <pre class="message">{{ error }}
+{{ JSON.stringify(error) }}</pre>
     </template>
   </Popup>
 </template>
