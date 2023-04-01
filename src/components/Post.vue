@@ -377,27 +377,27 @@ function removeThisPost (uri: string) {
 .replier {
   &:focus, &:hover {
     & > .svg-icon {
-      fill: rgb(var(--accent-color));
+      fill: rgb(var(--post-color));
     }
 
     .replier__display-name {
-      color: rgb(var(--accent-color));
+      color: rgb(var(--post-color));
     }
     .replier__handle {
-      color: rgba(var(--accent-color), 0.75);
+      color: rgba(var(--post-color), 0.75);
     }
   }
 
   & > .svg-icon {
-    fill: rgba(var(--accent-color), 0.75);
+    fill: rgba(var(--post-color), 0.75);
     transform: scaleX(-1.0);
   }
 
   &__display-name {
-    color: rgba(var(--accent-color), 0.75);
+    color: rgba(var(--post-color), 0.75);
   }
   &__handle {
-    color: rgba(var(--accent-color), 0.5);
+    color: rgba(var(--post-color), 0.5);
   }
 }
 .reposter {

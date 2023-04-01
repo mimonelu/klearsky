@@ -265,11 +265,11 @@ function moveToBottom () {
 
   &.send-post-button {
     .svg-icon {
-      fill: rgba(var(--accent-color), 0.75);
+      fill: rgba(var(--post-color), 0.75);
     }
     &:focus, &:hover {
       .svg-icon {
-        fill: rgb(var(--accent-color));
+        fill: rgb(var(--post-color));
       }
     }
   }
