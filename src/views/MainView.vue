@@ -360,8 +360,9 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
 
 async function updateNotification (forceUpdate: boolean) {
   const count = await state.atp.fetchNotificationCount() ?? 0
+  const canFetched = state.notificationCount < count
   if (count > 0) state.notificationCount = count
-  if (count > 0 || forceUpdate)
+  if (canFetched || forceUpdate)
     await state.fetchNotifications(forceUpdate
       ? consts.limitOfFetchNotifications
       : Math.min(consts.limitOfFetchNotifications, count)
