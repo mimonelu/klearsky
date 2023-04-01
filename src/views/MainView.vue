@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   inject,
+  nextTick,
   onMounted,
   onUnmounted,
   provide,
@@ -22,6 +23,7 @@ import MainMenu from "@/components/MainMenu.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import AtpWrapper from "@/composables/atp-wrapper"
+import scrollToFocused from "@/composables/scroll-to-focused"
 import storage from "@/composables/storage"
 import waitProp from "@/composables/wait-prop"
 import consts from "@/consts/consts.json"
@@ -256,6 +258,8 @@ async function processPage (pageName?: null | RouteRecordName) {
       }
       state.currentPosts?.splice(0)
       state.currentPosts = await state.atp.fetchPostThread(postUri) ?? []
+      await nextTick()
+      scrollToFocused()
       break
     }
   }
