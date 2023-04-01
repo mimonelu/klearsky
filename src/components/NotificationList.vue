@@ -105,7 +105,7 @@ async function openSubject (notification: TTNotification) {
     fill: rgb(var(--fg-color));
   }
   [data-reason="reply"] & {
-    fill: rgb(var(--accent-color));
+    fill: rgb(var(--post-color));
   }
   [data-reason="repost"] & {
     fill: rgb(var(--share-color));
