@@ -10,10 +10,12 @@ defineProps<{
 }>()
 
 const state = reactive<{
+  loaded: boolean;
   mode: boolean;
   x: number;
   y: number;
 }>({
+  loaded: false,
   mode: false,
   x: 0.5,
   y: 0.5,
@@ -52,6 +54,10 @@ function endDrag () {
   window.document.body.style.overflowY = "scroll"
 }
 
+function onLoadLargeImage () {
+  state.loaded = true
+}
+
 function close () {
   emit("close")
 }
@@ -60,12 +66,13 @@ function close () {
 <template>
   <div
     class="image-popup"
+    :data-loaded="state.loaded"
     :data-mode="state.mode"
   >
     <div
       class="image"
       :style="`
-        background-image: url(${smallUri ?? '/img/void'});
+        background-image: url(${state.loaded ? '' : smallUri});
         background-position: ${state.x * 100}% ${state.y * 100}%;
       `"
       @mousedown="startDrag"
@@ -78,11 +85,16 @@ function close () {
       <div
         class="image"
         :style="`
-          background-image: url(${largeUri ?? '/img/void'});
+          background-image: url(${largeUri});
           background-position: ${state.x * 100}% ${state.y * 100}%;
         `"
       />
     </div>
+    <img
+      class="large-image-loader"
+      :src="largeUri"
+      @load="onLoadLargeImage"
+    >
     <button
       class="closer"
       @click.prevent="close"
@@ -124,6 +136,10 @@ function close () {
     background-size: contain;
     cursor: grab;
   }
+}
+
+.large-image-loader {
+  display: contents;
 }
 
 .closer {
