@@ -1,8 +1,8 @@
-import { AtpAgent } from "@atproto/api"
+import { BskyAgent } from "@atproto/api"
 import type { AtpSessionData, AtpSessionEvent } from "@atproto/api"
 
 export default function (this: TIAtpWrapper, service: string): boolean {
-  this.agent = new AtpAgent({
+  this.agent = new BskyAgent({
     service,
     persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
       switch (event) {

@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetTimeline } from "@atproto/api"
+import type { AppBskyFeedGetTimeline, BskyAgent } from "@atproto/api"
 import {
   injectReason,
   mergeFeeds,
@@ -18,14 +18,14 @@ export default async function (
   if (this.agent == null) return null
   const query: AppBskyFeedGetTimeline.QueryParams = {
     // TODO: 要調査
-    // FYI: https://github.com/bluesky-social/atproto/blob/main/packages/pds/tests/views/timeline.test.ts
-    // algorithm: "reverse-chronological",
+    // FYI: https://github.com/bluesky-social/atproto/blob/main/packages/pds/src/app-view/api/app/bsky/util/feed.ts#L72
+    algorithm: "reverse-chronological",
   }
   if (limit != null) query.limit = limit
-  if (cursor != null) query.before = cursor
+  if (cursor != null) query.cursor = cursor
   const response: AppBskyFeedGetTimeline.Response =
-    await this.agent.api.app.bsky.feed.getTimeline(query)
-  console.log("[klearsky/fetchTimeline]", response)
+    await (this.agent as BskyAgent).getTimeline(query)
+  console.log("[klearsky/getTimeline]", response)
   if (!response.success) return null
 
   // TODO:

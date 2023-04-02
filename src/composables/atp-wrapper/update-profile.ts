@@ -1,4 +1,4 @@
-import type { AppBskyActorUpdateProfile } from "@atproto/api"
+import type { AppBskyActorProfile, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -27,14 +27,15 @@ export default async function (
   ])
   const avatarSchema: null | TTFileSchema = fileSchemas[0]
   const bannerSchema: null | TTFileSchema = fileSchemas[1]
-  const profileSchema: AppBskyActorUpdateProfile.InputSchema = {
+  const profileSchema: AppBskyActorProfile.Record = {
     displayName: params.displayName,
     description: params.description,
   }
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
-  const response: AppBskyActorUpdateProfile.Response =
-    (await this.agent?.api.app.bsky.actor.updateProfile(profileSchema)) ?? null
-  console.log("[klearsky/updateProfile]", response)
-  return response.success
+  ;(await (this.agent as BskyAgent).upsertProfile(
+    (_existing: AppBskyActorProfile.Record | undefined):
+      AppBskyActorProfile.Record => profileSchema
+  ))
+  return true
 }

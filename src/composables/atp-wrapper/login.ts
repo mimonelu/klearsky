@@ -1,3 +1,4 @@
+import type { BskyAgent, AtpAgentLoginOpts, ComAtprotoServerCreateSession } from "@atproto/api"
 import storage from "@/composables/storage"
 
 export default async function (
@@ -14,11 +15,18 @@ export default async function (
   if (identifier == null || password == null) {
     if (session == null) return false
     await this.resumeSession(session)
-  } else await this.agent.login({ identifier, password })
+  } else {
+    const optinos: AtpAgentLoginOpts = {
+      identifier,
+      password,
+    }
+    const response: ComAtprotoServerCreateSession.Response =
+      await (this.agent as BskyAgent).login(optinos)
+    console.log("[klearsky/login]", response)
+  }
 
   // ここで persistSession が入る
 
   storage.save("atp", this.data)
-
   return true
 }

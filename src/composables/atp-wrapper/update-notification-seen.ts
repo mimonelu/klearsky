@@ -1,11 +1,10 @@
-import type { AppBskyNotificationUpdateSeen } from "@atproto/api"
+import type { AppBskyNotificationUpdateSeen, BskyAgent } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper): Promise<boolean> {
   if (this.agent == null) return false
+  const seenAt = new Date().toISOString()
   const response: AppBskyNotificationUpdateSeen.Response =
-    await this.agent.api.app.bsky.notification.updateSeen({
-      seenAt: new Date().toISOString(),
-    })
-  console.log("[klearsky/updateNotificationSeen]", response)
+    await (this.agent as BskyAgent).updateSeenNotifications(seenAt)
+  console.log("[klearsky/updateSeenNotifications]", response)
   return response.success
 }

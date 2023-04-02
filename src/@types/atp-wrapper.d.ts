@@ -29,8 +29,14 @@ type TTData = {
   sessions: { [did: string]: TTSession }
 }
 
+type TTCidUri = {
+  uri: string
+  cid: string
+  [k: string]: unknown
+}
+
 interface TIAtpWrapper {
-  agent: null | AtpAgentstring
+  agent: null | BskyAgent
   data: TTData
   session?: TTSession
 
@@ -48,11 +54,16 @@ interface TIAtpWrapper {
   ): Promise<null | TTFileSchema>
   createFollow(
     this: TIAtpWrapper,
-    did: string,
     declarationCid: string
   ): Promise<null | string>
+  createLike(
+    this: TIAtpWrapper,
+    uri: string,
+    cid: string
+  ): Promise<boolean>
   createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
   createRepost(this: TIAtpWrapper, post?: TTPost): Promise<boolean>
+  deleteLike(this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteFollow(this: TIAtpWrapper, uri: string): Promise<boolean>
   deletePost(this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost(this: TIAtpWrapper, uri: string): Promise<boolean>
@@ -71,14 +82,14 @@ interface TIAtpWrapper {
     users: Array<TTUser> | Array<TTUser>,
     handle: string,
     limit?: number,
-    before?: string
+    cursor?: string
   ): Promise<undefined | string>
   fetchFollowers(
     this: TIAtpWrapper,
     users: Array<TTUser> | Array<TTUser>,
     handle: string,
     limit?: number,
-    before?: string
+    cursor?: string
   ): Promise<undefined | string>
   fetchKeywordSearch(
     this: TIAtpWrapper,
@@ -114,7 +125,7 @@ interface TIAtpWrapper {
     users: Array<TTUser>,
     term: string,
     limit?: number,
-    before?: string
+    cursor?: string
   ): Promise<undefined | string>
   hasLogin(this: TIAtpWrapper): boolean
   login(
@@ -130,11 +141,5 @@ interface TIAtpWrapper {
   updateProfile(
     this: TIAtpWrapper,
     params: TTUpdateProfileParams
-  ): Promise<boolean>
-  updateVote(
-    this: TIAtpWrapper,
-    uri: string,
-    cid: string,
-    direction: "none" | "up" | "down"
   ): Promise<boolean>
 }

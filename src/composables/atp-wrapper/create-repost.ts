@@ -1,23 +1,13 @@
-import { makeCreatedAt } from "@/composables/atp-wrapper/services"
+import type { BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
-  post?: any
+  post?: TTPost
 ): Promise<boolean> {
   if (this.agent == null) return false
   if (this.session == null) return false
-  const response = await this.agent.api.app.bsky.feed.repost.create(
-    {
-      did: this.session.did,
-    },
-    {
-      subject: {
-        cid: post?.cid,
-        uri: post?.uri,
-      },
-      createdAt: makeCreatedAt(),
-    }
-  )
-  console.log("[klearsky/createRepost]", response)
+  const response: ComAtprotoRepoCreateRecord.OutputSchema =
+    await (this.agent as BskyAgent).repost(post?.uri as string, post?.cid as string)
+  console.log("[klearsky/repost]", response)
   return true
 }

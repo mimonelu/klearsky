@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetAuthorFeed } from "@atproto/api"
+import type { AppBskyFeedGetAuthorFeed, BskyAgent } from "@atproto/api"
 import {
   injectReason,
   mergeFeeds,
@@ -14,12 +14,12 @@ export default async function (
   cursor?: string
 ): Promise<null | { feeds: Array<TTFeed>; cursor?: string }> {
   if (this.agent == null) return null
-  const query: AppBskyFeedGetAuthorFeed.QueryParams = { author }
+  const query: AppBskyFeedGetAuthorFeed.QueryParams = { actor: author }
   if (limit != null) query.limit = limit
-  if (cursor != null) query.before = cursor
+  if (cursor != null) query.cursor = cursor
   const response: AppBskyFeedGetAuthorFeed.Response =
-    await this.agent.api.app.bsky.feed.getAuthorFeed(query)
-  console.log("[klearsky/fetchAuthorFeed]", response)
+    await (this.agent as BskyAgent).getAuthorFeed(query)
+  console.log("[klearsky/getAuthorFeed]", response)
   if (!response.success) return null
 
   // TODO:

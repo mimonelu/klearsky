@@ -1,4 +1,4 @@
-import type { AppBskyNotificationList } from "@atproto/api"
+import type { AppBskyNotificationListNotifications, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -10,18 +10,18 @@ export default async function (
   newNotificationCount: number
 }> {
   if (this.agent == null) return null
-  const query: AppBskyNotificationList.QueryParams = {}
+  const query: AppBskyNotificationListNotifications.QueryParams = {}
   if (limit != null) query.limit = limit
-  if (cursor != null) query.before = cursor
-  const response: AppBskyNotificationList.Response =
-    await this.agent.api.app.bsky.notification.list(query)
-  console.log("[klearsky/fetchNotifications]", response)
+  if (cursor != null) query.cursor = cursor
+  const response: AppBskyNotificationListNotifications.Response =
+    await (this.agent as BskyAgent).listNotifications(query)
+  console.log("[klearsky/listNotifications]", response)
   if (!response.success) return null
 
   let newNotificationCount = 0
 
   response.data.notifications.forEach(
-    (notification: AppBskyNotificationList.Notification) => {
+    (notification: AppBskyNotificationListNotifications.Notification) => {
       const existence = values.some(
         (value: TTNotification) => value.cid === notification.cid
       )

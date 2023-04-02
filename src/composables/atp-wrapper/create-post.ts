@@ -1,4 +1,4 @@
-import type { AppBskyEmbedImages, AppBskyFeedPost } from "@atproto/api"
+import type { AppBskyEmbedImages, AppBskyFeedPost, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
 export default async function (
@@ -6,7 +6,6 @@ export default async function (
   params: TTCreatePostParams
 ): Promise<boolean> {
   if (this.agent == null) return false
-  if (this.session == null) return false
 
   // TODO:
   if (params.type === "quoteRepost" && params.text === "") {
@@ -129,10 +128,8 @@ export default async function (
     }
   }
 
-  const response = await this.agent.api.app.bsky.feed.post.create(
-    { did: this.session.did },
-    record
-  )
-  console.log("[klearsky/createRecord]", response)
+  const response: ComAtprotoRepoCreateRecord.OutputSchema =
+    await (this.agent as BskyAgent).post(record)
+  console.log("[klearsky/post]", response)
   return true
 }

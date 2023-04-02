@@ -1,4 +1,4 @@
-import type { ComAtprotoBlobUpload } from "@atproto/api"
+import type { BskyAgent, ComAtprotoRepoUploadBlob } from "@atproto/api"
 import Compressor from "compressorjs"
 
 function convertBlobTo (
@@ -97,14 +97,15 @@ export default async function (
     input = await convertBlobTo(params.file, "readAsText") as string
   }
 
-  const response: ComAtprotoBlobUpload.Response =
-    await this.agent.api.com.atproto.blob.upload(input, {
-      encoding: mimeType,
-    })
-  console.log("[klearsky/createFileSchema]", response)
+  const options: ComAtprotoRepoUploadBlob.CallOptions = {
+    encoding: mimeType,
+  }
+  const response: ComAtprotoRepoUploadBlob.Response =
+    await (this.agent as BskyAgent).uploadBlob(input, options)
+  console.log("[klearsky/uploadBlob]", response)
   if (!response.success) return null
   return {
-    cid: response.data.cid,
+    blob: response.data.blob,
     mimeType,
   }
 }

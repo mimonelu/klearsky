@@ -5,6 +5,6 @@ export default async function (
   uri: string
 ): Promise<boolean> {
   if (this.agent == null) return false
-  await (this.agent as BskyAgent).deleteFollow(uri)
+  await (this.agent as BskyAgent).deleteLike(uri)
   return true
 }

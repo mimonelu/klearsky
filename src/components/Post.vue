@@ -101,7 +101,8 @@ async function upvote () {
   state.processing = true
   try {
     const voted = props.post.viewer.upvote != null
-    await mainState.atp.updateVote(props.post.uri, props.post.cid, voted ? "none" : "up")
+    if (voted) await mainState.atp.deleteLike(props.post.uri)
+    else await mainState.atp.createLike(props.post.uri, props.post.cid)
     await updateThisPost()
   } finally {
     state.processing = false
