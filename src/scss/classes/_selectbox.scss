@@ -1,0 +1,33 @@
+.selectbox {
+  position: relative;
+
+  & > select {
+    background-color: rgb(var(--bg-color));
+    border: 1px solid rgba(var(--fg-color), 0.25);
+    border-radius: var(--border-radius);
+    color: rgb(var(--fg-color));
+    cursor: pointer;
+    padding: 0.5em 2.5em 0.5em 1em;
+    line-height: 1.5;
+    &:focus, &:hover {
+      border-color: rgb(var(--fg-color));
+    }
+  }
+
+  &::after {
+    background-color: rgb(var(--fg-color));
+    color: rgb(var(--fg-color));
+    content: "";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -0.5em;
+    mask: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="transparent" stroke="%23000000" d="M0,6 L12,18 L24,6" /></svg>') no-repeat center center;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    right: 0.75em;
+    width: 1em;
+    height: 1em;
+  }
+}
