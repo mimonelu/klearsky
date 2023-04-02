@@ -34,6 +34,8 @@ async function openSubject (notification: TTNotification) {
       break
     }
     case "reply":
+      await router.push({ name: "post", query: { postUri: notification.uri } })
+      break
     case "repost":
     case "vote": {
       await router.push({ name: "post", query: { postUri: notification.reasonSubject } })
@@ -73,6 +75,10 @@ async function openSubject (notification: TTNotification) {
         notification.indexedAt,
         mainState.currentSetting.language
       ) }}</div>
+      <div
+        v-if="notification.text"
+        class="reply-text"
+      >{{ notification.text }}</div>
     </div>
   </div>
 </template>
@@ -82,7 +88,7 @@ async function openSubject (notification: TTNotification) {
   display: grid;
   grid-template-columns: min-content min-content auto 1fr max-content;
   align-items: center;
-  grid-gap: 0.5rem;
+  grid-gap: 0 0.5rem;
   overflow: hidden;
   padding: 0.5rem 1rem;
   &[data-is-new="true"] {
@@ -140,5 +146,13 @@ async function openSubject (notification: TTNotification) {
   line-height: 1.25;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.reply-text {
+  color: rgb(var(--post-color));
+  font-size: 0.875rem;
+  grid-column: 3 / 6;
+  line-height: 1.5;
+  word-break: break-all;
 }
 </style>

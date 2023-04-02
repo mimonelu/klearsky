@@ -38,6 +38,8 @@ export default async function (
           notification.reason === "mention"
             ? notification.uri
             : notification.reasonSubject,
+        text: (notification.record as any)?.text,
+        uri: notification.uri,
       })
     }
   )

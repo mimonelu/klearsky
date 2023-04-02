@@ -142,6 +142,8 @@ type TTNotification = {
     | "invite"
     | (string & {})
   reasonSubject?: string
+  text?: string
+  uri?: string
 }
 
 type TTProfile = {
