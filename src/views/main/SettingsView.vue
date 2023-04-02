@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import colorThemes from "@/consts/color-themes.json"
 import languages from "@/consts/languages.json"
+import settings from "@/consts/settings.json"
 import PageHeader from "@/components/PageHeader.vue"
 
 const mainState = inject("state") as MainState
@@ -45,7 +45,7 @@ function changeSetting () {
               @change="changeSetting"
             >
               <option
-                v-for="colorTheme in colorThemes"
+                v-for="colorTheme in settings.colorThemes"
                 :value="colorTheme.value"
                 :selected="colorTheme.value === mainState.currentSetting.colorTheme"
               >{{ $t(colorTheme.label) }}</option>
@@ -54,7 +54,7 @@ function changeSetting () {
         </div>
       </div>
 
-      <!-- 背景画像 -->
+      <!-- 背景画像 URL -->
       <div class="section">
         <div class="section__header">{{ $t("backgroundImage") }}</div>
         <div class="section__body">
@@ -64,6 +64,25 @@ function changeSetting () {
             type="url"
             @change="changeSetting"
           >
+        </div>
+      </div>
+
+      <!-- 背景画像 不透明度 -->
+      <div class="section">
+        <div class="section__header">{{ $t("backgroundOpacity") }}</div>
+        <div class="section__body">
+          <label class="selectbox">
+            <select
+              v-model="mainState.currentSetting.backgroundOpacity"
+              @change="changeSetting"
+            >
+              <option
+                v-for="backgroundOpacity in settings.backgroundOpacities"
+                :value="backgroundOpacity.value"
+                :selected="backgroundOpacity.value === mainState.currentSetting.backgroundOpacity"
+              >{{ $t(backgroundOpacity.label) }}</option>
+            </select>
+          </label>
         </div>
       </div>
     </div>

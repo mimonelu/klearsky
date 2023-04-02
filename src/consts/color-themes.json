@@ -1,7 +1,0 @@
-[
-  { "label": "colorThemeAuto", "value": "auto" },
-  { "label": "colorThemeLight", "value": "light" },
-  { "label": "colorThemeDark", "value": "dark" },
-  { "label": "colorThemeWarmSand", "value": "warmsand" },
-  { "label": "colorThemeNightStars", "value": "nightstars" }
-]

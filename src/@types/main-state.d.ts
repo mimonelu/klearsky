@@ -2,6 +2,7 @@ type TTSetting = {
   language?: string
   colorTheme?: string
   backgroundImage?: string
+  backgroundOpacity?: number
 }
 
 type TTSettings = {
