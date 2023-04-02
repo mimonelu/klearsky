@@ -78,7 +78,7 @@ onMounted(async () => {
     await autoLogin()
     state.saveSettings()
     state.updateSettings()
-    await setupNotificationInterval()
+    setupNotificationInterval()
     await processPage(router.currentRoute.value.name)
   } finally {
     try {
@@ -201,11 +201,14 @@ async function manualLogin (service: string, identifier: string, password: strin
     resetState()
     state.saveSettings()
     state.updateSettings()
-    await setupNotificationInterval()
+    setupNotificationInterval()
     await processPage(router.currentRoute.value.name)
-    await fetchUserProfile()
   } finally {
-    state.processing = false
+    try {
+      await fetchUserProfile()
+    } finally {
+      state.processing = false
+    }
   }
 }
 
