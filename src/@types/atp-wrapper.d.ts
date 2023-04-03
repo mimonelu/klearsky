@@ -39,6 +39,7 @@ interface TIAtpWrapper {
   agent: null | BskyAgent
   data: TTData
   session?: TTSession
+  lastFetchNotificationsDate?: Date
 
   canLogin(this: TIAtpWrapper): boolean
   createAgent(this: TIAtpWrapper, service?: string): boolean

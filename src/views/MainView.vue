@@ -377,7 +377,7 @@ async function updateNotification (forceUpdate: boolean) {
   if (canFetched || forceUpdate)
     await state.fetchNotifications(forceUpdate
       ? consts.limitOfFetchNotifications
-      : Math.min(consts.limitOfFetchNotifications, count)
+      : Math.min(consts.limitOfFetchNotifications, count + 1) // NOTICE: 念のため + 1 している
     , "new")
 }
 

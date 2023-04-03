@@ -12,6 +12,7 @@ export default function (this: TIAtpWrapper, service: string): boolean {
           this.data.sessions[this.data.did] = session as TTSession
           this.data.sessions[this.data.did].__service = service
           this.session = session
+          this.lastFetchNotificationsDate = undefined
           break
         }
         case "create-failed":

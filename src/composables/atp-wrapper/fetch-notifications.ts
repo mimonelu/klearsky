@@ -50,6 +50,9 @@ export default async function (
     return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
   })
 
+  // 最後に通知を取得した日時を保存（ updateSeenNotifications で使用）
+  this.lastFetchNotificationsDate = new Date()
+
   return {
     cursor: response.data.cursor,
     newNotificationCount,

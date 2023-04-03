@@ -40,6 +40,7 @@ class AtpWrapper implements TIAtpWrapper {
       sessions: {},
     }
     this.session = undefined
+    this.lastFetchNotificationsDate = undefined
   }
 }
 
