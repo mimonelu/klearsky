@@ -28,7 +28,6 @@ function removeThisPost (uri: string) {
       <Post
         type="post"
         :post="post"
-        :data-focus="post.uri === mainState.currentQuery.postUri"
         :data-has-child="post.cid === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.cid"
         @updateThisPost="updateThisPost"
         @removeThisPost="removeThisPost"
@@ -39,9 +38,6 @@ function removeThisPost (uri: string) {
 
 <style lang="scss" scoped>
 .post {
-  &[data-focus="true"] {
-    background-color: rgba(var(--accent-color), 0.125);
-  }
   &[data-has-child="true"] {
     &::before {
       border-left: 2px solid rgba(var(--fg-color), 0.25);

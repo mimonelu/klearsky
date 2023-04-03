@@ -32,11 +32,16 @@ const state = reactive<{
 
 const router = useRouter()
 
+function isFocused (): boolean {
+  return props.post.uri === mainState.currentQuery.postUri
+}
+
 function onClickReplier () {
   emit("onClickReplier")
 }
 
 async function openPostThread (post: TTPost) {
+  if (isFocused()) return
   await router.push({ name: "post", query: { postUri: post.uri } })
 }
 
@@ -153,6 +158,7 @@ function removeThisPost (uri: string) {
     :data-type="type"
     :data-mode="mode"
     :data-repost="post.__reason != null"
+    :data-focus="isFocused()"
     @click.prevent.stop="openPostThread(post)"
   >
     <div class="header">
@@ -338,6 +344,11 @@ function removeThisPost (uri: string) {
     .body__footer {
       display: none;
     }
+  }
+
+  &[data-focus="true"] {
+    background-color: rgba(var(--accent-color), 0.125);
+    user-select: text;
   }
 }
 
