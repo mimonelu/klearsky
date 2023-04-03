@@ -9,6 +9,7 @@ import cursorLeft from "@/svg/cursor-left.svg?raw"
 import cursorRight from "@/svg/cursor-right.svg?raw"
 import cursorUp from "@/svg/cursor-up.svg?raw"
 import edit from "@/svg/edit.svg?raw"
+import fire from "@/svg/fire.svg?raw"
 import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
 import home from "@/svg/home.svg?raw"
@@ -37,6 +38,7 @@ const icons: { [k: string]: string } = {
   cursorRight,
   cursorUp,
   edit,
+  fire,
   heart,
   heartBroken,
   home,

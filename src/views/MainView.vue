@@ -401,6 +401,7 @@ function closeSendPostPopup (done: boolean) {
   <div
     class="main-view"
     :key="state.updateKey"
+    :data-path="state.currentPath"
     :style="{ '--bg-opacity': state.currentSetting.backgroundOpacity }"
   >
     <div class="main">
@@ -480,6 +481,9 @@ function closeSendPostPopup (done: boolean) {
   flex-direction: column;
   flex-grow: 1;
   max-width: $router-view-width;
+  [data-path="/hot"] & {
+    max-width: $router-view-width + $menu-max-width;
+  }
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
   }
@@ -490,6 +494,9 @@ function closeSendPostPopup (done: boolean) {
 }
 
 .sub-menu-wrapper {
+  [data-path="/hot"] & {
+    display: none;
+  }
   @media (max-width: 1024px) {
     display: none;
   }

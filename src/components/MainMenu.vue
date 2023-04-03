@@ -39,6 +39,7 @@ function moveToBottom () {
 
 <template>
   <div class="main-menu">
+    <!-- バックボタン -->
     <button
       v-if="state.canBack"
       class="move-button"
@@ -48,12 +49,16 @@ function moveToBottom () {
         <SVGIcon name="cursorLeft" />
       </div>
     </button>
+
+    <!-- スモールロゴ -->
     <div
       v-else
       class="small-logo"
     >
       <SVGIcon name="shimmer" />
     </div>
+
+    <!-- プロフィールボタン -->
     <RouterLink
       class="link-button"
       :to="{ name: 'profile-post', query: { handle: mainState.atp.session?.handle } }"
@@ -70,6 +75,8 @@ function moveToBottom () {
       >
       <div class="label">{{ mainState.userProfile?.handle }}</div>
     </RouterLink>
+
+    <!-- ホームボタン -->
     <RouterLink
       class="link-button"
       to="/home"
@@ -80,6 +87,20 @@ function moveToBottom () {
       </div>
       <div class="label">{{ $t("home") }}</div>
     </RouterLink>
+
+    <!-- HOTボタン -->
+    <RouterLink
+      class="link-button"
+      to="/hot"
+      @click.prevent
+    >
+      <div class="icon">
+        <SVGIcon name="fire" />
+      </div>
+      <div class="label">{{ $t("hot") }}</div>
+    </RouterLink>
+
+    <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
       to="/search/user"
@@ -91,6 +112,8 @@ function moveToBottom () {
       </div>
       <div class="label">{{ $t("search") }}</div>
     </RouterLink>
+
+    <!-- 通知ボタン -->
     <RouterLink
       class="link-button"
       to="/notifications"
@@ -105,6 +128,8 @@ function moveToBottom () {
       </div>
       <div class="label">{{ $t("notifications") }}</div>
     </RouterLink>
+
+    <!-- 設定ボタン -->
     <RouterLink
       class="link-button"
       to="/settings"
@@ -115,6 +140,8 @@ function moveToBottom () {
       </div>
       <div class="label">{{ $t("settings") }}</div>
     </RouterLink>
+
+    <!-- アカウントボタン -->
     <RouterLink
       class="link-button"
       to="/accounts"
@@ -125,6 +152,8 @@ function moveToBottom () {
       </div>
       <div class="label">{{ $t("accounts") }}</div>
     </RouterLink>
+
+    <!-- ポスト送信ポップアップトリガー -->
     <button
       class="link-button send-post-button"
       @click.prevent="openSendPostPopup"
@@ -134,6 +163,8 @@ function moveToBottom () {
       </div>
       <div class="label">{{ $t("sendPost") }}</div>
     </button>
+
+    <!-- スクロールダウンボタン -->
     <button
       class="move-button move-to-bottom-button"
       @click.prevent="moveToBottom"

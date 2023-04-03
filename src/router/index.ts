@@ -5,6 +5,7 @@ import NotFoundView from "@/views/NotFoundView.vue"
 import MainView from "@/views/MainView.vue"
 import AccountsView from "@/views/main/AccountsView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
+import HotView from "@/views/main/HotView.vue"
 import NotificationsView from "@/views/main/NotificationsView.vue"
 import PostView from "@/views/main/PostView.vue"
 import SettingsView from "@/views/main/SettingsView.vue"
@@ -44,6 +45,11 @@ const router = createRouter({
           path: "/home",
           name: "home",
           component: TimelineView,
+        },
+        {
+          path: "/hot",
+          name: "hot",
+          component: HotView,
         },
         {
           path: "/notifications",
