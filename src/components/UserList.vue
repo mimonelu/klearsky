@@ -50,6 +50,7 @@ async function fetchUsers (direction: "new" | "old") {
       >
         <div class="relations">
           <FollowButton
+            v-if="user.did !== mainState.atp.session?.did"
             :viewer="user.viewer"
             :did="user.did"
             :declarationDid="user.did"
