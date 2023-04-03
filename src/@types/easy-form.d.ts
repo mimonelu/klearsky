@@ -16,6 +16,7 @@ type TTEasyFormItem = {
   pattern?: string
   maxlength?: number
   maxLengthIndicator?: boolean
+  maxLengthWithSegmenter?: boolean
   rows?: number
   placeholder?: string
   autocomplete?: string

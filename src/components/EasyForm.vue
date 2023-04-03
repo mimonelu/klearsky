@@ -61,6 +61,18 @@ function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
 function onInputTextarea (item: TTEasyFormItem) {
   if (item.onInput != null) item.onInput(item, props)
 }
+
+function getCharacterLength (item: TTEasyFormItem): number {
+  const text = item.state[item.model]
+  if (item.maxLengthWithSegmenter) {
+    const segmenter = (Intl as any).Segmenter
+    return segmenter != null
+      ? [...new segmenter().segment(text)].length
+      : text.length
+  } else {
+    return text.length
+  }
+}
 </script>
 
 <template>
@@ -82,7 +94,6 @@ function onInputTextarea (item: TTEasyFormItem) {
           :disabled="item.disabled ?? false"
           :required="item.required ?? false"
           :pattern="item.pattern"
-          :maxlength="item.maxlength"
           :placeholder="item.placeholder ?? ''"
           autocapitalize="off"
           autocorrect="off"
@@ -105,7 +116,6 @@ function onInputTextarea (item: TTEasyFormItem) {
           :disabled="item.disabled ?? false"
           :required="item.required ?? false"
           :pattern="item.pattern"
-          :maxlength="item.maxlength"
           :rows="item.rows ?? ''"
           :placeholder="item.placeholder ?? ''"
           autocapitalize="off"
@@ -117,7 +127,11 @@ function onInputTextarea (item: TTEasyFormItem) {
         <div
           v-if="item.maxLengthIndicator"
           class="max-length-indicator"
-        >{{ item.state[item.model].length }} / {{ item.maxlength }}</div>
+          :data-over-maxlength="item.maxlength != null
+            ? getCharacterLength(item) > item.maxlength
+            : false
+          "
+        >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
       </dd>
     </dl>
     <slot name="after" />
@@ -157,5 +171,8 @@ function onInputTextarea (item: TTEasyFormItem) {
   font-size: 0.875rem;
   margin-top: 0.5rem;
   text-align: right;
+  &[data-over-maxlength="true"] {
+    color: rgb(var(--notice-color));
+  }
 }
 </style>
