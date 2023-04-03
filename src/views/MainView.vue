@@ -113,6 +113,9 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "home" && state.timelineFeeds.length > 0) return
 
+  if (state.currentQuery.handle !== state.currentProfile?.handle)
+    state.currentProfile = null
+
   state.processing = true
   try {
     await processPage(to.name)
