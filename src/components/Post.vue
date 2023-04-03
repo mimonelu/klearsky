@@ -95,13 +95,13 @@ async function quoteRepost () {
   }
 }
 
-async function upvote () {
+async function like () {
   if (state.processing) return
   blurElement()
   state.processing = true
   try {
-    const voted = props.post.viewer.upvote != null
-    if (voted) await mainState.atp.deleteLike(props.post.uri)
+    const liked = props.post.viewer.like != null
+    if (liked) await mainState.atp.deleteLike(props.post.viewer.like as string)
     else await mainState.atp.createLike(props.post.uri, props.post.cid)
     await updateThisPost()
   } finally {
@@ -162,8 +162,8 @@ function removeThisPost (uri: string) {
         @click.stop="onClickReplier"
       >
         <SVGIcon name="post" />
-        <div class="replier__display-name">{{ replyTo?.author.displayName }}</div>
-        <div class="replier__handle">{{ replyTo?.author.handle }}</div>
+        <div class="replier__display-name">{{ replyTo?.author?.displayName }}</div>
+        <div class="replier__handle">{{ replyTo?.author?.handle }}</div>
       </div>
       <div
         v-if="post.__reason != null"
@@ -178,11 +178,11 @@ function removeThisPost (uri: string) {
     <div class="body">
       <button
         class="avatar"
-        @click.stop="openProfile(post.author.handle)"
+        @click.stop="openProfile(post.author?.handle)"
       >
         <img
           loading="lazy"
-          :src="post.author.avatar ?? '/img/void-avatar.png'"
+          :src="post.author?.avatar ?? '/img/void-avatar.png'"
         >
       </button>
       <div class="body__right">
@@ -190,9 +190,9 @@ function removeThisPost (uri: string) {
           <a
             class="textlink display-name"
             tabindex="0"
-            @click.stop="openProfile(post.author.handle)"
-          >{{ post.author.displayName }}</a>
-          <div class="handle">{{ post.author.handle }}</div>
+            @click.stop="openProfile(post.author?.handle)"
+          >{{ post.author?.displayName }}</a>
+          <div class="handle">{{ post.author?.handle }}</div>
           <div
             v-if="post.indexedAt"
             class="indexed_at"
@@ -200,7 +200,7 @@ function removeThisPost (uri: string) {
         </div>
         <div
           class="text"
-          v-html="post.record.__textHtml"
+          v-html="post.record?.__textHtml ?? post.value?.__textHtml"
         />
         <a
           v-if="post.embed?.external"
@@ -277,13 +277,13 @@ function removeThisPost (uri: string) {
           </div>
           <div>
             <button
-              class="icon-button upvote_count"
-              :data-has="post.upvoteCount > 0"
-              :data-voted="!!post.viewer.upvote"
-              @click.stop="upvote"
+              class="icon-button like_count"
+              :data-has="post.likeCount > 0"
+              :data-liked="!!post.viewer.like"
+              @click.stop="like"
             >
               <SVGIcon name="heart" />
-              <span>{{ post.upvoteCount > 0 ? post.upvoteCount : "" }}</span>
+              <span>{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
             </button>
           </div>
           <div>
@@ -294,9 +294,9 @@ function removeThisPost (uri: string) {
               <SVGIcon name="menu" />
               <PostAndProfileMenuTicker
                 v-if="state.postMenuDisplay"
-                :translateText="post.record.text"
-                :copyText="post.record.text"
-                :deletePostUri="post.author.did === mainState.atp.session?.did
+                :translateText="post.record?.text"
+                :copyText="post.record?.text"
+                :deletePostUri="post.author?.did === mainState.atp.session?.did
                   ? post.uri
                   : undefined"
                 :openSource="post"
@@ -603,7 +603,7 @@ function removeThisPost (uri: string) {
   }
 }
 
-.upvote_count[data-voted="true"] {
+.like_count[data-liked="true"] {
   & > .svg-icon {
     fill: rgb(var(--like-color));
   }

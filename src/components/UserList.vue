@@ -52,7 +52,7 @@ async function fetchUsers (direction: "new" | "old") {
           <FollowButton
             :viewer="user.viewer"
             :did="user.did"
-            :declarationCid="user.declaration.cid"
+            :declarationDid="user.did"
           />
           <div
             v-if="user.viewer.followedBy"

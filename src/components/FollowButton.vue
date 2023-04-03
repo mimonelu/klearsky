@@ -5,7 +5,7 @@ import { blurElement } from "@/composables/misc"
 const props = defineProps<{
   viewer: TTUserViewer
   did: string
-  declarationCid: string
+  declarationDid: string
 }>()
 
 const mainState = inject("state") as MainState
@@ -18,7 +18,7 @@ async function toggleFollow () {
       await mainState.atp.deleteFollow(props.viewer.following)
       props.viewer.following = undefined
     } else {
-      const uri = await mainState.atp.createFollow(props.declarationCid)
+      const uri = await mainState.atp.createFollow(props.declarationDid)
       if (uri != null) props.viewer.following = uri
     }
   } finally {

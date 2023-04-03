@@ -80,7 +80,7 @@ function closePostMenu () {
                 v-if="mainState.currentProfile != null"
                 :viewer="mainState.currentProfile.viewer"
                 :did="mainState.currentProfile.did"
-                :declarationCid="mainState.currentProfile.declaration.cid"
+                :declarationDid="mainState.currentProfile.did"
               />
               <div
                 v-if="isFollowed()"

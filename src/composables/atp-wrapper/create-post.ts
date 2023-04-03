@@ -1,4 +1,4 @@
-import type { AppBskyEmbedImages, AppBskyFeedPost, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
 export default async function (
@@ -68,9 +68,9 @@ export default async function (
     }
   }
 
-  const fileSchemas: Array<null | TTFileSchema> = await Promise.all(
-    params.images.map((file: File): Promise<null | TTFileSchema> => {
-      return this.createFileSchema({
+  const fileBlobRefs: Array<null | BlobRef> = await Promise.all(
+    params.images.map((file: File): Promise<null | BlobRef> => {
+      return this.createFileBlob({
         file,
         maxWidth: 2000,
         maxHeight: 2000,
@@ -79,17 +79,17 @@ export default async function (
       })
     })
   )
-  if (fileSchemas.length > 0) {
-    const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileSchemas
+  if (fileBlobRefs.length > 0) {
+    const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileBlobRefs
       .map(
         (
-          fileSchema: null | TTFileSchema,
+          fileBlobRef: null | BlobRef,
           index: number
         ): null | AppBskyEmbedImages.Image => {
-          return fileSchema == null
+          return fileBlobRef == null
             ? null
             : {
-                image: fileSchema,
+                image: fileBlobRef,
                 alt: params.alts[index] ?? "",
               }
         }

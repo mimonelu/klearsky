@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoUploadBlob } from "@atproto/api"
+import type { BlobRef, BskyAgent, ComAtprotoRepoUploadBlob } from "@atproto/api"
 import Compressor from "compressorjs"
 
 function convertBlobTo (
@@ -68,7 +68,7 @@ export default async function (
     maxSize: number,
     quality?: number,
   }
-): Promise<null | TTFileSchema> {
+): Promise<null | BlobRef> {
   if (this.agent == null) return null
   if (params.file == null) return null
   const imageMimeType = convertMap[params.file.type]
@@ -104,8 +104,5 @@ export default async function (
     await (this.agent as BskyAgent).uploadBlob(input, options)
   console.log("[klearsky/uploadBlob]", response)
   if (!response.success) return null
-  return {
-    blob: response.data.blob,
-    mimeType,
-  }
+  return response.data.blob
 }

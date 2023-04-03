@@ -19,7 +19,7 @@ export default async function (
   if (!response.success) return
 
   const newUsers: Array<TTUser> = []
-  ;(response.data.users as Array<TTUser>).forEach((target: TTUser) => {
+  ;(response.data.actors as Array<TTUser>).forEach((target: TTUser) => {
     if (!users.some((user: TTUser) => user.did === target.did))
       newUsers.push(target)
   })

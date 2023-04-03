@@ -36,6 +36,8 @@ const easyFormProps: TTEasyForm = {
       label: $t("displayName"),
       type: "text",
       autocomplete: "name",
+      maxlength: 64,
+      maxLengthIndicator: true,
       focus: true,
     },
     {
@@ -43,6 +45,8 @@ const easyFormProps: TTEasyForm = {
       model: "description",
       label: $t("description"),
       type: "textarea",
+      maxlength: 256,
+      maxLengthIndicator: true,
       rows: 8,
     },
     {

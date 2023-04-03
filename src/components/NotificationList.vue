@@ -13,9 +13,10 @@ const iconMap: { [reason: string]: string } = {
   follow: "person",
   invite: "mail",
   mention: "at",
+  quote: "post", // TODO:
   reply: "post",
   repost: "repost",
-  vote: "heart",
+  like: "heart",
 }
 
 async function openSubject (notification: TTNotification) {
@@ -33,11 +34,12 @@ async function openSubject (notification: TTNotification) {
       await router.push({ name: "post", query: { postUri: notification.reasonSubject } })
       break
     }
+    case "quote":
     case "reply":
       await router.push({ name: "post", query: { postUri: notification.uri } })
       break
     case "repost":
-    case "vote": {
+    case "like": {
       await router.push({ name: "post", query: { postUri: notification.reasonSubject } })
       break
     }
@@ -110,13 +112,16 @@ async function openSubject (notification: TTNotification) {
   [data-reason="mention"] & {
     fill: rgb(var(--fg-color));
   }
+  [data-reason="quote"] & {
+    fill: rgb(var(--post-color));
+  }
   [data-reason="reply"] & {
     fill: rgb(var(--post-color));
   }
   [data-reason="repost"] & {
     fill: rgb(var(--share-color));
   }
-  [data-reason="vote"] & {
+  [data-reason="like"] & {
     fill: rgb(var(--like-color));
   }
 }

@@ -4,7 +4,7 @@ import {
   saveData,
 } from "@/composables/atp-wrapper/services"
 import createAgent from "@/composables/atp-wrapper/create-agent"
-import createFileSchema from "@/composables/atp-wrapper/create-file-schema"
+import createFileBlob from "@/composables/atp-wrapper/create-file-blob"
 import createFollow from "@/composables/atp-wrapper/create-follow"
 import createLike from "@/composables/atp-wrapper/create-like"
 import createPost from "@/composables/atp-wrapper/create-post"
@@ -46,7 +46,7 @@ class AtpWrapper implements TIAtpWrapper {
 const prototype = AtpWrapper.prototype as unknown as TIAtpWrapper
 prototype.canLogin = canLogin
 prototype.createAgent = createAgent
-prototype.createFileSchema = createFileSchema
+prototype.createFileBlob = createFileBlob
 prototype.createFollow = createFollow
 prototype.createLike = createLike
 prototype.createPost = createPost

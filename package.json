@@ -12,7 +12,7 @@
     "format": "npx prettier --write src/@types/**/* && npx prettier --write src/composables/**/*"
   },
   "dependencies": {
-    "@atproto/api": "^0.2.0",
+    "@atproto/api": "^0.2.1",
     "@atproto/uri": "^0.0.1",
     "compressorjs": "^1.2.1",
     "crypto-js": "^4.1.1",

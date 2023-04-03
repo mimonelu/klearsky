@@ -42,7 +42,7 @@ interface TIAtpWrapper {
 
   canLogin(this: TIAtpWrapper): boolean
   createAgent(this: TIAtpWrapper, service?: string): boolean
-  createFileSchema(
+  createFileBlob(
     this: TIAtpWrapper,
     params: {
       file: File,
@@ -51,10 +51,10 @@ interface TIAtpWrapper {
       maxSize: number
       quality?: number
     }
-  ): Promise<null | TTFileSchema>
+  ): Promise<null | BlobRef>
   createFollow(
     this: TIAtpWrapper,
-    declarationCid: string
+    declarationDid: string
   ): Promise<null | string>
   createLike(
     this: TIAtpWrapper,

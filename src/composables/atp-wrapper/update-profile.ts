@@ -1,13 +1,13 @@
-import type { AppBskyActorProfile, BskyAgent } from "@atproto/api"
+import type { AppBskyActorProfile, BlobRef, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
   params: TTUpdateProfileParams
 ): Promise<boolean> {
   if (this.agent == null) return false
-  const fileSchemas: Array<null | TTFileSchema> = await Promise.all([
+  const fileBlobRefs: Array<null | BlobRef> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
-      ? this.createFileSchema({
+      ? this.createFileBlob({
         file: params.avatar[0],
         maxWidth: 2000,
         maxHeight: 2000,
@@ -16,7 +16,7 @@ export default async function (
       })
       : null,
     params.banner != null && params.banner[0] != null
-      ? this.createFileSchema({
+      ? this.createFileBlob({
         file: params.banner[0],
         maxWidth: 2000,
         maxHeight: 2000,
@@ -25,8 +25,8 @@ export default async function (
       })
       : null,
   ])
-  const avatarSchema: null | TTFileSchema = fileSchemas[0]
-  const bannerSchema: null | TTFileSchema = fileSchemas[1]
+  const avatarSchema: null | BlobRef = fileBlobRefs[0]
+  const bannerSchema: null | BlobRef = fileBlobRefs[1]
   const profileSchema: AppBskyActorProfile.Record = {
     displayName: params.displayName,
     description: params.description,
@@ -34,8 +34,13 @@ export default async function (
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
   ;(await (this.agent as BskyAgent).upsertProfile(
-    (_existing: AppBskyActorProfile.Record | undefined):
-      AppBskyActorProfile.Record => profileSchema
+    (existing: AppBskyActorProfile.Record | undefined): AppBskyActorProfile.Record => {
+      if (profileSchema.avatar == null && existing?.avatar != null)
+        profileSchema.avatar = existing.avatar
+      if (profileSchema.banner == null && existing?.banner != null)
+        profileSchema.banner = existing.banner
+      return profileSchema
+    }
   ))
   return true
 }

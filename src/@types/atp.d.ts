@@ -7,13 +7,9 @@ type TTUserViewer = {
 
 type TTUser = {
   did: string
-  declaration: {
-    actorType: string
-    cid: string
-    [k: string]: unknown
-  }
   handle: string
   displayName: string
+  description?: string
   avatar?: string
   viewer: TTUserViewer
   [k: string]: unknown
@@ -95,15 +91,19 @@ type TTPost = {
     entities?: Array<TTEntity>
     [k: string]: unknown
   }
+  value?: {
+    text: string
+    $type: string
+    createdAt: string
+    __textHtml?: string // Injected
+  }
   replyCount: number
   repostCount: number
-  upvoteCount: number
-  downvoteCount: number
+  likeCount: number
   indexedAt: string
   viewer: {
     repost?: string
-    upvote?: string
-    downvote?: string
+    like?: string
     [k: string]: unknown
   }
   __reason?: TTReason // Injected
@@ -135,9 +135,10 @@ type TTNotification = {
   indexedAt: string
   reason:
     | "reply"
+    | "quote"
     | "mention"
     | "repost"
-    | "vote"
+    | "like"
     | "follow"
     | "invite"
     | (string & {})
