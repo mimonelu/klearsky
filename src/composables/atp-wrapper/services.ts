@@ -24,6 +24,13 @@ export function makeCreatedAt(): string {
   return new Date().toISOString()
 }
 
+export function extractEmbeds (feeds: Array<any>) {
+  traverseJson(feeds, (key: string, value: any, parent: any) => {
+    if (key === "embeds" && value[0] != null)
+      parent.embed = value[0]
+  })
+}
+
 export function mergeFeeds(
   oldFeeds: null | Array<TTFeed>,
   targetFeeds: Array<TTFeed>

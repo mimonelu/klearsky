@@ -23,21 +23,10 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   postMenuDisplay: boolean;
   repostMenuDisplay: boolean;
-  external?: any;
-  images: Array<any>;
   processing: boolean;
 }>({
   postMenuDisplay: false,
   repostMenuDisplay: false,
-  external: props.post.embed?.external ??
-    ((props.post.embeds != null && (props.post.embeds as any)[0] != null)
-      ? (props.post.embeds as any)[0].external ?? undefined
-      : undefined),
-  images: props.post.embed?.images != null
-    ? props.post.embed.images
-    : props.post.embeds != null && (props.post.embeds as any)[0] != null
-      ? (props.post.embeds as any)[0].images ?? []
-      : [],
   processing: false,
 })
 
@@ -214,24 +203,24 @@ function removeThisPost (uri: string) {
           v-html="post.record?.__textHtml ?? post.value?.__textHtml"
         />
         <a
-          v-if="state.external != null"
+          v-if="post.embed?.external"
           class="external"
-          :href="state.external.uri"
+          :href="post.embed.external.uri"
           rel="noreferrer"
           target="_blank"
           @click.stop
         >
-          <div class="external__title">{{ state.external.title ?? '' }}</div>
-          <div class="external__uri">{{ state.external.uri }}</div>
-          <div class="external__description">{{ state.external.description ?? '' }}</div>
+          <div class="external__title">{{ post.embed.external.title ?? '' }}</div>
+          <div class="external__uri">{{ post.embed.external.uri }}</div>
+          <div class="external__description">{{ post.embed.external.description ?? '' }}</div>
         </a>
         <div
-          v-if="state.images.length > 0"
+          v-if="post.embed?.images"
           class="images"
-          :data-number-of-images="state.images.length"
+          :data-number-of-images="post.embed?.images.length"
         >
           <div
-            v-for="image of state.images"
+            v-for="image of post.embed.images"
             class="image"
             @click.stop="openImagePopup(image.fullsize, image.thumb)"
           >
@@ -344,6 +333,7 @@ function removeThisPost (uri: string) {
     padding: 0;
     pointer-events: none;
 
+    .external,
     .images,
     .body__footer {
       display: none;

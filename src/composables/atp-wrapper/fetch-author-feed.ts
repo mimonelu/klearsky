@@ -1,5 +1,6 @@
 import type { AppBskyFeedGetAuthorFeed, BskyAgent } from "@atproto/api"
 import {
+  extractEmbeds,
   injectReason,
   mergeFeeds,
   sortFeeds,
@@ -24,6 +25,7 @@ export default async function (
 
   // TODO:
   injectReason(response.data.feed as Array<TTFeed>)
+  extractEmbeds(response.data.feed as Array<TTFeed>)
   text2htmlAtFeeds(response.data.feed as Array<TTFeed>)
   const newFeeds = mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
   sortFeeds(newFeeds)
