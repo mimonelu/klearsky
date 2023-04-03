@@ -35,7 +35,7 @@ async function fetchFeeds (direction: "new" | "old") {
   }
 }
 
-function updateThisPost (newPosts: Array<TTPost>) {
+function updateThisPostThread (newPosts: Array<TTPost>) {
   if (props.feeds == null) return
 
   // MEMO: フィード内の全同一ポストに最新のデータを反映する
@@ -84,28 +84,28 @@ function removeThisPost (uri: string) {
         <template v-if="feed.__replyDisplay && (feed.reply?.root != null || feed.reply?.parent != null)">
           <Post
             v-if="feed.reply?.root != null && feed.reply.root.cid !== feed.reply.parent?.cid"
-            type="root"
+            position="root"
             :post="feed.reply.root"
             :data-has-child="feed.reply.root.cid === feed.reply?.parent?.record.reply?.parent?.cid"
-            @updateThisPost="updateThisPost"
+            @updateThisPostThread="updateThisPostThread"
             @removeThisPost="removeThisPost"
           />
           <Post
             v-if="feed.reply?.parent != null"
-            type="parent"
+            position="parent"
             :post="feed.reply.parent"
             :data-has-child="feed.reply.parent.cid === feed.post.record?.reply?.parent?.cid"
-            @updateThisPost="updateThisPost"
+            @updateThisPostThread="updateThisPostThread"
             @removeThisPost="removeThisPost"
           />
         </template>
         <Post
           v-if="feed.post != null"
-          type="post"
+          position="post"
           :post="feed.post"
           :replyTo="feed.reply?.parent"
           @onClickReplier="feed.__replyDisplay = !feed.__replyDisplay"
-          @updateThisPost="updateThisPost"
+          @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         />
       </div>

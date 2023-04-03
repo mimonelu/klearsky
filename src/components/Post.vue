@@ -12,8 +12,7 @@ import { blurElement } from "@/composables/misc"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
-  type: "post" | "root" | "parent" | "postInPost";
-  mode?: "preview";
+  position: "post" | "root" | "parent" | "postInPost" | "preview";
   post: TTPost;
   replyTo?: TTPost;
 }>()
@@ -36,40 +35,40 @@ function isFocused (): boolean {
   return props.post.uri === mainState.currentQuery.postUri
 }
 
-function onClickReplier () {
-  emit("onClickReplier")
-}
-
-async function openPostThread (post: TTPost) {
+async function onActivatePost (post: TTPost) {
   if (isFocused()) return
   await router.push({ name: "post", query: { postUri: post.uri } })
 }
 
-async function openProfile (handle: string) {
+function onActivateReplierLink () {
+  emit("onClickReplier")
+}
+
+async function onActivateProfileLink (handle: string) {
   await router.push({ name: "profile-post", query: { handle } })
 }
 
-function openImagePopup (largeUri: string, smallUri: string) {
+function onActivateImage (largeUri: string, smallUri: string) {
   mainState.imagePopupProps.largeUri = largeUri
   mainState.imagePopupProps.smallUri = smallUri
   mainState.imagePopupProps.display = true
 }
 
-async function reply () {
+async function onActivateReplyButton () {
   blurElement()
   const done = await mainState.openSendPostPopup("reply", props.post)
   state.processing = true
   try {
     if (done) {
       if (mainState.currentPath.startsWith("/post")) await mainState.fetchPostThread()
-      else await updateThisPost()
+      else await updateThisPostThread()
     }
   } finally {
     state.processing = false
   }
 }
 
-async function repost () {
+async function onActivateRepostButton () {
   blurElement()
   state.repostMenuDisplay = false
   state.processing = true
@@ -82,25 +81,25 @@ async function repost () {
       images: [],
       alts: [],
     })
-    if (result) await updateThisPost()
+    if (result) await updateThisPostThread()
   } finally {
     state.processing = false
   }
 }
 
-async function quoteRepost () {
+async function onActivateQuoteRepostButton () {
   blurElement()
   state.repostMenuDisplay = false
   const done = await mainState.openSendPostPopup("quoteRepost", props.post)
   state.processing = true
   try {
-    if (done) await updateThisPost()
+    if (done) await updateThisPostThread()
   } finally {
     state.processing = false
   }
 }
 
-async function like () {
+async function onActivateLikeButton () {
   if (state.processing) return
   blurElement()
   state.processing = true
@@ -108,20 +107,13 @@ async function like () {
     const liked = props.post.viewer.like != null
     if (liked) await mainState.atp.deleteLike(props.post.viewer.like as string)
     else await mainState.atp.createLike(props.post.uri, props.post.cid)
-    await updateThisPost()
+    await updateThisPostThread()
   } finally {
     state.processing = false
   }
 }
 
-async function updateThisPost () {
-  const posts: null | Array<TTPost> =
-    await mainState.atp.fetchPostThread(props.post.uri, 1)
-  if (posts == null || posts.length === 0) return
-  emit("updateThisPost", posts)
-}
-
-async function openRepostMenu () {
+async function onActivateRepostMenuTrigger () {
   // 未リポストであればリポストメニューを開閉する
   if (props.post.viewer.repost == null) {
     state.repostMenuDisplay = !state.repostMenuDisplay
@@ -131,50 +123,59 @@ async function openRepostMenu () {
     state.processing = true
     try {
       await mainState.atp.deleteRepost(props.post.viewer.repost)
-      await updateThisPost()
+      await updateThisPostThread()
     } finally {
       state.processing = false
     }
   }
 }
 
-function openPostMenu () {
+function onActivatePostMenuTrigger () {
   blurElement()
   state.postMenuDisplay = !state.postMenuDisplay
 }
 
-function closePostMenu () {
+function onClosePostMenu () {
   state.postMenuDisplay = false
 }
 
-function removeThisPost (uri: string) {
+function onRemoveThisPost (uri: string) {
   emit("removeThisPost", uri)
+}
+
+async function updateThisPostThread () {
+  const posts: null | Array<TTPost> =
+    await mainState.atp.fetchPostThread(props.post.uri, 1)
+  if (posts == null || posts.length === 0) return
+  emit("updateThisPostThread", posts)
 }
 </script>
 
 <template>
   <div
     class="post"
-    :data-type="type"
-    :data-mode="mode"
+    :data-position="position"
     :data-repost="post.__reason != null"
     :data-focus="isFocused()"
-    @click.prevent.stop="openPostThread(post)"
+    @click.prevent.stop="onActivatePost(post)"
   >
     <div class="header">
+      <!-- リプライ先ユーザー -->
       <div
         v-if="replyTo != null"
         class="replier"
-        @click.stop="onClickReplier"
+        @click.stop="onActivateReplierLink"
       >
         <SVGIcon name="post" />
         <div class="replier__display-name">{{ replyTo?.author?.displayName }}</div>
         <div class="replier__handle">{{ replyTo?.author?.handle }}</div>
       </div>
+
+      <!-- リポストユーザー -->
       <div
         v-if="post.__reason != null"
         class="reposter"
-        @click.stop="openProfile(post.__reason?.by?.handle as string)"
+        @click.stop="onActivateProfileLink(post.__reason?.by?.handle as string)"
       >
         <SVGIcon name="repost" />
         <div class="reposter__display-name">{{ post.__reason?.by?.displayName }}</div>
@@ -182,9 +183,10 @@ function removeThisPost (uri: string) {
       </div>
     </div>
     <div class="body">
+      <!-- アバター -->
       <button
         class="avatar"
-        @click.stop="openProfile(post.author?.handle)"
+        @click.stop="onActivateProfileLink(post.author?.handle)"
       >
         <img
           loading="lazy"
@@ -193,21 +195,30 @@ function removeThisPost (uri: string) {
       </button>
       <div class="body__right">
         <div class="body__header">
+          <!-- 表示名 -->
           <a
             class="textlink display-name"
             tabindex="0"
-            @click.stop="openProfile(post.author?.handle)"
+            @click.stop="onActivateProfileLink(post.author?.handle)"
           >{{ post.author?.displayName }}</a>
+
+          <!-- ハンドル -->
           <div class="handle">{{ post.author?.handle }}</div>
+
+          <!-- ポスト時間 -->
           <div
             v-if="post.indexedAt"
             class="indexed_at"
           >{{ dateLabel(post.indexedAt, mainState.currentSetting.language) }}</div>
         </div>
+
+        <!-- 本文 -->
         <div
           class="text"
           v-html="post.record?.__textHtml ?? post.value?.__textHtml"
         />
+
+        <!-- リンクボックス -->
         <a
           v-if="post.embed?.external"
           class="external"
@@ -220,6 +231,8 @@ function removeThisPost (uri: string) {
           <div class="external__uri">{{ post.embed.external.uri }}</div>
           <div class="external__description">{{ post.embed.external.description ?? '' }}</div>
         </a>
+
+        <!-- 画像 -->
         <div
           v-if="post.embed?.images"
           class="images"
@@ -228,7 +241,7 @@ function removeThisPost (uri: string) {
           <div
             v-for="image of post.embed.images"
             class="image"
-            @click.stop="openImagePopup(image.fullsize, image.thumb)"
+            @click.stop="onActivateImage(image.fullsize, image.thumb)"
           >
             <img
               loading="lazy"
@@ -237,44 +250,51 @@ function removeThisPost (uri: string) {
             />
           </div>
         </div>
+
+        <!-- 引用リポスト -->
         <div
           v-if="post.embed?.record"
           class="repost"
         >
           <Post
-            type="postInPost"
+            position="postInPost"
             :post="post.embed.record as TTPost"
           />
         </div>
+
         <div
-          v-if="type !== 'postInPost'"
+          v-if="position !== 'postInPost'"
           class="body__footer"
         >
           <div>
+            <!-- リプライボタン -->
             <button
               class="icon-button reply_count"
               :data-has="post.replyCount > 0"
-              @click.stop="reply"
+              @click.stop="onActivateReplyButton"
             >
               <SVGIcon name="post" />
               <span>{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
             </button>
           </div>
           <div>
+            <!-- リポストボタン -->
             <button
               class="icon-button repost_count"
               :data-has="post.repostCount > 0"
               :data-reposted="!!post.viewer.repost"
-              @click.stop="openRepostMenu"
+              @click.stop="onActivateRepostMenuTrigger"
             >
               <SVGIcon name="repost" />
               <span>{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
+
+              <!-- リポストメニュー -->
               <MenuTicker v-if="state.repostMenuDisplay">
-                <button @click.stop="repost">
+                <button @click.stop="onActivateRepostButton">
                   <SVGIcon name="repost" />
                   <span>{{ $t("sendRepost") }}</span>
                 </button>
-                <button @click.stop="quoteRepost">
+                <button @click.stop="onActivateQuoteRepostButton">
                   <SVGIcon name="quoteRepost" />
                   <span>{{ $t("sendQuoteRepost") }}</span>
                 </button>
@@ -282,22 +302,26 @@ function removeThisPost (uri: string) {
             </button>
           </div>
           <div>
+            <!-- いいねボタン -->
             <button
               class="icon-button like_count"
               :data-has="post.likeCount > 0"
               :data-liked="!!post.viewer.like"
-              @click.stop="like"
+              @click.stop="onActivateLikeButton"
             >
               <SVGIcon name="heart" />
               <span>{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
             </button>
           </div>
           <div>
+            <!-- ポストメニューボタン -->
             <button
               class="icon-button menu-button"
-              @click.stop="openPostMenu"
+              @click.stop="onActivatePostMenuTrigger"
             >
               <SVGIcon name="menu" />
+
+              <!-- ポストメニュー -->
               <PostAndProfileMenuTicker
                 v-if="state.postMenuDisplay"
                 :translateText="post.record?.text"
@@ -306,8 +330,8 @@ function removeThisPost (uri: string) {
                   ? post.uri
                   : undefined"
                 :openSource="post"
-                @close="closePostMenu"
-                @removeThisPost="removeThisPost"
+                @close="onClosePostMenu"
+                @removeThisPost="onRemoveThisPost"
               />
             </button>
           </div>
@@ -329,12 +353,14 @@ function removeThisPost (uri: string) {
   flex-direction: column;
   padding: 1em;
   position: relative;
-
-  &[data-type="postInPost"] {
+  &[data-focus="true"]:not([data-position="preview"]) {
+    background-color: rgba(var(--accent-color), 0.125);
+    user-select: text;
+  }
+  &[data-position="postInPost"] {
     font-size: 0.875em;
   }
-
-  &[data-mode="preview"] {
+  &[data-position="preview"] {
     font-size: 0.875em;
     padding: 0;
     pointer-events: none;
@@ -344,11 +370,6 @@ function removeThisPost (uri: string) {
     .body__footer {
       display: none;
     }
-  }
-
-  &[data-focus="true"] {
-    background-color: rgba(var(--accent-color), 0.125);
-    user-select: text;
   }
 }
 

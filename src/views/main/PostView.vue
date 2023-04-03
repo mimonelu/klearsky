@@ -4,7 +4,7 @@ import Post from "@/components/Post.vue"
 
 const mainState = inject("state") as MainState
 
-function updateThisPost (newPosts: Array<TTPost>) {
+function updateThisPostThread (newPosts: Array<TTPost>) {
   const posts = mainState.currentPosts
   if (posts == null) return
 
@@ -26,10 +26,10 @@ function removeThisPost (uri: string) {
   <div class="post-view">
     <template v-for="post, postIndex of mainState.currentPosts">
       <Post
-        type="post"
+        position="post"
         :post="post"
         :data-has-child="post.cid === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.cid"
-        @updateThisPost="updateThisPost"
+        @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"
       />
     </template>
