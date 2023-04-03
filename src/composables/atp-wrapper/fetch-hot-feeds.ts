@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetAuthorFeed, BskyAgent } from "@atproto/api"
+import type { AppBskyUnspeccedGetPopular, BskyAgent } from "@atproto/api"
 import {
   extractEmbeds,
   injectReason,
@@ -10,17 +10,16 @@ import {
 export default async function (
   this: TIAtpWrapper,
   oldFeeds: Array<TTFeed>,
-  author: string,
   limit?: number,
   cursor?: string
 ): Promise<undefined | string> {
   if (this.agent == null) return
-  const query: AppBskyFeedGetAuthorFeed.QueryParams = { actor: author }
+  const query: AppBskyUnspeccedGetPopular.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
-  const response: AppBskyFeedGetAuthorFeed.Response =
-    await (this.agent as BskyAgent).getAuthorFeed(query)
-  console.log("[klearsky/getAuthorFeed]", response)
+  const response: AppBskyUnspeccedGetPopular.Response =
+    await (this.agent as BskyAgent).api.app.bsky.unspecced.getPopular(query)
+  console.log("[klearsky/getPopular]", response)
   if (!response.success) return
 
   // TODO:

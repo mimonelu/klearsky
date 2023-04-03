@@ -16,6 +16,7 @@ import deleteRepost from "@/composables/atp-wrapper/delete-repost"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
+import fetchHotFeeds from "@/composables/atp-wrapper/fetch-hot-feeds"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
@@ -59,6 +60,7 @@ prototype.deleteRepost = deleteRepost
 prototype.fetchAuthorFeed = fetchAuthorFeed
 prototype.fetchFollowers = fetchFollowers
 prototype.fetchFollowings = fetchFollowings
+prototype.fetchHotFeeds = fetchHotFeeds
 prototype.fetchKeywordSearch = fetchKeywordSearch
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications

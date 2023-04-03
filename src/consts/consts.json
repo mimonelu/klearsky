@@ -1,6 +1,7 @@
 {
   "intervalOfFetchNotifications": 20000,
   "limitOfFetchAuthorFeeds": 30,
+  "limitOfFetchHotFeeds": 30,
   "limitOfFetchNotifications": 30,
   "limitOfFetchTimeline": 30,
   "limitOfFetchUserSearch": 30,

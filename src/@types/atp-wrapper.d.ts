@@ -74,10 +74,7 @@ interface TIAtpWrapper {
     author: string,
     limit?: number,
     cursor?: string
-  ): Promise<null | {
-    feeds: Array<TTFeed>
-    cursor?: string
-  }>
+  ): Promise<undefined | string>
   fetchFollowings(
     this: TIAtpWrapper,
     users: Array<TTUser> | Array<TTUser>,
@@ -89,6 +86,12 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     users: Array<TTUser> | Array<TTUser>,
     handle: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
+  fetchHotFeeds(
+    this: TIAtpWrapper,
+    oldFeeds: Array<TTFeed>,
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
@@ -117,10 +120,7 @@ interface TIAtpWrapper {
     oldFeeds: Array<TTFeed>,
     limit?: number,
     cursor?: string
-  ): Promise<null | {
-    feeds: Array<TTFeed>
-    cursor?: string
-  }>
+  ): Promise<undefined | string>
   fetchUserSearch(
     this: TIAtpWrapper,
     users: Array<TTUser>,

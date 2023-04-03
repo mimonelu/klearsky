@@ -52,6 +52,7 @@ const state = reactive<MainState>({
   fetchUserProfile,
   fetchCurrentProfile,
   fetchCurrentAuthorFeed,
+  fetchHotFeeds,
   fetchTimeline,
   fetchPostThread,
   fetchNotifications,
@@ -113,6 +114,9 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "home" && state.timelineFeeds.length > 0) return
 
+  // HOT の取得はログイン後 or カーソルボタン押下時 or currentHotFeeds が空の時のみ
+  if (to.name === "hot" && state.currentHotFeeds.length > 0) return
+
   if (state.currentQuery.handle !== state.currentProfile?.handle)
     state.currentProfile = null
 
@@ -135,6 +139,8 @@ function resetState () {
   state.currentPosts = []
   state.currentFollowers = []
   state.currentFollowings = []
+  state.currentHotFeeds = []
+  state.currentHotCursor = undefined
   state.currentSearchKeywordTerm = ""
   state.currentSearchKeywordResults = []
   state.currentSearchUsers = []
@@ -258,6 +264,10 @@ async function processPage (pageName?: null | RouteRecordName) {
       await fetchTimeline("new")
       break
     }
+    case "hot": {
+      await fetchHotFeeds("new")
+      break
+    }
     case "post": {
       const postUri = state.currentQuery.postUri as LocationQueryValue
       if (!postUri) {
@@ -274,15 +284,23 @@ async function processPage (pageName?: null | RouteRecordName) {
 }
 
 async function fetchTimeline (direction: "old" | "new") {
-  const result: null | { feeds: Array<TTFeed>; cursor?: string } =
+  const cursor: undefined | string =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
       consts.limitOfFetchTimeline,
       direction === "old" ? state.timelineCursor : undefined
     )
-  if (result == null) return
-  state.timelineFeeds = result.feeds
-  state.timelineCursor = result.cursor
+  if (cursor != null) state.timelineCursor = cursor
+}
+
+async function fetchHotFeeds (direction: "old" | "new") {
+  const cursor: undefined | string =
+    await state.atp.fetchHotFeeds(
+      state.currentHotFeeds,
+      consts.limitOfFetchHotFeeds,
+      direction === "old" ? state.currentHotCursor : undefined
+    )
+  if (cursor != null) state.currentHotCursor = cursor
 }
 
 async function fetchPostThread () {
@@ -316,16 +334,14 @@ async function fetchCurrentProfile (handle: string) {
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const result: null | { feeds: Array<TTFeed>; cursor?: string } =
+  const cursor: undefined | string =
     await state.atp.fetchAuthorFeed(
       state.currentFeeds as Array<TTFeed>,
       handle,
       consts.limitOfFetchAuthorFeeds,
       direction === "old" ? state.currentCursor : undefined
     )
-  if (result == null) return
-  state.currentFeeds = result.feeds
-  state.currentCursor = result.cursor
+  if (cursor != null) state.currentCursor = cursor
 }
 
 async function fetchFollowings (direction: "new" | "old") {
@@ -481,9 +497,6 @@ function closeSendPostPopup (done: boolean) {
   flex-direction: column;
   flex-grow: 1;
   max-width: $router-view-width;
-  [data-path="/hot"] & {
-    max-width: $router-view-width + $menu-max-width;
-  }
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
   }
@@ -494,9 +507,6 @@ function closeSendPostPopup (done: boolean) {
 }
 
 .sub-menu-wrapper {
-  [data-path="/hot"] & {
-    display: none;
-  }
   @media (max-width: 1024px) {
     display: none;
   }

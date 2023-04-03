@@ -31,6 +31,9 @@ type MainState = {
   currentFollowers: Array<TTUser>
   currentFollowings: Array<TTUser>
 
+  currentHotFeeds: Array<TTFeed>
+  currentHotCursor?: string
+
   currentSearchKeywordTerm: string
   currentSearchKeywordResults: Array<any>
 
@@ -66,6 +69,7 @@ type MainState = {
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>
   fetchCurrentAuthorFeed: (direction: "new" | "old") => Promise<void>
+  fetchHotFeeds: (direction: "old" | "new") => Promise<void>
   fetchTimeline: (direction: "old" | "new") => Promise<void>
   fetchPostThread: () => Promise<void>
   fetchNotifications: (

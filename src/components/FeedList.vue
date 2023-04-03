@@ -5,7 +5,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
 const props = defineProps<{
-  type: "author" | "post" | "timeline";
+  type: "author" | "hot" | "post" | "timeline";
   feeds: null | Array<TTFeed>;
   hasFetchButton?: boolean;
 }>()
@@ -19,6 +19,10 @@ async function fetchFeeds (direction: "new" | "old") {
     switch (props.type) {
       case "author": {
         await mainState.fetchCurrentAuthorFeed(direction)
+        break
+      }
+      case "hot": {
+        await mainState.fetchHotFeeds(direction)
         break
       }
       case "post": {

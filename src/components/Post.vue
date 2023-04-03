@@ -463,6 +463,7 @@ async function updateThisPostThread () {
 .body {
   display: flex;
   grid-gap: 1em;
+  position: relative;
 }
 
 .avatar {

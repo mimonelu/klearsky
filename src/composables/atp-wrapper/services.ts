@@ -32,30 +32,28 @@ export function extractEmbeds (feeds: Array<any>) {
 }
 
 export function mergeFeeds(
-  oldFeeds: null | Array<TTFeed>,
+  oldFeeds: Array<TTFeed>,
   targetFeeds: Array<TTFeed>
-): Array<TTFeed> {
-  const results: Array<TTFeed> = oldFeeds != null ? [...oldFeeds] : []
+) {
   targetFeeds.forEach((targetFeed: TTFeed) => {
-    const index: number = results.findIndex(
+    const index: number = oldFeeds.findIndex(
       (oldFeed: TTFeed) => oldFeed.post?.cid === targetFeed.post?.cid
     )
-    if (index === - 1) results.push(targetFeed)
-    else if (results[index].post == null) results[index] = targetFeed
+    if (index === - 1) oldFeeds.push(targetFeed)
+    else if (oldFeeds[index].post == null) oldFeeds[index] = targetFeed
     else if (targetFeed.post == null) return
     else {
       const oldDate = new Date(
-        results[index].post.__reason?.indexedAt
-        ?? results[index].post.indexedAt
+        oldFeeds[index].post.__reason?.indexedAt
+        ?? oldFeeds[index].post.indexedAt
       )
       const targetDate = new Date(
         targetFeed.post.__reason?.indexedAt
         ?? targetFeed.post.indexedAt
       )
-      if (oldDate <= targetDate) results[index] = targetFeed
+      if (oldDate <= targetDate) oldFeeds[index] = targetFeed
     }
   })
-  return results
 }
 
 export function sortFeeds(feeds: Array<TTFeed>): Array<TTFeed> {
