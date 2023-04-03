@@ -10,7 +10,7 @@ const yyyy = (new Date).getFullYear()
     <small>&copy; {{ yyyy }} mimonelu</small>
     <a
       class="textlink"
-      href="/#/profile/post?handle=mimonelu.bsky.social"
+      href="#/profile/post?handle=mimonelu.bsky.social"
     >Bluesky@mimonelu.bsky.social</a>
     <a
       class="textlink"
