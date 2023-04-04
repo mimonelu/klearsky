@@ -49,3 +49,16 @@
 
   --border-radius: 2px;
 }
+
+@mixin color-theme-greentea {
+  --bg-color: 24, 80, 24;
+  --fg-color: 224, 240, 224;
+  --accent-color: 96, 192, 96;
+  --notice-color: 240, 64, 64;
+  --post-color: 0, 192, 240;
+  --like-color: 240, 64, 128;
+  --share-color: 32, 192, 64;
+  --hot-color: 255, 32, 32;
+
+  --border-radius: 2px;
+}

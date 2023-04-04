@@ -4,7 +4,8 @@
     { "label": "colorThemeLight", "value": "light" },
     { "label": "colorThemeDark", "value": "dark" },
     { "label": "colorThemeWarmSand", "value": "warmsand" },
-    { "label": "colorThemeNightStars", "value": "nightstars" }
+    { "label": "colorThemeNightStars", "value": "nightstars" },
+    { "label": "colorThemeGreenTea", "value": "greentea" }
   ],
   "backgroundOpacities": [
     { "label": "0%", "value": 0 },

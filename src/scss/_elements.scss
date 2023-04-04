@@ -39,6 +39,9 @@ body[data-color-theme="warmsand"] {
 body[data-color-theme="nightstars"] {
   @include color-theme-nightstars;
 }
+body[data-color-theme="greentea"] {
+  @include color-theme-greentea;
+}
 
 ::selection {
   background-color: rgba(var(--accent-color), 0.5);
