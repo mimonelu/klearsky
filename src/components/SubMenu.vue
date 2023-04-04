@@ -1,44 +1,12 @@
 <script lang="ts" setup>
 import CopyRight from "@/components/Copyright.vue"
 import Logo from "@/components/Logo.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
-
-function moveToTop () {
-  blurElement()
-  window.scrollTo({
-    left: 0,
-    top: 0,
-    behavior: "smooth",
-  })
-}
-
-function moveToBottom () {
-  blurElement()
-  window.scrollTo({
-    left: 0,
-    top: document.body.clientHeight,
-    behavior: "smooth",
-  })
-}
 </script>
 
 <template>
   <div class="sub-menu">
-    <button
-      class="move-button"
-      @click.prevent="moveToTop"
-    >
-      <SVGIcon name="cursorUp" />
-    </button>
     <Logo />
     <CopyRight />
-    <button
-      class="move-button"
-      @click.prevent="moveToBottom"
-    >
-      <SVGIcon name="cursorDown" />
-    </button>
   </div>
 </template>
 
@@ -49,37 +17,6 @@ function moveToBottom () {
   grid-gap: 3rem;
   padding-top: 3rem;
   position: relative;
-}
-
-.move-button {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  padding: 0.75rem;
-  position: fixed;
-  right: 0;
-  min-width: 3rem;
-  min-height: 3rem;
-  z-index: 1;
-
-  .svg-icon {
-    fill: transparent;
-    stroke: rgba(var(--fg-color), 0.25);
-    stroke-width: 2px;
-  }
-  &:focus , &:hover {
-    .svg-icon {
-      stroke: rgb(var(--fg-color));
-    }
-  }
-}
-.move-button:first-child {
-  top: 0;
-}
-.move-button:last-child {
-  bottom: 0;
 }
 
 .logo {

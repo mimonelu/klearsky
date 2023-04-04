@@ -15,7 +15,10 @@ function getServiceName (): string {
     <div class="header-icon">
       <SVGIcon name="fire" />
     </div>
-    <div class="header-label">Hot Posts <b>@{{ getServiceName() }}</b></div>
+    <div class="header-label">
+      <span>Hot Posts</span>
+      <b>@{{ getServiceName() }}</b>
+    </div>
   </div>
   <FeedList
     type="hot"
@@ -29,7 +32,8 @@ function getServiceName (): string {
 .header {
   border-top: 2px solid rgb(var(--hot-color));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
   grid-gap: 0.5rem;
   padding: 1rem;
@@ -45,11 +49,20 @@ function getServiceName (): string {
   }
 
   &-label {
+    display: flex;
+    grid-gap: 0.5rem;
     font-size: 1.25rem;
     font-weight: bold;
+    overflow: hidden;
+
+    & > span {
+      white-space: nowrap;
+    }
 
     & > b {
       color: rgb(var(--hot-color));
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

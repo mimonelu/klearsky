@@ -20,6 +20,7 @@ import ImagePopup from "@/components/ImagePopup.vue"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
 import MainMenu from "@/components/MainMenu.vue"
+import ScrollButton from "@/components/ScrollButton.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import AtpWrapper from "@/composables/atp-wrapper"
@@ -431,6 +432,7 @@ function closeSendPostPopup (done: boolean) {
         <SubMenu />
       </div>
     </div>
+    <ScrollButton />
     <ImagePopup
       v-if="state.imagePopupProps.display"
       :largeUri="state.imagePopupProps.largeUri"
@@ -465,6 +467,13 @@ function closeSendPostPopup (done: boolean) {
     }
 
     .sub-menu-wrapper  {
+      display: none;
+    }
+  }
+
+  // スクロールボタン用処理
+  &:deep() .scroll-button {
+    @media (max-width: #{$max-width-with-scrollbar + 64px}) {
       display: none;
     }
   }
