@@ -90,7 +90,7 @@ function moveToBottom () {
 
     <!-- HOTボタン -->
     <RouterLink
-      class="link-button"
+      class="link-button hot-button"
       to="/hot"
       @click.prevent
     >
@@ -259,9 +259,10 @@ function moveToBottom () {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0.5rem;
     position: relative;
-    min-width: 3rem;
-    min-height: 3rem;
+    min-width: 2rem;
+    min-height: 2rem;
 
     .svg-icon {
       fill: rgba(var(--fg-color), 0.75);
@@ -294,13 +295,44 @@ function moveToBottom () {
     background-color: rgba(var(--accent-color), 0.125);
   }
 
+  &.hot-button {
+    .icon {
+      background-color: rgba(var(--fg-color), 0.75);
+      border-radius: 1rem;
+    }
+
+    .svg-icon {
+      fill: rgba(var(--hot-color), 0.75);
+    }
+
+    &:focus, &:hover {
+      .icon {
+        background-color: rgb(var(--fg-color));
+      }
+
+      .svg-icon {
+        fill: rgb(var(--hot-color));
+      }
+    }
+  }
+
   &.send-post-button {
     .svg-icon {
       fill: rgba(var(--post-color), 0.75);
     }
+
+    .label {
+      color: rgba(var(--post-color), 0.75);
+      font-weight: bold;
+    }
+
     &:focus, &:hover {
       .svg-icon {
         fill: rgb(var(--post-color));
+      }
+
+      .label {
+        color: rgb(var(--post-color));
       }
     }
   }
