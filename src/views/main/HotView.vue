@@ -1,11 +1,22 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import FeedList from "@/components/FeedList.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
+
+function getServiceName (): string {
+  return (mainState.atp.session?.__service ?? "").replace(/^\w+:\/+/, "")
+}
 </script>
 
 <template>
+  <div class="header">
+    <div class="header-icon">
+      <SVGIcon name="fire" />
+    </div>
+    <div class="header-label">Hot Posts <b>@{{ getServiceName() }}</b></div>
+  </div>
   <FeedList
     type="hot"
     :feeds="mainState.currentHotFeeds"
@@ -15,6 +26,34 @@ const mainState = inject("state") as MainState
 </template>
 
 <style lang="scss" scoped>
+.header {
+  border-top: 2px solid rgb(var(--hot-color));
+  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  display: flex;
+  align-items: center;
+  grid-gap: 0.5rem;
+  padding: 1rem;
+
+  &-icon {
+    background-color: rgb(var(--hot-color));
+    border-radius: 1rem;
+    padding: 0.25rem;
+
+    & > .svg-icon {
+      fill: white;
+    }
+  }
+
+  &-label {
+    font-size: 1.25rem;
+    font-weight: bold;
+
+    & > b {
+      color: rgb(var(--hot-color));
+    }
+  }
+}
+
 .feed-list:deep() {
   @media not all and (max-width: $max-width) {
     .feeds {
@@ -29,6 +68,7 @@ const mainState = inject("state") as MainState
     }
   }
 
+  // HOTアイコン
   .feeds > .feed > .post[data-position="post"] > .body {
     & > .avatar::before {
       content: "";
@@ -37,6 +77,7 @@ const mainState = inject("state") as MainState
       background-color: rgb(var(--hot-color));
       background-size: 50%;
       border-radius: 2.5rem;
+      overflow: hidden;
       position: absolute;
       top: -0.375rem;
       left: -0.375rem;
