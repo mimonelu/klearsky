@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import Post from "@/components/Post.vue"
+import Feed from "@/components/Feed.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
@@ -8,6 +8,7 @@ const props = defineProps<{
   type: "author" | "hot" | "post" | "timeline";
   feeds: null | Array<TTFeed>;
   hasFetchButton?: boolean;
+  isMasonry?: boolean;
 }>()
 
 const mainState = inject("state") as MainState
@@ -81,38 +82,12 @@ function removeThisPost (uri: string) {
       <SVGIcon name="cursorUp"/>
     </button>
     <div class="feeds">
-      <div
+      <Feed
         v-for="feed of feeds"
-        class="feed"
-      >
-        <template v-if="feed.__replyDisplay && (feed.reply?.root != null || feed.reply?.parent != null)">
-          <Post
-            v-if="feed.reply?.root != null && feed.reply.root.cid !== feed.reply.parent?.cid"
-            position="root"
-            :post="feed.reply.root"
-            :data-has-child="feed.reply.root.cid === feed.reply?.parent?.record.reply?.parent?.cid"
-            @updateThisPostThread="updateThisPostThread"
-            @removeThisPost="removeThisPost"
-          />
-          <Post
-            v-if="feed.reply?.parent != null"
-            position="parent"
-            :post="feed.reply.parent"
-            :data-has-child="feed.reply.parent.cid === feed.post.record?.reply?.parent?.cid"
-            @updateThisPostThread="updateThisPostThread"
-            @removeThisPost="removeThisPost"
-          />
-        </template>
-        <Post
-          v-if="feed.post != null"
-          position="post"
-          :post="feed.post"
-          :replyTo="feed.reply?.parent"
-          @onClickReplier="feed.__replyDisplay = !feed.__replyDisplay"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
-        />
-      </div>
+        :feed="feed"
+        @updateThisPostThread="updateThisPostThread"
+        @removeThisPost="removeThisPost"
+      />
     </div>
     <button
       v-if="hasFetchButton"

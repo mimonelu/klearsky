@@ -463,10 +463,10 @@ async function updateThisPostThread () {
 .body {
   display: flex;
   grid-gap: 1em;
-  position: relative;
 }
 
 .avatar {
+  position: relative;
   @include avatar-link(var(--avatar-size));
 }
 
