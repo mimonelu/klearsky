@@ -14,10 +14,28 @@ export function saveData(this: TIAtpWrapper) {
 }
 
 export function coherentResponses (responses: Array<any>) {
+  // Blob な image は暫定的に削除
+  // TODO: 対応すること
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (value.images != null && value.images.some((image: any) => image.image != null)) {
+      const images = value.images
+      delete value.images
+      value.__images = images
+    }
+  })
+
   // embeds[0] -> embed
   traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "embeds" && value[0] != null) {
       parent.embed = JSON.parse(JSON.stringify(value[0]))
+      parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
+    }
+  })
+
+  // PARENT.value.embed -> PARENT.embed
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "value" && value.embed != null && parent.embed == null) {
+      parent.embed = JSON.parse(JSON.stringify(value.embed))
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
     }
   })

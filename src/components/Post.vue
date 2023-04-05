@@ -240,7 +240,7 @@ async function updateThisPostThread () {
 
         <!-- 画像 -->
         <div
-          v-if="post.embed?.images"
+          v-if="post.embed?.images != null && post.embed.images.length > 0"
           class="images"
           :data-number-of-images="post.embed?.images.length"
         >
@@ -259,7 +259,7 @@ async function updateThisPostThread () {
 
         <!-- 引用リポスト -->
         <div
-          v-if="post.embed?.record"
+          v-if="post.embed?.record && (post.embed.record as any).$type != null"
           class="repost"
         >
           <Post
