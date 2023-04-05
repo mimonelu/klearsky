@@ -54,7 +54,7 @@ const easyFormProps: TTEasyForm = {
       model: "avatar",
       label: $t("avatar"),
       type: "file",
-      accept: "image/png, image/jpeg",
+      // accept: "image/png, image/jpeg",
       isMultipleFile: false,
       maxNumberOfFile: 1,
     },
@@ -63,7 +63,7 @@ const easyFormProps: TTEasyForm = {
       model: "banner",
       label: $t("banner"),
       type: "file",
-      accept: "image/png, image/jpeg",
+      // accept: "image/png, image/jpeg",
       isMultipleFile: false,
       maxNumberOfFile: 1,
     }

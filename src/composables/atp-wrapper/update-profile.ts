@@ -9,19 +9,17 @@ export default async function (
     params.avatar != null && params.avatar[0] != null
       ? this.createFileBlob({
         file: params.avatar[0],
-        maxWidth: 2000,
-        maxHeight: 2000,
+        // maxWidth: 2000,
+        // maxHeight: 2000,
         maxSize: 976560,
-        // quality: 0.8,
       })
       : null,
     params.banner != null && params.banner[0] != null
       ? this.createFileBlob({
         file: params.banner[0],
-        maxWidth: 2000,
-        maxHeight: 2000,
+        // maxWidth: 2000,
+        // maxHeight: 2000,
         maxSize: 976560,
-        // quality: 0.8,
       })
       : null,
   ])

@@ -16,6 +16,7 @@ function convertBlobTo (
   })
 }
 
+/*
 async function convertFileToImage (file: File): Promise<HTMLImageElement> {
   return new Promise(async (resolve, reject) => {
     const dataUrl = await convertBlobTo(file, "readAsDataURL") as string
@@ -27,12 +28,13 @@ async function convertFileToImage (file: File): Promise<HTMLImageElement> {
     image.src = dataUrl
   })
 }
+*/
 
 function compressFileToBlob (params: {
   file: File,
-  mimeType: string,
-  maxWidth: number,
-  maxHeight: number,
+  // mimeType: string,
+  // maxWidth: number,
+  // maxHeight: number,
   maxSize: number,
   quality?: number,
 }): Promise<Blob> {
@@ -40,10 +42,10 @@ function compressFileToBlob (params: {
     // SEE: https://github.com/fengyuanchen/compressorjs#options
     new Compressor(params.file, {
       convertSize: params.maxSize,
-      convertTypes: params.mimeType,
-      maxWidth: params.maxWidth,
-      maxHeight: params.maxHeight,
-      mimeType: params.mimeType,
+      // convertTypes: params.mimeType,
+      // maxWidth: params.maxWidth,
+      // maxHeight: params.maxHeight,
+      // mimeType: params.mimeType,
       quality: params.quality,
       success: resolve,
       error: reject,
@@ -63,42 +65,28 @@ export default async function (
   this: TIAtpWrapper,
   params: {
     file: File,
-    maxWidth: number,
-    maxHeight: number,
+    // maxWidth: number,
+    // maxHeight: number,
     maxSize: number,
-    quality?: number,
   }
 ): Promise<null | BlobRef> {
   if (this.agent == null) return null
   if (params.file == null) return null
   const imageMimeType = convertMap[params.file.type]
 
-  let input: string | Uint8Array = ""
-  let mimeType = ""
-
+  let blob: undefined | Blob = undefined
   if (imageMimeType != null) {
-    mimeType = imageMimeType
-
-    if (params.file.size <= params.maxSize) {
-      const image = await convertFileToImage(params.file)
-      if (image.width <= params.maxWidth
-       && image.height <= params.maxHeight) {
-        mimeType = params.file.type
-      }
-    }
-
-    const blob: Error | Blob = await compressFileToBlob({ ...params, mimeType })
+    blob = await compressFileToBlob({ ...params })
     if (blob instanceof Error) return null
-    const arrayBuffer = await convertBlobTo(blob, "readAsArrayBuffer")
-    if (arrayBuffer == null) return null
-    input = new Uint8Array(arrayBuffer as ArrayBuffer)
   } else {
-    mimeType = params.file.type
-    input = await convertBlobTo(params.file, "readAsText") as string
+    blob = params.file
   }
 
+  const arrayBuffer = await convertBlobTo(blob, "readAsArrayBuffer")
+  if (arrayBuffer == null) return null
+  const input: Uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)
   const options: ComAtprotoRepoUploadBlob.CallOptions = {
-    encoding: mimeType,
+    encoding: params.file.type,
   }
   const response: ComAtprotoRepoUploadBlob.Response =
     await (this.agent as BskyAgent).uploadBlob(input, options)
