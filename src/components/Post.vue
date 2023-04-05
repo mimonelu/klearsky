@@ -470,6 +470,7 @@ async function updateThisPostThread () {
 .body {
   display: flex;
   grid-gap: 1em;
+  position: relative;
 }
 
 .avatar {
@@ -535,7 +536,7 @@ async function updateThisPostThread () {
   &:not(:empty) {
     margin-top: 0.75em;
   }
-  @media (min-width: 480px) {
+  @media (min-width: $sp-width) {
     padding-left: calc(var(--avatar-size) + 1em);
   }
 }

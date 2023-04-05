@@ -122,15 +122,27 @@ function removeThisPost (uri: string) {
   }
 }
 
-.post[data-has-child="true"] {
-  &::before {
-    border-left: 2px solid rgba(var(--fg-color), 0.25);
+.feed:deep() .post[data-has-child="true"] > .body::before {
+  @media not all and (min-width: $sp-width) {
+    background-color: rgba(var(--fg-color), 0.25);
+    content: "";
+    display: block;
+    position: absolute;
+    top: calc(var(--avatar-size) + 0.5em);
+    left: calc(var(--avatar-size) / 2);
+    width: 2px;
+    height: calc(100% - var(--avatar-size) - 0.75em);
+  }
+}
+.feed:deep() .post[data-has-child="true"]::before {
+  @media (min-width: $sp-width) {
+    background-color: rgba(var(--fg-color), 0.25);
     content: "";
     display: block;
     position: absolute;
     top: calc(1em + var(--avatar-size) + 8px);
     left: calc(2.5em - 1px);
-    width: 0;
+    width: 2px;
     height: calc(100% - var(--avatar-size) - 16px);
   }
 }
