@@ -45,6 +45,7 @@ export default async function (
   if (entities.length > 0) record.entities = entities
 
   // TODO:
+  let external: null | any = null
   if (params.url?.length > 0) {
     const response = await fetch(
       `https://mimonelu.net:4649/${params.url}`,
@@ -57,17 +58,19 @@ export default async function (
     const descriptionElement = html.querySelector("meta[name='description']")
     const title = titleElement?.innerHTML ?? ""
     const description = descriptionElement?.getAttribute("content") ?? ""
-
+    external = {
+      uri: params.url,
+      title,
+      description,
+    }
     record.embed = {
       $type: "app.bsky.embed.external",
-      external: {
-        uri: params.url,
-        title,
-        description,
-      },
+      external,
     }
   }
 
+  // TODO:
+  let images: null | any = null
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all(
     params.images.map((file: File): Promise<null | BlobRef> => {
       return this.createFileBlob({
@@ -96,9 +99,10 @@ export default async function (
       )
       .filter((image: null | AppBskyEmbedImages.Image) => image != null)
     if (imageObjects.length > 0) {
+      images = imageObjects
       record.embed = {
         $type: "app.bsky.embed.images",
-        images: imageObjects,
+        images,
       }
     }
   }
@@ -119,12 +123,19 @@ export default async function (
   }
 
   if (params.type === "quoteRepost") {
-    record.embed = {
+    record.embed ={
       $type: "app.bsky.embed.record",
       record: {
         cid: params.post?.cid,
         uri: params.post?.uri,
       },
+      media: {},
+    }
+    if (external != null) {
+      (record.embed.media as any).external = external
+    }
+    if (images != null) {
+      (record.embed.media as any).images = images
     }
   }
 

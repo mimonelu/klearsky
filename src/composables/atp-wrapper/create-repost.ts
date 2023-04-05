@@ -5,7 +5,6 @@ export default async function (
   post?: TTPost
 ): Promise<boolean> {
   if (this.agent == null) return false
-  if (this.session == null) return false
   const response: ComAtprotoRepoCreateRecord.OutputSchema =
     await (this.agent as BskyAgent).repost(post?.uri as string, post?.cid as string)
   console.log("[klearsky/repost]", response)

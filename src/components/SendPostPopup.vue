@@ -31,50 +31,43 @@ const state = reactive<{
 const easyFormProps: TTEasyForm = {
   submitButtonLabel: $t("submit"),
   submitCallback,
-  data: (() => {
-    const result: Array<TTEasyFormItem> = [
-      {
-        state,
-        model: "text",
-        type: "textarea",
-        placeholder: $t("text"),
-        maxlength: 300,
-        maxLengthIndicator: true,
-        maxLengthWithSegmenter: true,
-        rows: 4,
-        focus: true,
-      },
-    ]
-    if (props.type !== "quoteRepost") {
-      result.push({
-        state,
-        model: "url",
-        type: "url",
-        placeholder: $t("linkBox"),
-        autocomplete: "url",
-        inputmode: "url",
-      })
-      result.push({
-        state,
-        model: "images",
-        type: "file",
-        placeholder: $t("imageBoxes"),
-        // accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
-        isMultipleFile: true,
-        maxNumberOfFile: 4,
-        onChange (_: TTEasyFormItem, form: TTEasyForm) {
-          // ファイルがひとつ以上選択されているか否かでリンクボックスの表示状態を切り替える
-          const urlItem = form.data.find((item: TTEasyFormItem) => item.model === "url")
-          if (urlItem == null) return
-          urlItem.display = state.images.length === 0
+  data: [
+    {
+      state,
+      model: "text",
+      type: "textarea",
+      placeholder: $t("text"),
+      maxlength: 300,
+      maxLengthIndicator: true,
+      maxLengthWithSegmenter: true,
+      rows: 4,
+      focus: true,
+    }, {
+      state,
+      model: "url",
+      type: "url",
+      placeholder: $t("linkBox"),
+      autocomplete: "url",
+      inputmode: "url",
+    }, {
+      state,
+      model: "images",
+      type: "file",
+      placeholder: $t("imageBoxes"),
+      // accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
+      isMultipleFile: true,
+      maxNumberOfFile: 4,
+      onChange (_: TTEasyFormItem, form: TTEasyForm) {
+        // ファイルがひとつ以上選択されているか否かでリンクボックスの表示状態を切り替える
+        const urlItem = form.data.find((item: TTEasyFormItem) => item.model === "url")
+        if (urlItem == null) return
+        urlItem.display = state.images.length === 0
 
-          // WANT: 意図しない alt が削除される不具合を修正したい
-          state.alts.splice(state.images.length)
-        },
-      })
-    }
-    return result
-  })(),
+        // WANT: 意図しない alt が削除される不具合を修正したい
+        state.alts.splice(state.images.length)
+      },
+    },
+  ],
 }
 
 function close () {

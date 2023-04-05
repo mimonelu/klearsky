@@ -14,39 +14,49 @@ export function saveData(this: TIAtpWrapper) {
 }
 
 export function coherentResponses (responses: Array<any>) {
-  // Record
-  traverseJson(responses, (key: string, value: any, parent: any) => {
-    if (key === "record" && value.record != null) {
-      if (parent.record != null) {
-        parent.__record = JSON.parse(JSON.stringify(parent.record))
-        parent.__record.__comment = "❗ This '__record' was duplicated by Klearsky."
-      }
-      parent.record = JSON.parse(JSON.stringify(value.record))
-      parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
-    }
-  })
-
-  // Embed
+  // embeds[0] -> embed
   traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "embeds" && value[0] != null) {
-      if (parent.embed != null) {
-        parent.__embed = JSON.parse(JSON.stringify(parent.embed))
-        parent.__embed.__comment = "❗ This '__embed' was duplicated by Klearsky."
-      }
       parent.embed = JSON.parse(JSON.stringify(value[0]))
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
     }
   })
 
-  // External
+  // PARENT.embed.media.external -> PARENT.embed.external
   traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "media" && value.external != null) {
-      if (parent.external != null) {
-        parent.__external = JSON.parse(JSON.stringify(parent.external))
-        parent.__external.__comment = "❗ This '__external' was duplicated by Klearsky."
-      }
       parent.external = JSON.parse(JSON.stringify(value.external))
       parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
+    }
+  })
+
+  // PARENT.embed.media.images -> PARENT.embed.images
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "media" && value.images != null && parent.images == null) {
+      parent.images = JSON.parse(JSON.stringify(value.images))
+      parent.images.__comment = "❗ This 'images' was duplicated by Klearsky."
+    }
+  })
+
+  // PARENT.record.embed.external/images -> PARENT.embed.external/images
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "record" && parent.embed != null && value.embed != null) {
+      if (value.embed.external != null && parent.embed.external == null) {
+        parent.embed.external = JSON.parse(JSON.stringify(value.embed.external))
+        parent.embed.external.__comment = "❗ This 'external' was duplicated by Klearsky."
+      }
+      if (value.embed.images != null && parent.embed.images == null) {
+        parent.embed.images = JSON.parse(JSON.stringify(value.embed.images))
+        parent.embed.images.__comment = "❗ This 'images' was duplicated by Klearsky."
+      }
+    }
+  })
+
+  // PARENT.record.record -> PARENT.record
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "record" && value.record != null) {
+      parent.record = JSON.parse(JSON.stringify(value.record))
+      parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
     }
   })
 
@@ -109,12 +119,13 @@ export function text2htmlAtFeeds(feeds: Array<any>) {
 
 export function traverseJson(
   json: any,
-  callback: (key: string, value: any, parent: any) => void
+  callback: (key: string, value: any, parent: any, deep: number) => void,
+  deep = 0
 ) {
   for (const key in json) {
-    callback(key, json[key], json)
+    callback(key, json[key], json, deep)
     if (json[key] instanceof Object) {
-      traverseJson(json[key], callback)
+      traverseJson(json[key], callback, deep + 1)
     }
   }
 }

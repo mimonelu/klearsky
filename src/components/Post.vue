@@ -231,7 +231,7 @@ async function updateThisPostThread () {
           <div class="external__uri">{{ post.embed.external.uri }}</div>
           <div class="external__description">{{ post.embed.external.description ?? '' }}</div>
           <img
-            v-if="post.embed.external.thumb != null"
+            v-if="typeof post.embed.external.thumb === 'string'"
             class="external__thumb"
             loading="lazy"
             :src="post.embed.external.thumb"
