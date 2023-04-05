@@ -121,6 +121,8 @@ function moveToBottom () {
     >
       <div class="icon">
         <SVGIcon name="bell" />
+
+        <!-- 通知バッジ -->
         <div
           v-if="mainState.notificationCount > 0"
           class="notification-count"
@@ -202,19 +204,7 @@ function moveToBottom () {
   }
 }
 
-.small-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  min-width: 3rem;
-  min-height: 3rem;
-
-  .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
-  }
-}
-
+// バックボタン
 .move-button {
   cursor: pointer;
   display: flex;
@@ -232,6 +222,20 @@ function moveToBottom () {
     .svg-icon {
       stroke: rgb(var(--fg-color));
     }
+  }
+}
+
+// スモールロゴ
+.small-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  min-width: 3rem;
+  min-height: 3rem;
+
+  .svg-icon {
+    fill: rgba(var(--fg-color), 0.5);
   }
 }
 
@@ -295,6 +299,7 @@ function moveToBottom () {
     background-color: rgba(var(--accent-color), 0.125);
   }
 
+  // HOTボタン
   &.hot-button {
     .icon {
       background-color: rgba(var(--fg-color), 0.75);
@@ -316,6 +321,7 @@ function moveToBottom () {
     }
   }
 
+  // ポスト送信ポップアップトリガー
   &.send-post-button {
     .svg-icon {
       fill: rgba(var(--post-color), 0.75);
@@ -338,6 +344,7 @@ function moveToBottom () {
   }
 }
 
+// 通知バッジ
 .notification-count {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
@@ -347,7 +354,7 @@ function moveToBottom () {
   font-weight: bold;
   padding: 0.125rem 0.25rem;
   position: absolute;
-  right: 0.25rem;
-  top: 0.25rem;
+  right: 0rem;
+  top: 0rem;
 }
 </style>
