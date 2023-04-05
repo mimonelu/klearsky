@@ -1,6 +1,6 @@
 import type { AppBskyFeedGetPostThread, BskyAgent } from "@atproto/api"
 import {
-  extractEmbeds,
+  coherentResponses,
   text2htmlAtFeeds,
   traverseJson,
 } from "@/composables/atp-wrapper/services"
@@ -23,7 +23,7 @@ export default async function (
   traverseJson(response.data.thread, (key: string, value: any) => {
     if (key === "post") posts.push(value)
   })
-  extractEmbeds(posts)
+  coherentResponses(posts)
   text2htmlAtFeeds(posts)
   posts.sort((a: TTPost, b: TTPost) => {
     const aIndexedAt = new Date(a.__reason?.indexedAt ?? a.indexedAt)

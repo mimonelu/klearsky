@@ -48,10 +48,7 @@ type TTPost = {
     $type: string
     external?: {
       uri: string
-      thumb?: {
-        cid: string
-        mimeType: string
-      }
+      thumb?: string
       title?: string
       description?: string
     }

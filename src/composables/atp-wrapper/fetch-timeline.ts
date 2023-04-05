@@ -1,7 +1,6 @@
 import type { AppBskyFeedGetTimeline, BskyAgent } from "@atproto/api"
 import {
-  extractEmbeds,
-  injectReason,
+  coherentResponses,
   mergeFeeds,
   sortFeeds,
   text2htmlAtFeeds,
@@ -27,8 +26,7 @@ export default async function (
   if (!response.success) return
 
   // TODO:
-  injectReason(response.data.feed as Array<TTFeed>)
-  extractEmbeds(response.data.feed as Array<TTFeed>)
+  coherentResponses(response.data.feed as Array<TTFeed>)
   text2htmlAtFeeds(response.data.feed as Array<TTFeed>)
   mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
   sortFeeds(oldFeeds)

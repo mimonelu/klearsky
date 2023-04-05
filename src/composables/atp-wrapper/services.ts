@@ -13,22 +13,53 @@ export function saveData(this: TIAtpWrapper) {
   storage.save("atp", this.data)
 }
 
-export function injectReason(feeds: Array<TTFeed>) {
-  feeds.forEach((feed: TTFeed) => {
-    if (feed.reason == null) return
-    feed.post.__reason = feed.reason
+export function coherentResponses (responses: Array<any>) {
+  // Record
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "record" && value.record != null) {
+      if (parent.record != null) {
+        parent.__record = JSON.parse(JSON.stringify(parent.record))
+        parent.__record.__comment = "❗ This '__record' was duplicated by Klearsky."
+      }
+      parent.record = JSON.parse(JSON.stringify(value.record))
+      parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
+    }
+  })
+
+  // Embed
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "embeds" && value[0] != null) {
+      if (parent.embed != null) {
+        parent.__embed = JSON.parse(JSON.stringify(parent.embed))
+        parent.__embed.__comment = "❗ This '__embed' was duplicated by Klearsky."
+      }
+      parent.embed = JSON.parse(JSON.stringify(value[0]))
+      parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
+    }
+  })
+
+  // External
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "media" && value.external != null) {
+      if (parent.external != null) {
+        parent.__external = JSON.parse(JSON.stringify(parent.external))
+        parent.__external.__comment = "❗ This '__external' was duplicated by Klearsky."
+      }
+      parent.external = JSON.parse(JSON.stringify(value.external))
+      parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
+    }
+  })
+
+  // Reason
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "reason" && value != null && parent?.post != null) {
+      parent.post.__reason = value
+    }
   })
 }
 
 export function makeCreatedAt(): string {
   return new Date().toISOString()
-}
-
-export function extractEmbeds (feeds: Array<any>) {
-  traverseJson(feeds, (key: string, value: any, parent: any) => {
-    if (key === "embeds" && value[0] != null)
-      parent.embed = value[0]
-  })
 }
 
 export function mergeFeeds(

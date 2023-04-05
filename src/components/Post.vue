@@ -230,6 +230,12 @@ async function updateThisPostThread () {
           <div class="external__title">{{ post.embed.external.title ?? '' }}</div>
           <div class="external__uri">{{ post.embed.external.uri }}</div>
           <div class="external__description">{{ post.embed.external.description ?? '' }}</div>
+          <img
+            v-if="post.embed.external.thumb != null"
+            class="external__thumb"
+            loading="lazy"
+            :src="post.embed.external.thumb"
+          />
         </a>
 
         <!-- 画像 -->
@@ -549,6 +555,13 @@ async function updateThisPostThread () {
   }
   &__description {
     font-size: 0.875em;
+  }
+  &__thumb {
+    aspect-ratio: 1.91 / 1;
+    border-radius: var(--border-radius);
+    display: block;
+    margin-top: 0.5em;
+    object-fit: cover;
   }
 }
 
