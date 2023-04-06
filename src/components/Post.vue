@@ -68,7 +68,11 @@ async function onActivateReplyButton () {
   }
 }
 
-async function onActivateRepostButton () {
+async function onActivateRepostMenuTrigger () {
+  state.repostMenuDisplay = !state.repostMenuDisplay
+}
+
+async function onActivateSendRepostButton () {
   blurElement()
   state.repostMenuDisplay = false
   state.processing = true
@@ -82,6 +86,19 @@ async function onActivateRepostButton () {
       alts: [],
     })
     if (result) await updateThisPostThread()
+  } finally {
+    state.processing = false
+  }
+}
+
+async function onActivateDeleteRepostButton () {
+  blurElement()
+  if (props.post.viewer.repost == null) return
+  state.repostMenuDisplay = false
+  state.processing = true
+  try {
+    await mainState.atp.deleteRepost(props.post.viewer.repost)
+    await updateThisPostThread()
   } finally {
     state.processing = false
   }
@@ -110,23 +127,6 @@ async function onActivateLikeButton () {
     await updateThisPostThread()
   } finally {
     state.processing = false
-  }
-}
-
-async function onActivateRepostMenuTrigger () {
-  // 未リポストであればリポストメニューを開閉する
-  if (props.post.viewer.repost == null) {
-    state.repostMenuDisplay = !state.repostMenuDisplay
-  // リポスト済みであればリポストを削除する
-  } else {
-    state.repostMenuDisplay = false
-    state.processing = true
-    try {
-      await mainState.atp.deleteRepost(props.post.viewer.repost)
-      await updateThisPostThread()
-    } finally {
-      state.processing = false
-    }
   }
 }
 
@@ -294,9 +294,19 @@ async function updateThisPostThread () {
 
             <!-- リポストメニュー -->
             <MenuTicker v-if="state.repostMenuDisplay">
-              <button @click.stop="onActivateRepostButton">
+              <button
+                v-if="post.viewer.repost == null"
+                @click.stop="onActivateSendRepostButton"
+              >
                 <SVGIcon name="repost" />
                 <span>{{ $t("sendRepost") }}</span>
+              </button>
+              <button
+                v-else
+                @click.stop="onActivateDeleteRepostButton"
+              >
+                <SVGIcon name="repost" />
+                <span>{{ $t("deleteRepost") }}</span>
               </button>
               <button @click.stop="onActivateQuoteRepostButton">
                 <SVGIcon name="quoteRepost" />
