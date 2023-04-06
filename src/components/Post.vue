@@ -358,7 +358,10 @@ async function updateThisPostThread () {
   position: relative;
   &[data-focus="true"]:not([data-position="preview"]) {
     background-color: rgba(var(--accent-color), 0.125);
-    user-select: text;
+
+      & > .body > .body__right {
+      user-select: text;
+    }
   }
   &[data-position="postInPost"] {
     font-size: 0.875em;
