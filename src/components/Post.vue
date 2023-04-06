@@ -196,11 +196,7 @@ async function updateThisPostThread () {
       <div class="body__right">
         <div class="body__header">
           <!-- 表示名 -->
-          <a
-            class="textlink display-name"
-            tabindex="0"
-            @click.stop="onActivateProfileLink(post.author?.handle)"
-          >{{ post.author?.displayName }}</a>
+          <div class="display-name">{{ post.author?.displayName }}</div>
 
           <!-- ハンドル -->
           <div class="handle">{{ post.author?.handle }}</div>
@@ -496,7 +492,6 @@ async function updateThisPostThread () {
 
 .display-name {
   color: rgba(var(--fg-color), 0.75);
-  cursor: pointer;
   font-size: 0.875em;
   font-weight: bold;
   line-height: 1.25;
