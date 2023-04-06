@@ -14,6 +14,7 @@ import deleteLike from "@/composables/atp-wrapper/delete-like"
 import deletePost from "@/composables/atp-wrapper/delete-post"
 import deleteRepost from "@/composables/atp-wrapper/delete-repost"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
+import fetchBlob from "@/composables/atp-wrapper/fetch-blob"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
 import fetchHotFeeds from "@/composables/atp-wrapper/fetch-hot-feeds"
@@ -58,6 +59,7 @@ prototype.deleteLike = deleteLike
 prototype.deletePost = deletePost
 prototype.deleteRepost = deleteRepost
 prototype.fetchAuthorFeed = fetchAuthorFeed
+prototype.fetchBlob = fetchBlob
 prototype.fetchFollowers = fetchFollowers
 prototype.fetchFollowings = fetchFollowings
 prototype.fetchHotFeeds = fetchHotFeeds

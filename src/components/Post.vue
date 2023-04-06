@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
+import BlobImage from "@/components/BlobImage.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
@@ -46,12 +47,6 @@ function onActivateReplierLink () {
 
 async function onActivateProfileLink (handle: string) {
   await router.push({ name: "profile-post", query: { handle } })
-}
-
-function onActivateImage (largeUri: string, smallUri: string) {
-  mainState.imagePopupProps.largeUri = largeUri
-  mainState.imagePopupProps.smallUri = smallUri
-  mainState.imagePopupProps.display = true
 }
 
 async function onActivateReplyButton () {
@@ -245,13 +240,8 @@ async function updateThisPostThread () {
         <div
           v-for="image of post.embed.images"
           class="image"
-          @click.stop="onActivateImage(image.fullsize, image.thumb)"
         >
-          <img
-            loading="lazy"
-            :src="image.thumb ?? '/img/void.png'"
-            :alt="image.alt"
-          />
+          <BlobImage :image="image" />
         </div>
       </div>
 

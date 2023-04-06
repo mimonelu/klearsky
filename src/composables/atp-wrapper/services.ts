@@ -16,6 +16,7 @@ export function saveData(this: TIAtpWrapper) {
 export function coherentResponses (responses: Array<any>) {
   // Blob な image は暫定的に削除
   // TODO: 対応すること
+  /*
   traverseJson(responses, (key: string, value: any, parent: any) => {
     if (value.images != null && value.images.some((image: any) => image.image != null)) {
       const images = value.images
@@ -23,6 +24,7 @@ export function coherentResponses (responses: Array<any>) {
       value.__images = images
     }
   })
+  */
 
   // embeds[0] -> embed
   traverseJson(responses, (key: string, value: any, parent: any) => {

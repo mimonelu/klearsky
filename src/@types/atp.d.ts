@@ -40,6 +40,21 @@ type TTReason = {
   indexedAt: string
 }
 
+type TTImage = {
+  image?: {
+    mimeType: string
+    ref: {
+      $link: string
+    }
+    size: number
+  }
+
+  thumb?: string
+  fullsize?: string
+
+  alt: string
+}
+
 type TTPost = {
   uri: string
   cid: string

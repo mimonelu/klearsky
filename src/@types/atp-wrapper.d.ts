@@ -74,6 +74,7 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchBlob(this: TIAtpWrapper, cid: string): Promise<null | Uint8Array>
   fetchFollowings(
     this: TIAtpWrapper,
     users: Array<TTUser> | Array<TTUser>,
