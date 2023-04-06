@@ -21,6 +21,17 @@ function deleteAccount (session: TTSession) {
   mainState.atp.logout(session.did)
   if (mainState.atp.session?.did === session.did) location.reload()
 }
+
+function getDidColor (did: string): string {
+  return "#" + did
+    .replace("did:plc:", "")
+    .split("")
+    .map(c => c.charCodeAt(0).toString(16))
+    .join("")
+    .split("")
+    .splice(0, 6)
+    .join("")
+}
 </script>
 
 <template>
@@ -37,6 +48,7 @@ function deleteAccount (session: TTSession) {
         <img
           class="account__image"
           src="/img/void-avatar.png"
+          :style="{ '--color': getDidColor(session.did) }"
         >
         <div class="account__handle">{{ session.handle }}</div>
         <div class="account__service">{{ session.__service }}</div>
@@ -88,6 +100,8 @@ function deleteAccount (session: TTSession) {
   }
 
   &__image {
+    background-image: radial-gradient(closest-side, transparent, var(--color));
+    border-radius: var(--border-radius);
     grid-area: i;
     width: 3rem;
     height: 3rem;

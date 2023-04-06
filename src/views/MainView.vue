@@ -196,7 +196,7 @@ function updateSettings () {
 }
 
 function forceUpdate () {
-  state.updateKey = Math.random()
+  state.updateKey = new Date().getTime()
 }
 
 async function autoLogin () {
