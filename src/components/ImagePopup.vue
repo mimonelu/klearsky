@@ -22,10 +22,14 @@ const state = reactive<{
 })
 
 function startDrag (event: MouseEvent | TouchEvent) {
-  state.mode = true
   const e = (event as TouchEvent).touches != null
     ? (event as TouchEvent).touches[0]
     : event as MouseEvent
+
+  // 右クリックはスルー
+  if ((e as MouseEvent).button != null && (e as MouseEvent).button !== 0) return
+
+  state.mode = true
   state.x = (e.clientX / window.innerWidth)
   state.y = (e.clientY / window.innerHeight)
   // TODO: やや危険、別の方法を模索すること
