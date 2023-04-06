@@ -536,7 +536,11 @@ async function updateThisPostThread () {
   &:not(:empty) {
     margin-top: 0.75em;
   }
-  @media (min-width: $sp-width) {
+}
+.post[data-position="post"],
+.post[data-position="root"],
+.post[data-position="parent"] {
+  & > .body__footer {
     padding-left: calc(var(--avatar-size) + 1em);
   }
 }
