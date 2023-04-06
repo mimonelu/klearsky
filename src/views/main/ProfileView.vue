@@ -43,13 +43,9 @@ function closePostMenu () {
     <div
       class="banner"
       :data-has-banner="!!mainState.currentProfile?.banner"
+      :style="{ 'background-image': `url(${mainState.currentProfile?.banner ?? '/img/void.png'})` }"
       @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
-    >
-      <img
-        loading="lazy"
-        :src="mainState.currentProfile?.banner ?? '/img/void.png'"
-      >
-    </div>
+    />
     <div class="details">
       <div class="top">
         <div class="left">
@@ -157,6 +153,9 @@ function closePostMenu () {
   aspect-ratio: 3/1;
   display: block;
   &[data-has-banner="true"] {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
     cursor: pointer;
   }
   &[data-has-banner="false"] {
