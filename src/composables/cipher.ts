@@ -9,3 +9,7 @@ export function encrypt(text: string): string {
 export function decrypt(encryptedText: string): string {
   return CryptoJS.AES.decrypt(encryptedText, key).toString(CryptoJS.enc.Utf8)
 }
+
+export function encryptMD5(text: string): string {
+  return CryptoJS.MD5(text).toString()
+}

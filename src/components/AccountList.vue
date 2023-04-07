@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import { encryptMD5 } from "@/composables/cipher"
 import { blurElement } from "@/composables/misc"
 
 defineProps<{
@@ -37,14 +38,7 @@ function deleteAccount (session: TTSession) {
 }
 
 function getDidColor (did: string): string {
-  return "#" + did
-    .replace("did:plc:", "")
-    .split("")
-    .map(c => c.charCodeAt(0).toString(16))
-    .join("")
-    .split("")
-    .splice(0, 6)
-    .join("")
+  return "#" + encryptMD5(did).split("").splice(0, 6).join("")
 }
 </script>
 
@@ -114,7 +108,7 @@ function getDidColor (did: string): string {
   }
 
   &__image {
-    background-image: radial-gradient(closest-side, transparent, var(--color));
+    background-image: radial-gradient(closest-corner, transparent, var(--color));
     border-radius: var(--border-radius);
     grid-area: i;
     width: 3rem;
