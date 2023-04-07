@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
 import BlobImage from "@/components/BlobImage.vue"
 import Loader from "@/components/Loader.vue"
@@ -24,10 +24,16 @@ const state = reactive<{
   postMenuDisplay: boolean;
   repostMenuDisplay: boolean;
   processing: boolean;
+  external: ComputedRef<undefined | TTExternal>;
+  images: ComputedRef<Array<TTImage>>;
 }>({
   postMenuDisplay: false,
   repostMenuDisplay: false,
   processing: false,
+  external: computed(() => props.post.embed?.external),
+  images: computed(() => {
+    return props.post.embed?.images ?? []
+  })
 })
 
 const router = useRouter()
@@ -214,35 +220,42 @@ async function updateThisPostThread () {
     <div class="body__footer">
       <!-- リンクボックス -->
       <a
-        v-if="post.embed?.external"
+        v-if="state.external != null"
         class="external"
-        :href="post.embed.external.uri"
+        :href="state.external.uri"
         rel="noreferrer"
         target="_blank"
         @click.stop
       >
-        <div class="external__title">{{ post.embed.external.title ?? '' }}</div>
-        <div class="external__uri">{{ post.embed.external.uri }}</div>
-        <div class="external__description">{{ post.embed.external.description ?? '' }}</div>
+        <div class="external__title">{{ state.external.title ?? '' }}</div>
+        <div class="external__uri">{{ state.external.uri }}</div>
+        <div class="external__description">{{ state.external.description ?? '' }}</div>
         <img
-          v-if="typeof post.embed.external.thumb === 'string'"
+          v-if="typeof state.external.thumb === 'string'"
           class="external__thumb"
           loading="lazy"
-          :src="post.embed.external.thumb"
+          :src="state.external.thumb"
         />
       </a>
 
       <!-- 画像 -->
       <div
-        v-if="post.embed?.images != null && post.embed.images.length > 0"
+        v-if="state.images.length > 0"
         class="images"
-        :data-number-of-images="post.embed?.images.length"
+        :data-number-of-images="state.images.length"
       >
         <div
-          v-for="image of post.embed.images"
+          v-for="image of state.images"
           class="image"
         >
-          <BlobImage :image="image" />
+          <!--
+            TODO: 直前の投稿画像と同じ画像が表示される問題対策
+                  key なしでも正常に表示されるようにすること
+          -->
+          <BlobImage
+            :key="post.cid"
+            :image="image"
+          />
         </div>
       </div>
 

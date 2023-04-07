@@ -40,6 +40,13 @@ type TTReason = {
   indexedAt: string
 }
 
+type TTExternal = {
+  uri: string
+  thumb?: string
+  title?: string
+  description?: string
+}
+
 type TTImage = {
   image?: {
     mimeType: string
@@ -61,17 +68,8 @@ type TTPost = {
   author: TTUser
   embed?: {
     $type: string
-    external?: {
-      uri: string
-      thumb?: string
-      title?: string
-      description?: string
-    }
-    images?: Array<{
-      thumb: string
-      fullsize: string
-      alt: string
-    }>
+    external?: TTExternal
+    images?: Array<TTImage>
     [k: string]: unknown
   }
   record: {
