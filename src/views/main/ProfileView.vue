@@ -89,6 +89,7 @@ function closePostMenu () {
       <div class="bottom">
         <div
           class="description"
+          dir="auto"
           v-html="mainState.currentProfile?.__descriptionHtml ?? '&nbsp;'"
         />
         <div class="statistics">

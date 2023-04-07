@@ -206,6 +206,7 @@ async function updateThisPostThread () {
         <!-- 本文 -->
         <div
           class="text"
+          dir="auto"
           v-html="post.record?.__textHtml ?? post.value?.__textHtml"
         />
       </div>
