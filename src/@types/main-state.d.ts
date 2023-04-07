@@ -64,6 +64,9 @@ type MainState = {
   currentSetting: TTSetting
   saveSettings: () => void
   updateSettings: () => void
+  updateI18nSetting: () => void
+  updateColorThemeSetting: () => void
+  updateBackgroundImageSetting: () => void
 
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>

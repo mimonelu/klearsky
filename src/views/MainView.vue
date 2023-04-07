@@ -61,6 +61,9 @@ const state = reactive<MainState>({
   fetchFollowings,
   saveSettings,
   updateSettings,
+  updateI18nSetting,
+  updateColorThemeSetting,
+  updateBackgroundImageSetting,
   updateUserProfile,
   openSendPostPopup,
 })
@@ -174,18 +177,29 @@ function saveSettings () {
 }
 
 function updateSettings () {
-  if (state.currentSetting == null) return
-  if (state.currentSetting.language != null) {
+  updateI18nSetting()
+  updateColorThemeSetting()
+  updateBackgroundImageSetting()
+}
+
+function updateI18nSetting () {
+  if (state.currentSetting?.language != null) {
     $setI18n(state.currentSetting.language)
     state.forceUpdate()
   }
-  if (state.currentSetting.colorTheme != null) {
+}
+
+function updateColorThemeSetting () {
+  if (state.currentSetting?.colorTheme != null) {
     window.document.body.setAttribute(
       "data-color-theme",
       state.currentSetting.colorTheme as string
     )
   }
-  if (state.currentSetting.backgroundImage != null) {
+}
+
+function updateBackgroundImageSetting () {
+  if (state.currentSetting?.backgroundImage != null) {
     const backgroundImage = state.currentSetting.backgroundImage
       .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;")
     window.document.body.style.backgroundImage =

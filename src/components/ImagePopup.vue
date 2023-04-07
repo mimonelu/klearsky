@@ -1,20 +1,25 @@
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { inject, reactive } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import { blurElement } from "@/composables/misc"
 
 const emit = defineEmits<{(event: string): void}>()
 
-defineProps<{
+const props = defineProps<{
   largeUri: string;
   smallUri: string;
 }>()
 
+const mainState = inject("state") as MainState
+
 const state = reactive<{
+  isBlob: boolean;
   loaded: boolean;
   mode: boolean;
   x: number;
   y: number;
 }>({
+  isBlob: props.largeUri.startsWith("blob:"),
   loaded: false,
   mode: false,
   x: 0.5,
@@ -54,7 +59,7 @@ function endDrag () {
   state.y = 0.5
   state.mode = false
   // TODO: やや危険、別の方法を模索すること
-  window.document.body.style.overflowX = "unset"
+  window.document.body.style.overflowX = "hidden"
   window.document.body.style.overflowY = "scroll"
 }
 
@@ -62,7 +67,17 @@ function onLoadLargeImage () {
   state.loaded = true
 }
 
+function setWallpaper () {
+  blurElement()
+  if (!state.loaded) return
+  if (mainState.currentSetting == null) return
+  mainState.currentSetting.backgroundImage = props.largeUri
+  mainState.saveSettings()
+  mainState.updateBackgroundImageSetting()
+}
+
 function close () {
+  blurElement()
   emit("close")
 }
 </script>
@@ -73,6 +88,7 @@ function close () {
     :data-loaded="state.loaded"
     :data-mode="state.mode"
   >
+    <!-- サムネイル画像 -->
     <div
       class="image"
       :style="`
@@ -86,6 +102,7 @@ function close () {
       @mouseup="endDrag"
       @touchend.passive="endDrag"
     >
+      <!-- ラージ画像 -->
       <div
         class="image"
         :style="`
@@ -94,13 +111,26 @@ function close () {
         `"
       />
     </div>
+
+    <!-- ラージ画像の読込判断用 img 要素 -->
     <img
       class="large-image-loader"
       :src="largeUri"
       @load="onLoadLargeImage"
     >
+
+    <!-- 壁紙設定ボタン -->
     <button
-      class="closer"
+      v-if="!state.isBlob"
+      class="floating-button wallpaper-button"
+      @click.prevent="setWallpaper"
+    >
+      <SVGIcon name="wallpaper" />
+    </button>
+
+    <!-- 閉じるボタン -->
+    <button
+      class="floating-button close-button"
       @click.prevent="close"
     >
       <SVGIcon name="cross" />
@@ -127,6 +157,7 @@ function close () {
   }
 }
 
+// サムネイル画像 / ラージ画像
 .image {
   background-position: 50% 50%;
   background-repeat: no-repeat;
@@ -142,11 +173,13 @@ function close () {
   }
 }
 
+// ラージ画像の読込判断用 img 要素
 .large-image-loader {
   display: contents;
 }
 
-.closer {
+// 壁紙設定ボタン / 閉じるボタン
+.floating-button {
   background-color: rgba(0, 0, 0, 0.25);
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -154,7 +187,6 @@ function close () {
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 1rem;
   top: 1rem;
   width: 4rem;
   min-height: 4rem;
@@ -174,5 +206,20 @@ function close () {
       fill: rgb(255, 255, 255);
     }
   }
+}
+
+// 壁紙設定ボタン
+.wallpaper-button {
+  right: 6rem;
+  [data-loaded="false"] & {
+    & > .svg-icon {
+      fill: rgba(255, 255, 255, 0.25);
+    }
+  }
+}
+
+// 閉じるボタン
+.close-button {
+  right: 1rem;
 }
 </style>

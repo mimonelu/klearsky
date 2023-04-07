@@ -27,6 +27,7 @@ import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
 import translate from "@/svg/translate.svg?raw"
+import wallpaper from "@/svg/wallpaper.svg?raw"
 
 const icons: { [k: string]: string } = {
   at,
@@ -56,6 +57,7 @@ const icons: { [k: string]: string } = {
   setting,
   shimmer,
   translate,
+  wallpaper,
 }
 
 defineProps<{
