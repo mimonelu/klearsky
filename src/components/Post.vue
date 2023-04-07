@@ -227,15 +227,17 @@ async function updateThisPostThread () {
         target="_blank"
         @click.stop
       >
-        <div class="external__title">{{ state.external.title ?? '' }}</div>
-        <div class="external__uri">{{ state.external.uri }}</div>
-        <div class="external__description">{{ state.external.description ?? '' }}</div>
         <img
           v-if="typeof state.external.thumb === 'string'"
           class="external__thumb"
           loading="lazy"
           :src="state.external.thumb"
         />
+        <div class="external__meta">
+          <div class="external__title">{{ state.external.title ?? '' }}</div>
+          <div class="external__uri">{{ state.external.uri }}</div>
+          <div class="external__description">{{ state.external.description ?? '' }}</div>
+        </div>
       </a>
 
       <!-- 画像 -->
@@ -561,13 +563,21 @@ async function updateThisPostThread () {
   border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: var(--border-radius);
   cursor: pointer;
-  display: grid;
-  grid-template-rows: auto auto auto;
-  padding: 1em;
   &:focus, &:hover {
     border-color: rgba(var(--fg-color), 0.5);
   }
 
+  &__thumb {
+    aspect-ratio: 1.91 / 1;
+    border-radius: var(--border-radius);
+    display: block;
+    object-fit: cover;
+  }
+  &__meta{
+    display: grid;
+    grid-template-rows: auto auto auto;
+    padding: 1em;
+  }
   &__title,
   &__uri,
   &__description {
@@ -585,13 +595,6 @@ async function updateThisPostThread () {
   }
   &__description {
     font-size: 0.875em;
-  }
-  &__thumb {
-    aspect-ratio: 1.91 / 1;
-    border-radius: var(--border-radius);
-    display: block;
-    margin-top: 0.5em;
-    object-fit: cover;
   }
 }
 
