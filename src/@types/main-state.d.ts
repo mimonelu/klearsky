@@ -21,15 +21,19 @@ type MainState = {
   timelineFeeds: Array<TTFeed>
   timelineCursor?: string
 
-  currentProfile: null | TTProfile
-  currentFeeds: Array<TTFeed>
-  currentCursor?: string
-  currentPosts: Array<TTPost>
   currentPath: string
   currentQuery: LocationQuery
 
+  currentPosts: Array<TTPost>
+
+  inSameProfilePage: boolean
+  currentProfile: null | TTProfile
+  currentAuthorFeeds: Array<TTFeed>
+  currentAuthorCursor?: string
   currentFollowers: Array<TTUser>
+  currentFollowersCursor?: string
   currentFollowings: Array<TTUser>
+  currentFollowingsCursor?: string
 
   currentHotFeeds: Array<TTFeed>
   currentHotCursor?: string

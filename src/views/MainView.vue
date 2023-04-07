@@ -101,9 +101,25 @@ onUnmounted(() => {
 
 const router = useRouter()
 
-router.beforeEach(() => {
-  state.currentFeeds?.splice(0)
-  state.currentCursor = undefined
+router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+  state.currentPath = to.fullPath
+  state.currentQuery = to.query
+
+  if (to.path.startsWith("/profile")) {
+    if (state.currentQuery.handle !== state.currentProfile?.handle)
+      state.currentProfile = null
+
+    state.inSameProfilePage = state.currentProfile != null
+    if (!state.inSameProfilePage) {
+      state.currentAuthorFeeds?.splice(0)
+      state.currentAuthorCursor = undefined
+      state.currentFollowers?.splice(0)
+      state.currentFollowersCursor = undefined
+      state.currentFollowings?.splice(0)
+      state.currentFollowingsCursor = undefined
+    }
+  }
+
   state.currentPosts?.splice(0)
 })
 
@@ -113,16 +129,11 @@ router.afterEach(async (to: RouteLocationNormalized) => {
     window.scrollTo(0, 0)
   }
 
-  state.currentPath = router.currentRoute.value.fullPath
-  state.currentQuery = router.currentRoute.value.query
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "home" && state.timelineFeeds.length > 0) return
 
   // HOT の取得はログイン後 or カーソルボタン押下時 or currentHotFeeds が空の時のみ
   if (to.name === "hot" && state.currentHotFeeds.length > 0) return
-
-  if (state.currentQuery.handle !== state.currentProfile?.handle)
-    state.currentProfile = null
 
   state.processing = true
   try {
@@ -137,12 +148,15 @@ function resetState () {
   state.userProfile = null
   state.timelineFeeds = []
   state.timelineCursor = undefined
-  state.currentProfile = null
-  state.currentFeeds = []
-  state.currentCursor = undefined
   state.currentPosts = []
+  state.inSameProfilePage = false
+  state.currentProfile = null
+  state.currentAuthorFeeds = []
+  state.currentAuthorCursor = undefined
   state.currentFollowers = []
+  state.currentFollowersCursor = undefined
   state.currentFollowings = []
+  state.currentFollowingsCursor = undefined
   state.currentHotFeeds = []
   state.currentHotCursor = undefined
   state.currentSearchKeywordTerm = ""
@@ -255,23 +269,29 @@ async function processPage (pageName?: null | RouteRecordName) {
 
   switch (pageName) {
     case "profile-post": {
-      const tasks: Array<Promise<void>> = [fetchCurrentAuthorFeed("new")]
+      const tasks: Array<Promise<void>> = []
+      if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
+        tasks.push(fetchCurrentAuthorFeed("new"))
       if (handle !== state.currentProfile?.handle)
-       tasks.push(fetchCurrentProfile(handle as string))
+        tasks.push(fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
     case "profile-following": {
-      const tasks: Array<Promise<void>> = [fetchFollowings("new")]
+      const tasks: Array<Promise<void>> = []
+      if (!state.inSameProfilePage || state.currentFollowings.length === 0)
+        tasks.push(fetchFollowings("new"))
       if (handle !== state.currentProfile?.handle)
-       tasks.push(fetchCurrentProfile(handle as string))
+        tasks.push(fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
     case "profile-follower": {
-      const tasks: Array<Promise<void>> = [fetchFollowers("new")]
+      const tasks: Array<Promise<void>> = []
+      if (!state.inSameProfilePage || state.currentFollowers.length === 0)
+        tasks.push(fetchFollowers("new"))
       if (handle !== state.currentProfile?.handle)
-       tasks.push(fetchCurrentProfile(handle as string))
+        tasks.push(fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
@@ -351,26 +371,36 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   if (!handle) return
   const cursor: undefined | string =
     await state.atp.fetchAuthorFeed(
-      state.currentFeeds as Array<TTFeed>,
+      state.currentAuthorFeeds as Array<TTFeed>,
       handle,
       consts.limitOfFetchAuthorFeeds,
-      direction === "old" ? state.currentCursor : undefined
+      direction === "old" ? state.currentAuthorCursor : undefined
     )
-  if (cursor != null) state.currentCursor = cursor
+  if (cursor != null) state.currentAuthorCursor = cursor
 }
 
 async function fetchFollowings (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchFollowings(state.currentFollowings, handle, consts.limitOfFetchFollows, direction === "new" ? undefined : state.currentCursor)
-  state.currentCursor = cursor
+  const cursor: undefined | string = await state.atp.fetchFollowings(
+    state.currentFollowings,
+    handle,
+    consts.limitOfFetchFollows,
+    direction === "new" ? undefined : state.currentFollowingsCursor
+  )
+  state.currentFollowingsCursor = cursor
 }
 
 async function fetchFollowers (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchFollowers(state.currentFollowers, handle, consts.limitOfFetchFollows, direction === "new" ? undefined : state.currentCursor)
-  state.currentCursor = cursor
+  const cursor: undefined | string = await state.atp.fetchFollowers(
+    state.currentFollowers,
+    handle,
+    consts.limitOfFetchFollows,
+    direction === "new" ? undefined : state.currentFollowersCursor
+  )
+  state.currentFollowersCursor = cursor
 }
 
 function clearNotificationInterval () {
