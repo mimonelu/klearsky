@@ -64,7 +64,7 @@ function close () {
   overscroll-behavior: none;
   position: relative;
   max-width: calc(100% - 2rem);
-  max-height: calc(100vh - 2rem);
+  max-height: calc(100% - 2rem);
 }
 
 .popup-header {
@@ -85,6 +85,7 @@ function close () {
   flex-direction: column;
   grid-gap: 1rem;
   overflow-y: auto;
+  overscroll-behavior: none;
   padding: 0 2rem 2rem 2rem;
   @include scroll-bar();
   &:first-child {
