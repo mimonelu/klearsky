@@ -110,7 +110,7 @@ function closePostMenu () {
           >
             <SVGIcon name="menu" />
             <PostAndProfileMenuTicker
-              v-if="state.profileMenuDisplay"
+              :display="state.profileMenuDisplay"
               :translateText="mainState.currentProfile?.description"
               :copyText="mainState.currentProfile?.description"
               :openSource="mainState.currentProfile"
@@ -287,8 +287,13 @@ function closePostMenu () {
 
   .menu-ticker:deep() {
     .menu-ticker--inner {
-      top: 0;
-      right: 3em;
+      right: 0.25em;
+      &[data-to-down="true"] {
+        top: 2.5em;
+      }
+      &[data-to-down="false"] {
+        bottom: 2.5em;
+      }
     }
   }
 }

@@ -1,7 +1,38 @@
+<script lang="ts" setup>
+import { nextTick, ref, watch } from "vue"
+
+const props = defineProps<{
+  display: boolean;
+}>()
+
+const menuTickerOverlay = ref()
+const menuTickerInner = ref()
+
+watch(() => props.display, () => {
+  nextTick(() => {
+    if (menuTickerOverlay.value == null) return
+    if (menuTickerInner.value == null) return
+    const overlayRect = menuTickerOverlay.value.getBoundingClientRect()
+    const innerRect = menuTickerInner.value.getBoundingClientRect()
+    const heightDiff = (overlayRect.bottom / 2) - innerRect.y
+    menuTickerInner.value.setAttribute("data-to-down", heightDiff >= 0)
+  })
+})
+</script>
+
 <template>
-  <div class="menu-ticker">
-    <div class="menu-ticker--overlay" />
-    <div class="menu-ticker--inner">
+  <div
+    v-if="display"
+    class="menu-ticker"
+  >
+    <div
+      class="menu-ticker--overlay"
+      ref="menuTickerOverlay"
+    />
+    <div
+      class="menu-ticker--inner"
+      ref="menuTickerInner"
+    >
       <slot />
     </div>
   </div>

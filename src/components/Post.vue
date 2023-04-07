@@ -283,7 +283,7 @@ async function updateThisPostThread () {
             <span>{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
 
             <!-- リポストメニュー -->
-            <MenuTicker v-if="state.repostMenuDisplay">
+            <MenuTicker :display="state.repostMenuDisplay">
               <button
                 v-if="post.viewer.repost == null"
                 @click.stop="onActivateSendRepostButton"
@@ -327,7 +327,7 @@ async function updateThisPostThread () {
 
             <!-- ポストメニュー -->
             <PostAndProfileMenuTicker
-              v-if="state.postMenuDisplay"
+              :display="state.postMenuDisplay"
               :translateText="post.record?.text"
               :copyText="post.record?.text"
               :deletePostUri="post.author?.did === mainState.atp.session?.did
@@ -663,7 +663,12 @@ async function updateThisPostThread () {
   .menu-ticker:deep() {
     .menu-ticker--inner {
       left: 0;
-      bottom: 2.5em;
+      &[data-to-down="true"] {
+        top: 2.5em;
+      }
+      &[data-to-down="false"] {
+        bottom: 2.5em;
+      }
     }
   }
 }
@@ -684,7 +689,13 @@ async function updateThisPostThread () {
 
   .menu-ticker:deep() {
     .menu-ticker--inner {
-      right: 2.5em;
+      right: 0;
+      &[data-to-down="true"] {
+        top: 2.5em;
+      }
+      &[data-to-down="false"] {
+        bottom: 2.5em;
+      }
     }
   }
 }

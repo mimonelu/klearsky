@@ -8,6 +8,7 @@ import { blurElement } from "@/composables/misc"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
+  display: boolean;
   translateText?: string;
   copyText?: string;
   deletePostUri?: string;
@@ -50,7 +51,7 @@ function openSource () {
 </script>
 
 <template>
-  <MenuTicker>
+  <MenuTicker :display="display">
     <button
       v-if="translateText != null"
       @click.stop="translateText"
