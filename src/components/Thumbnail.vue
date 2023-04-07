@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
+import Loader from "@/components/Loader.vue"
 
 const props = defineProps<{
   image?: TTImage
@@ -65,10 +66,22 @@ function onActivateImage () {
 </script>
 
 <template>
-  <img
-    loading="lazy"
-    :src="state.src ?? '/img/void.png'"
-    :alt="image?.alt ?? ''"
-    @click.stop="onActivateImage"
-  />
+  <div class="thumbnail">
+    <img
+      loading="lazy"
+      :src="state.src ?? '/img/void.png'"
+      :alt="image?.alt ?? ''"
+      @click.stop="onActivateImage"
+    />
+    <Loader
+      v-if="!state.loaded"
+      @click.stop
+    />
+  </div>
 </template>
+
+<style lanf="scss" scoped>
+.thumbnail {
+  position: relative;
+}
+</style>

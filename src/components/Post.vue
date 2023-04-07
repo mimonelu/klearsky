@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-import BlobImage from "@/components/BlobImage.vue"
+import Thumbnail from "@/components/Thumbnail.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
@@ -252,7 +252,7 @@ async function updateThisPostThread () {
             TODO: 直前の投稿画像と同じ画像が表示される問題対策
                   key なしでも正常に表示されるようにすること
           -->
-          <BlobImage
+          <Thumbnail
             :key="post.cid"
             :image="image"
           />
@@ -623,16 +623,18 @@ async function updateThisPostThread () {
 
 .image {
   border-radius: var(--border-radius);
-  cursor: pointer;
-  display: block;
   overflow: hidden;
 
-  & > img {
-    aspect-ratio: 16 / 9;
-    display: block;
-    object-fit: cover;
-    width: 100%;
+  .thumbnail {
+    cursor: pointer;
     height: 100%;
+    &:deep() > img {
+      aspect-ratio: 16 / 9;
+      display: block;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 
