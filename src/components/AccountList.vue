@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
@@ -8,6 +8,20 @@ defineProps<{
 }>()
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  sortedSessions: ComputedRef<Array<TTSession>>;
+}>({
+  sortedSessions: computed(() => {
+    const sessionValues = Object.values(mainState.atp.data.sessions)
+      .sort((a: TTSession, b: TTSession) => {
+        const aKey = `${a.__service} ${a.handle}`
+        const bKey = `${b.__service} ${b.handle}`
+        return aKey < bKey ? - 1 : aKey > bKey ? 1 : 0
+      })
+    return sessionValues
+  }),
+})
 
 async function login (session: TTSession) {
   blurElement()
@@ -37,7 +51,7 @@ function getDidColor (did: string): string {
 <template>
   <div class="account-list">
     <div
-      v-for="session in mainState.atp.data.sessions"
+      v-for="session in state.sortedSessions"
       class="account"
       :data-is-me="mainState.atp.session?.did === session.did"
     >
