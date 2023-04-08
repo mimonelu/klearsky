@@ -50,23 +50,25 @@ async function fetchUsers (direction: "new" | "old") {
         :key="user.did"
         :user="user as TTUser"
       >
-        <div class="relations">
-          <FollowButton
-            v-if="user.did !== mainState.atp.session?.did"
-            :viewer="user.viewer"
-            :did="user.did"
-            :declarationDid="user.did"
-          />
-          <div
-            v-if="user.viewer.followedBy"
-            class="you-followed"
-          >{{ $t("followed") }}</div>
-          <MuteButton
-            v-if="user.did !== mainState.atp.session?.did"
-            :handle="user.handle"
-            :viewer="user.viewer"
-          />
-        </div>
+        <template v-slot:bottom>
+          <div class="relations">
+            <div
+              v-if="user.viewer.followedBy"
+              class="you-followed"
+            >{{ $t("followed") }}</div>
+            <FollowButton
+              v-if="user.did !== mainState.atp.session?.did"
+              :viewer="user.viewer"
+              :did="user.did"
+              :declarationDid="user.did"
+            />
+            <MuteButton
+              v-if="user.did !== mainState.atp.session?.did"
+              :handle="user.handle"
+              :viewer="user.viewer"
+            />
+          </div>
+        </template>
       </UserBox>
     </div>
     <button

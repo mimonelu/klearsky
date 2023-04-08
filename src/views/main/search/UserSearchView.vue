@@ -90,7 +90,7 @@ async function openProfile (handle: string) {
           class="user"
           :user="user"
           @click.prevent="openProfile(user.handle)"
-        >{{ user.description }}</UserBox>
+        />
       </div>
       <button
         class="fetch-button"

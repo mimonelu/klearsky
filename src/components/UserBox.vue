@@ -18,8 +18,9 @@ defineProps<{
     </RouterLink>
     <div class="display-name">{{ user.displayName }}</div>
     <div class="handle">{{ user.handle }}</div>
-    <div class="description">
-      <slot />
+    <div class="description">{{ user.description }}</div>
+    <div class="bottom">
+      <slot name="bottom" />
     </div>
   </div>
 </template>
@@ -27,13 +28,14 @@ defineProps<{
 <style lang="scss" scoped>
 .user-box {
   display: grid;
-  grid-gap: 0.25rem 0.5rem;
+  grid-gap: 0 0.5rem;
   grid-template-columns: min-content auto 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
   grid-template-areas:
     "a n h"
-    "a d d";
-  align-items: flex-end;
+    "a d d"
+    "b b b";
+  align-items: center;
   padding: 0 1rem;
 }
 
@@ -64,9 +66,24 @@ defineProps<{
 
 .description {
   grid-area: d;
+  font-size: 0.875rem;
   line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.bottom {
+  grid-area: b;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  &:not(:empty) {
+    margin-top: 0.25rem;
+  }
 }
 </style>
