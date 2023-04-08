@@ -468,7 +468,7 @@ function closeSendPostPopup (done: boolean) {
       class="background-image"
       :style="{
         'background-image': state.backgroundImage,
-        'opacity': state.currentSetting.backgroundOpacity
+        'opacity': 1.0 - (state.currentSetting.backgroundOpacity ?? 0)
       }"
     />
 
