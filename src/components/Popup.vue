@@ -84,6 +84,7 @@ function close () {
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: none;
   padding: 0 2rem 2rem 2rem;

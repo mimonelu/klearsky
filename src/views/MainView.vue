@@ -39,6 +39,9 @@ const state = reactive<MainState>({
   mounted: false,
   processing: false,
   loginPopupDisplay: false,
+  loginPopupAutoDisplay: computed((): boolean => {
+    return state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)
+  }),
   sendPostPopupProps: {
     display: false,
     type: "post",
@@ -469,7 +472,10 @@ function closeSendPostPopup (done: boolean) {
       }"
     />
 
-    <div class="main">
+    <div
+      v-show="!state.loginPopupAutoDisplay"
+      class="main"
+    >
       <div class="main-menu-wrapper">
         <MainMenu />
       </div>
@@ -479,8 +485,8 @@ function closeSendPostPopup (done: boolean) {
       <div class="sub-menu-wrapper">
         <SubMenu />
       </div>
+      <ScrollButton />
     </div>
-    <ScrollButton />
     <ImagePopup
       v-if="state.imagePopupProps.display"
       :largeUri="state.imagePopupProps.largeUri"
@@ -494,7 +500,7 @@ function closeSendPostPopup (done: boolean) {
       @close="closeSendPostPopup"
     />
     <LoginPopup
-      v-if="state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)"
+      v-if="state.loginPopupAutoDisplay"
       @login="manualLogin"
     />
     <Loader v-if="state.processing" />

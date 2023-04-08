@@ -51,6 +51,7 @@ type MainState = {
   notificationCount: number
 
   loginPopupDisplay: boolean
+  loginPopupAutoDisplay: any // TODO:
 
   sendPostPopupProps: {
     display: boolean
@@ -70,8 +71,7 @@ type MainState = {
   updateSettings: () => void
   updateI18nSetting: () => void
   updateColorThemeSetting: () => void
-  // TODO:
-  backgroundImage: any
+  backgroundImage: any // TODO:
 
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>

@@ -100,7 +100,7 @@ async function submitCallback () {
 $width: 800px;
 
 .login-popup:deep() {
-  background-color: rgb(var(--bg-color));
+  position: unset;
 
   .popup {
     border: unset;
@@ -108,7 +108,7 @@ $width: 800px;
     margin: unset;
     width: $width;
     max-width: 100%;
-    max-height: 100vh;
+    max-height: 100%;
 
     &-header {
       flex-direction: column;
