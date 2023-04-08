@@ -196,7 +196,7 @@ function saveSettings () {
   if (state.settings[did].backgroundImage == null)
     state.settings[did].backgroundImage = ""
   if (state.settings[did].backgroundOpacity == null)
-    state.settings[did].backgroundOpacity = 0
+    state.settings[did].backgroundOpacity = 0.5
   state.currentSetting = state.settings[did]
   storage.save("settings", state.settings)
 }
