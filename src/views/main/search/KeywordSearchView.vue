@@ -42,7 +42,8 @@ async function fetchNewResults () {
     <div class="main">
       <div class="results">
         <RouterLink
-          v-for="result of mainState.currentSearchKeywordResults"
+          v-for="result, resultIndex of mainState.currentSearchKeywordResults"
+          :key="resultIndex"
           :to="{ name: 'post', query: { postUri: `at://${result.user?.did}/${result.tid}` } }"
           class="item"
         >

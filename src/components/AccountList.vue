@@ -46,6 +46,7 @@ function getDidColor (did: string): string {
   <div class="account-list">
     <div
       v-for="session in state.sortedSessions"
+      :key="session.did"
       class="account"
       :data-is-me="mainState.atp.session?.did === session.did"
     >

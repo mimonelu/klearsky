@@ -24,7 +24,10 @@ function removeThisPost (uri: string) {
 
 <template>
   <div class="post-view">
-    <template v-for="post, postIndex of mainState.currentPosts">
+    <template
+      v-for="post, postIndex of mainState.currentPosts"
+      :key="post.cid"
+    >
       <Post
         position="post"
         :post="post"

@@ -247,7 +247,8 @@ async function updateThisPostThread () {
         :data-number-of-images="state.images.length"
       >
         <div
-          v-for="image of state.images"
+          v-for="image, imageIndex of state.images"
+          :key="imageIndex"
           class="image"
         >
           <!--

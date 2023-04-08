@@ -109,13 +109,16 @@ async function submitCallback () {
       <EasyForm v-bind="easyFormProps">
         <template v-slot:after>
           <dl v-if="state.images.length > 0">
-            <dd v-for="_, index of state.images">
+            <dd
+              v-for="_, altIndex of state.images"
+              :key="altIndex"
+            >
               <input
-                v-model="state.alts[index]"
+                v-model="state.alts[altIndex]"
                 type="text"
                 autocapitalize="off"
                 autocomplete="off"
-                :placeholder="`${$t('alts')} ${index + 1}`"
+                :placeholder="`${$t('alts')} ${altIndex + 1}`"
                 spellcheck="false"
                 class="textbox"
               />

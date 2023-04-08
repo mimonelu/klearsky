@@ -83,7 +83,8 @@ function removeThisPost (uri: string) {
     </button>
     <div class="feeds">
       <Feed
-        v-for="feed of feeds"
+        v-for="feed, feedIndex of feeds"
+        :key="feedIndex"
         :feed="feed"
         @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"

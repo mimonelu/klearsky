@@ -82,6 +82,7 @@ function getCharacterLength (item: TTEasyFormItem): number {
   >
     <dl
       v-for="item, index of data"
+      :key="index"
       v-show="item.display !== false"
     >
       <dt v-if="item.label != null">{{ item.label }}</dt>

@@ -86,6 +86,7 @@ async function openProfile (handle: string) {
       <div class="users">
         <UserBox
           v-for="user of mainState.currentSearchUsers"
+          :key="user.did"
           class="user"
           :user="user"
           @click.prevent="openProfile(user.handle)"

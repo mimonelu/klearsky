@@ -63,6 +63,7 @@ function deleteFile (index: number) {
     </label>
     <div
       v-for="preview, index of state.previews"
+      :key="index"
       class="preview-box"
       :data-has-image="preview != null"
       :style="{ 'background-image': `url(${preview})` }"

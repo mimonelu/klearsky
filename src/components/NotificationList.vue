@@ -51,6 +51,7 @@ async function openSubject (notification: TTNotification) {
   <div class="notification-list">
     <div
       v-for="notification, index of mainState.notifications"
+      :key="notification.cid"
       class="notification"
       tabindex="0"
       :data-reason="notification.reason"

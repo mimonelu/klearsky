@@ -46,6 +46,7 @@ async function fetchUsers (direction: "new" | "old") {
     <div class="users">
       <UserBox
         v-for="user of currentUsers"
+        :key="user.did"
         :user="user as TTUser"
       >
         <div class="relations">

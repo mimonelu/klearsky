@@ -26,7 +26,8 @@ function changeSetting () {
               @change="changeSetting"
             >
               <option
-                v-for="language in languages"
+                v-for="language, languageIndex in languages"
+                :key="languageIndex"
                 :value="language.value"
                 :selected="language.value === mainState.currentSetting.language"
               >{{ $t(language.label) }}</option>
@@ -45,7 +46,8 @@ function changeSetting () {
               @change="changeSetting"
             >
               <option
-                v-for="colorTheme in settings.colorThemes"
+                v-for="colorTheme, colorThemeIndex in settings.colorThemes"
+                :key="colorThemeIndex"
                 :value="colorTheme.value"
                 :selected="colorTheme.value === mainState.currentSetting.colorTheme"
               >{{ $t(colorTheme.label) }}</option>
@@ -77,7 +79,8 @@ function changeSetting () {
               @change="changeSetting"
             >
               <option
-                v-for="backgroundOpacity in settings.backgroundOpacities"
+                v-for="backgroundOpacity, backgroundOpacityIndex in settings.backgroundOpacities"
+                :key="backgroundOpacityIndex"
                 :value="backgroundOpacity.value"
                 :selected="backgroundOpacity.value === mainState.currentSetting.backgroundOpacity"
               >{{ $t(backgroundOpacity.label) }}</option>
