@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import FollowButton from "@/components/FollowButton.vue"
+import MuteButton from "@/components/MuteButton.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
 import { blurElement } from "@/composables/misc"
@@ -60,6 +61,11 @@ async function fetchUsers (direction: "new" | "old") {
             v-if="user.viewer.followedBy"
             class="you-followed"
           >{{ $t("followed") }}</div>
+          <MuteButton
+            v-if="user.did !== mainState.atp.session?.did"
+            :handle="user.handle"
+            :viewer="user.viewer"
+          />
         </div>
       </UserBox>
     </div>
@@ -97,7 +103,7 @@ async function fetchUsers (direction: "new" | "old") {
 .follow-button {
   font-size: 0.875rem;
   padding: 0.25rem 0;
-  min-width: 8rem;
+  min-width: 7rem;
 }
 
 .you-followed {
@@ -106,5 +112,15 @@ async function fetchUsers (direction: "new" | "old") {
   align-items: center;
   font-size: 0.875rem;
   line-height: 1.25;
+}
+
+.mute-button {
+  font-size: 0.875rem;
+  margin-left: auto;
+  padding: 0.25rem 0;
+  min-width: 3rem;
+  &:deep() span {
+    display: none;
+  }
 }
 </style>

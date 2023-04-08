@@ -67,6 +67,8 @@ interface TIAtpWrapper {
   deleteFollow(this: TIAtpWrapper, uri: string): Promise<boolean>
   deletePost(this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost(this: TIAtpWrapper, uri: string): Promise<boolean>
+  disableMute(this: TIAtpWrapper, handle: string): Promise<boolean>
+  enableMute(this: TIAtpWrapper, handle: string): Promise<boolean>
   fetchAuthorFeed(
     this: TIAtpWrapper,
     oldFeeds: Array<TTFeed>,

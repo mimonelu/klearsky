@@ -3,6 +3,7 @@ import { inject, reactive } from "vue"
 import { RouterView } from "vue-router"
 import type { LocationQueryValue } from "vue-router"
 import FollowButton from "@/components/FollowButton.vue"
+import MuteButton from "@/components/MuteButton.vue"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
@@ -62,31 +63,34 @@ function closePostMenu () {
         <div class="right">
           <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
           <div class="handle">{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</div>
-          <div class="right-bottom">
-            <RouterLink
-              v-if="isUserProfile()"
-              to="/profile/edit"
-              class="button"
-            >
-              <SVGIcon name="edit" />
-              <span>{{ $t("edit") }}</span>
-            </RouterLink>
-            <template v-else>
-              <FollowButton
-                v-if="mainState.currentProfile != null"
-                :viewer="mainState.currentProfile.viewer"
-                :did="mainState.currentProfile.did"
-                :declarationDid="mainState.currentProfile.did"
-              />
-              <div
-                v-if="isFollowed()"
-                class="followed"
-              >{{ $t("followed") }}</div>
-            </template>
-          </div>
+          <div
+            v-if="!isUserProfile() && isFollowed()"
+            class="followed"
+          >{{ $t("followed") }}</div>
         </div>
       </div>
       <div class="bottom">
+        <div class="button-container">
+          <RouterLink
+            v-if="isUserProfile()"
+            to="/profile/edit"
+            class="button"
+          >
+            <SVGIcon name="edit" />
+            <span>{{ $t("editProfile") }}</span>
+          </RouterLink>
+          <FollowButton
+            v-if="!isUserProfile() && mainState.currentProfile != null"
+            :viewer="mainState.currentProfile.viewer"
+            :did="mainState.currentProfile.did"
+            :declarationDid="mainState.currentProfile.did"
+          />
+          <MuteButton
+            v-if="!isUserProfile() && mainState.currentProfile != null"
+            :handle="mainState.currentProfile.handle"
+            :viewer="mainState.currentProfile.viewer"
+          />
+        </div>
         <div
           class="description"
           dir="auto"
@@ -197,7 +201,7 @@ function closePostMenu () {
 .right {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  flex-grow: 1;
 }
 
 .display-name {
@@ -211,20 +215,9 @@ function closePostMenu () {
 .handle {
   color: rgba(var(--fg-color), 0.75);
   line-height: 1.25;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   user-select: text;
   word-break: break-all;
-}
-
-.right-bottom {
-  display: flex;
-  align-items: center;
-  grid-gap: 0.5rem;
-  margin-top: auto;
-
-  .button {
-    font-size: 0.875rem;
-  }
 }
 
 .followed {
@@ -238,6 +231,21 @@ function closePostMenu () {
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  grid-gap: 0.5rem;
+
+  .button {
+    font-size: 0.875rem;
+  }
+}
+
+.mute-button {
+  margin-left: auto;
 }
 
 .description {

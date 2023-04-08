@@ -27,6 +27,8 @@ import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
 import translate from "@/svg/translate.svg?raw"
+import volumeOff from "@/svg/volume-off.svg?raw"
+import volumeOn from "@/svg/volume-on.svg?raw"
 import wallpaper from "@/svg/wallpaper.svg?raw"
 
 const icons: { [k: string]: string } = {
@@ -57,6 +59,8 @@ const icons: { [k: string]: string } = {
   setting,
   shimmer,
   translate,
+  volumeOff,
+  volumeOn,
   wallpaper,
 }
 
