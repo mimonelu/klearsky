@@ -70,7 +70,8 @@ type MainState = {
   updateSettings: () => void
   updateI18nSetting: () => void
   updateColorThemeSetting: () => void
-  updateBackgroundImageSetting: () => void
+  // TODO:
+  backgroundImage: any
 
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>

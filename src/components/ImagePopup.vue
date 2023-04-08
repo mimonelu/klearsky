@@ -67,13 +67,12 @@ function onLoadLargeImage () {
   state.loaded = true
 }
 
-function setWallpaper () {
+function setBackgroundImage () {
   blurElement()
   if (!state.loaded) return
   if (mainState.currentSetting == null) return
   mainState.currentSetting.backgroundImage = props.largeUri
   mainState.saveSettings()
-  mainState.updateBackgroundImageSetting()
 }
 
 function close () {
@@ -122,8 +121,8 @@ function close () {
     <!-- 壁紙設定ボタン -->
     <button
       v-if="!state.isBlob"
-      class="floating-button wallpaper-button"
-      @click.prevent="setWallpaper"
+      class="floating-button background-image-button"
+      @click.prevent="setBackgroundImage"
     >
       <SVGIcon name="wallpaper" />
     </button>
@@ -209,7 +208,7 @@ function close () {
 }
 
 // 壁紙設定ボタン
-.wallpaper-button {
+.background-image-button {
   right: 6rem;
   [data-loaded="false"] & {
     & > .svg-icon {

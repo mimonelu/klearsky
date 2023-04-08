@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  computed,
   inject,
   nextTick,
   onMounted,
@@ -49,6 +50,14 @@ const state = reactive<MainState>({
     smallUri: "",
   },
   settings: {},
+  backgroundImage: computed((): string => {
+    if (state.currentSetting?.backgroundImage == null) return ""
+    const backgroundImage: string = state.currentSetting.backgroundImage
+      .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;")
+    return backgroundImage.match(/^\/|^\w+:\/+/)
+      ? `url(${backgroundImage})`
+      : backgroundImage
+  }),
   forceUpdate,
   fetchUserProfile,
   fetchCurrentProfile,
@@ -63,7 +72,6 @@ const state = reactive<MainState>({
   updateSettings,
   updateI18nSetting,
   updateColorThemeSetting,
-  updateBackgroundImageSetting,
   updateUserProfile,
   openSendPostPopup,
 })
@@ -193,7 +201,6 @@ function saveSettings () {
 function updateSettings () {
   updateI18nSetting()
   updateColorThemeSetting()
-  updateBackgroundImageSetting()
 }
 
 function updateI18nSetting () {
@@ -209,17 +216,6 @@ function updateColorThemeSetting () {
       "data-color-theme",
       state.currentSetting.colorTheme as string
     )
-  }
-}
-
-function updateBackgroundImageSetting () {
-  if (state.currentSetting?.backgroundImage != null) {
-    const backgroundImage = state.currentSetting.backgroundImage
-      .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;")
-    window.document.body.style.backgroundImage =
-      backgroundImage.match(/^\/|^\w+:\/+/)
-        ? `url(${backgroundImage})`
-        : backgroundImage
   }
 }
 
@@ -463,8 +459,16 @@ function closeSendPostPopup (done: boolean) {
     class="main-view"
     :key="state.updateKey"
     :data-path="state.currentPath"
-    :style="{ '--bg-opacity': state.currentSetting.backgroundOpacity }"
   >
+    <!-- 壁紙 -->
+    <div
+      class="background-image"
+      :style="{
+        'background-image': state.backgroundImage,
+        'opacity': state.currentSetting.backgroundOpacity
+      }"
+    />
+
     <div class="main">
       <div class="main-menu-wrapper">
         <MainMenu />
@@ -527,10 +531,23 @@ function closeSendPostPopup (done: boolean) {
   }
 }
 
+.background-image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .main {
   display: flex;
   justify-content: center;
   margin: auto;
+  position: relative;
   max-width: $max-width;
   min-height: 100vh;
 }
