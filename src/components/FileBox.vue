@@ -18,6 +18,11 @@ const state = reactive<{
   previews: [],
 })
 
+// input[type="file"] で同一ファイルを選択すると change が発火しない仕様への対策
+function onClick (event: Event) {
+  if (event.target != null) (event.target as HTMLInputElement).value = ""
+}
+
 function onChange (event: Event) {
   const newFiles = getFiles(event)
   if (newFiles == null) return
@@ -57,6 +62,7 @@ function deleteFile (index: number) {
         type="file"
         :accept="accept"
         :multiple="multiple"
+        @click="onClick"
         @change="onChange"
       />
       <SVGIcon name="plus" />
