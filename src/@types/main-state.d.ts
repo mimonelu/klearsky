@@ -30,6 +30,10 @@ type MainState = {
   currentProfile: null | TTProfile
   currentAuthorFeeds: Array<TTFeed>
   currentAuthorCursor?: string
+  currentAuthorReposts: Array<TTFeed>
+  currentAuthorRepostsCursor?: string
+  currentAuthorLikes: Array<TTFeed>
+  currentAuthorLikesCursor?: string
   currentFollowers: Array<TTUser>
   currentFollowersCursor?: string
   currentFollowings: Array<TTUser>
@@ -77,6 +81,8 @@ type MainState = {
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>
   fetchCurrentAuthorFeed: (direction: "new" | "old") => Promise<void>
+  fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
+  fetchAuthorLikes: (direction: "new" | "old") => Promise<void>
   fetchHotFeeds: (direction: "old" | "new") => Promise<void>
   fetchTimeline: (direction: "old" | "new") => Promise<void>
   fetchPostThread: () => Promise<void>

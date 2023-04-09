@@ -36,6 +36,10 @@ import { RouterView } from "vue-router"
   position: sticky;
   top: 0;
   z-index: 1;
+
+  &__button {
+    width: 50%;
+  }
 }
 
 .child-view {

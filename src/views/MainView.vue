@@ -65,6 +65,8 @@ const state = reactive<MainState>({
   fetchUserProfile,
   fetchCurrentProfile,
   fetchCurrentAuthorFeed,
+  fetchAuthorReposts,
+  fetchAuthorLikes,
   fetchHotFeeds,
   fetchTimeline,
   fetchPostThread,
@@ -124,6 +126,10 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
     if (!state.inSameProfilePage) {
       state.currentAuthorFeeds?.splice(0)
       state.currentAuthorCursor = undefined
+      state.currentAuthorReposts?.splice(0)
+      state.currentAuthorRepostsCursor = undefined
+      state.currentAuthorLikes?.splice(0)
+      state.currentAuthorLikesCursor = undefined
       state.currentFollowers?.splice(0)
       state.currentFollowersCursor = undefined
       state.currentFollowings?.splice(0)
@@ -164,6 +170,10 @@ function resetState () {
   state.currentProfile = null
   state.currentAuthorFeeds = []
   state.currentAuthorCursor = undefined
+  state.currentAuthorReposts = []
+  state.currentAuthorRepostsCursor = undefined
+  state.currentAuthorLikes = []
+  state.currentAuthorLikesCursor = undefined
   state.currentFollowers = []
   state.currentFollowersCursor = undefined
   state.currentFollowings = []
@@ -255,6 +265,8 @@ async function processPage (pageName?: null | RouteRecordName) {
   let handle: null | string = null
   switch (pageName) {
     case "profile-post":
+    case "profile-repost":
+    case "profile-like":
     case "profile-following":
     case "profile-follower": {
       handle = state.currentQuery.handle as LocationQueryValue
@@ -271,6 +283,24 @@ async function processPage (pageName?: null | RouteRecordName) {
       const tasks: Array<Promise<void>> = []
       if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
         tasks.push(fetchCurrentAuthorFeed("new"))
+      if (handle !== state.currentProfile?.handle)
+        tasks.push(fetchCurrentProfile(handle as string))
+      await Promise.all(tasks)
+      break
+    }
+    case "profile-repost": {
+      const tasks: Array<Promise<void>> = []
+      if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0)
+        tasks.push(fetchAuthorReposts("new"))
+      if (handle !== state.currentProfile?.handle)
+        tasks.push(fetchCurrentProfile(handle as string))
+      await Promise.all(tasks)
+      break
+    }
+    case "profile-like": {
+      const tasks: Array<Promise<void>> = []
+      if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
+        tasks.push(fetchAuthorLikes("new"))
       if (handle !== state.currentProfile?.handle)
         tasks.push(fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
@@ -358,6 +388,8 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
 
 async function fetchCurrentProfile (handle: string) {
   state.currentProfile = null
+  state.currentAuthorReposts.splice(0)
+  state.currentAuthorLikes.splice(0)
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
   state.currentProfile = await state.atp.fetchProfile(handle)
@@ -376,6 +408,30 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
       direction === "old" ? state.currentAuthorCursor : undefined
     )
   if (cursor != null) state.currentAuthorCursor = cursor
+}
+
+async function fetchAuthorReposts (direction: "new" | "old") {
+  const handle = state.currentQuery.handle as LocationQueryValue
+  if (!handle) return
+  const cursor: undefined | string = await state.atp.fetchAuthorReposts(
+    state.currentAuthorReposts,
+    handle,
+    consts.limitOfFetchAuthorReposts,
+    direction === "new" ? undefined : state.currentAuthorRepostsCursor
+  )
+  state.currentAuthorRepostsCursor = cursor
+}
+
+async function fetchAuthorLikes (direction: "new" | "old") {
+  const handle = state.currentQuery.handle as LocationQueryValue
+  if (!handle) return
+  const cursor: undefined | string = await state.atp.fetchAuthorLikes(
+    state.currentAuthorLikes,
+    handle,
+    consts.limitOfFetchAuthorLikes,
+    direction === "new" ? undefined : state.currentAuthorLikesCursor
+  )
+  state.currentAuthorLikesCursor = cursor
 }
 
 async function fetchFollowings (direction: "new" | "old") {

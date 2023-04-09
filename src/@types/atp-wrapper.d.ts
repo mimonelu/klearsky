@@ -76,6 +76,20 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchAuthorReposts(
+    this: TIAtpWrapper,
+    currentAuthorReposts: Array<TTFeed>,
+    repo: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
+  fetchAuthorLikes(
+    this: TIAtpWrapper,
+    currentAuthorReposts: Array<TTFeed>,
+    repo: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
   fetchBlob(this: TIAtpWrapper, cid: string): Promise<null | Uint8Array>
   fetchFollowings(
     this: TIAtpWrapper,

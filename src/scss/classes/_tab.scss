@@ -12,11 +12,10 @@
     justify-content: center;
     flex-grow: 1;
     padding: 0.75rem 0.5rem;
-    width: 33.333%;
     min-height: 3rem;
     text-align: center;
     &.router-link-active {
-      background-color: rgba(var(--accent-color), 0.125);
+      background-color: rgba(var(--accent-color), 0.25);
     }
     &:focus, &:hover {
       color: rgb(var(--fg-color));

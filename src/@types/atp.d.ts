@@ -15,6 +15,19 @@ type TTUser = {
   [k: string]: unknown
 }
 
+type TTRecord = {
+  cid: string
+  uri: string
+  value: {
+    $type: string
+    createdAt: string
+    subject: {
+      cid: string
+      uri: string
+    }
+  }
+}
+
 type TTEntity = {
   type: string
   index: {
@@ -63,6 +76,7 @@ type TTImage = {
 }
 
 type TTPost = {
+  __createdAt: string // Injected
   uri: string
   cid: string
   author: TTUser

@@ -130,7 +130,23 @@ function closePostMenu () {
         class="tab__button"
         :to="{ path: '/profile/post', query: { handle: mainState.currentProfile?.handle } }"
         @click.prevent
-      >{{ $t("post") }}</RouterLink>
+      >
+        <SVGIcon name="post" />
+      </RouterLink>
+      <RouterLink
+        class="tab__button"
+        :to="{ path: '/profile/repost', query: { handle: mainState.currentProfile?.handle } }"
+        @click.prevent
+      >
+        <SVGIcon name="repost" />
+      </RouterLink>
+      <RouterLink
+        class="tab__button"
+        :to="{ path: '/profile/like', query: { handle: mainState.currentProfile?.handle } }"
+        @click.prevent
+      >
+        <SVGIcon name="heart" />
+      </RouterLink>
       <RouterLink
         class="tab__button"
         :to="{ path: '/profile/following', query: { handle: mainState.currentProfile?.handle } }"
@@ -311,6 +327,10 @@ function closePostMenu () {
   position: sticky;
   top: 0;
   z-index: 1;
+
+  &__button {
+    padding: 0.75rem 0;
+  }
 }
 
 .feed-list,

@@ -16,6 +16,8 @@ import deleteRepost from "@/composables/atp-wrapper/delete-repost"
 import disableMute from "@/composables/atp-wrapper/disable-mute"
 import enableMute from "@/composables/atp-wrapper/enable-mute"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
+import fetchAuthorReposts from "@/composables/atp-wrapper/fetch-author-reposts"
+import fetchAuthorLikes from "@/composables/atp-wrapper/fetch-author-likes"
 import fetchBlob from "@/composables/atp-wrapper/fetch-blob"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
@@ -63,6 +65,8 @@ prototype.deleteRepost = deleteRepost
 prototype.disableMute = disableMute
 prototype.enableMute = enableMute
 prototype.fetchAuthorFeed = fetchAuthorFeed
+prototype.fetchAuthorReposts = fetchAuthorReposts
+prototype.fetchAuthorLikes = fetchAuthorLikes
 prototype.fetchBlob = fetchBlob
 prototype.fetchFollowers = fetchFollowers
 prototype.fetchFollowings = fetchFollowings

@@ -14,6 +14,8 @@ import TimelineView from "@/views/main/TimelineView.vue"
 // Main - Profile
 import ProfileView from "@/views/main/ProfileView.vue"
 import AuthorPostView from "@/views/main/profile/AuthorPostView.vue"
+import AuthorRepostView from "@/views/main/profile/AuthorRepostView.vue"
+import AuthorLikeView from "@/views/main/profile/AuthorLikeView.vue"
 import FollowerListView from "@/views/main/profile/FollowerListView.vue"
 import FollowingListView from "@/views/main/profile/FollowingListView.vue"
 
@@ -76,6 +78,16 @@ const router = createRouter({
               path: "post",
               name: "profile-post",
               component: AuthorPostView,
+            },
+            {
+              path: "repost",
+              name: "profile-repost",
+              component: AuthorRepostView,
+            },
+            {
+              path: "like",
+              name: "profile-like",
+              component: AuthorLikeView,
             },
             {
               path: "follower",
