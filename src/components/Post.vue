@@ -205,7 +205,7 @@ async function updateThisPostThread () {
           <!-- ポスト時間 -->
           <div
             v-if="post.indexedAt"
-            class="indexed_at"
+            class="indexed-at"
           >{{ dateLabel(post.indexedAt, mainState.currentSetting.language) }}</div>
         </div>
 
@@ -291,7 +291,7 @@ async function updateThisPostThread () {
         <div>
           <!-- リポストボタン -->
           <button
-            class="icon-button repost_count"
+            class="icon-button repost-count"
             :data-has="post.repostCount > 0"
             :data-reposted="!!post.viewer.repost"
             @click.stop="onActivateRepostMenuTrigger"
@@ -325,7 +325,7 @@ async function updateThisPostThread () {
         <div>
           <!-- いいねボタン -->
           <button
-            class="icon-button like_count"
+            class="icon-button like-count"
             :data-has="post.likeCount > 0"
             :data-liked="!!post.viewer.like"
             @click.stop="onActivateLikeButton"
@@ -529,7 +529,7 @@ async function updateThisPostThread () {
   white-space: nowrap;
 }
 
-.indexed_at {
+.indexed-at {
   color: rgba(var(--fg-color), 0.5);
   font-size: 0.75em;
   white-space: nowrap;
@@ -541,6 +541,11 @@ async function updateThisPostThread () {
   word-break: break-word;
   &:empty {
     display: contents;
+  }
+
+  // 折り返されたURLの隙間が選択されないようにする
+  &:deep(.textlink) {
+    padding: 0.125em 0;
   }
 }
 
@@ -668,7 +673,7 @@ async function updateThisPostThread () {
   }
 }
 
-.repost_count {
+.repost-count {
   position: relative;
   &[data-reposted="true"] {
     & > .svg-icon {
@@ -693,7 +698,7 @@ async function updateThisPostThread () {
   }
 }
 
-.like_count[data-liked="true"] {
+.like-count[data-liked="true"] {
   & > .svg-icon {
     fill: rgb(var(--like-color));
   }
