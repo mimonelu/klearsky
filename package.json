@@ -3,6 +3,7 @@
   "version": "0.9.8",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
