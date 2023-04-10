@@ -3,7 +3,6 @@
   "version": "0.9.8",
   "private": true,
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "dev": "vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
@@ -17,7 +16,7 @@
     "compressorjs": "^1.2.1",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.29.3",
-    "postcss": "8.1.0",
+    "postcss": "^8.4.21",
     "sass": "^1.58.3",
     "the-new-css-reset": "^1.8.4",
     "vue": "^3.2.45",
