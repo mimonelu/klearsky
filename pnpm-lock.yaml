@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@atproto/api': ^0.2.1
+  '@atproto/api': ^0.2.5
   '@rushstack/eslint-patch': ^1.1.4
   '@types/node': ^18.11.12
   '@vitejs/plugin-vue': ^4.0.0
