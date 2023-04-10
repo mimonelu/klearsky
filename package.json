@@ -17,6 +17,7 @@
     "compressorjs": "^1.2.1",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.29.3",
+    "postcss": "8.1.0",
     "sass": "^1.58.3",
     "the-new-css-reset": "^1.8.4",
     "vue": "^3.2.45",
