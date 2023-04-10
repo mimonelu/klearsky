@@ -4,6 +4,7 @@ import Loader from "@/components/Loader.vue"
 
 const props = defineProps<{
   image?: TTImage
+  did?: string
 }>()
 
 const mainState = inject("state") as MainState
@@ -36,7 +37,7 @@ async function initializeSrc () {
     state.loaded = true
     return
   }
-  const data: null | Uint8Array = await mainState.atp.fetchBlob(link)
+  const data: null | Uint8Array = await mainState.atp.fetchBlob(link, props.did)
   if (data == null) {
     state.src = "/img/void.png"
     state.loaded = true

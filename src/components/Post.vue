@@ -258,6 +258,7 @@ async function updateThisPostThread () {
           <Thumbnail
             :key="post.cid"
             :image="image"
+            :did="post.author.did"
           />
         </div>
       </div>
