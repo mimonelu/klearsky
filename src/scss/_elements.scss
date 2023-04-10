@@ -28,19 +28,19 @@ body {
     @include color-theme-dark;
   }
 }
-body[data-color-theme="light"] {
+[data-color-theme="light"] {
   @include color-theme-light;
 }
-body[data-color-theme="dark"] {
+[data-color-theme="dark"] {
   @include color-theme-dark;
 }
-body[data-color-theme="warmsand"] {
+[data-color-theme="warmsand"] {
   @include color-theme-warmsand;
 }
-body[data-color-theme="nightstars"] {
+[data-color-theme="nightstars"] {
   @include color-theme-nightstars;
 }
-body[data-color-theme="greentea"] {
+[data-color-theme="greentea"] {
   @include color-theme-greentea;
 }
 

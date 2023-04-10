@@ -2,6 +2,7 @@
 import { inject } from "vue"
 import languages from "@/consts/languages.json"
 import settings from "@/consts/settings.json"
+import ColorTheme from "@/components/ColorTheme.vue"
 import PageHeader from "@/components/PageHeader.vue"
 
 const mainState = inject("state") as MainState
@@ -40,19 +41,7 @@ function changeSetting () {
       <div class="section">
         <div class="section__header">{{ $t("colorTheme") }}</div>
         <div class="section__body">
-          <label class="selectbox">
-            <select
-              v-model="mainState.currentSetting.colorTheme"
-              @change="changeSetting"
-            >
-              <option
-                v-for="colorTheme, colorThemeIndex in settings.colorThemes"
-                :key="colorThemeIndex"
-                :value="colorTheme.value"
-                :selected="colorTheme.value === mainState.currentSetting.colorTheme"
-              >{{ $t(colorTheme.label) }}</option>
-            </select>
-          </label>
+          <ColorTheme />
         </div>
       </div>
 
