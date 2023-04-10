@@ -393,8 +393,20 @@ async function fetchCurrentProfile (handle: string) {
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
   state.currentProfile = await state.atp.fetchProfile(handle)
+  if (state.currentProfile == null) return
   if (handle === state.atp.session?.handle)
     state.userProfile = state.currentProfile
+
+  // 利用開始日の取得（非同期で良い）
+  injectCreatedAt()
+}
+
+async function injectCreatedAt () {
+  if (state.currentProfile == null) return
+  const log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
+  const logJson = await log.json()
+  state.currentProfile.__createdAt = logJson[0]?.createdAt
+  console.log("[klearsky/log/audit]", logJson)
 }
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
@@ -468,6 +480,7 @@ function clearNotificationInterval () {
 async function setupNotificationInterval () {
   clearNotificationInterval()
   await updateNotification(true)
+  // @ts-ignore // TODO:
   notificationTimer = setInterval(() => {
     updateNotification(false)
   }, consts.intervalOfFetchNotifications)

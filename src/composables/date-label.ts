@@ -13,5 +13,5 @@ export default function (dateString?: string, locale?: string): string {
       locale,
     })
   if (isSameYear(now, the)) return format(the, "MM/dd HH:mm")
-  return format(the, "P")
+  return format(the, "yyyy/MM/dd")
 }

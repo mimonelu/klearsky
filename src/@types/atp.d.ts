@@ -172,6 +172,7 @@ type TTNotification = {
 }
 
 type TTProfile = {
+  __createdAt?: string // Injected
   did: string
   declaration: {
     actorType: string
