@@ -3,9 +3,11 @@
     { "label": "colorThemeAuto", "value": "auto" },
     { "label": "colorThemeLight", "value": "light" },
     { "label": "colorThemeDark", "value": "dark" },
-    { "label": "colorThemeWarmSand", "value": "warmsand" },
-    { "label": "colorThemeNightStars", "value": "nightstars" },
-    { "label": "colorThemeGreenTea", "value": "greentea" }
+    { "label": "colorThemeWarm", "value": "warm" },
+    { "label": "colorThemeRed", "value": "red" },
+    { "label": "colorThemeGreen", "value": "green" },
+    { "label": "colorThemeBlue", "value": "blue" },
+    { "label": "colorThemeIndigo", "value": "indigo" }
   ],
   "backgroundOpacities": [
     { "label": "0%", "value": 0 },

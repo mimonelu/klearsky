@@ -34,14 +34,20 @@ body {
 [data-color-theme="dark"] {
   @include color-theme-dark;
 }
-[data-color-theme="warmsand"] {
-  @include color-theme-warmsand;
+[data-color-theme="warm"] {
+  @include color-theme-warm;
 }
-[data-color-theme="nightstars"] {
-  @include color-theme-nightstars;
+[data-color-theme="red"] {
+  @include color-theme-red;
 }
-[data-color-theme="greentea"] {
-  @include color-theme-greentea;
+[data-color-theme="green"] {
+  @include color-theme-green;
+}
+[data-color-theme="blue"] {
+  @include color-theme-blue;
+}
+[data-color-theme="indigo"] {
+  @include color-theme-indigo;
 }
 
 ::selection {
