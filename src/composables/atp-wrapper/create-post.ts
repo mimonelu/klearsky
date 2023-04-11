@@ -14,11 +14,6 @@ export default async function (
 ): Promise<boolean> {
   if (this.agent == null) return false
 
-  // TODO:
-  if (params.type === "quoteRepost" && params.text === "") {
-    return await this.createRepost(params.post)
-  }
-
   const richText = new RichText({ text: params.text })
   await richText.detectFacets(this.agent)
 
