@@ -29,7 +29,28 @@ onMounted(() => {
   })
 })
 
-async function submit () {
+function makeItemId (index: number) {
+  return `easy-form--${props.id ?? 'default'}__${index}`
+}
+
+const inputList = [ "password", "text", "url" ]
+function isInput (type?: string): boolean {
+  return type != null ? inputList.includes(type) : true
+}
+
+function getCharacterLength (item: TTEasyFormItem): number {
+  const text = item.state[item.model]
+  if (item.maxLengthWithSegmenter) {
+    const segmenter = (Intl as any).Segmenter
+    return segmenter != null
+      ? [...new segmenter().segment(text)].length
+      : text.length
+  } else {
+    return text.length
+  }
+}
+
+async function onSubmit () {
   blurElement()
   if (state.processing) return
   if (props.submitCallback == null) {
@@ -44,15 +65,6 @@ async function submit () {
   }
 }
 
-function makeItemId (index: number) {
-  return `easy-form--${props.id ?? 'default'}__${index}`
-}
-
-const inputList = [ "password", "text", "url" ]
-function isInput (type?: string): boolean {
-  return type != null ? inputList.includes(type) : true
-}
-
 function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
   item.state[item.model] = files
   if (item.onChange != null) item.onChange(item, props)
@@ -62,23 +74,15 @@ function onInputTextarea (item: TTEasyFormItem) {
   if (item.onInput != null) item.onInput(item, props)
 }
 
-function getCharacterLength (item: TTEasyFormItem): number {
-  const text = item.state[item.model]
-  if (item.maxLengthWithSegmenter) {
-    const segmenter = (Intl as any).Segmenter
-    return segmenter != null
-      ? [...new segmenter().segment(text)].length
-      : text.length
-  } else {
-    return text.length
-  }
+function onSubmitTextarea (event: KeyboardEvent) {
+  if (!event.isComposing && (event.ctrlKey || event.metaKey)) onSubmit()
 }
 </script>
 
 <template>
   <form
     class="easy-form"
-    @submit.prevent="submit"
+    @submit.prevent="onSubmit"
   >
     <dl
       v-for="item, index of data"
@@ -124,6 +128,7 @@ function getCharacterLength (item: TTEasyFormItem): number {
           spellcheck="false"
           class="textarea"
           @input="onInputTextarea(item)"
+          @keydown.enter.meta.exact="onSubmitTextarea"
         />
         <div
           v-if="item.maxLengthIndicator"
