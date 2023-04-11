@@ -78,14 +78,10 @@ async function onActivateSendRepostButton () {
   state.repostMenuDisplay = false
   state.processing = true
   try {
-    const result = await mainState.atp.createPost({
-      type: "quoteRepost",
-      post: props.post,
-      text: "",
-      url: "",
-      images: [],
-      alts: [],
-    })
+    const result = await mainState.atp.createRepost(
+      props.post.uri,
+      props.post.cid
+    )
     if (result) await updateThisPostThread()
   } finally {
     state.processing = false

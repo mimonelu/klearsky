@@ -62,7 +62,7 @@ interface TIAtpWrapper {
     cid: string
   ): Promise<boolean>
   createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
-  createRepost(this: TIAtpWrapper, post?: TTPost): Promise<boolean>
+  createRepost(this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   deleteLike(this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteFollow(this: TIAtpWrapper, uri: string): Promise<boolean>
   deletePost(this: TIAtpWrapper, uri: string): Promise<boolean>
