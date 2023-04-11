@@ -1,4 +1,11 @@
-import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import { RichText } from "@atproto/api"
+import type {
+  AppBskyEmbedImages,
+  AppBskyFeedPost,
+  BlobRef,
+  BskyAgent,
+  ComAtprotoRepoCreateRecord
+} from "@atproto/api"
 import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
 export default async function (
@@ -12,37 +19,15 @@ export default async function (
     return await this.createRepost(params.post)
   }
 
-  const record: AppBskyFeedPost.Record = {
-    createdAt: makeCreatedAt(),
-    text: params.text,
-  }
+  const richText = new RichText({ text: params.text })
+  await richText.detectFacets(this.agent)
 
-  // TODO:
-  const entities: Array<TTEntity> = []
-  const entityRegExps: { [k: string]: RegExp } = {
-    // mention: new RegExp("(?:^|\\s)(@[\\w\\.\\-]+)", "g"),
-    // hashtag: new RegExp("(?:^|\\s)(#\\w+)", "g"),
-    link: new RegExp(
-      "(?:^|\\s)(https?:\\/\\/[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-]+)",
-      "g"
-    ),
+  const record: AppBskyFeedPost.Record = {
+    $type: "app.bsky.feed.post",
+    createdAt: makeCreatedAt(),
+    text: richText.text,
+    facets: richText.facets,
   }
-  for (const type in entityRegExps) {
-    const regexp: RegExp = entityRegExps[type]
-    while (true) {
-      const current = regexp.exec(params.text)
-      if (current == null) break
-      entities.push({
-        index: {
-          start: current.index + 1,
-          end: current.index + 1 + current[1].length,
-        },
-        type,
-        value: current[1],
-      })
-    }
-  }
-  if (entities.length > 0) record.entities = entities
 
   // TODO:
   let external: null | any = null
