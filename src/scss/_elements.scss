@@ -37,6 +37,9 @@ body {
 [data-color-theme="warm"] {
   @include color-theme-warm;
 }
+[data-color-theme="pink"] {
+  @include color-theme-pink;
+}
 [data-color-theme="red"] {
   @include color-theme-red;
 }

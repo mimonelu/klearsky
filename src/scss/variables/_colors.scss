@@ -37,6 +37,19 @@
   --border-radius: 2px;
 }
 
+@mixin color-theme-pink {
+  --bg-color: 255, 224, 240;
+  --fg-color: 0, 48, 96;
+  --accent-color: 64, 128, 255;
+  --notice-color: 255, 32, 32;
+  --post-color: 0, 160, 224;
+  --like-color: 240, 64, 128;
+  --share-color: 32, 160, 64;
+  --hot-color: 255, 0, 0;
+
+  --border-radius: 2px;
+}
+
 @mixin color-theme-red {
   --bg-color: 128, 0, 0;
   --fg-color: 240, 224, 224;

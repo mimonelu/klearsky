@@ -4,6 +4,7 @@
     { "label": "colorThemeLight", "value": "light" },
     { "label": "colorThemeDark", "value": "dark" },
     { "label": "colorThemeWarm", "value": "warm" },
+    { "label": "colorThemePink", "value": "pink" },
     { "label": "colorThemeRed", "value": "red" },
     { "label": "colorThemeGreen", "value": "green" },
     { "label": "colorThemeBlue", "value": "blue" },
