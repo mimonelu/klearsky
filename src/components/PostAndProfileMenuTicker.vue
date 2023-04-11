@@ -11,6 +11,7 @@ const props = defineProps<{
   display: boolean;
   translateText?: string;
   copyText?: string;
+  mentionTo?: string;
   deletePostUri?: string;
   openSource?: any;
 }>()
@@ -27,6 +28,13 @@ function translateText () {
 async function copyText () {
   if (props.copyText == null) return
   await navigator.clipboard.writeText(props.copyText)
+  emit("close")
+}
+
+async function sendMention () {
+  blurElement()
+  if (props.mentionTo == null) return
+  await mainState.openSendPostPopup("post", undefined, `@${props.mentionTo} `)
   emit("close")
 }
 
@@ -65,6 +73,13 @@ function openSource () {
     >
       <SVGIcon name="clipboard" />
       <span>{{ $t("copyPostText") }}</span>
+    </button>
+    <button
+      v-if="mentionTo != null"
+      @click.stop="sendMention"
+    >
+      <SVGIcon name="at" />
+      <span>{{ $t("sendMention") }}</span>
     </button>
     <button
       v-if="deletePostUri != null"

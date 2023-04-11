@@ -348,6 +348,7 @@ async function updateThisPostThread () {
               :display="state.postMenuDisplay"
               :translateText="post.record?.text"
               :copyText="post.record?.text"
+              :mentionTo="post.author?.handle"
               :deletePostUri="post.author?.did === mainState.atp.session?.did
                 ? post.uri
                 : undefined"

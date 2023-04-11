@@ -512,10 +512,11 @@ async function updateNotification (forceUpdate: boolean) {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (type: TTPostType, post?: TTPost): Promise<boolean> {
+async function openSendPostPopup (type: TTPostType, post?: TTPost, text?: string): Promise<boolean> {
   state.sendPostPopupProps.display = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post
+  state.sendPostPopupProps.text = text
   await waitProp(() => state.sendPostPopupProps.display, false)
   return isSendPostDone
 }
@@ -566,6 +567,7 @@ function closeSendPostPopup (done: boolean) {
       v-if="state.sendPostPopupProps.display"
       :type="state.sendPostPopupProps.type"
       :post="state.sendPostPopupProps.post"
+      :text="state.sendPostPopupProps.text"
       @close="closeSendPostPopup"
     />
     <LoginPopup

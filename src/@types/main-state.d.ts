@@ -61,6 +61,7 @@ type MainState = {
     display: boolean
     type: TTPostType
     post?: TTPost
+    text?: string
   }
 
   imagePopupProps: {
@@ -93,5 +94,5 @@ type MainState = {
   fetchFollowers: (direction: "new" | "old") => Promise<void>
   fetchFollowings: (direction: "new" | "old") => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
-  openSendPostPopup: (type: TTPostType, post?: TTPost) => Promise<boolean>
+  openSendPostPopup: (type: TTPostType, post?: TTPost, text?: string) => Promise<boolean>
 }

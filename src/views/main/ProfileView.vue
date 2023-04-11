@@ -126,6 +126,7 @@ function closePostMenu () {
               :display="state.profileMenuDisplay"
               :translateText="mainState.currentProfile?.description"
               :copyText="mainState.currentProfile?.description"
+              :mentionTo="mainState.currentProfile?.handle"
               :openSource="mainState.currentProfile"
               @close="closePostMenu"
             />

@@ -10,6 +10,7 @@ const emit = defineEmits<{(event: string, done: boolean): void}>()
 const props = defineProps<{
   type: TTPostType;
   post?: TTPost;
+  text?: string;
 }>()
 
 const $t = inject("$t") as Function
@@ -22,7 +23,7 @@ const state = reactive<{
   images: Array<File>;
   alts: Array<string>;
 }>({
-  text: "",
+  text: props.text ?? "",
   url: "",
   images: [],
   alts: [],
