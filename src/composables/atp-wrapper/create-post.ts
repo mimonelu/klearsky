@@ -55,8 +55,8 @@ export default async function (
     params.images.map((file: File): Promise<null | BlobRef> => {
       return this.createFileBlob({
         file,
-        // maxWidth: 2000,
-        // maxHeight: 2000,
+        maxWidth: 2000,
+        maxHeight: 2000,
         maxSize: 976560,
       })
     })

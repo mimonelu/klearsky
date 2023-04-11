@@ -47,8 +47,8 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     params: {
       file: File,
-      // maxWidth: number
-      // maxHeight: number
+      maxWidth: number
+      maxHeight: number
       maxSize: number
     }
   ): Promise<null | BlobRef>

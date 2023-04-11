@@ -16,25 +16,11 @@ function convertBlobTo (
   })
 }
 
-/*
-async function convertFileToImage (file: File): Promise<HTMLImageElement> {
-  return new Promise(async (resolve, reject) => {
-    const dataUrl = await convertBlobTo(file, "readAsDataURL") as string
-    const image = new Image()
-    image.onerror = reject
-    image.onload = () => {
-      resolve(image)
-    }
-    image.src = dataUrl
-  })
-}
-*/
-
 function compressFileToBlob (params: {
   file: File,
   // mimeType: string,
-  // maxWidth: number,
-  // maxHeight: number,
+  maxWidth: number,
+  maxHeight: number,
   maxSize: number,
   quality?: number,
 }): Promise<Blob> {
@@ -43,8 +29,8 @@ function compressFileToBlob (params: {
     new Compressor(params.file, {
       convertSize: params.maxSize,
       // convertTypes: params.mimeType,
-      // maxWidth: params.maxWidth,
-      // maxHeight: params.maxHeight,
+      maxWidth: params.maxWidth,
+      maxHeight: params.maxHeight,
       // mimeType: params.mimeType,
       quality: params.quality,
       success: resolve,
@@ -65,8 +51,8 @@ export default async function (
   this: TIAtpWrapper,
   params: {
     file: File,
-    // maxWidth: number,
-    // maxHeight: number,
+    maxWidth: number,
+    maxHeight: number,
     maxSize: number,
   }
 ): Promise<null | BlobRef> {
@@ -76,7 +62,7 @@ export default async function (
 
   let blob: undefined | Blob = undefined
   if (imageMimeType != null) {
-    blob = await compressFileToBlob({ ...params })
+    blob = await compressFileToBlob({ ...params, quality: 0.9 })
     if (blob instanceof Error) return null
   } else {
     blob = params.file
