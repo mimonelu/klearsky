@@ -18,7 +18,7 @@ function convertBlobTo (
 
 function compressFileToBlob (params: {
   file: File,
-  // mimeType: string,
+  mimeType: string,
   maxWidth: number,
   maxHeight: number,
   maxSize: number,
@@ -27,11 +27,17 @@ function compressFileToBlob (params: {
   return new Promise((resolve, reject) => {
     // SEE: https://github.com/fengyuanchen/compressorjs#options
     new Compressor(params.file, {
+      convertTypes: [
+        "image/bmp",
+        "image/gif",
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ],
       convertSize: params.maxSize,
-      // convertTypes: params.mimeType,
       maxWidth: params.maxWidth,
       maxHeight: params.maxHeight,
-      // mimeType: params.mimeType,
+      mimeType: params.mimeType,
       quality: params.quality,
       success: resolve,
       error: reject,
@@ -53,18 +59,26 @@ export default async function (
     file: File,
     maxWidth: number,
     maxHeight: number,
+    // SEE: https://github.com/bluesky-social/atproto/blob/7cc48089073aa71e139fa441c53f6141fba69936/lexicons/app/bsky/embed/images.json#L24-L26
     maxSize: number,
   }
 ): Promise<null | BlobRef> {
   if (this.agent == null) return null
   if (params.file == null) return null
   const imageMimeType = convertMap[params.file.type]
+  let mimeType = ""
 
   let blob: undefined | Blob = undefined
   if (imageMimeType != null) {
-    blob = await compressFileToBlob({ ...params, quality: 0.9 })
+    mimeType = imageMimeType
+    blob = await compressFileToBlob({
+      ...params,
+      mimeType,
+      quality: 0.9,
+    })
     if (blob instanceof Error) return null
   } else {
+    mimeType = params.file.type
     blob = params.file
   }
 
@@ -72,7 +86,7 @@ export default async function (
   if (arrayBuffer == null) return null
   const input: Uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)
   const options: ComAtprotoRepoUploadBlob.CallOptions = {
-    encoding: params.file.type,
+    encoding: mimeType,
   }
   const response: ComAtprotoRepoUploadBlob.Response =
     await (this.agent as BskyAgent).uploadBlob(input, options)

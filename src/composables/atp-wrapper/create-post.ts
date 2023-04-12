@@ -57,7 +57,7 @@ export default async function (
         file,
         maxWidth: 2000,
         maxHeight: 2000,
-        maxSize: 976560,
+        maxSize: 1000000,
       })
     })
   )

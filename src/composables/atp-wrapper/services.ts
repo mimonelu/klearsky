@@ -58,6 +58,14 @@ export function coherentResponses (responses: Array<any>) {
     }
   })
 
+  // PARENT.record.record -> PARENT.record
+  traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "record" && value.record != null) {
+      parent.record = JSON.parse(JSON.stringify(value.record))
+      parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
+    }
+  })
+
   // PARENT.record.embed.external/images -> PARENT.embed.external/images
   traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "record" && parent.embed != null && value.embed != null) {
@@ -69,14 +77,6 @@ export function coherentResponses (responses: Array<any>) {
         parent.embed.images = JSON.parse(JSON.stringify(value.embed.images))
         parent.embed.images.__comment = "❗ This 'images' was duplicated by Klearsky."
       }
-    }
-  })
-
-  // PARENT.record.record -> PARENT.record
-  traverseJson(responses, (key: string, value: any, parent: any) => {
-    if (key === "record" && value.record != null) {
-      parent.record = JSON.parse(JSON.stringify(value.record))
-      parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
     }
   })
 
