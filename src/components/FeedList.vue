@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, watch } from "vue"
 import Feed from "@/components/Feed.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
@@ -78,6 +78,11 @@ function removeThisPost (uri: string) {
     if (feed.reply?.root?.uri === uri) delete feed.reply.root
   })
 }
+
+// インフィニットスクロール
+watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  if (value) fetchFeeds("old")
+})
 </script>
 
 <template>

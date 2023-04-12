@@ -78,6 +78,9 @@ type MainState = {
   updateColorThemeSetting: () => void
   backgroundImage: any // TODO:
 
+  // インフィニットスクロール用プロパティ
+  scrolledToBottom: boolean
+
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>

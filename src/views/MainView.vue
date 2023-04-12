@@ -104,12 +104,18 @@ onMounted(async () => {
     } finally {
       state.mounted = true
       state.processing = false
+
+      // インフィニットスクロール用処理
+      window.addEventListener("scroll", scrollListener)
     }
   }
 })
 
 onUnmounted(() => {
   clearNotificationInterval()
+
+  // インフィニットスクロール用処理
+  window.removeEventListener("scroll", scrollListener)
 })
 
 const router = useRouter()
@@ -192,6 +198,7 @@ function resetState () {
   state.notifications = []
   state.notificationCursor = undefined
   state.notificationCount = 0
+  state.scrolledToBottom = false
 }
 
 function saveSettings () {
@@ -524,6 +531,29 @@ async function openSendPostPopup (type: TTPostType, post?: TTPost, text?: string
 function closeSendPostPopup (done: boolean) {
   isSendPostDone = done
   state.sendPostPopupProps.display = false
+}
+
+// インフィニットスクロール用処理
+let isEnter = false
+function scrollListener () {
+  const threshold = 44
+  const diff = Math.abs(window.scrollY - (
+    window.document.documentElement.scrollHeight -
+    window.document.documentElement.clientHeight
+  ))
+  state.scrolledToBottom = false
+  if (diff < threshold) {
+    if (!isEnter &&
+      state.mounted &&
+      state.atp.hasLogin() &&
+      !state.processing
+    ) {
+      state.scrolledToBottom = true
+    }
+    isEnter = true
+  } else {
+    isEnter = false
+  }
 }
 </script>
 

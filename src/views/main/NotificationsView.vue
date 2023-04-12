@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted } from "vue"
+import { inject, onBeforeUnmount, onMounted, watch } from "vue"
 import NotificationList from "@/components/NotificationList.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
@@ -24,6 +24,11 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
     mainState.processing = false
   }
 }
+
+// インフィニットスクロール
+watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  if (value) fetchNotifications(25, 'old')
+})
 </script>
 
 <template>

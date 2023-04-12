@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted } from "vue"
+import { inject, onMounted, watch } from "vue"
 import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
@@ -59,6 +59,11 @@ async function fetchContinuousResults (direction: "new" | "old") {
 async function openProfile (handle: string) {
   await router.push({ name: "profile-post", query: { handle } })
 }
+
+// インフィニットスクロール
+watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  if (value) fetchContinuousResults('old')
+})
 </script>
 
 <template>

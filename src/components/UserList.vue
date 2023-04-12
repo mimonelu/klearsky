@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, watch } from "vue"
 import FollowButton from "@/components/FollowButton.vue"
 import MuteButton from "@/components/MuteButton.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -34,6 +34,11 @@ async function fetchUsers (direction: "new" | "old") {
     mainState.processing = false
   }
 }
+
+// インフィニットスクロール
+watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  if (value) fetchUsers("old")
+})
 </script>
 
 <template>
