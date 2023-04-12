@@ -68,7 +68,7 @@ watch(() => props.display, () => {
       cursor: pointer;
       display: flex;
       align-items: center;
-      grid-gap: 1rem;
+      grid-gap: 0.5rem;
       padding: 0.5rem 1rem;
       white-space: nowrap;
       &:focus, &:hover {

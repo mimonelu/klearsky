@@ -208,6 +208,8 @@ function saveSettings () {
     state.settings[did] = {}
   if (state.settings[did].language == null)
     state.settings[did].language = $getI18n()
+  if (state.settings[did].fontSize == null)
+    state.settings[did].fontSize = "medium"
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].backgroundImage == null)
@@ -220,6 +222,7 @@ function saveSettings () {
 
 function updateSettings () {
   updateI18nSetting()
+  updateFontSizeSetting()
   updateColorThemeSetting()
 }
 
@@ -228,6 +231,13 @@ function updateI18nSetting () {
     $setI18n(state.currentSetting.language)
     state.forceUpdate()
   }
+}
+
+function updateFontSizeSetting () {
+  window.document.documentElement.setAttribute(
+    "data-font-size",
+    state.currentSetting?.fontSize ?? "medium"
+  )
 }
 
 function updateColorThemeSetting () {

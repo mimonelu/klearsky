@@ -37,6 +37,26 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- フォントサイズ -->
+      <div class="section">
+        <div class="section__header">{{ $t("fontSize") }}</div>
+        <div class="section__body">
+          <label class="selectbox">
+            <select
+              v-model="mainState.currentSetting.fontSize"
+              @change="changeSetting"
+            >
+              <option
+                v-for="fontSize, fontSizeIndex in settings.fontSizes"
+                :key="fontSizeIndex"
+                :value="fontSize.value"
+                :selected="fontSize.value === mainState.currentSetting.fontSize"
+              >{{ $t(fontSize.label) }}</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
       <!-- カラーテーマ -->
       <div class="section">
         <div class="section__header">{{ $t("colorTheme") }}</div>

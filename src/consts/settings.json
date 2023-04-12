@@ -1,4 +1,9 @@
 {
+  "fontSizes": [
+    { "label": "fontSizeSmall", "value": "small" },
+    { "label": "fontSizeMedium", "value": "medium" },
+    { "label": "fontSizeLarge", "value": "large" }
+  ],
   "colorThemes": [
     { "label": "colorThemeAuto", "value": "auto" },
     { "label": "colorThemeLight", "value": "light" },

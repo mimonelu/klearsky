@@ -1,5 +1,6 @@
 type TTSetting = {
   language?: string
+  fontSize?: string
   colorTheme?: string
   backgroundImage?: string
   backgroundOpacity?: number

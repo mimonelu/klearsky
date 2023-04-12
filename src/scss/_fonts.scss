@@ -12,6 +12,15 @@
     sans-serif;
 
   font-size: calc(0.125vmax + 13px);
+  &[data-font-size="small"] {
+    font-size: calc(0.125vmax + 13px);
+  }
+  &[data-font-size="medium"] {
+    font-size: calc(0.125vmax + 14px);
+  }
+  &[data-font-size="large"] {
+    font-size: calc(0.125vmax + 15px);
+  }
 }
 
 // iOS における font-size: 16px; 未満のフォームパーツにフォーカスするとビューポートがスケーリングされる仕様対策
