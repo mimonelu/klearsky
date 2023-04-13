@@ -4,10 +4,12 @@ import createFollow from "@/composables/atp-wrapper/create-follow"
 import createLike from "@/composables/atp-wrapper/create-like"
 import createPost from "@/composables/atp-wrapper/create-post"
 import createRepost from "@/composables/atp-wrapper/create-repost"
+import deleteAccount from "@/composables/atp-wrapper/delete-account"
 import deleteFollow from "@/composables/atp-wrapper/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete-like"
 import deletePost from "@/composables/atp-wrapper/delete-post"
 import deleteRepost from "@/composables/atp-wrapper/delete-repost"
+import deleteSession from "@/composables/atp-wrapper/delete-session"
 import disableMute from "@/composables/atp-wrapper/disable-mute"
 import enableMute from "@/composables/atp-wrapper/enable-mute"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
@@ -58,10 +60,12 @@ prototype.createFollow = createFollow
 prototype.createLike = createLike
 prototype.createPost = createPost
 prototype.createRepost = createRepost
+prototype.deleteAccount = deleteAccount
 prototype.deleteFollow = deleteFollow
 prototype.deleteLike = deleteLike
 prototype.deletePost = deletePost
 prototype.deleteRepost = deleteRepost
+prototype.deleteSession = deleteSession
 prototype.disableMute = disableMute
 prototype.enableMute = enableMute
 prototype.fetchAuthorFeed = fetchAuthorFeed

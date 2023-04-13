@@ -33,8 +33,7 @@ async function login (session: TTSession) {
 
 function deleteAccount (session: TTSession) {
   blurElement()
-  mainState.atp.logout(session.did)
-  if (mainState.atp.session?.did === session.did) location.reload()
+  mainState.atp.deleteAccount(session.did)
 }
 
 function getDidColor (did: string): string {

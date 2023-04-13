@@ -63,11 +63,13 @@ interface TIAtpWrapper {
   ): Promise<boolean>
   createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
   createRepost(this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
+  deleteAccount(this: TIAtpWrapper, did?: string)
   deleteLike(this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteFollow(this: TIAtpWrapper, uri: string): Promise<boolean>
   deletePost(this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost(this: TIAtpWrapper, uri: string): Promise<boolean>
   disableMute(this: TIAtpWrapper, handle: string): Promise<boolean>
+  deleteSession(this: TIAtpWrapper): Promise<boolean>
   enableMute(this: TIAtpWrapper, handle: string): Promise<boolean>
   fetchAuthorFeed(
     this: TIAtpWrapper,
@@ -151,7 +153,7 @@ interface TIAtpWrapper {
     identifier?: string,
     password?: string
   ): Promise<boolean>
-  logout(this: TIAtpWrapper, did?: string)
+  logout(this: TIAtpWrapper)
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
   updateNotificationSeen(this: TIAtpWrapper): Promise<boolean>

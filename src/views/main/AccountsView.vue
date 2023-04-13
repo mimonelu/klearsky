@@ -9,16 +9,26 @@ const mainState = inject("state") as MainState
 
 const router = useRouter()
 
-function newLogin () {
-  mainState.loginPopupDisplay = true
+async function newLogin () {
+  blurElement()
+  mainState.processing = true
+  mainState.atp.logout()
+  await router.push({ name: "home" })
+  location.reload()
+  mainState.processing = false
 }
 
 async function logout () {
   blurElement()
-  mainState.atp.logout()
-  mainState.timelineFeeds?.splice(0)
-  await router.push({ name: "home" })
-  location.reload()
+  mainState.processing = true
+  try {
+    await mainState.atp.deleteSession()
+  } finally {
+    mainState.atp.logout()
+    await router.push({ name: "home" })
+    location.reload()
+    mainState.processing = false
+  }
 }
 </script>
 
