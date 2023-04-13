@@ -128,7 +128,7 @@ function onSubmitTextarea (event: KeyboardEvent) {
           spellcheck="false"
           class="textarea"
           @input="onInputTextarea(item)"
-          @keydown.enter.meta.exact="onSubmitTextarea"
+          @keydown.enter="onSubmitTextarea"
         />
         <div
           v-if="item.maxLengthIndicator"
