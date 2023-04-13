@@ -1,4 +1,4 @@
-import splitter from "@/composables/splitter"
+import splitter from "@/composables/atp-wrapper/utils/splitter"
 
 export default function (text: string): string {
   let html: string = ""

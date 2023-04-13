@@ -6,7 +6,6 @@ import type {
   BskyAgent,
   ComAtprotoRepoCreateRecord
 } from "@atproto/api"
-import { makeCreatedAt } from "@/composables/atp-wrapper/services"
 
 export default async function (
   this: TIAtpWrapper,
@@ -19,7 +18,7 @@ export default async function (
 
   const record: AppBskyFeedPost.Record = {
     $type: "app.bsky.feed.post",
-    createdAt: makeCreatedAt(),
+    createdAt: new Date().toISOString(),
     text: richText.text,
     facets: richText.facets,
   }

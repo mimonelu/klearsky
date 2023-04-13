@@ -1,8 +1,3 @@
-import {
-  canLogin,
-  hasLogin,
-  saveData,
-} from "@/composables/atp-wrapper/services"
 import createAgent from "@/composables/atp-wrapper/create-agent"
 import createFileBlob from "@/composables/atp-wrapper/create-file-blob"
 import createFollow from "@/composables/atp-wrapper/create-follow"
@@ -51,7 +46,12 @@ class AtpWrapper implements TIAtpWrapper {
 }
 
 const prototype = AtpWrapper.prototype as unknown as TIAtpWrapper
-prototype.canLogin = canLogin
+prototype.canLogin = function (this: TIAtpWrapper): boolean {
+  return this.data.sessions[this.data.did] != null
+}
+prototype.hasLogin = function hasLogin (this: TIAtpWrapper): boolean {
+  return this.session != null
+}
 prototype.createAgent = createAgent
 prototype.createFileBlob = createFileBlob
 prototype.createFollow = createFollow
@@ -78,11 +78,12 @@ prototype.fetchPostThread = fetchPostThread
 prototype.fetchProfile = fetchProfile
 prototype.fetchTimeline = fetchTimeline
 prototype.fetchUserSearch = fetchUserSearch
-prototype.hasLogin = hasLogin
 prototype.login = login
 prototype.logout = logout
 prototype.resumeSession = resumeSession
-prototype.saveData = saveData
+prototype.saveData = function saveData (this: TIAtpWrapper) {
+  storage.save("atp", this.data)
+}
 prototype.updateNotificationSeen = updateNotificationSeen
 prototype.updateProfile = updateProfile
 

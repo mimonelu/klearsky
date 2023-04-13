@@ -5,6 +5,14 @@ export default async function (
   params: TTUpdateProfileParams
 ): Promise<boolean> {
   if (this.agent == null) return false
+
+  // クエリーオブジェクト
+  const profileSchema: AppBskyActorProfile.Record = {
+    displayName: params.displayName,
+    description: params.description,
+  }
+
+  // 画像処理
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
       ? this.createFileBlob({
@@ -25,18 +33,17 @@ export default async function (
   ])
   const avatarSchema: null | BlobRef = fileBlobRefs[0]
   const bannerSchema: null | BlobRef = fileBlobRefs[1]
-  const profileSchema: AppBskyActorProfile.Record = {
-    displayName: params.displayName,
-    description: params.description,
-  }
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
+
   ;(await (this.agent as BskyAgent).upsertProfile(
     (existing: AppBskyActorProfile.Record | undefined): AppBskyActorProfile.Record => {
+      // アバター画像とバナー画像が未指定の場合、既存の画像を指定する
       if (profileSchema.avatar == null && existing?.avatar != null)
         profileSchema.avatar = existing.avatar
       if (profileSchema.banner == null && existing?.banner != null)
         profileSchema.banner = existing.banner
+
       return profileSchema
     }
   ))
