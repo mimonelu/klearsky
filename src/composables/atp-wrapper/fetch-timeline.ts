@@ -22,7 +22,7 @@ export default async function (
 
   // TODO:
   Util.coherentResponses(response.data.feed as Array<TTFeed>)
-  Util.text2htmlAtFeeds(response.data.feed as Array<TTFeed>)
+  Util.feed2html(response.data.feed as Array<TTFeed>)
   Util.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
   Util.sortFeeds(oldFeeds)
 
