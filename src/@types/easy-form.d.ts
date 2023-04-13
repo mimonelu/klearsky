@@ -33,6 +33,7 @@ type TTEasyFormItem = {
   accept?: string
   isMultipleFile?: boolean
   maxNumberOfFile?: number
+  clearButton?: boolean
   focus?: boolean
   onChange?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onInput?: (item: TTEasyFormItem, form: TTEasyForm) => void

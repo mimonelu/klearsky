@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue"
 import FileBox from "@/components/FileBox.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 import { blurElement } from "@/composables/misc"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -65,6 +66,10 @@ async function onSubmit () {
   }
 }
 
+function onActivateClearButton (item: TTEasyFormItem) {
+  item.state[item.model] = ""
+}
+
 function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
   item.state[item.model] = files
   if (item.onChange != null) item.onChange(item, props)
@@ -107,6 +112,13 @@ function onSubmitTextarea (event: KeyboardEvent) {
           spellcheck="false"
           class="textbox"
         >
+        <button
+          v-if="item.clearButton"
+          class="clear-button"
+          @click.prevent="onActivateClearButton(item)"
+        >
+          <SVGIcon name="cross" />
+        </button>
         <FileBox
           v-else-if="item.type === 'file'"
           :accept="item.accept"
@@ -169,6 +181,30 @@ function onSubmitTextarea (event: KeyboardEvent) {
         flex-grow: 1;
       }
     }
+  }
+}
+
+.clear-button {
+  background-color: rgb(var(--bg-color));
+  border-radius: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -1rem;
+  position: absolute;
+  top: 50%;
+  right: 0.375rem;
+  width: 2rem;
+  height: 2rem;
+
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.75);
+    font-size: 0.75rem;
+  }
+  &:focus > .svg-icon,
+  &:hover > .svg-icon {
+    fill: rgb(var(--fg-color));
   }
 }
 
