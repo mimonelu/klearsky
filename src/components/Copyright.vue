@@ -8,10 +8,10 @@ const yyyy = (new Date).getFullYear()
   <div class="copyright">
     <div class="kebab-header">{{ $t("title") }} v{{ Package.version }}</div>
     <small>&copy; {{ yyyy }} mimonelu</small>
-    <a
+    <RouterLink
       class="textlink"
-      href="#/profile/post?handle=mimonelu.bsky.social"
-    >Bluesky@mimonelu.bsky.social</a>
+      :to="{ path: '/profile/post', query: { handle: 'mimonelu.bsky.social' } }"
+    >Bluesky@mimonelu.bsky.social</RouterLink>
     <a
       class="textlink"
       href="https://twitter.com/mimonelu"

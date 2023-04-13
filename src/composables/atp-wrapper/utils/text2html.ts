@@ -19,8 +19,20 @@ export default function (text: string): string {
     } else if (data.type === "mention") {
       html += `<a
         class="textlink"
-        href="#/profile/post?handle=${data.value.slice(1)}"
-        onclick="event?.stopPropagation()"
+        href="javascript: void 0;"
+        onclick="
+          event?.stopPropagation();
+          window.dispatchEvent(new CustomEvent(
+            'klearsky-router-push',
+            {
+              detail: {
+                path: '/profile/post',
+                query: {
+                  handle: '${data.value.slice(1)}'
+                }
+              }
+            }
+          ));"
       >${data.value}</a>`
     }
   })
