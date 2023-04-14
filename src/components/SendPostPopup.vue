@@ -3,7 +3,7 @@ import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Popup from "@/components/Popup.vue"
 import Post from "@/components/Post.vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const emit = defineEmits<{(event: string, done: boolean): void}>()
 
@@ -77,7 +77,7 @@ function close () {
 }
 
 async function submitCallback () {
-  blurElement()
+  Util.blurElement()
   if (mainState.processing) return
   mainState.processing = true
   try {

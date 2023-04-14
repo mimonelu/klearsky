@@ -1,10 +1,10 @@
-import Util from "@/composables/atp-wrapper/util"
+import AtpUtil from "@/composables/atp-wrapper/atp-util"
 
 export default function (responses: Array<any>) {
   // Blob な image は暫定的に削除
   // TODO: 対応すること
   /*
-  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
+  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (value.images != null && value.images.some((image: any) => image.image != null)) {
       const images = value.images
       delete value.images
@@ -14,7 +14,7 @@ export default function (responses: Array<any>) {
   */
 
   // embeds[0] -> embed
-  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
+  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "embeds" && value[0] != null) {
       parent.embed = JSON.parse(JSON.stringify(value[0]))
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
@@ -22,7 +22,7 @@ export default function (responses: Array<any>) {
   })
 
   // PARENT.value.embed -> PARENT.embed
-  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
+  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "value" && value.embed != null && parent.embed == null) {
       parent.embed = JSON.parse(JSON.stringify(value.embed))
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
@@ -30,7 +30,7 @@ export default function (responses: Array<any>) {
   })
 
   // PARENT.embed.media.external -> PARENT.embed.external
-  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
+  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "media" && value.external != null) {
       parent.external = JSON.parse(JSON.stringify(value.external))
       parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
@@ -38,7 +38,7 @@ export default function (responses: Array<any>) {
   })
 
   // PARENT.embed.media.images -> PARENT.embed.images
-  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
+  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "media" && value.images != null && parent.images == null) {
       parent.images = JSON.parse(JSON.stringify(value.images))
       parent.images.__comment = "❗ This 'images' was duplicated by Klearsky."
@@ -46,7 +46,7 @@ export default function (responses: Array<any>) {
   })
 
   // PARENT.record.record -> PARENT.record
-  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
+  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "record" && value.record != null) {
       parent.record = JSON.parse(JSON.stringify(value.record))
       parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
@@ -54,7 +54,7 @@ export default function (responses: Array<any>) {
   })
 
   // PARENT.record.embed.external/images -> PARENT.embed.external/images
-  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
+  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "record" && parent.embed != null && value.embed != null) {
       if (value.embed.external != null && parent.embed.external == null) {
         parent.embed.external = JSON.parse(JSON.stringify(value.embed.external))
@@ -68,7 +68,7 @@ export default function (responses: Array<any>) {
   })
 
   // Reason
-  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
+  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "reason" && value != null && parent?.post != null) {
       parent.post.__reason = value
     }

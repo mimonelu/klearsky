@@ -2,7 +2,7 @@
 import { onMounted, reactive } from "vue"
 import FileBox from "@/components/FileBox.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -52,7 +52,7 @@ function getCharacterLength (item: TTEasyFormItem): number {
 }
 
 async function onSubmit () {
-  blurElement()
+  Util.blurElement()
   if (state.processing) return
   if (props.submitCallback == null) {
     emit("submit")

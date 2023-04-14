@@ -2,7 +2,7 @@
 import { inject, onBeforeUnmount, onMounted, watch } from "vue"
 import NotificationList from "@/components/NotificationList.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
 
@@ -16,7 +16,7 @@ onMounted(async () => {
 })
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
-  blurElement()
+  Util.blurElement()
   mainState.processing = true
   try {
     await mainState.fetchNotifications(limit, direction)

@@ -1,4 +1,4 @@
-import storage from "@/composables/storage"
+import Util from "@/composables/util/index"
 
 export default function (this: TIAtpWrapper, did?: string) {
   // ログイン中のアカウント
@@ -7,5 +7,5 @@ export default function (this: TIAtpWrapper, did?: string) {
   // ログインしていない他のアカウント
   else delete this.data.sessions[did]
 
-  storage.save("atp", this.data)
+  Util.saveStorage("atp", this.data)
 }

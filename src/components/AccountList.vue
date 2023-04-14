@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { encryptMD5 } from "@/composables/cipher"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 defineProps<{
   hasDeleteButton: boolean;
@@ -25,19 +24,19 @@ const state = reactive<{
 })
 
 async function login (session: TTSession) {
-  blurElement()
+  Util.blurElement()
   mainState.atp.data.did = session.did
   mainState.atp.saveData()
   location.reload()
 }
 
 function deleteAccount (session: TTSession) {
-  blurElement()
+  Util.blurElement()
   mainState.atp.deleteAccount(session.did)
 }
 
 function getDidColor (did: string): string {
-  return "#" + encryptMD5(did).split("").splice(0, 6).join("")
+  return "#" + Util.encryptMD5(did).split("").splice(0, 6).join("")
 }
 </script>
 

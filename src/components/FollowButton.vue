@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const props = defineProps<{
   viewer: TTUserViewer
@@ -11,7 +11,7 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 async function toggleFollow () {
-  blurElement()
+  Util.blurElement()
   mainState.processing = true
   try {
     if (props.viewer.following != null) {

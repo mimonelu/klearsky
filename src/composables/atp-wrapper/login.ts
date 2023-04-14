@@ -1,5 +1,5 @@
 import type { BskyAgent, AtpAgentLoginOpts, ComAtprotoServerCreateSession } from "@atproto/api"
-import storage from "@/composables/storage"
+import Util from "@/composables/util/index"
 
 export default async function (
   this: TIAtpWrapper,
@@ -27,6 +27,6 @@ export default async function (
 
   // ここで persistSession が入る
 
-  storage.save("atp", this.data)
+  Util.saveStorage("atp", this.data)
   return true
 }

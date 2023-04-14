@@ -1,8 +1,8 @@
-import splitter from "@/composables/atp-wrapper/utils/splitter"
+import AtpUtil from "@/composables/atp-wrapper/atp-util"
 
 export default function (text: string): string {
   let html: string = ""
-  splitter(text).forEach((data: any) => {
+  AtpUtil.splitter(text).forEach((data: any) => {
     if (data.type === "text") {
       html += data.value
     } else if (data.type === "url") {

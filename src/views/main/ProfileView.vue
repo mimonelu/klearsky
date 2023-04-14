@@ -5,8 +5,8 @@ import type { LocationQueryValue } from "vue-router"
 import FollowButton from "@/components/FollowButton.vue"
 import MuteButton from "@/components/MuteButton.vue"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
-import dateLabel from "@/composables/date-label"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
 
@@ -112,7 +112,7 @@ function closePostMenu () {
           </dl>
           <dl class="created-at">
             <dt>{{ $t("startedAt") }}</dt>
-            <dd>{{ dateLabel(
+            <dd>{{ Util.dateLabel(
               mainState.currentProfile?.__createdAt,
               mainState.currentSetting.language
             ) }}</dd>

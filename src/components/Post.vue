@@ -7,8 +7,7 @@ import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import dateLabel from "@/composables/date-label"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -56,7 +55,7 @@ async function onActivateProfileLink (handle: string) {
 }
 
 async function onActivateReplyButton () {
-  blurElement()
+  Util.blurElement()
   const done = await mainState.openSendPostPopup("reply", props.post)
   state.processing = true
   try {
@@ -74,7 +73,7 @@ async function onActivateRepostMenuTrigger () {
 }
 
 async function onActivateSendRepostButton () {
-  blurElement()
+  Util.blurElement()
   state.repostMenuDisplay = false
   state.processing = true
   try {
@@ -89,7 +88,7 @@ async function onActivateSendRepostButton () {
 }
 
 async function onActivateDeleteRepostButton () {
-  blurElement()
+  Util.blurElement()
   if (props.post.viewer.repost == null) return
   state.repostMenuDisplay = false
   state.processing = true
@@ -102,7 +101,7 @@ async function onActivateDeleteRepostButton () {
 }
 
 async function onActivateQuoteRepostButton () {
-  blurElement()
+  Util.blurElement()
   state.repostMenuDisplay = false
   const done = await mainState.openSendPostPopup("quoteRepost", props.post)
   state.processing = true
@@ -115,7 +114,7 @@ async function onActivateQuoteRepostButton () {
 
 async function onActivateLikeButton () {
   if (state.processing) return
-  blurElement()
+  Util.blurElement()
   state.processing = true
   try {
     const liked = props.post.viewer.like != null
@@ -128,7 +127,7 @@ async function onActivateLikeButton () {
 }
 
 function onActivatePostMenuTrigger () {
-  blurElement()
+  Util.blurElement()
   state.postMenuDisplay = !state.postMenuDisplay
 }
 
@@ -202,7 +201,7 @@ async function updateThisPostThread () {
           <div
             v-if="post.indexedAt"
             class="indexed-at"
-          >{{ dateLabel(post.indexedAt, mainState.currentSetting.language) }}</div>
+          >{{ Util.dateLabel(post.indexedAt, mainState.currentSetting.language) }}</div>
         </div>
 
         <!-- 本文 -->

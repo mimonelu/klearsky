@@ -3,7 +3,7 @@ import { inject, onMounted, watch } from "vue"
 import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 import consts from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
@@ -34,7 +34,7 @@ async function fetchNewResults () {
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
-  blurElement()
+  Util.blurElement()
   if (mainState.processing) return
   if (mainState.currentSearchUserTerm === "") return
   if (mainState.currentSearchLastUserTerm !== mainState.currentSearchUserTerm) {

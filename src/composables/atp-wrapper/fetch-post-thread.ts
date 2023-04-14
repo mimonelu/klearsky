@@ -1,5 +1,5 @@
 import type { AppBskyFeedGetPostThread, BskyAgent } from "@atproto/api"
-import Util from "@/composables/atp-wrapper/util"
+import AtpUtil from "@/composables/atp-wrapper/atp-util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -16,11 +16,11 @@ export default async function (
 
   // TODO:
   const posts: Array<TTPost> = []
-  Util.traverseJson(response.data.thread, (key: string, value: any) => {
+  AtpUtil.traverseJson(response.data.thread, (key: string, value: any) => {
     if (key === "post") posts.push(value)
   })
-  Util.coherentResponses(posts)
-  Util.feed2html(posts)
+  AtpUtil.coherentResponses(posts)
+  AtpUtil.feed2html(posts)
   posts.sort((a: TTPost, b: TTPost) => {
     const aIndexedAt = new Date(a.__reason?.indexedAt ?? a.indexedAt)
     const bIndexedAt = new Date(b.__reason?.indexedAt ?? b.indexedAt)

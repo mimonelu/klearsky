@@ -2,7 +2,7 @@
 import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
 
@@ -19,12 +19,12 @@ router.afterEach(() => {
 })
 
 function back () {
-  blurElement()
+  Util.blurElement()
   if (state.canBack) router.back()
 }
 
 async function openSendPostPopup () {
-  blurElement()
+  Util.blurElement()
   await mainState.openSendPostPopup("post")
 }
 

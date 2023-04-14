@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -68,7 +68,7 @@ function onLoadLargeImage () {
 }
 
 function setBackgroundImage () {
-  blurElement()
+  Util.blurElement()
   if (!state.loaded) return
   if (mainState.currentSetting == null) return
   mainState.currentSetting.backgroundImage = props.largeUri
@@ -76,7 +76,7 @@ function setBackgroundImage () {
 }
 
 function close () {
-  blurElement()
+  Util.blurElement()
   emit("close")
 }
 </script>

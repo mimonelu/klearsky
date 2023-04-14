@@ -1,5 +1,5 @@
 import type { AppBskyFeedGetTimeline, BskyAgent } from "@atproto/api"
-import Util from "@/composables/atp-wrapper/util"
+import AtpUtil from "@/composables/atp-wrapper/atp-util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -21,10 +21,10 @@ export default async function (
   if (!response.success) return
 
   // TODO:
-  Util.coherentResponses(response.data.feed as Array<TTFeed>)
-  Util.feed2html(response.data.feed as Array<TTFeed>)
-  Util.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
-  Util.sortFeeds(oldFeeds)
+  AtpUtil.coherentResponses(response.data.feed as Array<TTFeed>)
+  AtpUtil.feed2html(response.data.feed as Array<TTFeed>)
+  AtpUtil.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
+  AtpUtil.sortFeeds(oldFeeds)
 
   return response.data.cursor
 }

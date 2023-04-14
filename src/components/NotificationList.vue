@@ -2,8 +2,7 @@
 import { inject } from "vue"
 import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
-import dateLabel from "@/composables/date-label"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
 
@@ -20,7 +19,7 @@ const iconMap: { [reason: string]: string } = {
 }
 
 async function openSubject (notification: TTNotification) {
-  blurElement()
+  Util.blurElement()
   switch (notification.reason) {
     case "follow": {
       await router.push({ name: "profile-post", query: { handle: notification.handle } })
@@ -74,7 +73,7 @@ async function openSubject (notification: TTNotification) {
       </RouterLink>
       <div class="display-name">{{ notification.displayName }}</div>
       <div class="handle">{{ notification.handle }}</div>
-      <div class="indexed-at">{{ dateLabel(
+      <div class="indexed-at">{{ Util.dateLabel(
         notification.indexedAt,
         mainState.currentSetting.language
       ) }}</div>

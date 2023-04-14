@@ -31,14 +31,14 @@ import logout from "@/composables/atp-wrapper/logout"
 import resumeSession from "@/composables/atp-wrapper/resume-session"
 import updateNotificationSeen from "@/composables/atp-wrapper/update-notification-seen"
 import updateProfile from "@/composables/atp-wrapper/update-profile"
-import storage from "@/composables/storage"
+import Util from "@/composables/util/index"
 
 // @ts-ignore // TODO:
 class AtpWrapper implements TIAtpWrapper {
   // @ts-ignore // TODO:
   constructor(this: TIAtpWrapper) {
     this.agent = null
-    this.data = storage.load("atp") ?? {
+    this.data = Util.loadStorage("atp") ?? {
       did: "",
       sessions: {},
     }
@@ -86,7 +86,7 @@ prototype.login = login
 prototype.logout = logout
 prototype.resumeSession = resumeSession
 prototype.saveData = function saveData (this: TIAtpWrapper) {
-  storage.save("atp", this.data)
+  Util.saveStorage("atp", this.data)
 }
 prototype.updateNotificationSeen = updateNotificationSeen
 prototype.updateProfile = updateProfile

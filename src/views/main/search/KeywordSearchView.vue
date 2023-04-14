@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted } from "vue"
-import dateLabel from "@/composables/date-label"
+import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
 
@@ -47,7 +47,7 @@ async function fetchNewResults () {
           :to="{ name: 'post', query: { postUri: `at://${result.user?.did}/${result.tid}` } }"
           class="item"
         >
-          <div class="created-at">{{ dateLabel(
+          <div class="created-at">{{ Util.dateLabel(
             result.post?.createdAt,
             mainState.currentSetting.language
           ) }}</div>

@@ -2,7 +2,7 @@
 import { inject, watch } from "vue"
 import Feed from "@/components/Feed.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const props = defineProps<{
   type: "author" | "authorReposts" | "authorLikes" | "hot" | "post" | "timeline";
@@ -14,7 +14,7 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 async function fetchFeeds (direction: "new" | "old") {
-  blurElement()
+  Util.blurElement()
   mainState.processing = true
   try {
     switch (props.type) {

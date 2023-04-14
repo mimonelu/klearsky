@@ -1,7 +1,7 @@
-import storage from "@/composables/storage"
+import Util from "@/composables/util/index"
 
 export default function (this: TIAtpWrapper) {
   this.data.did = ""
-  storage.save("atp", this.data)
+  Util.saveStorage("atp", this.data)
   this.session = undefined
 }

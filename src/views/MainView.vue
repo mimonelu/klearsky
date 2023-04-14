@@ -25,9 +25,7 @@ import ScrollButton from "@/components/ScrollButton.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import AtpWrapper from "@/composables/atp-wrapper"
-import scrollToFocused from "@/composables/scroll-to-focused"
-import storage from "@/composables/storage"
-import waitProp from "@/composables/wait-prop"
+import Util from "@/composables/util/index"
 import consts from "@/consts/consts.json"
 
 const $setI18n = inject("$setI18n") as Function
@@ -90,7 +88,7 @@ let notificationTimer: null | number = null
 onMounted(async () => {
   state.currentPath = router.currentRoute.value.fullPath
   state.currentQuery = router.currentRoute.value.query
-  state.settings = storage.load("settings") ?? {}
+  state.settings = Util.loadStorage("settings") ?? {}
   state.processing = true
   try {
     await autoLogin()
@@ -223,7 +221,7 @@ function saveSettings () {
   if (state.settings[did].backgroundOpacity == null)
     state.settings[did].backgroundOpacity = 0.5
   state.currentSetting = state.settings[did]
-  storage.save("settings", state.settings)
+  Util.saveStorage("settings", state.settings)
 }
 
 function updateSettings () {
@@ -540,13 +538,21 @@ async function openSendPostPopup (type: TTPostType, post?: TTPost, text?: string
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post
   state.sendPostPopupProps.text = text
-  await waitProp(() => state.sendPostPopupProps.display, false)
+  await Util.waitProp(() => state.sendPostPopupProps.display, false)
   return isSendPostDone
 }
 
 function closeSendPostPopup (done: boolean) {
   isSendPostDone = done
   state.sendPostPopupProps.display = false
+}
+
+function scrollToFocused () {
+  const focusElement = document.querySelector("[data-focus='true']")
+  if (focusElement != null) focusElement.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  })
 }
 
 // インフィニットスクロール用処理

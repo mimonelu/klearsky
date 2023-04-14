@@ -3,14 +3,14 @@ import { inject } from "vue"
 import { useRouter } from "vue-router"
 import AccountList from "@/components/AccountList.vue"
 import PageHeader from "@/components/PageHeader.vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
 
 const router = useRouter()
 
 async function newLogin () {
-  blurElement()
+  Util.blurElement()
   mainState.processing = true
   mainState.atp.logout()
   await router.push({ name: "home" })
@@ -19,7 +19,7 @@ async function newLogin () {
 }
 
 async function logout () {
-  blurElement()
+  Util.blurElement()
   mainState.processing = true
   try {
     await mainState.atp.deleteSession()

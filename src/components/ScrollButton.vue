@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import SVGIcon from "@/components/SVGIcon.vue"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 function moveToTop () {
-  blurElement()
+  Util.blurElement()
   window.scrollTo({
     left: 0,
     top: 0,
@@ -12,7 +12,7 @@ function moveToTop () {
 }
 
 function moveToBottom () {
-  blurElement()
+  Util.blurElement()
   window.scrollTo({
     left: 0,
     top: document.body.clientHeight,

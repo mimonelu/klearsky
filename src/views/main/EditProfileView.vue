@@ -3,8 +3,7 @@ import { inject, onMounted, reactive } from "vue"
 import { useRouter } from "vue-router"
 import EasyForm from "@/components/EasyForm.vue"
 import PageHeader from "@/components/PageHeader.vue"
-import { blurElement } from "@/composables/misc"
-import waitProp from "@/composables/wait-prop"
+import Util from "@/composables/util/index"
 
 const $t = inject("$t") as Function
 
@@ -74,14 +73,14 @@ onMounted(setDefaultValues)
 
 async function setDefaultValues () {
   state.processing = true
-  if (!mainState.mounted) await waitProp(() => mainState.mounted, true)
+  if (!mainState.mounted) await Util.waitProp(() => mainState.mounted, true)
   state.displayName = mainState.userProfile?.displayName ?? ""
   state.description = mainState.userProfile?.description ?? ""
   state.processing = false
 }
 
 async function submit () {
-  blurElement()
+  Util.blurElement()
   if (state.processing) return
   state.processing = true
   try {

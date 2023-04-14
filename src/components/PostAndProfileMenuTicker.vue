@@ -2,8 +2,7 @@
 import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import displayJson from "@/composables/display-json"
-import { blurElement } from "@/composables/misc"
+import Util from "@/composables/util/index"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -32,14 +31,14 @@ async function copyText () {
 }
 
 async function sendMention () {
-  blurElement()
+  Util.blurElement()
   if (props.mentionTo == null) return
   await mainState.openSendPostPopup("post", undefined, `@${props.mentionTo} `)
   emit("close")
 }
 
 async function deletePost () {
-  blurElement()
+  Util.blurElement()
   if (props.deletePostUri == null) return
   mainState.processing = true
   try {
@@ -53,7 +52,7 @@ async function deletePost () {
 
 function openSource () {
   if (props.openSource == null) return
-  displayJson(props.openSource)
+  Util.displayJson(props.openSource)
   emit("close")
 }
 </script>
