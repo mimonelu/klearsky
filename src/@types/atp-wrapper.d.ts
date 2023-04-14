@@ -118,6 +118,13 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     query: string
   ): Promise<undefined | any>
+  fetchLikeUsers(
+    this: TIAtpWrapper,
+    users: Array<TTUser>,
+    uri: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
   fetchNotificationCount(this: TIAtpWrapper): Promise<null | number>
   fetchNotifications(
     this: TIAtpWrapper,
@@ -134,6 +141,13 @@ interface TIAtpWrapper {
     uri: string,
     depth?: number
   ): Promise<null | Array<TTPost>>
+  fetchRepostUsers(
+    this: TIAtpWrapper,
+    users: Array<TTUser>,
+    uri: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
   fetchTimeline(
     this: TIAtpWrapper,
     oldFeeds: Array<TTFeed>,

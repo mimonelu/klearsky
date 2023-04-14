@@ -135,5 +135,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 .user-box {
   cursor: pointer;
+  padding: 0 1rem;
 }
 </style>

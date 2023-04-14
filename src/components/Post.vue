@@ -135,6 +135,18 @@ function onClosePostMenu () {
   state.postMenuDisplay = false
 }
 
+function onActivateOpenRepostUsersPopup () {
+  Util.blurElement()
+  mainState.openRepostUsersPopup(props.post.uri)
+  onClosePostMenu()
+}
+
+function onActivateOpenLikeUsersPopup () {
+  Util.blurElement()
+  mainState.openLikeUsersPopup(props.post.uri)
+  onClosePostMenu()
+}
+
 function onRemoveThisPost (uri: string) {
   emit("removeThisPost", uri)
 }
@@ -350,7 +362,23 @@ async function updateThisPostThread () {
               :openSource="post"
               @close="onClosePostMenu"
               @removeThisPost="onRemoveThisPost"
-            />
+            >
+              <template v-slot:before>
+                <!-- リポストユーザーリストポップアップボタン -->
+                <button @click.stop="onActivateOpenRepostUsersPopup">
+                  <SVGIcon name="repost" />
+                  <span>{{ $t("repostUsers") }}</span>
+                </button>
+
+                <!-- ライクユーザーリストポップアップボタン -->
+                <button @click.stop="onActivateOpenLikeUsersPopup">
+                  <SVGIcon name="heart" />
+                  <span>{{ $t("likeUsers") }}</span>
+                </button>
+
+                <hr>
+              </template>
+            </PostAndProfileMenuTicker>
           </button>
         </div>
       </div>

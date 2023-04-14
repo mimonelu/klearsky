@@ -51,6 +51,16 @@ type MainState = {
   currentSearchUserTerm: string
   currentSearchLastUserTerm: string
 
+  currentRepostUsers: Array<TTUser>
+  currentRepostUsersUri?: string
+  currentRepostUsersCursor?: string
+  repostUsersPopupDisplay: boolean
+
+  currentLikeUsers: Array<TTUser>
+  currentLikeUsersUri?: string
+  currentLikeUsersCursor?: string
+  likeUsersPopupDisplay: boolean
+
   notifications: Array<TTNotification>
   notificationCursor?: string
   notificationCount: number
@@ -92,6 +102,8 @@ type MainState = {
   fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
   fetchAuthorLikes: (direction: "new" | "old") => Promise<void>
   fetchHotFeeds: (direction: "old" | "new") => Promise<void>
+  fetchRepostUsers: (direction: "new" | "old") => Promise<void>
+  fetchLikeUsers: (direction: "new" | "old") => Promise<void>
   fetchTimeline: (direction: "old" | "new") => Promise<void>
   fetchPostThread: () => Promise<void>
   fetchNotifications: (
@@ -103,4 +115,8 @@ type MainState = {
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
   openSendPostPopup: (type: TTPostType, post?: TTPost, text?: string) => Promise<boolean>
   closeSendPostPopup: (done: boolean) => void
+  openRepostUsersPopup: (uri: string) => void
+  closeRepostUsersPopup: () => void
+  openLikeUsersPopup: (uri: string) => void
+  closeLikeUsersPopup: () => void
 }

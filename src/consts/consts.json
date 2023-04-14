@@ -1,10 +1,12 @@
 {
   "intervalOfFetchNotifications": 20000,
   "limitOfFetchAuthorFeeds": 30,
-  "limitOfFetchAuthorReposts": 30,
-  "limitOfFetchAuthorLikes": 30,
+  "limitOfFetchAuthorReposts": 15,
+  "limitOfFetchAuthorLikes": 15,
   "limitOfFetchHotFeeds": 30,
+  "limitOfFetchLikeUsers": 30,
   "limitOfFetchNotifications": 30,
+  "limitOfFetchRepostUsers": 30,
   "limitOfFetchTimeline": 30,
   "limitOfFetchUserSearch": 30,
   "limitOfFetchFollows": 30

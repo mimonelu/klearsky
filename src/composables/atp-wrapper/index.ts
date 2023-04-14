@@ -19,11 +19,13 @@ import fetchBlob from "@/composables/atp-wrapper/fetch-blob"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
 import fetchHotFeeds from "@/composables/atp-wrapper/fetch-hot-feeds"
+import fetchLikeUsers from "@/composables/atp-wrapper/fetch-like-users"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
+import fetchRepostUsers from "@/composables/atp-wrapper/fetch-repost-users"
 import fetchTimeline from "@/composables/atp-wrapper/fetch-timeline"
 import fetchUserSearch from "@/composables/atp-wrapper/fetch-user-search"
 import login from "@/composables/atp-wrapper/login"
@@ -80,6 +82,8 @@ prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications
 prototype.fetchPostThread = fetchPostThread
 prototype.fetchProfile = fetchProfile
+prototype.fetchRepostUsers = fetchRepostUsers
+prototype.fetchLikeUsers = fetchLikeUsers
 prototype.fetchTimeline = fetchTimeline
 prototype.fetchUserSearch = fetchUserSearch
 prototype.login = login

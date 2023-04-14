@@ -36,7 +36,6 @@ defineProps<{
     "a d d"
     "b b b";
   align-items: center;
-  padding: 0 1rem;
 }
 
 .avatar {

@@ -75,8 +75,16 @@ function close () {
   min-height: 4rem;
 
   &:deep() > h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-grow: 1;
+    grid-gap: 0.5rem;
     text-align: center;
+
+    & > .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
   }
 }
 

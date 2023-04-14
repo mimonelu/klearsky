@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import {
-  computed,
   inject,
   nextTick,
   onMounted,
   onUnmounted,
-  provide,
-  reactive
+  provide
 } from "vue"
 import {
   useRouter,
@@ -18,9 +16,11 @@ import type {
   RouteRecordName
 } from "vue-router"
 import ImagePopup from "@/components/ImagePopup.vue"
+import LikeUsersPopup from "@/components/LikeUsersPopup.vue"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
 import MainMenu from "@/components/MainMenu.vue"
+import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
@@ -143,6 +143,9 @@ function resetState () {
   state.currentFollowingsCursor = undefined
   state.currentHotFeeds = []
   state.currentHotCursor = undefined
+  state.currentRepostUsers = []
+  state.currentRepostUsersUri = undefined
+  state.currentRepostUsersCursor = undefined
   state.currentSearchKeywordTerm = ""
   state.currentSearchKeywordResults = []
   state.currentSearchUsers = []
@@ -363,6 +366,19 @@ async function routerPush (event: Event) {
       </div>
       <ScrollButton />
     </div>
+
+    <!-- リポストユーザーリストポップアップ -->
+    <RepostUsersPopup
+      v-if="state.repostUsersPopupDisplay"
+      @close="state.closeRepostUsersPopup"
+    />
+
+    <!-- ライクユーザーリストポップアップ -->
+    <LikeUsersPopup
+      v-if="state.likeUsersPopupDisplay"
+      @close="state.closeLikeUsersPopup"
+    />
+
     <ImagePopup
       v-if="state.imagePopupProps.display"
       :largeUri="state.imagePopupProps.largeUri"

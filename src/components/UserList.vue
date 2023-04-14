@@ -89,6 +89,10 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 .user-list {
   display: flex;
   flex-direction: column;
+
+  .user-box {
+    padding: 0 1rem;
+  }
 }
 
 .users {
