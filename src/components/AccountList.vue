@@ -58,6 +58,7 @@ function getDidColor (did: string): string {
           :style="{ '--color': getDidColor(session.did) }"
         >
         <div class="account__handle">{{ session.handle }}</div>
+        <div class="account__email">{{ session.email }}</div>
         <div class="account__service">{{ session.__service }}</div>
       </div>
       <div
@@ -94,10 +95,11 @@ function getDidColor (did: string): string {
     grid-template-columns: auto 1fr;
     grid-template-areas:
       "i h"
+      "i e"
       "i s";
-    grid-gap: 0.25rem 0.5rem;
+    grid-gap: 0 0.5rem;
     align-items: center;
-    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
     &:focus, &:hover {
       border-color: rgba(var(--fg-color), 0.5);
     }
@@ -110,13 +112,23 @@ function getDidColor (did: string): string {
     background-image: radial-gradient(closest-corner, transparent, var(--color));
     border-radius: var(--border-radius);
     grid-area: i;
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
   }
 
   &__handle {
     grid-area: h;
     font-weight: bold;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__email {
+    grid-area: e;
+    color: rgba(var(--fg-color), 0.75);
+    font-size: 0.875rem;
     line-height: 1.25;
     overflow: hidden;
     text-overflow: ellipsis;
