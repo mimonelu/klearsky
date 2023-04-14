@@ -24,60 +24,13 @@ import MainMenu from "@/components/MainMenu.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
-import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util/index"
 import consts from "@/consts/consts.json"
 
-const $setI18n = inject("$setI18n") as Function
-const $getI18n = inject("$getI18n") as Function
+import state from "@/composables/main-state"
 
-const state = reactive<MainState>({
-  // @ts-ignore // TODO:
-  atp: new AtpWrapper(),
-  mounted: false,
-  processing: false,
-  loginPopupDisplay: false,
-  loginPopupAutoDisplay: computed((): boolean => {
-    return state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)
-  }),
-  sendPostPopupProps: {
-    display: false,
-    type: "post",
-    post: undefined,
-  },
-  imagePopupProps: {
-    display: false,
-    largeUri: "",
-    smallUri: "",
-  },
-  settings: {},
-  backgroundImage: computed((): string => {
-    if (state.currentSetting?.backgroundImage == null) return ""
-    const backgroundImage: string = state.currentSetting.backgroundImage
-      .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;")
-    return backgroundImage.match(/^\/|^\w+:\/+/)
-      ? `url(${backgroundImage})`
-      : backgroundImage
-  }),
-  forceUpdate,
-  fetchUserProfile,
-  fetchCurrentProfile,
-  fetchCurrentAuthorFeed,
-  fetchAuthorReposts,
-  fetchAuthorLikes,
-  fetchHotFeeds,
-  fetchTimeline,
-  fetchPostThread,
-  fetchNotifications,
-  fetchFollowers,
-  fetchFollowings,
-  saveSettings,
-  updateSettings,
-  updateI18nSetting,
-  updateColorThemeSetting,
-  updateUserProfile,
-  openSendPostPopup,
-})
+state.$setI18n = inject("$setI18n") as Function
+state.$getI18n = inject("$getI18n") as Function
 
 resetState()
 
@@ -98,7 +51,7 @@ onMounted(async () => {
     await processPage(router.currentRoute.value.name)
   } finally {
     try {
-      await fetchUserProfile()
+      await state.fetchUserProfile()
     } finally {
       state.mounted = true
       state.processing = false
@@ -205,58 +158,6 @@ function resetState () {
   state.scrolledToBottom = false
 }
 
-function saveSettings () {
-  const did = state.atp.session?.did
-  if (did == null) return
-  if (state.settings[did] == null)
-    state.settings[did] = {}
-  if (state.settings[did].language == null)
-    state.settings[did].language = $getI18n()
-  if (state.settings[did].fontSize == null)
-    state.settings[did].fontSize = "medium"
-  if (state.settings[did].colorTheme == null)
-    state.settings[did].colorTheme = "auto"
-  if (state.settings[did].backgroundImage == null)
-    state.settings[did].backgroundImage = ""
-  if (state.settings[did].backgroundOpacity == null)
-    state.settings[did].backgroundOpacity = 0.5
-  state.currentSetting = state.settings[did]
-  Util.saveStorage("settings", state.settings)
-}
-
-function updateSettings () {
-  updateI18nSetting()
-  updateFontSizeSetting()
-  updateColorThemeSetting()
-}
-
-function updateI18nSetting () {
-  if (state.currentSetting?.language != null) {
-    $setI18n(state.currentSetting.language)
-    state.forceUpdate()
-  }
-}
-
-function updateFontSizeSetting () {
-  window.document.documentElement.setAttribute(
-    "data-font-size",
-    state.currentSetting?.fontSize ?? "medium"
-  )
-}
-
-function updateColorThemeSetting () {
-  if (state.currentSetting?.colorTheme != null) {
-    window.document.body.setAttribute(
-      "data-color-theme",
-      state.currentSetting.colorTheme as string
-    )
-  }
-}
-
-function forceUpdate () {
-  state.updateKey = new Date().getTime()
-}
-
 async function autoLogin () {
   if (state.atp.hasLogin()) return
   if (state.atp.canLogin()) await state.atp.login()
@@ -275,7 +176,7 @@ async function manualLogin (service: string, identifier: string, password: strin
     await processPage(router.currentRoute.value.name)
   } finally {
     try {
-      await fetchUserProfile()
+      await state.fetchUserProfile()
     } finally {
       state.processing = false
     }
@@ -303,54 +204,54 @@ async function processPage (pageName?: null | RouteRecordName) {
     case "profile-post": {
       const tasks: Array<Promise<void>> = []
       if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
-        tasks.push(fetchCurrentAuthorFeed("new"))
+        tasks.push(state.fetchCurrentAuthorFeed("new"))
       if (handle !== state.currentProfile?.handle)
-        tasks.push(fetchCurrentProfile(handle as string))
+        tasks.push(state.fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
     case "profile-repost": {
       const tasks: Array<Promise<void>> = []
       if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0)
-        tasks.push(fetchAuthorReposts("new"))
+        tasks.push(state.fetchAuthorReposts("new"))
       if (handle !== state.currentProfile?.handle)
-        tasks.push(fetchCurrentProfile(handle as string))
+        tasks.push(state.fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
     case "profile-like": {
       const tasks: Array<Promise<void>> = []
       if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
-        tasks.push(fetchAuthorLikes("new"))
+        tasks.push(state.fetchAuthorLikes("new"))
       if (handle !== state.currentProfile?.handle)
-        tasks.push(fetchCurrentProfile(handle as string))
+        tasks.push(state.fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
     case "profile-following": {
       const tasks: Array<Promise<void>> = []
       if (!state.inSameProfilePage || state.currentFollowings.length === 0)
-        tasks.push(fetchFollowings("new"))
+        tasks.push(state.fetchFollowings("new"))
       if (handle !== state.currentProfile?.handle)
-        tasks.push(fetchCurrentProfile(handle as string))
+        tasks.push(state.fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
     case "profile-follower": {
       const tasks: Array<Promise<void>> = []
       if (!state.inSameProfilePage || state.currentFollowers.length === 0)
-        tasks.push(fetchFollowers("new"))
+        tasks.push(state.fetchFollowers("new"))
       if (handle !== state.currentProfile?.handle)
-        tasks.push(fetchCurrentProfile(handle as string))
+        tasks.push(state.fetchCurrentProfile(handle as string))
       await Promise.all(tasks)
       break
     }
     case "home": {
-      await fetchTimeline("new")
+      await state.fetchTimeline("new")
       break
     }
     case "hot": {
-      await fetchHotFeeds("new")
+      await state.fetchHotFeeds("new")
       break
     }
     case "post": {
@@ -366,129 +267,6 @@ async function processPage (pageName?: null | RouteRecordName) {
       break
     }
   }
-}
-
-async function fetchTimeline (direction: "old" | "new") {
-  const cursor: undefined | string =
-    await state.atp.fetchTimeline(
-      state.timelineFeeds,
-      consts.limitOfFetchTimeline,
-      direction === "old" ? state.timelineCursor : undefined
-    )
-  if (cursor != null) state.timelineCursor = cursor
-}
-
-async function fetchHotFeeds (direction: "old" | "new") {
-  const cursor: undefined | string =
-    await state.atp.fetchHotFeeds(
-      state.currentHotFeeds,
-      consts.limitOfFetchHotFeeds,
-      direction === "old" ? state.currentHotCursor : undefined
-    )
-  if (cursor != null) state.currentHotCursor = cursor
-}
-
-async function fetchPostThread () {
-  const uri = state.currentQuery.postUri as LocationQueryValue
-  if (!uri) return
-  state.currentPosts = await state.atp.fetchPostThread(uri) ?? []
-}
-
-async function fetchUserProfile () {
-  state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle as string)
-}
-
-async function updateUserProfile (profile: TTUpdateProfileParams) {
-  state.processing = true
-  try {
-    await state.atp.updateProfile(profile)
-  } finally {
-    state.processing = false
-  }
-}
-
-async function fetchCurrentProfile (handle: string) {
-  state.currentProfile = null
-  state.currentAuthorReposts.splice(0)
-  state.currentAuthorLikes.splice(0)
-  state.currentFollowers.splice(0)
-  state.currentFollowings.splice(0)
-  state.currentProfile = await state.atp.fetchProfile(handle)
-  if (state.currentProfile == null) return
-  if (handle === state.atp.session?.handle)
-    state.userProfile = state.currentProfile
-
-  // 利用開始日の取得（非同期で良い）
-  injectCreatedAt()
-}
-
-async function injectCreatedAt () {
-  if (state.currentProfile == null) return
-  const log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
-  const logJson = await log.json()
-  state.currentProfile.__createdAt = logJson[0]?.createdAt
-  console.log("[klearsky/log/audit]", logJson)
-}
-
-async function fetchCurrentAuthorFeed (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
-  const cursor: undefined | string =
-    await state.atp.fetchAuthorFeed(
-      state.currentAuthorFeeds as Array<TTFeed>,
-      handle,
-      consts.limitOfFetchAuthorFeeds,
-      direction === "old" ? state.currentAuthorCursor : undefined
-    )
-  if (cursor != null) state.currentAuthorCursor = cursor
-}
-
-async function fetchAuthorReposts (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchAuthorReposts(
-    state.currentAuthorReposts,
-    handle,
-    consts.limitOfFetchAuthorReposts,
-    direction === "new" ? undefined : state.currentAuthorRepostsCursor
-  )
-  state.currentAuthorRepostsCursor = cursor
-}
-
-async function fetchAuthorLikes (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchAuthorLikes(
-    state.currentAuthorLikes,
-    handle,
-    consts.limitOfFetchAuthorLikes,
-    direction === "new" ? undefined : state.currentAuthorLikesCursor
-  )
-  state.currentAuthorLikesCursor = cursor
-}
-
-async function fetchFollowings (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchFollowings(
-    state.currentFollowings,
-    handle,
-    consts.limitOfFetchFollows,
-    direction === "new" ? undefined : state.currentFollowingsCursor
-  )
-  state.currentFollowingsCursor = cursor
-}
-
-async function fetchFollowers (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
-  const cursor: undefined | string = await state.atp.fetchFollowers(
-    state.currentFollowers,
-    handle,
-    consts.limitOfFetchFollows,
-    direction === "new" ? undefined : state.currentFollowersCursor
-  )
-  state.currentFollowersCursor = cursor
 }
 
 function clearNotificationInterval () {
@@ -507,19 +285,6 @@ async function setupNotificationInterval () {
   }, consts.intervalOfFetchNotifications)
 }
 
-async function fetchNotifications (limit: number, direction: "new" | "old") {
-  const result: null | {
-    cursor?: string
-    newNotificationCount: number
-  } = await state.atp.fetchNotifications(
-    state.notifications,
-    limit,
-    direction === "new" ? undefined : state.notificationCursor
-  )
-  if (result == null) return
-  state.notificationCursor = result.cursor
-}
-
 async function updateNotification (forceUpdate: boolean) {
   const count = await state.atp.fetchNotificationCount() ?? 0
   const canFetched = state.notificationCount < count
@@ -529,22 +294,6 @@ async function updateNotification (forceUpdate: boolean) {
       ? consts.limitOfFetchNotifications
       : Math.min(consts.limitOfFetchNotifications, count + 1) // NOTICE: 念のため + 1 している
     , "new")
-}
-
-let isSendPostDone = false
-
-async function openSendPostPopup (type: TTPostType, post?: TTPost, text?: string): Promise<boolean> {
-  state.sendPostPopupProps.display = true
-  state.sendPostPopupProps.type = type
-  state.sendPostPopupProps.post = post
-  state.sendPostPopupProps.text = text
-  await Util.waitProp(() => state.sendPostPopupProps.display, false)
-  return isSendPostDone
-}
-
-function closeSendPostPopup (done: boolean) {
-  isSendPostDone = done
-  state.sendPostPopupProps.display = false
 }
 
 function scrollToFocused () {
@@ -625,7 +374,7 @@ async function routerPush (event: Event) {
       :type="state.sendPostPopupProps.type"
       :post="state.sendPostPopupProps.post"
       :text="state.sendPostPopupProps.text"
-      @close="closeSendPostPopup"
+      @close="state.closeSendPostPopup"
     />
     <LoginPopup
       v-if="state.loginPopupAutoDisplay"

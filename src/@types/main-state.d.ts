@@ -82,6 +82,9 @@ type MainState = {
   // インフィニットスクロール用プロパティ
   scrolledToBottom: boolean
 
+  $setI18n?: Function
+  $getI18n?: Function
+
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>
@@ -99,4 +102,5 @@ type MainState = {
   fetchFollowings: (direction: "new" | "old") => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
   openSendPostPopup: (type: TTPostType, post?: TTPost, text?: string) => Promise<boolean>
+  closeSendPostPopup: (done: boolean) => void
 }
