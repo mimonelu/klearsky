@@ -17,16 +17,16 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+async function copyText () {
+  if (props.copyText == null) return
+  await navigator.clipboard.writeText(props.copyText)
+  emit("close")
+}
+
 function translateText () {
   if (props.translateText == null) return
   const language = window.navigator.language
   window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(props.translateText)}&op=translate`)
-  emit("close")
-}
-
-async function copyText () {
-  if (props.copyText == null) return
-  await navigator.clipboard.writeText(props.copyText)
   emit("close")
 }
 
@@ -59,19 +59,20 @@ function openSource () {
 
 <template>
   <MenuTicker :display="display">
-    <button
-      v-if="translateText != null"
-      @click.stop="translateText"
-    >
-      <SVGIcon name="translate" />
-      <span>{{ $t("translate") }}</span>
-    </button>
+    <slot name="before" />
     <button
       v-if="copyText != null"
       @click.stop="copyText"
     >
       <SVGIcon name="clipboard" />
       <span>{{ $t("copyPostText") }}</span>
+    </button>
+    <button
+      v-if="translateText != null"
+      @click.stop="translateText"
+    >
+      <SVGIcon name="translate" />
+      <span>{{ $t("translate") }}</span>
     </button>
     <button
       v-if="mentionTo != null"
@@ -94,5 +95,6 @@ function openSource () {
       <SVGIcon name="json" />
       <span>{{ $t("showSource") }}</span>
     </button>
+    <slot name="after" />
   </MenuTicker>
 </template>

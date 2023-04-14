@@ -9,10 +9,12 @@ import cursorLeft from "@/svg/cursor-left.svg?raw"
 import cursorRight from "@/svg/cursor-right.svg?raw"
 import cursorUp from "@/svg/cursor-up.svg?raw"
 import edit from "@/svg/edit.svg?raw"
+import email from "@/svg/email.svg?raw"
 import fire from "@/svg/fire.svg?raw"
 import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
 import home from "@/svg/home.svg?raw"
+import identifier from "@/svg/identifier.svg?raw"
 import json from "@/svg/json.svg?raw"
 import mail from "@/svg/mail.svg?raw"
 import menu from "@/svg/menu.svg?raw"
@@ -41,10 +43,12 @@ const icons: { [k: string]: string } = {
   cursorRight,
   cursorUp,
   edit,
+  email,
   fire,
   heart,
   heartBroken,
   home,
+  identifier,
   json,
   mail,
   menu,

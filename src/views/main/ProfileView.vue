@@ -38,6 +38,16 @@ function openPostMenu () {
 function closePostMenu () {
   state.profileMenuDisplay = false
 }
+
+async function copyHandle () {
+  await navigator.clipboard.writeText(mainState.currentProfile?.handle ?? "")
+  closePostMenu()
+}
+
+async function copyDid () {
+  await navigator.clipboard.writeText(mainState.currentProfile?.did ?? "")
+  closePostMenu()
+}
 </script>
 
 <template>
@@ -129,7 +139,35 @@ function closePostMenu () {
               :mentionTo="mainState.currentProfile?.handle"
               :openSource="mainState.currentProfile"
               @close="closePostMenu"
-            />
+            >
+              <template v-slot:before>
+                <!-- メールアドレス -->
+                <div
+                  v-if="isUserProfile()"
+                  class="menu-ticker__header"
+                >{{ mainState.atp.session?.email ?? "&nbsp;" }}</div>
+
+                <!-- ハンドルのコピー -->
+                <button
+                  class="copy-handle"
+                  @click.stop="copyHandle"
+                >
+                  <SVGIcon name="clipboard" />
+                  <span>{{ $t("copyHandle") }}</span>
+                </button>
+
+                <!-- DID のコピー -->
+                <button
+                  class="copy-did"
+                  @click.stop="copyDid"
+                >
+                  <SVGIcon name="clipboard" />
+                  <span>{{ $t("copyDid") }}</span>
+                </button>
+
+                <hr />
+              </template>
+            </PostAndProfileMenuTicker>
           </button>
         </div>
       </div>
@@ -239,10 +277,12 @@ function closePostMenu () {
 
 .handle {
   color: rgba(var(--fg-color), 0.75);
+  display: flex;
+  grid-gap: 0.5rem;
   line-height: 1.25;
-  margin-bottom: 0.5rem;
   user-select: text;
   word-break: break-all;
+  margin-bottom: 0.5rem;
 }
 
 .followed {

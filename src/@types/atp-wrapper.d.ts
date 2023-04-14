@@ -20,6 +20,7 @@ type TTSession = {
   accessJwt: string
   did: string
   handle: string
+  email?: string
   refreshJwt: string
   __service?: string // Injected
 }

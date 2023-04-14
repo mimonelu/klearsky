@@ -62,26 +62,44 @@ watch(() => props.display, () => {
     grid-gap: 0.25rem;
     padding: 0.5rem 0;
     position: absolute;
+    max-width: 16rem;
     z-index: 2;
 
-    &:deep() > button {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      grid-gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      white-space: nowrap;
-      &:focus, &:hover {
-        color: rgb(var(--bg-color));
+    &:deep() {
+      .menu-ticker__header {
+        border-bottom: 1px solid rgba(var(--bg-color), 0.25);
+        font-weight: bold;
+        padding: 0.25rem 1rem 0.75rem 1rem;
+        word-wrap: break-word;
+
+        & > .svg-icon {
+          fill: rgba(var(--bg-color), 0.5);
+        }
       }
 
-      & > .svg-icon {
-        fill: rgba(var(--bg-color), 0.75);
-      }
-      &:focus, &:hover {
-        & > .svg-icon {
-          fill: rgb(var(--bg-color));
+      & > button {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        grid-gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        white-space: nowrap;
+        &:focus, &:hover {
+          color: rgb(var(--bg-color));
         }
+
+        & > .svg-icon {
+          fill: rgba(var(--bg-color), 0.75);
+        }
+        &:focus, &:hover {
+          & > .svg-icon {
+            fill: rgb(var(--bg-color));
+          }
+        }
+      }
+
+      & > hr {
+        border-bottom: 1px solid rgba(var(--bg-color), 0.25);
       }
     }
   }
