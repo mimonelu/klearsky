@@ -217,9 +217,9 @@ function saveSettings () {
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].replyControl == null)
-    state.settings[did].replyControl = [2]
+    state.settings[did].replyControl = []
   if (state.settings[did].repostControl == null)
-    state.settings[did].repostControl = [2]
+    state.settings[did].repostControl = []
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].backgroundImage == null)
