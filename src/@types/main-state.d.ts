@@ -1,6 +1,8 @@
 type TTSetting = {
   language?: string
   fontSize?: string
+  replyControl?: Array<number>
+  repostControl?: Array<number>
   colorTheme?: string
   backgroundImage?: string
   backgroundOpacity?: number

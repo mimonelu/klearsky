@@ -154,6 +154,8 @@ async function fetchTimeline (direction: "old" | "new") {
   const cursor: undefined | string =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
+      state.currentSetting.replyControl,
+      state.currentSetting.repostControl,
       consts.limitOfFetchTimeline,
       direction === "old" ? state.timelineCursor : undefined
     )
@@ -214,6 +216,10 @@ function saveSettings () {
       : window.navigator.language
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
+  if (state.settings[did].replyControl == null)
+    state.settings[did].replyControl = [2]
+  if (state.settings[did].repostControl == null)
+    state.settings[did].repostControl = [2]
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].backgroundImage == null)

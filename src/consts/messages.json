@@ -76,7 +76,21 @@
     "title": "Klearsky",
     "translate": "Translate",
     "userSearch": "User Search",
-    "yourAccounts": "Your Accounts"
+    "yourAccounts": "Your Accounts",
+
+    "timelineControl": "Timeline Control",
+    "replyControl": "Reply Control",
+    "replyControl1": "Collapse replies to the user himself",
+    "replyControl2": "Collapse replies to you",
+    "replyControl3": "Collapse replies to users who don't follow you",
+    "replyControl4": "Collapse replies to users you don't follow",
+    "replyControl5": "Collapse replies to users you follow",
+    "repostControl": "Repost Control",
+    "repostControl1": "Collapse reposts of posts by the user himself",
+    "repostControl2": "Collapse reposts of posts by you",
+    "repostControl3": "Collapse reposts of posts by users who don't follow you",
+    "repostControl4": "Collapse reposts of posts by users you don't follow",
+    "repostControl5": "Collapse reposts of posts by users you follow"
   },
   "ja": {
     "accounts": "アカウント",
@@ -155,6 +169,20 @@
     "title": "Klearsky",
     "translate": "翻訳する",
     "userSearch": "ユーザー検索",
-    "yourAccounts": "あなたのアカウント"
+    "yourAccounts": "あなたのアカウント",
+
+    "timelineControl": "タイムラインの制御",
+    "replyControl": "リプライの制御",
+    "replyControl1": "自分自身へのリプライを折り畳む",
+    "replyControl2": "あなたへのリプライを折り畳む",
+    "replyControl3": "あなたをフォローしていないユーザーへのリプライを折り畳む",
+    "replyControl4": "あなたがフォローしていないユーザーへのリプライを折り畳む",
+    "replyControl5": "あなたがフォローしているユーザーへのリプライを折り畳む",
+    "repostControl": "リポストの制御",
+    "repostControl1": "自分自身によるポストのリポストを折り畳む",
+    "repostControl2": "あなたによるポストのリポストを折り畳む",
+    "repostControl3": "あなたをフォローしていないユーザーによるポストのリポストを折り畳む",
+    "repostControl4": "あなたがフォローしていないユーザーによるポストのリポストを折り畳む",
+    "repostControl5": "あなたがフォローしているユーザーによるポストのリポストを折り畳む"
   }
 }

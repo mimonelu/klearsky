@@ -2,6 +2,7 @@
 // SEE: https://pictogrammers.com/library/mdi/
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
+import check from "@/svg/check.svg?raw"
 import clipboard from "@/svg/clipboard.svg?raw"
 import cross from "@/svg/cross.svg?raw"
 import cursorDown from "@/svg/cursor-down.svg?raw"
@@ -36,6 +37,7 @@ import wallpaper from "@/svg/wallpaper.svg?raw"
 const icons: { [k: string]: string } = {
   at,
   bell,
+  check,
   clipboard,
   cross,
   cursorDown,

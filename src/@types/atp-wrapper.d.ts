@@ -151,6 +151,8 @@ interface TIAtpWrapper {
   fetchTimeline(
     this: TIAtpWrapper,
     oldFeeds: Array<TTFeed>,
+    replyControl?: Array<number>,
+    repostControl?: Array<number>,
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
