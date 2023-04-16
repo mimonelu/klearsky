@@ -3,7 +3,6 @@ import { inject, reactive } from "vue"
 import AccountList from "@/components/AccountList.vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Logo from "@/components/Logo.vue"
-import Popup from "@/components/Popup.vue"
 
 const emit = defineEmits<{(
   event: string,
@@ -73,52 +72,63 @@ async function submitCallback () {
 </script>
 
 <template>
-  <Popup
+  <div
     class="login-popup"
-    :hasCloseButton="false"
+    :data-has-accounts="Object.keys(mainState.atp.data.sessions).length > 0"
   >
-    <template v-slot:header>
-      <Logo />
-      <div class="description">Unofficial Web Client for Bluesky</div>
-    </template>
-    <template v-slot:body>
-      <div
-        class="body"
-        :data-has-accounts="Object.keys(mainState.atp.data.sessions).length > 0"
-      >
+    <div class="login-popup__inner">
+      <div class="login-popup__header">
+        <Logo />
+        <div class="description">Unofficial Web Client for Bluesky</div>
+      </div>
+      <div class="login-popup__body">
         <EasyForm v-bind="easyFormProps" />
-        <div class="body__right">
+        <div class="account-container">
           <div class="account-header">{{ $t("yourAccounts") }}</div>
           <AccountList :hasDeleteButton="false" />
         </div>
       </div>
-    </template>
-  </Popup>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 $width: 800px;
 
-.login-popup:deep() {
-  position: unset;
+.login-popup {
+  display: flex;
+  justify-content: center;
 
-  .popup {
-    border: unset;
-    box-shadow: unset;
-    margin: unset;
-    width: $width;
-    max-width: 100%;
-    max-height: 100%;
+  &__inner {
+    flex-grow: 1;
+    padding: 2rem;
+    max-width: $width;
+  }
 
-    &-header {
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-gap: 1rem;
+    padding: 1rem 2rem 2rem;
+  }
+
+  &__body {
+    grid-gap: 2rem;
+    @media (max-width: $width) {
+      display: flex;
       flex-direction: column;
-      grid-gap: 1rem;
-      padding: 2rem;
-      min-height: unset;
     }
+    @media not all and (max-width: $width) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  &[data-has-accounts="false"] {
+    grid-template-columns: unset;
 
-    &-body {
-      grid-gap: 2rem;
+    .account-container {
+      display: none;
     }
   }
 }
@@ -128,31 +138,13 @@ $width: 800px;
 }
 
 .description {
-  text-align: center;
+  color: rgba(var(--fg-color), 0.5);
 }
 
-.body {
-  grid-gap: 2rem;
-  @media (max-width: $width) {
-    display: flex;
-    flex-direction: column;
-  }
-  @media not all and (max-width: $width) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  &[data-has-accounts="false"] {
-    grid-template-columns: unset;
-  }
-  &[data-has-accounts="false"] &__right {
-    display: none;
-  }
-
-  &__right {
-    display: flex;
-    flex-direction: column;
-    grid-gap: 0.5rem;
-  }
+.account-container {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 0.5rem;
 }
 
 .account-header {

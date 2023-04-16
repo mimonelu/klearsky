@@ -23,6 +23,7 @@ async function compressFileToBlob (params: {
   maxHeight: number,
   maxSize: number,
 }): Promise<Blob> {
+  // SEE: https://github.com/Donaldcwl/browser-image-compression#main-function
   return await imageCompression(params.file, {
     fileType: params.mimeType,
     maxSizeMB: params.maxSize,
