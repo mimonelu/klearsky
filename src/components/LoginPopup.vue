@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import AccountList from "@/components/AccountList.vue"
+import Copyright from "@/components/Copyright.vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Logo from "@/components/Logo.vue"
 
@@ -88,6 +89,7 @@ async function submitCallback () {
           <AccountList :hasDeleteButton="false" />
         </div>
       </div>
+      <Copyright />
     </div>
   </div>
 </template>
@@ -100,8 +102,11 @@ $width: 800px;
   justify-content: center;
 
   &__inner {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
-    padding: 2rem;
+    grid-gap: 2rem;
+    padding: 4rem 2rem;
     max-width: $width;
   }
 
@@ -110,7 +115,6 @@ $width: 800px;
     flex-direction: column;
     align-items: center;
     grid-gap: 1rem;
-    padding: 1rem 2rem 2rem;
   }
 
   &__body {
@@ -125,7 +129,9 @@ $width: 800px;
     }
   }
   &[data-has-accounts="false"] {
-    grid-template-columns: unset;
+    .login-popup__body {
+      grid-template-columns: unset;
+    }
 
     .account-container {
       display: none;
@@ -151,5 +157,9 @@ $width: 800px;
   @media not all and (max-width: $width) {
     text-align: right;
   }
+}
+
+.copyright {
+  font-size: 0.875rem;
 }
 </style>

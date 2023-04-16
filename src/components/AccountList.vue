@@ -10,16 +10,23 @@ defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  sortedSessions: ComputedRef<Array<TTSession>>;
+  sessionGroups: ComputedRef<{ [service: string]: Array<TTSession> }>;
 }>({
-  sortedSessions: computed(() => {
-    const sessionValues = Object.values(mainState.atp.data.sessions)
-      .sort((a: TTSession, b: TTSession) => {
-        const aKey = `${a.__service} ${a.handle}`
-        const bKey = `${b.__service} ${b.handle}`
-        return aKey < bKey ? - 1 : aKey > bKey ? 1 : 0
-      })
-    return sessionValues
+  sessionGroups: computed(() => {
+    const sessionValues =
+      Object.values(mainState.atp.data.sessions)
+        .sort((a: TTSession, b: TTSession) => {
+          const aKey = `${a.__service} ${a.handle}`
+          const bKey = `${b.__service} ${b.handle}`
+          return aKey < bKey ? - 1 : aKey > bKey ? 1 : 0
+        })
+    const results: { [service: string]: Array<TTSession> } = {}
+    sessionValues.forEach((session: TTSession) => {
+      if (results[session.__service as string] == null)
+        results[session.__service as string] = []
+      results[session.__service as string].push(session)
+    })
+    return results
   }),
 })
 
@@ -43,34 +50,42 @@ function getDidColor (did: string): string {
 <template>
   <div class="account-list">
     <div
-      v-for="session in state.sortedSessions"
-      :key="session.did"
-      class="account"
-      :data-is-me="mainState.atp.session?.did === session.did"
+      v-for="sessions, service in state.sessionGroups"
+      :key="service"
+      class="account-list__service"
     >
-      <div
-        class="account__left"
-        @click.prevent="login(session)"
-      >
-        <img
-          class="account__image"
-          src="/img/void-avatar.png"
-          :style="{ '--color': getDidColor(session.did) }"
+      <div class="service">{{ service }}</div>
+      <div class="account-button-container">
+        <div
+          v-for="session of sessions"
+          :key="session.did"
+          class="account-button"
+          :data-is-me="mainState.atp.session?.did === session.did"
         >
-        <div class="account__handle">{{ session.handle }}</div>
-        <div class="account__email">{{ session.email }}</div>
-        <div class="account__service">{{ session.__service }}</div>
-      </div>
-      <div
-        v-if="hasDeleteButton"
-        class="account__right"
-      >
-        <button
-          class="account__delete"
-          @click.prevent="deleteAccount(session)"
-        >
-          <SVGIcon name="cross" />
-        </button>
+          <div
+            class="account-button__left"
+            @click.prevent="login(session)"
+          >
+            <img
+              class="account-button__image"
+              src="/img/void-avatar.png"
+              :style="{ '--color': getDidColor(session.did) }"
+            >
+            <div class="account-button__handle">{{ session.handle }}</div>
+            <div class="account-button__email">{{ session.email }}</div>
+          </div>
+          <div
+            v-if="hasDeleteButton"
+            class="account-button__right"
+          >
+            <button
+              class="account-button__delete"
+              @click.prevent="deleteAccount(session)"
+            >
+              <SVGIcon name="cross" />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -81,9 +96,29 @@ function getDidColor (did: string): string {
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
+
+  &__service {
+    border: 1px solid rgba(var(--fg-color), 0.125);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+  }
 }
 
-.account {
+.service {
+  background-color: rgba(var(--fg-color), 0.125);
+  color: rgba(var(--fg-color), 0.75);
+  padding: 0.5rem;
+}
+
+.account-button-container {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.account-button {
   display: flex;
 
   &__left {
@@ -95,8 +130,7 @@ function getDidColor (did: string): string {
     grid-template-columns: auto 1fr;
     grid-template-areas:
       "i h"
-      "i e"
-      "i s";
+      "i e";
     grid-gap: 0 0.5rem;
     align-items: center;
     padding: 0.25rem 0.5rem 0.25rem 0.25rem;
@@ -112,8 +146,8 @@ function getDidColor (did: string): string {
     background-image: radial-gradient(closest-corner, transparent, var(--color));
     border-radius: var(--border-radius);
     grid-area: i;
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
   }
 
   &__handle {
@@ -135,15 +169,6 @@ function getDidColor (did: string): string {
     white-space: nowrap;
   }
 
-  &__service {
-    grid-area: s;
-    font-size: 0.875rem;
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
   &__right {
     display: flex;
     align-items: center;
@@ -155,7 +180,7 @@ function getDidColor (did: string): string {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: -1rem;
+    margin-right: -0.5rem;
     min-width: 3rem;
     min-height: 3rem;
 
