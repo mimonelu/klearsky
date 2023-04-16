@@ -20,10 +20,12 @@ export default async function (
     $type: "app.bsky.feed.post",
     createdAt: new Date().toISOString(),
     text: richText.text,
-    facets: richText.facets,
   }
 
-  // TODO:
+  if (richText.facets != null)
+    record.facets = richText.facets
+
+  // TODO: リンクボックス
   let external: null | any = null
   if (params.url?.length > 0) {
     const response = await fetch(
@@ -42,13 +44,9 @@ export default async function (
       title,
       description,
     }
-    record.embed = {
-      $type: "app.bsky.embed.external",
-      external,
-    }
   }
 
-  // TODO:
+  // TODO: 画像
   let images: null | any = null
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all(
     params.images.map((file: File): Promise<null | BlobRef> => {
@@ -56,35 +54,28 @@ export default async function (
         file,
         maxWidth: 2000,
         maxHeight: 2000,
-        maxSize: 1000000,
+        maxSize: 0.9313201904,
       })
     })
   )
   if (fileBlobRefs.length > 0) {
     const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileBlobRefs
-      .map(
-        (
-          fileBlobRef: null | BlobRef,
-          index: number
-        ): null | AppBskyEmbedImages.Image => {
-          return fileBlobRef == null
-            ? null
-            : {
-                image: fileBlobRef,
-                alt: params.alts[index] ?? "",
-              }
-        }
-      )
+      .map((
+        fileBlobRef: null | BlobRef,
+        index: number
+      ): null | AppBskyEmbedImages.Image => {
+        return fileBlobRef == null
+          ? null
+          : {
+            image: fileBlobRef,
+            alt: params.alts[index] ?? "",
+          }
+      })
       .filter((image: null | AppBskyEmbedImages.Image) => image != null)
-    if (imageObjects.length > 0) {
-      images = imageObjects
-      record.embed = {
-        $type: "app.bsky.embed.images",
-        images,
-      }
-    }
+    if (imageObjects.length > 0) images = imageObjects
   }
 
+  // リプライ
   if (params.type === "reply" && params.post != null) {
     record.reply = {
       // TODO: Feed.root == Feed.parent であればこれで良いが、でなければ誤り。要修正
@@ -100,21 +91,24 @@ export default async function (
     }
   }
 
-  if (params.type === "quoteRepost") {
+  // 引用リポスト
+  if (params.type === "quoteRepost" && params.post != null) {
     record.embed ={
-      $type: "app.bsky.embed.record",
-      record: {
-        cid: params.post?.cid,
-        uri: params.post?.uri,
-      },
-      media: {},
+      $type: "app.bsky.embed.recordWithMedia",
+      record: { record: params.post },
     }
-    if (external != null) {
-      (record.embed.media as any).external = external
-    }
-    if (images != null) {
-      (record.embed.media as any).images = images
-    }
+    if (images != null)
+      record.embed.media = { $type: "app.bsky.embed.images", images }
+    else if (external != null)
+      record.embed.media = { $type: "app.bsky.embed.external", external }
+  }
+
+  // Embed
+  if (params.type !== "quoteRepost") {
+    if (images != null)
+      record.embed = { $type: "app.bsky.embed.images", images }
+    else if (external != null)
+      record.embed = { $type: "app.bsky.embed.external", external }
   }
 
   const response: ComAtprotoRepoCreateRecord.OutputSchema =

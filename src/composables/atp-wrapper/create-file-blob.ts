@@ -1,5 +1,5 @@
 import type { BlobRef, BskyAgent, ComAtprotoRepoUploadBlob } from "@atproto/api"
-import Compressor from "compressorjs"
+import imageCompression from "browser-image-compression"
 
 function convertBlobTo (
   blob: Blob,
@@ -16,32 +16,18 @@ function convertBlobTo (
   })
 }
 
-function compressFileToBlob (params: {
+async function compressFileToBlob (params: {
   file: File,
   mimeType: string,
   maxWidth: number,
   maxHeight: number,
   maxSize: number,
-  quality?: number,
 }): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    // SEE: https://github.com/fengyuanchen/compressorjs#options
-    new Compressor(params.file, {
-      convertTypes: [
-        "image/bmp",
-        "image/gif",
-        "image/jpeg",
-        "image/png",
-        "image/webp"
-      ],
-      convertSize: params.maxSize,
-      maxWidth: params.maxWidth,
-      maxHeight: params.maxHeight,
-      mimeType: params.mimeType,
-      quality: params.quality,
-      success: resolve,
-      error: reject,
-    })
+  return await imageCompression(params.file, {
+    fileType: params.mimeType,
+    maxSizeMB: params.maxSize,
+    maxWidthOrHeight: Math.max(params.maxWidth, params.maxHeight),
+    useWebWorker: true,
   })
 }
 
@@ -59,7 +45,6 @@ export default async function (
     file: File,
     maxWidth: number,
     maxHeight: number,
-    // SEE: https://github.com/bluesky-social/atproto/blob/7cc48089073aa71e139fa441c53f6141fba69936/lexicons/app/bsky/embed/images.json#L24-L26
     maxSize: number,
   }
 ): Promise<null | BlobRef> {
@@ -71,11 +56,7 @@ export default async function (
   let blob: undefined | Blob = undefined
   if (imageMimeType != null) {
     mimeType = imageMimeType
-    blob = await compressFileToBlob({
-      ...params,
-      mimeType,
-      quality: 0.9,
-    })
+    blob = await compressFileToBlob({ ...params, mimeType })
     if (blob instanceof Error) return null
   } else {
     mimeType = params.file.type
