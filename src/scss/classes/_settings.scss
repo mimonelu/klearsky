@@ -1,0 +1,27 @@
+.settings-section-container {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 2rem;
+  padding: 2rem;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+}
+
+.settings-section__header {
+  font-size: 1.25rem;
+}
+
+.settings-section__sub-header {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+.settings-section__body {
+  input[type="url"] {
+    width: 100%;
+  }
+}

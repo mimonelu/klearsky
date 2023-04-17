@@ -8,7 +8,6 @@ import EditProfileView from "@/views/main/EditProfileView.vue"
 import HotView from "@/views/main/HotView.vue"
 import NotificationsView from "@/views/main/NotificationsView.vue"
 import PostView from "@/views/main/PostView.vue"
-import SettingsView from "@/views/main/SettingsView.vue"
 import TimelineView from "@/views/main/TimelineView.vue"
 
 // Main - Profile
@@ -23,6 +22,11 @@ import FollowingListView from "@/views/main/profile/FollowingListView.vue"
 import SearchView from "@/views/main/SearchView.vue"
 import KeywordSearchView from "@/views/main/search/KeywordSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
+
+// Main - Settings
+import SettingsView from "@/views/main/SettingsView.vue"
+import KlearskySettingsView from "@/views/main/settings/KlearskySettingsView.vue"
+import BlueskySettingsView from "@/views/main/settings/BlueskySettingsView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -62,11 +66,6 @@ const router = createRouter({
           path: "/post",
           name: "post",
           component: PostView,
-        },
-        {
-          path: "/settings",
-          name: "settings",
-          component: SettingsView,
         },
         {
           path: "/profile",
@@ -116,6 +115,24 @@ const router = createRouter({
               path: "user",
               name: "user-search",
               component: UserSearchView,
+            },
+          ],
+        },
+        {
+          path: "/settings",
+          name: "settings",
+          component: SettingsView,
+          redirect: "/settings/klearsky",
+          children: [
+            {
+              path: "klearsky",
+              name: "klearsky-settings",
+              component: KlearskySettingsView,
+            },
+            {
+              path: "bluesky",
+              name: "bluesky-settings",
+              component: BlueskySettingsView,
             },
           ],
         },

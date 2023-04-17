@@ -8,12 +8,10 @@ import { RouterView } from "vue-router"
       <RouterLink
         class="tab__button"
         to="/search/user"
-        @click.prevent
       >{{ $t("userSearch") }}</RouterLink>
       <RouterLink
         class="tab__button"
         to="/search/keyword"
-        @click.prevent
       >{{ $t("keywordSearch") }}</RouterLink>
     </div>
     <RouterView class="child-view" />

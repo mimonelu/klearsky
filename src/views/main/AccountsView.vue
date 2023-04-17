@@ -42,7 +42,7 @@ async function logout () {
           @click.prevent="newLogin()"
         >{{ $t("newLogin") }}</button>
         <button
-          class="button button--important"
+          class="button--important"
           @click.prevent="logout"
         >{{ $t("logout") }}</button>
       </div>

@@ -134,7 +134,7 @@ function moveToBottom () {
     <!-- 設定ボタン -->
     <RouterLink
       class="link-button"
-      to="/settings"
+      to="/settings/klearsky"
       @click.prevent
     >
       <div class="icon">

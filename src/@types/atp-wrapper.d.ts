@@ -114,6 +114,9 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchInviteCodes(
+    this: TIAtpWrapper,
+  ): Promise<null | TTInviteCode[]>
   fetchKeywordSearch(
     this: TIAtpWrapper,
     query: string

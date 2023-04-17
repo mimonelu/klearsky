@@ -48,6 +48,7 @@ onMounted(async () => {
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
+    updateInviteCodes()
     await processPage(router.currentRoute.value.name)
   } finally {
     try {
@@ -155,6 +156,7 @@ function resetState () {
   state.currentPath = ""
   state.currentQuery = {}
   state.currentSetting = {}
+  state.inviteCodes = []
   state.notifications = []
   state.notificationCursor = undefined
   state.notificationCount = 0
@@ -176,6 +178,7 @@ async function manualLogin (service: string, identifier: string, password: strin
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
+    updateInviteCodes()
     await processPage(router.currentRoute.value.name)
   } finally {
     try {
@@ -297,6 +300,12 @@ async function updateNotification (forceUpdate: boolean) {
       ? consts.limitOfFetchNotifications
       : Math.min(consts.limitOfFetchNotifications, count + 1) // NOTICE: 念のため + 1 している
     , "new")
+}
+
+async function updateInviteCodes () {
+  const inviteCodes = await state.atp.fetchInviteCodes()
+  if (inviteCodes == null) return
+  state.inviteCodes.splice(0, state.inviteCodes.length, ...inviteCodes)
 }
 
 function scrollToFocused () {

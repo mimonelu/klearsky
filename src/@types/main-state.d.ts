@@ -70,6 +70,8 @@ type MainState = {
   loginPopupDisplay: boolean
   loginPopupAutoDisplay: any // TODO:
 
+  inviteCodes: Array<TTInviteCode>
+
   sendPostPopupProps: {
     display: boolean
     type: TTPostType

@@ -67,7 +67,12 @@
     "sendPostNote": "If both a link box and an image box are set, an image box takes precedence.",
     "sendRepost": "Repost",
     "sendQuoteRepost": "Quote repost",
+
     "settings": "Settings",
+    "klearskySettings": "Klearsky Settings",
+    "blueskySettings": "Bluesky Settings",
+    "inviteCodes": "Invite Codes",
+
     "service": "Service",
     "showSource": "Show source",
     "startedAt": "Started on",
@@ -160,7 +165,12 @@
     "sendPostNote": "リンクボックスとイメージボックスの両方が設定された場合、イメージボックスが優先されます。",
     "sendRepost": "リポストする",
     "sendQuoteRepost": "引用リポストする",
+
     "settings": "設定",
+    "klearskySettings": "Klearsky用設定",
+    "blueskySettings": "Bluesky用設定",
+    "inviteCodes": "招待コード",
+
     "service": "サービス",
     "showSource": "ソースを表示する",
     "startedAt": "利用開始日",

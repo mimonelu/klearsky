@@ -1,4 +1,6 @@
-.button {
+.button,
+.button--bordered,
+.button--important {
   background-color: rgba(var(--fg-color), 0.875);
   border: 1px solid transparent;
   border-radius: var(--border-radius);
@@ -22,9 +24,17 @@
   }
 }
 
-.button--large {
-  font-size: 1.25rem;
-  padding: 0.5em 2em;
+.button--bordered {
+  background-color: rgba(var(--bg-color), 0.75);
+  border: 1px solid rgba(var(--fg-color), 0.25);
+  color: rgb(var(--fg-color));
+  &:focus, &:hover {
+    background-color: rgb(var(--bg-color));
+  }
+
+  & > .svg-icon {
+    fill: rgb(var(--fg-color));
+  }
 }
 
 .button--important {
