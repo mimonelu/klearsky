@@ -80,6 +80,8 @@ function removeThisPost (uri: string) {
   & > .svg-icon {
     fill: rgba(var(--fg-color), 0.25);
     font-size: 0.875em;
+  }
+  & > .svg-icon--reply {
     transform: scaleX(-1);
   }
 

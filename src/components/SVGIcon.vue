@@ -79,6 +79,7 @@ defineProps<{
   <div
     v-html="icons[name]"
     class="svg-icon"
+    :class="`svg-icon--${name}`"
   />
 </template>
 
