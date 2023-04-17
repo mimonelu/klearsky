@@ -94,8 +94,14 @@ export default async function (
   // 引用リポスト
   if (params.type === "quoteRepost" && params.post != null) {
     record.embed ={
-      $type: "app.bsky.embed.recordWithMedia",
-      record: { record: params.post },
+      $type: images != null || external != null
+        ? "app.bsky.embed.recordWithMedia"
+        : "app.bsky.embed.record",
+      record: {
+        record: params.post,
+        cid: params.post?.cid,
+        uri: params.post?.uri,
+      },
     }
     if (images != null)
       record.embed.media = { $type: "app.bsky.embed.images", images }
