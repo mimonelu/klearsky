@@ -591,23 +591,24 @@ async function updateThisPostThread () {
 }
 
 .external {
+  background-color: rgba(var(--fg-color), 0.125);
   border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: var(--border-radius);
   cursor: pointer;
+  overflow: hidden;
   &:focus, &:hover {
     border-color: rgba(var(--fg-color), 0.5);
   }
 
   &__thumb {
     aspect-ratio: 1.91 / 1;
-    border-radius: var(--border-radius);
     display: block;
     object-fit: cover;
   }
   &__meta{
     display: grid;
     grid-template-rows: auto auto auto;
-    padding: 1em;
+    padding: 0.875em;
   }
   &__title,
   &__uri,

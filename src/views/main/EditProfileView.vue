@@ -135,12 +135,19 @@ async function submit () {
 
 <template>
   <div class="edit-profile-view">
-    <PageHeader :title="`${$t('editProfile')} - ${mainState.atp.session?.handle ?? ''}`" />
+    <PageHeader
+      :title="$t('editProfile')"
+      :subTitle="mainState.atp.session?.handle ?? ''"
+    />
     <EasyForm v-bind="easyFormProps" ref="easyForm" />
   </div>
 </template>
 
 <style lang="scss" scoped>
+.edit-profile-view {
+  padding-bottom: 8rem;
+}
+
 .easy-form {
   padding: 2rem;
 }

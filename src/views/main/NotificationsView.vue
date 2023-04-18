@@ -34,7 +34,10 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="notifications-view">
-    <PageHeader :title="`${$t('notifications')} - ${mainState.atp.session?.handle ?? ''}`" />
+    <PageHeader
+      :title="$t('notifications')"
+      :subTitle="mainState.atp.session?.handle ?? ''"
+    />
     <button
       class="fetch-button"
       @click.prevent="fetchNotifications(25, 'new')"

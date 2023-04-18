@@ -135,6 +135,7 @@ function moveToBottom () {
     <RouterLink
       class="link-button"
       to="/settings/klearsky"
+      :data-is-focus="mainState.currentPath.startsWith('/settings/')"
       @click.prevent
     >
       <div class="icon">

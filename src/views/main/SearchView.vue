@@ -9,7 +9,10 @@ const mainState = inject("state") as MainState
 <template>
   <div class="search-view">
     <div class="search-view__header">
-      <PageHeader :title="`${$t('search')} - ${mainState.atp.session?.__service ?? ''}`" />
+      <PageHeader
+        :title="$t('search')"
+        :subTitle="mainState.atp.session?.__service ?? ''"
+      />
       <div class="tab">
         <RouterLink
           class="tab__button"

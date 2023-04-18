@@ -26,6 +26,7 @@ function isFollowed (): boolean {
 }
 
 function openImagePopup (uri: string) {
+  if (uri === "") return
   mainState.imagePopupProps.largeUri = uri
   mainState.imagePopupProps.smallUri = ""
   mainState.imagePopupProps.display = true
@@ -55,7 +56,7 @@ async function copyDid () {
     <div
       class="banner"
       :data-has-banner="!!mainState.currentProfile?.banner"
-      :style="{ 'background-image': `url(${mainState.currentProfile?.banner ?? '/img/void.png'})` }"
+      :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
       @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
     />
     <div class="details">
@@ -225,15 +226,6 @@ async function copyDid () {
     background-repeat: no-repeat;
     background-size: cover;
     cursor: pointer;
-  }
-  &[data-has-banner="false"] {
-    background-image:
-      linear-gradient(45deg, rgba(var(--fg-color), 0.1) 25%, transparent 25%),
-      linear-gradient(-45deg, rgba(var(--fg-color), 0.1) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, rgba(var(--fg-color), 0.1) 75%),
-      linear-gradient(-45deg, transparent 75%, rgba(var(--fg-color), 0.1) 75%);
-    background-position: 0 0, 0 1rem, 1rem -1rem, -1rem 0;
-    background-size: 2rem 2rem;
   }
 
   & > img {

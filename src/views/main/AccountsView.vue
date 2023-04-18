@@ -34,7 +34,10 @@ async function logout () {
 
 <template>
   <div class="accounts-view">
-    <PageHeader :title="`${$t('accounts')} - ${mainState.atp.session?.handle ?? ''}`" />
+    <PageHeader
+      :title="$t('accounts')"
+      :subTitle="mainState.atp.session?.handle ?? ''"
+    />
     <div class="body">
       <div class="button-container">
         <button
@@ -52,6 +55,10 @@ async function logout () {
 </template>
 
 <style lang="scss" scoped>
+.accounts-view {
+  padding-bottom: 8rem;
+}
+
 .body {
   display: flex;
   flex-direction: column;

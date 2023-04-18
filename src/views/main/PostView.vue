@@ -25,7 +25,10 @@ function removeThisPost (uri: string) {
 
 <template>
   <div class="post-view">
-    <PageHeader :title="`${$t('post')} - ${mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''}`" />
+    <PageHeader
+      :title="$t('post')"
+      :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
+    />
     <template
       v-for="post, postIndex of mainState.currentPosts"
       :key="post.cid"
