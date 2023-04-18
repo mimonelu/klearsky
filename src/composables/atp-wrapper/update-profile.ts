@@ -39,10 +39,16 @@ export default async function (
     (
       existing: AppBskyActorProfile.Record | undefined
     ): AppBskyActorProfile.Record => {
-      // アバター画像とバナー画像が未指定の場合、既存の画像を指定する
-      if (profileSchema.avatar == null && existing?.avatar != null)
+      // アバター画像が未指定の場合、既存の画像を指定する
+      if (!params.detachAvatar.includes(true) &&
+          profileSchema.avatar == null &&
+          existing?.avatar != null)
         profileSchema.avatar = existing.avatar
-      if (profileSchema.banner == null && existing?.banner != null)
+
+      // バナー画像が未指定の場合、既存の画像を指定する
+      if (!params.detachBanner.includes(true) &&
+          profileSchema.banner == null &&
+          existing?.banner != null)
         profileSchema.banner = existing.banner
 
       return profileSchema

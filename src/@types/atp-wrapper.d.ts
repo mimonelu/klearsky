@@ -13,7 +13,9 @@ type TTUpdateProfileParams = {
   displayName: string
   description: string
   avatar: null | Array<File>
+  detachAvatar: Array<boolean>
   banner: null | Array<File>
+  detachBanner: Array<boolean>
 }
 
 type TTSession = {

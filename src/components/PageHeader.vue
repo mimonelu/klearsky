@@ -14,9 +14,16 @@ defineProps<{
 .page-header {
   background-color: rgb(var(--bg-color));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  display: grid;
   padding: 1rem;
   position: sticky;
   top: 0;
   z-index: 1;
+
+  & > h1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 </style>

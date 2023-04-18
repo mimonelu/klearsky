@@ -1,3 +1,8 @@
+type TTOption = {
+  label: string
+  value: any
+}
+
 type TTEasyForm = {
   id?: string
   submitButtonLabel?: string
@@ -13,6 +18,7 @@ type TTEasyFormItem = {
   display?: boolean
   disabled?: boolean
   required?: boolean
+  options?: Array<TTOption>
   pattern?: string
   maxlength?: number
   maxLengthIndicator?: boolean
@@ -35,6 +41,7 @@ type TTEasyFormItem = {
   maxNumberOfFile?: number
   clearButton?: boolean
   focus?: boolean
+  onUpdate?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onChange?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onInput?: (item: TTEasyFormItem, form: TTEasyForm) => void
 }

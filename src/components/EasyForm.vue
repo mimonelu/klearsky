@@ -1,10 +1,15 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue"
+import Checkboxes from "@/components/Checkboxes.vue"
 import FileBox from "@/components/FileBox.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
 const emit = defineEmits<{(event: string): void}>()
+
+defineExpose({
+  forceUpdate,
+})
 
 const props = defineProps<{
   id?: string
@@ -15,8 +20,10 @@ const props = defineProps<{
 
 const state = reactive<{
   processing: boolean
+  updateKey: number
 }>({
   processing: false,
+  updateKey: 0,
 })
 
 onMounted(() => {
@@ -29,6 +36,10 @@ onMounted(() => {
     }
   })
 })
+
+function forceUpdate () {
+  state.updateKey = new Date().getTime()
+}
 
 function makeItemId (index: number) {
   return `easy-form--${props.id ?? 'default'}__${index}`
@@ -66,6 +77,10 @@ async function onSubmit () {
   }
 }
 
+function onActivateCheckbox (item: TTEasyFormItem) {
+  if (item.onUpdate != null) item.onUpdate(item, props)
+}
+
 function onActivateClearButton (item: TTEasyFormItem) {
   item.state[item.model] = ""
 }
@@ -86,6 +101,7 @@ function onSubmitTextarea (event: KeyboardEvent) {
 
 <template>
   <form
+    :key="state.updateKey"
     class="easy-form"
     @submit.prevent="onSubmit"
   >
@@ -96,6 +112,7 @@ function onSubmitTextarea (event: KeyboardEvent) {
     >
       <dt v-if="item.label != null">{{ item.label }}</dt>
       <dd>
+        <!-- 各種 input 要素 -->
         <input
           v-if="isInput(item.type)"
           v-model="item.state[item.model]"
@@ -112,6 +129,17 @@ function onSubmitTextarea (event: KeyboardEvent) {
           spellcheck="false"
           class="textbox"
         >
+
+        <!-- チェックボックス -->
+        <Checkboxes
+          v-if="item.type === 'checkbox'"
+          :state="item.state"
+          :model="item.model"
+          :options="item.options as Array<TTOption>"
+          @update="onActivateCheckbox(item)"
+        />
+
+        <!-- クリアボタン -->
         <button
           v-if="item.clearButton"
           class="clear-button"
@@ -119,13 +147,18 @@ function onSubmitTextarea (event: KeyboardEvent) {
         >
           <SVGIcon name="cross" />
         </button>
+
+        <!-- ファイル選択ボックス -->
         <FileBox
           v-else-if="item.type === 'file'"
+          :disabled="item.disabled"
           :accept="item.accept"
           :multiple="item.isMultipleFile"
           :maxNumber="item.maxNumberOfFile"
           @change="(files: Array<File>) => { onChangeFile(files, item) }"
         />
+
+        <!-- テキストエリア -->
         <textarea
           v-else-if="item.type === 'textarea'"
           v-model="item.state[item.model]"
@@ -142,6 +175,8 @@ function onSubmitTextarea (event: KeyboardEvent) {
           @input="onInputTextarea(item)"
           @keydown.enter="onSubmitTextarea"
         />
+
+        <!-- 最大文字数インジケータ -->
         <div
           v-if="item.maxLengthIndicator"
           class="max-length-indicator"
@@ -169,10 +204,13 @@ function onSubmitTextarea (event: KeyboardEvent) {
     flex-direction: column;
     grid-gap: 0.5rem;
 
+    & > dt {
+      font-weight: bold;
+    }
+
     & > dd  {
       display: flex;
       flex-direction: column;
-      // align-items: center;
       position: relative;
 
       & > input,

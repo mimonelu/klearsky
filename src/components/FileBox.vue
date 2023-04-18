@@ -5,6 +5,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
 
 const props = defineProps<{
+  disabled?: boolean
   accept?: string
   multiple?: boolean
   maxNumber?: number
@@ -53,13 +54,17 @@ function deleteFile (index: number) {
 </script>
 
 <template>
-  <div class="filebox">
+  <div
+    class="filebox"
+    :data-disabled="disabled"
+  >
     <label
       class="button add-button"
       tabindex="0"
     >
       <input
         type="file"
+        :disabled="disabled"
         :accept="accept"
         :multiple="multiple"
         @click="onClick"
@@ -94,6 +99,9 @@ function deleteFile (index: number) {
 .add-button {
   width: 5rem;
   height: 5rem;
+  [data-disabled="true"] & {
+    opacity: 0.5;
+  }
 
   & > input {
     display: none;

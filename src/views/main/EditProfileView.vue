@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive } from "vue"
+import { inject, onMounted, reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import EasyForm from "@/components/EasyForm.vue"
 import PageHeader from "@/components/PageHeader.vue"
@@ -13,15 +13,21 @@ const state = reactive<{
   displayName: string,
   description: string,
   avatar: null | File
+  detachAvatar: Array<boolean>,
   banner: null | File
+  detachBanner: Array<boolean>,
   processing: boolean;
 }>({
   displayName: "",
   description: "",
   avatar: null,
+  detachAvatar: [],
   banner: null,
+  detachBanner: [],
   processing: false,
 })
+
+const easyForm = ref()
 
 const router = useRouter()
 
@@ -59,13 +65,43 @@ const easyFormProps: TTEasyForm = {
     },
     {
       state,
+      model: "detachAvatar",
+      type: "checkbox",
+      options: [{ label: $t("detachAvatar"), value: true }],
+      // 画像取り外しチェックボックスの処理
+      onUpdate (_: TTEasyFormItem, form: TTEasyForm) {
+        const item = form.data
+          .find((item: TTEasyFormItem) => item.model === "avatar")
+        if (item == null) return
+        item.disabled = state.detachAvatar.includes(true)
+        state.avatar = null
+        easyForm.value.forceUpdate()
+      },
+    },
+    {
+      state,
       model: "banner",
       label: $t("banner"),
       type: "file",
       // accept: "image/png, image/jpeg",
       isMultipleFile: false,
       maxNumberOfFile: 1,
-    }
+    },
+    {
+      state,
+      model: "detachBanner",
+      type: "checkbox",
+      options: [{ label: $t("detachBanner"), value: true }],
+      // 画像取り外しチェックボックスの処理
+      onUpdate (_: TTEasyFormItem, form: TTEasyForm) {
+        const item = form.data
+          .find((item: TTEasyFormItem) => item.model === "banner")
+        if (item == null) return
+        item.disabled = state.detachBanner.includes(true)
+        state.banner = null
+        easyForm.value.forceUpdate()
+      },
+    },
   ],
 }
 
@@ -99,8 +135,8 @@ async function submit () {
 
 <template>
   <div class="edit-profile-view">
-    <PageHeader :title="$t('editProfile')" />
-    <EasyForm v-bind="easyFormProps" />
+    <PageHeader :title="`${$t('editProfile')} - ${mainState.atp.session?.handle ?? ''}`" />
+    <EasyForm v-bind="easyFormProps" ref="easyForm" />
   </div>
 </template>
 
