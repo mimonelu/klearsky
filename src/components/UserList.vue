@@ -122,6 +122,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   display: flex;
   align-items: center;
   font-size: 0.875rem;
+  font-weight: bold;
   line-height: 1.25;
 }
 

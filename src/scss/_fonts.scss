@@ -11,15 +11,15 @@
     Arial,
     sans-serif;
 
-  font-size: calc(0.125vmax + 13px);
+  font-size: 13px;
   &[data-font-size="small"] {
-    font-size: calc(0.125vmax + 13px);
+    font-size: 13px;
   }
   &[data-font-size="medium"] {
-    font-size: calc(0.125vmax + 14px);
+    font-size: 15px;
   }
   &[data-font-size="large"] {
-    font-size: calc(0.125vmax + 15px);
+    font-size: 17px;
   }
 }
 

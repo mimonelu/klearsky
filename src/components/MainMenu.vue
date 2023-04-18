@@ -184,6 +184,7 @@ function moveToBottom () {
   flex-direction: column;
   grid-gap: 0.25rem;
 
+  // スリムレイアウト
   @media (max-width: $max-width-with-scrollbar) {
     padding: 0.75rem 0.5rem;
 
@@ -195,6 +196,8 @@ function moveToBottom () {
       display: none;
     }
   }
+
+  // フルレイアウト
   @media not all and (max-width: $max-width-with-scrollbar) {
     padding: 1.25rem 1rem;
 
@@ -239,6 +242,7 @@ function moveToBottom () {
   }
 }
 
+// 各種ボタン
 .link-button {
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -279,7 +283,7 @@ function moveToBottom () {
     font-size: 1.25rem;
     line-height: 1.25;
     overflow: hidden;
-    padding-right: 0.25rem;
+    padding-right: 0.5rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     word-break: break-all;
@@ -296,25 +300,16 @@ function moveToBottom () {
   }
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
-    background-color: rgba(var(--accent-color), 0.125);
+    background-color: rgba(var(--accent-color), 0.25);
   }
 
   // HOTボタン
   &.hot-button {
-    .icon {
-      background-color: rgba(var(--fg-color), 0.75);
-      border-radius: 1rem;
-    }
-
     .svg-icon {
       fill: rgba(var(--hot-color), 0.75);
     }
 
     &:focus, &:hover {
-      .icon {
-        background-color: rgb(var(--fg-color));
-      }
-
       .svg-icon {
         fill: rgb(var(--hot-color));
       }

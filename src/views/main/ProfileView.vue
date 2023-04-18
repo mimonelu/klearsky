@@ -269,6 +269,7 @@ async function copyDid () {
 
 .display-name {
   font-size: 2rem;
+  font-weight: bold;
   line-height: 1.25;
   margin-bottom: 0.25rem;
   user-select: text;
@@ -288,6 +289,7 @@ async function copyDid () {
 .followed {
   color: rgb(var(--like-color));
   font-size: 0.875rem;
+  font-weight: bold;
   line-height: 1.25;
   word-break: break-all;
 }

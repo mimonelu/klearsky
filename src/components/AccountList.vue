@@ -106,7 +106,7 @@ function getDidColor (did: string): string {
 }
 
 .service {
-  background-color: rgba(var(--fg-color), 0.125);
+  border-bottom: 1px solid rgba(var(--fg-color), 0.125);
   color: rgba(var(--fg-color), 0.75);
   padding: 0.5rem;
 }
@@ -139,7 +139,7 @@ function getDidColor (did: string): string {
     }
   }
   &[data-is-me="true"] &__left {
-    background-color: rgba(var(--accent-color), 0.125);
+    background-color: rgba(var(--accent-color), 0.25);
   }
 
   &__image {

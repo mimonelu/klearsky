@@ -1,6 +1,7 @@
 .icon-button {
   cursor: pointer;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
   margin: -0.75em;
@@ -22,5 +23,8 @@
   & > span {
     color: rgba(var(--fg-color), 0.5);
     font-size: 0.875em;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

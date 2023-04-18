@@ -11,6 +11,7 @@
     align-items: center;
     justify-content: center;
     flex-grow: 1;
+    font-weight: bold;
     padding: 0.75rem 0;
     min-height: 3rem;
     text-align: center;
@@ -23,7 +24,7 @@
   }
   &__button {
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.5);
+      fill: rgba(var(--fg-color), 0.75);
     }
     &:focus, &:hover {
       & > .svg-icon {
@@ -34,7 +35,7 @@
   &__button--outline {
     & > .svg-icon {
       fill: transparent;
-      stroke: rgba(var(--fg-color), 0.5);
+      stroke: rgba(var(--fg-color), 0.75);
       stroke-width: 2px;
     }
     &:focus, &:hover {

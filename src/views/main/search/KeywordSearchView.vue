@@ -87,7 +87,7 @@ async function fetchNewResults () {
   grid-gap: 0.25rem;
   padding: 1rem;
   &:focus, &:hover {
-    background-color: rgba(var(--accent-color), 0.125);
+    background-color: rgba(var(--accent-color), 0.25);
   }
 }
 
