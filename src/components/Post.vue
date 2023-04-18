@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-import Thumbnail from "@/components/Thumbnail.vue"
+import Avatar from "@/components/Avatar.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Thumbnail from "@/components/Thumbnail.vue"
 import Util from "@/composables/util/index"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
@@ -192,17 +193,21 @@ async function updateThisPostThread () {
     </div>
     <div class="body">
       <!-- アバター -->
-      <button
-        class="avatar"
-        @click.stop="onActivateProfileLink(post.author?.handle)"
-      >
-        <img
-          loading="lazy"
-          :src="post.author?.avatar ?? '/img/void-avatar.png'"
-        >
-      </button>
+      <Avatar
+        v-if="position !== 'postInPost'"
+        :handle="post.author?.handle"
+        :image="post.author?.avatar"
+      />
       <div class="body__right">
         <div class="body__header">
+          <!-- アバター -->
+          <Avatar
+            v-if="position === 'postInPost'"
+            class="avatar-in-post"
+            :handle="post.author?.handle"
+            :image="post.author?.avatar"
+          />
+
           <!-- 表示名 -->
           <div class="display-name">{{ post.author?.displayName }}</div>
 
@@ -222,164 +227,163 @@ async function updateThisPostThread () {
           dir="auto"
           v-html="post.record?.__textHtml ?? post.value?.__textHtml"
         />
-      </div>
-    </div>
-    <div class="body__footer">
-      <!-- リンクボックス -->
-      <a
-        v-if="state.external != null"
-        class="external"
-        :href="state.external.uri"
-        rel="noreferrer"
-        target="_blank"
-        @click.stop
-      >
-        <img
-          v-if="typeof state.external.thumb === 'string'"
-          class="external__thumb"
-          loading="lazy"
-          :src="state.external.thumb"
-        />
-        <div class="external__meta">
-          <div class="external__title">{{ state.external.title ?? '' }}</div>
-          <div class="external__uri">{{ state.external.uri }}</div>
-          <div class="external__description">{{ state.external.description ?? '' }}</div>
-        </div>
-      </a>
 
-      <!-- 画像 -->
-      <div
-        v-if="state.images.length > 0"
-        class="images"
-        :data-number-of-images="state.images.length"
-      >
-        <div
-          v-for="image, imageIndex of state.images"
-          :key="imageIndex"
-          class="image"
+        <!-- リンクボックス -->
+        <a
+          v-if="state.external != null"
+          class="external"
+          :href="state.external.uri"
+          rel="noreferrer"
+          target="_blank"
+          @click.stop
         >
-          <!--
-            TODO: 直前の投稿画像と同じ画像が表示される問題対策
-                  key なしでも正常に表示されるようにすること
-          -->
-          <Thumbnail
-            :key="post.cid"
-            :image="image"
-            :did="post.author.did"
+          <img
+            v-if="typeof state.external.thumb === 'string'"
+            class="external__thumb"
+            loading="lazy"
+            :src="state.external.thumb"
+          />
+          <div class="external__meta">
+            <div class="external__title">{{ state.external.title ?? '' }}</div>
+            <div class="external__uri">{{ state.external.uri }}</div>
+            <div class="external__description">{{ state.external.description ?? '' }}</div>
+          </div>
+        </a>
+
+        <!-- 画像 -->
+        <div
+          v-if="state.images.length > 0"
+          class="images"
+          :data-number-of-images="state.images.length"
+        >
+          <div
+            v-for="image, imageIndex of state.images"
+            :key="imageIndex"
+            class="image"
+          >
+            <!--
+              TODO: 直前の投稿画像と同じ画像が表示される問題対策
+                    key なしでも正常に表示されるようにすること
+            -->
+            <Thumbnail
+              :key="post.cid"
+              :image="image"
+              :did="post.author.did"
+            />
+          </div>
+        </div>
+
+        <!-- 引用リポスト -->
+        <div
+          v-if="post.embed?.record && (post.embed.record as any).$type != null"
+          class="repost"
+        >
+          <Post
+            position="postInPost"
+            :post="post.embed.record as TTPost"
           />
         </div>
-      </div>
 
-      <!-- 引用リポスト -->
-      <div
-        v-if="post.embed?.record && (post.embed.record as any).$type != null"
-        class="repost"
-      >
-        <Post
-          position="postInPost"
-          :post="post.embed.record as TTPost"
-        />
-      </div>
-
-      <div
-        v-if="position !== 'postInPost'"
-        class="button-container"
-      >
-        <div>
-          <!-- リプライボタン -->
-          <button
-            class="icon-button reply_count"
-            :data-has="post.replyCount > 0"
-            @click.stop="onActivateReplyButton"
-          >
-            <SVGIcon name="post" />
-            <span>{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
-          </button>
-        </div>
-        <div>
-          <!-- リポストボタン -->
-          <button
-            class="icon-button repost-count"
-            :data-has="post.repostCount > 0"
-            :data-reposted="!!post.viewer.repost"
-            @click.stop="onActivateRepostMenuTrigger"
-          >
-            <SVGIcon name="repost" />
-            <span>{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
-
-            <!-- リポストメニュー -->
-            <MenuTicker :display="state.repostMenuDisplay">
-              <button
-                v-if="post.viewer.repost == null"
-                @click.stop="onActivateSendRepostButton"
-              >
-                <SVGIcon name="repost" />
-                <span>{{ $t("sendRepost") }}</span>
-              </button>
-              <button
-                v-else
-                @click.stop="onActivateDeleteRepostButton"
-              >
-                <SVGIcon name="repost" />
-                <span>{{ $t("deleteRepost") }}</span>
-              </button>
-              <button @click.stop="onActivateQuoteRepostButton">
-                <SVGIcon name="quoteRepost" />
-                <span>{{ $t("sendQuoteRepost") }}</span>
-              </button>
-            </MenuTicker>
-          </button>
-        </div>
-        <div>
-          <!-- いいねボタン -->
-          <button
-            class="icon-button like-count"
-            :data-has="post.likeCount > 0"
-            :data-liked="!!post.viewer.like"
-            @click.stop="onActivateLikeButton"
-          >
-            <SVGIcon name="heart" />
-            <span>{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
-          </button>
-        </div>
-        <div>
-          <!-- ポストメニューボタン -->
-          <button
-            class="icon-button menu-button"
-            @click.stop="onActivatePostMenuTrigger"
-          >
-            <SVGIcon name="menu" />
-
-            <!-- ポストメニュー -->
-            <PostAndProfileMenuTicker
-              :display="state.postMenuDisplay"
-              :translateText="post.record?.text"
-              :copyText="post.record?.text"
-              :mentionTo="post.author?.handle"
-              :deletePostUri="post.author?.did === mainState.atp.session?.did
-                ? post.uri
-                : undefined"
-              :openSource="post"
-              @close="onClosePostMenu"
-              @removeThisPost="onRemoveThisPost"
+        <div
+          v-if="position !== 'postInPost'"
+          class="button-container"
+        >
+          <div>
+            <!-- リプライボタン -->
+            <button
+              class="icon-button reply_count"
+              :data-has="post.replyCount > 0"
+              @click.stop="onActivateReplyButton"
             >
-              <template v-slot:before>
-                <!-- リポストユーザーリストポップアップボタン -->
-                <button @click.stop="onActivateOpenRepostUsersPopup">
+              <SVGIcon name="post" />
+              <span>{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
+            </button>
+          </div>
+          <div>
+            <!-- リポストボタン -->
+            <button
+              class="icon-button repost-count"
+              :data-has="post.repostCount > 0"
+              :data-reposted="!!post.viewer.repost"
+              @click.stop="onActivateRepostMenuTrigger"
+            >
+              <SVGIcon name="repost" />
+              <span>{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
+
+              <!-- リポストメニュー -->
+              <MenuTicker :display="state.repostMenuDisplay">
+                <button
+                  v-if="post.viewer.repost == null"
+                  @click.stop="onActivateSendRepostButton"
+                >
                   <SVGIcon name="repost" />
-                  <span>{{ $t("repostUsers") }}</span>
+                  <span>{{ $t("sendRepost") }}</span>
                 </button>
-
-                <!-- ライクユーザーリストポップアップボタン -->
-                <button @click.stop="onActivateOpenLikeUsersPopup">
-                  <SVGIcon name="heart" />
-                  <span>{{ $t("likeUsers") }}</span>
+                <button
+                  v-else
+                  @click.stop="onActivateDeleteRepostButton"
+                >
+                  <SVGIcon name="repost" />
+                  <span>{{ $t("deleteRepost") }}</span>
                 </button>
+                <button @click.stop="onActivateQuoteRepostButton">
+                  <SVGIcon name="quoteRepost" />
+                  <span>{{ $t("sendQuoteRepost") }}</span>
+                </button>
+              </MenuTicker>
+            </button>
+          </div>
+          <div>
+            <!-- いいねボタン -->
+            <button
+              class="icon-button like-count"
+              :data-has="post.likeCount > 0"
+              :data-liked="!!post.viewer.like"
+              @click.stop="onActivateLikeButton"
+            >
+              <SVGIcon name="heart" />
+              <span>{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
+            </button>
+          </div>
+          <div>
+            <!-- ポストメニューボタン -->
+            <button
+              class="icon-button menu-button"
+              @click.stop="onActivatePostMenuTrigger"
+            >
+              <SVGIcon name="menu" />
 
-                <hr>
-              </template>
-            </PostAndProfileMenuTicker>
-          </button>
+              <!-- ポストメニュー -->
+              <PostAndProfileMenuTicker
+                :display="state.postMenuDisplay"
+                :translateText="post.record?.text"
+                :copyText="post.record?.text"
+                :mentionTo="post.author?.handle"
+                :deletePostUri="post.author?.did === mainState.atp.session?.did
+                  ? post.uri
+                  : undefined"
+                :openSource="post"
+                @close="onClosePostMenu"
+                @removeThisPost="onRemoveThisPost"
+              >
+                <template v-slot:before>
+                  <!-- リポストユーザーリストポップアップボタン -->
+                  <button @click.stop="onActivateOpenRepostUsersPopup">
+                    <SVGIcon name="repost" />
+                    <span>{{ $t("repostUsers") }}</span>
+                  </button>
+
+                  <!-- ライクユーザーリストポップアップボタン -->
+                  <button @click.stop="onActivateOpenLikeUsersPopup">
+                    <SVGIcon name="heart" />
+                    <span>{{ $t("likeUsers") }}</span>
+                  </button>
+
+                  <hr>
+                </template>
+              </PostAndProfileMenuTicker>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -401,15 +405,15 @@ async function updateThisPostThread () {
   &[data-focus="true"]:not([data-position="preview"]) {
     background-color: rgba(var(--accent-color), 0.125);
 
-      & > .body > .body__right {
+    & > .body > .body__right {
       user-select: text;
     }
   }
   &[data-position="postInPost"] {
-    font-size: 0.875em;
+    font-size: 0.9375em;
   }
   &[data-position="preview"] {
-    font-size: 0.875em;
+    font-size: 0.9375em;
     padding: 0;
     pointer-events: none;
 
@@ -509,14 +513,16 @@ async function updateThisPostThread () {
 }
 
 .body {
-  display: flex;
+  display: grid;
+  grid-template-columns: var(--avatar-size) 1fr;
   grid-gap: 1em;
-  position: relative;
+}
+.post[data-position="postInPost"] > .body {
+  display: unset;
 }
 
 .avatar {
   position: relative;
-  @include avatar-link(var(--avatar-size));
 }
 
 .body__right {
@@ -533,6 +539,13 @@ async function updateThisPostThread () {
   grid-template-columns: auto 1fr min-content;
   grid-gap: 0.5em;
   overflow: hidden;
+}
+.post[data-position="postInPost"] .body__header {
+  grid-template-columns: auto auto 1fr min-content;
+}
+
+.avatar-in-post {
+  font-size: 0.625em;
 }
 
 .display-name {
@@ -561,7 +574,7 @@ async function updateThisPostThread () {
 }
 
 .text {
-  line-height: 1.375;
+  line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
   &:empty {
@@ -571,22 +584,6 @@ async function updateThisPostThread () {
   // 折り返されたURLの隙間が選択されないようにする
   &:deep(.textlink) {
     padding: 0.125em 0;
-  }
-}
-
-.body__footer {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 0.5em;
-  &:not(:empty) {
-    margin-top: 0.75em;
-  }
-}
-.post[data-position="post"],
-.post[data-position="root"],
-.post[data-position="parent"] {
-  & > .body__footer {
-    padding-left: calc(var(--avatar-size) + 1em);
   }
 }
 
@@ -605,7 +602,7 @@ async function updateThisPostThread () {
     display: block;
     object-fit: cover;
   }
-  &__meta{
+  &__meta {
     display: grid;
     grid-template-rows: auto auto auto;
     padding: 0.875em;
