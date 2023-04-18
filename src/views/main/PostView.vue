@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import PageHeader from "@/components/PageHeader.vue"
 import Post from "@/components/Post.vue"
 
 const mainState = inject("state") as MainState
@@ -24,6 +25,7 @@ function removeThisPost (uri: string) {
 
 <template>
   <div class="post-view">
+    <PageHeader :title="`${$t('post')} - ${mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''}`" />
     <template
       v-for="post, postIndex of mainState.currentPosts"
       :key="post.cid"
@@ -40,6 +42,10 @@ function removeThisPost (uri: string) {
 </template>
 
 <style lang="scss" scoped>
+.page-header {
+  position: unset;
+}
+
 .post[data-has-child="true"]::before {
   background-color: rgba(var(--fg-color), 0.25);
   content: "";

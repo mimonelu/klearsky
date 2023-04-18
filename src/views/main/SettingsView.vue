@@ -8,17 +8,35 @@ const mainState = inject("state") as MainState
 
 <template>
   <div class="settings-view">
-    <PageHeader :title="`${$t('settings')} - ${mainState.atp.session?.handle ?? ''}`" />
-    <div class="tab">
-      <RouterLink
-        class="tab__button"
-        to="/settings/klearsky"
-      >{{ $t("klearskySettings") }}</RouterLink>
-      <RouterLink
-        class="tab__button"
-        to="/settings/bluesky"
-      >{{ $t("blueskySettings") }}</RouterLink>
+    <div class="settings-view__header">
+      <PageHeader :title="`${$t('settings')} - ${mainState.atp.session?.handle ?? ''}`" />
+      <div class="tab">
+        <RouterLink
+          class="tab__button"
+          to="/settings/klearsky"
+        >{{ $t("klearskySettings") }}</RouterLink>
+        <RouterLink
+          class="tab__button"
+          to="/settings/bluesky"
+        >{{ $t("blueskySettings") }}</RouterLink>
+      </div>
     </div>
     <RouterView />
   </div>
 </template>
+
+<style lang="scss" scoped>
+.settings-view {
+  padding-bottom: 8rem;
+
+  &__header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+}
+
+.tab__button {
+  width: 50%;
+}
+</style>

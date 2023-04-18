@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, watch } from "vue"
 import NotificationList from "@/components/NotificationList.vue"
+import PageHeader from "@/components/PageHeader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
@@ -33,6 +34,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="notifications-view">
+    <PageHeader :title="`${$t('notifications')} - ${mainState.atp.session?.handle ?? ''}`" />
     <button
       class="fetch-button"
       @click.prevent="fetchNotifications(25, 'new')"

@@ -12,7 +12,11 @@ defineProps<{
 
 <style lang="scss" scoped>
 .page-header {
+  background-color: rgb(var(--bg-color));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 </style>
