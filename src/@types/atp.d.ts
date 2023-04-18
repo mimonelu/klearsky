@@ -164,7 +164,7 @@ type TTInviteCode = {
     usedAt: string
     [k: string]: unknown
   }[]
-  [k: string]: unknown;
+  [k: string]: unknown
 }
 
 type TTNotification = {

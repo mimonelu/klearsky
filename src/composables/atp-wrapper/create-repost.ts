@@ -6,8 +6,9 @@ export default async function (
   cid: string
 ): Promise<boolean> {
   if (this.agent == null) return false
-  const response: ComAtprotoRepoCreateRecord.OutputSchema =
-    await (this.agent as BskyAgent).repost(uri, cid)
+  const response: ComAtprotoRepoCreateRecord.OutputSchema = await (
+    this.agent as BskyAgent
+  ).repost(uri, cid)
   console.log("[klearsky/repost]", response)
   return true
 }

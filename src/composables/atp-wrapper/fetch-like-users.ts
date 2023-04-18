@@ -13,8 +13,9 @@ export default async function (
     limit,
     cursor,
   }
-  const response: AppBskyFeedGetLikes.Response =
-    await (this.agent as BskyAgent).getLikes(query)
+  const response: AppBskyFeedGetLikes.Response = await (
+    this.agent as BskyAgent
+  ).getLikes(query)
   console.log("[klearsky/getLikes]", response)
   if (!response.success) return
 

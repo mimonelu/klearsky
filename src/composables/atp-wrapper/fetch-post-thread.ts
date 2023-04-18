@@ -9,8 +9,9 @@ export default async function (
   if (this.agent == null) return null
   const query: AppBskyFeedGetPostThread.QueryParams = { uri }
   if (depth != null) query.depth = depth
-  const response: AppBskyFeedGetPostThread.Response =
-    await (this.agent as BskyAgent).getPostThread(query)
+  const response: AppBskyFeedGetPostThread.Response = await (
+    this.agent as BskyAgent
+  ).getPostThread(query)
   console.log("[klearsky/getPostThread]", response)
   if (!response.success) return null
 

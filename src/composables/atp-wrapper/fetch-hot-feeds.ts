@@ -11,8 +11,9 @@ export default async function (
   const query: AppBskyUnspeccedGetPopular.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
-  const response: AppBskyUnspeccedGetPopular.Response =
-    await (this.agent as BskyAgent).api.app.bsky.unspecced.getPopular(query)
+  const response: AppBskyUnspeccedGetPopular.Response = await (
+    this.agent as BskyAgent
+  ).api.app.bsky.unspecced.getPopular(query)
   console.log("[klearsky/getPopular]", response)
   if (!response.success) return
 

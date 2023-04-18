@@ -110,14 +110,15 @@ type MainState = {
   fetchLikeUsers: (direction: "new" | "old") => Promise<void>
   fetchTimeline: (direction: "old" | "new") => Promise<void>
   fetchPostThread: () => Promise<void>
-  fetchNotifications: (
-    limit: number,
-    direction: "new" | "old"
-  ) => Promise<void>
+  fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
   fetchFollowers: (direction: "new" | "old") => Promise<void>
   fetchFollowings: (direction: "new" | "old") => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
-  openSendPostPopup: (type: TTPostType, post?: TTPost, text?: string) => Promise<boolean>
+  openSendPostPopup: (
+    type: TTPostType,
+    post?: TTPost,
+    text?: string
+  ) => Promise<boolean>
   closeSendPostPopup: (done: boolean) => void
   openRepostUsersPopup: (uri: string) => void
   closeRepostUsersPopup: () => void

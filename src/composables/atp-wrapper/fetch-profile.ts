@@ -6,13 +6,16 @@ export default async function (
   actor: string
 ): Promise<null | TTProfile> {
   if (this.agent == null) return null
-  const response: AppBskyActorGetProfile.Response =
-    await (this.agent as BskyAgent).getProfile({ actor })
+  const response: AppBskyActorGetProfile.Response = await (
+    this.agent as BskyAgent
+  ).getProfile({ actor })
   console.log("[klearsky/getProfile]", response)
   if (!response.success) return null
 
   // TODO:
-  response.data.__descriptionHtml = AtpUtil.text2html(response.data.description ?? "")
+  response.data.__descriptionHtml = AtpUtil.text2html(
+    response.data.description ?? ""
+  )
 
   return response.data as TTProfile
 }

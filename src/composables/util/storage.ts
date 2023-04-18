@@ -1,7 +1,7 @@
 import Util from "@/composables/util/index"
 
 export default {
-  saveStorage (key: string, json: null | any) {
+  saveStorage(key: string, json: null | any) {
     if (json == null) return
     const jsonString: null | string = Util.stringify(json)
     if (jsonString == null) return
@@ -9,14 +9,14 @@ export default {
     localStorage.setItem(key, cryptedJson)
   },
 
-  loadStorage (key: string): null | any {
+  loadStorage(key: string): null | any {
     const cryptedJson: null | string = localStorage.getItem(key)
     if (cryptedJson == null) return null
     const jsonString = Util.decrypt(cryptedJson)
     return Util.parse(jsonString)
   },
 
-  removeStorage (key: string) {
+  removeStorage(key: string) {
     localStorage.removeItem(key)
   },
 }

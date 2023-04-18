@@ -13,8 +13,9 @@ export default async function (
     limit,
     cursor,
   }
-  const response: AppBskyFeedGetRepostedBy.Response =
-    await (this.agent as BskyAgent).getRepostedBy(query)
+  const response: AppBskyFeedGetRepostedBy.Response = await (
+    this.agent as BskyAgent
+  ).getRepostedBy(query)
   console.log("[klearsky/getRepostedBy]", response)
   if (!response.success) return
 

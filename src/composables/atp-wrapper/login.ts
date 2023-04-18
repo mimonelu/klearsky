@@ -1,4 +1,8 @@
-import type { BskyAgent, AtpAgentLoginOpts, ComAtprotoServerCreateSession } from "@atproto/api"
+import type {
+  BskyAgent,
+  AtpAgentLoginOpts,
+  ComAtprotoServerCreateSession,
+} from "@atproto/api"
 import Util from "@/composables/util/index"
 
 export default async function (
@@ -20,8 +24,9 @@ export default async function (
       identifier,
       password,
     }
-    const response: ComAtprotoServerCreateSession.Response =
-      await (this.agent as BskyAgent).login(optinos)
+    const response: ComAtprotoServerCreateSession.Response = await (
+      this.agent as BskyAgent
+    ).login(optinos)
     console.log("[klearsky/login]", response)
   }
 

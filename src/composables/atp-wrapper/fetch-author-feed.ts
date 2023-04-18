@@ -12,8 +12,9 @@ export default async function (
   const query: AppBskyFeedGetAuthorFeed.QueryParams = { actor: author }
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
-  const response: AppBskyFeedGetAuthorFeed.Response =
-    await (this.agent as BskyAgent).getAuthorFeed(query)
+  const response: AppBskyFeedGetAuthorFeed.Response = await (
+    this.agent as BskyAgent
+  ).getAuthorFeed(query)
   console.log("[klearsky/getAuthorFeed]", response)
   if (!response.success) return
 

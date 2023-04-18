@@ -47,7 +47,7 @@ interface TIAtpWrapper {
   createFileBlob(
     this: TIAtpWrapper,
     params: {
-      file: File,
+      file: File
       maxWidth: number
       maxHeight: number
       maxSize: number
@@ -57,11 +57,7 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     declarationDid: string
   ): Promise<null | string>
-  createLike(
-    this: TIAtpWrapper,
-    uri: string,
-    cid: string
-  ): Promise<boolean>
+  createLike(this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
   createRepost(this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   deleteAccount(this: TIAtpWrapper, did?: string)
@@ -93,7 +89,11 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
-  fetchBlob(this: TIAtpWrapper, cid: string, did?: string): Promise<null | Uint8Array>
+  fetchBlob(
+    this: TIAtpWrapper,
+    cid: string,
+    did?: string
+  ): Promise<null | Uint8Array>
   fetchFollowings(
     this: TIAtpWrapper,
     users: Array<TTUser> | Array<TTUser>,
@@ -114,9 +114,7 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
-  fetchInviteCodes(
-    this: TIAtpWrapper,
-  ): Promise<null | TTInviteCode[]>
+  fetchInviteCodes(this: TIAtpWrapper): Promise<null | TTInviteCode[]>
   fetchKeywordSearch(
     this: TIAtpWrapper,
     query: string

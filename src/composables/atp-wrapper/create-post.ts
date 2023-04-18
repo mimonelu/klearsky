@@ -4,7 +4,7 @@ import type {
   AppBskyFeedPost,
   BlobRef,
   BskyAgent,
-  ComAtprotoRepoCreateRecord
+  ComAtprotoRepoCreateRecord,
 } from "@atproto/api"
 
 export default async function (
@@ -22,16 +22,14 @@ export default async function (
     text: richText.text,
   }
 
-  if (richText.facets != null)
-    record.facets = richText.facets
+  if (richText.facets != null) record.facets = richText.facets
 
   // TODO: リンクボックス
   let external: null | any = null
   if (params.url?.length > 0) {
-    const response = await fetch(
-      `https://mimonelu.net:4649/${params.url}`,
-      { headers: { "user-agent": "Klearsky" } }
-    )
+    const response = await fetch(`https://mimonelu.net:4649/${params.url}`, {
+      headers: { "user-agent": "Klearsky" },
+    })
     const htmlString: string = await response.text()
     const parser = new DOMParser()
     const html = parser.parseFromString(htmlString, "text/html")
@@ -60,17 +58,19 @@ export default async function (
   )
   if (fileBlobRefs.length > 0) {
     const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileBlobRefs
-      .map((
-        fileBlobRef: null | BlobRef,
-        index: number
-      ): null | AppBskyEmbedImages.Image => {
-        return fileBlobRef == null
-          ? null
-          : {
-            image: fileBlobRef,
-            alt: params.alts[index] ?? "",
-          }
-      })
+      .map(
+        (
+          fileBlobRef: null | BlobRef,
+          index: number
+        ): null | AppBskyEmbedImages.Image => {
+          return fileBlobRef == null
+            ? null
+            : {
+                image: fileBlobRef,
+                alt: params.alts[index] ?? "",
+              }
+        }
+      )
       .filter((image: null | AppBskyEmbedImages.Image) => image != null)
     if (imageObjects.length > 0) images = imageObjects
   }
@@ -93,10 +93,11 @@ export default async function (
 
   // 引用リポスト
   if (params.type === "quoteRepost" && params.post != null) {
-    record.embed ={
-      $type: images != null || external != null
-        ? "app.bsky.embed.recordWithMedia"
-        : "app.bsky.embed.record",
+    record.embed = {
+      $type:
+        images != null || external != null
+          ? "app.bsky.embed.recordWithMedia"
+          : "app.bsky.embed.record",
       record: {
         record: params.post,
         cid: params.post?.cid,
@@ -117,8 +118,9 @@ export default async function (
       record.embed = { $type: "app.bsky.embed.external", external }
   }
 
-  const response: ComAtprotoRepoCreateRecord.OutputSchema =
-    await (this.agent as BskyAgent).post(record)
+  const response: ComAtprotoRepoCreateRecord.OutputSchema = await (
+    this.agent as BskyAgent
+  ).post(record)
   console.log("[klearsky/post]", response)
   return true
 }

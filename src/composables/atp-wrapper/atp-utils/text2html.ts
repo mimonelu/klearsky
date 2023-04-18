@@ -1,13 +1,13 @@
-import type { /* Entity, */Facet } from "@atproto/api"
+import type { /* Entity, */ Facet } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import { Buffer } from "buffer"
 
-function substring (text: string, start: number, end?: number): string {
+function substring(text: string, start: number, end?: number): string {
   const buffer = new (Buffer as any)(text)
   return buffer.slice(start, end).toString()
 }
 
-function makeLink (text: string, uri: string): string {
+function makeLink(text: string, uri: string): string {
   return `<a
     class="textlink"
     href="${uri}"
@@ -17,7 +17,7 @@ function makeLink (text: string, uri: string): string {
   >${text}</a>`
 }
 
-function makeMention (text: string, did: string): string {
+function makeMention(text: string, did: string): string {
   return `<a
     class="textlink"
     href="javascript: void 0;"
@@ -39,7 +39,7 @@ function makeMention (text: string, did: string): string {
 
 export default function (
   text: string,
-  facets?: Facet[],
+  facets?: Facet[]
   // entities?: Entity[]
 ): string {
   let html: string = ""
@@ -50,18 +50,26 @@ export default function (
     for (const facet of reversedFacets) {
       if ((facet.features ?? [])[0] == null) continue
       const feature = facet.features[0]
-      const innerText = substring(text, facet.index.byteStart, facet.index.byteEnd)
+      const innerText = substring(
+        text,
+        facet.index.byteStart,
+        facet.index.byteEnd
+      )
       let innerHtml = innerText
       if (feature.$type === "app.bsky.richtext.facet#link") {
         innerHtml = makeLink(innerText, feature.uri as string)
       } else if (feature.$type === "app.bsky.richtext.facet#mention") {
         innerHtml = makeMention(innerText, feature.did as string)
       } else {
-        console.warn("[klearsky/text2html]", `Unknown feature.$type: "${feature.$type}"`)
+        console.warn(
+          "[klearsky/text2html]",
+          `Unknown feature.$type: "${feature.$type}"`
+        )
       }
-      html = substring(html, 0, facet.index.byteStart)
-        + innerHtml
-        + substring(html, facet.index.byteEnd)
+      html =
+        substring(html, 0, facet.index.byteStart) +
+        innerHtml +
+        substring(html, facet.index.byteEnd)
     }
     return html
   }

@@ -13,8 +13,9 @@ export default async function (
     limit,
     cursor,
   }
-  const response: AppBskyActorSearchActors.Response =
-    await (this.agent as BskyAgent).searchActors(query)
+  const response: AppBskyActorSearchActors.Response = await (
+    this.agent as BskyAgent
+  ).searchActors(query)
   console.log("[klearsky/searchActors]", response)
   if (!response.success) return
 

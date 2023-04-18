@@ -16,28 +16,29 @@ export default async function (
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
       ? this.createFileBlob({
-        file: params.avatar[0],
-        maxWidth: 2000,
-        maxHeight: 2000,
-        maxSize: 0.9313201904,
-      })
+          file: params.avatar[0],
+          maxWidth: 2000,
+          maxHeight: 2000,
+          maxSize: 0.9313201904,
+        })
       : null,
     params.banner != null && params.banner[0] != null
       ? this.createFileBlob({
-        file: params.banner[0],
-        maxWidth: 3000,
-        maxHeight: 1000,
-        maxSize: 0.9313201904,
-      })
+          file: params.banner[0],
+          maxWidth: 3000,
+          maxHeight: 1000,
+          maxSize: 0.9313201904,
+        })
       : null,
   ])
   const avatarSchema: null | BlobRef = fileBlobRefs[0]
   const bannerSchema: null | BlobRef = fileBlobRefs[1]
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
-
-  ;(await (this.agent as BskyAgent).upsertProfile(
-    (existing: AppBskyActorProfile.Record | undefined): AppBskyActorProfile.Record => {
+  await (this.agent as BskyAgent).upsertProfile(
+    (
+      existing: AppBskyActorProfile.Record | undefined
+    ): AppBskyActorProfile.Record => {
       // アバター画像とバナー画像が未指定の場合、既存の画像を指定する
       if (profileSchema.avatar == null && existing?.avatar != null)
         profileSchema.avatar = existing.avatar
@@ -46,6 +47,6 @@ export default async function (
 
       return profileSchema
     }
-  ))
+  )
   return true
 }

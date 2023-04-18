@@ -33,7 +33,8 @@ export default function (responses: Array<any>) {
   AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "media" && value.external != null) {
       parent.external = JSON.parse(JSON.stringify(value.external))
-      parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
+      parent.external.__comment =
+        "❗ This 'external' was duplicated by Klearsky."
     }
   })
 
@@ -58,11 +59,13 @@ export default function (responses: Array<any>) {
     if (key === "record" && parent.embed != null && value.embed != null) {
       if (value.embed.external != null && parent.embed.external == null) {
         parent.embed.external = JSON.parse(JSON.stringify(value.embed.external))
-        parent.embed.external.__comment = "❗ This 'external' was duplicated by Klearsky."
+        parent.embed.external.__comment =
+          "❗ This 'external' was duplicated by Klearsky."
       }
       if (value.embed.images != null && parent.embed.images == null) {
         parent.embed.images = JSON.parse(JSON.stringify(value.embed.images))
-        parent.embed.images.__comment = "❗ This 'images' was duplicated by Klearsky."
+        parent.embed.images.__comment =
+          "❗ This 'images' was duplicated by Klearsky."
       }
     }
   })
