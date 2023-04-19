@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { onBeforeMount, onBeforeUnmount } from "vue"
+import hotkeys from "hotkeys-js"
 import SVGIcon from "@/components/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -6,6 +8,14 @@ const emit = defineEmits<{(event: string): void}>()
 defineProps<{
   hasCloseButton?: boolean;
 }>()
+
+onBeforeMount(() => {
+  hotkeys("esc", close)
+})
+
+onBeforeUnmount(() => {
+  hotkeys.unbind("esc")
+})
 
 function close () {
   emit("close")

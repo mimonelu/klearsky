@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject, onBeforeMount, onBeforeUnmount, reactive } from "vue"
+import hotkeys from "hotkeys-js"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
@@ -24,6 +25,14 @@ const state = reactive<{
   mode: false,
   x: 0.5,
   y: 0.5,
+})
+
+onBeforeMount(() => {
+  hotkeys("esc", close)
+})
+
+onBeforeUnmount(() => {
+  hotkeys.unbind("esc")
 })
 
 function startDrag (event: MouseEvent | TouchEvent) {
