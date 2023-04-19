@@ -90,10 +90,13 @@ function close () {
     justify-content: center;
     flex-grow: 1;
     grid-gap: 0.5rem;
-    text-align: center;
 
     & > .svg-icon {
       fill: rgb(var(--fg-color));
+    }
+
+    & > span {
+      font-weight: bold;
     }
   }
 }

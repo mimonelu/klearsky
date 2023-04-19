@@ -16,6 +16,7 @@ import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
 import home from "@/svg/home.svg?raw"
 import identifier from "@/svg/identifier.svg?raw"
+import inviteCode from "@/svg/invite-code.svg?raw"
 import json from "@/svg/json.svg?raw"
 import mail from "@/svg/mail.svg?raw"
 import menu from "@/svg/menu.svg?raw"
@@ -51,6 +52,7 @@ const icons: { [k: string]: string } = {
   heartBroken,
   home,
   identifier,
+  inviteCode,
   json,
   mail,
   menu,

@@ -1,10 +1,8 @@
 .button,
 .button--bordered,
 .button--important {
-  background-color: rgba(var(--fg-color), 0.875);
   border: 1px solid transparent;
   border-radius: var(--border-radius);
-  color: rgb(var(--bg-color));
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -14,9 +12,6 @@
   line-height: 1.5;
   padding: 0.5em 1em;
   white-space: nowrap;
-  &:focus, &:hover {
-    background-color: rgb(var(--fg-color));
-  }
 
   & > .svg-icon {
     fill: rgb(var(--bg-color));
@@ -24,12 +19,20 @@
   }
 }
 
+.button {
+  background-color: rgba(var(--fg-color), 0.875);
+  color: rgb(var(--bg-color));
+  &:focus, &:hover {
+    background-color: rgb(var(--fg-color));
+  }
+}
+
 .button--bordered {
-  background-color: rgba(var(--bg-color), 0.75);
+  background-color: rgba(var(--bg-color), 0.875);
   border: 1px solid rgba(var(--fg-color), 0.25);
   color: rgb(var(--fg-color));
   &:focus, &:hover {
-    background-color: rgb(var(--bg-color));
+    border-color: rgb(var(--fg-color));
   }
 
   & > .svg-icon {

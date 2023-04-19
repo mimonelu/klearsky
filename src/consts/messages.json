@@ -74,6 +74,9 @@
     "klearskySettings": "Klearsky Settings",
     "blueskySettings": "Bluesky Settings",
     "inviteCodes": "Invite Codes",
+    "confirmInviteCodes": "Confirm invite codes",
+    "copyInviteCode": "Copy",
+    "userOfInviteCode": "Used",
 
     "service": "Service",
     "showSource": "Show source",
@@ -174,6 +177,9 @@
     "klearskySettings": "Klearsky用設定",
     "blueskySettings": "Bluesky用設定",
     "inviteCodes": "招待コード",
+    "confirmInviteCodes": "招待コードを確認する",
+    "copyInviteCode": "コピーする",
+    "userOfInviteCode": "使用済み",
 
     "service": "サービス",
     "showSource": "ソースを表示する",

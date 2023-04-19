@@ -68,8 +68,6 @@ async function fetchContinuousResults (direction: "new" | "old") {
     max-height: calc(100svh - 8rem);
 
     &-header {
-      font-weight: bold;
-
       & > h2 {
         color: rgb(var(--share-color));
 
