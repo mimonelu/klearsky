@@ -195,6 +195,7 @@ async function updateThisPostThread () {
         v-if="position !== 'postInPost'"
         :handle="post.author?.handle"
         :image="post.author?.avatar"
+        @click.stop
       />
 
       <div class="body__right">
@@ -205,6 +206,7 @@ async function updateThisPostThread () {
             class="avatar-in-post"
             :handle="post.author?.handle"
             :image="post.author?.avatar"
+            @click.stop
           />
 
           <!-- 表示名 -->

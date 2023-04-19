@@ -9,7 +9,6 @@ defineProps<{
   <RouterLink
     :to="{ name: 'profile-post', query: { handle } }"
     class="avatar-link"
-    @click.stop
   >
     <img
       loading="lazy"

@@ -65,6 +65,7 @@ async function openSubject (notification: TTNotification) {
       <AvatarLink
         :handle="notification.handle"
         :image="notification.avatar"
+        @click.stop
       />
       <div class="display-name">{{ notification.displayName }}</div>
       <div class="handle">{{ notification.handle }}</div>
