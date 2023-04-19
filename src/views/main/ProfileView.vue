@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import { RouterView } from "vue-router"
-import type { LocationQueryValue } from "vue-router"
+import { RouterView, type LocationQueryValue } from "vue-router"
+import AvatarButton from "@/components/AvatarButton.vue"
 import FollowButton from "@/components/FollowButton.vue"
 import MuteButton from "@/components/MuteButton.vue"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
@@ -62,15 +62,10 @@ async function copyDid () {
     <div class="details">
       <div class="top">
         <div class="left">
-          <div
-            class="avatar"
-            @click="openImagePopup(mainState.currentProfile?.avatar ?? '')"
-          >
-            <img
-              loading="lazy"
-              :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
-            >
-          </div>
+          <AvatarButton
+            :handle="mainState.currentProfile?.handle"
+            :image="mainState.currentProfile?.avatar"
+          />
         </div>
         <div class="right">
           <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
@@ -250,7 +245,7 @@ async function copyDid () {
 }
 
 .avatar {
-  @include avatar-link(6rem);
+  font-size: 6rem;
 }
 
 .right {

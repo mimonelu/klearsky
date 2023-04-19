@@ -8,7 +8,7 @@ defineProps<{
 <template>
   <RouterLink
     :to="{ name: 'profile-post', query: { handle } }"
-    class="avatar"
+    class="avatar-link"
     @click.stop
   >
     <img
@@ -19,16 +19,17 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.avatar {
+.avatar-link {
   cursor: pointer;
   display: block;
-  height: 3em;
 
   & > img {
     border-radius: var(--border-radius);
-    object-fit: cover;
+    display: block;
     min-width: 1em;
+    max-width: 1em;
     min-height: 1em;
+    max-height: 1em;
   }
 }
 </style>

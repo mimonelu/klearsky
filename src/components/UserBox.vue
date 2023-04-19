@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import AvatarLink from "@/components/AvatarLink.vue"
+
 defineProps<{
   user: TTUser
 }>()
@@ -6,16 +8,10 @@ defineProps<{
 
 <template>
   <div class="user-box">
-    <RouterLink
-      class="avatar"
-      :to="{ path: '/profile/post', query: { handle: user.handle } }"
-      @click.prevent
-    >
-      <img
-        loading="lazy"
-        :src="user.avatar ?? '/img/void-avatar.png'"
-      >
-    </RouterLink>
+    <AvatarLink
+      :handle="user.handle"
+      :image="user.avatar"
+    />
     <div class="display-name">{{ user.displayName }}</div>
     <div class="handle">{{ user.handle }}</div>
     <div class="description">{{ user.description }}</div>
@@ -38,9 +34,9 @@ defineProps<{
   align-items: center;
 }
 
-.avatar {
+.avatar-link {
   grid-area: a;
-  @include avatar-link(3rem);
+  font-size: 3rem;
 }
 
 .display-name {

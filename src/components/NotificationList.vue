@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import { useRouter } from "vue-router"
+import AvatarLink from "@/components/AvatarLink.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
@@ -61,16 +62,10 @@ async function openSubject (notification: TTNotification) {
         class="icon"
         :name="iconMap[notification.reason]"
       />
-      <RouterLink
-        class="avatar"
-        :to="{ path: '/profile/post', query: { handle: notification.handle } }"
-        @click.prevent.stop
-      >
-        <img
-          loading="lazy"
-          :src="notification.avatar ?? '/img/void-avatar.png'"
-        >
-      </RouterLink>
+      <AvatarLink
+        :handle="notification.handle"
+        :image="notification.avatar"
+      />
       <div class="display-name">{{ notification.displayName }}</div>
       <div class="handle">{{ notification.handle }}</div>
       <div class="indexed-at">{{ Util.dateLabel(
@@ -126,8 +121,8 @@ async function openSubject (notification: TTNotification) {
   }
 }
 
-.avatar {
-  @include avatar-link(2rem);
+.avatar-link {
+  font-size: 2rem;
 }
 
 .display-name {

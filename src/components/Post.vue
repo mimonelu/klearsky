@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-import Avatar from "@/components/Avatar.vue"
+import AvatarLink from "@/components/AvatarLink.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
@@ -31,9 +31,7 @@ const state = reactive<{
   repostMenuDisplay: false,
   processing: false,
   external: computed(() => props.post.embed?.external),
-  images: computed(() => {
-    return props.post.embed?.images ?? []
-  })
+  images: computed(() => props.post.embed?.images ?? [])
 })
 
 const router = useRouter()
@@ -193,15 +191,16 @@ async function updateThisPostThread () {
     </div>
     <div class="body">
       <!-- アバター -->
-      <Avatar
+      <AvatarLink
         v-if="position !== 'postInPost'"
         :handle="post.author?.handle"
         :image="post.author?.avatar"
       />
+
       <div class="body__right">
-        <div class="body__header">
+        <div class="body__right__header">
           <!-- アバター -->
-          <Avatar
+          <AvatarLink
             v-if="position === 'postInPost'"
             class="avatar-in-post"
             :handle="post.author?.handle"
@@ -284,9 +283,10 @@ async function updateThisPostThread () {
           />
         </div>
 
+        <!-- リアクションコンテナ -->
         <div
           v-if="position !== 'postInPost'"
-          class="button-container"
+          class="reaction-container"
         >
           <div>
             <!-- リプライボタン -->
@@ -419,7 +419,7 @@ async function updateThisPostThread () {
 
     .external,
     .images,
-    .button-container {
+    .reaction-container {
       display: none;
     }
   }
@@ -516,12 +516,14 @@ async function updateThisPostThread () {
   display: grid;
   grid-template-columns: var(--avatar-size) 1fr;
   grid-gap: 1em;
+  align-items: flex-start;
 }
 .post[data-position="postInPost"] > .body {
   display: unset;
 }
 
-.avatar {
+.avatar-link {
+  font-size: var(--avatar-size);
   position: relative;
 }
 
@@ -532,20 +534,20 @@ async function updateThisPostThread () {
   grid-gap: 0.5em;
 }
 
-.body__header {
+.body__right__header {
   grid-area: h;
   display: grid;
-  align-items: baseline;
+  align-items: center;
   grid-template-columns: auto 1fr min-content;
   grid-gap: 0.5em;
   overflow: hidden;
 }
-.post[data-position="postInPost"] .body__header {
+.post[data-position="postInPost"] .body__right__header {
   grid-template-columns: auto auto 1fr min-content;
 }
 
 .avatar-in-post {
-  font-size: 0.625em;
+  font-size: 1.5em;
 }
 
 .display-name {
@@ -680,7 +682,7 @@ async function updateThisPostThread () {
   }
 }
 
-.button-container {
+.reaction-container {
   grid-area: f;
   display: grid;
   align-items: center;
