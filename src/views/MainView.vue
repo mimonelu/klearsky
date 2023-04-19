@@ -439,7 +439,7 @@ async function routerPush (event: Event) {
       }
     }
 
-    .sub-menu-wrapper  {
+    .sub-menu-wrapper {
       display: none;
     }
   }
@@ -522,6 +522,11 @@ async function routerPush (event: Event) {
   @media not all and (max-width: 1024px) {
     flex-grow: 1;
     max-width: $menu-max-width;
+  }
+
+  & > .sub-menu {
+    position: fixed;
+    width: $menu-max-width;
   }
 }
 
