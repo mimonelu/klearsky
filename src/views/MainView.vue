@@ -2,19 +2,20 @@
 import {
   inject,
   nextTick,
+  onBeforeMount,
+  onBeforeUnmount,
   onMounted,
   onUnmounted,
   provide
 } from "vue"
 import {
   useRouter,
-  RouterView
+  RouterView,
+  type LocationQueryValue,
+  type RouteLocationNormalized,
+  type RouteRecordName
 } from "vue-router"
-import type {
-  LocationQueryValue,
-  RouteLocationNormalized,
-  RouteRecordName
-} from "vue-router"
+import hotkeys from "hotkeys-js"
 import ImagePopup from "@/components/ImagePopup.vue"
 import LikeUsersPopup from "@/components/LikeUsersPopup.vue"
 import Loader from "@/components/Loader.vue"
@@ -37,6 +38,22 @@ resetState()
 provide("state", state)
 
 let notificationTimer: null | number = null
+
+onBeforeMount(() => {
+  hotkeys("n", { keyup: true }, (event: any) => {
+    if (event.type === "keyup" &&
+        !state.repostUsersPopupDisplay &&
+        !state.likeUsersPopupDisplay &&
+        !state.imagePopupProps.display &&
+        !state.sendPostPopupProps.display &&
+        !state.loginPopupAutoDisplay)
+      state.sendPostPopupProps.display = true
+  })
+})
+
+onBeforeUnmount(() => {
+  hotkeys.unbind("n")
+})
 
 onMounted(async () => {
   state.currentPath = router.currentRoute.value.fullPath
