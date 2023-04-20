@@ -63,7 +63,7 @@ type MainState = {
   currentLikeUsersCursor?: string
   likeUsersPopupDisplay: boolean
 
-  notifications: Array<TTNotification>
+  notifications: Array<TTNotificationGroup>
   notificationCursor?: string
   notificationCount: number
 

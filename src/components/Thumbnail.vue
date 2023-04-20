@@ -31,12 +31,31 @@ async function initializeSrc () {
     state.loaded = true
     return
   }
-  const link = props.image.image?.ref?.$link
-  if (link == null) {
+
+  const ref = props.image.image?.ref
+  if (ref == null) {
     state.src = "/img/void.png"
     state.loaded = true
     return
   }
+
+  const link = ref.$link
+
+  if (link == null) {
+    const cid = ref.toString()
+    const data: null | Uint8Array = await mainState.atp.fetchBlob(cid, props.did)
+    if (data == null) {
+      state.src = "/img/void.png"
+      state.loaded = true
+      return
+    }
+    state.src = URL.createObjectURL(new Blob([data], {
+      type: props.image.image?.mimeType ?? "image/jpeg",
+    }))
+    state.loaded = true
+    return
+  }
+
   const data: null | Uint8Array = await mainState.atp.fetchBlob(link, props.did)
   if (data == null) {
     state.src = "/img/void.png"

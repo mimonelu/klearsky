@@ -65,6 +65,7 @@ type TTImage = {
     mimeType: string
     ref: {
       $link: string
+      bytes?: Uint8Array
     }
     size: number
   }
@@ -167,24 +168,32 @@ type TTInviteCode = {
   [k: string]: unknown
 }
 
+type TTNotificationReason = "reply"
+  | "quote"
+  | "mention"
+  | "repost"
+  | "like"
+  | "follow"
+  | "invite"
+  | (string & {})
+
 type TTNotification = {
   avatar?: string
   cid: string
   displayName?: string
   handle: string
   indexedAt: string
-  reason:
-    | "reply"
-    | "quote"
-    | "mention"
-    | "repost"
-    | "like"
-    | "follow"
-    | "invite"
-    | (string & {})
-  reasonSubject?: string
+  reason: TTNotificationReason
   text?: string
-  uri?: string
+  isRead: boolean
+}
+
+type TTNotificationGroup = {
+  indexedAt: string
+  notifications: Array<TTNotification>
+  reason: TTNotificationReason
+  reasonSubject?: string
+  __folding: boolean
 }
 
 type TTProfile = {

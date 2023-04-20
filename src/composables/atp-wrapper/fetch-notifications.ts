@@ -5,7 +5,7 @@ import type {
 
 export default async function (
   this: TIAtpWrapper,
-  values: Array<TTNotification>,
+  values: Array<TTNotificationGroup>,
   limit?: number,
   cursor?: string
 ): Promise<null | {
@@ -27,32 +27,46 @@ export default async function (
   response.data.notifications.forEach(
     (notification: AppBskyNotificationListNotifications.Notification) => {
       const existence = values.some(
-        (value: TTNotification) => value.cid === notification.cid
+        (valueGroup: TTNotificationGroup) =>
+          valueGroup.notifications.some(
+            (value: TTNotification) => value.cid === notification.cid
+          )
       )
       if (existence) return
-      if (cursor == null) newNotificationCount++
-      values.push({
+      if (cursor == null) newNotificationCount ++
+
+      const reason = notification.reason
+      const reasonSubject =
+        notification.reason === "mention" ||
+        notification.reason === "quote"
+          ? notification.uri
+          : notification.reason === "follow"
+            ? notification.author.handle
+            : notification.reasonSubject
+      const newNotification = {
         avatar: notification.author.avatar,
         cid: notification.cid,
         displayName: notification.author.displayName,
         handle: notification.author.handle,
         indexedAt: notification.indexedAt,
         reason: notification.reason,
-        reasonSubject:
-          notification.reason === "mention"
-            ? notification.uri
-            : notification.reasonSubject,
         text: (notification.record as any)?.text,
-        uri: notification.uri,
-      })
+        isRead: notification.isRead,
+      }
+
+      const existenceValue = values.find((value: TTNotificationGroup) =>
+        value.reason === reason && value.reasonSubject === reasonSubject)
+
+      if (existenceValue == null) values.push({
+          indexedAt: notification.indexedAt,
+          notifications: [newNotification],
+          reason,
+          reasonSubject,
+          __folding: true,
+        })
+      else existenceValue.notifications.push(newNotification)
     }
   )
-
-  values.sort((a: TTNotification, b: TTNotification) => {
-    const aIndexedAt = new Date(a.indexedAt)
-    const bIndexedAt = new Date(b.indexedAt)
-    return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
-  })
 
   // 最後に通知を取得した日時を保存（ updateSeenNotifications で使用）
   this.lastFetchNotificationsDate = new Date()

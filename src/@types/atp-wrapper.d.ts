@@ -131,19 +131,24 @@ interface TIAtpWrapper {
   fetchNotificationCount(this: TIAtpWrapper): Promise<null | number>
   fetchNotifications(
     this: TIAtpWrapper,
-    values: Array<TTNotification>,
+    values: Array<TTNotificationGroup>,
     limit?: number,
     cursor?: string
   ): Promise<null | {
     cursor?: string
     newNotificationCount: number
   }>
-  fetchProfile(this: TIAtpWrapper, actor: string): Promise<null | TTProfile>
+  fetchPost(
+    this: TIAtpWrapper,
+    uri: string,
+    handle?: string,
+  ): Promise<null | TTPost>
   fetchPostThread(
     this: TIAtpWrapper,
     uri: string,
     depth?: number
   ): Promise<null | Array<TTPost>>
+  fetchProfile(this: TIAtpWrapper, actor: string): Promise<null | TTProfile>
   fetchRepostUsers(
     this: TIAtpWrapper,
     users: Array<TTUser>,
