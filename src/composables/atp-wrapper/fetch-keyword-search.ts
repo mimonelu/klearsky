@@ -10,6 +10,13 @@ export default async function (
   const response = await fetch(request)
   const json: null | any = await response.json()
   if (json != null)
+    json.forEach((data: any) => {
+      if (data.post == null) return
+      const date = new Date()
+      date.setTime(data.post.createdAt / 1000 / 1000)
+      data.post.createdAt = date.toISOString()
+    })
+
     json.sort((a: any, b: any) => {
       const aCreatedAt = new Date(a.post?.createdAt)
       const bCreatedAt = new Date(b.post?.createdAt)
