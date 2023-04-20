@@ -100,7 +100,9 @@ async function submitCallback () {
     @close="close"
   >
     <template v-slot:header>
-      <h2>{{ $t(type) }}</h2>
+      <h2>
+        <span>{{ $t(type) }}</span>
+      </h2>
     </template>
     <template v-slot:body>
       <Post

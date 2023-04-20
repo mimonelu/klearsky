@@ -6,6 +6,7 @@ import {
 import { RouterView } from "vue-router"
 import IgnoreErrors from "@/consts/ignore-errors.json"
 import ErrorPopup from "@/components/ErrorPopup.vue"
+import Util from "@/composables/util/index"
 
 const state = reactive<{
   error?: unknown;
@@ -15,6 +16,7 @@ const state = reactive<{
 
 onErrorCaptured((error: any) => {
   if (IgnoreErrors.includes(error.error)) return
+  Util.blurElement()
   state.error = error
 })
 

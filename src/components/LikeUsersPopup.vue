@@ -65,7 +65,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
 .like-users-popup:deep() {
   .popup {
     width: calc($router-view-width - 2rem);
-    max-height: calc(100svh - 8rem);
+    max-height: calc(100vh - 8rem);
 
     &-header {
       & > h2 {

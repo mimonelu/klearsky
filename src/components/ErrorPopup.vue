@@ -19,7 +19,9 @@ function close () {
     @close="close"
   >
     <template v-slot:header>
-      <h2>{{ $t("error") }}</h2>
+      <h2>
+        <span>{{ $t("error") }}</span>
+      </h2>
     </template>
     <template v-slot:body>
       <pre class="message">{{ error }}
