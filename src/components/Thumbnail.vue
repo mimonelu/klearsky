@@ -104,4 +104,8 @@ function onActivateImage () {
 .thumbnail {
   position: relative;
 }
+
+.loader {
+  font-size: 0.75rem;
+}
 </style>

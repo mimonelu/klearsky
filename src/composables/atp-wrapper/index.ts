@@ -47,6 +47,7 @@ class AtpWrapper implements TIAtpWrapper {
       sessions: {},
     }
     this.session = undefined
+    this.caches = {}
     this.lastFetchNotificationsDate = undefined
   }
 }

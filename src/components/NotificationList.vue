@@ -53,6 +53,23 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
     }
   }
 }
+
+function makeSubjectTo (notification: TTNotification): any {
+  Util.blurElement()
+  switch (notification.reason) {
+    case "follow":
+    case "invite":
+    case "repost":
+    case "like": {
+      return { name: "profile-post", query: { handle: notification.handle } }
+    }
+    case "mention":
+    case "quote":
+    case "reply": {
+      return { name: "post", query: { postUri: notification.uri } }
+    }
+  }
+}
 </script>
 
 <template>
@@ -63,48 +80,50 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
       class="notification-group"
       tabindex="0"
       :data-reason="notificationGroup.reason"
-      :data-has-folder="
-        (
-          notificationGroup.reason !== 'reply' &&
-          isGroupingReason(notificationGroup.reason)
-        ) &&
+      :data-has-folder="isGroupingReason(notificationGroup.reason) &&
         notificationGroup.notifications.length >= 2"
-      @click="openSubject(notificationGroup)"
     >
-      <AsyncPost
-        v-if="isGroupingReason(notificationGroup.reason)"
-        :uri="notificationGroup.reasonSubject as string"
-      />
-      <div class="notification-container">
+      <!-- ユーザーポスト -->
+      <RouterLink :to="{ name: 'post', query: { postUri: notificationGroup.reasonSubject } }">
+        <AsyncPost
+          v-if="isGroupingReason(notificationGroup.reason)"
+          :uri="notificationGroup.reasonSubject as string"
+        />
+      </RouterLink>
+
+      <!-- 通知フォルダー -->
+      <div class="notification-folder">
+        <!-- 通知フォルダー開閉ボタン -->
         <button
-          v-if="
-            (
-              notificationGroup.reason !== 'reply' &&
-              isGroupingReason(notificationGroup.reason)
-            ) &&
+          v-if="isGroupingReason(notificationGroup.reason) &&
             notificationGroup.notifications.length >= 2"
           class="folder-button"
           :data-folding="notificationGroup.__folding"
           @click.prevent.stop="notificationGroup.__folding = !notificationGroup.__folding"
         >
           <SVGIcon
-            class="icon"
+            class="icon icon--reason"
             :name="iconMap[notificationGroup.reason]"
           />
           <span>+ {{ notificationGroup.notifications.length }}</span>
+          <SVGIcon
+            class="icon icon--cursor"
+            :name="notificationGroup.__folding ? 'cursorDown' : 'cursorUp'"
+          />
         </button>
+
         <template v-if="
-          (
-            notificationGroup.reason === 'reply' ||
-            !isGroupingReason(notificationGroup.reason)
-          ) ||
+          !isGroupingReason(notificationGroup.reason) ||
           (
             notificationGroup.notifications.length === 1 ||
             !notificationGroup.__folding
           )">
-          <div
+
+          <!-- 通知 -->
+          <RouterLink
             v-for="notification of notificationGroup.notifications"
             :key="notification.cid"
+            :to="makeSubjectTo(notification)"
             class="notification"
             :data-is-new="!notification.isRead"
           >
@@ -113,7 +132,7 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
               class="new"
             >NEW</div>
             <SVGIcon
-              class="icon"
+              class="icon icon--reason"
               :name="iconMap[notification.reason]"
             />
             <AvatarLink
@@ -129,9 +148,9 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
             ) }}</div>
             <div
               v-if="notification.text"
-              class="reply-text"
+              class="text"
             >{{ notification.text }}</div>
-          </div>
+          </RouterLink>
         </template>
       </div>
     </div>
@@ -153,9 +172,16 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
   }
   &[data-reason="follow"] {
     padding: 0.5rem 1rem;
+    
+    .text {
+      color: rgba(var(--fg-color), 0.75);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
   &[data-has-folder="true"] {
-    .notification-container {
+    .notification-folder {
       border: 1px solid rgba(var(--fg-color), 0.25);
       border-radius: var(--border-radius);
     }
@@ -175,7 +201,7 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
   padding: 0.5rem;
 }
 
-.notification-container {
+.notification-folder {
   display: flex;
   flex-direction: column;
 }
@@ -193,6 +219,12 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
   & > span {
     font-weight: bold;
   }
+
+  & > .icon--cursor {
+    fill: transparent;
+    margin-left: auto;
+    stroke: rgb(var(--fg-color));
+  }
 }
 
 .notification {
@@ -204,8 +236,15 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
   &:nth-child(2):not(:last-child) {
     margin-top: 0.75rem;
   }
+  &:last-child:not(:first-child) {
+    margin-bottom: 0.75rem;
+  }
   &[data-is-new="true"] {
     grid-template-columns: min-content min-content min-content auto 1fr max-content;
+
+    .text {
+      grid-column: 4 / 7;
+    }
   }
   &:focus, &:hover {
     cursor: pointer;
@@ -220,9 +259,6 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
     }
   }
 }
-.notification-group:not([data-reason="reply"]) .notification:last-child:not(:first-child) {
-  margin-bottom: 0.75rem;
-}
 
 .new {
   color: rgb(var(--accent-color));
@@ -230,7 +266,7 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
   font-weight: bold;
 }
 
-.icon {
+.icon--reason {
   [data-reason="follow"] & {
     fill: rgb(var(--fg-color));
   }
@@ -260,6 +296,8 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
 
 .display-name {
   color: rgba(var(--fg-color), 0.75);
+  font-size: 0.875rem;
+  font-weight: bold;
   line-height: 1.25;
   overflow: hidden;
   white-space: nowrap;
@@ -267,7 +305,7 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
 
 .handle {
   color: rgba(var(--fg-color), 0.5);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -282,7 +320,7 @@ async function openSubject (notificationGroup: TTNotificationGroup) {
   white-space: nowrap;
 }
 
-.reply-text {
+.text {
   color: rgb(var(--post-color));
   font-size: 0.875rem;
   grid-column: 3 / 6;

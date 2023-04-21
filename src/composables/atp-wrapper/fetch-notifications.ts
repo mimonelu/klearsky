@@ -50,7 +50,10 @@ export default async function (
         handle: notification.author.handle,
         indexedAt: notification.indexedAt,
         reason: notification.reason,
-        text: (notification.record as any)?.text,
+        text: notification.reason === "follow"
+          ? notification.author.description
+          : (notification.record as any)?.text,
+        uri: notification.uri,
         isRead: notification.isRead,
       }
 
@@ -67,6 +70,19 @@ export default async function (
       else existenceValue.notifications.push(newNotification)
     }
   )
+
+  if (cursor === undefined)
+    values.forEach((value: TTNotificationGroup) => {
+      value.__folding = !value.notifications.some((notification: TTNotification) => !notification.isRead)
+    })
+
+  values.forEach((value: TTNotificationGroup) => {
+    value.notifications.sort((a: TTNotification, b: TTNotification) => {
+      const aDate = new Date(a.indexedAt)
+      const bDate = new Date(b.indexedAt)
+      return aDate < bDate ? 1 : aDate > bDate ? - 1 : 0
+    })
+  })
 
   // 最後に通知を取得した日時を保存（ updateSeenNotifications で使用）
   this.lastFetchNotificationsDate = new Date()

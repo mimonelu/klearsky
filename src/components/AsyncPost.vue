@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onBeforeMount, reactive } from "vue"
+import Loader from "@/components/Loader.vue"
 // import Thumbnail from "@/components/Thumbnail.vue"
 
 const props = defineProps<{
@@ -27,43 +28,46 @@ onBeforeMount(async () => {
 
 <template>
   <div
-    v-if="state.post != null"
     class="async-post"
   >
-    <!-- 本文 -->
-    <div
-      v-html="state.post.__textHtml"
-      class="text"
-    />
-
-    <!-- リンクボックス -->
-    <a
-      v-if="state.post.embed?.external != null"
-      class="external"
-      :href="state.post.embed.external.uri"
-      rel="noreferrer"
-      target="_blank"
-      @click.stop
-    >
-      <div class="external__meta">
-        <div class="external__title">{{ state.post.embed.external.title ?? '' }}</div>
-        <div class="external__uri">{{ state.post.embed.external.uri }}</div>
-        <div class="external__description">{{ state.post.embed.external.description ?? '' }}</div>
-      </div>
-    </a>
-
-    <!-- 画像 -->
-    <!-- TODO: 重すぎるため一時撤去。対応を要検討
-    <div
-      v-if="state.post.embed?.images?.length"
-      class="images"
-    >
-      <Thumbnail
-        v-for="image of state.post.embed.images"
-        :image="image"
+    <template v-if="state.post != null">
+      <!-- 本文 -->
+      <div
+        v-html="state.post.__textHtml"
+        class="text"
       />
-    </div>
-    -->
+
+      <!-- リンクボックス -->
+      <a
+        v-if="state.post.embed?.external != null"
+        class="external"
+        :href="state.post.embed.external.uri"
+        rel="noreferrer"
+        target="_blank"
+        @click.stop
+      >
+        <div class="external__meta">
+          <div class="external__title">{{ state.post.embed.external.title ?? '' }}</div>
+          <div class="external__uri">{{ state.post.embed.external.uri }}</div>
+          <div class="external__description">{{ state.post.embed.external.description ?? '' }}</div>
+        </div>
+      </a>
+
+      <!-- 画像 -->
+      <!-- TODO: 重すぎるため一時撤去。対応を要検討
+      <div
+        v-if="state.post.embed?.images?.length"
+        class="images"
+      >
+        <Thumbnail
+          v-for="image of state.post.embed.images"
+          :image="image"
+        />
+      </div>
+      -->
+
+    </template>
+    <Loader v-if="state.post == null" />
   </div>
 </template>
 
@@ -72,6 +76,7 @@ onBeforeMount(async () => {
   display: flex;
   flex-direction: column;
   grid-gap: 0.5rem;
+  position: relative;
 }
 
 // 本文
@@ -132,5 +137,10 @@ onBeforeMount(async () => {
       height: 4rem;
     }
   }
+}
+
+.loader {
+  font-size: 0.75rem;
+  position: relative;
 }
 </style>

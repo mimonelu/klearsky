@@ -9,6 +9,9 @@ export default async function (
 ): Promise<null | TTPost> {
   if (this.agent == null) return null
   if (this.session == null) return null
+
+  if (this.caches[uri] != null) return this.caches[uri] as TTPost
+
   const aturi = new AtUri(uri)
   const query: ComAtprotoRepoGetRecord.QueryParams = {
     repo: handle ?? this.session.handle,
@@ -26,6 +29,8 @@ export default async function (
   // TODO:
   AtpUtil.coherentResponses([post])
   AtpUtil.feed2html([post])
+
+  this.caches[uri] = post
 
   return post
 }

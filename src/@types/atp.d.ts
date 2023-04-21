@@ -185,6 +185,7 @@ type TTNotification = {
   indexedAt: string
   reason: TTNotificationReason
   text?: string
+  uri: string
   isRead: boolean
 }
 
