@@ -687,11 +687,11 @@ async function updateThisPostThread () {
 .reaction-container {
   grid-area: f;
   display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr; // for Android
   align-items: center;
   &:not(:first-child) {
     margin-top: 0.5em;
   }
-
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     grid-template-columns: 1fr 1fr 1fr 2fr;
   }
