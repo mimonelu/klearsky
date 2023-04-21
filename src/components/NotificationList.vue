@@ -1,14 +1,11 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import { useRouter } from "vue-router"
 import AsyncPost from "@/components/AsyncPost.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
-
-const router = useRouter()
 
 const iconMap: { [reason: string]: string } = {
   follow: "person",
@@ -20,6 +17,7 @@ const iconMap: { [reason: string]: string } = {
   like: "heart",
 }
 
+// 通知フォルダーを持つ通知かどうか
 function isGroupingReason (reason: string): boolean {
   return reason === "like" ||
     reason === "quote" ||
@@ -27,35 +25,8 @@ function isGroupingReason (reason: string): boolean {
     reason === "repost"
 }
 
-async function openSubject (notificationGroup: TTNotificationGroup) {
-  Util.blurElement()
-  switch (notificationGroup.reason) {
-    case "follow": {
-      await router.push({ name: "profile-post", query: { handle: notificationGroup.reasonSubject } })
-      break
-    }
-    case "invite": {
-      // TODO:
-      break
-    }
-    case "mention": {
-      await router.push({ name: "post", query: { postUri: notificationGroup.reasonSubject } })
-      break
-    }
-    case "quote":
-    case "reply":
-      await router.push({ name: "post", query: { postUri: notificationGroup.reasonSubject } })
-      break
-    case "repost":
-    case "like": {
-      await router.push({ name: "post", query: { postUri: notificationGroup.reasonSubject } })
-      break
-    }
-  }
-}
-
+// 通知押下時の遷移先
 function makeSubjectTo (notification: TTNotification): any {
-  Util.blurElement()
   switch (notification.reason) {
     case "follow":
     case "invite":
@@ -74,9 +45,10 @@ function makeSubjectTo (notification: TTNotification): any {
 
 <template>
   <div class="notification-list">
+    <!-- 通知グループ -->
     <div
-      v-for="notificationGroup, index of mainState.notifications"
-      :key="index"
+      v-for="notificationGroup of mainState.notifications"
+      :key="notificationGroup.id"
       class="notification-group"
       tabindex="0"
       :data-reason="notificationGroup.reason"
@@ -84,7 +56,9 @@ function makeSubjectTo (notification: TTNotification): any {
         notificationGroup.notifications.length >= 2"
     >
       <!-- ユーザーポスト -->
-      <RouterLink :to="{ name: 'post', query: { postUri: notificationGroup.reasonSubject } }">
+      <RouterLink
+        :to="{ name: 'post', query: { postUri: notificationGroup.reasonSubject } }"
+      >
         <AsyncPost
           v-if="isGroupingReason(notificationGroup.reason)"
           :uri="notificationGroup.reasonSubject as string"
@@ -127,25 +101,38 @@ function makeSubjectTo (notification: TTNotification): any {
             class="notification"
             :data-is-new="!notification.isRead"
           >
+            <!-- NEW アイコン -->
             <div
               v-if="!notification.isRead"
               class="new"
             >NEW</div>
+
+            <!-- reason アイコン -->
             <SVGIcon
               class="icon icon--reason"
               :name="iconMap[notification.reason]"
             />
+
+            <!-- アバターリンク -->
             <AvatarLink
               :handle="notification.handle"
               :image="notification.avatar"
               @click.stop
             />
+
+            <!-- 表示名 -->
             <div class="display-name">{{ notification.displayName }}</div>
+
+            <!-- ハンドル -->
             <div class="handle">{{ notification.handle }}</div>
+
+            <!-- リアクション日時 -->
             <div class="indexed-at">{{ Util.dateLabel(
               notification.indexedAt,
               mainState.currentSetting.language
             ) }}</div>
+
+            <!-- 本文 -->
             <div
               v-if="notification.text"
               class="text"
@@ -158,9 +145,12 @@ function makeSubjectTo (notification: TTNotification): any {
 </template>
 
 <style lang="scss" scoped>
+// 通知グループ
 .notification-group {
   border-bottom: 1px solid rgba(var(--fg-color), 0.125);
   padding: 1rem;
+
+  // reason ごとの処理
   &[data-reason="reply"] {
     background-color: rgba(var(--post-color), 0.125);
   }
@@ -180,6 +170,8 @@ function makeSubjectTo (notification: TTNotification): any {
       white-space: nowrap;
     }
   }
+
+  // 通知フォルダー開閉ボタンを持つ通知グループの処理
   &[data-has-folder="true"] {
     .notification-folder {
       border: 1px solid rgba(var(--fg-color), 0.25);
@@ -192,6 +184,7 @@ function makeSubjectTo (notification: TTNotification): any {
   }
 }
 
+// ユーザーポスト
 .async-post {
   background-color: rgba(var(--fg-color), 0.125);
   border: 1px solid rgba(var(--fg-color), 0.25);
@@ -201,11 +194,13 @@ function makeSubjectTo (notification: TTNotification): any {
   padding: 0.5rem;
 }
 
+// 通知フォルダー
 .notification-folder {
   display: flex;
   flex-direction: column;
 }
 
+// 通知フォルダー開閉ボタン
 .folder-button {
   background-color: rgba(var(--fg-color), 0.25);
   display: flex;
@@ -227,6 +222,7 @@ function makeSubjectTo (notification: TTNotification): any {
   }
 }
 
+// 通知
 .notification {
   display: grid;
   grid-template-columns: min-content min-content auto 1fr max-content;
@@ -260,12 +256,14 @@ function makeSubjectTo (notification: TTNotification): any {
   }
 }
 
+// NEW アイコン
 .new {
   color: rgb(var(--accent-color));
   font-size: 0.75rem;
   font-weight: bold;
 }
 
+// reason アイコン
 .icon--reason {
   [data-reason="follow"] & {
     fill: rgb(var(--fg-color));
@@ -290,10 +288,12 @@ function makeSubjectTo (notification: TTNotification): any {
   }
 }
 
+// アバターリンク
 .avatar-link {
   font-size: 2rem;
 }
 
+// 表示名
 .display-name {
   color: rgba(var(--fg-color), 0.75);
   font-size: 0.875rem;
@@ -303,6 +303,7 @@ function makeSubjectTo (notification: TTNotification): any {
   white-space: nowrap;
 }
 
+// ハンドル
 .handle {
   color: rgba(var(--fg-color), 0.5);
   font-size: 0.75rem;
@@ -312,6 +313,7 @@ function makeSubjectTo (notification: TTNotification): any {
   white-space: nowrap;
 }
 
+// リアクション日時
 .indexed-at {
   color: rgba(var(--fg-color), 0.5);
   font-size: 0.875rem;
@@ -320,6 +322,7 @@ function makeSubjectTo (notification: TTNotification): any {
   white-space: nowrap;
 }
 
+// 本文
 .text {
   color: rgb(var(--post-color));
   font-size: 0.875rem;

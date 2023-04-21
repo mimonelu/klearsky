@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onBeforeMount, reactive } from "vue"
 import Loader from "@/components/Loader.vue"
-// import Thumbnail from "@/components/Thumbnail.vue"
+import Thumbnail from "@/components/Thumbnail.vue"
 
 const props = defineProps<{
   uri: string;
@@ -17,6 +17,7 @@ const state = reactive<{
 })
 
 onBeforeMount(async () => {
+  if (state.post != null) return
   try {
     const post = await mainState.atp.fetchPost(props.uri, props.handle)
     if (post != null) state.post = post
@@ -27,9 +28,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div
-    class="async-post"
-  >
+  <div class="async-post">
     <template v-if="state.post != null">
       <!-- 本文 -->
       <div
@@ -54,7 +53,6 @@ onBeforeMount(async () => {
       </a>
 
       <!-- 画像 -->
-      <!-- TODO: 重すぎるため一時撤去。対応を要検討
       <div
         v-if="state.post.embed?.images?.length"
         class="images"
@@ -64,7 +62,6 @@ onBeforeMount(async () => {
           :image="image"
         />
       </div>
-      -->
 
     </template>
     <Loader v-if="state.post == null" />
@@ -142,5 +139,6 @@ onBeforeMount(async () => {
 .loader {
   font-size: 0.75rem;
   position: relative;
+  z-index: unset;
 }
 </style>

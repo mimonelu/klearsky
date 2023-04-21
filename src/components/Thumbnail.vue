@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject, onMounted, reactive } from "vue"
 import Loader from "@/components/Loader.vue"
 
 const props = defineProps<{
@@ -17,9 +17,7 @@ const state = reactive<{
   loaded: false,
 })
 
-initializeSrc()
-
-async function initializeSrc () {
+onMounted(async () => {
   if (props.image == null) return
   if (typeof props.image === "string") {
     state.src = props.image
@@ -66,7 +64,7 @@ async function initializeSrc () {
     type: props.image.image?.mimeType ?? "image/jpeg",
   }))
   state.loaded = true
-}
+})
 
 function onActivateImage () {
   if (props.image == null) return
@@ -91,7 +89,7 @@ function onActivateImage () {
       loading="lazy"
       :src="state.src ?? '/img/void.png'"
       :alt="image?.alt ?? ''"
-      @click.stop="onActivateImage"
+      @click.prevent.stop="onActivateImage"
     />
     <Loader
       v-if="!state.loaded"
@@ -107,5 +105,6 @@ function onActivateImage () {
 
 .loader {
   font-size: 0.75rem;
+  z-index: unset;
 }
 </style>

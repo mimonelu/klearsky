@@ -9,7 +9,6 @@ export default async function (
 ): Promise<null | TTPost> {
   if (this.agent == null) return null
   if (this.session == null) return null
-
   if (this.caches[uri] != null) return this.caches[uri] as TTPost
 
   const aturi = new AtUri(uri)
@@ -31,6 +30,5 @@ export default async function (
   AtpUtil.feed2html([post])
 
   this.caches[uri] = post
-
   return post
 }

@@ -190,7 +190,8 @@ type TTNotification = {
 }
 
 type TTNotificationGroup = {
-  indexedAt: string
+  id: string
+  indexedAt: Date
   notifications: Array<TTNotification>
   reason: TTNotificationReason
   reasonSubject?: string

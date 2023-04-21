@@ -34,11 +34,9 @@ export default async function (
       )
       if (existence) return
       if (cursor == null) newNotificationCount ++
-
       const reason = notification.reason
       const reasonSubject =
-        notification.reason === "mention" ||
-        notification.reason === "quote"
+        notification.reason === "mention"
           ? notification.uri
           : notification.reason === "follow"
             ? notification.author.handle
@@ -56,32 +54,44 @@ export default async function (
         uri: notification.uri,
         isRead: notification.isRead,
       }
-
-      const existenceValue = values.find((value: TTNotificationGroup) =>
+      const existenceGroup = values.find((value: TTNotificationGroup) =>
         value.reason === reason && value.reasonSubject === reasonSubject)
-
-      if (existenceValue == null) values.push({
-          indexedAt: notification.indexedAt,
+      if (existenceGroup == null) values.push({
+          id: notification.cid,
+          indexedAt: new Date(notification.indexedAt),
           notifications: [newNotification],
           reason,
           reasonSubject,
           __folding: true,
         })
-      else existenceValue.notifications.push(newNotification)
+      else existenceGroup.notifications.push(newNotification)
     }
   )
 
+  // フォールディングの設定
   if (cursor === undefined)
     values.forEach((value: TTNotificationGroup) => {
       value.__folding = !value.notifications.some((notification: TTNotification) => !notification.isRead)
     })
 
+  // 通知配列のソート
   values.forEach((value: TTNotificationGroup) => {
     value.notifications.sort((a: TTNotification, b: TTNotification) => {
       const aDate = new Date(a.indexedAt)
       const bDate = new Date(b.indexedAt)
       return aDate < bDate ? 1 : aDate > bDate ? - 1 : 0
     })
+  })
+
+  // 通知グループのソート
+  values.forEach((group: TTNotificationGroup) => {
+    group.notifications.forEach((notification: TTNotification) => {
+      const date = new Date(notification.indexedAt)
+      if (group.indexedAt < date) group.indexedAt = date
+    })
+  })
+  values.sort((a: TTNotificationGroup, b: TTNotificationGroup) => {
+    return a.indexedAt < b.indexedAt ? 1 : a.indexedAt > b.indexedAt ? - 1 : 0
   })
 
   // 最後に通知を取得した日時を保存（ updateSeenNotifications で使用）
