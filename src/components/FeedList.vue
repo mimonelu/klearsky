@@ -1,21 +1,27 @@
 <script lang="ts" setup>
-import { inject, watch } from "vue"
+import { inject, reactive, watch } from "vue"
 import Feed from "@/components/Feed.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import LoadButton from "@/components/LoadButton.vue"
 import Util from "@/composables/util/index"
 
 const props = defineProps<{
   type: "author" | "authorReposts" | "authorLikes" | "hot" | "post" | "timeline";
   feeds: null | Array<TTFeed>;
-  hasFetchButton?: boolean;
+  hasLoadButton?: boolean;
   isMasonry?: boolean;
 }>()
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false
+})
+
 async function fetchFeeds (direction: "new" | "old") {
   Util.blurElement()
-  mainState.processing = true
+  state.processing = true
   try {
     switch (props.type) {
       case "author": {
@@ -44,7 +50,7 @@ async function fetchFeeds (direction: "new" | "old") {
       }
     }
   } finally {
-    mainState.processing = false
+    state.processing = false
   }
 }
 
@@ -87,13 +93,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="feed-list">
-    <button
-      v-if="hasFetchButton"
-      class="fetch-button"
-      @click.prevent="fetchFeeds('new')"
-    >
-      <SVGIcon name="cursorUp"/>
-    </button>
+    <LoadButton
+      v-if="hasLoadButton"
+      direction="new"
+      :processing="state.processing"
+      @activate="fetchFeeds('new')"
+    />
     <div class="feeds">
       <Feed
         v-for="feed, feedIndex of feeds"
@@ -103,13 +108,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         @removeThisPost="removeThisPost"
       />
     </div>
-    <button
-      v-if="hasFetchButton"
-      class="fetch-button"
-      @click.prevent="fetchFeeds('old')"
-    >
-      <SVGIcon name="cursorDown"/>
-    </button>
+    <LoadButton
+      v-if="hasLoadButton"
+      direction="old"
+      :processing="state.processing"
+      @activate="fetchFeeds('old')"
+    />
   </div>
 </template>
 

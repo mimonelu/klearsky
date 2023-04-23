@@ -23,7 +23,7 @@ function getServiceName (): string {
   <FeedList
     type="hot"
     :feeds="mainState.currentHotFeeds"
-    :hasFetchButton="true"
+    :hasLoadButton="true"
     :isMasonry="true"
   />
 </template>

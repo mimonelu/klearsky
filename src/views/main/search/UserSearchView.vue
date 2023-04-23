@@ -1,12 +1,18 @@
 <script lang="ts" setup>
-import { inject, onMounted, watch } from "vue"
+import { inject, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
-import SVGIcon from "@/components/SVGIcon.vue"
+import LoadButton from "@/components/LoadButton.vue"
 import UserBox from "@/components/UserBox.vue"
 import Util from "@/composables/util/index"
 import consts from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false
+})
 
 const router = useRouter()
 
@@ -16,11 +22,11 @@ onMounted(() => {
 })
 
 async function fetchNewResults () {
-  if (mainState.processing) return
+  if (state.processing) return
   if (mainState.currentSearchUserTerm === "") return
   mainState.currentSearchLastUserTerm = mainState.currentSearchUserTerm
   mainState.currentSearchUsers.splice(0)
-  mainState.processing = true
+  state.processing = true
   try {
     mainState.currentSearchUsersCursor =
       await mainState.atp.fetchUserSearch(
@@ -29,20 +35,20 @@ async function fetchNewResults () {
         consts.limitOfFetchUserSearch
       )
   } finally {
-    mainState.processing = false
+    state.processing = false
   }
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
-  if (mainState.processing) return
+  if (state.processing) return
   if (mainState.currentSearchUserTerm === "") return
   if (mainState.currentSearchLastUserTerm !== mainState.currentSearchUserTerm) {
     mainState.currentSearchLastUserTerm = mainState.currentSearchUserTerm
     mainState.currentSearchUsers.splice(0)
     mainState.currentSearchUsersCursor = undefined
   }
-  mainState.processing = true
+  state.processing = true
   try {
     mainState.currentSearchUsersCursor =
       await mainState.atp.fetchUserSearch(
@@ -52,7 +58,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
         direction === "new" ? undefined : mainState.currentSearchUsersCursor
       )
   } finally {
-    mainState.processing = false
+    state.processing = false
   }
 }
 
@@ -82,12 +88,11 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       >
     </form>
     <div class="main">
-      <button
-        class="fetch-button"
-        @click.prevent="fetchContinuousResults('new')"
-      >
-        <SVGIcon name="cursorUp"/>
-      </button>
+      <LoadButton
+        direction="new"
+        :processing="state.processing"
+        @activate="fetchContinuousResults('new')"
+      />
       <div class="users">
         <UserBox
           v-for="user of mainState.currentSearchUsers"
@@ -97,12 +102,11 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
           @click.prevent="openProfile(user.handle)"
         />
       </div>
-      <button
-        class="fetch-button"
-        @click.prevent="fetchContinuousResults('old')"
-      >
-        <SVGIcon name="cursorDown"/>
-      </button>
+      <LoadButton
+        direction="old"
+        :processing="state.processing"
+        @activate="fetchContinuousResults('old')"
+      />
     </div>
   </div>
 </template>
@@ -121,7 +125,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-grow: 1;
 }
 
-.fetch-button:first-child {
+.load-button:first-child {
   border-top: 1px solid rgb(var(--fg-color), 0.25);
 }
 

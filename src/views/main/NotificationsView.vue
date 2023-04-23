@@ -1,11 +1,17 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted, watch } from "vue"
+import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
+import LoadButton from "@/components/LoadButton.vue"
 import NotificationList from "@/components/NotificationList.vue"
 import PageHeader from "@/components/PageHeader.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false
+})
 
 onBeforeUnmount(() => {
   mainState.notificationCount = 0
@@ -18,11 +24,11 @@ onMounted(async () => {
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
   Util.blurElement()
-  mainState.processing = true
+  state.processing = true
   try {
     await mainState.fetchNotifications(limit, direction)
   } finally {
-    mainState.processing = false
+    state.processing = false
   }
 }
 
@@ -38,21 +44,19 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :title="$t('notifications')"
       :subTitle="mainState.atp.session?.handle ?? ''"
     />
-    <button
-      class="fetch-button"
-      @click.prevent="fetchNotifications(25, 'new')"
-    >
-      <SVGIcon name="cursorUp"/>
-    </button>
+    <LoadButton
+      direction="new"
+      :processing="state.processing"
+      @activate="fetchNotifications(25, 'new')"
+    />
     <div class="notifications-view__main">
       <NotificationList />
     </div>
-    <button
-      class="fetch-button"
-      @click.prevent="fetchNotifications(25, 'old')"
-    >
-      <SVGIcon name="cursorDown"/>
-    </button>
+    <LoadButton
+      direction="old"
+      :processing="state.processing"
+      @activate="fetchNotifications(25, 'old')"
+    />
   </div>
 </template>
 

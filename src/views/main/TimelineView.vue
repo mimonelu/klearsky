@@ -14,6 +14,6 @@ const mainState = inject("state") as MainState
   <FeedList
     type="timeline"
     :feeds="mainState.timelineFeeds"
-    :hasFetchButton="true"
+    :hasLoadButton="true"
   />
 </template>

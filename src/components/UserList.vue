@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { inject, watch } from "vue"
+import { inject, reactive, watch } from "vue"
 import FollowButton from "@/components/FollowButton.vue"
+import LoadButton from "@/components/LoadButton.vue"
 import MuteButton from "@/components/MuteButton.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
 import Util from "@/composables/util/index"
 
@@ -12,13 +12,19 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false
+})
+
 const currentUsers = props.type === "follower"
   ? mainState.currentFollowers
   : mainState.currentFollowings
 
 async function fetchUsers (direction: "new" | "old") {
   Util.blurElement()
-  mainState.processing = true
+  state.processing = true
   try {
     switch (props.type) {
       case "follower": {
@@ -31,7 +37,7 @@ async function fetchUsers (direction: "new" | "old") {
       }
     }
   } finally {
-    mainState.processing = false
+    state.processing = false
   }
 }
 
@@ -43,12 +49,11 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="user-list">
-    <button
-      class="fetch-button"
-      @click.prevent="fetchUsers('new')"
-    >
-      <SVGIcon name="cursorUp"/>
-    </button>
+    <LoadButton
+      direction="new"
+      :processing="state.processing"
+      @activate="fetchUsers('new')"
+    />
     <div class="users">
       <UserBox
         v-for="user of currentUsers"
@@ -76,12 +81,11 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         </template>
       </UserBox>
     </div>
-    <button
-      class="fetch-button"
-      @click.prevent="fetchUsers('old')"
-    >
-      <SVGIcon name="cursorDown"/>
-    </button>
+    <LoadButton
+      direction="old"
+      :processing="state.processing"
+      @activate="fetchUsers('old')"
+    />
   </div>
 </template>
 

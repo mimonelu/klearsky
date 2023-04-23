@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, onBeforeMount, reactive } from "vue"
 import { useRouter } from "vue-router"
+import LoadButton from "@/components/LoadButton.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
@@ -10,7 +11,17 @@ const emit = defineEmits<{(event: string): void}>()
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false
+})
+
 const router = useRouter()
+
+onBeforeMount(async () => {
+  await fetchContinuousResults("new")
+})
 
 function close () {
   emit("close")
@@ -23,7 +34,13 @@ async function openProfile (handle: string) {
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
-  await mainState.fetchRepostUsers(direction)
+  if (state.processing) return
+  state.processing = true
+  try {
+    await mainState.fetchRepostUsers(direction)
+  } finally {
+    state.processing = false
+  }
 }
 </script>
 
@@ -51,12 +68,11 @@ async function fetchContinuousResults (direction: "new" | "old") {
       </div>
     </template>
     <template v-slot:footer>
-      <button
-        class="fetch-button"
-        @click.prevent="fetchContinuousResults('old')"
-      >
-        <SVGIcon name="cursorDown" />
-      </button>
+      <LoadButton
+        direction="old"
+        :processing="state.processing"
+        @activate="fetchContinuousResults('old')"
+      />
     </template>
   </Popup>
 </template>

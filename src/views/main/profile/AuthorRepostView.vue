@@ -9,6 +9,6 @@ const mainState = inject("state") as MainState
   <FeedList
     type="authorReposts"
     :feeds="mainState.currentAuthorReposts"
-    :hasFetchButton="true"
+    :hasLoadButton="true"
   />
 </template>

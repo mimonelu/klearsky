@@ -276,19 +276,14 @@ function closeSendPostPopup (done: boolean) {
 }
 
 async function fetchRepostUsers (direction: "new" | "old") {
-  state.processing = true
-  try {
-    const cursor: undefined | string =
-      await state.atp.fetchRepostUsers(
-        state.currentRepostUsers as Array<TTUser>,
-        state.currentRepostUsersUri as string,
-        consts.limitOfFetchRepostUsers,
-        direction === "old" ? state.currentRepostUsersCursor : undefined
-      )
-    if (cursor != null) state.currentRepostUsersCursor = cursor
-  } finally {
-    state.processing = false
-  }
+  const cursor: undefined | string =
+    await state.atp.fetchRepostUsers(
+      state.currentRepostUsers as Array<TTUser>,
+      state.currentRepostUsersUri as string,
+      consts.limitOfFetchRepostUsers,
+      direction === "old" ? state.currentRepostUsersCursor : undefined
+    )
+  if (cursor != null) state.currentRepostUsersCursor = cursor
 }
 
 async function openRepostUsersPopup (uri: string) {
@@ -297,7 +292,6 @@ async function openRepostUsersPopup (uri: string) {
     state.currentRepostUsersUri = uri
     state.currentRepostUsersCursor = undefined
   }
-  await state.fetchRepostUsers("new")
   state.repostUsersPopupDisplay = true
 }
 
@@ -306,19 +300,14 @@ function closeRepostUsersPopup () {
 }
 
 async function fetchLikeUsers (direction: "new" | "old") {
-  state.processing = true
-  try {
-    const cursor: undefined | string =
-      await state.atp.fetchLikeUsers(
-        state.currentLikeUsers as Array<TTUser>,
-        state.currentLikeUsersUri as string,
-        consts.limitOfFetchLikeUsers,
-        direction === "old" ? state.currentLikeUsersCursor : undefined
-      )
-    if (cursor != null) state.currentLikeUsersCursor = cursor
-  } finally {
-    state.processing = false
-  }
+  const cursor: undefined | string =
+    await state.atp.fetchLikeUsers(
+      state.currentLikeUsers as Array<TTUser>,
+      state.currentLikeUsersUri as string,
+      consts.limitOfFetchLikeUsers,
+      direction === "old" ? state.currentLikeUsersCursor : undefined
+    )
+  if (cursor != null) state.currentLikeUsersCursor = cursor
 }
 
 async function openLikeUsersPopup (uri: string) {
@@ -327,7 +316,6 @@ async function openLikeUsersPopup (uri: string) {
     state.currentLikeUsersUri = uri
     state.currentLikeUsersCursor = undefined
   }
-  await state.fetchLikeUsers("new")
   state.likeUsersPopupDisplay = true
 }
 
