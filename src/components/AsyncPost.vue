@@ -32,6 +32,7 @@ onBeforeMount(async () => {
     <template v-if="state.post != null">
       <!-- 本文 -->
       <div
+        v-if="state.post.__textHtml"
         v-html="state.post.__textHtml"
         class="text"
       />

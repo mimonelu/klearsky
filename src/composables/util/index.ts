@@ -1,4 +1,5 @@
 import blurElement from "@/composables/util/blur-element"
+import cache from "@/composables/util/cache"
 import cipher from "@/composables/util/cipher"
 import dateLabel from "@/composables/util/date-label"
 import displayJson from "@/composables/util/display-json"
@@ -8,6 +9,7 @@ import waitProp from "@/composables/util/wait-prop"
 
 export default {
   blurElement,
+  cache,
   ...cipher,
   dateLabel,
   displayJson,

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive } from "vue"
 import Loader from "@/components/Loader.vue"
+import Util from "@/composables/util/index"
 
 const props = defineProps<{
   image?: TTImage
@@ -41,7 +42,7 @@ onMounted(async () => {
 
   if (link == null) {
     const cid = ref.toString()
-    const data: null | Uint8Array = await mainState.atp.fetchBlob(cid, props.did)
+    const data: null | Uint8Array = await fetchBlob(cid)
     if (data == null) {
       state.src = "/img/void.png"
       state.loaded = true
@@ -54,7 +55,7 @@ onMounted(async () => {
     return
   }
 
-  const data: null | Uint8Array = await mainState.atp.fetchBlob(link, props.did)
+  const data: null | Uint8Array = await fetchBlob(link)
   if (data == null) {
     state.src = "/img/void.png"
     state.loaded = true
@@ -65,6 +66,15 @@ onMounted(async () => {
   }))
   state.loaded = true
 })
+
+// Blob 画像のみキャッシュ
+async function fetchBlob (link: string): Promise<null | Uint8Array> {
+  let data: null | Uint8Array = Util.cache.get(link)
+  if (data != null) return data
+  data = await mainState.atp.fetchBlob(link, props.did)
+  Util.cache.set(link, data)
+  return data
+}
 
 function onActivateImage () {
   if (props.image == null) return
