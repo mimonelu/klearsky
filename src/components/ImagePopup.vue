@@ -84,6 +84,10 @@ function setBackgroundImage () {
   mainState.saveSettings()
 }
 
+function blurElement () {
+  Util.blurElement()
+}
+
 function close () {
   Util.blurElement()
   emit("close")
@@ -135,6 +139,18 @@ function close () {
     >
       <SVGIcon name="wallpaper" />
     </button>
+
+    <!-- 画像を別タブで開くボタン -->
+    <a
+      v-if="!state.isBlob"
+      class="floating-button open-image-button"
+      :href="largeUri"
+      rel="noreferrer"
+      target="_blank"
+      @click="blurElement"
+    >
+      <SVGIcon name="openInNew" />
+    </a>
 
     <!-- 閉じるボタン -->
     <button
@@ -217,13 +233,19 @@ function close () {
 }
 
 // 壁紙設定ボタン
-.background-image-button {
-  right: 6rem;
+.background-image-button,
+.open-image-button {
   [data-loaded="false"] & {
     & > .svg-icon {
       fill: rgba(255, 255, 255, 0.25);
     }
   }
+}
+.background-image-button {
+  left: 1rem;
+}
+.open-image-button {
+  left: 6rem;
 }
 
 // 閉じるボタン

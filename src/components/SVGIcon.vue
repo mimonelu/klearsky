@@ -20,6 +20,7 @@ import inviteCode from "@/svg/invite-code.svg?raw"
 import json from "@/svg/json.svg?raw"
 import mail from "@/svg/mail.svg?raw"
 import menu from "@/svg/menu.svg?raw"
+import openInNew from "@/svg/open-in-new.svg?raw"
 import person from "@/svg/person.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
@@ -56,6 +57,7 @@ const icons: { [k: string]: string } = {
   json,
   mail,
   menu,
+  openInNew,
   person,
   plus,
   post,
