@@ -63,74 +63,25 @@ function changeSetting () {
       <!-- タイムラインの制御 -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("timelineControl") }}</div>
+        <div class="settings-section__description">{{ $t("timelineControlDescription") }}</div>
         <div class="settings-section__body">
           <!-- タイムラインの制御 - リプライ -->
           <div class="settings-section__sub-header">{{ $t("replyControl") }}</div>
           <div class="checkbox-container">
             <label
+              v-for="value of [1, 2, 3, 4, 5]"
+              :key="value"
               class="checkbox"
-              :data-checked="mainState.currentSetting.replyControl?.includes(1)"
+              :data-checked="mainState.currentSetting.replyControl?.includes(value)"
             >
               <input
                 v-model="mainState.currentSetting.replyControl"
                 type="checkbox"
-                :value="1"
+                :value="value"
                 @change="saveSetting"
               >
               <SVGIcon name="check" />
-              <span>{{ $t("replyControl1") }}</span>
-            </label>
-            <label
-              class="checkbox"
-              :data-checked="mainState.currentSetting.replyControl?.includes(2)"
-            >
-              <input
-                v-model="mainState.currentSetting.replyControl"
-                type="checkbox"
-                :value="2"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t("replyControl2") }}</span>
-            </label>
-            <label
-              class="checkbox"
-              :data-checked="mainState.currentSetting.replyControl?.includes(3)"
-            >
-              <input
-                v-model="mainState.currentSetting.replyControl"
-                type="checkbox"
-                :value="3"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t("replyControl3") }}</span>
-            </label>
-            <label
-              class="checkbox"
-              :data-checked="mainState.currentSetting.replyControl?.includes(4)"
-            >
-              <input
-                v-model="mainState.currentSetting.replyControl"
-                type="checkbox"
-                :value="4"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t("replyControl4") }}</span>
-            </label>
-            <label
-              class="checkbox"
-              :data-checked="mainState.currentSetting.replyControl?.includes(5)"
-            >
-              <input
-                v-model="mainState.currentSetting.replyControl"
-                type="checkbox"
-                :value="5"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t("replyControl5") }}</span>
+              <span>{{ $t(`replyControl${value}`) }}</span>
             </label>
           </div>
 
@@ -138,69 +89,19 @@ function changeSetting () {
           <div class="settings-section__sub-header">{{ $t("repostControl") }}</div>
           <div class="checkbox-container">
             <label
+              v-for="value of [1, 2, 3, 4, 5]"
+              :key="value"
               class="checkbox"
-              :data-checked="mainState.currentSetting.repostControl?.includes(1)"
+              :data-checked="mainState.currentSetting.repostControl?.includes(value)"
             >
               <input
                 v-model="mainState.currentSetting.repostControl"
                 type="checkbox"
-                :value="1"
+                :value="value"
                 @change="saveSetting"
               >
               <SVGIcon name="check" />
-              <span>{{ $t("repostControl1") }}</span>
-            </label>
-            <label
-              class="checkbox"
-              :data-checked="mainState.currentSetting.repostControl?.includes(2)"
-            >
-              <input
-                v-model="mainState.currentSetting.repostControl"
-                type="checkbox"
-                :value="2"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t("repostControl2") }}</span>
-            </label>
-            <label
-              class="checkbox"
-              :data-checked="mainState.currentSetting.repostControl?.includes(3)"
-            >
-              <input
-                v-model="mainState.currentSetting.repostControl"
-                type="checkbox"
-                :value="3"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t("repostControl3") }}</span>
-            </label>
-            <label
-              class="checkbox"
-              :data-checked="mainState.currentSetting.repostControl?.includes(4)"
-            >
-              <input
-                v-model="mainState.currentSetting.repostControl"
-                type="checkbox"
-                :value="4"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t("repostControl4") }}</span>
-            </label>
-            <label
-              class="checkbox"
-              :data-checked="mainState.currentSetting.repostControl?.includes(5)"
-            >
-              <input
-                v-model="mainState.currentSetting.repostControl"
-                type="checkbox"
-                :value="5"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t("repostControl5") }}</span>
+              <span>{{ $t(`repostControl${value}`) }}</span>
             </label>
           </div>
         </div>

@@ -29,41 +29,31 @@ export default async function (
       if (
         replyControl?.includes(1) &&
         feed.reply?.parent.author.did === feed.post.author.did
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
 
       // あなたへのリプライ
       if (
         replyControl?.includes(2) &&
         feed.reply?.parent.author.did === this.session?.did
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
 
       // あなたをフォローしていないユーザーへのリプライ
       if (
         replyControl?.includes(3) &&
         feed.reply?.parent.author.viewer.followedBy == null
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
 
       // あなたがフォローしていないユーザーへのリプライ
       if (
         replyControl?.includes(4) &&
         feed.reply?.parent.author.viewer.following == null
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
 
       // あなたがフォローしているユーザーへのリプライ
       if (
         replyControl?.includes(5) &&
         feed.reply?.parent.author.viewer.following != null
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
     }
 
     // リポスト
@@ -72,41 +62,31 @@ export default async function (
       if (
         repostControl?.includes(1) &&
         feed.reason?.by.did === feed.post.author.did
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
 
       // あなたのポストのリポスト
       if (
         repostControl?.includes(2) &&
         feed.post.author.did === this.session?.did
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
 
       // あなたをフォローしていないユーザーのポストのリポスト
       if (
         repostControl?.includes(3) &&
         feed.post.author.viewer.followedBy == null
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
 
       // あなたがフォローしていないユーザーのポストのリポスト
       if (
         repostControl?.includes(4) &&
         feed.post.author.viewer.following == null
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
 
       // あなたがフォローしているユーザーのポストのリポスト
       if (
         repostControl?.includes(5) &&
         feed.post.author.viewer.following != null
-      ) {
-        feed.__folding = true
-      }
+      ) feed.__folding = true
     }
 
     // TODO: 引用リポスト

@@ -89,6 +89,7 @@
     "yourAccounts": "Your Accounts",
 
     "timelineControl": "Timeline Control",
+    "timelineControlDescription": "Effective from the next download.",
     "replyControl": "Reply Control",
     "replyControl1": "Collapse replies to the user himself",
     "replyControl2": "Collapse replies to you",
@@ -192,6 +193,7 @@
     "yourAccounts": "あなたのアカウント",
 
     "timelineControl": "タイムラインの制御",
+    "timelineControlDescription": "次のダウンロードから有効です。",
     "replyControl": "リプライの制御",
     "replyControl1": "自分自身へのリプライを折り畳む",
     "replyControl2": "あなたへのリプライを折り畳む",
