@@ -1,4 +1,5 @@
 .selectbox {
+  display: block;
   position: relative;
 
   & > select {
@@ -7,8 +8,10 @@
     border-radius: var(--border-radius);
     color: rgb(var(--fg-color));
     cursor: pointer;
-    padding: 0.5em 2.5em 0.5em 1em;
+    display: block;
     line-height: 1.5;
+    padding: 0.5em 2.5em 0.5em 1em;
+    width: 100%;
     &:focus, &:hover {
       border-color: rgb(var(--fg-color));
     }

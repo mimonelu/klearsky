@@ -26,12 +26,21 @@ const state = reactive<{
   processing: boolean;
   external: ComputedRef<undefined | TTExternal>;
   images: ComputedRef<Array<TTImage>>;
+  displayImage: ComputedRef<boolean>;
 }>({
   postMenuDisplay: false,
   repostMenuDisplay: false,
   processing: false,
   external: computed(() => props.post.embed?.external),
-  images: computed(() => props.post.embed?.images ?? [])
+  images: computed(() => props.post.embed?.images ?? []),
+  displayImage: computed(() => {
+    return isFocused() ||
+      props.post.author?.did === mainState.atp.session?.did ||
+      mainState.currentSetting.imageControl === "all" || (
+        mainState.currentSetting.imageControl === "following" &&
+        props.post.author.viewer.following != null
+      )
+  })
 })
 
 const router = useRouter()
@@ -255,6 +264,7 @@ async function updateThisPostThread () {
         <div
           v-if="state.images.length > 0"
           class="images"
+          :data-display-image="state.displayImage"
           :data-number-of-images="state.images.length"
         >
           <div
@@ -262,15 +272,18 @@ async function updateThisPostThread () {
             :key="imageIndex"
             class="image"
           >
-            <!--
-              TODO: 直前の投稿画像と同じ画像が表示される問題対策
-                    key なしでも正常に表示されるようにすること
-            -->
             <Thumbnail
+              v-if="state.displayImage"
               :key="post.cid"
               :image="image"
               :did="post.author.did"
             />
+            <div
+              v-else
+              class="off-image"
+            >
+              <SVGIcon name="offImage" />
+            </div>
           </div>
         </div>
 
@@ -637,6 +650,10 @@ async function updateThisPostThread () {
   display: grid;
   grid-gap: 2px;
   overflow: hidden;
+  position: relative;
+  &[data-display-image="false"] {
+    aspect-ratio: 16 / 3;
+  }
   &[data-number-of-images="2"] {
     grid-template-areas: "a b";
     & > .image:nth-child(1) { grid-area: a; }
@@ -671,6 +688,19 @@ async function updateThisPostThread () {
       width: 100%;
       height: 100%;
     }
+  }
+}
+
+.off-image {
+  background-color: rgba(var(--fg-color), 0.125);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.25);
+    font-size: 1em;
   }
 }
 

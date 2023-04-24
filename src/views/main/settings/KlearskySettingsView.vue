@@ -107,6 +107,26 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- 画像の制御 -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("imageControl") }}</div>
+        <div class="settings-section__body">
+          <label class="selectbox">
+            <select
+              v-model="mainState.currentSetting.imageControl"
+              @change="changeSetting"
+            >
+              <option
+                v-for="imageControl, imageControlIndex in settings.imageControls"
+                :key="imageControlIndex"
+                :value="imageControl.value"
+                :selected="imageControl.value === mainState.currentSetting.imageControl"
+              >{{ $t(imageControl.label) }}</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
       <!-- カラーテーマ -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("colorTheme") }}</div>

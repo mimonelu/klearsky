@@ -220,6 +220,8 @@ function saveSettings () {
     state.settings[did].replyControl = []
   if (state.settings[did].repostControl == null)
     state.settings[did].repostControl = []
+  if (state.settings[did].imageControl == null)
+    state.settings[did].imageControl = "all"
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].backgroundImage == null)

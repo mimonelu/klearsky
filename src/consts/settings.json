@@ -4,6 +4,11 @@
     { "label": "fontSizeMedium", "value": "medium" },
     { "label": "fontSizeLarge", "value": "large" }
   ],
+  "imageControls": [
+    { "label": "imageControl1", "value": "all" },
+    { "label": "imageControl2", "value": "following" },
+    { "label": "imageControl3", "value": "none" }
+  ],
   "colorThemes": [
     { "label": "colorThemeAuto", "value": "auto" },
     { "label": "colorThemeLight", "value": "light" },

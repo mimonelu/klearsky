@@ -101,7 +101,11 @@
     "repostControl2": "Collapse reposts of posts by you",
     "repostControl3": "Collapse reposts of posts by users who don't follow you",
     "repostControl4": "Collapse reposts of posts by users you don't follow",
-    "repostControl5": "Collapse reposts of posts by users you follow"
+    "repostControl5": "Collapse reposts of posts by users you follow",
+    "imageControl": "Image Control",
+    "imageControl1": "Show images",
+    "imageControl2": "Only show images posted by users you follow",
+    "imageControl3": "Don't show images"
   },
   "ja": {
     "accounts": "アカウント",
@@ -205,6 +209,10 @@
     "repostControl2": "あなたによるポストのリポストを折り畳む",
     "repostControl3": "あなたをフォローしていないユーザーによるポストのリポストを折り畳む",
     "repostControl4": "あなたがフォローしていないユーザーによるポストのリポストを折り畳む",
-    "repostControl5": "あなたがフォローしているユーザーによるポストのリポストを折り畳む"
+    "repostControl5": "あなたがフォローしているユーザーによるポストのリポストを折り畳む",
+    "imageControl": "画像の制御",
+    "imageControl1": "画像を表示する",
+    "imageControl2": "あなたがフォローしているユーザーが投稿した画像のみ表示する",
+    "imageControl3": "画像を表示しない"
   }
 }
