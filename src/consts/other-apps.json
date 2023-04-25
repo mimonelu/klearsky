@@ -1,0 +1,22 @@
+[
+  {
+    "name": "officialApp",
+    "profileUri": "https://staging.bsky.app/profile/{handle}",
+    "postUri": "https://staging.bsky.app/profile/{handle}/post/{rkey}"
+  },
+  {
+    "name": "wrapperApp",
+    "profileUri": "https://blue.amazingca.dev/?username={handle}",
+    "postUri": "https://blue.amazingca.dev/?username={handle}&postid={rkey}"
+  },
+  {
+    "name": "flatApp",
+    "profileUri": "https://flat-bs.vercel.app/{handle}",
+    "postUri": "https://flat-bs.vercel.app/{handle}/posts/{rkey}"
+  },
+  {
+    "name": "tokimekiApp",
+    "profileUri": "https://tokimekibluesky.vercel.app/profile/{handle}",
+    "postUri": "https://tokimekibluesky.vercel.app/profile/{handle}/post/{rkey}"
+  }
+]

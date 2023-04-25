@@ -391,6 +391,9 @@ async function updateThisPostThread () {
 
               <!-- ポストメニュー -->
               <PostAndProfileMenuTicker
+                type="post"
+                :handle="post.author.handle"
+                :uri="post.uri"
                 :display="state.postMenuDisplay"
                 :translateText="post.record?.text"
                 :copyText="post.record?.text"

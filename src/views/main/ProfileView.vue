@@ -129,6 +129,8 @@ async function copyDid () {
           >
             <SVGIcon name="menu" />
             <PostAndProfileMenuTicker
+              type="profile"
+              :handle="mainState.currentProfile?.handle"
               :display="state.profileMenuDisplay"
               :translateText="mainState.currentProfile?.description"
               :copyText="mainState.currentProfile?.description"

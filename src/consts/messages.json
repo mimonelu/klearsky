@@ -88,6 +88,12 @@
     "userSearch": "User Search",
     "yourAccounts": "Your Accounts",
 
+    "openOtherApp": "Open in other apps",
+    "officialApp": "Official Web App",
+    "wrapperApp": "Bluesky Social Wrapper",
+    "flatApp": "Flat",
+    "tokimekiApp": "TOKIMEKI Bluesky",
+
     "timelineControl": "Timeline Control",
     "timelineControlDescription": "Effective from the next download.",
     "replyControl": "Reply Control",
@@ -198,6 +204,12 @@
     "translate": "翻訳する",
     "userSearch": "ユーザー検索",
     "yourAccounts": "あなたのアカウント",
+
+    "openOtherApp": "他のアプリで開く",
+    "officialApp": "公式Webアプリ",
+    "wrapperApp": "BlueSky Social Wrapper",
+    "flatApp": "Flat",
+    "tokimekiApp": "TOKIMEKI Bluesky",
 
     "timelineControl": "タイムラインの制御",
     "timelineControlDescription": "次のダウンロードから有効です。",
