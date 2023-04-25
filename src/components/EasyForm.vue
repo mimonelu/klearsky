@@ -155,6 +155,7 @@ function onSubmitTextarea (event: KeyboardEvent) {
           :accept="item.accept"
           :multiple="item.isMultipleFile"
           :maxNumber="item.maxNumberOfFile"
+          :quadLayout="item.quadLayout"
           @change="(files: Array<File>) => { onChangeFile(files, item) }"
         />
 

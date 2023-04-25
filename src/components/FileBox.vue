@@ -9,6 +9,7 @@ const props = defineProps<{
   accept?: string
   multiple?: boolean
   maxNumber?: number
+  quadLayout?: boolean
 }>()
 
 const state = reactive<{
@@ -72,28 +73,62 @@ function deleteFile (index: number) {
       />
       <SVGIcon name="plus" />
     </label>
-    <div
-      v-for="preview, index of state.previews"
-      :key="index"
-      class="preview-box"
-      :data-has-image="preview != null"
-      :style="{ 'background-image': `url(${preview})` }"
-    >
-      <button
-        class="delete-button"
-        @click.prevent="deleteFile(index)"
+
+    <!-- 通常レイアウト -->
+    <template v-if="!quadLayout">
+      <div
+        v-for="preview, index of state.previews"
+        :key="index"
+        class="preview-box"
+        :data-has-image="preview != null"
+        :style="{ 'background-image': `url(${preview})` }"
       >
-        <SVGIcon name="cross" />
-      </button>
-    </div>
+        <button
+          class="delete-button"
+          @click.prevent="deleteFile(index)"
+        >
+          <SVGIcon name="cross" />
+        </button>
+      </div>
+    </template>
+
+    <!-- 4分割レイアウト -->
+    <template v-else>
+      <div
+        class="quad-images"
+        :data-number-of-images="state.previews.length"
+      >
+        <div
+          v-for="preview, index of state.previews"
+          :key="index"
+          class="quad-image"
+        >
+          <div class="thumbnail">
+            <img
+              :src="preview"
+              @click.prevent.stop
+            />
+            <button
+              class="delete-button"
+              @click.prevent="deleteFile(index)"
+            >
+              <SVGIcon name="cross" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .filebox {
   display: flex;
-  flex-wrap: wrap;
   grid-gap: 0.5rem;
+
+  @media not all and (min-width: $sp-width) {
+    flex-wrap: wrap;
+  }
 }
 
 .add-button {
@@ -114,6 +149,12 @@ function deleteFile (index: number) {
   }
 }
 
+.preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 0.5rem;
+}
+
 .preview-box {
   background-position: center center;
   background-repeat: no-repeat;
@@ -128,23 +169,27 @@ function deleteFile (index: number) {
   }
 }
 
+.thumbnail {
+  cursor: unset !important;
+}
+
 .delete-button {
-  background-color: rgb(var(--fg-color));
+  background-color: rgb(var(--bg-color));
   border-radius: 0 0 0 var(--border-radius);
   padding: 0.5rem;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 0.25rem;
+  right: 0.25rem;
 
   & > .svg-icon {
-    fill: rgba(var(--bg-color), 0.75);
+    fill: rgba(var(--notice-color), 0.75);
   }
 
   &:focus, &:hover {
     cursor: pointer;
 
     & > .svg-icon {
-      fill: rgb(var(--bg-color));
+      fill: rgb(var(--notice-color));
     }
   }
 }

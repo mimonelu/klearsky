@@ -39,6 +39,7 @@ type TTEasyFormItem = {
   accept?: string
   isMultipleFile?: boolean
   maxNumberOfFile?: number
+  quadLayout?: boolean
   clearButton?: boolean
   focus?: boolean
   onUpdate?: (item: TTEasyFormItem, form: TTEasyForm) => void

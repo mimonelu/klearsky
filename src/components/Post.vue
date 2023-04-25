@@ -291,13 +291,13 @@ async function updateThisPostThread () {
           <!-- イメージボックス -->
           <div
             v-if="!state.imageFolding"
-            class="images"
+            class="quad-images"
             :data-number-of-images="state.images.length"
           >
             <div
               v-for="image, imageIndex of state.images"
               :key="imageIndex"
-              class="image"
+              class="quad-image"
             >
               <Thumbnail
                 :key="post.cid"
@@ -625,51 +625,8 @@ async function updateThisPostThread () {
   }
 }
 
-.images {
+.quad-images {
   grid-area: i;
-  aspect-ratio: 16 / 9;
-  display: grid;
-  grid-gap: 2px;
-  overflow: hidden;
-  position: relative;
-  &[data-display-image="false"] {
-    aspect-ratio: 16 / 3;
-  }
-  &[data-number-of-images="2"] {
-    grid-template-areas: "a b";
-    & > .image:nth-child(1) { grid-area: a; }
-    & > .image:nth-child(2) { grid-area: b; }
-  }
-  &[data-number-of-images="3"] {
-    grid-template-areas: "a b" "a c";
-    & > .image:nth-child(1) { grid-area: a; }
-    & > .image:nth-child(2) { grid-area: b; }
-    & > .image:nth-child(3) { grid-area: c; }
-  }
-  &[data-number-of-images="4"] {
-    grid-template-areas: "a b" "c d";
-    & > .image:nth-child(1) { grid-area: a; }
-    & > .image:nth-child(2) { grid-area: b; }
-    & > .image:nth-child(3) { grid-area: c; }
-    & > .image:nth-child(4) { grid-area: d; }
-  }
-}
-
-.image {
-  border-radius: var(--border-radius);
-  overflow: hidden;
-
-  .thumbnail {
-    cursor: pointer;
-    height: 100%;
-    &:deep() > img {
-      aspect-ratio: 16 / 9;
-      display: block;
-      object-fit: cover;
-      width: 100%;
-      height: 100%;
-    }
-  }
 }
 
 .repost {

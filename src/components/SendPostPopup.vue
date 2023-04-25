@@ -59,6 +59,7 @@ const easyFormProps: TTEasyForm = {
       // accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
       isMultipleFile: true,
       maxNumberOfFile: 4,
+      quadLayout: true,
       onChange (_: TTEasyFormItem, form: TTEasyForm) {
         // ファイルがひとつ以上選択されているか否かでリンクボックスの表示状態を切り替える
         const urlItem = form.data.find((item: TTEasyFormItem) => item.model === "url")

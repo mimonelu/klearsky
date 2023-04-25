@@ -75,42 +75,6 @@ onBeforeMount(async () => {
   word-break: break-word;
 }
 
-// リンクボックス
-.external {
-  background-color: rgba(var(--fg-color), 0.125);
-  border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  overflow: hidden;
-  &:focus, &:hover {
-    border-color: rgba(var(--fg-color), 0.5);
-  }
-
-  &__meta {
-    display: grid;
-    grid-template-rows: auto auto auto;
-    padding: 0.5em;
-  }
-  &__title,
-  &__uri,
-  &__description {
-    line-height: 1.5;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  &__title {
-    font-weight: bold;
-  }
-  &__uri {
-    color: rgba(var(--fg-color), 0.5);
-    font-size: 0.875em;
-  }
-  &__description {
-    font-size: 0.875em;
-  }
-}
-
 // イメージボックス
 .images {
   display: flex;
