@@ -27,6 +27,7 @@ const state = reactive<{
   external: ComputedRef<undefined | TTExternal>;
   images: ComputedRef<Array<TTImage>>;
   displayImage: ComputedRef<boolean>;
+  imageFolding: boolean;
 }>({
   postMenuDisplay: false,
   repostMenuDisplay: false,
@@ -34,14 +35,16 @@ const state = reactive<{
   external: computed(() => props.post.embed?.external),
   images: computed(() => props.post.embed?.images ?? []),
   displayImage: computed(() => {
-    return isFocused() ||
-      props.post.author?.did === mainState.atp.session?.did ||
+    return props.post.author?.did === mainState.atp.session?.did ||
       mainState.currentSetting.imageControl === "all" || (
         mainState.currentSetting.imageControl === "following" &&
         props.post.author.viewer.following != null
       )
-  })
+  }),
+  imageFolding: false,
 })
+
+state.imageFolding = !state.displayImage
 
 const router = useRouter()
 
@@ -60,6 +63,11 @@ function onActivateReplierLink () {
 
 async function onActivateProfileLink (handle: string) {
   await router.push({ name: "profile-post", query: { handle } })
+}
+
+function onActivateImageFolderButton () {
+  Util.blurElement()
+  state.imageFolding = !state.imageFolding
 }
 
 async function onActivateReplyButton () {
@@ -260,32 +268,42 @@ async function updateThisPostThread () {
           </div>
         </a>
 
-        <!-- 画像 -->
-        <div
-          v-if="state.images.length > 0"
-          class="images"
-          :data-display-image="state.displayImage"
-          :data-number-of-images="state.images.length"
-        >
-          <div
-            v-for="image, imageIndex of state.images"
-            :key="imageIndex"
-            class="image"
+        <template v-if="state.images.length > 0">
+          <!-- 画像フォルダーボタン -->
+          <button
+            v-if="!state.displayImage"
+            class="button--bordered"
+            @click.prevent.stop="onActivateImageFolderButton"
           >
-            <Thumbnail
-              v-if="state.displayImage"
-              :key="post.cid"
-              :image="image"
-              :did="post.author.did"
-            />
-            <div
-              v-else
-              class="off-image"
-            >
+            <template v-if="state.imageFolding">
+              <SVGIcon name="image" />
+              <span>{{ $t("showImage") }}</span>
+            </template>
+            <template v-else>
               <SVGIcon name="offImage" />
+              <span>{{ $t("hideImage") }}</span>
+            </template>
+          </button>
+
+          <!-- 画像 -->
+          <div
+            v-if="!state.imageFolding"
+            class="images"
+            :data-number-of-images="state.images.length"
+          >
+            <div
+              v-for="image, imageIndex of state.images"
+              :key="imageIndex"
+              class="image"
+            >
+              <Thumbnail
+                :key="post.cid"
+                :image="image"
+                :did="post.author.did"
+              />
             </div>
           </div>
-        </div>
+        </template>
 
         <!-- 引用リポスト -->
         <div
@@ -688,19 +706,6 @@ async function updateThisPostThread () {
       width: 100%;
       height: 100%;
     }
-  }
-}
-
-.off-image {
-  background-color: rgba(var(--fg-color), 0.125);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
-    font-size: 1em;
   }
 }
 

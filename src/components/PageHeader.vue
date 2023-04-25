@@ -27,6 +27,7 @@ defineProps<{
 
   & > h1,
   & > h2 {
+    line-height: 1.25;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

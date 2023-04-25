@@ -105,7 +105,9 @@
     "imageControl": "Image Control",
     "imageControl1": "Show images",
     "imageControl2": "Only show images posted by users you follow",
-    "imageControl3": "Don't show images"
+    "imageControl3": "Don't show images",
+    "showImage": "Show images",
+    "hideImage": "Hide images"
   },
   "ja": {
     "accounts": "アカウント",
@@ -213,6 +215,8 @@
     "imageControl": "画像の制御",
     "imageControl1": "画像を表示する",
     "imageControl2": "あなたがフォローしているユーザーが投稿した画像のみ表示する",
-    "imageControl3": "画像を表示しない"
+    "imageControl3": "画像を表示しない",
+    "showImage": "画像を表示する",
+    "hideImage": "画像を隠す"
   }
 }
