@@ -103,9 +103,10 @@
     "repostControl4": "Collapse reposts of posts by users you don't follow",
     "repostControl5": "Collapse reposts of posts by users you follow",
     "imageControl": "Image Control",
-    "imageControl1": "Show images",
-    "imageControl2": "Only show images posted by users you follow",
-    "imageControl3": "Don't show images",
+    "imageControl1": "Don't hide all images",
+    "imageControl2": "Don't hide only images posted by you and users you follow",
+    "imageControl3": "Don't hide only images posted by you",
+    "imageControl4": "Hide all images",
     "showImage": "Show images",
     "hideImage": "Hide images"
   },
@@ -213,9 +214,10 @@
     "repostControl4": "あなたがフォローしていないユーザーによるポストのリポストを折り畳む",
     "repostControl5": "あなたがフォローしているユーザーによるポストのリポストを折り畳む",
     "imageControl": "画像の制御",
-    "imageControl1": "画像を表示する",
-    "imageControl2": "あなたがフォローしているユーザーが投稿した画像のみ表示する",
-    "imageControl3": "画像を表示しない",
+    "imageControl1": "すべての画像を隠さない",
+    "imageControl2": "あなたとあなたがフォローしているユーザーが投稿した画像のみ隠さない",
+    "imageControl3": "あなたが投稿した画像のみ隠さない",
+    "imageControl4": "すべての画像を隠す",
     "showImage": "画像を表示する",
     "hideImage": "画像を隠す"
   }

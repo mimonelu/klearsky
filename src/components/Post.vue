@@ -34,13 +34,26 @@ const state = reactive<{
   processing: false,
   external: computed(() => props.post.embed?.external),
   images: computed(() => props.post.embed?.images ?? []),
-  displayImage: computed(() => {
-    return props.post.author?.did === mainState.atp.session?.did ||
-      mainState.currentSetting.imageControl === "all" || (
-        mainState.currentSetting.imageControl === "following" &&
-        props.post.author.viewer.following != null
+
+  // 画像の制御
+  // TODO: 引用リポストに対応すること
+  displayImage: computed(() =>
+    mainState.currentSetting.imageControl === "all" ||
+    (
+      mainState.currentSetting.imageControl === "self" &&
+      props.post.author?.did === mainState.atp.session?.did
+    ) ||
+    (
+      mainState.currentSetting.imageControl === "following" && (
+        props.post.author?.did === mainState.atp.session?.did || (
+          props.post.author.viewer.following != null
+          // リポストも含む場合
+          /* || props.post.__reason?.by.viewer.following != null */
+        )
       )
-  }),
+    )
+  ),
+
   imageFolding: false,
 })
 

@@ -7,7 +7,8 @@
   "imageControls": [
     { "label": "imageControl1", "value": "all" },
     { "label": "imageControl2", "value": "following" },
-    { "label": "imageControl3", "value": "none" }
+    { "label": "imageControl3", "value": "self" },
+    { "label": "imageControl4", "value": "none" }
   ],
   "colorThemes": [
     { "label": "colorThemeAuto", "value": "auto" },
