@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
 import AvatarLink from "@/components/AvatarLink.vue"
+import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
@@ -260,26 +261,10 @@ async function updateThisPostThread () {
         />
 
         <!-- リンクボックス -->
-        <a
-          v-if="state.external != null"
-          class="external"
-          :href="state.external.uri"
-          rel="noreferrer"
-          target="_blank"
-          @click.stop
-        >
-          <img
-            v-if="typeof state.external.thumb === 'string'"
-            class="external__thumb"
-            loading="lazy"
-            :src="state.external.thumb"
-          />
-          <div class="external__meta">
-            <div class="external__title">{{ state.external.title ?? '' }}</div>
-            <div class="external__uri">{{ state.external.uri }}</div>
-            <div class="external__description">{{ state.external.description ?? '' }}</div>
-          </div>
-        </a>
+        <LinkBox
+          :external="state.external"
+          :displayImage="state.displayImage"
+        />
 
         <template v-if="state.images.length > 0">
           <!-- 画像フォルダーボタン -->
@@ -298,7 +283,7 @@ async function updateThisPostThread () {
             </template>
           </button>
 
-          <!-- 画像 -->
+          <!-- イメージボックス -->
           <div
             v-if="!state.imageFolding"
             class="images"
@@ -632,46 +617,6 @@ async function updateThisPostThread () {
   // 折り返されたURLの隙間が選択されないようにする
   &:deep(.textlink) {
     padding: 0.125em 0;
-  }
-}
-
-.external {
-  background-color: rgba(var(--fg-color), 0.125);
-  border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  overflow: hidden;
-  &:focus, &:hover {
-    border-color: rgba(var(--fg-color), 0.5);
-  }
-
-  &__thumb {
-    aspect-ratio: 1.91 / 1;
-    display: block;
-    object-fit: cover;
-  }
-  &__meta {
-    display: grid;
-    grid-template-rows: auto auto auto;
-    padding: 0.875em;
-  }
-  &__title,
-  &__uri,
-  &__description {
-    line-height: 1.5;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  &__title {
-    font-weight: bold;
-  }
-  &__uri {
-    color: rgba(var(--fg-color), 0.5);
-    font-size: 0.875em;
-  }
-  &__description {
-    font-size: 0.875em;
   }
 }
 

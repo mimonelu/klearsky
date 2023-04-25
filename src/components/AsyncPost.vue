@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onBeforeMount, reactive } from "vue"
+import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
 import Thumbnail from "@/components/Thumbnail.vue"
 
@@ -38,22 +39,12 @@ onBeforeMount(async () => {
       />
 
       <!-- リンクボックス -->
-      <a
-        v-if="state.post.embed?.external != null"
-        class="external"
-        :href="state.post.embed.external.uri"
-        rel="noreferrer"
-        target="_blank"
-        @click.stop
-      >
-        <div class="external__meta">
-          <div class="external__title">{{ state.post.embed.external.title ?? '' }}</div>
-          <div class="external__uri">{{ state.post.embed.external.uri }}</div>
-          <div class="external__description">{{ state.post.embed.external.description ?? '' }}</div>
-        </div>
-      </a>
+      <LinkBox
+        :external="state.post.embed?.external"
+        :displayImage="false"
+      />
 
-      <!-- 画像 -->
+      <!-- イメージボックス -->
       <div
         v-if="state.post.embed?.images?.length"
         class="images"
@@ -119,7 +110,7 @@ onBeforeMount(async () => {
   }
 }
 
-// 画像
+// イメージボックス
 .images {
   display: flex;
   grid-gap: 0.5rem;
