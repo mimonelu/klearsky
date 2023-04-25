@@ -39,11 +39,16 @@ const state = reactive<{
   // 画像の制御
   // TODO: 引用リポストに対応すること
   displayImage: computed(() =>
+    // すべて表示
     mainState.currentSetting.imageControl === "all" ||
+
+    // 自身のみ表示
     (
       mainState.currentSetting.imageControl === "self" &&
       props.post.author?.did === mainState.atp.session?.did
     ) ||
+
+    // 自身と自身のフォロイーのみ表示
     (
       mainState.currentSetting.imageControl === "following" && (
         props.post.author?.did === mainState.atp.session?.did || (

@@ -46,7 +46,8 @@ onBeforeMount(async () => {
 
       <!-- イメージボックス -->
       <div
-        v-if="state.post.embed?.images?.length"
+        v-if="mainState.currentSetting.imageControl !== 'none' &&
+          state.post.embed?.images?.length"
         class="images"
       >
         <Thumbnail
