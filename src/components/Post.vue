@@ -182,8 +182,15 @@ function onActivateOpenLikeUsersPopup () {
   onClosePostMenu()
 }
 
-function onRemoveThisPost (uri: string) {
-  emit("removeThisPost", uri)
+async function onRemoveThisPost (uri: string) {
+  if (state.processing) return
+  state.processing = true
+  try {
+    await mainState.atp.deletePost(uri)
+  } finally {
+    state.processing = false
+    emit("removeThisPost", uri)
+  }
 }
 
 async function updateThisPostThread () {

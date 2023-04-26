@@ -47,14 +47,7 @@ async function sendMention () {
 async function deletePost () {
   Util.blurElement()
   if (props.deletePostUri == null) return
-  mainState.processing = true
-  try {
-    await mainState.atp.deletePost(props.deletePostUri)
-    emit("removeThisPost", props.deletePostUri)
-  } finally {
-    mainState.processing = false
-    emit("close")
-  }
+  emit("removeThisPost", props.deletePostUri)
 }
 
 function openOtherApp (app: any) {
