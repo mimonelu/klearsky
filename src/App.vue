@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import {
+  inject,
   onErrorCaptured,
   onBeforeMount,
   onUnmounted,
   reactive
 } from "vue"
 import { RouterView } from "vue-router"
-import IgnoreErrors from "@/consts/ignore-errors.json"
 import ErrorPopup from "@/components/ErrorPopup.vue"
 import Util from "@/composables/util/index"
+import IgnoreErrors from "@/consts/ignore-errors.json"
+import ReplaceErrors from "@/consts/replace-errors.json"
+
+const $t = inject("$t") as Function
 
 const state = reactive<{
   error?: unknown;
@@ -31,8 +35,12 @@ function processUnhandledError (error: PromiseRejectionEvent) {
 }
 
 function processError (error: any) {
-  if (IgnoreErrors.includes(error.error)) return
   Util.blurElement()
+  if (IgnoreErrors.includes(error.error)) return
+  if (ReplaceErrors.includes(error.error)) {
+    state.error = $t(error.error)
+    return
+  }
   state.error = error
 }
 

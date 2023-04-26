@@ -18,7 +18,9 @@ export default async function (
   if (this.agent == null) return false
   if (identifier == null || password == null) {
     if (session == null) return false
-    await this.resumeSession(session)
+    await this.resumeSession(session).catch(() => {
+      throw { error: "sessionExpired" }
+    })
   } else {
     const optinos: AtpAgentLoginOpts = {
       identifier,

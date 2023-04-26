@@ -53,6 +53,7 @@
 
     "login": "Login",
     "loginFailed": "Login failed. Please check your entry.",
+    "sessionExpired": "Session expired. Please login again.",
     "logout": "Logout",
     "useAppPasswords": "Use App Passwords instead of passwords",
 
@@ -174,6 +175,7 @@
 
     "login": "ログイン",
     "loginFailed": "ログインに失敗しました。入力内容を確認してください。",
+    "sessionExpired": "セッションの有効期限が切れました。再ログインしてください。",
     "logout": "ログアウト",
     "useAppPasswords": "パスワードの代わりに App Passwords を使う",
 
