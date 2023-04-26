@@ -464,7 +464,7 @@ async function updateThisPostThread () {
     pointer-events: none;
 
     .external,
-    .images,
+    .quad-images,
     .reaction-container {
       display: none;
     }
@@ -658,7 +658,7 @@ async function updateThisPostThread () {
     margin-top: 0.5em;
   }
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
-    grid-template-columns: 1fr 1fr 1fr 2fr;
+    grid-template-columns: min min min 2fr;
   }
   @media not all and (min-width: calc($router-view-width + $main-menu-min-width)) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -678,6 +678,8 @@ async function updateThisPostThread () {
   }
 
   .menu-ticker:deep() {
+    display: contents; // TODO: 外すとティッカー表示時にレイアウト崩れ、外さないとティッカー表示位置が若干ずれる
+
     .menu-ticker--inner {
       left: 0;
       &[data-to-down="true"] {
