@@ -63,6 +63,7 @@ async function toggleFollow () {
 
   & > .loader {
     font-size: 0.5rem;
+    position: absolute;
   }
 }
 </style>

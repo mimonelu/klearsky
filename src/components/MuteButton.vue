@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, reactive } from "vue"
+import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
@@ -10,9 +11,16 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  processing: boolean;
+}>({
+  processing: false,
+})
+
 async function toggleMute () {
   Util.blurElement()
-  mainState.processing = true
+  if (state.processing) return
+  state.processing = true
   try {
     if (props.viewer.muted) {
       await mainState.atp.disableMute(props.handle)
@@ -22,7 +30,7 @@ async function toggleMute () {
       props.viewer.muted = true
     }
   } finally {
-    mainState.processing = false
+    state.processing = false
   }
 }
 </script>
@@ -31,6 +39,7 @@ async function toggleMute () {
   <button
     class="button mute-button"
     :data-is-muting="viewer.muted"
+    :data-is-processing="state.processing"
     @click.prevent="toggleMute"
   >
     <template v-if="viewer.muted">
@@ -41,11 +50,13 @@ async function toggleMute () {
       <SVGIcon name="volumeOn" />
       <span>{{ $t("mute") }}</span>
     </template>
+    <Loader v-if="state.processing" />
   </button>
 </template>
 
 <style lang="scss" scoped>
 .mute-button {
+  position: relative;
   &[data-is-muting="true"] {
     background-color: rgba(var(--notice-color), 0.875);
     &:focus, &:hover {
@@ -66,6 +77,14 @@ async function toggleMute () {
         fill: rgb(var(--notice-color));
       }
     }
+  }
+  &[data-is-processing="true"] {
+    pointer-events: none;
+  }
+
+  & > .loader {
+    font-size: 0.5rem;
+    position: absolute;
   }
 }
 </style>
