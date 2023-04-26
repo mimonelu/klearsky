@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, reactive } from "vue"
+import Loader from "@/components/Loader.vue"
 import Util from "@/composables/util/index"
 
 const props = defineProps<{
@@ -10,9 +11,16 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  processing: boolean;
+}>({
+  processing: false,
+})
+
 async function toggleFollow () {
   Util.blurElement()
-  mainState.processing = true
+  if (state.processing) return
+  state.processing = true
   try {
     if (props.viewer.following != null) {
       await mainState.atp.deleteFollow(props.viewer.following)
@@ -22,7 +30,7 @@ async function toggleFollow () {
       if (uri != null) props.viewer.following = uri
     }
   } finally {
-    mainState.processing = false
+    state.processing = false
   }
 }
 </script>
@@ -31,20 +39,30 @@ async function toggleFollow () {
   <button
     class="button follow-button"
     :data-is-following="viewer.following != null"
+    :data-is-processing="state.processing"
     @click.prevent="toggleFollow"
   >
     <span v-if="viewer.following != null">{{ $t("following") }}</span>
     <span v-else>{{ $t("follow") }}</span>
+    <Loader v-if="state.processing" />
   </button>
 </template>
 
 <style lang="scss" scoped>
 .follow-button {
+  position: relative;
   &[data-is-following="true"] {
     background-color: rgba(var(--like-color), 0.875);
     &:focus, &:hover {
       background-color: rgb(var(--like-color));
     }
+  }
+  &[data-is-processing="true"] {
+    pointer-events: none;
+  }
+
+  & > .loader {
+    font-size: 0.5rem;
   }
 }
 </style>
