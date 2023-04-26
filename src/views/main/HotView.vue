@@ -75,20 +75,6 @@ function getServiceName (): string {
   flex-grow: 1;
 
   &:deep() {
-    // HOTページのマルチカラム設定
-    @media not all and (max-width: $max-width) {
-      .feeds {
-        column-count: 2;
-        column-gap: 0;
-        column-rule: 1px solid rgba(var(--fg-color), 0.25);
-        display: unset;
-
-        & > .feed {
-          break-inside: avoid;
-        }
-      }
-    }
-
     // HOTアイコン
     .feeds > .feed > .post[data-position="post"] > .body {
       & > .avatar-link::before {

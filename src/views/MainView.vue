@@ -430,20 +430,6 @@ async function routerPush (event: Event) {
 .main-view {
   background-color: rgba(var(--bg-color), var(--bg-opacity));
 
-  // HOTページ用処理
-  &[data-path="/hot"] {
-    @media not all and (max-width: $max-width) {
-      .router-view-wrapper {
-        min-width: $router-view-width + $menu-max-width;
-        max-width: $router-view-width + $menu-max-width;
-      }
-    }
-
-    .sub-menu-wrapper {
-      display: none;
-    }
-  }
-
   // スクロールボタン用処理
   &:deep() .scroll-button {
     @media (max-width: #{$max-width-with-scrollbar + 64px}) {
