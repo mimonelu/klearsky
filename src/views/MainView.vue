@@ -68,7 +68,7 @@ onMounted(async () => {
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    state.fetchUserProfile()
+    await state.fetchUserProfile()
     await processPage(router.currentRoute.value.name)
   } finally {
     state.mounted = true
@@ -199,7 +199,7 @@ async function manualLogin (service: string, identifier: string, password: strin
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    state.fetchUserProfile()
+    await state.fetchUserProfile()
     await processPage(router.currentRoute.value.name)
   } finally {
     state.processing = false

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {
   onErrorCaptured,
+  onBeforeMount,
+  onUnmounted,
   reactive
 } from "vue"
 import { RouterView } from "vue-router"
@@ -14,13 +16,23 @@ const state = reactive<{
   error: undefined
 })
 
-onErrorCaptured((error: any) => {
-  if (IgnoreErrors.includes(error.error)) return
-  Util.blurElement()
-  state.error = error
+onBeforeMount(() => {
+  window.addEventListener("unhandledrejection", processUnhandledError)
 })
 
-function onError (error: any) {
+onUnmounted(() => {
+  window.removeEventListener("unhandledrejection", processUnhandledError)
+})
+
+onErrorCaptured(processError)
+
+function processUnhandledError (error: PromiseRejectionEvent) {
+  processError(error.reason)
+}
+
+function processError (error: any) {
+  if (IgnoreErrors.includes(error.error)) return
+  Util.blurElement()
   state.error = error
 }
 
@@ -30,7 +42,7 @@ function closeErrorPopup () {
 </script>
 
 <template>
-  <RouterView @error="onError" />
+  <RouterView @error="processError" />
   <ErrorPopup
     v-if="state.error != null"
     :error="state.error"

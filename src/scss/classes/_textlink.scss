@@ -3,13 +3,10 @@
   display: inline-flex;
   align-items: center;
   grid-gap: 0.5rem;
+  line-height: 1.25;
 
   & > .svg-icon {
     fill: rgba(var(--accent-color), 0.875);
-  }
-
-  & > span {
-    line-height: 1.25;
   }
 
   &:focus, &:hover {
