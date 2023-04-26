@@ -90,6 +90,10 @@ onBeforeMount(async () => {
       object-fit: cover;
       height: 4rem;
     }
+
+    & > .loader {
+      font-size: 0.5rem;
+    }
   }
 }
 

@@ -116,7 +116,7 @@ function openSource () {
       class="other-app-button"
       @click.stop
     >
-      <SVGIcon name="shimmer" />
+      <SVGIcon name="cursorLeft" />
       <span>{{ $t("openOtherApp") }}</span>
 
       <!-- 他のアプリで開くメニュー -->
@@ -134,6 +134,8 @@ function openSource () {
         </button>
       </MenuTicker>
     </button>
+
+    <hr />
 
     <!-- ソースを表示する -->
     <button

@@ -40,8 +40,6 @@ watch(() => props.display, () => {
 
 <style lang="scss" scoped>
 .menu-ticker {
-  display: contents;
-
   &--overlay {
     position: fixed;
     left: 0;
@@ -85,6 +83,7 @@ watch(() => props.display, () => {
         padding: 0.5rem 1rem;
         white-space: nowrap;
         &:focus, &:hover {
+          background-color: rgba(var(--accent-color), 0.25);
           color: rgb(var(--bg-color));
         }
 
