@@ -216,9 +216,8 @@ function makeSubjectTo (notification: TTNotification): any {
   }
 
   & > .icon--cursor {
-    fill: transparent;
+    fill: rgb(var(--fg-color));
     margin-left: auto;
-    stroke: rgb(var(--fg-color));
   }
 }
 

@@ -3,8 +3,7 @@
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
 
-  &__button,
-  &__button--outline {
+  &__button {
     color: rgba(var(--fg-color), 0.75);
     cursor: pointer;
     display: flex;
@@ -29,20 +28,6 @@
     &:focus, &:hover {
       & > .svg-icon {
         fill: rgb(var(--fg-color));
-      }
-    }
-  }
-  &__button--outline {
-    & > .svg-icon {
-      fill: transparent;
-      stroke: rgba(var(--fg-color), 0.75);
-      stroke-width: 2px;
-    }
-    &:focus, &:hover {
-      & > .svg-icon {
-        fill: transparent;
-        stroke: rgb(var(--fg-color));
-        stroke-width: 2px;
       }
     }
   }

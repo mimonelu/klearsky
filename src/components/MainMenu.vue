@@ -218,13 +218,11 @@ function moveToBottom () {
   min-height: 3rem;
 
   .svg-icon {
-    fill: transparent;
-    stroke: rgba(var(--fg-color), 0.25);
-    stroke-width: 2px;
+    fill: rgba(var(--fg-color), 0.25);
   }
   &:focus , &:hover {
     .svg-icon {
-      stroke: rgb(var(--fg-color));
+      fill: rgb(var(--fg-color));
     }
   }
 }

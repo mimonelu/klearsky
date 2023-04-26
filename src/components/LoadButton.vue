@@ -50,15 +50,13 @@ function onActivate () {
   }
 
   & > .svg-icon {
-    fill: transparent;
     font-size: 1.5rem;
-    stroke: rgba(var(--fg-color), 0.25);
-    stroke-width: 2px;
+    fill: rgba(var(--fg-color), 0.25);
   }
 
   &:focus, &:hover {
     & > .svg-icon {
-      stroke: rgba(var(--fg-color), 0.75);
+      fill: rgba(var(--fg-color), 0.75);
     }
   }
 
