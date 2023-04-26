@@ -24,10 +24,15 @@ export default async function (
       identifier,
       password,
     }
-    const response: ComAtprotoServerCreateSession.Response = await (
-      this.agent as BskyAgent
-    ).login(optinos)
-    console.log("[klearsky/login]", response)
+    try {
+      const response: ComAtprotoServerCreateSession.Response = await (
+        this.agent as BskyAgent
+      ).login(optinos)
+      console.log("[klearsky/login]", response)
+    } catch (error) {
+      console.error("[klearsky/login]", error)
+      return false
+    }
   }
 
   // ここで persistSession が入る

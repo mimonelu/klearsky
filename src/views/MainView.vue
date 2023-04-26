@@ -25,11 +25,13 @@ import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SubMenu from "@/components/SubMenu.vue"
+import state from "@/composables/main-state"
 import Util from "@/composables/util/index"
 import consts from "@/consts/consts.json"
 
-import state from "@/composables/main-state"
+const emit = defineEmits<(name: string, value: any) => void>()
 
+const $t = inject("$t") as Function
 state.$setI18n = inject("$setI18n") as Function
 state.$getI18n = inject("$getI18n") as Function
 
@@ -61,25 +63,22 @@ onMounted(async () => {
   state.settings = Util.loadStorage("settings") ?? {}
   state.processing = true
   try {
-    await autoLogin()
+    if (!await autoLogin()) return
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
+    state.fetchUserProfile()
     await processPage(router.currentRoute.value.name)
   } finally {
-    try {
-      await state.fetchUserProfile()
-    } finally {
-      state.mounted = true
-      state.processing = false
+    state.mounted = true
+    state.processing = false
 
-      // インフィニットスクロール用処理
-      window.addEventListener("scroll", scrollListener)
+    // インフィニットスクロール用処理
+    window.addEventListener("scroll", scrollListener)
 
-      // 動的生成されたリンクからページ遷移する処理
-      window.addEventListener("klearsky-router-push", routerPush)
-    }
+    // 動的生成されたリンクからページ遷移する処理
+    window.addEventListener("klearsky-router-push", routerPush)
   }
 })
 
@@ -180,15 +179,19 @@ function resetState () {
   state.scrolledToBottom = false
 }
 
-async function autoLogin () {
-  if (state.atp.hasLogin()) return
-  if (state.atp.canLogin()) await state.atp.login()
+async function autoLogin (): Promise<boolean> {
+  if (state.atp.hasLogin()) return false
+  if (state.atp.canLogin()) return await state.atp.login()
+  return false
 }
 
 async function manualLogin (service: string, identifier: string, password: string) {
   state.processing = true
   try {
-    await state.atp.login(service, identifier, password)
+    if (!await state.atp.login(service, identifier, password)) {
+      emit("error", $t("loginFailed"))
+      return
+    }
     if (!state.atp.hasLogin()) return
     state.loginPopupDisplay = false
     resetState()
@@ -196,13 +199,10 @@ async function manualLogin (service: string, identifier: string, password: strin
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
+    state.fetchUserProfile()
     await processPage(router.currentRoute.value.name)
   } finally {
-    try {
-      await state.fetchUserProfile()
-    } finally {
-      state.processing = false
-    }
+    state.processing = false
   }
 }
 

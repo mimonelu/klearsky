@@ -20,13 +20,17 @@ onErrorCaptured((error: any) => {
   state.error = error
 })
 
+function onError (error: any) {
+  state.error = error
+}
+
 function closeErrorPopup () {
   state.error = undefined
 }
 </script>
 
 <template>
-  <RouterView />
+  <RouterView @error="onError" />
   <ErrorPopup
     v-if="state.error != null"
     :error="state.error"

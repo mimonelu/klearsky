@@ -24,8 +24,11 @@ function close () {
       </h2>
     </template>
     <template v-slot:body>
-      <pre class="message">{{ error }}
-{{ JSON.stringify(error) }}</pre>
+      <pre class="message-string">{{ error }}</pre>
+      <pre
+        v-if="typeof error !== 'string'"
+        class="message-object"
+      >{{ JSON.stringify(error) }}</pre>
     </template>
   </Popup>
 </template>
@@ -42,11 +45,21 @@ function close () {
   }
 }
 
-.message {
+.message-string {
   background-color: rgba(var(--notice-color), 0.125);
   color: rgb(var(--notice-color));
   line-height: 1.5;
   padding: 1rem;
+  user-select: text;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message-object {
+  color: rgb(var(--notice-color));
+  font-size: 0.875rem;
+  line-height: 1.5;
+  padding: 0 1rem;
   user-select: text;
   white-space: pre-wrap;
   word-break: break-word;

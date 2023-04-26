@@ -52,6 +52,7 @@
     "linkBox": "Link card",
 
     "login": "Login",
+    "loginFailed": "Login failed. Please check your entry.",
     "logout": "Logout",
     "useAppPasswords": "Use App Passwords instead of passwords",
 
@@ -172,6 +173,7 @@
     "linkBox": "リンクカード",
 
     "login": "ログイン",
+    "loginFailed": "ログインに失敗しました。入力内容を確認してください。",
     "logout": "ログアウト",
     "useAppPasswords": "パスワードの代わりに App Passwords を使う",
 
