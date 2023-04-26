@@ -4,6 +4,7 @@
   grid-gap: 2px;
   overflow: hidden;
   position: relative;
+  width: 100%;
   &[data-number-of-images="2"] {
     grid-template-areas: "a b";
     & > .quad-image:nth-child(1) { grid-area: a; }

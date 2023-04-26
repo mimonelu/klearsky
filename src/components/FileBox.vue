@@ -95,6 +95,7 @@ function deleteFile (index: number) {
     <!-- 4分割レイアウト -->
     <template v-else>
       <div
+        v-if="state.previews.length > 0"
         class="quad-images"
         :data-number-of-images="state.previews.length"
       >
