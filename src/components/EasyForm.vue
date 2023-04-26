@@ -105,6 +105,7 @@ function onSubmitTextarea (event: KeyboardEvent) {
     class="easy-form"
     @submit.prevent="onSubmit"
   >
+    <slot name="before" />
     <dl
       v-for="item, index of data"
       :key="index"

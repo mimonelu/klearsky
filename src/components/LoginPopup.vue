@@ -4,6 +4,7 @@ import AccountList from "@/components/AccountList.vue"
 import Copyright from "@/components/Copyright.vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Logo from "@/components/Logo.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 
 const emit = defineEmits<{(
   event: string,
@@ -83,7 +84,21 @@ async function submitCallback () {
         <div class="description">Unofficial Web Client for Bluesky</div>
       </div>
       <div class="login-popup__body">
-        <EasyForm v-bind="easyFormProps" />
+        <EasyForm v-bind="easyFormProps"
+        >
+          <!-- App Passwords 導線 -->
+          <template v-slot:after>
+            <a
+              class="textlink app-passwords-link"
+              href="https://staging.bsky.app/settings/app-passwords"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <SVGIcon name="cursorRight" />
+              <span>{{ $t("useAppPasswords") }}</span>
+            </a>
+          </template>
+        </EasyForm>
         <div class="account-container">
           <div class="account-header">{{ $t("yourAccounts") }}</div>
           <AccountList :hasDeleteButton="false" />
@@ -145,6 +160,10 @@ $width: 800px;
 
 .description {
   color: rgba(var(--fg-color), 0.5);
+}
+
+.app-passwords-link {
+  margin-left: auto;
 }
 
 .account-container {

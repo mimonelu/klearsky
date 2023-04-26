@@ -50,8 +50,11 @@
     "language": "Language",
     "likeUsers": "Liked by",
     "linkBox": "Link card",
+
     "login": "Login",
     "logout": "Logout",
+    "useAppPasswords": "Use App Passwords instead of passwords",
+
     "mute": "Mute",
     "muting": "Unmute",
     "newLogin": "New Login",
@@ -167,8 +170,11 @@
     "language": "言語",
     "likeUsers": "いいねしたユーザー",
     "linkBox": "リンクカード",
+
     "login": "ログイン",
     "logout": "ログアウト",
+    "useAppPasswords": "パスワードの代わりに App Passwords を使う",
+
     "mute": "ミュートする",
     "muting": "ミュート中",
     "newLogin": "新規ログイン",

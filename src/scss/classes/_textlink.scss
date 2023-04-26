@@ -1,6 +1,22 @@
 .textlink {
-  color: rgb(var(--accent-color));
+  color: rgba(var(--accent-color), 0.875);
+  display: inline-flex;
+  align-items: center;
+  grid-gap: 0.5rem;
+
+  & > .svg-icon {
+    fill: rgba(var(--accent-color), 0.875);
+  }
+
+  & > span {
+    line-height: 1.25;
+  }
+
   &:focus, &:hover {
-    filter: brightness(1.25);
+    color: rgb(var(--accent-color));
+
+    & > .svg-icon {
+      fill: rgb(var(--accent-color));
+    }
   }
 }
