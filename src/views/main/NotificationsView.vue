@@ -14,13 +14,25 @@ const state = reactive<{
 })
 
 onBeforeUnmount(() => {
+  updateNotificationSeen()
+  updateNotificationIsRead()
   mainState.notificationCount = 0
 })
 
-onMounted(async () => {
+onMounted(updateNotificationSeen)
+
+async function updateNotificationSeen () {
   if (mainState.notificationCount <= 0) return
   await mainState.atp.updateNotificationSeen()
-})
+}
+
+function updateNotificationIsRead () {
+  mainState.notifications.forEach((notificationGroup: TTNotificationGroup) => {
+    notificationGroup.notifications.forEach((notification: TTNotification) => {
+      notification.isRead = true
+    })
+  })
+}
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
   Util.blurElement()
