@@ -181,6 +181,18 @@ function moveToBottom () {
 </template>
 
 <style lang="scss" scoped>
+@mixin slimLayout {
+  padding: 0.75rem 0.5rem;
+
+  .link-button {
+    grid-template-columns: min-content;
+  }
+
+  .label {
+    display: none;
+  }
+}
+
 .main-menu {
   display: flex;
   flex-direction: column;
@@ -188,15 +200,12 @@ function moveToBottom () {
 
   // スリムレイアウト
   @media (max-width: $max-width-with-scrollbar) {
-    padding: 0.75rem 0.5rem;
-
-    .link-button {
-      grid-template-columns: min-content;
-    }
-
-    .label {
-      display: none;
-    }
+    @include slimLayout;
+  }
+  .main-view[data-layout="slim"] &,
+  .main-view[data-layout="slimLeft"] &,
+  .main-view[data-layout="slimRight"] & {
+    @include slimLayout;
   }
 
   // フルレイアウト

@@ -127,6 +127,26 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- レイアウト -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("layout") }}</div>
+        <div class="settings-section__body">
+          <label class="selectbox">
+            <select
+              v-model="mainState.currentSetting.layout"
+              @change="changeSetting"
+            >
+              <option
+                v-for="layout, layoutIndex in settings.layouts"
+                :key="layoutIndex"
+                :value="layout.value"
+                :selected="layout.value === mainState.currentSetting.layout"
+              >{{ $t(layout.label) }}</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
       <!-- カラーテーマ -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("colorTheme") }}</div>

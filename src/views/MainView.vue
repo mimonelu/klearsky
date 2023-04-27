@@ -367,6 +367,7 @@ async function routerPush (event: Event) {
     class="main-view"
     :key="state.updateKey"
     :data-path="state.currentPath"
+    :data-layout="state.currentSetting.layout"
   >
     <!-- 壁紙 -->
     <div
@@ -430,6 +431,31 @@ async function routerPush (event: Event) {
 .main-view {
   background-color: rgba(var(--bg-color), var(--bg-opacity));
 
+  // レイアウト
+  &[data-layout="defaultLeft"],
+  &[data-layout="slimLeft"] {
+    .main {
+      justify-content: unset;
+      margin-left: unset;
+      margin-right: unset;
+    }
+  }
+  &[data-layout="defaultRight"],
+  &[data-layout="slimRight"] {
+    .main {
+      justify-content: flex-end;
+      margin-left: auto;
+      margin-right: unset;
+    }
+  }
+  &[data-layout="slim"],
+  &[data-layout="slimLeft"],
+  &[data-layout="slimRight"] {
+    .sub-menu-wrapper {
+      display: none;
+    }
+  }
+
   // スクロールボタン用処理
   &:deep() .scroll-button {
     @media (max-width: #{$max-width-with-scrollbar + 64px}) {
@@ -478,10 +504,22 @@ async function routerPush (event: Event) {
   & > .main-menu {
     position: fixed;
     top: 0;
-    @media not all and (max-width: $max-width-with-scrollbar) {
-      min-width: $menu-max-width;
-      max-width: $menu-max-width;
+    .main-view[data-layout="default"] &,
+    .main-view[data-layout="defaultLeft"] &,
+    .main-view[data-layout="defaultRight"] & {
+      @media not all and (max-width: $max-width-with-scrollbar) {
+        min-width: $menu-max-width;
+        max-width: $menu-max-width;
+      }
     }
+  }
+
+  // レイアウト
+  .main-view[data-layout="slim"] &,
+  .main-view[data-layout="slimLeft"] &,
+  .main-view[data-layout="slimRight"] & {
+    min-width: $main-menu-min-width;
+    max-width: $main-menu-min-width;
   }
 }
 

@@ -222,6 +222,8 @@ function saveSettings () {
     state.settings[did].repostControl = []
   if (state.settings[did].imageControl == null)
     state.settings[did].imageControl = "all"
+  if (state.settings[did].layout == null)
+    state.settings[did].layout = "default"
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].backgroundImage == null)

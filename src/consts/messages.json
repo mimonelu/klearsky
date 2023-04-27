@@ -9,6 +9,15 @@
     "backgroundOpacity": "Wallpaper - Opacity",
     "banner": "Banner",
     "detachBanner": "Detach banner image",
+
+    "layout": "Layout",
+    "layoutDefault": "Default",
+    "layoutDefaultLeft": "Default - Left",
+    "layoutDefaultRight": "Default - Right",
+    "layoutSlim": "Slim - Center",
+    "layoutSlimLeft": "Slim - Left",
+    "layoutSlimRight": "Slim - Right",
+
     "colorTheme": "Color Theme",
     "colorThemeAuto": "Auto",
     "colorThemeLight": "Light",
@@ -19,6 +28,7 @@
     "colorThemeGreen": "Green Tea",
     "colorThemeBlue": "Terminal",
     "colorThemeIndigo": "Night Stars",
+
     "copyDid": "Copy DID",
     "copyHandle": "Copy handle",
     "copyPostText": "Copy text",
@@ -131,6 +141,15 @@
     "backgroundOpacity": "壁紙 - 不透明度",
     "banner": "バナー",
     "detachBanner": "バナー画像を取り外す",
+
+    "layout": "レイアウト",
+    "layoutDefault": "通常",
+    "layoutDefaultLeft": "通常 - 左",
+    "layoutDefaultRight": "通常 - 右",
+    "layoutSlim": "スリム - 中央",
+    "layoutSlimLeft": "スリム - 左",
+    "layoutSlimRight": "スリム - 右",
+
     "colorTheme": "カラーテーマ",
     "colorThemeAuto": "自動",
     "colorThemeLight": "ライト",
@@ -141,6 +160,7 @@
     "colorThemeGreen": "グリーンティー",
     "colorThemeBlue": "ターミナル",
     "colorThemeIndigo": "ナイトスター",
+
     "copyDid": "DIDをコピーする",
     "copyHandle": "ハンドルをコピーする",
     "copyPostText": "テキストをコピーする",

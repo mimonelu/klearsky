@@ -10,6 +10,14 @@
     { "label": "imageControl3", "value": "self" },
     { "label": "imageControl4", "value": "none" }
   ],
+  "layouts": [
+    { "label": "layoutDefault", "value": "default" },
+    { "label": "layoutDefaultLeft", "value": "defaultLeft" },
+    { "label": "layoutDefaultRight", "value": "defaultRight" },
+    { "label": "layoutSlim", "value": "slim" },
+    { "label": "layoutSlimLeft", "value": "slimLeft" },
+    { "label": "layoutSlimRight", "value": "slimRight" }
+  ],
   "colorThemes": [
     { "label": "colorThemeAuto", "value": "auto" },
     { "label": "colorThemeLight", "value": "light" },

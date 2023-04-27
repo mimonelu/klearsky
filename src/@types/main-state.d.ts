@@ -3,7 +3,18 @@ type TTSetting = {
   fontSize?: string
   replyControl?: Array<number>
   repostControl?: Array<number>
-  imageControl?: "all" | "following" | "self" | "none"
+  imageControl?:
+    "all" |
+    "following" |
+    "self" |
+    "none"
+  layout?:
+    "default" |
+    "defaultLeft" |
+    "defaultRight" |
+    "slim" |
+    "slimLeft" |
+    "slimRight"
   colorTheme?: string
   backgroundImage?: string
   backgroundOpacity?: number
