@@ -1,6 +1,8 @@
 import { fileURLToPath, URL } from "node:url"
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
+// Rollup Visualizer
+import { visualizer } from "rollup-plugin-visualizer"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,6 +22,15 @@ export default defineConfig({
     commonjsOptions: { include: [] },
 
     outDir: "docs",
+
+    // Rollup Visualizer
+    rollupOptions: {
+      plugins: [
+        visualizer({
+          filename: "coproduct/stats.html",
+        }),
+      ],
+    },
   },
   css: {
     preprocessorOptions: {

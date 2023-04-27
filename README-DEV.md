@@ -8,6 +8,10 @@
 * Production: https://klearsky.pages.dev/
 * Staging: https://staging.klearsky.pages.dev/
 
+## Coproduct
+* rollup-plugin-visualizer
+  * `npm run build` で `/coproduct/stats.html` が生成される
+
 ## デザインリソース
 * ロゴのフォント: https://fonts.google.com/specimen/Albert+Sans?preview.text=Klearsky&preview.size=64&preview.text_type=custom&category=Sans+Serif,Display
 * SVGアイコン: https://pictogrammers.com/library/mdi/

@@ -1,3 +1,5 @@
 declare module "*.vue"
-declare module "crypto-js"
+declare module "crypto-js/aes.js"
+declare module "crypto-js/enc-utf8.js"
+declare module "crypto-js/md5.js"
 declare module "@/composables/**/*"
