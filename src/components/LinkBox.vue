@@ -19,6 +19,7 @@ defineProps<{
       class="external__thumb"
       loading="lazy"
       :src="external.thumb"
+      alt=""
     />
     <div class="external__meta">
       <div class="external__title">{{ external.title ?? '' }}</div>

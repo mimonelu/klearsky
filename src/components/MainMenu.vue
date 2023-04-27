@@ -72,6 +72,7 @@ function moveToBottom () {
         class="image"
         loading="lazy"
         :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'"
+        alt=""
       >
       <div class="label">{{ mainState.userProfile?.handle }}</div>
     </RouterLink>

@@ -20,8 +20,9 @@ function makeLink(text: string, uri: string): string {
 function makeMention(text: string, did: string): string {
   return `<a
     class="textlink"
-    href="javascript: void 0;"
+    href="/profile/post?handle=${did}"
     onclick="
+      event?.preventDefault();
       event?.stopPropagation();
       window.dispatchEvent(new CustomEvent(
         'klearsky-router-push',

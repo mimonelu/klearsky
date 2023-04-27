@@ -24,6 +24,7 @@ function openImagePopup () {
     <img
       loading="lazy"
       :src="image ?? '/img/void-avatar.png'"
+      alt=""
     >
   </button>
 </template>

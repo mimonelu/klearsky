@@ -128,6 +128,7 @@ function close () {
     <img
       class="large-image-loader"
       :src="largeUri"
+      alt=""
       @load="onLoadLargeImage"
     >
 

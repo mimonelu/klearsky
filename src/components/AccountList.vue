@@ -69,6 +69,7 @@ function getDidColor (did: string): string {
             <img
               class="account-button__image"
               src="/img/void-avatar.png"
+              alt=""
               :style="{ '--color': getDidColor(session.did) }"
             >
             <div class="account-button__handle">{{ session.handle }}</div>

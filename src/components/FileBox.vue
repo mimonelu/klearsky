@@ -107,6 +107,7 @@ function deleteFile (index: number) {
           <div class="thumbnail">
             <img
               :src="preview"
+              alt=""
               @click.prevent.stop
             />
             <button
