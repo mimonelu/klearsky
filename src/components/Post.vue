@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
 import AvatarLink from "@/components/AvatarLink.vue"
+import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
@@ -267,10 +268,12 @@ async function updateThisPostThread () {
         </div>
 
         <!-- 本文 -->
-        <div
+        <HtmlText
           class="text"
           dir="auto"
-          v-html="post.record?.__textHtml ?? post.value?.__textHtml"
+          :text="post.record?.text ?? post.value?.text"
+          :facets="post.record?.facets ?? post.value?.facets"
+          :entities="post.record?.entities ?? post.value?.entities"
         />
 
         <!-- リンクボックス -->

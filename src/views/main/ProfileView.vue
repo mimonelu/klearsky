@@ -3,6 +3,7 @@ import { inject, reactive } from "vue"
 import { RouterView, type LocationQueryValue } from "vue-router"
 import AvatarButton from "@/components/AvatarButton.vue"
 import FollowButton from "@/components/FollowButton.vue"
+import HtmlText from "@/components/HtmlText.vue"
 import MuteButton from "@/components/MuteButton.vue"
 import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -98,10 +99,10 @@ async function copyDid () {
             :viewer="mainState.currentProfile.viewer"
           />
         </div>
-        <div
+        <HtmlText
           class="description"
           dir="auto"
-          v-html="mainState.currentProfile?.__descriptionHtml ?? '&nbsp;'"
+          :text="mainState.currentProfile?.description ?? '&nbsp;'"
         />
         <div class="statistics">
           <dl class="posts-count">

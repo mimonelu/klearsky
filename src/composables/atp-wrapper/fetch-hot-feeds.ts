@@ -19,7 +19,6 @@ export default async function (
 
   // TODO:
   AtpUtil.coherentResponses(response.data.feed as Array<TTFeed>)
-  AtpUtil.feed2html(response.data.feed as Array<TTFeed>)
   AtpUtil.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
   AtpUtil.sortFeeds(oldFeeds)
 

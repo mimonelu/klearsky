@@ -21,7 +21,6 @@ export default async function (
     if (key === "post") posts.push(value)
   })
   AtpUtil.coherentResponses(posts)
-  AtpUtil.feed2html(posts)
   posts.sort((a: TTPost, b: TTPost) => {
     const aIndexedAt = new Date(a.__reason?.indexedAt ?? a.indexedAt)
     const bIndexedAt = new Date(b.__reason?.indexedAt ?? b.indexedAt)

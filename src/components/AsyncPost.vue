@@ -33,10 +33,9 @@ onBeforeMount(async () => {
     <template v-if="state.post != null">
       <!-- 本文 -->
       <div
-        v-if="state.post.__textHtml"
-        v-html="state.post.__textHtml"
+        v-if="state.post.text"
         class="text"
-      />
+      >{{ state.post.text }}</div>
 
       <!-- リンクボックス -->
       <LinkBox

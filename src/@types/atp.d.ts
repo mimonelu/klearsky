@@ -89,7 +89,6 @@ type TTPost = {
   }
   record: {
     text: string
-    __textHtml: string // Injected
     $type: string
     createdAt: string
     reply?: {
@@ -113,6 +112,7 @@ type TTPost = {
       }>
       [k: string]: unknown
     }
+    facets?: any
     entities?: Array<TTEntity>
     [k: string]: unknown
   }
@@ -120,7 +120,9 @@ type TTPost = {
     text: string
     $type: string
     createdAt: string
-    __textHtml?: string // Injected
+    facets?: any
+    entities?: Array<TTEntity>
+    [k: string]: unknown
   }
   replyCount: number
   repostCount: number
@@ -143,7 +145,7 @@ type TTFeed = {
     [k: string]: unknown
   }
   reason?: TTReason
-  __id: string
+  __id: string // Injected
   __folding?: boolean // Injected
   __replyDisplay?: boolean // Injected
   [k: string]: unknown
@@ -209,7 +211,6 @@ type TTProfile = {
   handle: string
   displayName: string
   description?: string
-  __descriptionHtml: string // Injected
   avatar: string
   banner: string
   followsCount: number

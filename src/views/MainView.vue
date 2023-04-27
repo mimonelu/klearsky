@@ -76,9 +76,6 @@ onMounted(async () => {
 
     // インフィニットスクロール用処理
     window.addEventListener("scroll", scrollListener)
-
-    // 動的生成されたリンクからページ遷移する処理
-    window.addEventListener("klearsky-router-push", routerPush)
   }
 })
 
@@ -87,9 +84,6 @@ onUnmounted(() => {
 
   // インフィニットスクロール用処理
   window.removeEventListener("scroll", scrollListener)
-
-  // 動的生成されたリンクからページ遷移する処理
-  window.removeEventListener("klearsky-router-push", routerPush)
 })
 
 const router = useRouter()
@@ -354,11 +348,6 @@ function scrollListener () {
   } else {
     isEnter = false
   }
-}
-
-// 動的生成されたリンクからページ遷移する処理
-async function routerPush (event: Event) {
-  await router.push((event as CustomEvent).detail)
 }
 </script>
 

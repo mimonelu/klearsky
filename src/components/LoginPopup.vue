@@ -89,7 +89,7 @@ async function submitCallback () {
           <!-- App Passwords 導線 -->
           <template v-slot:after>
             <a
-              class="textlink app-passwords-link"
+              class="textlink--icon app-passwords-link"
               href="https://staging.bsky.app/settings/app-passwords"
               rel="noreferrer"
               target="_blank"

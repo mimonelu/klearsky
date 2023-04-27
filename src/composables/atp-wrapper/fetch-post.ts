@@ -27,7 +27,6 @@ export default async function (
 
   // TODO:
   AtpUtil.coherentResponses([post])
-  AtpUtil.feed2html([post])
 
   this.caches[uri] = post
   return post
