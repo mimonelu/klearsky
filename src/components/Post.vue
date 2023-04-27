@@ -282,7 +282,7 @@ async function updateThisPostThread () {
           <!-- 画像フォルダーボタン -->
           <button
             v-if="!state.displayImage"
-            class="button--bordered"
+            class="button--bordered image-folder-button"
             @click.prevent.stop="onActivateImageFolderButton"
           >
             <template v-if="state.imageFolding">
@@ -448,6 +448,8 @@ async function updateThisPostThread () {
   flex-direction: column;
   padding: 1em;
   position: relative;
+
+  // フォーカスされたポスト
   &[data-focus="true"]:not([data-position="preview"]) {
     background-color: rgba(var(--accent-color), 0.125);
 
@@ -455,15 +457,20 @@ async function updateThisPostThread () {
       user-select: text;
     }
   }
+
+  // 引用ポスト
   &[data-position="postInPost"] {
     font-size: 0.9375em;
   }
+
+  // プレビューポスト
   &[data-position="preview"] {
     font-size: 0.9375em;
     padding: 0;
     pointer-events: none;
 
     .external,
+    .image-folder-button,
     .quad-images,
     .reaction-container {
       display: none;
@@ -633,6 +640,10 @@ async function updateThisPostThread () {
   &:deep(.textlink) {
     padding: 0.125em 0;
   }
+}
+
+.image-folder-button > span {
+  font-size: 0.875em;
 }
 
 .quad-images {

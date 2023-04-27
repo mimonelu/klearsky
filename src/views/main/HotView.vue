@@ -12,9 +12,7 @@ function getServiceName (): string {
 
 <template>
   <div class="header">
-    <div class="header-icon">
-      <SVGIcon name="fire" />
-    </div>
+    <SVGIcon name="fire" />
     <div class="header-label">
       <span>Hot Posts</span>
       <b>@{{ getServiceName() }}</b>
@@ -31,7 +29,6 @@ function getServiceName (): string {
 <style lang="scss" scoped>
 .header {
   background-color: rgb(var(--bg-color));
-  border-top: 2px solid rgb(var(--hot-color));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: grid;
   grid-template-columns: auto 1fr;
@@ -42,14 +39,8 @@ function getServiceName (): string {
   top: 0;
   z-index: 1;
 
-  &-icon {
-    background-color: rgb(var(--hot-color));
-    border-radius: 1rem;
-    padding: 0.25rem;
-
-    & > .svg-icon {
-      fill: white;
-    }
+  & > .svg-icon {
+    fill: rgb(var(--hot-color));
   }
 
   &-label {

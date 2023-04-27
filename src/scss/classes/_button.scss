@@ -30,13 +30,18 @@
 .button--bordered {
   background-color: rgba(var(--bg-color), 0.875);
   border: 1px solid rgba(var(--fg-color), 0.25);
-  color: rgb(var(--fg-color));
+  color: rgba(var(--fg-color), 0.75);
   &:focus, &:hover {
     border-color: rgb(var(--fg-color));
+    color: rgb(var(--fg-color));
+
+    & > .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
   }
 
   & > .svg-icon {
-    fill: rgb(var(--fg-color));
+    fill: rgba(var(--fg-color), 0.75);
   }
 }
 
