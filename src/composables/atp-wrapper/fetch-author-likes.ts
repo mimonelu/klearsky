@@ -1,5 +1,7 @@
 import type { BskyAgent, ComAtprotoRepoListRecords } from "@atproto/api"
 
+let id = 0
+
 export default async function (
   this: TIAtpWrapper,
   currentAuthorLikes: Array<TTFeed>,
@@ -44,7 +46,10 @@ export default async function (
     const existingIndex = currentAuthorLikes.findIndex(
       (currentFeed: TTFeed) => currentFeed.post.cid === post.cid
     )
-    if (existingIndex === -1) currentAuthorLikes.push({ post })
+    if (existingIndex === -1) currentAuthorLikes.push({
+      __id: `authorLike-${id ++}`,
+      post,
+    })
     else currentAuthorLikes[existingIndex].post = post
   })
 

@@ -1,5 +1,9 @@
+let id = 0
+
 export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
   targetFeeds.forEach((targetFeed: TTFeed) => {
+    if (targetFeed.__id == null) targetFeed.__id = `feed-${id ++}`
+
     const index: number = oldFeeds.findIndex(
       (oldFeed: TTFeed) => oldFeed.post?.cid === targetFeed.post?.cid
     )
@@ -25,7 +29,14 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
         targetFeed.post.__reason?.indexedAt ?? targetFeed.post.indexedAt
       )
 
-      if (oldDate <= targetDate) oldFeeds[index] = targetFeed
+      if (oldDate > targetDate) return
+      const oldId = oldFeeds[index].__id
+      const oldFolding = oldFeeds[index].__folding
+      const oldReplyDisplay = oldFeeds[index].__replyDisplay
+      oldFeeds[index] = targetFeed
+      oldFeeds[index].__id = oldId
+      oldFeeds[index].__folding = oldFolding
+      oldFeeds[index].__replyDisplay = oldReplyDisplay
     }
   })
 }

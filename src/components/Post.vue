@@ -60,6 +60,7 @@ const state = reactive<{
     )
   ),
 
+  // TODO: displayImage 共々 post に内包するべき
   imageFolding: false,
 })
 
@@ -297,7 +298,7 @@ async function updateThisPostThread () {
 
           <!-- イメージボックス -->
           <div
-            v-if="!state.imageFolding"
+            v-if="state.displayImage || (!state.displayImage && !state.imageFolding)"
             class="quad-images"
             :data-number-of-images="state.images.length"
           >

@@ -101,8 +101,8 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     />
     <div class="feeds">
       <Feed
-        v-for="feed, feedIndex of feeds"
-        :key="feedIndex"
+        v-for="feed of feeds"
+        :key="feed.__id"
         :feed="feed"
         @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"

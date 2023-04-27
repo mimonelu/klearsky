@@ -45,6 +45,10 @@ function removeThisPost (uri: string) {
 </template>
 
 <style lang="scss" scoped>
+.post-view {
+  padding-bottom: 8rem;
+}
+
 .page-header {
   position: unset;
 }
