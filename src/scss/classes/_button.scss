@@ -46,7 +46,7 @@
 }
 
 .button--important {
-  background-color: rgba(var(--notice-color), 0.25);
+  background-color: rgba(var(--notice-color), 0.875);
   color: rgb(var(--bg-color));
   &:focus, &:hover {
     background-color: rgb(var(--notice-color));

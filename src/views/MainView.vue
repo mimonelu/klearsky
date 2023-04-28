@@ -441,10 +441,25 @@ function scrollListener () {
       margin-right: unset;
     }
   }
+  &[data-layout="slim"] .sub-menu-wrapper {
+    display: none;
+  }
+  &[data-layout="slimLeft"] .sub-menu {
+    bottom: 3rem;
+    right: 0;
+  }
+  &[data-layout="slimRight"] .sub-menu-wrapper {
+    max-width: 0;
+
+    .sub-menu {
+      bottom: 3rem;
+      left: 0;
+    }
+  }
   &[data-layout="slim"],
   &[data-layout="slimLeft"],
   &[data-layout="slimRight"] {
-    .sub-menu-wrapper {
+    .sub-menu:deep() .copyright {
       display: none;
     }
   }

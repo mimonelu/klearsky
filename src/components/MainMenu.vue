@@ -182,7 +182,7 @@ function moveToBottom () {
 
 <style lang="scss" scoped>
 @mixin slimLayout {
-  padding: 0.75rem 0.5rem;
+  padding: 0 0.5rem 0.75rem;
 
   .link-button {
     grid-template-columns: min-content;
@@ -210,7 +210,7 @@ function moveToBottom () {
 
   // フルレイアウト
   @media not all and (max-width: $max-width-with-scrollbar) {
-    padding: 1.25rem 1rem;
+    padding: 0.25rem 1rem 1.25rem;
 
     .move-to-bottom-button {
       display: none;

@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import Package from "@/../package.json"
-
 const yyyy = (new Date).getFullYear()
 </script>
 
 <template>
   <div class="copyright">
-    <div class="kebab-header">{{ $t("title") }} v{{ Package.version }}</div>
+    <div class="kebab-header">Klearsky</div>
     <small>&copy; {{ yyyy }} mimonelu</small>
     <RouterLink
       class="textlink"
