@@ -1,6 +1,10 @@
 <template>
   <div class="loader">
-    <div v-for="_ of Array(5)" />
+    <div />
+    <div />
+    <div />
+    <div />
+    <div />
   </div>
 </template>
 
@@ -11,7 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  grid-gap: 0.75em;
+  grid-gap: 0.5em;
   position: absolute;
   left: 0;
   top: 0;
@@ -20,14 +24,14 @@
   height: 100%;
 
   & > div {
-    animation: loader-animation 250ms ease-in-out infinite alternate-reverse;
+    animation: loader-animation 200ms ease-in-out infinite alternate-reverse;
     background-color: rgb(var(--accent-color));
-    width: 0.75em;
-    height: 0.75em;
+    width: 0.25em;
+    height: 1.5em;
   }
   @for $i from 1 through 5 {
     & > div:nth-child(#{$i}) {
-      animation-delay: #{$i * 100}ms;
+      animation-delay: #{$i * 75}ms;
     }
   }
 }
