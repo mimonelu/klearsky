@@ -40,12 +40,14 @@ export default async function (
       // あなたをフォローしていないユーザーへのリプライ
       if (
         replyControl?.includes(3) &&
+        feed.reply?.parent.author.did !== this.session?.did &&
         feed.reply?.parent.author.viewer.followedBy == null
       ) feed.__folding = true
 
       // あなたがフォローしていないユーザーへのリプライ
       if (
         replyControl?.includes(4) &&
+        feed.reply?.parent.author.did !== this.session?.did &&
         feed.reply?.parent.author.viewer.following == null
       ) feed.__folding = true
 
@@ -73,12 +75,14 @@ export default async function (
       // あなたをフォローしていないユーザーのポストのリポスト
       if (
         repostControl?.includes(3) &&
+        feed.post.author.did !== this.session?.did &&
         feed.post.author.viewer.followedBy == null
       ) feed.__folding = true
 
       // あなたがフォローしていないユーザーのポストのリポスト
       if (
         repostControl?.includes(4) &&
+        feed.post.author.did !== this.session?.did &&
         feed.post.author.viewer.following == null
       ) feed.__folding = true
 
