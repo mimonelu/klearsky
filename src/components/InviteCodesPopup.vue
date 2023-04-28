@@ -88,7 +88,7 @@ async function copyCode (code: string) {
 .invite-codes-popup:deep() {
   .popup {
     width: calc($router-view-width - 2rem);
-    max-height: calc(100vh - 8rem);
+    max-height: calc(100vh - 12rem);
   }
 }
 

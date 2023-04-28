@@ -60,7 +60,7 @@ function moveToBottom () {
 
     <!-- プロフィールボタン -->
     <RouterLink
-      class="link-button"
+      class="link-button profile-button"
       :to="{ name: 'profile-post', query: { handle: mainState.atp.session?.handle } }"
       :data-is-focus="
         mainState.currentPath.startsWith('/profile/') &&
@@ -196,7 +196,7 @@ function moveToBottom () {
 .main-menu {
   display: flex;
   flex-direction: column;
-  grid-gap: 0.25rem;
+  grid-gap: 1px;
 
   // スリムレイアウト
   @media (max-width: $max-width-with-scrollbar) {
@@ -210,7 +210,7 @@ function moveToBottom () {
 
   // フルレイアウト
   @media not all and (max-width: $max-width-with-scrollbar) {
-    padding: 0.25rem 1rem 1.25rem;
+    padding: 0 1rem 1.25rem;
 
     .move-to-bottom-button {
       display: none;
@@ -225,7 +225,7 @@ function moveToBottom () {
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  min-height: 3rem;
+  min-height: 3.25rem;
 
   .svg-icon {
     fill: rgba(var(--fg-color), 0.25);
@@ -243,8 +243,8 @@ function moveToBottom () {
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  min-width: 3rem;
-  min-height: 3rem;
+  min-width: 3.25rem;
+  min-height: 3.25rem;
 
   .svg-icon {
     fill: rgba(var(--fg-color), 0.5);
@@ -310,6 +310,11 @@ function moveToBottom () {
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
     background-color: rgba(var(--accent-color), 0.25);
+  }
+
+  // プロフィールボタン
+  &.profile-button > .label {
+    font-weight: bold;
   }
 
   // HOTボタン
