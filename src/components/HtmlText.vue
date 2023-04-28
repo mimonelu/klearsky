@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, reactive, type ComputedRef } from "vue"
-import type { Entity, Facet, RichTextProps } from "@atproto/api"
+import type { Entity, Facet, RichTextOpts, RichTextProps } from "@atproto/api"
 import { RichText } from "@atproto/api"
 
 const props = defineProps<{
@@ -13,10 +13,11 @@ const state = reactive<{
   richText: ComputedRef<RichText>;
 }>({
   richText: computed(() => {
-    const options: RichTextProps = { text: props.text }
-    if (props.facets != null) options.facets = props.facets
-    if (props.entities != null) options.entities = props.entities
-    const richText = new RichText(options)
+    const rtProps: RichTextProps = { text: props.text }
+    if (props.facets != null) rtProps.facets = props.facets
+    if (props.entities != null) rtProps.entities = props.entities
+    const rtOptions: RichTextOpts = { cleanNewlines: true }
+    const richText = new RichText(rtProps, rtOptions)
     if (props.facets == null) richText.detectFacetsWithoutResolution()
     return richText
   }),
