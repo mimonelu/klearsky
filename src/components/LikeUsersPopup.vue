@@ -6,6 +6,7 @@ import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
 import Util from "@/composables/util/index"
+import consts from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -37,7 +38,13 @@ async function fetchContinuousResults (direction: "new" | "old") {
   if (state.processing) return
   state.processing = true
   try {
-    await mainState.fetchLikeUsers(direction)
+    const cursor: undefined | string = await mainState.atp.fetchLikeUsers(
+      mainState.currentLikeUsers as Array<TTUser>,
+      mainState.currentLikeUsersUri as string,
+      consts.limitOfFetchLikeUsers,
+      direction === "old" ? mainState.currentLikeUsersCursor : undefined
+    )
+    if (cursor != null) mainState.currentLikeUsersCursor = cursor
   } finally {
     state.processing = false
   }

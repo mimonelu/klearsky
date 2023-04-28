@@ -19,12 +19,9 @@ const state = reactive<{
 
 onBeforeMount(async () => {
   if (state.post != null) return
-  try {
-    const post = await mainState.atp.fetchPost(props.uri, props.handle)
-    if (post != null) state.post = post
-  } catch (error) {
-    console.error(error)
-  }
+  const post = await mainState.atp.fetchPost(props.uri, props.handle)
+    .catch(error => { console.error("[klearsky/fetchPost]", error) })
+  if (post != null) state.post = post
 })
 </script>
 
@@ -54,7 +51,6 @@ onBeforeMount(async () => {
           :image="image"
         />
       </div>
-
     </template>
     <Loader v-if="state.post == null" />
   </div>

@@ -2,8 +2,6 @@
 import {
   inject,
   onErrorCaptured,
-  onBeforeMount,
-  onUnmounted,
   reactive
 } from "vue"
 import { RouterView } from "vue-router"
@@ -20,19 +18,7 @@ const state = reactive<{
   error: undefined
 })
 
-onBeforeMount(() => {
-  window.addEventListener("unhandledrejection", processUnhandledError)
-})
-
-onUnmounted(() => {
-  window.removeEventListener("unhandledrejection", processUnhandledError)
-})
-
 onErrorCaptured(processError)
-
-function processUnhandledError (error: PromiseRejectionEvent) {
-  processError(error.reason)
-}
 
 function processError (error: any) {
   Util.blurElement()

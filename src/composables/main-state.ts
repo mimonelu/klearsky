@@ -48,8 +48,6 @@ const state = reactive<MainState>({
   fetchNotifications,
   fetchFollowers,
   fetchFollowings,
-  fetchRepostUsers,
-  fetchLikeUsers,
   saveSettings,
   updateSettings,
   updateI18nSetting,
@@ -279,17 +277,6 @@ function closeSendPostPopup (done: boolean) {
   state.sendPostPopupProps.display = false
 }
 
-async function fetchRepostUsers (direction: "new" | "old") {
-  const cursor: undefined | string =
-    await state.atp.fetchRepostUsers(
-      state.currentRepostUsers as Array<TTUser>,
-      state.currentRepostUsersUri as string,
-      consts.limitOfFetchRepostUsers,
-      direction === "old" ? state.currentRepostUsersCursor : undefined
-    )
-  if (cursor != null) state.currentRepostUsersCursor = cursor
-}
-
 async function openRepostUsersPopup (uri: string) {
   if (state.currentRepostUsersUri !== uri) {
     state.currentRepostUsers = []
@@ -301,17 +288,6 @@ async function openRepostUsersPopup (uri: string) {
 
 function closeRepostUsersPopup () {
   state.repostUsersPopupDisplay = false
-}
-
-async function fetchLikeUsers (direction: "new" | "old") {
-  const cursor: undefined | string =
-    await state.atp.fetchLikeUsers(
-      state.currentLikeUsers as Array<TTUser>,
-      state.currentLikeUsersUri as string,
-      consts.limitOfFetchLikeUsers,
-      direction === "old" ? state.currentLikeUsersCursor : undefined
-    )
-  if (cursor != null) state.currentLikeUsersCursor = cursor
 }
 
 async function openLikeUsersPopup (uri: string) {
