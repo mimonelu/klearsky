@@ -155,6 +155,26 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- メインエリアの不透明度 -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("mainAreaOpacity") }}</div>
+        <div class="settings-section__body">
+          <label class="selectbox">
+            <select
+              v-model="mainState.currentSetting.mainAreaOpacity"
+              @change="changeSetting"
+            >
+              <option
+                v-for="mainAreaOpacity, mainAreaOpacityIndex in settings.mainAreaOpacities"
+                :key="mainAreaOpacityIndex"
+                :value="mainAreaOpacity.value"
+                :selected="mainAreaOpacity.value === mainState.currentSetting.mainAreaOpacity"
+              >{{ $t(mainAreaOpacity.label) }}</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
       <!-- 背景画像 URL -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("backgroundImage") }}</div>

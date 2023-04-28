@@ -16,6 +16,7 @@ type TTSetting = {
     "slimLeft" |
     "slimRight"
   colorTheme?: string
+  mainAreaOpacity?: number
   backgroundImage?: string
   backgroundOpacity?: number
 }

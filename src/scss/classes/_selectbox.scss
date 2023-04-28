@@ -3,7 +3,7 @@
   position: relative;
 
   & > select {
-    background-color: rgb(var(--bg-color));
+    background-color: rgba(var(--bg-color), 0.25);
     border: 1px solid rgba(var(--fg-color), 0.25);
     border-radius: var(--border-radius);
     color: rgb(var(--fg-color));

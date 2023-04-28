@@ -357,6 +357,9 @@ function scrollListener () {
     :key="state.updateKey"
     :data-path="state.currentPath"
     :data-layout="state.currentSetting.layout"
+    :style="{
+      '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 0
+    }"
   >
     <!-- 壁紙 -->
     <div
@@ -418,6 +421,7 @@ function scrollListener () {
 
 <style lang="scss" scoped>
 .main-view {
+  --main-area-opacity: 1.0;
   background-color: rgba(var(--bg-color), var(--bg-opacity));
 
   // レイアウト
@@ -513,7 +517,7 @@ function scrollListener () {
 }
 
 .router-view-wrapper {
-  background-color: rgba(var(--bg-color), 0.875);
+  background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-left: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;

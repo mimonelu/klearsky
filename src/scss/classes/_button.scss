@@ -28,7 +28,7 @@
 }
 
 .button--bordered {
-  background-color: rgba(var(--bg-color), 0.875);
+  background-color: rgba(var(--bg-color), 0.25);
   border: 1px solid rgba(var(--fg-color), 0.25);
   color: rgba(var(--fg-color), 0.75);
   &:focus, &:hover {
@@ -46,7 +46,7 @@
 }
 
 .button--important {
-  background-color: rgba(var(--notice-color), 0.875);
+  background-color: rgba(var(--notice-color), 0.25);
   color: rgb(var(--bg-color));
   &:focus, &:hover {
     background-color: rgb(var(--notice-color));
