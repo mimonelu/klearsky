@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, onBeforeMount, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
+import { franc } from "franc"
+import { iso6393To1 } from "iso-639-3/iso6393-to-1"
 import AvatarLink from "@/components/AvatarLink.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
@@ -77,6 +79,10 @@ const state = reactive<{
 state.imageFolding = !state.displayImage
 
 const router = useRouter()
+
+onBeforeMount(() => {
+  translateText()
+})
 
 function isFocused (): boolean {
   return props.post.uri === mainState.currentQuery.postUri
@@ -210,6 +216,20 @@ async function updateThisPostThread () {
   if (posts == null || posts.length === 0) return
   emit("updateThisPostThread", posts)
 }
+
+// 自動翻訳文
+async function translateText () {
+  if (props.post.__translatedText != null) return
+  const text = props.post.record?.text ?? props.post.value?.text
+  if (text == null) return
+  const srcLanguage = iso6393To1[franc(text)]
+  const dstLanguage = window.navigator.language
+  if (srcLanguage === dstLanguage) return
+  const response = await fetch(`https://script.google.com/macros/s/AKfycbwFQAyQsmEj0b9gKkSxUy0vbu93yzsgp_oebMPbHuWkyagefdxEKFzIlmQH0o9ouPw/exec?text=${encodeURI(text)}&target=${dstLanguage}`)
+  const json = await response.json()
+  if (json.code !== 200) return
+  props.post.__translatedText = json.text
+}
 </script>
 
 <template>
@@ -284,6 +304,13 @@ async function updateThisPostThread () {
           :facets="post.record?.facets ?? post.value?.facets"
           :entities="post.record?.entities ?? post.value?.entities"
         />
+
+        <!-- 自動翻訳文 -->
+        <div
+          v-if="props.post.__translatedText != null"
+          class="translated-text"
+          dir="auto"
+        >{{ props.post.__translatedText }}</div>
 
         <!-- リンクボックス -->
         <LinkBox
@@ -653,6 +680,13 @@ async function updateThisPostThread () {
   &:deep(.textlink) {
     padding: 0.125em 0;
   }
+}
+
+.translated-text {
+  color: rgb(var(--accent-color));
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .image-folder-button > span {

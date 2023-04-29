@@ -18,10 +18,12 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
     else if (targetFeed.reason != null) return
     // 登録日時を考慮して既存フィードを上書き
     else {
+      let oldFeed = oldFeeds[index]
+
       // 既存フィードの登録日時
       const oldDate = new Date(
-        oldFeeds[index].post.__reason?.indexedAt ??
-          oldFeeds[index].post.indexedAt
+        oldFeed.post.__reason?.indexedAt ??
+          oldFeed.post.indexedAt
       )
 
       // 対象フィードの登録日時
@@ -30,13 +32,28 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
       )
 
       if (oldDate > targetDate) return
-      const oldId = oldFeeds[index].__id
-      const oldFolding = oldFeeds[index].__folding
-      const oldReplyDisplay = oldFeeds[index].__replyDisplay
+      const oldId = oldFeed.__id
+      const oldFolding = oldFeed.__folding
+      const oldReplyDisplay = oldFeed.__replyDisplay
+
+      // 自動翻訳文
+      const oldTranslatedTextOfPost = oldFeed.post.__translatedText
+      const oldTranslatedTextOfRoot = oldFeed.reply?.root.__translatedText
+      const oldTranslatedTextOfParent = oldFeed.reply?.parent.__translatedText
+
       oldFeeds[index] = targetFeed
-      oldFeeds[index].__id = oldId
-      oldFeeds[index].__folding = oldFolding
-      oldFeeds[index].__replyDisplay = oldReplyDisplay
+      oldFeed = oldFeeds[index]
+
+      oldFeed.__id = oldId
+      oldFeed.__folding = oldFolding
+      oldFeed.__replyDisplay = oldReplyDisplay
+
+      // 自動翻訳文
+      oldFeed.post.__translatedText = oldTranslatedTextOfPost
+      if (oldFeed.reply != null) {
+        oldFeed.reply.root.__translatedText = oldTranslatedTextOfRoot
+        oldFeed.reply.parent.__translatedText = oldTranslatedTextOfParent
+      }
     }
   })
 }
