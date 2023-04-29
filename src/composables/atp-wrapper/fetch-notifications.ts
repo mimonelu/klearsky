@@ -71,7 +71,8 @@ export default async function (
   // フォールディングの設定
   if (cursor === undefined)
     values.forEach((value: TTNotificationGroup) => {
-      value.__folding = !value.notifications.some((notification: TTNotification) => !notification.isRead)
+      const hasRead = value.notifications.some((notification: TTNotification) => !notification.isRead)
+      value.__folding = !hasRead
     })
 
   // 通知配列のソート

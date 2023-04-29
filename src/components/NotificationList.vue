@@ -17,6 +17,11 @@ const iconMap: { [reason: string]: string } = {
   like: "heart",
 }
 
+function notificationGroupHasNew (notificationGroup: TTNotificationGroup): boolean {
+  return notificationGroup.notifications
+    .some((notification: TTNotification) => !notification.isRead)
+}
+
 // 通知フォルダーを持つ通知かどうか
 function isGroupingReason (reason: string): boolean {
   return reason === "like" ||
@@ -55,6 +60,14 @@ function makeSubjectTo (notification: TTNotification): any {
       :data-has-folder="isGroupingReason(notificationGroup.reason) &&
         notificationGroup.notifications.length >= 2"
     >
+      <!-- 新着通知内包アイコン -->
+      <div
+        v-if="notificationGroupHasNew(notificationGroup) &&
+          isGroupingReason(notificationGroup.reason) &&
+          notificationGroup.notifications.length >= 2"
+        class="new"
+      >NEW</div>
+
       <!-- ユーザーポスト -->
       <RouterLink
         :to="{ name: 'post', query: { postUri: notificationGroup.reasonSubject } }"
@@ -101,7 +114,7 @@ function makeSubjectTo (notification: TTNotification): any {
             class="notification"
             :data-is-new="!notification.isRead"
           >
-            <!-- NEW アイコン -->
+            <!-- 新着通知アイコン -->
             <div
               v-if="!notification.isRead"
               class="new"
@@ -169,6 +182,12 @@ function makeSubjectTo (notification: TTNotification): any {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  // 新着通知内包アイコン
+  & > .new {
+    display: inline-block;
+    margin-bottom: 0.5rem;
   }
 
   // 通知フォルダー開閉ボタンを持つ通知グループの処理
@@ -253,13 +272,20 @@ function makeSubjectTo (notification: TTNotification): any {
       color: rgba(var(--fg-color), 0.75);
     }
   }
+
+  & > .new {
+    font-size: 0.75rem;
+  }
 }
 
-// NEW アイコン
+// 新着通知アイコン
 .new {
+  background-color: rgb(var(--bg-color));
+  border: 1px solid rgb(var(--accent-color));
+  border-radius: var(--border-radius);
   color: rgb(var(--accent-color));
-  font-size: 0.75rem;
   font-weight: bold;
+  padding: 0.25rem;
 }
 
 // reason アイコン
