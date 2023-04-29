@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import Checkboxes from "@/components/Checkboxes.vue"
+import ColorTheme from "@/components/ColorTheme.vue"
+import Radios from "@/components/Radios.vue"
 import languages from "@/consts/languages.json"
 import settings from "@/consts/settings.json"
-import ColorTheme from "@/components/ColorTheme.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
 
@@ -67,43 +68,21 @@ function changeSetting () {
         <div class="settings-section__body">
           <!-- タイムラインの制御 - リプライ -->
           <div class="settings-section__sub-header">{{ $t("replyControl") }}</div>
-          <div class="checkbox-container">
-            <label
-              v-for="value of [1, 2, 3, 4, 5]"
-              :key="value"
-              class="checkbox"
-              :data-checked="mainState.currentSetting.replyControl?.includes(value)"
-            >
-              <input
-                v-model="mainState.currentSetting.replyControl"
-                type="checkbox"
-                :value="value"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t(`replyControl${value}`) }}</span>
-            </label>
-          </div>
+          <Checkboxes
+            :state="mainState.currentSetting"
+            model="replyControl"
+            :options="settings.replyControls"
+            @update="saveSetting"
+          />
 
           <!-- タイムラインの制御 - リポスト -->
           <div class="settings-section__sub-header">{{ $t("repostControl") }}</div>
-          <div class="checkbox-container">
-            <label
-              v-for="value of [1, 2, 3, 4, 5]"
-              :key="value"
-              class="checkbox"
-              :data-checked="mainState.currentSetting.repostControl?.includes(value)"
-            >
-              <input
-                v-model="mainState.currentSetting.repostControl"
-                type="checkbox"
-                :value="value"
-                @change="saveSetting"
-              >
-              <SVGIcon name="check" />
-              <span>{{ $t(`repostControl${value}`) }}</span>
-            </label>
-          </div>
+          <Checkboxes
+            :state="mainState.currentSetting"
+            model="repostControl"
+            :options="settings.repostControls"
+            @update="saveSetting"
+          />
         </div>
       </div>
 
@@ -111,19 +90,12 @@ function changeSetting () {
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("imageControl") }}</div>
         <div class="settings-section__body">
-          <label class="selectbox">
-            <select
-              v-model="mainState.currentSetting.imageControl"
-              @change="changeSetting"
-            >
-              <option
-                v-for="imageControl, imageControlIndex in settings.imageControls"
-                :key="imageControlIndex"
-                :value="imageControl.value"
-                :selected="imageControl.value === mainState.currentSetting.imageControl"
-              >{{ $t(imageControl.label) }}</option>
-            </select>
-          </label>
+          <Radios
+            :state="mainState.currentSetting"
+            model="imageControl"
+            :options="settings.imageControls"
+            @update="saveSetting"
+          />
         </div>
       </div>
 
@@ -212,43 +184,7 @@ function changeSetting () {
 </template>
 
 <style lang="scss" scoped>
-.checkbox-container {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 0.5rem;
-}
-
-.checkbox-container:not(:last-child) {
+.checkboxes:not(:last-child) {
   margin-bottom: 1rem;
-}
-
-.checkbox {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-
-  & > .svg-icon {
-    fill: rgba(var(--accent-color), 0.25);
-    margin-right: 0.5rem;
-  }
-  &[data-checked="true"] > .svg-icon {
-    fill: rgb(var(--accent-color));
-  }
-
-  & > span {
-    color: rgba(var(--fg-color), 0.875);
-    line-height: 1.375;
-  }
-  &:focus > span,
-  &:hover > span {
-    color: rgb(var(--fg-color));
-  }
-  &[data-checked="true"] > span {
-    color: rgba(var(--accent-color), 0.875);
-  }
-  &[data-checked="true"]:focus > span,
-  &[data-checked="true"]:hover > span {
-    color: rgb(var(--accent-color));
-  }
 }
 </style>

@@ -39,27 +39,36 @@ const state = reactive<{
 
   // 画像の制御
   // TODO: 引用リポストに対応すること
-  displayImage: computed(() =>
+  displayImage: computed(() => {
     // すべて表示
-    mainState.currentSetting.imageControl === "all" ||
+    if (mainState.currentSetting.imageControl === "all") return true
+
+    // 自身とフォロイーとフォロイーのリポスト、およびプロフィールユーザーのみ表示
+    if (mainState.currentSetting.imageControl === "followingEx" && (
+      // 自身である
+      props.post.author?.did === mainState.atp.session?.did ||
+      // フォロイーである
+      props.post.author.viewer.following != null ||
+      // フォロイーのリポストである
+      props.post.__reason?.by.viewer.following != null ||
+      // プロフィールユーザーである
+      props.post.author?.did === mainState.currentProfile?.did
+    )) return true
+
+    // 自身とフォロイーのみ表示
+    if (mainState.currentSetting.imageControl === "following" && (
+      // 自身である
+      props.post.author?.did === mainState.atp.session?.did ||
+      // フォロイーである
+      props.post.author.viewer.following != null
+    )) return true
 
     // 自身のみ表示
-    (
-      mainState.currentSetting.imageControl === "self" &&
-      props.post.author?.did === mainState.atp.session?.did
-    ) ||
+    if (mainState.currentSetting.imageControl === "self" &&
+      props.post.author?.did === mainState.atp.session?.did) return true
 
-    // 自身と自身のフォロイーのみ表示
-    (
-      mainState.currentSetting.imageControl === "following" && (
-        props.post.author?.did === mainState.atp.session?.did || (
-          props.post.author.viewer.following != null
-          // リポストも含む場合
-          /* || props.post.__reason?.by.viewer.following != null */
-        )
-      )
-    )
-  ),
+    return false
+  }),
 
   // TODO: displayImage 共々 post に内包するべき
   imageFolding: false,

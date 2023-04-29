@@ -3,6 +3,8 @@
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
 import check from "@/svg/check.svg?raw"
+import checkboxOff from "@/svg/checkbox-off.svg?raw"
+import checkboxOn from "@/svg/checkbox-on.svg?raw"
 import clipboard from "@/svg/clipboard.svg?raw"
 import cross from "@/svg/cross.svg?raw"
 import cursorDown from "@/svg/cursor-down.svg?raw"
@@ -27,6 +29,8 @@ import person from "@/svg/person.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
+import radioOff from "@/svg/radio-off.svg?raw"
+import radioOn from "@/svg/radio-on.svg?raw"
 import remove from "@/svg/remove.svg?raw"
 import repost from "@/svg/repost.svg?raw"
 import search from "@/svg/search.svg?raw"
@@ -42,6 +46,8 @@ const icons: { [k: string]: string } = {
   at,
   bell,
   check,
+  checkboxOff,
+  checkboxOn,
   clipboard,
   cross,
   cursorDown,
@@ -66,6 +72,8 @@ const icons: { [k: string]: string } = {
   plus,
   post,
   quoteRepost,
+  radioOff,
+  radioOn,
   remove,
   repost,
   search,

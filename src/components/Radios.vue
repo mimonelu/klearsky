@@ -15,32 +15,32 @@ function onChange () {
 </script>
 
 <template>
-  <div class="checkboxes">
+  <div class="radios">
     <label
       v-for="option of options"
       :key="option.value"
-      class="checkbox"
-      :data-checked="state[model]?.includes(option.value)"
+      class="radio"
+      :data-checked="state[model] === option.value"
     >
       <input
         v-model="state[model]"
-        type="checkbox"
+        type="radio"
         :value="option.value"
         @change="onChange"
       >
-      <SVGIcon :name="state[model]?.includes(option.value) ? 'checkboxOn' : 'checkboxOff'" />
+      <SVGIcon :name="state[model] === option.value ? 'radioOn' : 'radioOff'" />
       <span>{{ $t(option.label) }}</span>
     </label>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.checkboxes {
+.radios {
   display: flex;
   flex-direction: column;
   grid-gap: 0.5rem;
 
-  & > .checkbox {
+  & > .radio {
     cursor: pointer;
     display: flex;
 

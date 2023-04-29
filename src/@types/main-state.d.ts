@@ -5,6 +5,7 @@ type TTSetting = {
   repostControl?: Array<number>
   imageControl?:
     "all" |
+    "followingEx" |
     "following" |
     "self" |
     "none"

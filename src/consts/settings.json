@@ -4,11 +4,26 @@
     { "label": "fontSizeMedium", "value": "medium" },
     { "label": "fontSizeLarge", "value": "large" }
   ],
+  "replyControls": [
+    { "label": "replyControl1", "value": 1 },
+    { "label": "replyControl2", "value": 2 },
+    { "label": "replyControl3", "value": 3 },
+    { "label": "replyControl4", "value": 4 },
+    { "label": "replyControl5", "value": 5 }
+  ],
+  "repostControls": [
+    { "label": "repostControl1", "value": 1 },
+    { "label": "repostControl2", "value": 2 },
+    { "label": "repostControl3", "value": 3 },
+    { "label": "repostControl4", "value": 4 },
+    { "label": "repostControl5", "value": 5 }
+  ],
   "imageControls": [
     { "label": "imageControl1", "value": "all" },
-    { "label": "imageControl2", "value": "following" },
-    { "label": "imageControl3", "value": "self" },
-    { "label": "imageControl4", "value": "none" }
+    { "label": "imageControl2", "value": "followingEx" },
+    { "label": "imageControl3", "value": "following" },
+    { "label": "imageControl4", "value": "self" },
+    { "label": "imageControl5", "value": "none" }
   ],
   "layouts": [
     { "label": "layoutDefault", "value": "default" },
