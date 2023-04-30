@@ -41,6 +41,34 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- 自動翻訳 -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("autoTranslation") }}</div>
+        <div class="settings-section__body">
+          <label class="selectbox">
+            <select
+              v-model="mainState.currentSetting.autoTranslation"
+              @change="changeSetting"
+            >
+              <option
+                :value="false"
+                :selected="!mainState.currentSetting.autoTranslation"
+              >{{ $t("disabled") }}</option>
+              <option
+                :value="true"
+                :selected="mainState.currentSetting.autoTranslation"
+              >{{ $t("enabled") }}</option>
+            </select>
+          </label>
+          <ul class="notification-list">
+            <li>{{ $t("autoTranslationRemarks1") }}</li>
+            <li>{{ $t("autoTranslationRemarks2") }}</li>
+            <li>{{ $t("autoTranslationRemarks3") }}</li>
+            <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
+          </ul>
+        </div>
+      </div>
+
       <!-- フォントサイズ -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("fontSize") }}</div>
@@ -184,6 +212,23 @@ function changeSetting () {
 </template>
 
 <style lang="scss" scoped>
+.notification-list {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+
+  & > li {
+    line-height: 1.5;
+    margin-left: 1.5rem;
+    text-indent: -0.75rem;
+
+    &::before {
+      content: "⭐";
+      display: inline-block;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
 .checkboxes:not(:last-child) {
   margin-bottom: 1rem;
 }

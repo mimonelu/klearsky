@@ -212,6 +212,8 @@ function saveSettings () {
     state.settings[did].language = state.$getI18n != null
       ? state.$getI18n()
       : window.navigator.language
+  if (state.settings[did].autoTranslation == null)
+    state.settings[did].autoTranslation = false
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].replyControl == null)

@@ -1,5 +1,8 @@
 {
   "en": {
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+
     "accounts": "Accounts",
     "alts": "ALT texts",
     "apply": "Apply",
@@ -110,6 +113,12 @@
     "flatApp": "Flat",
     "tokimekiApp": "TOKIMEKI Bluesky",
 
+    "autoTranslation": "Automatic Translation",
+    "autoTranslationRemarks1": "The automatic translation uses the API of MyMemory, a translation memory operated by Translated.",
+    "autoTranslationRemarks2": "Your email address will be assigned to the automatic translation API calls. Therefore, your email address may be shared with Translated and Translated's external partners.",
+    "autoTranslationRemarks3": "There is a daily character limit for the automatic translation API calls.",
+    "autoTranslationRemarks4": "For more information, check MyMemory website.",
+
     "timelineControl": "Timeline Control",
     "timelineControlDescription": "Effective from the next download.",
     "replyControl": "Reply Control",
@@ -134,6 +143,9 @@
     "hideImage": "Hide images"
   },
   "ja": {
+    "enabled": "有効",
+    "disabled": "無効",
+
     "accounts": "アカウント",
     "alts": "代替テキスト",
     "apply": "適用",
@@ -243,6 +255,12 @@
     "wrapperApp": "Bluesky Wrapper",
     "flatApp": "Flat",
     "tokimekiApp": "TOKIMEKI Bluesky",
+
+    "autoTranslation": "自動翻訳",
+    "autoTranslationRemarks1": "自動翻訳にはTranslated社の運営する翻訳メモリ「MyMemory」のAPIを使用しています。",
+    "autoTranslationRemarks2": "自動翻訳のAPIコールにはあなたのメールアドレスが付与されます。そのため、あなたのメールアドレスがTranslated社及びTranslated社の外部パートナーと共有される可能性があります。",
+    "autoTranslationRemarks3": "自動翻訳のAPIコールには1日あたりの文字数制限があります。",
+    "autoTranslationRemarks4": "詳しくはMyMemoryのWebサイトでご確認ください。",
 
     "timelineControl": "タイムラインの制御",
     "timelineControlDescription": "次のダウンロードから有効です。",

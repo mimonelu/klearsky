@@ -86,24 +86,26 @@ const router = useRouter()
 const postElement = ref()
 
 // 自動翻訳
-const observer = new IntersectionObserver((items) => {
-  items.forEach((item) => {
-    if (!item.isIntersecting) return
-    const cid = item.target.getAttribute("data-cid")
-    if (cid !== props.post.cid || state.translation !== "none") return
-    state.translation = "waiting"
-    translateText()
+const observer = mainState.currentSetting.autoTranslation
+  ? new IntersectionObserver((items) => {
+    items.forEach((item) => {
+      if (!item.isIntersecting) return
+      const cid = item.target.getAttribute("data-cid")
+      if (cid !== props.post.cid || state.translation !== "none") return
+      state.translation = "waiting"
+      translateText()
+    })
   })
-})
+  : undefined
 
 // 自動翻訳
 onMounted(() => {
-  observer.observe(postElement.value)
+  observer?.observe(postElement.value)
 })
 
 // 自動翻訳
 onBeforeUnmount(() => {
-  observer.unobserve(postElement.value)
+  observer?.unobserve(postElement.value)
 })
 
 function isFocused (): boolean {
@@ -242,7 +244,7 @@ async function updateThisPostThread () {
 // 自動翻訳
 async function translateText () {
   if (props.post.__translatedText != null) {
-    state.translation = "ignore"
+    state.translation = "done"
     return
   }
   const text = props.post.record?.text ?? props.post.value?.text
