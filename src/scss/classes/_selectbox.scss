@@ -15,6 +15,11 @@
     &:focus, &:hover {
       border-color: rgb(var(--fg-color));
     }
+
+    & > option {
+      background-color: rgba(var(--bg-color), 0.25);
+      color: rgb(var(--fg-color));
+    }
   }
 
   &::after {

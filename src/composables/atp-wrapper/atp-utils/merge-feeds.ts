@@ -38,6 +38,8 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
 
       // 自動翻訳
       const oldTranslatedTextOfPost = oldFeed.post.__translatedText
+      const oldTranslatedTextOfQuote1 = oldFeed.post.embed?.record?.__translatedText
+      const oldTranslatedTextOfQuote2 = oldFeed.post.embed?.record?.embed?.record?.__translatedText
       const oldTranslatedTextOfRoot = oldFeed.reply?.root.__translatedText
       const oldTranslatedTextOfParent = oldFeed.reply?.parent.__translatedText
 
@@ -50,6 +52,12 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
 
       // 自動翻訳
       oldFeed.post.__translatedText = oldTranslatedTextOfPost
+      if (oldFeed.post.embed?.record != null) {
+        oldFeed.post.embed.record.__translatedText = oldTranslatedTextOfQuote1
+      }
+      if (oldFeed.post.embed?.record?.embed?.record != null) {
+        oldFeed.post.embed.record.embed.record.__translatedText = oldTranslatedTextOfQuote2
+      }
       if (oldFeed.reply != null) {
         oldFeed.reply.root.__translatedText = oldTranslatedTextOfRoot
         oldFeed.reply.parent.__translatedText = oldTranslatedTextOfParent

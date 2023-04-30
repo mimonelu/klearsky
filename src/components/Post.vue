@@ -55,7 +55,10 @@ const state = reactive<{
       // フォロイーのリポストである
       props.post.__reason?.by.viewer.following != null ||
       // プロフィールユーザーである
-      props.post.author?.did === mainState.currentProfile?.did
+      (
+        mainState.currentPath.startsWith('/profile/') &&
+        props.post.author?.did === mainState.currentProfile?.did
+      )
     )) return true
 
     // 自身とフォロイーのみ表示

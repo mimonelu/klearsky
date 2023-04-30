@@ -85,6 +85,7 @@ type TTPost = {
     $type: string
     external?: TTExternal
     images?: Array<TTImage>
+    record?: TTPost
     [k: string]: unknown
   }
   record: {
