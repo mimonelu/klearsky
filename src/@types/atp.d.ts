@@ -134,7 +134,7 @@ type TTPost = {
     [k: string]: unknown
   }
   __reason?: TTReason // Injected
-  __translatedText?: string // Injected // 自動翻訳文
+  __translatedText?: string // Injected // 自動翻訳
   [k: string]: unknown
 }
 

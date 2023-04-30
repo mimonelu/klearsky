@@ -36,7 +36,7 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
       const oldFolding = oldFeed.__folding
       const oldReplyDisplay = oldFeed.__replyDisplay
 
-      // 自動翻訳文
+      // 自動翻訳
       const oldTranslatedTextOfPost = oldFeed.post.__translatedText
       const oldTranslatedTextOfRoot = oldFeed.reply?.root.__translatedText
       const oldTranslatedTextOfParent = oldFeed.reply?.parent.__translatedText
@@ -48,7 +48,7 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
       oldFeed.__folding = oldFolding
       oldFeed.__replyDisplay = oldReplyDisplay
 
-      // 自動翻訳文
+      // 自動翻訳
       oldFeed.post.__translatedText = oldTranslatedTextOfPost
       if (oldFeed.reply != null) {
         oldFeed.reply.root.__translatedText = oldTranslatedTextOfRoot

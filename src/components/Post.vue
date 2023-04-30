@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { computed, inject, onBeforeMount, reactive, type ComputedRef } from "vue"
+import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-import { franc } from "franc"
-import { iso6393To1 } from "iso-639-3/iso6393-to-1"
+// TODO: 適切なパスで記述すること
+import { detect } from "@/../node_modules/tinyld/dist/tinyld.light.node.js"
 import AvatarLink from "@/components/AvatarLink.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
@@ -32,6 +32,7 @@ const state = reactive<{
   images: ComputedRef<Array<TTImage>>;
   displayImage: ComputedRef<boolean>;
   imageFolding: boolean;
+  translation: "none" | "ignore" | "waiting" | "done" | "failed";
 }>({
   postMenuDisplay: false,
   repostMenuDisplay: false,
@@ -74,14 +75,35 @@ const state = reactive<{
 
   // TODO: displayImage 共々 post に内包するべき
   imageFolding: false,
+
+  translation: "none",
 })
 
 state.imageFolding = !state.displayImage
 
 const router = useRouter()
 
-onBeforeMount(() => {
-  translateText()
+const postElement = ref()
+
+// 自動翻訳
+const observer = new IntersectionObserver((items) => {
+  items.forEach((item) => {
+    if (!item.isIntersecting) return
+    const cid = item.target.getAttribute("data-cid")
+    if (cid !== props.post.cid || state.translation !== "none") return
+    state.translation = "waiting"
+    translateText()
+  })
+})
+
+// 自動翻訳
+onMounted(() => {
+  observer.observe(postElement.value)
+})
+
+// 自動翻訳
+onBeforeUnmount(() => {
+  observer.unobserve(postElement.value)
 })
 
 function isFocused (): boolean {
@@ -217,24 +239,52 @@ async function updateThisPostThread () {
   emit("updateThisPostThread", posts)
 }
 
-// 自動翻訳文
+// 自動翻訳
 async function translateText () {
-  if (props.post.__translatedText != null) return
+  if (props.post.__translatedText != null) {
+    state.translation = "ignore"
+    return
+  }
   const text = props.post.record?.text ?? props.post.value?.text
-  if (text == null) return
-  const srcLanguage = iso6393To1[franc(text)]
+  if (text == null) {
+    state.translation = "ignore"
+    return
+  }
+  const srcLanguage = detect(text)
+  if (!srcLanguage) {
+    state.translation = "ignore"
+    return
+  }
   const dstLanguage = window.navigator.language
-  if (srcLanguage === dstLanguage) return
-  const response = await fetch(`https://script.google.com/macros/s/AKfycbwFQAyQsmEj0b9gKkSxUy0vbu93yzsgp_oebMPbHuWkyagefdxEKFzIlmQH0o9ouPw/exec?text=${encodeURI(text)}&target=${dstLanguage}`)
-  const json = await response.json()
-  if (json.code !== 200) return
-  props.post.__translatedText = json.text
+  if (srcLanguage === dstLanguage) {
+    state.translation = "ignore"
+    return
+  }
+  // SEE: https://mymemory.translated.net/doc/spec.php
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLanguage}|${dstLanguage}&de=${mainState.atp.session?.email}`
+  const response = await fetch(url).catch(() => {
+    state.translation = "failed"
+  })
+  if (state.translation === "failed") return
+  if (response == null) {
+    state.translation = "failed"
+    return
+  }
+  const json = await (response as Response).json()
+  if (!(json?.responseData?.translatedText)) {
+    state.translation = "failed"
+    return
+  }
+  state.translation = "done"
+  props.post.__translatedText = json.responseData.translatedText
 }
 </script>
 
 <template>
   <div
     class="post"
+    ref="postElement"
+    :data-cid="post.cid"
     :data-position="position"
     :data-repost="post.__reason != null"
     :data-focus="isFocused()"
@@ -305,12 +355,16 @@ async function translateText () {
           :entities="post.record?.entities ?? post.value?.entities"
         />
 
-        <!-- 自動翻訳文 -->
+        <!-- 自動翻訳 -->
         <div
-          v-if="props.post.__translatedText != null"
+          v-if="state.translation !== 'none' && state.translation !== 'ignore'"
           class="translated-text"
           dir="auto"
-        >{{ props.post.__translatedText }}</div>
+        >
+          <template v-if="state.translation === 'waiting'">（翻訳中）</template>
+          <template v-else-if="state.translation === 'failed'">（翻訳に失敗しました）</template>
+          <template v-else-if="state.translation === 'done'">{{ props.post.__translatedText }}</template>
+        </div>
 
         <!-- リンクボックス -->
         <LinkBox
@@ -683,7 +737,10 @@ async function translateText () {
 }
 
 .translated-text {
-  color: rgb(var(--accent-color));
+  border-top: 1px solid rgba(var(--fg-color), 0.125);
+  padding-top: 0.5em;
+  color: rgba(var(--fg-color), 0.75);
+  font-style: italic;
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
