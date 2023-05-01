@@ -214,6 +214,8 @@ function saveSettings () {
       : window.navigator.language
   if (state.settings[did].autoTranslation == null)
     state.settings[did].autoTranslation = false
+  if (state.settings[did].autoTranslationIgnoreLanguage == null)
+    state.settings[did].autoTranslationIgnoreLanguage = ""
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].replyControl == null)

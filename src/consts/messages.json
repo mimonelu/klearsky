@@ -118,6 +118,7 @@
     "autoTranslationRemarks2": "Your email address will be assigned to the automatic translation API calls. Therefore, your email address may be shared with Translated and Translated's external partners.",
     "autoTranslationRemarks3": "There is a daily character limit for the automatic translation API calls.",
     "autoTranslationRemarks4": "For more information, check MyMemory website.",
+    "autoTranslationIgnoreLanguage": "Automatic Translation - Excluded Languages",
 
     "timelineControl": "Timeline Control",
     "timelineControlDescription": "Effective from the next download.",
@@ -261,6 +262,7 @@
     "autoTranslationRemarks2": "自動翻訳のAPIコールにはあなたのメールアドレスが付与されます。そのため、あなたのメールアドレスがTranslated社及びTranslated社の外部パートナーと共有される可能性があります。",
     "autoTranslationRemarks3": "自動翻訳のAPIコールには1日あたりの文字数制限があります。",
     "autoTranslationRemarks4": "詳しくはMyMemoryのWebサイトでご確認ください。",
+    "autoTranslationIgnoreLanguage": "自動翻訳 - 除外する言語",
 
     "timelineControl": "タイムラインの制御",
     "timelineControlDescription": "次のダウンロードから有効です。",

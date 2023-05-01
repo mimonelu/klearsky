@@ -19,10 +19,15 @@
 .settings-section__sub-header {
   font-size: 1.125rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  line-height: 1.25;
 }
 
 .settings-section__body {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+
+  input[type="text"],
   input[type="url"] {
     width: 100%;
   }

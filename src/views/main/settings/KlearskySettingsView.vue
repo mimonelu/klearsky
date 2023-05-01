@@ -66,6 +66,19 @@ function changeSetting () {
             <li>{{ $t("autoTranslationRemarks3") }}</li>
             <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
           </ul>
+
+          <!-- 自動翻訳 - 除外する言語 -->
+          <div class="settings-section__sub-header">{{ $t("autoTranslationIgnoreLanguage") }}</div>
+          <input
+            v-model="mainState.currentSetting.autoTranslationIgnoreLanguage"
+            class="textbox"
+            type="text"
+            placeholder="en, zh, es, ..."
+            @change="changeSetting"
+          >
+          <ul class="notification-list">
+            <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
+          </ul>
         </div>
       </div>
 
@@ -214,7 +227,6 @@ function changeSetting () {
 <style lang="scss" scoped>
 .notification-list {
   font-size: 0.875rem;
-  margin-top: 0.5rem;
 
   & > li {
     line-height: 1.5;
@@ -227,9 +239,5 @@ function changeSetting () {
       margin-right: 0.5rem;
     }
   }
-}
-
-.checkboxes:not(:last-child) {
-  margin-bottom: 1rem;
 }
 </style>

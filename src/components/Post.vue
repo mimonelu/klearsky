@@ -96,7 +96,7 @@ const observer = mainState.currentSetting.autoTranslation
       const cid = item.target.getAttribute("data-cid")
       if (cid !== props.post.cid || state.translation !== "none") return
       state.translation = "waiting"
-      translateText()
+      translateText() // No await
     })
   })
   : undefined
@@ -259,6 +259,15 @@ async function translateText () {
   if (!srcLanguage) {
     state.translation = "ignore"
     return
+  }
+  const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
+  if (autoTranslationIgnoreLanguage != null) {
+    const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/gs, '').split(",")
+    const ignored = ignoreLanguages.includes(srcLanguage)
+    if (ignored) {
+      state.translation = "ignore"
+      return
+    }
   }
   const dstLanguage = window.navigator.language
   if (srcLanguage === dstLanguage) {

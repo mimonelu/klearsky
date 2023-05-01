@@ -1,6 +1,7 @@
 type TTSetting = {
   language?: string
   autoTranslation?: boolean
+  autoTranslationIgnoreLanguage?: string
   fontSize?: string
   replyControl?: Array<number>
   repostControl?: Array<number>
