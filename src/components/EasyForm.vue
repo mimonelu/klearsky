@@ -226,7 +226,7 @@ function onSubmitTextarea (event: KeyboardEvent) {
 
 .clear-button {
   background-color: rgb(var(--bg-color));
-  border-radius: 1px;
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
   align-items: center;
