@@ -512,7 +512,7 @@ async function translateText () {
             <a
               v-if="post.record?.lightning"
               class="icon-button--nolabel lightning"
-              :href="`lightning:${post.record?.lightning}`"
+              :href="`lightning:${post.record?.lightning.toLocaleUpperCase()}`"
               rel="noreferrer"
               @click.stop
             >
