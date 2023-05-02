@@ -10,7 +10,9 @@ import deleteLike from "@/composables/atp-wrapper/delete-like"
 import deletePost from "@/composables/atp-wrapper/delete-post"
 import deleteRepost from "@/composables/atp-wrapper/delete-repost"
 import deleteSession from "@/composables/atp-wrapper/delete-session"
+import disableBlock from "@/composables/atp-wrapper/disable-block"
 import disableMute from "@/composables/atp-wrapper/disable-mute"
+import enableBlock from "@/composables/atp-wrapper/enable-block"
 import enableMute from "@/composables/atp-wrapper/enable-mute"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
 import fetchAuthorReposts from "@/composables/atp-wrapper/fetch-author-reposts"
@@ -71,7 +73,9 @@ prototype.deleteLike = deleteLike
 prototype.deletePost = deletePost
 prototype.deleteRepost = deleteRepost
 prototype.deleteSession = deleteSession
+prototype.disableBlock = disableBlock
 prototype.disableMute = disableMute
+prototype.enableBlock = enableBlock
 prototype.enableMute = enableMute
 prototype.fetchAuthorFeed = fetchAuthorFeed
 prototype.fetchAuthorReposts = fetchAuthorReposts

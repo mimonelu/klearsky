@@ -12,10 +12,18 @@ export default async function (
   const query: AppBskyFeedGetAuthorFeed.QueryParams = { actor: author }
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
-  const response: AppBskyFeedGetAuthorFeed.Response = await (
-    this.agent as BskyAgent
-  ).getAuthorFeed(query)
-  console.log("[klearsky/getAuthorFeed]", response)
+  let responseTemp: any = undefined
+  await (this.agent as BskyAgent)
+    .getAuthorFeed(query)
+    .catch(() => {
+      // if (error.error === "BlockedActor") ブロックしている
+    })
+    .then((value: any) => {
+      responseTemp = value
+    })
+  console.log("[klearsky/getAuthorFeed]", responseTemp)
+  if (responseTemp == null) return
+  const response: AppBskyFeedGetAuthorFeed.Response = responseTemp
   if (!response.success) return
 
   // TODO:

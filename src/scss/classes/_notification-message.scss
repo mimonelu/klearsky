@@ -1,0 +1,17 @@
+.notification-message {
+  background-color: rgba(var(--notice-color), 0.75);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: flex-start;
+  grid-gap: 0.5em;
+  padding: 0.5em 1em;
+
+  & > .svg-icon {
+    fill: rgb(var(--fg-color));
+    margin-top: 0.125em;
+  }
+
+  & > span {
+    line-height: 1.25;
+  }
+}

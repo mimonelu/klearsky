@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
+import alert from "@/svg/alert.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
 import check from "@/svg/check.svg?raw"
@@ -44,6 +45,7 @@ import volumeOn from "@/svg/volume-on.svg?raw"
 import wallpaper from "@/svg/wallpaper.svg?raw"
 
 const icons: { [k: string]: string } = {
+  alert,
   at,
   bell,
   check,

@@ -42,13 +42,34 @@ function closePostMenu () {
 }
 
 async function copyHandle () {
-  await navigator.clipboard.writeText(mainState.currentProfile?.handle ?? "")
   closePostMenu()
+  await navigator.clipboard.writeText(mainState.currentProfile?.handle ?? "")
 }
 
 async function copyDid () {
-  await navigator.clipboard.writeText(mainState.currentProfile?.did ?? "")
   closePostMenu()
+  await navigator.clipboard.writeText(mainState.currentProfile?.did ?? "")
+}
+
+async function block () {
+  closePostMenu()
+  if (mainState.processing) return
+  if (mainState.currentProfile?.viewer.blocking != null) return
+  mainState.processing = true
+  const blocking = await mainState.atp.enableBlock(mainState.currentProfile?.did as string)
+  if (blocking != null && mainState.currentProfile != null)
+    mainState.currentProfile.viewer.blocking = blocking
+  mainState.processing = false
+}
+
+async function unblock () {
+  closePostMenu()
+  if (mainState.processing) return
+  if (mainState.currentProfile?.viewer.blocking == null) return
+  mainState.processing = true
+  await mainState.atp.disableBlock(mainState.currentProfile.viewer.blocking)
+  delete mainState.currentProfile.viewer.blocking
+  mainState.processing = false
 }
 </script>
 
@@ -61,6 +82,24 @@ async function copyDid () {
       @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
     />
     <div class="details">
+      <!-- ブロックしている -->
+      <div
+        v-if="mainState.currentProfile?.viewer.blocking != null"
+        class="notification-message"
+      >
+        <SVGIcon name="alert" />
+        <span>{{ $t("blocking") }}</span>
+      </div>
+
+      <!-- ブロックされている -->
+      <div
+        v-if="mainState.currentProfile?.viewer.blockedBy"
+        class="notification-message"
+      >
+        <SVGIcon name="alert" />
+        <span>{{ $t("blocked") }}</span>
+      </div>
+
       <div class="top">
         <div class="left">
           <AvatarButton
@@ -162,6 +201,26 @@ async function copyDid () {
                 >
                   <SVGIcon name="clipboard" />
                   <span>{{ $t("copyDid") }}</span>
+                </button>
+
+                <!-- ブロック -->
+                <button
+                  v-if="!isUserProfile() && mainState.currentProfile?.viewer.blocking == null"
+                  class="block"
+                  @click.stop="block"
+                >
+                  <SVGIcon name="alert" />
+                  <span>{{ $t("block") }}</span>
+                </button>
+
+                <!-- ブロック解除 -->
+                <button
+                  v-else-if="!isUserProfile()"
+                  class="block"
+                  @click.stop="unblock"
+                >
+                  <SVGIcon name="alert" />
+                  <span>{{ $t("unblock") }}</span>
                 </button>
 
                 <hr />

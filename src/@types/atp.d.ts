@@ -1,5 +1,7 @@
 type TTUserViewer = {
   muted: boolean
+  blockedBy?: boolean
+  blocking?: string
   following?: string
   followedBy?: string
   [k: string]: unknown

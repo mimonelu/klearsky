@@ -219,12 +219,11 @@ async function processPage (pageName?: null | RouteRecordName) {
 
   switch (pageName) {
     case "profile-post": {
-      const tasks: Array<Promise<void>> = []
-      if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
-        tasks.push(state.fetchCurrentAuthorFeed("new"))
+      // ブロック情報などを先に取得するために Promise.all はしない
       if (handle !== state.currentProfile?.handle)
-        tasks.push(state.fetchCurrentProfile(handle as string))
-      await Promise.all(tasks)
+        await state.fetchCurrentProfile(handle as string)
+      if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
+        await state.fetchCurrentAuthorFeed("new")
       break
     }
     case "profile-repost": {

@@ -16,6 +16,12 @@
   "mute": "Mute",
   "muting": "Unmute",
 
+  "block": "Block",
+  "unblock": "Unblock",
+  "blocked": "You are blocked by this user.",
+  "blocking": "You are blocking this user.",
+  "postBlocked": "This post cannot be displayed.",
+
   "login": "Login",
   "service": "Service",
   "identifier": "Email or Handle or DID",

@@ -424,15 +424,26 @@ async function translateText () {
         </template>
 
         <!-- 引用リポスト -->
-        <div
-          v-if="post.embed?.record && (post.embed.record as any).$type != null"
-          class="repost"
-        >
-          <Post
-            position="postInPost"
-            :post="post.embed.record as TTPost"
-          />
-        </div>
+        <template v-if="post.embed?.record && (post.embed.record as any).$type != null">
+          <!-- ブロックされていない -->
+          <template v-if="(post.embed.record.$type as string)?.indexOf('#viewBlocked') === - 1">
+            <div class="repost">
+              <Post
+                position="postInPost"
+                :post="post.embed.record as TTPost"
+              />
+            </div>
+          </template>
+
+          <!-- ブロックされている -->
+          <div
+            v-else
+            class="notification-message"
+          >
+            <SVGIcon name="alert" />
+            <span>{{ $t("postBlocked") }}</span>
+          </div>
+        </template>
 
         <!-- リアクションコンテナ -->
         <div

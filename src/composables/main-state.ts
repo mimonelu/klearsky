@@ -104,6 +104,13 @@ async function injectCreatedAt () {
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
+
+  // ブロックしている
+  if (state.currentProfile?.viewer.blocking != null) return
+
+  // ブロックされている
+  if (state.currentProfile?.viewer.blockedBy) return
+
   const cursor: undefined | string =
     await state.atp.fetchAuthorFeed(
       state.currentAuthorFeeds as Array<TTFeed>,
@@ -182,6 +189,13 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
 async function fetchFollowers (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
+
+  // ブロックしている
+  if (state.currentProfile?.viewer.blocking != null) return
+
+  // ブロックされている
+  if (state.currentProfile?.viewer.blockedBy) return
+
   const cursor: undefined | string = await state.atp.fetchFollowers(
     state.currentFollowers,
     handle,
@@ -194,6 +208,13 @@ async function fetchFollowers (direction: "new" | "old") {
 async function fetchFollowings (direction: "new" | "old") {
   const handle = state.currentQuery.handle as LocationQueryValue
   if (!handle) return
+
+  // ブロックしている
+  if (state.currentProfile?.viewer.blocking != null) return
+
+  // ブロックされている
+  if (state.currentProfile?.viewer.blockedBy) return
+
   const cursor: undefined | string = await state.atp.fetchFollowings(
     state.currentFollowings,
     handle,
