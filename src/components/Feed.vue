@@ -49,7 +49,7 @@ function removeThisPost (uri: string) {
           v-if="feed.reply?.parent != null"
           position="parent"
           :post="feed.reply.parent"
-          :data-has-child="feed.reply.parent.cid === feed.post.record?.reply?.parent?.cid"
+          :data-has-child="feed.reply.parent.cid === feed.post?.record?.reply?.parent?.cid"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         />

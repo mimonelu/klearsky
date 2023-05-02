@@ -129,8 +129,12 @@
 
   "mainAreaOpacity": "Main Area Opacity",
 
+  "background": "Wallpaper",
   "backgroundImage": "Wallpaper - URL",
   "backgroundOpacity": "Wallpaper - Opacity",
+
+  "lightning": "⚡ Lightning",
+  "lightningDescription": "Once you set up the LN-URL or Lightning Address/Invoice as the payment destination for Lightning payments, a payment link (a.k.a. Zap button) will be given to your posts.",
 
   "inviteCodes": "Invite Codes",
   "confirmInviteCodes": "Confirm invite codes",

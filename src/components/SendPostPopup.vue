@@ -86,6 +86,9 @@ async function submitCallback () {
       ...state,
       type: props.type,
       post: props.post,
+
+      // Lightning
+      lightning: mainState.currentSetting.lightning,
     })
     if (result) emit("close", true)
   } finally {

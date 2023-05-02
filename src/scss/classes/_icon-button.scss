@@ -1,9 +1,6 @@
-.icon-button {
+.icon-button,
+.icon-button--nolabel {
   cursor: pointer;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  grid-gap: 0.5em;
   margin: -0.75em;
   padding: 0.75em;
   &:focus, &:hover {
@@ -27,4 +24,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+.icon-button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  grid-gap: 0.5em;
 }

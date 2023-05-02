@@ -22,6 +22,11 @@ export default async function (
     text: richText.text,
   }
 
+  // Lightning
+  if (params.lightning) {
+    record.lightning = params.lightning
+  }
+
   if (richText.facets != null) record.facets = richText.facets
 
   // TODO: リンクボックス

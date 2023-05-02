@@ -497,9 +497,20 @@ async function translateText () {
             </button>
           </div>
           <div>
+            <!-- Lightning -->
+            <a
+              v-if="post.record?.lightning"
+              class="icon-button--nolabel lightning"
+              :href="`lightning:${post.record?.lightning}`"
+              rel="noreferrer"
+              @click.stop
+            >
+              <SVGIcon name="lightning" />
+            </a>
+
             <!-- ポストメニューボタン -->
             <button
-              class="icon-button menu-button"
+              class="icon-button--nolabel menu-button"
               @click.stop="onActivatePostMenuTrigger"
             >
               <SVGIcon name="menu" />
@@ -792,6 +803,11 @@ async function translateText () {
   @media not all and (min-width: calc($router-view-width + $main-menu-min-width)) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
+
+  & > div:last-child {
+    display: flex;
+    margin-left: auto;
+  }
 }
 
 .repost-count {
@@ -831,8 +847,13 @@ async function translateText () {
   }
 }
 
+.lightning {
+  --fg-color: 240, 0, 240;
+  margin-right: 0.75em;
+}
+
 .menu-button {
-  margin-left: auto;
+  margin-right: -0.25em;
   position: relative;
 
   .menu-ticker:deep() {

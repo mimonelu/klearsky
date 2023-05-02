@@ -7,6 +7,7 @@ type TTCreatePostParams = {
   url: string
   images: Array<File>
   alts: Array<string>
+  lightning?: string
 }
 
 type TTUpdateProfileParams = {

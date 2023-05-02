@@ -215,7 +215,7 @@ function saveSettings () {
   if (state.settings[did].autoTranslation == null)
     state.settings[did].autoTranslation = false
   if (state.settings[did].autoTranslationIgnoreLanguage == null)
-    state.settings[did].autoTranslationIgnoreLanguage = ""
+    state.settings[did].autoTranslationIgnoreLanguage = undefined
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].replyControl == null)
@@ -231,9 +231,11 @@ function saveSettings () {
   if (state.settings[did].mainAreaOpacity == null)
     state.settings[did].mainAreaOpacity = 1.0
   if (state.settings[did].backgroundImage == null)
-    state.settings[did].backgroundImage = ""
+    state.settings[did].backgroundImage = undefined
   if (state.settings[did].backgroundOpacity == null)
     state.settings[did].backgroundOpacity = 0.5
+  if (state.settings[did].lightning == null)
+    state.settings[did].lightning = undefined
   state.currentSetting = state.settings[did]
   Util.saveStorage("settings", state.settings)
 }

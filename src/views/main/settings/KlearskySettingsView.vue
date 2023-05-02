@@ -188,23 +188,21 @@ function changeSetting () {
         </div>
       </div>
 
-      <!-- 背景画像 URL -->
+      <!-- 背景画像 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("backgroundImage") }}</div>
+        <div class="settings-section__header">{{ $t("background") }}</div>
         <div class="settings-section__body">
+          <!-- 背景画像 - URL -->
+          <div class="settings-section__sub-header">{{ $t("backgroundImage") }}</div>
           <input
             v-model="mainState.currentSetting.backgroundImage"
             class="textbox"
             type="url"
             @change="changeSetting"
           >
-        </div>
-      </div>
 
-      <!-- 背景画像 不透明度 -->
-      <div class="settings-section">
-        <div class="settings-section__header">{{ $t("backgroundOpacity") }}</div>
-        <div class="settings-section__body">
+          <!-- 背景画像 - 不透明度 -->
+          <div class="settings-section__sub-header">{{ $t("backgroundOpacity") }}</div>
           <label class="selectbox">
             <select
               v-model="mainState.currentSetting.backgroundOpacity"
@@ -218,6 +216,23 @@ function changeSetting () {
               >{{ $t(backgroundOpacity.label) }}</option>
             </select>
           </label>
+        </div>
+      </div>
+
+      <!-- Lightning -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("lightning") }}</div>
+        <div class="settings-section__body">
+          <input
+            v-model="mainState.currentSetting.lightning"
+            class="textbox"
+            type="url"
+            placeholder="xxx@getalby.com, lnurlxxx, lnbcxxx, ..."
+            @change="changeSetting"
+          >
+          <ul class="notification-list">
+            <li>{{ $t("lightningDescription") }}</li>
+          </ul>
         </div>
       </div>
     </div>

@@ -35,6 +35,7 @@ export default async function (
   const bannerSchema: null | BlobRef = fileBlobRefs[1]
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
+
   await (this.agent as BskyAgent).upsertProfile(
     (
       existing: AppBskyActorProfile.Record | undefined

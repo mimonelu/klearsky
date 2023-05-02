@@ -22,6 +22,7 @@ type TTSetting = {
   mainAreaOpacity?: number
   backgroundImage?: string
   backgroundOpacity?: number
+  lightning?: string
 }
 
 type TTSettings = {

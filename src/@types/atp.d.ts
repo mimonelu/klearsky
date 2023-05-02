@@ -115,6 +115,7 @@ type TTPost = {
     }
     facets?: any
     entities?: Array<TTEntity>
+    lightning?: string // Injected
     [k: string]: unknown
   }
   value?: {
