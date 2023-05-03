@@ -87,9 +87,6 @@ async function fetchContinuousResults (direction: "new" | "old") {
 <style lang="scss" scoped>
 .like-users-popup:deep() {
   .popup {
-    width: calc($router-view-width - 2rem);
-    max-height: calc(100vh - 12rem);
-
     &-header {
       & > h2 {
         color: rgb(var(--like-color));

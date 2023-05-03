@@ -72,9 +72,9 @@ function close () {
   margin: 1rem;
   overflow: hidden;
   overscroll-behavior: none;
-  position: relative;
-  max-width: calc(100% - 2rem);
-  max-height: calc(100% - 2rem);
+  width: calc($router-view-width - 2rem);
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100svh - 10rem);
 }
 
 .popup-header {

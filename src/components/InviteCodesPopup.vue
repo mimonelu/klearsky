@@ -85,13 +85,6 @@ async function copyCode (code: string) {
 </template>
 
 <style lang="scss" scoped>
-.invite-codes-popup:deep() {
-  .popup {
-    width: calc($router-view-width - 2rem);
-    max-height: calc(100vh - 12rem);
-  }
-}
-
 .invite-code-container {
   display: grid;
   grid-template-columns: auto 1fr;
