@@ -138,6 +138,12 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchMutingUsers(
+    this: TIAtpWrapper,
+    users: Array<TTUser>,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
   fetchNotificationCount(this: TIAtpWrapper): Promise<null | number>
   fetchNotifications(
     this: TIAtpWrapper,

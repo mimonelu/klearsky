@@ -147,8 +147,11 @@
   "copyInviteCode": "Copy",
   "userOfInviteCode": "Used",
 
-  "blockingUsers": "Blocking Users",
-  "checkBlockingUsers": "Confirm blocking users",
+  "mutingUsers": "Muted Accounts",
+  "checkMutingUsers": "Confirm muted accounts",
+
+  "blockingUsers": "Blocked Accounts",
+  "checkBlockingUsers": "Confirm blocked accounts",
 
   "accounts": "Accounts",
   "newLogin": "New Login",

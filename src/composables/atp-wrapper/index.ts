@@ -25,6 +25,7 @@ import fetchHotFeeds from "@/composables/atp-wrapper/fetch-hot-feeds"
 import fetchInviteCodes from "@/composables/atp-wrapper/fetch-invite-codes"
 import fetchLikeUsers from "@/composables/atp-wrapper/fetch-like-users"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
+import fetchMutingUsers from "@/composables/atp-wrapper/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
 import fetchPost from "@/composables/atp-wrapper/fetch-post"
@@ -88,6 +89,7 @@ prototype.fetchFollowings = fetchFollowings
 prototype.fetchHotFeeds = fetchHotFeeds
 prototype.fetchInviteCodes = fetchInviteCodes
 prototype.fetchKeywordSearch = fetchKeywordSearch
+prototype.fetchMutingUsers = fetchMutingUsers
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications
 prototype.fetchPost = fetchPost

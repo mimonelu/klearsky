@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import InviteCodesPopup from "@/components/InviteCodesPopup.vue"
+import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
 
 const mainState = inject("state") as MainState
 
@@ -11,7 +12,10 @@ const state = reactive<{
   numberOfInviteCodes: ComputedRef<number>
   numberOfAvailableInviteCodes: ComputedRef<number>
 
-  // ブロックユーザーポップアップ
+  // ミュート中のユーザーポップアップ
+  mutingUsersPopupDisplay: boolean
+
+  // ブロック中のユーザーポップアップ
   blockingUsersPopupDisplay: boolean
 }>({
   // 招待コード
@@ -31,7 +35,10 @@ const state = reactive<{
     return total
   }),
 
-  // ブロックユーザーポップアップ
+  // ミュート中のユーザーポップアップ
+  mutingUsersPopupDisplay: false,
+
+  // ブロック中のユーザーポップアップ
   blockingUsersPopupDisplay: false,
 })
 
@@ -45,7 +52,17 @@ function closeInviteCodesPopup () {
   state.inviteCodesPopupDisplay = false
 }
 
-// ブロックユーザー
+// ミュート中のユーザー
+
+function openMutingUsersPopup () {
+  state.mutingUsersPopupDisplay = true
+}
+
+function closeMutingUsersPopup () {
+  state.mutingUsersPopupDisplay = false
+}
+
+// ブロック中のユーザー
 
 function openBlockingUsersPopup () {
   state.blockingUsersPopupDisplay = true
@@ -72,7 +89,18 @@ function closeBlockingUsersPopup () {
         </div>
       </div>
 
-      <!-- ブロックリスト -->
+      <!-- ミュート中のユーザーリスト -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("mutingUsers") }}</div>
+        <div class="settings-section__body">
+          <button
+            class="button"
+            @click.prevent="openMutingUsersPopup"
+          >{{ $t("checkMutingUsers") }}</button>
+        </div>
+      </div>
+
+      <!-- ブロック中のユーザーリスト -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("blockingUsers") }}</div>
         <div class="settings-section__body">
@@ -90,7 +118,13 @@ function closeBlockingUsersPopup () {
       @close="closeInviteCodesPopup"
      />
 
-    <!-- ブロックユーザーポップアップ -->
+    <!-- ミュート中のユーザーポップアップ -->
+    <MutingUsersPopup
+      v-if="state.mutingUsersPopupDisplay"
+      @close="closeMutingUsersPopup"
+     />
+
+    <!-- ブロック中のユーザーポップアップ -->
     <BlockingUsersPopup
       v-if="state.blockingUsersPopupDisplay"
       @close="closeBlockingUsersPopup"

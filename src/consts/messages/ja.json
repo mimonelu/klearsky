@@ -147,6 +147,9 @@
   "copyInviteCode": "コピーする",
   "userOfInviteCode": "使用済み",
 
+  "mutingUsers": "ミュート中のユーザー",
+  "checkMutingUsers": "ミュート中のユーザーを確認する",
+
   "blockingUsers": "ブロック中のユーザー",
   "checkBlockingUsers": "ブロック中のユーザーを確認する",
 

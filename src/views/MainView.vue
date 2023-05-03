@@ -163,6 +163,8 @@ function resetState () {
   state.currentSearchUsersCursor = undefined
   state.currentSearchUserTerm = ""
   state.currentSearchLastUserTerm = ""
+  state.currentMutingUsers = []
+  state.currentMutingUsersCursor = undefined
   state.currentBlockingUsers = []
   state.currentBlockingUsersCursor = undefined
   state.currentPath = ""

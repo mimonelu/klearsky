@@ -80,6 +80,9 @@ type MainState = {
   currentLikeUsersCursor?: string
   likeUsersPopupDisplay: boolean
 
+  currentMutingUsers: Array<TTUser>
+  currentMutingUsersCursor?: string
+
   currentBlockingUsers: Array<TTUser>
   currentBlockingUsersCursor?: string
 
