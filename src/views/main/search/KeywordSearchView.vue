@@ -44,13 +44,20 @@ async function fetchNewResults () {
         <RouterLink
           v-for="result, resultIndex of mainState.currentSearchKeywordResults"
           :key="resultIndex"
-          :to="{ name: 'post', query: { postUri: `at://${result.user?.did}/${result.tid}` } }"
+          :to="{ name: 'post', query: { postUri: result.uri } }"
           class="item"
         >
-          <div class="created-at">{{ Util.dateLabel(
-            result.post?.createdAt,
-            mainState.currentSetting.language
-          ) }}</div>
+          <div class="item__top">
+            <RouterLink
+              :to="{ name: 'profile-post', query: { handle: result.user.handle } }"
+              class="textlink handle"
+              @click.stop
+            >{{ result.user.handle }}</RouterLink>
+            <div class="created-at">{{ Util.dateLabel(
+              result.post?.createdAt,
+              mainState.currentSetting.language
+            ) }}</div>
+          </div>
           <div class="text">{{ result.post?.text }}</div>
         </RouterLink>
       </div>
@@ -87,13 +94,31 @@ async function fetchNewResults () {
   grid-gap: 0.25rem;
   padding: 1rem;
   &:focus, &:hover {
-    background-color: rgba(var(--accent-color), 0.25);
+    background-color: rgba(var(--accent-color), 0.125);
   }
+
+  &__top {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: 1fr min-content;
+    align-items: center;
+  }
+}
+
+.handle {
+  font-weight: bold;
+  flex-grow: 1;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .created-at {
   color: rgba(var(--fg-color), 0.5);
   font-size: 0.875rem;
+  line-height: 1.25;
+  white-space: nowrap;
 }
 
 .text {
