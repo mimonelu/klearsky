@@ -11,7 +11,7 @@ const iconMap: { [reason: string]: string } = {
   follow: "person",
   invite: "mail",
   mention: "at",
-  quote: "post", // TODO:
+  quote: "quoteRepost",
   reply: "post",
   repost: "repost",
   like: "heart",
@@ -60,14 +60,6 @@ function makeSubjectTo (notification: TTNotification): any {
       :data-has-folder="isGroupingReason(notificationGroup.reason) &&
         notificationGroup.notifications.length >= 2"
     >
-      <!-- 新着通知内包アイコン -->
-      <div
-        v-if="notificationGroupHasNew(notificationGroup) &&
-          isGroupingReason(notificationGroup.reason) &&
-          notificationGroup.notifications.length >= 2"
-        class="new"
-      >NEW</div>
-
       <!-- ユーザーポスト -->
       <RouterLink
         :to="{ name: 'post', query: { postUri: notificationGroup.reasonSubject } }"
@@ -88,6 +80,14 @@ function makeSubjectTo (notification: TTNotification): any {
           :data-folding="notificationGroup.__folding"
           @click.prevent.stop="notificationGroup.__folding = !notificationGroup.__folding"
         >
+          <!-- 新着通知内包アイコン -->
+          <div
+            v-if="notificationGroupHasNew(notificationGroup) &&
+              isGroupingReason(notificationGroup.reason) &&
+              notificationGroup.notifications.length >= 2"
+            class="new"
+          >NEW</div>
+
           <SVGIcon
             class="icon icon--reason"
             :name="iconMap[notificationGroup.reason]"
@@ -160,8 +160,10 @@ function makeSubjectTo (notification: TTNotification): any {
 <style lang="scss" scoped>
 // 通知グループ
 .notification-group {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.125);
   padding: 1rem;
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+  }
 
   // reason ごとの処理
   &[data-reason="reply"] {
@@ -182,12 +184,6 @@ function makeSubjectTo (notification: TTNotification): any {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-  }
-
-  // 新着通知内包アイコン
-  & > .new {
-    display: inline-block;
-    margin-bottom: 0.5rem;
   }
 
   // 通知フォルダー開閉ボタンを持つ通知グループの処理
@@ -228,6 +224,12 @@ function makeSubjectTo (notification: TTNotification): any {
   padding: 0.75rem;
   &:focus, &:hover {
     cursor: pointer;
+  }
+
+  // 新着通知内包アイコン
+  & > .new {
+    font-size: 0.875rem;
+    margin: -0.375rem 0;
   }
 
   & > span {
@@ -285,7 +287,7 @@ function makeSubjectTo (notification: TTNotification): any {
   border-radius: var(--border-radius);
   color: rgb(var(--accent-color));
   font-weight: bold;
-  padding: 0.25rem;
+  padding: 0.25rem 0.5rem;
 }
 
 // reason アイコン
@@ -297,13 +299,14 @@ function makeSubjectTo (notification: TTNotification): any {
     fill: rgb(var(--fg-color));
   }
   [data-reason="mention"] & {
-    fill: rgb(var(--fg-color));
+    fill: rgb(var(--post-color));
   }
   [data-reason="quote"] & {
-    fill: rgb(var(--post-color));
+    fill: rgb(var(--share-color));
   }
   [data-reason="reply"] & {
     fill: rgb(var(--post-color));
+    transform: scaleX(-1);
   }
   [data-reason="repost"] & {
     fill: rgb(var(--share-color));
