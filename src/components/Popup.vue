@@ -38,6 +38,7 @@ function close () {
           <SVGIcon name="cross" />
         </button>
       </header>
+      <slot name="header-after" />
       <div class="popup-body">
         <slot name="body" />
       </div>

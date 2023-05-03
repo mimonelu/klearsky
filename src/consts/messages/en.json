@@ -147,6 +147,9 @@
   "copyInviteCode": "Copy",
   "userOfInviteCode": "Used",
 
+  "blockingUsers": "Blocking Users",
+  "checkBlockingUsers": "Confirm blocking users",
+
   "accounts": "Accounts",
   "newLogin": "New Login",
   "logout": "Logout",

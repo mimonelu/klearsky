@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import InviteCodesPopup from "@/components/InviteCodesPopup.vue"
 
 const mainState = inject("state") as MainState
@@ -9,6 +10,9 @@ const state = reactive<{
   inviteCodesPopupDisplay: boolean
   numberOfInviteCodes: ComputedRef<number>
   numberOfAvailableInviteCodes: ComputedRef<number>
+
+  // ブロックユーザーポップアップ
+  blockingUsersPopupDisplay: boolean
 }>({
   // 招待コード
   inviteCodesPopupDisplay: false,
@@ -26,6 +30,9 @@ const state = reactive<{
     })
     return total
   }),
+
+  // ブロックユーザーポップアップ
+  blockingUsersPopupDisplay: false,
 })
 
 // 招待コード
@@ -36,6 +43,16 @@ function openInviteCodesPopup () {
 
 function closeInviteCodesPopup () {
   state.inviteCodesPopupDisplay = false
+}
+
+// ブロックユーザー
+
+function openBlockingUsersPopup () {
+  state.blockingUsersPopupDisplay = true
+}
+
+function closeBlockingUsersPopup () {
+  state.blockingUsersPopupDisplay = false
 }
 </script>
 
@@ -54,12 +71,29 @@ function closeInviteCodesPopup () {
           >{{ $t("confirmInviteCodes") }}</button>
         </div>
       </div>
+
+      <!-- ブロックリスト -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("blockingUsers") }}</div>
+        <div class="settings-section__body">
+          <button
+            class="button"
+            @click.prevent="openBlockingUsersPopup"
+          >{{ $t("checkBlockingUsers") }}</button>
+        </div>
+      </div>
     </div>
 
     <!-- 招待コードポップアップ -->
     <InviteCodesPopup
       v-if="state.inviteCodesPopupDisplay"
       @close="closeInviteCodesPopup"
+     />
+
+    <!-- ブロックユーザーポップアップ -->
+    <BlockingUsersPopup
+      v-if="state.blockingUsersPopupDisplay"
+      @close="closeBlockingUsersPopup"
      />
   </div>
 </template>

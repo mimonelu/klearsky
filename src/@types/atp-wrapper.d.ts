@@ -100,6 +100,12 @@ interface TIAtpWrapper {
     cid: string,
     did?: string
   ): Promise<null | Uint8Array>
+  fetchBlockingUsers(
+    this: TIAtpWrapper,
+    users: Array<TTUser>,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
   fetchFollowings(
     this: TIAtpWrapper,
     users: Array<TTUser> | Array<TTUser>,

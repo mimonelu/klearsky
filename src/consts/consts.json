@@ -3,6 +3,7 @@
   "limitOfFetchAuthorFeeds": 30,
   "limitOfFetchAuthorReposts": 15,
   "limitOfFetchAuthorLikes": 15,
+  "limitOfFetchBlockingUsers": 30,
   "limitOfFetchFollows": 30,
   "limitOfFetchHotFeeds": 30,
   "limitOfFetchLikeUsers": 30,
