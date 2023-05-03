@@ -8,9 +8,23 @@
 * Production: https://klearsky.pages.dev/
 * Staging: https://staging.klearsky.pages.dev/
 
+## カスタムフィールド
+* POST.record.lightning?: string
+  * Zapボタンで使用
+
+## 外部連携サービス
+* MyMemory
+  * 自動翻訳で使用。ユーザーのメールアドレスを自動付与している
+* Lightning Network
+  * Zapボタンで使用。 `lightning:` プロトコルでリンクしているだけ
+
 ## Coproduct
 * rollup-plugin-visualizer
-  * `npm run build` で `/coproduct/stats.html` が生成される
+  * `npm run build` で `/coproduct/stats.html` を生成
+
+## Tools
+* svg-list.js
+  * 使用中のSVGファイルを一覧できるHTMLを生成
 
 ## デザインリソース
 * ロゴのフォント: https://fonts.google.com/specimen/Albert+Sans?preview.text=Klearsky&preview.size=64&preview.text_type=custom&category=Sans+Serif,Display
