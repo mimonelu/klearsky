@@ -145,4 +145,10 @@ type MainState = {
   closeRepostUsersPopup: () => void
   openLikeUsersPopup: (uri: string) => void
   closeLikeUsersPopup: () => void
+
+  messagePopupDisplay: boolean
+  messagePopupTitle?: string
+  messagePopupText?: string
+  openMessagePopup: (title?: string, text?: string) => void
+  closeMessagePopup: () => void
 }

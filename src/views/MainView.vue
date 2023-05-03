@@ -21,6 +21,7 @@ import LikeUsersPopup from "@/components/LikeUsersPopup.vue"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
 import MainMenu from "@/components/MainMenu.vue"
+import MessagePopup from "@/components/MessagePopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
@@ -175,6 +176,9 @@ function resetState () {
   state.notificationCursor = undefined
   state.notificationCount = 0
   state.scrolledToBottom = false
+  state.messagePopupDisplay = false
+  state.messagePopupTitle = undefined
+  state.messagePopupText = undefined
 }
 
 async function autoLogin (): Promise<boolean> {
@@ -417,6 +421,10 @@ function scrollListener () {
     <LoginPopup
       v-if="state.loginPopupAutoDisplay"
       @login="manualLogin"
+    />
+    <MessagePopup
+      v-if="state.messagePopupDisplay"
+      @close="state.closeMessagePopup"
     />
     <Loader v-if="state.processing" />
   </div>

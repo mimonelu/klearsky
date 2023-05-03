@@ -91,6 +91,11 @@ function onActivateImage () {
       : "/img/void.png"
   mainState.imagePopupProps.display = true
 }
+
+function onActivateAlt (alt: string) {
+  Util.blurElement()
+  mainState.openMessagePopup("ALT", alt)
+}
 </script>
 
 <template>
@@ -101,6 +106,11 @@ function onActivateImage () {
       :alt="image?.alt ?? ''"
       @click.prevent.stop="onActivateImage"
     />
+    <button
+      v-if="image?.alt"
+      class="button alt-button"
+      @click.stop="onActivateAlt(image.alt)"
+    >ALT</button>
     <Loader
       v-if="!state.loaded"
       @click.stop
@@ -113,8 +123,16 @@ function onActivateImage () {
   position: relative;
 }
 
+.alt-button {
+  border-radius: 0 var(--border-radius) 0 0;
+  font-size: 0.75em;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
 .loader {
-  font-size: 0.75rem;
+  font-size: 0.75em;
   z-index: unset;
 }
 </style>

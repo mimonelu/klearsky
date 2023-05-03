@@ -59,6 +59,8 @@ const state = reactive<MainState>({
   closeRepostUsersPopup,
   openLikeUsersPopup,
   closeLikeUsersPopup,
+  openMessagePopup,
+  closeMessagePopup,
 })
 
 function forceUpdate () {
@@ -330,6 +332,16 @@ async function openLikeUsersPopup (uri: string) {
 
 function closeLikeUsersPopup () {
   state.likeUsersPopupDisplay = false
+}
+
+async function openMessagePopup (title?: string, text?: string) {
+  state.messagePopupTitle = title
+  state.messagePopupText = text
+  state.messagePopupDisplay = true
+}
+
+function closeMessagePopup () {
+  state.messagePopupDisplay = false
 }
 
 export default state
