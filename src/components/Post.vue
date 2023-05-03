@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-import { decodelnurl } from "js-lnurl"
 // TODO: 適切なパスで記述すること
 import { detect } from "@/../node_modules/tinyld/dist/tinyld.light.node.js"
 import AvatarLink from "@/components/AvatarLink.vue"
@@ -203,43 +202,6 @@ async function onActivateLikeButton () {
     await updateThisPostThread()
   } finally {
     state.processing = false
-  }
-}
-
-async function sendLightning (event: Event) {
-  Util.blurElement()
-  const lnurl = props.post.record?.lightning
-  if (!lnurl) return
-
-  if (!lnurl.startsWith("lnurl")) return
-  event.preventDefault()
-
-  if (mainState.processing) return
-  mainState.processing = true
-  try {
-    const apiUrl = decodelnurl(lnurl)
-
-    const apiRequest = new Request(
-      `https://mimonelu.net:4649/${apiUrl}`,
-      { headers: { "user-agent": "Klearsky" } }
-    )
-    const apiResponse = await fetch(apiRequest)
-    const apiJson: null | any = await apiResponse.json()
-    if (apiJson?.callback == null || apiJson?.minSendable == null) return
-
-    const callbackRequest = new Request(
-      `https://mimonelu.net:4649/${apiJson.callback}?amount=${apiJson.minSendable}`,
-      { headers: { "user-agent": "Klearsky" } }
-    )
-    const callbackResponse = await fetch(callbackRequest)
-    const callbackJson: null | any = await callbackResponse.json()
-    if (callbackJson?.pr == null) return
-
-    const link = document.createElement("a")
-    link.setAttribute("href", `lightning:${callbackJson.pr}`)
-    link.click()
-  } finally {
-    mainState.processing = false
   }
 }
 
@@ -549,9 +511,10 @@ async function translateText () {
             <!-- Lightning -->
             <a
               v-if="post.record?.lightning"
-              :href="`lightning:${post.record?.lightning}`"
               class="icon-button--nolabel lightning"
-              @click.stop="sendLightning"
+              :href="`lightning:${post.record?.lightning}`"
+              rel="noreferrer"
+              @click.stop
             >
               <SVGIcon name="lightning" />
             </a>
