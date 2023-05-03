@@ -27,5 +27,5 @@ coverage
 *.sln
 *.sw?
 
-docs
+docs/*
 coproduct
