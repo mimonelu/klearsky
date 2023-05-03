@@ -140,7 +140,7 @@
   "backgroundOpacity": "壁紙 - 不透明度",
 
   "lightning": "⚡ Lightning",
-  "lightningDescription": "ライトニング決済の支払先となるLN-URLやLightning Address/Invoiceを設定すると、あなたのポストに支払リンク（いわゆるZapボタン）が付与されます。",
+  "lightningDescription": "ライトニング決済の支払先となるLN-URLやLightning Addressを設定すると、あなたのポストに支払リンク（いわゆるZapボタン）が付与されます。",
 
   "inviteCodes": "招待コード",
   "confirmInviteCodes": "招待コードを確認する",

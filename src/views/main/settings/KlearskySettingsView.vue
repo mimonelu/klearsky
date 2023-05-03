@@ -227,7 +227,7 @@ function changeSetting () {
             v-model="mainState.currentSetting.lightning"
             class="textbox"
             type="url"
-            placeholder="xxx@getalby.com, lnurlxxx, lnbcxxx, ..."
+            placeholder="sample@wallet.com, lnurlxxx, lnbcxxx, ..."
             @change="changeSetting"
           >
           <ul class="notification-list">
