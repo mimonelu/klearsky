@@ -8,6 +8,8 @@ const props = defineProps<{
   did?: string
 }>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
@@ -94,7 +96,7 @@ function onActivateImage () {
 
 function onActivateAlt (alt: string) {
   Util.blurElement()
-  mainState.openMessagePopup("ALT", alt)
+  mainState.openMessagePopup($t("alt"), alt)
 }
 </script>
 

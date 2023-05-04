@@ -1,10 +1,13 @@
 {
   "title": "Klearsky",
 
+  "cancel": "Cancel",
+  "yes": "Yes",
   "apply": "Apply",
   "enabled": "Enabled",
   "disabled": "Disabled",
   "error": "Error",
+  "alt": "ALT",
 
   "follow": "Follow",
   "followed": "Follows you",
@@ -156,6 +159,8 @@
   "accounts": "Accounts",
   "newLogin": "New Login",
   "logout": "Logout",
+  "removeAccountHistory": "Delete account history",
+  "removeAccountHistoryMessage": "This account will be deleted from account history. Are you sure?",
 
   "sendPost": "New Post",
   "post": "Post",

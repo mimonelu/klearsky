@@ -16,6 +16,7 @@ import {
   type RouteRecordName
 } from "vue-router"
 import hotkeys from "hotkeys-js"
+import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
 import ImagePopup from "@/components/ImagePopup.vue"
 import LikeUsersPopup from "@/components/LikeUsersPopup.vue"
 import Loader from "@/components/Loader.vue"
@@ -179,6 +180,10 @@ function resetState () {
   state.messagePopupDisplay = false
   state.messagePopupTitle = undefined
   state.messagePopupText = undefined
+  state.confirmationPopupDisplay = false
+  state.confirmationPopupTitle = undefined
+  state.confirmationPopupText = undefined
+  state.confirmationPopupResult = false
 }
 
 async function autoLogin (): Promise<boolean> {
@@ -425,6 +430,11 @@ function scrollListener () {
     <MessagePopup
       v-if="state.messagePopupDisplay"
       @close="state.closeMessagePopup"
+    />
+    <ConfirmationPopup
+      v-if="state.confirmationPopupDisplay"
+      @close="state.closeConfirmationPopup"
+      @apply="state.applyConfirmationPopup"
     />
     <Loader v-if="state.processing" />
   </div>

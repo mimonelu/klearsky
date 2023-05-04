@@ -151,4 +151,12 @@ type MainState = {
   messagePopupText?: string
   openMessagePopup: (title?: string, text?: string) => void
   closeMessagePopup: () => void
+
+  confirmationPopupDisplay: boolean
+  confirmationPopupTitle?: string
+  confirmationPopupText?: string
+  confirmationPopupResult: boolean
+  openConfirmationPopup: (title?: string, text?: string) => Promise<boolean>
+  closeConfirmationPopup: () => void
+  applyConfirmationPopup: () => void
 }

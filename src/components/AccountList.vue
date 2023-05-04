@@ -7,6 +7,8 @@ defineProps<{
   hasDeleteButton: boolean;
 }>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
@@ -37,9 +39,10 @@ async function login (session: TTSession) {
   location.reload()
 }
 
-function deleteAccount (session: TTSession) {
+async function deleteAccount (session: TTSession) {
   Util.blurElement()
-  mainState.atp.deleteAccount(session.did)
+  const result = await mainState.openConfirmationPopup($t("removeAccountHistory"), $t("removeAccountHistoryMessage"))
+  if (result) mainState.atp.deleteAccount(session.did)
 }
 
 function getDidColor (did: string): string {

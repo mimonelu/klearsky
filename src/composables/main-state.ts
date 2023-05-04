@@ -61,6 +61,9 @@ const state = reactive<MainState>({
   closeLikeUsersPopup,
   openMessagePopup,
   closeMessagePopup,
+  openConfirmationPopup,
+  closeConfirmationPopup,
+  applyConfirmationPopup,
 })
 
 function forceUpdate () {
@@ -334,7 +337,7 @@ function closeLikeUsersPopup () {
   state.likeUsersPopupDisplay = false
 }
 
-async function openMessagePopup (title?: string, text?: string) {
+function openMessagePopup (title?: string, text?: string) {
   state.messagePopupTitle = title
   state.messagePopupText = text
   state.messagePopupDisplay = true
@@ -342,6 +345,25 @@ async function openMessagePopup (title?: string, text?: string) {
 
 function closeMessagePopup () {
   state.messagePopupDisplay = false
+}
+
+async function openConfirmationPopup (title?: string, text?: string): Promise<boolean> {
+  state.confirmationPopupTitle = title
+  state.confirmationPopupText = text
+  state.confirmationPopupResult = false
+  state.confirmationPopupDisplay = true
+  await Util.waitProp(() => state.confirmationPopupDisplay, false)
+  return state.confirmationPopupResult
+}
+
+function closeConfirmationPopup () {
+  state.confirmationPopupResult = false
+  state.confirmationPopupDisplay = false
+}
+
+function applyConfirmationPopup () {
+  state.confirmationPopupResult = true
+  state.confirmationPopupDisplay = false
 }
 
 export default state

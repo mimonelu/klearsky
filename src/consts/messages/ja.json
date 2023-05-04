@@ -1,10 +1,13 @@
 {
   "title": "Klearsky",
 
+  "cancel": "キャンセル",
+  "yes": "はい",
   "apply": "適用",
   "enabled": "有効",
   "disabled": "無効",
   "error": "エラー",
+  "alt": "ALT",
 
   "follow": "フォローする",
   "followed": "あなたをフォロー中",
@@ -156,6 +159,8 @@
   "accounts": "アカウント",
   "newLogin": "新規ログイン",
   "logout": "ログアウト",
+  "removeAccountHistory": "アカウント履歴の削除",
+  "removeAccountHistoryMessage": "このアカウントを履歴から削除します。よろしいですか？",
 
   "sendPost": "ポストを投稿する",
   "post": "ポスト",
