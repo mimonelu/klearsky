@@ -591,8 +591,12 @@ function scrollListener () {
   flex-direction: column;
   flex-grow: 1;
   max-width: $router-view-width;
+
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
+  }
+  @media not all and (min-width: $sp-width) {
+    border-left-style: none;
   }
 
   & > .feed-list {
