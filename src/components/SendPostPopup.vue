@@ -5,7 +5,7 @@ import Popup from "@/components/Popup.vue"
 import Post from "@/components/Post.vue"
 import Util from "@/composables/util/index"
 
-const emit = defineEmits<{(event: string, done: boolean): void}>()
+const emit = defineEmits<{(event: string, done: boolean, empty: boolean): void}>()
 
 const props = defineProps<{
   type: TTPostType;
@@ -74,7 +74,7 @@ const easyFormProps: TTEasyForm = {
 }
 
 function close () {
-  emit("close", false)
+  emit("closeSnedPostPopup", false, isEmpty())
 }
 
 async function submitCallback () {
@@ -90,10 +90,17 @@ async function submitCallback () {
       // Lightning
       lightning: mainState.currentSetting.lightning,
     })
-    if (result) emit("close", true)
+    if (result) emit("closeSnedPostPopup", true, true)
   } finally {
     mainState.processing = false
   }
+}
+
+function isEmpty (): boolean {
+  return !state.text &&
+    !state.url &&
+    state.images.length === 0 &&
+    state.alts.length === 0
 }
 </script>
 

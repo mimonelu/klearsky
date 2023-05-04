@@ -331,6 +331,15 @@ async function updateInviteCodes () {
   state.inviteCodes.splice(0, state.inviteCodes.length, ...inviteCodes)
 }
 
+async function closeSendPostPopup (done: boolean, empty: boolean) {
+  if (empty) {
+    state.closeSendPostPopup(done)
+    return
+  }
+  const result = await state.openConfirmationPopup($t("cancelPost"), $t("cancelPostMessage"))
+  if (result) state.closeSendPostPopup(done)
+}
+
 function scrollToFocused () {
   const focusElement = document.querySelector("[data-focus='true']")
   if (focusElement != null) focusElement.scrollIntoView({
@@ -421,7 +430,7 @@ function scrollListener () {
       :type="state.sendPostPopupProps.type"
       :post="state.sendPostPopupProps.post"
       :text="state.sendPostPopupProps.text"
-      @close="state.closeSendPostPopup"
+      @closeSnedPostPopup="closeSendPostPopup"
     />
     <LoginPopup
       v-if="state.loginPopupAutoDisplay"

@@ -3,6 +3,7 @@
 
   "cancel": "Cancel",
   "yes": "Yes",
+  "no": "No",
   "apply": "Apply",
   "enabled": "Enabled",
   "disabled": "Disabled",
@@ -172,6 +173,8 @@
   "imageBoxes": "Images",
   "alts": "ALT texts",
   "submit": "Submit",
+  "cancelPost": "Cancel Post",
+  "cancelPostMessage": "The entered information will be reset. Are you sure?",
 
   "$comment": "-- Probably unused --",
   "delete": "Delete",

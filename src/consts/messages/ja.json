@@ -3,6 +3,7 @@
 
   "cancel": "キャンセル",
   "yes": "はい",
+  "no": "いいえ",
   "apply": "適用",
   "enabled": "有効",
   "disabled": "無効",
@@ -172,6 +173,8 @@
   "imageBoxes": "画像",
   "alts": "代替テキスト",
   "submit": "送信",
+  "cancelPost": "ポストのキャンセル",
+  "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
 
   "$comment": "-- Probably unused --",
   "delete": "削除する",

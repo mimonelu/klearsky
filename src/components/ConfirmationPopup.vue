@@ -46,7 +46,7 @@ function apply () {
           class="button--bordered"
           ref="cancelButton"
           @click="close"
-        >{{ $t("cancel") }}</button>
+        >{{ $t("no") }}</button>
         <button
           class="button"
           @click="apply"
