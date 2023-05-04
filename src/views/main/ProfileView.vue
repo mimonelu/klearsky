@@ -68,6 +68,11 @@ async function unblock () {
   if (mainState.currentProfile?.viewer.blocking == null) return
   mainState.processing = true
   await mainState.atp.disableBlock(mainState.currentProfile.viewer.blocking)
+
+  mainState.currentBlockingUsers = mainState.currentBlockingUsers.filter((user: TTUser) => {
+    return user.viewer.blocking !== mainState.currentProfile?.viewer.blocking
+  })
+
   delete mainState.currentProfile.viewer.blocking
   mainState.processing = false
 }

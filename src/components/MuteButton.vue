@@ -25,6 +25,10 @@ async function toggleMute () {
     if (props.viewer.muted) {
       await mainState.atp.disableMute(props.handle)
       props.viewer.muted = false
+
+      mainState.currentMutingUsers = mainState.currentMutingUsers.filter((user: TTUser) => {
+        return user.handle !== props.handle
+      })
     } else {
       await mainState.atp.enableMute(props.handle)
       props.viewer.muted = true
