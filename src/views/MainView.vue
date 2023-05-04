@@ -21,7 +21,8 @@ import ImagePopup from "@/components/ImagePopup.vue"
 import LikeUsersPopup from "@/components/LikeUsersPopup.vue"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
-import MainMenu from "@/components/MainMenu.vue"
+import MainMenuHorizontal from "@/components/MainMenuHorizontal.vue"
+import MainMenuVertical from "@/components/MainMenuVertical.vue"
 import MessagePopup from "@/components/MessagePopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
@@ -395,8 +396,11 @@ function scrollListener () {
       v-show="!state.loginPopupAutoDisplay"
       class="main"
     >
-      <div class="main-menu-wrapper">
-        <MainMenu />
+      <div class="main-menu-vertical-wrapper">
+        <MainMenuVertical />
+      </div>
+      <div class="main-menu-horizontal-wrapper">
+        <MainMenuHorizontal />
       </div>
       <div class="router-view-wrapper">
         <RouterView />
@@ -525,9 +529,13 @@ function scrollListener () {
   position: relative;
   max-width: $max-width;
   min-height: 100vh;
+
+  @media not all and (min-width: $sp-width) {
+    padding-bottom: 3rem;
+  }
 }
 
-.main-menu-wrapper {
+.main-menu-vertical-wrapper {
   overflow: hidden;
   position: relative;
   @media (max-width: $max-width-with-scrollbar) {
@@ -538,8 +546,11 @@ function scrollListener () {
     min-width: $menu-max-width;
     max-width: $menu-max-width;
   }
+  @media not all and (min-width: $sp-width) {
+    display: none;
+  }
 
-  & > .main-menu {
+  & > .main-menu-vertical {
     position: fixed;
     top: 0;
     .main-view[data-layout="default"] &,
@@ -558,6 +569,18 @@ function scrollListener () {
   .main-view[data-layout="slimRight"] & {
     min-width: $main-menu-min-width;
     max-width: $main-menu-min-width;
+  }
+}
+
+.main-menu-horizontal-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  width: 100vw;
+
+  @media (min-width: $sp-width) {
+    display: none;
   }
 }
 

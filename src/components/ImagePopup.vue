@@ -174,7 +174,7 @@ function close () {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   height: 100%;
   &[data-mode="false"] {

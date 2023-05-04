@@ -38,7 +38,7 @@ function moveToBottom () {
 </script>
 
 <template>
-  <div class="main-menu">
+  <div class="main-menu-vertical">
     <!-- バックボタン -->
     <button
       v-if="state.canBack"
@@ -193,7 +193,7 @@ function moveToBottom () {
   }
 }
 
-.main-menu {
+.main-menu-vertical {
   display: flex;
   flex-direction: column;
   grid-gap: 1px;

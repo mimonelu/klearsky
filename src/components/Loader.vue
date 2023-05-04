@@ -19,7 +19,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
   height: 100%;
 
