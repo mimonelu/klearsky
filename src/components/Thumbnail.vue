@@ -109,7 +109,7 @@ function onActivateAlt (alt: string) {
     <button
       v-if="image?.alt"
       class="button alt-button"
-      @click.stop="onActivateAlt(image.alt)"
+      @click.prevent.stop="onActivateAlt(image.alt)"
     >ALT</button>
     <Loader
       v-if="!state.loaded"
