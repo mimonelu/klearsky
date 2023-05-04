@@ -42,6 +42,7 @@
   "translate": "翻訳する",
   "sendMention": "メンションを送る",
   "deletePost": "ポストを削除する",
+  "deletePostMessage": "このポストを削除します。よろしいですか？",
   "openOtherApp": "他のアプリで開く",
   "officialApp": "公式Webアプリ",
   "wrapperApp": "Bluesky Wrapper",

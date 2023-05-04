@@ -20,6 +20,8 @@ const props = defineProps<{
   openSource?: any;
 }>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 async function copyText () {
@@ -47,7 +49,9 @@ async function sendMention () {
 async function deletePost () {
   Util.blurElement()
   if (props.deletePostUri == null) return
-  emit("removeThisPost", props.deletePostUri)
+  emit("close")
+  const result = await mainState.openConfirmationPopup($t("deletePost"), $t("deletePostMessage"))
+  if (result) emit("removeThisPost", props.deletePostUri)
 }
 
 function openOtherApp (app: any) {

@@ -42,6 +42,7 @@
   "translate": "Translate",
   "sendMention": "Send mention",
   "deletePost": "Delete post",
+  "deletePostMessage": "This post will be deleted. Are you sure?",
   "openOtherApp": "Open in other apps",
   "officialApp": "Official Web App",
   "wrapperApp": "Bluesky Wrapper",
