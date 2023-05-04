@@ -23,8 +23,14 @@ function close () {
 </script>
 
 <template>
-  <div class="popup-overlay">
-    <div class="popup">
+  <div
+    class="popup-overlay"
+    @click="close"
+  >
+    <div
+      class="popup"
+      @click.stop
+    >
       <header
         v-if="$slots.header"
         class="popup-header"
