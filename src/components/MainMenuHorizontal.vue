@@ -37,9 +37,7 @@ async function openSendPostPopup () {
       to="/home"
       @click.prevent
     >
-      <div class="icon">
-        <SVGIcon name="home" />
-      </div>
+      <SVGIcon name="home" />
     </RouterLink>
 
     <!-- HOTボタン -->
@@ -48,9 +46,7 @@ async function openSendPostPopup () {
       to="/hot"
       @click.prevent
     >
-      <div class="icon">
-        <SVGIcon name="fire" />
-      </div>
+      <SVGIcon name="fire" />
     </RouterLink>
 
     <!-- 検索ボタン -->
@@ -60,9 +56,7 @@ async function openSendPostPopup () {
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
       @click.prevent
     >
-      <div class="icon">
-        <SVGIcon name="search" />
-      </div>
+      <SVGIcon name="search" />
     </RouterLink>
 
     <!-- 通知ボタン -->
@@ -71,15 +65,13 @@ async function openSendPostPopup () {
       to="/notifications"
       @click.prevent
     >
-      <div class="icon">
-        <SVGIcon name="bell" />
+      <SVGIcon name="bell" />
 
-        <!-- 通知バッジ -->
-        <div
-          v-if="mainState.notificationCount > 0"
-          class="notification-count"
-        >{{ mainState.notificationCount }}</div>
-      </div>
+      <!-- 通知バッジ -->
+      <div
+        v-if="mainState.notificationCount > 0"
+        class="notification-count"
+      >{{ mainState.notificationCount }}</div>
     </RouterLink>
 
     <!-- 設定ボタン -->
@@ -89,9 +81,7 @@ async function openSendPostPopup () {
       :data-is-focus="mainState.currentPath.startsWith('/settings/')"
       @click.prevent
     >
-      <div class="icon">
-        <SVGIcon name="setting" />
-      </div>
+      <SVGIcon name="setting" />
     </RouterLink>
 
     <!-- アカウントボタン -->
@@ -100,9 +90,7 @@ async function openSendPostPopup () {
       to="/accounts"
       @click.prevent
     >
-      <div class="icon">
-        <SVGIcon name="person" />
-      </div>
+      <SVGIcon name="person" />
     </RouterLink>
 
     <!-- ポスト送信ポップアップトリガー -->
@@ -110,35 +98,31 @@ async function openSendPostPopup () {
       class="link-button send-post-button"
       @click.prevent="openSendPostPopup"
     >
-      <div class="icon">
-        <SVGIcon name="sendPost" />
-      </div>
+      <SVGIcon name="sendPost" />
     </button>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .main-menu-horizontal {
-  --button-size: 2.25rem;
-  background-color: rgb(var(--bg-color));
+  --button-size: 2.125rem;
+  background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-top: 1px solid rgba(var(--fg-color), 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 }
 
 // 各種ボタン
 .link-button {
-  border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
+  padding: 0.5rem 0;
+  position: relative;
 
   .image {
     border-radius: var(--border-radius);
-    margin: 0.5rem;
     object-fit: cover;
     min-width: var(--button-size);
     max-width: var(--button-size);
@@ -146,19 +130,9 @@ async function openSendPostPopup () {
     max-height: var(--button-size);
   }
 
-  .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0.5rem;
-    position: relative;
-    min-width: var(--button-size);
-    min-height: var(--button-size);
-
-    .svg-icon {
-      fill: rgba(var(--fg-color), 0.75);
-      font-size: 1.5rem;
-    }
+  .svg-icon {
+    fill: rgba(var(--fg-color), 0.75);
+    font-size: 1.5rem;
   }
 
   &:focus, &:hover {
@@ -186,15 +160,14 @@ async function openSendPostPopup () {
 
   // ポスト送信ポップアップトリガー
   &.send-post-button {
-    background-color: rgb(var(--post-color));
-    border: 1px solid rgb(var(--bg-color));
-    border-radius: 3rem;
+    padding: 0;
     position: absolute;
-    bottom: 4rem;
-    right: 1rem;
+    bottom: calc(3.625rem + 1px);
+    right: 0.5rem;
 
     .svg-icon {
-      fill: rgb(var(--bg-color));
+      fill: rgb(var(--post-color));
+      font-size: 2.5rem;
     }
 
     &:focus, &:hover {
@@ -213,7 +186,7 @@ async function openSendPostPopup () {
   font-weight: bold;
   padding: 0.125rem 0.25rem;
   position: absolute;
-  right: 0rem;
-  top: 0rem;
+  right: 0.5rem;
+  top: 0.5rem;
 }
 </style>
