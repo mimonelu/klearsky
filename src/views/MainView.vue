@@ -392,19 +392,27 @@ function scrollListener () {
       }"
     />
 
+    <!-- メインエリア -->
     <div
       v-show="!state.loginPopupAutoDisplay"
       class="main"
     >
+      <!-- PC用メニュー -->
       <div class="main-menu-vertical-wrapper">
         <MainMenuVertical />
       </div>
+
+      <!-- SP用メニュー -->
       <div class="main-menu-horizontal-wrapper">
         <MainMenuHorizontal />
       </div>
+
+      <!-- ルータービュー -->
       <div class="router-view-wrapper">
         <RouterView />
       </div>
+
+      <!-- サブメニュー -->
       <div class="sub-menu-wrapper">
         <SubMenu />
       </div>
@@ -423,12 +431,15 @@ function scrollListener () {
       @close="state.closeLikeUsersPopup"
     />
 
+    <!-- イメージポップアップ -->
     <ImagePopup
       v-if="state.imagePopupProps.display"
       :largeUri="state.imagePopupProps.largeUri"
       :smallUri="state.imagePopupProps.smallUri"
       @close="state.imagePopupProps.display = false"
     />
+
+    <!-- ポスト送信ポップアップ -->
     <SendPostPopup
       v-if="state.sendPostPopupProps.display"
       :type="state.sendPostPopupProps.type"
@@ -436,19 +447,27 @@ function scrollListener () {
       :text="state.sendPostPopupProps.text"
       @closeSnedPostPopup="closeSendPostPopup"
     />
+
+    <!-- ログインポップアップ -->
     <LoginPopup
       v-if="state.loginPopupAutoDisplay"
       @login="manualLogin"
     />
+
+    <!-- メッセージポップアップ -->
     <MessagePopup
       v-if="state.messagePopupDisplay"
       @close="state.closeMessagePopup"
     />
+
+    <!-- 確認ポップアップ -->
     <ConfirmationPopup
       v-if="state.confirmationPopupDisplay"
       @close="state.closeConfirmationPopup"
       @apply="state.applyConfirmationPopup"
     />
+
+    <!-- 全画面ローダー -->
     <Loader v-if="state.processing" />
   </div>
 </template>
@@ -458,7 +477,7 @@ function scrollListener () {
   --main-area-opacity: 1.0;
   background-color: rgba(var(--bg-color), var(--bg-opacity));
 
-  // レイアウト
+  // カスタムレイアウト
   &[data-layout="defaultLeft"],
   &[data-layout="slimLeft"] {
     .main {
@@ -504,12 +523,9 @@ function scrollListener () {
       display: none;
     }
   }
-
-  & > .loader {
-    position: fixed;
-  }
 }
 
+// 壁紙
 .background-image {
   background-position: center center;
   background-repeat: no-repeat;
@@ -522,6 +538,7 @@ function scrollListener () {
   height: 100vh;
 }
 
+// メインエリア
 .main {
   display: flex;
   justify-content: center;
@@ -530,40 +547,35 @@ function scrollListener () {
   max-width: $max-width;
   min-height: 100vh;
 
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     padding-bottom: 3rem;
   }
 }
 
+// メインメニュー
 .main-menu-vertical-wrapper {
   overflow: hidden;
   position: relative;
+
+  // 最大幅未満
   @media (max-width: $max-width-with-scrollbar) {
     min-width: $main-menu-min-width;
     max-width: $main-menu-min-width;
   }
+
+  // 最大幅以上
   @media not all and (max-width: $max-width-with-scrollbar) {
     min-width: $menu-max-width;
     max-width: $menu-max-width;
   }
+
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     display: none;
   }
 
-  & > .main-menu-vertical {
-    position: fixed;
-    top: 0;
-    .main-view[data-layout="default"] &,
-    .main-view[data-layout="defaultLeft"] &,
-    .main-view[data-layout="defaultRight"] & {
-      @media not all and (max-width: $max-width-with-scrollbar) {
-        min-width: $menu-max-width;
-        max-width: $menu-max-width;
-      }
-    }
-  }
-
-  // レイアウト
+  // カスタムレイアウト
   .main-view[data-layout="slim"] &,
   .main-view[data-layout="slimLeft"] &,
   .main-view[data-layout="slimRight"] & {
@@ -572,6 +584,24 @@ function scrollListener () {
   }
 }
 
+// PC用メニュー
+.main-menu-vertical {
+  position: fixed;
+  top: 0;
+
+  // カスタムレイアウト
+  .main-view[data-layout="default"] &,
+  .main-view[data-layout="defaultLeft"] &,
+  .main-view[data-layout="defaultRight"] & {
+    // 最大幅以上
+    @media not all and (max-width: $max-width-with-scrollbar) {
+      min-width: $menu-max-width;
+      max-width: $menu-max-width;
+    }
+  }
+}
+
+// SP用メニュー
 .main-menu-horizontal-wrapper {
   position: fixed;
   bottom: 0;
@@ -579,11 +609,13 @@ function scrollListener () {
   z-index: 2;
   width: 100vw;
 
+  // SP幅以上
   @media (min-width: $sp-width) {
     display: none;
   }
 }
 
+// ルータービュー
 .router-view-wrapper {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-left: 1px solid rgba(var(--fg-color), 0.25);
@@ -592,9 +624,12 @@ function scrollListener () {
   flex-grow: 1;
   max-width: $router-view-width;
 
+  // タブレット幅以上
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
   }
+
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     border-left-style: none;
   }
@@ -604,6 +639,7 @@ function scrollListener () {
   }
 }
 
+// サブメニュー
 .sub-menu-wrapper {
   @media (max-width: 1024px) {
     display: none;
@@ -619,6 +655,7 @@ function scrollListener () {
   }
 }
 
+// 全画面ローダー
 .loader {
   position: fixed;
 }

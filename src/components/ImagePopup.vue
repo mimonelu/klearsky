@@ -244,13 +244,13 @@ function close () {
 
 // 壁紙設定ボタン
 .background-image-button {
-  // 非SPレイアウト
+  // SP幅以上
   @media (min-width: $sp-width) {
     top: 1rem;
     left: 1rem;
   }
 
-  // SPレイアウト
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     bottom: 1rem;
     right: 6rem;
@@ -259,13 +259,13 @@ function close () {
 
 // 画像を別タブで開くボタン
 .open-image-button {
-  // 非SPレイアウト
+  // SP幅以上
   @media (min-width: $sp-width) {
     top: 1rem;
     left: 6rem;
   }
 
-  // SPレイアウト
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     bottom: 1rem;
     right: 1rem;
@@ -274,13 +274,13 @@ function close () {
 
 // 閉じるボタン
 .close-button {
-  // 非SPレイアウト
+  // SP幅以上
   @media (min-width: $sp-width) {
     top: 1rem;
     right: 1rem;
   }
 
-  // SPレイアウト
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     bottom: 1rem;
     left: 1rem;

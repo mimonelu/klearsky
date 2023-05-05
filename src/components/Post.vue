@@ -808,9 +808,13 @@ async function translateText () {
   &:not(:first-child) {
     margin-top: 0.5em;
   }
+
+  // タブレット幅以上
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     grid-template-columns: min min min 2fr;
   }
+
+  // タブレット幅未満
   @media not all and (min-width: calc($router-view-width + $main-menu-min-width)) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }

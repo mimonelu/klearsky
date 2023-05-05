@@ -128,6 +128,7 @@ function deleteFile (index: number) {
   display: flex;
   grid-gap: 0.5rem;
 
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     flex-wrap: wrap;
   }
