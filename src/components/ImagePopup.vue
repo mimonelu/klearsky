@@ -203,7 +203,7 @@ function close () {
   display: contents;
 }
 
-// 壁紙設定ボタン / 閉じるボタン
+// 壁紙設定ボタン / 画像を別タブで開くボタン / 閉じるボタン
 .floating-button {
   background-color: rgba(0, 0, 0, 0.25);
   border-radius: var(--border-radius);
@@ -212,7 +212,6 @@ function close () {
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 1rem;
   width: 4rem;
   min-height: 4rem;
   [data-mode="true"] & {
@@ -233,7 +232,7 @@ function close () {
   }
 }
 
-// 壁紙設定ボタン
+// 壁紙設定ボタン / 画像を別タブで開くボタン
 .background-image-button,
 .open-image-button {
   [data-loaded="false"] & {
@@ -242,15 +241,49 @@ function close () {
     }
   }
 }
+
+// 壁紙設定ボタン
 .background-image-button {
-  left: 1rem;
+  // 非SPレイアウト
+  @media (min-width: $sp-width) {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  // SPレイアウト
+  @media not all and (min-width: $sp-width) {
+    bottom: 1rem;
+    right: 6rem;
+  }
 }
+
+// 画像を別タブで開くボタン
 .open-image-button {
-  left: 6rem;
+  // 非SPレイアウト
+  @media (min-width: $sp-width) {
+    top: 1rem;
+    left: 6rem;
+  }
+
+  // SPレイアウト
+  @media not all and (min-width: $sp-width) {
+    bottom: 1rem;
+    right: 1rem;
+  }
 }
 
 // 閉じるボタン
 .close-button {
-  right: 1rem;
+  // 非SPレイアウト
+  @media (min-width: $sp-width) {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  // SPレイアウト
+  @media not all and (min-width: $sp-width) {
+    bottom: 1rem;
+    left: 1rem;
+  }
 }
 </style>
