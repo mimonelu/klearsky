@@ -12,19 +12,13 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  processing: boolean
-}>({
-  processing: false
-})
-
 const currentUsers = props.type === "follower"
   ? mainState.currentFollowers
   : mainState.currentFollowings
 
 async function fetchUsers (direction: "new" | "old") {
   Util.blurElement()
-  state.processing = true
+  mainState.listProcessing = true
   try {
     switch (props.type) {
       case "follower": {
@@ -37,7 +31,7 @@ async function fetchUsers (direction: "new" | "old") {
       }
     }
   } finally {
-    state.processing = false
+    mainState.listProcessing = false
   }
 }
 
@@ -51,7 +45,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   <div class="user-list">
     <LoadButton
       direction="new"
-      :processing="state.processing"
+      :processing="mainState.listProcessing"
       @activate="fetchUsers('new')"
     />
     <div class="users">
@@ -83,7 +77,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     </div>
     <LoadButton
       direction="old"
-      :processing="state.processing"
+      :processing="mainState.listProcessing"
       @activate="fetchUsers('old')"
     />
   </div>

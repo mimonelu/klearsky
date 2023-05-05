@@ -39,6 +39,8 @@ type MainState = {
 
   userProfile: null | TTProfile
 
+  listProcessing: boolean
+
   timelineFeeds: Array<TTFeed>
   timelineCursor?: string
 

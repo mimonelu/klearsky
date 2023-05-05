@@ -47,11 +47,11 @@ let notificationTimer: null | number = null
 onBeforeMount(() => {
   hotkeys("n", { keyup: true }, (event: any) => {
     if (event.type === "keyup" &&
-        !state.repostUsersPopupDisplay &&
-        !state.likeUsersPopupDisplay &&
-        !state.imagePopupProps.display &&
-        !state.sendPostPopupProps.display &&
-        !state.loginPopupAutoDisplay)
+      !state.repostUsersPopupDisplay &&
+      !state.likeUsersPopupDisplay &&
+      !state.imagePopupProps.display &&
+      !state.sendPostPopupProps.display &&
+      !state.loginPopupAutoDisplay)
       state.sendPostPopupProps.display = true
   })
 })
@@ -71,8 +71,8 @@ onMounted(async () => {
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    await state.fetchUserProfile()
-    await processPage(router.currentRoute.value.name)
+    state.fetchUserProfile()
+    processPage(router.currentRoute.value.name)
   } finally {
     state.mounted = true
     state.processing = false
@@ -129,17 +129,13 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   // HOT の取得はログイン後 or カーソルボタン押下時 or currentHotFeeds が空の時のみ
   if (to.name === "hot" && state.currentHotFeeds.length > 0) return
 
-  state.processing = true
-  try {
-    await processPage(to.name)
-  } finally {
-    state.processing = false
-  }
+  await processPage(to.name)
 })
 
 function resetState () {
   state.updateKey = 0
   state.userProfile = null
+  state.listProcessing = false
   state.timelineFeeds = []
   state.timelineCursor = undefined
   state.currentPosts = []
@@ -207,8 +203,8 @@ async function manualLogin (service: string, identifier: string, password: strin
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    await state.fetchUserProfile()
-    await processPage(router.currentRoute.value.name)
+    state.fetchUserProfile()
+    processPage(router.currentRoute.value.name)
   } finally {
     state.processing = false
   }
@@ -231,71 +227,73 @@ async function processPage (pageName?: null | RouteRecordName) {
     }
   }
 
-  switch (pageName) {
-    case "profile-post": {
-      // ブロック情報などを先に取得するために Promise.all はしない
-      if (handle !== state.currentProfile?.handle)
-        await state.fetchCurrentProfile(handle as string)
-      if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
-        await state.fetchCurrentAuthorFeed("new")
-      break
-    }
-    case "profile-repost": {
-      const tasks: Array<Promise<void>> = []
-      if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0)
-        tasks.push(state.fetchAuthorReposts("new"))
-      if (handle !== state.currentProfile?.handle)
-        tasks.push(state.fetchCurrentProfile(handle as string))
-      await Promise.all(tasks)
-      break
-    }
-    case "profile-like": {
-      const tasks: Array<Promise<void>> = []
-      if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
-        tasks.push(state.fetchAuthorLikes("new"))
-      if (handle !== state.currentProfile?.handle)
-        tasks.push(state.fetchCurrentProfile(handle as string))
-      await Promise.all(tasks)
-      break
-    }
-    case "profile-following": {
-      const tasks: Array<Promise<void>> = []
-      if (!state.inSameProfilePage || state.currentFollowings.length === 0)
-        tasks.push(state.fetchFollowings("new"))
-      if (handle !== state.currentProfile?.handle)
-        tasks.push(state.fetchCurrentProfile(handle as string))
-      await Promise.all(tasks)
-      break
-    }
-    case "profile-follower": {
-      const tasks: Array<Promise<void>> = []
-      if (!state.inSameProfilePage || state.currentFollowers.length === 0)
-        tasks.push(state.fetchFollowers("new"))
-      if (handle !== state.currentProfile?.handle)
-        tasks.push(state.fetchCurrentProfile(handle as string))
-      await Promise.all(tasks)
-      break
-    }
-    case "home": {
-      await state.fetchTimeline("new")
-      break
-    }
-    case "hot": {
-      await state.fetchHotFeeds("new")
-      break
-    }
-    case "post": {
-      const postUri = state.currentQuery.postUri as LocationQueryValue
-      if (!postUri) {
-        await router.push({ name: "home" })
+  state.listProcessing = true
+  try {
+    switch (pageName) {
+      case "profile-post": {
+        // ブロック情報などを先に取得するために Promise.all はしない
+        if (handle !== state.currentProfile?.handle)
+          await state.fetchCurrentProfile(handle as string)
+        if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
+          await state.fetchCurrentAuthorFeed("new")
         break
       }
-      state.currentPosts?.splice(0)
-      state.currentPosts = await state.atp.fetchPostThread(postUri) ?? []
-      await nextTick()
-      scrollToFocused()
-      break
+      case "profile-repost": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0)
+          tasks.push(state.fetchAuthorReposts("new"))
+        if (handle !== state.currentProfile?.handle)
+          tasks.push(state.fetchCurrentProfile(handle as string))
+        await Promise.all(tasks)
+        break
+      }
+      case "profile-like": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
+          tasks.push(state.fetchAuthorLikes("new"))
+        if (handle !== state.currentProfile?.handle)
+          tasks.push(state.fetchCurrentProfile(handle as string))
+        await Promise.all(tasks)
+        break
+      }
+      case "profile-following": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentFollowings.length === 0)
+          tasks.push(state.fetchFollowings("new"))
+        if (handle !== state.currentProfile?.handle)
+          tasks.push(state.fetchCurrentProfile(handle as string))
+        await Promise.all(tasks)
+        break
+      }
+      case "profile-follower": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentFollowers.length === 0)
+          tasks.push(state.fetchFollowers("new"))
+        if (handle !== state.currentProfile?.handle)
+          tasks.push(state.fetchCurrentProfile(handle as string))
+        await Promise.all(tasks)
+        break
+      }
+      case "home": {
+        await state.fetchTimeline("new")
+        break
+      }
+      case "hot": {
+        await state.fetchHotFeeds("new")
+        break
+      }
+      case "post": {
+        const postUri = state.currentQuery.postUri as LocationQueryValue
+        if (!postUri) return
+        state.currentPosts?.splice(0)
+        state.currentPosts = await state.atp.fetchPostThread(postUri) ?? []
+        await nextTick()
+        scrollToFocused()
+        break
+      }
     }
+  } finally {
+    state.listProcessing = false
   }
 }
 
