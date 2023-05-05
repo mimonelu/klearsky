@@ -22,6 +22,10 @@ const mainState = inject("state") as MainState
           class="tab__button"
           to="/settings/bluesky"
         >{{ $t("blueskySettings") }}</RouterLink>
+        <RouterLink
+          class="tab__button"
+          to="/settings/account"
+        >{{ $t("accountSettings") }}</RouterLink>
       </div>
     </div>
     <RouterView />

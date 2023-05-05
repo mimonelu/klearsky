@@ -2,7 +2,6 @@
 import { inject } from "vue"
 import { useRouter } from "vue-router"
 import AccountList from "@/components/AccountList.vue"
-import PageHeader from "@/components/PageHeader.vue"
 import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
@@ -34,10 +33,6 @@ async function logout () {
 
 <template>
   <div class="accounts-view">
-    <PageHeader
-      :title="$t('accounts')"
-      :subTitle="mainState.atp.session?.handle ?? ''"
-    />
     <div class="body">
       <div class="button-container">
         <button
@@ -55,10 +50,6 @@ async function logout () {
 </template>
 
 <style lang="scss" scoped>
-.accounts-view {
-  padding-bottom: 8rem;
-}
-
 .body {
   display: flex;
   flex-direction: column;

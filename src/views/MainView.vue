@@ -587,7 +587,7 @@ function scrollListener () {
 // PC用メニュー
 .main-menu-vertical {
   position: fixed;
-  top: 0;
+  top: 0.5rem;
 
   // カスタムレイアウト
   .main-view[data-layout="default"] &,

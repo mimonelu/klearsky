@@ -76,8 +76,9 @@
   "notifications": "通知",
 
   "settings": "設定",
-  "klearskySettings": "Klearsky用設定",
-  "blueskySettings": "Bluesky用設定",
+  "klearskySettings": "Klearsky",
+  "blueskySettings": "Bluesky",
+  "accountSettings": "アカウント",
 
   "language": "言語",
   "english": "英語",

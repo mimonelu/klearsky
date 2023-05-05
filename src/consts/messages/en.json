@@ -76,8 +76,9 @@
   "notifications": "Notifications",
 
   "settings": "Settings",
-  "klearskySettings": "Klearsky Settings",
-  "blueskySettings": "Bluesky Settings",
+  "klearskySettings": "Klearsky",
+  "blueskySettings": "Bluesky",
+  "accountSettings": "Accounts",
 
   "language": "Language",
   "english": "English",

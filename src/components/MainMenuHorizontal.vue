@@ -84,15 +84,6 @@ async function openSendPostPopup () {
       <SVGIcon name="setting" />
     </RouterLink>
 
-    <!-- アカウントボタン -->
-    <RouterLink
-      class="link-button"
-      to="/accounts"
-      @click.prevent
-    >
-      <SVGIcon name="person" />
-    </RouterLink>
-
     <!-- ポスト送信ポップアップトリガー -->
     <button
       class="link-button send-post-button"
@@ -160,18 +151,8 @@ async function openSendPostPopup () {
 
   // ポスト送信ポップアップトリガー
   &.send-post-button {
-    padding: 0;
-    position: absolute;
-    bottom: calc(3.625rem + 1px);
-    right: 0.5rem;
-
     .svg-icon {
       fill: rgb(var(--post-color));
-      font-size: 2.5rem;
-    }
-
-    &:focus, &:hover {
-      background-color: rgba(var(--post-color), 0.75);
     }
   }
 }

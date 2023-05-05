@@ -15,7 +15,7 @@ defineProps<{
 
 <style lang="scss" scoped>
 .page-header {
-  background-color: rgb(var(--bg-color));
+  background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: grid;
   grid-gap: 0.5rem;
