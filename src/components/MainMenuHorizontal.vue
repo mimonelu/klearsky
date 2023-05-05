@@ -119,12 +119,12 @@ async function openSendPostPopup () {
 
 <style lang="scss" scoped>
 .main-menu-horizontal {
+  --button-size: 2.25rem;
   background-color: rgb(var(--bg-color));
   border-top: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   align-items: center;
   justify-content: space-around;
-  grid-gap: 0.5rem;
 }
 
 // 各種ボタン
@@ -140,10 +140,10 @@ async function openSendPostPopup () {
     border-radius: var(--border-radius);
     margin: 0.5rem;
     object-fit: cover;
-    min-width: 2rem;
-    max-width: 2rem;
-    min-height: 2rem;
-    max-height: 2rem;
+    min-width: var(--button-size);
+    max-width: var(--button-size);
+    min-height: var(--button-size);
+    max-height: var(--button-size);
   }
 
   .icon {
@@ -152,8 +152,8 @@ async function openSendPostPopup () {
     justify-content: center;
     margin: 0.5rem;
     position: relative;
-    min-width: 2rem;
-    min-height: 2rem;
+    min-width: var(--button-size);
+    min-height: var(--button-size);
 
     .svg-icon {
       fill: rgba(var(--fg-color), 0.75);
