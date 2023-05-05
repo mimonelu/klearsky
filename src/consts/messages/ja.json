@@ -120,6 +120,12 @@
   "showImage": "画像を表示する",
   "hideImage": "画像を隠す",
 
+  "imageAspectRatio": "画像サイズの比率",
+  "imageAspectRatio1": "1 / 1",
+  "imageAspectRatio2": "3 / 2",
+  "imageAspectRatio3": "1 / 2",
+  "imageAspectRatio4": "1 / 3",
+
   "layout": "レイアウト",
   "layoutDefault": "通常",
   "layoutDefaultLeft": "通常 - 左",

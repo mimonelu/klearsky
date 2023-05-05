@@ -380,7 +380,8 @@ function scrollListener () {
     :data-path="state.currentPath"
     :data-layout="state.currentSetting.layout"
     :style="{
-      '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 0
+      '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 0,
+      '--image-aspect-ratio': state.currentSetting.imageAspectRatio ?? '1 / 1'
     }"
   >
     <!-- 壁紙 -->

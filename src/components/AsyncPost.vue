@@ -81,7 +81,7 @@ onBeforeMount(async () => {
     overflow: hidden;
 
     & > img {
-      aspect-ratio: 16 / 9;
+      aspect-ratio: var(--image-aspect-ratio);
       object-fit: cover;
       height: 4rem;
     }

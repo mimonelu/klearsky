@@ -140,6 +140,19 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- 画像サイズの比率 -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("imageAspectRatio") }}</div>
+        <div class="settings-section__body">
+          <Radios
+            :state="mainState.currentSetting"
+            model="imageAspectRatio"
+            :options="settings.imageAspectRatio"
+            @update="saveSetting"
+          />
+        </div>
+      </div>
+
       <!-- レイアウト -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("layout") }}</div>

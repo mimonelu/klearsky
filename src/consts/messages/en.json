@@ -120,6 +120,12 @@
   "showImage": "Show images",
   "hideImage": "Hide images",
 
+  "imageAspectRatio": "Image Aspect Ratio",
+  "imageAspectRatio1": "1 / 1",
+  "imageAspectRatio2": "3 / 2",
+  "imageAspectRatio3": "1 / 2",
+  "imageAspectRatio4": "1 / 3",
+
   "layout": "Layout",
   "layoutDefault": "Default",
   "layoutDefaultLeft": "Default - Left",

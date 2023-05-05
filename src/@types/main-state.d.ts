@@ -11,6 +11,7 @@ type TTSetting = {
     "following" |
     "self" |
     "none"
+  imageAspectRatio?: string
   layout?:
     "default" |
     "defaultLeft" |
