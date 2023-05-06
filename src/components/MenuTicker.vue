@@ -121,5 +121,24 @@ watch(() => props.display, (display: boolean) => {
       }
     }
   }
+
+  &:deep() {
+    .menu-ticker__sub-trigger {
+      position: relative;
+    }
+
+    .menu-ticker__sub {
+      display: contents;
+
+      .menu-ticker--overlay {
+        pointer-events: none;
+      }
+
+      .menu-ticker--inner {
+        top: 0;
+        right: calc(100% - 2rem) !important; // TODO:
+      }
+    }
+  }
 }
 </style>

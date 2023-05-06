@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import { inject, reactive, watch } from "vue"
-import { AtUri } from "@atproto/uri"
+import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
+import MenuTickerCopyText from "@/components/MenuTickerComponents/CopyText.vue"
+import MenuTickerOpenOtherApp from "@/components/MenuTickerComponents/OpenOtherApp.vue"
+import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
+import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
+import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
-import otherApps from "@/consts/other-apps.json"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -24,64 +27,12 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  otherAppDisplay: boolean;
-}>({
-  otherAppDisplay: false,
-})
-
-watch(() => props.display, (display: boolean) => {
-  if (display) state.otherAppDisplay = false
-})
-
-async function copyText () {
-  Util.blurElement()
-  if (props.copyText == null) return
-  emit("close")
-  await navigator.clipboard.writeText(props.copyText)
-}
-
-function translateText () {
-  Util.blurElement()
-  if (props.translateText == null) return
-  emit("close")
-  const language = window.navigator.language
-  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(props.translateText)}&op=translate`)
-}
-
-async function sendMention () {
-  Util.blurElement()
-  emit("close")
-  if (props.mentionTo == null) return
-  await mainState.openSendPostPopup("post", undefined, `@${props.mentionTo} `)
-}
-
 async function deletePost () {
   Util.blurElement()
   if (props.deletePostUri == null) return
   emit("close")
   const result = await mainState.openConfirmationPopup($t("deletePost"), $t("deletePostMessage"))
   if (result) emit("removeThisPost", props.deletePostUri)
-}
-
-function openOtherApp (app: any) {
-  let uri = ""
-  if (props.type === "profile") {
-    uri = app.profileUri.replace("{handle}", props.handle)
-  } else if (props.type === "post") {
-    const aturi = new AtUri(props.uri as string)
-    uri = app.postUri
-      .replace("{handle}", props.handle)
-      .replace("{rkey}", aturi.rkey)
-  }
-  window.open(uri)
-  emit("close")
-}
-
-function openSource () {
-  if (props.openSource == null) return
-  Util.displayJson(props.openSource)
-  emit("close")
 }
 </script>
 
@@ -90,31 +41,22 @@ function openSource () {
     <slot name="before" />
 
     <!-- テキストをコピーする -->
-    <button
-      v-if="copyText != null"
-      @click.stop="copyText"
-    >
-      <SVGIcon name="clipboard" />
-      <span>{{ $t("copyPostText") }}</span>
-    </button>
+    <MenuTickerCopyText
+      :text="copyText"
+      @close="emit('close')"
+    />
 
-    <!-- 翻訳する -->
-    <button
-      v-if="translateText != null"
-      @click.stop="translateText"
-    >
-      <SVGIcon name="translate" />
-      <span>{{ $t("translate") }}</span>
-    </button>
+    <!-- テキストを翻訳する -->
+    <MenuTickerTranslateText
+      :text="translateText"
+      @close="emit('close')"
+    />
 
     <!-- メンションを送る -->
-    <button
-      v-if="mentionTo != null"
-      @click.stop="sendMention"
-    >
-      <SVGIcon name="at" />
-      <span>{{ $t("sendMention") }}</span>
-    </button>
+    <MenuTickerSendMention
+      :mentionTo="mentionTo"
+      @close="emit('close')"
+    />
 
     <!-- ポストの削除 -->
     <button
@@ -126,61 +68,20 @@ function openSource () {
     </button>
 
     <!-- 他のアプリで開く -->
-    <button
-      class="other-app-button"
-      @click.stop
-      @mouseenter="state.otherAppDisplay = true"
-      @mouseleave="state.otherAppDisplay = false"
-    >
-      <SVGIcon name="cursorLeft" />
-      <span>{{ $t("openOtherApp") }}</span>
-
-      <!-- 他のアプリで開くメニュー -->
-      <MenuTicker
-        :display="state.otherAppDisplay"
-        class="other-app-menu"
-      >
-        <button
-          v-for="app of otherApps"
-          :key="app.name"
-          @click.stop="openOtherApp(app)"
-        >
-          <SVGIcon name="shimmer" />
-          <span>{{ $t(app.name) }}</span>
-        </button>
-      </MenuTicker>
-    </button>
+    <MenuTickerOpenOtherApp
+      :type="type"
+      :handle="handle"
+      :uri="uri"
+    />
 
     <hr />
 
     <!-- ソースを表示する -->
-    <button
-      v-if="openSource != null"
-      @click.stop="openSource"
-    >
-      <SVGIcon name="json" />
-      <span>{{ $t("showSource") }}</span>
-    </button>
+    <MenuTickerOpenSource
+      :source="openSource"
+      @close="emit('close')"
+    />
+
     <slot name="after" />
   </MenuTicker>
 </template>
-
-<style lang="scss" scoped>
-.other-app-button {
-  position: relative;
-
-  .other-app-menu {
-    display: contents;
-    &:deep() {
-      .menu-ticker--overlay {
-        pointer-events: none;
-      }
-
-      .menu-ticker--inner {
-        top: 0;
-        right: calc(100% - 2rem) !important; // TODO:
-      }
-    }
-  }
-}
-</style>
