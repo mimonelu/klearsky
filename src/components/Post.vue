@@ -509,10 +509,11 @@ async function translateText () {
           </div>
           <div>
             <!-- Lightning -->
+            <!-- TODO: `post.record?.lightning` は頃合いを見て削除すること -->
             <a
-              v-if="post.record?.lightning"
+              v-if="post.record?.custom?.lightning || post.record?.lightning"
               class="icon-button--nolabel lightning"
-              :href="`lightning:${post.record?.lightning}`"
+              :href="`lightning:${post.record?.custom?.lightning || post.record?.lightning}`"
               rel="noreferrer"
               @click.stop
             >

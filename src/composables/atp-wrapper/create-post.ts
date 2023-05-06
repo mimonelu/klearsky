@@ -22,9 +22,14 @@ export default async function (
     text: richText.text,
   }
 
+  // カスタムフィールドの作成
+  if (params.lightning) {
+    record.custom = {}
+  }
+
   // Lightning
   if (params.lightning) {
-    record.lightning = params.lightning
+    (record.custom as TTCustomFieldsInPost).lightning = params.lightning
   }
 
   if (richText.facets != null) record.facets = richText.facets
