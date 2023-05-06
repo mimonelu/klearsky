@@ -842,13 +842,8 @@ async function translateText () {
     display: contents; // TODO: 外すとティッカー表示時にレイアウト崩れ、外さないとティッカー表示位置が若干ずれる
 
     .menu-ticker--inner {
+      top: 2.5rem;
       left: 0;
-      &[data-to-down="true"] {
-        top: 2.5em;
-      }
-      &[data-to-down="false"] {
-        bottom: 2.5em;
-      }
     }
   }
 }
@@ -873,14 +868,9 @@ async function translateText () {
   position: relative;
 
   .menu-ticker:deep() {
-    .menu-ticker--inner {
+    & > .menu-ticker--inner {
+      top: 2.5rem;
       right: 0;
-      &[data-to-down="true"] {
-        top: 2.5em;
-      }
-      &[data-to-down="false"] {
-        bottom: 2.5em;
-      }
     }
   }
 }

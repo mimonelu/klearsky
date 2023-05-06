@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, reactive, watch } from "vue"
 import { AtUri } from "@atproto/uri"
 import MenuTicker from "@/components/MenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -23,6 +23,16 @@ const props = defineProps<{
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  otherAppDisplay: boolean;
+}>({
+  otherAppDisplay: false,
+})
+
+watch(() => props.display, (display: boolean) => {
+  if (display) state.otherAppDisplay = false
+})
 
 async function copyText () {
   Util.blurElement()
@@ -119,13 +129,15 @@ function openSource () {
     <button
       class="other-app-button"
       @click.stop
+      @mouseenter="state.otherAppDisplay = true"
+      @mouseleave="state.otherAppDisplay = false"
     >
       <SVGIcon name="cursorLeft" />
       <span>{{ $t("openOtherApp") }}</span>
 
       <!-- 他のアプリで開くメニュー -->
       <MenuTicker
-        :display="true"
+        :display="state.otherAppDisplay"
         class="other-app-menu"
       >
         <button
@@ -155,21 +167,20 @@ function openSource () {
 
 <style lang="scss" scoped>
 .other-app-button {
-  .other-app-menu {
-    display: none;
+  position: relative;
 
+  .other-app-menu {
+    display: contents;
     &:deep() {
       .menu-ticker--overlay {
-        display: none;
+        pointer-events: none;
       }
 
       .menu-ticker--inner {
+        top: 0;
         right: calc(100% - 2rem) !important; // TODO:
       }
     }
-  }
-  &:hover .other-app-menu {
-    display: contents;
   }
 }
 </style>
