@@ -1,3 +1,4 @@
+import Package from "@/../package.json"
 import { RichText } from "@atproto/api"
 import type {
   AppBskyEmbedImages,
@@ -23,14 +24,14 @@ export default async function (
   }
 
   // カスタムフィールドの作成
-  if (params.lightning) {
-    record.custom = {}
+  const custom: TTCustomFieldsInPost = {
+    via: `Klearsky v${Package.version}`,
   }
 
   // Lightning
-  if (params.lightning) {
-    (record.custom as TTCustomFieldsInPost).lightning = params.lightning
-  }
+  if (params.lightning) custom.lightning = params.lightning
+
+  record.custom = custom
 
   if (richText.facets != null) record.facets = richText.facets
 

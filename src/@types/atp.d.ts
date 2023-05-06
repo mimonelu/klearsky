@@ -79,6 +79,7 @@ type TTImage = {
 }
 
 type TTCustomFieldsInPost = {
+  via?: string
   lightning?: string
 }
 
