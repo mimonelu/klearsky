@@ -5,7 +5,7 @@ import AvatarButton from "@/components/AvatarButton.vue"
 import FollowButton from "@/components/FollowButton.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import MuteButton from "@/components/MuteButton.vue"
-import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
+import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
@@ -173,7 +173,7 @@ async function unblock () {
             @click.stop="openPostMenu"
           >
             <SVGIcon name="menu" />
-            <PostAndProfileMenuTicker
+            <ProfileMenuTicker
               type="profile"
               :handle="mainState.currentProfile?.handle"
               :display="state.profileMenuDisplay"
@@ -227,10 +227,8 @@ async function unblock () {
                   <SVGIcon name="alert" />
                   <span>{{ $t("unblock") }}</span>
                 </button>
-
-                <hr />
               </template>
-            </PostAndProfileMenuTicker>
+            </ProfileMenuTicker>
           </button>
         </div>
       </div>

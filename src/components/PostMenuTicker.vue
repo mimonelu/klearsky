@@ -5,6 +5,8 @@ import MenuTickerCopyText from "@/components/MenuTickerComponents/CopyText.vue"
 import MenuTickerOpenOtherApp from "@/components/MenuTickerComponents/OpenOtherApp.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
+import MenuTickerShowLikeUsers from "@/components/MenuTickerComponents/ShowLikeUsers.vue"
+import MenuTickerShowRepostUsers from "@/components/MenuTickerComponents/ShowRepostUsers.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
@@ -12,7 +14,6 @@ import Util from "@/composables/util/index"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
-  type: "post" | "profile";
   handle?: string;
   uri?: string;
   display: boolean;
@@ -38,7 +39,13 @@ async function deletePost () {
 
 <template>
   <MenuTicker :display="display">
-    <slot name="before" />
+    <!-- メンションを送る -->
+    <MenuTickerSendMention
+      :mentionTo="mentionTo"
+      @close="emit('close')"
+    />
+
+    <hr>
 
     <!-- テキストをコピーする -->
     <MenuTickerCopyText
@@ -52,13 +59,7 @@ async function deletePost () {
       @close="emit('close')"
     />
 
-    <!-- メンションを送る -->
-    <MenuTickerSendMention
-      :mentionTo="mentionTo"
-      @close="emit('close')"
-    />
-
-    <!-- ポストの削除 -->
+    <!-- ポストを削除する -->
     <button
       v-if="deletePostUri != null"
       @click.stop="deletePost"
@@ -67,9 +68,21 @@ async function deletePost () {
       <span>{{ $t("deletePost") }}</span>
     </button>
 
+    <!-- リポストユーザーリストポップアップボタン -->
+    <MenuTickerShowRepostUsers
+      :uri="uri"
+      @close="emit('close')"
+    />
+
+    <!-- ライクユーザーリストポップアップボタン -->
+    <MenuTickerShowLikeUsers
+      :uri="uri"
+      @close="emit('close')"
+    />
+
     <!-- 他のアプリで開く -->
     <MenuTickerOpenOtherApp
-      :type="type"
+      :type="'post'"
       :handle="handle"
       :uri="uri"
     />
@@ -81,7 +94,5 @@ async function deletePost () {
       :source="openSource"
       @close="emit('close')"
     />
-
-    <slot name="after" />
   </MenuTicker>
 </template>

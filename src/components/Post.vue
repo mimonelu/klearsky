@@ -9,7 +9,7 @@ import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
-import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
+import PostMenuTicker from "@/components/PostMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Thumbnail from "@/components/Thumbnail.vue"
 import Util from "@/composables/util/index"
@@ -212,18 +212,6 @@ function onActivatePostMenuTrigger () {
 
 function onClosePostMenu () {
   state.postMenuDisplay = false
-}
-
-function onActivateOpenRepostUsersPopup () {
-  Util.blurElement()
-  mainState.openRepostUsersPopup(props.post.uri)
-  onClosePostMenu()
-}
-
-function onActivateOpenLikeUsersPopup () {
-  Util.blurElement()
-  mainState.openLikeUsersPopup(props.post.uri)
-  onClosePostMenu()
 }
 
 async function onRemoveThisPost (uri: string) {
@@ -528,8 +516,7 @@ async function translateText () {
               <SVGIcon name="menu" />
 
               <!-- ポストメニュー -->
-              <PostAndProfileMenuTicker
-                type="post"
+              <PostMenuTicker
                 :handle="post.author.handle"
                 :uri="post.uri"
                 :display="state.postMenuDisplay"
@@ -542,23 +529,7 @@ async function translateText () {
                 :openSource="post"
                 @close="onClosePostMenu"
                 @removeThisPost="onRemoveThisPost"
-              >
-                <template v-slot:before>
-                  <!-- リポストユーザーリストポップアップボタン -->
-                  <button @click.stop="onActivateOpenRepostUsersPopup">
-                    <SVGIcon name="repost" />
-                    <span>{{ $t("repostUsers") }}</span>
-                  </button>
-
-                  <!-- ライクユーザーリストポップアップボタン -->
-                  <button @click.stop="onActivateOpenLikeUsersPopup">
-                    <SVGIcon name="heart" />
-                    <span>{{ $t("likeUsers") }}</span>
-                  </button>
-
-                  <hr>
-                </template>
-              </PostAndProfileMenuTicker>
+              />
             </button>
           </div>
         </div>
