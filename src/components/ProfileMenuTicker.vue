@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
-import MenuTickerCopyText from "@/components/MenuTickerComponents/CopyText.vue"
+import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
 import MenuTickerOpenOtherApp from "@/components/MenuTickerComponents/OpenOtherApp.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
@@ -52,30 +52,17 @@ const mainState = inject("state") as MainState
       @close="emit('close')"
     />
 
-    <!-- DID をコピーする -->
-    <MenuTickerCopyText
-      label="copyDid"
-      :text="mainState.currentProfile?.did"
-      @close="emit('close')"
-    />
-
-    <!-- ハンドルをコピーする -->
-    <MenuTickerCopyText
-      label="copyHandle"
-      :text="mainState.currentProfile?.handle"
-      @close="emit('close')"
-    />
-
-    <!-- テキストをコピーする -->
-    <MenuTickerCopyText
-      label="copyPostText"
-      :text="copyText"
-      @close="emit('close')"
-    />
-
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
       :text="translateText"
+      @close="emit('close')"
+    />
+
+    <!-- コピーする -->
+    <MenuTickerCopyTextWrapper
+      :did="mainState.currentProfile?.did"
+      :handle="mainState.currentProfile?.handle"
+      :text="copyText"
       @close="emit('close')"
     />
 

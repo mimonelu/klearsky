@@ -35,6 +35,7 @@
   "loginFailed": "Login failed. Please check your entry.",
   "sessionExpired": "Session expired. Please login again.",
 
+  "copy": "Copy",
   "copyHandle": "Copy handle",
   "copyDid": "Copy DID",
   "likeUsers": "Liked by",
