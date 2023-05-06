@@ -6,6 +6,7 @@ import MenuTickerOpenOtherApp from "@/components/MenuTickerComponents/OpenOtherA
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
 import MenuTickerToggleBlock from "@/components/MenuTickerComponents/ToggleBlock.vue"
+import MenuTickerToggleMute from "@/components/MenuTickerComponents/ToggleMute.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -37,7 +38,14 @@ const mainState = inject("state") as MainState
       @close="emit('close')"
     />
 
-    <!-- ブロック＆ブロック解除 -->
+    <!-- ミュートのトグル -->
+    <MenuTickerToggleMute
+      v-if="!isUser"
+      :user="mainState.currentProfile ?? undefined"
+      @close="emit('close')"
+    />
+
+    <!-- ブロックのトグル -->
     <MenuTickerToggleBlock
       v-if="!isUser"
       :user="mainState.currentProfile ?? undefined"

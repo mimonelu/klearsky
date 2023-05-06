@@ -8,6 +8,7 @@ import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention
 import MenuTickerShowLikeUsers from "@/components/MenuTickerComponents/ShowLikeUsers.vue"
 import MenuTickerShowRepostUsers from "@/components/MenuTickerComponents/ShowRepostUsers.vue"
 import MenuTickerToggleBlock from "@/components/MenuTickerComponents/ToggleBlock.vue"
+import MenuTickerToggleMute from "@/components/MenuTickerComponents/ToggleMute.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
@@ -48,7 +49,14 @@ async function deletePost () {
       @close="emit('close')"
     />
 
-    <!-- ブロック＆ブロック解除 -->
+    <!-- ミュートのトグル -->
+    <MenuTickerToggleMute
+      v-if="!isUser"
+      :user="author"
+      @close="emit('close')"
+    />
+
+    <!-- ブロックのトグル -->
     <MenuTickerToggleBlock
       v-if="!isUser"
       :user="author"

@@ -43,10 +43,7 @@ async function unblock () {
 </script>
 
 <template>
-  <button
-    class="block"
-    @click.stop="onActivate"
-  >
+  <button @click.stop="onActivate">
     <SVGIcon name="alert" />
     <span>{{ $t(user?.viewer.blocking == null ? "block" : "unblock") }}</span>
   </button>
