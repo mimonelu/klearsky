@@ -7,6 +7,7 @@ import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.v
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
 import MenuTickerShowLikeUsers from "@/components/MenuTickerComponents/ShowLikeUsers.vue"
 import MenuTickerShowRepostUsers from "@/components/MenuTickerComponents/ShowRepostUsers.vue"
+import MenuTickerToggleBlock from "@/components/MenuTickerComponents/ToggleBlock.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
@@ -14,6 +15,8 @@ import Util from "@/composables/util/index"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
+  author?: TTUser;
+  isUser: boolean;
   handle?: string;
   uri?: string;
   display: boolean;
@@ -45,10 +48,32 @@ async function deletePost () {
       @close="emit('close')"
     />
 
+    <!-- ブロック＆ブロック解除 -->
+    <MenuTickerToggleBlock
+      v-if="!isUser"
+      :user="author"
+      @close="emit('close')"
+    />
+
+    <!-- DID をコピーする -->
+    <MenuTickerCopyText
+      label="copyDid"
+      :text="mainState.currentProfile?.did"
+      @close="emit('close')"
+    />
+
+    <!-- ハンドルをコピーする -->
+    <MenuTickerCopyText
+      label="copyHandle"
+      :text="mainState.currentProfile?.handle"
+      @close="emit('close')"
+    />
+
     <hr>
 
     <!-- テキストをコピーする -->
     <MenuTickerCopyText
+      label="copyPostText"
       :text="copyText"
       @close="emit('close')"
     />

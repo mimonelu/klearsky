@@ -1,27 +1,35 @@
 <script lang="ts" setup>
+import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerCopyText from "@/components/MenuTickerComponents/CopyText.vue"
 import MenuTickerOpenOtherApp from "@/components/MenuTickerComponents/OpenOtherApp.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
+import MenuTickerToggleBlock from "@/components/MenuTickerComponents/ToggleBlock.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 
-const emit = defineEmits<{(event: string, params?: any): void}>()
+const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
+  isUser: boolean
   handle?: string;
-  uri?: string;
   display: boolean;
   translateText?: string;
   copyText?: string;
   mentionTo?: string;
   openSource?: any;
 }>()
+
+const mainState = inject("state") as MainState
 </script>
 
 <template>
   <MenuTicker :display="display">
-    <slot name="before" />
+    <!-- メールアドレス -->
+    <div
+      v-if="isUser"
+      class="menu-ticker__header"
+    >{{ mainState.atp.session?.email ?? "&nbsp;" }}</div>
 
     <!-- メンションを送る -->
     <MenuTickerSendMention
@@ -29,8 +37,30 @@ defineProps<{
       @close="emit('close')"
     />
 
+    <!-- ブロック＆ブロック解除 -->
+    <MenuTickerToggleBlock
+      v-if="!isUser"
+      :user="mainState.currentProfile ?? undefined"
+      @close="emit('close')"
+    />
+
+    <!-- DID をコピーする -->
+    <MenuTickerCopyText
+      label="copyDid"
+      :text="mainState.currentProfile?.did"
+      @close="emit('close')"
+    />
+
+    <!-- ハンドルをコピーする -->
+    <MenuTickerCopyText
+      label="copyHandle"
+      :text="mainState.currentProfile?.handle"
+      @close="emit('close')"
+    />
+
     <!-- テキストをコピーする -->
     <MenuTickerCopyText
+      label="copyPostText"
       :text="copyText"
       @close="emit('close')"
     />
@@ -45,7 +75,6 @@ defineProps<{
     <MenuTickerOpenOtherApp
       type="profile"
       :handle="handle"
-      :uri="uri"
     />
 
     <hr />

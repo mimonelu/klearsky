@@ -5,6 +5,7 @@ import Util from "@/composables/util/index"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
+  label: string;
   text?: string;
 }>()
 
@@ -19,6 +20,6 @@ async function copy () {
 <template>
   <button @click.stop="copy">
     <SVGIcon name="clipboard" />
-    <span>{{ $t("copyPostText") }}</span>
+    <span>{{ $t(label) }}</span>
   </button>
 </template>

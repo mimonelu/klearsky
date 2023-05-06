@@ -517,6 +517,8 @@ async function translateText () {
 
               <!-- ポストメニュー -->
               <PostMenuTicker
+                :author="post.author"
+                :isUser="post.author?.did === mainState.atp.session?.did"
                 :handle="post.author.handle"
                 :uri="post.uri"
                 :display="state.postMenuDisplay"

@@ -40,42 +40,6 @@ function openPostMenu () {
 function closePostMenu () {
   state.profileMenuDisplay = false
 }
-
-async function copyHandle () {
-  closePostMenu()
-  await navigator.clipboard.writeText(mainState.currentProfile?.handle ?? "")
-}
-
-async function copyDid () {
-  closePostMenu()
-  await navigator.clipboard.writeText(mainState.currentProfile?.did ?? "")
-}
-
-async function block () {
-  closePostMenu()
-  if (mainState.processing) return
-  if (mainState.currentProfile?.viewer.blocking != null) return
-  mainState.processing = true
-  const blocking = await mainState.atp.enableBlock(mainState.currentProfile?.did as string)
-  if (blocking != null && mainState.currentProfile != null)
-    mainState.currentProfile.viewer.blocking = blocking
-  mainState.processing = false
-}
-
-async function unblock () {
-  closePostMenu()
-  if (mainState.processing) return
-  if (mainState.currentProfile?.viewer.blocking == null) return
-  mainState.processing = true
-  await mainState.atp.disableBlock(mainState.currentProfile.viewer.blocking)
-
-  mainState.currentBlockingUsers = mainState.currentBlockingUsers.filter((user: TTUser) => {
-    return user.viewer.blocking !== mainState.currentProfile?.viewer.blocking
-  })
-
-  delete mainState.currentProfile.viewer.blocking
-  mainState.processing = false
-}
 </script>
 
 <template>
@@ -174,7 +138,7 @@ async function unblock () {
           >
             <SVGIcon name="menu" />
             <ProfileMenuTicker
-              type="profile"
+              :isUser="isUserProfile()"
               :handle="mainState.currentProfile?.handle"
               :display="state.profileMenuDisplay"
               :translateText="mainState.currentProfile?.description"
@@ -182,53 +146,7 @@ async function unblock () {
               :mentionTo="mainState.currentProfile?.handle"
               :openSource="mainState.currentProfile"
               @close="closePostMenu"
-            >
-              <template v-slot:before>
-                <!-- メールアドレス -->
-                <div
-                  v-if="isUserProfile()"
-                  class="menu-ticker__header"
-                >{{ mainState.atp.session?.email ?? "&nbsp;" }}</div>
-
-                <!-- ハンドルのコピー -->
-                <button
-                  class="copy-handle"
-                  @click.stop="copyHandle"
-                >
-                  <SVGIcon name="clipboard" />
-                  <span>{{ $t("copyHandle") }}</span>
-                </button>
-
-                <!-- DID のコピー -->
-                <button
-                  class="copy-did"
-                  @click.stop="copyDid"
-                >
-                  <SVGIcon name="clipboard" />
-                  <span>{{ $t("copyDid") }}</span>
-                </button>
-
-                <!-- ブロック -->
-                <button
-                  v-if="!isUserProfile() && mainState.currentProfile?.viewer.blocking == null"
-                  class="block"
-                  @click.stop="block"
-                >
-                  <SVGIcon name="alert" />
-                  <span>{{ $t("block") }}</span>
-                </button>
-
-                <!-- ブロック解除 -->
-                <button
-                  v-else-if="!isUserProfile()"
-                  class="block"
-                  @click.stop="unblock"
-                >
-                  <SVGIcon name="alert" />
-                  <span>{{ $t("unblock") }}</span>
-                </button>
-              </template>
-            </ProfileMenuTicker>
+            />
           </button>
         </div>
       </div>
@@ -416,13 +334,8 @@ async function unblock () {
 
   .menu-ticker:deep() {
     .menu-ticker--inner {
-      right: 0.25em;
-      &[data-to-down="true"] {
-        top: 2.5em;
-      }
-      &[data-to-down="false"] {
-        bottom: 2.5em;
-      }
+      top: 2.5rem;
+      right: 0.75rem;
     }
   }
 }
