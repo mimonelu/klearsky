@@ -1,5 +1,5 @@
 .quad-images {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: var(--image-aspect-ratio);
   display: grid;
   grid-gap: 2px;
   overflow: hidden;
@@ -33,7 +33,7 @@
       position: relative;
       height: 100%;
       & > img {
-        aspect-ratio: 16 / 9;
+        aspect-ratio: var(--image-aspect-ratio);
         display: block;
         object-fit: cover;
         width: 100%;

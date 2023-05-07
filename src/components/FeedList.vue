@@ -13,15 +13,9 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  processing: boolean
-}>({
-  processing: false
-})
-
 async function fetchFeeds (direction: "new" | "old") {
   Util.blurElement()
-  state.processing = true
+  mainState.listProcessing = true
   try {
     switch (props.type) {
       case "author": {
@@ -50,7 +44,7 @@ async function fetchFeeds (direction: "new" | "old") {
       }
     }
   } finally {
-    state.processing = false
+    mainState.listProcessing = false
   }
 }
 
@@ -96,7 +90,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <LoadButton
       v-if="hasLoadButton"
       direction="new"
-      :processing="state.processing"
+      :processing="mainState.listProcessing"
       @activate="fetchFeeds('new')"
     />
     <div class="feeds">
@@ -111,7 +105,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <LoadButton
       v-if="hasLoadButton"
       direction="old"
-      :processing="state.processing"
+      :processing="mainState.listProcessing"
       @activate="fetchFeeds('old')"
     />
   </div>

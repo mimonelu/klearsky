@@ -3,7 +3,6 @@ import NotFoundView from "@/views/NotFoundView.vue"
 
 // Main
 import MainView from "@/views/MainView.vue"
-import AccountsView from "@/views/main/AccountsView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
 import HotView from "@/views/main/HotView.vue"
 import NotificationsView from "@/views/main/NotificationsView.vue"
@@ -27,6 +26,7 @@ import UserSearchView from "@/views/main/search/UserSearchView.vue"
 import SettingsView from "@/views/main/SettingsView.vue"
 import KlearskySettingsView from "@/views/main/settings/KlearskySettingsView.vue"
 import BlueskySettingsView from "@/views/main/settings/BlueskySettingsView.vue"
+import AccountSettingsView from "@/views/main/settings/AccountSettingsView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -37,11 +37,6 @@ const router = createRouter({
       component: MainView,
       redirect: "/home",
       children: [
-        {
-          path: "/accounts",
-          name: "accounts",
-          component: AccountsView,
-        },
         {
           path: "/profile/edit",
           name: "edit-profile",
@@ -133,6 +128,11 @@ const router = createRouter({
               path: "bluesky",
               name: "bluesky-settings",
               component: BlueskySettingsView,
+            },
+            {
+              path: "account",
+              name: "account-settings",
+              component: AccountSettingsView,
             },
           ],
         },

@@ -11,6 +11,7 @@ type TTSetting = {
     "following" |
     "self" |
     "none"
+  imageAspectRatio?: string
   layout?:
     "default" |
     "defaultLeft" |
@@ -37,6 +38,8 @@ type MainState = {
   processing: boolean
 
   userProfile: null | TTProfile
+
+  listProcessing: boolean
 
   timelineFeeds: Array<TTFeed>
   timelineCursor?: string

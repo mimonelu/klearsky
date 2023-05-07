@@ -145,18 +145,6 @@ function moveToBottom () {
       <div class="label">{{ $t("settings") }}</div>
     </RouterLink>
 
-    <!-- アカウントボタン -->
-    <RouterLink
-      class="link-button"
-      to="/accounts"
-      @click.prevent
-    >
-      <div class="icon">
-        <SVGIcon name="person" />
-      </div>
-      <div class="label">{{ $t("accounts") }}</div>
-    </RouterLink>
-
     <!-- ポスト送信ポップアップトリガー -->
     <button
       class="link-button send-post-button"
@@ -196,7 +184,7 @@ function moveToBottom () {
 .main-menu-vertical {
   display: flex;
   flex-direction: column;
-  grid-gap: 1px;
+  grid-gap: 0.5rem;
 
   // スリムレイアウト
   @media (max-width: $max-width-with-scrollbar) {

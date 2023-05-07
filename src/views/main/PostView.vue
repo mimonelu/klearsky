@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import Loader from "@/components/Loader.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import Post from "@/components/Post.vue"
 
@@ -41,12 +42,15 @@ function removeThisPost (uri: string) {
         @removeThisPost="removeThisPost"
       />
     </template>
+    <Loader v-if="mainState.listProcessing" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .post-view {
+  flex-grow: 1;
   padding-bottom: 8rem;
+  position: relative;
 }
 
 .page-header {

@@ -9,7 +9,7 @@ import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import Post from "@/components/Post.vue"
-import PostAndProfileMenuTicker from "@/components/PostAndProfileMenuTicker.vue"
+import PostMenuTicker from "@/components/PostMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Thumbnail from "@/components/Thumbnail.vue"
 import Util from "@/composables/util/index"
@@ -212,18 +212,6 @@ function onActivatePostMenuTrigger () {
 
 function onClosePostMenu () {
   state.postMenuDisplay = false
-}
-
-function onActivateOpenRepostUsersPopup () {
-  Util.blurElement()
-  mainState.openRepostUsersPopup(props.post.uri)
-  onClosePostMenu()
-}
-
-function onActivateOpenLikeUsersPopup () {
-  Util.blurElement()
-  mainState.openLikeUsersPopup(props.post.uri)
-  onClosePostMenu()
 }
 
 async function onRemoveThisPost (uri: string) {
@@ -509,10 +497,11 @@ async function translateText () {
           </div>
           <div>
             <!-- Lightning -->
+            <!-- TODO: `post.record?.lightning` は頃合いを見て削除すること -->
             <a
-              v-if="post.record?.lightning"
+              v-if="post.record?.custom?.lightning || post.record?.lightning"
               class="icon-button--nolabel lightning"
-              :href="`lightning:${post.record?.lightning}`"
+              :href="`lightning:${post.record?.custom?.lightning || post.record?.lightning}`"
               rel="noreferrer"
               @click.stop
             >
@@ -527,8 +516,10 @@ async function translateText () {
               <SVGIcon name="menu" />
 
               <!-- ポストメニュー -->
-              <PostAndProfileMenuTicker
-                type="post"
+              <PostMenuTicker
+                :author="post.author"
+                :isUser="post.author?.did === mainState.atp.session?.did"
+                :did="post.author.did"
                 :handle="post.author.handle"
                 :uri="post.uri"
                 :display="state.postMenuDisplay"
@@ -541,23 +532,7 @@ async function translateText () {
                 :openSource="post"
                 @close="onClosePostMenu"
                 @removeThisPost="onRemoveThisPost"
-              >
-                <template v-slot:before>
-                  <!-- リポストユーザーリストポップアップボタン -->
-                  <button @click.stop="onActivateOpenRepostUsersPopup">
-                    <SVGIcon name="repost" />
-                    <span>{{ $t("repostUsers") }}</span>
-                  </button>
-
-                  <!-- ライクユーザーリストポップアップボタン -->
-                  <button @click.stop="onActivateOpenLikeUsersPopup">
-                    <SVGIcon name="heart" />
-                    <span>{{ $t("likeUsers") }}</span>
-                  </button>
-
-                  <hr>
-                </template>
-              </PostAndProfileMenuTicker>
+              />
             </button>
           </div>
         </div>
@@ -808,9 +783,13 @@ async function translateText () {
   &:not(:first-child) {
     margin-top: 0.5em;
   }
+
+  // タブレット幅以上
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     grid-template-columns: min min min 2fr;
   }
+
+  // タブレット幅未満
   @media not all and (min-width: calc($router-view-width + $main-menu-min-width)) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
@@ -837,13 +816,8 @@ async function translateText () {
     display: contents; // TODO: 外すとティッカー表示時にレイアウト崩れ、外さないとティッカー表示位置が若干ずれる
 
     .menu-ticker--inner {
+      top: 2.5rem;
       left: 0;
-      &[data-to-down="true"] {
-        top: 2.5em;
-      }
-      &[data-to-down="false"] {
-        bottom: 2.5em;
-      }
     }
   }
 }
@@ -864,18 +838,14 @@ async function translateText () {
 }
 
 .menu-button {
-  margin-right: -0.25em;
+  margin: -0.75em -1em;
+  padding: 0.75em 1.5em;
   position: relative;
 
   .menu-ticker:deep() {
-    .menu-ticker--inner {
-      right: 0;
-      &[data-to-down="true"] {
-        top: 2.5em;
-      }
-      &[data-to-down="false"] {
-        bottom: 2.5em;
-      }
+    & > .menu-ticker--inner {
+      top: 2.5rem;
+      right: 0.5rem;
     }
   }
 }

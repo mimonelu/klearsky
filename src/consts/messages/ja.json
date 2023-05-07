@@ -18,7 +18,7 @@
   "followersCount": "フォロワー数",
 
   "mute": "ミュートする",
-  "muting": "ミュート中",
+  "muting": "ミュートを解除する",
 
   "block": "ブロックする",
   "unblock": "ブロックを解除する",
@@ -35,20 +35,24 @@
   "loginFailed": "ログインに失敗しました。入力内容を確認してください。",
   "sessionExpired": "セッションの有効期限が切れました。再ログインしてください。",
 
+  "copy": "コピーする",
   "copyHandle": "ハンドルをコピーする",
   "copyDid": "DIDをコピーする",
   "likeUsers": "いいねしたユーザー",
   "repostUsers": "リポストしたユーザー",
   "copyPostText": "テキストをコピーする",
-  "translate": "翻訳する",
+  "translate": "テキストを翻訳する",
   "sendMention": "メンションを送る",
   "deletePost": "ポストを削除する",
   "deletePostMessage": "このポストを削除します。よろしいですか？",
+  "moderate": "モデレートする",
   "openOtherApp": "他のアプリで開く",
   "officialApp": "公式Webアプリ",
   "wrapperApp": "Bluesky Wrapper",
   "flatApp": "Flat",
+  "kiteApp": "Kite",
   "tokimekiApp": "TOKIMEKI Bluesky",
+  "atlasApp": "BSky Atlas",
   "showSource": "ソースを表示する",
 
   "sendRepost": "リポストする",
@@ -76,8 +80,9 @@
   "notifications": "通知",
 
   "settings": "設定",
-  "klearskySettings": "Klearsky用設定",
-  "blueskySettings": "Bluesky用設定",
+  "klearskySettings": "Klearsky",
+  "blueskySettings": "Bluesky",
+  "accountSettings": "アカウント",
 
   "language": "言語",
   "english": "英語",
@@ -118,6 +123,12 @@
   "imageControl5": "すべての画像を折り畳む",
   "showImage": "画像を表示する",
   "hideImage": "画像を隠す",
+
+  "imageAspectRatio": "画像サイズの比率",
+  "imageAspectRatio1": "1 / 1",
+  "imageAspectRatio2": "3 / 2",
+  "imageAspectRatio3": "2 / 1",
+  "imageAspectRatio4": "3 / 1",
 
   "layout": "レイアウト",
   "layoutDefault": "通常",

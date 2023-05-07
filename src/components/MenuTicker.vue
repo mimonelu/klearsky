@@ -1,21 +1,33 @@
 <script lang="ts" setup>
-import { nextTick, ref, watch } from "vue"
+import { nextTick, reactive, ref, watch } from "vue"
 
 const props = defineProps<{
   display: boolean;
 }>()
 
+const state = reactive<{
+  top: number;
+  left: number;
+}>({
+  top: 0,
+  left: 0,
+})
+
 const menuTickerOverlay = ref()
 const menuTickerInner = ref()
 
-watch(() => props.display, () => {
+watch(() => props.display, (display: boolean) => {
+  state.top = 0
+  state.left = 0
   nextTick(() => {
-    if (menuTickerOverlay.value == null) return
+    if (!display) return
     if (menuTickerInner.value == null) return
-    const overlayRect = menuTickerOverlay.value.getBoundingClientRect()
     const innerRect = menuTickerInner.value.getBoundingClientRect()
-    const heightDiff = (overlayRect.bottom / 2) - innerRect.y
-    menuTickerInner.value.setAttribute("data-to-down", heightDiff >= 0)
+
+    if (window.innerHeight < innerRect.bottom)
+      state.top = window.innerHeight - innerRect.bottom
+    if (0 > innerRect.left)
+      state.left = - innerRect.left
   })
 })
 </script>
@@ -32,8 +44,11 @@ watch(() => props.display, () => {
     <div
       class="menu-ticker--inner"
       ref="menuTickerInner"
+      :style="{ transform: `translate(${state.left}px, ${state.top}px)` }"
     >
-      <slot />
+      <div class="menu-ticker--content">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
@@ -50,18 +65,22 @@ watch(() => props.display, () => {
   }
 
   &--inner {
+    padding: 0 0 3.125rem 0.75rem;
+    position: absolute;
+    max-width: 16rem;
+    z-index: 2;
+  }
+
+  &--content {
     box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.25);
     background-color: rgb(var(--fg-color));
-    color: rgba(var(--bg-color), 0.75);
+    color: rgb(var(--bg-color));
     border: 1px solid rgba(var(--bg-color), 0.25);
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
-    grid-gap: 0.25rem;
+    grid-gap: 0.125rem;
     padding: 0.5rem 0;
-    position: absolute;
-    max-width: 16rem;
-    z-index: 2;
 
     &:deep() {
       .menu-ticker__header {
@@ -84,21 +103,50 @@ watch(() => props.display, () => {
         white-space: nowrap;
         &:focus, &:hover {
           background-color: rgba(var(--accent-color), 0.25);
-          color: rgb(var(--bg-color));
         }
 
         & > .svg-icon {
-          fill: rgba(var(--bg-color), 0.75);
+          fill: rgb(var(--bg-color));
         }
-        &:focus, &:hover {
-          & > .svg-icon {
-            fill: rgb(var(--bg-color));
-          }
+        & > .svg-icon--at {
+          fill: rgb(var(--post-color));
+        }
+        & > .svg-icon--repost {
+          fill: rgb(var(--share-color));
+        }
+        & > .svg-icon--heart {
+          fill: rgb(var(--like-color));
+        }
+        & > .svg-icon--person,
+        & > .svg-icon--personOff,
+        & > .svg-icon--remove,
+        & > .svg-icon--volumeOn,
+        & > .svg-icon--volumeOff {
+          fill: rgb(var(--notice-color));
         }
       }
 
       & > hr {
         border-bottom: 1px solid rgba(var(--bg-color), 0.25);
+      }
+    }
+  }
+
+  &:deep() {
+    .menu-ticker__sub-trigger {
+      position: relative;
+    }
+
+    .menu-ticker__sub {
+      display: contents;
+
+      .menu-ticker--overlay {
+        pointer-events: none;
+      }
+
+      .menu-ticker--inner {
+        top: 0;
+        right: calc(100% - 2rem) !important; // TODO:
       }
     }
   }

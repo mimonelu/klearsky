@@ -250,6 +250,8 @@ function saveSettings () {
     state.settings[did].repostControl = []
   if (state.settings[did].imageControl == null)
     state.settings[did].imageControl = "all"
+  if (state.settings[did].imageAspectRatio == null)
+    state.settings[did].imageAspectRatio = "2 / 1"
   if (state.settings[did].layout == null)
     state.settings[did].layout = "default"
   if (state.settings[did].colorTheme == null)

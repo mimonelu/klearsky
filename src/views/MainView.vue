@@ -47,11 +47,11 @@ let notificationTimer: null | number = null
 onBeforeMount(() => {
   hotkeys("n", { keyup: true }, (event: any) => {
     if (event.type === "keyup" &&
-        !state.repostUsersPopupDisplay &&
-        !state.likeUsersPopupDisplay &&
-        !state.imagePopupProps.display &&
-        !state.sendPostPopupProps.display &&
-        !state.loginPopupAutoDisplay)
+      !state.repostUsersPopupDisplay &&
+      !state.likeUsersPopupDisplay &&
+      !state.imagePopupProps.display &&
+      !state.sendPostPopupProps.display &&
+      !state.loginPopupAutoDisplay)
       state.sendPostPopupProps.display = true
   })
 })
@@ -71,8 +71,8 @@ onMounted(async () => {
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    await state.fetchUserProfile()
-    await processPage(router.currentRoute.value.name)
+    state.fetchUserProfile()
+    processPage(router.currentRoute.value.name)
   } finally {
     state.mounted = true
     state.processing = false
@@ -129,17 +129,13 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   // HOT の取得はログイン後 or カーソルボタン押下時 or currentHotFeeds が空の時のみ
   if (to.name === "hot" && state.currentHotFeeds.length > 0) return
 
-  state.processing = true
-  try {
-    await processPage(to.name)
-  } finally {
-    state.processing = false
-  }
+  await processPage(to.name)
 })
 
 function resetState () {
   state.updateKey = 0
   state.userProfile = null
+  state.listProcessing = false
   state.timelineFeeds = []
   state.timelineCursor = undefined
   state.currentPosts = []
@@ -207,8 +203,8 @@ async function manualLogin (service: string, identifier: string, password: strin
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    await state.fetchUserProfile()
-    await processPage(router.currentRoute.value.name)
+    state.fetchUserProfile()
+    processPage(router.currentRoute.value.name)
   } finally {
     state.processing = false
   }
@@ -231,71 +227,73 @@ async function processPage (pageName?: null | RouteRecordName) {
     }
   }
 
-  switch (pageName) {
-    case "profile-post": {
-      // ブロック情報などを先に取得するために Promise.all はしない
-      if (handle !== state.currentProfile?.handle)
-        await state.fetchCurrentProfile(handle as string)
-      if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
-        await state.fetchCurrentAuthorFeed("new")
-      break
-    }
-    case "profile-repost": {
-      const tasks: Array<Promise<void>> = []
-      if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0)
-        tasks.push(state.fetchAuthorReposts("new"))
-      if (handle !== state.currentProfile?.handle)
-        tasks.push(state.fetchCurrentProfile(handle as string))
-      await Promise.all(tasks)
-      break
-    }
-    case "profile-like": {
-      const tasks: Array<Promise<void>> = []
-      if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
-        tasks.push(state.fetchAuthorLikes("new"))
-      if (handle !== state.currentProfile?.handle)
-        tasks.push(state.fetchCurrentProfile(handle as string))
-      await Promise.all(tasks)
-      break
-    }
-    case "profile-following": {
-      const tasks: Array<Promise<void>> = []
-      if (!state.inSameProfilePage || state.currentFollowings.length === 0)
-        tasks.push(state.fetchFollowings("new"))
-      if (handle !== state.currentProfile?.handle)
-        tasks.push(state.fetchCurrentProfile(handle as string))
-      await Promise.all(tasks)
-      break
-    }
-    case "profile-follower": {
-      const tasks: Array<Promise<void>> = []
-      if (!state.inSameProfilePage || state.currentFollowers.length === 0)
-        tasks.push(state.fetchFollowers("new"))
-      if (handle !== state.currentProfile?.handle)
-        tasks.push(state.fetchCurrentProfile(handle as string))
-      await Promise.all(tasks)
-      break
-    }
-    case "home": {
-      await state.fetchTimeline("new")
-      break
-    }
-    case "hot": {
-      await state.fetchHotFeeds("new")
-      break
-    }
-    case "post": {
-      const postUri = state.currentQuery.postUri as LocationQueryValue
-      if (!postUri) {
-        await router.push({ name: "home" })
+  state.listProcessing = true
+  try {
+    switch (pageName) {
+      case "profile-post": {
+        // ブロック情報などを先に取得するために Promise.all はしない
+        if (handle !== state.currentProfile?.handle)
+          await state.fetchCurrentProfile(handle as string)
+        if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
+          await state.fetchCurrentAuthorFeed("new")
         break
       }
-      state.currentPosts?.splice(0)
-      state.currentPosts = await state.atp.fetchPostThread(postUri) ?? []
-      await nextTick()
-      scrollToFocused()
-      break
+      case "profile-repost": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0)
+          tasks.push(state.fetchAuthorReposts("new"))
+        if (handle !== state.currentProfile?.handle)
+          tasks.push(state.fetchCurrentProfile(handle as string))
+        await Promise.all(tasks)
+        break
+      }
+      case "profile-like": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
+          tasks.push(state.fetchAuthorLikes("new"))
+        if (handle !== state.currentProfile?.handle)
+          tasks.push(state.fetchCurrentProfile(handle as string))
+        await Promise.all(tasks)
+        break
+      }
+      case "profile-following": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentFollowings.length === 0)
+          tasks.push(state.fetchFollowings("new"))
+        if (handle !== state.currentProfile?.handle)
+          tasks.push(state.fetchCurrentProfile(handle as string))
+        await Promise.all(tasks)
+        break
+      }
+      case "profile-follower": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentFollowers.length === 0)
+          tasks.push(state.fetchFollowers("new"))
+        if (handle !== state.currentProfile?.handle)
+          tasks.push(state.fetchCurrentProfile(handle as string))
+        await Promise.all(tasks)
+        break
+      }
+      case "home": {
+        await state.fetchTimeline("new")
+        break
+      }
+      case "hot": {
+        await state.fetchHotFeeds("new")
+        break
+      }
+      case "post": {
+        const postUri = state.currentQuery.postUri as LocationQueryValue
+        if (!postUri) return
+        state.currentPosts?.splice(0)
+        state.currentPosts = await state.atp.fetchPostThread(postUri) ?? []
+        await nextTick()
+        scrollToFocused()
+        break
+      }
     }
+  } finally {
+    state.listProcessing = false
   }
 }
 
@@ -380,7 +378,8 @@ function scrollListener () {
     :data-path="state.currentPath"
     :data-layout="state.currentSetting.layout"
     :style="{
-      '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 0
+      '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 0,
+      '--image-aspect-ratio': state.currentSetting.imageAspectRatio ?? '1 / 1'
     }"
   >
     <!-- 壁紙 -->
@@ -392,19 +391,27 @@ function scrollListener () {
       }"
     />
 
+    <!-- メインエリア -->
     <div
       v-show="!state.loginPopupAutoDisplay"
       class="main"
     >
+      <!-- PC用メニュー -->
       <div class="main-menu-vertical-wrapper">
         <MainMenuVertical />
       </div>
+
+      <!-- SP用メニュー -->
       <div class="main-menu-horizontal-wrapper">
         <MainMenuHorizontal />
       </div>
+
+      <!-- ルータービュー -->
       <div class="router-view-wrapper">
         <RouterView />
       </div>
+
+      <!-- サブメニュー -->
       <div class="sub-menu-wrapper">
         <SubMenu />
       </div>
@@ -423,12 +430,15 @@ function scrollListener () {
       @close="state.closeLikeUsersPopup"
     />
 
+    <!-- イメージポップアップ -->
     <ImagePopup
       v-if="state.imagePopupProps.display"
       :largeUri="state.imagePopupProps.largeUri"
       :smallUri="state.imagePopupProps.smallUri"
       @close="state.imagePopupProps.display = false"
     />
+
+    <!-- ポスト送信ポップアップ -->
     <SendPostPopup
       v-if="state.sendPostPopupProps.display"
       :type="state.sendPostPopupProps.type"
@@ -436,19 +446,27 @@ function scrollListener () {
       :text="state.sendPostPopupProps.text"
       @closeSnedPostPopup="closeSendPostPopup"
     />
+
+    <!-- ログインポップアップ -->
     <LoginPopup
       v-if="state.loginPopupAutoDisplay"
       @login="manualLogin"
     />
+
+    <!-- メッセージポップアップ -->
     <MessagePopup
       v-if="state.messagePopupDisplay"
       @close="state.closeMessagePopup"
     />
+
+    <!-- 確認ポップアップ -->
     <ConfirmationPopup
       v-if="state.confirmationPopupDisplay"
       @close="state.closeConfirmationPopup"
       @apply="state.applyConfirmationPopup"
     />
+
+    <!-- 全画面ローダー -->
     <Loader v-if="state.processing" />
   </div>
 </template>
@@ -458,7 +476,7 @@ function scrollListener () {
   --main-area-opacity: 1.0;
   background-color: rgba(var(--bg-color), var(--bg-opacity));
 
-  // レイアウト
+  // カスタムレイアウト
   &[data-layout="defaultLeft"],
   &[data-layout="slimLeft"] {
     .main {
@@ -504,12 +522,9 @@ function scrollListener () {
       display: none;
     }
   }
-
-  & > .loader {
-    position: fixed;
-  }
 }
 
+// 壁紙
 .background-image {
   background-position: center center;
   background-repeat: no-repeat;
@@ -522,6 +537,7 @@ function scrollListener () {
   height: 100vh;
 }
 
+// メインエリア
 .main {
   display: flex;
   justify-content: center;
@@ -530,40 +546,35 @@ function scrollListener () {
   max-width: $max-width;
   min-height: 100vh;
 
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     padding-bottom: 3rem;
   }
 }
 
+// メインメニュー
 .main-menu-vertical-wrapper {
   overflow: hidden;
   position: relative;
+
+  // 最大幅未満
   @media (max-width: $max-width-with-scrollbar) {
     min-width: $main-menu-min-width;
     max-width: $main-menu-min-width;
   }
+
+  // 最大幅以上
   @media not all and (max-width: $max-width-with-scrollbar) {
     min-width: $menu-max-width;
     max-width: $menu-max-width;
   }
+
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     display: none;
   }
 
-  & > .main-menu-vertical {
-    position: fixed;
-    top: 0;
-    .main-view[data-layout="default"] &,
-    .main-view[data-layout="defaultLeft"] &,
-    .main-view[data-layout="defaultRight"] & {
-      @media not all and (max-width: $max-width-with-scrollbar) {
-        min-width: $menu-max-width;
-        max-width: $menu-max-width;
-      }
-    }
-  }
-
-  // レイアウト
+  // カスタムレイアウト
   .main-view[data-layout="slim"] &,
   .main-view[data-layout="slimLeft"] &,
   .main-view[data-layout="slimRight"] & {
@@ -572,6 +583,24 @@ function scrollListener () {
   }
 }
 
+// PC用メニュー
+.main-menu-vertical {
+  position: fixed;
+  top: 0.5rem;
+
+  // カスタムレイアウト
+  .main-view[data-layout="default"] &,
+  .main-view[data-layout="defaultLeft"] &,
+  .main-view[data-layout="defaultRight"] & {
+    // 最大幅以上
+    @media not all and (max-width: $max-width-with-scrollbar) {
+      min-width: $menu-max-width;
+      max-width: $menu-max-width;
+    }
+  }
+}
+
+// SP用メニュー
 .main-menu-horizontal-wrapper {
   position: fixed;
   bottom: 0;
@@ -579,11 +608,13 @@ function scrollListener () {
   z-index: 2;
   width: 100vw;
 
+  // SP幅以上
   @media (min-width: $sp-width) {
     display: none;
   }
 }
 
+// ルータービュー
 .router-view-wrapper {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-left: 1px solid rgba(var(--fg-color), 0.25);
@@ -592,9 +623,12 @@ function scrollListener () {
   flex-grow: 1;
   max-width: $router-view-width;
 
+  // タブレット幅以上
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
     border-right: 1px solid rgba(var(--fg-color), 0.25);
   }
+
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     border-left-style: none;
   }
@@ -604,6 +638,7 @@ function scrollListener () {
   }
 }
 
+// サブメニュー
 .sub-menu-wrapper {
   @media (max-width: 1024px) {
     display: none;
@@ -619,6 +654,7 @@ function scrollListener () {
   }
 }
 
+// 全画面ローダー
 .loader {
   position: fixed;
 }

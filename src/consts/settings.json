@@ -25,6 +25,12 @@
     { "label": "imageControl4", "value": "self" },
     { "label": "imageControl5", "value": "none" }
   ],
+  "imageAspectRatio": [
+    { "label": "imageAspectRatio1", "value": "1 / 1" },
+    { "label": "imageAspectRatio2", "value": "3 / 2" },
+    { "label": "imageAspectRatio3", "value": "2 / 1" },
+    { "label": "imageAspectRatio4", "value": "3 / 1" }
+  ],
   "layouts": [
     { "label": "layoutDefault", "value": "default" },
     { "label": "layoutDefaultLeft", "value": "defaultLeft" },

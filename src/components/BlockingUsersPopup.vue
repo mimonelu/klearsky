@@ -58,7 +58,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
   >
     <template v-slot:header>
       <h2>
-        <SVGIcon name="alert" />
+        <SVGIcon name="personOff" />
         <span>{{ $t("blockingUsers") }}</span>
       </h2>
     </template>

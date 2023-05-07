@@ -11,10 +11,12 @@ export default async function (
     did: did ?? (this.session.did as string),
     cid,
   }
-  const response: ComAtprotoSyncGetBlob.Response = await (
+  const response: null | ComAtprotoSyncGetBlob.Response = await (
     this.agent as BskyAgent
   ).api.com.atproto.sync.getBlob(query)
+    .catch(console.error)
+    .then((value: any) => value)
   console.log("[klearsky/getBlob]", response)
-  if (!response.success) return null
+  if (!response?.success) return null
   return response.data
 }

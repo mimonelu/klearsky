@@ -3,6 +3,8 @@
 }
 
 body {
+  --image-aspect-ratio: 1 / 1; // 16 / 9;
+
   background-attachment: fixed;
   background-color: rgb(var(--bg-color));
   background-position: center center;

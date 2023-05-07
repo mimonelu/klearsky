@@ -89,6 +89,16 @@ async function copyCode (code: string) {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 1rem;
+
+  // SP幅以上
+  @media (min-width: $sp-width) {
+    .invite-code__slot-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  // SP幅未満
   @media not all and (min-width: $sp-width) {
     grid-template-columns: 1fr;
 
@@ -103,12 +113,6 @@ async function copyCode (code: string) {
 
     .invite-code__slot {
       width: 100%;
-    }
-  }
-  @media (min-width: $sp-width) {
-    .invite-code__slot-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
     }
   }
 }
