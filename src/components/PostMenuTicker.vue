@@ -95,8 +95,10 @@ async function deletePost () {
     <!-- 他のアプリで開く -->
     <MenuTickerOpenAppWrapper
       :type="'post'"
+      :did="did"
       :handle="handle"
       :uri="uri"
+      @close="emit('close')"
     />
 
     <hr />

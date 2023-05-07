@@ -50,7 +50,9 @@
   "officialApp": "Official Web App",
   "wrapperApp": "Bluesky Wrapper",
   "flatApp": "Flat",
+  "kiteApp": "Kite",
   "tokimekiApp": "TOKIMEKI Bluesky",
+  "atlasApp": "BSky Atlas",
   "showSource": "Show source",
 
   "sendRepost": "Repost",

@@ -838,13 +838,14 @@ async function translateText () {
 }
 
 .menu-button {
-  margin-right: -0.25em;
+  margin: -0.75em -1em;
+  padding: 0.75em 1.5em;
   position: relative;
 
   .menu-ticker:deep() {
     & > .menu-ticker--inner {
       top: 2.5rem;
-      right: 0;
+      right: 0.5rem;
     }
   }
 }

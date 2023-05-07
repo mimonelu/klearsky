@@ -44,7 +44,13 @@ async function unblock () {
 
 <template>
   <button @click.stop="onActivate">
-    <SVGIcon name="alert" />
-    <span>{{ $t(user?.viewer.blocking == null ? "block" : "unblock") }}</span>
+    <template v-if="user?.viewer.blocking == null">
+      <SVGIcon name="personOff" />
+      <span>{{ $t("block") }}</span>
+    </template>
+    <template v-else>
+      <SVGIcon name="person" />
+      <span>{{ $t("unblock") }}</span>
+    </template>
   </button>
 </template>

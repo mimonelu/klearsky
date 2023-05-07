@@ -9,6 +9,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   type: "post" | "profile";
+  did?: string;
   handle?: string;
   uri?: string;
 }>()
@@ -20,17 +21,20 @@ const state = reactive<{
 })
 
 function openOtherApp (app: any) {
+  emit("close")
   let uri = ""
   if (props.type === "profile") {
-    uri = app.profileUri.replace("{handle}", props.handle)
+    uri = app.profileUri
+      .replace("{did}", props.did)
+      .replace("{handle}", props.handle)
   } else if (props.type === "post") {
     const aturi = new AtUri(props.uri as string)
     uri = app.postUri
+      .replace("{did}", props.did)
       .replace("{handle}", props.handle)
       .replace("{rkey}", aturi.rkey)
   }
   window.open(uri)
-  emit("close")
 }
 </script>
 
@@ -49,14 +53,16 @@ function openOtherApp (app: any) {
       :display="state.otherAppDisplay"
       class="menu-ticker__sub"
     >
-      <button
-        v-for="app of otherApps"
-        :key="app.name"
-        @click.stop="openOtherApp(app)"
-      >
-        <SVGIcon name="shimmer" />
-        <span>{{ $t(app.name) }}</span>
-      </button>
+      <template v-for="app of otherApps">
+        <button
+          @click.stop="openOtherApp(app)"
+        >
+          <SVGIcon name="openInApp" />
+          <span>{{ $t(app.name) }}</span>
+        </button>
+
+        <hr v-if="app.separator" />
+      </template>
     </MenuTicker>
   </button>
 </template>

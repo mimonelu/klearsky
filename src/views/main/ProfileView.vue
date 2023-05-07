@@ -317,8 +317,8 @@ function closePostMenu () {
 
 .menu-button {
   cursor: pointer;
-  margin: -1rem;
-  padding: 1rem;
+  margin: -1rem -1rem;
+  padding: 1rem 1.5rem;
   position: absolute;
   bottom: 0rem;
   right: 0;
@@ -335,7 +335,7 @@ function closePostMenu () {
   .menu-ticker:deep() {
     & > .menu-ticker--inner {
       top: 2.5rem;
-      right: 0.75rem;
+      right: 0.5rem;
     }
   }
 }

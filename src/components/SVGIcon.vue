@@ -26,8 +26,10 @@ import lightning from "@/svg/lightning.svg?raw"
 import mail from "@/svg/mail.svg?raw"
 import menu from "@/svg/menu.svg?raw"
 import offImage from "@/svg/off-image.svg?raw"
+import openInApp from "@/svg/open-in-app.svg?raw"
 import openInNew from "@/svg/open-in-new.svg?raw"
 import person from "@/svg/person.svg?raw"
+import personOff from "@/svg/person-off.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
@@ -71,8 +73,10 @@ const icons: { [k: string]: string } = {
   mail,
   menu,
   offImage,
+  openInApp,
   openInNew,
   person,
+  personOff,
   plus,
   post,
   quoteRepost,

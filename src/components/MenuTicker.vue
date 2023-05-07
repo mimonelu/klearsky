@@ -74,12 +74,12 @@ watch(() => props.display, (display: boolean) => {
   &--content {
     box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.25);
     background-color: rgb(var(--fg-color));
-    color: rgba(var(--bg-color), 0.75);
+    color: rgb(var(--bg-color));
     border: 1px solid rgba(var(--bg-color), 0.25);
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
-    grid-gap: 0.25rem;
+    grid-gap: 0.125rem;
     padding: 0.5rem 0;
 
     &:deep() {
@@ -103,16 +103,26 @@ watch(() => props.display, (display: boolean) => {
         white-space: nowrap;
         &:focus, &:hover {
           background-color: rgba(var(--accent-color), 0.25);
-          color: rgb(var(--bg-color));
         }
 
         & > .svg-icon {
-          fill: rgba(var(--bg-color), 0.75);
+          fill: rgb(var(--bg-color));
         }
-        &:focus, &:hover {
-          & > .svg-icon {
-            fill: rgb(var(--bg-color));
-          }
+        & > .svg-icon--at {
+          fill: rgb(var(--post-color));
+        }
+        & > .svg-icon--repost {
+          fill: rgb(var(--share-color));
+        }
+        & > .svg-icon--heart {
+          fill: rgb(var(--like-color));
+        }
+        & > .svg-icon--person,
+        & > .svg-icon--personOff,
+        & > .svg-icon--remove,
+        & > .svg-icon--volumeOn,
+        & > .svg-icon--volumeOff {
+          fill: rgb(var(--notice-color));
         }
       }
 

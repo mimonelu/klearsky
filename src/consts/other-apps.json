@@ -15,8 +15,19 @@
     "postUri": "https://flat-bs.vercel.app/{handle}/posts/{rkey}"
   },
   {
+    "name": "kiteApp",
+    "profileUri": "https://kite.black/#/user/{handle}",
+    "postUri": "https://kite.black/#/blue/{did}/{rkey}"
+  },
+  {
     "name": "tokimekiApp",
     "profileUri": "https://tokimekibluesky.vercel.app/profile/{handle}",
-    "postUri": "https://tokimekibluesky.vercel.app/profile/{handle}/post/{rkey}"
+    "postUri": "https://tokimekibluesky.vercel.app/profile/{handle}/post/{rkey}",
+    "separator": true
+  },
+  {
+    "name": "atlasApp",
+    "profileUri": "https://bsky.jazco.dev/?s={handle}",
+    "postUri": "https://bsky.jazco.dev/?s={handle}"
   }
 ]

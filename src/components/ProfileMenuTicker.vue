@@ -62,7 +62,9 @@ const mainState = inject("state") as MainState
     <!-- 他のアプリで開く -->
     <MenuTickerOpenAppWrapper
       type="profile"
+      :did="mainState.currentProfile?.did"
       :handle="handle"
+      @close="emit('close')"
     />
 
     <hr />

@@ -35,11 +35,11 @@ async function toggleMute () {
 <template>
   <button @click.stop="toggleMute">
     <template v-if="user?.viewer.muted">
-      <SVGIcon name="volumeOff" />
+      <SVGIcon name="volumeOn" />
       <span>{{ $t("muting") }}</span>
     </template>
     <template v-else>
-      <SVGIcon name="volumeOn" />
+      <SVGIcon name="volumeOff" />
       <span>{{ $t("mute") }}</span>
     </template>
   </button>
