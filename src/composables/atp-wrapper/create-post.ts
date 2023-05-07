@@ -24,14 +24,14 @@ export default async function (
   }
 
   // カスタムフィールドの作成
-  const custom: TTCustomFieldsInPost = {
+  const unofficial: TTCustomFieldsInPost = {
     via: `Klearsky v${Package.version}`,
   }
 
   // Lightning
-  if (params.lightning) custom.lightning = params.lightning
+  if (params.lightning) unofficial.lightning = params.lightning
 
-  record.custom = custom
+  record.unofficial = unofficial
 
   if (richText.facets != null) record.facets = richText.facets
 

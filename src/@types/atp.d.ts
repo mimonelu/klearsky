@@ -122,7 +122,7 @@ type TTPost = {
     }
     facets?: any
     entities?: Array<TTEntity>
-    custom?: TTCustomFieldsInPost // Injected
+    unofficial?: TTCustomFieldsInPost // Injected
     lightning?: string // Injected // TODO: 頃合いを見て削除すること
     [k: string]: unknown
   }
