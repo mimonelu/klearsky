@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive } from "vue"
 import Loader from "@/components/Loader.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
 const props = defineProps<{
@@ -15,9 +16,11 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   src: null | string;
   loaded: boolean;
+  errored: boolean;
 }>({
   src: null,
   loaded: false,
+  errored: false,
 })
 
 onMounted(async () => {
@@ -74,6 +77,7 @@ async function fetchBlob (link: string): Promise<null | Uint8Array> {
   let data: null | Uint8Array = Util.cache.get(link)
   if (data != null) return data
   data = await mainState.atp.fetchBlob(link, props.did)
+  state.errored = data == null
   Util.cache.set(link, data)
   return data
 }
@@ -81,6 +85,7 @@ async function fetchBlob (link: string): Promise<null | Uint8Array> {
 function onActivateImage () {
   if (props.image == null) return
   if (!state.loaded) return
+  if (state.errored) return
   mainState.imagePopupProps.smallUri = props.image.thumb != null
     ? props.image.thumb
     : state.loaded
@@ -113,6 +118,12 @@ function onActivateAlt (alt: string) {
       class="button alt-button"
       @click.prevent.stop="onActivateAlt(image.alt)"
     >ALT</button>
+    <div
+      v-if="state.errored"
+      class="error"
+    >
+      <SVGIcon name="alert" />
+    </div>
     <Loader
       v-if="!state.loaded"
       @click.stop
@@ -120,7 +131,7 @@ function onActivateAlt (alt: string) {
   </div>
 </template>
 
-<style lanf="scss" scoped>
+<style lang="scss" scoped>
 .thumbnail {
   position: relative;
 }
@@ -131,6 +142,23 @@ function onActivateAlt (alt: string) {
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+.error {
+  background-color: rgba(var(--bg-color), 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  & > .svg-icon {
+    fill: rgb(var(--notice-color));
+    font-size: 2em;
+  }
 }
 
 .loader {
