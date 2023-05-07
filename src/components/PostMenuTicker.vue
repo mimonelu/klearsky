@@ -2,13 +2,12 @@
 import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
-import MenuTickerOpenOtherApp from "@/components/MenuTickerComponents/OpenOtherApp.vue"
+import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
+import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
 import MenuTickerShowLikeUsers from "@/components/MenuTickerComponents/ShowLikeUsers.vue"
 import MenuTickerShowRepostUsers from "@/components/MenuTickerComponents/ShowRepostUsers.vue"
-import MenuTickerToggleBlock from "@/components/MenuTickerComponents/ToggleBlock.vue"
-import MenuTickerToggleMute from "@/components/MenuTickerComponents/ToggleMute.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
@@ -50,20 +49,6 @@ async function deletePost () {
       @close="emit('close')"
     />
 
-    <!-- ミュートのトグル -->
-    <MenuTickerToggleMute
-      v-if="!isUser"
-      :user="author"
-      @close="emit('close')"
-    />
-
-    <!-- ブロックのトグル -->
-    <MenuTickerToggleBlock
-      v-if="!isUser"
-      :user="author"
-      @close="emit('close')"
-    />
-
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
       :text="translateText"
@@ -99,8 +84,16 @@ async function deletePost () {
       @close="emit('close')"
     />
 
+    <!-- モデレートする -->
+    <MenuTickerModerateWrapper
+      v-if="!isUser"
+      :isUser="isUser"
+      :user="author"
+      @close="emit('close')"
+    />
+
     <!-- 他のアプリで開く -->
-    <MenuTickerOpenOtherApp
+    <MenuTickerOpenAppWrapper
       :type="'post'"
       :handle="handle"
       :uri="uri"

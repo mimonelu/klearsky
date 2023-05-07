@@ -2,11 +2,10 @@
 import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
-import MenuTickerOpenOtherApp from "@/components/MenuTickerComponents/OpenOtherApp.vue"
+import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
+import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
-import MenuTickerToggleBlock from "@/components/MenuTickerComponents/ToggleBlock.vue"
-import MenuTickerToggleMute from "@/components/MenuTickerComponents/ToggleMute.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -38,20 +37,6 @@ const mainState = inject("state") as MainState
       @close="emit('close')"
     />
 
-    <!-- ミュートのトグル -->
-    <MenuTickerToggleMute
-      v-if="!isUser"
-      :user="mainState.currentProfile ?? undefined"
-      @close="emit('close')"
-    />
-
-    <!-- ブロックのトグル -->
-    <MenuTickerToggleBlock
-      v-if="!isUser"
-      :user="mainState.currentProfile ?? undefined"
-      @close="emit('close')"
-    />
-
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
       :text="translateText"
@@ -66,8 +51,16 @@ const mainState = inject("state") as MainState
       @close="emit('close')"
     />
 
+    <!-- モデレートする -->
+    <MenuTickerModerateWrapper
+      v-if="!isUser"
+      :isUser="isUser"
+      :user="mainState.currentProfile ?? undefined"
+      @close="emit('close')"
+    />
+
     <!-- 他のアプリで開く -->
-    <MenuTickerOpenOtherApp
+    <MenuTickerOpenAppWrapper
       type="profile"
       :handle="handle"
     />

@@ -18,7 +18,7 @@
   "followersCount": "フォロワー数",
 
   "mute": "ミュートする",
-  "muting": "ミュート中",
+  "muting": "ミュートを解除する",
 
   "block": "ブロックする",
   "unblock": "ブロックを解除する",
@@ -45,6 +45,7 @@
   "sendMention": "メンションを送る",
   "deletePost": "ポストを削除する",
   "deletePostMessage": "このポストを削除します。よろしいですか？",
+  "moderate": "モデレートする",
   "openOtherApp": "他のアプリで開く",
   "officialApp": "公式Webアプリ",
   "wrapperApp": "Bluesky Wrapper",

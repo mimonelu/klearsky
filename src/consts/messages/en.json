@@ -45,6 +45,7 @@
   "sendMention": "Send mention",
   "deletePost": "Delete post",
   "deletePostMessage": "This post will be deleted. Are you sure?",
+  "moderate": "Moderate",
   "openOtherApp": "Open in other apps",
   "officialApp": "Official Web App",
   "wrapperApp": "Bluesky Wrapper",

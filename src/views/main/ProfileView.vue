@@ -333,7 +333,7 @@ function closePostMenu () {
   }
 
   .menu-ticker:deep() {
-    .menu-ticker--inner {
+    & > .menu-ticker--inner {
       top: 2.5rem;
       right: 0.75rem;
     }

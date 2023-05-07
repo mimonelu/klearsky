@@ -11,6 +11,7 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 async function toggleMute () {
+  emit("close")
   if (mainState.processing) return
   mainState.processing = true
   try {
@@ -27,7 +28,6 @@ async function toggleMute () {
     }
   } finally {
     mainState.processing = false
-    emit("close")
   }
 }
 </script>
