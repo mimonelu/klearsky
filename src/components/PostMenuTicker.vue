@@ -2,7 +2,6 @@
 import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
-import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
@@ -81,14 +80,6 @@ async function deletePost () {
       :did="did"
       :handle="handle"
       :text="copyText"
-      @close="emit('close')"
-    />
-
-    <!-- モデレートする -->
-    <MenuTickerModerateWrapper
-      v-if="!isUser"
-      :isUser="isUser"
-      :user="author"
       @close="emit('close')"
     />
 
