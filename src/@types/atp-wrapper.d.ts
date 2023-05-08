@@ -82,14 +82,14 @@ interface TIAtpWrapper {
   ): Promise<undefined | string>
   fetchAuthorReposts(
     this: TIAtpWrapper,
-    currentAuthorReposts: Array<TTFeed>,
+    currentFeeds: Array<TTFeed>,
     repo: string,
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
   fetchAuthorLikes(
     this: TIAtpWrapper,
-    currentAuthorReposts: Array<TTFeed>,
+    currentFeeds: Array<TTFeed>,
     repo: string,
     limit?: number,
     cursor?: string
