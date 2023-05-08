@@ -17,6 +17,7 @@ import Util from "@/composables/util/index"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
+  level?: number;
   position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim";
   post: TTPost;
   replyTo?: TTPost;
@@ -381,7 +382,7 @@ async function translateText () {
           :displayImage="state.displayImage"
         />
 
-        <template v-if="state.images.length > 0">
+        <template v-if="state.images.length > 0 && (level ?? 1) < 3">
           <template v-if="position !== 'slim'">
             <!-- 画像フォルダーボタン -->
             <button
@@ -437,6 +438,7 @@ async function translateText () {
           <template v-if="(post.embed.record.$type as string)?.indexOf('#viewBlocked') === - 1">
             <div class="repost">
               <Post
+                :level="(level ?? 1) + 1"
                 :position="position === 'slim' ? 'slim' : 'postInPost'"
                 :post="post.embed.record as TTPost"
               />
