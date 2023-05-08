@@ -28,7 +28,6 @@ import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
-import fetchPost from "@/composables/atp-wrapper/fetch-post"
 import fetchPosts from "@/composables/atp-wrapper/fetch-posts"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
@@ -52,7 +51,6 @@ class AtpWrapper implements TIAtpWrapper {
       sessions: {},
     }
     this.session = undefined
-    this.caches = {}
     this.lastFetchNotificationsDate = undefined
   }
 }
@@ -93,7 +91,6 @@ prototype.fetchKeywordSearch = fetchKeywordSearch
 prototype.fetchMutingUsers = fetchMutingUsers
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications
-prototype.fetchPost = fetchPost
 prototype.fetchPosts = fetchPosts
 prototype.fetchPostThread = fetchPostThread
 prototype.fetchProfile = fetchProfile

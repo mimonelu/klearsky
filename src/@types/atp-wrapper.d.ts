@@ -43,7 +43,6 @@ interface TIAtpWrapper {
   agent: null | BskyAgent
   data: TTData
   session?: TTSession
-  caches: { [k: string]: any }
   lastFetchNotificationsDate?: Date
 
   canLogin(this: TIAtpWrapper): boolean
@@ -154,11 +153,6 @@ interface TIAtpWrapper {
     cursor?: string
     newNotificationCount: number
   }>
-  fetchPost(
-    this: TIAtpWrapper,
-    uri: string,
-    handle?: string,
-  ): Promise<null | TTPost>
   fetchPosts(
     this: TIAtpWrapper,
     uris: Array<string>
