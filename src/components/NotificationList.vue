@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import AsyncPost from "@/components/AsyncPost.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
+import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
@@ -60,16 +60,6 @@ function makeSubjectTo (notification: TTNotification): any {
       :data-has-folder="isGroupingReason(notificationGroup.reason) &&
         notificationGroup.notifications.length >= 2"
     >
-      <!-- ユーザーポスト -->
-      <RouterLink
-        :to="{ name: 'post', query: { postUri: notificationGroup.reasonSubject } }"
-      >
-        <AsyncPost
-          v-if="isGroupingReason(notificationGroup.reason)"
-          :uri="notificationGroup.reasonSubject as string"
-        />
-      </RouterLink>
-
       <!-- 通知フォルダー -->
       <div class="notification-folder">
         <!-- 通知フォルダー開閉ボタン -->
@@ -153,6 +143,13 @@ function makeSubjectTo (notification: TTNotification): any {
           </RouterLink>
         </template>
       </div>
+
+      <!-- ユーザーポスト -->
+      <Post
+        v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.post != null"
+        position="slim"
+        :post="notificationGroup.post"
+      />
     </div>
   </div>
 </template>
@@ -197,16 +194,6 @@ function makeSubjectTo (notification: TTNotification): any {
       padding: 0.25rem 0.75rem;
     }
   }
-}
-
-// ユーザーポスト
-.async-post {
-  background-color: rgba(var(--fg-color), 0.125);
-  border: 1px solid rgba(var(--fg-color), 0.25);
-  border-radius: var(--border-radius);
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
 }
 
 // 通知フォルダー
@@ -357,5 +344,15 @@ function makeSubjectTo (notification: TTNotification): any {
   grid-column: 3 / 6;
   line-height: 1.5;
   word-break: break-all;
+}
+
+// ユーザーポスト
+.post {
+  background-color: rgba(var(--fg-color), 0.125);
+  border: 1px solid rgba(var(--fg-color), 0.25);
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
 }
 </style>

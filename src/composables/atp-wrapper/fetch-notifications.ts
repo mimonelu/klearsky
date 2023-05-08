@@ -24,9 +24,11 @@ export default async function (
 
   let newNotificationCount = 0
 
+  const newValues: Array<TTNotificationGroup> = [...values]
+
   response.data.notifications.forEach(
     (notification: AppBskyNotificationListNotifications.Notification) => {
-      const existence = values.some(
+      const existence = newValues.some(
         (valueGroup: TTNotificationGroup) =>
           valueGroup.notifications.some(
             (value: TTNotification) => value.cid === notification.cid
@@ -54,9 +56,9 @@ export default async function (
         uri: notification.uri,
         isRead: notification.isRead,
       }
-      const existenceGroup = values.find((value: TTNotificationGroup) =>
+      const existenceGroup = newValues.find((value: TTNotificationGroup) =>
         value.reason === reason && value.reasonSubject === reasonSubject)
-      if (existenceGroup == null) values.push({
+      if (existenceGroup == null) newValues.push({
           id: notification.cid,
           indexedAt: new Date(notification.indexedAt),
           notifications: [newNotification],
@@ -67,6 +69,27 @@ export default async function (
       else existenceGroup.notifications.push(newNotification)
     }
   )
+
+  // ポスト詳細の取得
+  const uris: Set<string> = new Set()
+  newValues.forEach((group: TTNotificationGroup) => {
+    if (group.post != null) return
+    if (group.reason !== "like" &&
+      group.reason !== "quote" &&
+      group.reason !== "reply" &&
+      group.reason !== "repost") return
+    uris.add(group.reasonSubject as string)
+  })
+  const posts: null | Array<TTPost> = await this.fetchPosts(Array.from(uris))
+  if (posts != null) {
+    newValues.forEach((value: TTNotificationGroup) => {
+      const post: undefined | TTPost =
+        posts.find((post: TTPost) => value.reasonSubject === post.uri)
+      if (post != null) value.post = post
+    })
+  }
+
+  values.splice(0, values.length, ...newValues)
 
   // フォールディングの設定
   if (cursor === undefined)

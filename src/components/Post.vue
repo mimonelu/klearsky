@@ -17,7 +17,7 @@ import Util from "@/composables/util/index"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
-  position: "post" | "root" | "parent" | "postInPost" | "preview";
+  position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim";
   post: TTPost;
   replyTo?: TTPost;
 }>()
@@ -318,7 +318,7 @@ async function translateText () {
     <div class="body">
       <!-- アバター -->
       <AvatarLink
-        v-if="position !== 'postInPost'"
+        v-if="position !== 'postInPost' && position !== 'slim'"
         :handle="post.author?.handle"
         :image="post.author?.avatar"
         @click.stop
@@ -328,7 +328,7 @@ async function translateText () {
         <div class="body__right__header">
           <!-- アバター -->
           <AvatarLink
-            v-if="position === 'postInPost'"
+            v-if="position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
             :handle="post.author?.handle"
             :image="post.author?.avatar"
@@ -350,12 +350,18 @@ async function translateText () {
 
         <!-- 本文 -->
         <HtmlText
+          v-if="position !== 'slim'"
           class="text"
           dir="auto"
           :text="post.record?.text ?? post.value?.text"
           :facets="post.record?.facets ?? post.value?.facets"
           :entities="post.record?.entities ?? post.value?.entities"
         />
+        <div
+          v-else
+          class="text--slim"
+          dir="auto"
+        >{{ post.record?.text ?? post.value?.text }}</div>
 
         <!-- 自動翻訳 -->
         <div
@@ -370,45 +376,59 @@ async function translateText () {
 
         <!-- リンクボックス -->
         <LinkBox
+          v-if="position !== 'slim'"
           :external="state.external"
           :displayImage="state.displayImage"
         />
 
         <template v-if="state.images.length > 0">
-          <!-- 画像フォルダーボタン -->
-          <button
-            v-if="!state.displayImage"
-            class="button--bordered image-folder-button"
-            @click.prevent.stop="onActivateImageFolderButton"
-          >
-            <template v-if="state.imageFolding">
-              <SVGIcon name="image" />
-              <span>{{ $t("showImage") }}</span>
-            </template>
-            <template v-else>
-              <SVGIcon name="offImage" />
-              <span>{{ $t("hideImage") }}</span>
-            </template>
-          </button>
-
-          <!-- イメージボックス -->
-          <div
-            v-if="state.displayImage || (!state.displayImage && !state.imageFolding)"
-            class="quad-images"
-            :data-number-of-images="state.images.length"
-          >
-            <div
-              v-for="image, imageIndex of state.images"
-              :key="imageIndex"
-              class="quad-image"
+          <template v-if="position !== 'slim'">
+            <!-- 画像フォルダーボタン -->
+            <button
+              v-if="!state.displayImage"
+              class="button--bordered image-folder-button"
+              @click.prevent.stop="onActivateImageFolderButton"
             >
+              <template v-if="state.imageFolding">
+                <SVGIcon name="image" />
+                <span>{{ $t("showImage") }}</span>
+              </template>
+              <template v-else>
+                <SVGIcon name="offImage" />
+                <span>{{ $t("hideImage") }}</span>
+              </template>
+            </button>
+
+            <!-- イメージボックス -->
+            <div
+              v-if="state.displayImage || (!state.displayImage && !state.imageFolding)"
+              class="quad-images"
+              :data-number-of-images="state.images.length"
+            >
+              <div
+                v-for="image, imageIndex of state.images"
+                :key="imageIndex"
+                class="quad-image"
+              >
+                <Thumbnail
+                  :key="post.cid"
+                  :image="image"
+                  :did="post.author.did"
+                />
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <!-- イメージリスト -->
+            <div class="image-list">
               <Thumbnail
-                :key="post.cid"
+                v-for="image, imageIndex of state.images"
+                :key="imageIndex"
                 :image="image"
                 :did="post.author.did"
               />
             </div>
-          </div>
+          </template>
         </template>
 
         <!-- 引用リポスト -->
@@ -417,7 +437,7 @@ async function translateText () {
           <template v-if="(post.embed.record.$type as string)?.indexOf('#viewBlocked') === - 1">
             <div class="repost">
               <Post
-                position="postInPost"
+                :position="position === 'slim' ? 'slim' : 'postInPost'"
                 :post="post.embed.record as TTPost"
               />
             </div>
@@ -435,7 +455,7 @@ async function translateText () {
 
         <!-- リアクションコンテナ -->
         <div
-          v-if="position !== 'postInPost'"
+          v-if="position !== 'postInPost' && position !== 'slim'"
           class="reaction-container"
         >
           <div>
@@ -676,8 +696,11 @@ async function translateText () {
   grid-gap: 1em;
   align-items: flex-start;
 }
-.post[data-position="postInPost"] > .body {
-  display: unset;
+.post[data-position="postInPost"],
+.post[data-position="slim"] {
+  & > .body {
+    display: unset;
+  }
 }
 
 .avatar-link {
@@ -700,8 +723,11 @@ async function translateText () {
   grid-gap: 0.5em;
   overflow: hidden;
 }
-.post[data-position="postInPost"] .body__right__header {
-  grid-template-columns: auto auto 1fr min-content;
+.post[data-position="postInPost"],
+.post[data-position="slim"] {
+  .body__right__header {
+    grid-template-columns: auto auto 1fr min-content;
+  }
 }
 
 .avatar-in-post {
@@ -733,13 +759,16 @@ async function translateText () {
   white-space: nowrap;
 }
 
-.text {
+.text,
+.text--slim {
   line-height: 1.5;
-  white-space: pre-wrap;
   word-break: break-word;
   &:empty {
     display: contents;
   }
+}
+.text {
+  white-space: pre-wrap;
 
   // 折り返されたURLの隙間が選択されないようにする
   &:deep(.textlink) {
@@ -765,13 +794,37 @@ async function translateText () {
   grid-area: i;
 }
 
+.image-list {
+  display: flex;
+  grid-gap: 0.5rem;
+
+  & > .thumbnail:deep() {
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    overflow: hidden;
+
+    & > img {
+      aspect-ratio: var(--image-aspect-ratio);
+      object-fit: cover;
+      height: 4rem;
+    }
+
+    & > .loader {
+      font-size: 0.5rem;
+    }
+  }
+}
+
 .repost {
   grid-area: r;
   border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: var(--border-radius);
 
-  & > .post {
+  :not([data-position="slim"]) & > .post {
     padding: 0.875em;
+  }
+  [data-position="slim"] & > .post {
+    padding: 0.5em;
   }
 }
 

@@ -207,6 +207,7 @@ type TTNotificationGroup = {
   id: string
   indexedAt: Date
   notifications: Array<TTNotification>
+  post?: TTPost
   reason: TTNotificationReason
   reasonSubject?: string
   __folding: boolean

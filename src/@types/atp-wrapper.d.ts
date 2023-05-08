@@ -159,6 +159,10 @@ interface TIAtpWrapper {
     uri: string,
     handle?: string,
   ): Promise<null | TTPost>
+  fetchPosts(
+    this: TIAtpWrapper,
+    uris: Array<string>
+  ): Promise<null | Array<TTPost>>
   fetchPostThread(
     this: TIAtpWrapper,
     uri: string,
