@@ -139,12 +139,8 @@ function closePostMenu () {
             <SVGIcon name="menu" />
             <ProfileMenuTicker
               :isUser="isUserProfile()"
-              :handle="mainState.currentProfile?.handle"
               :display="state.profileMenuDisplay"
-              :translateText="mainState.currentProfile?.description"
-              :copyText="mainState.currentProfile?.description"
-              :mentionTo="mainState.currentProfile?.handle"
-              :openSource="mainState.currentProfile"
+              :user="(mainState.currentProfile as TTProfile)"
               @close="closePostMenu"
             />
           </button>

@@ -12,12 +12,8 @@ const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
   isUser: boolean
-  handle?: string;
   display: boolean;
-  translateText?: string;
-  copyText?: string;
-  mentionTo?: string;
-  openSource?: any;
+  user: TTUser;
 }>()
 
 const mainState = inject("state") as MainState
@@ -33,21 +29,21 @@ const mainState = inject("state") as MainState
 
     <!-- メンションを送る -->
     <MenuTickerSendMention
-      :mentionTo="mentionTo"
+      :mentionTo="user.handle"
       @close="emit('close')"
     />
 
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
-      :text="translateText"
+      :text="user.description"
       @close="emit('close')"
     />
 
     <!-- コピーする -->
     <MenuTickerCopyTextWrapper
-      :did="mainState.currentProfile?.did"
-      :handle="mainState.currentProfile?.handle"
-      :text="copyText"
+      :did="user.did"
+      :handle="user.handle"
+      :text="user.description"
       @close="emit('close')"
     />
 
@@ -55,15 +51,15 @@ const mainState = inject("state") as MainState
     <MenuTickerModerateWrapper
       v-if="!isUser"
       :isUser="isUser"
-      :user="mainState.currentProfile ?? undefined"
+      :user="user"
       @close="emit('close')"
     />
 
     <!-- 他のアプリで開く -->
     <MenuTickerOpenAppWrapper
       type="profile"
-      :did="mainState.currentProfile?.did"
-      :handle="handle"
+      :did="user.did"
+      :handle="user.handle"
       @close="emit('close')"
     />
 
@@ -71,7 +67,7 @@ const mainState = inject("state") as MainState
 
     <!-- ソースを表示する -->
     <MenuTickerOpenSource
-      :source="openSource"
+      :source="user"
       @close="emit('close')"
     />
   </MenuTicker>
