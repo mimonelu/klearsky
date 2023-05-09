@@ -43,7 +43,7 @@ async function unblock () {
 </script>
 
 <template>
-  <button @click.stop="onActivate">
+  <button @click.prevent.stop="onActivate">
     <template v-if="user?.viewer.blocking == null">
       <SVGIcon name="personOff" />
       <span>{{ $t("block") }}</span>

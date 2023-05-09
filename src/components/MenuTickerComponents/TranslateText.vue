@@ -18,7 +18,7 @@ function translate () {
 </script>
 
 <template>
-  <button @click.stop="translate">
+  <button @click.prevent.stop="translate">
     <SVGIcon name="translate" />
     <span>{{ $t("translate") }}</span>
   </button>

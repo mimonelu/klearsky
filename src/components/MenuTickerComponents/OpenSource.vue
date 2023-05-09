@@ -16,7 +16,7 @@ function openSource () {
 </script>
 
 <template>
-  <button @click.stop="openSource">
+  <button @click.prevent.stop="openSource">
     <SVGIcon name="json" />
     <span>{{ $t("showSource") }}</span>
   </button>

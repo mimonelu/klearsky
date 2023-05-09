@@ -41,7 +41,7 @@ function openOtherApp (app: any) {
 <template>
   <button
     class="menu-ticker__sub-trigger"
-    @click.stop
+    @click.prevent.stop
     @mouseenter="state.otherAppDisplay = true"
     @mouseleave="state.otherAppDisplay = false"
   >
@@ -55,7 +55,7 @@ function openOtherApp (app: any) {
     >
       <template v-for="app of otherApps">
         <button
-          @click.stop="openOtherApp(app)"
+          @click.prevent.stop="openOtherApp(app)"
         >
           <SVGIcon name="openInApp" />
           <span>{{ $t(app.name) }}</span>

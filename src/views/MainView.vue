@@ -115,6 +115,9 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
   }
 
   state.currentPosts?.splice(0)
+
+  state.repostUsersPopupDisplay = false
+  state.likeUsersPopupDisplay = false
 })
 
 router.afterEach(async (to: RouteLocationNormalized) => {

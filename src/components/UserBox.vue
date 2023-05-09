@@ -26,16 +26,20 @@ function closePostMenu () {
 </script>
 
 <template>
-  <div class="user-box">
+  <RouterLink
+    class="user-box"
+    :to="{ name: 'profile-post', query: { handle: user.handle } }"
+  >
     <AvatarLink
       :handle="user.handle"
       :image="user.avatar"
     />
     <div class="display-name">{{ user.displayName }}</div>
     <div class="handle">{{ user.handle }}</div>
+    <!-- // TODO: ポップアップで見切れる不具合を修正すること
     <button
       class="menu-button"
-      @click.stop="openPostMenu"
+      @click.prevent.stop="openPostMenu"
     >
       <SVGIcon name="menu" />
       <ProfileMenuTicker
@@ -45,11 +49,12 @@ function closePostMenu () {
         @close="closePostMenu"
       />
     </button>
+    -->
     <div class="description">{{ user.description }}</div>
     <div class="bottom">
       <slot name="bottom" />
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <style lang="scss" scoped>
@@ -59,9 +64,9 @@ function closePostMenu () {
   grid-template-columns: min-content auto 1fr;
   grid-template-rows: auto auto 1fr;
   grid-template-areas:
-    "a n h m"
-    "a d d d"
-    "b b b b";
+    "a n h"
+    "a d d"
+    "b b b";
   align-items: center;
 }
 
@@ -90,6 +95,7 @@ function closePostMenu () {
   white-space: nowrap;
 }
 
+/*
 .menu-button {
   grid-area: m;
   cursor: pointer;
@@ -113,6 +119,7 @@ function closePostMenu () {
     }
   }
 }
+*/
 
 .description {
   grid-area: d;

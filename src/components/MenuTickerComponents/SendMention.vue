@@ -20,7 +20,7 @@ async function sendMention () {
 </script>
 
 <template>
-  <button @click.stop="sendMention">
+  <button @click.prevent.stop="sendMention">
     <SVGIcon name="at" />
     <span>{{ $t("sendMention") }}</span>
   </button>

@@ -16,7 +16,7 @@ async function copy () {
 </script>
 
 <template>
-  <button @click.stop="copy">
+  <button @click.prevent.stop="copy">
     <SVGIcon name="clipboard" />
     <span>{{ $t(label) }}</span>
   </button>

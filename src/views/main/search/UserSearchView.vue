@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
-import { useRouter } from "vue-router"
 import LoadButton from "@/components/LoadButton.vue"
 import UserBox from "@/components/UserBox.vue"
 import Util from "@/composables/util/index"
@@ -13,8 +12,6 @@ const state = reactive<{
 }>({
   processing: false
 })
-
-const router = useRouter()
 
 onMounted(() => {
   const formItem = document.getElementById("user-term-textbox")
@@ -62,10 +59,6 @@ async function fetchContinuousResults (direction: "new" | "old") {
   }
 }
 
-async function openProfile (handle: string) {
-  await router.push({ name: "profile-post", query: { handle } })
-}
-
 // インフィニットスクロール
 watch(() => mainState.scrolledToBottom, (value: boolean) => {
   if (value) fetchContinuousResults('old')
@@ -99,7 +92,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
           :key="user.did"
           class="user"
           :user="user"
-          @click.prevent="openProfile(user.handle)"
         />
       </div>
       <LoadButton
