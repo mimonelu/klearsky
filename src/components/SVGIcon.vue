@@ -17,6 +17,7 @@ import email from "@/svg/email.svg?raw"
 import fire from "@/svg/fire.svg?raw"
 import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
+import history from "@/svg/history.svg?raw"
 import home from "@/svg/home.svg?raw"
 import identifier from "@/svg/identifier.svg?raw"
 import image from "@/svg/image.svg?raw"
@@ -64,6 +65,7 @@ const icons: { [k: string]: string } = {
   fire,
   heart,
   heartBroken,
+  history,
   home,
   identifier,
   image,

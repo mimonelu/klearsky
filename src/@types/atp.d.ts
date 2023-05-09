@@ -214,6 +214,7 @@ type TTNotificationGroup = {
 }
 
 type TTProfile = {
+  __log?: any // Injected
   __createdAt?: string // Injected
   did: string
   declaration: {
