@@ -207,12 +207,14 @@ type TTNotificationGroup = {
   id: string
   indexedAt: Date
   notifications: Array<TTNotification>
+  post?: TTPost
   reason: TTNotificationReason
   reasonSubject?: string
   __folding: boolean
 }
 
 type TTProfile = {
+  __log?: any // Injected
   __createdAt?: string // Injected
   did: string
   declaration: {

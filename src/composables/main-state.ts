@@ -85,8 +85,8 @@ async function fetchCurrentProfile (handle: string) {
   if (handle === state.atp.session?.handle)
     state.userProfile = state.currentProfile
 
-  // 利用開始日の取得（非同期で良い）
-  injectCreatedAt()
+  // ハンドル履歴と利用開始日の取得（非同期で良い）
+  fetchLogAudit()
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
@@ -98,11 +98,12 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
   }
 }
 
-async function injectCreatedAt () {
+async function fetchLogAudit () {
   if (state.currentProfile == null) return
   const log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
   const logJson = await log.json()
   state.currentProfile.__createdAt = logJson[0]?.createdAt
+  state.currentProfile.__log = logJson.reverse()
   console.log("[klearsky/log/audit]", logJson)
 }
 

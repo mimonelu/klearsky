@@ -3,6 +3,7 @@ import { inject, reactive } from "vue"
 import { RouterView, type LocationQueryValue } from "vue-router"
 import AvatarButton from "@/components/AvatarButton.vue"
 import FollowButton from "@/components/FollowButton.vue"
+import HandleHistoryPopup from "@/components/HandleHistoryPopup.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import MuteButton from "@/components/MuteButton.vue"
 import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
@@ -12,8 +13,10 @@ import Util from "@/composables/util/index"
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  handleHistoryPopupDisplay: boolean;
   profileMenuDisplay: boolean;
 }>({
+  handleHistoryPopupDisplay: false,
   profileMenuDisplay: false,
 })
 
@@ -43,7 +46,10 @@ function closePostMenu () {
 </script>
 
 <template>
-  <div class="profile-view">
+  <div
+    class="profile-view"
+    :data-log-loaded="mainState.currentProfile?.__log != null"
+  >
     <div
       class="banner"
       :data-has-banner="!!mainState.currentProfile?.banner"
@@ -78,7 +84,13 @@ function closePostMenu () {
         </div>
         <div class="right">
           <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
-          <div class="handle">{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</div>
+          <a
+            class="handle"
+            @click.stop="state.handleHistoryPopupDisplay = true"
+          >
+            <span>{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</span>
+            <SVGIcon name="history" />
+          </a>
           <div
             v-if="!isUserProfile() && isFollowed()"
             class="followed"
@@ -139,12 +151,8 @@ function closePostMenu () {
             <SVGIcon name="menu" />
             <ProfileMenuTicker
               :isUser="isUserProfile()"
-              :handle="mainState.currentProfile?.handle"
               :display="state.profileMenuDisplay"
-              :translateText="mainState.currentProfile?.description"
-              :copyText="mainState.currentProfile?.description"
-              :mentionTo="mainState.currentProfile?.handle"
-              :openSource="mainState.currentProfile"
+              :user="(mainState.currentProfile as TTProfile)"
               @close="closePostMenu"
             />
           </button>
@@ -185,6 +193,11 @@ function closePostMenu () {
       >{{ $t("follower") }}</RouterLink>
     </div>
     <RouterView />
+    <HandleHistoryPopup
+      v-if="state.handleHistoryPopupDisplay"
+      :log="mainState.currentProfile?.__log"
+      @close="state.handleHistoryPopupDisplay = false"
+    />
   </div>
 </template>
 
@@ -249,11 +262,29 @@ function closePostMenu () {
 .handle {
   color: rgba(var(--fg-color), 0.75);
   display: flex;
-  grid-gap: 0.5rem;
+  align-items: center;
+  grid-gap: 0.25rem;
   line-height: 1.25;
   user-select: text;
   word-break: break-all;
   margin-bottom: 0.5rem;
+  [data-log-loaded="true"] & {
+    color: rgba(var(--accent-color), 0.875);
+    cursor: pointer;
+    &:focus, &:hover {
+      color: rgb(var(--accent-color));
+      & > .svg-icon {
+        fill: rgb(var(--accent-color));
+      }
+    }
+  }
+
+  [data-log-loaded="false"] & > .svg-icon {
+    display: none;
+  }
+  [data-log-loaded="true"] & > .svg-icon {
+    fill: rgba(var(--accent-color), 0.875);
+  }
 }
 
 .followed {

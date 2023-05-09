@@ -14,7 +14,7 @@ export default async function (
   const response: null | ComAtprotoSyncGetBlob.Response = await (
     this.agent as BskyAgent
   ).api.com.atproto.sync.getBlob(query)
-    .catch(console.error)
+    .catch((error: any) => console.error("[klearsky/getBlob]", error))
     .then((value: any) => value)
   console.log("[klearsky/getBlob]", response)
   if (!response?.success) return null

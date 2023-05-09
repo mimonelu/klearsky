@@ -1,24 +1,60 @@
 <script lang="ts" setup>
+import { inject, reactive } from "vue"
 import AvatarLink from "@/components/AvatarLink.vue"
+import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 
 defineProps<{
   user: TTUser
 }>()
+
+const mainState = inject("state") as MainState
+
+const state = reactive<{
+  profileMenuDisplay: boolean;
+}>({
+  profileMenuDisplay: false,
+})
+
+function openPostMenu () {
+  state.profileMenuDisplay = !state.profileMenuDisplay
+}
+
+function closePostMenu () {
+  state.profileMenuDisplay = false
+}
 </script>
 
 <template>
-  <div class="user-box">
+  <RouterLink
+    class="user-box"
+    :to="{ name: 'profile-post', query: { handle: user.handle } }"
+  >
     <AvatarLink
       :handle="user.handle"
       :image="user.avatar"
     />
     <div class="display-name">{{ user.displayName }}</div>
     <div class="handle">{{ user.handle }}</div>
+    <!-- // TODO: ポップアップで見切れる不具合を修正すること
+    <button
+      class="menu-button"
+      @click.prevent.stop="openPostMenu"
+    >
+      <SVGIcon name="menu" />
+      <ProfileMenuTicker
+        :isUser="user.handle === mainState.atp.session?.handle"
+        :display="state.profileMenuDisplay"
+        :user="user"
+        @close="closePostMenu"
+      />
+    </button>
+    -->
     <div class="description">{{ user.description }}</div>
     <div class="bottom">
       <slot name="bottom" />
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <style lang="scss" scoped>
@@ -58,6 +94,32 @@ defineProps<{
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/*
+.menu-button {
+  grid-area: m;
+  cursor: pointer;
+  margin: -1rem -1rem;
+  padding: 1rem 1.5rem;
+  position: relative;
+
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.5);
+  }
+  &:focus, &:hover {
+    & > .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
+  }
+
+  .menu-ticker:deep() {
+    & > .menu-ticker--inner {
+      top: 2.5rem;
+      right: 0.5rem;
+    }
+  }
+}
+*/
 
 .description {
   grid-area: d;

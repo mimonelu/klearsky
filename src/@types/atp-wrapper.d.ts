@@ -43,7 +43,6 @@ interface TIAtpWrapper {
   agent: null | BskyAgent
   data: TTData
   session?: TTSession
-  caches: { [k: string]: any }
   lastFetchNotificationsDate?: Date
 
   canLogin(this: TIAtpWrapper): boolean
@@ -83,14 +82,14 @@ interface TIAtpWrapper {
   ): Promise<undefined | string>
   fetchAuthorReposts(
     this: TIAtpWrapper,
-    currentAuthorReposts: Array<TTFeed>,
+    currentFeeds: Array<TTFeed>,
     repo: string,
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
   fetchAuthorLikes(
     this: TIAtpWrapper,
-    currentAuthorReposts: Array<TTFeed>,
+    currentFeeds: Array<TTFeed>,
     repo: string,
     limit?: number,
     cursor?: string
@@ -154,11 +153,10 @@ interface TIAtpWrapper {
     cursor?: string
     newNotificationCount: number
   }>
-  fetchPost(
+  fetchPosts(
     this: TIAtpWrapper,
-    uri: string,
-    handle?: string,
-  ): Promise<null | TTPost>
+    uris: Array<string>
+  ): Promise<null | Array<TTPost>>
   fetchPostThread(
     this: TIAtpWrapper,
     uri: string,

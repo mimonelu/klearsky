@@ -22,7 +22,7 @@ const state = reactive<{
 <template>
   <button
     class="menu-ticker__sub-trigger"
-    @click.stop
+    @click.prevent.stop
     @mouseenter="state.display = true"
     @mouseleave="state.display = false"
   >

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { inject, onBeforeMount, reactive } from "vue"
-import { useRouter } from "vue-router"
 import LoadButton from "@/components/LoadButton.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -18,19 +17,12 @@ const state = reactive<{
   processing: false
 })
 
-const router = useRouter()
-
 onBeforeMount(async () => {
   await fetchContinuousResults("new")
 })
 
 function close () {
   emit("close")
-}
-
-async function openProfile (handle: string) {
-  close()
-  await router.push({ name: "profile-post", query: { handle } })
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
@@ -70,7 +62,6 @@ async function fetchContinuousResults (direction: "new" | "old") {
           :key="user.did"
           class="user"
           :user="user"
-          @click.prevent="openProfile(user.handle)"
         />
       </div>
     </template>

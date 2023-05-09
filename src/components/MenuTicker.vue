@@ -111,7 +111,8 @@ watch(() => props.display, (display: boolean) => {
         & > .svg-icon--at {
           fill: rgb(var(--post-color));
         }
-        & > .svg-icon--repost {
+        & > .svg-icon--repost,
+        & > .svg-icon--quoteRepost {
           fill: rgb(var(--share-color));
         }
         & > .svg-icon--heart {

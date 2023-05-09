@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util/index"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -10,15 +9,14 @@ const props = defineProps<{
 }>()
 
 async function copy () {
-  Util.blurElement()
+  emit("close")
   if (props.text == null) return
   await navigator.clipboard.writeText(props.text)
-  emit("close")
 }
 </script>
 
 <template>
-  <button @click.stop="copy">
+  <button @click.prevent.stop="copy">
     <SVGIcon name="clipboard" />
     <span>{{ $t(label) }}</span>
   </button>

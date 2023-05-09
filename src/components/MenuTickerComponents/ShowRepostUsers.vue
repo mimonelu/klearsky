@@ -20,7 +20,7 @@ function show () {
 </script>
 
 <template>
-  <button @click.stop="show">
+  <button @click.prevent.stop="show">
     <SVGIcon name="repost" />
     <span>{{ $t("repostUsers") }}</span>
   </button>
