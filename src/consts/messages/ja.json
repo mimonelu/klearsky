@@ -76,8 +76,10 @@
   "hot": "What's Hot",
 
   "search": "検索",
-  "userSearch": "ユーザー検索",
-  "keywordSearch": "キーワード検索（仮）",
+  "suggestionSearch": "おすすめ",
+  "userSearch": "ユーザーを探す",
+  "keywordSearch": "ポストを探す",
+  "searchWord": "検索キーワード",
 
   "notifications": "通知",
 

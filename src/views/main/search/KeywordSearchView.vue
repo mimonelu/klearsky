@@ -31,7 +31,7 @@ async function fetchNewResults () {
         v-model="mainState.currentSearchKeywordTerm"
         id="keyword-term-textbox"
         type="search"
-        :placeholder="$t('keywordSearch')"
+        :placeholder="$t('searchWord')"
         autocapitalize="off"
         autocomplete="off"
         inputmode="search"

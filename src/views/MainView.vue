@@ -159,12 +159,14 @@ function resetState () {
   state.currentRepostUsers = []
   state.currentRepostUsersUri = undefined
   state.currentRepostUsersCursor = undefined
-  state.currentSearchKeywordTerm = ""
-  state.currentSearchKeywordResults = []
+  state.currentSearchSuggestionResults = []
+  state.currentSearchSuggestionCursor = undefined
   state.currentSearchUsers = []
   state.currentSearchUsersCursor = undefined
   state.currentSearchUserTerm = ""
   state.currentSearchLastUserTerm = ""
+  state.currentSearchKeywordTerm = ""
+  state.currentSearchKeywordResults = []
   state.currentMutingUsers = []
   state.currentMutingUsersCursor = undefined
   state.currentBlockingUsers = []

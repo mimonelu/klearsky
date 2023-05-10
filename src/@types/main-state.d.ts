@@ -65,13 +65,16 @@ type MainState = {
   currentHotFeeds: Array<TTFeed>
   currentHotCursor?: string
 
-  currentSearchKeywordTerm: string
-  currentSearchKeywordResults: Array<any>
+  currentSearchSuggestionResults: Array<TTUser>
+  currentSearchSuggestionCursor?: string
 
   currentSearchUsers: Array<TTUser>
   currentSearchUsersCursor?: string
   currentSearchUserTerm: string
   currentSearchLastUserTerm: string
+
+  currentSearchKeywordTerm: string
+  currentSearchKeywordResults: Array<any>
 
   currentRepostUsers: Array<TTUser>
   currentRepostUsersUri?: string

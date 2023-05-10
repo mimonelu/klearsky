@@ -10,6 +10,7 @@
   "limitOfFetchMutingUsers": 30,
   "limitOfFetchNotifications": 30,
   "limitOfFetchRepostUsers": 30,
+  "limitOfFetchSuggestionSearch": 30,
   "limitOfFetchTimeline": 30,
   "limitOfFetchUserSearch": 30
 }

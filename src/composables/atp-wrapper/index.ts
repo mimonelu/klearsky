@@ -32,6 +32,7 @@ import fetchPosts from "@/composables/atp-wrapper/fetch-posts"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch-repost-users"
+import fetchSuggestions from "@/composables/atp-wrapper/fetch-suggestions"
 import fetchTimeline from "@/composables/atp-wrapper/fetch-timeline"
 import fetchUserSearch from "@/composables/atp-wrapper/fetch-user-search"
 import login from "@/composables/atp-wrapper/login"
@@ -96,6 +97,7 @@ prototype.fetchPostThread = fetchPostThread
 prototype.fetchProfile = fetchProfile
 prototype.fetchRepostUsers = fetchRepostUsers
 prototype.fetchLikeUsers = fetchLikeUsers
+prototype.fetchSuggestions = fetchSuggestions
 prototype.fetchTimeline = fetchTimeline
 prototype.fetchUserSearch = fetchUserSearch
 prototype.login = login

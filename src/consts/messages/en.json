@@ -76,8 +76,10 @@
   "hot": "What's Hot",
 
   "search": "Search",
-  "userSearch": "User Search",
-  "keywordSearch": "Keyword Search",
+  "suggestionSearch": "Suggestions",
+  "userSearch": "Find users",
+  "keywordSearch": "Find posts",
+  "searchWord": "Search word",
 
   "notifications": "Notifications",
 

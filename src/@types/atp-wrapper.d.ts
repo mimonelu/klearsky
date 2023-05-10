@@ -170,6 +170,12 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchSuggestions(
+    this: TIAtpWrapper,
+    dataRef: Array<TTUser>,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
   fetchTimeline(
     this: TIAtpWrapper,
     oldFeeds: Array<TTFeed>,

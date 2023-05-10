@@ -104,7 +104,7 @@ function moveToBottom () {
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
-      to="/search/user"
+      to="/search/suggestion"
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
       @click.prevent
     >
