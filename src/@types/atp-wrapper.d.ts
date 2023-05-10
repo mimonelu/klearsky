@@ -199,6 +199,7 @@ interface TIAtpWrapper {
     password?: string
   ): Promise<boolean>
   logout(this: TIAtpWrapper)
+  refreshSession(this: TIAtpWrapper): Promise<boolean>
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
   updateNotificationSeen(this: TIAtpWrapper): Promise<boolean>

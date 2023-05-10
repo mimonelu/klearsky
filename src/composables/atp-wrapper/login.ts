@@ -21,6 +21,9 @@ export default async function (
     await this.resumeSession(session).catch(() => {
       throw { error: "sessionExpired" }
     })
+    await this.refreshSession().catch((error: any) => {
+      console.error("[klearsky/refreshSession]", error)
+    })
   } else {
     const optinos: AtpAgentLoginOpts = {
       identifier,

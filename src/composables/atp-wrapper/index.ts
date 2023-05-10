@@ -37,6 +37,7 @@ import fetchTimeline from "@/composables/atp-wrapper/fetch-timeline"
 import fetchUserSearch from "@/composables/atp-wrapper/fetch-user-search"
 import login from "@/composables/atp-wrapper/login"
 import logout from "@/composables/atp-wrapper/logout"
+import refreshSession from "@/composables/atp-wrapper/refresh-session"
 import resumeSession from "@/composables/atp-wrapper/resume-session"
 import updateNotificationSeen from "@/composables/atp-wrapper/update-notification-seen"
 import updateProfile from "@/composables/atp-wrapper/update-profile"
@@ -102,6 +103,7 @@ prototype.fetchTimeline = fetchTimeline
 prototype.fetchUserSearch = fetchUserSearch
 prototype.login = login
 prototype.logout = logout
+prototype.refreshSession = refreshSession
 prototype.resumeSession = resumeSession
 prototype.saveData = function saveData(this: TIAtpWrapper) {
   Util.saveStorage("atp", this.data)
