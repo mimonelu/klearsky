@@ -20,6 +20,11 @@
     "postUri": "https://kite.black/#/blue/{did}/{rkey}"
   },
   {
+    "name": "skylineApp",
+    "profileUri": "https://skyline.gay/profile/{handle}",
+    "postUri": "https://skyline.gay/profile/{handle}/post/{rkey}"
+  },
+  {
     "name": "tokimekiApp",
     "profileUri": "https://tokimekibluesky.vercel.app/profile/{handle}",
     "postUri": "https://tokimekibluesky.vercel.app/profile/{handle}/post/{rkey}",
