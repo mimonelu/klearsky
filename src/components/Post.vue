@@ -468,7 +468,7 @@ async function translateText () {
               @click.stop="onActivateReplyButton"
             >
               <SVGIcon name="post" />
-              <span>{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
+              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
             </button>
           </div>
           <div>
@@ -480,7 +480,7 @@ async function translateText () {
               @click.stop="onActivateRepostMenuTrigger"
             >
               <SVGIcon name="repost" />
-              <span>{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
+              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
 
               <!-- リポストメニュー -->
               <MenuTicker :display="state.repostMenuDisplay">
@@ -514,7 +514,7 @@ async function translateText () {
               @click.stop="onActivateLikeButton"
             >
               <SVGIcon name="heart" />
-              <span>{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
+              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
             </button>
           </div>
           <div>

@@ -23,6 +23,7 @@ type TTSetting = {
   mainAreaOpacity?: number
   backgroundImage?: string
   backgroundOpacity?: number
+  hideNumberOfReaction?: boolean
   lightning?: string
 }
 

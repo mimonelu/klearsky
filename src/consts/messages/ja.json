@@ -159,7 +159,12 @@
   "backgroundImage": "壁紙 - URL",
   "backgroundOpacity": "壁紙 - 不透明度",
 
-  "lightning": "⚡ Lightning",
+  "psySafety": "心理的安全性",
+  "hideNumberOfReaction": "リアクション数の非表示",
+  "hideNumberOfReactionOff": "無効",
+  "hideNumberOfReactionOn": "有効",
+
+  "lightning": "Lightning",
   "lightningDescription": "ライトニング決済の支払先となるLN-URLやLightning Addressを設定すると、あなたのポストに支払リンク（いわゆるZapボタン）が付与されます。",
 
   "inviteCodes": "招待コード",
