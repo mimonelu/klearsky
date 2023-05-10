@@ -8,7 +8,6 @@ import HtmlText from "@/components/HtmlText.vue"
 import MuteButton from "@/components/MuteButton.vue"
 import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
 
@@ -139,10 +138,7 @@ function closePostMenu () {
           </dl>
           <dl class="created-at">
             <dt>{{ $t("startedAt") }}</dt>
-            <dd>{{ Util.dateLabel(
-              mainState.currentProfile?.__createdAt,
-              mainState.currentSetting.language
-            ) }}</dd>
+            <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt) }}</dd>
           </dl>
           <button
             class="menu-button"

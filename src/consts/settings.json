@@ -4,6 +4,10 @@
     { "label": "fontSizeMedium", "value": "medium" },
     { "label": "fontSizeLarge", "value": "large" }
   ],
+  "timeControls": [
+    { "label": "timeControlRelative", "value": "relative" },
+    { "label": "timeControlAbsolute", "value": "absolute" }
+  ],
   "replyControls": [
     { "label": "replyControl1", "value": 1 },
     { "label": "replyControl2", "value": 2 },

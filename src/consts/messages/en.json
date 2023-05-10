@@ -104,6 +104,10 @@
   "fontSizeMedium": "Medium",
   "fontSizeLarge": "Large",
 
+  "timeControl": "Time Representation",
+  "timeControlRelative": "Relative",
+  "timeControlAbsolute": "Absolute",
+
   "timelineControl": "Timeline Control",
   "timelineControlDescription": "Effective from the next download.",
   "replyControl": "Reply Control",

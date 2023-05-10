@@ -2,7 +2,6 @@
 import { inject } from "vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -51,10 +50,7 @@ function close () {
             v-else
             class="handle"
           >{{ makeAlsoKnownAs(item.operation?.alsoKnownAs) }}</div>
-          <div class="created-at">{{ Util.dateLabel(
-            item.createdAt,
-            mainState.currentSetting.language
-          ) }}</div>
+          <div class="created-at">{{ mainState.formatDate(item.createdAt) }}</div>
         </div>
       </template>
     </template>

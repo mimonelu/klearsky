@@ -5,6 +5,7 @@ type TTSetting = {
   fontSize?: string
   replyControl?: Array<number>
   repostControl?: Array<number>
+  timeControl?: string
   imageControl?:
     "all" |
     "followingEx" |
@@ -129,6 +130,8 @@ type MainState = {
 
   $setI18n?: Function
   $getI18n?: Function
+
+  formatDate: Function
 
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>

@@ -102,6 +102,19 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- 時間表記 -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("timeControl") }}</div>
+        <div class="settings-section__body">
+          <Radios
+            :state="mainState.currentSetting"
+            model="timeControl"
+            :options="settings.timeControls"
+            @update="saveSetting"
+          />
+        </div>
+      </div>
+
       <!-- タイムラインの制御 -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("timelineControl") }}</div>

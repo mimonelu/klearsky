@@ -366,7 +366,7 @@ async function translateText () {
           <div
             v-if="post.indexedAt"
             class="indexed-at"
-          >{{ Util.dateLabel(post.indexedAt, mainState.currentSetting.language) }}</div>
+          >{{ mainState.formatDate(post.indexedAt) }}</div>
         </div>
 
         <!-- 本文 -->

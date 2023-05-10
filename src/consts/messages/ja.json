@@ -104,6 +104,10 @@
   "fontSizeMedium": "中",
   "fontSizeLarge": "大",
 
+  "timeControl": "時間表記",
+  "timeControlRelative": "相対表記",
+  "timeControlAbsolute": "絶対表記",
+
   "timelineControl": "タイムラインの制御",
   "timelineControlDescription": "次のダウンロードから有効です。",
   "replyControl": "リプライの制御",
