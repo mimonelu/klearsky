@@ -163,6 +163,10 @@
   "hideNumberOfReaction": "リアクション数の非表示",
   "hideNumberOfReactionOff": "無効",
   "hideNumberOfReactionOn": "有効",
+  "postAnonymization": "ポストの匿名化",
+  "postAnonymizationOff": "無効",
+  "postAnonymizationOn": "有効",
+  "anonymous": "（匿名）",
 
   "lightning": "Lightning",
   "lightningDescription": "ライトニング決済の支払先となるLN-URLやLightning Addressを設定すると、あなたのポストに支払リンク（いわゆるZapボタン）が付与されます。",

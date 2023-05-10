@@ -265,6 +265,8 @@ function saveSettings () {
     state.settings[did].backgroundOpacity = 0.5
   if (state.settings[did].hideNumberOfReaction == null)
     state.settings[did].hideNumberOfReaction = false
+  if (state.settings[did].postAnonymization == null)
+    state.settings[did].postAnonymization = false
   if (state.settings[did].lightning == null)
     state.settings[did].lightning = undefined
   state.currentSetting = state.settings[did]

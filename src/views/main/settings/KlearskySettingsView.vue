@@ -244,6 +244,15 @@ function changeSetting () {
             :options="settings.hideNumberOfReaction"
             @update="saveSetting"
           />
+
+          <!-- 心理的安全性 - ポストの匿名化 -->
+          <div class="settings-section__sub-header">{{ $t("postAnonymization") }}</div>
+          <Radios
+            :state="mainState.currentSetting"
+            model="postAnonymization"
+            :options="settings.postAnonymization"
+            @update="saveSetting"
+          />
         </div>
       </div>
 

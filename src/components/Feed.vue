@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { inject } from "vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
@@ -7,6 +8,8 @@ const emit = defineEmits<{(event: string, params?: any): void}>()
 defineProps<{
   feed: TTFeed;
 }>()
+
+const mainState = inject("state") as MainState
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
   emit("updateThisPostThread", newPosts)
@@ -26,13 +29,29 @@ function removeThisPost (uri: string) {
     >
       <template v-if="feed.reply != null">
         <SVGIcon name="post" />
-        <div class="display-name">{{ feed.post.author.displayName }}</div>
-        <div class="handle">{{ feed.post.author.handle }}</div>
+        <div class="display-name">{{
+          !mainState.currentSetting.postAnonymization
+            ? feed.post.author.displayName
+            : $t("anonymous")
+        }}</div>
+        <div class="handle">{{
+          !mainState.currentSetting.postAnonymization
+            ? feed.post.author.handle
+            : ""
+        }}</div>
       </template>
       <template v-if="feed.reason != null">
         <SVGIcon name="repost" />
-        <div class="display-name">{{ feed.reason.by.displayName }}</div>
-        <div class="handle">{{ feed.reason.by.handle }}</div>
+        <div class="display-name">{{
+          !mainState.currentSetting.postAnonymization
+            ? feed.reason.by.displayName
+            : $t("anonymous")
+        }}</div>
+        <div class="handle">{{
+          !mainState.currentSetting.postAnonymization
+            ? feed.reason.by.handle
+            : ""
+        }}</div>
       </template>
     </div>
     <template v-else>

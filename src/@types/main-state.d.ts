@@ -24,6 +24,7 @@ type TTSetting = {
   backgroundImage?: string
   backgroundOpacity?: number
   hideNumberOfReaction?: boolean
+  postAnonymization?: boolean
   lightning?: string
 }
 

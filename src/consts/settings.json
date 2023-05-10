@@ -79,5 +79,9 @@
   "hideNumberOfReaction": [
     { "label": "hideNumberOfReactionOff", "value": false },
     { "label": "hideNumberOfReactionOn", "value": true }
+  ],
+  "postAnonymization": [
+    { "label": "postAnonymizationOff", "value": false },
+    { "label": "postAnonymizationOn", "value": true }
   ]
 }

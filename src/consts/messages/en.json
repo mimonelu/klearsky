@@ -163,6 +163,10 @@
   "hideNumberOfReaction": "Hide number of reactions",
   "hideNumberOfReactionOff": "Disable",
   "hideNumberOfReactionOn": "Enable",
+  "postAnonymization": "Post anonymization",
+  "postAnonymizationOff": "Disable",
+  "postAnonymizationOn": "Enable",
+  "anonymous": "(Anonymous)",
 
   "lightning": "Lightning",
   "lightningDescription": "Once you set up the LN-URL or Lightning Address as the payment destination for Lightning payments, a payment link (a.k.a. Zap button) will be given to your posts.",

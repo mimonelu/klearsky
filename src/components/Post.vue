@@ -301,8 +301,16 @@ async function translateText () {
         @click.stop="onActivateReplierLink"
       >
         <SVGIcon name="post" />
-        <div class="replier__display-name">{{ replyTo?.author?.displayName }}</div>
-        <div class="replier__handle">{{ replyTo?.author?.handle }}</div>
+        <div class="replier__display-name">{{
+          !mainState.currentSetting.postAnonymization
+            ? replyTo?.author?.displayName
+            : $t("anonymous")
+        }}</div>
+        <div class="replier__handle">{{
+          !mainState.currentSetting.postAnonymization
+            ? replyTo?.author?.handle
+            : ""
+        }}</div>
       </div>
 
       <!-- リポストユーザー -->
@@ -312,8 +320,16 @@ async function translateText () {
         @click.stop="onActivateProfileLink(post.__reason?.by?.handle as string)"
       >
         <SVGIcon name="repost" />
-        <div class="reposter__display-name">{{ post.__reason?.by?.displayName }}</div>
-        <div class="reposter__handle">{{ post.__reason?.by?.handle }}</div>
+        <div class="reposter__display-name">{{
+          !mainState.currentSetting.postAnonymization
+            ? post.__reason?.by?.displayName
+            : $t("anonymous")
+        }}</div>
+        <div class="reposter__handle">{{
+          !mainState.currentSetting.postAnonymization
+            ? post.__reason?.by?.handle
+            : ""
+        }}</div>
       </div>
     </div>
     <div class="body">
@@ -321,7 +337,7 @@ async function translateText () {
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
         :handle="post.author?.handle"
-        :image="post.author?.avatar"
+        :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
         @click.stop
       />
 
@@ -332,15 +348,19 @@ async function translateText () {
             v-if="position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
             :handle="post.author?.handle"
-            :image="post.author?.avatar"
+            :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
             @click.stop
           />
 
           <!-- 表示名 -->
-          <div class="display-name">{{ post.author?.displayName }}</div>
+          <div class="display-name">{{
+            !mainState.currentSetting.postAnonymization
+              ? post.author?.displayName
+              : $t("anonymous")
+          }}</div>
 
           <!-- ハンドル -->
-          <div class="handle">{{ post.author?.handle }}</div>
+          <div class="handle">{{ !mainState.currentSetting.postAnonymization ? post.author?.handle : "" }}</div>
 
           <!-- ポスト時間 -->
           <div
