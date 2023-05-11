@@ -81,7 +81,7 @@ async function submitCallback () {
     <div class="login-popup__inner">
       <div class="login-popup__header">
         <Logo />
-        <div class="description">Unofficial Web Client for Bluesky</div>
+        <div class="description">The web client for Bluesky.</div>
       </div>
       <div class="login-popup__body">
         <EasyForm v-bind="easyFormProps"
