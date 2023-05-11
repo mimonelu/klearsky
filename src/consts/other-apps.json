@@ -11,8 +11,8 @@
   },
   {
     "name": "flatApp",
-    "profileUri": "https://flat-bs.vercel.app/{handle}",
-    "postUri": "https://flat-bs.vercel.app/{handle}/posts/{rkey}"
+    "profileUri": "https://flat.sabigara.com/{handle}",
+    "postUri": "https://flat.sabigara.com/{handle}/posts/{rkey}"
   },
   {
     "name": "kiteApp",
