@@ -189,7 +189,7 @@ function resetState () {
 }
 
 async function autoLogin (): Promise<boolean> {
-  if (state.atp.hasLogin()) return false
+  if (state.atp.hasLogin()) return true
   if (state.atp.canLogin()) return await state.atp.login()
   return false
 }
@@ -383,7 +383,7 @@ function scrollListener () {
     :data-path="state.currentPath"
     :data-layout="state.currentSetting.layout"
     :style="{
-      '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 0,
+      '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 1.0,
       '--image-aspect-ratio': state.currentSetting.imageAspectRatio ?? '1 / 1'
     }"
   >
