@@ -21,17 +21,13 @@ export default async function (
     $type: "app.bsky.feed.post",
     createdAt: new Date().toISOString(),
     text: richText.text,
-  }
 
-  // カスタムフィールドの作成
-  const unofficial: TTCustomFieldsInPost = {
+    // カスタムフィールド - via
     via: `Klearsky v${Package.version}`,
   }
 
-  // Lightning
-  if (params.lightning) unofficial.lightning = params.lightning
-
-  record.unofficial = unofficial
+  // カスタムフィールド - Lightning
+  if (params.lightning) record.lightning = params.lightning
 
   if (richText.facets != null) record.facets = richText.facets
 
