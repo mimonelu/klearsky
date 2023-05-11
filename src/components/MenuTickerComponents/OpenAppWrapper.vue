@@ -9,6 +9,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   type: "post" | "profile";
+  cid?: string;
   did?: string;
   handle?: string;
   uri?: string;
@@ -30,6 +31,7 @@ function openOtherApp (app: any) {
   } else if (props.type === "post") {
     const aturi = new AtUri(props.uri as string)
     uri = app.postUri
+      .replace("{cid}", props.cid)
       .replace("{did}", props.did)
       .replace("{handle}", props.handle)
       .replace("{rkey}", aturi.rkey)

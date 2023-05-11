@@ -5,6 +5,7 @@ type TTSetting = {
   fontSize?: string
   replyControl?: Array<number>
   repostControl?: Array<number>
+  timeControl?: string
   imageControl?:
     "all" |
     "followingEx" |
@@ -23,6 +24,8 @@ type TTSetting = {
   mainAreaOpacity?: number
   backgroundImage?: string
   backgroundOpacity?: number
+  hideNumberOfReaction?: boolean
+  postAnonymization?: boolean
   lightning?: string
 }
 
@@ -65,13 +68,16 @@ type MainState = {
   currentHotFeeds: Array<TTFeed>
   currentHotCursor?: string
 
-  currentSearchKeywordTerm: string
-  currentSearchKeywordResults: Array<any>
+  currentSearchSuggestionResults: Array<TTUser>
+  currentSearchSuggestionCursor?: string
 
   currentSearchUsers: Array<TTUser>
   currentSearchUsersCursor?: string
   currentSearchUserTerm: string
   currentSearchLastUserTerm: string
+
+  currentSearchKeywordTerm: string
+  currentSearchKeywordResults: Array<any>
 
   currentRepostUsers: Array<TTUser>
   currentRepostUsersUri?: string
@@ -124,6 +130,8 @@ type MainState = {
 
   $setI18n?: Function
   $getI18n?: Function
+
+  formatDate: Function
 
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>

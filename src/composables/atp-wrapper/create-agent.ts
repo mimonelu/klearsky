@@ -5,6 +5,7 @@ export default function (this: TIAtpWrapper, service: string): boolean {
   this.agent = new BskyAgent({
     service,
     persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
+      console.log("[klearsky/persistSession]", event)
       switch (event) {
         case "create":
         case "update": {

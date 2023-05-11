@@ -102,6 +102,19 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- 時間表記 -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("timeControl") }}</div>
+        <div class="settings-section__body">
+          <Radios
+            :state="mainState.currentSetting"
+            model="timeControl"
+            :options="settings.timeControls"
+            @update="saveSetting"
+          />
+        </div>
+      </div>
+
       <!-- タイムラインの制御 -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("timelineControl") }}</div>
@@ -232,9 +245,33 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- 心理的安全性 -->
+      <div class="settings-section">
+        <div class="settings-section__header">💚 {{ $t("psySafety") }}</div>
+        <div class="settings-section__body">
+          <!-- 心理的安全性 - リアクション数の非表示 -->
+          <div class="settings-section__sub-header">{{ $t("hideNumberOfReaction") }}</div>
+          <Radios
+            :state="mainState.currentSetting"
+            model="hideNumberOfReaction"
+            :options="settings.hideNumberOfReaction"
+            @update="saveSetting"
+          />
+
+          <!-- 心理的安全性 - ポストの匿名化 -->
+          <div class="settings-section__sub-header">{{ $t("postAnonymization") }}</div>
+          <Radios
+            :state="mainState.currentSetting"
+            model="postAnonymization"
+            :options="settings.postAnonymization"
+            @update="saveSetting"
+          />
+        </div>
+      </div>
+
       <!-- Lightning -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("lightning") }}</div>
+        <div class="settings-section__header">⚡ {{ $t("lightning") }}</div>
         <div class="settings-section__body">
           <input
             v-model="mainState.currentSetting.lightning"

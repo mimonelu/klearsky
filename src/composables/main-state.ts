@@ -1,3 +1,7 @@
+import endOfYesterday from "date-fns/endOfYesterday"
+import format from "date-fns/format"
+import intlFormatDistance from "date-fns/intlFormatDistance"
+import isSameYear from "date-fns/isSameYear"
 import { computed, reactive } from "vue"
 import type {
   LocationQueryValue,
@@ -36,6 +40,7 @@ const state = reactive<MainState>({
   }),
   $setI18n: undefined,
   $getI18n: undefined,
+  formatDate,
   forceUpdate,
   fetchUserProfile,
   fetchCurrentProfile,
@@ -65,6 +70,31 @@ const state = reactive<MainState>({
   closeConfirmationPopup,
   applyConfirmationPopup,
 })
+
+function formatDate (dateString?: string): string {
+  if (dateString == null) return ""
+  const now = new Date()
+  const the = new Date(dateString)
+
+  // 今日
+  if (endOfYesterday() < the) {
+    // 絶対表記
+    if (state.currentSetting.timeControl === "absolute")
+      return format(the, "HH:mm")
+    // 相対表記
+    else
+      return intlFormatDistance(the, now, {
+        numeric: "always",
+        locale: state.currentSetting.language,
+      })
+  }
+
+  // 今年
+  if (isSameYear(now, the)) return format(the, "MM/dd HH:mm")
+
+  // 去年以前
+  return format(the, "yyyy/MM/dd")
+}
 
 function forceUpdate () {
   state.updateKey = new Date().getTime()
@@ -249,6 +279,8 @@ function saveSettings () {
     state.settings[did].replyControl = []
   if (state.settings[did].repostControl == null)
     state.settings[did].repostControl = []
+  if (state.settings[did].timeControl == null)
+    state.settings[did].timeControl = "relative"
   if (state.settings[did].imageControl == null)
     state.settings[did].imageControl = "all"
   if (state.settings[did].imageAspectRatio == null)
@@ -263,6 +295,10 @@ function saveSettings () {
     state.settings[did].backgroundImage = undefined
   if (state.settings[did].backgroundOpacity == null)
     state.settings[did].backgroundOpacity = 0.5
+  if (state.settings[did].hideNumberOfReaction == null)
+    state.settings[did].hideNumberOfReaction = false
+  if (state.settings[did].postAnonymization == null)
+    state.settings[did].postAnonymization = false
   if (state.settings[did].lightning == null)
     state.settings[did].lightning = undefined
   state.currentSetting = state.settings[did]

@@ -52,7 +52,7 @@ onBeforeMount(() => {
       !state.imagePopupProps.display &&
       !state.sendPostPopupProps.display &&
       !state.loginPopupAutoDisplay)
-      state.sendPostPopupProps.display = true
+      state.openSendPostPopup("post")
   })
 })
 
@@ -159,12 +159,14 @@ function resetState () {
   state.currentRepostUsers = []
   state.currentRepostUsersUri = undefined
   state.currentRepostUsersCursor = undefined
-  state.currentSearchKeywordTerm = ""
-  state.currentSearchKeywordResults = []
+  state.currentSearchSuggestionResults = []
+  state.currentSearchSuggestionCursor = undefined
   state.currentSearchUsers = []
   state.currentSearchUsersCursor = undefined
   state.currentSearchUserTerm = ""
   state.currentSearchLastUserTerm = ""
+  state.currentSearchKeywordTerm = ""
+  state.currentSearchKeywordResults = []
   state.currentMutingUsers = []
   state.currentMutingUsersCursor = undefined
   state.currentBlockingUsers = []
@@ -187,7 +189,7 @@ function resetState () {
 }
 
 async function autoLogin (): Promise<boolean> {
-  if (state.atp.hasLogin()) return false
+  if (state.atp.hasLogin()) return true
   if (state.atp.canLogin()) return await state.atp.login()
   return false
 }
@@ -381,7 +383,7 @@ function scrollListener () {
     :data-path="state.currentPath"
     :data-layout="state.currentSetting.layout"
     :style="{
-      '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 0,
+      '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 1.0,
       '--image-aspect-ratio': state.currentSetting.imageAspectRatio ?? '1 / 1'
     }"
   >

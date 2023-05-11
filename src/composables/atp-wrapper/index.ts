@@ -32,10 +32,12 @@ import fetchPosts from "@/composables/atp-wrapper/fetch-posts"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch-repost-users"
+import fetchSuggestions from "@/composables/atp-wrapper/fetch-suggestions"
 import fetchTimeline from "@/composables/atp-wrapper/fetch-timeline"
 import fetchUserSearch from "@/composables/atp-wrapper/fetch-user-search"
 import login from "@/composables/atp-wrapper/login"
 import logout from "@/composables/atp-wrapper/logout"
+import refreshSession from "@/composables/atp-wrapper/refresh-session"
 import resumeSession from "@/composables/atp-wrapper/resume-session"
 import updateNotificationSeen from "@/composables/atp-wrapper/update-notification-seen"
 import updateProfile from "@/composables/atp-wrapper/update-profile"
@@ -96,10 +98,12 @@ prototype.fetchPostThread = fetchPostThread
 prototype.fetchProfile = fetchProfile
 prototype.fetchRepostUsers = fetchRepostUsers
 prototype.fetchLikeUsers = fetchLikeUsers
+prototype.fetchSuggestions = fetchSuggestions
 prototype.fetchTimeline = fetchTimeline
 prototype.fetchUserSearch = fetchUserSearch
 prototype.login = login
 prototype.logout = logout
+prototype.refreshSession = refreshSession
 prototype.resumeSession = resumeSession
 prototype.saveData = function saveData(this: TIAtpWrapper) {
   Util.saveStorage("atp", this.data)

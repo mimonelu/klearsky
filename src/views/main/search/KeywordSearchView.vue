@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { inject, onMounted } from "vue"
-import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
 
@@ -31,7 +30,7 @@ async function fetchNewResults () {
         v-model="mainState.currentSearchKeywordTerm"
         id="keyword-term-textbox"
         type="search"
-        :placeholder="$t('keywordSearch')"
+        :placeholder="$t('searchWord')"
         autocapitalize="off"
         autocomplete="off"
         inputmode="search"
@@ -53,10 +52,7 @@ async function fetchNewResults () {
               class="textlink handle"
               @click.stop
             >{{ result.user.handle }}</RouterLink>
-            <div class="created-at">{{ Util.dateLabel(
-              result.post?.createdAt,
-              mainState.currentSetting.language
-            ) }}</div>
+            <div class="created-at">{{ mainState.formatDate(result.post?.createdAt) }}</div>
           </div>
           <div class="text">{{ result.post?.text }}</div>
         </RouterLink>

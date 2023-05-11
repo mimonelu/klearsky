@@ -301,8 +301,16 @@ async function translateText () {
         @click.stop="onActivateReplierLink"
       >
         <SVGIcon name="post" />
-        <div class="replier__display-name">{{ replyTo?.author?.displayName }}</div>
-        <div class="replier__handle">{{ replyTo?.author?.handle }}</div>
+        <div class="replier__display-name">{{
+          !mainState.currentSetting.postAnonymization
+            ? replyTo?.author?.displayName
+            : $t("anonymous")
+        }}</div>
+        <div class="replier__handle">{{
+          !mainState.currentSetting.postAnonymization
+            ? replyTo?.author?.handle
+            : ""
+        }}</div>
       </div>
 
       <!-- リポストユーザー -->
@@ -312,8 +320,16 @@ async function translateText () {
         @click.stop="onActivateProfileLink(post.__reason?.by?.handle as string)"
       >
         <SVGIcon name="repost" />
-        <div class="reposter__display-name">{{ post.__reason?.by?.displayName }}</div>
-        <div class="reposter__handle">{{ post.__reason?.by?.handle }}</div>
+        <div class="reposter__display-name">{{
+          !mainState.currentSetting.postAnonymization
+            ? post.__reason?.by?.displayName
+            : $t("anonymous")
+        }}</div>
+        <div class="reposter__handle">{{
+          !mainState.currentSetting.postAnonymization
+            ? post.__reason?.by?.handle
+            : ""
+        }}</div>
       </div>
     </div>
     <div class="body">
@@ -321,7 +337,7 @@ async function translateText () {
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
         :handle="post.author?.handle"
-        :image="post.author?.avatar"
+        :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
         @click.stop
       />
 
@@ -332,21 +348,25 @@ async function translateText () {
             v-if="position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
             :handle="post.author?.handle"
-            :image="post.author?.avatar"
+            :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
             @click.stop
           />
 
           <!-- 表示名 -->
-          <div class="display-name">{{ post.author?.displayName }}</div>
+          <div class="display-name">{{
+            !mainState.currentSetting.postAnonymization
+              ? post.author?.displayName
+              : $t("anonymous")
+          }}</div>
 
           <!-- ハンドル -->
-          <div class="handle">{{ post.author?.handle }}</div>
+          <div class="handle">{{ !mainState.currentSetting.postAnonymization ? post.author?.handle : "" }}</div>
 
           <!-- ポスト時間 -->
           <div
             v-if="post.indexedAt"
             class="indexed-at"
-          >{{ Util.dateLabel(post.indexedAt, mainState.currentSetting.language) }}</div>
+          >{{ mainState.formatDate(post.indexedAt) }}</div>
         </div>
 
         <!-- 本文 -->
@@ -468,7 +488,7 @@ async function translateText () {
               @click.stop="onActivateReplyButton"
             >
               <SVGIcon name="post" />
-              <span>{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
+              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
             </button>
           </div>
           <div>
@@ -480,7 +500,7 @@ async function translateText () {
               @click.stop="onActivateRepostMenuTrigger"
             >
               <SVGIcon name="repost" />
-              <span>{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
+              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
 
               <!-- リポストメニュー -->
               <MenuTicker :display="state.repostMenuDisplay">
@@ -514,16 +534,15 @@ async function translateText () {
               @click.stop="onActivateLikeButton"
             >
               <SVGIcon name="heart" />
-              <span>{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
+              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
             </button>
           </div>
           <div>
             <!-- Lightning -->
-            <!-- TODO: `post.record?.lightning` は頃合いを見て削除すること -->
             <a
-              v-if="post.record?.unofficial?.lightning || post.record?.lightning"
+              v-if="post.record?.lightning"
               class="icon-button--nolabel lightning"
-              :href="`lightning:${post.record?.unofficial?.lightning || post.record?.lightning}`"
+              :href="`lightning:${post.record?.lightning}`"
               rel="noreferrer"
               @click.stop
             >
@@ -541,6 +560,7 @@ async function translateText () {
               <PostMenuTicker
                 :author="post.author"
                 :isUser="post.author?.did === mainState.atp.session?.did"
+                :cid="post.cid"
                 :did="post.author.did"
                 :handle="post.author.handle"
                 :uri="post.uri"

@@ -16,11 +16,19 @@ export default async function (
 
   if (!this.createAgent(service)) return false
   if (this.agent == null) return false
+
   if (identifier == null || password == null) {
     if (session == null) return false
-    await this.resumeSession(session).catch(() => {
-      throw { error: "sessionExpired" }
-    })
+    if (await this.resumeSession(session)
+      .catch(() => {
+        throw { error: "sessionExpired" }
+      })
+      .then((result: boolean) => result)
+    ) {
+      await this.refreshSession().catch((error: any) => {
+        console.error("[klearsky/refreshSession]", error)
+      })
+    } else return false
   } else {
     const optinos: AtpAgentLoginOpts = {
       identifier,

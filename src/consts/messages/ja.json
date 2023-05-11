@@ -51,6 +51,7 @@
   "wrapperApp": "Bluesky Wrapper",
   "flatApp": "Flat",
   "kiteApp": "Kite",
+  "skylineApp": "Skyline",
   "tokimekiApp": "TOKIMEKI Bluesky",
   "atlasApp": "BSky Atlas",
   "showSource": "ソースを表示する",
@@ -75,8 +76,10 @@
   "hot": "What's Hot",
 
   "search": "検索",
-  "userSearch": "ユーザー検索",
-  "keywordSearch": "キーワード検索（仮）",
+  "suggestionSearch": "おすすめ",
+  "userSearch": "ユーザーを探す",
+  "keywordSearch": "ポストを探す",
+  "searchWord": "検索キーワード",
 
   "notifications": "通知",
 
@@ -100,6 +103,10 @@
   "fontSizeSmall": "小",
   "fontSizeMedium": "中",
   "fontSizeLarge": "大",
+
+  "timeControl": "時間表記",
+  "timeControlRelative": "相対表記",
+  "timeControlAbsolute": "絶対表記",
 
   "timelineControl": "タイムラインの制御",
   "timelineControlDescription": "次のダウンロードから有効です。",
@@ -156,7 +163,16 @@
   "backgroundImage": "壁紙 - URL",
   "backgroundOpacity": "壁紙 - 不透明度",
 
-  "lightning": "⚡ Lightning",
+  "psySafety": "心理的安全性",
+  "hideNumberOfReaction": "リアクション数の非表示",
+  "hideNumberOfReactionOff": "無効",
+  "hideNumberOfReactionOn": "有効",
+  "postAnonymization": "ポストの匿名化",
+  "postAnonymizationOff": "無効",
+  "postAnonymizationOn": "有効",
+  "anonymous": "（匿名）",
+
+  "lightning": "Lightning",
   "lightningDescription": "ライトニング決済の支払先となるLN-URLやLightning Addressを設定すると、あなたのポストに支払リンク（いわゆるZapボタン）が付与されます。",
 
   "inviteCodes": "招待コード",

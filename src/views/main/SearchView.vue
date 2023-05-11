@@ -16,6 +16,10 @@ const mainState = inject("state") as MainState
       <div class="tab">
         <RouterLink
           class="tab__button"
+          to="/search/suggestion"
+        >{{ $t("suggestionSearch") }}</RouterLink>
+        <RouterLink
+          class="tab__button"
           to="/search/user"
         >{{ $t("userSearch") }}</RouterLink>
         <RouterLink

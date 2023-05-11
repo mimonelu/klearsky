@@ -78,11 +78,6 @@ type TTImage = {
   alt: string
 }
 
-type TTCustomFieldsInPost = {
-  via?: string
-  lightning?: string
-}
-
 type TTPost = {
   __createdAt: string // Injected
   uri: string
@@ -122,8 +117,8 @@ type TTPost = {
     }
     facets?: any
     entities?: Array<TTEntity>
-    unofficial?: TTCustomFieldsInPost // Injected
-    lightning?: string // Injected // TODO: 頃合いを見て削除すること
+    via?: string // カスタムフィールド
+    lightning?: string // カスタムフィールド
     [k: string]: unknown
   }
   value?: {

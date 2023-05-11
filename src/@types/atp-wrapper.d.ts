@@ -170,6 +170,12 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchSuggestions(
+    this: TIAtpWrapper,
+    dataRef: Array<TTUser>,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | string>
   fetchTimeline(
     this: TIAtpWrapper,
     oldFeeds: Array<TTFeed>,
@@ -193,6 +199,7 @@ interface TIAtpWrapper {
     password?: string
   ): Promise<boolean>
   logout(this: TIAtpWrapper)
+  refreshSession(this: TIAtpWrapper): Promise<boolean>
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
   updateNotificationSeen(this: TIAtpWrapper): Promise<boolean>

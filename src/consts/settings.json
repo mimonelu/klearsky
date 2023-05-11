@@ -4,6 +4,10 @@
     { "label": "fontSizeMedium", "value": "medium" },
     { "label": "fontSizeLarge", "value": "large" }
   ],
+  "timeControls": [
+    { "label": "timeControlRelative", "value": "relative" },
+    { "label": "timeControlAbsolute", "value": "absolute" }
+  ],
   "replyControls": [
     { "label": "replyControl1", "value": 1 },
     { "label": "replyControl2", "value": 2 },
@@ -75,5 +79,13 @@
     { "label": "80%", "value": 0.8 },
     { "label": "90%", "value": 0.9 },
     { "label": "100%", "value": 1.0 }
+  ],
+  "hideNumberOfReaction": [
+    { "label": "hideNumberOfReactionOff", "value": false },
+    { "label": "hideNumberOfReactionOn", "value": true }
+  ],
+  "postAnonymization": [
+    { "label": "postAnonymizationOff", "value": false },
+    { "label": "postAnonymizationOn", "value": true }
   ]
 }

@@ -11,13 +11,18 @@
   },
   {
     "name": "flatApp",
-    "profileUri": "https://flat-bs.vercel.app/{handle}",
-    "postUri": "https://flat-bs.vercel.app/{handle}/posts/{rkey}"
+    "profileUri": "https://flat.sabigara.com/{handle}",
+    "postUri": "https://flat.sabigara.com/{handle}/posts/{rkey}"
   },
   {
     "name": "kiteApp",
     "profileUri": "https://kite.black/#/user/{handle}",
     "postUri": "https://kite.black/#/blue/{did}/{rkey}"
+  },
+  {
+    "name": "skylineApp",
+    "profileUri": "https://skyline.gay/profile/{handle}",
+    "postUri": "https://skyline.gay/profile/{handle}/post/{rkey}"
   },
   {
     "name": "tokimekiApp",

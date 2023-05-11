@@ -3,7 +3,6 @@ import { inject } from "vue"
 import AvatarLink from "@/components/AvatarLink.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
 
@@ -130,10 +129,7 @@ function makeSubjectTo (notification: TTNotification): any {
             <div class="handle">{{ notification.handle }}</div>
 
             <!-- リアクション日時 -->
-            <div class="indexed-at">{{ Util.dateLabel(
-              notification.indexedAt,
-              mainState.currentSetting.language
-            ) }}</div>
+            <div class="indexed-at">{{ mainState.formatDate(notification.indexedAt) }}</div>
 
             <!-- 本文 -->
             <div
