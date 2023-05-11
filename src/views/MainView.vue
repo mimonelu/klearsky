@@ -52,7 +52,7 @@ onBeforeMount(() => {
       !state.imagePopupProps.display &&
       !state.sendPostPopupProps.display &&
       !state.loginPopupAutoDisplay)
-      state.sendPostPopupProps.display = true
+      state.openSendPostPopup("post")
   })
 })
 
