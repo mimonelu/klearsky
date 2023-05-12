@@ -16,7 +16,6 @@ const emit = defineEmits<{(event: string, params?: any): void}>()
 const props = defineProps<{
   author?: TTUser;
   isUser: boolean;
-  cid?: string;
   did?: string;
   handle?: string;
   uri?: string;
@@ -87,7 +86,6 @@ async function deletePost () {
     <!-- 他のアプリで開く -->
     <MenuTickerOpenAppWrapper
       :type="'post'"
-      :cid="cid"
       :did="did"
       :handle="handle"
       :uri="uri"
