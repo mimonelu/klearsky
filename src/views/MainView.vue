@@ -553,7 +553,7 @@ function scrollListener () {
 
   // SP幅未満
   @media not all and (min-width: $sp-width) {
-    padding-bottom: 3rem;
+    padding-bottom: 3.5rem;
   }
 }
 
@@ -611,7 +611,7 @@ function scrollListener () {
   bottom: 0;
   left: 0;
   z-index: 2;
-  width: 100vw;
+  width: 100%;
 
   // SP幅以上
   @media (min-width: $sp-width) {

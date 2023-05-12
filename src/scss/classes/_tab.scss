@@ -4,6 +4,7 @@
   display: flex;
 
   &__button {
+    border-radius: var(--border-radius);
     color: rgba(var(--fg-color), 0.75);
     cursor: pointer;
     display: flex;
@@ -16,6 +17,7 @@
     text-align: center;
     &.router-link-active {
       background-color: rgba(var(--accent-color), 0.25);
+      box-shadow: 0 0 0 1px rgb(var(--bg-color)) inset;
     }
     &:focus, &:hover {
       color: rgb(var(--fg-color));

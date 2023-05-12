@@ -109,7 +109,7 @@ async function openSendPostPopup () {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 0;
+  padding: 0.625rem 0;
   position: relative;
 
   .image {
@@ -134,6 +134,7 @@ async function openSendPostPopup () {
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
     background-color: rgba(var(--accent-color), 0.25);
+    box-shadow: 0 0 0 1px rgb(var(--bg-color)) inset;
   }
 
   // HOTボタン

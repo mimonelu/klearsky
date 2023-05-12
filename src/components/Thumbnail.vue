@@ -115,7 +115,7 @@ function onActivateAlt (alt: string) {
     />
     <button
       v-if="image?.alt"
-      class="button alt-button"
+      class="button--invert alt-button"
       @click.prevent.stop="onActivateAlt(image.alt)"
     >ALT</button>
     <div
@@ -133,15 +133,19 @@ function onActivateAlt (alt: string) {
 
 <style lang="scss" scoped>
 .thumbnail {
+  border: 1px solid rgba(var(--fg-color), 0.25);
   position: relative;
+  &:focus, &:hover {
+    border-color: rgba(var(--fg-color), 0.5);
+  }
 }
 
 .alt-button {
   border-radius: 0 var(--border-radius) 0 0;
   font-size: 0.75em;
   position: absolute;
-  bottom: 0;
-  left: 0;
+  bottom: 1px;
+  left: 1px;
 }
 
 .error {

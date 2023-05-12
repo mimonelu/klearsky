@@ -80,7 +80,7 @@ function close () {
   overflow: hidden;
   overscroll-behavior: none;
   width: calc($router-view-width - 2rem);
-  max-width: calc(100vw - 2rem);
+  max-width: calc(100% - 2rem);
   max-height: calc(100svh - 10rem);
 }
 

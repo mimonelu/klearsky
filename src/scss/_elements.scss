@@ -3,8 +3,9 @@
 }
 
 body {
-  --main-area-opacity: 1.0;
+  --border-radius: 1px;
   --image-aspect-ratio: 1 / 1; // 16 / 9;
+  --main-area-opacity: 1.0;
 
   background-attachment: fixed;
   background-color: rgb(var(--bg-color));

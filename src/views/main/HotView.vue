@@ -2,8 +2,18 @@
 import { inject } from "vue"
 import FeedList from "@/components/FeedList.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+function onActivateHeader () {
+  Util.blurElement()
+  window.scrollTo({
+    left: 0,
+    top: 0,
+    behavior: "smooth",
+  })
+}
 
 function getServiceName (): string {
   return (mainState.atp.session?.__service ?? "").replace(/^\w+:\/+/, "")
@@ -11,7 +21,10 @@ function getServiceName (): string {
 </script>
 
 <template>
-  <div class="header">
+  <div
+    class="header"
+    @click.stop="onActivateHeader"
+  >
     <SVGIcon name="fire" />
     <div class="header-label">
       <span>Hot Posts</span>
@@ -30,6 +43,7 @@ function getServiceName (): string {
 .header {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  cursor: pointer;
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;

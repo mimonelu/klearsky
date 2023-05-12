@@ -1,12 +1,26 @@
 <script lang="ts" setup>
+import Util from "@/composables/util"
+
 defineProps<{
   title?: string;
   subTitle?: string;
 }>()
+
+function onActivateHeader () {
+  Util.blurElement()
+  window.scrollTo({
+    left: 0,
+    top: 0,
+    behavior: "smooth",
+  })
+}
 </script>
 
 <template>
-  <header class="page-header">
+  <header
+    class="page-header"
+    @click.stop="onActivateHeader"
+  >
     <h1 v-if="title">{{ title }}</h1>
     <div v-if="subTitle">-</div>
     <h2 v-if="subTitle">{{ subTitle }}</h2>
@@ -17,6 +31,7 @@ defineProps<{
 .page-header {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  cursor: pointer;
   display: grid;
   grid-gap: 0.5rem;
   grid-template-columns: auto auto 1fr;

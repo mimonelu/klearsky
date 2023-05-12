@@ -840,6 +840,9 @@ async function translateText () {
   grid-area: r;
   border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: var(--border-radius);
+  &:focus, &:hover {
+    border-color: rgba(var(--fg-color), 0.5);
+  }
 
   :not([data-position="slim"]) & > .post {
     padding: 0.875em;
