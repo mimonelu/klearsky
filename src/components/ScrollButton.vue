@@ -60,7 +60,7 @@ function moveToBottom () {
   }
 }
 .scroll-button--up {
-  top: 0;
+  top: var(--top-border-width);
 }
 .scroll-button--down {
   bottom: 0;

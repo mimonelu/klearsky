@@ -10,6 +10,7 @@ const mainState = inject("state") as MainState
   <div class="search-view">
     <div class="search-view__header">
       <PageHeader
+        :hasBackButton="true"
         :title="$t('search')"
         :subTitle="mainState.atp.session?.__service ?? ''"
       />
@@ -45,7 +46,7 @@ const mainState = inject("state") as MainState
 
   &__header {
     position: sticky;
-    top: 0;
+    top: var(--top-border-width);
     z-index: 1;
   }
 }

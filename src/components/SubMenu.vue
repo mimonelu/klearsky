@@ -16,7 +16,7 @@ const mainState = inject("state") as MainState
       to="/settings/bluesky"
     >
       <SVGIcon name="inviteCode" />
-      <span>{{ mainState.numberOfAvailableInviteCodes }} invite codes</span>
+      <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
     </RouterLink>
     <CopyRight />
   </div>
@@ -40,6 +40,10 @@ const mainState = inject("state") as MainState
   justify-content: center;
   font-size: 0.875rem;
   margin-bottom: 2rem;
+
+  & > span {
+    text-transform: lowercase;
+  }
 }
 
 .copyright {

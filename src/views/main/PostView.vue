@@ -27,6 +27,7 @@ function removeThisPost (uri: string) {
 <template>
   <div class="post-view">
     <PageHeader
+      :hasBackButton="true"
       :title="$t('post')"
       :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
     />
@@ -53,8 +54,8 @@ function removeThisPost (uri: string) {
   position: relative;
 }
 
-.page-header {
-  position: unset;
+.post[data-focus="true"] {
+  scroll-margin: calc(var(--top-border-width) + 3.25rem);
 }
 
 .post[data-has-child="true"]::before {

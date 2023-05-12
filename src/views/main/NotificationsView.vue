@@ -53,6 +53,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 <template>
   <div class="notifications-view">
     <PageHeader
+      :hasBackButton="true"
       :title="$t('notifications')"
       :subTitle="mainState.atp.session?.handle ?? ''"
     />

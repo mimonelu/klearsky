@@ -50,7 +50,7 @@ function getServiceName (): string {
   grid-gap: 0.5rem;
   padding: 1rem;
   position: sticky;
-  top: 0;
+  top: var(--top-border-width);
   z-index: 1;
 
   & > .svg-icon {

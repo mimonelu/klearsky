@@ -369,7 +369,7 @@ function closePostMenu () {
 
 .tab {
   position: sticky;
-  top: 0;
+  top: var(--top-border-width);
   z-index: 1;
 
   &__button {
