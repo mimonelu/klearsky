@@ -483,12 +483,13 @@ function scrollListener () {
 
   // Top border
   &::before {
-    background-color: rgb(var(--accent-color));
+    background-color: rgb(var(--bg-color));
+    border-top: 1px solid rgba(var(--fg-color), 0.25);
     content: "";
     display: block;
     position: fixed;
     top: 0;
-    z-index: 4;
+    z-index: 1;
     width: 100%;
     height: var(--top-border-width);
   }
