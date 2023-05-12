@@ -1,5 +1,8 @@
 # Klearsky Dev Memo
 
+## Meta
+* Description: `A design-first web client for the AT Protocol a.k.a. Bluesky.`
+
 ## GitHub
 * リポジトリ: https://github.com/mimonelu/klearsky
 * イシュー: https://github.com/mimonelu/klearsky/issues
@@ -9,6 +12,8 @@
 * Staging: https://staging.klearsky.pages.dev/
 
 ## カスタムフィールド
+* POST.record.via?: string
+  * クライアント名
 * POST.record.lightning?: string
   * Zapボタンで使用
 
