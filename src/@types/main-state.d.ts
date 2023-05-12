@@ -103,6 +103,8 @@ type MainState = {
   loginPopupAutoDisplay: any // TODO:
 
   inviteCodes: Array<TTInviteCode>
+  numberOfInviteCodes: ComputedRef<number>
+  numberOfAvailableInviteCodes: ComputedRef<number>
 
   sendPostPopupProps: {
     display: boolean

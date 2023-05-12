@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { inject, reactive } from "vue"
 import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import InviteCodesPopup from "@/components/InviteCodesPopup.vue"
 import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
@@ -9,8 +9,6 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   // 招待コード
   inviteCodesPopupDisplay: boolean
-  numberOfInviteCodes: ComputedRef<number>
-  numberOfAvailableInviteCodes: ComputedRef<number>
 
   // ミュート中のユーザーポップアップ
   mutingUsersPopupDisplay: boolean
@@ -20,20 +18,6 @@ const state = reactive<{
 }>({
   // 招待コード
   inviteCodesPopupDisplay: false,
-  numberOfInviteCodes: computed(() => {
-    let total = 0
-    mainState.inviteCodes.forEach((inviteCode: TTInviteCode) => {
-      total += inviteCode.available
-    })
-    return total
-  }),
-  numberOfAvailableInviteCodes: computed(() => {
-    let total = 0
-    mainState.inviteCodes.forEach((inviteCode: TTInviteCode) => {
-      total += inviteCode.available - inviteCode.uses.length
-    })
-    return total
-  }),
 
   // ミュート中のユーザーポップアップ
   mutingUsersPopupDisplay: false,
@@ -79,7 +63,7 @@ function closeBlockingUsersPopup () {
       <!-- 招待コード -->
       <div class="settings-section">
         <div class="settings-section__header">
-          <span>{{ $t("inviteCodes") }}</span>: <span class="numerator">{{ state.numberOfAvailableInviteCodes }}</span> / <span class="denominator">{{ state.numberOfInviteCodes }}</span>
+          <span>{{ $t("inviteCodes") }}</span>: <span class="numerator">{{ mainState.numberOfAvailableInviteCodes }}</span> / <span class="denominator">{{ mainState.numberOfInviteCodes }}</span>
         </div>
         <div class="settings-section__body">
           <button
