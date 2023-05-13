@@ -27,6 +27,7 @@ import MessagePopup from "@/components/MessagePopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
+import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import state from "@/composables/main-state"
 import Util from "@/composables/util/index"
@@ -473,6 +474,9 @@ function scrollListener () {
 
     <!-- 全画面ローダー -->
     <Loader v-if="state.processing" />
+
+    <!-- スプラッシュスクリーン -->
+    <SplashScreen />
   </div>
 </template>
 

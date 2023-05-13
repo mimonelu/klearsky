@@ -13,5 +13,10 @@ export default {
   displayJson,
   ...safeJson,
   ...storage,
+  wait (duration: number) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, duration)
+    })
+  },
   waitProp,
 }
