@@ -147,6 +147,12 @@ async function submit () {
 <style lang="scss" scoped>
 .edit-profile-view {
   padding-bottom: var(--sp-menu-height);
+
+  &__header {
+    position: sticky;
+    top: var(--top-border-width);
+    z-index: 1;
+  }
 }
 
 .easy-form {

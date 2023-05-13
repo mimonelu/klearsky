@@ -41,7 +41,7 @@ const easyFormProps: TTEasyForm = {
       maxlength: 300,
       maxLengthIndicator: true,
       maxLengthWithSegmenter: true,
-      rows: 4,
+      rows: 6,
       focus: true,
     }, {
       state,

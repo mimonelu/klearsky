@@ -66,7 +66,7 @@ function close () {
   top: 0;
   z-index: 2;
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 
 .popup {
@@ -76,12 +76,21 @@ function close () {
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
-  margin: 1rem;
   overflow: hidden;
   overscroll-behavior: none;
   width: calc($router-view-width - 2rem);
   max-width: calc(100% - 2rem);
-  max-height: calc(100svh - 10rem);
+  max-height: calc(100% - 2rem);
+
+  // SP幅以上
+  @media (min-width: $sp-width) {
+    margin: 1rem;
+  }
+
+  // SP幅未満
+  @media not all and (min-width: $sp-width) {
+    margin: calc(1rem + env(safe-area-inset-top)) 1rem calc(1rem + var(--sp-menu-height));
+  }
 }
 
 .popup-header {
