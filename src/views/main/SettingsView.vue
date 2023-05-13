@@ -10,6 +10,7 @@ const mainState = inject("state") as MainState
   <div class="settings-view">
     <div class="settings-view__header">
       <PageHeader
+        :hasBackButton="true"
         :title="$t('settings')"
         :subTitle="mainState.atp.session?.handle ?? ''"
       />
@@ -34,7 +35,7 @@ const mainState = inject("state") as MainState
 
 <style lang="scss" scoped>
 .settings-view {
-  padding-bottom: 8rem;
+  padding-bottom: var(--sp-menu-height);
 
   &__header {
     position: sticky;

@@ -1,27 +1,9 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import { useRouter } from "vue-router"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
 const mainState = inject("state") as MainState
-
-const state = reactive<{
-  canBack: boolean;
-}>({
-  canBack: history.state.back != null,
-})
-
-const router = useRouter()
-
-router.afterEach(() => {
-  state.canBack = history.state.back != null
-})
-
-function back () {
-  Util.blurElement()
-  if (state.canBack) router.back()
-}
 
 async function openSendPostPopup () {
   Util.blurElement()
@@ -39,28 +21,14 @@ function moveToBottom () {
 
 <template>
   <div class="main-menu-vertical">
-    <!-- バックボタン -->
-    <button
-      v-if="state.canBack"
-      class="move-button"
-      @click.prevent="back"
-    >
-      <div class="icon">
-        <SVGIcon name="cursorLeft" />
-      </div>
-    </button>
-
     <!-- スモールロゴ -->
-    <div
-      v-else
-      class="small-logo"
-    >
+    <div class="small-logo">
       <SVGIcon name="shimmer" />
     </div>
 
     <!-- プロフィールボタン -->
     <RouterLink
-      class="link-button profile-button"
+      class="link-button"
       :to="{ name: 'profile-post', query: { handle: mainState.atp.session?.handle } }"
       :data-is-focus="
         mainState.currentPath.startsWith('/profile/') &&
@@ -206,33 +174,14 @@ function moveToBottom () {
   }
 }
 
-// バックボタン
-.move-button {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  min-height: 3.25rem;
-
-  .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
-  }
-  &:focus , &:hover {
-    .svg-icon {
-      fill: rgb(var(--fg-color));
-    }
-  }
-}
-
 // スモールロゴ
 .small-logo {
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  min-width: 3.25rem;
-  min-height: 3.25rem;
+  min-width: 3rem;
+  min-height: 3rem;
 
   .svg-icon {
     fill: rgba(var(--fg-color), 0.5);
@@ -278,6 +227,7 @@ function moveToBottom () {
   .label {
     color: rgba(var(--fg-color), 0.75);
     font-size: 1.25rem;
+    font-weight: bold;
     line-height: 1.25;
     overflow: hidden;
     padding-right: 0.5rem;
@@ -298,11 +248,6 @@ function moveToBottom () {
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
     background-color: rgba(var(--accent-color), 0.25);
-  }
-
-  // プロフィールボタン
-  &.profile-button > .label {
-    font-weight: bold;
   }
 
   // HOTボタン
@@ -326,7 +271,6 @@ function moveToBottom () {
 
     .label {
       color: rgba(var(--post-color), 0.75);
-      font-weight: bold;
     }
 
     &:focus, &:hover {
@@ -353,5 +297,24 @@ function moveToBottom () {
   position: absolute;
   right: 0rem;
   top: 0rem;
+}
+
+// スクロールボタン
+.move-button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  min-height: 3rem;
+
+  .svg-icon {
+    fill: rgba(var(--fg-color), 0.25);
+  }
+  &:focus , &:hover {
+    .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
+  }
 }
 </style>

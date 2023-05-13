@@ -40,6 +40,22 @@ const state = reactive<MainState>({
   }),
   $setI18n: undefined,
   $getI18n: undefined,
+
+  numberOfInviteCodes: computed(() => {
+    let total = 0
+    state.inviteCodes.forEach((inviteCode: TTInviteCode) => {
+      total += inviteCode.available
+    })
+    return total
+  }),
+  numberOfAvailableInviteCodes: computed(() => {
+    let total = 0
+    state.inviteCodes.forEach((inviteCode: TTInviteCode) => {
+      total += inviteCode.available - inviteCode.uses.length
+    })
+    return total
+  }),
+
   formatDate,
   forceUpdate,
   fetchUserProfile,

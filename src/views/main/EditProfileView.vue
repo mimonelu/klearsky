@@ -136,6 +136,7 @@ async function submit () {
 <template>
   <div class="edit-profile-view">
     <PageHeader
+      :hasBackButton="true"
       :title="$t('editProfile')"
       :subTitle="mainState.atp.session?.handle ?? ''"
     />
@@ -145,7 +146,13 @@ async function submit () {
 
 <style lang="scss" scoped>
 .edit-profile-view {
-  padding-bottom: 8rem;
+  padding-bottom: var(--sp-menu-height);
+
+  &__header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
 }
 
 .easy-form {

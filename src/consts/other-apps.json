@@ -20,6 +20,11 @@
     "postUri": "https://kite.black/#/blue/{did}/{rkey}"
   },
   {
+    "name": "laikaApp",
+    "profileUri": "https://laika-bluesky.web.app/profile/{handle}",
+    "postUri": "https://laika-bluesky.web.app/index#thread/uri/{uri}"
+  },
+  {
     "name": "skylineApp",
     "profileUri": "https://skyline.gay/profile/{handle}",
     "postUri": "https://skyline.gay/profile/{handle}/post/{rkey}"

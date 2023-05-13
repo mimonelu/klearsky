@@ -1,65 +1,36 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import FeedList from "@/components/FeedList.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import PageHeader from "@/components/PageHeader.vue"
 
 const mainState = inject("state") as MainState
-
-function getServiceName (): string {
-  return (mainState.atp.session?.__service ?? "").replace(/^\w+:\/+/, "")
-}
 </script>
 
 <template>
-  <div class="header">
-    <SVGIcon name="fire" />
-    <div class="header-label">
-      <span>Hot Posts</span>
-      <b>@{{ getServiceName() }}</b>
-    </div>
+  <div class="hot-view">
+    <PageHeader
+      :hasBackButton="true"
+      :title="$t('hot')"
+      :subTitle="mainState.atp.session?.__service"
+    />
+    <FeedList
+      type="hot"
+      :feeds="mainState.currentHotFeeds"
+      :hasLoadButton="true"
+      :isMasonry="true"
+    />
   </div>
-  <FeedList
-    type="hot"
-    :feeds="mainState.currentHotFeeds"
-    :hasLoadButton="true"
-    :isMasonry="true"
-  />
 </template>
 
 <style lang="scss" scoped>
-.header {
-  background-color: rgba(var(--bg-color), var(--main-area-opacity));
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  grid-gap: 0.5rem;
-  padding: 1rem;
-  position: sticky;
-  top: 0;
-  z-index: 1;
+.hot-view {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
 
-  & > .svg-icon {
-    fill: rgb(var(--hot-color));
-  }
-
-  &-label {
-    display: flex;
-    grid-gap: 0.5rem;
-    font-size: 1.25rem;
-    font-weight: bold;
-    overflow: hidden;
-
-    & > span {
-      white-space: nowrap;
-    }
-
-    & > b {
-      color: rgb(var(--hot-color));
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
+.page-header:deep() > h1 {
+  color: rgb(var(--hot-color));
 }
 
 .feed-list {

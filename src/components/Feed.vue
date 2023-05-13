@@ -25,9 +25,13 @@ function removeThisPost (uri: string) {
     <div
       v-if="feed.__folding"
       class="folder"
+      :data-has-reply-and-repost="feed.reply != null && feed.reason != null"
       @click="feed.__folding = !feed.__folding"
     >
-      <template v-if="feed.reply != null">
+      <div
+        v-if="feed.reply != null"
+        class="folder__item"
+      >
         <SVGIcon name="post" />
         <div class="display-name">{{
           !mainState.currentSetting.postAnonymization
@@ -39,8 +43,11 @@ function removeThisPost (uri: string) {
             ? feed.post.author.handle
             : ""
         }}</div>
-      </template>
-      <template v-if="feed.reason != null">
+      </div>
+      <div
+        v-if="feed.reason != null"
+        class="folder__item"
+      >
         <SVGIcon name="repost" />
         <div class="display-name">{{
           !mainState.currentSetting.postAnonymization
@@ -52,7 +59,7 @@ function removeThisPost (uri: string) {
             ? feed.reason.by.handle
             : ""
         }}</div>
-      </template>
+      </div>
     </div>
     <template v-else>
       <template v-if="feed.__replyDisplay && (feed.reply?.root != null || feed.reply?.parent != null)">
@@ -91,36 +98,49 @@ function removeThisPost (uri: string) {
   cursor: pointer;
   display: grid;
   grid-gap: 0.5em;
-  grid-template-columns: auto auto 1fr;
   align-items: center;
-  overflow: hidden;
   padding: 0.5em 1em;
-
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
-    font-size: 0.875em;
+  &[data-has-reply-and-repost="false"] {
+    grid-template-columns: 1fr;
   }
-  & > .svg-icon--post {
-    transform: scaleX(-1);
+  &[data-has-reply-and-repost="true"] {
+    grid-template-columns: 1fr 1fr;
   }
 
-  & > .display-name {
-    color: rgba(var(--fg-color), 0.5);
-    font-size: 0.875em;
-    font-weight: bold;
-    line-height: 1.25;
+  &__item {
+    display: grid;
+    grid-gap: 0.5em;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
 
-  & > .handle {
-    color: rgba(var(--fg-color), 0.25);
-    font-size: 0.75em;
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    & > .svg-icon {
+      fill: rgba(var(--fg-color), 0.25);
+      font-size: 0.875em;
+    }
+
+    & > .svg-icon--post {
+      transform: scaleX(-1);
+    }
+
+    & > .display-name {
+      color: rgba(var(--fg-color), 0.5);
+      font-size: 0.875em;
+      font-weight: bold;
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    & > .handle {
+      color: rgba(var(--fg-color), 0.25);
+      font-size: 0.75em;
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 }
 </style>

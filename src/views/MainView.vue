@@ -27,6 +27,7 @@ import MessagePopup from "@/components/MessagePopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
+import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import state from "@/composables/main-state"
 import Util from "@/composables/util/index"
@@ -473,12 +474,14 @@ function scrollListener () {
 
     <!-- 全画面ローダー -->
     <Loader v-if="state.processing" />
+
+    <!-- スプラッシュスクリーン -->
+    <SplashScreen />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .main-view {
-  --main-area-opacity: 1.0;
   background-color: rgba(var(--bg-color), var(--bg-opacity));
 
   // カスタムレイアウト
@@ -553,7 +556,7 @@ function scrollListener () {
 
   // SP幅未満
   @media not all and (min-width: $sp-width) {
-    padding-bottom: 3rem;
+    padding-bottom: var(--sp-menu-height);
   }
 }
 
@@ -611,7 +614,7 @@ function scrollListener () {
   bottom: 0;
   left: 0;
   z-index: 2;
-  width: 100vw;
+  width: 100%;
 
   // SP幅以上
   @media (min-width: $sp-width) {

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
 import alert from "@/svg/alert.svg?raw"
+import arrowLeft from "@/svg/arrow-left.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
 import check from "@/svg/check.svg?raw"
@@ -29,6 +30,7 @@ import menu from "@/svg/menu.svg?raw"
 import offImage from "@/svg/off-image.svg?raw"
 import openInApp from "@/svg/open-in-app.svg?raw"
 import openInNew from "@/svg/open-in-new.svg?raw"
+import people from "@/svg/people.svg?raw"
 import person from "@/svg/person.svg?raw"
 import personOff from "@/svg/person-off.svg?raw"
 import plus from "@/svg/plus.svg?raw"
@@ -49,6 +51,7 @@ import wallpaper from "@/svg/wallpaper.svg?raw"
 
 const icons: { [k: string]: string } = {
   alert,
+  arrowLeft,
   at,
   bell,
   check,
@@ -77,6 +80,7 @@ const icons: { [k: string]: string } = {
   offImage,
   openInApp,
   openInNew,
+  people,
   person,
   personOff,
   plus,

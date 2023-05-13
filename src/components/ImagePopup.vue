@@ -252,7 +252,7 @@ function close () {
 
   // SP幅未満
   @media not all and (min-width: $sp-width) {
-    bottom: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
     right: 6rem;
   }
 }
@@ -267,7 +267,7 @@ function close () {
 
   // SP幅未満
   @media not all and (min-width: $sp-width) {
-    bottom: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
     right: 1rem;
   }
 }
@@ -282,7 +282,7 @@ function close () {
 
   // SP幅未満
   @media not all and (min-width: $sp-width) {
-    bottom: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
     left: 1rem;
   }
 }

@@ -1,0 +1,37 @@
+{
+  "id": "klearsky",
+  "name": "Klearsky",
+  "short_name": "Klearsky",
+  "scope": "/",
+  "start_url": "/",
+  "categories": [
+    "entertainment",
+    "news",
+    "social networking"
+  ],
+  "description": "A design-first web client for the AT Protocol a.k.a. Bluesky.",
+  "display": "standalone",
+  "background_color": "#202020",
+  "icons": [
+    {
+      "src": "/img/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
