@@ -55,7 +55,7 @@ function removeThisPost (uri: string) {
 }
 
 .post[data-focus="true"] {
-  scroll-margin: calc(var(--top-border-width) + 3.25rem);
+  scroll-margin: 3.25rem;
 }
 
 .post[data-has-child="true"]::before {

@@ -58,7 +58,7 @@ function onActivateBackButton () {
   grid-gap: 1rem;
   padding: 1rem;
   position: sticky;
-  top: var(--top-border-width);
+  top: 0;
   z-index: 1;
   &[data-has-back-button="false"] {
     grid-template-columns: auto auto 1fr;

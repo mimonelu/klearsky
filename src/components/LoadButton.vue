@@ -62,6 +62,7 @@ function onActivate () {
 
   & > .loader {
     font-size: 0.75rem;
+    z-index: 1;
   }
 }
 </style>

@@ -46,7 +46,7 @@ const mainState = inject("state") as MainState
 
   &__header {
     position: sticky;
-    top: var(--top-border-width);
+    top: 0;
     z-index: 1;
   }
 }

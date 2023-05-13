@@ -150,7 +150,7 @@ async function submit () {
 
   &__header {
     position: sticky;
-    top: var(--top-border-width);
+    top: 0;
     z-index: 1;
   }
 }

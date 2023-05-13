@@ -479,20 +479,6 @@ function scrollListener () {
 <style lang="scss" scoped>
 .main-view {
   background-color: rgba(var(--bg-color), var(--bg-opacity));
-  margin-top: var(--top-border-width);
-
-  // Top border
-  &::before {
-    background-color: rgb(var(--bg-color));
-    border-top: 1px solid rgba(var(--fg-color), 0.25);
-    content: "";
-    display: block;
-    position: fixed;
-    top: 0;
-    z-index: 1;
-    width: 100%;
-    height: var(--top-border-width);
-  }
 
   // カスタムレイアウト
   &[data-layout="defaultLeft"],
@@ -604,7 +590,7 @@ function scrollListener () {
 // PC用メニュー
 .main-menu-vertical {
   position: fixed;
-  top: calc(var(--top-border-width) + 0.5rem);
+  top: 0.5rem;
 
   // カスタムレイアウト
   .main-view[data-layout="default"] &,

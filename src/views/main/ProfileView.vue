@@ -401,7 +401,7 @@ function onActivateBackButton () {
 
 .tab {
   position: sticky;
-  top: var(--top-border-width);
+  top: 0;
   z-index: 1;
 
   &__button {
