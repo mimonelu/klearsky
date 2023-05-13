@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import { RouterView, type LocationQueryValue } from "vue-router"
+import { RouterView, useRouter, type LocationQueryValue } from "vue-router"
 import AvatarButton from "@/components/AvatarButton.vue"
 import FollowButton from "@/components/FollowButton.vue"
 import HandleHistoryPopup from "@/components/HandleHistoryPopup.vue"
@@ -8,6 +8,7 @@ import HtmlText from "@/components/HtmlText.vue"
 import MuteButton from "@/components/MuteButton.vue"
 import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
@@ -18,6 +19,8 @@ const state = reactive<{
   handleHistoryPopupDisplay: false,
   profileMenuDisplay: false,
 })
+
+const router = useRouter()
 
 function isUserProfile (): boolean {
   const handle = mainState.currentQuery.handle as LocationQueryValue
@@ -41,6 +44,11 @@ function openPostMenu () {
 
 function closePostMenu () {
   state.profileMenuDisplay = false
+}
+
+function onActivateBackButton () {
+  Util.blurElement()
+  if (history.state.back != null) router.back()
 }
 </script>
 
@@ -156,6 +164,12 @@ function closePostMenu () {
       </div>
     </div>
     <div class="tab">
+      <button
+        class="tab__button"
+        @click.prevent="onActivateBackButton"
+      >
+        <SVGIcon name="cursorLeft" />
+      </button>
       <RouterLink
         class="tab__button"
         :to="{ path: '/profile/post', query: { handle: mainState.currentProfile?.handle } }"
@@ -178,15 +192,33 @@ function closePostMenu () {
         <SVGIcon name="heart" />
       </RouterLink>
       <RouterLink
-        class="tab__button"
+        class="tab__button tab__button--following"
         :to="{ path: '/profile/following', query: { handle: mainState.currentProfile?.handle } }"
+        :title="$t('following')"
         @click.prevent
-      >{{ $t("following") }}</RouterLink>
+      >
+        <SVGIcon name="people" />
+        <SVGIcon name="arrowLeft" />
+        <img
+          loading="lazy"
+          :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
+          alt=""
+        >
+      </RouterLink>
       <RouterLink
-        class="tab__button"
+        class="tab__button tab__button--following"
         :to="{ path: '/profile/follower', query: { handle: mainState.currentProfile?.handle } }"
+        :title="$t('follower')"
         @click.prevent
-      >{{ $t("follower") }}</RouterLink>
+      >
+        <img
+          loading="lazy"
+          :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
+          alt=""
+        >
+        <SVGIcon name="arrowLeft" />
+        <SVGIcon name="people" />
+      </RouterLink>
     </div>
     <RouterView />
     <HandleHistoryPopup
@@ -374,6 +406,27 @@ function closePostMenu () {
 
   &__button {
     padding: 0.75rem 0;
+  }
+
+  &__button--following {
+    grid-gap: 0.375rem;
+
+    & > .svg-icon--people {
+      font-size: 1.5rem;
+    }
+
+    & > .svg-icon--arrowLeft {
+      font-size: 0.75rem;
+    }
+
+    & > img {
+      border-radius: var(--border-radius);
+      display: block;
+      min-width: 1.5rem;
+      max-width: 1.5rem;
+      min-height: 1.5rem;
+      max-height: 1.5rem;
+    }
   }
 }
 
