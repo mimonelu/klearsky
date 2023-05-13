@@ -101,6 +101,8 @@ async function openSendPostPopup () {
   border-top: 1px solid rgba(var(--fg-color), 0.25);
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  min-height: var(--sp-menu-height);
+  max-height: var(--sp-menu-height);
 }
 
 // 各種ボタン
@@ -109,17 +111,9 @@ async function openSendPostPopup () {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.625rem 0;
   position: relative;
-
-  .image {
-    border-radius: var(--border-radius);
-    object-fit: cover;
-    min-width: var(--button-size);
-    max-width: var(--button-size);
-    min-height: var(--button-size);
-    max-height: var(--button-size);
-  }
+  min-height: var(--sp-menu-size);
+  max-height: var(--sp-menu-size);
 
   .svg-icon {
     fill: rgba(var(--fg-color), 0.75);
@@ -134,7 +128,17 @@ async function openSendPostPopup () {
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
     background-color: rgba(var(--accent-color), 0.25);
-    box-shadow: 0 0 0 1px rgb(var(--bg-color)) inset;
+  }
+
+  &.profile-button {
+    .image {
+      border-radius: var(--border-radius);
+      object-fit: cover;
+      min-width: var(--button-size);
+      max-width: var(--button-size);
+      min-height: var(--button-size);
+      max-height: var(--button-size);
+    }
   }
 
   // HOTボタン

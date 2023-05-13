@@ -17,7 +17,6 @@
     text-align: center;
     &.router-link-active {
       background-color: rgba(var(--accent-color), 0.25);
-      box-shadow: 0 0 0 1px rgb(var(--bg-color)) inset;
     }
     &:focus, &:hover {
       color: rgb(var(--fg-color));

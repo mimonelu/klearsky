@@ -566,7 +566,7 @@ function scrollListener () {
 
   // SP幅未満
   @media not all and (min-width: $sp-width) {
-    padding-bottom: 3.5rem;
+    padding-bottom: var(--sp-menu-height);
   }
 }
 

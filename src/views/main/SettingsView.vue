@@ -35,7 +35,7 @@ const mainState = inject("state") as MainState
 
 <style lang="scss" scoped>
 .settings-view {
-  padding-bottom: 8rem;
+  padding-bottom: var(--sp-menu-height);
 
   &__header {
     position: sticky;

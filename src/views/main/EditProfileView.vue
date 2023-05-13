@@ -146,7 +146,7 @@ async function submit () {
 
 <style lang="scss" scoped>
 .edit-profile-view {
-  padding-bottom: 8rem;
+  padding-bottom: var(--sp-menu-height);
 }
 
 .easy-form {

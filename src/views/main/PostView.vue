@@ -50,7 +50,7 @@ function removeThisPost (uri: string) {
 <style lang="scss" scoped>
 .post-view {
   flex-grow: 1;
-  padding-bottom: 8rem;
+  padding-bottom: var(--sp-menu-height);
   position: relative;
 }
 

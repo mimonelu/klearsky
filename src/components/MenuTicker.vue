@@ -65,7 +65,16 @@ watch(() => props.display, (display: boolean) => {
   }
 
   &--inner {
-    padding: 0 0 3.125rem 0.75rem;
+    // SP幅未満
+    @media not all and (min-width: $sp-width) {
+      padding: 0 0 var(--sp-menu-height) 0.75rem;
+    }
+
+    // SP幅以上
+    @media (min-width: $sp-width) {
+      padding: 0 0 1rem 0.75rem;
+    }
+
     position: absolute;
     max-width: 16rem;
     z-index: 2;
