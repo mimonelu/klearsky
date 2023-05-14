@@ -95,6 +95,12 @@ type MainState = {
   currentBlockingUsers: Array<TTUser>
   currentBlockingUsersCursor?: string
 
+  globallinePosts: Array<TTPost>
+  globallineProfiles: { [did: string]: any }
+  globallineNumberOfPosts: number
+  globallineNumberOfMessages: number
+  globallineTotalTime: number
+
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string
   notificationCount: number

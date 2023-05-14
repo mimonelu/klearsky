@@ -175,6 +175,11 @@ function resetState () {
   state.currentPath = ""
   state.currentQuery = {}
   state.currentSetting = {}
+  state.globallinePosts = []
+  state.globallineProfiles = {}
+  state.globallineNumberOfPosts = 0
+  state.globallineNumberOfMessages = 0
+  state.globallineTotalTime = 0
   state.inviteCodes = []
   state.notifications = []
   state.notificationCursor = undefined

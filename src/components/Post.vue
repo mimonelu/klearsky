@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-// TODO: 適切なパスで記述すること
-import { detect } from "@/../node_modules/tinyld/dist/tinyld.light.node.js"
+import { detect } from "@/../node_modules/tinyld/dist/tinyld.light.node.js" // TODO: 適切なパスで記述すること
 import AvatarLink from "@/components/AvatarLink.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
@@ -355,7 +354,7 @@ async function translateText () {
           <!-- 表示名 -->
           <div class="display-name">{{
             !mainState.currentSetting.postAnonymization
-              ? post.author?.displayName
+              ? post.author?.displayName ?? "　"
               : $t("anonymous")
           }}</div>
 
