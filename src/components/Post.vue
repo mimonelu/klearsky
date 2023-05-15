@@ -20,6 +20,7 @@ const props = defineProps<{
   position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim";
   post: TTPost;
   replyTo?: TTPost;
+  forceHideImages?: boolean;
 }>()
 
 const mainState = inject("state") as MainState
@@ -402,7 +403,16 @@ async function translateText () {
         />
 
         <template v-if="state.images.length > 0 && (level ?? 1) < 3">
-          <template v-if="position !== 'slim'">
+          <template v-if="forceHideImages">
+            <div class="omit-images">
+              <SVGIcon
+                v-for="_, index of state.images"
+                :key="index"
+                name="image"
+              />
+            </div>
+          </template>
+          <template v-else-if="position !== 'slim'">
             <!-- 画像フォルダーボタン -->
             <button
               v-if="!state.displayImage"
@@ -804,6 +814,15 @@ async function translateText () {
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.omit-images {
+  display: flex;
+  grid-gap: 0.5em;
+
+  & > .svg-icon {
+    fill: rgb(var(--accent-color));
+  }
 }
 
 .image-folder-button > span {

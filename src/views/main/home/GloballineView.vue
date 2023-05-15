@@ -182,8 +182,8 @@ function removeThisPost (uri: string) {
   <div class="globalline-view">
     <div class="message-container">
       <div
-        v-for="message, index of mainState.globallinePosts"
-        :key="index"
+        v-for="message of mainState.globallinePosts"
+        :key="message.cid"
         class="message-wrapper"
         :data-is-reply="message.record.reply != null"
         :data-is-quote-repost="message.record.embed?.record != null"
@@ -193,6 +193,7 @@ function removeThisPost (uri: string) {
         <Post
           position="post"
           :post="message"
+          :forceHideImages="true"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         />
