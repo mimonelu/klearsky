@@ -128,7 +128,7 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   }
 
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
-  if (to.name === "home" && state.timelineFeeds.length > 0) return
+  if (to.name === "timeline-home" && state.timelineFeeds.length > 0) return
 
   // HOT の取得はログイン後 or カーソルボタン押下時 or currentHotFeeds が空の時のみ
   if (to.name === "hot" && state.currentHotFeeds.length > 0) return
@@ -231,7 +231,7 @@ async function processPage (pageName?: null | RouteRecordName) {
     case "profile-follower": {
       handle = state.currentQuery.handle as LocationQueryValue
       if (!handle) {
-        await router.push({ name: "home" })
+        await router.push({ name: "timeline-home" })
         break
       }
       break
@@ -285,7 +285,7 @@ async function processPage (pageName?: null | RouteRecordName) {
         await Promise.all(tasks)
         break
       }
-      case "home": {
+      case "timeline-home": {
         await state.fetchTimeline("new")
         break
       }

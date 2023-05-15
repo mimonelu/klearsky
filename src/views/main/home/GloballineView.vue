@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted } from "vue"
-import PageHeader from "@/components/PageHeader.vue"
 import Post from "@/components/Post.vue"
 
 // レコード解析用
@@ -134,18 +133,6 @@ function spendTime () {
 
 <template>
   <div class="globalline-view">
-    <div class="header">
-      <PageHeader
-        :hasBackButton="true"
-        :title="$t('globalline')"
-        :subTitle="mainState.atp.session?.__service ?? ''"
-      />
-      <div class="controls">
-        <div>{{ socketState() }}</div>
-        <div>Posts: {{ mainState.globallinePosts.length }} / {{ mainState.globallineNumberOfPosts }} / {{ mainState.globallineNumberOfMessages }}</div>
-        <div>Time: {{ spendTime() }}</div>
-      </div>
-    </div>
     <div class="message-container">
       <div
         v-for="message, index of mainState.globallinePosts"
@@ -158,23 +145,40 @@ function spendTime () {
         />
       </div>
     </div>
+    <div class="footer">
+      <div class="controls">
+        <div>{{ socketState() }}</div>
+        <div>Posts: {{ mainState.globallinePosts.length }} / {{ mainState.globallineNumberOfPosts }} / {{ mainState.globallineNumberOfMessages }}</div>
+        <div>Time: {{ spendTime() }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.header {
-  position: sticky;
-  top: 0;
+.footer {
+  background-color: rgba(var(--bg-color), var(--main-area-opacity));
+  border-top: 1px solid rgba(var(--fg-color), 0.25);
+  padding: 1rem;
+  position: fixed;
+  width: calc($router-view-width - 2px);
   z-index: 1;
+
+  // SP幅以上
+  @media (min-width: $sp-width) {
+    bottom: 0;
+  }
+
+  // SP幅未満
+  @media not all and (min-width: $sp-width) {
+    bottom: var(--sp-menu-height);
+  }
 }
 
 .controls {
-  background-color: rgba(var(--bg-color), var(--main-area-opacity));
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   align-items: center;
   grid-gap: 1rem;
-  padding: 1rem;
 
   & > * {
     line-height: 1.25;
