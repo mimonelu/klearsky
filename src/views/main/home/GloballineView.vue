@@ -97,7 +97,7 @@ async function onMessage (messageEvent: MessageEvent) {
   if (body?.blocks == null) return
   const car = CarBufferReader.fromBytes(body.blocks)
 
-  const cid = body.commit.toString()
+  let cid = undefined
   const did = body.repo
   let rkey = undefined
   let record = undefined
@@ -111,6 +111,7 @@ async function onMessage (messageEvent: MessageEvent) {
     // ポスト・引用リポスト・リプライのみ処理
     if (typeof currentRecord.$type === "string" &&
         currentRecord.$type !== "app.bsky.feed.post") return
+    cid = op.cid.toString()
     rkey = op.path.split("/").at(- 1)
     record = currentRecord
   }
@@ -141,6 +142,7 @@ async function onMessage (messageEvent: MessageEvent) {
     indexedAt: record.createdAt,
     viewer: {},
     __createdAt: record.createdAt,
+    embed: record.embed,
   })
 }
 
@@ -159,6 +161,21 @@ function spendTime () {
   const second = ("00" + (mainState.globallineTotalTime % 60)).slice(- 2)
   return `${hours}:${minutes}:${second}`
 }
+
+function updateThisPostThread (newPosts: Array<TTPost>) {
+  mainState.globallinePosts.forEach((post: TTPost, index: number) => {
+    const newPost = newPosts.find((newPost: TTPost) => {
+      return post.cid === newPost.cid
+    })
+    if (newPost != null) mainState.globallinePosts[index] = newPost
+  })
+}
+
+function removeThisPost (uri: string) {
+  mainState.globallinePosts = mainState.globallinePosts.filter((post: TTPost) => {
+    return post.uri !== uri
+  })
+}
 </script>
 
 <template>
@@ -173,6 +190,12 @@ function spendTime () {
         :data-is-loaded="message.author.did != null"
         :data-is-blocking="message.author.viewer?.blocking != null"
       >
+        <Post
+          position="post"
+          :post="message"
+          @updateThisPostThread="updateThisPostThread"
+          @removeThisPost="removeThisPost"
+        />
         <div
           v-if="message.record.reply != null"
           class="reply-icon"
@@ -185,10 +208,6 @@ function spendTime () {
         >
           <SVGIcon name="quoteRepost" />
         </div>
-        <Post
-          position="post"
-          :post="message"
-        />
       </div>
     </div>
     <div class="footer">
@@ -252,7 +271,6 @@ function spendTime () {
   position: absolute;
   top: 0;
   left: 0.5rem;
-  z-index: 1;
 
   & > .svg-icon {
     font-size: 1.25rem;
