@@ -1,6 +1,9 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted } from "vue"
+import { inject, onBeforeUnmount, onMounted, reactive } from "vue"
+import Loader from "@/components/Loader.vue"
 import Post from "@/components/Post.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 // レコード解析用
 import { addExtension, decode, decodeMultiple } from "cbor-x"
@@ -11,6 +14,12 @@ import { CID } from "multiformats"
 import { detectAll } from "@/../node_modules/tinyld/dist/tinyld.light.node.js" // TODO: 適切なパスで記述すること
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  socketState?: number;
+}>({
+  socketState: 0,
+})
 
 let socket: undefined | WebSocket = undefined
 
@@ -29,10 +38,17 @@ addExtension({
   },
 })
 
-onMounted(() => {
+onMounted(connect)
+
+onBeforeUnmount(disconnect)
+
+function connect () {
   const domain = mainState.atp.session?.__service?.replace(/^\w+:\/+/, "") ?? ""
   socket = new WebSocket(`wss://${domain}/xrpc/com.atproto.sync.subscribeRepos`)
+  socket.addEventListener("open", onOpen)
+  socket.addEventListener("close", onClose)
   socket.addEventListener("message", onMessage)
+  state.socketState = 1
 
   timer = setInterval(async () => {
     if (socket?.readyState === 1) mainState.globallineTotalTime ++
@@ -47,15 +63,24 @@ onMounted(() => {
       return
     }
   }, 1000)
-})
+}
 
-onBeforeUnmount(() => {
+function disconnect () {
+  socket?.removeEventListener("message", onOpen)
   socket?.removeEventListener("message", onMessage)
   socket?.close()
 
   clearInterval(timer)
   timer = undefined
-})
+}
+
+function onOpen () {
+  state.socketState = 2
+}
+
+function onClose () {
+  state.socketState = 0
+}
 
 async function onMessage (messageEvent: MessageEvent) {
   mainState.globallineNumberOfMessages ++
@@ -119,8 +144,13 @@ async function onMessage (messageEvent: MessageEvent) {
   })
 }
 
-function socketState () {
-  return socket?.readyState ?? 0
+function toggleConnect () {
+  Util.blurElement()
+  if (state.socketState === 0) {
+    connect()
+  } else if (state.socketState === 2) {
+    disconnect()
+  }
 }
 
 function spendTime () {
@@ -148,10 +178,34 @@ function spendTime () {
       </div>
     </div>
     <div class="footer">
-      <div class="controls">
-        <div>{{ socketState() }}</div>
-        <div>Posts: {{ mainState.globallinePosts.length }} / {{ mainState.globallineNumberOfPosts }} / {{ mainState.globallineNumberOfMessages }}</div>
-        <div>Time: {{ spendTime() }}</div>
+      <button
+        :class="state.socketState === 2 ? 'button--important' : 'button--bordered'"
+        class="power-button"
+        @click.stop="toggleConnect"
+      >
+        <template v-if="state.socketState === 0">
+          <SVGIcon name="play" />
+        </template>
+        <template v-else-if="state.socketState === 1">
+          <Loader />
+        </template>
+        <template v-else-if="state.socketState === 2">
+          <SVGIcon name="pause" />
+        </template>
+      </button>
+      <div class="info">
+        <dl>
+          <dt>
+            <SVGIcon name="post" />
+          </dt>
+          <dd>{{ mainState.globallinePosts.length.toLocaleString() }} / {{ mainState.globallineNumberOfPosts.toLocaleString() }} / {{ mainState.globallineNumberOfMessages.toLocaleString() }}</dd>
+        </dl>
+        <dl>
+          <dt>
+            <SVGIcon name="clock" />
+          </dt>
+          <dd>{{ spendTime() }}</dd>
+        </dl>
       </div>
     </div>
   </div>
@@ -160,38 +214,6 @@ function spendTime () {
 <style lang="scss" scoped>
 .globalline-view {
   padding-bottom: var(--sp-menu-height);
-}
-
-.footer {
-  background-color: rgba(var(--bg-color), var(--main-area-opacity));
-  border-top: 1px solid rgba(var(--fg-color), 0.25);
-  padding: 1rem;
-  position: fixed;
-  width: calc($router-view-width - 2px);
-  z-index: 1;
-
-  // SP幅以上
-  @media (min-width: $sp-width) {
-    bottom: 0;
-  }
-
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
-    bottom: var(--sp-menu-height);
-  }
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  grid-gap: 1rem;
-
-  & > * {
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
 }
 
 .message-container {
@@ -211,6 +233,64 @@ function spendTime () {
   }
   &[data-is-blocking="true"] {
     display: none;
+  }
+}
+
+.footer {
+  background-color: rgba(var(--bg-color), var(--main-area-opacity));
+  border-top: 1px solid rgba(var(--fg-color), 0.25);
+  display: flex;
+  grid-gap: 1rem;
+  padding: 1rem;
+  position: fixed;
+  width: calc($router-view-width - 2px);
+  z-index: 1;
+
+  // SP幅以上
+  @media (min-width: $sp-width) {
+    bottom: 0;
+  }
+
+  // SP幅未満
+  @media not all and (min-width: $sp-width) {
+    bottom: var(--sp-menu-height);
+  }
+
+  & > .info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    grid-gap: 0.5rem;
+
+    & > dl {
+      display: flex;
+      align-items: center;
+      grid-gap: 0.5rem;
+      font-size: 0.875rem;
+
+      & > dt {
+        & > .svg-icon {
+          fill: rgba(var(--fg-color), 0.5);
+        }
+      }
+
+      & > dd {
+        color: rgba(var(--fg-color), 0.75);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.power-button {
+  position: relative;
+  min-width: 4rem;
+
+  & > .loader {
+    font-size: 0.5rem;
   }
 }
 </style>
