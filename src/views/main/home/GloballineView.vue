@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive } from "vue"
+import GloballineSettingsPopup from "@/components/GloballineSettingsPopup.vue"
 import Loader from "@/components/Loader.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -17,8 +18,10 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   socketState?: number;
+  globallineSettingsPopupDisplay: boolean;
 }>({
   socketState: 0,
+  globallineSettingsPopupDisplay: false,
 })
 
 let socket: undefined | WebSocket = undefined
@@ -123,8 +126,7 @@ async function onMessage (messageEvent: MessageEvent) {
   if (record.text != null) {
     const languages = detectAll(record.text)
     const yourLanguage = languages.findIndex((language: any) => {
-      // TODO: 言語を選択できるようにすること
-      return language.lang === window.navigator.language
+      return language.lang === mainState.globallineLanguage
     }) !== - 1
     if (!yourLanguage) return
   }
@@ -176,6 +178,15 @@ function removeThisPost (uri: string) {
     return post.uri !== uri
   })
 }
+
+function openGloballineSettingsPopup () {
+  Util.blurElement()
+  state.globallineSettingsPopupDisplay = true
+}
+
+function closeGloballineSettingsPopup () {
+  state.globallineSettingsPopupDisplay = false
+}
 </script>
 
 <template>
@@ -191,7 +202,7 @@ function removeThisPost (uri: string) {
         :data-is-blocking="message.author.viewer?.blocking != null"
       >
         <Post
-          position="post"
+          :position="mainState.globallineLayout"
           :post="message"
           :forceHideImages="true"
           @updateThisPostThread="updateThisPostThread"
@@ -241,7 +252,17 @@ function removeThisPost (uri: string) {
           <dd>{{ spendTime() }}</dd>
         </dl>
       </div>
+      <button
+        class="button--bordered globalline-settings-popup-button"
+        @click.stop="openGloballineSettingsPopup"
+      >
+        <SVGIcon name="setting" />
+      </button>
     </div>
+    <GloballineSettingsPopup
+      v-if="state.globallineSettingsPopupDisplay"
+      @close="closeGloballineSettingsPopup"
+    />
   </div>
 </template>
 
@@ -350,6 +371,12 @@ function removeThisPost (uri: string) {
 
   & > .loader {
     font-size: 0.5rem;
+  }
+}
+
+.globalline-settings-popup-button {
+  & > .svg-icon {
+    font-size: 1rem;
   }
 }
 </style>

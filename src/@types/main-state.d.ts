@@ -100,6 +100,8 @@ type MainState = {
   globallineNumberOfPosts: number
   globallineNumberOfMessages: number
   globallineTotalTime: number
+  globallineLayout: "post" | "slim"
+  globallineLanguage: string
 
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string

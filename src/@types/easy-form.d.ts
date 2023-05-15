@@ -5,6 +5,7 @@ type TTOption = {
 
 type TTEasyForm = {
   id?: string
+  hasSubmitButton?: boolean
   submitButtonLabel?: string
   submitCallback?: Function
   data: Array<TTEasyFormItem>
