@@ -168,12 +168,26 @@ function spendTime () {
         v-for="message, index of mainState.globallinePosts"
         :key="index"
         class="message-wrapper"
+        :data-is-reply="message.record.reply != null"
+        :data-is-quote-repost="message.record.embed?.record != null"
+        :data-is-loaded="message.author.did != null"
+        :data-is-blocking="message.author.viewer?.blocking != null"
       >
+        <div
+          v-if="message.record.reply != null"
+          class="reply-icon"
+        >
+          <SVGIcon name="post" />
+        </div>
+        <div
+          v-if="message.record.embed?.record != null"
+          class="quote-repost-icon"
+        >
+          <SVGIcon name="quoteRepost" />
+        </div>
         <Post
           position="post"
           :post="message"
-          :data-is-loaded="message.author.did != null"
-          :data-is-blocking="message.author.viewer?.blocking != null"
         />
       </div>
     </div>
@@ -223,17 +237,43 @@ function spendTime () {
 }
 
 .message-wrapper {
-  display: contents;
-}
+  position: relative;
 
-.post {
-  padding: 0.5em 1em;
   &[data-is-loaded="false"] {
     opacity: 0.5;
   }
   &[data-is-blocking="true"] {
     display: none;
   }
+}
+
+.reply-icon,
+.quote-repost-icon {
+  position: absolute;
+  top: 0;
+  left: 0.5rem;
+  z-index: 1;
+
+  & > .svg-icon {
+    font-size: 1.25rem;
+    transform: scaleX(- 1.0);
+  }
+}
+.reply-icon {
+  & > .svg-icon {
+    fill: rgb(var(--post-color));
+    stroke: rgb(var(--bg-color));
+  }
+}
+.quote-repost-icon {
+  & > .svg-icon {
+    fill: rgb(var(--share-color));
+    stroke: rgb(var(--bg-color));
+  }
+}
+
+.post {
+  padding: 0.5rem 1rem;
 }
 
 .footer {
