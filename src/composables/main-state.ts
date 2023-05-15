@@ -148,6 +148,7 @@ async function fetchLogAudit () {
   if (state.currentProfile == null) return
   const log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
   const logJson = await log.json()
+  if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
   state.currentProfile.__createdAt = logJson[0]?.createdAt
   state.currentProfile.__log = logJson.reverse()
   console.log("[klearsky/log/audit]", logJson)
