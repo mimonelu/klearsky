@@ -142,6 +142,8 @@ function spendTime () {
         <Post
           position="post"
           :post="message"
+          :data-is-loaded="message.author.did != null"
+          :data-is-blocking="message.author.viewer?.blocking != null"
         />
       </div>
     </div>
@@ -156,6 +158,10 @@ function spendTime () {
 </template>
 
 <style lang="scss" scoped>
+.globalline-view {
+  padding-bottom: var(--sp-menu-height);
+}
+
 .footer {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-top: 1px solid rgba(var(--fg-color), 0.25);
@@ -200,5 +206,11 @@ function spendTime () {
 
 .post {
   padding: 0.5em 1em;
+  &[data-is-loaded="false"] {
+    opacity: 0.5;
+  }
+  &[data-is-blocking="true"] {
+    display: none;
+  }
 }
 </style>
