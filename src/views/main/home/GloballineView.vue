@@ -80,11 +80,8 @@ async function onPost (did: string, post: any) {
 
 function toggleConnect () {
   Util.blurElement()
-  if (state.subscriber?.socketState === 0) {
-    connect()
-  } else if (state.subscriber?.socketState === 2) {
-    disconnect()
-  }
+  if (state.subscriber?.socketState === 0) connect()
+  else if (state.subscriber?.socketState === 2) disconnect()
 }
 
 function spendTime () {
@@ -130,6 +127,7 @@ function closeGloballineSettingsPopup () {
         :data-is-reply="message.record.reply != null"
         :data-is-quote-repost="message.record.embed?.record != null"
         :data-is-loaded="message.author.did != null"
+        :data-is-muted="message.author.viewer?.muted"
         :data-is-blocking="message.author.viewer?.blocking != null"
       >
         <Post
@@ -214,6 +212,7 @@ function closeGloballineSettingsPopup () {
   &[data-is-loaded="false"] {
     opacity: 0.5;
   }
+  &[data-is-muted="true"],
   &[data-is-blocking="true"] {
     display: none;
   }

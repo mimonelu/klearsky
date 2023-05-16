@@ -116,9 +116,15 @@ function isFocused (): boolean {
   return props.post.uri === mainState.currentQuery.postUri
 }
 
-async function onActivatePost (post: TTPost) {
+async function onActivatePost (post: TTPost, event: Event) {
   if (isFocused()) return
-  await router.push({ name: "post", query: { postUri: post.uri } })
+  const postUrl = { name: "post", query: { postUri: post.uri } }
+  if ((event as any).metaKey || (event as any).ctrlKey) {
+    const resolvedRoute = router.resolve(postUrl)
+    window.open(resolvedRoute.href, "_blank")
+    return
+  }
+  await router.push(postUrl)
 }
 
 function onActivateReplierLink () {
@@ -291,7 +297,7 @@ async function translateText () {
     :data-position="position"
     :data-repost="post.__reason != null"
     :data-focus="isFocused()"
-    @click.prevent.stop="onActivatePost(post)"
+    @click.prevent.stop="onActivatePost(post, $event)"
   >
     <div class="header">
       <!-- リプライ先ユーザー -->
