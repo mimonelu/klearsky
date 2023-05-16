@@ -7,7 +7,11 @@ import EditProfileView from "@/views/main/EditProfileView.vue"
 import HotView from "@/views/main/HotView.vue"
 import NotificationsView from "@/views/main/NotificationsView.vue"
 import PostView from "@/views/main/PostView.vue"
-import TimelineView from "@/views/main/TimelineView.vue"
+
+// Main - Home
+import HomeView from "@/views/main/HomeView.vue"
+import TimelineView from "@/views/main/home/TimelineView.vue"
+import GloballineView from "@/views/main/home/GloballineView.vue"
 
 // Main - Profile
 import ProfileView from "@/views/main/ProfileView.vue"
@@ -49,6 +53,11 @@ const router = createRouter({
           component: TimelineView,
         },
         {
+          path: "/global",
+          name: "global",
+          component: GloballineView,
+        },
+        {
           path: "/hot",
           name: "hot",
           component: HotView,
@@ -62,6 +71,24 @@ const router = createRouter({
           path: "/post",
           name: "post",
           component: PostView,
+        },
+        {
+          path: "/home",
+          name: "home",
+          component: HomeView,
+          redirect: "/home/timeline",
+          children: [
+            {
+              path: "timeline",
+              name: "timeline-home",
+              component: TimelineView,
+            },
+            {
+              path: "globalline",
+              name: "globalline-home",
+              component: GloballineView,
+            },
+          ],
         },
         {
           path: "/profile",

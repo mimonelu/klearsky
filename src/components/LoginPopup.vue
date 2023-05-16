@@ -84,8 +84,7 @@ async function submitCallback () {
         <div class="description">The web client for Bluesky.</div>
       </div>
       <div class="login-popup__body">
-        <EasyForm v-bind="easyFormProps"
-        >
+        <EasyForm v-bind="easyFormProps">
           <!-- App Passwords 導線 -->
           <template v-slot:after>
             <a

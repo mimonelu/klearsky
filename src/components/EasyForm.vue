@@ -2,6 +2,7 @@
 import { onMounted, reactive } from "vue"
 import Checkboxes from "@/components/Checkboxes.vue"
 import FileBox from "@/components/FileBox.vue"
+import Radios from "@/components/Radios.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util/index"
 
@@ -14,6 +15,7 @@ defineExpose({
 const props = defineProps<{
   id?: string
   data: Array<TTEasyFormItem>
+  hasSubmitButton?: boolean
   submitButtonLabel?: string
   submitCallback?: Function
 }>()
@@ -77,7 +79,7 @@ async function onSubmit () {
   }
 }
 
-function onActivateCheckbox (item: TTEasyFormItem) {
+function onActivateCheckboxAndRadio (item: TTEasyFormItem) {
   if (item.onUpdate != null) item.onUpdate(item, props)
 }
 
@@ -137,8 +139,32 @@ function onSubmitTextarea (event: KeyboardEvent) {
           :state="item.state"
           :model="item.model"
           :options="item.options as Array<TTOption>"
-          @update="onActivateCheckbox(item)"
+          @update="onActivateCheckboxAndRadio(item)"
         />
+
+        <!-- ラジオボタン -->
+        <Radios
+          v-if="item.type === 'radio'"
+          :state="item.state"
+          :model="item.model"
+          :options="item.options as Array<TTOption>"
+          @update="onActivateCheckboxAndRadio(item)"
+        />
+
+        <!-- セレクトボックス -->
+        <label
+          v-if="item.type === 'select'"
+          class="selectbox"
+        >
+          <select v-model="item.state[item.model]">
+            <option
+              v-for="option, index in item.options"
+              :key="index"
+              :value="option.value"
+              :selected="option.value === item.state[item.model]"
+            >{{ $t(option.label) }}</option>
+          </select>
+        </label>
 
         <!-- クリアボタン -->
         <button
@@ -190,7 +216,10 @@ function onSubmitTextarea (event: KeyboardEvent) {
       </dd>
     </dl>
     <slot name="after" />
-    <button class="button">{{ submitButtonLabel ?? $t("submit") }}</button>
+    <button
+      v-if="hasSubmitButton ?? true"
+      class="button"
+    >{{ submitButtonLabel ?? $t("submit") }}</button>
   </form>
 </template>
 
@@ -199,12 +228,12 @@ function onSubmitTextarea (event: KeyboardEvent) {
 .easy-form:deep() {
   display: flex;
   flex-direction: column;
-  grid-gap: 1rem;
+  grid-gap: 1.5rem;
 
   & > dl {
     display: flex;
     flex-direction: column;
-    grid-gap: 0.5rem;
+    grid-gap: 0.75rem;
 
     & > dt {
       font-weight: bold;

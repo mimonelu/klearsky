@@ -8,6 +8,7 @@ import check from "@/svg/check.svg?raw"
 import checkboxOff from "@/svg/checkbox-off.svg?raw"
 import checkboxOn from "@/svg/checkbox-on.svg?raw"
 import clipboard from "@/svg/clipboard.svg?raw"
+import clock from "@/svg/clock.svg?raw"
 import cross from "@/svg/cross.svg?raw"
 import cursorDown from "@/svg/cursor-down.svg?raw"
 import cursorLeft from "@/svg/cursor-left.svg?raw"
@@ -30,9 +31,11 @@ import menu from "@/svg/menu.svg?raw"
 import offImage from "@/svg/off-image.svg?raw"
 import openInApp from "@/svg/open-in-app.svg?raw"
 import openInNew from "@/svg/open-in-new.svg?raw"
+import pause from "@/svg/pause.svg?raw"
 import people from "@/svg/people.svg?raw"
 import person from "@/svg/person.svg?raw"
 import personOff from "@/svg/person-off.svg?raw"
+import play from "@/svg/play.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
@@ -58,6 +61,7 @@ const icons: { [k: string]: string } = {
   checkboxOff,
   checkboxOn,
   clipboard,
+  clock,
   cross,
   cursorDown,
   cursorLeft,
@@ -80,9 +84,11 @@ const icons: { [k: string]: string } = {
   offImage,
   openInApp,
   openInNew,
+  pause,
   people,
   person,
   personOff,
+  play,
   plus,
   post,
   quoteRepost,

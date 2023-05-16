@@ -3,7 +3,7 @@ import { inject } from "vue"
 import Checkboxes from "@/components/Checkboxes.vue"
 import ColorTheme from "@/components/ColorTheme.vue"
 import Radios from "@/components/Radios.vue"
-import languages from "@/consts/languages.json"
+import languages from "@/consts/ui-languages.json"
 import settings from "@/consts/settings.json"
 
 const mainState = inject("state") as MainState

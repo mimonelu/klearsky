@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-// TODO: 適切なパスで記述すること
-import { detect } from "@/../node_modules/tinyld/dist/tinyld.light.node.js"
+import { detect } from "@/../node_modules/tinyld/dist/tinyld.light.node.js" // TODO: 適切なパスで記述すること
 import AvatarLink from "@/components/AvatarLink.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
@@ -21,6 +20,7 @@ const props = defineProps<{
   position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim";
   post: TTPost;
   replyTo?: TTPost;
+  forceHideImages?: boolean;
 }>()
 
 const mainState = inject("state") as MainState
@@ -116,9 +116,15 @@ function isFocused (): boolean {
   return props.post.uri === mainState.currentQuery.postUri
 }
 
-async function onActivatePost (post: TTPost) {
+async function onActivatePost (post: TTPost, event: Event) {
   if (isFocused()) return
-  await router.push({ name: "post", query: { postUri: post.uri } })
+  const postUrl = { name: "post", query: { postUri: post.uri } }
+  if ((event as any).metaKey || (event as any).ctrlKey) {
+    const resolvedRoute = router.resolve(postUrl)
+    window.open(resolvedRoute.href, "_blank")
+    return
+  }
+  await router.push(postUrl)
 }
 
 function onActivateReplierLink () {
@@ -291,7 +297,7 @@ async function translateText () {
     :data-position="position"
     :data-repost="post.__reason != null"
     :data-focus="isFocused()"
-    @click.prevent.stop="onActivatePost(post)"
+    @click.prevent.stop="onActivatePost(post, $event)"
   >
     <div class="header">
       <!-- リプライ先ユーザー -->
@@ -355,7 +361,7 @@ async function translateText () {
           <!-- 表示名 -->
           <div class="display-name">{{
             !mainState.currentSetting.postAnonymization
-              ? post.author?.displayName
+              ? post.author?.displayName ?? "　"
               : $t("anonymous")
           }}</div>
 
@@ -403,7 +409,16 @@ async function translateText () {
         />
 
         <template v-if="state.images.length > 0 && (level ?? 1) < 3">
-          <template v-if="position !== 'slim'">
+          <template v-if="forceHideImages">
+            <div class="omit-images">
+              <SVGIcon
+                v-for="_, index of state.images"
+                :key="index"
+                name="image"
+              />
+            </div>
+          </template>
+          <template v-else-if="position !== 'slim'">
             <!-- 画像フォルダーボタン -->
             <button
               v-if="!state.displayImage"
@@ -805,6 +820,15 @@ async function translateText () {
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.omit-images {
+  display: flex;
+  grid-gap: 0.5em;
+
+  & > .svg-icon {
+    fill: rgb(var(--accent-color));
+  }
 }
 
 .image-folder-button > span {
