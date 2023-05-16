@@ -91,6 +91,7 @@ export default class {
     }
     const body = data[1]
     if (body?.blocks == null) {
+      // 例： `{t: '#handle', op: 1}`: 新規ユーザー
       console.warn("[klearsky/subscribeRepos]", "body?.blocks == null", data)
       return
     }

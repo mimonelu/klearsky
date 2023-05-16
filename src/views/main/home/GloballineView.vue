@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted, reactive } from "vue"
+import { inject, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import { detectAll } from "@/../node_modules/tinyld/dist/tinyld.light.node.js" // TODO: 適切なパスで記述すること
 import GloballineSettingsPopup from "@/components/GloballineSettingsPopup.vue"
 import Loader from "@/components/Loader.vue"
@@ -20,9 +20,15 @@ const state = reactive<{
 
 let timer: undefined | NodeJS.Timer = undefined
 
-onMounted(connect)
+onMounted(() => {
+  startControlToScroll()
+  connect()
+})
 
-onBeforeUnmount(disconnect)
+onBeforeUnmount(() => {
+  endControlToScroll()
+  disconnect()
+})
 
 function connect () {
   const domain = mainState.atp.session?.__service?.replace(/^\w+:\/+/, "") ?? ""
@@ -62,6 +68,8 @@ function onMessage () {
 
 async function onPost (did: string, post: any) {
   mainState.globallineNumberOfPosts ++
+
+  messageContainerHeight = (messageContainer.value as any).clientHeight
 
   // 言語解析
   if (post.record.text != null) {
@@ -115,11 +123,45 @@ function openGloballineSettingsPopup () {
 function closeGloballineSettingsPopup () {
   state.globallineSettingsPopupDisplay = false
 }
+
+// スクロール制御
+
+let mutationObserver: undefined | MutationObserver = undefined
+const messageContainer = ref(null)
+let messageContainerHeight = 0
+
+function startControlToScroll () {
+  mutationObserver = new MutationObserver(onMutated)
+  mutationObserver.observe((messageContainer.value as unknown as HTMLElement), {
+    childList: true,
+    characterData: false,
+    characterDataOldValue: false,
+    attributes: true,
+    subtree: false,
+  })
+}
+
+function endControlToScroll () {
+  mutationObserver?.disconnect()
+}
+
+function onMutated () {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  if (scrollTop == 0) return
+  const heightDiff = (messageContainer.value as unknown as HTMLElement).clientHeight - messageContainerHeight
+  window.scrollTo({
+    left: 0,
+    top: scrollTop + heightDiff
+  })
+}
 </script>
 
 <template>
   <div class="globalline-view">
-    <div class="message-container">
+    <div
+      class="message-container"
+      ref="messageContainer"
+      >
       <div
         v-for="message of mainState.globallinePosts"
         :key="message.cid"
