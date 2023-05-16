@@ -1,45 +1,24 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive } from "vue"
+import { detectAll } from "@/../node_modules/tinyld/dist/tinyld.light.node.js" // TODO: 適切なパスで記述すること
 import GloballineSettingsPopup from "@/components/GloballineSettingsPopup.vue"
 import Loader from "@/components/Loader.vue"
 import Post from "@/components/Post.vue"
+import SubscribeRepos from "@/composables/atp-wrapper/atp-utils/subscribe-repos"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
-
-// レコード解析用
-import { addExtension, decode, decodeMultiple } from "cbor-x"
-import { CarBufferReader } from "@ipld/car"
-import { CID } from "multiformats"
-
-// 言語解析用
-import { detectAll } from "@/../node_modules/tinyld/dist/tinyld.light.node.js" // TODO: 適切なパスで記述すること
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  socketState?: number;
+  subscriber?: SubscribeRepos;
   globallineSettingsPopupDisplay: boolean;
 }>({
-  socketState: 0,
+  subscriber: undefined,
   globallineSettingsPopupDisplay: false,
 })
 
-let socket: undefined | WebSocket = undefined
-
 let timer: undefined | NodeJS.Timer = undefined
-
-// レコード解析用処理
-addExtension({
-  Class: CID,
-  tag: 42,
-  encode () {
-    throw new Error("Cannot encode cids")
-  },
-  decode (bytes: Uint8Array) {
-    if (bytes[0] !== 0) throw new Error("Invalid cid")
-    return CID.decode(bytes.subarray(1))
-  },
-})
 
 onMounted(connect)
 
@@ -47,14 +26,12 @@ onBeforeUnmount(disconnect)
 
 function connect () {
   const domain = mainState.atp.session?.__service?.replace(/^\w+:\/+/, "") ?? ""
-  socket = new WebSocket(`wss://${domain}/xrpc/com.atproto.sync.subscribeRepos`)
-  socket.addEventListener("open", onOpen)
-  socket.addEventListener("close", onClose)
-  socket.addEventListener("message", onMessage)
-  state.socketState = 1
+  state.subscriber = new SubscribeRepos(onError, undefined, undefined, onMessage, onPost)
+  state.subscriber.connect(`wss://${domain}/xrpc/com.atproto.sync.subscribeRepos`)
 
   timer = setInterval(async () => {
-    if (socket?.readyState === 1) mainState.globallineTotalTime ++
+    if (state.subscriber?.socket?.readyState === 1)
+      mainState.globallineTotalTime ++
 
     for (const did in mainState.globallineProfiles) {
       const profile = mainState.globallineProfiles[did]
@@ -69,90 +46,43 @@ function connect () {
 }
 
 function disconnect () {
-  socket?.removeEventListener("message", onOpen)
-  socket?.removeEventListener("message", onMessage)
-  socket?.close()
+  state.subscriber?.disconnect()
 
   clearInterval(timer)
   timer = undefined
 }
 
-function onOpen () {
-  state.socketState = 2
+function onError () {
+  disconnect()
 }
 
-function onClose () {
-  state.socketState = 0
-}
-
-async function onMessage (messageEvent: MessageEvent) {
+function onMessage () {
   mainState.globallineNumberOfMessages ++
-  if (!(messageEvent.data instanceof Blob)) return
-  const arrayBuffer = await messageEvent.data.arrayBuffer()
-  const uint8Array: Uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)
-  const data = decodeMultiple(uint8Array) as Array<any>
-  const header = data[0]
-  if (header?.op !== 1) {
-    console.warn("[klearsky/subscribeRepos]", "header?.op !== 1", data)
-    return
-  }
-  const body = data[1]
-  if (body?.blocks == null) return
-  const car = CarBufferReader.fromBytes(body.blocks)
+}
 
-  let cid = undefined
-  const did = body.repo
-  let rkey = undefined
-  let record = undefined
-  for (const op of body.ops) {
-    // 何らかのレコードが削除された
-    if (!op.cid) continue
-    const block = car.get(op.cid)
-    if (!block) continue
-    const currentRecord = decode(block.bytes)
-    if (currentRecord == null) continue
-    // ポスト・引用リポスト・リプライのみ処理
-    if (typeof currentRecord.$type === "string" &&
-        currentRecord.$type !== "app.bsky.feed.post") return
-    cid = op.cid.toString()
-    rkey = op.path.split("/").at(- 1)
-    record = currentRecord
-  }
-  if (record == null) return
-
+async function onPost (did: string, post: any) {
   mainState.globallineNumberOfPosts ++
 
   // 言語解析
-  if (record.text != null) {
-    const languages = detectAll(record.text)
+  if (post.record.text != null) {
+    const languages = detectAll(post.record.text)
     const yourLanguage = languages.findIndex((language: any) => {
       return language.lang === mainState.globallineLanguage
     }) !== - 1
     if (!yourLanguage) return
   }
 
-  if (mainState.globallineProfiles[did] == null) mainState.globallineProfiles[did] = {}
-
-  mainState.globallinePosts.unshift({
-    uri: `at://${did ?? ''}/app.bsky.feed.post/${rkey ?? ''}`,
-    cid,
-    author: mainState.globallineProfiles[did] as TTUser,
-    record,
-    replyCount: 0,
-    repostCount: 0,
-    likeCount: 0,
-    indexedAt: record.createdAt,
-    viewer: {},
-    __createdAt: record.createdAt,
-    embed: record.embed,
-  })
+  if (mainState.globallineProfiles[did] == null)
+    mainState.globallineProfiles[did] = {}
+  post.author = mainState.globallineProfiles[did]
+  mainState.globallinePosts.unshift(post)
 }
 
 function toggleConnect () {
   Util.blurElement()
-  if (state.socketState === 0) {
+  if (state.subscriber?.socketState === 0) {
     connect()
-  } else if (state.socketState === 2) {
+  } else if (state.subscriber?.socketState === 2) {
     disconnect()
   }
 }
@@ -174,9 +104,10 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
 }
 
 function removeThisPost (uri: string) {
-  mainState.globallinePosts = mainState.globallinePosts.filter((post: TTPost) => {
-    return post.uri !== uri
-  })
+  mainState.globallinePosts = mainState.globallinePosts
+    .filter((post: TTPost) => {
+      return post.uri !== uri
+    })
 }
 
 function openGloballineSettingsPopup () {
@@ -224,17 +155,17 @@ function closeGloballineSettingsPopup () {
     </div>
     <div class="footer">
       <button
-        :class="state.socketState === 2 ? 'button--important' : 'button--bordered'"
+        :class="state.subscriber?.socketState === 2 ? 'button--important' : 'button--bordered'"
         class="power-button"
         @click.stop="toggleConnect"
       >
-        <template v-if="state.socketState === 0">
+        <template v-if="state.subscriber?.socketState === 0">
           <SVGIcon name="play" />
         </template>
-        <template v-else-if="state.socketState === 1">
+        <template v-else-if="state.subscriber?.socketState === 1">
           <Loader />
         </template>
-        <template v-else-if="state.socketState === 2">
+        <template v-else-if="state.subscriber?.socketState === 2">
           <SVGIcon name="pause" />
         </template>
       </button>
