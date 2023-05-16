@@ -31,6 +31,7 @@ const state = reactive<{
 })
 
 const easyFormProps: TTEasyForm = {
+  hasSubmitButton: true,
   submitButtonLabel: $t("login"),
   submitCallback,
   data: [
