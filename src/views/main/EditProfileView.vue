@@ -32,6 +32,7 @@ const easyForm = ref()
 const router = useRouter()
 
 const easyFormProps: TTEasyForm = {
+  hasSubmitButton: true,
   submitButtonLabel: $t("apply"),
   submitCallback: submit,
   data: [
