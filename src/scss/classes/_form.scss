@@ -10,14 +10,16 @@
   border-radius: var(--border-radius);
   color: rgb(var(--fg-color));
   line-height: 1.5;
-  padding: 0.5rem 0.5rem;
 
   &::placeholder {
     color: rgba(var(--color), 0.5);
   }
 }
-
 .textarea {
+  padding: 0.5rem;
   word-break: break-word;
   @include scroll-bar;
+}
+.textbox {
+  padding: 0.5rem 1rem;
 }
