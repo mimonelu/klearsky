@@ -102,9 +102,10 @@ function onEnterKeyDown (event: KeyboardEvent) {
 </script>
 
 <template>
-  <div
+  <form
     :key="state.updateKey"
     class="easy-form"
+    @submit.stop="onSubmit"
   >
     <slot name="before" />
     <dl
@@ -219,9 +220,8 @@ function onEnterKeyDown (event: KeyboardEvent) {
     <button
       v-if="hasSubmitButton ?? true"
       class="button"
-      @click.stop="onSubmit"
     >{{ submitButtonLabel ?? $t("submit") }}</button>
-  </div>
+  </form>
 </template>
 
 <style lang="scss" scoped>
