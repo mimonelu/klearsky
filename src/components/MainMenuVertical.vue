@@ -195,6 +195,7 @@ function moveToBottom () {
 
   .image {
     border-radius: var(--border-radius);
+    font-size: 2rem;
     margin: 0.5rem;
     object-fit: cover;
     min-width: 2rem;

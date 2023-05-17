@@ -417,6 +417,7 @@ function onActivateBackButton () {
     & > img {
       border-radius: var(--border-radius);
       display: block;
+      font-size: 1.5rem;
       min-width: 1.5rem;
       max-width: 1.5rem;
       min-height: 1.5rem;

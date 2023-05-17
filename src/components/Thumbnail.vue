@@ -133,19 +133,23 @@ function onActivateAlt (alt: string) {
 
 <style lang="scss" scoped>
 .thumbnail {
-  border: 1px solid rgba(var(--fg-color), 0.25);
   position: relative;
-  &:focus, &:hover {
-    border-color: rgba(var(--fg-color), 0.5);
+
+  & > img {
+    border: 1px solid rgba(var(--fg-color), 0.25);
+    border-radius: var(--border-radius);
+    &:focus, &:hover {
+      border-color: rgba(var(--fg-color), 0.5);
+    }
   }
 }
 
 .alt-button {
-  border-radius: 0 var(--border-radius) 0 0;
+  border-radius: var(--border-radius);
   font-size: 0.75em;
   position: absolute;
-  bottom: 1px;
-  left: 1px;
+  bottom: 2px;
+  left: 2px;
 }
 
 .error {

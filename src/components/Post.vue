@@ -844,7 +844,6 @@ async function translateText () {
   grid-gap: 0.5rem;
 
   & > .thumbnail:deep() {
-    border-radius: var(--border-radius);
     cursor: pointer;
     overflow: hidden;
 

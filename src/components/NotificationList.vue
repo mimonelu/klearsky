@@ -200,7 +200,6 @@ function makeSubjectTo (notification: TTNotification): any {
 
 // 通知フォルダー開閉ボタン
 .folder-button {
-  background-color: rgba(var(--fg-color), 0.25);
   display: flex;
   align-items: center;
   grid-gap: 0.5rem;
