@@ -186,6 +186,19 @@ function changeSetting () {
         </div>
       </div>
 
+      <!-- 角丸 -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("borderRadius") }}</div>
+        <div class="settings-section__body">
+          <Radios
+            :state="mainState.currentSetting"
+            model="borderRadius"
+            :options="settings.borderRadius"
+            @update="saveSetting"
+          />
+        </div>
+      </div>
+
       <!-- カラーテーマ -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("colorTheme") }}</div>

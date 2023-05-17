@@ -127,6 +127,7 @@ async function openSendPostPopup () {
   &.profile-button {
     .image {
       border-radius: var(--border-radius);
+      font-size: var(--button-size);
       object-fit: cover;
       min-width: var(--button-size);
       max-width: var(--button-size);

@@ -149,6 +149,11 @@
   "layoutSlimLeft": "Slim - Left",
   "layoutSlimRight": "Slim - Right",
 
+  "borderRadius": "Border Radius",
+  "borderRadius1": "None",
+  "borderRadius2": "A little rounded",
+  "borderRadius3": "Rounded",
+
   "colorTheme": "Color Theme",
   "colorThemeAuto": "Auto",
   "colorThemeLight": "Light",

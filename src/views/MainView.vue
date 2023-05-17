@@ -391,6 +391,7 @@ function scrollListener () {
     :data-path="state.currentPath"
     :data-layout="state.currentSetting.layout"
     :style="{
+      '--border-radius': state.currentSetting.borderRadius ?? '0.5em',
       '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 1.0,
       '--image-aspect-ratio': state.currentSetting.imageAspectRatio ?? '1 / 1'
     }"

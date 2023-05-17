@@ -149,6 +149,11 @@
   "layoutSlimLeft": "スリム - 左",
   "layoutSlimRight": "スリム - 右",
 
+  "borderRadius": "角の丸み",
+  "borderRadius1": "なし",
+  "borderRadius2": "少し丸い",
+  "borderRadius3": "丸い",
+
   "colorTheme": "カラーテーマ",
   "colorThemeAuto": "自動",
   "colorThemeLight": "ライト",
