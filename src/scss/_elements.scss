@@ -40,6 +40,12 @@ body {
 [data-color-theme="dark"] {
   @include color-theme-dark;
 }
+[data-color-theme="lightGray"] {
+  @include color-theme-light-gray;
+}
+[data-color-theme="darkGray"] {
+  @include color-theme-dark-gray;
+}
 [data-color-theme="warm"] {
   @include color-theme-warm;
 }

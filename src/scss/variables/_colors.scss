@@ -1,7 +1,20 @@
 @mixin color-theme-light {
   --bg-color: 255, 255, 255;
   --fg-color: 32, 32, 32;
-  --accent-color: 0, 160, 240;
+  --accent-color: 0, 128, 255;
+  --notice-color: 240, 32, 32;
+  --post-color: 0, 160, 240;
+  --like-color: 240, 64, 128;
+  --share-color: 0, 160, 32;
+  --hot-color: 255, 0, 0;
+
+  --border-radius: 1px;
+}
+
+@mixin color-theme-light-gray {
+  --bg-color: 224, 224, 224;
+  --fg-color: 32, 32, 32;
+  --accent-color: 0, 128, 255;
   --notice-color: 240, 32, 32;
   --post-color: 0, 160, 240;
   --like-color: 240, 64, 128;
@@ -12,9 +25,22 @@
 }
 
 @mixin color-theme-dark {
-  --bg-color: 24, 24, 24;
+  --bg-color: 0, 0, 0;
   --fg-color: 224, 224, 224;
-  --accent-color: 32, 160, 240;
+  --accent-color: 0, 128, 255;
+  --notice-color: 240, 32, 32;
+  --post-color: 32, 160, 240;
+  --like-color: 240, 64, 128;
+  --share-color: 32, 192, 64;
+  --hot-color: 255, 0, 0;
+
+  --border-radius: 1px;
+}
+
+@mixin color-theme-dark-gray {
+  --bg-color: 32, 32, 32;
+  --fg-color: 224, 224, 224;
+  --accent-color: 0, 128, 255;
   --notice-color: 240, 32, 32;
   --post-color: 32, 160, 240;
   --like-color: 240, 64, 128;
