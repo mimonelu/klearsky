@@ -96,16 +96,15 @@ function onInputTextarea (item: TTEasyFormItem) {
   if (item.onInput != null) item.onInput(item, props)
 }
 
-function onSubmitTextarea (event: KeyboardEvent) {
+function onEnterKeyDown (event: KeyboardEvent) {
   if (!event.isComposing && (event.ctrlKey || event.metaKey)) onSubmit()
 }
 </script>
 
 <template>
-  <form
+  <div
     :key="state.updateKey"
     class="easy-form"
-    @submit.prevent="onSubmit"
   >
     <slot name="before" />
     <dl
@@ -131,6 +130,7 @@ function onSubmitTextarea (event: KeyboardEvent) {
           :inputmode="item.inputmode ?? undefined"
           spellcheck="false"
           class="textbox"
+          @keydown.enter="onEnterKeyDown"
         >
 
         <!-- チェックボックス -->
@@ -201,7 +201,7 @@ function onSubmitTextarea (event: KeyboardEvent) {
           spellcheck="false"
           class="textarea"
           @input="onInputTextarea(item)"
-          @keydown.enter="onSubmitTextarea"
+          @keydown.enter="onEnterKeyDown"
         />
 
         <!-- 最大文字数インジケータ -->
@@ -219,8 +219,9 @@ function onSubmitTextarea (event: KeyboardEvent) {
     <button
       v-if="hasSubmitButton ?? true"
       class="button"
+      @click.stop="onSubmit"
     >{{ submitButtonLabel ?? $t("submit") }}</button>
-  </form>
+  </div>
 </template>
 
 <style lang="scss" scoped>
