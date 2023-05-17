@@ -34,7 +34,6 @@ function moveToBottom () {
         mainState.currentPath.startsWith('/profile/') &&
         mainState.currentQuery.handle === mainState.atp.session?.handle
       "
-      @click.prevent
     >
       <img
         class="image"
@@ -49,7 +48,6 @@ function moveToBottom () {
     <RouterLink
       class="link-button"
       to="/home"
-      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="home" />
@@ -61,7 +59,6 @@ function moveToBottom () {
     <RouterLink
       class="link-button hot-button"
       to="/hot"
-      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="fire" />
@@ -74,7 +71,6 @@ function moveToBottom () {
       class="link-button"
       to="/search/suggestion"
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
-      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="search" />
@@ -86,7 +82,6 @@ function moveToBottom () {
     <RouterLink
       class="link-button"
       to="/notifications"
-      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="bell" />
@@ -105,7 +100,6 @@ function moveToBottom () {
       class="link-button"
       to="/settings/klearsky"
       :data-is-focus="mainState.currentPath.startsWith('/settings/')"
-      @click.prevent
     >
       <div class="icon">
         <SVGIcon name="setting" />

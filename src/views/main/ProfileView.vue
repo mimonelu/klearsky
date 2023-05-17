@@ -173,21 +173,18 @@ function onActivateBackButton () {
       <RouterLink
         class="tab__button"
         :to="{ path: '/profile/post', query: { handle: mainState.currentProfile?.handle } }"
-        @click.prevent
       >
         <SVGIcon name="post" />
       </RouterLink>
       <RouterLink
         class="tab__button"
         :to="{ path: '/profile/repost', query: { handle: mainState.currentProfile?.handle } }"
-        @click.prevent
       >
         <SVGIcon name="repost" />
       </RouterLink>
       <RouterLink
         class="tab__button"
         :to="{ path: '/profile/like', query: { handle: mainState.currentProfile?.handle } }"
-        @click.prevent
       >
         <SVGIcon name="heart" />
       </RouterLink>
@@ -195,7 +192,6 @@ function onActivateBackButton () {
         class="tab__button tab__button--following"
         :to="{ path: '/profile/following', query: { handle: mainState.currentProfile?.handle } }"
         :title="$t('following')"
-        @click.prevent
       >
         <SVGIcon name="people" />
         <SVGIcon name="arrowLeft" />
@@ -209,7 +205,6 @@ function onActivateBackButton () {
         class="tab__button tab__button--following"
         :to="{ path: '/profile/follower', query: { handle: mainState.currentProfile?.handle } }"
         :title="$t('follower')"
-        @click.prevent
       >
         <img
           loading="lazy"
