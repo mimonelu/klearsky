@@ -16,6 +16,11 @@ export default async function (
   console.log("[klearsky/getSuggestions]", response)
   if (!response.success) return
 
+  // ブロックユーザーをフィルタリング
+  response.data.actors = (response.data.actors as Array<TTUser>).filter((user: TTUser) => {
+    return !user.viewer?.blocking && !user.viewer?.blockedBy
+  })
+
   const newUsers: Array<TTUser> = (response.data.actors as Array<TTUser>)
     .filter((target: TTUser) => {
       return dataRef.every((user: TTUser) => user.did !== target.did)

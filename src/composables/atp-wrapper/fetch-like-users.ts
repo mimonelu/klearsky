@@ -19,6 +19,11 @@ export default async function (
   console.log("[klearsky/getLikes]", response)
   if (!response.success) return
 
+  // ブロックユーザーをフィルタリング
+  response.data.likes = (response.data.likes as Array<any>).filter((like: any) => {
+    return !(like.actor as TTUser).viewer?.blocking && !(like.actor as TTUser).viewer?.blockedBy
+  })
+
   const newUsers: Array<TTUser> = []
   ;(response.data.likes as Array<any>).forEach((like: any) => {
     const target = like.actor as TTUser

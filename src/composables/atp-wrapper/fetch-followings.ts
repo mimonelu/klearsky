@@ -16,6 +16,12 @@ export default async function (
   ).getFollows(query)
   console.log("[klearsky/getFollows]", response)
   if (!response.success) return undefined
+
+  // ブロックユーザーをフィルタリング
+  response.data.followers = (response.data.followers as Array<TTUser>).filter((follow: TTUser) => {
+    return !follow.viewer?.blocking && !follow.viewer?.blockedBy
+  })
+
   ;(response.data.follows as Array<TTUser>).forEach((following: TTUser) => {
     if (!users.some((user: TTUser) => user.did === following.did))
       users.push(following)
