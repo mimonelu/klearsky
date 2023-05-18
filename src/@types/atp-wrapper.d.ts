@@ -105,6 +105,10 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchFirstPost(
+  this: TIAtpWrapper,
+  handle: string
+): Promise<undefined | string>
   fetchFollowings(
     this: TIAtpWrapper,
     users: Array<TTUser> | Array<TTUser>,

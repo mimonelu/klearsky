@@ -2,6 +2,7 @@
 import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
+import MenuTickerFirstPost from "@/components/MenuTickerComponents/FirstPost.vue"
 import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
@@ -26,6 +27,12 @@ const mainState = inject("state") as MainState
       v-if="isUser"
       class="menu-ticker__header"
     >{{ mainState.atp.session?.email ?? "&nbsp;" }}</div>
+
+    <!-- 最初のポスト -->
+    <MenuTickerFirstPost
+      :handle="user.handle"
+      @close="emit('close')"
+    />
 
     <!-- メンションを送る -->
     <MenuTickerSendMention

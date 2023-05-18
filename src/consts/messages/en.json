@@ -42,6 +42,7 @@
   "repostUsers": "Reposted by",
   "copyPostText": "Copy text",
   "translate": "Translate text",
+  "firstPost": "Show first post",
   "sendMention": "Send mention",
   "deletePost": "Delete post",
   "deletePostMessage": "This post will be deleted. Are you sure?",
