@@ -159,11 +159,17 @@ function makeSubjectTo (notification: TTNotification): any {
   }
 
   // reason ごとの処理
+  &[data-reason="mention"],
   &[data-reason="reply"] {
     background-color: rgba(var(--post-color), 0.125);
   }
   &[data-reason="like"] {
     background-color: rgba(var(--like-color), 0.125);
+  }
+  &[data-reason="quote"] {
+    .text {
+      color: rgb(var(--share-color));
+    }
   }
   &[data-reason="repost"] {
     background-color: rgba(var(--share-color), 0.125);
@@ -232,10 +238,10 @@ function makeSubjectTo (notification: TTNotification): any {
   grid-gap: 0 0.5rem;
   overflow: hidden;
   &:nth-child(2):not(:last-child) {
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
   }
   &:last-child:not(:first-child) {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
   &[data-is-new="true"] {
     grid-template-columns: min-content min-content min-content auto 1fr max-content;

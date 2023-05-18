@@ -55,6 +55,9 @@
       &:not(:last-child) {
         border-right-style: none;
       }
+      &[data-checked="true"] + * {
+        border-left-color: rgba(var(--fg-color), 0.375);
+      }
     }
   }
   &[data-layout="vertical"] {
@@ -70,6 +73,9 @@
       }
       &:not(:last-child) {
         border-bottom-style: none;
+      }
+      &[data-checked="true"] + * {
+        border-top-color: rgba(var(--fg-color), 0.375);
       }
     }
   }
