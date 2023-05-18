@@ -844,12 +844,7 @@ async function translateText () {
   grid-gap: 0.5rem;
 
   & > .thumbnail:deep() {
-    cursor: pointer;
-    overflow: hidden;
-
     & > img {
-      aspect-ratio: var(--image-aspect-ratio);
-      object-fit: cover;
       height: 4rem;
     }
 

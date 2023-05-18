@@ -133,11 +133,16 @@ function onActivateAlt (alt: string) {
 
 <style lang="scss" scoped>
 .thumbnail {
+  cursor: pointer;
+  overflow: hidden;
   position: relative;
 
   & > img {
+    aspect-ratio: var(--image-aspect-ratio);
     border: 1px solid rgba(var(--fg-color), 0.25);
     border-radius: var(--border-radius);
+    display: block;
+    object-fit: cover;
     &:focus, &:hover {
       border-color: rgba(var(--fg-color), 0.5);
     }
