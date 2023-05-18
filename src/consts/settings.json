@@ -1,4 +1,8 @@
 {
+  "autoTranslations": [
+    { "label": "disabled", "value": false },
+    { "label": "enabled", "value": true }
+  ],
   "fontSizes": [
     { "label": "fontSizeSmall", "value": "small" },
     { "label": "fontSizeMedium", "value": "medium" },
@@ -43,10 +47,17 @@
     { "label": "layoutSlimLeft", "value": "slimLeft" },
     { "label": "layoutSlimRight", "value": "slimRight" }
   ],
+  "borderRadius": [
+    { "label": "borderRadius1", "value": "1px" },
+    { "label": "borderRadius2", "value": "0.25em" },
+    { "label": "borderRadius3", "value": "0.5em" }
+  ],
   "colorThemes": [
     { "label": "colorThemeAuto", "value": "auto" },
     { "label": "colorThemeLight", "value": "light" },
     { "label": "colorThemeDark", "value": "dark" },
+    { "label": "colorThemeLightGray", "value": "lightGray" },
+    { "label": "colorThemeDarkGray", "value": "darkGray" },
     { "label": "colorThemeWarm", "value": "warm" },
     { "label": "colorThemePink", "value": "pink" },
     { "label": "colorThemeRed", "value": "red" },

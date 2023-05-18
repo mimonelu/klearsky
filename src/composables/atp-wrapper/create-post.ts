@@ -7,6 +7,7 @@ import type {
   BskyAgent,
   ComAtprotoRepoCreateRecord,
 } from "@atproto/api"
+import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -34,21 +35,8 @@ export default async function (
   // TODO: リンクボックス
   let external: null | any = null
   if (params.url?.length > 0) {
-    const response = await fetch(`https://mimonelu.net:4649/${params.url}`, {
-      headers: { "user-agent": "Klearsky" },
-    })
-    const htmlString: string = await response.text()
-    const parser = new DOMParser()
-    const html = parser.parseFromString(htmlString, "text/html")
-    const titleElement = html.querySelector("title")
-    const descriptionElement = html.querySelector("meta[name='description']")
-    const title = titleElement?.innerHTML ?? ""
-    const description = descriptionElement?.getAttribute("content") ?? ""
-    external = {
-      uri: params.url,
-      title,
-      description,
-    }
+    external = await Util.parseOgp(params.url)
+    if (external == null) return false
   }
 
   // TODO: 画像

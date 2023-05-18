@@ -21,7 +21,6 @@ async function openSendPostPopup () {
         mainState.currentPath.startsWith('/profile/') &&
         mainState.currentQuery.handle === mainState.atp.session?.handle
       "
-      @click.prevent
     >
       <img
         class="image"
@@ -35,7 +34,6 @@ async function openSendPostPopup () {
     <RouterLink
       class="link-button"
       to="/home"
-      @click.prevent
     >
       <SVGIcon name="home" />
     </RouterLink>
@@ -44,7 +42,6 @@ async function openSendPostPopup () {
     <RouterLink
       class="link-button hot-button"
       to="/hot"
-      @click.prevent
     >
       <SVGIcon name="fire" />
     </RouterLink>
@@ -54,7 +51,6 @@ async function openSendPostPopup () {
       class="link-button"
       to="/search/suggestion"
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
-      @click.prevent
     >
       <SVGIcon name="search" />
     </RouterLink>
@@ -63,7 +59,6 @@ async function openSendPostPopup () {
     <RouterLink
       class="link-button"
       to="/notifications"
-      @click.prevent
     >
       <SVGIcon name="bell" />
 
@@ -79,7 +74,6 @@ async function openSendPostPopup () {
       class="link-button"
       to="/settings/klearsky"
       :data-is-focus="mainState.currentPath.startsWith('/settings/')"
-      @click.prevent
     >
       <SVGIcon name="setting" />
     </RouterLink>
@@ -133,6 +127,7 @@ async function openSendPostPopup () {
   &.profile-button {
     .image {
       border-radius: var(--border-radius);
+      font-size: var(--button-size);
       object-fit: cover;
       min-width: var(--button-size);
       max-width: var(--button-size);

@@ -90,7 +90,7 @@ async function submitCallback () {
           <template v-slot:after>
             <a
               class="textlink--icon app-passwords-link"
-              href="https://staging.bsky.app/settings/app-passwords"
+              href="https://bsky.app/settings/app-passwords"
               rel="noreferrer"
               target="_blank"
             >
@@ -169,10 +169,12 @@ $width: 800px;
 .account-container {
   display: flex;
   flex-direction: column;
-  grid-gap: 0.5rem;
+  grid-gap: 0.75rem;
 }
 
 .account-header {
+  font-weight: bold;
+
   @media not all and (max-width: $width) {
     text-align: right;
   }

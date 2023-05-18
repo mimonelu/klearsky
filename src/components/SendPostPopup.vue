@@ -145,3 +145,14 @@ function isEmpty (): boolean {
     </template>
   </Popup>
 </template>
+
+<style lang="scss" scoped>
+.send-post-popup:deep() {
+  .textarea {
+    border-left-style: none;
+    border-right-style: none;
+    border-radius: 0;
+    margin: 0 -2rem;
+  }
+}
+</style>

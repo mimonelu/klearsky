@@ -3,7 +3,7 @@
 }
 
 body {
-  --border-radius: 1px;
+  --border-radius: 0.5em;
   --image-aspect-ratio: 1 / 1; // 16 / 9;
   --main-area-opacity: 1.0;
   --sp-menu-size: calc(100vw / 7);
@@ -39,6 +39,12 @@ body {
 }
 [data-color-theme="dark"] {
   @include color-theme-dark;
+}
+[data-color-theme="lightGray"] {
+  @include color-theme-light-gray;
+}
+[data-color-theme="darkGray"] {
+  @include color-theme-dark-gray;
 }
 [data-color-theme="warm"] {
   @include color-theme-warm;

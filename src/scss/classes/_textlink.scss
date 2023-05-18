@@ -1,18 +1,18 @@
 .textlink,
 .textlink--icon {
-  color: rgba(var(--accent-color), 0.875);
+  color: rgb(var(--accent-color));
   line-height: 1.25;
 
   & > .svg-icon {
-    fill: rgba(var(--accent-color), 0.875);
+    fill: rgb(var(--accent-color));
+  }
+
+  & > span {
+    line-height: 1.25;
   }
 
   &:focus, &:hover {
-    color: rgb(var(--accent-color));
-
-    & > .svg-icon {
-      fill: rgb(var(--accent-color));
-    }
+    filter: hue-rotate(45deg);
   }
 }
 .textlink--icon {

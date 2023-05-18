@@ -7,6 +7,7 @@ defineProps<{
   state: any
   model: string
   options: Array<TTOption>
+  layout?: "horizontal" | "vertical"
 }>()
 
 function onChange () {
@@ -15,7 +16,10 @@ function onChange () {
 </script>
 
 <template>
-  <div class="radios">
+  <div
+    class="radios"
+    :data-layout="layout ?? 'vertical'"
+  >
     <label
       v-for="option of options"
       :key="option.value"
@@ -33,41 +37,3 @@ function onChange () {
     </label>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.radios {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 0.5rem;
-
-  & > .radio {
-    cursor: pointer;
-    display: flex;
-
-    & > .svg-icon {
-      fill: rgba(var(--accent-color), 0.25);
-      margin-top: 0.25rem;
-      margin-right: 0.5rem;
-    }
-    &[data-checked="true"] > .svg-icon {
-      fill: rgb(var(--accent-color));
-    }
-
-    & > span {
-      color: rgba(var(--fg-color), 0.875);
-      line-height: 1.5;
-    }
-    &:focus > span,
-    &:hover > span {
-      color: rgb(var(--fg-color));
-    }
-    &[data-checked="true"] > span {
-      color: rgba(var(--accent-color), 0.875);
-    }
-    &[data-checked="true"]:focus > span,
-    &[data-checked="true"]:hover > span {
-      color: rgb(var(--accent-color));
-    }
-  }
-}
-</style>

@@ -19,6 +19,11 @@ export default async function (
   console.log("[klearsky/searchActors]", response)
   if (!response.success) return
 
+  // ブロックユーザーをフィルタリング
+  response.data.actors = (response.data.actors as Array<TTUser>).filter((user: TTUser) => {
+    return !user.viewer?.blocking && !user.viewer?.blockedBy
+  })
+
   const newUsers: Array<TTUser> = []
   ;(response.data.actors as Array<TTUser>).forEach((target: TTUser) => {
     if (!users.some((user: TTUser) => user.did === target.did))

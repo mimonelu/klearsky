@@ -7,14 +7,16 @@ import UserBox from "@/components/UserBox.vue"
 import Util from "@/composables/util/index"
 
 const props = defineProps<{
-  type: "follower" | "following"
+  type: "follower" | "following" | "suggestion"
 }>()
 
 const mainState = inject("state") as MainState
 
 const currentUsers = props.type === "follower"
   ? mainState.currentFollowers
-  : mainState.currentFollowings
+  : props.type === "following"
+    ? mainState.currentFollowings
+    : mainState.currentSearchSuggestionResults
 
 async function fetchUsers (direction: "new" | "old") {
   Util.blurElement()
@@ -27,6 +29,10 @@ async function fetchUsers (direction: "new" | "old") {
       }
       case "following": {
         await mainState.fetchFollowings(direction)
+        break
+      }
+      case "suggestion": {
+        await mainState.fetchSuggestions(direction)
         break
       }
     }

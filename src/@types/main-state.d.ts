@@ -20,6 +20,7 @@ type TTSetting = {
     "slim" |
     "slimLeft" |
     "slimRight"
+  borderRadius?: string
   colorTheme?: string
   mainAreaOpacity?: number
   backgroundImage?: string
@@ -155,6 +156,7 @@ type MainState = {
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
   fetchFollowers: (direction: "new" | "old") => Promise<void>
   fetchFollowings: (direction: "new" | "old") => Promise<void>
+  fetchSuggestions: (direction: "new" | "old") => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
   openSendPostPopup: (
     type: TTPostType,

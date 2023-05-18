@@ -11,7 +11,7 @@
     Arial,
     sans-serif;
 
-  font-size: 13px;
+  font-size: 15px;
   &[data-font-size="small"] {
     font-size: 13px;
   }
@@ -26,8 +26,14 @@
 // iOS における font-size: 16px; 未満のフォームパーツにフォーカスするとビューポートがスケーリングされる仕様対策
 input,
 textarea {
-  font-size: calc(0.125vmax + 16px);
-  &::placeholder {
-    font-size: calc(0.125vmax + 13px);
+  font-size: 18px;
+  [data-font-size="small"] & {
+    font-size: 16px;
+  }
+  [data-font-size="medium"] & {
+    font-size: 18px;
+  }
+  [data-font-size="large"] & {
+    font-size: 20px;
   }
 }

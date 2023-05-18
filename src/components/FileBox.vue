@@ -180,7 +180,7 @@ function deleteFile (index: number) {
 
 .delete-button {
   background-color: rgb(var(--bg-color));
-  border-radius: 0 0 0 var(--border-radius);
+  border-radius: var(--border-radius);
   padding: 0.5rem;
   position: absolute;
   top: 0.25rem;

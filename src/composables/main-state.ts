@@ -69,6 +69,7 @@ const state = reactive<MainState>({
   fetchNotifications,
   fetchFollowers,
   fetchFollowings,
+  fetchSuggestions,
   saveSettings,
   updateSettings,
   updateI18nSetting,
@@ -277,6 +278,15 @@ async function fetchFollowings (direction: "new" | "old") {
   state.currentFollowingsCursor = cursor
 }
 
+async function fetchSuggestions (direction: "new" | "old") {
+  state.currentSearchSuggestionCursor =
+    await state.atp.fetchSuggestions(
+      state.currentSearchSuggestionResults,
+      consts.limitOfFetchSuggestionSearch,
+      direction === "new" ? undefined : state.currentSearchSuggestionCursor
+    )
+}
+
 function saveSettings () {
   const did = state.atp.session?.did
   if (did == null) return
@@ -301,9 +311,11 @@ function saveSettings () {
   if (state.settings[did].imageControl == null)
     state.settings[did].imageControl = "all"
   if (state.settings[did].imageAspectRatio == null)
-    state.settings[did].imageAspectRatio = "2 / 1"
+    state.settings[did].imageAspectRatio = "1 / 1"
   if (state.settings[did].layout == null)
     state.settings[did].layout = "default"
+  if (state.settings[did].borderRadius == null)
+    state.settings[did].borderRadius = "0.5em"
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].mainAreaOpacity == null)

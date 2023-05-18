@@ -1,22 +1,25 @@
 .textarea,
 .textbox {
   --color: var(--fg-color);
-
+  --opacity: 0.125;
   &:focus {
     --color: var(--accent-color);
   }
+  &:hover {
+    --opacity: 0.25;
+  }
 
   background-color: rgba(var(--color), 0.125);
+  border: 1px solid rgba(var(--color), var(--opacity));
   border-radius: var(--border-radius);
   color: rgb(var(--fg-color));
   line-height: 1.5;
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 1rem;
 
   &::placeholder {
     color: rgba(var(--color), 0.5);
   }
 }
-
 .textarea {
   word-break: break-word;
   @include scroll-bar;

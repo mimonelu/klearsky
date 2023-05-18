@@ -38,11 +38,6 @@ const mainState = inject("state") as MainState
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  &:deep() {
-    .textbox {
-      border-bottom-style: none;
-    }
-  }
 
   &__header {
     position: sticky;

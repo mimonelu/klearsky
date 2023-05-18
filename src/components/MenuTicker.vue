@@ -117,7 +117,8 @@ watch(() => props.display, (display: boolean) => {
         & > .svg-icon {
           fill: rgb(var(--bg-color));
         }
-        & > .svg-icon--at {
+        & > .svg-icon--at,
+        & > .svg-icon--post {
           fill: rgb(var(--post-color));
         }
         & > .svg-icon--repost,

@@ -1,8 +1,8 @@
 [
   {
     "name": "officialApp",
-    "profileUri": "https://staging.bsky.app/profile/{handle}",
-    "postUri": "https://staging.bsky.app/profile/{handle}/post/{rkey}"
+    "profileUri": "https://bsky.app/profile/{handle}",
+    "postUri": "https://bsky.app/profile/{handle}/post/{rkey}"
   },
   {
     "name": "wrapperApp",
