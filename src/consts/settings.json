@@ -1,4 +1,8 @@
 {
+  "autoTranslations": [
+    { "label": "disabled", "value": false },
+    { "label": "enabled", "value": true }
+  ],
   "fontSizes": [
     { "label": "fontSizeSmall", "value": "small" },
     { "label": "fontSizeMedium", "value": "medium" },

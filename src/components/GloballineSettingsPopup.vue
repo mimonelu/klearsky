@@ -26,6 +26,7 @@ const easyFormProps: TTEasyForm = {
         { label: "Post", value: "post" },
         { label: "Slim", value: "slim" },
       ],
+      layout: "horizontal",
     },
     {
       state: mainState,

@@ -41,7 +41,7 @@
   border: 1px solid rgba(var(--fg-color), 0.25);
   color: rgba(var(--fg-color), 0.75);
   &:focus, &:hover {
-    border-color: rgb(var(--fg-color));
+    border-color: rgba(var(--fg-color), 0.5);
     color: rgb(var(--fg-color));
 
     & > .svg-icon {

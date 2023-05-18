@@ -13,7 +13,7 @@
     padding: 0.5em 2.5em 0.5em 1em;
     width: 100%;
     &:focus, &:hover {
-      border-color: rgb(var(--fg-color));
+      border-color: rgba(var(--fg-color), 0.5);
     }
 
     & > option {
@@ -23,7 +23,7 @@
   }
 
   &::after {
-    background-color: rgb(var(--fg-color));
+    background-color: rgba(var(--fg-color), 0.5);
     color: rgb(var(--fg-color));
     content: "";
     display: flex;
@@ -37,5 +37,8 @@
     right: 0.75em;
     width: 1em;
     height: 1em;
+  }
+  &:focus::after, &:hover::after {
+    background-color: rgb(var(--fg-color));
   }
 }

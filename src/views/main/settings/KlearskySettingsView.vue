@@ -45,21 +45,13 @@ function changeSetting () {
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("autoTranslation") }}</div>
         <div class="settings-section__body">
-          <label class="selectbox">
-            <select
-              v-model="mainState.currentSetting.autoTranslation"
-              @change="changeSetting"
-            >
-              <option
-                :value="false"
-                :selected="!mainState.currentSetting.autoTranslation"
-              >{{ $t("disabled") }}</option>
-              <option
-                :value="true"
-                :selected="mainState.currentSetting.autoTranslation"
-              >{{ $t("enabled") }}</option>
-            </select>
-          </label>
+          <Radios
+            :state="mainState.currentSetting"
+            model="autoTranslation"
+            :options="settings.autoTranslations"
+            layout="horizontal"
+            @update="saveSetting"
+          />
           <ul class="notification-list">
             <li>{{ $t("autoTranslationRemarks1") }}</li>
             <li>{{ $t("autoTranslationRemarks2") }}</li>
@@ -86,19 +78,13 @@ function changeSetting () {
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("fontSize") }}</div>
         <div class="settings-section__body">
-          <label class="selectbox">
-            <select
-              v-model="mainState.currentSetting.fontSize"
-              @change="changeSetting"
-            >
-              <option
-                v-for="fontSize, fontSizeIndex in settings.fontSizes"
-                :key="fontSizeIndex"
-                :value="fontSize.value"
-                :selected="fontSize.value === mainState.currentSetting.fontSize"
-              >{{ $t(fontSize.label) }}</option>
-            </select>
-          </label>
+          <Radios
+            :state="mainState.currentSetting"
+            model="fontSize"
+            :options="settings.fontSizes"
+            layout="horizontal"
+            @update="changeSetting"
+          />
         </div>
       </div>
 
@@ -110,6 +96,7 @@ function changeSetting () {
             :state="mainState.currentSetting"
             model="timeControl"
             :options="settings.timeControls"
+            layout="horizontal"
             @update="saveSetting"
           />
         </div>
@@ -161,6 +148,7 @@ function changeSetting () {
             :state="mainState.currentSetting"
             model="imageAspectRatio"
             :options="settings.imageAspectRatio"
+            layout="horizontal"
             @update="saveSetting"
           />
         </div>
@@ -194,6 +182,7 @@ function changeSetting () {
             :state="mainState.currentSetting"
             model="borderRadius"
             :options="settings.borderRadius"
+            layout="horizontal"
             @update="saveSetting"
           />
         </div>
@@ -268,6 +257,7 @@ function changeSetting () {
             :state="mainState.currentSetting"
             model="hideNumberOfReaction"
             :options="settings.hideNumberOfReaction"
+            layout="horizontal"
             @update="saveSetting"
           />
 
@@ -277,6 +267,7 @@ function changeSetting () {
             :state="mainState.currentSetting"
             model="postAnonymization"
             :options="settings.postAnonymization"
+            layout="horizontal"
             @update="saveSetting"
           />
         </div>

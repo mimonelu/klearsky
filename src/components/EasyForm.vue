@@ -140,6 +140,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           :state="item.state"
           :model="item.model"
           :options="item.options as Array<TTOption>"
+          :layout="item.layout"
           @update="onActivateCheckboxAndRadio(item)"
         />
 
@@ -149,6 +150,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           :state="item.state"
           :model="item.model"
           :options="item.options as Array<TTOption>"
+          :layout="item.layout"
           @update="onActivateCheckboxAndRadio(item)"
         />
 
