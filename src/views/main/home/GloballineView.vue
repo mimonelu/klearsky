@@ -239,13 +239,16 @@ function onMutated () {
 
 <style lang="scss" scoped>
 .globalline-view {
-  padding-bottom: var(--sp-menu-height);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .message-container {
   display: flex;
   flex-direction: column;
-  padding: 0.5em 0;
+  flex-grow: 1;
+  padding: 0.5em 0 var(--sp-menu-height);
 }
 
 .message-wrapper {
@@ -294,8 +297,8 @@ function onMutated () {
   display: flex;
   grid-gap: 1rem;
   padding: 1rem;
-  position: fixed;
-  width: calc($router-view-width - 2px);
+  position: sticky;
+  // width: calc($router-view-width - 2px);
   z-index: 1;
 
   // SP幅以上
