@@ -69,6 +69,7 @@ const state = reactive<MainState>({
   fetchNotifications,
   fetchFollowers,
   fetchFollowings,
+  fetchSuggestions,
   saveSettings,
   updateSettings,
   updateI18nSetting,
@@ -275,6 +276,15 @@ async function fetchFollowings (direction: "new" | "old") {
     direction === "new" ? undefined : state.currentFollowingsCursor
   )
   state.currentFollowingsCursor = cursor
+}
+
+async function fetchSuggestions (direction: "new" | "old") {
+  state.currentSearchSuggestionCursor =
+    await state.atp.fetchSuggestions(
+      state.currentSearchSuggestionResults,
+      consts.limitOfFetchSuggestionSearch,
+      direction === "new" ? undefined : state.currentSearchSuggestionCursor
+    )
 }
 
 function saveSettings () {
