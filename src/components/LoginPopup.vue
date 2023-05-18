@@ -90,7 +90,7 @@ async function submitCallback () {
           <template v-slot:after>
             <a
               class="textlink--icon app-passwords-link"
-              href="https://staging.bsky.app/settings/app-passwords"
+              href="https://bsky.app/settings/app-passwords"
               rel="noreferrer"
               target="_blank"
             >
