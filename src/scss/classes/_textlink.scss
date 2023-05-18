@@ -7,6 +7,10 @@
     fill: rgb(var(--accent-color));
   }
 
+  & > span {
+    line-height: 1.25;
+  }
+
   &:focus, &:hover {
     filter: hue-rotate(45deg);
   }
