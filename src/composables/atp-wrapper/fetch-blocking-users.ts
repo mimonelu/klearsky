@@ -1,4 +1,4 @@
-import type { BskyAgent, AppBskyGraphGetBlocks } from "@atproto/api"
+import type { AppBskyGraphGetBlocks, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

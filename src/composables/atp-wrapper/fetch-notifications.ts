@@ -91,14 +91,13 @@ export default async function (
 
   values.splice(0, values.length, ...newValues)
 
-  // 新着通知があればフォールディングを展開する
-  /*
+  // 新着通知があればフォールディングを展開する（いいねとリポスト以外）
   if (cursor === undefined)
     values.forEach((value: TTNotificationGroup) => {
+      if (value.reason === "repost" || value.reason === "like") return
       const hasRead = value.notifications.some((notification: TTNotification) => !notification.isRead)
       value.__folding = !hasRead
     })
-  */
 
   // 通知配列のソート
   values.forEach((value: TTNotificationGroup) => {

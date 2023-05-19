@@ -97,7 +97,7 @@ const observer = mainState.currentSetting.autoTranslation
       const cid = item.target.getAttribute("data-cid")
       if (cid !== props.post.cid || state.translation !== "none") return
       state.translation = "waiting"
-      translateText() // No await
+      translateText(false) // No await
     })
   })
   : undefined
@@ -221,6 +221,11 @@ function onClosePostMenu () {
   state.postMenuDisplay = false
 }
 
+function onAutoTranslate () {
+  onClosePostMenu()
+  translateText(true)
+}
+
 async function onRemoveThisPost (uri: string) {
   if (state.processing) return
   state.processing = true
@@ -240,7 +245,7 @@ async function updateThisPostThread () {
 }
 
 // 自動翻訳
-async function translateText () {
+async function translateText (forceTranslate: boolean) {
   if (props.post.__translatedText != null) {
     state.translation = "done"
     return
@@ -255,13 +260,15 @@ async function translateText () {
     state.translation = "ignore"
     return
   }
-  const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
-  if (autoTranslationIgnoreLanguage != null) {
-    const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/gs, '').split(",")
-    const ignored = ignoreLanguages.includes(srcLanguage)
-    if (ignored) {
-      state.translation = "ignore"
-      return
+  if (!forceTranslate) {
+    const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
+    if (autoTranslationIgnoreLanguage != null) {
+      const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/gs, '').split(",")
+      const ignored = ignoreLanguages.includes(srcLanguage)
+      if (ignored) {
+        state.translation = "ignore"
+        return
+      }
     }
   }
   const dstLanguage = window.navigator.language
@@ -587,6 +594,7 @@ async function translateText () {
                   : undefined"
                 :openSource="post"
                 @close="onClosePostMenu"
+                @autoTranslate="onAutoTranslate"
                 @removeThisPost="onRemoveThisPost"
               />
             </button>

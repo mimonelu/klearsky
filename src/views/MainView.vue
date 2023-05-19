@@ -180,8 +180,6 @@ function resetState () {
   state.globallineNumberOfPosts = 0
   state.globallineNumberOfMessages = 0
   state.globallineTotalTime = 0
-  state.globallineLayout = "post"
-  state.globallineLanguage = window.navigator.language ?? "en"
   state.inviteCodes = []
   state.notifications = []
   state.notificationCursor = undefined

@@ -1,4 +1,4 @@
-import type { BskyAgent, AppBskyActorSearchActors } from "@atproto/api"
+import type { AppBskyActorSearchActors, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

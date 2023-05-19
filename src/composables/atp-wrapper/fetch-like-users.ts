@@ -1,4 +1,4 @@
-import type { BskyAgent, AppBskyFeedGetLikes } from "@atproto/api"
+import type { AppBskyFeedGetLikes, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

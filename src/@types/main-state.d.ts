@@ -13,6 +13,8 @@ type TTSetting = {
     "self" |
     "none"
   imageAspectRatio?: string
+  globallineLayout?: "post" | "slim"
+  globallineLanguage?: string
   layout?:
     "default" |
     "defaultLeft" |
@@ -101,8 +103,6 @@ type MainState = {
   globallineNumberOfPosts: number
   globallineNumberOfMessages: number
   globallineTotalTime: number
-  globallineLayout: "post" | "slim"
-  globallineLanguage: string
 
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string

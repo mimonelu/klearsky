@@ -1,4 +1,4 @@
-import type { ComAtprotoRepoCreateRecord, BskyAgent } from "@atproto/api"
+import type { BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

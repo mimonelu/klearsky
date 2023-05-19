@@ -251,6 +251,8 @@ function onActivateBackButton () {
 }
 
 .details {
+  background-color: rgba(var(--fg-color), 0.125);
+  border-top: 1px solid rgba(var(--fg-color), 0.25);
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;

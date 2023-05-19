@@ -79,7 +79,7 @@ async function onSubmit () {
   }
 }
 
-function onActivateCheckboxAndRadio (item: TTEasyFormItem) {
+function onChange (item: TTEasyFormItem) {
   if (item.onUpdate != null) item.onUpdate(item, props)
 }
 
@@ -141,7 +141,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           :model="item.model"
           :options="item.options as Array<TTOption>"
           :layout="item.layout"
-          @update="onActivateCheckboxAndRadio(item)"
+          @update="onChange(item)"
         />
 
         <!-- ラジオボタン -->
@@ -151,7 +151,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           :model="item.model"
           :options="item.options as Array<TTOption>"
           :layout="item.layout"
-          @update="onActivateCheckboxAndRadio(item)"
+          @update="onChange(item)"
         />
 
         <!-- セレクトボックス -->
@@ -159,7 +159,10 @@ function onEnterKeyDown (event: KeyboardEvent) {
           v-if="item.type === 'select'"
           class="selectbox"
         >
-          <select v-model="item.state[item.model]">
+          <select
+            v-model="item.state[item.model]"
+            @change="onChange(item)"
+          >
             <option
               v-for="option, index in item.options"
               :key="index"

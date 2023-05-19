@@ -18,8 +18,6 @@ const state = reactive<{
   globallineSettingsPopupDisplay: false,
 })
 
-let timer: undefined | NodeJS.Timer = undefined
-
 onMounted(() => {
   startControlToScroll()
   connect()
@@ -28,34 +26,20 @@ onMounted(() => {
 onBeforeUnmount(() => {
   endControlToScroll()
   disconnect()
+  destroyProfileTimer()
 })
+
+// subscribeRepo
 
 function connect () {
   const domain = mainState.atp.session?.__service?.replace(/^\w+:\/+/, "") ?? ""
   state.subscriber = new SubscribeRepos(onError, undefined, undefined, onMessage, onPost)
   state.subscriber.connect(`wss://${domain}/xrpc/com.atproto.sync.subscribeRepos`)
-
-  timer = setInterval(async () => {
-    if (state.subscriber?.socket?.readyState === 1)
-      mainState.globallineTotalTime ++
-
-    for (const did in mainState.globallineProfiles) {
-      const profile = mainState.globallineProfiles[did]
-      if (profile.handle != null) continue
-      const newProfile = await mainState.atp.fetchProfile(did)
-      for (const key in newProfile) {
-        mainState.globallineProfiles[did][key] = newProfile[key]
-      }
-      return
-    }
-  }, 1000)
+  createProfileTimer()
 }
 
 function disconnect () {
   state.subscriber?.disconnect()
-
-  clearInterval(timer)
-  timer = undefined
 }
 
 function onError () {
@@ -75,7 +59,7 @@ async function onPost (did: string, post: any) {
   if (post.record.text != null) {
     const languages = detectAll(post.record.text)
     const yourLanguage = languages.findIndex((language: any) => {
-      return language.lang === mainState.globallineLanguage
+      return language.lang === mainState.currentSetting.globallineLanguage
     }) !== - 1
     if (!yourLanguage) return
   }
@@ -92,12 +76,47 @@ function toggleConnect () {
   else if (state.subscriber?.socketState === 2) disconnect()
 }
 
+// subscribeRepo - プロフィール取得
+
+let timer: undefined | NodeJS.Timer = undefined
+
+function createProfileTimer () {
+  timer = setTimeout(async () => {
+    // TODO: 適切な場所へ移動すること
+    if (state.subscriber?.socket?.readyState === 1)
+      mainState.globallineTotalTime ++
+
+    try {
+      for (const did in mainState.globallineProfiles) {
+        const profile = mainState.globallineProfiles[did]
+        if (profile.handle != null) continue
+        const newProfile = await mainState.atp.fetchProfile(did)
+        for (const key in newProfile) {
+          mainState.globallineProfiles[did][key] = newProfile[key]
+        }
+        break
+      }
+    } finally {
+      createProfileTimer()
+    }
+  }, 1000)
+}
+
+function destroyProfileTimer () {
+  clearInterval(timer)
+  timer = undefined
+}
+
+// 経過時間
+
 function spendTime () {
   const hours = ("00" + Math.floor(mainState.globallineTotalTime / 60 / 60)).slice(- 2)
   const minutes = ("00" + Math.floor(mainState.globallineTotalTime / 60)).slice(- 2)
   const second = ("00" + (mainState.globallineTotalTime % 60)).slice(- 2)
   return `${hours}:${minutes}:${second}`
 }
+
+// ポストアクション
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.globallinePosts.forEach((post: TTPost, index: number) => {
@@ -114,6 +133,8 @@ function removeThisPost (uri: string) {
       return post.uri !== uri
     })
 }
+
+// グローバルライン設定ポップアップ
 
 function openGloballineSettingsPopup () {
   Util.blurElement()
@@ -172,13 +193,16 @@ function onMutated () {
         :data-is-muted="message.author.viewer?.muted"
         :data-is-blocking="message.author.viewer?.blocking != null"
       >
+        <!-- ポスト -->
         <Post
-          :position="mainState.globallineLayout"
+          :position="mainState.currentSetting.globallineLayout ?? 'post'"
           :post="message"
           :forceHideImages="true"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         />
+
+        <!-- リプライ／引用リポストアイコン -->
         <div
           v-if="message.record.reply != null"
           class="reply-icon"
@@ -193,7 +217,10 @@ function onMutated () {
         </div>
       </div>
     </div>
+
+    <!-- グローバルラインフッター -->
     <div class="footer">
+      <!-- 電源ボタン -->
       <button
         :class="state.subscriber?.socketState === 2 ? 'button--important' : 'button--bordered'"
         class="power-button"
@@ -209,6 +236,8 @@ function onMutated () {
           <SVGIcon name="pause" />
         </template>
       </button>
+
+      <!-- 電源ボタン -->
       <div class="info">
         <dl>
           <dt>
@@ -223,6 +252,8 @@ function onMutated () {
           <dd>{{ spendTime() }}</dd>
         </dl>
       </div>
+
+      <!-- グローバルライン設定ポップアップトリガー -->
       <button
         class="button--bordered globalline-settings-popup-button"
         @click.stop="openGloballineSettingsPopup"
@@ -230,6 +261,8 @@ function onMutated () {
         <SVGIcon name="setting" />
       </button>
     </div>
+
+    <!-- グローバルライン設定ポップアップ -->
     <GloballineSettingsPopup
       v-if="state.globallineSettingsPopupDisplay"
       @close="closeGloballineSettingsPopup"
@@ -263,6 +296,12 @@ function onMutated () {
   }
 }
 
+// ポスト
+.post {
+  padding: 0.5rem 1rem;
+}
+
+// リプライ／引用リポストアイコン
 .reply-icon,
 .quote-repost-icon {
   position: absolute;
@@ -287,10 +326,7 @@ function onMutated () {
   }
 }
 
-.post {
-  padding: 0.5rem 1rem;
-}
-
+// グローバルラインフッター
 .footer {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-top: 1px solid rgba(var(--fg-color), 0.25);
@@ -298,7 +334,6 @@ function onMutated () {
   grid-gap: 1rem;
   padding: 1rem;
   position: sticky;
-  // width: calc($router-view-width - 2px);
   z-index: 1;
 
   // SP幅以上
@@ -309,6 +344,16 @@ function onMutated () {
   // SP幅未満
   @media not all and (min-width: $sp-width) {
     bottom: var(--sp-menu-height);
+  }
+
+  // 電源ボタン
+  .power-button {
+    position: relative;
+    min-width: 4rem;
+
+    & > .loader {
+      font-size: 0.5rem;
+    }
   }
 
   & > .info {
@@ -340,15 +385,7 @@ function onMutated () {
   }
 }
 
-.power-button {
-  position: relative;
-  min-width: 4rem;
-
-  & > .loader {
-    font-size: 0.5rem;
-  }
-}
-
+// フローバルライン設定ポップアップ
 .globalline-settings-popup-button {
   & > .svg-icon {
     font-size: 1rem;

@@ -1,5 +1,5 @@
 import { AtUri } from "@atproto/uri"
-import type { ComAtprotoRepoDeleteRecord, BskyAgent } from "@atproto/api"
+import type { BskyAgent, ComAtprotoRepoDeleteRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

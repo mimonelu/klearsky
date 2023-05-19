@@ -1,6 +1,6 @@
 import type {
-  BskyAgent,
   AtpAgentLoginOpts,
+  BskyAgent,
   ComAtprotoServerCreateSession,
 } from "@atproto/api"
 import Util from "@/composables/util/index"
