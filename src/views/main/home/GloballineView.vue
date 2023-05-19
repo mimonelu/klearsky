@@ -59,7 +59,7 @@ async function onPost (did: string, post: any) {
   if (post.record.text != null) {
     const languages = detectAll(post.record.text)
     const yourLanguage = languages.findIndex((language: any) => {
-      return language.lang === mainState.globallineLanguage
+      return language.lang === mainState.currentSetting.globallineLanguage
     }) !== - 1
     if (!yourLanguage) return
   }
@@ -195,7 +195,7 @@ function onMutated () {
       >
         <!-- ポスト -->
         <Post
-          :position="mainState.globallineLayout"
+          :position="mainState.currentSetting.globallineLayout ?? 'post'"
           :post="message"
           :forceHideImages="true"
           @updateThisPostThread="updateThisPostThread"

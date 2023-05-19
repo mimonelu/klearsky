@@ -17,7 +17,7 @@ const easyFormProps: TTEasyForm = {
   submitCallback: close,
   data: [
     {
-      state: mainState,
+      state: mainState.currentSetting,
       model: "globallineLayout",
       label: $t("layout"),
       type: "radio",
@@ -27,20 +27,26 @@ const easyFormProps: TTEasyForm = {
         { label: "Slim", value: "slim" },
       ],
       layout: "horizontal",
+      onUpdate: saveSetting,
     },
     {
-      state: mainState,
+      state: mainState.currentSetting,
       model: "globallineLanguage",
       label: $t("language"),
       type: "select",
       required: true,
       options: languages,
+      onUpdate: saveSetting,
     },
   ],
 }
 
 function close () {
   emit("close")
+}
+
+function saveSetting () {
+  mainState.saveSettings()
 }
 </script>
 

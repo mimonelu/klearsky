@@ -312,6 +312,10 @@ function saveSettings () {
     state.settings[did].imageControl = "all"
   if (state.settings[did].imageAspectRatio == null)
     state.settings[did].imageAspectRatio = "1 / 1"
+  if (state.settings[did].globallineLayout == null)
+    state.settings[did].globallineLayout = "post"
+  if (state.settings[did].globallineLanguage == null)
+    state.settings[did].globallineLanguage = window.navigator.language ?? "en"
   if (state.settings[did].layout == null)
     state.settings[did].layout = "default"
   if (state.settings[did].borderRadius == null)
