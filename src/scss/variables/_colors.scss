@@ -65,9 +65,9 @@
 }
 
 @mixin color-theme-red {
-  --bg-color: 128, 0, 0;
+  --bg-color: 64, 32, 32;
   --fg-color: 240, 224, 224;
-  --accent-color: 240, 240, 128;
+  --accent-color: 240, 128, 128;
   --notice-color: 255, 64, 64;
   --post-color: 32, 192, 240;
   --like-color: 240, 64, 128;
@@ -76,13 +76,13 @@
 }
 
 @mixin color-theme-green {
-  --bg-color: 24, 80, 24;
-  --fg-color: 224, 240, 224;
-  --accent-color: 96, 192, 96;
-  --notice-color: 240, 64, 64;
-  --post-color: 0, 192, 240;
-  --like-color: 240, 64, 128;
-  --share-color: 32, 192, 64;
+  --bg-color: 160, 192, 160;
+  --fg-color: 16, 32, 16;
+  --accent-color: 255, 255, 0;
+  --notice-color: 192, 32, 32;
+  --post-color: 0, 64, 255;
+  --like-color: 255, 32, 128;
+  --share-color: 0, 128, 0;
   --hot-color: 255, 32, 32;
 }
 
