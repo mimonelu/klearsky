@@ -26,6 +26,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   endControlToScroll()
   disconnect()
+  destroyProfileTimer()
 })
 
 // subscribeRepo
@@ -39,7 +40,6 @@ function connect () {
 
 function disconnect () {
   state.subscriber?.disconnect()
-  destroyProfileTimer()
 }
 
 function onError () {
