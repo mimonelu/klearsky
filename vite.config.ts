@@ -21,10 +21,19 @@ export default defineConfig({
     // SEE: stackoverflow.com/a/73470097
     commonjsOptions: { include: [] },
 
+    chunkSizeWarningLimit: 600,
+
     outDir: "docs",
 
-    // Rollup Visualizer
     rollupOptions: {
+      // @atproto のみチャンクを分ける
+      output: {
+        manualChunks: {
+          atproto: ["@atproto/api"],
+        },
+      },
+
+      // Rollup Visualizer
       plugins: [
         visualizer({
           filename: "coproduct/stats.html",

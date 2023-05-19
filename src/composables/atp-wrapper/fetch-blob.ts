@@ -1,4 +1,4 @@
-import type { ComAtprotoSyncGetBlob, BskyAgent } from "@atproto/api"
+import type { BskyAgent, ComAtprotoSyncGetBlob } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

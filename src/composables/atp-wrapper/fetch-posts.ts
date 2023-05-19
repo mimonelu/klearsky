@@ -1,4 +1,4 @@
-import type { BskyAgent, AppBskyFeedGetPosts } from "@atproto/api"
+import type { AppBskyFeedGetPosts, BskyAgent } from "@atproto/api"
 import AtpUtil from "@/composables/atp-wrapper/atp-util"
 
 export default async function (

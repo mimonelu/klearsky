@@ -1,4 +1,4 @@
-import type { BskyAgent, AppBskyGraphGetMutes } from "@atproto/api"
+import type { AppBskyGraphGetMutes, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

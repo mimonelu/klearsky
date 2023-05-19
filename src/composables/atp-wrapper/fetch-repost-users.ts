@@ -1,4 +1,4 @@
-import type { BskyAgent, AppBskyFeedGetRepostedBy } from "@atproto/api"
+import type { AppBskyFeedGetRepostedBy, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

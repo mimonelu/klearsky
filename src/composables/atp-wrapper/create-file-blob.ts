@@ -1,5 +1,5 @@
 import type { BlobRef, BskyAgent, ComAtprotoRepoUploadBlob } from "@atproto/api"
-import imageCompression from "browser-image-compression"
+import imageCompression from "browser-image-compression/dist/browser-image-compression"
 
 function convertBlobTo(
   blob: Blob,
