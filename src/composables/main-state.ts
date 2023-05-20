@@ -63,6 +63,8 @@ const state = reactive<MainState>({
   fetchCurrentAuthorFeed,
   fetchAuthorReposts,
   fetchAuthorLikes,
+  getContentWarningVisibility,
+  getConcernedPreferences,
   fetchHotFeeds,
   fetchTimeline,
   fetchPostThread,
@@ -197,6 +199,55 @@ async function fetchAuthorLikes (direction: "new" | "old") {
     direction === "new" ? undefined : state.currentAuthorLikesCursor
   )
   state.currentAuthorLikesCursor = cursor
+}
+
+// ラベル対応
+
+const labelMap: { [k: string]: Array<string> } = {
+  defaults: ["porn"],
+  gore: ["gore"],
+  hate: ["hate"],
+  impersonation: ["impersonation"],
+  nsfw: ["nsfw", "porn"],
+  nudity: ["nudity", "porn"],
+  spam: ["spam"],
+  suggestive: ["suggestive", "porn"],
+}
+
+function getContentWarningVisibility (
+  authorLabels?: Array<TTLabel>,
+  postLabels?: Array<TTLabel>,
+  processAuthor = true,
+  processPost = true,
+): "hide" | "show" | "warn" {
+  const authorPreferences = state.getConcernedPreferences(authorLabels)
+  const postPreferences = state.getConcernedPreferences(postLabels)
+  if (processAuthor && authorPreferences.some((preference: TTPreference) => {
+    return preference.visibility === "hide"
+  })) return "hide"
+  if (processPost && postPreferences.some((preference: TTPreference) => {
+    return preference.visibility === "hide"
+  })) return "hide"
+  if (processAuthor && authorPreferences.some((preference: TTPreference) => {
+    return preference.visibility === "warn"
+  })) return "warn"
+  if (processPost && postPreferences.some((preference: TTPreference) => {
+    return preference.visibility === "warn"
+  })) return "warn"
+  return "show"
+}
+
+function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> {
+  if (labels == null) return []
+  return state.currentPreferences.filter((preference: TTPreference) => {
+    if (preference.label == null ||
+        preference.visibility === "show") return false
+    const label = labels.find((label: TTLabel) => {
+      return (labelMap[preference.label ?? "defaults"] ?? labelMap.defaults).includes(label.val)
+    })
+    if (label == null) return false
+    return true
+  })
 }
 
 async function fetchHotFeeds (direction: "old" | "new") {

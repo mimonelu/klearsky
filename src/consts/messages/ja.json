@@ -7,6 +7,8 @@
   "apply": "適用",
   "enabled": "有効",
   "disabled": "無効",
+  "show": "表示する",
+  "hide": "隠す",
   "error": "エラー",
   "alt": "ALT",
 
@@ -25,6 +27,11 @@
   "blocked": "このユーザーからブロックされています。",
   "blocking": "このユーザーをブロックしています。",
   "postBlocked": "このポストを表示することはできません。",
+
+  "contentWarning": "閲覧注意",
+  "contentWarningHideMessage": "コンテンツフィルタによる閲覧制限",
+  "contentWarningAuthorMessage": "このアカウントが言及する可能性のある事柄：",
+  "contentWarningPostMessage": "このポストが含む可能性のある事柄：",
 
   "login": "ログイン",
   "service": "サービス",

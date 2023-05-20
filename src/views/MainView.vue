@@ -68,6 +68,7 @@ onMounted(async () => {
   state.processing = true
   try {
     if (!await autoLogin()) return
+    await fetchPreferences()
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
@@ -155,6 +156,7 @@ function resetState () {
   state.currentFollowersCursor = undefined
   state.currentFollowings = []
   state.currentFollowingsCursor = undefined
+  state.currentPreferences = []
   state.currentHotFeeds = []
   state.currentHotCursor = undefined
   state.currentRepostUsers = []
@@ -208,8 +210,9 @@ async function manualLogin (service: string, identifier: string, password: strin
       return
     }
     if (!state.atp.hasLogin()) return
-    state.loginPopupDisplay = false
     resetState()
+    await fetchPreferences()
+    state.loginPopupDisplay = false
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
@@ -338,6 +341,12 @@ async function updateNotification (forceUpdate: boolean) {
       ? consts.limitOfFetchNotifications
       : Math.min(consts.limitOfFetchNotifications, count + 1) // NOTICE: 念のため + 1 している
     , "new")
+}
+
+async function fetchPreferences () {
+  const preferences = await state.atp.fetchPreferences()
+  if (preferences == null) return
+  state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
 }
 
 async function updateInviteCodes () {

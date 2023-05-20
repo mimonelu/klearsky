@@ -8,11 +8,12 @@ type TTUserViewer = {
 }
 
 type TTUser = {
-  did: string
-  handle: string
-  displayName: string
-  description?: string
   avatar?: string
+  description?: string
+  did: string
+  displayName: string
+  handle: string
+  labels?: Array<TTLabel>
   viewer: TTUserViewer
   [k: string]: unknown
 }
@@ -78,10 +79,28 @@ type TTImage = {
   alt: string
 }
 
-type TTPost = {
+type TTLabel = {
+  cid?: string // Only post
+  cts: string // Date
+  neg?: boolean
+  src: string // DID
   uri: string
-  cid: string
+  val: string
+}
+
+type TTPreference = {
+  $type: string
+  enabled?: boolean
+  label?: string
+  visibility?: "hide" | "warn" | "show"
+}
+
+type TTPost = {
+  __createdAt?: string // Injected
+  __reason?: TTReason // Injected
+  __translatedText?: string // Injected // 自動翻訳
   author: TTUser
+  cid: string
   embed?: {
     $type: string
     external?: TTExternal
@@ -89,20 +108,12 @@ type TTPost = {
     record?: TTPost
     [k: string]: unknown
   }
+  indexedAt: string
+  labels?: Array<TTLabel>
+  likeCount: number
   record: {
-    text: string
     $type: string
     createdAt: string
-    reply?: {
-      root?: {
-        cid: string
-        uri: string
-      }
-      parent?: {
-        cid: string
-        uri: string
-      }
-    }
     embed?: {
       $type: string
       images?: Array<{
@@ -114,32 +125,39 @@ type TTPost = {
       }>
       [k: string]: unknown
     }
-    facets?: any
     entities?: Array<TTEntity>
-    via?: string // カスタムフィールド
+    facets?: any
     lightning?: string // カスタムフィールド
-    [k: string]: unknown
-  }
-  value?: {
+    reply?: {
+      parent?: {
+        cid: string
+        uri: string
+      }
+      root?: {
+        cid: string
+        uri: string
+      }
+    }
     text: string
-    $type: string
-    createdAt: string
-    facets?: any
-    entities?: Array<TTEntity>
+    via?: string // カスタムフィールド
     [k: string]: unknown
   }
   replyCount: number
   repostCount: number
-  likeCount: number
-  indexedAt: string
+  uri: string
+  value?: {
+    $type: string
+    createdAt: string
+    entities?: Array<TTEntity>
+    facets?: any
+    text: string
+    [k: string]: unknown
+  }
   viewer: {
     repost?: string
     like?: string
     [k: string]: unknown
   }
-  __createdAt?: string // Injected
-  __reason?: TTReason // Injected
-  __translatedText?: string // Injected // 自動翻訳
   [k: string]: unknown
 }
 

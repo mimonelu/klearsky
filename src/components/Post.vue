@@ -7,6 +7,7 @@ import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
+import ContentWarning from "@/components/ContentWarning.vue"
 import Post from "@/components/Post.vue"
 import PostMenuTicker from "@/components/PostMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -33,6 +34,11 @@ const state = reactive<{
   images: ComputedRef<Array<TTImage>>;
   displayImage: ComputedRef<boolean>;
   imageFolding: boolean;
+
+  // ラベル対応
+  contentWarningForceDisplay: boolean;
+  contentWarningVisibility: ComputedRef<"hide" | "show" | "warn">;
+
   translation: "none" | "ignore" | "waiting" | "done" | "failed";
 }>({
   postMenuDisplay: false,
@@ -79,6 +85,17 @@ const state = reactive<{
 
   // TODO: displayImage 共々 post に内包するべき
   imageFolding: false,
+
+  // ラベル対応
+  contentWarningForceDisplay: false,
+  contentWarningVisibility: computed((): "hide" | "show" | "warn" => {
+    return mainState.getContentWarningVisibility(
+      props.post.author.labels,
+      props.post.labels,
+      true,
+      true
+    )
+  }),
 
   translation: "none",
 })
@@ -244,7 +261,18 @@ async function updateThisPostThread () {
   emit("updateThisPostThread", posts)
 }
 
+// ラベル対応
+
+function showWarningContent () {
+  state.contentWarningForceDisplay = true
+}
+
+function hideWarningContent () {
+  state.contentWarningForceDisplay = false
+}
+
 // 自動翻訳
+
 async function translateText (forceTranslate: boolean) {
   if (props.post.__translatedText != null) {
     state.translation = "done"
@@ -304,8 +332,19 @@ async function translateText (forceTranslate: boolean) {
     :data-position="position"
     :data-repost="post.__reason != null"
     :data-focus="isFocused()"
+    :data-content-warning-force-display="state.contentWarningForceDisplay"
+    :data-content-warning-visibility="state.contentWarningVisibility"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
+    <!-- ラベル対応 -->
+    <ContentWarning
+      :display="state.contentWarningForceDisplay"
+      :authorLabels="post.author.labels"
+      :postLabels="post.labels"
+      @show="showWarningContent"
+      @hide="hideWarningContent"
+    />
+
     <div class="header">
       <!-- リプライ先ユーザー -->
       <div
@@ -602,10 +641,7 @@ async function translateText (forceTranslate: boolean) {
         </div>
       </div>
     </div>
-    <Loader
-      v-if="state.processing"
-      @click.stop
-    />
+    <Loader v-if="state.processing" />
   </div>
 </template>
 
@@ -644,6 +680,18 @@ async function translateText (forceTranslate: boolean) {
     .reaction-container {
       display: none;
     }
+  }
+
+  // ラベル対応
+  &[data-content-warning-force-display="false"][data-content-warning-visibility="warn"],
+  &[data-content-warning-force-display="false"][data-content-warning-visibility="hide"] {
+    .header,
+    .body {
+      display: none;
+    }
+  }
+  &[data-content-warning-force-display="true"] .content-warning {
+    margin-bottom: 1em;
   }
 }
 

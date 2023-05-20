@@ -7,6 +7,8 @@
   "apply": "Apply",
   "enabled": "Enabled",
   "disabled": "Disabled",
+  "show": "Show",
+  "hide": "Hide",
   "error": "Error",
   "alt": "ALT",
 
@@ -25,6 +27,11 @@
   "blocked": "You are blocked by this user.",
   "blocking": "You are blocking this user.",
   "postBlocked": "This post cannot be displayed.",
+
+  "contentWarning": "CONTENT WARNING",
+  "contentWarningHideMessage": "This content violates moderation.",
+  "contentWarningAuthorMessage": "This account may be related to:",
+  "contentWarningPostMessage": "This post may contains:",
 
   "login": "Login",
   "service": "Service",
