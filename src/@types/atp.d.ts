@@ -79,7 +79,6 @@ type TTImage = {
 }
 
 type TTPost = {
-  __createdAt: string // Injected
   uri: string
   cid: string
   author: TTUser
@@ -138,6 +137,7 @@ type TTPost = {
     like?: string
     [k: string]: unknown
   }
+  __createdAt?: string // Injected
   __reason?: TTReason // Injected
   __translatedText?: string // Injected // 自動翻訳
   [k: string]: unknown

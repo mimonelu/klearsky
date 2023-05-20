@@ -56,13 +56,15 @@ export default function (responses: Array<any>) {
 
   // PARENT.record.embed.external/images -> PARENT.embed.external/images
   AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
-    if (key === "record" && parent.embed != null && value.embed != null) {
-      if (value.embed.external != null && parent.embed.external == null) {
+    if (key === "record" && value.embed != null) {
+      if (value.embed.external != null && parent.embed?.external == null) {
+        if (parent.embed == null) parent.embed = {}
         parent.embed.external = JSON.parse(JSON.stringify(value.embed.external))
         parent.embed.external.__comment =
           "❗ This 'external' was duplicated by Klearsky."
       }
-      if (value.embed.images != null && parent.embed.images == null) {
+      if (value.embed.images != null && parent.embed?.images == null) {
+        if (parent.embed == null) parent.embed = {}
         parent.embed.images = JSON.parse(JSON.stringify(value.embed.images))
         parent.embed.images.__comment =
           "❗ This 'images' was duplicated by Klearsky."

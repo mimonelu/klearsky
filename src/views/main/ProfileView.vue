@@ -146,7 +146,7 @@ function onActivateBackButton () {
           </dl>
           <dl class="created-at">
             <dt>{{ $t("startedAt") }}</dt>
-            <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt) }}</dd>
+            <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt ?? "") }}</dd>
           </dl>
           <button
             class="menu-button"
