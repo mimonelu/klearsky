@@ -105,7 +105,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
   <form
     :key="state.updateKey"
     class="easy-form"
-    @submit.stop="onSubmit"
+    @submit.prevent.stop="onSubmit"
   >
     <slot name="before" />
     <dl
