@@ -421,6 +421,24 @@ async function translateText (forceTranslate: boolean) {
           >{{ mainState.formatDate(post.indexedAt) }}</div>
         </div>
 
+        <!-- ポストラベル -->
+        <div
+          v-if="(post.labels?.length ?? 0) > 0"
+          class="post-label"
+        >
+          <div class="post-label__header">
+            <SVGIcon name="alert" />
+            <span>{{ $t("postLabel") }}</span>
+          </div>
+          <div class="post-label__body">
+            <div
+              v-for="label of post.labels"
+              :key="label.val"
+              class="post-label__item"
+            >{{ label.val }}</div>
+          </div>
+        </div>
+
         <!-- 本文 -->
         <HtmlText
           v-if="position !== 'slim'"
@@ -849,6 +867,44 @@ async function translateText (forceTranslate: boolean) {
   color: rgba(var(--fg-color), 0.5);
   font-size: 0.75em;
   white-space: nowrap;
+}
+
+// ポストラベル
+.post-label {
+  background-color: rgba(var(--notice-color), 0.25);
+  border: 1px solid rgba(var(--notice-color), 0.25);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 0.5em;
+  padding: 0.5em 1em;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5em;
+
+    & > .svg-icon {
+      fill: rgb(var(--notice-color));
+    }
+
+    & > span {
+      line-height: 1.25;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 0.5em;
+  }
+
+  &__item {
+    color: rgb(var(--notice-color));
+    line-height: 1.25;
+    text-transform: capitalize;
+    word-break: break-word;
+  }
 }
 
 .text,

@@ -32,6 +32,7 @@
   "contentWarningHideMessage": "コンテンツフィルタによる閲覧制限",
   "contentWarningAuthorMessage": "このアカウントが言及する可能性のある事柄：",
   "contentWarningPostMessage": "このポストが含む可能性のある事柄：",
+  "postLabel": "このポストが含む事柄：",
 
   "login": "ログイン",
   "service": "サービス",

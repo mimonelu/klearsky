@@ -58,7 +58,7 @@ function removeThisPost (uri: string) {
   scroll-margin: 3.25rem;
 }
 
-.post[data-has-child="true"]::before {
+.post[data-has-child="true"][data-content-warning-visibility="show"]::before {
   background-color: rgba(var(--fg-color), 0.25);
   content: "";
   display: block;

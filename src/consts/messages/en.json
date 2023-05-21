@@ -32,6 +32,7 @@
   "contentWarningHideMessage": "This content violates moderation.",
   "contentWarningAuthorMessage": "This account may be related to:",
   "contentWarningPostMessage": "This post may contains:",
+  "postLabel": "This post contains:",
 
   "login": "Login",
   "service": "Service",

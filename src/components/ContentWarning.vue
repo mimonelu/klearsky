@@ -114,8 +114,8 @@ function hide () {
   position: relative;
   height: 100%;
   &[data-visibility="warn"] {
-    background-color: rgb(var(--bg-color));
-    border: 1px solid rgba(var(--notice-color), 0.5);
+    background-color: rgba(var(--notice-color), 0.25);
+    border: 1px solid rgba(var(--notice-color), 0.25);
   }
   &[data-visibility="hide"] {
     background-color: rgba(var(--fg-color), 0.125);
