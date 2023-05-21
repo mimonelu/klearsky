@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import { RouterView, useRouter, type LocationQueryValue } from "vue-router"
 import AvatarButton from "@/components/AvatarButton.vue"
+import ContentWarning from "@/components/ContentWarning.vue"
 import FollowButton from "@/components/FollowButton.vue"
 import HandleHistoryPopup from "@/components/HandleHistoryPopup.vue"
 import HtmlText from "@/components/HtmlText.vue"
@@ -15,9 +16,29 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   handleHistoryPopupDisplay: boolean;
   profileMenuDisplay: boolean;
+
+  // ラベル対応
+  contentWarningForceDisplay: boolean;
+  contentWarningDisplay: ComputedRef<boolean>;
+  contentWarningVisibility: ComputedRef<"hide" | "show" | "warn">;
 }>({
   handleHistoryPopupDisplay: false,
   profileMenuDisplay: false,
+
+  // ラベル対応
+  contentWarningForceDisplay: false,
+  contentWarningDisplay: computed((): boolean => {
+    return state.contentWarningVisibility === 'show' ||
+           (state.contentWarningVisibility === 'warn' && state.contentWarningForceDisplay)
+  }),
+  contentWarningVisibility: computed((): "hide" | "show" | "warn" => {
+    return mainState.getContentWarningVisibility(
+      mainState.currentProfile?.labels,
+      undefined,
+      true,
+      true
+    )
+  }),
 })
 
 const router = useRouter()
@@ -50,23 +71,38 @@ function onActivateBackButton () {
   Util.blurElement()
   if (history.state.back != null) router.back()
 }
+
+// ラベル対応
+
+function showWarningContent () {
+  state.contentWarningForceDisplay = true
+}
+
+function hideWarningContent () {
+  state.contentWarningForceDisplay = false
+}
 </script>
 
 <template>
   <div
     class="profile-view"
+    :data-content-warning-force-display="state.contentWarningForceDisplay"
+    :data-content-warning-visibility="state.contentWarningVisibility"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
-    <div
-      class="banner"
-      :data-has-banner="!!mainState.currentProfile?.banner"
-      :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
-      @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
-    />
-    <div class="details">
+    <!-- Danger zone -->
+    <div class="danger-zone">
+      <!-- ラベル対応 -->
+      <ContentWarning
+        :display="state.contentWarningForceDisplay"
+        :authorLabels="mainState.currentProfile?.labels"
+        @show="showWarningContent"
+        @hide="hideWarningContent"
+      />
+
       <!-- プロフィールラベル -->
       <div
-        v-if="(mainState.currentProfile?.labels?.length ?? 0) > 0"
+        v-if="state.contentWarningDisplay && (mainState.currentProfile?.labels?.length ?? 0) > 0"
         class="notification-message"
       >
         <div class="notification-message__header">
@@ -103,9 +139,21 @@ function onActivateBackButton () {
           <span>{{ $t("blocked") }}</span>
         </div>
       </div>
+    </div>
 
+    <div
+      v-if="state.contentWarningDisplay"
+      class="banner"
+      :data-has-banner="!!mainState.currentProfile?.banner"
+      :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
+      @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
+    />
+    <div class="details">
       <div class="top">
-        <div class="left">
+        <div
+          v-if="state.contentWarningDisplay"
+          class="left"
+        >
           <AvatarButton
             :handle="mainState.currentProfile?.handle"
             :image="mainState.currentProfile?.avatar"
@@ -149,6 +197,7 @@ function onActivateBackButton () {
           />
         </div>
         <HtmlText
+          v-if="state.contentWarningDisplay"
           class="description"
           dir="auto"
           :text="mainState.currentProfile?.description ?? '&nbsp;'"
@@ -254,6 +303,27 @@ function onActivateBackButton () {
   position: relative;
 }
 
+// Danger zone
+.danger-zone {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+  &:not(:empty) {
+    margin: 1rem;
+  }
+}
+
+// ラベル対応
+.content-warning {
+  height: unset;
+}
+.profile-view[data-content-warning-force-display="false"]:not([data-content-warning-visibility="show"]) {
+  .danger-zone,
+  .handle {
+    margin-bottom: 0;
+  }
+}
+
 .banner {
   aspect-ratio: 3/1;
   display: block;
@@ -273,7 +343,6 @@ function onActivateBackButton () {
 }
 
 .details {
-  border-top: 1px solid rgba(var(--fg-color), 0.25);
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;

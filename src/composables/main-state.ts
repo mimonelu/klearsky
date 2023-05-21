@@ -204,7 +204,7 @@ async function fetchAuthorLikes (direction: "new" | "old") {
 // ラベル対応
 
 const labelMap: { [k: string]: Array<string> } = {
-  defaults: ["porn"],
+  defaults: [],
   gore: ["gore"],
   hate: ["hate"],
   impersonation: ["impersonation"],

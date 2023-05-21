@@ -109,16 +109,17 @@ function hide () {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  grid-gap: 1em;
-  padding: 0.5em 1em;
+  grid-gap: 0.5em;
   position: relative;
   height: 100%;
   &[data-visibility="warn"] {
     background-color: rgba(var(--notice-color), 0.25);
-    border: 1px solid rgba(var(--notice-color), 0.25);
+    // border: 1px solid rgba(var(--notice-color), 0.25);
+    padding: 1em;
   }
   &[data-visibility="hide"] {
     background-color: rgba(var(--fg-color), 0.125);
+    padding: 0.5em 1em;
   }
 }
 
