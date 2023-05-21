@@ -1,17 +1,36 @@
 .notification-message {
-  background-color: rgba(var(--notice-color), 0.75);
+  background-color: rgba(var(--notice-color), 0.25);
+  border: 1px solid rgba(var(--notice-color), 0.25);
   border-radius: var(--border-radius);
   display: flex;
-  align-items: flex-start;
+  flex-wrap: wrap;
   grid-gap: 0.5em;
   padding: 0.5em 1em;
 
-  & > .svg-icon {
-    fill: rgb(var(--fg-color));
-    margin-top: 0.125em;
+  &__header {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5em;
+
+    & > .svg-icon {
+      fill: rgb(var(--notice-color));
+    }
+
+    & > span {
+      line-height: 1.25;
+    }
   }
 
-  & > span {
+  &__body {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 0.5em;
+  }
+
+  &__item {
+    color: rgb(var(--notice-color));
     line-height: 1.25;
+    text-transform: capitalize;
+    word-break: break-word;
   }
 }

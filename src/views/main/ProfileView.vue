@@ -64,13 +64,33 @@ function onActivateBackButton () {
       @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
     />
     <div class="details">
+      <!-- プロフィールラベル -->
+      <div
+        v-if="(mainState.currentProfile?.labels?.length ?? 0) > 0"
+        class="notification-message"
+      >
+        <div class="notification-message__header">
+          <SVGIcon name="alert" />
+          <span>{{ $t("profileLabel") }}</span>
+        </div>
+        <div class="notification-message__body">
+          <div
+            v-for="label of mainState.currentProfile?.labels"
+            :key="label.val"
+            class="notification-message__item"
+          >{{ label.val }}</div>
+        </div>
+      </div>
+
       <!-- ブロックしている -->
       <div
         v-if="mainState.currentProfile?.viewer.blocking != null"
         class="notification-message"
       >
-        <SVGIcon name="alert" />
-        <span>{{ $t("blocking") }}</span>
+        <div class="notification-message__header">
+          <SVGIcon name="alert" />
+          <span>{{ $t("blocking") }}</span>
+        </div>
       </div>
 
       <!-- ブロックされている -->
@@ -78,8 +98,10 @@ function onActivateBackButton () {
         v-if="mainState.currentProfile?.viewer.blockedBy"
         class="notification-message"
       >
-        <SVGIcon name="alert" />
-        <span>{{ $t("blocked") }}</span>
+        <div class="notification-message__header">
+          <SVGIcon name="alert" />
+          <span>{{ $t("blocked") }}</span>
+        </div>
       </div>
 
       <div class="top">

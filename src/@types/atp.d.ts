@@ -244,6 +244,7 @@ type TTProfile = {
   postsCount: number
   creator: string
   indexedAt: string
+  labels?: Array<TTLabel>
   viewer: TTUserViewer
   myState: {
     follow?: string
