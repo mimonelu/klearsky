@@ -390,6 +390,7 @@ async function translateText (forceTranslate: boolean) {
         v-if="position !== 'postInPost' && position !== 'slim'"
         :handle="post.author?.handle"
         :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
+        :labels="post.author?.labels"
         @click.stop
       />
 
@@ -401,6 +402,7 @@ async function translateText (forceTranslate: boolean) {
             class="avatar-in-post"
             :handle="post.author?.handle"
             :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
+            :labels="post.author?.labels"
             @click.stop
           />
 

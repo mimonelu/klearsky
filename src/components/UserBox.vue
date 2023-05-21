@@ -33,6 +33,7 @@ function closePostMenu () {
     <AvatarLink
       :handle="user.handle"
       :image="user.avatar"
+      :labels="user.labels"
     />
     <div class="display-name">{{ user.displayName }}</div>
     <div class="handle">{{ user.handle }}</div>

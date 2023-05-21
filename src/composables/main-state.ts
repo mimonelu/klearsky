@@ -240,7 +240,7 @@ function getContentWarningVisibility (
 function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> {
   if (labels == null) return []
   return state.currentPreferences.filter((preference: TTPreference) => {
-    if (preference.label == null ||
+    if (preference.$type !== "app.bsky.actor.defs#contentLabelPref" ||
         preference.visibility === "show") return false
     const label = labels.find((label: TTLabel) => {
       return (labelMap[preference.label ?? "defaults"] ?? labelMap.defaults).includes(label.val)

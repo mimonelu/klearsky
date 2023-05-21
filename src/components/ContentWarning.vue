@@ -110,7 +110,7 @@ function hide () {
   align-items: center;
   justify-content: center;
   grid-gap: 1em;
-  padding: 1em;
+  padding: 0.5em 1em;
   position: relative;
   height: 100%;
   &[data-visibility="warn"] {
