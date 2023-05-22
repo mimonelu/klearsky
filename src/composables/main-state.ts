@@ -204,8 +204,11 @@ async function fetchAuthorLikes (direction: "new" | "old") {
 // ラベル対応
 
 // SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/labeling/const.ts
+// 強制閲覧制限
 const ALWAYS_HIDE_LABELS = ["!filter", "csam", "dmca-violation", "nudity-nonconsensual"]
+// 強制閲覧警告
 const ALWAYS_WARN_LABELS = ["!warn", "account-security"]
+// 閲覧制限または閲覧警告
 const LABEL_GROUP_MAP: { [k: string]: Array<string> } = {
   // Explicit Sexual Images
   nsfw: ["nsfw", "nsfl", "porn"],

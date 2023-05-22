@@ -37,6 +37,7 @@ const state = reactive<{
 
   // ラベル対応
   contentWarningForceDisplay: boolean;
+  contentWarningDisplay: ComputedRef<boolean>;
   contentWarningVisibility: ComputedRef<TTContentVisibility>;
 
   translation: "none" | "ignore" | "waiting" | "done" | "failed";
@@ -88,6 +89,10 @@ const state = reactive<{
 
   // ラベル対応
   contentWarningForceDisplay: false,
+  contentWarningDisplay: computed((): boolean => {
+    return state.contentWarningVisibility === 'show' ||
+           ((state.contentWarningVisibility === 'always-warn' || state.contentWarningVisibility === 'warn') && state.contentWarningForceDisplay)
+  }),
   contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(
       props.post.author.labels,
@@ -331,7 +336,6 @@ async function translateText (forceTranslate: boolean) {
     :data-repost="post.__reason != null"
     :data-focus="isFocused()"
     :data-content-warning-force-display="state.contentWarningForceDisplay"
-    :data-content-warning-visibility="state.contentWarningVisibility"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
     <!-- ラベル対応 -->
@@ -343,7 +347,10 @@ async function translateText (forceTranslate: boolean) {
       @hide="hideWarningContent"
     />
 
-    <div class="header">
+    <div
+      v-if="state.contentWarningDisplay"
+      class="header"
+    >
       <!-- リプライ先ユーザー -->
       <div
         v-if="replyTo != null"
@@ -382,7 +389,10 @@ async function translateText (forceTranslate: boolean) {
         }}</div>
       </div>
     </div>
-    <div class="body">
+    <div
+      v-if="state.contentWarningDisplay"
+      class="body"
+    >
       <!-- アバター -->
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
@@ -699,12 +709,6 @@ async function translateText (forceTranslate: boolean) {
   }
 
   // ラベル対応
-  &[data-content-warning-force-display="false"]:not([data-content-warning-visibility="show"]) {
-    .header,
-    .body {
-      display: none;
-    }
-  }
   &[data-content-warning-force-display="true"] .content-warning {
     margin-bottom: 1em;
   }

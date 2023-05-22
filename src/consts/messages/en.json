@@ -28,8 +28,10 @@
   "blocking": "You are blocking this account.",
   "postBlocked": "This post cannot be displayed.",
 
-  "contentWarning": "CONTENT WARNING",
-  "contentWarningHideMessage": "This content violates moderation.",
+  "contentWarningAlwaysHide": "FORCED CONTENT FILTERING",
+  "contentWarningHide": "CONTENT FILTERING",
+  "contentWarningAlwaysWarn": "FORCED CONTENT WARNING",
+  "contentWarningWarn": "CONTENT WARNING",
   "contentWarningAuthorMessage": "This account has been filtered:",
   "contentWarningPostMessage": "This post has been filtered:",
   "profileLabel": "This account has been labeled:",
