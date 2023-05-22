@@ -134,6 +134,10 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     query: string
   ): Promise<undefined | any>
+  fetchLabels(
+    this: TIAtpWrapper,
+    uriPatterns: Array<string>,
+  ): Promise<undefined | Array<TTLabel>>
   fetchLikeUsers(
     this: TIAtpWrapper,
     users: Array<TTUser>,
@@ -166,6 +170,7 @@ interface TIAtpWrapper {
     uri: string,
     depth?: number
   ): Promise<null | Array<TTPost>>
+  fetchPreferences(this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile(this: TIAtpWrapper, actor: string): Promise<null | TTProfile>
   fetchRepostUsers(
     this: TIAtpWrapper,
@@ -207,6 +212,10 @@ interface TIAtpWrapper {
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
   updateNotificationSeen(this: TIAtpWrapper): Promise<boolean>
+  updatePreferences (
+    this: TIAtpWrapper,
+    preferences: Array<TTPreference>,
+  ): Promise<boolean>
   updateProfile(
     this: TIAtpWrapper,
     params: TTUpdateProfileParams

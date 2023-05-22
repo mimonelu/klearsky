@@ -7,6 +7,7 @@ import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
+import ContentWarning from "@/components/ContentWarning.vue"
 import Post from "@/components/Post.vue"
 import PostMenuTicker from "@/components/PostMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -33,6 +34,12 @@ const state = reactive<{
   images: ComputedRef<Array<TTImage>>;
   displayImage: ComputedRef<boolean>;
   imageFolding: boolean;
+
+  // ラベル対応
+  contentWarningForceDisplay: boolean;
+  contentWarningDisplay: ComputedRef<boolean>;
+  contentWarningVisibility: ComputedRef<TTContentVisibility>;
+
   translation: "none" | "ignore" | "waiting" | "done" | "failed";
 }>({
   postMenuDisplay: false,
@@ -79,6 +86,19 @@ const state = reactive<{
 
   // TODO: displayImage 共々 post に内包するべき
   imageFolding: false,
+
+  // ラベル対応
+  contentWarningForceDisplay: false,
+  contentWarningDisplay: computed((): boolean => {
+    return state.contentWarningVisibility === "show" ||
+           ((state.contentWarningVisibility === "always-warn" || state.contentWarningVisibility === "warn") && state.contentWarningForceDisplay)
+  }),
+  contentWarningVisibility: computed((): TTContentVisibility => {
+    return mainState.getContentWarningVisibility(
+      props.post.author.labels,
+      props.post.labels
+    )
+  }),
 
   translation: "none",
 })
@@ -244,7 +264,18 @@ async function updateThisPostThread () {
   emit("updateThisPostThread", posts)
 }
 
+// ラベル対応
+
+function showWarningContent () {
+  state.contentWarningForceDisplay = true
+}
+
+function hideWarningContent () {
+  state.contentWarningForceDisplay = false
+}
+
 // 自動翻訳
+
 async function translateText (forceTranslate: boolean) {
   if (props.post.__translatedText != null) {
     state.translation = "done"
@@ -304,9 +335,23 @@ async function translateText (forceTranslate: boolean) {
     :data-position="position"
     :data-repost="post.__reason != null"
     :data-focus="isFocused()"
+    :data-content-warning-force-display="state.contentWarningForceDisplay"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
-    <div class="header">
+    <!-- ラベル対応 -->
+    <ContentWarning
+      v-if="position !== 'preview' && position !== 'slim'"
+      :display="state.contentWarningForceDisplay"
+      :authorLabels="post.author.labels"
+      :postLabels="post.labels"
+      @show="showWarningContent"
+      @hide="hideWarningContent"
+    />
+
+    <div
+      v-if="state.contentWarningDisplay"
+      class="header"
+    >
       <!-- リプライ先ユーザー -->
       <div
         v-if="replyTo != null"
@@ -345,12 +390,16 @@ async function translateText (forceTranslate: boolean) {
         }}</div>
       </div>
     </div>
-    <div class="body">
+    <div
+      v-if="state.contentWarningDisplay || position === 'preview' || position === 'slim'"
+      class="body"
+    >
       <!-- アバター -->
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
         :handle="post.author?.handle"
         :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
+        :labels="post.author?.labels"
         @click.stop
       />
 
@@ -362,6 +411,7 @@ async function translateText (forceTranslate: boolean) {
             class="avatar-in-post"
             :handle="post.author?.handle"
             :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
+            :labels="post.author?.labels"
             @click.stop
           />
 
@@ -380,6 +430,20 @@ async function translateText (forceTranslate: boolean) {
             v-if="post.indexedAt"
             class="indexed-at"
           >{{ mainState.formatDate(post.indexedAt) }}</div>
+        </div>
+
+        <!-- ポストラベル -->
+        <div
+          v-if="(post.labels?.length ?? 0) > 0"
+          class="notification-message"
+        >
+          <SVGIcon name="alert" />
+          <div class="notification-message__text">{{ $t("postLabel") }}</div>
+          <div
+            v-for="label of post.labels"
+            :key="label.val"
+            class="notification-message__item"
+          >{{ $t(label.val) }}</div>
         </div>
 
         <!-- 本文 -->
@@ -492,8 +556,10 @@ async function translateText (forceTranslate: boolean) {
             v-else
             class="notification-message"
           >
-            <SVGIcon name="alert" />
-            <span>{{ $t("postBlocked") }}</span>
+            <div class="notification-message__header">
+              <SVGIcon name="alert" />
+              <span>{{ $t("postBlocked") }}</span>
+            </div>
           </div>
         </template>
 
@@ -602,10 +668,7 @@ async function translateText (forceTranslate: boolean) {
         </div>
       </div>
     </div>
-    <Loader
-      v-if="state.processing"
-      @click.stop
-    />
+    <Loader v-if="state.processing" />
   </div>
 </template>
 
@@ -644,6 +707,11 @@ async function translateText (forceTranslate: boolean) {
     .reaction-container {
       display: none;
     }
+  }
+
+  // ラベル対応
+  &[data-content-warning-force-display="true"] .content-warning {
+    margin-bottom: 1em;
   }
 }
 

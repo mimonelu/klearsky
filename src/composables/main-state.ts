@@ -63,6 +63,8 @@ const state = reactive<MainState>({
   fetchCurrentAuthorFeed,
   fetchAuthorReposts,
   fetchAuthorLikes,
+  getContentWarningVisibility,
+  getConcernedPreferences,
   fetchHotFeeds,
   fetchTimeline,
   fetchPostThread,
@@ -197,6 +199,102 @@ async function fetchAuthorLikes (direction: "new" | "old") {
     direction === "new" ? undefined : state.currentAuthorLikesCursor
   )
   state.currentAuthorLikesCursor = cursor
+}
+
+// ラベル対応
+
+// SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/labeling/const.ts
+// 強制閲覧制限
+const ALWAYS_HIDE_LABELS = ["!filter", "csam", "dmca-violation", "nudity-nonconsensual"]
+// 強制閲覧警告
+const ALWAYS_WARN_LABELS = ["!warn", "account-security"]
+// 閲覧制限または閲覧警告
+const LABEL_GROUP_MAP: { [k: string]: Array<string> } = {
+  // Explicit Sexual Images
+  nsfw: ["nsfw", "nsfl", "porn"],
+  // Other Nudity
+  nudity: ["nudity"],
+  // Sexually Suggestive
+  suggestive: ["suggestive", "sexual"],
+  // Violent / Bloody
+  gore: ["gore", "self-harm", "torture", "nsfl"],
+  // Political Hate-Groups
+  hate: ["hate", "icon-kkk", "icon-nazi", "icon-intolerant", "behavior-intolerant"],
+  // Spam
+  spam: ["spam"],
+  // Impersonation
+  impersonation: ["impersonation"],
+}
+
+function getContentWarningVisibility (
+  authorLabels?: Array<TTLabel>,
+  postLabels?: Array<TTLabel>,
+): TTContentVisibility {
+  const authorPreferences = state.getConcernedPreferences(authorLabels)
+  const postPreferences = state.getConcernedPreferences(postLabels)
+  for (const preference of authorPreferences) {
+    if (preference.visibility === "always-hide") return "always-hide"
+  }
+  for (const preference of postPreferences) {
+    if (preference.visibility === "always-hide") return "always-hide"
+  }
+  for (const preference of authorPreferences) {
+    if (preference.visibility === "hide") return "hide"
+  }
+  for (const preference of postPreferences) {
+    if (preference.visibility === "hide") return "hide"
+  }
+  for (const preference of authorPreferences) {
+    if (preference.visibility === "always-warn") return "always-warn"
+  }
+  for (const preference of postPreferences) {
+    if (preference.visibility === "always-warn") return "always-warn"
+  }
+  for (const preference of authorPreferences) {
+    if (preference.visibility === "warn") return "warn"
+  }
+  for (const preference of postPreferences) {
+    if (preference.visibility === "warn") return "warn"
+  }
+  return "show"
+}
+
+// label に該当する preference を取得する
+function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> {
+  if (labels == null) return []
+
+  const concernedPreferences = state.currentPreferences.filter((preference: TTPreference) => {
+    if (preference.$type !== "app.bsky.actor.defs#contentLabelPref" ||
+        preference.label == null ||
+        preference.visibility === "show") return false
+    const labelGroup = LABEL_GROUP_MAP[preference.label as string]
+    if (labelGroup == null) return false
+    return labels.some((label: TTLabel) => {
+      return labelGroup.includes(label.val)
+    })
+  })
+
+  if (labels.some((label: TTLabel) => {
+    return ALWAYS_HIDE_LABELS.includes(label.val)
+  })) {
+    concernedPreferences.push({
+      $type: "app.bsky.actor.defs#contentLabelPref",
+      label: "always-hide",
+      visibility: "always-hide",
+    })
+  }
+
+  if (labels.some((label: TTLabel) => {
+    return ALWAYS_WARN_LABELS.includes(label.val)
+  })) {
+    concernedPreferences.push({
+      $type: "app.bsky.actor.defs#contentLabelPref",
+      label: "always-warn",
+      visibility: "always-warn",
+    })
+  }
+
+  return concernedPreferences
 }
 
 async function fetchHotFeeds (direction: "old" | "new") {

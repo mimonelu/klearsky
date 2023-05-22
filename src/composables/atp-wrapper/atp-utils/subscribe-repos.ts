@@ -1,6 +1,7 @@
 import { addExtension, decode, decodeMultiple } from "cbor-x/decode"
 import { CarBufferReader } from "@ipld/car/buffer-reader"
 import { CID } from "multiformats/cid"
+import AtpUtil from "@/composables/atp-wrapper/atp-util"
 
 addExtension({
   Class: CID,
@@ -119,18 +120,21 @@ export default class {
     }
     if (record == null) return
 
-    const post = {
-      uri: `at://${did ?? ''}/app.bsky.feed.post/${rkey ?? ''}`,
-      cid,
-      record,
-      replyCount: 0,
-      repostCount: 0,
-      likeCount: 0,
-      indexedAt: record.createdAt,
-      viewer: {},
-      __createdAt: record.createdAt,
-      embed: record.embed,
-    }
+    const feeds: Array<TTFeed> = [{
+      // @ts-ignore
+      post: {
+        uri: `at://${did ?? ''}/app.bsky.feed.post/${rkey ?? ''}`,
+        cid,
+        record,
+        replyCount: 0,
+        repostCount: 0,
+        likeCount: 0,
+        indexedAt: record.createdAt,
+        viewer: {},
+      },
+    }]
+    AtpUtil.coherentResponses(feeds as Array<TTFeed>)
+    const post = feeds[0].post
 
     if (this.postCallback != null) this.postCallback(did, post)
   }

@@ -26,11 +26,13 @@ import fetchHotFeeds from "@/composables/atp-wrapper/fetch-hot-feeds"
 import fetchInviteCodes from "@/composables/atp-wrapper/fetch-invite-codes"
 import fetchLikeUsers from "@/composables/atp-wrapper/fetch-like-users"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
+import fetchLabels from "@/composables/atp-wrapper/fetch-labels"
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
 import fetchPosts from "@/composables/atp-wrapper/fetch-posts"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
+import fetchPreferences from "@/composables/atp-wrapper/fetch-preferences"
 import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch-repost-users"
 import fetchSuggestions from "@/composables/atp-wrapper/fetch-suggestions"
@@ -41,6 +43,7 @@ import logout from "@/composables/atp-wrapper/logout"
 import refreshSession from "@/composables/atp-wrapper/refresh-session"
 import resumeSession from "@/composables/atp-wrapper/resume-session"
 import updateNotificationSeen from "@/composables/atp-wrapper/update-notification-seen"
+import updatePreferences from "@/composables/atp-wrapper/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update-profile"
 import Util from "@/composables/util/index"
 
@@ -92,11 +95,13 @@ prototype.fetchFollowings = fetchFollowings
 prototype.fetchHotFeeds = fetchHotFeeds
 prototype.fetchInviteCodes = fetchInviteCodes
 prototype.fetchKeywordSearch = fetchKeywordSearch
+prototype.fetchLabels = fetchLabels
 prototype.fetchMutingUsers = fetchMutingUsers
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications
 prototype.fetchPosts = fetchPosts
 prototype.fetchPostThread = fetchPostThread
+prototype.fetchPreferences = fetchPreferences
 prototype.fetchProfile = fetchProfile
 prototype.fetchRepostUsers = fetchRepostUsers
 prototype.fetchLikeUsers = fetchLikeUsers
@@ -111,6 +116,7 @@ prototype.saveData = function saveData(this: TIAtpWrapper) {
   Util.saveStorage("atp", this.data)
 }
 prototype.updateNotificationSeen = updateNotificationSeen
+prototype.updatePreferences = updatePreferences
 prototype.updateProfile = updateProfile
 
 export default AtpWrapper

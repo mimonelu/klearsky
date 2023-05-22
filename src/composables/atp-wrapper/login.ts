@@ -25,9 +25,11 @@ export default async function (
       })
       .then((result: boolean) => result)
     ) {
+      /* TODO: 動作不安定のため一時コメントアウト。ロジックを再検討すること
       await this.refreshSession().catch((error: any) => {
         console.error("[klearsky/refreshSession]", error)
       })
+      */
     } else return false
   } else {
     const optinos: AtpAgentLoginOpts = {

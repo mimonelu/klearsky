@@ -68,6 +68,13 @@ type MainState = {
   currentFollowings: Array<TTUser>
   currentFollowingsCursor?: string
 
+  currentPreferences: Array<TTPreference>
+  getContentWarningVisibility: (
+    authorLabels?: Array<TTLabel>,
+    postLabels?: Array<TTLabel>,
+  ) => TTContentVisibility
+  getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
+
   currentHotFeeds: Array<TTFeed>
   currentHotCursor?: string
 

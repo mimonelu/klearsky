@@ -135,7 +135,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   }
 }
 
-.feed:deep() .post[data-has-child="true"]::before {
+.feed:deep() .post[data-has-child="true"][data-content-warning-visibility="show"]::before {
   background-color: rgba(var(--fg-color), 0.25);
   content: "";
   display: block;
