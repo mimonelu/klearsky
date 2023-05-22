@@ -34,8 +34,8 @@
   "contentWarningWarn": "閲覧警告",
   "contentWarningAuthorMessage": "このアカウントはフィルタリングされています：",
   "contentWarningPostMessage": "このポストはフィルタリングされています：",
-  "profileLabel": "このアカウントはラベリングされています：",
-  "postLabel": "このポストはラベリングされています：",
+  "profileLabel": "このアカウントのラベル：",
+  "postLabel": "このポストのラベル：",
 
   "login": "ログイン",
   "service": "サービス",
