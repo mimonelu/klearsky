@@ -67,7 +67,7 @@ function hide () {
           <dd
             v-for="preference of state.authorConcernedPreferences"
             :key="preference.$type"
-          >{{ preference.label }}</dd>
+          >{{ $t(preference.label) }}</dd>
         </dl>
 
         <!-- ポストラベル -->
@@ -79,7 +79,7 @@ function hide () {
           <dd
             v-for="preference of state.postConcernedPreferences"
             :key="preference.$type"
-          >{{ preference.label }}</dd>
+          >{{ $t(preference.label) }}</dd>
         </dl>
       </div>
       <template v-if="state.visibility === 'always-warn' || state.visibility === 'warn'">
@@ -192,7 +192,6 @@ function hide () {
   & > dd {
     color: rgb(var(--notice-color));
     line-height: 1.25;
-    text-transform: capitalize;
   }
 }
 

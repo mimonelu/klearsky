@@ -90,8 +90,8 @@ const state = reactive<{
   // ラベル対応
   contentWarningForceDisplay: false,
   contentWarningDisplay: computed((): boolean => {
-    return state.contentWarningVisibility === 'show' ||
-           ((state.contentWarningVisibility === 'always-warn' || state.contentWarningVisibility === 'warn') && state.contentWarningForceDisplay)
+    return state.contentWarningVisibility === "show" ||
+           ((state.contentWarningVisibility === "always-warn" || state.contentWarningVisibility === "warn") && state.contentWarningForceDisplay)
   }),
   contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(
@@ -340,6 +340,7 @@ async function translateText (forceTranslate: boolean) {
   >
     <!-- ラベル対応 -->
     <ContentWarning
+      v-if="position !== 'preview' && position !== 'slim'"
       :display="state.contentWarningForceDisplay"
       :authorLabels="post.author.labels"
       :postLabels="post.labels"
@@ -390,7 +391,7 @@ async function translateText (forceTranslate: boolean) {
       </div>
     </div>
     <div
-      v-if="state.contentWarningDisplay"
+      v-if="state.contentWarningDisplay || position === 'preview' || position === 'slim'"
       class="body"
     >
       <!-- アバター -->
@@ -442,7 +443,7 @@ async function translateText (forceTranslate: boolean) {
             v-for="label of post.labels"
             :key="label.val"
             class="notification-message__item"
-          >{{ label.val }}</div>
+          >{{ $t(label.val) }}</div>
         </div>
 
         <!-- 本文 -->

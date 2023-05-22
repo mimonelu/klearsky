@@ -109,7 +109,7 @@ function hideWarningContent () {
           v-for="label of mainState.currentProfile?.labels"
           :key="label.val"
           class="notification-message__item"
-        >{{ label.val }}</div>
+        >{{ $t(label.val) }}</div>
       </div>
 
       <!-- ブロックしている -->

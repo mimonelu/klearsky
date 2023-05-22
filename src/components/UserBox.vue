@@ -82,7 +82,7 @@ function hideWarningContent () {
         v-for="label of user.labels"
         :key="label.val"
         class="notification-message__item"
-      >{{ label.val }}</div>
+      >{{ $t(label.val) }}</div>
     </div>
 
     <template v-if="contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)">
