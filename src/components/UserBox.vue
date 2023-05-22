@@ -7,6 +7,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 
 const props = defineProps<{
   user: TTUser
+  contentWarningDisabled: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -58,10 +59,12 @@ function hideWarningContent () {
   <RouterLink
     class="user-box"
     :to="{ name: 'profile-post', query: { handle: user.handle } }"
+    :data-content-warning-disabled="contentWarningDisabled"
     :data-content-warning-visibility="state.contentWarningVisibility"
   >
     <!-- ラベル対応 -->
     <ContentWarning
+      v-if="!contentWarningDisabled"
       :display="state.contentWarningForceDisplay"
       :authorLabels="user.labels"
       @show="showWarningContent"
@@ -70,7 +73,7 @@ function hideWarningContent () {
 
     <!-- プロフィールラベル -->
     <div
-      v-if="state.contentWarningDisplay && (user.labels?.length ?? 0) > 0"
+      v-if="(contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)) && (user.labels?.length ?? 0) > 0"
       class="notification-message"
     >
       <SVGIcon name="alert" />
@@ -82,7 +85,7 @@ function hideWarningContent () {
       >{{ label.val }}</div>
     </div>
 
-    <template v-if="state.contentWarningDisplay">
+    <template v-if="contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)">
       <AvatarLink
         :handle="user.handle"
         :image="user.avatar"
@@ -125,8 +128,8 @@ function hideWarningContent () {
     "a d d"
     "b b b";
   align-items: center;
-  &[data-content-warning-visibility="hide"],
-  &[data-content-warning-visibility="always-hide"] {
+  &[data-content-warning-disabled="false"][data-content-warning-visibility="hide"],
+  &[data-content-warning-disabled="false"][data-content-warning-visibility="always-hide"] {
     pointer-events: none;
   }
 }

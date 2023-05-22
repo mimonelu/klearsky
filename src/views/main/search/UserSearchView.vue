@@ -92,6 +92,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
           :key="user.did"
           class="user"
           :user="user"
+          :contentWarningDisabled="false"
         />
       </div>
       <LoadButton

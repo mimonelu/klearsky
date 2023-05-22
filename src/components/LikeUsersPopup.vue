@@ -62,6 +62,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
           :key="user.did"
           class="user"
           :user="user"
+          :contentWarningDisabled="false"
         />
       </div>
     </template>
