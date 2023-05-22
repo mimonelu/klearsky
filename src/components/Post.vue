@@ -336,6 +336,7 @@ async function translateText (forceTranslate: boolean) {
     :data-repost="post.__reason != null"
     :data-focus="isFocused()"
     :data-content-warning-force-display="state.contentWarningForceDisplay"
+    :data-content-warning-visibility="state.contentWarningVisibility"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
     <!-- ラベル対応 -->
