@@ -1,30 +1,18 @@
 .notification-message {
   background-color: rgba(var(--notice-color), 0.25);
-  // border: 1px solid rgba(var(--notice-color), 0.25);
   border-radius: var(--border-radius);
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   grid-gap: 0.25em 0.5em;
   padding: 0.5em 1em;
 
-  &__header {
-    display: flex;
-    align-items: center;
-    grid-gap: 0.5em;
-
-    & > .svg-icon {
-      fill: rgb(var(--notice-color));
-    }
-
-    & > span {
-      line-height: 1.25;
-    }
+  & > .svg-icon {
+    fill: rgb(var(--notice-color));
   }
 
-  &__body {
-    display: flex;
-    flex-wrap: wrap;
-    grid-gap: 0.5em;
+  &__text {
+    line-height: 1.25;
   }
 
   &__item {

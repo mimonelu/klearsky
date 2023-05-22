@@ -37,7 +37,7 @@ const state = reactive<{
 
   // ラベル対応
   contentWarningForceDisplay: boolean;
-  contentWarningVisibility: ComputedRef<"hide" | "show" | "warn">;
+  contentWarningVisibility: ComputedRef<TTContentVisibility>;
 
   translation: "none" | "ignore" | "waiting" | "done" | "failed";
 }>({
@@ -88,12 +88,10 @@ const state = reactive<{
 
   // ラベル対応
   contentWarningForceDisplay: false,
-  contentWarningVisibility: computed((): "hide" | "show" | "warn" => {
+  contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(
       props.post.author.labels,
-      props.post.labels,
-      true,
-      true
+      props.post.labels
     )
   }),
 
@@ -428,17 +426,13 @@ async function translateText (forceTranslate: boolean) {
           v-if="(post.labels?.length ?? 0) > 0"
           class="notification-message"
         >
-          <div class="notification-message__header">
-            <SVGIcon name="alert" />
-            <span>{{ $t("postLabel") }}</span>
-          </div>
-          <div class="notification-message__body">
-            <div
-              v-for="label of post.labels"
-              :key="label.val"
-              class="notification-message__item"
-            >{{ label.val }}</div>
-          </div>
+          <SVGIcon name="alert" />
+          <div class="notification-message__text">{{ $t("postLabel") }}</div>
+          <div
+            v-for="label of post.labels"
+            :key="label.val"
+            class="notification-message__item"
+          >{{ label.val }}</div>
         </div>
 
         <!-- 本文 -->
@@ -705,8 +699,7 @@ async function translateText (forceTranslate: boolean) {
   }
 
   // ラベル対応
-  &[data-content-warning-force-display="false"][data-content-warning-visibility="warn"],
-  &[data-content-warning-force-display="false"][data-content-warning-visibility="hide"] {
+  &[data-content-warning-force-display="false"]:not([data-content-warning-visibility="show"]) {
     .header,
     .body {
       display: none;

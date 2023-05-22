@@ -72,9 +72,7 @@ type MainState = {
   getContentWarningVisibility: (
     authorLabels?: Array<TTLabel>,
     postLabels?: Array<TTLabel>,
-    processAuthor = true,
-    processPost = true,
-  ) => "hide" | "show" | "warn"
+  ) => TTContentVisibility
   getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
 
   currentHotFeeds: Array<TTFeed>

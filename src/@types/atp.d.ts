@@ -88,11 +88,13 @@ type TTLabel = {
   val: string
 }
 
+type TTContentVisibility = "always-hide" | "always-warn" | "hide" | "show" | "warn"
+
 type TTPreference = {
   $type: string
   enabled?: boolean
   label?: string
-  visibility?: "hide" | "warn" | "show"
+  visibility?: TTContentVisibility
 }
 
 type TTPost = {

@@ -20,7 +20,7 @@ const state = reactive<{
   // ラベル対応
   contentWarningForceDisplay: boolean;
   contentWarningDisplay: ComputedRef<boolean>;
-  contentWarningVisibility: ComputedRef<"hide" | "show" | "warn">;
+  contentWarningVisibility: ComputedRef<TTContentVisibility>;
 }>({
   handleHistoryPopupDisplay: false,
   profileMenuDisplay: false,
@@ -29,14 +29,12 @@ const state = reactive<{
   contentWarningForceDisplay: false,
   contentWarningDisplay: computed((): boolean => {
     return state.contentWarningVisibility === 'show' ||
-           (state.contentWarningVisibility === 'warn' && state.contentWarningForceDisplay)
+           ((state.contentWarningVisibility === 'always-warn' || state.contentWarningVisibility === 'warn') && state.contentWarningForceDisplay)
   }),
-  contentWarningVisibility: computed((): "hide" | "show" | "warn" => {
+  contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(
       mainState.currentProfile?.labels,
-      undefined,
-      true,
-      true
+      undefined
     )
   }),
 })
@@ -105,17 +103,13 @@ function hideWarningContent () {
         v-if="state.contentWarningDisplay && (mainState.currentProfile?.labels?.length ?? 0) > 0"
         class="notification-message"
       >
-        <div class="notification-message__header">
-          <SVGIcon name="alert" />
-          <span>{{ $t("profileLabel") }}</span>
-        </div>
-        <div class="notification-message__body">
-          <div
-            v-for="label of mainState.currentProfile?.labels"
-            :key="label.val"
-            class="notification-message__item"
-          >{{ label.val }}</div>
-        </div>
+        <SVGIcon name="alert" />
+        <div class="notification-message__text">{{ $t("profileLabel") }}</div>
+        <div
+          v-for="label of mainState.currentProfile?.labels"
+          :key="label.val"
+          class="notification-message__item"
+        >{{ label.val }}</div>
       </div>
 
       <!-- ブロックしている -->
@@ -123,10 +117,8 @@ function hideWarningContent () {
         v-if="mainState.currentProfile?.viewer.blocking != null"
         class="notification-message"
       >
-        <div class="notification-message__header">
-          <SVGIcon name="alert" />
-          <span>{{ $t("blocking") }}</span>
-        </div>
+        <SVGIcon name="alert" />
+        <div class="notification-message__text">{{ $t("blocking") }}</div>
       </div>
 
       <!-- ブロックされている -->
@@ -134,10 +126,8 @@ function hideWarningContent () {
         v-if="mainState.currentProfile?.viewer.blockedBy"
         class="notification-message"
       >
-        <div class="notification-message__header">
-          <SVGIcon name="alert" />
-          <span>{{ $t("blocked") }}</span>
-        </div>
+        <SVGIcon name="alert" />
+        <div class="notification-message__text">{{ $t("blocked") }}</div>
       </div>
     </div>
 

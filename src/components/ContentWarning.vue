@@ -13,16 +13,14 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  visibility: ComputedRef<"hide" | "show" | "warn">
+  visibility: ComputedRef<TTContentVisibility>
   authorConcernedPreferences: ComputedRef<Array<TTPreference>>
   postConcernedPreferences: ComputedRef<Array<TTPreference>>
 }>({
-  visibility: computed((): "hide" | "show" | "warn" => {
+  visibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(
       props.authorLabels,
-      props.postLabels,
-      true,
-      true
+      props.postLabels
     )
   }),
   authorConcernedPreferences: computed((): Array<TTPreference> => {
@@ -32,6 +30,13 @@ const state = reactive<{
     return mainState.getConcernedPreferences(props.postLabels)
   }),
 })
+
+const messageMap: { [k: string]: string } = {
+  "always-hide": "contentWarningAlwaysHide",
+  hide: "contentWarningHide",
+  "always-warn": "contentWarningAlwaysWarn",
+  warn: "contentWarningWarn",
+}
 
 function show () {
   emit("show")
@@ -48,45 +53,36 @@ function hide () {
       class="content-warning"
       :data-visibility="state.visibility"
     >
-      <!-- 非表示ラベルが含まれている -->
-      <template v-if="state.visibility === 'hide'">
-        <div class="header">
-          <SVGIcon name="alert" />
-          <span>{{ $t("contentWarningHideMessage") }}</span>
-        </div>
-      </template>
+      <div class="header">
+        <SVGIcon name="alert" />
+        <span>{{ $t(messageMap[state.visibility]) }}</span>
+      </div>
+      <div class="body">
+        <!-- ユーザーラベル -->
+        <dl
+          v-if="state.authorConcernedPreferences.length > 0"
+          class="label-container"
+        >
+          <dt>{{ $t("contentWarningAuthorMessage") }}</dt>
+          <dd
+            v-for="preference of state.authorConcernedPreferences"
+            :key="preference.$type"
+          >{{ preference.label }}</dd>
+        </dl>
 
-      <!-- 警告ラベルが含まれている -->
-      <template v-else>
-        <div class="header">
-          <SVGIcon name="alert" />
-          <span>{{ $t("contentWarning") }}</span>
-        </div>
-        <div class="body">
-          <!-- ユーザーラベル -->
-          <dl
-            v-if="state.authorConcernedPreferences.length > 0"
-            class="label-container"
-          >
-            <dt>{{ $t("contentWarningAuthorMessage") }}</dt>
-            <dd
-              v-for="preference of state.authorConcernedPreferences"
-              :key="preference.$type"
-            >{{ preference.label }}</dd>
-          </dl>
-
-          <!-- ポストラベル -->
-          <dl
-            v-if="state.postConcernedPreferences.length > 0"
-            class="label-container"
-          >
-            <dt>{{ $t("contentWarningPostMessage") }}</dt>
-            <dd
-              v-for="preference of state.postConcernedPreferences"
-              :key="preference.$type"
-            >{{ preference.label }}</dd>
-          </dl>
-        </div>
+        <!-- ポストラベル -->
+        <dl
+          v-if="state.postConcernedPreferences.length > 0"
+          class="label-container"
+        >
+          <dt>{{ $t("contentWarningPostMessage") }}</dt>
+          <dd
+            v-for="preference of state.postConcernedPreferences"
+            :key="preference.$type"
+          >{{ preference.label }}</dd>
+        </dl>
+      </div>
+      <template v-if="state.visibility === 'always-warn' || state.visibility === 'warn'">
         <button
           v-if="!display"
           class="button--important"
@@ -110,16 +106,34 @@ function hide () {
   align-items: center;
   justify-content: center;
   grid-gap: 0.5em;
+  padding: 1em;
   position: relative;
   height: 100%;
-  &[data-visibility="warn"] {
-    background-color: rgba(var(--notice-color), 0.25);
-    // border: 1px solid rgba(var(--notice-color), 0.25);
-    padding: 1em;
-  }
+  &[data-visibility="always-hide"],
   &[data-visibility="hide"] {
     background-color: rgba(var(--fg-color), 0.125);
-    padding: 0.5em 1em;
+  }
+  &[data-visibility="always-hide"] {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 0.5em,
+      rgba(var(--fg-color), 0.0625) 0.5em,
+      rgba(var(--fg-color), 0.0625) 1em
+    );
+  }
+  &[data-visibility="always-warn"],
+  &[data-visibility="warn"] {
+    background-color: rgba(var(--notice-color), 0.25);
+  }
+  &[data-visibility="always-warn"] {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 0.5em,
+      rgba(var(--notice-color), 0.0625) 0.5em,
+      rgba(var(--notice-color), 0.0625) 1em
+    );
   }
 }
 
@@ -134,35 +148,42 @@ function hide () {
     line-height: 1.25;
   }
 }
-.content-warning[data-visibility="warn"] .header {
-  & > .svg-icon {
-    fill: rgb(var(--notice-color));
-  }
+.content-warning[data-visibility="always-hide"],
+.content-warning[data-visibility="hide"] {
+  .header {
+    & > .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
 
-  & > span {
-    color: rgb(var(--notice-color));
+    & > span {
+      color: rgb(var(--fg-color));
+    }
   }
 }
-.content-warning[data-visibility="hide"] .header {
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
-  }
+.content-warning[data-visibility="always-warn"],
+.content-warning[data-visibility="warn"] {
+  .header {
+    & > .svg-icon {
+      fill: rgb(var(--notice-color));
+    }
 
-  & > span {
-    color: rgba(var(--fg-color), 0.5);
+    & > span {
+      color: rgb(var(--notice-color));
+    }
   }
 }
 
 .body {
   display: flex;
   flex-direction: column;
-  grid-gap: 0.5em;
+  grid-gap: 0.25em 0.5em;
 }
 
 .label-container {
   display: inline-flex;
   flex-wrap: wrap;
-  grid-gap: 0.5em;
+  justify-content: center;
+  grid-gap: 0.25em 0.5em;
 
   & > dt {
     line-height: 1.25;

@@ -344,6 +344,7 @@ async function updateNotification (forceUpdate: boolean) {
 }
 
 async function fetchPreferences () {
+  // await state.atp.updatePreferences([])
   const preferences = await state.atp.fetchPreferences()
   if (preferences == null) return
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
