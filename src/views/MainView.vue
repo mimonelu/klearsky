@@ -351,8 +351,10 @@ async function updateNotification (forceUpdate: boolean) {
 }
 
 async function fetchPreferences () {
-  // await state.atp.updatePreferences([])
-  const preferences = await state.atp.fetchPreferences()
+  const preferences = await state.atp.fetchPreferences().catch((error: any) => {
+    // おそらく getPreferences を実装していないケース
+    console.warn("[klearsky/getPreferences]", error)
+  })
   if (preferences == null) return
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
 }
