@@ -95,7 +95,7 @@ const state = reactive<{
   }),
   contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(
-      props.post.author.labels,
+      props.post.author?.labels,
       props.post.labels
     )
   }),
@@ -343,7 +343,7 @@ async function translateText (forceTranslate: boolean) {
     <ContentWarning
       v-if="position !== 'preview' && position !== 'slim'"
       :display="state.contentWarningForceDisplay"
-      :authorLabels="post.author.labels"
+      :authorLabels="post.author?.labels"
       :postLabels="post.labels"
       @show="showWarningContent"
       @hide="hideWarningContent"
