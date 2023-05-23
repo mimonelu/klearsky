@@ -385,7 +385,7 @@ function scrollToFocused () {
 // インフィニットスクロール用処理
 let isEnter = false
 function scrollListener () {
-  const threshold = 44
+  const threshold = 64
   const diff = Math.abs(window.scrollY - (
     window.document.documentElement.scrollHeight -
     window.document.documentElement.clientHeight
@@ -396,9 +396,7 @@ function scrollListener () {
       state.mounted &&
       state.atp.hasLogin() &&
       !state.processing
-    ) {
-      state.scrolledToBottom = true
-    }
+    ) state.scrolledToBottom = true
     isEnter = true
   } else {
     isEnter = false
