@@ -5,11 +5,15 @@ export default function (this: TIAtpWrapper, service: string): boolean {
   this.agent = new BskyAgent({
     service,
     persistSession: (event: AtpSessionEvent, session?: AtpSessionData) => {
-      console.log("[klearsky/persistSession]", event)
       switch (event) {
         case "create":
         case "update": {
-          this.data.did = session?.did ?? ""
+          console.log("[klearsky/persistSession]", event)
+          if (session?.did == null) {
+            console.warn("[klearsky/persistSession]", "session?.did == null")
+            break
+          }
+          this.data.did = session.did
           this.data.sessions[this.data.did] = session as TTSession
           this.data.sessions[this.data.did].__service = service
           this.session = session
@@ -17,8 +21,9 @@ export default function (this: TIAtpWrapper, service: string): boolean {
           break
         }
         case "create-failed":
-        case "expired": {
-          // this.logout()
+        case "expired":
+        default: {
+          console.warn("[klearsky/persistSession]", event)
           break
         }
       }

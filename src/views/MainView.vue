@@ -198,7 +198,14 @@ function resetState () {
 
 async function autoLogin (): Promise<boolean> {
   if (state.atp.hasLogin()) return true
-  if (state.atp.canLogin()) return await state.atp.login()
+  if (state.atp.canLogin()) {
+    const loginResult = await state.atp.login()
+    if (!loginResult) return false
+    state.atp.refreshSession().catch((error: any) => {
+      console.error("[klearsky/refreshSession]", error)
+    })
+    return true
+  }
   return false
 }
 

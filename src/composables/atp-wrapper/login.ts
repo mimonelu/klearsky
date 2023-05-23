@@ -19,18 +19,9 @@ export default async function (
 
   if (identifier == null || password == null) {
     if (session == null) return false
-    if (await this.resumeSession(session)
-      .catch(() => {
-        throw { error: "sessionExpired" }
-      })
-      .then((result: boolean) => result)
-    ) {
-      /* TODO: 動作不安定のため一時コメントアウト。ロジックを再検討すること
-      await this.refreshSession().catch((error: any) => {
-        console.error("[klearsky/refreshSession]", error)
-      })
-      */
-    } else return false
+    await this.resumeSession(session).catch(() => {
+      throw { error: "sessionExpired" }
+    })
   } else {
     const optinos: AtpAgentLoginOpts = {
       identifier,

@@ -65,7 +65,7 @@ const prototype = AtpWrapper.prototype as unknown as TIAtpWrapper
 prototype.canLogin = function (this: TIAtpWrapper): boolean {
   return this.data.sessions[this.data.did] != null
 }
-prototype.hasLogin = function hasLogin(this: TIAtpWrapper): boolean {
+prototype.hasLogin = function (this: TIAtpWrapper): boolean {
   return this.session != null
 }
 prototype.createAgent = createAgent
@@ -112,7 +112,7 @@ prototype.login = login
 prototype.logout = logout
 prototype.refreshSession = refreshSession
 prototype.resumeSession = resumeSession
-prototype.saveData = function saveData(this: TIAtpWrapper) {
+prototype.saveData = function (this: TIAtpWrapper) {
   Util.saveStorage("atp", this.data)
 }
 prototype.updateNotificationSeen = updateNotificationSeen
