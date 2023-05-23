@@ -3,7 +3,7 @@ import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import LoadButton from "@/components/LoadButton.vue"
 import NotificationList from "@/components/NotificationList.vue"
 import PageHeader from "@/components/PageHeader.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 

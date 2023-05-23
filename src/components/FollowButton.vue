@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import Loader from "@/components/Loader.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const props = defineProps<{
   viewer: TTUserViewer

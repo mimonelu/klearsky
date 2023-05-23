@@ -66,8 +66,8 @@ function hide () {
           <dt>{{ $t("contentWarningAuthorMessage") }}</dt>
           <dd
             v-for="preference of state.authorConcernedPreferences"
-            :key="preference.$type"
-          >{{ $t(preference.label) }}</dd>
+            :key="preference?.$type"
+          >{{ $t(preference?.label) }}</dd>
         </dl>
 
         <!-- ポストラベル -->
@@ -78,8 +78,8 @@ function hide () {
           <dt>{{ $t("contentWarningPostMessage") }}</dt>
           <dd
             v-for="preference of state.postConcernedPreferences"
-            :key="preference.$type"
-          >{{ $t(preference.label) }}</dd>
+            :key="preference?.$type"
+          >{{ $t(preference?.label) }}</dd>
         </dl>
       </div>
       <template v-if="state.visibility === 'always-warn' || state.visibility === 'warn'">

@@ -3,7 +3,7 @@ import { inject, onMounted, reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import EasyForm from "@/components/EasyForm.vue"
 import PageHeader from "@/components/PageHeader.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const $t = inject("$t") as Function
 

@@ -4,7 +4,7 @@ import LoadButton from "@/components/LoadButton.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import UserBox from "@/components/UserBox.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()

@@ -2,7 +2,7 @@
 import { inject, onMounted, reactive, watch } from "vue"
 import LoadButton from "@/components/LoadButton.vue"
 import UserBox from "@/components/UserBox.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState

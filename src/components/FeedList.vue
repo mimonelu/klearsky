@@ -2,7 +2,7 @@
 import { inject, reactive, watch } from "vue"
 import Feed from "@/components/Feed.vue"
 import LoadButton from "@/components/LoadButton.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const props = defineProps<{
   type: "author" | "authorReposts" | "authorLikes" | "hot" | "post" | "timeline";

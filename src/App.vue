@@ -6,7 +6,7 @@ import {
 } from "vue"
 import { RouterView } from "vue-router"
 import ErrorPopup from "@/components/ErrorPopup.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 import IgnoreErrors from "@/consts/ignore-errors.json"
 import ReplaceErrors from "@/consts/replace-errors.json"
 

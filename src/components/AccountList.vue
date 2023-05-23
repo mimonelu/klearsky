@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 defineProps<{
   hasDeleteButton: boolean;

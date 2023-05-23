@@ -10,7 +10,7 @@ import MenuTickerShowLikeUsers from "@/components/MenuTickerComponents/ShowLikeU
 import MenuTickerShowRepostUsers from "@/components/MenuTickerComponents/ShowRepostUsers.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 

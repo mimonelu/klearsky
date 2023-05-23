@@ -1,4 +1,4 @@
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 export default function (this: TIAtpWrapper) {
   this.data.did = ""

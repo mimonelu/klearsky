@@ -2,7 +2,7 @@
 import { inject } from "vue"
 import { useRouter } from "vue-router"
 import AccountList from "@/components/AccountList.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 

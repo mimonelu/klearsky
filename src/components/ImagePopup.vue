@@ -2,7 +2,7 @@
 import { inject, onBeforeMount, onBeforeUnmount, reactive } from "vue"
 import hotkeys from "hotkeys-js"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 

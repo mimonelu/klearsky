@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 

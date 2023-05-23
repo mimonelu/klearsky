@@ -30,7 +30,7 @@ import SendPostPopup from "@/components/SendPostPopup.vue"
 import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import state from "@/composables/main-state"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
 
 const emit = defineEmits<(name: string, value: any) => void>()
@@ -198,7 +198,14 @@ function resetState () {
 
 async function autoLogin (): Promise<boolean> {
   if (state.atp.hasLogin()) return true
-  if (state.atp.canLogin()) return await state.atp.login()
+  if (state.atp.canLogin()) {
+    const loginResult = await state.atp.login()
+    if (!loginResult) return false
+    state.atp.refreshSession().catch((error: any) => {
+      console.error("[klearsky/refreshSession]", error)
+    })
+    return true
+  }
   return false
 }
 
@@ -344,8 +351,10 @@ async function updateNotification (forceUpdate: boolean) {
 }
 
 async function fetchPreferences () {
-  // await state.atp.updatePreferences([])
-  const preferences = await state.atp.fetchPreferences()
+  const preferences = await state.atp.fetchPreferences().catch((error: any) => {
+    // おそらく getPreferences を実装していないケース
+    console.warn("[klearsky/getPreferences]", error)
+  })
   if (preferences == null) return
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
 }
@@ -376,7 +385,7 @@ function scrollToFocused () {
 // インフィニットスクロール用処理
 let isEnter = false
 function scrollListener () {
-  const threshold = 44
+  const threshold = 64
   const diff = Math.abs(window.scrollY - (
     window.document.documentElement.scrollHeight -
     window.document.documentElement.clientHeight
@@ -387,9 +396,7 @@ function scrollListener () {
       state.mounted &&
       state.atp.hasLogin() &&
       !state.processing
-    ) {
-      state.scrolledToBottom = true
-    }
+    ) state.scrolledToBottom = true
     isEnter = true
   } else {
     isEnter = false
