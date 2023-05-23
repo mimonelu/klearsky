@@ -12,7 +12,7 @@ type Messages = {
 
 export default {
   install(app: App, messages: Messages) {
-    const defaultLanguage = window.navigator.language ?? "en"
+    const defaultLanguage = window.navigator.language || "en"
     let currentLanguage = defaultLanguage
 
     const $setI18n = (newLanguage: string) => {

@@ -302,7 +302,7 @@ async function translateText (forceTranslate: boolean) {
       }
     }
   }
-  const dstLanguage = window.navigator.language ?? "en"
+  const dstLanguage = window.navigator.language || "en"
   if (srcLanguage === dstLanguage) {
     state.translation = "ignore"
     return

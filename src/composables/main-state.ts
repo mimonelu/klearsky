@@ -413,7 +413,7 @@ function saveSettings () {
   if (state.settings[did].globallineLayout == null)
     state.settings[did].globallineLayout = "post"
   if (state.settings[did].globallineLanguage == null)
-    state.settings[did].globallineLanguage = window.navigator.language ?? "en"
+    state.settings[did].globallineLanguage = window.navigator.language || "en"
   if (state.settings[did].layout == null)
     state.settings[did].layout = "default"
   if (state.settings[did].borderRadius == null)
