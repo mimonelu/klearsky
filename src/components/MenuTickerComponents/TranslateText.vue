@@ -12,7 +12,7 @@ function translate () {
   Util.blurElement()
   if (props.text == null) return
   emit("close")
-  const language = window.navigator.language
+  const language = window.navigator.language ?? "en"
   window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(props.text)}&op=translate`)
 }
 </script>
