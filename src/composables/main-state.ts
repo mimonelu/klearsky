@@ -7,7 +7,7 @@ import type {
   LocationQueryValue,
 } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
 
 const state = reactive<MainState>({
@@ -413,7 +413,7 @@ function saveSettings () {
   if (state.settings[did].globallineLayout == null)
     state.settings[did].globallineLayout = "post"
   if (state.settings[did].globallineLanguage == null)
-    state.settings[did].globallineLanguage = window.navigator.language || "en"
+    state.settings[did].globallineLanguage = Util.getUserLanguage()
   if (state.settings[did].layout == null)
     state.settings[did].layout = "default"
   if (state.settings[did].borderRadius == null)

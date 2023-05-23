@@ -45,7 +45,7 @@ import resumeSession from "@/composables/atp-wrapper/resume-session"
 import updateNotificationSeen from "@/composables/atp-wrapper/update-notification-seen"
 import updatePreferences from "@/composables/atp-wrapper/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update-profile"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 // @ts-ignore // TODO:
 class AtpWrapper implements TIAtpWrapper {

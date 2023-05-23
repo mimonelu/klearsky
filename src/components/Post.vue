@@ -12,7 +12,7 @@ import Post from "@/components/Post.vue"
 import PostMenuTicker from "@/components/PostMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Thumbnail from "@/components/Thumbnail.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -302,7 +302,7 @@ async function translateText (forceTranslate: boolean) {
       }
     }
   }
-  const dstLanguage = window.navigator.language || "en"
+  const dstLanguage = Util.getUserLanguage()
   if (srcLanguage === dstLanguage) {
     state.translation = "ignore"
     return

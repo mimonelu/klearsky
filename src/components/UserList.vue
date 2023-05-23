@@ -4,7 +4,7 @@ import FollowButton from "@/components/FollowButton.vue"
 import LoadButton from "@/components/LoadButton.vue"
 import MuteButton from "@/components/MuteButton.vue"
 import UserBox from "@/components/UserBox.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const props = defineProps<{
   type: "follower" | "following" | "suggestion"

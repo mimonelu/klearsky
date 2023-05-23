@@ -1,4 +1,5 @@
 import type { App } from "vue"
+import Util from "@/composables/util"
 
 declare const window: {
   navigator: any
@@ -12,8 +13,7 @@ type Messages = {
 
 export default {
   install(app: App, messages: Messages) {
-    const defaultLanguage = window.navigator.language || "en"
-    let currentLanguage = defaultLanguage
+    let currentLanguage = Util.getUserLanguage()
 
     const $setI18n = (newLanguage: string) => {
       currentLanguage = newLanguage

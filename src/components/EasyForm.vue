@@ -4,7 +4,7 @@ import Checkboxes from "@/components/Checkboxes.vue"
 import FileBox from "@/components/FileBox.vue"
 import Radios from "@/components/Radios.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 

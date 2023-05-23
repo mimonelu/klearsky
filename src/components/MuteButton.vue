@@ -2,7 +2,7 @@
 import { inject, reactive } from "vue"
 import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const props = defineProps<{
   handle: string

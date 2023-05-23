@@ -30,7 +30,7 @@ import SendPostPopup from "@/components/SendPostPopup.vue"
 import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import state from "@/composables/main-state"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
 
 const emit = defineEmits<(name: string, value: any) => void>()

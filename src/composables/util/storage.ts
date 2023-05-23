@@ -1,4 +1,4 @@
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 export default {
   saveStorage(key: string, json: null | any) {

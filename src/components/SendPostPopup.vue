@@ -3,7 +3,7 @@ import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Popup from "@/components/Popup.vue"
 import Post from "@/components/Post.vue"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string, done: boolean, empty: boolean): void}>()
 

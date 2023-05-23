@@ -3,7 +3,7 @@ import type {
   BskyAgent,
   ComAtprotoServerCreateSession,
 } from "@atproto/api"
-import Util from "@/composables/util/index"
+import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
