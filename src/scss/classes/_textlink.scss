@@ -1,6 +1,7 @@
 .textlink,
 .textlink--icon {
   color: rgb(var(--accent-color));
+  cursor: pointer;
   line-height: 1.25;
 
   & > .svg-icon {

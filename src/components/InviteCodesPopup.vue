@@ -72,6 +72,7 @@ async function copyCode (code: string) {
                   query: { handle: inviteCode.uses[index]?.usedBy }
                 }"
                 class="button--bordered"
+                @click="close"
               >
                 <SVGIcon name="person" />
                 <span>{{ $t("userOfInviteCode") }}</span>

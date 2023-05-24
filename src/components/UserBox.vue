@@ -5,6 +5,8 @@ import ContentWarning from "@/components/ContentWarning.vue"
 import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
+const emit = defineEmits<(name: string) => void>()
+
 const props = defineProps<{
   user: TTUser
   contentWarningDisabled: boolean
@@ -36,6 +38,10 @@ const state = reactive<{
   profileMenuDisplay: false,
 })
 
+function onActivateLink () {
+  emit("link")
+}
+
 function openPostMenu () {
   state.profileMenuDisplay = !state.profileMenuDisplay
 }
@@ -61,6 +67,7 @@ function hideWarningContent () {
     :to="{ name: 'profile-post', query: { handle: user.handle } }"
     :data-content-warning-disabled="contentWarningDisabled"
     :data-content-warning-visibility="state.contentWarningVisibility"
+    @click="onActivateLink"
   >
     <!-- ラベル対応 -->
     <ContentWarning

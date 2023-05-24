@@ -16,14 +16,17 @@ import {
   type RouteRecordName
 } from "vue-router"
 import hotkeys from "hotkeys-js"
+import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
 import ImagePopup from "@/components/ImagePopup.vue"
+import InviteCodesPopup from "@/components/InviteCodesPopup.vue"
 import LikeUsersPopup from "@/components/LikeUsersPopup.vue"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
 import MainMenuHorizontal from "@/components/MainMenuHorizontal.vue"
 import MainMenuVertical from "@/components/MainMenuVertical.vue"
 import MessagePopup from "@/components/MessagePopup.vue"
+import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
@@ -194,6 +197,15 @@ function resetState () {
   state.confirmationPopupTitle = undefined
   state.confirmationPopupText = undefined
   state.confirmationPopupResult = false
+
+  // 招待コード確認ポップアップの表示スイッチ
+  state.inviteCodesPopupDisplay = false
+
+  // ミュートユーザーリストポップアップの表示スイッチ
+  state.mutingUsersPopupDisplay = false
+
+  // ブロックユーザーリストポップアップの表示スイッチ
+  state.blockingUsersPopupDisplay = false
 }
 
 async function autoLogin (): Promise<boolean> {
@@ -463,6 +475,24 @@ function scrollListener () {
       v-if="state.likeUsersPopupDisplay"
       @close="state.closeLikeUsersPopup"
     />
+
+    <!-- 招待コード確認ポップアップ -->
+    <InviteCodesPopup
+      v-if="state.inviteCodesPopupDisplay"
+      @close="state.closeInviteCodesPopup"
+     />
+
+    <!-- ミュートユーザーリストポップアップ -->
+    <MutingUsersPopup
+      v-if="state.mutingUsersPopupDisplay"
+      @close="state.closeMutingUsersPopup"
+     />
+
+    <!-- ブロックユーザーリストポップアップ -->
+    <BlockingUsersPopup
+      v-if="state.blockingUsersPopupDisplay"
+      @close="state.closeBlockingUsersPopup"
+     />
 
     <!-- イメージポップアップ -->
     <ImagePopup

@@ -88,6 +88,12 @@ const state = reactive<MainState>({
   openConfirmationPopup,
   closeConfirmationPopup,
   applyConfirmationPopup,
+  openInviteCodesPopup,
+  closeInviteCodesPopup,
+  openMutingUsersPopup,
+  closeMutingUsersPopup,
+  openBlockingUsersPopup,
+  closeBlockingUsersPopup
 })
 
 function formatDate (dateString?: string): string {
@@ -534,6 +540,36 @@ function closeConfirmationPopup () {
 function applyConfirmationPopup () {
   state.confirmationPopupResult = true
   state.confirmationPopupDisplay = false
+}
+
+// 招待コード確認ポップアップ
+
+function openInviteCodesPopup () {
+  state.inviteCodesPopupDisplay = true
+}
+
+function closeInviteCodesPopup () {
+  state.inviteCodesPopupDisplay = false
+}
+
+// ミュートユーザーリストポップアップ
+
+function openMutingUsersPopup () {
+  state.mutingUsersPopupDisplay = true
+}
+
+function closeMutingUsersPopup () {
+  state.mutingUsersPopupDisplay = false
+}
+
+// ブロックユーザーリストポップアップ
+
+function openBlockingUsersPopup () {
+  state.blockingUsersPopupDisplay = true
+}
+
+function closeBlockingUsersPopup () {
+  state.blockingUsersPopupDisplay = false
 }
 
 export default state

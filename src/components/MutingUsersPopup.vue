@@ -69,6 +69,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
           class="user"
           :user="user"
           :contentWarningDisabled="true"
+          @link="close"
         />
       </div>
     </template>

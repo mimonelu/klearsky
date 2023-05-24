@@ -146,6 +146,15 @@ type MainState = {
   // インフィニットスクロール用プロパティ
   scrolledToBottom: boolean
 
+  // 招待コード確認ポップアップの表示スイッチ
+  inviteCodesPopupDisplay: boolean
+
+  // ミュートユーザーリストポップアップの表示スイッチ
+  mutingUsersPopupDisplay: boolean
+
+  // ブロックユーザーリストポップアップの表示スイッチ
+  blockingUsersPopupDisplay: boolean
+
   $setI18n?: Function
   $getI18n?: Function
 
@@ -189,4 +198,11 @@ type MainState = {
   openConfirmationPopup: (title?: string, text?: string) => Promise<boolean>
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
+
+  openInviteCodesPopup: Function
+  closeInviteCodesPopup: Function
+  openMutingUsersPopup: Function
+  closeMutingUsersPopup: Function
+  openBlockingUsersPopup: Function
+  closeBlockingUsersPopup: Function
 }
