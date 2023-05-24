@@ -28,6 +28,9 @@
   "blocking": "このアカウントをブロックしています。",
   "postBlocked": "このポストを表示することはできません。",
 
+  "sendAccountReport": "アカウントをレポートする",
+  "sendPostReport": "ポストをレポートする",
+
   "contentWarningAlwaysHide": "強制閲覧制限",
   "contentWarningHide": "閲覧制限",
   "contentWarningAlwaysWarn": "強制閲覧警告",

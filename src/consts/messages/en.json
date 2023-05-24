@@ -28,6 +28,9 @@
   "blocking": "You are blocking this account.",
   "postBlocked": "This post cannot be displayed.",
 
+  "sendAccountReport": "Report account",
+  "sendPostReport": "Report post",
+
   "contentWarningAlwaysHide": "FORCED CONTENT FILTERING",
   "contentWarningHide": "CONTENT FILTERING",
   "contentWarningAlwaysWarn": "FORCED CONTENT WARNING",
