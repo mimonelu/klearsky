@@ -3,6 +3,7 @@ import createFileBlob from "@/composables/atp-wrapper/create-file-blob"
 import createFollow from "@/composables/atp-wrapper/create-follow"
 import createLike from "@/composables/atp-wrapper/create-like"
 import createPost from "@/composables/atp-wrapper/create-post"
+import createReport from "@/composables/atp-wrapper/create-report"
 import createRepost from "@/composables/atp-wrapper/create-repost"
 import deleteAccount from "@/composables/atp-wrapper/delete-account"
 import deleteFollow from "@/composables/atp-wrapper/delete-follow"
@@ -73,6 +74,7 @@ prototype.createFileBlob = createFileBlob
 prototype.createFollow = createFollow
 prototype.createLike = createLike
 prototype.createPost = createPost
+prototype.createReport = createReport
 prototype.createRepost = createRepost
 prototype.deleteAccount = deleteAccount
 prototype.deleteFollow = deleteFollow

@@ -647,19 +647,8 @@ async function translateText (forceTranslate: boolean) {
 
               <!-- ポストメニュー -->
               <PostMenuTicker
-                :author="post.author"
-                :isUser="post.author?.did === mainState.atp.session?.did"
-                :did="post.author.did"
-                :handle="post.author.handle"
-                :uri="post.uri"
+                :post="post"
                 :display="state.postMenuDisplay"
-                :translateText="post.record?.text"
-                :copyText="post.record?.text"
-                :mentionTo="post.author?.handle"
-                :deletePostUri="post.author?.did === mainState.atp.session?.did
-                  ? post.uri
-                  : undefined"
-                :openSource="post"
                 @close="onClosePostMenu"
                 @autoTranslate="onAutoTranslate"
                 @removeThisPost="onRemoveThisPost"

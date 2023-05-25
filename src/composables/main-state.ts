@@ -19,6 +19,14 @@ const state = reactive<MainState>({
   loginPopupAutoDisplay: computed((): boolean => {
     return state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)
   }),
+  sendAccountReportPopupProps: {
+    display: false,
+    user: undefined,
+  },
+  sendPostReportPopupProps: {
+    display: false,
+    post: undefined,
+  },
   sendPostPopupProps: {
     display: false,
     type: "post",
@@ -28,6 +36,11 @@ const state = reactive<MainState>({
     display: false,
     largeUri: "",
     smallUri: "",
+  },
+  errorPopupProps: {
+    display: false,
+    error: undefined,
+    description: undefined,
   },
   settings: {},
   backgroundImage: computed((): string => {
@@ -88,6 +101,30 @@ const state = reactive<MainState>({
   openConfirmationPopup,
   closeConfirmationPopup,
   applyConfirmationPopup,
+
+  // 招待コード確認ポップアップの開閉
+  openInviteCodesPopup,
+  closeInviteCodesPopup,
+
+  // ミュートユーザーリストポップアップの開閉
+  openMutingUsersPopup,
+  closeMutingUsersPopup,
+
+  // ブロックユーザーリストポップアップの開閉
+  openBlockingUsersPopup,
+  closeBlockingUsersPopup,
+
+  // アカウントレポート送信ポップアップの開閉
+  openSendAccountReportPopup,
+  closeSendAccountReportPopup,
+
+  // ポストレポート送信ポップアップの開閉
+  openSendPostReportPopup,
+  closeSendPostReportPopup,
+
+  // エラーポップアップの開閉
+  openErrorPopup,
+  closeErrorPopup,
 })
 
 function formatDate (dateString?: string): string {
@@ -534,6 +571,70 @@ function closeConfirmationPopup () {
 function applyConfirmationPopup () {
   state.confirmationPopupResult = true
   state.confirmationPopupDisplay = false
+}
+
+// 招待コード確認ポップアップの開閉
+
+function openInviteCodesPopup () {
+  state.inviteCodesPopupDisplay = true
+}
+
+function closeInviteCodesPopup () {
+  state.inviteCodesPopupDisplay = false
+}
+
+// ミュートユーザーリストポップアップの開閉
+
+function openMutingUsersPopup () {
+  state.mutingUsersPopupDisplay = true
+}
+
+function closeMutingUsersPopup () {
+  state.mutingUsersPopupDisplay = false
+}
+
+// ブロックユーザーリストポップアップの開閉
+
+function openBlockingUsersPopup () {
+  state.blockingUsersPopupDisplay = true
+}
+
+function closeBlockingUsersPopup () {
+  state.blockingUsersPopupDisplay = false
+}
+
+// アカウントレポート送信ポップアップの開閉
+
+function openSendAccountReportPopup (user: TTUser) {
+  state.sendAccountReportPopupProps.user = user
+  state.sendAccountReportPopupProps.display = true
+}
+
+function closeSendAccountReportPopup () {
+  state.sendAccountReportPopupProps.display = false
+}
+
+// ポストレポート送信ポップアップの開閉
+
+function openSendPostReportPopup (post: TTPost) {
+  state.sendPostReportPopupProps.post = post
+  state.sendPostReportPopupProps.display = true
+}
+
+function closeSendPostReportPopup () {
+  state.sendPostReportPopupProps.display = false
+}
+
+// エラーポップアップの開閉
+
+function openErrorPopup (error: any, description: any) {
+  state.errorPopupProps.error = error
+  state.errorPopupProps.description = description
+  state.errorPopupProps.display = true
+}
+
+function closeErrorPopup () {
+  state.errorPopupProps.display = false
 }
 
 export default state

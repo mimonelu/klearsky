@@ -4,11 +4,8 @@ import Popup from "@/components/Popup.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  error?: unknown
-  description?: unknown
+  error?: unknown;
 }>()
-
-const url = window.location.href
 
 function close () {
   emit("close")
@@ -27,15 +24,11 @@ function close () {
       </h2>
     </template>
     <template v-slot:body>
-      <pre class="message">{{ $t(error) }}
-* {{ description }}
-* {{ url }}</pre>
-      <pre class="help">{{ $t("errorNotification") }} <a
-        class="textlink"
-        href="https://bsky.app/profile/mimonelu.net"
-        rel="noreferrer"
-        target="_blank"
-      >@mimonelu.net</a> </pre>
+      <pre class="message-string">{{ error }}</pre>
+      <pre
+        v-if="typeof error !== 'string'"
+        class="message-object"
+      >{{ JSON.stringify(error) }}</pre>
     </template>
   </Popup>
 </template>
@@ -52,7 +45,7 @@ function close () {
   }
 }
 
-.message {
+.message-string {
   background-color: rgba(var(--notice-color), 0.125);
   color: rgb(var(--notice-color));
   line-height: 1.5;
@@ -62,7 +55,8 @@ function close () {
   word-break: break-word;
 }
 
-.help {
+.message-object {
+  color: rgb(var(--notice-color));
   font-size: 0.875rem;
   line-height: 1.5;
   padding: 0 1rem;

@@ -16,12 +16,6 @@ const yyyy = (new Date).getFullYear()
       rel="noreferrer"
       target="_blank"
     >Twitter@mimonelu</a>
-    <a
-      class="textlink"
-      href="https://iris.to/mimonelu@mimonelu.github.io"
-      rel="noreferrer"
-      target="_blank"
-    >Nostr@mimonelu</a>
     <div />
     <div class="kebab-header">Bluesky</div>
     <small>&copy; {{ yyyy }} Bluesky PBLLC</small>

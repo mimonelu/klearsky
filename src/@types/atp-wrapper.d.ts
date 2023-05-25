@@ -62,6 +62,13 @@ interface TIAtpWrapper {
   ): Promise<null | string>
   createLike(this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
+  createReport(
+    this: TIAtpWrapper,
+    reason: string,
+    did?: string,
+    cid?: string,
+    uri?: string
+  ): Promise<boolean>
   createRepost(this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   deleteAccount(this: TIAtpWrapper, did?: string)
   deleteLike(this: TIAtpWrapper, uri: string): Promise<boolean>
@@ -106,9 +113,9 @@ interface TIAtpWrapper {
     cursor?: string
   ): Promise<undefined | string>
   fetchFirstPost(
-  this: TIAtpWrapper,
-  handle: string
-): Promise<undefined | string>
+    this: TIAtpWrapper,
+    handle: string
+  ): Promise<undefined | string>
   fetchFollowings(
     this: TIAtpWrapper,
     users: Array<TTUser> | Array<TTUser>,

@@ -16,16 +16,35 @@ const mainState = inject("state") as MainState
     <!-- @atproto/api バージョン -->
     <div class="api-version">@atproto/api v{{ Package.dependencies["@atproto/api"] }}</div>
 
-    <!-- 招待コード確認ポップアップトリガー -->
-    <div class="link-to-invite-code">
-      <RouterLink
+    <!-- トリガーコンテナ -->
+    <div class="textlink-container">
+      <!-- 招待コード確認ポップアップトリガー -->
+      <a
         v-if="mainState.numberOfAvailableInviteCodes > 0"
         class="textlink--icon"
-        to="/settings/bluesky"
+        @click.prevent="mainState.openInviteCodesPopup"
       >
         <SVGIcon name="inviteCode" />
         <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
-      </RouterLink>
+      </a>
+
+      <!-- ミュート中のユーザーポップアップトリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="mainState.openMutingUsersPopup"
+      >
+        <SVGIcon name="volumeOff" />
+        <span>{{ $t("mutingUsers") }}</span>
+      </a>
+
+      <!-- ブロック中のユーザーポップアップトリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="mainState.openBlockingUsersPopup"
+      >
+        <SVGIcon name="personOff" />
+        <span>{{ $t("blockingUsers") }}</span>
+      </a>
     </div>
 
     <!-- コピーライト -->
@@ -55,14 +74,16 @@ const mainState = inject("state") as MainState
   text-align: center;
 }
 
-// 招待コード確認ポップアップトリガー
-.link-to-invite-code {
+// トリガーコンテナ
+.textlink-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  grid-gap: 1rem;
   font-size: 0.875rem;
   margin-bottom: 2rem;
 
-  & > span {
+  & > .textlink--icon:first-child > span {
     text-transform: lowercase;
   }
 }

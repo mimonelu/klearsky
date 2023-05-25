@@ -1,0 +1,13 @@
+{
+  "accountReportReason": [
+    { "label": "reportReasonMisleading", "value": "com.atproto.moderation.defs#reasonMisleading" },
+    { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" }
+  ],
+  "postReportReason": [
+    { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" },
+    { "label": "reportReasonSexual", "value": "com.atproto.moderation.defs#reasonSexual" },
+    { "label": "reportReasonViolation", "value": "com.atproto.moderation.defs#reasonViolation" },
+    { "label": "reportReasonRude", "value": "com.atproto.moderation.defs#reasonRude" },
+    { "label": "reportReasonOther", "value": "com.atproto.moderation.defs#reasonOther" }
+  ]
+}

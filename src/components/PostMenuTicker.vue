@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, reactive } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerAutoTranslateText from "@/components/MenuTickerComponents/AutoTranslateText.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
+import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
@@ -15,29 +16,28 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
-  author?: TTUser;
-  isUser: boolean;
-  did?: string;
-  handle?: string;
-  uri?: string;
+  post: TTPost;
   display: boolean;
-  translateText?: string;
-  copyText?: string;
-  mentionTo?: string;
-  deletePostUri?: string;
-  openSource?: any;
 }>()
 
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  isUser: boolean
+  deletePostUri?: string
+}>({
+  isUser: props.post.author.did === mainState.atp.session?.did,
+  deletePostUri: props.post.author.did === mainState.atp.session?.did ? props.post.uri : undefined
+})
+
 async function deletePost () {
   Util.blurElement()
-  if (props.deletePostUri == null) return
+  if (state.deletePostUri == null) return
   emit("close")
   const result = await mainState.openConfirmationPopup($t("deletePost"), $t("deletePostMessage"))
-  if (result) emit("removeThisPost", props.deletePostUri)
+  if (result) emit("removeThisPost", state.deletePostUri)
 }
 </script>
 
@@ -45,25 +45,25 @@ async function deletePost () {
   <MenuTicker :display="display">
     <!-- メンションを送る -->
     <MenuTickerSendMention
-      :mentionTo="mentionTo"
+      :mentionTo="post.author.handle"
       @close="emit('close')"
     />
 
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
-      :text="translateText"
+      :text="post.record?.text"
       @close="emit('close')"
     />
 
     <!-- テキストを自動翻訳する -->
     <MenuTickerAutoTranslateText
-      :text="translateText"
+      :text="post.record?.text"
       @close="emit('autoTranslate')"
     />
 
     <!-- ポストを削除する -->
     <button
-      v-if="deletePostUri != null"
+      v-if="state.deletePostUri != null"
       @click.stop="deletePost"
     >
       <SVGIcon name="remove" />
@@ -72,30 +72,39 @@ async function deletePost () {
 
     <!-- リポストユーザーリストポップアップボタン -->
     <MenuTickerShowRepostUsers
-      :uri="uri"
+      :uri="post.uri"
       @close="emit('close')"
     />
 
     <!-- ライクユーザーリストポップアップボタン -->
     <MenuTickerShowLikeUsers
-      :uri="uri"
+      :uri="post.uri"
       @close="emit('close')"
     />
 
     <!-- コピーする -->
     <MenuTickerCopyTextWrapper
-      :did="did"
-      :handle="handle"
-      :text="copyText"
+      :did="post.author.did"
+      :handle="post.author.handle"
+      :text="post.record?.text"
+      @close="emit('close')"
+    />
+
+    <!-- モデレートする -->
+    <MenuTickerModerateWrapper
+      v-if="!state.isUser"
+      :isUser="state.isUser"
+      :user="post.author"
+      :post="post"
       @close="emit('close')"
     />
 
     <!-- 他のアプリで開く -->
     <MenuTickerOpenAppWrapper
       :type="'post'"
-      :did="did"
-      :handle="handle"
-      :uri="uri"
+      :did="post.author.did"
+      :handle="post.author.handle"
+      :uri="post.uri"
       @close="emit('close')"
     />
 
@@ -103,7 +112,7 @@ async function deletePost () {
 
     <!-- ソースを表示する -->
     <MenuTickerOpenSource
-      :source="openSource"
+      :source="post"
       @close="emit('close')"
     />
   </MenuTicker>

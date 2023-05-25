@@ -128,6 +128,7 @@ watch(() => props.display, (display: boolean) => {
         & > .svg-icon--heart {
           fill: rgb(var(--like-color));
         }
+        & > .svg-icon--alert,
         & > .svg-icon--person,
         & > .svg-icon--personOff,
         & > .svg-icon--remove,

@@ -7,6 +7,7 @@ defineProps<{
   state: any
   model: string
   options: Array<TTOption>
+  required?: boolean
   layout?: "horizontal" | "vertical"
 }>()
 
@@ -29,7 +30,9 @@ function onChange () {
       <input
         v-model="state[model]"
         type="checkbox"
+        :name="model"
         :value="option.value"
+        :required="required ?? false"
         @change="onChange"
       >
       <SVGIcon :name="state[model]?.includes(option.value) ? 'checkboxOn' : 'checkboxOff'" />

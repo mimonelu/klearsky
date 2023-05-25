@@ -146,6 +146,34 @@ type MainState = {
   // インフィニットスクロール用プロパティ
   scrolledToBottom: boolean
 
+  // エラーポップアッププロパティ
+  errorPopupProps: {
+    display: boolean
+    error: any
+    description: any
+  }
+
+  // 招待コード確認ポップアップの表示スイッチ
+  inviteCodesPopupDisplay: boolean
+
+  // ミュートユーザーリストポップアップの表示スイッチ
+  mutingUsersPopupDisplay: boolean
+
+  // ブロックユーザーリストポップアップの表示スイッチ
+  blockingUsersPopupDisplay: boolean
+
+  // アカウントレポート送信ポップアッププロパティ
+  sendAccountReportPopupProps: {
+    display: boolean
+    user?: TTUser
+  }
+
+  // ポストレポート送信ポップアッププロパティ
+  sendPostReportPopupProps: {
+    display: boolean
+    post?: TTPost
+  }
+
   $setI18n?: Function
   $getI18n?: Function
 
@@ -189,4 +217,28 @@ type MainState = {
   openConfirmationPopup: (title?: string, text?: string) => Promise<boolean>
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
+
+  // 招待コード確認ポップアップの開閉
+  openInviteCodesPopup: Function
+  closeInviteCodesPopup: Function
+
+  // ミュートユーザーリストポップアップの開閉
+  openMutingUsersPopup: Function
+  closeMutingUsersPopup: Function
+
+  // ブロックユーザーリストポップアップの開閉
+  openBlockingUsersPopup: Function
+  closeBlockingUsersPopup: Function
+
+  // アカウントレポート送信ポップアップの開閉
+  openSendAccountReportPopup: Function
+  closeSendAccountReportPopup: Function
+
+  // ポストレポート送信ポップアップの開閉
+  openSendPostReportPopup: Function
+  closeSendPostReportPopup: Function
+
+  // エラーポップアップの開閉
+  openErrorPopup: Function
+  closeErrorPopup: Function
 }

@@ -16,17 +16,23 @@ import {
   type RouteRecordName
 } from "vue-router"
 import hotkeys from "hotkeys-js"
+import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
+import ErrorPopup from "@/components/ErrorPopup.vue"
 import ImagePopup from "@/components/ImagePopup.vue"
+import InviteCodesPopup from "@/components/InviteCodesPopup.vue"
 import LikeUsersPopup from "@/components/LikeUsersPopup.vue"
 import Loader from "@/components/Loader.vue"
 import LoginPopup from "@/components/LoginPopup.vue"
 import MainMenuHorizontal from "@/components/MainMenuHorizontal.vue"
 import MainMenuVertical from "@/components/MainMenuVertical.vue"
 import MessagePopup from "@/components/MessagePopup.vue"
+import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
+import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
+import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
 import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import state from "@/composables/main-state"
@@ -194,6 +200,28 @@ function resetState () {
   state.confirmationPopupTitle = undefined
   state.confirmationPopupText = undefined
   state.confirmationPopupResult = false
+
+  // エラーポップアッププロパティ
+  state.errorPopupProps.display = false
+  state.errorPopupProps.error = undefined
+  state.errorPopupProps.description = undefined
+
+  // 招待コード確認ポップアップの表示スイッチ
+  state.inviteCodesPopupDisplay = false
+
+  // ミュートユーザーリストポップアップの表示スイッチ
+  state.mutingUsersPopupDisplay = false
+
+  // ブロックユーザーリストポップアップの表示スイッチ
+  state.blockingUsersPopupDisplay = false
+
+  // アカウントレポート送信ポップアッププロパティ
+  state.sendAccountReportPopupProps.display = false
+  state.sendAccountReportPopupProps.user = undefined
+
+  // ポストレポート送信ポップアッププロパティ
+  state.sendPostReportPopupProps.display = false
+  state.sendPostReportPopupProps.post = undefined
 }
 
 async function autoLogin (): Promise<boolean> {
@@ -201,9 +229,12 @@ async function autoLogin (): Promise<boolean> {
   if (state.atp.canLogin()) {
     const loginResult = await state.atp.login()
     if (!loginResult) return false
+
+    // TODO: セッション延命のためトークンを更新しているが、適切な処理かどうか不明。要再検討
     state.atp.refreshSession().catch((error: any) => {
       console.error("[klearsky/refreshSession]", error)
     })
+
     return true
   }
   return false
@@ -217,6 +248,12 @@ async function manualLogin (service: string, identifier: string, password: strin
       return
     }
     if (!state.atp.hasLogin()) return
+
+    // TODO: セッション延命のためトークンを更新しているが、適切な処理かどうか不明。要再検討
+    state.atp.refreshSession().catch((error: any) => {
+      console.error("[klearsky/refreshSession]", error)
+    })
+
     resetState()
     await fetchPreferences()
     state.loginPopupDisplay = false
@@ -464,6 +501,38 @@ function scrollListener () {
       @close="state.closeLikeUsersPopup"
     />
 
+    <!-- 招待コード確認ポップアップ -->
+    <InviteCodesPopup
+      v-if="state.inviteCodesPopupDisplay"
+      @close="state.closeInviteCodesPopup"
+    />
+
+    <!-- ミュートユーザーリストポップアップ -->
+    <MutingUsersPopup
+      v-if="state.mutingUsersPopupDisplay"
+      @close="state.closeMutingUsersPopup"
+    />
+
+    <!-- ブロックユーザーリストポップアップ -->
+    <BlockingUsersPopup
+      v-if="state.blockingUsersPopupDisplay"
+      @close="state.closeBlockingUsersPopup"
+    />
+
+    <!-- アカウントレポート送信ポップアップ -->
+    <SendAccountReportPopup
+      v-if="state.sendAccountReportPopupProps.display"
+      :user="state.sendAccountReportPopupProps.user"
+      @close="state.closeSendAccountReportPopup"
+    />
+
+    <!-- ポストレポート送信ポップアップ -->
+    <SendPostReportPopup
+      v-if="state.sendPostReportPopupProps.display"
+      :post="state.sendPostReportPopupProps.post"
+      @close="state.closeSendPostReportPopup"
+    />
+
     <!-- イメージポップアップ -->
     <ImagePopup
       v-if="state.imagePopupProps.display"
@@ -498,6 +567,14 @@ function scrollListener () {
       v-if="state.confirmationPopupDisplay"
       @close="state.closeConfirmationPopup"
       @apply="state.applyConfirmationPopup"
+    />
+
+    <!-- エラーポップアップ -->
+    <ErrorPopup
+      v-if="state.errorPopupProps.display"
+      :error="state.errorPopupProps.error"
+      :description="state.errorPopupProps.description"
+      @close="state.closeErrorPopup"
     />
 
     <!-- 全画面ローダー -->

@@ -12,6 +12,12 @@
   "error": "Error",
   "alt": "ALT",
 
+  "success": "Process Completion",
+  "successMessage": "The process has been successfully completed.",
+
+  "errorNotification": "Please reload your browser before retrying.\nIf the error occurs again, please contact me with the details of the error.",
+  "errorApiFailed": "API request failed.",
+
   "follow": "Follow",
   "followed": "Follows you",
   "follower": "Follower",
@@ -27,6 +33,16 @@
   "blocked": "You are blocked by this account.",
   "blocking": "You are blocking this account.",
   "postBlocked": "This post cannot be displayed.",
+
+  "sendAccountReport": "Report account",
+  "sendPostReport": "Report post",
+  "selectReportReason": "Reason",
+  "reportReasonMisleading": "Misleading: Impersonation, False claims",
+  "reportReasonSpam": "Spam: Frequently posts unwanted content",
+  "reportReasonSexual": "Sexual: Nudity, Pornography",
+  "reportReasonViolation": "Violation: Copyright violation, Violation of terms of Service",
+  "reportReasonRude": "Rude: Harassment, Trolling, Intolerance",
+  "reportReasonOther": "Other",
 
   "contentWarningAlwaysHide": "FORCED CONTENT FILTERING",
   "contentWarningHide": "CONTENT FILTERING",
