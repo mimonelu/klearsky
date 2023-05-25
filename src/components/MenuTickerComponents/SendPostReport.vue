@@ -14,7 +14,7 @@ const mainState = inject("state") as MainState
 async function sendPostReport () {
   Util.blurElement()
   emit("close")
-  // await mainState.openSendPostReportPopup(props.post)
+  mainState.openSendPostReportPopup(props.post)
 }
 </script>
 

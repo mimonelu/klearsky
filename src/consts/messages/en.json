@@ -32,7 +32,7 @@
   "sendPostReport": "Report post",
   "selectReportReason": "Reason",
   "reportReasonSpam": "Spam: Frequently posts unwanted content",
-  "reportReasonViolation": "Copyright violation",
+  "reportReasonViolation": "Violation: Copyright violation, Violation of terms of Service",
   "reportReasonMisleading": "Misleading: Impersonation, False claims",
   "reportReasonSexual": "Sexual: Nudity, Pornography",
   "reportReasonRude": "Rude: Harassment, Trolling, Intolerance",

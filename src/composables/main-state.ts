@@ -23,6 +23,10 @@ const state = reactive<MainState>({
     display: false,
     user: undefined,
   },
+  sendPostReportPopupProps: {
+    display: false,
+    post: undefined,
+  },
   sendPostPopupProps: {
     display: false,
     type: "post",
@@ -108,6 +112,10 @@ const state = reactive<MainState>({
   // アカウントレポート送信ポップアップの開閉
   openSendAccountReportPopup,
   closeSendAccountReportPopup,
+
+  // ポストレポート送信ポップアップの開閉
+  openSendPostReportPopup,
+  closeSendPostReportPopup,
 })
 
 function formatDate (dateString?: string): string {
@@ -595,6 +603,17 @@ function openSendAccountReportPopup (user: TTUser) {
 
 function closeSendAccountReportPopup () {
   state.sendAccountReportPopupProps.display = false
+}
+
+// ポストレポート送信ポップアップの開閉
+
+function openSendPostReportPopup (post: TTPost) {
+  state.sendPostReportPopupProps.post = post
+  state.sendPostReportPopupProps.display = true
+}
+
+function closeSendPostReportPopup () {
+  state.sendPostReportPopupProps.display = false
 }
 
 export default state

@@ -161,6 +161,12 @@ type MainState = {
     user?: TTUser
   }
 
+  // ポストレポート送信ポップアッププロパティ
+  sendPostReportPopupProps: {
+    display: boolean
+    post?: TTPost
+  }
+
   $setI18n?: Function
   $getI18n?: Function
 
@@ -215,4 +221,8 @@ type MainState = {
   // アカウントレポート送信ポップアップの開閉
   openSendAccountReportPopup: Function
   closeSendAccountReportPopup: Function
+
+  // ポストレポート送信ポップアップの開閉
+  openSendPostReportPopup: Function
+  closeSendPostReportPopup: Function
 }

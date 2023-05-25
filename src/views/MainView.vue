@@ -31,6 +31,7 @@ import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
+import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
 import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import state from "@/composables/main-state"
@@ -211,6 +212,10 @@ function resetState () {
   // アカウントレポート送信ポップアッププロパティ
   state.sendAccountReportPopupProps.display = false
   state.sendAccountReportPopupProps.user = undefined
+
+  // ポストレポート送信ポップアッププロパティ
+  state.sendPostReportPopupProps.display = false
+  state.sendPostReportPopupProps.post = undefined
 }
 
 async function autoLogin (): Promise<boolean> {
@@ -485,26 +490,33 @@ function scrollListener () {
     <InviteCodesPopup
       v-if="state.inviteCodesPopupDisplay"
       @close="state.closeInviteCodesPopup"
-     />
+    />
 
     <!-- ミュートユーザーリストポップアップ -->
     <MutingUsersPopup
       v-if="state.mutingUsersPopupDisplay"
       @close="state.closeMutingUsersPopup"
-     />
+    />
 
     <!-- ブロックユーザーリストポップアップ -->
     <BlockingUsersPopup
       v-if="state.blockingUsersPopupDisplay"
       @close="state.closeBlockingUsersPopup"
-     />
+    />
 
     <!-- アカウントレポート送信ポップアップ -->
     <SendAccountReportPopup
       v-if="state.sendAccountReportPopupProps.display"
       :user="state.sendAccountReportPopupProps.user"
       @close="state.closeSendAccountReportPopup"
-     />
+    />
+
+    <!-- ポストレポート送信ポップアップ -->
+    <SendPostReportPopup
+      v-if="state.sendPostReportPopupProps.display"
+      :post="state.sendPostReportPopupProps.post"
+      @close="state.closeSendPostReportPopup"
+    />
 
     <!-- イメージポップアップ -->
     <ImagePopup
