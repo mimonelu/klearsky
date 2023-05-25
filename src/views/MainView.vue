@@ -18,6 +18,7 @@ import {
 import hotkeys from "hotkeys-js"
 import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
+import ErrorPopup from "@/components/ErrorPopup.vue"
 import ImagePopup from "@/components/ImagePopup.vue"
 import InviteCodesPopup from "@/components/InviteCodesPopup.vue"
 import LikeUsersPopup from "@/components/LikeUsersPopup.vue"
@@ -199,6 +200,11 @@ function resetState () {
   state.confirmationPopupTitle = undefined
   state.confirmationPopupText = undefined
   state.confirmationPopupResult = false
+
+  // エラーポップアッププロパティ
+  state.errorPopupProps.display = false
+  state.errorPopupProps.error = undefined
+  state.errorPopupProps.description = undefined
 
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
@@ -561,6 +567,14 @@ function scrollListener () {
       v-if="state.confirmationPopupDisplay"
       @close="state.closeConfirmationPopup"
       @apply="state.applyConfirmationPopup"
+    />
+
+    <!-- エラーポップアップ -->
+    <ErrorPopup
+      v-if="state.errorPopupProps.display"
+      :error="state.errorPopupProps.error"
+      :description="state.errorPopupProps.description"
+      @close="state.closeErrorPopup"
     />
 
     <!-- 全画面ローダー -->

@@ -5,7 +5,7 @@ import {
   reactive
 } from "vue"
 import { RouterView } from "vue-router"
-import ErrorPopup from "@/components/ErrorPopup.vue"
+import GlobalErrorPopup from "@/components/GlobalErrorPopup.vue"
 import Util from "@/composables/util"
 import IgnoreErrors from "@/consts/ignore-errors.json"
 import ReplaceErrors from "@/consts/replace-errors.json"
@@ -30,16 +30,16 @@ function processError (error: any) {
   state.error = error
 }
 
-function closeErrorPopup () {
+function closeGlobalErrorPopup () {
   state.error = undefined
 }
 </script>
 
 <template>
   <RouterView @error="processError" />
-  <ErrorPopup
+  <GlobalErrorPopup
     v-if="state.error != null"
     :error="state.error"
-    @close="closeErrorPopup"
+    @close="closeGlobalErrorPopup"
   />
 </template>

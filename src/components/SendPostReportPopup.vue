@@ -8,7 +8,7 @@ import OPTIONS from "@/consts/options.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
-defineProps<{
+const props = defineProps<{
   post?: TTPost
 }>()
 
@@ -47,11 +47,18 @@ async function submitCallback () {
   Util.blurElement()
   if (mainState.processing) return
   mainState.processing = true
-  try {
-    console.log(state.reason)
+  const response = await mainState.atp.createReport(
+    state.reason as string,
+    props.post?.author?.did,
+    props.post?.cid,
+    props.post?.uri
+  )
+  mainState.processing = false
+  if (response) {
+    mainState.openMessagePopup($t("success"), $t("successMessage"))
     close()
-  } finally {
-    mainState.processing = false
+  } else {
+    mainState.openErrorPopup("errorApiFailed", "SendPostReportPopup/createReport")
   }
 }
 </script>

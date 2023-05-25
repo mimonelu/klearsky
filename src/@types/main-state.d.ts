@@ -146,6 +146,13 @@ type MainState = {
   // インフィニットスクロール用プロパティ
   scrolledToBottom: boolean
 
+  // エラーポップアッププロパティ
+  errorPopupProps: {
+    display: boolean
+    error: any
+    description: any
+  }
+
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
@@ -211,10 +218,15 @@ type MainState = {
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
 
+  // 招待コード確認ポップアップの開閉
   openInviteCodesPopup: Function
   closeInviteCodesPopup: Function
+
+  // ミュートユーザーリストポップアップの開閉
   openMutingUsersPopup: Function
   closeMutingUsersPopup: Function
+
+  // ブロックユーザーリストポップアップの開閉
   openBlockingUsersPopup: Function
   closeBlockingUsersPopup: Function
 
@@ -225,4 +237,8 @@ type MainState = {
   // ポストレポート送信ポップアップの開閉
   openSendPostReportPopup: Function
   closeSendPostReportPopup: Function
+
+  // エラーポップアップの開閉
+  openErrorPopup: Function
+  closeErrorPopup: Function
 }

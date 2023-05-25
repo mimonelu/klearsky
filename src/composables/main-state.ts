@@ -37,6 +37,11 @@ const state = reactive<MainState>({
     largeUri: "",
     smallUri: "",
   },
+  errorPopupProps: {
+    display: false,
+    error: undefined,
+    description: undefined,
+  },
   settings: {},
   backgroundImage: computed((): string => {
     if (state.currentSetting?.backgroundImage == null) return ""
@@ -116,6 +121,10 @@ const state = reactive<MainState>({
   // ポストレポート送信ポップアップの開閉
   openSendPostReportPopup,
   closeSendPostReportPopup,
+
+  // エラーポップアップの開閉
+  openErrorPopup,
+  closeErrorPopup,
 })
 
 function formatDate (dateString?: string): string {
@@ -614,6 +623,18 @@ function openSendPostReportPopup (post: TTPost) {
 
 function closeSendPostReportPopup () {
   state.sendPostReportPopupProps.display = false
+}
+
+// エラーポップアップの開閉
+
+function openErrorPopup (error: any, description: any) {
+  state.errorPopupProps.error = error
+  state.errorPopupProps.description = description
+  state.errorPopupProps.display = true
+}
+
+function closeErrorPopup () {
+  state.errorPopupProps.display = false
 }
 
 export default state
