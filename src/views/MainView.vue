@@ -29,6 +29,7 @@ import MessagePopup from "@/components/MessagePopup.vue"
 import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
+import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
@@ -206,6 +207,10 @@ function resetState () {
 
   // ブロックユーザーリストポップアップの表示スイッチ
   state.blockingUsersPopupDisplay = false
+
+  // アカウントレポート送信ポップアッププロパティ
+  state.sendAccountReportPopupProps.display = false
+  state.sendAccountReportPopupProps.user = undefined
 }
 
 async function autoLogin (): Promise<boolean> {
@@ -492,6 +497,13 @@ function scrollListener () {
     <BlockingUsersPopup
       v-if="state.blockingUsersPopupDisplay"
       @close="state.closeBlockingUsersPopup"
+     />
+
+    <!-- アカウントレポート送信ポップアップ -->
+    <SendAccountReportPopup
+      v-if="state.sendAccountReportPopupProps.display"
+      :user="state.sendAccountReportPopupProps.user"
+      @close="state.closeSendAccountReportPopup"
      />
 
     <!-- イメージポップアップ -->

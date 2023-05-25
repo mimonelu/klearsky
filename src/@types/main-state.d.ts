@@ -155,6 +155,12 @@ type MainState = {
   // ブロックユーザーリストポップアップの表示スイッチ
   blockingUsersPopupDisplay: boolean
 
+  // アカウントレポート送信ポップアッププロパティ
+  sendAccountReportPopupProps: {
+    display: boolean
+    user?: TTUser
+  }
+
   $setI18n?: Function
   $getI18n?: Function
 
@@ -205,4 +211,8 @@ type MainState = {
   closeMutingUsersPopup: Function
   openBlockingUsersPopup: Function
   closeBlockingUsersPopup: Function
+
+  // アカウントレポート送信ポップアップの開閉
+  openSendAccountReportPopup: Function
+  closeSendAccountReportPopup: Function
 }

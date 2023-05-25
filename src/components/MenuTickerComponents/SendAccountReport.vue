@@ -14,7 +14,7 @@ const mainState = inject("state") as MainState
 async function sendAccountReport () {
   Util.blurElement()
   emit("close")
-  // await mainState.openSendAccountReportPopup(props.user)
+  mainState.openSendAccountReportPopup(props.user)
 }
 </script>
 

@@ -30,6 +30,13 @@
 
   "sendAccountReport": "アカウントをレポートする",
   "sendPostReport": "ポストをレポートする",
+  "selectReportReason": "レポート事由",
+  "reportReasonSpam": "スパム：望ましくないコンテンツの過剰な投稿など",
+  "reportReasonViolation": "Copyright violation",
+  "reportReasonMisleading": "ミスリード：なりすまし、虚偽の主張など",
+  "reportReasonSexual": "Sexual: Nudity, Pornography",
+  "reportReasonRude": "Rude: Harassment, Trolling, Intolerance",
+  "reportReasonOther": "Other",
 
   "contentWarningAlwaysHide": "強制閲覧制限",
   "contentWarningHide": "閲覧制限",

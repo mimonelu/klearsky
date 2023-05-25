@@ -69,7 +69,7 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
-async function submitCallback () {
+function submitCallback () {
   emit("login", state.service, state.identifier, state.password)
 }
 </script>

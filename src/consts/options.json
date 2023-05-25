@@ -1,0 +1,6 @@
+{
+  "accountReportReason": [
+    { "label": "reportReasonMisleading", "value": "com.atproto.moderation.defs#reasonMisleading" },
+    { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" }
+  ]
+}

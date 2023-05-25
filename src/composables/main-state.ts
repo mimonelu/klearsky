@@ -19,6 +19,10 @@ const state = reactive<MainState>({
   loginPopupAutoDisplay: computed((): boolean => {
     return state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)
   }),
+  sendAccountReportPopupProps: {
+    display: false,
+    user: undefined,
+  },
   sendPostPopupProps: {
     display: false,
     type: "post",
@@ -88,12 +92,22 @@ const state = reactive<MainState>({
   openConfirmationPopup,
   closeConfirmationPopup,
   applyConfirmationPopup,
+
+  // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
   closeInviteCodesPopup,
+
+  // ミュートユーザーリストポップアップの開閉
   openMutingUsersPopup,
   closeMutingUsersPopup,
+
+  // ブロックユーザーリストポップアップの開閉
   openBlockingUsersPopup,
-  closeBlockingUsersPopup
+  closeBlockingUsersPopup,
+
+  // アカウントレポート送信ポップアップの開閉
+  openSendAccountReportPopup,
+  closeSendAccountReportPopup,
 })
 
 function formatDate (dateString?: string): string {
@@ -542,7 +556,7 @@ function applyConfirmationPopup () {
   state.confirmationPopupDisplay = false
 }
 
-// 招待コード確認ポップアップ
+// 招待コード確認ポップアップの開閉
 
 function openInviteCodesPopup () {
   state.inviteCodesPopupDisplay = true
@@ -552,7 +566,7 @@ function closeInviteCodesPopup () {
   state.inviteCodesPopupDisplay = false
 }
 
-// ミュートユーザーリストポップアップ
+// ミュートユーザーリストポップアップの開閉
 
 function openMutingUsersPopup () {
   state.mutingUsersPopupDisplay = true
@@ -562,7 +576,7 @@ function closeMutingUsersPopup () {
   state.mutingUsersPopupDisplay = false
 }
 
-// ブロックユーザーリストポップアップ
+// ブロックユーザーリストポップアップの開閉
 
 function openBlockingUsersPopup () {
   state.blockingUsersPopupDisplay = true
@@ -570,6 +584,17 @@ function openBlockingUsersPopup () {
 
 function closeBlockingUsersPopup () {
   state.blockingUsersPopupDisplay = false
+}
+
+// アカウントレポート送信ポップアップの開閉
+
+function openSendAccountReportPopup (user: TTUser) {
+  state.sendAccountReportPopupProps.user = user
+  state.sendAccountReportPopupProps.display = true
+}
+
+function closeSendAccountReportPopup () {
+  state.sendAccountReportPopupProps.display = false
 }
 
 export default state

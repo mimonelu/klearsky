@@ -30,6 +30,13 @@
 
   "sendAccountReport": "Report account",
   "sendPostReport": "Report post",
+  "selectReportReason": "Reason",
+  "reportReasonSpam": "Spam: Frequently posts unwanted content",
+  "reportReasonViolation": "Copyright violation",
+  "reportReasonMisleading": "Misleading: Impersonation, False claims",
+  "reportReasonSexual": "Sexual: Nudity, Pornography",
+  "reportReasonRude": "Rude: Harassment, Trolling, Intolerance",
+  "reportReasonOther": "Other",
 
   "contentWarningAlwaysHide": "FORCED CONTENT FILTERING",
   "contentWarningHide": "CONTENT FILTERING",

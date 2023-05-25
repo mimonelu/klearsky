@@ -11,8 +11,18 @@
     cursor: pointer;
     display: flex;
     padding: 0.5rem 1rem;
+    position: relative;
     &[data-checked="true"] {
       background-color: rgba(var(--accent-color), 0.25);
+    }
+
+    // Chrome のバリデーションメッセージ対応
+    & > input {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      height: 1px;
     }
 
     & > .svg-icon {
