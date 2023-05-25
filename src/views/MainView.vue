@@ -223,9 +223,12 @@ async function autoLogin (): Promise<boolean> {
   if (state.atp.canLogin()) {
     const loginResult = await state.atp.login()
     if (!loginResult) return false
+
+    // TODO: セッション延命のためトークンを更新しているが、適切な処理かどうか不明。要再検討
     state.atp.refreshSession().catch((error: any) => {
       console.error("[klearsky/refreshSession]", error)
     })
+
     return true
   }
   return false
@@ -239,6 +242,12 @@ async function manualLogin (service: string, identifier: string, password: strin
       return
     }
     if (!state.atp.hasLogin()) return
+
+    // TODO: セッション延命のためトークンを更新しているが、適切な処理かどうか不明。要再検討
+    state.atp.refreshSession().catch((error: any) => {
+      console.error("[klearsky/refreshSession]", error)
+    })
+
     resetState()
     await fetchPreferences()
     state.loginPopupDisplay = false
