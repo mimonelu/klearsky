@@ -560,8 +560,8 @@ function onDrop (event: DragEvent) {
     <!-- イメージポップアップ -->
     <ImagePopup
       v-if="state.imagePopupProps.display"
-      :largeUri="state.imagePopupProps.largeUri"
-      :smallUri="state.imagePopupProps.smallUri"
+      :images="state.imagePopupProps.images"
+      :index="state.imagePopupProps.index"
       @close="state.imagePopupProps.display = false"
     />
 

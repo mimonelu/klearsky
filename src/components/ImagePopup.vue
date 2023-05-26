@@ -7,8 +7,11 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  largeUri: string;
-  smallUri: string;
+  images: Array<{
+    largeUri: string
+    smallUri: string
+  }>
+  index: number
 }>()
 
 const mainState = inject("state") as MainState
@@ -20,7 +23,7 @@ const state = reactive<{
   x: number;
   y: number;
 }>({
-  isBlob: props.largeUri.startsWith("blob:"),
+  isBlob: props.images[props.index].largeUri.startsWith("blob:"),
   loaded: false,
   mode: false,
   x: 0.5,
@@ -76,11 +79,15 @@ function onLoadLargeImage () {
   state.loaded = true
 }
 
+function showImage (indexAdding: number) {
+  mainState.imagePopupProps.index = props.index + indexAdding
+}
+
 function setBackgroundImage () {
   Util.blurElement()
   if (!state.loaded) return
   if (mainState.currentSetting == null) return
-  mainState.currentSetting.backgroundImage = props.largeUri
+  mainState.currentSetting.backgroundImage = props.images[props.index].largeUri
   mainState.saveSettings()
 }
 
@@ -104,7 +111,7 @@ function close () {
     <div
       class="image"
       :style="`
-        background-image: url(${state.loaded ? '' : smallUri});
+        background-image: url(${state.loaded ? '' : images[index].smallUri});
         background-position: ${state.x * 100}% ${state.y * 100}%;
       `"
       @mousedown="startDrag"
@@ -118,7 +125,7 @@ function close () {
       <div
         class="image"
         :style="`
-          background-image: url(${largeUri});
+          background-image: url(${images[index].largeUri});
           background-position: ${state.x * 100}% ${state.y * 100}%;
         `"
       />
@@ -127,10 +134,28 @@ function close () {
     <!-- ラージ画像の読込判断用 img 要素 -->
     <img
       class="large-image-loader"
-      :src="largeUri"
+      :src="images[index].largeUri"
       alt=""
       @load="onLoadLargeImage"
     >
+
+    <!-- 前の画像ボタン -->
+    <button
+      class="floating-button previous-image-button"
+      :disabled="index === 0"
+      @click.prevent="showImage(- 1)"
+    >
+      <SVGIcon name="cursorLeft" />
+    </button>
+
+    <!-- 次の画像ボタン -->
+    <button
+      class="floating-button next-image-button"
+      :disabled="index + 1 === images.length"
+      @click.prevent="showImage(1)"
+    >
+      <SVGIcon name="cursorRight" />
+    </button>
 
     <!-- 壁紙設定ボタン -->
     <button
@@ -145,7 +170,7 @@ function close () {
     <a
       v-if="!state.isBlob"
       class="floating-button open-image-button"
-      :href="largeUri"
+      :href="images[index].largeUri"
       rel="noreferrer"
       target="_blank"
       @click="blurElement"
@@ -214,6 +239,9 @@ function close () {
   position: absolute;
   width: 4rem;
   min-height: 4rem;
+  &[disabled] {
+    opacity: 0.25;
+  }
   [data-mode="true"] & {
     display: none;
   }
@@ -232,6 +260,34 @@ function close () {
   }
 }
 
+// 前の画像ボタン
+.previous-image-button {
+  // SP幅以上
+  @media (min-width: $sp-width) {
+    left: 1rem;
+  }
+
+  // SP幅未満
+  @media not all and (min-width: $sp-width) {
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    left: 1rem;
+  }
+}
+
+// 次の画像ボタン
+.next-image-button {
+  // SP幅以上
+  @media (min-width: $sp-width) {
+    right: 1rem;
+  }
+
+  // SP幅未満
+  @media not all and (min-width: $sp-width) {
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    left: 6rem;
+  }
+}
+
 // 壁紙設定ボタン / 画像を別タブで開くボタン
 .background-image-button,
 .open-image-button {
@@ -244,32 +300,14 @@ function close () {
 
 // 壁紙設定ボタン
 .background-image-button {
-  // SP幅以上
-  @media (min-width: $sp-width) {
-    top: 1rem;
-    left: 1rem;
-  }
-
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
-    bottom: calc(1rem + env(safe-area-inset-bottom));
-    right: 6rem;
-  }
+  top: 1rem;
+  left: 1rem;
 }
 
 // 画像を別タブで開くボタン
 .open-image-button {
-  // SP幅以上
-  @media (min-width: $sp-width) {
-    top: 1rem;
-    left: 6rem;
-  }
-
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
-    bottom: calc(1rem + env(safe-area-inset-bottom));
-    right: 1rem;
-  }
+  top: 1rem;
+  left: 6rem;
 }
 
 // 閉じるボタン
@@ -283,7 +321,7 @@ function close () {
   // SP幅未満
   @media not all and (min-width: $sp-width) {
     bottom: calc(1rem + env(safe-area-inset-bottom));
-    left: 1rem;
+    right: 1rem;
   }
 }
 </style>

@@ -10,8 +10,11 @@ const mainState = inject("state") as MainState
 
 function openImagePopup () {
   if (!props.image) return
-  mainState.imagePopupProps.largeUri = props.image
-  mainState.imagePopupProps.smallUri = ""
+  mainState.imagePopupProps.images = [{
+    largeUri: props.image,
+    smallUri: "",
+  }]
+  mainState.imagePopupProps.index = 0
   mainState.imagePopupProps.display = true
 }
 </script>

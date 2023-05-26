@@ -35,8 +35,8 @@ const state = reactive<MainState>({
   },
   imagePopupProps: {
     display: false,
-    largeUri: "",
-    smallUri: "",
+    images: [],
+    index: 0,
   },
   errorPopupProps: {
     display: false,

@@ -82,23 +82,6 @@ async function fetchBlob (link: string): Promise<null | Uint8Array> {
   return data
 }
 
-function onActivateImage () {
-  if (props.image == null) return
-  if (!state.loaded) return
-  if (state.errored) return
-  mainState.imagePopupProps.smallUri = props.image.thumb != null
-    ? props.image.thumb
-    : state.loaded
-      ? state.src as string
-      : "/img/void.png"
-  mainState.imagePopupProps.largeUri = props.image.fullsize != null
-    ? props.image.fullsize
-    : state.loaded
-      ? state.src as string
-      : "/img/void.png"
-  mainState.imagePopupProps.display = true
-}
-
 function onActivateAlt (alt: string) {
   Util.blurElement()
   mainState.openMessagePopup($t("alt"), alt)
@@ -111,7 +94,6 @@ function onActivateAlt (alt: string) {
       loading="lazy"
       :src="state.src ?? '/img/void.png'"
       :alt="image?.alt ?? ''"
-      @click.prevent.stop="onActivateImage"
     />
     <button
       v-if="image?.alt"

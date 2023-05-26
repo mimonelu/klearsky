@@ -263,6 +263,19 @@ async function updateThisPostThread () {
   emit("updateThisPostThread", posts)
 }
 
+// 画像ポップアップ
+
+function openImagePopup (imageIndex: number) {
+  mainState.imagePopupProps.images = state.images.map((image: TTImage) => {
+    return {
+      smallUri: image.thumb ?? "/img/void.png",
+      largeUri: image.fullsize ?? "/img/void.png"
+    }
+  })
+  mainState.imagePopupProps.index = imageIndex
+  mainState.imagePopupProps.display = true
+}
+
 // ラベル対応
 
 function showWarningContent () {
@@ -522,6 +535,7 @@ async function translateText (forceTranslate: boolean) {
                   :key="post.cid"
                   :image="image"
                   :did="post.author.did"
+                  @click.stop="openImagePopup(imageIndex)"
                 />
               </div>
             </div>
@@ -534,6 +548,7 @@ async function translateText (forceTranslate: boolean) {
                 :key="imageIndex"
                 :image="image"
                 :did="post.author.did"
+                @click.stop="openImagePopup(imageIndex)"
               />
             </div>
           </template>
