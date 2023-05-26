@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive, ref } from "vue"
-import { detectAll } from "@/../node_modules/tinyld/dist/tinyld.light.node.js" // TODO: 適切なパスで記述すること
 import GloballineSettingsPopup from "@/components/GloballineSettingsPopup.vue"
 import Loader from "@/components/Loader.vue"
 import Post from "@/components/Post.vue"
@@ -57,11 +56,13 @@ async function onPost (did: string, post: any) {
 
   // 言語解析
   if (post.record.text != null) {
-    const languages = detectAll(post.record.text)
-    const yourLanguage = languages.findIndex((language: any) => {
-      return language.lang === mainState.currentSetting.globallineLanguage
-    }) !== - 1
-    if (!yourLanguage) return
+    const languages = post.__languages
+    if (languages != null) {
+      const yourLanguage = languages.findIndex((language: any) => {
+        return language.lang === mainState.currentSetting.globallineLanguage
+      }) !== - 1
+      if (!yourLanguage) return
+    }
   }
 
   if (mainState.globallineProfiles[did] == null)

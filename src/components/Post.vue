@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-import { detect } from "@/../node_modules/tinyld/dist/tinyld.light.node.js" // TODO: 適切なパスで記述すること
 import AvatarLink from "@/components/AvatarLink.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
@@ -286,11 +285,12 @@ async function translateText (forceTranslate: boolean) {
     state.translation = "ignore"
     return
   }
-  const srcLanguage = detect(text)
-  if (!srcLanguage) {
+  const srcLanguages = props.post.__languages
+  if (!srcLanguages?.length) {
     state.translation = "ignore"
     return
   }
+  const srcLanguage = srcLanguages[0].lang
   if (!forceTranslate) {
     const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
     if (autoTranslationIgnoreLanguage != null) {

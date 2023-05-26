@@ -99,6 +99,10 @@ type TTPreference = {
 
 type TTPost = {
   __createdAt?: string // Injected
+  __languages?: {
+    lang: string
+    accuracy: number
+  }[] // Injected
   __reason?: TTReason // Injected
   __translatedText?: string // Injected // 自動翻訳
   author: TTUser
