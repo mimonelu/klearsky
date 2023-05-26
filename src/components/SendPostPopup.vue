@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject, reactive, watch } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Popup from "@/components/Popup.vue"
 import Post from "@/components/Post.vue"
@@ -11,6 +11,7 @@ const props = defineProps<{
   type: TTPostType;
   post?: TTPost;
   text?: string;
+  fileList?: FileList;
 }>()
 
 const $t = inject("$t") as Function
@@ -25,8 +26,13 @@ const state = reactive<{
 }>({
   text: props.text ?? "",
   url: "",
-  images: [],
+  images: props.fileList != null ? Array.from(props.fileList) : [],
   alts: [],
+})
+
+// D&D用処置
+watch(() => props.fileList, (value?: FileList) => {
+  state.images = value != null ? Array.from(value) : []
 })
 
 const easyFormProps: TTEasyForm = {

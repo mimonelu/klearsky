@@ -129,6 +129,7 @@ type MainState = {
     type: TTPostType
     post?: TTPost
     text?: string
+    fileList?: FileList
   }
 
   imagePopupProps: {
@@ -177,6 +178,9 @@ type MainState = {
     post?: TTPost
   }
 
+  // D&D
+  isDragOver: boolean
+
   $setI18n?: Function
   $getI18n?: Function
 
@@ -199,7 +203,8 @@ type MainState = {
   openSendPostPopup: (
     type: TTPostType,
     post?: TTPost,
-    text?: string
+    text?: string,
+    fileList?: FileList
   ) => Promise<boolean>
   closeSendPostPopup: (done: boolean) => void
   openRepostUsersPopup: (uri: string) => void

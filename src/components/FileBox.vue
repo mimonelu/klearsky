@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { onMounted, reactive, watch } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
 const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
 
 const props = defineProps<{
+  files?: Array<File>
   disabled?: boolean
   accept?: string
   multiple?: boolean
@@ -16,8 +17,19 @@ const state = reactive<{
   files: Array<File>
   previews: Array<string>
 }>({
-  files: [],
+  files: props.files != null ? props.files : [],
   previews: [],
+})
+
+// D&D用処置
+watch(() => props.files, (value?: Array<File>) => {
+  state.files = value ?? []
+  resetFiles()
+})
+
+// D&D用処置
+onMounted(() => {
+  resetFiles()
 })
 
 // input[type="file"] で同一ファイルを選択すると change が発火しない仕様への対策
@@ -30,9 +42,13 @@ function onChange (event: Event) {
   if (newFiles == null) return
   // WANT: 同一ファイルを追加できないようにしたい
   state.files.push(...newFiles)
+  resetFiles()
+  emit("change", state.files)
+}
+
+function resetFiles () {
   if (props.maxNumber != null) state.files.splice(props.maxNumber)
   setPreviews(state.files)
-  emit("change", state.files)
 }
 
 function getFiles (event: Event): null | Array<File> {

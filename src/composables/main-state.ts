@@ -31,6 +31,7 @@ const state = reactive<MainState>({
     display: false,
     type: "post",
     post: undefined,
+    fileList: undefined,
   },
   imagePopupProps: {
     display: false,
@@ -520,11 +521,12 @@ function updateColorThemeSetting () {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (type: TTPostType, post?: TTPost, text?: string): Promise<boolean> {
+async function openSendPostPopup (type: TTPostType, post?: TTPost, text?: string, fileList?: FileList): Promise<boolean> {
   state.sendPostPopupProps.display = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post
   state.sendPostPopupProps.text = text
+  state.sendPostPopupProps.fileList = fileList
   await Util.waitProp(() => state.sendPostPopupProps.display, false)
   return isSendPostDone
 }
