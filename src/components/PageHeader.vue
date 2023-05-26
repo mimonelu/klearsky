@@ -45,6 +45,9 @@ function onActivateBackButton () {
       class="separator"
     />
     <h2 v-if="subTitle">{{ subTitle }}</h2>
+    <div class="right">
+      <slot name="right" />
+    </div>
   </header>
 </template>
 
@@ -55,16 +58,16 @@ function onActivateBackButton () {
   cursor: pointer;
   display: grid;
   align-items: center;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   padding: 1rem;
   position: sticky;
   top: 0;
   z-index: 1;
   &[data-has-back-button="false"] {
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto auto 1fr auto;
   }
   &[data-has-back-button="true"] {
-    grid-template-columns: auto auto auto 1fr;
+    grid-template-columns: auto auto auto 1fr auto;
   }
 
   & > h1,
@@ -82,7 +85,7 @@ function onActivateBackButton () {
 
 .back-button {
   cursor: pointer;
-  margin: -1rem;
+  margin: -1rem -0.5rem -1rem -1rem;
   padding: 1rem;
   &:focus, &:hover {
     & > .svg-icon {

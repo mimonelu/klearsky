@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive, watch } from "vue"
+import { inject, watch } from "vue"
 import Feed from "@/components/Feed.vue"
 import LoadButton from "@/components/LoadButton.vue"
 import Util from "@/composables/util"

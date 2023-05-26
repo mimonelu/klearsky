@@ -1,9 +1,29 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import FeedList from "@/components/FeedList.vue"
 import PageHeader from "@/components/PageHeader.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  filteredFeeds: ComputedRef<Array<TTFeed>>
+}>({
+  filteredFeeds: computed(() => {
+    const targetLanguages: string[] = []
+    if (targetLanguages.length === 0) return mainState.currentHotFeeds
+    return mainState.currentHotFeeds.filter((feed: TTFeed) => {
+      if (feed.post.__languages == null) return false
+      return feed.post.__languages.some((language: any) =>
+        targetLanguages.includes(language.lang))
+    }) ?? []
+  }),
+})
+
+function onActivateSelectLanguagesPopupTrigger () {
+  Util.blurElement()
+}
 </script>
 
 <template>
@@ -11,11 +31,20 @@ const mainState = inject("state") as MainState
     <PageHeader
       :hasBackButton="true"
       :title="$t('hot')"
-      :subTitle="mainState.atp.session?.__service"
-    />
+      :subTitle="`${state.filteredFeeds.length} / ${mainState.currentHotFeeds.length} ${$t('posts')}`"
+    >
+      <template #right>
+        <button
+          class="button--bordered"
+          @click.stop="onActivateSelectLanguagesPopupTrigger"
+        >
+          <SVGIcon name="translate" />
+        </button>
+      </template>
+    </PageHeader>
     <FeedList
       type="hot"
-      :feeds="mainState.currentHotFeeds"
+      :feeds="state.filteredFeeds"
       :hasLoadButton="true"
       :isMasonry="true"
     />
@@ -29,8 +58,14 @@ const mainState = inject("state") as MainState
   flex-grow: 1;
 }
 
-.page-header:deep() > h1 {
-  color: rgb(var(--hot-color));
+.page-header:deep() {
+  & > h1 {
+    color: rgb(var(--hot-color));
+  }
+
+  .button--bordered {
+    margin: -1rem 0;
+  }
 }
 
 .feed-list {
