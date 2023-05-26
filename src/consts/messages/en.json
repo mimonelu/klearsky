@@ -131,6 +131,8 @@
   "globalline": "Globalline",
 
   "hot": "What's Hot",
+  "selectLanguages": "Select languages",
+  "selectLanguagesDetail": "Multiple selections allowed. If select nothing, all posts be displayed.",
 
   "search": "Search",
   "suggestionSearch": "Suggestions",

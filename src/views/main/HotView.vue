@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import FeedList from "@/components/FeedList.vue"
 import PageHeader from "@/components/PageHeader.vue"
+import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -9,20 +10,30 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   filteredFeeds: ComputedRef<Array<TTFeed>>
+  selectLanguagesPopupDisplay: boolean
 }>({
-  filteredFeeds: computed(() => {
-    const targetLanguages: string[] = []
-    if (targetLanguages.length === 0) return mainState.currentHotFeeds
+  filteredFeeds: computed((): Array<TTFeed> => {
+    if (!mainState.currentSetting?.hotLanguages?.length) return mainState.currentHotFeeds
     return mainState.currentHotFeeds.filter((feed: TTFeed) => {
       if (feed.post.__languages == null) return false
       return feed.post.__languages.some((language: any) =>
-        targetLanguages.includes(language.lang))
+        mainState.currentSetting?.hotLanguages?.includes(language.lang))
     }) ?? []
   }),
+  selectLanguagesPopupDisplay: false,
 })
 
-function onActivateSelectLanguagesPopupTrigger () {
+function openSelectLanguagesPopup () {
   Util.blurElement()
+  state.selectLanguagesPopupDisplay = true
+}
+
+function closeSelectLanguagesPopup () {
+  state.selectLanguagesPopupDisplay = false
+}
+
+function saveSettings () {
+  mainState.saveSettings()
 }
 </script>
 
@@ -36,7 +47,7 @@ function onActivateSelectLanguagesPopupTrigger () {
       <template #right>
         <button
           class="button--bordered"
-          @click.stop="onActivateSelectLanguagesPopupTrigger"
+          @click.stop="openSelectLanguagesPopup"
         >
           <SVGIcon name="translate" />
         </button>
@@ -48,6 +59,17 @@ function onActivateSelectLanguagesPopupTrigger () {
       :hasLoadButton="true"
       :isMasonry="true"
     />
+    <SelectLanguagesPopup
+      v-if="state.selectLanguagesPopupDisplay"
+      :state="mainState.currentSetting"
+      property="hotLanguages"
+      @close="closeSelectLanguagesPopup"
+      @change="saveSettings"
+    >
+      <template #header>
+        <p>{{ $t("selectLanguagesDetail") }}</p>
+      </template>
+    </SelectLanguagesPopup>
   </div>
 </template>
 

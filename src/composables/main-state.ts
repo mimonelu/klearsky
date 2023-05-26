@@ -440,6 +440,8 @@ function saveSettings () {
     state.settings[did].autoTranslation = false
   if (state.settings[did].autoTranslationIgnoreLanguage == null)
     state.settings[did].autoTranslationIgnoreLanguage = undefined
+  if (state.settings[did].hotLanguages == null)
+    state.settings[did].hotLanguages = [Util.getUserLanguage()]
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].replyControl == null)

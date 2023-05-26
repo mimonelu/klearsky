@@ -131,6 +131,8 @@
   "globalline": "グローバルライン",
 
   "hot": "What's Hot",
+  "selectLanguages": "言語の選択",
+  "selectLanguagesDetail": "複数選択可。ひとつも選択しないとすべて表示されます。",
 
   "search": "検索",
   "suggestionSearch": "おすすめ",
