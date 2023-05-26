@@ -446,7 +446,9 @@ function scrollListener () {
 
 // D&D用処理
 
-function onDragEnter () {
+function onDragEnter (event: DragEvent) {
+  const types = event.dataTransfer?.types
+  if (types == null || !types.includes("Files")) return
   state.isDragOver = true
 }
 
