@@ -135,7 +135,7 @@ interface TIAtpWrapper {
     oldFeeds: Array<TTFeed>,
     limit?: number,
     cursor?: string
-  ): Promise<undefined | string>
+  ): Promise<undefined | false | string>
   fetchInviteCodes(this: TIAtpWrapper): Promise<null | TTInviteCode[]>
   fetchKeywordSearch(
     this: TIAtpWrapper,
@@ -164,14 +164,14 @@ interface TIAtpWrapper {
     values: Array<TTNotificationGroup>,
     limit?: number,
     cursor?: string
-  ): Promise<null | {
+  ): Promise<null | false | {
     cursor?: string
     newNotificationCount: number
   }>
   fetchPosts(
     this: TIAtpWrapper,
     uris: Array<string>
-  ): Promise<null | Array<TTPost>>
+  ): Promise<null | false | Array<TTPost>>
   fetchPostThread(
     this: TIAtpWrapper,
     uri: string,
@@ -199,7 +199,7 @@ interface TIAtpWrapper {
     repostControl?: Array<number>,
     limit?: number,
     cursor?: string
-  ): Promise<undefined | string>
+  ): Promise<undefined | false | string>
   fetchUserSearch(
     this: TIAtpWrapper,
     users: Array<TTUser>,

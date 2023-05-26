@@ -338,17 +338,18 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
 }
 
 async function fetchHotFeeds (direction: "old" | "new") {
-  const cursor: undefined | string =
+  const cursor: undefined | false | string =
     await state.atp.fetchHotFeeds(
       state.currentHotFeeds,
       consts.limitOfFetchHotFeeds,
       direction === "old" ? state.currentHotCursor : undefined
     )
-  if (cursor != null) state.currentHotCursor = cursor
+  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchHotFeeds")
+  else if (cursor != null) state.currentHotCursor = cursor
 }
 
 async function fetchTimeline (direction: "old" | "new") {
-  const cursor: undefined | string =
+  const cursor: undefined | false | string =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
       state.currentSetting.replyControl,
@@ -356,7 +357,8 @@ async function fetchTimeline (direction: "old" | "new") {
       consts.limitOfFetchTimeline,
       direction === "old" ? state.timelineCursor : undefined
     )
-  if (cursor != null) state.timelineCursor = cursor
+  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
+  else if (cursor != null) state.timelineCursor = cursor
 }
 
 async function fetchPostThread () {
@@ -366,7 +368,7 @@ async function fetchPostThread () {
 }
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
-  const result: null | {
+  const result: null | false | {
     cursor?: string
     newNotificationCount: number
   } = await state.atp.fetchNotifications(
@@ -374,8 +376,8 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
     limit,
     direction === "new" ? undefined : state.notificationCursor
   )
-  if (result == null) return
-  state.notificationCursor = result.cursor
+  if (result === false) state.openErrorPopup("errorApiFailed", "main-state/fetchNotifications")
+  else if (result != null) state.notificationCursor = result.cursor
 }
 
 async function fetchFollowers (direction: "new" | "old") {

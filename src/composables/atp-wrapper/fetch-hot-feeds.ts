@@ -6,16 +6,17 @@ export default async function (
   oldFeeds: Array<TTFeed>,
   limit?: number,
   cursor?: string
-): Promise<undefined | string> {
+): Promise<undefined | false | string> {
   if (this.agent == null) return
   const query: AppBskyUnspeccedGetPopular.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
-  const response: AppBskyUnspeccedGetPopular.Response = await (
-    this.agent as BskyAgent
-  ).api.app.bsky.unspecced.getPopular(query)
+  const response: AppBskyUnspeccedGetPopular.Response =
+    await (this.agent as BskyAgent).api.app.bsky.unspecced.getPopular(query)
+      .then((value: AppBskyUnspeccedGetPopular.Response) => value)
+      .catch((error: any) => error)
   console.log("[klearsky/getPopular]", response)
-  if (!response.success) return
+  if (!response.success) return false
 
   // TODO:
   AtpUtil.coherentResponses(response.data.feed as Array<TTFeed>)
