@@ -22,7 +22,7 @@ function changeSetting () {
 
 async function resetSettings () {
   Util.blurElement()
-  const result = await mainState.openConfirmationPopup($t("resetSettings"), "Klearskyの設定をリセットします。よろしいですか？")
+  const result = await mainState.openConfirmationPopup($t("resetSettings"), $t("resetSettingsDetail"))
   if (!result) return
   mainState.resetSettings()
   location.reload()
