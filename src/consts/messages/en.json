@@ -237,6 +237,10 @@
   "lightning": "Lightning",
   "lightningDescription": "Once you set up the LN-URL or Lightning Address as the payment destination for Lightning payments, a payment link (a.k.a. Zap button) will be given to your posts.",
 
+  "development": "Development",
+  "resetSettings": "Reset settings",
+  "resetSettingsDetail": "Reset Klearsky settings. Are you sure?",
+
   "inviteCodes": "Invite Codes",
   "confirmInviteCodes": "Confirm invite codes",
   "copyInviteCode": "Copy",

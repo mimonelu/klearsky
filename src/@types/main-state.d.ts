@@ -30,6 +30,7 @@ type TTSetting = {
   hideNumberOfReaction?: boolean
   postAnonymization?: boolean
   lightning?: string
+  [k: string]: any
 }
 
 type TTSettings = {
@@ -138,6 +139,7 @@ type MainState = {
   settings: TTSettings
   currentSetting: TTSetting
   saveSettings: () => void
+  resetSettings: () => void
   updateSettings: () => void
   updateI18nSetting: () => void
   updateColorThemeSetting: () => void

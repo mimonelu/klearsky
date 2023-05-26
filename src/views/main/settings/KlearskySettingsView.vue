@@ -3,8 +3,11 @@ import { inject } from "vue"
 import Checkboxes from "@/components/Checkboxes.vue"
 import ColorTheme from "@/components/ColorTheme.vue"
 import Radios from "@/components/Radios.vue"
+import Util from "@/composables/util"
 import languages from "@/consts/ui-languages.json"
 import settings from "@/consts/settings.json"
+
+const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
@@ -15,6 +18,14 @@ function saveSetting () {
 function changeSetting () {
   mainState.saveSettings()
   mainState.updateSettings()
+}
+
+async function resetSettings () {
+  Util.blurElement()
+  const result = await mainState.openConfirmationPopup($t("resetSettings"), "Klearskyの設定をリセットします。よろしいですか？")
+  if (!result) return
+  mainState.resetSettings()
+  location.reload()
 }
 </script>
 
@@ -287,6 +298,17 @@ function changeSetting () {
           <ul class="notification-list">
             <li>{{ $t("lightningDescription") }}</li>
           </ul>
+        </div>
+      </div>
+
+      <!-- 設定のリセット -->
+      <div class="settings-section">
+        <div class="settings-section__header">🔧 {{ $t("development") }}</div>
+        <div class="settings-section__body">
+          <button
+            class="button--important"
+            @click.stop="resetSettings"
+          >{{ $t("resetSettings") }}</button>
         </div>
       </div>
     </div>

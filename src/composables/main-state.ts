@@ -85,10 +85,13 @@ const state = reactive<MainState>({
   fetchFollowers,
   fetchFollowings,
   fetchSuggestions,
+
   saveSettings,
+  resetSettings,
   updateSettings,
   updateI18nSetting,
   updateColorThemeSetting,
+
   updateUserProfile,
   openSendPostPopup,
   closeSendPostPopup,
@@ -470,6 +473,15 @@ function saveSettings () {
   if (state.settings[did].lightning == null)
     state.settings[did].lightning = undefined
   state.currentSetting = state.settings[did]
+  Util.saveStorage("settings", state.settings)
+}
+
+function resetSettings () {
+  const did = state.atp.session?.did
+  if (did == null) return
+  Object.keys(state.settings[did]).forEach((key: string) => {
+    delete state.settings[did][key]
+  })
   Util.saveStorage("settings", state.settings)
 }
 
