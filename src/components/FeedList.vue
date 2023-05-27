@@ -8,7 +8,6 @@ const props = defineProps<{
   type: "author" | "authorReposts" | "authorLikes" | "hot" | "post" | "timeline";
   feeds: null | Array<TTFeed>;
   hasLoadButton?: boolean;
-  isMasonry?: boolean;
 }>()
 
 const mainState = inject("state") as MainState

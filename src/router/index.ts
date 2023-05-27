@@ -13,6 +13,9 @@ import HomeView from "@/views/main/HomeView.vue"
 import TimelineView from "@/views/main/home/TimelineView.vue"
 import GloballineView from "@/views/main/home/GloballineView.vue"
 
+// Main - Custom Feeds
+import CustomFeedsView from "@/views/main/CustomFeedsView.vue"
+
 // Main - Profile
 import ProfileView from "@/views/main/ProfileView.vue"
 import AuthorPostView from "@/views/main/profile/AuthorPostView.vue"
@@ -61,6 +64,11 @@ const router = createRouter({
           path: "/hot",
           name: "hot",
           component: HotView,
+        },
+        {
+          path: "/feeds",
+          name: "feeds",
+          component: CustomFeedsView,
         },
         {
           path: "/notifications",

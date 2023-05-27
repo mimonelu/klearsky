@@ -113,6 +113,9 @@ type MainState = {
   globallineNumberOfMessages: number
   globallineTotalTime: number
 
+  currentFeedGenerators: Array<TTFeedGenerator>
+  fetchPopularFeedGenerators: () => Promise<void>
+
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string
   notificationCount: number

@@ -57,7 +57,6 @@ function saveSettings () {
       type="hot"
       :feeds="state.filteredFeeds"
       :hasLoadButton="true"
-      :isMasonry="true"
     />
     <SelectLanguagesPopup
       v-if="state.selectLanguagesPopupDisplay"

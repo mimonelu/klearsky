@@ -87,6 +87,8 @@ const state = reactive<MainState>({
   fetchFollowings,
   fetchSuggestions,
 
+  fetchPopularFeedGenerators,
+
   saveSettings,
   resetSettings,
   updateSettings,
@@ -426,6 +428,15 @@ async function fetchSuggestions (direction: "new" | "old") {
       consts.limitOfFetchSuggestionSearch,
       direction === "new" ? undefined : state.currentSearchSuggestionCursor
     )
+}
+
+async function fetchPopularFeedGenerators () {
+  state.listProcessing = true
+  const feeds = await state.atp.fetchPopularFeedGenerators()
+  state.listProcessing = false
+  if (feeds == null) return
+  if (feeds === false) state.openErrorPopup("errorApiFailed", "main-state/fetchPopularFeedGenerators")
+  state.currentFeedGenerators = feeds as Array<TTFeedGenerator>
 }
 
 function saveSettings () {

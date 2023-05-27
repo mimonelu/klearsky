@@ -189,6 +189,7 @@ function resetState () {
   state.globallineNumberOfPosts = 0
   state.globallineNumberOfMessages = 0
   state.globallineTotalTime = 0
+  state.currentFeedGenerators = []
   state.inviteCodes = []
   state.notifications = []
   state.notificationCursor = undefined
@@ -342,6 +343,10 @@ async function processPage (pageName?: null | RouteRecordName) {
       }
       case "hot": {
         await state.fetchHotFeeds("new")
+        break
+      }
+      case "feeds": {
+        await state.fetchPopularFeedGenerators()
         break
       }
       case "post": {
