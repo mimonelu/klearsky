@@ -31,8 +31,11 @@ function moveToBottom () {
       class="link-button"
       :to="{ name: 'profile-post', query: { handle: mainState.atp.session?.handle } }"
       :data-is-focus="
-        mainState.currentPath.startsWith('/profile/') &&
-        mainState.currentQuery.handle === mainState.atp.session?.handle
+        (
+          mainState.currentPath.startsWith('/profile/') &&
+          mainState.currentQuery.handle === mainState.atp.session?.handle
+        ) ||
+        mainState.currentPath.startsWith('/profile/edit')
       "
     >
       <img
@@ -58,7 +61,8 @@ function moveToBottom () {
     <!-- カスタムフィードボタン -->
     <RouterLink
       class="link-button"
-      to="/feeds"
+      to="/feeds/popular"
+      :data-is-focus="mainState.currentPath.startsWith('/feeds/')"
     >
       <div class="icon">
         <SVGIcon name="rss" />

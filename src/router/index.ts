@@ -15,6 +15,8 @@ import GloballineView from "@/views/main/home/GloballineView.vue"
 
 // Main - Custom Feeds
 import CustomFeedsView from "@/views/main/CustomFeedsView.vue"
+import PopularFeedsView from "@/views/main/feeds/PopularFeedsView.vue"
+import FeedsTimelineView from "@/views/main/feeds/FeedsTimelineView.vue"
 
 // Main - Profile
 import ProfileView from "@/views/main/ProfileView.vue"
@@ -56,11 +58,6 @@ const router = createRouter({
           component: TimelineView,
         },
         {
-          path: "/feeds",
-          name: "feeds",
-          component: CustomFeedsView,
-        },
-        {
           path: "/notifications",
           name: "notifications",
           component: NotificationsView,
@@ -90,6 +87,24 @@ const router = createRouter({
               path: "globalline",
               name: "globalline-home",
               component: GloballineView,
+            },
+          ],
+        },
+        {
+          path: "/feeds",
+          name: "feeds",
+          component: CustomFeedsView,
+          redirect: "/feeds/popular",
+          children: [
+            {
+              path: "popular",
+              name: "feeds-popular",
+              component: PopularFeedsView,
+            },
+            {
+              path: "timeline",
+              name: "feeds-timeline",
+              component: FeedsTimelineView,
             },
           ],
         },

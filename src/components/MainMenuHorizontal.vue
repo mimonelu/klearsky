@@ -18,8 +18,11 @@ async function openSendPostPopup () {
       class="link-button profile-button"
       :to="{ name: 'profile-post', query: { handle: mainState.atp.session?.handle } }"
       :data-is-focus="
-        mainState.currentPath.startsWith('/profile/') &&
-        mainState.currentQuery.handle === mainState.atp.session?.handle
+        (
+          mainState.currentPath.startsWith('/profile/') &&
+          mainState.currentQuery.handle === mainState.atp.session?.handle
+        ) ||
+        mainState.currentPath.startsWith('/profile/edit')
       "
     >
       <img
@@ -41,7 +44,8 @@ async function openSendPostPopup () {
     <!-- カスタムフィードボタン -->
     <RouterLink
       class="link-button"
-      to="/feeds"
+      to="/feeds/popular"
+      :data-is-focus="mainState.currentPath.startsWith('/feeds/')"
     >
       <SVGIcon name="rss" />
     </RouterLink>

@@ -343,8 +343,9 @@ async function processPage (pageName?: null | RouteRecordName) {
         await state.fetchHotFeeds("new")
         break
       }
-      case "feeds": {
-        await state.fetchPopularFeedGenerators()
+      case "feeds-popular": {
+        if (state.currentFeedGenerators.length === 0)
+          await state.fetchPopularFeedGenerators()
         break
       }
       case "post": {
