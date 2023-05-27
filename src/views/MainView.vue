@@ -188,6 +188,9 @@ function resetState () {
   state.globallineProfiles = {}
   state.globallineNumberOfPosts = 0
   state.currentFeedGenerators = []
+  state.currentCustomUri = undefined
+  state.currentCustomFeeds = []
+  state.currentCustomCursor = undefined
   state.inviteCodes = []
   state.notifications = []
   state.notificationCursor = undefined
@@ -340,12 +343,19 @@ async function processPage (pageName?: null | RouteRecordName) {
         break
       }
       case "hot-home": {
-        await state.fetchHotFeeds("new")
+        if (state.currentHotFeeds.length === 0)
+          await state.fetchHotFeeds("new")
         break
       }
       case "feeds-popular": {
         if (state.currentFeedGenerators.length === 0)
           await state.fetchPopularFeedGenerators()
+        break
+      }
+      case "feeds-timeline": {
+        if (state.currentCustomUri !== state.currentQuery.feed &&
+            state.currentCustomFeeds.length === 0)
+          await state.fetchCustomFeeds("new")
         break
       }
       case "post": {

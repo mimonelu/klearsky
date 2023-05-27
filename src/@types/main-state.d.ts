@@ -113,6 +113,10 @@ type MainState = {
 
   currentFeedGenerators: Array<TTFeedGenerator>
   fetchPopularFeedGenerators: () => Promise<void>
+  currentCustomUri?: string
+  currentCustomFeeds: Array<TTFeed>
+  currentCustomCursor?: string
+  fetchCustomFeeds: (direction: "new" | "old") => Promise<void>
 
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string

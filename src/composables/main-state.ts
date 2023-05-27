@@ -88,6 +88,7 @@ const state = reactive<MainState>({
   fetchSuggestions,
 
   fetchPopularFeedGenerators,
+  fetchCustomFeeds,
 
   saveSettings,
   resetSettings,
@@ -437,6 +438,23 @@ async function fetchPopularFeedGenerators () {
   if (feeds == null) return
   if (feeds === false) state.openErrorPopup("errorApiFailed", "main-state/fetchPopularFeedGenerators")
   state.currentFeedGenerators = feeds as Array<TTFeedGenerator>
+}
+
+async function fetchCustomFeeds (direction: "old" | "new") {
+  if (state.currentCustomUri !== state.currentQuery.feed) {
+    state.currentCustomFeeds.splice(0)
+    state.currentCustomCursor = undefined
+  }
+  const cursor: undefined | false | string =
+    await state.atp.fetchCustomFeeds(
+      state.currentCustomFeeds,
+      state.currentQuery.feed,
+      consts.limitOfFetchTimeline,
+      direction === "old" ? state.currentCustomCursor : undefined
+    )
+  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
+  else if (cursor != null) state.currentCustomCursor = cursor
+  state.currentCustomUri = state.currentQuery.feed
 }
 
 function saveSettings () {

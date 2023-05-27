@@ -7,15 +7,15 @@ const mainState = inject("state") as MainState
 
 <template>
   <FeedList
-    class="timeline-view"
-    type="timeline"
-    :feeds="mainState.timelineFeeds"
+    class="feeds-timeline-view"
+    type="feeds-timeline"
+    :feeds="mainState.currentCustomFeeds"
     :hasLoadButton="true"
   />
 </template>
 
 <style lang="scss" scoped>
-.timeline-view {
+.feeds-timeline-view {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

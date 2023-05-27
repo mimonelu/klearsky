@@ -112,6 +112,13 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchCustomFeeds(
+    this: TIAtpWrapper,
+    oldFeeds: Array<TTFeed>,
+    feed: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | false | string>
   fetchFirstPost(
     this: TIAtpWrapper,
     handle: string
