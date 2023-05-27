@@ -38,12 +38,12 @@ async function openSendPostPopup () {
       <SVGIcon name="home" />
     </RouterLink>
 
-    <!-- HOTボタン -->
+    <!-- カスタムフィードボタン -->
     <RouterLink
-      class="link-button hot-button"
-      to="/hot"
+      class="link-button"
+      to="/feeds"
     >
-      <SVGIcon name="fire" />
+      <SVGIcon name="rss" />
     </RouterLink>
 
     <!-- 検索ボタン -->
@@ -133,19 +133,6 @@ async function openSendPostPopup () {
       max-width: var(--button-size);
       min-height: var(--button-size);
       max-height: var(--button-size);
-    }
-  }
-
-  // HOTボタン
-  &.hot-button {
-    .svg-icon {
-      fill: rgba(var(--hot-color), 0.75);
-    }
-
-    &:focus, &:hover {
-      .svg-icon {
-        fill: rgb(var(--hot-color));
-      }
     }
   }
 

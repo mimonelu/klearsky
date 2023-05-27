@@ -43,6 +43,7 @@ import radioOff from "@/svg/radio-off.svg?raw"
 import radioOn from "@/svg/radio-on.svg?raw"
 import remove from "@/svg/remove.svg?raw"
 import repost from "@/svg/repost.svg?raw"
+import rss from "@/svg/rss.svg?raw"
 import search from "@/svg/search.svg?raw"
 import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
@@ -96,6 +97,7 @@ const icons: { [k: string]: string } = {
   radioOn,
   remove,
   repost,
+  rss,
   search,
   sendPost,
   setting,

@@ -55,15 +55,15 @@ function moveToBottom () {
       <div class="label">{{ $t("home") }}</div>
     </RouterLink>
 
-    <!-- HOTボタン -->
+    <!-- カスタムフィードボタン -->
     <RouterLink
-      class="link-button hot-button"
-      to="/hot"
+      class="link-button"
+      to="/feeds"
     >
       <div class="icon">
-        <SVGIcon name="fire" />
+        <SVGIcon name="rss" />
       </div>
-      <div class="label">{{ $t("hot") }}</div>
+      <div class="label">{{ $t("customFeeds") }}</div>
     </RouterLink>
 
     <!-- 検索ボタン -->
@@ -243,19 +243,6 @@ function moveToBottom () {
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
     background-color: rgba(var(--accent-color), 0.25);
-  }
-
-  // HOTボタン
-  &.hot-button {
-    .svg-icon {
-      fill: rgba(var(--hot-color), 0.75);
-    }
-
-    &:focus, &:hover {
-      .svg-icon {
-        fill: rgb(var(--hot-color));
-      }
-    }
   }
 
   // ポスト送信ポップアップトリガー

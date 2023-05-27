@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import FeedList from "@/components/FeedList.vue"
-import PageHeader from "@/components/PageHeader.vue"
 import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -39,25 +38,32 @@ function saveSettings () {
 
 <template>
   <div class="hot-view">
-    <PageHeader
-      :hasBackButton="true"
-      :title="$t('hot')"
-      :subTitle="`${state.filteredFeeds.length} / ${mainState.currentHotFeeds.length} ${$t('posts')}`"
-    >
-      <template #right>
+    <FeedList
+      type="hot"
+      :feeds="state.filteredFeeds"
+      :hasLoadButton="true"
+    />
+
+    <!-- HOTヘッダー -->
+    <Portal to="home-view-header-portal">
+      <div class="hot-header">
+        <!-- 情報 -->
+        <div class="info">
+          <SVGIcon name="post" />
+          <span>{{ state.filteredFeeds.length.toLocaleString() }} / {{ mainState.currentHotFeeds.length.toLocaleString() }}</span>
+        </div>
+
+        <!-- 言語選択 -->
         <button
           class="button--bordered"
           @click.stop="openSelectLanguagesPopup"
         >
           <SVGIcon name="translate" />
         </button>
-      </template>
-    </PageHeader>
-    <FeedList
-      type="hot"
-      :feeds="state.filteredFeeds"
-      :hasLoadButton="true"
-    />
+      </div>
+    </Portal>
+
+    <!-- 言語選択ポップアップ -->
     <SelectLanguagesPopup
       v-if="state.selectLanguagesPopupDisplay"
       :state="mainState.currentSetting"
@@ -77,16 +83,6 @@ function saveSettings () {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-}
-
-.page-header:deep() {
-  & > h1 {
-    color: rgb(var(--hot-color));
-  }
-
-  .button--bordered {
-    margin: -1rem 0;
-  }
 }
 
 .feed-list {
@@ -116,6 +112,39 @@ function saveSettings () {
         }
       }
     }
+  }
+}
+
+// HOTヘッダー
+.hot-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  grid-gap: 1rem;
+
+  // 情報
+  & > .info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-gap: 0.5rem;
+
+    & > .svg-icon {
+      fill: rgba(var(--fg-color), 0.5);
+      font-size: 0.875rem;
+    }
+
+    & > span {
+      color: rgba(var(--fg-color), 0.75);
+      font-family: monospace;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+  }
+
+  // 言語選択
+  & > button {
+    margin: -1rem 0 -1rem auto;
   }
 }
 </style>

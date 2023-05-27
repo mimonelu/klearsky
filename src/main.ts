@@ -5,6 +5,7 @@ import "@/scss/main.scss"
 import "@/composables/vendor/intl-segmenter-polyfill.min.js"
 
 import { createApp } from "vue"
+import PortalVue from "portal-vue"
 import App from "@/App.vue"
 import i18n from "@/plugins/i18n"
 import router from "@/router"
@@ -15,6 +16,7 @@ import ja from "@/consts/messages/ja.json"
 
 const app = createApp(App)
 app.use(router)
+app.use(PortalVue)
 
 // Messages - Setup
 const messages = { en, ja }

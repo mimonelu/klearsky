@@ -1,4 +1,5 @@
 declare module "*.vue"
+declare module "portal-vue"
 declare module "crypto-js/aes.js"
 declare module "crypto-js/enc-utf8.js"
 declare module "crypto-js/md5.js"

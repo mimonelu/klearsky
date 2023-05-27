@@ -187,8 +187,6 @@ function resetState () {
   state.globallinePosts = []
   state.globallineProfiles = {}
   state.globallineNumberOfPosts = 0
-  state.globallineNumberOfMessages = 0
-  state.globallineTotalTime = 0
   state.currentFeedGenerators = []
   state.inviteCodes = []
   state.notifications = []
@@ -341,7 +339,7 @@ async function processPage (pageName?: null | RouteRecordName) {
         await state.fetchTimeline("new")
         break
       }
-      case "hot": {
+      case "hot-home": {
         await state.fetchHotFeeds("new")
         break
       }

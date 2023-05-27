@@ -32,7 +32,7 @@ onBeforeUnmount(() => {
 
 function connect () {
   const domain = mainState.atp.session?.__service?.replace(/^\w+:\/+/, "") ?? ""
-  state.subscriber = new SubscribeRepos(onError, undefined, undefined, onMessage, onPost)
+  state.subscriber = new SubscribeRepos(onError, undefined, undefined, undefined, onPost)
   state.subscriber.connect(`wss://${domain}/xrpc/com.atproto.sync.subscribeRepos`)
   createProfileTimer()
 }
@@ -43,10 +43,6 @@ function disconnect () {
 
 function onError () {
   disconnect()
-}
-
-function onMessage () {
-  mainState.globallineNumberOfMessages ++
 }
 
 async function onPost (did: string, post: any) {
@@ -83,10 +79,6 @@ let timer: undefined | NodeJS.Timer = undefined
 
 function createProfileTimer () {
   timer = setTimeout(async () => {
-    // TODO: 適切な場所へ移動すること
-    if (state.subscriber?.socket?.readyState === 1)
-      mainState.globallineTotalTime ++
-
     try {
       for (const did in mainState.globallineProfiles) {
         const profile = mainState.globallineProfiles[did]
@@ -106,15 +98,6 @@ function createProfileTimer () {
 function destroyProfileTimer () {
   clearInterval(timer)
   timer = undefined
-}
-
-// 経過時間
-
-function spendTime () {
-  const hours = ("00" + Math.floor(mainState.globallineTotalTime / 60 / 60)).slice(- 2)
-  const minutes = ("00" + Math.floor(mainState.globallineTotalTime / 60)).slice(- 2)
-  const second = ("00" + (mainState.globallineTotalTime % 60)).slice(- 2)
-  return `${hours}:${minutes}:${second}`
 }
 
 // ポストアクション
@@ -219,49 +202,46 @@ function onMutated () {
       </div>
     </div>
 
-    <!-- グローバルラインフッター -->
-    <div class="footer">
-      <!-- 電源ボタン -->
-      <button
-        :class="state.subscriber?.socketState === 2 ? 'button--important' : 'button--bordered'"
-        class="power-button"
-        @click.stop="toggleConnect"
-      >
-        <template v-if="state.subscriber?.socketState === 0">
-          <SVGIcon name="play" />
-        </template>
-        <template v-else-if="state.subscriber?.socketState === 1">
-          <Loader />
-        </template>
-        <template v-else-if="state.subscriber?.socketState === 2">
-          <SVGIcon name="pause" />
-        </template>
-      </button>
+    <!-- グローバルラインヘッダー -->
+    <Portal to="home-view-header-portal">
+      <div class="globalline-footer">
+        <!-- 情報 -->
+        <div class="info">
+          <dl>
+            <dt>
+              <SVGIcon name="post" />
+            </dt>
+            <dd>{{ mainState.globallinePosts.length.toLocaleString() }} / {{ mainState.globallineNumberOfPosts.toLocaleString() }}</dd>
+          </dl>
+        </div>
 
-      <!-- 電源ボタン -->
-      <div class="info">
-        <dl>
-          <dt>
-            <SVGIcon name="post" />
-          </dt>
-          <dd>{{ mainState.globallinePosts.length.toLocaleString() }} / {{ mainState.globallineNumberOfPosts.toLocaleString() }} / {{ mainState.globallineNumberOfMessages.toLocaleString() }}</dd>
-        </dl>
-        <dl>
-          <dt>
-            <SVGIcon name="clock" />
-          </dt>
-          <dd>{{ spendTime() }}</dd>
-        </dl>
+        <!-- 電源ボタン -->
+        <button
+          :class="state.subscriber?.socketState === 2 ? 'button--important' : 'button--bordered'"
+          class="power-button"
+          @click.stop="toggleConnect"
+        >
+          <template v-if="state.subscriber?.socketState === 0">
+            <SVGIcon name="play" />
+          </template>
+          <template v-else-if="state.subscriber?.socketState === 1">
+            <SVGIcon name="menu" />
+            <Loader />
+          </template>
+          <template v-else-if="state.subscriber?.socketState === 2">
+            <SVGIcon name="pause" />
+          </template>
+        </button>
+
+        <!-- グローバルライン設定ポップアップトリガー -->
+        <button
+          class="button--bordered globalline-settings-popup-button"
+          @click.stop="openGloballineSettingsPopup"
+        >
+          <SVGIcon name="setting" />
+        </button>
       </div>
-
-      <!-- グローバルライン設定ポップアップトリガー -->
-      <button
-        class="button--bordered globalline-settings-popup-button"
-        @click.stop="openGloballineSettingsPopup"
-      >
-        <SVGIcon name="setting" />
-      </button>
-    </div>
+    </Portal>
 
     <!-- グローバルライン設定ポップアップ -->
     <GloballineSettingsPopup
@@ -327,69 +307,59 @@ function onMutated () {
   }
 }
 
-// グローバルラインフッター
-.footer {
-  background-color: rgba(var(--bg-color), var(--main-area-opacity));
-  border-top: 1px solid rgba(var(--fg-color), 0.25);
+// グローバルラインヘッダー
+.globalline-footer {
   display: flex;
-  grid-gap: 1rem;
-  padding: 1rem;
-  position: sticky;
-  z-index: 1;
-
-  // SP幅以上
-  @media (min-width: $sp-width) {
-    bottom: 0;
-  }
-
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
-    bottom: var(--sp-menu-height);
-  }
+  align-items: center;
+  grid-gap: 0.75rem;
 
   // 電源ボタン
   .power-button {
     position: relative;
     min-width: 4rem;
 
+    & > .svg-icon--menu {
+      fill: transparent;
+    }
+
     & > .loader {
       font-size: 0.5rem;
     }
   }
 
+  // 情報
   & > .info {
     display: flex;
-    flex-direction: column;
     flex-grow: 1;
-    justify-content: center;
+    align-content: center;
+    justify-content: flex-end;
     grid-gap: 0.5rem;
 
     & > dl {
       display: flex;
       align-items: center;
       grid-gap: 0.5rem;
-      font-size: 0.875rem;
 
       & > dt {
         & > .svg-icon {
           fill: rgba(var(--fg-color), 0.5);
+          font-size: 0.875rem;
         }
       }
 
       & > dd {
         color: rgba(var(--fg-color), 0.75);
+        font-family: monospace;
+        line-height: 1.25;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
     }
   }
-}
 
-// フローバルライン設定ポップアップ
-.globalline-settings-popup-button {
-  & > .svg-icon {
-    font-size: 1rem;
+  button {
+    margin: -1rem 0;
   }
 }
 </style>

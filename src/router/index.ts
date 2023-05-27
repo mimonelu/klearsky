@@ -4,13 +4,13 @@ import NotFoundView from "@/views/NotFoundView.vue"
 // Main
 import MainView from "@/views/MainView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
-import HotView from "@/views/main/HotView.vue"
 import NotificationsView from "@/views/main/NotificationsView.vue"
 import PostView from "@/views/main/PostView.vue"
 
 // Main - Home
 import HomeView from "@/views/main/HomeView.vue"
 import TimelineView from "@/views/main/home/TimelineView.vue"
+import HotView from "@/views/main/home/HotView.vue"
 import GloballineView from "@/views/main/home/GloballineView.vue"
 
 // Main - Custom Feeds
@@ -56,16 +56,6 @@ const router = createRouter({
           component: TimelineView,
         },
         {
-          path: "/global",
-          name: "global",
-          component: GloballineView,
-        },
-        {
-          path: "/hot",
-          name: "hot",
-          component: HotView,
-        },
-        {
           path: "/feeds",
           name: "feeds",
           component: CustomFeedsView,
@@ -90,6 +80,11 @@ const router = createRouter({
               path: "timeline",
               name: "timeline-home",
               component: TimelineView,
+            },
+            {
+              path: "hot",
+              name: "hot-home",
+              component: HotView,
             },
             {
               path: "globalline",

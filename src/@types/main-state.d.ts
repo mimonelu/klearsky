@@ -110,8 +110,6 @@ type MainState = {
   globallinePosts: Array<TTPost>
   globallineProfiles: { [did: string]: any }
   globallineNumberOfPosts: number
-  globallineNumberOfMessages: number
-  globallineTotalTime: number
 
   currentFeedGenerators: Array<TTFeedGenerator>
   fetchPopularFeedGenerators: () => Promise<void>
