@@ -20,4 +20,20 @@ const mainState = inject("state") as MainState
   flex-direction: column;
   flex-grow: 1;
 }
+
+.feed-list:deep() {
+  .feeds {
+    padding: 0.25em 0;
+  }
+
+  .feed {
+    border: 1px solid rgba(var(--accent-color), 0.25);
+    border-radius: var(--border-radius);
+    margin: 0.25em 0.5em;
+
+    &:not(:empty):not(:last-child)::after {
+      border-bottom-style: none;
+    }
+  }
+}
 </style>

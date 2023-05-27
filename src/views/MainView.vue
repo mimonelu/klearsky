@@ -353,7 +353,7 @@ async function processPage (pageName?: null | RouteRecordName) {
         break
       }
       case "feeds-timeline": {
-        if (state.currentCustomUri !== state.currentQuery.feed &&
+        if (state.currentCustomUri !== state.currentQuery.feed ||
             state.currentCustomFeeds.length === 0)
           await state.fetchCustomFeeds("new")
         break
