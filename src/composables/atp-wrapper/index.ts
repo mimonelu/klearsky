@@ -31,6 +31,8 @@ import fetchLabels from "@/composables/atp-wrapper/fetch-labels"
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
+import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch-official-feed-generators"
+import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch-popular-feed-generators"
 import fetchPosts from "@/composables/atp-wrapper/fetch-posts"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchPreferences from "@/composables/atp-wrapper/fetch-preferences"
@@ -101,6 +103,8 @@ prototype.fetchLabels = fetchLabels
 prototype.fetchMutingUsers = fetchMutingUsers
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications
+prototype.fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
+prototype.fetchPopularFeedGenerators = fetchPopularFeedGenerators
 prototype.fetchPosts = fetchPosts
 prototype.fetchPostThread = fetchPostThread
 prototype.fetchPreferences = fetchPreferences

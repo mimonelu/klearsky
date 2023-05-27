@@ -168,6 +168,8 @@ interface TIAtpWrapper {
     cursor?: string
     newNotificationCount: number
   }>
+  fetchOfficialFeedGenerators(this: TIAtpWrapper): Promise<undefined | false | Array<TTFeedGenerator>>
+  fetchPopularFeedGenerators(this: TIAtpWrapper): Promise<undefined | false | Array<TTFeedGenerator>>
   fetchPosts(
     this: TIAtpWrapper,
     uris: Array<string>

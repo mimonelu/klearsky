@@ -258,3 +258,16 @@ type TTProfile = {
   }
   [k: string]: unknown
 }
+
+type TTFeedGenerator = {
+  avatar: string
+  cid: string
+  creator: TTUser
+  description: string
+  did: string
+  displayName: string
+  indexedAt:string
+  likeCount: number
+  uri: string
+  viewer: { [k: string]: any }
+}
