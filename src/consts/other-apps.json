@@ -30,6 +30,11 @@
     "postUri": "https://skyline.gay/profile/{handle}/post/{rkey}"
   },
   {
+    "name": "sunriseApp",
+    "profileUri": "https://sunrise.li/u/{handle}",
+    "postUri": "https://sunrise.li/u/{handle}/skeet/{rkey}"
+  },
+  {
     "name": "tokimekiApp",
     "profileUri": "https://tokimekibluesky.vercel.app/profile/{handle}",
     "postUri": "https://tokimekibluesky.vercel.app/profile/{handle}/post/{rkey}",

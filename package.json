@@ -1,6 +1,6 @@
 {
   "name": "klearsky",
-  "version": "0.9.29",
+  "version": "0.9.30",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
     "format": "npx prettier --write src/@types/**/* && npx prettier --write src/composables/**/*"
   },
   "dependencies": {
-    "@atproto/api": "0.3.4",
+    "@atproto/api": "0.3.8",
     "@ipld/car": "^5.1.1",
     "browser-image-compression": "^2.0.2",
     "cbor-x": "^1.5.2",
@@ -20,6 +20,7 @@
     "date-fns": "^2.29.3",
     "hotkeys-js": "^3.10.2",
     "multiformats": "^11.0.2",
+    "portal-vue": "^3.0.0-beta.0",
     "postcss": "^8.4.21",
     "sass": "^1.58.3",
     "the-new-css-reset": "^1.8.4",

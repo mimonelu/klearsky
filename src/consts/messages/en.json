@@ -11,6 +11,7 @@
   "hide": "Hide",
   "error": "Error",
   "alt": "ALT",
+  "posts": "posts",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -105,6 +106,7 @@
   "kiteApp": "Kite",
   "laikaApp": "Laika",
   "skylineApp": "Skyline",
+  "sunriseApp": "Sunrise",
   "tokimekiApp": "TOKIMEKI Bluesky",
   "atlasApp": "BSky Atlas",
   "showSource": "Show source",
@@ -126,9 +128,12 @@
 
   "home": "Home",
   "timeline": "Timeline",
+  "customFeeds": "Custom Feeds",
   "globalline": "Globalline",
 
   "hot": "What's Hot",
+  "selectLanguages": "Select languages",
+  "selectLanguagesDetail": "Multiple selections allowed. If select nothing, all posts be displayed.",
 
   "search": "Search",
   "suggestionSearch": "Suggestions",
@@ -236,6 +241,10 @@
 
   "lightning": "Lightning",
   "lightningDescription": "Once you set up the LN-URL or Lightning Address as the payment destination for Lightning payments, a payment link (a.k.a. Zap button) will be given to your posts.",
+
+  "development": "Development",
+  "resetSettings": "Reset settings",
+  "resetSettingsDetail": "Reset Klearsky settings. Are you sure?",
 
   "inviteCodes": "Invite Codes",
   "confirmInviteCodes": "Confirm invite codes",

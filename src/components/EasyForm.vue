@@ -186,6 +186,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
         <!-- ファイル選択ボックス -->
         <FileBox
           v-else-if="item.type === 'file'"
+          :files="item.state[item.model]"
           :disabled="item.disabled"
           :accept="item.accept"
           :multiple="item.isMultipleFile"

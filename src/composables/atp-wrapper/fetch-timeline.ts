@@ -8,7 +8,7 @@ export default async function (
   repostControl?: Array<number>,
   limit?: number,
   cursor?: string
-): Promise<undefined | string> {
+): Promise<undefined | false | string> {
   if (this.agent == null) return
   const query: AppBskyFeedGetTimeline.QueryParams = {
     // TODO: 要調査
@@ -17,11 +17,12 @@ export default async function (
   }
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
-  const response: AppBskyFeedGetTimeline.Response = await (
-    this.agent as BskyAgent
-  ).getTimeline(query)
+  const response: AppBskyFeedGetTimeline.Response =
+    await (this.agent as BskyAgent).getTimeline(query)
+      .then((value: AppBskyFeedGetTimeline.Response) => value)
+      .catch((error: any) => error)
   console.log("[klearsky/getTimeline]", response)
-  if (!response.success) return
+  if (!response.success) return false
   ;(response.data.feed as Array<TTFeed>).forEach((feed: TTFeed) => {
     // リプライ
     if (feed.reply != null) {
@@ -102,7 +103,8 @@ export default async function (
   })
 
   // TODO:
-  AtpUtil.coherentResponses(response.data.feed as Array<TTFeed>)
+  AtpUtil.coherentResponses(response.data.feed)
+  AtpUtil.detectLanguages(response.data.feed)
   AtpUtil.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
   AtpUtil.sortFeeds(oldFeeds)
 

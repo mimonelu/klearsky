@@ -20,6 +20,7 @@ import fetchAuthorReposts from "@/composables/atp-wrapper/fetch-author-reposts"
 import fetchAuthorLikes from "@/composables/atp-wrapper/fetch-author-likes"
 import fetchBlob from "@/composables/atp-wrapper/fetch-blob"
 import fetchBlockingUsers from "@/composables/atp-wrapper/fetch-blocking-users"
+import fetchCustomFeeds from "@/composables/atp-wrapper/fetch-custom-feeds"
 import fetchFirstPost from "@/composables/atp-wrapper/fetch-first-post"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
@@ -31,6 +32,8 @@ import fetchLabels from "@/composables/atp-wrapper/fetch-labels"
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
+import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch-official-feed-generators"
+import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch-popular-feed-generators"
 import fetchPosts from "@/composables/atp-wrapper/fetch-posts"
 import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
 import fetchPreferences from "@/composables/atp-wrapper/fetch-preferences"
@@ -91,6 +94,7 @@ prototype.fetchAuthorReposts = fetchAuthorReposts
 prototype.fetchAuthorLikes = fetchAuthorLikes
 prototype.fetchBlob = fetchBlob
 prototype.fetchBlockingUsers = fetchBlockingUsers
+prototype.fetchCustomFeeds = fetchCustomFeeds
 prototype.fetchFirstPost = fetchFirstPost
 prototype.fetchFollowers = fetchFollowers
 prototype.fetchFollowings = fetchFollowings
@@ -101,6 +105,8 @@ prototype.fetchLabels = fetchLabels
 prototype.fetchMutingUsers = fetchMutingUsers
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications
+prototype.fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
+prototype.fetchPopularFeedGenerators = fetchPopularFeedGenerators
 prototype.fetchPosts = fetchPosts
 prototype.fetchPostThread = fetchPostThread
 prototype.fetchPreferences = fetchPreferences

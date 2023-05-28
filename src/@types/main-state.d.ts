@@ -2,6 +2,7 @@ type TTSetting = {
   language?: string
   autoTranslation?: boolean
   autoTranslationIgnoreLanguage?: string
+  hotLanguages?: Array<string>
   fontSize?: string
   replyControl?: Array<number>
   repostControl?: Array<number>
@@ -30,6 +31,7 @@ type TTSetting = {
   hideNumberOfReaction?: boolean
   postAnonymization?: boolean
   lightning?: string
+  [k: string]: any
 }
 
 type TTSettings = {
@@ -69,6 +71,8 @@ type MainState = {
   currentFollowingsCursor?: string
 
   currentPreferences: Array<TTPreference>
+  feedPreferences: ComputedRef<undefined | TTPreference>
+
   getContentWarningVisibility: (
     authorLabels?: Array<TTLabel>,
     postLabels?: Array<TTLabel>,
@@ -108,8 +112,13 @@ type MainState = {
   globallinePosts: Array<TTPost>
   globallineProfiles: { [did: string]: any }
   globallineNumberOfPosts: number
-  globallineNumberOfMessages: number
-  globallineTotalTime: number
+
+  currentFeedGenerators: Array<TTFeedGenerator>
+  fetchPopularFeedGenerators: () => Promise<void>
+  currentCustomUri?: string
+  currentCustomFeeds: Array<TTFeed>
+  currentCustomCursor?: string
+  fetchCustomFeeds: (direction: "new" | "old") => Promise<void>
 
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string
@@ -127,17 +136,22 @@ type MainState = {
     type: TTPostType
     post?: TTPost
     text?: string
+    fileList?: FileList
   }
 
   imagePopupProps: {
     display: boolean
-    largeUri: string
-    smallUri: string
+    images: Array<{
+      largeUri: string
+      smallUri: string
+    }>
+    index: number
   }
 
   settings: TTSettings
   currentSetting: TTSetting
   saveSettings: () => void
+  resetSettings: () => void
   updateSettings: () => void
   updateI18nSetting: () => void
   updateColorThemeSetting: () => void
@@ -174,6 +188,9 @@ type MainState = {
     post?: TTPost
   }
 
+  // D&D
+  isDragOver: boolean
+
   $setI18n?: Function
   $getI18n?: Function
 
@@ -196,7 +213,8 @@ type MainState = {
   openSendPostPopup: (
     type: TTPostType,
     post?: TTPost,
-    text?: string
+    text?: string,
+    fileList?: FileList
   ) => Promise<boolean>
   closeSendPostPopup: (done: boolean) => void
   openRepostUsersPopup: (uri: string) => void

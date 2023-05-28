@@ -112,6 +112,13 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchCustomFeeds(
+    this: TIAtpWrapper,
+    oldFeeds: Array<TTFeed>,
+    feed: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<undefined | false | string>
   fetchFirstPost(
     this: TIAtpWrapper,
     handle: string
@@ -135,7 +142,7 @@ interface TIAtpWrapper {
     oldFeeds: Array<TTFeed>,
     limit?: number,
     cursor?: string
-  ): Promise<undefined | string>
+  ): Promise<undefined | false | string>
   fetchInviteCodes(this: TIAtpWrapper): Promise<null | TTInviteCode[]>
   fetchKeywordSearch(
     this: TIAtpWrapper,
@@ -164,14 +171,16 @@ interface TIAtpWrapper {
     values: Array<TTNotificationGroup>,
     limit?: number,
     cursor?: string
-  ): Promise<null | {
+  ): Promise<null | false | {
     cursor?: string
     newNotificationCount: number
   }>
+  fetchOfficialFeedGenerators(this: TIAtpWrapper): Promise<undefined | false | Array<TTFeedGenerator>>
+  fetchPopularFeedGenerators(this: TIAtpWrapper): Promise<undefined | false | Array<TTFeedGenerator>>
   fetchPosts(
     this: TIAtpWrapper,
     uris: Array<string>
-  ): Promise<null | Array<TTPost>>
+  ): Promise<null | false | Array<TTPost>>
   fetchPostThread(
     this: TIAtpWrapper,
     uri: string,
@@ -199,7 +208,7 @@ interface TIAtpWrapper {
     repostControl?: Array<number>,
     limit?: number,
     cursor?: string
-  ): Promise<undefined | string>
+  ): Promise<undefined | false | string>
   fetchUserSearch(
     this: TIAtpWrapper,
     users: Array<TTUser>,

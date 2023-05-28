@@ -11,6 +11,7 @@
   "hide": "隠す",
   "error": "エラー",
   "alt": "ALT",
+  "posts": "ポスト",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -105,6 +106,7 @@
   "kiteApp": "Kite",
   "laikaApp": "Laika",
   "skylineApp": "Skyline",
+  "sunriseApp": "Sunrise",
   "tokimekiApp": "TOKIMEKI Bluesky",
   "atlasApp": "BSky Atlas",
   "showSource": "ソースを表示する",
@@ -126,9 +128,12 @@
 
   "home": "ホーム",
   "timeline": "タイムライン",
+  "customFeeds": "カスタムフィード",
   "globalline": "グローバルライン",
 
   "hot": "What's Hot",
+  "selectLanguages": "言語の選択",
+  "selectLanguagesDetail": "複数選択可。ひとつも選択しないとすべて表示されます。",
 
   "search": "検索",
   "suggestionSearch": "おすすめ",
@@ -236,6 +241,10 @@
 
   "lightning": "Lightning",
   "lightningDescription": "ライトニング決済の支払先となるLN-URLやLightning Addressを設定すると、あなたのポストに支払リンク（いわゆるZapボタン）が付与されます。",
+
+  "development": "開発",
+  "resetSettings": "設定をリセットする",
+  "resetSettingsDetail": "Klearskyの設定をリセットします。よろしいですか？",
 
   "inviteCodes": "招待コード",
   "confirmInviteCodes": "招待コードを確認する",

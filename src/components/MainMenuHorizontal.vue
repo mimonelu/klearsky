@@ -18,8 +18,11 @@ async function openSendPostPopup () {
       class="link-button profile-button"
       :to="{ name: 'profile-post', query: { handle: mainState.atp.session?.handle } }"
       :data-is-focus="
-        mainState.currentPath.startsWith('/profile/') &&
-        mainState.currentQuery.handle === mainState.atp.session?.handle
+        (
+          mainState.currentPath.startsWith('/profile/') &&
+          mainState.currentQuery.handle === mainState.atp.session?.handle
+        ) ||
+        mainState.currentPath.startsWith('/profile/edit')
       "
     >
       <img
@@ -38,12 +41,13 @@ async function openSendPostPopup () {
       <SVGIcon name="home" />
     </RouterLink>
 
-    <!-- HOTボタン -->
+    <!-- カスタムフィードボタン -->
     <RouterLink
-      class="link-button hot-button"
-      to="/hot"
+      class="link-button"
+      to="/feeds/popular"
+      :data-is-focus="mainState.currentPath.startsWith('/feeds/')"
     >
-      <SVGIcon name="fire" />
+      <SVGIcon name="rss" />
     </RouterLink>
 
     <!-- 検索ボタン -->
@@ -133,19 +137,6 @@ async function openSendPostPopup () {
       max-width: var(--button-size);
       min-height: var(--button-size);
       max-height: var(--button-size);
-    }
-  }
-
-  // HOTボタン
-  &.hot-button {
-    .svg-icon {
-      fill: rgba(var(--hot-color), 0.75);
-    }
-
-    &:focus, &:hover {
-      .svg-icon {
-        fill: rgb(var(--hot-color));
-      }
     }
   }
 

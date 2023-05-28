@@ -31,11 +31,12 @@ const state = reactive<MainState>({
     display: false,
     type: "post",
     post: undefined,
+    fileList: undefined,
   },
   imagePopupProps: {
     display: false,
-    largeUri: "",
-    smallUri: "",
+    images: [],
+    index: 0,
   },
   errorPopupProps: {
     display: false,
@@ -77,7 +78,14 @@ const state = reactive<MainState>({
   fetchAuthorReposts,
   fetchAuthorLikes,
   getContentWarningVisibility,
+
   getConcernedPreferences,
+  feedPreferences: computed((): undefined | TTPreference => {
+    return state.currentPreferences.find((preference: TTPreference) => {
+      return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
+    })
+  }),
+
   fetchHotFeeds,
   fetchTimeline,
   fetchPostThread,
@@ -85,10 +93,16 @@ const state = reactive<MainState>({
   fetchFollowers,
   fetchFollowings,
   fetchSuggestions,
+
+  fetchPopularFeedGenerators,
+  fetchCustomFeeds,
+
   saveSettings,
+  resetSettings,
   updateSettings,
   updateI18nSetting,
   updateColorThemeSetting,
+
   updateUserProfile,
   openSendPostPopup,
   closeSendPostPopup,
@@ -335,17 +349,18 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
 }
 
 async function fetchHotFeeds (direction: "old" | "new") {
-  const cursor: undefined | string =
+  const cursor: undefined | false | string =
     await state.atp.fetchHotFeeds(
       state.currentHotFeeds,
       consts.limitOfFetchHotFeeds,
       direction === "old" ? state.currentHotCursor : undefined
     )
-  if (cursor != null) state.currentHotCursor = cursor
+  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchHotFeeds")
+  else if (cursor != null) state.currentHotCursor = cursor
 }
 
 async function fetchTimeline (direction: "old" | "new") {
-  const cursor: undefined | string =
+  const cursor: undefined | false | string =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
       state.currentSetting.replyControl,
@@ -353,7 +368,8 @@ async function fetchTimeline (direction: "old" | "new") {
       consts.limitOfFetchTimeline,
       direction === "old" ? state.timelineCursor : undefined
     )
-  if (cursor != null) state.timelineCursor = cursor
+  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
+  else if (cursor != null) state.timelineCursor = cursor
 }
 
 async function fetchPostThread () {
@@ -363,7 +379,7 @@ async function fetchPostThread () {
 }
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
-  const result: null | {
+  const result: null | false | {
     cursor?: string
     newNotificationCount: number
   } = await state.atp.fetchNotifications(
@@ -371,8 +387,8 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
     limit,
     direction === "new" ? undefined : state.notificationCursor
   )
-  if (result == null) return
-  state.notificationCursor = result.cursor
+  if (result === false) state.openErrorPopup("errorApiFailed", "main-state/fetchNotifications")
+  else if (result != null) state.notificationCursor = result.cursor
 }
 
 async function fetchFollowers (direction: "new" | "old") {
@@ -422,6 +438,32 @@ async function fetchSuggestions (direction: "new" | "old") {
     )
 }
 
+async function fetchPopularFeedGenerators () {
+  state.listProcessing = true
+  const feeds = await state.atp.fetchPopularFeedGenerators()
+  state.listProcessing = false
+  if (feeds == null) return
+  if (feeds === false) state.openErrorPopup("errorApiFailed", "main-state/fetchPopularFeedGenerators")
+  state.currentFeedGenerators = feeds as Array<TTFeedGenerator>
+}
+
+async function fetchCustomFeeds (direction: "old" | "new") {
+  if (state.currentCustomUri !== state.currentQuery.feed) {
+    state.currentCustomFeeds.splice(0)
+    state.currentCustomCursor = undefined
+  }
+  const cursor: undefined | false | string =
+    await state.atp.fetchCustomFeeds(
+      state.currentCustomFeeds,
+      state.currentQuery.feed,
+      consts.limitOfFetchTimeline,
+      direction === "old" ? state.currentCustomCursor : undefined
+    )
+  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
+  else if (cursor != null) state.currentCustomCursor = cursor
+  state.currentCustomUri = state.currentQuery.feed
+}
+
 function saveSettings () {
   const did = state.atp.session?.did
   if (did == null) return
@@ -435,6 +477,8 @@ function saveSettings () {
     state.settings[did].autoTranslation = false
   if (state.settings[did].autoTranslationIgnoreLanguage == null)
     state.settings[did].autoTranslationIgnoreLanguage = undefined
+  if (state.settings[did].hotLanguages == null)
+    state.settings[did].hotLanguages = [Util.getUserLanguage()]
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].replyControl == null)
@@ -473,6 +517,15 @@ function saveSettings () {
   Util.saveStorage("settings", state.settings)
 }
 
+function resetSettings () {
+  const did = state.atp.session?.did
+  if (did == null) return
+  Object.keys(state.settings[did]).forEach((key: string) => {
+    delete state.settings[did][key]
+  })
+  Util.saveStorage("settings", state.settings)
+}
+
 function updateSettings () {
   updateI18nSetting()
   updateFontSizeSetting()
@@ -504,11 +557,12 @@ function updateColorThemeSetting () {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (type: TTPostType, post?: TTPost, text?: string): Promise<boolean> {
+async function openSendPostPopup (type: TTPostType, post?: TTPost, text?: string, fileList?: FileList): Promise<boolean> {
   state.sendPostPopupProps.display = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post
   state.sendPostPopupProps.text = text
+  state.sendPostPopupProps.fileList = fileList
   await Util.waitProp(() => state.sendPostPopupProps.display, false)
   return isSendPostDone
 }

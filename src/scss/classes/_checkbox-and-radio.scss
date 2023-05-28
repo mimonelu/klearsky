@@ -37,6 +37,7 @@
     & > span {
       color: rgba(var(--fg-color), 0.875);
       line-height: 1.5;
+      word-break: break-all;
     }
     &:focus > span,
     &:hover > span {

@@ -52,8 +52,11 @@ function isFollowed (): boolean {
 
 function openImagePopup (uri: string) {
   if (uri === "") return
-  mainState.imagePopupProps.largeUri = uri
-  mainState.imagePopupProps.smallUri = ""
+  mainState.imagePopupProps.images = [{
+    largeUri: uri,
+    smallUri: "",
+  }]
+  mainState.imagePopupProps.index = 0
   mainState.imagePopupProps.display = true
 }
 

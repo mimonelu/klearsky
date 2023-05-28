@@ -95,10 +95,18 @@ type TTPreference = {
   enabled?: boolean
   label?: string
   visibility?: TTContentVisibility
+
+  // カスタムフィード
+  pinned?: Array<string>
+  saved?: Array<string>
 }
 
 type TTPost = {
   __createdAt?: string // Injected
+  __languages?: {
+    lang: string
+    accuracy: number
+  }[] // Injected
   __reason?: TTReason // Injected
   __translatedText?: string // Injected // 自動翻訳
   author: TTUser
@@ -253,4 +261,17 @@ type TTProfile = {
     muted: boolean
   }
   [k: string]: unknown
+}
+
+type TTFeedGenerator = {
+  avatar: string
+  cid: string
+  creator: TTUser
+  description: string
+  did: string
+  displayName: string
+  indexedAt:string
+  likeCount: number
+  uri: string
+  viewer: { [k: string]: any }
 }

@@ -45,6 +45,12 @@ function onActivateBackButton () {
       class="separator"
     />
     <h2 v-if="subTitle">{{ subTitle }}</h2>
+    <div
+      v-if="$slots.right != null"
+      class="right"
+    >
+      <slot name="right" />
+    </div>
   </header>
 </template>
 
@@ -55,15 +61,19 @@ function onActivateBackButton () {
   cursor: pointer;
   display: grid;
   align-items: center;
-  grid-gap: 1rem;
-  padding: 1rem;
+  grid-gap: 0.5rem;
+  padding: 0.75rem;
   position: sticky;
   top: 0;
+  min-height: 3rem;
   z-index: 1;
-  &[data-has-back-button="false"] {
+  &:has(> :nth-child(2)) {
+    grid-template-columns: auto 1fr;
+  }
+  &:has(> :nth-child(3)) {
     grid-template-columns: auto auto 1fr;
   }
-  &[data-has-back-button="true"] {
+  &:has(> :nth-child(4)) {
     grid-template-columns: auto auto auto 1fr;
   }
 
@@ -82,8 +92,8 @@ function onActivateBackButton () {
 
 .back-button {
   cursor: pointer;
-  margin: -1rem;
-  padding: 1rem;
+  margin: -1rem -0.25rem -1rem -0.75rem;
+  padding: 1rem 1.25rem;
   &:focus, &:hover {
     & > .svg-icon {
       fill: rgb(var(--fg-color));
@@ -91,7 +101,7 @@ function onActivateBackButton () {
   }
 
   & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
+    fill: rgba(var(--fg-color), 0.5);
   }
 }
 
@@ -99,5 +109,10 @@ function onActivateBackButton () {
   background-color: rgb(var(--fg-color));
   width: 1rem;
   height: 1px;
+}
+
+.right {
+  flex-grow: 1;
+  margin-left: auto;
 }
 </style>

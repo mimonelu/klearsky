@@ -35,6 +35,7 @@ import SendPostPopup from "@/components/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
 import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 import state from "@/composables/main-state"
 import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
@@ -186,8 +187,10 @@ function resetState () {
   state.globallinePosts = []
   state.globallineProfiles = {}
   state.globallineNumberOfPosts = 0
-  state.globallineNumberOfMessages = 0
-  state.globallineTotalTime = 0
+  state.currentFeedGenerators = []
+  state.currentCustomUri = undefined
+  state.currentCustomFeeds = []
+  state.currentCustomCursor = undefined
   state.inviteCodes = []
   state.notifications = []
   state.notificationCursor = undefined
@@ -222,6 +225,9 @@ function resetState () {
   // ポストレポート送信ポップアッププロパティ
   state.sendPostReportPopupProps.display = false
   state.sendPostReportPopupProps.post = undefined
+
+  // D&D用処理
+  state.isDragOver = false
 }
 
 async function autoLogin (): Promise<boolean> {
@@ -336,8 +342,20 @@ async function processPage (pageName?: null | RouteRecordName) {
         await state.fetchTimeline("new")
         break
       }
-      case "hot": {
-        await state.fetchHotFeeds("new")
+      case "hot-home": {
+        if (state.currentHotFeeds.length === 0)
+          await state.fetchHotFeeds("new")
+        break
+      }
+      case "feeds-popular": {
+        if (state.currentFeedGenerators.length === 0)
+          await state.fetchPopularFeedGenerators()
+        break
+      }
+      case "feeds-timeline": {
+        if (state.currentCustomUri !== state.currentQuery.feed ||
+            state.currentCustomFeeds.length === 0)
+          await state.fetchCustomFeeds("new")
         break
       }
       case "post": {
@@ -439,6 +457,27 @@ function scrollListener () {
     isEnter = false
   }
 }
+
+// D&D用処理
+
+function onDragEnter (event: DragEvent) {
+  const types = event.dataTransfer?.types
+  if (types == null || !types.includes("Files")) return
+  state.isDragOver = true
+}
+
+function onDragLeave () {
+  state.isDragOver = false
+}
+
+function onDrop (event: DragEvent) {
+  const files = event.dataTransfer?.files
+  if (state.sendPostPopupProps.display)
+    state.sendPostPopupProps.fileList = files
+  else
+    state.openSendPostPopup("post", undefined, undefined, files)
+  state.isDragOver = false
+}
 </script>
 
 <template>
@@ -452,6 +491,7 @@ function scrollListener () {
       '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 1.0,
       '--image-aspect-ratio': state.currentSetting.imageAspectRatio ?? '1 / 1'
     }"
+    @dragenter.prevent="onDragEnter"
   >
     <!-- 壁紙 -->
     <div
@@ -536,8 +576,8 @@ function scrollListener () {
     <!-- イメージポップアップ -->
     <ImagePopup
       v-if="state.imagePopupProps.display"
-      :largeUri="state.imagePopupProps.largeUri"
-      :smallUri="state.imagePopupProps.smallUri"
+      :images="state.imagePopupProps.images"
+      :index="state.imagePopupProps.index"
       @close="state.imagePopupProps.display = false"
     />
 
@@ -547,8 +587,22 @@ function scrollListener () {
       :type="state.sendPostPopupProps.type"
       :post="state.sendPostPopupProps.post"
       :text="state.sendPostPopupProps.text"
+      :fileList="state.sendPostPopupProps.fileList"
       @closeSnedPostPopup="closeSendPostPopup"
     />
+
+    <!-- 　D&Dオーバーレイ -->
+    <div
+      v-if="state.isDragOver"
+      class="drag-and-drop-overlay"
+      @click="onDragLeave"
+      @dragenter.prevent
+      @dragover.prevent
+      @dragleave.prevent="onDragLeave"
+      @drop.prevent.stop="onDrop"
+    >
+      <SVGIcon name="image" />
+    </div>
 
     <!-- ログインポップアップ -->
     <LoginPopup
@@ -764,6 +818,27 @@ function scrollListener () {
   & > .sub-menu {
     position: fixed;
     width: $menu-max-width;
+  }
+}
+
+// D&Dオーバーレイ
+.drag-and-drop-overlay {
+  background-color: rgba(var(--bg-color), 0.5);
+  border: 0.5rem  solid rgb(var(--accent-color));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+
+  & > .svg-icon {
+    fill: rgb(var(--accent-color));
+    font-size: 4rem;
+    pointer-events: none;
   }
 }
 

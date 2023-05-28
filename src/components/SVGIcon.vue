@@ -4,6 +4,7 @@ import alert from "@/svg/alert.svg?raw"
 import arrowLeft from "@/svg/arrow-left.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
+import bookmark from "@/svg/bookmark.svg?raw"
 import check from "@/svg/check.svg?raw"
 import checkboxOff from "@/svg/checkbox-off.svg?raw"
 import checkboxOn from "@/svg/checkbox-on.svg?raw"
@@ -43,6 +44,7 @@ import radioOff from "@/svg/radio-off.svg?raw"
 import radioOn from "@/svg/radio-on.svg?raw"
 import remove from "@/svg/remove.svg?raw"
 import repost from "@/svg/repost.svg?raw"
+import rss from "@/svg/rss.svg?raw"
 import search from "@/svg/search.svg?raw"
 import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
@@ -57,6 +59,7 @@ const icons: { [k: string]: string } = {
   arrowLeft,
   at,
   bell,
+  bookmark,
   check,
   checkboxOff,
   checkboxOn,
@@ -96,6 +99,7 @@ const icons: { [k: string]: string } = {
   radioOn,
   remove,
   repost,
+  rss,
   search,
   sendPost,
   setting,

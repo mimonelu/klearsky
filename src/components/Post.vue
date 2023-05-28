@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-import { detect } from "@/../node_modules/tinyld/dist/tinyld.light.node.js" // TODO: 適切なパスで記述すること
 import AvatarLink from "@/components/AvatarLink.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
@@ -264,6 +264,19 @@ async function updateThisPostThread () {
   emit("updateThisPostThread", posts)
 }
 
+// 画像ポップアップ
+
+function openImagePopup (imageIndex: number) {
+  mainState.imagePopupProps.images = state.images.map((image: TTImage) => {
+    return {
+      smallUri: image.thumb ?? "/img/void.png",
+      largeUri: image.fullsize ?? "/img/void.png"
+    }
+  })
+  mainState.imagePopupProps.index = imageIndex
+  mainState.imagePopupProps.display = true
+}
+
 // ラベル対応
 
 function showWarningContent () {
@@ -286,11 +299,12 @@ async function translateText (forceTranslate: boolean) {
     state.translation = "ignore"
     return
   }
-  const srcLanguage = detect(text)
-  if (!srcLanguage) {
+  const srcLanguages = props.post.__languages
+  if (!srcLanguages?.length) {
     state.translation = "ignore"
     return
   }
+  const srcLanguage = srcLanguages[0].lang
   if (!forceTranslate) {
     const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
     if (autoTranslationIgnoreLanguage != null) {
@@ -522,6 +536,7 @@ async function translateText (forceTranslate: boolean) {
                   :key="post.cid"
                   :image="image"
                   :did="post.author.did"
+                  @click.stop="openImagePopup(imageIndex)"
                 />
               </div>
             </div>
@@ -534,15 +549,16 @@ async function translateText (forceTranslate: boolean) {
                 :key="imageIndex"
                 :image="image"
                 :did="post.author.did"
+                @click.stop="openImagePopup(imageIndex)"
               />
             </div>
           </template>
         </template>
 
-        <!-- 引用リポスト -->
-        <template v-if="post.embed?.record && (post.embed.record as any).$type != null">
-          <!-- ブロックされていない -->
-          <template v-if="(post.embed.record.$type as string)?.indexOf('#viewBlocked') === - 1">
+        <!-- 埋込コンテンツ -->
+        <template v-if="post.embed?.record != null">
+          <!-- 引用リポスト -->
+          <template v-if="post.embed.record.$type === 'app.bsky.embed.record#viewRecord'">
             <div class="repost">
               <Post
                 :level="(level ?? 1) + 1"
@@ -552,16 +568,23 @@ async function translateText (forceTranslate: boolean) {
             </div>
           </template>
 
-          <!-- ブロックされている -->
+          <!-- 引用リポスト：ブロック中／見つからない -->
           <div
-            v-else
+            v-else-if="
+              post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
+              post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'
+            "
             class="notification-message"
           >
-            <div class="notification-message__header">
-              <SVGIcon name="alert" />
-              <span>{{ $t("postBlocked") }}</span>
-            </div>
+            <SVGIcon name="alert" />
+            <div class="notification-message__text">{{ $t("postBlocked") }}</div>
           </div>
+
+          <!-- フィードカード -->
+          <FeedCard
+            v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
+            :generator="post.embed.record as unknown as TTFeedGenerator"
+          />
         </template>
 
         <!-- リアクションコンテナ -->

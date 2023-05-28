@@ -12,13 +12,20 @@ const mainState = inject("state") as MainState
       <PageHeader
         :hasBackButton="true"
         :title="$t('home')"
-        :subTitle="mainState.atp.session?.handle ?? ''"
-      />
+      >
+        <template #right>
+          <PortalTarget name="home-view-header-portal" />
+        </template>
+      </PageHeader>
       <div class="tab">
         <RouterLink
           class="tab__button"
           to="/home/timeline"
         >{{ $t("timeline") }}</RouterLink>
+        <RouterLink
+          class="tab__button"
+          to="/home/hot"
+        >{{ $t("hot") }}</RouterLink>
         <RouterLink
           class="tab__button"
           to="/home/globalline"

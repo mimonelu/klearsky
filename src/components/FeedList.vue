@@ -1,14 +1,13 @@
 <script lang="ts" setup>
-import { inject, reactive, watch } from "vue"
+import { inject, watch } from "vue"
 import Feed from "@/components/Feed.vue"
 import LoadButton from "@/components/LoadButton.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{
-  type: "author" | "authorReposts" | "authorLikes" | "hot" | "post" | "timeline";
+  type: "author" | "authorReposts" | "authorLikes" | "feeds-timeline" | "hot" | "post" | "timeline";
   feeds: null | Array<TTFeed>;
   hasLoadButton?: boolean;
-  isMasonry?: boolean;
 }>()
 
 const mainState = inject("state") as MainState
@@ -28,6 +27,10 @@ async function fetchFeeds (direction: "new" | "old") {
       }
       case "authorLikes": {
         await mainState.fetchAuthorLikes(direction)
+        break
+      }
+      case "feeds-timeline": {
+        await mainState.fetchCustomFeeds(direction)
         break
       }
       case "hot": {

@@ -8,7 +8,7 @@ export default async function (
   values: Array<TTNotificationGroup>,
   limit?: number,
   cursor?: string
-): Promise<null | {
+): Promise<null | false | {
   cursor?: string
   newNotificationCount: number
 }> {
@@ -16,11 +16,12 @@ export default async function (
   const query: AppBskyNotificationListNotifications.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
-  const response: AppBskyNotificationListNotifications.Response = await (
-    this.agent as BskyAgent
-  ).listNotifications(query)
+  const response: AppBskyNotificationListNotifications.Response =
+    await (this.agent as BskyAgent).listNotifications(query)
+      .then((value: AppBskyNotificationListNotifications.Response) => value)
+      .catch((error: any) => error)
   console.log("[klearsky/listNotifications]", response)
-  if (!response.success) return null
+  if (!response.success) return false
 
   let newNotificationCount = 0
 
@@ -80,14 +81,14 @@ export default async function (
       group.reason !== "repost") return
     uris.add(group.reasonSubject as string)
   })
-  const posts: null | Array<TTPost> = await this.fetchPosts(Array.from(uris))
-  if (posts != null) {
+  const posts: null | false | Array<TTPost> = await this.fetchPosts(Array.from(uris))
+  if (posts === false) return false
+  if (posts != null)
     newValues.forEach((value: TTNotificationGroup) => {
       const post: undefined | TTPost =
         posts.find((post: TTPost) => value.reasonSubject === post.uri)
       if (post != null) value.post = post
     })
-  }
 
   values.splice(0, values.length, ...newValues)
 
