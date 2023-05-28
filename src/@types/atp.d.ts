@@ -95,6 +95,10 @@ type TTPreference = {
   enabled?: boolean
   label?: string
   visibility?: TTContentVisibility
+
+  // カスタムフィード
+  pinned?: Array<string>
+  saved?: Array<string>
 }
 
 type TTPost = {

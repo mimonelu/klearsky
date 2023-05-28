@@ -4,6 +4,7 @@ import alert from "@/svg/alert.svg?raw"
 import arrowLeft from "@/svg/arrow-left.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
+import bookmark from "@/svg/bookmark.svg?raw"
 import check from "@/svg/check.svg?raw"
 import checkboxOff from "@/svg/checkbox-off.svg?raw"
 import checkboxOn from "@/svg/checkbox-on.svg?raw"
@@ -58,6 +59,7 @@ const icons: { [k: string]: string } = {
   arrowLeft,
   at,
   bell,
+  bookmark,
   check,
   checkboxOff,
   checkboxOn,

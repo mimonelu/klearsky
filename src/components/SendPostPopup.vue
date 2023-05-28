@@ -50,7 +50,8 @@ const easyFormProps: TTEasyForm = {
       maxLengthWithSegmenter: true,
       rows: 6,
       focus: true,
-    }, {
+    },
+    {
       state,
       model: "url",
       type: "url",
@@ -58,7 +59,8 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "url",
       inputmode: "url",
       clearButton: true,
-    }, {
+    },
+    {
       state,
       model: "images",
       type: "file",

@@ -1,12 +1,21 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
-defineProps<{
+const props = defineProps<{
   generator: TTFeedGenerator
 }>()
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  saved: ComputedRef<boolean>
+}>({
+  saved: computed((): boolean => {
+    return mainState.feedPreferences?.saved
+      .some((pin: string) => pin === props.generator.uri) ?? false
+  }),
+})
 </script>
 
 <template>
@@ -18,30 +27,55 @@ const mainState = inject("state") as MainState
     } }"
     @click.stop
   >
-    <div class="feed-card__left">
+    <div class="feed-card__top">
+      <!-- フィード画像 -->
       <img
         class="feed-card__avatar"
         loading="lazy"
         :src="generator.avatar"
         alt=""
       >
-    </div>
-    <div class="feed-card__right">
-      <div class="feed-card__display-name">
-        <SVGIcon name="rss" />
-        <span>{{ generator.displayName }}</span>
-      </div>
-      <div class="feed-card__right__middle">
+
+      <div class="feed-card__top__right">
+        <!-- フィード名 -->
+        <div class="feed-card__display-name">
+          <SVGIcon name="rss" />
+          <span>{{ generator.displayName }}</span>
+        </div>
+
+        <!-- フィードライク数 -->
         <div class="feed-card__like-count">
           <SVGIcon name="heart" />
           <span>{{ generator.likeCount }}</span>
         </div>
+
+        <!-- フィード作成日時 -->
         <div class="feed-card__indexed-at">
           <SVGIcon name="clock" />
           <span>{{ mainState.formatDate(generator.indexedAt) }}</span>
         </div>
+
+        <div class="feed-card__top__right__right">
+          <!-- お気に入りフィード -->
+          <div
+            class="feed-card__bookmark"
+            :data-saved="state.saved"
+            @click.prevent.stop
+          >
+            <SVGIcon name="bookmark" />
+          </div>
+        </div>
       </div>
-      <div class="feed-card__description">{{ generator.description }}</div>
+    </div>
+
+    <!-- フィード説明文 -->
+    <div
+      class="feed-card__description"
+      dir="auto"
+    >{{ generator.description }}</div>
+
+    <div class="feed-card__bottom">
+      <!-- フィード作成者 -->
       <RouterLink
         class="feed-card__creator"
         :to="{ name: 'profile-post', query: { handle: generator.creator.handle } }"
@@ -61,13 +95,40 @@ const mainState = inject("state") as MainState
   border: 1px solid rgba(var(--accent-color), 0.25);
   border-radius: var(--border-radius);
   display: flex;
-  grid-gap: 1em;
+  flex-direction: column;
+  grid-gap: 0.5em;
   padding: 1em;
   &:focus, &:hover {
     border-color: rgb(var(--accent-color), 0.5);
   }
 
+  &__top {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.75em;
+
+    &__right {
+      display: grid;
+      grid-template-columns: auto max-content 1fr;
+      grid-template-areas:
+        "n n r"
+        "l i r";
+      flex-grow: 1;
+      grid-gap: 0.25em 0.5em;
+
+      &__right {
+        grid-area: r;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+        flex-grow: 1;
+      }
+    }
+  }
+
+  // フィード画像
   &__avatar {
+    grid-area: a;
     border: 1px solid rgba(var(--fg-color), 0.25);
     border-radius: var(--border-radius);
     display: block;
@@ -77,22 +138,13 @@ const mainState = inject("state") as MainState
     max-height: 3em;
   }
 
-  &__right {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    grid-gap: 0.25em;
-
-    &__middle {
-      display: flex;
-      grid-gap: 0.5em;
-    }
-  }
-
+  // フィード名
   &__display-name {
+    grid-area: n;
     display: flex;
     align-items: center;
     grid-gap: 0.25em;
+    overflow: hidden;
 
     & > .svg-icon {
       fill: rgb(var(--accent-color));
@@ -102,8 +154,9 @@ const mainState = inject("state") as MainState
     & > span {
       font-weight: bold;
       line-height: 1.25;
-      white-space: pre-wrap;
-      word-break: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
@@ -123,7 +176,10 @@ const mainState = inject("state") as MainState
     }
   }
 
+  // フィードライク数
   &__like-count {
+    grid-area: l;
+
     & > .svg-icon {
       fill: rgba(var(--like-color), 0.75);
     }
@@ -134,7 +190,10 @@ const mainState = inject("state") as MainState
     }
   }
 
+  // フィード作成日時
   &__indexed-at {
+    grid-area: i;
+
     & > .svg-icon {
       fill: rgba(var(--fg-color), 0.75);
     }
@@ -144,6 +203,21 @@ const mainState = inject("state") as MainState
     }
   }
 
+  // お気に入りフィード
+  &__bookmark {
+    margin: -1em;
+    padding: 1em;
+
+    & > .svg-icon {
+      fill: rgb(var(--accent-color));
+      font-size: 1.5em;
+    }
+    &[data-saved="false"] > .svg-icon {
+      opacity: 0.25;
+    }
+  }
+
+  // フィード説明文
   &__description {
     font-size: 0.875em;
     line-height: 1.25;
@@ -151,6 +225,14 @@ const mainState = inject("state") as MainState
     word-break: break-word;
   }
 
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-gap: 0.5em;
+  }
+
+  // フィード作成者
   &__creator {
     background-color: rgb(var(--bg-color));
     border: 1px solid rgb(var(--accent-color), 0.25);
@@ -159,7 +241,6 @@ const mainState = inject("state") as MainState
     grid-template-columns: auto 1fr auto;
     align-items: center;
     grid-gap: 0.5em;
-    margin: 0.25em 0 0 auto;
     padding: 0.5em 1em;
     &:focus, &:hover {
       border-color: rgb(var(--accent-color), 0.5);

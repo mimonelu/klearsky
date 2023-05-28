@@ -78,7 +78,14 @@ const state = reactive<MainState>({
   fetchAuthorReposts,
   fetchAuthorLikes,
   getContentWarningVisibility,
+
   getConcernedPreferences,
+  feedPreferences: computed((): undefined | TTPreference => {
+    return state.currentPreferences.find((preference: TTPreference) => {
+      return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
+    })
+  }),
+
   fetchHotFeeds,
   fetchTimeline,
   fetchPostThread,

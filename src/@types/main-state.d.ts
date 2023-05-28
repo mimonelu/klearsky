@@ -71,6 +71,8 @@ type MainState = {
   currentFollowingsCursor?: string
 
   currentPreferences: Array<TTPreference>
+  feedPreferences: ComputedRef<undefined | TTPreference>
+
   getContentWarningVisibility: (
     authorLabels?: Array<TTLabel>,
     postLabels?: Array<TTLabel>,
