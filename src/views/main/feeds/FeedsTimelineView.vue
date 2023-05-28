@@ -22,18 +22,12 @@ const mainState = inject("state") as MainState
 }
 
 .feed-list:deep() {
-  .feeds {
-    padding: 0.25em 0;
+  .feed:not(:last-child) {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   }
 
-  .feed {
-    border: 1px solid rgba(var(--accent-color), 0.25);
-    border-radius: var(--border-radius);
-    margin: 0.25em 0.5em;
-
-    &:not(:empty):not(:last-child)::after {
-      border-bottom-style: none;
-    }
+  .feed:not(:empty):not(:last-child)::after {
+    border-bottom-style: none;
   }
 }
 </style>

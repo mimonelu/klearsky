@@ -16,6 +16,7 @@ const mainState = inject("state") as MainState
       feed: generator.uri,
       displayName: generator.displayName,
     } }"
+    @click.stop
   >
     <div class="feed-card__left">
       <img
@@ -26,7 +27,10 @@ const mainState = inject("state") as MainState
       >
     </div>
     <div class="feed-card__right">
-      <div class="feed-card__display-name">{{ generator.displayName }}</div>
+      <div class="feed-card__display-name">
+        <SVGIcon name="rss" />
+        <span>{{ generator.displayName }}</span>
+      </div>
       <div class="feed-card__right__middle">
         <div class="feed-card__like-count">
           <SVGIcon name="heart" />
@@ -41,6 +45,7 @@ const mainState = inject("state") as MainState
       <RouterLink
         class="feed-card__creator"
         :to="{ name: 'profile-post', query: { handle: generator.creator.handle } }"
+        @click.stop
       >
         <SVGIcon name="person" />
         <div class="feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
@@ -85,10 +90,21 @@ const mainState = inject("state") as MainState
   }
 
   &__display-name {
-    font-weight: bold;
-    line-height: 1.25;
-    white-space: pre-wrap;
-    word-break: break-word;
+    display: flex;
+    align-items: center;
+    grid-gap: 0.25em;
+
+    & > .svg-icon {
+      fill: rgb(var(--accent-color));
+      font-size: 0.875em;
+    }
+
+    & > span {
+      font-weight: bold;
+      line-height: 1.25;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
   }
 
   &__like-count,

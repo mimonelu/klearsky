@@ -2,6 +2,7 @@
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
 import AvatarLink from "@/components/AvatarLink.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
@@ -554,10 +555,10 @@ async function translateText (forceTranslate: boolean) {
           </template>
         </template>
 
-        <!-- 引用リポスト -->
-        <template v-if="post.embed?.record && (post.embed.record as any).$type != null">
-          <!-- ブロックされていない -->
-          <template v-if="(post.embed.record.$type as string)?.indexOf('#viewBlocked') === - 1">
+        <!-- 埋込コンテンツ -->
+        <template v-if="post.embed?.record != null">
+          <!-- 引用リポスト -->
+          <template v-if="post.embed.record.$type === 'app.bsky.embed.record#viewRecord'">
             <div class="repost">
               <Post
                 :level="(level ?? 1) + 1"
@@ -567,16 +568,23 @@ async function translateText (forceTranslate: boolean) {
             </div>
           </template>
 
-          <!-- ブロックされている -->
+          <!-- 引用リポスト：ブロック中／見つからない -->
           <div
-            v-else
+            v-else-if="
+              post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
+              post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'
+            "
             class="notification-message"
           >
-            <div class="notification-message__header">
-              <SVGIcon name="alert" />
-              <span>{{ $t("postBlocked") }}</span>
-            </div>
+            <SVGIcon name="alert" />
+            <div class="notification-message__text">{{ $t("postBlocked") }}</div>
           </div>
+
+          <!-- フィードカード -->
+          <FeedCard
+            v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
+            :generator="post.embed.record as unknown as TTFeedGenerator"
+          />
         </template>
 
         <!-- リアクションコンテナ -->
