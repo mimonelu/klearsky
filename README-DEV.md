@@ -30,6 +30,7 @@
 ## Tools
 * svg-list.js
   * 使用中のSVGファイルを一覧できるHTMLを生成
+  * `node tools/svg-list.js`
 
 ## デザインリソース
 * ロゴのフォント: https://fonts.google.com/specimen/Albert+Sans?preview.text=Klearsky&preview.size=64&preview.text_type=custom&category=Sans+Serif,Display
