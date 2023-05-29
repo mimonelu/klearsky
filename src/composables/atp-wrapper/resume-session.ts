@@ -1,8 +1,4 @@
-import type {
-  AtpSessionData,
-  BskyAgent,
-  ComAtprotoServerGetSession,
-} from "@atproto/api"
+import type { AtpSessionData, BskyAgent, ComAtprotoServerGetSession } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

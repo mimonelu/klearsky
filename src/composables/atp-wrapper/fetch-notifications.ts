@@ -1,7 +1,4 @@
-import type {
-  AppBskyNotificationListNotifications,
-  BskyAgent,
-} from "@atproto/api"
+import type { AppBskyNotificationListNotifications, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,

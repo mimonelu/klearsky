@@ -3,9 +3,7 @@ import format from "date-fns/format"
 import intlFormatDistance from "date-fns/intlFormatDistance"
 import isSameYear from "date-fns/isSameYear"
 import { computed, reactive } from "vue"
-import type {
-  LocationQueryValue,
-} from "vue-router"
+import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util"
 import consts from "@/consts/consts.json"

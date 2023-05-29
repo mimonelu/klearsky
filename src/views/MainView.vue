@@ -1,20 +1,7 @@
 <script setup lang="ts">
-import {
-  inject,
-  nextTick,
-  onBeforeMount,
-  onBeforeUnmount,
-  onMounted,
-  onUnmounted,
-  provide
-} from "vue"
-import {
-  useRouter,
-  RouterView,
-  type LocationQueryValue,
-  type RouteLocationNormalized,
-  type RouteRecordName
-} from "vue-router"
+import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, provide } from "vue"
+import type { LocationQueryValue, RouteLocationNormalized, RouteRecordName } from "vue-router"
+import { useRouter } from "vue-router"
 import hotkeys from "hotkeys-js"
 import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
