@@ -110,7 +110,6 @@ onMounted(setDefaultValues)
 
 async function setDefaultValues () {
   state.processing = true
-  if (!mainState.mounted) await Util.waitProp(() => mainState.mounted, true)
   state.displayName = mainState.userProfile?.displayName ?? ""
   state.description = mainState.userProfile?.description ?? ""
   state.processing = false

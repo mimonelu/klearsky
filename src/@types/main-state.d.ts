@@ -123,6 +123,7 @@ type MainState = {
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string
   notificationCount: number
+  notificationFetchedFirst: boolean
 
   loginPopupDisplay: boolean
   loginPopupAutoDisplay: any // TODO:

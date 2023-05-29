@@ -62,12 +62,14 @@ onMounted(async () => {
   state.processing = true
   try {
     if (!await autoLogin()) return
-    await fetchPreferences()
+    await Promise.all([
+      fetchPreferences(),
+      state.fetchUserProfile(),
+    ])
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    state.fetchUserProfile()
     processPage(router.currentRoute.value.name)
   } finally {
     state.mounted = true
@@ -182,6 +184,7 @@ function resetState () {
   state.notifications = []
   state.notificationCursor = undefined
   state.notificationCount = 0
+  state.notificationFetchedFirst = false
   state.scrolledToBottom = false
   state.messagePopupDisplay = false
   state.messagePopupTitle = undefined
@@ -248,13 +251,15 @@ async function manualLogin (service: string, identifier: string, password: strin
     })
 
     resetState()
-    await fetchPreferences()
+    await Promise.all([
+      fetchPreferences(),
+      state.fetchUserProfile(),
+    ])
     state.loginPopupDisplay = false
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    state.fetchUserProfile()
     processPage(router.currentRoute.value.name)
   } finally {
     state.processing = false
@@ -374,22 +379,18 @@ function clearNotificationInterval () {
 
 async function setupNotificationInterval () {
   clearNotificationInterval()
-  await updateNotification(true)
+  await updateNotification()
   // @ts-ignore // TODO:
-  notificationTimer = setInterval(() => {
-    updateNotification(false)
-  }, consts.intervalOfFetchNotifications)
+  notificationTimer = setInterval(updateNotification, consts.intervalOfFetchNotifications)
 }
 
-async function updateNotification (forceUpdate: boolean) {
+async function updateNotification () {
   const count = await state.atp.fetchNotificationCount() ?? 0
   const canFetched = state.notificationCount < count
   if (count > 0) state.notificationCount = count
-  if (canFetched || forceUpdate)
-    await state.fetchNotifications(forceUpdate
-      ? consts.limitOfFetchNotifications
-      : Math.min(consts.limitOfFetchNotifications, count + 1) // NOTICE: 念のため + 1 している
-    , "new")
+  if (canFetched)
+    // NOTICE: 念のため + 1 している
+    await state.fetchNotifications(Math.min(consts.limitOfFetchNotifications, count + 1), "new")
 }
 
 async function fetchPreferences () {
@@ -506,7 +507,7 @@ function onDrop (event: DragEvent) {
 
       <!-- ルータービュー -->
       <div class="router-view-wrapper">
-        <RouterView />
+        <RouterView v-if="state.mounted" />
       </div>
 
       <!-- サブメニュー -->

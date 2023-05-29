@@ -4,6 +4,7 @@ import LoadButton from "@/components/LoadButton.vue"
 import NotificationList from "@/components/NotificationList.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import Util from "@/composables/util"
+import consts from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
@@ -19,7 +20,13 @@ onBeforeUnmount(() => {
   mainState.notificationCount = 0
 })
 
-onMounted(updateNotificationSeen)
+onMounted(() => {
+  updateNotificationSeen()
+  if (!mainState.notificationFetchedFirst) {
+    mainState.notificationFetchedFirst = true
+    fetchNotifications("new")
+  }
+})
 
 async function updateNotificationSeen () {
   if (mainState.notificationCount <= 0) return
@@ -34,11 +41,11 @@ function updateNotificationIsRead () {
   })
 }
 
-async function fetchNotifications (limit: number, direction: "new" | "old") {
+async function fetchNotifications (direction: "new" | "old") {
   Util.blurElement()
   state.processing = true
   try {
-    await mainState.fetchNotifications(limit, direction)
+    await mainState.fetchNotifications(consts.limitOfFetchNotifications, direction)
   } finally {
     state.processing = false
   }
@@ -46,7 +53,7 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
 
 // インフィニットスクロール
 watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchNotifications(25, 'old')
+  if (value) fetchNotifications("old")
 })
 </script>
 
@@ -60,7 +67,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <LoadButton
       direction="new"
       :processing="state.processing"
-      @activate="fetchNotifications(25, 'new')"
+      @activate="fetchNotifications('new')"
     />
     <div class="notifications-view__main">
       <NotificationList />
@@ -68,7 +75,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <LoadButton
       direction="old"
       :processing="state.processing"
-      @activate="fetchNotifications(25, 'old')"
+      @activate="fetchNotifications('old')"
     />
   </div>
 </template>
