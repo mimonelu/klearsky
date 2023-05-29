@@ -260,6 +260,8 @@
   "accounts": "アカウント",
   "newLogin": "新規ログイン",
   "logout": "ログアウト",
+  "refreshSession": "セッションの更新",
+  "refreshSessionDescription": "セッションを更新するとセッションの期間が延長されますが、別環境でログインしている同一アカウントのセッションは切断される可能性があります。\n以上を承諾した上で更新しますか？",
   "removeAccountHistory": "アカウント履歴の削除",
   "removeAccountHistoryMessage": "このアカウントを履歴から削除します。よろしいですか？",
 

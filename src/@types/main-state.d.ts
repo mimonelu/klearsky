@@ -196,7 +196,6 @@ type MainState = {
   $getI18n?: Function
 
   formatDate: Function
-
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>

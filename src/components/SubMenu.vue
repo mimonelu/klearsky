@@ -5,7 +5,21 @@ import CopyRight from "@/components/Copyright.vue"
 import Logo from "@/components/Logo.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
+
+async function refreshSession () {
+  if (!await mainState.openConfirmationPopup(
+    $t("refreshSession"),
+    $t("refreshSessionDescription")
+  )) return
+  mainState.processing = true
+  await mainState.atp.refreshSession().catch(() => {
+    mainState.openErrorPopup("errorApiFailed", "SubMenu/refreshSession")
+  })
+  mainState.processing = false
+}
 </script>
 
 <template>
@@ -44,6 +58,15 @@ const mainState = inject("state") as MainState
       >
         <SVGIcon name="personOff" />
         <span>{{ $t("blockingUsers") }}</span>
+      </a>
+
+      <!-- セッション更新トリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="refreshSession"
+      >
+        <SVGIcon name="shimmer" />
+        <span>{{ $t("refreshSession") }}</span>
       </a>
     </div>
 
