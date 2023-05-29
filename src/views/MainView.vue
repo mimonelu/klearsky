@@ -250,7 +250,6 @@ async function manualLogin (service: string, identifier: string, password: strin
       console.error("[klearsky/refreshSession]", error)
     })
 
-    resetState()
     await Promise.all([
       fetchPreferences(),
       state.fetchUserProfile(),
@@ -328,6 +327,13 @@ async function processPage (pageName?: null | RouteRecordName) {
         if (handle !== state.currentProfile?.handle)
           tasks.push(state.fetchCurrentProfile(handle as string))
         await Promise.all(tasks)
+        break
+      }
+      case "notifications": {
+        if (!state.notificationFetchedFirst) {
+          state.notificationFetchedFirst = true
+          await state.fetchNotifications(consts.limitOfFetchNotifications, "new")
+        }
         break
       }
       case "timeline-home": {

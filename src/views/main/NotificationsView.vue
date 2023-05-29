@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
+import { inject, onBeforeUnmount, onMounted, watch } from "vue"
 import LoadButton from "@/components/LoadButton.vue"
 import NotificationList from "@/components/NotificationList.vue"
 import PageHeader from "@/components/PageHeader.vue"
@@ -8,25 +8,13 @@ import consts from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  processing: boolean
-}>({
-  processing: false
-})
-
 onBeforeUnmount(() => {
   updateNotificationSeen()
   updateNotificationIsRead()
   mainState.notificationCount = 0
 })
 
-onMounted(() => {
-  updateNotificationSeen()
-  if (!mainState.notificationFetchedFirst) {
-    mainState.notificationFetchedFirst = true
-    fetchNotifications("new")
-  }
-})
+onMounted(updateNotificationSeen)
 
 async function updateNotificationSeen () {
   if (mainState.notificationCount <= 0) return
@@ -43,11 +31,11 @@ function updateNotificationIsRead () {
 
 async function fetchNotifications (direction: "new" | "old") {
   Util.blurElement()
-  state.processing = true
+  mainState.listProcessing = true
   try {
     await mainState.fetchNotifications(consts.limitOfFetchNotifications, direction)
   } finally {
-    state.processing = false
+    mainState.listProcessing = false
   }
 }
 
@@ -66,7 +54,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     />
     <LoadButton
       direction="new"
-      :processing="state.processing"
+      :processing="mainState.listProcessing"
       @activate="fetchNotifications('new')"
     />
     <div class="notifications-view__main">
@@ -74,7 +62,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     </div>
     <LoadButton
       direction="old"
-      :processing="state.processing"
+      :processing="mainState.listProcessing"
       @activate="fetchNotifications('old')"
     />
   </div>
