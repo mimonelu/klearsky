@@ -16,9 +16,8 @@ async function refreshSession () {
     $t("refreshSessionDescription")
   )) return
   mainState.processing = true
-  await mainState.atp.refreshSession().catch(() => {
+  if (!await mainState.atp.refreshSession())
     mainState.openErrorPopup("errorApiFailed", "AccountSettingsView/refreshSession")
-  })
   mainState.processing = false
 }
 

@@ -15,9 +15,8 @@ async function refreshSession () {
     $t("refreshSessionDescription")
   )) return
   mainState.processing = true
-  await mainState.atp.refreshSession().catch(() => {
+  if (!await mainState.atp.refreshSession())
     mainState.openErrorPopup("errorApiFailed", "SubMenu/refreshSession")
-  })
   mainState.processing = false
 }
 </script>
