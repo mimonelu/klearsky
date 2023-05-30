@@ -8,7 +8,9 @@
   "enabled": "有効",
   "disabled": "無効",
   "show": "表示する",
+  "warn": "警告する",
   "hide": "隠す",
+  "seal": "封印する",
   "error": "エラー",
   "alt": "ALT",
   "posts": "ポスト",
@@ -25,6 +27,10 @@
   "following": "フォロー中",
   "followingCount": "フォロー数",
   "followersCount": "フォロワー数",
+
+  "contentFiltering": "コンテンツフィルタ",
+  "modifyContentFiltering": "コンテンツフィルタを編集する",
+  "contentFilteringDescription": "各コンテンツラベルの制御を設定した上で「適用」ボタンを押してください。",
 
   "mute": "ミュートする",
   "muting": "ミュートを解除する",

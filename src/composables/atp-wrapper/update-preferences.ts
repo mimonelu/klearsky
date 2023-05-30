@@ -8,6 +8,8 @@ export default async function (
   const query: AppBskyActorPutPreferences.InputSchema = { preferences }
   const response: AppBskyActorPutPreferences.Response =
     await (this.agent as BskyAgent).app.bsky.actor.putPreferences(query)
+      .then((value: AppBskyActorPutPreferences.Response) => value)
+      .catch((error: any) => error)
   console.log("[klearsky/putPreferences]", response)
-  return response.success
+  return !!response.success
 }

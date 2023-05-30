@@ -1,0 +1,13 @@
+{
+  "ALWAYS_HIDE": ["!filter", "csam", "dmca-violation", "nudity-nonconsensual"],
+  "ALWAYS_WARN": ["!warn", "account-security"],
+  "DEFAULTS": {
+    "nsfw": ["nsfw", "nsfl", "porn"],
+    "nudity": ["nudity"],
+    "suggestive": ["suggestive", "sexual"],
+    "gore": ["gore", "self-harm", "torture", "nsfl"],
+    "hate": ["hate", "icon-kkk", "icon-nazi", "icon-intolerant", "behavior-intolerant"],
+    "spam": ["spam"],
+    "impersonation": ["impersonation"]
+  }
+}

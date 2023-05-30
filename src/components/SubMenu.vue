@@ -41,6 +41,15 @@ async function refreshSession () {
         <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
       </a>
 
+      <!-- コンテンツフィルタリングポップアップトリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="mainState.openContentFilteringPopup"
+      >
+        <SVGIcon name="alert" />
+        <span>{{ $t("contentFiltering") }}</span>
+      </a>
+
       <!-- ミュート中のユーザーポップアップトリガー -->
       <a
         class="textlink--icon"

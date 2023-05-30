@@ -8,7 +8,9 @@
   "enabled": "Enabled",
   "disabled": "Disabled",
   "show": "Show",
+  "warn": "Warn",
   "hide": "Hide",
+  "seal": "Seal",
   "error": "Error",
   "alt": "ALT",
   "posts": "posts",
@@ -25,6 +27,10 @@
   "following": "Following",
   "followingCount": "Following",
   "followersCount": "Followers",
+
+  "contentFiltering": "Content Filtering",
+  "modifyContentFiltering": "Modify content filtering",
+  "contentFilteringDescription": "After setting the controls for each content label, press the \"Apply\" button.",
 
   "mute": "Mute",
   "muting": "Unmute",

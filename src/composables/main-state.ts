@@ -7,6 +7,7 @@ import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
+import LABELS from "@/consts/labels.json"
 
 const state = reactive<MainState>({
   // @ts-ignore // TODO:
@@ -117,6 +118,10 @@ const state = reactive<MainState>({
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
   closeInviteCodesPopup,
+
+  // コンテンツフィルタリングポップアップの開閉
+  openContentFilteringPopup,
+  closeContentFilteringPopup,
 
   // ミュートユーザーリストポップアップの開閉
   openMutingUsersPopup,
@@ -252,29 +257,6 @@ async function fetchAuthorLikes (direction: "new" | "old") {
 
 // ラベル対応
 
-// SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/labeling/const.ts
-// 強制閲覧制限
-const ALWAYS_HIDE_LABELS = ["!filter", "csam", "dmca-violation", "nudity-nonconsensual"]
-// 強制閲覧警告
-const ALWAYS_WARN_LABELS = ["!warn", "account-security"]
-// 閲覧制限または閲覧警告
-const LABEL_GROUP_MAP: { [k: string]: Array<string> } = {
-  // Explicit Sexual Images
-  nsfw: ["nsfw", "nsfl", "porn"],
-  // Other Nudity
-  nudity: ["nudity"],
-  // Sexually Suggestive
-  suggestive: ["suggestive", "sexual"],
-  // Violent / Bloody
-  gore: ["gore", "self-harm", "torture", "nsfl"],
-  // Political Hate-Groups
-  hate: ["hate", "icon-kkk", "icon-nazi", "icon-intolerant", "behavior-intolerant"],
-  // Spam
-  spam: ["spam"],
-  // Impersonation
-  impersonation: ["impersonation"],
-}
-
 function getContentWarningVisibility (
   authorLabels?: Array<TTLabel>,
   postLabels?: Array<TTLabel>,
@@ -316,7 +298,7 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
     if (preference.$type !== "app.bsky.actor.defs#contentLabelPref" ||
         preference.label == null ||
         preference.visibility === "show") return false
-    const labelGroup = LABEL_GROUP_MAP[preference.label as string]
+    const labelGroup = (LABELS.DEFAULTS as any)[preference.label as string]
     if (labelGroup == null) return false
     return labels.some((label: TTLabel) => {
       return labelGroup.includes(label.val)
@@ -324,7 +306,7 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
   })
 
   if (labels.some((label: TTLabel) => {
-    return ALWAYS_HIDE_LABELS.includes(label.val)
+    return LABELS.ALWAYS_HIDE.includes(label.val)
   })) {
     concernedPreferences.push({
       $type: "app.bsky.actor.defs#contentLabelPref",
@@ -334,7 +316,7 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
   }
 
   if (labels.some((label: TTLabel) => {
-    return ALWAYS_WARN_LABELS.includes(label.val)
+    return LABELS.ALWAYS_WARN.includes(label.val)
   })) {
     concernedPreferences.push({
       $type: "app.bsky.actor.defs#contentLabelPref",
@@ -633,6 +615,16 @@ function openInviteCodesPopup () {
 
 function closeInviteCodesPopup () {
   state.inviteCodesPopupDisplay = false
+}
+
+// コンテンツフィルタリングポップアップの開閉
+
+function openContentFilteringPopup () {
+  state.contentFilteringPopupDisplay = true
+}
+
+function closeContentFilteringPopup () {
+  state.contentFilteringPopupDisplay = false
 }
 
 // ミュートユーザーリストポップアップの開閉

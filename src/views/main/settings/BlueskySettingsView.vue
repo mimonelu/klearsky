@@ -20,6 +20,17 @@ const mainState = inject("state") as MainState
         </div>
       </div>
 
+      <!-- コンテンツフィルタリングポップアップトリガー -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("contentFiltering") }}</div>
+        <div class="settings-section__body">
+          <button
+            class="button"
+            @click.prevent="mainState.openContentFilteringPopup"
+          >{{ $t("modifyContentFiltering") }}</button>
+        </div>
+      </div>
+
       <!-- ミュートユーザーリストポップアップトリガー -->
       <div class="settings-section">
         <div class="settings-section__header">{{ $t("mutingUsers") }}</div>

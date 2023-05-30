@@ -171,6 +171,9 @@ type MainState = {
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
+  // コンテンツフィルタリングポップアップの表示スイッチ
+  contentFilteringPopupDisplay: boolean
+
   // ミュートユーザーリストポップアップの表示スイッチ
   mutingUsersPopupDisplay: boolean
 
@@ -239,6 +242,10 @@ type MainState = {
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup: Function
   closeInviteCodesPopup: Function
+
+  // コンテンツフィルタリングポップアップの開閉
+  openContentFilteringPopup: Function
+  closeContentFilteringPopup: Function
 
   // ミュートユーザーリストポップアップの開閉
   openMutingUsersPopup: Function
