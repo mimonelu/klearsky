@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject, onMounted, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -23,14 +23,16 @@ const state = reactive<{
   spam: TTLabelVisiblity
   impersonation: TTLabelVisiblity
 }>({
-  nsfw: getLabelVisibility("nsfw"),
-  nudity: getLabelVisibility("nudity"),
-  suggestive: getLabelVisibility("suggestive"),
-  gore: getLabelVisibility("gore"),
-  hate: getLabelVisibility("hate"),
-  spam: getLabelVisibility("spam"),
-  impersonation: getLabelVisibility("impersonation"),
+  nsfw: "hide",
+  nudity: "hide",
+  suggestive: "hide",
+  gore: "hide",
+  hate: "hide",
+  spam: "hide",
+  impersonation: "hide",
 })
+
+resetState()
 
 const easyFormProps: TTEasyForm = {
   hasSubmitButton: true,
@@ -44,6 +46,24 @@ const easyFormProps: TTEasyForm = {
     options: OPTIONS.labelVisibility,
     layout: "horizontal",
   })))(),
+}
+
+onMounted(async () => {
+  mainState.processing = true
+  if (!await mainState.fetchPreferences())
+    mainState.openErrorPopup("errorApiFailed", "ContentFilteringPopup/fetchPreferences")
+  else resetState()
+  mainState.processing = false
+})
+
+function resetState () {
+  state.nsfw = getLabelVisibility("nsfw")
+  state.nudity = getLabelVisibility("nudity")
+  state.suggestive = getLabelVisibility("suggestive")
+  state.gore = getLabelVisibility("gore")
+  state.hate = getLabelVisibility("hate")
+  state.spam = getLabelVisibility("spam")
+  state.impersonation = getLabelVisibility("impersonation")
 }
 
 function getLabelPrefernce (label: string): undefined | TTPreference {

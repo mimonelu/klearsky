@@ -64,7 +64,7 @@ onMounted(async () => {
   try {
     if (!await autoLogin()) return
     await Promise.all([
-      fetchPreferences(),
+      state.fetchPreferences(),
       state.fetchUserProfile(),
     ])
     state.saveSettings()
@@ -243,7 +243,7 @@ async function manualLogin (service: string, identifier: string, password: strin
     }
     if (!state.atp.hasLogin()) return
     await Promise.all([
-      fetchPreferences(),
+      state.fetchPreferences(),
       state.fetchUserProfile(),
     ])
     state.loginPopupDisplay = false
@@ -389,15 +389,6 @@ async function updateNotification () {
   if (canFetched)
     // NOTICE: 念のため + 1 している
     await state.fetchNotifications(Math.min(consts.limitOfFetchNotifications, count + 1), "new")
-}
-
-async function fetchPreferences () {
-  const preferences = await state.atp.fetchPreferences().catch((error: any) => {
-    // おそらく getPreferences を実装していないケース
-    console.warn("[klearsky/getPreferences]", error)
-  })
-  if (preferences == null) return
-  state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
 }
 
 async function updateInviteCodes () {

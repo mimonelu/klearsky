@@ -71,6 +71,7 @@ type MainState = {
   currentFollowingsCursor?: string
 
   currentPreferences: Array<TTPreference>
+  fetchPreferences: () => Promise<boolean>
   feedPreferences: ComputedRef<undefined | TTPreference>
 
   getContentWarningVisibility: (

@@ -78,6 +78,7 @@ const state = reactive<MainState>({
   fetchAuthorLikes,
   getContentWarningVisibility,
 
+  fetchPreferences,
   getConcernedPreferences,
   feedPreferences: computed((): undefined | TTPreference => {
     return state.currentPreferences.find((preference: TTPreference) => {
@@ -253,6 +254,13 @@ async function fetchAuthorLikes (direction: "new" | "old") {
     direction === "new" ? undefined : state.currentAuthorLikesCursor
   )
   state.currentAuthorLikesCursor = cursor
+}
+
+async function fetchPreferences (): Promise<boolean> {
+  const preferences = await state.atp.fetchPreferences()
+  if (preferences == null) return false
+  state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
+  return true
 }
 
 // ラベル対応
