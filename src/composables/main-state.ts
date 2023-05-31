@@ -120,6 +120,10 @@ const state = reactive<MainState>({
   openInviteCodesPopup,
   closeInviteCodesPopup,
 
+  // カスタムフィードポップアップの開閉
+  openCustomFeedsPopup,
+  closeCustomFeedsPopup,
+
   // コンテンツフィルタリングポップアップの開閉
   openContentFilteringPopup,
   closeContentFilteringPopup,
@@ -623,6 +627,16 @@ function openInviteCodesPopup () {
 
 function closeInviteCodesPopup () {
   state.inviteCodesPopupDisplay = false
+}
+
+// カスタムフィードポップアップの開閉
+
+function openCustomFeedsPopup () {
+  state.customFeedsPopupDisplay = true
+}
+
+function closeCustomFeedsPopup () {
+  state.customFeedsPopupDisplay = false
 }
 
 // コンテンツフィルタリングポップアップの開閉

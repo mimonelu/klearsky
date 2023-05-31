@@ -2,8 +2,13 @@
 import { inject } from "vue"
 import { RouterView } from "vue-router"
 import PageHeader from "@/components/PageHeader.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
+
+function openCustomFeedsPopup () {
+  mainState.openCustomFeedsPopup()
+}
 </script>
 
 <template>
@@ -13,7 +18,16 @@ const mainState = inject("state") as MainState
         :hasBackButton="true"
         :title="$t('customFeeds')"
         :subTitle="mainState.currentQuery.displayName"
-      />
+      >
+        <template #right>
+          <button
+            class="button--bordered"
+            @click.stop="openCustomFeedsPopup"
+          >
+            <SVGIcon name="setting" />
+          </button>
+        </template>
+      </PageHeader>
     </div>
     <RouterView class="child-view" />
   </div>

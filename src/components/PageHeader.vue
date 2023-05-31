@@ -76,6 +76,9 @@ function onActivateBackButton () {
   &:has(> :nth-child(4)) {
     grid-template-columns: auto auto auto 1fr;
   }
+  &:has(> :nth-child(4)) {
+    grid-template-columns: auto auto auto auto 1fr;
+  }
 
   & > h1,
   & > h2 {

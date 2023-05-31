@@ -172,6 +172,9 @@ type MainState = {
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
+  // カスタムフィードポップアップの表示スイッチ
+  customFeedsPopupDisplay: boolean
+
   // コンテンツフィルタリングポップアップの表示スイッチ
   contentFilteringPopupDisplay: boolean
 
@@ -243,6 +246,10 @@ type MainState = {
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup: Function
   closeInviteCodesPopup: Function
+
+  // カスタムフィードポップアップの開閉
+  openCustomFeedsPopup: Function
+  closeCustomFeedsPopup: Function
 
   // コンテンツフィルタリングポップアップの開閉
   openContentFilteringPopup: Function
