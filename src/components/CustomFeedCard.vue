@@ -137,7 +137,7 @@ async function toggleSaved () {
 
     &__right {
       display: grid;
-      grid-template-columns: auto max-content 1fr;
+      grid-template-columns: auto 1fr auto;
       grid-template-areas:
         "n n r"
         "l i r";
@@ -193,6 +193,7 @@ async function toggleSaved () {
     display: flex;
     align-items: center;
     grid-gap: 0.25em;
+    overflow: hidden;
 
     & > .svg-icon {
       font-size: 0.75em;
@@ -201,6 +202,9 @@ async function toggleSaved () {
     & > span {
       font-size: 0.875em;
       line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
