@@ -246,6 +246,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
 
     & > dt {
       font-weight: bold;
+      line-height: 1.25;
     }
 
     & > dd  {
