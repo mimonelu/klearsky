@@ -9,7 +9,7 @@ const mainState = inject("state") as MainState
 <template>
   <div class="popular-feeds-view">
     <CustomFeedCard
-      v-for="generator of mainState.currentFeedGenerators"
+      v-for="generator of mainState.currentPopularFeedGenerators"
       :key="generator.cid"
       :generator="generator"
     />

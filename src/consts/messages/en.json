@@ -14,6 +14,7 @@
   "error": "Error",
   "alt": "ALT",
   "posts": "posts",
+  "loading": "Loading...",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -134,8 +135,11 @@
 
   "home": "Home",
   "timeline": "Timeline",
-  "customFeeds": "Custom Feeds",
   "globalline": "Globalline",
+
+  "customFeeds": "Custom Feeds",
+  "myFeeds": "My Feeds",
+  "noFeeds": "There are no bookmarked custom feeds.",
 
   "hot": "What's Hot",
   "selectLanguages": "Select languages",

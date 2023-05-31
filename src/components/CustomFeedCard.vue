@@ -102,7 +102,7 @@ async function toggleSaved () {
       <RouterLink
         class="custom-feed-card__creator"
         :to="{ name: 'profile-post', query: { handle: generator.creator.handle } }"
-        @click.stop
+        @click.prevent
       >
         <SVGIcon name="person" />
         <div class="custom-feed-card__creator__display-name">{{ generator.creator.displayName }}</div>

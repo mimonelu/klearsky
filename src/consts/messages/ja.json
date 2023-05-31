@@ -14,6 +14,7 @@
   "error": "エラー",
   "alt": "ALT",
   "posts": "ポスト",
+  "loading": "読込中...",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -134,8 +135,11 @@
 
   "home": "ホーム",
   "timeline": "タイムライン",
-  "customFeeds": "カスタムフィード",
   "globalline": "グローバルライン",
+
+  "customFeeds": "カスタムフィード",
+  "myFeeds": "マイフィード",
+  "noFeeds": "ブックマークされたカスタムフィードはありません。",
 
   "hot": "What's Hot",
   "selectLanguages": "言語の選択",

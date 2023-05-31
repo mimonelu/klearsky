@@ -47,7 +47,7 @@ async function refreshSession () {
         @click.prevent="mainState.openCustomFeedsPopup"
       >
         <SVGIcon name="rss" />
-        <span>{{ $t("customFeeds") }}</span>
+        <span>{{ $t("myFeeds") }}</span>
       </a>
 
       <!-- コンテンツフィルタリングポップアップトリガー -->

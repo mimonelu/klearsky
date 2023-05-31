@@ -436,7 +436,7 @@ async function fetchPopularFeedGenerators () {
   state.listProcessing = false
   if (feeds == null) return
   if (feeds === false) state.openErrorPopup("errorApiFailed", "main-state/fetchPopularFeedGenerators")
-  state.currentFeedGenerators = feeds as Array<TTFeedGenerator>
+  state.currentPopularFeedGenerators = feeds as Array<TTFeedGenerator>
 }
 
 async function fetchCustomFeeds (direction: "old" | "new") {
