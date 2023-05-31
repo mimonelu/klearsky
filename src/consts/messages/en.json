@@ -281,6 +281,7 @@
   "quoteRepost": "Quote repost",
   "text": "Text",
   "linkBox": "Link card",
+  "linkBoxFootnote": "* Display of OGP image is not yet supported.",
   "imageBoxes": "Images",
   "alts": "ALT texts",
   "submit": "Submit",
