@@ -28,6 +28,16 @@ function openMyFeedsPopup () {
           </button>
         </template>
       </PageHeader>
+      <div class="tab">
+        <RouterLink
+          class="tab__button"
+          to="/feeds/my"
+        >{{ $t("myFeeds") }}</RouterLink>
+        <RouterLink
+          class="tab__button"
+          to="/feeds/popular"
+        >{{ $t("popularFeeds") }}</RouterLink>
+      </div>
     </div>
     <RouterView class="child-view" />
   </div>
@@ -43,6 +53,15 @@ function openMyFeedsPopup () {
     position: sticky;
     top: 0;
     z-index: 1;
+
+    .button--bordered {
+      margin: -1rem 0;
+    }
+
+    .tab {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
   }
 }
 

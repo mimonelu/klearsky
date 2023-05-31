@@ -61,7 +61,7 @@ function moveToBottom () {
     <!-- カスタムフィードボタン -->
     <RouterLink
       class="link-button"
-      to="/feeds/popular"
+      to="/feeds/my"
       :data-is-focus="mainState.currentPath.startsWith('/feeds/')"
     >
       <div class="icon">
