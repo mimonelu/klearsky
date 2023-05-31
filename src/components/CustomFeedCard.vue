@@ -20,45 +20,45 @@ const state = reactive<{
 
 <template>
   <RouterLink
-    class="feed-card"
+    class="custom-feed-card"
     :to="{ path: '/feeds/timeline', query: {
       feed: generator.uri,
       displayName: generator.displayName,
     } }"
     @click.stop
   >
-    <div class="feed-card__top">
+    <div class="custom-feed-card__top">
       <!-- フィード画像 -->
       <img
-        class="feed-card__avatar"
+        class="custom-feed-card__avatar"
         loading="lazy"
         :src="generator.avatar"
         alt=""
       >
 
-      <div class="feed-card__top__right">
+      <div class="custom-feed-card__top__right">
         <!-- フィード名 -->
-        <div class="feed-card__display-name">
+        <div class="custom-feed-card__display-name">
           <SVGIcon name="rss" />
           <span>{{ generator.displayName }}</span>
         </div>
 
         <!-- フィードライク数 -->
-        <div class="feed-card__like-count">
+        <div class="custom-feed-card__like-count">
           <SVGIcon name="heart" />
           <span>{{ generator.likeCount }}</span>
         </div>
 
         <!-- フィード作成日時 -->
-        <div class="feed-card__indexed-at">
+        <div class="custom-feed-card__indexed-at">
           <SVGIcon name="clock" />
           <span>{{ mainState.formatDate(generator.indexedAt) }}</span>
         </div>
 
-        <div class="feed-card__top__right__right">
+        <div class="custom-feed-card__top__right__right">
           <!-- お気に入りフィード -->
           <div
-            class="feed-card__bookmark"
+            class="custom-feed-card__bookmark"
             :data-saved="state.saved"
             @click.prevent.stop
           >
@@ -70,27 +70,27 @@ const state = reactive<{
 
     <!-- フィード説明文 -->
     <div
-      class="feed-card__description"
+      class="custom-feed-card__description"
       dir="auto"
     >{{ generator.description }}</div>
 
-    <div class="feed-card__bottom">
+    <div class="custom-feed-card__bottom">
       <!-- フィード作成者 -->
       <RouterLink
-        class="feed-card__creator"
+        class="custom-feed-card__creator"
         :to="{ name: 'profile-post', query: { handle: generator.creator.handle } }"
         @click.stop
       >
         <SVGIcon name="person" />
-        <div class="feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
-        <div class="feed-card__creator__handle">{{ generator.creator.handle }}</div>
+        <div class="custom-feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
+        <div class="custom-feed-card__creator__handle">{{ generator.creator.handle }}</div>
       </RouterLink>
     </div>
   </RouterLink>
 </template>
 
 <style lang="scss" scoped>
-.feed-card {
+.custom-feed-card {
   background-color: rgba(var(--accent-color), 0.125);
   border: 1px solid rgba(var(--accent-color), 0.25);
   border-radius: var(--border-radius);

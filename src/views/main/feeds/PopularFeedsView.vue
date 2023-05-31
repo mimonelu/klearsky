@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import FeedCard from "@/components/FeedCard.vue"
+import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import Loader from "@/components/Loader.vue"
 
 const mainState = inject("state") as MainState
@@ -8,7 +8,7 @@ const mainState = inject("state") as MainState
 
 <template>
   <div class="popular-feeds-view">
-    <FeedCard
+    <CustomFeedCard
       v-for="generator of mainState.currentFeedGenerators"
       :key="generator.cid"
       :generator="generator"

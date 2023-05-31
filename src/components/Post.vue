@@ -2,7 +2,7 @@
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
 import AvatarLink from "@/components/AvatarLink.vue"
-import FeedCard from "@/components/FeedCard.vue"
+import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
@@ -581,7 +581,7 @@ async function translateText (forceTranslate: boolean) {
           </div>
 
           <!-- フィードカード -->
-          <FeedCard
+          <CustomFeedCard
             v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
             :generator="post.embed.record as unknown as TTFeedGenerator"
           />
