@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const props = defineProps<{
   generator: TTFeedGenerator
@@ -9,13 +11,34 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  processing: boolean
   saved: ComputedRef<boolean>
 }>({
+  processing: false,
   saved: computed((): boolean => {
     return mainState.feedPreferences?.saved
-      .some((pin: string) => pin === props.generator.uri) ?? false
+      .some((uri: string) => uri === props.generator.uri) ?? false
   }),
 })
+
+async function toggleSaved () {
+  Util.blurElement()
+  if (state.processing) return
+  if (mainState.feedPreferences == null) return
+  if (mainState.feedPreferences.saved == null) mainState.feedPreferences.saved = []
+  if (state.saved)
+    mainState.feedPreferences.saved.splice(
+      0,
+      mainState.feedPreferences.saved.length,
+      ...mainState.feedPreferences.saved.filter((uri: string) => uri !== props.generator.uri)
+    )
+  else
+    mainState.feedPreferences.saved.push(props.generator.uri)
+  state.processing = true
+  if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
+    mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/updatePreferences")
+  state.processing = false
+}
 </script>
 
 <template>
@@ -60,7 +83,7 @@ const state = reactive<{
           <div
             class="custom-feed-card__bookmark"
             :data-saved="state.saved"
-            @click.prevent.stop
+            @click.prevent.stop="toggleSaved"
           >
             <SVGIcon name="bookmark" />
           </div>
@@ -86,6 +109,10 @@ const state = reactive<{
         <div class="custom-feed-card__creator__handle">{{ generator.creator.handle }}</div>
       </RouterLink>
     </div>
+    <Loader
+      v-if="state.processing"
+      @click.prevent
+    />
   </RouterLink>
 </template>
 
@@ -98,6 +125,7 @@ const state = reactive<{
   flex-direction: column;
   grid-gap: 0.5em;
   padding: 1em;
+  position: relative;
   &:focus, &:hover {
     border-color: rgb(var(--accent-color), 0.5);
   }
