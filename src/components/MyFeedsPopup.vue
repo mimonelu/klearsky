@@ -19,7 +19,7 @@ onMounted(async () => {
   const preferences = await mainState.fetchPreferences()
   mainState.processing = false
   if (!preferences) {
-    mainState.openErrorPopup("errorApiFailed", "CustomFeedsPopup/fetchPreferences")
+    mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchPreferences")
     return
   }
 
@@ -35,7 +35,7 @@ onMounted(async () => {
   const generators = await mainState.atp.fetchFeedGenerators(savedFeeds.saved)
   mainState.processing = false
   if (generators instanceof Error) {
-    mainState.openErrorPopup("errorApiFailed", "CustomFeedsPopup/fetchFeedGenerators")
+    mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
     return
   }
   state.myFeedGenerators.splice(0, state.myFeedGenerators.length, ...generators)
@@ -48,7 +48,7 @@ function close () {
 
 <template>
   <Popup
-    class="custom-feeds-popup"
+    class="my-feeds-popup"
     :hasCloseButton="true"
     @close="close"
   >
@@ -67,13 +67,13 @@ function close () {
           @click="close"
         />
       </template>
-      <p>{{ $t(mainState.processing ? "loading" : "noFeeds") }}</p>
+      <p v-else>{{ $t(mainState.processing ? "loading" : "noFeeds") }}</p>
     </template>
   </Popup>
 </template>
 
 <style lang="scss" scoped>
-.custom-feeds-popup:deep() {
+.my-feeds-popup:deep() {
   .popup-header > h2 {
     color: rgb(var(--accent-color));
 

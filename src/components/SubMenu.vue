@@ -41,10 +41,10 @@ async function refreshSession () {
         <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
       </a>
 
-      <!-- カスタムフィードポップアップトリガー -->
+      <!-- マイフィードポップアップトリガー -->
       <a
         class="textlink--icon"
-        @click.prevent="mainState.openCustomFeedsPopup"
+        @click.prevent="mainState.openMyFeedsPopup"
       >
         <SVGIcon name="rss" />
         <span>{{ $t("myFeeds") }}</span>

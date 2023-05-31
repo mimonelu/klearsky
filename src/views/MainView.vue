@@ -6,7 +6,6 @@ import hotkeys from "hotkeys-js"
 import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
 import ContentFilteringPopup from "@/components/ContentFilteringPopup.vue"
-import CustomFeedsPopup from "@/components/CustomFeedsPopup.vue"
 import ErrorPopup from "@/components/ErrorPopup.vue"
 import ImagePopup from "@/components/ImagePopup.vue"
 import InviteCodesPopup from "@/components/InviteCodesPopup.vue"
@@ -17,6 +16,7 @@ import MainMenuHorizontal from "@/components/MainMenuHorizontal.vue"
 import MainMenuVertical from "@/components/MainMenuVertical.vue"
 import MessagePopup from "@/components/MessagePopup.vue"
 import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
+import MyFeedsPopup from "@/components/MyFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
@@ -204,8 +204,8 @@ function resetState () {
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
 
-  // カスタムフィードポップアップの表示スイッチ
-  state.customFeedsPopupDisplay = false
+  // マイフィードポップアップの表示スイッチ
+  state.myFeedsPopupDisplay = false
 
   // コンテンツフィルタリングポップアップの表示スイッチ
   state.contentFilteringPopupDisplay = false
@@ -528,10 +528,10 @@ function onDrop (event: DragEvent) {
       @close="state.closeInviteCodesPopup"
     />
 
-    <!-- カスタムフィードポップアップ -->
-    <CustomFeedsPopup
-      v-if="state.customFeedsPopupDisplay"
-      @close="state.closeCustomFeedsPopup"
+    <!-- マイフィードポップアップ -->
+    <MyFeedsPopup
+      v-if="state.myFeedsPopupDisplay"
+      @close="state.closeMyFeedsPopup"
     />
 
     <!-- コンテンツフィルタリングポップアップ -->

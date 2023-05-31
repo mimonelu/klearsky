@@ -6,8 +6,8 @@ import SVGIcon from "@/components/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
 
-function openCustomFeedsPopup () {
-  mainState.openCustomFeedsPopup()
+function openMyFeedsPopup () {
+  mainState.openMyFeedsPopup()
 }
 </script>
 
@@ -22,7 +22,7 @@ function openCustomFeedsPopup () {
         <template #right>
           <button
             class="button--bordered"
-            @click.stop="openCustomFeedsPopup"
+            @click.stop="openMyFeedsPopup"
           >
             <SVGIcon name="setting" />
           </button>
