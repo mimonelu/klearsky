@@ -23,16 +23,13 @@ onMounted(async () => {
     return
   }
 
-  const savedFeeds = mainState.currentPreferences.find((preference: TTPreference) => {
-    return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
-  })
-  if (savedFeeds?.saved == null) {
+  if (mainState.feedPreferences?.saved == null) {
     state.myFeedGenerators.splice(0)
     return
   }
 
   mainState.processing = true
-  const generators = await mainState.atp.fetchFeedGenerators(savedFeeds.saved)
+  const generators = await mainState.atp.fetchFeedGenerators(mainState.feedPreferences.saved)
   mainState.processing = false
   if (generators instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")

@@ -73,6 +73,11 @@ type MainState = {
   currentPreferences: Array<TTPreference>
   fetchPreferences: () => Promise<boolean>
   feedPreferences: ComputedRef<undefined | TTPreference>
+  currentMyFeeds: { [uri: string]: {
+    generator?: TTFeedGenerator
+    feeds: Array<TTFeed>
+  } }
+  fetchMyFeeds: () => Promise<boolean>
 
   getContentWarningVisibility: (
     authorLabels?: Array<TTLabel>,

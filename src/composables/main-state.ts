@@ -85,6 +85,7 @@ const state = reactive<MainState>({
       return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
     })
   }),
+  fetchMyFeeds,
 
   fetchHotFeeds,
   fetchTimeline,
@@ -454,6 +455,31 @@ async function fetchCustomFeeds (direction: "old" | "new") {
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
   else if (cursor != null) state.currentCustomCursor = cursor
   state.currentCustomUri = state.currentQuery.feed
+}
+
+async function fetchMyFeeds (): Promise<boolean> {
+  const saved: undefined | Array<string> = state.feedPreferences?.saved
+  if (saved == null) return false
+
+  const generators = await state.atp.fetchFeedGenerators(saved)
+  if (generators instanceof Error) {
+    state.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
+    return false
+  }
+
+  saved.forEach((uri: string) => {
+    if (state.currentMyFeeds[uri] == null)
+      state.currentMyFeeds[uri] = {
+        generator: generators.find((generator: TTFeedGenerator) => generator.uri === uri),
+        feeds: [],
+      }
+  })
+
+  await Promise.all(saved.map((uri: string) => {
+    return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, 3)
+  }))
+
+  return true
 }
 
 function saveSettings () {

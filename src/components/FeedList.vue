@@ -8,6 +8,7 @@ const props = defineProps<{
   type: "author" | "authorReposts" | "authorLikes" | "feeds-timeline" | "hot" | "post" | "timeline";
   feeds: null | Array<TTFeed>;
   hasLoadButton?: boolean;
+  disabledInfinitScroll?: boolean;
 }>()
 
 const mainState = inject("state") as MainState
@@ -84,7 +85,7 @@ function removeThisPost (uri: string) {
 
 // インフィニットスクロール
 watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchFeeds("old")
+  if (!props.disabledInfinitScroll && value) fetchFeeds("old")
 })
 </script>
 

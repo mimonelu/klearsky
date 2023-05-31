@@ -178,6 +178,7 @@ function resetState () {
   state.globallinePosts = []
   state.globallineProfiles = {}
   state.globallineNumberOfPosts = 0
+  state.currentMyFeeds = {}
   state.currentPopularFeedGenerators = []
   state.currentCustomUri = undefined
   state.currentCustomFeeds = []
@@ -339,6 +340,11 @@ async function processPage (pageName?: null | RouteRecordName) {
       case "hot-home": {
         if (state.currentHotFeeds.length === 0)
           await state.fetchHotFeeds("new")
+        break
+      }
+      case "feeds-my": {
+        if (Object.keys(state.currentMyFeeds).length === 0)
+          await state.fetchMyFeeds()
         break
       }
       case "feeds-popular": {
