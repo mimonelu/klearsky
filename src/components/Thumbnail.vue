@@ -99,7 +99,9 @@ function onActivateAlt (alt: string) {
       v-if="image?.alt"
       class="button--invert alt-button"
       @click.prevent.stop="onActivateAlt(image.alt)"
-    >ALT</button>
+    >
+      <span>ALT</span>
+    </button>
     <div
       v-if="state.errored"
       class="error"

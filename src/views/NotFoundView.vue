@@ -4,7 +4,9 @@
     <RouterLink
       to="/"
       class="button"
-    >Back to Klearsky's top page</RouterLink>
+    >
+      <span>Back to Klearsky's top page</span>
+    </RouterLink>
   </div>
 </template>
 

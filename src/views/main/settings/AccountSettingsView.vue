@@ -51,17 +51,23 @@ async function logout () {
         <button
           class="button--bordered"
           @click.prevent="refreshSession()"
-        >{{ $t("refreshSession") }}</button>
+        >
+          <span>{{ $t("refreshSession") }}</span>
+        </button>
         <button
           class="button"
           @click.prevent="newLogin()"
-        >{{ $t("newLogin") }}</button>
+        >
+          <span>{{ $t("newLogin") }}</span>
+        </button>
       </div>
       <AccountList :hasDeleteButton="true" />
       <button
         class="button--important"
         @click.prevent="logout"
-      >{{ $t("logout") }}</button>
+      >
+        <span>{{ $t("logout") }}</span>
+      </button>
     </div>
   </div>
 </template>

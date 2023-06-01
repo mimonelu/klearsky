@@ -234,7 +234,9 @@ function onEnterKeyDown (event: KeyboardEvent) {
     <button
       v-if="hasSubmitButton ?? true"
       class="button"
-    >{{ submitButtonLabel ?? $t("submit") }}</button>
+    >
+      <span>{{ submitButtonLabel ?? $t("submit") }}</span>
+    </button>
   </form>
 </template>
 

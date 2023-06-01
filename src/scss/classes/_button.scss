@@ -9,14 +9,17 @@
   align-items: center;
   justify-content: center;
   grid-gap: 0.5em;
-  font-weight: bold;
-  line-height: 1.5;
   padding: 0.5em 1em;
-  // white-space: nowrap;
 
   & > .svg-icon {
     fill: rgb(var(--bg-color));
     font-size: 0.75em;
+  }
+
+  & > span {
+    font-weight: bold;
+    line-height: 1.5;
+    word-break: break-word;
   }
 }
 
