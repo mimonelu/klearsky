@@ -3,7 +3,7 @@ export default function (
   newSession: TTSession,
   service?: string
 ) {
-  const session = this.data.sessions[this.data.did]
+  const session = this.data.sessions[this.data.did] ?? {}
   session.accessJwt = newSession.accessJwt ?? session.accessJwt
   session.did = newSession.did ?? session.did
   session.handle = newSession.handle ?? session.handle
