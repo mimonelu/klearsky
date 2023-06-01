@@ -81,14 +81,15 @@ function hideWarningContent () {
     <!-- プロフィールラベル -->
     <div
       v-if="(contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)) && (user.labels?.length ?? 0) > 0"
-      class="notification-message"
+      class="textlabel--alert"
     >
-      <SVGIcon name="alert" />
-      <div class="notification-message__text">{{ $t("profileLabel") }}</div>
+      <div class="textlabel__text">
+        <SVGIcon name="alert" />{{ $t("profileLabel") }}
+      </div>
       <div
         v-for="label of user.labels"
         :key="label.val"
-        class="notification-message__item"
+        class="textlabel__item"
       >{{ $t(label.val) }}</div>
     </div>
 
@@ -146,7 +147,7 @@ function hideWarningContent () {
   margin-bottom: 0.5rem;
 }
 
-.notification-message {
+.textlabel--alert {
   grid-area: o;
   margin-bottom: 0.5rem;
 }

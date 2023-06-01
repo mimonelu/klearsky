@@ -104,33 +104,36 @@ function hideWarningContent () {
       <!-- プロフィールラベル -->
       <div
         v-if="state.contentWarningDisplay && (mainState.currentProfile?.labels?.length ?? 0) > 0"
-        class="notification-message"
+        class="textlabel--alert"
       >
-        <SVGIcon name="alert" />
-        <div class="notification-message__text">{{ $t("profileLabel") }}</div>
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("profileLabel") }}
+        </div>
         <div
           v-for="label of mainState.currentProfile?.labels"
           :key="label.val"
-          class="notification-message__item"
+          class="textlabel__item"
         >{{ $t(label.val) }}</div>
       </div>
 
       <!-- ブロックしている -->
       <div
         v-if="mainState.currentProfile?.viewer.blocking != null"
-        class="notification-message"
+        class="textlabel--alert"
       >
-        <SVGIcon name="alert" />
-        <div class="notification-message__text">{{ $t("blocking") }}</div>
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("blocking") }}
+        </div>
       </div>
 
       <!-- ブロックされている -->
       <div
         v-if="mainState.currentProfile?.viewer.blockedBy"
-        class="notification-message"
+        class="textlabel--alert"
       >
-        <SVGIcon name="alert" />
-        <div class="notification-message__text">{{ $t("blocked") }}</div>
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("blocked") }}
+        </div>
       </div>
     </div>
 

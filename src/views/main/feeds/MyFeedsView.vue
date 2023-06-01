@@ -10,43 +10,53 @@ const mainState = inject("state") as MainState
 <template>
   <div class="my-feeds-view">
     <div
-      v-for="myFeeds, uri in mainState.currentMyFeeds"
-      :key="uri"
-      v-show="!mainState.listProcessing"
-      class="my-feeds-view__item"
+      v-if="!mainState.listProcessing && Object.keys(mainState.currentMyFeeds).length === 0"
+      class="textlabel"
     >
-      <RouterLink
-        class="my-feeds-view__header"
-        :to="{ path: '/feeds/timeline', query: {
-          feed: myFeeds.generator?.uri,
-          displayName: myFeeds.generator?.displayName,
-        } }"
-      >
-        <SVGIcon name="rss" />
-        <span>{{ myFeeds.generator?.displayName }}</span>
-        <SVGIcon name="cursorRight" />
-      </RouterLink>
-      <div class="my-feeds-view__body">
-        <FeedList
-          type="feeds-timeline"
-          :feeds="myFeeds.feeds"
-          :hasLoadButton="false"
-          :disabledInfinitScroll="true"
-        />
+      <div class="textlabel__text">
+        <SVGIcon name="alert" />{{ $t("noMyFeeds") }}
       </div>
-      <div class="my-feeds-view__link">
+    </div>
+    <template v-else>
+      <div
+        v-for="myFeeds, uri in mainState.currentMyFeeds"
+        :key="uri"
+        v-show="!mainState.listProcessing"
+        class="my-feeds-view__item"
+      >
         <RouterLink
-          class="button--bordered"
+          class="my-feeds-view__header"
           :to="{ path: '/feeds/timeline', query: {
             feed: myFeeds.generator?.uri,
             displayName: myFeeds.generator?.displayName,
           } }"
         >
+          <SVGIcon name="rss" />
+          <span>{{ myFeeds.generator?.displayName }}</span>
           <SVGIcon name="cursorRight" />
-          <span>{{ $t("more") }} - {{ myFeeds.generator?.displayName }}</span>
         </RouterLink>
+        <div class="my-feeds-view__body">
+          <FeedList
+            type="feeds-timeline"
+            :feeds="myFeeds.feeds"
+            :hasLoadButton="false"
+            :disabledInfinitScroll="true"
+          />
+        </div>
+        <div class="my-feeds-view__link">
+          <RouterLink
+            class="button--bordered"
+            :to="{ path: '/feeds/timeline', query: {
+              feed: myFeeds.generator?.uri,
+              displayName: myFeeds.generator?.displayName,
+            } }"
+          >
+            <SVGIcon name="cursorRight" />
+            <span>{{ $t("more") }} - {{ myFeeds.generator?.displayName }}</span>
+          </RouterLink>
+        </div>
       </div>
-    </div>
+    </template>
     <Loader v-if="mainState.listProcessing" />
   </div>
 </template>
@@ -88,6 +98,10 @@ const mainState = inject("state") as MainState
         fill: rgb(var(--fg-color));
       }
     }
+  }
+
+  .textlabel {
+    margin: 2rem;
   }
 
   &__link {

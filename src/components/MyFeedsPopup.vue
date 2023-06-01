@@ -56,7 +56,16 @@ function close () {
       </h2>
     </template>
     <template v-slot:body>
-      <template v-if="state.myFeedGenerators.length > 0">
+      <div
+        v-if="state.myFeedGenerators.length === 0"
+        class="textlabel"
+        :data-is-processing="mainState.processing"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("noFeeds") }}
+        </div>
+      </div>
+      <template v-else>
         <CustomFeedCard
           v-for="generator of state.myFeedGenerators"
           :key="generator.cid"
@@ -64,7 +73,6 @@ function close () {
           @click="close"
         />
       </template>
-      <p v-else>{{ $t(mainState.processing ? "loading" : "noFeeds") }}</p>
     </template>
   </Popup>
 </template>
@@ -77,6 +85,10 @@ function close () {
     & > .svg-icon {
       fill: rgb(var(--accent-color));
     }
+  }
+
+  .textlabel[data-is-processing="true"] {
+    visibility: hidden;
   }
 }
 </style>

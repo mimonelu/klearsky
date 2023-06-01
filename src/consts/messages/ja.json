@@ -141,7 +141,9 @@
   "customFeeds": "カスタムフィード",
   "popularFeeds": "人気のフィード",
   "myFeeds": "マイフィード",
+  "noMyFeeds": "マイフィードがありません。フィードをブックマークしてください。",
   "noFeeds": "ブックマークされたカスタムフィードはありません。",
+  "noPopularFeeds": "人気のフィードがありません。サーバ管理者にお問い合わせください。",
 
   "hot": "What's Hot",
   "selectLanguages": "言語の選択",

@@ -142,6 +142,8 @@
   "popularFeeds": "Popular Feeds",
   "myFeeds": "My Feeds",
   "noFeeds": "There are no bookmarked custom feeds.",
+  "noMyFeeds": "There are no My Feeds. Please bookmark feeds.",
+  "noPopularFeeds": "There are no popular feeds. Please contact the server administrator.",
 
   "hot": "What's Hot",
   "selectLanguages": "Select languages",

@@ -450,14 +450,15 @@ async function translateText (forceTranslate: boolean) {
         <!-- ポストラベル -->
         <div
           v-if="(post.labels?.length ?? 0) > 0"
-          class="notification-message"
+          class="textlabel--alert"
         >
-          <SVGIcon name="alert" />
-          <div class="notification-message__text">{{ $t("postLabel") }}</div>
+          <div class="textlabel__text">
+            <SVGIcon name="alert" />{{ $t("postLabel") }}
+          </div>
           <div
             v-for="label of post.labels"
             :key="label.val"
-            class="notification-message__item"
+            class="textlabel__item"
           >{{ $t(label.val) }}</div>
         </div>
 
@@ -574,10 +575,11 @@ async function translateText (forceTranslate: boolean) {
               post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
               post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'
             "
-            class="notification-message"
+            class="textlabel--alert"
           >
-            <SVGIcon name="alert" />
-            <div class="notification-message__text">{{ $t("postBlocked") }}</div>
+            <div class="textlabel__text">
+              <SVGIcon name="alert" />{{ $t("postBlocked") }}
+            </div>
           </div>
 
           <!-- フィードカード -->
