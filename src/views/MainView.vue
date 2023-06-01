@@ -1,23 +1,11 @@
 <script setup lang="ts">
-import {
-  inject,
-  nextTick,
-  onBeforeMount,
-  onBeforeUnmount,
-  onMounted,
-  onUnmounted,
-  provide
-} from "vue"
-import {
-  useRouter,
-  RouterView,
-  type LocationQueryValue,
-  type RouteLocationNormalized,
-  type RouteRecordName
-} from "vue-router"
+import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, provide } from "vue"
+import type { LocationQueryValue, RouteLocationNormalized, RouteRecordName } from "vue-router"
+import { useRouter } from "vue-router"
 import hotkeys from "hotkeys-js"
 import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
+import ContentFilteringPopup from "@/components/ContentFilteringPopup.vue"
 import ErrorPopup from "@/components/ErrorPopup.vue"
 import ImagePopup from "@/components/ImagePopup.vue"
 import InviteCodesPopup from "@/components/InviteCodesPopup.vue"
@@ -28,6 +16,7 @@ import MainMenuHorizontal from "@/components/MainMenuHorizontal.vue"
 import MainMenuVertical from "@/components/MainMenuVertical.vue"
 import MessagePopup from "@/components/MessagePopup.vue"
 import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
+import MyFeedsPopup from "@/components/MyFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
@@ -69,18 +58,23 @@ onBeforeUnmount(() => {
 })
 
 onMounted(async () => {
+  // ブロードキャスト
+  state.broadcastChannel.addEventListener("message", broadcastListener)
+
   state.currentPath = router.currentRoute.value.fullPath
   state.currentQuery = router.currentRoute.value.query
   state.settings = Util.loadStorage("settings") ?? {}
   state.processing = true
   try {
     if (!await autoLogin()) return
-    await fetchPreferences()
+    await Promise.all([
+      state.fetchPreferences(),
+      state.fetchUserProfile(),
+    ])
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    state.fetchUserProfile()
     processPage(router.currentRoute.value.name)
   } finally {
     state.mounted = true
@@ -92,6 +86,9 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  // ブロードキャスト
+  state.broadcastChannel.removeEventListener("message", broadcastListener)
+
   clearNotificationInterval()
 
   // インフィニットスクロール用処理
@@ -187,7 +184,8 @@ function resetState () {
   state.globallinePosts = []
   state.globallineProfiles = {}
   state.globallineNumberOfPosts = 0
-  state.currentFeedGenerators = []
+  state.currentMyFeeds = {}
+  state.currentPopularFeedGenerators = []
   state.currentCustomUri = undefined
   state.currentCustomFeeds = []
   state.currentCustomCursor = undefined
@@ -195,6 +193,7 @@ function resetState () {
   state.notifications = []
   state.notificationCursor = undefined
   state.notificationCount = 0
+  state.notificationFetchedFirst = false
   state.scrolledToBottom = false
   state.messagePopupDisplay = false
   state.messagePopupTitle = undefined
@@ -212,6 +211,12 @@ function resetState () {
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
 
+  // マイフィードポップアップの表示スイッチ
+  state.myFeedsPopupDisplay = false
+
+  // コンテンツフィルタリングポップアップの表示スイッチ
+  state.contentFilteringPopupDisplay = false
+
   // ミュートユーザーリストポップアップの表示スイッチ
   state.mutingUsersPopupDisplay = false
 
@@ -228,6 +233,9 @@ function resetState () {
 
   // D&D用処理
   state.isDragOver = false
+
+  // ブロードキャスト
+  state.broadcastChannel = new BroadcastChannel("klearsky")
 }
 
 async function autoLogin (): Promise<boolean> {
@@ -235,12 +243,6 @@ async function autoLogin (): Promise<boolean> {
   if (state.atp.canLogin()) {
     const loginResult = await state.atp.login()
     if (!loginResult) return false
-
-    // TODO: セッション延命のためトークンを更新しているが、適切な処理かどうか不明。要再検討
-    state.atp.refreshSession().catch((error: any) => {
-      console.error("[klearsky/refreshSession]", error)
-    })
-
     return true
   }
   return false
@@ -254,20 +256,15 @@ async function manualLogin (service: string, identifier: string, password: strin
       return
     }
     if (!state.atp.hasLogin()) return
-
-    // TODO: セッション延命のためトークンを更新しているが、適切な処理かどうか不明。要再検討
-    state.atp.refreshSession().catch((error: any) => {
-      console.error("[klearsky/refreshSession]", error)
-    })
-
-    resetState()
-    await fetchPreferences()
+    await Promise.all([
+      state.fetchPreferences(),
+      state.fetchUserProfile(),
+    ])
     state.loginPopupDisplay = false
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    state.fetchUserProfile()
     processPage(router.currentRoute.value.name)
   } finally {
     state.processing = false
@@ -338,6 +335,13 @@ async function processPage (pageName?: null | RouteRecordName) {
         await Promise.all(tasks)
         break
       }
+      case "notifications": {
+        if (!state.notificationFetchedFirst) {
+          state.notificationFetchedFirst = true
+          await state.fetchNotifications(consts.limitOfFetchNotifications, "new")
+        }
+        break
+      }
       case "timeline-home": {
         await state.fetchTimeline("new")
         break
@@ -347,8 +351,13 @@ async function processPage (pageName?: null | RouteRecordName) {
           await state.fetchHotFeeds("new")
         break
       }
+      case "feeds-my": {
+        if (Object.keys(state.currentMyFeeds).length === 0)
+          await state.fetchMyFeeds()
+        break
+      }
       case "feeds-popular": {
-        if (state.currentFeedGenerators.length === 0)
+        if (state.currentPopularFeedGenerators.length === 0)
           await state.fetchPopularFeedGenerators()
         break
       }
@@ -387,31 +396,18 @@ function clearNotificationInterval () {
 
 async function setupNotificationInterval () {
   clearNotificationInterval()
-  await updateNotification(true)
+  await updateNotification()
   // @ts-ignore // TODO:
-  notificationTimer = setInterval(() => {
-    updateNotification(false)
-  }, consts.intervalOfFetchNotifications)
+  notificationTimer = setInterval(updateNotification, consts.intervalOfFetchNotifications)
 }
 
-async function updateNotification (forceUpdate: boolean) {
+async function updateNotification () {
   const count = await state.atp.fetchNotificationCount() ?? 0
   const canFetched = state.notificationCount < count
   if (count > 0) state.notificationCount = count
-  if (canFetched || forceUpdate)
-    await state.fetchNotifications(forceUpdate
-      ? consts.limitOfFetchNotifications
-      : Math.min(consts.limitOfFetchNotifications, count + 1) // NOTICE: 念のため + 1 している
-    , "new")
-}
-
-async function fetchPreferences () {
-  const preferences = await state.atp.fetchPreferences().catch((error: any) => {
-    // おそらく getPreferences を実装していないケース
-    console.warn("[klearsky/getPreferences]", error)
-  })
-  if (preferences == null) return
-  state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
+  if (canFetched)
+    // NOTICE: 念のため + 1 している
+    await state.fetchNotifications(Math.min(consts.limitOfFetchNotifications, count + 1), "new")
 }
 
 async function updateInviteCodes () {
@@ -438,6 +434,7 @@ function scrollToFocused () {
 }
 
 // インフィニットスクロール用処理
+
 let isEnter = false
 function scrollListener () {
   const threshold = 64
@@ -477,6 +474,20 @@ function onDrop (event: DragEvent) {
   else
     state.openSendPostPopup("post", undefined, undefined, files)
   state.isDragOver = false
+}
+
+// ブロードキャスト
+
+function broadcastListener (event: MessageEvent) {
+  switch (event.data.type) {
+    // セッションの同期
+    case "refreshSession": {
+      if (event.data.data == null) break
+      if (event.data.data.did !== state.atp.data.did) break
+      state.atp.resetSession(event.data.data)
+      break
+    }
+  }
 }
 </script>
 
@@ -519,7 +530,7 @@ function onDrop (event: DragEvent) {
 
       <!-- ルータービュー -->
       <div class="router-view-wrapper">
-        <RouterView />
+        <RouterView v-if="state.mounted" />
       </div>
 
       <!-- サブメニュー -->
@@ -545,6 +556,18 @@ function onDrop (event: DragEvent) {
     <InviteCodesPopup
       v-if="state.inviteCodesPopupDisplay"
       @close="state.closeInviteCodesPopup"
+    />
+
+    <!-- マイフィードポップアップ -->
+    <MyFeedsPopup
+      v-if="state.myFeedsPopupDisplay"
+      @close="state.closeMyFeedsPopup"
+    />
+
+    <!-- コンテンツフィルタリングポップアップ -->
+    <ContentFilteringPopup
+      v-if="state.contentFilteringPopupDisplay"
+      @close="state.closeContentFilteringPopup"
     />
 
     <!-- ミュートユーザーリストポップアップ -->

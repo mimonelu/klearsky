@@ -1,8 +1,4 @@
-import type {
-  AtpAgentLoginOpts,
-  BskyAgent,
-  ComAtprotoServerCreateSession,
-} from "@atproto/api"
+import type { AtpAgentLoginOpts, BskyAgent, ComAtprotoServerCreateSession } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (

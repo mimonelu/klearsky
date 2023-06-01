@@ -16,7 +16,22 @@ const mainState = inject("state") as MainState
           <button
             class="button"
             @click.prevent="mainState.openInviteCodesPopup"
-          >{{ $t("confirmInviteCodes") }}</button>
+          >
+            <span>{{ $t("confirmInviteCodes") }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- コンテンツフィルタリングポップアップトリガー -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("contentFiltering") }}</div>
+        <div class="settings-section__body">
+          <button
+            class="button"
+            @click.prevent="mainState.openContentFilteringPopup"
+          >
+            <span>{{ $t("modifyContentFiltering") }}</span>
+          </button>
         </div>
       </div>
 
@@ -27,7 +42,9 @@ const mainState = inject("state") as MainState
           <button
             class="button"
             @click.prevent="mainState.openMutingUsersPopup"
-          >{{ $t("checkMutingUsers") }}</button>
+          >
+            <span>{{ $t("checkMutingUsers") }}</span>
+          </button>
         </div>
       </div>
 
@@ -38,7 +55,9 @@ const mainState = inject("state") as MainState
           <button
             class="button"
             @click.prevent="mainState.openBlockingUsersPopup"
-          >{{ $t("checkBlockingUsers") }}</button>
+          >
+            <span>{{ $t("checkBlockingUsers") }}</span>
+          </button>
         </div>
       </div>
     </div>

@@ -5,7 +5,26 @@ import CopyRight from "@/components/Copyright.vue"
 import Logo from "@/components/Logo.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
+
+async function refreshSession () {
+  if (!await mainState.openConfirmationPopup(
+    $t("refreshSession"),
+    $t("refreshSessionDescription")
+  )) return
+  mainState.processing = true
+  if (!await mainState.atp.refreshSession())
+    mainState.openErrorPopup("errorApiFailed", "SubMenu/refreshSession")
+  else
+    // セッションの同期
+    mainState.broadcastChannel.postMessage({
+      type: "refreshSession",
+      data: JSON.parse(JSON.stringify(mainState.atp.session)),
+    })
+  mainState.processing = false
+}
 </script>
 
 <template>
@@ -28,6 +47,24 @@ const mainState = inject("state") as MainState
         <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
       </a>
 
+      <!-- マイフィードポップアップトリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="mainState.openMyFeedsPopup"
+      >
+        <SVGIcon name="rss" />
+        <span>{{ $t("myFeeds") }}</span>
+      </a>
+
+      <!-- コンテンツフィルタリングポップアップトリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="mainState.openContentFilteringPopup"
+      >
+        <SVGIcon name="alert" />
+        <span>{{ $t("contentFiltering") }}</span>
+      </a>
+
       <!-- ミュート中のユーザーポップアップトリガー -->
       <a
         class="textlink--icon"
@@ -44,6 +81,15 @@ const mainState = inject("state") as MainState
       >
         <SVGIcon name="personOff" />
         <span>{{ $t("blockingUsers") }}</span>
+      </a>
+
+      <!-- セッション更新トリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="refreshSession"
+      >
+        <SVGIcon name="shimmer" />
+        <span>{{ $t("refreshSession") }}</span>
       </a>
     </div>
 

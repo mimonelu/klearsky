@@ -71,7 +71,13 @@ type MainState = {
   currentFollowingsCursor?: string
 
   currentPreferences: Array<TTPreference>
+  fetchPreferences: () => Promise<boolean>
   feedPreferences: ComputedRef<undefined | TTPreference>
+  currentMyFeeds: { [uri: string]: {
+    generator?: TTFeedGenerator
+    feeds: Array<TTFeed>
+  } }
+  fetchMyFeeds: () => Promise<boolean>
 
   getContentWarningVisibility: (
     authorLabels?: Array<TTLabel>,
@@ -113,7 +119,7 @@ type MainState = {
   globallineProfiles: { [did: string]: any }
   globallineNumberOfPosts: number
 
-  currentFeedGenerators: Array<TTFeedGenerator>
+  currentPopularFeedGenerators: Array<TTFeedGenerator>
   fetchPopularFeedGenerators: () => Promise<void>
   currentCustomUri?: string
   currentCustomFeeds: Array<TTFeed>
@@ -123,6 +129,7 @@ type MainState = {
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string
   notificationCount: number
+  notificationFetchedFirst: boolean
 
   loginPopupDisplay: boolean
   loginPopupAutoDisplay: any // TODO:
@@ -170,6 +177,12 @@ type MainState = {
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
+  // マイフィードポップアップの表示スイッチ
+  myFeedsPopupDisplay: boolean
+
+  // コンテンツフィルタリングポップアップの表示スイッチ
+  contentFilteringPopupDisplay: boolean
+
   // ミュートユーザーリストポップアップの表示スイッチ
   mutingUsersPopupDisplay: boolean
 
@@ -195,7 +208,6 @@ type MainState = {
   $getI18n?: Function
 
   formatDate: Function
-
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>
@@ -240,6 +252,14 @@ type MainState = {
   openInviteCodesPopup: Function
   closeInviteCodesPopup: Function
 
+  // マイフィードポップアップの開閉
+  openMyFeedsPopup: Function
+  closeMyFeedsPopup: Function
+
+  // コンテンツフィルタリングポップアップの開閉
+  openContentFilteringPopup: Function
+  closeContentFilteringPopup: Function
+
   // ミュートユーザーリストポップアップの開閉
   openMutingUsersPopup: Function
   closeMutingUsersPopup: Function
@@ -259,4 +279,7 @@ type MainState = {
   // エラーポップアップの開閉
   openErrorPopup: Function
   closeErrorPopup: Function
+
+  // ブロードキャスト
+  broadcastChannel: BroadcastChannel
 }

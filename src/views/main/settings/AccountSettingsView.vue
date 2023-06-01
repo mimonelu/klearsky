@@ -4,9 +4,22 @@ import { useRouter } from "vue-router"
 import AccountList from "@/components/AccountList.vue"
 import Util from "@/composables/util"
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const router = useRouter()
+
+async function refreshSession () {
+  if (!await mainState.openConfirmationPopup(
+    $t("refreshSession"),
+    $t("refreshSessionDescription")
+  )) return
+  mainState.processing = true
+  if (!await mainState.atp.refreshSession())
+    mainState.openErrorPopup("errorApiFailed", "AccountSettingsView/refreshSession")
+  mainState.processing = false
+}
 
 async function newLogin () {
   Util.blurElement()
@@ -36,15 +49,25 @@ async function logout () {
     <div class="body">
       <div class="button-container">
         <button
+          class="button--bordered"
+          @click.prevent="refreshSession()"
+        >
+          <span>{{ $t("refreshSession") }}</span>
+        </button>
+        <button
           class="button"
           @click.prevent="newLogin()"
-        >{{ $t("newLogin") }}</button>
-        <button
-          class="button--important"
-          @click.prevent="logout"
-        >{{ $t("logout") }}</button>
+        >
+          <span>{{ $t("newLogin") }}</span>
+        </button>
       </div>
       <AccountList :hasDeleteButton="true" />
+      <button
+        class="button--important"
+        @click.prevent="logout"
+      >
+        <span>{{ $t("logout") }}</span>
+      </button>
     </div>
   </div>
 </template>
@@ -59,7 +82,7 @@ async function logout () {
 
 .button-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1rem;
+  grid-template-columns: auto auto;
+  grid-gap: 0.5rem;
 }
 </style>

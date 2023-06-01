@@ -1,3 +1,5 @@
+import Util from "@/composables/util"
+
 export default async function (this: TIAtpWrapper): Promise<boolean> {
   if (this.session == null) return false
 
@@ -14,12 +16,13 @@ export default async function (this: TIAtpWrapper): Promise<boolean> {
     if (!response.ok) return undefined
     return await response.json()
   })
+
   if (json?.did == null) return false
   this.data.did = json.did
-  this.data.sessions[this.data.did] = json as TTSession
-  this.data.sessions[this.data.did].__service = this.session.__service
-  json.email = this.session.email
-  this.session = json
+  this.resetSession(json)
+
+  // TODO:
+  Util.saveStorage("atp", this.data)
 
   return true
 }

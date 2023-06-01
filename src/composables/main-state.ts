@@ -3,12 +3,11 @@ import format from "date-fns/format"
 import intlFormatDistance from "date-fns/intlFormatDistance"
 import isSameYear from "date-fns/isSameYear"
 import { computed, reactive } from "vue"
-import type {
-  LocationQueryValue,
-} from "vue-router"
+import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
+import LABELS from "@/consts/labels.json"
 
 const state = reactive<MainState>({
   // @ts-ignore // TODO:
@@ -79,12 +78,14 @@ const state = reactive<MainState>({
   fetchAuthorLikes,
   getContentWarningVisibility,
 
+  fetchPreferences,
   getConcernedPreferences,
   feedPreferences: computed((): undefined | TTPreference => {
     return state.currentPreferences.find((preference: TTPreference) => {
       return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
     })
   }),
+  fetchMyFeeds,
 
   fetchHotFeeds,
   fetchTimeline,
@@ -119,6 +120,14 @@ const state = reactive<MainState>({
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
   closeInviteCodesPopup,
+
+  // マイフィードポップアップの開閉
+  openMyFeedsPopup,
+  closeMyFeedsPopup,
+
+  // コンテンツフィルタリングポップアップの開閉
+  openContentFilteringPopup,
+  closeContentFilteringPopup,
 
   // ミュートユーザーリストポップアップの開閉
   openMutingUsersPopup,
@@ -252,30 +261,14 @@ async function fetchAuthorLikes (direction: "new" | "old") {
   state.currentAuthorLikesCursor = cursor
 }
 
-// ラベル対応
-
-// SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/labeling/const.ts
-// 強制閲覧制限
-const ALWAYS_HIDE_LABELS = ["!filter", "csam", "dmca-violation", "nudity-nonconsensual"]
-// 強制閲覧警告
-const ALWAYS_WARN_LABELS = ["!warn", "account-security"]
-// 閲覧制限または閲覧警告
-const LABEL_GROUP_MAP: { [k: string]: Array<string> } = {
-  // Explicit Sexual Images
-  nsfw: ["nsfw", "nsfl", "porn"],
-  // Other Nudity
-  nudity: ["nudity"],
-  // Sexually Suggestive
-  suggestive: ["suggestive", "sexual"],
-  // Violent / Bloody
-  gore: ["gore", "self-harm", "torture", "nsfl"],
-  // Political Hate-Groups
-  hate: ["hate", "icon-kkk", "icon-nazi", "icon-intolerant", "behavior-intolerant"],
-  // Spam
-  spam: ["spam"],
-  // Impersonation
-  impersonation: ["impersonation"],
+async function fetchPreferences (): Promise<boolean> {
+  const preferences = await state.atp.fetchPreferences()
+  if (preferences == null) return false
+  state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
+  return true
 }
+
+// ラベル対応
 
 function getContentWarningVisibility (
   authorLabels?: Array<TTLabel>,
@@ -318,7 +311,7 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
     if (preference.$type !== "app.bsky.actor.defs#contentLabelPref" ||
         preference.label == null ||
         preference.visibility === "show") return false
-    const labelGroup = LABEL_GROUP_MAP[preference.label as string]
+    const labelGroup = (LABELS.DEFAULTS as any)[preference.label as string]
     if (labelGroup == null) return false
     return labels.some((label: TTLabel) => {
       return labelGroup.includes(label.val)
@@ -326,7 +319,7 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
   })
 
   if (labels.some((label: TTLabel) => {
-    return ALWAYS_HIDE_LABELS.includes(label.val)
+    return LABELS.ALWAYS_HIDE.includes(label.val)
   })) {
     concernedPreferences.push({
       $type: "app.bsky.actor.defs#contentLabelPref",
@@ -336,7 +329,7 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
   }
 
   if (labels.some((label: TTLabel) => {
-    return ALWAYS_WARN_LABELS.includes(label.val)
+    return LABELS.ALWAYS_WARN.includes(label.val)
   })) {
     concernedPreferences.push({
       $type: "app.bsky.actor.defs#contentLabelPref",
@@ -444,7 +437,7 @@ async function fetchPopularFeedGenerators () {
   state.listProcessing = false
   if (feeds == null) return
   if (feeds === false) state.openErrorPopup("errorApiFailed", "main-state/fetchPopularFeedGenerators")
-  state.currentFeedGenerators = feeds as Array<TTFeedGenerator>
+  state.currentPopularFeedGenerators = feeds as Array<TTFeedGenerator>
 }
 
 async function fetchCustomFeeds (direction: "old" | "new") {
@@ -462,6 +455,31 @@ async function fetchCustomFeeds (direction: "old" | "new") {
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
   else if (cursor != null) state.currentCustomCursor = cursor
   state.currentCustomUri = state.currentQuery.feed
+}
+
+async function fetchMyFeeds (): Promise<boolean> {
+  const saved: undefined | Array<string> = state.feedPreferences?.saved
+  if (saved == null) return false
+
+  const generators = await state.atp.fetchFeedGenerators(saved)
+  if (generators instanceof Error) {
+    state.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
+    return false
+  }
+
+  saved.forEach((uri: string) => {
+    if (state.currentMyFeeds[uri] == null)
+      state.currentMyFeeds[uri] = {
+        generator: generators.find((generator: TTFeedGenerator) => generator.uri === uri),
+        feeds: [],
+      }
+  })
+
+  await Promise.all(saved.map((uri: string) => {
+    return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, 3)
+  }))
+
+  return true
 }
 
 function saveSettings () {
@@ -635,6 +653,26 @@ function openInviteCodesPopup () {
 
 function closeInviteCodesPopup () {
   state.inviteCodesPopupDisplay = false
+}
+
+// マイフィードポップアップの開閉
+
+function openMyFeedsPopup () {
+  state.myFeedsPopupDisplay = true
+}
+
+function closeMyFeedsPopup () {
+  state.myFeedsPopupDisplay = false
+}
+
+// コンテンツフィルタリングポップアップの開閉
+
+function openContentFilteringPopup () {
+  state.contentFilteringPopupDisplay = true
+}
+
+function closeContentFilteringPopup () {
+  state.contentFilteringPopupDisplay = false
 }
 
 // ミュートユーザーリストポップアップの開閉

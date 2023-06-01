@@ -44,7 +44,7 @@ async function openSendPostPopup () {
     <!-- カスタムフィードボタン -->
     <RouterLink
       class="link-button"
-      to="/feeds/popular"
+      to="/feeds/my"
       :data-is-focus="mainState.currentPath.startsWith('/feeds/')"
     >
       <SVGIcon name="rss" />

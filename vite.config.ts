@@ -41,6 +41,14 @@ export default defineConfig({
       ],
     },
   },
+
+  // ビルドプロダクションでは開発用のオブジェクトをドロップ
+  esbuild: {
+    drop: process.env.NODE_ENV === "production"
+      ? ["console", "debugger"]
+      : [],
+  },
+
   css: {
     preprocessorOptions: {
       scss: {

@@ -1,5 +1,5 @@
-import { BskyAgent } from "@atproto/api"
 import type { AtpSessionData, AtpSessionEvent } from "@atproto/api"
+import { BskyAgent } from "@atproto/api"
 
 export default function (this: TIAtpWrapper, service: string): boolean {
   this.agent = new BskyAgent({
@@ -13,10 +13,7 @@ export default function (this: TIAtpWrapper, service: string): boolean {
             console.warn("[klearsky/persistSession]", "session?.did == null")
             break
           }
-          this.data.did = session.did
-          this.data.sessions[this.data.did] = session as TTSession
-          this.data.sessions[this.data.did].__service = service
-          this.session = session
+          this.resetSession(session, service)
           this.lastFetchNotificationsDate = undefined
           break
         }

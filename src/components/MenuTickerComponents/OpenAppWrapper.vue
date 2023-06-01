@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { reactive } from "vue"
-import { AtUri } from "@atproto/uri"
 import MenuTicker from "@/components/MenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import otherApps from "@/consts/other-apps.json"
@@ -28,11 +27,11 @@ function openOtherApp (app: any) {
       .replace("{did}", props.did)
       .replace("{handle}", props.handle)
   } else if (props.type === "post") {
-    const aturi = new AtUri(props.uri as string)
+    const rkey = (props.uri?.match(/\/([^\/]+)$/) ?? ["", ""])[1]
     uri = app.postUri
       .replace("{did}", props.did)
       .replace("{handle}", props.handle)
-      .replace("{rkey}", aturi.rkey)
+      .replace("{rkey}", rkey)
       .replace("{uri}", props.uri)
   }
   window.open(uri)

@@ -119,6 +119,10 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | false | string>
+  fetchFeedGenerators(
+    this: TIAtpWrapper,
+    feeds: Array<string>
+  ): Promise<Error | Array<TTFeedGenerator>>
   fetchFirstPost(
     this: TIAtpWrapper,
     handle: string
@@ -225,6 +229,11 @@ interface TIAtpWrapper {
   ): Promise<boolean>
   logout(this: TIAtpWrapper)
   refreshSession(this: TIAtpWrapper): Promise<boolean>
+  resetSession(
+    this: TIAtpWrapper,
+    newSession: TTSession,
+    service?: string
+  ): void
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
   updateNotificationSeen(this: TIAtpWrapper): Promise<boolean>

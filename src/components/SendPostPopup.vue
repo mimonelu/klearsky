@@ -59,6 +59,7 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "url",
       inputmode: "url",
       clearButton: true,
+      footnote: "※リンク先画像の取得は未対応です。",
     },
     {
       state,

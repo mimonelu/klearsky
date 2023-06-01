@@ -1,0 +1,123 @@
+<script lang="ts" setup>
+import { inject } from "vue"
+import FeedList from "@/components/FeedList.vue"
+import Loader from "@/components/Loader.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
+
+const mainState = inject("state") as MainState
+</script>
+
+<template>
+  <div class="my-feeds-view">
+    <div
+      v-if="!mainState.listProcessing && Object.keys(mainState.currentMyFeeds).length === 0"
+      class="textlabel"
+    >
+      <div class="textlabel__text">
+        <SVGIcon name="alert" />{{ $t("noMyFeeds") }}
+      </div>
+    </div>
+    <template v-else>
+      <div
+        v-for="myFeeds, uri in mainState.currentMyFeeds"
+        :key="uri"
+        v-show="!mainState.listProcessing"
+        class="my-feeds-view__item"
+      >
+        <RouterLink
+          class="my-feeds-view__header"
+          :to="{ path: '/feeds/timeline', query: {
+            feed: myFeeds.generator?.uri,
+            displayName: myFeeds.generator?.displayName,
+          } }"
+        >
+          <SVGIcon name="rss" />
+          <span>{{ myFeeds.generator?.displayName }}</span>
+          <SVGIcon name="cursorRight" />
+        </RouterLink>
+        <div class="my-feeds-view__body">
+          <FeedList
+            type="feeds-timeline"
+            :feeds="myFeeds.feeds"
+            :hasLoadButton="false"
+            :disabledInfinitScroll="true"
+          />
+        </div>
+        <div class="my-feeds-view__link">
+          <RouterLink
+            class="button--bordered"
+            :to="{ path: '/feeds/timeline', query: {
+              feed: myFeeds.generator?.uri,
+              displayName: myFeeds.generator?.displayName,
+            } }"
+          >
+            <SVGIcon name="cursorRight" />
+            <span>{{ $t("more") }} - {{ myFeeds.generator?.displayName }}</span>
+          </RouterLink>
+        </div>
+      </div>
+    </template>
+    <Loader v-if="mainState.listProcessing" />
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.my-feeds-view {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-bottom: var(--sp-menu-height);
+  position: relative;
+
+  &__header {
+    background-color: rgba(var(--accent-color), 0.5);
+    cursor: pointer;
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 1rem;
+
+    & > .svg-icon--rss {
+      fill: rgb(var(--accent-color));
+    }
+
+    & > span {
+      font-size: 1.25rem;
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    & > .svg-icon--cursorRight {
+      fill: rgba(var(--fg-color), 0.5);
+    }
+    &:focus, &:hover {
+      & > .svg-icon--cursorRight {
+        fill: rgb(var(--fg-color));
+      }
+    }
+  }
+
+  .textlabel {
+    margin: 2rem;
+  }
+
+  &__link {
+    display: flex;
+    justify-content: center;
+    margin: 0 1em 1em;
+  }
+}
+
+.feed-list:deep() {
+  .feed:not(:last-child) {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  }
+
+  .feed:not(:empty):not(:last-child)::after {
+    border-bottom-style: none;
+  }
+}
+</style>

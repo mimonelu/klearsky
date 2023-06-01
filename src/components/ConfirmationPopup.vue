@@ -46,11 +46,15 @@ function apply () {
           class="button--bordered"
           ref="cancelButton"
           @click="close"
-        >{{ $t("no") }}</button>
+        >
+          <span>{{ $t("no") }}</span>
+        </button>
         <button
           class="button"
           @click="apply"
-        >{{ $t("yes") }}</button>
+        >
+          <span>{{ $t("yes") }}</span>
+        </button>
       </div>
     </template>
   </Popup>

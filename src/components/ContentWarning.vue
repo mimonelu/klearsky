@@ -87,12 +87,16 @@ function hide () {
           v-if="!display"
           class="button--important"
           @click.prevent.stop="show"
-        >{{ $t("show") }}</button>
+        >
+          <span>{{ $t("show") }}</span>
+        </button>
         <button
           v-else
           class="button--important"
           @click.prevent.stop="hide"
-        >{{ $t("hide") }}</button>
+        >
+          <span>{{ $t("hide") }}</span>
+        </button>
       </template>
     </div>
   </template>

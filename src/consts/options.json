@@ -1,4 +1,9 @@
 {
+  "labelVisibility": [
+    { "label": "seal", "value": "hide" },
+    { "label": "warn", "value": "warn" },
+    { "label": "show", "value": "show" }
+  ],
   "accountReportReason": [
     { "label": "reportReasonMisleading", "value": "com.atproto.moderation.defs#reasonMisleading" },
     { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" }

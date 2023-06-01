@@ -223,12 +223,20 @@ function onEnterKeyDown (event: KeyboardEvent) {
           "
         >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
       </dd>
+
+      <!-- 脚注 -->
+      <dd
+        v-if="item.footnote != null"
+        class="footnote"
+      >{{ item.footnote }}</dd>
     </dl>
     <slot name="after" />
     <button
       v-if="hasSubmitButton ?? true"
       class="button"
-    >{{ submitButtonLabel ?? $t("submit") }}</button>
+    >
+      <span>{{ submitButtonLabel ?? $t("submit") }}</span>
+    </button>
   </form>
 </template>
 
@@ -246,6 +254,8 @@ function onEnterKeyDown (event: KeyboardEvent) {
 
     & > dt {
       font-weight: bold;
+      line-height: 1.25;
+      word-wrap: break-word;
     }
 
     & > dd  {
@@ -284,6 +294,14 @@ function onEnterKeyDown (event: KeyboardEvent) {
   &:hover > .svg-icon {
     fill: rgb(var(--fg-color));
   }
+}
+
+.footnote {
+  color: rgba(var(--fg-color), 0.75);
+  font-size: 0.875rem;
+  line-height: 1.25;
+  text-align: right;
+  word-wrap: break-word;
 }
 
 .max-length-indicator {

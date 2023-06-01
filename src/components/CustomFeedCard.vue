@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const props = defineProps<{
   generator: TTFeedGenerator
@@ -9,58 +11,79 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  processing: boolean
   saved: ComputedRef<boolean>
 }>({
+  processing: false,
   saved: computed((): boolean => {
     return mainState.feedPreferences?.saved
-      .some((pin: string) => pin === props.generator.uri) ?? false
+      .some((uri: string) => uri === props.generator.uri) ?? false
   }),
 })
+
+async function toggleSaved () {
+  Util.blurElement()
+  if (state.processing) return
+  if (mainState.feedPreferences == null) return
+  if (mainState.feedPreferences.saved == null) mainState.feedPreferences.saved = []
+  if (state.saved)
+    mainState.feedPreferences.saved.splice(
+      0,
+      mainState.feedPreferences.saved.length,
+      ...mainState.feedPreferences.saved.filter((uri: string) => uri !== props.generator.uri)
+    )
+  else
+    mainState.feedPreferences.saved.push(props.generator.uri)
+  state.processing = true
+  if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
+    mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/updatePreferences")
+  state.processing = false
+}
 </script>
 
 <template>
   <RouterLink
-    class="feed-card"
+    class="custom-feed-card"
     :to="{ path: '/feeds/timeline', query: {
       feed: generator.uri,
       displayName: generator.displayName,
     } }"
     @click.stop
   >
-    <div class="feed-card__top">
+    <div class="custom-feed-card__top">
       <!-- フィード画像 -->
       <img
-        class="feed-card__avatar"
+        class="custom-feed-card__avatar"
         loading="lazy"
         :src="generator.avatar"
         alt=""
       >
 
-      <div class="feed-card__top__right">
+      <div class="custom-feed-card__top__right">
         <!-- フィード名 -->
-        <div class="feed-card__display-name">
+        <div class="custom-feed-card__display-name">
           <SVGIcon name="rss" />
           <span>{{ generator.displayName }}</span>
         </div>
 
         <!-- フィードライク数 -->
-        <div class="feed-card__like-count">
+        <div class="custom-feed-card__like-count">
           <SVGIcon name="heart" />
           <span>{{ generator.likeCount }}</span>
         </div>
 
         <!-- フィード作成日時 -->
-        <div class="feed-card__indexed-at">
+        <div class="custom-feed-card__indexed-at">
           <SVGIcon name="clock" />
           <span>{{ mainState.formatDate(generator.indexedAt) }}</span>
         </div>
 
-        <div class="feed-card__top__right__right">
+        <div class="custom-feed-card__top__right__right">
           <!-- お気に入りフィード -->
           <div
-            class="feed-card__bookmark"
+            class="custom-feed-card__bookmark"
             :data-saved="state.saved"
-            @click.prevent.stop
+            @click.prevent.stop="toggleSaved"
           >
             <SVGIcon name="bookmark" />
           </div>
@@ -70,27 +93,31 @@ const state = reactive<{
 
     <!-- フィード説明文 -->
     <div
-      class="feed-card__description"
+      class="custom-feed-card__description"
       dir="auto"
     >{{ generator.description }}</div>
 
-    <div class="feed-card__bottom">
+    <div class="custom-feed-card__bottom">
       <!-- フィード作成者 -->
       <RouterLink
-        class="feed-card__creator"
+        class="custom-feed-card__creator"
         :to="{ name: 'profile-post', query: { handle: generator.creator.handle } }"
-        @click.stop
+        @click.prevent
       >
         <SVGIcon name="person" />
-        <div class="feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
-        <div class="feed-card__creator__handle">{{ generator.creator.handle }}</div>
+        <div class="custom-feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
+        <div class="custom-feed-card__creator__handle">{{ generator.creator.handle }}</div>
       </RouterLink>
     </div>
+    <Loader
+      v-if="state.processing"
+      @click.prevent
+    />
   </RouterLink>
 </template>
 
 <style lang="scss" scoped>
-.feed-card {
+.custom-feed-card {
   background-color: rgba(var(--accent-color), 0.125);
   border: 1px solid rgba(var(--accent-color), 0.25);
   border-radius: var(--border-radius);
@@ -98,6 +125,7 @@ const state = reactive<{
   flex-direction: column;
   grid-gap: 0.5em;
   padding: 1em;
+  position: relative;
   &:focus, &:hover {
     border-color: rgb(var(--accent-color), 0.5);
   }
@@ -109,7 +137,7 @@ const state = reactive<{
 
     &__right {
       display: grid;
-      grid-template-columns: auto max-content 1fr;
+      grid-template-columns: auto 1fr auto;
       grid-template-areas:
         "n n r"
         "l i r";
@@ -165,6 +193,7 @@ const state = reactive<{
     display: flex;
     align-items: center;
     grid-gap: 0.25em;
+    overflow: hidden;
 
     & > .svg-icon {
       font-size: 0.75em;
@@ -173,6 +202,9 @@ const state = reactive<{
     & > span {
       font-size: 0.875em;
       line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 

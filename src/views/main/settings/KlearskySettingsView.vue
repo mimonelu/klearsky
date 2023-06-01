@@ -308,7 +308,9 @@ async function resetSettings () {
           <button
             class="button--important"
             @click.stop="resetSettings"
-          >{{ $t("resetSettings") }}</button>
+          >
+            <span>{{ $t("resetSettings") }}</span>
+          </button>
         </div>
       </div>
     </div>

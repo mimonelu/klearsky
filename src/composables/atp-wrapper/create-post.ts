@@ -1,12 +1,6 @@
 import Package from "@/../package.json"
+import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 import { RichText } from "@atproto/api"
-import type {
-  AppBskyEmbedImages,
-  AppBskyFeedPost,
-  BlobRef,
-  BskyAgent,
-  ComAtprotoRepoCreateRecord,
-} from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (

@@ -21,6 +21,7 @@ import fetchAuthorLikes from "@/composables/atp-wrapper/fetch-author-likes"
 import fetchBlob from "@/composables/atp-wrapper/fetch-blob"
 import fetchBlockingUsers from "@/composables/atp-wrapper/fetch-blocking-users"
 import fetchCustomFeeds from "@/composables/atp-wrapper/fetch-custom-feeds"
+import fetchFeedGenerators from "@/composables/atp-wrapper/fetch-feed-generators"
 import fetchFirstPost from "@/composables/atp-wrapper/fetch-first-post"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
@@ -45,6 +46,7 @@ import fetchUserSearch from "@/composables/atp-wrapper/fetch-user-search"
 import login from "@/composables/atp-wrapper/login"
 import logout from "@/composables/atp-wrapper/logout"
 import refreshSession from "@/composables/atp-wrapper/refresh-session"
+import resetSession from "@/composables/atp-wrapper/reset-session"
 import resumeSession from "@/composables/atp-wrapper/resume-session"
 import updateNotificationSeen from "@/composables/atp-wrapper/update-notification-seen"
 import updatePreferences from "@/composables/atp-wrapper/update-preferences"
@@ -95,6 +97,7 @@ prototype.fetchAuthorLikes = fetchAuthorLikes
 prototype.fetchBlob = fetchBlob
 prototype.fetchBlockingUsers = fetchBlockingUsers
 prototype.fetchCustomFeeds = fetchCustomFeeds
+prototype.fetchFeedGenerators = fetchFeedGenerators
 prototype.fetchFirstPost = fetchFirstPost
 prototype.fetchFollowers = fetchFollowers
 prototype.fetchFollowings = fetchFollowings
@@ -119,6 +122,7 @@ prototype.fetchUserSearch = fetchUserSearch
 prototype.login = login
 prototype.logout = logout
 prototype.refreshSession = refreshSession
+prototype.resetSession = resetSession
 prototype.resumeSession = resumeSession
 prototype.saveData = function (this: TIAtpWrapper) {
   Util.saveStorage("atp", this.data)
