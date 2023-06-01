@@ -279,4 +279,7 @@ type MainState = {
   // エラーポップアップの開閉
   openErrorPopup: Function
   closeErrorPopup: Function
+
+  // ブロードキャスト
+  broadcastChannel: BroadcastChannel
 }

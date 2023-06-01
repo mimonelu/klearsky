@@ -58,6 +58,9 @@ onBeforeUnmount(() => {
 })
 
 onMounted(async () => {
+  // ブロードキャスト
+  state.broadcastChannel.addEventListener("message", broadcastListener)
+
   state.currentPath = router.currentRoute.value.fullPath
   state.currentQuery = router.currentRoute.value.query
   state.settings = Util.loadStorage("settings") ?? {}
@@ -83,6 +86,9 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  // ブロードキャスト
+  state.broadcastChannel.removeEventListener("message", broadcastListener)
+
   clearNotificationInterval()
 
   // インフィニットスクロール用処理
@@ -227,6 +233,9 @@ function resetState () {
 
   // D&D用処理
   state.isDragOver = false
+
+  // ブロードキャスト
+  state.broadcastChannel = new BroadcastChannel("klearsky")
 }
 
 async function autoLogin (): Promise<boolean> {
@@ -425,6 +434,7 @@ function scrollToFocused () {
 }
 
 // インフィニットスクロール用処理
+
 let isEnter = false
 function scrollListener () {
   const threshold = 64
@@ -464,6 +474,20 @@ function onDrop (event: DragEvent) {
   else
     state.openSendPostPopup("post", undefined, undefined, files)
   state.isDragOver = false
+}
+
+// ブロードキャスト
+
+function broadcastListener (event: MessageEvent) {
+  switch (event.data.type) {
+    // セッションの同期
+    case "refreshSession": {
+      if (event.data.data == null) break
+      if (event.data.data.did !== state.atp.data.did) break
+      state.atp.resetSession(event.data.data)
+      break
+    }
+  }
 }
 </script>
 

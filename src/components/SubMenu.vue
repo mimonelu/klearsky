@@ -17,6 +17,12 @@ async function refreshSession () {
   mainState.processing = true
   if (!await mainState.atp.refreshSession())
     mainState.openErrorPopup("errorApiFailed", "SubMenu/refreshSession")
+  else
+    // セッションの同期
+    mainState.broadcastChannel.postMessage({
+      type: "refreshSession",
+      data: JSON.parse(JSON.stringify(mainState.atp.session)),
+    })
   mainState.processing = false
 }
 </script>
