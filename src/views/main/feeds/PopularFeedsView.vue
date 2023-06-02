@@ -33,9 +33,12 @@ const mainState = inject("state") as MainState
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  grid-gap: 0.5rem;
-  padding: 0.5rem 0.5rem var(--sp-menu-height);
+  padding-bottom: var(--sp-menu-height);
   position: relative;
+
+  .custom-feed-card {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+  }
 
   .textlabel {
     margin: 1.5rem;

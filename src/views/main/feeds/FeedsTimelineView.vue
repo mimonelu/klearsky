@@ -23,7 +23,7 @@ const mainState = inject("state") as MainState
 
 .feed-list:deep() {
   .feed:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
   }
 
   .feed:not(:empty):not(:last-child)::after {

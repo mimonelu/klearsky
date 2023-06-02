@@ -79,16 +79,32 @@ function close () {
 
 <style lang="scss" scoped>
 .my-feeds-popup:deep() {
-  .popup-header > h2 {
-    color: rgb(var(--accent-color));
+  .popup-header {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
 
-    & > .svg-icon {
-      fill: rgb(var(--accent-color));
+    & > h2 {
+      color: rgb(var(--accent-color));
+
+      & > .svg-icon {
+        fill: rgb(var(--accent-color));
+      }
     }
   }
 
-  .textlabel[data-is-processing="true"] {
-    visibility: hidden;
+  .popup-body {
+    grid-gap: unset;
+    padding: unset;
+  }
+
+  .custom-feed-card:not(:last-child) {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+  }
+
+  .textlabel {
+    margin: 1rem;
+    &[data-is-processing="true"] {
+      visibility: hidden;
+    }
   }
 }
 </style>

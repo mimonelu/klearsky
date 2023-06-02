@@ -118,16 +118,13 @@ async function toggleSaved () {
 
 <style lang="scss" scoped>
 .custom-feed-card {
-  background-color: rgba(var(--accent-color), 0.125);
-  border: 1px solid rgba(var(--accent-color), 0.25);
-  border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
   grid-gap: 0.5em;
   padding: 1em;
   position: relative;
   &:focus, &:hover {
-    border-color: rgb(var(--accent-color), 0.5);
+    background-color: rgb(var(--accent-color), 0.125);
   }
 
   &__top {
@@ -157,7 +154,7 @@ async function toggleSaved () {
   // フィード画像
   &__avatar {
     grid-area: a;
-    border: 1px solid rgba(var(--fg-color), 0.25);
+    border: 1px solid rgba(var(--accent-color), 0.25);
     border-radius: var(--border-radius);
     display: block;
     min-width: 3em;
