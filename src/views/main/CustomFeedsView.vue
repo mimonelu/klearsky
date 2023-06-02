@@ -52,7 +52,7 @@ function openMyFeedsPopup () {
   &__header {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
 
     .button--bordered {
       margin: -1rem 0;

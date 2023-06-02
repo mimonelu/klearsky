@@ -70,19 +70,24 @@ const mainState = inject("state") as MainState
   position: relative;
 
   &__header {
-    background-color: rgba(var(--accent-color), 0.5);
+    background-color: rgba(var(--bg-color), var(--main-area-opacity));
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
     cursor: pointer;
     display: grid;
     grid-gap: 0.5rem;
     grid-template-columns: auto 1fr auto;
     align-items: center;
     padding: 1rem;
+    position: sticky;
+    top: calc(6rem + 1px);
+    z-index: 1;
 
     & > .svg-icon--rss {
       fill: rgb(var(--accent-color));
     }
 
     & > span {
+      color: rgb(var(--accent-color));
       font-size: 1.25rem;
       font-weight: bold;
       overflow: hidden;
@@ -98,6 +103,10 @@ const mainState = inject("state") as MainState
         fill: rgb(var(--fg-color));
       }
     }
+  }
+
+  &__item {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   }
 
   .textlabel {
