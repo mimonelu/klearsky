@@ -467,6 +467,10 @@ async function fetchMyFeeds (): Promise<boolean> {
     return false
   }
 
+  for (const uri in state.currentMyFeeds) {
+    delete state.currentMyFeeds[uri]
+  }
+
   saved.forEach((uri: string) => {
     if (state.currentMyFeeds[uri] == null)
       state.currentMyFeeds[uri] = {
@@ -475,7 +479,7 @@ async function fetchMyFeeds (): Promise<boolean> {
       }
   })
 
-  await Promise.all(saved.map((uri: string) => {
+  await Promise.allSettled(saved.map((uri: string) => {
     return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, 3)
   }))
 

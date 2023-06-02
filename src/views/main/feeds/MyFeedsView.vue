@@ -3,12 +3,29 @@ import { inject } from "vue"
 import FeedList from "@/components/FeedList.vue"
 import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+async function updateMyFeeds () {
+  Util.blurElement()
+  if (mainState.listProcessing) return
+  mainState.listProcessing = true
+  await mainState.fetchMyFeeds()
+  mainState.listProcessing = false
+}
 </script>
 
 <template>
   <div class="my-feeds-view">
+    <Portal to="custom-feeds-view-header-portal">
+      <button
+        class="button--bordered"
+        @click.stop="updateMyFeeds"
+      >
+        <SVGIcon name="repost" />
+      </button>
+    </Portal>
     <div
       v-if="!mainState.listProcessing && Object.keys(mainState.currentMyFeeds).length === 0"
       class="textlabel"
