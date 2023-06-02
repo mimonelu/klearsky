@@ -26,14 +26,19 @@ async function toggleSaved () {
   if (state.processing) return
   if (mainState.feedPreferences == null) return
   if (mainState.feedPreferences.saved == null) mainState.feedPreferences.saved = []
+
+  // フィードブックマークの削除
   if (state.saved)
     mainState.feedPreferences.saved.splice(
       0,
       mainState.feedPreferences.saved.length,
       ...mainState.feedPreferences.saved.filter((uri: string) => uri !== props.generator.uri)
     )
+
+  // フィードブックマークの追加
   else
     mainState.feedPreferences.saved.push(props.generator.uri)
+
   state.processing = true
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
     mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/updatePreferences")
@@ -118,16 +123,13 @@ async function toggleSaved () {
 
 <style lang="scss" scoped>
 .custom-feed-card {
-  background-color: rgba(var(--accent-color), 0.125);
-  border: 1px solid rgba(var(--accent-color), 0.25);
-  border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
   grid-gap: 0.5em;
   padding: 1em;
   position: relative;
   &:focus, &:hover {
-    border-color: rgb(var(--accent-color), 0.5);
+    background-color: rgb(var(--accent-color), 0.125);
   }
 
   &__top {
@@ -157,7 +159,7 @@ async function toggleSaved () {
   // フィード画像
   &__avatar {
     grid-area: a;
-    border: 1px solid rgba(var(--fg-color), 0.25);
+    border: 1px solid rgba(var(--accent-color), 0.25);
     border-radius: var(--border-radius);
     display: block;
     min-width: 3em;

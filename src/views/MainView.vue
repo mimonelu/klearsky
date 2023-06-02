@@ -67,7 +67,7 @@ onMounted(async () => {
   state.processing = true
   try {
     if (!await autoLogin()) return
-    await Promise.all([
+    await Promise.allSettled([
       state.fetchPreferences(),
       state.fetchUserProfile(),
     ])
@@ -184,6 +184,7 @@ function resetState () {
   state.globallinePosts = []
   state.globallineProfiles = {}
   state.globallineNumberOfPosts = 0
+  state.currentMyFeedGenerators = []
   state.currentMyFeeds = {}
   state.currentPopularFeedGenerators = []
   state.currentCustomUri = undefined
@@ -256,7 +257,7 @@ async function manualLogin (service: string, identifier: string, password: strin
       return
     }
     if (!state.atp.hasLogin()) return
-    await Promise.all([
+    await Promise.allSettled([
       state.fetchPreferences(),
       state.fetchUserProfile(),
     ])
@@ -292,7 +293,7 @@ async function processPage (pageName?: null | RouteRecordName) {
   try {
     switch (pageName) {
       case "profile-post": {
-        // ブロック情報などを先に取得するために Promise.all はしない
+        // ブロック情報などを先に取得するために Promise.allSettled はしない
         if (handle !== state.currentProfile?.handle)
           await state.fetchCurrentProfile(handle as string)
         if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
@@ -305,7 +306,7 @@ async function processPage (pageName?: null | RouteRecordName) {
           tasks.push(state.fetchAuthorReposts("new"))
         if (handle !== state.currentProfile?.handle)
           tasks.push(state.fetchCurrentProfile(handle as string))
-        await Promise.all(tasks)
+        await Promise.allSettled(tasks)
         break
       }
       case "profile-like": {
@@ -314,7 +315,7 @@ async function processPage (pageName?: null | RouteRecordName) {
           tasks.push(state.fetchAuthorLikes("new"))
         if (handle !== state.currentProfile?.handle)
           tasks.push(state.fetchCurrentProfile(handle as string))
-        await Promise.all(tasks)
+        await Promise.allSettled(tasks)
         break
       }
       case "profile-following": {
@@ -323,7 +324,7 @@ async function processPage (pageName?: null | RouteRecordName) {
           tasks.push(state.fetchFollowings("new"))
         if (handle !== state.currentProfile?.handle)
           tasks.push(state.fetchCurrentProfile(handle as string))
-        await Promise.all(tasks)
+        await Promise.allSettled(tasks)
         break
       }
       case "profile-follower": {
@@ -332,7 +333,7 @@ async function processPage (pageName?: null | RouteRecordName) {
           tasks.push(state.fetchFollowers("new"))
         if (handle !== state.currentProfile?.handle)
           tasks.push(state.fetchCurrentProfile(handle as string))
-        await Promise.all(tasks)
+        await Promise.allSettled(tasks)
         break
       }
       case "notifications": {

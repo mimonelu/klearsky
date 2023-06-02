@@ -961,6 +961,15 @@ async function translateText (forceTranslate: boolean) {
   }
 }
 
+.custom-feed-card {
+  background-color: rgba(var(--accent-color), 0.125);
+  border: 1px solid rgba(var(--accent-color), 0.25);
+  border-radius: var(--border-radius);
+  &:focus, &:hover {
+    border-color: rgba(var(--accent-color), 0.5);
+  }
+}
+
 .reaction-container {
   grid-area: f;
   display: grid;

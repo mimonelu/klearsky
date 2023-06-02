@@ -8,13 +8,8 @@ const emit = defineEmits<{(event: string): void}>()
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  myFeedGenerators: Array<TTFeedGenerator>
-}>({
-  myFeedGenerators: [],
-})
-
 onMounted(async () => {
+  // Preferences の取得
   mainState.processing = true
   const preferences = await mainState.fetchPreferences()
   mainState.processing = false
@@ -23,11 +18,19 @@ onMounted(async () => {
     return
   }
 
+  // ブックマークが存在しない
   if (mainState.feedPreferences?.saved == null) {
-    state.myFeedGenerators.splice(0)
+    mainState.currentMyFeedGenerators.splice(0)
     return
   }
 
+  // ブックマークが存在する＆差分がない
+  const savedBefore = JSON.stringify(mainState.currentMyFeedGenerators
+    .map((generator: TTFeedGenerator) => generator.uri))
+  const savedAfter = JSON.stringify(mainState.feedPreferences?.saved ?? [])
+  if (savedBefore === savedAfter && mainState.currentMyFeedGenerators.length > 0) return
+
+  // マイフィードジェネレーターの取得
   mainState.processing = true
   const generators = await mainState.atp.fetchFeedGenerators(mainState.feedPreferences.saved)
   mainState.processing = false
@@ -35,7 +38,7 @@ onMounted(async () => {
     mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
     return
   }
-  state.myFeedGenerators.splice(0, state.myFeedGenerators.length, ...generators)
+  mainState.currentMyFeedGenerators.splice(0, mainState.currentMyFeedGenerators.length, ...generators)
 })
 
 function close () {
@@ -57,7 +60,7 @@ function close () {
     </template>
     <template v-slot:body>
       <div
-        v-if="state.myFeedGenerators.length === 0"
+        v-if="mainState.currentMyFeedGenerators.length === 0"
         class="textlabel"
         :data-is-processing="mainState.processing"
       >
@@ -67,7 +70,7 @@ function close () {
       </div>
       <template v-else>
         <CustomFeedCard
-          v-for="generator of state.myFeedGenerators"
+          v-for="generator of mainState.currentMyFeedGenerators"
           :key="generator.cid"
           :generator="generator"
           @click="close"
@@ -79,16 +82,32 @@ function close () {
 
 <style lang="scss" scoped>
 .my-feeds-popup:deep() {
-  .popup-header > h2 {
-    color: rgb(var(--accent-color));
+  .popup-header {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
 
-    & > .svg-icon {
-      fill: rgb(var(--accent-color));
+    & > h2 {
+      color: rgb(var(--accent-color));
+
+      & > .svg-icon {
+        fill: rgb(var(--accent-color));
+      }
     }
   }
 
-  .textlabel[data-is-processing="true"] {
-    visibility: hidden;
+  .popup-body {
+    grid-gap: unset;
+    padding: unset;
+  }
+
+  .custom-feed-card:not(:last-child) {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+  }
+
+  .textlabel {
+    margin: 1rem;
+    &[data-is-processing="true"] {
+      visibility: hidden;
+    }
   }
 }
 </style>

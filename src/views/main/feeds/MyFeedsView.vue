@@ -3,12 +3,29 @@ import { inject } from "vue"
 import FeedList from "@/components/FeedList.vue"
 import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+async function updateMyFeeds () {
+  Util.blurElement()
+  if (mainState.listProcessing) return
+  mainState.listProcessing = true
+  await mainState.fetchMyFeeds()
+  mainState.listProcessing = false
+}
 </script>
 
 <template>
   <div class="my-feeds-view">
+    <Portal to="custom-feeds-view-header-portal">
+      <button
+        class="button--bordered"
+        @click.stop="updateMyFeeds"
+      >
+        <SVGIcon name="repost" />
+      </button>
+    </Portal>
     <div
       v-if="!mainState.listProcessing && Object.keys(mainState.currentMyFeeds).length === 0"
       class="textlabel"
@@ -70,19 +87,24 @@ const mainState = inject("state") as MainState
   position: relative;
 
   &__header {
-    background-color: rgba(var(--accent-color), 0.5);
+    background-color: rgba(var(--bg-color), var(--main-area-opacity));
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
     cursor: pointer;
     display: grid;
     grid-gap: 0.5rem;
     grid-template-columns: auto 1fr auto;
     align-items: center;
     padding: 1rem;
+    position: sticky;
+    top: calc(6rem + 1px);
+    z-index: 1;
 
     & > .svg-icon--rss {
       fill: rgb(var(--accent-color));
     }
 
     & > span {
+      color: rgb(var(--accent-color));
       font-size: 1.25rem;
       font-weight: bold;
       overflow: hidden;
@@ -100,6 +122,10 @@ const mainState = inject("state") as MainState
     }
   }
 
+  &__item {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  }
+
   .textlabel {
     margin: 2rem;
   }
@@ -113,7 +139,7 @@ const mainState = inject("state") as MainState
 
 .feed-list:deep() {
   .feed:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
   }
 
   .feed:not(:empty):not(:last-child)::after {

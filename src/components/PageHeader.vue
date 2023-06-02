@@ -59,26 +59,15 @@ function onActivateBackButton () {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   cursor: pointer;
-  display: grid;
+  display: flex;
   align-items: center;
   grid-gap: 0.5rem;
   padding: 0.75rem;
   position: sticky;
   top: 0;
   min-height: 3rem;
+  max-width: 100vw;
   z-index: 1;
-  &:has(> :nth-child(2)) {
-    grid-template-columns: auto 1fr;
-  }
-  &:has(> :nth-child(3)) {
-    grid-template-columns: auto auto 1fr;
-  }
-  &:has(> :nth-child(4)) {
-    grid-template-columns: auto auto auto 1fr;
-  }
-  &:has(> :nth-child(4)) {
-    grid-template-columns: auto auto auto auto 1fr;
-  }
 
   & > h1,
   & > h2 {
@@ -115,7 +104,9 @@ function onActivateBackButton () {
 }
 
 .right {
-  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  grid-gap: 0.75rem;
   margin-left: auto;
 }
 </style>
