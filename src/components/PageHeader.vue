@@ -104,6 +104,9 @@ function onActivateBackButton () {
 }
 
 .right {
+  display: flex;
+  align-items: center;
+  grid-gap: 0.75rem;
   margin-left: auto;
 }
 </style>

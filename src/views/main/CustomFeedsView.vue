@@ -3,10 +3,12 @@ import { inject } from "vue"
 import { RouterView } from "vue-router"
 import PageHeader from "@/components/PageHeader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
 function openMyFeedsPopup () {
+  Util.blurElement()
   mainState.openMyFeedsPopup()
 }
 </script>
@@ -20,6 +22,7 @@ function openMyFeedsPopup () {
         :subTitle="mainState.currentQuery.displayName"
       >
         <template #right>
+          <PortalTarget name="custom-feeds-view-header-portal" />
           <button
             class="button--bordered"
             @click.stop="openMyFeedsPopup"
@@ -54,8 +57,9 @@ function openMyFeedsPopup () {
     top: 0;
     z-index: 2;
 
-    .button--bordered {
-      margin: -1rem 0;
+    .page-header:deep() {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
     }
 
     .tab {
