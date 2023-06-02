@@ -26,14 +26,19 @@ async function toggleSaved () {
   if (state.processing) return
   if (mainState.feedPreferences == null) return
   if (mainState.feedPreferences.saved == null) mainState.feedPreferences.saved = []
+
+  // フィードブックマークの削除
   if (state.saved)
     mainState.feedPreferences.saved.splice(
       0,
       mainState.feedPreferences.saved.length,
       ...mainState.feedPreferences.saved.filter((uri: string) => uri !== props.generator.uri)
     )
+
+  // フィードブックマークの追加
   else
     mainState.feedPreferences.saved.push(props.generator.uri)
+
   state.processing = true
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
     mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/updatePreferences")

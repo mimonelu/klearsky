@@ -13,5 +13,14 @@ export default async function (
   console.log("[klearsky/getFeedGenerators]", response)
   if (response instanceof Error) return response
   if (!response.success) return Error("Failed")
-  return response.data.feeds as Array<TTFeedGenerator>
+
+  // ジェネレーターのソート
+  const generators: Array<TTFeedGenerator> = []
+  feeds.forEach((uri: string) => {
+    const currentGenerator = (response.data.feeds as Array<TTFeedGenerator>)
+      .find((generator: TTFeedGenerator) => generator.uri === uri)
+    if (currentGenerator != null) generators.push(currentGenerator)
+  })
+
+  return generators
 }

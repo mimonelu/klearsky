@@ -77,6 +77,7 @@ type MainState = {
     generator?: TTFeedGenerator
     feeds: Array<TTFeed>
   } }
+  currentMyFeedGenerators: Array<TTFeedGenerator>
   fetchMyFeeds: () => Promise<boolean>
 
   getContentWarningVisibility: (

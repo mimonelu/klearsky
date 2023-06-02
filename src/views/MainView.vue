@@ -184,6 +184,7 @@ function resetState () {
   state.globallinePosts = []
   state.globallineProfiles = {}
   state.globallineNumberOfPosts = 0
+  state.currentMyFeedGenerators = []
   state.currentMyFeeds = {}
   state.currentPopularFeedGenerators = []
   state.currentCustomUri = undefined
