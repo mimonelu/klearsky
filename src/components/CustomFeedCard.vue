@@ -8,6 +8,7 @@ const emit = defineEmits<{(name: string): void}>()
 
 const props = defineProps<{
   generator: TTFeedGenerator
+  orderButtonDisplay: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -118,18 +119,20 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
     <div class="custom-feed-card__bottom">
       <!-- フィードオーダーボタン -->
-      <button
-        class="button--bordered"
-        @click.prevent.stop="changeCustomFeedOrder('up')"
-      >
-        <SVGIcon name="cursorUp" />
-      </button>
-      <button
-        class="button--bordered"
-        @click.prevent.stop="changeCustomFeedOrder('down')"
-      >
-        <SVGIcon name="cursorDown" />
-      </button>
+      <template v-if="orderButtonDisplay">
+        <button
+          class="button--bordered"
+          @click.prevent.stop="changeCustomFeedOrder('up')"
+        >
+          <SVGIcon name="cursorUp" />
+        </button>
+        <button
+          class="button--bordered"
+          @click.prevent.stop="changeCustomFeedOrder('down')"
+        >
+          <SVGIcon name="cursorDown" />
+        </button>
+      </template>
 
       <!-- フィード作成者 -->
       <RouterLink

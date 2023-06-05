@@ -39,6 +39,7 @@ async function updatePopularFeeds () {
         v-for="generator of mainState.currentPopularFeedGenerators"
         :key="generator.cid"
         :generator="generator"
+        :orderButtonDisplay="false"
       />
     </template>
     <Loader v-if="mainState.listProcessing" />

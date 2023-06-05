@@ -586,6 +586,7 @@ async function translateText (forceTranslate: boolean) {
           <CustomFeedCard
             v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
             :generator="post.embed.record as unknown as TTFeedGenerator"
+            :orderButtonDisplay="false"
           />
         </template>
 
