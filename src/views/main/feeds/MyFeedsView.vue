@@ -107,6 +107,7 @@ async function updateMyFeeds () {
       color: rgb(var(--accent-color));
       font-size: 1.25rem;
       font-weight: bold;
+      margin: -1rem 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

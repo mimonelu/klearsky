@@ -8,6 +8,12 @@ const emit = defineEmits<{(event: string): void}>()
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  orderChanged: boolean
+}>({
+  orderChanged: false,
+})
+
 onMounted(async () => {
   // Preferences の取得
   mainState.processing = true
@@ -41,8 +47,40 @@ onMounted(async () => {
   mainState.currentMyFeedGenerators.splice(0, mainState.currentMyFeedGenerators.length, ...generators)
 })
 
-function close () {
+async function close () {
+  if (state.orderChanged) {
+    mainState.processing = true
+    if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
+      mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
+    mainState.processing = false
+  }
+
   emit("close")
+}
+
+function changeCustomFeedOrder () {
+  const saved = mainState.feedPreferences?.saved
+  if (saved == null) return
+
+  // マイフィードジェネレーターのソート
+  const generators: Array<TTFeedGenerator> = []
+  saved.forEach((uri: string) => {
+    const generator = mainState.currentMyFeedGenerators.find((generator: TTFeedGenerator) => generator.uri === uri)
+    if (generator == null) return
+    generators.push(generator)
+  })
+  mainState.currentMyFeedGenerators.splice(0, mainState.currentMyFeedGenerators.length, ...generators)
+
+  // マイフィードのソート
+  const myFeeds: {[uri: string]: any} = {}
+  saved.forEach((uri: string) => {
+    const myFeed = mainState.currentMyFeeds[uri]
+    if (myFeed == null) return
+    myFeeds[uri] = myFeed
+  })
+  mainState.currentMyFeeds = myFeeds
+
+  state.orderChanged = true
 }
 </script>
 
@@ -74,6 +112,7 @@ function close () {
           :key="generator.cid"
           :generator="generator"
           @click="close"
+          @changeCustomFeedOrder="changeCustomFeedOrder"
         />
       </template>
     </template>

@@ -4,6 +4,8 @@ import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
+const emit = defineEmits<{(name: string): void}>()
+
 const props = defineProps<{
   generator: TTFeedGenerator
 }>()
@@ -43,6 +45,18 @@ async function toggleSaved () {
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
     mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/updatePreferences")
   state.processing = false
+}
+
+function changeCustomFeedOrder (direction: "up" | "down") {
+  const saved = mainState.feedPreferences?.saved
+  if (saved == null) return
+  const index = saved.findIndex((uri: string) => uri === props.generator.uri)
+  if (index == null) return
+  if (direction === "up" && index > 0)
+    [saved[index], saved[index - 1]] = [saved[index - 1], saved[index]]
+  else if (direction === "down" && index < saved.length - 1)
+    [saved[index], saved[index + 1]] = [saved[index + 1], saved[index]]
+  emit("changeCustomFeedOrder")
 }
 </script>
 
@@ -103,6 +117,20 @@ async function toggleSaved () {
     >{{ generator.description }}</div>
 
     <div class="custom-feed-card__bottom">
+      <!-- フィードオーダーボタン -->
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('up')"
+      >
+        <SVGIcon name="cursorUp" />
+      </button>
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('down')"
+      >
+        <SVGIcon name="cursorDown" />
+      </button>
+
       <!-- フィード作成者 -->
       <RouterLink
         class="custom-feed-card__creator"
@@ -261,8 +289,6 @@ async function toggleSaved () {
 
   &__bottom {
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
     grid-gap: 0.5em;
   }
 
@@ -275,6 +301,7 @@ async function toggleSaved () {
     grid-template-columns: auto 1fr auto;
     align-items: center;
     grid-gap: 0.5em;
+    margin-left: auto;
     padding: 0.5em 1em;
     &:focus, &:hover {
       border-color: rgb(var(--accent-color), 0.5);
