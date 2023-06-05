@@ -6,6 +6,11 @@ const mainState = inject("state") as MainState
 onMounted(() => {
   const formItem = document.getElementById("keyword-term-textbox")
   if (formItem != null) formItem.focus()
+
+  if (mainState.currentQuery.text) {
+    mainState.currentSearchKeywordTerm = mainState.currentQuery.text
+    fetchNewResults()
+  }
 })
 
 async function fetchNewResults () {
