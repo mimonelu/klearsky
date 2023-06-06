@@ -372,7 +372,7 @@ async function fetchPostThread () {
 }
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
-  const result: null | false | {
+  const result: undefined | false | {
     cursor?: string
     newNotificationCount: number
   } = await state.atp.fetchNotifications(

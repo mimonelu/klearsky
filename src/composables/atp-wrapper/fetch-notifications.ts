@@ -5,11 +5,11 @@ export default async function (
   values: Array<TTNotificationGroup>,
   limit?: number,
   cursor?: string
-): Promise<null | false | {
+): Promise<undefined | false | {
   cursor?: string
   newNotificationCount: number
 }> {
-  if (this.agent == null) return null
+  if (this.agent == null) return
   const query: AppBskyNotificationListNotifications.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
@@ -78,7 +78,7 @@ export default async function (
       group.reason !== "repost") return
     uris.add(group.reasonSubject as string)
   })
-  const posts: null | false | Array<TTPost> = await this.fetchPosts(Array.from(uris))
+  const posts: undefined | false | Array<TTPost> = await this.fetchPosts(Array.from(uris))
   if (posts === false) return false
   if (posts != null)
     newValues.forEach((value: TTNotificationGroup) => {

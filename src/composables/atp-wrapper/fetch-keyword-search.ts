@@ -1,27 +1,50 @@
 export default async function (
   this: TIAtpWrapper,
   query: string
-): Promise<undefined | Array<any>> {
+): Promise<undefined | false | Array<TTPost>> {
+  // TODO: デモ用のAPIにアクセスしている
+  //       将来的には正規のAPIを使用すること
   const encodedQuery = encodeURIComponent(query)
   const request = new Request(
     `https://mimonelu.net:4649/https://search.bsky.social/search/posts?q=${encodedQuery}`,
     { headers: { "user-agent": "Klearsky" } }
   )
   const response = await fetch(request)
-  console.log("[klearsky/fetchKeywordSearch]", response)
   const json: null | any = await response.json()
-  if (!Array.isArray(json)) return
-  json.forEach(async (data: any) => {
-    if (data.post == null) return
-    const date = new Date()
-    date.setTime(data.post.createdAt / 1000 / 1000)
-    data.post.createdAt = date.toISOString()
-    data.uri = `at://${data.user?.did}/${data.tid}`
+  console.log("[klearsky/fetchKeywordSearch]", json)
+  if (!Array.isArray(json)) return false
+
+  // 　ポストの取得
+  // TODO: getPosts は２５ポスト以下でなければエラーとなるため処理を分割している
+  //       将来的にはページネーションを採用すること
+  const tasks = []
+  const NUMBER_OF_POST_IN_PAGE = 15
+  for (let i = 0, ii = json.length; i < ii; i += NUMBER_OF_POST_IN_PAGE) {
+    const uris = json
+      .slice(i, i + NUMBER_OF_POST_IN_PAGE)
+      .map((data: any) => `at://${data.user?.did ?? ""}/${data.tid}`)
+    tasks.push(this.fetchPosts(uris))
+  }
+  const results = await Promise.allSettled(tasks)
+  let errored = false
+  const posts = results.map((result: any) => {
+    if (result.value == null) return []
+    if (result.value === false) {
+      errored = true
+      return []
+    }
+    return result.value
+  }).flat()
+
+  // TODO: ここでエラーメッセージを非同期で表示したい
+  // if (errored) ...
+
+  // ポストのソート
+  posts.sort((a: any, b: any) => {
+    const aIndexedAt = new Date(a.indexedAt)
+    const bIndexedAt = new Date(b.indexedAt)
+    return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
   })
-  json.sort((a: any, b: any) => {
-    const aCreatedAt = new Date(a.post?.createdAt)
-    const bCreatedAt = new Date(b.post?.createdAt)
-    return aCreatedAt < bCreatedAt ? 1 : aCreatedAt > bCreatedAt ? -1 : 0
-  })
-  return json
+
+  return posts
 }

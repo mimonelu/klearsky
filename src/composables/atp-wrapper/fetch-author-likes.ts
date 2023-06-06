@@ -22,7 +22,7 @@ export default async function (
   const uris: Array<string> = response.data.records.map((record: any) => {
     return record.value.subject.uri
   })
-  const posts: null | false | Array<TTPost> = await this.fetchPosts(uris)
+  const posts: undefined | false | Array<TTPost> = await this.fetchPosts(uris)
   if (posts === false) return
   if (posts != null) {
     const newFeeds: Array<TTFeed> = posts

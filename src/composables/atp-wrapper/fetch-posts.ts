@@ -4,10 +4,12 @@ import AtpUtil from "@/composables/atp-wrapper/atp-util"
 export default async function (
   this: TIAtpWrapper,
   uris: Array<string>
-): Promise<null | false | Array<TTPost>> {
-  if (this.agent == null) return null
-  if (this.session == null) return null
-  if (uris.length === 0) return null
+): Promise<undefined | false | Array<TTPost>> {
+  if (this.agent == null) return
+  if (this.session == null) return
+
+  // 空配列はエラーとなるため却下
+  if (uris.length === 0) return
 
   const query: AppBskyFeedGetPosts.QueryParams = { uris }
   const response: AppBskyFeedGetPosts.Response =

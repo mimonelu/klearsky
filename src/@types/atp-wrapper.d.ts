@@ -151,7 +151,7 @@ interface TIAtpWrapper {
   fetchKeywordSearch(
     this: TIAtpWrapper,
     query: string
-  ): Promise<undefined | any>
+  ): Promise<undefined | false | Array<TTPost>>
   fetchLabels(
     this: TIAtpWrapper,
     uriPatterns: Array<string>,
@@ -175,7 +175,7 @@ interface TIAtpWrapper {
     values: Array<TTNotificationGroup>,
     limit?: number,
     cursor?: string
-  ): Promise<null | false | {
+  ): Promise<undefined | false | {
     cursor?: string
     newNotificationCount: number
   }>
@@ -184,7 +184,7 @@ interface TIAtpWrapper {
   fetchPosts(
     this: TIAtpWrapper,
     uris: Array<string>
-  ): Promise<null | false | Array<TTPost>>
+  ): Promise<undefined | false | Array<TTPost>>
   fetchPostThread(
     this: TIAtpWrapper,
     uri: string,

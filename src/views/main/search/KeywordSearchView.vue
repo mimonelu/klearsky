@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted } from "vue"
+import Post from "@/components/Post.vue"
 
 const mainState = inject("state") as MainState
 
@@ -19,12 +20,26 @@ async function fetchNewResults () {
   mainState.currentSearchKeywordResults.splice(0)
   mainState.processing = true
   try {
-    const results: undefined | Array<any> =
+    const results: undefined | false | Array<TTPost> =
       await mainState.atp.fetchKeywordSearch(mainState.currentSearchKeywordTerm)
+    if (results === false) return
     if (results != null) mainState.currentSearchKeywordResults = results
   } finally {
     mainState.processing = false
   }
+}
+
+function updateThisPostThread (newPosts: Array<TTPost>) {
+  const posts = mainState.currentSearchKeywordResults
+  posts.forEach((oldPost: TTPost, index: number) => {
+    const newPost = newPosts.find((newPost: TTPost) => oldPost.cid === newPost.cid)
+    if (newPost != null) posts[index] = newPost
+  })
+}
+
+function removeThisPost (uri: string) {
+  mainState.currentSearchKeywordResults = mainState.currentSearchKeywordResults
+    .filter((post: TTPost) => post.uri !== uri)
 }
 </script>
 
@@ -44,31 +59,24 @@ async function fetchNewResults () {
       >
     </form>
     <div class="main">
-      <div class="results">
-        <RouterLink
-          v-for="result, resultIndex of mainState.currentSearchKeywordResults"
-          :key="resultIndex"
-          :to="{ name: 'post', query: { postUri: result.uri } }"
-          class="item"
-        >
-          <div class="item__top">
-            <RouterLink
-              :to="{ name: 'profile-post', query: { handle: result.user.handle } }"
-              class="textlink handle"
-              @click.stop
-            >{{ result.user.handle }}</RouterLink>
-            <div class="created-at">{{ mainState.formatDate(result.post?.createdAt) }}</div>
-          </div>
-          <div class="text">{{ result.post?.text }}</div>
-        </RouterLink>
-      </div>
+      <Post
+        v-for="post of mainState.currentSearchKeywordResults"
+        :key="post.cid"
+        position="post"
+        :post="post"
+        @updateThisPostThread="updateThisPostThread"
+        @removeThisPost="removeThisPost"
+      />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .keyword-search-view {
+  padding-bottom: var(--sp-menu-height);
+
   form {
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
     display: grid;
     padding: 1rem;
   }
@@ -80,51 +88,7 @@ async function fetchNewResults () {
   flex-grow: 1;
 }
 
-.results {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.item {
-  border-top: 1px solid rgba(var(--fg-color), 0.125);
-  border-left: 2px solid transparent;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  grid-gap: 0.25rem;
-  padding: 1rem;
-  &:focus, &:hover {
-    background-color: rgba(var(--accent-color), 0.125);
-  }
-
-  &__top {
-    display: grid;
-    grid-gap: 0.5rem;
-    grid-template-columns: 1fr min-content;
-    align-items: center;
-  }
-}
-
-.handle {
-  font-weight: bold;
-  flex-grow: 1;
-  line-height: 1.25;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.created-at {
-  color: rgba(var(--fg-color), 0.5);
-  font-size: 0.875rem;
-  line-height: 1.25;
-  white-space: nowrap;
-}
-
-.text {
-  line-height: 1.5;
-  white-space: pre-wrap;
-  word-break: break-word;
+.post {
+  border-bottom: 1px solid rgba(var(--fg-color), 0.125);
 }
 </style>
