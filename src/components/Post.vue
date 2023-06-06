@@ -470,6 +470,7 @@ async function translateText (forceTranslate: boolean) {
           :text="post.record?.text ?? post.value?.text"
           :facets="post.record?.facets ?? post.value?.facets"
           :entities="post.record?.entities ?? post.value?.entities"
+          @onActivateHashTag="emit('onActivateHashTag')"
         />
         <div
           v-else

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import type { Entity, Facet, RichTextOpts, RichTextProps } from "@atproto/api"
 import { RichText } from "@atproto/api"
 
@@ -9,11 +9,15 @@ type RichParam = {
   param: string,
 }
 
+const emit = defineEmits<{(name: string): void}>()
+
 const props = defineProps<{
   text?: string;
   facets?: Facet[];
   entities?: Entity[];
 }>()
+
+const mainState = inject("state") as MainState
 
 const tagRegExpString = "#[^\\s\\(\\)\\[\\]]+"
 const tagRegExp = new RegExp(tagRegExpString)
@@ -64,6 +68,11 @@ const state = reactive<{
     return results
   }),
 })
+
+function onActivateHashTag (text: string) {
+  mainState.currentSearchKeywordTerm = text
+  emit("onActivateHashTag")
+}
 </script>
 
 <template>
@@ -89,7 +98,7 @@ const state = reactive<{
         <RouterLink
           class="textlink"
           :to="`/search/keyword?text=${segment.param}`"
-          @click.stop
+          @click.stop="onActivateHashTag(segment.param)"
         >{{ segment.text }}</RouterLink>
       </template>
       <template v-else>{{ segment.text }}</template>

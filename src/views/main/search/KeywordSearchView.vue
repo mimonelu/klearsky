@@ -7,12 +7,14 @@ const mainState = inject("state") as MainState
 onMounted(() => {
   const formItem = document.getElementById("keyword-term-textbox")
   if (formItem != null) formItem.focus()
-
-  if (mainState.currentQuery.text) {
-    mainState.currentSearchKeywordTerm = mainState.currentQuery.text
-    fetchNewResults()
-  }
+  updateSearchKeywordTerm()
 })
+
+async function updateSearchKeywordTerm () {
+  if (!mainState.currentQuery.text) return
+  mainState.currentSearchKeywordTerm = mainState.currentQuery.text
+  await fetchNewResults()
+}
 
 async function fetchNewResults () {
   if (mainState.processing) return
@@ -41,6 +43,10 @@ function removeThisPost (uri: string) {
   mainState.currentSearchKeywordResults = mainState.currentSearchKeywordResults
     .filter((post: TTPost) => post.uri !== uri)
 }
+
+function onActivateHashTag () {
+  fetchNewResults()
+}
 </script>
 
 <template>
@@ -66,6 +72,7 @@ function removeThisPost (uri: string) {
         :post="post"
         @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"
+        @onActivateHashTag="onActivateHashTag"
       />
     </div>
   </div>
