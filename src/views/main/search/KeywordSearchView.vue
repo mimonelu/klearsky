@@ -1,8 +1,17 @@
 <script lang="ts" setup>
-import { inject, onMounted } from "vue"
+import { inject, onMounted, watch } from "vue"
+import { useRouter } from "vue-router"
 import Post from "@/components/Post.vue"
 
 const mainState = inject("state") as MainState
+
+const router = useRouter()
+
+watch(() => router.currentRoute.value.query.text, (value: any) => {
+  if (!value) return
+  mainState.currentSearchKeywordTerm = value
+  fetchNewResults()
+}, { immediate: true })
 
 onMounted(() => {
   const formItem = document.getElementById("keyword-term-textbox")
@@ -13,7 +22,10 @@ onMounted(() => {
 async function updateSearchKeywordTerm () {
   if (!mainState.currentQuery.text) return
   mainState.currentSearchKeywordTerm = mainState.currentQuery.text
-  await fetchNewResults()
+}
+
+function submitForm () {
+  router.push({ name: "keyword-search", query: { text: mainState.currentSearchKeywordTerm } })
 }
 
 async function fetchNewResults () {
@@ -51,7 +63,7 @@ function onActivateHashTag () {
 
 <template>
   <div class="keyword-search-view">
-    <form @submit.prevent="fetchNewResults">
+    <form @submit.prevent="submitForm">
       <input
         v-model="mainState.currentSearchKeywordTerm"
         id="keyword-term-textbox"
