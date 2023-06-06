@@ -19,9 +19,9 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const tagRegExpString = "#[^\\s\\(\\)\\[\\]]+"
+const tagRegExpString = "(?<=^|\\s)#[^\\s\\(\\)\\[\\]]+"
 const tagRegExp = new RegExp(tagRegExpString)
-const regexp = new RegExp(`(?<=^|\\s)(${tagRegExpString})`, "g")
+const regexp = new RegExp(`(${tagRegExpString})`, "g")
 
 const state = reactive<{
   segments: ComputedRef<Array<RichParam>>;
