@@ -2,6 +2,7 @@
 import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, provide } from "vue"
 import type { LocationQueryValue, RouteLocationNormalized, RouteRecordName } from "vue-router"
 import { useRouter } from "vue-router"
+import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
@@ -58,9 +59,6 @@ onBeforeUnmount(() => {
 })
 
 onMounted(async () => {
-  // ブロードキャスト
-  state.broadcastChannel.addEventListener("message", broadcastListener)
-
   state.currentPath = router.currentRoute.value.fullPath
   state.currentQuery = router.currentRoute.value.query
   state.settings = Util.loadStorage("settings") ?? {}
@@ -80,19 +78,16 @@ onMounted(async () => {
     state.mounted = true
     state.processing = false
 
+    // ブロードキャスト
+    useEventListener(state.broadcastChannel, "message", broadcastListener)
+
     // インフィニットスクロール用処理
-    window.addEventListener("scroll", scrollListener)
+    useEventListener(window, "scroll", scrollListener)
   }
 })
 
 onUnmounted(() => {
-  // ブロードキャスト
-  state.broadcastChannel.removeEventListener("message", broadcastListener)
-
   clearNotificationInterval()
-
-  // インフィニットスクロール用処理
-  window.removeEventListener("scroll", scrollListener)
 })
 
 const router = useRouter()
