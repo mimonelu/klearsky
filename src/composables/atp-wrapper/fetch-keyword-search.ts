@@ -5,10 +5,7 @@ export default async function (
   // TODO: デモ用のAPIにアクセスしている
   //       将来的には正規のAPIを使用すること
   const encodedQuery = encodeURIComponent(query)
-  const request = new Request(
-    `https://mimonelu.net:4649/https://search.bsky.social/search/posts?q=${encodedQuery}`,
-    { headers: { "user-agent": "Klearsky" } }
-  )
+  const request = new Request(`https://search.bsky.social/search/posts?q=${encodedQuery}`)
   const response = await fetch(request)
   const json: null | any = await response.json()
   console.log("[klearsky/fetchKeywordSearch]", json)
