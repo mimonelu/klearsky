@@ -6,7 +6,7 @@ import { computed, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util"
-import consts from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
 import LABELS from "@/consts/labels.json"
 
 const state = reactive<MainState>({
@@ -231,7 +231,7 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
     await state.atp.fetchAuthorFeed(
       state.currentAuthorFeeds as Array<TTFeed>,
       handle,
-      consts.limitOfFetchAuthorFeeds,
+      CONSTS.limitOfFetchAuthorFeeds,
       direction === "old" ? state.currentAuthorCursor : undefined
     )
   if (cursor != null) state.currentAuthorCursor = cursor
@@ -243,7 +243,7 @@ async function fetchAuthorReposts (direction: "new" | "old") {
   const cursor: undefined | string = await state.atp.fetchAuthorReposts(
     state.currentAuthorReposts,
     handle,
-    consts.limitOfFetchAuthorReposts,
+    CONSTS.limitOfFetchAuthorReposts,
     direction === "new" ? undefined : state.currentAuthorRepostsCursor
   )
   state.currentAuthorRepostsCursor = cursor
@@ -255,7 +255,7 @@ async function fetchAuthorLikes (direction: "new" | "old") {
   const cursor: undefined | string = await state.atp.fetchAuthorLikes(
     state.currentAuthorLikes,
     handle,
-    consts.limitOfFetchAuthorLikes,
+    CONSTS.limitOfFetchAuthorLikes,
     direction === "new" ? undefined : state.currentAuthorLikesCursor
   )
   state.currentAuthorLikesCursor = cursor
@@ -345,7 +345,7 @@ async function fetchHotFeeds (direction: "old" | "new") {
   const cursor: undefined | false | string =
     await state.atp.fetchHotFeeds(
       state.currentHotFeeds,
-      consts.limitOfFetchHotFeeds,
+      CONSTS.limitOfFetchHotFeeds,
       direction === "old" ? state.currentHotCursor : undefined
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchHotFeeds")
@@ -358,7 +358,7 @@ async function fetchTimeline (direction: "old" | "new") {
       state.timelineFeeds,
       state.currentSetting.replyControl,
       state.currentSetting.repostControl,
-      consts.limitOfFetchTimeline,
+      CONSTS.limitOfFetchTimeline,
       direction === "old" ? state.timelineCursor : undefined
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
@@ -372,7 +372,7 @@ async function fetchPostThread () {
 }
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
-  const result: null | false | {
+  const result: undefined | false | {
     cursor?: string
     newNotificationCount: number
   } = await state.atp.fetchNotifications(
@@ -397,7 +397,7 @@ async function fetchFollowers (direction: "new" | "old") {
   const cursor: undefined | string = await state.atp.fetchFollowers(
     state.currentFollowers,
     handle,
-    consts.limitOfFetchFollows,
+    CONSTS.limitOfFetchFollows,
     direction === "new" ? undefined : state.currentFollowersCursor
   )
   state.currentFollowersCursor = cursor
@@ -416,7 +416,7 @@ async function fetchFollowings (direction: "new" | "old") {
   const cursor: undefined | string = await state.atp.fetchFollowings(
     state.currentFollowings,
     handle,
-    consts.limitOfFetchFollows,
+    CONSTS.limitOfFetchFollows,
     direction === "new" ? undefined : state.currentFollowingsCursor
   )
   state.currentFollowingsCursor = cursor
@@ -426,7 +426,7 @@ async function fetchSuggestions (direction: "new" | "old") {
   state.currentSearchSuggestionCursor =
     await state.atp.fetchSuggestions(
       state.currentSearchSuggestionResults,
-      consts.limitOfFetchSuggestionSearch,
+      CONSTS.limitOfFetchSuggestionSearch,
       direction === "new" ? undefined : state.currentSearchSuggestionCursor
     )
 }
@@ -449,7 +449,7 @@ async function fetchCustomFeeds (direction: "old" | "new") {
     await state.atp.fetchCustomFeeds(
       state.currentCustomFeeds,
       state.currentQuery.feed,
-      consts.limitOfFetchTimeline,
+      CONSTS.limitOfFetchTimeline,
       direction === "old" ? state.currentCustomCursor : undefined
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
@@ -480,7 +480,7 @@ async function fetchMyFeeds (): Promise<boolean> {
   })
 
   await Promise.allSettled(saved.map((uri: string) => {
-    return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, 3)
+    return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
   }))
 
   return true

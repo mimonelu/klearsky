@@ -4,6 +4,7 @@ import FeedList from "@/components/FeedList.vue"
 import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
@@ -60,7 +61,10 @@ async function updateMyFeeds () {
             :disabledInfinitScroll="true"
           />
         </div>
-        <div class="my-feeds-view__link">
+        <div
+          v-if="myFeeds.feeds.length >= 2"
+          class="my-feeds-view__link"
+        >
           <RouterLink
             class="button--bordered"
             :to="{ path: '/feeds/timeline', query: {
@@ -107,6 +111,7 @@ async function updateMyFeeds () {
       color: rgb(var(--accent-color));
       font-size: 1.25rem;
       font-weight: bold;
+      margin: -1rem 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

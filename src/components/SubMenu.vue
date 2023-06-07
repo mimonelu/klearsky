@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import Package from "@/../package.json"
-import { inject } from "vue"
+import { inject, reactive } from "vue"
+import { useRouter } from "vue-router"
 import CopyRight from "@/components/Copyright.vue"
 import Logo from "@/components/Logo.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -8,6 +9,18 @@ import SVGIcon from "@/components/SVGIcon.vue"
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  text: string
+}>({
+  text: "",
+})
+
+const router = useRouter()
+
+function searchKeyword () {
+  router.push({ name: "keyword-search", query: { text: state.text } })
+}
 
 async function refreshSession () {
   if (!await mainState.openConfirmationPopup(
@@ -34,6 +47,21 @@ async function refreshSession () {
 
     <!-- @atproto/api バージョン -->
     <div class="api-version">@atproto/api v{{ Package.dependencies["@atproto/api"] }}</div>
+
+    <!-- ポスト検索ボックス -->
+    <form @submit.prevent="searchKeyword">
+      <input
+        v-model="state.text"
+        id="keyword-term-textbox"
+        type="search"
+        :placeholder="$t('searchWord')"
+        autocapitalize="off"
+        autocomplete="off"
+        inputmode="search"
+        spellcheck="false"
+        class="textbox"
+      >
+    </form>
 
     <!-- トリガーコンテナ -->
     <div class="textlink-container">
@@ -102,7 +130,7 @@ async function refreshSession () {
 .sub-menu {
   display: flex;
   flex-direction: column;
-  padding: 3rem 1rem;
+  padding: 2rem 1rem;
   position: relative;
 }
 
@@ -116,8 +144,15 @@ async function refreshSession () {
 .api-version {
   color: rgba(var(--fg-color), 0.5);
   font-size: 0.75rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   text-align: center;
+}
+
+// ポスト検索ボックス
+.textbox {
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 // トリガーコンテナ

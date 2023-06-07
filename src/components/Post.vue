@@ -339,6 +339,10 @@ async function translateText (forceTranslate: boolean) {
   state.translation = "done"
   props.post.__translatedText = json.responseData.translatedText
 }
+
+function onActivateHashTag (text: string) {
+  emit("onActivateHashTag", text)
+}
 </script>
 
 <template>
@@ -470,6 +474,7 @@ async function translateText (forceTranslate: boolean) {
           :text="post.record?.text ?? post.value?.text"
           :facets="post.record?.facets ?? post.value?.facets"
           :entities="post.record?.entities ?? post.value?.entities"
+          @onActivateHashTag="onActivateHashTag"
         />
         <div
           v-else
@@ -586,6 +591,7 @@ async function translateText (forceTranslate: boolean) {
           <CustomFeedCard
             v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
             :generator="post.embed.record as unknown as TTFeedGenerator"
+            :orderButtonDisplay="false"
           />
         </template>
 

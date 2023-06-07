@@ -8,6 +8,7 @@
   "limitOfFetchHotFeeds": 30,
   "limitOfFetchLikeUsers": 30,
   "limitOfFetchMutingUsers": 30,
+  "limitOfFetchMyFeeds": 3,
   "limitOfFetchNotifications": 30,
   "limitOfFetchRepostUsers": 30,
   "limitOfFetchSuggestionSearch": 30,
