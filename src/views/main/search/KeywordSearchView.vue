@@ -1,41 +1,46 @@
 <script lang="ts" setup>
-import { inject, onMounted, watch } from "vue"
+import { inject, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import Post from "@/components/Post.vue"
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  text: string
+}>({
+  text: "",
+})
+
 const router = useRouter()
 
 watch(() => router.currentRoute.value.query.text, (value: any) => {
-  if (!value) return
-  mainState.currentSearchKeywordTerm = value
-  fetchNewResults()
+  updateSearchKeywordTerm(value)
 }, { immediate: true })
 
 onMounted(() => {
   const formItem = document.getElementById("keyword-term-textbox")
   if (formItem != null) formItem.focus()
-  updateSearchKeywordTerm()
 })
 
-async function updateSearchKeywordTerm () {
-  if (!mainState.currentQuery.text) return
-  mainState.currentSearchKeywordTerm = mainState.currentQuery.text
+function updateSearchKeywordTerm (text: string) {
+  state.text = text
+  if (!text || mainState.currentSearchKeywordTerm === text) return
+  mainState.currentSearchKeywordTerm = text
+  fetchNewResults()
 }
 
 function submitForm () {
-  router.push({ name: "keyword-search", query: { text: mainState.currentSearchKeywordTerm } })
+  router.push({ name: "keyword-search", query: { text: state.text } })
 }
 
 async function fetchNewResults () {
   if (mainState.processing) return
-  if (mainState.currentSearchKeywordTerm === "") return
+  if (state.text === "") return
   mainState.currentSearchKeywordResults.splice(0)
   mainState.processing = true
   try {
     const results: undefined | false | Array<TTPost> =
-      await mainState.atp.fetchKeywordSearch(mainState.currentSearchKeywordTerm)
+      await mainState.atp.fetchKeywordSearch(state.text)
     if (results === false) return
     if (results != null) mainState.currentSearchKeywordResults = results
   } finally {
@@ -55,17 +60,13 @@ function removeThisPost (uri: string) {
   mainState.currentSearchKeywordResults = mainState.currentSearchKeywordResults
     .filter((post: TTPost) => post.uri !== uri)
 }
-
-function onActivateHashTag () {
-  fetchNewResults()
-}
 </script>
 
 <template>
   <div class="keyword-search-view">
     <form @submit.prevent="submitForm">
       <input
-        v-model="mainState.currentSearchKeywordTerm"
+        v-model="state.text"
         id="keyword-term-textbox"
         type="search"
         :placeholder="$t('searchWord')"
@@ -84,7 +85,7 @@ function onActivateHashTag () {
         :post="post"
         @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"
-        @onActivateHashTag="onActivateHashTag"
+        @onActivateHashTag="updateSearchKeywordTerm"
       />
     </div>
   </div>

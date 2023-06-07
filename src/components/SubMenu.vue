@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Package from "@/../package.json"
-import { inject } from "vue"
+import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
 import CopyRight from "@/components/Copyright.vue"
 import Logo from "@/components/Logo.vue"
@@ -10,10 +10,16 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  text: string
+}>({
+  text: "",
+})
+
 const router = useRouter()
 
 function searchKeyword () {
-  router.push({ name: "keyword-search", query: { text: mainState.currentSearchKeywordTerm } })
+  router.push({ name: "keyword-search", query: { text: state.text } })
 }
 
 async function refreshSession () {
@@ -45,7 +51,7 @@ async function refreshSession () {
     <!-- ポスト検索ボックス -->
     <form @submit.prevent="searchKeyword">
       <input
-        v-model="mainState.currentSearchKeywordTerm"
+        v-model="state.text"
         id="keyword-term-textbox"
         type="search"
         :placeholder="$t('searchWord')"

@@ -9,7 +9,7 @@ type RichParam = {
   param: string,
 }
 
-const emit = defineEmits<{(name: string): void}>()
+const emit = defineEmits<{(name: string, text: string): void}>()
 
 const props = defineProps<{
   text?: string;
@@ -19,9 +19,9 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const tagRegExpString = "(?<=^|\\s)#[^\\s\\(\\)\\[\\]]+"
+const tagRegExpString = "#[^\\s\\(\\)\\[\\]]+"
 const tagRegExp = new RegExp(tagRegExpString)
-const regexp = new RegExp(`(${tagRegExpString})`, "g")
+const regexp = new RegExp(`(?=^|\\W)(${tagRegExpString})`, "g")
 
 const state = reactive<{
   segments: ComputedRef<Array<RichParam>>;
@@ -70,8 +70,8 @@ const state = reactive<{
 })
 
 function onActivateHashTag (text: string) {
-  mainState.currentSearchKeywordTerm = text
-  emit("onActivateHashTag")
+  if (mainState.currentSearchKeywordTerm === text) return
+  emit("onActivateHashTag", text)
 }
 </script>
 
