@@ -81,7 +81,7 @@ function removeThisPost (uri: string) {
       <Post
         v-for="post of mainState.currentSearchKeywordResults"
         :key="post.cid"
-        position="post"
+        :position="post.__style != null ? post.__style as any : 'post'"
         :post="post"
         @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"
@@ -110,5 +110,8 @@ function removeThisPost (uri: string) {
 
 .post {
   border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+  &[data-position="preview"] {
+    padding: 1em;
+  }
 }
 </style>

@@ -39,6 +39,39 @@ export default async function (
   // TODO: ここでエラーメッセージを非同期で表示したい
   // if (errored) ...
 
+  // 取りこぼし対策
+  // TODO: おそらく bsky.social 以外のPDS。後日正式に対応すること
+  if (json.length > posts.length) {
+    json
+      .filter((item: any) => posts.every((post: TTPost) => post.cid !== item.cid))
+      .forEach((dropout: any) => {
+        const createdAtDate = new Date()
+        createdAtDate.setTime(dropout.post.createdAt / 1000 / 1000)
+        const createdAt = createdAtDate.toISOString()
+        posts.push({
+          __style: "preview",
+          author: {
+            did: dropout.user.did,
+            displayName: "(Non-existent account)",
+            handle: "",
+            viewer: {},
+          },
+          cid: dropout.cid,
+          indexedAt: createdAt,
+          likeCount: 0,
+          record: {
+            $type: "app.bsky.feed.post",
+            createdAt,
+            text: dropout.post.text,
+          },
+          replyCount: 0,
+          repostCount: 0,
+          uri: "",
+          viewer: {},
+        })
+      })
+  }
+
   // ポストのソート
   posts.sort((a: any, b: any) => {
     const aIndexedAt = new Date(a.indexedAt)

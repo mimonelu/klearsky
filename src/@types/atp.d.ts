@@ -108,6 +108,7 @@ type TTPost = {
     accuracy: number
   }[] // Injected
   __reason?: TTReason // Injected
+  __style?: string // Injected
   __translatedText?: string // Injected // 自動翻訳
   author: TTUser
   cid: string
