@@ -17,11 +17,12 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
-  level?: number;
-  position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim";
-  post: TTPost;
-  replyTo?: TTPost;
-  forceHideImages?: boolean;
+  level?: number
+  position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim"
+  post: TTPost
+  noLink?: boolean
+  replyTo?: TTPost
+  forceHideImages?: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -137,7 +138,7 @@ function isFocused (): boolean {
 }
 
 async function onActivatePost (post: TTPost, event: Event) {
-  if (isFocused()) return
+  if (isFocused() || props.noLink) return
   const postUrl = { name: "post", query: { postUri: post.uri } }
   if ((event as any).metaKey || (event as any).ctrlKey) {
     const resolvedRoute = router.resolve(postUrl)
@@ -570,6 +571,7 @@ function onActivateHashTag (text: string) {
                 :level="(level ?? 1) + 1"
                 :position="position === 'slim' ? 'slim' : 'postInPost'"
                 :post="post.embed.record as TTPost"
+                :noLink="noLink"
               />
             </div>
           </template>

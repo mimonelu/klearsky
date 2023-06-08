@@ -129,6 +129,7 @@ function isEmpty (): boolean {
         v-if="type === 'reply' || type === 'quoteRepost'"
         position="preview"
         :post="post as TTPost"
+        :noLink="true"
       />
       <EasyForm v-bind="easyFormProps">
         <template v-slot:after>
@@ -158,6 +159,18 @@ function isEmpty (): boolean {
 <style lang="scss" scoped>
 .send-post-popup {
   &:deep() {
+    // プレビューポストのテキスト選択
+    .post {
+      .text {
+        pointer-events: fill;
+        user-select: text;
+      }
+
+      .textlink {
+        pointer-events: none;
+      }
+    }
+
     .textarea {
       border-left-style: none;
       border-right-style: none;
