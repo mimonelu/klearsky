@@ -1,6 +1,7 @@
 import Package from "@/../package.json"
 import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 import { RichText } from "@atproto/api"
+import AtpUtil from "@/composables/atp-wrapper/atp-util"
 import Util from "@/composables/util"
 
 export default async function (
@@ -9,22 +10,31 @@ export default async function (
 ): Promise<boolean> {
   if (this.agent == null) return false
 
-  const richText = new RichText({ text: params.text })
-  await richText.detectFacets(this.agent)
-
   const record: AppBskyFeedPost.Record = {
     $type: "app.bsky.feed.post",
     createdAt: new Date().toISOString(),
-    text: richText.text,
+    text: params.text,
 
     // カスタムフィールド - via
     via: `Klearsky v${Package.version}`,
   }
 
+  // カスタムリンク
+  const customLinks = AtpUtil.makeCustomLinks(record.text)
+  record.text = customLinks.text
+  if (customLinks.facets.length > 0) record.facets = customLinks.facets
+
+  // Facets
+  const richText = new RichText({ text: record.text })
+  await richText.detectFacets(this.agent)
+  record.text = richText.text
+  if (richText.facets != null) {
+    if (record.facets != null) record.facets.push(...richText.facets)
+    else record.facets = richText.facets
+  }
+
   // カスタムフィールド - Lightning
   if (params.lightning) record.lightning = params.lightning
-
-  if (richText.facets != null) record.facets = richText.facets
 
   // TODO: リンクボックス
   let external: null | any = null
