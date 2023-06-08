@@ -20,6 +20,10 @@ function changeSetting () {
   mainState.updateSettings()
 }
 
+function openWordMutePopup () {
+  mainState.openWordMutePopup()
+}
+
 async function resetSettings () {
   Util.blurElement()
   const result = await mainState.openConfirmationPopup($t("resetSettings"), $t("resetSettingsDetail"))
@@ -96,6 +100,19 @@ async function resetSettings () {
             layout="horizontal"
             @update="changeSetting"
           />
+        </div>
+      </div>
+
+      <!-- ワードミュート -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("wordMute") }}</div>
+        <div class="settings-section__body">
+          <button
+            class="button"
+            @click.stop="openWordMutePopup"
+          >
+            <span>{{ $t("wordMuteEdit") }}</span>
+          </button>
         </div>
       </div>
 

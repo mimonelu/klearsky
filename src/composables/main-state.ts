@@ -125,6 +125,10 @@ const state = reactive<MainState>({
   openMyFeedsPopup,
   closeMyFeedsPopup,
 
+  // ワードミュートポップアップの開閉
+  openWordMutePopup,
+  closeWordMutePopup,
+
   // コンテンツフィルタリングポップアップの開閉
   openContentFilteringPopup,
   closeContentFilteringPopup,
@@ -503,6 +507,8 @@ function saveSettings () {
     state.settings[did].hotLanguages = [Util.getUserLanguage()]
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
+  if (state.settings[did].wordMute == null)
+    state.settings[did].wordMute = []
   if (state.settings[did].replyControl == null)
     state.settings[did].replyControl = []
   if (state.settings[did].repostControl == null)
@@ -667,6 +673,16 @@ function openMyFeedsPopup () {
 
 function closeMyFeedsPopup () {
   state.myFeedsPopupDisplay = false
+}
+
+// ワードミュートポップアップの開閉
+
+function openWordMutePopup () {
+  state.wordMutePopupDisplay = true
+}
+
+function closeWordMutePopup () {
+  state.wordMutePopupDisplay = false
 }
 
 // コンテンツフィルタリングポップアップの開閉

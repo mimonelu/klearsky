@@ -26,6 +26,7 @@ import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
 import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import WordMutePopup from "@/components/WordMutePopup.vue"
 import state from "@/composables/main-state"
 import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
@@ -209,6 +210,9 @@ function resetState () {
 
   // マイフィードポップアップの表示スイッチ
   state.myFeedsPopupDisplay = false
+
+  // ワードミュートポップアップの表示スイッチ
+  state.wordMutePopupDisplay = false
 
   // コンテンツフィルタリングポップアップの表示スイッチ
   state.contentFilteringPopupDisplay = false
@@ -558,6 +562,12 @@ function broadcastListener (event: MessageEvent) {
     <MyFeedsPopup
       v-if="state.myFeedsPopupDisplay"
       @close="state.closeMyFeedsPopup"
+    />
+
+    <!-- ワードミュートポップアップ -->
+    <WordMutePopup
+      v-if="state.wordMutePopupDisplay"
+      @close="state.closeWordMutePopup"
     />
 
     <!-- コンテンツフィルタリングポップアップ -->

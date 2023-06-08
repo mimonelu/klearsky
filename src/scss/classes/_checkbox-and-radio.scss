@@ -10,7 +10,8 @@
     border: 1px solid rgba(var(--fg-color), 0.25);
     cursor: pointer;
     display: flex;
-    padding: 0.5rem 1rem;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
     position: relative;
     &[data-checked="true"] {
       background-color: rgba(var(--accent-color), 0.25);
@@ -27,7 +28,6 @@
 
     & > .svg-icon {
       fill: rgba(var(--accent-color), 0.25);
-      margin-top: 0.25rem;
       margin-right: 0.5rem;
     }
     &[data-checked="true"] > .svg-icon {

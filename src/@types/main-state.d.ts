@@ -1,9 +1,15 @@
+type TTWordMute = {
+  enabled: Array<boolean>
+  keyword: string
+}
+
 type TTSetting = {
   language?: string
   autoTranslation?: boolean
   autoTranslationIgnoreLanguage?: string
   hotLanguages?: Array<string>
   fontSize?: string
+  wordMute?: Array<TTWordMute>
   replyControl?: Array<number>
   repostControl?: Array<number>
   timeControl?: string
@@ -181,6 +187,9 @@ type MainState = {
   // マイフィードポップアップの表示スイッチ
   myFeedsPopupDisplay: boolean
 
+  // ワードミュートポップアップの表示スイッチ
+  wordMutePopupDisplay: boolean
+
   // コンテンツフィルタリングポップアップの表示スイッチ
   contentFilteringPopupDisplay: boolean
 
@@ -256,6 +265,10 @@ type MainState = {
   // マイフィードポップアップの開閉
   openMyFeedsPopup: Function
   closeMyFeedsPopup: Function
+
+  // ワードミュートポップアップの開閉
+  openWordMutePopup: Function
+  closeWordMutePopup: Function
 
   // コンテンツフィルタリングポップアップの開閉
   openContentFilteringPopup: Function

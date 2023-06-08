@@ -5,6 +5,7 @@
   "yes": "Yes",
   "no": "No",
   "apply": "Apply",
+  "save": "Save",
   "enabled": "Enabled",
   "disabled": "Disabled",
   "show": "Show",
@@ -177,6 +178,12 @@
   "fontSizeSmall": "Small",
   "fontSizeMedium": "Medium",
   "fontSizeLarge": "Large",
+
+  "wordMute": "Muted Words",
+  "wordMuteEdit": "Edit muted words",
+  "wordMuteAdd": "Add muted word",
+  "wordMuteEnabled": "ON",
+  "wordMutePlaceholder": "Word1 Word2 ...",
 
   "timeControl": "Time Representation",
   "timeControlRelative": "Relative",
