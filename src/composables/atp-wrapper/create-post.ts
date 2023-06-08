@@ -36,14 +36,14 @@ export default async function (
   // カスタムフィールド - Lightning
   if (params.lightning) record.lightning = params.lightning
 
-  // TODO: リンクボックス
+  // リンクボックス
   let external: null | any = null
   if (params.url?.length > 0) {
     external = await Util.parseOgp(params.url)
     if (external == null) return false
   }
 
-  // TODO: 画像
+  // 画像
   let images: null | any = null
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all(
     params.images.map((file: File): Promise<null | BlobRef> => {
@@ -77,12 +77,10 @@ export default async function (
   // リプライ
   if (params.type === "reply" && params.post != null) {
     record.reply = {
-      // TODO: Feed.root == Feed.parent であればこれで良いが、でなければ誤り。要修正
       root: {
-        cid: params.post.cid,
-        uri: params.post.uri,
+        cid: params.post.record.reply?.root?.cid ?? params.post.cid,
+        uri: params.post.record.reply?.root?.uri ?? params.post.uri,
       },
-
       parent: {
         cid: params.post.cid,
         uri: params.post.uri,
