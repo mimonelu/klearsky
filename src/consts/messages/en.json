@@ -285,10 +285,10 @@
   "quoteRepost": "Quote repost",
   "text": "Text",
   "linkBox": "Link card",
-  "linkBoxFootnote": "* Display of OGP image is not yet supported.",
   "imageBoxes": "Images",
   "alts": "ALT texts",
   "submit": "Submit",
+  "sendPostNotification": "* You can also link with [TEXT](URL)\n* Display of OGP image in link card is not yet supported.",
   "cancelPost": "Cancel Post",
   "cancelPostMessage": "The entered information will be reset. Are you sure?",
 

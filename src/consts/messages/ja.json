@@ -285,10 +285,10 @@
   "quoteRepost": "引用リポスト",
   "text": "テキスト",
   "linkBox": "リンクカード",
-  "linkBoxFootnote": "※リンク先画像の取得は未対応です。",
   "imageBoxes": "画像",
   "alts": "代替テキスト",
   "submit": "送信",
+  "sendPostNotification": "※ [文字列](URL) でもリンクを張れます。\n※ リンクカードにおけるOGP画像の取得は未対応です。",
   "cancelPost": "ポストのキャンセル",
   "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
 
