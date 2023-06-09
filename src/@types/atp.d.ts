@@ -110,6 +110,7 @@ type TTPost = {
   __reason?: TTReason // Injected
   __style?: string // Injected
   __translatedText?: string // Injected // 自動翻訳
+  __wordMuteDisplay?: boolean // Injected
   author: TTUser
   cid: string
   embed?: {

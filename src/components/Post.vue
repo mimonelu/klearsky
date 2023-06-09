@@ -28,13 +28,14 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  postMenuDisplay: boolean;
-  repostMenuDisplay: boolean;
-  processing: boolean;
-  external: ComputedRef<undefined | TTExternal>;
-  images: ComputedRef<Array<TTImage>>;
-  displayImage: ComputedRef<boolean>;
-  imageFolding: boolean;
+  postMenuDisplay: boolean
+  repostMenuDisplay: boolean
+  processing: boolean
+  external: ComputedRef<undefined | TTExternal>
+  images: ComputedRef<Array<TTImage>>
+  isWordMute: ComputedRef<boolean>
+  displayImage: ComputedRef<boolean>
+  imageFolding: boolean
 
   // ラベル対応
   contentWarningForceDisplay: boolean;
@@ -49,6 +50,17 @@ const state = reactive<{
   external: computed(() => props.post.embed?.external),
   images: computed(() => props.post.embed?.images ?? []),
 
+  // ワードミュートの判定
+  isWordMute: computed((): boolean => {
+    const target = props.post.record?.text.toLowerCase() ?? props.post.value?.text.toLowerCase()
+    if (!target) return false
+    return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
+      if (!wordMute.enabled[0]) return false
+      const keywords = wordMute.keyword.toLowerCase().split(" ")
+      return keywords.some((keyword: string) => target.indexOf(keyword) !== - 1)
+    }) ?? false
+  }),
+
   // 画像の制御
   // TODO: 引用リポストに対応すること
   displayImage: computed(() => {
@@ -60,9 +72,9 @@ const state = reactive<{
       // 自身である
       props.post.author?.did === mainState.atp.session?.did ||
       // フォロイーである
-      props.post.author.viewer.following != null ||
+      props.post.author.viewer?.following != null ||
       // フォロイーのリポストである
-      props.post.__reason?.by.viewer.following != null ||
+      props.post.__reason?.by.viewer?.following != null ||
       // プロフィールユーザーである
       (
         mainState.currentPath.startsWith('/profile/') &&
@@ -75,7 +87,7 @@ const state = reactive<{
       // 自身である
       props.post.author?.did === mainState.atp.session?.did ||
       // フォロイーである
-      props.post.author.viewer.following != null
+      props.post.author.viewer?.following != null
     )) return true
 
     // 自身のみ表示
@@ -138,6 +150,12 @@ function isFocused (): boolean {
 }
 
 async function onActivatePost (post: TTPost, event: Event) {
+  // ワードミュート中の場合
+  if (state.isWordMute && !props.post.__wordMuteDisplay) {
+    props.post.__wordMuteDisplay = true
+    return
+  }
+
   if (isFocused() || props.noLink) return
   const postUrl = { name: "post", query: { postUri: post.uri } }
   if ((event as any).metaKey || (event as any).ctrlKey) {
@@ -354,6 +372,7 @@ function onActivateHashTag (text: string) {
     :data-position="position"
     :data-repost="post.__reason != null"
     :data-focus="isFocused()"
+    :data-word-mute="state.isWordMute && !post.__wordMuteDisplay"
     :data-content-warning-force-display="state.contentWarningForceDisplay"
     :data-content-warning-visibility="state.contentWarningVisibility"
     @click.prevent.stop="onActivatePost(post, $event)"
@@ -368,6 +387,7 @@ function onActivateHashTag (text: string) {
       @hide="hideWarningContent"
     />
 
+    <!-- ポストヘッダー -->
     <div
       v-if="state.contentWarningDisplay"
       class="header"
@@ -410,8 +430,32 @@ function onActivateHashTag (text: string) {
         }}</div>
       </div>
     </div>
+
+    <!-- ワードミュートレイヤー -->
     <div
-      v-if="state.contentWarningDisplay || position === 'preview' || position === 'slim'"
+      v-if="!post.__wordMuteDisplay && state.contentWarningDisplay && state.isWordMute"
+      class="post__word-mute"
+    >
+      <SVGIcon name="alphabeticalOff" />
+      <div class="post__word-mute__display-name">{{
+        !mainState.currentSetting.postAnonymization
+          ? post.author?.displayName
+          : $t("anonymous")
+      }}</div>
+      <div class="post__word-mute__handle">{{
+        !mainState.currentSetting.postAnonymization
+          ? post.author?.handle
+          : ""
+      }}</div>
+    </div>
+
+    <!-- ポストボディ -->
+    <div
+      v-else-if="
+        state.contentWarningDisplay ||
+        position === 'preview' ||
+        position === 'slim'
+      "
       class="body"
     >
       <!-- アバター -->
@@ -708,7 +752,7 @@ function onActivateHashTag (text: string) {
   &[data-focus="true"]:not([data-position="preview"]) {
     background-color: rgba(var(--accent-color), 0.125);
 
-    & > .body > .body__right {
+    .body > .body__right {
       user-select: text;
     }
   }
@@ -727,6 +771,7 @@ function onActivateHashTag (text: string) {
     .external,
     .image-folder-button,
     .quad-images,
+    .custom-feed-card,
     .reaction-container {
       display: none;
     }
@@ -735,6 +780,41 @@ function onActivateHashTag (text: string) {
   // ラベル対応
   &[data-content-warning-force-display="true"] .content-warning {
     margin-bottom: 1em;
+  }
+
+  // ワードミュート
+  &[data-word-mute="true"] {
+    cursor: pointer;
+    padding: 0.5em 1em;
+  }
+  &__word-mute {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    grid-gap: 0.5em;
+
+    & > .svg-icon {
+      fill: rgba(var(--fg-color), 0.5);
+      font-size: 0.875em;
+    }
+
+    &__display-name,
+    &__handle {
+      color: rgba(var(--fg-color), 0.5);
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__display-name {
+      font-size: 0.875em;
+      font-weight: bold;
+    }
+
+    &__handle {
+      font-size: 0.75em;
+    }
   }
 }
 
@@ -833,7 +913,7 @@ function onActivateHashTag (text: string) {
 }
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
-  & > .body {
+  .body {
     display: unset;
   }
 }
