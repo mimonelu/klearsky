@@ -1,6 +1,14 @@
 import AtpUtil from "@/composables/atp-wrapper/atp-util"
 
 export default function (responses: Array<any>) {
+  // __custom プロパティの作成
+  // TODO: 確実にポスト直下に作成するようにすること
+  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
+    if (key === "cid" && value != null) {
+      parent.__custom = {}
+    }
+  })
+
   // Blob な image は暫定的に削除
   // TODO: 対応すること
   /*
@@ -75,7 +83,7 @@ export default function (responses: Array<any>) {
   // Reason
   AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "reason" && value != null && parent?.post != null) {
-      parent.post.__reason = value
+      parent.post.__custom.reason = value
     }
   })
 }

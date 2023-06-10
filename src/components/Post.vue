@@ -74,7 +74,7 @@ const state = reactive<{
       // フォロイーである
       props.post.author.viewer?.following != null ||
       // フォロイーのリポストである
-      props.post.__reason?.by.viewer?.following != null ||
+      props.post.__custom?.reason?.by.viewer?.following != null ||
       // プロフィールユーザーである
       (
         mainState.currentPath.startsWith('/profile/') &&
@@ -151,8 +151,8 @@ function isFocused (): boolean {
 
 async function onActivatePost (post: TTPost, event: Event) {
   // ワードミュート中の場合
-  if (state.isWordMute && !props.post.__wordMuteDisplay) {
-    props.post.__wordMuteDisplay = true
+  if (state.isWordMute && !props.post.__custom.wordMuteDisplay) {
+    props.post.__custom.wordMuteDisplay = true
     return
   }
 
@@ -309,7 +309,7 @@ function hideWarningContent () {
 // 自動翻訳
 
 async function translateText (forceTranslate: boolean) {
-  if (props.post.__translatedText != null) {
+  if (props.post.__custom.translatedText != null) {
     state.translation = "done"
     return
   }
@@ -318,7 +318,7 @@ async function translateText (forceTranslate: boolean) {
     state.translation = "ignore"
     return
   }
-  const srcLanguages = props.post.__languages
+  const srcLanguages = props.post.__custom.detectedLanguages
   if (!srcLanguages?.length) {
     state.translation = "ignore"
     return
@@ -356,7 +356,7 @@ async function translateText (forceTranslate: boolean) {
     return
   }
   state.translation = "done"
-  props.post.__translatedText = json.responseData.translatedText
+  props.post.__custom.translatedText = json.responseData.translatedText
 }
 
 function onActivateHashTag (text: string) {
@@ -370,9 +370,9 @@ function onActivateHashTag (text: string) {
     ref="postElement"
     :data-cid="post.cid"
     :data-position="position"
-    :data-repost="post.__reason != null"
+    :data-repost="post.__custom?.reason != null"
     :data-focus="isFocused()"
-    :data-word-mute="state.isWordMute && !post.__wordMuteDisplay"
+    :data-word-mute="state.isWordMute && !post.__custom.wordMuteDisplay"
     :data-content-warning-force-display="state.contentWarningForceDisplay"
     :data-content-warning-visibility="state.contentWarningVisibility"
     @click.prevent.stop="onActivatePost(post, $event)"
@@ -413,19 +413,19 @@ function onActivateHashTag (text: string) {
 
       <!-- リポストユーザー -->
       <div
-        v-if="post.__reason != null"
+        v-if="post.__custom?.reason != null"
         class="reposter"
-        @click.stop="onActivateProfileLink(post.__reason?.by?.handle as string)"
+        @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.handle as string)"
       >
         <SVGIcon name="repost" />
         <div class="reposter__display-name">{{
           !mainState.currentSetting.postAnonymization
-            ? post.__reason?.by?.displayName
+            ? post.__custom?.reason?.by?.displayName
             : $t("anonymous")
         }}</div>
         <div class="reposter__handle">{{
           !mainState.currentSetting.postAnonymization
-            ? post.__reason?.by?.handle
+            ? post.__custom?.reason?.by?.handle
             : ""
         }}</div>
       </div>
@@ -433,7 +433,7 @@ function onActivateHashTag (text: string) {
 
     <!-- ワードミュートレイヤー -->
     <div
-      v-if="!post.__wordMuteDisplay && state.contentWarningDisplay && state.isWordMute"
+      v-if="!post.__custom.wordMuteDisplay && state.contentWarningDisplay && state.isWordMute"
       class="post__word-mute"
     >
       <SVGIcon name="alphabeticalOff" />
@@ -535,7 +535,7 @@ function onActivateHashTag (text: string) {
         >
           <template v-if="state.translation === 'waiting'">（翻訳中）</template>
           <template v-else-if="state.translation === 'failed'">（翻訳に失敗しました）</template>
-          <template v-else-if="state.translation === 'done'">{{ props.post.__translatedText }}</template>
+          <template v-else-if="state.translation === 'done'">{{ props.post.__custom.translatedText }}</template>
         </div>
 
         <!-- リンクボックス -->

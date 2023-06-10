@@ -14,8 +14,8 @@ const state = reactive<{
   filteredFeeds: computed((): Array<TTFeed> => {
     if (!mainState.currentSetting?.hotLanguages?.length) return mainState.currentHotFeeds
     return mainState.currentHotFeeds.filter((feed: TTFeed) => {
-      if (feed.post.__languages == null) return false
-      return feed.post.__languages.some((language: any) =>
+      if (feed.post.__custom.detectedLanguages == null) return false
+      return feed.post.__custom.detectedLanguages.some((language: any) =>
         mainState.currentSetting?.hotLanguages?.includes(language.lang))
     }) ?? []
   }),

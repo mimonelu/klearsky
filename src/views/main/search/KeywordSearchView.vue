@@ -81,7 +81,7 @@ function removeThisPost (uri: string) {
       <Post
         v-for="post of mainState.currentSearchKeywordResults"
         :key="post.cid"
-        :position="post.__style != null ? post.__style as any : 'post'"
+        :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
         :post="post"
         @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"

@@ -23,8 +23,8 @@ export default async function (
   AtpUtil.coherentResponses(posts)
   AtpUtil.detectLanguages(posts)
   posts.sort((a: TTPost, b: TTPost) => {
-    const aIndexedAt = new Date(a.__reason?.indexedAt ?? a.indexedAt)
-    const bIndexedAt = new Date(b.__reason?.indexedAt ?? b.indexedAt)
+    const aIndexedAt = new Date(a.__custom.reason?.indexedAt ?? a.indexedAt)
+    const bIndexedAt = new Date(b.__custom.reason?.indexedAt ?? b.indexedAt)
     return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
   })
   posts.reverse()
