@@ -225,6 +225,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           <!-- ボタン -->
           <button
             v-if="item.type === 'button'"
+            type="button"
             class="button--bordered"
             @click.prevent="onClick(item)"
           >

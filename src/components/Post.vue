@@ -55,9 +55,11 @@ const state = reactive<{
     const target = props.post.record?.text.toLowerCase() ?? props.post.value?.text.toLowerCase()
     if (!target) return false
     return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
-      if (!wordMute.enabled[0]) return false
+      if (!wordMute.enabled[0] || wordMute.keyword === "") return false
       const keywords = wordMute.keyword.toLowerCase().split(" ")
-      return keywords.some((keyword: string) => target.indexOf(keyword) !== - 1)
+      const result = keywords.some((keyword: string) => keyword !== "" && target.indexOf(keyword) !== - 1)
+      if (result) console.log(target)
+      return result
     }) ?? false
   }),
 
