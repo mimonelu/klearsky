@@ -60,8 +60,9 @@ onBeforeUnmount(() => {
 })
 
 onMounted(async () => {
-  state.currentPath = router.currentRoute.value.fullPath
+  state.currentPath = router.currentRoute.value.path
   state.currentQuery = router.currentRoute.value.query
+  updatePageTitle()
   state.settings = Util.loadStorage("settings") ?? {}
   state.processing = true
   try {
@@ -94,7 +95,7 @@ onUnmounted(() => {
 const router = useRouter()
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) => {
-  state.currentPath = to.fullPath
+  state.currentPath = to.path
   state.currentQuery = to.query
 
   if (to.path.startsWith("/profile")) {
@@ -123,6 +124,8 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
 })
 
 router.afterEach(async (to: RouteLocationNormalized) => {
+  updatePageTitle()
+
   // ページフォワード時はページトップへスクロール
   if (window.history.state.forward == null) {
     window.scrollTo(0, 0)
@@ -236,6 +239,30 @@ function resetState () {
 
   // ブロードキャスト
   state.broadcastChannel = new BroadcastChannel("klearsky")
+}
+
+// ページタイトルの更新
+// TODO: /post のタイトルを付けること
+function updatePageTitle () {
+  let title = "Klearsky"
+  switch (state.currentPath) {
+    case "/profile/post":
+    case "/profile/repost":
+    case "/profile/like":
+    case "/profile/following":
+    case "/profile/follower": {
+      title += ` - ${state.currentQuery.handle}`
+      break
+    }
+    case "/feeds/timeline": {
+      title += ` - ${state.currentQuery.displayName}`
+      break
+    }
+    default: break
+  }
+  if (router.currentRoute.value.meta.label != null)
+    title += ` - ${router.currentRoute.value.meta.label}`
+  window.document.title = title
 }
 
 async function autoLogin (): Promise<boolean> {
