@@ -395,10 +395,10 @@ async function processPage (pageName?: null | RouteRecordName) {
         break
       }
       case "post": {
-        const postUri = state.currentQuery.postUri as LocationQueryValue
-        if (!postUri) return
+        const uri = state.currentQuery.uri as LocationQueryValue
+        if (!uri) return
         state.currentPosts?.splice(0)
-        state.currentPosts = await state.atp.fetchPostThread(postUri) ?? []
+        state.currentPosts = await state.atp.fetchPostThread(uri) ?? []
         await nextTick()
         scrollToFocused()
         break

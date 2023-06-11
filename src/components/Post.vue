@@ -148,7 +148,7 @@ onBeforeUnmount(() => {
 })
 
 function isFocused (): boolean {
-  return props.post.uri === mainState.currentQuery.postUri
+  return props.post.uri === mainState.currentQuery.uri
 }
 
 async function onActivatePost (post: TTPost, event: Event) {
@@ -159,7 +159,7 @@ async function onActivatePost (post: TTPost, event: Event) {
   }
 
   if (isFocused() || props.noLink) return
-  const postUrl = { name: "post", query: { postUri: post.uri } }
+  const postUrl = { name: "post", query: { uri: post.uri } }
   if ((event as any).metaKey || (event as any).ctrlKey) {
     const resolvedRoute = router.resolve(postUrl)
     window.open(resolvedRoute.href, "_blank")

@@ -41,7 +41,7 @@ function makeSubjectTo (notification: TTNotification): any {
     case "mention":
     case "quote":
     case "reply": {
-      return { name: "post", query: { postUri: notification.uri } }
+      return { name: "post", query: { uri: notification.uri } }
     }
   }
 }
