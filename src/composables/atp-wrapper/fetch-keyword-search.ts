@@ -65,6 +65,7 @@ export default async function (
           repostCount: 0,
           uri: "",
           viewer: {},
+          __custom: {},
         })
       })
   }
