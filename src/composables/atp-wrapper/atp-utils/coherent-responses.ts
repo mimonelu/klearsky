@@ -4,7 +4,7 @@ export default function (responses: Array<any>) {
   // __custom プロパティの作成
   // TODO: 確実にポスト直下に作成するようにすること
   AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
-    if (key === "cid" && value != null) {
+    if ((key === "cid" || key === "record") && value != null) {
       parent.__custom = {}
     }
   })
