@@ -5,6 +5,7 @@ type TTOption = {
 
 type TTEasyForm = {
   id?: string
+  gridColumns?: string
   hasSubmitButton?: boolean
   submitButtonLabel?: string
   submitCallback?: Function
@@ -12,9 +13,13 @@ type TTEasyForm = {
 }
 
 type TTEasyFormItem = {
-  state: any
-  model: string
+  index?: number // ボタンのコールバック用
+  state?: any
+  model?: string
+  classes?: string
   label?: string
+  buttonLabel?: string
+  icon?: string
   type: string
   display?: boolean
   disabled?: boolean
@@ -45,6 +50,7 @@ type TTEasyFormItem = {
   clearButton?: boolean
   footnote?: string
   focus?: boolean
+  onClick?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onUpdate?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onChange?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onInput?: (item: TTEasyFormItem, form: TTEasyForm) => void

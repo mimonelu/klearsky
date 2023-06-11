@@ -5,6 +5,7 @@
   "yes": "Yes",
   "no": "No",
   "apply": "Apply",
+  "save": "Save",
   "enabled": "Enabled",
   "disabled": "Disabled",
   "show": "Show",
@@ -16,6 +17,9 @@
   "posts": "posts",
   "loading": "Loading...",
   "more": "See more",
+  "klearsky": "Klearsky",
+  "bluesky": "Bluesky",
+  "account": "Accounts",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -26,7 +30,9 @@
   "follow": "Follow",
   "followed": "Follows you",
   "follower": "Follower",
+  "followers": "Followers",
   "following": "Following",
+  "followings": "Followings",
   "followingCount": "Following",
   "followersCount": "Followers",
 
@@ -146,21 +152,22 @@
   "noPopularFeeds": "There are no popular feeds. Please contact the server administrator.",
 
   "hot": "What's Hot",
+  "whatsHot": "What's Hot",
   "selectLanguages": "Select languages",
   "selectLanguagesDetail": "Multiple selections allowed. If select nothing, all posts be displayed.",
 
   "search": "Search",
   "suggestionSearch": "Suggestions",
-  "userSearch": "Find accounts",
-  "keywordSearch": "Find posts",
-  "searchWord": "Search word",
+  "userSearch": "Find Accounts",
+  "keywordSearch": "Find Posts",
+  "searchWord": "Search words",
 
   "notifications": "Notifications",
 
   "settings": "Settings",
-  "klearskySettings": "Klearsky",
-  "blueskySettings": "Bluesky",
-  "accountSettings": "Accounts",
+  "klearskySettings": "Klearsky Settings",
+  "blueskySettings": "Bluesky Settings",
+  "accountSettings": "Accounts Settings",
 
   "language": "Language",
   "english": "English",
@@ -177,6 +184,12 @@
   "fontSizeSmall": "Small",
   "fontSizeMedium": "Medium",
   "fontSizeLarge": "Large",
+
+  "wordMute": "Muted Words",
+  "wordMuteEdit": "Edit muted words",
+  "wordMuteAdd": "Add muted word",
+  "wordMuteEnabled": "ON",
+  "wordMutePlaceholder": "Word1 Word2 ...",
 
   "timeControl": "Time Representation",
   "timeControlRelative": "Relative",
@@ -285,15 +298,17 @@
   "quoteRepost": "Quote repost",
   "text": "Text",
   "linkBox": "Link card",
-  "linkBoxFootnote": "* Display of OGP image is not yet supported.",
   "imageBoxes": "Images",
   "alts": "ALT texts",
   "submit": "Submit",
+  "sendPostNotification": "* You can also link with [TEXT](URL)\n* Display of OGP image in link card is not yet supported.",
   "cancelPost": "Cancel Post",
   "cancelPostMessage": "The entered information will be reset. Are you sure?",
 
-  "$comment": "-- Probably unused --",
   "delete": "Delete",
   "edit": "Edit",
-  "repost": "Repost"
+  "like": "Like",
+  "likes": "Likes",
+  "repost": "Repost",
+  "reposts": "Reposts"
 }

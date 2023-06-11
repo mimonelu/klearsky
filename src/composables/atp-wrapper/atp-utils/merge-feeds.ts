@@ -22,13 +22,13 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
 
       // 既存フィードの登録日時
       const oldDate = new Date(
-        oldFeed.post.__reason?.indexedAt ??
+        oldFeed.post.__custom.reason?.indexedAt ??
           oldFeed.post.indexedAt
       )
 
       // 対象フィードの登録日時
       const targetDate = new Date(
-        targetFeed.post.__reason?.indexedAt ?? targetFeed.post.indexedAt
+        targetFeed.post.__custom.reason?.indexedAt ?? targetFeed.post.indexedAt
       )
 
       if (oldDate > targetDate) return
@@ -36,12 +36,12 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
       const oldFolding = oldFeed.__folding
       const oldReplyDisplay = oldFeed.__replyDisplay
 
-      // 自動翻訳
-      const oldTranslatedTextOfPost = oldFeed.post.__translatedText
-      const oldTranslatedTextOfQuote1 = oldFeed.post.embed?.record?.__translatedText
-      const oldTranslatedTextOfQuote2 = oldFeed.post.embed?.record?.embed?.record?.__translatedText
-      const oldTranslatedTextOfRoot = oldFeed.reply?.root.__translatedText
-      const oldTranslatedTextOfParent = oldFeed.reply?.parent.__translatedText
+      // __custom の退避
+      const oldCustomPropsOfPost = oldFeed.post.__custom
+      const oldCustomPropsOfQuote1 = oldFeed.post.embed?.record?.__custom
+      const oldCustomPropsOfQuote2 = oldFeed.post.embed?.record?.embed?.record?.__custom
+      const oldCustomPropsOfRoot = oldFeed.reply?.root.__custom
+      const oldCustomPropsOfParent = oldFeed.reply?.parent.__custom
 
       oldFeeds[index] = targetFeed
       oldFeed = oldFeeds[index]
@@ -50,17 +50,17 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
       oldFeed.__folding = oldFolding
       oldFeed.__replyDisplay = oldReplyDisplay
 
-      // 自動翻訳
-      oldFeed.post.__translatedText = oldTranslatedTextOfPost
-      if (oldFeed.post.embed?.record != null) {
-        oldFeed.post.embed.record.__translatedText = oldTranslatedTextOfQuote1
+      // __custom の復帰
+      oldFeed.post.__custom = oldCustomPropsOfPost
+      if (oldFeed.post.embed?.record != null && oldCustomPropsOfQuote1 != null) {
+        oldFeed.post.embed.record.__custom = oldCustomPropsOfQuote1
       }
-      if (oldFeed.post.embed?.record?.embed?.record != null) {
-        oldFeed.post.embed.record.embed.record.__translatedText = oldTranslatedTextOfQuote2
+      if (oldFeed.post.embed?.record?.embed?.record != null && oldCustomPropsOfQuote2 != null) {
+        oldFeed.post.embed.record.embed.record.__custom = oldCustomPropsOfQuote2
       }
       if (oldFeed.reply != null) {
-        oldFeed.reply.root.__translatedText = oldTranslatedTextOfRoot
-        oldFeed.reply.parent.__translatedText = oldTranslatedTextOfParent
+        if (oldCustomPropsOfRoot != null) oldFeed.reply.root.__custom = oldCustomPropsOfRoot
+        if (oldCustomPropsOfParent != null) oldFeed.reply.parent.__custom = oldCustomPropsOfParent
       }
     }
   })

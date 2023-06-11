@@ -42,8 +42,9 @@ const state = reactive<{
 const router = useRouter()
 
 function isUserProfile (): boolean {
-  const handle = mainState.currentQuery.handle as LocationQueryValue
-  return handle === mainState.atp.session?.handle
+  const account = mainState.currentQuery.account as LocationQueryValue
+  return account === mainState.atp.session?.handle ||
+         account === mainState.atp.session?.did
 }
 
 function isFollowed (): boolean {
@@ -239,25 +240,25 @@ function hideWarningContent () {
       </button>
       <RouterLink
         class="tab__button"
-        :to="{ path: '/profile/post', query: { handle: mainState.currentProfile?.handle } }"
+        :to="{ path: '/profile/post', query: { account: mainState.currentProfile?.handle } }"
       >
         <SVGIcon name="post" />
       </RouterLink>
       <RouterLink
         class="tab__button"
-        :to="{ path: '/profile/repost', query: { handle: mainState.currentProfile?.handle } }"
+        :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.handle } }"
       >
         <SVGIcon name="repost" />
       </RouterLink>
       <RouterLink
         class="tab__button"
-        :to="{ path: '/profile/like', query: { handle: mainState.currentProfile?.handle } }"
+        :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.handle } }"
       >
         <SVGIcon name="heart" />
       </RouterLink>
       <RouterLink
         class="tab__button tab__button--following"
-        :to="{ path: '/profile/following', query: { handle: mainState.currentProfile?.handle } }"
+        :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
         :title="$t('following')"
       >
         <SVGIcon name="people" />
@@ -270,7 +271,7 @@ function hideWarningContent () {
       </RouterLink>
       <RouterLink
         class="tab__button tab__button--following"
-        :to="{ path: '/profile/follower', query: { handle: mainState.currentProfile?.handle } }"
+        :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.handle } }"
         :title="$t('follower')"
       >
         <img

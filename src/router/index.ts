@@ -51,6 +51,7 @@ const router = createRouter({
         {
           path: "/profile/edit",
           name: "edit-profile",
+          meta: { label: "editProfile" },
           component: EditProfileView,
         },
         {
@@ -61,6 +62,7 @@ const router = createRouter({
         {
           path: "/notifications",
           name: "notifications",
+          meta: { label: "notifications" },
           component: NotificationsView,
         },
         {
@@ -77,16 +79,19 @@ const router = createRouter({
             {
               path: "timeline",
               name: "timeline-home",
+              meta: { label: "The Bluesky Client" },
               component: TimelineView,
             },
             {
               path: "hot",
               name: "hot-home",
+              meta: { label: "whatsHot" },
               component: HotView,
             },
             {
               path: "globalline",
               name: "globalline-home",
+              meta: { label: "globalline" },
               component: GloballineView,
             },
           ],
@@ -100,11 +105,13 @@ const router = createRouter({
             {
               path: "my",
               name: "feeds-my",
+              meta: { label: "myFeeds" },
               component: MyFeedsView,
             },
             {
               path: "popular",
               name: "feeds-popular",
+              meta: { label: "popularFeeds" },
               component: PopularFeedsView,
             },
             {
@@ -128,21 +135,25 @@ const router = createRouter({
             {
               path: "repost",
               name: "profile-repost",
+              meta: { label: "reposts" },
               component: AuthorRepostView,
             },
             {
               path: "like",
               name: "profile-like",
+              meta: { label: "likes" },
               component: AuthorLikeView,
             },
             {
               path: "follower",
               name: "profile-follower",
+              meta: { label: "followers" },
               component: FollowerListView,
             },
             {
               path: "following",
               name: "profile-following",
+              meta: { label: "followings" },
               component: FollowingListView,
             },
           ],
@@ -156,16 +167,19 @@ const router = createRouter({
             {
               path: "suggestion",
               name: "suggestion-search",
+              meta: { label: "suggestionSearch" },
               component: SuggestionSearchView,
             },
             {
               path: "keyword",
               name: "keyword-search",
+              meta: { label: "keywordSearch" },
               component: KeywordSearchView,
             },
             {
               path: "user",
               name: "user-search",
+              meta: { label: "userSearch" },
               component: UserSearchView,
             },
           ],
@@ -179,16 +193,19 @@ const router = createRouter({
             {
               path: "klearsky",
               name: "klearsky-settings",
+              meta: { label: "klearskySettings" },
               component: KlearskySettingsView,
             },
             {
               path: "bluesky",
               name: "bluesky-settings",
+              meta: { label: "blueskySettings" },
               component: BlueskySettingsView,
             },
             {
-              path: "account",
+              path: "accounts",
               name: "account-settings",
+              meta: { label: "accountSettings" },
               component: AccountSettingsView,
             },
           ],

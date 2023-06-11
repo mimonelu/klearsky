@@ -92,6 +92,8 @@ type TTContentVisibility = "always-hide" | "always-warn" | "hide" | "show" | "wa
 
 type TTPreference = {
   $type: string
+
+  // ラベル
   enabled?: boolean
   label?: string
   visibility?: TTContentVisibility
@@ -102,14 +104,18 @@ type TTPreference = {
 }
 
 type TTPost = {
-  __createdAt?: string // Injected
-  __languages?: {
-    lang: string
-    accuracy: number
-  }[] // Injected
-  __reason?: TTReason // Injected
-  __style?: string // Injected
-  __translatedText?: string // Injected // 自動翻訳
+  // Injected
+  __custom: {
+    detectedLanguages?: {
+      lang: string
+      accuracy: number
+    }[]
+    reason?: TTReason
+    forcePosition?: string
+    translatedText?: string
+    wordMuteDisplay?: boolean
+  }
+
   author: TTUser
   cid: string
   embed?: {

@@ -9,16 +9,17 @@ export default function (data: Array<any>) {
 }
 
 function detectLanguages (post: TTPost) {
-  if (post.__languages != null) return
+  if (post.__custom == null) console.log(post)
+  if (post.__custom.detectedLanguages != null) return
   const text = post.record?.text ?? post.value?.text
   if (text == null) {
-    post.__languages = []
+    post.__custom.detectedLanguages = []
     return
   }
   const languages = detectAll(text)
   if (!languages) {
-    post.__languages = []
+    post.__custom.detectedLanguages = []
     return
   }
-  post.__languages = languages
+  post.__custom.detectedLanguages = languages
 }

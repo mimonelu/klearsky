@@ -23,7 +23,7 @@ async function moveToFirstPost (event: Event) {
   try {
     const uri = await mainState.atp.fetchFirstPost(props.handle)
     if (uri == null) return
-    const postUrl = { name: "post", query: { postUri: uri } }
+    const postUrl = { name: "post", query: { uri } }
     if ((event as any).metaKey || (event as any).ctrlKey) {
       const resolvedRoute = router.resolve(postUrl)
       window.open(resolvedRoute.href, "_blank")

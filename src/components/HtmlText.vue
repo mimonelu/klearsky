@@ -90,7 +90,7 @@ function onActivateHashTag (text: string) {
       <template v-else-if="segment.type === 'mention'">
         <RouterLink
           class="textlink"
-          :to="`/profile/post?handle=${segment.param}`"
+          :to="`/profile/post?account=${segment.param}`"
           @click.stop
         >{{ segment.text }}</RouterLink>
       </template>

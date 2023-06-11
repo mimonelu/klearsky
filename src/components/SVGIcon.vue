@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
 import alert from "@/svg/alert.svg?raw"
+import alphabeticalOff from "@/svg/alphabetical-off.svg?raw"
 import arrowLeft from "@/svg/arrow-left.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
@@ -56,6 +57,7 @@ import wallpaper from "@/svg/wallpaper.svg?raw"
 
 const icons: { [k: string]: string } = {
   alert,
+  alphabeticalOff,
   arrowLeft,
   at,
   bell,

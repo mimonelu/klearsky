@@ -84,6 +84,15 @@ async function refreshSession () {
         <span>{{ $t("myFeeds") }}</span>
       </a>
 
+      <!-- ワードミュートポップアップトリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="mainState.openWordMutePopup"
+      >
+        <SVGIcon name="alphabeticalOff" />
+        <span>{{ $t("wordMute") }}</span>
+      </a>
+
       <!-- コンテンツフィルタリングポップアップトリガー -->
       <a
         class="textlink--icon"

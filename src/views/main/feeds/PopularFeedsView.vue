@@ -59,7 +59,7 @@ async function updatePopularFeeds () {
   }
 
   .textlabel {
-    margin: 1.5rem;
+    margin: 2rem;
   }
 }
 </style>

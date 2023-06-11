@@ -59,7 +59,6 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "url",
       inputmode: "url",
       clearButton: true,
-      footnote: "※リンク先画像の取得は未対応です。",
     },
     {
       state,
@@ -130,6 +129,7 @@ function isEmpty (): boolean {
         v-if="type === 'reply' || type === 'quoteRepost'"
         position="preview"
         :post="post as TTPost"
+        :noLink="true"
       />
       <EasyForm v-bind="easyFormProps">
         <template v-slot:after>
@@ -151,17 +151,38 @@ function isEmpty (): boolean {
           </dl>
         </template>
       </EasyForm>
+      <p class="send-post-popup__notification">{{ $t("sendPostNotification") }}</p>
     </template>
   </Popup>
 </template>
 
 <style lang="scss" scoped>
-.send-post-popup:deep() {
-  .textarea {
-    border-left-style: none;
-    border-right-style: none;
-    border-radius: 0;
-    margin: 0 -2rem;
+.send-post-popup {
+  &:deep() {
+    // プレビューポストのテキスト選択
+    .post {
+      .text {
+        pointer-events: fill;
+        user-select: text;
+      }
+
+      .textlink {
+        pointer-events: none;
+      }
+    }
+
+    .textarea {
+      border-left-style: none;
+      border-right-style: none;
+      border-radius: 0;
+      margin: 0 -2rem;
+    }
+  }
+
+  &__notification {
+    color: rgba(var(--fg-color), 0.75);
+    font-size: 0.875rem;
+    white-space: pre-line;
   }
 }
 </style>

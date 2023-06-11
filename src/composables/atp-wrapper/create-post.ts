@@ -1,6 +1,7 @@
 import Package from "@/../package.json"
 import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 import { RichText } from "@atproto/api"
+import AtpUtil from "@/composables/atp-wrapper/atp-util"
 import Util from "@/composables/util"
 
 export default async function (
@@ -9,31 +10,40 @@ export default async function (
 ): Promise<boolean> {
   if (this.agent == null) return false
 
-  const richText = new RichText({ text: params.text })
-  await richText.detectFacets(this.agent)
-
   const record: AppBskyFeedPost.Record = {
     $type: "app.bsky.feed.post",
     createdAt: new Date().toISOString(),
-    text: richText.text,
+    text: params.text,
 
     // カスタムフィールド - via
     via: `Klearsky v${Package.version}`,
   }
 
+  // カスタムリンク
+  const customLinks = AtpUtil.makeCustomLinks(record.text)
+  record.text = customLinks.text
+  if (customLinks.facets.length > 0) record.facets = customLinks.facets
+
+  // Facets
+  const richText = new RichText({ text: record.text })
+  await richText.detectFacets(this.agent)
+  record.text = richText.text
+  if (richText.facets != null) {
+    if (record.facets != null) record.facets.push(...richText.facets)
+    else record.facets = richText.facets
+  }
+
   // カスタムフィールド - Lightning
   if (params.lightning) record.lightning = params.lightning
 
-  if (richText.facets != null) record.facets = richText.facets
-
-  // TODO: リンクボックス
+  // リンクボックス
   let external: null | any = null
   if (params.url?.length > 0) {
     external = await Util.parseOgp(params.url)
     if (external == null) return false
   }
 
-  // TODO: 画像
+  // 画像
   let images: null | any = null
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all(
     params.images.map((file: File): Promise<null | BlobRef> => {
@@ -67,12 +77,10 @@ export default async function (
   // リプライ
   if (params.type === "reply" && params.post != null) {
     record.reply = {
-      // TODO: Feed.root == Feed.parent であればこれで良いが、でなければ誤り。要修正
       root: {
-        cid: params.post.cid,
-        uri: params.post.uri,
+        cid: params.post.record.reply?.root?.cid ?? params.post.cid,
+        uri: params.post.record.reply?.root?.uri ?? params.post.uri,
       },
-
       parent: {
         cid: params.post.cid,
         uri: params.post.uri,

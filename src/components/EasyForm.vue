@@ -14,10 +14,11 @@ defineExpose({
 
 const props = defineProps<{
   id?: string
-  data: Array<TTEasyFormItem>
+  gridColumns?: string
   hasSubmitButton?: boolean
   submitButtonLabel?: string
   submitCallback?: Function
+  data: Array<TTEasyFormItem>
 }>()
 
 const state = reactive<{
@@ -53,6 +54,7 @@ function isInput (type?: string): boolean {
 }
 
 function getCharacterLength (item: TTEasyFormItem): number {
+  if (item.model == null) return 0
   const text = item.state[item.model]
   if (item.maxLengthWithSegmenter) {
     const segmenter = (Intl as any).Segmenter
@@ -79,15 +81,23 @@ async function onSubmit () {
   }
 }
 
+function onClick (item: TTEasyFormItem) {
+  Util.blurElement()
+  if (item.onClick != null) item.onClick(item, props)
+}
+
 function onChange (item: TTEasyFormItem) {
   if (item.onUpdate != null) item.onUpdate(item, props)
 }
 
-function onActivateClearButton (item: TTEasyFormItem) {
+function onClickClearButton (item: TTEasyFormItem) {
+  Util.blurElement()
+  if (item.model == null) return
   item.state[item.model] = ""
 }
 
 function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
+  if (item.model == null) return
   item.state[item.model] = files
   if (item.onChange != null) item.onChange(item, props)
 }
@@ -105,135 +115,158 @@ function onEnterKeyDown (event: KeyboardEvent) {
   <form
     :key="state.updateKey"
     class="easy-form"
+    :data-grid-columns="gridColumns != null"
+    :style="gridColumns != null ? `--grid-columns: ${gridColumns};` : ''"
     @submit.prevent.stop="onSubmit"
   >
     <slot name="before" />
-    <dl
-      v-for="item, index of data"
-      :key="index"
-      v-show="item.display !== false"
+    <div
+      v-if="data.length > 0"
+      class="easy-form__body"
     >
-      <dt v-if="item.label != null">{{ item.label }}</dt>
-      <dd>
-        <!-- 各種 input 要素 -->
-        <input
-          v-if="isInput(item.type)"
-          v-model="item.state[item.model]"
-          :id="makeItemId(index)"
-          :type="item.type ?? 'text'"
-          :disabled="item.disabled ?? false"
-          :required="item.required ?? false"
-          :pattern="item.pattern"
-          :placeholder="item.placeholder ?? ''"
-          autocapitalize="off"
-          autocorrect="off"
-          :autocomplete="item.autocomplete ?? ''"
-          :inputmode="item.inputmode ?? undefined"
-          spellcheck="false"
-          class="textbox"
-          @keydown.enter="onEnterKeyDown"
-        >
+      <dl
+        v-for="item, index of data"
+        :key="index"
+        v-show="item.display !== false"
+      >
+        <dt v-if="item.label != null">{{ item.label }}</dt>
+        <dd>
+          <template v-if="item.model != null">
+            <!-- 各種 input 要素 -->
+            <input
+              v-if="isInput(item.type)"
+              v-model="item.state[item.model]"
+              :id="makeItemId(index)"
+              :type="item.type ?? 'text'"
+              :disabled="item.disabled ?? false"
+              :required="item.required ?? false"
+              :pattern="item.pattern"
+              :placeholder="item.placeholder ?? ''"
+              autocapitalize="off"
+              autocorrect="off"
+              :autocomplete="item.autocomplete ?? ''"
+              :inputmode="item.inputmode ?? undefined"
+              spellcheck="false"
+              class="textbox"
+              @keydown.enter="onEnterKeyDown"
+            >
 
-        <!-- チェックボックス -->
-        <Checkboxes
-          v-if="item.type === 'checkbox'"
-          :state="item.state"
-          :model="item.model"
-          :required="item.required ?? false"
-          :options="item.options as Array<TTOption>"
-          :layout="item.layout"
-          @update="onChange(item)"
-        />
+            <!-- チェックボックス -->
+            <Checkboxes
+              v-if="item.type === 'checkbox'"
+              :state="item.state"
+              :model="item.model"
+              :required="item.required ?? false"
+              :options="item.options as Array<TTOption>"
+              :layout="item.layout"
+              @update="onChange(item)"
+            />
 
-        <!-- ラジオボタン -->
-        <Radios
-          v-if="item.type === 'radio'"
-          :state="item.state"
-          :model="item.model"
-          :required="item.required ?? false"
-          :options="item.options as Array<TTOption>"
-          :layout="item.layout"
-          @update="onChange(item)"
-        />
+            <!-- ラジオボタン -->
+            <Radios
+              v-if="item.type === 'radio'"
+              :state="item.state"
+              :model="item.model"
+              :required="item.required ?? false"
+              :options="item.options as Array<TTOption>"
+              :layout="item.layout"
+              @update="onChange(item)"
+            />
 
-        <!-- セレクトボックス -->
-        <label
-          v-if="item.type === 'select'"
-          class="selectbox"
-        >
-          <select
-            v-model="item.state[item.model]"
-            @change="onChange(item)"
+            <!-- セレクトボックス -->
+            <label
+              v-if="item.type === 'select'"
+              class="selectbox"
+            >
+              <select
+                v-model="item.state[item.model]"
+                @change="onChange(item)"
+              >
+                <option
+                  v-for="option, index in item.options"
+                  :key="index"
+                  :value="option.value"
+                  :selected="option.value === item.state[item.model]"
+                >{{ $t(option.label) }}</option>
+              </select>
+            </label>
+
+            <!-- ファイル選択ボックス -->
+            <FileBox
+              v-else-if="item.type === 'file'"
+              :files="item.state[item.model]"
+              :disabled="item.disabled"
+              :accept="item.accept"
+              :multiple="item.isMultipleFile"
+              :maxNumber="item.maxNumberOfFile"
+              :quadLayout="item.quadLayout"
+              @change="(files: Array<File>) => { onChangeFile(files, item) }"
+            />
+
+            <!-- テキストエリア -->
+            <textarea
+              v-else-if="item.type === 'textarea'"
+              v-model="item.state[item.model]"
+              :id="makeItemId(index)"
+              :disabled="item.disabled ?? false"
+              :required="item.required ?? false"
+              :pattern="item.pattern"
+              :rows="item.rows ?? ''"
+              :placeholder="item.placeholder ?? ''"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              class="textarea"
+              @input="onInputTextarea(item)"
+              @keydown.enter="onEnterKeyDown"
+            />
+          </template>
+
+          <!-- ボタン -->
+          <button
+            v-if="item.type === 'button'"
+            type="button"
+            class="button--bordered"
+            @click.prevent="onClick(item)"
           >
-            <option
-              v-for="option, index in item.options"
-              :key="index"
-              :value="option.value"
-              :selected="option.value === item.state[item.model]"
-            >{{ $t(option.label) }}</option>
-          </select>
-        </label>
+            <SVGIcon
+              v-if="item.icon != null"
+              :name="item.icon"
+            />
+            <span v-if="item.buttonLabel != null">{{ item.buttonLabel }}</span>
+          </button>
 
-        <!-- クリアボタン -->
-        <button
-          v-if="item.clearButton"
-          class="clear-button"
-          @click.prevent="onActivateClearButton(item)"
-        >
-          <SVGIcon name="cross" />
-        </button>
+          <!-- クリアボタン -->
+          <button
+            v-if="item.clearButton"
+            class="clear-button"
+            @click.prevent="onClickClearButton(item)"
+          >
+            <SVGIcon name="cross" />
+          </button>
 
-        <!-- ファイル選択ボックス -->
-        <FileBox
-          v-else-if="item.type === 'file'"
-          :files="item.state[item.model]"
-          :disabled="item.disabled"
-          :accept="item.accept"
-          :multiple="item.isMultipleFile"
-          :maxNumber="item.maxNumberOfFile"
-          :quadLayout="item.quadLayout"
-          @change="(files: Array<File>) => { onChangeFile(files, item) }"
-        />
+          <!-- 最大文字数インジケータ -->
+          <div
+            v-if="item.maxLengthIndicator"
+            class="max-length-indicator"
+            :data-over-maxlength="item.maxlength != null
+              ? getCharacterLength(item) > item.maxlength
+              : false
+            "
+          >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
+        </dd>
 
-        <!-- テキストエリア -->
-        <textarea
-          v-else-if="item.type === 'textarea'"
-          v-model="item.state[item.model]"
-          :id="makeItemId(index)"
-          :disabled="item.disabled ?? false"
-          :required="item.required ?? false"
-          :pattern="item.pattern"
-          :rows="item.rows ?? ''"
-          :placeholder="item.placeholder ?? ''"
-          autocapitalize="off"
-          autocorrect="off"
-          spellcheck="false"
-          class="textarea"
-          @input="onInputTextarea(item)"
-          @keydown.enter="onEnterKeyDown"
-        />
-
-        <!-- 最大文字数インジケータ -->
-        <div
-          v-if="item.maxLengthIndicator"
-          class="max-length-indicator"
-          :data-over-maxlength="item.maxlength != null
-            ? getCharacterLength(item) > item.maxlength
-            : false
-          "
-        >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
-      </dd>
-
-      <!-- 脚注 -->
-      <dd
-        v-if="item.footnote != null"
-        class="footnote"
-      >{{ item.footnote }}</dd>
-    </dl>
+        <!-- 脚注 -->
+        <dd
+          v-if="item.footnote != null"
+          class="footnote"
+        >{{ item.footnote }}</dd>
+      </dl>
+    </div>
     <slot name="after" />
     <button
       v-if="hasSubmitButton ?? true"
-      class="button"
+      class="button submit-button"
     >
       <span>{{ submitButtonLabel ?? $t("submit") }}</span>
     </button>
@@ -241,32 +274,54 @@ function onEnterKeyDown (event: KeyboardEvent) {
 </template>
 
 <style lang="scss" scoped>
-// `slot` 用に `:deep()` を付与している
-.easy-form:deep() {
+.easy-form {
   display: flex;
   flex-direction: column;
-  grid-gap: 1.5rem;
+  grid-gap: 1rem;
 
-  & > dl {
+  &__body {
     display: flex;
     flex-direction: column;
-    grid-gap: 0.75rem;
+    grid-gap: 1rem 0.5rem;
+  }
+  &[data-grid-columns="true"] &__body {
+    display: grid;
+    grid-template-columns: var(--grid-columns);
+    align-items: center;
+  }
 
-    & > dt {
-      font-weight: bold;
-      line-height: 1.25;
-      word-wrap: break-word;
-    }
-
-    & > dd  {
+  &:deep() {
+    dl {
       display: flex;
       flex-direction: column;
-      position: relative;
+      grid-gap: 0.5rem;
 
-      & > input,
-      & > textarea {
-        display: block;
-        flex-grow: 1;
+      & > dt {
+        font-weight: bold;
+        line-height: 1.25;
+        word-wrap: break-word;
+      }
+
+      & > dd  {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        & > input {
+          width: 100%;
+        }
+
+        & > textarea {
+          display: block;
+          flex-grow: 1;
+        }
+
+        & > .button--bordered,
+        & > input,
+        & > .checkboxes,
+        & > .checkboxes > .checkbox {
+          min-height: 3rem;
+        }
       }
     }
   }

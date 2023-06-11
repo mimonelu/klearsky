@@ -29,11 +29,14 @@ function moveToBottom () {
     <!-- プロフィールボタン -->
     <RouterLink
       class="link-button"
-      :to="{ name: 'profile-post', query: { handle: mainState.atp.session?.handle } }"
+      :to="{ name: 'profile-post', query: { account: mainState.atp.session?.handle } }"
       :data-is-focus="
         (
           mainState.currentPath.startsWith('/profile/') &&
-          mainState.currentQuery.handle === mainState.atp.session?.handle
+          (
+            mainState.currentQuery.account === mainState.atp.session?.handle ||
+            mainState.currentQuery.account === mainState.atp.session?.did
+          )
         ) ||
         mainState.currentPath.startsWith('/profile/edit')
       "

@@ -64,7 +64,7 @@ function hideWarningContent () {
 <template>
   <RouterLink
     class="user-box"
-    :to="{ name: 'profile-post', query: { handle: user.handle } }"
+    :to="{ name: 'profile-post', query: { account: user.handle } }"
     :data-content-warning-disabled="contentWarningDisabled"
     :data-content-warning-visibility="state.contentWarningVisibility"
     @click="onActivateLink"

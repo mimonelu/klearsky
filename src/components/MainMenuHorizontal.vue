@@ -16,11 +16,14 @@ async function openSendPostPopup () {
     <!-- プロフィールボタン -->
     <RouterLink
       class="link-button profile-button"
-      :to="{ name: 'profile-post', query: { handle: mainState.atp.session?.handle } }"
+      :to="{ name: 'profile-post', query: { account: mainState.atp.session?.handle } }"
       :data-is-focus="
         (
           mainState.currentPath.startsWith('/profile/') &&
-          mainState.currentQuery.handle === mainState.atp.session?.handle
+          (
+            mainState.currentQuery.account === mainState.atp.session?.handle ||
+            mainState.currentQuery.account === mainState.atp.session?.did
+          )
         ) ||
         mainState.currentPath.startsWith('/profile/edit')
       "

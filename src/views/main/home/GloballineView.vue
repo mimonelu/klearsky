@@ -52,7 +52,7 @@ async function onPost (did: string, post: any) {
 
   // 言語解析
   if (post.record.text != null) {
-    const languages = post.__languages
+    const languages = post.__custom.detectedLanguages
     if (languages != null) {
       const yourLanguage = languages.findIndex((language: any) => {
         return language.lang === mainState.currentSetting.globallineLanguage

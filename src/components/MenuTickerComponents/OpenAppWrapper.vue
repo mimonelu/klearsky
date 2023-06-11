@@ -2,6 +2,7 @@
 import { reactive } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 import otherApps from "@/consts/other-apps.json"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -27,7 +28,7 @@ function openOtherApp (app: any) {
       .replace("{did}", props.did)
       .replace("{handle}", props.handle)
   } else if (props.type === "post") {
-    const rkey = (props.uri?.match(/\/([^\/]+)$/) ?? ["", ""])[1]
+    const rkey = Util.getRkey(props.uri)
     uri = app.postUri
       .replace("{did}", props.did)
       .replace("{handle}", props.handle)

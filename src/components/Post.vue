@@ -17,23 +17,25 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
-  level?: number;
-  position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim";
-  post: TTPost;
-  replyTo?: TTPost;
-  forceHideImages?: boolean;
+  level?: number
+  position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim"
+  post: TTPost
+  noLink?: boolean
+  replyTo?: TTPost
+  forceHideImages?: boolean
 }>()
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  postMenuDisplay: boolean;
-  repostMenuDisplay: boolean;
-  processing: boolean;
-  external: ComputedRef<undefined | TTExternal>;
-  images: ComputedRef<Array<TTImage>>;
-  displayImage: ComputedRef<boolean>;
-  imageFolding: boolean;
+  postMenuDisplay: boolean
+  repostMenuDisplay: boolean
+  processing: boolean
+  external: ComputedRef<undefined | TTExternal>
+  images: ComputedRef<Array<TTImage>>
+  isWordMute: ComputedRef<boolean>
+  displayImage: ComputedRef<boolean>
+  imageFolding: boolean
 
   // ラベル対応
   contentWarningForceDisplay: boolean;
@@ -48,6 +50,19 @@ const state = reactive<{
   external: computed(() => props.post.embed?.external),
   images: computed(() => props.post.embed?.images ?? []),
 
+  // ワードミュートの判定
+  isWordMute: computed((): boolean => {
+    const target = props.post.record?.text.toLowerCase() ?? props.post.value?.text.toLowerCase()
+    if (!target) return false
+    return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
+      if (!wordMute.enabled[0] || wordMute.keyword === "") return false
+      const keywords = wordMute.keyword.toLowerCase().split(" ")
+      const result = keywords.some((keyword: string) => keyword !== "" && target.indexOf(keyword) !== - 1)
+      if (result) console.log(target)
+      return result
+    }) ?? false
+  }),
+
   // 画像の制御
   // TODO: 引用リポストに対応すること
   displayImage: computed(() => {
@@ -59,9 +74,9 @@ const state = reactive<{
       // 自身である
       props.post.author?.did === mainState.atp.session?.did ||
       // フォロイーである
-      props.post.author.viewer.following != null ||
+      props.post.author.viewer?.following != null ||
       // フォロイーのリポストである
-      props.post.__reason?.by.viewer.following != null ||
+      props.post.__custom?.reason?.by.viewer?.following != null ||
       // プロフィールユーザーである
       (
         mainState.currentPath.startsWith('/profile/') &&
@@ -74,7 +89,7 @@ const state = reactive<{
       // 自身である
       props.post.author?.did === mainState.atp.session?.did ||
       // フォロイーである
-      props.post.author.viewer.following != null
+      props.post.author.viewer?.following != null
     )) return true
 
     // 自身のみ表示
@@ -133,12 +148,18 @@ onBeforeUnmount(() => {
 })
 
 function isFocused (): boolean {
-  return props.post.uri === mainState.currentQuery.postUri
+  return props.post.uri === mainState.currentQuery.uri
 }
 
 async function onActivatePost (post: TTPost, event: Event) {
-  if (isFocused()) return
-  const postUrl = { name: "post", query: { postUri: post.uri } }
+  // ワードミュート中の場合
+  if (state.isWordMute && !props.post.__custom.wordMuteDisplay) {
+    props.post.__custom.wordMuteDisplay = true
+    return
+  }
+
+  if (isFocused() || props.noLink) return
+  const postUrl = { name: "post", query: { uri: post.uri } }
   if ((event as any).metaKey || (event as any).ctrlKey) {
     const resolvedRoute = router.resolve(postUrl)
     window.open(resolvedRoute.href, "_blank")
@@ -152,7 +173,7 @@ function onActivateReplierLink () {
 }
 
 async function onActivateProfileLink (handle: string) {
-  await router.push({ name: "profile-post", query: { handle } })
+  await router.push({ name: "profile-post", query: { account: handle } })
 }
 
 function onActivateImageFolderButton () {
@@ -290,7 +311,7 @@ function hideWarningContent () {
 // 自動翻訳
 
 async function translateText (forceTranslate: boolean) {
-  if (props.post.__translatedText != null) {
+  if (props.post.__custom.translatedText != null) {
     state.translation = "done"
     return
   }
@@ -299,7 +320,7 @@ async function translateText (forceTranslate: boolean) {
     state.translation = "ignore"
     return
   }
-  const srcLanguages = props.post.__languages
+  const srcLanguages = props.post.__custom.detectedLanguages
   if (!srcLanguages?.length) {
     state.translation = "ignore"
     return
@@ -337,7 +358,7 @@ async function translateText (forceTranslate: boolean) {
     return
   }
   state.translation = "done"
-  props.post.__translatedText = json.responseData.translatedText
+  props.post.__custom.translatedText = json.responseData.translatedText
 }
 
 function onActivateHashTag (text: string) {
@@ -351,8 +372,9 @@ function onActivateHashTag (text: string) {
     ref="postElement"
     :data-cid="post.cid"
     :data-position="position"
-    :data-repost="post.__reason != null"
+    :data-repost="post.__custom?.reason != null"
     :data-focus="isFocused()"
+    :data-word-mute="state.isWordMute && !post.__custom.wordMuteDisplay"
     :data-content-warning-force-display="state.contentWarningForceDisplay"
     :data-content-warning-visibility="state.contentWarningVisibility"
     @click.prevent.stop="onActivatePost(post, $event)"
@@ -367,6 +389,7 @@ function onActivateHashTag (text: string) {
       @hide="hideWarningContent"
     />
 
+    <!-- ポストヘッダー -->
     <div
       v-if="state.contentWarningDisplay"
       class="header"
@@ -392,25 +415,49 @@ function onActivateHashTag (text: string) {
 
       <!-- リポストユーザー -->
       <div
-        v-if="post.__reason != null"
+        v-if="post.__custom?.reason != null"
         class="reposter"
-        @click.stop="onActivateProfileLink(post.__reason?.by?.handle as string)"
+        @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.handle as string)"
       >
         <SVGIcon name="repost" />
         <div class="reposter__display-name">{{
           !mainState.currentSetting.postAnonymization
-            ? post.__reason?.by?.displayName
+            ? post.__custom?.reason?.by?.displayName
             : $t("anonymous")
         }}</div>
         <div class="reposter__handle">{{
           !mainState.currentSetting.postAnonymization
-            ? post.__reason?.by?.handle
+            ? post.__custom?.reason?.by?.handle
             : ""
         }}</div>
       </div>
     </div>
+
+    <!-- ワードミュートレイヤー -->
     <div
-      v-if="state.contentWarningDisplay || position === 'preview' || position === 'slim'"
+      v-if="!post.__custom.wordMuteDisplay && state.contentWarningDisplay && state.isWordMute"
+      class="post__word-mute"
+    >
+      <SVGIcon name="alphabeticalOff" />
+      <div class="post__word-mute__display-name">{{
+        !mainState.currentSetting.postAnonymization
+          ? post.author?.displayName
+          : $t("anonymous")
+      }}</div>
+      <div class="post__word-mute__handle">{{
+        !mainState.currentSetting.postAnonymization
+          ? post.author?.handle
+          : ""
+      }}</div>
+    </div>
+
+    <!-- ポストボディ -->
+    <div
+      v-else-if="
+        state.contentWarningDisplay ||
+        position === 'preview' ||
+        position === 'slim'
+      "
       class="body"
     >
       <!-- アバター -->
@@ -490,7 +537,7 @@ function onActivateHashTag (text: string) {
         >
           <template v-if="state.translation === 'waiting'">（翻訳中）</template>
           <template v-else-if="state.translation === 'failed'">（翻訳に失敗しました）</template>
-          <template v-else-if="state.translation === 'done'">{{ props.post.__translatedText }}</template>
+          <template v-else-if="state.translation === 'done'">{{ props.post.__custom.translatedText }}</template>
         </div>
 
         <!-- リンクボックス -->
@@ -570,6 +617,7 @@ function onActivateHashTag (text: string) {
                 :level="(level ?? 1) + 1"
                 :position="position === 'slim' ? 'slim' : 'postInPost'"
                 :post="post.embed.record as TTPost"
+                :noLink="noLink"
               />
             </div>
           </template>
@@ -706,7 +754,7 @@ function onActivateHashTag (text: string) {
   &[data-focus="true"]:not([data-position="preview"]) {
     background-color: rgba(var(--accent-color), 0.125);
 
-    & > .body > .body__right {
+    .body > .body__right {
       user-select: text;
     }
   }
@@ -725,6 +773,7 @@ function onActivateHashTag (text: string) {
     .external,
     .image-folder-button,
     .quad-images,
+    .custom-feed-card,
     .reaction-container {
       display: none;
     }
@@ -733,6 +782,41 @@ function onActivateHashTag (text: string) {
   // ラベル対応
   &[data-content-warning-force-display="true"] .content-warning {
     margin-bottom: 1em;
+  }
+
+  // ワードミュート
+  &[data-word-mute="true"] {
+    cursor: pointer;
+    padding: 0.5em 1em;
+  }
+  &__word-mute {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    grid-gap: 0.5em;
+
+    & > .svg-icon {
+      fill: rgba(var(--fg-color), 0.5);
+      font-size: 0.875em;
+    }
+
+    &__display-name,
+    &__handle {
+      color: rgba(var(--fg-color), 0.5);
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__display-name {
+      font-size: 0.875em;
+      font-weight: bold;
+    }
+
+    &__handle {
+      font-size: 0.75em;
+    }
   }
 }
 
@@ -831,7 +915,7 @@ function onActivateHashTag (text: string) {
 }
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
-  & > .body {
+  .body {
     display: unset;
   }
 }

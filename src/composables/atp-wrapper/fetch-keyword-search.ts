@@ -46,7 +46,7 @@ export default async function (
         createdAtDate.setTime(dropout.post.createdAt / 1000 / 1000)
         const createdAt = createdAtDate.toISOString()
         posts.push({
-          __style: "preview",
+          forcePosition: "preview",
           author: {
             did: dropout.user.did,
             displayName: "(Non-existent account)",
@@ -65,6 +65,7 @@ export default async function (
           repostCount: 0,
           uri: "",
           viewer: {},
+          __custom: {},
         })
       })
   }
