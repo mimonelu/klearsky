@@ -69,7 +69,7 @@ async function copyCode (code: string) {
                 v-else
                 :to="{
                   path: '/profile/post',
-                  query: { handle: inviteCode.uses[index]?.usedBy }
+                  query: { account: inviteCode.uses[index]?.usedBy }
                 }"
                 class="button--bordered"
                 @click="close"

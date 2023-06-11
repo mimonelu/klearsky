@@ -137,7 +137,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <!-- フィード作成者 -->
       <RouterLink
         class="custom-feed-card__creator"
-        :to="{ name: 'profile-post', query: { handle: generator.creator.handle } }"
+        :to="{ name: 'profile-post', query: { account: generator.creator.handle } }"
         @click.prevent
       >
         <SVGIcon name="person" />

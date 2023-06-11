@@ -36,7 +36,7 @@ function makeSubjectTo (notification: TTNotification): any {
     case "invite":
     case "repost":
     case "like": {
-      return { name: "profile-post", query: { handle: notification.handle } }
+      return { name: "profile-post", query: { account: notification.handle } }
     }
     case "mention":
     case "quote":

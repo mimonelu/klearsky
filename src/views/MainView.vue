@@ -99,7 +99,8 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
   state.currentQuery = to.query
 
   if (to.path.startsWith("/profile")) {
-    if (state.currentQuery.handle !== state.currentProfile?.handle)
+    if (state.currentQuery.account !== state.currentProfile?.handle &&
+        state.currentQuery.account !== state.currentProfile?.did)
       state.currentProfile = null
 
     state.inSameProfilePage = state.currentProfile != null
@@ -251,7 +252,7 @@ function updatePageTitle () {
     case "/profile/like":
     case "/profile/following":
     case "/profile/follower": {
-      title += ` - ${state.currentQuery.handle}`
+      title += ` - ${state.currentQuery.account}`
       break
     }
     case "/feeds/timeline": {
@@ -299,15 +300,15 @@ async function manualLogin (service: string, identifier: string, password: strin
 }
 
 async function processPage (pageName?: null | RouteRecordName) {
-  let handle: null | string = null
+  let account: null | string = null
   switch (pageName) {
     case "profile-post":
     case "profile-repost":
     case "profile-like":
     case "profile-following":
     case "profile-follower": {
-      handle = state.currentQuery.handle as LocationQueryValue
-      if (!handle) {
+      account = state.currentQuery.account as LocationQueryValue
+      if (!account) {
         await router.push({ name: "timeline-home" })
         break
       }
@@ -320,8 +321,9 @@ async function processPage (pageName?: null | RouteRecordName) {
     switch (pageName) {
       case "profile-post": {
         // ブロック情報などを先に取得するために Promise.allSettled はしない
-        if (handle !== state.currentProfile?.handle)
-          await state.fetchCurrentProfile(handle as string)
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          await state.fetchCurrentProfile(account as string)
         if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
           await state.fetchCurrentAuthorFeed("new")
         break
@@ -330,8 +332,9 @@ async function processPage (pageName?: null | RouteRecordName) {
         const tasks: Array<Promise<void>> = []
         if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0)
           tasks.push(state.fetchAuthorReposts("new"))
-        if (handle !== state.currentProfile?.handle)
-          tasks.push(state.fetchCurrentProfile(handle as string))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
         await Promise.allSettled(tasks)
         break
       }
@@ -339,8 +342,9 @@ async function processPage (pageName?: null | RouteRecordName) {
         const tasks: Array<Promise<void>> = []
         if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
           tasks.push(state.fetchAuthorLikes("new"))
-        if (handle !== state.currentProfile?.handle)
-          tasks.push(state.fetchCurrentProfile(handle as string))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
         await Promise.allSettled(tasks)
         break
       }
@@ -348,8 +352,9 @@ async function processPage (pageName?: null | RouteRecordName) {
         const tasks: Array<Promise<void>> = []
         if (!state.inSameProfilePage || state.currentFollowings.length === 0)
           tasks.push(state.fetchFollowings("new"))
-        if (handle !== state.currentProfile?.handle)
-          tasks.push(state.fetchCurrentProfile(handle as string))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
         await Promise.allSettled(tasks)
         break
       }
@@ -357,8 +362,9 @@ async function processPage (pageName?: null | RouteRecordName) {
         const tasks: Array<Promise<void>> = []
         if (!state.inSameProfilePage || state.currentFollowers.length === 0)
           tasks.push(state.fetchFollowers("new"))
-        if (handle !== state.currentProfile?.handle)
-          tasks.push(state.fetchCurrentProfile(handle as string))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
         await Promise.allSettled(tasks)
         break
       }

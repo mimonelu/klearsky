@@ -8,7 +8,7 @@ const yyyy = (new Date).getFullYear()
     <small>&copy; {{ yyyy }} mimonelu</small>
     <RouterLink
       class="textlink"
-      :to="{ path: '/profile/post', query: { handle: 'mimonelu.net' } }"
+      :to="{ path: '/profile/post', query: { account: 'mimonelu.net' } }"
     >Bluesky@mimonelu.net</RouterLink>
     <a
       class="textlink"

@@ -222,8 +222,8 @@ async function fetchLogAudit () {
 }
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
 
   // ブロックしている
   if (state.currentProfile?.viewer.blocking != null) return
@@ -234,7 +234,7 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   const cursor: undefined | string =
     await state.atp.fetchAuthorFeed(
       state.currentAuthorFeeds as Array<TTFeed>,
-      handle,
+      account,
       CONSTS.limitOfFetchAuthorFeeds,
       direction === "old" ? state.currentAuthorCursor : undefined
     )
@@ -242,11 +242,11 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
 }
 
 async function fetchAuthorReposts (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
   const cursor: undefined | string = await state.atp.fetchAuthorReposts(
     state.currentAuthorReposts,
-    handle,
+    account,
     CONSTS.limitOfFetchAuthorReposts,
     direction === "new" ? undefined : state.currentAuthorRepostsCursor
   )
@@ -254,11 +254,11 @@ async function fetchAuthorReposts (direction: "new" | "old") {
 }
 
 async function fetchAuthorLikes (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
   const cursor: undefined | string = await state.atp.fetchAuthorLikes(
     state.currentAuthorLikes,
-    handle,
+    account,
     CONSTS.limitOfFetchAuthorLikes,
     direction === "new" ? undefined : state.currentAuthorLikesCursor
   )
@@ -389,8 +389,8 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
 }
 
 async function fetchFollowers (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
 
   // ブロックしている
   if (state.currentProfile?.viewer.blocking != null) return
@@ -400,7 +400,7 @@ async function fetchFollowers (direction: "new" | "old") {
 
   const cursor: undefined | string = await state.atp.fetchFollowers(
     state.currentFollowers,
-    handle,
+    account,
     CONSTS.limitOfFetchFollows,
     direction === "new" ? undefined : state.currentFollowersCursor
   )
@@ -408,8 +408,8 @@ async function fetchFollowers (direction: "new" | "old") {
 }
 
 async function fetchFollowings (direction: "new" | "old") {
-  const handle = state.currentQuery.handle as LocationQueryValue
-  if (!handle) return
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
 
   // ブロックしている
   if (state.currentProfile?.viewer.blocking != null) return
@@ -419,7 +419,7 @@ async function fetchFollowings (direction: "new" | "old") {
 
   const cursor: undefined | string = await state.atp.fetchFollowings(
     state.currentFollowings,
-    handle,
+    account,
     CONSTS.limitOfFetchFollows,
     direction === "new" ? undefined : state.currentFollowingsCursor
   )
