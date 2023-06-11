@@ -17,6 +17,9 @@
   "posts": "ポスト",
   "loading": "読込中...",
   "more": "もっと見る",
+  "klearsky": "Klearsky",
+  "bluesky": "Bluesky",
+  "account": "アカウント",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -27,7 +30,9 @@
   "follow": "フォローする",
   "followed": "あなたをフォロー中",
   "follower": "フォロワー",
+  "followers": "フォロワー",
   "following": "フォロー中",
+  "followings": "フォロー中",
   "followingCount": "フォロー数",
   "followersCount": "フォロワー数",
 
@@ -147,6 +152,7 @@
   "noPopularFeeds": "人気のフィードがありません。サーバ管理者にお問い合わせください。",
 
   "hot": "What's Hot",
+  "whatsHot": "What's Hot",
   "selectLanguages": "言語の選択",
   "selectLanguagesDetail": "複数選択可。ひとつも選択しないとすべて表示されます。",
 
@@ -159,9 +165,9 @@
   "notifications": "通知",
 
   "settings": "設定",
-  "klearskySettings": "Klearsky",
-  "blueskySettings": "Bluesky",
-  "accountSettings": "アカウント",
+  "klearskySettings": "Klearsky設定",
+  "blueskySettings": "Bluesky設定",
+  "accountSettings": "アカウント設定",
 
   "language": "言語",
   "english": "英語",
@@ -299,8 +305,10 @@
   "cancelPost": "ポストのキャンセル",
   "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
 
-  "$comment": "-- Probably unused --",
   "delete": "削除する",
   "edit": "編集",
-  "repost": "リポスト"
+  "like": "いいね",
+  "likes": "いいね",
+  "repost": "リポスト",
+  "reposts": "リポスト"
 }

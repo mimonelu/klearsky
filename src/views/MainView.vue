@@ -261,7 +261,7 @@ function updatePageTitle () {
     default: break
   }
   if (router.currentRoute.value.meta.label != null)
-    title += ` - ${router.currentRoute.value.meta.label}`
+    title += ` - ${$t(router.currentRoute.value.meta.label)}`
   window.document.title = title
 }
 

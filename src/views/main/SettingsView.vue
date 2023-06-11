@@ -18,15 +18,15 @@ const mainState = inject("state") as MainState
         <RouterLink
           class="tab__button"
           to="/settings/klearsky"
-        >{{ $t("klearskySettings") }}</RouterLink>
+        >{{ $t("klearsky") }}</RouterLink>
         <RouterLink
           class="tab__button"
           to="/settings/bluesky"
-        >{{ $t("blueskySettings") }}</RouterLink>
+        >{{ $t("bluesky") }}</RouterLink>
         <RouterLink
           class="tab__button"
-          to="/settings/account"
-        >{{ $t("accountSettings") }}</RouterLink>
+          to="/settings/accounts"
+        >{{ $t("accounts") }}</RouterLink>
       </div>
     </div>
     <RouterView />

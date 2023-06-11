@@ -51,7 +51,7 @@ const router = createRouter({
         {
           path: "/profile/edit",
           name: "edit-profile",
-          meta: { label: "Edit Profile" },
+          meta: { label: "editProfile" },
           component: EditProfileView,
         },
         {
@@ -62,7 +62,7 @@ const router = createRouter({
         {
           path: "/notifications",
           name: "notifications",
-          meta: { label: "Notifications" },
+          meta: { label: "notifications" },
           component: NotificationsView,
         },
         {
@@ -85,13 +85,13 @@ const router = createRouter({
             {
               path: "hot",
               name: "hot-home",
-              meta: { label: "What's Hot" },
+              meta: { label: "whatsHot" },
               component: HotView,
             },
             {
               path: "globalline",
               name: "globalline-home",
-              meta: { label: "Globalline" },
+              meta: { label: "globalline" },
               component: GloballineView,
             },
           ],
@@ -105,13 +105,13 @@ const router = createRouter({
             {
               path: "my",
               name: "feeds-my",
-              meta: { label: "My Feeds" },
+              meta: { label: "myFeeds" },
               component: MyFeedsView,
             },
             {
               path: "popular",
               name: "feeds-popular",
-              meta: { label: "Popular Feeds" },
+              meta: { label: "popularFeeds" },
               component: PopularFeedsView,
             },
             {
@@ -135,25 +135,25 @@ const router = createRouter({
             {
               path: "repost",
               name: "profile-repost",
-              meta: { label: "Reposts" },
+              meta: { label: "reposts" },
               component: AuthorRepostView,
             },
             {
               path: "like",
               name: "profile-like",
-              meta: { label: "Likes" },
+              meta: { label: "likes" },
               component: AuthorLikeView,
             },
             {
               path: "follower",
               name: "profile-follower",
-              meta: { label: "Followers" },
+              meta: { label: "followers" },
               component: FollowerListView,
             },
             {
               path: "following",
               name: "profile-following",
-              meta: { label: "Followings" },
+              meta: { label: "followings" },
               component: FollowingListView,
             },
           ],
@@ -167,19 +167,19 @@ const router = createRouter({
             {
               path: "suggestion",
               name: "suggestion-search",
-              meta: { label: "Suggestions" },
+              meta: { label: "suggestionSearch" },
               component: SuggestionSearchView,
             },
             {
               path: "keyword",
               name: "keyword-search",
-              meta: { label: "Find Posts" },
+              meta: { label: "keywordSearch" },
               component: KeywordSearchView,
             },
             {
               path: "user",
               name: "user-search",
-              meta: { label: "Find Accounts" },
+              meta: { label: "userSearch" },
               component: UserSearchView,
             },
           ],
@@ -193,19 +193,19 @@ const router = createRouter({
             {
               path: "klearsky",
               name: "klearsky-settings",
-              meta: { label: "Klearsky Settings" },
+              meta: { label: "klearskySettings" },
               component: KlearskySettingsView,
             },
             {
               path: "bluesky",
               name: "bluesky-settings",
-              meta: { label: "Bluesky Settings" },
+              meta: { label: "blueskySettings" },
               component: BlueskySettingsView,
             },
             {
-              path: "account",
+              path: "accounts",
               name: "account-settings",
-              meta: { label: "Account Settings" },
+              meta: { label: "accountSettings" },
               component: AccountSettingsView,
             },
           ],
