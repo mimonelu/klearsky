@@ -62,7 +62,6 @@ onBeforeUnmount(() => {
 onMounted(async () => {
   state.currentPath = router.currentRoute.value.path
   state.currentQuery = router.currentRoute.value.query
-  updatePageTitle()
   state.settings = Util.loadStorage("settings") ?? {}
   state.processing = true
   try {
@@ -79,6 +78,7 @@ onMounted(async () => {
   } finally {
     state.mounted = true
     state.processing = false
+    updatePageTitle()
 
     // ブロードキャスト
     useEventListener(state.broadcastChannel, "message", broadcastListener)
