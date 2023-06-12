@@ -189,7 +189,7 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     uri: string,
     depth?: number
-  ): Promise<null | Array<TTPost>>
+  ): Promise<undefined | false | Array<TTPost>>
   fetchPreferences(this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile(this: TIAtpWrapper, actor: string): Promise<null | TTProfile>
   fetchRepostUsers(

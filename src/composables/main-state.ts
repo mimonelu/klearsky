@@ -372,7 +372,8 @@ async function fetchTimeline (direction: "old" | "new") {
 async function fetchPostThread () {
   const uri = state.currentQuery.postUri as LocationQueryValue
   if (!uri) return
-  state.currentPosts = await state.atp.fetchPostThread(uri) ?? []
+  const posts = await state.atp.fetchPostThread(uri, CONSTS.limitOfFetchPostThread) ?? []
+  if (posts) state.currentPosts = posts
 }
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {

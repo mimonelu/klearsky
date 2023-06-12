@@ -281,9 +281,9 @@ async function onRemoveThisPost (uri: string) {
 }
 
 async function updateThisPostThread () {
-  const posts: null | Array<TTPost> =
+  const posts: undefined | false | Array<TTPost> =
     await mainState.atp.fetchPostThread(props.post.uri, 1)
-  if (posts == null || posts.length === 0) return
+  if (!posts || posts.length === 0) return
   emit("updateThisPostThread", posts)
 }
 

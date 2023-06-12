@@ -29,7 +29,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 import WordMutePopup from "@/components/WordMutePopup.vue"
 import state from "@/composables/main-state"
 import Util from "@/composables/util"
-import consts from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<(name: string, value: any) => void>()
 
@@ -372,7 +372,7 @@ async function processPage (pageName?: null | RouteRecordName) {
       case "notifications": {
         if (!state.notificationFetchedFirst) {
           state.notificationFetchedFirst = true
-          await state.fetchNotifications(consts.limitOfFetchNotifications, "new")
+          await state.fetchNotifications(CONSTS.limitOfFetchNotifications, "new")
         }
         break
       }
@@ -405,7 +405,8 @@ async function processPage (pageName?: null | RouteRecordName) {
         const uri = state.currentQuery.uri as LocationQueryValue
         if (!uri) return
         state.currentPosts?.splice(0)
-        state.currentPosts = await state.atp.fetchPostThread(uri) ?? []
+        const posts = await state.atp.fetchPostThread(uri, CONSTS.limitOfFetchPostThread) ?? []
+        if (posts) state.currentPosts = posts
         await nextTick()
         scrollToFocused()
         break
@@ -432,7 +433,7 @@ async function setupNotificationInterval () {
   clearNotificationInterval()
   await updateNotification()
   // @ts-ignore // TODO:
-  notificationTimer = setInterval(updateNotification, consts.intervalOfFetchNotifications)
+  notificationTimer = setInterval(updateNotification, CONSTS.intervalOfFetchNotifications)
 }
 
 async function updateNotification () {
@@ -444,7 +445,7 @@ async function updateNotification () {
   }
   if (canFetched) {
     // NOTICE: 念のため + 1 している
-    await state.fetchNotifications(Math.min(consts.limitOfFetchNotifications, count + 1), "new")
+    await state.fetchNotifications(Math.min(CONSTS.limitOfFetchNotifications, count + 1), "new")
   }
 }
 

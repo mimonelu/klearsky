@@ -19,8 +19,7 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
 }
 
 function removeThisPost (uri: string) {
-  mainState.currentPosts = mainState.currentPosts.filter((post: TTPost) =>
-    post.uri !== uri)
+  mainState.currentPosts = mainState.currentPosts.filter((post: TTPost) => post.uri !== uri)
 }
 </script>
 
@@ -31,24 +30,23 @@ function removeThisPost (uri: string) {
       :title="$t('post')"
       :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
     />
-    <template
+    <Post
       v-for="post, postIndex of mainState.currentPosts"
       :key="post.cid"
-    >
-      <Post
-        position="post"
-        :post="post"
-        :data-has-child="post.cid === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.cid"
-        @updateThisPostThread="updateThisPostThread"
-        @removeThisPost="removeThisPost"
-      />
-    </template>
+      position="post"
+      :post="post"
+      :data-has-child="post.cid === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.cid"
+      @updateThisPostThread="updateThisPostThread"
+      @removeThisPost="removeThisPost"
+    />
     <Loader v-if="mainState.listProcessing" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .post-view {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   padding-bottom: var(--sp-menu-height);
   position: relative;
