@@ -22,11 +22,11 @@ const mainState = inject("state") as MainState
         <RouterLink
           class="tab__button"
           to="/search/user"
-        >{{ $t("userSearch") }}</RouterLink>
+        >{{ $t("accounts") }}</RouterLink>
         <RouterLink
           class="tab__button"
           to="/search/keyword"
-        >{{ $t("keywordSearch") }}</RouterLink>
+        >{{ $t("posts") }}</RouterLink>
       </div>
     </div>
     <RouterView class="child-view" />
