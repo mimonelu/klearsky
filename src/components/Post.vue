@@ -60,7 +60,6 @@ const state = reactive<{
       if (!wordMute.enabled[0] || wordMute.keyword === "") return false
       const keywords = wordMute.keyword.toLowerCase().split(" ")
       const result = keywords.some((keyword: string) => keyword !== "" && target.indexOf(keyword) !== - 1)
-      if (result) console.log(target)
       return result
     }) ?? false
   }),
