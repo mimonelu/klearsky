@@ -12,6 +12,6 @@
   "limitOfFetchNotifications": 30,
   "limitOfFetchRepostUsers": 30,
   "limitOfFetchSuggestionSearch": 30,
-  "limitOfFetchTimeline": 30,
+  "limitOfFetchFeeds": 30,
   "limitOfFetchUserSearch": 30
 }

@@ -362,7 +362,7 @@ async function fetchTimeline (direction: "old" | "new") {
       state.timelineFeeds,
       state.currentSetting.replyControl,
       state.currentSetting.repostControl,
-      CONSTS.limitOfFetchTimeline,
+      CONSTS.limitOfFetchFeeds,
       direction === "old" ? state.timelineCursor : undefined
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
@@ -453,7 +453,7 @@ async function fetchCustomFeeds (direction: "old" | "new") {
     await state.atp.fetchCustomFeeds(
       state.currentCustomFeeds,
       state.currentQuery.feed,
-      CONSTS.limitOfFetchTimeline,
+      CONSTS.limitOfFetchFeeds,
       direction === "old" ? state.currentCustomCursor : undefined
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
