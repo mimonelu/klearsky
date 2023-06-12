@@ -40,8 +40,8 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
       const oldCustomPropsOfPost = oldFeed.post.__custom
       const oldCustomPropsOfQuote1 = oldFeed.post.embed?.record?.__custom
       const oldCustomPropsOfQuote2 = oldFeed.post.embed?.record?.embed?.record?.__custom
-      const oldCustomPropsOfRoot = oldFeed.reply?.root.__custom
-      const oldCustomPropsOfParent = oldFeed.reply?.parent.__custom
+      const oldCustomPropsOfRoot = oldFeed.reply?.root?.__custom
+      const oldCustomPropsOfParent = oldFeed.reply?.parent?.__custom
 
       oldFeeds[index] = targetFeed
       oldFeed = oldFeeds[index]

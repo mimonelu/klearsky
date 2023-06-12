@@ -295,6 +295,7 @@
   "sendPost": "ポストを投稿する",
   "post": "ポスト",
   "reply": "返信",
+  "replyUnknown": "返信先不明",
   "quoteRepost": "引用リポスト",
   "text": "テキスト",
   "linkBox": "リンクカード",

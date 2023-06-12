@@ -20,8 +20,10 @@ const props = defineProps<{
   level?: number
   position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim"
   post: TTPost
+  rootPost?: TTPost
+  parentPost?: TTPost
+  isInFeed?: boolean
   noLink?: boolean
-  replyTo?: TTPost
   forceHideImages?: boolean
 }>()
 
@@ -396,21 +398,30 @@ function onActivateHashTag (text: string) {
     >
       <!-- リプライ先ユーザー -->
       <div
-        v-if="replyTo != null"
+        v-if="parentPost != null"
         class="replier"
         @click.stop="onActivateReplierLink"
       >
         <SVGIcon name="post" />
         <div class="replier__display-name">{{
           !mainState.currentSetting.postAnonymization
-            ? replyTo?.author?.displayName
+            ? parentPost?.author?.displayName
             : $t("anonymous")
         }}</div>
         <div class="replier__handle">{{
           !mainState.currentSetting.postAnonymization
-            ? replyTo?.author?.handle
+            ? parentPost?.author?.handle
             : ""
         }}</div>
+      </div>
+
+      <!-- リプライ先不明 -->
+      <div
+        v-else-if="isInFeed && rootPost == null && post.record?.reply != null"
+        class="replier--unknown"
+      >
+        <SVGIcon name="post" />
+        <div class="replier__display-name">({{ $t("replyUnknown") }})</div>
       </div>
 
       <!-- リポストユーザー -->
@@ -827,6 +838,7 @@ function onActivateHashTag (text: string) {
 }
 
 .replier,
+.replier--unknown,
 .reposter {
   cursor: pointer;
   display: grid;
@@ -868,6 +880,21 @@ function onActivateHashTag (text: string) {
       color: rgba(var(--post-color), 0.75);
     }
   }
+
+  & > .svg-icon {
+    fill: rgba(var(--post-color), 0.75);
+    transform: scaleX(-1.0);
+  }
+
+  &__display-name {
+    color: rgba(var(--post-color), 0.75);
+  }
+  &__handle {
+    color: rgba(var(--post-color), 0.5);
+  }
+}
+.replier--unknown {
+  cursor: unset;
 
   & > .svg-icon {
     fill: rgba(var(--post-color), 0.75);

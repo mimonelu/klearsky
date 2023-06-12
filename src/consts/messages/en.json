@@ -295,6 +295,7 @@
   "sendPost": "New Post",
   "post": "Post",
   "reply": "Reply",
+  "replyUnknown": "Reply address unknown",
   "quoteRepost": "Quote repost",
   "text": "Text",
   "linkBox": "Link card",
