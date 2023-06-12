@@ -6,12 +6,15 @@ import PageHeader from "@/components/PageHeader.vue"
 import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
 
+const emit = defineEmits<{(name: string): void}>()
+
 const mainState = inject("state") as MainState
 
 onBeforeUnmount(() => {
   updateNotificationSeen()
   updateNotificationIsRead()
   mainState.notificationCount = 0
+  emit("updatePageTitle")
 })
 
 onMounted(updateNotificationSeen)

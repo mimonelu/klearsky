@@ -245,7 +245,8 @@ function resetState () {
 // ページタイトルの更新
 // TODO: /post のタイトルを付けること
 function updatePageTitle () {
-  let title = "Klearsky"
+  let title = state.notificationCount === 0 ? "" : `(${state.notificationCount}) `
+  title += "Klearsky"
   switch (state.currentPath) {
     case "/profile/post":
     case "/profile/repost":
@@ -437,10 +438,14 @@ async function setupNotificationInterval () {
 async function updateNotification () {
   const count = await state.atp.fetchNotificationCount() ?? 0
   const canFetched = state.notificationCount < count
-  if (count > 0) state.notificationCount = count
-  if (canFetched)
+  if (count > 0) {
+    state.notificationCount = count
+    updatePageTitle()
+  }
+  if (canFetched) {
     // NOTICE: 念のため + 1 している
     await state.fetchNotifications(Math.min(consts.limitOfFetchNotifications, count + 1), "new")
+  }
 }
 
 async function updateInviteCodes () {
@@ -563,7 +568,10 @@ function broadcastListener (event: MessageEvent) {
 
       <!-- ルータービュー -->
       <div class="router-view-wrapper">
-        <RouterView v-if="state.mounted" />
+        <RouterView
+          v-if="state.mounted"
+          @updatePageTitle="updatePageTitle"
+        />
       </div>
 
       <!-- サブメニュー -->
