@@ -1,6 +1,8 @@
 let id = 0
 
-export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
+export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>, doesUnshift?: boolean) {
+  const addings: Array<TTFeed> = []
+
   targetFeeds.forEach((targetFeed: TTFeed) => {
     if (targetFeed.__id == null) targetFeed.__id = `feed-${id ++}`
 
@@ -9,7 +11,7 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
     )
 
     // 新規フィード
-    if (index === -1) oldFeeds.push(targetFeed)
+    if (index === -1) addings.push(targetFeed)
     // 既存フィードに `post` がない場合はスキップ（おそらく該当ケースなし）
     else if (oldFeeds[index].post == null) oldFeeds[index] = targetFeed
     // 対象フィードに `post` がない場合はスキップ（おそらく該当ケースなし）
@@ -64,4 +66,6 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>) {
       }
     }
   })
+
+  doesUnshift ? oldFeeds.unshift(...addings) : oldFeeds.push(...addings)
 }
