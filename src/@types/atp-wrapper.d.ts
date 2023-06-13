@@ -119,6 +119,10 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | false | string>
+  fetchFeedGenerator(
+    this: TIAtpWrapper,
+    feed: string
+  ): Promise<Error | TTFeedGenerator>
   fetchFeedGenerators(
     this: TIAtpWrapper,
     feeds: Array<string>
