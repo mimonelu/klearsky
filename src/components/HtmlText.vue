@@ -83,7 +83,7 @@ function onActivateHashTag (text: string) {
           class="textlink"
           :href="segment.param"
           rel="noreferrer"
-          target="_blank"
+          :target="segment.param.startsWith('lightning:') ? '' : '_blank'"
           @click.stop
         >{{ segment.text }}</a>
       </template>
