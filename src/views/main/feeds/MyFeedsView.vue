@@ -4,7 +4,6 @@ import FeedList from "@/components/FeedList.vue"
 import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
-import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
