@@ -8,7 +8,7 @@ const fs = require("fs")
 const path = require("path")
 
 const svgDir = `${__dirname}/../src/svg/**/*.svg`
-const htmlPath = `${__dirname}/icon.html`
+const htmlPath = `${__dirname}/svg-list.html`
 const template = `<html lang="en">
   <head>
     <style>
@@ -17,6 +17,8 @@ const template = `<html lang="en">
   padding: 0;
 }
 body {
+  background-color: #202020;
+  color: #f0f0f0;
   padding: 2em;
 }
 h1 {
@@ -29,15 +31,20 @@ main {
   grid-gap: 0.5rem;
 }
 main > dl {
-  background-color: #f0f0f0;
+  background-color: #404040;
   display: flex;
   flex-direction: column;
   align-items: center;
   grid-gap: 1rem;
+  overflow: hidden;
   padding: 1rem;
+  width: 8rem;
 }
 main > dl > dt {
+  font-size: small;
   line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 main > dl > dd > svg {
   background-color: white;
