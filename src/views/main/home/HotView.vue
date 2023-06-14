@@ -12,11 +12,11 @@ const state = reactive<{
   selectLanguagesPopupDisplay: boolean
 }>({
   filteredFeeds: computed((): Array<TTFeed> => {
-    if (!mainState.currentSetting?.hotLanguages?.length) return mainState.currentHotFeeds
+    if (!mainState.currentSetting?.contentLanguages?.length) return mainState.currentHotFeeds
     return mainState.currentHotFeeds.filter((feed: TTFeed) => {
       if (feed.post.__custom.detectedLanguages == null) return false
       return feed.post.__custom.detectedLanguages.some((language: any) =>
-        mainState.currentSetting?.hotLanguages?.includes(language.lang))
+        mainState.currentSetting?.contentLanguages?.includes(language.lang))
     }) ?? []
   }),
   selectLanguagesPopupDisplay: false,
@@ -67,7 +67,7 @@ function saveSettings () {
     <SelectLanguagesPopup
       v-if="state.selectLanguagesPopupDisplay"
       :state="mainState.currentSetting"
-      property="hotLanguages"
+      property="contentLanguages"
       @close="closeSelectLanguagesPopup"
       @change="saveSettings"
     >

@@ -135,18 +135,18 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     border-bottom: 1px solid rgba(var(--fg-color), 0.125);
     content: "";
     display: block;
-    margin: 0 1rem;
   }
 }
 
 .feed:deep() .post[data-has-child="true"][data-content-warning-visibility="show"]::before {
   background-color: rgba(var(--fg-color), 0.25);
+  border-radius: var(--border-radius);
   content: "";
   display: block;
   position: absolute;
-  top: calc(1em + var(--avatar-size) + 8px);
-  left: calc(2.5em - 1px);
-  width: 2px;
-  height: calc(100% - var(--avatar-size) - 16px);
+  top: calc(1em + var(--avatar-size) + 12px);
+  left: calc(2.5em - 1.5px);
+  width: 3px;
+  height: calc(100% - var(--avatar-size) - 28px);
 }
 </style>

@@ -7,7 +7,7 @@ type TTSetting = {
   language?: string
   autoTranslation?: boolean
   autoTranslationIgnoreLanguage?: string
-  hotLanguages?: Array<string>
+  contentLanguages?: Array<string>
   fontSize?: string
   wordMute?: Array<TTWordMute>
   replyControl?: Array<number>

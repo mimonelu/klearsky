@@ -110,10 +110,10 @@ type TTPost = {
       lang: string
       accuracy: number
     }[]
-    reason?: TTReason
     forcePosition?: string
+    unmask?: boolean
+    reason?: TTReason
     translatedText?: string
-    wordMuteDisplay?: boolean
   }
 
   author: TTUser

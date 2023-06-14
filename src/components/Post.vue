@@ -35,6 +35,7 @@ const state = reactive<{
   processing: boolean
   external: ComputedRef<undefined | TTExternal>
   images: ComputedRef<Array<TTImage>>
+  noContentLanguage: ComputedRef<boolean>
   isWordMute: ComputedRef<boolean>
   displayImage: ComputedRef<boolean>
   imageFolding: boolean
@@ -52,8 +53,18 @@ const state = reactive<{
   external: computed(() => props.post.embed?.external),
   images: computed(() => props.post.embed?.images ?? []),
 
+  // コンテンツ言語の判定
+  noContentLanguage: computed(() => {
+    if (!(props.post.record?.text ?? props.post.value?.text)) return false
+    if (!props.post.__custom?.detectedLanguages?.length) return false
+    if (!mainState.currentSetting?.contentLanguages?.length) return false
+    return !props.post.__custom.detectedLanguages?.some((language: any) =>
+      mainState.currentSetting.contentLanguages?.includes(language.lang)
+    ) ?? false
+  }),
+
   // ワードミュートの判定
-  isWordMute: computed((): boolean => {
+  isWordMute: computed(() => {
     const target = props.post.record?.text.toLowerCase() ?? props.post.value?.text.toLowerCase()
     if (!target) return false
     return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
@@ -154,8 +165,8 @@ function isFocused (): boolean {
 
 async function onActivatePost (post: TTPost, event: Event) {
   // ワードミュート中の場合
-  if (state.isWordMute && !props.post.__custom.wordMuteDisplay) {
-    props.post.__custom.wordMuteDisplay = true
+  if (!props.post.__custom.unmask && (state.noContentLanguage || state.isWordMute)) {
+    props.post.__custom.unmask = true
     return
   }
 
@@ -375,7 +386,7 @@ function onActivateHashTag (text: string) {
     :data-position="position"
     :data-repost="post.__custom?.reason != null"
     :data-focus="isFocused()"
-    :data-word-mute="state.isWordMute && !post.__custom.wordMuteDisplay"
+    :data-mask="!post.__custom.unmask && (state.noContentLanguage || state.isWordMute)"
     :data-content-warning-force-display="state.contentWarningForceDisplay"
     :data-content-warning-visibility="state.contentWarningVisibility"
     @click.prevent.stop="onActivatePost(post, $event)"
@@ -391,10 +402,7 @@ function onActivateHashTag (text: string) {
     />
 
     <!-- ポストヘッダー -->
-    <div
-      v-if="state.contentWarningDisplay"
-      class="header"
-    >
+    <div class="header">
       <!-- リプライ先ユーザー -->
       <div
         v-if="parentPost != null"
@@ -416,7 +424,7 @@ function onActivateHashTag (text: string) {
 
       <!-- リプライ先不明 -->
       <div
-        v-else-if="isInFeed && rootPost == null && post.record?.reply != null"
+        v-else-if="isInFeed && position !== 'root' && rootPost == null && post.record?.reply != null"
         class="replier--unknown"
       >
         <SVGIcon name="post" />
@@ -443,18 +451,27 @@ function onActivateHashTag (text: string) {
       </div>
     </div>
 
-    <!-- ワードミュートレイヤー -->
+    <!-- ポストマスク -->
+    <!-- コンテンツ言語マスク -->
+    <!-- ワードミュートマスク -->
     <div
-      v-if="!post.__custom.wordMuteDisplay && state.contentWarningDisplay && state.isWordMute"
-      class="post__word-mute"
+      v-if="state.contentWarningDisplay && !post.__custom.unmask && (state.noContentLanguage || state.isWordMute)"
+      class="post__mask"
     >
-      <SVGIcon name="alphabeticalOff" />
-      <div class="post__word-mute__display-name">{{
+      <SVGIcon
+        v-show="state.noContentLanguage"
+        name="translate"
+      />
+      <SVGIcon
+        v-show="state.isWordMute"
+        name="alphabeticalOff"
+      />
+      <div class="post__mask__display-name">{{
         !mainState.currentSetting.postAnonymization
           ? post.author?.displayName
           : $t("anonymous")
       }}</div>
-      <div class="post__word-mute__handle">{{
+      <div class="post__mask__handle">{{
         !mainState.currentSetting.postAnonymization
           ? post.author?.handle
           : ""
@@ -463,8 +480,17 @@ function onActivateHashTag (text: string) {
 
     <!-- ポストボディ -->
     <div
-      v-else-if="
-        state.contentWarningDisplay ||
+      v-if="
+        (
+          state.contentWarningDisplay &&
+          (
+            post.__custom.unmask ||
+            (
+              !state.noContentLanguage &&
+              !state.isWordMute
+            )
+          )
+        ) ||
         position === 'preview' ||
         position === 'slim'
       "
@@ -794,14 +820,21 @@ function onActivateHashTag (text: string) {
     margin-bottom: 1em;
   }
 
-  // ワードミュート
-  &[data-word-mute="true"] {
+  // マスク
+  &[data-mask="true"] {
     cursor: pointer;
     padding: 0.5em 1em;
+    &:not(:last-child)::after {
+      border-bottom: 1px dashed rgba(var(--fg-color), 0.125);
+      content: "";
+      display: block;
+      position: relative;
+      top: 0.5em;
+    }
   }
-  &__word-mute {
+  &__mask {
     display: grid;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto auto auto 1fr;
     align-items: center;
     grid-gap: 0.5em;
 
@@ -844,8 +877,8 @@ function onActivateHashTag (text: string) {
   grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
-  margin: -1em -1em -0.5em;
-  padding: 1em 1em 0.5em;
+  margin: -0.5em -1em;
+  padding: 0.5em 1em;
 
   & > .svg-icon {
     font-size: 0.875em;
@@ -866,6 +899,7 @@ function onActivateHashTag (text: string) {
     font-size: 0.75em;
   }
 }
+
 .replier {
   &:focus, &:hover {
     & > .svg-icon {
@@ -892,6 +926,7 @@ function onActivateHashTag (text: string) {
     color: rgba(var(--post-color), 0.5);
   }
 }
+
 .replier--unknown {
   cursor: unset;
 
@@ -907,6 +942,7 @@ function onActivateHashTag (text: string) {
     color: rgba(var(--post-color), 0.5);
   }
 }
+
 .reposter {
   &:focus, &:hover {
     & > .svg-icon {
