@@ -26,7 +26,6 @@ function removeThisPost (uri: string) {
     <div
       v-if="feed.__folding"
       class="folder"
-      :data-has-reply-and-repost="feed.reply != null && feed.reason != null"
       @click="feed.__folding = !feed.__folding"
     >
       <!-- 折り畳みリプライオープナー -->
@@ -113,17 +112,18 @@ function removeThisPost (uri: string) {
 .folder {
   cursor: pointer;
   display: grid;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 0.5em;
   align-items: center;
-  padding: 0.5em 1em;
-  &[data-has-reply-and-repost="false"] {
-    grid-template-columns: 1fr;
-  }
-  &[data-has-reply-and-repost="true"] {
-    grid-template-columns: 1fr 1fr;
+  padding: 0.75em 1em;
+  &:focus, &:hover {
+    .folder__item {
+      --alpha: 0.75;
+    }
   }
 
   &__item {
+    --alpha: 0.5;
     display: grid;
     grid-gap: 0.5em;
     grid-template-columns: auto auto 1fr;
@@ -131,7 +131,7 @@ function removeThisPost (uri: string) {
     overflow: hidden;
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.25);
+      fill: rgba(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
@@ -139,23 +139,23 @@ function removeThisPost (uri: string) {
       transform: scaleX(-1);
     }
 
-    & > .display-name {
-      color: rgba(var(--fg-color), 0.5);
-      font-size: 0.875em;
-      font-weight: bold;
+    & > .display-name,
+    & > .handle {
       line-height: 1.25;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
+    & > .display-name {
+      color: rgba(var(--fg-color), var(--alpha));
+      font-size: 0.875em;
+      font-weight: bold;
+    }
+
     & > .handle {
-      color: rgba(var(--fg-color), 0.25);
+      color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
       font-size: 0.75em;
-      line-height: 1.25;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
   }
 }

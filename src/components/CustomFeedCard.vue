@@ -154,7 +154,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
 <style lang="scss" scoped>
 .custom-feed-card {
-  cursor: unset;
+  cursor: default;
   display: flex;
   flex-direction: column;
   grid-gap: 0.5em;

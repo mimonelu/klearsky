@@ -111,9 +111,9 @@ type TTPost = {
       accuracy: number
     }[]
     forcePosition?: string
-    unmask?: boolean
     reason?: TTReason
     translatedText?: string
+    unmask?: boolean
   }
 
   author: TTUser

@@ -7,7 +7,6 @@ import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
-import ContentWarning from "@/components/ContentWarning.vue"
 import Post from "@/components/Post.vue"
 import PostMenuTicker from "@/components/PostMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -27,6 +26,8 @@ const props = defineProps<{
   forceHideImages?: boolean
 }>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
@@ -35,16 +36,21 @@ const state = reactive<{
   processing: boolean
   external: ComputedRef<undefined | TTExternal>
   images: ComputedRef<Array<TTImage>>
+
+  // コンテンツ言語の判定
   noContentLanguage: ComputedRef<boolean>
+
+  // ワードミュートの判定
   isWordMute: ComputedRef<boolean>
-  displayImage: ComputedRef<boolean>
-  imageFolding: boolean
 
   // ラベル対応
-  contentWarningForceDisplay: boolean;
-  contentWarningDisplay: ComputedRef<boolean>;
   contentWarningVisibility: ComputedRef<TTContentVisibility>;
+  contentWarningLabel: ComputedRef<string>;
 
+  // 画像の制御
+  displayImage: ComputedRef<boolean>
+
+  imageFolding: boolean
   translation: "none" | "ignore" | "waiting" | "done" | "failed";
 }>({
   postMenuDisplay: false,
@@ -52,6 +58,23 @@ const state = reactive<{
   processing: false,
   external: computed(() => props.post.embed?.external),
   images: computed(() => props.post.embed?.images ?? []),
+
+  // ラベル対応
+  contentWarningVisibility: computed((): TTContentVisibility => {
+    return mainState.getContentWarningVisibility(
+      props.post.author?.labels,
+      props.post.labels
+    )
+  }),
+  contentWarningLabel: computed(() => {
+    const preferences: Array<TTPreference> = [
+      ...mainState.getConcernedPreferences(props.post.author?.labels),
+      ...mainState.getConcernedPreferences(props.post.labels),
+    ]
+    return preferences
+      .map((preference: TTPreference) => $t(preference.label))
+      .join(", ")
+  }),
 
   // コンテンツ言語の判定
   noContentLanguage: computed(() => {
@@ -114,19 +137,6 @@ const state = reactive<{
   // TODO: displayImage 共々 post に内包するべき
   imageFolding: false,
 
-  // ラベル対応
-  contentWarningForceDisplay: false,
-  contentWarningDisplay: computed((): boolean => {
-    return state.contentWarningVisibility === "show" ||
-           ((state.contentWarningVisibility === "always-warn" || state.contentWarningVisibility === "warn") && state.contentWarningForceDisplay)
-  }),
-  contentWarningVisibility: computed((): TTContentVisibility => {
-    return mainState.getContentWarningVisibility(
-      props.post.author?.labels,
-      props.post.labels
-    )
-  }),
-
   translation: "none",
 })
 
@@ -164,8 +174,18 @@ function isFocused (): boolean {
 }
 
 async function onActivatePost (post: TTPost, event: Event) {
-  // ワードミュート中の場合
-  if (!props.post.__custom.unmask && (state.noContentLanguage || state.isWordMute)) {
+  // Hide 指定のラベルを持つポストの場合はキャンセル
+  if (state.contentWarningVisibility === "hide") return
+
+  // ポストマスクのOFF
+  if (
+    !props.post.__custom.unmask &&
+    (
+      state.noContentLanguage ||
+      state.contentWarningVisibility !== "show" ||
+      state.isWordMute
+    )
+  ) {
     props.post.__custom.unmask = true
     return
   }
@@ -178,6 +198,11 @@ async function onActivatePost (post: TTPost, event: Event) {
     return
   }
   await router.push(postUrl)
+}
+
+function onActivatePostMask () {
+  // ポストマスクのトグル
+  props.post.__custom.unmask = !props.post.__custom.unmask
 }
 
 function onActivateReplierLink () {
@@ -310,16 +335,6 @@ function openImagePopup (imageIndex: number) {
   mainState.imagePopupProps.display = true
 }
 
-// ラベル対応
-
-function showWarningContent () {
-  state.contentWarningForceDisplay = true
-}
-
-function hideWarningContent () {
-  state.contentWarningForceDisplay = false
-}
-
 // 自動翻訳
 
 async function translateText (forceTranslate: boolean) {
@@ -341,7 +356,7 @@ async function translateText (forceTranslate: boolean) {
   if (!forceTranslate) {
     const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
     if (autoTranslationIgnoreLanguage != null) {
-      const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/gs, '').split(",")
+      const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/gs, "").split(",")
       const ignored = ignoreLanguages.includes(srcLanguage)
       if (ignored) {
         state.translation = "ignore"
@@ -386,23 +401,21 @@ function onActivateHashTag (text: string) {
     :data-position="position"
     :data-repost="post.__custom?.reason != null"
     :data-focus="isFocused()"
-    :data-mask="!post.__custom.unmask && (state.noContentLanguage || state.isWordMute)"
-    :data-content-warning-force-display="state.contentWarningForceDisplay"
-    :data-content-warning-visibility="state.contentWarningVisibility"
+    :data-mask="
+      !post.__custom.unmask &&
+      (
+        state.noContentLanguage ||
+        state.contentWarningVisibility !== 'show' ||
+        state.isWordMute
+      )
+    "
     @click.prevent.stop="onActivatePost(post, $event)"
   >
-    <!-- ラベル対応 -->
-    <ContentWarning
-      v-if="position !== 'preview' && position !== 'slim'"
-      :display="state.contentWarningForceDisplay"
-      :authorLabels="post.author?.labels"
-      :postLabels="post.labels"
-      @show="showWarningContent"
-      @hide="hideWarningContent"
-    />
-
     <!-- ポストヘッダー -->
-    <div class="header">
+    <div
+      class="header"
+      @click.stop
+    >
       <!-- リプライ先ユーザー -->
       <div
         v-if="parentPost != null"
@@ -452,16 +465,32 @@ function onActivateHashTag (text: string) {
     </div>
 
     <!-- ポストマスク -->
-    <!-- コンテンツ言語マスク -->
-    <!-- ワードミュートマスク -->
     <div
-      v-if="state.contentWarningDisplay && !post.__custom.unmask && (state.noContentLanguage || state.isWordMute)"
+      v-if="
+        state.noContentLanguage ||
+        state.contentWarningVisibility !== 'show' ||
+        state.isWordMute
+      "
       class="post__mask"
+      @click.stop="onActivatePostMask"
     >
+      <SVGIcon :name="
+        state.contentWarningVisibility === 'hide'
+          ? 'lock'
+          : post.__custom.unmask ? 'cursorDown' : 'cursorUp'
+      " />
       <SVGIcon
         v-show="state.noContentLanguage"
         name="translate"
       />
+      <SVGIcon
+        v-show="state.contentWarningVisibility !== 'show'"
+        name="alert"
+      />
+      <div
+        v-show="state.contentWarningVisibility !== 'show'"
+        class="post__mask__content-warning"
+      >{{ state.contentWarningLabel }}</div>
       <SVGIcon
         v-show="state.isWordMute"
         name="alphabeticalOff"
@@ -482,13 +511,11 @@ function onActivateHashTag (text: string) {
     <div
       v-if="
         (
-          state.contentWarningDisplay &&
+          post.__custom.unmask ||
           (
-            post.__custom.unmask ||
-            (
-              !state.noContentLanguage &&
-              !state.isWordMute
-            )
+            !state.noContentLanguage &&
+            state.contentWarningVisibility === 'show' &&
+            !state.isWordMute
           )
         ) ||
         position === 'preview' ||
@@ -815,58 +842,86 @@ function onActivateHashTag (text: string) {
     }
   }
 
-  // ラベル対応
-  &[data-content-warning-force-display="true"] .content-warning {
-    margin-bottom: 1em;
-  }
-
   // マスク
   &[data-mask="true"] {
     cursor: pointer;
-    padding: 0.5em 1em;
-    &:not(:last-child)::after {
-      border-bottom: 1px dashed rgba(var(--fg-color), 0.125);
-      content: "";
-      display: block;
-      position: relative;
-      top: 0.5em;
+    padding: 0.75em 1em;
+    &[data-position="postInPost"] .post__mask {
+      margin: 0;
+      padding: 0;
+    }
+    &:focus, &:hover {
+      .post__mask {
+        --alpha: 0.75;
+      }
+    }
+  }
+  &[data-mask="false"] {
+    padding-top: 0.75em;
+
+    .header:not(:empty) {
+      margin-bottom: 0.5em;
+    }
+
+    .post__mask {
+      margin: -0.75em -1em 0;
+      padding: 0.75em 1em;
     }
   }
   &__mask {
+    --alpha: 0.5;
+    cursor: pointer;
     display: grid;
-    grid-template-columns: auto auto auto 1fr;
+    grid-template-columns: auto auto auto auto auto auto 1fr;
     align-items: center;
     grid-gap: 0.5em;
+    &:focus, &:hover {
+      --alpha: 0.75;
+    }
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.5);
+      fill: rgba(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
+    & > .svg-icon--alert,
+    & > .svg-icon--alphabeticalOff {
+      fill: rgba(var(--notice-color), calc(var(--alpha) + 0.25));
+    }
+
+    &__content-warning,
     &__display-name,
     &__handle {
-      color: rgba(var(--fg-color), 0.5);
       line-height: 1.25;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
+    &__content-warning {
+      color: rgba(var(--fg-color), var(--alpha));
+      font-size: 0.875em;
+    }
+
     &__display-name {
+      color: rgba(var(--fg-color), var(--alpha));
       font-size: 0.875em;
       font-weight: bold;
     }
 
     &__handle {
+      color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
       font-size: 0.75em;
     }
   }
 }
 
 .header:not(:empty) {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 1em;
-  margin-bottom: 0.5em;
+  margin: -0.75em -1em 0.5em;
+  padding: 0.75em 1em 0;
 }
 
 .replier,
@@ -877,8 +932,8 @@ function onActivateHashTag (text: string) {
   grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
-  margin: -0.5em -1em;
-  padding: 0.5em 1em;
+  margin: -0.75em -1em -0.5em;
+  padding: 0.75em 1em 0.5em;
 
   & > .svg-icon {
     font-size: 0.875em;
@@ -928,7 +983,7 @@ function onActivateHashTag (text: string) {
 }
 
 .replier--unknown {
-  cursor: unset;
+  cursor: default;
 
   & > .svg-icon {
     fill: rgba(var(--post-color), 0.75);
