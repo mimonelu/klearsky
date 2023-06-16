@@ -3,15 +3,11 @@ import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import FeedList from "@/components/FeedList.vue"
-import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
   generator: Ref<undefined | TTFeedGenerator>
-  selectLanguagesPopupDisplay: boolean
 }>({
   generator: computedAsync(async () => {
     const uri = mainState.currentQuery.feed
@@ -35,17 +31,7 @@ const state = reactive<{
 
     return generator
   }),
-  selectLanguagesPopupDisplay: false,
 })
-
-function openSelectLanguagesPopup () {
-  Util.blurElement()
-  state.selectLanguagesPopupDisplay = true
-}
-
-function closeSelectLanguagesPopup () {
-  state.selectLanguagesPopupDisplay = false
-}
 
 function saveSettings () {
   mainState.saveSettings()
@@ -54,15 +40,6 @@ function saveSettings () {
 
 <template>
   <div class="feeds-timeline-view">
-    <Portal to="custom-feeds-view-header-portal">
-      <!-- 言語選択 -->
-      <button
-        class="button--bordered"
-        @click.stop="openSelectLanguagesPopup"
-      >
-        <SVGIcon name="translate" />
-      </button>
-    </Portal>
     <CustomFeedCard
       v-if="state.generator != null"
       :generator="state.generator"
@@ -73,19 +50,6 @@ function saveSettings () {
       :feeds="mainState.currentCustomFeeds"
       :hasLoadButton="true"
     />
-
-    <!-- 言語選択ポップアップ -->
-    <SelectLanguagesPopup
-      v-if="state.selectLanguagesPopupDisplay"
-      :state="mainState.currentSetting"
-      property="contentLanguages"
-      @close="closeSelectLanguagesPopup"
-      @change="saveSettings"
-    >
-      <template #header>
-        <p>{{ $t("selectLanguagesDetail") }}</p>
-      </template>
-    </SelectLanguagesPopup>
   </div>
 </template>
 

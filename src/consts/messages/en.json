@@ -153,9 +153,7 @@
 
   "hot": "What's Hot",
   "whatsHot": "What's Hot",
-  "selectLanguages": "Select languages",
-  "selectLanguagesDetail": "Multiple selections allowed. If select nothing, all posts be displayed.",
-
+  
   "search": "Search",
   "suggestionSearch": "Suggestions",
   "userSearch": "Find Accounts",
@@ -169,7 +167,11 @@
   "blueskySettings": "Bluesky Settings",
   "accountSettings": "Accounts Settings",
 
-  "language": "Language",
+  "uiLanguage": "UI Language",
+  "contentLanguages": "Content Languages",
+  "contentLanguagesEdit": "Select Content Languages",
+  "selectLanguages": "Select Content Languages",
+  "selectLanguagesDetail": "Multiple selections allowed. If select nothing, all posts be displayed.",
   "english": "English",
   "japanese": "Japanese",
 

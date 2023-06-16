@@ -75,6 +75,15 @@ async function refreshSession () {
         <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
       </a>
 
+      <!-- コンテンツ言語ポップアップトリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="mainState.openContentLanguagesPopup"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("contentLanguages") }}</span>
+      </a>
+
       <!-- マイフィードポップアップトリガー -->
       <a
         class="textlink--icon"

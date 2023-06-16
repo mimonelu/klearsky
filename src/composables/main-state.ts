@@ -117,6 +117,10 @@ const state = reactive<MainState>({
   closeConfirmationPopup,
   applyConfirmationPopup,
 
+  // コンテンツ言語ポップアップの開閉
+  openContentLanguagesPopup,
+  closeContentLanguagesPopup,
+
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
   closeInviteCodesPopup,
@@ -168,7 +172,7 @@ function formatDate (dateString?: string): string {
     else
       return intlFormatDistance(the, now, {
         numeric: "always",
-        locale: state.currentSetting.language,
+        locale: state.currentSetting.uiLanguage,
       })
   }
 
@@ -496,8 +500,8 @@ function saveSettings () {
   if (did == null) return
   if (state.settings[did] == null)
     state.settings[did] = {}
-  if (state.settings[did].language == null)
-    state.settings[did].language = state.$getI18n != null
+  if (state.settings[did].uiLanguage == null)
+    state.settings[did].uiLanguage = state.$getI18n != null
       ? state.$getI18n()
       : window.navigator.language
   if (state.settings[did].autoTranslation == null)
@@ -562,8 +566,8 @@ function updateSettings () {
 }
 
 function updateI18nSetting () {
-  if (state.currentSetting?.language != null) {
-    if (state.$setI18n != null) state.$setI18n(state.currentSetting.language)
+  if (state.currentSetting?.uiLanguage != null) {
+    if (state.$setI18n != null) state.$setI18n(state.currentSetting.uiLanguage)
     state.forceUpdate()
   }
 }
@@ -654,6 +658,16 @@ function closeConfirmationPopup () {
 function applyConfirmationPopup () {
   state.confirmationPopupResult = true
   state.confirmationPopupDisplay = false
+}
+
+// コンテンツ言語ポップアップの開閉
+
+function openContentLanguagesPopup () {
+  state.contentLanguagesPopupDisplay = true
+}
+
+function closeContentLanguagesPopup () {
+  state.contentLanguagesPopupDisplay = false
 }
 
 // 招待コード確認ポップアップの開閉

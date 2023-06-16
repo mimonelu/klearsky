@@ -4,10 +4,10 @@ type TTWordMute = {
 }
 
 type TTSetting = {
-  language?: string
+  uiLanguages?: string
+  contentLanguages?: Array<string>
   autoTranslation?: boolean
   autoTranslationIgnoreLanguage?: string
-  contentLanguages?: Array<string>
   fontSize?: string
   wordMute?: Array<TTWordMute>
   replyControl?: Array<number>
@@ -181,6 +181,9 @@ type MainState = {
     description: any
   }
 
+  // コンテンツ言語ポップアップの表示スイッチ
+  contentLanguagesPopupDisplay: boolean
+
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
@@ -257,6 +260,10 @@ type MainState = {
   openConfirmationPopup: (title?: string, text?: string) => Promise<boolean>
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
+
+  // コンテンツ言語ポップアップの開閉
+  openContentLanguagesPopup: Function
+  closeContentLanguagesPopup: Function
 
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup: Function

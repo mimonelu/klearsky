@@ -20,6 +20,7 @@ import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/MyFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
+import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
@@ -208,6 +209,9 @@ function resetState () {
   state.errorPopupProps.display = false
   state.errorPopupProps.error = undefined
   state.errorPopupProps.description = undefined
+
+  // コンテンツ言語ポップアップの表示スイッチ
+  state.contentLanguagesPopupDisplay = false
 
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
@@ -582,6 +586,19 @@ function broadcastListener (event: MessageEvent) {
       </div>
       <ScrollButton />
     </div>
+
+    <!-- 言語選択ポップアップ -->
+    <SelectLanguagesPopup
+      v-if="state.contentLanguagesPopupDisplay"
+      :state="state.currentSetting"
+      property="contentLanguages"
+      @close="state.closeContentLanguagesPopup"
+      @change="state.saveSettings"
+    >
+      <template #header>
+        <p>{{ $t("selectLanguagesDetail") }}</p>
+      </template>
+    </SelectLanguagesPopup>
 
     <!-- リポストユーザーリストポップアップ -->
     <RepostUsersPopup
