@@ -37,15 +37,18 @@ const state = reactive<{
   external: ComputedRef<undefined | TTExternal>
   images: ComputedRef<Array<TTImage>>
 
+  // ポストマスクの表示
+  masked: ComputedRef<boolean>
+
   // コンテンツ言語の判定
   noContentLanguage: ComputedRef<boolean>
-
-  // ワードミュートの判定
-  isWordMute: ComputedRef<boolean>
 
   // ラベル対応
   contentWarningVisibility: ComputedRef<TTContentVisibility>;
   contentWarningLabel: ComputedRef<string>;
+
+  // ワードミュートの判定
+  isWordMute: ComputedRef<boolean>
 
   // 画像の制御
   displayImage: ComputedRef<boolean>
@@ -58,6 +61,23 @@ const state = reactive<{
   processing: false,
   external: computed(() => props.post.embed?.external),
   images: computed(() => props.post.embed?.images ?? []),
+
+  // ポストマスクの表示
+  masked: computed((): boolean => {
+    return state.noContentLanguage ||
+      state.contentWarningVisibility !== 'show' ||
+      state.isWordMute
+  }),
+
+  // コンテンツ言語の判定
+  noContentLanguage: computed(() => {
+    if (!(props.post.record?.text ?? props.post.value?.text)) return false
+    if (!props.post.__custom?.detectedLanguages?.length) return false
+    if (!mainState.currentSetting?.contentLanguages?.length) return false
+    return !props.post.__custom.detectedLanguages?.some((language: any) =>
+      mainState.currentSetting.contentLanguages?.includes(language.lang)
+    ) ?? false
+  }),
 
   // ラベル対応
   contentWarningVisibility: computed((): TTContentVisibility => {
@@ -74,16 +94,6 @@ const state = reactive<{
     return preferences
       .map((preference: TTPreference) => $t(preference.label))
       .join(", ")
-  }),
-
-  // コンテンツ言語の判定
-  noContentLanguage: computed(() => {
-    if (!(props.post.record?.text ?? props.post.value?.text)) return false
-    if (!props.post.__custom?.detectedLanguages?.length) return false
-    if (!mainState.currentSetting?.contentLanguages?.length) return false
-    return !props.post.__custom.detectedLanguages?.some((language: any) =>
-      mainState.currentSetting.contentLanguages?.includes(language.lang)
-    ) ?? false
   }),
 
   // ワードミュートの判定
@@ -175,17 +185,11 @@ function isFocused (): boolean {
 
 async function onActivatePost (post: TTPost, event: Event) {
   // Hide 指定のラベルを持つポストの場合はキャンセル
-  if (state.contentWarningVisibility === "hide") return
+  if (state.contentWarningVisibility === "hide" ||
+      state.contentWarningVisibility === "always-hide") return
 
   // ポストマスクのOFF
-  if (
-    !props.post.__custom.unmask &&
-    (
-      state.noContentLanguage ||
-      state.contentWarningVisibility !== "show" ||
-      state.isWordMute
-    )
-  ) {
+  if (!props.post.__custom.unmask && state.masked) {
     props.post.__custom.unmask = true
     return
   }
@@ -202,7 +206,8 @@ async function onActivatePost (post: TTPost, event: Event) {
 
 function onActivatePostMask () {
   // Hide 指定のラベルを持つポストの場合はキャンセル
-  if (state.contentWarningVisibility === "hide") return
+  if (state.contentWarningVisibility === "hide" ||
+      state.contentWarningVisibility === "always-hide") return
 
   // ポストマスクのトグル
   props.post.__custom.unmask = !props.post.__custom.unmask
@@ -404,14 +409,7 @@ function onActivateHashTag (text: string) {
     :data-position="position"
     :data-repost="post.__custom?.reason != null"
     :data-focus="isFocused()"
-    :data-mask="
-      !post.__custom.unmask &&
-      (
-        state.noContentLanguage ||
-        state.contentWarningVisibility !== 'show' ||
-        state.isWordMute
-      )
-    "
+    :data-mask="!post.__custom.unmask && state.masked"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
     <!-- ポストヘッダー -->
@@ -460,16 +458,13 @@ function onActivateHashTag (text: string) {
 
     <!-- ポストマスク -->
     <button
-      v-if="
-        state.noContentLanguage ||
-        state.contentWarningVisibility !== 'show' ||
-        state.isWordMute
-      "
+      v-if="state.masked"
       class="post__mask"
       @click.stop="onActivatePostMask"
     >
       <SVGIcon :name="
-        state.contentWarningVisibility === 'hide'
+        state.contentWarningVisibility === 'hide' ||
+        state.contentWarningVisibility === 'always-hide'
           ? 'lock'
           : post.__custom.unmask ? 'cursorDown' : 'cursorUp'
       " />
@@ -506,11 +501,7 @@ function onActivateHashTag (text: string) {
       v-if="
         (
           post.__custom.unmask ||
-          (
-            !state.noContentLanguage &&
-            state.contentWarningVisibility === 'show' &&
-            !state.isWordMute
-          )
+          !state.masked
         ) ||
         position === 'preview' ||
         position === 'slim'
