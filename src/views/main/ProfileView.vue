@@ -246,13 +246,13 @@ function hideWarningContent () {
       </RouterLink>
       <RouterLink
         class="tab__button"
-        :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.handle } }"
+        :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
       >
         <SVGIcon name="repost" />
       </RouterLink>
       <RouterLink
         class="tab__button"
-        :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.handle } }"
+        :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
       >
         <SVGIcon name="heart" />
       </RouterLink>

@@ -216,12 +216,22 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
 
 async function fetchLogAudit () {
   if (state.currentProfile == null) return
-  const log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
-  const logJson = await log.json()
+  let log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
+  let logJson = await log.json()
+  console.log("[klearsky/log/audit]", logJson)
   if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
+
+  // Sandbox PDS対応
+  if (!Array.isArray(logJson)) {
+    log = await fetch(`https://plc.bsky-sandbox.dev/${state.currentProfile.did}/log/audit`)
+    logJson = await log.json()
+    console.log("[klearsky/log/audit]", logJson)
+    if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
+    if (!Array.isArray(logJson)) return
+  }
+
   state.currentProfile.__createdAt = logJson[0]?.createdAt
   state.currentProfile.__log = logJson.reverse()
-  console.log("[klearsky/log/audit]", logJson)
 }
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
@@ -469,14 +479,14 @@ async function fetchMyFeeds (): Promise<boolean> {
   }
 
   saved.forEach((uri: string) => {
-    if (state.currentMyFeeds[uri] == null)
-      state.currentMyFeeds[uri] = {
-        generator: generators.find((generator: TTFeedGenerator) => generator.uri === uri),
-        feeds: [],
-      }
+    if (state.currentMyFeeds[uri] != null) return
+    const generator = generators.find((generator: TTFeedGenerator) => generator.uri === uri)
+    if (generator == null) return
+    state.currentMyFeeds[uri] = { generator, feeds: [] }
   })
 
   await Promise.allSettled(saved.map((uri: string) => {
+    if (state.currentMyFeeds[uri] == null) return
     return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
   }))
 
