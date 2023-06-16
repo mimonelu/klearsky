@@ -145,12 +145,6 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
-  fetchHotFeeds(
-    this: TIAtpWrapper,
-    oldFeeds: Array<TTFeed>,
-    limit?: number,
-    cursor?: string
-  ): Promise<undefined | false | string>
   fetchInviteCodes(this: TIAtpWrapper): Promise<null | TTInviteCode[]>
   fetchKeywordSearch(
     this: TIAtpWrapper,

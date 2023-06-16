@@ -87,7 +87,6 @@ const state = reactive<MainState>({
   }),
   fetchMyFeeds,
 
-  fetchHotFeeds,
   fetchTimeline,
   fetchPostThread,
   fetchNotifications,
@@ -347,17 +346,6 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
   }
 
   return concernedPreferences
-}
-
-async function fetchHotFeeds (direction: "old" | "new") {
-  const cursor: undefined | false | string =
-    await state.atp.fetchHotFeeds(
-      state.currentHotFeeds,
-      CONSTS.limitOfFetchHotFeeds,
-      direction === "old" ? state.currentHotCursor : undefined
-    )
-  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchHotFeeds")
-  else if (cursor != null) state.currentHotCursor = cursor
 }
 
 async function fetchTimeline (direction: "old" | "new") {

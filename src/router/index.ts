@@ -10,7 +10,6 @@ import PostView from "@/views/main/PostView.vue"
 // Main - Home
 import HomeView from "@/views/main/HomeView.vue"
 import TimelineView from "@/views/main/home/TimelineView.vue"
-import HotView from "@/views/main/home/HotView.vue"
 import GloballineView from "@/views/main/home/GloballineView.vue"
 
 // Main - Custom Feeds
@@ -81,12 +80,6 @@ const router = createRouter({
               name: "timeline-home",
               meta: { label: "The Bluesky Client" },
               component: TimelineView,
-            },
-            {
-              path: "hot",
-              name: "hot-home",
-              meta: { label: "whatsHot" },
-              component: HotView,
             },
             {
               path: "globalline",

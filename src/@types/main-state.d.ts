@@ -92,9 +92,6 @@ type MainState = {
   ) => TTContentVisibility
   getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
 
-  currentHotFeeds: Array<TTFeed>
-  currentHotCursor?: string
-
   currentSearchSuggestionResults: Array<TTUser>
   currentSearchSuggestionCursor?: string
 
@@ -227,7 +224,6 @@ type MainState = {
   fetchCurrentAuthorFeed: (direction: "new" | "old") => Promise<void>
   fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
   fetchAuthorLikes: (direction: "new" | "old") => Promise<void>
-  fetchHotFeeds: (direction: "old" | "new") => Promise<void>
   fetchTimeline: (direction: "old" | "new") => Promise<void>
   fetchPostThread: () => Promise<void>
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>

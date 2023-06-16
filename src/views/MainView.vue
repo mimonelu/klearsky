@@ -136,9 +136,6 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "timeline-home" && state.timelineFeeds.length > 0) return
 
-  // HOT の取得はログイン後 or カーソルボタン押下時 or currentHotFeeds が空の時のみ
-  if (to.name === "hot" && state.currentHotFeeds.length > 0) return
-
   await processPage(to.name)
 })
 
@@ -162,8 +159,6 @@ function resetState () {
   state.currentFollowings = []
   state.currentFollowingsCursor = undefined
   state.currentPreferences = []
-  state.currentHotFeeds = []
-  state.currentHotCursor = undefined
   state.currentRepostUsers = []
   state.currentRepostUsersUri = undefined
   state.currentRepostUsersCursor = undefined
@@ -382,11 +377,6 @@ async function processPage (pageName?: null | RouteRecordName) {
       }
       case "timeline-home": {
         await state.fetchTimeline("new")
-        break
-      }
-      case "hot-home": {
-        if (state.currentHotFeeds.length === 0)
-          await state.fetchHotFeeds("new")
         break
       }
       case "feeds-my": {

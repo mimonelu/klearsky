@@ -24,10 +24,6 @@ const mainState = inject("state") as MainState
         >{{ $t("timeline") }}</RouterLink>
         <RouterLink
           class="tab__button"
-          to="/home/hot"
-        >{{ $t("hot") }}</RouterLink>
-        <RouterLink
-          class="tab__button"
           to="/home/globalline"
         >{{ $t("globalline") }}</RouterLink>
       </div>
