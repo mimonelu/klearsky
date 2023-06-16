@@ -15,6 +15,7 @@ export default function (this: TIAtpWrapper, service: string): boolean {
           }
           this.resetSession(session, service)
           this.lastFetchNotificationsDate = undefined
+          console.log(this.data)
           break
         }
         case "create-failed":

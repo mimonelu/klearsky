@@ -63,6 +63,19 @@ class AtpWrapper implements TIAtpWrapper {
       did: "",
       sessions: {},
     }
+
+    // 不正なアカウントデータの修復
+    // TODO: このような処理が不要になるように再実装すること
+    if (this.data?.sessions != null) {
+      for (const did in this.data.sessions) {
+        if (!did) {
+          const session = this.data.sessions[did]
+          this.data.sessions[session.did] = session
+          delete this.data.sessions[did]
+        }
+      }
+    }
+
     this.session = undefined
     this.lastFetchNotificationsDate = undefined
   }

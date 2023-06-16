@@ -201,6 +201,9 @@ async function onActivatePost (post: TTPost, event: Event) {
 }
 
 function onActivatePostMask () {
+  // Hide 指定のラベルを持つポストの場合はキャンセル
+  if (state.contentWarningVisibility === "hide") return
+
   // ポストマスクのトグル
   props.post.__custom.unmask = !props.post.__custom.unmask
 }
@@ -417,7 +420,7 @@ function onActivateHashTag (text: string) {
       @click.stop
     >
       <!-- リプライ先ユーザー -->
-      <div
+      <button
         v-if="parentPost != null"
         class="replier"
         @click.stop="onActivateReplierLink"
@@ -433,7 +436,7 @@ function onActivateHashTag (text: string) {
             ? parentPost?.author?.handle
             : ""
         }}</div>
-      </div>
+      </button>
 
       <!-- リプライ先不明 -->
       <div
@@ -445,7 +448,7 @@ function onActivateHashTag (text: string) {
       </div>
 
       <!-- リポストユーザー -->
-      <div
+      <button
         v-if="post.__custom?.reason != null"
         class="reposter"
         @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.handle as string)"
@@ -461,11 +464,11 @@ function onActivateHashTag (text: string) {
             ? post.__custom?.reason?.by?.handle
             : ""
         }}</div>
-      </div>
+      </button>
     </div>
 
     <!-- ポストマスク -->
-    <div
+    <button
       v-if="
         state.noContentLanguage ||
         state.contentWarningVisibility !== 'show' ||
@@ -505,7 +508,7 @@ function onActivateHashTag (text: string) {
           ? post.author?.handle
           : ""
       }}</div>
-    </div>
+    </button>
 
     <!-- ポストボディ -->
     <div

@@ -24,9 +24,8 @@ export default async function (
       password,
     }
     try {
-      const response: ComAtprotoServerCreateSession.Response = await (
-        this.agent as BskyAgent
-      ).login(optinos)
+      const response: ComAtprotoServerCreateSession.Response =
+        await (this.agent as BskyAgent).login(optinos)
       console.log("[klearsky/login]", response)
     } catch (error) {
       console.error("[klearsky/login]", error)

@@ -518,6 +518,7 @@ function onDrop (event: DragEvent) {
 // ブロードキャスト
 
 function broadcastListener (event: MessageEvent) {
+  console.log("[klearsky/broadcast]", event.data.type)
   switch (event.data.type) {
     // セッションの同期
     case "refreshSession": {
