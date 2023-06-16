@@ -26,9 +26,7 @@ const state = reactive<{
 
     // 上記になければ取得（ページ更新時は取得確定）
     if (generator == null) {
-      mainState.processing = true
       generator = await mainState.atp.fetchFeedGenerator(uri)
-      mainState.processing = false
       if (generator instanceof Error) {
         mainState.openErrorPopup("errorApiFailed", "FeedsTimelineView/fetchFeedGenerator")
         return
