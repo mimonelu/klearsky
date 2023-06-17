@@ -409,7 +409,8 @@ function onActivateHashTag (text: string) {
     :data-position="position"
     :data-repost="post.__custom?.reason != null"
     :data-focus="isFocused()"
-    :data-mask="!post.__custom.unmask && state.masked"
+    :data-has-mask="state.masked"
+    :data-is-masked="!post.__custom.unmask && state.masked"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
     <!-- ポストヘッダー -->
@@ -828,7 +829,7 @@ function onActivateHashTag (text: string) {
   }
 
   // マスク
-  &[data-mask="true"] {
+  &[data-is-masked="true"] {
     cursor: pointer;
     padding: 0.75em 1em;
     &[data-position="postInPost"] .post__mask {
@@ -841,7 +842,7 @@ function onActivateHashTag (text: string) {
       }
     }
   }
-  &[data-mask="false"] {
+  &[data-is-masked="false"] {
     padding-top: 0.75em;
 
     .header:not(:empty) {
@@ -897,6 +898,27 @@ function onActivateHashTag (text: string) {
     &__handle {
       color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
       font-size: 0.75em;
+    }
+  }
+
+  &[data-has-child="true"] {
+    --top: 0.75em;
+    --gap: 1em;
+    &[data-has-mask="true"] {
+      --top: 1.5em;
+      --gap: 2em;
+    }
+
+    &::before {
+      background-color: rgba(var(--fg-color), 0.25);
+      border-radius: var(--border-radius);
+      content: "";
+      display: block;
+      position: absolute;
+      top: calc(var(--top) + var(--avatar-size) + var(--gap));
+      left: calc(2.5em - 1.5px);
+      width: 3px;
+      height: calc(100% - var(--avatar-size) - var(--gap) - var(--gap));
     }
   }
 }

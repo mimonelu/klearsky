@@ -55,16 +55,4 @@ function removeThisPost (uri: string) {
 .post[data-focus="true"] {
   scroll-margin: 3.25rem;
 }
-
-.post[data-has-child="true"][data-content-warning-visibility="show"]::before {
-  background-color: rgba(var(--fg-color), 0.25);
-  border-radius: var(--border-radius);
-  content: "";
-  display: block;
-  position: absolute;
-  top: calc(1em + var(--avatar-size) + 12px);
-  left: calc(2.5em - 1.5px);
-  width: 3px;
-  height: calc(100% - var(--avatar-size) - 28px);
-}
 </style>
