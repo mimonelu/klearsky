@@ -76,6 +76,10 @@ const state = reactive<{
 
   // コンテンツ言語の判定
   noContentLanguage: computed(() => {
+    // コンテンツ言語設定はポストスレッドとプロフィールポストでは無効
+    if (mainState.currentPath === "/post" ||
+        mainState.currentPath.startsWith("/profile/")) return false
+
     if (!(props.post.record?.text ?? props.post.value?.text)) return false
     if (!props.post.__custom?.detectedLanguages?.length) return false
     if (!mainState.currentSetting?.contentLanguages?.length) return false
@@ -193,7 +197,7 @@ async function onActivatePost (post: TTPost, event: Event) {
   if (state.contentWarningVisibility === "hide" ||
       state.contentWarningVisibility === "always-hide") return
 
-  // ポストマスクのOFF
+  // ポストマスクの無効化
   if (!props.post.__custom.unmask && state.masked) {
     props.post.__custom.unmask = true
     return
