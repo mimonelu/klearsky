@@ -50,7 +50,7 @@ export default async function (
           author: {
             did: dropout.user.did,
             displayName: "(Non-existent account)",
-            handle: "",
+            handle: dropout.user.handle,
             viewer: {},
           },
           cid: dropout.cid,
