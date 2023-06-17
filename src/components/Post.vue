@@ -64,9 +64,14 @@ const state = reactive<{
 
   // ポストマスクの表示
   masked: computed((): boolean => {
-    return state.noContentLanguage ||
+    return (
+      state.noContentLanguage ||
       state.contentWarningVisibility !== 'show' ||
       state.isWordMute
+    ) && (
+      props.position !== 'preview' &&
+      props.position !== 'slim'
+    )
   }),
 
   // コンテンツ言語の判定
@@ -499,16 +504,11 @@ function onActivateHashTag (text: string) {
 
     <!-- ポストボディ -->
     <div
-      v-if="
-        (
-          post.__custom.unmask ||
-          !state.masked
-        ) ||
-        position === 'preview' ||
-        position === 'slim'
-      "
+      v-if="post.__custom.unmask || !state.masked"
       class="body"
     >
+      <slot name="body-before" />
+
       <!-- アバター -->
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
@@ -785,6 +785,8 @@ function onActivateHashTag (text: string) {
           </div>
         </div>
       </div>
+
+      <slot name="body-after" />
     </div>
     <Loader v-if="state.processing" />
   </div>
@@ -1019,6 +1021,7 @@ function onActivateHashTag (text: string) {
   grid-template-columns: var(--avatar-size) 1fr;
   grid-gap: 1em;
   align-items: flex-start;
+  position: relative;
 }
 .post[data-position="postInPost"],
 .post[data-position="slim"] {

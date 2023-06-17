@@ -3,6 +3,7 @@ import { inject } from "vue"
 import Loader from "@/components/Loader.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import Post from "@/components/Post.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
@@ -12,9 +13,8 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
 
   // MEMO: ポストスレッドの全同一ポストに最新のデータを反映する
   posts.forEach((post: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) =>
-      post?.cid === newPost.cid)
-    if (newPost != null) posts[index] = newPost
+    const newPost = newPosts.find((newPost: TTPost) => post?.cid === newPost.cid)
+    if (newPost != null) Util.replacePost(posts[index], newPost)
   })
 }
 

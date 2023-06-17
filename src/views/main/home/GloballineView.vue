@@ -104,10 +104,8 @@ function destroyProfileTimer () {
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.globallinePosts.forEach((post: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) => {
-      return post.cid === newPost.cid
-    })
-    if (newPost != null) mainState.globallinePosts[index] = newPost
+    const newPost = newPosts.find((newPost: TTPost) => post.cid === newPost.cid)
+    if (newPost != null) Util.replacePost(mainState.globallinePosts[index], newPost)
   })
 }
 
@@ -184,21 +182,23 @@ function onMutated () {
           :forceHideImages="true"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
-        />
-
-        <!-- リプライ／引用リポストアイコン -->
-        <div
-          v-if="message.record.reply != null"
-          class="reply-icon"
         >
-          <SVGIcon name="post" />
-        </div>
-        <div
-          v-if="message.record.embed?.record != null"
-          class="quote-repost-icon"
-        >
-          <SVGIcon name="quoteRepost" />
-        </div>
+          <template v-slot:body-after>
+            <!-- リプライ／引用リポストアイコン -->
+            <div
+              v-if="message.record.reply != null"
+              class="reply-icon"
+            >
+              <SVGIcon name="post" />
+            </div>
+            <div
+              v-if="message.record.embed?.record != null"
+              class="quote-repost-icon"
+            >
+              <SVGIcon name="quoteRepost" />
+            </div>
+          </template>
+        </Post>
       </div>
     </div>
 
@@ -286,8 +286,8 @@ function onMutated () {
 .reply-icon,
 .quote-repost-icon {
   position: absolute;
-  top: 0;
-  left: 0.5rem;
+  top: -0.5rem;
+  left: -0.5rem;
 
   & > .svg-icon {
     font-size: 1.25rem;
