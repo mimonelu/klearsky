@@ -42,7 +42,7 @@ type TTEasyFormItem = {
     | "decimal"
     | "search"
     | undefined
-  layout?: "horizontal" | "vertical"
+  layout?: "horizontal" | "vertical" | "vertical-2columns"
   accept?: string
   isMultipleFile?: boolean
   maxNumberOfFile?: number

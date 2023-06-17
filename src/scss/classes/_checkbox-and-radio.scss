@@ -1,8 +1,15 @@
 .checkboxes,
 .radios {
-  display: flex;
+  &[data-layout="horizontal"] {
+    display: flex;
+  }
   &[data-layout="vertical"] {
+    display: flex;
     flex-direction: column;
+  }
+  &[data-layout="vertical-2columns"] {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
   & > .checkbox,
@@ -87,6 +94,35 @@
       }
       &[data-checked="true"] + * {
         border-top-color: rgba(var(--fg-color), 0.375);
+      }
+    }
+  }
+  &[data-layout="vertical-2columns"] {
+    // border-right: 1px solid rgba(var(--fg-color), 0.25);
+    // border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+
+    & > .checkbox,
+    & > .radio {
+      border-right-style: none;
+      border-bottom-style: none;
+      &:nth-child(even) {
+        border-right: 1px solid rgba(var(--fg-color), 0.25);
+      }
+      &:nth-last-child(1),
+      &:nth-last-child(2) {
+        border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+      }
+      &:first-child {
+        border-radius: var(--border-radius) 0 0 0;
+      }
+      &:nth-child(2) {
+        border-radius: 0 var(--border-radius) 0 0;
+      }
+      &:nth-last-child(2) {
+        border-radius: 0 0 0 var(--border-radius);
+      }
+      &:nth-last-child(1) {
+        border-radius: 0 0 var(--border-radius) 0;
       }
     }
   }
