@@ -3,24 +3,31 @@ let id = 0
 export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>, doesUnshift?: boolean) {
   const addings: Array<TTFeed> = []
 
-  targetFeeds.forEach((targetFeed: TTFeed) => {
+  // 重複フィード（リポスト）を除去
+  const map = new Map()
+  targetFeeds.reverse().forEach((targetFeed: TTFeed) => {
+    if (!map.has(targetFeed.post.cid))
+      map.set(targetFeed.post.cid, targetFeed)
+  })
+
+  Array.from(map.values()).reverse().forEach((targetFeed: TTFeed) => {
     if (targetFeed.__id == null) targetFeed.__id = `feed-${id ++}`
 
-    const index: number = oldFeeds.findIndex(
-      (oldFeed: TTFeed) => oldFeed.post?.cid === targetFeed.post?.cid
-    )
+    const oldIndex: number = oldFeeds.findIndex((oldFeed: TTFeed) => {
+      return oldFeed.post?.cid === targetFeed.post?.cid
+    })
 
     // 新規フィード
-    if (index === -1) addings.push(targetFeed)
+    if (oldIndex === - 1) addings.push(targetFeed)
     // 既存フィードに `post` がない場合はスキップ（おそらく該当ケースなし）
-    else if (oldFeeds[index].post == null) oldFeeds[index] = targetFeed
+    else if (oldFeeds[oldIndex].post == null) oldFeeds[oldIndex] = targetFeed
     // 対象フィードに `post` がない場合はスキップ（おそらく該当ケースなし）
     else if (targetFeed.post == null) return
     // 対象フィードがリポストの場合はスキップ
     else if (targetFeed.reason != null) return
     // 登録日時を考慮して既存フィードを上書き
     else {
-      let oldFeed = oldFeeds[index]
+      let oldFeed = oldFeeds[oldIndex]
 
       // 既存フィードの登録日時
       const oldDate = new Date(
@@ -45,8 +52,8 @@ export default function (oldFeeds: Array<TTFeed>, targetFeeds: Array<TTFeed>, do
       const oldCustomPropsOfRoot = oldFeed.reply?.root?.__custom
       const oldCustomPropsOfParent = oldFeed.reply?.parent?.__custom
 
-      oldFeeds[index] = targetFeed
-      oldFeed = oldFeeds[index]
+      oldFeeds[oldIndex] = targetFeed
+      oldFeed = oldFeeds[oldIndex]
 
       oldFeed.__id = oldId
       oldFeed.__folding = oldFolding
