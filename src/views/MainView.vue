@@ -20,6 +20,7 @@ import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/MyFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
+import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
@@ -29,7 +30,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 import WordMutePopup from "@/components/WordMutePopup.vue"
 import state from "@/composables/main-state"
 import Util from "@/composables/util"
-import consts from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<(name: string, value: any) => void>()
 
@@ -135,9 +136,6 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "timeline-home" && state.timelineFeeds.length > 0) return
 
-  // HOT の取得はログイン後 or カーソルボタン押下時 or currentHotFeeds が空の時のみ
-  if (to.name === "hot" && state.currentHotFeeds.length > 0) return
-
   await processPage(to.name)
 })
 
@@ -161,8 +159,6 @@ function resetState () {
   state.currentFollowings = []
   state.currentFollowingsCursor = undefined
   state.currentPreferences = []
-  state.currentHotFeeds = []
-  state.currentHotCursor = undefined
   state.currentRepostUsers = []
   state.currentRepostUsersUri = undefined
   state.currentRepostUsersCursor = undefined
@@ -209,6 +205,9 @@ function resetState () {
   state.errorPopupProps.error = undefined
   state.errorPopupProps.description = undefined
 
+  // コンテンツ言語ポップアップの表示スイッチ
+  state.contentLanguagesPopupDisplay = false
+
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
 
@@ -245,7 +244,8 @@ function resetState () {
 // ページタイトルの更新
 // TODO: /post のタイトルを付けること
 function updatePageTitle () {
-  let title = "Klearsky"
+  let title = state.notificationCount === 0 ? "" : `(${state.notificationCount}) `
+  title += "Klearsky"
   switch (state.currentPath) {
     case "/profile/post":
     case "/profile/repost":
@@ -371,17 +371,12 @@ async function processPage (pageName?: null | RouteRecordName) {
       case "notifications": {
         if (!state.notificationFetchedFirst) {
           state.notificationFetchedFirst = true
-          await state.fetchNotifications(consts.limitOfFetchNotifications, "new")
+          await state.fetchNotifications(CONSTS.limitOfFetchNotifications, "new")
         }
         break
       }
       case "timeline-home": {
         await state.fetchTimeline("new")
-        break
-      }
-      case "hot-home": {
-        if (state.currentHotFeeds.length === 0)
-          await state.fetchHotFeeds("new")
         break
       }
       case "feeds-my": {
@@ -404,7 +399,8 @@ async function processPage (pageName?: null | RouteRecordName) {
         const uri = state.currentQuery.uri as LocationQueryValue
         if (!uri) return
         state.currentPosts?.splice(0)
-        state.currentPosts = await state.atp.fetchPostThread(uri) ?? []
+        const posts = await state.atp.fetchPostThread(uri, CONSTS.limitOfFetchPostThread) ?? []
+        if (posts) state.currentPosts = posts
         await nextTick()
         scrollToFocused()
         break
@@ -431,16 +427,20 @@ async function setupNotificationInterval () {
   clearNotificationInterval()
   await updateNotification()
   // @ts-ignore // TODO:
-  notificationTimer = setInterval(updateNotification, consts.intervalOfFetchNotifications)
+  notificationTimer = setInterval(updateNotification, CONSTS.intervalOfFetchNotifications)
 }
 
 async function updateNotification () {
   const count = await state.atp.fetchNotificationCount() ?? 0
   const canFetched = state.notificationCount < count
-  if (count > 0) state.notificationCount = count
-  if (canFetched)
+  if (count > 0) {
+    state.notificationCount = count
+    updatePageTitle()
+  }
+  if (canFetched) {
     // NOTICE: 念のため + 1 している
-    await state.fetchNotifications(Math.min(consts.limitOfFetchNotifications, count + 1), "new")
+    await state.fetchNotifications(Math.min(CONSTS.limitOfFetchNotifications, count + 1), "new")
+  }
 }
 
 async function updateInviteCodes () {
@@ -512,6 +512,7 @@ function onDrop (event: DragEvent) {
 // ブロードキャスト
 
 function broadcastListener (event: MessageEvent) {
+  console.log("[klearsky/broadcast]", event.data.type)
   switch (event.data.type) {
     // セッションの同期
     case "refreshSession": {
@@ -563,7 +564,10 @@ function broadcastListener (event: MessageEvent) {
 
       <!-- ルータービュー -->
       <div class="router-view-wrapper">
-        <RouterView v-if="state.mounted" />
+        <RouterView
+          v-if="state.mounted"
+          @updatePageTitle="updatePageTitle"
+        />
       </div>
 
       <!-- サブメニュー -->
@@ -572,6 +576,19 @@ function broadcastListener (event: MessageEvent) {
       </div>
       <ScrollButton />
     </div>
+
+    <!-- 言語選択ポップアップ -->
+    <SelectLanguagesPopup
+      v-if="state.contentLanguagesPopupDisplay"
+      :state="state.currentSetting"
+      property="contentLanguages"
+      @close="state.closeContentLanguagesPopup"
+      @change="state.saveSettings"
+    >
+      <template #header>
+        <p>{{ $t("selectLanguagesDetail") }}</p>
+      </template>
+    </SelectLanguagesPopup>
 
     <!-- リポストユーザーリストポップアップ -->
     <RepostUsersPopup

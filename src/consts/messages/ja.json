@@ -20,6 +20,7 @@
   "klearsky": "Klearsky",
   "bluesky": "Bluesky",
   "account": "アカウント",
+  "profile": "プロフィール",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -151,11 +152,6 @@
   "noFeeds": "ブックマークされたカスタムフィードはありません。",
   "noPopularFeeds": "人気のフィードがありません。サーバ管理者にお問い合わせください。",
 
-  "hot": "What's Hot",
-  "whatsHot": "What's Hot",
-  "selectLanguages": "言語の選択",
-  "selectLanguagesDetail": "複数選択可。ひとつも選択しないとすべて表示されます。",
-
   "search": "検索",
   "suggestionSearch": "おすすめ",
   "userSearch": "アカウントを探す",
@@ -169,7 +165,11 @@
   "blueskySettings": "Bluesky設定",
   "accountSettings": "アカウント設定",
 
-  "language": "言語",
+  "uiLanguage": "UI言語",
+  "contentLanguages": "コンテンツ言語",
+  "contentLanguagesEdit": "コンテンツ言語を選択する",
+  "selectLanguages": "コンテンツ言語の選択",
+  "selectLanguagesDetail": "複数選択可。ひとつも選択しないとすべて表示されます。",
   "english": "英語",
   "japanese": "日本語",
 
@@ -295,13 +295,14 @@
   "sendPost": "ポストを投稿する",
   "post": "ポスト",
   "reply": "返信",
+  "replyUnknown": "返信先不明",
   "quoteRepost": "引用リポスト",
   "text": "テキスト",
   "linkBox": "リンクカード",
   "imageBoxes": "画像",
   "alts": "代替テキスト",
   "submit": "送信する",
-  "sendPostNotification": "※ [文字列](URL) でもリンクを張れます。\n※ リンクカードにおけるOGP画像の取得は未対応です。",
+  "sendPostNotification": "※ [文字列](URL) でもリンクを張れます。\n※ @zap でZapリンクを張れます（要設定）。\n※ リンクカードにおけるOGP画像の取得は未対応です。",
   "cancelPost": "ポストのキャンセル",
   "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
 

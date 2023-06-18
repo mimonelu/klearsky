@@ -1,7 +1,8 @@
 .button,
 .button--invert,
 .button--bordered,
-.button--important {
+.button--important,
+.button--plane {
   border: 1px solid transparent;
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -62,5 +63,20 @@
   color: rgb(var(--bg-color));
   &:focus, &:hover {
     background-color: rgb(var(--notice-color));
+  }
+}
+
+.button--plane {
+  color: rgba(var(--fg-color), 0.875);
+  &:focus, &:hover {
+    color: rgb(var(--fg-color));
+
+    & > .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
+  }
+
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.875);
   }
 }

@@ -7,7 +7,7 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  handle: string;
+  did: string;
 }>()
 
 const mainState = inject("state") as MainState
@@ -17,11 +17,11 @@ const router = useRouter()
 async function moveToFirstPost (event: Event) {
   Util.blurElement()
   emit("close")
-  if (props.handle == null) return
+  if (props.did == null) return
   if (mainState.processing) return
   mainState.processing = true
   try {
-    const uri = await mainState.atp.fetchFirstPost(props.handle)
+    const uri = await mainState.atp.fetchFirstPost(props.did)
     if (uri == null) return
     const postUrl = { name: "post", query: { uri } }
     if ((event as any).metaKey || (event as any).ctrlKey) {

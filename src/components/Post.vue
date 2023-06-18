@@ -7,7 +7,6 @@ import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
 import MenuTicker from "@/components/MenuTicker.vue"
-import ContentWarning from "@/components/ContentWarning.vue"
 import Post from "@/components/Post.vue"
 import PostMenuTicker from "@/components/PostMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -20,10 +19,14 @@ const props = defineProps<{
   level?: number
   position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim"
   post: TTPost
+  rootPost?: TTPost
+  parentPost?: TTPost
+  isInFeed?: boolean
   noLink?: boolean
-  replyTo?: TTPost
   forceHideImages?: boolean
 }>()
+
+const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
@@ -33,15 +36,24 @@ const state = reactive<{
   processing: boolean
   external: ComputedRef<undefined | TTExternal>
   images: ComputedRef<Array<TTImage>>
-  isWordMute: ComputedRef<boolean>
-  displayImage: ComputedRef<boolean>
-  imageFolding: boolean
+
+  // ポストマスクの表示
+  masked: ComputedRef<boolean>
+
+  // コンテンツ言語の判定
+  noContentLanguage: ComputedRef<boolean>
 
   // ラベル対応
-  contentWarningForceDisplay: boolean;
-  contentWarningDisplay: ComputedRef<boolean>;
   contentWarningVisibility: ComputedRef<TTContentVisibility>;
+  contentWarningLabel: ComputedRef<string>;
 
+  // ワードミュートの判定
+  isWordMute: ComputedRef<boolean>
+
+  // 画像の制御
+  displayImage: ComputedRef<boolean>
+
+  imageFolding: boolean
   translation: "none" | "ignore" | "waiting" | "done" | "failed";
 }>({
   postMenuDisplay: false,
@@ -50,15 +62,57 @@ const state = reactive<{
   external: computed(() => props.post.embed?.external),
   images: computed(() => props.post.embed?.images ?? []),
 
+  // ポストマスクの表示
+  masked: computed((): boolean => {
+    return (
+      state.noContentLanguage ||
+      state.contentWarningVisibility !== 'show' ||
+      state.isWordMute
+    ) && (
+      props.position !== 'preview' &&
+      props.position !== 'slim'
+    )
+  }),
+
+  // コンテンツ言語の判定
+  noContentLanguage: computed(() => {
+    // コンテンツ言語設定はポストスレッドとプロフィールポストでは無効
+    if (mainState.currentPath === "/post" ||
+        mainState.currentPath.startsWith("/profile/")) return false
+
+    if (!(props.post.record?.text ?? props.post.value?.text)) return false
+    if (!props.post.__custom?.detectedLanguages?.length) return false
+    if (!mainState.currentSetting?.contentLanguages?.length) return false
+    return !props.post.__custom.detectedLanguages?.some((language: any) =>
+      mainState.currentSetting.contentLanguages?.includes(language.lang)
+    ) ?? false
+  }),
+
+  // ラベル対応
+  contentWarningVisibility: computed((): TTContentVisibility => {
+    return mainState.getContentWarningVisibility(
+      props.post.author?.labels,
+      props.post.labels
+    )
+  }),
+  contentWarningLabel: computed(() => {
+    const preferences: Array<TTPreference> = [
+      ...mainState.getConcernedPreferences(props.post.author?.labels),
+      ...mainState.getConcernedPreferences(props.post.labels),
+    ]
+    return preferences
+      .map((preference: TTPreference) => $t(preference.label))
+      .join(", ")
+  }),
+
   // ワードミュートの判定
-  isWordMute: computed((): boolean => {
+  isWordMute: computed(() => {
     const target = props.post.record?.text.toLowerCase() ?? props.post.value?.text.toLowerCase()
     if (!target) return false
     return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
       if (!wordMute.enabled[0] || wordMute.keyword === "") return false
       const keywords = wordMute.keyword.toLowerCase().split(" ")
       const result = keywords.some((keyword: string) => keyword !== "" && target.indexOf(keyword) !== - 1)
-      if (result) console.log(target)
       return result
     }) ?? false
   }),
@@ -102,19 +156,6 @@ const state = reactive<{
   // TODO: displayImage 共々 post に内包するべき
   imageFolding: false,
 
-  // ラベル対応
-  contentWarningForceDisplay: false,
-  contentWarningDisplay: computed((): boolean => {
-    return state.contentWarningVisibility === "show" ||
-           ((state.contentWarningVisibility === "always-warn" || state.contentWarningVisibility === "warn") && state.contentWarningForceDisplay)
-  }),
-  contentWarningVisibility: computed((): TTContentVisibility => {
-    return mainState.getContentWarningVisibility(
-      props.post.author?.labels,
-      props.post.labels
-    )
-  }),
-
   translation: "none",
 })
 
@@ -152,9 +193,13 @@ function isFocused (): boolean {
 }
 
 async function onActivatePost (post: TTPost, event: Event) {
-  // ワードミュート中の場合
-  if (state.isWordMute && !props.post.__custom.wordMuteDisplay) {
-    props.post.__custom.wordMuteDisplay = true
+  // Hide 指定のラベルを持つポストの場合はキャンセル
+  if (state.contentWarningVisibility === "hide" ||
+      state.contentWarningVisibility === "always-hide") return
+
+  // ポストマスクの無効化
+  if (!props.post.__custom.unmask && state.masked) {
+    props.post.__custom.unmask = true
     return
   }
 
@@ -166,6 +211,17 @@ async function onActivatePost (post: TTPost, event: Event) {
     return
   }
   await router.push(postUrl)
+}
+
+function onActivatePostMask () {
+  Util.blurElement()
+
+  // Hide 指定のラベルを持つポストの場合はキャンセル
+  if (state.contentWarningVisibility === "hide" ||
+      state.contentWarningVisibility === "always-hide") return
+
+  // ポストマスクのトグル
+  props.post.__custom.unmask = !props.post.__custom.unmask
 }
 
 function onActivateReplierLink () {
@@ -279,9 +335,9 @@ async function onRemoveThisPost (uri: string) {
 }
 
 async function updateThisPostThread () {
-  const posts: null | Array<TTPost> =
+  const posts: undefined | false | Array<TTPost> =
     await mainState.atp.fetchPostThread(props.post.uri, 1)
-  if (posts == null || posts.length === 0) return
+  if (!posts || posts.length === 0) return
   emit("updateThisPostThread", posts)
 }
 
@@ -296,16 +352,6 @@ function openImagePopup (imageIndex: number) {
   })
   mainState.imagePopupProps.index = imageIndex
   mainState.imagePopupProps.display = true
-}
-
-// ラベル対応
-
-function showWarningContent () {
-  state.contentWarningForceDisplay = true
-}
-
-function hideWarningContent () {
-  state.contentWarningForceDisplay = false
 }
 
 // 自動翻訳
@@ -329,7 +375,7 @@ async function translateText (forceTranslate: boolean) {
   if (!forceTranslate) {
     const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
     if (autoTranslationIgnoreLanguage != null) {
-      const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/gs, '').split(",")
+      const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/gs, "").split(",")
       const ignored = ignoreLanguages.includes(srcLanguage)
       if (ignored) {
         state.translation = "ignore"
@@ -374,47 +420,36 @@ function onActivateHashTag (text: string) {
     :data-position="position"
     :data-repost="post.__custom?.reason != null"
     :data-focus="isFocused()"
-    :data-word-mute="state.isWordMute && !post.__custom.wordMuteDisplay"
-    :data-content-warning-force-display="state.contentWarningForceDisplay"
-    :data-content-warning-visibility="state.contentWarningVisibility"
+    :data-has-mask="state.masked"
+    :data-is-masked="!post.__custom.unmask && state.masked"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
-    <!-- ラベル対応 -->
-    <ContentWarning
-      v-if="position !== 'preview' && position !== 'slim'"
-      :display="state.contentWarningForceDisplay"
-      :authorLabels="post.author?.labels"
-      :postLabels="post.labels"
-      @show="showWarningContent"
-      @hide="hideWarningContent"
-    />
-
     <!-- ポストヘッダー -->
     <div
-      v-if="state.contentWarningDisplay"
       class="header"
+      @click.stop
     >
       <!-- リプライ先ユーザー -->
-      <div
-        v-if="replyTo != null"
+      <button
+        v-if="parentPost != null"
         class="replier"
         @click.stop="onActivateReplierLink"
       >
         <SVGIcon name="post" />
         <div class="replier__display-name">{{
           !mainState.currentSetting.postAnonymization
-            ? replyTo?.author?.displayName
+            ? parentPost?.author?.displayName
             : $t("anonymous")
         }}</div>
         <div class="replier__handle">{{
           !mainState.currentSetting.postAnonymization
-            ? replyTo?.author?.handle
+            ? parentPost?.author?.handle
             : ""
         }}</div>
-      </div>
+      </button>
 
       <!-- リポストユーザー -->
-      <div
+      <button
         v-if="post.__custom?.reason != null"
         class="reposter"
         @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.handle as string)"
@@ -430,36 +465,56 @@ function onActivateHashTag (text: string) {
             ? post.__custom?.reason?.by?.handle
             : ""
         }}</div>
-      </div>
+      </button>
     </div>
 
-    <!-- ワードミュートレイヤー -->
-    <div
-      v-if="!post.__custom.wordMuteDisplay && state.contentWarningDisplay && state.isWordMute"
-      class="post__word-mute"
+    <!-- ポストマスク -->
+    <button
+      v-if="state.masked"
+      class="post__mask"
+      @click.stop="onActivatePostMask"
     >
-      <SVGIcon name="alphabeticalOff" />
-      <div class="post__word-mute__display-name">{{
+      <SVGIcon :name="
+        state.contentWarningVisibility === 'hide' ||
+        state.contentWarningVisibility === 'always-hide'
+          ? 'lock'
+          : post.__custom.unmask ? 'cursorDown' : 'cursorUp'
+      " />
+      <SVGIcon
+        v-show="state.noContentLanguage"
+        name="translate"
+      />
+      <SVGIcon
+        v-show="state.contentWarningVisibility !== 'show'"
+        name="alert"
+      />
+      <div
+        v-show="state.contentWarningVisibility !== 'show'"
+        class="post__mask__content-warning"
+      >{{ state.contentWarningLabel }}</div>
+      <SVGIcon
+        v-show="state.isWordMute"
+        name="alphabeticalOff"
+      />
+      <div class="post__mask__display-name">{{
         !mainState.currentSetting.postAnonymization
           ? post.author?.displayName
           : $t("anonymous")
       }}</div>
-      <div class="post__word-mute__handle">{{
+      <div class="post__mask__handle">{{
         !mainState.currentSetting.postAnonymization
           ? post.author?.handle
           : ""
       }}</div>
-    </div>
+    </button>
 
     <!-- ポストボディ -->
     <div
-      v-else-if="
-        state.contentWarningDisplay ||
-        position === 'preview' ||
-        position === 'slim'
-      "
+      v-if="post.__custom.unmask || !state.masked"
       class="body"
     >
+      <slot name="body-before" />
+
       <!-- アバター -->
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
@@ -736,6 +791,8 @@ function onActivateHashTag (text: string) {
           </div>
         </div>
       </div>
+
+      <slot name="body-after" />
     </div>
     <Loader v-if="state.processing" />
   </div>
@@ -779,51 +836,107 @@ function onActivateHashTag (text: string) {
     }
   }
 
-  // ラベル対応
-  &[data-content-warning-force-display="true"] .content-warning {
-    margin-bottom: 1em;
-  }
-
-  // ワードミュート
-  &[data-word-mute="true"] {
+  // マスク
+  &[data-is-masked="true"] {
     cursor: pointer;
-    padding: 0.5em 1em;
+    padding: 0.75em 1em;
+    &[data-position="postInPost"] .post__mask {
+      margin: 0;
+      padding: 0;
+    }
+    &:focus, &:hover {
+      .post__mask {
+        --alpha: 0.75;
+      }
+    }
   }
-  &__word-mute {
+  &[data-is-masked="false"] {
+    padding-top: 0.75em;
+
+    .header:not(:empty) {
+      margin-bottom: 0.5em;
+    }
+
+    .post__mask {
+      margin: -0.75em -1em 0;
+      padding: 0.75em 1em;
+    }
+  }
+  &__mask {
+    --alpha: 0.5;
+    cursor: pointer;
     display: grid;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto auto auto auto auto auto 1fr;
     align-items: center;
     grid-gap: 0.5em;
+    &:focus, &:hover {
+      --alpha: 0.75;
+    }
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.5);
+      fill: rgba(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
+    & > .svg-icon--alert,
+    & > .svg-icon--alphabeticalOff {
+      fill: rgba(var(--notice-color), calc(var(--alpha) + 0.25));
+    }
+
+    &__content-warning,
     &__display-name,
     &__handle {
-      color: rgba(var(--fg-color), 0.5);
       line-height: 1.25;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
+    &__content-warning {
+      color: rgba(var(--fg-color), var(--alpha));
+      font-size: 0.875em;
+    }
+
     &__display-name {
+      color: rgba(var(--fg-color), var(--alpha));
       font-size: 0.875em;
       font-weight: bold;
     }
 
     &__handle {
+      color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
       font-size: 0.75em;
+    }
+  }
+
+  &[data-has-child="true"] {
+    --top: 0.75em;
+    --gap: 1em;
+    &[data-has-mask="true"] {
+      --top: 1.5em;
+      --gap: 2em;
+    }
+
+    &::before {
+      background-color: rgba(var(--fg-color), 0.25);
+      border-radius: var(--border-radius);
+      content: "";
+      display: block;
+      position: absolute;
+      top: calc(var(--top) + var(--avatar-size) + var(--gap));
+      left: calc(2.5em - 1.5px);
+      width: 3px;
+      height: calc(100% - var(--avatar-size) - var(--gap) - var(--gap));
     }
   }
 }
 
 .header:not(:empty) {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 1em;
-  margin-bottom: 0.5em;
+  margin: -0.75em -1em 0.5em;
+  padding: 0.75em 1em 0;
 }
 
 .replier,
@@ -833,8 +946,8 @@ function onActivateHashTag (text: string) {
   grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
-  margin: -1em -1em -0.5em;
-  padding: 1em 1em 0.5em;
+  margin: -0.75em -1em -0.5em;
+  padding: 0.75em 1em 0.5em;
 
   & > .svg-icon {
     font-size: 0.875em;
@@ -855,6 +968,7 @@ function onActivateHashTag (text: string) {
     font-size: 0.75em;
   }
 }
+
 .replier {
   &:focus, &:hover {
     & > .svg-icon {
@@ -881,6 +995,7 @@ function onActivateHashTag (text: string) {
     color: rgba(var(--post-color), 0.5);
   }
 }
+
 .reposter {
   &:focus, &:hover {
     & > .svg-icon {
@@ -912,6 +1027,7 @@ function onActivateHashTag (text: string) {
   grid-template-columns: var(--avatar-size) 1fr;
   grid-gap: 1em;
   align-items: flex-start;
+  position: relative;
 }
 .post[data-position="postInPost"],
 .post[data-position="slim"] {

@@ -4,14 +4,14 @@
   "limitOfFetchAuthorReposts": 15,
   "limitOfFetchAuthorLikes": 15,
   "limitOfFetchBlockingUsers": 30,
+  "limitOfFetchFeeds": 30,
   "limitOfFetchFollows": 30,
-  "limitOfFetchHotFeeds": 30,
   "limitOfFetchLikeUsers": 30,
   "limitOfFetchMutingUsers": 30,
   "limitOfFetchMyFeeds": 3,
   "limitOfFetchNotifications": 30,
+  "limitOfFetchPostThread": 8,
   "limitOfFetchRepostUsers": 30,
   "limitOfFetchSuggestionSearch": 30,
-  "limitOfFetchTimeline": 30,
   "limitOfFetchUserSearch": 30
 }

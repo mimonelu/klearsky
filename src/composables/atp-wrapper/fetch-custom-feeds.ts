@@ -22,8 +22,8 @@ export default async function (
   // TODO:
   AtpUtil.coherentResponses(response.data.feed)
   AtpUtil.detectLanguages(response.data.feed)
-  AtpUtil.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
-  AtpUtil.sortFeeds(oldFeeds)
+  AtpUtil.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>, !cursor)
+  // AtpUtil.sortFeeds(oldFeeds) // ソートはしない
 
   return response.data.cursor
 }

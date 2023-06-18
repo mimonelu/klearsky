@@ -17,7 +17,7 @@
     }
 
     & > option {
-      background-color: rgba(var(--bg-color), 0.25);
+      background-color: rgb(var(--bg-color));
       color: rgb(var(--fg-color));
     }
   }

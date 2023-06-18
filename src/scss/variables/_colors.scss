@@ -6,7 +6,6 @@
   --post-color: 0, 160, 240;
   --like-color: 240, 64, 128;
   --share-color: 0, 160, 32;
-  --hot-color: 255, 0, 0;
 }
 
 @mixin color-theme-light-gray {
@@ -17,7 +16,6 @@
   --post-color: 0, 160, 240;
   --like-color: 240, 64, 128;
   --share-color: 0, 160, 32;
-  --hot-color: 255, 0, 0;
 }
 
 @mixin color-theme-dark {
@@ -28,7 +26,6 @@
   --post-color: 32, 160, 240;
   --like-color: 240, 64, 128;
   --share-color: 32, 192, 64;
-  --hot-color: 255, 0, 0;
 }
 
 @mixin color-theme-dark-gray {
@@ -39,7 +36,6 @@
   --post-color: 32, 160, 240;
   --like-color: 240, 64, 128;
   --share-color: 32, 192, 64;
-  --hot-color: 255, 0, 0;
 }
 
 @mixin color-theme-warm {
@@ -50,7 +46,6 @@
   --post-color: 0, 160, 240;
   --like-color: 240, 64, 128;
   --share-color: 0, 160, 32;
-  --hot-color: 255, 0, 0;
 }
 
 @mixin color-theme-pink {
@@ -61,7 +56,6 @@
   --post-color: 0, 160, 224;
   --like-color: 240, 64, 128;
   --share-color: 32, 160, 64;
-  --hot-color: 255, 0, 0;
 }
 
 @mixin color-theme-red {
@@ -72,7 +66,6 @@
   --post-color: 32, 192, 240;
   --like-color: 240, 64, 128;
   --share-color: 0, 192, 32;
-  --hot-color: 255, 0, 0;
 }
 
 @mixin color-theme-green {
@@ -83,7 +76,6 @@
   --post-color: 0, 64, 255;
   --like-color: 255, 32, 128;
   --share-color: 0, 128, 0;
-  --hot-color: 255, 32, 32;
 }
 
 @mixin color-theme-blue {
@@ -94,7 +86,6 @@
   --post-color: 0, 192, 240;
   --like-color: 240, 64, 128;
   --share-color: 32, 224, 64;
-  --hot-color: 255, 0, 0;
 }
 
 @mixin color-theme-indigo {
@@ -105,5 +96,4 @@
   --post-color: 32, 160, 240;
   --like-color: 240, 64, 128;
   --share-color: 32, 192, 64;
-  --hot-color: 255, 0, 0;
 }

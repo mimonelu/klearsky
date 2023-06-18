@@ -19,6 +19,10 @@ export default async function (
     via: `Klearsky v${Package.version}`,
   }
 
+  // Zapリンク
+  if (params.lightning)
+    record.text = record.text.replace(/@zap(?=\W|$)/gi, `[⚡️Zap!](lightning:${params.lightning})`)
+
   // カスタムリンク
   const customLinks = AtpUtil.makeCustomLinks(record.text)
   record.text = customLinks.text

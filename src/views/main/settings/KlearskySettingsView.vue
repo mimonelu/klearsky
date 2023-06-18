@@ -36,23 +36,36 @@ async function resetSettings () {
 <template>
   <div class="klearsky-settings-view">
     <div class="settings-section-container">
-      <!-- 言語 -->
+      <!-- UI言語 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("language") }}</div>
+        <div class="settings-section__header">{{ $t("uiLanguage") }}</div>
         <div class="settings-section__body">
           <label class="selectbox">
             <select
-              v-model="mainState.currentSetting.language"
+              v-model="mainState.currentSetting.uiLanguage"
               @change="changeSetting"
             >
               <option
                 v-for="language, languageIndex in languages"
                 :key="languageIndex"
                 :value="language.value"
-                :selected="language.value === mainState.currentSetting.language"
+                :selected="language.value === mainState.currentSetting.uiLanguage"
               >{{ $t(language.label) }}</option>
             </select>
           </label>
+        </div>
+      </div>
+
+      <!-- コンテンツ言語 -->
+      <div class="settings-section">
+        <div class="settings-section__header">{{ $t("contentLanguages") }}</div>
+        <div class="settings-section__body">
+          <button
+            class="button"
+            @click.stop="mainState.openContentLanguagesPopup"
+          >
+            <span>{{ $t("contentLanguagesEdit") }}</span>
+          </button>
         </div>
       </div>
 

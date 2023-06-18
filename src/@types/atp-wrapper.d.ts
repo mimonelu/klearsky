@@ -119,6 +119,10 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | false | string>
+  fetchFeedGenerator(
+    this: TIAtpWrapper,
+    feed: string
+  ): Promise<Error | TTFeedGenerator>
   fetchFeedGenerators(
     this: TIAtpWrapper,
     feeds: Array<string>
@@ -141,12 +145,6 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
-  fetchHotFeeds(
-    this: TIAtpWrapper,
-    oldFeeds: Array<TTFeed>,
-    limit?: number,
-    cursor?: string
-  ): Promise<undefined | false | string>
   fetchInviteCodes(this: TIAtpWrapper): Promise<null | TTInviteCode[]>
   fetchKeywordSearch(
     this: TIAtpWrapper,
@@ -189,7 +187,7 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     uri: string,
     depth?: number
-  ): Promise<null | Array<TTPost>>
+  ): Promise<undefined | false | Array<TTPost>>
   fetchPreferences(this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile(this: TIAtpWrapper, actor: string): Promise<null | TTProfile>
   fetchRepostUsers(

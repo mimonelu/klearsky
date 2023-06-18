@@ -87,7 +87,6 @@ const state = reactive<MainState>({
   }),
   fetchMyFeeds,
 
-  fetchHotFeeds,
   fetchTimeline,
   fetchPostThread,
   fetchNotifications,
@@ -116,6 +115,10 @@ const state = reactive<MainState>({
   openConfirmationPopup,
   closeConfirmationPopup,
   applyConfirmationPopup,
+
+  // コンテンツ言語ポップアップの開閉
+  openContentLanguagesPopup,
+  closeContentLanguagesPopup,
 
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
@@ -168,7 +171,7 @@ function formatDate (dateString?: string): string {
     else
       return intlFormatDistance(the, now, {
         numeric: "always",
-        locale: state.currentSetting.language,
+        locale: state.currentSetting.uiLanguage,
       })
   }
 
@@ -213,12 +216,22 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
 
 async function fetchLogAudit () {
   if (state.currentProfile == null) return
-  const log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
-  const logJson = await log.json()
+  let log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
+  let logJson = await log.json()
+  console.log("[klearsky/log/audit]", logJson)
   if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
+
+  // Sandbox PDS対応
+  if (!Array.isArray(logJson)) {
+    log = await fetch(`https://plc.bsky-sandbox.dev/${state.currentProfile.did}/log/audit`)
+    logJson = await log.json()
+    console.log("[klearsky/log/audit]", logJson)
+    if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
+    if (!Array.isArray(logJson)) return
+  }
+
   state.currentProfile.__createdAt = logJson[0]?.createdAt
   state.currentProfile.__log = logJson.reverse()
-  console.log("[klearsky/log/audit]", logJson)
 }
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
@@ -345,24 +358,13 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
   return concernedPreferences
 }
 
-async function fetchHotFeeds (direction: "old" | "new") {
-  const cursor: undefined | false | string =
-    await state.atp.fetchHotFeeds(
-      state.currentHotFeeds,
-      CONSTS.limitOfFetchHotFeeds,
-      direction === "old" ? state.currentHotCursor : undefined
-    )
-  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchHotFeeds")
-  else if (cursor != null) state.currentHotCursor = cursor
-}
-
 async function fetchTimeline (direction: "old" | "new") {
   const cursor: undefined | false | string =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
       state.currentSetting.replyControl,
       state.currentSetting.repostControl,
-      CONSTS.limitOfFetchTimeline,
+      CONSTS.limitOfFetchFeeds,
       direction === "old" ? state.timelineCursor : undefined
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
@@ -372,7 +374,8 @@ async function fetchTimeline (direction: "old" | "new") {
 async function fetchPostThread () {
   const uri = state.currentQuery.postUri as LocationQueryValue
   if (!uri) return
-  state.currentPosts = await state.atp.fetchPostThread(uri) ?? []
+  const posts = await state.atp.fetchPostThread(uri, CONSTS.limitOfFetchPostThread) ?? []
+  if (posts) state.currentPosts = posts
 }
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
@@ -453,7 +456,7 @@ async function fetchCustomFeeds (direction: "old" | "new") {
     await state.atp.fetchCustomFeeds(
       state.currentCustomFeeds,
       state.currentQuery.feed,
-      CONSTS.limitOfFetchTimeline,
+      CONSTS.limitOfFetchFeeds,
       direction === "old" ? state.currentCustomCursor : undefined
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
@@ -476,14 +479,14 @@ async function fetchMyFeeds (): Promise<boolean> {
   }
 
   saved.forEach((uri: string) => {
-    if (state.currentMyFeeds[uri] == null)
-      state.currentMyFeeds[uri] = {
-        generator: generators.find((generator: TTFeedGenerator) => generator.uri === uri),
-        feeds: [],
-      }
+    if (state.currentMyFeeds[uri] != null) return
+    const generator = generators.find((generator: TTFeedGenerator) => generator.uri === uri)
+    if (generator == null) return
+    state.currentMyFeeds[uri] = { generator, feeds: [] }
   })
 
   await Promise.allSettled(saved.map((uri: string) => {
+    if (state.currentMyFeeds[uri] == null) return
     return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
   }))
 
@@ -495,16 +498,19 @@ function saveSettings () {
   if (did == null) return
   if (state.settings[did] == null)
     state.settings[did] = {}
-  if (state.settings[did].language == null)
-    state.settings[did].language = state.$getI18n != null
+  if (state.settings[did].uiLanguage == null)
+    state.settings[did].uiLanguage = state.$getI18n != null
       ? state.$getI18n()
       : window.navigator.language
   if (state.settings[did].autoTranslation == null)
     state.settings[did].autoTranslation = false
   if (state.settings[did].autoTranslationIgnoreLanguage == null)
     state.settings[did].autoTranslationIgnoreLanguage = undefined
-  if (state.settings[did].hotLanguages == null)
-    state.settings[did].hotLanguages = [Util.getUserLanguage()]
+  if (state.settings[did].contentLanguages == null) {
+    const userLanguage = Util.getUserLanguage()
+    state.settings[did].contentLanguages = [userLanguage]
+    if (userLanguage !== "en") state.settings[did].contentLanguages?.push("en")
+  }
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].wordMute == null)
@@ -561,8 +567,8 @@ function updateSettings () {
 }
 
 function updateI18nSetting () {
-  if (state.currentSetting?.language != null) {
-    if (state.$setI18n != null) state.$setI18n(state.currentSetting.language)
+  if (state.currentSetting?.uiLanguage != null) {
+    if (state.$setI18n != null) state.$setI18n(state.currentSetting.uiLanguage)
     state.forceUpdate()
   }
 }
@@ -653,6 +659,16 @@ function closeConfirmationPopup () {
 function applyConfirmationPopup () {
   state.confirmationPopupResult = true
   state.confirmationPopupDisplay = false
+}
+
+// コンテンツ言語ポップアップの開閉
+
+function openContentLanguagesPopup () {
+  state.contentLanguagesPopupDisplay = true
+}
+
+function closeContentLanguagesPopup () {
+  state.contentLanguagesPopupDisplay = false
 }
 
 // 招待コード確認ポップアップの開閉

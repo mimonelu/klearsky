@@ -100,13 +100,13 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
         <div class="custom-feed-card__top__right__right">
           <!-- お気に入りフィード -->
-          <div
+          <button
             class="custom-feed-card__bookmark"
             :data-saved="state.saved"
             @click.prevent.stop="toggleSaved"
           >
             <SVGIcon name="bookmark" />
-          </div>
+          </button>
         </div>
       </div>
     </div>
@@ -154,14 +154,12 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
 <style lang="scss" scoped>
 .custom-feed-card {
+  cursor: default;
   display: flex;
   flex-direction: column;
   grid-gap: 0.5em;
   padding: 1em;
   position: relative;
-  &:focus, &:hover {
-    background-color: rgb(var(--accent-color), 0.125);
-  }
 
   &__top {
     display: flex;
@@ -270,15 +268,24 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
   // お気に入りフィード
   &__bookmark {
+    --color: rgba(var(--accent-color), 0.875);
+    cursor: pointer;
     margin: -1em;
     padding: 1em;
+    &:focus, &:hover {
+      --color: rgb(var(--accent-color));
+    }
 
     & > .svg-icon {
-      fill: rgb(var(--accent-color));
+      fill: var(--color);
       font-size: 1.5em;
     }
     &[data-saved="false"] > .svg-icon {
-      opacity: 0.25;
+      fill: transparent;
+      stroke: var(--color);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1px;
     }
   }
 

@@ -4,7 +4,6 @@ import FeedList from "@/components/FeedList.vue"
 import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
-import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
@@ -66,7 +65,7 @@ async function updateMyFeeds () {
           class="my-feeds-view__link"
         >
           <RouterLink
-            class="button--bordered"
+            class="button--plane"
             :to="{ path: '/feeds/timeline', query: {
               feed: myFeeds.generator?.uri,
               displayName: myFeeds.generator?.displayName,
@@ -137,8 +136,8 @@ async function updateMyFeeds () {
 
   &__link {
     display: flex;
-    justify-content: center;
-    margin: 0 1em 1em;
+    justify-content: flex-end;
+    margin-bottom: 0.5em;
   }
 }
 

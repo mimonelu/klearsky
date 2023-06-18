@@ -1,6 +1,6 @@
 import { type Facet } from "@atproto/api"
 
-const CUSTOM_LINK_REGEXP = /\[([^\[\]]+)\]\(((?:https?:\/\/)[^\(\)\s]+)\)/g
+const CUSTOM_LINK_REGEXP = /\[([^\[\]]+)\]\(((?:https?:\/\/|lightning:)[^\(\)\s]+)\)/g
 
 export default function (text: string): { text: string; facets: Array<Facet> } {
   const customLinks = []

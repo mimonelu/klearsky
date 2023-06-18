@@ -4,10 +4,10 @@ type TTWordMute = {
 }
 
 type TTSetting = {
-  language?: string
+  uiLanguages?: string
+  contentLanguages?: Array<string>
   autoTranslation?: boolean
   autoTranslationIgnoreLanguage?: string
-  hotLanguages?: Array<string>
   fontSize?: string
   wordMute?: Array<TTWordMute>
   replyControl?: Array<number>
@@ -91,9 +91,6 @@ type MainState = {
     postLabels?: Array<TTLabel>,
   ) => TTContentVisibility
   getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
-
-  currentHotFeeds: Array<TTFeed>
-  currentHotCursor?: string
 
   currentSearchSuggestionResults: Array<TTUser>
   currentSearchSuggestionCursor?: string
@@ -181,6 +178,9 @@ type MainState = {
     description: any
   }
 
+  // コンテンツ言語ポップアップの表示スイッチ
+  contentLanguagesPopupDisplay: boolean
+
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
@@ -224,7 +224,6 @@ type MainState = {
   fetchCurrentAuthorFeed: (direction: "new" | "old") => Promise<void>
   fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
   fetchAuthorLikes: (direction: "new" | "old") => Promise<void>
-  fetchHotFeeds: (direction: "old" | "new") => Promise<void>
   fetchTimeline: (direction: "old" | "new") => Promise<void>
   fetchPostThread: () => Promise<void>
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
@@ -257,6 +256,10 @@ type MainState = {
   openConfirmationPopup: (title?: string, text?: string) => Promise<boolean>
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
+
+  // コンテンツ言語ポップアップの開閉
+  openContentLanguagesPopup: Function
+  closeContentLanguagesPopup: Function
 
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup: Function

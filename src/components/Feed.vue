@@ -6,7 +6,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 defineProps<{
-  feed: TTFeed;
+  feed: TTFeed
 }>()
 
 const mainState = inject("state") as MainState
@@ -22,12 +22,13 @@ function removeThisPost (uri: string) {
 
 <template>
   <div class="feed">
+    <!-- オープナー -->
     <div
       v-if="feed.__folding"
       class="folder"
-      :data-has-reply-and-repost="feed.reply != null && feed.reason != null"
       @click="feed.__folding = !feed.__folding"
     >
+      <!-- 折り畳みリプライオープナー -->
       <div
         v-if="feed.reply != null"
         class="folder__item"
@@ -44,6 +45,8 @@ function removeThisPost (uri: string) {
             : ""
         }}</div>
       </div>
+
+      <!-- 折り畳みリポストオープナー -->
       <div
         v-if="feed.reason != null"
         class="folder__item"
@@ -61,30 +64,42 @@ function removeThisPost (uri: string) {
         }}</div>
       </div>
     </div>
+
+    <!-- 本体 -->
     <template v-else>
       <template v-if="feed.__replyDisplay && (feed.reply?.root != null || feed.reply?.parent != null)">
+        <!-- ルートポスト -->
         <Post
           v-if="feed.reply?.root != null && feed.reply.root.cid !== feed.reply.parent?.cid"
           position="root"
           :post="feed.reply.root"
+          :isInFeed="true"
           :data-has-child="feed.reply.root.cid === feed.reply?.parent?.record.reply?.parent?.cid"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         />
+
+        <!-- リプライポスト -->
         <Post
           v-if="feed.reply?.parent != null"
           position="parent"
           :post="feed.reply.parent"
+          :rootPost="feed.reply?.root"
+          :isInFeed="true"
           :data-has-child="feed.reply.parent.cid === feed.post?.record?.reply?.parent?.cid"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         />
       </template>
+
+      <!-- ポスト -->
       <Post
         v-if="feed.post != null"
         position="post"
         :post="feed.post"
-        :replyTo="feed.reply?.parent"
+        :rootPost="feed.reply?.root"
+        :parentPost="feed.reply?.parent"
+        :isInFeed="true"
         @onClickReplier="feed.__replyDisplay = !feed.__replyDisplay"
         @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"
@@ -97,17 +112,18 @@ function removeThisPost (uri: string) {
 .folder {
   cursor: pointer;
   display: grid;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 0.5em;
   align-items: center;
-  padding: 0.5em 1em;
-  &[data-has-reply-and-repost="false"] {
-    grid-template-columns: 1fr;
-  }
-  &[data-has-reply-and-repost="true"] {
-    grid-template-columns: 1fr 1fr;
+  padding: 0.75em 1em;
+  &:focus, &:hover {
+    .folder__item {
+      --alpha: 0.75;
+    }
   }
 
   &__item {
+    --alpha: 0.5;
     display: grid;
     grid-gap: 0.5em;
     grid-template-columns: auto auto 1fr;
@@ -115,7 +131,7 @@ function removeThisPost (uri: string) {
     overflow: hidden;
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.25);
+      fill: rgba(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
@@ -123,23 +139,23 @@ function removeThisPost (uri: string) {
       transform: scaleX(-1);
     }
 
-    & > .display-name {
-      color: rgba(var(--fg-color), 0.5);
-      font-size: 0.875em;
-      font-weight: bold;
+    & > .display-name,
+    & > .handle {
       line-height: 1.25;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
+    & > .display-name {
+      color: rgba(var(--fg-color), var(--alpha));
+      font-size: 0.875em;
+      font-weight: bold;
+    }
+
     & > .handle {
-      color: rgba(var(--fg-color), 0.25);
+      color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
       font-size: 0.75em;
-      line-height: 1.25;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
   }
 }

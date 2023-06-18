@@ -30,7 +30,7 @@ const mainState = inject("state") as MainState
 
     <!-- 最初のポスト -->
     <MenuTickerFirstPost
-      :handle="user.handle"
+      :did="user.did"
       @close="emit('close')"
     />
 

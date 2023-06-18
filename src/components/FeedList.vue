@@ -5,7 +5,7 @@ import LoadButton from "@/components/LoadButton.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{
-  type: "author" | "authorReposts" | "authorLikes" | "feeds-timeline" | "hot" | "post" | "timeline";
+  type: "author" | "authorReposts" | "authorLikes" | "feeds-timeline" | "post" | "timeline";
   feeds: null | Array<TTFeed>;
   hasLoadButton?: boolean;
   disabledInfinitScroll?: boolean;
@@ -34,10 +34,6 @@ async function fetchFeeds (direction: "new" | "old") {
         await mainState.fetchCustomFeeds(direction)
         break
       }
-      case "hot": {
-        await mainState.fetchHotFeeds(direction)
-        break
-      }
       case "post": {
         await mainState.fetchPostThread()
         break
@@ -55,19 +51,16 @@ async function fetchFeeds (direction: "new" | "old") {
 function updateThisPostThread (newPosts: Array<TTPost>) {
   if (props.feeds == null) return
 
-  // MEMO: フィード内の全同一ポストに最新のデータを反映する
+  // MEMO: 全フィードの全同一ポストに最新のデータを反映する
   // WANT: このために「画面には1つのフィードのみ表示する」としているが、何とかしたい
   props.feeds.forEach((feed: TTFeed) => {
     newPosts.forEach((newPost: TTPost) => {
-      if (feed.post?.cid === newPost.cid) {
-        feed.post = newPost
-      }
-      if (feed.reply?.parent?.cid === newPost.cid) {
-        feed.reply.parent = newPost
-      }
-      if (feed.reply?.root?.cid === newPost.cid) {
-        feed.reply.root = newPost
-      }
+      if (feed.post?.cid === newPost.cid)
+        Util.replacePost(feed.post, newPost)
+      if (feed.reply?.parent?.cid === newPost.cid)
+        Util.replacePost(feed.reply.parent, newPost)
+      if (feed.reply?.root?.cid === newPost.cid)
+        Util.replacePost(feed.reply.root, newPost)
     })
   })
 }
@@ -135,18 +128,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     border-bottom: 1px solid rgba(var(--fg-color), 0.125);
     content: "";
     display: block;
-    margin: 0 1rem;
   }
-}
-
-.feed:deep() .post[data-has-child="true"][data-content-warning-visibility="show"]::before {
-  background-color: rgba(var(--fg-color), 0.25);
-  content: "";
-  display: block;
-  position: absolute;
-  top: calc(1em + var(--avatar-size) + 8px);
-  left: calc(2.5em - 1px);
-  width: 2px;
-  height: calc(100% - var(--avatar-size) - 16px);
 }
 </style>

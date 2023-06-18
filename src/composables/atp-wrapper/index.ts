@@ -21,11 +21,11 @@ import fetchAuthorLikes from "@/composables/atp-wrapper/fetch-author-likes"
 import fetchBlob from "@/composables/atp-wrapper/fetch-blob"
 import fetchBlockingUsers from "@/composables/atp-wrapper/fetch-blocking-users"
 import fetchCustomFeeds from "@/composables/atp-wrapper/fetch-custom-feeds"
+import fetchFeedGenerator from "@/composables/atp-wrapper/fetch-feed-generator"
 import fetchFeedGenerators from "@/composables/atp-wrapper/fetch-feed-generators"
 import fetchFirstPost from "@/composables/atp-wrapper/fetch-first-post"
 import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
-import fetchHotFeeds from "@/composables/atp-wrapper/fetch-hot-feeds"
 import fetchInviteCodes from "@/composables/atp-wrapper/fetch-invite-codes"
 import fetchLikeUsers from "@/composables/atp-wrapper/fetch-like-users"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
@@ -62,6 +62,19 @@ class AtpWrapper implements TIAtpWrapper {
       did: "",
       sessions: {},
     }
+
+    // 不正なアカウントデータの修復
+    // TODO: このような処理が不要になるように再実装すること
+    if (this.data?.sessions != null) {
+      for (const did in this.data.sessions) {
+        if (!did) {
+          const session = this.data.sessions[did]
+          this.data.sessions[session.did] = session
+          delete this.data.sessions[did]
+        }
+      }
+    }
+
     this.session = undefined
     this.lastFetchNotificationsDate = undefined
   }
@@ -97,11 +110,11 @@ prototype.fetchAuthorLikes = fetchAuthorLikes
 prototype.fetchBlob = fetchBlob
 prototype.fetchBlockingUsers = fetchBlockingUsers
 prototype.fetchCustomFeeds = fetchCustomFeeds
+prototype.fetchFeedGenerator = fetchFeedGenerator
 prototype.fetchFeedGenerators = fetchFeedGenerators
 prototype.fetchFirstPost = fetchFirstPost
 prototype.fetchFollowers = fetchFollowers
 prototype.fetchFollowings = fetchFollowings
-prototype.fetchHotFeeds = fetchHotFeeds
 prototype.fetchInviteCodes = fetchInviteCodes
 prototype.fetchKeywordSearch = fetchKeywordSearch
 prototype.fetchLabels = fetchLabels

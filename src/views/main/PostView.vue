@@ -3,6 +3,7 @@ import { inject } from "vue"
 import Loader from "@/components/Loader.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import Post from "@/components/Post.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
@@ -12,15 +13,13 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
 
   // MEMO: ポストスレッドの全同一ポストに最新のデータを反映する
   posts.forEach((post: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) =>
-      post?.cid === newPost.cid)
-    if (newPost != null) posts[index] = newPost
+    const newPost = newPosts.find((newPost: TTPost) => post?.cid === newPost.cid)
+    if (newPost != null) Util.replacePost(posts[index], newPost)
   })
 }
 
 function removeThisPost (uri: string) {
-  mainState.currentPosts = mainState.currentPosts.filter((post: TTPost) =>
-    post.uri !== uri)
+  mainState.currentPosts = mainState.currentPosts.filter((post: TTPost) => post.uri !== uri)
 }
 </script>
 
@@ -31,24 +30,23 @@ function removeThisPost (uri: string) {
       :title="$t('post')"
       :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
     />
-    <template
+    <Post
       v-for="post, postIndex of mainState.currentPosts"
       :key="post.cid"
-    >
-      <Post
-        position="post"
-        :post="post"
-        :data-has-child="post.cid === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.cid"
-        @updateThisPostThread="updateThisPostThread"
-        @removeThisPost="removeThisPost"
-      />
-    </template>
+      position="post"
+      :post="post"
+      :data-has-child="post.cid === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.cid"
+      @updateThisPostThread="updateThisPostThread"
+      @removeThisPost="removeThisPost"
+    />
     <Loader v-if="mainState.listProcessing" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .post-view {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   padding-bottom: var(--sp-menu-height);
   position: relative;
@@ -56,16 +54,5 @@ function removeThisPost (uri: string) {
 
 .post[data-focus="true"] {
   scroll-margin: 3.25rem;
-}
-
-.post[data-has-child="true"][data-content-warning-visibility="show"]::before {
-  background-color: rgba(var(--fg-color), 0.25);
-  content: "";
-  display: block;
-  position: absolute;
-  top: calc(1em + var(--avatar-size) + 8px);
-  left: calc(2.5em - 1px);
-  width: 2px;
-  height: calc(100% - var(--avatar-size) - 16px);
 }
 </style>

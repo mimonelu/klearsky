@@ -2,6 +2,7 @@
 import { inject, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import Post from "@/components/Post.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
@@ -52,7 +53,7 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
   const posts = mainState.currentSearchKeywordResults
   posts.forEach((oldPost: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => oldPost.cid === newPost.cid)
-    if (newPost != null) posts[index] = newPost
+    if (newPost != null) Util.replacePost(posts[index], newPost)
   })
 }
 

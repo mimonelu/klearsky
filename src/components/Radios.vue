@@ -8,7 +8,7 @@ defineProps<{
   model: string
   options: Array<TTOption>
   required?: boolean
-  layout?: "horizontal" | "vertical"
+  layout?: "horizontal" | "vertical" | "vertical-2columns"
 }>()
 
 function onChange () {
