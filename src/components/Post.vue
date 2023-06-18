@@ -214,6 +214,8 @@ async function onActivatePost (post: TTPost, event: Event) {
 }
 
 function onActivatePostMask () {
+  Util.blurElement()
+
   // Hide 指定のラベルを持つポストの場合はキャンセル
   if (state.contentWarningVisibility === "hide" ||
       state.contentWarningVisibility === "always-hide") return
