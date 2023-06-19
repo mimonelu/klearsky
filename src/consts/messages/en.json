@@ -41,8 +41,9 @@
   "modifyContentFiltering": "Modify content filtering",
   "contentFilteringDescription": "After setting the controls for each content label, press the \"Apply\" button.",
 
-  "mute": "Mute",
-  "muting": "Unmute",
+  "muteOn": "Mute",
+  "muteOff": "Unmute",
+  "muting": "You are muting this account.",
 
   "block": "Block",
   "unblock": "Unblock",

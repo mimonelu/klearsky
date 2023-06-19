@@ -92,6 +92,14 @@ function hideWarningContent () {
     :data-content-warning-visibility="state.contentWarningVisibility"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
+    <div
+      v-if="state.contentWarningDisplay"
+      class="banner"
+      :data-has-banner="!!mainState.currentProfile?.banner"
+      :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
+      @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
+    />
+
     <!-- Danger zone -->
     <div class="danger-zone">
       <!-- ラベル対応 -->
@@ -117,6 +125,16 @@ function hideWarningContent () {
         >{{ $t(label.val) }}</div>
       </div>
 
+      <!-- ミュートしている -->
+      <div
+        v-if="mainState.currentProfile?.viewer.muted"
+        class="textlabel"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="volumeOff" />{{ $t("muting") }}
+        </div>
+      </div>
+
       <!-- ブロックしている -->
       <div
         v-if="mainState.currentProfile?.viewer.blocking != null"
@@ -138,13 +156,6 @@ function hideWarningContent () {
       </div>
     </div>
 
-    <div
-      v-if="state.contentWarningDisplay"
-      class="banner"
-      :data-has-banner="!!mainState.currentProfile?.banner"
-      :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
-      @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
-    />
     <div class="details">
       <div class="top">
         <div
@@ -306,7 +317,7 @@ function hideWarningContent () {
   flex-direction: column;
   grid-gap: 1rem;
   &:not(:empty) {
-    margin: 1rem;
+    margin: 1rem 1rem 0;
   }
 }
 

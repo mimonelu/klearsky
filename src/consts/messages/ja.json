@@ -41,8 +41,9 @@
   "modifyContentFiltering": "コンテンツフィルタを編集する",
   "contentFilteringDescription": "各コンテンツラベルの制御を設定した上で「適用」ボタンを押してください。",
 
-  "mute": "ミュートする",
-  "muting": "ミュートを解除する",
+  "muteOn": "ミュートする",
+  "muteOff": "ミュートを解除する",
+  "muting": "このアカウントをミュートしています",
 
   "block": "ブロックする",
   "unblock": "ブロックを解除する",
