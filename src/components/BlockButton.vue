@@ -5,7 +5,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{
-  handle: string
+  did: string
   viewer: TTUserViewer
 }>()
 
@@ -17,22 +17,22 @@ const state = reactive<{
   processing: false,
 })
 
-async function toggleMute () {
+async function toggleBlock () {
   Util.blurElement()
   if (state.processing) return
   state.processing = true
   try {
-    if (props.viewer.muted) {
-      await mainState.atp.disableMute(props.handle)
-      props.viewer.muted = false
+    if (props.viewer.blocking) {
+      await mainState.atp.disableBlock(props.viewer.blocking)
+      delete props.viewer.blocking
 
-      // ミュートユーザー一覧の更新
-      mainState.currentMutingUsers = mainState.currentMutingUsers.filter((user: TTUser) => {
-        return user.viewer.blocking !== props.viewer.blocking
+      // ブロックユーザー一覧の更新
+      mainState.currentBlockingUsers = mainState.currentBlockingUsers.filter((user: TTUser) => {
+        return user.did !== props.did
       })
     } else {
-      await mainState.atp.enableMute(props.handle)
-      props.viewer.muted = true
+      const blocking = await mainState.atp.enableBlock(props.did)
+      if (blocking != null) props.viewer.blocking = blocking
     }
   } finally {
     state.processing = false
@@ -42,23 +42,23 @@ async function toggleMute () {
 
 <template>
   <button
-    class="button--bordered--important mute-button"
-    :data-enabled="viewer.muted"
+    class="button--bordered--important block-button"
+    :data-enabled="viewer.blocking != null"
     :data-is-processing="state.processing"
-    @click.prevent="toggleMute"
+    @click.prevent="toggleBlock"
   >
-    <template v-if="viewer.muted">
-      <SVGIcon name="volumeOff" />
+    <template v-if="viewer.blocking != null">
+      <SVGIcon name="personOff" />
     </template>
     <template v-else>
-      <SVGIcon name="volumeOn" />
+      <SVGIcon name="person" />
     </template>
     <Loader v-if="state.processing" />
   </button>
 </template>
 
 <style lang="scss" scoped>
-.mute-button {
+.block-button {
   position: relative;
   &[data-is-processing="true"] {
     pointer-events: none;

@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { RouterView, useRouter, type LocationQueryValue } from "vue-router"
 import AvatarButton from "@/components/AvatarButton.vue"
+import BlockButton from "@/components/BlockButton.vue"
 import ContentWarning from "@/components/ContentWarning.vue"
 import FollowButton from "@/components/FollowButton.vue"
 import HandleHistoryPopup from "@/components/HandleHistoryPopup.vue"
@@ -19,15 +20,17 @@ const state = reactive<{
 
   // ラベル対応
   contentWarningForceDisplay: boolean;
-  contentWarningDisplay: ComputedRef<boolean>;
+  contentWarningIsHidden: ComputedRef<boolean>;
   contentWarningVisibility: ComputedRef<TTContentVisibility>;
+
+  showPrivateData: ComputedRef<boolean>
 }>({
   handleHistoryPopupDisplay: false,
   profileMenuDisplay: false,
 
   // ラベル対応
   contentWarningForceDisplay: false,
-  contentWarningDisplay: computed((): boolean => {
+  contentWarningIsHidden: computed((): boolean => {
     return state.contentWarningVisibility === 'show' ||
            ((state.contentWarningVisibility === 'always-warn' || state.contentWarningVisibility === 'warn') && state.contentWarningForceDisplay)
   }),
@@ -37,6 +40,9 @@ const state = reactive<{
       undefined
     )
   }),
+
+  showPrivateData: computed((): boolean =>
+    state.contentWarningIsHidden && mainState.currentProfile?.viewer.blocking == null)
 })
 
 const router = useRouter()
@@ -94,7 +100,7 @@ function hideWarningContent () {
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
     <div
-      v-if="state.contentWarningDisplay"
+      v-if="state.showPrivateData"
       class="banner"
       :data-has-banner="!!mainState.currentProfile?.banner"
       :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
@@ -113,7 +119,7 @@ function hideWarningContent () {
 
       <!-- プロフィールラベル -->
       <div
-        v-if="state.contentWarningDisplay && (mainState.currentProfile?.labels?.length ?? 0) > 0"
+        v-if="state.contentWarningIsHidden && (mainState.currentProfile?.labels?.length ?? 0) > 0"
         class="textlabel--alert"
       >
         <div class="textlabel__text">
@@ -129,7 +135,7 @@ function hideWarningContent () {
       <!-- ミュートしている -->
       <div
         v-if="mainState.currentProfile?.viewer.muted"
-        class="textlabel"
+        class="textlabel--alert"
       >
         <div class="textlabel__text">
           <SVGIcon name="volumeOff" />{{ $t("muting") }}
@@ -160,7 +166,7 @@ function hideWarningContent () {
     <div class="details">
       <div class="top">
         <div
-          v-if="state.contentWarningDisplay"
+          v-if="state.showPrivateData"
           class="left"
         >
           <AvatarButton
@@ -208,6 +214,11 @@ function hideWarningContent () {
             :handle="mainState.currentProfile.handle"
             :viewer="mainState.currentProfile.viewer"
           />
+          <BlockButton
+            v-if="!isUserProfile()"
+            :did="mainState.currentProfile.did"
+            :viewer="mainState.currentProfile.viewer"
+          />
           <button
             class="button--bordered menu-button"
             @click.stop="openPostMenu"
@@ -222,7 +233,7 @@ function hideWarningContent () {
           </button>
         </div>
         <HtmlText
-          v-if="state.contentWarningDisplay"
+          v-if="state.showPrivateData"
           class="description"
           dir="auto"
           :text="mainState.currentProfile?.description ?? '&nbsp;'"
@@ -437,24 +448,38 @@ function hideWarningContent () {
   &__separator {
     flex-grow: 1;
   }
+}
 
-  .button {
-    font-size: 0.875rem;
+.follow-button,
+.mute-button,
+.block-button,
+.menu-button {
+  &:deep() {
+    & > span {
+      font-size: 0.875rem;
+    }
 
-    &:deep() > .svg-icon {
+    & > .svg-icon {
       font-size: 1rem;
     }
   }
 }
 
 .mute-button {
+  min-width: 3rem;
+  max-width: 3rem;
+}
+
+.block-button {
+  min-width: 3rem;
   max-width: 3rem;
 }
 
 .menu-button {
   grid-gap: 0;
   position: relative;
-  max-width: 3rem;
+  min-width: 4rem;
+  max-width: 4rem;
 
   .menu-ticker:deep() > .menu-ticker--inner {
     top: 2.75rem;
