@@ -136,8 +136,5 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   margin-left: auto;
   padding: 0.25rem 0;
   min-width: 3rem;
-  &:deep() span {
-    display: none;
-  }
 }
 </style>

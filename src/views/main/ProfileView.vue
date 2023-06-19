@@ -62,6 +62,7 @@ function openImagePopup (uri: string) {
 }
 
 function openPostMenu () {
+  Util.blurElement()
   state.profileMenuDisplay = !state.profileMenuDisplay
 }
 
@@ -183,7 +184,10 @@ function hideWarningContent () {
         </div>
       </div>
       <div class="bottom">
-        <div class="button-container">
+        <div
+          v-if="mainState.currentProfile != null"
+          class="button-container"
+        >
           <RouterLink
             v-if="isUserProfile()"
             to="/profile/edit"
@@ -193,16 +197,29 @@ function hideWarningContent () {
             <span>{{ $t("editProfile") }}</span>
           </RouterLink>
           <FollowButton
-            v-if="!isUserProfile() && mainState.currentProfile != null"
+            v-if="!isUserProfile()"
             :viewer="mainState.currentProfile.viewer"
             :did="mainState.currentProfile.did"
             :declarationDid="mainState.currentProfile.did"
           />
+          <div class="button-container__separator" />
           <MuteButton
-            v-if="!isUserProfile() && mainState.currentProfile != null"
+            v-if="!isUserProfile()"
             :handle="mainState.currentProfile.handle"
             :viewer="mainState.currentProfile.viewer"
           />
+          <button
+            class="button--bordered menu-button"
+            @click.stop="openPostMenu"
+          >
+            <SVGIcon name="menu" />
+            <ProfileMenuTicker
+              :isUser="isUserProfile()"
+              :display="state.profileMenuDisplay"
+              :user="(mainState.currentProfile as TTProfile)"
+              @close="closePostMenu"
+            />
+          </button>
         </div>
         <HtmlText
           v-if="state.contentWarningDisplay"
@@ -227,18 +244,6 @@ function hideWarningContent () {
             <dt>{{ $t("startedAt") }}</dt>
             <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt) }}</dd>
           </dl>
-          <button
-            class="menu-button"
-            @click.stop="openPostMenu"
-          >
-            <SVGIcon name="menu" />
-            <ProfileMenuTicker
-              :isUser="isUserProfile()"
-              :display="state.profileMenuDisplay"
-              :user="(mainState.currentProfile as TTProfile)"
-              @close="closePostMenu"
-            />
-          </button>
         </div>
       </div>
     </div>
@@ -426,17 +431,35 @@ function hideWarningContent () {
 
 .button-container {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   grid-gap: 0.5rem;
 
+  &__separator {
+    flex-grow: 1;
+  }
+
   .button {
     font-size: 0.875rem;
+
+    &:deep() > .svg-icon {
+      font-size: 1rem;
+    }
   }
 }
 
 .mute-button {
-  margin-left: auto;
+  max-width: 3rem;
+}
+
+.menu-button {
+  grid-gap: 0;
+  position: relative;
+  max-width: 3rem;
+
+  .menu-ticker:deep() > .menu-ticker--inner {
+    top: 2.75rem;
+    right: 0;
+  }
 }
 
 .description {
@@ -454,6 +477,7 @@ function hideWarningContent () {
   position: relative;
 
   dl {
+    color: rgba(var(--fg-color), 0.75);
     display: flex;
     align-items: baseline;
     grid-gap: 0.5rem;
@@ -465,31 +489,6 @@ function hideWarningContent () {
 
     & > dd {
       font-weight: bold;
-    }
-  }
-}
-
-.menu-button {
-  cursor: pointer;
-  margin: -1rem -1rem;
-  padding: 1rem 1.5rem;
-  position: absolute;
-  bottom: 0rem;
-  right: 0;
-
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
-  }
-  &:focus, &:hover {
-    & > .svg-icon {
-      fill: rgb(var(--fg-color));
-    }
-  }
-
-  .menu-ticker:deep() {
-    & > .menu-ticker--inner {
-      top: 2.5rem;
-      right: 0.5rem;
     }
   }
 }
