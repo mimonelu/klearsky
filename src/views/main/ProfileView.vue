@@ -197,7 +197,7 @@ function hideWarningContent () {
           <RouterLink
             v-if="isUserProfile()"
             to="/profile/edit"
-            class="button"
+            class="button edit-button"
           >
             <SVGIcon name="edit" />
             <span>{{ $t("editProfile") }}</span>
@@ -450,6 +450,7 @@ function hideWarningContent () {
   }
 }
 
+.edit-button,
 .follow-button,
 .mute-button,
 .block-button,
