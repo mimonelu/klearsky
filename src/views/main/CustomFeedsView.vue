@@ -23,11 +23,8 @@ function openMyFeedsPopup () {
       >
         <template #right>
           <PortalTarget name="custom-feeds-view-header-portal" />
-          <button
-            class="button--bordered"
-            @click.stop="openMyFeedsPopup"
-          >
-            <SVGIcon name="setting" />
+          <button @click.stop="openMyFeedsPopup">
+            <SVGIcon name="rss" />
           </button>
         </template>
       </PageHeader>

@@ -34,7 +34,6 @@ function onActivateBackButton () {
   >
     <button
       v-if="hasBackButton"
-      class="back-button"
       @click.prevent.stop="onActivateBackButton"
     >
       <SVGIcon name="cursorLeft" />
@@ -61,8 +60,7 @@ function onActivateBackButton () {
   cursor: pointer;
   display: flex;
   align-items: center;
-  grid-gap: 0.5rem;
-  padding: 0.75rem;
+  padding: 0.75rem 0;
   position: sticky;
   top: 0;
   min-height: 3rem;
@@ -80,25 +78,35 @@ function onActivateBackButton () {
   & > h1 {
     font-weight: bold;
   }
-}
 
-.back-button {
-  cursor: pointer;
-  margin: -1rem -0.25rem -1rem -0.75rem;
-  padding: 1rem 1.25rem;
-  &:focus, &:hover {
-    & > .svg-icon {
-      fill: rgb(var(--fg-color));
+  &:deep() {
+    button {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: -1rem 0;
+      min-width: 3rem;
+      max-width: 3rem;
+      min-height: 3rem;
+      max-height: 3rem;
+      &:focus, &:hover {
+        & > .svg-icon {
+          fill: rgb(var(--fg-color));
+        }
+      }
+
+      & > .svg-icon {
+        fill: rgba(var(--fg-color), 0.5);
+        font-size: 1.25rem;
+      }
     }
-  }
-
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
   }
 }
 
 .separator {
   background-color: rgb(var(--fg-color));
+  margin: 0 0.5rem;
   width: 1rem;
   height: 1px;
 }
@@ -106,7 +114,6 @@ function onActivateBackButton () {
 .right {
   display: flex;
   align-items: center;
-  grid-gap: 0.75rem;
   margin-left: auto;
 }
 </style>

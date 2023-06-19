@@ -204,43 +204,41 @@ function onMutated () {
 
     <!-- グローバルラインヘッダー -->
     <Portal to="home-view-header-portal">
-      <div class="globalline-footer">
-        <!-- 情報 -->
-        <div class="info">
-          <dl>
-            <dt>
-              <SVGIcon name="post" />
-            </dt>
-            <dd>{{ mainState.globallinePosts.length.toLocaleString() }} / {{ mainState.globallineNumberOfPosts.toLocaleString() }}</dd>
-          </dl>
-        </div>
-
-        <!-- 電源ボタン -->
-        <button
-          :class="state.subscriber?.socketState === 2 ? 'button--important' : 'button--bordered'"
-          class="power-button"
-          @click.stop="toggleConnect"
-        >
-          <template v-if="state.subscriber?.socketState === 0">
-            <SVGIcon name="play" />
-          </template>
-          <template v-else-if="state.subscriber?.socketState === 1">
-            <SVGIcon name="menu" />
-            <Loader />
-          </template>
-          <template v-else-if="state.subscriber?.socketState === 2">
-            <SVGIcon name="pause" />
-          </template>
-        </button>
-
-        <!-- グローバルライン設定ポップアップトリガー -->
-        <button
-          class="button--bordered globalline-settings-popup-button"
-          @click.stop="openGloballineSettingsPopup"
-        >
-          <SVGIcon name="setting" />
-        </button>
+      <!-- 情報 -->
+      <div class="info">
+        <dl>
+          <dt>
+            <SVGIcon name="post" />
+          </dt>
+          <dd>{{ mainState.globallinePosts.length.toLocaleString() }} / {{ mainState.globallineNumberOfPosts.toLocaleString() }}</dd>
+        </dl>
       </div>
+
+      <!-- 電源ボタン -->
+      <button
+        class="power-button"
+        :data-is-on="state.subscriber?.socketState === 2"
+        @click.stop="toggleConnect"
+      >
+        <template v-if="state.subscriber?.socketState === 0">
+          <SVGIcon name="play" />
+        </template>
+        <template v-else-if="state.subscriber?.socketState === 1">
+          <SVGIcon name="menu" />
+          <Loader />
+        </template>
+        <template v-else-if="state.subscriber?.socketState === 2">
+          <SVGIcon name="pause" />
+        </template>
+      </button>
+
+      <!-- グローバルライン設定ポップアップトリガー -->
+      <button
+        class="globalline-settings-popup-button"
+        @click.stop="openGloballineSettingsPopup"
+      >
+        <SVGIcon name="setting" />
+      </button>
     </Portal>
 
     <!-- グローバルライン設定ポップアップ -->
@@ -307,59 +305,59 @@ function onMutated () {
   }
 }
 
-// グローバルラインヘッダー
-.globalline-footer {
-  display: flex;
-  align-items: center;
-  grid-gap: 0.75rem;
+// 電源ボタン
+.power-button {
+  position: relative;
 
-  // 電源ボタン
-  .power-button {
-    position: relative;
-    min-width: 4rem;
-
-    & > .svg-icon--menu {
-      fill: transparent;
-    }
-
-    & > .loader {
-      font-size: 0.5rem;
-    }
+  & > .svg-icon--menu {
+    display: none;
   }
 
-  // 情報
-  & > .info {
+  & > .loader {
+    font-size: 0.5rem;
+  }
+
+  &[data-is-on="true"] {
+    & > .svg-icon {
+      fill: rgba(var(--notice-color), 0.75);
+    }
+    &:focus, &:hover {
+      & > .svg-icon {
+        fill: rgb(var(--notice-color));
+      }
+    }
+  }
+}
+
+// 情報
+.info {
+  display: flex;
+  flex-grow: 1;
+  align-content: center;
+  justify-content: flex-end;
+  grid-gap: 0.5rem;
+  margin-right: 1rem;
+
+  & > dl {
     display: flex;
-    flex-grow: 1;
-    align-content: center;
-    justify-content: flex-end;
+    align-items: center;
     grid-gap: 0.5rem;
 
-    & > dl {
-      display: flex;
-      align-items: center;
-      grid-gap: 0.5rem;
-
-      & > dt {
-        & > .svg-icon {
-          fill: rgba(var(--fg-color), 0.5);
-          font-size: 0.875rem;
-        }
-      }
-
-      & > dd {
-        color: rgba(var(--fg-color), 0.75);
-        font-family: monospace;
-        line-height: 1.25;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+    & > dt {
+      & > .svg-icon {
+        fill: rgba(var(--fg-color), 0.5);
+        font-size: 0.875rem;
       }
     }
-  }
 
-  button {
-    margin: -1rem 0;
+    & > dd {
+      color: rgba(var(--fg-color), 0.75);
+      font-family: monospace;
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 }
 </style>

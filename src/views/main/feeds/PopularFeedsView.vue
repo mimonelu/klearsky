@@ -19,10 +19,7 @@ async function updatePopularFeeds () {
 <template>
   <div class="popular-feeds-view">
     <Portal to="custom-feeds-view-header-portal">
-      <button
-        class="button--bordered"
-        @click.stop="updatePopularFeeds"
-      >
+      <button @click.stop="updatePopularFeeds">
         <SVGIcon name="repost" />
       </button>
     </Portal>
