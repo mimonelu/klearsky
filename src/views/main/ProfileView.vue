@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import { RouterView, useRouter, type LocationQueryValue } from "vue-router"
+import { RouterView, type LocationQueryValue } from "vue-router"
 import AvatarButton from "@/components/AvatarButton.vue"
 import BlockButton from "@/components/BlockButton.vue"
 import ContentWarning from "@/components/ContentWarning.vue"
@@ -8,6 +8,7 @@ import FollowButton from "@/components/FollowButton.vue"
 import HandleHistoryPopup from "@/components/HandleHistoryPopup.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import MuteButton from "@/components/MuteButton.vue"
+import PageHeader from "@/components/PageHeader.vue"
 import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -45,9 +46,7 @@ const state = reactive<{
     state.contentWarningIsHidden && mainState.currentProfile?.viewer.blocking == null)
 })
 
-const router = useRouter()
-
-function isUserProfile (): boolean {
+function isMyProfile (): boolean {
   const account = mainState.currentQuery.account as LocationQueryValue
   return account === mainState.atp.session?.handle ||
          account === mainState.atp.session?.did
@@ -76,11 +75,6 @@ function closePostMenu () {
   state.profileMenuDisplay = false
 }
 
-function onActivateBackButton () {
-  Util.blurElement()
-  if (history.state.back != null) router.back()
-}
-
 // ラベル対応
 
 function showWarningContent () {
@@ -95,10 +89,17 @@ function hideWarningContent () {
 <template>
   <div
     class="profile-view"
+    :data-is-my-profile="isMyProfile()"
     :data-content-warning-force-display="state.contentWarningForceDisplay"
     :data-content-warning-visibility="state.contentWarningVisibility"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
+    <PageHeader
+      :hasBackButton="true"
+      :title="$t('profile')"
+      :subTitle="mainState.currentProfile?.displayName"
+    />
+
     <div
       v-if="state.showPrivateData"
       class="banner"
@@ -184,7 +185,7 @@ function hideWarningContent () {
             <SVGIcon name="history" />
           </a>
           <div
-            v-if="!isUserProfile() && isFollowed()"
+            v-if="!isMyProfile() && isFollowed()"
             class="followed"
           >{{ $t("followed") }}</div>
         </div>
@@ -195,7 +196,7 @@ function hideWarningContent () {
           class="button-container"
         >
           <RouterLink
-            v-if="isUserProfile()"
+            v-if="isMyProfile()"
             to="/profile/edit"
             class="button edit-button"
           >
@@ -203,19 +204,19 @@ function hideWarningContent () {
             <span>{{ $t("editProfile") }}</span>
           </RouterLink>
           <FollowButton
-            v-if="!isUserProfile()"
+            v-if="!isMyProfile()"
             :viewer="mainState.currentProfile.viewer"
             :did="mainState.currentProfile.did"
             :declarationDid="mainState.currentProfile.did"
           />
           <div class="button-container__separator" />
           <MuteButton
-            v-if="!isUserProfile()"
+            v-if="!isMyProfile()"
             :handle="mainState.currentProfile.handle"
             :viewer="mainState.currentProfile.viewer"
           />
           <BlockButton
-            v-if="!isUserProfile()"
+            v-if="!isMyProfile()"
             :did="mainState.currentProfile.did"
             :viewer="mainState.currentProfile.viewer"
           />
@@ -225,7 +226,7 @@ function hideWarningContent () {
           >
             <SVGIcon name="menu" />
             <ProfileMenuTicker
-              :isUser="isUserProfile()"
+              :isUser="isMyProfile()"
               :display="state.profileMenuDisplay"
               :user="(mainState.currentProfile as TTProfile)"
               @close="closePostMenu"
@@ -259,26 +260,22 @@ function hideWarningContent () {
       </div>
     </div>
     <div class="tab">
-      <button
-        class="tab__button"
-        @click.prevent="onActivateBackButton"
-      >
-        <SVGIcon name="cursorLeft" />
-      </button>
       <RouterLink
-        class="tab__button"
+        class="tab__button tab__button--post"
         :to="{ path: '/profile/post', query: { account: mainState.currentProfile?.handle } }"
       >
         <SVGIcon name="post" />
       </RouterLink>
       <RouterLink
-        class="tab__button"
+        v-if="isMyProfile()"
+        class="tab__button tab__button--repost"
         :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
       >
         <SVGIcon name="repost" />
       </RouterLink>
       <RouterLink
-        class="tab__button"
+        v-if="isMyProfile()"
+        class="tab__button tab__button--like"
         :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
       >
         <SVGIcon name="heart" />
@@ -350,6 +347,7 @@ function hideWarningContent () {
 
 .banner {
   aspect-ratio: 3/1;
+  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: block;
   &[data-has-banner="true"] {
     background-position: center center;
@@ -521,11 +519,23 @@ function hideWarningContent () {
 
 .tab {
   position: sticky;
-  top: 0;
+  top: 3rem;
   z-index: 1;
 
-  &__button {
-    padding: 0.75rem 0;
+  [data-is-my-profile="false"] &__button {
+    flex: 1;
+  }
+
+  &__button--post > .svg-icon {
+    --fg-color: var(--post-color);
+  }
+
+  &__button--repost > .svg-icon {
+    --fg-color: var(--share-color);
+  }
+
+  &__button--like > .svg-icon {
+    --fg-color: var(--like-color);
   }
 
   &__button--following {

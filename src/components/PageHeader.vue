@@ -34,6 +34,7 @@ function onActivateBackButton () {
   >
     <button
       v-if="hasBackButton"
+      class="page-header__back-button"
       @click.prevent.stop="onActivateBackButton"
     >
       <SVGIcon name="cursorLeft" />
@@ -80,6 +81,10 @@ function onActivateBackButton () {
   }
 
   &:deep() {
+    .page-header__back-button {
+      min-width: 4rem;
+    }
+
     button {
       cursor: pointer;
       display: flex;
