@@ -909,7 +909,9 @@ function onActivateHashTag (text: string) {
     }
   }
 
-  &[data-has-child="true"] {
+  // リプライライン
+  &[data-has-child="true"],
+  &[data-has-child="false"] {
     --top: 0.75em;
     --gap: 1em;
     &[data-has-mask="true"] {
@@ -918,7 +920,6 @@ function onActivateHashTag (text: string) {
     }
 
     &::before {
-      background-color: rgba(var(--fg-color), 0.25);
       border-radius: var(--border-radius);
       content: "";
       display: block;
@@ -928,6 +929,19 @@ function onActivateHashTag (text: string) {
       width: 3px;
       height: calc(100% - var(--avatar-size) - var(--gap) - var(--gap));
     }
+  }
+  &[data-has-child="true"]::before {
+    background-color: rgba(var(--fg-color), 0.25);
+  }
+  &[data-has-child="false"]:not(:last-child)::before {
+    background-image: linear-gradient(
+      to bottom,
+      rgba(var(--fg-color), 0.25) 0,
+      rgba(var(--fg-color), 0.25) 3px,
+      transparent 3px
+    );
+    background-size: 6px 6px;
+    background-repeat: repeat-y;
   }
 }
 
