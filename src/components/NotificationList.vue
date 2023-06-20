@@ -56,6 +56,7 @@ function makeSubjectTo (notification: TTNotification): any {
       class="notification-group"
       tabindex="0"
       :data-reason="notificationGroup.reason"
+      :data-is-new="notificationGroupHasNew(notificationGroup)"
       :data-has-folder="isGroupingReason(notificationGroup.reason) &&
         notificationGroup.notifications.length >= 2"
     >
@@ -157,26 +158,17 @@ function makeSubjectTo (notification: TTNotification): any {
   &:not(:last-child) {
     border-bottom: 1px solid rgba(var(--fg-color), 0.125);
   }
+  &[data-is-new="true"] {
+    background-color: rgba(var(--accent-color), 0.125);
+  }
 
   // reason ごとの処理
-  &[data-reason="mention"],
-  &[data-reason="reply"] {
-    background-color: rgba(var(--post-color), 0.125);
-  }
-  &[data-reason="like"] {
-    background-color: rgba(var(--like-color), 0.125);
-  }
   &[data-reason="quote"] {
     .text {
       color: rgb(var(--share-color));
     }
   }
-  &[data-reason="repost"] {
-    background-color: rgba(var(--share-color), 0.125);
-  }
   &[data-reason="follow"] {
-    padding: 0.5rem 1rem;
-    
     .text {
       color: rgba(var(--fg-color), 0.75);
       overflow: hidden;
