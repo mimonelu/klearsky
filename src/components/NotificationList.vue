@@ -237,11 +237,14 @@ function makeSubjectTo (notification: TTNotification): any {
   align-items: center;
   grid-gap: 0 0.5rem;
   overflow: hidden;
-  &:nth-child(2):not(:last-child) {
-    margin-top: 0.5rem;
+  [data-reason="like"] &,
+  [data-reason="repost"] &,
+  [data-reason="reply"] &,
+  [data-reason="quote"] & {
+    padding-bottom: calc(0.5rem + 2px);
   }
   &:last-child:not(:first-child) {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
   }
   &[data-is-new="true"] {
     grid-template-columns: min-content min-content min-content auto 1fr max-content;
