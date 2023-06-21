@@ -54,10 +54,10 @@ function close () {
 <style lang="scss" scoped>
 .select-languages-popup:deep() {
   .popup-body {
-    padding: 0;
+    padding: 1rem 0 0;
 
     p {
-      margin: 0 2rem;
+      margin: 0 1rem;
     }
   }
 

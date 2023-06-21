@@ -103,6 +103,7 @@ function makeSubjectTo (notification: TTNotification): any {
             :to="makeSubjectTo(notification)"
             class="notification"
             :data-is-new="!notification.isRead"
+            @click="$emit('close')"
           >
             <!-- 新着通知アイコン -->
             <div
@@ -120,7 +121,7 @@ function makeSubjectTo (notification: TTNotification): any {
             <AvatarLink
               :handle="notification.handle"
               :image="notification.avatar"
-              @click.stop
+              @click.stop="$emit('close')"
             />
 
             <!-- 表示名 -->
@@ -146,6 +147,7 @@ function makeSubjectTo (notification: TTNotification): any {
         v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.post != null"
         position="slim"
         :post="notificationGroup.post"
+        @click="$emit('close')"
       />
     </div>
   </div>

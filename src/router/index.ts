@@ -4,7 +4,6 @@ import NotFoundView from "@/views/NotFoundView.vue"
 // Main
 import MainView from "@/views/MainView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
-import NotificationsView from "@/views/main/NotificationsView.vue"
 import PostView from "@/views/main/PostView.vue"
 
 // Main - Home
@@ -57,12 +56,6 @@ const router = createRouter({
           path: "/home",
           name: "home",
           component: TimelineView,
-        },
-        {
-          path: "/notifications",
-          name: "notifications",
-          meta: { label: "notifications" },
-          component: NotificationsView,
         },
         {
           path: "/post",

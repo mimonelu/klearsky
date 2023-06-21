@@ -159,6 +159,14 @@ function isEmpty (): boolean {
 <style lang="scss" scoped>
 .send-post-popup {
   &:deep() {
+    .popup-header {
+      border-bottom-style: none;
+    }
+
+    .popup-body {
+      padding-top: 0;
+    }
+
     // プレビューポストのテキスト選択
     .post {
       .text {

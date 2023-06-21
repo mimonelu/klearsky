@@ -123,8 +123,6 @@ function changeCustomFeedOrder () {
 <style lang="scss" scoped>
 .my-feeds-popup:deep() {
   .popup-header {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-
     & > h2 {
       color: rgb(var(--accent-color));
 

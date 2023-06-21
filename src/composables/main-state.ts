@@ -116,6 +116,10 @@ const state = reactive<MainState>({
   closeConfirmationPopup,
   applyConfirmationPopup,
 
+  // 通知ポップアップの開閉
+  openNotificationPopup,
+  closeNotificationPopup,
+
   // コンテンツ言語ポップアップの開閉
   openContentLanguagesPopup,
   closeContentLanguagesPopup,
@@ -659,6 +663,16 @@ function closeConfirmationPopup () {
 function applyConfirmationPopup () {
   state.confirmationPopupResult = true
   state.confirmationPopupDisplay = false
+}
+
+// 通知ポップアップの開閉
+
+function openNotificationPopup () {
+  state.notificationPopupDisplay = true
+}
+
+function closeNotificationPopup () {
+  state.notificationPopupDisplay = false
 }
 
 // コンテンツ言語ポップアップの開閉

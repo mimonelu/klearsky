@@ -18,6 +18,7 @@ import MainMenuVertical from "@/components/MainMenuVertical.vue"
 import MessagePopup from "@/components/MessagePopup.vue"
 import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/MyFeedsPopup.vue"
+import NotificationPopup from "@/components/NotificationPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
@@ -205,6 +206,9 @@ function resetState () {
   state.errorPopupProps.error = undefined
   state.errorPopupProps.description = undefined
 
+  // 通知ポップアップの表示スイッチ
+  state.notificationPopupDisplay = false
+
   // コンテンツ言語ポップアップの表示スイッチ
   state.contentLanguagesPopupDisplay = false
 
@@ -366,13 +370,6 @@ async function processPage (pageName?: null | RouteRecordName) {
             account !== state.currentProfile?.did)
           tasks.push(state.fetchCurrentProfile(account as string))
         await Promise.allSettled(tasks)
-        break
-      }
-      case "notifications": {
-        if (!state.notificationFetchedFirst) {
-          state.notificationFetchedFirst = true
-          await state.fetchNotifications(CONSTS.limitOfFetchNotifications, "new")
-        }
         break
       }
       case "timeline-home": {
@@ -576,6 +573,13 @@ function broadcastListener (event: MessageEvent) {
       </div>
       <ScrollButton />
     </div>
+
+    <!-- 通知ポップアップ -->
+    <NotificationPopup
+      v-if="state.notificationPopupDisplay"
+      @close="state.closeNotificationPopup"
+      @updatePageTitle="updatePageTitle"
+    />
 
     <!-- 言語選択ポップアップ -->
     <SelectLanguagesPopup

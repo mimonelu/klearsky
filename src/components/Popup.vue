@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeMount, onBeforeUnmount } from "vue"
+import { onBeforeMount, onBeforeUnmount, ref } from "vue"
 import hotkeys from "hotkeys-js"
 import SVGIcon from "@/components/SVGIcon.vue"
 
@@ -20,6 +20,16 @@ onBeforeUnmount(() => {
 function close () {
   emit("close")
 }
+
+const popupBody = ref()
+
+function scrollToTop () {
+  popupBody?.value?.scrollTo({
+    left: 0,
+    top: 0,
+    behavior: "smooth",
+  })
+}
 </script>
 
 <template>
@@ -34,6 +44,7 @@ function close () {
       <header
         v-if="$slots.header"
         class="popup-header"
+        @click="scrollToTop"
       >
         <slot name="header" />
         <button
@@ -45,7 +56,10 @@ function close () {
         </button>
       </header>
       <slot name="header-after" />
-      <div class="popup-body">
+      <div
+        class="popup-body"
+        ref="popupBody"
+      >
         <slot name="body" />
       </div>
       <slot name="footer" />
@@ -74,6 +88,7 @@ function close () {
   border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: var(--border-radius);
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.25);
+  color: rgb(var(--fg-color));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -94,11 +109,13 @@ function close () {
 }
 
 .popup-header {
+  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  cursor: pointer;
   display: flex;
   align-items: center;
   padding: 0 1.5rem;
   position: relative;
-  min-height: 4rem;
+  min-height: 3rem;
 
   &:deep() > h2 {
     display: flex;
@@ -124,7 +141,7 @@ function close () {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: none;
-  padding: 0 2rem 2rem 2rem;
+  padding: 2rem;
   @include scroll-bar();
   &:first-child {
     padding-top: 2rem;
@@ -139,8 +156,8 @@ function close () {
   position: absolute;
   right: 0;
   top: 0;
-  width: 4rem;
-  min-height: 4rem;
+  width: 3rem;
+  min-height: 3rem;
 
   & > .svg-icon {
     fill: rgba(var(--fg-color), 0.75);

@@ -110,9 +110,5 @@ async function fetchContinuousResults (direction: "new" | "old") {
       }
     }
   }
-
-  .load-button {
-    border-top: 1px solid rgba(var(--fg-color), 0.25);
-  }
 }
 </style>

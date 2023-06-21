@@ -5,6 +5,11 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
+function openNotificationPopup () {
+  Util.blurElement()
+  mainState.openNotificationPopup()
+}
+
 async function openSendPostPopup () {
   Util.blurElement()
   await mainState.openSendPostPopup("post")
@@ -63,9 +68,9 @@ async function openSendPostPopup () {
     </RouterLink>
 
     <!-- 通知ボタン -->
-    <RouterLink
+    <button
       class="link-button"
-      to="/notifications"
+      @click.prevent="openNotificationPopup"
     >
       <SVGIcon name="bell" />
 
@@ -74,7 +79,7 @@ async function openSendPostPopup () {
         v-if="mainState.notificationCount > 0"
         class="notification-count"
       >{{ mainState.notificationCount }}</div>
-    </RouterLink>
+    </button>
 
     <!-- 設定ボタン -->
     <RouterLink

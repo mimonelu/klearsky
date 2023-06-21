@@ -178,6 +178,9 @@ type MainState = {
     description: any
   }
 
+  // 通知ポップアップの表示スイッチ
+  notificationPopupDisplay: boolean
+
   // コンテンツ言語ポップアップの表示スイッチ
   contentLanguagesPopupDisplay: boolean
 
@@ -256,6 +259,10 @@ type MainState = {
   openConfirmationPopup: (title?: string, text?: string) => Promise<boolean>
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
+
+  // 通知ポップアップの開閉
+  openNotificationPopup: Function
+  closeNotificationPopup: Function
 
   // コンテンツ言語ポップアップの開閉
   openContentLanguagesPopup: Function

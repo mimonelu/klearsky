@@ -673,6 +673,7 @@ function onActivateHashTag (text: string) {
                 :position="position === 'slim' ? 'slim' : 'postInPost'"
                 :post="post.embed.record as TTPost"
                 :noLink="noLink"
+                @click="$emit('click')"
               />
             </div>
           </template>
@@ -808,7 +809,7 @@ function onActivateHashTag (text: string) {
   position: relative;
 
   // フォーカスされたポスト
-  &[data-focus="true"]:not([data-position="preview"]) {
+  .post-view &[data-focus="true"]:not([data-position="preview"]) {
     background-color: rgba(var(--accent-color), 0.125);
 
     .body > .body__right {

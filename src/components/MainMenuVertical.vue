@@ -5,6 +5,11 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
+function openNotificationPopup () {
+  Util.blurElement()
+  mainState.openNotificationPopup()
+}
+
 async function openSendPostPopup () {
   Util.blurElement()
   await mainState.openSendPostPopup("post")
@@ -86,9 +91,9 @@ function moveToBottom () {
     </RouterLink>
 
     <!-- 通知ボタン -->
-    <RouterLink
+    <button
       class="link-button"
-      to="/notifications"
+      @click.prevent="openNotificationPopup"
     >
       <div class="icon">
         <SVGIcon name="bell" />
@@ -100,7 +105,7 @@ function moveToBottom () {
         >{{ mainState.notificationCount }}</div>
       </div>
       <div class="label">{{ $t("notifications") }}</div>
-    </RouterLink>
+    </button>
 
     <!-- 設定ボタン -->
     <RouterLink
