@@ -475,6 +475,18 @@ function closeHtmlPopupDisplay () {
 </template>
 
 <style lang="scss" scoped>
+.list-menu {
+  .svg-icon--rss {
+    --icon-color: var(--post-color);
+  }
+  .svg-icon--alphabeticalOff,
+  .svg-icon--alert,
+  .svg-icon--volumeOff,
+  .svg-icon--personOff {
+    --icon-color: var(--notice-color);
+  }
+}
+
 .notification-list {
   font-size: 0.875rem;
 

@@ -3,6 +3,7 @@
   flex-direction: column;
 
   button {
+    --icon-color: var(--fg-color);
     --alpha: 0.75;
     border-bottom: 1px solid rgba(var(--fg-color), 0.25);
     cursor: pointer;
@@ -16,7 +17,7 @@
     }
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), var(--alpha));
+      fill: rgba(var(--icon-color), var(--alpha));
     }
 
     & > span {
