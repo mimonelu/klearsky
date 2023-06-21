@@ -50,66 +50,68 @@ function closeHtmlPopupDisplay () {
 
 <template>
   <div class="klearsky-settings-view">
-    <!-- 各種機能設定 -->
-    <div class="list-menu">
-      <!-- コンテンツフィルタリングポップアップトリガー -->
-      <button @click.prevent="mainState.openContentLanguagesPopup">
-        <SVGIcon name="translate" />
-        <span>{{ $t("contentLanguagesEdit") }}</span>
-        <SVGIcon name="cursorRight" />
-      </button>
-
-      <!-- マイフィードポップアップトリガー -->
-      <button @click.prevent="mainState.openMyFeedsPopup">
-        <SVGIcon name="rss" />
-        <span>{{ $t("myFeedsEdit") }}</span>
-        <SVGIcon name="cursorRight" />
-      </button>
-
-      <!-- ワードミュートポップアップトリガー -->
-      <button @click.prevent="mainState.openWordMutePopup">
-        <SVGIcon name="alphabeticalOff" />
-        <span>{{ $t("wordMuteEdit") }}</span>
-        <SVGIcon name="cursorRight" />
-      </button>
-
-      <!-- コンテンツフィルタリングポップアップトリガー -->
-      <button @click.prevent="mainState.openContentFilteringPopup">
-        <SVGIcon name="alert" />
-        <span>{{ $t("modifyContentFiltering") }}</span>
-        <SVGIcon name="cursorRight" />
-      </button>
-
-      <!-- ミュートユーザーリストポップアップトリガー -->
-      <button @click.prevent="mainState.openMutingUsersPopup">
-        <SVGIcon name="volumeOff" />
-        <span>{{ $t("checkMutingUsers") }}</span>
-        <SVGIcon name="cursorRight" />
-      </button>
-
-      <!-- ブロックユーザーリストポップアップトリガー -->
-      <button @click.prevent="mainState.openBlockingUsersPopup">
-        <SVGIcon name="personOff" />
-        <span>{{ $t("checkBlockingUsers") }}</span>
-        <SVGIcon name="cursorRight" />
-      </button>
-
-      <!-- 招待コード確認ポップアップトリガー -->
-      <button @click.prevent="mainState.openInviteCodesPopup">
-        <SVGIcon name="inviteCode" />
-        <span>{{ $t("confirmInviteCodes") }} ({{ mainState.numberOfAvailableInviteCodes }} / {{ mainState.numberOfInviteCodes }})</span>
-        <SVGIcon name="cursorRight" />
-      </button>
-    </div>
-
     <div class="settings-section-container">
+      <!-- 各種機能設定 -->
+      <div class="settings-section">
+        <div class="list-menu">
+          <!-- コンテンツフィルタリングポップアップトリガー -->
+          <button @click.prevent="mainState.openContentLanguagesPopup">
+            <SVGIcon name="translate" />
+            <span>{{ $t("contentLanguagesEdit") }}</span>
+            <SVGIcon name="cursorRight" />
+          </button>
+
+          <!-- マイフィードポップアップトリガー -->
+          <button @click.prevent="mainState.openMyFeedsPopup">
+            <SVGIcon name="rss" />
+            <span>{{ $t("myFeedsEdit") }}</span>
+            <SVGIcon name="cursorRight" />
+          </button>
+
+          <!-- ワードミュートポップアップトリガー -->
+          <button @click.prevent="mainState.openWordMutePopup">
+            <SVGIcon name="alphabeticalOff" />
+            <span>{{ $t("wordMuteEdit") }}</span>
+            <SVGIcon name="cursorRight" />
+          </button>
+
+          <!-- コンテンツフィルタリングポップアップトリガー -->
+          <button @click.prevent="mainState.openContentFilteringPopup">
+            <SVGIcon name="alert" />
+            <span>{{ $t("modifyContentFiltering") }}</span>
+            <SVGIcon name="cursorRight" />
+          </button>
+
+          <!-- ミュートユーザーリストポップアップトリガー -->
+          <button @click.prevent="mainState.openMutingUsersPopup">
+            <SVGIcon name="volumeOff" />
+            <span>{{ $t("checkMutingUsers") }}</span>
+            <SVGIcon name="cursorRight" />
+          </button>
+
+          <!-- ブロックユーザーリストポップアップトリガー -->
+          <button @click.prevent="mainState.openBlockingUsersPopup">
+            <SVGIcon name="personOff" />
+            <span>{{ $t("checkBlockingUsers") }}</span>
+            <SVGIcon name="cursorRight" />
+          </button>
+
+          <!-- 招待コード確認ポップアップトリガー -->
+          <button @click.prevent="mainState.openInviteCodesPopup">
+            <SVGIcon name="inviteCode" />
+            <span>{{ $t("confirmInviteCodes") }} ({{ mainState.numberOfAvailableInviteCodes }} / {{ mainState.numberOfInviteCodes }})</span>
+            <SVGIcon name="cursorRight" />
+          </button>
+        </div>
+      </div>
+
       <!-- UI言語 -->
       <div class="settings-section">
         <div class="settings-section__header">
           <span>{{ $t("uiLanguage") }}</span>
         </div>
         <div class="settings-section__body">
-          <label class="selectbox">
+          <label class="selectbox selectbox-is-wide">
             <select
               v-model="mainState.currentSetting.uiLanguage"
               @change="changeSetting"
@@ -138,6 +140,7 @@ function closeHtmlPopupDisplay () {
         </div>
         <div class="settings-section__body">
           <Radios
+            class="radios-is-wide"
             :state="mainState.currentSetting"
             model="autoTranslation"
             :options="settings.autoTranslations"
@@ -156,8 +159,8 @@ function closeHtmlPopupDisplay () {
             </button>
           </div>
           <input
+            class="textbox textbox-is-wide"
             v-model="mainState.currentSetting.autoTranslationIgnoreLanguage"
-            class="textbox"
             type="text"
             placeholder="en, zh, es, ..."
             @change="changeSetting"
@@ -172,6 +175,7 @@ function closeHtmlPopupDisplay () {
         </div>
         <div class="settings-section__body">
           <Radios
+            class="radios-is-wide"
             :state="mainState.currentSetting"
             model="fontSize"
             :options="settings.fontSizes"
@@ -188,6 +192,7 @@ function closeHtmlPopupDisplay () {
         </div>
         <div class="settings-section__body">
           <Radios
+            class="radios-is-wide"
             :state="mainState.currentSetting"
             model="timeControl"
             :options="settings.timeControls"
@@ -214,6 +219,7 @@ function closeHtmlPopupDisplay () {
             <span>{{ $t("replyControl") }}</span>
           </div>
           <Checkboxes
+            class="checkboxes-is-wide"
             :state="mainState.currentSetting"
             model="replyControl"
             :options="settings.replyControls"
@@ -225,6 +231,7 @@ function closeHtmlPopupDisplay () {
             <span>{{ $t("repostControl") }}</span>
           </div>
           <Checkboxes
+            class="checkboxes-is-wide"
             :state="mainState.currentSetting"
             model="repostControl"
             :options="settings.repostControls"
@@ -240,6 +247,7 @@ function closeHtmlPopupDisplay () {
         </div>
         <div class="settings-section__body">
           <Radios
+            class="radios-is-wide"
             :state="mainState.currentSetting"
             model="imageControl"
             :options="settings.imageControls"
@@ -255,6 +263,7 @@ function closeHtmlPopupDisplay () {
         </div>
         <div class="settings-section__body">
           <Radios
+            class="radios-is-wide"
             :state="mainState.currentSetting"
             model="imageAspectRatio"
             :options="settings.imageAspectRatio"
@@ -270,7 +279,7 @@ function closeHtmlPopupDisplay () {
           <span>{{ $t("layout") }}</span>
         </div>
         <div class="settings-section__body">
-          <label class="selectbox">
+          <label class="selectbox selectbox-is-wide">
             <select
               v-model="mainState.currentSetting.layout"
               @change="changeSetting"
@@ -293,6 +302,7 @@ function closeHtmlPopupDisplay () {
         </div>
         <div class="settings-section__body">
           <Radios
+            class="radios-is-wide"
             :state="mainState.currentSetting"
             model="borderRadius"
             :options="settings.borderRadius"
@@ -318,7 +328,7 @@ function closeHtmlPopupDisplay () {
           <span>{{ $t("mainAreaOpacity") }}</span>
         </div>
         <div class="settings-section__body">
-          <label class="selectbox">
+          <label class="selectbox selectbox-is-wide">
             <select
               v-model="mainState.currentSetting.mainAreaOpacity"
               @change="changeSetting"
@@ -345,8 +355,8 @@ function closeHtmlPopupDisplay () {
             <span>{{ $t("backgroundImage") }}</span>
           </div>
           <input
+            class="textbox textbox-is-wide"
             v-model="mainState.currentSetting.backgroundImage"
-            class="textbox"
             type="url"
             @change="changeSetting"
           >
@@ -355,7 +365,7 @@ function closeHtmlPopupDisplay () {
           <div class="settings-section__sub-header">
             <span>{{ $t("backgroundOpacity") }}</span>
           </div>
-          <label class="selectbox">
+          <label class="selectbox selectbox-is-wide">
             <select
               v-model="mainState.currentSetting.backgroundOpacity"
               @change="changeSetting"
@@ -382,6 +392,7 @@ function closeHtmlPopupDisplay () {
             <span>{{ $t("hideNumberOfReaction") }}</span>
           </div>
           <Radios
+            class="radios-is-wide"
             :state="mainState.currentSetting"
             model="hideNumberOfReaction"
             :options="settings.hideNumberOfReaction"
@@ -394,6 +405,7 @@ function closeHtmlPopupDisplay () {
             <span>{{ $t("postAnonymization") }}</span>
           </div>
           <Radios
+            class="radios-is-wide"
             :state="mainState.currentSetting"
             model="postAnonymization"
             :options="settings.postAnonymization"
@@ -416,8 +428,8 @@ function closeHtmlPopupDisplay () {
         </div>
         <div class="settings-section__body">
           <input
+            class="textbox textbox-is-wide"
             v-model="mainState.currentSetting.lightning"
-            class="textbox"
             type="url"
             placeholder="sample@wallet.com, lnurlxxx, lnbcxxx, ..."
             @change="changeSetting"
@@ -432,7 +444,7 @@ function closeHtmlPopupDisplay () {
         </div>
         <div class="settings-section__body">
           <button
-            class="button--important"
+            class="button--important button-is-wide"
             @click.stop="resetSettings"
           >
             <span>{{ $t("resetSettings") }}</span>
@@ -515,5 +527,9 @@ function closeHtmlPopupDisplay () {
   & > .svg-icon {
     fill: rgba(var(--accent-color), var(--alpha));
   }
+}
+
+.color-theme {
+  padding: 0.5rem;
 }
 </style>

@@ -148,6 +148,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               :inputmode="item.inputmode ?? undefined"
               spellcheck="false"
               class="textbox"
+              :class="item.classes"
               @keydown.enter="onEnterKeyDown"
             >
 
@@ -159,6 +160,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               :required="item.required ?? false"
               :options="item.options as Array<TTOption>"
               :layout="item.layout"
+              :class="item.classes"
               @update="onChange(item)"
             />
 
@@ -170,6 +172,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               :required="item.required ?? false"
               :options="item.options as Array<TTOption>"
               :layout="item.layout"
+              :class="item.classes"
               @update="onChange(item)"
             />
 
@@ -177,6 +180,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
             <label
               v-if="item.type === 'select'"
               class="selectbox"
+              :class="item.classes"
             >
               <select
                 v-model="item.state[item.model]"
@@ -200,6 +204,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               :multiple="item.isMultipleFile"
               :maxNumber="item.maxNumberOfFile"
               :quadLayout="item.quadLayout"
+              :class="item.classes"
               @change="(files: Array<File>) => { onChangeFile(files, item) }"
             />
 
@@ -217,6 +222,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               autocorrect="off"
               spellcheck="false"
               class="textarea"
+              :class="item.classes"
               @input="onInputTextarea(item)"
               @keydown.enter="onEnterKeyDown"
             />
@@ -227,6 +233,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
             v-if="item.type === 'button'"
             type="button"
             class="button--bordered"
+            :class="item.classes"
             @click.prevent="onClick(item)"
           >
             <SVGIcon
@@ -240,6 +247,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           <button
             v-if="item.clearButton"
             class="clear-button"
+            :class="item.classes"
             @click.prevent="onClickClearButton(item)"
           >
             <SVGIcon name="cross" />
@@ -249,6 +257,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           <div
             v-if="item.maxLengthIndicator"
             class="max-length-indicator"
+            :class="item.classes"
             :data-over-maxlength="item.maxlength != null
               ? getCharacterLength(item) > item.maxlength
               : false

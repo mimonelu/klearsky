@@ -24,3 +24,9 @@
   word-break: break-word;
   @include scroll-bar;
 }
+.textarea-is-wide,
+.textbox-is-wide {
+  border-left-style: none;
+  border-right-style: none;
+  border-radius: unset;
+}

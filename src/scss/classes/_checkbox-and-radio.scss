@@ -99,9 +99,6 @@
     }
   }
   &[data-layout="vertical-2columns"] {
-    // border-right: 1px solid rgba(var(--fg-color), 0.25);
-    // border-bottom: 1px solid rgba(var(--fg-color), 0.25);
-
     & > .checkbox,
     & > .radio {
       border-right-style: none;
@@ -124,6 +121,56 @@
       }
       &:nth-last-child(1) {
         border-radius: 0 0 var(--border-radius) 0;
+      }
+    }
+  }
+}
+.checkboxes-is-wide,
+.radios-is-wide {
+  & > .checkbox,
+  & > .radio {
+    border-radius: 0 !important;
+  }
+  &[data-layout="horizontal"] {
+    & > .checkbox,
+    & > .radio {
+      border-right-style: none;
+      &:first-child {
+        border-left-style: none;
+      }
+    }
+  }
+  &[data-layout="vertical"] {
+    & > .checkbox,
+    & > .radio {
+      border-left-style: none;
+      border-right-style: none;
+    }
+  }
+  &[data-layout="vertical-2columns"] {
+    & > .checkbox,
+    & > .radio {
+      &:nth-child(odd) {
+        border-left-style: none;
+      }
+      &:nth-child(even) {
+        border-right-style: none;
+      }
+      &:nth-last-child(1),
+      &:nth-last-child(2) {
+        border-bottom-style: none;
+      }
+      &:first-child {
+        border-radius: unset;
+      }
+      &:nth-child(2) {
+        border-radius: unset;
+      }
+      &:nth-last-child(2) {
+        border-radius: unset;
+      }
+      &:nth-last-child(1) {
+        border-radius: unset;
       }
     }
   }

@@ -45,6 +45,7 @@ const easyFormProps: TTEasyForm = {
     type: "radio",
     options: OPTIONS.labelVisibility,
     layout: "horizontal",
+    classes: "radios-is-wide",
   })))(),
 }
 
@@ -130,6 +131,24 @@ async function apply () {
 
     & > .svg-icon {
       fill: rgb(var(--notice-color));
+    }
+  }
+
+  .popup-body {
+    padding: 1rem 0;
+
+    & > p {
+      margin: 0 1rem;
+    }
+  }
+
+  .easy-form {
+    dt {
+      margin: 0 1rem;
+    }
+
+    .submit-button {
+      margin: 0 1rem;
     }
   }
 

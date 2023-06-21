@@ -18,6 +18,7 @@ const easyFormProps: TTEasyForm = {
       state: props.state,
       model: props.property,
       type: "checkbox",
+      classes: "checkboxes-is-wide",
       options: LANGUAGES,
       layout: "vertical-2columns",
       onUpdate () {
@@ -58,31 +59,6 @@ function close () {
 
     p {
       margin: 0 1rem;
-    }
-  }
-
-  .checkbox {
-    &:nth-child(odd) {
-      border-left-style: none;
-    }
-    &:nth-child(even) {
-      border-right-style: none;
-    }
-    &:nth-last-child(1),
-    &:nth-last-child(2) {
-      border-bottom-style: none;
-    }
-    &:first-child {
-      border-radius: unset;
-    }
-    &:nth-child(2) {
-      border-radius: unset;
-    }
-    &:nth-last-child(2) {
-      border-radius: unset;
-    }
-    &:nth-last-child(1) {
-      border-radius: unset;
     }
   }
 }
