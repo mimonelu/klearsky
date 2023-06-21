@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, reactive } from "vue"
 import Checkboxes from "@/components/Checkboxes.vue"
 import ColorTheme from "@/components/ColorTheme.vue"
+import HtmlPopup from "@/components/HtmlPopup.vue"
 import Radios from "@/components/Radios.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -12,6 +13,14 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  htmlPopupDisplay: boolean
+  htmlPopupType?: string
+}>({
+  htmlPopupDisplay: false,
+  htmlPopupType: undefined,
+})
+
 function saveSetting () {
   mainState.saveSettings()
 }
@@ -21,16 +30,21 @@ function changeSetting () {
   mainState.updateSettings()
 }
 
-function openWordMutePopup () {
-  mainState.openWordMutePopup()
-}
-
 async function resetSettings () {
   Util.blurElement()
   const result = await mainState.openConfirmationPopup($t("resetSettings"), $t("resetSettingsDetail"))
   if (!result) return
   mainState.resetSettings()
   location.reload()
+}
+
+function showDescription (type: string) {
+  state.htmlPopupType = type
+  state.htmlPopupDisplay = true
+}
+
+function closeHtmlPopupDisplay () {
+  state.htmlPopupDisplay = false
 }
 </script>
 
@@ -91,7 +105,9 @@ async function resetSettings () {
     <div class="settings-section-container">
       <!-- UI言語 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("uiLanguage") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("uiLanguage") }}</span>
+        </div>
         <div class="settings-section__body">
           <label class="selectbox">
             <select
@@ -111,7 +127,15 @@ async function resetSettings () {
 
       <!-- 自動翻訳 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("autoTranslation") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("autoTranslation") }}</span>
+          <button
+            class="description-button"
+            @click.prevent="showDescription('autoTranslation')"
+          >
+            <SVGIcon name="help" />
+          </button>
+        </div>
         <div class="settings-section__body">
           <Radios
             :state="mainState.currentSetting"
@@ -120,15 +144,17 @@ async function resetSettings () {
             layout="horizontal"
             @update="saveSetting"
           />
-          <ul class="notification-list">
-            <li>{{ $t("autoTranslationRemarks1") }}</li>
-            <li>{{ $t("autoTranslationRemarks2") }}</li>
-            <li>{{ $t("autoTranslationRemarks3") }}</li>
-            <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
-          </ul>
 
           <!-- 自動翻訳 - 除外する言語 -->
-          <div class="settings-section__sub-header">{{ $t("autoTranslationIgnoreLanguage") }}</div>
+          <div class="settings-section__sub-header">
+            <span>{{ $t("autoTranslationIgnoreLanguage") }}</span>
+            <button
+              class="description-button"
+              @click.prevent="showDescription('autoTranslationIgnoreLanguage')"
+            >
+              <SVGIcon name="help" />
+            </button>
+          </div>
           <input
             v-model="mainState.currentSetting.autoTranslationIgnoreLanguage"
             class="textbox"
@@ -136,15 +162,14 @@ async function resetSettings () {
             placeholder="en, zh, es, ..."
             @change="changeSetting"
           >
-          <ul class="notification-list">
-            <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
-          </ul>
         </div>
       </div>
 
       <!-- フォントサイズ -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("fontSize") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("fontSize") }}</span>
+        </div>
         <div class="settings-section__body">
           <Radios
             :state="mainState.currentSetting"
@@ -158,7 +183,9 @@ async function resetSettings () {
 
       <!-- 時間表記 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("timeControl") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("timeControl") }}</span>
+        </div>
         <div class="settings-section__body">
           <Radios
             :state="mainState.currentSetting"
@@ -172,11 +199,20 @@ async function resetSettings () {
 
       <!-- タイムラインの制御 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("timelineControl") }}</div>
-        <div class="settings-section__description">{{ $t("timelineControlDescription") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("timelineControl") }}</span>
+          <button
+            class="description-button"
+            @click.prevent="showDescription('timelineControl')"
+          >
+            <SVGIcon name="help" />
+          </button>
+        </div>
         <div class="settings-section__body">
           <!-- タイムラインの制御 - リプライ -->
-          <div class="settings-section__sub-header">{{ $t("replyControl") }}</div>
+          <div class="settings-section__sub-header">
+            <span>{{ $t("replyControl") }}</span>
+          </div>
           <Checkboxes
             :state="mainState.currentSetting"
             model="replyControl"
@@ -185,7 +221,9 @@ async function resetSettings () {
           />
 
           <!-- タイムラインの制御 - リポスト -->
-          <div class="settings-section__sub-header">{{ $t("repostControl") }}</div>
+          <div class="settings-section__sub-header">
+            <span>{{ $t("repostControl") }}</span>
+          </div>
           <Checkboxes
             :state="mainState.currentSetting"
             model="repostControl"
@@ -197,7 +235,9 @@ async function resetSettings () {
 
       <!-- 画像の制御 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("imageControl") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("imageControl") }}</span>
+        </div>
         <div class="settings-section__body">
           <Radios
             :state="mainState.currentSetting"
@@ -210,7 +250,9 @@ async function resetSettings () {
 
       <!-- 画像サイズの比率 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("imageAspectRatio") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("imageAspectRatio") }}</span>
+        </div>
         <div class="settings-section__body">
           <Radios
             :state="mainState.currentSetting"
@@ -224,7 +266,9 @@ async function resetSettings () {
 
       <!-- レイアウト -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("layout") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("layout") }}</span>
+        </div>
         <div class="settings-section__body">
           <label class="selectbox">
             <select
@@ -244,7 +288,9 @@ async function resetSettings () {
 
       <!-- 角丸 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("borderRadius") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("borderRadius") }}</span>
+        </div>
         <div class="settings-section__body">
           <Radios
             :state="mainState.currentSetting"
@@ -258,7 +304,9 @@ async function resetSettings () {
 
       <!-- カラーテーマ -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("colorTheme") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("colorTheme") }}</span>
+        </div>
         <div class="settings-section__body">
           <ColorTheme />
         </div>
@@ -266,7 +314,9 @@ async function resetSettings () {
 
       <!-- メインエリアの不透明度 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("mainAreaOpacity") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("mainAreaOpacity") }}</span>
+        </div>
         <div class="settings-section__body">
           <label class="selectbox">
             <select
@@ -286,10 +336,14 @@ async function resetSettings () {
 
       <!-- 背景画像 -->
       <div class="settings-section">
-        <div class="settings-section__header">{{ $t("background") }}</div>
+        <div class="settings-section__header">
+          <span>{{ $t("background") }}</span>
+        </div>
         <div class="settings-section__body">
           <!-- 背景画像 - URL -->
-          <div class="settings-section__sub-header">{{ $t("backgroundImage") }}</div>
+          <div class="settings-section__sub-header">
+            <span>{{ $t("backgroundImage") }}</span>
+          </div>
           <input
             v-model="mainState.currentSetting.backgroundImage"
             class="textbox"
@@ -298,7 +352,9 @@ async function resetSettings () {
           >
 
           <!-- 背景画像 - 不透明度 -->
-          <div class="settings-section__sub-header">{{ $t("backgroundOpacity") }}</div>
+          <div class="settings-section__sub-header">
+            <span>{{ $t("backgroundOpacity") }}</span>
+          </div>
           <label class="selectbox">
             <select
               v-model="mainState.currentSetting.backgroundOpacity"
@@ -317,10 +373,14 @@ async function resetSettings () {
 
       <!-- 心理的安全性 -->
       <div class="settings-section">
-        <div class="settings-section__header">💚 {{ $t("psySafety") }}</div>
+        <div class="settings-section__header">
+          <span>💚 {{ $t("psySafety") }}</span>
+        </div>
         <div class="settings-section__body">
           <!-- 心理的安全性 - リアクション数の非表示 -->
-          <div class="settings-section__sub-header">{{ $t("hideNumberOfReaction") }}</div>
+          <div class="settings-section__sub-header">
+            <span>{{ $t("hideNumberOfReaction") }}</span>
+          </div>
           <Radios
             :state="mainState.currentSetting"
             model="hideNumberOfReaction"
@@ -330,7 +390,9 @@ async function resetSettings () {
           />
 
           <!-- 心理的安全性 - ポストの匿名化 -->
-          <div class="settings-section__sub-header">{{ $t("postAnonymization") }}</div>
+          <div class="settings-section__sub-header">
+            <span>{{ $t("postAnonymization") }}</span>
+          </div>
           <Radios
             :state="mainState.currentSetting"
             model="postAnonymization"
@@ -343,7 +405,15 @@ async function resetSettings () {
 
       <!-- Lightning -->
       <div class="settings-section">
-        <div class="settings-section__header">⚡ {{ $t("lightning") }}</div>
+        <div class="settings-section__header">
+          <span>⚡ {{ $t("lightning") }}</span>
+          <button
+            class="description-button"
+            @click.prevent="showDescription('lightning')"
+          >
+            <SVGIcon name="help" />
+          </button>
+        </div>
         <div class="settings-section__body">
           <input
             v-model="mainState.currentSetting.lightning"
@@ -352,15 +422,14 @@ async function resetSettings () {
             placeholder="sample@wallet.com, lnurlxxx, lnbcxxx, ..."
             @change="changeSetting"
           >
-          <ul class="notification-list">
-            <li>{{ $t("lightningDescription") }}</li>
-          </ul>
         </div>
       </div>
 
       <!-- 設定のリセット -->
       <div class="settings-section">
-        <div class="settings-section__header">🔧 {{ $t("development") }}</div>
+        <div class="settings-section__header">
+          <span>🔧 {{ $t("development") }}</span>
+        </div>
         <div class="settings-section__body">
           <button
             class="button--important"
@@ -371,6 +440,37 @@ async function resetSettings () {
         </div>
       </div>
     </div>
+
+    <!-- 説明用HTMLポップアップ -->
+    <HtmlPopup
+      v-if="state.htmlPopupDisplay"
+      :title="$t(state.htmlPopupType)"
+      @close="closeHtmlPopupDisplay"
+    >
+      <template v-if="state.htmlPopupType === 'autoTranslation'">
+        <ul class="notification-list">
+          <li>{{ $t("autoTranslationRemarks1") }}</li>
+          <li>{{ $t("autoTranslationRemarks2") }}</li>
+          <li>{{ $t("autoTranslationRemarks3") }}</li>
+          <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
+        </ul>
+      </template>
+      <template v-else-if="state.htmlPopupType === 'autoTranslationIgnoreLanguage'">
+        <ul class="notification-list">
+          <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
+        </ul>
+      </template>
+      <template v-else-if="state.htmlPopupType === 'timelineControl'">
+        <ul class="notification-list">
+          <li>{{ $t("timelineControlDescription") }}</li>
+        </ul>
+      </template>
+      <template v-else-if="state.htmlPopupType === 'lightning'">
+        <ul class="notification-list">
+          <li>{{ $t("lightningDescription") }}</li>
+        </ul>
+      </template>
+    </HtmlPopup>
   </div>
 </template>
 
@@ -388,6 +488,20 @@ async function resetSettings () {
       display: inline-block;
       margin-right: 0.5rem;
     }
+  }
+}
+
+.description-button {
+  --alpha: 0.75;
+  cursor: pointer;
+  margin: -0.5em;
+  padding: 0.5em;
+  &:focus, &:hover {
+    --alpha: 1.0;
+  }
+
+  & > .svg-icon {
+    fill: rgba(var(--accent-color), var(--alpha));
   }
 }
 </style>

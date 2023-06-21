@@ -11,15 +11,21 @@
   grid-gap: 1rem;
 }
 
+.settings-section__header,
+.settings-section__sub-header {
+  display: flex;
+  align-items: center;
+  grid-gap: 1rem;
+  font-weight: bold;
+  line-height: 1.25;
+}
+
 .settings-section__header {
   font-size: 1.25rem;
-  font-weight: bold;
 }
 
 .settings-section__sub-header {
   font-size: 1.125rem;
-  font-weight: bold;
-  line-height: 1.25;
 }
 
 .settings-section__body {

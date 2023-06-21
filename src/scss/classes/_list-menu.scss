@@ -21,6 +21,7 @@
 
     & > span {
       color: rgba(var(--fg-color), var(--alpha));
+      font-weight: bold;
       line-height: 1.25;
       overflow: hidden;
       text-overflow: ellipsis;
