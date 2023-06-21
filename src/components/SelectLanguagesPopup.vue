@@ -41,7 +41,7 @@ function close () {
     <template v-slot:header>
       <h2>
         <SVGIcon name="translate" />
-        <span>{{ $t("selectLanguages") }}</span>
+        <span>{{ $t("contentLanguages") }}</span>
       </h2>
     </template>
     <template v-slot:body>

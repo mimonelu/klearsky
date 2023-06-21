@@ -21,10 +21,6 @@ const mainState = inject("state") as MainState
         >{{ $t("klearsky") }}</RouterLink>
         <RouterLink
           class="tab__button"
-          to="/settings/bluesky"
-        >{{ $t("bluesky") }}</RouterLink>
-        <RouterLink
-          class="tab__button"
           to="/settings/accounts"
         >{{ $t("accounts") }}</RouterLink>
       </div>

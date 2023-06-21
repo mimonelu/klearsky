@@ -3,6 +3,7 @@ import { inject } from "vue"
 import Checkboxes from "@/components/Checkboxes.vue"
 import ColorTheme from "@/components/ColorTheme.vue"
 import Radios from "@/components/Radios.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 import languages from "@/consts/ui-languages.json"
 import settings from "@/consts/settings.json"
@@ -35,6 +36,58 @@ async function resetSettings () {
 
 <template>
   <div class="klearsky-settings-view">
+    <!-- 各種機能設定 -->
+    <div class="list-menu">
+      <!-- コンテンツフィルタリングポップアップトリガー -->
+      <button @click.prevent="mainState.openContentLanguagesPopup">
+        <SVGIcon name="translate" />
+        <span>{{ $t("contentLanguagesEdit") }}</span>
+        <SVGIcon name="cursorRight" />
+      </button>
+
+      <!-- マイフィードポップアップトリガー -->
+      <button @click.prevent="mainState.openMyFeedsPopup">
+        <SVGIcon name="rss" />
+        <span>{{ $t("myFeedsEdit") }}</span>
+        <SVGIcon name="cursorRight" />
+      </button>
+
+      <!-- ワードミュートポップアップトリガー -->
+      <button @click.prevent="mainState.openWordMutePopup">
+        <SVGIcon name="alphabeticalOff" />
+        <span>{{ $t("wordMuteEdit") }}</span>
+        <SVGIcon name="cursorRight" />
+      </button>
+
+      <!-- コンテンツフィルタリングポップアップトリガー -->
+      <button @click.prevent="mainState.openContentFilteringPopup">
+        <SVGIcon name="alert" />
+        <span>{{ $t("modifyContentFiltering") }}</span>
+        <SVGIcon name="cursorRight" />
+      </button>
+
+      <!-- ミュートユーザーリストポップアップトリガー -->
+      <button @click.prevent="mainState.openMutingUsersPopup">
+        <SVGIcon name="volumeOff" />
+        <span>{{ $t("checkMutingUsers") }}</span>
+        <SVGIcon name="cursorRight" />
+      </button>
+
+      <!-- ブロックユーザーリストポップアップトリガー -->
+      <button @click.prevent="mainState.openBlockingUsersPopup">
+        <SVGIcon name="personOff" />
+        <span>{{ $t("checkBlockingUsers") }}</span>
+        <SVGIcon name="cursorRight" />
+      </button>
+
+      <!-- 招待コード確認ポップアップトリガー -->
+      <button @click.prevent="mainState.openInviteCodesPopup">
+        <SVGIcon name="inviteCode" />
+        <span>{{ $t("confirmInviteCodes") }} ({{ mainState.numberOfAvailableInviteCodes }} / {{ mainState.numberOfInviteCodes }})</span>
+        <SVGIcon name="cursorRight" />
+      </button>
+    </div>
+
     <div class="settings-section-container">
       <!-- UI言語 -->
       <div class="settings-section">
@@ -53,19 +106,6 @@ async function resetSettings () {
               >{{ $t(language.label) }}</option>
             </select>
           </label>
-        </div>
-      </div>
-
-      <!-- コンテンツ言語 -->
-      <div class="settings-section">
-        <div class="settings-section__header">{{ $t("contentLanguages") }}</div>
-        <div class="settings-section__body">
-          <button
-            class="button"
-            @click.stop="mainState.openContentLanguagesPopup"
-          >
-            <span>{{ $t("contentLanguagesEdit") }}</span>
-          </button>
         </div>
       </div>
 
@@ -113,19 +153,6 @@ async function resetSettings () {
             layout="horizontal"
             @update="changeSetting"
           />
-        </div>
-      </div>
-
-      <!-- ワードミュート -->
-      <div class="settings-section">
-        <div class="settings-section__header">{{ $t("wordMute") }}</div>
-        <div class="settings-section__body">
-          <button
-            class="button"
-            @click.stop="openWordMutePopup"
-          >
-            <span>{{ $t("wordMuteEdit") }}</span>
-          </button>
         </div>
       </div>
 

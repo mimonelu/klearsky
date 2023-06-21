@@ -34,7 +34,6 @@ import UserSearchView from "@/views/main/search/UserSearchView.vue"
 // Main - Settings
 import SettingsView from "@/views/main/SettingsView.vue"
 import KlearskySettingsView from "@/views/main/settings/KlearskySettingsView.vue"
-import BlueskySettingsView from "@/views/main/settings/BlueskySettingsView.vue"
 import AccountSettingsView from "@/views/main/settings/AccountSettingsView.vue"
 
 const router = createRouter({
@@ -181,12 +180,6 @@ const router = createRouter({
               name: "klearsky-settings",
               meta: { label: "klearskySettings" },
               component: KlearskySettingsView,
-            },
-            {
-              path: "bluesky",
-              name: "bluesky-settings",
-              meta: { label: "blueskySettings" },
-              component: BlueskySettingsView,
             },
             {
               path: "accounts",

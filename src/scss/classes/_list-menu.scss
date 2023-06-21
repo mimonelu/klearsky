@@ -1,0 +1,30 @@
+.list-menu {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    --alpha: 0.75;
+    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    cursor: pointer;
+    display: grid;
+    align-items: center;
+    grid-gap: 1em;
+    grid-template-columns: auto 1fr auto;
+    padding: 1em;
+    &:focus, &:hover {
+      --alpha: 1.0;
+    }
+
+    & > .svg-icon {
+      fill: rgba(var(--fg-color), var(--alpha));
+    }
+
+    & > span {
+      color: rgba(var(--fg-color), var(--alpha));
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

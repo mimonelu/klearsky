@@ -149,6 +149,7 @@
   "customFeeds": "Custom Feeds",
   "popularFeeds": "Popular Feeds",
   "myFeeds": "My Feeds",
+  "myFeedsEdit": "Edit my feeds",
   "noFeeds": "There are no bookmarked custom feeds.",
   "noMyFeeds": "There are no My Feeds. Please bookmark feeds.",
   "noPopularFeeds": "There are no popular feeds. Please contact the server administrator.",
@@ -168,8 +169,7 @@
 
   "uiLanguage": "UI Language",
   "contentLanguages": "Content Languages",
-  "contentLanguagesEdit": "Select Content Languages",
-  "selectLanguages": "Select Content Languages",
+  "contentLanguagesEdit": "Select content languages",
   "selectLanguagesDetail": "Multiple selections allowed. If select nothing, all posts be displayed.",
   "english": "English",
   "japanese": "Japanese",
