@@ -30,7 +30,6 @@ import UserSearchView from "@/views/main/search/UserSearchView.vue"
 // Main - Settings
 import SettingsView from "@/views/main/SettingsView.vue"
 import KlearskySettingsView from "@/views/main/settings/KlearskySettingsView.vue"
-import AccountSettingsView from "@/views/main/settings/AccountSettingsView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -162,12 +161,6 @@ const router = createRouter({
               name: "klearsky-settings",
               meta: { label: "klearskySettings" },
               component: KlearskySettingsView,
-            },
-            {
-              path: "accounts",
-              name: "account-settings",
-              meta: { label: "accountSettings" },
-              component: AccountSettingsView,
             },
           ],
         },

@@ -4,6 +4,7 @@ import type { LocationQueryValue, RouteLocationNormalized, RouteRecordName } fro
 import { useRouter } from "vue-router"
 import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
+import AccountPopup from "@/components/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
 import ContentFilteringPopup from "@/components/ContentFilteringPopup.vue"
@@ -209,6 +210,9 @@ function resetState () {
 
   // 通知ポップアップの表示スイッチ
   state.notificationPopupDisplay = false
+
+  // アカウントポップアップの表示スイッチ
+  state.accountPopupDisplay = false
 
   // コンテンツ言語ポップアップの表示スイッチ
   state.contentLanguagesPopupDisplay = false
@@ -575,6 +579,12 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.notificationPopupDisplay"
       @close="state.closeNotificationPopup"
       @updatePageTitle="updatePageTitle"
+    />
+
+    <!-- アカウントポップアップ -->
+    <AccountPopup
+      v-if="state.accountPopupDisplay"
+      @close="state.closeAccountPopup"
     />
 
     <!-- 言語選択ポップアップ -->

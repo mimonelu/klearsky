@@ -14,16 +14,6 @@ const mainState = inject("state") as MainState
         :title="$t('settings')"
         :subTitle="mainState.atp.session?.handle ?? ''"
       />
-      <div class="tab">
-        <RouterLink
-          class="tab__button"
-          to="/settings/klearsky"
-        >{{ $t("klearsky") }}</RouterLink>
-        <RouterLink
-          class="tab__button"
-          to="/settings/accounts"
-        >{{ $t("accounts") }}</RouterLink>
-      </div>
     </div>
     <RouterView />
   </div>

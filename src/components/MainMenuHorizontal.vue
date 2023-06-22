@@ -10,6 +10,11 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
+function openAccountPopup () {
+  Util.blurElement()
+  mainState.openAccountPopup()
+}
+
 async function openSendPostPopup () {
   Util.blurElement()
   await mainState.openSendPostPopup("post")
@@ -81,6 +86,14 @@ async function openSendPostPopup () {
       <SVGIcon name="setting" />
     </RouterLink>
 
+    <!-- アカウントポップアップトリガー -->
+    <button
+      class="link-button"
+      @click.prevent="openAccountPopup"
+    >
+      <SVGIcon name="person" />
+    </button>
+
     <!-- ポスト送信ポップアップトリガー -->
     <button
       class="link-button send-post-button"
@@ -97,7 +110,7 @@ async function openSendPostPopup () {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-top: 1px solid rgba(var(--fg-color), 0.25);
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   min-height: var(--sp-menu-height);
   max-height: var(--sp-menu-height);
 }

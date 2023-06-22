@@ -10,6 +10,11 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
+function openAccountPopup () {
+  Util.blurElement()
+  mainState.openAccountPopup()
+}
+
 async function openSendPostPopup () {
   Util.blurElement()
   await mainState.openSendPostPopup("post")
@@ -106,6 +111,17 @@ function moveToBottom () {
       </div>
       <div class="label">{{ $t("settings") }}</div>
     </RouterLink>
+
+    <!-- アカウントポップアップトリガー -->
+    <button
+      class="link-button"
+      @click.prevent="openAccountPopup"
+    >
+      <div class="icon">
+        <SVGIcon name="person" />
+      </div>
+      <div class="label">{{ $t("account") }}</div>
+    </button>
 
     <!-- ポスト送信ポップアップトリガー -->
     <button

@@ -120,6 +120,10 @@ const state = reactive<MainState>({
   openNotificationPopup,
   closeNotificationPopup,
 
+  // アカウントポップアップの開閉
+  openAccountPopup,
+  closeAccountPopup,
+
   // コンテンツ言語ポップアップの開閉
   openContentLanguagesPopup,
   closeContentLanguagesPopup,
@@ -675,6 +679,16 @@ function openNotificationPopup () {
 
 function closeNotificationPopup () {
   state.notificationPopupDisplay = false
+}
+
+// アカウントポップアップの開閉
+
+function openAccountPopup () {
+  state.accountPopupDisplay = true
+}
+
+function closeAccountPopup () {
+  state.accountPopupDisplay = false
 }
 
 // コンテンツ言語ポップアップの開閉

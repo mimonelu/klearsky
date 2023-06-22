@@ -181,6 +181,9 @@ type MainState = {
   // 通知ポップアップの表示スイッチ
   notificationPopupDisplay: boolean
 
+  // アカウントポップアップの表示スイッチ
+  accountPopupDisplay: boolean
+
   // コンテンツ言語ポップアップの表示スイッチ
   contentLanguagesPopupDisplay: boolean
 
@@ -266,6 +269,10 @@ type MainState = {
   // 通知ポップアップの開閉
   openNotificationPopup: Function
   closeNotificationPopup: Function
+
+  // アカウントポップアップの開閉
+  openAccountPopup: Function
+  closeAccountPopup: Function
 
   // コンテンツ言語ポップアップの開閉
   openContentLanguagesPopup: Function
