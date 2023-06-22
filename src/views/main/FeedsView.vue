@@ -3,6 +3,7 @@ import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import FeedList from "@/components/FeedList.vue"
+import PageHeader from "@/components/PageHeader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -48,17 +49,24 @@ function openPopularFeedsPopup () {
 
 <template>
   <div class="feeds-view">
-    <Portal to="home-view-header-portal">
-      <!-- マイフィードポップアップトリガー -->
-      <button @click.stop="openMyFeedsPopup">
-        <SVGIcon name="rss" />
-      </button>
+    <PageHeader
+      :hasBackButton="true"
+      :title="$t('customFeeds')"
+      :subTitle="mainState.currentQuery.displayName"
 
-      <!-- 人気のフィードポップアップトリガー -->
-      <button @click.stop="openPopularFeedsPopup">
-        <SVGIcon name="fire" />
-      </button>
-    </Portal>
+    >
+      <template #right>
+        <!-- マイフィードポップアップトリガー -->
+        <button @click.stop="openMyFeedsPopup">
+          <SVGIcon name="rss" />
+        </button>
+
+        <!-- 人気のフィードポップアップトリガー -->
+        <button @click.stop="openPopularFeedsPopup">
+          <SVGIcon name="fire" />
+        </button>
+      </template>
+    </PageHeader>
     <CustomFeedCard
       v-if="state.generator != null"
       :generator="state.generator"
