@@ -65,16 +65,6 @@ async function refreshSession () {
 
     <!-- トリガーコンテナ -->
     <div class="textlink-container">
-      <!-- 招待コード確認ポップアップトリガー -->
-      <a
-        v-if="mainState.numberOfAvailableInviteCodes > 0"
-        class="textlink--icon"
-        @click.prevent="mainState.openInviteCodesPopup"
-      >
-        <SVGIcon name="inviteCode" />
-        <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
-      </a>
-
       <!-- コンテンツ言語ポップアップトリガー -->
       <a
         class="textlink--icon"
@@ -127,6 +117,16 @@ async function refreshSession () {
       >
         <SVGIcon name="personOff" />
         <span>{{ $t("blockingUsers") }}</span>
+      </a>
+
+      <!-- 招待コード確認ポップアップトリガー -->
+      <a
+        v-if="mainState.numberOfAvailableInviteCodes > 0"
+        class="textlink--icon"
+        @click.prevent="mainState.openInviteCodesPopup"
+      >
+        <SVGIcon name="inviteCode" />
+        <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
       </a>
 
       <!-- セッション更新トリガー -->
