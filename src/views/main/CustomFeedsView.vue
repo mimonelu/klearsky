@@ -11,34 +11,35 @@ function openMyFeedsPopup () {
   Util.blurElement()
   mainState.openMyFeedsPopup()
 }
+
+function openPopularFeedsPopup () {
+  Util.blurElement()
+  mainState.openPopularFeedsPopup()
+}
 </script>
 
 <template>
   <div class="custom-feeds-view">
-    <div class="custom-feeds-view__header">
-      <PageHeader
-        :hasBackButton="true"
-        :title="$t('customFeeds')"
-        :subTitle="mainState.currentQuery.displayName"
-      >
-        <template #right>
-          <PortalTarget name="custom-feeds-view-header-portal" />
-          <button @click.stop="openMyFeedsPopup">
-            <SVGIcon name="rss" />
-          </button>
-        </template>
-      </PageHeader>
-      <div class="tab">
-        <RouterLink
-          class="tab__button"
-          to="/feeds/my"
-        >{{ $t("myFeeds") }}</RouterLink>
-        <RouterLink
-          class="tab__button"
-          to="/feeds/popular"
-        >{{ $t("popularFeeds") }}</RouterLink>
-      </div>
-    </div>
+    <PageHeader
+      :hasBackButton="true"
+      :title="$t('customFeeds')"
+      :subTitle="mainState.currentQuery.displayName"
+    >
+      <template #right>
+        <!-- VuePortal の出口 -->
+        <PortalTarget name="custom-feeds-view-header-portal" />
+
+        <!-- マイフィードポップアップトリガー -->
+        <button @click.stop="openMyFeedsPopup">
+          <SVGIcon name="rss" />
+        </button>
+
+        <!-- 人気のフィードポップアップトリガー -->
+        <button @click.stop="openPopularFeedsPopup">
+          <SVGIcon name="fire" />
+        </button>
+      </template>
+    </PageHeader>
     <RouterView class="child-view" />
   </div>
 </template>
@@ -49,20 +50,8 @@ function openMyFeedsPopup () {
   flex-direction: column;
   flex-grow: 1;
 
-  &__header {
-    position: sticky;
-    top: 0;
+  .page-header {
     z-index: 2;
-
-    .page-header:deep() {
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
-    }
-
-    .tab {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
   }
 }
 

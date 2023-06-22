@@ -112,24 +112,47 @@ function scrollToTop () {
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   cursor: pointer;
   display: flex;
-  align-items: center;
-  padding: 0 1.5rem;
   position: relative;
   min-height: 3rem;
 
-  &:deep() > h2 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    grid-gap: 0.5rem;
+  &:deep() {
+    & > button {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      // min-height: 3rem;
 
-    & > .svg-icon {
-      fill: rgb(var(--fg-color));
+      & > .svg-icon {
+        fill: rgba(var(--fg-color), 0.75);
+      }
+
+      &:focus, &:hover {
+        & > .svg-icon {
+          fill: rgb(var(--fg-color));
+        }
+      }
     }
 
-    & > span {
-      font-weight: bold;
+    & > h2 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      grid-gap: 0.5rem;
+
+      &:first-child {
+        margin-left: 3rem;
+      }
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color));
+      }
+
+      & > span {
+        font-weight: bold;
+      }
     }
   }
 }
@@ -145,28 +168,6 @@ function scrollToTop () {
   @include scroll-bar();
   &:first-child {
     padding-top: 2rem;
-  }
-}
-
-.popup-closer {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 3rem;
-  min-height: 3rem;
-
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.75);
-  }
-
-  &:focus, &:hover {
-    & > .svg-icon {
-      fill: rgb(var(--fg-color));
-    }
   }
 }
 </style>

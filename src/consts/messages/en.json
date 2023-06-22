@@ -21,6 +21,7 @@
   "bluesky": "Bluesky",
   "account": "Accounts",
   "profile": "Profile",
+  "language": "Language",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -150,8 +151,8 @@
   "popularFeeds": "Popular Feeds",
   "myFeeds": "My Feeds",
   "myFeedsEdit": "Edit my feeds",
-  "noFeeds": "There are no bookmarked custom feeds.",
-  "noMyFeeds": "There are no My Feeds. Please bookmark feeds.",
+  "noFeeds": "There are no saved custom feeds.",
+  "noMyFeeds": "There are no My Feeds. Please save feeds.",
   "noPopularFeeds": "There are no popular feeds. Please contact the server administrator.",
 
   "search": "Search",

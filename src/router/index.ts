@@ -14,7 +14,6 @@ import GloballineView from "@/views/main/home/GloballineView.vue"
 // Main - Custom Feeds
 import CustomFeedsView from "@/views/main/CustomFeedsView.vue"
 import MyFeedsView from "@/views/main/feeds/MyFeedsView.vue"
-import PopularFeedsView from "@/views/main/feeds/PopularFeedsView.vue"
 import FeedsTimelineView from "@/views/main/feeds/FeedsTimelineView.vue"
 
 // Main - Profile
@@ -92,12 +91,6 @@ const router = createRouter({
               name: "feeds-my",
               meta: { label: "myFeeds" },
               component: MyFeedsView,
-            },
-            {
-              path: "popular",
-              name: "feeds-popular",
-              meta: { label: "popularFeeds" },
-              component: PopularFeedsView,
             },
             {
               path: "timeline",

@@ -19,6 +19,7 @@ import MessagePopup from "@/components/MessagePopup.vue"
 import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/MyFeedsPopup.vue"
 import NotificationPopup from "@/components/NotificationPopup.vue"
+import PopularFeedsPopup from "@/components/PopularFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
@@ -381,11 +382,6 @@ async function processPage (pageName?: null | RouteRecordName) {
           await state.fetchMyFeeds()
         break
       }
-      case "feeds-popular": {
-        if (state.currentPopularFeedGenerators.length === 0)
-          await state.fetchPopularFeedGenerators()
-        break
-      }
       case "feeds-timeline": {
         if (state.currentCustomUri !== state.currentQuery.feed ||
             state.currentCustomFeeds.length === 0)
@@ -616,6 +612,12 @@ function broadcastListener (event: MessageEvent) {
     <MyFeedsPopup
       v-if="state.myFeedsPopupDisplay"
       @close="state.closeMyFeedsPopup"
+    />
+
+    <!-- 人気のフィードポップアップ -->
+    <PopularFeedsPopup
+      v-if="state.popularFeedsPopupDisplay"
+      @close="state.closePopularFeedsPopup"
     />
 
     <!-- ワードミュートポップアップ -->

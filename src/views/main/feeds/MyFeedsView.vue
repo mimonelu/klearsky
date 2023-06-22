@@ -96,7 +96,7 @@ async function updateMyFeeds () {
     align-items: center;
     padding: 1rem;
     position: sticky;
-    top: calc(6rem + 1px);
+    top: 3rem;
     z-index: 1;
 
     & > .svg-icon--rss {

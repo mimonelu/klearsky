@@ -21,6 +21,7 @@
   "bluesky": "Bluesky",
   "account": "アカウント",
   "profile": "プロフィール",
+  "language": "言語",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -150,8 +151,8 @@
   "popularFeeds": "人気のフィード",
   "myFeeds": "マイフィード",
   "myFeedsEdit": "マイフィードを編集する",
-  "noMyFeeds": "マイフィードがありません。フィードをブックマークしてください。",
-  "noFeeds": "ブックマークされたカスタムフィードはありません。",
+  "noMyFeeds": "マイフィードがありません。フィードを保存してください。",
+  "noFeeds": "保存されたカスタムフィードがありません。",
   "noPopularFeeds": "人気のフィードがありません。サーバ管理者にお問い合わせください。",
 
   "search": "検索",

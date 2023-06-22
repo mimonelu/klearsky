@@ -2,6 +2,7 @@
 import { inject, onMounted, reactive } from "vue"
 import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import Popup from "@/components/Popup.vue"
+import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -9,16 +10,18 @@ const emit = defineEmits<{(event: string): void}>()
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  processing: boolean
   orderChanged: boolean
 }>({
+  processing: false,
   orderChanged: false,
 })
 
 onMounted(async () => {
   // Preferences の取得
-  mainState.processing = true
+  state.processing = true
   const preferences = await mainState.fetchPreferences()
-  mainState.processing = false
+  state.processing = false
   if (!preferences) {
     mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchPreferences")
     return
@@ -37,9 +40,9 @@ onMounted(async () => {
   if (savedBefore === savedAfter && mainState.currentMyFeedGenerators.length > 0) return
 
   // マイフィードジェネレーターの取得
-  mainState.processing = true
+  state.processing = true
   const generators = await mainState.atp.fetchFeedGenerators(mainState.feedPreferences.saved)
-  mainState.processing = false
+  state.processing = false
   if (generators instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
     return
@@ -49,10 +52,10 @@ onMounted(async () => {
 
 async function close () {
   if (state.orderChanged) {
-    mainState.processing = true
+    state.processing = true
     if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
       mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
-    mainState.processing = false
+    state.processing = false
   }
 
   emit("close")
@@ -90,17 +93,16 @@ function changeCustomFeedOrder () {
     :hasCloseButton="true"
     @close="close"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <SVGIcon name="rss" />
         <span>{{ $t("myFeeds") }}</span>
       </h2>
     </template>
-    <template v-slot:body>
+    <template #body>
       <div
-        v-if="mainState.currentMyFeedGenerators.length === 0"
+        v-if="!state.processing && mainState.currentMyFeedGenerators.length === 0"
         class="textlabel"
-        :data-is-processing="mainState.processing"
       >
         <div class="textlabel__text">
           <SVGIcon name="alert" />{{ $t("noFeeds") }}
@@ -116,12 +118,17 @@ function changeCustomFeedOrder () {
           @changeCustomFeedOrder="changeCustomFeedOrder"
         />
       </template>
+      <Loader v-if="state.processing" />
     </template>
   </Popup>
 </template>
 
 <style lang="scss" scoped>
 .my-feeds-popup:deep() {
+  .popup {
+    flex-grow: 1;
+  }
+
   .popup-header {
     & > h2 {
       color: rgb(var(--accent-color));
@@ -133,6 +140,7 @@ function changeCustomFeedOrder () {
   }
 
   .popup-body {
+    flex-grow: 1;
     grid-gap: unset;
     padding: unset;
   }
@@ -143,9 +151,6 @@ function changeCustomFeedOrder () {
 
   .textlabel {
     margin: 1rem;
-    &[data-is-processing="true"] {
-      visibility: hidden;
-    }
   }
 }
 </style>

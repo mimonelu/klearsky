@@ -132,6 +132,10 @@ const state = reactive<MainState>({
   openMyFeedsPopup,
   closeMyFeedsPopup,
 
+  // 人気のフィードポップアップの開閉
+  openPopularFeedsPopup,
+  closePopularFeedsPopup,
+
   // ワードミュートポップアップの開閉
   openWordMutePopup,
   closeWordMutePopup,
@@ -443,9 +447,7 @@ async function fetchSuggestions (direction: "new" | "old") {
 }
 
 async function fetchPopularFeedGenerators () {
-  state.listProcessing = true
   const feeds = await state.atp.fetchPopularFeedGenerators()
-  state.listProcessing = false
   if (feeds == null) return
   if (feeds === false) state.openErrorPopup("errorApiFailed", "main-state/fetchPopularFeedGenerators")
   state.currentPopularFeedGenerators = feeds as Array<TTFeedGenerator>
@@ -703,6 +705,16 @@ function openMyFeedsPopup () {
 
 function closeMyFeedsPopup () {
   state.myFeedsPopupDisplay = false
+}
+
+// 人気のフィードポップアップの開閉
+
+function openPopularFeedsPopup () {
+  state.popularFeedsPopupDisplay = true
+}
+
+function closePopularFeedsPopup () {
+  state.popularFeedsPopupDisplay = false
 }
 
 // ワードミュートポップアップの開閉
