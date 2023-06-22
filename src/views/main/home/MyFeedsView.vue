@@ -14,13 +14,33 @@ async function updateMyFeeds () {
   await mainState.fetchMyFeeds()
   mainState.listProcessing = false
 }
+
+function openMyFeedsPopup () {
+  Util.blurElement()
+  mainState.openMyFeedsPopup()
+}
+
+function openPopularFeedsPopup () {
+  Util.blurElement()
+  mainState.openPopularFeedsPopup()
+}
 </script>
 
 <template>
   <div class="my-feeds-view">
-    <Portal to="custom-feeds-view-header-portal">
+    <Portal to="home-view-header-portal">
       <button @click.stop="updateMyFeeds">
         <SVGIcon name="repost" />
+      </button>
+
+      <!-- マイフィードポップアップトリガー -->
+      <button @click.stop="openMyFeedsPopup">
+        <SVGIcon name="rss" />
+      </button>
+
+      <!-- 人気のフィードポップアップトリガー -->
+      <button @click.stop="openPopularFeedsPopup">
+        <SVGIcon name="fire" />
       </button>
     </Portal>
     <div
@@ -40,7 +60,7 @@ async function updateMyFeeds () {
       >
         <RouterLink
           class="my-feeds-view__header"
-          :to="{ path: '/feeds/timeline', query: {
+          :to="{ path: '/feeds', query: {
             feed: myFeeds.generator?.uri,
             displayName: myFeeds.generator?.displayName,
           } }"
@@ -51,7 +71,7 @@ async function updateMyFeeds () {
         </RouterLink>
         <div class="my-feeds-view__body">
           <FeedList
-            type="feeds-timeline"
+            type="feeds"
             :feeds="myFeeds.feeds"
             :hasLoadButton="false"
             :disabledInfinitScroll="true"
@@ -63,7 +83,7 @@ async function updateMyFeeds () {
         >
           <RouterLink
             class="button--plane"
-            :to="{ path: '/feeds/timeline', query: {
+            :to="{ path: '/feeds', query: {
               feed: myFeeds.generator?.uri,
               displayName: myFeeds.generator?.displayName,
             } }"
@@ -96,7 +116,7 @@ async function updateMyFeeds () {
     align-items: center;
     padding: 1rem;
     position: sticky;
-    top: 3rem;
+    top: calc(6rem + 1px);
     z-index: 1;
 
     & > .svg-icon--rss {

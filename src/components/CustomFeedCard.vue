@@ -64,7 +64,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 <template>
   <RouterLink
     class="custom-feed-card"
-    :to="{ path: '/feeds/timeline', query: {
+    :to="{ path: '/feeds', query: {
       feed: generator.uri,
       displayName: generator.displayName,
     } }"

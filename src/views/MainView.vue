@@ -260,7 +260,7 @@ function updatePageTitle () {
       title += ` - ${state.currentQuery.account}`
       break
     }
-    case "/feeds/timeline": {
+    case "/feeds": {
       title += ` - ${state.currentQuery.displayName}`
       break
     }
@@ -377,12 +377,12 @@ async function processPage (pageName?: null | RouteRecordName) {
         await state.fetchTimeline("new")
         break
       }
-      case "feeds-my": {
+      case "feeds-home": {
         if (Object.keys(state.currentMyFeeds).length === 0)
           await state.fetchMyFeeds()
         break
       }
-      case "feeds-timeline": {
+      case "feeds": {
         if (state.currentCustomUri !== state.currentQuery.feed ||
             state.currentCustomFeeds.length === 0)
           await state.fetchCustomFeeds("new")

@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
-import { RouterView } from "vue-router"
 import PageHeader from "@/components/PageHeader.vue"
-
-const mainState = inject("state") as MainState
 </script>
 
 <template>
@@ -24,6 +20,10 @@ const mainState = inject("state") as MainState
         >{{ $t("timeline") }}</RouterLink>
         <RouterLink
           class="tab__button"
+          to="/home/my"
+        >{{ $t("myFeeds") }}</RouterLink>
+        <RouterLink
+          class="tab__button"
           to="/home/globalline"
         >{{ $t("globalline") }}</RouterLink>
       </div>
@@ -41,7 +41,7 @@ const mainState = inject("state") as MainState
   &__header {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
   }
 }
 

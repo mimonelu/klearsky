@@ -49,15 +49,6 @@ async function openSendPostPopup () {
       <SVGIcon name="home" />
     </RouterLink>
 
-    <!-- カスタムフィードボタン -->
-    <RouterLink
-      class="link-button"
-      to="/feeds/my"
-      :data-is-focus="mainState.currentPath.startsWith('/feeds/')"
-    >
-      <SVGIcon name="rss" />
-    </RouterLink>
-
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
@@ -106,7 +97,7 @@ async function openSendPostPopup () {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-top: 1px solid rgba(var(--fg-color), 0.25);
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   min-height: var(--sp-menu-height);
   max-height: var(--sp-menu-height);
 }

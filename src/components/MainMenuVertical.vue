@@ -66,18 +66,6 @@ function moveToBottom () {
       <div class="label">{{ $t("home") }}</div>
     </RouterLink>
 
-    <!-- カスタムフィードボタン -->
-    <RouterLink
-      class="link-button"
-      to="/feeds/my"
-      :data-is-focus="mainState.currentPath.startsWith('/feeds/')"
-    >
-      <div class="icon">
-        <SVGIcon name="rss" />
-      </div>
-      <div class="label">{{ $t("customFeeds") }}</div>
-    </RouterLink>
-
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"

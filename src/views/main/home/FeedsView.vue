@@ -3,6 +3,8 @@ import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import FeedList from "@/components/FeedList.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
@@ -33,20 +35,37 @@ const state = reactive<{
   }),
 })
 
-function saveSettings () {
-  mainState.saveSettings()
+function openMyFeedsPopup () {
+  Util.blurElement()
+  mainState.openMyFeedsPopup()
+}
+
+function openPopularFeedsPopup () {
+  Util.blurElement()
+  mainState.openPopularFeedsPopup()
 }
 </script>
 
 <template>
-  <div class="feeds-timeline-view">
+  <div class="feeds-view">
+    <Portal to="home-view-header-portal">
+      <!-- マイフィードポップアップトリガー -->
+      <button @click.stop="openMyFeedsPopup">
+        <SVGIcon name="rss" />
+      </button>
+
+      <!-- 人気のフィードポップアップトリガー -->
+      <button @click.stop="openPopularFeedsPopup">
+        <SVGIcon name="fire" />
+      </button>
+    </Portal>
     <CustomFeedCard
       v-if="state.generator != null"
       :generator="state.generator"
       :orderButtonDisplay="false"
     />
     <FeedList
-      type="feeds-timeline"
+      type="feeds"
       :feeds="mainState.currentCustomFeeds"
       :hasLoadButton="true"
     />
@@ -54,7 +73,7 @@ function saveSettings () {
 </template>
 
 <style lang="scss" scoped>
-.feeds-timeline-view {
+.feeds-view {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
