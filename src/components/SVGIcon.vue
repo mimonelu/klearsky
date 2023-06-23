@@ -6,6 +6,8 @@ import arrowLeft from "@/svg/arrow-left.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
 import bookmark from "@/svg/bookmark.svg?raw"
+import bookmarkOff from "@/svg/bookmark-off.svg?raw"
+import bookmarkOutline from "@/svg/bookmark-outline.svg?raw"
 import check from "@/svg/check.svg?raw"
 import checkboxOff from "@/svg/checkbox-off.svg?raw"
 import checkboxOn from "@/svg/checkbox-on.svg?raw"
@@ -39,6 +41,8 @@ import pause from "@/svg/pause.svg?raw"
 import people from "@/svg/people.svg?raw"
 import person from "@/svg/person.svg?raw"
 import personOff from "@/svg/person-off.svg?raw"
+import pin from "@/svg/pin.svg?raw"
+import pinOutline from "@/svg/pin-outline.svg?raw"
 import play from "@/svg/play.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
@@ -64,6 +68,8 @@ const icons: { [k: string]: string } = {
   at,
   bell,
   bookmark,
+  bookmarkOff,
+  bookmarkOutline,
   check,
   checkboxOff,
   checkboxOn,
@@ -97,6 +103,8 @@ const icons: { [k: string]: string } = {
   people,
   person,
   personOff,
+  pin,
+  pinOutline,
   play,
   plus,
   post,

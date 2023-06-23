@@ -16,31 +16,40 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
   saved: ComputedRef<boolean>
+  pinned: ComputedRef<boolean>
 }>({
   processing: false,
   saved: computed((): boolean => {
     return mainState.feedPreferences?.saved
       .some((uri: string) => uri === props.generator.uri) ?? false
   }),
+  pinned: computed((): boolean => {
+    return mainState.feedPreferences?.pinned
+      .some((uri: string) => uri === props.generator.uri) ?? false
+  }),
 })
 
-async function toggleSaved () {
+async function toggleSavedOrPinned (type: "saved" | "pinned") {
   Util.blurElement()
   if (state.processing) return
   if (mainState.feedPreferences == null) return
-  if (mainState.feedPreferences.saved == null) mainState.feedPreferences.saved = []
+  if (mainState.feedPreferences[type] == null) mainState.feedPreferences[type] = []
 
-  // フィードブックマークの削除
-  if (state.saved)
-    mainState.feedPreferences.saved.splice(
+  // フィードブックマーク／フィードピンの削除
+  if (state[type]) {
+    // フィードブックマークの削除はフィードピンが無効の場合のみ
+    if (type === "saved" && state.pinned) return
+
+    mainState.feedPreferences[type].splice(
       0,
-      mainState.feedPreferences.saved.length,
-      ...mainState.feedPreferences.saved.filter((uri: string) => uri !== props.generator.uri)
+      mainState.feedPreferences[type].length,
+      ...mainState.feedPreferences[type].filter((uri: string) => uri !== props.generator.uri)
     )
+  }
 
-  // フィードブックマークの追加
+  // フィードブックマーク／フィードピンの追加
   else
-    mainState.feedPreferences.saved.push(props.generator.uri)
+    mainState.feedPreferences[type].push(props.generator.uri)
 
   state.processing = true
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
@@ -99,13 +108,25 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         </div>
 
         <div class="custom-feed-card__top__right__right">
-          <!-- お気に入りフィード -->
+          <!-- フィードピン -->
+          <button
+            class="custom-feed-card__pin"
+            @click.prevent.stop="toggleSavedOrPinned('pinned')"
+          >
+            <SVGIcon :name="state.pinned ? 'pin' : 'pinOutline'" />
+          </button>
+
+          <!-- フィードブックマーク -->
           <button
             class="custom-feed-card__bookmark"
-            :data-saved="state.saved"
-            @click.prevent.stop="toggleSaved"
+            @click.prevent.stop="toggleSavedOrPinned('saved')"
           >
-            <SVGIcon name="bookmark" />
+            <SVGIcon :name="state.saved
+              ? state.pinned
+                ? 'bookmarkOff'
+                : 'bookmark'
+              : 'bookmarkOutline'
+            " />
           </button>
         </div>
       </div>
@@ -181,6 +202,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         align-items: flex-start;
         justify-content: flex-end;
         flex-grow: 1;
+        grid-gap: 1em;
       }
     }
   }
@@ -266,12 +288,13 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     }
   }
 
-  // お気に入りフィード
-  &__bookmark {
+  // フィードブックマーク・フィードピン
+  &__bookmark,
+  &__pin {
     --color: rgba(var(--accent-color), 0.875);
     cursor: pointer;
-    margin: -1em;
-    padding: 1em;
+    margin: -0.5em;
+    padding: 0.5em;
     &:focus, &:hover {
       --color: rgb(var(--accent-color));
     }
@@ -280,7 +303,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       fill: var(--color);
       font-size: 1.5em;
     }
-    &[data-saved="false"] > .svg-icon {
+    &[data-on="false"] > .svg-icon {
       fill: transparent;
       stroke: var(--color);
       stroke-linecap: round;
