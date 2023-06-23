@@ -29,6 +29,29 @@ const state = reactive<{
   }),
 })
 
+async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
+  Util.blurElement()
+  if (state.processing) return
+  state.processing = true
+  if (generator.viewer.like == null) {
+    const uri = await mainState.atp.createLike(generator.uri, generator.cid)
+    if (uri != null) {
+      generator.viewer.like = uri
+      generator.likeCount ++
+    } else {
+      mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/createLike")
+    }
+  } else {
+    if (await mainState.atp.deleteLike(generator.viewer.like)) {
+      delete generator.viewer.like
+      generator.likeCount --
+    } else {
+      mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/deleteLike")
+    }
+  }
+  state.processing = false
+}
+
 async function toggleSavedOrPinned (type: "saved" | "pinned") {
   Util.blurElement()
   if (state.processing) return
@@ -100,10 +123,14 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         </div>
 
         <!-- フィードライク数 -->
-        <div class="custom-feed-card__like-count">
+        <button
+          class="custom-feed-card__like-count"
+          :data-on="generator.viewer.like != null"
+          @click.prevent.stop="toggleFeedGeneratorLike(generator)"
+        >
           <SVGIcon name="heart" />
           <span>{{ generator.likeCount }}</span>
-        </div>
+        </button>
 
         <!-- フィード作成日時 -->
         <div class="custom-feed-card__indexed-at">
@@ -203,7 +230,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         "n n r"
         "l i r";
       flex-grow: 1;
-      grid-gap: 0.25em 0.5em;
+      grid-gap: 0.5em 0.75em;
 
       &__right {
         grid-area: r;
@@ -254,12 +281,8 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   &__indexed-at {
     display: flex;
     align-items: center;
-    grid-gap: 0.25em;
+    grid-gap: 0.5em;
     overflow: hidden;
-
-    & > .svg-icon {
-      font-size: 0.75em;
-    }
 
     & > span {
       font-size: 0.875em;
@@ -272,14 +295,29 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
   // フィードライク数
   &__like-count {
+    --color: rgba(var(--fg-color), 0.5);
+    cursor: pointer;
     grid-area: l;
+    margin: -0.5em;
+    padding: 0.5em;
+    &[data-on="true"] {
+      --color: rgba(var(--like-color), 0.75);
+      &:focus, &:hover {
+        --color: rgb(var(--like-color));
+      }
+    }
+    &[data-on="false"] {
+      &:focus, &:hover {
+        --color: rgb(var(--fg-color));
+      }
+    }
 
     & > .svg-icon {
-      fill: rgba(var(--like-color), 0.75);
+      fill: var(--color);
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.75);
+      color: var(--color);
       font-weight: bold;
     }
   }
@@ -289,11 +327,12 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     grid-area: i;
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.75);
+      fill: rgba(var(--fg-color), 0.5);
+      font-size: 0.75em;
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.75);
+      color: rgba(var(--fg-color), 0.5);
     }
   }
 

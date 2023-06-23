@@ -280,5 +280,8 @@ type TTFeedGenerator = {
   indexedAt:string
   likeCount: number
   uri: string
-  viewer: { [k: string]: any }
+  viewer: {
+    like?: string
+    [k: string]: any
+  }
 }
