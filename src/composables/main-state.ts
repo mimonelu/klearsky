@@ -520,11 +520,8 @@ function saveSettings () {
     state.settings[did].autoTranslation = false
   if (state.settings[did].autoTranslationIgnoreLanguage == null)
     state.settings[did].autoTranslationIgnoreLanguage = undefined
-  if (state.settings[did].contentLanguages == null) {
-    const userLanguage = Util.getUserLanguage()
-    state.settings[did].contentLanguages = [userLanguage]
-    if (userLanguage !== "en") state.settings[did].contentLanguages?.push("en")
-  }
+  if (state.settings[did].contentLanguages == null)
+    state.settings[did].contentLanguages = []
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].wordMute == null)
