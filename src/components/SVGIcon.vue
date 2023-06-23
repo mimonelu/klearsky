@@ -42,6 +42,7 @@ import people from "@/svg/people.svg?raw"
 import person from "@/svg/person.svg?raw"
 import personOff from "@/svg/person-off.svg?raw"
 import pin from "@/svg/pin.svg?raw"
+import pinOffOutline from "@/svg/pin-off-outline.svg?raw"
 import pinOutline from "@/svg/pin-outline.svg?raw"
 import play from "@/svg/play.svg?raw"
 import plus from "@/svg/plus.svg?raw"
@@ -104,6 +105,7 @@ const icons: { [k: string]: string } = {
   person,
   personOff,
   pin,
+  pinOffOutline,
   pinOutline,
   play,
   plus,

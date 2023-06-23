@@ -479,10 +479,11 @@ async function fetchCustomFeeds (direction: "old" | "new") {
 }
 
 async function fetchMyFeeds (): Promise<boolean> {
-  const saved: undefined | Array<string> = state.feedPreferences?.saved
-  if (saved == null) return false
+  const pinned: undefined | Array<string> =
+    state.feedPreferences?.saved.filter((uri: string) => state.feedPreferences?.pinned.includes(uri))
+  if (pinned == null) return false
 
-  const generators = await state.atp.fetchFeedGenerators(saved)
+  const generators = await state.atp.fetchFeedGenerators(pinned)
   if (generators instanceof Error) {
     state.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
     return false
@@ -492,14 +493,14 @@ async function fetchMyFeeds (): Promise<boolean> {
     delete state.currentMyFeeds[uri]
   }
 
-  saved.forEach((uri: string) => {
+  pinned.forEach((uri: string) => {
     if (state.currentMyFeeds[uri] != null) return
     const generator = generators.find((generator: TTFeedGenerator) => generator.uri === uri)
     if (generator == null) return
     state.currentMyFeeds[uri] = { generator, feeds: [] }
   })
 
-  await Promise.allSettled(saved.map((uri: string) => {
+  await Promise.allSettled(pinned.map((uri: string) => {
     if (state.currentMyFeeds[uri] == null) return
     return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
   }))

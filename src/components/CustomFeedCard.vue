@@ -37,7 +37,7 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
 
   // フィードブックマーク／フィードピンの削除
   if (state[type]) {
-    // フィードブックマークの削除はフィードピンが無効の場合のみ
+    // フィードブックマークの削除はフィードピンが有効の場合のみ
     if (type === "saved" && state.pinned) return
 
     mainState.feedPreferences[type].splice(
@@ -48,8 +48,12 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
   }
 
   // フィードブックマーク／フィードピンの追加
-  else
+  else {
+    // ピンの追加はフィードブックマークが無効の場合のみ
+    if (type === "pinned" && !state.saved) return
+
     mainState.feedPreferences[type].push(props.generator.uri)
+  }
 
   state.processing = true
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
@@ -113,7 +117,12 @@ function changeCustomFeedOrder (direction: "up" | "down") {
             class="custom-feed-card__pin"
             @click.prevent.stop="toggleSavedOrPinned('pinned')"
           >
-            <SVGIcon :name="state.pinned ? 'pin' : 'pinOutline'" />
+            <SVGIcon :name="state.pinned
+              ? 'pin'
+              : state.saved
+                ? 'pinOutline'
+                : 'pinOffOutline'
+            " />
           </button>
 
           <!-- フィードブックマーク -->
@@ -302,13 +311,6 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     & > .svg-icon {
       fill: var(--color);
       font-size: 1.5em;
-    }
-    &[data-on="false"] > .svg-icon {
-      fill: transparent;
-      stroke: var(--color);
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-width: 1px;
     }
   }
 
