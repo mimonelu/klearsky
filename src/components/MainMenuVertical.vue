@@ -10,6 +10,11 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
+function openSettingsPopup () {
+  Util.blurElement()
+  mainState.openSettingsPopup()
+}
+
 function openAccountPopup () {
   Util.blurElement()
   mainState.openAccountPopup()
@@ -101,16 +106,15 @@ function moveToBottom () {
     </button>
 
     <!-- 設定ボタン -->
-    <RouterLink
+    <button
       class="link-button"
-      to="/settings/klearsky"
-      :data-is-focus="mainState.currentPath.startsWith('/settings/')"
+      @click.prevent="openSettingsPopup"
     >
       <div class="icon">
         <SVGIcon name="setting" />
       </div>
       <div class="label">{{ $t("settings") }}</div>
-    </RouterLink>
+    </button>
 
     <!-- アカウントポップアップトリガー -->
     <button

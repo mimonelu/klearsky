@@ -27,6 +27,7 @@ import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
+import SettingsPopup from "@/components/SettingsPopup.vue"
 import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -210,6 +211,9 @@ function resetState () {
 
   // 通知ポップアップの表示スイッチ
   state.notificationPopupDisplay = false
+
+  // 設定ポップアップの表示スイッチ
+  state.settingsPopupDisplay = false
 
   // アカウントポップアップの表示スイッチ
   state.accountPopupDisplay = false
@@ -579,6 +583,12 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.notificationPopupDisplay"
       @close="state.closeNotificationPopup"
       @updatePageTitle="updatePageTitle"
+    />
+
+    <!-- 設定ポップアップ -->
+    <SettingsPopup
+      v-if="state.settingsPopupDisplay"
+      @close="state.closeSettingsPopup"
     />
 
     <!-- アカウントポップアップ -->

@@ -10,6 +10,11 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
+function openSettingsPopup () {
+  Util.blurElement()
+  mainState.openSettingsPopup()
+}
+
 function openAccountPopup () {
   Util.blurElement()
   mainState.openAccountPopup()
@@ -78,13 +83,12 @@ async function openSendPostPopup () {
     </button>
 
     <!-- 設定ボタン -->
-    <RouterLink
+    <button
       class="link-button"
-      to="/settings/klearsky"
-      :data-is-focus="mainState.currentPath.startsWith('/settings/')"
+      @click.prevent="openSettingsPopup"
     >
       <SVGIcon name="setting" />
-    </RouterLink>
+    </button>
 
     <!-- アカウントポップアップトリガー -->
     <button

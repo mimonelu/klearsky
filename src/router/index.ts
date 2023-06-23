@@ -27,10 +27,6 @@ import SuggestionSearchView from "@/views/main/search/SuggestionSearchView.vue"
 import KeywordSearchView from "@/views/main/search/KeywordSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
 
-// Main - Settings
-import SettingsView from "@/views/main/SettingsView.vue"
-import KlearskySettingsView from "@/views/main/settings/KlearskySettingsView.vue"
-
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -147,20 +143,6 @@ const router = createRouter({
               name: "user-search",
               meta: { label: "userSearch" },
               component: UserSearchView,
-            },
-          ],
-        },
-        {
-          path: "/settings",
-          name: "settings",
-          component: SettingsView,
-          redirect: "/settings/klearsky",
-          children: [
-            {
-              path: "klearsky",
-              name: "klearsky-settings",
-              meta: { label: "klearskySettings" },
-              component: KlearskySettingsView,
             },
           ],
         },
