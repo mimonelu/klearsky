@@ -858,7 +858,6 @@ function broadcastListener (event: MessageEvent) {
 // PC用メニュー
 .main-menu-vertical {
   position: fixed;
-  top: 0.5rem;
 
   // カスタムレイアウト
   .main-view[data-layout="default"] &,
