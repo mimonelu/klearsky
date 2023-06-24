@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue"
+import Graphemer from "graphemer"
 import Checkboxes from "@/components/Checkboxes.vue"
 import FileBox from "@/components/FileBox.vue"
 import Radios from "@/components/Radios.vue"
@@ -57,10 +58,8 @@ function getCharacterLength (item: TTEasyFormItem): number {
   if (item.model == null) return 0
   const text = item.state[item.model]
   if (item.maxLengthWithSegmenter) {
-    const segmenter = (Intl as any).Segmenter
-    return segmenter != null
-      ? [...new segmenter().segment(text)].length
-      : text.length
+    const splitter = new Graphemer()
+    return splitter.countGraphemes(text)
   } else {
     return text.length
   }

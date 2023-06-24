@@ -30,8 +30,6 @@ export default defineConfig({
         manualChunks (id: string) {
           if (id.includes("@atproto_api"))
             return "atproto-api"
-          if (id.includes("intl-segmenter-polyfill.min.js"))
-            return "intl-segmenter-polyfill"
           if (id.includes("node_modules"))
             return "vendor"
         },
