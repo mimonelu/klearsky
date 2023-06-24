@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import AvatarLink from "@/components/AvatarLink.vue"
+import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
@@ -14,6 +15,7 @@ const iconMap: { [reason: string]: string } = {
   reply: "post",
   repost: "repost",
   like: "heart",
+  likeGenerator: "heart",
 }
 
 function notificationGroupHasNew (notificationGroup: TTNotificationGroup): boolean {
@@ -24,6 +26,7 @@ function notificationGroupHasNew (notificationGroup: TTNotificationGroup): boole
 // 通知フォルダーを持つ通知かどうか
 function isGroupingReason (reason: string): boolean {
   return reason === "like" ||
+    reason === "likeGenerator" ||
     reason === "quote" ||
     reason === "reply" ||
     reason === "repost"
@@ -37,6 +40,9 @@ function makeSubjectTo (notification: TTNotification): any {
     case "repost":
     case "like": {
       return { name: "profile-post", query: { account: notification.handle } }
+    }
+    case "likeGenerator": {
+      return { name: "feeds", query: { feed: notification.uri, displayName: notification.displayName } }
     }
     case "mention":
     case "quote":
@@ -149,6 +155,14 @@ function makeSubjectTo (notification: TTNotification): any {
         :post="notificationGroup.post"
         @click="$emit('close')"
       />
+
+      <!-- フィードジェネレーター -->
+      <CustomFeedCard
+        v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.generator != null"
+        :generator="notificationGroup.generator"
+        :orderButtonDisplay="false"
+        @click="$emit('close')"
+      />
     </div>
   </div>
 </template>
@@ -188,6 +202,17 @@ function makeSubjectTo (notification: TTNotification): any {
 
     .notification {
       padding: 0.25rem 0.75rem;
+    }
+  }
+
+  // フィードジェネレーター
+  & > .custom-feed-card {
+    background-color: rgba(var(--accent-color), 0.125);
+    border: 1px solid rgba(var(--accent-color), 0.25);
+    border-radius: var(--border-radius);
+    margin-top: 0.5rem;
+    &:focus, &:hover {
+      border-color: rgba(var(--accent-color), 0.5);
     }
   }
 }
@@ -232,6 +257,7 @@ function makeSubjectTo (notification: TTNotification): any {
   grid-gap: 0 0.5rem;
   overflow: hidden;
   [data-reason="like"] &,
+  [data-reason="likeGenerator"] &,
   [data-reason="repost"] &,
   [data-reason="reply"] &,
   [data-reason="quote"] & {
@@ -298,6 +324,9 @@ function makeSubjectTo (notification: TTNotification): any {
   }
   [data-reason="like"] & {
     fill: rgb(var(--like-color));
+  }
+  [data-reason="likeGenerator"] & {
+    fill: rgb(var(--post-color));
   }
 }
 
