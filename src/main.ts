@@ -1,9 +1,5 @@
 import "@/scss/main.scss"
 
-// Firefox における Intl.Segmenter 関連のエラーへの暫定対応
-// TODO: 折を見て削除すること
-import "@/composables/vendor/intl-segmenter-polyfill.min.js"
-
 import { createApp } from "vue"
 import PortalVue from "portal-vue"
 import App from "@/App.vue"
