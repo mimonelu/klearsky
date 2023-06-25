@@ -189,7 +189,7 @@ function onMutated () {
               v-if="message.record.reply != null"
               class="reply-icon"
             >
-              <SVGIcon name="post" />
+              <SVGIcon name="reply" />
             </div>
             <div
               v-if="message.record.embed?.record != null"
@@ -289,7 +289,6 @@ function onMutated () {
 
   & > .svg-icon {
     font-size: 1.25rem;
-    transform: scaleX(- 1.0);
   }
 }
 .reply-icon {

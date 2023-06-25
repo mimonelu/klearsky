@@ -80,6 +80,10 @@ function onActivateBackButton () {
     font-weight: bold;
   }
 
+  & > h2:last-child {
+    margin-right: 1rem;
+  }
+
   &:deep() {
     .page-header__back-button {
       min-width: 4rem;

@@ -12,7 +12,7 @@ const iconMap: { [reason: string]: string } = {
   invite: "mail",
   mention: "at",
   quote: "quoteRepost",
-  reply: "post",
+  reply: "reply",
   repost: "repost",
   like: "heart",
   likeGenerator: "heart",
@@ -317,7 +317,6 @@ function makeSubjectTo (notification: TTNotification): any {
   }
   [data-reason="reply"] & {
     fill: rgb(var(--post-color));
-    transform: scaleX(-1);
   }
   [data-reason="repost"] & {
     fill: rgb(var(--share-color));

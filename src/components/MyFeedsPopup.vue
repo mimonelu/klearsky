@@ -95,7 +95,7 @@ function changeCustomFeedOrder () {
   >
     <template #header>
       <h2>
-        <SVGIcon name="rss" />
+        <SVGIcon name="feed" />
         <span>{{ $t("myFeeds") }}</span>
       </h2>
     </template>

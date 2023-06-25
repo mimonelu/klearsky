@@ -42,7 +42,7 @@ async function updatePopularFeeds () {
   >
     <template #header>
       <button @click.stop="updatePopularFeeds">
-        <SVGIcon name="repost" />
+        <SVGIcon name="refresh" />
       </button>
       <h2>
         <SVGIcon name="fire" />

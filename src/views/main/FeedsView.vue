@@ -48,17 +48,19 @@ function openPopularFeedsPopup () {
 </script>
 
 <template>
-  <div class="feeds-view">
+  <div
+    class="feeds-view"
+    :data-processing="!(state.generator != null)"
+  >
     <PageHeader
       :hasBackButton="true"
       :title="$t('customFeeds')"
       :subTitle="mainState.currentQuery.displayName"
-
     >
       <template #right>
         <!-- マイフィードポップアップトリガー -->
         <button @click.stop="openMyFeedsPopup">
-          <SVGIcon name="rss" />
+          <SVGIcon name="feed" />
         </button>
 
         <!-- 人気のフィードポップアップトリガー -->
@@ -85,13 +87,15 @@ function openPopularFeedsPopup () {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-}
 
-.custom-feed-card {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  // TODO: フィードカードに空の generator を渡せるようにすること
+  &[data-processing="true"] .feed-list {
+    margin-top: 9rem;
+  }
 }
 
 .feed-list:deep() {
+  border-top: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
   flex-grow: 1;

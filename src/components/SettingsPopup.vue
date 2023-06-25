@@ -82,7 +82,7 @@ function closeHtmlPopupDisplay () {
 
               <!-- マイフィードポップアップトリガー -->
               <button @click.prevent="mainState.openMyFeedsPopup">
-                <SVGIcon name="rss" />
+                <SVGIcon name="feed" />
                 <span>{{ $t("myFeedsEdit") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
@@ -539,7 +539,7 @@ function closeHtmlPopupDisplay () {
 }
 
 .list-menu {
-  .svg-icon--rss {
+  .svg-icon--feed {
     --icon-color: var(--post-color);
   }
   .svg-icon--alphabeticalOff,

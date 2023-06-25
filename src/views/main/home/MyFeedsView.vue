@@ -30,12 +30,12 @@ function openPopularFeedsPopup () {
   <div class="my-feeds-view">
     <Portal to="home-view-header-portal">
       <button @click.stop="updateMyFeeds">
-        <SVGIcon name="repost" />
+        <SVGIcon name="refresh" />
       </button>
 
       <!-- マイフィードポップアップトリガー -->
       <button @click.stop="openMyFeedsPopup">
-        <SVGIcon name="rss" />
+        <SVGIcon name="feed" />
       </button>
 
       <!-- 人気のフィードポップアップトリガー -->
@@ -65,7 +65,7 @@ function openPopularFeedsPopup () {
             displayName: myFeeds.generator?.displayName,
           } }"
         >
-          <SVGIcon name="rss" />
+          <SVGIcon name="feed" />
           <span>{{ myFeeds.generator?.displayName }}</span>
           <SVGIcon name="cursorRight" />
         </RouterLink>
@@ -119,7 +119,7 @@ function openPopularFeedsPopup () {
     top: calc(6rem + 1px);
     z-index: 1;
 
-    & > .svg-icon--rss {
+    & > .svg-icon--feed {
       fill: rgb(var(--accent-color));
     }
 

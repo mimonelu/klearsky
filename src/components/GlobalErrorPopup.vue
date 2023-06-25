@@ -47,7 +47,7 @@ function close () {
   padding: 1rem;
   user-select: text;
   white-space: pre-wrap;
-  word-break: break-word;
+  word-break: break-all;
 }
 
 .message-object {
@@ -57,6 +57,6 @@ function close () {
   padding: 0 1rem;
   user-select: text;
   white-space: pre-wrap;
-  word-break: break-word;
+  word-break: break-all;
 }
 </style>

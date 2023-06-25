@@ -401,9 +401,6 @@ function hideWarningContent () {
   display: flex;
   align-items: center;
   grid-gap: 0.25rem;
-  line-height: 1.25;
-  user-select: text;
-  word-break: break-all;
   margin-bottom: 0.5rem;
   [data-log-loaded="true"] & {
     color: rgba(var(--accent-color), 0.875);
@@ -421,6 +418,12 @@ function hideWarningContent () {
   }
   [data-log-loaded="true"] & > .svg-icon {
     fill: rgba(var(--accent-color), 0.875);
+  }
+
+  & > span {
+    line-height: 1.25;
+    user-select: text;
+    word-break: break-all;
   }
 }
 

@@ -96,13 +96,15 @@ export default async function (
     if (group.reason === "likeGenerator")
       generatorUris.add(group.reasonSubject as string)
   })
-  const generators: Error | Array<TTFeedGenerator> = await this.fetchFeedGenerators(Array.from(generatorUris))
-  if (!(generators instanceof Error))
-    newValues.forEach((value: TTNotificationGroup) => {
-      const generator: undefined | TTFeedGenerator =
-        generators.find((generator: TTFeedGenerator) => value.reasonSubject === generator.uri)
-      if (generator != null) value.generator = generator
-    })
+  if (generatorUris.size > 0) {
+    const generators: Error | Array<TTFeedGenerator> = await this.fetchFeedGenerators(Array.from(generatorUris))
+    if (!(generators instanceof Error))
+      newValues.forEach((value: TTNotificationGroup) => {
+        const generator: undefined | TTFeedGenerator =
+          generators.find((generator: TTFeedGenerator) => value.reasonSubject === generator.uri)
+        if (generator != null) value.generator = generator
+      })
+  }
 
   values.splice(0, values.length, ...newValues)
 

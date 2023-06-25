@@ -20,6 +20,7 @@ import cursorRight from "@/svg/cursor-right.svg?raw"
 import cursorUp from "@/svg/cursor-up.svg?raw"
 import edit from "@/svg/edit.svg?raw"
 import email from "@/svg/email.svg?raw"
+import feed from "@/svg/feed.svg?raw"
 import fire from "@/svg/fire.svg?raw"
 import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
@@ -50,9 +51,10 @@ import post from "@/svg/post.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
 import radioOff from "@/svg/radio-off.svg?raw"
 import radioOn from "@/svg/radio-on.svg?raw"
+import refresh from "@/svg/refresh.svg?raw"
 import remove from "@/svg/remove.svg?raw"
+import reply from "@/svg/reply.svg?raw"
 import repost from "@/svg/repost.svg?raw"
-import rss from "@/svg/rss.svg?raw"
 import search from "@/svg/search.svg?raw"
 import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
@@ -83,6 +85,7 @@ const icons: { [k: string]: string } = {
   cursorUp,
   edit,
   email,
+  feed,
   fire,
   heart,
   heartBroken,
@@ -113,9 +116,10 @@ const icons: { [k: string]: string } = {
   quoteRepost,
   radioOff,
   radioOn,
+  refresh,
   remove,
+  reply,
   repost,
-  rss,
   search,
   sendPost,
   setting,

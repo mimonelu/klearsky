@@ -49,16 +49,15 @@ function close () {
 }
 
 .message {
-  background-color: rgba(var(--notice-color), 0.125);
+  background-color: rgba(var(--fg-color), 0.125);
   line-height: 1.5;
   padding: 1rem;
   user-select: text;
   white-space: pre-wrap;
-  word-break: break-word;
+  word-break: break-all;
 }
 
 .help {
-  color: var(--fg-color);
   font-size: 0.875rem;
   line-height: 1.5;
   padding: 0 1rem;

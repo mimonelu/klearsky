@@ -435,7 +435,7 @@ function onActivateHashTag (text: string) {
         class="replier"
         @click.stop="onActivateReplierLink"
       >
-        <SVGIcon name="post" />
+        <SVGIcon name="reply" />
         <div class="replier__display-name">{{
           !mainState.currentSetting.postAnonymization
             ? parentPost?.author?.displayName
@@ -712,7 +712,7 @@ function onActivateHashTag (text: string) {
               :data-has="post.replyCount > 0"
               @click.stop="onActivateReplyButton"
             >
-              <SVGIcon name="post" />
+              <SVGIcon name="reply" />
               <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
             </button>
           </div>
@@ -1001,7 +1001,6 @@ function onActivateHashTag (text: string) {
 
   & > .svg-icon {
     fill: rgba(var(--post-color), 0.75);
-    transform: scaleX(-1.0);
   }
 
   &__display-name {

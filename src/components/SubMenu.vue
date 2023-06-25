@@ -79,7 +79,7 @@ async function refreshSession () {
         class="textlink--icon"
         @click.prevent="mainState.openMyFeedsPopup"
       >
-        <SVGIcon name="rss" />
+        <SVGIcon name="feed" />
         <span>{{ $t("myFeeds") }}</span>
       </a>
 

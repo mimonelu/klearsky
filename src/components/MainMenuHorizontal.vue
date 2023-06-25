@@ -121,13 +121,15 @@ async function openSendPostPopup () {
 
 // 各種ボタン
 .link-button {
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  min-height: var(--sp-menu-size);
-  max-height: var(--sp-menu-size);
+  margin: 0.25rem;
+  min-height: calc(var(--sp-menu-size) - 0.5rem);
+  max-height: calc(var(--sp-menu-size) - 0.5rem);
 
   .svg-icon {
     fill: rgba(var(--fg-color), 0.75);

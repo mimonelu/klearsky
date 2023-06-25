@@ -118,7 +118,6 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <div class="custom-feed-card__top__right">
         <!-- フィード名 -->
         <div class="custom-feed-card__display-name">
-          <SVGIcon name="rss" />
           <span>{{ generator.displayName }}</span>
         </div>
 
@@ -258,15 +257,8 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   // フィード名
   &__display-name {
     grid-area: n;
-    display: flex;
-    align-items: center;
-    grid-gap: 0.25em;
+    display: grid;
     overflow: hidden;
-
-    & > .svg-icon {
-      fill: rgb(var(--accent-color));
-      font-size: 0.875em;
-    }
 
     & > span {
       font-weight: bold;
