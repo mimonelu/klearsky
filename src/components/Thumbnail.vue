@@ -123,12 +123,10 @@ function onActivateAlt (alt: string) {
 
   & > img {
     aspect-ratio: var(--image-aspect-ratio);
+    background-color: rgba(var(--fg-color), 0.125);
     border-radius: var(--border-radius);
     display: block;
     object-fit: cover;
-    &:focus, &:hover {
-      // object-fit: contain;
-    }
   }
 }
 
