@@ -5,6 +5,21 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
+function openNotificationPopup () {
+  Util.blurElement()
+  mainState.openNotificationPopup()
+}
+
+function openSettingsPopup () {
+  Util.blurElement()
+  mainState.openSettingsPopup()
+}
+
+function openAccountPopup () {
+  Util.blurElement()
+  mainState.openAccountPopup()
+}
+
 async function openSendPostPopup () {
   Util.blurElement()
   await mainState.openSendPostPopup("post")
@@ -21,14 +36,9 @@ function moveToBottom () {
 
 <template>
   <div class="main-menu-vertical">
-    <!-- スモールロゴ -->
-    <div class="small-logo">
-      <SVGIcon name="shimmer" />
-    </div>
-
     <!-- プロフィールボタン -->
     <RouterLink
-      class="link-button"
+      class="profile-button"
       :to="{ name: 'profile-post', query: { account: mainState.atp.session?.handle } }"
       :data-is-focus="
         (
@@ -61,18 +71,6 @@ function moveToBottom () {
       <div class="label">{{ $t("home") }}</div>
     </RouterLink>
 
-    <!-- カスタムフィードボタン -->
-    <RouterLink
-      class="link-button"
-      to="/feeds/my"
-      :data-is-focus="mainState.currentPath.startsWith('/feeds/')"
-    >
-      <div class="icon">
-        <SVGIcon name="rss" />
-      </div>
-      <div class="label">{{ $t("customFeeds") }}</div>
-    </RouterLink>
-
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
@@ -86,9 +84,9 @@ function moveToBottom () {
     </RouterLink>
 
     <!-- 通知ボタン -->
-    <RouterLink
+    <button
       class="link-button"
-      to="/notifications"
+      @click.prevent="openNotificationPopup"
     >
       <div class="icon">
         <SVGIcon name="bell" />
@@ -100,19 +98,29 @@ function moveToBottom () {
         >{{ mainState.notificationCount }}</div>
       </div>
       <div class="label">{{ $t("notifications") }}</div>
-    </RouterLink>
+    </button>
 
     <!-- 設定ボタン -->
-    <RouterLink
+    <button
       class="link-button"
-      to="/settings/klearsky"
-      :data-is-focus="mainState.currentPath.startsWith('/settings/')"
+      @click.prevent="openSettingsPopup"
     >
       <div class="icon">
         <SVGIcon name="setting" />
       </div>
       <div class="label">{{ $t("settings") }}</div>
-    </RouterLink>
+    </button>
+
+    <!-- アカウントポップアップトリガー -->
+    <button
+      class="link-button"
+      @click.prevent="openAccountPopup"
+    >
+      <div class="icon">
+        <SVGIcon name="person" />
+      </div>
+      <div class="label">{{ $t("account") }}</div>
+    </button>
 
     <!-- ポスト送信ポップアップトリガー -->
     <button
@@ -141,6 +149,17 @@ function moveToBottom () {
 @mixin slimLayout {
   padding: 0 0.5rem 0.75rem;
 
+  .profile-button {
+    --size: 2rem;
+    --padding: 0.5rem;
+    margin-top: 0.5rem;
+
+    &[data-is-focus="true"],
+    &:not([data-is-focus]).router-link-active {
+      background-color: rgba(var(--accent-color), 0.25);
+    }
+  }
+
   .link-button {
     grid-template-columns: min-content;
   }
@@ -167,7 +186,7 @@ function moveToBottom () {
 
   // フルレイアウト
   @media not all and (max-width: $max-width-with-scrollbar) {
-    padding: 0 1rem 1.25rem;
+    padding: 1rem 1rem 1.25rem;
 
     .move-to-bottom-button {
       display: none;
@@ -175,17 +194,45 @@ function moveToBottom () {
   }
 }
 
-// スモールロゴ
-.small-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  min-width: 3rem;
-  min-height: 3rem;
+// プロフィールボタン
+.profile-button {
+  --size: 4.5rem;
+  --padding: 1rem;
+  --color: var(--fg-color);
+  --alpha: 0.75;
+  border-radius: var(--border-radius);
+  display: grid;
+  grid-gap: 0.5rem;
+  overflow: hidden;
+  padding: var(--padding);
+  &:focus, &:hover {
+    --alpha: 1.0;
+  }
+  &[data-is-focus="true"],
+  &:not([data-is-focus]).router-link-active {
+    --color: var(--accent-color);
+  }
 
-  .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
+  & > .image {
+    border-radius: var(--border-radius);
+    font-size: var(--size);
+    margin: auto;
+    object-fit: cover;
+    min-width: var(--size);
+    max-width: var(--size);
+    min-height: var(--size);
+    max-height: var(--size);
+  }
+
+  & > .label {
+    color: rgba(var(--color), var(--alpha));
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1.25;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

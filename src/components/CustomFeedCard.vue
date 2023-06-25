@@ -16,31 +16,67 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
   saved: ComputedRef<boolean>
+  pinned: ComputedRef<boolean>
 }>({
   processing: false,
   saved: computed((): boolean => {
     return mainState.feedPreferences?.saved
       .some((uri: string) => uri === props.generator.uri) ?? false
   }),
+  pinned: computed((): boolean => {
+    return mainState.feedPreferences?.pinned
+      .some((uri: string) => uri === props.generator.uri) ?? false
+  }),
 })
 
-async function toggleSaved () {
+async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
+  Util.blurElement()
+  if (state.processing) return
+  state.processing = true
+  if (generator.viewer.like == null) {
+    const uri = await mainState.atp.createLike(generator.uri, generator.cid)
+    if (uri != null) {
+      generator.viewer.like = uri
+      generator.likeCount ++
+    } else {
+      mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/createLike")
+    }
+  } else {
+    if (await mainState.atp.deleteLike(generator.viewer.like)) {
+      delete generator.viewer.like
+      generator.likeCount --
+    } else {
+      mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/deleteLike")
+    }
+  }
+  state.processing = false
+}
+
+async function toggleSavedOrPinned (type: "saved" | "pinned") {
   Util.blurElement()
   if (state.processing) return
   if (mainState.feedPreferences == null) return
-  if (mainState.feedPreferences.saved == null) mainState.feedPreferences.saved = []
+  if (mainState.feedPreferences[type] == null) mainState.feedPreferences[type] = []
 
-  // フィードブックマークの削除
-  if (state.saved)
-    mainState.feedPreferences.saved.splice(
+  // フィードブックマーク／フィードピンの削除
+  if (state[type]) {
+    // フィードブックマークの削除はフィードピンが有効の場合のみ
+    if (type === "saved" && state.pinned) return
+
+    mainState.feedPreferences[type].splice(
       0,
-      mainState.feedPreferences.saved.length,
-      ...mainState.feedPreferences.saved.filter((uri: string) => uri !== props.generator.uri)
+      mainState.feedPreferences[type].length,
+      ...mainState.feedPreferences[type].filter((uri: string) => uri !== props.generator.uri)
     )
+  }
 
-  // フィードブックマークの追加
-  else
-    mainState.feedPreferences.saved.push(props.generator.uri)
+  // フィードブックマーク／フィードピンの追加
+  else {
+    // ピンの追加はフィードブックマークが無効の場合のみ
+    if (type === "pinned" && !state.saved) return
+
+    mainState.feedPreferences[type].push(props.generator.uri)
+  }
 
   state.processing = true
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
@@ -64,7 +100,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 <template>
   <RouterLink
     class="custom-feed-card"
-    :to="{ path: '/feeds/timeline', query: {
+    :to="{ path: '/feeds', query: {
       feed: generator.uri,
       displayName: generator.displayName,
     } }"
@@ -82,15 +118,18 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <div class="custom-feed-card__top__right">
         <!-- フィード名 -->
         <div class="custom-feed-card__display-name">
-          <SVGIcon name="rss" />
           <span>{{ generator.displayName }}</span>
         </div>
 
         <!-- フィードライク数 -->
-        <div class="custom-feed-card__like-count">
+        <button
+          class="custom-feed-card__like-count"
+          :data-on="generator.viewer.like != null"
+          @click.prevent.stop="toggleFeedGeneratorLike(generator)"
+        >
           <SVGIcon name="heart" />
           <span>{{ generator.likeCount }}</span>
-        </div>
+        </button>
 
         <!-- フィード作成日時 -->
         <div class="custom-feed-card__indexed-at">
@@ -99,13 +138,30 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         </div>
 
         <div class="custom-feed-card__top__right__right">
-          <!-- お気に入りフィード -->
+          <!-- フィードピン -->
+          <button
+            class="custom-feed-card__pin"
+            @click.prevent.stop="toggleSavedOrPinned('pinned')"
+          >
+            <SVGIcon :name="state.pinned
+              ? 'pin'
+              : state.saved
+                ? 'pinOutline'
+                : 'pinOffOutline'
+            " />
+          </button>
+
+          <!-- フィードブックマーク -->
           <button
             class="custom-feed-card__bookmark"
-            :data-saved="state.saved"
-            @click.prevent.stop="toggleSaved"
+            @click.prevent.stop="toggleSavedOrPinned('saved')"
           >
-            <SVGIcon name="bookmark" />
+            <SVGIcon :name="state.saved
+              ? state.pinned
+                ? 'bookmarkOff'
+                : 'bookmark'
+              : 'bookmarkOutline'
+            " />
           </button>
         </div>
       </div>
@@ -173,7 +229,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         "n n r"
         "l i r";
       flex-grow: 1;
-      grid-gap: 0.25em 0.5em;
+      grid-gap: 0.5em 0.75em;
 
       &__right {
         grid-area: r;
@@ -181,6 +237,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         align-items: flex-start;
         justify-content: flex-end;
         flex-grow: 1;
+        grid-gap: 1em;
       }
     }
   }
@@ -200,15 +257,8 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   // フィード名
   &__display-name {
     grid-area: n;
-    display: flex;
-    align-items: center;
-    grid-gap: 0.25em;
+    display: grid;
     overflow: hidden;
-
-    & > .svg-icon {
-      fill: rgb(var(--accent-color));
-      font-size: 0.875em;
-    }
 
     & > span {
       font-weight: bold;
@@ -223,12 +273,8 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   &__indexed-at {
     display: flex;
     align-items: center;
-    grid-gap: 0.25em;
+    grid-gap: 0.5em;
     overflow: hidden;
-
-    & > .svg-icon {
-      font-size: 0.75em;
-    }
 
     & > span {
       font-size: 0.875em;
@@ -241,14 +287,29 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
   // フィードライク数
   &__like-count {
+    --color: rgba(var(--fg-color), 0.5);
+    cursor: pointer;
     grid-area: l;
+    margin: -0.5em;
+    padding: 0.5em;
+    &[data-on="true"] {
+      --color: rgba(var(--like-color), 0.75);
+      &:focus, &:hover {
+        --color: rgb(var(--like-color));
+      }
+    }
+    &[data-on="false"] {
+      &:focus, &:hover {
+        --color: rgb(var(--fg-color));
+      }
+    }
 
     & > .svg-icon {
-      fill: rgba(var(--like-color), 0.75);
+      fill: var(--color);
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.75);
+      color: var(--color);
       font-weight: bold;
     }
   }
@@ -258,20 +319,22 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     grid-area: i;
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.75);
+      fill: rgba(var(--fg-color), 0.5);
+      font-size: 0.75em;
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.75);
+      color: rgba(var(--fg-color), 0.5);
     }
   }
 
-  // お気に入りフィード
-  &__bookmark {
+  // フィードブックマーク・フィードピン
+  &__bookmark,
+  &__pin {
     --color: rgba(var(--accent-color), 0.875);
     cursor: pointer;
-    margin: -1em;
-    padding: 1em;
+    margin: -0.5em;
+    padding: 0.5em;
     &:focus, &:hover {
       --color: rgb(var(--accent-color));
     }
@@ -279,13 +342,6 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     & > .svg-icon {
       fill: var(--color);
       font-size: 1.5em;
-    }
-    &[data-saved="false"] > .svg-icon {
-      fill: transparent;
-      stroke: var(--color);
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-width: 1px;
     }
   }
 

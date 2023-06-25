@@ -116,12 +116,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   grid-gap: 0.5rem;
 }
 
-.follow-button {
-  font-size: 0.875rem;
-  padding: 0.25rem 0;
-  min-width: 7rem;
-}
-
 .you-followed {
   color: rgb(var(--like-color));
   display: flex;
@@ -131,13 +125,15 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   line-height: 1.25;
 }
 
-.mute-button {
+.follow-button {
   font-size: 0.875rem;
+  padding: 0.25rem 0;
+  min-width: 7rem;
+}
+
+.mute-button {
   margin-left: auto;
   padding: 0.25rem 0;
   min-width: 3rem;
-  &:deep() span {
-    display: none;
-  }
 }
 </style>

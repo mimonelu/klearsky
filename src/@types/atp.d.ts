@@ -238,6 +238,7 @@ type TTNotificationGroup = {
   indexedAt: Date
   notifications: Array<TTNotification>
   post?: TTPost
+  generator?: TTFeedGenerator
   reason: TTNotificationReason
   reasonSubject?: string
   __folding: boolean
@@ -280,5 +281,8 @@ type TTFeedGenerator = {
   indexedAt:string
   likeCount: number
   uri: string
-  viewer: { [k: string]: any }
+  viewer: {
+    like?: string
+    [k: string]: any
+  }
 }

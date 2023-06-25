@@ -4,19 +4,14 @@ import NotFoundView from "@/views/NotFoundView.vue"
 // Main
 import MainView from "@/views/MainView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
-import NotificationsView from "@/views/main/NotificationsView.vue"
+import FeedsView from "@/views/main/FeedsView.vue"
 import PostView from "@/views/main/PostView.vue"
 
 // Main - Home
 import HomeView from "@/views/main/HomeView.vue"
 import TimelineView from "@/views/main/home/TimelineView.vue"
+import MyFeedsView from "@/views/main/home/MyFeedsView.vue"
 import GloballineView from "@/views/main/home/GloballineView.vue"
-
-// Main - Custom Feeds
-import CustomFeedsView from "@/views/main/CustomFeedsView.vue"
-import MyFeedsView from "@/views/main/feeds/MyFeedsView.vue"
-import PopularFeedsView from "@/views/main/feeds/PopularFeedsView.vue"
-import FeedsTimelineView from "@/views/main/feeds/FeedsTimelineView.vue"
 
 // Main - Profile
 import ProfileView from "@/views/main/ProfileView.vue"
@@ -31,12 +26,6 @@ import SearchView from "@/views/main/SearchView.vue"
 import SuggestionSearchView from "@/views/main/search/SuggestionSearchView.vue"
 import KeywordSearchView from "@/views/main/search/KeywordSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
-
-// Main - Settings
-import SettingsView from "@/views/main/SettingsView.vue"
-import KlearskySettingsView from "@/views/main/settings/KlearskySettingsView.vue"
-import BlueskySettingsView from "@/views/main/settings/BlueskySettingsView.vue"
-import AccountSettingsView from "@/views/main/settings/AccountSettingsView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -59,10 +48,9 @@ const router = createRouter({
           component: TimelineView,
         },
         {
-          path: "/notifications",
-          name: "notifications",
-          meta: { label: "notifications" },
-          component: NotificationsView,
+          path: "/feeds",
+          name: "feeds",
+          component: FeedsView,
         },
         {
           path: "/post",
@@ -82,35 +70,16 @@ const router = createRouter({
               component: TimelineView,
             },
             {
-              path: "globalline",
-              name: "globalline-home",
-              meta: { label: "globalline" },
-              component: GloballineView,
-            },
-          ],
-        },
-        {
-          path: "/feeds",
-          name: "feeds",
-          component: CustomFeedsView,
-          redirect: "/feeds/my",
-          children: [
-            {
               path: "my",
-              name: "feeds-my",
+              name: "feeds-home",
               meta: { label: "myFeeds" },
               component: MyFeedsView,
             },
             {
-              path: "popular",
-              name: "feeds-popular",
-              meta: { label: "popularFeeds" },
-              component: PopularFeedsView,
-            },
-            {
-              path: "timeline",
-              name: "feeds-timeline",
-              component: FeedsTimelineView,
+              path: "globalline",
+              name: "globalline-home",
+              meta: { label: "globalline" },
+              component: GloballineView,
             },
           ],
         },
@@ -174,32 +143,6 @@ const router = createRouter({
               name: "user-search",
               meta: { label: "userSearch" },
               component: UserSearchView,
-            },
-          ],
-        },
-        {
-          path: "/settings",
-          name: "settings",
-          component: SettingsView,
-          redirect: "/settings/klearsky",
-          children: [
-            {
-              path: "klearsky",
-              name: "klearsky-settings",
-              meta: { label: "klearskySettings" },
-              component: KlearskySettingsView,
-            },
-            {
-              path: "bluesky",
-              name: "bluesky-settings",
-              meta: { label: "blueskySettings" },
-              component: BlueskySettingsView,
-            },
-            {
-              path: "accounts",
-              name: "account-settings",
-              meta: { label: "accountSettings" },
-              component: AccountSettingsView,
             },
           ],
         },

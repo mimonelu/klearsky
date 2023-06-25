@@ -116,6 +116,18 @@ const state = reactive<MainState>({
   closeConfirmationPopup,
   applyConfirmationPopup,
 
+  // 通知ポップアップの開閉
+  openNotificationPopup,
+  closeNotificationPopup,
+
+  // 設定ポップアップの開閉
+  openSettingsPopup,
+  closeSettingsPopup,
+
+  // アカウントポップアップの開閉
+  openAccountPopup,
+  closeAccountPopup,
+
   // コンテンツ言語ポップアップの開閉
   openContentLanguagesPopup,
   closeContentLanguagesPopup,
@@ -127,6 +139,10 @@ const state = reactive<MainState>({
   // マイフィードポップアップの開閉
   openMyFeedsPopup,
   closeMyFeedsPopup,
+
+  // 人気のフィードポップアップの開閉
+  openPopularFeedsPopup,
+  closePopularFeedsPopup,
 
   // ワードミュートポップアップの開閉
   openWordMutePopup,
@@ -439,9 +455,7 @@ async function fetchSuggestions (direction: "new" | "old") {
 }
 
 async function fetchPopularFeedGenerators () {
-  state.listProcessing = true
   const feeds = await state.atp.fetchPopularFeedGenerators()
-  state.listProcessing = false
   if (feeds == null) return
   if (feeds === false) state.openErrorPopup("errorApiFailed", "main-state/fetchPopularFeedGenerators")
   state.currentPopularFeedGenerators = feeds as Array<TTFeedGenerator>
@@ -465,10 +479,11 @@ async function fetchCustomFeeds (direction: "old" | "new") {
 }
 
 async function fetchMyFeeds (): Promise<boolean> {
-  const saved: undefined | Array<string> = state.feedPreferences?.saved
-  if (saved == null) return false
+  const pinned: undefined | Array<string> =
+    state.feedPreferences?.saved.filter((uri: string) => state.feedPreferences?.pinned.includes(uri))
+  if (pinned == null) return false
 
-  const generators = await state.atp.fetchFeedGenerators(saved)
+  const generators = await state.atp.fetchFeedGenerators(pinned)
   if (generators instanceof Error) {
     state.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
     return false
@@ -478,14 +493,14 @@ async function fetchMyFeeds (): Promise<boolean> {
     delete state.currentMyFeeds[uri]
   }
 
-  saved.forEach((uri: string) => {
+  pinned.forEach((uri: string) => {
     if (state.currentMyFeeds[uri] != null) return
     const generator = generators.find((generator: TTFeedGenerator) => generator.uri === uri)
     if (generator == null) return
     state.currentMyFeeds[uri] = { generator, feeds: [] }
   })
 
-  await Promise.allSettled(saved.map((uri: string) => {
+  await Promise.allSettled(pinned.map((uri: string) => {
     if (state.currentMyFeeds[uri] == null) return
     return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
   }))
@@ -506,11 +521,8 @@ function saveSettings () {
     state.settings[did].autoTranslation = false
   if (state.settings[did].autoTranslationIgnoreLanguage == null)
     state.settings[did].autoTranslationIgnoreLanguage = undefined
-  if (state.settings[did].contentLanguages == null) {
-    const userLanguage = Util.getUserLanguage()
-    state.settings[did].contentLanguages = [userLanguage]
-    if (userLanguage !== "en") state.settings[did].contentLanguages?.push("en")
-  }
+  if (state.settings[did].contentLanguages == null)
+    state.settings[did].contentLanguages = []
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].wordMute == null)
@@ -661,6 +673,36 @@ function applyConfirmationPopup () {
   state.confirmationPopupDisplay = false
 }
 
+// 通知ポップアップの開閉
+
+function openNotificationPopup () {
+  state.notificationPopupDisplay = true
+}
+
+function closeNotificationPopup () {
+  state.notificationPopupDisplay = false
+}
+
+// 設定ポップアップの開閉
+
+function openSettingsPopup () {
+  state.settingsPopupDisplay = true
+}
+
+function closeSettingsPopup () {
+  state.settingsPopupDisplay = false
+}
+
+// アカウントポップアップの開閉
+
+function openAccountPopup () {
+  state.accountPopupDisplay = true
+}
+
+function closeAccountPopup () {
+  state.accountPopupDisplay = false
+}
+
 // コンテンツ言語ポップアップの開閉
 
 function openContentLanguagesPopup () {
@@ -689,6 +731,16 @@ function openMyFeedsPopup () {
 
 function closeMyFeedsPopup () {
   state.myFeedsPopupDisplay = false
+}
+
+// 人気のフィードポップアップの開閉
+
+function openPopularFeedsPopup () {
+  state.popularFeedsPopupDisplay = true
+}
+
+function closePopularFeedsPopup () {
+  state.popularFeedsPopupDisplay = false
 }
 
 // ワードミュートポップアップの開閉

@@ -14,7 +14,7 @@ function close () {
 
 <template>
   <Popup
-    class="error-popup"
+    class="global-error-popup"
     :hasCloseButton="true"
     @close="close"
   >
@@ -34,34 +34,29 @@ function close () {
 </template>
 
 <style lang="scss" scoped>
-.error-popup:deep() {
+.global-error-popup:deep() {
   .popup {
-    border-color: rgba(var(--notice-color), 0.5);
+    --fg-color: var(--notice-color);
     width: calc($router-view-width - 4rem);
-  }
-
-  .popup-header {
-    color: rgb(var(--notice-color));
   }
 }
 
 .message-string {
   background-color: rgba(var(--notice-color), 0.125);
-  color: rgb(var(--notice-color));
   line-height: 1.5;
   padding: 1rem;
   user-select: text;
   white-space: pre-wrap;
-  word-break: break-word;
+  word-break: break-all;
 }
 
 .message-object {
-  color: rgb(var(--notice-color));
+  color: var(--fg-color);
   font-size: 0.875rem;
   line-height: 1.5;
   padding: 0 1rem;
   user-select: text;
   white-space: pre-wrap;
-  word-break: break-word;
+  word-break: break-all;
 }
 </style>

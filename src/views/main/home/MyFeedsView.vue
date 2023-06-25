@@ -14,16 +14,33 @@ async function updateMyFeeds () {
   await mainState.fetchMyFeeds()
   mainState.listProcessing = false
 }
+
+function openMyFeedsPopup () {
+  Util.blurElement()
+  mainState.openMyFeedsPopup()
+}
+
+function openPopularFeedsPopup () {
+  Util.blurElement()
+  mainState.openPopularFeedsPopup()
+}
 </script>
 
 <template>
   <div class="my-feeds-view">
-    <Portal to="custom-feeds-view-header-portal">
-      <button
-        class="button--bordered"
-        @click.stop="updateMyFeeds"
-      >
-        <SVGIcon name="repost" />
+    <Portal to="home-view-header-portal">
+      <button @click.stop="updateMyFeeds">
+        <SVGIcon name="refresh" />
+      </button>
+
+      <!-- マイフィードポップアップトリガー -->
+      <button @click.stop="openMyFeedsPopup">
+        <SVGIcon name="feed" />
+      </button>
+
+      <!-- 人気のフィードポップアップトリガー -->
+      <button @click.stop="openPopularFeedsPopup">
+        <SVGIcon name="fire" />
       </button>
     </Portal>
     <div
@@ -43,18 +60,18 @@ async function updateMyFeeds () {
       >
         <RouterLink
           class="my-feeds-view__header"
-          :to="{ path: '/feeds/timeline', query: {
+          :to="{ path: '/feeds', query: {
             feed: myFeeds.generator?.uri,
             displayName: myFeeds.generator?.displayName,
           } }"
         >
-          <SVGIcon name="rss" />
+          <SVGIcon name="feed" />
           <span>{{ myFeeds.generator?.displayName }}</span>
           <SVGIcon name="cursorRight" />
         </RouterLink>
         <div class="my-feeds-view__body">
           <FeedList
-            type="feeds-timeline"
+            type="feeds"
             :feeds="myFeeds.feeds"
             :hasLoadButton="false"
             :disabledInfinitScroll="true"
@@ -66,7 +83,7 @@ async function updateMyFeeds () {
         >
           <RouterLink
             class="button--plane"
-            :to="{ path: '/feeds/timeline', query: {
+            :to="{ path: '/feeds', query: {
               feed: myFeeds.generator?.uri,
               displayName: myFeeds.generator?.displayName,
             } }"
@@ -102,7 +119,7 @@ async function updateMyFeeds () {
     top: calc(6rem + 1px);
     z-index: 1;
 
-    & > .svg-icon--rss {
+    & > .svg-icon--feed {
       fill: rgb(var(--accent-color));
     }
 

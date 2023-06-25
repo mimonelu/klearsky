@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import AvatarLink from "@/components/AvatarLink.vue"
+import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
@@ -11,9 +12,10 @@ const iconMap: { [reason: string]: string } = {
   invite: "mail",
   mention: "at",
   quote: "quoteRepost",
-  reply: "post",
+  reply: "reply",
   repost: "repost",
   like: "heart",
+  likeGenerator: "heart",
 }
 
 function notificationGroupHasNew (notificationGroup: TTNotificationGroup): boolean {
@@ -24,6 +26,7 @@ function notificationGroupHasNew (notificationGroup: TTNotificationGroup): boole
 // 通知フォルダーを持つ通知かどうか
 function isGroupingReason (reason: string): boolean {
   return reason === "like" ||
+    reason === "likeGenerator" ||
     reason === "quote" ||
     reason === "reply" ||
     reason === "repost"
@@ -37,6 +40,9 @@ function makeSubjectTo (notification: TTNotification): any {
     case "repost":
     case "like": {
       return { name: "profile-post", query: { account: notification.handle } }
+    }
+    case "likeGenerator": {
+      return { name: "feeds", query: { feed: notification.uri, displayName: notification.displayName } }
     }
     case "mention":
     case "quote":
@@ -56,6 +62,7 @@ function makeSubjectTo (notification: TTNotification): any {
       class="notification-group"
       tabindex="0"
       :data-reason="notificationGroup.reason"
+      :data-is-new="notificationGroupHasNew(notificationGroup)"
       :data-has-folder="isGroupingReason(notificationGroup.reason) &&
         notificationGroup.notifications.length >= 2"
     >
@@ -102,6 +109,7 @@ function makeSubjectTo (notification: TTNotification): any {
             :to="makeSubjectTo(notification)"
             class="notification"
             :data-is-new="!notification.isRead"
+            @click="$emit('close')"
           >
             <!-- 新着通知アイコン -->
             <div
@@ -119,7 +127,7 @@ function makeSubjectTo (notification: TTNotification): any {
             <AvatarLink
               :handle="notification.handle"
               :image="notification.avatar"
-              @click.stop
+              @click.stop="$emit('close')"
             />
 
             <!-- 表示名 -->
@@ -145,6 +153,15 @@ function makeSubjectTo (notification: TTNotification): any {
         v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.post != null"
         position="slim"
         :post="notificationGroup.post"
+        @click="$emit('close')"
+      />
+
+      <!-- フィードジェネレーター -->
+      <CustomFeedCard
+        v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.generator != null"
+        :generator="notificationGroup.generator"
+        :orderButtonDisplay="false"
+        @click="$emit('close')"
       />
     </div>
   </div>
@@ -157,26 +174,17 @@ function makeSubjectTo (notification: TTNotification): any {
   &:not(:last-child) {
     border-bottom: 1px solid rgba(var(--fg-color), 0.125);
   }
+  &[data-is-new="true"] {
+    background-color: rgba(var(--accent-color), 0.125);
+  }
 
   // reason ごとの処理
-  &[data-reason="mention"],
-  &[data-reason="reply"] {
-    background-color: rgba(var(--post-color), 0.125);
-  }
-  &[data-reason="like"] {
-    background-color: rgba(var(--like-color), 0.125);
-  }
   &[data-reason="quote"] {
     .text {
       color: rgb(var(--share-color));
     }
   }
-  &[data-reason="repost"] {
-    background-color: rgba(var(--share-color), 0.125);
-  }
   &[data-reason="follow"] {
-    padding: 0.5rem 1rem;
-    
     .text {
       color: rgba(var(--fg-color), 0.75);
       overflow: hidden;
@@ -194,6 +202,17 @@ function makeSubjectTo (notification: TTNotification): any {
 
     .notification {
       padding: 0.25rem 0.75rem;
+    }
+  }
+
+  // フィードジェネレーター
+  & > .custom-feed-card {
+    background-color: rgba(var(--accent-color), 0.125);
+    border: 1px solid rgba(var(--accent-color), 0.25);
+    border-radius: var(--border-radius);
+    margin-top: 0.5rem;
+    &:focus, &:hover {
+      border-color: rgba(var(--accent-color), 0.5);
     }
   }
 }
@@ -237,11 +256,15 @@ function makeSubjectTo (notification: TTNotification): any {
   align-items: center;
   grid-gap: 0 0.5rem;
   overflow: hidden;
-  &:nth-child(2):not(:last-child) {
-    margin-top: 0.5rem;
+  [data-reason="like"] &,
+  [data-reason="likeGenerator"] &,
+  [data-reason="repost"] &,
+  [data-reason="reply"] &,
+  [data-reason="quote"] & {
+    padding-bottom: calc(0.5rem + 2px);
   }
   &:last-child:not(:first-child) {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
   }
   &[data-is-new="true"] {
     grid-template-columns: min-content min-content min-content auto 1fr max-content;
@@ -294,13 +317,15 @@ function makeSubjectTo (notification: TTNotification): any {
   }
   [data-reason="reply"] & {
     fill: rgb(var(--post-color));
-    transform: scaleX(-1);
   }
   [data-reason="repost"] & {
     fill: rgb(var(--share-color));
   }
   [data-reason="like"] & {
     fill: rgb(var(--like-color));
+  }
+  [data-reason="likeGenerator"] & {
+    fill: rgb(var(--post-color));
   }
 }
 

@@ -21,6 +21,7 @@
   "bluesky": "Bluesky",
   "account": "アカウント",
   "profile": "プロフィール",
+  "language": "言語",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -41,8 +42,9 @@
   "modifyContentFiltering": "コンテンツフィルタを編集する",
   "contentFilteringDescription": "各コンテンツラベルの制御を設定した上で「適用」ボタンを押してください。",
 
-  "mute": "ミュートする",
-  "muting": "ミュートを解除する",
+  "muteOn": "ミュートする",
+  "muteOff": "ミュートを解除する",
+  "muting": "このアカウントをミュートしています",
 
   "block": "ブロックする",
   "unblock": "ブロックを解除する",
@@ -143,13 +145,14 @@
 
   "home": "ホーム",
   "timeline": "タイムライン",
-  "globalline": "グローバルライン",
+  "globalline": "グローバル",
 
   "customFeeds": "カスタムフィード",
   "popularFeeds": "人気のフィード",
   "myFeeds": "マイフィード",
-  "noMyFeeds": "マイフィードがありません。フィードをブックマークしてください。",
-  "noFeeds": "ブックマークされたカスタムフィードはありません。",
+  "myFeedsEdit": "マイフィードを編集する",
+  "noMyFeeds": "マイフィードがありません。フィードを保存してください。",
+  "noFeeds": "保存されたカスタムフィードがありません。",
   "noPopularFeeds": "人気のフィードがありません。サーバ管理者にお問い合わせください。",
 
   "search": "検索",

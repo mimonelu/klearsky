@@ -2,13 +2,24 @@
   display: flex;
   flex-direction: column;
   grid-gap: 2rem;
-  padding: 2rem;
 }
 
 .settings-section {
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
+}
+
+.settings-section__header,
+.settings-section__sub-header {
+  display: flex;
+  align-items: center;
+  grid-gap: 1rem;
+  padding: 0 1rem;
+
+  & > span {
+    line-height: 1.25;
+  }
 }
 
 .settings-section__header {
@@ -18,8 +29,6 @@
 
 .settings-section__sub-header {
   font-size: 1.125rem;
-  font-weight: bold;
-  line-height: 1.25;
 }
 
 .settings-section__body {

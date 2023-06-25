@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import { RouterView, useRouter, type LocationQueryValue } from "vue-router"
+import { RouterView, type LocationQueryValue } from "vue-router"
 import AvatarButton from "@/components/AvatarButton.vue"
+import BlockButton from "@/components/BlockButton.vue"
 import ContentWarning from "@/components/ContentWarning.vue"
 import FollowButton from "@/components/FollowButton.vue"
 import HandleHistoryPopup from "@/components/HandleHistoryPopup.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import MuteButton from "@/components/MuteButton.vue"
+import PageHeader from "@/components/PageHeader.vue"
 import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -19,15 +21,17 @@ const state = reactive<{
 
   // ラベル対応
   contentWarningForceDisplay: boolean;
-  contentWarningDisplay: ComputedRef<boolean>;
+  contentWarningIsHidden: ComputedRef<boolean>;
   contentWarningVisibility: ComputedRef<TTContentVisibility>;
+
+  showPrivateData: ComputedRef<boolean>
 }>({
   handleHistoryPopupDisplay: false,
   profileMenuDisplay: false,
 
   // ラベル対応
   contentWarningForceDisplay: false,
-  contentWarningDisplay: computed((): boolean => {
+  contentWarningIsHidden: computed((): boolean => {
     return state.contentWarningVisibility === 'show' ||
            ((state.contentWarningVisibility === 'always-warn' || state.contentWarningVisibility === 'warn') && state.contentWarningForceDisplay)
   }),
@@ -37,11 +41,12 @@ const state = reactive<{
       undefined
     )
   }),
+
+  showPrivateData: computed((): boolean =>
+    state.contentWarningIsHidden && mainState.currentProfile?.viewer.blocking == null)
 })
 
-const router = useRouter()
-
-function isUserProfile (): boolean {
+function isMyProfile (): boolean {
   const account = mainState.currentQuery.account as LocationQueryValue
   return account === mainState.atp.session?.handle ||
          account === mainState.atp.session?.did
@@ -62,16 +67,12 @@ function openImagePopup (uri: string) {
 }
 
 function openPostMenu () {
+  Util.blurElement()
   state.profileMenuDisplay = !state.profileMenuDisplay
 }
 
 function closePostMenu () {
   state.profileMenuDisplay = false
-}
-
-function onActivateBackButton () {
-  Util.blurElement()
-  if (history.state.back != null) router.back()
 }
 
 // ラベル対応
@@ -88,10 +89,25 @@ function hideWarningContent () {
 <template>
   <div
     class="profile-view"
+    :data-is-my-profile="isMyProfile()"
     :data-content-warning-force-display="state.contentWarningForceDisplay"
     :data-content-warning-visibility="state.contentWarningVisibility"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
+    <PageHeader
+      :hasBackButton="true"
+      :title="$t('profile')"
+      :subTitle="mainState.currentProfile?.displayName"
+    />
+
+    <div
+      v-if="state.showPrivateData"
+      class="banner"
+      :data-has-banner="!!mainState.currentProfile?.banner"
+      :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
+      @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
+    />
+
     <!-- Danger zone -->
     <div class="danger-zone">
       <!-- ラベル対応 -->
@@ -104,7 +120,7 @@ function hideWarningContent () {
 
       <!-- プロフィールラベル -->
       <div
-        v-if="state.contentWarningDisplay && (mainState.currentProfile?.labels?.length ?? 0) > 0"
+        v-if="state.contentWarningIsHidden && (mainState.currentProfile?.labels?.length ?? 0) > 0"
         class="textlabel--alert"
       >
         <div class="textlabel__text">
@@ -115,6 +131,16 @@ function hideWarningContent () {
           :key="label.val"
           class="textlabel__item"
         >{{ $t(label.val) }}</div>
+      </div>
+
+      <!-- ミュートしている -->
+      <div
+        v-if="mainState.currentProfile?.viewer.muted"
+        class="textlabel--alert"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="volumeOff" />{{ $t("muting") }}
+        </div>
       </div>
 
       <!-- ブロックしている -->
@@ -138,17 +164,10 @@ function hideWarningContent () {
       </div>
     </div>
 
-    <div
-      v-if="state.contentWarningDisplay"
-      class="banner"
-      :data-has-banner="!!mainState.currentProfile?.banner"
-      :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
-      @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
-    />
     <div class="details">
       <div class="top">
         <div
-          v-if="state.contentWarningDisplay"
+          v-if="state.showPrivateData"
           class="left"
         >
           <AvatarButton
@@ -166,35 +185,56 @@ function hideWarningContent () {
             <SVGIcon name="history" />
           </a>
           <div
-            v-if="!isUserProfile() && isFollowed()"
+            v-if="!isMyProfile() && isFollowed()"
             class="followed"
           >{{ $t("followed") }}</div>
         </div>
       </div>
       <div class="bottom">
-        <div class="button-container">
+        <div
+          v-if="mainState.currentProfile != null"
+          class="button-container"
+        >
           <RouterLink
-            v-if="isUserProfile()"
+            v-if="isMyProfile()"
             to="/profile/edit"
-            class="button"
+            class="button edit-button"
           >
             <SVGIcon name="edit" />
             <span>{{ $t("editProfile") }}</span>
           </RouterLink>
           <FollowButton
-            v-if="!isUserProfile() && mainState.currentProfile != null"
+            v-if="!isMyProfile()"
             :viewer="mainState.currentProfile.viewer"
             :did="mainState.currentProfile.did"
             :declarationDid="mainState.currentProfile.did"
           />
+          <div class="button-container__separator" />
           <MuteButton
-            v-if="!isUserProfile() && mainState.currentProfile != null"
+            v-if="!isMyProfile()"
             :handle="mainState.currentProfile.handle"
             :viewer="mainState.currentProfile.viewer"
           />
+          <BlockButton
+            v-if="!isMyProfile()"
+            :did="mainState.currentProfile.did"
+            :viewer="mainState.currentProfile.viewer"
+          />
+          <button
+            class="button--bordered menu-button"
+            @click.stop="openPostMenu"
+          >
+            <SVGIcon name="menu" />
+            <ProfileMenuTicker
+              :isUser="isMyProfile()"
+              :display="state.profileMenuDisplay"
+              :user="(mainState.currentProfile as TTProfile)"
+              @close="closePostMenu"
+            />
+          </button>
         </div>
         <HtmlText
-          v-if="state.contentWarningDisplay"
+          v-if="state.showPrivateData"
           class="description"
           dir="auto"
           :text="mainState.currentProfile?.description ?? '&nbsp;'"
@@ -216,42 +256,26 @@ function hideWarningContent () {
             <dt>{{ $t("startedAt") }}</dt>
             <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt) }}</dd>
           </dl>
-          <button
-            class="menu-button"
-            @click.stop="openPostMenu"
-          >
-            <SVGIcon name="menu" />
-            <ProfileMenuTicker
-              :isUser="isUserProfile()"
-              :display="state.profileMenuDisplay"
-              :user="(mainState.currentProfile as TTProfile)"
-              @close="closePostMenu"
-            />
-          </button>
         </div>
       </div>
     </div>
     <div class="tab">
-      <button
-        class="tab__button"
-        @click.prevent="onActivateBackButton"
-      >
-        <SVGIcon name="cursorLeft" />
-      </button>
       <RouterLink
-        class="tab__button"
+        class="tab__button tab__button--post"
         :to="{ path: '/profile/post', query: { account: mainState.currentProfile?.handle } }"
       >
         <SVGIcon name="post" />
       </RouterLink>
       <RouterLink
-        class="tab__button"
+        v-if="isMyProfile()"
+        class="tab__button tab__button--repost"
         :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
       >
         <SVGIcon name="repost" />
       </RouterLink>
       <RouterLink
-        class="tab__button"
+        v-if="isMyProfile()"
+        class="tab__button tab__button--like"
         :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
       >
         <SVGIcon name="heart" />
@@ -306,7 +330,7 @@ function hideWarningContent () {
   flex-direction: column;
   grid-gap: 1rem;
   &:not(:empty) {
-    margin: 1rem;
+    margin: 1rem 1rem 0;
   }
 }
 
@@ -323,6 +347,7 @@ function hideWarningContent () {
 
 .banner {
   aspect-ratio: 3/1;
+  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: block;
   &[data-has-banner="true"] {
     background-position: center center;
@@ -376,9 +401,6 @@ function hideWarningContent () {
   display: flex;
   align-items: center;
   grid-gap: 0.25rem;
-  line-height: 1.25;
-  user-select: text;
-  word-break: break-all;
   margin-bottom: 0.5rem;
   [data-log-loaded="true"] & {
     color: rgba(var(--accent-color), 0.875);
@@ -396,6 +418,12 @@ function hideWarningContent () {
   }
   [data-log-loaded="true"] & > .svg-icon {
     fill: rgba(var(--accent-color), 0.875);
+  }
+
+  & > span {
+    line-height: 1.25;
+    user-select: text;
+    word-break: break-all;
   }
 }
 
@@ -415,17 +443,50 @@ function hideWarningContent () {
 
 .button-container {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   grid-gap: 0.5rem;
 
-  .button {
-    font-size: 0.875rem;
+  &__separator {
+    flex-grow: 1;
+  }
+}
+
+.edit-button,
+.follow-button,
+.mute-button,
+.block-button,
+.menu-button {
+  &:deep() {
+    & > span {
+      font-size: 0.875rem;
+    }
+
+    & > .svg-icon {
+      font-size: 1rem;
+    }
   }
 }
 
 .mute-button {
-  margin-left: auto;
+  min-width: 3rem;
+  max-width: 3rem;
+}
+
+.block-button {
+  min-width: 3rem;
+  max-width: 3rem;
+}
+
+.menu-button {
+  grid-gap: 0;
+  position: relative;
+  min-width: 4rem;
+  max-width: 4rem;
+
+  .menu-ticker:deep() > .menu-ticker--inner {
+    top: 2.75rem;
+    right: 0;
+  }
 }
 
 .description {
@@ -443,6 +504,7 @@ function hideWarningContent () {
   position: relative;
 
   dl {
+    color: rgba(var(--fg-color), 0.75);
     display: flex;
     align-items: baseline;
     grid-gap: 0.5rem;
@@ -458,38 +520,25 @@ function hideWarningContent () {
   }
 }
 
-.menu-button {
-  cursor: pointer;
-  margin: -1rem -1rem;
-  padding: 1rem 1.5rem;
-  position: absolute;
-  bottom: 0rem;
-  right: 0;
-
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
-  }
-  &:focus, &:hover {
-    & > .svg-icon {
-      fill: rgb(var(--fg-color));
-    }
-  }
-
-  .menu-ticker:deep() {
-    & > .menu-ticker--inner {
-      top: 2.5rem;
-      right: 0.5rem;
-    }
-  }
-}
-
 .tab {
   position: sticky;
-  top: 0;
+  top: 3rem;
   z-index: 1;
 
-  &__button {
-    padding: 0.75rem 0;
+  [data-is-my-profile="false"] &__button {
+    flex: 1;
+  }
+
+  &__button--post > .svg-icon {
+    --fg-color: var(--post-color);
+  }
+
+  &__button--repost > .svg-icon {
+    --fg-color: var(--share-color);
+  }
+
+  &__button--like > .svg-icon {
+    --fg-color: var(--like-color);
   }
 
   &__button--following {

@@ -178,6 +178,15 @@ type MainState = {
     description: any
   }
 
+  // 通知ポップアップの表示スイッチ
+  notificationPopupDisplay: boolean
+
+  // 設定ポップアップの表示スイッチ
+  settingsPopupDisplay: boolean
+
+  // アカウントポップアップの表示スイッチ
+  accountPopupDisplay: boolean
+
   // コンテンツ言語ポップアップの表示スイッチ
   contentLanguagesPopupDisplay: boolean
 
@@ -186,6 +195,9 @@ type MainState = {
 
   // マイフィードポップアップの表示スイッチ
   myFeedsPopupDisplay: boolean
+
+  // 人気のフィードポップアップの表示スイッチ
+  popularFeedsPopupDisplay: boolean
 
   // ワードミュートポップアップの表示スイッチ
   wordMutePopupDisplay: boolean
@@ -257,6 +269,18 @@ type MainState = {
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
 
+  // 通知ポップアップの開閉
+  openNotificationPopup: Function
+  closeNotificationPopup: Function
+
+  // 設定ポップアップの開閉
+  openSettingsPopup: Function
+  closeSettingsPopup: Function
+
+  // アカウントポップアップの開閉
+  openAccountPopup: Function
+  closeAccountPopup: Function
+
   // コンテンツ言語ポップアップの開閉
   openContentLanguagesPopup: Function
   closeContentLanguagesPopup: Function
@@ -268,6 +292,10 @@ type MainState = {
   // マイフィードポップアップの開閉
   openMyFeedsPopup: Function
   closeMyFeedsPopup: Function
+
+  // 人気のフィードポップアップの開閉
+  openPopularFeedsPopup: Function
+  closePopularFeedsPopup: Function
 
   // ワードミュートポップアップの開閉
   openWordMutePopup: Function

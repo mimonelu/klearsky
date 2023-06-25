@@ -4,6 +4,7 @@ import type { LocationQueryValue, RouteLocationNormalized, RouteRecordName } fro
 import { useRouter } from "vue-router"
 import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
+import AccountPopup from "@/components/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
 import ContentFilteringPopup from "@/components/ContentFilteringPopup.vue"
@@ -18,12 +19,15 @@ import MainMenuVertical from "@/components/MainMenuVertical.vue"
 import MessagePopup from "@/components/MessagePopup.vue"
 import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/MyFeedsPopup.vue"
+import NotificationPopup from "@/components/NotificationPopup.vue"
+import PopularFeedsPopup from "@/components/PopularFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
 import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
+import SettingsPopup from "@/components/SettingsPopup.vue"
 import SplashScreen from "@/components/SplashScreen.vue"
 import SubMenu from "@/components/SubMenu.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -205,6 +209,15 @@ function resetState () {
   state.errorPopupProps.error = undefined
   state.errorPopupProps.description = undefined
 
+  // 通知ポップアップの表示スイッチ
+  state.notificationPopupDisplay = false
+
+  // 設定ポップアップの表示スイッチ
+  state.settingsPopupDisplay = false
+
+  // アカウントポップアップの表示スイッチ
+  state.accountPopupDisplay = false
+
   // コンテンツ言語ポップアップの表示スイッチ
   state.contentLanguagesPopupDisplay = false
 
@@ -255,7 +268,7 @@ function updatePageTitle () {
       title += ` - ${state.currentQuery.account}`
       break
     }
-    case "/feeds/timeline": {
+    case "/feeds": {
       title += ` - ${state.currentQuery.displayName}`
       break
     }
@@ -368,28 +381,16 @@ async function processPage (pageName?: null | RouteRecordName) {
         await Promise.allSettled(tasks)
         break
       }
-      case "notifications": {
-        if (!state.notificationFetchedFirst) {
-          state.notificationFetchedFirst = true
-          await state.fetchNotifications(CONSTS.limitOfFetchNotifications, "new")
-        }
-        break
-      }
       case "timeline-home": {
         await state.fetchTimeline("new")
         break
       }
-      case "feeds-my": {
+      case "feeds-home": {
         if (Object.keys(state.currentMyFeeds).length === 0)
           await state.fetchMyFeeds()
         break
       }
-      case "feeds-popular": {
-        if (state.currentPopularFeedGenerators.length === 0)
-          await state.fetchPopularFeedGenerators()
-        break
-      }
-      case "feeds-timeline": {
+      case "feeds": {
         if (state.currentCustomUri !== state.currentQuery.feed ||
             state.currentCustomFeeds.length === 0)
           await state.fetchCustomFeeds("new")
@@ -577,6 +578,25 @@ function broadcastListener (event: MessageEvent) {
       <ScrollButton />
     </div>
 
+    <!-- 通知ポップアップ -->
+    <NotificationPopup
+      v-if="state.notificationPopupDisplay"
+      @close="state.closeNotificationPopup"
+      @updatePageTitle="updatePageTitle"
+    />
+
+    <!-- 設定ポップアップ -->
+    <SettingsPopup
+      v-if="state.settingsPopupDisplay"
+      @close="state.closeSettingsPopup"
+    />
+
+    <!-- アカウントポップアップ -->
+    <AccountPopup
+      v-if="state.accountPopupDisplay"
+      @close="state.closeAccountPopup"
+    />
+
     <!-- 言語選択ポップアップ -->
     <SelectLanguagesPopup
       v-if="state.contentLanguagesPopupDisplay"
@@ -612,6 +632,12 @@ function broadcastListener (event: MessageEvent) {
     <MyFeedsPopup
       v-if="state.myFeedsPopupDisplay"
       @close="state.closeMyFeedsPopup"
+    />
+
+    <!-- 人気のフィードポップアップ -->
+    <PopularFeedsPopup
+      v-if="state.popularFeedsPopupDisplay"
+      @close="state.closePopularFeedsPopup"
     />
 
     <!-- ワードミュートポップアップ -->
@@ -832,7 +858,6 @@ function broadcastListener (event: MessageEvent) {
 // PC用メニュー
 .main-menu-vertical {
   position: fixed;
-  top: 0.5rem;
 
   // カスタムレイアウト
   .main-view[data-layout="default"] &,

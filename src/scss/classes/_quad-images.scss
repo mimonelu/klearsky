@@ -1,7 +1,7 @@
 .quad-images {
   aspect-ratio: var(--image-aspect-ratio);
   display: grid;
-  grid-gap: 0;
+  grid-gap: 1px;
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -82,9 +82,17 @@
       }
     }
   }
+  &:focus, &:hover {
+    & > .quad-image {
+      filter: brightness(0.75);
+    }
+  }
 
   & > .quad-image {
     overflow: hidden;
+    &:focus, &:hover {
+      filter: brightness(1.0);
+    }
 
     & > .thumbnail {
       position: relative;

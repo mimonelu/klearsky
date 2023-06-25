@@ -3,6 +3,7 @@ import { inject, reactive, watch } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Popup from "@/components/Popup.vue"
 import Post from "@/components/Post.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string, done: boolean, empty: boolean): void}>()
@@ -121,6 +122,7 @@ function isEmpty (): boolean {
   >
     <template v-slot:header>
       <h2>
+        <SVGIcon :name="type" />
         <span>{{ $t(type) }}</span>
       </h2>
     </template>
@@ -159,6 +161,14 @@ function isEmpty (): boolean {
 <style lang="scss" scoped>
 .send-post-popup {
   &:deep() {
+    .popup-header {
+      border-bottom-style: none;
+    }
+
+    .popup-body {
+      padding-top: 0;
+    }
+
     // プレビューポストのテキスト選択
     .post {
       .text {

@@ -5,6 +5,21 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
+function openNotificationPopup () {
+  Util.blurElement()
+  mainState.openNotificationPopup()
+}
+
+function openSettingsPopup () {
+  Util.blurElement()
+  mainState.openSettingsPopup()
+}
+
+function openAccountPopup () {
+  Util.blurElement()
+  mainState.openAccountPopup()
+}
+
 async function openSendPostPopup () {
   Util.blurElement()
   await mainState.openSendPostPopup("post")
@@ -44,15 +59,6 @@ async function openSendPostPopup () {
       <SVGIcon name="home" />
     </RouterLink>
 
-    <!-- カスタムフィードボタン -->
-    <RouterLink
-      class="link-button"
-      to="/feeds/my"
-      :data-is-focus="mainState.currentPath.startsWith('/feeds/')"
-    >
-      <SVGIcon name="rss" />
-    </RouterLink>
-
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
@@ -63,9 +69,9 @@ async function openSendPostPopup () {
     </RouterLink>
 
     <!-- 通知ボタン -->
-    <RouterLink
+    <button
       class="link-button"
-      to="/notifications"
+      @click.prevent="openNotificationPopup"
     >
       <SVGIcon name="bell" />
 
@@ -74,16 +80,23 @@ async function openSendPostPopup () {
         v-if="mainState.notificationCount > 0"
         class="notification-count"
       >{{ mainState.notificationCount }}</div>
-    </RouterLink>
+    </button>
 
     <!-- 設定ボタン -->
-    <RouterLink
+    <button
       class="link-button"
-      to="/settings/klearsky"
-      :data-is-focus="mainState.currentPath.startsWith('/settings/')"
+      @click.prevent="openSettingsPopup"
     >
       <SVGIcon name="setting" />
-    </RouterLink>
+    </button>
+
+    <!-- アカウントポップアップトリガー -->
+    <button
+      class="link-button"
+      @click.prevent="openAccountPopup"
+    >
+      <SVGIcon name="person" />
+    </button>
 
     <!-- ポスト送信ポップアップトリガー -->
     <button
@@ -108,13 +121,15 @@ async function openSendPostPopup () {
 
 // 各種ボタン
 .link-button {
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  min-height: var(--sp-menu-size);
-  max-height: var(--sp-menu-size);
+  margin: 0.25rem;
+  min-height: calc(var(--sp-menu-size) - 0.5rem);
+  max-height: calc(var(--sp-menu-size) - 0.5rem);
 
   .svg-icon {
     fill: rgba(var(--fg-color), 0.75);

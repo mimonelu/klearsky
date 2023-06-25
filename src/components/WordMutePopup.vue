@@ -93,3 +93,15 @@ function onSubmit () {
     </template>
   </Popup>
 </template>
+
+<style lang="scss" scoped>
+.word-mute-popup {
+  .popup-header > h2 {
+    color: rgb(var(--notice-color));
+
+    & > .svg-icon {
+      fill: rgb(var(--notice-color));
+    }
+  }
+}
+</style>

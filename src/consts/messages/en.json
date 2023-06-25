@@ -21,6 +21,7 @@
   "bluesky": "Bluesky",
   "account": "Accounts",
   "profile": "Profile",
+  "language": "Language",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -41,8 +42,9 @@
   "modifyContentFiltering": "Modify content filtering",
   "contentFilteringDescription": "After setting the controls for each content label, press the \"Apply\" button.",
 
-  "mute": "Mute",
-  "muting": "Unmute",
+  "muteOn": "Mute",
+  "muteOff": "Unmute",
+  "muting": "You are muting this account.",
 
   "block": "Block",
   "unblock": "Unblock",
@@ -148,8 +150,9 @@
   "customFeeds": "Custom Feeds",
   "popularFeeds": "Popular Feeds",
   "myFeeds": "My Feeds",
-  "noFeeds": "There are no bookmarked custom feeds.",
-  "noMyFeeds": "There are no My Feeds. Please bookmark feeds.",
+  "myFeedsEdit": "Edit my feeds",
+  "noFeeds": "There are no saved custom feeds.",
+  "noMyFeeds": "There are no My Feeds. Please save feeds.",
   "noPopularFeeds": "There are no popular feeds. Please contact the server administrator.",
 
   "search": "Search",
@@ -167,8 +170,7 @@
 
   "uiLanguage": "UI Language",
   "contentLanguages": "Content Languages",
-  "contentLanguagesEdit": "Select Content Languages",
-  "selectLanguages": "Select Content Languages",
+  "contentLanguagesEdit": "Select content languages",
   "selectLanguagesDetail": "Multiple selections allowed. If select nothing, all posts be displayed.",
   "english": "English",
   "japanese": "Japanese",

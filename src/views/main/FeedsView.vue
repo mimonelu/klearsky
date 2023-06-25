@@ -3,6 +3,9 @@ import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import FeedList from "@/components/FeedList.vue"
+import PageHeader from "@/components/PageHeader.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
@@ -33,20 +36,46 @@ const state = reactive<{
   }),
 })
 
-function saveSettings () {
-  mainState.saveSettings()
+function openMyFeedsPopup () {
+  Util.blurElement()
+  mainState.openMyFeedsPopup()
+}
+
+function openPopularFeedsPopup () {
+  Util.blurElement()
+  mainState.openPopularFeedsPopup()
 }
 </script>
 
 <template>
-  <div class="feeds-timeline-view">
+  <div
+    class="feeds-view"
+    :data-processing="!(state.generator != null)"
+  >
+    <PageHeader
+      :hasBackButton="true"
+      :title="$t('customFeeds')"
+      :subTitle="mainState.currentQuery.displayName"
+    >
+      <template #right>
+        <!-- マイフィードポップアップトリガー -->
+        <button @click.stop="openMyFeedsPopup">
+          <SVGIcon name="feed" />
+        </button>
+
+        <!-- 人気のフィードポップアップトリガー -->
+        <button @click.stop="openPopularFeedsPopup">
+          <SVGIcon name="fire" />
+        </button>
+      </template>
+    </PageHeader>
     <CustomFeedCard
       v-if="state.generator != null"
       :generator="state.generator"
       :orderButtonDisplay="false"
     />
     <FeedList
-      type="feeds-timeline"
+      type="feeds"
       :feeds="mainState.currentCustomFeeds"
       :hasLoadButton="true"
     />
@@ -54,17 +83,19 @@ function saveSettings () {
 </template>
 
 <style lang="scss" scoped>
-.feeds-timeline-view {
+.feeds-view {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-}
 
-.custom-feed-card {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  // TODO: フィードカードに空の generator を渡せるようにすること
+  &[data-processing="true"] .feed-list {
+    margin-top: 9rem;
+  }
 }
 
 .feed-list:deep() {
+  border-top: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
   flex-grow: 1;

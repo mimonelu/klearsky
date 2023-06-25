@@ -2,8 +2,10 @@
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
+  padding: 0.25rem;
 
   &__button {
+    border-radius: var(--border-radius);
     color: rgba(var(--fg-color), 0.75);
     cursor: pointer;
     display: flex;
@@ -11,8 +13,8 @@
     justify-content: center;
     flex-grow: 1;
     font-weight: bold;
-    padding: 0.75rem 0;
-    min-height: 3rem;
+    padding: 0.5rem 0;
+    min-height: 2.5rem;
     text-align: center;
     &.router-link-active {
       background-color: rgba(var(--accent-color), 0.25);

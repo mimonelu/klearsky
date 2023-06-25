@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue"
+import Graphemer from "graphemer"
 import Checkboxes from "@/components/Checkboxes.vue"
 import FileBox from "@/components/FileBox.vue"
 import Radios from "@/components/Radios.vue"
@@ -57,10 +58,8 @@ function getCharacterLength (item: TTEasyFormItem): number {
   if (item.model == null) return 0
   const text = item.state[item.model]
   if (item.maxLengthWithSegmenter) {
-    const segmenter = (Intl as any).Segmenter
-    return segmenter != null
-      ? [...new segmenter().segment(text)].length
-      : text.length
+    const splitter = new Graphemer()
+    return splitter.countGraphemes(text)
   } else {
     return text.length
   }
@@ -148,6 +147,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               :inputmode="item.inputmode ?? undefined"
               spellcheck="false"
               class="textbox"
+              :class="item.classes"
               @keydown.enter="onEnterKeyDown"
             >
 
@@ -159,6 +159,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               :required="item.required ?? false"
               :options="item.options as Array<TTOption>"
               :layout="item.layout"
+              :class="item.classes"
               @update="onChange(item)"
             />
 
@@ -170,6 +171,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               :required="item.required ?? false"
               :options="item.options as Array<TTOption>"
               :layout="item.layout"
+              :class="item.classes"
               @update="onChange(item)"
             />
 
@@ -177,6 +179,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
             <label
               v-if="item.type === 'select'"
               class="selectbox"
+              :class="item.classes"
             >
               <select
                 v-model="item.state[item.model]"
@@ -200,6 +203,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               :multiple="item.isMultipleFile"
               :maxNumber="item.maxNumberOfFile"
               :quadLayout="item.quadLayout"
+              :class="item.classes"
               @change="(files: Array<File>) => { onChangeFile(files, item) }"
             />
 
@@ -217,6 +221,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
               autocorrect="off"
               spellcheck="false"
               class="textarea"
+              :class="item.classes"
               @input="onInputTextarea(item)"
               @keydown.enter="onEnterKeyDown"
             />
@@ -227,6 +232,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
             v-if="item.type === 'button'"
             type="button"
             class="button--bordered"
+            :class="item.classes"
             @click.prevent="onClick(item)"
           >
             <SVGIcon
@@ -240,6 +246,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           <button
             v-if="item.clearButton"
             class="clear-button"
+            :class="item.classes"
             @click.prevent="onClickClearButton(item)"
           >
             <SVGIcon name="cross" />
@@ -249,6 +256,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           <div
             v-if="item.maxLengthIndicator"
             class="max-length-indicator"
+            :class="item.classes"
             :data-over-maxlength="item.maxlength != null
               ? getCharacterLength(item) > item.maxlength
               : false

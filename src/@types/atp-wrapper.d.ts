@@ -60,7 +60,7 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     declarationDid: string
   ): Promise<null | string>
-  createLike(this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
+  createLike(this: TIAtpWrapper, uri: string, cid: string): Promise<undefined | string>
   createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
   createReport(
     this: TIAtpWrapper,

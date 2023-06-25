@@ -42,3 +42,10 @@
     background-color: rgb(var(--fg-color));
   }
 }
+.selectbox-is-wide {
+  & > select {
+    border-left-style: none;
+    border-right-style: none;
+    border-radius: unset;
+  }
+}

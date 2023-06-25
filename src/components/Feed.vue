@@ -33,7 +33,7 @@ function removeThisPost (uri: string) {
         v-if="feed.reply != null"
         class="folder__item"
       >
-        <SVGIcon name="post" />
+        <SVGIcon name="reply" />
         <div class="display-name">{{
           !mainState.currentSetting.postAnonymization
             ? feed.post.author.displayName
@@ -133,10 +133,6 @@ function removeThisPost (uri: string) {
     & > .svg-icon {
       fill: rgba(var(--fg-color), var(--alpha));
       font-size: 0.875em;
-    }
-
-    & > .svg-icon--post {
-      transform: scaleX(-1);
     }
 
     & > .display-name,

@@ -18,6 +18,7 @@ const easyFormProps: TTEasyForm = {
       state: props.state,
       model: props.property,
       type: "checkbox",
+      classes: "checkboxes-is-wide",
       options: LANGUAGES,
       layout: "vertical-2columns",
       onUpdate () {
@@ -41,7 +42,7 @@ function close () {
     <template v-slot:header>
       <h2>
         <SVGIcon name="translate" />
-        <span>{{ $t("selectLanguages") }}</span>
+        <span>{{ $t("contentLanguages") }}</span>
       </h2>
     </template>
     <template v-slot:body>
@@ -54,35 +55,10 @@ function close () {
 <style lang="scss" scoped>
 .select-languages-popup:deep() {
   .popup-body {
-    padding: 0;
+    padding: 1rem 0 0;
 
     p {
-      margin: 0 2rem;
-    }
-  }
-
-  .checkbox {
-    &:nth-child(odd) {
-      border-left-style: none;
-    }
-    &:nth-child(even) {
-      border-right-style: none;
-    }
-    &:nth-last-child(1),
-    &:nth-last-child(2) {
-      border-bottom-style: none;
-    }
-    &:first-child {
-      border-radius: unset;
-    }
-    &:nth-child(2) {
-      border-radius: unset;
-    }
-    &:nth-last-child(2) {
-      border-radius: unset;
-    }
-    &:nth-last-child(1) {
-      border-radius: unset;
+      margin: 0 1rem;
     }
   }
 }

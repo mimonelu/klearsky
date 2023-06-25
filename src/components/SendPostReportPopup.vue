@@ -35,6 +35,7 @@ const easyFormProps: TTEasyForm = {
       required: true,
       options: OPTIONS.postReportReason,
       layout: "vertical",
+      classes: "radios-is-wide",
     },
   ],
 }
@@ -82,12 +83,30 @@ async function submitCallback () {
 </template>
 
 <style lang="scss" scoped>
-.send-post-report-popup {
+.send-post-report-popup:deep() {
   .popup-header > h2 {
     color: rgb(var(--notice-color));
 
     & > .svg-icon {
       fill: rgb(var(--notice-color));
+    }
+  }
+
+  .popup-body {
+    padding: 1rem 0;
+
+    & > p {
+      margin: 0 1rem;
+    }
+  }
+
+  .easy-form {
+    dt {
+      margin: 0 1rem;
+    }
+
+    .submit-button {
+      margin: 0 1rem;
     }
   }
 }

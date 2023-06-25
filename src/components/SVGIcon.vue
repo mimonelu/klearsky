@@ -6,6 +6,8 @@ import arrowLeft from "@/svg/arrow-left.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
 import bookmark from "@/svg/bookmark.svg?raw"
+import bookmarkOff from "@/svg/bookmark-off.svg?raw"
+import bookmarkOutline from "@/svg/bookmark-outline.svg?raw"
 import check from "@/svg/check.svg?raw"
 import checkboxOff from "@/svg/checkbox-off.svg?raw"
 import checkboxOn from "@/svg/checkbox-on.svg?raw"
@@ -18,9 +20,11 @@ import cursorRight from "@/svg/cursor-right.svg?raw"
 import cursorUp from "@/svg/cursor-up.svg?raw"
 import edit from "@/svg/edit.svg?raw"
 import email from "@/svg/email.svg?raw"
+import feed from "@/svg/feed.svg?raw"
 import fire from "@/svg/fire.svg?raw"
 import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
+import help from "@/svg/help.svg?raw"
 import history from "@/svg/history.svg?raw"
 import home from "@/svg/home.svg?raw"
 import identifier from "@/svg/identifier.svg?raw"
@@ -38,15 +42,19 @@ import pause from "@/svg/pause.svg?raw"
 import people from "@/svg/people.svg?raw"
 import person from "@/svg/person.svg?raw"
 import personOff from "@/svg/person-off.svg?raw"
+import pin from "@/svg/pin.svg?raw"
+import pinOffOutline from "@/svg/pin-off-outline.svg?raw"
+import pinOutline from "@/svg/pin-outline.svg?raw"
 import play from "@/svg/play.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
 import radioOff from "@/svg/radio-off.svg?raw"
 import radioOn from "@/svg/radio-on.svg?raw"
+import refresh from "@/svg/refresh.svg?raw"
 import remove from "@/svg/remove.svg?raw"
+import reply from "@/svg/reply.svg?raw"
 import repost from "@/svg/repost.svg?raw"
-import rss from "@/svg/rss.svg?raw"
 import search from "@/svg/search.svg?raw"
 import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
@@ -63,6 +71,8 @@ const icons: { [k: string]: string } = {
   at,
   bell,
   bookmark,
+  bookmarkOff,
+  bookmarkOutline,
   check,
   checkboxOff,
   checkboxOn,
@@ -75,9 +85,11 @@ const icons: { [k: string]: string } = {
   cursorUp,
   edit,
   email,
+  feed,
   fire,
   heart,
   heartBroken,
+  help,
   history,
   home,
   identifier,
@@ -95,15 +107,19 @@ const icons: { [k: string]: string } = {
   people,
   person,
   personOff,
+  pin,
+  pinOffOutline,
+  pinOutline,
   play,
   plus,
   post,
   quoteRepost,
   radioOff,
   radioOn,
+  refresh,
   remove,
+  reply,
   repost,
-  rss,
   search,
   sendPost,
   setting,

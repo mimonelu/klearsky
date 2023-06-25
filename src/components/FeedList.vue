@@ -5,7 +5,7 @@ import LoadButton from "@/components/LoadButton.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{
-  type: "author" | "authorReposts" | "authorLikes" | "feeds-timeline" | "post" | "timeline";
+  type: "author" | "authorReposts" | "authorLikes" | "feeds" | "post" | "timeline";
   feeds: null | Array<TTFeed>;
   hasLoadButton?: boolean;
   disabledInfinitScroll?: boolean;
@@ -30,7 +30,7 @@ async function fetchFeeds (direction: "new" | "old") {
         await mainState.fetchAuthorLikes(direction)
         break
       }
-      case "feeds-timeline": {
+      case "feeds": {
         await mainState.fetchCustomFeeds(direction)
         break
       }

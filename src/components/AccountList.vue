@@ -102,32 +102,42 @@ function getDidColor (did: string): string {
   grid-gap: 1rem;
 
   &__service {
-    border: 1px solid rgba(var(--fg-color), 0.125);
-    border-radius: var(--border-radius);
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-gap: 0.5rem;
   }
 }
 
 .service {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.125);
-  color: rgba(var(--fg-color), 0.75);
-  padding: 0.5rem;
+  color: rgba(var(--fg-color), 0.5);
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .account-button-container {
   display: flex;
   flex-direction: column;
-  grid-gap: 0.5rem;
-  padding: 0.5rem;
 }
 
 .account-button {
   display: flex;
+  &:first-child:not(:last-child) &__left {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+  }
+  &:last-child:not(:first-child) &__left {
+    border-bottom-style: solid;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+  &:first-child:last-child &__left {
+    border-bottom-style: solid;
+    border-radius: var(--border-radius);
+  }
 
   &__left {
-    border: 1px solid rgba(var(--fg-color), 0.125);
-    border-radius: var(--border-radius);
+    --color: var(--fg-color);
+    background-clip: padding-box;
+    border: 1px solid rgba(var(--fg-color), 0.25);
+    border-bottom-style: none;
     cursor: pointer;
     display: grid;
     flex-grow: 1;
@@ -139,7 +149,7 @@ function getDidColor (did: string): string {
     align-items: center;
     padding: 0.25rem 0.5rem 0.25rem 0.25rem;
     &:focus, &:hover {
-      border-color: rgba(var(--fg-color), 0.5);
+      --color: var(--accent-color);
     }
   }
   &[data-is-me="true"] &__left {
@@ -156,6 +166,7 @@ function getDidColor (did: string): string {
 
   &__handle {
     grid-area: h;
+    color: rgb(var(--color));
     font-weight: bold;
     line-height: 1.25;
     overflow: hidden;
@@ -165,7 +176,7 @@ function getDidColor (did: string): string {
 
   &__email {
     grid-area: e;
-    color: rgba(var(--fg-color), 0.75);
+    color: rgba(var(--color), 0.75);
     font-size: 0.875rem;
     line-height: 1.25;
     overflow: hidden;

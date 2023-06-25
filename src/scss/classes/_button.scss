@@ -2,6 +2,7 @@
 .button--invert,
 .button--bordered,
 .button--important,
+.button--bordered--important,
 .button--plane {
   border: 1px solid transparent;
   border-radius: var(--border-radius);
@@ -66,6 +67,30 @@
   }
 }
 
+.button--bordered--important {
+  &[data-enabled="true"] {
+    background-color: rgba(var(--notice-color), 0.875);
+    &:focus, &:hover {
+      background-color: rgb(var(--notice-color));
+    }
+  }
+  &[data-enabled="false"] {
+    background-color: transparent;
+    border-color: rgba(var(--notice-color), 0.875);
+    color: rgba(var(--notice-color), 0.875);
+    .svg-icon {
+      fill: rgba(var(--notice-color), 0.875);
+    }
+    &:focus, &:hover {
+      border-color: rgb(var(--notice-color));
+      color: rgb(var(--notice-color));
+      .svg-icon {
+        fill: rgb(var(--notice-color));
+      }
+    }
+  }
+}
+
 .button--plane {
   color: rgba(var(--fg-color), 0.875);
   &:focus, &:hover {
@@ -79,4 +104,8 @@
   & > .svg-icon {
     fill: rgba(var(--fg-color), 0.875);
   }
+}
+
+.button-is-wide {
+  border-radius: unset;
 }
