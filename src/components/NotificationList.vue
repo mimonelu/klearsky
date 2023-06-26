@@ -162,6 +162,8 @@ function makeSubjectTo (notification: TTNotification): any {
         :generator="notificationGroup.generator"
         :orderButtonDisplay="false"
         @click="$emit('close')"
+        @onActivateMention="$emit('close')"
+        @onActivateHashTag="$emit('close')"
       />
     </div>
   </div>

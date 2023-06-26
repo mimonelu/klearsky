@@ -116,6 +116,8 @@ function changeCustomFeedOrder () {
           :orderButtonDisplay="true"
           @click="close"
           @changeCustomFeedOrder="changeCustomFeedOrder"
+          @onActivateMention="close"
+          @onActivateHashTag="close"
         />
       </template>
       <Loader v-if="state.processing" />
