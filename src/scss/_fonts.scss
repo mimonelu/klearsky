@@ -1,8 +1,10 @@
 @import "@/scss/fonts/inter";
+@import "@/scss/fonts/noto-color-emoji";
 
 :root {
   font-family:
     "Inter",
+    "Noto Color Emoji",
     "Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体",
 
     // 以下、基本的にWeb版Twitterと等しくする
