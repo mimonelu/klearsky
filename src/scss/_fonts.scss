@@ -1,9 +1,11 @@
 @import "@/scss/fonts/inter";
 
 :root {
-  // 基本的に Web 版 Twitter と等しくする
   font-family:
     "Inter",
+    "Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体",
+
+    // 以下、基本的にWeb版Twitterと等しくする
     "Segoe UI",
     Meiryo,
     system-ui,
@@ -13,7 +15,6 @@
     Helvetica,
     Arial,
     sans-serif;
-
   font-size: 15px;
   &[data-font-size="small"] {
     font-size: 13px;
@@ -24,6 +25,9 @@
   &[data-font-size="large"] {
     font-size: 17px;
   }
+
+  // 游ゴシック対策
+  font-weight: 500;
 }
 
 // iOS における font-size: 16px; 未満のフォームパーツにフォーカスするとビューポートがスケーリングされる仕様対策
