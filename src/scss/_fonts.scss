@@ -1,6 +1,9 @@
+@import "@/scss/fonts/inter";
+
 :root {
-  // Web 版 Twitter と極力等しくする
+  // 基本的に Web 版 Twitter と等しくする
   font-family:
+    "Inter",
     "Segoe UI",
     Meiryo,
     system-ui,
