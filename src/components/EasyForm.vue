@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue"
 import Graphemer from "graphemer"
+import AccountSuggest from "@/components/AccountSuggest.vue"
 import Checkboxes from "@/components/Checkboxes.vue"
 import FileBox from "@/components/FileBox.vue"
 import Radios from "@/components/Radios.vue"
@@ -224,6 +225,12 @@ function onEnterKeyDown (event: KeyboardEvent) {
               :class="item.classes"
               @input="onInputTextarea(item)"
               @keydown.enter="onEnterKeyDown"
+            />
+
+            <AccountSuggest
+              v-if="item.hasAccountSuggest"
+              :text="item.state[item.model]"
+              @selected=""
             />
           </template>
 

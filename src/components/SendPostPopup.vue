@@ -50,6 +50,7 @@ const easyFormProps: TTEasyForm = {
       maxLengthIndicator: true,
       maxLengthWithSegmenter: true,
       rows: 6,
+      hasAccountSuggest: true,
       focus: true,
     },
     {
