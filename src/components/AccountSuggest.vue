@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, watch } from "vue"
-import getCaretCoordinates from "textarea-caret"
+import { Caret } from "textarea-caret-ts"
 
 const props = defineProps<{
   text: string
@@ -36,7 +36,7 @@ watch(() => props.text, (value: string) => {
     return
   }
   state.text = frontMatch[1] + backMatch[1]
-  const coordinates = getCaretCoordinates(textarea, index)
+  const coordinates = Caret.getRelativePosition(textarea)
   state.top = coordinates.top + coordinates.height - textarea.scrollTop
   state.display = true
 })
