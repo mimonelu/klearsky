@@ -227,10 +227,11 @@ function onEnterKeyDown (event: KeyboardEvent) {
               @keydown.enter="onEnterKeyDown"
             />
 
+            <!-- アカウントサジェスト -->
             <AccountSuggest
               v-if="item.hasAccountSuggest"
               :text="item.state[item.model]"
-              @selected=""
+              @select="(text: string) => { if (item.model != null) item.state[item.model] = text }"
             />
           </template>
 

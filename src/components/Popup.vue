@@ -35,12 +35,9 @@ function scrollToTop () {
 <template>
   <div
     class="popup-overlay"
-    @click="close"
+    @click.self="close"
   >
-    <div
-      class="popup"
-      @click.stop
-    >
+    <div class="popup">
       <header
         v-if="$slots.header"
         class="popup-header"
