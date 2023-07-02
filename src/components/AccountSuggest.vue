@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { inject, nextTick, onBeforeUnmount, reactive, ref, watch } from "vue"
-import { Caret } from "textarea-caret-ts"
 import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string, text: string): void}>()
@@ -15,14 +14,12 @@ const state = reactive<{
   display: boolean
   users?: Array<TTUser>
   text?: string
-  top?: number
   timer?: any
   index: number
 }>({
   display: false,
   users: undefined,
   text: undefined,
-  top: undefined,
   timer: undefined,
   index: 0,
 })
@@ -59,8 +56,6 @@ watch(() => props.text, (value: string) => {
   }
   startIndex = frontMatch.index ?? - 1
   endIndex = startIndex + state.text.length
-  const coordinates = Caret.getRelativePosition(textarea)
-  state.top = coordinates.top + coordinates.height - textarea.scrollTop
   state.display = true
   window.addEventListener("click", resetState)
   window.addEventListener("keydown", onKeyDown)
@@ -107,7 +102,6 @@ function resetState () {
   state.display = false
   state.users?.splice(0)
   state.text = undefined
-  state.top = undefined
   state.index = 0
   window.removeEventListener("click", resetState)
   window.removeEventListener("keydown", onKeyDown)
@@ -195,7 +189,6 @@ function selectUser (user?: TTUser) {
     <div
       v-if="state.display"
       class="account-suggest__suggest"
-      :style="{ top: `calc(0.5em + ${state.top}px)` }"
     >
       <div
         v-for="user, index of state.users"
@@ -235,7 +228,6 @@ function selectUser (user?: TTUser) {
     display: flex;
     flex-direction: column;
     position: absolute;
-    z-index: 1;
     &:empty {
       display: none;
     }

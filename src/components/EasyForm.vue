@@ -226,13 +226,6 @@ function onEnterKeyDown (event: KeyboardEvent) {
               @input="onInputTextarea(item)"
               @keydown.enter="onEnterKeyDown"
             />
-
-            <!-- アカウントサジェスト -->
-            <AccountSuggest
-              v-if="item.hasAccountSuggest"
-              :text="item.state[item.model]"
-              @select="(text: string) => { if (item.model != null) item.state[item.model] = text }"
-            />
           </template>
 
           <!-- ボタン -->
@@ -270,6 +263,13 @@ function onEnterKeyDown (event: KeyboardEvent) {
               : false
             "
           >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
+
+          <!-- アカウントサジェスト -->
+          <AccountSuggest
+            v-if="item.model != null && item.hasAccountSuggest"
+            :text="item.state[item.model]"
+            @select="(text: string) => { if (item.model != null) item.state[item.model] = text }"
+          />
         </dd>
 
         <!-- 脚注 -->
@@ -373,6 +373,14 @@ function onEnterKeyDown (event: KeyboardEvent) {
   line-height: 1.25;
   text-align: right;
   word-wrap: break-word;
+}
+
+.account-suggest:deep() {
+  .account-suggest__suggest {
+    margin-top: 1rem;
+    z-index: 1;
+    width: 100%;
+  }
 }
 
 .max-length-indicator {
