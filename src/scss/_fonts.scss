@@ -1,11 +1,11 @@
-@import "@/scss/fonts/inter";
-@import "@/scss/fonts/noto-color-emoji";
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap");
 
 :root {
   font-family:
     "Inter",
     "Noto Color Emoji",
-    "Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体",
+    "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", "メイリオ",
 
     // 以下、基本的にWeb版Twitterと等しくする
     "Segoe UI",
@@ -27,9 +27,6 @@
   &[data-font-size="large"] {
     font-size: 17px;
   }
-
-  // 游ゴシック対策
-  font-weight: 500;
 }
 
 // iOS における font-size: 16px; 未満のフォームパーツにフォーカスするとビューポートがスケーリングされる仕様対策
