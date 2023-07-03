@@ -2,7 +2,7 @@
 import { inject, nextTick, onBeforeUnmount, reactive, ref, watch } from "vue"
 import CONSTS from "@/consts/consts.json"
 
-const emit = defineEmits<{(event: string, text: string): void}>()
+const emit = defineEmits<{(event: string, params: any): void}>()
 
 const props = defineProps<{
   text: string
@@ -16,12 +16,14 @@ const state = reactive<{
   text?: string
   timer?: any
   index: number
+  inputMode: "mouse" | "keyboard"
 }>({
   display: false,
   users: undefined,
   text: undefined,
   timer: undefined,
   index: 0,
+  inputMode: "keyboard",
 })
 
 const suggestButtons = ref(null)
@@ -54,6 +56,9 @@ watch(() => props.text, (value: string) => {
     resetState()
     return
   }
+
+  // 有効化
+
   startIndex = frontMatch.index ?? - 1
   endIndex = startIndex + state.text.length
   state.display = true
@@ -93,6 +98,8 @@ watch(() => props.text, (value: string) => {
       return aWeight < bWeight ? 1 : aWeight > bWeight ? - 1 : 0
     })
     state.timer = undefined
+
+    // リスト表示
   }, 500)
 })
 
@@ -154,17 +161,13 @@ function moveSuggestButtonFocus (direction: "up" | "down") {
   } else {
     if (++ state.index >= state.users.length) state.index = 0
   }
+  state.inputMode = "keyboard"
 
-  /*
   nextTick(() => {
     const focusElement = document.querySelector(".account-suggest__suggest__item[data-focus='true']")
     if (focusElement == null) return
-    focusElement.scrollIntoView({
-      // behavior: "smooth",
-      block: "center",
-    })
+    focusElement.scrollIntoView({ block: "nearest" })
   })
-  */
 }
 
 function selectUser (user?: TTUser) {
@@ -172,12 +175,13 @@ function selectUser (user?: TTUser) {
   if (startIndex !== - 1) {
     const currentStartIndex = startIndex + (startIndex === 0 ? 1 : 2)
     const currentEndIndex = endIndex + (startIndex === 0 ? 1 : 2)
+    const hasSpace = props.text.charAt(currentEndIndex) !== " "
     const text =
       props.text.substring(0, currentStartIndex) +
       user.handle +
-      (props.text.charAt(currentEndIndex) === " " ? "" : " ") +
+      (hasSpace ? " " : "") +
       props.text.substring(currentEndIndex)
-    emit("select", text)
+    emit("select", { text, endIndex: currentStartIndex + user.handle.length + 1 })
   }
   if (textarea != null) textarea.focus()
   nextTick(resetState)
@@ -189,6 +193,8 @@ function selectUser (user?: TTUser) {
     <div
       v-if="state.display"
       class="account-suggest__suggest"
+      :data-input-mode="state.inputMode"
+      @mousemove="state.inputMode = 'mouse'"
     >
       <div
         v-for="user, index of state.users"
@@ -206,14 +212,6 @@ function selectUser (user?: TTUser) {
         >
         <div class="account-suggest__suggest__item__display-name">{{ user.displayName }}</div>
         <div class="account-suggest__suggest__item__handle">{{ user.handle }}</div>
-        <div
-          v-if="user.viewer.following != null"
-          class="account-suggest__suggest__item__following"
-        >{{ $t("following") }}</div>
-        <div
-          v-if="user.viewer.followedBy != null"
-          class="account-suggest__suggest__item__followed-by"
-        >{{ $t("followed") }}</div>
       </div>
     </div>
   </div>
@@ -222,81 +220,59 @@ function selectUser (user?: TTUser) {
 <style lang="scss" scoped>
 .account-suggest {
   &__suggest {
-    background-color: rgb(var(--fg-color));
-    border: 1px solid rgba(var(--bg-color), 0.25);
+    border: 1px solid rgba(var(--fg-color), 0.25);
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
-    position: absolute;
+    overflow: hidden;
     &:empty {
       display: none;
     }
 
     &__item {
       background-clip: padding-box;
-      color: rgb(var(--bg-color));
+      background-color: rgba(var(--fg-color), 0.125);
       cursor: pointer;
       display: grid;
-      grid-template-columns: auto 1fr auto auto;
-      grid-template-areas:
-        "a d d d"
-        "a h g b";
+      grid-template-columns: auto auto 1fr;
       grid-gap: 0 0.5em;
       align-items: center;
-      padding: 0.375em 0.75em;
+      padding: 0.25em 0.5em;
       white-space: nowrap;
       &:not(:last-child) {
-        border-bottom: 1px solid rgba(var(--bg-color), 0.25);
-      }
-      &[data-focus="true"], &:hover {
-        background-color: rgba(var(--accent-color), 0.25);
+        border-bottom: 1px solid rgba(var(--fg-color), 0.25);
       }
 
       &__avatar {
-        grid-area: a;
         border-radius: var(--border-radius);
-        font-size: 2em;
+        font-size: 1.5em;
         object-fit: cover;
-        min-width: 2rem;
-        max-width: 2rem;
-        min-height: 2rem;
-        max-height: 2rem;
+        min-width: 1.5rem;
+        max-width: 1.5rem;
+        min-height: 1.5rem;
+        max-height: 1.5rem;
       }
 
       &__display-name,
-      &__handle,
-      &__following,
-      &__followed-by {
+      &__handle {
         line-height: 1.25;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
       &__display-name {
-        grid-area: d;
         font-size: 0.875em;
         font-weight: bold;
       }
 
       &__handle {
-        grid-area: h;
-        color: rgba(var(--bg-color), 0.75);
+        color: rgba(var(--fg-color), 0.75);
         font-size: 0.75em;
       }
-
-      &__following,
-      &__followed-by {
-        color: rgb(var(--accent-color));
-        font-size: 0.75em;
-      }
-
-      &__following {
-        grid-area: g;
-      }
-
-      &__followed-by {
-        grid-area: b;
-      }
+    }
+    &[data-input-mode="keyboard"] &__item[data-focus="true"],
+    &[data-input-mode="mouse"] &__item:hover {
+      background-color: rgba(var(--accent-color), 0.25);
     }
   }
 }

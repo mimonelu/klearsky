@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, reactive } from "vue"
+import { nextTick, onMounted, reactive, ref } from "vue"
 import Graphemer from "graphemer"
 import AccountSuggest from "@/components/AccountSuggest.vue"
 import Checkboxes from "@/components/Checkboxes.vue"
@@ -30,6 +30,8 @@ const state = reactive<{
   processing: false,
   updateKey: 0,
 })
+
+const easyForm = ref(null)
 
 onMounted(() => {
   props.data.forEach((prop: TTEasyFormItem, index: number) => {
@@ -109,11 +111,24 @@ function onInputTextarea (item: TTEasyFormItem) {
 function onEnterKeyDown (event: KeyboardEvent) {
   if (!event.isComposing && (event.ctrlKey || event.metaKey)) onSubmit()
 }
+
+function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
+  if (item.model == null) return
+  const id = makeItemId(itemIndex)
+  const target: null | HTMLInputElement =
+    (easyForm.value as null | HTMLInputElement)?.querySelector(`#${id}`) ?? null
+  item.state[item.model] = params.text
+  nextTick(() => {
+    if (target == null) return
+    target.setSelectionRange(params.endIndex, params.endIndex)
+  })
+}
 </script>
 
 <template>
   <form
     :key="state.updateKey"
+    ref="easyForm"
     class="easy-form"
     :data-grid-columns="gridColumns != null"
     :style="gridColumns != null ? `--grid-columns: ${gridColumns};` : ''"
@@ -268,7 +283,7 @@ function onEnterKeyDown (event: KeyboardEvent) {
           <AccountSuggest
             v-if="item.model != null && item.hasAccountSuggest"
             :text="item.state[item.model]"
-            @select="(text: string) => { if (item.model != null) item.state[item.model] = text }"
+            @select="(params: any) => { onUpdateText(item, index, params) }"
           />
         </dd>
 

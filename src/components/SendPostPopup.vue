@@ -162,6 +162,16 @@ function isEmpty (): boolean {
 <style lang="scss" scoped>
 .send-post-popup {
   &:deep() {
+    // ポップアップとテキストエリアを縦に最大化
+    .popup,
+    .popup-body,
+    .easy-form,
+    .easy-form__body,
+    .easy-form__body > dl:first-child,
+    .easy-form__body > dl:first-child > dd {
+      flex-grow: 1;
+    }
+
     .popup-header {
       border-bottom-style: none;
     }
@@ -187,6 +197,16 @@ function isEmpty (): boolean {
       border-right-style: none;
       border-radius: 0;
       margin: 0 -2rem;
+    }
+
+    .account-suggest {
+      margin: 0 -2rem;
+
+      &__suggest {
+        border-left-style: unset;
+        border-right-style: unset;
+        border-radius: unset;
+      }
     }
   }
 
