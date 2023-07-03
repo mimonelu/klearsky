@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { onMounted, reactive } from "vue"
+import { nextTick, onMounted, reactive, ref } from "vue"
 import Graphemer from "graphemer"
+import AccountSuggest from "@/components/AccountSuggest.vue"
 import Checkboxes from "@/components/Checkboxes.vue"
 import FileBox from "@/components/FileBox.vue"
 import Radios from "@/components/Radios.vue"
@@ -29,6 +30,8 @@ const state = reactive<{
   processing: false,
   updateKey: 0,
 })
+
+const easyForm = ref(null)
 
 onMounted(() => {
   props.data.forEach((prop: TTEasyFormItem, index: number) => {
@@ -108,11 +111,24 @@ function onInputTextarea (item: TTEasyFormItem) {
 function onEnterKeyDown (event: KeyboardEvent) {
   if (!event.isComposing && (event.ctrlKey || event.metaKey)) onSubmit()
 }
+
+function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
+  if (item.model == null) return
+  const id = makeItemId(itemIndex)
+  const target: null | HTMLInputElement =
+    (easyForm.value as null | HTMLInputElement)?.querySelector(`#${id}`) ?? null
+  item.state[item.model] = params.text
+  nextTick(() => {
+    if (target == null) return
+    target.setSelectionRange(params.endIndex, params.endIndex)
+  })
+}
 </script>
 
 <template>
   <form
     :key="state.updateKey"
+    ref="easyForm"
     class="easy-form"
     :data-grid-columns="gridColumns != null"
     :style="gridColumns != null ? `--grid-columns: ${gridColumns};` : ''"
@@ -262,6 +278,13 @@ function onEnterKeyDown (event: KeyboardEvent) {
               : false
             "
           >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
+
+          <!-- アカウントサジェスト -->
+          <AccountSuggest
+            v-if="item.model != null && item.hasAccountSuggest"
+            :text="item.state[item.model]"
+            @select="(params: any) => { onUpdateText(item, index, params) }"
+          />
         </dd>
 
         <!-- 脚注 -->
@@ -365,6 +388,14 @@ function onEnterKeyDown (event: KeyboardEvent) {
   line-height: 1.25;
   text-align: right;
   word-wrap: break-word;
+}
+
+.account-suggest:deep() {
+  .account-suggest__suggest {
+    margin-top: 1rem;
+    z-index: 1;
+    width: 100%;
+  }
 }
 
 .max-length-indicator {

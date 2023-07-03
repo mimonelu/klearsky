@@ -80,6 +80,11 @@ interface TIAtpWrapper {
   deleteSession(this: TIAtpWrapper): Promise<boolean>
   enableBlock(this: TIAtpWrapper, handle: string): Promise<null | string>
   enableMute(this: TIAtpWrapper, handle: string): Promise<boolean>
+  fetchActorsTypeahead(
+    this: TIAtpWrapper,
+    term?: string,
+    limit?: number
+  ): Promise<Error | Array<TTUser>>
   fetchAuthorFeed(
     this: TIAtpWrapper,
     oldFeeds: Array<TTFeed>,

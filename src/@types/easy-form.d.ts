@@ -48,6 +48,7 @@ type TTEasyFormItem = {
   maxNumberOfFile?: number
   quadLayout?: boolean
   clearButton?: boolean
+  hasAccountSuggest?: boolean
   footnote?: string
   focus?: boolean
   onClick?: (item: TTEasyFormItem, form: TTEasyForm) => void

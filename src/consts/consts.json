@@ -1,5 +1,6 @@
 {
   "intervalOfFetchNotifications": 20000,
+  "limitOfFetchActorsTypeahead": 10,
   "limitOfFetchAuthorFeeds": 30,
   "limitOfFetchAuthorReposts": 15,
   "limitOfFetchAuthorLikes": 15,

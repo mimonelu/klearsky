@@ -697,6 +697,8 @@ function onActivateHashTag (text: string) {
             :generator="post.embed.record as unknown as TTFeedGenerator"
             :orderButtonDisplay="false"
             @click="$emit('click')"
+            @onActivateMention="$emit('click')"
+            @onActivateHashTag="$emit('click')"
           />
         </template>
 

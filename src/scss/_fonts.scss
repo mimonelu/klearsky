@@ -1,6 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap");
+
 :root {
-  // Web 版 Twitter と極力等しくする
   font-family:
+    "Inter",
+    "Noto Color Emoji",
+    "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", "メイリオ",
+
+    // 以下、基本的にWeb版Twitterと等しくする
     "Segoe UI",
     Meiryo,
     system-ui,
@@ -10,7 +17,6 @@
     Helvetica,
     Arial,
     sans-serif;
-
   font-size: 15px;
   &[data-font-size="small"] {
     font-size: 13px;

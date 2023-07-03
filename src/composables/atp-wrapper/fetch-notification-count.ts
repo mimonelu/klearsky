@@ -5,7 +5,7 @@ export default async function (this: TIAtpWrapper): Promise<null | number> {
   const response: AppBskyNotificationGetUnreadCount.Response = await (
     this.agent as BskyAgent
   ).countUnreadNotifications()
-  console.log("[klearsky/countUnreadNotifications]", response)
+  // console.log("[klearsky/countUnreadNotifications]", response)
   if (!response.success) return null
   return response.data.count
 }

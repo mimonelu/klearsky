@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import HtmlText from "@/components/HtmlText.vue"
 import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -168,10 +169,13 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     </div>
 
     <!-- フィード説明文 -->
-    <div
+    <HtmlText
       class="custom-feed-card__description"
       dir="auto"
-    >{{ generator.description }}</div>
+      :text="generator.description ?? '&nbsp;'"
+      @onActivateMention="emit('onActivateMention')"
+      @onActivateHashTag="emit('onActivateHashTag')"
+    />
 
     <div class="custom-feed-card__bottom">
       <!-- フィードオーダーボタン -->

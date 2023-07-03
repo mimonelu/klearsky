@@ -181,10 +181,6 @@ async function refreshSession () {
   grid-gap: 1rem;
   font-size: 0.875rem;
   margin-bottom: 2rem;
-
-  & > .textlink--icon:first-child > span {
-    text-transform: lowercase;
-  }
 }
 
 // コピーライト

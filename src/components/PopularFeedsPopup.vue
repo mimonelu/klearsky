@@ -65,6 +65,8 @@ async function updatePopularFeeds () {
           :generator="generator"
           :orderButtonDisplay="false"
           @click="close"
+          @onActivateMention="close"
+          @onActivateHashTag="close"
         />
       </template>
       <Loader v-if="state.processing" />
