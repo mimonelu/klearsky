@@ -29,15 +29,6 @@ const easyFormProps: TTEasyForm = {
       layout: "horizontal",
       onUpdate: saveSetting,
     },
-    {
-      state: mainState.currentSetting,
-      model: "globallineLanguage",
-      label: $t("language"),
-      type: "select",
-      required: true,
-      options: languages,
-      onUpdate: saveSetting,
-    },
   ],
 }
 

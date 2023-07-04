@@ -528,6 +528,7 @@ function saveSettings () {
     state.settings[did].autoTranslationIgnoreLanguage = undefined
   if (state.settings[did].contentLanguages == null)
     state.settings[did].contentLanguages = []
+  else state.settings[did].contentLanguages = getSanitizedLanguages(state.settings[did].contentLanguages)
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].wordMute == null)
@@ -544,8 +545,6 @@ function saveSettings () {
     state.settings[did].imageAspectRatio = "1 / 1"
   if (state.settings[did].globallineLayout == null)
     state.settings[did].globallineLayout = "post"
-  if (state.settings[did].globallineLanguage == null)
-    state.settings[did].globallineLanguage = Util.getUserLanguage()
   if (state.settings[did].layout == null)
     state.settings[did].layout = "default"
   if (state.settings[did].borderRadius == null)
@@ -564,13 +563,17 @@ function saveSettings () {
     state.settings[did].postAnonymization = false
   if (state.settings[did].postLanguages == null)
     state.settings[did].postLanguages = [Util.getUserLanguage()]
-  else state.settings[did].postLanguages = state.settings[did].postLanguages?.filter((language: string) => {
-    return LANGUAGES.findIndex((target: any) => language === target.value) !== - 1
-  })
+  else state.settings[did].postLanguages = getSanitizedLanguages(state.settings[did].postLanguages)
   if (state.settings[did].lightning == null)
     state.settings[did].lightning = undefined
   state.currentSetting = state.settings[did]
   Util.saveStorage("settings", state.settings)
+}
+
+function getSanitizedLanguages (languages?: Array<string>) {
+  return languages?.filter((language: string) => {
+    return LANGUAGES.findIndex((target: any) => language === target.value) !== - 1
+  })
 }
 
 function resetSettings () {

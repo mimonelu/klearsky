@@ -80,11 +80,11 @@ const state = reactive<{
     if (mainState.currentPath === "/post" ||
         mainState.currentPath.startsWith("/profile/")) return false
 
-    if (!(props.post.record?.text ?? props.post.value?.text)) return false
-    if (!props.post.__custom?.detectedLanguages?.length) return false
-    if (!mainState.currentSetting?.contentLanguages?.length) return false
-    return !props.post.__custom.detectedLanguages?.some((language: any) =>
-      mainState.currentSetting.contentLanguages?.includes(language.lang)
+    const langs = props.post.record?.langs ?? props.post.value?.langs
+    if (!langs?.length) return false
+    if (!mainState.currentSetting.contentLanguages?.length) return false
+    return !langs?.some((language: any) =>
+      mainState.currentSetting.contentLanguages?.includes(language)
     ) ?? false
   }),
 
@@ -366,17 +366,16 @@ async function translateText (forceTranslate: boolean) {
     state.translation = "ignore"
     return
   }
-  const srcLanguages = props.post.__custom.detectedLanguages
+  const srcLanguages = props.post.record?.langs ?? props.post.value?.langs
   if (!srcLanguages?.length) {
     state.translation = "ignore"
     return
   }
-  const srcLanguage = srcLanguages[0].lang
   if (!forceTranslate) {
     const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
     if (autoTranslationIgnoreLanguage != null) {
       const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/gs, "").split(",")
-      const ignored = ignoreLanguages.includes(srcLanguage)
+      const ignored = ignoreLanguages.some((ignore: string) => srcLanguages.includes(ignore))
       if (ignored) {
         state.translation = "ignore"
         return
@@ -384,12 +383,12 @@ async function translateText (forceTranslate: boolean) {
     }
   }
   const dstLanguage = Util.getUserLanguage()
-  if (srcLanguage === dstLanguage) {
+  if (srcLanguages.includes(dstLanguage)) {
     state.translation = "ignore"
     return
   }
   // SEE: https://mymemory.translated.net/doc/spec.php
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLanguage}|${dstLanguage}&de=${mainState.atp.session?.email}`
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLanguages[0]}|${dstLanguage}&de=${mainState.atp.session?.email}`
   const response = await fetch(url).catch(() => {
     state.translation = "failed"
   })

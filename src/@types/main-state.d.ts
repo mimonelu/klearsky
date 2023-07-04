@@ -21,7 +21,6 @@ type TTSetting = {
     "none"
   imageAspectRatio?: string
   globallineLayout?: "post" | "slim"
-  globallineLanguage?: string
   layout?:
     "default" |
     "defaultLeft" |

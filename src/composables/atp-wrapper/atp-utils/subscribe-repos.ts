@@ -134,7 +134,6 @@ export default class {
       },
     }]
     AtpUtil.coherentResponses(feeds)
-    AtpUtil.detectLanguages(feeds)
     const post = feeds[0].post
 
     if (this.postCallback != null) this.postCallback(did, post)

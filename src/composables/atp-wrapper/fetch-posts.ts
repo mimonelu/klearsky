@@ -21,7 +21,6 @@ export default async function (
 
   // TODO:
   AtpUtil.coherentResponses(response.data.posts)
-  AtpUtil.detectLanguages(response.data.posts)
 
   return response.data.posts as Array<TTPost>
 }

@@ -50,15 +50,13 @@ async function onPost (did: string, post: any) {
 
   messageContainerHeight = (messageContainer.value as any).clientHeight
 
-  // 言語解析
-  if (post.record.text != null) {
-    const languages = post.__custom.detectedLanguages
-    if (languages != null) {
-      const yourLanguage = languages.findIndex((language: any) => {
-        return language.lang === mainState.currentSetting.globallineLanguage
-      }) !== - 1
-      if (!yourLanguage) return
-    }
+  // 言語判定
+  const langs = post.record?.langs ?? post.value?.langs
+  if (!langs?.length) return
+  if ((mainState.currentSetting.contentLanguages?.length ?? 0) > 0) {
+    // 第1言語（配列の最初）のみ参照
+    const matched = mainState.currentSetting.contentLanguages?.includes(langs[0])
+    if (!matched) return
   }
 
   if (mainState.globallineProfiles[did] == null)
