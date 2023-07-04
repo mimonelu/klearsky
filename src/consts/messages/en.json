@@ -180,6 +180,7 @@
   "japanese": "Japanese",
 
   "postLanguages": "Post Languages",
+  "postLanguagesEdit": "Select post languages",
   "postLanguagesDetail1": "Select up to 3 languages used in your post.",
   "postLanguagesDetail2": "This setting will be checked against the viewer's content languages.",
 

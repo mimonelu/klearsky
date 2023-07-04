@@ -73,10 +73,17 @@ function closeHtmlPopupDisplay () {
           <!-- 各種機能設定 -->
           <div class="settings-section">
             <div class="list-menu">
-              <!-- コンテンツフィルタリングポップアップトリガー -->
+              <!-- コンテンツ言語選択ポップアップトリガー -->
               <button @click.prevent="mainState.openContentLanguagesPopup">
                 <SVGIcon name="translate" />
                 <span>{{ $t("contentLanguagesEdit") }}</span>
+                <SVGIcon name="cursorRight" />
+              </button>
+
+              <!-- ポスト言語選択ポップアップトリガー -->
+              <button @click.prevent="mainState.openPostLanguagesPopup">
+                <SVGIcon name="translate" />
+                <span>{{ $t("postLanguagesEdit") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
@@ -94,7 +101,7 @@ function closeHtmlPopupDisplay () {
                 <SVGIcon name="cursorRight" />
               </button>
 
-              <!-- コンテンツフィルタリングポップアップトリガー -->
+              <!-- コンテンツ言語選択ポップアップトリガー -->
               <button @click.prevent="mainState.openContentFilteringPopup">
                 <SVGIcon name="alert" />
                 <span>{{ $t("modifyContentFiltering") }}</span>

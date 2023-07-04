@@ -65,13 +65,22 @@ async function refreshSession () {
 
     <!-- トリガーコンテナ -->
     <div class="textlink-container">
-      <!-- コンテンツ言語ポップアップトリガー -->
+      <!-- コンテンツ言語選択ポップアップトリガー -->
       <a
         class="textlink--icon"
         @click.prevent="mainState.openContentLanguagesPopup"
       >
         <SVGIcon name="translate" />
         <span>{{ $t("contentLanguages") }}</span>
+      </a>
+
+      <!-- ポスト言語選択ポップアップトリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="mainState.openPostLanguagesPopup"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("postLanguages") }}</span>
       </a>
 
       <!-- マイフィードポップアップトリガー -->

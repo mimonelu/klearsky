@@ -180,6 +180,7 @@
   "japanese": "日本語",
 
   "postLanguages": "ポスト言語",
+  "postLanguagesEdit": "ポスト言語を選択する",
   "postLanguagesDetail1": "ポストで使用している言語を3つまで選択してください。",
   "postLanguagesDetail2": "この設定は閲覧者のコンテンツ言語と照合されます。",
 
