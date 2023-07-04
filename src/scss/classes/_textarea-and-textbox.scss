@@ -8,6 +8,15 @@
   &:hover {
     --opacity: 0.25;
   }
+  &[disabled] {
+    border-style: none;
+    background-image: repeating-linear-gradient(-45deg,
+      rgba(255, 255, 255, 0.0625) 0,
+      rgba(255, 255, 255, 0.0625) 0.5rem,
+      rgba(0, 0, 0, 0.0625) 0.5rem,
+      rgba(0, 0, 0, 0.0625) 1rem
+    );
+  }
 
   background-color: rgba(var(--color), 0.125);
   border: 1px solid rgba(var(--color), var(--opacity));

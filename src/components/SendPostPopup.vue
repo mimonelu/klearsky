@@ -78,9 +78,9 @@ const easyFormProps: TTEasyForm = {
         // ファイルがひとつ以上選択されているか否かでリンクボックスの表示状態を切り替える
         const urlItem = form.data.find((item: TTEasyFormItem) => item.model === "url")
         if (urlItem == null) return
-        urlItem.display = state.images.length === 0
+        urlItem.disabled = state.images.length > 0
 
-        // WANT: 意図しない alt が削除される不具合を修正したい
+        // TODO: 意図しない alt が削除される不具合を修正すること
         state.alts.splice(state.images.length)
       },
     },
@@ -220,7 +220,7 @@ function isEmpty (): boolean {
       border-left-style: none;
       border-right-style: none;
       border-radius: 0;
-      margin: 0 -2rem;
+      margin: 0 -1.5rem;
     }
   }
 
