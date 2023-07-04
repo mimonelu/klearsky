@@ -36,6 +36,7 @@ type TTSetting = {
   backgroundOpacity?: number
   hideNumberOfReaction?: boolean
   postAnonymization?: boolean
+  postLanguages?: Array<string>
   lightning?: string
   [k: string]: any
 }
@@ -190,6 +191,9 @@ type MainState = {
   // コンテンツ言語ポップアップの表示スイッチ
   contentLanguagesPopupDisplay: boolean
 
+  // ポスト言語ポップアップの表示スイッチ
+  postLanguagesPopupDisplay: boolean
+
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
@@ -284,6 +288,10 @@ type MainState = {
   // コンテンツ言語ポップアップの開閉
   openContentLanguagesPopup: Function
   closeContentLanguagesPopup: Function
+
+  // ポスト言語ポップアップの開閉
+  openPostLanguagesPopup: Function
+  closePostLanguagesPopup: Function
 
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup: Function

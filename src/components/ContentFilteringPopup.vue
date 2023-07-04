@@ -135,20 +135,23 @@ async function apply () {
   }
 
   .popup-body {
-    padding: 1rem 0;
+    grid-gap: 1.5rem;
+    padding: 1.5rem 0;
 
     & > p {
-      margin: 0 1rem;
+      margin: 0 1.5rem;
     }
   }
 
   .easy-form {
+    grid-gap: 1.5rem;
+
     dt {
-      margin: 0 1rem;
+      margin: 0 1.5rem;
     }
 
     .submit-button {
-      margin: 0 1rem;
+      margin: 0 1.5rem;
     }
   }
 

@@ -8,6 +8,7 @@ import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 import LABELS from "@/consts/labels.json"
+import LANGUAGES from "@/consts/languages.json"
 
 const state = reactive<MainState>({
   // @ts-ignore // TODO:
@@ -131,6 +132,10 @@ const state = reactive<MainState>({
   // コンテンツ言語ポップアップの開閉
   openContentLanguagesPopup,
   closeContentLanguagesPopup,
+
+  // ポスト言語ポップアップの開閉
+  openPostLanguagesPopup,
+  closePostLanguagesPopup,
 
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
@@ -557,6 +562,11 @@ function saveSettings () {
     state.settings[did].hideNumberOfReaction = false
   if (state.settings[did].postAnonymization == null)
     state.settings[did].postAnonymization = false
+  if (state.settings[did].postLanguages == null)
+    state.settings[did].postLanguages = [Util.getUserLanguage()]
+  else state.settings[did].postLanguages = state.settings[did].postLanguages?.filter((language: string) => {
+    return LANGUAGES.findIndex((target: any) => language === target.value) !== - 1
+  })
   if (state.settings[did].lightning == null)
     state.settings[did].lightning = undefined
   state.currentSetting = state.settings[did]
@@ -711,6 +721,16 @@ function openContentLanguagesPopup () {
 
 function closeContentLanguagesPopup () {
   state.contentLanguagesPopupDisplay = false
+}
+
+// ポスト言語ポップアップの開閉
+
+function openPostLanguagesPopup () {
+  state.postLanguagesPopupDisplay = true
+}
+
+function closePostLanguagesPopup () {
+  state.postLanguagesPopupDisplay = false
 }
 
 // 招待コード確認ポップアップの開閉

@@ -104,7 +104,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   &:not(:empty) {
     padding: 1rem 0;
   }

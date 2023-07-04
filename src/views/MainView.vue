@@ -221,6 +221,9 @@ function resetState () {
   // コンテンツ言語ポップアップの表示スイッチ
   state.contentLanguagesPopupDisplay = false
 
+  // ポスト言語ポップアップの表示スイッチ
+  state.postLanguagesPopupDisplay = false
+
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
 
@@ -597,16 +600,22 @@ function broadcastListener (event: MessageEvent) {
       @close="state.closeAccountPopup"
     />
 
-    <!-- 言語選択ポップアップ -->
+    <!-- コンテンツ言語選択ポップアップ -->
     <SelectLanguagesPopup
       v-if="state.contentLanguagesPopupDisplay"
       :state="state.currentSetting"
       property="contentLanguages"
+      title="contentLanguages"
       @close="state.closeContentLanguagesPopup"
       @change="state.saveSettings"
     >
-      <template #header>
-        <p>{{ $t("selectLanguagesDetail") }}</p>
+      <template #html-popup-content>
+        <ul class="bullet-points">
+          <li>{{ $t("contentLanguagesDetail1") }}</li>
+          <li>{{ $t("contentLanguagesDetail2") }}</li>
+          <li>{{ $t("contentLanguagesDetail3") }}</li>
+          <li>{{ $t("contentLanguagesDetail4") }}</li>
+        </ul>
       </template>
     </SelectLanguagesPopup>
 
@@ -695,6 +704,24 @@ function broadcastListener (event: MessageEvent) {
       :fileList="state.sendPostPopupProps.fileList"
       @closeSnedPostPopup="closeSendPostPopup"
     />
+
+    <!-- ポスト言語選択ポップアップ -->
+    <SelectLanguagesPopup
+      v-if="state.postLanguagesPopupDisplay"
+      :state="state.currentSetting"
+      property="postLanguages"
+      title="postLanguages"
+      :limit="3"
+      @close="state.closePostLanguagesPopup"
+      @change="state.saveSettings"
+    >
+      <template #html-popup-content>
+        <ul class="bullet-points">
+          <li>{{ $t("postLanguagesDetail1") }}</li>
+          <li>{{ $t("postLanguagesDetail2") }}</li>
+        </ul>
+      </template>
+    </SelectLanguagesPopup>
 
     <!-- 　D&Dオーバーレイ -->
     <div

@@ -172,9 +172,16 @@
   "uiLanguage": "UI Language",
   "contentLanguages": "Content Languages",
   "contentLanguagesEdit": "Select content languages",
-  "selectLanguagesDetail": "Multiple selections allowed. If select nothing, all posts be displayed.",
+  "contentLanguagesDetail1": "Multiple selections allowed.",
+  "contentLanguagesDetail2": "Posts that don't match the selected languages will be collapsed.",
+  "contentLanguagesDetail3": "If the appropriate languages is not set for the post, the above does not apply.",
+  "contentLanguagesDetail4": "If none are selected, all posts will be displayed.",
   "english": "English",
   "japanese": "Japanese",
+
+  "postLanguages": "Post Languages",
+  "postLanguagesDetail1": "Select up to 3 languages used in your post.",
+  "postLanguagesDetail2": "This setting will be checked against the viewer's content languages.",
 
   "autoTranslation": "Automatic Translation",
   "autoTranslationRemarks1": "The automatic translation uses the API of MyMemory, a translation memory operated by Translated.",

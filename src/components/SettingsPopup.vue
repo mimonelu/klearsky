@@ -463,7 +463,7 @@ function closeHtmlPopupDisplay () {
             </div>
             <div class="settings-section__body">
               <button
-                class="button--important button-is-wide"
+                class="button--important"
                 @click.stop="resetSettings"
               >
                 <span>{{ $t("resetSettings") }}</span>
@@ -542,5 +542,9 @@ function closeHtmlPopupDisplay () {
   .svg-icon--personOff {
     --icon-color: var(--notice-color);
   }
+}
+
+.button--important {
+  margin: 0 1.5rem;
 }
 </style>

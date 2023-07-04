@@ -53,6 +53,7 @@ const easyFormProps: TTEasyForm = {
       maxLengthIndicator: true,
       maxLengthWithSegmenter: true,
       rows: 6,
+      hasPostLanguages: true,
       hasAccountSuggest: true,
       focus: true,
     },
@@ -100,6 +101,7 @@ async function submitCallback () {
       ...state,
       type: props.type,
       post: props.post,
+      languages: mainState.currentSetting.postLanguages,
 
       // Lightning
       lightning: mainState.currentSetting.lightning,

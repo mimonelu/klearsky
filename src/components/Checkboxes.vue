@@ -3,15 +3,22 @@ import SVGIcon from "@/components/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
-defineProps<{
+const props = defineProps<{
   state: any
   model: string
   options: Array<TTOption>
   required?: boolean
+  limit?: number
   layout?: "horizontal" | "vertical" | "vertical-2columns"
 }>()
 
 function onChange () {
+  // 最大選択可能数の処理
+  if (props.limit != null && props.limit <= props.state[props.model].length) {
+    props.state[props.model].splice(props.limit)
+    return
+  }
+
   emit("update")
 }
 </script>
