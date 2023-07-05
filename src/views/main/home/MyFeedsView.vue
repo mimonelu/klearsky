@@ -114,7 +114,7 @@ function openPopularFeedsPopup () {
     grid-gap: 0.5rem;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     position: sticky;
     top: calc(6rem + 1px);
     z-index: 1;
@@ -127,7 +127,7 @@ function openPopularFeedsPopup () {
       color: rgb(var(--accent-color));
       font-size: 1.25rem;
       font-weight: bold;
-      margin: -1rem 0;
+      line-height: 1.25;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

@@ -48,22 +48,23 @@ defineProps<{
   &__meta {
     display: grid;
     grid-template-rows: auto auto auto;
-    padding: 0.875em;
+    padding: 0.75em;
   }
   &__title,
   &__uri,
   &__description {
-    line-height: 1.5;
+    line-height: 1.375;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   &__title {
+    font-size: 0.875em;
     font-weight: bold;
   }
   &__uri {
     color: rgba(var(--fg-color), 0.5);
-    font-size: 0.875em;
+    font-size: 0.75em;
   }
   &__description {
     font-size: 0.875em;

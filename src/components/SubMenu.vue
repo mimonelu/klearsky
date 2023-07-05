@@ -187,7 +187,7 @@ async function refreshSession () {
   display: flex;
   flex-direction: column;
   align-items: center;
-  grid-gap: 1rem;
+  grid-gap: 0.75rem;
   font-size: 0.875rem;
   margin-bottom: 2rem;
 }

@@ -252,6 +252,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     border: 1px solid rgba(var(--accent-color), 0.25);
     border-radius: var(--border-radius);
     display: block;
+    overflow: hidden;
     min-width: 3em;
     max-width: 3em;
     min-height: 3em;

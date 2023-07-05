@@ -1149,7 +1149,7 @@ function onActivateHashTag (text: string) {
 
 .text,
 .text--slim {
-  line-height: 1.5;
+  line-height: 1.375;
   word-break: break-word;
   &:empty {
     display: contents;
@@ -1170,7 +1170,7 @@ function onActivateHashTag (text: string) {
   padding-top: 0.5em;
   color: rgba(var(--fg-color), 0.75);
   font-style: italic;
-  line-height: 1.5;
+  line-height: 1.375;
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -1238,7 +1238,7 @@ function onActivateHashTag (text: string) {
   grid-template-columns: 1fr 1fr 1fr 1fr; // for Android
   align-items: center;
   &:not(:first-child) {
-    margin-top: 0.5em;
+    margin-top: 0.25em;
   }
 
   // タブレット幅以上
