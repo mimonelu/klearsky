@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
-import MenuTickerAutoTranslateText from "@/components/MenuTickerComponents/AutoTranslateText.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
 import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppWrapper.vue"
@@ -53,12 +52,6 @@ async function deletePost () {
     <MenuTickerTranslateText
       :text="post.record?.text"
       @close="emit('close')"
-    />
-
-    <!-- テキストを自動翻訳する -->
-    <MenuTickerAutoTranslateText
-      :text="post.record?.text"
-      @close="emit('autoTranslate')"
     />
 
     <!-- ポストを削除する -->

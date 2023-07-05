@@ -827,7 +827,6 @@ function onActivateHashTag (text: string) {
                 :post="post"
                 :display="state.postMenuDisplay"
                 @close="onClosePostMenu"
-                @autoTranslate="onForceTranslate"
                 @removeThisPost="onRemoveThisPost"
               />
             </button>
