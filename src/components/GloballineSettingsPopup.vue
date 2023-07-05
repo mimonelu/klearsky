@@ -3,7 +3,6 @@ import { inject } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import languages from "@/consts/languages.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -27,15 +26,6 @@ const easyFormProps: TTEasyForm = {
         { label: "Slim", value: "slim" },
       ],
       layout: "horizontal",
-      onUpdate: saveSetting,
-    },
-    {
-      state: mainState.currentSetting,
-      model: "globallineLanguage",
-      label: $t("language"),
-      type: "select",
-      required: true,
-      options: languages,
       onUpdate: saveSetting,
     },
   ],

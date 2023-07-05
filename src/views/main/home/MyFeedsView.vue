@@ -43,6 +43,8 @@ function openPopularFeedsPopup () {
         <SVGIcon name="fire" />
       </button>
     </Portal>
+
+    <!-- マイフィード未取得エラーラベル -->
     <div
       v-if="!mainState.listProcessing && Object.keys(mainState.currentMyFeeds).length === 0"
       class="textlabel"
@@ -51,24 +53,36 @@ function openPopularFeedsPopup () {
         <SVGIcon name="alert" />{{ $t("noMyFeeds") }}
       </div>
     </div>
-    <template v-else>
-      <div
-        v-for="myFeeds, uri in mainState.currentMyFeeds"
-        :key="uri"
-        v-show="!mainState.listProcessing"
-        class="my-feeds-view__item"
+
+    <div
+      v-for="myFeeds, uri in mainState.currentMyFeeds"
+      :key="uri"
+      class="my-feeds-view__item"
+    >
+      <RouterLink
+        class="my-feeds-view__header"
+        :to="{ path: '/feeds', query: {
+          feed: myFeeds.generator?.uri,
+          displayName: myFeeds.generator?.displayName,
+        } }"
       >
-        <RouterLink
-          class="my-feeds-view__header"
-          :to="{ path: '/feeds', query: {
-            feed: myFeeds.generator?.uri,
-            displayName: myFeeds.generator?.displayName,
-          } }"
-        >
-          <SVGIcon name="feed" />
-          <span>{{ myFeeds.generator?.displayName }}</span>
-          <SVGIcon name="cursorRight" />
-        </RouterLink>
+        <SVGIcon name="feed" />
+        <span>{{ myFeeds.generator?.displayName }}</span>
+        <SVGIcon name="cursorRight" />
+      </RouterLink>
+      <Loader v-if="myFeeds.processing" />
+
+      <!-- カスタムフィードの取得エラーラベル -->
+      <div
+        v-else-if="!myFeeds.status"
+        class="textlabel"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("errorMessage") }}
+        </div>
+      </div>
+
+      <template v-else>
         <div class="my-feeds-view__body">
           <FeedList
             type="feeds"
@@ -92,8 +106,8 @@ function openPopularFeedsPopup () {
             <span>{{ $t("more") }} - {{ myFeeds.generator?.displayName }}</span>
           </RouterLink>
         </div>
-      </div>
-    </template>
+      </template>
+    </div>
     <Loader v-if="mainState.listProcessing" />
   </div>
 </template>
@@ -114,7 +128,7 @@ function openPopularFeedsPopup () {
     grid-gap: 0.5rem;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     position: sticky;
     top: calc(6rem + 1px);
     z-index: 1;
@@ -127,7 +141,7 @@ function openPopularFeedsPopup () {
       color: rgb(var(--accent-color));
       font-size: 1.25rem;
       font-weight: bold;
-      margin: -1rem 0;
+      line-height: 1.25;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -145,9 +159,20 @@ function openPopularFeedsPopup () {
 
   &__item {
     border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    position: relative;
+
+    .loader {
+      position: relative;
+      z-index: 0;
+      height: 3rem;
+    }
+
+    .textlabel {
+      margin: 1rem;
+    }
   }
 
-  .textlabel {
+  & > .textlabel {
     margin: 2rem;
   }
 

@@ -22,7 +22,6 @@ export default async function (
     if (key === "post") posts.push(value)
   })
   AtpUtil.coherentResponses(posts)
-  AtpUtil.detectLanguages(posts)
   posts.sort((a: TTPost, b: TTPost) => {
     const aIndexedAt = new Date(a.__custom.reason?.indexedAt ?? a.indexedAt)
     const bIndexedAt = new Date(b.__custom.reason?.indexedAt ?? b.indexedAt)

@@ -73,10 +73,17 @@ function closeHtmlPopupDisplay () {
           <!-- 各種機能設定 -->
           <div class="settings-section">
             <div class="list-menu">
-              <!-- コンテンツフィルタリングポップアップトリガー -->
+              <!-- コンテンツ言語選択ポップアップトリガー -->
               <button @click.prevent="mainState.openContentLanguagesPopup">
                 <SVGIcon name="translate" />
                 <span>{{ $t("contentLanguagesEdit") }}</span>
+                <SVGIcon name="cursorRight" />
+              </button>
+
+              <!-- ポスト言語選択ポップアップトリガー -->
+              <button @click.prevent="mainState.openPostLanguagesPopup">
+                <SVGIcon name="translate" />
+                <span>{{ $t("postLanguagesEdit") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
@@ -94,7 +101,7 @@ function closeHtmlPopupDisplay () {
                 <SVGIcon name="cursorRight" />
               </button>
 
-              <!-- コンテンツフィルタリングポップアップトリガー -->
+              <!-- コンテンツ言語選択ポップアップトリガー -->
               <button @click.prevent="mainState.openContentFilteringPopup">
                 <SVGIcon name="alert" />
                 <span>{{ $t("modifyContentFiltering") }}</span>
@@ -463,7 +470,7 @@ function closeHtmlPopupDisplay () {
             </div>
             <div class="settings-section__body">
               <button
-                class="button--important button-is-wide"
+                class="button--important"
                 @click.stop="resetSettings"
               >
                 <span>{{ $t("resetSettings") }}</span>
@@ -477,11 +484,11 @@ function closeHtmlPopupDisplay () {
     <!-- 説明用HTMLポップアップ -->
     <HtmlPopup
       v-if="state.htmlPopupDisplay"
-      :title="$t(state.htmlPopupType)"
+      :title="`${$t('help')} - ${$t(state.htmlPopupType)}`"
       @close="closeHtmlPopupDisplay"
     >
       <template v-if="state.htmlPopupType === 'autoTranslation'">
-        <ul class="notification-list">
+        <ul class="bullet-points">
           <li>{{ $t("autoTranslationRemarks1") }}</li>
           <li>{{ $t("autoTranslationRemarks2") }}</li>
           <li>{{ $t("autoTranslationRemarks3") }}</li>
@@ -489,17 +496,17 @@ function closeHtmlPopupDisplay () {
         </ul>
       </template>
       <template v-else-if="state.htmlPopupType === 'autoTranslationIgnoreLanguage'">
-        <ul class="notification-list">
+        <ul class="bullet-points">
           <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
         </ul>
       </template>
       <template v-else-if="state.htmlPopupType === 'timelineControl'">
-        <ul class="notification-list">
+        <ul class="bullet-points">
           <li>{{ $t("timelineControlDescription") }}</li>
         </ul>
       </template>
       <template v-else-if="state.htmlPopupType === 'lightning'">
-        <ul class="notification-list">
+        <ul class="bullet-points">
           <li>{{ $t("lightningDescription") }}</li>
         </ul>
       </template>
@@ -532,12 +539,6 @@ function closeHtmlPopupDisplay () {
   padding: 0.5rem;
 }
 
-.html-popup:deep() {
-  .popup-body {
-    padding:1rem;
-  }
-}
-
 .list-menu {
   .svg-icon--feed {
     --icon-color: var(--post-color);
@@ -550,19 +551,7 @@ function closeHtmlPopupDisplay () {
   }
 }
 
-.notification-list {
-  font-size: 0.875rem;
-
-  & > li {
-    line-height: 1.5;
-    margin-left: 1.5rem;
-    text-indent: -0.75rem;
-
-    &::before {
-      content: "⭐";
-      display: inline-block;
-      margin-right: 0.5rem;
-    }
-  }
+.button--important {
+  margin: 0 1.5rem;
 }
 </style>

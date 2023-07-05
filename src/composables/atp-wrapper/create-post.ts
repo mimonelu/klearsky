@@ -19,6 +19,10 @@ export default async function (
     via: `Klearsky v${Package.version}`,
   }
 
+  // ポスト言語
+  if (params.languages != null && params.languages.length > 0)
+    record.langs = params.languages
+
   // Zapリンク
   if (params.lightning)
     record.text = record.text.replace(/@zap(?=\W|$)/gi, `[⚡️Zap!](lightning:${params.lightning})`)

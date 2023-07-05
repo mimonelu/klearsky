@@ -222,7 +222,7 @@ function hideWarningContent () {
   text-overflow: ellipsis;
   white-space: nowrap;
   &:not(:empty) {
-    margin-top: 0.25rem;
+    margin-top: 0.5rem;
   }
 }
 </style>

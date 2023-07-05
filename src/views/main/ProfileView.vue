@@ -388,7 +388,7 @@ function hideWarningContent () {
 }
 
 .display-name {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: bold;
   line-height: 1.25;
   margin-bottom: 0.25rem;
@@ -467,6 +467,12 @@ function hideWarningContent () {
   }
 }
 
+.edit-button {
+  & > .svg-icon {
+    font-size: 0.75rem;
+  }
+}
+
 .mute-button {
   min-width: 3rem;
   max-width: 3rem;
@@ -490,7 +496,7 @@ function hideWarningContent () {
 }
 
 .description {
-  line-height: 1.5;
+  line-height: 1.375;
   user-select: text;
   white-space: pre-wrap;
   word-break: break-word;

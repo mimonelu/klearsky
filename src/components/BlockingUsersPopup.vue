@@ -97,8 +97,6 @@ async function fetchContinuousResults (direction: "new" | "old") {
     }
 
     &-body {
-      padding: 2rem;
-
       & > .users {
         display: flex;
         flex-direction: column;

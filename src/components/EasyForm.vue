@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { nextTick, onMounted, reactive, ref } from "vue"
+import { inject, nextTick, onMounted, reactive, ref } from "vue"
 import Graphemer from "graphemer"
 import AccountSuggest from "@/components/AccountSuggest.vue"
 import Checkboxes from "@/components/Checkboxes.vue"
@@ -22,6 +22,8 @@ const props = defineProps<{
   submitCallback?: Function
   data: Array<TTEasyFormItem>
 }>()
+
+const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
@@ -174,6 +176,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               :model="item.model"
               :required="item.required ?? false"
               :options="item.options as Array<TTOption>"
+              :limit="item.limit"
               :layout="item.layout"
               :class="item.classes"
               @update="onChange(item)"
@@ -268,16 +271,31 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
             <SVGIcon name="cross" />
           </button>
 
-          <!-- 最大文字数インジケータ -->
           <div
-            v-if="item.maxLengthIndicator"
-            class="max-length-indicator"
-            :class="item.classes"
-            :data-over-maxlength="item.maxlength != null
-              ? getCharacterLength(item) > item.maxlength
-              : false
-            "
-          >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
+            v-if="item.hasPostLanguages || item.maxLengthIndicator"
+            class="text-option-container"
+          >
+            <!-- ポスト言語選択ポップアップボタン -->
+            <button
+              v-if="item.hasPostLanguages"
+              class="select-languages-popup-trigger"
+              @click.prevent="mainState.openPostLanguagesPopup()"
+            >
+              <SVGIcon name="translate" />
+              <span>{{ mainState.currentSetting.postLanguages?.join(", ") }}</span>
+            </button>
+
+            <!-- 最大文字数インジケータ -->
+            <div
+              v-if="item.maxLengthIndicator"
+              class="max-length-indicator"
+              :class="item.classes"
+              :data-over-maxlength="item.maxlength != null
+                ? getCharacterLength(item) > item.maxlength
+                : false
+              "
+            >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
+          </div>
 
           <!-- アカウントサジェスト -->
           <AccountSuggest
@@ -390,21 +408,46 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
   word-wrap: break-word;
 }
 
-.account-suggest:deep() {
-  .account-suggest__suggest {
-    margin-top: 1rem;
-    z-index: 1;
-    width: 100%;
+.text-option-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.select-languages-popup-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  grid-gap: 0.5rem;
+  margin: -0.5rem -1rem;
+  padding: 0.5rem 1rem;
+
+  & > .svg-icon {
+    fill: rgb(var(--accent-color));
+  }
+
+  & > span {
+    color: rgb(var(--accent-color));
+    font-weight: bold;
+    text-transform: uppercase;
   }
 }
 
 .max-length-indicator {
   color: rgb(var(--fg-color));
   font-size: 0.875rem;
-  margin-top: 0.5rem;
-  text-align: right;
+  margin-left: auto;
   &[data-over-maxlength="true"] {
     color: rgb(var(--notice-color));
+  }
+}
+
+.account-suggest:deep() {
+  .account-suggest__suggest {
+    margin-top: 1rem;
+    z-index: 1;
+    width: 100%;
   }
 }
 </style>

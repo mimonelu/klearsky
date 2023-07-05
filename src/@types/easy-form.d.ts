@@ -25,6 +25,7 @@ type TTEasyFormItem = {
   disabled?: boolean
   required?: boolean
   options?: Array<TTOption>
+  limit?: number
   pattern?: string
   maxlength?: number
   maxLengthIndicator?: boolean
@@ -48,6 +49,7 @@ type TTEasyFormItem = {
   maxNumberOfFile?: number
   quadLayout?: boolean
   clearButton?: boolean
+  hasPostLanguages?: boolean
   hasAccountSuggest?: boolean
   footnote?: string
   focus?: boolean

@@ -119,7 +119,6 @@ function scrollToTop () {
       align-items: center;
       justify-content: center;
       width: 3rem;
-      // min-height: 3rem;
 
       & > .svg-icon {
         fill: rgba(var(--fg-color), 0.75);
@@ -161,10 +160,10 @@ function scrollToTop () {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: none;
-  padding: 2rem;
+  padding: 1.5rem;
   @include scroll-bar();
   &:first-child {
-    padding-top: 2rem;
+    padding-top: 1.5rem;
   }
 }
 </style>

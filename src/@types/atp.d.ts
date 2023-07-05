@@ -106,10 +106,6 @@ type TTPreference = {
 type TTPost = {
   // Injected
   __custom: {
-    detectedLanguages?: {
-      lang: string
-      accuracy: number
-    }[]
     forcePosition?: string
     reason?: TTReason
     translatedText?: string
@@ -144,6 +140,7 @@ type TTPost = {
     }
     entities?: Array<TTEntity>
     facets?: any
+    langs?: Array<string>
     lightning?: string // カスタムフィールド
     reply?: {
       parent?: {
@@ -168,6 +165,7 @@ type TTPost = {
     entities?: Array<TTEntity>
     facets?: any
     text: string
+    langs?: Array<string>
     [k: string]: unknown
   }
   viewer: {

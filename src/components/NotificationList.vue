@@ -370,7 +370,7 @@ function makeSubjectTo (notification: TTNotification): any {
   color: rgb(var(--post-color));
   font-size: 0.875rem;
   grid-column: 3 / 6;
-  line-height: 1.5;
+  line-height: 1.375;
   word-break: break-all;
 }
 

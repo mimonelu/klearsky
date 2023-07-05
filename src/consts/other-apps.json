@@ -10,11 +10,6 @@
     "postUri": "https://blue.amazingca.dev/?username={handle}&postid={rkey}"
   },
   {
-    "name": "flatApp",
-    "profileUri": "https://flat.sabigara.com/{handle}",
-    "postUri": "https://flat.sabigara.com/{handle}/posts/{rkey}"
-  },
-  {
     "name": "kiteApp",
     "profileUri": "https://kite.black/#/user/{handle}",
     "postUri": "https://kite.black/#/blue/{did}/{rkey}"

@@ -65,13 +65,22 @@ async function refreshSession () {
 
     <!-- トリガーコンテナ -->
     <div class="textlink-container">
-      <!-- コンテンツ言語ポップアップトリガー -->
+      <!-- コンテンツ言語選択ポップアップトリガー -->
       <a
         class="textlink--icon"
         @click.prevent="mainState.openContentLanguagesPopup"
       >
         <SVGIcon name="translate" />
         <span>{{ $t("contentLanguages") }}</span>
+      </a>
+
+      <!-- ポスト言語選択ポップアップトリガー -->
+      <a
+        class="textlink--icon"
+        @click.prevent="mainState.openPostLanguagesPopup"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("postLanguages") }}</span>
       </a>
 
       <!-- マイフィードポップアップトリガー -->
@@ -178,7 +187,7 @@ async function refreshSession () {
   display: flex;
   flex-direction: column;
   align-items: center;
-  grid-gap: 1rem;
+  grid-gap: 0.75rem;
   font-size: 0.875rem;
   margin-bottom: 2rem;
 }

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, watch } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
+import HtmlPopup from "@/components/HtmlPopup.vue"
 import Popup from "@/components/Popup.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -20,15 +21,17 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  text: string;
-  url: string;
-  images: Array<File>;
-  alts: Array<string>;
+  text: string
+  url: string
+  images: Array<File>
+  alts: Array<string>
+  htmlPopupDisplay: boolean
 }>({
   text: props.text ?? "",
   url: "",
   images: props.fileList != null ? Array.from(props.fileList) : [],
   alts: [],
+  htmlPopupDisplay: false,
 })
 
 // D&D用処置
@@ -50,6 +53,7 @@ const easyFormProps: TTEasyForm = {
       maxLengthIndicator: true,
       maxLengthWithSegmenter: true,
       rows: 6,
+      hasPostLanguages: true,
       hasAccountSuggest: true,
       focus: true,
     },
@@ -75,9 +79,9 @@ const easyFormProps: TTEasyForm = {
         // ファイルがひとつ以上選択されているか否かでリンクボックスの表示状態を切り替える
         const urlItem = form.data.find((item: TTEasyFormItem) => item.model === "url")
         if (urlItem == null) return
-        urlItem.display = state.images.length === 0
+        urlItem.disabled = state.images.length > 0
 
-        // WANT: 意図しない alt が削除される不具合を修正したい
+        // TODO: 意図しない alt が削除される不具合を修正すること
         state.alts.splice(state.images.length)
       },
     },
@@ -97,6 +101,7 @@ async function submitCallback () {
       ...state,
       type: props.type,
       post: props.post,
+      languages: mainState.currentSetting.postLanguages,
 
       // Lightning
       lightning: mainState.currentSetting.lightning,
@@ -116,47 +121,64 @@ function isEmpty (): boolean {
 </script>
 
 <template>
-  <Popup
-    class="send-post-popup"
-    :hasCloseButton="true"
-    @close="close"
-  >
-    <template v-slot:header>
-      <h2>
-        <SVGIcon :name="type" />
-        <span>{{ $t(type) }}</span>
-      </h2>
-    </template>
-    <template v-slot:body>
-      <Post
-        v-if="type === 'reply' || type === 'quoteRepost'"
-        position="preview"
-        :post="post as TTPost"
-        :noLink="true"
-      />
-      <EasyForm v-bind="easyFormProps">
-        <template v-slot:after>
-          <dl v-if="state.images.length > 0">
-            <dd
-              v-for="_, altIndex of state.images"
-              :key="altIndex"
-            >
-              <input
-                v-model="state.alts[altIndex]"
-                type="text"
-                autocapitalize="off"
-                autocomplete="off"
-                :placeholder="`${$t('alts')} ${altIndex + 1}`"
-                spellcheck="false"
-                class="textbox"
-              />
-            </dd>
-          </dl>
-        </template>
-      </EasyForm>
-      <p class="send-post-popup__notification">{{ $t("sendPostNotification") }}</p>
-    </template>
-  </Popup>
+  <div>
+    <Popup
+      class="send-post-popup"
+      :hasCloseButton="true"
+      @close="close"
+    >
+      <template #header>
+        <button @click.stop="state.htmlPopupDisplay = true">
+          <SVGIcon name="help" />
+        </button>
+        <h2>
+          <SVGIcon :name="type" />
+          <span>{{ $t(type) }}</span>
+        </h2>
+      </template>
+      <template #body>
+        <Post
+          v-if="type === 'reply' || type === 'quoteRepost'"
+          position="preview"
+          :post="post as TTPost"
+          :noLink="true"
+        />
+        <EasyForm v-bind="easyFormProps">
+          <template #after>
+            <dl v-if="state.images.length > 0">
+              <dd
+                v-for="_, altIndex of state.images"
+                :key="altIndex"
+              >
+                <input
+                  v-model="state.alts[altIndex]"
+                  type="text"
+                  autocapitalize="off"
+                  autocomplete="off"
+                  :placeholder="`${$t('alts')} ${altIndex + 1}`"
+                  spellcheck="false"
+                  class="textbox"
+                />
+              </dd>
+            </dl>
+          </template>
+        </EasyForm>
+      </template>
+    </Popup>
+
+    <!-- 説明用HTMLポップアップ -->
+    <HtmlPopup
+      v-if="state.htmlPopupDisplay"
+      :title="`${$t('help')} - ${$t('post')}`"
+      @close="state.htmlPopupDisplay = false"
+    >
+      <ul class="bullet-points">
+        <li>{{ $t("sendPostNotification1") }}</li>
+        <li>{{ $t("sendPostNotification2") }}</li>
+        <li>{{ $t("sendPostNotification3") }}</li>
+      </ul>
+    </HtmlPopup>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -170,6 +192,10 @@ function isEmpty (): boolean {
     .easy-form__body > dl:first-child,
     .easy-form__body > dl:first-child > dd {
       flex-grow: 1;
+    }
+
+    .popup {
+      max-height: $router-view-width;
     }
 
     .popup-header {
@@ -196,24 +222,12 @@ function isEmpty (): boolean {
       border-left-style: none;
       border-right-style: none;
       border-radius: 0;
-      margin: 0 -2rem;
-    }
-
-    .account-suggest {
-      margin: 0 -2rem;
-
-      &__suggest {
-        border-left-style: unset;
-        border-right-style: unset;
-        border-radius: unset;
-      }
+      margin: 0 -1.5rem;
     }
   }
 
-  &__notification {
-    color: rgba(var(--fg-color), 0.75);
-    font-size: 0.875rem;
-    white-space: pre-line;
+  .svg-icon--help {
+    font-size: 1.25rem;
   }
 }
 </style>

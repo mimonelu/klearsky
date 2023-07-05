@@ -8,6 +8,7 @@ import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 import LABELS from "@/consts/labels.json"
+import LANGUAGES from "@/consts/languages.json"
 
 const state = reactive<MainState>({
   // @ts-ignore // TODO:
@@ -131,6 +132,10 @@ const state = reactive<MainState>({
   // コンテンツ言語ポップアップの開閉
   openContentLanguagesPopup,
   closeContentLanguagesPopup,
+
+  // ポスト言語ポップアップの開閉
+  openPostLanguagesPopup,
+  closePostLanguagesPopup,
 
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
@@ -497,13 +502,17 @@ async function fetchMyFeeds (): Promise<boolean> {
     if (state.currentMyFeeds[uri] != null) return
     const generator = generators.find((generator: TTFeedGenerator) => generator.uri === uri)
     if (generator == null) return
-    state.currentMyFeeds[uri] = { generator, feeds: [] }
+    state.currentMyFeeds[uri] = { generator, feeds: [], processing: false, status: true }
   })
 
-  await Promise.allSettled(pinned.map((uri: string) => {
+  // あえて並列同期していない
+  pinned.forEach(async (uri: string) => {
     if (state.currentMyFeeds[uri] == null) return
-    return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
-  }))
+    state.currentMyFeeds[uri].processing = true
+    const status = await state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
+    state.currentMyFeeds[uri].status = status !== false
+    state.currentMyFeeds[uri].processing = false
+  })
 
   return true
 }
@@ -523,6 +532,7 @@ function saveSettings () {
     state.settings[did].autoTranslationIgnoreLanguage = undefined
   if (state.settings[did].contentLanguages == null)
     state.settings[did].contentLanguages = []
+  else state.settings[did].contentLanguages = getSanitizedLanguages(state.settings[did].contentLanguages)
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
   if (state.settings[did].wordMute == null)
@@ -539,8 +549,6 @@ function saveSettings () {
     state.settings[did].imageAspectRatio = "1 / 1"
   if (state.settings[did].globallineLayout == null)
     state.settings[did].globallineLayout = "post"
-  if (state.settings[did].globallineLanguage == null)
-    state.settings[did].globallineLanguage = Util.getUserLanguage()
   if (state.settings[did].layout == null)
     state.settings[did].layout = "default"
   if (state.settings[did].borderRadius == null)
@@ -557,10 +565,19 @@ function saveSettings () {
     state.settings[did].hideNumberOfReaction = false
   if (state.settings[did].postAnonymization == null)
     state.settings[did].postAnonymization = false
+  if (state.settings[did].postLanguages == null)
+    state.settings[did].postLanguages = [Util.getUserLanguage()]
+  else state.settings[did].postLanguages = getSanitizedLanguages(state.settings[did].postLanguages)
   if (state.settings[did].lightning == null)
     state.settings[did].lightning = undefined
   state.currentSetting = state.settings[did]
   Util.saveStorage("settings", state.settings)
+}
+
+function getSanitizedLanguages (languages?: Array<string>) {
+  return languages?.filter((language: string) => {
+    return LANGUAGES.findIndex((target: any) => language === target.value) !== - 1
+  })
 }
 
 function resetSettings () {
@@ -711,6 +728,16 @@ function openContentLanguagesPopup () {
 
 function closeContentLanguagesPopup () {
   state.contentLanguagesPopupDisplay = false
+}
+
+// ポスト言語ポップアップの開閉
+
+function openPostLanguagesPopup () {
+  state.postLanguagesPopupDisplay = true
+}
+
+function closePostLanguagesPopup () {
+  state.postLanguagesPopupDisplay = false
 }
 
 // 招待コード確認ポップアップの開閉

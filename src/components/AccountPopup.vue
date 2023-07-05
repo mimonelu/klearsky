@@ -94,10 +94,6 @@ async function logout () {
 
 <style lang="scss" scoped>
 .account-popup {
-  &:deep() .popup-body {
-    padding: 1rem;
-  }
-
   &__body {
     display: flex;
     flex-direction: column;
