@@ -103,7 +103,7 @@ const state = reactive<{
 
   // 翻訳リンクの設置可否
   isOtherLanguage: computed((): boolean => {
-    if (props.position === "postInPost" || props.position === "preview") return false
+    if (props.noLink) return false
     if (!state.text) return false
     if (!(state.postLanguages?.length)) return false
     const userLanguage = Util.getUserLanguage()
