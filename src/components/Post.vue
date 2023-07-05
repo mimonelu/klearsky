@@ -103,6 +103,7 @@ const state = reactive<{
 
   // 翻訳リンクの設置可否
   isOtherLanguage: computed((): boolean => {
+    if (props.position === "postInPost" || props.position === "preview") return false
     if (!state.text) return false
     if (!(state.postLanguages?.length)) return false
     const userLanguage = Util.getUserLanguage()
@@ -612,7 +613,9 @@ function onActivateHashTag (text: string) {
           :text="state.text"
           :facets="post.record?.facets ?? post.value?.facets"
           :entities="post.record?.entities ?? post.value?.entities"
+          :hasTranslateLink="state.isOtherLanguage"
           @onActivateHashTag="onActivateHashTag"
+          @translate="onForceTranslate"
         />
         <div
           v-else
@@ -801,15 +804,6 @@ function onActivateHashTag (text: string) {
             </button>
           </div>
           <div>
-            <!-- 翻訳ボタン -->
-            <a
-              v-if="state.isOtherLanguage"
-              class="icon-button--nolabel translate-link"
-              @click.stop="onForceTranslate"
-            >
-              <SVGIcon name="translate" />
-            </a>
-
             <!-- Lightning -->
             <a
               v-if="post.record?.lightning"
@@ -1294,10 +1288,6 @@ function onActivateHashTag (text: string) {
   & > span {
     color: rgb(var(--like-color));
   }
-}
-
-.translate-link {
-  margin-right: 0.75em;
 }
 
 .lightning-link {

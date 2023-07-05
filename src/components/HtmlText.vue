@@ -19,6 +19,7 @@ const props = defineProps<{
   text?: string;
   facets?: Facet[];
   entities?: Entity[];
+  hasTranslateLink?: boolean;
 }>()
 
 const mainState = inject("state") as MainState
@@ -117,5 +118,30 @@ function onActivateHashTag (text: string) {
       <!-- テキスト -->
       <template v-else>{{ segment.text }}</template>
     </template>
+
+    <!-- 翻訳リンク -->
+    <template v-if="hasTranslateLink">
+      &#160;<a
+        v-if="hasTranslateLink"
+        class="textlink translate-link"
+        @click.prevent.stop="$emit('translate')"
+      >{{ $t("translate") }}</a>
+    </template>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.translate-link {
+  --accent-color: var(--fg-color);
+  --opacity: 0.5;
+  border-radius: 0.25em;
+  color: rgba(var(--accent-color), var(--opacity));
+  display: inline-block;
+  font-size: 0.875em;
+  padding: 0 0.25em;
+  &:focus, &:hover {
+    --opacity: 0.75;
+    background-color: rgba(var(--accent-color), 0.125);
+  }
+}
+</style>
