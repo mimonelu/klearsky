@@ -13,6 +13,7 @@
   "hide": "隠す",
   "seal": "封印する",
   "error": "エラー",
+  "errorMessage": "エラーが発生しました。",
   "alt": "ALT",
   "posts": "ポスト",
   "loading": "読込中...",

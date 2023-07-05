@@ -502,13 +502,17 @@ async function fetchMyFeeds (): Promise<boolean> {
     if (state.currentMyFeeds[uri] != null) return
     const generator = generators.find((generator: TTFeedGenerator) => generator.uri === uri)
     if (generator == null) return
-    state.currentMyFeeds[uri] = { generator, feeds: [] }
+    state.currentMyFeeds[uri] = { generator, feeds: [], processing: false, status: true }
   })
 
-  await Promise.allSettled(pinned.map((uri: string) => {
+  // あえて並列同期していない
+  pinned.forEach(async (uri: string) => {
     if (state.currentMyFeeds[uri] == null) return
-    return state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
-  }))
+    state.currentMyFeeds[uri].processing = true
+    const status = await state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
+    state.currentMyFeeds[uri].status = status !== false
+    state.currentMyFeeds[uri].processing = false
+  })
 
   return true
 }

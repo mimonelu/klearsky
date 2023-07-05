@@ -82,6 +82,8 @@ type MainState = {
   currentMyFeeds: { [uri: string]: {
     generator?: TTFeedGenerator
     feeds: Array<TTFeed>
+    processing: boolean
+    status: boolean
   } }
   currentMyFeedGenerators: Array<TTFeedGenerator>
   fetchMyFeeds: () => Promise<boolean>
