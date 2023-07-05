@@ -704,8 +704,23 @@ function onActivateHashTag (text: string) {
 
         <!-- 埋込コンテンツ -->
         <template v-if="post.embed?.record != null">
+          <!-- 引用リポスト：ブロック中／被ブロック中／見つからない -->
+          <div
+            v-if="
+              post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
+              post.embed.record.$type === 'app.bsky.embed.record#viewNotFound' ||
+              post.embed.record.author?.viewer?.blockedBy ||
+              post.embed.record.author?.viewer?.blocking != null
+            "
+            class="textlabel"
+          >
+            <div class="textlabel__text">
+              <SVGIcon name="alert" />{{ $t("postBlocked") }}
+            </div>
+          </div>
+
           <!-- 引用リポスト -->
-          <template v-if="post.embed.record.$type === 'app.bsky.embed.record#viewRecord'">
+          <template v-else-if="post.embed.record.$type === 'app.bsky.embed.record#viewRecord'">
             <div class="repost">
               <Post
                 :level="(level ?? 1) + 1"
@@ -716,19 +731,6 @@ function onActivateHashTag (text: string) {
               />
             </div>
           </template>
-
-          <!-- 引用リポスト：ブロック中／見つからない -->
-          <div
-            v-else-if="
-              post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
-              post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'
-            "
-            class="textlabel--alert"
-          >
-            <div class="textlabel__text">
-              <SVGIcon name="alert" />{{ $t("postBlocked") }}
-            </div>
-          </div>
 
           <!-- フィードカード -->
           <CustomFeedCard
