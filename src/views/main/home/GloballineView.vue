@@ -51,11 +51,15 @@ async function onPost (did: string, post: any) {
   messageContainerHeight = (messageContainer.value as any).clientHeight
 
   // 言語判定
+  // ※コンテンツ言語がひとつも設定されていない場合はブラウザのUI言語を使用
+  // ※ポスト言語がひとつだけ設定されているポストのみ照合
   const langs = post.record?.langs ?? post.value?.langs
-  if (!langs?.length) return
-  if ((mainState.currentSetting.contentLanguages?.length ?? 0) > 0) {
-    // 第1言語（配列の最初）のみ参照
-    const matched = mainState.currentSetting.contentLanguages?.includes(langs[0])
+  if (langs == null || langs.length !== 1) return
+  const contentLanguages = mainState.currentSetting.contentLanguages ?? []
+  if (contentLanguages.length === 0) {
+    if (langs[0] !== Util.getUserLanguage()) return
+  } else {
+    const matched = contentLanguages.includes(langs[0])
     if (!matched) return
   }
 
