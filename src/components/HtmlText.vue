@@ -9,6 +9,10 @@ type RichParam = {
   param: string,
 }
 
+const TAG_REGEXP_STRING = "#[^#\\s\\(\\)\\[\\]{}<>\"'`:;,.!?/\\\\|　]+"
+const TAG_REGEXP_SINGLE = new RegExp(TAG_REGEXP_STRING)
+const TAG_REGEXP_ALL = new RegExp(`(?=^|\\W)(${TAG_REGEXP_STRING})`, "g")
+
 const emit = defineEmits<{(name: string, text: string): void}>()
 
 const props = defineProps<{
@@ -18,10 +22,6 @@ const props = defineProps<{
 }>()
 
 const mainState = inject("state") as MainState
-
-const tagRegExpString = "#[^#\\s\\(\\)\\[\\]{}<>\"'`:;,.!?/\\\\|　]+"
-const tagRegExp = new RegExp(tagRegExpString)
-const regexp = new RegExp(`(?=^|\\W)(${tagRegExpString})`, "g")
 
 const state = reactive<{
   segments: ComputedRef<Array<RichParam>>;
@@ -35,27 +35,34 @@ const state = reactive<{
     if (props.facets == null) richText.detectFacetsWithoutResolution()
     const results: Array<RichParam> = []
     for (const segment of richText.segments()) {
+      // リンク
       if (segment.isLink())
         results.push({
           type: "link",
           text: segment.text,
           param: segment.link?.uri ?? '',
         })
+
+      // メンション
       else if (segment.isMention())
         results.push({
           type: "mention",
           text: segment.text,
           param: segment.mention?.did ?? '',
         })
+
       else {
-        const matches = segment.text.split(regexp)
+        const matches = segment.text.split(TAG_REGEXP_ALL)
         for (const match of matches) {
-          if (tagRegExp.test(match))
+          // ハッシュタグ
+          if (TAG_REGEXP_SINGLE.test(match))
             results.push({
               type: "tag",
               text: match,
               param: match.substring(1),
             })
+
+          // テキスト
           else
             results.push({
               type: "text",
@@ -78,6 +85,7 @@ function onActivateHashTag (text: string) {
 <template>
   <div class="html-text">
     <template v-for="segment of state.segments">
+      <!-- リンク -->
       <template v-if="segment.type === 'link'">
         <a
           class="textlink"
@@ -87,6 +95,8 @@ function onActivateHashTag (text: string) {
           @click.stop
         >{{ segment.text }}</a>
       </template>
+
+      <!-- メンション -->
       <template v-else-if="segment.type === 'mention'">
         <RouterLink
           class="textlink"
@@ -94,6 +104,8 @@ function onActivateHashTag (text: string) {
           @click.stop="$emit('onActivateMention')"
         >{{ segment.text }}</RouterLink>
       </template>
+
+      <!-- ハッシュタグ -->
       <template v-else-if="segment.type === 'tag'">
         <RouterLink
           class="textlink"
@@ -101,6 +113,8 @@ function onActivateHashTag (text: string) {
           @click.stop="onActivateHashTag(segment.param)"
         >{{ segment.text }}</RouterLink>
       </template>
+
+      <!-- テキスト -->
       <template v-else>{{ segment.text }}</template>
     </template>
   </div>

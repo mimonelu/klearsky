@@ -34,11 +34,24 @@ const state = reactive<{
   postMenuDisplay: boolean
   repostMenuDisplay: boolean
   processing: boolean
+
+  // 本文
+  text: ComputedRef<undefined | string>
+
+  // リンクカード
   external: ComputedRef<undefined | TTExternal>
+
+  // 画像
   images: ComputedRef<Array<TTImage>>
 
   // ポストマスクの表示
   masked: ComputedRef<boolean>
+
+  // 対象ポスト言語
+  postLanguages: ComputedRef<undefined | Array<string>>
+
+  // 翻訳リンクの設置可否
+  isOtherLanguage: ComputedRef<boolean>
 
   // コンテンツ言語の判定
   noContentLanguage: ComputedRef<boolean>
@@ -59,7 +72,16 @@ const state = reactive<{
   postMenuDisplay: false,
   repostMenuDisplay: false,
   processing: false,
+
+  // 本文
+  text: computed((): undefined | string => {
+    return props.post.record?.text ?? props.post.value?.text
+  }),
+
+  // リンクカード
   external: computed(() => props.post.embed?.external),
+
+  // 画像
   images: computed(() => props.post.embed?.images ?? []),
 
   // ポストマスクの表示
@@ -74,18 +96,30 @@ const state = reactive<{
     )
   }),
 
+  // 対象ポスト言語
+  postLanguages: computed((): undefined | Array<string> => {
+    return props.post.record?.langs ?? props.post.value?.langs
+  }),
+
+  // 翻訳リンクの設置可否
+  isOtherLanguage: computed((): boolean => {
+    if (!state.text) return false
+    if (!(state.postLanguages?.length)) return false
+    const userLanguage = Util.getUserLanguage()
+    return !state.postLanguages.includes(userLanguage)
+  }),
+
   // コンテンツ言語の判定
-  noContentLanguage: computed(() => {
+  noContentLanguage: computed((): boolean => {
     // コンテンツ言語設定はポストスレッドとプロフィールポストでは無効
     if (mainState.currentPath === "/post" ||
         mainState.currentPath.startsWith("/profile/")) return false
 
-    const langs = props.post.record?.langs ?? props.post.value?.langs
-    if (!langs?.length) return false
-    if (!mainState.currentSetting.contentLanguages?.length) return false
-    return !langs?.some((language: any) =>
-      mainState.currentSetting.contentLanguages?.includes(language)
-    ) ?? false
+    if (!(mainState.currentSetting.contentLanguages?.length)) return false
+    if (!(state.postLanguages?.length)) return false
+    return !(state.postLanguages?.some((language: any) =>
+      mainState.currentSetting.contentLanguages?.includes(language) ?? false
+    ) ?? false)
   }),
 
   // ラベル対応
@@ -95,7 +129,7 @@ const state = reactive<{
       props.post.labels
     )
   }),
-  contentWarningLabel: computed(() => {
+  contentWarningLabel: computed((): string => {
     const preferences: Array<TTPreference> = [
       ...mainState.getConcernedPreferences(props.post.author?.labels),
       ...mainState.getConcernedPreferences(props.post.labels),
@@ -106,8 +140,8 @@ const state = reactive<{
   }),
 
   // ワードミュートの判定
-  isWordMute: computed(() => {
-    const target = props.post.record?.text.toLowerCase() ?? props.post.value?.text.toLowerCase()
+  isWordMute: computed((): boolean => {
+    const target = state.text?.toLowerCase() ?? ""
     if (!target) return false
     return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
       if (!wordMute.enabled[0] || wordMute.keyword === "") return false
@@ -119,7 +153,7 @@ const state = reactive<{
 
   // 画像の制御
   // TODO: 引用リポストに対応すること
-  displayImage: computed(() => {
+  displayImage: computed((): boolean => {
     // すべて表示
     if (mainState.currentSetting.imageControl === "all") return true
 
@@ -318,9 +352,14 @@ function onClosePostMenu () {
   state.postMenuDisplay = false
 }
 
-function onAutoTranslate () {
+async function onForceTranslate () {
   onClosePostMenu()
-  translateText(true)
+  state.processing = true
+  try {
+    await translateText(true)
+  } finally {
+    state.processing = false
+  }
 }
 
 async function onRemoveThisPost (uri: string) {
@@ -342,7 +381,6 @@ async function updateThisPostThread () {
 }
 
 // 画像ポップアップ
-
 function openImagePopup (imageIndex: number) {
   mainState.imagePopupProps.images = state.images.map((image: TTImage) => {
     return {
@@ -355,18 +393,17 @@ function openImagePopup (imageIndex: number) {
 }
 
 // 自動翻訳
-
 async function translateText (forceTranslate: boolean) {
   if (props.post.__custom.translatedText != null) {
     state.translation = "done"
     return
   }
-  const text = props.post.record?.text ?? props.post.value?.text
+  const text = state.text
   if (text == null) {
     state.translation = "ignore"
     return
   }
-  const srcLanguages = props.post.record?.langs ?? props.post.value?.langs
+  const srcLanguages = state.postLanguages
   if (!srcLanguages?.length) {
     state.translation = "ignore"
     return
@@ -572,7 +609,7 @@ function onActivateHashTag (text: string) {
           v-if="position !== 'slim'"
           class="text"
           dir="auto"
-          :text="post.record?.text ?? post.value?.text"
+          :text="state.text"
           :facets="post.record?.facets ?? post.value?.facets"
           :entities="post.record?.entities ?? post.value?.entities"
           @onActivateHashTag="onActivateHashTag"
@@ -581,7 +618,7 @@ function onActivateHashTag (text: string) {
           v-else
           class="text--slim"
           dir="auto"
-        >{{ post.record?.text ?? post.value?.text }}</div>
+        >{{ state.text }}</div>
 
         <!-- 自動翻訳 -->
         <div
@@ -764,10 +801,19 @@ function onActivateHashTag (text: string) {
             </button>
           </div>
           <div>
+            <!-- 翻訳ボタン -->
+            <a
+              v-if="state.isOtherLanguage"
+              class="icon-button--nolabel translate-link"
+              @click.stop="onForceTranslate"
+            >
+              <SVGIcon name="translate" />
+            </a>
+
             <!-- Lightning -->
             <a
               v-if="post.record?.lightning"
-              class="icon-button--nolabel lightning"
+              class="icon-button--nolabel lightning-link"
               :href="`lightning:${post.record?.lightning}`"
               rel="noreferrer"
               @click.stop
@@ -787,7 +833,7 @@ function onActivateHashTag (text: string) {
                 :post="post"
                 :display="state.postMenuDisplay"
                 @close="onClosePostMenu"
-                @autoTranslate="onAutoTranslate"
+                @autoTranslate="onForceTranslate"
                 @removeThisPost="onRemoveThisPost"
               />
             </button>
@@ -1121,7 +1167,8 @@ function onActivateHashTag (text: string) {
 
   // 折り返されたURLの隙間が選択されないようにする
   &:deep(.textlink) {
-    padding: 0.125em 0;
+    padding-top: 0.125em;
+    padding-bottom: 0.125em;
   }
 }
 
@@ -1249,7 +1296,11 @@ function onActivateHashTag (text: string) {
   }
 }
 
-.lightning {
+.translate-link {
+  margin-right: 0.75em;
+}
+
+.lightning-link {
   --fg-color: 240, 0, 240;
   margin-right: 0.75em;
 }

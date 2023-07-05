@@ -3,7 +3,6 @@ import { inject } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import languages from "@/consts/languages.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
