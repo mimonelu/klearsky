@@ -388,7 +388,7 @@ function hideWarningContent () {
 }
 
 .display-name {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: bold;
   line-height: 1.25;
   margin-bottom: 0.25rem;
