@@ -1211,10 +1211,10 @@ function onActivateHashTag (text: string) {
 
 .repost {
   grid-area: r;
-  border: 1px solid rgba(var(--fg-color), 0.25);
+  border: 1px solid rgba(var(--fg-color), 0.125);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgba(var(--fg-color), 0.5);
+    border-color: rgba(var(--fg-color), 0.25);
   }
 
   :not([data-position="slim"]) & > .post {
@@ -1227,10 +1227,10 @@ function onActivateHashTag (text: string) {
 
 .custom-feed-card {
   background-color: rgba(var(--accent-color), 0.125);
-  border: 1px solid rgba(var(--accent-color), 0.25);
+  border: 1px solid rgba(var(--accent-color), 0.125);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgba(var(--accent-color), 0.5);
+    border-color: rgba(var(--accent-color), 0.25);
   }
 }
 

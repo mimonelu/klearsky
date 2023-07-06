@@ -110,6 +110,7 @@ function getDidColor (did: string): string {
 .service {
   color: rgba(var(--fg-color), 0.5);
   font-weight: bold;
+  line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -147,7 +148,7 @@ function getDidColor (did: string): string {
       "i e";
     grid-gap: 0 0.5rem;
     align-items: center;
-    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+    overflow: hidden;
     &:focus, &:hover {
       --color: var(--accent-color);
     }
@@ -157,8 +158,7 @@ function getDidColor (did: string): string {
   }
 
   &__image {
-    background-image: radial-gradient(closest-corner, transparent, var(--color));
-    border-radius: var(--border-radius);
+    background-color: var(--color);
     grid-area: i;
     width: 3rem;
     height: 3rem;

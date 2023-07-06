@@ -136,7 +136,6 @@ function onActivateHashTag (text: string) {
   --opacity: 0.5;
   border-radius: 0.25em;
   color: rgba(var(--accent-color), var(--opacity));
-  display: inline-block;
   font-size: 0.875em;
   padding: 0 0.25em;
   &:focus, &:hover {

@@ -353,7 +353,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   // フィード説明文
   &__description {
     font-size: 0.875em;
-    line-height: 1.25;
+    line-height: var(--line-height);
     white-space: pre-wrap;
     word-break: break-word;
   }
@@ -365,8 +365,9 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
   // フィード作成者
   &__creator {
+    background-clip: padding-box;
     background-color: rgb(var(--bg-color));
-    border: 1px solid rgb(var(--accent-color), 0.25);
+    border: 1px solid rgb(var(--accent-color), 0.125);
     border-radius: var(--border-radius);
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -375,7 +376,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     margin-left: auto;
     padding: 0.5em 1em;
     &:focus, &:hover {
-      border-color: rgb(var(--accent-color), 0.5);
+      border-color: rgb(var(--accent-color), 0.25);
     }
 
     & > .svg-icon {
