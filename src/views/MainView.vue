@@ -919,6 +919,7 @@ function broadcastListener (event: MessageEvent) {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  overflow-x: hidden;
   max-width: $router-view-width;
 
   // タブレット幅以上
