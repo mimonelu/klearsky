@@ -22,7 +22,7 @@
   border: 1px solid rgba(var(--color), var(--opacity));
   border-radius: var(--border-radius);
   color: rgb(var(--fg-color));
-  line-height: 1.375;
+  line-height: var(--line-height);
   padding: 0.5rem 1rem;
 
   &::placeholder {

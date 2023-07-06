@@ -79,7 +79,7 @@ function close () {
   }
 
   .handle {
-    line-height: 1.375;
+    line-height: var(--line-height);
     user-select: text;
     white-space: pre-wrap;
     word-break: break-word;
@@ -88,7 +88,7 @@ function close () {
   .created-at {
     color: rgba(var(--fg-color), 0.5);
     font-size: 0.875rem;
-    line-height: 1.375;
+    line-height: var(--line-height);
     white-space: nowrap;
   }
 }

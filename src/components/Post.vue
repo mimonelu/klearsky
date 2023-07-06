@@ -1151,7 +1151,7 @@ function onActivateHashTag (text: string) {
 
 .text,
 .text--slim {
-  line-height: 1.375;
+  line-height: var(--line-height);
   word-break: break-word;
   &:empty {
     display: contents;
@@ -1172,7 +1172,7 @@ function onActivateHashTag (text: string) {
   padding-top: 0.5em;
   color: rgba(var(--fg-color), 0.75);
   font-style: italic;
-  line-height: 1.375;
+  line-height: var(--line-height);
   white-space: pre-wrap;
   word-break: break-word;
 }

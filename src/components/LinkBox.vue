@@ -53,7 +53,7 @@ defineProps<{
   &__title,
   &__uri,
   &__description {
-    line-height: 1.375;
+    line-height: var(--line-height);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
