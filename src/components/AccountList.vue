@@ -149,6 +149,7 @@ function getDidColor (did: string): string {
     grid-gap: 0 0.5rem;
     align-items: center;
     overflow: hidden;
+    padding-right: 0.5rem;
     &:focus, &:hover {
       --color: var(--accent-color);
     }
@@ -170,6 +171,7 @@ function getDidColor (did: string): string {
     font-weight: bold;
     line-height: 1.25;
     overflow: hidden;
+    padding-top: 0.25rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -180,6 +182,7 @@ function getDidColor (did: string): string {
     font-size: 0.875rem;
     line-height: 1.25;
     overflow: hidden;
+    padding-bottom: 0.25rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -195,7 +198,7 @@ function getDidColor (did: string): string {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: -0.5rem;
+    margin-right: -1rem;
     min-width: 3rem;
     min-height: 3rem;
 

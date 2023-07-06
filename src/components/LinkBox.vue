@@ -35,11 +35,14 @@ defineProps<{
   border-radius: var(--border-radius);
   cursor: pointer;
   overflow: hidden;
+  position: relative;
+  height: 100%;
 
   &__thumb {
     aspect-ratio: 1.91 / 1;
     display: block;
     object-fit: cover;
+    width: 100%;
     min-height: 100%;
   }
   &__meta {

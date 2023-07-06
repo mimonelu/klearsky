@@ -58,6 +58,7 @@ function onActivateBackButton () {
 .page-header {
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  box-shadow: -1px 0 0 1px rgba(var(--bg-color), var(--main-area-opacity));
   cursor: pointer;
   display: flex;
   align-items: center;
