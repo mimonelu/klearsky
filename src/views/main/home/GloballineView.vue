@@ -48,7 +48,9 @@ function onError () {
 async function onPost (did: string, post: any) {
   mainState.globallineNumberOfPosts ++
 
-  messageContainerHeight = (messageContainer.value as any).clientHeight
+  const container = messageContainer.value as unknown as HTMLElement
+  if (container == null) return
+  messageContainerHeight = container.clientHeight
 
   // 言語判定
   // ※コンテンツ言語がひとつも設定されていない場合はブラウザのUI言語を使用
@@ -136,8 +138,10 @@ const messageContainer = ref(null)
 let messageContainerHeight = 0
 
 function startControlToScroll () {
+  const container = messageContainer.value as unknown as HTMLElement
+  if (container == null) return
   mutationObserver = new MutationObserver(onMutated)
-  mutationObserver.observe((messageContainer.value as unknown as HTMLElement), {
+  mutationObserver.observe(container, {
     childList: true,
     characterData: false,
     characterDataOldValue: false,
@@ -153,7 +157,9 @@ function endControlToScroll () {
 function onMutated () {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop
   if (scrollTop == 0) return
-  const heightDiff = (messageContainer.value as unknown as HTMLElement).clientHeight - messageContainerHeight
+  const container = messageContainer.value as unknown as HTMLElement
+  if (container == null) return
+  const heightDiff = container.clientHeight - messageContainerHeight
   window.scrollTo({
     left: 0,
     top: scrollTop + heightDiff
