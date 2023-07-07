@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive, watch } from "vue"
+import { inject, onMounted, reactive, watch } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import HtmlPopup from "@/components/HtmlPopup.vue"
 import Popup from "@/components/Popup.vue"
@@ -29,7 +29,7 @@ const state = reactive<{
 }>({
   text: props.text ?? "",
   url: "",
-  images: props.fileList != null ? Array.from(props.fileList) : [],
+  images: [],
   alts: [],
   htmlPopupDisplay: false,
 })
@@ -37,6 +37,12 @@ const state = reactive<{
 // D&D用処置
 watch(() => props.fileList, (value?: FileList) => {
   state.images = value != null ? Array.from(value) : []
+  onChangeImage()
+})
+
+onMounted(() => {
+  if (props.fileList != null) state.images = Array.from(props.fileList)
+  onChangeImage()
 })
 
 const easyFormProps: TTEasyForm = {
@@ -60,7 +66,7 @@ const easyFormProps: TTEasyForm = {
     {
       state,
       model: "url",
-      type: "url",
+      type: "text",
       placeholder: $t("linkBox"),
       autocomplete: "url",
       inputmode: "url",
@@ -75,21 +81,20 @@ const easyFormProps: TTEasyForm = {
       isMultipleFile: true,
       maxNumberOfFile: 4,
       quadLayout: true,
-      onChange (_: TTEasyFormItem, form: TTEasyForm) {
-        // ファイルがひとつ以上選択されているか否かでリンクボックスの表示状態を切り替える
-        const urlItem = form.data.find((item: TTEasyFormItem) => item.model === "url")
-        if (urlItem == null) return
-        urlItem.disabled = state.images.length > 0
-
-        // TODO: 意図しない alt が削除される不具合を修正すること
-        state.alts.splice(state.images.length)
-      },
+      onChange: onChangeImage,
     },
   ],
 }
 
 function close () {
   emit("closeSnedPostPopup", false, isEmpty())
+}
+
+function isEmpty (): boolean {
+  return !state.text &&
+    !state.url &&
+    state.images.length === 0 &&
+    state.alts.length === 0
 }
 
 async function submitCallback () {
@@ -112,11 +117,14 @@ async function submitCallback () {
   }
 }
 
-function isEmpty (): boolean {
-  return !state.text &&
-    !state.url &&
-    state.images.length === 0 &&
-    state.alts.length === 0
+function onChangeImage () {
+  // ファイルがひとつ以上選択されているか否かでリンクカード／フィードカードの表示状態を切り替える
+  const urlItem = easyFormProps.data.find((item: TTEasyFormItem) => item.model === "url")
+  if (urlItem == null) return
+  urlItem.disabled = state.images.length > 0
+
+  // TODO: 意図しない alt が削除される不具合を修正すること
+  state.alts.splice(state.images.length)
 }
 </script>
 
@@ -176,6 +184,8 @@ function isEmpty (): boolean {
         <li>{{ $t("sendPostNotification1") }}</li>
         <li>{{ $t("sendPostNotification2") }}</li>
         <li>{{ $t("sendPostNotification3") }}</li>
+        <li>{{ $t("sendPostNotification4") }}</li>
+        <li>{{ $t("sendPostNotification5") }}</li>
       </ul>
     </HtmlPopup>
   </div>

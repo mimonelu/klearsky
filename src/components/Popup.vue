@@ -66,7 +66,7 @@ function scrollToTop () {
 
 <style lang="scss" scoped>
 .popup-overlay {
-  background-color: rgba(var(--fg-color), 0.25);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,7 +84,7 @@ function scrollToTop () {
   background-color: rgb(var(--bg-color));
   border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: var(--border-radius);
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
   color: rgb(var(--fg-color));
   display: flex;
   flex-direction: column;

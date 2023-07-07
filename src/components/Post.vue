@@ -634,7 +634,7 @@ function onActivateHashTag (text: string) {
           <template v-else-if="state.translation === 'done'">{{ props.post.__custom.translatedText }}</template>
         </div>
 
-        <!-- リンクボックス -->
+        <!-- リンクカード -->
         <LinkBox
           v-if="position !== 'slim'"
           :external="state.external"
@@ -1151,7 +1151,7 @@ function onActivateHashTag (text: string) {
 
 .text,
 .text--slim {
-  line-height: 1.375;
+  line-height: var(--line-height);
   word-break: break-word;
   &:empty {
     display: contents;
@@ -1172,7 +1172,7 @@ function onActivateHashTag (text: string) {
   padding-top: 0.5em;
   color: rgba(var(--fg-color), 0.75);
   font-style: italic;
-  line-height: 1.375;
+  line-height: var(--line-height);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -1211,10 +1211,10 @@ function onActivateHashTag (text: string) {
 
 .repost {
   grid-area: r;
-  border: 1px solid rgba(var(--fg-color), 0.25);
+  border: 1px solid rgba(var(--fg-color), 0.125);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgba(var(--fg-color), 0.5);
+    border-color: rgba(var(--fg-color), 0.25);
   }
 
   :not([data-position="slim"]) & > .post {
@@ -1227,10 +1227,10 @@ function onActivateHashTag (text: string) {
 
 .custom-feed-card {
   background-color: rgba(var(--accent-color), 0.125);
-  border: 1px solid rgba(var(--accent-color), 0.25);
+  border: 1px solid rgba(var(--accent-color), 0.125);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgba(var(--accent-color), 0.5);
+    border-color: rgba(var(--accent-color), 0.25);
   }
 }
 

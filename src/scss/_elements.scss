@@ -74,7 +74,7 @@ img {
 }
 
 p {
-  line-height: 1.375;
+  line-height: var(--line-height);
 }
 
 pre {

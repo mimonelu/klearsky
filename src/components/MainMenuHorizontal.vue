@@ -128,8 +128,8 @@ async function openSendPostPopup () {
   justify-content: center;
   position: relative;
   margin: 0.25rem;
-  min-height: calc(var(--sp-menu-size) - 0.5rem);
-  max-height: calc(var(--sp-menu-size) - 0.5rem);
+  min-height: calc(var(--sp-menu-size) - 0.5rem - 1px);
+  max-height: calc(var(--sp-menu-size) - 0.5rem - 1px);
 
   .svg-icon {
     fill: rgba(var(--fg-color), 0.75);

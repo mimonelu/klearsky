@@ -10,7 +10,7 @@
 
 <style lang="scss" scoped>
 .loader {
-  background-color: rgba(var(--bg-color), 0.25);
+  background-color: rgba(0, 0, 0, 0.125);
   cursor: wait;
   display: flex;
   align-items: center;
@@ -26,6 +26,7 @@
   & > div {
     animation: loader-animation 200ms ease-in-out infinite alternate-reverse;
     background-color: rgb(var(--accent-color));
+    border-radius: 0.25em;
     width: 0.25em;
     height: 1.5em;
   }

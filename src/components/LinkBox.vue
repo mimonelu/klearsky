@@ -32,18 +32,18 @@ defineProps<{
 <style lang="scss" scoped>
 .external {
   background-color: rgba(var(--fg-color), 0.125);
-  border: 1px solid rgba(var(--fg-color), 0.25);
   border-radius: var(--border-radius);
   cursor: pointer;
   overflow: hidden;
-  &:focus, &:hover {
-    border-color: rgba(var(--fg-color), 0.5);
-  }
+  position: relative;
+  height: 100%;
 
   &__thumb {
     aspect-ratio: 1.91 / 1;
     display: block;
     object-fit: cover;
+    width: 100%;
+    min-height: 100%;
   }
   &__meta {
     display: grid;
@@ -53,13 +53,12 @@ defineProps<{
   &__title,
   &__uri,
   &__description {
-    line-height: 1.375;
+    line-height: var(--line-height);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   &__title {
-    font-size: 0.875em;
     font-weight: bold;
   }
   &__uri {

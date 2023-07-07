@@ -37,7 +37,6 @@ defineProps<{
   position: relative;
 
   & > img {
-    border: 1px solid rgba(var(--fg-color), 0.25);
     border-radius: var(--border-radius);
     display: block;
     min-width: 1em;
@@ -48,12 +47,6 @@ defineProps<{
   &[data-has-label="true"] > img {
     filter: grayscale(1.0);
     opacity: 0.5;
-  }
-
-  &:focus, &:hover {
-    & > img {
-      border-color: rgba(var(--fg-color), 0.5);
-    }
   }
 }
 

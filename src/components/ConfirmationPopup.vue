@@ -67,7 +67,7 @@ function apply () {
   }
 
   .text {
-    line-height: 1.375;
+    line-height: var(--line-height);
     user-select: text;
     white-space: pre-wrap;
     word-break: break-word;

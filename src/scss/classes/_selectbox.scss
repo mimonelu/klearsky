@@ -9,7 +9,7 @@
     color: rgb(var(--fg-color));
     cursor: pointer;
     display: block;
-    line-height: 1.375;
+    line-height: var(--line-height);
     padding: 0.5em 2.5em 0.5em 1em;
     width: 100%;
     &:focus, &:hover {

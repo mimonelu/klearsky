@@ -69,12 +69,15 @@ function getDidColor (did: string): string {
             class="account-button__left"
             @click.prevent="login(session)"
           >
-            <img
+            <div
               class="account-button__image"
-              src="/img/void-avatar.png"
-              alt=""
               :style="{ '--color': getDidColor(session.did) }"
             >
+              <img
+                src="/img/void-avatar.png"
+                alt=""
+              >
+            </div>
             <div class="account-button__handle">{{ session.handle }}</div>
             <div class="account-button__email">{{ session.email }}</div>
           </div>
@@ -110,6 +113,7 @@ function getDidColor (did: string): string {
 .service {
   color: rgba(var(--fg-color), 0.5);
   font-weight: bold;
+  line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -147,7 +151,8 @@ function getDidColor (did: string): string {
       "i e";
     grid-gap: 0 0.5rem;
     align-items: center;
-    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+    overflow: hidden;
+    padding-right: 0.5rem;
     &:focus, &:hover {
       --color: var(--accent-color);
     }
@@ -157,11 +162,14 @@ function getDidColor (did: string): string {
   }
 
   &__image {
-    background-image: radial-gradient(closest-corner, transparent, var(--color));
-    border-radius: var(--border-radius);
+    background-color: var(--color);
     grid-area: i;
-    width: 3rem;
-    height: 3rem;
+
+    & > img {
+      filter: brightness(200%);
+      width: 3rem;
+      height: 3rem;
+    }
   }
 
   &__handle {
@@ -170,6 +178,7 @@ function getDidColor (did: string): string {
     font-weight: bold;
     line-height: 1.25;
     overflow: hidden;
+    padding-top: 0.25rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -180,6 +189,7 @@ function getDidColor (did: string): string {
     font-size: 0.875rem;
     line-height: 1.25;
     overflow: hidden;
+    padding-bottom: 0.25rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -195,7 +205,7 @@ function getDidColor (did: string): string {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: -0.5rem;
+    margin-right: -1rem;
     min-width: 3rem;
     min-height: 3rem;
 

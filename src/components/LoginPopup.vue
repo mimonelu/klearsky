@@ -163,6 +163,7 @@ $width: 800px;
 }
 
 .app-passwords-link {
+  font-size: 0.9375rem;
   margin-left: auto;
 }
 

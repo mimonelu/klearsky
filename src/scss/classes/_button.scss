@@ -20,7 +20,7 @@
 
   & > span {
     font-weight: bold;
-    line-height: 1.375;
+    line-height: var(--line-height);
     word-break: break-word;
   }
 }

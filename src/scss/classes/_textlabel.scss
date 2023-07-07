@@ -11,11 +11,11 @@
     display: flex;
     align-items: center;
     grid-gap: 0.25em 0.5em;
-    line-height: 1.375;
+    line-height: var(--line-height);
   }
 
   &__item {
-    line-height: 1.375;
+    line-height: var(--line-height);
     word-break: break-word;
   }
 }

@@ -901,7 +901,7 @@ function broadcastListener (event: MessageEvent) {
 // SP用メニュー
 .main-menu-horizontal-wrapper {
   position: fixed;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   z-index: 2;
   width: 100%;
@@ -919,7 +919,7 @@ function broadcastListener (event: MessageEvent) {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: $router-view-width;
 
   // タブレット幅以上
