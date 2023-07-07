@@ -901,7 +901,7 @@ function broadcastListener (event: MessageEvent) {
 // SP用メニュー
 .main-menu-horizontal-wrapper {
   position: fixed;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   z-index: 2;
   width: 100%;

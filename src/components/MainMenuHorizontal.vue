@@ -113,7 +113,6 @@ async function openSendPostPopup () {
   --button-size: 2.125rem;
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-top: 1px solid rgba(var(--fg-color), 0.25);
-  box-shadow: 1px 0 0 1px rgba(var(--bg-color), var(--main-area-opacity));
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   min-height: var(--sp-menu-height);
@@ -129,8 +128,8 @@ async function openSendPostPopup () {
   justify-content: center;
   position: relative;
   margin: 0.25rem;
-  min-height: calc(var(--sp-menu-size) - 0.5rem);
-  max-height: calc(var(--sp-menu-size) - 0.5rem);
+  min-height: calc(var(--sp-menu-size) - 0.5rem - 1px);
+  max-height: calc(var(--sp-menu-size) - 0.5rem - 1px);
 
   .svg-icon {
     fill: rgba(var(--fg-color), 0.75);
