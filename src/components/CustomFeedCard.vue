@@ -30,6 +30,10 @@ const state = reactive<{
   }),
 })
 
+async function copyFeedName () {
+  await navigator.clipboard.writeText(props.generator.uri)
+}
+
 async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
   Util.blurElement()
   if (state.processing) return
@@ -120,6 +124,14 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         <!-- フィード名 -->
         <div class="custom-feed-card__display-name">
           <span>{{ generator.displayName }}</span>
+
+          <!-- フィード名コピーボタン -->
+          <div class="custom-feed-card__display-name__copy-button">
+            <SVGIcon
+              name="clipboard"
+              @click.prevent.stop="copyFeedName"
+            />
+          </div>
         </div>
 
         <!-- フィードライク数 -->
@@ -262,6 +274,8 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   &__display-name {
     grid-area: n;
     display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 0.5em;
     overflow: hidden;
 
     & > span {
@@ -270,6 +284,20 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    // フィード名コピーボタン
+    &__copy-button {
+      --opacity: 0.25;
+
+      & > .svg-icon {
+        cursor: pointer;
+        fill: rgba(var(--fg-color), var(--opacity));
+        font-size: 1.25em;
+        &:focus, &:hover {
+          --opacity: 0.5;
+        }
+      }
     }
   }
 
