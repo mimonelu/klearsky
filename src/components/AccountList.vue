@@ -69,12 +69,15 @@ function getDidColor (did: string): string {
             class="account-button__left"
             @click.prevent="login(session)"
           >
-            <img
+            <div
               class="account-button__image"
-              src="/img/void-avatar.png"
-              alt=""
               :style="{ '--color': getDidColor(session.did) }"
             >
+              <img
+                src="/img/void-avatar.png"
+                alt=""
+              >
+            </div>
             <div class="account-button__handle">{{ session.handle }}</div>
             <div class="account-button__email">{{ session.email }}</div>
           </div>
@@ -161,8 +164,12 @@ function getDidColor (did: string): string {
   &__image {
     background-color: var(--color);
     grid-area: i;
-    width: 3rem;
-    height: 3rem;
+
+    & > img {
+      filter: brightness(200%);
+      width: 3rem;
+      height: 3rem;
+    }
   }
 
   &__handle {
