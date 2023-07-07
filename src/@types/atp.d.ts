@@ -1,3 +1,12 @@
+type TTServerInfo = {
+  inviteCodeRequired?: boolean
+  availableUserDomains: string[]
+  links?: {
+    privacyPolicy?: string
+    termsOfService?: string
+  }
+}
+
 type TTUserViewer = {
   muted: boolean
   blockedBy?: boolean
