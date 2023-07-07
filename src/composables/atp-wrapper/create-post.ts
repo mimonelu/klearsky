@@ -44,11 +44,40 @@ export default async function (
   // カスタムフィールド - Lightning
   if (params.lightning) record.lightning = params.lightning
 
-  // リンクボックス
+  // リンクカード／フィードカード
   let external: null | any = null
+  let feedCard: undefined | any
   if (params.url?.length > 0) {
-    external = await Util.parseOgp(params.url)
-    if (external == null) return false
+    // フィードカード
+    let generatorUri: undefined | string
+    const isAtUri = params.url.match(/^at:\/\/did:plc:[\w\.\-]+\/app\.bsky\.feed\.generator\/[\w\.\-]+$/) != null
+    if (isAtUri) {
+      generatorUri = params.url
+    } else {
+      const matches = params.url.match(/^https?:\/\/[\w\.\-]+\/profile\/did:plc:([\w\.\-]+)\/feed\/([\w\.\-]+)$/)
+      if (matches != null) {
+        const did = matches[1]
+        const id = matches[2]
+        generatorUri = `at://did:plc:${did}/app.bsky.feed.generator/${id}`
+      }
+    }
+    if (generatorUri != null) {
+      const generator: Error | TTFeedGenerator = await this.fetchFeedGenerator(generatorUri)
+      if (generator instanceof Error) return false
+      feedCard = {
+        $type: "app.bsky.embed.record",
+        record: {
+          cid: generator.cid,
+          uri: generator.uri,
+        },
+      }
+    }
+
+    // リンクカード
+    else {
+      external = await Util.parseOgp(params.url)
+      if (external == null) return false
+    }
   }
 
   // 画像
@@ -97,7 +126,7 @@ export default async function (
   }
 
   // 引用リポスト
-  if (params.type === "quoteRepost" && params.post != null) {
+  else if (params.type === "quoteRepost" && params.post != null) {
     record.embed = {
       $type:
         images != null || external != null
@@ -113,14 +142,18 @@ export default async function (
       record.embed.media = { $type: "app.bsky.embed.images", images }
     else if (external != null)
       record.embed.media = { $type: "app.bsky.embed.external", external }
+    else if (feedCard != null)
+      record.embed.media = feedCard
   }
 
-  // Embed
+  // 画像またはリンクカード
   if (params.type !== "quoteRepost") {
     if (images != null)
       record.embed = { $type: "app.bsky.embed.images", images }
     else if (external != null)
       record.embed = { $type: "app.bsky.embed.external", external }
+    else if (feedCard != null)
+      record.embed = feedCard
   }
 
   const response: ComAtprotoRepoCreateRecord.OutputSchema = await (

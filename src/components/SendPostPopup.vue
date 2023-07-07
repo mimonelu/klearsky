@@ -76,7 +76,7 @@ const easyFormProps: TTEasyForm = {
       maxNumberOfFile: 4,
       quadLayout: true,
       onChange (_: TTEasyFormItem, form: TTEasyForm) {
-        // ファイルがひとつ以上選択されているか否かでリンクボックスの表示状態を切り替える
+        // ファイルがひとつ以上選択されているか否かでリンクカード／フィードカードの表示状態を切り替える
         const urlItem = form.data.find((item: TTEasyFormItem) => item.model === "url")
         if (urlItem == null) return
         urlItem.disabled = state.images.length > 0
@@ -176,6 +176,8 @@ function isEmpty (): boolean {
         <li>{{ $t("sendPostNotification1") }}</li>
         <li>{{ $t("sendPostNotification2") }}</li>
         <li>{{ $t("sendPostNotification3") }}</li>
+        <li>{{ $t("sendPostNotification4") }}</li>
+        <li>{{ $t("sendPostNotification5") }}</li>
       </ul>
     </HtmlPopup>
   </div>

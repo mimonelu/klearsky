@@ -634,7 +634,7 @@ function onActivateHashTag (text: string) {
           <template v-else-if="state.translation === 'done'">{{ props.post.__custom.translatedText }}</template>
         </div>
 
-        <!-- リンクボックス -->
+        <!-- リンクカード -->
         <LinkBox
           v-if="position !== 'slim'"
           :external="state.external"
