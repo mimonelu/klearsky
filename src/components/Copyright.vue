@@ -18,7 +18,7 @@ const yyyy = (new Date).getFullYear()
     >Twitter@mimonelu</a>
     <div />
     <div class="kebab-header">Bluesky</div>
-    <small>&copy; {{ yyyy }} Bluesky PBLLC</small>
+    <small>&copy; {{ yyyy }} Bluesky PBC</small>
     <a
       class="textlink"
       href="https://blueskyweb.xyz/"
