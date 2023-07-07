@@ -112,7 +112,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <img
         class="custom-feed-card__avatar"
         loading="lazy"
-        :src="generator.avatar"
+        :src="generator.avatar ?? '/img/void-avatar.png'"
         alt=""
       >
 
@@ -249,7 +249,6 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   // フィード画像
   &__avatar {
     grid-area: a;
-    border: 1px solid rgba(var(--accent-color), 0.25);
     border-radius: var(--border-radius);
     display: block;
     overflow: hidden;
@@ -367,7 +366,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   &__creator {
     background-clip: padding-box;
     background-color: rgb(var(--bg-color));
-    border: 1px solid rgb(var(--accent-color), 0.125);
+    border: 1px solid rgb(var(--accent-color), 0.25);
     border-radius: var(--border-radius);
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -376,7 +375,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     margin-left: auto;
     padding: 0.5em 1em;
     &:focus, &:hover {
-      border-color: rgb(var(--accent-color), 0.25);
+      border-color: rgb(var(--accent-color), 0.5);
     }
 
     & > .svg-icon {
