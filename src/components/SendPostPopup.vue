@@ -66,7 +66,7 @@ const easyFormProps: TTEasyForm = {
     {
       state,
       model: "url",
-      type: "url",
+      type: "text",
       placeholder: $t("linkBox"),
       autocomplete: "url",
       inputmode: "url",
