@@ -13,10 +13,19 @@ const TAG_REGEXP_STRING = "#[^#\\s\\(\\)\\[\\]{}<>\"'`:;,.!?/\\\\|　]+"
 const TAG_REGEXP_SINGLE = new RegExp(TAG_REGEXP_STRING)
 const TAG_REGEXP_ALL = new RegExp(`(?=^|\\W)(${TAG_REGEXP_STRING})`, "g")
 const INTERNAL_LINK_ITEMS = [
+  // プロフィールページ
   {
     src: new RegExp("^https:\/\/bsky\.app\/profile\/did:plc:([^\/]+)\/feed\/([^\/]+)"),
     dst: "/feeds?feed=at://did:plc:[1]/app.bsky.feed.generator/[2]",
   },
+
+  // ポストスレッドページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)\/post\/([^\/]+)"),
+    dst: "/post?handle=[1]&rkey=[2]",
+  },
+
+  // カスタムフィードページ
   {
     src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)"),
     dst: "/profile/post?account=[1]",
