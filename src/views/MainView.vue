@@ -400,19 +400,7 @@ async function processPage (pageName?: null | RouteRecordName) {
         break
       }
       case "post": {
-        let uri = state.currentQuery.uri as LocationQueryValue
-        if (!uri) {
-          // uri パラメータがない場合は handle と rkey パラメータがあるものとみなす
-          const handle = state.currentQuery.handle as LocationQueryValue
-          const rkey = state.currentQuery.rkey as LocationQueryValue
-          if (!handle || !rkey) return
-          const did = await state.atp.fetchDid(handle)
-          if (did instanceof Error) return
-          uri = `at://${did}/app.bsky.feed.post/${rkey}`
-        }
-        state.currentPosts?.splice(0)
-        const posts = await state.atp.fetchPostThread(uri, CONSTS.limitOfFetchPostThread) ?? []
-        if (posts) state.currentPosts = posts
+        await state.fetchPostThread()
         await nextTick()
         scrollToFocused()
         break

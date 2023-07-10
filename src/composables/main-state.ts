@@ -403,6 +403,7 @@ async function fetchPostThread () {
     if (did instanceof Error) return
     uri = `at://${did}/app.bsky.feed.post/${rkey}`
   }
+  state.currentPosts?.splice(0)
   const posts = await state.atp.fetchPostThread(uri, CONSTS.limitOfFetchPostThread) ?? []
   if (posts) state.currentPosts = posts
 }
