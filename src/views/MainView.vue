@@ -272,7 +272,7 @@ function updatePageTitle () {
       break
     }
     case "/feeds": {
-      title += ` - ${state.currentQuery.displayName}`
+      title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
       break
     }
     default: break
