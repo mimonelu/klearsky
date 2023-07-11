@@ -28,7 +28,6 @@ type TTSetting = {
     "slim" |
     "slimLeft" |
     "slimRight"
-  borderRadius?: string
   colorTheme?: string
   mainAreaOpacity?: number
   backgroundImage?: string

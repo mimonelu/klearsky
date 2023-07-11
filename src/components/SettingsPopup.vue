@@ -321,23 +321,6 @@ function closeHtmlPopupDisplay () {
             </div>
           </div>
 
-          <!-- 角丸 -->
-          <div class="settings-section">
-            <div class="settings-section__header">
-              <span>{{ $t("borderRadius") }}</span>
-            </div>
-            <div class="settings-section__body">
-              <Radios
-                class="radios-is-wide"
-                :state="mainState.currentSetting"
-                model="borderRadius"
-                :options="settings.borderRadius"
-                layout="horizontal"
-                @update="saveSetting"
-              />
-            </div>
-          </div>
-
           <!-- カラーテーマ -->
           <div class="settings-section">
             <div class="settings-section__header">
