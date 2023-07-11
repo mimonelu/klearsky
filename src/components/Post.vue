@@ -636,7 +636,7 @@ function onActivateHashTag (text: string) {
 
         <!-- リンクカード -->
         <LinkBox
-          v-if="position !== 'slim'"
+          v-if="state.external != null && position !== 'slim'"
           :external="state.external"
           :displayImage="state.displayImage"
         />
