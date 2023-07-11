@@ -8,13 +8,12 @@ import Util from "@/composables/util"
 const mainState = inject("state") as MainState
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
-  const posts = mainState.currentPosts
-  if (posts == null) return
+  if (mainState.currentPosts == null) return
 
   // MEMO: ポストスレッドの全同一ポストに最新のデータを反映する
-  posts.forEach((post: TTPost, index: number) => {
+  mainState.currentPosts.forEach((post: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => post?.cid === newPost.cid)
-    if (newPost != null) Util.replacePost(posts[index], newPost)
+    if (newPost != null) Util.updateReactions(mainState.currentPosts[index], newPost)
   })
 }
 

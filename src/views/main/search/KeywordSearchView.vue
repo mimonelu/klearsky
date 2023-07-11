@@ -53,7 +53,7 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
   const posts = mainState.currentSearchKeywordResults
   posts.forEach((oldPost: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => oldPost.cid === newPost.cid)
-    if (newPost != null) Util.replacePost(posts[index], newPost)
+    if (newPost != null) Util.updateReactions(posts[index], newPost)
   })
 }
 
