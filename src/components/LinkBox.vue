@@ -4,6 +4,17 @@ const props = defineProps<{
   displayImage?: boolean
 }>()
 
+// Spotify 対応
+const SpotifyId = ((): null | string => {
+  const url = new URL(props.external.uri)
+  if (url.hostname === "open.spotify.com") {
+    const matches = url.pathname.match(/\/track\/([^\/]+)/)
+    if (matches != null && matches[1] != null)
+      return matches[1]
+  }
+  return null
+})()
+
 // YouTube 対応
 const YouTubeId = ((): null | string => {
   const url = new URL(props.external.uri)
@@ -25,7 +36,7 @@ const YouTubeId = ((): null | string => {
 <template>
   <div class="external">
     <a
-      v-if="YouTubeId == null"
+      v-if="SpotifyId == null && YouTubeId == null"
       class="external--default"
       :href="external.uri"
       rel="noreferrer"
@@ -46,16 +57,31 @@ const YouTubeId = ((): null | string => {
       </div>
     </a>
 
+    <!-- Spotify 対応 -->
+    <iframe
+      v-else-if="SpotifyId != null"
+      class="external--spotify"
+      :src="`https://open.spotify.com/embed/track/${SpotifyId}?utm_source=generator`"
+      title="Spotify player"
+      width="100%"
+      height="152"
+      frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      allowfullscreen
+      loading="lazy"
+    />
+
     <!-- YouTube 対応 -->
     <iframe
-      v-else
-      class="external--video"
-      width="100%"
+      v-else-if="YouTubeId != null"
+      class="external--youtube"
       :src="`https://www.youtube-nocookie.com/embed/${YouTubeId}`"
       title="YouTube video player"
+      width="100%"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen
+      loading="lazy"
     />
   </div>
 </template>
@@ -103,8 +129,13 @@ const YouTubeId = ((): null | string => {
     }
   }
 
+  // Spotify 対応
+  &--spotify {
+    border-radius: var(--border-radius);
+  }
+
   // YouTube 対応
-  &--video {
+  &--youtube {
     aspect-ratio: 16 / 9;
     border-radius: var(--border-radius);
   }
