@@ -1,12 +1,27 @@
 <script lang="ts" setup>
+import { onMounted, ref } from "vue"
+
 const props = defineProps<{
   external: TTExternal
   displayImage?: boolean
 }>()
 
+const external = ref()
+
+const url = new URL(props.external.uri)
+
+// Nicovideo 対応 1
+const NicovideoId = ((): null | string => {
+  if (url.hostname === "www.nicovideo.jp") {
+    const matches = url.pathname.match(/\/watch\/([^\/]+)/)
+    if (matches != null && matches[1] != null)
+      return matches[1]
+  }
+  return null
+})()
+
 // Spotify 対応
 const SpotifyId = ((): null | string => {
-  const url = new URL(props.external.uri)
   if (url.hostname === "open.spotify.com") {
     const matches = url.pathname.match(/\/track\/([^\/]+)/)
     if (matches != null && matches[1] != null)
@@ -17,7 +32,6 @@ const SpotifyId = ((): null | string => {
 
 // Steam 対応
 const SteamId = ((): null | string => {
-  const url = new URL(props.external.uri)
   if (url.hostname === "store.steampowered.com") {
     const matches = url.pathname.match(/\/app\/([^\/]+)/)
     if (matches != null && matches[1] != null)
@@ -28,7 +42,6 @@ const SteamId = ((): null | string => {
 
 // YouTube 対応
 const YouTubeId = ((): null | string => {
-  const url = new URL(props.external.uri)
   if (
     url.hostname === "www.youtube.com" &&
     url.pathname === "/watch"
@@ -42,12 +55,21 @@ const YouTubeId = ((): null | string => {
   }
   return null
 })()
+
+onMounted(() => {
+  // Nicovideo 対応 2
+  if (NicovideoId != null) {
+    const script = document.createElement("script")
+    script.setAttribute("src", `https://embed.nicovideo.jp/watch/${NicovideoId}/script`)
+    external.value.appendChild(script)
+  }
+})
 </script>
 
 <template>
-  <div class="external">
+  <div ref="external" class="external">
     <a
-      v-if="SpotifyId == null && SteamId == null && YouTubeId == null"
+      v-if="NicovideoId == null && SpotifyId == null && SteamId == null && YouTubeId == null"
       class="external--default"
       :href="external.uri"
       rel="noreferrer"
@@ -77,6 +99,7 @@ const YouTubeId = ((): null | string => {
       allowfullscreen
       frameborder="0"
       loading="lazy"
+      scrolling="no"
       width="100%"
       height="152"
     />
@@ -88,6 +111,7 @@ const YouTubeId = ((): null | string => {
       :src="`https://store.steampowered.com/widget/${SteamId}/`"
       frameborder="0"
       loading="lazy"
+      scrolling="no"
       width="100%"
       height="190"
     />
@@ -101,6 +125,7 @@ const YouTubeId = ((): null | string => {
       allowfullscreen
       frameborder="0"
       loading="lazy"
+      scrolling="no"
       width="100%"
     />
   </div>
@@ -159,5 +184,13 @@ const YouTubeId = ((): null | string => {
     aspect-ratio: 16 / 9;
     border-radius: var(--border-radius);
   }
+}
+</style>
+
+<!-- Nicovideo 対応 -->
+<style lang="scss">
+.external > iframe[src^="https://embed.nicovideo."] {
+  aspect-ratio: 548 / 362;
+  border-radius: var(--border-radius);
 }
 </style>
