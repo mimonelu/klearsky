@@ -6,7 +6,7 @@ const props = defineProps<{
   displayImage?: boolean
 }>()
 
-const external = ref()
+const externalComponent = ref()
 
 const url = new URL(props.external.uri)
 
@@ -40,6 +40,16 @@ const SteamId = ((): null | string => {
   return null
 })()
 
+// Twitter 対応 1
+const TwitterId = ((): null | string => {
+  if (url.hostname === "twitter.com") {
+    const matches = url.pathname.match(/\/status\/([^\/]+)/)
+    if (matches != null && matches[1] != null)
+      return matches[1]
+  }
+  return null
+})()
+
 // YouTube 対応
 const YouTubeId = ((): null | string => {
   if (
@@ -61,15 +71,34 @@ onMounted(() => {
   if (NicovideoId != null) {
     const script = document.createElement("script")
     script.setAttribute("src", `https://embed.nicovideo.jp/watch/${NicovideoId}/script`)
-    external.value.appendChild(script)
+    externalComponent.value.appendChild(script)
+  }
+
+  // Twitter 対応 2
+  // SEE: https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-javascript-factory-function
+  if (TwitterId != null) {
+    const target = externalComponent.value.querySelector(".external--twitter")
+    ;(window as any).twttr?.widgets?.createTweet(TwitterId, target, {
+      dnt: true,
+      theme: isDarkMode() ? "dark" : undefined,
+    })
   }
 })
+
+function isDarkMode (): boolean {
+  return window.matchMedia != null
+    ? window.matchMedia("(prefers-color-scheme: dark)")?.matches ?? false
+    : false
+}
 </script>
 
 <template>
-  <div ref="external" class="external">
+  <div
+    ref="externalComponent"
+    class="external"
+  >
     <a
-      v-if="NicovideoId == null && SpotifyId == null && SteamId == null && YouTubeId == null"
+      v-if="NicovideoId == null && SpotifyId == null && SteamId == null && TwitterId == null && YouTubeId == null"
       class="external--default"
       :href="external.uri"
       rel="noreferrer"
@@ -114,6 +143,12 @@ onMounted(() => {
       scrolling="no"
       width="100%"
       height="190"
+    />
+
+    <!-- Twitter 対応 -->
+    <div
+      v-else-if="TwitterId != null"
+      class="external--twitter twitter-tweet"
     />
 
     <!-- YouTube 対応 -->
@@ -187,10 +222,20 @@ onMounted(() => {
 }
 </style>
 
-<!-- Nicovideo 対応 -->
 <style lang="scss">
+// Nicovideo 対応
 .external > iframe[src^="https://embed.nicovideo."] {
   aspect-ratio: 548 / 362;
   border-radius: var(--border-radius);
+}
+
+// Twitter 対応
+.twitter-tweet {
+  margin: 0 !important;
+  max-width: 100% !important;
+
+  & > iframe {
+    width: 100% !important;
+  }
 }
 </style>
