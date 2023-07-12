@@ -10,6 +10,16 @@ const externalComponent = ref()
 
 const url = new URL(props.external.uri)
 
+// Giphy 対応
+const GiphyId = ((): null | string => {
+  if (url.hostname.endsWith("giphy.com")) {
+    const matches = url.pathname.match(/([0-9a-zA-Z]{10,})(?:$|\/)/)
+    if (matches != null && matches[1] != null)
+      return matches[1]
+  }
+  return null
+})()
+
 // Nicovideo 対応 1
 const NicovideoId = ((): null | string => {
   if (url.hostname === "www.nicovideo.jp") {
@@ -98,7 +108,7 @@ function isDarkMode (): boolean {
     class="external"
   >
     <a
-      v-if="NicovideoId == null && SpotifyId == null && SteamId == null && TwitterId == null && YouTubeId == null"
+      v-if="GiphyId == null && NicovideoId == null && SpotifyId == null && SteamId == null && TwitterId == null && YouTubeId == null"
       class="external--default"
       :href="external.uri"
       rel="noreferrer"
@@ -118,6 +128,19 @@ function isDarkMode (): boolean {
         <div class="external--default__description">{{ external.description ?? '' }}</div>
       </div>
     </a>
+
+    <!-- Giphy 対応 -->
+    <iframe
+      v-else-if="GiphyId != null"
+      class="external--giphy"
+      :src="`https://giphy.com/embed/${GiphyId}`"
+      allowfullScreen
+      frameBorder="0"
+      loading="lazy"
+      scrolling="no"
+      width="100%"
+      height="360"
+    />
 
     <!-- Spotify 対応 -->
     <iframe
@@ -207,6 +230,12 @@ function isDarkMode (): boolean {
     &__description {
       font-size: 0.875em;
     }
+  }
+
+  // Giphy 対応
+  &--giphy {
+    background-color: rgba(var(--fg-color), 0.125);
+    border-radius: var(--border-radius);
   }
 
   // Spotify 対応
