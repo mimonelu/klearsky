@@ -139,7 +139,7 @@ function isDarkMode (): boolean {
       loading="lazy"
       scrolling="no"
       width="100%"
-      height="360"
+      height="300"
     />
 
     <!-- Spotify 対応 -->
