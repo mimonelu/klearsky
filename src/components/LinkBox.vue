@@ -15,6 +15,17 @@ const SpotifyId = ((): null | string => {
   return null
 })()
 
+// Steam 対応
+const SteamId = ((): null | string => {
+  const url = new URL(props.external.uri)
+  if (url.hostname === "store.steampowered.com") {
+    const matches = url.pathname.match(/\/app\/([^\/]+)/)
+    if (matches != null && matches[1] != null)
+      return matches[1]
+  }
+  return null
+})()
+
 // YouTube 対応
 const YouTubeId = ((): null | string => {
   const url = new URL(props.external.uri)
@@ -36,7 +47,7 @@ const YouTubeId = ((): null | string => {
 <template>
   <div class="external">
     <a
-      v-if="SpotifyId == null && YouTubeId == null"
+      v-if="SpotifyId == null && SteamId == null && YouTubeId == null"
       class="external--default"
       :href="external.uri"
       rel="noreferrer"
@@ -62,13 +73,23 @@ const YouTubeId = ((): null | string => {
       v-else-if="SpotifyId != null"
       class="external--spotify"
       :src="`https://open.spotify.com/embed/track/${SpotifyId}?utm_source=generator`"
-      title="Spotify player"
-      width="100%"
-      height="152"
-      frameborder="0"
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
       allowfullscreen
+      frameborder="0"
       loading="lazy"
+      width="100%"
+      height="152"
+    />
+
+    <!-- Steam 対応 -->
+    <iframe
+      v-else-if="SteamId != null"
+      class="external--steam"
+      :src="`https://store.steampowered.com/widget/${SteamId}/`"
+      frameborder="0"
+      loading="lazy"
+      width="100%"
+      height="190"
     />
 
     <!-- YouTube 対応 -->
@@ -76,12 +97,11 @@ const YouTubeId = ((): null | string => {
       v-else-if="YouTubeId != null"
       class="external--youtube"
       :src="`https://www.youtube-nocookie.com/embed/${YouTubeId}`"
-      title="YouTube video player"
-      width="100%"
-      frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen
+      frameborder="0"
       loading="lazy"
+      width="100%"
     />
   </div>
 </template>
