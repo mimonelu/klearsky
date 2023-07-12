@@ -31,11 +31,14 @@ const NicovideoId = ((): null | string => {
 })()
 
 // Spotify 対応
+let SoptifyType: string = "album"
 const SpotifyId = ((): null | string => {
   if (url.hostname === "open.spotify.com") {
-    const matches = url.pathname.match(/\/track\/([^\/]+)/)
-    if (matches != null && matches[1] != null)
-      return matches[1]
+    const matches = url.pathname.match(/\/(album|track)\/([^\/]+)/)
+    if (matches != null && matches[1] != null && matches[2] != null) {
+      SoptifyType = matches[1]
+      return matches[2]
+    }
   }
   return null
 })()
@@ -146,14 +149,14 @@ function isDarkMode (): boolean {
     <iframe
       v-else-if="SpotifyId != null"
       class="external--spotify"
-      :src="`https://open.spotify.com/embed/track/${SpotifyId}?utm_source=generator`"
+      :src="`https://open.spotify.com/embed/${SoptifyType}/${SpotifyId}?utm_source=generator`"
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
       allowfullscreen
       frameborder="0"
       loading="lazy"
       scrolling="no"
       width="100%"
-      height="152"
+      :height="SoptifyType === 'album' ? 352 : 152"
     />
 
     <!-- Steam 対応 -->
