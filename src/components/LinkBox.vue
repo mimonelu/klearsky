@@ -243,12 +243,14 @@ function isDarkMode (): boolean {
 
   // Spotify 対応
   &--spotify {
+    background-color: rgba(var(--fg-color), 0.125);
     border-radius: var(--border-radius);
   }
 
   // YouTube 対応
   &--youtube {
     aspect-ratio: 16 / 9;
+    background-color: rgba(var(--fg-color), 0.125);
     border-radius: var(--border-radius);
   }
 }
@@ -257,7 +259,7 @@ function isDarkMode (): boolean {
 <style lang="scss">
 // Nicovideo 対応
 .external > iframe[src^="https://embed.nicovideo."] {
-  aspect-ratio: 548 / 362;
+  background-color: rgba(var(--fg-color), 0.125);
   border-radius: var(--border-radius);
 }
 
