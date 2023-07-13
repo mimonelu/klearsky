@@ -20,6 +20,7 @@ type TTSetting = {
     "self" |
     "none"
   imageAspectRatio?: string
+  linkcardEmbeddedControl?: Array<string>
   globallineLayout?: "post" | "slim"
   layout?:
     "default" |

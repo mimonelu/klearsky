@@ -221,6 +221,7 @@
   "repostControl4": "あなたがフォローしていないアカウントによるポストのリポストを折り畳む",
   "repostControl5": "あなたがフォローしているアカウントによるポストのリポストを折り畳む",
 
+  "image": "画像",
   "imageControl": "画像の制御",
   "imageControl1": "すべての画像を折り畳まない",
   "imageControl2": "あなたとフォロイーが投稿した画像、フォロイーがリポストした画像、プロフィールアカウントが投稿した画像のみ折り畳まない",
@@ -235,6 +236,9 @@
   "imageAspectRatio2": "3 / 2",
   "imageAspectRatio3": "2 / 1",
   "imageAspectRatio4": "3 / 1",
+
+  "linkcard": "リンクカード",
+  "linkcardEmbeddedControl": "リンクカードの埋込コンテンツ制御",
 
   "layout": "レイアウト",
   "layoutDefault": "通常",
@@ -321,5 +325,11 @@
   "like": "いいね",
   "likes": "いいね",
   "repost": "リポスト",
-  "reposts": "リポスト"
+  "reposts": "リポスト",
+
+  "pnGiphy": "Giphy",
+  "pnSpotify": "Spotify",
+  "pnTwitter": "Twitter",
+  "pnYoutube": "Youtube",
+  "pnNicovideo": "ニコニコ動画"
 }

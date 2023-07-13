@@ -39,6 +39,13 @@
     { "label": "imageAspectRatio3", "value": "2 / 1" },
     { "label": "imageAspectRatio4", "value": "3 / 1" }
   ],
+  "linkcardEmbeddedControl": [
+    { "label": "pnGiphy", "value": "giphy" },
+    { "label": "pnSpotify", "value": "spotify" },
+    { "label": "pnTwitter", "value": "twitter" },
+    { "label": "pnYoutube", "value": "youtube" },
+    { "label": "pnNicovideo", "value": "nicovideo" }
+  ],
   "layouts": [
     { "label": "layoutDefault", "value": "default" },
     { "label": "layoutDefaultLeft", "value": "defaultLeft" },

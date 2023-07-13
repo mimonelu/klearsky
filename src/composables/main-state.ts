@@ -556,6 +556,14 @@ function saveSettings () {
     state.settings[did].imageControl = "all"
   if (state.settings[did].imageAspectRatio == null)
     state.settings[did].imageAspectRatio = "3 / 2"
+  if (state.settings[did].linkcardEmbeddedControl == null)
+    state.settings[did].linkcardEmbeddedControl = [
+      "giphy",
+      "spotify",
+      "twitter",
+      "youtube",
+      "nicovideo",
+    ]
   if (state.settings[did].globallineLayout == null)
     state.settings[did].globallineLayout = "post"
   if (state.settings[did].layout == null)

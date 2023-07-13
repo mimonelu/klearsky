@@ -1,98 +1,133 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue"
+import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
 
 const props = defineProps<{
   external: TTExternal
   displayImage?: boolean
 }>()
 
+const mainState = inject("state") as MainState
+
+const state = reactive<{
+  type: ComputedRef<string>
+}>({
+  type: computed((): string => {
+    const settingValues = mainState.currentSetting.linkcardEmbeddedControl
+    if (settingValues == null) return ""
+    if (embeddedContentType === "giphy" && settingValues.includes("giphy")) return "giphy"
+    if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
+    if (embeddedContentType === "spotify" && settingValues.includes("spotify")) return "spotify"
+    if (embeddedContentType === "twitter" && settingValues.includes("twitter")) return "twitter"
+    if (embeddedContentType === "youtube" && settingValues.includes("youtube")) return "youtube"
+    return ""
+  }),
+})
+
 const externalComponent = ref()
 
-const url = new URL(props.external.uri)
+let embeddedContentType: null | string = null
+let embeddedContentId: null | string = null
+let SoptifyType: string = "album"
 
-// Giphy 対応
-const GiphyId = ((): null | string => {
+watch(() => mainState.currentSetting.linkcardEmbeddedControl, () => {
+  nextTick(updateEmbeddedContents)
+})
+
+onMounted(updateEmbeddedContents)
+
+function getEmbeddedContentId () {
+  const url = new URL(props.external.uri)
+
+  // Giphy 対応
   if (url.hostname.endsWith("giphy.com")) {
     const matches = url.pathname.match(/([0-9a-zA-Z]{10,})(?:$|\/)/)
-    if (matches != null && matches[1] != null)
-      return matches[1]
+    if (matches != null && matches[1] != null) {
+      embeddedContentType = "giphy"
+      embeddedContentId = matches[1]
+      return
+    }
   }
-  return null
-})()
 
-// Nicovideo 対応 1
-const NicovideoId = ((): null | string => {
+  // Nicovideo 対応 1
   if (url.hostname === "www.nicovideo.jp") {
     const matches = url.pathname.match(/\/watch\/([^\/]+)/)
-    if (matches != null && matches[1] != null)
-      return matches[1]
+    if (matches != null && matches[1] != null) {
+      embeddedContentType = "nicovideo"
+      embeddedContentId = matches[1]
+      return
+    }
   }
-  return null
-})()
 
-// Spotify 対応
-let SoptifyType: string = "album"
-const SpotifyId = ((): null | string => {
+  // Spotify 対応
   if (url.hostname === "open.spotify.com") {
     const matches = url.pathname.match(/\/(album|track)\/([^\/]+)/)
     if (matches != null && matches[1] != null && matches[2] != null) {
+      embeddedContentType = "spotify"
+      embeddedContentId = matches[2]
       SoptifyType = matches[1]
-      return matches[2]
+      return
     }
   }
-  return null
-})()
 
-// Twitter 対応 1
-const TwitterId = ((): null | string => {
+  // Twitter 対応 1
   if (url.hostname === "twitter.com") {
     const matches = url.pathname.match(/\/status\/([^\/]+)/)
-    if (matches != null && matches[1] != null)
-      return matches[1]
+    if (matches != null && matches[1] != null) {
+      embeddedContentType = "twitter"
+      embeddedContentId = matches[1]
+      return
+    }
   }
-  return null
-})()
 
-// YouTube 対応
-const YouTubeId = ((): null | string => {
+  // YouTube 対応
   if (
     url.hostname === "www.youtube.com" &&
     url.pathname === "/watch"
   ) {
-    return url.searchParams.get("v")
+    embeddedContentType = "youtube"
+    embeddedContentId = url.searchParams.get("v")
+    return
   } else if (
     url.hostname === "youtu.be" &&
     url.pathname
   ) {
-    return url.pathname.substring(1)
+    embeddedContentType = "youtube"
+    embeddedContentId = url.pathname.substring(1)
+    return
   }
-  return null
-})()
+}
 
-onMounted(() => {
+function updateEmbeddedContents () {
   // Nicovideo 対応 2
-  if (NicovideoId != null) {
-    const script = document.createElement("script")
-    script.setAttribute("src", `https://embed.nicovideo.jp/watch/${NicovideoId}/script`)
-    externalComponent.value.appendChild(script)
+  if (state.type === "nicovideo") {
+    const parent = externalComponent.value.querySelector(".external--nicovideo")
+    if (parent.children.length === 0) {
+      const script = document.createElement("script")
+      script.setAttribute("src", `https://embed.nicovideo.jp/watch/${embeddedContentId}/script`)
+      parent.appendChild(script)
+    }
   }
 
   // Twitter 対応 2
   // SEE: https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-javascript-factory-function
-  if (TwitterId != null) {
-    const target = externalComponent.value.querySelector(".external--twitter")
-    ;(window as any).twttr?.widgets?.createTweet(TwitterId, target, {
-      dnt: true,
-      theme: isDarkMode() ? "dark" : undefined,
-    })
+  else if (state.type === "twitter") {
+    const parent = externalComponent.value.querySelector(".external--twitter")
+    if (parent.children.length === 0) {
+      ;(window as any).twttr?.widgets?.createTweet(embeddedContentId, parent, {
+        dnt: true,
+        theme: isDarkMode() ? "dark" : undefined,
+      })
+    }
   }
-})
+}
 
 function isDarkMode (): boolean {
   return window.matchMedia != null
     ? window.matchMedia("(prefers-color-scheme: dark)")?.matches ?? false
     : false
 }
+
+getEmbeddedContentId()
 </script>
 
 <template>
@@ -101,7 +136,7 @@ function isDarkMode (): boolean {
     class="external"
   >
     <a
-      v-if="GiphyId == null && NicovideoId == null && SpotifyId == null && TwitterId == null && YouTubeId == null"
+      v-if="state.type === ''"
       class="external--default"
       :href="external.uri"
       rel="noreferrer"
@@ -124,9 +159,9 @@ function isDarkMode (): boolean {
 
     <!-- Giphy 対応 -->
     <iframe
-      v-else-if="GiphyId != null"
+      v-else-if="state.type === 'giphy'"
       class="external--giphy"
-      :src="`https://giphy.com/embed/${GiphyId}`"
+      :src="`https://giphy.com/embed/${embeddedContentId}`"
       allowfullScreen
       frameBorder="0"
       loading="lazy"
@@ -135,11 +170,17 @@ function isDarkMode (): boolean {
       height="300"
     />
 
+    <!-- Nicovideo 対応 -->
+    <div
+      v-else-if="state.type === 'nicovideo'"
+      class="external--nicovideo"
+    />
+
     <!-- Spotify 対応 -->
     <iframe
-      v-else-if="SpotifyId != null"
+      v-else-if="state.type === 'spotify'"
       class="external--spotify"
-      :src="`https://open.spotify.com/embed/${SoptifyType}/${SpotifyId}?utm_source=generator`"
+      :src="`https://open.spotify.com/embed/${SoptifyType}/${embeddedContentId}?utm_source=generator`"
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
       allowfullscreen
       frameborder="0"
@@ -151,15 +192,15 @@ function isDarkMode (): boolean {
 
     <!-- Twitter 対応 -->
     <div
-      v-else-if="TwitterId != null"
+      v-else-if="state.type === 'twitter'"
       class="external--twitter twitter-tweet"
     />
 
     <!-- YouTube 対応 -->
     <iframe
-      v-else-if="YouTubeId != null"
+      v-else-if="state.type === 'youtube'"
       class="external--youtube"
-      :src="`https://www.youtube-nocookie.com/embed/${YouTubeId}`"
+      :src="`https://www.youtube-nocookie.com/embed/${embeddedContentId}`"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen
       frameborder="0"
@@ -219,10 +260,30 @@ function isDarkMode (): boolean {
     border-radius: var(--border-radius);
   }
 
+  // Nicovideo 対応
+  &--nicovideo:deep() {
+    iframe[src^="https://embed.nicovideo."] {
+      background-color: rgba(var(--fg-color), 0.125);
+      border-radius: var(--border-radius);
+    }
+  }
+
   // Spotify 対応
   &--spotify {
     background-color: rgba(var(--fg-color), 0.125);
     border-radius: var(--border-radius);
+  }
+
+  // Twitter 対応
+  &--twitter:deep() {
+    .twitter-tweet {
+      margin: 0 !important;
+      max-width: 100% !important;
+
+      & > iframe {
+        width: 100% !important;
+      }
+    }
   }
 
   // YouTube 対応
@@ -230,24 +291,6 @@ function isDarkMode (): boolean {
     aspect-ratio: 16 / 9;
     background-color: rgba(var(--fg-color), 0.125);
     border-radius: var(--border-radius);
-  }
-}
-</style>
-
-<style lang="scss">
-// Nicovideo 対応
-.external > iframe[src^="https://embed.nicovideo."] {
-  background-color: rgba(var(--fg-color), 0.125);
-  border-radius: var(--border-radius);
-}
-
-// Twitter 対応
-.twitter-tweet {
-  margin: 0 !important;
-  max-width: 100% !important;
-
-  & > iframe {
-    width: 100% !important;
   }
 }
 </style>
