@@ -43,16 +43,6 @@ const SpotifyId = ((): null | string => {
   return null
 })()
 
-// Steam 対応
-const SteamId = ((): null | string => {
-  if (url.hostname === "store.steampowered.com") {
-    const matches = url.pathname.match(/\/app\/([^\/]+)/)
-    if (matches != null && matches[1] != null)
-      return matches[1]
-  }
-  return null
-})()
-
 // Twitter 対応 1
 const TwitterId = ((): null | string => {
   if (url.hostname === "twitter.com") {
@@ -111,7 +101,7 @@ function isDarkMode (): boolean {
     class="external"
   >
     <a
-      v-if="GiphyId == null && NicovideoId == null && SpotifyId == null && SteamId == null && TwitterId == null && YouTubeId == null"
+      v-if="GiphyId == null && NicovideoId == null && SpotifyId == null && TwitterId == null && YouTubeId == null"
       class="external--default"
       :href="external.uri"
       rel="noreferrer"
@@ -157,18 +147,6 @@ function isDarkMode (): boolean {
       scrolling="no"
       width="100%"
       :height="SoptifyType === 'album' ? 352 : 152"
-    />
-
-    <!-- Steam 対応 -->
-    <iframe
-      v-else-if="SteamId != null"
-      class="external--steam"
-      :src="`https://store.steampowered.com/widget/${SteamId}/`"
-      frameborder="0"
-      loading="lazy"
-      scrolling="no"
-      width="100%"
-      height="190"
     />
 
     <!-- Twitter 対応 -->
