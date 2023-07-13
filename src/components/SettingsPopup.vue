@@ -302,13 +302,9 @@ function closeHtmlPopupDisplay () {
           <!-- リンクカード -->
           <div class="settings-section">
             <div class="settings-section__header">
-              <span>{{ $t("linkcard") }}</span>
+              <span>{{ $t("linkcardEmbeddedControl") }}</span>
             </div>
             <div class="settings-section__body">
-              <!-- リンクカードの埋込コンテンツ制御 -->
-              <div class="settings-section__sub-header">
-                <span>{{ $t("linkcardEmbeddedControl") }}</span>
-              </div>
               <Checkboxes
                 class="checkboxes-is-wide"
                 :state="mainState.currentSetting"
