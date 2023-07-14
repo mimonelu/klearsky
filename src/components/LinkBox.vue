@@ -259,12 +259,21 @@ getEmbeddedContentId()
     background-color: rgba(var(--fg-color), 0.125);
     border-radius: var(--border-radius);
   }
+  // Giphy 対応 - SP幅未満
+  @media not all and (min-width: $sp-width) {
+    &--giphy {
+      aspect-ratio: 1 / 1;
+      height: unset !important;
+    }
+  }
 
   // Nicovideo 対応
   &--nicovideo:deep() {
     iframe[src^="https://embed.nicovideo."] {
+      aspect-ratio: 640 / 360;
       background-color: rgba(var(--fg-color), 0.125);
       border-radius: var(--border-radius);
+      height: unset !important;
     }
   }
 
