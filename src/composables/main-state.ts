@@ -393,8 +393,17 @@ async function fetchTimeline (direction: "old" | "new") {
 }
 
 async function fetchPostThread () {
-  const uri = state.currentQuery.postUri as LocationQueryValue
-  if (!uri) return
+  let uri = state.currentQuery.uri as LocationQueryValue
+  if (!uri) {
+    // uri パラメータがない場合は handle と rkey パラメータがあるものとみなす
+    const handle = state.currentQuery.handle as LocationQueryValue
+    const rkey = state.currentQuery.rkey as LocationQueryValue
+    if (!handle || !rkey) return
+    const did = await state.atp.fetchDid(handle)
+    if (did instanceof Error) return
+    uri = `at://${did}/app.bsky.feed.post/${rkey}`
+  }
+  state.currentPosts?.splice(0)
   const posts = await state.atp.fetchPostThread(uri, CONSTS.limitOfFetchPostThread) ?? []
   if (posts) state.currentPosts = posts
 }
@@ -546,13 +555,19 @@ function saveSettings () {
   if (state.settings[did].imageControl == null)
     state.settings[did].imageControl = "all"
   if (state.settings[did].imageAspectRatio == null)
-    state.settings[did].imageAspectRatio = "1 / 1"
+    state.settings[did].imageAspectRatio = "3 / 2"
+  if (state.settings[did].linkcardEmbeddedControl == null)
+    state.settings[did].linkcardEmbeddedControl = [
+      "giphy",
+      "spotify",
+      "twitter",
+      "youtube",
+      "nicovideo",
+    ]
   if (state.settings[did].globallineLayout == null)
     state.settings[did].globallineLayout = "post"
   if (state.settings[did].layout == null)
     state.settings[did].layout = "default"
-  if (state.settings[did].borderRadius == null)
-    state.settings[did].borderRadius = "0.5em"
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].mainAreaOpacity == null)

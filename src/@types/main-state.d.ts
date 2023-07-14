@@ -20,6 +20,7 @@ type TTSetting = {
     "self" |
     "none"
   imageAspectRatio?: string
+  linkcardEmbeddedControl?: Array<string>
   globallineLayout?: "post" | "slim"
   layout?:
     "default" |
@@ -28,7 +29,6 @@ type TTSetting = {
     "slim" |
     "slimLeft" |
     "slimRight"
-  borderRadius?: string
   colorTheme?: string
   mainAreaOpacity?: number
   backgroundImage?: string

@@ -376,7 +376,7 @@ async function onRemoveThisPost (uri: string) {
 
 async function updateThisPostThread () {
   const posts: undefined | false | Array<TTPost> =
-    await mainState.atp.fetchPostThread(props.post.uri, 1)
+    await mainState.atp.fetchPosts([props.post.uri])
   if (!posts || posts.length === 0) return
   emit("updateThisPostThread", posts)
 }
@@ -636,7 +636,7 @@ function onActivateHashTag (text: string) {
 
         <!-- リンクカード -->
         <LinkBox
-          v-if="position !== 'slim'"
+          v-if="state.external != null && position !== 'slim'"
           :external="state.external"
           :displayImage="state.displayImage"
         />

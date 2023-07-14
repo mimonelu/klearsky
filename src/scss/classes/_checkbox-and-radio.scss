@@ -35,7 +35,7 @@
     }
 
     & > .svg-icon {
-      fill: rgba(var(--accent-color), 0.25);
+      fill: rgb(var(--accent-color));
       margin-right: 0.5rem;
     }
     &[data-checked="true"] > .svg-icon {
@@ -50,13 +50,6 @@
     &:focus > span,
     &:hover > span {
       color: rgb(var(--fg-color));
-    }
-    &[data-checked="true"] > span {
-      color: rgba(var(--accent-color), 0.875);
-    }
-    &[data-checked="true"]:focus > span,
-    &[data-checked="true"]:hover > span {
-      color: rgb(var(--accent-color));
     }
   }
   &[data-layout="horizontal"] {

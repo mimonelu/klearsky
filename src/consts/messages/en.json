@@ -221,6 +221,7 @@
   "repostControl4": "Collapse reposts of posts by accounts you don't follow",
   "repostControl5": "Collapse reposts of posts by accounts you follow",
 
+  "image": "Image",
   "imageControl": "Image Control",
   "imageControl1": "Don't collapse all images",
   "imageControl2": "Don't collapse only images posted by you and followees, images reposted by followees, and images posted by profile accounts",
@@ -236,6 +237,9 @@
   "imageAspectRatio3": "2 / 1",
   "imageAspectRatio4": "3 / 1",
 
+  "linkcard": "Link card",
+  "linkcardEmbeddedControl": "Link Card Embedded Content Control",
+
   "layout": "Layout",
   "layoutDefault": "Default",
   "layoutDefaultLeft": "Default - Left",
@@ -243,11 +247,6 @@
   "layoutSlim": "Slim - Center",
   "layoutSlimLeft": "Slim - Left",
   "layoutSlimRight": "Slim - Right",
-
-  "borderRadius": "Border Radius",
-  "borderRadius1": "None",
-  "borderRadius2": "A little rounded",
-  "borderRadius3": "Rounded",
 
   "colorTheme": "Color Theme",
   "colorThemeAuto": "Auto",
@@ -326,5 +325,11 @@
   "like": "Like",
   "likes": "Likes",
   "repost": "Repost",
-  "reposts": "Reposts"
+  "reposts": "Reposts",
+
+  "pnGiphy": "Giphy",
+  "pnSpotify": "Spotify",
+  "pnTwitter": "Twitter",
+  "pnYoutube": "Youtube",
+  "pnNicovideo": "Nicovideo"
 }

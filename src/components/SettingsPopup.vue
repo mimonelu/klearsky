@@ -231,7 +231,7 @@ function closeHtmlPopupDisplay () {
           <!-- タイムラインの制御 -->
           <div class="settings-section">
             <div class="settings-section__header">
-              <span>{{ $t("timelineControl") }}</span>
+              <span>{{ $t("timeline") }}</span>
               <button
                 class="description-button"
                 @click.prevent="showDescription('timelineControl')"
@@ -266,12 +266,16 @@ function closeHtmlPopupDisplay () {
             </div>
           </div>
 
-          <!-- 画像の制御 -->
+          <!-- 画像 -->
           <div class="settings-section">
             <div class="settings-section__header">
-              <span>{{ $t("imageControl") }}</span>
+              <span>{{ $t("image") }}</span>
             </div>
             <div class="settings-section__body">
+              <!-- 画像の制御 -->
+              <div class="settings-section__sub-header">
+                <span>{{ $t("imageControl") }}</span>
+              </div>
               <Radios
                 class="radios-is-wide"
                 :state="mainState.currentSetting"
@@ -279,21 +283,34 @@ function closeHtmlPopupDisplay () {
                 :options="settings.imageControls"
                 @update="saveSetting"
               />
-            </div>
-          </div>
 
-          <!-- 画像サイズの比率 -->
-          <div class="settings-section">
-            <div class="settings-section__header">
-              <span>{{ $t("imageAspectRatio") }}</span>
-            </div>
-            <div class="settings-section__body">
+              <!-- 画像サイズの比率 -->
+              <div class="settings-section__sub-header">
+                <span>{{ $t("imageAspectRatio") }}</span>
+              </div>
               <Radios
                 class="radios-is-wide"
                 :state="mainState.currentSetting"
                 model="imageAspectRatio"
                 :options="settings.imageAspectRatio"
                 layout="horizontal"
+                @update="saveSetting"
+              />
+            </div>
+          </div>
+
+          <!-- リンクカード -->
+          <div class="settings-section">
+            <div class="settings-section__header">
+              <span>{{ $t("linkcardEmbeddedControl") }}</span>
+            </div>
+            <div class="settings-section__body">
+              <Checkboxes
+                class="checkboxes-is-wide"
+                :state="mainState.currentSetting"
+                model="linkcardEmbeddedControl"
+                :options="settings.linkcardEmbeddedControl"
+                layout="vertical"
                 @update="saveSetting"
               />
             </div>
@@ -318,23 +335,6 @@ function closeHtmlPopupDisplay () {
                   >{{ $t(layout.label) }}</option>
                 </select>
               </label>
-            </div>
-          </div>
-
-          <!-- 角丸 -->
-          <div class="settings-section">
-            <div class="settings-section__header">
-              <span>{{ $t("borderRadius") }}</span>
-            </div>
-            <div class="settings-section__body">
-              <Radios
-                class="radios-is-wide"
-                :state="mainState.currentSetting"
-                model="borderRadius"
-                :options="settings.borderRadius"
-                layout="horizontal"
-                @update="saveSetting"
-              />
             </div>
           </div>
 

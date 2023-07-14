@@ -125,6 +125,10 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | false | string>
+  fetchDid(
+    this: TIAtpWrapper,
+    handle: string
+  ): Promise<Error | string>
   fetchFeedGenerator(
     this: TIAtpWrapper,
     feed: string

@@ -4,7 +4,7 @@ import type { Entity, Facet, RichTextOpts, RichTextProps } from "@atproto/api"
 import { RichText } from "@atproto/api"
 
 type RichParam = {
-  type: "link" | "mention" | "tag" | "text",
+  type: "externalLink" | "internalLink" | "mention" | "tag" | "text",
   text: string,
   param: string,
 }
@@ -12,6 +12,25 @@ type RichParam = {
 const TAG_REGEXP_STRING = "#[^#\\s\\(\\)\\[\\]{}<>\"'`:;,.!?/\\\\|　]+"
 const TAG_REGEXP_SINGLE = new RegExp(TAG_REGEXP_STRING)
 const TAG_REGEXP_ALL = new RegExp(`(?=^|\\W)(${TAG_REGEXP_STRING})`, "g")
+const INTERNAL_LINK_ITEMS = [
+  // プロフィールページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/did:plc:([^\/]+)\/feed\/([^\/]+)"),
+    dst: "/feeds?feed=at://did:plc:[1]/app.bsky.feed.generator/[2]",
+  },
+
+  // ポストスレッドページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)\/post\/([^\/]+)"),
+    dst: "/post?handle=[1]&rkey=[2]",
+  },
+
+  // カスタムフィードページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)"),
+    dst: "/profile/post?account=[1]",
+  },
+]
 
 const emit = defineEmits<{(name: string, text: string): void}>()
 
@@ -37,15 +56,26 @@ const state = reactive<{
     const results: Array<RichParam> = []
     for (const segment of richText.segments()) {
       // リンク
-      if (segment.isLink())
-        results.push({
-          type: "link",
-          text: segment.text,
-          param: segment.link?.uri ?? '',
-        })
+      if (segment.isLink() && segment.link?.uri) {
+        const uri = transformInternalLink(segment.link.uri)
+        // 外部リンク
+        if (uri == null)
+          results.push({
+            type: "externalLink",
+            text: segment.text,
+            param: segment.link.uri,
+          })
+
+        // 内部リンク
+        else
+          results.push({
+            type: "internalLink",
+            text: segment.text,
+            param: uri,
+          })
 
       // メンション
-      else if (segment.isMention())
+      } else if (segment.isMention())
         results.push({
           type: "mention",
           text: segment.text,
@@ -77,6 +107,16 @@ const state = reactive<{
   }),
 })
 
+function transformInternalLink (uri: string): undefined | string {
+  for (const item of INTERNAL_LINK_ITEMS) {
+    const matches = uri.match(item.src)
+    if (matches == null) continue
+    return item.dst
+      .replace("[1]", matches[1])
+      .replace("[2]", matches[2])
+  }
+}
+
 function onActivateHashTag (text: string) {
   if (mainState.currentSearchKeywordTerm === text) return
   emit("onActivateHashTag", text)
@@ -86,8 +126,8 @@ function onActivateHashTag (text: string) {
 <template>
   <div class="html-text">
     <template v-for="segment of state.segments">
-      <!-- リンク -->
-      <template v-if="segment.type === 'link'">
+      <!-- 外部リンク -->
+      <template v-if="segment.type === 'externalLink'">
         <a
           class="textlink"
           :href="segment.param"
@@ -95,6 +135,15 @@ function onActivateHashTag (text: string) {
           :target="segment.param.startsWith('lightning:') ? '' : '_blank'"
           @click.stop
         >{{ segment.text }}</a>
+      </template>
+
+      <!-- 内部リンク -->
+      <template v-else-if="segment.type === 'internalLink'">
+        <RouterLink
+          class="textlink"
+          :to="segment.param"
+          @click.stop
+        >{{ segment.param }}</RouterLink>
       </template>
 
       <!-- メンション -->

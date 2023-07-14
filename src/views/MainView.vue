@@ -272,7 +272,7 @@ function updatePageTitle () {
       break
     }
     case "/feeds": {
-      title += ` - ${state.currentQuery.displayName}`
+      title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
       break
     }
     default: break
@@ -400,11 +400,7 @@ async function processPage (pageName?: null | RouteRecordName) {
         break
       }
       case "post": {
-        const uri = state.currentQuery.uri as LocationQueryValue
-        if (!uri) return
-        state.currentPosts?.splice(0)
-        const posts = await state.atp.fetchPostThread(uri, CONSTS.limitOfFetchPostThread) ?? []
-        if (posts) state.currentPosts = posts
+        await state.fetchPostThread()
         await nextTick()
         scrollToFocused()
         break
@@ -536,7 +532,6 @@ function broadcastListener (event: MessageEvent) {
     :data-path="state.currentPath"
     :data-layout="state.currentSetting.layout"
     :style="{
-      '--border-radius': state.currentSetting.borderRadius ?? '0.5em',
       '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 1.0,
       '--image-aspect-ratio': state.currentSetting.imageAspectRatio ?? '1 / 1'
     }"
