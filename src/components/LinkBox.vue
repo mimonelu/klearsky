@@ -60,7 +60,7 @@ function getEmbeddedContentId () {
 
   // Spotify 対応
   if (url.hostname === "open.spotify.com") {
-    const matches = url.pathname.match(/\/(album|track)\/([^\/]+)/)
+    const matches = url.pathname.match(/\/(album|artist|track)\/([^\/]+)/)
     if (matches != null && matches[1] != null && matches[2] != null) {
       embeddedContentType = "spotify"
       embeddedContentId = matches[2]
