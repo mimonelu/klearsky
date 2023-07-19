@@ -28,8 +28,11 @@ export default async function (
 
   // TODO:
   AtpUtil.coherentResponses(response.data.feed)
-  AtpUtil.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
-  AtpUtil.sortFeeds(oldFeeds)
+  const initialFeed = oldFeeds[0]
+  const isAllNew = AtpUtil.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>, cursor == null)
+  if (initialFeed != null && isAllNew && cursor == null)
+    initialFeed.__cursor = response.data.cursor
+  // AtpUtil.sortFeeds(oldFeeds)
 
   return response.data.cursor
 }

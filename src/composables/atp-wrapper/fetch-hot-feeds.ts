@@ -21,7 +21,7 @@ export default async function (
   // TODO:
   AtpUtil.coherentResponses(response.data.feed)
   AtpUtil.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>)
-  AtpUtil.sortFeeds(oldFeeds)
+  // AtpUtil.sortFeeds(oldFeeds)
 
   return response.data.cursor
 }

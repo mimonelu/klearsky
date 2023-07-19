@@ -91,13 +91,19 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       @activate="fetchFeeds('new')"
     />
     <div class="feeds">
-      <Feed
+      <template
         v-for="feed of feeds"
         :key="feed.__id"
-        :feed="feed"
-        @updateThisPostThread="updateThisPostThread"
-        @removeThisPost="removeThisPost"
-      />
+      >
+        <!-- TODO: 抜け漏れ取得ボタン -->
+        <div v-if="feed.__cursor != null" />
+
+        <Feed
+          :feed="feed"
+          @updateThisPostThread="updateThisPostThread"
+          @removeThisPost="removeThisPost"
+        />
+      </template>
     </div>
     <LoadButton
       v-if="hasLoadButton"
