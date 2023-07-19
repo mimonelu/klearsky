@@ -70,7 +70,7 @@ const state = reactive<{
         else
           results.push({
             type: "internalLink",
-            text: segment.text,
+            text: segment.text.startsWith("http") ? uri : segment.text,
             param: uri,
           })
 
@@ -143,7 +143,7 @@ function onActivateHashTag (text: string) {
           class="textlink"
           :to="segment.param"
           @click.stop
-        >{{ segment.param }}</RouterLink>
+        >{{ segment.text }}</RouterLink>
       </template>
 
       <!-- メンション -->
