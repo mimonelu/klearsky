@@ -116,6 +116,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <img
         class="custom-feed-card__avatar"
         loading="lazy"
+        decoding="async"
         :src="generator.avatar ?? '/img/void-avatar.png'"
         alt=""
       >

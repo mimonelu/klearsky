@@ -289,6 +289,7 @@ function hideWarningContent () {
         <SVGIcon name="arrowLeft" />
         <img
           loading="lazy"
+          decoding="async"
           :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
           alt=""
         >
@@ -300,6 +301,7 @@ function hideWarningContent () {
       >
         <img
           loading="lazy"
+          decoding="async"
           :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
           alt=""
         >
