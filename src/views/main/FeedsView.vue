@@ -73,6 +73,7 @@ function openPopularFeedsPopup () {
       v-if="state.generator != null"
       :generator="state.generator"
       :orderButtonDisplay="false"
+      :unclickable="true"
     />
     <FeedList
       type="feeds"
