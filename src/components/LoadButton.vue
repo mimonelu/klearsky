@@ -2,10 +2,10 @@
 import SVGIcon from "@/components/SVGIcon.vue"
 import Loader from "@/components/Loader.vue"
 
-const emit = defineEmits<(name: string, direction: "old" | "new") => void>()
+const emit = defineEmits<(name: string, direction: "old" | "middle" | "new") => void>()
 
 const props = defineProps<{
-  direction: "old" | "new"
+  direction: "old" | "middle" | "new"
   processing: boolean
 }>()
 
@@ -18,6 +18,7 @@ function onActivate () {
 <template>
   <button
     class="load-button"
+    :data-direction="direction"
     @click.prevent="onActivate"
   >
     <template v-if="!processing">
@@ -36,6 +37,7 @@ function onActivate () {
 
 <style lang="scss" scoped>
 .load-button {
+  background-clip: content-box;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -47,6 +49,11 @@ function onActivate () {
   }
   &:last-child {
     border-top: 1px solid rgba(var(--fg-color), 0.25);
+  }
+
+  // 抜け漏れ取得ボタン
+  &[data-direction="middle"] {
+    background-color: rgba(var(--accent-color), 0.25);
   }
 
   & > .svg-icon {

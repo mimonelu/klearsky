@@ -130,7 +130,7 @@ type MainState = {
   currentCustomUri?: string
   currentCustomFeeds: Array<TTFeed>
   currentCustomCursor?: string
-  fetchCustomFeeds: (direction: "new" | "old") => Promise<void>
+  fetchCustomFeeds: (direction: "new" | "old", middleCursor?: string) => Promise<void>
 
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string
@@ -238,10 +238,10 @@ type MainState = {
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>
-  fetchCurrentAuthorFeed: (direction: "new" | "old") => Promise<void>
+  fetchCurrentAuthorFeed: (direction: "new" | "old", middleCursor?: string) => Promise<void>
   fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
   fetchAuthorLikes: (direction: "new" | "old") => Promise<void>
-  fetchTimeline: (direction: "old" | "new") => Promise<void>
+  fetchTimeline: (direction: "old" | "new", middleCursor?: string) => Promise<void>
   fetchPostThread: () => Promise<void>
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
   fetchFollowers: (direction: "new" | "old") => Promise<void>

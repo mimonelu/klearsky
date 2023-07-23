@@ -255,7 +255,7 @@ async function fetchLogAudit () {
   state.currentProfile.__log = logJson.reverse()
 }
 
-async function fetchCurrentAuthorFeed (direction: "new" | "old") {
+async function fetchCurrentAuthorFeed (direction: "new" | "old", middleCursor?: string) {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
 
@@ -270,7 +270,8 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
       state.currentAuthorFeeds as Array<TTFeed>,
       account,
       CONSTS.limitOfFetchAuthorFeeds,
-      direction === "old" ? state.currentAuthorCursor : undefined
+      direction === "old" ? middleCursor ?? state.currentAuthorCursor : undefined,
+      middleCursor != null
     )
   if (cursor != null) state.currentAuthorCursor = cursor
 }
@@ -379,14 +380,15 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
   return concernedPreferences
 }
 
-async function fetchTimeline (direction: "old" | "new") {
+async function fetchTimeline (direction: "old" | "new", middleCursor?: string) {
   const cursor: undefined | false | string =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
       state.currentSetting.replyControl,
       state.currentSetting.repostControl,
       CONSTS.limitOfFetchFeeds,
-      direction === "old" ? state.timelineCursor : undefined
+      direction === "old" ? middleCursor ?? state.timelineCursor : undefined,
+      middleCursor != null
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
   else if (cursor != null) state.timelineCursor = cursor
@@ -475,7 +477,7 @@ async function fetchPopularFeedGenerators () {
   state.currentPopularFeedGenerators = feeds as Array<TTFeedGenerator>
 }
 
-async function fetchCustomFeeds (direction: "old" | "new") {
+async function fetchCustomFeeds (direction: "old" | "new", middleCursor?: string) {
   if (state.currentCustomUri !== state.currentQuery.feed) {
     state.currentCustomFeeds.splice(0)
     state.currentCustomCursor = undefined
@@ -485,7 +487,8 @@ async function fetchCustomFeeds (direction: "old" | "new") {
       state.currentCustomFeeds,
       state.currentQuery.feed,
       CONSTS.limitOfFetchFeeds,
-      direction === "old" ? state.currentCustomCursor : undefined
+      direction === "old" ? middleCursor ?? state.currentCustomCursor : undefined,
+      middleCursor != null
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
   else if (cursor != null) state.currentCustomCursor = cursor

@@ -96,13 +96,20 @@ function openPopularFeedsPopup () {
 }
 
 .feed-list:deep() {
+  --opacity: 0.125;
+
+  // 抜け漏れ取得ボタン
+  &[data-is-middle="true"] {
+    --opacity: 0.25;
+  }
+
   border-top: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 
   .feed:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+    border-bottom: 1px solid rgba(var(--fg-color), var(--opacity));
   }
 
   .feed:not(:empty):not(:last-child)::after {

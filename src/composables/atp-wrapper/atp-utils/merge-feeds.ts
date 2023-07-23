@@ -3,7 +3,8 @@ let id = 0
 export default function (
   oldFeeds: Array<TTFeed>,
   targetFeeds: Array<TTFeed>,
-  doesUnshift?: boolean
+  doesUnshift?: boolean,
+  middleCursor?: string
 ): boolean {
   const addings: Array<TTFeed> = []
 
@@ -88,8 +89,24 @@ export default function (
     }
   })
 
-  if (doesUnshift) oldFeeds.unshift(...addings)
-  else oldFeeds.push(...addings)
+  // 新着フィード
+  if (doesUnshift) {
+    oldFeeds.unshift(...addings)
+  }
+
+  // 抜け漏れフィード
+  else if (middleCursor != null) {
+    const index = oldFeeds.findIndex((oldFeed: TTFeed) => oldFeed.__cursor === middleCursor)
+    if (index !== - 1) {
+      delete oldFeeds[index].__cursor
+      oldFeeds.splice(index + 1, 0, ...addings)
+    }
+  }
+
+  // 過去フィード
+  else {
+    oldFeeds.push(...addings)
+  }
 
   return isAllNew
 }

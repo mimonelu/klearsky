@@ -91,7 +91,8 @@ interface TIAtpWrapper {
     oldFeeds: Array<TTFeed>,
     author: string,
     limit?: number,
-    cursor?: string
+    cursor?: string,
+    middle?: boolean
   ): Promise<undefined | string>
   fetchAuthorReposts(
     this: TIAtpWrapper,
@@ -123,7 +124,8 @@ interface TIAtpWrapper {
     oldFeeds: Array<TTFeed>,
     feed: string,
     limit?: number,
-    cursor?: string
+    cursor?: string,
+    middle?: boolean
   ): Promise<undefined | false | string>
   fetchDid(
     this: TIAtpWrapper,
@@ -219,7 +221,8 @@ interface TIAtpWrapper {
     replyControl?: Array<number>,
     repostControl?: Array<number>,
     limit?: number,
-    cursor?: string
+    cursor?: string,
+    middle?: boolean
   ): Promise<undefined | false | string>
   fetchUserSearch(
     this: TIAtpWrapper,
