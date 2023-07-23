@@ -61,10 +61,13 @@ function openPopularFeedsPopup () {
     >
       <RouterLink
         class="my-feeds-view__header"
-        :to="{ path: '/feeds', query: {
-          feed: myFeeds.generator?.uri,
-          displayName: myFeeds.generator?.displayName,
-        } }"
+        :to="{
+          path: '/feeds',
+          query: {
+            feed: myFeeds.generator?.uri,
+            displayName: myFeeds.generator?.displayName,
+          },
+        }"
       >
         <SVGIcon name="feed" />
         <span>{{ myFeeds.generator?.displayName }}</span>

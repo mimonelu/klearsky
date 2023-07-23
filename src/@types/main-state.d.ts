@@ -86,6 +86,7 @@ type MainState = {
     status: boolean
   } }
   currentMyFeedGenerators: Array<TTFeedGenerator>
+  fetchMyFeedGenerators: () => Promise<void>
   fetchMyFeeds: () => Promise<boolean>
 
   getContentWarningVisibility: (

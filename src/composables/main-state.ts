@@ -86,6 +86,7 @@ const state = reactive<MainState>({
       return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
     })
   }),
+  fetchMyFeedGenerators,
   fetchMyFeeds,
 
   fetchTimeline,
@@ -493,6 +494,15 @@ async function fetchCustomFeeds (direction: "old" | "new", middleCursor?: string
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
   else if (cursor != null) state.currentCustomCursor = cursor
   state.currentCustomUri = state.currentQuery.feed
+}
+
+async function fetchMyFeedGenerators (): Promise<void> {
+  const generators = await state.atp.fetchFeedGenerators(state.feedPreferences.saved)
+  if (generators instanceof Error) {
+    state.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
+    return
+  }
+  state.currentMyFeedGenerators.splice(0, state.currentMyFeedGenerators.length, ...generators)
 }
 
 async function fetchMyFeeds (): Promise<boolean> {
