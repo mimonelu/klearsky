@@ -1,0 +1,68 @@
+.pulldown-button {
+  background-color: rgba(var(--fg-color), 0.0625);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  grid-gap: 0.5em;
+  padding: 0.5em 1em;
+  position: relative;
+
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.5);
+    font-size: 0.75em;
+  }
+
+  & > span {
+    color: rgba(var(--fg-color), 0.5);
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: var(--line-height);
+    word-break: break-word;
+  }
+
+  & > menu {
+    background-color: rgb(var(--fg-color));
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    display: none;
+    flex-direction: column;
+    grid-gap: 0.125rem;
+    padding-bottom: 0.5rem;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    z-index: 1;
+    width: 100%;
+
+    & > * {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      grid-gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      &:hover, &:focus {
+        background-color: rgba(var(--accent-color), 0.25);
+      }
+
+      & > span {
+        color: rgb(var(--bg-color));
+      }
+    }
+  }
+  &:hover, &:focus {
+    background-color: rgb(var(--fg-color));
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+
+    & > span {
+      color: rgba(var(--bg-color), 0.5);
+    }
+
+    & > .svg-icon {
+      fill: rgba(var(--bg-color), 0.5);
+    }
+
+    & > menu {
+      display: flex;
+    }
+  }
+}

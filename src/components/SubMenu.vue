@@ -59,89 +59,68 @@ async function refreshSession () {
       >
     </form>
 
-    <!-- トリガーコンテナ -->
-    <div class="textlink-container">
-      <!-- コンテンツ言語選択ポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openContentLanguagesPopup"
-      >
-        <SVGIcon name="translate" />
-        <span>{{ $t("contentLanguages") }}</span>
-      </a>
+    <!-- ショートカットプルダウン -->
+    <div class="pulldown-button">
+      <SVGIcon name="menu" />
+      <span>{{ $t("shortcuts") }}</span>
+      <menu>
+        <!-- コンテンツ言語選択ポップアップトリガー -->
+        <a @click.prevent="mainState.openContentLanguagesPopup">
+          <SVGIcon name="translate" />
+          <span>{{ $t("contentLanguages") }}</span>
+        </a>
 
-      <!-- ポスト言語選択ポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openPostLanguagesPopup"
-      >
-        <SVGIcon name="translate" />
-        <span>{{ $t("postLanguages") }}</span>
-      </a>
+        <!-- ポスト言語選択ポップアップトリガー -->
+        <a @click.prevent="mainState.openPostLanguagesPopup">
+          <SVGIcon name="translate" />
+          <span>{{ $t("postLanguages") }}</span>
+        </a>
 
-      <!-- マイフィードポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openMyFeedsPopup"
-      >
-        <SVGIcon name="feed" />
-        <span>{{ $t("myFeeds") }}</span>
-      </a>
+        <!-- マイフィードポップアップトリガー -->
+        <a @click.prevent="mainState.openMyFeedsPopup">
+          <SVGIcon name="feed" />
+          <span>{{ $t("myFeeds") }}</span>
+        </a>
 
-      <!-- ワードミュートポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openWordMutePopup"
-      >
-        <SVGIcon name="alphabeticalOff" />
-        <span>{{ $t("wordMute") }}</span>
-      </a>
+        <!-- ワードミュートポップアップトリガー -->
+        <a @click.prevent="mainState.openWordMutePopup">
+          <SVGIcon name="alphabeticalOff" />
+          <span>{{ $t("wordMute") }}</span>
+        </a>
 
-      <!-- コンテンツフィルタリングポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openContentFilteringPopup"
-      >
-        <SVGIcon name="alert" />
-        <span>{{ $t("contentFiltering") }}</span>
-      </a>
+        <!-- コンテンツフィルタリングポップアップトリガー -->
+        <a @click.prevent="mainState.openContentFilteringPopup">
+          <SVGIcon name="alert" />
+          <span>{{ $t("contentFiltering") }}</span>
+        </a>
 
-      <!-- ミュート中のユーザーポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openMutingUsersPopup"
-      >
-        <SVGIcon name="volumeOff" />
-        <span>{{ $t("mutingUsers") }}</span>
-      </a>
+        <!-- ミュート中のユーザーポップアップトリガー -->
+        <a @click.prevent="mainState.openMutingUsersPopup">
+          <SVGIcon name="volumeOff" />
+          <span>{{ $t("mutingUsers") }}</span>
+        </a>
 
-      <!-- ブロック中のユーザーポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openBlockingUsersPopup"
-      >
-        <SVGIcon name="personOff" />
-        <span>{{ $t("blockingUsers") }}</span>
-      </a>
+        <!-- ブロック中のユーザーポップアップトリガー -->
+        <a @click.prevent="mainState.openBlockingUsersPopup">
+          <SVGIcon name="personOff" />
+          <span>{{ $t("blockingUsers") }}</span>
+        </a>
 
-      <!-- 招待コード確認ポップアップトリガー -->
-      <a
-        v-if="mainState.numberOfAvailableInviteCodes > 0"
-        class="textlink--icon"
-        @click.prevent="mainState.openInviteCodesPopup"
-      >
-        <SVGIcon name="inviteCode" />
-        <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
-      </a>
+        <!-- 招待コード確認ポップアップトリガー -->
+        <a
+          v-if="mainState.numberOfAvailableInviteCodes > 0"
+          @click.prevent="mainState.openInviteCodesPopup"
+        >
+          <SVGIcon name="inviteCode" />
+          <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
+        </a>
 
-      <!-- セッション更新トリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="refreshSession"
-      >
-        <SVGIcon name="shimmer" />
-        <span>{{ $t("refreshSession") }}</span>
-      </a>
+        <!-- セッション更新トリガー -->
+        <a @click.prevent="refreshSession">
+          <SVGIcon name="shimmer" />
+          <span>{{ $t("refreshSession") }}</span>
+        </a>
+      </menu>
     </div>
 
     <!-- コピーライト -->
@@ -170,13 +149,8 @@ async function refreshSession () {
   width: 100%;
 }
 
-// トリガーコンテナ
-.textlink-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  grid-gap: 0.75rem;
-  font-size: 0.875rem;
+// ショートカットプルダウン
+.pulldown-button {
   margin-bottom: 2rem;
 }
 
