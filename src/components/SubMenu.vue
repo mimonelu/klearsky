@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import Package from "@/../package.json"
 import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
 import CopyRight from "@/components/Copyright.vue"
@@ -44,9 +43,6 @@ async function refreshSession () {
   <div class="sub-menu">
     <!-- ロゴ -->
     <Logo />
-
-    <!-- @atproto/api バージョン -->
-    <div class="api-version">@atproto/api v{{ Package.dependencies["@atproto/api"] }}</div>
 
     <!-- ポスト検索ボックス -->
     <form @submit.prevent="searchKeyword">
@@ -164,15 +160,7 @@ async function refreshSession () {
 // ロゴ
 .logo {
   font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-// @atproto/api バージョン
-.api-version {
-  color: rgba(var(--fg-color), 0.5);
-  font-size: 0.75rem;
   margin-bottom: 2rem;
-  text-align: center;
 }
 
 // ポスト検索ボックス
