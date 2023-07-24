@@ -50,21 +50,6 @@ async function refreshSession () {
     <!-- ロゴ -->
     <Logo />
 
-    <!-- ポスト検索ボックス -->
-    <form @submit.prevent="searchKeyword">
-      <input
-        v-model="state.text"
-        id="keyword-term-textbox"
-        type="search"
-        :placeholder="$t('searchWord')"
-        autocapitalize="off"
-        autocomplete="off"
-        inputmode="search"
-        spellcheck="false"
-        class="textbox"
-      >
-    </form>
-
     <!-- ショートカットプルダウン -->
     <div class="pulldown-button">
       <SVGIcon name="menu" />
@@ -129,6 +114,21 @@ async function refreshSession () {
       </menu>
     </div>
 
+    <!-- ポスト検索ボックス -->
+    <form @submit.prevent="searchKeyword">
+      <input
+        v-model="state.text"
+        id="keyword-term-textbox"
+        type="search"
+        :placeholder="$t('searchWord')"
+        autocapitalize="off"
+        autocomplete="off"
+        inputmode="search"
+        spellcheck="false"
+        class="textbox"
+      >
+    </form>
+
     <!-- マイフィード -->
     <div class="my-feed">
       <RouterLink
@@ -162,7 +162,7 @@ async function refreshSession () {
 .sub-menu {
   display: flex;
   flex-direction: column;
-  padding: 2rem 1rem;
+  padding: 2rem 1rem 1rem;
   position: relative;
   height: 100vh;
 }
@@ -182,39 +182,37 @@ async function refreshSession () {
 
 // ショートカットプルダウン
 .pulldown-button {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 // マイフィード
 .my-feed {
   @include scroll-bar;
-  // border: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  grid-gap: 1px;
   margin-bottom: 2rem;
-  padding: 1px;
   overflow-y: auto;
   overscroll-behavior: none;
 
   &__button {
+    border-radius: 1px;
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;
-    // padding: 1px;
+    padding: 0.25rem;
     &:hover, &:focus {
       background-color: rgba(var(--accent-color), 0.25);
     }
 
     & > img {
-      // border-radius: 1.5em;
+      border-radius: 1px;
       display: block;
       overflow: hidden;
-      min-width: 1.75em;
-      max-width: 1.75em;
-      min-height: 1.75em;
-      max-height: 1.75em;
+      min-width: 1.5em;
+      max-width: 1.5em;
+      min-height: 1.5em;
+      max-height: 1.5em;
     }
 
     & > span {
