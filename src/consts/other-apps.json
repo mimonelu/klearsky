@@ -39,5 +39,10 @@
     "name": "atlasApp",
     "profileUri": "https://bsky.jazco.dev/?s={handle}",
     "postUri": "https://bsky.jazco.dev/?s={handle}"
+  },
+  {
+    "name": "atscanApp",
+    "profileUri": "https://atscan.net/{did}",
+    "postUri": "https://atscan.net/{did}"
   }
 ]
