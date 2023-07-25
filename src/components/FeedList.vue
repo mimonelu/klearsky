@@ -13,13 +13,13 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-async function fetchFeeds (direction: "new" | "old") {
+async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
   Util.blurElement()
   mainState.listProcessing = true
   try {
     switch (props.type) {
       case "author": {
-        await mainState.fetchCurrentAuthorFeed(direction)
+        await mainState.fetchCurrentAuthorFeed(direction, middleCursor)
         break
       }
       case "authorReposts": {
@@ -31,7 +31,7 @@ async function fetchFeeds (direction: "new" | "old") {
         break
       }
       case "feeds": {
-        await mainState.fetchCustomFeeds(direction)
+        await mainState.fetchCustomFeeds(direction, middleCursor)
         break
       }
       case "post": {
@@ -39,7 +39,7 @@ async function fetchFeeds (direction: "new" | "old") {
         break
       }
       case "timeline": {
-        await mainState.fetchTimeline(direction)
+        await mainState.fetchTimeline(direction, middleCursor)
         break
       }
     }
@@ -91,13 +91,25 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       @activate="fetchFeeds('new')"
     />
     <div class="feeds">
-      <Feed
+      <template
         v-for="feed of feeds"
         :key="feed.__id"
-        :feed="feed"
-        @updateThisPostThread="updateThisPostThread"
-        @removeThisPost="removeThisPost"
-      />
+      >
+        <Feed
+          :feed="feed"
+          :data-is-middle="feed.__cursor != null"
+          @updateThisPostThread="updateThisPostThread"
+          @removeThisPost="removeThisPost"
+        />
+
+        <!-- 抜け漏れ取得ボタン -->
+        <LoadButton
+          v-if="feed.__cursor != null"
+          direction="middle"
+          :processing="mainState.listProcessing"
+          @activate="fetchFeeds('old', feed.__cursor)"
+        />
+      </template>
     </div>
     <LoadButton
       v-if="hasLoadButton"

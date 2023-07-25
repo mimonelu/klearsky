@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import Package from "@/../package.json"
-import { inject, reactive } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
 import CopyRight from "@/components/Copyright.vue"
 import Logo from "@/components/Logo.vue"
@@ -11,9 +10,15 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  text: string
+  text: string,
+  pinned: ComputedRef<Array<TTFeedGenerator>>,
 }>({
   text: "",
+  pinned: computed((): Array<TTFeedGenerator> => {
+    return mainState.currentMyFeedGenerators.filter((generator: TTFeedGenerator) => {
+      return mainState.feedPreferences?.pinned?.includes(generator.uri)
+    })
+  }),
 })
 
 const router = useRouter()
@@ -45,8 +50,69 @@ async function refreshSession () {
     <!-- ロゴ -->
     <Logo />
 
-    <!-- @atproto/api バージョン -->
-    <div class="api-version">@atproto/api v{{ Package.dependencies["@atproto/api"] }}</div>
+    <!-- ショートカットプルダウン -->
+    <div class="pulldown-button">
+      <SVGIcon name="menu" />
+      <span>{{ $t("shortcuts") }}</span>
+      <menu>
+        <!-- コンテンツ言語選択ポップアップトリガー -->
+        <a @click.prevent="mainState.openContentLanguagesPopup">
+          <SVGIcon name="translate" />
+          <span>{{ $t("contentLanguages") }}</span>
+        </a>
+
+        <!-- ポスト言語選択ポップアップトリガー -->
+        <a @click.prevent="mainState.openPostLanguagesPopup">
+          <SVGIcon name="translate" />
+          <span>{{ $t("postLanguages") }}</span>
+        </a>
+
+        <!-- マイフィードポップアップトリガー -->
+        <a @click.prevent="mainState.openMyFeedsPopup">
+          <SVGIcon name="feed" />
+          <span>{{ $t("myFeeds") }}</span>
+        </a>
+
+        <!-- ワードミュートポップアップトリガー -->
+        <a @click.prevent="mainState.openWordMutePopup">
+          <SVGIcon name="alphabeticalOff" />
+          <span>{{ $t("wordMute") }}</span>
+        </a>
+
+        <!-- コンテンツフィルタリングポップアップトリガー -->
+        <a @click.prevent="mainState.openContentFilteringPopup">
+          <SVGIcon name="alert" />
+          <span>{{ $t("contentFiltering") }}</span>
+        </a>
+
+        <!-- ミュート中のユーザーポップアップトリガー -->
+        <a @click.prevent="mainState.openMutingUsersPopup">
+          <SVGIcon name="volumeOff" />
+          <span>{{ $t("mutingUsers") }}</span>
+        </a>
+
+        <!-- ブロック中のユーザーポップアップトリガー -->
+        <a @click.prevent="mainState.openBlockingUsersPopup">
+          <SVGIcon name="personOff" />
+          <span>{{ $t("blockingUsers") }}</span>
+        </a>
+
+        <!-- 招待コード確認ポップアップトリガー -->
+        <a
+          v-if="mainState.numberOfAvailableInviteCodes > 0"
+          @click.prevent="mainState.openInviteCodesPopup"
+        >
+          <SVGIcon name="inviteCode" />
+          <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
+        </a>
+
+        <!-- セッション更新トリガー -->
+        <a @click.prevent="refreshSession">
+          <SVGIcon name="shimmer" />
+          <span>{{ $t("refreshSession") }}</span>
+        </a>
+      </menu>
+    </div>
 
     <!-- ポスト検索ボックス -->
     <form @submit.prevent="searchKeyword">
@@ -63,89 +129,28 @@ async function refreshSession () {
       >
     </form>
 
-    <!-- トリガーコンテナ -->
-    <div class="textlink-container">
-      <!-- コンテンツ言語選択ポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openContentLanguagesPopup"
+    <!-- マイフィード -->
+    <div class="my-feed">
+      <RouterLink
+        v-for="generator of state.pinned"
+        :key="generator.cid"
+        :to="{
+          path: '/feeds',
+          query: {
+            feed: generator.uri,
+            displayName: generator.displayName,
+          },
+        }"
+        class="my-feed__button"
       >
-        <SVGIcon name="translate" />
-        <span>{{ $t("contentLanguages") }}</span>
-      </a>
-
-      <!-- ポスト言語選択ポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openPostLanguagesPopup"
-      >
-        <SVGIcon name="translate" />
-        <span>{{ $t("postLanguages") }}</span>
-      </a>
-
-      <!-- マイフィードポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openMyFeedsPopup"
-      >
-        <SVGIcon name="feed" />
-        <span>{{ $t("myFeeds") }}</span>
-      </a>
-
-      <!-- ワードミュートポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openWordMutePopup"
-      >
-        <SVGIcon name="alphabeticalOff" />
-        <span>{{ $t("wordMute") }}</span>
-      </a>
-
-      <!-- コンテンツフィルタリングポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openContentFilteringPopup"
-      >
-        <SVGIcon name="alert" />
-        <span>{{ $t("contentFiltering") }}</span>
-      </a>
-
-      <!-- ミュート中のユーザーポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openMutingUsersPopup"
-      >
-        <SVGIcon name="volumeOff" />
-        <span>{{ $t("mutingUsers") }}</span>
-      </a>
-
-      <!-- ブロック中のユーザーポップアップトリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="mainState.openBlockingUsersPopup"
-      >
-        <SVGIcon name="personOff" />
-        <span>{{ $t("blockingUsers") }}</span>
-      </a>
-
-      <!-- 招待コード確認ポップアップトリガー -->
-      <a
-        v-if="mainState.numberOfAvailableInviteCodes > 0"
-        class="textlink--icon"
-        @click.prevent="mainState.openInviteCodesPopup"
-      >
-        <SVGIcon name="inviteCode" />
-        <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
-      </a>
-
-      <!-- セッション更新トリガー -->
-      <a
-        class="textlink--icon"
-        @click.prevent="refreshSession"
-      >
-        <SVGIcon name="shimmer" />
-        <span>{{ $t("refreshSession") }}</span>
-      </a>
+        <img
+          loading="lazy"
+          decoding="async"
+          :src="generator.avatar ?? '/img/void-avatar.png'"
+          alt=""
+        >
+        <span>{{ generator.displayName }}</span>
+      </RouterLink>
     </div>
 
     <!-- コピーライト -->
@@ -157,22 +162,15 @@ async function refreshSession () {
 .sub-menu {
   display: flex;
   flex-direction: column;
-  padding: 2rem 1rem;
+  padding: 2rem 1rem 1rem;
   position: relative;
+  height: 100vh;
 }
 
 // ロゴ
 .logo {
   font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-// @atproto/api バージョン
-.api-version {
-  color: rgba(var(--fg-color), 0.5);
-  font-size: 0.75rem;
   margin-bottom: 2rem;
-  text-align: center;
 }
 
 // ポスト検索ボックス
@@ -182,14 +180,54 @@ async function refreshSession () {
   width: 100%;
 }
 
-// トリガーコンテナ
-.textlink-container {
+// ショートカットプルダウン
+.pulldown-button {
+  margin-bottom: 1rem;
+}
+
+// マイフィード
+.my-feed {
+  @include scroll-bar;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  grid-gap: 0.75rem;
-  font-size: 0.875rem;
+  flex-grow: 1;
   margin-bottom: 2rem;
+  overflow-y: auto;
+  overscroll-behavior: none;
+
+  &__button {
+    border-radius: 1px;
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5rem;
+    padding: 0.25rem;
+    &:hover, &:focus {
+      background-color: rgba(var(--accent-color), 0.25);
+    }
+
+    & > img {
+      border-radius: 1px;
+      display: block;
+      overflow: hidden;
+      min-width: 1.5em;
+      max-width: 1.5em;
+      min-height: 1.5em;
+      max-height: 1.5em;
+    }
+
+    & > span {
+      color: rgba(var(--fg-color), 0.5);
+      line-height: var(--line-height);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    &:hover, &:focus {
+      & > span {
+        color: rgb(var(--fg-color));
+      }
+    }
+  }
 }
 
 // コピーライト

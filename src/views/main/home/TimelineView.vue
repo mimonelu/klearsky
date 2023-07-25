@@ -1,11 +1,34 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import FeedList from "@/components/FeedList.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+function openMyFeedsPopup () {
+  Util.blurElement()
+  mainState.openMyFeedsPopup()
+}
+
+function openPopularFeedsPopup () {
+  Util.blurElement()
+  mainState.openPopularFeedsPopup()
+}
 </script>
 
 <template>
+  <Portal to="home-view-header-portal">
+    <!-- マイフィードポップアップトリガー -->
+    <button @click.stop="openMyFeedsPopup">
+      <SVGIcon name="feed" />
+    </button>
+
+    <!-- 人気のフィードポップアップトリガー -->
+    <button @click.stop="openPopularFeedsPopup">
+      <SVGIcon name="fire" />
+    </button>
+  </Portal>
   <FeedList
     class="timeline-view"
     type="timeline"

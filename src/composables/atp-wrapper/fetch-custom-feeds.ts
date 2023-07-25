@@ -6,7 +6,8 @@ export default async function (
   oldFeeds: Array<TTFeed>,
   feed: string,
   limit?: number,
-  cursor?: string
+  cursor?: string,
+  middle?: boolean
 ): Promise<undefined | false | string> {
   if (this.agent == null) return
   const query: AppBskyFeedGetFeed.QueryParams = { feed }
@@ -21,7 +22,17 @@ export default async function (
 
   // TODO:
   AtpUtil.coherentResponses(response.data.feed)
-  AtpUtil.mergeFeeds(oldFeeds, response.data.feed as Array<TTFeed>, !cursor)
+  const isNotFirstFetch = oldFeeds.length > 0
+  const isAllNew = AtpUtil.mergeFeeds(
+    oldFeeds,
+    response.data.feed as Array<TTFeed>,
+    cursor == null,
+    middle ? cursor : undefined
+  )
+  if (isNotFirstFetch && isAllNew && (cursor == null || middle)) {
+    const initialFeed = response.data.feed[0]
+    if (initialFeed != null) initialFeed.__cursor = response.data.cursor
+  }
   // AtpUtil.sortFeeds(oldFeeds) // ソートはしない
 
   return response.data.cursor

@@ -46,6 +46,7 @@ async function openSendPostPopup () {
       <img
         class="image"
         loading="lazy"
+        decoding="async"
         :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'"
         alt=""
       >

@@ -51,7 +51,7 @@ const state = reactive<{
   postLanguages: ComputedRef<undefined | Array<string>>
 
   // 翻訳リンクの設置可否
-  isOtherLanguage: ComputedRef<boolean>
+  hasOtherLanguages: ComputedRef<boolean>
 
   // コンテンツ言語の判定
   noContentLanguage: ComputedRef<boolean>
@@ -102,12 +102,14 @@ const state = reactive<{
   }),
 
   // 翻訳リンクの設置可否
-  isOtherLanguage: computed((): boolean => {
+  hasOtherLanguages: computed((): boolean => {
     if (props.noLink) return false
     if (!state.text) return false
-    if (!(state.postLanguages?.length)) return false
+    if (state.postLanguages == null) return false
+    if (state.postLanguages.length === 0) return false
+    if (state.postLanguages.length >= 2) return true
     const userLanguage = Util.getUserLanguage()
-    return !state.postLanguages.includes(userLanguage)
+    return state.postLanguages[0] !== userLanguage
   }),
 
   // コンテンツ言語の判定
@@ -421,12 +423,13 @@ async function translateText (forceTranslate: boolean) {
     }
   }
   const dstLanguage = Util.getUserLanguage()
-  if (srcLanguages.includes(dstLanguage)) {
+  if (srcLanguages.length === 1 && srcLanguages[0] === dstLanguage) {
     state.translation = "ignore"
     return
   }
+  const langpair = srcLanguages.find((srcLanguage: string) => srcLanguage !== dstLanguage)
   // SEE: https://mymemory.translated.net/doc/spec.php
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLanguages[0]}|${dstLanguage}&de=${mainState.atp.session?.email}`
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langpair}|${dstLanguage}&de=${mainState.atp.session?.email}`
   const response = await fetch(url).catch(() => {
     state.translation = "failed"
   })
@@ -613,7 +616,7 @@ function onActivateHashTag (text: string) {
           :text="state.text"
           :facets="post.record?.facets ?? post.value?.facets"
           :entities="post.record?.entities ?? post.value?.entities"
-          :hasTranslateLink="state.isOtherLanguage"
+          :hasTranslateLink="state.hasOtherLanguages"
           @onActivateHashTag="onActivateHashTag"
           @translate="onForceTranslate"
         />

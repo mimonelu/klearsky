@@ -127,6 +127,7 @@
   "sunriseApp": "Sunrise",
   "tokimekiApp": "TOKIMEKI Bluesky",
   "atlasApp": "BSky Atlas",
+  "atscanApp": "ATScan",
   "showSource": "ソースを表示する",
 
   "sendRepost": "リポストする",
@@ -326,6 +327,8 @@
   "likes": "いいね",
   "repost": "リポスト",
   "reposts": "リポスト",
+
+  "shortcuts": "ショートカット",
 
   "pnGiphy": "Giphy",
   "pnSpotify": "Spotify",

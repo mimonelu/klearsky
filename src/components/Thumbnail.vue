@@ -92,6 +92,7 @@ function onActivateAlt (alt: string) {
   <div class="thumbnail">
     <img
       loading="lazy"
+      decoding="async"
       :src="state.src ?? '/img/void.png'"
       :alt="image?.alt ?? ''"
     />

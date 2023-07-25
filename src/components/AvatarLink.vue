@@ -16,6 +16,7 @@ defineProps<{
   >
     <img
       loading="lazy"
+      decoding="async"
       :src="image ?? '/img/void-avatar.png'"
       alt=""
     >

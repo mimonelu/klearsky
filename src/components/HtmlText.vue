@@ -13,7 +13,7 @@ const TAG_REGEXP_STRING = "#[^#\\s\\(\\)\\[\\]{}<>\"'`:;,.!?/\\\\|　]+"
 const TAG_REGEXP_SINGLE = new RegExp(TAG_REGEXP_STRING)
 const TAG_REGEXP_ALL = new RegExp(`(?=^|\\W)(${TAG_REGEXP_STRING})`, "g")
 const INTERNAL_LINK_ITEMS = [
-  // プロフィールページ
+  // カスタムフィードページ
   {
     src: new RegExp("^https:\/\/bsky\.app\/profile\/did:plc:([^\/]+)\/feed\/([^\/]+)"),
     dst: "/feeds?feed=at://did:plc:[1]/app.bsky.feed.generator/[2]",
@@ -25,9 +25,9 @@ const INTERNAL_LINK_ITEMS = [
     dst: "/post?handle=[1]&rkey=[2]",
   },
 
-  // カスタムフィードページ
+  // プロフィールページ
   {
-    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)"),
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)$"),
     dst: "/profile/post?account=[1]",
   },
 ]
@@ -70,7 +70,7 @@ const state = reactive<{
         else
           results.push({
             type: "internalLink",
-            text: segment.text,
+            text: segment.text.startsWith("http") ? uri : segment.text,
             param: uri,
           })
 
@@ -143,7 +143,7 @@ function onActivateHashTag (text: string) {
           class="textlink"
           :to="segment.param"
           @click.stop
-        >{{ segment.param }}</RouterLink>
+        >{{ segment.text }}</RouterLink>
       </template>
 
       <!-- メンション -->

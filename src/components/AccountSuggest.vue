@@ -208,6 +208,7 @@ function selectUser (user?: TTUser) {
           class="account-suggest__suggest__item__avatar"
           alt=""
           loading="lazy"
+          decoding="async"
           :src="user.avatar ?? '/img/void-avatar.png'"
         >
         <div class="account-suggest__suggest__item__display-name">{{ user.displayName }}</div>

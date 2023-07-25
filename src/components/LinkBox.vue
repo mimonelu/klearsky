@@ -147,6 +147,7 @@ getEmbeddedContentId()
         v-if="displayImage && typeof external.thumb === 'string'"
         class="external--default__thumb"
         loading="lazy"
+        decoding="async"
         :src="external.thumb"
         alt=""
       />

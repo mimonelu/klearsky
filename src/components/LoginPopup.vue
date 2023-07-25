@@ -159,7 +159,8 @@ $width: 800px;
 }
 
 .description {
-  color: rgba(var(--fg-color), 0.5);
+  color: rgba(var(--fg-color), 0.75);
+  font-size: 1.25rem;
 }
 
 .app-passwords-link {
@@ -183,5 +184,6 @@ $width: 800px;
 
 .copyright {
   font-size: 0.875rem;
+  text-align: center;
 }
 </style>

@@ -41,13 +41,8 @@ onMounted(async () => {
 
   // マイフィードジェネレーターの取得
   state.processing = true
-  const generators = await mainState.atp.fetchFeedGenerators(mainState.feedPreferences.saved)
+  await mainState.fetchMyFeedGenerators()
   state.processing = false
-  if (generators instanceof Error) {
-    mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
-    return
-  }
-  mainState.currentMyFeedGenerators.splice(0, mainState.currentMyFeedGenerators.length, ...generators)
 })
 
 async function close () {

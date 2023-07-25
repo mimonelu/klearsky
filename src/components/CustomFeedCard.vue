@@ -10,6 +10,7 @@ const emit = defineEmits<{(name: string): void}>()
 const props = defineProps<{
   generator: TTFeedGenerator
   orderButtonDisplay: boolean
+  unclickable?: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -103,12 +104,19 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 </script>
 
 <template>
-  <RouterLink
+  <component
     class="custom-feed-card"
-    :to="{ path: '/feeds', query: {
-      feed: generator.uri,
-      displayName: generator.displayName,
-    } }"
+    :is="unclickable ? 'div' : 'RouterLink'"
+    v-bind="unclickable ? null : {
+      to: {
+        path: '/feeds',
+        query: {
+          feed: generator.uri,
+          displayName: generator.displayName,
+        },
+      },
+    }"
+    :data-unclickable="unclickable"
     @click.stop
   >
     <div class="custom-feed-card__top">
@@ -116,6 +124,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <img
         class="custom-feed-card__avatar"
         loading="lazy"
+        decoding="async"
         :src="generator.avatar ?? '/img/void-avatar.png'"
         alt=""
       >
@@ -221,7 +230,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       v-if="state.processing"
       @click.prevent
     />
-  </RouterLink>
+  </component>
 </template>
 
 <style lang="scss" scoped>
@@ -232,6 +241,13 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   grid-gap: 0.5em;
   padding: 1em;
   position: relative;
+
+  // テキスト選択
+  &[data-unclickable="true"] &__display-name,
+  &[data-unclickable="true"] &__description {
+    cursor: auto;
+    user-select: text;
+  }
 
   &__top {
     display: flex;

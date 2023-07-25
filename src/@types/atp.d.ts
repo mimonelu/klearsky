@@ -193,6 +193,7 @@ type TTFeed = {
     [k: string]: unknown
   }
   reason?: TTReason
+  __cursor?: string // Injected
   __id: string // Injected
   __folding?: boolean // Injected
   __replyDisplay?: boolean // Injected

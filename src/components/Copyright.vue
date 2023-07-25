@@ -4,58 +4,55 @@ const yyyy = (new Date).getFullYear()
 
 <template>
   <div class="copyright">
-    <div class="kebab-header">Klearsky</div>
-    <small>&copy; {{ yyyy }} mimonelu</small>
+    <small>Klearsky &copy; {{ yyyy }} mimonelu</small>
+    <a
+      class="textlink"
+      href="https://github.com/mimonelu/klearsky"
+      rel="noreferrer"
+      target="_blank"
+    >@GitHub</a>
     <RouterLink
       class="textlink"
       :to="{ path: '/profile/post', query: { account: 'mimonelu.net' } }"
-    >Bluesky@mimonelu.net</RouterLink>
+    >@Bluesky</RouterLink>
     <a
       class="textlink"
       href="https://twitter.com/mimonelu"
       rel="noreferrer"
       target="_blank"
-    >Twitter@mimonelu</a>
-    <div />
-    <div class="kebab-header">Bluesky</div>
-    <small>&copy; {{ yyyy }} Bluesky PBC</small>
+    >@Twitter</a>
+    <span>/</span>
+    <small>Bluesky &copy; {{ yyyy }} Bluesky PBC</small>
     <a
       class="textlink"
       href="https://blueskyweb.xyz/"
       rel="noreferrer"
       target="_blank"
-    >Bluesky official web site</a>
+    >@Web</a>
     <a
       class="textlink"
       href="https://twitter.com/bluesky"
       rel="noreferrer"
       target="_blank"
-    >Twitter@bluesky</a>
+    >@Twitter</a>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .copyright {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  grid-gap: 1em;
-}
+  color: rgba(var(--fg-color), 0.5);
+  line-height: var(--line-height);
 
-.kebab-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  grid-gap: 0.5em;
-  width: 100%;
-
-  &::before,
-  &::after {
-    background-color: rgba(var(--fg-color), 0.125);
-    content: "";
-    display: block;
-    flex-grow: 1;
-    height: 1px;
+  & > * {
+    display: inline;
+    margin: 0 0.25em;
+    word-break: break-all;
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }
 </style>
