@@ -44,6 +44,10 @@
         background-color: rgba(var(--accent-color), 0.25);
       }
 
+      & > .svg-icon {
+        fill: rgb(var(--bg-color));
+      }
+
       & > span {
         color: rgb(var(--bg-color));
       }

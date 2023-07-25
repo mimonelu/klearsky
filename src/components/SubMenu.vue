@@ -216,7 +216,7 @@ async function refreshSession () {
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.5);
+      color: rgba(var(--fg-color), 0.75);
       line-height: var(--line-height);
       overflow: hidden;
       text-overflow: ellipsis;
