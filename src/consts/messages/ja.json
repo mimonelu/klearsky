@@ -107,6 +107,7 @@
 
   "copy": "コピーする",
   "copyHandle": "ハンドルをコピーする",
+  "copyUri": "AT URIをコピーする",
   "copyDid": "DIDをコピーする",
   "likeUsers": "いいねしたアカウント",
   "repostUsers": "リポストしたアカウント",

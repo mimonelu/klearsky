@@ -107,6 +107,7 @@
 
   "copy": "Copy",
   "copyHandle": "Copy handle",
+  "copyUri": "Copy AT URI",
   "copyDid": "Copy DID",
   "likeUsers": "Liked by",
   "repostUsers": "Reposted by",
