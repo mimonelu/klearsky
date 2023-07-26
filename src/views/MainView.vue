@@ -113,6 +113,8 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
     if (!state.inSameProfilePage) {
       state.currentAuthorFeeds?.splice(0)
       state.currentAuthorCursor = undefined
+      state.currentAuthorCustomFeeds?.splice(0)
+      state.currentAuthorCustomFeedsCursor = undefined
       state.currentAuthorReposts?.splice(0)
       state.currentAuthorRepostsCursor = undefined
       state.currentAuthorLikes?.splice(0)
@@ -155,6 +157,8 @@ function resetState () {
   state.currentProfile = null
   state.currentAuthorFeeds = []
   state.currentAuthorCursor = undefined
+  state.currentAuthorCustomFeeds = []
+  state.currentAuthorCustomFeedsCursor = undefined
   state.currentAuthorReposts = []
   state.currentAuthorRepostsCursor = undefined
   state.currentAuthorLikes = []
@@ -267,6 +271,7 @@ function updatePageTitle () {
     case "/profile/post":
     case "/profile/repost":
     case "/profile/like":
+    case "/profile/custom-feeds":
     case "/profile/following":
     case "/profile/follower": {
       title += ` - ${state.currentQuery.account}`
@@ -323,6 +328,7 @@ async function processPage (pageName?: null | RouteRecordName) {
     case "profile-post":
     case "profile-repost":
     case "profile-like":
+    case "profile-custom-feeds":
     case "profile-following":
     case "profile-follower": {
       account = state.currentQuery.account as LocationQueryValue
@@ -360,6 +366,16 @@ async function processPage (pageName?: null | RouteRecordName) {
         const tasks: Array<Promise<void>> = []
         if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
           tasks.push(state.fetchAuthorLikes("new"))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
+        await Promise.allSettled(tasks)
+        break
+      }
+      case "profile-custom-feeds": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorCustomFeeds.length === 0)
+          tasks.push(state.fetchCurrentAuthorCustomFeeds("new"))
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           tasks.push(state.fetchCurrentProfile(account as string))

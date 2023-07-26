@@ -285,6 +285,12 @@ function hideWarningContent () {
           <SVGIcon name="post" />
         </RouterLink>
         <RouterLink
+          class="tab__button tab__button--custom-feeds"
+          :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.handle } }"
+        >
+          <SVGIcon name="feed" />
+        </RouterLink>
+        <RouterLink
           class="tab__button tab__button--following"
           :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
           :title="$t('following')"

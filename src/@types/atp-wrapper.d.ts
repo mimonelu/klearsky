@@ -86,6 +86,13 @@ interface TIAtpWrapper {
     term?: string,
     limit?: number
   ): Promise<Error | Array<TTUser>>
+  fetchAuthorCustomFeeds(
+    this: TIAtpWrapper,
+    generators: Array<TTFeedGenerator>,
+    author: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<Error | undefined | string>
   fetchAuthorFeed(
     this: TIAtpWrapper,
     oldFeeds: Array<TTFeed>,

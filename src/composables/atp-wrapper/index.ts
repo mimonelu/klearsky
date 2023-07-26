@@ -16,6 +16,7 @@ import disableMute from "@/composables/atp-wrapper/disable-mute"
 import enableBlock from "@/composables/atp-wrapper/enable-block"
 import enableMute from "@/composables/atp-wrapper/enable-mute"
 import fetchActorsTypeahead from "@/composables/atp-wrapper/fetch-actors-typeahead"
+import fetchAuthorCustomFeeds from "@/composables/atp-wrapper/fetch-author-custom-feeds"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
 import fetchAuthorReposts from "@/composables/atp-wrapper/fetch-author-reposts"
 import fetchAuthorLikes from "@/composables/atp-wrapper/fetch-author-likes"
@@ -107,6 +108,7 @@ prototype.disableMute = disableMute
 prototype.enableBlock = enableBlock
 prototype.enableMute = enableMute
 prototype.fetchActorsTypeahead = fetchActorsTypeahead
+prototype.fetchAuthorCustomFeeds = fetchAuthorCustomFeeds
 prototype.fetchAuthorFeed = fetchAuthorFeed
 prototype.fetchAuthorReposts = fetchAuthorReposts
 prototype.fetchAuthorLikes = fetchAuthorLikes

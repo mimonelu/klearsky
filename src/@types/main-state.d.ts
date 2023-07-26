@@ -67,6 +67,8 @@ type MainState = {
   currentProfile: null | TTProfile
   currentAuthorFeeds: Array<TTFeed>
   currentAuthorCursor?: string
+  currentAuthorCustomFeeds: Array<TTFeedGenerator>
+  currentAuthorCustomFeedsCursor?: string
   currentAuthorReposts: Array<TTFeed>
   currentAuthorRepostsCursor?: string
   currentAuthorLikes: Array<TTFeed>
@@ -239,6 +241,7 @@ type MainState = {
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>
+  fetchCurrentAuthorCustomFeeds: (direction: "new" | "old") => Promise<void>
   fetchCurrentAuthorFeed: (direction: "new" | "old", middleCursor?: string) => Promise<void>
   fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
   fetchAuthorLikes: (direction: "new" | "old") => Promise<void>

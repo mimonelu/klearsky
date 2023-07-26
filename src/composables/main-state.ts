@@ -75,6 +75,7 @@ const state = reactive<MainState>({
   fetchUserProfile,
   fetchCurrentProfile,
   fetchCurrentAuthorFeed,
+  fetchCurrentAuthorCustomFeeds,
   fetchAuthorReposts,
   fetchAuthorLikes,
   getContentWarningVisibility,
@@ -275,6 +276,27 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old", middleCursor?: 
       middleCursor != null
     )
   if (cursor != null) state.currentAuthorCursor = cursor
+}
+
+async function fetchCurrentAuthorCustomFeeds (direction: "new" | "old") {
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
+
+  // ブロックしている
+  if (state.currentProfile?.viewer.blocking != null) return
+
+  // ブロックされている
+  if (state.currentProfile?.viewer.blockedBy) return
+
+  const cursor: Error | undefined | string =
+    await state.atp.fetchAuthorCustomFeeds(
+      state.currentAuthorCustomFeeds as Array<TTFeedGenerator>,
+      account,
+      CONSTS.limitOfFetchAuthorFeeds,
+      direction === "old" ? state.currentAuthorCursor : undefined
+    )
+  if (cursor instanceof Error) return
+  if (cursor != null) state.currentAuthorCustomFeedsCursor = cursor
 }
 
 async function fetchAuthorReposts (direction: "new" | "old") {
