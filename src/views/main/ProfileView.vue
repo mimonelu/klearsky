@@ -259,55 +259,60 @@ function hideWarningContent () {
         </div>
       </div>
     </div>
-    <div class="tab">
-      <RouterLink
-        class="tab__button tab__button--post"
-        :to="{ path: '/profile/post', query: { account: mainState.currentProfile?.handle } }"
-      >
-        <SVGIcon name="post" />
-      </RouterLink>
-      <RouterLink
+    <div class="tab-container">
+      <div
         v-if="isMyProfile()"
-        class="tab__button tab__button--repost"
-        :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
+        class="tab"
       >
-        <SVGIcon name="repost" />
-      </RouterLink>
-      <RouterLink
-        v-if="isMyProfile()"
-        class="tab__button tab__button--like"
-        :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
-      >
-        <SVGIcon name="heart" />
-      </RouterLink>
-      <RouterLink
-        class="tab__button tab__button--following"
-        :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
-        :title="$t('following')"
-      >
-        <SVGIcon name="people" />
-        <SVGIcon name="arrowLeft" />
-        <img
-          loading="lazy"
-          decoding="async"
-          :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
-          alt=""
+        <RouterLink
+          class="tab__button tab__button--repost"
+          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
         >
-      </RouterLink>
-      <RouterLink
-        class="tab__button tab__button--following"
-        :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.handle } }"
-        :title="$t('follower')"
-      >
-        <img
-          loading="lazy"
-          decoding="async"
-          :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
-          alt=""
+          <SVGIcon name="repost" />
+        </RouterLink>
+        <RouterLink
+          class="tab__button tab__button--like"
+          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
         >
-        <SVGIcon name="arrowLeft" />
-        <SVGIcon name="people" />
-      </RouterLink>
+          <SVGIcon name="heart" />
+        </RouterLink>
+      </div>
+      <div class="tab">
+        <RouterLink
+          class="tab__button tab__button--post"
+          :to="{ path: '/profile/post', query: { account: mainState.currentProfile?.handle } }"
+        >
+          <SVGIcon name="post" />
+        </RouterLink>
+        <RouterLink
+          class="tab__button tab__button--following"
+          :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
+          :title="$t('following')"
+        >
+          <SVGIcon name="people" />
+          <SVGIcon name="arrowLeft" />
+          <img
+            loading="lazy"
+            decoding="async"
+            :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
+            alt=""
+          >
+        </RouterLink>
+        <RouterLink
+          class="tab__button tab__button--following"
+          :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.handle } }"
+          :title="$t('follower')"
+        >
+          <img
+            loading="lazy"
+            decoding="async"
+            :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
+            alt=""
+          >
+          <SVGIcon name="arrowLeft" />
+          <SVGIcon name="people" />
+        </RouterLink>
+      </div>
     </div>
     <RouterView />
     <HandleHistoryPopup
@@ -528,11 +533,13 @@ function hideWarningContent () {
   }
 }
 
-.tab {
+.tab-container {
   position: sticky;
   top: 3rem;
   z-index: 1;
+}
 
+.tab {
   [data-is-my-profile="false"] &__button {
     flex: 1;
   }
