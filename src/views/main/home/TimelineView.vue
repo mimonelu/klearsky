@@ -20,12 +20,18 @@ function openPopularFeedsPopup () {
 <template>
   <Portal to="home-view-header-portal">
     <!-- マイフィードポップアップトリガー -->
-    <button @click.stop="openMyFeedsPopup">
+    <button
+      class="my-feeds-trigger"
+      @click.stop="openMyFeedsPopup"
+    >
       <SVGIcon name="feed" />
     </button>
 
     <!-- 人気のフィードポップアップトリガー -->
-    <button @click.stop="openPopularFeedsPopup">
+    <button
+      class="popular-feeds-trigger"
+      @click.stop="openPopularFeedsPopup"
+    >
       <SVGIcon name="fire" />
     </button>
   </Portal>

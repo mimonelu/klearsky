@@ -82,10 +82,10 @@ async function updatePopularFeeds () {
 
   .popup-header {
     & > h2 {
-      color: rgb(var(--accent-color));
+      color: rgb(var(--notice-color));
 
       & > .svg-icon {
-        fill: rgb(var(--accent-color));
+        fill: rgb(var(--notice-color));
       }
     }
   }
