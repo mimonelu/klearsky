@@ -269,12 +269,14 @@ function hideWarningContent () {
           :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
         >
           <SVGIcon name="repost" />
+          <span>{{ $t("reposts") }}</span>
         </RouterLink>
         <RouterLink
           class="tab__button tab__button--like"
           :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
         >
           <SVGIcon name="heart" />
+          <span>{{ $t("likes") }}</span>
         </RouterLink>
       </div>
       <div class="tab">
@@ -560,6 +562,10 @@ function hideWarningContent () {
 
   &__button--like > .svg-icon {
     --fg-color: var(--like-color);
+  }
+
+  &__button--custom-feeds > .svg-icon {
+    --fg-color: var(--accent-color);
   }
 
   &__button--following {

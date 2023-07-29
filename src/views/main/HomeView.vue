@@ -17,15 +17,21 @@ import PageHeader from "@/components/PageHeader.vue"
         <RouterLink
           class="tab__button"
           to="/home/timeline"
-        >{{ $t("timeline") }}</RouterLink>
+        >
+          <span>{{ $t("timeline") }}</span>
+        </RouterLink>
         <RouterLink
           class="tab__button"
           to="/home/my"
-        >{{ $t("myFeeds") }}</RouterLink>
+        >
+          <span>{{ $t("myFeeds") }}</span>
+        </RouterLink>
         <RouterLink
           class="tab__button"
           to="/home/globalline"
-        >{{ $t("globalline") }}</RouterLink>
+        >
+          <span>{{ $t("globalline") }}</span>
+        </RouterLink>
       </div>
     </div>
     <RouterView />

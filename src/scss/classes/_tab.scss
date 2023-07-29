@@ -13,21 +13,23 @@
     justify-content: center;
     flex-grow: 1;
     font-weight: bold;
+    grid-gap: 0.5rem;
     padding: 0.5rem 0;
     min-height: 2.5rem;
     text-align: center;
+
+    & > .svg-icon {
+      fill: rgba(var(--fg-color), 0.75);
+    }
+
     &.router-link-active {
       background-color: rgba(var(--accent-color), 0.25);
     }
     &:focus, &:hover {
-      color: rgb(var(--fg-color));
-    }
-  }
-  &__button {
-    & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.75);
-    }
-    &:focus, &:hover {
+      & > span {
+        color: rgb(var(--fg-color));
+      }
+
       & > .svg-icon {
         fill: rgb(var(--fg-color));
       }
