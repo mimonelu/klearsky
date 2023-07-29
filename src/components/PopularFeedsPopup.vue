@@ -64,6 +64,7 @@ async function updatePopularFeeds () {
           :key="generator.cid"
           :generator="generator"
           :orderButtonDisplay="false"
+          :creatorDisplay="true"
           @click="close"
           @onActivateMention="close"
           @onActivateHashTag="close"

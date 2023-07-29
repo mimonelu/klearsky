@@ -32,6 +32,7 @@ watch(() => mainState.scrolledToBottom, () => {
         :key="generator.cid"
         :generator="generator"
         :orderButtonDisplay="false"
+        :creatorDisplay="false"
       />
     </div>
     <LoadButton

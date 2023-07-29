@@ -10,6 +10,7 @@ const emit = defineEmits<{(name: string): void}>()
 const props = defineProps<{
   generator: TTFeedGenerator
   orderButtonDisplay: boolean
+  creatorDisplay: boolean
   unclickable?: boolean
 }>()
 
@@ -198,7 +199,10 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       @onActivateHashTag="emit('onActivateHashTag')"
     />
 
-    <div class="custom-feed-card__bottom">
+    <div
+      v-if="orderButtonDisplay || creatorDisplay"
+      class="custom-feed-card__bottom"
+    >
       <!-- フィードオーダーボタン -->
       <template v-if="orderButtonDisplay">
         <button
@@ -217,6 +221,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
       <!-- フィード作成者 -->
       <RouterLink
+        v-if="creatorDisplay"
         class="custom-feed-card__creator"
         :to="{ name: 'profile-post', query: { account: generator.creator.handle } }"
         @click.prevent

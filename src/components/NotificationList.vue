@@ -161,6 +161,7 @@ function makeSubjectTo (notification: TTNotification): any {
         v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.generator != null"
         :generator="notificationGroup.generator"
         :orderButtonDisplay="false"
+        :creatorDisplay="false"
         @click="$emit('close')"
         @onActivateMention="$emit('close')"
         @onActivateHashTag="$emit('close')"
