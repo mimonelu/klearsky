@@ -328,6 +328,7 @@ async function processPage (pageName?: null | RouteRecordName) {
     case "profile-post":
     case "profile-repost":
     case "profile-like":
+    case "profile-media":
     case "profile-custom-feeds":
     case "profile-following":
     case "profile-follower": {
@@ -343,7 +344,8 @@ async function processPage (pageName?: null | RouteRecordName) {
   state.listProcessing = true
   try {
     switch (pageName) {
-      case "profile-post": {
+      case "profile-post":
+      case "profile-media": {
         // ブロック情報などを先に取得するために Promise.allSettled はしない
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)

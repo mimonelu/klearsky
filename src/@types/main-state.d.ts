@@ -44,6 +44,12 @@ type TTSettings = {
   [did: string]: TTSetting
 }
 
+type TTMedia = {
+  post: TTPost
+  uri: string
+  alt?: string
+}
+
 type MainState = {
   atp: TIAtpWrapper
   mounted: boolean
@@ -67,6 +73,8 @@ type MainState = {
   currentProfile: null | TTProfile
   currentAuthorFeeds: Array<TTFeed>
   currentAuthorCursor?: string
+  currentAuthorMedias: Array<string>
+  currentAuthorMediasCursor?: string
   currentAuthorCustomFeeds: Array<TTFeedGenerator>
   currentAuthorCustomFeedsCursor?: string
   currentAuthorReposts: Array<TTFeed>

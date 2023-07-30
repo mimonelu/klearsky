@@ -33,6 +33,10 @@ import fetchInviteCodes from "@/composables/atp-wrapper/fetch-invite-codes"
 import fetchLikeUsers from "@/composables/atp-wrapper/fetch-like-users"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
 import fetchLabels from "@/composables/atp-wrapper/fetch-labels"
+
+// TODO: 不要であれば削除する事
+// import fetchMedias from "@/composables/atp-wrapper/fetch-medias"
+
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
@@ -124,6 +128,10 @@ prototype.fetchFollowings = fetchFollowings
 prototype.fetchInviteCodes = fetchInviteCodes
 prototype.fetchKeywordSearch = fetchKeywordSearch
 prototype.fetchLabels = fetchLabels
+
+// TODO: 不要であれば削除する事
+// prototype.fetchMedias = fetchMedias
+
 prototype.fetchMutingUsers = fetchMutingUsers
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications

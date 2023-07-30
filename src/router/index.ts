@@ -18,6 +18,7 @@ import ProfileView from "@/views/main/ProfileView.vue"
 import AuthorPostView from "@/views/main/profile/AuthorPostView.vue"
 import AuthorRepostView from "@/views/main/profile/AuthorRepostView.vue"
 import AuthorLikeView from "@/views/main/profile/AuthorLikeView.vue"
+import AuthorMediaView from "@/views/main/profile/AuthorMediaView.vue"
 import AuthorCustomFeedsView from "@/views/main/profile/AuthorCustomFeedsView.vue"
 import FollowerListView from "@/views/main/profile/FollowerListView.vue"
 import FollowingListView from "@/views/main/profile/FollowingListView.vue"
@@ -106,6 +107,12 @@ const router = createRouter({
               name: "profile-like",
               meta: { label: "likes" },
               component: AuthorLikeView,
+            },
+            {
+              path: "media",
+              name: "profile-media",
+              meta: { label: "media" },
+              component: AuthorMediaView,
             },
             {
               path: "custom-feeds",

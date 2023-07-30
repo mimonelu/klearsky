@@ -217,6 +217,7 @@ async function fetchCurrentProfile (handle: string) {
   state.currentProfile = null
   state.currentAuthorReposts.splice(0)
   state.currentAuthorLikes.splice(0)
+  state.currentAuthorCustomFeeds.splice(0)
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
   state.currentProfile = await state.atp.fetchProfile(handle)
@@ -292,8 +293,8 @@ async function fetchCurrentAuthorCustomFeeds (direction: "new" | "old") {
     await state.atp.fetchAuthorCustomFeeds(
       state.currentAuthorCustomFeeds as Array<TTFeedGenerator>,
       account,
-      CONSTS.limitOfFetchAuthorFeeds,
-      direction === "old" ? state.currentAuthorCursor : undefined
+      CONSTS.limitOfFetchAuthorCustomFeeds,
+      direction === "old" ? state.currentAuthorCustomFeedsCursor : undefined
     )
   if (cursor instanceof Error) return
   if (cursor != null) state.currentAuthorCustomFeedsCursor = cursor

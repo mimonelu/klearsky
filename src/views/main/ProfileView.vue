@@ -259,7 +259,10 @@ function hideWarningContent () {
         </div>
       </div>
     </div>
+
+    <!-- タブ -->
     <div class="tab-container">
+      <!-- マイタブ -->
       <div
         v-if="isMyProfile()"
         class="tab"
@@ -279,19 +282,34 @@ function hideWarningContent () {
           <span>{{ $t("likes") }}</span>
         </RouterLink>
       </div>
+
+      <!-- 共通タブ -->
       <div class="tab">
+        <!-- ポストタブボタン -->
         <RouterLink
           class="tab__button tab__button--post"
           :to="{ path: '/profile/post', query: { account: mainState.currentProfile?.handle } }"
         >
           <SVGIcon name="post" />
         </RouterLink>
+
+        <!-- メディアタブボタン -->
+        <RouterLink
+          class="tab__button tab__button--media"
+          :to="{ path: '/profile/media', query: { account: mainState.currentProfile?.handle } }"
+        >
+          <SVGIcon name="image" />
+        </RouterLink>
+
+        <!-- カスタムフィードタブボタン -->
         <RouterLink
           class="tab__button tab__button--custom-feeds"
           :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.handle } }"
         >
           <SVGIcon name="feed" />
         </RouterLink>
+
+        <!-- フォローイングタブボタン -->
         <RouterLink
           class="tab__button tab__button--following"
           :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
@@ -306,6 +324,8 @@ function hideWarningContent () {
             alt=""
           >
         </RouterLink>
+
+        <!-- フォロワータブボタン -->
         <RouterLink
           class="tab__button tab__button--following"
           :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.handle } }"
@@ -322,7 +342,10 @@ function hideWarningContent () {
         </RouterLink>
       </div>
     </div>
+
     <RouterView />
+
+    <!-- ハンドル履歴ポップアップ -->
     <HandleHistoryPopup
       v-if="state.handleHistoryPopupDisplay"
       :log="mainState.currentProfile?.__log"
