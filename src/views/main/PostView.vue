@@ -3,6 +3,7 @@ import { inject } from "vue"
 import Loader from "@/components/Loader.vue"
 import PageHeader from "@/components/PageHeader.vue"
 import Post from "@/components/Post.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -20,6 +21,13 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
 function removeThisPost (uri: string) {
   mainState.currentPosts = mainState.currentPosts.filter((post: TTPost) => post.uri !== uri)
 }
+
+async function updateAll () {
+  Util.blurElement()
+  mainState.listProcessing = true
+  await mainState.fetchPostThread()
+  mainState.listProcessing = false
+}
 </script>
 
 <template>
@@ -28,7 +36,13 @@ function removeThisPost (uri: string) {
       :hasBackButton="true"
       :title="$t('post')"
       :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
-    />
+    >
+      <template #right>
+        <button @click.stop="updateAll">
+          <SVGIcon name="refresh" />
+        </button>
+      </template>
+    </PageHeader>
     <Post
       v-for="post, postIndex of mainState.currentPosts"
       :key="post.cid"

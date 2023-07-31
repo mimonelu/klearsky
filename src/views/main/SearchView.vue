@@ -31,7 +31,7 @@ const mainState = inject("state") as MainState
           class="tab__button"
           to="/search/keyword"
         >
-          <span>{{ $t("posts") }}</span>
+          <span>{{ $t("postSearch") }}</span>
         </RouterLink>
       </div>
     </div>

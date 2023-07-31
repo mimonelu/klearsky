@@ -41,6 +41,10 @@ async function fetchContinuousResults (direction: "new" | "old") {
     state.processing = false
   }
 }
+
+function scrolledToBottom () {
+  fetchContinuousResults("old")
+}
 </script>
 
 <template>
@@ -48,6 +52,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
     class="like-users-popup"
     :hasCloseButton="true"
     @close="close"
+    @scrolledToBottom="scrolledToBottom"
   >
     <template v-slot:header>
       <h2>

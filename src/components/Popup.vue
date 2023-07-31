@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { onBeforeMount, onBeforeUnmount, ref } from "vue"
+import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue"
+import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import SVGIcon from "@/components/SVGIcon.vue"
 
@@ -8,6 +9,19 @@ const emit = defineEmits<{(event: string): void}>()
 defineProps<{
   hasCloseButton?: boolean;
 }>()
+
+const state = reactive<{
+  scrolledToBottom: boolean
+}>({
+  scrolledToBottom: false,
+})
+
+const popupBody = ref()
+
+onMounted(() => {
+  // インフィニットスクロール用処理
+  useEventListener(popupBody, "scroll", scrollListener)
+})
 
 onBeforeMount(() => {
   hotkeys("esc", close)
@@ -21,14 +35,33 @@ function close () {
   emit("close")
 }
 
-const popupBody = ref()
-
 function scrollToTop () {
   popupBody?.value?.scrollTo({
     left: 0,
     top: 0,
     behavior: "smooth",
   })
+}
+
+// インフィニットスクロール用処理
+let isEnter = false
+function scrollListener () {
+  if (popupBody?.value == null) return
+  const threshold = 64
+  const diff = Math.abs(popupBody.value.scrollTop - (
+    popupBody.value.scrollHeight -
+    popupBody.value.clientHeight
+  ))
+  state.scrolledToBottom = false
+  if (diff < threshold) {
+    if (!isEnter) {
+      state.scrolledToBottom = true
+      emit("scrolledToBottom")
+    }
+    isEnter = true
+  } else {
+    isEnter = false
+  }
 }
 </script>
 

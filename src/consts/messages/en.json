@@ -162,7 +162,9 @@
   "suggestionSearch": "Suggestions",
   "userSearch": "Find Accounts",
   "keywordSearch": "Find Posts",
-  "searchWord": "Search words",
+  "postSearch": "Posts (TBD)",
+  "searchWord": "Post Search (TBD)",
+  "keyword": "Keyword",
 
   "notifications": "Notifications",
 

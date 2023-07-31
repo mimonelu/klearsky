@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import PageHeader from "@/components/PageHeader.vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 </script>
 
 <template>
@@ -24,6 +25,7 @@ import PageHeader from "@/components/PageHeader.vue"
           class="tab__button"
           to="/home/my"
         >
+          <SVGIcon name="feed" />
           <span>{{ $t("myFeeds") }}</span>
         </RouterLink>
         <RouterLink

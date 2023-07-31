@@ -72,7 +72,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         v-model="mainState.currentSearchUserTerm"
         id="user-term-textbox"
         type="search"
-        :placeholder="$t('searchWord')"
+        :placeholder="$t('keyword')"
         autocapitalize="off"
         autocomplete="off"
         inputmode="search"

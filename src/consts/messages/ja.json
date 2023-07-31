@@ -162,7 +162,9 @@
   "suggestionSearch": "おすすめ",
   "userSearch": "アカウントを探す",
   "keywordSearch": "ポストを探す",
-  "searchWord": "検索キーワード",
+  "postSearch": "ポスト（仮）",
+  "searchWord": "ポスト検索（仮）",
+  "keyword": "キーワード",
 
   "notifications": "通知",
 
