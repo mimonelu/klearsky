@@ -234,6 +234,7 @@ type TTNotification = {
   cid: string
   displayName?: string
   handle: string
+  following: boolean
   indexedAt: string
   reason: TTNotificationReason
   text?: string

@@ -109,6 +109,7 @@ function makeSubjectTo (notification: TTNotification): any {
             :to="makeSubjectTo(notification)"
             class="notification"
             :data-is-new="!notification.isRead"
+            :data-is-following="notification.following"
             @click="$emit('close')"
           >
             <!-- 新着通知アイコン -->
@@ -134,7 +135,7 @@ function makeSubjectTo (notification: TTNotification): any {
             <div class="display-name">{{ notification.displayName }}</div>
 
             <!-- ハンドル -->
-            <div class="handle">{{ notification.handle }}</div>
+            <div class="author-handle">{{ notification.handle }}</div>
 
             <!-- リアクション日時 -->
             <div class="indexed-at">{{ mainState.formatDate(notification.indexedAt) }}</div>
@@ -283,7 +284,6 @@ function makeSubjectTo (notification: TTNotification): any {
       color: rgb(var(--fg-color));
     }
 
-    .handle,
     .indexed-at {
       color: rgba(var(--fg-color), 0.75);
     }
@@ -344,16 +344,6 @@ function makeSubjectTo (notification: TTNotification): any {
   font-weight: bold;
   line-height: 1.25;
   overflow: hidden;
-  white-space: nowrap;
-}
-
-// ハンドル
-.handle {
-  color: rgba(var(--fg-color), 0.5);
-  font-size: 0.75rem;
-  line-height: 1.25;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

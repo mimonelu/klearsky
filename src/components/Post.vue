@@ -473,6 +473,7 @@ function onActivateHashTag (text: string) {
       <button
         v-if="parentPost != null"
         class="replier"
+        :data-is-following="parentPost?.author?.viewer?.following != null"
         @click.stop="onActivateReplierLink"
       >
         <SVGIcon name="reply" />
@@ -481,7 +482,7 @@ function onActivateHashTag (text: string) {
             ? parentPost?.author?.displayName
             : $t("anonymous")
         }}</div>
-        <div class="replier__handle">{{
+        <div class="author-handle">{{
           !mainState.currentSetting.postAnonymization
             ? parentPost?.author?.handle
             : ""
@@ -492,6 +493,7 @@ function onActivateHashTag (text: string) {
       <button
         v-if="post.__custom?.reason != null"
         class="reposter"
+        :data-is-following="post.__custom?.reason?.by?.viewer?.following != null"
         @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.handle as string)"
       >
         <SVGIcon name="repost" />
@@ -500,7 +502,7 @@ function onActivateHashTag (text: string) {
             ? post.__custom?.reason?.by?.displayName
             : $t("anonymous")
         }}</div>
-        <div class="reposter__handle">{{
+        <div class="author-handle">{{
           !mainState.currentSetting.postAnonymization
             ? post.__custom?.reason?.by?.handle
             : ""
@@ -552,6 +554,7 @@ function onActivateHashTag (text: string) {
     <div
       v-if="post.__custom.unmask || !state.masked"
       class="body"
+      :data-is-following="post.author.viewer?.following != null"
     >
       <slot name="body-before" />
 
@@ -584,7 +587,7 @@ function onActivateHashTag (text: string) {
           }}</div>
 
           <!-- ハンドル -->
-          <div class="handle">{{ !mainState.currentSetting.postAnonymization ? post.author?.handle : "" }}</div>
+          <div class="author-handle">{{ !mainState.currentSetting.postAnonymization ? post.author?.handle : "" }}</div>
 
           <!-- ポスト時間 -->
           <div
@@ -1015,19 +1018,13 @@ function onActivateHashTag (text: string) {
     font-size: 0.875em;
   }
 
-  &__display-name,
-  &__handle {
+  &__display-name {
+    font-size: 0.875em;
+    font-weight: bold;
     line-height: 1.25;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-  &__display-name {
-    font-size: 0.875em;
-    font-weight: bold;
-  }
-  &__handle {
-    font-size: 0.75em;
   }
 }
 
@@ -1040,8 +1037,9 @@ function onActivateHashTag (text: string) {
     .replier__display-name {
       color: rgb(var(--post-color));
     }
-    .replier__handle {
-      color: rgba(var(--post-color), 0.75);
+
+    .author-handle {
+      --opacity: 0.75;
     }
   }
 
@@ -1052,8 +1050,9 @@ function onActivateHashTag (text: string) {
   &__display-name {
     color: rgba(var(--post-color), 0.75);
   }
-  &__handle {
-    color: rgba(var(--post-color), 0.5);
+
+  .author-handle {
+    --fg-color: var(--post-color);
   }
 }
 
@@ -1066,8 +1065,9 @@ function onActivateHashTag (text: string) {
     .reposter__display-name {
       color: rgb(var(--share-color));
     }
-    .reposter__handle {
-      color: rgba(var(--share-color), 0.75);
+
+    .author-handle {
+      --opacity: 0.75;
     }
   }
 
@@ -1078,8 +1078,9 @@ function onActivateHashTag (text: string) {
   &__display-name {
     color: rgba(var(--share-color), 0.75);
   }
-  &__handle {
-    color: rgba(var(--share-color), 0.5);
+
+  .author-handle {
+    --fg-color: var(--share-color);
   }
 }
 
@@ -1132,15 +1133,6 @@ function onActivateHashTag (text: string) {
   color: rgba(var(--fg-color), 0.75);
   font-size: 0.875em;
   font-weight: bold;
-  line-height: 1.25;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.handle {
-  color: rgba(var(--fg-color), 0.5);
-  font-size: 0.75em;
   line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
