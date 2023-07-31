@@ -72,7 +72,7 @@ export default async function (
     // NOTICE: 横幅の規定値チェック
     // TODO: 間に合わせの処理のため要検討
     const size = await imagesize(blob as File)
-    if ((size?.width ?? 0) < 548) return external
+    if ((size?.width ?? 0) < (548 / 2)) return external
 
     const blobRef = await atpWrapper.createFileBlob({
       file: blob as File,
