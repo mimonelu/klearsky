@@ -147,7 +147,7 @@
   "detachBanner": "Detach banner image",
 
   "home": "Home",
-  "timeline": "Timeline",
+  "timeline": "Following",
   "globalline": "Globalline",
 
   "customFeeds": "Custom Feeds",
@@ -208,7 +208,7 @@
   "timeControlRelative": "Relative",
   "timeControlAbsolute": "Absolute",
 
-  "timelineControl": "Timeline Control",
+  "timelineControl": "Following Feed Control",
   "timelineControlDescription": "Effective from the next download.",
   "replyControl": "Reply Control",
   "replyControl1": "Collapse replies to the account himself",

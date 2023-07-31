@@ -147,7 +147,7 @@
   "detachBanner": "バナー画像を取り外す",
 
   "home": "ホーム",
-  "timeline": "タイムライン",
+  "timeline": "フォロー中",
   "globalline": "グローバル",
 
   "customFeeds": "カスタムフィード",
@@ -208,7 +208,7 @@
   "timeControlRelative": "相対表記",
   "timeControlAbsolute": "絶対表記",
 
-  "timelineControl": "タイムラインの制御",
+  "timelineControl": "フォロー中フィードの制御",
   "timelineControlDescription": "次のダウンロードから有効です。",
   "replyControl": "リプライの制御",
   "replyControl1": "自分自身へのリプライを折り畳む",
