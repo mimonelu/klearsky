@@ -52,29 +52,23 @@ function openPopularFeedsPopup () {
     class="feeds-view"
     :data-processing="!(state.generator != null)"
   >
-    <PageHeader
-      :hasBackButton="true"
-      :title="$t('customFeeds')"
-      :subTitle="mainState.currentQuery.displayName"
-    >
-      <template #right>
-        <!-- マイフィードポップアップトリガー -->
-        <button
-          class="my-feeds-trigger"
-          @click.stop="openMyFeedsPopup"
-        >
-          <SVGIcon name="feed" />
-        </button>
+    <Portal to="home-view-header-portal">
+      <!-- マイフィードポップアップトリガー -->
+      <button
+        class="my-feeds-trigger"
+        @click.stop="openMyFeedsPopup"
+      >
+        <SVGIcon name="feed" />
+      </button>
 
-        <!-- 人気のフィードポップアップトリガー -->
-        <button
-          class="popular-feeds-trigger"
-          @click.stop="openPopularFeedsPopup"
-        >
-          <SVGIcon name="fire" />
-        </button>
-      </template>
-    </PageHeader>
+      <!-- 人気のフィードポップアップトリガー -->
+      <button
+        class="popular-feeds-trigger"
+        @click.stop="openPopularFeedsPopup"
+      >
+        <SVGIcon name="fire" />
+      </button>
+    </Portal>
     <CustomFeedCard
       v-if="state.generator != null"
       :generator="state.generator"

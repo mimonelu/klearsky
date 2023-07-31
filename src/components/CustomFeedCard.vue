@@ -110,7 +110,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     :is="unclickable ? 'div' : 'RouterLink'"
     v-bind="unclickable ? null : {
       to: {
-        path: '/feeds',
+        path: '/home/feeds',
         query: {
           feed: generator.uri,
           displayName: generator.displayName,

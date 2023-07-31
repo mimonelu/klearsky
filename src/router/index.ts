@@ -4,13 +4,13 @@ import NotFoundView from "@/views/NotFoundView.vue"
 // Main
 import MainView from "@/views/MainView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
-import FeedsView from "@/views/main/FeedsView.vue"
 import PostView from "@/views/main/PostView.vue"
 
 // Main - Home
 import HomeView from "@/views/main/HomeView.vue"
 import TimelineView from "@/views/main/home/TimelineView.vue"
 import MyFeedsView from "@/views/main/home/MyFeedsView.vue"
+import FeedsView from "@/views/main/home/FeedsView.vue"
 import GloballineView from "@/views/main/home/GloballineView.vue"
 
 // Main - Profile
@@ -50,11 +50,6 @@ const router = createRouter({
           component: TimelineView,
         },
         {
-          path: "/feeds",
-          name: "feeds",
-          component: FeedsView,
-        },
-        {
           path: "/post",
           name: "post",
           component: PostView,
@@ -73,9 +68,15 @@ const router = createRouter({
             },
             {
               path: "my",
-              name: "feeds-home",
+              name: "my-feeds-home",
               meta: { label: "myFeeds" },
               component: MyFeedsView,
+            },
+            {
+              path: "feeds",
+              name: "feeds-home",
+              meta: { label: "feeds" },
+              component: FeedsView,
             },
             {
               path: "globalline",

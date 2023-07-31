@@ -16,7 +16,7 @@ const INTERNAL_LINK_ITEMS = [
   // カスタムフィードページ
   {
     src: new RegExp("^https:\/\/bsky\.app\/profile\/did:plc:([^\/]+)\/feed\/([^\/]+)"),
-    dst: "/feeds?feed=at://did:plc:[1]/app.bsky.feed.generator/[2]",
+    dst: "/home/feeds?feed=at://did:plc:[1]/app.bsky.feed.generator/[2]",
   },
 
   // ポストスレッドページ

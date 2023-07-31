@@ -68,7 +68,7 @@ function openPopularFeedsPopup () {
       <RouterLink
         class="my-feeds-view__header"
         :to="{
-          path: '/feeds',
+          path: '/home/feeds',
           query: {
             feed: myFeeds.generator?.uri,
             displayName: myFeeds.generator?.displayName,
@@ -106,7 +106,7 @@ function openPopularFeedsPopup () {
         >
           <RouterLink
             class="button--plane"
-            :to="{ path: '/feeds', query: {
+            :to="{ path: '/home/feeds', query: {
               feed: myFeeds.generator?.uri,
               displayName: myFeeds.generator?.displayName,
             } }"
