@@ -1,4 +1,25 @@
-export default async function (uri: string): Promise<{
+async function imagesize (file: File): Promise<{ width: number; height: number; }> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => {
+      const size = {
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+      }
+      URL.revokeObjectURL(img.src)
+      resolve(size)
+    }
+    img.onerror = (error) => {
+      reject(error)
+    }
+    img.src = URL.createObjectURL(file)
+  })
+}
+
+export default async function (
+  atpWrapper: TIAtpWrapper,
+  uri: string
+): Promise<{
   uri: string,
   title: string,
   description: string
@@ -25,9 +46,43 @@ export default async function (uri: string): Promise<{
   const ogTitle = ogTitleElement?.getAttribute("content") ?? ""
   const description = descriptionElement?.getAttribute("content") ?? ""
   const ogDscription = ogDescriptionElement?.getAttribute("content") ?? ""
-  return {
+  const external = {
     uri,
     title: ogTitle || title || "",
     description: ogDscription || description || "",
   }
+
+  // OGP 画像の対応
+  const ogImageElement = html.querySelector("meta[property='og:image']")
+  const ogImage = ogImageElement?.getAttribute("content") ?? ""
+  if (ogImage !== "") {
+    const response =
+      await fetch(`https://mimonelu.net:4649/${ogImage}`, {
+        headers: { "user-agent": "Klearsky" },
+      })
+      .then((response: Response) => {
+        if (!response.ok) return Error(`Fetch error: ${response.statusText}`)
+        return response
+      })
+      .catch((error: any) => error)
+    
+    if (response instanceof Error) return external
+    const blob = await response.blob()
+
+    // NOTICE: 横幅の規定値チェック
+    // TODO: 間に合わせの処理のため要検討
+    const size = await imagesize(blob as File)
+    if ((size?.width ?? 0) < 548) return external
+
+    const blobRef = await atpWrapper.createFileBlob({
+      file: blob as File,
+      maxWidth: 2000,
+      maxHeight: 2000,
+      maxSize: 0.9313201904,
+    })
+    if (blobRef == null) return external
+    ;(external as any).thumb = blobRef
+  }
+
+  return external
 }
