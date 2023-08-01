@@ -24,6 +24,7 @@
   "profile": "プロフィール",
   "language": "言語",
   "help": "ヘルプ",
+  "includeRepost": "リポストの画像も表示する",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -107,6 +108,7 @@
 
   "copy": "コピーする",
   "copyHandle": "ハンドルをコピーする",
+  "copyUri": "AT URIをコピーする",
   "copyDid": "DIDをコピーする",
   "likeUsers": "いいねしたアカウント",
   "repostUsers": "リポストしたアカウント",
@@ -146,7 +148,7 @@
   "detachBanner": "バナー画像を取り外す",
 
   "home": "ホーム",
-  "timeline": "タイムライン",
+  "timeline": "フォロー中",
   "globalline": "グローバル",
 
   "customFeeds": "カスタムフィード",
@@ -161,7 +163,9 @@
   "suggestionSearch": "おすすめ",
   "userSearch": "アカウントを探す",
   "keywordSearch": "ポストを探す",
-  "searchWord": "検索キーワード",
+  "postSearch": "ポスト（仮）",
+  "searchWord": "ポスト検索（仮）",
+  "keyword": "キーワード",
 
   "notifications": "通知",
 
@@ -207,7 +211,7 @@
   "timeControlRelative": "相対表記",
   "timeControlAbsolute": "絶対表記",
 
-  "timelineControl": "タイムラインの制御",
+  "timelineControl": "フォロー中フィードの制御",
   "timelineControlDescription": "次のダウンロードから有効です。",
   "replyControl": "リプライの制御",
   "replyControl1": "自分自身へのリプライを折り畳む",
@@ -315,9 +319,8 @@
   "submit": "送信する",
   "sendPostNotification1": "[文字列](URL) でもリンクを張れます。",
   "sendPostNotification2": "@zap でZapリンクを張れます（要設定）。",
-  "sendPostNotification3": "リンクカードにおけるOGP画像の取得は未対応です。",
-  "sendPostNotification4": "フィードカードはAT URIでも指定できます。",
-  "sendPostNotification5": "最大文字数を超えても送信自体は可能です。",
+  "sendPostNotification3": "フィードカードはAT URIでも指定できます。",
+  "sendPostNotification4": "最大文字数を超えても送信自体は可能です。",
   "cancelPost": "ポストのキャンセル",
   "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
 

@@ -135,7 +135,7 @@ async function refreshSession () {
         v-for="generator of state.pinned"
         :key="generator.cid"
         :to="{
-          path: '/feeds',
+          path: '/home/feeds',
           query: {
             feed: generator.uri,
             displayName: generator.displayName,

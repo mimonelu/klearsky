@@ -64,6 +64,7 @@ async function updatePopularFeeds () {
           :key="generator.cid"
           :generator="generator"
           :orderButtonDisplay="false"
+          :creatorDisplay="true"
           @click="close"
           @onActivateMention="close"
           @onActivateHashTag="close"
@@ -82,10 +83,10 @@ async function updatePopularFeeds () {
 
   .popup-header {
     & > h2 {
-      color: rgb(var(--accent-color));
+      color: rgb(var(--notice-color));
 
       & > .svg-icon {
-        fill: rgb(var(--accent-color));
+        fill: rgb(var(--notice-color));
       }
     }
   }

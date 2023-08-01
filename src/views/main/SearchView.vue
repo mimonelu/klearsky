@@ -18,15 +18,21 @@ const mainState = inject("state") as MainState
         <RouterLink
           class="tab__button"
           to="/search/suggestion"
-        >{{ $t("suggestionSearch") }}</RouterLink>
+        >
+          <span>{{ $t("suggestionSearch") }}</span>
+        </RouterLink>
         <RouterLink
           class="tab__button"
           to="/search/user"
-        >{{ $t("accounts") }}</RouterLink>
+        >
+          <span>{{ $t("accounts") }}</span>
+        </RouterLink>
         <RouterLink
           class="tab__button"
           to="/search/keyword"
-        >{{ $t("posts") }}</RouterLink>
+        >
+          <span>{{ $t("postSearch") }}</span>
+        </RouterLink>
       </div>
     </div>
     <RouterView class="child-view" />

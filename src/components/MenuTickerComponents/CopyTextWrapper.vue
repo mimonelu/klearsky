@@ -7,6 +7,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
+  uri?: string;
   did?: string;
   handle?: string;
   text?: string;
@@ -34,6 +35,14 @@ const state = reactive<{
       :display="state.display"
       class="menu-ticker__sub"
     >
+      <!-- URI をコピーする -->
+      <MenuTickerCopyText
+        v-if="uri != null"
+        label="copyUri"
+        :text="uri"
+        @close="emit('close')"
+      />
+
       <!-- DID をコピーする -->
       <MenuTickerCopyText
         label="copyDid"

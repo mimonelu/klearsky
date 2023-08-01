@@ -70,7 +70,7 @@ function removeThisPost (uri: string) {
         v-model="state.text"
         id="keyword-term-textbox"
         type="search"
-        :placeholder="$t('searchWord')"
+        :placeholder="$t('keyword')"
         autocapitalize="off"
         autocomplete="off"
         inputmode="search"

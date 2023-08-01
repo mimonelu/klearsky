@@ -259,57 +259,93 @@ function hideWarningContent () {
         </div>
       </div>
     </div>
-    <div class="tab">
-      <RouterLink
-        class="tab__button tab__button--post"
-        :to="{ path: '/profile/post', query: { account: mainState.currentProfile?.handle } }"
-      >
-        <SVGIcon name="post" />
-      </RouterLink>
-      <RouterLink
+
+    <!-- タブ -->
+    <div class="tab-container">
+      <!-- マイタブ -->
+      <div
         v-if="isMyProfile()"
-        class="tab__button tab__button--repost"
-        :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
+        class="tab"
       >
-        <SVGIcon name="repost" />
-      </RouterLink>
-      <RouterLink
-        v-if="isMyProfile()"
-        class="tab__button tab__button--like"
-        :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
-      >
-        <SVGIcon name="heart" />
-      </RouterLink>
-      <RouterLink
-        class="tab__button tab__button--following"
-        :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
-        :title="$t('following')"
-      >
-        <SVGIcon name="people" />
-        <SVGIcon name="arrowLeft" />
-        <img
-          loading="lazy"
-          decoding="async"
-          :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
-          alt=""
+        <RouterLink
+          class="tab__button tab__button--repost"
+          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
         >
-      </RouterLink>
-      <RouterLink
-        class="tab__button tab__button--following"
-        :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.handle } }"
-        :title="$t('follower')"
-      >
-        <img
-          loading="lazy"
-          decoding="async"
-          :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
-          alt=""
+          <SVGIcon name="repost" />
+          <span>{{ $t("reposts") }}</span>
+        </RouterLink>
+        <RouterLink
+          class="tab__button tab__button--like"
+          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
         >
-        <SVGIcon name="arrowLeft" />
-        <SVGIcon name="people" />
-      </RouterLink>
+          <SVGIcon name="heart" />
+          <span>{{ $t("likes") }}</span>
+        </RouterLink>
+      </div>
+
+      <!-- 共通タブ -->
+      <div class="tab">
+        <!-- ポストタブボタン -->
+        <RouterLink
+          class="tab__button tab__button--post"
+          :to="{ path: '/profile/post', query: { account: mainState.currentProfile?.handle } }"
+        >
+          <SVGIcon name="post" />
+        </RouterLink>
+
+        <!-- メディアタブボタン -->
+        <RouterLink
+          class="tab__button tab__button--media"
+          :to="{ path: '/profile/media', query: { account: mainState.currentProfile?.handle } }"
+        >
+          <SVGIcon name="image" />
+        </RouterLink>
+
+        <!-- カスタムフィードタブボタン -->
+        <RouterLink
+          class="tab__button tab__button--custom-feeds"
+          :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.handle } }"
+        >
+          <SVGIcon name="feed" />
+        </RouterLink>
+
+        <!-- フォローイングタブボタン -->
+        <RouterLink
+          class="tab__button tab__button--following"
+          :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
+          :title="$t('following')"
+        >
+          <SVGIcon name="people" />
+          <SVGIcon name="arrowLeft" />
+          <img
+            loading="lazy"
+            decoding="async"
+            :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
+            alt=""
+          >
+        </RouterLink>
+
+        <!-- フォロワータブボタン -->
+        <RouterLink
+          class="tab__button tab__button--following"
+          :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.handle } }"
+          :title="$t('follower')"
+        >
+          <img
+            loading="lazy"
+            decoding="async"
+            :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
+            alt=""
+          >
+          <SVGIcon name="arrowLeft" />
+          <SVGIcon name="people" />
+        </RouterLink>
+      </div>
     </div>
+
     <RouterView />
+
+    <!-- ハンドル履歴ポップアップ -->
     <HandleHistoryPopup
       v-if="state.handleHistoryPopupDisplay"
       :log="mainState.currentProfile?.__log"
@@ -528,17 +564,15 @@ function hideWarningContent () {
   }
 }
 
-.tab {
+.tab-container {
   position: sticky;
   top: 3rem;
   z-index: 1;
+}
 
+.tab {
   [data-is-my-profile="false"] &__button {
     flex: 1;
-  }
-
-  &__button--post > .svg-icon {
-    --fg-color: var(--post-color);
   }
 
   &__button--repost > .svg-icon {
@@ -547,6 +581,15 @@ function hideWarningContent () {
 
   &__button--like > .svg-icon {
     --fg-color: var(--like-color);
+  }
+
+  &__button--post > .svg-icon,
+  &__button--media > .svg-icon {
+    --fg-color: var(--post-color);
+  }
+
+  &__button--custom-feeds > .svg-icon {
+    --fg-color: var(--accent-color);
   }
 
   &__button--following {

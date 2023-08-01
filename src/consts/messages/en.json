@@ -24,6 +24,7 @@
   "profile": "Profile",
   "language": "Language",
   "help": "Help",
+  "includeRepost": "Show images in reposts",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -107,6 +108,7 @@
 
   "copy": "Copy",
   "copyHandle": "Copy handle",
+  "copyUri": "Copy AT URI",
   "copyDid": "Copy DID",
   "likeUsers": "Liked by",
   "repostUsers": "Reposted by",
@@ -146,7 +148,7 @@
   "detachBanner": "Detach banner image",
 
   "home": "Home",
-  "timeline": "Timeline",
+  "timeline": "Following",
   "globalline": "Globalline",
 
   "customFeeds": "Custom Feeds",
@@ -161,7 +163,9 @@
   "suggestionSearch": "Suggestions",
   "userSearch": "Find Accounts",
   "keywordSearch": "Find Posts",
-  "searchWord": "Search words",
+  "postSearch": "Posts (TBD)",
+  "searchWord": "Post Search (TBD)",
+  "keyword": "Keyword",
 
   "notifications": "Notifications",
 
@@ -207,7 +211,7 @@
   "timeControlRelative": "Relative",
   "timeControlAbsolute": "Absolute",
 
-  "timelineControl": "Timeline Control",
+  "timelineControl": "Following Feed Control",
   "timelineControlDescription": "Effective from the next download.",
   "replyControl": "Reply Control",
   "replyControl1": "Collapse replies to the account himself",
@@ -315,9 +319,8 @@
   "submit": "Submit",
   "sendPostNotification1": "You can also link with [TEXT](URL) .",
   "sendPostNotification2": "You can make Zap link with @zap (configuration required).",
-  "sendPostNotification3": "Display of OGP image in link card is not yet supported.",
-  "sendPostNotification4": "Feed card can also be specified by AT URI.",
-  "sendPostNotification5": "It is possible to send more than the maximum number of characters.",
+  "sendPostNotification3": "Feed card can also be specified by AT URI.",
+  "sendPostNotification4": "It is possible to send more than the maximum number of characters.",
   "cancelPost": "Cancel Post",
   "cancelPostMessage": "The entered information will be reset. Are you sure?",
 

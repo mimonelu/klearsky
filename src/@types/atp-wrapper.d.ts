@@ -86,6 +86,13 @@ interface TIAtpWrapper {
     term?: string,
     limit?: number
   ): Promise<Error | Array<TTUser>>
+  fetchAuthorCustomFeeds(
+    this: TIAtpWrapper,
+    generators: Array<TTFeedGenerator>,
+    author: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<Error | undefined | string>
   fetchAuthorFeed(
     this: TIAtpWrapper,
     oldFeeds: Array<TTFeed>,
@@ -173,6 +180,16 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+
+  /* // TODO: 不要であれば削除する事
+  fetchMedias(
+    this: TIAtpWrapper,
+    oldMedias: Array<string>,
+    did: string,
+    cursor?: string
+  ): Promise<Error | undefined | string>
+  */
+
   fetchMutingUsers(
     this: TIAtpWrapper,
     users: Array<TTUser>,

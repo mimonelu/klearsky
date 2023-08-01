@@ -106,9 +106,17 @@ function onActivateBackButton () {
       }
 
       & > .svg-icon {
-        fill: rgba(var(--fg-color), 0.5);
+        fill: rgba(var(--fg-color), 0.75);
         font-size: 1.25rem;
       }
+    }
+
+    .my-feeds-trigger {
+      --fg-color: var(--accent-color);
+    }
+
+    .popular-feeds-trigger {
+      --fg-color: var(--notice-color);
     }
   }
 }

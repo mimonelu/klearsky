@@ -16,6 +16,7 @@ import disableMute from "@/composables/atp-wrapper/disable-mute"
 import enableBlock from "@/composables/atp-wrapper/enable-block"
 import enableMute from "@/composables/atp-wrapper/enable-mute"
 import fetchActorsTypeahead from "@/composables/atp-wrapper/fetch-actors-typeahead"
+import fetchAuthorCustomFeeds from "@/composables/atp-wrapper/fetch-author-custom-feeds"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
 import fetchAuthorReposts from "@/composables/atp-wrapper/fetch-author-reposts"
 import fetchAuthorLikes from "@/composables/atp-wrapper/fetch-author-likes"
@@ -32,6 +33,10 @@ import fetchInviteCodes from "@/composables/atp-wrapper/fetch-invite-codes"
 import fetchLikeUsers from "@/composables/atp-wrapper/fetch-like-users"
 import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
 import fetchLabels from "@/composables/atp-wrapper/fetch-labels"
+
+// TODO: 不要であれば削除する事
+// import fetchMedias from "@/composables/atp-wrapper/fetch-medias"
+
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
@@ -107,6 +112,7 @@ prototype.disableMute = disableMute
 prototype.enableBlock = enableBlock
 prototype.enableMute = enableMute
 prototype.fetchActorsTypeahead = fetchActorsTypeahead
+prototype.fetchAuthorCustomFeeds = fetchAuthorCustomFeeds
 prototype.fetchAuthorFeed = fetchAuthorFeed
 prototype.fetchAuthorReposts = fetchAuthorReposts
 prototype.fetchAuthorLikes = fetchAuthorLikes
@@ -122,6 +128,10 @@ prototype.fetchFollowings = fetchFollowings
 prototype.fetchInviteCodes = fetchInviteCodes
 prototype.fetchKeywordSearch = fetchKeywordSearch
 prototype.fetchLabels = fetchLabels
+
+// TODO: 不要であれば削除する事
+// prototype.fetchMedias = fetchMedias
+
 prototype.fetchMutingUsers = fetchMutingUsers
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications

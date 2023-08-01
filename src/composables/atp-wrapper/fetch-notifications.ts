@@ -50,6 +50,7 @@ export default async function (
         cid: notification.cid,
         displayName: notification.author.displayName,
         handle: notification.author.handle,
+        following: notification.author.viewer?.following != null,
         indexedAt: notification.indexedAt,
         reason: notification.reason,
         text: notification.reason === "follow"

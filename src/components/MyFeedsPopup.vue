@@ -109,6 +109,7 @@ function changeCustomFeedOrder () {
           :key="generator.cid"
           :generator="generator"
           :orderButtonDisplay="true"
+          :creatorDisplay="true"
           @click="close"
           @changeCustomFeedOrder="changeCustomFeedOrder"
           @onActivateMention="close"

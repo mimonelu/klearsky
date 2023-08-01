@@ -39,7 +39,7 @@ function removeThisPost (uri: string) {
             ? feed.post.author.displayName
             : $t("anonymous")
         }}</div>
-        <div class="handle">{{
+        <div class="author-handle">{{
           !mainState.currentSetting.postAnonymization
             ? feed.post.author.handle
             : ""
@@ -57,7 +57,7 @@ function removeThisPost (uri: string) {
             ? feed.reason.by.displayName
             : $t("anonymous")
         }}</div>
-        <div class="handle">{{
+        <div class="author-handle">{{
           !mainState.currentSetting.postAnonymization
             ? feed.reason.by.handle
             : ""
@@ -135,21 +135,17 @@ function removeThisPost (uri: string) {
       font-size: 0.875em;
     }
 
-    & > .display-name,
-    & > .handle {
+    & > .display-name {
+      color: rgba(var(--fg-color), var(--alpha));
+      font-size: 0.875em;
+      font-weight: bold;
       line-height: 1.25;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    & > .display-name {
-      color: rgba(var(--fg-color), var(--alpha));
-      font-size: 0.875em;
-      font-weight: bold;
-    }
-
-    & > .handle {
+    & > .author-handle {
       color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
       font-size: 0.75em;
     }

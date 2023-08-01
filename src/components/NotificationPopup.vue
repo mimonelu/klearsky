@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
+import { inject, onBeforeUnmount, onMounted, reactive } from "vue"
 import LoadButton from "@/components/LoadButton.vue"
 import NotificationList from "@/components/NotificationList.vue"
 import Popup from "@/components/Popup.vue"
@@ -59,10 +59,9 @@ async function fetchNotifications (direction: "new" | "old") {
   }
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchNotifications("old")
-})
+function scrolledToBottom () {
+  fetchNotifications("old")
+}
 </script>
 
 <template>
@@ -70,6 +69,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     class="notification-popup"
     :hasCloseButton="true"
     @close="close"
+    @scrolledToBottom="scrolledToBottom"
   >
     <template #header>
       <h2>

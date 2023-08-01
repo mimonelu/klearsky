@@ -231,7 +231,7 @@ function closeHtmlPopupDisplay () {
           <!-- タイムラインの制御 -->
           <div class="settings-section">
             <div class="settings-section__header">
-              <span>{{ $t("timeline") }}</span>
+              <span>{{ $t("timelineControl") }}</span>
               <button
                 class="description-button"
                 @click.prevent="showDescription('timelineControl')"

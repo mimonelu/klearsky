@@ -34,12 +34,18 @@ function openPopularFeedsPopup () {
       </button>
 
       <!-- マイフィードポップアップトリガー -->
-      <button @click.stop="openMyFeedsPopup">
+      <button
+        class="my-feeds-trigger"
+        @click.stop="openMyFeedsPopup"
+      >
         <SVGIcon name="feed" />
       </button>
 
       <!-- 人気のフィードポップアップトリガー -->
-      <button @click.stop="openPopularFeedsPopup">
+      <button
+        class="popular-feeds-trigger"
+        @click.stop="openPopularFeedsPopup"
+      >
         <SVGIcon name="fire" />
       </button>
     </Portal>
@@ -62,7 +68,7 @@ function openPopularFeedsPopup () {
       <RouterLink
         class="my-feeds-view__header"
         :to="{
-          path: '/feeds',
+          path: '/home/feeds',
           query: {
             feed: myFeeds.generator?.uri,
             displayName: myFeeds.generator?.displayName,
@@ -100,7 +106,7 @@ function openPopularFeedsPopup () {
         >
           <RouterLink
             class="button--plane"
-            :to="{ path: '/feeds', query: {
+            :to="{ path: '/home/feeds', query: {
               feed: myFeeds.generator?.uri,
               displayName: myFeeds.generator?.displayName,
             } }"

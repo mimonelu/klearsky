@@ -44,6 +44,13 @@ type TTSettings = {
   [did: string]: TTSetting
 }
 
+type TTMedia = {
+  post: TTPost
+  isRepost: boolean
+  uri: string
+  alt?: string
+}
+
 type MainState = {
   atp: TIAtpWrapper
   mounted: boolean
@@ -67,6 +74,9 @@ type MainState = {
   currentProfile: null | TTProfile
   currentAuthorFeeds: Array<TTFeed>
   currentAuthorCursor?: string
+  currentAuthorMediasIncludeRepost: Array<boolean>
+  currentAuthorCustomFeeds: Array<TTFeedGenerator>
+  currentAuthorCustomFeedsCursor?: string
   currentAuthorReposts: Array<TTFeed>
   currentAuthorRepostsCursor?: string
   currentAuthorLikes: Array<TTFeed>
@@ -239,6 +249,7 @@ type MainState = {
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
   fetchCurrentProfile: (handle: string) => Promise<void>
+  fetchCurrentAuthorCustomFeeds: (direction: "new" | "old") => Promise<void>
   fetchCurrentAuthorFeed: (direction: "new" | "old", middleCursor?: string) => Promise<void>
   fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
   fetchAuthorLikes: (direction: "new" | "old") => Promise<void>

@@ -65,6 +65,7 @@ function hideWarningContent () {
   <RouterLink
     class="user-box"
     :to="{ name: 'profile-post', query: { account: user.handle } }"
+    :data-is-following="user.viewer.following != null"
     :data-content-warning-disabled="contentWarningDisabled"
     :data-content-warning-visibility="state.contentWarningVisibility"
     @click="onActivateLink"
@@ -100,7 +101,7 @@ function hideWarningContent () {
         :labels="user.labels"
       />
       <div class="display-name">{{ user.displayName }}</div>
-      <div class="handle">{{ user.handle }}</div>
+      <div class="author-handle">{{ user.handle }}</div>
       <!-- // TODO: ポップアップで見切れる不具合を修正すること
       <button
         class="menu-button"
@@ -167,14 +168,8 @@ function hideWarningContent () {
   white-space: nowrap;
 }
 
-.handle {
+.author-handle {
   grid-area: h;
-  color: rgba(var(--fg-color), 0.5);
-  font-size: 0.75rem;
-  line-height: 1.25;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /*
