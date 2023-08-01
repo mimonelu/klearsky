@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import SVGIcon from "@/components/SVGIcon.vue"
 
 defineProps<{
   medias: Array<TTMedia>
@@ -24,6 +25,10 @@ const mainState = inject("state") as MainState
         :alt="media.alt"
       />
       <div class="media__cover">
+        <SVGIcon
+          v-if="media.isRepost"
+          name="repost"
+        />
         <div
           class="media__text"
           dir="auto"
@@ -57,16 +62,18 @@ const mainState = inject("state") as MainState
     background-color: rgba(var(--fg-color), 0.75);
     color: rgb(var(--bg-color));
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
     padding: 0.125rem 0.375rem;
     position: absolute;
     bottom: 0;
     right: 0;
-  }
 
-  &__created-at {
-    font-size: 0.75rem;
-    line-height: var(--line-height);
+    & > .svg-icon {
+      fill: rgb(var(--bg-color));
+      font-size: 0.75rem;
+      margin-right: 0.375rem;
+    }
   }
 
   &__text {
@@ -80,6 +87,12 @@ const mainState = inject("state") as MainState
     &:empty {
       display: none;
     }
+  }
+
+  &__created-at {
+    font-size: 0.75rem;
+    line-height: var(--line-height);
+    white-space: nowrap;
   }
 }
 </style>

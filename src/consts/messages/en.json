@@ -24,6 +24,7 @@
   "profile": "Profile",
   "language": "Language",
   "help": "Help",
+  "includeRepost": "Show images in reposts",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",

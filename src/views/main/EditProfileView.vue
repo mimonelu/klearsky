@@ -137,7 +137,10 @@ async function submit () {
       :title="$t('editProfile')"
       :subTitle="mainState.atp.session?.handle ?? ''"
     />
-    <EasyForm v-bind="easyFormProps" ref="easyForm" />
+    <EasyForm
+      v-bind="easyFormProps"
+      ref="easyForm"
+    />
   </div>
 </template>
 

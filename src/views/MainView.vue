@@ -113,6 +113,7 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
     if (!state.inSameProfilePage) {
       state.currentAuthorFeeds?.splice(0)
       state.currentAuthorCursor = undefined
+      state.currentAuthorMediasIncludeRepost = [false]
       state.currentAuthorCustomFeeds?.splice(0)
       state.currentAuthorCustomFeedsCursor = undefined
       state.currentAuthorReposts?.splice(0)
@@ -157,6 +158,7 @@ function resetState () {
   state.currentProfile = null
   state.currentAuthorFeeds = []
   state.currentAuthorCursor = undefined
+  state.currentAuthorMediasIncludeRepost = [false]
   state.currentAuthorCustomFeeds = []
   state.currentAuthorCustomFeedsCursor = undefined
   state.currentAuthorReposts = []

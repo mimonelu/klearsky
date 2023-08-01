@@ -46,6 +46,7 @@ type TTSettings = {
 
 type TTMedia = {
   post: TTPost
+  isRepost: boolean
   uri: string
   alt?: string
 }
@@ -73,8 +74,7 @@ type MainState = {
   currentProfile: null | TTProfile
   currentAuthorFeeds: Array<TTFeed>
   currentAuthorCursor?: string
-  currentAuthorMedias: Array<string>
-  currentAuthorMediasCursor?: string
+  currentAuthorMediasIncludeRepost: Array<boolean>
   currentAuthorCustomFeeds: Array<TTFeedGenerator>
   currentAuthorCustomFeedsCursor?: string
   currentAuthorReposts: Array<TTFeed>

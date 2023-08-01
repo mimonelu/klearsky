@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, watch, type ComputedRef } from "vue"
+import EasyForm from "@/components/EasyForm.vue"
 import LoadButton from "@/components/LoadButton.vue"
 import MediaList from "@/components/MediaList.vue"
 import Util from "@/composables/util"
+
+const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
@@ -11,16 +14,24 @@ const state = reactive<{
 }>({
   medias: computed((): Array<TTMedia> => {
     const results: Array<TTMedia> = []
+
+    // リポストを含むかどうか
+    const includeRepost = mainState.currentAuthorMediasIncludeRepost.includes(true)
+
     mainState.currentAuthorFeeds.forEach((feed: TTFeed) => {
       // メディアがなければ終了
       if (feed.post.embed?.images == null) return
 
-      // リポストであれば終了
-      if (feed.reason?.$type === "app.bsky.feed.defs#reasonRepost") return
+      // リポストかどうか
+      const isRepost = feed.reason?.$type === "app.bsky.feed.defs#reasonRepost"
+
+      // リポスト判定
+      if (!includeRepost && isRepost) return
 
       feed.post.embed.images.forEach((image: TTImage) => {
         results.push({
           post: feed.post,
+          isRepost,
           uri: image.thumb as string,
           alt: image.alt,
         })
@@ -29,6 +40,17 @@ const state = reactive<{
     return results
   }),
 })
+
+const easyFormProps: TTEasyForm = {
+  data: [
+    {
+      state: mainState,
+      model: "currentAuthorMediasIncludeRepost",
+      type: "checkbox",
+      options: [{ label: $t("includeRepost"), value: true }],
+    },
+  ],
+}
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   Util.blurElement()
@@ -50,9 +72,8 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :processing="mainState.listProcessing"
       @activate="fetchCurrentAuthorFeed('new')"
     />
-    <MediaList
-      :medias="state.medias"
-    />
+    <EasyForm v-bind="easyFormProps" />
+    <MediaList :medias="state.medias" />
     <LoadButton
       direction="old"
       :processing="mainState.listProcessing"
@@ -65,5 +86,10 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 .author-media-view {
   display: flex;
   flex-direction: column;
+
+  &:deep() .easy-form .checkboxes label {
+    border-radius: 0;
+    border-style: none;
+  }
 }
 </style>

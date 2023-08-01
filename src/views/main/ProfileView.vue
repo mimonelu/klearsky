@@ -575,16 +575,17 @@ function hideWarningContent () {
     flex: 1;
   }
 
-  &__button--post > .svg-icon {
-    --fg-color: var(--post-color);
-  }
-
   &__button--repost > .svg-icon {
     --fg-color: var(--share-color);
   }
 
   &__button--like > .svg-icon {
     --fg-color: var(--like-color);
+  }
+
+  &__button--post > .svg-icon,
+  &__button--media > .svg-icon {
+    --fg-color: var(--post-color);
   }
 
   &__button--custom-feeds > .svg-icon {
