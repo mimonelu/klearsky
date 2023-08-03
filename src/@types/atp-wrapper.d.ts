@@ -65,6 +65,7 @@ interface TIAtpWrapper {
   createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
   createReport(
     this: TIAtpWrapper,
+    reasonTypr: string,
     reason: string,
     did?: string,
     cid?: string,

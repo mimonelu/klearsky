@@ -2,6 +2,7 @@ import type { BskyAgent, ComAtprotoModerationCreateReport } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
+  reasonType: string,
   reason: string,
   did?: string,
   cid?: string,
@@ -9,7 +10,8 @@ export default async function (
 ): Promise<boolean> {
   if (this.agent == null) return false
   const query: ComAtprotoModerationCreateReport.InputSchema = {
-    reasonType: reason,
+    reasonType,
+    reason,
     subject: {
       $type: cid == null || uri == null
         ? "com.atproto.admin.defs#repoRef"
