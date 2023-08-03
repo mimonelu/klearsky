@@ -2,7 +2,9 @@
   background-color: rgba(var(--bg-color), var(--main-area-opacity));
   border-bottom: 1px solid rgba(var(--fg-color), 0.25);
   display: flex;
-  padding: 0.25rem;
+  padding: 0.125rem;
+  min-height: 3rem;
+  max-height: 3rem;
 
   &__button {
     border-radius: var(--border-radius);
