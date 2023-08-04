@@ -21,6 +21,8 @@ import cursorUp from "@/svg/cursor-up.svg?raw"
 import edit from "@/svg/edit.svg?raw"
 import email from "@/svg/email.svg?raw"
 import feed from "@/svg/feed.svg?raw"
+import fileExport from "@/svg/file-export.svg?raw"
+import fileImport from "@/svg/file-import.svg?raw"
 import fire from "@/svg/fire.svg?raw"
 import heart from "@/svg/heart.svg?raw"
 import heartBroken from "@/svg/heart-broken.svg?raw"
@@ -86,6 +88,8 @@ const icons: { [k: string]: string } = {
   edit,
   email,
   feed,
+  fileExport,
+  fileImport,
   fire,
   heart,
   heartBroken,
