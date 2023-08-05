@@ -1,5 +1,6 @@
 .pulldown-button {
   background-color: rgba(var(--fg-color), 0.0625);
+  border: 1px solid rgba(var(--fg-color), 0.125);
   border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
@@ -8,17 +9,16 @@
   padding: 0.5em 1em;
   position: relative;
 
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
-    font-size: 0.75em;
-  }
-
   & > span {
     color: rgba(var(--fg-color), 0.5);
-    font-size: 0.875em;
     font-weight: bold;
     line-height: var(--line-height);
     word-break: break-word;
+  }
+
+  & > .svg-icon {
+    fill: rgba(var(--fg-color), 0.25);
+    margin-left: auto;
   }
 
   & > menu {
@@ -29,10 +29,10 @@
     grid-gap: 0.125em;
     padding-bottom: 0.5em;
     position: absolute;
-    left: 0;
+    left: -1px;
     top: 100%;
     z-index: 1;
-    width: 100%;
+    width: calc(100% + 2px);
 
     & > * {
       cursor: pointer;
@@ -53,7 +53,14 @@
       }
     }
   }
-  &:hover, &:focus {
+  &:hover {
+    border-color: rgba(var(--fg-color), 0.25);
+
+    & > .svg-icon {
+      fill: rgba(var(--fg-color), 0.5);
+    }
+  }
+  &:focus {
     background-color: rgb(var(--fg-color));
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 

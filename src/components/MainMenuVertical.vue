@@ -3,7 +3,26 @@ import { inject } from "vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
+
+async function refreshSession () {
+  if (!await mainState.openConfirmationPopup(
+    $t("refreshSession"),
+    $t("refreshSessionDescription")
+  )) return
+  mainState.processing = true
+  if (!await mainState.atp.refreshSession())
+    mainState.openErrorPopup("errorApiFailed", "SubMenu/refreshSession")
+  else
+    // セッションの同期
+    mainState.broadcastChannel.postMessage({
+      type: "refreshSession",
+      data: JSON.parse(JSON.stringify(mainState.atp.session)),
+    })
+  mainState.processing = false
+}
 
 function openNotificationPopup () {
   Util.blurElement()
@@ -60,6 +79,73 @@ function moveToBottom () {
       >
       <div class="label">{{ mainState.userProfile?.handle }}</div>
     </RouterLink>
+
+    <!-- ショートカットプルダウン -->
+    <div
+      class="pulldown-button"
+      tabindex="0"
+    >
+      <span>{{ $t("shortcuts") }}</span>
+      <SVGIcon name="cursorDown" />
+      <menu>
+        <!-- コンテンツ言語選択ポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openContentLanguagesPopup() }">
+          <SVGIcon name="translate" />
+          <span>{{ $t("contentLanguages") }}</span>
+        </a>
+
+        <!-- ポスト言語選択ポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openPostLanguagesPopup() }">
+          <SVGIcon name="translate" />
+          <span>{{ $t("postLanguages") }}</span>
+        </a>
+
+        <!-- マイフィードポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openMyFeedsPopup() }">
+          <SVGIcon name="feed" />
+          <span>{{ $t("myFeeds") }}</span>
+        </a>
+
+        <!-- ワードミュートポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openWordMutePopup() }">
+          <SVGIcon name="alphabeticalOff" />
+          <span>{{ $t("wordMute") }}</span>
+        </a>
+
+        <!-- コンテンツフィルタリングポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openContentFilteringPopup() }">
+          <SVGIcon name="alert" />
+          <span>{{ $t("contentFiltering") }}</span>
+        </a>
+
+        <!-- ミュート中のユーザーポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openMutingUsersPopup() }">
+          <SVGIcon name="volumeOff" />
+          <span>{{ $t("mutingUsers") }}</span>
+        </a>
+
+        <!-- ブロック中のユーザーポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openBlockingUsersPopup() }">
+          <SVGIcon name="personOff" />
+          <span>{{ $t("blockingUsers") }}</span>
+        </a>
+
+        <!-- 招待コード確認ポップアップトリガー -->
+        <a
+          v-if="mainState.numberOfAvailableInviteCodes > 0"
+          @click.prevent="() => { Util.blurElement(); mainState.openInviteCodesPopup() }"
+        >
+          <SVGIcon name="inviteCode" />
+          <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
+        </a>
+
+        <!-- セッション更新トリガー -->
+        <a @click.prevent="() => { Util.blurElement(); refreshSession() }">
+          <SVGIcon name="shimmer" />
+          <span>{{ $t("refreshSession") }}</span>
+        </a>
+      </menu>
+    </div>
 
     <!-- ホームボタン -->
     <RouterLink
@@ -150,6 +236,11 @@ function moveToBottom () {
 @mixin slimLayout {
   padding: 0 0.5rem 0.75rem;
 
+  // ショートカットプルダウン
+  .pulldown-button {
+    display: none;
+  }
+
   .profile-button {
     --size: 2rem;
     --padding: 0.5rem;
@@ -193,6 +284,11 @@ function moveToBottom () {
       display: none;
     }
   }
+}
+
+// ショートカットプルダウン
+.pulldown-button {
+  margin-bottom: 1rem;
 }
 
 // プロフィールボタン

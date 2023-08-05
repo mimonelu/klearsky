@@ -26,93 +26,12 @@ const router = useRouter()
 function searchPost () {
   router.push({ name: "post-search", query: { text: state.text } })
 }
-
-async function refreshSession () {
-  if (!await mainState.openConfirmationPopup(
-    $t("refreshSession"),
-    $t("refreshSessionDescription")
-  )) return
-  mainState.processing = true
-  if (!await mainState.atp.refreshSession())
-    mainState.openErrorPopup("errorApiFailed", "SubMenu/refreshSession")
-  else
-    // セッションの同期
-    mainState.broadcastChannel.postMessage({
-      type: "refreshSession",
-      data: JSON.parse(JSON.stringify(mainState.atp.session)),
-    })
-  mainState.processing = false
-}
 </script>
 
 <template>
   <div class="sub-menu">
     <!-- ロゴ -->
     <Logo />
-
-    <!-- ショートカットプルダウン -->
-    <div class="pulldown-button">
-      <SVGIcon name="menu" />
-      <span>{{ $t("shortcuts") }}</span>
-      <menu>
-        <!-- コンテンツ言語選択ポップアップトリガー -->
-        <a @click.prevent="mainState.openContentLanguagesPopup">
-          <SVGIcon name="translate" />
-          <span>{{ $t("contentLanguages") }}</span>
-        </a>
-
-        <!-- ポスト言語選択ポップアップトリガー -->
-        <a @click.prevent="mainState.openPostLanguagesPopup">
-          <SVGIcon name="translate" />
-          <span>{{ $t("postLanguages") }}</span>
-        </a>
-
-        <!-- マイフィードポップアップトリガー -->
-        <a @click.prevent="mainState.openMyFeedsPopup">
-          <SVGIcon name="feed" />
-          <span>{{ $t("myFeeds") }}</span>
-        </a>
-
-        <!-- ワードミュートポップアップトリガー -->
-        <a @click.prevent="mainState.openWordMutePopup">
-          <SVGIcon name="alphabeticalOff" />
-          <span>{{ $t("wordMute") }}</span>
-        </a>
-
-        <!-- コンテンツフィルタリングポップアップトリガー -->
-        <a @click.prevent="mainState.openContentFilteringPopup">
-          <SVGIcon name="alert" />
-          <span>{{ $t("contentFiltering") }}</span>
-        </a>
-
-        <!-- ミュート中のユーザーポップアップトリガー -->
-        <a @click.prevent="mainState.openMutingUsersPopup">
-          <SVGIcon name="volumeOff" />
-          <span>{{ $t("mutingUsers") }}</span>
-        </a>
-
-        <!-- ブロック中のユーザーポップアップトリガー -->
-        <a @click.prevent="mainState.openBlockingUsersPopup">
-          <SVGIcon name="personOff" />
-          <span>{{ $t("blockingUsers") }}</span>
-        </a>
-
-        <!-- 招待コード確認ポップアップトリガー -->
-        <a
-          v-if="mainState.numberOfAvailableInviteCodes > 0"
-          @click.prevent="mainState.openInviteCodesPopup"
-        >
-          <SVGIcon name="inviteCode" />
-          <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
-        </a>
-
-        <!-- セッション更新トリガー -->
-        <a @click.prevent="refreshSession">
-          <SVGIcon name="shimmer" />
-          <span>{{ $t("refreshSession") }}</span>
-        </a>
-      </menu>
-    </div>
 
     <!-- ポスト検索ボックス -->
     <form @submit.prevent="searchPost">
@@ -130,26 +49,32 @@ async function refreshSession () {
 
     <!-- マイフィード -->
     <div class="my-feed">
-      <RouterLink
-        v-for="generator of state.pinned"
-        :key="generator.cid"
-        :to="{
-          path: '/home/feeds',
-          query: {
-            feed: generator.uri,
-            displayName: generator.displayName,
-          },
-        }"
-        class="my-feed__button"
-      >
-        <img
-          loading="lazy"
-          decoding="async"
-          :src="generator.avatar ?? '/img/void-avatar.png'"
-          alt=""
+      <div class="my-feed__header">
+        <SVGIcon name="feed" />
+        <span>{{ $t("myFeeds") }}</span>
+      </div>
+      <div class="my-feed__inner">
+        <RouterLink
+          v-for="generator of state.pinned"
+          :key="generator.cid"
+          :to="{
+            path: '/home/feeds',
+            query: {
+              feed: generator.uri,
+              displayName: generator.displayName,
+            },
+          }"
+          class="my-feed__button"
         >
-        <span>{{ generator.displayName }}</span>
-      </RouterLink>
+          <img
+            loading="lazy"
+            decoding="async"
+            :src="generator.avatar ?? '/img/void-avatar.png'"
+            alt=""
+          >
+          <span>{{ generator.displayName }}</span>
+        </RouterLink>
+      </div>
     </div>
 
     <!-- コピーライト -->
@@ -179,30 +104,45 @@ async function refreshSession () {
   width: 100%;
 }
 
-// ショートカットプルダウン
-.pulldown-button {
-  margin-bottom: 1rem;
-}
-
 // マイフィード
 .my-feed {
-  @include scroll-bar;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   margin-bottom: 2rem;
-  overflow-y: auto;
-  overscroll-behavior: none;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5rem;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+
+    & > .svg-icon {
+      fill: rgba(var(--fg-color), 0.5);
+    }
+
+    & > span {
+      color: rgba(var(--fg-color), 0.5);
+    }
+  }
+
+  &__inner {
+    @include scroll-bar;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    grid-gap: 0.5rem;
+    overflow-y: auto;
+    overscroll-behavior: none;
+  }
 
   &__button {
     border-radius: 1px;
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;
-    padding: 0.25rem;
-    &:hover, &:focus {
-      background-color: rgba(var(--accent-color), 0.25);
-    }
 
     & > img {
       border-radius: 1px;
@@ -215,7 +155,7 @@ async function refreshSession () {
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.75);
+      color: rgba(var(--fg-color), 0.5);
       line-height: var(--line-height);
       overflow: hidden;
       text-overflow: ellipsis;
