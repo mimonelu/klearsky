@@ -63,7 +63,7 @@ async function openSendPostPopup () {
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
-      to="/search/suggestion"
+      to="/search/post"
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
     >
       <SVGIcon name="search" />

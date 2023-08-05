@@ -75,7 +75,7 @@ function moveToBottom () {
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
-      to="/search/suggestion"
+      to="/search/post"
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
     >
       <div class="icon">

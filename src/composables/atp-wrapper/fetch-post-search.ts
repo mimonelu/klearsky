@@ -8,7 +8,7 @@ export default async function (
   const request = new Request(`https://search.bsky.social/search/posts?q=${encodedQuery}`)
   const response = await fetch(request)
   const json: null | any = await response.json()
-  console.log("[klearsky/fetchKeywordSearch]", json)
+  console.log("[klearsky/fetchPostSearch]", json)
   if (!Array.isArray(json)) return false
 
   // 　ポストの取得

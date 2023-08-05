@@ -60,8 +60,8 @@ type MainState = {
   currentSearchUserTerm: string
   currentSearchLastUserTerm: string
 
-  currentSearchKeywordTerm: string
-  currentSearchKeywordResults: Array<TTPost>
+  currentSearchPostTerm: string
+  currentSearchPostResults: Array<TTPost>
 
   currentRepostUsers: Array<TTUser>
   currentRepostUsersUri?: string

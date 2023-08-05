@@ -17,9 +17,9 @@ const mainState = inject("state") as MainState
       <div class="tab">
         <RouterLink
           class="tab__button"
-          to="/search/suggestion"
+          to="/search/post"
         >
-          <span>{{ $t("suggestionSearch") }}</span>
+          <span>{{ $t("postSearch") }}</span>
         </RouterLink>
         <RouterLink
           class="tab__button"
@@ -29,9 +29,9 @@ const mainState = inject("state") as MainState
         </RouterLink>
         <RouterLink
           class="tab__button"
-          to="/search/keyword"
+          to="/search/suggestion"
         >
-          <span>{{ $t("postSearch") }}</span>
+          <span>{{ $t("suggestionSearch") }}</span>
         </RouterLink>
       </div>
     </div>

@@ -23,8 +23,8 @@ const state = reactive<{
 
 const router = useRouter()
 
-function searchKeyword () {
-  router.push({ name: "keyword-search", query: { text: state.text } })
+function searchPost () {
+  router.push({ name: "post-search", query: { text: state.text } })
 }
 
 async function refreshSession () {
@@ -115,10 +115,9 @@ async function refreshSession () {
     </div>
 
     <!-- ポスト検索ボックス -->
-    <form @submit.prevent="searchKeyword">
+    <form @submit.prevent="searchPost">
       <input
         v-model="state.text"
-        id="keyword-term-textbox"
         type="search"
         :placeholder="$t('searchWord')"
         autocapitalize="off"

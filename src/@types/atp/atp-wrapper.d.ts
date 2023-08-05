@@ -166,7 +166,7 @@ interface TIAtpWrapper {
     cursor?: string
   ): Promise<undefined | string>
   fetchInviteCodes(this: TIAtpWrapper): Promise<null | TTInviteCode[]>
-  fetchKeywordSearch(
+  fetchPostSearch(
     this: TIAtpWrapper,
     query: string
   ): Promise<undefined | false | Array<TTPost>>

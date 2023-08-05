@@ -31,7 +31,7 @@ import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
 import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
 import fetchInviteCodes from "@/composables/atp-wrapper/fetch-invite-codes"
 import fetchLikeUsers from "@/composables/atp-wrapper/fetch-like-users"
-import fetchKeywordSearch from "@/composables/atp-wrapper/fetch-keyword-search"
+import fetchPostSearch from "@/composables/atp-wrapper/fetch-post-search"
 import fetchLabels from "@/composables/atp-wrapper/fetch-labels"
 
 // TODO: 不要であれば削除する事
@@ -126,7 +126,7 @@ prototype.fetchFirstPost = fetchFirstPost
 prototype.fetchFollowers = fetchFollowers
 prototype.fetchFollowings = fetchFollowings
 prototype.fetchInviteCodes = fetchInviteCodes
-prototype.fetchKeywordSearch = fetchKeywordSearch
+prototype.fetchPostSearch = fetchPostSearch
 prototype.fetchLabels = fetchLabels
 
 // TODO: 不要であれば削除する事
