@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, nextTick, onMounted, reactive, ref } from "vue"
-import Graphemer from "graphemer"
+import { RichText } from "@atproto/api"
 import AccountSuggest from "@/components/AccountSuggest.vue"
 import Checkboxes from "@/components/Checkboxes.vue"
 import FileBox from "@/components/FileBox.vue"
@@ -63,8 +63,8 @@ function getCharacterLength (item: TTEasyFormItem): number {
   if (item.model == null) return 0
   const text = item.state[item.model]
   if (item.maxLengthWithSegmenter) {
-    const splitter = new Graphemer()
-    return splitter.countGraphemes(text)
+    const richText = new RichText({ text })
+    return richText.graphemeLength
   } else {
     return text.length
   }
