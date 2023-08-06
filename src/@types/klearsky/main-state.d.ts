@@ -84,6 +84,7 @@ type MainState = {
   globallineNumberOfPosts: number
 
   currentPopularFeedGenerators: Array<TTFeedGenerator>
+  currentPopularFeedGeneratorsCursor?: string
   fetchPopularFeedGenerators: () => Promise<void>
   currentCustomUri?: string
   currentCustomFeeds: Array<TTFeed>

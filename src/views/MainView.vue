@@ -194,6 +194,7 @@ function resetState () {
   state.currentMyFeedGenerators = []
   state.currentMyFeeds = {}
   state.currentPopularFeedGenerators = []
+  state.currentPopularFeedGeneratorsCursor = undefined
   state.currentCustomUri = undefined
   state.currentCustomFeeds = []
   state.currentCustomCursor = undefined
