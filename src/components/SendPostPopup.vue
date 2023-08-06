@@ -59,7 +59,7 @@ const easyFormProps: TTEasyForm = {
       placeholder: $t("text"),
       maxlength: 300,
       maxLengthIndicator: true,
-      maxLengthWithSegmenter: true,
+      maxLengthIndicatorByGrapheme: true,
       rows: 6,
       hasPostLanguages: true,
       hasAccountSuggest: true,

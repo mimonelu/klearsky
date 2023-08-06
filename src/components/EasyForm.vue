@@ -62,11 +62,11 @@ function isInput (type?: string): boolean {
 function getCharacterLength (item: TTEasyFormItem): number {
   if (item.model == null) return 0
   const text = item.state[item.model]
-  if (item.maxLengthWithSegmenter) {
+  if (item.maxLengthIndicatorByGrapheme) {
     const richText = new RichText({ text })
     return richText.graphemeLength
   } else {
-    return text.length
+    return new Blob([text]).size
   }
 }
 

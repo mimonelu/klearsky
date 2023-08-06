@@ -29,7 +29,7 @@ type TTEasyFormItem = {
   limit?: number
   maxlength?: number
   maxLengthIndicator?: boolean
-  maxLengthWithSegmenter?: boolean
+  maxLengthIndicatorByGrapheme?: boolean
   maxNumberOfFile?: number
   model?: string
   options?: Array<TTOption>
