@@ -15,42 +15,42 @@ const state = reactive<{
 const router = useRouter()
 
 watch(() => router.currentRoute.value.query.text, (value: any) => {
-  updateSearchKeywordTerm(value)
+  updateSearchPostTerm(value)
 }, { immediate: true })
 
 onMounted(() => {
-  const formItem = document.getElementById("keyword-term-textbox")
+  const formItem = document.getElementById("post-term-textbox")
   if (formItem != null) formItem.focus()
 })
 
-function updateSearchKeywordTerm (text: string) {
+function updateSearchPostTerm (text: string) {
   state.text = text
-  if (!text || mainState.currentSearchKeywordTerm === text) return
-  mainState.currentSearchKeywordTerm = text
+  if (!text || mainState.currentSearchPostTerm === text) return
+  mainState.currentSearchPostTerm = text
   fetchNewResults()
 }
 
 function submitForm () {
-  router.push({ name: "keyword-search", query: { text: state.text } })
+  router.push({ name: "post-search", query: { text: state.text } })
 }
 
 async function fetchNewResults () {
   if (mainState.processing) return
   if (state.text === "") return
-  mainState.currentSearchKeywordResults.splice(0)
+  mainState.currentSearchPostResults.splice(0)
   mainState.processing = true
   try {
     const results: undefined | false | Array<TTPost> =
-      await mainState.atp.fetchKeywordSearch(state.text)
+      await mainState.atp.fetchPostSearch(state.text)
     if (results === false) return
-    if (results != null) mainState.currentSearchKeywordResults = results
+    if (results != null) mainState.currentSearchPostResults = results
   } finally {
     mainState.processing = false
   }
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
-  const posts = mainState.currentSearchKeywordResults
+  const posts = mainState.currentSearchPostResults
   posts.forEach((oldPost: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => oldPost.cid === newPost.cid)
     if (newPost != null) Util.updateReactions(posts[index], newPost)
@@ -58,17 +58,17 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
 }
 
 function removeThisPost (uri: string) {
-  mainState.currentSearchKeywordResults = mainState.currentSearchKeywordResults
+  mainState.currentSearchPostResults = mainState.currentSearchPostResults
     .filter((post: TTPost) => post.uri !== uri)
 }
 </script>
 
 <template>
-  <div class="keyword-search-view">
+  <div class="post-search-view">
     <form @submit.prevent="submitForm">
       <input
         v-model="state.text"
-        id="keyword-term-textbox"
+        id="post-term-textbox"
         type="search"
         :placeholder="$t('keyword')"
         autocapitalize="off"
@@ -80,20 +80,20 @@ function removeThisPost (uri: string) {
     </form>
     <div class="main">
       <Post
-        v-for="post of mainState.currentSearchKeywordResults"
+        v-for="post of mainState.currentSearchPostResults"
         :key="post.cid"
         :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
         :post="post"
         @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"
-        @onActivateHashTag="updateSearchKeywordTerm"
+        @onActivateHashTag="updateSearchPostTerm"
       />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.keyword-search-view {
+.post-search-view {
   padding-bottom: var(--sp-menu-height);
 
   form {

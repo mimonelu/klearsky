@@ -1,56 +1,3 @@
-type TTWordMute = {
-  enabled: Array<boolean>
-  keyword: string
-}
-
-type TTSetting = {
-  uiLanguages?: string
-  contentLanguages?: Array<string>
-  autoTranslation?: boolean
-  autoTranslationIgnoreLanguage?: string
-  fontSize?: string
-  wordMute?: Array<TTWordMute>
-  replyControl?: Array<number>
-  repostControl?: Array<number>
-  timeControl?: string
-  imageControl?:
-    "all" |
-    "followingEx" |
-    "following" |
-    "self" |
-    "none"
-  imageAspectRatio?: string
-  linkcardEmbeddedControl?: Array<string>
-  globallineLayout?: "post" | "slim"
-  layout?:
-    "default" |
-    "defaultLeft" |
-    "defaultRight" |
-    "slim" |
-    "slimLeft" |
-    "slimRight"
-  colorTheme?: string
-  mainAreaOpacity?: number
-  backgroundImage?: string
-  backgroundOpacity?: number
-  hideNumberOfReaction?: boolean
-  postAnonymization?: boolean
-  postLanguages?: Array<string>
-  lightning?: string
-  [k: string]: any
-}
-
-type TTSettings = {
-  [did: string]: TTSetting
-}
-
-type TTMedia = {
-  post: TTPost
-  isRepost: boolean
-  uri: string
-  alt?: string
-}
-
 type MainState = {
   atp: TIAtpWrapper
   mounted: boolean
@@ -113,8 +60,14 @@ type MainState = {
   currentSearchUserTerm: string
   currentSearchLastUserTerm: string
 
-  currentSearchKeywordTerm: string
-  currentSearchKeywordResults: Array<TTPost>
+  currentSearchPostTerm: string
+  currentSearchPostResults: Array<TTPost>
+
+  currentSearchFeeds: Array<TTFeedGenerator>
+  currentSearchFeedsCursor?: string
+  currentSearchFeedsTerm: string
+  currentSearchFeedsLastTerm: string
+  fetchSearchFeeds: (direction: "new" | "old") => Promise<void>
 
   currentRepostUsers: Array<TTUser>
   currentRepostUsersUri?: string
@@ -137,7 +90,8 @@ type MainState = {
   globallineNumberOfPosts: number
 
   currentPopularFeedGenerators: Array<TTFeedGenerator>
-  fetchPopularFeedGenerators: () => Promise<void>
+  currentPopularFeedGeneratorsCursor?: string
+  fetchPopularFeedGenerators: (direction: "new" | "old") => Promise<void>
   currentCustomUri?: string
   currentCustomFeeds: Array<TTFeed>
   currentCustomCursor?: string
@@ -172,7 +126,7 @@ type MainState = {
     index: number
   }
 
-  settings: TTSettings
+  settings: { [did: string]: TTSetting }
   currentSetting: TTSetting
   saveSettings: () => void
   resetSettings: () => void

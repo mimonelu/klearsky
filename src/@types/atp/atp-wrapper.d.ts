@@ -65,6 +65,7 @@ interface TIAtpWrapper {
   createPost(this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
   createReport(
     this: TIAtpWrapper,
+    reasonTypr: string,
     reason: string,
     did?: string,
     cid?: string,
@@ -165,7 +166,7 @@ interface TIAtpWrapper {
     cursor?: string
   ): Promise<undefined | string>
   fetchInviteCodes(this: TIAtpWrapper): Promise<null | TTInviteCode[]>
-  fetchKeywordSearch(
+  fetchPostSearch(
     this: TIAtpWrapper,
     query: string
   ): Promise<undefined | false | Array<TTPost>>
@@ -207,7 +208,13 @@ interface TIAtpWrapper {
     newNotificationCount: number
   }>
   fetchOfficialFeedGenerators(this: TIAtpWrapper): Promise<undefined | false | Array<TTFeedGenerator>>
-  fetchPopularFeedGenerators(this: TIAtpWrapper): Promise<undefined | false | Array<TTFeedGenerator>>
+  fetchPopularFeedGenerators(
+    this: TIAtpWrapper,
+    currentValues: Array<TTFeedGenerator>,
+    limit?: number,
+    cursor?: string,
+    term?: string
+  ): Promise<Error | undefined | string>
   fetchPosts(
     this: TIAtpWrapper,
     uris: Array<string>

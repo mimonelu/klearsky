@@ -25,9 +25,10 @@ import FollowingListView from "@/views/main/profile/FollowingListView.vue"
 
 // Main - Search
 import SearchView from "@/views/main/SearchView.vue"
-import SuggestionSearchView from "@/views/main/search/SuggestionSearchView.vue"
-import KeywordSearchView from "@/views/main/search/KeywordSearchView.vue"
+import PostSearchView from "@/views/main/search/PostSearchView.vue"
+import FeedSearchView from "@/views/main/search/FeedSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
+import SuggestionSearchView from "@/views/main/search/SuggestionSearchView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -142,22 +143,28 @@ const router = createRouter({
           redirect: "/search/user",
           children: [
             {
-              path: "suggestion",
-              name: "suggestion-search",
-              meta: { label: "suggestionSearch" },
-              component: SuggestionSearchView,
+              path: "post",
+              name: "post-search",
+              meta: { label: "postSearch" },
+              component: PostSearchView,
             },
             {
-              path: "keyword",
-              name: "keyword-search",
-              meta: { label: "keywordSearch" },
-              component: KeywordSearchView,
+              path: "feed",
+              name: "feed-search",
+              meta: { label: "feedSearch" },
+              component: FeedSearchView,
             },
             {
               path: "user",
               name: "user-search",
               meta: { label: "userSearch" },
               component: UserSearchView,
+            },
+            {
+              path: "suggestion",
+              name: "suggestion-search",
+              meta: { label: "suggestionSearch" },
+              component: SuggestionSearchView,
             },
           ],
         },

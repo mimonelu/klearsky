@@ -106,6 +106,13 @@
   }
 }
 
+.button--filebox {
+  & > input {
+    display: contents;
+    visibility: hidden;
+  }
+}
+
 .button-is-wide {
   border-radius: unset;
 }

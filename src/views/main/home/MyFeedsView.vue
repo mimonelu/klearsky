@@ -75,7 +75,12 @@ function openPopularFeedsPopup () {
           },
         }"
       >
-        <SVGIcon name="feed" />
+        <img
+          loading="lazy"
+          decoding="async"
+          :src="myFeeds.generator?.avatar ?? '/img/void-avatar.png'"
+          alt=""
+        >
         <span>{{ myFeeds.generator?.displayName }}</span>
         <SVGIcon name="cursorRight" />
       </RouterLink>
@@ -137,13 +142,21 @@ function openPopularFeedsPopup () {
     grid-gap: 0.5rem;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    padding: 0.75rem 1rem;
+    padding: 0 1rem;
     position: sticky;
-    top: calc(6rem + 1px);
+    top: 6rem;
+    min-height: 3rem;
+    max-height: 3rem;
     z-index: 1;
 
-    & > .svg-icon--feed {
-      fill: rgb(var(--accent-color));
+    & > img {
+      border-radius: 1px;
+      display: block;
+      overflow: hidden;
+      min-width: 1.75em;
+      max-width: 1.75em;
+      min-height: 1.75em;
+      max-height: 1.75em;
     }
 
     & > span {

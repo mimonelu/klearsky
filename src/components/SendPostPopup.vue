@@ -36,7 +36,9 @@ const state = reactive<{
 
 // D&D用処置
 watch(() => props.fileList, (value?: FileList) => {
-  state.images = value != null ? Array.from(value) : []
+  const files = value != null ? Array.from(value) : []
+  files.unshift(...state.images)
+  state.images = files
   onChangeImage()
 })
 

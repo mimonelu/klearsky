@@ -118,7 +118,7 @@ function transformInternalLink (uri: string): undefined | string {
 }
 
 function onActivateHashTag (text: string) {
-  if (mainState.currentSearchKeywordTerm === text) return
+  if (mainState.currentSearchPostTerm === text) return
   emit("onActivateHashTag", text)
 }
 </script>
@@ -159,7 +159,7 @@ function onActivateHashTag (text: string) {
       <template v-else-if="segment.type === 'tag'">
         <RouterLink
           class="textlink"
-          :to="`/search/keyword?text=${segment.param}`"
+          :to="`/search/post?text=${segment.param}`"
           @click.stop="onActivateHashTag(segment.param)"
         >{{ segment.text }}</RouterLink>
       </template>

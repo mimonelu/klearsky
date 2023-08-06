@@ -98,6 +98,7 @@ const state = reactive<MainState>({
   fetchSuggestions,
 
   fetchPopularFeedGenerators,
+  fetchSearchFeeds,
   fetchCustomFeeds,
 
   saveSettings,
@@ -494,11 +495,33 @@ async function fetchSuggestions (direction: "new" | "old") {
     )
 }
 
-async function fetchPopularFeedGenerators () {
-  const feeds = await state.atp.fetchPopularFeedGenerators()
-  if (feeds == null) return
-  if (feeds === false) state.openErrorPopup("errorApiFailed", "main-state/fetchPopularFeedGenerators")
-  state.currentPopularFeedGenerators = feeds as Array<TTFeedGenerator>
+async function fetchPopularFeedGenerators (direction: "old" | "new") {
+  const cursor: Error | undefined | string =
+    await state.atp.fetchPopularFeedGenerators(
+      state.currentPopularFeedGenerators,
+      CONSTS.limitOfFetchPopularFeedGenerators,
+      direction === "old" ? state.currentPopularFeedGeneratorsCursor : undefined
+    )
+  if (cursor instanceof Error) state.openErrorPopup(
+    "errorApiFailed",
+    "main-state/fetchPopularFeedGenerators"
+  )
+  else if (cursor != null) state.currentPopularFeedGeneratorsCursor = cursor
+}
+
+async function fetchSearchFeeds (direction: "old" | "new") {
+  const cursor: Error | undefined | string =
+    await state.atp.fetchPopularFeedGenerators(
+      state.currentSearchFeeds,
+      CONSTS.limitOfFetchPopularFeedGenerators,
+      direction === "old" ? state.currentSearchFeedsCursor : undefined,
+      state.currentSearchFeedsTerm
+    )
+  if (cursor instanceof Error) state.openErrorPopup(
+    "errorApiFailed",
+    "main-state/fetchSearchFeeds"
+  )
+  else if (cursor != null) state.currentSearchFeedsCursor = cursor
 }
 
 async function fetchCustomFeeds (direction: "old" | "new", middleCursor?: string) {

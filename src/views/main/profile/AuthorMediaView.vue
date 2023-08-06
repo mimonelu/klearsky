@@ -23,7 +23,7 @@ const state = reactive<{
       if (feed.post.embed?.images == null) return
 
       // リポストかどうか
-      const isRepost = feed.reason?.$type === "app.bsky.feed.defs#reasonRepost"
+      const isRepost = (feed.reason?.$type ?? "") === "app.bsky.feed.defs#reasonRepost"
 
       // リポスト判定
       if (!includeRepost && isRepost) return
@@ -31,9 +31,9 @@ const state = reactive<{
       feed.post.embed.images.forEach((image: TTImage) => {
         results.push({
           post: feed.post,
-          isRepost,
           uri: image.thumb as string,
           alt: image.alt,
+          isRepost,
         })
       })
     })

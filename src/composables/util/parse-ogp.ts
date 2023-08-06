@@ -1,3 +1,5 @@
+import Encoding from "encoding-japanese"
+
 async function imagesize (file: File): Promise<{ width: number; height: number; }> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -35,7 +37,15 @@ export default async function (
     .catch((error: any) => {
       throw error
     })
-  const htmlString: string = await response.text()
+
+  // 文字エンコードの変換 (for Japanese Language)
+  const arrayBuffer = await response.arrayBuffer()
+  const uint8Array = new Uint8Array(arrayBuffer)
+  const htmlString = Encoding.convert(uint8Array, {
+    to: "UNICODE",
+    type: "string",
+  })
+
   const parser = new DOMParser()
   const html = parser.parseFromString(htmlString, "text/html")
   const titleElement = html.querySelector("title")

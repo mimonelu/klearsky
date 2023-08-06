@@ -179,8 +179,12 @@ function resetState () {
   state.currentSearchUsersCursor = undefined
   state.currentSearchUserTerm = ""
   state.currentSearchLastUserTerm = ""
-  state.currentSearchKeywordTerm = ""
-  state.currentSearchKeywordResults = []
+  state.currentSearchPostTerm = ""
+  state.currentSearchPostResults = []
+  state.currentSearchFeeds = []
+  state.currentSearchFeedsCursor = undefined
+  state.currentSearchFeedsTerm = ""
+  state.currentSearchFeedsLastTerm = ""
   state.currentMutingUsers = []
   state.currentMutingUsersCursor = undefined
   state.currentBlockingUsers = []
@@ -194,6 +198,7 @@ function resetState () {
   state.currentMyFeedGenerators = []
   state.currentMyFeeds = {}
   state.currentPopularFeedGenerators = []
+  state.currentPopularFeedGeneratorsCursor = undefined
   state.currentCustomUri = undefined
   state.currentCustomFeeds = []
   state.currentCustomCursor = undefined

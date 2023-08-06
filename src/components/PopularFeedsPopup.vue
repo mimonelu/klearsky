@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive } from "vue"
 import CustomFeedCard from "@/components/CustomFeedCard.vue"
-import Loader from "@/components/Loader.vue"
+import LoadButton from "@/components/LoadButton.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -18,19 +18,29 @@ const state = reactive<{
 
 onMounted(async () => {
   if (mainState.currentPopularFeedGenerators.length === 0)
-    await updatePopularFeeds()
+    await fetchContinuousResults("new")
 })
 
 function close () {
   emit("close")
 }
 
-async function updatePopularFeeds () {
+async function resetPopularFeeds () {
+  mainState.currentPopularFeedGenerators.splice(0)
+  mainState.currentPopularFeedGeneratorsCursor = undefined
+  await fetchContinuousResults("new")
+}
+
+async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
   if (state.processing) return
   state.processing = true
-  await mainState.fetchPopularFeedGenerators()
+  await mainState.fetchPopularFeedGenerators(direction)
   state.processing = false
+}
+
+function scrolledToBottom () {
+  fetchContinuousResults("old")
 }
 </script>
 
@@ -39,17 +49,21 @@ async function updatePopularFeeds () {
     class="popular-feeds-popup"
     :hasCloseButton="true"
     @close="close"
+    @scrolledToBottom="scrolledToBottom"
   >
     <template #header>
-      <button @click.stop="updatePopularFeeds">
+      <!-- リセットボタン -->
+      <button @click.stop="resetPopularFeeds">
         <SVGIcon name="refresh" />
       </button>
+
       <h2>
         <SVGIcon name="fire" />
         <span>{{ $t("popularFeeds") }}</span>
       </h2>
     </template>
     <template #body>
+      <!-- 人気フィードがひとつもないメッセージ -->
       <div
         v-if="!state.processing && mainState.currentPopularFeedGenerators.length === 0"
         class="textlabel"
@@ -58,6 +72,8 @@ async function updatePopularFeeds () {
           <SVGIcon name="alert" />{{ $t("noPopularFeeds") }}
         </div>
       </div>
+
+      <!-- カスタムフィード -->
       <template v-else>
         <CustomFeedCard
           v-for="generator of mainState.currentPopularFeedGenerators"
@@ -70,7 +86,13 @@ async function updatePopularFeeds () {
           @onActivateHashTag="close"
         />
       </template>
-      <Loader v-if="state.processing" />
+    </template>
+    <template v-slot:footer>
+      <LoadButton
+        direction="old"
+        :processing="state.processing"
+        @activate="fetchContinuousResults('old')"
+      />
     </template>
   </Popup>
 </template>

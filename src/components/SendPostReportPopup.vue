@@ -17,8 +17,10 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  reasonType?: string
   reason?: string
 }>({
+  reasonType: undefined,
   reason: undefined,
 })
 
@@ -29,13 +31,20 @@ const easyFormProps: TTEasyForm = {
   data: [
     {
       state,
-      model: "reason",
-      label: $t("selectReportReason"),
+      model: "reasonType",
+      label: $t("reportReasonType"),
       type: "radio",
       required: true,
       options: OPTIONS.postReportReason,
       layout: "vertical",
-      classes: "radios-is-wide",
+    },
+    {
+      state,
+      model: "reason",
+      label: $t("reportReason"),
+      type: "textarea",
+      placeholder: $t("reportReasonDescription"),
+      rows: 6,
     },
   ],
 }
@@ -49,6 +58,7 @@ async function submitCallback () {
   if (mainState.processing) return
   mainState.processing = true
   const response = await mainState.atp.createReport(
+    state.reasonType as string,
     state.reason as string,
     props.post?.author?.did,
     props.post?.cid,
@@ -73,7 +83,7 @@ async function submitCallback () {
     <template v-slot:header>
       <h2>
         <SVGIcon name="alert" />
-        <span>{{ $t("sendPostReport") }}</span>
+        <span>{{ $t("reportSendPost") }}</span>
       </h2>
     </template>
     <template v-slot:body>
@@ -89,26 +99,6 @@ async function submitCallback () {
 
     & > .svg-icon {
       fill: rgb(var(--notice-color));
-    }
-  }
-
-  .popup-body {
-    padding: 1.5rem 0;
-
-    & > p {
-      margin: 0 1.5rem;
-    }
-  }
-
-  .easy-form {
-    grid-gap: 1.5rem;
-
-    dt {
-      margin: 0 1.5rem;
-    }
-
-    .submit-button {
-      margin: 0 1.5rem;
     }
   }
 }

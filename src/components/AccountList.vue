@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import format from "date-fns/format"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -41,12 +42,59 @@ async function login (session: TTSession) {
 
 async function deleteAccount (session: TTSession) {
   Util.blurElement()
-  const result = await mainState.openConfirmationPopup($t("removeAccountHistory"), $t("removeAccountHistoryMessage"))
+  const result = await mainState.openConfirmationPopup(
+    $t("removeAccountHistory"),
+    $t("removeAccountHistoryMessage")
+  )
   if (result) mainState.atp.deleteAccount(session.did)
 }
 
 function getDidColor (did: string): string {
   return "#" + Util.encryptMD5(did).split("").splice(0, 6).join("")
+}
+
+function exportAccounts () {
+  const jsonString = JSON.stringify(mainState.atp.data.sessions, null, 2)
+  const suffix = format(new Date(), "yyyyMMdd")
+  Util.downloadBlob(
+    [jsonString],
+    { type: "application/json" },
+    `klearsky-account-list-${suffix}.json`
+  )
+}
+
+function importAccounts (event: Event) {
+  const file = (event.target as null | any)?.files[0] ?? null
+  if (file == null) return
+  const reader = new FileReader()
+  reader.onload = async (event: Event) => {
+    const contents = (event.target as null | any)?.result ?? null
+    if (contents == null) return
+    const jsonData = JSON.parse(contents)
+    if (jsonData == null) return
+    if (!await mainState.openConfirmationPopup(
+      $t("accountImport"),
+      $t("accountImportNotification")
+    )) return
+
+    // 既存のセッションデータにインポートしたセッションデータを「上書き」する
+    // ただし現在ログイン中のデータはスキップする（古いトークンで上書きされる恐れがあるため）
+    for (const did in jsonData) {
+      if (mainState.atp.session?.did !== did)
+        mainState.atp.data.sessions[did] = jsonData[did]
+    }
+    Util.saveStorage("atp", mainState.atp.data)
+
+    mainState.processing = true
+    location.reload()
+    mainState.processing = false
+  }
+  reader.readAsText(file)
+}
+
+// input[type="file"] で同一ファイルを選択すると change が発火しない仕様への対策
+function onClickFileBox (event: Event) {
+  if (event.target != null) (event.target as HTMLInputElement).value = ""
 }
 </script>
 
@@ -94,6 +142,30 @@ function getDidColor (did: string): string {
           </div>
         </div>
       </div>
+    </div>
+    <div class="button-contaienr">
+      <!-- エクスポートボタン -->
+      <button
+        class="button--bordered"
+        @click.prevent="exportAccounts"
+      >
+        <SVGIcon name="fileExport" />
+        <span>{{ $t("accountExport") }}</span>
+      </button>
+
+      <!-- インポートボタン -->
+      <label
+        class="button--bordered button--filebox"
+      >
+        <input
+          type="file"
+          accept=".json"
+          @click="onClickFileBox"
+          @change="importAccounts"
+        />
+        <SVGIcon name="fileImport" />
+        <span>{{ $t("accountImport") }}</span>
+      </label>
     </div>
   </div>
 </template>
@@ -216,6 +288,22 @@ function getDidColor (did: string): string {
       & > .svg-icon {
         fill: rgb(var(--notice-color));
       }
+    }
+  }
+}
+
+.button-contaienr {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.5rem;
+  align-items: center;
+
+  button, label {
+    padding-left: 0;
+    padding-right: 0;
+
+    .svg-icon {
+      font-size: 1rem;
     }
   }
 }
