@@ -181,6 +181,10 @@ function resetState () {
   state.currentSearchLastUserTerm = ""
   state.currentSearchPostTerm = ""
   state.currentSearchPostResults = []
+  state.currentSearchFeeds = []
+  state.currentSearchFeedsCursor = undefined
+  state.currentSearchFeedsTerm = ""
+  state.currentSearchFeedsLastTerm = ""
   state.currentMutingUsers = []
   state.currentMutingUsersCursor = undefined
   state.currentBlockingUsers = []

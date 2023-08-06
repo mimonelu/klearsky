@@ -25,9 +25,10 @@ import FollowingListView from "@/views/main/profile/FollowingListView.vue"
 
 // Main - Search
 import SearchView from "@/views/main/SearchView.vue"
-import SuggestionSearchView from "@/views/main/search/SuggestionSearchView.vue"
 import PostSearchView from "@/views/main/search/PostSearchView.vue"
+import FeedSearchView from "@/views/main/search/FeedSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
+import SuggestionSearchView from "@/views/main/search/SuggestionSearchView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -146,6 +147,12 @@ const router = createRouter({
               name: "post-search",
               meta: { label: "postSearch" },
               component: PostSearchView,
+            },
+            {
+              path: "feed",
+              name: "feed-search",
+              meta: { label: "feedSearch" },
+              component: FeedSearchView,
             },
             {
               path: "user",

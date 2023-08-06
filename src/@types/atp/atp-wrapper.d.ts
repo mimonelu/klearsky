@@ -213,6 +213,7 @@ interface TIAtpWrapper {
     currentValues: Array<TTFeedGenerator>,
     limit?: number,
     cursor?: string,
+    term?: string
   ): Promise<Error | undefined | string>
   fetchPosts(
     this: TIAtpWrapper,

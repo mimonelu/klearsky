@@ -23,6 +23,12 @@ const mainState = inject("state") as MainState
         </RouterLink>
         <RouterLink
           class="tab__button"
+          to="/search/feed"
+        >
+          <span>{{ $t("feedSearch") }}</span>
+        </RouterLink>
+        <RouterLink
+          class="tab__button"
           to="/search/user"
         >
           <span>{{ $t("accounts") }}</span>
@@ -50,10 +56,6 @@ const mainState = inject("state") as MainState
     top: 0;
     z-index: 1;
   }
-}
-
-.tab__button {
-  width: 50%;
 }
 
 .child-view {

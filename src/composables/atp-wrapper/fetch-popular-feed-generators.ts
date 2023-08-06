@@ -5,12 +5,14 @@ export default async function (
   currentValues: Array<TTFeedGenerator>,
   limit?: number,
   cursor?: string,
+  term?: string
 ): Promise<Error | undefined | string> {
   if (this.agent == null) return Error("No agent")
 
   const query: AppBskyUnspeccedGetPopularFeedGenerators.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
+  if (term != null) query.query = term
 
   const response: Error | AppBskyUnspeccedGetPopularFeedGenerators.Response =
     await (this.agent as BskyAgent).app.bsky.unspecced.getPopularFeedGenerators(query)

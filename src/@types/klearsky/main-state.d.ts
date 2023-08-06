@@ -63,6 +63,12 @@ type MainState = {
   currentSearchPostTerm: string
   currentSearchPostResults: Array<TTPost>
 
+  currentSearchFeeds: Array<TTFeedGenerator>
+  currentSearchFeedsCursor?: string
+  currentSearchFeedsTerm: string
+  currentSearchFeedsLastTerm: string
+  fetchSearchFeeds: (direction: "new" | "old") => Promise<void>
+
   currentRepostUsers: Array<TTUser>
   currentRepostUsersUri?: string
   currentRepostUsersCursor?: string
@@ -85,7 +91,7 @@ type MainState = {
 
   currentPopularFeedGenerators: Array<TTFeedGenerator>
   currentPopularFeedGeneratorsCursor?: string
-  fetchPopularFeedGenerators: () => Promise<void>
+  fetchPopularFeedGenerators: (direction: "new" | "old") => Promise<void>
   currentCustomUri?: string
   currentCustomFeeds: Array<TTFeed>
   currentCustomCursor?: string
