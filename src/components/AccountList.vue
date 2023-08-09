@@ -54,7 +54,15 @@ function getDidColor (did: string): string {
 }
 
 function exportAccounts () {
-  const jsonString = JSON.stringify(mainState.atp.data.sessions, null, 2)
+  const jsonData = JSON.parse(JSON.stringify(mainState.atp.data.sessions))
+
+  // アカウント出力から JWT を削除
+  for (const did in jsonData) {
+    delete jsonData[did].accessJwt
+    delete jsonData[did].refreshJwt
+  }
+
+  const jsonString = JSON.stringify(jsonData, null, 2)
   const suffix = format(new Date(), "yyyyMMdd")
   Util.downloadBlob(
     [jsonString],
@@ -78,10 +86,17 @@ function importAccounts (event: Event) {
     )) return
 
     // 既存のセッションデータにインポートしたセッションデータを「上書き」する
-    // ただし現在ログイン中のデータはスキップする（古いトークンで上書きされる恐れがあるため）
     for (const did in jsonData) {
-      if (mainState.atp.session?.did !== did)
+      // 現在ログイン中のデータはスキップ
+      if (mainState.atp.session?.did === did) continue
+
+      if (mainState.atp.data.sessions[did] == null) {
         mainState.atp.data.sessions[did] = jsonData[did]
+      } else {
+        for (const key in jsonData[did]) {
+          mainState.atp.data.sessions[did][key] = jsonData[did][key]
+        }
+      }
     }
     Util.saveStorage("atp", mainState.atp.data)
 

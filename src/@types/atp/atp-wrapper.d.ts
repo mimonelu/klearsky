@@ -21,6 +21,7 @@ type TTUpdateProfileParams = {
 }
 
 type TTSession = {
+  [index: string]: string
   accessJwt: string
   did: string
   handle: string
