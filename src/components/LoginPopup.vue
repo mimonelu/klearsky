@@ -51,7 +51,6 @@ const easyFormProps: TTEasyForm = {
       label: $t("identifier"),
       type: "text",
       required: true,
-      placeholder: "your@email.address, you.bsky.social, did:plc:xxx...",
       autocomplete: "on",
       inputmode: "email",
       focus: currentSession == null,
@@ -75,10 +74,7 @@ function submitCallback () {
 </script>
 
 <template>
-  <div
-    class="login-popup"
-    :data-has-accounts="Object.keys(mainState.atp.data.sessions).length > 0"
-  >
+  <div class="login-popup">
     <div class="login-popup__inner">
       <div class="login-popup__header">
         <Logo />
@@ -89,18 +85,18 @@ function submitCallback () {
           <!-- App Passwords 導線 -->
           <template v-slot:after>
             <a
-              class="textlink--icon app-passwords-link"
+              class="textlink--icon app-password-link"
               href="https://bsky.app/settings/app-passwords"
               rel="noreferrer"
               target="_blank"
             >
               <SVGIcon name="cursorRight" />
-              <span>{{ $t("useAppPasswords") }}</span>
+              <span>{{ $t("getAppPassword") }}</span>
             </a>
           </template>
         </EasyForm>
         <div class="account-container">
-          <div class="account-header">{{ $t("yourAccounts") }}</div>
+          <div class="account-header">{{ $t("myAccounts") }}</div>
           <AccountList :hasDeleteButton="false" />
         </div>
       </div>
@@ -114,7 +110,9 @@ $width: 800px;
 
 .login-popup {
   display: flex;
+  align-items: center;
   justify-content: center;
+  min-height: 100vh;
 
   &__inner {
     display: flex;
@@ -141,21 +139,19 @@ $width: 800px;
     @media not all and (max-width: $width) {
       display: grid;
       grid-template-columns: 1fr 1fr;
-    }
-  }
-  &[data-has-accounts="false"] {
-    .login-popup__body {
-      grid-template-columns: unset;
-    }
-
-    .account-container {
-      display: none;
+      align-items: flex-start;
     }
   }
 }
 
 .logo {
-  font-size: 3rem;
+  font-size: 3.5rem;
+
+  &:deep() {
+    .version {
+      font-size: 0.875rem;
+    }
+  }
 }
 
 .description {
@@ -163,9 +159,17 @@ $width: 800px;
   font-size: 1.25rem;
 }
 
-.app-passwords-link {
+.app-password-link {
   font-size: 0.9375rem;
+  font-weight: bold;
   margin-left: auto;
+}
+
+.easy-form,
+.account-container {
+  background-color: rgba(var(--fg-color), 0.0625);
+  border-radius: var(--border-radius);
+  padding: 1rem;
 }
 
 .account-container {
@@ -176,10 +180,6 @@ $width: 800px;
 
 .account-header {
   font-weight: bold;
-
-  @media not all and (max-width: $width) {
-    text-align: right;
-  }
 }
 
 .copyright {

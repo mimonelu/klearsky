@@ -23,6 +23,11 @@
     line-height: var(--line-height);
     word-break: break-word;
   }
+
+  &[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
 .button {

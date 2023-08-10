@@ -206,7 +206,7 @@ function moveToBottom () {
       <div class="icon">
         <SVGIcon name="person" />
       </div>
-      <div class="label">{{ $t("account") }}</div>
+      <div class="label">{{ $t("myAccounts") }}</div>
     </button>
 
     <!-- ポスト送信ポップアップトリガー -->

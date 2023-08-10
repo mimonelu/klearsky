@@ -61,7 +61,7 @@ async function logout () {
     <template v-slot:header>
       <h2>
         <SVGIcon name="person" />
-        <span>{{ $t("account") }}</span>
+        <span>{{ $t("myAccounts") }}</span>
       </h2>
     </template>
     <template v-slot:body>

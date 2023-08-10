@@ -13,8 +13,12 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  sessionCount: ComputedRef<number>;
   sessionGroups: ComputedRef<{ [service: string]: Array<TTSession> }>;
 }>({
+  sessionCount: computed((): number => {
+    return Object.keys(mainState.atp.data.sessions).length
+  }),
   sessionGroups: computed(() => {
     const sessionValues =
       Object.values(mainState.atp.data.sessions)
@@ -115,6 +119,16 @@ function onClickFileBox (event: Event) {
 
 <template>
   <div class="account-list">
+    <!-- マイアカウントが存在しない場合のメッセージ -->
+    <div
+      v-if="state.sessionCount === 0"
+      class="textlabel"
+    >
+      <div class="textlabel__text">
+        <SVGIcon name="alert" />{{ $t("noMyAccounts") }}
+      </div>
+    </div>
+
     <div
       v-for="sessions, service in state.sessionGroups"
       :key="service"
@@ -162,6 +176,7 @@ function onClickFileBox (event: Event) {
       <!-- エクスポートボタン -->
       <button
         class="button--bordered"
+        :disabled="state.sessionCount === 0"
         @click.prevent="exportAccounts"
       >
         <SVGIcon name="fileExport" />
@@ -227,6 +242,7 @@ function onClickFileBox (event: Event) {
   &__left {
     --color: var(--fg-color);
     background-clip: padding-box;
+    background-color: rgb(var(--bg-color));
     border: 1px solid rgba(var(--fg-color), 0.25);
     border-bottom-style: none;
     cursor: pointer;
