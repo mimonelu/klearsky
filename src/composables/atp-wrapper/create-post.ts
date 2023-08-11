@@ -156,6 +156,15 @@ export default async function (
       record.embed = feedCard
   }
 
+  /* セルフラベリング
+  record.labels = {
+    "$type": "com.atproto.label.defs#selfLabels",
+    values: [
+      { val: "" },
+    ],
+  }
+  */
+
   const response: ComAtprotoRepoCreateRecord.OutputSchema = await (
     this.agent as BskyAgent
   ).post(record)
