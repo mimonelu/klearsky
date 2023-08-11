@@ -120,11 +120,11 @@ function searchPost () {
     margin-bottom: 1rem;
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.5);
+      fill: rgba(var(--accent-color), 0.75);
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.5);
+      color: rgba(var(--accent-color), 0.75);
     }
   }
 

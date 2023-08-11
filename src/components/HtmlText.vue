@@ -28,7 +28,7 @@ const INTERNAL_LINK_ITEMS = [
   // プロフィールページ
   {
     src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)$"),
-    dst: "/profile/post?account=[1]",
+    dst: "/profile/feeds?account=[1]",
   },
 ]
 
@@ -150,7 +150,7 @@ function onActivateHashTag (text: string) {
       <template v-else-if="segment.type === 'mention'">
         <RouterLink
           class="textlink"
-          :to="`/profile/post?account=${segment.param}`"
+          :to="`/profile/feeds?account=${segment.param}`"
           @click.stop="$emit('onActivateMention')"
         >{{ segment.text }}</RouterLink>
       </template>

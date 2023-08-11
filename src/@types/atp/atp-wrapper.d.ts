@@ -21,7 +21,7 @@ type TTUpdateProfileParams = {
 }
 
 type TTSession = {
-  [index: string]: string
+  [index: string]: any
   accessJwt: string
   did: string
   handle: string
@@ -101,6 +101,7 @@ interface TIAtpWrapper {
     author: string,
     limit?: number,
     cursor?: string,
+    filter?: string,
     middle?: boolean
   ): Promise<undefined | string>
   fetchAuthorReposts(

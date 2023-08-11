@@ -16,6 +16,7 @@
   "errorMessage": "An error occurred.",
   "alt": "ALT",
   "posts": "Posts",
+  "postWithReplies": "Posts with replies",
   "loading": "Loading...",
   "more": "See more",
   "klearsky": "Klearsky",
@@ -23,6 +24,7 @@
   "account": "Accounts",
   "profile": "Profile",
   "language": "Language",
+  "medias": "Medias",
   "help": "Help",
   "includeRepost": "Show images in reposts",
 

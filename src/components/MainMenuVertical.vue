@@ -58,7 +58,7 @@ function moveToBottom () {
     <!-- プロフィールボタン -->
     <RouterLink
       class="profile-button"
-      :to="{ name: 'profile-post', query: { account: mainState.atp.session?.handle } }"
+      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.handle } }"
       :data-is-focus="
         (
           mainState.currentPath.startsWith('/profile/') &&

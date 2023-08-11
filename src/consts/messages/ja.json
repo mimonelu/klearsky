@@ -16,6 +16,7 @@
   "errorMessage": "エラーが発生しました。",
   "alt": "ALT",
   "posts": "ポスト",
+  "postWithReplies": "リプライ付きポスト",
   "loading": "読込中...",
   "more": "もっと見る",
   "klearsky": "Klearsky",
@@ -23,6 +24,7 @@
   "account": "アカウント",
   "profile": "プロフィール",
   "language": "言語",
+  "medias": "メディア",
   "help": "ヘルプ",
   "includeRepost": "リポストの画像も表示する",
 
@@ -302,7 +304,7 @@
   "blockingUsers": "ブロック中のアカウント",
   "checkBlockingUsers": "ブロック中のアカウントを確認する",
 
-  "accounts": "マイアカウント",
+  "accounts": "アカウント",
   "newLogin": "新規ログイン",
   "logout": "ログアウト",
   "refreshSession": "セッションの更新",

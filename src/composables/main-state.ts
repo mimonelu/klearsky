@@ -259,7 +259,7 @@ async function fetchLogAudit () {
   state.currentProfile.__log = logJson.reverse()
 }
 
-async function fetchCurrentAuthorFeed (direction: "new" | "old", middleCursor?: string) {
+async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string, middleCursor?: string) {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
 
@@ -269,12 +269,17 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old", middleCursor?: 
   // ブロックされている
   if (state.currentProfile?.viewer.blockedBy) return
 
+  const feeds = filter === undefined
+    ? state.currentAuthorFeeds
+    : state.currentAuthorFeedsWithReplies
+
   const cursor: undefined | string =
     await state.atp.fetchAuthorFeed(
-      state.currentAuthorFeeds as Array<TTFeed>,
+      feeds as Array<TTFeed>,
       account,
       CONSTS.limitOfFetchAuthorFeeds,
       direction === "old" ? middleCursor ?? state.currentAuthorCursor : undefined,
+      filter ?? "posts_no_replies",
       middleCursor != null
     )
   if (cursor != null) state.currentAuthorCursor = cursor

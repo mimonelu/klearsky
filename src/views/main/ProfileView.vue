@@ -262,41 +262,31 @@ function hideWarningContent () {
 
     <!-- タブ -->
     <div class="tab-container">
-      <!-- マイタブ -->
-      <div
-        v-if="isMyProfile()"
-        class="tab"
-      >
-        <RouterLink
-          class="tab__button tab__button--repost"
-          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
-        >
-          <SVGIcon name="repost" />
-          <span>{{ $t("reposts") }}</span>
-        </RouterLink>
-        <RouterLink
-          class="tab__button tab__button--like"
-          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
-        >
-          <SVGIcon name="heart" />
-          <span>{{ $t("likes") }}</span>
-        </RouterLink>
-      </div>
-
-      <!-- 共通タブ -->
-      <div class="tab">
+      <!-- 上タブ -->
+      <div class="tab tab--top">
         <!-- ポストタブボタン -->
         <RouterLink
           class="tab__button tab__button--post"
-          :to="{ path: '/profile/post', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.handle } }"
+          :title="$t('post')"
         >
           <SVGIcon name="post" />
+        </RouterLink>
+
+        <!-- リプライ付きポストタブボタン -->
+        <RouterLink
+          class="tab__button tab__button--post"
+          :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.handle } }"
+          :title="$t('postWithReplies')"
+        >
+          <SVGIcon name="posts" />
         </RouterLink>
 
         <!-- メディアタブボタン -->
         <RouterLink
           class="tab__button tab__button--media"
           :to="{ path: '/profile/media', query: { account: mainState.currentProfile?.handle } }"
+          :title="$t('medias')"
         >
           <SVGIcon name="image" />
         </RouterLink>
@@ -305,17 +295,41 @@ function hideWarningContent () {
         <RouterLink
           class="tab__button tab__button--custom-feeds"
           :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.handle } }"
+          :title="$t('customFeeds')"
         >
           <SVGIcon name="feed" />
         </RouterLink>
 
+        <!-- 自分のリポストタブボタン -->
+        <RouterLink
+          v-if="isMyProfile()"
+          class="tab__button tab__button--repost"
+          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('reposts')"
+        >
+          <SVGIcon name="repost" />
+        </RouterLink>
+
+        <!-- 自分のいいねタブボタン -->
+        <RouterLink
+          v-if="isMyProfile()"
+          class="tab__button tab__button--like"
+          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('likes')"
+        >
+          <SVGIcon name="heart" />
+        </RouterLink>
+      </div>
+
+      <!-- 下タブ -->
+      <div class="tab tab--bottom">
         <!-- フォローイングタブボタン -->
         <RouterLink
           class="tab__button tab__button--following"
           :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
           :title="$t('following')"
         >
-          <SVGIcon name="people" />
+          <span>{{ $t("followings") }}</span>
           <SVGIcon name="arrowLeft" />
           <img
             loading="lazy"
@@ -338,12 +352,12 @@ function hideWarningContent () {
             alt=""
           >
           <SVGIcon name="arrowLeft" />
-          <SVGIcon name="people" />
+          <span>{{ $t("followers") }}</span>
         </RouterLink>
       </div>
     </div>
 
-    <RouterView />
+    <RouterView class="profile-view__router-view" />
 
     <!-- ハンドル履歴ポップアップ -->
     <HandleHistoryPopup
@@ -583,8 +597,7 @@ function hideWarningContent () {
     --fg-color: var(--like-color);
   }
 
-  &__button--post > .svg-icon,
-  &__button--media > .svg-icon {
+  &__button--post > .svg-icon {
     --fg-color: var(--post-color);
   }
 
@@ -613,6 +626,10 @@ function hideWarningContent () {
       max-height: 1.5rem;
     }
   }
+}
+
+.tab--bottom > * {
+  width: 50%;
 }
 
 .feed-list,

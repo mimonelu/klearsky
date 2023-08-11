@@ -223,7 +223,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <RouterLink
         v-if="creatorDisplay"
         class="custom-feed-card__creator"
-        :to="{ name: 'profile-post', query: { account: generator.creator.handle } }"
+        :to="{ name: 'profile-feeds', query: { account: generator.creator.handle } }"
         @click.prevent
       >
         <SVGIcon name="person" />

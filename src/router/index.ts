@@ -15,7 +15,8 @@ import GloballineView from "@/views/main/home/GloballineView.vue"
 
 // Main - Profile
 import ProfileView from "@/views/main/ProfileView.vue"
-import AuthorPostView from "@/views/main/profile/AuthorPostView.vue"
+import AuthorFeedsView from "@/views/main/profile/AuthorFeedsView.vue"
+import AuthorFeedsWithRepliesView from "@/views/main/profile/AuthorFeedsWithRepliesView.vue"
 import AuthorRepostView from "@/views/main/profile/AuthorRepostView.vue"
 import AuthorLikeView from "@/views/main/profile/AuthorLikeView.vue"
 import AuthorMediaView from "@/views/main/profile/AuthorMediaView.vue"
@@ -91,12 +92,17 @@ const router = createRouter({
           path: "/profile",
           name: "profile",
           component: ProfileView,
-          redirect: "/profile/post",
+          redirect: "/profile/feeds",
           children: [
             {
-              path: "post",
-              name: "profile-post",
-              component: AuthorPostView,
+              path: "feeds",
+              name: "profile-feeds",
+              component: AuthorFeedsView,
+            },
+            {
+              path: "feeds-with-replies",
+              name: "profile-feeds-with-replies",
+              component: AuthorFeedsWithRepliesView,
             },
             {
               path: "repost",

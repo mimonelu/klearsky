@@ -13,7 +13,7 @@ const yyyy = (new Date).getFullYear()
     >@GitHub</a>
     <RouterLink
       class="textlink"
-      :to="{ path: '/profile/post', query: { account: 'mimonelu.net' } }"
+      :to="{ path: '/profile/feeds', query: { account: 'mimonelu.net' } }"
     >@Bluesky</RouterLink>
     <a
       class="textlink"

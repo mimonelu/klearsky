@@ -113,6 +113,8 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
     if (!state.inSameProfilePage) {
       state.currentAuthorFeeds?.splice(0)
       state.currentAuthorCursor = undefined
+      state.currentAuthorFeedsWithReplies?.splice(0)
+      state.currentAuthorFeedsWithRepliesCursor = undefined
       state.currentAuthorMediasIncludeRepost = [false]
       state.currentAuthorCustomFeeds?.splice(0)
       state.currentAuthorCustomFeedsCursor = undefined
@@ -158,6 +160,8 @@ function resetState () {
   state.currentProfile = null
   state.currentAuthorFeeds = []
   state.currentAuthorCursor = undefined
+  state.currentAuthorFeedsWithReplies = []
+  state.currentAuthorFeedsWithRepliesCursor = undefined
   state.currentAuthorMediasIncludeRepost = [false]
   state.currentAuthorCustomFeeds = []
   state.currentAuthorCustomFeedsCursor = undefined
@@ -275,7 +279,8 @@ function updatePageTitle () {
   let title = state.notificationCount === 0 ? "" : `(${state.notificationCount}) `
   title += "Klearsky"
   switch (state.currentPath) {
-    case "/profile/post":
+    case "/profile/feeds":
+    case "/profile/feeds-with-replies":
     case "/profile/repost":
     case "/profile/like":
     case "/profile/custom-feeds":
@@ -332,7 +337,8 @@ async function manualLogin (service: string, identifier: string, password: strin
 async function processPage (pageName?: null | RouteRecordName) {
   let account: null | string = null
   switch (pageName) {
-    case "profile-post":
+    case "profile-feeds":
+    case "profile-feeds-with-replies":
     case "profile-repost":
     case "profile-like":
     case "profile-media":
@@ -351,7 +357,7 @@ async function processPage (pageName?: null | RouteRecordName) {
   state.listProcessing = true
   try {
     switch (pageName) {
-      case "profile-post":
+      case "profile-feeds":
       case "profile-media": {
         // ブロック情報などを先に取得するために Promise.allSettled はしない
         if (account !== state.currentProfile?.handle &&
@@ -359,6 +365,16 @@ async function processPage (pageName?: null | RouteRecordName) {
           await state.fetchCurrentProfile(account as string)
         if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
           await state.fetchCurrentAuthorFeed("new")
+        break
+      }
+      case "profile-feeds-with-replies": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorFeedsWithReplies.length === 0)
+          tasks.push(state.fetchCurrentAuthorFeed("new", "posts_with_replies"))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
+        await Promise.allSettled(tasks)
         break
       }
       case "profile-repost": {
