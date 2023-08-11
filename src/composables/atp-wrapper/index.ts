@@ -55,6 +55,10 @@ import logout from "@/composables/atp-wrapper/logout"
 import refreshSession from "@/composables/atp-wrapper/refresh-session"
 import resetSession from "@/composables/atp-wrapper/reset-session"
 import resumeSession from "@/composables/atp-wrapper/resume-session"
+
+// TODO: 不要であれば削除する事
+// import updateMyLabels from "@/composables/atp-wrapper/update-my-labels"
+
 import updateNotificationSeen from "@/composables/atp-wrapper/update-notification-seen"
 import updatePreferences from "@/composables/atp-wrapper/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update-profile"
@@ -154,6 +158,10 @@ prototype.resumeSession = resumeSession
 prototype.saveData = function (this: TIAtpWrapper) {
   Util.saveStorage("atp", this.data)
 }
+
+// TODO: 不要であれば削除する事
+// prototype.updateMyLabels = updateMyLabels
+
 prototype.updateNotificationSeen = updateNotificationSeen
 prototype.updatePreferences = updatePreferences
 prototype.updateProfile = updateProfile

@@ -272,6 +272,7 @@ interface TIAtpWrapper {
   ): void
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
+  updateMyLabels(this: TIAtpWrapper, labels: Array<TTLabel>): Promise<Error | boolean>
   updateNotificationSeen(this: TIAtpWrapper): Promise<boolean>
   updatePreferences (
     this: TIAtpWrapper,
