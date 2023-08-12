@@ -332,6 +332,9 @@
   "cancelPost": "Cancel Post",
   "cancelPostMessage": "The entered information will be reset. Are you sure?",
 
+  "emptyPostConfirmation": "Empty Post Confirmation",
+  "emptyPostConfirmationMessage": "This post seems to be empty. Do you want to post this as is?",
+
   "delete": "Delete",
   "edit": "Edit",
   "like": "Like",

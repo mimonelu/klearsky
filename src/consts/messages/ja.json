@@ -332,6 +332,9 @@
   "cancelPost": "ポストのキャンセル",
   "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
 
+  "emptyPostConfirmation": "空ポストの確認",
+  "emptyPostConfirmationMessage": "ポストが空のようです。このまま投稿しますか？",
+
   "delete": "削除する",
   "edit": "編集",
   "like": "いいね",
