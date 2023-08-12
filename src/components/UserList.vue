@@ -49,11 +49,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="user-list">
-    <LoadButton
-      direction="new"
-      :processing="mainState.listProcessing"
-      @activate="fetchUsers('new')"
-    />
     <div class="users">
       <UserBox
         v-for="user of currentUsers"
