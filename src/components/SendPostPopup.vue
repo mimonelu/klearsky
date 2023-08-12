@@ -126,6 +126,7 @@ async function submitCallback () {
       type: props.type,
       post: props.post,
       languages: mainState.currentSetting.postLanguages,
+      labels: state.labels,
 
       // Lightning
       lightning: mainState.currentSetting.lightning,
@@ -189,10 +190,14 @@ function onChangeImage () {
               <!-- ラベル選択ポップアップトリガー -->
               <button
                 class="button--bordered"
-                @click.prevent="mainState.openPostLanguagesPopup()"
+                @click.prevent="mainState.openSelectLabelsPopup(state)"
               >
                 <SVGIcon name="alert" />
-                <span>{{ state.labels.length === 0 ? "---" : state.labels.join(", ") }}</span>
+                <span>{{
+                  state.labels.length === 0
+                  ? "---"
+                  : state.labels.map((label: string) => $t(label)).join(", ")
+                }}</span>
               </button>
             </div>
           </template>
@@ -291,6 +296,12 @@ function onChangeImage () {
 
     .button--bordered {
       min-height: 3rem;
+      &:first-child {
+        white-space: nowrap;
+      }
+      &:last-child {
+        --fg-color: var(--notice-color);
+      }
 
       & > .svg-icon {
         font-size: 1rem;
@@ -298,6 +309,7 @@ function onChangeImage () {
 
       & > span {
         text-transform: uppercase;
+        word-break: break-all;
       }
     }
   }

@@ -8,6 +8,7 @@ type TTCreatePostParams = {
   images: Array<File>
   alts: Array<string>
   languages?: Array<string>
+  labels?: Array<string>
   lightning?: string
 }
 

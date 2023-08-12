@@ -140,6 +140,10 @@ const state = reactive<MainState>({
   openPostLanguagesPopup,
   closePostLanguagesPopup,
 
+  // ラベル選択ポップアップの開閉
+  openSelectLabelsPopup,
+  closeSelectLabelsPopup,
+
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
   closeInviteCodesPopup,
@@ -830,6 +834,17 @@ function openPostLanguagesPopup () {
 
 function closePostLanguagesPopup () {
   state.postLanguagesPopupDisplay = false
+}
+
+// ラベル選択ポップアップの開閉
+
+function openSelectLabelsPopup (params: any) {
+  state.selectLabelsPopupDisplay = true
+  state.selectLabelsPopupState = params
+}
+
+function closeSelectLabelsPopup () {
+  state.selectLabelsPopupDisplay = false
 }
 
 // 招待コード確認ポップアップの開閉

@@ -164,6 +164,10 @@ type MainState = {
   // ポスト言語ポップアップの表示スイッチ
   postLanguagesPopupDisplay: boolean
 
+  // ラベル選択ポップアップ
+  selectLabelsPopupDisplay: boolean
+  selectLabelsPopupState: any
+
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
@@ -263,6 +267,10 @@ type MainState = {
   // ポスト言語ポップアップの開閉
   openPostLanguagesPopup: Function
   closePostLanguagesPopup: Function
+
+  // ラベル選択ポップアップの開閉
+  openSelectLabelsPopup: Function
+  closeSelectLabelsPopup: Function
 
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup: Function

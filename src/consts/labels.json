@@ -9,5 +9,15 @@
     "hate": ["hate", "icon-kkk", "icon-nazi", "icon-intolerant", "behavior-intolerant"],
     "spam": ["spam"],
     "impersonation": ["impersonation"]
-  }
+  },
+  "POST_LABELS": [
+    { "label": "nsfw", "value": "nsfw" },
+    { "label": "nudity", "value": "nudity" },
+    { "label": "suggestive", "value": "suggestive" },
+    { "label": "gore", "value": "gore" },
+    { "label": "hate", "value": "hate" },
+    { "label": "spam", "value": "spam" },
+    { "label": "impersonation", "value": "impersonation" },
+    { "label": "!warn", "value": "!warn" }
+  ]
 }

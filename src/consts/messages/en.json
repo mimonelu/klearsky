@@ -46,6 +46,7 @@
   "contentFiltering": "Content Filtering",
   "modifyContentFiltering": "Modify content filtering",
   "contentFilteringDescription": "After setting the controls for each content label, press the \"Apply\" button.",
+  "selectLabels": "Select Labels",
 
   "muteOn": "Mute",
   "muteOff": "Unmute",
@@ -82,7 +83,8 @@
   "csam": "CSAM",
   "dmca-violation": "DMCA violation",
   "nudity-nonconsensual": "Non-consensual nudity",
-  "!warn": "!warn",
+  "!warn": "Warning",
+  "always-warn": "Warning",
   "account-security": "Account security",
   "nsfw": "NSFW",
   "nsfl": "NSFL",

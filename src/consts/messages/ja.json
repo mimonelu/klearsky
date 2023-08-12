@@ -46,6 +46,7 @@
   "contentFiltering": "コンテンツフィルタ",
   "modifyContentFiltering": "コンテンツフィルタを編集する",
   "contentFilteringDescription": "各コンテンツラベルの制御を設定した上で「適用」ボタンを押してください。",
+  "selectLabels": "ラベルの選択",
 
   "muteOn": "ミュートする",
   "muteOff": "ミュートを解除する",
@@ -82,7 +83,8 @@
   "csam": "児童性的虐待",
   "dmca-violation": "DMCA侵害",
   "nudity-nonconsensual": "同意のないヌード",
-  "!warn": "!warn",
+  "!warn": "警告",
+  "always-warn": "警告",
   "account-security": "アカウントセキュリティ",
   "nsfw": "職場閲覧注意",
   "nsfl": "閲覧注意",

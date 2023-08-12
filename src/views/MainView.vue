@@ -23,6 +23,7 @@ import NotificationPopup from "@/components/NotificationPopup.vue"
 import PopularFeedsPopup from "@/components/PopularFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
+import SelectLabelsPopup from "@/components/SelectLabelsPopup.vue"
 import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
@@ -243,6 +244,10 @@ function resetState () {
 
   // ポスト言語ポップアップの表示スイッチ
   state.postLanguagesPopupDisplay = false
+
+  // ラベル選択ポップアップ
+  state.selectLabelsPopupDisplay = false
+  state.selectLabelsPopupState = undefined
 
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
@@ -773,6 +778,15 @@ function broadcastListener (event: MessageEvent) {
         </ul>
       </template>
     </SelectLanguagesPopup>
+
+    <!-- ラベル選択ポップアップ -->
+    <SelectLabelsPopup
+      v-if="state.selectLabelsPopupDisplay"
+      :state="state.selectLabelsPopupState"
+      property="labels"
+      @close="state.closeSelectLabelsPopup"
+      @change=""
+    />
 
     <!-- 　D&Dオーバーレイ -->
     <div
