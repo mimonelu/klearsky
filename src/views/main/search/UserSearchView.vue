@@ -81,11 +81,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       >
     </form>
     <div class="main">
-      <LoadButton
-        direction="new"
-        :processing="state.processing"
-        @activate="fetchContinuousResults('new')"
-      />
       <div class="users">
         <UserBox
           v-for="user of mainState.currentSearchUsers"
@@ -113,13 +108,10 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 }
 
 .main {
+  border-top: 1px solid rgb(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-}
-
-.load-button:first-child {
-  border-top: 1px solid rgb(var(--fg-color), 0.25);
 }
 
 .users {
