@@ -285,7 +285,7 @@ function hideWarningContent () {
         <!-- メディアタブボタン -->
         <RouterLink
           class="tab__button tab__button--media"
-          :to="{ path: '/profile/media', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.handle } }"
           :title="$t('medias')"
         >
           <SVGIcon name="image" />

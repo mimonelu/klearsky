@@ -20,9 +20,11 @@ type MainState = {
   inSameProfilePage: boolean
   currentProfile: null | TTProfile
   currentAuthorFeeds: Array<TTFeed>
-  currentAuthorCursor?: string
+  currentAuthorFeedsCursor?: string
   currentAuthorFeedsWithReplies: Array<TTFeed>
   currentAuthorFeedsWithRepliesCursor?: string
+  currentAuthorFeedsWithMedia: Array<TTFeed>
+  currentAuthorFeedsWithMediaCursor?: string
   currentAuthorMediasIncludeRepost: Array<boolean>
   currentAuthorCustomFeeds: Array<TTFeedGenerator>
   currentAuthorCustomFeedsCursor?: string

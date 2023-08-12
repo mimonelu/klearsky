@@ -112,9 +112,11 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
     state.inSameProfilePage = state.currentProfile != null
     if (!state.inSameProfilePage) {
       state.currentAuthorFeeds?.splice(0)
-      state.currentAuthorCursor = undefined
+      state.currentAuthorFeedsCursor = undefined
       state.currentAuthorFeedsWithReplies?.splice(0)
       state.currentAuthorFeedsWithRepliesCursor = undefined
+      state.currentAuthorFeedsWithMedia?.splice(0)
+      state.currentAuthorFeedsWithMediaCursor = undefined
       state.currentAuthorMediasIncludeRepost = [false]
       state.currentAuthorCustomFeeds?.splice(0)
       state.currentAuthorCustomFeedsCursor = undefined
@@ -159,9 +161,11 @@ function resetState () {
   state.inSameProfilePage = false
   state.currentProfile = null
   state.currentAuthorFeeds = []
-  state.currentAuthorCursor = undefined
+  state.currentAuthorFeedsCursor = undefined
   state.currentAuthorFeedsWithReplies = []
   state.currentAuthorFeedsWithRepliesCursor = undefined
+  state.currentAuthorFeedsWithMedia = []
+  state.currentAuthorFeedsWithMediaCursor = undefined
   state.currentAuthorMediasIncludeRepost = [false]
   state.currentAuthorCustomFeeds = []
   state.currentAuthorCustomFeedsCursor = undefined
@@ -339,10 +343,10 @@ async function processPage (pageName?: null | RouteRecordName) {
   switch (pageName) {
     case "profile-feeds":
     case "profile-feeds-with-replies":
+    case "profile-feeds-with-media":
+    case "profile-custom-feeds":
     case "profile-repost":
     case "profile-like":
-    case "profile-media":
-    case "profile-custom-feeds":
     case "profile-following":
     case "profile-follower": {
       account = state.currentQuery.account as LocationQueryValue
@@ -357,8 +361,7 @@ async function processPage (pageName?: null | RouteRecordName) {
   state.listProcessing = true
   try {
     switch (pageName) {
-      case "profile-feeds":
-      case "profile-media": {
+      case "profile-feeds": {
         // ブロック情報などを先に取得するために Promise.allSettled はしない
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
@@ -371,6 +374,16 @@ async function processPage (pageName?: null | RouteRecordName) {
         const tasks: Array<Promise<void>> = []
         if (!state.inSameProfilePage || state.currentAuthorFeedsWithReplies.length === 0)
           tasks.push(state.fetchCurrentAuthorFeed("new", "posts_with_replies"))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
+        await Promise.allSettled(tasks)
+        break
+      }
+      case "profile-feeds-with-media": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorFeedsWithMedia.length === 0)
+          tasks.push(state.fetchCurrentAuthorFeed("new", "posts_with_media"))
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           tasks.push(state.fetchCurrentProfile(account as string))

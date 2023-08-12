@@ -269,20 +269,33 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string
   // ブロックされている
   if (state.currentProfile?.viewer.blockedBy) return
 
-  const feeds = filter === undefined
-    ? state.currentAuthorFeeds
-    : state.currentAuthorFeedsWithReplies
+  const feeds = filter === "posts_with_replies"
+    ? state.currentAuthorFeedsWithReplies
+    : filter === "posts_with_media"
+      ? state.currentAuthorFeedsWithMedia
+      : state.currentAuthorFeeds
 
-  const cursor: undefined | string =
+  const cursor = filter === "posts_with_replies"
+    ? state.currentAuthorFeedsWithRepliesCursor
+    : filter === "posts_with_media" 
+      ? state.currentAuthorFeedsWithMediaCursor
+      : state.currentAuthorFeedsCursor
+
+  const resultCursor: undefined | string =
     await state.atp.fetchAuthorFeed(
       feeds as Array<TTFeed>,
       account,
       CONSTS.limitOfFetchAuthorFeeds,
-      direction === "old" ? middleCursor ?? state.currentAuthorCursor : undefined,
+      direction === "old" ? middleCursor ?? cursor : undefined,
       filter ?? "posts_no_replies",
       middleCursor != null
     )
-  if (cursor != null) state.currentAuthorCursor = cursor
+  if (resultCursor != null)
+    filter === "posts_with_replies"
+      ? state.currentAuthorFeedsWithRepliesCursor = resultCursor
+      : filter === "posts_with_media" 
+        ? state.currentAuthorFeedsWithMediaCursor = resultCursor
+        : state.currentAuthorFeedsCursor = resultCursor
 }
 
 async function fetchCurrentAuthorCustomFeeds (direction: "new" | "old") {

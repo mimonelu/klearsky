@@ -17,10 +17,10 @@ import GloballineView from "@/views/main/home/GloballineView.vue"
 import ProfileView from "@/views/main/ProfileView.vue"
 import AuthorFeedsView from "@/views/main/profile/AuthorFeedsView.vue"
 import AuthorFeedsWithRepliesView from "@/views/main/profile/AuthorFeedsWithRepliesView.vue"
+import AuthorFeedsWithMediaView from "@/views/main/profile/AuthorFeedsWithMediaView.vue"
+import AuthorCustomFeedsView from "@/views/main/profile/AuthorCustomFeedsView.vue"
 import AuthorRepostView from "@/views/main/profile/AuthorRepostView.vue"
 import AuthorLikeView from "@/views/main/profile/AuthorLikeView.vue"
-import AuthorMediaView from "@/views/main/profile/AuthorMediaView.vue"
-import AuthorCustomFeedsView from "@/views/main/profile/AuthorCustomFeedsView.vue"
 import FollowerListView from "@/views/main/profile/FollowerListView.vue"
 import FollowingListView from "@/views/main/profile/FollowingListView.vue"
 
@@ -105,6 +105,18 @@ const router = createRouter({
               component: AuthorFeedsWithRepliesView,
             },
             {
+              path: "feeds-with-media",
+              name: "profile-feeds-with-media",
+              meta: { label: "media" },
+              component: AuthorFeedsWithMediaView,
+            },
+            {
+              path: "custom-feeds",
+              name: "profile-custom-feeds",
+              meta: { label: "custom-feeds" },
+              component: AuthorCustomFeedsView,
+            },
+            {
               path: "repost",
               name: "profile-repost",
               meta: { label: "reposts" },
@@ -115,18 +127,6 @@ const router = createRouter({
               name: "profile-like",
               meta: { label: "likes" },
               component: AuthorLikeView,
-            },
-            {
-              path: "media",
-              name: "profile-media",
-              meta: { label: "media" },
-              component: AuthorMediaView,
-            },
-            {
-              path: "custom-feeds",
-              name: "profile-custom-feeds",
-              meta: { label: "custom-feeds" },
-              component: AuthorCustomFeedsView,
             },
             {
               path: "follower",

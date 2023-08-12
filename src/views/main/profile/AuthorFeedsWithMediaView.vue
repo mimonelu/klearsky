@@ -18,7 +18,7 @@ const state = reactive<{
     // リポストを含むかどうか
     const includeRepost = mainState.currentAuthorMediasIncludeRepost.includes(true)
 
-    mainState.currentAuthorFeeds.forEach((feed: TTFeed) => {
+    mainState.currentAuthorFeedsWithMedia.forEach((feed: TTFeed) => {
       // メディアがなければ終了
       if (feed.post.embed?.images == null) return
 
@@ -55,7 +55,7 @@ const easyFormProps: TTEasyForm = {
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   Util.blurElement()
   mainState.listProcessing = true
-  await mainState.fetchCurrentAuthorFeed(direction)
+  await mainState.fetchCurrentAuthorFeed(direction, "posts_with_media")
   mainState.listProcessing = false
 }
 
