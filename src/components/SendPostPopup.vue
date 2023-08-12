@@ -52,7 +52,6 @@ const easyFormProps: TTEasyForm = {
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
       rows: 6,
-      hasPostLanguages: true,
       hasAccountSuggest: true,
       focus: true,
     },
@@ -64,6 +63,9 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "url",
       inputmode: "url",
       clearButton: true,
+    },
+    {
+      type: "postLanguages",
     },
     {
       state: easyFormState,

@@ -169,9 +169,28 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               @keydown.enter="onEnterKeyDown"
             >
 
+            <!-- テキストエリア -->
+            <textarea
+              v-else-if="item.type === 'textarea'"
+              v-model="item.state[item.model]"
+              :id="makeItemId(index)"
+              :disabled="item.disabled ?? false"
+              :required="item.required ?? false"
+              :pattern="item.pattern"
+              :rows="item.rows ?? ''"
+              :placeholder="item.placeholder ?? ''"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              class="textarea"
+              :class="item.classes"
+              @input="onInputTextarea(item)"
+              @keydown.enter="onEnterKeyDown"
+            />
+
             <!-- チェックボックス -->
             <Checkboxes
-              v-if="item.type === 'checkbox'"
+              v-else-if="item.type === 'checkbox'"
               :state="item.state"
               :model="item.model"
               :required="item.required ?? false"
@@ -184,7 +203,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
 
             <!-- ラジオボタン -->
             <Radios
-              v-if="item.type === 'radio'"
+              v-else-if="item.type === 'radio'"
               :state="item.state"
               :model="item.model"
               :required="item.required ?? false"
@@ -196,7 +215,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
 
             <!-- セレクトボックス -->
             <label
-              v-if="item.type === 'select'"
+              v-else-if="item.type === 'select'"
               class="selectbox"
               :class="item.classes"
             >
@@ -225,25 +244,6 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               :class="item.classes"
               @change="(files: Array<File>) => { onChangeFile(files, item) }"
             />
-
-            <!-- テキストエリア -->
-            <textarea
-              v-else-if="item.type === 'textarea'"
-              v-model="item.state[item.model]"
-              :id="makeItemId(index)"
-              :disabled="item.disabled ?? false"
-              :required="item.required ?? false"
-              :pattern="item.pattern"
-              :rows="item.rows ?? ''"
-              :placeholder="item.placeholder ?? ''"
-              autocapitalize="off"
-              autocorrect="off"
-              spellcheck="false"
-              class="textarea"
-              :class="item.classes"
-              @input="onInputTextarea(item)"
-              @keydown.enter="onEnterKeyDown"
-            />
           </template>
 
           <!-- ボタン -->
@@ -271,30 +271,30 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
             <SVGIcon name="cross" />
           </button>
 
+          <!-- 最大文字数インジケータ -->
           <div
-            v-if="item.hasPostLanguages || item.maxLengthIndicator"
-            class="text-option-container"
+            v-if="item.maxLengthIndicator"
+            class="max-length-indicator"
+            :class="item.classes"
+            :data-over-maxlength="item.maxlength != null
+              ? getCharacterLength(item) > item.maxlength
+              : false
+            "
+          >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
+
+          <div
+            v-if="item.type === 'postLanguages'"
+            class="button-container"
           >
             <!-- ポスト言語選択ポップアップボタン -->
             <button
-              v-if="item.hasPostLanguages"
-              class="select-languages-popup-trigger"
+              v-if="item.type === 'postLanguages'"
+              class="button--bordered select-languages-popup-trigger"
               @click.prevent="mainState.openPostLanguagesPopup()"
             >
               <SVGIcon name="translate" />
-              <span>{{ mainState.currentSetting.postLanguages?.join(", ") }}</span>
+              <span>{{ mainState.currentSetting.postLanguages?.length === 0 ? "---" : mainState.currentSetting.postLanguages?.join(", ") }}</span>
             </button>
-
-            <!-- 最大文字数インジケータ -->
-            <div
-              v-if="item.maxLengthIndicator"
-              class="max-length-indicator"
-              :class="item.classes"
-              :data-over-maxlength="item.maxlength != null
-                ? getCharacterLength(item) > item.maxlength
-                : false
-              "
-            >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
           </div>
 
           <!-- アカウントサジェスト -->
@@ -408,28 +408,19 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
   word-wrap: break-word;
 }
 
-.text-option-container {
+.button-container {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 0.5rem;
+  grid-gap: 1rem;
 }
 
 .select-languages-popup-trigger {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  grid-gap: 0.5rem;
-  margin: -0.5rem -1rem;
-  padding: 0.5rem 1rem;
+  min-height: 3rem;
 
   & > .svg-icon {
-    fill: rgb(var(--accent-color));
+    font-size: 1rem;
   }
 
   & > span {
-    color: rgb(var(--accent-color));
-    font-weight: bold;
     text-transform: uppercase;
   }
 }
@@ -437,7 +428,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
 .max-length-indicator {
   color: rgb(var(--fg-color));
   font-size: 0.875rem;
-  margin-left: auto;
+  margin: 0.5rem 0 0 auto;
   &[data-over-maxlength="true"] {
     color: rgb(var(--notice-color));
   }
