@@ -21,8 +21,10 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  labels: Array<string>
   htmlPopupDisplay: boolean
 }>({
+  labels: [],
   htmlPopupDisplay: false,
 })
 
@@ -63,9 +65,6 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "url",
       inputmode: "url",
       clearButton: true,
-    },
-    {
-      type: "postLanguages",
     },
     {
       state: easyFormState,
@@ -172,6 +171,33 @@ function onChangeImage () {
           :noLink="true"
         />
         <EasyForm v-bind="easyFormProps">
+          <template v-slot:free-2>
+            <div class="button-container">
+              <!-- ポスト言語選択ポップアップトリガー -->
+              <button
+                class="button--bordered"
+                @click.prevent="mainState.openPostLanguagesPopup()"
+              >
+                <SVGIcon name="translate" />
+                <span>{{
+                  mainState.currentSetting.postLanguages?.length === 0
+                  ? "---"
+                  : mainState.currentSetting.postLanguages?.join(", ")
+                }}</span>
+              </button>
+
+              <!-- ラベル選択ポップアップトリガー -->
+              <button
+                class="button--bordered"
+                @click.prevent="mainState.openPostLanguagesPopup()"
+              >
+                <SVGIcon name="alert" />
+                <span>{{ state.labels.length === 0 ? "---" : state.labels.join(", ") }}</span>
+              </button>
+            </div>
+          </template>
+
+          <!-- alt -->
           <template #after>
             <dl v-if="easyFormState.images.length > 0">
               <dd
@@ -257,6 +283,23 @@ function onChangeImage () {
 
   .svg-icon--help {
     font-size: 1.25rem;
+  }
+
+  .button-container {
+    display: flex;
+    grid-gap: 1rem;
+
+    .button--bordered {
+      min-height: 3rem;
+
+      & > .svg-icon {
+        font-size: 1rem;
+      }
+
+      & > span {
+        text-transform: uppercase;
+      }
+    }
   }
 }
 </style>
