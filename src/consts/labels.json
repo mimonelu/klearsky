@@ -1,21 +1,59 @@
 {
-  "ALWAYS_HIDE": ["!filter", "csam", "dmca-violation", "nudity-nonconsensual"],
-  "ALWAYS_WARN": ["!warn", "account-security"],
+  "ALWAYS_HIDE": [
+    "!hide",
+    "!no-promote",
+    "dmca-violation",
+    "doxxing"
+  ],
+  "ALWAYS_WARN": [
+    "!warn"
+  ],
   "DEFAULTS": {
-    "nsfw": ["nsfw", "nsfl", "porn"],
-    "nudity": ["nudity"],
-    "suggestive": ["suggestive", "sexual"],
-    "gore": ["gore", "self-harm", "torture", "nsfl"],
-    "hate": ["hate", "icon-kkk", "icon-nazi", "icon-intolerant", "behavior-intolerant"],
-    "spam": ["spam"],
-    "impersonation": ["impersonation"]
+    "nsfw": [
+      "$nsfw",
+      "porn"
+    ],
+    "nudity": [
+      "nudity"
+    ],
+    "suggestive": [
+      "$suggestive",
+      "sexual"
+    ],
+    "gore": [
+      "nsfl",
+      "corpse",
+      "gore",
+      "torture",
+      "self-harm"
+    ],
+    "hate": [
+      "$hate",
+      "intolerant-race",
+      "intolerant-gender",
+      "intolerant-sexual-orientation",
+      "intolerant-religion",
+      "intolerant",
+      "icon-intolerant",
+      "threat"
+    ],
+    "spam": [
+      "spam",
+      "spoiler"
+    ],
+    "impersonation": [
+      "account-security",
+      "net-abuse",
+      "impersonation",
+      "scam"
+    ]
   },
   "POST_LABELS": [
-    { "label": "nsfw", "value": "nsfw" },
+    { "label": "nsfw-porn", "value": "porn" },
     { "label": "nudity", "value": "nudity" },
-    { "label": "suggestive", "value": "suggestive" },
+    { "label": "suggestive-sexual", "value": "sexual" },
     { "label": "gore", "value": "gore" },
-    { "label": "hate", "value": "hate" },
+    { "label": "hate", "value": "intolerant" },
     { "label": "spam", "value": "spam" },
     { "label": "impersonation", "value": "impersonation" },
     { "label": "!warn", "value": "!warn" }

@@ -308,9 +308,11 @@ function onChangeImage () {
       }
 
       & > span {
-        text-transform: uppercase;
         word-break: break-all;
       }
+    }
+    .button--bordered:first-child > span {
+      text-transform: uppercase;
     }
   }
 }
