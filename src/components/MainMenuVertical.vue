@@ -58,7 +58,7 @@ function moveToBottom () {
     <!-- プロフィールボタン -->
     <RouterLink
       class="profile-button"
-      :to="{ name: 'profile-post', query: { account: mainState.atp.session?.handle } }"
+      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.handle } }"
       :data-is-focus="
         (
           mainState.currentPath.startsWith('/profile/') &&
@@ -106,11 +106,7 @@ function moveToBottom () {
           <span>{{ $t("myFeeds") }}</span>
         </a>
 
-        <!-- ワードミュートポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openWordMutePopup() }">
-          <SVGIcon name="alphabeticalOff" />
-          <span>{{ $t("wordMute") }}</span>
-        </a>
+        <hr />
 
         <!-- コンテンツフィルタリングポップアップトリガー -->
         <a @click.prevent="() => { Util.blurElement(); mainState.openContentFilteringPopup() }">
@@ -130,6 +126,14 @@ function moveToBottom () {
           <span>{{ $t("blockingUsers") }}</span>
         </a>
 
+        <!-- ワードミュートポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openWordMutePopup() }">
+          <SVGIcon name="alphabeticalOff" />
+          <span>{{ $t("wordMute") }}</span>
+        </a>
+
+        <hr />
+
         <!-- 招待コード確認ポップアップトリガー -->
         <a
           v-if="mainState.numberOfAvailableInviteCodes > 0"
@@ -141,7 +145,7 @@ function moveToBottom () {
 
         <!-- セッション更新トリガー -->
         <a @click.prevent="() => { Util.blurElement(); refreshSession() }">
-          <SVGIcon name="shimmer" />
+          <SVGIcon name="refresh" />
           <span>{{ $t("refreshSession") }}</span>
         </a>
       </menu>
@@ -206,7 +210,7 @@ function moveToBottom () {
       <div class="icon">
         <SVGIcon name="person" />
       </div>
-      <div class="label">{{ $t("account") }}</div>
+      <div class="label">{{ $t("myAccounts") }}</div>
     </button>
 
     <!-- ポスト送信ポップアップトリガー -->
@@ -289,6 +293,16 @@ function moveToBottom () {
 // ショートカットプルダウン
 .pulldown-button {
   margin-bottom: 1rem;
+
+  .svg-icon--feed {
+    --bg-color: var(--accent-color);
+  }
+  .svg-icon--alphabeticalOff,
+  .svg-icon--alert,
+  .svg-icon--volumeOff,
+  .svg-icon--personOff {
+    --bg-color: var(--notice-color);
+  }
 }
 
 // プロフィールボタン

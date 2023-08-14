@@ -7,7 +7,7 @@ const mainState = inject("state") as MainState
 
 <template>
   <FeedList
-    type="author"
+    type="authorFeeds"
     :feeds="mainState.currentAuthorFeeds"
     :hasLoadButton="true"
   />

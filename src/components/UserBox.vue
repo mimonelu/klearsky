@@ -64,7 +64,7 @@ function hideWarningContent () {
 <template>
   <RouterLink
     class="user-box"
-    :to="{ name: 'profile-post', query: { account: user.handle } }"
+    :to="{ name: 'profile-feeds', query: { account: user.handle } }"
     :data-is-following="user.viewer.following != null"
     :data-content-warning-disabled="contentWarningDisabled"
     :data-content-warning-visibility="state.contentWarningVisibility"

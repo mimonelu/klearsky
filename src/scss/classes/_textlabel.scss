@@ -9,9 +9,12 @@
 
   &__text {
     display: flex;
-    align-items: center;
     grid-gap: 0.25em 0.5em;
     line-height: var(--line-height);
+
+    & > .svg-icon {
+      margin-top: 0.25em;
+    }
   }
 
   &__item {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, nextTick, onMounted, reactive, ref } from "vue"
-import Graphemer from "graphemer"
+import { RichText } from "@atproto/api"
 import AccountSuggest from "@/components/AccountSuggest.vue"
 import Checkboxes from "@/components/Checkboxes.vue"
 import FileBox from "@/components/FileBox.vue"
@@ -62,11 +62,11 @@ function isInput (type?: string): boolean {
 function getCharacterLength (item: TTEasyFormItem): number {
   if (item.model == null) return 0
   const text = item.state[item.model]
-  if (item.maxLengthWithSegmenter) {
-    const splitter = new Graphemer()
-    return splitter.countGraphemes(text)
+  if (item.maxLengthIndicatorByGrapheme) {
+    const richText = new RichText({ text })
+    return richText.graphemeLength
   } else {
-    return text.length
+    return new Blob([text]).size
   }
 }
 
@@ -141,148 +141,135 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
       v-if="data.length > 0"
       class="easy-form__body"
     >
-      <dl
+      <template
         v-for="item, index of data"
         :key="index"
-        v-show="item.display !== false"
       >
-        <dt v-if="item.label != null">{{ item.label }}</dt>
-        <dd>
-          <template v-if="item.model != null">
-            <!-- 各種 input 要素 -->
-            <input
-              v-if="isInput(item.type)"
-              v-model="item.state[item.model]"
-              :id="makeItemId(index)"
-              :type="item.type ?? 'text'"
-              :disabled="item.disabled ?? false"
-              :required="item.required ?? false"
-              :pattern="item.pattern"
-              :placeholder="item.placeholder ?? ''"
-              autocapitalize="off"
-              autocorrect="off"
-              :autocomplete="item.autocomplete ?? ''"
-              :inputmode="item.inputmode ?? undefined"
-              spellcheck="false"
-              class="textbox"
-              :class="item.classes"
-              @keydown.enter="onEnterKeyDown"
-            >
-
-            <!-- チェックボックス -->
-            <Checkboxes
-              v-if="item.type === 'checkbox'"
-              :state="item.state"
-              :model="item.model"
-              :required="item.required ?? false"
-              :options="item.options as Array<TTOption>"
-              :limit="item.limit"
-              :layout="item.layout"
-              :class="item.classes"
-              @update="onChange(item)"
-            />
-
-            <!-- ラジオボタン -->
-            <Radios
-              v-if="item.type === 'radio'"
-              :state="item.state"
-              :model="item.model"
-              :required="item.required ?? false"
-              :options="item.options as Array<TTOption>"
-              :layout="item.layout"
-              :class="item.classes"
-              @update="onChange(item)"
-            />
-
-            <!-- セレクトボックス -->
-            <label
-              v-if="item.type === 'select'"
-              class="selectbox"
-              :class="item.classes"
-            >
-              <select
+        <slot :name="`free-${index}`" />
+        <dl v-show="item.display !== false">
+          <dt v-if="item.label != null">{{ item.label }}</dt>
+          <dd>
+            <template v-if="item.model != null">
+              <!-- 各種 input 要素 -->
+              <input
+                v-if="isInput(item.type)"
                 v-model="item.state[item.model]"
-                @change="onChange(item)"
+                :id="makeItemId(index)"
+                :type="item.type ?? 'text'"
+                :disabled="item.disabled ?? false"
+                :required="item.required ?? false"
+                :pattern="item.pattern"
+                :placeholder="item.placeholder ?? ''"
+                autocapitalize="off"
+                autocorrect="off"
+                :autocomplete="item.autocomplete ?? ''"
+                :inputmode="item.inputmode ?? undefined"
+                spellcheck="false"
+                class="textbox"
+                :class="item.classes"
+                @keydown.enter="onEnterKeyDown"
               >
-                <option
-                  v-for="option, index in item.options"
-                  :key="index"
-                  :value="option.value"
-                  :selected="option.value === item.state[item.model]"
-                >{{ $t(option.label) }}</option>
-              </select>
-            </label>
 
-            <!-- ファイル選択ボックス -->
-            <FileBox
-              v-else-if="item.type === 'file'"
-              :files="item.state[item.model]"
-              :disabled="item.disabled"
-              :accept="item.accept"
-              :multiple="item.isMultipleFile"
-              :maxNumber="item.maxNumberOfFile"
-              :quadLayout="item.quadLayout"
-              :class="item.classes"
-              @change="(files: Array<File>) => { onChangeFile(files, item) }"
-            />
+              <!-- テキストエリア -->
+              <textarea
+                v-else-if="item.type === 'textarea'"
+                v-model="item.state[item.model]"
+                :id="makeItemId(index)"
+                :disabled="item.disabled ?? false"
+                :required="item.required ?? false"
+                :pattern="item.pattern"
+                :rows="item.rows ?? ''"
+                :placeholder="item.placeholder ?? ''"
+                autocapitalize="off"
+                autocorrect="off"
+                spellcheck="false"
+                class="textarea"
+                :class="item.classes"
+                @input="onInputTextarea(item)"
+                @keydown.enter="onEnterKeyDown"
+              />
 
-            <!-- テキストエリア -->
-            <textarea
-              v-else-if="item.type === 'textarea'"
-              v-model="item.state[item.model]"
-              :id="makeItemId(index)"
-              :disabled="item.disabled ?? false"
-              :required="item.required ?? false"
-              :pattern="item.pattern"
-              :rows="item.rows ?? ''"
-              :placeholder="item.placeholder ?? ''"
-              autocapitalize="off"
-              autocorrect="off"
-              spellcheck="false"
-              class="textarea"
-              :class="item.classes"
-              @input="onInputTextarea(item)"
-              @keydown.enter="onEnterKeyDown"
-            />
-          </template>
+              <!-- チェックボックス -->
+              <Checkboxes
+                v-else-if="item.type === 'checkbox'"
+                :state="item.state"
+                :model="item.model"
+                :required="item.required ?? false"
+                :options="item.options as Array<TTOption>"
+                :limit="item.limit"
+                :layout="item.layout"
+                :class="item.classes"
+                @update="onChange(item)"
+              />
 
-          <!-- ボタン -->
-          <button
-            v-if="item.type === 'button'"
-            type="button"
-            class="button--bordered"
-            :class="item.classes"
-            @click.prevent="onClick(item)"
-          >
-            <SVGIcon
-              v-if="item.icon != null"
-              :name="item.icon"
-            />
-            <span v-if="item.buttonLabel != null">{{ item.buttonLabel }}</span>
-          </button>
+              <!-- ラジオボタン -->
+              <Radios
+                v-else-if="item.type === 'radio'"
+                :state="item.state"
+                :model="item.model"
+                :required="item.required ?? false"
+                :options="item.options as Array<TTOption>"
+                :layout="item.layout"
+                :class="item.classes"
+                @update="onChange(item)"
+              />
 
-          <!-- クリアボタン -->
-          <button
-            v-if="item.clearButton"
-            class="clear-button"
-            :class="item.classes"
-            @click.prevent="onClickClearButton(item)"
-          >
-            <SVGIcon name="cross" />
-          </button>
+              <!-- セレクトボックス -->
+              <label
+                v-else-if="item.type === 'select'"
+                class="selectbox"
+                :class="item.classes"
+              >
+                <select
+                  v-model="item.state[item.model]"
+                  @change="onChange(item)"
+                >
+                  <option
+                    v-for="option, index in item.options"
+                    :key="index"
+                    :value="option.value"
+                    :selected="option.value === item.state[item.model]"
+                  >{{ $t(option.label) }}</option>
+                </select>
+              </label>
 
-          <div
-            v-if="item.hasPostLanguages || item.maxLengthIndicator"
-            class="text-option-container"
-          >
-            <!-- ポスト言語選択ポップアップボタン -->
+              <!-- ファイル選択ボックス -->
+              <FileBox
+                v-else-if="item.type === 'file'"
+                :files="item.state[item.model]"
+                :disabled="item.disabled"
+                :accept="item.accept"
+                :multiple="item.isMultipleFile"
+                :maxNumber="item.maxNumberOfFile"
+                :quadLayout="item.quadLayout"
+                :class="item.classes"
+                @change="(files: Array<File>) => { onChangeFile(files, item) }"
+              />
+            </template>
+
+            <!-- ボタン -->
             <button
-              v-if="item.hasPostLanguages"
-              class="select-languages-popup-trigger"
-              @click.prevent="mainState.openPostLanguagesPopup()"
+              v-if="item.type === 'button'"
+              type="button"
+              class="button--bordered"
+              :class="item.classes"
+              @click.prevent="onClick(item)"
             >
-              <SVGIcon name="translate" />
-              <span>{{ mainState.currentSetting.postLanguages?.join(", ") }}</span>
+              <SVGIcon
+                v-if="item.icon != null"
+                :name="item.icon"
+              />
+              <span v-if="item.buttonLabel != null">{{ item.buttonLabel }}</span>
+            </button>
+
+            <!-- クリアボタン -->
+            <button
+              v-if="item.clearButton"
+              class="clear-button"
+              :class="item.classes"
+              @click.prevent="onClickClearButton(item)"
+            >
+              <SVGIcon name="cross" />
             </button>
 
             <!-- 最大文字数インジケータ -->
@@ -295,22 +282,22 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
                 : false
               "
             >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
-          </div>
 
-          <!-- アカウントサジェスト -->
-          <AccountSuggest
-            v-if="item.model != null && item.hasAccountSuggest"
-            :text="item.state[item.model]"
-            @select="(params: any) => { onUpdateText(item, index, params) }"
-          />
-        </dd>
+            <!-- アカウントサジェスト -->
+            <AccountSuggest
+              v-if="item.model != null && item.hasAccountSuggest"
+              :text="item.state[item.model]"
+              @select="(params: any) => { onUpdateText(item, index, params) }"
+            />
+          </dd>
 
-        <!-- 脚注 -->
-        <dd
-          v-if="item.footnote != null"
-          class="footnote"
-        >{{ item.footnote }}</dd>
-      </dl>
+          <!-- 脚注 -->
+          <dd
+            v-if="item.footnote != null"
+            class="footnote"
+          >{{ item.footnote }}</dd>
+        </dl>
+      </template>
     </div>
     <slot name="after" />
     <button
@@ -408,36 +395,10 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
   word-wrap: break-word;
 }
 
-.text-option-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 0.5rem;
-}
-
-.select-languages-popup-trigger {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  grid-gap: 0.5rem;
-  margin: -0.5rem -1rem;
-  padding: 0.5rem 1rem;
-
-  & > .svg-icon {
-    fill: rgb(var(--accent-color));
-  }
-
-  & > span {
-    color: rgb(var(--accent-color));
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-}
-
 .max-length-indicator {
   color: rgb(var(--fg-color));
   font-size: 0.875rem;
-  margin-left: auto;
+  margin: 0.5rem 0 0 auto;
   &[data-over-maxlength="true"] {
     color: rgb(var(--notice-color));
   }

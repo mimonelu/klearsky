@@ -19,7 +19,6 @@ type TTEasyFormItem = {
   focus?: boolean
   footnote?: string
   hasAccountSuggest?: boolean
-  hasPostLanguages?: boolean
   icon?: string
   index?: number // ボタンのコールバック用
   inputmode?: "text" | "url" | "none" | "tel" | "email" | "numeric" | "decimal" | "search" | undefined
@@ -29,7 +28,7 @@ type TTEasyFormItem = {
   limit?: number
   maxlength?: number
   maxLengthIndicator?: boolean
-  maxLengthWithSegmenter?: boolean
+  maxLengthIndicatorByGrapheme?: boolean
   maxNumberOfFile?: number
   model?: string
   options?: Array<TTOption>

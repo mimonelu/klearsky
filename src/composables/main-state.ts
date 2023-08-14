@@ -140,6 +140,10 @@ const state = reactive<MainState>({
   openPostLanguagesPopup,
   closePostLanguagesPopup,
 
+  // ラベル選択ポップアップの開閉
+  openSelectLabelsPopup,
+  closeSelectLabelsPopup,
+
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
   closeInviteCodesPopup,
@@ -259,7 +263,7 @@ async function fetchLogAudit () {
   state.currentProfile.__log = logJson.reverse()
 }
 
-async function fetchCurrentAuthorFeed (direction: "new" | "old", middleCursor?: string) {
+async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string, middleCursor?: string) {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
 
@@ -269,15 +273,33 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old", middleCursor?: 
   // ブロックされている
   if (state.currentProfile?.viewer.blockedBy) return
 
-  const cursor: undefined | string =
+  const feeds = filter === "posts_with_replies"
+    ? state.currentAuthorFeedsWithReplies
+    : filter === "posts_with_media"
+      ? state.currentAuthorFeedsWithMedia
+      : state.currentAuthorFeeds
+
+  const cursor = filter === "posts_with_replies"
+    ? state.currentAuthorFeedsWithRepliesCursor
+    : filter === "posts_with_media" 
+      ? state.currentAuthorFeedsWithMediaCursor
+      : state.currentAuthorFeedsCursor
+
+  const resultCursor: undefined | string =
     await state.atp.fetchAuthorFeed(
-      state.currentAuthorFeeds as Array<TTFeed>,
+      feeds as Array<TTFeed>,
       account,
       CONSTS.limitOfFetchAuthorFeeds,
-      direction === "old" ? middleCursor ?? state.currentAuthorCursor : undefined,
+      direction === "old" ? middleCursor ?? cursor : undefined,
+      filter ?? "posts_no_replies",
       middleCursor != null
     )
-  if (cursor != null) state.currentAuthorCursor = cursor
+  if (resultCursor != null)
+    filter === "posts_with_replies"
+      ? state.currentAuthorFeedsWithRepliesCursor = resultCursor
+      : filter === "posts_with_media" 
+        ? state.currentAuthorFeedsWithMediaCursor = resultCursor
+        : state.currentAuthorFeedsCursor = resultCursor
 }
 
 async function fetchCurrentAuthorCustomFeeds (direction: "new" | "old") {
@@ -812,6 +834,17 @@ function openPostLanguagesPopup () {
 
 function closePostLanguagesPopup () {
   state.postLanguagesPopupDisplay = false
+}
+
+// ラベル選択ポップアップの開閉
+
+function openSelectLabelsPopup (params: any) {
+  state.selectLabelsPopupDisplay = true
+  state.selectLabelsPopupState = params
+}
+
+function closeSelectLabelsPopup () {
+  state.selectLabelsPopupDisplay = false
 }
 
 // 招待コード確認ポップアップの開閉

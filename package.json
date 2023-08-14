@@ -1,6 +1,6 @@
 {
   "name": "klearsky",
-  "version": "0.9.43",
+  "version": "0.9.44",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@atproto/api": "0.4.3",
+    "@atproto/api": "0.6.1",
     "@ipld/car": "^5.1.1",
     "@vueuse/core": "^10.2.0",
     "browser-image-compression": "^2.0.2",
@@ -19,7 +19,6 @@
     "crypto-js": "^4.1.1",
     "date-fns": "^2.30.0",
     "encoding-japanese": "^2.0.0",
-    "graphemer": "^1.4.0",
     "hotkeys-js": "^3.10.3",
     "multiformats": "^12.0.1",
     "portal-vue": "^3.0.0",

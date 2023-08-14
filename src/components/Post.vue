@@ -266,7 +266,7 @@ function onActivateReplierLink () {
 }
 
 async function onActivateProfileLink (handle: string) {
-  await router.push({ name: "profile-post", query: { account: handle } })
+  await router.push({ name: "profile-feeds", query: { account: handle } })
 }
 
 function onActivateImageFolderButton () {

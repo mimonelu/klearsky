@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <RouterLink
-    :to="{ name: 'profile-post', query: { account: handle } }"
+    :to="{ name: 'profile-feeds', query: { account: handle } }"
     class="avatar-link"
     :data-has-label="(labels?.length ?? 0) > 0"
   >

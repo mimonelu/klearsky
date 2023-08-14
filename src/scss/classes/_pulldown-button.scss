@@ -34,7 +34,7 @@
     z-index: 1;
     width: calc(100% + 2px);
 
-    & > * {
+    & > a {
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -51,6 +51,11 @@
       & > span {
         color: rgb(var(--bg-color));
       }
+    }
+
+    & > hr {
+      background-color: rgba(var(--bg-color), 0.25);
+      height: 1px;
     }
   }
   &:hover {

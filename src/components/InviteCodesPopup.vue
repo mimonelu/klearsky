@@ -68,7 +68,7 @@ async function copyCode (code: string) {
               <RouterLink
                 v-else
                 :to="{
-                  path: '/profile/post',
+                  path: '/profile/feeds',
                   query: { account: inviteCode.uses[index]?.usedBy }
                 }"
                 class="button--bordered"

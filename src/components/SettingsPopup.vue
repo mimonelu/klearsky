@@ -94,13 +94,6 @@ function closeHtmlPopupDisplay () {
                 <SVGIcon name="cursorRight" />
               </button>
 
-              <!-- ワードミュートポップアップトリガー -->
-              <button @click.prevent="mainState.openWordMutePopup">
-                <SVGIcon name="alphabeticalOff" />
-                <span>{{ $t("wordMuteEdit") }}</span>
-                <SVGIcon name="cursorRight" />
-              </button>
-
               <!-- コンテンツ言語選択ポップアップトリガー -->
               <button @click.prevent="mainState.openContentFilteringPopup">
                 <SVGIcon name="alert" />
@@ -119,6 +112,13 @@ function closeHtmlPopupDisplay () {
               <button @click.prevent="mainState.openBlockingUsersPopup">
                 <SVGIcon name="personOff" />
                 <span>{{ $t("checkBlockingUsers") }}</span>
+                <SVGIcon name="cursorRight" />
+              </button>
+
+              <!-- ワードミュートポップアップトリガー -->
+              <button @click.prevent="mainState.openWordMutePopup">
+                <SVGIcon name="alphabeticalOff" />
+                <span>{{ $t("wordMuteEdit") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
@@ -541,7 +541,7 @@ function closeHtmlPopupDisplay () {
 
 .list-menu {
   .svg-icon--feed {
-    --icon-color: var(--post-color);
+    --icon-color: var(--accent-color);
   }
   .svg-icon--alphabeticalOff,
   .svg-icon--alert,

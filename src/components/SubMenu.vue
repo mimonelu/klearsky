@@ -50,8 +50,13 @@ function searchPost () {
     <!-- マイフィード -->
     <div class="my-feed">
       <div class="my-feed__header">
-        <SVGIcon name="feed" />
-        <span>{{ $t("myFeeds") }}</span>
+        <a
+          class="textlink--icon"
+          @click="mainState.openMyFeedsPopup"
+        >
+          <SVGIcon name="feed" />
+          <span>{{ $t("myFeeds") }}</span>
+        </a>
       </div>
       <div class="my-feed__inner">
         <RouterLink
@@ -112,20 +117,9 @@ function searchPost () {
   margin-bottom: 2rem;
   overflow: hidden;
 
-  &__header {
-    display: flex;
-    align-items: center;
-    grid-gap: 0.5rem;
+  &__header .textlink--icon {
     font-size: 0.875rem;
     margin-bottom: 1rem;
-
-    & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.5);
-    }
-
-    & > span {
-      color: rgba(var(--fg-color), 0.5);
-    }
   }
 
   &__inner {

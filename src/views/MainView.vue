@@ -23,6 +23,7 @@ import NotificationPopup from "@/components/NotificationPopup.vue"
 import PopularFeedsPopup from "@/components/PopularFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
+import SelectLabelsPopup from "@/components/SelectLabelsPopup.vue"
 import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
@@ -112,7 +113,11 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
     state.inSameProfilePage = state.currentProfile != null
     if (!state.inSameProfilePage) {
       state.currentAuthorFeeds?.splice(0)
-      state.currentAuthorCursor = undefined
+      state.currentAuthorFeedsCursor = undefined
+      state.currentAuthorFeedsWithReplies?.splice(0)
+      state.currentAuthorFeedsWithRepliesCursor = undefined
+      state.currentAuthorFeedsWithMedia?.splice(0)
+      state.currentAuthorFeedsWithMediaCursor = undefined
       state.currentAuthorMediasIncludeRepost = [false]
       state.currentAuthorCustomFeeds?.splice(0)
       state.currentAuthorCustomFeedsCursor = undefined
@@ -157,7 +162,11 @@ function resetState () {
   state.inSameProfilePage = false
   state.currentProfile = null
   state.currentAuthorFeeds = []
-  state.currentAuthorCursor = undefined
+  state.currentAuthorFeedsCursor = undefined
+  state.currentAuthorFeedsWithReplies = []
+  state.currentAuthorFeedsWithRepliesCursor = undefined
+  state.currentAuthorFeedsWithMedia = []
+  state.currentAuthorFeedsWithMediaCursor = undefined
   state.currentAuthorMediasIncludeRepost = [false]
   state.currentAuthorCustomFeeds = []
   state.currentAuthorCustomFeedsCursor = undefined
@@ -236,6 +245,10 @@ function resetState () {
   // ポスト言語ポップアップの表示スイッチ
   state.postLanguagesPopupDisplay = false
 
+  // ラベル選択ポップアップ
+  state.selectLabelsPopupDisplay = false
+  state.selectLabelsPopupState = undefined
+
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
 
@@ -274,22 +287,17 @@ function resetState () {
 function updatePageTitle () {
   let title = state.notificationCount === 0 ? "" : `(${state.notificationCount}) `
   title += "Klearsky"
-  switch (state.currentPath) {
-    case "/profile/post":
-    case "/profile/repost":
-    case "/profile/like":
-    case "/profile/custom-feeds":
-    case "/profile/following":
-    case "/profile/follower": {
-      title += ` - ${state.currentQuery.account}`
-      break
-    }
-    case "/home/feeds": {
-      title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
-      break
-    }
-    default: break
-  }
+
+  if (state.currentPath === "/home/feeds")
+    title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
+
+  if (state.currentPath.startsWith("/profile/") &&
+      state.currentQuery.account != null)
+    title += ` - ${state.currentQuery.account}`
+
+  if (state.currentPath.startsWith("/search/"))
+    title += ` - ${$t("search")}`
+
   if (router.currentRoute.value.meta.label != null)
     title += ` - ${$t(router.currentRoute.value.meta.label)}`
   window.document.title = title
@@ -332,11 +340,12 @@ async function manualLogin (service: string, identifier: string, password: strin
 async function processPage (pageName?: null | RouteRecordName) {
   let account: null | string = null
   switch (pageName) {
-    case "profile-post":
+    case "profile-feeds":
+    case "profile-feeds-with-replies":
+    case "profile-feeds-with-media":
+    case "profile-custom-feeds":
     case "profile-repost":
     case "profile-like":
-    case "profile-media":
-    case "profile-custom-feeds":
     case "profile-following":
     case "profile-follower": {
       account = state.currentQuery.account as LocationQueryValue
@@ -351,14 +360,33 @@ async function processPage (pageName?: null | RouteRecordName) {
   state.listProcessing = true
   try {
     switch (pageName) {
-      case "profile-post":
-      case "profile-media": {
+      case "profile-feeds": {
         // ブロック情報などを先に取得するために Promise.allSettled はしない
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           await state.fetchCurrentProfile(account as string)
         if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0)
           await state.fetchCurrentAuthorFeed("new")
+        break
+      }
+      case "profile-feeds-with-replies": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorFeedsWithReplies.length === 0)
+          tasks.push(state.fetchCurrentAuthorFeed("new", "posts_with_replies"))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
+        await Promise.allSettled(tasks)
+        break
+      }
+      case "profile-feeds-with-media": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorFeedsWithMedia.length === 0)
+          tasks.push(state.fetchCurrentAuthorFeed("new", "posts_with_media"))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
+        await Promise.allSettled(tasks)
         break
       }
       case "profile-repost": {
@@ -744,6 +772,15 @@ function broadcastListener (event: MessageEvent) {
         </ul>
       </template>
     </SelectLanguagesPopup>
+
+    <!-- ラベル選択ポップアップ -->
+    <SelectLabelsPopup
+      v-if="state.selectLabelsPopupDisplay"
+      :state="state.selectLabelsPopupState"
+      property="labels"
+      @close="state.closeSelectLabelsPopup"
+      @change=""
+    />
 
     <!-- 　D&Dオーバーレイ -->
     <div

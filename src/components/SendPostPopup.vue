@@ -21,30 +21,23 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  labels: Array<string>
+  htmlPopupDisplay: boolean
+}>({
+  labels: [],
+  htmlPopupDisplay: false,
+})
+
+const easyFormState = reactive<{
   text: string
   url: string
   images: Array<File>
   alts: Array<string>
-  htmlPopupDisplay: boolean
 }>({
   text: props.text ?? "",
   url: "",
   images: [],
   alts: [],
-  htmlPopupDisplay: false,
-})
-
-// D&D用処置
-watch(() => props.fileList, (value?: FileList) => {
-  const files = value != null ? Array.from(value) : []
-  files.unshift(...state.images)
-  state.images = files
-  onChangeImage()
-})
-
-onMounted(() => {
-  if (props.fileList != null) state.images = Array.from(props.fileList)
-  onChangeImage()
 })
 
 const easyFormProps: TTEasyForm = {
@@ -53,20 +46,19 @@ const easyFormProps: TTEasyForm = {
   submitCallback,
   data: [
     {
-      state,
+      state: easyFormState,
       model: "text",
       type: "textarea",
       placeholder: $t("text"),
       maxlength: 300,
       maxLengthIndicator: true,
-      maxLengthWithSegmenter: true,
+      maxLengthIndicatorByGrapheme: true,
       rows: 6,
-      hasPostLanguages: true,
       hasAccountSuggest: true,
       focus: true,
     },
     {
-      state,
+      state: easyFormState,
       model: "url",
       type: "text",
       placeholder: $t("linkBox"),
@@ -75,7 +67,7 @@ const easyFormProps: TTEasyForm = {
       clearButton: true,
     },
     {
-      state,
+      state: easyFormState,
       model: "images",
       type: "file",
       placeholder: $t("imageBoxes"),
@@ -88,27 +80,53 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
+// D&D用処置
+watch(() => props.fileList, (value?: FileList) => {
+  const files = value != null ? Array.from(value) : []
+  files.unshift(...easyFormState.images)
+  easyFormState.images = files
+  onChangeImage()
+})
+
+onMounted(() => {
+  if (props.fileList != null) easyFormState.images = Array.from(props.fileList)
+  onChangeImage()
+})
+
 function close () {
   emit("closeSnedPostPopup", false, isEmpty())
 }
 
 function isEmpty (): boolean {
-  return !state.text &&
-    !state.url &&
-    state.images.length === 0 &&
-    state.alts.length === 0
+  return !easyFormState.text &&
+    !easyFormState.url &&
+    easyFormState.images.length === 0 &&
+    easyFormState.alts.length === 0
 }
 
 async function submitCallback () {
   Util.blurElement()
+
+  // 空ポストの確認
+  if (easyFormState.text.trim() === "" &&
+      easyFormState.images.length === 0 &&
+      easyFormState.url.trim() === "") {
+    const result = await mainState.openConfirmationPopup(
+      $t("emptyPostConfirmation"),
+      $t("emptyPostConfirmationMessage")
+    )
+    if (!result) return
+  }
+
   if (mainState.processing) return
   mainState.processing = true
   try {
     const result = await mainState.atp.createPost({
-      ...state,
+      ...easyFormState,
       type: props.type,
       post: props.post,
       languages: mainState.currentSetting.postLanguages,
+      labels: state.labels,
 
       // Lightning
       lightning: mainState.currentSetting.lightning,
@@ -123,10 +141,10 @@ function onChangeImage () {
   // ファイルがひとつ以上選択されているか否かでリンクカード／フィードカードの表示状態を切り替える
   const urlItem = easyFormProps.data.find((item: TTEasyFormItem) => item.model === "url")
   if (urlItem == null) return
-  urlItem.disabled = state.images.length > 0
+  urlItem.disabled = easyFormState.images.length > 0
 
   // TODO: 意図しない alt が削除される不具合を修正すること
-  state.alts.splice(state.images.length)
+  easyFormState.alts.splice(easyFormState.images.length)
 }
 </script>
 
@@ -154,14 +172,45 @@ function onChangeImage () {
           :noLink="true"
         />
         <EasyForm v-bind="easyFormProps">
+          <template v-slot:free-2>
+            <div class="button-container">
+              <!-- ポスト言語選択ポップアップトリガー -->
+              <button
+                class="button--bordered"
+                @click.prevent="mainState.openPostLanguagesPopup()"
+              >
+                <SVGIcon name="translate" />
+                <span>{{
+                  mainState.currentSetting.postLanguages?.length === 0
+                  ? "---"
+                  : mainState.currentSetting.postLanguages?.join(", ")
+                }}</span>
+              </button>
+
+              <!-- ラベル選択ポップアップトリガー -->
+              <button
+                class="button--bordered"
+                @click.prevent="mainState.openSelectLabelsPopup(state)"
+              >
+                <SVGIcon name="alert" />
+                <span>{{
+                  state.labels.length === 0
+                  ? "---"
+                  : state.labels.map((label: string) => $t(label)).join(", ")
+                }}</span>
+              </button>
+            </div>
+          </template>
+
+          <!-- alt -->
           <template #after>
-            <dl v-if="state.images.length > 0">
+            <dl v-if="easyFormState.images.length > 0">
               <dd
-                v-for="_, altIndex of state.images"
+                v-for="_, altIndex of easyFormState.images"
                 :key="altIndex"
               >
                 <input
-                  v-model="state.alts[altIndex]"
+                  v-model="easyFormState.alts[altIndex]"
                   type="text"
                   autocapitalize="off"
                   autocomplete="off"
@@ -239,6 +288,32 @@ function onChangeImage () {
 
   .svg-icon--help {
     font-size: 1.25rem;
+  }
+
+  .button-container {
+    display: flex;
+    grid-gap: 1rem;
+
+    .button--bordered {
+      min-height: 3rem;
+      &:first-child {
+        white-space: nowrap;
+      }
+      &:last-child {
+        --fg-color: var(--notice-color);
+      }
+
+      & > .svg-icon {
+        font-size: 1rem;
+      }
+
+      & > span {
+        word-break: break-all;
+      }
+    }
+    .button--bordered:first-child > span {
+      text-transform: uppercase;
+    }
   }
 }
 </style>

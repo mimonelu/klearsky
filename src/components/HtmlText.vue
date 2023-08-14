@@ -28,7 +28,7 @@ const INTERNAL_LINK_ITEMS = [
   // プロフィールページ
   {
     src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)$"),
-    dst: "/profile/post?account=[1]",
+    dst: "/profile/feeds?account=[1]",
   },
 ]
 
@@ -129,7 +129,7 @@ function onActivateHashTag (text: string) {
       <!-- 外部リンク -->
       <template v-if="segment.type === 'externalLink'">
         <a
-          class="textlink"
+          class="textlink external-link"
           :href="segment.param"
           rel="noreferrer"
           :target="segment.param.startsWith('lightning:') ? '' : '_blank'"
@@ -140,7 +140,7 @@ function onActivateHashTag (text: string) {
       <!-- 内部リンク -->
       <template v-else-if="segment.type === 'internalLink'">
         <RouterLink
-          class="textlink"
+          class="textlink internal-link"
           :to="segment.param"
           @click.stop
         >{{ segment.text }}</RouterLink>
@@ -149,8 +149,8 @@ function onActivateHashTag (text: string) {
       <!-- メンション -->
       <template v-else-if="segment.type === 'mention'">
         <RouterLink
-          class="textlink"
-          :to="`/profile/post?account=${segment.param}`"
+          class="textlink mention"
+          :to="`/profile/feeds?account=${segment.param}`"
           @click.stop="$emit('onActivateMention')"
         >{{ segment.text }}</RouterLink>
       </template>
@@ -158,7 +158,7 @@ function onActivateHashTag (text: string) {
       <!-- ハッシュタグ -->
       <template v-else-if="segment.type === 'tag'">
         <RouterLink
-          class="textlink"
+          class="textlink hash-tag"
           :to="`/search/post?text=${segment.param}`"
           @click.stop="onActivateHashTag(segment.param)"
         >{{ segment.text }}</RouterLink>
@@ -180,6 +180,11 @@ function onActivateHashTag (text: string) {
 </template>
 
 <style lang="scss" scoped>
+.external-link,
+.internal-link {
+  word-break: break-all;
+}
+
 .translate-link {
   --accent-color: var(--fg-color);
   --opacity: 0.5;

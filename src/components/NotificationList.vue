@@ -39,7 +39,7 @@ function makeSubjectTo (notification: TTNotification): any {
     case "invite":
     case "repost":
     case "like": {
-      return { name: "profile-post", query: { account: notification.handle } }
+      return { name: "profile-feeds", query: { account: notification.handle } }
     }
     case "likeGenerator": {
       return { name: "feeds", query: { feed: notification.uri, displayName: notification.displayName } }

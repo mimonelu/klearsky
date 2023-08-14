@@ -7,12 +7,14 @@ export default async function (
   author: string,
   limit?: number,
   cursor?: string,
+  filter?: string,
   middle?: boolean
 ): Promise<undefined | string> {
   if (this.agent == null) return
   const query: AppBskyFeedGetAuthorFeed.QueryParams = { actor: author }
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
+  if (filter != null) query.filter = filter
   let responseTemp: any = undefined
   await (this.agent as BskyAgent)
     .getAuthorFeed(query)

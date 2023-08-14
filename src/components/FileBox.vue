@@ -76,7 +76,7 @@ function deleteFile (index: number) {
     :data-disabled="disabled"
   >
     <label
-      class="button add-button"
+      class="button--bordered add-button"
       tabindex="0"
     >
       <input
@@ -87,7 +87,7 @@ function deleteFile (index: number) {
         @click="onClick"
         @change="onChange"
       />
-      <SVGIcon name="plus" />
+      <SVGIcon name="image" />
     </label>
 
     <!-- 通常レイアウト -->
@@ -164,9 +164,7 @@ function deleteFile (index: number) {
   }
 
   & > .svg-icon {
-    fill: rgb(var(--bg-color));
-    min-width: 1rem;
-    height: 1rem;
+    font-size: 16px;
   }
 }
 

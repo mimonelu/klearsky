@@ -8,6 +8,7 @@ type TTCreatePostParams = {
   images: Array<File>
   alts: Array<string>
   languages?: Array<string>
+  labels?: Array<string>
   lightning?: string
 }
 
@@ -21,6 +22,7 @@ type TTUpdateProfileParams = {
 }
 
 type TTSession = {
+  [index: string]: any
   accessJwt: string
   did: string
   handle: string
@@ -100,6 +102,7 @@ interface TIAtpWrapper {
     author: string,
     limit?: number,
     cursor?: string,
+    filter?: string,
     middle?: boolean
   ): Promise<undefined | string>
   fetchAuthorReposts(
@@ -271,6 +274,7 @@ interface TIAtpWrapper {
   ): void
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
+  updateMyLabels(this: TIAtpWrapper, labels: Array<TTLabel>): Promise<Error | boolean>
   updateNotificationSeen(this: TIAtpWrapper): Promise<boolean>
   updatePreferences (
     this: TIAtpWrapper,

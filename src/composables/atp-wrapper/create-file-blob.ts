@@ -30,6 +30,7 @@ async function compressFileToBlob(params: {
   // SEE: https://github.com/Donaldcwl/browser-image-compression#main-function
   return await imageCompression(params.file, {
     fileType: params.mimeType,
+    maxIteration: 20, // Default: 10
     maxSizeMB: params.maxSize,
     maxWidthOrHeight: Math.max(params.maxWidth, params.maxHeight),
     useWebWorker: true,
