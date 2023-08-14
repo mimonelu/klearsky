@@ -287,23 +287,17 @@ function resetState () {
 function updatePageTitle () {
   let title = state.notificationCount === 0 ? "" : `(${state.notificationCount}) `
   title += "Klearsky"
-  switch (state.currentPath) {
-    case "/profile/feeds":
-    case "/profile/feeds-with-replies":
-    case "/profile/repost":
-    case "/profile/like":
-    case "/profile/custom-feeds":
-    case "/profile/following":
-    case "/profile/follower": {
-      title += ` - ${state.currentQuery.account}`
-      break
-    }
-    case "/home/feeds": {
-      title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
-      break
-    }
-    default: break
-  }
+
+  if (state.currentPath === "/home/feeds")
+    title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
+
+  if (state.currentPath.startsWith("/profile/") &&
+      state.currentQuery.account != null)
+    title += ` - ${state.currentQuery.account}`
+
+  if (state.currentPath.startsWith("/search/"))
+    title += ` - ${$t("search")}`
+
   if (router.currentRoute.value.meta.label != null)
     title += ` - ${$t(router.currentRoute.value.meta.label)}`
   window.document.title = title

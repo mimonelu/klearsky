@@ -27,6 +27,7 @@
   "medias": "メディア",
   "help": "ヘルプ",
   "includeRepost": "リポストの画像も表示する",
+  "media": "メディア",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -84,6 +85,7 @@
   "suggestive": "わいせつ表現",
   "suggestive-sexual": "わいせつ表現（性的表現）",
   "hate": "ヘイト／差別表現",
+  "hate-intolerant": "ヘイト（差別表現）",
 
   "always-hide": "強制閲覧制限",
   "always-warn": "強制閲覧警告",

@@ -27,6 +27,7 @@
   "medias": "Medias",
   "help": "Help",
   "includeRepost": "Show images in reposts",
+  "media": "Media",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -84,6 +85,7 @@
   "suggestive": "Suggestive",
   "suggestive-sexual": "Suggestive (Sexual)",
   "hate": "Hate/Intolerance",
+  "hate-intolerant": "Hate (Intolerance)",
 
   "always-hide": "Forced to hide",
   "always-warn": "Forced warning",

@@ -113,7 +113,7 @@ const router = createRouter({
             {
               path: "custom-feeds",
               name: "profile-custom-feeds",
-              meta: { label: "custom-feeds" },
+              meta: { label: "customFeeds" },
               component: AuthorCustomFeedsView,
             },
             {
@@ -157,13 +157,13 @@ const router = createRouter({
             {
               path: "feed",
               name: "feed-search",
-              meta: { label: "feedSearch" },
+              meta: { label: "customFeeds" },
               component: FeedSearchView,
             },
             {
               path: "user",
               name: "user-search",
-              meta: { label: "userSearch" },
+              meta: { label: "account" },
               component: UserSearchView,
             },
             {

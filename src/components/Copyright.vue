@@ -20,7 +20,7 @@ const yyyy = (new Date).getFullYear()
       href="https://twitter.com/mimonelu"
       rel="noreferrer"
       target="_blank"
-    >@Twitter</a>
+    >@X(Twitter)</a>
     <span>/</span>
     <small>Bluesky &copy; {{ yyyy }} Bluesky PBC</small>
     <a
@@ -34,7 +34,7 @@ const yyyy = (new Date).getFullYear()
       href="https://twitter.com/bluesky"
       rel="noreferrer"
       target="_blank"
-    >@Twitter</a>
+    >@X(Twitter)</a>
   </div>
 </template>
 

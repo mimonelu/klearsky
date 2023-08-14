@@ -304,7 +304,7 @@ function hideWarningContent () {
         <RouterLink
           v-if="isMyProfile()"
           class="tab__button tab__button--repost"
-          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
+          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.handle } }"
           :title="$t('reposts')"
         >
           <SVGIcon name="repost" />
@@ -314,7 +314,7 @@ function hideWarningContent () {
         <RouterLink
           v-if="isMyProfile()"
           class="tab__button tab__button--like"
-          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
+          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.handle } }"
           :title="$t('likes')"
         >
           <SVGIcon name="heart" />
