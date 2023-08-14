@@ -81,10 +81,10 @@ watch(() => props.display, (display: boolean) => {
   }
 
   &--content {
-    box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 0.5rem 0 rgb(0, 0, 0, 0.25);
     background-color: rgb(var(--fg-color));
     color: rgb(var(--bg-color));
-    border: 1px solid rgba(var(--bg-color), 0.25);
+    border: 1px solid rgb(var(--bg-color), 0.25);
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
@@ -93,13 +93,13 @@ watch(() => props.display, (display: boolean) => {
 
     &:deep() {
       .menu-ticker__header {
-        border-bottom: 1px solid rgba(var(--bg-color), 0.25);
+        border-bottom: 1px solid rgb(var(--bg-color), 0.25);
         font-weight: bold;
         padding: 0.25rem 1rem 0.75rem 1rem;
         word-wrap: break-word;
 
         & > .svg-icon {
-          fill: rgba(var(--bg-color), 0.5);
+          fill: rgb(var(--bg-color), 0.5);
         }
       }
 
@@ -111,7 +111,7 @@ watch(() => props.display, (display: boolean) => {
         padding: 0.5rem 1rem;
         white-space: nowrap;
         &:focus, &:hover {
-          background-color: rgba(var(--accent-color), 0.25);
+          background-color: rgb(var(--accent-color), 0.25);
         }
 
         & > .svg-icon {
@@ -139,7 +139,7 @@ watch(() => props.display, (display: boolean) => {
       }
 
       & > hr {
-        border-bottom: 1px solid rgba(var(--bg-color), 0.25);
+        border-bottom: 1px solid rgb(var(--bg-color), 0.25);
       }
     }
   }

@@ -112,8 +112,8 @@ async function openSendPostPopup () {
 <style lang="scss" scoped>
 .main-menu-horizontal {
   --button-size: 2.125rem;
-  background-color: rgba(var(--bg-color), var(--main-area-opacity));
-  border-top: 1px solid rgba(var(--fg-color), 0.25);
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+  border-top: 1px solid rgb(var(--fg-color), 0.25);
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   min-height: var(--sp-menu-height);
@@ -133,7 +133,7 @@ async function openSendPostPopup () {
   max-height: calc(var(--sp-menu-size) - 0.5rem - 1px);
 
   .svg-icon {
-    fill: rgba(var(--fg-color), 0.75);
+    fill: rgb(var(--fg-color), 0.75);
     font-size: 1.5rem;
   }
 
@@ -144,7 +144,7 @@ async function openSendPostPopup () {
   }
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
-    background-color: rgba(var(--accent-color), 0.25);
+    background-color: rgb(var(--accent-color), 0.25);
   }
 
   &.profile-button {

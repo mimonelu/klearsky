@@ -1,6 +1,6 @@
 .author-handle {
   --opacity: 0.5;
-  color: rgba(var(--fg-color), var(--opacity));
+  color: rgb(var(--fg-color), var(--opacity));
   font-size: 0.75em;
   line-height: 1.25;
   overflow: hidden;
@@ -11,8 +11,8 @@
   [data-is-following="true"] &::before {
     background-image: radial-gradient(
       circle at center,
-      rgba(var(--fg-color), var(--opacity)) 37.5%,
-      rgba(var(--fg-color), 0) 37.5%
+      rgb(var(--fg-color), var(--opacity)) 37.5%,
+      rgb(var(--fg-color), 0) 37.5%
     );
     content: "";
     display: inline-block;

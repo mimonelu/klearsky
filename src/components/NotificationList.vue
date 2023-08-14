@@ -176,10 +176,10 @@ function makeSubjectTo (notification: TTNotification): any {
 .notification-group {
   padding: 1rem;
   &:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+    border-bottom: 1px solid rgb(var(--fg-color), 0.125);
   }
   &[data-is-new="true"] {
-    background-color: rgba(var(--accent-color), 0.125);
+    background-color: rgb(var(--accent-color), 0.125);
   }
 
   // reason ごとの処理
@@ -190,7 +190,7 @@ function makeSubjectTo (notification: TTNotification): any {
   }
   &[data-reason="follow"] {
     .text {
-      color: rgba(var(--fg-color), 0.75);
+      color: rgb(var(--fg-color), 0.75);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -200,7 +200,7 @@ function makeSubjectTo (notification: TTNotification): any {
   // 通知フォルダー開閉ボタンを持つ通知グループの処理
   &[data-has-folder="true"] {
     .notification-folder {
-      border: 1px solid rgba(var(--fg-color), 0.25);
+      border: 1px solid rgb(var(--fg-color), 0.25);
       border-radius: var(--border-radius);
     }
 
@@ -211,12 +211,12 @@ function makeSubjectTo (notification: TTNotification): any {
 
   // フィードジェネレーター
   & > .custom-feed-card {
-    background-color: rgba(var(--accent-color), 0.125);
-    border: 1px solid rgba(var(--accent-color), 0.25);
+    background-color: rgb(var(--accent-color), 0.125);
+    border: 1px solid rgb(var(--accent-color), 0.25);
     border-radius: var(--border-radius);
     margin-top: 0.5rem;
     &:focus, &:hover {
-      border-color: rgba(var(--accent-color), 0.5);
+      border-color: rgb(var(--accent-color), 0.5);
     }
   }
 }
@@ -285,7 +285,7 @@ function makeSubjectTo (notification: TTNotification): any {
     }
 
     .indexed-at {
-      color: rgba(var(--fg-color), 0.75);
+      color: rgb(var(--fg-color), 0.75);
     }
   }
 
@@ -339,7 +339,7 @@ function makeSubjectTo (notification: TTNotification): any {
 
 // 表示名
 .display-name {
-  color: rgba(var(--fg-color), 0.75);
+  color: rgb(var(--fg-color), 0.75);
   font-size: 0.875rem;
   font-weight: bold;
   line-height: 1.25;
@@ -349,7 +349,7 @@ function makeSubjectTo (notification: TTNotification): any {
 
 // リアクション日時
 .indexed-at {
-  color: rgba(var(--fg-color), 0.5);
+  color: rgb(var(--fg-color), 0.5);
   font-size: 0.875rem;
   line-height: 1.25;
   overflow: hidden;
@@ -367,8 +367,8 @@ function makeSubjectTo (notification: TTNotification): any {
 
 // ユーザーポスト
 .post {
-  background-color: rgba(var(--fg-color), 0.125);
-  border: 1px solid rgba(var(--fg-color), 0.25);
+  background-color: rgb(var(--fg-color), 0.125);
+  border: 1px solid rgb(var(--fg-color), 0.25);
   border-radius: var(--border-radius);
   font-size: 0.875rem;
   margin-top: 0.5rem;

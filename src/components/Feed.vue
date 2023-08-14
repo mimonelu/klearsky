@@ -131,12 +131,12 @@ function removeThisPost (uri: string) {
     overflow: hidden;
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), var(--alpha));
+      fill: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
     & > .display-name {
-      color: rgba(var(--fg-color), var(--alpha));
+      color: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
       font-weight: bold;
       line-height: 1.25;
@@ -146,7 +146,7 @@ function removeThisPost (uri: string) {
     }
 
     & > .author-handle {
-      color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
+      color: rgb(var(--fg-color), calc(var(--alpha) - 0.25));
       font-size: 0.75em;
     }
   }

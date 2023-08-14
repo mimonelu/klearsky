@@ -189,12 +189,12 @@ function onActivateHashTag (text: string) {
   --accent-color: var(--fg-color);
   --opacity: 0.5;
   border-radius: 0.25em;
-  color: rgba(var(--accent-color), var(--opacity));
+  color: rgb(var(--accent-color), var(--opacity));
   font-size: 0.875em;
   padding: 0 0.25em;
   &:focus, &:hover {
     --opacity: 0.75;
-    background-color: rgba(var(--accent-color), 0.125);
+    background-color: rgb(var(--accent-color), 0.125);
   }
 }
 </style>

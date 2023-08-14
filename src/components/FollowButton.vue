@@ -52,7 +52,7 @@ async function toggleFollow () {
 .follow-button {
   position: relative;
   &[data-is-following="true"] {
-    background-color: rgba(var(--like-color), 0.875);
+    background-color: rgb(var(--like-color), 0.875);
     &:focus, &:hover {
       background-color: rgb(var(--like-color));
     }

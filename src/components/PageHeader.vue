@@ -56,8 +56,8 @@ function onActivateBackButton () {
 
 <style lang="scss" scoped>
 .page-header {
-  background-color: rgba(var(--bg-color), var(--main-area-opacity));
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+  border-bottom: 1px solid rgb(var(--fg-color), 0.25);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@ function onActivateBackButton () {
       }
 
       & > .svg-icon {
-        fill: rgba(var(--fg-color), 0.75);
+        fill: rgb(var(--fg-color), 0.75);
         font-size: 1.25rem;
       }
     }

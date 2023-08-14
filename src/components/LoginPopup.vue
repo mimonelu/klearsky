@@ -155,7 +155,7 @@ $width: 800px;
 }
 
 .description {
-  color: rgba(var(--fg-color), 0.75);
+  color: rgb(var(--fg-color), 0.75);
   font-size: 1.25rem;
 }
 
@@ -167,7 +167,7 @@ $width: 800px;
 
 .easy-form,
 .account-container {
-  background-color: rgba(var(--fg-color), 0.0625);
+  background-color: rgb(var(--fg-color), 0.0625);
   border-radius: var(--border-radius);
   padding: 1rem;
 }

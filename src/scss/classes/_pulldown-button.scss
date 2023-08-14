@@ -1,6 +1,6 @@
 .pulldown-button {
-  background-color: rgba(var(--fg-color), 0.0625);
-  border: 1px solid rgba(var(--fg-color), 0.125);
+  background-color: rgb(var(--fg-color), 0.0625);
+  border: 1px solid rgb(var(--fg-color), 0.125);
   border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
@@ -10,14 +10,14 @@
   position: relative;
 
   & > span {
-    color: rgba(var(--fg-color), 0.5);
+    color: rgb(var(--fg-color), 0.5);
     font-weight: bold;
     line-height: var(--line-height);
     word-break: break-word;
   }
 
   & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
+    fill: rgb(var(--fg-color), 0.25);
     margin-left: auto;
   }
 
@@ -41,7 +41,7 @@
       grid-gap: 0.5em;
       padding: 0.5em 1em;
       &:hover, &:focus {
-        background-color: rgba(var(--accent-color), 0.25);
+        background-color: rgb(var(--accent-color), 0.25);
       }
 
       & > .svg-icon {
@@ -54,15 +54,15 @@
     }
 
     & > hr {
-      background-color: rgba(var(--bg-color), 0.25);
+      background-color: rgb(var(--bg-color), 0.25);
       height: 1px;
     }
   }
   &:hover {
-    border-color: rgba(var(--fg-color), 0.25);
+    border-color: rgb(var(--fg-color), 0.25);
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.5);
+      fill: rgb(var(--fg-color), 0.5);
     }
   }
   &:focus {
@@ -70,11 +70,11 @@
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 
     & > span {
-      color: rgba(var(--bg-color), 0.5);
+      color: rgb(var(--bg-color), 0.5);
     }
 
     & > .svg-icon {
-      fill: rgba(var(--bg-color), 0.5);
+      fill: rgb(var(--bg-color), 0.5);
     }
 
     & > menu {

@@ -221,7 +221,7 @@ function selectUser (user?: TTUser) {
 <style lang="scss" scoped>
 .account-suggest {
   &__suggest {
-    border: 1px solid rgba(var(--fg-color), 0.25);
+    border: 1px solid rgb(var(--fg-color), 0.25);
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
@@ -232,7 +232,7 @@ function selectUser (user?: TTUser) {
 
     &__item {
       background-clip: padding-box;
-      background-color: rgba(var(--fg-color), 0.125);
+      background-color: rgb(var(--fg-color), 0.125);
       cursor: pointer;
       display: grid;
       grid-template-columns: auto auto 1fr;
@@ -241,7 +241,7 @@ function selectUser (user?: TTUser) {
       padding: 0.25em 0.5em;
       white-space: nowrap;
       &:not(:last-child) {
-        border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+        border-bottom: 1px solid rgb(var(--fg-color), 0.25);
       }
 
       &__avatar {
@@ -267,13 +267,13 @@ function selectUser (user?: TTUser) {
       }
 
       &__handle {
-        color: rgba(var(--fg-color), 0.75);
+        color: rgb(var(--fg-color), 0.75);
         font-size: 0.75em;
       }
     }
     &[data-input-mode="keyboard"] &__item[data-focus="true"],
     &[data-input-mode="mouse"] &__item:hover {
-      background-color: rgba(var(--accent-color), 0.25);
+      background-color: rgb(var(--accent-color), 0.25);
     }
   }
 }

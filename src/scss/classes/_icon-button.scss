@@ -13,12 +13,12 @@
   }
 
   & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
+    fill: rgb(var(--fg-color), 0.5);
     font-size: 1em;
   }
 
   & > span {
-    color: rgba(var(--fg-color), 0.5);
+    color: rgb(var(--fg-color), 0.5);
     font-size: 0.875em;
     font-weight: bold;
     overflow: hidden;

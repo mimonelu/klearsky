@@ -53,13 +53,13 @@ const mainState = inject("state") as MainState
 
   &__image {
     aspect-ratio: 1 / 1;
-    background-color: rgba(var(--fg-color), 0.125);
+    background-color: rgb(var(--fg-color), 0.125);
     display: block;
     object-fit: cover;
   }
 
   &__cover {
-    background-color: rgba(var(--fg-color), 0.75);
+    background-color: rgb(var(--fg-color), 0.75);
     color: rgb(var(--bg-color));
     display: grid;
     grid-template-columns: auto 1fr auto;

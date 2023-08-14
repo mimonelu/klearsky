@@ -860,7 +860,7 @@ function onActivateHashTag (text: string) {
 
   // フォーカスされたポスト
   .post-view &[data-focus="true"]:not([data-position="preview"]) {
-    background-color: rgba(var(--accent-color), 0.125);
+    background-color: rgb(var(--accent-color), 0.125);
 
     .body > .body__right {
       user-select: text;
@@ -925,13 +925,13 @@ function onActivateHashTag (text: string) {
     }
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), var(--alpha));
+      fill: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
     & > .svg-icon--alert,
     & > .svg-icon--alphabeticalOff {
-      fill: rgba(var(--notice-color), calc(var(--alpha) + 0.25));
+      fill: rgb(var(--notice-color), calc(var(--alpha) + 0.25));
     }
 
     &__content-warning,
@@ -944,18 +944,18 @@ function onActivateHashTag (text: string) {
     }
 
     &__content-warning {
-      color: rgba(var(--fg-color), var(--alpha));
+      color: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
     &__display-name {
-      color: rgba(var(--fg-color), var(--alpha));
+      color: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
       font-weight: bold;
     }
 
     &__handle {
-      color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
+      color: rgb(var(--fg-color), calc(var(--alpha) - 0.25));
       font-size: 0.75em;
     }
   }
@@ -982,13 +982,13 @@ function onActivateHashTag (text: string) {
     }
   }
   &[data-has-child="true"]::before {
-    background-color: rgba(var(--fg-color), 0.25);
+    background-color: rgb(var(--fg-color), 0.25);
   }
   &[data-has-child="false"]:not(:last-child)::before {
     background-image: linear-gradient(
       to bottom,
-      rgba(var(--fg-color), 0.25) 0,
-      rgba(var(--fg-color), 0.25) 3px,
+      rgb(var(--fg-color), 0.25) 0,
+      rgb(var(--fg-color), 0.25) 3px,
       transparent 3px
     );
     background-size: 6px 6px;
@@ -1044,11 +1044,11 @@ function onActivateHashTag (text: string) {
   }
 
   & > .svg-icon {
-    fill: rgba(var(--post-color), 0.75);
+    fill: rgb(var(--post-color), 0.75);
   }
 
   &__display-name {
-    color: rgba(var(--post-color), 0.75);
+    color: rgb(var(--post-color), 0.75);
   }
 
   .author-handle {
@@ -1072,11 +1072,11 @@ function onActivateHashTag (text: string) {
   }
 
   & > .svg-icon {
-    fill: rgba(var(--share-color), 0.75);
+    fill: rgb(var(--share-color), 0.75);
   }
 
   &__display-name {
-    color: rgba(var(--share-color), 0.75);
+    color: rgb(var(--share-color), 0.75);
   }
 
   .author-handle {
@@ -1130,7 +1130,7 @@ function onActivateHashTag (text: string) {
 }
 
 .display-name {
-  color: rgba(var(--fg-color), 0.75);
+  color: rgb(var(--fg-color), 0.75);
   font-size: 0.875em;
   font-weight: bold;
   line-height: 1.25;
@@ -1140,7 +1140,7 @@ function onActivateHashTag (text: string) {
 }
 
 .indexed-at {
-  color: rgba(var(--fg-color), 0.5);
+  color: rgb(var(--fg-color), 0.5);
   font-size: 0.75em;
   white-space: nowrap;
 }
@@ -1164,9 +1164,9 @@ function onActivateHashTag (text: string) {
 }
 
 .translated-text {
-  border-top: 1px solid rgba(var(--fg-color), 0.125);
+  border-top: 1px solid rgb(var(--fg-color), 0.125);
   padding-top: 0.5em;
-  color: rgba(var(--fg-color), 0.75);
+  color: rgb(var(--fg-color), 0.75);
   font-style: italic;
   line-height: var(--line-height);
   white-space: pre-wrap;
@@ -1207,10 +1207,10 @@ function onActivateHashTag (text: string) {
 
 .repost {
   grid-area: r;
-  border: 1px solid rgba(var(--fg-color), 0.125);
+  border: 1px solid rgb(var(--fg-color), 0.125);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgba(var(--fg-color), 0.25);
+    border-color: rgb(var(--fg-color), 0.25);
   }
 
   :not([data-position="slim"]) & > .post {
@@ -1222,11 +1222,11 @@ function onActivateHashTag (text: string) {
 }
 
 .custom-feed-card {
-  background-color: rgba(var(--accent-color), 0.125);
-  border: 1px solid rgba(var(--accent-color), 0.125);
+  background-color: rgb(var(--accent-color), 0.125);
+  border: 1px solid rgb(var(--accent-color), 0.125);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgba(var(--accent-color), 0.25);
+    border-color: rgb(var(--accent-color), 0.25);
   }
 }
 

@@ -399,7 +399,7 @@ function hideWarningContent () {
 
 .banner {
   aspect-ratio: 3/1;
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  border-bottom: 1px solid rgb(var(--fg-color), 0.25);
   display: block;
   &[data-has-banner="true"] {
     background-position: center center;
@@ -417,7 +417,7 @@ function hideWarningContent () {
 }
 
 .details {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  border-bottom: 1px solid rgb(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
@@ -449,13 +449,13 @@ function hideWarningContent () {
 }
 
 .handle {
-  color: rgba(var(--fg-color), 0.75);
+  color: rgb(var(--fg-color), 0.75);
   display: flex;
   align-items: center;
   grid-gap: 0.25rem;
   margin-bottom: 0.5rem;
   [data-log-loaded="true"] & {
-    color: rgba(var(--accent-color), 0.875);
+    color: rgb(var(--accent-color), 0.875);
     cursor: pointer;
     &:focus, &:hover {
       color: rgb(var(--accent-color));
@@ -469,7 +469,7 @@ function hideWarningContent () {
     display: none;
   }
   [data-log-loaded="true"] & > .svg-icon {
-    fill: rgba(var(--accent-color), 0.875);
+    fill: rgb(var(--accent-color), 0.875);
   }
 
   & > span {
@@ -562,7 +562,7 @@ function hideWarningContent () {
   position: relative;
 
   dl {
-    color: rgba(var(--fg-color), 0.75);
+    color: rgb(var(--fg-color), 0.75);
     display: flex;
     align-items: baseline;
     grid-gap: 0.5rem;

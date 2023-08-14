@@ -42,7 +42,7 @@ function close () {
 }
 
 .message-string {
-  background-color: rgba(var(--notice-color), 0.125);
+  background-color: rgb(var(--notice-color), 0.125);
   line-height: var(--line-height);
   padding: 1rem;
   user-select: text;

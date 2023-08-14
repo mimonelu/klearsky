@@ -832,7 +832,7 @@ function broadcastListener (event: MessageEvent) {
 
 <style lang="scss" scoped>
 .main-view {
-  background-color: rgba(var(--bg-color), var(--bg-opacity));
+  background-color: rgb(var(--bg-color), var(--bg-opacity));
 
   // カスタムレイアウト
   &[data-layout="defaultLeft"],
@@ -973,8 +973,8 @@ function broadcastListener (event: MessageEvent) {
 
 // ルータービュー
 .router-view-wrapper {
-  background-color: rgba(var(--bg-color), var(--main-area-opacity));
-  border-left: 1px solid rgba(var(--fg-color), 0.25);
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+  border-left: 1px solid rgb(var(--fg-color), 0.25);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -983,7 +983,7 @@ function broadcastListener (event: MessageEvent) {
 
   // タブレット幅以上
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
-    border-right: 1px solid rgba(var(--fg-color), 0.25);
+    border-right: 1px solid rgb(var(--fg-color), 0.25);
   }
 
   // SP幅未満
@@ -1014,7 +1014,7 @@ function broadcastListener (event: MessageEvent) {
 
 // D&Dオーバーレイ
 .drag-and-drop-overlay {
-  background-color: rgba(var(--bg-color), 0.5);
+  background-color: rgb(var(--bg-color), 0.5);
   border: 0.5rem  solid rgb(var(--accent-color));
   display: flex;
   align-items: center;

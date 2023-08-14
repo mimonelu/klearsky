@@ -213,7 +213,7 @@ function onClickFileBox (event: Event) {
 }
 
 .service {
-  color: rgba(var(--fg-color), 0.5);
+  color: rgb(var(--fg-color), 0.5);
   font-weight: bold;
   line-height: 1.25;
   overflow: hidden;
@@ -243,7 +243,7 @@ function onClickFileBox (event: Event) {
     --color: var(--fg-color);
     background-clip: padding-box;
     background-color: rgb(var(--bg-color));
-    border: 1px solid rgba(var(--fg-color), 0.25);
+    border: 1px solid rgb(var(--fg-color), 0.25);
     border-bottom-style: none;
     cursor: pointer;
     display: grid;
@@ -261,7 +261,7 @@ function onClickFileBox (event: Event) {
     }
   }
   &[data-is-me="true"] &__left {
-    background-color: rgba(var(--accent-color), 0.25);
+    background-color: rgb(var(--accent-color), 0.25);
   }
 
   &__image {
@@ -288,7 +288,7 @@ function onClickFileBox (event: Event) {
 
   &__email {
     grid-area: e;
-    color: rgba(var(--color), 0.75);
+    color: rgb(var(--color), 0.75);
     font-size: 0.875rem;
     line-height: 1.25;
     overflow: hidden;
@@ -313,7 +313,7 @@ function onClickFileBox (event: Event) {
     min-height: 3rem;
 
     & > .svg-icon {
-      fill: rgba(var(--notice-color), 0.75);
+      fill: rgb(var(--notice-color), 0.75);
     }
     &:focus, &:hover {
       & > .svg-icon {

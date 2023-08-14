@@ -70,7 +70,7 @@ function close () {
   }
 
   .item {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    border-bottom: 1px solid rgb(var(--fg-color), 0.25);
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -86,7 +86,7 @@ function close () {
   }
 
   .created-at {
-    color: rgba(var(--fg-color), 0.5);
+    color: rgb(var(--fg-color), 0.5);
     font-size: 0.875rem;
     line-height: var(--line-height);
     white-space: nowrap;

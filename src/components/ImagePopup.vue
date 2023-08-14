@@ -190,7 +190,7 @@ function close () {
 
 <style lang="scss" scoped>
 .image-popup {
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgb(0, 0, 0, 0.75);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -230,7 +230,7 @@ function close () {
 
 // 壁紙設定ボタン / 画像を別タブで開くボタン / 閉じるボタン
 .floating-button {
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgb(0, 0, 0, 0.25);
   border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
@@ -247,12 +247,12 @@ function close () {
   }
 
   & > .svg-icon {
-    fill: rgba(255, 255, 255, 0.75);
+    fill: rgb(255, 255, 255, 0.75);
     font-size: 2rem;
   }
 
   &:focus, &:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(0, 0, 0, 0.5);
 
     & > .svg-icon {
       fill: rgb(255, 255, 255);
@@ -293,7 +293,7 @@ function close () {
 .open-image-button {
   [data-loaded="false"] & {
     & > .svg-icon {
-      fill: rgba(255, 255, 255, 0.25);
+      fill: rgb(255, 255, 255, 0.25);
     }
   }
 }

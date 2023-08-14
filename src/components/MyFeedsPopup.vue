@@ -144,7 +144,7 @@ function changeCustomFeedOrder () {
   }
 
   .custom-feed-card:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+    border-bottom: 1px solid rgb(var(--fg-color), 0.125);
   }
 
   .textlabel {

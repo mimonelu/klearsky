@@ -52,7 +52,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 }
 
 .version {
-  color: rgba(var(--fg-color), 0.5);
+  color: rgb(var(--fg-color), 0.5);
   font-size: 0.375em;
 }
 </style>

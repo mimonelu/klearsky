@@ -40,7 +40,7 @@ const yyyy = (new Date).getFullYear()
 
 <style lang="scss" scoped>
 .copyright {
-  color: rgba(var(--fg-color), 0.5);
+  color: rgb(var(--fg-color), 0.5);
   line-height: var(--line-height);
 
   & > * {

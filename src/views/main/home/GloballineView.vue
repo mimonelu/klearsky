@@ -326,7 +326,7 @@ function onMutated () {
 
   &[data-is-on="true"] {
     & > .svg-icon {
-      fill: rgba(var(--notice-color), 0.75);
+      fill: rgb(var(--notice-color), 0.75);
     }
     &:focus, &:hover {
       & > .svg-icon {
@@ -352,13 +352,13 @@ function onMutated () {
 
     & > dt {
       & > .svg-icon {
-        fill: rgba(var(--fg-color), 0.5);
+        fill: rgb(var(--fg-color), 0.5);
         font-size: 0.875rem;
       }
     }
 
     & > dd {
-      color: rgba(var(--fg-color), 0.75);
+      color: rgb(var(--fg-color), 0.75);
       font-family: monospace;
       line-height: 1.25;
       overflow: hidden;

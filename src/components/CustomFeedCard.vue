@@ -313,7 +313,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
       & > .svg-icon {
         cursor: pointer;
-        fill: rgba(var(--fg-color), var(--opacity));
+        fill: rgb(var(--fg-color), var(--opacity));
         font-size: 1.25em;
         &:focus, &:hover {
           --opacity: 0.5;
@@ -340,13 +340,13 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
   // フィードライク数
   &__like-count {
-    --color: rgba(var(--fg-color), 0.5);
+    --color: rgb(var(--fg-color), 0.5);
     cursor: pointer;
     grid-area: l;
     margin: -0.5em;
     padding: 0.5em;
     &[data-on="true"] {
-      --color: rgba(var(--like-color), 0.75);
+      --color: rgb(var(--like-color), 0.75);
       &:focus, &:hover {
         --color: rgb(var(--like-color));
       }
@@ -372,19 +372,19 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     grid-area: i;
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.5);
+      fill: rgb(var(--fg-color), 0.5);
       font-size: 0.75em;
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.5);
+      color: rgb(var(--fg-color), 0.5);
     }
   }
 
   // フィードブックマーク・フィードピン
   &__bookmark,
   &__pin {
-    --color: rgba(var(--accent-color), 0.875);
+    --color: rgb(var(--accent-color), 0.875);
     cursor: pointer;
     margin: -0.5em;
     padding: 0.5em;
@@ -428,7 +428,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     }
 
     & > .svg-icon {
-      fill: rgba(var(--accent-color), 0.75);
+      fill: rgb(var(--accent-color), 0.75);
       font-size: 0.75em;
     }
 
@@ -443,7 +443,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     }
 
     &__handle {
-      color: rgba(var(--fg-color), 0.75);
+      color: rgb(var(--fg-color), 0.75);
       font-size: 0.875em;
       line-height: 1.25;
       overflow: hidden;

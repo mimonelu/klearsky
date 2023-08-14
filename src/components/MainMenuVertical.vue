@@ -252,7 +252,7 @@ function moveToBottom () {
 
     &[data-is-focus="true"],
     &:not([data-is-focus]).router-link-active {
-      background-color: rgba(var(--accent-color), 0.25);
+      background-color: rgb(var(--accent-color), 0.25);
     }
   }
 
@@ -336,7 +336,7 @@ function moveToBottom () {
   }
 
   & > .label {
-    color: rgba(var(--color), var(--alpha));
+    color: rgb(var(--color), var(--alpha));
     font-size: 1.25rem;
     font-weight: bold;
     line-height: 1.25;
@@ -379,13 +379,13 @@ function moveToBottom () {
     min-height: 2rem;
 
     .svg-icon {
-      fill: rgba(var(--fg-color), 0.75);
+      fill: rgb(var(--fg-color), 0.75);
       font-size: 1.5rem;
     }
   }
 
   .label {
-    color: rgba(var(--fg-color), 0.75);
+    color: rgb(var(--fg-color), 0.75);
     font-size: 1.25rem;
     font-weight: bold;
     line-height: 1.25;
@@ -407,17 +407,17 @@ function moveToBottom () {
   }
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
-    background-color: rgba(var(--accent-color), 0.25);
+    background-color: rgb(var(--accent-color), 0.25);
   }
 
   // ポスト送信ポップアップトリガー
   &.send-post-button {
     .svg-icon {
-      fill: rgba(var(--post-color), 0.75);
+      fill: rgb(var(--post-color), 0.75);
     }
 
     .label {
-      color: rgba(var(--post-color), 0.75);
+      color: rgb(var(--post-color), 0.75);
     }
 
     &:focus, &:hover {
@@ -456,7 +456,7 @@ function moveToBottom () {
   min-height: 3rem;
 
   .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
+    fill: rgb(var(--fg-color), 0.25);
   }
   &:focus , &:hover {
     .svg-icon {
