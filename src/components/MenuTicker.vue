@@ -111,7 +111,7 @@ watch(() => props.display, (display: boolean) => {
         padding: 0.5rem 1rem;
         white-space: nowrap;
         &:focus, &:hover {
-          background-color: rgb(var(--accent-color), 0.25);
+          background-color: var(--fg-color-075);
         }
 
         & > .svg-icon {

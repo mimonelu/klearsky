@@ -49,7 +49,7 @@ function close () {
 }
 
 .message {
-  background-color: rgb(var(--fg-color), 0.125);
+  background-color: var(--fg-color-0125);
   line-height: var(--line-height);
   padding: 1rem;
   user-select: text;

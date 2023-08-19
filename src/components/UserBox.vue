@@ -160,7 +160,7 @@ function hideWarningContent () {
 
 .display-name {
   grid-area: n;
-  color: rgb(var(--fg-color), 0.75);
+  color: var(--fg-color-075);
   font-size: 0.875rem;
   font-weight: bold;
   line-height: 1.25;
@@ -181,7 +181,7 @@ function hideWarningContent () {
   position: relative;
 
   & > .svg-icon {
-    fill: rgb(var(--fg-color), 0.5);
+    fill: var(--fg-color-05);
   }
   &:focus, &:hover {
     & > .svg-icon {

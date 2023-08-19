@@ -194,7 +194,7 @@ function onActivateHashTag (text: string) {
   padding: 0 0.25em;
   &:focus, &:hover {
     --opacity: 0.75;
-    background-color: rgb(var(--accent-color), 0.125);
+    background-color: var(--accent-color-0125);
   }
 }
 </style>

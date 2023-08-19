@@ -97,7 +97,7 @@ function removeThisPost (uri: string) {
   padding-bottom: var(--sp-menu-height);
 
   form {
-    border-bottom: 1px solid rgb(var(--fg-color), 0.25);
+    border-bottom: 1px solid var(--fg-color-025);
     display: grid;
     padding: 1rem;
   }
@@ -110,7 +110,7 @@ function removeThisPost (uri: string) {
 }
 
 .post {
-  border-bottom: 1px solid rgb(var(--fg-color), 0.125);
+  border-bottom: 1px solid var(--fg-color-0125);
   &[data-position="preview"] {
     padding: 1em;
   }

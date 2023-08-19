@@ -974,7 +974,7 @@ function broadcastListener (event: MessageEvent) {
 // ルータービュー
 .router-view-wrapper {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-left: 1px solid rgb(var(--fg-color), 0.25);
+  border-left: 1px solid var(--fg-color-025);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -983,7 +983,7 @@ function broadcastListener (event: MessageEvent) {
 
   // タブレット幅以上
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
-    border-right: 1px solid rgb(var(--fg-color), 0.25);
+    border-right: 1px solid var(--fg-color-025);
   }
 
   // SP幅未満

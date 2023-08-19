@@ -124,7 +124,7 @@ function onActivateAlt (alt: string) {
 
   & > img {
     aspect-ratio: var(--image-aspect-ratio);
-    background-color: rgb(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
     display: block;
     object-fit: cover;

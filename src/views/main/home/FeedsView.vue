@@ -3,7 +3,6 @@ import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import FeedList from "@/components/FeedList.vue"
-import PageHeader from "@/components/PageHeader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -104,7 +103,7 @@ function openPopularFeedsPopup () {
     --opacity: 0.25;
   }
 
-  border-top: 1px solid rgb(var(--fg-color), 0.25);
+  border-top: 1px solid var(--fg-color-025);
   display: flex;
   flex-direction: column;
   flex-grow: 1;

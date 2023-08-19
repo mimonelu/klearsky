@@ -340,13 +340,13 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
   // フィードライク数
   &__like-count {
-    --color: rgb(var(--fg-color), 0.5);
+    --color: var(--fg-color-05);
     cursor: pointer;
     grid-area: l;
     margin: -0.5em;
     padding: 0.5em;
     &[data-on="true"] {
-      --color: rgb(var(--like-color), 0.75);
+      --color: var(--like-color-075);
       &:focus, &:hover {
         --color: rgb(var(--like-color));
       }
@@ -372,19 +372,19 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     grid-area: i;
 
     & > .svg-icon {
-      fill: rgb(var(--fg-color), 0.5);
+      fill: var(--fg-color-05);
       font-size: 0.75em;
     }
 
     & > span {
-      color: rgb(var(--fg-color), 0.5);
+      color: var(--fg-color-05);
     }
   }
 
   // フィードブックマーク・フィードピン
   &__bookmark,
   &__pin {
-    --color: rgb(var(--accent-color), 0.875);
+    --color: var(--accent-color-0875);
     cursor: pointer;
     margin: -0.5em;
     padding: 0.5em;
@@ -415,7 +415,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   &__creator {
     background-clip: padding-box;
     background-color: rgb(var(--bg-color));
-    border: 1px solid rgb(var(--accent-color), 0.25);
+    border: 1px solid var(--accent-color-025);
     border-radius: var(--border-radius);
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -424,11 +424,11 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     margin-left: auto;
     padding: 0.5em 1em;
     &:focus, &:hover {
-      border-color: rgb(var(--accent-color), 0.5);
+      border-color: var(--accent-color-05);
     }
 
     & > .svg-icon {
-      fill: rgb(var(--accent-color), 0.75);
+      fill: var(--accent-color-075);
       font-size: 0.75em;
     }
 
@@ -443,7 +443,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     }
 
     &__handle {
-      color: rgb(var(--fg-color), 0.75);
+      color: var(--fg-color-075);
       font-size: 0.875em;
       line-height: 1.25;
       overflow: hidden;

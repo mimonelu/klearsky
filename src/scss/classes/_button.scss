@@ -31,7 +31,7 @@
 }
 
 .button {
-  background-color: rgb(var(--fg-color), 0.875);
+  background-color: var(--fg-color-0875);
   color: rgb(var(--bg-color));
   &:focus, &:hover {
     background-color: rgb(var(--fg-color));
@@ -48,10 +48,10 @@
 
 .button--bordered {
   background-color: rgb(var(--bg-color), 0.25);
-  border: 1px solid rgb(var(--fg-color), 0.25);
-  color: rgb(var(--fg-color), 0.75);
+  border: 1px solid var(--fg-color-025);
+  color: var(--fg-color-075);
   &:focus, &:hover {
-    border-color: rgb(var(--fg-color), 0.5);
+    border-color: var(--fg-color-0375);
     color: rgb(var(--fg-color));
 
     & > .svg-icon {
@@ -60,12 +60,12 @@
   }
 
   & > .svg-icon {
-    fill: rgb(var(--fg-color), 0.75);
+    fill: var(--fg-color-075);
   }
 }
 
 .button--important {
-  background-color: rgb(var(--notice-color), 0.875);
+  background-color: var(--notice-color-0875);
   color: rgb(var(--bg-color));
   &:focus, &:hover {
     background-color: rgb(var(--notice-color));
@@ -74,17 +74,17 @@
 
 .button--bordered--important {
   &[data-enabled="true"] {
-    background-color: rgb(var(--notice-color), 0.875);
+    background-color: var(--notice-color-0875);
     &:focus, &:hover {
       background-color: rgb(var(--notice-color));
     }
   }
   &[data-enabled="false"] {
     background-color: transparent;
-    border-color: rgb(var(--notice-color), 0.875);
-    color: rgb(var(--notice-color), 0.875);
+    border-color: var(--notice-color-0875);
+    color: var(--notice-color-0875);
     .svg-icon {
-      fill: rgb(var(--notice-color), 0.875);
+      fill: var(--notice-color-0875);
     }
     &:focus, &:hover {
       border-color: rgb(var(--notice-color));
@@ -97,7 +97,7 @@
 }
 
 .button--plane {
-  color: rgb(var(--fg-color), 0.875);
+  color: var(--fg-color-0875);
   &:focus, &:hover {
     color: rgb(var(--fg-color));
 
@@ -107,7 +107,7 @@
   }
 
   & > .svg-icon {
-    fill: rgb(var(--fg-color), 0.875);
+    fill: var(--fg-color-0875);
   }
 }
 

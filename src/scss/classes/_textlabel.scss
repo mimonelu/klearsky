@@ -23,7 +23,7 @@
   }
 }
 .textlabel {
-  background-color: rgb(var(--fg-color), 0.125);
+  background-color: var(--fg-color-0125);
 
   &__text > .svg-icon {
     fill: rgb(var(--fg-color));
@@ -34,7 +34,7 @@
   }
 }
 .textlabel--alert {
-  background-color: rgb(var(--notice-color), 0.25);
+  background-color: var(--notice-color-025);
 
   .textlabel__text > .svg-icon {
     fill: rgb(var(--notice-color));

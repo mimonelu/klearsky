@@ -215,13 +215,17 @@ getEmbeddedContentId()
 <style lang="scss" scoped>
 .external {
   &--default {
-    background-color: rgb(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
+    border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius);
     cursor: pointer;
     display: block;
     overflow: hidden;
     position: relative;
     height: 100%;
+    &:focus, &:hover {
+      border-color: var(--fg-color-0375);
+    }
 
     &__thumb {
       aspect-ratio: 1.91 / 1;
@@ -247,7 +251,7 @@ getEmbeddedContentId()
       font-weight: bold;
     }
     &__uri {
-      color: rgb(var(--fg-color), 0.5);
+      color: var(--fg-color-05);
       font-size: 0.75em;
     }
     &__description {
@@ -257,7 +261,7 @@ getEmbeddedContentId()
 
   // Giphy 対応
   &--giphy {
-    background-color: rgb(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
   // Giphy 対応 - SP幅未満
@@ -272,7 +276,7 @@ getEmbeddedContentId()
   &--nicovideo:deep() {
     iframe[src^="https://embed.nicovideo."] {
       aspect-ratio: 640 / 360;
-      background-color: rgb(var(--fg-color), 0.125);
+      background-color: var(--fg-color-0125);
       border-radius: var(--border-radius);
       height: unset !important;
     }
@@ -280,7 +284,7 @@ getEmbeddedContentId()
 
   // Spotify 対応
   &--spotify {
-    background-color: rgb(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
 
@@ -299,7 +303,7 @@ getEmbeddedContentId()
   // YouTube 対応
   &--youtube {
     aspect-ratio: 16 / 9;
-    background-color: rgb(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
 }

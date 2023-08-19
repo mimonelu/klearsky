@@ -858,9 +858,9 @@ function onActivateHashTag (text: string) {
   padding: 1em;
   position: relative;
 
-  // フォーカスされたポスト
+  // フォーカスポスト
   .post-view &[data-focus="true"]:not([data-position="preview"]) {
-    background-color: rgb(var(--accent-color), 0.125);
+    background-color: var(--accent-color-0125);
 
     .body > .body__right {
       user-select: text;
@@ -982,13 +982,13 @@ function onActivateHashTag (text: string) {
     }
   }
   &[data-has-child="true"]::before {
-    background-color: rgb(var(--fg-color), 0.25);
+    background-color: var(--fg-color-025);
   }
   &[data-has-child="false"]:not(:last-child)::before {
     background-image: linear-gradient(
       to bottom,
-      rgb(var(--fg-color), 0.25) 0,
-      rgb(var(--fg-color), 0.25) 3px,
+      var(--fg-color-025) 0,
+      var(--fg-color-025) 3px,
       transparent 3px
     );
     background-size: 6px 6px;
@@ -1044,11 +1044,11 @@ function onActivateHashTag (text: string) {
   }
 
   & > .svg-icon {
-    fill: rgb(var(--post-color), 0.75);
+    fill: var(--post-color-075);
   }
 
   &__display-name {
-    color: rgb(var(--post-color), 0.75);
+    color: var(--post-color-075);
   }
 
   .author-handle {
@@ -1072,11 +1072,11 @@ function onActivateHashTag (text: string) {
   }
 
   & > .svg-icon {
-    fill: rgb(var(--share-color), 0.75);
+    fill: var(--share-color-075);
   }
 
   &__display-name {
-    color: rgb(var(--share-color), 0.75);
+    color: var(--share-color-075);
   }
 
   .author-handle {
@@ -1130,7 +1130,7 @@ function onActivateHashTag (text: string) {
 }
 
 .display-name {
-  color: rgb(var(--fg-color), 0.75);
+  color: var(--fg-color-075);
   font-size: 0.875em;
   font-weight: bold;
   line-height: 1.25;
@@ -1140,7 +1140,7 @@ function onActivateHashTag (text: string) {
 }
 
 .indexed-at {
-  color: rgb(var(--fg-color), 0.5);
+  color: var(--fg-color-05);
   font-size: 0.75em;
   white-space: nowrap;
 }
@@ -1164,9 +1164,9 @@ function onActivateHashTag (text: string) {
 }
 
 .translated-text {
-  border-top: 1px solid rgb(var(--fg-color), 0.125);
+  border-top: 1px solid var(--fg-color-0125);
   padding-top: 0.5em;
-  color: rgb(var(--fg-color), 0.75);
+  color: var(--fg-color-075);
   font-style: italic;
   line-height: var(--line-height);
   white-space: pre-wrap;
@@ -1207,10 +1207,11 @@ function onActivateHashTag (text: string) {
 
 .repost {
   grid-area: r;
-  border: 1px solid rgb(var(--fg-color), 0.125);
+  background-color: var(--fg-color-0125);
+  border: 1px solid var(--fg-color-025);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgb(var(--fg-color), 0.25);
+    border-color: var(--fg-color-0375);
   }
 
   :not([data-position="slim"]) & > .post {
@@ -1222,11 +1223,11 @@ function onActivateHashTag (text: string) {
 }
 
 .custom-feed-card {
-  background-color: rgb(var(--accent-color), 0.125);
-  border: 1px solid rgb(var(--accent-color), 0.125);
+  background-color: var(--accent-color-0125);
+  border: 1px solid var(--accent-color-025);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgb(var(--accent-color), 0.25);
+    border-color: var(--accent-color-05);
   }
 }
 
@@ -1288,7 +1289,6 @@ function onActivateHashTag (text: string) {
 }
 
 .lightning-link {
-  --fg-color: 240, 0, 240;
   margin-right: 0.75em;
 }
 

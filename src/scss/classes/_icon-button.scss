@@ -5,20 +5,20 @@
   padding: 0.75em;
   &:focus, &:hover {
     & > .svg-icon {
-      fill: rgb(var(--fg-color), 1);
+      fill: rgb(var(--fg-color));
     }
     & > span {
-      color: rgb(var(--fg-color), 1);
+      color: rgb(var(--fg-color));
     }
   }
 
   & > .svg-icon {
-    fill: rgb(var(--fg-color), 0.5);
+    fill: var(--fg-color-05);
     font-size: 1em;
   }
 
   & > span {
-    color: rgb(var(--fg-color), 0.5);
+    color: var(--fg-color-05);
     font-size: 0.875em;
     font-weight: bold;
     overflow: hidden;

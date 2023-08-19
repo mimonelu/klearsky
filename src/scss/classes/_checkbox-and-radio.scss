@@ -15,14 +15,14 @@
   & > .checkbox,
   & > .radio {
     background-clip: padding-box;
-    border: 1px solid rgb(var(--fg-color), 0.25);
+    border: 1px solid var(--fg-color-025);
     cursor: pointer;
     display: flex;
     align-items: center;
     padding: 0.5rem 0.75rem;
     position: relative;
     &[data-checked="true"] {
-      background-color: rgb(var(--accent-color), 0.25);
+      background-color: var(--accent-color-025);
     }
 
     // Chrome のバリデーションメッセージ対応
@@ -43,7 +43,7 @@
     }
 
     & > span {
-      color: rgb(var(--fg-color), 0.875);
+      color: var(--fg-color-0875);
       line-height: var(--line-height);
       word-break: break-all;
     }
@@ -68,7 +68,7 @@
         border-right-style: none;
       }
       &[data-checked="true"] + * {
-        border-left-color: rgb(var(--fg-color), 0.375);
+        border-left-color: var(--fg-color-0375);
       }
     }
   }
@@ -87,7 +87,7 @@
         border-bottom-style: none;
       }
       &[data-checked="true"] + * {
-        border-top-color: rgb(var(--fg-color), 0.375);
+        border-top-color: var(--fg-color-0375);
       }
     }
   }
@@ -97,11 +97,11 @@
       border-right-style: none;
       border-bottom-style: none;
       &:nth-child(even) {
-        border-right: 1px solid rgb(var(--fg-color), 0.25);
+        border-right: 1px solid var(--fg-color-025);
       }
       &:nth-last-child(1),
       &:nth-last-child(2) {
-        border-bottom: 1px solid rgb(var(--fg-color), 0.25);
+        border-bottom: 1px solid var(--fg-color-025);
       }
       &:first-child {
         border-radius: var(--border-radius) 0 0 0;

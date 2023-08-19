@@ -51,7 +51,7 @@ function moveToBottom () {
   z-index: 1;
 
   .svg-icon {
-    fill: rgb(var(--fg-color), 0.25);
+    fill: var(--fg-color-025);
   }
   &:focus , &:hover {
     .svg-icon {

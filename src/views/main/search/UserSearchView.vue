@@ -108,7 +108,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 }
 
 .main {
-  border-top: 1px solid rgb(var(--fg-color), 0.25);
+  border-top: 1px solid var(--fg-color-025);
   display: flex;
   flex-direction: column;
   flex-grow: 1;

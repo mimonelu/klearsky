@@ -201,7 +201,7 @@ function deleteFile (index: number) {
   right: 0.25rem;
 
   & > .svg-icon {
-    fill: rgb(var(--notice-color), 0.75);
+    fill: var(--notice-color-075);
   }
 
   &:focus, &:hover {

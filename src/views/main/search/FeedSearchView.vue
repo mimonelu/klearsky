@@ -94,11 +94,11 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 }
 
 .custom-feed-container {
-  border-top: 1px solid rgb(var(--fg-color), 0.25);
+  border-top: 1px solid var(--fg-color-025);
   flex-grow: 1;
 }
 
 .custom-feed-card:not(:last-child) {
-  border-bottom: 1px solid rgb(var(--fg-color), 0.125);
+  border-bottom: 1px solid var(--fg-color-0125);
 }
 </style>
