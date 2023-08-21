@@ -30,6 +30,30 @@ const INTERNAL_LINK_ITEMS = [
     src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)$"),
     dst: "/profile/feeds?account=[1]",
   },
+
+  // フォロイー一覧ページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)\/follows$"),
+    dst: "/profile/following?account=[1]",
+  },
+
+  // フォロワー一覧ページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)\/followers$"),
+    dst: "/profile/follower?account=[1]",
+  },
+
+  // ポスト検索ページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/search\\?q=([^&]+)$"),
+    dst: "/search/post?text=[1]",
+  },
+
+  // フィード検索ページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/search\/feeds$"),
+    dst: "/search/feed",
+  },
 ]
 
 const emit = defineEmits<{(name: string, text: string): void}>()
