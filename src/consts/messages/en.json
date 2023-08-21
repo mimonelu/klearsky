@@ -28,6 +28,7 @@
   "help": "Help",
   "includeRepost": "Show images in reposts",
   "media": "Media",
+  "invalidHandle": "(Invalid handle)",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",

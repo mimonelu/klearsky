@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
+import AuthorHandle from "@/components/AuthorHandle.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
 import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import HtmlText from "@/components/HtmlText.vue"
@@ -482,11 +483,7 @@ function onActivateHashTag (text: string) {
             ? parentPost?.author?.displayName
             : $t("anonymous")
         }}</div>
-        <div class="author-handle">{{
-          !mainState.currentSetting.postAnonymization
-            ? parentPost?.author?.handle
-            : ""
-        }}</div>
+        <AuthorHandle :handle="parentPost.author?.handle" />
       </button>
 
       <!-- リポストユーザー -->
@@ -502,11 +499,7 @@ function onActivateHashTag (text: string) {
             ? post.__custom?.reason?.by?.displayName
             : $t("anonymous")
         }}</div>
-        <div class="author-handle">{{
-          !mainState.currentSetting.postAnonymization
-            ? post.__custom?.reason?.by?.handle
-            : ""
-        }}</div>
+        <AuthorHandle :handle="post.__custom?.reason?.by?.handle" />
       </button>
     </div>
 
@@ -587,7 +580,7 @@ function onActivateHashTag (text: string) {
           }}</div>
 
           <!-- ハンドル -->
-          <div class="author-handle">{{ !mainState.currentSetting.postAnonymization ? post.author?.handle : "" }}</div>
+          <AuthorHandle :handle="post.author?.handle" />
 
           <!-- ポスト時間 -->
           <div
@@ -1048,7 +1041,7 @@ function onActivateHashTag (text: string) {
     }
 
     .author-handle {
-      --opacity: 0.75;
+      --fg-color-05: var(--fg-color-075);
     }
   }
 
@@ -1076,7 +1069,7 @@ function onActivateHashTag (text: string) {
     }
 
     .author-handle {
-      --opacity: 0.75;
+      --fg-color-05: var(--fg-color-075);
     }
   }
 

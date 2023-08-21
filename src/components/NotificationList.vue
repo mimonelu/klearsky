@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import AuthorHandle from "@/components/AuthorHandle.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
 import CustomFeedCard from "@/components/CustomFeedCard.vue"
 import Post from "@/components/Post.vue"
@@ -135,7 +136,7 @@ function makeSubjectTo (notification: TTNotification): any {
             <div class="display-name">{{ notification.displayName }}</div>
 
             <!-- ハンドル -->
-            <div class="author-handle">{{ notification.handle }}</div>
+            <AuthorHandle :handle="notification.handle" />
 
             <!-- リアクション日時 -->
             <div class="indexed-at">{{ mainState.formatDate(notification.indexedAt) }}</div>

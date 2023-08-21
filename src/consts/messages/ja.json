@@ -28,6 +28,7 @@
   "help": "ヘルプ",
   "includeRepost": "リポストの画像も表示する",
   "media": "メディア",
+  "invalidHandle": "（不正なハンドル）",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",

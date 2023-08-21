@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import AuthorHandle from "@/components/AuthorHandle.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
 import ContentWarning from "@/components/ContentWarning.vue"
 import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
@@ -101,7 +102,7 @@ function hideWarningContent () {
         :labels="user.labels"
       />
       <div class="display-name">{{ user.displayName }}</div>
-      <div class="author-handle">{{ user.handle }}</div>
+      <AuthorHandle :handle="user.handle" />
       <!-- // TODO: ポップアップで見切れる不具合を修正すること
       <button
         class="menu-button"
