@@ -58,6 +58,7 @@
   "blocked": "You are blocked by this account.",
   "blocking": "You are blocking this account.",
   "postBlocked": "This post cannot be displayed.",
+  "postNotFound": "This post does not exist.",
 
   "reportSendAccount": "Report account",
   "reportSendPost": "Report post",

@@ -58,6 +58,7 @@
   "blocked": "このアカウントからブロックされています。",
   "blocking": "このアカウントをブロックしています。",
   "postBlocked": "このポストを表示することはできません。",
+  "postNotFound": "このポストは存在しません。",
 
   "reportSendAccount": "アカウントをレポートする",
   "reportSendPost": "ポストをレポートする",

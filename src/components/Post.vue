@@ -710,15 +710,24 @@ function onActivateHashTag (text: string) {
 
         <!-- 埋込コンテンツ -->
         <template v-if="post.embed?.record != null">
-          <!-- 引用リポスト：ブロック中／被ブロック中／見つからない -->
+          <!-- 引用リポスト：見つからない -->
           <div
-            v-if="
+            v-if="post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'"
+            class="textlabel repost"
+          >
+            <div class="textlabel__text">
+              <SVGIcon name="alert" />{{ $t("postNotFound") }}
+            </div>
+          </div>
+
+          <!-- 引用リポスト：ブロック中／被ブロック中 -->
+          <div
+            v-else-if="
               post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
-              post.embed.record.$type === 'app.bsky.embed.record#viewNotFound' ||
               post.embed.record.author?.viewer?.blockedBy ||
               post.embed.record.author?.viewer?.blocking != null
             "
-            class="textlabel"
+            class="textlabel repost"
           >
             <div class="textlabel__text">
               <SVGIcon name="alert" />{{ $t("postBlocked") }}
