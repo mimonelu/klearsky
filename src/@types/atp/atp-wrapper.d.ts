@@ -80,10 +80,10 @@ interface TIAtpWrapper {
   deletePost(this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost(this: TIAtpWrapper, uri: string): Promise<boolean>
   disableBlock(this: TIAtpWrapper, uri: string): Promise<boolean>
-  disableMute(this: TIAtpWrapper, handle: string): Promise<boolean>
+  disableMute(this: TIAtpWrapper, did: string): Promise<boolean>
   deleteSession(this: TIAtpWrapper): Promise<boolean>
-  enableBlock(this: TIAtpWrapper, handle: string): Promise<null | string>
-  enableMute(this: TIAtpWrapper, handle: string): Promise<boolean>
+  enableBlock(this: TIAtpWrapper, did: string): Promise<null | string>
+  enableMute(this: TIAtpWrapper, did: string): Promise<boolean>
   fetchActorsTypeahead(
     this: TIAtpWrapper,
     term?: string,

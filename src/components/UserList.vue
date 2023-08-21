@@ -70,7 +70,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
             />
             <MuteButton
               v-if="user.did !== mainState.atp.session?.did"
-              :handle="user.handle"
+              :did="user.did"
               :viewer="user.viewer"
             />
           </div>

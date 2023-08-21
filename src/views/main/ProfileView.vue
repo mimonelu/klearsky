@@ -212,7 +212,7 @@ function hideWarningContent () {
           <div class="button-container__separator" />
           <MuteButton
             v-if="!isMyProfile()"
-            :handle="mainState.currentProfile.handle"
+            :did="mainState.currentProfile.did"
             :viewer="mainState.currentProfile.viewer"
           />
           <BlockButton
