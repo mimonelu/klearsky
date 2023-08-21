@@ -267,7 +267,7 @@ function hideWarningContent () {
         <!-- ポストタブボタン -->
         <RouterLink
           class="tab__button tab__button--post"
-          :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
           :title="$t('post')"
         >
           <SVGIcon name="post" />
@@ -276,7 +276,7 @@ function hideWarningContent () {
         <!-- リプライ付きポストタブボタン -->
         <RouterLink
           class="tab__button tab__button--post"
-          :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
           :title="$t('postWithReplies')"
         >
           <SVGIcon name="posts" />
@@ -285,7 +285,7 @@ function hideWarningContent () {
         <!-- メディアタブボタン -->
         <RouterLink
           class="tab__button tab__button--media"
-          :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
           :title="$t('medias')"
         >
           <SVGIcon name="image" />
@@ -294,7 +294,7 @@ function hideWarningContent () {
         <!-- カスタムフィードタブボタン -->
         <RouterLink
           class="tab__button tab__button--custom-feeds"
-          :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.did } }"
           :title="$t('customFeeds')"
         >
           <SVGIcon name="feed" />
@@ -304,7 +304,7 @@ function hideWarningContent () {
         <RouterLink
           v-if="isMyProfile()"
           class="tab__button tab__button--repost"
-          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
           :title="$t('reposts')"
         >
           <SVGIcon name="repost" />
@@ -314,7 +314,7 @@ function hideWarningContent () {
         <RouterLink
           v-if="isMyProfile()"
           class="tab__button tab__button--like"
-          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
           :title="$t('likes')"
         >
           <SVGIcon name="heart" />
@@ -326,7 +326,7 @@ function hideWarningContent () {
         <!-- フォローイングタブボタン -->
         <RouterLink
           class="tab__button tab__button--following"
-          :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.did } }"
           :title="$t('following')"
         >
           <span>{{ $t("followings") }}</span>
@@ -342,7 +342,7 @@ function hideWarningContent () {
         <!-- フォロワータブボタン -->
         <RouterLink
           class="tab__button tab__button--following"
-          :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.did } }"
           :title="$t('follower')"
         >
           <img

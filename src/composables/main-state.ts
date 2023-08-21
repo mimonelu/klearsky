@@ -218,16 +218,16 @@ async function fetchUserProfile () {
   state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle as string)
 }
 
-async function fetchCurrentProfile (handle: string) {
+async function fetchCurrentProfile (did: string) {
   state.currentProfile = null
   state.currentAuthorReposts.splice(0)
   state.currentAuthorLikes.splice(0)
   state.currentAuthorCustomFeeds.splice(0)
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
-  state.currentProfile = await state.atp.fetchProfile(handle)
+  state.currentProfile = await state.atp.fetchProfile(did)
   if (state.currentProfile == null) return
-  if (handle === state.atp.session?.handle)
+  if (did === state.atp.session?.did)
     state.userProfile = state.currentProfile
 
   // ハンドル履歴と利用開始日の取得（非同期で良い）

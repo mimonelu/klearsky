@@ -265,8 +265,8 @@ function onActivateReplierLink () {
   emit("onClickReplier")
 }
 
-async function onActivateProfileLink (handle: string) {
-  await router.push({ name: "profile-feeds", query: { account: handle } })
+async function onActivateProfileLink (did: string) {
+  await router.push({ name: "profile-feeds", query: { account: did } })
 }
 
 function onActivateImageFolderButton () {
@@ -494,7 +494,7 @@ function onActivateHashTag (text: string) {
         v-if="post.__custom?.reason != null"
         class="reposter"
         :data-is-following="post.__custom?.reason?.by?.viewer?.following != null"
-        @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.handle as string)"
+        @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.did as string)"
       >
         <SVGIcon name="repost" />
         <div class="reposter__display-name">{{
@@ -561,7 +561,7 @@ function onActivateHashTag (text: string) {
       <!-- アバター -->
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
-        :handle="post.author?.handle"
+        :did="post.author?.did"
         :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
         :labels="post.author?.labels"
         @click.stop
@@ -573,7 +573,7 @@ function onActivateHashTag (text: string) {
           <AvatarLink
             v-if="position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
-            :handle="post.author?.handle"
+            :did="post.author?.did"
             :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
             :labels="post.author?.labels"
             @click.stop

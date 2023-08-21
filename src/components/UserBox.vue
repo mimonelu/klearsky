@@ -64,7 +64,7 @@ function hideWarningContent () {
 <template>
   <RouterLink
     class="user-box"
-    :to="{ name: 'profile-feeds', query: { account: user.handle } }"
+    :to="{ name: 'profile-feeds', query: { account: user.did } }"
     :data-is-following="user.viewer.following != null"
     :data-content-warning-disabled="contentWarningDisabled"
     :data-content-warning-visibility="state.contentWarningVisibility"
@@ -96,7 +96,7 @@ function hideWarningContent () {
 
     <template v-if="contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)">
       <AvatarLink
-        :handle="user.handle"
+        :did="user.did"
         :image="user.avatar"
         :labels="user.labels"
       />

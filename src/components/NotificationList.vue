@@ -39,7 +39,7 @@ function makeSubjectTo (notification: TTNotification): any {
     case "invite":
     case "repost":
     case "like": {
-      return { name: "profile-feeds", query: { account: notification.handle } }
+      return { name: "profile-feeds", query: { account: notification.did } }
     }
     case "likeGenerator": {
       return { name: "feeds", query: { feed: notification.uri, displayName: notification.displayName } }
@@ -126,7 +126,7 @@ function makeSubjectTo (notification: TTNotification): any {
 
             <!-- アバターリンク -->
             <AvatarLink
-              :handle="notification.handle"
+              :did="notification.did"
               :image="notification.avatar"
               @click.stop="$emit('close')"
             />

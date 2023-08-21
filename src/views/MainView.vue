@@ -292,8 +292,8 @@ function updatePageTitle () {
     title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
 
   if (state.currentPath.startsWith("/profile/") &&
-      state.currentQuery.account != null)
-    title += ` - ${state.currentQuery.account}`
+      state.currentProfile?.displayName != null)
+    title += ` - ${state.currentProfile.displayName}`
 
   if (state.currentPath.startsWith("/search/"))
     title += ` - ${$t("search")}`
@@ -469,6 +469,9 @@ async function processPage (pageName?: null | RouteRecordName) {
   } finally {
     state.listProcessing = false
   }
+
+  // プロフィールページの場合、現在のプロフィールを取得してからページタイトルを更新
+  if ((pageName as undefined | null | string)?.startsWith("profile")) updatePageTitle()
 }
 
 function clearNotificationInterval () {

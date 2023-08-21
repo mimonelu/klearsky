@@ -210,7 +210,7 @@ type MainState = {
   formatDate: Function
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
-  fetchCurrentProfile: (handle: string) => Promise<void>
+  fetchCurrentProfile: (did: string) => Promise<void>
   fetchCurrentAuthorCustomFeeds: (direction: "new" | "old") => Promise<void>
   fetchCurrentAuthorFeed: (direction: "new" | "old", filter?: string, middleCursor?: string) => Promise<void>
   fetchAuthorReposts: (direction: "new" | "old") => Promise<void>

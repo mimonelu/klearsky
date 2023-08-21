@@ -48,6 +48,7 @@ export default async function (
       const newNotification = {
         avatar: notification.author.avatar,
         cid: notification.cid,
+        did: notification.author.did,
         displayName: notification.author.displayName,
         handle: notification.author.handle,
         following: notification.author.viewer?.following != null,
