@@ -1216,7 +1216,6 @@ function onActivateHashTag (text: string) {
 
 .repost {
   grid-area: r;
-  background-color: var(--fg-color-0125);
   border: 1px solid var(--fg-color-025);
   border-radius: var(--border-radius);
   &:focus, &:hover {
