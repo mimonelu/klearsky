@@ -5,7 +5,8 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  text?: string;
+  text?: string
+  langs?: string[]
 }>()
 
 function translate () {
@@ -21,5 +22,6 @@ function translate () {
   <button @click.prevent.stop="translate">
     <SVGIcon name="translate" />
     <span>{{ $t("translate") }}</span>
+    <span v-if="langs != null">({{ langs?.join("/").toUpperCase() }})</span>
   </button>
 </template>

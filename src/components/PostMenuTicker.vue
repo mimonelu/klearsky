@@ -51,6 +51,7 @@ async function deletePost () {
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
       :text="post.record?.text"
+      :langs="post.record?.langs ?? post.value?.langs"
       @close="emit('close')"
     />
 

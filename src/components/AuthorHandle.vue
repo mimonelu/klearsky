@@ -35,6 +35,7 @@ const handle = mainState.currentSetting.postAnonymization
   white-space: nowrap;
   &[data-is-invalid="true"] {
     --fg-color: var(--notice-color);
+    font-weight: bold;
   }
 
   // フォローイングドット
