@@ -151,8 +151,9 @@ function onClickFileBox (event: Event) {
               :style="{ '--color': getDidColor(session.did) }"
             >
               <img
-                src="/img/void-avatar.png"
+                :src="session.__avatar ?? '/img/void-avatar.png'"
                 alt=""
+                :data-has-avatar="session.__avatar != null"
               >
             </div>
             <div class="account-button__handle">{{ session.handle }}</div>
@@ -269,9 +270,11 @@ function onClickFileBox (event: Event) {
     grid-area: i;
 
     & > img {
-      filter: brightness(200%);
       width: 3rem;
       height: 3rem;
+      &[data-has-avatar="false"] {
+        filter: brightness(200%);
+      }
     }
   }
 

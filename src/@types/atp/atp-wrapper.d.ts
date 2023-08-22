@@ -29,6 +29,7 @@ type TTSession = {
   email?: string
   refreshJwt: string
   __service?: string // Injected
+  __avatar?: string // Injected
 }
 
 type TTData = {

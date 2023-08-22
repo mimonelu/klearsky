@@ -216,6 +216,10 @@ function forceUpdate () {
 
 async function fetchUserProfile () {
   state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle as string)
+
+  // 現在のセッションにアバター画像を設定
+  if (state.atp.session != null && state.userProfile?.avatar != null)
+    state.atp.session.__avatar = state.userProfile?.avatar
 }
 
 async function fetchCurrentProfile (did: string) {
