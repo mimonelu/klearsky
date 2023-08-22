@@ -13,15 +13,19 @@ const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
   isUser: boolean
-  display: boolean;
-  user: TTUser;
+  display: boolean
+  user: TTUser
+  container?: HTMLElement
 }>()
 
 const mainState = inject("state") as MainState
 </script>
 
 <template>
-  <MenuTicker :display="display">
+  <MenuTicker
+    :display="display"
+    :container="container"
+  >
     <!-- メールアドレス -->
     <div
       v-if="isUser"
@@ -51,6 +55,7 @@ const mainState = inject("state") as MainState
       :did="user.did"
       :handle="user.handle"
       :text="user.description"
+      :container="container"
       @close="emit('close')"
     />
 
@@ -59,6 +64,7 @@ const mainState = inject("state") as MainState
       v-if="!isUser"
       :isUser="isUser"
       :user="user"
+      :container="container"
       @close="emit('close')"
     />
 
@@ -67,6 +73,7 @@ const mainState = inject("state") as MainState
       type="profile"
       :did="user.did"
       :handle="user.handle"
+      :container="container"
       @close="emit('close')"
     />
 

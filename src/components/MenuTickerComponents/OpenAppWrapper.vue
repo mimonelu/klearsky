@@ -8,14 +8,15 @@ import otherApps from "@/consts/other-apps.json"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  type: "post" | "profile";
-  did?: string;
-  handle?: string;
-  uri?: string;
+  type: "post" | "profile"
+  did?: string
+  handle?: string
+  uri?: string
+  container?: HTMLElement
 }>()
 
 const state = reactive<{
-  otherAppDisplay: boolean;
+  otherAppDisplay: boolean
 }>({
   otherAppDisplay: false,
 })
@@ -51,8 +52,9 @@ function openOtherApp (app: any) {
 
     <!-- 他のアプリで開くメニュー -->
     <MenuTicker
-      :display="state.otherAppDisplay"
       class="menu-ticker__sub"
+      :display="state.otherAppDisplay"
+      :container="container"
     >
       <template v-for="app of otherApps">
         <button

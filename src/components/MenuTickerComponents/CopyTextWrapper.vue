@@ -7,14 +7,15 @@ import SVGIcon from "@/components/SVGIcon.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  uri?: string;
-  did?: string;
-  handle?: string;
-  text?: string;
+  uri?: string
+  did?: string
+  handle?: string
+  text?: string
+  container?: HTMLElement
 }>()
 
 const state = reactive<{
-  display: boolean;
+  display: boolean
 }>({
   display: false,
 })
@@ -33,6 +34,7 @@ const state = reactive<{
     <!-- 他のアプリで開くメニュー -->
     <MenuTicker
       :display="state.display"
+      :container="container"
       class="menu-ticker__sub"
     >
       <!-- URI をコピーする -->

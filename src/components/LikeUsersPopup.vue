@@ -84,6 +84,8 @@ function scrolledToBottom () {
 <style lang="scss" scoped>
 .like-users-popup:deep() {
   .popup {
+    height: 100%;
+
     &-header {
       & > h2 {
         color: rgb(var(--like-color));

@@ -2,7 +2,8 @@
 import { nextTick, reactive, ref, watch } from "vue"
 
 const props = defineProps<{
-  display: boolean;
+  display: boolean
+  container?: HTMLElement
 }>()
 
 const state = reactive<{
@@ -24,10 +25,17 @@ watch(() => props.display, (display: boolean) => {
     if (menuTickerInner.value == null) return
     const innerRect = menuTickerInner.value.getBoundingClientRect()
 
-    if (window.innerHeight < innerRect.bottom)
-      state.top = window.innerHeight - innerRect.bottom
-    if (0 > innerRect.left)
-      state.left = - innerRect.left
+    const left = props.container != null
+      ? props.container.offsetLeft
+      : 0
+    if (left > innerRect.left)
+      state.left = left - innerRect.left
+
+    const innerHeight = props.container != null
+      ? props.container.clientHeight + props.container.offsetTop
+      : window.innerHeight
+    if (innerHeight < innerRect.bottom)
+      state.top = innerHeight - innerRect.bottom
   })
 })
 </script>

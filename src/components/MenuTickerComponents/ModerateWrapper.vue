@@ -10,13 +10,14 @@ import SVGIcon from "@/components/SVGIcon.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  isUser?: boolean;
-  user?: TTUser;
-  post?: TTPost;
+  isUser?: boolean
+  user?: TTUser
+  post?: TTPost
+  container?: HTMLElement
 }>()
 
 const state = reactive<{
-  display: boolean;
+  display: boolean
 }>({
   display: false,
 })
@@ -34,8 +35,9 @@ const state = reactive<{
 
     <!-- モデレーションメニュー -->
     <MenuTicker
-      :display="state.display"
       class="menu-ticker__sub"
+      :display="state.display"
+      :container="container"
     >
       <!-- ミュートのトグル -->
       <MenuTickerToggleMute
