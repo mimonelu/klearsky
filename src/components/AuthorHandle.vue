@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 
 const props = defineProps<{
   handle?: string
@@ -9,20 +9,25 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const isInvalid = props.handle === "handle.invalid"
-
-const handle = mainState.currentSetting.postAnonymization
-  ? ""
-  : isInvalid
-    ? $t("invalidHandle")
-    : props.handle
+const state = reactive<{
+  isInvalid?: ComputedRef<boolean>
+  handle?: ComputedRef<string>
+}>({
+  isInvalid: computed((): boolean => props.handle === "handle.invalid"),
+  handle: computed((): string => mainState.currentSetting.postAnonymization
+    ? ""
+    : state.isInvalid
+      ? $t("invalidHandle")
+      : props.handle
+  ),
+})
 </script>
 
 <template>
   <div
     class="author-handle"
-    :data-is-invalid="isInvalid"
-  >{{ handle }}</div>
+    :data-is-invalid="state.isInvalid"
+  >{{ state.handle }}</div>
 </template>
 
 <style lang="scss" scoped>
