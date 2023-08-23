@@ -1,3 +1,5 @@
+![Klearsky](./public/img/ogp.png "Klearsky")
+
 # Klearsky
 
 This template should help get you started developing with Vue 3 in Vite.
