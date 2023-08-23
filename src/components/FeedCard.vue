@@ -46,14 +46,14 @@ async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
       generator.viewer.like = uri
       generator.likeCount ++
     } else {
-      mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/createLike")
+      mainState.openErrorPopup("errorApiFailed", "FeedCard/createLike")
     }
   } else {
     if (await mainState.atp.deleteLike(generator.viewer.like)) {
       delete generator.viewer.like
       generator.likeCount --
     } else {
-      mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/deleteLike")
+      mainState.openErrorPopup("errorApiFailed", "FeedCard/deleteLike")
     }
   }
   state.processing = false
@@ -87,7 +87,7 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
 
   state.processing = true
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
-    mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/updatePreferences")
+    mainState.openErrorPopup("errorApiFailed", "FeedCard/updatePreferences")
   state.processing = false
 }
 
@@ -106,7 +106,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
 <template>
   <component
-    class="custom-feed-card"
+    class="feed-card"
     :is="unclickable ? 'div' : 'RouterLink'"
     v-bind="unclickable ? null : {
       to: {
@@ -120,23 +120,23 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     :data-unclickable="unclickable"
     @click.stop
   >
-    <div class="custom-feed-card__top">
+    <div class="feed-card__top">
       <!-- フィード画像 -->
       <img
-        class="custom-feed-card__avatar"
+        class="feed-card__avatar"
         loading="lazy"
         decoding="async"
         :src="generator.avatar ?? '/img/void-avatar.png'"
         alt=""
       >
 
-      <div class="custom-feed-card__top__right">
+      <div class="feed-card__top__right">
         <!-- フィード名 -->
-        <div class="custom-feed-card__display-name">
+        <div class="feed-card__display-name">
           <span>{{ generator.displayName }}</span>
 
           <!-- フィード名コピーボタン -->
-          <div class="custom-feed-card__display-name__copy-button">
+          <div class="feed-card__display-name__copy-button">
             <SVGIcon
               name="clipboard"
               @click.prevent.stop="copyFeedName"
@@ -146,7 +146,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
         <!-- フィードライク数 -->
         <button
-          class="custom-feed-card__like-count"
+          class="feed-card__like-count"
           :data-on="generator.viewer.like != null"
           @click.prevent.stop="toggleFeedGeneratorLike(generator)"
         >
@@ -155,15 +155,15 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         </button>
 
         <!-- フィード作成日時 -->
-        <div class="custom-feed-card__indexed-at">
+        <div class="feed-card__indexed-at">
           <SVGIcon name="clock" />
           <span>{{ mainState.formatDate(generator.indexedAt) }}</span>
         </div>
 
-        <div class="custom-feed-card__top__right__right">
+        <div class="feed-card__top__right__right">
           <!-- フィードピン -->
           <button
-            class="custom-feed-card__pin"
+            class="feed-card__pin"
             @click.prevent.stop="toggleSavedOrPinned('pinned')"
           >
             <SVGIcon :name="state.pinned
@@ -176,7 +176,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
           <!-- フィードブックマーク -->
           <button
-            class="custom-feed-card__bookmark"
+            class="feed-card__bookmark"
             @click.prevent.stop="toggleSavedOrPinned('saved')"
           >
             <SVGIcon :name="state.saved
@@ -192,7 +192,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
     <!-- フィード説明文 -->
     <HtmlText
-      class="custom-feed-card__description"
+      class="feed-card__description"
       dir="auto"
       :text="generator.description ?? '&nbsp;'"
       @onActivateMention="emit('onActivateMention')"
@@ -201,7 +201,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
     <div
       v-if="orderButtonDisplay || creatorDisplay"
-      class="custom-feed-card__bottom"
+      class="feed-card__bottom"
     >
       <!-- フィードオーダーボタン -->
       <template v-if="orderButtonDisplay">
@@ -222,13 +222,13 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <!-- フィード作成者 -->
       <RouterLink
         v-if="creatorDisplay"
-        class="custom-feed-card__creator"
+        class="feed-card__creator"
         :to="{ name: 'profile-feeds', query: { account: generator.creator.did } }"
         @click.prevent
       >
         <SVGIcon name="person" />
-        <div class="custom-feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
-        <div class="custom-feed-card__creator__handle">{{ generator.creator.handle }}</div>
+        <div class="feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
+        <div class="feed-card__creator__handle">{{ generator.creator.handle }}</div>
       </RouterLink>
     </div>
     <Loader
@@ -239,7 +239,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 </template>
 
 <style lang="scss" scoped>
-.custom-feed-card {
+.feed-card {
   cursor: default;
   display: flex;
   flex-direction: column;

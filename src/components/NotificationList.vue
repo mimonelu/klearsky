@@ -2,7 +2,7 @@
 import { inject } from "vue"
 import AuthorHandle from "@/components/AuthorHandle.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
-import CustomFeedCard from "@/components/CustomFeedCard.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
@@ -159,7 +159,7 @@ function makeSubjectTo (notification: TTNotification): any {
       />
 
       <!-- フィードジェネレーター -->
-      <CustomFeedCard
+      <FeedCard
         v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.generator != null"
         :generator="notificationGroup.generator"
         :orderButtonDisplay="false"
@@ -211,7 +211,7 @@ function makeSubjectTo (notification: TTNotification): any {
   }
 
   // フィードジェネレーター
-  & > .custom-feed-card {
+  & > .feed-card {
     background-color: var(--accent-color-0125);
     border: 1px solid var(--accent-color-025);
     border-radius: var(--border-radius);

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
-import CustomFeedCard from "@/components/CustomFeedCard.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import FeedList from "@/components/FeedList.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -68,7 +68,7 @@ function openPopularFeedsPopup () {
         <SVGIcon name="fire" />
       </button>
     </Portal>
-    <CustomFeedCard
+    <FeedCard
       v-if="state.generator != null"
       :generator="state.generator"
       :orderButtonDisplay="false"

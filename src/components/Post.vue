@@ -3,7 +3,7 @@ import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type Compu
 import { useRouter } from "vue-router"
 import AuthorHandle from "@/components/AuthorHandle.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
-import CustomFeedCard from "@/components/CustomFeedCard.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
@@ -741,7 +741,7 @@ function onActivateHashTag (text: string) {
           </template>
 
           <!-- フィードカード -->
-          <CustomFeedCard
+          <FeedCard
             v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
             :generator="post.embed.record as unknown as TTFeedGenerator"
             :orderButtonDisplay="false"
@@ -883,7 +883,7 @@ function onActivateHashTag (text: string) {
     .external,
     .image-folder-button,
     .quad-images,
-    .custom-feed-card,
+    .feed-card,
     .reaction-container {
       display: none;
     }
@@ -1223,7 +1223,7 @@ function onActivateHashTag (text: string) {
   }
 }
 
-.custom-feed-card {
+.feed-card {
   background-color: var(--accent-color-0125);
   border: 1px solid var(--accent-color-025);
   border-radius: var(--border-radius);

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, watch } from "vue"
-import CustomFeedCard from "@/components/CustomFeedCard.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import LoadButton from "@/components/LoadButton.vue"
 import Util from "@/composables/util"
 
@@ -26,8 +26,8 @@ watch(() => mainState.scrolledToBottom, () => {
       :processing="mainState.listProcessing"
       @activate="fetchAuthorCustomFeeds('new')"
     />
-    <div class="custom-feed-container">
-      <CustomFeedCard
+    <div class="feed-card-container">
+      <FeedCard
         v-for="generator of mainState.currentAuthorCustomFeeds"
         :key="generator.cid"
         :generator="generator"
@@ -50,7 +50,7 @@ watch(() => mainState.scrolledToBottom, () => {
   flex-grow: 1;
 }
 
-.custom-feed-card:not(:last-child) {
+.feed-card:not(:last-child) {
   border-bottom: 1px solid var(--fg-color-0125);
 }
 </style>
