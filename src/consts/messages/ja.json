@@ -133,6 +133,7 @@
   "copyHandle": "ハンドルをコピーする",
   "copyUri": "AT URIをコピーする",
   "copyDid": "DIDをコピーする",
+  "copyDisplayName": "表示名をコピーする",
   "likeUsers": "いいねしたアカウント",
   "repostUsers": "リポストしたアカウント",
   "copyPostText": "テキストをコピーする",

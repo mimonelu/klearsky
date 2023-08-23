@@ -133,6 +133,7 @@
   "copyHandle": "Copy handle",
   "copyUri": "Copy AT URI",
   "copyDid": "Copy DID",
+  "copyDisplayName": "Copy display name",
   "likeUsers": "Liked by",
   "repostUsers": "Reposted by",
   "copyPostText": "Copy text",

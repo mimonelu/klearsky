@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive, ref, type ComputedRef } from "vue"
+import FeedCardMenuTicker from "@/components/FeedCardMenuTicker.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -20,6 +21,8 @@ const state = reactive<{
   processing: boolean
   saved: ComputedRef<boolean>
   pinned: ComputedRef<boolean>
+  menuTickerDisplay: boolean
+  menuTickerContainer: ComputedRef<undefined | HTMLElement>
 }>({
   processing: false,
   saved: computed((): boolean => {
@@ -30,11 +33,13 @@ const state = reactive<{
     return mainState.feedPreferences?.pinned
       .some((uri: string) => uri === props.generator.uri) ?? false
   }),
+  menuTickerDisplay: false,
+  menuTickerContainer: computed((): undefined | HTMLElement => {
+    return menuTicker.value?.closest(".popup-body") ?? undefined
+  }),
 })
 
-async function copyFeedName () {
-  await navigator.clipboard.writeText(props.generator.uri)
-}
+const menuTicker = ref()
 
 async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
   Util.blurElement()
@@ -102,6 +107,14 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     [saved[index], saved[index + 1]] = [saved[index + 1], saved[index]]
   emit("changeCustomFeedOrder")
 }
+
+function openMenuTicker () {
+  state.menuTickerDisplay = !state.menuTickerDisplay
+}
+
+function closeMenuTicker () {
+  state.menuTickerDisplay = false
+}
 </script>
 
 <template>
@@ -134,14 +147,6 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         <!-- フィード名 -->
         <div class="feed-card__display-name">
           <span>{{ generator.displayName }}</span>
-
-          <!-- フィード名コピーボタン -->
-          <div class="feed-card__display-name__copy-button">
-            <SVGIcon
-              name="clipboard"
-              @click.prevent.stop="copyFeedName"
-            />
-          </div>
         </div>
 
         <!-- フィードライク数 -->
@@ -186,6 +191,23 @@ function changeCustomFeedOrder (direction: "up" | "down") {
               : 'bookmarkOutline'
             " />
           </button>
+
+          <!-- フィードカードメニュートリガー -->
+          <button
+            class="menu-button"
+            ref="menuTicker"
+            @click.prevent.stop="openMenuTicker"
+          >
+            <SVGIcon name="menu" />
+
+            <!-- フィードカードメニュー -->
+            <FeedCardMenuTicker
+              :generator="generator"
+              :display="state.menuTickerDisplay"
+              :container="state.menuTickerContainer"
+              @close="closeMenuTicker"
+            />
+          </button>
         </div>
       </div>
     </div>
@@ -223,7 +245,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <RouterLink
         v-if="creatorDisplay"
         class="feed-card__creator"
-        :to="{ name: 'profile-feeds', query: { account: generator.creator.did } }"
+        :to="{ name: 'profile-custom-feeds', query: { account: generator.creator.did } }"
         @click.prevent
       >
         <SVGIcon name="person" />
@@ -306,20 +328,6 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
-    // フィード名コピーボタン
-    &__copy-button {
-      --opacity: 0.25;
-
-      & > .svg-icon {
-        cursor: pointer;
-        fill: rgb(var(--fg-color), var(--opacity));
-        font-size: 1.25em;
-        &:focus, &:hover {
-          --opacity: 0.5;
-        }
-      }
-    }
   }
 
   &__like-count,
@@ -381,9 +389,10 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     }
   }
 
-  // フィードブックマーク・フィードピン
+  // フィードブックマーク・フィードピン・フィードカードメニュートリガー
   &__bookmark,
-  &__pin {
+  &__pin,
+  .menu-button {
     --color: var(--accent-color-0875);
     cursor: pointer;
     margin: -0.5em;
@@ -394,7 +403,20 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
     & > .svg-icon {
       fill: var(--color);
-      font-size: 1.5em;
+      font-size: 1.25em;
+    }
+  }
+  .menu-button {
+    --color: var(--fg-color-075);
+    &:focus, &:hover {
+      --color: var(--fg-color-0875);
+    }
+  }
+
+  .menu-ticker:deep() {
+    & > .menu-ticker--inner {
+      top: 3rem;
+      right: 0.5rem;
     }
   }
 

@@ -1,48 +1,49 @@
 [
   {
     "name": "officialApp",
-    "profileUri": "https://bsky.app/profile/{handle}",
-    "postUri": "https://bsky.app/profile/{handle}/post/{rkey}"
+    "generator": "https://bsky.app/profile/{uri}",
+    "post": "https://bsky.app/profile/{handle}/post/{rkey}",
+    "profile": "https://bsky.app/profile/{handle}"
   },
   {
     "name": "wrapperApp",
-    "profileUri": "https://blue.amazingca.dev/?username={handle}",
-    "postUri": "https://blue.amazingca.dev/?username={handle}&postid={rkey}"
+    "post": "https://blue.amazingca.dev/?username={handle}&postid={rkey}",
+    "profile": "https://blue.amazingca.dev/?username={handle}"
   },
   {
     "name": "kiteApp",
-    "profileUri": "https://kite.black/#/user/{handle}",
-    "postUri": "https://kite.black/#/blue/{did}/{rkey}"
+    "post": "https://kite.black/#/blue/{did}/{rkey}",
+    "profile": "https://kite.black/#/user/{handle}"
   },
   {
     "name": "laikaApp",
-    "profileUri": "https://laika-bluesky.web.app/profile/{handle}",
-    "postUri": "https://laika-bluesky.web.app/index#thread/uri/{uri}"
+    "post": "https://laika-bluesky.web.app/index#thread/uri/{uri}",
+    "profile": "https://laika-bluesky.web.app/profile/{handle}"
   },
   {
     "name": "skylineApp",
-    "profileUri": "https://skyline.gay/profile/{handle}",
-    "postUri": "https://skyline.gay/profile/{handle}/post/{rkey}"
+    "post": "https://skyline.gay/profile/{handle}/post/{rkey}",
+    "profile": "https://skyline.gay/profile/{handle}"
   },
   {
     "name": "sunriseApp",
-    "profileUri": "https://sunrise.li/u/{handle}",
-    "postUri": "https://sunrise.li/u/{handle}/skeet/{rkey}"
+    "post": "https://sunrise.li/u/{handle}/skeet/{rkey}",
+    "profile": "https://sunrise.li/u/{handle}"
   },
   {
     "name": "tokimekiApp",
-    "profileUri": "https://tokimekibluesky.vercel.app/profile/{handle}",
-    "postUri": "https://tokimekibluesky.vercel.app/profile/{handle}/post/{rkey}",
+    "post": "https://tokimekibluesky.vercel.app/profile/{handle}/post/{rkey}",
+    "profile": "https://tokimekibluesky.vercel.app/profile/{handle}",
     "separator": true
   },
   {
     "name": "atlasApp",
-    "profileUri": "https://bsky.jazco.dev/?s={handle}",
-    "postUri": "https://bsky.jazco.dev/?s={handle}"
+    "post": "https://bsky.jazco.dev/?s={handle}",
+    "profile": "https://bsky.jazco.dev/?s={handle}"
   },
   {
     "name": "atscanApp",
-    "profileUri": "https://atscan.net/{did}",
-    "postUri": "https://atscan.net/{did}"
+    "post": "https://atscan.net/{did}",
+    "profile": "https://atscan.net/{did}"
   }
 ]

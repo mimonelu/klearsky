@@ -104,6 +104,7 @@ function scrolledToBottom () {
   &:deep() {
     .popup {
       flex-grow: 1;
+      height: 100%;
     }
 
     .popup-body {

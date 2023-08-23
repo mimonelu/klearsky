@@ -9,6 +9,7 @@ const emit = defineEmits<{(event: string): void}>()
 defineProps<{
   uri?: string
   did?: string
+  displayName?: string
   handle?: string
   text?: string
   container?: HTMLElement
@@ -47,13 +48,23 @@ const state = reactive<{
 
       <!-- DID をコピーする -->
       <MenuTickerCopyText
+        v-if="did != null"
         label="copyDid"
         :text="did"
         @close="emit('close')"
       />
 
+      <!-- 表示名をコピーする -->
+      <MenuTickerCopyText
+        v-if="displayName != null"
+        label="copyDisplayName"
+        :text="displayName"
+        @close="emit('close')"
+      />
+
       <!-- ハンドルをコピーする -->
       <MenuTickerCopyText
+        v-if="handle != null"
         label="copyHandle"
         :text="handle"
         @close="emit('close')"
@@ -61,6 +72,7 @@ const state = reactive<{
 
       <!-- テキストをコピーする -->
       <MenuTickerCopyText
+        v-if="text != null"
         label="copyPostText"
         :text="text"
         @close="emit('close')"
