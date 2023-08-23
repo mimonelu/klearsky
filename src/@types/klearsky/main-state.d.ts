@@ -119,6 +119,7 @@ type MainState = {
     post?: TTPost
     text?: string
     fileList?: FileList
+    createdAt?: string
   }
 
   imagePopupProps: {
@@ -226,7 +227,8 @@ type MainState = {
     type: TTPostType,
     post?: TTPost,
     text?: string,
-    fileList?: FileList
+    fileList?: FileList,
+    createdAt?: string
   ) => Promise<boolean>
   closeSendPostPopup: (done: boolean) => void
   openRepostUsersPopup: (uri: string) => void

@@ -755,6 +755,7 @@ function broadcastListener (event: MessageEvent) {
       :post="state.sendPostPopupProps.post"
       :text="state.sendPostPopupProps.text"
       :fileList="state.sendPostPopupProps.fileList"
+      :createdAt="state.sendPostPopupProps.createdAt"
       @closeSnedPostPopup="closeSendPostPopup"
     />
 

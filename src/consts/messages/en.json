@@ -139,6 +139,8 @@
   "translate": "Translate",
   "firstPost": "Show first post",
   "sendMention": "Send mention",
+  "sendPostAfter": "Send post after this",
+  "warpPostNotification": "This post will be posted as the following date:",
   "deletePost": "Delete post",
   "deletePostMessage": "This post will be deleted. Are you sure?",
   "moderate": "Moderate",

@@ -6,6 +6,7 @@ import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/Moderat
 import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
+import MenuTickerSendPostAfter from "@/components/MenuTickerComponents/SendPostAfter.vue"
 import MenuTickerShowLikeUsers from "@/components/MenuTickerComponents/ShowLikeUsers.vue"
 import MenuTickerShowRepostUsers from "@/components/MenuTickerComponents/ShowRepostUsers.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
@@ -45,6 +46,12 @@ async function deletePost () {
     <!-- メンションを送る -->
     <MenuTickerSendMention
       :mentionTo="post.author.handle"
+      @close="emit('close')"
+    />
+
+    <!-- このポストの直後に投稿する -->
+    <MenuTickerSendPostAfter
+      :createdAt="post.record.createdAt"
       @close="emit('close')"
     />
 

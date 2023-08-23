@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
+import format from "date-fns/format"
 import EasyForm from "@/components/EasyForm.vue"
 import HtmlPopup from "@/components/HtmlPopup.vue"
 import Popup from "@/components/Popup.vue"
@@ -10,10 +11,11 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string, done: boolean, empty: boolean): void}>()
 
 const props = defineProps<{
-  type: TTPostType;
-  post?: TTPost;
-  text?: string;
-  fileList?: FileList;
+  type: TTPostType
+  post?: TTPost
+  text?: string
+  fileList?: FileList
+  createdAt?: string
 }>()
 
 const $t = inject("$t") as Function
@@ -125,6 +127,7 @@ async function submitCallback () {
       ...easyFormState,
       type: props.type,
       post: props.post,
+      createdAt: props.createdAt,
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
 
@@ -165,6 +168,16 @@ function onChangeImage () {
         </h2>
       </template>
       <template #body>
+        <!-- ワープポスト用注意文言 -->
+        <div
+          v-if="createdAt != null"
+          class="textlabel"
+        >
+          <div class="textlabel__text">
+            <SVGIcon name="history" />{{ $t("warpPostNotification") }} {{ format(new Date(createdAt), "yyyy/MM/dd HH:mm:ss") }}
+          </div>
+        </div>
+
         <Post
           v-if="type === 'reply' || type === 'quoteRepost'"
           position="preview"
@@ -264,6 +277,10 @@ function onChangeImage () {
 
     .popup-body {
       padding-top: 0;
+    }
+
+    .textlabel {
+      margin: 0 -0.5rem;
     }
 
     // プレビューポストのテキスト選択

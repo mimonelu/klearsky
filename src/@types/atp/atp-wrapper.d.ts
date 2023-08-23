@@ -4,6 +4,7 @@ type TTCreatePostParams = {
   type: TTPostType
   post?: TTPost
   text: string
+  createdAt?: string
   url: string
   images: Array<File>
   alts: Array<string>
