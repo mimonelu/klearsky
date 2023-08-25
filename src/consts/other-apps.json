@@ -6,44 +6,13 @@
     "profile": "https://bsky.app/profile/{handle}"
   },
   {
-    "name": "wrapperApp",
-    "post": "https://blue.amazingca.dev/?username={handle}&postid={rkey}",
-    "profile": "https://blue.amazingca.dev/?username={handle}"
-  },
-  {
-    "name": "kiteApp",
-    "post": "https://kite.black/#/blue/{did}/{rkey}",
-    "profile": "https://kite.black/#/user/{handle}"
-  },
-  {
-    "name": "laikaApp",
-    "post": "https://laika-bluesky.web.app/index#thread/uri/{uri}",
-    "profile": "https://laika-bluesky.web.app/profile/{handle}"
-  },
-  {
-    "name": "skylineApp",
-    "post": "https://skyline.gay/profile/{handle}/post/{rkey}",
-    "profile": "https://skyline.gay/profile/{handle}"
-  },
-  {
-    "name": "sunriseApp",
-    "post": "https://sunrise.li/u/{handle}/skeet/{rkey}",
-    "profile": "https://sunrise.li/u/{handle}"
-  },
-  {
     "name": "tokimekiApp",
     "post": "https://tokimekibluesky.vercel.app/profile/{handle}/post/{rkey}",
-    "profile": "https://tokimekibluesky.vercel.app/profile/{handle}",
-    "separator": true
+    "profile": "https://tokimekibluesky.vercel.app/profile/{handle}"
   },
   {
     "name": "atlasApp",
     "post": "https://bsky.jazco.dev/?s={handle}",
     "profile": "https://bsky.jazco.dev/?s={handle}"
-  },
-  {
-    "name": "atscanApp",
-    "post": "https://atscan.net/{did}",
-    "profile": "https://atscan.net/{did}"
   }
 ]
