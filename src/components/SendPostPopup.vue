@@ -189,7 +189,7 @@ function onChangeImage () {
             <div class="button-container">
               <!-- ポスト言語選択ポップアップトリガー -->
               <button
-                class="button--bordered"
+                class="button--bordered post-language-button"
                 @click.prevent="mainState.openPostLanguagesPopup()"
               >
                 <SVGIcon name="translate" />
@@ -202,14 +202,14 @@ function onChangeImage () {
 
               <!-- ラベル選択ポップアップトリガー -->
               <button
-                class="button--bordered"
+                class="button--bordered label-button"
                 @click.prevent="mainState.openSelectLabelsPopup(state)"
               >
                 <SVGIcon name="alert" />
                 <span>{{
                   state.labels.length === 0
                   ? "---"
-                  : state.labels.map((label: string) => $t(label)).join(", ")
+                  : `(${state.labels.length}) ${state.labels.map((label: string) => $t(label)).join(", ")}`
                 }}</span>
               </button>
             </div>
@@ -313,9 +313,7 @@ function onChangeImage () {
 
     .button--bordered {
       min-height: 3rem;
-      &:first-child {
-        white-space: nowrap;
-      }
+      white-space: nowrap;
       &:last-child {
         --fg-color: var(--notice-color);
       }
@@ -325,11 +323,19 @@ function onChangeImage () {
       }
 
       & > span {
-        word-break: break-all;
+        text-overflow: ellipsis;
       }
     }
-    .button--bordered:first-child > span {
+    .post-language-button > span {
       text-transform: uppercase;
+    }
+    .label-button {
+      overflow: hidden;
+
+      & > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }
