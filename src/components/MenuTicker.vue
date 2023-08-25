@@ -82,6 +82,11 @@ watch(() => props.display, (display: boolean) => {
     @media not all and (min-width: $sp-width) {
       padding: 0 0 calc(var(--sp-menu-height) + 0.75rem) 0.75rem;
     }
+    .popup-body & {
+      @media not all and (min-width: $sp-width) {
+        padding: 0 0 0.75rem 0.75rem;
+      }
+    }
 
     position: absolute;
     max-width: 16rem;
