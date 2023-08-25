@@ -81,7 +81,7 @@ onMounted(async () => {
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    processPage(router.currentRoute.value.name)
+    processPage(router.currentRoute.value.name as undefined | null | string)
   } finally {
     state.mounted = true
     state.processing = false
@@ -149,7 +149,7 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "timeline-home" && state.timelineFeeds.length > 0) return
 
-  await processPage(to.name)
+  await processPage(to.name as undefined | null | string)
 })
 
 function resetState () {
@@ -283,23 +283,31 @@ function resetState () {
 }
 
 // ページタイトルの更新
-// TODO: /post のタイトルを付けること
 function updatePageTitle () {
   let title = state.notificationCount === 0 ? "" : `(${state.notificationCount}) `
   title += "Klearsky"
 
-  if (state.currentPath === "/home/feeds")
-    title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
-
-  if (state.currentPath.startsWith("/profile/") &&
-      state.currentProfile?.displayName != null)
-    title += ` - ${state.currentProfile.displayName}`
-
   if (state.currentPath.startsWith("/search/"))
     title += ` - ${$t("search")}`
 
+  else if (state.currentPath.startsWith("/profile/") &&
+      state.currentProfile?.displayName != null)
+    title += ` - ${state.currentProfile.displayName}`
+
   if (router.currentRoute.value.meta.label != null)
     title += ` - ${$t(router.currentRoute.value.meta.label)}`
+
+  if (state.currentPath === "/home/feeds")
+    title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
+
+  else if (state.currentPath.startsWith("/post") &&
+      state.currentPosts != null &&
+      state.currentPosts.length > 0)
+    title += ` - ${state.currentPosts[0].author.displayName}`
+
+  else if (state.currentPath.startsWith("/search/post"))
+    title += ` - ${state.currentSearchPostTerm}`
+
   window.document.title = title
 }
 
@@ -331,13 +339,13 @@ async function manualLogin (service: string, identifier: string, password: strin
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    processPage(router.currentRoute.value.name)
+    processPage(router.currentRoute.value.name as undefined | null | string)
   } finally {
     state.processing = false
   }
 }
 
-async function processPage (pageName?: null | RouteRecordName) {
+async function processPage (pageName?: null | string) {
   let account: null | string = null
   switch (pageName) {
     case "profile-feeds":
@@ -470,8 +478,9 @@ async function processPage (pageName?: null | RouteRecordName) {
     state.listProcessing = false
   }
 
-  // プロフィールページの場合、現在のプロフィールを取得してからページタイトルを更新
-  if ((pageName as undefined | null | string)?.startsWith("profile")) updatePageTitle()
+  // 現在ページの該当データを取得してからページタイトルを更新
+  if (pageName?.startsWith("post") ||
+      pageName?.startsWith("profile")) updatePageTitle()
 }
 
 function clearNotificationInterval () {
