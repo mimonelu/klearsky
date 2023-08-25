@@ -16,10 +16,14 @@ const props = defineProps<{
 }>()
 
 const state = reactive<{
-  otherAppDisplay: boolean
+  display: boolean
 }>({
-  otherAppDisplay: false,
+  display: false,
 })
+
+function showSubMenuTicker () {
+  setTimeout(() => { state.display = true }, 1)
+}
 
 function openOtherApp (app: any) {
   emit("close")
@@ -55,8 +59,8 @@ function openOtherApp (app: any) {
   <button
     class="menu-ticker__sub-trigger"
     @click.prevent.stop
-    @mouseenter="state.otherAppDisplay = true"
-    @mouseleave="state.otherAppDisplay = false"
+    @mouseenter="showSubMenuTicker"
+    @mouseleave="state.display = false"
   >
     <SVGIcon name="cursorLeft" />
     <span>{{ $t("openOtherApp") }}</span>
@@ -64,7 +68,7 @@ function openOtherApp (app: any) {
     <!-- 他のアプリで開くメニュー -->
     <MenuTicker
       class="menu-ticker__sub"
-      :display="state.otherAppDisplay"
+      :display="state.display"
       :container="container"
     >
       <template v-for="app of otherApps">

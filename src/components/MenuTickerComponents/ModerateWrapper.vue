@@ -21,13 +21,17 @@ const state = reactive<{
 }>({
   display: false,
 })
+
+function showSubMenuTicker () {
+  setTimeout(() => { state.display = true }, 1)
+}
 </script>
 
 <template>
   <button
     class="menu-ticker__sub-trigger"
     @click.prevent.stop
-    @mouseenter="state.display = true"
+    @mouseenter="showSubMenuTicker"
     @mouseleave="state.display = false"
   >
     <SVGIcon name="cursorLeft" />
