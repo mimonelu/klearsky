@@ -293,6 +293,9 @@ function moveToBottom () {
 // ショートカットプルダウン
 .pulldown-button {
   margin-bottom: 1rem;
+  &:not(:focus) {
+    background-color: transparent;
+  }
 }
 
 // プロフィールボタン
