@@ -77,7 +77,6 @@ function openOtherApp (app: any) {
             <SVGIcon name="openInApp" />
             <span>{{ $t(app.name) }}</span>
           </button>
-          <hr v-if="app.separator" />
         </template>
       </template>
     </MenuTicker>
