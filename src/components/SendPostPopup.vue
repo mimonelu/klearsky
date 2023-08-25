@@ -222,14 +222,14 @@ function onChangeImage () {
                 v-for="_, altIndex of easyFormState.images"
                 :key="altIndex"
               >
-                <input
+                <textarea
                   v-model="easyFormState.alts[altIndex]"
                   type="text"
                   autocapitalize="off"
                   autocomplete="off"
                   :placeholder="`${$t('alts')} ${altIndex + 1}`"
                   spellcheck="false"
-                  class="textbox"
+                  class="textarea"
                 />
               </dd>
             </dl>
