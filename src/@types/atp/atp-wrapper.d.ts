@@ -274,6 +274,7 @@ interface TIAtpWrapper {
     newSession: TTSession,
     service?: string
   ): void
+  registerPush(this: TIAtpWrapper): Promise<Error | boolean>
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
   updateMyLabels(this: TIAtpWrapper, labels: Array<TTLabel>): Promise<Error | boolean>
