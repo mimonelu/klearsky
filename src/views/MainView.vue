@@ -118,7 +118,6 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
       state.currentAuthorFeedsWithRepliesCursor = undefined
       state.currentAuthorFeedsWithMedia?.splice(0)
       state.currentAuthorFeedsWithMediaCursor = undefined
-      state.currentAuthorMediasIncludeRepost = [false]
       state.currentAuthorCustomFeeds?.splice(0)
       state.currentAuthorCustomFeedsCursor = undefined
       state.currentAuthorReposts?.splice(0)
@@ -167,7 +166,6 @@ function resetState () {
   state.currentAuthorFeedsWithRepliesCursor = undefined
   state.currentAuthorFeedsWithMedia = []
   state.currentAuthorFeedsWithMediaCursor = undefined
-  state.currentAuthorMediasIncludeRepost = [false]
   state.currentAuthorCustomFeeds = []
   state.currentAuthorCustomFeedsCursor = undefined
   state.currentAuthorReposts = []

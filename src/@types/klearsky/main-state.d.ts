@@ -25,7 +25,6 @@ type MainState = {
   currentAuthorFeedsWithRepliesCursor?: string
   currentAuthorFeedsWithMedia: Array<TTFeed>
   currentAuthorFeedsWithMediaCursor?: string
-  currentAuthorMediasIncludeRepost: Array<boolean>
   currentAuthorCustomFeeds: Array<TTFeedGenerator>
   currentAuthorCustomFeedsCursor?: string
   currentAuthorReposts: Array<TTFeed>
