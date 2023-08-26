@@ -82,17 +82,9 @@
       }
     }
   }
-  &:focus, &:hover {
-    & > .quad-image {
-      filter: brightness(0.75);
-    }
-  }
 
   & > .quad-image {
     overflow: hidden;
-    &:focus, &:hover {
-      filter: brightness(1.0);
-    }
 
     & > .thumbnail {
       position: relative;
