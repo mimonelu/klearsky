@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
-import CustomFeedCard from "@/components/CustomFeedCard.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import FeedList from "@/components/FeedList.vue"
-import PageHeader from "@/components/PageHeader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -69,7 +68,7 @@ function openPopularFeedsPopup () {
         <SVGIcon name="fire" />
       </button>
     </Portal>
-    <CustomFeedCard
+    <FeedCard
       v-if="state.generator != null"
       :generator="state.generator"
       :orderButtonDisplay="false"
@@ -104,13 +103,13 @@ function openPopularFeedsPopup () {
     --opacity: 0.25;
   }
 
-  border-top: 1px solid rgba(var(--fg-color), 0.25);
+  border-top: 1px solid var(--fg-color-025);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 
   .feed:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), var(--opacity));
+    border-bottom: 1px solid rgb(var(--fg-color), var(--opacity));
   }
 
   .feed:not(:empty):not(:last-child)::after {

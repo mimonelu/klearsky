@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive, ref, type ComputedRef } from "vue"
+import FeedCardMenuTicker from "@/components/FeedCardMenuTicker.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -20,6 +21,8 @@ const state = reactive<{
   processing: boolean
   saved: ComputedRef<boolean>
   pinned: ComputedRef<boolean>
+  menuTickerDisplay: boolean
+  menuTickerContainer: ComputedRef<undefined | HTMLElement>
 }>({
   processing: false,
   saved: computed((): boolean => {
@@ -30,11 +33,13 @@ const state = reactive<{
     return mainState.feedPreferences?.pinned
       .some((uri: string) => uri === props.generator.uri) ?? false
   }),
+  menuTickerDisplay: false,
+  menuTickerContainer: computed((): undefined | HTMLElement => {
+    return menuTicker.value?.closest(".popup-body") ?? undefined
+  }),
 })
 
-async function copyFeedName () {
-  await navigator.clipboard.writeText(props.generator.uri)
-}
+const menuTicker = ref()
 
 async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
   Util.blurElement()
@@ -46,14 +51,14 @@ async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
       generator.viewer.like = uri
       generator.likeCount ++
     } else {
-      mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/createLike")
+      mainState.openErrorPopup("errorApiFailed", "FeedCard/createLike")
     }
   } else {
     if (await mainState.atp.deleteLike(generator.viewer.like)) {
       delete generator.viewer.like
       generator.likeCount --
     } else {
-      mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/deleteLike")
+      mainState.openErrorPopup("errorApiFailed", "FeedCard/deleteLike")
     }
   }
   state.processing = false
@@ -87,7 +92,7 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
 
   state.processing = true
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
-    mainState.openErrorPopup("errorApiFailed", "CustomFeedCard/updatePreferences")
+    mainState.openErrorPopup("errorApiFailed", "FeedCard/updatePreferences")
   state.processing = false
 }
 
@@ -102,11 +107,19 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     [saved[index], saved[index + 1]] = [saved[index + 1], saved[index]]
   emit("changeCustomFeedOrder")
 }
+
+function openMenuTicker () {
+  state.menuTickerDisplay = !state.menuTickerDisplay
+}
+
+function closeMenuTicker () {
+  state.menuTickerDisplay = false
+}
 </script>
 
 <template>
   <component
-    class="custom-feed-card"
+    class="feed-card"
     :is="unclickable ? 'div' : 'RouterLink'"
     v-bind="unclickable ? null : {
       to: {
@@ -120,33 +133,25 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     :data-unclickable="unclickable"
     @click.stop
   >
-    <div class="custom-feed-card__top">
+    <div class="feed-card__top">
       <!-- フィード画像 -->
       <img
-        class="custom-feed-card__avatar"
+        class="feed-card__avatar"
         loading="lazy"
         decoding="async"
         :src="generator.avatar ?? '/img/void-avatar.png'"
         alt=""
       >
 
-      <div class="custom-feed-card__top__right">
+      <div class="feed-card__top__right">
         <!-- フィード名 -->
-        <div class="custom-feed-card__display-name">
+        <div class="feed-card__display-name">
           <span>{{ generator.displayName }}</span>
-
-          <!-- フィード名コピーボタン -->
-          <div class="custom-feed-card__display-name__copy-button">
-            <SVGIcon
-              name="clipboard"
-              @click.prevent.stop="copyFeedName"
-            />
-          </div>
         </div>
 
         <!-- フィードライク数 -->
         <button
-          class="custom-feed-card__like-count"
+          class="feed-card__like-count"
           :data-on="generator.viewer.like != null"
           @click.prevent.stop="toggleFeedGeneratorLike(generator)"
         >
@@ -155,15 +160,15 @@ function changeCustomFeedOrder (direction: "up" | "down") {
         </button>
 
         <!-- フィード作成日時 -->
-        <div class="custom-feed-card__indexed-at">
+        <div class="feed-card__indexed-at">
           <SVGIcon name="clock" />
           <span>{{ mainState.formatDate(generator.indexedAt) }}</span>
         </div>
 
-        <div class="custom-feed-card__top__right__right">
+        <div class="feed-card__top__right__right">
           <!-- フィードピン -->
           <button
-            class="custom-feed-card__pin"
+            class="feed-card__pin"
             @click.prevent.stop="toggleSavedOrPinned('pinned')"
           >
             <SVGIcon :name="state.pinned
@@ -176,7 +181,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
           <!-- フィードブックマーク -->
           <button
-            class="custom-feed-card__bookmark"
+            class="feed-card__bookmark"
             @click.prevent.stop="toggleSavedOrPinned('saved')"
           >
             <SVGIcon :name="state.saved
@@ -186,13 +191,30 @@ function changeCustomFeedOrder (direction: "up" | "down") {
               : 'bookmarkOutline'
             " />
           </button>
+
+          <!-- フィードカードメニュートリガー -->
+          <button
+            class="menu-button"
+            ref="menuTicker"
+            @click.prevent.stop="openMenuTicker"
+          >
+            <SVGIcon name="menu" />
+
+            <!-- フィードカードメニュー -->
+            <FeedCardMenuTicker
+              :generator="generator"
+              :display="state.menuTickerDisplay"
+              :container="state.menuTickerContainer"
+              @close="closeMenuTicker"
+            />
+          </button>
         </div>
       </div>
     </div>
 
     <!-- フィード説明文 -->
     <HtmlText
-      class="custom-feed-card__description"
+      class="feed-card__description"
       dir="auto"
       :text="generator.description ?? '&nbsp;'"
       @onActivateMention="emit('onActivateMention')"
@@ -201,7 +223,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
     <div
       v-if="orderButtonDisplay || creatorDisplay"
-      class="custom-feed-card__bottom"
+      class="feed-card__bottom"
     >
       <!-- フィードオーダーボタン -->
       <template v-if="orderButtonDisplay">
@@ -222,13 +244,13 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <!-- フィード作成者 -->
       <RouterLink
         v-if="creatorDisplay"
-        class="custom-feed-card__creator"
-        :to="{ name: 'profile-feeds', query: { account: generator.creator.handle } }"
+        class="feed-card__creator"
+        :to="{ name: 'profile-custom-feeds', query: { account: generator.creator.did } }"
         @click.prevent
       >
         <SVGIcon name="person" />
-        <div class="custom-feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
-        <div class="custom-feed-card__creator__handle">{{ generator.creator.handle }}</div>
+        <div class="feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
+        <div class="feed-card__creator__handle">{{ generator.creator.handle }}</div>
       </RouterLink>
     </div>
     <Loader
@@ -239,7 +261,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 </template>
 
 <style lang="scss" scoped>
-.custom-feed-card {
+.feed-card {
   cursor: default;
   display: flex;
   flex-direction: column;
@@ -306,20 +328,6 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
-    // フィード名コピーボタン
-    &__copy-button {
-      --opacity: 0.25;
-
-      & > .svg-icon {
-        cursor: pointer;
-        fill: rgba(var(--fg-color), var(--opacity));
-        font-size: 1.25em;
-        &:focus, &:hover {
-          --opacity: 0.5;
-        }
-      }
-    }
   }
 
   &__like-count,
@@ -340,13 +348,13 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
   // フィードライク数
   &__like-count {
-    --color: rgba(var(--fg-color), 0.5);
+    --color: var(--fg-color-05);
     cursor: pointer;
     grid-area: l;
     margin: -0.5em;
     padding: 0.5em;
     &[data-on="true"] {
-      --color: rgba(var(--like-color), 0.75);
+      --color: var(--like-color-075);
       &:focus, &:hover {
         --color: rgb(var(--like-color));
       }
@@ -372,19 +380,20 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     grid-area: i;
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.5);
+      fill: var(--fg-color-05);
       font-size: 0.75em;
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.5);
+      color: var(--fg-color-05);
     }
   }
 
-  // フィードブックマーク・フィードピン
+  // フィードブックマーク・フィードピン・フィードカードメニュートリガー
   &__bookmark,
-  &__pin {
-    --color: rgba(var(--accent-color), 0.875);
+  &__pin,
+  .menu-button {
+    --color: var(--accent-color-0875);
     cursor: pointer;
     margin: -0.5em;
     padding: 0.5em;
@@ -394,7 +403,20 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
     & > .svg-icon {
       fill: var(--color);
-      font-size: 1.5em;
+      font-size: 1.25em;
+    }
+  }
+  .menu-button {
+    --color: var(--fg-color-075);
+    &:focus, &:hover {
+      --color: var(--fg-color-0875);
+    }
+  }
+
+  .menu-ticker:deep() {
+    & > .menu-ticker--inner {
+      top: 3rem;
+      right: 0.5rem;
     }
   }
 
@@ -415,7 +437,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   &__creator {
     background-clip: padding-box;
     background-color: rgb(var(--bg-color));
-    border: 1px solid rgb(var(--accent-color), 0.25);
+    border: 1px solid var(--accent-color-025);
     border-radius: var(--border-radius);
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -424,11 +446,11 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     margin-left: auto;
     padding: 0.5em 1em;
     &:focus, &:hover {
-      border-color: rgb(var(--accent-color), 0.5);
+      border-color: var(--accent-color-05);
     }
 
     & > .svg-icon {
-      fill: rgba(var(--accent-color), 0.75);
+      fill: var(--accent-color-075);
       font-size: 0.75em;
     }
 
@@ -443,7 +465,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     }
 
     &__handle {
-      color: rgba(var(--fg-color), 0.75);
+      color: var(--fg-color-075);
       font-size: 0.875em;
       line-height: 1.25;
       overflow: hidden;

@@ -2,7 +2,7 @@
 import SVGIcon from "@/components/SVGIcon.vue"
 
 defineProps<{
-  handle?: string
+  did?: string
   image?: string
   labels?: Array<TTLabel>
 }>()
@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <RouterLink
-    :to="{ name: 'profile-feeds', query: { account: handle } }"
+    :to="{ name: 'profile-feeds', query: { account: did } }"
     class="avatar-link"
     :data-has-label="(labels?.length ?? 0) > 0"
   >

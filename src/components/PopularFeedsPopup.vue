@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive } from "vue"
-import CustomFeedCard from "@/components/CustomFeedCard.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import LoadButton from "@/components/LoadButton.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
@@ -75,7 +75,7 @@ function scrolledToBottom () {
 
       <!-- カスタムフィード -->
       <template v-else>
-        <CustomFeedCard
+        <FeedCard
           v-for="generator of mainState.currentPopularFeedGenerators"
           :key="generator.cid"
           :generator="generator"
@@ -101,6 +101,7 @@ function scrolledToBottom () {
 .popular-feeds-popup:deep() {
   .popup {
     flex-grow: 1;
+    height: 100%;
   }
 
   .popup-header {
@@ -119,8 +120,8 @@ function scrolledToBottom () {
     padding: unset;
   }
 
-  .custom-feed-card:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+  .feed-card:not(:last-child) {
+    border-bottom: 1px solid var(--fg-color-0125);
   }
 
   .textlabel {

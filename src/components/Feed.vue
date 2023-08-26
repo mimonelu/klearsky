@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import AuthorHandle from "@/components/AuthorHandle.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
@@ -32,6 +33,7 @@ function removeThisPost (uri: string) {
       <div
         v-if="feed.reply != null"
         class="folder__item"
+        :data-is-following="feed.post.author.viewer?.following != null"
       >
         <SVGIcon name="reply" />
         <div class="display-name">{{
@@ -39,17 +41,14 @@ function removeThisPost (uri: string) {
             ? feed.post.author.displayName
             : $t("anonymous")
         }}</div>
-        <div class="author-handle">{{
-          !mainState.currentSetting.postAnonymization
-            ? feed.post.author.handle
-            : ""
-        }}</div>
+        <AuthorHandle :handle="feed.post.author.handle" />
       </div>
 
       <!-- 折り畳みリポストオープナー -->
       <div
         v-if="feed.reason != null"
         class="folder__item"
+        :data-is-following="feed.reason.by.viewer?.following != null"
       >
         <SVGIcon name="repost" />
         <div class="display-name">{{
@@ -57,11 +56,7 @@ function removeThisPost (uri: string) {
             ? feed.reason.by.displayName
             : $t("anonymous")
         }}</div>
-        <div class="author-handle">{{
-          !mainState.currentSetting.postAnonymization
-            ? feed.reason.by.handle
-            : ""
-        }}</div>
+        <AuthorHandle :handle="feed.reason.by.handle" />
       </div>
     </div>
 
@@ -119,6 +114,10 @@ function removeThisPost (uri: string) {
   &:focus, &:hover {
     .folder__item {
       --alpha: 0.75;
+
+      & > .author-handle {
+        --fg-color-05: unset;
+      }
     }
   }
 
@@ -131,12 +130,12 @@ function removeThisPost (uri: string) {
     overflow: hidden;
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), var(--alpha));
+      fill: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
     & > .display-name {
-      color: rgba(var(--fg-color), var(--alpha));
+      color: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
       font-weight: bold;
       line-height: 1.25;
@@ -146,7 +145,7 @@ function removeThisPost (uri: string) {
     }
 
     & > .author-handle {
-      color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
+      --fg-color-05: var(--fg-color-025);
       font-size: 0.75em;
     }
   }

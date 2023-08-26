@@ -2,7 +2,7 @@ import type { BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
-  handle: string
+  did: string
 ): Promise<null | string> {
   if (this.agent == null) return null
   const query: Omit<ComAtprotoRepoCreateRecord.InputSchema, "collection" | "record"> = {
@@ -15,7 +15,7 @@ export default async function (
     this.agent as BskyAgent
   ).app.bsky.graph.block.create(query, {
     createdAt: new Date().toISOString(),
-    subject: handle,
+    subject: did,
   })
   console.log("[klearsky/block.create]", response)
   if (response?.uri == null) return null

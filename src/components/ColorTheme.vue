@@ -36,7 +36,7 @@ function onActivate (colorValue: string) {
 
   &__box {
     background-color: rgb(var(--bg-color));
-    border: 1px solid rgba(var(--fg-color), 0.25);
+    border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius);
     display: flex;
     align-items: center;

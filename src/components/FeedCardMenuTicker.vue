@@ -2,23 +2,19 @@
 import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
-import MenuTickerFirstPost from "@/components/MenuTickerComponents/FirstPost.vue"
-import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
+// TODO: カスタムフィードのレポート機能を実装しない場合は削除すること
+// import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
-import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  isUser: boolean
+  generator: TTFeedGenerator
   display: boolean
-  user: TTUser
   container?: HTMLElement
 }>()
-
-const mainState = inject("state") as MainState
 </script>
 
 <template>
@@ -26,40 +22,24 @@ const mainState = inject("state") as MainState
     :display="display"
     :container="container"
   >
-    <!-- メールアドレス -->
-    <div
-      v-if="isUser"
-      class="menu-ticker__header"
-    >{{ mainState.atp.session?.email ?? "&nbsp;" }}</div>
-
-    <!-- 最初のポスト -->
-    <MenuTickerFirstPost
-      :did="user.did"
-      @close="emit('close')"
-    />
-
-    <!-- メンションを送る -->
-    <MenuTickerSendMention
-      :mentionTo="user.handle"
-      @close="emit('close')"
-    />
-
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
-      :text="user.description"
+      :text="generator.description"
       @close="emit('close')"
     />
 
     <!-- コピーする -->
     <MenuTickerCopyTextWrapper
-      :did="user.did"
-      :handle="user.handle"
-      :text="user.description"
+      :did="generator.did"
+      :displayName="generator.displayName"
+      :text="generator.description"
+      :uri="generator.uri"
       :container="container"
       @close="emit('close')"
     />
 
-    <!-- モデレートする -->
+    <!-- TODO: カスタムフィードのレポート機能を実装しない場合は削除すること -->
+    <!-- モデレートする
     <MenuTickerModerateWrapper
       v-if="!isUser"
       :isUser="isUser"
@@ -67,12 +47,12 @@ const mainState = inject("state") as MainState
       :container="container"
       @close="emit('close')"
     />
+    -->
 
     <!-- 他のアプリで開く -->
     <MenuTickerOpenAppWrapper
-      type="profile"
-      :did="user.did"
-      :handle="user.handle"
+      type="generator"
+      :uri="generator.uri.replace('at://', '').replace('app.bsky.feed.generator', 'feed')"
       :container="container"
       @close="emit('close')"
     />
@@ -81,7 +61,7 @@ const mainState = inject("state") as MainState
 
     <!-- ソースを表示する -->
     <MenuTickerOpenSource
-      :source="user"
+      :source="generator"
       @close="emit('close')"
     />
   </MenuTicker>

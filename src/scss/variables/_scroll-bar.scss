@@ -1,8 +1,12 @@
 @mixin scroll-bar () {
+  // for WebKit
   &::-webkit-scrollbar {
-    background-color: rgba(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
   }
   &::-webkit-scrollbar-thumb {
-    background-color: rgba(var(--fg-color), 0.25);
+    background-color: var(--fg-color-025);
   }
+
+  // for Firefox
+  scrollbar-color: var(--fg-color-025) var(--fg-color-0125);
 }

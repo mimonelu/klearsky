@@ -135,8 +135,8 @@ function openPopularFeedsPopup () {
   position: relative;
 
   &__header {
-    background-color: rgba(var(--bg-color), var(--main-area-opacity));
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    background-color: rgb(var(--bg-color), var(--main-area-opacity));
+    border-bottom: 1px solid var(--fg-color-025);
     cursor: pointer;
     display: grid;
     grid-gap: 0.5rem;
@@ -170,7 +170,7 @@ function openPopularFeedsPopup () {
     }
 
     & > .svg-icon--cursorRight {
-      fill: rgba(var(--fg-color), 0.5);
+      fill: var(--fg-color-05);
     }
     &:focus, &:hover {
       & > .svg-icon--cursorRight {
@@ -180,7 +180,7 @@ function openPopularFeedsPopup () {
   }
 
   &__item {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    border-bottom: 1px solid var(--fg-color-025);
     position: relative;
 
     .loader {
@@ -207,7 +207,7 @@ function openPopularFeedsPopup () {
 
 .feed-list:deep() {
   .feed:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+    border-bottom: 1px solid var(--fg-color-0125);
   }
 
   .feed:not(:empty):not(:last-child)::after {

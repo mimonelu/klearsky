@@ -149,7 +149,7 @@ function searchPost () {
     }
 
     & > span {
-      color: rgba(var(--fg-color), 0.5);
+      color: var(--fg-color-05);
       line-height: var(--line-height);
       overflow: hidden;
       text-overflow: ellipsis;

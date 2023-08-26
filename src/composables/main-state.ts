@@ -32,6 +32,7 @@ const state = reactive<MainState>({
     type: "post",
     post: undefined,
     fileList: undefined,
+    createdAt: undefined,
   },
   imagePopupProps: {
     display: false,
@@ -216,18 +217,22 @@ function forceUpdate () {
 
 async function fetchUserProfile () {
   state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle as string)
+
+  // 現在のセッションにアバター画像を設定
+  if (state.atp.session != null && state.userProfile?.avatar != null)
+    state.atp.session.__avatar = state.userProfile?.avatar
 }
 
-async function fetchCurrentProfile (handle: string) {
+async function fetchCurrentProfile (did: string) {
   state.currentProfile = null
   state.currentAuthorReposts.splice(0)
   state.currentAuthorLikes.splice(0)
   state.currentAuthorCustomFeeds.splice(0)
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
-  state.currentProfile = await state.atp.fetchProfile(handle)
+  state.currentProfile = await state.atp.fetchProfile(did)
   if (state.currentProfile == null) return
-  if (handle === state.atp.session?.handle)
+  if (did === state.atp.session?.did)
     state.userProfile = state.currentProfile
 
   // ハンドル履歴と利用開始日の取得（非同期で良い）
@@ -716,12 +721,19 @@ function updateColorThemeSetting () {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (type: TTPostType, post?: TTPost, text?: string, fileList?: FileList): Promise<boolean> {
+async function openSendPostPopup (
+  type: TTPostType,
+  post?: TTPost,
+  text?: string,
+  fileList?: FileList,
+  createdAt?: string
+): Promise<boolean> {
   state.sendPostPopupProps.display = true
   state.sendPostPopupProps.type = type
   state.sendPostPopupProps.post = post
   state.sendPostPopupProps.text = text
   state.sendPostPopupProps.fileList = fileList
+  state.sendPostPopupProps.createdAt = createdAt
   await Util.waitProp(() => state.sendPostPopupProps.display, false)
   return isSendPostDone
 }

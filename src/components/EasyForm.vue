@@ -378,7 +378,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
   height: 2rem;
 
   & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.75);
+    fill: var(--fg-color-075);
     font-size: 0.75rem;
   }
   &:focus > .svg-icon,
@@ -388,7 +388,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
 }
 
 .footnote {
-  color: rgba(var(--fg-color), 0.75);
+  color: var(--fg-color-075);
   font-size: 0.875rem;
   line-height: 1.25;
   text-align: right;

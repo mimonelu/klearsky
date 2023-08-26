@@ -212,7 +212,7 @@ function hideWarningContent () {
           <div class="button-container__separator" />
           <MuteButton
             v-if="!isMyProfile()"
-            :handle="mainState.currentProfile.handle"
+            :did="mainState.currentProfile.did"
             :viewer="mainState.currentProfile.viewer"
           />
           <BlockButton
@@ -267,7 +267,7 @@ function hideWarningContent () {
         <!-- ポストタブボタン -->
         <RouterLink
           class="tab__button tab__button--post"
-          :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
           :title="$t('post')"
         >
           <SVGIcon name="post" />
@@ -276,7 +276,7 @@ function hideWarningContent () {
         <!-- リプライ付きポストタブボタン -->
         <RouterLink
           class="tab__button tab__button--post"
-          :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
           :title="$t('postWithReplies')"
         >
           <SVGIcon name="posts" />
@@ -285,7 +285,7 @@ function hideWarningContent () {
         <!-- メディアタブボタン -->
         <RouterLink
           class="tab__button tab__button--media"
-          :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
           :title="$t('medias')"
         >
           <SVGIcon name="image" />
@@ -294,7 +294,7 @@ function hideWarningContent () {
         <!-- カスタムフィードタブボタン -->
         <RouterLink
           class="tab__button tab__button--custom-feeds"
-          :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.did } }"
           :title="$t('customFeeds')"
         >
           <SVGIcon name="feed" />
@@ -304,7 +304,7 @@ function hideWarningContent () {
         <RouterLink
           v-if="isMyProfile()"
           class="tab__button tab__button--repost"
-          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
           :title="$t('reposts')"
         >
           <SVGIcon name="repost" />
@@ -314,7 +314,7 @@ function hideWarningContent () {
         <RouterLink
           v-if="isMyProfile()"
           class="tab__button tab__button--like"
-          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
           :title="$t('likes')"
         >
           <SVGIcon name="heart" />
@@ -326,7 +326,7 @@ function hideWarningContent () {
         <!-- フォローイングタブボタン -->
         <RouterLink
           class="tab__button tab__button--following"
-          :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.did } }"
           :title="$t('following')"
         >
           <span>{{ $t("followings") }}</span>
@@ -342,7 +342,7 @@ function hideWarningContent () {
         <!-- フォロワータブボタン -->
         <RouterLink
           class="tab__button tab__button--following"
-          :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.handle } }"
+          :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.did } }"
           :title="$t('follower')"
         >
           <img
@@ -399,7 +399,7 @@ function hideWarningContent () {
 
 .banner {
   aspect-ratio: 3/1;
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  border-bottom: 1px solid var(--fg-color-025);
   display: block;
   &[data-has-banner="true"] {
     background-position: center center;
@@ -417,7 +417,7 @@ function hideWarningContent () {
 }
 
 .details {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  border-bottom: 1px solid var(--fg-color-025);
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
@@ -449,13 +449,13 @@ function hideWarningContent () {
 }
 
 .handle {
-  color: rgba(var(--fg-color), 0.75);
+  color: var(--fg-color-075);
   display: flex;
   align-items: center;
   grid-gap: 0.25rem;
   margin-bottom: 0.5rem;
   [data-log-loaded="true"] & {
-    color: rgba(var(--accent-color), 0.875);
+    color: var(--accent-color-0875);
     cursor: pointer;
     &:focus, &:hover {
       color: rgb(var(--accent-color));
@@ -469,7 +469,7 @@ function hideWarningContent () {
     display: none;
   }
   [data-log-loaded="true"] & > .svg-icon {
-    fill: rgba(var(--accent-color), 0.875);
+    fill: var(--accent-color-0875);
   }
 
   & > span {
@@ -562,7 +562,7 @@ function hideWarningContent () {
   position: relative;
 
   dl {
-    color: rgba(var(--fg-color), 0.75);
+    color: var(--fg-color-075);
     display: flex;
     align-items: baseline;
     grid-gap: 0.5rem;

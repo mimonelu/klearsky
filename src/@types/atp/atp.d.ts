@@ -232,6 +232,7 @@ type TTNotificationReason = "reply"
 type TTNotification = {
   avatar?: string
   cid: string
+  did: string
   displayName?: string
   handle: string
   following: boolean

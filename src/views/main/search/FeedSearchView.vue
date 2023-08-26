@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
-import CustomFeedCard from "@/components/CustomFeedCard.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import LoadButton from "@/components/LoadButton.vue"
 import Util from "@/composables/util"
 
@@ -61,8 +61,8 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       >
     </form>
     <div class="main">
-      <div class="custom-feed-container">
-        <CustomFeedCard
+      <div class="feed-card-container">
+        <FeedCard
           v-for="generator of mainState.currentSearchFeeds"
           :key="generator.cid"
           :generator="generator"
@@ -93,12 +93,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-grow: 1;
 }
 
-.custom-feed-container {
-  border-top: 1px solid rgb(var(--fg-color), 0.25);
+.feed-card-container {
+  border-top: 1px solid var(--fg-color-025);
   flex-grow: 1;
 }
 
-.custom-feed-card:not(:last-child) {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+.feed-card:not(:last-child) {
+  border-bottom: 1px solid var(--fg-color-0125);
 }
 </style>

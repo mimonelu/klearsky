@@ -91,6 +91,8 @@ function scrolledToBottom () {
 <style lang="scss" scoped>
 .muting-users-popup:deep() {
   .popup {
+    height: 100%;
+
     &-header {
       & > h2 {
         color: rgb(var(--notice-color));

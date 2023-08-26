@@ -45,25 +45,25 @@ function onActivate () {
   position: relative;
   min-height: 3rem;
   &:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    border-bottom: 1px solid var(--fg-color-025);
   }
   &:last-child {
-    border-top: 1px solid rgba(var(--fg-color), 0.25);
+    border-top: 1px solid var(--fg-color-025);
   }
 
   // 抜け漏れ取得ボタン
   &[data-direction="middle"] {
-    background-color: rgba(var(--accent-color), 0.25);
+    background-color: var(--accent-color-025);
   }
 
   & > .svg-icon {
     font-size: 1.5rem;
-    fill: rgba(var(--fg-color), 0.25);
+    fill: var(--fg-color-025);
   }
 
   &:focus, &:hover {
     & > .svg-icon {
-      fill: rgba(var(--fg-color), 0.75);
+      fill: var(--fg-color-075);
     }
   }
 

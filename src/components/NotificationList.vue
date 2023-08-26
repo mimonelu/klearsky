@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import AuthorHandle from "@/components/AuthorHandle.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
-import CustomFeedCard from "@/components/CustomFeedCard.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
@@ -39,7 +40,7 @@ function makeSubjectTo (notification: TTNotification): any {
     case "invite":
     case "repost":
     case "like": {
-      return { name: "profile-feeds", query: { account: notification.handle } }
+      return { name: "profile-feeds", query: { account: notification.did } }
     }
     case "likeGenerator": {
       return { name: "feeds", query: { feed: notification.uri, displayName: notification.displayName } }
@@ -126,7 +127,7 @@ function makeSubjectTo (notification: TTNotification): any {
 
             <!-- アバターリンク -->
             <AvatarLink
-              :handle="notification.handle"
+              :did="notification.did"
               :image="notification.avatar"
               @click.stop="$emit('close')"
             />
@@ -135,7 +136,7 @@ function makeSubjectTo (notification: TTNotification): any {
             <div class="display-name">{{ notification.displayName }}</div>
 
             <!-- ハンドル -->
-            <div class="author-handle">{{ notification.handle }}</div>
+            <AuthorHandle :handle="notification.handle" />
 
             <!-- リアクション日時 -->
             <div class="indexed-at">{{ mainState.formatDate(notification.indexedAt) }}</div>
@@ -158,7 +159,7 @@ function makeSubjectTo (notification: TTNotification): any {
       />
 
       <!-- フィードジェネレーター -->
-      <CustomFeedCard
+      <FeedCard
         v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.generator != null"
         :generator="notificationGroup.generator"
         :orderButtonDisplay="false"
@@ -176,10 +177,10 @@ function makeSubjectTo (notification: TTNotification): any {
 .notification-group {
   padding: 1rem;
   &:not(:last-child) {
-    border-bottom: 1px solid rgba(var(--fg-color), 0.125);
+    border-bottom: 1px solid var(--fg-color-0125);
   }
   &[data-is-new="true"] {
-    background-color: rgba(var(--accent-color), 0.125);
+    background-color: var(--accent-color-0125);
   }
 
   // reason ごとの処理
@@ -190,7 +191,7 @@ function makeSubjectTo (notification: TTNotification): any {
   }
   &[data-reason="follow"] {
     .text {
-      color: rgba(var(--fg-color), 0.75);
+      color: var(--fg-color-075);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -200,7 +201,7 @@ function makeSubjectTo (notification: TTNotification): any {
   // 通知フォルダー開閉ボタンを持つ通知グループの処理
   &[data-has-folder="true"] {
     .notification-folder {
-      border: 1px solid rgba(var(--fg-color), 0.25);
+      border: 1px solid var(--fg-color-025);
       border-radius: var(--border-radius);
     }
 
@@ -210,13 +211,13 @@ function makeSubjectTo (notification: TTNotification): any {
   }
 
   // フィードジェネレーター
-  & > .custom-feed-card {
-    background-color: rgba(var(--accent-color), 0.125);
-    border: 1px solid rgba(var(--accent-color), 0.25);
+  & > .feed-card {
+    background-color: var(--accent-color-0125);
+    border: 1px solid var(--accent-color-025);
     border-radius: var(--border-radius);
     margin-top: 0.5rem;
     &:focus, &:hover {
-      border-color: rgba(var(--accent-color), 0.5);
+      border-color: var(--accent-color-05);
     }
   }
 }
@@ -285,7 +286,7 @@ function makeSubjectTo (notification: TTNotification): any {
     }
 
     .indexed-at {
-      color: rgba(var(--fg-color), 0.75);
+      color: var(--fg-color-075);
     }
   }
 
@@ -339,7 +340,7 @@ function makeSubjectTo (notification: TTNotification): any {
 
 // 表示名
 .display-name {
-  color: rgba(var(--fg-color), 0.75);
+  color: var(--fg-color-075);
   font-size: 0.875rem;
   font-weight: bold;
   line-height: 1.25;
@@ -349,7 +350,7 @@ function makeSubjectTo (notification: TTNotification): any {
 
 // リアクション日時
 .indexed-at {
-  color: rgba(var(--fg-color), 0.5);
+  color: var(--fg-color-05);
   font-size: 0.875rem;
   line-height: 1.25;
   overflow: hidden;
@@ -367,8 +368,8 @@ function makeSubjectTo (notification: TTNotification): any {
 
 // ユーザーポスト
 .post {
-  background-color: rgba(var(--fg-color), 0.125);
-  border: 1px solid rgba(var(--fg-color), 0.25);
+  background-color: var(--fg-color-0125);
+  border: 1px solid var(--fg-color-025);
   border-radius: var(--border-radius);
   font-size: 0.875rem;
   margin-top: 0.5rem;

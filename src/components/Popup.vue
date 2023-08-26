@@ -99,7 +99,7 @@ function scrollListener () {
 
 <style lang="scss" scoped>
 .popup-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgb(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -115,9 +115,9 @@ function scrollListener () {
 
 .popup {
   background-color: rgb(var(--bg-color));
-  border: 1px solid rgba(var(--fg-color), 0.25);
+  border: 1px solid var(--fg-color-025);
   border-radius: var(--border-radius);
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1rem 0 rgb(0, 0, 0, 0.5);
   color: rgb(var(--fg-color));
   display: flex;
   flex-direction: column;
@@ -139,7 +139,7 @@ function scrollListener () {
 }
 
 .popup-header {
-  border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+  border-bottom: 1px solid var(--fg-color-025);
   cursor: pointer;
   display: flex;
   position: relative;
@@ -154,7 +154,7 @@ function scrollListener () {
       width: 3rem;
 
       & > .svg-icon {
-        fill: rgba(var(--fg-color), 0.75);
+        fill: var(--fg-color-075);
       }
 
       &:focus, &:hover {
@@ -189,6 +189,7 @@ function scrollListener () {
 .popup-body {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   grid-gap: 1rem;
   overflow-x: hidden;
   overflow-y: auto;

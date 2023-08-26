@@ -96,7 +96,7 @@ function createProfileTimer () {
     } finally {
       createProfileTimer()
     }
-  }, 1000)
+  }, 500)
 }
 
 function destroyProfileTimer () {
@@ -326,7 +326,7 @@ function onMutated () {
 
   &[data-is-on="true"] {
     & > .svg-icon {
-      fill: rgba(var(--notice-color), 0.75);
+      fill: var(--notice-color-075);
     }
     &:focus, &:hover {
       & > .svg-icon {
@@ -352,13 +352,13 @@ function onMutated () {
 
     & > dt {
       & > .svg-icon {
-        fill: rgba(var(--fg-color), 0.5);
+        fill: var(--fg-color-05);
         font-size: 0.875rem;
       }
     }
 
     & > dd {
-      color: rgba(var(--fg-color), 0.75);
+      color: var(--fg-color-075);
       font-family: monospace;
       line-height: 1.25;
       overflow: hidden;

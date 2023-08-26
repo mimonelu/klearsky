@@ -531,7 +531,7 @@ function closeHtmlPopupDisplay () {
   }
 
   & > .svg-icon {
-    fill: rgba(var(--accent-color), var(--alpha));
+    fill: rgb(var(--accent-color), var(--alpha));
   }
 }
 

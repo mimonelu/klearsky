@@ -25,7 +25,6 @@ type MainState = {
   currentAuthorFeedsWithRepliesCursor?: string
   currentAuthorFeedsWithMedia: Array<TTFeed>
   currentAuthorFeedsWithMediaCursor?: string
-  currentAuthorMediasIncludeRepost: Array<boolean>
   currentAuthorCustomFeeds: Array<TTFeedGenerator>
   currentAuthorCustomFeedsCursor?: string
   currentAuthorReposts: Array<TTFeed>
@@ -119,6 +118,7 @@ type MainState = {
     post?: TTPost
     text?: string
     fileList?: FileList
+    createdAt?: string
   }
 
   imagePopupProps: {
@@ -210,7 +210,7 @@ type MainState = {
   formatDate: Function
   forceUpdate: () => void
   fetchUserProfile: () => Promise<void>
-  fetchCurrentProfile: (handle: string) => Promise<void>
+  fetchCurrentProfile: (did: string) => Promise<void>
   fetchCurrentAuthorCustomFeeds: (direction: "new" | "old") => Promise<void>
   fetchCurrentAuthorFeed: (direction: "new" | "old", filter?: string, middleCursor?: string) => Promise<void>
   fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
@@ -226,7 +226,8 @@ type MainState = {
     type: TTPostType,
     post?: TTPost,
     text?: string,
-    fileList?: FileList
+    fileList?: FileList,
+    createdAt?: string
   ) => Promise<boolean>
   closeSendPostPopup: (done: boolean) => void
   openRepostUsersPopup: (uri: string) => void

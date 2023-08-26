@@ -81,7 +81,7 @@ onMounted(async () => {
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    processPage(router.currentRoute.value.name)
+    processPage(router.currentRoute.value.name as undefined | null | string)
   } finally {
     state.mounted = true
     state.processing = false
@@ -118,7 +118,6 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
       state.currentAuthorFeedsWithRepliesCursor = undefined
       state.currentAuthorFeedsWithMedia?.splice(0)
       state.currentAuthorFeedsWithMediaCursor = undefined
-      state.currentAuthorMediasIncludeRepost = [false]
       state.currentAuthorCustomFeeds?.splice(0)
       state.currentAuthorCustomFeedsCursor = undefined
       state.currentAuthorReposts?.splice(0)
@@ -149,7 +148,7 @@ router.afterEach(async (to: RouteLocationNormalized) => {
   // Timeline の取得はログイン後 or カーソルボタン押下時 or timelineFeeds が空の時のみ
   if (to.name === "timeline-home" && state.timelineFeeds.length > 0) return
 
-  await processPage(to.name)
+  await processPage(to.name as undefined | null | string)
 })
 
 function resetState () {
@@ -167,7 +166,6 @@ function resetState () {
   state.currentAuthorFeedsWithRepliesCursor = undefined
   state.currentAuthorFeedsWithMedia = []
   state.currentAuthorFeedsWithMediaCursor = undefined
-  state.currentAuthorMediasIncludeRepost = [false]
   state.currentAuthorCustomFeeds = []
   state.currentAuthorCustomFeedsCursor = undefined
   state.currentAuthorReposts = []
@@ -283,23 +281,31 @@ function resetState () {
 }
 
 // ページタイトルの更新
-// TODO: /post のタイトルを付けること
 function updatePageTitle () {
   let title = state.notificationCount === 0 ? "" : `(${state.notificationCount}) `
   title += "Klearsky"
 
-  if (state.currentPath === "/home/feeds")
-    title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
-
-  if (state.currentPath.startsWith("/profile/") &&
-      state.currentQuery.account != null)
-    title += ` - ${state.currentQuery.account}`
-
   if (state.currentPath.startsWith("/search/"))
     title += ` - ${$t("search")}`
 
+  else if (state.currentPath.startsWith("/profile/") &&
+      state.currentProfile?.displayName != null)
+    title += ` - ${state.currentProfile.displayName}`
+
   if (router.currentRoute.value.meta.label != null)
     title += ` - ${$t(router.currentRoute.value.meta.label)}`
+
+  if (state.currentPath === "/home/feeds")
+    title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
+
+  else if (state.currentPath.startsWith("/post") &&
+      state.currentPosts != null &&
+      state.currentPosts.length > 0)
+    title += ` - ${state.currentPosts[0].author.displayName}`
+
+  else if (state.currentPath.startsWith("/search/post"))
+    title += ` - ${state.currentSearchPostTerm}`
+
   window.document.title = title
 }
 
@@ -331,13 +337,13 @@ async function manualLogin (service: string, identifier: string, password: strin
     state.updateSettings()
     setupNotificationInterval()
     updateInviteCodes()
-    processPage(router.currentRoute.value.name)
+    processPage(router.currentRoute.value.name as undefined | null | string)
   } finally {
     state.processing = false
   }
 }
 
-async function processPage (pageName?: null | RouteRecordName) {
+async function processPage (pageName?: null | string) {
   let account: null | string = null
   switch (pageName) {
     case "profile-feeds":
@@ -468,6 +474,14 @@ async function processPage (pageName?: null | RouteRecordName) {
     }
   } finally {
     state.listProcessing = false
+  }
+
+  // 現在ページの該当データを取得してからページタイトルを更新
+  if (pageName?.startsWith("post") ||
+      pageName?.startsWith("profile") ||
+      pageName?.startsWith("search-post")) {
+    //　TODO: "search-post"　特有の問題のために setTimeout している。使わずに対処すること
+    setTimeout(updatePageTitle, 1)
   }
 }
 
@@ -752,6 +766,7 @@ function broadcastListener (event: MessageEvent) {
       :post="state.sendPostPopupProps.post"
       :text="state.sendPostPopupProps.text"
       :fileList="state.sendPostPopupProps.fileList"
+      :createdAt="state.sendPostPopupProps.createdAt"
       @closeSnedPostPopup="closeSendPostPopup"
     />
 
@@ -832,7 +847,7 @@ function broadcastListener (event: MessageEvent) {
 
 <style lang="scss" scoped>
 .main-view {
-  background-color: rgba(var(--bg-color), var(--bg-opacity));
+  background-color: rgb(var(--bg-color), var(--bg-opacity));
 
   // カスタムレイアウト
   &[data-layout="defaultLeft"],
@@ -973,8 +988,8 @@ function broadcastListener (event: MessageEvent) {
 
 // ルータービュー
 .router-view-wrapper {
-  background-color: rgba(var(--bg-color), var(--main-area-opacity));
-  border-left: 1px solid rgba(var(--fg-color), 0.25);
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+  border-left: 1px solid var(--fg-color-025);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -983,7 +998,7 @@ function broadcastListener (event: MessageEvent) {
 
   // タブレット幅以上
   @media (min-width: calc($router-view-width + $main-menu-min-width)) {
-    border-right: 1px solid rgba(var(--fg-color), 0.25);
+    border-right: 1px solid var(--fg-color-025);
   }
 
   // SP幅未満
@@ -1014,7 +1029,7 @@ function broadcastListener (event: MessageEvent) {
 
 // D&Dオーバーレイ
 .drag-and-drop-overlay {
-  background-color: rgba(var(--bg-color), 0.5);
+  background-color: rgb(var(--bg-color), 0.5);
   border: 0.5rem  solid rgb(var(--accent-color));
   display: flex;
   align-items: center;

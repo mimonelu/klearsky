@@ -26,8 +26,8 @@
   "language": "Language",
   "medias": "Medias",
   "help": "Help",
-  "includeRepost": "Show images in reposts",
   "media": "Media",
+  "invalidHandle": "(Invalid handle)",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -58,6 +58,7 @@
   "blocked": "You are blocked by this account.",
   "blocking": "You are blocking this account.",
   "postBlocked": "This post cannot be displayed.",
+  "postNotFound": "This post does not exist.",
 
   "reportSendAccount": "Report account",
   "reportSendPost": "Report post",
@@ -131,12 +132,15 @@
   "copyHandle": "Copy handle",
   "copyUri": "Copy AT URI",
   "copyDid": "Copy DID",
+  "copyDisplayName": "Copy display name",
   "likeUsers": "Liked by",
   "repostUsers": "Reposted by",
   "copyPostText": "Copy text",
   "translate": "Translate",
   "firstPost": "Show first post",
   "sendMention": "Send mention",
+  "sendPostAfter": "Send post after this",
+  "warpPostNotification": "This post will be posted as the following date:",
   "deletePost": "Delete post",
   "deletePostMessage": "This post will be deleted. Are you sure?",
   "moderate": "Moderate",
@@ -307,7 +311,7 @@
 
   "development": "Development",
   "resetSettings": "Reset settings",
-  "resetSettingsDetail": "Reset Klearsky settings. Are you sure?",
+  "resetSettingsDetail": "Reset this account's settings. Are you sure?",
 
   "inviteCodes": "Invite Codes",
   "confirmInviteCodes": "Confirm invite codes",

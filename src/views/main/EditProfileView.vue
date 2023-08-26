@@ -122,9 +122,9 @@ async function submit () {
   state.processing = true
   try {
     await mainState.updateUserProfile(state as TTUpdateProfileParams)
-    const handle = mainState.atp.session?.handle
-    await mainState.fetchCurrentProfile(handle as string)
-    await router.push({ name: "profile-feeds", query: { account: handle } })
+    const did = mainState.atp.session?.did
+    await mainState.fetchCurrentProfile(did as string)
+    await router.push({ name: "profile-feeds", query: { account: did } })
   } finally {
     state.processing = false
   }

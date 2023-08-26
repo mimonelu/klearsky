@@ -151,8 +151,9 @@ function onClickFileBox (event: Event) {
               :style="{ '--color': getDidColor(session.did) }"
             >
               <img
-                src="/img/void-avatar.png"
+                :src="session.__avatar ?? '/img/void-avatar.png'"
                 alt=""
+                :data-has-avatar="session.__avatar != null"
               >
             </div>
             <div class="account-button__handle">{{ session.handle }}</div>
@@ -213,7 +214,7 @@ function onClickFileBox (event: Event) {
 }
 
 .service {
-  color: rgba(var(--fg-color), 0.5);
+  color: var(--fg-color-05);
   font-weight: bold;
   line-height: 1.25;
   overflow: hidden;
@@ -243,7 +244,7 @@ function onClickFileBox (event: Event) {
     --color: var(--fg-color);
     background-clip: padding-box;
     background-color: rgb(var(--bg-color));
-    border: 1px solid rgba(var(--fg-color), 0.25);
+    border: 1px solid var(--fg-color-025);
     border-bottom-style: none;
     cursor: pointer;
     display: grid;
@@ -261,7 +262,7 @@ function onClickFileBox (event: Event) {
     }
   }
   &[data-is-me="true"] &__left {
-    background-color: rgba(var(--accent-color), 0.25);
+    background-color: var(--accent-color-025);
   }
 
   &__image {
@@ -269,9 +270,11 @@ function onClickFileBox (event: Event) {
     grid-area: i;
 
     & > img {
-      filter: brightness(200%);
       width: 3rem;
       height: 3rem;
+      &[data-has-avatar="false"] {
+        filter: brightness(200%);
+      }
     }
   }
 
@@ -288,7 +291,7 @@ function onClickFileBox (event: Event) {
 
   &__email {
     grid-area: e;
-    color: rgba(var(--color), 0.75);
+    color: rgb(var(--color), 0.75);
     font-size: 0.875rem;
     line-height: 1.25;
     overflow: hidden;
@@ -313,7 +316,7 @@ function onClickFileBox (event: Event) {
     min-height: 3rem;
 
     & > .svg-icon {
-      fill: rgba(var(--notice-color), 0.75);
+      fill: var(--notice-color-075);
     }
     &:focus, &:hover {
       & > .svg-icon {

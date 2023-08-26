@@ -12,7 +12,9 @@ export default async function (
 
   const record: AppBskyFeedPost.Record = {
     $type: "app.bsky.feed.post",
-    createdAt: new Date().toISOString(),
+    createdAt: params.createdAt != null
+      ? new Date(params.createdAt).toISOString()
+      : new Date().toISOString(),
     text: params.text,
 
     // カスタムフィールド - via

@@ -26,8 +26,8 @@
   "language": "言語",
   "medias": "メディア",
   "help": "ヘルプ",
-  "includeRepost": "リポストの画像も表示する",
   "media": "メディア",
+  "invalidHandle": "（不正なハンドル）",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -58,6 +58,7 @@
   "blocked": "このアカウントからブロックされています。",
   "blocking": "このアカウントをブロックしています。",
   "postBlocked": "このポストを表示することはできません。",
+  "postNotFound": "このポストは存在しません。",
 
   "reportSendAccount": "アカウントをレポートする",
   "reportSendPost": "ポストをレポートする",
@@ -131,12 +132,15 @@
   "copyHandle": "ハンドルをコピーする",
   "copyUri": "AT URIをコピーする",
   "copyDid": "DIDをコピーする",
+  "copyDisplayName": "表示名をコピーする",
   "likeUsers": "いいねしたアカウント",
   "repostUsers": "リポストしたアカウント",
   "copyPostText": "テキストをコピーする",
   "translate": "翻訳する",
   "firstPost": "最初のポストを見る",
   "sendMention": "メンションを送る",
+  "sendPostAfter": "この直後に投稿する",
+  "warpPostNotification": "このポストは次の日時として投稿されます：",
   "deletePost": "ポストを削除する",
   "deletePostMessage": "このポストを削除します。よろしいですか？",
   "moderate": "モデレートする",
@@ -307,7 +311,7 @@
 
   "development": "開発",
   "resetSettings": "設定をリセットする",
-  "resetSettingsDetail": "Klearskyの設定をリセットします。よろしいですか？",
+  "resetSettingsDetail": "このアカウントの設定をリセットします。よろしいですか？",
 
   "inviteCodes": "招待コード",
   "confirmInviteCodes": "招待コードを確認する",

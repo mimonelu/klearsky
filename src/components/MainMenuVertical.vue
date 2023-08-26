@@ -58,7 +58,7 @@ function moveToBottom () {
     <!-- プロフィールボタン -->
     <RouterLink
       class="profile-button"
-      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.handle } }"
+      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.did } }"
       :data-is-focus="
         (
           mainState.currentPath.startsWith('/profile/') &&
@@ -87,7 +87,7 @@ function moveToBottom () {
     >
       <span>{{ $t("shortcuts") }}</span>
       <SVGIcon name="cursorDown" />
-      <menu>
+      <menu class="ticker-menu">
         <!-- コンテンツ言語選択ポップアップトリガー -->
         <a @click.prevent="() => { Util.blurElement(); mainState.openContentLanguagesPopup() }">
           <SVGIcon name="translate" />
@@ -252,7 +252,7 @@ function moveToBottom () {
 
     &[data-is-focus="true"],
     &:not([data-is-focus]).router-link-active {
-      background-color: rgba(var(--accent-color), 0.25);
+      background-color: var(--accent-color-025);
     }
   }
 
@@ -293,15 +293,8 @@ function moveToBottom () {
 // ショートカットプルダウン
 .pulldown-button {
   margin-bottom: 1rem;
-
-  .svg-icon--feed {
-    --bg-color: var(--accent-color);
-  }
-  .svg-icon--alphabeticalOff,
-  .svg-icon--alert,
-  .svg-icon--volumeOff,
-  .svg-icon--personOff {
-    --bg-color: var(--notice-color);
+  &:not(:focus) {
+    background-color: transparent;
   }
 }
 
@@ -336,7 +329,7 @@ function moveToBottom () {
   }
 
   & > .label {
-    color: rgba(var(--color), var(--alpha));
+    color: rgb(var(--color), var(--alpha));
     font-size: 1.25rem;
     font-weight: bold;
     line-height: 1.25;
@@ -379,13 +372,13 @@ function moveToBottom () {
     min-height: 2rem;
 
     .svg-icon {
-      fill: rgba(var(--fg-color), 0.75);
+      fill: var(--fg-color-075);
       font-size: 1.5rem;
     }
   }
 
   .label {
-    color: rgba(var(--fg-color), 0.75);
+    color: var(--fg-color-075);
     font-size: 1.25rem;
     font-weight: bold;
     line-height: 1.25;
@@ -407,17 +400,17 @@ function moveToBottom () {
   }
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
-    background-color: rgba(var(--accent-color), 0.25);
+    background-color: var(--accent-color-025);
   }
 
   // ポスト送信ポップアップトリガー
   &.send-post-button {
     .svg-icon {
-      fill: rgba(var(--post-color), 0.75);
+      fill: var(--post-color-075);
     }
 
     .label {
-      color: rgba(var(--post-color), 0.75);
+      color: var(--post-color-075);
     }
 
     &:focus, &:hover {
@@ -456,7 +449,7 @@ function moveToBottom () {
   min-height: 3rem;
 
   .svg-icon {
-    fill: rgba(var(--fg-color), 0.25);
+    fill: var(--fg-color-025);
   }
   &:focus , &:hover {
     .svg-icon {

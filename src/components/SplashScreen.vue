@@ -30,7 +30,7 @@ const mainState = inject("state") as MainState
   & > .svg-icon {
     animation: show 500ms ease-out;
     animation-fill-mode: forwards;
-    fill: rgba(var(--fg-color), 0.5);
+    fill: var(--fg-color-05);
     font-size: 100px;
   }
 

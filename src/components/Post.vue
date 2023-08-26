@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
+import AuthorHandle from "@/components/AuthorHandle.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
-import CustomFeedCard from "@/components/CustomFeedCard.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import HtmlText from "@/components/HtmlText.vue"
 import LinkBox from "@/components/LinkBox.vue"
 import Loader from "@/components/Loader.vue"
@@ -265,8 +266,8 @@ function onActivateReplierLink () {
   emit("onClickReplier")
 }
 
-async function onActivateProfileLink (handle: string) {
-  await router.push({ name: "profile-feeds", query: { account: handle } })
+async function onActivateProfileLink (did: string) {
+  await router.push({ name: "profile-feeds", query: { account: did } })
 }
 
 function onActivateImageFolderButton () {
@@ -482,11 +483,7 @@ function onActivateHashTag (text: string) {
             ? parentPost?.author?.displayName
             : $t("anonymous")
         }}</div>
-        <div class="author-handle">{{
-          !mainState.currentSetting.postAnonymization
-            ? parentPost?.author?.handle
-            : ""
-        }}</div>
+        <AuthorHandle :handle="parentPost.author?.handle" />
       </button>
 
       <!-- リポストユーザー -->
@@ -494,7 +491,7 @@ function onActivateHashTag (text: string) {
         v-if="post.__custom?.reason != null"
         class="reposter"
         :data-is-following="post.__custom?.reason?.by?.viewer?.following != null"
-        @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.handle as string)"
+        @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.did as string)"
       >
         <SVGIcon name="repost" />
         <div class="reposter__display-name">{{
@@ -502,11 +499,7 @@ function onActivateHashTag (text: string) {
             ? post.__custom?.reason?.by?.displayName
             : $t("anonymous")
         }}</div>
-        <div class="author-handle">{{
-          !mainState.currentSetting.postAnonymization
-            ? post.__custom?.reason?.by?.handle
-            : ""
-        }}</div>
+        <AuthorHandle :handle="post.__custom?.reason?.by?.handle" />
       </button>
     </div>
 
@@ -561,7 +554,7 @@ function onActivateHashTag (text: string) {
       <!-- アバター -->
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
-        :handle="post.author?.handle"
+        :did="post.author?.did"
         :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
         :labels="post.author?.labels"
         @click.stop
@@ -573,7 +566,7 @@ function onActivateHashTag (text: string) {
           <AvatarLink
             v-if="position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
-            :handle="post.author?.handle"
+            :did="post.author?.did"
             :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
             :labels="post.author?.labels"
             @click.stop
@@ -587,7 +580,7 @@ function onActivateHashTag (text: string) {
           }}</div>
 
           <!-- ハンドル -->
-          <div class="author-handle">{{ !mainState.currentSetting.postAnonymization ? post.author?.handle : "" }}</div>
+          <AuthorHandle :handle="post.author?.handle" />
 
           <!-- ポスト時間 -->
           <div
@@ -710,15 +703,24 @@ function onActivateHashTag (text: string) {
 
         <!-- 埋込コンテンツ -->
         <template v-if="post.embed?.record != null">
-          <!-- 引用リポスト：ブロック中／被ブロック中／見つからない -->
+          <!-- 引用リポスト：見つからない -->
           <div
-            v-if="
+            v-if="post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'"
+            class="textlabel repost"
+          >
+            <div class="textlabel__text">
+              <SVGIcon name="alert" />{{ $t("postNotFound") }}
+            </div>
+          </div>
+
+          <!-- 引用リポスト：ブロック中／被ブロック中 -->
+          <div
+            v-else-if="
               post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
-              post.embed.record.$type === 'app.bsky.embed.record#viewNotFound' ||
               post.embed.record.author?.viewer?.blockedBy ||
               post.embed.record.author?.viewer?.blocking != null
             "
-            class="textlabel"
+            class="textlabel repost"
           >
             <div class="textlabel__text">
               <SVGIcon name="alert" />{{ $t("postBlocked") }}
@@ -739,7 +741,7 @@ function onActivateHashTag (text: string) {
           </template>
 
           <!-- フィードカード -->
-          <CustomFeedCard
+          <FeedCard
             v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
             :generator="post.embed.record as unknown as TTFeedGenerator"
             :orderButtonDisplay="false"
@@ -858,9 +860,9 @@ function onActivateHashTag (text: string) {
   padding: 1em;
   position: relative;
 
-  // フォーカスされたポスト
+  // フォーカスポスト
   .post-view &[data-focus="true"]:not([data-position="preview"]) {
-    background-color: rgba(var(--accent-color), 0.125);
+    background-color: var(--accent-color-0125);
 
     .body > .body__right {
       user-select: text;
@@ -881,7 +883,7 @@ function onActivateHashTag (text: string) {
     .external,
     .image-folder-button,
     .quad-images,
-    .custom-feed-card,
+    .feed-card,
     .reaction-container {
       display: none;
     }
@@ -925,13 +927,13 @@ function onActivateHashTag (text: string) {
     }
 
     & > .svg-icon {
-      fill: rgba(var(--fg-color), var(--alpha));
+      fill: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
     & > .svg-icon--alert,
     & > .svg-icon--alphabeticalOff {
-      fill: rgba(var(--notice-color), calc(var(--alpha) + 0.25));
+      fill: rgb(var(--notice-color), calc(var(--alpha) + 0.25));
     }
 
     &__content-warning,
@@ -944,18 +946,18 @@ function onActivateHashTag (text: string) {
     }
 
     &__content-warning {
-      color: rgba(var(--fg-color), var(--alpha));
+      color: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
     }
 
     &__display-name {
-      color: rgba(var(--fg-color), var(--alpha));
+      color: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
       font-weight: bold;
     }
 
     &__handle {
-      color: rgba(var(--fg-color), calc(var(--alpha) - 0.25));
+      color: rgb(var(--fg-color), calc(var(--alpha) - 0.25));
       font-size: 0.75em;
     }
   }
@@ -982,13 +984,13 @@ function onActivateHashTag (text: string) {
     }
   }
   &[data-has-child="true"]::before {
-    background-color: rgba(var(--fg-color), 0.25);
+    background-color: var(--fg-color-025);
   }
   &[data-has-child="false"]:not(:last-child)::before {
     background-image: linear-gradient(
       to bottom,
-      rgba(var(--fg-color), 0.25) 0,
-      rgba(var(--fg-color), 0.25) 3px,
+      var(--fg-color-025) 0,
+      var(--fg-color-025) 3px,
       transparent 3px
     );
     background-size: 6px 6px;
@@ -1039,16 +1041,16 @@ function onActivateHashTag (text: string) {
     }
 
     .author-handle {
-      --opacity: 0.75;
+      --fg-color-05: var(--fg-color-075);
     }
   }
 
   & > .svg-icon {
-    fill: rgba(var(--post-color), 0.75);
+    fill: var(--post-color-075);
   }
 
   &__display-name {
-    color: rgba(var(--post-color), 0.75);
+    color: var(--post-color-075);
   }
 
   .author-handle {
@@ -1067,16 +1069,16 @@ function onActivateHashTag (text: string) {
     }
 
     .author-handle {
-      --opacity: 0.75;
+      --fg-color-05: var(--fg-color-075);
     }
   }
 
   & > .svg-icon {
-    fill: rgba(var(--share-color), 0.75);
+    fill: var(--share-color-075);
   }
 
   &__display-name {
-    color: rgba(var(--share-color), 0.75);
+    color: var(--share-color-075);
   }
 
   .author-handle {
@@ -1130,7 +1132,7 @@ function onActivateHashTag (text: string) {
 }
 
 .display-name {
-  color: rgba(var(--fg-color), 0.75);
+  color: var(--fg-color-075);
   font-size: 0.875em;
   font-weight: bold;
   line-height: 1.25;
@@ -1140,7 +1142,7 @@ function onActivateHashTag (text: string) {
 }
 
 .indexed-at {
-  color: rgba(var(--fg-color), 0.5);
+  color: var(--fg-color-05);
   font-size: 0.75em;
   white-space: nowrap;
 }
@@ -1164,9 +1166,9 @@ function onActivateHashTag (text: string) {
 }
 
 .translated-text {
-  border-top: 1px solid rgba(var(--fg-color), 0.125);
+  border-top: 1px solid var(--fg-color-0125);
   padding-top: 0.5em;
-  color: rgba(var(--fg-color), 0.75);
+  color: var(--fg-color-075);
   font-style: italic;
   line-height: var(--line-height);
   white-space: pre-wrap;
@@ -1207,10 +1209,10 @@ function onActivateHashTag (text: string) {
 
 .repost {
   grid-area: r;
-  border: 1px solid rgba(var(--fg-color), 0.125);
+  border: 1px solid var(--fg-color-025);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgba(var(--fg-color), 0.25);
+    border-color: var(--fg-color-0375);
   }
 
   :not([data-position="slim"]) & > .post {
@@ -1221,12 +1223,12 @@ function onActivateHashTag (text: string) {
   }
 }
 
-.custom-feed-card {
-  background-color: rgba(var(--accent-color), 0.125);
-  border: 1px solid rgba(var(--accent-color), 0.125);
+.feed-card {
+  background-color: var(--accent-color-0125);
+  border: 1px solid var(--accent-color-025);
   border-radius: var(--border-radius);
   &:focus, &:hover {
-    border-color: rgba(var(--accent-color), 0.25);
+    border-color: var(--accent-color-05);
   }
 }
 
@@ -1288,7 +1290,6 @@ function onActivateHashTag (text: string) {
 }
 
 .lightning-link {
-  --fg-color: 240, 0, 240;
   margin-right: 0.75em;
 }
 

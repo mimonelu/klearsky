@@ -142,7 +142,7 @@ function deleteFile (index: number) {
 <style lang="scss" scoped>
 .filebox {
   display: flex;
-  grid-gap: 0.5rem;
+  grid-gap: 1rem;
 
   // SP幅未満
   @media not all and (min-width: $sp-width) {
@@ -201,7 +201,7 @@ function deleteFile (index: number) {
   right: 0.25rem;
 
   & > .svg-icon {
-    fill: rgba(var(--notice-color), 0.75);
+    fill: var(--notice-color-075);
   }
 
   &:focus, &:hover {

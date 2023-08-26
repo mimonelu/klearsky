@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive, ref, type ComputedRef } from "vue"
+import AuthorHandle from "@/components/AuthorHandle.vue"
 import AvatarLink from "@/components/AvatarLink.vue"
 import ContentWarning from "@/components/ContentWarning.vue"
 import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
@@ -16,11 +17,12 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   // ラベル対応
-  contentWarningForceDisplay: boolean;
-  contentWarningDisplay: ComputedRef<boolean>;
-  contentWarningVisibility: ComputedRef<TTContentVisibility>;
+  contentWarningForceDisplay: boolean
+  contentWarningDisplay: ComputedRef<boolean>
+  contentWarningVisibility: ComputedRef<TTContentVisibility>
 
-  profileMenuDisplay: boolean;
+  profileMenuDisplay: boolean
+  profileMenuContainer: ComputedRef<undefined | HTMLElement>
 }>({
   // ラベル対応
   contentWarningForceDisplay: false,
@@ -36,7 +38,12 @@ const state = reactive<{
   }),
 
   profileMenuDisplay: false,
+  profileMenuContainer: computed((): undefined | HTMLElement => {
+    return profileMenuTrigger.value?.closest(".popup-body") ?? undefined
+  }),
 })
+
+const profileMenuTrigger = ref()
 
 function onActivateLink () {
   emit("link")
@@ -64,7 +71,7 @@ function hideWarningContent () {
 <template>
   <RouterLink
     class="user-box"
-    :to="{ name: 'profile-feeds', query: { account: user.handle } }"
+    :to="{ name: 'profile-feeds', query: { account: user.did } }"
     :data-is-following="user.viewer.following != null"
     :data-content-warning-disabled="contentWarningDisabled"
     :data-content-warning-visibility="state.contentWarningVisibility"
@@ -96,27 +103,32 @@ function hideWarningContent () {
 
     <template v-if="contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)">
       <AvatarLink
-        :handle="user.handle"
+        :did="user.did"
         :image="user.avatar"
         :labels="user.labels"
       />
       <div class="display-name">{{ user.displayName }}</div>
-      <div class="author-handle">{{ user.handle }}</div>
-      <!-- // TODO: ポップアップで見切れる不具合を修正すること
+      <AuthorHandle :handle="user.handle" />
+      <div class="description">{{ user.description }}</div>
+
+      <!-- プロフィールメニュートリガー -->
       <button
         class="menu-button"
+        ref="profileMenuTrigger"
         @click.prevent.stop="openPostMenu"
       >
         <SVGIcon name="menu" />
+
+        <!-- プロフィールメニュー -->
         <ProfileMenuTicker
           :isUser="user.handle === mainState.atp.session?.handle"
           :display="state.profileMenuDisplay"
           :user="user"
+          :container="state.profileMenuContainer"
           @close="closePostMenu"
         />
       </button>
-      -->
-      <div class="description">{{ user.description }}</div>
+
       <div class="bottom">
         <slot name="bottom" />
       </div>
@@ -128,14 +140,14 @@ function hideWarningContent () {
 .user-box {
   display: grid;
   grid-gap: 0 0.5rem;
-  grid-template-columns: min-content auto 1fr;
-  grid-template-rows: auto auto 1fr;
+  grid-template-columns: min-content auto 1fr auto;
+  grid-template-rows: auto auto auto auto 1fr;
   grid-template-areas:
-    "c c c"
-    "o o o"
-    "a n h"
-    "a d d"
-    "b b b";
+    "c c c c"
+    "o o o o"
+    "a n h m"
+    "a d d m"
+    "b b b b";
   align-items: center;
   &[data-content-warning-disabled="false"][data-content-warning-visibility="hide"],
   &[data-content-warning-disabled="false"][data-content-warning-visibility="always-hide"] {
@@ -160,7 +172,7 @@ function hideWarningContent () {
 
 .display-name {
   grid-area: n;
-  color: rgba(var(--fg-color), 0.75);
+  color: var(--fg-color-075);
   font-size: 0.875rem;
   font-weight: bold;
   line-height: 1.25;
@@ -172,32 +184,6 @@ function hideWarningContent () {
   grid-area: h;
 }
 
-/*
-.menu-button {
-  grid-area: m;
-  cursor: pointer;
-  margin: -1rem -1rem;
-  padding: 1rem 1.5rem;
-  position: relative;
-
-  & > .svg-icon {
-    fill: rgba(var(--fg-color), 0.5);
-  }
-  &:focus, &:hover {
-    & > .svg-icon {
-      fill: rgb(var(--fg-color));
-    }
-  }
-
-  .menu-ticker:deep() {
-    & > .menu-ticker--inner {
-      top: 2.5rem;
-      right: 0.5rem;
-    }
-  }
-}
-*/
-
 .description {
   grid-area: d;
   font-size: 0.875rem;
@@ -205,6 +191,33 @@ function hideWarningContent () {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.menu-button {
+  grid-area: m;
+  cursor: pointer;
+  margin: 0 -1rem 0 -0.5rem;
+  padding: 0 1rem;
+  position: relative;
+  height: 100%;
+
+  & > .svg-icon {
+    fill: var(--fg-color-05);
+  }
+  &:focus, &:hover {
+    --fg-color-0125: var(--fg-color-025);
+
+    & > .svg-icon {
+      --fg-color-05: var(--fg-color-075);
+    }
+  }
+
+  .menu-ticker:deep() {
+    & > .menu-ticker--inner {
+      top: 3rem;
+      right: 0.5rem;
+    }
+  }
 }
 
 .bottom {

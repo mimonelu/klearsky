@@ -2,7 +2,8 @@
 import { nextTick, reactive, ref, watch } from "vue"
 
 const props = defineProps<{
-  display: boolean;
+  display: boolean
+  container?: HTMLElement
 }>()
 
 const state = reactive<{
@@ -24,10 +25,17 @@ watch(() => props.display, (display: boolean) => {
     if (menuTickerInner.value == null) return
     const innerRect = menuTickerInner.value.getBoundingClientRect()
 
-    if (window.innerHeight < innerRect.bottom)
-      state.top = window.innerHeight - innerRect.bottom
-    if (0 > innerRect.left)
-      state.left = - innerRect.left
+    const left = props.container != null
+      ? props.container.offsetLeft
+      : 0
+    if (left > innerRect.left)
+      state.left = left - innerRect.left
+
+    const innerHeight = props.container != null
+      ? props.container.clientHeight + props.container.offsetTop
+      : window.innerHeight
+    if (innerHeight < innerRect.bottom)
+      state.top = innerHeight - innerRect.bottom
   })
 })
 </script>
@@ -74,6 +82,11 @@ watch(() => props.display, (display: boolean) => {
     @media not all and (min-width: $sp-width) {
       padding: 0 0 calc(var(--sp-menu-height) + 0.75rem) 0.75rem;
     }
+    .popup-body & {
+      @media not all and (min-width: $sp-width) {
+        padding: 0 0 0.75rem 0.75rem;
+      }
+    }
 
     position: absolute;
     max-width: 16rem;
@@ -81,10 +94,10 @@ watch(() => props.display, (display: boolean) => {
   }
 
   &--content {
-    box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 0.5rem 0 rgb(0, 0, 0, 0.25);
     background-color: rgb(var(--fg-color));
     color: rgb(var(--bg-color));
-    border: 1px solid rgba(var(--bg-color), 0.25);
+    border: 1px solid rgb(var(--bg-color), 0.25);
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
@@ -93,13 +106,13 @@ watch(() => props.display, (display: boolean) => {
 
     &:deep() {
       .menu-ticker__header {
-        border-bottom: 1px solid rgba(var(--bg-color), 0.25);
+        border-bottom: 1px solid rgb(var(--bg-color), 0.25);
         font-weight: bold;
         padding: 0.25rem 1rem 0.75rem 1rem;
         word-wrap: break-word;
 
         & > .svg-icon {
-          fill: rgba(var(--bg-color), 0.5);
+          fill: rgb(var(--bg-color), 0.5);
         }
       }
 
@@ -111,7 +124,7 @@ watch(() => props.display, (display: boolean) => {
         padding: 0.5rem 1rem;
         white-space: nowrap;
         &:focus, &:hover {
-          background-color: rgba(var(--accent-color), 0.25);
+          background-color: var(--fg-color-075);
         }
 
         & > .svg-icon {
@@ -139,7 +152,7 @@ watch(() => props.display, (display: boolean) => {
       }
 
       & > hr {
-        border-bottom: 1px solid rgba(var(--bg-color), 0.25);
+        border-bottom: 1px solid rgb(var(--bg-color), 0.25);
       }
     }
   }

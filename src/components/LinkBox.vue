@@ -151,77 +151,94 @@ getEmbeddedContentId()
         :src="external.thumb"
         alt=""
       />
-      <div class="external--default__meta">
-        <div class="external--default__title">{{ external.title ?? '' }}</div>
-        <div class="external--default__uri">{{ external.uri }}</div>
-        <div class="external--default__description">{{ external.description ?? '' }}</div>
+      <div class="external__meta">
+        <div class="external__meta__title">{{ external.title ?? '' }}</div>
+        <div class="external__meta__uri">{{ external.uri }}</div>
+        <div class="external__meta__description">{{ external.description ?? '' }}</div>
       </div>
     </a>
+    <div v-else>
+      <!-- Giphy 対応 -->
+      <iframe
+        v-if="state.type === 'giphy'"
+        class="external--giphy"
+        :src="`https://giphy.com/embed/${embeddedContentId}`"
+        allowfullScreen
+        frameBorder="0"
+        loading="lazy"
+        scrolling="no"
+        width="100%"
+        height="300"
+      />
 
-    <!-- Giphy 対応 -->
-    <iframe
-      v-else-if="state.type === 'giphy'"
-      class="external--giphy"
-      :src="`https://giphy.com/embed/${embeddedContentId}`"
-      allowfullScreen
-      frameBorder="0"
-      loading="lazy"
-      scrolling="no"
-      width="100%"
-      height="300"
-    />
+      <!-- Nicovideo 対応 -->
+      <div
+        v-else-if="state.type === 'nicovideo'"
+        class="external--nicovideo"
+      />
 
-    <!-- Nicovideo 対応 -->
-    <div
-      v-else-if="state.type === 'nicovideo'"
-      class="external--nicovideo"
-    />
+      <!-- Spotify 対応 -->
+      <iframe
+        v-else-if="state.type === 'spotify'"
+        class="external--spotify"
+        :src="`https://open.spotify.com/embed/${SoptifyType}/${embeddedContentId}?utm_source=generator`"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        allowfullscreen
+        frameborder="0"
+        loading="lazy"
+        scrolling="no"
+        width="100%"
+        :height="SoptifyType === 'album' ? 352 : 152"
+      />
 
-    <!-- Spotify 対応 -->
-    <iframe
-      v-else-if="state.type === 'spotify'"
-      class="external--spotify"
-      :src="`https://open.spotify.com/embed/${SoptifyType}/${embeddedContentId}?utm_source=generator`"
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      allowfullscreen
-      frameborder="0"
-      loading="lazy"
-      scrolling="no"
-      width="100%"
-      :height="SoptifyType === 'album' ? 352 : 152"
-    />
+      <!-- Twitter 対応 -->
+      <div
+        v-else-if="state.type === 'twitter'"
+        class="external--twitter twitter-tweet"
+      />
 
-    <!-- Twitter 対応 -->
-    <div
-      v-else-if="state.type === 'twitter'"
-      class="external--twitter twitter-tweet"
-    />
+      <!-- YouTube 対応 -->
+      <iframe
+        v-else-if="state.type === 'youtube'"
+        class="external--youtube"
+        :src="`https://www.youtube-nocookie.com/embed/${embeddedContentId}`"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        frameborder="0"
+        loading="lazy"
+        scrolling="no"
+        width="100%"
+      />
 
-    <!-- YouTube 対応 -->
-    <iframe
-      v-else-if="state.type === 'youtube'"
-      class="external--youtube"
-      :src="`https://www.youtube-nocookie.com/embed/${embeddedContentId}`"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      frameborder="0"
-      loading="lazy"
-      scrolling="no"
-      width="100%"
-    />
+      <a
+        class="external__meta--special"
+        :href="external.uri"
+        rel="noreferrer"
+        target="_blank"
+        @click.stop
+      >
+        <div class="external__meta__title">{{ external.title ?? '' }}</div>
+        <div class="external__meta__uri">{{ external.uri }}</div>
+        <div class="external__meta__description">{{ external.description ?? '' }}</div>
+      </a>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .external {
   &--default {
-    background-color: rgba(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
+    border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius);
     cursor: pointer;
     display: block;
     overflow: hidden;
     position: relative;
     height: 100%;
+    &:focus, &:hover {
+      border-color: var(--fg-color-0375);
+    }
 
     &__thumb {
       aspect-ratio: 1.91 / 1;
@@ -230,11 +247,22 @@ getEmbeddedContentId()
       width: 100%;
       min-height: 100%;
     }
-    &__meta {
+  }
+
+  &__meta {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    padding: 0.75em;
+
+    &--special {
       display: grid;
       grid-template-rows: auto auto auto;
-      padding: 0.75em;
+      margin-top: 0.5em;
+      &:focus, &:hover {
+        --fg-color: var(--accent-color);
+      }
     }
+
     &__title,
     &__uri,
     &__description {
@@ -243,21 +271,26 @@ getEmbeddedContentId()
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+
     &__title {
+      color: rgb(var(--fg-color));
       font-weight: bold;
     }
+
     &__uri {
-      color: rgba(var(--fg-color), 0.5);
+      color: var(--fg-color-05);
       font-size: 0.75em;
     }
+
     &__description {
+      color: var(--fg-color-075);
       font-size: 0.875em;
     }
   }
 
   // Giphy 対応
   &--giphy {
-    background-color: rgba(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
   // Giphy 対応 - SP幅未満
@@ -272,7 +305,7 @@ getEmbeddedContentId()
   &--nicovideo:deep() {
     iframe[src^="https://embed.nicovideo."] {
       aspect-ratio: 640 / 360;
-      background-color: rgba(var(--fg-color), 0.125);
+      background-color: var(--fg-color-0125);
       border-radius: var(--border-radius);
       height: unset !important;
     }
@@ -280,7 +313,7 @@ getEmbeddedContentId()
 
   // Spotify 対応
   &--spotify {
-    background-color: rgba(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
 
@@ -299,7 +332,7 @@ getEmbeddedContentId()
   // YouTube 対応
   &--youtube {
     aspect-ratio: 16 / 9;
-    background-color: rgba(var(--fg-color), 0.125);
+    background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
 }

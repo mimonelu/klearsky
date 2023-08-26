@@ -4,6 +4,7 @@ type TTCreatePostParams = {
   type: TTPostType
   post?: TTPost
   text: string
+  createdAt?: string
   url: string
   images: Array<File>
   alts: Array<string>
@@ -29,6 +30,7 @@ type TTSession = {
   email?: string
   refreshJwt: string
   __service?: string // Injected
+  __avatar?: string // Injected
 }
 
 type TTData = {
@@ -80,10 +82,10 @@ interface TIAtpWrapper {
   deletePost(this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost(this: TIAtpWrapper, uri: string): Promise<boolean>
   disableBlock(this: TIAtpWrapper, uri: string): Promise<boolean>
-  disableMute(this: TIAtpWrapper, handle: string): Promise<boolean>
+  disableMute(this: TIAtpWrapper, did: string): Promise<boolean>
   deleteSession(this: TIAtpWrapper): Promise<boolean>
-  enableBlock(this: TIAtpWrapper, handle: string): Promise<null | string>
-  enableMute(this: TIAtpWrapper, handle: string): Promise<boolean>
+  enableBlock(this: TIAtpWrapper, did: string): Promise<null | string>
+  enableMute(this: TIAtpWrapper, did: string): Promise<boolean>
   fetchActorsTypeahead(
     this: TIAtpWrapper,
     term?: string,
@@ -272,6 +274,7 @@ interface TIAtpWrapper {
     newSession: TTSession,
     service?: string
   ): void
+  registerPush(this: TIAtpWrapper): Promise<Error | boolean>
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
   updateMyLabels(this: TIAtpWrapper, labels: Array<TTLabel>): Promise<Error | boolean>

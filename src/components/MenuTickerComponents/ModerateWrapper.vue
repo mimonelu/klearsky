@@ -10,23 +10,28 @@ import SVGIcon from "@/components/SVGIcon.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  isUser?: boolean;
-  user?: TTUser;
-  post?: TTPost;
+  isUser?: boolean
+  user?: TTUser
+  post?: TTPost
+  container?: HTMLElement
 }>()
 
 const state = reactive<{
-  display: boolean;
+  display: boolean
 }>({
   display: false,
 })
+
+function showSubMenuTicker () {
+  setTimeout(() => { state.display = true }, 1)
+}
 </script>
 
 <template>
   <button
     class="menu-ticker__sub-trigger"
     @click.prevent.stop
-    @mouseenter="state.display = true"
+    @mouseenter="showSubMenuTicker"
     @mouseleave="state.display = false"
   >
     <SVGIcon name="cursorLeft" />
@@ -34,8 +39,9 @@ const state = reactive<{
 
     <!-- モデレーションメニュー -->
     <MenuTicker
-      :display="state.display"
       class="menu-ticker__sub"
+      :display="state.display"
+      :container="container"
     >
       <!-- ミュートのトグル -->
       <MenuTickerToggleMute

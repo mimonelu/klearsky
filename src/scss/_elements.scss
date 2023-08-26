@@ -69,8 +69,28 @@ body {
   @include color-theme-indigo;
 }
 
+// 中間色
+* {
+  $colors:
+    --fg-color,
+    --accent-color,
+    --notice-color,
+    --post-color,
+    --like-color,
+    --share-color;
+  @each $color in $colors {
+    #{$color}-0125: color-mix(in srgb, rgb(var(#{$color})) 12.5%, rgb(var(--bg-color)));
+    #{$color}-025: color-mix(in srgb, rgb(var(#{$color})) 25%, rgb(var(--bg-color)));
+    #{$color}-0375: color-mix(in srgb, rgb(var(#{$color})) 37.5%, rgb(var(--bg-color)));
+    #{$color}-05: color-mix(in srgb, rgb(var(#{$color})) 50%, rgb(var(--bg-color)));
+    #{$color}-0625: color-mix(in srgb, rgb(var(#{$color})) 62.5%, rgb(var(--bg-color)));
+    #{$color}-075: color-mix(in srgb, rgb(var(#{$color})) 75%, rgb(var(--bg-color)));
+    #{$color}-0875: color-mix(in srgb, rgb(var(#{$color})) 87.5%, rgb(var(--bg-color)));
+  }
+}
+
 ::selection {
-  background-color: rgba(var(--accent-color), 0.5);
+  background-color: var(--accent-color-05);
 }
 
 img {

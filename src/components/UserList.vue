@@ -2,7 +2,6 @@
 import { inject, watch } from "vue"
 import FollowButton from "@/components/FollowButton.vue"
 import LoadButton from "@/components/LoadButton.vue"
-import MuteButton from "@/components/MuteButton.vue"
 import UserBox from "@/components/UserBox.vue"
 import Util from "@/composables/util"
 
@@ -68,11 +67,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
               :did="user.did"
               :declarationDid="user.did"
             />
-            <MuteButton
-              v-if="user.did !== mainState.atp.session?.did"
-              :handle="user.handle"
-              :viewer="user.viewer"
-            />
           </div>
         </template>
       </UserBox>
@@ -124,11 +118,5 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   font-size: 0.875rem;
   padding: 0.25rem 0;
   min-width: 7rem;
-}
-
-.mute-button {
-  margin-left: auto;
-  padding: 0.25rem 0;
-  min-width: 3rem;
 }
 </style>

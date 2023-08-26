@@ -5,7 +5,7 @@ import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{
-  handle: string
+  did: string
   viewer: TTUserViewer
 }>()
 
@@ -23,7 +23,7 @@ async function toggleMute () {
   state.processing = true
   try {
     if (props.viewer.muted) {
-      await mainState.atp.disableMute(props.handle)
+      await mainState.atp.disableMute(props.did)
       props.viewer.muted = false
 
       // ミュートユーザー一覧の更新
@@ -31,7 +31,7 @@ async function toggleMute () {
         return user.viewer.blocking !== props.viewer.blocking
       })
     } else {
-      await mainState.atp.enableMute(props.handle)
+      await mainState.atp.enableMute(props.did)
       props.viewer.muted = true
     }
   } finally {

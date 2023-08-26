@@ -30,6 +30,30 @@ const INTERNAL_LINK_ITEMS = [
     src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)$"),
     dst: "/profile/feeds?account=[1]",
   },
+
+  // フォロイー一覧ページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)\/follows$"),
+    dst: "/profile/following?account=[1]",
+  },
+
+  // フォロワー一覧ページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)\/followers$"),
+    dst: "/profile/follower?account=[1]",
+  },
+
+  // ポスト検索ページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/search\\?q=([^&]+)$"),
+    dst: "/search/post?text=[1]",
+  },
+
+  // フィード検索ページ
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/search\/feeds$"),
+    dst: "/search/feed",
+  },
 ]
 
 const emit = defineEmits<{(name: string, text: string): void}>()
@@ -189,12 +213,12 @@ function onActivateHashTag (text: string) {
   --accent-color: var(--fg-color);
   --opacity: 0.5;
   border-radius: 0.25em;
-  color: rgba(var(--accent-color), var(--opacity));
+  color: rgb(var(--accent-color), var(--opacity));
   font-size: 0.875em;
   padding: 0 0.25em;
   &:focus, &:hover {
     --opacity: 0.75;
-    background-color: rgba(var(--accent-color), 0.125);
+    background-color: var(--accent-color-0125);
   }
 }
 </style>

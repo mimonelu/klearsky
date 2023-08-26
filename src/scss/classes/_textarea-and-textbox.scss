@@ -1,32 +1,33 @@
 .textarea,
 .textbox {
-  --color: var(--fg-color);
-  --opacity: 0.125;
-  &:focus {
-    --color: var(--accent-color);
-  }
   &:hover {
-    --opacity: 0.25;
+    --fg-color-025: var(--fg-color-0375);
+  }
+  &:focus {
+    --fg-color-0125: var(--accent-color-0125);
+    --fg-color-025: var(--accent-color-0375);
+    --fg-color-05: var(--accent-color-075);
   }
   &[disabled] {
     border-style: none;
-    background-image: repeating-linear-gradient(-45deg,
-      rgba(255, 255, 255, 0.05) 0,
-      rgba(255, 255, 255, 0.05) 0.5rem,
-      rgba(0, 0, 0, 0.05) 0.5rem,
-      rgba(0, 0, 0, 0.05) 1rem
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgb(255, 255, 255, 0.05) 0,
+      rgb(255, 255, 255, 0.05) 0.5rem,
+      rgb(0, 0, 0, 0.05) 0.5rem,
+      rgb(0, 0, 0, 0.05) 1rem
     );
   }
 
-  background-color: rgba(var(--color), 0.125);
-  border: 1px solid rgba(var(--color), var(--opacity));
+  background-color: var(--fg-color-0125);
+  border: 1px solid var(--fg-color-025);
   border-radius: var(--border-radius);
   color: rgb(var(--fg-color));
   line-height: var(--line-height);
   padding: 0.5rem 1rem;
 
   &::placeholder {
-    color: rgba(var(--color), 0.5);
+    color: var(--fg-color-05);
   }
 }
 .textarea {

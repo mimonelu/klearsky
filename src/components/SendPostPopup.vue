@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
+import format from "date-fns/format"
 import EasyForm from "@/components/EasyForm.vue"
 import HtmlPopup from "@/components/HtmlPopup.vue"
 import Popup from "@/components/Popup.vue"
@@ -10,10 +11,11 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string, done: boolean, empty: boolean): void}>()
 
 const props = defineProps<{
-  type: TTPostType;
-  post?: TTPost;
-  text?: string;
-  fileList?: FileList;
+  type: TTPostType
+  post?: TTPost
+  text?: string
+  fileList?: FileList
+  createdAt?: string
 }>()
 
 const $t = inject("$t") as Function
@@ -125,6 +127,7 @@ async function submitCallback () {
       ...easyFormState,
       type: props.type,
       post: props.post,
+      createdAt: props.createdAt,
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
 
@@ -165,6 +168,16 @@ function onChangeImage () {
         </h2>
       </template>
       <template #body>
+        <!-- ワープポスト用注意文言 -->
+        <div
+          v-if="createdAt != null"
+          class="textlabel"
+        >
+          <div class="textlabel__text">
+            <SVGIcon name="history" />{{ $t("warpPostNotification") }} {{ format(new Date(createdAt), "yyyy/MM/dd HH:mm:ss") }}
+          </div>
+        </div>
+
         <Post
           v-if="type === 'reply' || type === 'quoteRepost'"
           position="preview"
@@ -176,7 +189,7 @@ function onChangeImage () {
             <div class="button-container">
               <!-- ポスト言語選択ポップアップトリガー -->
               <button
-                class="button--bordered"
+                class="button--bordered post-language-button"
                 @click.prevent="mainState.openPostLanguagesPopup()"
               >
                 <SVGIcon name="translate" />
@@ -189,14 +202,14 @@ function onChangeImage () {
 
               <!-- ラベル選択ポップアップトリガー -->
               <button
-                class="button--bordered"
+                class="button--bordered label-button"
                 @click.prevent="mainState.openSelectLabelsPopup(state)"
               >
                 <SVGIcon name="alert" />
                 <span>{{
                   state.labels.length === 0
                   ? "---"
-                  : state.labels.map((label: string) => $t(label)).join(", ")
+                  : `(${state.labels.length}) ${state.labels.map((label: string) => $t(label)).join(", ")}`
                 }}</span>
               </button>
             </div>
@@ -209,14 +222,14 @@ function onChangeImage () {
                 v-for="_, altIndex of easyFormState.images"
                 :key="altIndex"
               >
-                <input
+                <textarea
                   v-model="easyFormState.alts[altIndex]"
                   type="text"
                   autocapitalize="off"
                   autocomplete="off"
                   :placeholder="`${$t('alts')} ${altIndex + 1}`"
                   spellcheck="false"
-                  class="textbox"
+                  class="textarea"
                 />
               </dd>
             </dl>
@@ -266,6 +279,10 @@ function onChangeImage () {
       padding-top: 0;
     }
 
+    .textlabel {
+      margin: 0 -0.5rem;
+    }
+
     // プレビューポストのテキスト選択
     .post {
       .text {
@@ -296,9 +313,7 @@ function onChangeImage () {
 
     .button--bordered {
       min-height: 3rem;
-      &:first-child {
-        white-space: nowrap;
-      }
+      white-space: nowrap;
       &:last-child {
         --fg-color: var(--notice-color);
       }
@@ -308,11 +323,19 @@ function onChangeImage () {
       }
 
       & > span {
-        word-break: break-all;
+        text-overflow: ellipsis;
       }
     }
-    .button--bordered:first-child > span {
+    .post-language-button > span {
       text-transform: uppercase;
+    }
+    .label-button {
+      overflow: hidden;
+
+      & > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }

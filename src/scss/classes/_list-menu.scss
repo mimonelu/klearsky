@@ -5,7 +5,7 @@
   button {
     --icon-color: var(--fg-color);
     --alpha: 0.875;
-    border-bottom: 1px solid rgba(var(--fg-color), 0.25);
+    border-bottom: 1px solid var(--fg-color-025);
     cursor: pointer;
     display: grid;
     align-items: center;
@@ -17,11 +17,11 @@
     }
 
     & > .svg-icon {
-      fill: rgba(var(--icon-color), var(--alpha));
+      fill: rgb(var(--icon-color), var(--alpha));
     }
 
     & > span {
-      color: rgba(var(--fg-color), var(--alpha));
+      color: rgb(var(--fg-color), var(--alpha));
       font-weight: bold;
       line-height: 1.25;
       overflow: hidden;

@@ -54,6 +54,7 @@ const router = createRouter({
         {
           path: "/post",
           name: "post",
+          meta: { label: "post" },
           component: PostView,
         },
         {
@@ -77,7 +78,7 @@ const router = createRouter({
             {
               path: "feeds",
               name: "feeds-home",
-              meta: { label: "feeds" },
+              meta: { label: "customFeeds" },
               component: FeedsView,
             },
             {
@@ -102,6 +103,7 @@ const router = createRouter({
             {
               path: "feeds-with-replies",
               name: "profile-feeds-with-replies",
+              meta: { label: "reply" },
               component: AuthorFeedsWithRepliesView,
             },
             {
