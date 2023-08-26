@@ -56,6 +56,7 @@ const mainState = inject("state") as MainState
     background-color: var(--fg-color-0125);
     display: block;
     object-fit: cover;
+    width: 100%; // for Firefox
   }
 
   &__cover {
