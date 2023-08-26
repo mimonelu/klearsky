@@ -23,7 +23,7 @@ const state = reactive<{
 })
 
 function showSubMenuTicker () {
-  setTimeout(() => { state.display = true }, 1)
+  setTimeout(() => { state.display = true }, 100)
 }
 </script>
 
