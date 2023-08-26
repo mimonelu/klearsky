@@ -478,7 +478,11 @@ async function processPage (pageName?: null | string) {
 
   // 現在ページの該当データを取得してからページタイトルを更新
   if (pageName?.startsWith("post") ||
-      pageName?.startsWith("profile")) updatePageTitle()
+      pageName?.startsWith("profile") ||
+      pageName?.startsWith("search-post")) {
+    //　TODO: "search-post"　特有の問題のために setTimeout している。使わずに対処すること
+    setTimeout(updatePageTitle, 1)
+  }
 }
 
 function clearNotificationInterval () {
