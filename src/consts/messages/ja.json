@@ -312,7 +312,7 @@
 
   "development": "開発",
   "resetSettings": "設定をリセットする",
-  "resetSettingsDetail": "Klearskyの設定をリセットします。よろしいですか？",
+  "resetSettingsDetail": "このアカウントの設定をリセットします。よろしいですか？",
 
   "inviteCodes": "招待コード",
   "confirmInviteCodes": "招待コードを確認する",

@@ -312,7 +312,7 @@
 
   "development": "Development",
   "resetSettings": "Reset settings",
-  "resetSettingsDetail": "Reset Klearsky settings. Are you sure?",
+  "resetSettingsDetail": "Reset this account's settings. Are you sure?",
 
   "inviteCodes": "Invite Codes",
   "confirmInviteCodes": "Confirm invite codes",
