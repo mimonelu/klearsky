@@ -96,7 +96,7 @@ function createProfileTimer () {
     } finally {
       createProfileTimer()
     }
-  }, 1000)
+  }, 500)
 }
 
 function destroyProfileTimer () {
