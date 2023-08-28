@@ -140,7 +140,7 @@
   "firstPost": "Show first post",
   "sendMention": "Send mention",
   "sendPostAfter": "Send post after this",
-  "warpPostNotification": "This post will be posted as the following date:",
+  "warpPostNotification": "This post will be sent as the following date:",
   "deletePost": "Delete post",
   "deletePostMessage": "This post will be deleted. Are you sure?",
   "moderate": "Moderate",
@@ -351,6 +351,11 @@
   "sendPostNotification4": "It is possible to send more than the maximum number of characters.",
   "cancelPost": "Cancel Post",
   "cancelPostMessage": "The entered information will be reset. Are you sure?",
+
+  "postDatePopupTitle": "Set post date",
+  "postDatePopupDescription": "This post will be sent as the following date.",
+  "postDatePopupReset": "Reset date",
+  "postDatePopupResetDescription": "Reset the date. Are you sure?",
 
   "emptyPostConfirmation": "Empty Post Confirmation",
   "emptyPostConfirmationMessage": "This post seems to be empty. Do you want to post this as is?",

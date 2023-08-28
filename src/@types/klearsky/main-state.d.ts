@@ -168,6 +168,10 @@ type MainState = {
   selectLabelsPopupDisplay: boolean
   selectLabelsPopupState: any
 
+  // ポスト日時選択ポップアップ
+  postDatePopupDisplay: boolean
+  postDatePopupDate?: string
+
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
@@ -272,6 +276,10 @@ type MainState = {
   // ラベル選択ポップアップの開閉
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: Function
+
+  // ポスト日時選択ポップアップの開閉
+  openPostDatePopup: Function
+  closePostDatePopup: Function
 
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup: Function

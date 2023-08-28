@@ -93,6 +93,8 @@ watch(() => props.fileList, (value?: FileList) => {
 onMounted(() => {
   if (props.fileList != null) easyFormState.images = Array.from(props.fileList)
   onChangeImage()
+
+  mainState.postDatePopupDate = props.createdAt
 })
 
 function close () {
@@ -127,7 +129,7 @@ async function submitCallback () {
       ...easyFormState,
       type: props.type,
       post: props.post,
-      createdAt: props.createdAt,
+      createdAt: mainState.postDatePopupDate,
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
 
@@ -170,11 +172,11 @@ function onChangeImage () {
       <template #body>
         <!-- ワープポスト用注意文言 -->
         <div
-          v-if="createdAt != null"
+          v-if="mainState.postDatePopupDate != null"
           class="textlabel"
         >
           <div class="textlabel__text">
-            <SVGIcon name="history" />{{ $t("warpPostNotification") }} {{ format(new Date(createdAt), "yyyy/MM/dd HH:mm:ss") }}
+            <SVGIcon name="history" />{{ $t("warpPostNotification") }} {{ format(new Date(mainState.postDatePopupDate), "yyyy/MM/dd HH:mm:ss") }}
           </div>
         </div>
 
@@ -200,9 +202,9 @@ function onChangeImage () {
                 }}</span>
               </button>
 
-              <!-- ラベル選択ポップアップトリガー -->
+              <!-- ポストラベル選択ポップアップトリガー -->
               <button
-                class="button--bordered label-button"
+                class="button--bordered post-label-button"
                 @click.prevent="mainState.openSelectLabelsPopup(state)"
               >
                 <SVGIcon name="alert" />
@@ -211,6 +213,14 @@ function onChangeImage () {
                   ? "---"
                   : `(${state.labels.length}) ${state.labels.map((label: string) => $t(label)).join(", ")}`
                 }}</span>
+              </button>
+
+              <!-- ポスト日時選択ポップアップトリガー -->
+              <button
+                class="button--bordered post-date-button"
+                @click.prevent="mainState.openPostDatePopup"
+              >
+                <SVGIcon name="history" />
               </button>
             </div>
           </template>
@@ -309,14 +319,11 @@ function onChangeImage () {
 
   .button-container {
     display: flex;
-    grid-gap: 1rem;
+    grid-gap: 1rem 0.5rem;
 
     .button--bordered {
       min-height: 3rem;
       white-space: nowrap;
-      &:last-child {
-        --fg-color: var(--notice-color);
-      }
 
       & > .svg-icon {
         font-size: 1rem;
@@ -329,13 +336,17 @@ function onChangeImage () {
     .post-language-button > span {
       text-transform: uppercase;
     }
-    .label-button {
+    .post-label-button {
+      --fg-color: var(--notice-color);
       overflow: hidden;
 
       & > span {
         overflow: hidden;
         text-overflow: ellipsis;
       }
+    }
+    .post-date-button {
+      margin-left: auto;
     }
   }
 }

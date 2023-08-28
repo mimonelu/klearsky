@@ -145,6 +145,10 @@ const state = reactive<MainState>({
   openSelectLabelsPopup,
   closeSelectLabelsPopup,
 
+  // ポスト日時選択ポップアップの開閉
+  openPostDatePopup,
+  closePostDatePopup,
+
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
   closeInviteCodesPopup,
@@ -857,6 +861,16 @@ function openSelectLabelsPopup (params: any) {
 
 function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
+}
+
+// ポスト日時選択ポップアップの開閉
+
+function openPostDatePopup () {
+  state.postDatePopupDisplay = true
+}
+
+function closePostDatePopup () {
+  state.postDatePopupDisplay = false
 }
 
 // 招待コード確認ポップアップの開閉

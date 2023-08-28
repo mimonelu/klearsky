@@ -23,6 +23,7 @@ import NotificationPopup from "@/components/NotificationPopup.vue"
 import PopularFeedsPopup from "@/components/PopularFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
+import SelectDatePopup from "@/components/SelectDatePopup.vue"
 import SelectLabelsPopup from "@/components/SelectLabelsPopup.vue"
 import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
@@ -246,6 +247,10 @@ function resetState () {
   // ラベル選択ポップアップ
   state.selectLabelsPopupDisplay = false
   state.selectLabelsPopupState = undefined
+
+  // ポスト日時選択ポップアップ
+  state.postDatePopupDisplay = false
+  state.postDatePopupDate = undefined
 
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
@@ -795,6 +800,18 @@ function broadcastListener (event: MessageEvent) {
       property="labels"
       @close="state.closeSelectLabelsPopup"
       @change=""
+    />
+
+    <!-- ポスト日時選択ポップアップ -->
+    <SelectDatePopup
+      v-if="state.postDatePopupDisplay"
+      :date="state.postDatePopupDate"
+      textTitle="postDatePopupTitle"
+      textDescription="postDatePopupDescription"
+      textReset="postDatePopupReset"
+      textResetDescription="postDatePopupResetDescription"
+      @close="state.closePostDatePopup"
+      @onChange="(params: any) => { state.postDatePopupDate = params }"
     />
 
     <!-- 　D&Dオーバーレイ -->

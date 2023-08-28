@@ -352,6 +352,11 @@
   "cancelPost": "ポストのキャンセル",
   "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
 
+  "postDatePopupTitle": "ポスト日時の設定",
+  "postDatePopupDescription": "下記の日時でポストを投稿します。",
+  "postDatePopupReset": "日時をリセットする",
+  "postDatePopupResetDescription": "日時をリセットします。よろしいですか？",
+
   "emptyPostConfirmation": "空ポストの確認",
   "emptyPostConfirmationMessage": "ポストが空のようです。このまま投稿しますか？",
 
