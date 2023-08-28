@@ -1,48 +1,38 @@
 ![Klearsky](./public/img/ogp.png "Klearsky")
 
 # Klearsky
+A design-first web client for the AT Protocol a.k.a. Bluesky.
 
-This template should help get you started developing with Vue 3 in Vite.
+## GitHub
+* Repository: https://github.com/mimonelu/klearsky
 
-## Recommended IDE Setup
+## Deployment destination
+Klearsky is deployed on Cloudflare.
+* Production: https://klearsky.pages.dev/
+* Staging: https://staging.klearsky.pages.dev/
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Development environment
+* Node: v18.12.1 (based on Cloudflare)
+* Framework: Vite + Vue3 (see `package.json` )
 
-## Type Support for `.vue` Imports in TS
+## Custom fields
+* `POST.record.via?: string` Client name (Klearsky)
+* `POST.record.lightning?: string` Used in Zap! link
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## External linkage services
+* MyMemory: 自動翻訳で使用。ユーザーのメールアドレスを自動付与している
+* Lightning Network: Zap! リンク／ボタンで使用。 `lightning:` プロトコルでリンクしているだけ
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## Coproduct
+* `/coproduct/stats.html`: `npm run build` で rollup-plugin-visualizer によるバンドルファイルの一覧を副次的に生成
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+## Tools
+* `svg-list.js`: `node tools/svg-list.js` で使用中のSVGファイルを一覧できるHTMLを生成
 
-## Customize configuration
+## Design resources
+* Logo font: https://fonts.google.com/specimen/Albert+Sans?preview.text=Klearsky&preview.size=64&preview.text_type=custom&category=Sans+Serif,Display
+* SVG icons: https://pictogrammers.com/library/mdi/
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Others
+* AT Protocol Ecosystem: https://github.com/bluesky-social/atproto-ecosystem
+* Scrapbox: https://scrapbox.io/Bluesky/%E9%96%A2%E9%80%A3%E3%83%84%E3%83%BC%E3%83%AB
