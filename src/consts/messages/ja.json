@@ -353,7 +353,7 @@
   "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
 
   "postDatePopupTitle": "ポスト日時の設定",
-  "postDatePopupDescription": "下記の日時でポストを投稿します。",
+  "postDatePopupDescription": "下記の日時でポストを投稿します。過去の日時のみ有効です。",
   "postDatePopupReset": "日時をリセットする",
   "postDatePopupResetDescription": "日時をリセットします。よろしいですか？",
 

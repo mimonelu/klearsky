@@ -353,7 +353,7 @@
   "cancelPostMessage": "The entered information will be reset. Are you sure?",
 
   "postDatePopupTitle": "Set post date",
-  "postDatePopupDescription": "This post will be sent as the following date.",
+  "postDatePopupDescription": "This post will be sent as the following date. Date is valid only for past.",
   "postDatePopupReset": "Reset date",
   "postDatePopupResetDescription": "Reset the date. Are you sure?",
 
