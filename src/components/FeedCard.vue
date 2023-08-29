@@ -10,6 +10,7 @@ const emit = defineEmits<{(name: string): void}>()
 
 const props = defineProps<{
   generator: TTFeedGenerator
+  menuDisplay: boolean
   orderButtonDisplay: boolean
   creatorDisplay: boolean
   unclickable?: boolean
@@ -194,6 +195,7 @@ function closeMenuTicker () {
 
           <!-- フィードカードメニュートリガー -->
           <button
+            v-if="menuDisplay"
             class="menu-button"
             ref="menuTicker"
             @click.prevent.stop="openMenuTicker"

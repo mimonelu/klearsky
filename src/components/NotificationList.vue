@@ -162,6 +162,7 @@ function makeSubjectTo (notification: TTNotification): any {
       <FeedCard
         v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.generator != null"
         :generator="notificationGroup.generator"
+        :menuDisplay="true"
         :orderButtonDisplay="false"
         :creatorDisplay="false"
         @click="$emit('close')"

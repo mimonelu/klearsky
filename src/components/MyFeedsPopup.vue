@@ -108,6 +108,7 @@ function changeCustomFeedOrder () {
           v-for="generator of mainState.currentMyFeedGenerators"
           :key="generator.cid"
           :generator="generator"
+          :menuDisplay="true"
           :orderButtonDisplay="true"
           :creatorDisplay="true"
           @click="close"

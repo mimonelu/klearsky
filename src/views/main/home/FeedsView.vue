@@ -71,6 +71,7 @@ function openPopularFeedsPopup () {
     <FeedCard
       v-if="state.generator != null"
       :generator="state.generator"
+      :menuDisplay="true"
       :orderButtonDisplay="false"
       :creatorDisplay="true"
       :unclickable="true"

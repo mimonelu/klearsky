@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -9,7 +10,7 @@ import OPTIONS from "@/consts/options.json"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  generator?: TTFeedGenerator
+  generator: TTFeedGenerator
 }>()
 
 const $t = inject("$t") as Function
@@ -60,9 +61,9 @@ async function submitCallback () {
   const response = await mainState.atp.createReport(
     state.reasonType as string,
     state.reason as string,
-    props.generator?.did,
-    props.generator?.cid,
-    props.generator?.uri
+    props.generator.did,
+    props.generator.cid,
+    props.generator.uri
   )
   mainState.processing = false
   if (response) {
@@ -87,19 +88,36 @@ async function submitCallback () {
       </h2>
     </template>
     <template #body>
+      <FeedCard
+        :generator="generator"
+        :menuDisplay="false"
+        :orderButtonDisplay="false"
+        :creatorDisplay="true"
+        @keydown.prevent.stop
+        @keyup.prevent.stop
+      />
       <EasyForm v-bind="easyFormProps" />
     </template>
   </Popup>
 </template>
 
 <style lang="scss" scoped>
-.send-feed-report-popup:deep() {
-  .popup-header > h2 {
-    color: rgb(var(--notice-color));
+.send-feed-report-popup {
+  &:deep() {
+    .popup-header > h2 {
+      color: rgb(var(--notice-color));
 
-    & > .svg-icon {
-      fill: rgb(var(--notice-color));
+      & > .svg-icon {
+        fill: rgb(var(--notice-color));
+      }
     }
+  }
+
+  .feed-card {
+    filter: grayscale(50%);
+    font-size: 0.875rem;
+    padding: 1rem 1rem 0;
+    pointer-events: none;
   }
 }
 </style>

@@ -31,6 +31,7 @@ watch(() => mainState.scrolledToBottom, () => {
         v-for="generator of mainState.currentAuthorCustomFeeds"
         :key="generator.cid"
         :generator="generator"
+        :menuDisplay="true"
         :orderButtonDisplay="false"
         :creatorDisplay="false"
       />

@@ -66,6 +66,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
           v-for="generator of mainState.currentSearchFeeds"
           :key="generator.cid"
           :generator="generator"
+          :menuDisplay="true"
           :orderButtonDisplay="false"
           :creatorDisplay="true"
         />

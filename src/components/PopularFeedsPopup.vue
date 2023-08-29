@@ -79,6 +79,7 @@ function scrolledToBottom () {
           v-for="generator of mainState.currentPopularFeedGenerators"
           :key="generator.cid"
           :generator="generator"
+          :menuDisplay="true"
           :orderButtonDisplay="false"
           :creatorDisplay="true"
           @click="close"

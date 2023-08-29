@@ -744,6 +744,7 @@ function onActivateHashTag (text: string) {
           <FeedCard
             v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
             :generator="post.embed.record as unknown as TTFeedGenerator"
+            :menuDisplay="true"
             :orderButtonDisplay="false"
             :creatorDisplay="true"
             @click="$emit('click')"
