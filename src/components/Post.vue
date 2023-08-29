@@ -1150,6 +1150,7 @@ function onActivateHashTag (text: string) {
 
 .text,
 .text--slim {
+  color: rgb(var(--fg-color));
   line-height: var(--line-height);
   word-break: break-word;
   &:empty {

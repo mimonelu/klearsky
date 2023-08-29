@@ -185,6 +185,8 @@ function onChangeImage () {
           position="preview"
           :post="post as TTPost"
           :noLink="true"
+          @keydown.prevent.stop
+          @keyup.prevent.stop
         />
         <EasyForm v-bind="easyFormProps">
           <template #free-2>

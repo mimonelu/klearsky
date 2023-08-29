@@ -2,6 +2,7 @@
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Popup from "@/components/Popup.vue"
+import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 import OPTIONS from "@/consts/options.json"
@@ -9,7 +10,7 @@ import OPTIONS from "@/consts/options.json"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  post?: TTPost
+  post: TTPost
 }>()
 
 const $t = inject("$t") as Function
@@ -60,9 +61,9 @@ async function submitCallback () {
   const response = await mainState.atp.createReport(
     state.reasonType as string,
     state.reason as string,
-    props.post?.author?.did,
-    props.post?.cid,
-    props.post?.uri
+    props.post.author?.did,
+    props.post.cid,
+    props.post.uri
   )
   mainState.processing = false
   if (response) {
@@ -87,19 +88,36 @@ async function submitCallback () {
       </h2>
     </template>
     <template #body>
+      <Post
+        position="preview"
+        :post="post"
+        :noLink="true"
+        @keydown.prevent.stop
+        @keyup.prevent.stop
+      />
       <EasyForm v-bind="easyFormProps" />
     </template>
   </Popup>
 </template>
 
 <style lang="scss" scoped>
-.send-post-report-popup:deep() {
-  .popup-header > h2 {
-    color: rgb(var(--notice-color));
+.send-post-report-popup {
+  &:deep() {
+    .popup-header > h2 {
+      color: rgb(var(--notice-color));
 
-    & > .svg-icon {
-      fill: rgb(var(--notice-color));
+      & > .svg-icon {
+        fill: rgb(var(--notice-color));
+      }
     }
+  }
+
+  .post {
+    --fg-color: var(--notice-color);
+    background-color: rgb(var(--notice-color), 0.125);
+    font-size: 0.875rem;
+    padding: 1rem;
+    pointer-events: none;
   }
 }
 </style>

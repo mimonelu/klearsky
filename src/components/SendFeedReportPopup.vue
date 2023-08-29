@@ -114,9 +114,10 @@ async function submitCallback () {
   }
 
   .feed-card {
-    filter: grayscale(50%);
+    --fg-color: var(--notice-color);
+    background-color: rgb(var(--notice-color), 0.125);
     font-size: 0.875rem;
-    padding: 1rem 1rem 0;
+    opacity: 0.75;
     pointer-events: none;
   }
 }

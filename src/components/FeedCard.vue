@@ -279,6 +279,7 @@ function closeMenuTicker () {
   }
 
   &__top {
+    color: rgb(var(--fg-color));
     display: flex;
     align-items: center;
     grid-gap: 0.75em;
@@ -424,6 +425,7 @@ function closeMenuTicker () {
 
   // フィード説明文
   &__description {
+    color: rgb(var(--fg-color));
     font-size: 0.875em;
     line-height: var(--line-height);
     white-space: pre-wrap;
@@ -431,6 +433,7 @@ function closeMenuTicker () {
   }
 
   &__bottom {
+    color: rgb(var(--fg-color));
     display: flex;
     grid-gap: 0.5em;
   }
