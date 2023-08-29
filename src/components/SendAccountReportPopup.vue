@@ -3,13 +3,14 @@ import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
+import UserBox from "@/components/UserBox.vue"
 import Util from "@/composables/util"
 import OPTIONS from "@/consts/options.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  user?: TTUser
+  user: TTUser
 }>()
 
 const $t = inject("$t") as Function
@@ -60,7 +61,7 @@ async function submitCallback () {
   const response = await mainState.atp.createReport(
     state.reasonType as string,
     state.reason as string,
-    props.user?.did
+    props.user.did
   )
   mainState.processing = false
   if (response) {
@@ -85,19 +86,36 @@ async function submitCallback () {
       </h2>
     </template>
     <template #body>
+      <UserBox
+        :user="user"
+        :contentWarningDisabled="true"
+        @keydown.prevent.stop
+        @keyup.prevent.stop
+      />
       <EasyForm v-bind="easyFormProps" />
     </template>
   </Popup>
 </template>
 
 <style lang="scss" scoped>
-.send-account-report-popup:deep() {
-  .popup-header > h2 {
-    color: rgb(var(--notice-color));
+.send-account-report-popup {
+  &:deep() {
+    .popup-header > h2 {
+      color: rgb(var(--notice-color));
 
-    & > .svg-icon {
-      fill: rgb(var(--notice-color));
+      & > .svg-icon {
+        fill: rgb(var(--notice-color));
+      }
     }
+  }
+
+  .user-box {
+    --fg-color: var(--notice-color);
+    background-color: rgb(var(--notice-color), 0.125);
+    font-size: 0.875rem;
+    opacity: 0.875;
+    padding: 1rem;
+    pointer-events: none;
   }
 }
 </style>

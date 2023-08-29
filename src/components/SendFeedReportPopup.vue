@@ -117,7 +117,7 @@ async function submitCallback () {
     --fg-color: var(--notice-color);
     background-color: rgb(var(--notice-color), 0.125);
     font-size: 0.875rem;
-    opacity: 0.75;
+    opacity: 0.875;
     pointer-events: none;
   }
 }
