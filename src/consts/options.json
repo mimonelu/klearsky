@@ -14,5 +14,10 @@
     { "label": "reportReasonViolation", "value": "com.atproto.moderation.defs#reasonViolation" },
     { "label": "reportReasonRude", "value": "com.atproto.moderation.defs#reasonRude" },
     { "label": "reportReasonOther", "value": "com.atproto.moderation.defs#reasonOther" }
+  ],
+  "feedReportReason": [
+    { "label": "reportReasonViolation", "value": "com.atproto.moderation.defs#reasonViolation" },
+    { "label": "reportReasonRude", "value": "com.atproto.moderation.defs#reasonRude" },
+    { "label": "reportReasonOther", "value": "com.atproto.moderation.defs#reasonOther" }
   ]
 }

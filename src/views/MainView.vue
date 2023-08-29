@@ -27,6 +27,7 @@ import SelectDatePopup from "@/components/SelectDatePopup.vue"
 import SelectLabelsPopup from "@/components/SelectLabelsPopup.vue"
 import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
+import SendFeedReportPopup from "@/components/SendFeedReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
 import SettingsPopup from "@/components/SettingsPopup.vue"
@@ -277,6 +278,10 @@ function resetState () {
   // ポストレポート送信ポップアッププロパティ
   state.sendPostReportPopupProps.display = false
   state.sendPostReportPopupProps.post = undefined
+
+  // フィードレポート送信ポップアッププロパティ
+  state.sendFeedReportPopupProps.display = false
+  state.sendFeedReportPopupProps.generator = undefined
 
   // D&D用処理
   state.isDragOver = false
@@ -754,6 +759,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.sendPostReportPopupProps.display"
       :post="state.sendPostReportPopupProps.post"
       @close="state.closeSendPostReportPopup"
+    />
+
+    <!-- フィードレポート送信ポップアップ -->
+    <SendFeedReportPopup
+      v-if="state.sendFeedReportPopupProps.display"
+      :generator="state.sendFeedReportPopupProps.generator"
+      @close="state.closeSendFeedReportPopup"
     />
 
     <!-- イメージポップアップ -->

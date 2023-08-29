@@ -62,6 +62,7 @@
 
   "reportSendAccount": "Report account",
   "reportSendPost": "Report post",
+  "reportSendFeed": "Report custom feed",
   "reportReasonType": "Reason",
   "reportReason": "Details (optional)",
   "reportReasonDescription": "Enter any additional information here.",

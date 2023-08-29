@@ -205,6 +205,12 @@ type MainState = {
     post?: TTPost
   }
 
+  // フィードレポート送信ポップアッププロパティ
+  sendFeedReportPopupProps: {
+    display: boolean
+    generator?: TTFeedGenerator
+  }
+
   // D&D
   isDragOver: boolean
 
@@ -316,6 +322,10 @@ type MainState = {
   // ポストレポート送信ポップアップの開閉
   openSendPostReportPopup: Function
   closeSendPostReportPopup: Function
+
+  // フィードレポート送信ポップアップの開閉
+  openSendFeedReportPopup: Function
+  closeSendFeedReportPopup: Function
 
   // エラーポップアップの開閉
   openErrorPopup: Function

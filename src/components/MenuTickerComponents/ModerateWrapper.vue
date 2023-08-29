@@ -2,6 +2,7 @@
 import { reactive } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerSendAccountReport from "@/components/MenuTickerComponents/SendAccountReport.vue"
+import MenuTickerSendFeedReport from "@/components/MenuTickerComponents/SendFeedReport.vue"
 import MenuTickerSendPostReport from "@/components/MenuTickerComponents/SendPostReport.vue"
 import MenuTickerToggleBlock from "@/components/MenuTickerComponents/ToggleBlock.vue"
 import MenuTickerToggleMute from "@/components/MenuTickerComponents/ToggleMute.vue"
@@ -13,6 +14,7 @@ defineProps<{
   isUser?: boolean
   user?: TTUser
   post?: TTPost
+  generator?: TTFeedGenerator
   container?: HTMLElement
 }>()
 
@@ -45,14 +47,14 @@ function showSubMenuTicker () {
     >
       <!-- ミュートのトグル -->
       <MenuTickerToggleMute
-        v-if="!isUser"
+        v-if="!isUser && generator == null"
         :user="user"
         @close="emit('close')"
       />
 
       <!-- ブロックのトグル -->
       <MenuTickerToggleBlock
-        v-if="!isUser"
+        v-if="!isUser && generator == null"
         :user="user"
         @close="emit('close')"
       />
@@ -68,6 +70,13 @@ function showSubMenuTicker () {
       <MenuTickerSendPostReport
         v-if="!isUser && post != null"
         :post="post"
+        @close="emit('close')"
+      />
+
+      <!-- フィードレポート送信ポップアップを開く -->
+      <MenuTickerSendFeedReport
+        v-if="generator != null"
+        :generator="generator"
         @close="emit('close')"
       />
     </MenuTicker>

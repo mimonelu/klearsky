@@ -27,6 +27,10 @@ const state = reactive<MainState>({
     display: false,
     post: undefined,
   },
+  sendFeedReportPopupProps: {
+    display: false,
+    generator: undefined,
+  },
   sendPostPopupProps: {
     display: false,
     type: "post",
@@ -184,6 +188,10 @@ const state = reactive<MainState>({
   // ポストレポート送信ポップアップの開閉
   openSendPostReportPopup,
   closeSendPostReportPopup,
+
+  // フィードレポート送信ポップアップの開閉
+  openSendFeedReportPopup,
+  closeSendFeedReportPopup,
 
   // エラーポップアップの開閉
   openErrorPopup,
@@ -963,6 +971,17 @@ function openSendPostReportPopup (post: TTPost) {
 
 function closeSendPostReportPopup () {
   state.sendPostReportPopupProps.display = false
+}
+
+// フィードレポート送信ポップアップの開閉
+
+function openSendFeedReportPopup (generator: TTFeedGenerator) {
+  state.sendFeedReportPopupProps.generator = generator
+  state.sendFeedReportPopupProps.display = true
+}
+
+function closeSendFeedReportPopup () {
+  state.sendFeedReportPopupProps.display = false
 }
 
 // エラーポップアップの開閉
