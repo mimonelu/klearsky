@@ -58,13 +58,13 @@ async function logout () {
     :hasCloseButton="true"
     @close="close"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <SVGIcon name="person" />
         <span>{{ $t("myAccounts") }}</span>
       </h2>
     </template>
-    <template v-slot:body>
+    <template #body>
       <div class="account-popup__body">
         <div class="account-popup__button-container">
           <button

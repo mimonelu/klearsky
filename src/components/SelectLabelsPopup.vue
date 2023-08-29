@@ -39,13 +39,13 @@ function close () {
       :hasCloseButton="true"
       @close="close"
     >
-      <template v-slot:header>
+      <template #header>
         <h2>
           <SVGIcon name="alert" />
           <span>{{ $t("selectLabels") }}</span>
         </h2>
       </template>
-      <template v-slot:body>
+      <template #body>
         <EasyForm v-bind="easyFormProps" />
       </template>
     </Popup>

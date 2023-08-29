@@ -187,7 +187,7 @@ function onChangeImage () {
           :noLink="true"
         />
         <EasyForm v-bind="easyFormProps">
-          <template v-slot:free-2>
+          <template #free-2>
             <div class="button-container">
               <!-- ポスト言語選択ポップアップトリガー -->
               <button

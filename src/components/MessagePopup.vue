@@ -22,12 +22,12 @@ function close () {
     :hasCloseButton="true"
     @close="close"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <span>{{ mainState.messagePopupTitle }}</span>
       </h2>
     </template>
-    <template v-slot:body>
+    <template #body>
       <div class="text">{{ mainState.messagePopupText }}</div>
     </template>
   </Popup>

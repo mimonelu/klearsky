@@ -75,13 +75,13 @@ function onSubmit () {
     :hasCloseButton="true"
     @close="close"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <SVGIcon name="alphabeticalOff" />
         <span>{{ $t("wordMute") }}</span>
       </h2>
     </template>
-    <template v-slot:body>
+    <template #body>
       <slot name="header" />
       <button
         class="button--bordered"

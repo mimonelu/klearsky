@@ -55,7 +55,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         :user="user as TTUser"
         :contentWarningDisabled="false"
       >
-        <template v-slot:bottom>
+        <template #bottom>
           <div class="relations">
             <div
               v-if="user.viewer.followedBy"

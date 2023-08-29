@@ -111,13 +111,13 @@ async function apply () {
     :hasCloseButton="true"
     @close="close"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <SVGIcon name="alert" />
         <span>{{ $t("contentFiltering") }}</span>
       </h2>
     </template>
-    <template v-slot:body>
+    <template #body>
       <p>{{ $t("contentFilteringDescription") }}</p>
       <EasyForm v-bind="easyFormProps" />
     </template>

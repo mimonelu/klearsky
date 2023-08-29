@@ -18,12 +18,12 @@ function close () {
     :hasCloseButton="true"
     @close="close"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <span>{{ $t("error") }}</span>
       </h2>
     </template>
-    <template v-slot:body>
+    <template #body>
       <pre class="message-string">{{ error }}</pre>
       <pre
         v-if="typeof error !== 'string'"

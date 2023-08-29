@@ -191,7 +191,7 @@ function onMutated () {
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         >
-          <template v-slot:body-after>
+          <template #body-after>
             <!-- リプライ／引用リポストアイコン -->
             <div
               v-if="message.record.reply != null"
