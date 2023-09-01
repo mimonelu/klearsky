@@ -93,6 +93,7 @@ const state = reactive<{
     <!-- 共有する -->
     <MenuTickerWebShare
       :text="state.shareText"
+      :title="user.displayName"
       @close="emit('close')"
     />
 
