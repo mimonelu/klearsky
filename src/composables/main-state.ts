@@ -733,19 +733,14 @@ function updateColorThemeSetting () {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (
-  type: TTPostType,
-  post?: TTPost,
-  text?: string,
-  fileList?: FileList,
-  createdAt?: string
-): Promise<boolean> {
+async function openSendPostPopup (params: TTSendPostPopupProps): Promise<boolean> {
   state.sendPostPopupProps.display = true
-  state.sendPostPopupProps.type = type
-  state.sendPostPopupProps.post = post
-  state.sendPostPopupProps.text = text
-  state.sendPostPopupProps.fileList = fileList
-  state.sendPostPopupProps.createdAt = createdAt
+  state.sendPostPopupProps.type = params.type
+  state.sendPostPopupProps.post = params.post
+  state.sendPostPopupProps.text = params.text
+  state.sendPostPopupProps.url = params.url
+  state.sendPostPopupProps.fileList = params.fileList
+  state.sendPostPopupProps.createdAt = params.createdAt
   await Util.waitProp(() => state.sendPostPopupProps.display, false)
   return isSendPostDone
 }

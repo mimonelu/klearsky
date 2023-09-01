@@ -277,7 +277,7 @@ function onActivateImageFolderButton () {
 
 async function onActivateReplyButton () {
   Util.blurElement()
-  const done = await mainState.openSendPostPopup("reply", props.post)
+  const done = await mainState.openSendPostPopup({ type: "reply", post: props.post })
   state.processing = true
   try {
     if (done) {
@@ -324,7 +324,7 @@ async function onActivateDeleteRepostButton () {
 async function onActivateQuoteRepostButton () {
   Util.blurElement()
   state.repostMenuDisplay = false
-  const done = await mainState.openSendPostPopup("quoteRepost", props.post)
+  const done = await mainState.openSendPostPopup({ type: "quoteRepost", post: props.post })
   state.processing = true
   try {
     if (done) await updateThisPostThread()

@@ -34,6 +34,7 @@ import image from "@/svg/image.svg?raw"
 import inviteCode from "@/svg/invite-code.svg?raw"
 import json from "@/svg/json.svg?raw"
 import lightning from "@/svg/lightning.svg?raw"
+import link from "@/svg/link.svg?raw"
 import lock from "@/svg/lock.svg?raw"
 import mail from "@/svg/mail.svg?raw"
 import menu from "@/svg/menu.svg?raw"
@@ -102,6 +103,7 @@ const icons: { [k: string]: string } = {
   inviteCode,
   json,
   lightning,
+  link,
   lock,
   mail,
   menu,

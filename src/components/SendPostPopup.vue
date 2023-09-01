@@ -14,6 +14,7 @@ const props = defineProps<{
   type: TTPostType
   post?: TTPost
   text?: string
+  url?: string
   fileList?: FileList
   createdAt?: string
 }>()
@@ -37,7 +38,7 @@ const easyFormState = reactive<{
   alts: Array<string>
 }>({
   text: props.text ?? "",
-  url: "",
+  url: props.url ?? "",
   images: [],
   alts: [],
 })

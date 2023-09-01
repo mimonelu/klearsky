@@ -21,7 +21,10 @@ async function sendPostAfter () {
   createdAtDate.setMilliseconds(createdAtDate.getMilliseconds() + 1)
   const createdAtString = createdAtDate.toISOString()
 
-  await mainState.openSendPostPopup("post", undefined, undefined, undefined, createdAtString)
+  await mainState.openSendPostPopup({
+    type: "post",
+    createdAt: createdAtString,
+  })
 }
 </script>
 

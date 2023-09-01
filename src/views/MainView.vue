@@ -59,7 +59,7 @@ onBeforeMount(() => {
       !state.imagePopupProps.display &&
       !state.sendPostPopupProps.display &&
       !state.loginPopupAutoDisplay)
-      state.openSendPostPopup("post")
+      state.openSendPostPopup({ type: "post" })
   })
 })
 
@@ -584,7 +584,10 @@ function onDrop (event: DragEvent) {
   if (state.sendPostPopupProps.display)
     state.sendPostPopupProps.fileList = files
   else
-    state.openSendPostPopup("post", undefined, undefined, files)
+    state.openSendPostPopup({
+      type: "post",
+      fileList: files,
+    })
   state.isDragOver = false
 }
 
@@ -750,21 +753,21 @@ function broadcastListener (event: MessageEvent) {
     <!-- アカウントレポート送信ポップアップ -->
     <SendAccountReportPopup
       v-if="state.sendAccountReportPopupProps.display"
-      :user="state.sendAccountReportPopupProps.user"
+      :user="state.sendAccountReportPopupProps.user as TTUser"
       @close="state.closeSendAccountReportPopup"
     />
 
     <!-- ポストレポート送信ポップアップ -->
     <SendPostReportPopup
       v-if="state.sendPostReportPopupProps.display"
-      :post="state.sendPostReportPopupProps.post"
+      :post="state.sendPostReportPopupProps.post as TTPost"
       @close="state.closeSendPostReportPopup"
     />
 
     <!-- フィードレポート送信ポップアップ -->
     <SendFeedReportPopup
       v-if="state.sendFeedReportPopupProps.display"
-      :generator="state.sendFeedReportPopupProps.generator"
+      :generator="state.sendFeedReportPopupProps.generator as TTFeedGenerator"
       @close="state.closeSendFeedReportPopup"
     />
 
@@ -782,6 +785,7 @@ function broadcastListener (event: MessageEvent) {
       :type="state.sendPostPopupProps.type"
       :post="state.sendPostPopupProps.post"
       :text="state.sendPostPopupProps.text"
+      :url="state.sendPostPopupProps.url"
       :fileList="state.sendPostPopupProps.fileList"
       :createdAt="state.sendPostPopupProps.createdAt"
       @closeSnedPostPopup="closeSendPostPopup"

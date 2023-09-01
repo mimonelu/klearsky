@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { inject } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
 import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
+import MenuTickerSendLinkCard from "@/components/MenuTickerComponents/SendLinkCard.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -21,6 +21,12 @@ defineProps<{
     :display="display"
     :container="container"
   >
+    <!-- リンクカードで投稿する -->
+    <MenuTickerSendLinkCard
+      :uri="generator.uri"
+      @close="emit('close')"
+    />
+
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
       :text="generator.description"
