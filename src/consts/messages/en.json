@@ -28,6 +28,7 @@
   "help": "Help",
   "media": "Media",
   "invalidHandle": "(Invalid handle)",
+  "share": "Share",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",

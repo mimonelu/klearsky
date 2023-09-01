@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
 import MenuTickerModerateWrapper from "@/components/MenuTickerComponents/ModerateWrapper.vue"
@@ -10,6 +10,7 @@ import MenuTickerSendPostAfter from "@/components/MenuTickerComponents/SendPostA
 import MenuTickerShowLikeUsers from "@/components/MenuTickerComponents/ShowLikeUsers.vue"
 import MenuTickerShowRepostUsers from "@/components/MenuTickerComponents/ShowRepostUsers.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
+import MenuTickerWebShare from "@/components/MenuTickerComponents/WebShare.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -27,9 +28,18 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   isUser: boolean
   deletePostUri?: string
+  shareText: ComputedRef<string>
+  shareUrl: ComputedRef<string>
 }>({
   isUser: props.post.author.did === mainState.atp.session?.did,
-  deletePostUri: props.post.author.did === mainState.atp.session?.did ? props.post.uri : undefined
+  deletePostUri: props.post.author.did === mainState.atp.session?.did ? props.post.uri : undefined,
+  shareText: computed((): string => {
+    return `"${props.post.record.text}" - ${props.post.author.displayName}(${props.post.author.handle}) ${state.shareUrl}`
+  }),
+  shareUrl: computed((): string => {
+    const rkey = Util.getRkey(props.post.uri)
+    return `https://bsky.app/profile/${props.post.author.handle}/post/${rkey}`
+  }),
 })
 
 async function deletePost () {
@@ -107,6 +117,13 @@ async function deletePost () {
       :did="post.author.did"
       :handle="post.author.handle"
       :uri="post.uri"
+      @close="emit('close')"
+    />
+
+    <!-- 共有する -->
+    <MenuTickerWebShare
+      :text="state.shareText"
+      :url="state.shareUrl"
       @close="emit('close')"
     />
 
