@@ -123,7 +123,6 @@ async function deletePost () {
     <!-- 共有する -->
     <MenuTickerWebShare
       :text="state.shareText"
-      :url="state.shareUrl"
       @close="emit('close')"
     />
 

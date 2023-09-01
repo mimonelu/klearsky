@@ -79,7 +79,6 @@ const state = reactive<{
     <MenuTickerWebShare
       :text="state.shareText"
       :title="generator.displayName"
-      :url="state.shareUrl"
       @close="emit('close')"
     />
 
