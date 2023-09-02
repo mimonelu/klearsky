@@ -64,6 +64,8 @@
   "reportSendAccount": "アカウントをレポートする",
   "reportSendPost": "ポストをレポートする",
   "reportSendFeed": "フィードをレポートする",
+  "reportSendConfirmation": "レポートの送信確認",
+  "reportSendConfirmationMessage": "レポートを送信します。よろしいですか？",
   "reportReasonType": "レポート事由",
   "reportReason": "詳細（任意）",
   "reportReasonDescription": "その他、情報があれば記入してください。",

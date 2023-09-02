@@ -62,6 +62,14 @@ function close () {
 
 async function submitCallback () {
   Util.blurElement()
+
+  // 送信確認
+  const result = await mainState.openConfirmationPopup(
+    $t("reportSendConfirmation"),
+    $t("reportSendConfirmationMessage")
+  )
+  if (!result) return
+
   if (state.popupLoaderDisplay) return
   state.popupLoaderDisplay = true
   const response = await mainState.atp.createReport(

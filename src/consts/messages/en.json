@@ -64,6 +64,8 @@
   "reportSendAccount": "Report account",
   "reportSendPost": "Report post",
   "reportSendFeed": "Report custom feed",
+  "reportSendConfirmation": "Confirmation of sending report",
+  "reportSendConfirmationMessage": "This report will be sent. Are you sure?",
   "reportReasonType": "Reason",
   "reportReason": "Details (optional)",
   "reportReasonDescription": "Enter any additional information here.",
