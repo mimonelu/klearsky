@@ -18,6 +18,12 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  popupLoaderDisplay: boolean
+}>({
+  popupLoaderDisplay: false,
+})
+
+const formState = reactive<{
   reasonType?: string
   reason?: string
 }>({
@@ -31,7 +37,7 @@ const easyFormProps: TTEasyForm = {
   submitCallback,
   data: [
     {
-      state,
+      state: formState,
       model: "reasonType",
       label: $t("reportReasonType"),
       type: "radio",
@@ -40,7 +46,7 @@ const easyFormProps: TTEasyForm = {
       layout: "vertical",
     },
     {
-      state,
+      state: formState,
       model: "reason",
       label: $t("reportReason"),
       type: "textarea",
@@ -56,16 +62,16 @@ function close () {
 
 async function submitCallback () {
   Util.blurElement()
-  if (mainState.processing) return
-  mainState.processing = true
+  if (state.popupLoaderDisplay) return
+  state.popupLoaderDisplay = true
   const response = await mainState.atp.createReport(
-    state.reasonType as string,
-    state.reason as string,
+    formState.reasonType as string,
+    formState.reason as string,
     props.generator.did,
     props.generator.cid,
     props.generator.uri
   )
-  mainState.processing = false
+  state.popupLoaderDisplay = false
   if (response) {
     mainState.openMessagePopup($t("success"), $t("successMessage"))
     close()
@@ -79,6 +85,7 @@ async function submitCallback () {
   <Popup
     class="send-feed-report-popup"
     :hasCloseButton="true"
+    :loaderDisplay="state.popupLoaderDisplay"
     @close="close"
   >
     <template #header>

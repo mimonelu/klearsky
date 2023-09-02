@@ -4,7 +4,6 @@ import { useRouter } from "vue-router"
 import AccountList from "@/components/AccountList.vue"
 import Popup from "@/components/Popup.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
-import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 

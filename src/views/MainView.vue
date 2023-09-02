@@ -528,13 +528,8 @@ async function updateInviteCodes () {
   state.inviteCodes.splice(0, state.inviteCodes.length, ...inviteCodes)
 }
 
-async function closeSendPostPopup (done: boolean, empty: boolean) {
-  if (empty) {
-    state.closeSendPostPopup(done)
-    return
-  }
-  const result = await state.openConfirmationPopup($t("cancelPost"), $t("cancelPostMessage"))
-  if (result) state.closeSendPostPopup(done)
+async function closeSendPostPopup (done: boolean) {
+  state.closeSendPostPopup(done)
 }
 
 function scrollToFocused () {

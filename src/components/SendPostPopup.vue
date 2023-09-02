@@ -8,7 +8,7 @@ import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
-const emit = defineEmits<{(event: string, done: boolean, empty: boolean): void}>()
+const emit = defineEmits<{(event: string, done: boolean): void}>()
 
 const props = defineProps<{
   type: TTPostType
@@ -26,9 +26,11 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   labels: Array<string>
   htmlPopupDisplay: boolean
+  popupLoaderDisplay: boolean
 }>({
   labels: [],
   htmlPopupDisplay: false,
+  popupLoaderDisplay: false,
 })
 
 const easyFormState = reactive<{
@@ -98,8 +100,12 @@ onMounted(() => {
   mainState.postDatePopupDate = props.createdAt
 })
 
-function close () {
-  emit("closeSnedPostPopup", false, isEmpty())
+async function close () {
+  if (!isEmpty() && !state.popupLoaderDisplay) {
+    const result = await mainState.openConfirmationPopup($t("cancelPost"), $t("cancelPostMessage"))
+    if (!result) return
+  }
+  emit("closeSnedPostPopup", false)
 }
 
 function isEmpty (): boolean {
@@ -123,8 +129,8 @@ async function submitCallback () {
     if (!result) return
   }
 
-  if (mainState.processing) return
-  mainState.processing = true
+  if (state.popupLoaderDisplay) return
+  state.popupLoaderDisplay = true
   try {
     const result = await mainState.atp.createPost({
       ...easyFormState,
@@ -137,9 +143,9 @@ async function submitCallback () {
       // Lightning
       lightning: mainState.currentSetting.lightning,
     })
-    if (result) emit("closeSnedPostPopup", true, true)
+    if (result) emit("closeSnedPostPopup", true)
   } finally {
-    mainState.processing = false
+    state.popupLoaderDisplay = false
   }
 }
 
@@ -159,6 +165,7 @@ function onChangeImage () {
     <Popup
       class="send-post-popup"
       :hasCloseButton="true"
+      :loaderDisplay="state.popupLoaderDisplay"
       @close="close"
     >
       <template #header>
