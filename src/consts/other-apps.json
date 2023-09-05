@@ -7,8 +7,8 @@
   },
   {
     "name": "tokimekiApp",
-    "post": "https://tokimekibluesky.vercel.app/profile/{handle}/post/{rkey}",
-    "profile": "https://tokimekibluesky.vercel.app/profile/{handle}"
+    "post": "https://tokimeki.blue/profile/{handle}/post/{rkey}",
+    "profile": "https://tokimeki.blue/profile/{handle}"
   },
   {
     "name": "atlasApp",
