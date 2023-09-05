@@ -709,10 +709,14 @@ function updateSettings () {
 }
 
 function updateI18nSetting () {
-  if (state.currentSetting?.uiLanguage != null) {
-    if (state.$setI18n != null) state.$setI18n(state.currentSetting.uiLanguage)
-    state.forceUpdate()
-  }
+  if (state.currentSetting?.uiLanguage == null) return
+
+  // NOTICE: UI言語の変更を即時反映するために `forceUpdate()` を呼び出すと、
+  //         すべてのコンポーネントが更新されてしまう。この現象の防止策として、
+  //         UI言語の変更以外では `forceUpdate()` を呼び出さないようにしている
+  const oldUiLanguage = state.$getI18n != null ? state.$getI18n() : undefined
+  if (state.$setI18n != null) state.$setI18n(state.currentSetting.uiLanguage)
+  if (oldUiLanguage !== state.currentSetting.uiLanguage) state.forceUpdate()
 }
 
 function updateFontSizeSetting () {
