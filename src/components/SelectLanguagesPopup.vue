@@ -51,7 +51,7 @@ function close () {
       :hasCloseButton="true"
       @close="close"
     >
-      <template v-slot:header>
+      <template #header>
         <button @click.stop="state.htmlPopupDisplay = true">
           <SVGIcon name="help" />
         </button>
@@ -60,7 +60,7 @@ function close () {
           <span>{{ $t(title) }}</span>
         </h2>
       </template>
-      <template v-slot:body>
+      <template #body>
         <EasyForm v-bind="easyFormProps" />
       </template>
     </Popup>

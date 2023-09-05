@@ -83,7 +83,7 @@ function submitCallback () {
       <div class="login-popup__body">
         <EasyForm v-bind="easyFormProps">
           <!-- App Passwords 導線 -->
-          <template v-slot:after>
+          <template #after>
             <a
               class="textlink--icon app-password-link"
               href="https://bsky.app/settings/app-passwords"

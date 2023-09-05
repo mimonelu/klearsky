@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import MenuTicker from "@/components/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/MenuTickerComponents/CopyTextWrapper.vue"
 import MenuTickerFirstPost from "@/components/MenuTickerComponents/FirstPost.vue"
@@ -8,10 +8,11 @@ import MenuTickerOpenAppWrapper from "@/components/MenuTickerComponents/OpenAppW
 import MenuTickerOpenSource from "@/components/MenuTickerComponents/OpenSource.vue"
 import MenuTickerSendMention from "@/components/MenuTickerComponents/SendMention.vue"
 import MenuTickerTranslateText from "@/components/MenuTickerComponents/TranslateText.vue"
+import MenuTickerWebShare from "@/components/MenuTickerComponents/WebShare.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
-defineProps<{
+const props = defineProps<{
   isUser: boolean
   display: boolean
   user: TTUser
@@ -19,6 +20,18 @@ defineProps<{
 }>()
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  shareText: ComputedRef<string>
+  shareUrl: ComputedRef<string>
+}>({
+  shareText: computed((): string => {
+    return `"${props.user.description}" - ${props.user.displayName}(${props.user.handle}) ${state.shareUrl}`
+  }),
+  shareUrl: computed((): string => {
+    return `https://bsky.app/profile/${props.user.handle}`
+  }),
+})
 </script>
 
 <template>
@@ -74,6 +87,13 @@ const mainState = inject("state") as MainState
       :did="user.did"
       :handle="user.handle"
       :container="container"
+      @close="emit('close')"
+    />
+
+    <!-- 共有する -->
+    <MenuTickerWebShare
+      :text="state.shareText"
+      :title="user.displayName"
       @close="emit('close')"
     />
 

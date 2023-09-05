@@ -1,6 +1,12 @@
 import type { AppBskyFeedGetPostThread, BskyAgent } from "@atproto/api"
 import AtpUtil from "@/composables/atp-wrapper/atp-util"
 
+interface TTThread {
+  parent: TTThread
+  post: TTPost
+  replies: Array<TTThread>
+}
+
 export default async function (
   this: TIAtpWrapper,
   uri: string,
@@ -15,19 +21,19 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/getPostThread]", response)
   if (!response.success) return false
-
-  // TODO:
   const posts: Array<TTPost> = []
-  AtpUtil.traverseJson(response.data.thread, (key: string, value: any) => {
-    if (key === "post") posts.push(value)
-  })
+  traverseThread(response.data.thread as unknown as TTThread, posts)
   AtpUtil.coherentResponses(posts)
-  posts.sort((a: TTPost, b: TTPost) => {
-    const aIndexedAt = new Date(a.__custom.reason?.indexedAt ?? a.indexedAt)
-    const bIndexedAt = new Date(b.__custom.reason?.indexedAt ?? b.indexedAt)
-    return aIndexedAt < bIndexedAt ? 1 : aIndexedAt > bIndexedAt ? -1 : 0
-  })
-  posts.reverse()
-
   return posts
+}
+
+function traverseThread (thread: TTThread, results: Array<TTPost>) {
+  if (thread.parent != null)
+    traverseThread(thread.parent, results)
+  if (thread.post != null)
+    results.push(thread.post)
+  if (thread.replies != null)
+    thread.replies.forEach((reply: TTThread) => {
+      traverseThread(reply, results)
+    })
 }

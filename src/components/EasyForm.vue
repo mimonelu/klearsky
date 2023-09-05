@@ -54,7 +54,7 @@ function makeItemId (index: number) {
   return `easy-form--${props.id ?? 'default'}__${index}`
 }
 
-const inputList = [ "password", "text", "url" ]
+const inputList = [ "datetime-local", "password", "text", "url" ]
 function isInput (type?: string): boolean {
   return type != null ? inputList.includes(type) : true
 }
@@ -106,7 +106,7 @@ function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
   if (item.onChange != null) item.onChange(item, props)
 }
 
-function onInputTextarea (item: TTEasyFormItem) {
+function onInput (item: TTEasyFormItem) {
   if (item.onInput != null) item.onInput(item, props)
 }
 
@@ -167,6 +167,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
                 spellcheck="false"
                 class="textbox"
                 :class="item.classes"
+                @input="onInput(item)"
                 @keydown.enter="onEnterKeyDown"
               >
 
@@ -185,7 +186,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
                 spellcheck="false"
                 class="textarea"
                 :class="item.classes"
-                @input="onInputTextarea(item)"
+                @input="onInput(item)"
                 @keydown.enter="onEnterKeyDown"
               />
 

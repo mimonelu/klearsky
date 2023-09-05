@@ -109,7 +109,7 @@ function hideWarningContent () {
       />
       <div class="display-name">{{ user.displayName }}</div>
       <AuthorHandle :handle="user.handle" />
-      <div class="description">{{ user.description }}</div>
+      <div class="description">{{ user.description || "&#160;" }}</div>
 
       <!-- プロフィールメニュートリガー -->
       <button
@@ -138,8 +138,9 @@ function hideWarningContent () {
 
 <style lang="scss" scoped>
 .user-box {
+  color: rgb(var(--fg-color));
   display: grid;
-  grid-gap: 0 0.5rem;
+  grid-gap: 0 0.5em;
   grid-template-columns: min-content auto 1fr auto;
   grid-template-rows: auto auto auto auto 1fr;
   grid-template-areas:
@@ -157,23 +158,23 @@ function hideWarningContent () {
 
 .content-warning {
   grid-area: c;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5em;
 }
 
 .textlabel--alert {
   grid-area: o;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5em;
 }
 
 .avatar-link {
   grid-area: a;
-  font-size: 3rem;
+  font-size: 3em;
 }
 
 .display-name {
   grid-area: n;
   color: var(--fg-color-075);
-  font-size: 0.875rem;
+  font-size: 0.875em;
   font-weight: bold;
   line-height: 1.25;
   overflow: hidden;
@@ -186,7 +187,7 @@ function hideWarningContent () {
 
 .description {
   grid-area: d;
-  font-size: 0.875rem;
+  font-size: 0.875em;
   line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -196,8 +197,8 @@ function hideWarningContent () {
 .menu-button {
   grid-area: m;
   cursor: pointer;
-  margin: 0 -1rem 0 -0.5rem;
-  padding: 0 1rem;
+  margin: 0 -1em 0 -0.5em;
+  padding: 0 1em;
   position: relative;
   height: 100%;
 
@@ -214,8 +215,8 @@ function hideWarningContent () {
 
   .menu-ticker:deep() {
     & > .menu-ticker--inner {
-      top: 3rem;
-      right: 0.5rem;
+      top: 3em;
+      right: 0.5em;
     }
   }
 }
@@ -230,7 +231,7 @@ function hideWarningContent () {
   text-overflow: ellipsis;
   white-space: nowrap;
   &:not(:empty) {
-    margin-top: 0.5rem;
+    margin-top: 0.5em;
   }
 }
 </style>

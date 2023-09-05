@@ -28,6 +28,7 @@
   "help": "ヘルプ",
   "media": "メディア",
   "invalidHandle": "（不正なハンドル）",
+  "share": "共有する",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -62,6 +63,9 @@
 
   "reportSendAccount": "アカウントをレポートする",
   "reportSendPost": "ポストをレポートする",
+  "reportSendFeed": "フィードをレポートする",
+  "reportSendConfirmation": "レポートの送信確認",
+  "reportSendConfirmationMessage": "レポートを送信します。よろしいですか？",
   "reportReasonType": "レポート事由",
   "reportReason": "詳細（任意）",
   "reportReasonDescription": "その他、情報があれば記入してください。",
@@ -140,6 +144,7 @@
   "firstPost": "最初のポストを見る",
   "sendMention": "メンションを送る",
   "sendPostAfter": "この直後に投稿する",
+  "sendLinkCard": "リンクカードにする",
   "warpPostNotification": "このポストは次の日時として投稿されます：",
   "deletePost": "ポストを削除する",
   "deletePostMessage": "このポストを削除します。よろしいですか？",
@@ -351,6 +356,11 @@
   "sendPostNotification4": "最大文字数を超えても送信自体は可能です。",
   "cancelPost": "ポストのキャンセル",
   "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
+
+  "postDatePopupTitle": "ポスト日時の設定",
+  "postDatePopupDescription": "下記の日時でポストを投稿します。過去の日時のみ有効です。",
+  "postDatePopupReset": "日時をリセットする",
+  "postDatePopupResetDescription": "日時をリセットします。よろしいですか？",
 
   "emptyPostConfirmation": "空ポストの確認",
   "emptyPostConfirmationMessage": "ポストが空のようです。このまま投稿しますか？",

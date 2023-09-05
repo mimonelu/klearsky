@@ -53,20 +53,20 @@ function scrolledToBottom () {
     @close="close"
     @scrolledToBottom="scrolledToBottom"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <SVGIcon name="volumeOff" />
         <span>{{ $t("mutingUsers") }}</span>
       </h2>
     </template>
-    <template v-slot:header-after>
+    <template #header-after>
       <LoadButton
         direction="new"
         :processing="state.processing"
         @activate="fetchContinuousResults('new')"
       />
     </template>
-    <template v-slot:body>
+    <template #body>
       <div class="users">
         <UserBox
           v-for="user of mainState.currentMutingUsers"
@@ -78,7 +78,7 @@ function scrolledToBottom () {
         />
       </div>
     </template>
-    <template v-slot:footer>
+    <template #footer>
       <LoadButton
         direction="old"
         :processing="state.processing"

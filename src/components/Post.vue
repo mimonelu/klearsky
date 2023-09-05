@@ -277,7 +277,7 @@ function onActivateImageFolderButton () {
 
 async function onActivateReplyButton () {
   Util.blurElement()
-  const done = await mainState.openSendPostPopup("reply", props.post)
+  const done = await mainState.openSendPostPopup({ type: "reply", post: props.post })
   state.processing = true
   try {
     if (done) {
@@ -324,7 +324,7 @@ async function onActivateDeleteRepostButton () {
 async function onActivateQuoteRepostButton () {
   Util.blurElement()
   state.repostMenuDisplay = false
-  const done = await mainState.openSendPostPopup("quoteRepost", props.post)
+  const done = await mainState.openSendPostPopup({ type: "quoteRepost", post: props.post })
   state.processing = true
   try {
     if (done) await updateThisPostThread()
@@ -744,6 +744,7 @@ function onActivateHashTag (text: string) {
           <FeedCard
             v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
             :generator="post.embed.record as unknown as TTFeedGenerator"
+            :menuDisplay="true"
             :orderButtonDisplay="false"
             :creatorDisplay="true"
             @click="$emit('click')"
@@ -1149,6 +1150,7 @@ function onActivateHashTag (text: string) {
 
 .text,
 .text--slim {
+  color: rgb(var(--fg-color));
   line-height: var(--line-height);
   word-break: break-word;
   &:empty {

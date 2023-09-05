@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/EasyForm.vue"
+import FeedCard from "@/components/FeedCard.vue"
 import Popup from "@/components/Popup.vue"
-import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 import OPTIONS from "@/consts/options.json"
@@ -10,7 +10,7 @@ import OPTIONS from "@/consts/options.json"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  post: TTPost
+  generator: TTFeedGenerator
 }>()
 
 const $t = inject("$t") as Function
@@ -42,7 +42,7 @@ const easyFormProps: TTEasyForm = {
       label: $t("reportReasonType"),
       type: "radio",
       required: true,
-      options: OPTIONS.postReportReason,
+      options: OPTIONS.feedReportReason,
       layout: "vertical",
     },
     {
@@ -75,23 +75,23 @@ async function submitCallback () {
   const response = await mainState.atp.createReport(
     formState.reasonType as string,
     formState.reason as string,
-    props.post.author?.did,
-    props.post.cid,
-    props.post.uri
+    props.generator.did,
+    props.generator.cid,
+    props.generator.uri
   )
   state.popupLoaderDisplay = false
   if (response) {
     mainState.openMessagePopup($t("success"), $t("successMessage"))
     close()
   } else {
-    mainState.openErrorPopup("errorApiFailed", "SendPostReportPopup/createReport")
+    mainState.openErrorPopup("errorApiFailed", "SendFeedReportPopup/createReport")
   }
 }
 </script>
 
 <template>
   <Popup
-    class="send-post-report-popup"
+    class="send-feed-report-popup"
     :hasCloseButton="true"
     :loaderDisplay="state.popupLoaderDisplay"
     @close="close"
@@ -99,14 +99,15 @@ async function submitCallback () {
     <template #header>
       <h2>
         <SVGIcon name="alert" />
-        <span>{{ $t("reportSendPost") }}</span>
+        <span>{{ $t("reportSendFeed") }}</span>
       </h2>
     </template>
     <template #body>
-      <Post
-        position="preview"
-        :post="post"
-        :noLink="true"
+      <FeedCard
+        :generator="generator"
+        :menuDisplay="false"
+        :orderButtonDisplay="false"
+        :creatorDisplay="true"
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
@@ -116,7 +117,7 @@ async function submitCallback () {
 </template>
 
 <style lang="scss" scoped>
-.send-post-report-popup {
+.send-feed-report-popup {
   &:deep() {
     .popup-header > h2 {
       color: rgb(var(--notice-color));
@@ -127,12 +128,11 @@ async function submitCallback () {
     }
   }
 
-  .post {
+  .feed-card {
     --fg-color: var(--notice-color);
     background-color: rgb(var(--notice-color), 0.125);
     font-size: 0.875rem;
     opacity: 0.875;
-    padding: 1rem;
     pointer-events: none;
   }
 }

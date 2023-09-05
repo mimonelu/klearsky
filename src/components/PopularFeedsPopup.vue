@@ -79,6 +79,7 @@ function scrolledToBottom () {
           v-for="generator of mainState.currentPopularFeedGenerators"
           :key="generator.cid"
           :generator="generator"
+          :menuDisplay="true"
           :orderButtonDisplay="false"
           :creatorDisplay="true"
           @click="close"
@@ -87,7 +88,7 @@ function scrolledToBottom () {
         />
       </template>
     </template>
-    <template v-slot:footer>
+    <template #footer>
       <LoadButton
         direction="old"
         :processing="state.processing"

@@ -79,7 +79,7 @@ function toggleConnect () {
 
 // subscribeRepo - プロフィール取得
 
-let timer: undefined | NodeJS.Timer = undefined
+let timer: undefined | NodeJS.Timeout = undefined
 
 function createProfileTimer () {
   timer = setTimeout(async () => {
@@ -191,7 +191,7 @@ function onMutated () {
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         >
-          <template v-slot:body-after>
+          <template #body-after>
             <!-- リプライ／引用リポストアイコン -->
             <div
               v-if="message.record.reply != null"

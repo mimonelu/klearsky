@@ -2,7 +2,6 @@
 import { inject, onMounted, reactive } from "vue"
 import FeedCard from "@/components/FeedCard.vue"
 import Popup from "@/components/Popup.vue"
-import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -10,18 +9,18 @@ const emit = defineEmits<{(event: string): void}>()
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  processing: boolean
   orderChanged: boolean
+  popupLoaderDisplay: boolean
 }>({
-  processing: false,
   orderChanged: false,
+  popupLoaderDisplay: true,
 })
 
 onMounted(async () => {
   // Preferences の取得
-  state.processing = true
+  state.popupLoaderDisplay = true
   const preferences = await mainState.fetchPreferences()
-  state.processing = false
+  state.popupLoaderDisplay = false
   if (!preferences) {
     mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchPreferences")
     return
@@ -40,17 +39,17 @@ onMounted(async () => {
   if (savedBefore === savedAfter && mainState.currentMyFeedGenerators.length > 0) return
 
   // マイフィードジェネレーターの取得
-  state.processing = true
+  state.popupLoaderDisplay = true
   await mainState.fetchMyFeedGenerators()
-  state.processing = false
+  state.popupLoaderDisplay = false
 })
 
 async function close () {
   if (state.orderChanged) {
-    state.processing = true
+    state.popupLoaderDisplay = true
     if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
       mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
-    state.processing = false
+    state.popupLoaderDisplay = false
   }
 
   emit("close")
@@ -86,6 +85,7 @@ function changeCustomFeedOrder () {
   <Popup
     class="my-feeds-popup"
     :hasCloseButton="true"
+    :loaderDisplay="state.popupLoaderDisplay"
     @close="close"
   >
     <template #header>
@@ -96,7 +96,7 @@ function changeCustomFeedOrder () {
     </template>
     <template #body>
       <div
-        v-if="!state.processing && mainState.currentMyFeedGenerators.length === 0"
+        v-if="!state.popupLoaderDisplay && mainState.currentMyFeedGenerators.length === 0"
         class="textlabel"
       >
         <div class="textlabel__text">
@@ -108,6 +108,7 @@ function changeCustomFeedOrder () {
           v-for="generator of mainState.currentMyFeedGenerators"
           :key="generator.cid"
           :generator="generator"
+          :menuDisplay="true"
           :orderButtonDisplay="true"
           :creatorDisplay="true"
           @click="close"
@@ -116,7 +117,6 @@ function changeCustomFeedOrder () {
           @onActivateHashTag="close"
         />
       </template>
-      <Loader v-if="state.processing" />
     </template>
   </Popup>
 </template>

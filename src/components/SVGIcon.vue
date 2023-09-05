@@ -34,6 +34,7 @@ import image from "@/svg/image.svg?raw"
 import inviteCode from "@/svg/invite-code.svg?raw"
 import json from "@/svg/json.svg?raw"
 import lightning from "@/svg/lightning.svg?raw"
+import link from "@/svg/link.svg?raw"
 import lock from "@/svg/lock.svg?raw"
 import mail from "@/svg/mail.svg?raw"
 import menu from "@/svg/menu.svg?raw"
@@ -61,6 +62,7 @@ import repost from "@/svg/repost.svg?raw"
 import search from "@/svg/search.svg?raw"
 import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
+import share from "@/svg/share.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
 import translate from "@/svg/translate.svg?raw"
 import volumeOff from "@/svg/volume-off.svg?raw"
@@ -102,6 +104,7 @@ const icons: { [k: string]: string } = {
   inviteCode,
   json,
   lightning,
+  link,
   lock,
   mail,
   menu,
@@ -129,6 +132,7 @@ const icons: { [k: string]: string } = {
   search,
   sendPost,
   setting,
+  share,
   shimmer,
   translate,
   volumeOff,

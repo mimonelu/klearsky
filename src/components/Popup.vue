@@ -2,12 +2,14 @@
 import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
+import Loader from "@/components/Loader.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  hasCloseButton?: boolean;
+  hasCloseButton?: boolean
+  loaderDisplay?: boolean
 }>()
 
 const state = reactive<{
@@ -93,6 +95,7 @@ function scrollListener () {
         <slot name="body" />
       </div>
       <slot name="footer" />
+      <Loader v-if="loaderDisplay" />
     </div>
   </div>
 </template>
@@ -123,6 +126,7 @@ function scrollListener () {
   flex-direction: column;
   overflow: hidden;
   overscroll-behavior: none;
+  position: relative;
   width: calc($router-view-width - 2rem);
   max-width: calc(100% - 2rem);
   max-height: calc(100% - 2rem);

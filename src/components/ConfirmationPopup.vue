@@ -32,15 +32,15 @@ function apply () {
     :hasCloseButton="true"
     @close="close"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <span>{{ mainState.confirmationPopupTitle }}</span>
       </h2>
     </template>
-    <template v-slot:body>
+    <template #body>
       <div class="text">{{ mainState.confirmationPopupText }}</div>
     </template>
-    <template v-slot:footer>
+    <template #footer>
       <div class="button-container">
         <button
           class="button--bordered"

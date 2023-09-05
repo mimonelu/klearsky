@@ -27,6 +27,10 @@ const state = reactive<MainState>({
     display: false,
     post: undefined,
   },
+  sendFeedReportPopupProps: {
+    display: false,
+    generator: undefined,
+  },
   sendPostPopupProps: {
     display: false,
     type: "post",
@@ -145,6 +149,10 @@ const state = reactive<MainState>({
   openSelectLabelsPopup,
   closeSelectLabelsPopup,
 
+  // ポスト日時選択ポップアップの開閉
+  openPostDatePopup,
+  closePostDatePopup,
+
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup,
   closeInviteCodesPopup,
@@ -180,6 +188,10 @@ const state = reactive<MainState>({
   // ポストレポート送信ポップアップの開閉
   openSendPostReportPopup,
   closeSendPostReportPopup,
+
+  // フィードレポート送信ポップアップの開閉
+  openSendFeedReportPopup,
+  closeSendFeedReportPopup,
 
   // エラーポップアップの開閉
   openErrorPopup,
@@ -721,19 +733,14 @@ function updateColorThemeSetting () {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (
-  type: TTPostType,
-  post?: TTPost,
-  text?: string,
-  fileList?: FileList,
-  createdAt?: string
-): Promise<boolean> {
+async function openSendPostPopup (params: TTSendPostPopupProps): Promise<boolean> {
   state.sendPostPopupProps.display = true
-  state.sendPostPopupProps.type = type
-  state.sendPostPopupProps.post = post
-  state.sendPostPopupProps.text = text
-  state.sendPostPopupProps.fileList = fileList
-  state.sendPostPopupProps.createdAt = createdAt
+  state.sendPostPopupProps.type = params.type
+  state.sendPostPopupProps.post = params.post
+  state.sendPostPopupProps.text = params.text
+  state.sendPostPopupProps.url = params.url
+  state.sendPostPopupProps.fileList = params.fileList
+  state.sendPostPopupProps.createdAt = params.createdAt
   await Util.waitProp(() => state.sendPostPopupProps.display, false)
   return isSendPostDone
 }
@@ -859,6 +866,16 @@ function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
 }
 
+// ポスト日時選択ポップアップの開閉
+
+function openPostDatePopup () {
+  state.postDatePopupDisplay = true
+}
+
+function closePostDatePopup () {
+  state.postDatePopupDisplay = false
+}
+
 // 招待コード確認ポップアップの開閉
 
 function openInviteCodesPopup () {
@@ -949,6 +966,17 @@ function openSendPostReportPopup (post: TTPost) {
 
 function closeSendPostReportPopup () {
   state.sendPostReportPopupProps.display = false
+}
+
+// フィードレポート送信ポップアップの開閉
+
+function openSendFeedReportPopup (generator: TTFeedGenerator) {
+  state.sendFeedReportPopupProps.generator = generator
+  state.sendFeedReportPopupProps.display = true
+}
+
+function closeSendFeedReportPopup () {
+  state.sendFeedReportPopupProps.display = false
 }
 
 // エラーポップアップの開閉

@@ -28,6 +28,7 @@
   "help": "Help",
   "media": "Media",
   "invalidHandle": "(Invalid handle)",
+  "share": "Share",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -62,6 +63,9 @@
 
   "reportSendAccount": "Report account",
   "reportSendPost": "Report post",
+  "reportSendFeed": "Report custom feed",
+  "reportSendConfirmation": "Confirmation of sending report",
+  "reportSendConfirmationMessage": "This report will be sent. Are you sure?",
   "reportReasonType": "Reason",
   "reportReason": "Details (optional)",
   "reportReasonDescription": "Enter any additional information here.",
@@ -140,7 +144,8 @@
   "firstPost": "Show first post",
   "sendMention": "Send mention",
   "sendPostAfter": "Send post after this",
-  "warpPostNotification": "This post will be posted as the following date:",
+  "sendLinkCard": "Send as a link card",
+  "warpPostNotification": "This post will be sent as the following date:",
   "deletePost": "Delete post",
   "deletePostMessage": "This post will be deleted. Are you sure?",
   "moderate": "Moderate",
@@ -351,6 +356,11 @@
   "sendPostNotification4": "It is possible to send more than the maximum number of characters.",
   "cancelPost": "Cancel Post",
   "cancelPostMessage": "The entered information will be reset. Are you sure?",
+
+  "postDatePopupTitle": "Set post date",
+  "postDatePopupDescription": "This post will be sent as the following date. Date is valid only for past.",
+  "postDatePopupReset": "Reset date",
+  "postDatePopupResetDescription": "Reset the date. Are you sure?",
 
   "emptyPostConfirmation": "Empty Post Confirmation",
   "emptyPostConfirmationMessage": "This post seems to be empty. Do you want to post this as is?",

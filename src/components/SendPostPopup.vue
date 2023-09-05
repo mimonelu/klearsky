@@ -8,12 +8,13 @@ import Post from "@/components/Post.vue"
 import SVGIcon from "@/components/SVGIcon.vue"
 import Util from "@/composables/util"
 
-const emit = defineEmits<{(event: string, done: boolean, empty: boolean): void}>()
+const emit = defineEmits<{(event: string, done: boolean): void}>()
 
 const props = defineProps<{
   type: TTPostType
   post?: TTPost
   text?: string
+  url?: string
   fileList?: FileList
   createdAt?: string
 }>()
@@ -25,9 +26,11 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   labels: Array<string>
   htmlPopupDisplay: boolean
+  popupLoaderDisplay: boolean
 }>({
   labels: [],
   htmlPopupDisplay: false,
+  popupLoaderDisplay: false,
 })
 
 const easyFormState = reactive<{
@@ -37,7 +40,7 @@ const easyFormState = reactive<{
   alts: Array<string>
 }>({
   text: props.text ?? "",
-  url: "",
+  url: props.url ?? "",
   images: [],
   alts: [],
 })
@@ -93,10 +96,16 @@ watch(() => props.fileList, (value?: FileList) => {
 onMounted(() => {
   if (props.fileList != null) easyFormState.images = Array.from(props.fileList)
   onChangeImage()
+
+  mainState.postDatePopupDate = props.createdAt
 })
 
-function close () {
-  emit("closeSnedPostPopup", false, isEmpty())
+async function close () {
+  if (!isEmpty() && !state.popupLoaderDisplay) {
+    const result = await mainState.openConfirmationPopup($t("cancelPost"), $t("cancelPostMessage"))
+    if (!result) return
+  }
+  emit("closeSnedPostPopup", false)
 }
 
 function isEmpty (): boolean {
@@ -120,23 +129,23 @@ async function submitCallback () {
     if (!result) return
   }
 
-  if (mainState.processing) return
-  mainState.processing = true
+  if (state.popupLoaderDisplay) return
+  state.popupLoaderDisplay = true
   try {
     const result = await mainState.atp.createPost({
       ...easyFormState,
       type: props.type,
       post: props.post,
-      createdAt: props.createdAt,
+      createdAt: mainState.postDatePopupDate,
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
 
       // Lightning
       lightning: mainState.currentSetting.lightning,
     })
-    if (result) emit("closeSnedPostPopup", true, true)
+    if (result) emit("closeSnedPostPopup", true)
   } finally {
-    mainState.processing = false
+    state.popupLoaderDisplay = false
   }
 }
 
@@ -156,6 +165,7 @@ function onChangeImage () {
     <Popup
       class="send-post-popup"
       :hasCloseButton="true"
+      :loaderDisplay="state.popupLoaderDisplay"
       @close="close"
     >
       <template #header>
@@ -170,11 +180,11 @@ function onChangeImage () {
       <template #body>
         <!-- ワープポスト用注意文言 -->
         <div
-          v-if="createdAt != null"
+          v-if="mainState.postDatePopupDate != null"
           class="textlabel"
         >
           <div class="textlabel__text">
-            <SVGIcon name="history" />{{ $t("warpPostNotification") }} {{ format(new Date(createdAt), "yyyy/MM/dd HH:mm:ss") }}
+            <SVGIcon name="history" />{{ $t("warpPostNotification") }} {{ format(new Date(mainState.postDatePopupDate), "yyyy/MM/dd HH:mm:ss") }}
           </div>
         </div>
 
@@ -183,9 +193,11 @@ function onChangeImage () {
           position="preview"
           :post="post as TTPost"
           :noLink="true"
+          @keydown.prevent.stop
+          @keyup.prevent.stop
         />
         <EasyForm v-bind="easyFormProps">
-          <template v-slot:free-2>
+          <template #free-2>
             <div class="button-container">
               <!-- ポスト言語選択ポップアップトリガー -->
               <button
@@ -200,9 +212,9 @@ function onChangeImage () {
                 }}</span>
               </button>
 
-              <!-- ラベル選択ポップアップトリガー -->
+              <!-- ポストラベル選択ポップアップトリガー -->
               <button
-                class="button--bordered label-button"
+                class="button--bordered post-label-button"
                 @click.prevent="mainState.openSelectLabelsPopup(state)"
               >
                 <SVGIcon name="alert" />
@@ -211,6 +223,14 @@ function onChangeImage () {
                   ? "---"
                   : `(${state.labels.length}) ${state.labels.map((label: string) => $t(label)).join(", ")}`
                 }}</span>
+              </button>
+
+              <!-- ポスト日時選択ポップアップトリガー -->
+              <button
+                class="button--bordered post-date-button"
+                @click.prevent="mainState.openPostDatePopup"
+              >
+                <SVGIcon name="history" />
               </button>
             </div>
           </template>
@@ -309,14 +329,11 @@ function onChangeImage () {
 
   .button-container {
     display: flex;
-    grid-gap: 1rem;
+    grid-gap: 1rem 0.5rem;
 
     .button--bordered {
       min-height: 3rem;
       white-space: nowrap;
-      &:last-child {
-        --fg-color: var(--notice-color);
-      }
 
       & > .svg-icon {
         font-size: 1rem;
@@ -329,13 +346,17 @@ function onChangeImage () {
     .post-language-button > span {
       text-transform: uppercase;
     }
-    .label-button {
+    .post-label-button {
+      --fg-color: var(--notice-color);
       overflow: hidden;
 
       & > span {
         overflow: hidden;
         text-overflow: ellipsis;
       }
+    }
+    .post-date-button {
+      margin-left: auto;
     }
   }
 }

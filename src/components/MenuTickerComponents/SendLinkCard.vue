@@ -6,7 +6,7 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  mentionTo?: string;
+  uri?: string;
 }>()
 
 const mainState = inject("state") as MainState
@@ -14,17 +14,17 @@ const mainState = inject("state") as MainState
 async function sendMention () {
   Util.blurElement()
   emit("close")
-  if (props.mentionTo == null) return
+  if (props.uri == null) return
   await mainState.openSendPostPopup({
     type: "post",
-    text: `@${props.mentionTo} `,
+    url: props.uri,
   })
 }
 </script>
 
 <template>
   <button @click.prevent.stop="sendMention">
-    <SVGIcon name="at" />
-    <span>{{ $t("sendMention") }}</span>
+    <SVGIcon name="link" />
+    <span>{{ $t("sendLinkCard") }}</span>
   </button>
 </template>

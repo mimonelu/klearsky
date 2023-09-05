@@ -29,13 +29,13 @@ function close () {
     :hasCloseButton="true"
     @close="close"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <SVGIcon name="history" />
         <span>{{ $t("handleHistory") }}</span>
       </h2>
     </template>
-    <template v-slot:body>
+    <template #body>
       <template v-if="log != null">
         <div
           v-for="item, itemIndex of log"

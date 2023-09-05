@@ -15,6 +15,12 @@ const mainState = inject("state") as MainState
 type TTLabelVisiblity = "hide" | "show" | "warn"
 
 const state = reactive<{
+  popupLoaderDisplay: boolean
+}>({
+  popupLoaderDisplay: false,
+})
+
+const formState = reactive<{
   nsfw: TTLabelVisiblity
   nudity: TTLabelVisiblity
   suggestive: TTLabelVisiblity
@@ -39,7 +45,7 @@ const easyFormProps: TTEasyForm = {
   submitButtonLabel: $t("apply"),
   submitCallback: apply,
   data: (() => Object.keys(LABELS.DEFAULTS).map((label: string) => ({
-    state,
+    state: formState,
     model: label,
     label: $t(label),
     type: "radio",
@@ -50,21 +56,21 @@ const easyFormProps: TTEasyForm = {
 }
 
 onMounted(async () => {
-  mainState.processing = true
+  state.popupLoaderDisplay = true
   if (!await mainState.fetchPreferences())
     mainState.openErrorPopup("errorApiFailed", "ContentFilteringPopup/fetchPreferences")
   else resetState()
-  mainState.processing = false
+  state.popupLoaderDisplay = false
 })
 
 function resetState () {
-  state.nsfw = getLabelVisibility("nsfw")
-  state.nudity = getLabelVisibility("nudity")
-  state.suggestive = getLabelVisibility("suggestive")
-  state.gore = getLabelVisibility("gore")
-  state.hate = getLabelVisibility("hate")
-  state.spam = getLabelVisibility("spam")
-  state.impersonation = getLabelVisibility("impersonation")
+  formState.nsfw = getLabelVisibility("nsfw")
+  formState.nudity = getLabelVisibility("nudity")
+  formState.suggestive = getLabelVisibility("suggestive")
+  formState.gore = getLabelVisibility("gore")
+  formState.hate = getLabelVisibility("hate")
+  formState.spam = getLabelVisibility("spam")
+  formState.impersonation = getLabelVisibility("impersonation")
 }
 
 function getLabelPrefernce (label: string): undefined | TTPreference {
@@ -84,23 +90,23 @@ function close () {
 }
 
 async function apply () {
-  if (mainState.processing) return
-  Object.keys(state).forEach((label: string) => {
+  if (state.popupLoaderDisplay) return
+  Object.keys(formState).forEach((label: string) => {
     const preference = getLabelPrefernce(label)
     if (preference == null) {
       mainState.currentPreferences.push({
         $type: "app.bsky.actor.defs#contentLabelPref",
         label,
-        visibility: (state as any)[label],
+        visibility: (formState as any)[label],
       })
     } else {
-      preference.visibility = (state as any)[label]
+      preference.visibility = (formState as any)[label]
     }
   })
-  mainState.processing = true
+  state.popupLoaderDisplay = true
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
     mainState.openErrorPopup("errorApiFailed", "ContentFilteringPopup/updatePreferences")
-  mainState.processing = false
+  state.popupLoaderDisplay = false
   close()
 }
 </script>
@@ -109,15 +115,16 @@ async function apply () {
   <Popup
     class="content-filtering-popup"
     :hasCloseButton="true"
+    :loaderDisplay="state.popupLoaderDisplay"
     @close="close"
   >
-    <template v-slot:header>
+    <template #header>
       <h2>
         <SVGIcon name="alert" />
         <span>{{ $t("contentFiltering") }}</span>
       </h2>
     </template>
-    <template v-slot:body>
+    <template #body>
       <p>{{ $t("contentFilteringDescription") }}</p>
       <EasyForm v-bind="easyFormProps" />
     </template>

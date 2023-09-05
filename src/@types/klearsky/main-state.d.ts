@@ -1,3 +1,13 @@
+interface TTSendPostPopupProps {
+  display?: boolean
+  type: TTPostType
+  post?: TTPost
+  text?: string
+  url?: string
+  fileList?: FileList
+  createdAt?: string
+}
+
 type MainState = {
   atp: TIAtpWrapper
   mounted: boolean
@@ -112,14 +122,7 @@ type MainState = {
   numberOfInviteCodes: ComputedRef<number>
   numberOfAvailableInviteCodes: ComputedRef<number>
 
-  sendPostPopupProps: {
-    display: boolean
-    type: TTPostType
-    post?: TTPost
-    text?: string
-    fileList?: FileList
-    createdAt?: string
-  }
+  sendPostPopupProps: TTSendPostPopupProps
 
   imagePopupProps: {
     display: boolean
@@ -168,6 +171,10 @@ type MainState = {
   selectLabelsPopupDisplay: boolean
   selectLabelsPopupState: any
 
+  // ポスト日時選択ポップアップ
+  postDatePopupDisplay: boolean
+  postDatePopupDate?: string
+
   // 招待コード確認ポップアップの表示スイッチ
   inviteCodesPopupDisplay: boolean
 
@@ -201,6 +208,12 @@ type MainState = {
     post?: TTPost
   }
 
+  // フィードレポート送信ポップアッププロパティ
+  sendFeedReportPopupProps: {
+    display: boolean
+    generator?: TTFeedGenerator
+  }
+
   // D&D
   isDragOver: boolean
 
@@ -222,13 +235,7 @@ type MainState = {
   fetchFollowings: (direction: "new" | "old") => Promise<void>
   fetchSuggestions: (direction: "new" | "old") => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
-  openSendPostPopup: (
-    type: TTPostType,
-    post?: TTPost,
-    text?: string,
-    fileList?: FileList,
-    createdAt?: string
-  ) => Promise<boolean>
+  openSendPostPopup: (params: TTSendPostPopupProps) => Promise<boolean>
   closeSendPostPopup: (done: boolean) => void
   openRepostUsersPopup: (uri: string) => void
   closeRepostUsersPopup: () => void
@@ -273,6 +280,10 @@ type MainState = {
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: Function
 
+  // ポスト日時選択ポップアップの開閉
+  openPostDatePopup: Function
+  closePostDatePopup: Function
+
   // 招待コード確認ポップアップの開閉
   openInviteCodesPopup: Function
   closeInviteCodesPopup: Function
@@ -308,6 +319,10 @@ type MainState = {
   // ポストレポート送信ポップアップの開閉
   openSendPostReportPopup: Function
   closeSendPostReportPopup: Function
+
+  // フィードレポート送信ポップアップの開閉
+  openSendFeedReportPopup: Function
+  closeSendFeedReportPopup: Function
 
   // エラーポップアップの開閉
   openErrorPopup: Function

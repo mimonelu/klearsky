@@ -6,25 +6,21 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  mentionTo?: string;
+  generator: TTFeedGenerator
 }>()
 
 const mainState = inject("state") as MainState
 
-async function sendMention () {
+async function sendFeedReport () {
   Util.blurElement()
   emit("close")
-  if (props.mentionTo == null) return
-  await mainState.openSendPostPopup({
-    type: "post",
-    text: `@${props.mentionTo} `,
-  })
+  mainState.openSendFeedReportPopup(props.generator)
 }
 </script>
 
 <template>
-  <button @click.prevent.stop="sendMention">
-    <SVGIcon name="at" />
-    <span>{{ $t("sendMention") }}</span>
+  <button @click.prevent.stop="sendFeedReport">
+    <SVGIcon name="alert" />
+    <span>{{ $t("reportSendFeed") }}</span>
   </button>
 </template>

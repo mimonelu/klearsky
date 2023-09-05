@@ -23,9 +23,11 @@ import NotificationPopup from "@/components/NotificationPopup.vue"
 import PopularFeedsPopup from "@/components/PopularFeedsPopup.vue"
 import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
 import ScrollButton from "@/components/ScrollButton.vue"
+import SelectDatePopup from "@/components/SelectDatePopup.vue"
 import SelectLabelsPopup from "@/components/SelectLabelsPopup.vue"
 import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
+import SendFeedReportPopup from "@/components/SendFeedReportPopup.vue"
 import SendPostPopup from "@/components/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
 import SettingsPopup from "@/components/SettingsPopup.vue"
@@ -57,7 +59,7 @@ onBeforeMount(() => {
       !state.imagePopupProps.display &&
       !state.sendPostPopupProps.display &&
       !state.loginPopupAutoDisplay)
-      state.openSendPostPopup("post")
+      state.openSendPostPopup({ type: "post" })
   })
 })
 
@@ -247,6 +249,10 @@ function resetState () {
   state.selectLabelsPopupDisplay = false
   state.selectLabelsPopupState = undefined
 
+  // ポスト日時選択ポップアップ
+  state.postDatePopupDisplay = false
+  state.postDatePopupDate = undefined
+
   // 招待コード確認ポップアップの表示スイッチ
   state.inviteCodesPopupDisplay = false
 
@@ -272,6 +278,10 @@ function resetState () {
   // ポストレポート送信ポップアッププロパティ
   state.sendPostReportPopupProps.display = false
   state.sendPostReportPopupProps.post = undefined
+
+  // フィードレポート送信ポップアッププロパティ
+  state.sendFeedReportPopupProps.display = false
+  state.sendFeedReportPopupProps.generator = undefined
 
   // D&D用処理
   state.isDragOver = false
@@ -518,13 +528,8 @@ async function updateInviteCodes () {
   state.inviteCodes.splice(0, state.inviteCodes.length, ...inviteCodes)
 }
 
-async function closeSendPostPopup (done: boolean, empty: boolean) {
-  if (empty) {
-    state.closeSendPostPopup(done)
-    return
-  }
-  const result = await state.openConfirmationPopup($t("cancelPost"), $t("cancelPostMessage"))
-  if (result) state.closeSendPostPopup(done)
+async function closeSendPostPopup (done: boolean) {
+  state.closeSendPostPopup(done)
 }
 
 function scrollToFocused () {
@@ -574,7 +579,10 @@ function onDrop (event: DragEvent) {
   if (state.sendPostPopupProps.display)
     state.sendPostPopupProps.fileList = files
   else
-    state.openSendPostPopup("post", undefined, undefined, files)
+    state.openSendPostPopup({
+      type: "post",
+      fileList: files,
+    })
   state.isDragOver = false
 }
 
@@ -740,15 +748,22 @@ function broadcastListener (event: MessageEvent) {
     <!-- アカウントレポート送信ポップアップ -->
     <SendAccountReportPopup
       v-if="state.sendAccountReportPopupProps.display"
-      :user="state.sendAccountReportPopupProps.user"
+      :user="state.sendAccountReportPopupProps.user as TTUser"
       @close="state.closeSendAccountReportPopup"
     />
 
     <!-- ポストレポート送信ポップアップ -->
     <SendPostReportPopup
       v-if="state.sendPostReportPopupProps.display"
-      :post="state.sendPostReportPopupProps.post"
+      :post="state.sendPostReportPopupProps.post as TTPost"
       @close="state.closeSendPostReportPopup"
+    />
+
+    <!-- フィードレポート送信ポップアップ -->
+    <SendFeedReportPopup
+      v-if="state.sendFeedReportPopupProps.display"
+      :generator="state.sendFeedReportPopupProps.generator as TTFeedGenerator"
+      @close="state.closeSendFeedReportPopup"
     />
 
     <!-- イメージポップアップ -->
@@ -765,6 +780,7 @@ function broadcastListener (event: MessageEvent) {
       :type="state.sendPostPopupProps.type"
       :post="state.sendPostPopupProps.post"
       :text="state.sendPostPopupProps.text"
+      :url="state.sendPostPopupProps.url"
       :fileList="state.sendPostPopupProps.fileList"
       :createdAt="state.sendPostPopupProps.createdAt"
       @closeSnedPostPopup="closeSendPostPopup"
@@ -795,6 +811,18 @@ function broadcastListener (event: MessageEvent) {
       property="labels"
       @close="state.closeSelectLabelsPopup"
       @change=""
+    />
+
+    <!-- ポスト日時選択ポップアップ -->
+    <SelectDatePopup
+      v-if="state.postDatePopupDisplay"
+      :date="state.postDatePopupDate"
+      textTitle="postDatePopupTitle"
+      textDescription="postDatePopupDescription"
+      textReset="postDatePopupReset"
+      textResetDescription="postDatePopupResetDescription"
+      @close="state.closePostDatePopup"
+      @onChange="(params: any) => { state.postDatePopupDate = params }"
     />
 
     <!-- 　D&Dオーバーレイ -->
