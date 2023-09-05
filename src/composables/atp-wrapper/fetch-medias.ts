@@ -8,7 +8,7 @@ export default async function (
 ): Promise<Error | undefined | string> {
   if (this.agent == null) return Error("No agent")
   const query: ComAtprotoSyncListBlobs.QueryParams = { did }
-  if (cursor != null) query.latest = cursor
+  if (cursor != null) query.cursor = cursor
   const response: Error | ComAtprotoSyncListBlobs.Response =
     await (this.agent as BskyAgent).com.atproto.sync.listBlobs(query)
       .then((value: ComAtprotoSyncListBlobs.Response) => value)

@@ -79,7 +79,7 @@ function toggleConnect () {
 
 // subscribeRepo - プロフィール取得
 
-let timer: undefined | NodeJS.Timer = undefined
+let timer: undefined | NodeJS.Timeout = undefined
 
 function createProfileTimer () {
   timer = setTimeout(async () => {
