@@ -430,7 +430,7 @@ async function translateText (forceTranslate: boolean) {
   }
   const langpair = srcLanguages.find((srcLanguage: string) => srcLanguage !== dstLanguage)
   // SEE: https://mymemory.translated.net/doc/spec.php
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langpair}|${dstLanguage}&de=${mainState.atp.session?.email}`
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langpair}|${dstLanguage}&de=${encodeURIComponent(mainState.atp.session?.email ?? "")}`
   const response = await fetch(url).catch(() => {
     state.translation = "failed"
   })
