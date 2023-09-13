@@ -310,7 +310,7 @@ async function onActivateSendRepostButton () {
 
 async function onActivateDeleteRepostButton () {
   Util.blurElement()
-  if (props.post.viewer.repost == null) return
+  if (props.post.viewer?.repost == null) return
   state.repostMenuDisplay = false
   state.processing = true
   try {
@@ -338,8 +338,8 @@ async function onActivateLikeButton () {
   Util.blurElement()
   state.processing = true
   try {
-    const liked = props.post.viewer.like != null
-    if (liked) await mainState.atp.deleteLike(props.post.viewer.like as string)
+    if (props.post.viewer?.like != null)
+      await mainState.atp.deleteLike(props.post.viewer.like as string)
     else await mainState.atp.createLike(props.post.uri, props.post.cid)
     await updateThisPostThread()
   } finally {
@@ -774,7 +774,7 @@ function onActivateHashTag (text: string) {
             <button
               class="icon-button repost-count"
               :data-has="post.repostCount > 0"
-              :data-reposted="!!post.viewer.repost"
+              :data-reposted="!!post.viewer?.repost"
               @click.stop="onActivateRepostMenuTrigger"
             >
               <SVGIcon name="repost" />
@@ -783,7 +783,7 @@ function onActivateHashTag (text: string) {
               <!-- リポストメニュー -->
               <MenuTicker :display="state.repostMenuDisplay">
                 <button
-                  v-if="post.viewer.repost == null"
+                  v-if="post.viewer?.repost == null"
                   @click.stop="onActivateSendRepostButton"
                 >
                   <SVGIcon name="repost" />
@@ -808,7 +808,7 @@ function onActivateHashTag (text: string) {
             <button
               class="icon-button like-count"
               :data-has="post.likeCount > 0"
-              :data-liked="!!post.viewer.like"
+              :data-liked="!!post.viewer?.like"
               @click.stop="onActivateLikeButton"
             >
               <SVGIcon name="heart" />

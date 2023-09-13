@@ -177,7 +177,7 @@ type TTPost = {
     langs?: Array<string>
     [k: string]: unknown
   }
-  viewer: {
+  viewer?: {
     repost?: string
     like?: string
     [k: string]: unknown
