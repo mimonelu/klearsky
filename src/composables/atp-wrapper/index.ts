@@ -33,6 +33,7 @@ import fetchInviteCodes from "@/composables/atp-wrapper/fetch-invite-codes"
 import fetchLikeUsers from "@/composables/atp-wrapper/fetch-like-users"
 import fetchPostSearch from "@/composables/atp-wrapper/fetch-post-search"
 import fetchLabels from "@/composables/atp-wrapper/fetch-labels"
+import fetchListFeed from "@/composables/atp-wrapper/fetch-list-feed"
 
 // TODO: 不要であれば削除する事
 // import fetchMedias from "@/composables/atp-wrapper/fetch-medias"
@@ -133,6 +134,7 @@ prototype.fetchFollowings = fetchFollowings
 prototype.fetchInviteCodes = fetchInviteCodes
 prototype.fetchPostSearch = fetchPostSearch
 prototype.fetchLabels = fetchLabels
+prototype.fetchListFeed = fetchListFeed
 
 // TODO: 不要であれば削除する事
 // prototype.fetchMedias = fetchMedias

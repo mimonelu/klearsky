@@ -186,6 +186,13 @@ interface TIAtpWrapper {
     limit?: number,
     cursor?: string
   ): Promise<undefined | string>
+  fetchListFeed(
+    this: TIAtpWrapper,
+    currentFeeds: Array<TTFeed>,
+    list: string,
+    limit?: number,
+    cursor?: string
+  ): Promise<Error | undefined | string>
 
   /* // TODO: 不要であれば削除する事
   fetchMedias(
