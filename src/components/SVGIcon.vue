@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
 import alert from "@/svg/alert.svg?raw"
-import alphabeticalOff from "@/svg/alphabetical-off.svg?raw"
-import arrowLeft from "@/svg/arrow-left.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
 import bookmark from "@/svg/bookmark.svg?raw"
@@ -13,6 +11,7 @@ import checkboxOff from "@/svg/checkbox-off.svg?raw"
 import checkboxOn from "@/svg/checkbox-on.svg?raw"
 import clipboard from "@/svg/clipboard.svg?raw"
 import clock from "@/svg/clock.svg?raw"
+import contentFiltering from "@/svg/content-filtering.svg?raw"
 import cross from "@/svg/cross.svg?raw"
 import cursorDown from "@/svg/cursor-down.svg?raw"
 import cursorLeft from "@/svg/cursor-left.svg?raw"
@@ -24,16 +23,14 @@ import feed from "@/svg/feed.svg?raw"
 import fileExport from "@/svg/file-export.svg?raw"
 import fileImport from "@/svg/file-import.svg?raw"
 import fire from "@/svg/fire.svg?raw"
-import heart from "@/svg/heart.svg?raw"
-import heartBroken from "@/svg/heart-broken.svg?raw"
 import help from "@/svg/help.svg?raw"
 import history from "@/svg/history.svg?raw"
 import home from "@/svg/home.svg?raw"
-import identifier from "@/svg/identifier.svg?raw"
 import image from "@/svg/image.svg?raw"
 import inviteCode from "@/svg/invite-code.svg?raw"
 import json from "@/svg/json.svg?raw"
 import lightning from "@/svg/lightning.svg?raw"
+import like from "@/svg/like.svg?raw"
 import link from "@/svg/link.svg?raw"
 import lock from "@/svg/lock.svg?raw"
 import mail from "@/svg/mail.svg?raw"
@@ -42,7 +39,6 @@ import offImage from "@/svg/off-image.svg?raw"
 import openInApp from "@/svg/open-in-app.svg?raw"
 import openInNew from "@/svg/open-in-new.svg?raw"
 import pause from "@/svg/pause.svg?raw"
-import people from "@/svg/people.svg?raw"
 import person from "@/svg/person.svg?raw"
 import personOff from "@/svg/person-off.svg?raw"
 import pin from "@/svg/pin.svg?raw"
@@ -68,11 +64,10 @@ import translate from "@/svg/translate.svg?raw"
 import volumeOff from "@/svg/volume-off.svg?raw"
 import volumeOn from "@/svg/volume-on.svg?raw"
 import wallpaper from "@/svg/wallpaper.svg?raw"
+import wordMute from "@/svg/word-mute.svg?raw"
 
 const icons: { [k: string]: string } = {
   alert,
-  alphabeticalOff,
-  arrowLeft,
   at,
   bell,
   bookmark,
@@ -83,6 +78,7 @@ const icons: { [k: string]: string } = {
   checkboxOn,
   clipboard,
   clock,
+  contentFiltering,
   cross,
   cursorDown,
   cursorLeft,
@@ -94,16 +90,14 @@ const icons: { [k: string]: string } = {
   fileExport,
   fileImport,
   fire,
-  heart,
-  heartBroken,
   help,
   history,
   home,
-  identifier,
   image,
   inviteCode,
   json,
   lightning,
+  like,
   link,
   lock,
   mail,
@@ -112,7 +106,6 @@ const icons: { [k: string]: string } = {
   openInApp,
   openInNew,
   pause,
-  people,
   person,
   personOff,
   pin,
@@ -138,6 +131,7 @@ const icons: { [k: string]: string } = {
   volumeOff,
   volumeOn,
   wallpaper,
+  wordMute,
 }
 
 defineProps<{

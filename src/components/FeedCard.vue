@@ -156,7 +156,7 @@ function closeMenuTicker () {
           :data-on="generator.viewer.like != null"
           @click.prevent.stop="toggleFeedGeneratorLike(generator)"
         >
-          <SVGIcon name="heart" />
+          <SVGIcon name="like" />
           <span>{{ generator.likeCount }}</span>
         </button>
 

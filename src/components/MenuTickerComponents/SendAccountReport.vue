@@ -20,7 +20,7 @@ async function sendAccountReport () {
 
 <template>
   <button @click.prevent.stop="sendAccountReport">
-    <SVGIcon name="alert" />
+    <SVGIcon name="contentFiltering" />
     <span>{{ $t("reportSendAccount") }}</span>
   </button>
 </template>

@@ -94,9 +94,9 @@ function closeHtmlPopupDisplay () {
                 <SVGIcon name="cursorRight" />
               </button>
 
-              <!-- コンテンツ言語選択ポップアップトリガー -->
+              <!-- コンテンツフィルタリングポップアップトリガー -->
               <button @click.prevent="mainState.openContentFilteringPopup">
-                <SVGIcon name="alert" />
+                <SVGIcon name="contentFiltering" />
                 <span>{{ $t("modifyContentFiltering") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
@@ -117,7 +117,7 @@ function closeHtmlPopupDisplay () {
 
               <!-- ワードミュートポップアップトリガー -->
               <button @click.prevent="mainState.openWordMutePopup">
-                <SVGIcon name="alphabeticalOff" />
+                <SVGIcon name="wordMute" />
                 <span>{{ $t("wordMuteEdit") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
@@ -543,8 +543,8 @@ function closeHtmlPopupDisplay () {
   .svg-icon--feed {
     --icon-color: var(--accent-color);
   }
-  .svg-icon--alphabeticalOff,
-  .svg-icon--alert,
+  .svg-icon--wordMute,
+  .svg-icon--contentFiltering,
   .svg-icon--volumeOff,
   .svg-icon--personOff {
     --icon-color: var(--notice-color);

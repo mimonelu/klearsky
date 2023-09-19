@@ -56,7 +56,7 @@ function scrolledToBottom () {
   >
     <template #header>
       <h2>
-        <SVGIcon name="heart" />
+        <SVGIcon name="like" />
         <span>{{ $t("likeUsers") }}</span>
       </h2>
     </template>

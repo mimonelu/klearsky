@@ -21,7 +21,7 @@ function show () {
 
 <template>
   <button @click.prevent.stop="show">
-    <SVGIcon name="heart" />
+    <SVGIcon name="like" />
     <span>{{ $t("likeUsers") }}</span>
   </button>
 </template>

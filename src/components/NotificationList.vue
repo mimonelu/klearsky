@@ -15,8 +15,8 @@ const iconMap: { [reason: string]: string } = {
   quote: "quoteRepost",
   reply: "reply",
   repost: "repost",
-  like: "heart",
-  likeGenerator: "heart",
+  like: "like",
+  likeGenerator: "like",
 }
 
 function notificationGroupHasNew (notificationGroup: TTNotificationGroup): boolean {

@@ -217,7 +217,7 @@ function onChangeImage () {
                 class="button--bordered post-label-button"
                 @click.prevent="mainState.openSelectLabelsPopup(state)"
               >
-                <SVGIcon name="alert" />
+                <SVGIcon name="contentFiltering" />
                 <span>{{
                   state.labels.length === 0
                   ? "---"

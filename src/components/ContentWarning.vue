@@ -54,7 +54,7 @@ function hide () {
       :data-visibility="state.visibility"
     >
       <div class="header">
-        <SVGIcon name="alert" />
+        <SVGIcon name="contentFiltering" />
         <span>{{ $t(messageMap[state.visibility]) }}</span>
       </div>
       <div class="body">

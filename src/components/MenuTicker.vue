@@ -138,10 +138,10 @@ watch(() => props.display, (display: boolean) => {
         & > .svg-icon--quoteRepost {
           fill: rgb(var(--share-color));
         }
-        & > .svg-icon--heart {
+        & > .svg-icon--like {
           fill: rgb(var(--like-color));
         }
-        & > .svg-icon--alert,
+        & > .svg-icon--contentFiltering,
         & > .svg-icon--person,
         & > .svg-icon--personOff,
         & > .svg-icon--remove,

@@ -26,7 +26,7 @@ defineProps<{
       v-if="(labels?.length ?? 0) > 0"
       class="label-icon"
     >
-      <SVGIcon name="alert" />
+      <SVGIcon name="contentFiltering" />
     </div>
   </RouterLink>
 </template>

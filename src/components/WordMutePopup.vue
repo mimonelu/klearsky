@@ -77,7 +77,7 @@ function onSubmit () {
   >
     <template #header>
       <h2>
-        <SVGIcon name="alphabeticalOff" />
+        <SVGIcon name="wordMute" />
         <span>{{ $t("wordMute") }}</span>
       </h2>
     </template>

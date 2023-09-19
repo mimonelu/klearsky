@@ -110,7 +110,7 @@ function moveToBottom () {
 
         <!-- コンテンツフィルタリングポップアップトリガー -->
         <a @click.prevent="() => { Util.blurElement(); mainState.openContentFilteringPopup() }">
-          <SVGIcon name="alert" />
+          <SVGIcon name="contentFiltering" />
           <span>{{ $t("contentFiltering") }}</span>
         </a>
 
@@ -128,7 +128,7 @@ function moveToBottom () {
 
         <!-- ワードミュートポップアップトリガー -->
         <a @click.prevent="() => { Util.blurElement(); mainState.openWordMutePopup() }">
-          <SVGIcon name="alphabeticalOff" />
+          <SVGIcon name="wordMute" />
           <span>{{ $t("wordMute") }}</span>
         </a>
 

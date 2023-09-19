@@ -521,7 +521,7 @@ function onActivateHashTag (text: string) {
       />
       <SVGIcon
         v-show="state.contentWarningVisibility !== 'show'"
-        name="alert"
+        name="contentFiltering"
       />
       <div
         v-show="state.contentWarningVisibility !== 'show'"
@@ -529,7 +529,7 @@ function onActivateHashTag (text: string) {
       >{{ state.contentWarningLabel }}</div>
       <SVGIcon
         v-show="state.isWordMute"
-        name="alphabeticalOff"
+        name="wordMute"
       />
       <div class="post__mask__display-name">{{
         !mainState.currentSetting.postAnonymization
@@ -595,7 +595,7 @@ function onActivateHashTag (text: string) {
           class="textlabel--alert"
         >
           <div class="textlabel__text">
-            <SVGIcon name="alert" />{{ $t("postLabel") }}
+            <SVGIcon name="contentFiltering" />{{ $t("postLabel") }}
           </div>
           <div
             v-for="label of post.labels"
@@ -811,7 +811,7 @@ function onActivateHashTag (text: string) {
               :data-liked="!!post.viewer?.like"
               @click.stop="onActivateLikeButton"
             >
-              <SVGIcon name="heart" />
+              <SVGIcon name="like" />
               <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
             </button>
           </div>
@@ -932,8 +932,8 @@ function onActivateHashTag (text: string) {
       font-size: 0.875em;
     }
 
-    & > .svg-icon--alert,
-    & > .svg-icon--alphabeticalOff {
+    & > .svg-icon--contentFiltering,
+    & > .svg-icon--wordMute {
       fill: rgb(var(--notice-color), calc(var(--alpha) + 0.25));
     }
 

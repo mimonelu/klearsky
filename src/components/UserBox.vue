@@ -92,7 +92,7 @@ function hideWarningContent () {
       class="textlabel--alert"
     >
       <div class="textlabel__text">
-        <SVGIcon name="alert" />{{ $t("profileLabel") }}
+        <SVGIcon name="contentFiltering" />{{ $t("profileLabel") }}
       </div>
       <div
         v-for="label of user.labels"

@@ -17,8 +17,8 @@ const template = `<html lang="en">
   padding: 0;
 }
 body {
-  background-color: #202020;
-  color: #f0f0f0;
+  background-color: #ffffff;
+  color: #000000;
   padding: 2em;
 }
 h1 {
@@ -28,10 +28,8 @@ h1 {
 main {
   display: flex;
   flex-wrap: wrap;
-  grid-gap: 0.5rem;
 }
 main > dl {
-  background-color: #404040;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,7 +45,7 @@ main > dl > dt {
   white-space: nowrap;
 }
 main > dl > dd > svg {
-  background-color: white;
+  border: 1px solid #c0c0c0;
   display: flex;
   align-items: center;
   justify-content: center;

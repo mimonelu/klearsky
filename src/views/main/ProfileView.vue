@@ -124,7 +124,7 @@ function hideWarningContent () {
         class="textlabel--alert"
       >
         <div class="textlabel__text">
-          <SVGIcon name="alert" />{{ $t("profileLabel") }}
+          <SVGIcon name="contentFiltering" />{{ $t("profileLabel") }}
         </div>
         <div
           v-for="label of mainState.currentProfile?.labels"
@@ -317,7 +317,7 @@ function hideWarningContent () {
           :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
           :title="$t('likes')"
         >
-          <SVGIcon name="heart" />
+          <SVGIcon name="like" />
         </RouterLink>
       </div>
 
@@ -330,13 +330,6 @@ function hideWarningContent () {
           :title="$t('following')"
         >
           <span>{{ $t("followings") }}</span>
-          <SVGIcon name="arrowLeft" />
-          <img
-            loading="lazy"
-            decoding="async"
-            :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
-            alt=""
-          >
         </RouterLink>
 
         <!-- フォロワータブボタン -->
@@ -345,13 +338,6 @@ function hideWarningContent () {
           :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.did } }"
           :title="$t('follower')"
         >
-          <img
-            loading="lazy"
-            decoding="async"
-            :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
-            alt=""
-          >
-          <SVGIcon name="arrowLeft" />
           <span>{{ $t("followers") }}</span>
         </RouterLink>
       </div>
@@ -603,28 +589,6 @@ function hideWarningContent () {
 
   &__button--custom-feeds > .svg-icon {
     --fg-color: var(--accent-color);
-  }
-
-  &__button--following {
-    grid-gap: 0.375rem;
-
-    & > .svg-icon--people {
-      font-size: 1.5rem;
-    }
-
-    & > .svg-icon--arrowLeft {
-      font-size: 0.75rem;
-    }
-
-    & > img {
-      border-radius: var(--border-radius);
-      display: block;
-      font-size: 1.5rem;
-      min-width: 1.5rem;
-      max-width: 1.5rem;
-      min-height: 1.5rem;
-      max-height: 1.5rem;
-    }
   }
 }
 

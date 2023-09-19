@@ -120,7 +120,7 @@ async function apply () {
   >
     <template #header>
       <h2>
-        <SVGIcon name="alert" />
+        <SVGIcon name="contentFiltering" />
         <span>{{ $t("contentFiltering") }}</span>
       </h2>
     </template>

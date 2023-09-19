@@ -41,7 +41,7 @@ function close () {
     >
       <template #header>
         <h2>
-          <SVGIcon name="alert" />
+          <SVGIcon name="contentFiltering" />
           <span>{{ $t("selectLabels") }}</span>
         </h2>
       </template>
