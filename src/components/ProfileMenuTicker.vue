@@ -42,7 +42,7 @@ const state = reactive<{
     <!-- メールアドレス -->
     <div
       v-if="isUser"
-      class="menu-ticker__header"
+      class="list-menu__header"
     >{{ mainState.atp.session?.email ?? "&nbsp;" }}</div>
 
     <!-- 最初のポスト -->

@@ -54,9 +54,9 @@ watch(() => props.display, (display: boolean) => {
       ref="menuTickerInner"
       :style="{ transform: `translate(${state.left}px, ${state.top}px)` }"
     >
-      <div class="menu-ticker--content">
+      <menu class="list-menu">
         <slot />
-      </div>
+      </menu>
     </div>
   </div>
 </template>
@@ -91,70 +91,6 @@ watch(() => props.display, (display: boolean) => {
     position: absolute;
     max-width: 16rem;
     z-index: 2;
-  }
-
-  &--content {
-    box-shadow: 0 0 0.5rem 0 rgb(0, 0, 0, 0.25);
-    background-color: rgb(var(--fg-color));
-    color: rgb(var(--bg-color));
-    border: 1px solid rgb(var(--bg-color), 0.25);
-    border-radius: var(--border-radius);
-    display: flex;
-    flex-direction: column;
-    grid-gap: 0.125rem;
-    padding: 0.5rem 0;
-
-    &:deep() {
-      .menu-ticker__header {
-        border-bottom: 1px solid rgb(var(--bg-color), 0.25);
-        font-weight: bold;
-        padding: 0.25rem 1rem 0.75rem 1rem;
-        word-wrap: break-word;
-
-        & > .svg-icon {
-          fill: rgb(var(--bg-color), 0.5);
-        }
-      }
-
-      & > button {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        grid-gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        white-space: nowrap;
-        &:focus, &:hover {
-          background-color: var(--fg-color-075);
-        }
-
-        & > .svg-icon {
-          fill: rgb(var(--bg-color));
-        }
-        & > .svg-icon--at,
-        & > .svg-icon--post {
-          fill: rgb(var(--post-color));
-        }
-        & > .svg-icon--repost,
-        & > .svg-icon--quoteRepost {
-          fill: rgb(var(--share-color));
-        }
-        & > .svg-icon--like {
-          fill: rgb(var(--like-color));
-        }
-        & > .svg-icon--contentFiltering,
-        & > .svg-icon--person,
-        & > .svg-icon--personOff,
-        & > .svg-icon--remove,
-        & > .svg-icon--volumeOn,
-        & > .svg-icon--volumeOff {
-          fill: rgb(var(--notice-color));
-        }
-      }
-
-      & > hr {
-        border-bottom: 1px solid rgb(var(--bg-color), 0.25);
-      }
-    }
   }
 
   &:deep() {

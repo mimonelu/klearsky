@@ -1,6 +1,6 @@
 .pulldown-button {
   background-color: rgb(var(--bg-color));
-  border: 1px solid var(--fg-color-025);
+  border: 1px solid var(--fg-color-0125);
   border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
@@ -9,20 +9,17 @@
   padding: 0.5em 1em;
   position: relative;
   &:focus, &:hover {
-    border-color: var(--fg-color-0375);
+    border-color: var(--fg-color-025);
 
     & > .svg-icon {
       fill: var(--fg-color-0375);
     }
   }
   &:focus {
-    background-color: rgb(var(--fg-color));
-    border-color: var(--fg-color-075);
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 
-    & > .ticker-menu {
+    & > .list-menu {
       border-radius: 0 0 var(--border-radius) var(--border-radius);
-      border-top-color: var(--fg-color-075);
       display: flex;
     }
   }
@@ -38,52 +35,13 @@
     fill: var(--fg-color-025);
     margin-left: auto;
   }
-}
 
-.ticker-menu {
-  background-color: rgb(var(--fg-color));
-  border: 1px solid var(--fg-color-075);
-  border-radius: var(--border-radius);
-  display: none;
-  flex-direction: column;
-  grid-gap: 0.125em;
-  padding: 0.5em 0;
-  position: absolute;
-  left: -1px;
-  top: 100%;
-  z-index: 1;
-  width: calc(100% + 2px);
-
-  & > a {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    grid-gap: 0.5em;
-    padding: 0.5em 1em;
-    &:hover, &:focus {
-      background-color: var(--fg-color-075);
-    }
-
-    & > .svg-icon {
-      fill: rgb(var(--bg-color));
-    }
-    & > .svg-icon--feed {
-      fill: rgb(var(--accent-color));
-    }
-    & > .svg-icon--wordMute,
-    & > .svg-icon--contentFiltering,
-    & > .svg-icon--volumeOff,
-    & > .svg-icon--personOff {
-      fill: rgb(var(--notice-color));
-    }
-
-    & > span {
-      color: rgb(var(--bg-color));
-    }
-  }
-
-  & > hr {
-    background-color: var(--fg-color-075);
-    height: 1px;
+  & > .list-menu {
+    display: none;
+    position: absolute;
+    left: -1px;
+    top: 100%;
+    z-index: 1;
+    width: calc(100% + 2px);
   }
 }

@@ -87,7 +87,7 @@ function moveToBottom () {
     >
       <span>{{ $t("shortcuts") }}</span>
       <SVGIcon name="cursorDown" />
-      <menu class="ticker-menu">
+      <menu class="list-menu">
         <!-- コンテンツ言語選択ポップアップトリガー -->
         <a @click.prevent="() => { Util.blurElement(); mainState.openContentLanguagesPopup() }">
           <SVGIcon name="translate" />

@@ -72,7 +72,7 @@ function closeHtmlPopupDisplay () {
         <div class="settings-section-container">
           <!-- 各種機能設定 -->
           <div class="settings-section">
-            <div class="list-menu">
+            <div class="settings-section__list-menu">
               <!-- コンテンツ言語選択ポップアップトリガー -->
               <button @click.prevent="mainState.openContentLanguagesPopup">
                 <SVGIcon name="translate" />
@@ -539,7 +539,38 @@ function closeHtmlPopupDisplay () {
   padding: 0.5rem;
 }
 
-.list-menu {
+.settings-section__list-menu {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    --icon-color: var(--fg-color);
+    --alpha: 0.875;
+    border-bottom: 1px solid var(--fg-color-025);
+    cursor: pointer;
+    display: grid;
+    align-items: center;
+    grid-gap: 1em;
+    grid-template-columns: auto 1fr auto;
+    padding: 0.625em 1em;
+    &:focus, &:hover {
+      --alpha: 1.0;
+    }
+
+    & > .svg-icon {
+      fill: rgb(var(--icon-color), var(--alpha));
+    }
+
+    & > span {
+      color: rgb(var(--fg-color), var(--alpha));
+      font-weight: bold;
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
   .svg-icon--feed {
     --icon-color: var(--accent-color);
   }

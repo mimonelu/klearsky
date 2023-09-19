@@ -1,32 +1,65 @@
 .list-menu {
+  background-color: rgb(var(--bg-color));
+  border: 1px solid var(--fg-color-025);
+  border-radius: var(--border-radius);
+  color: rgb(var(--fg-color));
   display: flex;
   flex-direction: column;
+  grid-gap: 0.125em;
+  padding: 0.5em 0;
 
-  button {
-    --icon-color: var(--fg-color);
-    --alpha: 0.875;
+  &__header {
     border-bottom: 1px solid var(--fg-color-025);
+    font-weight: bold;
+    padding: 0.25rem 1rem 0.75rem 1rem;
+    word-wrap: break-word;
+
+    & > .svg-icon {
+      fill: rgb(var(--fg-color), 0.5);
+    }
+  }
+
+  & > a,
+  & > button {
     cursor: pointer;
-    display: grid;
+    display: flex;
     align-items: center;
-    grid-gap: 1em;
-    grid-template-columns: auto 1fr auto;
-    padding: 0.625em 1em;
+    grid-gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
     &:focus, &:hover {
-      --alpha: 1.0;
+      background-color: rgb(var(--accent-color), 0.25);
     }
 
     & > .svg-icon {
-      fill: rgb(var(--icon-color), var(--alpha));
+      fill: rgb(var(--fg-color));
     }
+    & > .svg-icon--feed {
+      fill: rgb(var(--accent-color));
+    }
+    & > .svg-icon--at,
+    & > .svg-icon--post {
+      fill: rgb(var(--post-color));
+    }
+    & > .svg-icon--repost,
+    & > .svg-icon--quoteRepost {
+      fill: rgb(var(--share-color));
+    }
+    & > .svg-icon--like {
+      fill: rgb(var(--like-color));
+    }
+    & > .svg-icon--contentFiltering,
+    & > .svg-icon--person,
+    & > .svg-icon--personOff,
+    & > .svg-icon--remove,
+    & > .svg-icon--volumeOn,
+    & > .svg-icon--volumeOff,
+    & > .svg-icon--wordMute {
+      fill: rgb(var(--notice-color));
+    }
+  }
 
-    & > span {
-      color: rgb(var(--fg-color), var(--alpha));
-      font-weight: bold;
-      line-height: 1.25;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+  & > hr {
+    border-bottom: 1px solid var(--fg-color-025);
   }
 }
