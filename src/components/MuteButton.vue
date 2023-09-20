@@ -23,7 +23,7 @@ async function toggleMute () {
   state.processing = true
   try {
     if (props.viewer.muted) {
-      await mainState.atp.disableMute(props.did)
+      await mainState.atp.updateMuteToDisable(props.did)
       props.viewer.muted = false
 
       // ミュートユーザー一覧の更新
@@ -31,7 +31,7 @@ async function toggleMute () {
         return user.viewer.blocking !== props.viewer.blocking
       })
     } else {
-      await mainState.atp.enableMute(props.did)
+      await mainState.atp.updateMuteToEnable(props.did)
       props.viewer.muted = true
     }
   } finally {

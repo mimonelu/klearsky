@@ -81,11 +81,11 @@ interface TIAtpWrapper {
   deleteFollow(this: TIAtpWrapper, uri: string): Promise<boolean>
   deletePost(this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost(this: TIAtpWrapper, uri: string): Promise<boolean>
-  disableBlock(this: TIAtpWrapper, uri: string): Promise<boolean>
-  disableMute(this: TIAtpWrapper, did: string): Promise<boolean>
+  updateBlockToDisable(this: TIAtpWrapper, uri: string): Promise<boolean>
+  updateMuteToDisable(this: TIAtpWrapper, did: string): Promise<boolean>
   deleteSession(this: TIAtpWrapper): Promise<boolean>
-  enableBlock(this: TIAtpWrapper, did: string): Promise<null | string>
-  enableMute(this: TIAtpWrapper, did: string): Promise<boolean>
+  updateBlockToEnable(this: TIAtpWrapper, did: string): Promise<null | string>
+  updateMuteToEnable(this: TIAtpWrapper, did: string): Promise<boolean>
   fetchActorsTypeahead(
     this: TIAtpWrapper,
     term?: string,
@@ -275,13 +275,11 @@ interface TIAtpWrapper {
     password?: string
   ): Promise<boolean>
   logout(this: TIAtpWrapper)
-  refreshSession(this: TIAtpWrapper): Promise<boolean>
   resetSession(
     this: TIAtpWrapper,
     newSession: TTSession,
     service?: string
   ): void
-  registerPush(this: TIAtpWrapper): Promise<Error | boolean>
   resumeSession(this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData(this: TIAtpWrapper)
   updateMyLabels(this: TIAtpWrapper, labels: Array<TTLabel>): Promise<Error | boolean>
@@ -294,4 +292,5 @@ interface TIAtpWrapper {
     this: TIAtpWrapper,
     params: TTUpdateProfileParams
   ): Promise<boolean>
+  refreshSession(this: TIAtpWrapper): Promise<boolean>
 }

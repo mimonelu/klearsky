@@ -20,7 +20,7 @@ async function block () {
   if (mainState.processing) return
   if (props.user?.viewer.blocking != null) return
   mainState.processing = true
-  const blocking = await mainState.atp.enableBlock(props.user?.did as string)
+  const blocking = await mainState.atp.updateBlockToEnable(props.user?.did as string)
   if (blocking != null && props.user != null)
     props.user.viewer.blocking = blocking
   mainState.processing = false
@@ -31,7 +31,7 @@ async function unblock () {
   if (mainState.processing) return
   if (props.user?.viewer.blocking == null) return
   mainState.processing = true
-  await mainState.atp.disableBlock(props.user.viewer.blocking)
+  await mainState.atp.updateBlockToDisable(props.user.viewer.blocking)
 
   mainState.currentBlockingUsers = mainState.currentBlockingUsers.filter((user: TTUser) => {
     return user.viewer.blocking !== props.user?.viewer.blocking

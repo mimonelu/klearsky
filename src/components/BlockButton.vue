@@ -23,7 +23,7 @@ async function toggleBlock () {
   state.processing = true
   try {
     if (props.viewer.blocking) {
-      await mainState.atp.disableBlock(props.viewer.blocking)
+      await mainState.atp.updateBlockToDisable(props.viewer.blocking)
       delete props.viewer.blocking
 
       // ブロックユーザー一覧の更新
@@ -31,7 +31,7 @@ async function toggleBlock () {
         return user.did !== props.did
       })
     } else {
-      const blocking = await mainState.atp.enableBlock(props.did)
+      const blocking = await mainState.atp.updateBlockToEnable(props.did)
       if (blocking != null) props.viewer.blocking = blocking
     }
   } finally {
