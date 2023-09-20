@@ -737,7 +737,7 @@ function updateColorThemeSetting () {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (params: TTSendPostPopupProps): Promise<boolean> {
+async function openSendPostPopup (params: TTSendPostPopupParams): Promise<boolean> {
   state.sendPostPopupProps.display = true
   state.sendPostPopupProps.type = params.type
   state.sendPostPopupProps.post = params.post

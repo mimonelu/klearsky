@@ -20,13 +20,7 @@ function convertBlobTo(
   })
 }
 
-async function compressFileToBlob(params: {
-  file: File
-  mimeType: string
-  maxWidth: number
-  maxHeight: number
-  maxSize: number
-}): Promise<Blob> {
+async function compressFileToBlob(params: TTCreateFileBlobParams): Promise<Blob> {
   // SEE: https://github.com/Donaldcwl/browser-image-compression#main-function
   return await imageCompression(params.file, {
     fileType: params.mimeType,

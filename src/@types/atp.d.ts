@@ -1,3 +1,14 @@
+type TTSession = {
+  [index: string]: any
+  accessJwt: string
+  did: string
+  handle: string
+  email?: string
+  refreshJwt: string
+  __service?: string // Injected
+  __avatar?: string // Injected
+}
+
 type TTServerInfo = {
   inviteCodeRequired?: boolean
   availableUserDomains: string[]
@@ -295,4 +306,10 @@ type TTFeedGenerator = {
     like?: string
     [k: string]: any
   }
+}
+
+type TTCidUri = {
+  uri: string
+  cid: string
+  [k: string]: unknown
 }

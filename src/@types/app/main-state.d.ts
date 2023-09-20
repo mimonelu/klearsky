@@ -1,13 +1,3 @@
-interface TTSendPostPopupProps {
-  display?: boolean
-  type: TTPostType
-  post?: TTPost
-  text?: string
-  url?: string
-  fileList?: FileList
-  createdAt?: string
-}
-
 type MainState = {
   atp: TIAtpWrapper
   mounted: boolean
@@ -122,7 +112,7 @@ type MainState = {
   numberOfInviteCodes: ComputedRef<number>
   numberOfAvailableInviteCodes: ComputedRef<number>
 
-  sendPostPopupProps: TTSendPostPopupProps
+  sendPostPopupProps: TTSendPostPopupParams
 
   imagePopupProps: {
     display: boolean
@@ -235,7 +225,7 @@ type MainState = {
   fetchFollowings: (direction: "new" | "old") => Promise<void>
   fetchSuggestions: (direction: "new" | "old") => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
-  openSendPostPopup: (params: TTSendPostPopupProps) => Promise<boolean>
+  openSendPostPopup: (params: TTSendPostPopupParams) => Promise<boolean>
   closeSendPostPopup: (done: boolean) => void
   openRepostUsersPopup: (uri: string) => void
   closeRepostUsersPopup: () => void

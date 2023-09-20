@@ -13,7 +13,7 @@ export default function (this: TIAtpWrapper, service: string): boolean {
             console.warn("[klearsky/persistSession]", "session?.did == null")
             break
           }
-          this.resetSession(session, service)
+          this.resetSession(session as TTSession, service)
           this.lastFetchNotificationsDate = undefined
           break
         }
