@@ -13,8 +13,13 @@ const state = reactive<{
 })
 
 onMounted(() => {
-  const formItem = document.getElementById("feed-term-textbox")
-  if (formItem != null) formItem.focus()
+  const textbox = document.getElementById("feed-term-textbox")
+  if (textbox != null) textbox.focus()
+
+  // 検索キーワードと検索結果がない場合、すべてのフィードを取得
+  if (mainState.currentSearchFeedsTerm === "" &&
+      mainState.currentSearchFeeds.length === 0)
+    fetchNewResults()
 })
 
 async function fetchNewResults () {

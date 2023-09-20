@@ -14,8 +14,8 @@ const state = reactive<{
 })
 
 onMounted(() => {
-  const formItem = document.getElementById("user-term-textbox")
-  if (formItem != null) formItem.focus()
+  const textbox = document.getElementById("user-term-textbox")
+  if (textbox != null) textbox.focus()
 })
 
 async function fetchNewResults () {

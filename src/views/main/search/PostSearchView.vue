@@ -19,8 +19,8 @@ watch(() => router.currentRoute.value.query.text, (value: any) => {
 }, { immediate: true })
 
 onMounted(() => {
-  const formItem = document.getElementById("post-term-textbox")
-  if (formItem != null) formItem.focus()
+  const textbox = document.getElementById("post-term-textbox")
+  if (textbox != null) textbox.focus()
 })
 
 function updateSearchPostTerm (text: string) {
