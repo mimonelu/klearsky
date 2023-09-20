@@ -4,7 +4,7 @@ import PageHeader from "@/components/PageHeader.vue"
 
 <template>
   <div class="home-view">
-    <div class="home-view__header">
+    <Portal to="router-view-wrapper-header">
       <PageHeader
         :hasBackButton="true"
         :title="$t('home')"
@@ -33,7 +33,7 @@ import PageHeader from "@/components/PageHeader.vue"
           <span>{{ $t("globalline") }}</span>
         </RouterLink>
       </div>
-    </div>
+    </Portal>
     <RouterView />
   </div>
 </template>
@@ -43,12 +43,6 @@ import PageHeader from "@/components/PageHeader.vue"
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-
-  &__header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-  }
 }
 
 .tab__button {

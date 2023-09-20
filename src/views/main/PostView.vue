@@ -32,17 +32,19 @@ async function updateAll () {
 
 <template>
   <div class="post-view">
-    <PageHeader
-      :hasBackButton="true"
-      :title="$t('post')"
-      :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
-    >
-      <template #right>
-        <button @click.stop="updateAll">
-          <SVGIcon name="refresh" />
-        </button>
-      </template>
-    </PageHeader>
+    <Portal to="router-view-wrapper-header">
+      <PageHeader
+        :hasBackButton="true"
+        :title="$t('post')"
+        :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
+      >
+        <template #right>
+          <button @click.stop="updateAll">
+            <SVGIcon name="refresh" />
+          </button>
+        </template>
+      </PageHeader>
+    </Portal>
     <Post
       v-for="post, postIndex of mainState.currentPosts"
       :key="post.cid"

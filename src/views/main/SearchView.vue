@@ -8,7 +8,7 @@ const mainState = inject("state") as MainState
 
 <template>
   <div class="search-view">
-    <div class="search-view__header">
+    <Portal to="router-view-wrapper-header">
       <PageHeader
         :hasBackButton="true"
         :title="$t('search')"
@@ -40,7 +40,7 @@ const mainState = inject("state") as MainState
           <span>{{ $t("suggestionSearch") }}</span>
         </RouterLink>
       </div>
-    </div>
+    </Portal>
     <RouterView class="child-view" />
   </div>
 </template>
@@ -50,12 +50,6 @@ const mainState = inject("state") as MainState
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-
-  &__header {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
 }
 
 .child-view {

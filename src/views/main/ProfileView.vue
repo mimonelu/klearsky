@@ -94,11 +94,13 @@ function hideWarningContent () {
     :data-content-warning-visibility="state.contentWarningVisibility"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
-    <PageHeader
-      :hasBackButton="true"
-      :title="$t('profile')"
-      :subTitle="mainState.currentProfile?.displayName"
-    />
+    <Portal to="router-view-wrapper-header">
+      <PageHeader
+        :hasBackButton="true"
+        :title="$t('profile')"
+        :subTitle="mainState.currentProfile?.displayName"
+      />
+    </Portal>
 
     <div
       v-if="state.showPrivateData"

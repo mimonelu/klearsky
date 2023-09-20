@@ -640,6 +640,11 @@ function broadcastListener (event: MessageEvent) {
 
       <!-- ルータービュー -->
       <div class="router-view-wrapper">
+        <!-- ルータービューヘッダー -->
+        <div class="router-view-wrapper__header">
+          <PortalTarget name="router-view-wrapper-header" />
+        </div>
+
         <RouterView
           v-if="state.mounted"
           @updatePageTitle="updatePageTitle"
@@ -1032,6 +1037,18 @@ function broadcastListener (event: MessageEvent) {
   // SP幅未満
   @media not all and (min-width: $sp-width) {
     border-left-style: none;
+  }
+
+  // ルータービューヘッダー
+  &__header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    max-width: $router-view-width;
+    &:empty {
+      display: none;
+    }
   }
 
   & > .feed-list {

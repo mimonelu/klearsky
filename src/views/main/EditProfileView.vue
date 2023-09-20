@@ -133,11 +133,13 @@ async function submit () {
 
 <template>
   <div class="edit-profile-view">
-    <PageHeader
-      :hasBackButton="true"
-      :title="$t('editProfile')"
-      :subTitle="mainState.atp.session?.handle ?? ''"
-    />
+    <Portal to="router-view-wrapper-header">
+      <PageHeader
+        :hasBackButton="true"
+        :title="$t('editProfile')"
+        :subTitle="mainState.atp.session?.handle ?? ''"
+      />
+    </Portal>
     <EasyForm
       v-bind="easyFormProps"
       ref="easyForm"

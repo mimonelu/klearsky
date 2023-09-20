@@ -62,11 +62,7 @@ function onActivateBackButton () {
   display: flex;
   align-items: center;
   padding: 0.75rem 0;
-  position: sticky;
-  top: 0;
   min-height: 3rem;
-  max-width: 100vw;
-  z-index: 1;
 
   & > h1,
   & > h2 {
