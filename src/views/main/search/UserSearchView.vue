@@ -16,21 +16,35 @@ const state = reactive<{
 onMounted(() => {
   const textbox = document.getElementById("user-term-textbox")
   if (textbox != null) textbox.focus()
+
+  // 検索キーワードと検索結果がない場合はおすすめアカウントを取得
+  if (mainState.currentSearchUsers.length === 0) fetchNewResults()
 })
 
 async function fetchNewResults () {
   if (state.processing) return
-  if (mainState.currentSearchUserTerm === "") return
   mainState.currentSearchLastUserTerm = mainState.currentSearchUserTerm
   mainState.currentSearchUsers.splice(0)
   state.processing = true
   try {
-    mainState.currentSearchUsersCursor =
-      await mainState.atp.fetchUserSearch(
-        mainState.currentSearchUsers,
-        mainState.currentSearchUserTerm,
-        consts.limitOfFetchUserSearch
+    // おすすめアカウントの取得
+    if (mainState.currentSearchUserTerm === "") {
+      await mainState.fetchSuggestions("new")
+      mainState.currentSearchUsers.splice(
+        0,
+        mainState.currentSearchUsers.length,
+        ...mainState.currentSearchSuggestionResults
       )
+
+    // アカウント検索結果の取得
+    } else {
+      mainState.currentSearchUsersCursor =
+        await mainState.atp.fetchUserSearch(
+          mainState.currentSearchUsers,
+          mainState.currentSearchUserTerm,
+          consts.limitOfFetchUserSearch
+        )
+    }
   } finally {
     state.processing = false
   }

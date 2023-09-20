@@ -33,12 +33,6 @@ const mainState = inject("state") as MainState
         >
           <span>{{ $t("accounts") }}</span>
         </RouterLink>
-        <RouterLink
-          class="tab__button"
-          to="/search/suggestion"
-        >
-          <span>{{ $t("suggestionSearch") }}</span>
-        </RouterLink>
       </div>
     </Portal>
     <RouterView class="child-view" />

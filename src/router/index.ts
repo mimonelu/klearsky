@@ -29,7 +29,6 @@ import SearchView from "@/views/main/SearchView.vue"
 import PostSearchView from "@/views/main/search/PostSearchView.vue"
 import FeedSearchView from "@/views/main/search/FeedSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
-import SuggestionSearchView from "@/views/main/search/SuggestionSearchView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -167,12 +166,6 @@ const router = createRouter({
               name: "user-search",
               meta: { label: "account" },
               component: UserSearchView,
-            },
-            {
-              path: "suggestion",
-              name: "suggestion-search",
-              meta: { label: "suggestionSearch" },
-              component: SuggestionSearchView,
             },
           ],
         },

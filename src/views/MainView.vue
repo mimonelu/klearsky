@@ -476,11 +476,6 @@ async function processPage (pageName?: null | string) {
         scrollToFocused()
         break
       }
-      case "suggestion-search": {
-        if (state.currentSearchSuggestionResults.length === 0)
-          await state.fetchSuggestions("new")
-        break
-      }
     }
   } finally {
     state.listProcessing = false
