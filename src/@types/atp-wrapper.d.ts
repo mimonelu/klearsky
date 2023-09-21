@@ -33,7 +33,7 @@ interface TIAtpWrapper {
   fetchFirstPost (this: TIAtpWrapper, handle: string): Promise<undefined | string>
   fetchFollowers (this: TIAtpWrapper, users: Array<TTUser> | Array<TTUser>, handle: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchFollowings (this: TIAtpWrapper, users: Array<TTUser> | Array<TTUser>, handle: string, limit?: number, cursor?: string): Promise<undefined | string>
-  fetchInviteCodes (this: TIAtpWrapper): Promise<null | TTInviteCode[]>
+  fetchInviteCodes (this: TIAtpWrapper): Promise<Error | TTInviteCode[]>
   fetchLabels (this: TIAtpWrapper, uriPatterns: Array<string>, ): Promise<undefined | Array<TTLabel>>
   fetchLikeUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchListFeed (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, list: string, limit?: number, cursor?: string): Promise<Error | undefined | string>

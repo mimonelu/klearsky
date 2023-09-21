@@ -29,6 +29,7 @@
   "media": "Media",
   "invalidHandle": "(Invalid handle)",
   "share": "Share",
+  "noInviteCodes": "No invite codes. Please note that if you are logged in with AppPasswords, you can not get an invite codes.",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",

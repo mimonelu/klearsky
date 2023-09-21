@@ -29,6 +29,7 @@
   "media": "メディア",
   "invalidHandle": "（不正なハンドル）",
   "share": "共有する",
+  "noInviteCodes": "招待コードがありません。AppPasswordsでログインしている場合は招待コードを取得できない点にご注意ください。",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",

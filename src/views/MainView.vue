@@ -519,7 +519,7 @@ async function updateNotification () {
 
 async function updateInviteCodes () {
   const inviteCodes = await state.atp.fetchInviteCodes()
-  if (inviteCodes == null) return
+  if (inviteCodes instanceof Error) return
   state.inviteCodes.splice(0, state.inviteCodes.length, ...inviteCodes)
 }
 

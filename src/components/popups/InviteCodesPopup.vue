@@ -41,7 +41,21 @@ async function copyCode (code: string) {
       </h2>
     </template>
     <template #body>
-      <div class="invite-code-container">
+      <!-- 招待コードがない場合 -->
+      <div
+        v-if="state.sortedInviteCodes.length === 0"
+        class="textlabel"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("noInviteCodes") }}
+        </div>
+      </div>
+
+      <!-- 招待コードがある場合 -->
+      <div
+        v-else
+        class="invite-code-container"
+      >
         <div
           v-for="inviteCode of state.sortedInviteCodes"
           :key="inviteCode.code"
