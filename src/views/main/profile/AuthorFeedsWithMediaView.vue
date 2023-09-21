@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, watch, type ComputedRef } from "vue"
-import LoadButton from "@/components/LoadButton.vue"
-import MediaList from "@/components/MediaList.vue"
+import LoadButton from "@/components/buttons/LoadButton.vue"
+import MediaList from "@/components/list/MediaList.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

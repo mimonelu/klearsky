@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
-import LoadButton from "@/components/LoadButton.vue"
-import UserBox from "@/components/UserBox.vue"
+import LoadButton from "@/components/buttons/LoadButton.vue"
+import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
 import consts from "@/consts/consts.json"
 

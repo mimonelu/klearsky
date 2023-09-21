@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive, ref } from "vue"
-import GloballineSettingsPopup from "@/components/GloballineSettingsPopup.vue"
-import Loader from "@/components/Loader.vue"
-import Post from "@/components/Post.vue"
+import GloballineSettingsPopup from "@/components/popups/GloballineSettingsPopup.vue"
+import Loader from "@/components/common/Loader.vue"
+import Post from "@/components/app-parts/Post.vue"
 import SubscribeRepos from "@/composables/atp-wrapper/atp-util/subscribe-repos"
-import SVGIcon from "@/components/SVGIcon.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

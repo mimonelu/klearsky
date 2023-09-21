@@ -346,7 +346,7 @@
   "replyUnknown": "返信先不明",
   "quoteRepost": "引用リポスト",
   "text": "テキスト",
-  "linkBox": "リンクカード／フィードカードURL",
+  "LinkCardPlaceHolder": "リンクカード／フィードカードURL",
   "imageBoxes": "画像",
   "alts": "代替テキスト",
   "submit": "送信する",

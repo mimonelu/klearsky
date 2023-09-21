@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import Loader from "@/components/Loader.vue"
-import PageHeader from "@/components/PageHeader.vue"
-import Post from "@/components/Post.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import Loader from "@/components/common/Loader.vue"
+import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import Post from "@/components/app-parts/Post.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

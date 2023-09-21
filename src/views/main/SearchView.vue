@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import { RouterView } from "vue-router"
-import PageHeader from "@/components/PageHeader.vue"
+import PageHeader from "@/components/shell-parts/PageHeader.vue"
 
 const mainState = inject("state") as MainState
 </script>

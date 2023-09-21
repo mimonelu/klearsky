@@ -346,7 +346,7 @@
   "replyUnknown": "Reply address unknown",
   "quoteRepost": "Quote repost",
   "text": "Text",
-  "linkBox": "Link card/Feed card URL",
+  "LinkCardPlaceHolder": "Link card/Feed card URL",
   "imageBoxes": "Images",
   "alts": "ALT texts",
   "submit": "Submit",

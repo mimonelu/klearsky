@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
-import Post from "@/components/Post.vue"
+import Post from "@/components/app-parts/Post.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

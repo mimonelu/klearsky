@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, onErrorCaptured, reactive } from "vue"
 import { RouterView } from "vue-router"
-import GlobalErrorPopup from "@/components/GlobalErrorPopup.vue"
+import GlobalErrorPopup from "@/components/popups/GlobalErrorPopup.vue"
 import Util from "@/composables/util"
 import IgnoreErrors from "@/consts/ignore-errors.json"
 import ReplaceErrors from "@/consts/replace-errors.json"

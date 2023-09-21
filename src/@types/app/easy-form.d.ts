@@ -18,7 +18,7 @@ type TTEasyFormItem = {
   display?: boolean
   focus?: boolean
   footnote?: string
-  hasAccountSuggest?: boolean
+  hasAccountSuggestion?: boolean
   icon?: string
   index?: number // ボタンのコールバック用
   inputmode?: "text" | "url" | "none" | "tel" | "email" | "numeric" | "decimal" | "search" | undefined

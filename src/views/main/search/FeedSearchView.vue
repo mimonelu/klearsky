@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
-import FeedCard from "@/components/FeedCard.vue"
-import LoadButton from "@/components/LoadButton.vue"
+import FeedCard from "@/components/app-parts/FeedCard.vue"
+import LoadButton from "@/components/buttons/LoadButton.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

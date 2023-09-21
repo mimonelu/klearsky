@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import FeedList from "@/components/FeedList.vue"
-import Loader from "@/components/Loader.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import FeedList from "@/components/list/FeedList.vue"
+import Loader from "@/components/common/Loader.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
