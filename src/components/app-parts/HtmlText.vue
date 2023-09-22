@@ -140,11 +140,6 @@ function transformInternalLink (uri: string): undefined | string {
       .replace("[2]", matches[2])
   }
 }
-
-function onActivateHashTag (text: string) {
-  if (mainState.currentSearchPostTerm === text) return
-  emit("onActivateHashTag", text)
-}
 </script>
 
 <template>
@@ -184,7 +179,7 @@ function onActivateHashTag (text: string) {
         <RouterLink
           class="textlink hash-tag"
           :to="`/search/post?text=${segment.param}`"
-          @click.stop="onActivateHashTag(segment.param)"
+          @click.stop="emit('onActivateHashTag', segment.param)"
         >{{ segment.text }}</RouterLink>
       </template>
 

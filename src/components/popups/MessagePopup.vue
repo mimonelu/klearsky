@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import HtmlText from "@/components/app-parts/HtmlText.vue"
 import Popup from "@/components/popups/Popup.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -28,7 +29,11 @@ function close () {
       </h2>
     </template>
     <template #body>
-      <div class="text">{{ mainState.messagePopupText }}</div>
+      <HtmlText
+        :text="mainState.messagePopupText"
+        @onActivateHashTag="close"
+        @onActivateMention="close"
+      />
     </template>
   </Popup>
 </template>
@@ -39,7 +44,7 @@ function close () {
     width: calc($router-view-width - 4rem);
   }
 
-  .text {
+  .html-text {
     line-height: var(--line-height);
     user-select: text;
     white-space: pre-wrap;
