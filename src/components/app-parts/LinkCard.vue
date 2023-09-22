@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 
 const props = defineProps<{
   external: TTExternal
@@ -143,13 +144,9 @@ getEmbeddedContentId()
       target="_blank"
       @click.stop
     >
-      <img
+      <LazyImage
         v-if="displayImage && typeof external.thumb === 'string'"
-        class="external--default__thumb"
-        loading="lazy"
-        decoding="async"
         :src="external.thumb"
-        alt=""
       />
       <div class="external__meta">
         <div class="external__meta__title">{{ external.title ?? '' }}</div>
@@ -240,9 +237,8 @@ getEmbeddedContentId()
       border-color: var(--fg-color-0375);
     }
 
-    &__thumb {
+    .lazy-image {
       aspect-ratio: 1.91 / 1;
-      display: block;
       object-fit: cover;
       width: 100%;
       min-height: 100%;

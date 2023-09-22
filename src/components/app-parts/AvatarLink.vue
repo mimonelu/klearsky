@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 defineProps<{
@@ -14,12 +15,7 @@ defineProps<{
     class="avatar-link"
     :data-has-label="(labels?.length ?? 0) > 0"
   >
-    <img
-      loading="lazy"
-      decoding="async"
-      :src="image ?? '/img/void-avatar.png'"
-      alt=""
-    >
+    <LazyImage :src="image ?? '/img/void-avatar.png'" />
 
     <!-- ラベルアイコン -->
     <div
@@ -37,7 +33,7 @@ defineProps<{
   display: block;
   position: relative;
 
-  & > img {
+  & > .lazy-image {
     border-radius: var(--border-radius);
     display: block;
     min-width: 1em;
@@ -45,7 +41,7 @@ defineProps<{
     min-height: 1em;
     max-height: 1em;
   }
-  &[data-has-label="true"] > img {
+  &[data-has-label="true"] > .lazy-image {
     filter: grayscale(1.0);
     opacity: 0.5;
   }

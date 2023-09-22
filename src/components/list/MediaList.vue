@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 defineProps<{
@@ -17,10 +18,7 @@ const mainState = inject("state") as MainState
       :to="{ name: 'post', query: { uri: media.post.uri } }"
       class="media"
     >
-      <img
-        class="media__image"
-        loading="lazy"
-        decoding="async"
+      <LazyImage
         :src="media.uri"
         :alt="media.alt"
       />
@@ -51,10 +49,9 @@ const mainState = inject("state") as MainState
   aspect-ratio: 1 / 1;
   position: relative;
 
-  &__image {
+  .lazy-image {
     aspect-ratio: 1 / 1;
     background-color: var(--fg-color-0125);
-    display: block;
     object-fit: cover;
     width: 100%; // for Firefox
   }

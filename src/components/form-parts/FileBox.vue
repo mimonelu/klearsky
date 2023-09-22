@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, reactive, watch } from "vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
@@ -121,9 +122,8 @@ function deleteFile (index: number) {
           class="quad-image"
         >
           <div class="thumbnail">
-            <img
+            <LazyImage
               :src="preview"
-              alt=""
               @click.prevent.stop
             />
             <button

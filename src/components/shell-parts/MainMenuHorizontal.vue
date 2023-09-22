@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -43,13 +44,7 @@ async function openSendPostPopup () {
         mainState.currentPath.startsWith('/profile/edit')
       "
     >
-      <img
-        class="image"
-        loading="lazy"
-        decoding="async"
-        :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'"
-        alt=""
-      >
+      <LazyImage :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'" />
     </RouterLink>
 
     <!-- ホームボタン -->
@@ -148,7 +143,7 @@ async function openSendPostPopup () {
   }
 
   &.profile-button {
-    .image {
+    .lazy-image {
       border-radius: var(--border-radius);
       font-size: var(--button-size);
       object-fit: cover;

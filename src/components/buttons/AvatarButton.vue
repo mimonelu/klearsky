@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 
 const props = defineProps<{
   handle?: string
@@ -24,12 +25,7 @@ function openImagePopup () {
     class="avatar"
     @click.stop="openImagePopup"
   >
-    <img
-      loading="lazy"
-      decoding="async"
-      :src="image ?? '/img/void-avatar.png'"
-      alt=""
-    >
+    <LazyImage :src="image ?? '/img/void-avatar.png'" />
   </button>
 </template>
 
@@ -38,9 +34,8 @@ function openImagePopup () {
   cursor: pointer;
   display: block;
 
-  & > img {
+  & > .lazy-image {
     border-radius: var(--border-radius);
-    display: block;
     min-width: 1em;
     max-width: 1em;
     min-height: 1em;

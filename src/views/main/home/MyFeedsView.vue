@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import FeedList from "@/components/list/FeedList.vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -62,12 +63,7 @@ function openMyFeedsPopup () {
           },
         }"
       >
-        <img
-          loading="lazy"
-          decoding="async"
-          :src="myFeeds.generator?.avatar ?? '/img/void-avatar.png'"
-          alt=""
-        >
+        <LazyImage :src="myFeeds.generator?.avatar ?? '/img/void-avatar.png'" />
         <span>{{ myFeeds.generator?.displayName }}</span>
         <SVGIcon name="cursorRight" />
       </RouterLink>
@@ -136,9 +132,8 @@ function openMyFeedsPopup () {
     max-height: 3rem;
     z-index: 1;
 
-    & > img {
+    & > .lazy-image {
       border-radius: 1px;
-      display: block;
       overflow: hidden;
       min-width: 1.75em;
       max-width: 1.75em;

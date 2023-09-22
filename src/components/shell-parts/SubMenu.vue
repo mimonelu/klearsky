@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
 import CopyRight from "@/components/shell-parts/Copyright.vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import Logo from "@/components/shell-parts/Logo.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
@@ -71,12 +72,7 @@ function searchPost () {
           }"
           class="my-feed__button"
         >
-          <img
-            loading="lazy"
-            decoding="async"
-            :src="generator.avatar ?? '/img/void-avatar.png'"
-            alt=""
-          >
+          <LazyImage :src="generator.avatar ?? '/img/void-avatar.png'" />
           <span>{{ generator.displayName }}</span>
         </RouterLink>
       </div>
@@ -138,9 +134,8 @@ function searchPost () {
     align-items: center;
     grid-gap: 0.5rem;
 
-    & > img {
+    & > .lazy-image {
       border-radius: 1px;
-      display: block;
       overflow: hidden;
       min-width: 1.5em;
       max-width: 1.5em;

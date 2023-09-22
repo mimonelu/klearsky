@@ -2,6 +2,7 @@
 import { computed, inject, reactive, ref, type ComputedRef } from "vue"
 import FeedCardMenuTicker from "@/components/menu-tickers/FeedCardMenuTicker.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -136,13 +137,7 @@ function closeMenuTicker () {
   >
     <div class="feed-card__top">
       <!-- フィード画像 -->
-      <img
-        class="feed-card__avatar"
-        loading="lazy"
-        decoding="async"
-        :src="generator.avatar ?? '/img/void-avatar.png'"
-        alt=""
-      >
+      <LazyImage :src="generator.avatar ?? '/img/void-avatar.png'" />
 
       <div class="feed-card__top__right">
         <!-- フィード名 -->
@@ -305,7 +300,7 @@ function closeMenuTicker () {
   }
 
   // フィード画像
-  &__avatar {
+  .lazy-image {
     grid-area: a;
     border-radius: var(--border-radius);
     display: block;

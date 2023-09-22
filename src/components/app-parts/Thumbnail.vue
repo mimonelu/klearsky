@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive } from "vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -90,11 +91,9 @@ function onActivateAlt (alt: string) {
 
 <template>
   <div class="thumbnail">
-    <img
-      loading="lazy"
-      decoding="async"
-      :src="state.src ?? '/img/void.png'"
-      :alt="image?.alt ?? ''"
+    <LazyImage
+      :src="state.src ?? undefined"
+      :alt="image?.alt"
     />
     <button
       v-if="image?.alt"
@@ -122,7 +121,7 @@ function onActivateAlt (alt: string) {
   overflow: hidden;
   position: relative;
 
-  & > img {
+  & > .lazy-image {
     aspect-ratio: var(--image-aspect-ratio);
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);

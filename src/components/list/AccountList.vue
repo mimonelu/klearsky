@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import format from "date-fns/format"
+import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -150,11 +151,10 @@ function onClickFileBox (event: Event) {
               class="account-button__image"
               :style="{ '--color': getDidColor(session.did) }"
             >
-              <img
+              <LazyImage
                 :src="session.__avatar ?? '/img/void-avatar.png'"
-                alt=""
                 :data-has-avatar="session.__avatar != null"
-              >
+              />
             </div>
             <div class="account-button__handle">{{ session.handle }}</div>
             <div class="account-button__email">{{ session.email }}</div>
@@ -269,7 +269,7 @@ function onClickFileBox (event: Event) {
     background-color: var(--color);
     grid-area: i;
 
-    & > img {
+    & > .lazy-image {
       width: 3rem;
       height: 3rem;
       &[data-has-avatar="false"] {

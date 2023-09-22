@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, nextTick, onBeforeUnmount, reactive, ref, watch } from "vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string, params: any): void}>()
@@ -204,13 +205,7 @@ function selectUser (user?: TTUser) {
         :data-focus="state.index === index"
         @click.prevent="selectUser(user)"
       >
-        <img
-          class="account-suggestion-list__suggestion__item__avatar"
-          alt=""
-          loading="lazy"
-          decoding="async"
-          :src="user.avatar ?? '/img/void-avatar.png'"
-        >
+        <LazyImage :src="user.avatar ?? '/img/void-avatar.png'" />
         <div class="account-suggestion-list__suggestion__item__display-name">{{ user.displayName }}</div>
         <div class="account-suggestion-list__suggestion__item__handle">{{ user.handle }}</div>
       </div>
@@ -244,7 +239,7 @@ function selectUser (user?: TTUser) {
         border-bottom: 1px solid var(--fg-color-025);
       }
 
-      &__avatar {
+      .lazy-image {
         border-radius: var(--border-radius);
         font-size: 1.5em;
         object-fit: cover;

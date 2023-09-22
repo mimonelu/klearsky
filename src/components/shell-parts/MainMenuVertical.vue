@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -70,13 +71,7 @@ function moveToBottom () {
         mainState.currentPath.startsWith('/profile/edit')
       "
     >
-      <img
-        class="image"
-        loading="lazy"
-        decoding="async"
-        :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'"
-        alt=""
-      >
+      <LazyImage :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'" />
       <div class="label">{{ mainState.userProfile?.handle }}</div>
     </RouterLink>
 
@@ -317,7 +312,7 @@ function moveToBottom () {
     --color: var(--accent-color);
   }
 
-  & > .image {
+  & > .lazy-image {
     border-radius: var(--border-radius);
     font-size: var(--size);
     margin: auto;
@@ -351,7 +346,7 @@ function moveToBottom () {
   grid-gap: 1rem;
   width: 100%;
 
-  .image {
+  .lazy-image {
     border-radius: var(--border-radius);
     font-size: 2rem;
     margin: 0.5rem;
