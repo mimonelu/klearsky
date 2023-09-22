@@ -171,9 +171,6 @@ type MainState = {
   // マイフィードポップアップの表示スイッチ
   myFeedsPopupDisplay: boolean
 
-  // 人気のフィードポップアップの表示スイッチ
-  popularFeedsPopupDisplay: boolean
-
   // ワードミュートポップアップの表示スイッチ
   wordMutePopupDisplay: boolean
 
@@ -281,10 +278,6 @@ type MainState = {
   // マイフィードポップアップの開閉
   openMyFeedsPopup: Function
   closeMyFeedsPopup: Function
-
-  // 人気のフィードポップアップの開閉
-  openPopularFeedsPopup: Function
-  closePopularFeedsPopup: Function
 
   // ワードミュートポップアップの開閉
   openWordMutePopup: Function

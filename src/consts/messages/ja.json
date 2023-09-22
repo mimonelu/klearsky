@@ -183,12 +183,10 @@
   "globalline": "グローバル",
 
   "customFeeds": "カスタムフィード",
-  "popularFeeds": "人気のフィード",
   "myFeeds": "マイフィード",
   "myFeedsEdit": "マイフィードを編集する",
   "noMyFeeds": "マイフィードがありません。フィードを保存してください。",
   "noFeeds": "保存されたカスタムフィードがありません。",
-  "noPopularFeeds": "人気のフィードがありません。サーバ管理者にお問い合わせください。",
 
   "search": "検索",
   "suggestionSearch": "おすすめ",

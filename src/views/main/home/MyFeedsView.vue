@@ -19,11 +19,6 @@ function openMyFeedsPopup () {
   Util.blurElement()
   mainState.openMyFeedsPopup()
 }
-
-function openPopularFeedsPopup () {
-  Util.blurElement()
-  mainState.openPopularFeedsPopup()
-}
 </script>
 
 <template>
@@ -39,14 +34,6 @@ function openPopularFeedsPopup () {
         @click.stop="openMyFeedsPopup"
       >
         <SVGIcon name="feed" />
-      </button>
-
-      <!-- 人気のフィードポップアップトリガー -->
-      <button
-        class="popular-feeds-trigger"
-        @click.stop="openPopularFeedsPopup"
-      >
-        <SVGIcon name="fire" />
       </button>
     </Portal>
 

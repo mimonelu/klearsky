@@ -20,7 +20,6 @@ import MessagePopup from "@/components/popups/MessagePopup.vue"
 import MutingUsersPopup from "@/components/popups/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
-import PopularFeedsPopup from "@/components/popups/PopularFeedsPopup.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
 import ScrollButton from "@/components/buttons/ScrollButton.vue"
 import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
@@ -713,12 +712,6 @@ function broadcastListener (event: MessageEvent) {
     <MyFeedsPopup
       v-if="state.myFeedsPopupDisplay"
       @close="state.closeMyFeedsPopup"
-    />
-
-    <!-- 人気のフィードポップアップ -->
-    <PopularFeedsPopup
-      v-if="state.popularFeedsPopupDisplay"
-      @close="state.closePopularFeedsPopup"
     />
 
     <!-- ワードミュートポップアップ -->

@@ -161,10 +161,6 @@ const state = reactive<MainState>({
   openMyFeedsPopup,
   closeMyFeedsPopup,
 
-  // 人気のフィードポップアップの開閉
-  openPopularFeedsPopup,
-  closePopularFeedsPopup,
-
   // ワードミュートポップアップの開閉
   openWordMutePopup,
   closeWordMutePopup,
@@ -898,16 +894,6 @@ function openMyFeedsPopup () {
 
 function closeMyFeedsPopup () {
   state.myFeedsPopupDisplay = false
-}
-
-// 人気のフィードポップアップの開閉
-
-function openPopularFeedsPopup () {
-  state.popularFeedsPopupDisplay = true
-}
-
-function closePopularFeedsPopup () {
-  state.popularFeedsPopupDisplay = false
 }
 
 // ワードミュートポップアップの開閉

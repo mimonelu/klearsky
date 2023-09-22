@@ -22,7 +22,6 @@ import email from "@/svg/email.svg?raw"
 import feed from "@/svg/feed.svg?raw"
 import fileExport from "@/svg/file-export.svg?raw"
 import fileImport from "@/svg/file-import.svg?raw"
-import fire from "@/svg/fire.svg?raw"
 import help from "@/svg/help.svg?raw"
 import history from "@/svg/history.svg?raw"
 import home from "@/svg/home.svg?raw"
@@ -89,7 +88,6 @@ const icons: { [k: string]: string } = {
   feed,
   fileExport,
   fileImport,
-  fire,
   help,
   history,
   home,
