@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import settings from "@/consts/settings.json"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import SETTINGS from "@/consts/settings.json"
 
 const mainState = inject("state") as MainState
 
@@ -15,7 +15,7 @@ function onActivate (colorValue: string) {
 <template>
   <div class="color-theme-list">
     <div
-      v-for="colorTheme, colorThemeIndex in settings.colorThemes"
+      v-for="colorTheme, colorThemeIndex in SETTINGS.COLOR_THEMES"
       :key="colorThemeIndex"
       class="color-theme-list__box"
       :data-color-theme="colorTheme.value"

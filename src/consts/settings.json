@@ -1,52 +1,52 @@
 {
-  "autoTranslations": [
+  "AUTO_TRANSLATIONS": [
     { "label": "disabled", "value": false },
     { "label": "enabled", "value": true }
   ],
-  "fontSizes": [
+  "FONT_SIZES": [
     { "label": "fontSizeSmall", "value": "small" },
     { "label": "fontSizeMedium", "value": "medium" },
     { "label": "fontSizeLarge", "value": "large" }
   ],
-  "timeControls": [
+  "TIME_CONTROLS": [
     { "label": "timeControlRelative", "value": "relative" },
     { "label": "timeControlAbsolute", "value": "absolute" }
   ],
-  "replyControls": [
+  "REPLY_CONTROLS": [
     { "label": "replyControl1", "value": 1 },
     { "label": "replyControl2", "value": 2 },
     { "label": "replyControl3", "value": 3 },
     { "label": "replyControl4", "value": 4 },
     { "label": "replyControl5", "value": 5 }
   ],
-  "repostControls": [
+  "REPOST_CONTROLS": [
     { "label": "repostControl1", "value": 1 },
     { "label": "repostControl2", "value": 2 },
     { "label": "repostControl3", "value": 3 },
     { "label": "repostControl4", "value": 4 },
     { "label": "repostControl5", "value": 5 }
   ],
-  "imageControls": [
+  "IMAGE_CONTROLS": [
     { "label": "imageControl1", "value": "all" },
     { "label": "imageControl2", "value": "followingEx" },
     { "label": "imageControl3", "value": "following" },
     { "label": "imageControl4", "value": "self" },
     { "label": "imageControl5", "value": "none" }
   ],
-  "imageAspectRatio": [
+  "IMAGE_ASPECT_RATIO": [
     { "label": "imageAspectRatio1", "value": "1 / 1" },
     { "label": "imageAspectRatio2", "value": "3 / 2" },
     { "label": "imageAspectRatio3", "value": "2 / 1" },
     { "label": "imageAspectRatio4", "value": "3 / 1" }
   ],
-  "linkcardEmbeddedControl": [
+  "LINKCARD_EMBEDDED_CONTROL": [
     { "label": "pnGiphy", "value": "giphy" },
     { "label": "pnSpotify", "value": "spotify" },
     { "label": "pnTwitter", "value": "twitter" },
     { "label": "pnYoutube", "value": "youtube" },
     { "label": "pnNicovideo", "value": "nicovideo" }
   ],
-  "layouts": [
+  "LAYOUTS": [
     { "label": "layoutDefault", "value": "default" },
     { "label": "layoutDefaultLeft", "value": "defaultLeft" },
     { "label": "layoutDefaultRight", "value": "defaultRight" },
@@ -54,7 +54,7 @@
     { "label": "layoutSlimLeft", "value": "slimLeft" },
     { "label": "layoutSlimRight", "value": "slimRight" }
   ],
-  "colorThemes": [
+  "COLOR_THEMES": [
     { "label": "colorThemeAuto", "value": "auto" },
     { "label": "colorThemeLight", "value": "light" },
     { "label": "colorThemeDarkGray", "value": "darkGray" },
@@ -67,7 +67,7 @@
     { "label": "colorThemeBlue", "value": "blue" },
     { "label": "colorThemeIndigo", "value": "indigo" }
   ],
-  "mainAreaOpacities": [
+  "MAIN_AREA_OPACITIES": [
     { "label": "0%", "value": 0 },
     { "label": "10%", "value": 0.1 },
     { "label": "20%", "value": 0.2 },
@@ -80,7 +80,7 @@
     { "label": "90%", "value": 0.9 },
     { "label": "100%", "value": 1.0 }
   ],
-  "backgroundOpacities": [
+  "BACKGROUND_OPACITIES": [
     { "label": "0%", "value": 0 },
     { "label": "10%", "value": 0.1 },
     { "label": "20%", "value": 0.2 },
@@ -93,11 +93,11 @@
     { "label": "90%", "value": 0.9 },
     { "label": "100%", "value": 1.0 }
   ],
-  "hideNumberOfReaction": [
+  "HIDE_NUMBER_OF_REACTION": [
     { "label": "hideNumberOfReactionOff", "value": false },
     { "label": "hideNumberOfReactionOn", "value": true }
   ],
-  "postAnonymization": [
+  "POST_ANONYMIZATION": [
     { "label": "postAnonymizationOff", "value": false },
     { "label": "postAnonymizationOn", "value": true }
   ]

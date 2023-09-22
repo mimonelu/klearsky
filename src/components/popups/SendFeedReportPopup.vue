@@ -42,7 +42,7 @@ const easyFormProps: TTEasyForm = {
       label: $t("reportReasonType"),
       type: "radio",
       required: true,
-      options: OPTIONS.feedReportReason,
+      options: OPTIONS.FEED_REPORT_REASON,
       layout: "vertical",
     },
     {

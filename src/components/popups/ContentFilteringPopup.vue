@@ -49,7 +49,7 @@ const easyFormProps: TTEasyForm = {
     model: label,
     label: $t(label),
     type: "radio",
-    options: OPTIONS.labelVisibility,
+    options: OPTIONS.LABEL_VISIBILITY,
     layout: "horizontal",
     classes: "radios-is-wide",
   })))(),

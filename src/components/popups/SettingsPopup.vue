@@ -7,8 +7,8 @@ import Popup from "@/components/popups/Popup.vue"
 import Radios from "@/components/form-parts/Radios.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
-import languages from "@/consts/ui-languages.json"
-import settings from "@/consts/settings.json"
+import LANGUAGES from "@/consts/ui-languages.json"
+import SETTINGS from "@/consts/settings.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -143,7 +143,7 @@ function closeHtmlPopupDisplay () {
                   @change="changeSetting"
                 >
                   <option
-                    v-for="language, languageIndex in languages"
+                    v-for="language, languageIndex in LANGUAGES"
                     :key="languageIndex"
                     :value="language.value"
                     :selected="language.value === mainState.currentSetting.uiLanguage"
@@ -169,7 +169,7 @@ function closeHtmlPopupDisplay () {
                 class="radios-is-wide"
                 :state="mainState.currentSetting"
                 model="autoTranslation"
-                :options="settings.autoTranslations"
+                :options="SETTINGS.AUTO_TRANSLATIONS"
                 layout="horizontal"
                 @update="saveSetting"
               />
@@ -204,7 +204,7 @@ function closeHtmlPopupDisplay () {
                 class="radios-is-wide"
                 :state="mainState.currentSetting"
                 model="fontSize"
-                :options="settings.fontSizes"
+                :options="SETTINGS.FONT_SIZES"
                 layout="horizontal"
                 @update="changeSetting"
               />
@@ -221,7 +221,7 @@ function closeHtmlPopupDisplay () {
                 class="radios-is-wide"
                 :state="mainState.currentSetting"
                 model="timeControl"
-                :options="settings.timeControls"
+                :options="SETTINGS.TIME_CONTROLS"
                 layout="horizontal"
                 @update="saveSetting"
               />
@@ -248,7 +248,7 @@ function closeHtmlPopupDisplay () {
                 class="checkboxes-is-wide"
                 :state="mainState.currentSetting"
                 model="replyControl"
-                :options="settings.replyControls"
+                :options="SETTINGS.REPLY_CONTROLS"
                 @update="saveSetting"
               />
 
@@ -260,7 +260,7 @@ function closeHtmlPopupDisplay () {
                 class="checkboxes-is-wide"
                 :state="mainState.currentSetting"
                 model="repostControl"
-                :options="settings.repostControls"
+                :options="SETTINGS.REPOST_CONTROLS"
                 @update="saveSetting"
               />
             </div>
@@ -280,7 +280,7 @@ function closeHtmlPopupDisplay () {
                 class="radios-is-wide"
                 :state="mainState.currentSetting"
                 model="imageControl"
-                :options="settings.imageControls"
+                :options="SETTINGS.IMAGE_CONTROLS"
                 @update="saveSetting"
               />
 
@@ -292,7 +292,7 @@ function closeHtmlPopupDisplay () {
                 class="radios-is-wide"
                 :state="mainState.currentSetting"
                 model="imageAspectRatio"
-                :options="settings.imageAspectRatio"
+                :options="SETTINGS.IMAGE_ASPECT_RATIO"
                 layout="horizontal"
                 @update="saveSetting"
               />
@@ -309,7 +309,7 @@ function closeHtmlPopupDisplay () {
                 class="checkboxes-is-wide"
                 :state="mainState.currentSetting"
                 model="linkcardEmbeddedControl"
-                :options="settings.linkcardEmbeddedControl"
+                :options="SETTINGS.LINKCARD_EMBEDDED_CONTROL"
                 layout="vertical"
                 @update="saveSetting"
               />
@@ -328,7 +328,7 @@ function closeHtmlPopupDisplay () {
                   @change="changeSetting"
                 >
                   <option
-                    v-for="layout, layoutIndex in settings.layouts"
+                    v-for="layout, layoutIndex in SETTINGS.LAYOUTS"
                     :key="layoutIndex"
                     :value="layout.value"
                     :selected="layout.value === mainState.currentSetting.layout"
@@ -360,7 +360,7 @@ function closeHtmlPopupDisplay () {
                   @change="changeSetting"
                 >
                   <option
-                    v-for="mainAreaOpacity, mainAreaOpacityIndex in settings.mainAreaOpacities"
+                    v-for="mainAreaOpacity, mainAreaOpacityIndex in SETTINGS.MAIN_AREA_OPACITIES"
                     :key="mainAreaOpacityIndex"
                     :value="mainAreaOpacity.value"
                     :selected="mainAreaOpacity.value === mainState.currentSetting.mainAreaOpacity"
@@ -397,7 +397,7 @@ function closeHtmlPopupDisplay () {
                   @change="changeSetting"
                 >
                   <option
-                    v-for="backgroundOpacity, backgroundOpacityIndex in settings.backgroundOpacities"
+                    v-for="backgroundOpacity, backgroundOpacityIndex in SETTINGS.BACKGROUND_OPACITIES"
                     :key="backgroundOpacityIndex"
                     :value="backgroundOpacity.value"
                     :selected="backgroundOpacity.value === mainState.currentSetting.backgroundOpacity"
@@ -421,7 +421,7 @@ function closeHtmlPopupDisplay () {
                 class="radios-is-wide"
                 :state="mainState.currentSetting"
                 model="hideNumberOfReaction"
-                :options="settings.hideNumberOfReaction"
+                :options="SETTINGS.HIDE_NUMBER_OF_REACTION"
                 layout="horizontal"
                 @update="saveSetting"
               />
@@ -434,7 +434,7 @@ function closeHtmlPopupDisplay () {
                 class="radios-is-wide"
                 :state="mainState.currentSetting"
                 model="postAnonymization"
-                :options="settings.postAnonymization"
+                :options="SETTINGS.POST_ANONYMIZATION"
                 layout="horizontal"
                 @update="saveSetting"
               />

@@ -3,7 +3,7 @@ import { reactive } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
-import otherApps from "@/consts/other-apps.json"
+import OTHER_APPS from "@/consts/other-apps.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -71,7 +71,7 @@ function openOtherApp (app: any) {
       :display="state.display"
       :container="container"
     >
-      <template v-for="app of otherApps">
+      <template v-for="app of OTHER_APPS">
         <template v-if="app[type] != null">
           <button @click.prevent.stop="openOtherApp(app)">
             <SVGIcon name="openInApp" />

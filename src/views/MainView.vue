@@ -500,7 +500,7 @@ async function setupNotificationInterval () {
   clearNotificationInterval()
   await updateNotification()
   // @ts-ignore // TODO:
-  notificationTimer = setInterval(updateNotification, CONSTS.intervalOfFetchNotifications)
+  notificationTimer = setInterval(updateNotification, CONSTS.INTERVAL_OF_FETCH_NOTIFICATIONS)
 }
 
 async function updateNotification () {
@@ -512,7 +512,7 @@ async function updateNotification () {
   }
   if (canFetched) {
     // NOTICE: 念のため + 1 している
-    await state.fetchNotifications(Math.min(CONSTS.limitOfFetchNotifications, count + 1), "new")
+    await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
   }
 }
 

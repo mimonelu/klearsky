@@ -5,7 +5,7 @@ import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
-import consts from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -32,7 +32,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
   try {
     const cursor: undefined | string = await mainState.atp.fetchMutingUsers(
       mainState.currentMutingUsers as Array<TTUser>,
-      consts.limitOfFetchMutingUsers,
+      CONSTS.LIMIT_OF_FETCH_MUTING_USERS,
       direction === "old" ? mainState.currentMutingUsersCursor : undefined
     )
     if (cursor != null) mainState.currentMutingUsersCursor = cursor

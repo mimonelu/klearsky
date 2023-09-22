@@ -3,7 +3,7 @@ import { inject, onMounted, reactive, watch } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
-import consts from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
@@ -42,7 +42,7 @@ async function fetchNewResults () {
         await mainState.atp.fetchUserSearch(
           mainState.currentSearchUsers,
           mainState.currentSearchUserTerm,
-          consts.limitOfFetchUserSearch
+          CONSTS.LIMIT_OF_FETCH_USER_SEARCH
         )
     }
   } finally {
@@ -65,7 +65,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
       await mainState.atp.fetchUserSearch(
         mainState.currentSearchUsers,
         mainState.currentSearchUserTerm,
-        consts.limitOfFetchUserSearch,
+        CONSTS.LIMIT_OF_FETCH_USER_SEARCH,
         direction === "new" ? undefined : mainState.currentSearchUsersCursor
       )
   } finally {

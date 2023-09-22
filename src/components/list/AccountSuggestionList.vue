@@ -72,7 +72,7 @@ watch(() => props.text, (value: string) => {
   }
   state.timer = setTimeout(async () => {
     if (!state.display || !state.text) return
-    const results = await mainState.atp.fetchActorsTypeahead(state.text, CONSTS.limitOfFetchActorsTypeahead)
+    const results = await mainState.atp.fetchActorsTypeahead(state.text, CONSTS.LIMIT_OF_FETCH_ACTORS_TYPEAHEAD)
     if (results instanceof Error) return
     state.users = results
       .filter((user: TTUser) => {

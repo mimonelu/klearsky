@@ -53,7 +53,7 @@ async function fetchNotifications (direction: "new" | "old") {
   Util.blurElement()
   state.processing = true
   try {
-    await mainState.fetchNotifications(CONSTS.limitOfFetchNotifications, direction)
+    await mainState.fetchNotifications(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, direction)
   } finally {
     state.processing = false
   }

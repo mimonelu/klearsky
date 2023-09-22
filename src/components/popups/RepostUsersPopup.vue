@@ -5,7 +5,7 @@ import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
-import consts from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -33,7 +33,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
     const cursor: undefined | string = await mainState.atp.fetchRepostUsers(
       mainState.currentRepostUsers as Array<TTUser>,
       mainState.currentRepostUsersUri as string,
-      consts.limitOfFetchRepostUsers,
+      CONSTS.LIMIT_OF_FETCH_REPOST_USERS,
       direction === "old" ? mainState.currentRepostUsersCursor : undefined
     )
     if (cursor != null) mainState.currentRepostUsersCursor = cursor
