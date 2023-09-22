@@ -12,33 +12,45 @@ const mainState = inject("state") as MainState
 
 <template>
   <div class="media-list">
-    <RouterLink
-      v-for="media of medias"
-      :key="media.uri"
-      :to="{ name: 'post', query: { uri: media.post.uri } }"
-      class="media"
+    <!-- 空のコンテンツメッセージ -->
+    <div
+      v-if="!mainState.listProcessing && medias?.length === 0"
+      class="textlabel margin1"
     >
-      <LazyImage
-        :src="media.uri"
-        :alt="media.alt"
-      />
-      <div class="media__cover">
-        <SVGIcon
-          v-if="media.isRepost"
-          name="repost"
-        />
-        <div
-          class="media__text"
-          dir="auto"
-        >{{ media.post.record.text }}</div>
-        <div class="media__created-at">{{ mainState.formatDate(media.post.record.createdAt) }}</div>
+      <div class="textlabel__text">
+        <SVGIcon name="alert" />{{ $t("noMedias") }}
       </div>
-    </RouterLink>
+    </div>
+
+    <div class="media-list__contents">
+      <RouterLink
+        v-for="media of medias"
+        :key="media.uri"
+        :to="{ name: 'post', query: { uri: media.post.uri } }"
+        class="media"
+      >
+        <LazyImage
+          :src="media.uri"
+          :alt="media.alt"
+        />
+        <div class="media__cover">
+          <SVGIcon
+            v-if="media.isRepost"
+            name="repost"
+          />
+          <div
+            class="media__text"
+            dir="auto"
+          >{{ media.post.record.text }}</div>
+          <div class="media__created-at">{{ mainState.formatDate(media.post.record.createdAt) }}</div>
+        </div>
+      </RouterLink>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.media-list {
+.media-list__contents {
   display: grid;
   grid-gap: 1px;
   grid-template-columns: repeat(2, 1fr);

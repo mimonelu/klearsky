@@ -100,7 +100,7 @@ function changeCustomFeedOrder () {
         class="textlabel"
       >
         <div class="textlabel__text">
-          <SVGIcon name="alert" />{{ $t("noFeeds") }}
+          <SVGIcon name="alert" />{{ $t("noMyFeeds") }}
         </div>
       </div>
       <template v-else>

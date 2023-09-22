@@ -29,8 +29,7 @@
   "media": "メディア",
   "invalidHandle": "（不正なハンドル）",
   "share": "共有する",
-  "noInviteCodes": "招待コードがありません。AppPasswordsでログインしている場合は招待コードを取得できない点にご注意ください。",
-
+  
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
 
@@ -129,7 +128,6 @@
   "password": "パスワード／App Password",
   "getAppPassword": "App Password を取得する",
   "myAccounts": "マイアカウント",
-  "noMyAccounts": "マイアカウントがありません。まずはログインしてください。アカウントは公式アプリで作成できます。",
   "loginFailed": "ログインに失敗しました。入力内容を確認してください。",
   "sessionExpired": "セッションの有効期限が切れました。再ログインしてください。",
 
@@ -185,8 +183,6 @@
   "customFeeds": "カスタムフィード",
   "myFeeds": "マイフィード",
   "myFeedsEdit": "マイフィードを編集する",
-  "noMyFeeds": "マイフィードがありません。フィードを保存してください。",
-  "noFeeds": "保存されたカスタムフィードがありません。",
 
   "search": "検索",
   "suggestionSearch": "おすすめ",
@@ -372,6 +368,13 @@
   "reposts": "リポスト",
 
   "shortcuts": "ショートカット",
+
+  "noInviteCodes": "招待コードがありません。AppPasswordsでログインしている場合は招待コードを取得できない点にご注意ください。",
+  "noMyAccounts": "マイアカウントがありません。まずはログインしてください。アカウントは公式アプリで作成できます。",
+  "noMyFeeds": "マイフィードがありません。フィードを保存してください。",
+  "noPostsInFeed": "このフィードにポストはありません。",
+  "noMedias": "メディアがありません。さらに読み込んでみてください。",
+  "noAuthorFeeds": "このユーザーの管理するフィードはありません。",
 
   "pnGiphy": "Giphy",
   "pnSpotify": "Spotify",

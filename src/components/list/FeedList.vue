@@ -2,6 +2,7 @@
 import { inject, watch } from "vue"
 import Feed from "@/components/app-parts/Feed.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{
@@ -95,6 +96,16 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       @activate="fetchFeeds('new')"
     />
     <div class="feeds">
+      <!-- 空のコンテンツメッセージ -->
+      <div
+        v-if="!mainState.listProcessing && feeds?.length === 0"
+        class="textlabel margin1"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("noPostsInFeed") }}
+        </div>
+      </div>
+
       <template
         v-for="feed of feeds"
         :key="feed.__id"

@@ -406,7 +406,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
 }
 
 .account-suggestion-list:deep() {
-  .account-suggestion-list__suggest {
+  .account-suggestion-list__suggestion {
     margin-top: 1rem;
     z-index: 1;
     width: 100%;

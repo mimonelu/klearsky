@@ -29,7 +29,6 @@
   "media": "Media",
   "invalidHandle": "(Invalid handle)",
   "share": "Share",
-  "noInviteCodes": "No invite codes. Please note that if you are logged in with AppPasswords, you can not get an invite codes.",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -129,7 +128,6 @@
   "password": "Password or App Password",
   "getAppPassword": "Get App Password",
   "myAccounts": "My Accounts",
-  "noMyAccounts": "No My Accounts. Please log in first. You can create an account on the official app.",
   "loginFailed": "Login failed. Please check your entry.",
   "sessionExpired": "Session expired. Please login again.",
 
@@ -185,8 +183,6 @@
   "customFeeds": "Custom Feeds",
   "myFeeds": "My Feeds",
   "myFeedsEdit": "Edit my feeds",
-  "noFeeds": "There are no saved custom feeds.",
-  "noMyFeeds": "There are no My Feeds. Please save feeds.",
 
   "search": "Search",
   "suggestionSearch": "Suggestions",
@@ -372,6 +368,13 @@
   "reposts": "Reposts",
 
   "shortcuts": "Shortcuts",
+
+  "noInviteCodes": "No invite codes. Please note that if you are logged in with AppPasswords, you can not get an invite codes.",
+  "noMyAccounts": "No My Accounts. Please log in first. You can create an account on the official app.",
+  "noMyFeeds": "No My Feeds. Please save feeds.",
+  "noPostsInFeed": "No posts in this feed.",
+  "noMedias": "No media. Please read more.",
+  "noAuthorFeeds": "There are no feeds managed by this user.",
 
   "pnGiphy": "Giphy",
   "pnSpotify": "Spotify",
