@@ -7,6 +7,7 @@ import ContentWarning from "@/components/app-parts/ContentWarning.vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
 import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
@@ -102,11 +103,12 @@ function hideWarningContent () {
       />
     </Portal>
 
-    <div
+    <!-- バナー -->
+    <LazyImage
       v-if="state.showPrivateData"
       class="banner"
+      :src="mainState.currentProfile?.banner"
       :data-has-banner="!!mainState.currentProfile?.banner"
-      :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
       @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
     />
 
@@ -388,19 +390,9 @@ function hideWarningContent () {
 .banner {
   aspect-ratio: 3/1;
   border-bottom: 1px solid var(--fg-color-025);
-  display: block;
+  object-fit: cover;
   &[data-has-banner="true"] {
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
     cursor: pointer;
-  }
-
-  & > img {
-    aspect-ratio: 3/1;
-    display: block;
-    object-fit: cover;
-    width: 100%;
   }
 }
 

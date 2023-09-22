@@ -37,11 +37,6 @@ function onLoad () {
 </template>
 
 <style lang="scss" scoped>
-@keyframes fade-in {
-  0% { opacity: 0; }
-  100% { opacity: 1.0; }
-}
-
 .lazy-image {
   display: block;
   opacity: 0;
