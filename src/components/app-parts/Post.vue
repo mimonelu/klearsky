@@ -24,6 +24,8 @@ const props = defineProps<{
   parentPost?: TTPost
   isInFeed?: boolean
   noLink?: boolean
+  container?: HTMLElement
+  forceFocus?: boolean
   forceHideImages?: boolean
 }>()
 
@@ -227,7 +229,7 @@ onBeforeUnmount(() => {
 })
 
 function isFocused (): boolean {
-  return props.post.uri === mainState.currentQuery.uri
+  return props.forceFocus || props.post.uri === mainState.currentQuery.uri
 }
 
 async function onActivatePost (post: TTPost, event: Event) {
@@ -470,6 +472,8 @@ function onActivateHashTag (text: string) {
       class="header"
       @click.stop
     >
+      <slot name="header-before" />
+
       <!-- リプライ先ユーザー -->
       <button
         v-if="parentPost != null"
@@ -557,7 +561,7 @@ function onActivateHashTag (text: string) {
         :did="post.author?.did"
         :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
         :labels="post.author?.labels"
-        @click.stop
+        @click.stop="$emit('click')"
       />
 
       <div class="body__right">
@@ -569,7 +573,7 @@ function onActivateHashTag (text: string) {
             :did="post.author?.did"
             :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
             :labels="post.author?.labels"
-            @click.stop
+            @click.stop="$emit('click')"
           />
 
           <!-- 表示名 -->
@@ -781,7 +785,10 @@ function onActivateHashTag (text: string) {
               <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
 
               <!-- リポストメニュー -->
-              <MenuTicker :display="state.repostMenuDisplay">
+              <MenuTicker
+                :display="state.repostMenuDisplay"
+                :container="container"
+              >
                 <button
                   v-if="post.viewer?.repost == null"
                   @click.stop="onActivateSendRepostButton"
@@ -838,6 +845,7 @@ function onActivateHashTag (text: string) {
               <PostMenuTicker
                 :post="post"
                 :display="state.postMenuDisplay"
+                :container="container"
                 @close="onClosePostMenu"
                 @removeThisPost="onRemoveThisPost"
               />
@@ -1013,7 +1021,7 @@ function onActivateHashTag (text: string) {
   display: grid;
   grid-template-columns: auto auto 1fr;
   align-items: center;
-  grid-gap: 0.5em;
+  grid-gap: 0.25em;
   margin: -0.75em -1em -0.5em;
   padding: 0.75em 1em 0.5em;
 

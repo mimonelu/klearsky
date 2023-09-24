@@ -243,6 +243,13 @@ type MainState = {
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
 
+  // タイムフィード
+  currentTimeFeeds: Array<TTPost>
+  timeFeedsPopupDisplay: boolean
+  timeFeedsPopupProps?: TTPost
+  openTimeFeedsPopup: (post: TTPost) => void
+  closeTimeFeedsPopup: () => void
+
   // 通知ポップアップの開閉
   openNotificationPopup: Function
   closeNotificationPopup: Function

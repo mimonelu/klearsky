@@ -156,6 +156,7 @@ function scrollListener () {
       align-items: center;
       justify-content: center;
       width: 3rem;
+      min-width: 3rem;
 
       & > .svg-icon {
         fill: var(--fg-color-075);
@@ -174,6 +175,7 @@ function scrollListener () {
       justify-content: center;
       flex-grow: 1;
       grid-gap: 0.5rem;
+      overflow: hidden;
 
       &:first-child {
         margin-left: 3rem;
@@ -185,6 +187,9 @@ function scrollListener () {
 
       & > span {
         font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

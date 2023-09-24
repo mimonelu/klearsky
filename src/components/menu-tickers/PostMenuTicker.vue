@@ -5,6 +5,7 @@ import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.v
 import MenuTickerModerateWrapper from "@/components/menu-items/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
+import MenuTickerOpenTimeFeedsPopup from "@/components/menu-items/OpenTimeFeedsPopup.vue"
 import MenuTickerSendMention from "@/components/menu-items/SendMention.vue"
 import MenuTickerSendPostAfter from "@/components/menu-items/SendPostAfter.vue"
 import MenuTickerShowLikeUsers from "@/components/menu-items/ShowLikeUsers.vue"
@@ -17,8 +18,9 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
-  post: TTPost;
-  display: boolean;
+  post: TTPost
+  display: boolean
+  container?: HTMLElement
 }>()
 
 const $t = inject("$t") as Function
@@ -52,10 +54,19 @@ async function deletePost () {
 </script>
 
 <template>
-  <MenuTicker :display="display">
+  <MenuTicker
+    :display="display"
+    :container="container"
+  >
     <!-- メンションを送る -->
     <MenuTickerSendMention
       :mentionTo="post.author.handle"
+      @close="emit('close')"
+    />
+
+    <!-- タイムフィードで見る -->
+    <MenuTickerOpenTimeFeedsPopup
+      :post="post"
       @close="emit('close')"
     />
 
@@ -99,6 +110,7 @@ async function deletePost () {
       :did="post.author.did"
       :handle="post.author.handle"
       :text="post.record?.text"
+      :container="container"
       @close="emit('close')"
     />
 
@@ -108,6 +120,7 @@ async function deletePost () {
       :isUser="state.isUser"
       :user="post.author"
       :post="post"
+      :container="container"
       @close="emit('close')"
     />
 
@@ -117,6 +130,7 @@ async function deletePost () {
       :did="post.author.did"
       :handle="post.author.handle"
       :uri="post.uri"
+      :container="container"
       @close="emit('close')"
     />
 

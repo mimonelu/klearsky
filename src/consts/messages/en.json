@@ -376,6 +376,9 @@
   "noMedias": "No media. Please read more.",
   "noAuthorFeeds": "There are no feeds managed by this user.",
 
+  "showTimeFeeds": "Show in timefeed",
+  "timeFeeds": "Timefeed",
+
   "pnGiphy": "Giphy",
   "pnSpotify": "Spotify",
   "pnTwitter": "Twitter",

@@ -33,6 +33,7 @@ import SettingsPopup from "@/components/popups/SettingsPopup.vue"
 import SplashScreen from "@/components/shell-parts/SplashScreen.vue"
 import SubMenu from "@/components/shell-parts/SubMenu.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import WordMutePopup from "@/components/popups/WordMutePopup.vue"
 import state from "@/composables/main-state"
 import Util from "@/composables/util"
@@ -228,6 +229,11 @@ function resetState () {
   state.errorPopupProps.display = false
   state.errorPopupProps.error = undefined
   state.errorPopupProps.description = undefined
+
+  // タイムフィードポップアップ
+  state.currentTimeFeeds = []
+  state.timeFeedsPopupDisplay = false
+  state.timeFeedsPopupProps = undefined
 
   // 通知ポップアップの表示スイッチ
   state.notificationPopupDisplay = false
@@ -689,6 +695,12 @@ function broadcastListener (event: MessageEvent) {
         </ul>
       </template>
     </SelectLanguagesPopup>
+
+    <!-- タイムフィードポップアップ -->
+    <TimeFeedsPopup
+      v-if="state.timeFeedsPopupDisplay"
+      @close="state.closeTimeFeedsPopup"
+    />
 
     <!-- リポストユーザーリストポップアップ -->
     <RepostUsersPopup

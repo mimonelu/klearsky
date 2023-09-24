@@ -337,8 +337,8 @@
 
   "sendPost": "ポストを投稿する",
   "post": "ポスト",
-  "reply": "返信",
-  "replyUnknown": "返信先不明",
+  "reply": "リプライ",
+  "replyUnknown": "リプライ先不明",
   "quoteRepost": "引用リポスト",
   "text": "テキスト",
   "LinkCardPlaceHolder": "リンクカード／フィードカードURL",
@@ -375,6 +375,9 @@
   "noPostsInFeed": "このフィードにポストはありません。",
   "noMedias": "メディアがありません。さらに読み込んでみてください。",
   "noAuthorFeeds": "このユーザーの管理するフィードはありません。",
+
+  "showTimeFeeds": "タイムフィードで見る",
+  "timeFeeds": "タイムフィード",
 
   "pnGiphy": "Giphy",
   "pnSpotify": "Spotify",

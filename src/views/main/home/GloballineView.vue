@@ -191,19 +191,21 @@ function onMutated () {
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         >
-          <template #body-after>
+          <template #header-before>
             <!-- リプライ／引用リポストアイコン -->
             <div
               v-if="message.record.reply != null"
               class="reply-icon"
             >
               <SVGIcon name="reply" />
+              <span>{{ $t("reply") }}</span>
             </div>
             <div
               v-if="message.record.embed?.record != null"
               class="quote-repost-icon"
             >
               <SVGIcon name="quoteRepost" />
+              <span>{{ $t("quoteRepost") }}</span>
             </div>
           </template>
         </Post>
@@ -291,24 +293,32 @@ function onMutated () {
 // リプライ／引用リポストアイコン
 .reply-icon,
 .quote-repost-icon {
-  position: absolute;
-  top: -0.5rem;
-  left: -0.5rem;
+  display: flex;
+  align-items: center;
+  grid-gap: 0.25em;
 
-  & > .svg-icon {
-    font-size: 1.25rem;
+  & > .svg-icon,
+  & > span {
+    font-size: 0.875em;
+  }
+  & > span {
+    font-weight: bold;
   }
 }
 .reply-icon {
   & > .svg-icon {
     fill: rgb(var(--post-color));
-    stroke: rgb(var(--bg-color));
+  }
+  & > span {
+    color: rgb(var(--post-color));
   }
 }
 .quote-repost-icon {
   & > .svg-icon {
     fill: rgb(var(--share-color));
-    stroke: rgb(var(--bg-color));
+  }
+  & > span {
+    color: rgb(var(--share-color));
   }
 }
 

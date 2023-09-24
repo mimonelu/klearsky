@@ -44,7 +44,29 @@ type TTRecord = {
   value: {
     $type: string
     createdAt: string
-    subject: {
+    embed?: {
+      $type: string
+      images?: {
+        alt: string
+        image: BrobRef
+      }
+      record?: TTPost
+    }
+    facets?: any
+    langs?: string[]
+    reply?: {
+      root: {
+        cid: string
+        uri: string
+      }
+      parent: {
+        cid: string
+        uri: string
+      }
+    }
+    text?: string
+
+    subject?: {
       cid: string
       uri: string
     }

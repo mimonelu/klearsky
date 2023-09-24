@@ -125,6 +125,10 @@ const state = reactive<MainState>({
   closeConfirmationPopup,
   applyConfirmationPopup,
 
+  // タイムフィードポップアップの開閉
+  openTimeFeedsPopup,
+  closeTimeFeedsPopup,
+
   // 通知ポップアップの開閉
   openNotificationPopup,
   closeNotificationPopup,
@@ -803,6 +807,19 @@ function closeConfirmationPopup () {
 function applyConfirmationPopup () {
   state.confirmationPopupResult = true
   state.confirmationPopupDisplay = false
+}
+
+// タイムフィードポップアップの開閉
+
+function openTimeFeedsPopup (post: TTPost) {
+  state.currentTimeFeeds.splice(0)
+  state.currentTimeFeeds.push(post)
+  state.timeFeedsPopupProps = post
+  state.timeFeedsPopupDisplay = true
+}
+
+function closeTimeFeedsPopup () {
+  state.timeFeedsPopupDisplay = false
 }
 
 // 通知ポップアップの開閉
