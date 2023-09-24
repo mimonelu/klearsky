@@ -388,6 +388,9 @@ async function updateThisPostThread () {
 
 // 画像ポップアップ
 function openImagePopup (imageIndex: number) {
+  // ラージ画像のないポスト向け処理（レコードなど）
+  if (state.images[imageIndex].fullsize == null) return
+
   mainState.imagePopupProps.images = state.images.map((image: TTImage) => {
     return {
       smallUri: image.thumb ?? "/img/void.png",
@@ -686,6 +689,7 @@ function onActivateHashTag (text: string) {
                   :key="post.cid"
                   :image="image"
                   :did="post.author.did"
+                  :data-has-no-fullsize="state.images[imageIndex].fullsize == null"
                   @click.stop="openImagePopup(imageIndex)"
                 />
               </div>
@@ -1200,6 +1204,11 @@ function onActivateHashTag (text: string) {
 
 .quad-images {
   grid-area: i;
+
+  // ラージ画像のないポスト向け処理（レコードなど）
+  .thumbnail[data-has-no-fullsize="true"] {
+    cursor: unset;
+  }
 }
 
 .image-list {
