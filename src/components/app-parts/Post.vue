@@ -641,7 +641,7 @@ function onActivateHashTag (text: string) {
         <LinkCard
           v-if="state.external != null && position !== 'slim'"
           :external="state.external"
-          :displayImage="state.displayImage"
+          :displayImage="state.displayImage && !forceHideImages"
         />
 
         <template v-if="state.images.length > 0 && (level ?? 1) < 3">

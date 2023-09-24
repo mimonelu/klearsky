@@ -5,9 +5,7 @@ import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.v
 import MenuTickerModerateWrapper from "@/components/menu-items/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
-import MenuTickerOpenTimeFeedsPopup from "@/components/menu-items/OpenTimeFeedsPopup.vue"
-import MenuTickerSendMention from "@/components/menu-items/SendMention.vue"
-import MenuTickerSendPostAfter from "@/components/menu-items/SendPostAfter.vue"
+import MenuTickerPostFeaturesWrapper from "@/components/menu-items/PostFeaturesWrapper.vue"
 import MenuTickerShowLikeUsers from "@/components/menu-items/ShowLikeUsers.vue"
 import MenuTickerShowRepostUsers from "@/components/menu-items/ShowRepostUsers.vue"
 import MenuTickerTranslateText from "@/components/menu-items/TranslateText.vue"
@@ -58,24 +56,6 @@ async function deletePost () {
     :display="display"
     :container="container"
   >
-    <!-- メンションを送る -->
-    <MenuTickerSendMention
-      :mentionTo="post.author.handle"
-      @close="emit('close')"
-    />
-
-    <!-- タイムフィードで見る -->
-    <MenuTickerOpenTimeFeedsPopup
-      :post="post"
-      @close="emit('close')"
-    />
-
-    <!-- このポストの直後に投稿する -->
-    <MenuTickerSendPostAfter
-      :createdAt="post.record.createdAt"
-      @close="emit('close')"
-    />
-
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
       :text="post.record?.text"
@@ -104,6 +84,13 @@ async function deletePost () {
       @close="emit('close')"
     />
 
+    <!-- ポスト機能 -->
+    <MenuTickerPostFeaturesWrapper
+      :post="post"
+      :container="container"
+      @close="emit('close')"
+    />
+
     <!-- コピーする -->
     <MenuTickerCopyTextWrapper
       :uri="post.uri"
@@ -124,7 +111,7 @@ async function deletePost () {
       @close="emit('close')"
     />
 
-    <!-- 他のアプリで開く -->
+    <!-- 外部アプリで開く -->
     <MenuTickerOpenAppWrapper
       :type="'post'"
       :did="post.author.did"

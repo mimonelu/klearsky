@@ -36,7 +36,7 @@ function showSubMenuTicker () {
     <SVGIcon name="cursorLeft" />
     <span>{{ $t("copy") }}</span>
 
-    <!-- 他のアプリで開くメニュー -->
+    <!-- コピーするメニュー -->
     <MenuTicker
       :display="state.display"
       :container="container"

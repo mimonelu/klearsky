@@ -67,7 +67,7 @@ const state = reactive<{
       @close="emit('close')"
     />
 
-    <!-- 他のアプリで開く -->
+    <!-- 外部アプリで開く -->
     <MenuTickerOpenAppWrapper
       type="generator"
       :uri="generator.uri.replace('at://', '').replace('app.bsky.feed.generator', 'feed')"

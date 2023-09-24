@@ -81,7 +81,7 @@ const state = reactive<{
       @close="emit('close')"
     />
 
-    <!-- 他のアプリで開く -->
+    <!-- 外部アプリで開く -->
     <MenuTickerOpenAppWrapper
       type="profile"
       :did="user.did"

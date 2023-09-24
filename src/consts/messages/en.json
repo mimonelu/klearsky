@@ -29,6 +29,7 @@
   "media": "Media",
   "invalidHandle": "(Invalid handle)",
   "share": "Share",
+  "postFeatures": "Features",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",

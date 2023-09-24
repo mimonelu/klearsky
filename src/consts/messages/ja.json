@@ -29,6 +29,7 @@
   "media": "メディア",
   "invalidHandle": "（不正なハンドル）",
   "share": "共有する",
+  "postFeatures": "機能",
   
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -148,7 +149,7 @@
   "deletePost": "ポストを削除する",
   "deletePostMessage": "このポストを削除します。よろしいですか？",
   "moderate": "モデレートする",
-  "openOtherApp": "他のアプリで開く",
+  "openOtherApp": "外部アプリで開く",
   "officialApp": "公式Webアプリ",
   "wrapperApp": "Bluesky Wrapper",
   "flatApp": "Flat",

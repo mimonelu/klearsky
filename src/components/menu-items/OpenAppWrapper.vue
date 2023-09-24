@@ -65,7 +65,7 @@ function openOtherApp (app: any) {
     <SVGIcon name="cursorLeft" />
     <span>{{ $t("openOtherApp") }}</span>
 
-    <!-- 他のアプリで開くメニュー -->
+    <!-- 外部アプリで開くメニュー -->
     <MenuTicker
       class="menu-ticker__sub"
       :display="state.display"
