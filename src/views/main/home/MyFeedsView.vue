@@ -63,7 +63,7 @@ function openMyFeedsPopup () {
           },
         }"
       >
-        <LazyImage :src="myFeeds.generator?.avatar ?? '/img/void-avatar.png'" />
+        <LazyImage :src="myFeeds.generator?.avatar" />
         <span>{{ myFeeds.generator?.displayName }}</span>
         <SVGIcon name="cursorRight" />
       </RouterLink>

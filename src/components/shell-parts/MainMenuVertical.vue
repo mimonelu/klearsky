@@ -71,7 +71,7 @@ function moveToBottom () {
         mainState.currentPath.startsWith('/profile/edit')
       "
     >
-      <LazyImage :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'" />
+      <LazyImage :src="mainState.userProfile?.avatar" />
       <div class="label">{{ mainState.userProfile?.handle }}</div>
     </RouterLink>
 

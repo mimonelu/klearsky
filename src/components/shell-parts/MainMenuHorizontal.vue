@@ -44,7 +44,7 @@ async function openSendPostPopup () {
         mainState.currentPath.startsWith('/profile/edit')
       "
     >
-      <LazyImage :src="mainState.userProfile?.avatar ?? '/img/void-avatar.png'" />
+      <LazyImage :src="mainState.userProfile?.avatar" />
     </RouterLink>
 
     <!-- ホームボタン -->

@@ -137,7 +137,7 @@ function closeMenuTicker () {
   >
     <div class="feed-card__top">
       <!-- フィード画像 -->
-      <LazyImage :src="generator.avatar ?? '/img/void-avatar.png'" />
+      <LazyImage :src="generator.avatar" />
 
       <div class="feed-card__top__right">
         <!-- フィード名 -->

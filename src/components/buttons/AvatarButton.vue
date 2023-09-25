@@ -25,7 +25,7 @@ function openImagePopup () {
     class="avatar"
     @click.stop="openImagePopup"
   >
-    <LazyImage :src="image ?? '/img/void-avatar.png'" />
+    <LazyImage :src="image" />
   </button>
 </template>
 

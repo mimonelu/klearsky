@@ -15,7 +15,7 @@ defineProps<{
     class="avatar-link"
     :data-has-label="(labels?.length ?? 0) > 0"
   >
-    <LazyImage :src="image ?? '/img/void-avatar.png'" />
+    <LazyImage :src="image" />
 
     <!-- ラベルアイコン -->
     <div

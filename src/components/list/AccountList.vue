@@ -270,6 +270,7 @@ function onClickFileBox (event: Event) {
     grid-area: i;
 
     & > .lazy-image {
+      background-color: unset;
       width: 3rem;
       height: 3rem;
       &[data-has-avatar="false"] {

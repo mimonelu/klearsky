@@ -72,7 +72,7 @@ function searchPost () {
           }"
           class="my-feed__button"
         >
-          <LazyImage :src="generator.avatar ?? '/img/void-avatar.png'" />
+          <LazyImage :src="generator.avatar" />
           <span>{{ generator.displayName }}</span>
         </RouterLink>
       </div>

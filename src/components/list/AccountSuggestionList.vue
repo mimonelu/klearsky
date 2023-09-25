@@ -205,7 +205,7 @@ function selectUser (user?: TTUser) {
         :data-focus="state.index === index"
         @click.prevent="selectUser(user)"
       >
-        <LazyImage :src="user.avatar ?? '/img/void-avatar.png'" />
+        <LazyImage :src="user.avatar" />
         <div class="account-suggestion-list__suggestion__item__display-name">{{ user.displayName }}</div>
         <div class="account-suggestion-list__suggestion__item__handle">{{ user.handle }}</div>
       </div>
