@@ -9,9 +9,7 @@ type RichParam = {
   param: string,
 }
 
-// TODO: `?<=` は iOS ではスルーされる。代替策を講じること
-const TAG_REGEXP_STRING = "(?<=^|[\\s　、。！？「（])#[^#\\s\\(\\)\\[\\]{}<>\"'`:;,.!?/\\\\|　、。！？）」]+"
-
+const TAG_REGEXP_STRING = "(?:[\\s　、。！？「（])#[^#\\s\\(\\)\\[\\]{}<>\"'`:;,.!?/\\\\|　、。！？）」]+"
 const TAG_REGEXP_SINGLE = new RegExp(TAG_REGEXP_STRING)
 const TAG_REGEXP_ALL = new RegExp(`(${TAG_REGEXP_STRING})`, "gm")
 const INTERNAL_LINK_ITEMS = [
