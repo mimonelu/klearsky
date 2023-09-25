@@ -52,20 +52,22 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="feed-search-view">
-    <form @submit.prevent="fetchNewResults">
-      <input
-        v-model="mainState.currentSearchFeedsTerm"
-        id="feed-term-textbox"
-        type="search"
-        :placeholder="$t('keyword')"
-        autocapitalize="off"
-        autocomplete="off"
-        inputmode="search"
-        spellcheck="false"
-        class="textbox"
-      >
-    </form>
-    <div class="main">
+    <Portal to="search-view-header">
+      <form @submit.prevent="fetchNewResults">
+        <input
+          v-model="mainState.currentSearchFeedsTerm"
+          id="feed-term-textbox"
+          type="search"
+          :placeholder="$t('keyword')"
+          autocapitalize="off"
+          autocomplete="off"
+          inputmode="search"
+          spellcheck="false"
+          class="textbox"
+        >
+      </form>
+    </Portal>
+    <div class="feed-search-view__main">
       <div class="feed-card-container">
         <FeedCard
           v-for="generator of mainState.currentSearchFeeds"
@@ -86,21 +88,13 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 </template>
 
 <style lang="scss" scoped>
-.feed-search-view {
-  form {
-    display: grid;
-    padding: 1rem;
-  }
-}
-
-.main {
+.feed-search-view__main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .feed-card-container {
-  border-top: 1px solid var(--fg-color-025);
   flex-grow: 1;
 }
 

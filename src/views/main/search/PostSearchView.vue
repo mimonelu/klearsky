@@ -65,20 +65,22 @@ function removeThisPost (uri: string) {
 
 <template>
   <div class="post-search-view">
-    <form @submit.prevent="submitForm">
-      <input
-        v-model="state.text"
-        id="post-term-textbox"
-        type="search"
-        :placeholder="$t('keyword')"
-        autocapitalize="off"
-        autocomplete="off"
-        inputmode="search"
-        spellcheck="false"
-        class="textbox"
-      >
-    </form>
-    <div class="main">
+    <Portal to="search-view-header">
+      <form @submit.prevent="submitForm">
+        <input
+          v-model="state.text"
+          id="post-term-textbox"
+          type="search"
+          :placeholder="$t('keyword')"
+          autocapitalize="off"
+          autocomplete="off"
+          inputmode="search"
+          spellcheck="false"
+          class="textbox"
+        >
+      </form>
+    </Portal>
+    <div class="post-search-view__main">
       <Post
         v-for="post of mainState.currentSearchPostResults"
         :key="post.cid"
@@ -93,17 +95,7 @@ function removeThisPost (uri: string) {
 </template>
 
 <style lang="scss" scoped>
-.post-search-view {
-  padding-bottom: var(--sp-menu-height);
-
-  form {
-    border-bottom: 1px solid var(--fg-color-025);
-    display: grid;
-    padding: 1rem;
-  }
-}
-
-.main {
+.post-search-view__main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

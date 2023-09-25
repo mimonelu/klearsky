@@ -81,20 +81,22 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="user-search-view">
-    <form @submit.prevent="fetchNewResults">
-      <input
-        v-model="mainState.currentSearchUserTerm"
-        id="user-term-textbox"
-        type="search"
-        :placeholder="$t('keyword')"
-        autocapitalize="off"
-        autocomplete="off"
-        inputmode="search"
-        spellcheck="false"
-        class="textbox"
-      >
-    </form>
-    <div class="main">
+    <Portal to="search-view-header">
+      <form @submit.prevent="fetchNewResults">
+        <input
+          v-model="mainState.currentSearchUserTerm"
+          id="user-term-textbox"
+          type="search"
+          :placeholder="$t('keyword')"
+          autocapitalize="off"
+          autocomplete="off"
+          inputmode="search"
+          spellcheck="false"
+          class="textbox"
+        >
+      </form>
+    </Portal>
+    <div class="user-search-view__main">
       <div class="users">
         <UserBox
           v-for="user of mainState.currentSearchUsers"
@@ -114,15 +116,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 </template>
 
 <style lang="scss" scoped>
-.user-search-view {
-  form {
-    display: grid;
-    padding: 1rem;
-  }
-}
-
-.main {
-  border-top: 1px solid var(--fg-color-025);
+.user-search-view__main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

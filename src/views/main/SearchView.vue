@@ -34,12 +34,27 @@ const mainState = inject("state") as MainState
           <span>{{ $t("accounts") }}</span>
         </RouterLink>
       </div>
+      <div class="search-view__form">
+        <PortalTarget name="search-view-header" />
+      </div>
     </Portal>
     <RouterView class="child-view" />
   </div>
 </template>
 
 <style lang="scss" scoped>
+.search-view__form {
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+  border-bottom: 1px solid var(--fg-color-025);
+
+  &:deep() {
+    & > form {
+      display: grid;
+      padding: 1rem;
+    }
+  }
+}
+
 .search-view {
   display: flex;
   flex-direction: column;
