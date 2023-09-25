@@ -45,9 +45,9 @@ const state = reactive<{
       class="list-menu__header"
     >{{ mainState.atp.session?.email ?? "&nbsp;" }}</div>
 
-    <!-- 最初のポスト -->
-    <MenuTickerFirstPost
-      :did="user.did"
+    <!-- テキストを翻訳する -->
+    <MenuTickerTranslateText
+      :text="user.description"
       @close="emit('close')"
     />
 
@@ -57,9 +57,9 @@ const state = reactive<{
       @close="emit('close')"
     />
 
-    <!-- テキストを翻訳する -->
-    <MenuTickerTranslateText
-      :text="user.description"
+    <!-- 最初のポストを見る -->
+    <MenuTickerFirstPost
+      :did="user.did"
       @close="emit('close')"
     />
 
