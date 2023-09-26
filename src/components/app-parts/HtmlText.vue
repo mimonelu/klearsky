@@ -9,9 +9,6 @@ type RichParam = {
   param: string,
 }
 
-const TAG_REGEXP_STRING = "#[^#\\s\\(\\)\\[\\]{}<>\"'`:;,.!?/\\\\|　、。！？）」]+"
-const TAG_REGEXP_SINGLE = new RegExp(TAG_REGEXP_STRING)
-const TAG_REGEXP_ALL = new RegExp(`(?=^|\\W)(${TAG_REGEXP_STRING})`, "gm")
 const INTERNAL_LINK_ITEMS = [
   // カスタムフィードページ
   {
@@ -110,29 +107,15 @@ const state = reactive<{
         results.push({
           type: "tag",
           text: segment.text,
-          param: segment.tag?.tag ?? '',
+          param: encodeURIComponent(segment.tag?.tag?.substring(1) ?? ''),
         })
 
-      else {
-        const matches = segment.text.split(TAG_REGEXP_ALL)
-        for (const match of matches) {
-          // ハッシュタグ
-          if (props.processHashTag && TAG_REGEXP_SINGLE.test(match))
-            results.push({
-              type: "tag",
-              text: match,
-              param: match.substring(1),
-            })
-
-          // テキスト
-          else
-            results.push({
-              type: "text",
-              text: match,
-              param: "",
-            })
-        }
-      }
+      else
+        results.push({
+          type: "text",
+          text: segment.text,
+          param: "",
+        })
     }
     return results
   }),
