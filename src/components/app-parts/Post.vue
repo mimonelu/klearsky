@@ -762,6 +762,19 @@ function onActivateHashTag (text: string) {
           />
         </template>
 
+        <!-- ポストタグ -->
+        <div
+          v-if="post.record?.tags != null"
+          class="post-tag"
+        >
+          <RouterLink
+            v-for="postTag of post.record.tags"
+            :to="`/search/post?text=${encodeURIComponent(postTag)}`"
+            class="post-tag__item"
+            @click.prevent.stop
+          >{{ postTag }}</RouterLink>
+        </div>
+
         <!-- リアクションコンテナ -->
         <div
           v-if="position !== 'postInPost' && position !== 'slim'"
@@ -1249,6 +1262,26 @@ function onActivateHashTag (text: string) {
   border-radius: var(--border-radius);
   &:focus, &:hover {
     border-color: var(--accent-color-05);
+  }
+}
+
+.post-tag {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 0.25em;
+
+  &__item {
+    border: 1px solid rgb(var(--fg-color), 0.125);
+    border-radius: var(--border-radius);
+    color: rgb(var(--fg-color), 0.5);
+    display: block;
+    font-size: 0.875em;
+    padding: 0.25em 0.5em;
+    word-break: break-all;
+    &:focus, &:hover {
+      border-color: rgb(var(--accent-color), 0.625);
+      color: rgb(var(--accent-color));
+    }
   }
 }
 
