@@ -18,14 +18,9 @@ const mainState = inject("state") as MainState
 
 <style lang="scss" scoped>
 @keyframes show {
-  0% {
-    opacity: 0;
-    transform: scale(1.5, 1.5);
-  }
-  100% {
-    opacity: 1.0;
-    transform: scale(1.0, 1.0);
-  }
+  0% { transform: scale(0, 0); }
+  50% { transform: scale(1.25, 1.25); }
+  100% { transform: scale(1.0, 1.0); }
 }
 
 .splash-screen {
@@ -45,10 +40,10 @@ const mainState = inject("state") as MainState
   }
 
   & > .svg-icon {
-    animation: show 500ms ease-out;
+    animation: show 500ms ease-in-out;
     animation-fill-mode: forwards;
-    fill: var(--fg-color-05);
-    font-size: 100px;
+    fill: rgb(var(--accent-color));
+    font-size: 4rem;
     transition: fill 500ms ease-out;
   }
 }

@@ -151,8 +151,13 @@ function onClickFileBox (event: Event) {
               class="account-button__image"
               :style="{ '--color': getDidColor(session.did) }"
             >
+              <SVGIcon
+                v-if="session.__avatar == null"
+                name="shimmer"
+              />
               <LazyImage
-                :src="session.__avatar ?? '/img/void-avatar.png'"
+                v-else
+                :src="session.__avatar"
                 :data-has-avatar="session.__avatar != null"
               />
             </div>
@@ -267,12 +272,20 @@ function onClickFileBox (event: Event) {
 
   &__image {
     background-color: var(--color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     grid-area: i;
+    width: 3rem;
+    height: 3rem;
+
+    & > .svg-icon {
+      fill: white;
+      font-size: 1.5rem;
+    }
 
     & > .lazy-image {
       background-color: unset;
-      width: 3rem;
-      height: 3rem;
       &[data-has-avatar="false"] {
         filter: brightness(200%);
       }

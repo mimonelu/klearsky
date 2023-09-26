@@ -32,7 +32,7 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 
     & > .svg-icon {
       fill: rgb(var(--accent-color));
-      font-size: 0.75em;
+      font-size: 0.8em;
     }
 
     &__svg {
