@@ -619,6 +619,7 @@ function onActivateHashTag (text: string) {
           :text="state.text"
           :facets="post.record?.facets ?? post.value?.facets"
           :entities="post.record?.entities ?? post.value?.entities"
+          :processHashTag="false"
           :hasTranslateLink="state.hasOtherLanguages"
           @onActivateHashTag="onActivateHashTag"
           @translate="onForceTranslate"

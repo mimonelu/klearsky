@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, reactive, type ComputedRef } from "vue"
 import type { Entity, Facet, RichTextOpts, RichTextProps } from "@atproto/api"
 import { RichText } from "@atproto/api"
 
@@ -59,13 +59,12 @@ const INTERNAL_LINK_ITEMS = [
 const emit = defineEmits<{(name: string, text: string): void}>()
 
 const props = defineProps<{
-  text?: string;
-  facets?: Facet[];
-  entities?: Entity[];
-  hasTranslateLink?: boolean;
+  text?: string
+  facets?: Facet[]
+  entities?: Entity[]
+  processHashTag?: boolean
+  hasTranslateLink?: boolean
 }>()
-
-const mainState = inject("state") as MainState
 
 const state = reactive<{
   segments: ComputedRef<Array<RichParam>>;
@@ -106,11 +105,19 @@ const state = reactive<{
           param: segment.mention?.did ?? '',
         })
 
+      // ハッシュタグ
+      else if (segment.isTag())
+        results.push({
+          type: "tag",
+          text: segment.text,
+          param: segment.tag?.tag ?? '',
+        })
+
       else {
         const matches = segment.text.split(TAG_REGEXP_ALL)
         for (const match of matches) {
           // ハッシュタグ
-          if (TAG_REGEXP_SINGLE.test(match))
+          if (props.processHashTag && TAG_REGEXP_SINGLE.test(match))
             results.push({
               type: "tag",
               text: match,

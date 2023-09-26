@@ -214,6 +214,7 @@ function closeMenuTicker () {
       class="feed-card__description"
       dir="auto"
       :text="generator.description ?? '&nbsp;'"
+      :processHashTag="true"
       @onActivateMention="emit('onActivateMention')"
       @onActivateHashTag="emit('onActivateHashTag')"
     />

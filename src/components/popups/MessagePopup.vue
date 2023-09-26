@@ -31,6 +31,7 @@ function close () {
     <template #body>
       <HtmlText
         :text="mainState.messagePopupText"
+        :processHashTag="true"
         @onActivateHashTag="close"
         @onActivateMention="close"
       />

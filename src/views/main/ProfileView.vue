@@ -242,6 +242,7 @@ function hideWarningContent () {
           class="description"
           dir="auto"
           :text="mainState.currentProfile?.description ?? '&nbsp;'"
+          :processHashTag="true"
         />
         <div class="statistics">
           <dl class="posts-count">
