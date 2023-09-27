@@ -880,7 +880,8 @@ function broadcastListener (event: MessageEvent) {
 
 <style lang="scss" scoped>
 .main-view {
-  background-color: rgb(var(--bg-color), var(--bg-opacity));
+  background-color: rgb(var(--bg-color));
+  transition: background-color 500ms ease-out;
 
   // カスタムレイアウト
   &[data-layout="defaultLeft"],
