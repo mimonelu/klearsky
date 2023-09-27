@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { RouterView, type LocationQueryValue } from "vue-router"
-import AvatarButton from "@/components/AvatarButton.vue"
-import BlockButton from "@/components/BlockButton.vue"
-import ContentWarning from "@/components/ContentWarning.vue"
-import FollowButton from "@/components/FollowButton.vue"
-import HandleHistoryPopup from "@/components/HandleHistoryPopup.vue"
-import HtmlText from "@/components/HtmlText.vue"
-import MuteButton from "@/components/MuteButton.vue"
-import PageHeader from "@/components/PageHeader.vue"
-import ProfileMenuTicker from "@/components/ProfileMenuTicker.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import AvatarButton from "@/components/buttons/AvatarButton.vue"
+import BlockButton from "@/components/buttons/BlockButton.vue"
+import ContentWarning from "@/components/app-parts/ContentWarning.vue"
+import FollowButton from "@/components/buttons/FollowButton.vue"
+import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
+import HtmlText from "@/components/app-parts/HtmlText.vue"
+import LazyImage from "@/components/common/LazyImage.vue"
+import Loader from "@/components/common/Loader.vue"
+import MuteButton from "@/components/buttons/MuteButton.vue"
+import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -94,170 +96,177 @@ function hideWarningContent () {
     :data-content-warning-visibility="state.contentWarningVisibility"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
-    <PageHeader
-      :hasBackButton="true"
-      :title="$t('profile')"
-      :subTitle="mainState.currentProfile?.displayName"
-    />
+    <Portal to="router-view-wrapper-header">
+      <PageHeader
+        :hasBackButton="true"
+        :title="$t('profile')"
+        :subTitle="mainState.currentProfile?.displayName"
+      />
+    </Portal>
 
-    <div
+    <!-- バナー -->
+    <LazyImage
       v-if="state.showPrivateData"
       class="banner"
+      :src="mainState.currentProfile?.banner"
       :data-has-banner="!!mainState.currentProfile?.banner"
-      :style="`background-image: url(${mainState.currentProfile?.banner ?? '/img/void.png'});`"
       @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
     />
 
-    <!-- Danger zone -->
-    <div class="danger-zone">
-      <!-- ラベル対応 -->
-      <ContentWarning
-        :display="state.contentWarningForceDisplay"
-        :authorLabels="mainState.currentProfile?.labels"
-        @show="showWarningContent"
-        @hide="hideWarningContent"
-      />
-
-      <!-- プロフィールラベル -->
-      <div
-        v-if="state.contentWarningIsHidden && (mainState.currentProfile?.labels?.length ?? 0) > 0"
-        class="textlabel--alert"
-      >
-        <div class="textlabel__text">
-          <SVGIcon name="alert" />{{ $t("profileLabel") }}
-        </div>
-        <div
-          v-for="label of mainState.currentProfile?.labels"
-          :key="label.val"
-          class="textlabel__item"
-        >{{ $t(label.val) }}</div>
-      </div>
-
-      <!-- ミュートしている -->
-      <div
-        v-if="mainState.currentProfile?.viewer.muted"
-        class="textlabel--alert"
-      >
-        <div class="textlabel__text">
-          <SVGIcon name="volumeOff" />{{ $t("muting") }}
-        </div>
-      </div>
-
-      <!-- ブロックしている -->
-      <div
-        v-if="mainState.currentProfile?.viewer.blocking != null"
-        class="textlabel--alert"
-      >
-        <div class="textlabel__text">
-          <SVGIcon name="alert" />{{ $t("blocking") }}
-        </div>
-      </div>
-
-      <!-- ブロックされている -->
-      <div
-        v-if="mainState.currentProfile?.viewer.blockedBy"
-        class="textlabel--alert"
-      >
-        <div class="textlabel__text">
-          <SVGIcon name="alert" />{{ $t("blocked") }}
-        </div>
-      </div>
-    </div>
-
-    <div class="details">
-      <div class="top">
-        <div
-          v-if="state.showPrivateData"
-          class="left"
-        >
-          <AvatarButton
-            :handle="mainState.currentProfile?.handle"
-            :image="mainState.currentProfile?.avatar"
-          />
-        </div>
-        <div class="right">
-          <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
-          <a
-            class="handle"
-            @click.stop="state.handleHistoryPopupDisplay = true"
-          >
-            <span>{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</span>
-            <SVGIcon name="history" />
-          </a>
-          <div
-            v-if="!isMyProfile() && isFollowed()"
-            class="followed"
-          >{{ $t("followed") }}</div>
-        </div>
-      </div>
-      <div class="bottom">
-        <div
-          v-if="mainState.currentProfile != null"
-          class="button-container"
-        >
-          <RouterLink
-            v-if="isMyProfile()"
-            to="/profile/edit"
-            class="button edit-button"
-          >
-            <SVGIcon name="edit" />
-            <span>{{ $t("editProfile") }}</span>
-          </RouterLink>
-          <FollowButton
-            v-if="!isMyProfile()"
-            :viewer="mainState.currentProfile.viewer"
-            :did="mainState.currentProfile.did"
-            :declarationDid="mainState.currentProfile.did"
-          />
-          <div class="button-container__separator" />
-          <MuteButton
-            v-if="!isMyProfile()"
-            :did="mainState.currentProfile.did"
-            :viewer="mainState.currentProfile.viewer"
-          />
-          <BlockButton
-            v-if="!isMyProfile()"
-            :did="mainState.currentProfile.did"
-            :viewer="mainState.currentProfile.viewer"
-          />
-          <button
-            class="button--bordered menu-button"
-            @click.stop="openPostMenu"
-          >
-            <SVGIcon name="menu" />
-            <ProfileMenuTicker
-              :isUser="isMyProfile()"
-              :display="state.profileMenuDisplay"
-              :user="(mainState.currentProfile as TTProfile)"
-              @close="closePostMenu"
-            />
-          </button>
-        </div>
-        <HtmlText
-          v-if="state.showPrivateData"
-          class="description"
-          dir="auto"
-          :text="mainState.currentProfile?.description ?? '&nbsp;'"
+    <div class="profile-view__top">
+      <!-- Danger zone -->
+      <div class="danger-zone">
+        <!-- ラベル対応 -->
+        <ContentWarning
+          :display="state.contentWarningForceDisplay"
+          :authorLabels="mainState.currentProfile?.labels"
+          @show="showWarningContent"
+          @hide="hideWarningContent"
         />
-        <div class="statistics">
-          <dl class="posts-count">
-            <dt>{{ $t("postsCount") }}</dt>
-            <dd>{{ mainState.currentProfile?.postsCount?.toLocaleString() }}</dd>
-          </dl>
-          <dl class="follows-count">
-            <dt>{{ $t("followingCount") }}</dt>
-            <dd>{{ mainState.currentProfile?.followsCount?.toLocaleString() }}</dd>
-          </dl>
-          <dl class="followers-count">
-            <dt>{{ $t("followersCount") }}</dt>
-            <dd>{{ mainState.currentProfile?.followersCount?.toLocaleString() }}</dd>
-          </dl>
-          <dl class="created-at">
-            <dt>{{ $t("startedAt") }}</dt>
-            <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt) }}</dd>
-          </dl>
+
+        <!-- プロフィールラベル -->
+        <div
+          v-if="state.contentWarningIsHidden && (mainState.currentProfile?.labels?.length ?? 0) > 0"
+          class="textlabel--alert"
+        >
+          <div class="textlabel__text">
+            <SVGIcon name="contentFiltering" />{{ $t("profileLabel") }}
+          </div>
+          <div
+            v-for="label of mainState.currentProfile?.labels"
+            :key="label.val"
+            class="textlabel__item"
+          >{{ $t(label.val) }}</div>
+        </div>
+
+        <!-- ミュートしている -->
+        <div
+          v-if="mainState.currentProfile?.viewer.muted"
+          class="textlabel--alert"
+        >
+          <div class="textlabel__text">
+            <SVGIcon name="volumeOff" />{{ $t("muting") }}
+          </div>
+        </div>
+
+        <!-- ブロックしている -->
+        <div
+          v-if="mainState.currentProfile?.viewer.blocking != null"
+          class="textlabel--alert"
+        >
+          <div class="textlabel__text">
+            <SVGIcon name="alert" />{{ $t("blocking") }}
+          </div>
+        </div>
+
+        <!-- ブロックされている -->
+        <div
+          v-if="mainState.currentProfile?.viewer.blockedBy"
+          class="textlabel--alert"
+        >
+          <div class="textlabel__text">
+            <SVGIcon name="alert" />{{ $t("blocked") }}
+          </div>
         </div>
       </div>
+
+      <div class="details">
+        <div class="top">
+          <div
+            v-if="state.showPrivateData"
+            class="left"
+          >
+            <AvatarButton
+              :handle="mainState.currentProfile?.handle"
+              :image="mainState.currentProfile?.avatar"
+            />
+          </div>
+          <div class="right">
+            <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
+            <a
+              class="handle"
+              @click.stop="state.handleHistoryPopupDisplay = true"
+            >
+              <span>{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</span>
+              <SVGIcon name="history" />
+            </a>
+            <div
+              v-if="!isMyProfile() && isFollowed()"
+              class="followed"
+            >{{ $t("followed") }}</div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div
+            v-if="mainState.currentProfile != null"
+            class="button-container"
+          >
+            <RouterLink
+              v-if="isMyProfile()"
+              to="/profile/edit"
+              class="button edit-button"
+            >
+              <SVGIcon name="edit" />
+              <span>{{ $t("editProfile") }}</span>
+            </RouterLink>
+            <FollowButton
+              v-if="!isMyProfile()"
+              :viewer="mainState.currentProfile.viewer"
+              :did="mainState.currentProfile.did"
+              :declarationDid="mainState.currentProfile.did"
+            />
+            <div class="button-container__separator" />
+            <MuteButton
+              v-if="!isMyProfile()"
+              :did="mainState.currentProfile.did"
+              :viewer="mainState.currentProfile.viewer"
+            />
+            <BlockButton
+              v-if="!isMyProfile()"
+              :did="mainState.currentProfile.did"
+              :viewer="mainState.currentProfile.viewer"
+            />
+            <button
+              class="button--bordered menu-button"
+              @click.stop="openPostMenu"
+            >
+              <SVGIcon name="menu" />
+              <ProfileMenuTicker
+                :isUser="isMyProfile()"
+                :display="state.profileMenuDisplay"
+                :user="(mainState.currentProfile as TTProfile)"
+                @close="closePostMenu"
+              />
+            </button>
+          </div>
+          <HtmlText
+            v-if="state.showPrivateData"
+            class="description"
+            dir="auto"
+            :text="mainState.currentProfile?.description ?? '&nbsp;'"
+            :processHashTag="true"
+          />
+          <div class="statistics">
+            <dl class="posts-count">
+              <dt>{{ $t("postsCount") }}</dt>
+              <dd>{{ mainState.currentProfile?.postsCount?.toLocaleString() }}</dd>
+            </dl>
+            <dl class="follows-count">
+              <dt>{{ $t("followingCount") }}</dt>
+              <dd>{{ mainState.currentProfile?.followsCount?.toLocaleString() }}</dd>
+            </dl>
+            <dl class="followers-count">
+              <dt>{{ $t("followersCount") }}</dt>
+              <dd>{{ mainState.currentProfile?.followersCount?.toLocaleString() }}</dd>
+            </dl>
+            <dl class="created-at">
+              <dt>{{ $t("startedAt") }}</dt>
+              <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt) }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <Loader v-if="mainState.currentProfile == null && mainState.listProcessing" />
     </div>
 
     <!-- タブ -->
@@ -317,7 +326,7 @@ function hideWarningContent () {
           :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
           :title="$t('likes')"
         >
-          <SVGIcon name="heart" />
+          <SVGIcon name="like" />
         </RouterLink>
       </div>
 
@@ -330,13 +339,6 @@ function hideWarningContent () {
           :title="$t('following')"
         >
           <span>{{ $t("followings") }}</span>
-          <SVGIcon name="arrowLeft" />
-          <img
-            loading="lazy"
-            decoding="async"
-            :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
-            alt=""
-          >
         </RouterLink>
 
         <!-- フォロワータブボタン -->
@@ -345,13 +347,6 @@ function hideWarningContent () {
           :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.did } }"
           :title="$t('follower')"
         >
-          <img
-            loading="lazy"
-            decoding="async"
-            :src="mainState.currentProfile?.avatar ?? '/img/void-avatar.png'"
-            alt=""
-          >
-          <SVGIcon name="arrowLeft" />
           <span>{{ $t("followers") }}</span>
         </RouterLink>
       </div>
@@ -374,6 +369,12 @@ function hideWarningContent () {
   flex-direction: column;
   flex-grow: 1;
   position: relative;
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
 }
 
 // Danger zone
@@ -400,19 +401,9 @@ function hideWarningContent () {
 .banner {
   aspect-ratio: 3/1;
   border-bottom: 1px solid var(--fg-color-025);
-  display: block;
+  object-fit: cover;
   &[data-has-banner="true"] {
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
     cursor: pointer;
-  }
-
-  & > img {
-    aspect-ratio: 3/1;
-    display: block;
-    object-fit: cover;
-    width: 100%;
   }
 }
 
@@ -603,28 +594,6 @@ function hideWarningContent () {
 
   &__button--custom-feeds > .svg-icon {
     --fg-color: var(--accent-color);
-  }
-
-  &__button--following {
-    grid-gap: 0.375rem;
-
-    & > .svg-icon--people {
-      font-size: 1.5rem;
-    }
-
-    & > .svg-icon--arrowLeft {
-      font-size: 0.75rem;
-    }
-
-    & > img {
-      border-radius: var(--border-radius);
-      display: block;
-      font-size: 1.5rem;
-      min-width: 1.5rem;
-      max-width: 1.5rem;
-      min-height: 1.5rem;
-      max-height: 1.5rem;
-    }
   }
 }
 

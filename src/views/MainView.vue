@@ -1,40 +1,40 @@
 <script setup lang="ts">
 import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, provide } from "vue"
-import type { LocationQueryValue, RouteLocationNormalized, RouteRecordName } from "vue-router"
+import type { LocationQueryValue, RouteLocationNormalized } from "vue-router"
 import { useRouter } from "vue-router"
 import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
-import AccountPopup from "@/components/AccountPopup.vue"
-import BlockingUsersPopup from "@/components/BlockingUsersPopup.vue"
-import ConfirmationPopup from "@/components/ConfirmationPopup.vue"
-import ContentFilteringPopup from "@/components/ContentFilteringPopup.vue"
-import ErrorPopup from "@/components/ErrorPopup.vue"
-import ImagePopup from "@/components/ImagePopup.vue"
-import InviteCodesPopup from "@/components/InviteCodesPopup.vue"
-import LikeUsersPopup from "@/components/LikeUsersPopup.vue"
-import Loader from "@/components/Loader.vue"
-import LoginPopup from "@/components/LoginPopup.vue"
-import MainMenuHorizontal from "@/components/MainMenuHorizontal.vue"
-import MainMenuVertical from "@/components/MainMenuVertical.vue"
-import MessagePopup from "@/components/MessagePopup.vue"
-import MutingUsersPopup from "@/components/MutingUsersPopup.vue"
-import MyFeedsPopup from "@/components/MyFeedsPopup.vue"
-import NotificationPopup from "@/components/NotificationPopup.vue"
-import PopularFeedsPopup from "@/components/PopularFeedsPopup.vue"
-import RepostUsersPopup from "@/components/RepostUsersPopup.vue"
-import ScrollButton from "@/components/ScrollButton.vue"
-import SelectDatePopup from "@/components/SelectDatePopup.vue"
-import SelectLabelsPopup from "@/components/SelectLabelsPopup.vue"
-import SelectLanguagesPopup from "@/components/SelectLanguagesPopup.vue"
-import SendAccountReportPopup from "@/components/SendAccountReportPopup.vue"
-import SendFeedReportPopup from "@/components/SendFeedReportPopup.vue"
-import SendPostPopup from "@/components/SendPostPopup.vue"
-import SendPostReportPopup from "@/components/SendPostReportPopup.vue"
-import SettingsPopup from "@/components/SettingsPopup.vue"
-import SplashScreen from "@/components/SplashScreen.vue"
-import SubMenu from "@/components/SubMenu.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
-import WordMutePopup from "@/components/WordMutePopup.vue"
+import AccountPopup from "@/components/popups/AccountPopup.vue"
+import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
+import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
+import ContentFilteringPopup from "@/components/popups/ContentFilteringPopup.vue"
+import ErrorPopup from "@/components/popups/ErrorPopup.vue"
+import ImagePopup from "@/components/popups/ImagePopup.vue"
+import InviteCodesPopup from "@/components/popups/InviteCodesPopup.vue"
+import LikeUsersPopup from "@/components/popups/LikeUsersPopup.vue"
+import Loader from "@/components/common/Loader.vue"
+import LoginPopup from "@/components/popups/LoginPopup.vue"
+import MainMenuHorizontal from "@/components/shell-parts/MainMenuHorizontal.vue"
+import MainMenuVertical from "@/components/shell-parts/MainMenuVertical.vue"
+import MessagePopup from "@/components/popups/MessagePopup.vue"
+import MutingUsersPopup from "@/components/popups/MutingUsersPopup.vue"
+import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
+import NotificationPopup from "@/components/popups/NotificationPopup.vue"
+import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
+import ScrollButton from "@/components/buttons/ScrollButton.vue"
+import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
+import SelectLabelsPopup from "@/components/popups/SelectLabelsPopup.vue"
+import SelectLanguagesPopup from "@/components/popups/SelectLanguagesPopup.vue"
+import SendAccountReportPopup from "@/components/popups/SendAccountReportPopup.vue"
+import SendFeedReportPopup from "@/components/popups/SendFeedReportPopup.vue"
+import SendPostPopup from "@/components/popups/SendPostPopup.vue"
+import SendPostReportPopup from "@/components/popups/SendPostReportPopup.vue"
+import SettingsPopup from "@/components/popups/SettingsPopup.vue"
+import SplashScreen from "@/components/shell-parts/SplashScreen.vue"
+import SubMenu from "@/components/shell-parts/SubMenu.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
+import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
+import WordMutePopup from "@/components/popups/WordMutePopup.vue"
 import state from "@/composables/main-state"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
@@ -229,6 +229,11 @@ function resetState () {
   state.errorPopupProps.display = false
   state.errorPopupProps.error = undefined
   state.errorPopupProps.description = undefined
+
+  // タイムフィードポップアップ
+  state.currentTimeFeeds = []
+  state.timeFeedsPopupDisplay = false
+  state.timeFeedsPopupProps = undefined
 
   // 通知ポップアップの表示スイッチ
   state.notificationPopupDisplay = false
@@ -476,11 +481,6 @@ async function processPage (pageName?: null | string) {
         scrollToFocused()
         break
       }
-      case "suggestion-search": {
-        if (state.currentSearchSuggestionResults.length === 0)
-          await state.fetchSuggestions("new")
-        break
-      }
     }
   } finally {
     state.listProcessing = false
@@ -506,7 +506,7 @@ async function setupNotificationInterval () {
   clearNotificationInterval()
   await updateNotification()
   // @ts-ignore // TODO:
-  notificationTimer = setInterval(updateNotification, CONSTS.intervalOfFetchNotifications)
+  notificationTimer = setInterval(updateNotification, CONSTS.INTERVAL_OF_FETCH_NOTIFICATIONS)
 }
 
 async function updateNotification () {
@@ -518,13 +518,13 @@ async function updateNotification () {
   }
   if (canFetched) {
     // NOTICE: 念のため + 1 している
-    await state.fetchNotifications(Math.min(CONSTS.limitOfFetchNotifications, count + 1), "new")
+    await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
   }
 }
 
 async function updateInviteCodes () {
   const inviteCodes = await state.atp.fetchInviteCodes()
-  if (inviteCodes == null) return
+  if (inviteCodes instanceof Error) return
   state.inviteCodes.splice(0, state.inviteCodes.length, ...inviteCodes)
 }
 
@@ -640,6 +640,11 @@ function broadcastListener (event: MessageEvent) {
 
       <!-- ルータービュー -->
       <div class="router-view-wrapper">
+        <!-- ルータービューヘッダー -->
+        <div class="router-view-wrapper__header">
+          <PortalTarget name="router-view-wrapper-header" />
+        </div>
+
         <RouterView
           v-if="state.mounted"
           @updatePageTitle="updatePageTitle"
@@ -691,6 +696,12 @@ function broadcastListener (event: MessageEvent) {
       </template>
     </SelectLanguagesPopup>
 
+    <!-- タイムフィードポップアップ -->
+    <TimeFeedsPopup
+      v-if="state.timeFeedsPopupDisplay"
+      @close="state.closeTimeFeedsPopup"
+    />
+
     <!-- リポストユーザーリストポップアップ -->
     <RepostUsersPopup
       v-if="state.repostUsersPopupDisplay"
@@ -713,12 +724,6 @@ function broadcastListener (event: MessageEvent) {
     <MyFeedsPopup
       v-if="state.myFeedsPopupDisplay"
       @close="state.closeMyFeedsPopup"
-    />
-
-    <!-- 人気のフィードポップアップ -->
-    <PopularFeedsPopup
-      v-if="state.popularFeedsPopupDisplay"
-      @close="state.closePopularFeedsPopup"
     />
 
     <!-- ワードミュートポップアップ -->
@@ -875,7 +880,8 @@ function broadcastListener (event: MessageEvent) {
 
 <style lang="scss" scoped>
 .main-view {
-  background-color: rgb(var(--bg-color), var(--bg-opacity));
+  background-color: rgb(var(--bg-color));
+  transition: background-color 500ms ease-out;
 
   // カスタムレイアウト
   &[data-layout="defaultLeft"],
@@ -1032,6 +1038,18 @@ function broadcastListener (event: MessageEvent) {
   // SP幅未満
   @media not all and (min-width: $sp-width) {
     border-left-style: none;
+  }
+
+  // ルータービューヘッダー
+  &__header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    max-width: $router-view-width;
+    &:empty {
+      display: none;
+    }
   }
 
   & > .feed-list {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
-import Post from "@/components/Post.vue"
+import Post from "@/components/app-parts/Post.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -19,8 +19,8 @@ watch(() => router.currentRoute.value.query.text, (value: any) => {
 }, { immediate: true })
 
 onMounted(() => {
-  const formItem = document.getElementById("post-term-textbox")
-  if (formItem != null) formItem.focus()
+  const textbox = document.getElementById("post-term-textbox")
+  if (textbox != null) textbox.focus()
 })
 
 function updateSearchPostTerm (text: string) {
@@ -65,20 +65,22 @@ function removeThisPost (uri: string) {
 
 <template>
   <div class="post-search-view">
-    <form @submit.prevent="submitForm">
-      <input
-        v-model="state.text"
-        id="post-term-textbox"
-        type="search"
-        :placeholder="$t('keyword')"
-        autocapitalize="off"
-        autocomplete="off"
-        inputmode="search"
-        spellcheck="false"
-        class="textbox"
-      >
-    </form>
-    <div class="main">
+    <Portal to="search-view-header">
+      <form @submit.prevent="submitForm">
+        <input
+          v-model="state.text"
+          id="post-term-textbox"
+          type="search"
+          :placeholder="$t('keyword')"
+          autocapitalize="off"
+          autocomplete="off"
+          inputmode="search"
+          spellcheck="false"
+          class="textbox"
+        >
+      </form>
+    </Portal>
+    <div class="post-search-view__main">
       <Post
         v-for="post of mainState.currentSearchPostResults"
         :key="post.cid"
@@ -93,17 +95,7 @@ function removeThisPost (uri: string) {
 </template>
 
 <style lang="scss" scoped>
-.post-search-view {
-  padding-bottom: var(--sp-menu-height);
-
-  form {
-    border-bottom: 1px solid var(--fg-color-025);
-    display: grid;
-    padding: 1rem;
-  }
-}
-
-.main {
+.post-search-view__main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

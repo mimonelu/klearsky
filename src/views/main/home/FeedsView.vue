@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
-import FeedCard from "@/components/FeedCard.vue"
-import FeedList from "@/components/FeedList.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import FeedCard from "@/components/app-parts/FeedCard.vue"
+import FeedList from "@/components/list/FeedList.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -39,11 +39,6 @@ function openMyFeedsPopup () {
   Util.blurElement()
   mainState.openMyFeedsPopup()
 }
-
-function openPopularFeedsPopup () {
-  Util.blurElement()
-  mainState.openPopularFeedsPopup()
-}
 </script>
 
 <template>
@@ -58,14 +53,6 @@ function openPopularFeedsPopup () {
         @click.stop="openMyFeedsPopup"
       >
         <SVGIcon name="feed" />
-      </button>
-
-      <!-- 人気のフィードポップアップトリガー -->
-      <button
-        class="popular-feeds-trigger"
-        @click.stop="openPopularFeedsPopup"
-      >
-        <SVGIcon name="fire" />
       </button>
     </Portal>
     <FeedCard

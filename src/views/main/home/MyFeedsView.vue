@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import FeedList from "@/components/FeedList.vue"
-import Loader from "@/components/Loader.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import FeedList from "@/components/list/FeedList.vue"
+import LazyImage from "@/components/common/LazyImage.vue"
+import Loader from "@/components/common/Loader.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -19,11 +20,6 @@ function openMyFeedsPopup () {
   Util.blurElement()
   mainState.openMyFeedsPopup()
 }
-
-function openPopularFeedsPopup () {
-  Util.blurElement()
-  mainState.openPopularFeedsPopup()
-}
 </script>
 
 <template>
@@ -39,14 +35,6 @@ function openPopularFeedsPopup () {
         @click.stop="openMyFeedsPopup"
       >
         <SVGIcon name="feed" />
-      </button>
-
-      <!-- 人気のフィードポップアップトリガー -->
-      <button
-        class="popular-feeds-trigger"
-        @click.stop="openPopularFeedsPopup"
-      >
-        <SVGIcon name="fire" />
       </button>
     </Portal>
 
@@ -75,12 +63,7 @@ function openPopularFeedsPopup () {
           },
         }"
       >
-        <img
-          loading="lazy"
-          decoding="async"
-          :src="myFeeds.generator?.avatar ?? '/img/void-avatar.png'"
-          alt=""
-        >
+        <LazyImage :src="myFeeds.generator?.avatar" />
         <span>{{ myFeeds.generator?.displayName }}</span>
         <SVGIcon name="cursorRight" />
       </RouterLink>
@@ -149,9 +132,8 @@ function openPopularFeedsPopup () {
     max-height: 3rem;
     z-index: 1;
 
-    & > img {
+    & > .lazy-image {
       border-radius: 1px;
-      display: block;
       overflow: hidden;
       min-width: 1.75em;
       max-width: 1.75em;

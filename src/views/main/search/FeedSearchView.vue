@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
-import FeedCard from "@/components/FeedCard.vue"
-import LoadButton from "@/components/LoadButton.vue"
+import FeedCard from "@/components/app-parts/FeedCard.vue"
+import LoadButton from "@/components/buttons/LoadButton.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -13,8 +13,13 @@ const state = reactive<{
 })
 
 onMounted(() => {
-  const formItem = document.getElementById("feed-term-textbox")
-  if (formItem != null) formItem.focus()
+  const textbox = document.getElementById("feed-term-textbox")
+  if (textbox != null) textbox.focus()
+
+  // 検索キーワードと検索結果がない場合、すべてのフィードを取得
+  if (mainState.currentSearchFeedsTerm === "" &&
+      mainState.currentSearchFeeds.length === 0)
+    fetchNewResults()
 })
 
 async function fetchNewResults () {
@@ -47,20 +52,22 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="feed-search-view">
-    <form @submit.prevent="fetchNewResults">
-      <input
-        v-model="mainState.currentSearchFeedsTerm"
-        id="feed-term-textbox"
-        type="search"
-        :placeholder="$t('keyword')"
-        autocapitalize="off"
-        autocomplete="off"
-        inputmode="search"
-        spellcheck="false"
-        class="textbox"
-      >
-    </form>
-    <div class="main">
+    <Portal to="search-view-header">
+      <form @submit.prevent="fetchNewResults">
+        <input
+          v-model="mainState.currentSearchFeedsTerm"
+          id="feed-term-textbox"
+          type="search"
+          :placeholder="$t('keyword')"
+          autocapitalize="off"
+          autocomplete="off"
+          inputmode="search"
+          spellcheck="false"
+          class="textbox"
+        >
+      </form>
+    </Portal>
+    <div class="feed-search-view__main">
       <div class="feed-card-container">
         <FeedCard
           v-for="generator of mainState.currentSearchFeeds"
@@ -81,21 +88,13 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 </template>
 
 <style lang="scss" scoped>
-.feed-search-view {
-  form {
-    display: grid;
-    padding: 1rem;
-  }
-}
-
-.main {
+.feed-search-view__main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .feed-card-container {
-  border-top: 1px solid var(--fg-color-025);
   flex-grow: 1;
 }
 

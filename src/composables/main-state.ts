@@ -125,6 +125,10 @@ const state = reactive<MainState>({
   closeConfirmationPopup,
   applyConfirmationPopup,
 
+  // タイムフィードポップアップの開閉
+  openTimeFeedsPopup,
+  closeTimeFeedsPopup,
+
   // 通知ポップアップの開閉
   openNotificationPopup,
   closeNotificationPopup,
@@ -160,10 +164,6 @@ const state = reactive<MainState>({
   // マイフィードポップアップの開閉
   openMyFeedsPopup,
   closeMyFeedsPopup,
-
-  // 人気のフィードポップアップの開閉
-  openPopularFeedsPopup,
-  closePopularFeedsPopup,
 
   // ワードミュートポップアップの開閉
   openWordMutePopup,
@@ -306,7 +306,7 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string
     await state.atp.fetchAuthorFeed(
       feeds as Array<TTFeed>,
       account,
-      CONSTS.limitOfFetchAuthorFeeds,
+      CONSTS.LIMIT_OF_FETCH_AUTHOR_FEEDS,
       direction === "old" ? middleCursor ?? cursor : undefined,
       filter ?? "posts_no_replies",
       middleCursor != null
@@ -333,7 +333,7 @@ async function fetchCurrentAuthorCustomFeeds (direction: "new" | "old") {
     await state.atp.fetchAuthorCustomFeeds(
       state.currentAuthorCustomFeeds as Array<TTFeedGenerator>,
       account,
-      CONSTS.limitOfFetchAuthorCustomFeeds,
+      CONSTS.LIMIT_OF_FETCH_AUTHOR_CUSTOM_FEEDS,
       direction === "old" ? state.currentAuthorCustomFeedsCursor : undefined
     )
   if (cursor instanceof Error) return
@@ -346,7 +346,7 @@ async function fetchAuthorReposts (direction: "new" | "old") {
   const cursor: undefined | string = await state.atp.fetchAuthorReposts(
     state.currentAuthorReposts,
     account,
-    CONSTS.limitOfFetchAuthorReposts,
+    CONSTS.LIMIT_OF_FETCH_AUTHOR_REPOSTS,
     direction === "new" ? undefined : state.currentAuthorRepostsCursor
   )
   state.currentAuthorRepostsCursor = cursor
@@ -358,7 +358,7 @@ async function fetchAuthorLikes (direction: "new" | "old") {
   const cursor: undefined | string = await state.atp.fetchAuthorLikes(
     state.currentAuthorLikes,
     account,
-    CONSTS.limitOfFetchAuthorLikes,
+    CONSTS.LIMIT_OF_FETCH_AUTHOR_LIKES,
     direction === "new" ? undefined : state.currentAuthorLikesCursor
   )
   state.currentAuthorLikesCursor = cursor
@@ -450,7 +450,7 @@ async function fetchTimeline (direction: "old" | "new", middleCursor?: string) {
       state.timelineFeeds,
       state.currentSetting.replyControl,
       state.currentSetting.repostControl,
-      CONSTS.limitOfFetchFeeds,
+      CONSTS.LIMIT_OF_FETCH_FEEDS,
       direction === "old" ? middleCursor ?? state.timelineCursor : undefined,
       middleCursor != null
     )
@@ -470,7 +470,7 @@ async function fetchPostThread () {
     uri = `at://${did}/app.bsky.feed.post/${rkey}`
   }
   state.currentPosts?.splice(0)
-  const posts = await state.atp.fetchPostThread(uri, CONSTS.limitOfFetchPostThread) ?? []
+  const posts = await state.atp.fetchPostThread(uri, CONSTS.LIMIT_OF_FETCH_POST_THREAD) ?? []
   if (posts) state.currentPosts = posts
 }
 
@@ -500,7 +500,7 @@ async function fetchFollowers (direction: "new" | "old") {
   const cursor: undefined | string = await state.atp.fetchFollowers(
     state.currentFollowers,
     account,
-    CONSTS.limitOfFetchFollows,
+    CONSTS.LIMIT_OF_FETCH_FOLLOWS,
     direction === "new" ? undefined : state.currentFollowersCursor
   )
   state.currentFollowersCursor = cursor
@@ -519,7 +519,7 @@ async function fetchFollowings (direction: "new" | "old") {
   const cursor: undefined | string = await state.atp.fetchFollowings(
     state.currentFollowings,
     account,
-    CONSTS.limitOfFetchFollows,
+    CONSTS.LIMIT_OF_FETCH_FOLLOWS,
     direction === "new" ? undefined : state.currentFollowingsCursor
   )
   state.currentFollowingsCursor = cursor
@@ -529,7 +529,7 @@ async function fetchSuggestions (direction: "new" | "old") {
   state.currentSearchSuggestionCursor =
     await state.atp.fetchSuggestions(
       state.currentSearchSuggestionResults,
-      CONSTS.limitOfFetchSuggestionSearch,
+      CONSTS.LIMIT_OF_FETCH_SUGGESTION_SEARCH,
       direction === "new" ? undefined : state.currentSearchSuggestionCursor
     )
 }
@@ -538,7 +538,7 @@ async function fetchPopularFeedGenerators (direction: "old" | "new") {
   const cursor: Error | undefined | string =
     await state.atp.fetchPopularFeedGenerators(
       state.currentPopularFeedGenerators,
-      CONSTS.limitOfFetchPopularFeedGenerators,
+      CONSTS.LIMIT_OF_FETCH_POPULAR_FEED_GENERATORS,
       direction === "old" ? state.currentPopularFeedGeneratorsCursor : undefined
     )
   if (cursor instanceof Error) state.openErrorPopup(
@@ -552,7 +552,7 @@ async function fetchSearchFeeds (direction: "old" | "new") {
   const cursor: Error | undefined | string =
     await state.atp.fetchPopularFeedGenerators(
       state.currentSearchFeeds,
-      CONSTS.limitOfFetchPopularFeedGenerators,
+      CONSTS.LIMIT_OF_FETCH_POPULAR_FEED_GENERATORS,
       direction === "old" ? state.currentSearchFeedsCursor : undefined,
       state.currentSearchFeedsTerm
     )
@@ -572,7 +572,7 @@ async function fetchCustomFeeds (direction: "old" | "new", middleCursor?: string
     await state.atp.fetchCustomFeeds(
       state.currentCustomFeeds,
       state.currentQuery.feed,
-      CONSTS.limitOfFetchFeeds,
+      CONSTS.LIMIT_OF_FETCH_FEEDS,
       direction === "old" ? middleCursor ?? state.currentCustomCursor : undefined,
       middleCursor != null
     )
@@ -616,7 +616,7 @@ async function fetchMyFeeds (): Promise<boolean> {
   pinned.forEach(async (uri: string) => {
     if (state.currentMyFeeds[uri] == null) return
     state.currentMyFeeds[uri].processing = true
-    const status = await state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.limitOfFetchMyFeeds)
+    const status = await state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.LIMIT_OF_FETCH_MY_FEEDS)
     state.currentMyFeeds[uri].status = status !== false
     state.currentMyFeeds[uri].processing = false
   })
@@ -737,7 +737,7 @@ function updateColorThemeSetting () {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (params: TTSendPostPopupProps): Promise<boolean> {
+async function openSendPostPopup (params: TTSendPostPopupParams): Promise<boolean> {
   state.sendPostPopupProps.display = true
   state.sendPostPopupProps.type = params.type
   state.sendPostPopupProps.post = params.post
@@ -807,6 +807,19 @@ function closeConfirmationPopup () {
 function applyConfirmationPopup () {
   state.confirmationPopupResult = true
   state.confirmationPopupDisplay = false
+}
+
+// タイムフィードポップアップの開閉
+
+function openTimeFeedsPopup (post: TTPost) {
+  state.currentTimeFeeds.splice(0)
+  state.currentTimeFeeds.push(post)
+  state.timeFeedsPopupProps = post
+  state.timeFeedsPopupDisplay = true
+}
+
+function closeTimeFeedsPopup () {
+  state.timeFeedsPopupDisplay = false
 }
 
 // 通知ポップアップの開閉
@@ -898,16 +911,6 @@ function openMyFeedsPopup () {
 
 function closeMyFeedsPopup () {
   state.myFeedsPopupDisplay = false
-}
-
-// 人気のフィードポップアップの開閉
-
-function openPopularFeedsPopup () {
-  state.popularFeedsPopupDisplay = true
-}
-
-function closePopularFeedsPopup () {
-  state.popularFeedsPopupDisplay = false
 }
 
 // ワードミュートポップアップの開閉

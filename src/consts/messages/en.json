@@ -29,6 +29,7 @@
   "media": "Media",
   "invalidHandle": "(Invalid handle)",
   "share": "Share",
+  "postFeatures": "Features",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -128,7 +129,6 @@
   "password": "Password or App Password",
   "getAppPassword": "Get App Password",
   "myAccounts": "My Accounts",
-  "noMyAccounts": "No My Accounts. Please log in first. You can create an account on the official app.",
   "loginFailed": "Login failed. Please check your entry.",
   "sessionExpired": "Session expired. Please login again.",
 
@@ -182,12 +182,8 @@
   "globalline": "Globalline",
 
   "customFeeds": "Custom Feeds",
-  "popularFeeds": "Popular Feeds",
   "myFeeds": "My Feeds",
   "myFeedsEdit": "Edit my feeds",
-  "noFeeds": "There are no saved custom feeds.",
-  "noMyFeeds": "There are no My Feeds. Please save feeds.",
-  "noPopularFeeds": "There are no popular feeds. Please contact the server administrator.",
 
   "search": "Search",
   "suggestionSearch": "Suggestions",
@@ -346,7 +342,7 @@
   "replyUnknown": "Reply address unknown",
   "quoteRepost": "Quote repost",
   "text": "Text",
-  "linkBox": "Link card/Feed card URL",
+  "LinkCardPlaceHolder": "Link card/Feed card URL",
   "imageBoxes": "Images",
   "alts": "ALT texts",
   "submit": "Submit",
@@ -373,6 +369,16 @@
   "reposts": "Reposts",
 
   "shortcuts": "Shortcuts",
+
+  "noInviteCodes": "No invite codes. Please note that if you are logged in with AppPasswords, you can not get an invite codes.",
+  "noMyAccounts": "No My Accounts. Please log in first. You can create an account on the official app.",
+  "noMyFeeds": "No My Feeds. Please save feeds.",
+  "noPostsInFeed": "No posts in this feed.",
+  "noMedias": "No media. Please read more.",
+  "noAuthorFeeds": "There are no feeds managed by this user.",
+
+  "showTimeFeeds": "Show in timefeed",
+  "timeFeeds": "Timefeed",
 
   "pnGiphy": "Giphy",
   "pnSpotify": "Spotify",

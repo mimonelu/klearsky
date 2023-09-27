@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import Loader from "@/components/Loader.vue"
-import PageHeader from "@/components/PageHeader.vue"
-import Post from "@/components/Post.vue"
-import SVGIcon from "@/components/SVGIcon.vue"
+import Loader from "@/components/common/Loader.vue"
+import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import Post from "@/components/app-parts/Post.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -32,17 +32,19 @@ async function updateAll () {
 
 <template>
   <div class="post-view">
-    <PageHeader
-      :hasBackButton="true"
-      :title="$t('post')"
-      :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
-    >
-      <template #right>
-        <button @click.stop="updateAll">
-          <SVGIcon name="refresh" />
-        </button>
-      </template>
-    </PageHeader>
+    <Portal to="router-view-wrapper-header">
+      <PageHeader
+        :hasBackButton="true"
+        :title="$t('post')"
+        :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
+      >
+        <template #right>
+          <button @click.stop="updateAll">
+            <SVGIcon name="refresh" />
+          </button>
+        </template>
+      </PageHeader>
+    </Portal>
     <Post
       v-for="post, postIndex of mainState.currentPosts"
       :key="post.cid"

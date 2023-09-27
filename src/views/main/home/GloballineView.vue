@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive, ref } from "vue"
-import GloballineSettingsPopup from "@/components/GloballineSettingsPopup.vue"
-import Loader from "@/components/Loader.vue"
-import Post from "@/components/Post.vue"
-import SubscribeRepos from "@/composables/atp-wrapper/atp-utils/subscribe-repos"
-import SVGIcon from "@/components/SVGIcon.vue"
+import GloballineSettingsPopup from "@/components/popups/GloballineSettingsPopup.vue"
+import Loader from "@/components/common/Loader.vue"
+import Post from "@/components/app-parts/Post.vue"
+import SubscribeRepos from "@/composables/atp-wrapper/atp-util/subscribe-repos"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -191,19 +191,21 @@ function onMutated () {
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         >
-          <template #body-after>
+          <template #header-before>
             <!-- リプライ／引用リポストアイコン -->
             <div
               v-if="message.record.reply != null"
               class="reply-icon"
             >
               <SVGIcon name="reply" />
+              <span>{{ $t("reply") }}</span>
             </div>
             <div
               v-if="message.record.embed?.record != null"
               class="quote-repost-icon"
             >
               <SVGIcon name="quoteRepost" />
+              <span>{{ $t("quoteRepost") }}</span>
             </div>
           </template>
         </Post>
@@ -291,24 +293,32 @@ function onMutated () {
 // リプライ／引用リポストアイコン
 .reply-icon,
 .quote-repost-icon {
-  position: absolute;
-  top: -0.5rem;
-  left: -0.5rem;
+  display: flex;
+  align-items: center;
+  grid-gap: 0.25em;
 
-  & > .svg-icon {
-    font-size: 1.25rem;
+  & > .svg-icon,
+  & > span {
+    font-size: 0.875em;
+  }
+  & > span {
+    font-weight: bold;
   }
 }
 .reply-icon {
   & > .svg-icon {
     fill: rgb(var(--post-color));
-    stroke: rgb(var(--bg-color));
+  }
+  & > span {
+    color: rgb(var(--post-color));
   }
 }
 .quote-repost-icon {
   & > .svg-icon {
     fill: rgb(var(--share-color));
-    stroke: rgb(var(--bg-color));
+  }
+  & > span {
+    color: rgb(var(--share-color));
   }
 }
 

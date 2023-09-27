@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import { RouterView } from "vue-router"
-import PageHeader from "@/components/PageHeader.vue"
+import PageHeader from "@/components/shell-parts/PageHeader.vue"
 
 const mainState = inject("state") as MainState
 </script>
 
 <template>
   <div class="search-view">
-    <div class="search-view__header">
+    <Portal to="router-view-wrapper-header">
       <PageHeader
         :hasBackButton="true"
         :title="$t('search')"
@@ -33,29 +33,32 @@ const mainState = inject("state") as MainState
         >
           <span>{{ $t("accounts") }}</span>
         </RouterLink>
-        <RouterLink
-          class="tab__button"
-          to="/search/suggestion"
-        >
-          <span>{{ $t("suggestionSearch") }}</span>
-        </RouterLink>
       </div>
-    </div>
+      <div class="search-view__form">
+        <PortalTarget name="search-view-header" />
+      </div>
+    </Portal>
     <RouterView class="child-view" />
   </div>
 </template>
 
 <style lang="scss" scoped>
+.search-view__form {
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+  border-bottom: 1px solid var(--fg-color-025);
+
+  &:deep() {
+    & > form {
+      display: grid;
+      padding: 1rem;
+    }
+  }
+}
+
 .search-view {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-
-  &__header {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
 }
 
 .child-view {

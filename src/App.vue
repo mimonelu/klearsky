@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { inject, onErrorCaptured, reactive } from "vue"
 import { RouterView } from "vue-router"
-import GlobalErrorPopup from "@/components/GlobalErrorPopup.vue"
+import GlobalErrorPopup from "@/components/popups/GlobalErrorPopup.vue"
 import Util from "@/composables/util"
-import IgnoreErrors from "@/consts/ignore-errors.json"
-import ReplaceErrors from "@/consts/replace-errors.json"
+import IGNORE_ERRORS from "@/consts/ignore-errors.json"
+import REPLACE_ERRORS from "@/consts/replace-errors.json"
 
 const $t = inject("$t") as Function
 
@@ -18,8 +18,8 @@ onErrorCaptured(processError)
 
 function processError (error: any) {
   Util.blurElement()
-  if (IgnoreErrors.includes(error.error)) return
-  if (ReplaceErrors.includes(error.error)) {
+  if (IGNORE_ERRORS.includes(error.error)) return
+  if (REPLACE_ERRORS.includes(error.error)) {
     state.error = $t(error.error)
     return
   }

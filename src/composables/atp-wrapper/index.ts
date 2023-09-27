@@ -1,74 +1,67 @@
-import createAgent from "@/composables/atp-wrapper/create-agent"
-import createFileBlob from "@/composables/atp-wrapper/create-file-blob"
-import createFollow from "@/composables/atp-wrapper/create-follow"
-import createLike from "@/composables/atp-wrapper/create-like"
-import createPost from "@/composables/atp-wrapper/create-post"
-import createReport from "@/composables/atp-wrapper/create-report"
-import createRepost from "@/composables/atp-wrapper/create-repost"
-import deleteAccount from "@/composables/atp-wrapper/delete-account"
-import deleteFollow from "@/composables/atp-wrapper/delete-follow"
-import deleteLike from "@/composables/atp-wrapper/delete-like"
-import deletePost from "@/composables/atp-wrapper/delete-post"
-import deleteRepost from "@/composables/atp-wrapper/delete-repost"
-import deleteSession from "@/composables/atp-wrapper/delete-session"
-import disableBlock from "@/composables/atp-wrapper/disable-block"
-import disableMute from "@/composables/atp-wrapper/disable-mute"
-import enableBlock from "@/composables/atp-wrapper/enable-block"
-import enableMute from "@/composables/atp-wrapper/enable-mute"
-import fetchActorsTypeahead from "@/composables/atp-wrapper/fetch-actors-typeahead"
-import fetchAuthorCustomFeeds from "@/composables/atp-wrapper/fetch-author-custom-feeds"
-import fetchAuthorFeed from "@/composables/atp-wrapper/fetch-author-feed"
-import fetchAuthorReposts from "@/composables/atp-wrapper/fetch-author-reposts"
-import fetchAuthorLikes from "@/composables/atp-wrapper/fetch-author-likes"
-import fetchBlob from "@/composables/atp-wrapper/fetch-blob"
-import fetchBlockingUsers from "@/composables/atp-wrapper/fetch-blocking-users"
-import fetchCustomFeeds from "@/composables/atp-wrapper/fetch-custom-feeds"
-import fetchDid from "@/composables/atp-wrapper/fetch-did"
-import fetchFeedGenerator from "@/composables/atp-wrapper/fetch-feed-generator"
-import fetchFeedGenerators from "@/composables/atp-wrapper/fetch-feed-generators"
-import fetchFirstPost from "@/composables/atp-wrapper/fetch-first-post"
-import fetchFollowers from "@/composables/atp-wrapper/fetch-followers"
-import fetchFollowings from "@/composables/atp-wrapper/fetch-followings"
-import fetchInviteCodes from "@/composables/atp-wrapper/fetch-invite-codes"
-import fetchLikeUsers from "@/composables/atp-wrapper/fetch-like-users"
-import fetchPostSearch from "@/composables/atp-wrapper/fetch-post-search"
-import fetchLabels from "@/composables/atp-wrapper/fetch-labels"
-
-// TODO: 不要であれば削除する事
-// import fetchMedias from "@/composables/atp-wrapper/fetch-medias"
-
-import fetchMutingUsers from "@/composables/atp-wrapper/fetch-muting-users"
-import fetchNotificationCount from "@/composables/atp-wrapper/fetch-notification-count"
-import fetchNotifications from "@/composables/atp-wrapper/fetch-notifications"
-import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch-official-feed-generators"
-import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch-popular-feed-generators"
-import fetchPosts from "@/composables/atp-wrapper/fetch-posts"
-import fetchPostThread from "@/composables/atp-wrapper/fetch-post-thread"
-import fetchPreferences from "@/composables/atp-wrapper/fetch-preferences"
-import fetchProfile from "@/composables/atp-wrapper/fetch-profile"
-import fetchRepostUsers from "@/composables/atp-wrapper/fetch-repost-users"
-import fetchSuggestions from "@/composables/atp-wrapper/fetch-suggestions"
-import fetchTimeline from "@/composables/atp-wrapper/fetch-timeline"
-import fetchUserSearch from "@/composables/atp-wrapper/fetch-user-search"
-import login from "@/composables/atp-wrapper/login"
-import logout from "@/composables/atp-wrapper/logout"
-import refreshSession from "@/composables/atp-wrapper/refresh-session"
-import resetSession from "@/composables/atp-wrapper/reset-session"
-import registerPush from "@/composables/atp-wrapper/register-push"
-import resumeSession from "@/composables/atp-wrapper/resume-session"
-
-// TODO: 不要であれば削除する事
-// import updateMyLabels from "@/composables/atp-wrapper/update-my-labels"
-
-import updateNotificationSeen from "@/composables/atp-wrapper/update-notification-seen"
-import updatePreferences from "@/composables/atp-wrapper/update-preferences"
-import updateProfile from "@/composables/atp-wrapper/update-profile"
+import createAgent from "@/composables/atp-wrapper/create/create-agent"
+import createFileBlob from "@/composables/atp-wrapper/create/create-file-blob"
+import createFollow from "@/composables/atp-wrapper/create/create-follow"
+import createLike from "@/composables/atp-wrapper/create/create-like"
+import createPost from "@/composables/atp-wrapper/create/create-post"
+import createReport from "@/composables/atp-wrapper/create/create-report"
+import createRepost from "@/composables/atp-wrapper/create/create-repost"
+import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
+import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
+import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
+import deletePost from "@/composables/atp-wrapper/delete/delete-post"
+import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
+import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
+import fetchActorsTypeahead from "@/composables/atp-wrapper/fetch/fetch-actors-typeahead"
+import fetchAuthorCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-author-custom-feeds"
+import fetchAuthorFeed from "@/composables/atp-wrapper/fetch/fetch-author-feed"
+import fetchAuthorLikes from "@/composables/atp-wrapper/fetch/fetch-author-likes"
+import fetchAuthorReposts from "@/composables/atp-wrapper/fetch/fetch-author-reposts"
+import fetchBlob from "@/composables/atp-wrapper/fetch/fetch-blob"
+import fetchBlockingUsers from "@/composables/atp-wrapper/fetch/fetch-blocking-users"
+import fetchCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-custom-feeds"
+import fetchDid from "@/composables/atp-wrapper/fetch/fetch-did"
+import fetchFeedGenerator from "@/composables/atp-wrapper/fetch/fetch-feed-generator"
+import fetchFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-feed-generators"
+import fetchFirstPost from "@/composables/atp-wrapper/fetch/fetch-first-post"
+import fetchFollowers from "@/composables/atp-wrapper/fetch/fetch-followers"
+import fetchFollowings from "@/composables/atp-wrapper/fetch/fetch-followings"
+import fetchInviteCodes from "@/composables/atp-wrapper/fetch/fetch-invite-codes"
+import fetchLabels from "@/composables/atp-wrapper/fetch/fetch-labels"
+import fetchLikeUsers from "@/composables/atp-wrapper/fetch/fetch-like-users"
+import fetchListFeed from "@/composables/atp-wrapper/fetch/fetch-list-feed"
+import fetchMutingUsers from "@/composables/atp-wrapper/fetch/fetch-muting-users"
+import fetchNotificationCount from "@/composables/atp-wrapper/fetch/fetch-notification-count"
+import fetchNotifications from "@/composables/atp-wrapper/fetch/fetch-notifications"
+import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-official-feed-generators"
+import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-popular-feed-generators"
+import fetchPosts from "@/composables/atp-wrapper/fetch/fetch-posts"
+import fetchPostSearch from "@/composables/atp-wrapper/fetch/fetch-post-search"
+import fetchPostThread from "@/composables/atp-wrapper/fetch/fetch-post-thread"
+import fetchPreferences from "@/composables/atp-wrapper/fetch/fetch-preferences"
+import fetchProfile from "@/composables/atp-wrapper/fetch/fetch-profile"
+import fetchRepostUsers from "@/composables/atp-wrapper/fetch/fetch-repost-users"
+import fetchSuggestions from "@/composables/atp-wrapper/fetch/fetch-suggestions"
+import fetchTimeFeeds from "@/composables/atp-wrapper/fetch/fetch-time-feeds"
+import fetchTimeline from "@/composables/atp-wrapper/fetch/fetch-timeline"
+import fetchUserSearch from "@/composables/atp-wrapper/fetch/fetch-user-search"
+import login from "@/composables/atp-wrapper/session/login"
+import logout from "@/composables/atp-wrapper/session/logout"
+import refreshSession from "@/composables/atp-wrapper/session/refresh-session"
+import resetSession from "@/composables/atp-wrapper/session/reset-session"
+import resumeSession from "@/composables/atp-wrapper/session/resume-session"
+import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
+import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
+import updateMuteToDisable from "@/composables/atp-wrapper/update/update-mute-to-disable"
+import updateMuteToEnable from "@/composables/atp-wrapper/update/update-mute-to-enable"
+import updateNotificationSeen from "@/composables/atp-wrapper/update/update-notification-seen"
+import updatePreferences from "@/composables/atp-wrapper/update/update-preferences"
+import updateProfile from "@/composables/atp-wrapper/update/update-profile"
 import Util from "@/composables/util"
 
-// @ts-ignore // TODO:
+// @ts-ignore
 class AtpWrapper implements TIAtpWrapper {
-  // @ts-ignore // TODO:
-  constructor(this: TIAtpWrapper) {
+  // @ts-ignore
+  constructor (this: TIAtpWrapper) {
     this.agent = null
     this.data = Util.loadStorage("atp") ?? {
       did: "",
@@ -93,12 +86,7 @@ class AtpWrapper implements TIAtpWrapper {
 }
 
 const prototype = AtpWrapper.prototype as unknown as TIAtpWrapper
-prototype.canLogin = function (this: TIAtpWrapper): boolean {
-  return this.data.sessions[this.data.did] != null
-}
-prototype.hasLogin = function (this: TIAtpWrapper): boolean {
-  return this.session != null
-}
+prototype.canLogin = function (this: TIAtpWrapper): boolean { return this.data.sessions[this.data.did] != null }
 prototype.createAgent = createAgent
 prototype.createFileBlob = createFileBlob
 prototype.createFollow = createFollow
@@ -112,15 +100,11 @@ prototype.deleteLike = deleteLike
 prototype.deletePost = deletePost
 prototype.deleteRepost = deleteRepost
 prototype.deleteSession = deleteSession
-prototype.disableBlock = disableBlock
-prototype.disableMute = disableMute
-prototype.enableBlock = enableBlock
-prototype.enableMute = enableMute
 prototype.fetchActorsTypeahead = fetchActorsTypeahead
 prototype.fetchAuthorCustomFeeds = fetchAuthorCustomFeeds
 prototype.fetchAuthorFeed = fetchAuthorFeed
-prototype.fetchAuthorReposts = fetchAuthorReposts
 prototype.fetchAuthorLikes = fetchAuthorLikes
+prototype.fetchAuthorReposts = fetchAuthorReposts
 prototype.fetchBlob = fetchBlob
 prototype.fetchBlockingUsers = fetchBlockingUsers
 prototype.fetchCustomFeeds = fetchCustomFeeds
@@ -131,39 +115,35 @@ prototype.fetchFirstPost = fetchFirstPost
 prototype.fetchFollowers = fetchFollowers
 prototype.fetchFollowings = fetchFollowings
 prototype.fetchInviteCodes = fetchInviteCodes
-prototype.fetchPostSearch = fetchPostSearch
 prototype.fetchLabels = fetchLabels
-
-// TODO: 不要であれば削除する事
-// prototype.fetchMedias = fetchMedias
-
+prototype.fetchLikeUsers = fetchLikeUsers
+prototype.fetchListFeed = fetchListFeed
 prototype.fetchMutingUsers = fetchMutingUsers
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications
 prototype.fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
 prototype.fetchPopularFeedGenerators = fetchPopularFeedGenerators
 prototype.fetchPosts = fetchPosts
+prototype.fetchPostSearch = fetchPostSearch
 prototype.fetchPostThread = fetchPostThread
 prototype.fetchPreferences = fetchPreferences
 prototype.fetchProfile = fetchProfile
 prototype.fetchRepostUsers = fetchRepostUsers
-prototype.fetchLikeUsers = fetchLikeUsers
 prototype.fetchSuggestions = fetchSuggestions
+prototype.fetchTimeFeeds = fetchTimeFeeds
 prototype.fetchTimeline = fetchTimeline
 prototype.fetchUserSearch = fetchUserSearch
+prototype.hasLogin = function (this: TIAtpWrapper): boolean { return this.session != null }
 prototype.login = login
 prototype.logout = logout
 prototype.refreshSession = refreshSession
 prototype.resetSession = resetSession
 prototype.resumeSession = resumeSession
-prototype.registerPush = registerPush
-prototype.saveData = function (this: TIAtpWrapper) {
-  Util.saveStorage("atp", this.data)
-}
-
-// TODO: 不要であれば削除する事
-// prototype.updateMyLabels = updateMyLabels
-
+prototype.saveData = function (this: TIAtpWrapper) { Util.saveStorage("atp", this.data) }
+prototype.updateBlockToDisable = updateBlockToDisable
+prototype.updateBlockToEnable = updateBlockToEnable
+prototype.updateMuteToDisable = updateMuteToDisable
+prototype.updateMuteToEnable = updateMuteToEnable
 prototype.updateNotificationSeen = updateNotificationSeen
 prototype.updatePreferences = updatePreferences
 prototype.updateProfile = updateProfile

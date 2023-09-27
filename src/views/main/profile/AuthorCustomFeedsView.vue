@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { inject, watch } from "vue"
-import FeedCard from "@/components/FeedCard.vue"
-import LoadButton from "@/components/LoadButton.vue"
+import FeedCard from "@/components/app-parts/FeedCard.vue"
+import LoadButton from "@/components/buttons/LoadButton.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -26,6 +27,17 @@ watch(() => mainState.scrolledToBottom, () => {
       :processing="mainState.listProcessing"
       @activate="fetchAuthorCustomFeeds('new')"
     />
+
+    <!-- 空のコンテンツメッセージ -->
+    <div
+      v-if="!mainState.listProcessing && mainState.currentAuthorCustomFeeds?.length === 0"
+      class="textlabel margin1"
+    >
+      <div class="textlabel__text">
+        <SVGIcon name="alert" />{{ $t("noAuthorFeeds") }}
+      </div>
+    </div>
+
     <div class="feed-card-container">
       <FeedCard
         v-for="generator of mainState.currentAuthorCustomFeeds"
@@ -48,6 +60,10 @@ watch(() => mainState.scrolledToBottom, () => {
 .author-custom-feeds-view {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+}
+
+.feed-card-container {
   flex-grow: 1;
 }
 

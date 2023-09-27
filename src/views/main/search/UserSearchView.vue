@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, watch } from "vue"
-import LoadButton from "@/components/LoadButton.vue"
-import UserBox from "@/components/UserBox.vue"
+import LoadButton from "@/components/buttons/LoadButton.vue"
+import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
-import consts from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
@@ -14,23 +14,37 @@ const state = reactive<{
 })
 
 onMounted(() => {
-  const formItem = document.getElementById("user-term-textbox")
-  if (formItem != null) formItem.focus()
+  const textbox = document.getElementById("user-term-textbox")
+  if (textbox != null) textbox.focus()
+
+  // 検索キーワードと検索結果がない場合はおすすめアカウントを取得
+  if (mainState.currentSearchUsers.length === 0) fetchNewResults()
 })
 
 async function fetchNewResults () {
   if (state.processing) return
-  if (mainState.currentSearchUserTerm === "") return
   mainState.currentSearchLastUserTerm = mainState.currentSearchUserTerm
   mainState.currentSearchUsers.splice(0)
   state.processing = true
   try {
-    mainState.currentSearchUsersCursor =
-      await mainState.atp.fetchUserSearch(
-        mainState.currentSearchUsers,
-        mainState.currentSearchUserTerm,
-        consts.limitOfFetchUserSearch
+    // おすすめアカウントの取得
+    if (mainState.currentSearchUserTerm === "") {
+      await mainState.fetchSuggestions("new")
+      mainState.currentSearchUsers.splice(
+        0,
+        mainState.currentSearchUsers.length,
+        ...mainState.currentSearchSuggestionResults
       )
+
+    // アカウント検索結果の取得
+    } else {
+      mainState.currentSearchUsersCursor =
+        await mainState.atp.fetchUserSearch(
+          mainState.currentSearchUsers,
+          mainState.currentSearchUserTerm,
+          CONSTS.LIMIT_OF_FETCH_USER_SEARCH
+        )
+    }
   } finally {
     state.processing = false
   }
@@ -51,7 +65,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
       await mainState.atp.fetchUserSearch(
         mainState.currentSearchUsers,
         mainState.currentSearchUserTerm,
-        consts.limitOfFetchUserSearch,
+        CONSTS.LIMIT_OF_FETCH_USER_SEARCH,
         direction === "new" ? undefined : mainState.currentSearchUsersCursor
       )
   } finally {
@@ -67,20 +81,22 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="user-search-view">
-    <form @submit.prevent="fetchNewResults">
-      <input
-        v-model="mainState.currentSearchUserTerm"
-        id="user-term-textbox"
-        type="search"
-        :placeholder="$t('keyword')"
-        autocapitalize="off"
-        autocomplete="off"
-        inputmode="search"
-        spellcheck="false"
-        class="textbox"
-      >
-    </form>
-    <div class="main">
+    <Portal to="search-view-header">
+      <form @submit.prevent="fetchNewResults">
+        <input
+          v-model="mainState.currentSearchUserTerm"
+          id="user-term-textbox"
+          type="search"
+          :placeholder="$t('keyword')"
+          autocapitalize="off"
+          autocomplete="off"
+          inputmode="search"
+          spellcheck="false"
+          class="textbox"
+        >
+      </form>
+    </Portal>
+    <div class="user-search-view__main">
       <div class="users">
         <UserBox
           v-for="user of mainState.currentSearchUsers"
@@ -100,15 +116,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 </template>
 
 <style lang="scss" scoped>
-.user-search-view {
-  form {
-    display: grid;
-    padding: 1rem;
-  }
-}
-
-.main {
-  border-top: 1px solid var(--fg-color-025);
+.user-search-view__main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
