@@ -1,7 +1,8 @@
 .list-menu {
   background-color: rgb(var(--bg-color));
-  border: 1px solid var(--fg-color-025);
+  border: 1px solid rgb(var(--accent-color));
   border-radius: var(--border-radius);
+  box-shadow: 0 0 0 1px rgb(var(--bg-color));
   color: rgb(var(--fg-color));
   display: flex;
   flex-direction: column;
@@ -32,7 +33,7 @@
     }
 
     & > .svg-icon {
-      fill: rgb(var(--fg-color));
+      fill: rgb(var(--accent-color));
     }
     & > .svg-icon--feed {
       fill: rgb(var(--accent-color));
@@ -60,6 +61,6 @@
   }
 
   & > hr {
-    border-bottom: 1px solid var(--fg-color-025);
+    border-bottom: 1px solid rgb(var(--accent-color), 0.25);
   }
 }

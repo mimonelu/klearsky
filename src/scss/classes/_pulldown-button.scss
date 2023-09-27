@@ -9,10 +9,14 @@
   padding: 0.5em 1em;
   position: relative;
   &:focus, &:hover {
-    border-color: var(--fg-color-025);
+    border-color: rgb(var(--accent-color));
 
     & > .svg-icon {
-      fill: var(--fg-color-0375);
+      fill: rgb(var(--accent-color));
+    }
+
+    & > span {
+      color: rgb(var(--accent-color));
     }
   }
   &:focus {
@@ -20,6 +24,7 @@
 
     & > .list-menu {
       border-radius: 0 0 var(--border-radius) var(--border-radius);
+      box-shadow: unset;
       display: flex;
     }
   }
