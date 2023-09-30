@@ -1,25 +1,16 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
 import CopyRight from "@/components/shell-parts/Copyright.vue"
-import LazyImage from "@/components/common/LazyImage.vue"
 import Logo from "@/components/shell-parts/Logo.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import MyFeedList from "@/components/list/MyFeedList.vue"
 
 const $t = inject("$t") as Function
 
-const mainState = inject("state") as MainState
-
 const state = reactive<{
   text: string,
-  pinned: ComputedRef<Array<TTFeedGenerator>>,
 }>({
   text: "",
-  pinned: computed((): Array<TTFeedGenerator> => {
-    return mainState.currentMyFeedGenerators.filter((generator: TTFeedGenerator) => {
-      return mainState.feedPreferences?.pinned?.includes(generator.uri)
-    })
-  }),
 })
 
 const router = useRouter()
@@ -48,35 +39,8 @@ function searchPost () {
       >
     </form>
 
-    <!-- マイフィード -->
-    <div class="my-feed">
-      <div class="my-feed__header">
-        <a
-          class="textlink--icon"
-          @click="mainState.openMyFeedsPopup"
-        >
-          <SVGIcon name="feed" />
-          <span>{{ $t("myFeeds") }}</span>
-        </a>
-      </div>
-      <div class="my-feed__inner">
-        <RouterLink
-          v-for="generator of state.pinned"
-          :key="generator.cid"
-          :to="{
-            path: '/home/feeds',
-            query: {
-              feed: generator.uri,
-              displayName: generator.displayName,
-            },
-          }"
-          class="my-feed__button"
-        >
-          <LazyImage :src="generator.avatar" />
-          <span>{{ generator.displayName }}</span>
-        </RouterLink>
-      </div>
-    </div>
+    <!-- マイフィードリスト -->
+    <MyFeedList />
 
     <!-- コピーライト -->
     <CopyRight />
@@ -105,57 +69,10 @@ function searchPost () {
   width: 100%;
 }
 
-// マイフィード
+// マイフィードリスト
 .my-feed {
-  display: flex;
-  flex-direction: column;
   flex-grow: 1;
   margin-bottom: 2rem;
-  overflow: hidden;
-
-  &__header .textlink--icon {
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-  }
-
-  &__inner {
-    @include scroll-bar;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    grid-gap: 0.5rem;
-    overflow-y: auto;
-    overscroll-behavior: none;
-  }
-
-  &__button {
-    border-radius: 1px;
-    display: flex;
-    align-items: center;
-    grid-gap: 0.5rem;
-
-    & > .lazy-image {
-      border-radius: 1px;
-      overflow: hidden;
-      min-width: 1.5em;
-      max-width: 1.5em;
-      min-height: 1.5em;
-      max-height: 1.5em;
-    }
-
-    & > span {
-      color: var(--fg-color-05);
-      line-height: var(--line-height);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    &:hover, &:focus {
-      & > span {
-        color: rgb(var(--fg-color));
-      }
-    }
-  }
 }
 
 // コピーライト
