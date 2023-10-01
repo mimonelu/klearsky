@@ -2,12 +2,10 @@
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
   border-bottom: 1px solid var(--fg-color-025);
   display: flex;
-  padding: 0.125rem;
   min-height: 3rem;
   max-height: 3rem;
 
   &__button {
-    border-radius: var(--border-radius);
     color: var(--fg-color-075);
     cursor: pointer;
     display: flex;
@@ -19,6 +17,9 @@
     padding: 0.5rem 0;
     min-height: 2.5rem;
     text-align: center;
+    &:not(:last-child) {
+      border-right: 1px solid var(--fg-color-025);
+    }
 
     & > .svg-icon {
       fill: var(--fg-color-075);

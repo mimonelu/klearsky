@@ -348,6 +348,7 @@ function hideWarningContent () {
           :to="{ path: '/profile/suggested-follows', query: { account: mainState.currentProfile?.did } }"
           :title="$t('suggestedFollows')"
         >
+          <SVGIcon name="person" />
           <span>{{ $t("suggestedFollows") }}</span>
         </RouterLink>
 
@@ -357,6 +358,7 @@ function hideWarningContent () {
           :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.did } }"
           :title="$t('followings')"
         >
+          <SVGIcon name="person" />
           <span>{{ $t("followings") }}</span>
         </RouterLink>
 
@@ -366,6 +368,7 @@ function hideWarningContent () {
           :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.did } }"
           :title="$t('followers')"
         >
+          <SVGIcon name="person" />
           <span>{{ $t("followers") }}</span>
         </RouterLink>
       </div>
@@ -595,8 +598,11 @@ function hideWarningContent () {
 }
 
 .tab {
-  [data-is-my-profile="false"] &__button {
-    // flex: 1;
+  &__button {
+    flex: 1;
+  }
+  &:first-child {
+    font-size: 0.9375rem;
   }
 
   &__button--repost > .svg-icon {
