@@ -48,6 +48,7 @@ import play from "@/svg/play.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import posts from "@/svg/comment-multiple.svg?raw"
+import question from "@/svg/question.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
 import radioOff from "@/svg/radio-off.svg?raw"
 import radioOn from "@/svg/radio-on.svg?raw"
@@ -115,6 +116,7 @@ const icons: { [k: string]: string } = {
   plus,
   post,
   posts,
+  question,
   quoteRepost,
   radioOff,
   radioOn,

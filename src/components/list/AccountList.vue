@@ -162,7 +162,21 @@ function onClickFileBox (event: Event) {
               />
             </div>
             <div class="account-button__handle">{{ session.handle }}</div>
-            <div class="account-button__email">{{ session.email }}</div>
+
+            <!-- メールアドレス -->
+            <div class="account-button__email">
+              <!-- メールアドレス確認状態 -->
+              <SVGIcon
+                v-if="session.emailConfirmed != null"
+                :data-email-confirmed="session.emailConfirmed"
+                :name="session.emailConfirmed
+                  ? 'check'
+                  : 'question'
+              " />
+
+              <SVGIcon name="email" />
+              <span class="account-button__email__text">{{ session.email }}</span>
+            </div>
           </div>
           <div
             v-if="hasDeleteButton"
@@ -306,12 +320,31 @@ function onClickFileBox (event: Event) {
   &__email {
     grid-area: e;
     color: rgb(var(--color), 0.75);
+    display: flex;
+    align-items: center;
+    grid-gap: 0.25rem;
     font-size: 0.875rem;
     line-height: 1.25;
     overflow: hidden;
     padding-bottom: 0.25rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+
+    // メールアドレス確認状態
+    .svg-icon--check {
+      fill: rgb(var(--color), 0.5);
+    }
+    .svg-icon--question {
+      fill: rgb(var(--color), 0.75);
+    }
+
+    .svg-icon--email {
+      fill: rgb(var(--color), 0.5);
+    }
+
+    &__text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   &__right {
