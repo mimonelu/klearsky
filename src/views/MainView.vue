@@ -109,8 +109,12 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
 
   if (to.path.startsWith("/profile")) {
     if (state.currentQuery.account !== state.currentProfile?.handle &&
-        state.currentQuery.account !== state.currentProfile?.did)
+        state.currentQuery.account !== state.currentProfile?.did) {
+      state.profileFolding = false
       state.currentProfile = null
+    } else {
+      state.profileFolding = true
+    }
 
     state.inSameProfilePage = state.currentProfile != null
     if (!state.inSameProfilePage) {
@@ -162,6 +166,7 @@ function resetState () {
   state.timelineCursor = undefined
   state.currentPosts = []
   state.inSameProfilePage = false
+  state.profileFolding = false
   state.currentProfile = null
   state.currentAuthorFeeds = []
   state.currentAuthorFeedsCursor = undefined

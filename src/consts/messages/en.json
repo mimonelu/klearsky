@@ -33,6 +33,8 @@
   "invalidHandle": "(Invalid handle)",
   "share": "Share",
   "postFeatures": "Features",
+  "showDetail": "Show details",
+  "hideDetail": "Hide details",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",

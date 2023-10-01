@@ -33,7 +33,9 @@
   "invalidHandle": "（不正なハンドル）",
   "share": "共有する",
   "postFeatures": "機能",
-  
+  "showDetail": "詳細を表示する",
+  "hideDetail": "詳細を隠す",
+
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
 

@@ -18,6 +18,7 @@ type MainState = {
   currentPosts: Array<TTPost>
 
   inSameProfilePage: boolean
+  profileFolding: boolean
   currentProfile: null | TTProfile
   currentAuthorFeeds: Array<TTFeed>
   currentAuthorFeedsCursor?: string
