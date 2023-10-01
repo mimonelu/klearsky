@@ -40,6 +40,7 @@ import fetchPostThread from "@/composables/atp-wrapper/fetch/fetch-post-thread"
 import fetchPreferences from "@/composables/atp-wrapper/fetch/fetch-preferences"
 import fetchProfile from "@/composables/atp-wrapper/fetch/fetch-profile"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch/fetch-repost-users"
+import fetchSuggestedFollows from "@/composables/atp-wrapper/fetch/fetch-suggested-follows"
 import fetchSuggestions from "@/composables/atp-wrapper/fetch/fetch-suggestions"
 import fetchTimeFeeds from "@/composables/atp-wrapper/fetch/fetch-time-feeds"
 import fetchTimeline from "@/composables/atp-wrapper/fetch/fetch-timeline"
@@ -129,6 +130,7 @@ prototype.fetchPostThread = fetchPostThread
 prototype.fetchPreferences = fetchPreferences
 prototype.fetchProfile = fetchProfile
 prototype.fetchRepostUsers = fetchRepostUsers
+prototype.fetchSuggestedFollows = fetchSuggestedFollows
 prototype.fetchSuggestions = fetchSuggestions
 prototype.fetchTimeFeeds = fetchTimeFeeds
 prototype.fetchTimeline = fetchTimeline

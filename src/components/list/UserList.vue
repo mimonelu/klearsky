@@ -6,14 +6,16 @@ import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{
-  type: "follower" | "following"
+  type: "follower" | "following" | "suggestedFollows"
 }>()
 
 const mainState = inject("state") as MainState
 
 const currentUsers = props.type === "follower"
   ? mainState.currentFollowers
-  : mainState.currentFollowings
+  : props.type === "following"
+    ? mainState.currentFollowings
+    : mainState.currentSuggestedFollows
 
 async function fetchUsers (direction: "new" | "old") {
   Util.blurElement()
@@ -28,6 +30,10 @@ async function fetchUsers (direction: "new" | "old") {
         await mainState.fetchFollowings(direction)
         break
       }
+      case "suggestedFollows": {
+        await mainState.fetchSuggestedFollows()
+        break
+      }
     }
   } finally {
     mainState.listProcessing = false
@@ -36,6 +42,9 @@ async function fetchUsers (direction: "new" | "old") {
 
 // インフィニットスクロール
 watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  // おすすめユーザーはページネーションなし
+  if (props.type === "suggestedFollows") return
+
   if (value) fetchUsers("old")
 })
 </script>
@@ -65,7 +74,10 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         </template>
       </UserBox>
     </div>
+
+    <!-- おすすめユーザーはページネーションなし -->
     <LoadButton
+      v-if="type !== 'suggestedFollows'"
       direction="old"
       :processing="mainState.listProcessing"
       @activate="fetchUsers('old')"

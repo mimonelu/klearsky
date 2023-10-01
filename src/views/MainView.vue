@@ -130,6 +130,7 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
       state.currentFollowersCursor = undefined
       state.currentFollowings?.splice(0)
       state.currentFollowingsCursor = undefined
+      state.currentSuggestedFollows?.splice(0)
     }
   }
 
@@ -178,6 +179,7 @@ function resetState () {
   state.currentFollowersCursor = undefined
   state.currentFollowings = []
   state.currentFollowingsCursor = undefined
+  state.currentSuggestedFollows = []
   state.currentPreferences = []
   state.currentRepostUsers = []
   state.currentRepostUsersUri = undefined
@@ -368,7 +370,8 @@ async function processPage (pageName?: null | string) {
     case "profile-repost":
     case "profile-like":
     case "profile-following":
-    case "profile-follower": {
+    case "profile-follower":
+    case "profile-suggested-follows": {
       account = state.currentQuery.account as LocationQueryValue
       if (!account) {
         await router.push({ name: "timeline-home" })
@@ -454,6 +457,16 @@ async function processPage (pageName?: null | string) {
         const tasks: Array<Promise<void>> = []
         if (!state.inSameProfilePage || state.currentFollowers.length === 0)
           tasks.push(state.fetchFollowers("new"))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
+        await Promise.allSettled(tasks)
+        break
+      }
+      case "profile-suggested-follows": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentSuggestedFollows.length === 0)
+          tasks.push(state.fetchSuggestedFollows())
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           tasks.push(state.fetchCurrentProfile(account as string))

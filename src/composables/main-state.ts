@@ -100,6 +100,7 @@ const state = reactive<MainState>({
   fetchNotifications,
   fetchFollowers,
   fetchFollowings,
+  fetchSuggestedFollows,
   fetchSuggestions,
 
   fetchPopularFeedGenerators,
@@ -242,6 +243,7 @@ async function fetchCurrentProfile (did: string) {
   state.currentAuthorCustomFeeds.splice(0)
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
+  state.currentSuggestedFollows.splice(0)
   state.currentProfile = await state.atp.fetchProfile(did)
   if (state.currentProfile == null) return
   if (did === state.atp.session?.did)
@@ -523,6 +525,19 @@ async function fetchFollowings (direction: "new" | "old") {
     direction === "new" ? undefined : state.currentFollowingsCursor
   )
   state.currentFollowingsCursor = cursor
+}
+
+async function fetchSuggestedFollows () {
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
+
+  // ブロックしている
+  if (state.currentProfile?.viewer.blocking != null) return
+
+  // ブロックされている
+  if (state.currentProfile?.viewer.blockedBy) return
+
+  await state.atp.fetchSuggestedFollows(state.currentSuggestedFollows, account)
 }
 
 async function fetchSuggestions (direction: "new" | "old") {

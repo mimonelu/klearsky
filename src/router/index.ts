@@ -23,6 +23,7 @@ import AuthorRepostView from "@/views/main/profile/AuthorRepostView.vue"
 import AuthorLikeView from "@/views/main/profile/AuthorLikeView.vue"
 import FollowerListView from "@/views/main/profile/FollowerListView.vue"
 import FollowingListView from "@/views/main/profile/FollowingListView.vue"
+import SuggestedFollowsView from "@/views/main/profile/SuggestedFollowsView.vue"
 
 // Main - Search
 import SearchView from "@/views/main/SearchView.vue"
@@ -140,6 +141,12 @@ const router = createRouter({
               name: "profile-following",
               meta: { label: "followings" },
               component: FollowingListView,
+            },
+            {
+              path: "suggested-follows",
+              name: "profile-suggested-follows",
+              meta: { label: "suggestedFollows" },
+              component: SuggestedFollowsView,
             },
           ],
         },

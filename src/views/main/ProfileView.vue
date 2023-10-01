@@ -272,14 +272,15 @@ function hideWarningContent () {
     <!-- タブ -->
     <div class="tab-container">
       <!-- 上タブ -->
-      <div class="tab tab--top">
+      <div class="tab">
         <!-- ポストタブボタン -->
         <RouterLink
           class="tab__button tab__button--post"
           :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('post')"
+          :title="$t('posts')"
         >
           <SVGIcon name="post" />
+          <span>{{ $t("posts") }}</span>
         </RouterLink>
 
         <!-- リプライ付きポストタブボタン -->
@@ -289,6 +290,7 @@ function hideWarningContent () {
           :title="$t('postWithReplies')"
         >
           <SVGIcon name="posts" />
+          <span>{{ $t("replies") }}</span>
         </RouterLink>
 
         <!-- メディアタブボタン -->
@@ -298,6 +300,7 @@ function hideWarningContent () {
           :title="$t('medias')"
         >
           <SVGIcon name="image" />
+          <span>{{ $t("medias") }}</span>
         </RouterLink>
 
         <!-- カスタムフィードタブボタン -->
@@ -307,45 +310,61 @@ function hideWarningContent () {
           :title="$t('customFeeds')"
         >
           <SVGIcon name="feed" />
+          <span>{{ $t("feeds") }}</span>
         </RouterLink>
+      </div>
 
+      <!-- 中タブ -->
+      <div
+        v-if="isMyProfile()"
+        class="tab"
+      >
         <!-- 自分のリポストタブボタン -->
         <RouterLink
-          v-if="isMyProfile()"
           class="tab__button tab__button--repost"
           :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
           :title="$t('reposts')"
         >
           <SVGIcon name="repost" />
+          <span>{{ $t("reposts") }}</span>
         </RouterLink>
 
         <!-- 自分のいいねタブボタン -->
         <RouterLink
-          v-if="isMyProfile()"
           class="tab__button tab__button--like"
           :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
           :title="$t('likes')"
         >
           <SVGIcon name="like" />
+          <span>{{ $t("likes") }}</span>
         </RouterLink>
       </div>
 
       <!-- 下タブ -->
-      <div class="tab tab--bottom">
+      <div class="tab">
+        <!-- 関連ユーザータブボタン -->
+        <RouterLink
+          class="tab__button"
+          :to="{ path: '/profile/suggested-follows', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('suggestedFollows')"
+        >
+          <span>{{ $t("suggestedFollows") }}</span>
+        </RouterLink>
+
         <!-- フォローイングタブボタン -->
         <RouterLink
-          class="tab__button tab__button--following"
+          class="tab__button"
           :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('following')"
+          :title="$t('followings')"
         >
           <span>{{ $t("followings") }}</span>
         </RouterLink>
 
         <!-- フォロワータブボタン -->
         <RouterLink
-          class="tab__button tab__button--following"
+          class="tab__button"
           :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('follower')"
+          :title="$t('followers')"
         >
           <span>{{ $t("followers") }}</span>
         </RouterLink>
@@ -577,7 +596,7 @@ function hideWarningContent () {
 
 .tab {
   [data-is-my-profile="false"] &__button {
-    flex: 1;
+    // flex: 1;
   }
 
   &__button--repost > .svg-icon {

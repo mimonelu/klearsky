@@ -35,6 +35,7 @@ type MainState = {
   currentFollowersCursor?: string
   currentFollowings: Array<TTUser>
   currentFollowingsCursor?: string
+  currentSuggestedFollows: Array<TTUser>
 
   currentPreferences: Array<TTPreference>
   fetchPreferences: () => Promise<boolean>
@@ -220,6 +221,7 @@ type MainState = {
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
   fetchFollowers: (direction: "new" | "old") => Promise<void>
   fetchFollowings: (direction: "new" | "old") => Promise<void>
+  fetchSuggestedFollows: () => Promise<void>
   fetchSuggestions: (direction: "new" | "old") => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
   openSendPostPopup: (params: TTSendPostPopupParams) => Promise<boolean>
