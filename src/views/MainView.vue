@@ -230,6 +230,7 @@ function resetState () {
   state.confirmationPopupDisplay = false
   state.confirmationPopupTitle = undefined
   state.confirmationPopupText = undefined
+  state.confirmationPopupDetail = undefined
   state.confirmationPopupResult = false
 
   // エラーポップアッププロパティ

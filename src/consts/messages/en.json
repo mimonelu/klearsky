@@ -35,6 +35,8 @@
   "postFeatures": "Features",
   "showDetail": "Show details",
   "hideDetail": "Hide details",
+  "confirmUrl": "Confirmation of URL",
+  "confirmUrlNotification": "Open the following URL. Are you sure?",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",

@@ -805,9 +805,10 @@ function closeMessagePopup () {
   state.messagePopupDisplay = false
 }
 
-async function openConfirmationPopup (title?: string, text?: string): Promise<boolean> {
+async function openConfirmationPopup (title?: string, text?: string, detail?: string): Promise<boolean> {
   state.confirmationPopupTitle = title
   state.confirmationPopupText = text
+  state.confirmationPopupDetail = detail
   state.confirmationPopupResult = false
   state.confirmationPopupDisplay = true
   await Util.waitProp(() => state.confirmationPopupDisplay, false)

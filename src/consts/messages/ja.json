@@ -35,6 +35,8 @@
   "postFeatures": "機能",
   "showDetail": "詳細を表示する",
   "hideDetail": "詳細を隠す",
+  "confirmUrl": "URLの確認",
+  "confirmUrlNotification": "下記URLを開きます。よろしいですか？",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",

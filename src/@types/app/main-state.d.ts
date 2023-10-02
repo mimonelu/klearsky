@@ -241,8 +241,9 @@ type MainState = {
   confirmationPopupDisplay: boolean
   confirmationPopupTitle?: string
   confirmationPopupText?: string
+  confirmationPopupDetail?: string
   confirmationPopupResult: boolean
-  openConfirmationPopup: (title?: string, text?: string) => Promise<boolean>
+  openConfirmationPopup: (title?: string, text?: string, detail?: string) => Promise<boolean>
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
 
