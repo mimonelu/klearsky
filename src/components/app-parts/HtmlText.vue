@@ -143,8 +143,10 @@ async function openWindowIfCan (segment: RichParam) {
     $t("confirmUrlNotification"),
     segment.param
   )) {
-    const target = segment.param.startsWith("lightning:") ? "" : "_blank"
-    window.open(segment.param, target)
+    if (segment.param.startsWith("lightning:"))
+      location.href = segment.param
+    else
+      window.open(segment.param, "_blank")
   }
 }
 
