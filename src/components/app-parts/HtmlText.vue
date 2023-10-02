@@ -151,9 +151,20 @@ async function openWindowIfCan (segment: RichParam) {
 }
 
 function validateUri (url: string, text: string): boolean {
-  const urlModified = url.replace(/^\w+:\/+/, "")
-  const textModified = text.replace(/^\w+:\/+/, "")
-  return urlModified.startsWith(textModified)
+  let urlObject: undefined | URL
+  try {
+    urlObject = new URL(url)
+  } catch (error) {
+    return false
+  }
+  return (
+    urlObject.origin !== "null" &&
+    urlObject.host !== "" &&
+    (
+      text.startsWith(urlObject.origin + urlObject.pathname) ||
+      text.startsWith(urlObject.host + urlObject.pathname)
+    )
+  )
 }
 </script>
 
