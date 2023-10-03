@@ -112,7 +112,7 @@ const state = reactive<{
         results.push({
           type: "tag",
           text: segment.text,
-          param: encodeURIComponent(segment.tag?.tag?.substring(1) ?? ""),
+          param: encodeURIComponent(segment.tag?.tag ?? ""),
         })
 
       else
