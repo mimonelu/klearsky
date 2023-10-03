@@ -137,7 +137,7 @@ function transformInternalLink (uri: string): undefined | string {
 }
 
 async function openWindowIfCan (segment: RichParam) {
-  const valid = validateUri(segment.param ?? "", segment.text)
+  const valid = validateUrl(segment.param ?? "", segment.text)
   if (valid || await mainState.openConfirmationPopup(
     $t("confirmUrl"),
     $t("confirmUrlNotification"),
@@ -150,19 +150,23 @@ async function openWindowIfCan (segment: RichParam) {
   }
 }
 
-function validateUri (url: string, text: string): boolean {
+function validateUrl (url: string, text: string): boolean {
   let urlObject: undefined | URL
   try {
     urlObject = new URL(url)
   } catch (error) {
     return false
   }
+
+  // 末尾のスラッシュを削除して照合
+  const pathname = urlObject.pathname.replace(/\/$/, "")
+
   return (
     urlObject.origin !== "null" &&
     urlObject.host !== "" &&
     (
-      text.startsWith(urlObject.origin + urlObject.pathname) ||
-      text.startsWith(urlObject.host + urlObject.pathname)
+      text.startsWith(urlObject.origin + pathname) ||
+      text.startsWith(urlObject.host + pathname)
     )
   )
 }
