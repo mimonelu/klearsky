@@ -93,6 +93,8 @@ const state = reactive<MainState>({
     })
   }),
   fetchMyFeedGenerators,
+  sortMyFeedGenerators,
+  sortFeedPreferencesSavedAndPinned,
   fetchMyFeeds,
 
   fetchTimeline,
@@ -603,6 +605,31 @@ async function fetchMyFeedGenerators (): Promise<void> {
     return
   }
   state.currentMyFeedGenerators.splice(0, state.currentMyFeedGenerators.length, ...generators)
+}
+
+function sortMyFeedGenerators () {
+  if (state.feedPreferences?.pinned == null) return
+  state.currentMyFeedGenerators.sort((a: TTFeedGenerator, b: TTFeedGenerator) => {
+    const aIsPinned = state.feedPreferences.pinned.indexOf(a.uri)
+    const bIsPinned = state.feedPreferences.pinned.indexOf(b.uri)
+    return (aIsPinned !== - 1 && bIsPinned !== - 1) || (aIsPinned === - 1 && bIsPinned === - 1)
+      ? 0
+      : aIsPinned === - 1 && bIsPinned !== - 1
+        ? 1
+        : aIsPinned !== - 1 && bIsPinned === - 1
+          ? - 1
+          : 0
+  })
+}
+
+function sortFeedPreferencesSavedAndPinned () {
+  if (state.feedPreferences?.saved != null)
+    state.feedPreferences.saved = state.currentMyFeedGenerators
+      .map((generator: TTFeedGenerator) => generator.uri)
+  if (state.feedPreferences?.pinned != null)
+    state.feedPreferences.pinned = state.currentMyFeedGenerators
+      .filter((generator: TTFeedGenerator) => state.feedPreferences.pinned.includes(generator.uri))
+      .map((generator: TTFeedGenerator) => generator.uri)
 }
 
 async function fetchMyFeeds (): Promise<boolean> {

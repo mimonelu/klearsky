@@ -49,6 +49,8 @@ type MainState = {
   } }
   currentMyFeedGenerators: Array<TTFeedGenerator>
   fetchMyFeedGenerators: () => Promise<void>
+  sortMyFeedGenerators: () => void
+  sortFeedPreferencesSavedAndPinned: () => void
   fetchMyFeeds: () => Promise<boolean>
 
   getContentWarningVisibility: (

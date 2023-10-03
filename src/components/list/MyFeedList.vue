@@ -45,8 +45,8 @@ async function saveMyFeed () {
   if (state.processing) return
   if (mainState.feedPreferences == null) return
   state.processing = true
-  mainState.feedPreferences.saved = mainState.currentMyFeedGenerators
-    .map((generator: TTFeedGenerator) => generator.uri)
+  mainState.sortMyFeedGenerators()
+  mainState.sortFeedPreferencesSavedAndPinned()
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
     mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
   state.processing = false

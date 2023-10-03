@@ -78,7 +78,11 @@ onMounted(async () => {
       state.fetchPreferences(),
       state.fetchUserProfile(),
     ])
-    state.fetchMyFeedGenerators()
+
+    state.fetchMyFeedGenerators().then(() => {
+      state.sortMyFeedGenerators()
+    })
+
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
@@ -354,7 +358,9 @@ async function manualLogin (service: string, identifier: string, password: strin
       state.fetchPreferences(),
       state.fetchUserProfile(),
     ])
-    state.fetchMyFeedGenerators()
+    state.fetchMyFeedGenerators().then(() => {
+      state.sortMyFeedGenerators()
+    })
     state.loginPopupDisplay = false
     state.saveSettings()
     state.updateSettings()
