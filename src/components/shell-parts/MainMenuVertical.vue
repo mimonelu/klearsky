@@ -95,6 +95,12 @@ function moveToBottom () {
           <span>{{ $t("postLanguages") }}</span>
         </a>
 
+        <!-- マイタグポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openMyTagPopup({ mode: 'edit' }) }">
+          <SVGIcon name="tag" />
+          <span>{{ $t("myTag") }}</span>
+        </a>
+
         <!-- マイフィードポップアップトリガー -->
         <a @click.prevent="() => { Util.blurElement(); mainState.openMyFeedsPopup() }">
           <SVGIcon name="feed" />

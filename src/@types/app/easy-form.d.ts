@@ -5,6 +5,7 @@ type TTEasyForm = {
   id?: string
   submitButtonLabel?: string
   submitCallback?: Function
+  blurOnSubmit?: boolean
 }
 
 type TTEasyFormItem = {

@@ -175,6 +175,12 @@ type MainState = {
   // マイフィードポップアップの表示スイッチ
   myFeedsPopupDisplay: boolean
 
+  // タグ
+  currentPostTags: Array<TTTag>
+  myTagPopupProps: TTTagPopupProps
+  openMyTagPopup: Function
+  closeMyTagPopup: Function
+
   // ワードミュートポップアップの表示スイッチ
   wordMutePopupDisplay: boolean
 

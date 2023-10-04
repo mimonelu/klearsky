@@ -44,6 +44,7 @@ const easyFormProps: TTEasyForm = {
   hasSubmitButton: true,
   submitButtonLabel: $t("apply"),
   submitCallback: apply,
+  blurOnSubmit: true,
   data: (() => Object.keys(LABELS.DEFAULTS).map((label: string) => ({
     state: formState,
     model: label,

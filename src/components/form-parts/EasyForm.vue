@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, nextTick, onMounted, reactive, ref } from "vue"
+import { nextTick, onMounted, reactive, ref } from "vue"
 import { RichText } from "@atproto/api"
 import AccountSuggestionList from "@/components/list/AccountSuggestionList.vue"
 import Checkboxes from "@/components/form-parts/Checkboxes.vue"
@@ -20,10 +20,9 @@ const props = defineProps<{
   hasSubmitButton?: boolean
   submitButtonLabel?: string
   submitCallback?: Function
+  blurOnSubmit?: boolean
   data: Array<TTEasyFormItem>
 }>()
-
-const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
@@ -71,7 +70,7 @@ function getCharacterLength (item: TTEasyFormItem): number {
 }
 
 async function onSubmit () {
-  Util.blurElement()
+  if (props.blurOnSubmit) Util.blurElement()
   if (state.processing) return
   if (props.submitCallback == null) {
     emit("submit")

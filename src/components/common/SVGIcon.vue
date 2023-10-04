@@ -61,6 +61,7 @@ import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
 import share from "@/svg/share.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
+import tag from "@/svg/tag.svg?raw"
 import translate from "@/svg/translate.svg?raw"
 import volumeOff from "@/svg/volume-off.svg?raw"
 import volumeOn from "@/svg/volume-on.svg?raw"
@@ -129,6 +130,7 @@ const icons: { [k: string]: string } = {
   setting,
   share,
   shimmer,
+  tag,
   translate,
   volumeOff,
   volumeOn,
