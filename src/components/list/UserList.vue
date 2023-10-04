@@ -2,6 +2,7 @@
 import { inject, watch } from "vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import Loader from "@/components/common/Loader.vue"
 import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
 
@@ -82,6 +83,9 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :processing="mainState.listProcessing"
       @activate="fetchUsers('old')"
     />
+
+    <!-- おすすめユーザー用ローダー -->
+    <Loader v-if="type === 'suggestedFollows' && mainState.listProcessing" />
   </div>
 </template>
 
@@ -89,6 +93,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 .user-list {
   display: flex;
   flex-direction: column;
+  position: relative;
 
   .user-box {
     padding: 0 1rem;
@@ -124,5 +129,9 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   font-size: 0.875rem;
   padding: 0.25rem 0;
   min-width: 7rem;
+}
+
+.loader {
+  z-index: unset;
 }
 </style>

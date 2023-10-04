@@ -60,6 +60,11 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 .author-media-view {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+
+  .media-list {
+    flex-grow: 1;
+  }
 
   &:deep() .easy-form .checkboxes label {
     border-radius: 0;
