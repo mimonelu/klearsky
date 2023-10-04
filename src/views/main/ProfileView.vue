@@ -58,6 +58,12 @@ function isFollowed (): boolean {
   return mainState.currentProfile?.viewer?.followedBy != null
 }
 
+function toggleFolding () {
+  Util.blurElement()
+  mainState.profileFolding = !mainState.profileFolding
+  window.scrollTo({ left: 0, top: 0 })
+}
+
 function openImagePopup (uri: string) {
   if (uri === "") return
   mainState.imagePopupProps.images = [{
@@ -91,6 +97,7 @@ function hideWarningContent () {
 <template>
   <div
     class="profile-view"
+    :data-folding="mainState.profileFolding"
     :data-is-my-profile="isMyProfile()"
     :data-content-warning-force-display="state.contentWarningForceDisplay"
     :data-content-warning-visibility="state.contentWarningVisibility"
@@ -170,33 +177,46 @@ function hideWarningContent () {
         </div>
       </div>
 
-      <div class="details">
-        <div class="top">
+      <div class="profile-view__details">
+        <div class="profile-view__details__top">
           <div
             v-if="state.showPrivateData"
-            class="left"
+            class="profile-view__details__top__left"
           >
             <AvatarButton
               :handle="mainState.currentProfile?.handle"
               :image="mainState.currentProfile?.avatar"
             />
           </div>
-          <div class="right">
+          <div class="profile-view__details__top__right">
             <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
-            <a
-              class="handle"
-              @click.stop="state.handleHistoryPopupDisplay = true"
-            >
-              <span>{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</span>
-              <SVGIcon name="history" />
-            </a>
-            <div
-              v-if="!isMyProfile() && isFollowed()"
-              class="followed"
-            >{{ $t("followed") }}</div>
+            <div class="handle">
+              <a @click.stop="state.handleHistoryPopupDisplay = true">
+                <SVGIcon name="history" />
+                <span>{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</span>
+              </a>
+            </div>
+            <div class="profile-view__details__top__right__bottom">
+              <div
+                v-if="!isMyProfile() && isFollowed()"
+                class="followed"
+              >
+                <SVGIcon name="like" />
+                <span>{{ $t("followed") }}</span>
+              </div>
+
+              <!-- 折り畳みトグルボタン -->
+              <button
+                class="button--bordered"
+                @click="toggleFolding"
+              >
+                <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
+                <span>{{ $t(mainState.profileFolding ? "showDetail" : "hideDetail") }}</span>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="bottom">
+        <div class="profile-view__details__bottom">
           <div
             v-if="mainState.currentProfile != null"
             class="button-container"
@@ -272,14 +292,15 @@ function hideWarningContent () {
     <!-- タブ -->
     <div class="tab-container">
       <!-- 上タブ -->
-      <div class="tab tab--top">
+      <div class="tab">
         <!-- ポストタブボタン -->
         <RouterLink
           class="tab__button tab__button--post"
           :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('post')"
+          :title="$t('posts')"
         >
           <SVGIcon name="post" />
+          <span>{{ $t("posts") }}</span>
         </RouterLink>
 
         <!-- リプライ付きポストタブボタン -->
@@ -289,6 +310,7 @@ function hideWarningContent () {
           :title="$t('postWithReplies')"
         >
           <SVGIcon name="posts" />
+          <span>{{ $t("replies") }}</span>
         </RouterLink>
 
         <!-- メディアタブボタン -->
@@ -298,6 +320,7 @@ function hideWarningContent () {
           :title="$t('medias')"
         >
           <SVGIcon name="image" />
+          <span>{{ $t("medias") }}</span>
         </RouterLink>
 
         <!-- カスタムフィードタブボタン -->
@@ -307,46 +330,65 @@ function hideWarningContent () {
           :title="$t('customFeeds')"
         >
           <SVGIcon name="feed" />
+          <span>{{ $t("feeds") }}</span>
         </RouterLink>
+      </div>
 
+      <!-- 中タブ -->
+      <div
+        v-if="isMyProfile()"
+        class="tab"
+      >
         <!-- 自分のリポストタブボタン -->
         <RouterLink
-          v-if="isMyProfile()"
           class="tab__button tab__button--repost"
           :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
           :title="$t('reposts')"
         >
           <SVGIcon name="repost" />
+          <span>{{ $t("reposts") }}</span>
         </RouterLink>
 
         <!-- 自分のいいねタブボタン -->
         <RouterLink
-          v-if="isMyProfile()"
           class="tab__button tab__button--like"
           :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
           :title="$t('likes')"
         >
           <SVGIcon name="like" />
+          <span>{{ $t("likes") }}</span>
         </RouterLink>
       </div>
 
       <!-- 下タブ -->
-      <div class="tab tab--bottom">
+      <div class="tab">
+        <!-- 関連ユーザータブボタン -->
+        <RouterLink
+          class="tab__button"
+          :to="{ path: '/profile/suggested-follows', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('suggestedFollows')"
+        >
+          <SVGIcon name="person" />
+          <span>{{ $t("suggestedFollows") }}</span>
+        </RouterLink>
+
         <!-- フォローイングタブボタン -->
         <RouterLink
-          class="tab__button tab__button--following"
+          class="tab__button"
           :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('following')"
+          :title="$t('followings')"
         >
+          <SVGIcon name="person" />
           <span>{{ $t("followings") }}</span>
         </RouterLink>
 
         <!-- フォロワータブボタン -->
         <RouterLink
-          class="tab__button tab__button--following"
+          class="tab__button"
           :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('follower')"
+          :title="$t('followers')"
         >
+          <SVGIcon name="person" />
           <span>{{ $t("followers") }}</span>
         </RouterLink>
       </div>
@@ -370,10 +412,62 @@ function hideWarningContent () {
   flex-grow: 1;
   position: relative;
 
+  // 折り畳み
+  &[data-folding="true"] {
+    .banner,
+    .profile-view__details__bottom {
+      display: none;
+    }
+    .profile-view__details {
+      .avatar {
+        font-size: 4rem;
+      }
+      .display-name {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
   &__top {
     display: flex;
     flex-direction: column;
     position: relative;
+  }
+
+  &__details {
+    border-bottom: 1px solid var(--fg-color-025);
+    display: flex;
+    flex-direction: column;
+    grid-gap: 1rem;
+    padding: 1rem;
+
+    &__top {
+      display: flex;
+      grid-gap: 1rem;
+
+      &__right {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        &__bottom {
+          display: flex;
+          flex-grow: 1;
+          grid-gap: 1rem;
+
+          button {
+            font-size: 0.75rem;
+            margin-left: auto;
+          }
+        }
+      }
+    }
+
+    &__bottom {
+      display: flex;
+      flex-direction: column;
+      grid-gap: 1rem;
+    }
   }
 }
 
@@ -407,27 +501,8 @@ function hideWarningContent () {
   }
 }
 
-.details {
-  border-bottom: 1px solid var(--fg-color-025);
-  display: flex;
-  flex-direction: column;
-  grid-gap: 1rem;
-  padding: 1rem;
-}
-
-.top {
-  display: flex;
-  grid-gap: 1rem;
-}
-
 .avatar {
   font-size: 6rem;
-}
-
-.right {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
 }
 
 .display-name {
@@ -439,9 +514,9 @@ function hideWarningContent () {
   word-break: break-word;
 }
 
-.handle {
+.handle > a {
   color: var(--fg-color-075);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   grid-gap: 0.25rem;
   margin-bottom: 0.5rem;
@@ -471,17 +546,21 @@ function hideWarningContent () {
 }
 
 .followed {
-  color: rgb(var(--like-color));
-  font-size: 0.875rem;
-  font-weight: bold;
-  line-height: 1.25;
-  word-break: break-all;
-}
-
-.bottom {
   display: flex;
-  flex-direction: column;
-  grid-gap: 1rem;
+  flex-grow: 1;
+  grid-gap: 0.5rem;
+
+  .svg-icon {
+    fill: rgb(var(--like-color));
+  }
+
+  span {
+    color: rgb(var(--like-color));
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.25;
+    word-break: break-all;
+  }
 }
 
 .button-container {
@@ -576,8 +655,11 @@ function hideWarningContent () {
 }
 
 .tab {
-  [data-is-my-profile="false"] &__button {
+  &__button {
     flex: 1;
+  }
+  &:first-child {
+    font-size: 0.9375rem;
   }
 
   &__button--repost > .svg-icon {

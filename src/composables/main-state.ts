@@ -93,6 +93,8 @@ const state = reactive<MainState>({
     })
   }),
   fetchMyFeedGenerators,
+  sortMyFeedGenerators,
+  sortFeedPreferencesSavedAndPinned,
   fetchMyFeeds,
 
   fetchTimeline,
@@ -100,6 +102,7 @@ const state = reactive<MainState>({
   fetchNotifications,
   fetchFollowers,
   fetchFollowings,
+  fetchSuggestedFollows,
   fetchSuggestions,
 
   fetchPopularFeedGenerators,
@@ -242,6 +245,7 @@ async function fetchCurrentProfile (did: string) {
   state.currentAuthorCustomFeeds.splice(0)
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
+  state.currentSuggestedFollows.splice(0)
   state.currentProfile = await state.atp.fetchProfile(did)
   if (state.currentProfile == null) return
   if (did === state.atp.session?.did)
@@ -525,6 +529,19 @@ async function fetchFollowings (direction: "new" | "old") {
   state.currentFollowingsCursor = cursor
 }
 
+async function fetchSuggestedFollows () {
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
+
+  // ブロックしている
+  if (state.currentProfile?.viewer.blocking != null) return
+
+  // ブロックされている
+  if (state.currentProfile?.viewer.blockedBy) return
+
+  await state.atp.fetchSuggestedFollows(state.currentSuggestedFollows, account)
+}
+
 async function fetchSuggestions (direction: "new" | "old") {
   state.currentSearchSuggestionCursor =
     await state.atp.fetchSuggestions(
@@ -588,6 +605,31 @@ async function fetchMyFeedGenerators (): Promise<void> {
     return
   }
   state.currentMyFeedGenerators.splice(0, state.currentMyFeedGenerators.length, ...generators)
+}
+
+function sortMyFeedGenerators () {
+  if (state.feedPreferences?.pinned == null) return
+  state.currentMyFeedGenerators.sort((a: TTFeedGenerator, b: TTFeedGenerator) => {
+    const aIsPinned = state.feedPreferences.pinned.indexOf(a.uri)
+    const bIsPinned = state.feedPreferences.pinned.indexOf(b.uri)
+    return (aIsPinned !== - 1 && bIsPinned !== - 1) || (aIsPinned === - 1 && bIsPinned === - 1)
+      ? 0
+      : aIsPinned === - 1 && bIsPinned !== - 1
+        ? 1
+        : aIsPinned !== - 1 && bIsPinned === - 1
+          ? - 1
+          : 0
+  })
+}
+
+function sortFeedPreferencesSavedAndPinned () {
+  if (state.feedPreferences?.saved != null)
+    state.feedPreferences.saved = state.currentMyFeedGenerators
+      .map((generator: TTFeedGenerator) => generator.uri)
+  if (state.feedPreferences?.pinned != null)
+    state.feedPreferences.pinned = state.currentMyFeedGenerators
+      .filter((generator: TTFeedGenerator) => state.feedPreferences.pinned.includes(generator.uri))
+      .map((generator: TTFeedGenerator) => generator.uri)
 }
 
 async function fetchMyFeeds (): Promise<boolean> {
@@ -790,9 +832,10 @@ function closeMessagePopup () {
   state.messagePopupDisplay = false
 }
 
-async function openConfirmationPopup (title?: string, text?: string): Promise<boolean> {
+async function openConfirmationPopup (title?: string, text?: string, detail?: string): Promise<boolean> {
   state.confirmationPopupTitle = title
   state.confirmationPopupText = text
+  state.confirmationPopupDetail = detail
   state.confirmationPopupResult = false
   state.confirmationPopupDisplay = true
   await Util.waitProp(() => state.confirmationPopupDisplay, false)

@@ -17,6 +17,7 @@ import cursorDown from "@/svg/cursor-down.svg?raw"
 import cursorLeft from "@/svg/cursor-left.svg?raw"
 import cursorRight from "@/svg/cursor-right.svg?raw"
 import cursorUp from "@/svg/cursor-up.svg?raw"
+import drag from "@/svg/drag.svg?raw"
 import edit from "@/svg/edit.svg?raw"
 import email from "@/svg/email.svg?raw"
 import feed from "@/svg/feed.svg?raw"
@@ -47,6 +48,7 @@ import play from "@/svg/play.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import post from "@/svg/post.svg?raw"
 import posts from "@/svg/comment-multiple.svg?raw"
+import question from "@/svg/question.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
 import radioOff from "@/svg/radio-off.svg?raw"
 import radioOn from "@/svg/radio-on.svg?raw"
@@ -83,6 +85,7 @@ const icons: { [k: string]: string } = {
   cursorLeft,
   cursorRight,
   cursorUp,
+  drag,
   edit,
   email,
   feed,
@@ -113,6 +116,7 @@ const icons: { [k: string]: string } = {
   plus,
   post,
   posts,
+  question,
   quoteRepost,
   radioOff,
   radioOn,

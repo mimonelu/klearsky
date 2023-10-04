@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { computed, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import type { Entity, Facet, RichTextOpts, RichTextProps } from "@atproto/api"
 import { RichText } from "@atproto/api"
 
 type RichParam = {
-  type: "externalLink" | "internalLink" | "mention" | "tag" | "text",
-  text: string,
-  param: string,
+  type: "externalLink" | "internalLink" | "mention" | "tag" | "text"
+  text: string
+  param: string
 }
 
 const INTERNAL_LINK_ITEMS = [
@@ -63,6 +63,10 @@ const props = defineProps<{
   hasTranslateLink?: boolean
 }>()
 
+const $t = inject("$t") as Function
+
+const mainState = inject("state") as MainState
+
 const state = reactive<{
   segments: ComputedRef<Array<RichParam>>;
 }>({
@@ -76,14 +80,15 @@ const state = reactive<{
     const results: Array<RichParam> = []
     for (const segment of richText.segments()) {
       // リンク
-      if (segment.isLink() && segment.link?.uri) {
-        const uri = transformInternalLink(segment.link.uri)
+      if (segment.isLink()) {
+        const uri = transformInternalLink(segment.link?.uri ?? "")
+
         // 外部リンク
         if (uri == null)
           results.push({
             type: "externalLink",
             text: segment.text,
-            param: segment.link.uri,
+            param: segment.link?.uri ?? "",
           })
 
         // 内部リンク
@@ -99,7 +104,7 @@ const state = reactive<{
         results.push({
           type: "mention",
           text: segment.text,
-          param: segment.mention?.did ?? '',
+          param: segment.mention?.did ?? "",
         })
 
       // ハッシュタグ
@@ -107,7 +112,7 @@ const state = reactive<{
         results.push({
           type: "tag",
           text: segment.text,
-          param: encodeURIComponent(segment.tag?.tag?.substring(1) ?? ''),
+          param: encodeURIComponent(segment.tag?.tag ?? ""),
         })
 
       else
@@ -130,6 +135,41 @@ function transformInternalLink (uri: string): undefined | string {
       .replace("[2]", matches[2])
   }
 }
+
+async function openWindowIfCan (segment: RichParam) {
+  const valid = validateUrl(segment.param ?? "", segment.text)
+  if (valid || await mainState.openConfirmationPopup(
+    $t("confirmUrl"),
+    $t("confirmUrlNotification"),
+    segment.param
+  )) {
+    if (segment.param.startsWith("lightning:"))
+      location.href = segment.param
+    else
+      window.open(segment.param, "_blank")
+  }
+}
+
+function validateUrl (url: string, text: string): boolean {
+  let urlObject: undefined | URL
+  try {
+    urlObject = new URL(url)
+  } catch (error) {
+    return false
+  }
+
+  // 末尾のスラッシュを削除して照合
+  const pathname = urlObject.pathname.replace(/\/$/, "")
+
+  return (
+    urlObject.origin !== "null" &&
+    urlObject.host !== "" &&
+    (
+      text.startsWith(urlObject.origin + pathname) ||
+      text.startsWith(urlObject.host + pathname)
+    )
+  )
+}
 </script>
 
 <template>
@@ -137,13 +177,10 @@ function transformInternalLink (uri: string): undefined | string {
     <template v-for="segment of state.segments">
       <!-- 外部リンク -->
       <template v-if="segment.type === 'externalLink'">
-        <a
+        <span
           class="textlink external-link"
-          :href="segment.param"
-          rel="noreferrer"
-          :target="segment.param.startsWith('lightning:') ? '' : '_blank'"
-          @click.stop
-        >{{ segment.text }}</a>
+          @click.stop="openWindowIfCan(segment)"
+        >{{ segment.text }}</span>
       </template>
 
       <!-- 内部リンク -->

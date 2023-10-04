@@ -4,6 +4,7 @@ type TTSession = {
   did: string
   handle: string
   email?: string
+  emailConfirmed?: boolean
   refreshJwt: string
   __service?: string // Injected
   __avatar?: string // Injected

@@ -39,6 +39,10 @@ function apply () {
     </template>
     <template #body>
       <div class="text">{{ mainState.confirmationPopupText }}</div>
+      <div
+        v-if="mainState.confirmationPopupDetail != null"
+        class="detail"
+      >{{ mainState.confirmationPopupDetail }}</div>
     </template>
     <template #footer>
       <div class="button-container">
@@ -66,11 +70,18 @@ function apply () {
     width: calc($router-view-width - 4rem);
   }
 
-  .text {
+  .text,
+  .detail {
     line-height: var(--line-height);
     user-select: text;
     white-space: pre-wrap;
     word-break: break-word;
+  }
+  .detail {
+    background-color: var(--fg-color-0125);
+    border-radius: var(--border-radius);
+    color: var(--fg-color-075);
+    padding: 0.5rem 1rem;
   }
 
   .button-container {

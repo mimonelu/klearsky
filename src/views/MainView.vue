@@ -78,7 +78,11 @@ onMounted(async () => {
       state.fetchPreferences(),
       state.fetchUserProfile(),
     ])
-    state.fetchMyFeedGenerators()
+
+    state.fetchMyFeedGenerators().then(() => {
+      state.sortMyFeedGenerators()
+    })
+
     state.saveSettings()
     state.updateSettings()
     setupNotificationInterval()
@@ -109,8 +113,12 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
 
   if (to.path.startsWith("/profile")) {
     if (state.currentQuery.account !== state.currentProfile?.handle &&
-        state.currentQuery.account !== state.currentProfile?.did)
+        state.currentQuery.account !== state.currentProfile?.did) {
+      state.profileFolding = false
       state.currentProfile = null
+    } else {
+      state.profileFolding = true
+    }
 
     state.inSameProfilePage = state.currentProfile != null
     if (!state.inSameProfilePage) {
@@ -130,6 +138,7 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
       state.currentFollowersCursor = undefined
       state.currentFollowings?.splice(0)
       state.currentFollowingsCursor = undefined
+      state.currentSuggestedFollows?.splice(0)
     }
   }
 
@@ -161,6 +170,7 @@ function resetState () {
   state.timelineCursor = undefined
   state.currentPosts = []
   state.inSameProfilePage = false
+  state.profileFolding = false
   state.currentProfile = null
   state.currentAuthorFeeds = []
   state.currentAuthorFeedsCursor = undefined
@@ -178,6 +188,7 @@ function resetState () {
   state.currentFollowersCursor = undefined
   state.currentFollowings = []
   state.currentFollowingsCursor = undefined
+  state.currentSuggestedFollows = []
   state.currentPreferences = []
   state.currentRepostUsers = []
   state.currentRepostUsersUri = undefined
@@ -223,6 +234,7 @@ function resetState () {
   state.confirmationPopupDisplay = false
   state.confirmationPopupTitle = undefined
   state.confirmationPopupText = undefined
+  state.confirmationPopupDetail = undefined
   state.confirmationPopupResult = false
 
   // エラーポップアッププロパティ
@@ -346,7 +358,9 @@ async function manualLogin (service: string, identifier: string, password: strin
       state.fetchPreferences(),
       state.fetchUserProfile(),
     ])
-    state.fetchMyFeedGenerators()
+    state.fetchMyFeedGenerators().then(() => {
+      state.sortMyFeedGenerators()
+    })
     state.loginPopupDisplay = false
     state.saveSettings()
     state.updateSettings()
@@ -368,7 +382,8 @@ async function processPage (pageName?: null | string) {
     case "profile-repost":
     case "profile-like":
     case "profile-following":
-    case "profile-follower": {
+    case "profile-follower":
+    case "profile-suggested-follows": {
       account = state.currentQuery.account as LocationQueryValue
       if (!account) {
         await router.push({ name: "timeline-home" })
@@ -454,6 +469,16 @@ async function processPage (pageName?: null | string) {
         const tasks: Array<Promise<void>> = []
         if (!state.inSameProfilePage || state.currentFollowers.length === 0)
           tasks.push(state.fetchFollowers("new"))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
+        await Promise.allSettled(tasks)
+        break
+      }
+      case "profile-suggested-follows": {
+        const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentSuggestedFollows.length === 0)
+          tasks.push(state.fetchSuggestedFollows())
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           tasks.push(state.fetchCurrentProfile(account as string))

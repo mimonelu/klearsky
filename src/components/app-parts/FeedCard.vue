@@ -77,6 +77,11 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
     // フィードブックマークの削除はフィードピンが有効の場合のみ
     if (type === "saved" && state.pinned) return
 
+    mainState.currentMyFeedGenerators = mainState.currentMyFeedGenerators
+      .filter((generator: TTFeedGenerator) => {
+        return generator.uri !== props.generator.uri
+      })
+
     mainState.feedPreferences[type].splice(
       0,
       mainState.feedPreferences[type].length,
@@ -89,9 +94,13 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
     // ピンの追加はフィードブックマークが無効の場合のみ
     if (type === "pinned" && !state.saved) return
 
+    if (mainState.currentMyFeedGenerators.findIndex((generator: TTFeedGenerator) => {
+      return generator.uri === props.generator.uri
+    }) === - 1) mainState.currentMyFeedGenerators.push(props.generator)
     mainState.feedPreferences[type].push(props.generator.uri)
   }
 
+  mainState.sortMyFeedGenerators()
   state.processing = true
   if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
     mainState.openErrorPopup("errorApiFailed", "FeedCard/updatePreferences")

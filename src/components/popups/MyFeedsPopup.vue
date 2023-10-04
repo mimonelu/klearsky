@@ -41,17 +41,19 @@ onMounted(async () => {
   // マイフィードジェネレーターの取得
   state.popupLoaderDisplay = true
   await mainState.fetchMyFeedGenerators()
+  mainState.sortMyFeedGenerators()
   state.popupLoaderDisplay = false
 })
 
 async function close () {
   if (state.orderChanged) {
     state.popupLoaderDisplay = true
+    mainState.sortMyFeedGenerators()
+    mainState.sortFeedPreferencesSavedAndPinned()
     if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
       mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
     state.popupLoaderDisplay = false
   }
-
   emit("close")
 }
 

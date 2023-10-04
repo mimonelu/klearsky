@@ -11,6 +11,11 @@
     "profile": "https://tokimeki.blue/profile/{handle}"
   },
   {
+    "name": "didApp",
+    "post": "https://web.plc.directory/did/{did}",
+    "profile": "https://web.plc.directory/did/{did}"
+  },
+  {
     "name": "atlasApp",
     "post": "https://bsky.jazco.dev/?s={handle}",
     "profile": "https://bsky.jazco.dev/?s={handle}"

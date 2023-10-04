@@ -18,6 +18,7 @@ type MainState = {
   currentPosts: Array<TTPost>
 
   inSameProfilePage: boolean
+  profileFolding: boolean
   currentProfile: null | TTProfile
   currentAuthorFeeds: Array<TTFeed>
   currentAuthorFeedsCursor?: string
@@ -35,6 +36,7 @@ type MainState = {
   currentFollowersCursor?: string
   currentFollowings: Array<TTUser>
   currentFollowingsCursor?: string
+  currentSuggestedFollows: Array<TTUser>
 
   currentPreferences: Array<TTPreference>
   fetchPreferences: () => Promise<boolean>
@@ -47,6 +49,8 @@ type MainState = {
   } }
   currentMyFeedGenerators: Array<TTFeedGenerator>
   fetchMyFeedGenerators: () => Promise<void>
+  sortMyFeedGenerators: () => void
+  sortFeedPreferencesSavedAndPinned: () => void
   fetchMyFeeds: () => Promise<boolean>
 
   getContentWarningVisibility: (
@@ -220,6 +224,7 @@ type MainState = {
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
   fetchFollowers: (direction: "new" | "old") => Promise<void>
   fetchFollowings: (direction: "new" | "old") => Promise<void>
+  fetchSuggestedFollows: () => Promise<void>
   fetchSuggestions: (direction: "new" | "old") => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
   openSendPostPopup: (params: TTSendPostPopupParams) => Promise<boolean>
@@ -238,8 +243,9 @@ type MainState = {
   confirmationPopupDisplay: boolean
   confirmationPopupTitle?: string
   confirmationPopupText?: string
+  confirmationPopupDetail?: string
   confirmationPopupResult: boolean
-  openConfirmationPopup: (title?: string, text?: string) => Promise<boolean>
+  openConfirmationPopup: (title?: string, text?: string, detail?: string) => Promise<boolean>
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
 

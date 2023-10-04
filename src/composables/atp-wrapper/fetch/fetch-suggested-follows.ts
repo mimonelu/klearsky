@@ -1,0 +1,27 @@
+import type { AppBskyGraphGetSuggestedFollowsByActor, BskyAgent } from "@atproto/api"
+
+export default async function (
+  this: TIAtpWrapper,
+  users: Array<TTUser>,
+  actor: string
+): Promise<Error | undefined> {
+  if (this.agent == null) return Error("No agent")
+  const query: AppBskyGraphGetSuggestedFollowsByActor.QueryParams = { actor }
+  const response: Error | AppBskyGraphGetSuggestedFollowsByActor.Response =
+    await (this.agent as BskyAgent).app.bsky.graph.getSuggestedFollowsByActor(query)
+      .then((value: AppBskyGraphGetSuggestedFollowsByActor.Response) => value)
+      .catch((error: any) => error)
+  console.log("[klearsky/getSuggestedFollowsByActor]", response)
+  if (response instanceof Error) return response
+  if (!response.success) return Error("Failed")
+  ;(response.data.suggestions as Array<TTUser>)
+    // ブロックユーザーをフィルタリング
+    .filter((follow: TTUser) => {
+      return !follow.viewer?.blocking && !follow.viewer?.blockedBy
+    })
+
+    .forEach((following: TTUser) => {
+      if (!users.some((user: TTUser) => user.did === following.did))
+        users.push(following)
+    })
+}
