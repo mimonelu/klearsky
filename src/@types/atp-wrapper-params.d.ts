@@ -19,6 +19,7 @@ type TTCreatePostParams = {
   languages?: Array<string>
   labels?: Array<string>
   lightning?: string
+  tags?: Array<TTMyTag>
 }
 
 type TTSendPostPopupParams = {

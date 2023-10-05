@@ -12,7 +12,7 @@ const mainState = inject("state") as MainState
       <PageHeader
         :hasBackButton="true"
         :title="$t('search')"
-        :subTitle="mainState.atp.session?.__service ?? ''"
+        :subTitle="mainState.atp.session?.__serviceName ?? ''"
       />
       <div class="tab">
         <RouterLink

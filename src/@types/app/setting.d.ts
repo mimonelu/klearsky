@@ -18,6 +18,7 @@ type TTSetting = {
   postLanguages?: Array<string>
   replyControl?: Array<number>
   repostControl?: Array<number>
+  tags?: Array<TTMyTag>
   timeControl?: string
   uiLanguage?: string
   wordMute?: Array<TTWordMute>

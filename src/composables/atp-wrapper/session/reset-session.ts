@@ -12,6 +12,19 @@ export default function (
   session.emailConfirmed = newSession.emailConfirmed ?? session.emailConfirmed
   session.refreshJwt = newSession.refreshJwt ?? session.refreshJwt
   session.__service = service ?? newSession.__service ?? session.__service ?? ""
+
+  // __serviceName の取得
+  let hostName = ""
+  if (session.__service != null) {
+    try {
+      const url = new URL(session.__service)
+      hostName = url.hostname
+    } catch (error) {
+      console.error(`[klearsky/__serviceName] ${error}`)
+    }
+  }
+  session.__serviceName = hostName ?? newSession.__serviceName ?? session.__serviceName ?? ""
+
   this.data.sessions[this.data.did] = this.session = session
   console.log("[klearsky/resetSession]")
 }

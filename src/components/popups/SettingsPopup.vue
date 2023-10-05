@@ -87,6 +87,13 @@ function closeHtmlPopupDisplay () {
                 <SVGIcon name="cursorRight" />
               </button>
 
+              <!-- マイタグポップアップトリガー -->
+              <button @click.prevent="mainState.openMyTagPopup({ mode: 'edit' })">
+                <SVGIcon name="tag" />
+                <span>{{ $t("tagEdit") }}</span>
+                <SVGIcon name="cursorRight" />
+              </button>
+
               <!-- マイフィードポップアップトリガー -->
               <button @click.prevent="mainState.openMyFeedsPopup">
                 <SVGIcon name="feed" />

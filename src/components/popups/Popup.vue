@@ -187,6 +187,7 @@ function scrollListener () {
 
       & > span {
         font-weight: bold;
+        line-height: 1.25;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

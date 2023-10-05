@@ -5,8 +5,7 @@ export default async function (this: TIAtpWrapper): Promise<boolean> {
 
   // TODO: 本来は @atproto/api の `com.atproto.server.refreshSession` を使用するべきだが、
   //       不明なエラーが発生するため直接サーバを叩いている。原因がわかり次第差し替えること
-  const domain = this.session.__service?.replace(/^\w+:\/+/, "") ?? ""
-  const url = `https://${domain}/xrpc/com.atproto.server.refreshSession`
+  const url = `https://${this.session.__serviceName}/xrpc/com.atproto.server.refreshSession`
   const request: RequestInit = {
     method: "POST",
     headers: { "Authorization": `Bearer ${this.session.refreshJwt}` },

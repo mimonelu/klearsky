@@ -49,6 +49,7 @@ const easyFormProps: TTEasyForm = {
   hasSubmitButton: true,
   submitButtonLabel: $t("submit"),
   submitCallback,
+  blurOnSubmit: true,
   data: [
     {
       state: easyFormState,
@@ -139,6 +140,7 @@ async function submitCallback () {
       createdAt: mainState.postDatePopupDate,
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
+      tags: mainState.currentPostTags,
 
       // Lightning
       lightning: mainState.currentSetting.lightning,
@@ -178,16 +180,6 @@ function onChangeImage () {
         </h2>
       </template>
       <template #body>
-        <!-- ワープポスト用注意文言 -->
-        <div
-          v-if="mainState.postDatePopupDate != null"
-          class="textlabel"
-        >
-          <div class="textlabel__text">
-            <SVGIcon name="history" />{{ $t("warpPostNotification") }} {{ format(new Date(mainState.postDatePopupDate), "yyyy/MM/dd HH:mm:ss") }}
-          </div>
-        </div>
-
         <Post
           v-if="type === 'reply' || type === 'quoteRepost'"
           position="preview"
@@ -199,15 +191,38 @@ function onChangeImage () {
         <EasyForm v-bind="easyFormProps">
           <template #free-2>
             <div class="button-container">
+              <!-- マイタグポップアップトリガー -->
+              <button
+                class="button--bordered post-tag-button"
+                @click.prevent="mainState.openMyTagPopup('select')"
+              >
+                <SVGIcon name="tag" />
+                <span>{{ $t("tags") }}:</span>
+                <span v-if="mainState.currentPostTags?.length === 0">-</span>
+                <div
+                  v-else
+                  class="post-tag-container"
+                >
+                  <div
+                    v-for="tag, index of mainState.currentPostTags"
+                    :key="index"
+                    class="post-tag"
+                  >
+                    <span>{{ tag.text }}</span>
+                  </div>
+                </div>
+              </button>
+
               <!-- ポスト言語選択ポップアップトリガー -->
               <button
                 class="button--bordered post-language-button"
                 @click.prevent="mainState.openPostLanguagesPopup()"
               >
                 <SVGIcon name="translate" />
+                <span>{{ $t("languages") }}:</span>
                 <span>{{
                   mainState.currentSetting.postLanguages?.length === 0
-                  ? "---"
+                  ? "-"
                   : mainState.currentSetting.postLanguages?.join(", ")
                 }}</span>
               </button>
@@ -218,10 +233,11 @@ function onChangeImage () {
                 @click.prevent="mainState.openSelectLabelsPopup(state)"
               >
                 <SVGIcon name="contentFiltering" />
+                <span>{{ $t("labels") }}:</span>
                 <span>{{
                   state.labels.length === 0
-                  ? "---"
-                  : `(${state.labels.length}) ${state.labels.map((label: string) => $t(label)).join(", ")}`
+                  ? "-"
+                  : `${state.labels.map((label: string) => $t(label)).join(", ")}`
                 }}</span>
               </button>
 
@@ -231,6 +247,12 @@ function onChangeImage () {
                 @click.prevent="mainState.openPostDatePopup"
               >
                 <SVGIcon name="history" />
+                <span>{{ $t("date") }}:</span>
+                <span>{{
+                  mainState.postDatePopupDate != null
+                  ? format(new Date(mainState.postDatePopupDate), "yyyy/MM/dd HH:mm:ss")
+                  : "-"
+                }}</span>
               </button>
             </div>
           </template>
@@ -329,6 +351,7 @@ function onChangeImage () {
 
   .button-container {
     display: flex;
+    flex-wrap: wrap;
     grid-gap: 1rem 0.5rem;
 
     .button--bordered {
@@ -343,20 +366,39 @@ function onChangeImage () {
         text-overflow: ellipsis;
       }
     }
-    .post-language-button > span {
+    .post-tag-button {
+      white-space: unset;
+
+      & > span:nth-child(2) {
+        white-space: nowrap;
+      }
+
+      .post-tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        grid-gap: 0.25rem;
+      }
+
+      .post-tag {
+        --alpha: 0.75;
+        font-size: 0.875rem;
+      }
+      &:focus, &:hover {
+        .post-tag {
+          --alpha: 1.0;
+        }
+      }
+    }
+    .post-language-button > span:last-child {
       text-transform: uppercase;
     }
     .post-label-button {
       --fg-color: var(--notice-color);
-      overflow: hidden;
+      white-space: unset;
 
-      & > span {
-        overflow: hidden;
-        text-overflow: ellipsis;
+      & > span:nth-child(2) {
+        white-space: nowrap;
       }
-    }
-    .post-date-button {
-      margin-left: auto;
     }
   }
 }

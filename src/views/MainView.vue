@@ -19,6 +19,7 @@ import MainMenuVertical from "@/components/shell-parts/MainMenuVertical.vue"
 import MessagePopup from "@/components/popups/MessagePopup.vue"
 import MutingUsersPopup from "@/components/popups/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
+import MyTagPopup from "@/components/popups/MyTagPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
 import ScrollButton from "@/components/buttons/ScrollButton.vue"
@@ -275,6 +276,11 @@ function resetState () {
 
   // マイフィードポップアップの表示スイッチ
   state.myFeedsPopupDisplay = false
+
+  // タグ
+  state.currentPostTags = []
+  state.myTagPopupProps.display = false
+  state.myTagPopupProps.mode = "select"
 
   // ワードミュートポップアップの表示スイッチ
   state.wordMutePopupDisplay = false
@@ -814,6 +820,13 @@ function broadcastListener (event: MessageEvent) {
       :fileList="state.sendPostPopupProps.fileList"
       :createdAt="state.sendPostPopupProps.createdAt"
       @closeSnedPostPopup="closeSendPostPopup"
+    />
+
+    <!-- マイタグポップアップ -->
+    <MyTagPopup
+      v-if="state.myTagPopupProps.display"
+      v-bind="state.myTagPopupProps"
+      @close="state.closeMyTagPopup"
     />
 
     <!-- ポスト言語選択ポップアップ -->

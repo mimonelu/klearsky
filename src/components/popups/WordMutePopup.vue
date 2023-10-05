@@ -20,6 +20,7 @@ const state = reactive<{
       hasSubmitButton: true,
       submitButtonLabel: $t("save"),
       submitCallback: onSubmit,
+      blurOnSubmit: true,
       data: [],
     }
     result.data = mainState.currentSetting.wordMute?.map((wordMute: TTWordMute, index: number) => {

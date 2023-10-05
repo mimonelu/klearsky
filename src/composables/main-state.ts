@@ -168,6 +168,15 @@ const state = reactive<MainState>({
   openMyFeedsPopup,
   closeMyFeedsPopup,
 
+  // タグ
+  currentPostTags: [],
+  myTagPopupProps: {
+    display: false,
+    mode: "select",
+  },
+  openMyTagPopup,
+  closeMyTagPopup,
+
   // ワードミュートポップアップの開閉
   openWordMutePopup,
   closeWordMutePopup,
@@ -684,6 +693,8 @@ function saveSettings () {
   else state.settings[did].contentLanguages = getSanitizedLanguages(state.settings[did].contentLanguages)
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
+  if (state.settings[did].tags == null)
+    state.settings[did].tags = []
   if (state.settings[did].wordMute == null)
     state.settings[did].wordMute = []
   if (state.settings[did].replyControl == null)
@@ -787,6 +798,7 @@ async function openSendPostPopup (params: TTSendPostPopupParams): Promise<boolea
   state.sendPostPopupProps.url = params.url
   state.sendPostPopupProps.fileList = params.fileList
   state.sendPostPopupProps.createdAt = params.createdAt
+  state.currentPostTags.splice(0)
   await Util.waitProp(() => state.sendPostPopupProps.display, false)
   return isSendPostDone
 }
@@ -954,6 +966,17 @@ function openMyFeedsPopup () {
 
 function closeMyFeedsPopup () {
   state.myFeedsPopupDisplay = false
+}
+
+// マイタグポップアップの開閉
+
+function openMyTagPopup (props?: TTMyTagPopupProps) {
+  state.myTagPopupProps.mode = props?.mode ?? "select"
+  state.myTagPopupProps.display = true
+}
+
+function closeMyTagPopup () {
+  state.myTagPopupProps.display = false
 }
 
 // ワードミュートポップアップの開閉

@@ -25,6 +25,10 @@ export default async function (
   if (params.languages != null && params.languages.length > 0)
     record.langs = params.languages
 
+  // ポストタグ
+  if (params.tags != null)
+    record.tags = params.tags.map((tag: TTMyTag) => tag.text)
+
   // Zapリンク
   if (params.lightning)
     record.text = record.text.replace(/@zap(?=\W|$)/gi, `[⚡️Zap!](lightning:${params.lightning})`)

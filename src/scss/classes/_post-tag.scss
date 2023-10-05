@@ -1,0 +1,21 @@
+.post-tag {
+  --alpha: 0.5;
+  border: 2px solid rgb(var(--fg-color), calc(var(--alpha) * 0.25));
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  grid-gap: 0.25em;
+  font-weight: bold;
+  padding: 0.25em 0.5em;
+
+  & > .svg-icon--tag {
+    fill: rgb(var(--fg-color), calc(var(--alpha) * 0.5));
+    font-size: 0.75em;
+  }
+
+  & > span {
+    color: rgb(var(--fg-color), var(--alpha));
+    line-height: 1.25;
+    word-break: break-all;
+  }
+}

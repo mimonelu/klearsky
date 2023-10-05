@@ -31,9 +31,8 @@ onBeforeUnmount(() => {
 // subscribeRepo
 
 function connect () {
-  const domain = mainState.atp.session?.__service?.replace(/^\w+:\/+/, "") ?? ""
   state.subscriber = new SubscribeRepos(onError, undefined, undefined, undefined, onPost)
-  state.subscriber.connect(`wss://${domain}/xrpc/com.atproto.sync.subscribeRepos`)
+  state.subscriber.connect(`wss://${mainState.atp.session?.__serviceName ?? ""}/xrpc/com.atproto.sync.subscribeRepos`)
   createProfileTimer()
 }
 
@@ -169,6 +168,48 @@ function onMutated () {
 
 <template>
   <div class="globalline-view">
+    <!-- グローバルラインヘッダー -->
+    <Portal to="home-view-header-bottom">
+      <div class="globalline-view__header">
+        <!-- 情報 -->
+        <div class="info">
+          <dl>
+            <dt>
+              <SVGIcon name="post" />
+            </dt>
+            <dd>{{ mainState.globallinePosts.length.toLocaleString() }} / {{ mainState.globallineNumberOfPosts.toLocaleString() }}</dd>
+          </dl>
+        </div>
+
+        <!-- 電源ボタン -->
+        <button
+          class="button--bordered power-button"
+          :data-is-on="state.subscriber?.socketState === 2"
+          @click.stop="toggleConnect"
+        >
+          <template v-if="state.subscriber?.socketState === 0">
+            <SVGIcon name="play" />
+          </template>
+          <template v-else-if="state.subscriber?.socketState === 1">
+            <SVGIcon name="menu" />
+            <Loader />
+          </template>
+          <template v-else-if="state.subscriber?.socketState === 2">
+            <SVGIcon name="pause" />
+          </template>
+        </button>
+
+        <!-- グローバルライン設定ポップアップトリガー -->
+        <button
+          class="button--bordered globalline-settings-popup-button"
+          @click.stop="openGloballineSettingsPopup"
+        >
+          <SVGIcon name="setting" />
+        </button>
+      </div>
+    </Portal>
+
+    <!-- タイムライン -->
     <div
       class="message-container"
       ref="messageContainer"
@@ -212,45 +253,6 @@ function onMutated () {
       </div>
     </div>
 
-    <!-- グローバルラインヘッダー -->
-    <Portal to="home-view-header-portal">
-      <!-- 情報 -->
-      <div class="info">
-        <dl>
-          <dt>
-            <SVGIcon name="post" />
-          </dt>
-          <dd>{{ mainState.globallinePosts.length.toLocaleString() }} / {{ mainState.globallineNumberOfPosts.toLocaleString() }}</dd>
-        </dl>
-      </div>
-
-      <!-- 電源ボタン -->
-      <button
-        class="power-button"
-        :data-is-on="state.subscriber?.socketState === 2"
-        @click.stop="toggleConnect"
-      >
-        <template v-if="state.subscriber?.socketState === 0">
-          <SVGIcon name="play" />
-        </template>
-        <template v-else-if="state.subscriber?.socketState === 1">
-          <SVGIcon name="menu" />
-          <Loader />
-        </template>
-        <template v-else-if="state.subscriber?.socketState === 2">
-          <SVGIcon name="pause" />
-        </template>
-      </button>
-
-      <!-- グローバルライン設定ポップアップトリガー -->
-      <button
-        class="globalline-settings-popup-button"
-        @click.stop="openGloballineSettingsPopup"
-      >
-        <SVGIcon name="setting" />
-      </button>
-    </Portal>
-
     <!-- グローバルライン設定ポップアップ -->
     <GloballineSettingsPopup
       v-if="state.globallineSettingsPopupDisplay"
@@ -264,6 +266,17 @@ function onMutated () {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+
+  // グローバルラインヘッダー
+  &__header {
+    background-color: rgb(var(--bg-color), var(--main-area-opacity));
+    border-bottom: 1px solid var(--fg-color-025);
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5rem;
+    padding: 0 0.5rem 0 0.5rem;
+    min-height: 3rem;
+  }
 }
 
 .message-container {
@@ -322,30 +335,6 @@ function onMutated () {
   }
 }
 
-// 電源ボタン
-.power-button {
-  position: relative;
-
-  & > .svg-icon--menu {
-    display: none;
-  }
-
-  & > .loader {
-    font-size: 0.5rem;
-  }
-
-  &[data-is-on="true"] {
-    & > .svg-icon {
-      fill: var(--notice-color-075);
-    }
-    &:focus, &:hover {
-      & > .svg-icon {
-        fill: rgb(var(--notice-color));
-      }
-    }
-  }
-}
-
 // 情報
 .info {
   display: flex;
@@ -353,7 +342,6 @@ function onMutated () {
   align-content: center;
   justify-content: flex-end;
   grid-gap: 0.5rem;
-  margin-right: 1rem;
 
   & > dl {
     display: flex;
@@ -374,6 +362,30 @@ function onMutated () {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+  }
+}
+
+// 電源ボタン
+.power-button {
+  position: relative;
+
+  & > .svg-icon--menu {
+    visibility: hidden;
+  }
+
+  & > .loader {
+    font-size: 0.5rem;
+  }
+
+  &[data-is-on="true"] {
+    & > .svg-icon {
+      fill: var(--notice-color-075);
+    }
+    &:focus, &:hover {
+      & > .svg-icon {
+        fill: rgb(var(--notice-color));
+      }
     }
   }
 }

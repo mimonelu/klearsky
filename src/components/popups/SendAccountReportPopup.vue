@@ -35,6 +35,7 @@ const easyFormProps: TTEasyForm = {
   hasSubmitButton: true,
   submitButtonLabel: $t("submit"),
   submitCallback,
+  blurOnSubmit: true,
   data: [
     {
       state: formState,

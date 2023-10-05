@@ -602,7 +602,7 @@ function onActivateHashTag (text: string) {
           class="textlabel--alert"
         >
           <div class="textlabel__text">
-            <SVGIcon name="contentFiltering" />{{ $t("postLabel") }}
+            <SVGIcon name="contentFiltering" />{{ $t("postLabel") }}:
           </div>
           <div
             v-for="label of post.labels"
@@ -764,15 +764,23 @@ function onActivateHashTag (text: string) {
 
         <!-- ポストタグ -->
         <div
-          v-if="post.record?.tags != null"
-          class="post-tag"
+          v-if="
+            post.record?.tags != null &&
+            position !== 'postInPost' &&
+            position !== 'preview' &&
+            position !== 'slim'
+          "
+          class="post-tag-container"
         >
           <RouterLink
             v-for="postTag of post.record.tags"
             :to="`/search/post?text=${encodeURIComponent(postTag)}`"
-            class="post-tag__item"
+            class="post-tag"
             @click.prevent.stop
-          >{{ postTag }}</RouterLink>
+          >
+            <SVGIcon name="tag" />
+            <span>{{ postTag }}</span>
+          </RouterLink>
         </div>
 
         <!-- リアクションコンテナ -->
@@ -1265,22 +1273,16 @@ function onActivateHashTag (text: string) {
   }
 }
 
-.post-tag {
+.post-tag-container {
   display: flex;
   flex-wrap: wrap;
   grid-gap: 0.25em;
 
-  &__item {
-    border: 1px solid rgb(var(--fg-color), 0.125);
-    border-radius: var(--border-radius);
-    color: rgb(var(--fg-color), 0.5);
-    display: block;
+  .post-tag {
     font-size: 0.875em;
-    padding: 0.25em 0.5em;
-    word-break: break-all;
     &:focus, &:hover {
-      border-color: rgb(var(--accent-color), 0.625);
-      color: rgb(var(--accent-color));
+      --alpha: 1.0;
+      --fg-color: var(--accent-color);
     }
   }
 }

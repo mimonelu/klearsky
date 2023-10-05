@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+import { inject } from "vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
+
+const mainState = inject("state") as MainState
 </script>
 
 <template>
@@ -8,9 +11,10 @@ import PageHeader from "@/components/shell-parts/PageHeader.vue"
       <PageHeader
         :hasBackButton="true"
         :title="$t('home')"
+        :subTitle="mainState.atp.session?.__serviceName ?? ''"
       >
         <template #right>
-          <PortalTarget name="home-view-header-portal" />
+          <PortalTarget name="home-view-header-top" />
         </template>
       </PageHeader>
       <div class="tab">
@@ -33,6 +37,7 @@ import PageHeader from "@/components/shell-parts/PageHeader.vue"
           <span>{{ $t("globalline") }}</span>
         </RouterLink>
       </div>
+      <PortalTarget name="home-view-header-bottom" />
     </Portal>
     <RouterView />
   </div>
