@@ -31,9 +31,8 @@ onBeforeUnmount(() => {
 // subscribeRepo
 
 function connect () {
-  const domain = mainState.atp.session?.__service?.replace(/^\w+:\/+/, "") ?? ""
   state.subscriber = new SubscribeRepos(onError, undefined, undefined, undefined, onPost)
-  state.subscriber.connect(`wss://${domain}/xrpc/com.atproto.sync.subscribeRepos`)
+  state.subscriber.connect(`wss://${mainState.atp.session?.__serviceName ?? ""}/xrpc/com.atproto.sync.subscribeRepos`)
   createProfileTimer()
 }
 
