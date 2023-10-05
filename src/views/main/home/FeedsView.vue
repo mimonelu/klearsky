@@ -46,7 +46,7 @@ function openMyFeedsPopup () {
     class="feeds-view"
     :data-processing="!(state.generator != null)"
   >
-    <Portal to="home-view-header-portal">
+    <Portal to="home-view-header-top">
       <!-- マイフィードポップアップトリガー -->
       <button
         class="my-feeds-trigger"

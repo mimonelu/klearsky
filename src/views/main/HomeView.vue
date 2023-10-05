@@ -14,7 +14,7 @@ const mainState = inject("state") as MainState
         :subTitle="mainState.atp.session?.__serviceName ?? ''"
       >
         <template #right>
-          <PortalTarget name="home-view-header-portal" />
+          <PortalTarget name="home-view-header-top" />
         </template>
       </PageHeader>
       <div class="tab">
@@ -37,6 +37,7 @@ const mainState = inject("state") as MainState
           <span>{{ $t("globalline") }}</span>
         </RouterLink>
       </div>
+      <PortalTarget name="home-view-header-bottom" />
     </Portal>
     <RouterView />
   </div>

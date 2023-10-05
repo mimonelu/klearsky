@@ -24,7 +24,7 @@ function openMyFeedsPopup () {
 
 <template>
   <div class="my-feeds-view">
-    <Portal to="home-view-header-portal">
+    <Portal to="home-view-header-top">
       <button @click.stop="updateMyFeeds">
         <SVGIcon name="refresh" />
       </button>

@@ -13,7 +13,7 @@ function openMyFeedsPopup () {
 </script>
 
 <template>
-  <Portal to="home-view-header-portal">
+  <Portal to="home-view-header-top">
     <!-- マイフィードポップアップトリガー -->
     <button
       class="my-feeds-trigger"
