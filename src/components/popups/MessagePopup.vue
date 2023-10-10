@@ -2,18 +2,18 @@
 import { inject } from "vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import Popup from "@/components/popups/Popup.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
-
-defineProps<{
-  title?: string;
-  text?: string;
-}>()
 
 const mainState = inject("state") as MainState
 
 function close () {
   emit("close")
+}
+
+function translate () {
+  Util.translateInExternalService(mainState.messagePopupProps.text)
 }
 </script>
 
@@ -25,15 +25,17 @@ function close () {
   >
     <template #header>
       <h2>
-        <span>{{ mainState.messagePopupTitle }}</span>
+        <span>{{ mainState.messagePopupProps.title }}</span>
       </h2>
     </template>
     <template #body>
       <HtmlText
-        :text="mainState.messagePopupText"
+        :text="mainState.messagePopupProps.text"
         :processHashTag="true"
+        :hasTranslateLink="mainState.messagePopupProps.hasTranslateLink"
         @onActivateHashTag="close"
         @onActivateMention="close"
+        @translate="translate"
       />
     </template>
   </Popup>

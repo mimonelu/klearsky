@@ -240,10 +240,8 @@ type MainState = {
   openLikeUsersPopup: (uri: string) => void
   closeLikeUsersPopup: () => void
 
-  messagePopupDisplay: boolean
-  messagePopupTitle?: string
-  messagePopupText?: string
-  openMessagePopup: (title?: string, text?: string) => void
+  messagePopupProps: TTMessagePopupProps
+  openMessagePopup: (params: Omit<TTMessagePopupProps, "display">) => void
   closeMessagePopup: () => void
 
   confirmationPopupDisplay: boolean

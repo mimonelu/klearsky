@@ -11,10 +11,8 @@ const props = defineProps<{
 
 function translate () {
   Util.blurElement()
-  if (props.text == null) return
+  Util.translateInExternalService(props.text)
   emit("close")
-  const language = Util.getUserLanguage()
-  window.open(`https://translate.google.com/?sl=auto&tl=${language}&text=${encodeURIComponent(props.text)}&op=translate`)
 }
 </script>
 

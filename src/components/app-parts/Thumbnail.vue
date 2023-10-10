@@ -8,6 +8,7 @@ import Util from "@/composables/util"
 const props = defineProps<{
   image?: TTImage
   did?: string
+  hasTranslateLink?: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -85,7 +86,11 @@ async function fetchBlob (link: string): Promise<null | Uint8Array> {
 
 function onActivateAlt (alt: string) {
   Util.blurElement()
-  mainState.openMessagePopup($t("alt"), alt)
+  mainState.openMessagePopup({
+    title: $t("alt"),
+    text: alt,
+    hasTranslateLink: props.hasTranslateLink,
+  })
 }
 </script>
 

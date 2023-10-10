@@ -690,6 +690,7 @@ function onActivateHashTag (text: string) {
                   :key="post.cid"
                   :image="image"
                   :did="post.author.did"
+                  :hasTranslateLink="state.hasOtherLanguages"
                   :data-has-no-fullsize="state.images[imageIndex].fullsize == null"
                   @click.stop="openImagePopup(imageIndex)"
                 />
