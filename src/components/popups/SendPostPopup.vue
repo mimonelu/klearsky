@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, watch } from "vue"
+import { inject, onMounted, reactive, ref, watch } from "vue"
 import format from "date-fns/format"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
@@ -36,11 +36,13 @@ const state = reactive<{
 const easyFormState = reactive<{
   text: string
   url: string
+  urlHasImage: Array<boolean>
   images: Array<File>
   alts: Array<string>
 }>({
   text: props.text ?? "",
   url: props.url ?? "",
+  urlHasImage: [true],
   images: [],
   alts: [],
 })
@@ -71,6 +73,14 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "url",
       inputmode: "url",
       clearButton: true,
+      onInput: onInputUrl,
+    },
+    {
+      state: easyFormState,
+      model: "urlHasImage",
+      type: "checkbox",
+      options: [{ label: $t("urlHasImage"), value: true }],
+      display: false,
     },
     {
       state: easyFormState,
@@ -86,16 +96,20 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
+const easyForm = ref(null)
+
 // D&D用処置
 watch(() => props.fileList, (value?: FileList) => {
   const files = value != null ? Array.from(value) : []
   files.unshift(...easyFormState.images)
   easyFormState.images = files
+  onInputUrl()
   onChangeImage()
 })
 
 onMounted(() => {
   if (props.fileList != null) easyFormState.images = Array.from(props.fileList)
+  onInputUrl()
   onChangeImage()
 
   mainState.postDatePopupDate = props.createdAt
@@ -151,14 +165,34 @@ async function submitCallback () {
   }
 }
 
+function onInputUrl () {
+  // リンクカードの画像添付チェックボックスの出し分け
+  const urlHasImageItem = easyFormProps.data.find((item: TTEasyFormItem) => {
+    return item.model === "urlHasImage"
+  })
+  if (urlHasImageItem == null) return
+  urlHasImageItem.display = !!easyFormState.url && easyFormState.images.length === 0
+
+  // TODO: 要修正
+  ;(easyForm.value as any)?.forceUpdate()
+}
+
+function onClickClearButton () {
+  onInputUrl()
+}
+
 function onChangeImage () {
   // ファイルがひとつ以上選択されているか否かでリンクカード／フィードカードの表示状態を切り替える
-  const urlItem = easyFormProps.data.find((item: TTEasyFormItem) => item.model === "url")
+  const urlItem = easyFormProps.data.find((item: TTEasyFormItem) => {
+    return item.model === "url"
+  })
   if (urlItem == null) return
-  urlItem.disabled = easyFormState.images.length > 0
+  urlItem.display = easyFormState.images.length === 0
 
   // TODO: 意図しない alt が削除される不具合を修正すること
   easyFormState.alts.splice(easyFormState.images.length)
+
+  onInputUrl()
 }
 </script>
 
@@ -188,8 +222,12 @@ function onChangeImage () {
           @keydown.prevent.stop
           @keyup.prevent.stop
         />
-        <EasyForm v-bind="easyFormProps">
-          <template #free-2>
+        <EasyForm
+          v-bind="easyFormProps"
+          ref="easyForm"
+          @clickClearButton="onClickClearButton"
+        >
+          <template #free-3>
             <div class="button-container">
               <!-- マイタグポップアップトリガー -->
               <button

@@ -97,6 +97,7 @@ function onClickClearButton (item: TTEasyFormItem) {
   Util.blurElement()
   if (item.model == null) return
   item.state[item.model] = ""
+  emit("clickClearButton")
 }
 
 function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
@@ -128,7 +129,6 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
 
 <template>
   <form
-    :key="state.updateKey"
     ref="easyForm"
     class="easy-form"
     :data-grid-columns="gridColumns != null"
@@ -306,6 +306,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
     >
       <span>{{ submitButtonLabel ?? $t("submit") }}</span>
     </button>
+    <div class="update-key">{{ state.updateKey }}</div>
   </form>
 </template>
 
@@ -410,5 +411,9 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
     z-index: 1;
     width: 100%;
   }
+}
+
+.update-key {
+  display: none;
 }
 </style>
