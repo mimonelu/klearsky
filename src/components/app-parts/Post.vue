@@ -22,6 +22,8 @@ const props = defineProps<{
   post: TTPost
   rootPost?: TTPost
   parentPost?: TTPost
+  hasReplyIcon?: boolean
+  hasQuoteRepostIcon?: boolean
   isInFeed?: boolean
   noLink?: boolean
   container?: HTMLElement
@@ -477,6 +479,22 @@ function onActivateHashTag (text: string) {
     >
       <slot name="header-before" />
 
+      <!-- 引用リポスト - リプライ／引用リポストアイコン -->
+      <div
+        v-if="hasReplyIcon"
+        class="reply-icon"
+      >
+        <SVGIcon name="reply" />
+        <span>{{ $t("reply") }}</span>
+      </div>
+      <div
+        v-if="hasQuoteRepostIcon"
+        class="quote-repost-icon"
+      >
+        <SVGIcon name="quoteRepost" />
+        <span>{{ $t("quoteRepost") }}</span>
+      </div>
+
       <!-- リプライ先ユーザー -->
       <button
         v-if="parentPost != null"
@@ -726,7 +744,7 @@ function onActivateHashTag (text: string) {
 
         <!-- 埋込コンテンツ -->
         <template v-if="post.embed?.record != null">
-          <!-- 引用リポスト：見つからない -->
+          <!-- 引用リポスト - 見つからない -->
           <div
             v-if="post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'"
             class="textlabel repost"
@@ -736,7 +754,7 @@ function onActivateHashTag (text: string) {
             </div>
           </div>
 
-          <!-- 引用リポスト：ブロック中／被ブロック中 -->
+          <!-- 引用リポスト - ブロック中／被ブロック中 -->
           <div
             v-else-if="
               post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
@@ -757,6 +775,7 @@ function onActivateHashTag (text: string) {
                 :level="(level ?? 1) + 1"
                 :position="position === 'slim' ? 'slim' : 'postInPost'"
                 :post="post.embed.record as TTPost"
+                :hasReplyIcon="post.embed.record.value?.reply != null"
                 :noLink="noLink"
                 @click="$emit('click')"
               />
@@ -1053,6 +1072,38 @@ function onActivateHashTag (text: string) {
   grid-gap: 1em;
   margin: -0.75em -1em 0.5em;
   padding: 0.75em 1em 0;
+}
+
+// リプライ／引用リポストアイコン
+.reply-icon,
+.quote-repost-icon {
+  display: flex;
+  align-items: center;
+  grid-gap: 0.25em;
+
+  & > .svg-icon,
+  & > span {
+    font-size: 0.875em;
+  }
+  & > span {
+    font-weight: bold;
+  }
+}
+.reply-icon {
+  & > .svg-icon {
+    fill: rgb(var(--post-color));
+  }
+  & > span {
+    color: rgb(var(--post-color));
+  }
+}
+.quote-repost-icon {
+  & > .svg-icon {
+    fill: rgb(var(--share-color));
+  }
+  & > span {
+    color: rgb(var(--share-color));
+  }
 }
 
 .replier,

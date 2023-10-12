@@ -95,30 +95,14 @@ function removeThisPost (uri: string) {
           position="post"
           :post="post"
           :container="state.postContainer"
+          :hasReplyIcon="post.record.reply != null"
+          :hasQuoteRepostIcon="post.record.embed?.record != null"
           :forceFocus="mainState.timeFeedsPopupProps?.uri === post.uri"
           @click="close"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
           @onActivateHashTag="close"
-        >
-          <template #header-before>
-            <!-- リプライ／引用リポストアイコン -->
-            <div
-              v-if="post.record.reply != null"
-              class="reply-icon"
-            >
-              <SVGIcon name="reply" />
-              <span>{{ $t("reply") }}</span>
-            </div>
-            <div
-              v-if="post.record.embed?.record != null"
-              class="quote-repost-icon"
-            >
-              <SVGIcon name="quoteRepost" />
-              <span>{{ $t("quoteRepost") }}</span>
-            </div>
-          </template>
-        </Post>
+        />
       </div>
     </template>
     <template #footer>
@@ -144,37 +128,5 @@ function removeThisPost (uri: string) {
 
 .post[data-focus="true"] {
   background-color: var(--accent-color-0125);
-}
-
-// リプライ／引用リポストアイコン
-.reply-icon,
-.quote-repost-icon {
-  display: flex;
-  align-items: center;
-  grid-gap: 0.25em;
-
-  & > .svg-icon,
-  & > span {
-    font-size: 0.875em;
-  }
-  & > span {
-    font-weight: bold;
-  }
-}
-.reply-icon {
-  & > .svg-icon {
-    fill: rgb(var(--post-color));
-  }
-  & > span {
-    color: rgb(var(--post-color));
-  }
-}
-.quote-repost-icon {
-  & > .svg-icon {
-    fill: rgb(var(--share-color));
-  }
-  & > span {
-    color: rgb(var(--share-color));
-  }
 }
 </style>
