@@ -49,6 +49,8 @@
   "myTag": "My Tags",
   "newTag": "New tag",
   "noTag": "No tags. Please add it.",
+  "deleteTag": "Delete tag",
+  "deleteTagMessage": "This tag will be deleted. Are you sure?",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",

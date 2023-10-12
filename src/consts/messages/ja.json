@@ -49,6 +49,8 @@
   "myTag": "マイタグ",
   "newTag": "新しいタグ",
   "noTag": "タグがありません。追加してください。",
+  "deleteTag": "タグの削除",
+  "deleteTagMessage": "このタグを削除します。よろしいですか？",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",

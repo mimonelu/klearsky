@@ -70,8 +70,13 @@ function addTag (text: string) {
   formState.text = ""
 }
 
-function removeTag (index: number) {
+async function removeTag (index: number) {
   if (mainState.currentSetting.tags == null) return
+  const result = await mainState.openConfirmationPopup(
+    $t("deleteTag"),
+    `${$t("deleteTagMessage")}: "${mainState.currentSetting.tags[index].text}"`
+  )
+  if (!result) return
 
   // マイタグ削除時は選択済みのポストタグも削除
   const selectedIndex = findTagSelected(mainState.currentSetting.tags[index])
