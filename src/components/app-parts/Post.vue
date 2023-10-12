@@ -676,26 +676,38 @@ function onActivateHashTag (text: string) {
             </button>
 
             <!-- イメージボックス -->
-            <div
-              v-if="state.displayImage || (!state.displayImage && !state.imageFolding)"
-              class="quad-images"
-              :data-number-of-images="state.images.length"
-            >
+            <template v-if="state.displayImage || (!state.displayImage && !state.imageFolding)">
+              <Thumbnail
+                v-if="state.images.length === 1"
+                :image="state.images[0]"
+                :did="post.author.did"
+                :hasAspectRatio="!mainState.currentSetting.imageOption?.includes(0) ?? false"
+                :hasTranslateLink="state.hasOtherLanguages"
+                :data-has-no-fullsize="state.images[0].fullsize == null"
+                @click.stop="openImagePopup(0)"
+              />
               <div
-                v-for="image, imageIndex of state.images"
-                :key="imageIndex"
-                class="quad-image"
+                v-else
+                class="quad-images"
+                :data-number-of-images="state.images.length"
               >
-                <Thumbnail
-                  :key="post.cid"
-                  :image="image"
-                  :did="post.author.did"
-                  :hasTranslateLink="state.hasOtherLanguages"
-                  :data-has-no-fullsize="state.images[imageIndex].fullsize == null"
-                  @click.stop="openImagePopup(imageIndex)"
-                />
+                <div
+                  v-for="image, imageIndex of state.images"
+                  :key="imageIndex"
+                  class="quad-image"
+                >
+                  <Thumbnail
+                    :key="post.cid"
+                    :image="image"
+                    :did="post.author.did"
+                    :hasAspectRatio="true"
+                    :hasTranslateLink="state.hasOtherLanguages"
+                    :data-has-no-fullsize="state.images[imageIndex].fullsize == null"
+                    @click.stop="openImagePopup(imageIndex)"
+                  />
+                </div>
               </div>
-            </div>
+            </template>
           </template>
           <template v-else>
             <!-- イメージリスト -->
@@ -705,6 +717,7 @@ function onActivateHashTag (text: string) {
                 :key="imageIndex"
                 :image="image"
                 :did="post.author.did"
+                :hasAspectRatio="true"
                 @click.stop="openImagePopup(imageIndex)"
               />
             </div>

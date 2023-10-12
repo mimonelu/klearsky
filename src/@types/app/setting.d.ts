@@ -9,6 +9,7 @@ type TTSetting = {
   globallineLayout?: "post" | "slim"
   hideNumberOfReaction?: boolean
   imageAspectRatio?: string
+  imageOption?: Array<number>
   imageControl?: "all" | "followingEx" | "following" | "self" | "none"
   layout?: "default" | "defaultLeft" | "defaultRight" | "slim" | "slimLeft" | "slimRight"
   lightning?: string

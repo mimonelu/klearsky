@@ -190,6 +190,7 @@ function deleteFile (index: number) {
 
 .thumbnail {
   cursor: unset !important;
+  overflow: hidden;
 }
 
 .delete-button {

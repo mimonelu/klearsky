@@ -287,6 +287,7 @@
   "imageAspectRatio2": "3 / 2",
   "imageAspectRatio3": "2 / 1",
   "imageAspectRatio4": "3 / 1",
+  "singleImageHasNoAspectRatio": "If only one image is attached, preserve the original size ratio as much as possible",
 
   "linkcard": "Link card",
   "linkcardEmbeddedControl": "Link Card Embedded Content Control",
