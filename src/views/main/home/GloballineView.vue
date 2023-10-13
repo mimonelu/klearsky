@@ -228,28 +228,12 @@ function onMutated () {
         <Post
           :position="mainState.currentSetting.globallineLayout ?? 'post'"
           :post="message"
+          :hasReplyIcon="message.record.reply != null"
+          :hasQuoteRepostIcon="message.record.embed?.record != null"
           :forceHideImages="true"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
-        >
-          <template #header-before>
-            <!-- リプライ／引用リポストアイコン -->
-            <div
-              v-if="message.record.reply != null"
-              class="reply-icon"
-            >
-              <SVGIcon name="reply" />
-              <span>{{ $t("reply") }}</span>
-            </div>
-            <div
-              v-if="message.record.embed?.record != null"
-              class="quote-repost-icon"
-            >
-              <SVGIcon name="quoteRepost" />
-              <span>{{ $t("quoteRepost") }}</span>
-            </div>
-          </template>
-        </Post>
+        />
       </div>
     </div>
 
@@ -301,38 +285,6 @@ function onMutated () {
 // ポスト
 .post {
   padding: 0.5rem 1rem;
-}
-
-// リプライ／引用リポストアイコン
-.reply-icon,
-.quote-repost-icon {
-  display: flex;
-  align-items: center;
-  grid-gap: 0.25em;
-
-  & > .svg-icon,
-  & > span {
-    font-size: 0.875em;
-  }
-  & > span {
-    font-weight: bold;
-  }
-}
-.reply-icon {
-  & > .svg-icon {
-    fill: rgb(var(--post-color));
-  }
-  & > span {
-    color: rgb(var(--post-color));
-  }
-}
-.quote-repost-icon {
-  & > .svg-icon {
-    fill: rgb(var(--share-color));
-  }
-  & > span {
-    color: rgb(var(--share-color));
-  }
 }
 
 // 情報

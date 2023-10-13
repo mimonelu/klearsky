@@ -49,6 +49,8 @@
   "myTag": "My Tags",
   "newTag": "New tag",
   "noTag": "No tags. Please add it.",
+  "deleteTag": "Delete tag",
+  "deleteTagMessage": "This tag will be deleted. Are you sure?",
 
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
@@ -287,6 +289,7 @@
   "imageAspectRatio2": "3 / 2",
   "imageAspectRatio3": "2 / 1",
   "imageAspectRatio4": "3 / 1",
+  "singleImageHasNoAspectRatio": "If only one image is attached, preserve the original size ratio as much as possible",
 
   "linkcard": "Link card",
   "linkcardEmbeddedControl": "Link Card Embedded Content Control",
@@ -363,7 +366,8 @@
   "replyUnknown": "Reply address unknown",
   "quoteRepost": "Quote repost",
   "text": "Text",
-  "LinkCardPlaceHolder": "URL or Custom feed's AT URI",
+  "LinkCardPlaceHolder": "Link card's URL / feed's AT URI",
+  "urlHasImage": "Attach OGP image to link card",
   "imageBoxes": "Images",
   "alts": "ALT texts",
   "submit": "Submit",
@@ -403,6 +407,7 @@
   "timeFeeds": "Timefeed",
 
   "pnGiphy": "Giphy",
+  "pnGraysky": "Graysky",
   "pnSpotify": "Spotify",
   "pnTwitter": "Twitter",
   "pnYoutube": "Youtube",

@@ -8,6 +8,8 @@ import Util from "@/composables/util"
 const props = defineProps<{
   image?: TTImage
   did?: string
+  hasAspectRatio?: boolean
+  hasTranslateLink?: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -85,12 +87,19 @@ async function fetchBlob (link: string): Promise<null | Uint8Array> {
 
 function onActivateAlt (alt: string) {
   Util.blurElement()
-  mainState.openMessagePopup($t("alt"), alt)
+  mainState.openMessagePopup({
+    title: $t("alt"),
+    text: alt,
+    hasTranslateLink: props.hasTranslateLink,
+  })
 }
 </script>
 
 <template>
-  <div class="thumbnail">
+  <div
+    class="thumbnail"
+    :data-has-aspect-ratio="hasAspectRatio"
+  >
     <LazyImage
       :src="state.src ?? undefined"
       :alt="image?.alt"
@@ -117,16 +126,31 @@ function onActivateAlt (alt: string) {
 
 <style lang="scss" scoped>
 .thumbnail {
+  background-color: var(--fg-color-0125);
+  border-radius: var(--border-radius);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   position: relative;
 
   & > .lazy-image {
-    aspect-ratio: var(--image-aspect-ratio);
-    background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
     display: block;
     object-fit: cover;
+  }
+
+  // アスペクト比の調節あり
+  &[data-has-aspect-ratio="true"] > .lazy-image {
+    aspect-ratio: var(--image-aspect-ratio);
+  }
+
+  // アスペクト比の調節なし（＝添付画像が1枚だけの場合）
+  &[data-has-aspect-ratio="false"] > .lazy-image {
+    min-height: calc(2em + 4px); // NOTICE: ALTボタンを考慮
+
+    // TODO: 暫定対応
+    max-height: 200vh;
   }
 }
 

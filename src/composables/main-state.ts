@@ -707,9 +707,12 @@ function saveSettings () {
     state.settings[did].imageControl = "all"
   if (state.settings[did].imageAspectRatio == null)
     state.settings[did].imageAspectRatio = "3 / 2"
+  if (state.settings[did].imageOption == null)
+    state.settings[did].imageOption = [0]
   if (state.settings[did].linkcardEmbeddedControl == null)
     state.settings[did].linkcardEmbeddedControl = [
       "giphy",
+      "graysky",
       "spotify",
       "twitter",
       "youtube",
@@ -834,14 +837,15 @@ function closeLikeUsersPopup () {
   state.likeUsersPopupDisplay = false
 }
 
-function openMessagePopup (title?: string, text?: string) {
-  state.messagePopupTitle = title
-  state.messagePopupText = text
-  state.messagePopupDisplay = true
+function openMessagePopup ({ title, text, hasTranslateLink }: Omit<TTMessagePopupProps, "display">) {
+  state.messagePopupProps.title = title
+  state.messagePopupProps.text = text
+  state.messagePopupProps.hasTranslateLink = hasTranslateLink
+  state.messagePopupProps.display = true
 }
 
 function closeMessagePopup () {
-  state.messagePopupDisplay = false
+  state.messagePopupProps.display = false
 }
 
 async function openConfirmationPopup (title?: string, text?: string, detail?: string): Promise<boolean> {

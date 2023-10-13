@@ -82,7 +82,10 @@ async function submitCallback () {
   )
   state.popupLoaderDisplay = false
   if (response) {
-    mainState.openMessagePopup($t("success"), $t("successMessage"))
+    mainState.openMessagePopup({
+      title: $t("success"),
+      text: $t("successMessage"),
+    })
     close()
   } else {
     mainState.openErrorPopup("errorApiFailed", "SendPostReportPopup/createReport")

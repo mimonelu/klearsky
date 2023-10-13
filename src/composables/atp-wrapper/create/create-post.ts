@@ -81,7 +81,11 @@ export default async function (
 
     // リンクカード
     else {
-      external = await Util.parseOgp(this, params.url)
+      external = await Util.parseOgp(
+        this,
+        params.url,
+        params.urlHasImage?.includes(true) ?? false
+      )
       if (external == null) return false
     }
   }

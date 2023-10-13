@@ -39,8 +39,12 @@
     { "label": "imageAspectRatio3", "value": "2 / 1" },
     { "label": "imageAspectRatio4", "value": "3 / 1" }
   ],
+  "IMAGE_OPTION": [
+    { "label": "singleImageHasNoAspectRatio", "value": 0 }
+  ],
   "LINKCARD_EMBEDDED_CONTROL": [
     { "label": "pnGiphy", "value": "giphy" },
+    { "label": "pnGraysky", "value": "graysky" },
     { "label": "pnSpotify", "value": "spotify" },
     { "label": "pnTwitter", "value": "twitter" },
     { "label": "pnYoutube", "value": "youtube" },

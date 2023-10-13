@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
+import { useRouter } from "vue-router"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -53,6 +54,8 @@ const state = reactive<{
   },
 })
 
+const router = useRouter()
+
 function close () {
   emit("close")
 }
@@ -70,8 +73,20 @@ function addTag (text: string) {
   formState.text = ""
 }
 
-function removeTag (index: number) {
+function searchTag (index: number) {
   if (mainState.currentSetting.tags == null) return
+  const text = mainState.currentSetting.tags[index].text
+  router.push({ name: "post-search", query: { text } })
+  close()
+}
+
+async function removeTag (index: number) {
+  if (mainState.currentSetting.tags == null) return
+  const result = await mainState.openConfirmationPopup(
+    $t("deleteTag"),
+    `${$t("deleteTagMessage")}: "${mainState.currentSetting.tags[index].text}"`
+  )
+  if (!result) return
 
   // マイタグ削除時は選択済みのポストタグも削除
   const selectedIndex = findTagSelected(mainState.currentSetting.tags[index])
@@ -165,6 +180,13 @@ function removeCurrentPostTag (index: number) {
             v-if="state.mode === 'select'"
             :name="findTagSelected(tag) !== - 1 ? 'checkboxOn' : 'checkboxOff'"
           />
+          <button
+            v-if="mode === 'edit' && state.mode === 'edit'"
+            class="button--plane tag__search-button"
+            @click.prevent="searchTag(index)"
+          >
+            <SVGIcon name="search" />
+          </button>
           <div class="tag__text">{{ tag.text }}</div>
           <button
             v-if="state.mode === 'edit'"
@@ -207,8 +229,6 @@ function removeCurrentPostTag (index: number) {
   border: 2px solid var(--fg-color-0125);
   border-radius: var(--border-radius);
   display: flex;
-  align-items: center;
-  padding-left: 0.5rem;
 
   & > .svg-icon {
     fill: rgb(var(--fg-color));
@@ -216,6 +236,9 @@ function removeCurrentPostTag (index: number) {
 
   & > button {
     padding: 0.5rem;
+  }
+  &__search-button {
+    font-size: 1.25rem;
   }
   &__remove-button {
     --fg-color: var(--notice-color);
@@ -226,11 +249,16 @@ function removeCurrentPostTag (index: number) {
     line-height: 1.25;
     padding: 0.5rem 0.25rem;
     word-break: break-all;
+    &:first-child {
+      padding-left: 1rem;
+    }
   }
 
   // タグ - 選択時
   [data-mode="select"] .tag-list & {
+    align-items: center;
     cursor: pointer;
+    padding-left: 0.5rem;
     &:focus, &:hover {
       background-color: rgb(var(--accent-color), 0.25);
     }

@@ -16,6 +16,7 @@ const state = reactive<{
     const settingValues = mainState.currentSetting.linkcardEmbeddedControl
     if (settingValues == null) return ""
     if (embeddedContentType === "giphy" && settingValues.includes("giphy")) return "giphy"
+    if (embeddedContentType === "graysky" && settingValues.includes("graysky")) return "graysky"
     if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
     if (embeddedContentType === "spotify" && settingValues.includes("spotify")) return "spotify"
     if (embeddedContentType === "twitter" && settingValues.includes("twitter")) return "twitter"
@@ -45,6 +46,17 @@ function getEmbeddedContentId () {
     if (matches != null && matches[1] != null) {
       embeddedContentType = "giphy"
       embeddedContentId = matches[1]
+      return
+    }
+  }
+
+  // Graysky 対応
+  if (url.hostname.endsWith("graysky.app")) {
+    const matches = url.pathname.match(/\/gif\/(.+?)\.mp4/)
+    if (matches != null && matches[1] != null) {
+      embeddedContentType = "graysky"
+      embeddedContentId = matches[1]
+      console.log(embeddedContentId)
       return
     }
   }
@@ -167,6 +179,25 @@ getEmbeddedContentId()
         width="100%"
         height="300"
       />
+
+      <!-- Graysky 対応 -->
+      <video
+        v-if="state.type === 'graysky'"
+        class="external--graysky"
+        autoplay
+        controls
+        loading="lazy"
+        loop
+        muted
+        :poster="external.thumb"
+        preload="metadata"
+        height="300"
+      >
+        <source
+          :src="`https://media.tenor.com/${embeddedContentId}.mp4`"
+          type="video/mp4"
+        />
+      </video>
 
       <!-- Nicovideo 対応 -->
       <div
@@ -295,6 +326,13 @@ getEmbeddedContentId()
       aspect-ratio: 1 / 1;
       height: unset !important;
     }
+  }
+
+  // Graysky 対応
+  &--graysky {
+    background-color: var(--fg-color-0125);
+    border-radius: var(--border-radius);
+    width: 100%;
   }
 
   // Nicovideo 対応

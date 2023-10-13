@@ -49,6 +49,8 @@
   "myTag": "マイタグ",
   "newTag": "新しいタグ",
   "noTag": "タグがありません。追加してください。",
+  "deleteTag": "タグの削除",
+  "deleteTagMessage": "このタグを削除します。よろしいですか？",
 
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
@@ -287,6 +289,7 @@
   "imageAspectRatio2": "3 / 2",
   "imageAspectRatio3": "2 / 1",
   "imageAspectRatio4": "3 / 1",
+  "singleImageHasNoAspectRatio": "画像が1枚だけの場合はなるべく原寸比を維持する",
 
   "linkcard": "リンクカード",
   "linkcardEmbeddedControl": "リンクカードの埋込コンテンツ制御",
@@ -363,7 +366,8 @@
   "replyUnknown": "リプライ先不明",
   "quoteRepost": "引用リポスト",
   "text": "テキスト",
-  "LinkCardPlaceHolder": "URLまたはカスタムフィードのAT URI",
+  "LinkCardPlaceHolder": "リンクカードのURL／フィードのAT URI",
+  "urlHasImage": "リンクカードにOGP画像を添付する",
   "imageBoxes": "画像",
   "alts": "代替テキスト",
   "submit": "送信する",
@@ -403,6 +407,7 @@
   "timeFeeds": "タイムフィード",
 
   "pnGiphy": "Giphy",
+  "pnGraysky": "Graysky",
   "pnSpotify": "Spotify",
   "pnTwitter": "Twitter",
   "pnYoutube": "Youtube",

@@ -303,6 +303,16 @@ function closeHtmlPopupDisplay () {
                 layout="horizontal"
                 @update="saveSetting"
               />
+
+              <!-- 画像オプション -->
+              <Checkboxes
+                class="checkboxes-is-wide"
+                :state="mainState.currentSetting"
+                model="imageOption"
+                :options="SETTINGS.IMAGE_OPTION"
+                layout="vertical"
+                @update="saveSetting"
+              />
             </div>
           </div>
 

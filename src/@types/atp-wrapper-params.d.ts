@@ -14,6 +14,7 @@ type TTCreatePostParams = {
   text: string
   createdAt?: string
   url: string
+  urlHasImage?: Array<boolean>
   images: Array<File>
   alts: Array<string>
   languages?: Array<string>

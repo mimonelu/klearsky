@@ -229,9 +229,12 @@ function resetState () {
   state.notificationCount = 0
   state.notificationFetchedFirst = false
   state.scrolledToBottom = false
-  state.messagePopupDisplay = false
-  state.messagePopupTitle = undefined
-  state.messagePopupText = undefined
+  state.messagePopupProps = {
+    display: false,
+    title: undefined,
+    text: undefined,
+    hasTranslateLink: undefined,
+  }
   state.confirmationPopupDisplay = false
   state.confirmationPopupTitle = undefined
   state.confirmationPopupText = undefined
@@ -889,7 +892,7 @@ function broadcastListener (event: MessageEvent) {
 
     <!-- メッセージポップアップ -->
     <MessagePopup
-      v-if="state.messagePopupDisplay"
+      v-if="state.messagePopupProps.display"
       @close="state.closeMessagePopup"
     />
 
