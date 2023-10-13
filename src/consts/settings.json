@@ -44,6 +44,7 @@
   ],
   "LINKCARD_EMBEDDED_CONTROL": [
     { "label": "pnGiphy", "value": "giphy" },
+    { "label": "pnGraysky", "value": "graysky" },
     { "label": "pnSpotify", "value": "spotify" },
     { "label": "pnTwitter", "value": "twitter" },
     { "label": "pnYoutube", "value": "youtube" },
