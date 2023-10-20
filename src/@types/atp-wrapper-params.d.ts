@@ -36,6 +36,7 @@ type TTSendPostPopupParams = {
 type TTUpdateProfileParams = {
   displayName: string
   description: string
+  labels: Array<TTLabel>
   avatar: null | Array<File>
   detachAvatar: Array<boolean>
   banner: null | Array<File>

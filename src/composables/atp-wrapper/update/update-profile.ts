@@ -12,6 +12,13 @@ export default async function (
     description: params.description,
   }
 
+  // アカウントラベル
+  if (params.labels.length > 0)
+    profileSchema.labels = {
+      $type: "com.atproto.label.defs#selfLabels",
+      values: params.labels,
+    }
+
   // 画像処理
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all([
     params.avatar != null && params.avatar[0] != null

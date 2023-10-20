@@ -12,6 +12,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   displayName: string,
   description: string,
+  labels: Array<TTLabel>,
   avatar: null | File
   detachAvatar: Array<boolean>,
   banner: null | File
@@ -20,6 +21,7 @@ const state = reactive<{
 }>({
   displayName: "",
   description: "",
+  labels: [],
   avatar: null,
   detachAvatar: [],
   banner: null,
@@ -114,6 +116,7 @@ async function setDefaultValues () {
   state.processing = true
   state.displayName = mainState.userProfile?.displayName ?? ""
   state.description = mainState.userProfile?.description ?? ""
+  state.labels = mainState.userProfile?.labels ?? []
   state.processing = false
 }
 
