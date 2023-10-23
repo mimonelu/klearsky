@@ -2,6 +2,7 @@
 import { inject, onMounted, reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
+import LabelButton from "@/components/buttons/LabelButton.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import Util from "@/composables/util"
 
@@ -12,7 +13,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   displayName: string,
   description: string,
-  labels: Array<TTLabel>,
+  labels: Array<string>,
   avatar: null | File
   detachAvatar: Array<boolean>,
   banner: null | File
@@ -116,7 +117,7 @@ async function setDefaultValues () {
   state.processing = true
   state.displayName = mainState.userProfile?.displayName ?? ""
   state.description = mainState.userProfile?.description ?? ""
-  state.labels = mainState.userProfile?.labels ?? []
+  state.labels = mainState.userProfile?.labels?.map((label: TTLabel) => label.val) ?? []
   state.processing = false
 }
 
@@ -147,7 +148,20 @@ async function submit () {
     <EasyForm
       v-bind="easyFormProps"
       ref="easyForm"
-    />
+    >
+      <template #free-2>
+        <!-- アカウントラベル選択ポップアップトリガー -->
+        <dl>
+          <dt>{{ $t("accountLabels") }}</dt>
+          <dd>
+            <LabelButton
+              type="account"
+              :parentState="state"
+            />
+          </dd>
+        </dl>
+      </template>
+    </EasyForm>
   </div>
 </template>
 
@@ -159,6 +173,12 @@ async function submit () {
     position: sticky;
     top: 0;
     z-index: 1;
+  }
+
+  &::v-deep() {
+    .label-button {
+      width: fit-content;
+    }
   }
 }
 

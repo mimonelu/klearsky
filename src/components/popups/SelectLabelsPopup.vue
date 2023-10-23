@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { inject, reactive } from "vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -7,21 +8,53 @@ import LABELS from "@/consts/labels.json"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
+  type: "post" | "account"
   state: any
-  property: string
 }>()
+
+const options = props.type === "post"
+  ? LABELS.POST_LABELS
+  : LABELS.ACCOUNT_LABELS
+
+const $t = inject("$t") as Function
+
+const state = reactive<{
+  customLabels: string
+}>({
+  customLabels: ((): string => {
+    return props.state.labels.filter((label: string) => {
+      return !options.find((option: TTOption) => option.value === label)
+    }).join(", ")
+  })()
+})
 
 const easyFormProps: TTEasyForm = {
   hasSubmitButton: false,
   data: [
     {
       state: props.state,
-      model: props.property,
+      model: "labels",
       type: "checkbox",
-      classes: "checkboxes-is-wide",
-      options: LABELS.POST_LABELS,
+      options,
       onUpdate () {
         emit("change")
+      },
+    },
+    {
+      state: state,
+      model: "customLabels",
+      type: "text",
+      placeholder: `${$t("customLabels")}, ...`,
+      onInput () {
+        const customLabels = state.customLabels
+          .split(",")
+          .map((label: string) => label.trim())
+          .filter(Boolean)
+        props.state.labels = props.state.labels
+          .filter((label: string) => {
+            return options.find((option: TTOption) => option.value === label)
+          })
+          .concat(...customLabels)
       },
     },
   ],
@@ -67,14 +100,7 @@ function close () {
   }
 
   .popup-body {
-    padding: 0;
-  }
-
-  .checkbox:first-child {
-    border-top-style: none;
-  }
-  .checkbox:last-child {
-    border-bottom-style: none;
+    padding: 1rem;
   }
 }
 </style>

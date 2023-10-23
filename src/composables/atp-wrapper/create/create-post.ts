@@ -166,7 +166,7 @@ export default async function (
       record.embed = feedCard
   }
 
-  // セルフラベリング
+  // セルフポストラベル
   if (params.labels != null && params.labels.length > 0)
     record.labels = {
       "$type": "com.atproto.label.defs#selfLabels",

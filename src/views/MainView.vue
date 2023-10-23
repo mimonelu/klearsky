@@ -268,6 +268,7 @@ function resetState () {
 
   // ラベル選択ポップアップ
   state.selectLabelsPopupDisplay = false
+  state.selectLabelsPopupType = "post"
   state.selectLabelsPopupState = undefined
 
   // ポスト日時選択ポップアップ
@@ -853,8 +854,8 @@ function broadcastListener (event: MessageEvent) {
     <!-- ラベル選択ポップアップ -->
     <SelectLabelsPopup
       v-if="state.selectLabelsPopupDisplay"
+      :type="state.selectLabelsPopupType"
       :state="state.selectLabelsPopupState"
-      property="labels"
       @close="state.closeSelectLabelsPopup"
       @change=""
     />

@@ -3,6 +3,7 @@ import { inject, onMounted, reactive, ref, watch } from "vue"
 import format from "date-fns/format"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
+import LabelButton from "@/components/buttons/LabelButton.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -266,18 +267,10 @@ function onChangeImage () {
               </button>
 
               <!-- ポストラベル選択ポップアップトリガー -->
-              <button
-                class="button--bordered post-label-button"
-                @click.prevent="mainState.openSelectLabelsPopup(state)"
-              >
-                <SVGIcon name="contentFiltering" />
-                <span>{{ $t("labels") }}:</span>
-                <span>{{
-                  state.labels.length === 0
-                  ? "-"
-                  : `${state.labels.map((label: string) => $t(label)).join(", ")}`
-                }}</span>
-              </button>
+              <LabelButton
+                type="post"
+                :parentState="state"
+              />
 
               <!-- ポスト日時選択ポップアップトリガー -->
               <button
@@ -394,7 +387,6 @@ function onChangeImage () {
 
     .button--bordered {
       min-height: 3rem;
-      white-space: nowrap;
 
       & > .svg-icon {
         font-size: 1rem;
@@ -405,8 +397,6 @@ function onChangeImage () {
       }
     }
     .post-tag-button {
-      white-space: unset;
-
       & > span:nth-child(2) {
         white-space: nowrap;
       }
@@ -429,14 +419,6 @@ function onChangeImage () {
     }
     .post-language-button > span:last-child {
       text-transform: uppercase;
-    }
-    .post-label-button {
-      --fg-color: var(--notice-color);
-      white-space: unset;
-
-      & > span:nth-child(2) {
-        white-space: nowrap;
-      }
     }
   }
 }

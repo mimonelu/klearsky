@@ -41,6 +41,8 @@
   "date": "日時",
   "label": "ラベル",
   "labels": "ラベル",
+  "accountLabels": "アカウントラベル",
+  "customLabels": "カスタムラベル",
   "select": "選択",
 
   "tag": "タグ",

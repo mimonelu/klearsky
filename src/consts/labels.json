@@ -48,6 +48,16 @@
       "scam"
     ]
   },
+  "ACCOUNT_LABELS": [
+    { "label": "nsfw-porn", "value": "porn" },
+    { "label": "nudity", "value": "nudity" },
+    { "label": "suggestive-sexual", "value": "sexual" },
+    { "label": "gore", "value": "gore" },
+    { "label": "hate-intolerant", "value": "intolerant" },
+    { "label": "spam", "value": "spam" },
+    { "label": "impersonation", "value": "impersonation" },
+    { "label": "!warn", "value": "!warn" }
+  ],
   "POST_LABELS": [
     { "label": "nsfw-porn", "value": "porn" },
     { "label": "nudity", "value": "nudity" },

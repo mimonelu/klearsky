@@ -933,8 +933,9 @@ function closePostLanguagesPopup () {
 
 // ラベル選択ポップアップの開閉
 
-function openSelectLabelsPopup (params: any) {
+function openSelectLabelsPopup (type: "post" | "account", params: any) {
   state.selectLabelsPopupDisplay = true
+  state.selectLabelsPopupType = type
   state.selectLabelsPopupState = params
 }
 

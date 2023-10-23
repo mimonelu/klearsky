@@ -163,6 +163,7 @@ type MainState = {
 
   // ラベル選択ポップアップ
   selectLabelsPopupDisplay: boolean
+  selectLabelsPopupType: "post" | "account"
   selectLabelsPopupState: any
 
   // ポスト日時選択ポップアップ

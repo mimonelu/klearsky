@@ -16,7 +16,14 @@ export default async function (
   if (params.labels.length > 0)
     profileSchema.labels = {
       $type: "com.atproto.label.defs#selfLabels",
-      values: params.labels,
+      values: params.labels.map((label: string) => {
+        return {
+          src: this.data.did,
+          uri: `at://${this.data.did}/app.bsky.actor.profile/self`,
+          val: label,
+          cts: new Date().toISOString(),
+        }
+      }),
     }
 
   // 画像処理

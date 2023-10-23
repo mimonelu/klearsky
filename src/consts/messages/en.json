@@ -41,6 +41,8 @@
   "date": "Date",
   "label": "Label",
   "labels": "Labels",
+  "accountLabels": "Account labels",
+  "customLabels": "Custom labels",
   "select": "Select",
 
   "tag": "Tag",
