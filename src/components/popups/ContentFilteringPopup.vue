@@ -3,7 +3,7 @@ import { inject, onMounted, reactive } from "vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
-import LABELS from "@/consts/labels.json"
+import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
 import OPTIONS from "@/consts/options.json"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -45,15 +45,25 @@ const easyFormProps: TTEasyForm = {
   submitButtonLabel: $t("apply"),
   submitCallback: apply,
   blurOnSubmit: true,
-  data: (() => Object.keys(LABELS.DEFAULTS).map((label: string) => ({
-    state: formState,
-    model: label,
-    label: $t(label),
-    type: "radio",
-    options: OPTIONS.LABEL_VISIBILITY,
-    layout: "horizontal",
-    classes: "radios-is-wide",
-  })))(),
+  data: (() => {
+    // コンテンツフィルタのラベルグループを作成
+    const results: { [k: string]: any } = {}
+    Object.keys(LABEL_BEHAVIORS).forEach((key: string) => {
+      const oldGroup = LABEL_BEHAVIORS[key].oldGroup
+      if (!oldGroup) return
+      results[oldGroup] = true
+    })
+
+    return Object.keys(results).map((label: string) => ({
+      state: formState,
+      model: label,
+      label: $t(label),
+      type: "radio",
+      options: OPTIONS.LABEL_VISIBILITY,
+      layout: "horizontal",
+      classes: "radios-is-wide",
+    }))
+  })(),
 }
 
 onMounted(async () => {

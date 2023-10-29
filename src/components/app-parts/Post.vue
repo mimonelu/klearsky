@@ -63,7 +63,8 @@ const state = reactive<{
 
   // ラベル対応
   contentWarningVisibility: ComputedRef<TTContentVisibility>;
-  contentWarningLabel: ComputedRef<string>;
+  contentWarningLabels: ComputedRef<Array<string>>;
+  contentWarningPostLabels: ComputedRef<Array<string>>;
 
   // ワードミュートの判定
   isWordMute: ComputedRef<boolean>
@@ -137,14 +138,14 @@ const state = reactive<{
       props.post.labels
     )
   }),
-  contentWarningLabel: computed((): string => {
-    const preferences: Array<TTPreference> = [
-      ...mainState.getConcernedPreferences(props.post.author?.labels),
-      ...mainState.getConcernedPreferences(props.post.labels),
-    ]
-    return preferences
-      .map((preference: TTPreference) => $t(preference.label))
-      .join(", ")
+  contentWarningLabels: computed((): Array<string> => {
+    return Array.from(new Set([
+      ...props.post.author?.labels?.map((label: TTLabel) => $t(label.val)) ?? [],
+      ...props.post.labels?.map((label: TTLabel) => $t(label.val)) ?? []
+    ]))
+  }),
+  contentWarningPostLabels: computed((): Array<string> => {
+    return Array.from(new Set(props.post.labels?.map((label: TTLabel) => $t(label.val)) ?? []))
   }),
 
   // ワードミュートの判定
@@ -544,14 +545,13 @@ function onActivateHashTag (text: string) {
         v-show="state.noContentLanguage"
         name="translate"
       />
-      <SVGIcon
-        v-show="state.contentWarningVisibility !== 'show'"
-        name="contentFiltering"
-      />
-      <div
-        v-show="state.contentWarningVisibility !== 'show'"
-        class="post__mask__content-warning"
-      >{{ state.contentWarningLabel }}</div>
+
+      <!-- アカウントラベル＆ポストラベル -->
+      <template v-if="state.contentWarningVisibility !== 'show'">
+        <SVGIcon name="contentFiltering" />
+        <div class="post__mask__content-warning">{{ state.contentWarningLabels.join(", ") }}</div>
+      </template>
+
       <SVGIcon
         v-show="state.isWordMute"
         name="wordMute"
@@ -623,10 +623,10 @@ function onActivateHashTag (text: string) {
             <SVGIcon name="contentFiltering" />{{ $t("postLabel") }}:
           </div>
           <div
-            v-for="label of post.labels"
-            :key="label.val"
+            v-for="label of state.contentWarningPostLabels"
+            :key="label"
             class="textlabel__item"
-          >{{ $t(label.val) }}</div>
+          >{{ label }}</div>
         </div>
 
         <!-- 本文 -->

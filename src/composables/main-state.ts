@@ -7,7 +7,7 @@ import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
-import LABELS from "@/consts/labels.json"
+import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
 import LANGUAGES from "@/consts/languages.json"
 
 const state = reactive<MainState>({
@@ -422,39 +422,29 @@ function getContentWarningVisibility (
 // label に該当する preference を取得する
 function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> {
   if (labels == null) return []
-
-  const concernedPreferences = state.currentPreferences.filter((preference: TTPreference) => {
-    if (preference.$type !== "app.bsky.actor.defs#contentLabelPref" ||
-        preference.label == null ||
-        preference.visibility === "show") return false
-    const labelGroup = (LABELS.DEFAULTS as any)[preference.label as string]
-    if (labelGroup == null) return false
-    return labels.some((label: TTLabel) => {
-      return labelGroup.includes(label.val)
+  const concernedPreferences = labels
+    .map((label: TTLabel): TTPreference => {
+      const val = Object.keys(LABEL_BEHAVIORS).find((k: string) => k === label.val)
+      if (val == null) return makeCustomLabelPreference(label.val)
+      return state.currentPreferences.find((preference: TTPreference) => {
+        return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
+              preference.label === LABEL_BEHAVIORS[val].oldGroup &&
+              preference.visibility !== "show"
+      }) ?? makeCustomLabelPreference(label.val)
     })
-  })
-
-  if (labels.some((label: TTLabel) => {
-    return LABELS.ALWAYS_HIDE.includes(label.val)
-  })) {
-    concernedPreferences.push({
-      $type: "app.bsky.actor.defs#contentLabelPref",
-      label: "always-hide",
-      visibility: "always-hide",
-    })
-  }
-
-  if (labels.some((label: TTLabel) => {
-    return LABELS.ALWAYS_WARN.includes(label.val)
-  })) {
-    concernedPreferences.push({
-      $type: "app.bsky.actor.defs#contentLabelPref",
-      label: "always-warn",
-      visibility: "always-warn",
-    })
-  }
-
   return concernedPreferences
+}
+
+function makeCustomLabelPreference (label: string): TTPreference {
+  return {
+    $type: "app.bsky.actor.defs#contentLabelPref",
+    label,
+    visibility: label === "!hide"
+      ? "hide"
+      : LABEL_BEHAVIORS[label]?.configurable === false
+        ? "warn"
+        : "show",
+  }
 }
 
 async function fetchTimeline (direction: "old" | "new", middleCursor?: string) {
@@ -935,7 +925,6 @@ function closePostLanguagesPopup () {
 
 function openSelectLabelsPopup (type: "post" | "account", params: any) {
   state.selectLabelsPopupDisplay = true
-  state.selectLabelsPopupType = type
   state.selectLabelsPopupState = params
 }
 

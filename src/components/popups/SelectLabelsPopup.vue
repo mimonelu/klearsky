@@ -3,18 +3,24 @@ import { inject, reactive } from "vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
-import LABELS from "@/consts/labels.json"
+import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  type: "post" | "account"
   state: any
 }>()
 
-const options = props.type === "post"
-  ? LABELS.POST_LABELS
-  : LABELS.ACCOUNT_LABELS
+const options = Object.keys(LABEL_BEHAVIORS)
+  .filter((key: string) => {
+    return LABEL_BEHAVIORS[key].selectable
+  })
+  .map((key: string) => {
+    return {
+      label: key,
+      value: key,
+    }
+  })
 
 const $t = inject("$t") as Function
 
