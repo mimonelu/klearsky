@@ -132,7 +132,9 @@ type TTLabel = {
   val: string
 }
 
-type TTContentVisibility = "always-hide" | "always-warn" | "hide" | "show" | "warn"
+type TTContentVisibility = "hide" | "show" | "warn"
+
+type TTLabelOnWarn = "null" | "blur" | "blur-media" | "alert"
 
 type TTPreference = {
   $type: string

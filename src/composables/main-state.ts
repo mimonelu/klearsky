@@ -84,6 +84,7 @@ const state = reactive<MainState>({
   fetchAuthorReposts,
   fetchAuthorLikes,
   getContentWarningVisibility,
+  getContentWarningOnWarn,
 
   fetchPreferences,
   getConcernedPreferences,
@@ -388,27 +389,15 @@ async function fetchPreferences (): Promise<boolean> {
 
 function getContentWarningVisibility (
   authorLabels?: Array<TTLabel>,
-  postLabels?: Array<TTLabel>,
+  postLabels?: Array<TTLabel>
 ): TTContentVisibility {
   const authorPreferences = state.getConcernedPreferences(authorLabels)
   const postPreferences = state.getConcernedPreferences(postLabels)
   for (const preference of authorPreferences) {
-    if (preference.visibility === "always-hide") return "always-hide"
-  }
-  for (const preference of postPreferences) {
-    if (preference.visibility === "always-hide") return "always-hide"
-  }
-  for (const preference of authorPreferences) {
     if (preference.visibility === "hide") return "hide"
   }
   for (const preference of postPreferences) {
     if (preference.visibility === "hide") return "hide"
-  }
-  for (const preference of authorPreferences) {
-    if (preference.visibility === "always-warn") return "always-warn"
-  }
-  for (const preference of postPreferences) {
-    if (preference.visibility === "always-warn") return "always-warn"
   }
   for (const preference of authorPreferences) {
     if (preference.visibility === "warn") return "warn"
@@ -417,6 +406,28 @@ function getContentWarningVisibility (
     if (preference.visibility === "warn") return "warn"
   }
   return "show"
+}
+
+function getContentWarningOnWarn (
+  authorLabels?: Array<TTLabel>,
+  postLabels?: Array<TTLabel>
+): TTLabelOnWarn {
+  const authorOnWarn = getLabelsOnWarn(authorLabels)
+  if (authorOnWarn !== "null") return authorOnWarn
+  const postOnWarn = getLabelsOnWarn(postLabels)
+  return postOnWarn
+}
+
+function getLabelsOnWarn (labels?: Array<TTLabel>): TTLabelOnWarn {
+  const behaviors = labels?.map((label: TTLabel) => LABEL_BEHAVIORS[label.val]) ?? []
+  for (const behavior of behaviors) {
+    if (behavior == null) continue
+    if (behavior.warn === "blur") return "blur"
+    if (behavior.warn === "blur-media") return "blur-media"
+    if (behavior.warn === "alert") return "alert"
+    if (behavior.warn === "null") return "null"
+  }
+  return "null"
 }
 
 // label に該当する preference を取得する
@@ -428,8 +439,8 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
       if (val == null) return makeCustomLabelPreference(label.val)
       return state.currentPreferences.find((preference: TTPreference) => {
         return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
-              preference.label === LABEL_BEHAVIORS[val].oldGroup &&
-              preference.visibility !== "show"
+          preference.label === LABEL_BEHAVIORS[val].oldGroup &&
+          preference.visibility !== "show"
       }) ?? makeCustomLabelPreference(label.val)
     })
   return concernedPreferences

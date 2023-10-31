@@ -57,6 +57,10 @@ type MainState = {
     authorLabels?: Array<TTLabel>,
     postLabels?: Array<TTLabel>,
   ) => TTContentVisibility
+  getContentWarningOnWarn: (
+    authorLabels?: Array<TTLabel>,
+    postLabels?: Array<TTLabel>,
+  ) => TTLabelOnWarn
   getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
 
   currentSearchSuggestionResults: Array<TTUser>

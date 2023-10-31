@@ -4,7 +4,7 @@ declare module "@/consts/label_behaviors.json" {
       oldGroup: string
       group: string
       configurable: boolean
-      warn: "null" | "blur" | "blur-media" | "alert"
+      warn: TTLabelOnWarn
       selectable?: boolean
     }
   };

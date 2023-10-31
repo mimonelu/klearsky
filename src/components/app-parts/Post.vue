@@ -13,6 +13,7 @@ import PostMenuTicker from "@/components/menu-tickers/PostMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Thumbnail from "@/components/app-parts/Thumbnail.vue"
 import Util from "@/composables/util"
+import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -63,6 +64,7 @@ const state = reactive<{
 
   // ラベル対応
   contentWarningVisibility: ComputedRef<TTContentVisibility>;
+  contentWarningOnWarn: ComputedRef<TTLabelOnWarn>;
   contentWarningLabels: ComputedRef<Array<string>>;
   contentWarningPostLabels: ComputedRef<Array<string>>;
 
@@ -94,11 +96,15 @@ const state = reactive<{
   masked: computed((): boolean => {
     return (
       state.noContentLanguage ||
-      state.contentWarningVisibility !== 'show' ||
+      state.contentWarningVisibility === "hide" ||
+      (
+        state.contentWarningVisibility === "warn" &&
+        state.contentWarningOnWarn !== "null" // TODO:
+      ) ||
       state.isWordMute
     ) && (
-      props.position !== 'preview' &&
-      props.position !== 'slim'
+      props.position !== "preview" &&
+      props.position !== "slim"
     )
   }),
 
@@ -134,6 +140,12 @@ const state = reactive<{
   // ラベル対応
   contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(
+      props.post.author?.labels,
+      props.post.labels
+    )
+  }),
+  contentWarningOnWarn: computed((): TTLabelOnWarn => {
+    return mainState.getContentWarningOnWarn(
       props.post.author?.labels,
       props.post.labels
     )
@@ -237,8 +249,7 @@ function isFocused (): boolean {
 
 async function onActivatePost (post: TTPost, event: Event) {
   // Hide 指定のラベルを持つポストの場合はキャンセル
-  if (state.contentWarningVisibility === "hide" ||
-      state.contentWarningVisibility === "always-hide") return
+  if (state.contentWarningVisibility === "hide") return
 
   // ポストマスクの無効化
   if (!props.post.__custom.unmask && state.masked) {
@@ -260,8 +271,7 @@ function onActivatePostMask () {
   Util.blurElement()
 
   // Hide 指定のラベルを持つポストの場合はキャンセル
-  if (state.contentWarningVisibility === "hide" ||
-      state.contentWarningVisibility === "always-hide") return
+  if (state.contentWarningVisibility === "hide") return
 
   // ポストマスクのトグル
   props.post.__custom.unmask = !props.post.__custom.unmask
@@ -536,10 +546,11 @@ function onActivateHashTag (text: string) {
       @click.stop="onActivatePostMask"
     >
       <SVGIcon :name="
-        state.contentWarningVisibility === 'hide' ||
-        state.contentWarningVisibility === 'always-hide'
+        state.contentWarningVisibility === 'hide'
           ? 'lock'
-          : post.__custom.unmask ? 'cursorDown' : 'cursorUp'
+          : post.__custom.unmask
+            ? 'cursorDown'
+            : 'cursorUp'
       " />
       <SVGIcon
         v-show="state.noContentLanguage"
