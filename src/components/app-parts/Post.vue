@@ -13,7 +13,6 @@ import PostMenuTicker from "@/components/menu-tickers/PostMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Thumbnail from "@/components/app-parts/Thumbnail.vue"
 import Util from "@/composables/util"
-import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -67,6 +66,10 @@ const state = reactive<{
   contentWarningOnWarn: ComputedRef<TTLabelOnWarn>;
   contentWarningLabels: ComputedRef<Array<string>>;
   contentWarningPostLabels: ComputedRef<Array<string>>;
+  hasBlurredContent: ComputedRef<boolean>;
+  blurredContentClicked: boolean;
+  hasBlurredMedia: ComputedRef<Array<boolean>>;
+  blurredMediaClicked: Array<boolean>;
 
   // ワードミュートの判定
   isWordMute: ComputedRef<boolean>
@@ -97,10 +100,6 @@ const state = reactive<{
     return (
       state.noContentLanguage ||
       state.contentWarningVisibility === "hide" ||
-      (
-        state.contentWarningVisibility === "warn" &&
-        state.contentWarningOnWarn !== "null" // TODO:
-      ) ||
       state.isWordMute
     ) && (
       props.position !== "preview" &&
@@ -159,6 +158,24 @@ const state = reactive<{
   contentWarningPostLabels: computed((): Array<string> => {
     return Array.from(new Set(props.post.labels?.map((label: TTLabel) => $t(label.val)) ?? []))
   }),
+  hasBlurredContent: computed((): boolean => {
+    return !state.blurredContentClicked && (
+      state.contentWarningVisibility === "hide" ||
+      state.contentWarningVisibility === "warn"
+    ) && state.contentWarningOnWarn === "blur"
+  }),
+  blurredContentClicked: false,
+  hasBlurredMedia: computed((): Array<boolean> => {
+    const has = (
+      state.contentWarningVisibility === "hide" ||
+      state.contentWarningVisibility === "warn"
+    ) && (
+      state.contentWarningOnWarn === "blur" ||
+      state.contentWarningOnWarn === "blur-media"
+    )
+    return state.blurredMediaClicked.map((clicked: boolean) => !clicked && has)
+  }),
+  blurredMediaClicked: props.post.embed?.images?.map(() => false) ?? [],
 
   // ワードミュートの判定
   isWordMute: computed((): boolean => {
@@ -248,9 +265,6 @@ function isFocused (): boolean {
 }
 
 async function onActivatePost (post: TTPost, event: Event) {
-  // Hide 指定のラベルを持つポストの場合はキャンセル
-  if (state.contentWarningVisibility === "hide") return
-
   // ポストマスクの無効化
   if (!props.post.__custom.unmask && state.masked) {
     props.post.__custom.unmask = true
@@ -270,9 +284,6 @@ async function onActivatePost (post: TTPost, event: Event) {
 function onActivatePostMask () {
   Util.blurElement()
 
-  // Hide 指定のラベルを持つポストの場合はキャンセル
-  if (state.contentWarningVisibility === "hide") return
-
   // ポストマスクのトグル
   props.post.__custom.unmask = !props.post.__custom.unmask
 }
@@ -288,6 +299,14 @@ async function onActivateProfileLink (did: string) {
 function onActivateImageFolderButton () {
   Util.blurElement()
   state.imageFolding = !state.imageFolding
+}
+
+function onActivateThumbnail (imageIndex: number) {
+  if (state.hasBlurredMedia[imageIndex]) {
+    state.blurredMediaClicked[imageIndex] = true
+    return
+  }
+  openImagePopup(imageIndex)
 }
 
 async function onActivateReplyButton () {
@@ -545,12 +564,9 @@ function onActivateHashTag (text: string) {
       class="post__mask"
       @click.stop="onActivatePostMask"
     >
-      <SVGIcon :name="
-        state.contentWarningVisibility === 'hide'
-          ? 'lock'
-          : post.__custom.unmask
-            ? 'cursorDown'
-            : 'cursorUp'
+      <SVGIcon :name="post.__custom.unmask
+        ? 'cursorDown'
+        : 'cursorUp'
       " />
       <SVGIcon
         v-show="state.noContentLanguage"
@@ -640,120 +656,175 @@ function onActivateHashTag (text: string) {
           >{{ label }}</div>
         </div>
 
-        <!-- 本文 -->
-        <HtmlText
-          v-if="position !== 'slim'"
-          class="text"
-          dir="auto"
-          :text="state.text"
-          :facets="post.record?.facets ?? post.value?.facets"
-          :entities="post.record?.entities ?? post.value?.entities"
-          :processHashTag="false"
-          :hasTranslateLink="state.hasOtherLanguages"
-          @onActivateHashTag="onActivateHashTag"
-          @translate="onForceTranslate"
-        />
+        <!-- ポストコンテンツ -->
         <div
-          v-else
-          class="text--slim"
-          dir="auto"
-        >{{ state.text }}</div>
-
-        <!-- 自動翻訳 -->
-        <div
-          v-if="state.translation !== 'none' && state.translation !== 'ignore'"
-          class="translated-text"
-          dir="auto"
+          class="post__content"
+          :data-has-blurred-content="state.hasBlurredContent"
         >
-          <template v-if="state.translation === 'waiting'">（翻訳中）</template>
-          <template v-else-if="state.translation === 'failed'">（翻訳に失敗しました）</template>
-          <template v-else-if="state.translation === 'done'">{{ props.post.__custom.translatedText }}</template>
-        </div>
+          <!-- 本文 -->
+          <HtmlText
+            v-if="position !== 'slim'"
+            class="text"
+            dir="auto"
+            :text="state.text"
+            :facets="post.record?.facets ?? post.value?.facets"
+            :entities="post.record?.entities ?? post.value?.entities"
+            :processHashTag="false"
+            :hasTranslateLink="state.hasOtherLanguages"
+            @onActivateHashTag="onActivateHashTag"
+            @translate="onForceTranslate"
+          />
+          <div
+            v-else
+            class="text--slim"
+            dir="auto"
+          >{{ state.text }}</div>
 
-        <!-- リンクカード -->
-        <LinkCard
-          v-if="state.external != null && position !== 'slim'"
-          :external="state.external"
-          :displayImage="state.displayImage && !forceHideImages"
-        />
+          <!-- 自動翻訳 -->
+          <div
+            v-if="state.translation !== 'none' && state.translation !== 'ignore'"
+            class="translated-text"
+            dir="auto"
+          >
+            <template v-if="state.translation === 'waiting'">（翻訳中）</template>
+            <template v-else-if="state.translation === 'failed'">（翻訳に失敗しました）</template>
+            <template v-else-if="state.translation === 'done'">{{ props.post.__custom.translatedText }}</template>
+          </div>
 
-        <template v-if="state.images.length > 0 && (level ?? 1) < 3">
-          <template v-if="forceHideImages">
-            <div class="omit-images">
-              <SVGIcon
-                v-for="_, index of state.images"
-                :key="index"
-                name="image"
-              />
-            </div>
-          </template>
-          <template v-else-if="position !== 'slim'">
-            <!-- 画像フォルダーボタン -->
-            <button
-              v-if="!state.displayImage"
-              class="button--bordered image-folder-button"
-              @click.prevent.stop="onActivateImageFolderButton"
-            >
-              <template v-if="state.imageFolding">
-                <SVGIcon name="image" />
-                <span>{{ $t("showImage") }}</span>
-              </template>
-              <template v-else>
-                <SVGIcon name="offImage" />
-                <span>{{ $t("hideImage") }}</span>
-              </template>
-            </button>
-
-            <!-- イメージボックス -->
-            <template v-if="state.displayImage || (!state.displayImage && !state.imageFolding)">
-              <Thumbnail
-                v-if="state.images.length === 1"
-                :image="state.images[0]"
-                :did="post.author.did"
-                :hasAspectRatio="!mainState.currentSetting.imageOption?.includes(0) ?? false"
-                :hasTranslateLink="state.hasOtherLanguages"
-                :data-has-no-fullsize="state.images[0].fullsize == null"
-                @click.stop="openImagePopup(0)"
-              />
-              <div
-                v-else
-                class="quad-images"
-                :data-number-of-images="state.images.length"
+          <!-- 画像 -->
+          <template v-if="state.images.length > 0 && (level ?? 1) < 3">
+            <template v-if="forceHideImages">
+              <div class="omit-images">
+                <SVGIcon
+                  v-for="_, index of state.images"
+                  :key="index"
+                  name="image"
+                />
+              </div>
+            </template>
+            <template v-else-if="position !== 'slim'">
+              <!-- 画像フォルダーボタン -->
+              <button
+                v-if="!state.displayImage"
+                class="button--bordered image-folder-button"
+                @click.prevent.stop="onActivateImageFolderButton"
               >
+                <template v-if="state.imageFolding">
+                  <SVGIcon name="image" />
+                  <span>{{ $t("showImage") }}</span>
+                </template>
+                <template v-else>
+                  <SVGIcon name="offImage" />
+                  <span>{{ $t("hideImage") }}</span>
+                </template>
+              </button>
+
+              <!-- イメージボックス -->
+              <template v-if="state.displayImage || (!state.displayImage && !state.imageFolding)">
+                <!-- イメージがひとつだけの場合 -->
+                <Thumbnail
+                  v-if="state.images.length === 1"
+                  :image="state.images[0]"
+                  :did="post.author.did"
+                  :hasAspectRatio="!mainState.currentSetting.imageOption?.includes(0) ?? false"
+                  :hasTranslateLink="state.hasOtherLanguages"
+                  :blurred="state.hasBlurredMedia[0]"
+                  :data-has-no-fullsize="state.images[0].fullsize == null"
+                  @click.stop="onActivateThumbnail(0)"
+                />
+
+                <!-- イメージが複数ある場合 -->
                 <div
+                  v-else
+                  class="quad-images"
+                  :data-number-of-images="state.images.length"
+                >
+                  <div
+                    v-for="image, imageIndex of state.images"
+                    :key="imageIndex"
+                    class="quad-image"
+                  >
+                    <Thumbnail
+                      :key="post.cid"
+                      :image="image"
+                      :did="post.author.did"
+                      :hasAspectRatio="true"
+                      :hasTranslateLink="state.hasOtherLanguages"
+                      :blurred="state.hasBlurredMedia[imageIndex]"
+                      :data-has-no-fullsize="state.images[imageIndex].fullsize == null"
+                      @click.stop="onActivateThumbnail(imageIndex)"
+                    />
+                  </div>
+                </div>
+              </template>
+            </template>
+            <template v-else>
+              <!-- イメージリスト（通知ポップアップ） -->
+              <div class="image-list">
+                <Thumbnail
                   v-for="image, imageIndex of state.images"
                   :key="imageIndex"
-                  class="quad-image"
-                >
-                  <Thumbnail
-                    :key="post.cid"
-                    :image="image"
-                    :did="post.author.did"
-                    :hasAspectRatio="true"
-                    :hasTranslateLink="state.hasOtherLanguages"
-                    :data-has-no-fullsize="state.images[imageIndex].fullsize == null"
-                    @click.stop="openImagePopup(imageIndex)"
-                  />
-                </div>
+                  :image="image"
+                  :did="post.author.did"
+                  :hasAspectRatio="true"
+                  @click.stop="openImagePopup(imageIndex)"
+                />
               </div>
             </template>
           </template>
-          <template v-else>
-            <!-- イメージリスト -->
-            <div class="image-list">
-              <Thumbnail
-                v-for="image, imageIndex of state.images"
-                :key="imageIndex"
-                :image="image"
-                :did="post.author.did"
-                :hasAspectRatio="true"
-                @click.stop="openImagePopup(imageIndex)"
-              />
-            </div>
-          </template>
-        </template>
 
-        <!-- 埋込コンテンツ -->
+          <!-- リンクカード -->
+          <LinkCard
+            v-if="state.external != null && position !== 'slim'"
+            :external="state.external"
+            :displayImage="state.displayImage && !forceHideImages"
+          />
+
+          <!-- フィードカード -->
+          <FeedCard
+            v-if="post.embed?.record?.$type === 'app.bsky.feed.defs#generatorView'"
+            :generator="post.embed.record as unknown as TTFeedGenerator"
+            :menuDisplay="true"
+            :orderButtonDisplay="false"
+            :creatorDisplay="true"
+            @click="$emit('click')"
+            @onActivateMention="$emit('click')"
+            @onActivateHashTag="$emit('click')"
+          />
+
+          <!-- ポストタグ -->
+          <div
+            v-if="
+              post.record?.tags != null &&
+              position !== 'postInPost' &&
+              position !== 'preview' &&
+              position !== 'slim'
+            "
+            class="post-tag-container"
+          >
+            <RouterLink
+              v-for="postTag of post.record.tags"
+              :to="`/search/post?text=${encodeURIComponent(postTag)}`"
+              class="post-tag"
+              @click.prevent.stop
+            >
+              <SVGIcon name="tag" />
+              <span>{{ postTag }}</span>
+            </RouterLink>
+          </div>
+
+          <!-- ポストコンテンツカバー -->
+          <div
+            v-if="state.hasBlurredContent"
+            class="post__content__cover"
+            @click.prevent.stop="state.blurredContentClicked = true"
+          >
+            <SVGIcon name="contentFiltering" />
+            <p>{{ $t("showBlurredContent") }}</p>
+          </div>
+        </div>
+
+        <!-- 引用リポスト -->
         <template v-if="post.embed?.record != null">
           <!-- 引用リポスト - 見つからない -->
           <div
@@ -792,40 +863,7 @@ function onActivateHashTag (text: string) {
               />
             </div>
           </template>
-
-          <!-- フィードカード -->
-          <FeedCard
-            v-else-if="post.embed.record.$type === 'app.bsky.feed.defs#generatorView'"
-            :generator="post.embed.record as unknown as TTFeedGenerator"
-            :menuDisplay="true"
-            :orderButtonDisplay="false"
-            :creatorDisplay="true"
-            @click="$emit('click')"
-            @onActivateMention="$emit('click')"
-            @onActivateHashTag="$emit('click')"
-          />
         </template>
-
-        <!-- ポストタグ -->
-        <div
-          v-if="
-            post.record?.tags != null &&
-            position !== 'postInPost' &&
-            position !== 'preview' &&
-            position !== 'slim'
-          "
-          class="post-tag-container"
-        >
-          <RouterLink
-            v-for="postTag of post.record.tags"
-            :to="`/search/post?text=${encodeURIComponent(postTag)}`"
-            class="post-tag"
-            @click.prevent.stop
-          >
-            <SVGIcon name="tag" />
-            <span>{{ postTag }}</span>
-          </RouterLink>
-        </div>
 
         <!-- リアクションコンテナ -->
         <div
@@ -1258,6 +1296,53 @@ function onActivateHashTag (text: string) {
   white-space: nowrap;
 }
 
+// ポストコンテンツ
+.post__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  grid-gap: 0.5em;
+  position: relative;
+  &[data-has-blurred-content="true"] {
+    min-height: 6em;
+
+    & > *:not(.post__content__cover) {
+      visibility: hidden;
+    }
+  }
+
+  // ポストコンテンツカバー
+  &__cover {
+    background-color: var(--fg-color-0125);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    grid-gap: 0.25em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+
+    & > .svg-icon {
+      fill: rgb(var(--notice-color));
+      font-size: 1.5em;
+    }
+
+    & > p {
+      color: rgb(var(--notice-color));
+      font-size: 0.75em;
+      font-weight: bold;
+      padding: 0 1em;
+      word-break: break-word;
+    }
+  }
+}
+
 .text,
 .text--slim {
   color: rgb(var(--fg-color));
@@ -1353,6 +1438,9 @@ function onActivateHashTag (text: string) {
   display: flex;
   flex-wrap: wrap;
   grid-gap: 0.25em;
+  &:empty {
+    display: contents;
+  }
 
   .post-tag {
     font-size: 0.875em;

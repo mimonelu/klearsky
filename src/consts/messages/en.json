@@ -147,6 +147,9 @@
   "scam": "Scam",
   "misleading": "Misleading",
 
+  "showBlurredContent": "Show content",
+  "showBlurredMedia": "Show media",
+
   "login": "Login",
   "service": "Service",
   "identifier": "Email or Handle or DID",

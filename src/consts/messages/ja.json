@@ -147,6 +147,9 @@
   "scam": "詐欺",
   "misleading": "ミスリード",
 
+  "showBlurredContent": "コンテンツを表示する",
+  "showBlurredMedia": "メディアを表示する",
+
   "login": "ログイン",
   "service": "サービス",
   "identifier": "メールアドレス／ハンドル／DID",
