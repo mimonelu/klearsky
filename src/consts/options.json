@@ -1,6 +1,6 @@
 {
   "LABEL_VISIBILITY": [
-    { "label": "seal", "value": "hide" },
+    { "label": "fold", "value": "hide" },
     { "label": "warn", "value": "warn" },
     { "label": "show", "value": "show" }
   ],
