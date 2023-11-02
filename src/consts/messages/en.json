@@ -147,10 +147,12 @@
   "scam": "Scam",
   "misleading": "Misleading",
 
-  "showPostContent": "Show content",
-  "hidePostContent": "Hide content",
-  "showPostMedia": "Show media",
-  "hidePostMedia": "Hide media",
+  "showAccount": "Show profile",
+  "hideAccount": "Hide profile",
+  "showContent": "Show content",
+  "hideContent": "Hide content",
+  "showMedia": "Show media",
+  "hideMedia": "Hide media",
 
   "login": "Login",
   "service": "Service",

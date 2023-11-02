@@ -413,19 +413,24 @@ function getContentWarningOnWarn (
   postLabels?: Array<TTLabel>
 ): TTLabelOnWarn {
   const authorOnWarn = getLabelsOnWarn(authorLabels)
-  if (authorOnWarn !== "null") return authorOnWarn
   const postOnWarn = getLabelsOnWarn(postLabels)
-  return postOnWarn
+  if (authorOnWarn === "blur") return authorOnWarn
+  if (postOnWarn === "blur") return postOnWarn
+  if (authorOnWarn === "blur-media") return authorOnWarn
+  if (postOnWarn === "blur-media") return postOnWarn
+  if (authorOnWarn === "alert") return authorOnWarn
+  if (postOnWarn === "alert") return postOnWarn
+  return "null"
 }
 
 function getLabelsOnWarn (labels?: Array<TTLabel>): TTLabelOnWarn {
   const behaviors = labels?.map((label: TTLabel) => LABEL_BEHAVIORS[label.val]) ?? []
   for (const behavior of behaviors) {
     if (behavior == null) continue
-    if (behavior.warn === "blur") return "blur"
-    if (behavior.warn === "blur-media") return "blur-media"
-    if (behavior.warn === "alert") return "alert"
-    if (behavior.warn === "null") return "null"
+    if (behavior.warn === "blur") return behavior.warn
+    if (behavior.warn === "blur-media") return behavior.warn
+    if (behavior.warn === "alert") return behavior.warn
+    if (behavior.warn === "null") return behavior.warn
   }
   return "null"
 }

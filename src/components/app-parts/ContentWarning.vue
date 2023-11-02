@@ -82,7 +82,7 @@ function hide () {
           >{{ $t(preference?.label) }}</dd>
         </dl>
       </div>
-      <template v-if="state.visibility === 'always-warn' || state.visibility === 'warn'">
+      <template v-if="state.visibility === 'warn'">
         <button
           v-if="!display"
           class="button--important"

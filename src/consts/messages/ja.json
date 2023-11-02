@@ -147,10 +147,12 @@
   "scam": "詐欺",
   "misleading": "ミスリード",
 
-  "showPostContent": "コンテンツを表示する",
-  "hidePostContent": "コンテンツを隠す",
-  "showPostMedia": "メディアを表示する",
-  "hidePostMedia": "メディアを隠す",
+  "showAccount": "プロフィールを表示する",
+  "hideAccount": "プロフィールを隠す",
+  "showContent": "コンテンツを表示する",
+  "hideContent": "コンテンツを隠す",
+  "showMedia": "メディアを表示する",
+  "hideMedia": "メディアを隠す",
 
   "login": "ログイン",
   "service": "サービス",

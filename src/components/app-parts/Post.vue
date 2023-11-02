@@ -692,8 +692,8 @@ function onActivateHashTag (text: string) {
           @click.prevent.stop="onActivatePostContentToggle"
         >
           <SVGIcon name="contentFiltering" />
-          <span v-if="state.blurredContentClicked">{{ $t("hidePostContent") }}</span>
-          <span v-else="state.blurredContentClicked">{{ $t("showPostContent") }}</span>
+          <span v-if="state.blurredContentClicked">{{ $t("hideContent") }}</span>
+          <span v-else="state.blurredContentClicked">{{ $t("showContent") }}</span>
         </button>
 
         <!-- ポストコンテンツ -->
@@ -738,8 +738,8 @@ function onActivateHashTag (text: string) {
             @click.prevent.stop="onActivatePostMediaToggle"
           >
             <SVGIcon name="contentFiltering" />
-            <span v-if="state.blurredMediaClicked">{{ $t("hidePostMedia") }}</span>
-            <span v-else="state.blurredMediaClicked">{{ $t("showPostMedia") }}</span>
+            <span v-if="state.blurredMediaClicked">{{ $t("hideMedia") }}</span>
+            <span v-else="state.blurredMediaClicked">{{ $t("showMedia") }}</span>
           </button>
 
           <!-- ポストメディア -->

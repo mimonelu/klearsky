@@ -27,8 +27,8 @@ const state = reactive<{
   // ラベル対応
   contentWarningForceDisplay: false,
   contentWarningDisplay: computed((): boolean => {
-    return state.contentWarningVisibility === 'show' ||
-           ((state.contentWarningVisibility === 'always-warn' || state.contentWarningVisibility === 'warn') && state.contentWarningForceDisplay)
+    return state.contentWarningVisibility === "show" ||
+           state.contentWarningForceDisplay
   }),
   contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(
