@@ -10,7 +10,6 @@ const props = defineProps<{
   did?: string
   hasAspectRatio?: boolean
   hasTranslateLink?: boolean
-  blurred?: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -100,7 +99,6 @@ function onActivateAlt (alt: string) {
   <div
     class="thumbnail"
     :data-has-aspect-ratio="hasAspectRatio"
-    :data-blurred="blurred"
   >
     <LazyImage
       :src="state.src ?? undefined"
@@ -113,16 +111,6 @@ function onActivateAlt (alt: string) {
     >
       <span>ALT</span>
     </button>
-
-    <!-- blur-media 対応 -->
-    <div
-      v-if="blurred"
-      class="blurred"
-    >
-      <SVGIcon name="contentFiltering" />
-      <p>{{ $t("showBlurredMedia") }}</p>
-    </div>
-
     <div
       v-if="state.errored"
       class="error"
@@ -152,11 +140,6 @@ function onActivateAlt (alt: string) {
     object-fit: cover;
   }
 
-  // blur-media 対応
-  &[data-blurred="true"] > .lazy-image {
-    visibility: hidden;
-  }
-
   // アスペクト比の調節あり
   &[data-has-aspect-ratio="true"] > .lazy-image {
     aspect-ratio: var(--image-aspect-ratio);
@@ -177,35 +160,6 @@ function onActivateAlt (alt: string) {
   position: absolute;
   bottom: 2px;
   left: 2px;
-}
-
-// blur-media 対応
-.blurred {
-  background-color: var(--fg-color-0125);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  grid-gap: 0.25em;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  user-select: none;
-
-  & > .svg-icon {
-    fill: rgb(var(--notice-color));
-    font-size: 1.5em;
-  }
-
-  & > p {
-    color: rgb(var(--notice-color));
-    font-size: 0.75em;
-    font-weight: bold;
-    padding: 0 1em;
-    word-break: break-word;
-  }
 }
 
 .error {
