@@ -100,12 +100,6 @@
   "reportReasonRude": "迷惑行為：ハラスメント、荒らし、差別など",
   "reportReasonOther": "その他",
 
-  "contentWarningAlwaysHide": "強制閲覧制限",
-  "contentWarningHide": "閲覧制限",
-  "contentWarningAlwaysWarn": "強制閲覧警告",
-  "contentWarningWarn": "閲覧警告",
-  "contentWarningAuthorMessage": "このアカウントはフィルタリングされています：",
-  "contentWarningPostMessage": "このポストはフィルタリングされています：",
   "profileLabel": "アカウントラベル",
   "postLabel": "ポストラベル",
 
@@ -147,8 +141,10 @@
   "scam": "詐欺",
   "misleading": "ミスリード",
 
-  "showAccount": "プロフィールを表示する",
-  "hideAccount": "プロフィールを隠す",
+  "showAccount": "アカウントを表示する",
+  "hideAccount": "アカウントを隠す",
+  "showProfile": "プロフィールを表示する",
+  "hideProfile": "プロフィールを隠す",
   "showContent": "コンテンツを表示する",
   "hideContent": "コンテンツを隠す",
   "showMedia": "メディアを表示する",

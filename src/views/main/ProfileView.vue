@@ -166,6 +166,21 @@ function onActivateAccountMaskToggle () {
       <div class="profile-view__top__inner">
         <!-- Danger zone -->
         <div class="danger-zone">
+          <!-- アカウントラベル -->
+          <div
+            v-if="(mainState.currentProfile?.labels?.length ?? 0) > 0"
+            class="textlabel--alert"
+          >
+            <div class="textlabel__text">
+              <SVGIcon name="contentFiltering" />{{ $t("profileLabel") }}:
+            </div>
+            <div
+              v-for="label of mainState.currentProfile?.labels"
+              :key="label.val"
+              class="textlabel__item"
+            >{{ $t(label.val) }}</div>
+          </div>
+
           <!-- アカウントトグル -->
           <div
             v-if="state.contentWarningVisibility === 'hide'"
@@ -173,8 +188,8 @@ function onActivateAccountMaskToggle () {
             @click.prevent.stop="onActivateAccountMaskToggle"
           >
             <SVGIcon name="contentFiltering" />
-            <span v-if="state.enabledContentMask">{{ $t("hideAccount") }}</span>
-            <span v-else="state.enabledContentMask">{{ $t("showAccount") }}</span>
+            <span v-if="state.enabledContentMask">{{ $t("hideProfile") }}</span>
+            <span v-else="state.enabledContentMask">{{ $t("showProfile") }}</span>
           </div>
 
           <!-- アカウントコンテンツトグル -->
@@ -197,21 +212,6 @@ function onActivateAccountMaskToggle () {
             <SVGIcon name="contentFiltering" />
             <span v-if="state.enabledContentMask">{{ $t("hideMedia") }}</span>
             <span v-else="state.enabledContentMask">{{ $t("showMedia") }}</span>
-          </div>
-
-          <!-- アカウントラベル -->
-          <div
-            v-if="(mainState.currentProfile?.labels?.length ?? 0) > 0"
-            class="textlabel--alert"
-          >
-            <div class="textlabel__text">
-              <SVGIcon name="contentFiltering" />{{ $t("profileLabel") }}:
-            </div>
-            <div
-              v-for="label of mainState.currentProfile?.labels"
-              :key="label.val"
-              class="textlabel__item"
-            >{{ $t(label.val) }}</div>
           </div>
 
           <!-- ミュートしている -->

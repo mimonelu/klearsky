@@ -100,12 +100,6 @@
   "reportReasonRude": "Rude: Harassment, Trolling, Intolerance",
   "reportReasonOther": "Other",
 
-  "contentWarningAlwaysHide": "FORCED CONTENT FILTERING",
-  "contentWarningHide": "CONTENT FILTERING",
-  "contentWarningAlwaysWarn": "FORCED CONTENT WARNING",
-  "contentWarningWarn": "CONTENT WARNING",
-  "contentWarningAuthorMessage": "This account has been filtered:",
-  "contentWarningPostMessage": "This post has been filtered:",
   "profileLabel": "Account labels",
   "postLabel": "Post labels",
 
@@ -147,8 +141,10 @@
   "scam": "Scam",
   "misleading": "Misleading",
 
-  "showAccount": "Show profile",
-  "hideAccount": "Hide profile",
+  "showAccount": "Show account",
+  "hideAccount": "Hide account",
+  "showProfile": "Show profile",
+  "hideProfile": "Hide profile",
   "showContent": "Show content",
   "hideContent": "Hide content",
   "showMedia": "Show media",

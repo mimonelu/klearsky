@@ -2,7 +2,6 @@
 import { computed, inject, reactive, ref, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
-import ContentWarning from "@/components/app-parts/ContentWarning.vue"
 import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
@@ -59,12 +58,8 @@ function closePostMenu () {
 
 // ラベル対応
 
-function showWarningContent () {
-  state.contentWarningForceDisplay = true
-}
-
-function hideWarningContent () {
-  state.contentWarningForceDisplay = false
+function toggleWarningContent () {
+  state.contentWarningForceDisplay = !state.contentWarningForceDisplay
 }
 </script>
 
@@ -73,22 +68,11 @@ function hideWarningContent () {
     class="user-box"
     :to="{ name: 'profile-feeds', query: { account: user.did } }"
     :data-is-following="user.viewer.following != null"
-    :data-content-warning-disabled="contentWarningDisabled"
-    :data-content-warning-visibility="state.contentWarningVisibility"
     @click="onActivateLink"
   >
-    <!-- ラベル対応 -->
-    <ContentWarning
-      v-if="!contentWarningDisabled"
-      :display="state.contentWarningForceDisplay"
-      :authorLabels="user.labels"
-      @show="showWarningContent"
-      @hide="hideWarningContent"
-    />
-
     <!-- プロフィールラベル -->
     <div
-      v-if="(contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)) && (user.labels?.length ?? 0) > 0"
+      v-if="(user.labels?.length ?? 0) > 0"
       class="textlabel--alert"
     >
       <div class="textlabel__text">
@@ -100,6 +84,17 @@ function hideWarningContent () {
         class="textlabel__item"
       >{{ $t(label.val) }}</div>
     </div>
+
+    <!-- ラベル対応 -->
+    <button
+      v-if="state.contentWarningVisibility !== 'show'"
+      class="button--important content-warning-toggle"
+      @click.prevent.stop="toggleWarningContent"
+    >
+      <SVGIcon name="contentFiltering" />
+      <span v-if="state.contentWarningDisplay">{{ $t("hideAccount") }}</span>
+      <span v-else="state.contentWarningDisplay">{{ $t("showAccount") }}</span>
+    </button>
 
     <template v-if="contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)">
       <AvatarLink
@@ -144,19 +139,15 @@ function hideWarningContent () {
   grid-template-columns: min-content auto 1fr auto;
   grid-template-rows: auto auto auto auto 1fr;
   grid-template-areas:
-    "c c c c"
     "o o o o"
+    "c c c c"
     "a n h m"
     "a d d m"
     "b b b b";
   align-items: center;
-  &[data-content-warning-disabled="false"][data-content-warning-visibility="hide"],
-  &[data-content-warning-disabled="false"][data-content-warning-visibility="always-hide"] {
-    pointer-events: none;
-  }
 }
 
-.content-warning {
+.content-warning-toggle {
   grid-area: c;
   margin-bottom: 0.5em;
 }
