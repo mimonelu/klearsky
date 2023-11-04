@@ -141,15 +141,6 @@
   "scam": "詐欺",
   "misleading": "ミスリード",
 
-  "showAccount": "アカウントを表示する",
-  "hideAccount": "アカウントを隠す",
-  "showProfile": "プロフィールを表示する",
-  "hideProfile": "プロフィールを隠す",
-  "showContent": "コンテンツを表示する",
-  "hideContent": "コンテンツを隠す",
-  "showMedia": "メディアを表示する",
-  "hideMedia": "メディアを隠す",
-
   "login": "ログイン",
   "service": "サービス",
   "identifier": "メールアドレス／ハンドル／DID",

@@ -75,6 +75,7 @@
 .button--bordered--important {
   &[data-enabled="true"] {
     background-color: var(--notice-color-0875);
+    color: rgb(var(--bg-color));
     &:focus, &:hover {
       background-color: rgb(var(--notice-color));
     }

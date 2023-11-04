@@ -3,6 +3,7 @@ import { computed, inject, reactive, type ComputedRef } from "vue"
 import { RouterView, type LocationQueryValue } from "vue-router"
 import AvatarButton from "@/components/buttons/AvatarButton.vue"
 import BlockButton from "@/components/buttons/BlockButton.vue"
+import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
 import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
@@ -25,6 +26,7 @@ const state = reactive<{
   contentWarningOnWarn: ComputedRef<TTLabelOnWarn>
   displayPrivateData: ComputedRef<boolean>
   enabledContentMask: boolean
+  contentFilteringToggleDisplay: ComputedRef<boolean>
 
   // ラベル対応 - アカウント
   accountDisplay: ComputedRef<boolean>
@@ -54,6 +56,11 @@ const state = reactive<{
     )
   }),
   enabledContentMask: false,
+  contentFilteringToggleDisplay: computed((): boolean => {
+    return state.contentWarningVisibility === 'hide' ||
+      state.hasBlurredContent ||
+      state.hasBlurredMedia
+  }),
 
   // ラベル対応 - アカウント
   accountDisplay: computed((): boolean => {
@@ -166,53 +173,13 @@ function onActivateAccountMaskToggle () {
       <div class="profile-view__top__inner">
         <!-- Danger zone -->
         <div class="danger-zone">
-          <!-- アカウントラベル -->
-          <div
-            v-if="(mainState.currentProfile?.labels?.length ?? 0) > 0"
-            class="textlabel--alert"
-          >
-            <div class="textlabel__text">
-              <SVGIcon name="contentFiltering" />{{ $t("profileLabel") }}:
-            </div>
-            <div
-              v-for="label of mainState.currentProfile?.labels"
-              :key="label.val"
-              class="textlabel__item"
-            >{{ $t(label.val) }}</div>
-          </div>
-
           <!-- アカウントトグル -->
-          <div
-            v-if="state.contentWarningVisibility === 'hide'"
-            class="button--important"
+          <ContentFilteringToggle
+            v-if="state.contentFilteringToggleDisplay"
+            :accountLabels="mainState.currentProfile?.labels"
+            :display="state.enabledContentMask"
             @click.prevent.stop="onActivateAccountMaskToggle"
-          >
-            <SVGIcon name="contentFiltering" />
-            <span v-if="state.enabledContentMask">{{ $t("hideProfile") }}</span>
-            <span v-else="state.enabledContentMask">{{ $t("showProfile") }}</span>
-          </div>
-
-          <!-- アカウントコンテンツトグル -->
-          <div
-            v-else-if="state.hasBlurredContent"
-            class="button--important"
-            @click.prevent.stop="onActivateAccountMaskToggle"
-          >
-            <SVGIcon name="contentFiltering" />
-            <span v-if="state.enabledContentMask">{{ $t("hideContent") }}</span>
-            <span v-else="state.enabledContentMask">{{ $t("showContent") }}</span>
-          </div>
-
-          <!-- アカウントメディアトグル -->
-          <div
-            v-else-if="state.hasBlurredMedia"
-            class="button--important"
-            @click.prevent.stop="onActivateAccountMaskToggle"
-          >
-            <SVGIcon name="contentFiltering" />
-            <span v-if="state.enabledContentMask">{{ $t("hideMedia") }}</span>
-            <span v-else="state.enabledContentMask">{{ $t("showMedia") }}</span>
-          </div>
+          />
 
           <!-- ミュートしている -->
           <div
@@ -263,6 +230,19 @@ function onActivateAccountMaskToggle () {
               />
             </div>
             <div class="profile-view__details__top__right">
+              <!-- アカウントラベルアイコン -->
+              <div
+                v-if="(mainState.currentProfile?.labels?.length ?? 0) > 0"
+                class="labels"
+              >
+                <SVGIcon name="contentFiltering" />
+                <div
+                  v-for="label of mainState.currentProfile?.labels"
+                  :key="label.val"
+                  class="labels__item"
+                >{{ $t(label.val) }}</div>
+              </div>
+
               <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
               <div class="handle">
                 <a @click.stop="state.handleHistoryPopupDisplay = true">
@@ -570,6 +550,25 @@ function onActivateAccountMaskToggle () {
 
 .avatar {
   font-size: 6rem;
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  grid-gap: 0.5rem;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+
+  & > .svg-icon {
+    fill: rgb(var(--notice-color));
+  }
+
+  &__item {
+    color: rgb(var(--notice-color));
+    font-weight: bold;
+    word-break: break-word;
+  }
 }
 
 .display-name {

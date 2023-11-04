@@ -2,6 +2,7 @@
 import { computed, inject, reactive, ref, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
+import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
 import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
@@ -70,37 +71,18 @@ function toggleWarningContent () {
     :data-is-following="user.viewer.following != null"
     @click="onActivateLink"
   >
-    <!-- プロフィールラベル -->
-    <div
-      v-if="(user.labels?.length ?? 0) > 0"
-      class="textlabel--alert"
-    >
-      <div class="textlabel__text">
-        <SVGIcon name="contentFiltering" />{{ $t("profileLabel") }}:
-      </div>
-      <div
-        v-for="label of user.labels"
-        :key="label.val"
-        class="textlabel__item"
-      >{{ $t(label.val) }}</div>
-    </div>
-
-    <!-- ラベル対応 -->
-    <button
+    <!-- プロフィールトグル -->
+    <ContentFilteringToggle
       v-if="state.contentWarningVisibility !== 'show'"
-      class="button--important content-warning-toggle"
+      :accountLabels="user.labels"
+      :display="state.contentWarningDisplay"
       @click.prevent.stop="toggleWarningContent"
-    >
-      <SVGIcon name="contentFiltering" />
-      <span v-if="state.contentWarningDisplay">{{ $t("hideAccount") }}</span>
-      <span v-else="state.contentWarningDisplay">{{ $t("showAccount") }}</span>
-    </button>
+    />
 
     <template v-if="contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)">
       <AvatarLink
         :did="user.did"
         :image="user.avatar"
-        :labels="user.labels"
       />
       <div class="display-name">{{ user.displayName }}</div>
       <AuthorHandle :handle="user.handle" />
@@ -139,7 +121,6 @@ function toggleWarningContent () {
   grid-template-columns: min-content auto 1fr auto;
   grid-template-rows: auto auto auto auto 1fr;
   grid-template-areas:
-    "o o o o"
     "c c c c"
     "a n h m"
     "a d d m"
@@ -147,14 +128,9 @@ function toggleWarningContent () {
   align-items: center;
 }
 
-.content-warning-toggle {
+.content-filtering-toggle {
   grid-area: c;
-  margin-bottom: 0.5em;
-}
-
-.textlabel--alert {
-  grid-area: o;
-  margin-bottom: 0.5em;
+  margin: 0.5em 0;
 }
 
 .avatar-link {

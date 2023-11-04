@@ -141,15 +141,6 @@
   "scam": "Scam",
   "misleading": "Misleading",
 
-  "showAccount": "Show account",
-  "hideAccount": "Hide account",
-  "showProfile": "Show profile",
-  "hideProfile": "Hide profile",
-  "showContent": "Show content",
-  "hideContent": "Hide content",
-  "showMedia": "Show media",
-  "hideMedia": "Hide media",
-
   "login": "Login",
   "service": "Service",
   "identifier": "Email or Handle or DID",

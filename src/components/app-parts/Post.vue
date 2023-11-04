@@ -3,6 +3,7 @@ import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type Compu
 import { useRouter } from "vue-router"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
+import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LinkCard from "@/components/app-parts/LinkCard.vue"
@@ -639,7 +640,6 @@ function onActivateHashTag (text: string) {
         v-if="position !== 'postInPost' && position !== 'slim'"
         :did="post.author?.did"
         :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
-        :labels="post.author?.labels"
         @click.stop="$emit('click')"
       />
 
@@ -651,8 +651,14 @@ function onActivateHashTag (text: string) {
             class="avatar-in-post"
             :did="post.author?.did"
             :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
-            :labels="post.author?.labels"
             @click.stop="$emit('click')"
+          />
+
+          <!-- アカウントラベルアイコン -->
+          <SVGIcon
+            v-if="(post.author?.labels?.length ?? 0) > 0"
+            name="contentFiltering"
+            class="account-label-icon"
           />
 
           <!-- 表示名 -->
@@ -672,31 +678,14 @@ function onActivateHashTag (text: string) {
           >{{ mainState.formatDate(post.indexedAt) }}</div>
         </div>
 
-        <!-- ポストラベル -->
-        <div
-          v-if="(post.labels?.length ?? 0) > 0"
-          class="textlabel--alert"
-        >
-          <div class="textlabel__text">
-            <SVGIcon name="contentFiltering" />{{ $t("postLabel") }}:
-          </div>
-          <div
-            v-for="label of state.contentWarningPostLabels"
-            :key="label"
-            class="textlabel__item"
-          >{{ label }}</div>
-        </div>
-
         <!-- ポストコンテンツトグル -->
-        <button
+        <ContentFilteringToggle
           v-if="state.hasBlurredContent"
-          class="button--important image-folder-button"
+          :accountLabels="post.author?.labels"
+          :postLabels="post.labels"
+          :display="state.blurredContentClicked"
           @click.prevent.stop="onActivatePostContentToggle"
-        >
-          <SVGIcon name="contentFiltering" />
-          <span v-if="state.blurredContentClicked">{{ $t("hideContent") }}</span>
-          <span v-else="state.blurredContentClicked">{{ $t("showContent") }}</span>
-        </button>
+        />
 
         <!-- ポストコンテンツ -->
         <div
@@ -734,15 +723,13 @@ function onActivateHashTag (text: string) {
           </div>
 
           <!-- ポストメディアトグル -->
-          <button
+          <ContentFilteringToggle
             v-if="state.hasBlurredMedia"
-            class="button--important image-folder-button"
+            :accountLabels="post.author?.labels"
+            :postLabels="post.labels"
+            :display="state.blurredMediaClicked"
             @click.prevent.stop="onActivatePostMediaToggle"
-          >
-            <SVGIcon name="contentFiltering" />
-            <span v-if="state.blurredMediaClicked">{{ $t("hideMedia") }}</span>
-            <span v-else="state.blurredMediaClicked">{{ $t("showMedia") }}</span>
-          </button>
+          />
 
           <!-- ポストメディア -->
           <template v-if="state.postMediaDisplay">
@@ -1042,6 +1029,7 @@ function onActivateHashTag (text: string) {
     pointer-events: none;
 
     .external,
+    .content-filtering-toggle,
     .image-folder-button,
     .quad-images,
     .feed-card,
@@ -1309,19 +1297,24 @@ function onActivateHashTag (text: string) {
   grid-area: h;
   display: grid;
   align-items: center;
-  grid-template-columns: auto 1fr min-content;
+  grid-template-columns: auto auto 1fr min-content;
   grid-gap: 0.5em;
   overflow: hidden;
 }
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
   .body__right__header {
-    grid-template-columns: auto auto 1fr min-content;
+    grid-template-columns: auto auto auto 1fr min-content;
   }
 }
 
 .avatar-in-post {
   font-size: 1.5em;
+}
+
+.account-label-icon {
+  fill: rgb(var(--notice-color));
+  font-size: 0.875em;
 }
 
 .display-name {
@@ -1338,6 +1331,10 @@ function onActivateHashTag (text: string) {
   color: var(--fg-color-05);
   font-size: 0.75em;
   white-space: nowrap;
+}
+
+.content-filtering-toggle {
+  font-size: 0.875em;
 }
 
 // ポストコンテンツ
