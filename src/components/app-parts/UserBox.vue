@@ -17,24 +17,20 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   // ラベル対応
-  contentWarningForceDisplay: boolean
-  contentWarningDisplay: ComputedRef<boolean>
+  appliedLabels: ComputedRef<Array<TTLabel>>
+  contentFilteringToggleDisplay: boolean
   contentWarningVisibility: ComputedRef<TTContentVisibility>
 
   profileMenuDisplay: boolean
   profileMenuContainer: ComputedRef<undefined | HTMLElement>
 }>({
   // ラベル対応
-  contentWarningForceDisplay: false,
-  contentWarningDisplay: computed((): boolean => {
-    return state.contentWarningVisibility === "show" ||
-           state.contentWarningForceDisplay
+  appliedLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(['hide', 'warn'], ['blur', 'blur-media'], props.user.labels)
   }),
+  contentFilteringToggleDisplay: false,
   contentWarningVisibility: computed((): TTContentVisibility => {
-    return mainState.getContentWarningVisibility(
-      props.user.labels,
-      undefined
-    )
+    return mainState.getContentWarningVisibility(props.user.labels)
   }),
 
   profileMenuDisplay: false,
@@ -59,8 +55,8 @@ function closePostMenu () {
 
 // ラベル対応
 
-function toggleWarningContent () {
-  state.contentWarningForceDisplay = !state.contentWarningForceDisplay
+function onActivateContentFilteringToggle () {
+  state.contentFilteringToggleDisplay = !state.contentFilteringToggleDisplay
 }
 </script>
 
@@ -73,13 +69,23 @@ function toggleWarningContent () {
   >
     <!-- プロフィールトグル -->
     <ContentFilteringToggle
-      v-if="state.contentWarningVisibility !== 'show'"
-      :accountLabels="user.labels"
-      :display="state.contentWarningDisplay"
-      @click.prevent.stop="toggleWarningContent"
+      v-if="state.appliedLabels.length > 0"
+      :labels="state.appliedLabels"
+      :display="
+        state.contentWarningVisibility === 'show' ||
+        state.contentFilteringToggleDisplay
+      "
+      @click.prevent.stop="onActivateContentFilteringToggle"
     />
 
-    <template v-if="contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)">
+    <template v-if="
+      contentWarningDisabled || (
+        !contentWarningDisabled && (
+          state.contentWarningVisibility === 'show' ||
+          state.contentFilteringToggleDisplay
+        )
+      )
+    ">
       <AvatarLink
         :did="user.did"
         :image="user.avatar"

@@ -2,8 +2,7 @@
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 defineProps<{
-  accountLabels?: Array<TTLabel>
-  postLabels?: Array<TTLabel>
+  labels?: Array<TTLabel>
   display: boolean
 }>()
 </script>
@@ -15,16 +14,7 @@ defineProps<{
   >
     <SVGIcon name="contentFiltering" />
     <div
-      v-for="label of accountLabels"
-      :key="label.val"
-      class="content-filtering-toggle__label"
-    >{{ $t(label.val) }}</div>
-    <div
-      v-if="(accountLabels?.length ?? 0) > 0 && (postLabels?.length ?? 0) > 0"
-      class="content-filtering-toggle__separator"
-    />
-    <div
-      v-for="label of postLabels"
+      v-for="label of labels"
       :key="label.val"
       class="content-filtering-toggle__label"
     >{{ $t(label.val) }}</div>
@@ -78,12 +68,6 @@ defineProps<{
     font-size: 0.875em;
     margin-left: auto;
     white-space: nowrap;
-  }
-
-  &__separator {
-    background-color: var(--fg-color-05);
-    width: 1px;
-    height: 1em;
   }
 }
 </style>

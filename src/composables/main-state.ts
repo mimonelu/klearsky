@@ -83,8 +83,8 @@ const state = reactive<MainState>({
   fetchCurrentAuthorCustomFeeds,
   fetchAuthorReposts,
   fetchAuthorLikes,
+  filterLabels,
   getContentWarningVisibility,
-  getContentWarningOnWarn,
 
   fetchPreferences,
   getConcernedPreferences,
@@ -387,52 +387,46 @@ async function fetchPreferences (): Promise<boolean> {
 
 // ラベル対応
 
-function getContentWarningVisibility (
-  authorLabels?: Array<TTLabel>,
-  postLabels?: Array<TTLabel>
-): TTContentVisibility {
-  const authorPreferences = state.getConcernedPreferences(authorLabels)
-  const postPreferences = state.getConcernedPreferences(postLabels)
-  for (const preference of authorPreferences) {
+function filterLabels (
+  visibilities?: Array<TTContentVisibility>,
+  warns?: Array<TTLabelOnWarn>,
+  labels?: Array<TTLabel>
+): Array<TTLabel> {
+  return labels?.filter((label: TTLabel) => {
+    const labelBehavior = LABEL_BEHAVIORS[label.val]
+
+    if (warns != null &&
+      labelBehavior != null &&
+      warns.indexOf(labelBehavior?.warn) === - 1
+    ) return false
+
+    if (labelBehavior != null &&
+      !labelBehavior.configurable &&
+      (warns == null || (warns != null && warns.indexOf(labelBehavior.warn) !== - 1))
+    ) {
+      return true
+    }
+
+    return state.currentPreferences.some((preference: TTPreference) => {
+      return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
+        preference.label === labelBehavior?.oldGroup &&
+        (
+          visibilities == null ||
+          (visibilities != null && visibilities.indexOf(preference.visibility as TTContentVisibility) !== - 1)
+        )
+    })
+  }) ?? []
+}
+
+function getContentWarningVisibility (labels?: Array<TTLabel>): TTContentVisibility {
+  const preferences = state.getConcernedPreferences(labels)
+  for (const preference of preferences) {
     if (preference.visibility === "hide") return "hide"
   }
-  for (const preference of postPreferences) {
-    if (preference.visibility === "hide") return "hide"
-  }
-  for (const preference of authorPreferences) {
-    if (preference.visibility === "warn") return "warn"
-  }
-  for (const preference of postPreferences) {
+  for (const preference of preferences) {
     if (preference.visibility === "warn") return "warn"
   }
   return "show"
-}
-
-function getContentWarningOnWarn (
-  authorLabels?: Array<TTLabel>,
-  postLabels?: Array<TTLabel>
-): TTLabelOnWarn {
-  const authorOnWarn = getLabelsOnWarn(authorLabels)
-  const postOnWarn = getLabelsOnWarn(postLabels)
-  if (authorOnWarn === "blur") return authorOnWarn
-  if (postOnWarn === "blur") return postOnWarn
-  if (authorOnWarn === "blur-media") return authorOnWarn
-  if (postOnWarn === "blur-media") return postOnWarn
-  if (authorOnWarn === "alert") return authorOnWarn
-  if (postOnWarn === "alert") return postOnWarn
-  return "null"
-}
-
-function getLabelsOnWarn (labels?: Array<TTLabel>): TTLabelOnWarn {
-  const behaviors = labels?.map((label: TTLabel) => LABEL_BEHAVIORS[label.val]) ?? []
-  for (const behavior of behaviors) {
-    if (behavior == null) continue
-    if (behavior.warn === "blur") return behavior.warn
-    if (behavior.warn === "blur-media") return behavior.warn
-    if (behavior.warn === "alert") return behavior.warn
-    if (behavior.warn === "null") return behavior.warn
-  }
-  return "null"
 }
 
 // label に該当する preference を取得する

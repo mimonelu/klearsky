@@ -23,7 +23,6 @@ const state = reactive<{
 
   // ラベル対応
   contentWarningVisibility: ComputedRef<TTContentVisibility>
-  contentWarningOnWarn: ComputedRef<TTLabelOnWarn>
   displayPrivateData: ComputedRef<boolean>
   enabledContentMask: boolean
   contentFilteringToggleDisplay: ComputedRef<boolean>
@@ -45,9 +44,6 @@ const state = reactive<{
   // ラベル対応
   contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(mainState.currentProfile?.labels)
-  }),
-  contentWarningOnWarn: computed((): TTLabelOnWarn => {
-    return mainState.getContentWarningOnWarn(mainState.currentProfile?.labels)
   }),
   displayPrivateData: computed((): boolean => {
     return (
@@ -73,10 +69,7 @@ const state = reactive<{
 
   // ラベル対応 - アカウントコンテンツ
   hasBlurredContent: computed((): boolean => {
-    return (
-      state.contentWarningVisibility === "hide" ||
-      state.contentWarningVisibility === "warn"
-    ) && state.contentWarningOnWarn === "blur"
+    return mainState.filterLabels(['hide', 'warn'], ['blur'], mainState.currentProfile?.labels).length > 0
   }),
   accountContentDisplay: computed((): boolean => {
     return !state.hasBlurredContent ||
@@ -88,11 +81,7 @@ const state = reactive<{
 
   // ラベル対応 - アカウントメディア
   hasBlurredMedia: computed((): boolean => {
-    return (
-      state.contentWarningVisibility === "hide" ||
-      state.contentWarningVisibility === "warn"
-    ) &&
-    state.contentWarningOnWarn === "blur-media"
+    return mainState.filterLabels(['hide', 'warn'], ['blur-media'], mainState.currentProfile?.labels).length > 0
   }),
   accountMediaDisplay: computed((): boolean => {
     return !state.hasBlurredMedia ||
@@ -176,7 +165,7 @@ function onActivateAccountMaskToggle () {
           <!-- アカウントトグル -->
           <ContentFilteringToggle
             v-if="state.contentFilteringToggleDisplay"
-            :accountLabels="mainState.currentProfile?.labels"
+            :labels="mainState.filterLabels(['hide', 'warn'], ['blur', 'blur-media'], mainState.currentProfile?.labels)"
             :display="state.enabledContentMask"
             @click.prevent.stop="onActivateAccountMaskToggle"
           />

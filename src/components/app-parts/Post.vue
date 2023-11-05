@@ -73,10 +73,9 @@ const state = reactive<{
   translation: "none" | "ignore" | "waiting" | "done" | "failed";
 
   // ラベル対応
+  allLabels: ComputedRef<Array<TTLabel>>
   contentWarningVisibility: ComputedRef<TTContentVisibility>
-  contentWarningOnWarn: ComputedRef<TTLabelOnWarn>
   contentWarningLabels: ComputedRef<Array<string>>
-  contentWarningPostLabels: ComputedRef<Array<string>>
   hasBlurredContent: ComputedRef<boolean>
   blurredContentClicked: boolean
   postContentDisplay: ComputedRef<boolean>
@@ -191,34 +190,24 @@ const state = reactive<{
   translation: "none",
 
   // ラベル対応
-  contentWarningVisibility: computed((): TTContentVisibility => {
-    return mainState.getContentWarningVisibility(
-      props.post.author?.labels,
-      props.post.labels
-    )
+  allLabels: computed((): Array<TTLabel> => {
+    return [
+      ...(props.post.author?.labels ?? []),
+      ...(props.post.labels ?? [])
+    ]
   }),
-  contentWarningOnWarn: computed((): TTLabelOnWarn => {
-    return mainState.getContentWarningOnWarn(
-      props.post.author?.labels,
-      props.post.labels
-    )
+  contentWarningVisibility: computed((): TTContentVisibility => {
+    return mainState.getContentWarningVisibility(state.allLabels)
   }),
   contentWarningLabels: computed((): Array<string> => {
-    return Array.from(new Set([
-      ...props.post.author?.labels?.map((label: TTLabel) => $t(label.val)) ?? [],
-      ...props.post.labels?.map((label: TTLabel) => $t(label.val)) ?? []
-    ]))
-  }),
-  contentWarningPostLabels: computed((): Array<string> => {
-    return Array.from(new Set(props.post.labels?.map((label: TTLabel) => $t(label.val)) ?? []))
+    return mainState
+      .filterLabels(["hide"], undefined, state.allLabels)
+      .map((label: TTLabel) => $t(label.val))
   }),
 
   // ラベル対応 - ポストコンテンツ
   hasBlurredContent: computed((): boolean => {
-    return (
-      state.contentWarningVisibility === "hide" ||
-      state.contentWarningVisibility === "warn"
-    ) && state.contentWarningOnWarn === "blur"
+    return mainState.filterLabels(["hide", "warn"], ["blur"], state.allLabels).length > 0
   }),
   blurredContentClicked: false,
   postContentDisplay: computed((): boolean => {
@@ -235,11 +224,7 @@ const state = reactive<{
       state.hasImage ||
       state.hasLinkCard ||
       state.hasFeedCard
-    ) && (
-      state.contentWarningVisibility === "hide" ||
-      state.contentWarningVisibility === "warn"
-    ) &&
-    state.contentWarningOnWarn === "blur-media"
+    ) && mainState.filterLabels(["hide", "warn"], ["blur-media"], state.allLabels).length > 0
   }),
   blurredMediaClicked: false,
   postMediaDisplay: computed((): boolean => {
@@ -681,8 +666,7 @@ function onActivateHashTag (text: string) {
         <!-- ポストコンテンツトグル -->
         <ContentFilteringToggle
           v-if="state.hasBlurredContent"
-          :accountLabels="post.author?.labels"
-          :postLabels="post.labels"
+          :labels="mainState.filterLabels(['hide', 'warn'], ['blur'], state.allLabels)"
           :display="state.blurredContentClicked"
           @click.prevent.stop="onActivatePostContentToggle"
         />
@@ -725,8 +709,7 @@ function onActivateHashTag (text: string) {
           <!-- ポストメディアトグル -->
           <ContentFilteringToggle
             v-if="state.hasBlurredMedia"
-            :accountLabels="post.author?.labels"
-            :postLabels="post.labels"
+            :labels="mainState.filterLabels(['hide', 'warn'], ['blur-media'], state.allLabels)"
             :display="state.blurredMediaClicked"
             @click.prevent.stop="onActivatePostMediaToggle"
           />

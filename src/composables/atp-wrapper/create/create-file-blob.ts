@@ -69,9 +69,8 @@ export default async function (
   const options: ComAtprotoRepoUploadBlob.CallOptions = {
     encoding: mimeType,
   }
-  const response: ComAtprotoRepoUploadBlob.Response = await (
-    this.agent as BskyAgent
-  ).uploadBlob(input, options)
+  const response: ComAtprotoRepoUploadBlob.Response =
+    await (this.agent as BskyAgent).com.atproto.repo.uploadBlob(input, options)
   console.log("[klearsky/uploadBlob]", response)
   if (!response.success) return null
   return response.data.blob

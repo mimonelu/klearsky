@@ -53,14 +53,12 @@ type MainState = {
   sortFeedPreferencesSavedAndPinned: () => void
   fetchMyFeeds: () => Promise<boolean>
 
-  getContentWarningVisibility: (
-    authorLabels?: Array<TTLabel>,
-    postLabels?: Array<TTLabel>,
-  ) => TTContentVisibility
-  getContentWarningOnWarn: (
-    authorLabels?: Array<TTLabel>,
-    postLabels?: Array<TTLabel>,
-  ) => TTLabelOnWarn
+  filterLabels (
+    visibilities?: Array<TTContentVisibility>,
+    warns?: Array<TTLabelOnWarn>,
+    labels?: Array<TTLabel>
+  ): Array<TTLabel>
+  getContentWarningVisibility: (labels?: Array<TTLabel>) => TTContentVisibility
   getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
 
   currentSearchSuggestionResults: Array<TTUser>
