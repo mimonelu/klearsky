@@ -666,6 +666,7 @@ function onActivateHashTag (text: string) {
         <!-- ポストコンテンツトグル -->
         <ContentFilteringToggle
           v-if="state.hasBlurredContent"
+          type="blur"
           :labels="mainState.filterLabels(['hide', 'warn'], ['blur'], state.allLabels)"
           :display="state.blurredContentClicked"
           @click.prevent.stop="onActivatePostContentToggle"
@@ -709,6 +710,7 @@ function onActivateHashTag (text: string) {
           <!-- ポストメディアトグル -->
           <ContentFilteringToggle
             v-if="state.hasBlurredMedia"
+            type="blur-media"
             :labels="mainState.filterLabels(['hide', 'warn'], ['blur-media'], state.allLabels)"
             :display="state.blurredMediaClicked"
             @click.prevent.stop="onActivatePostMediaToggle"

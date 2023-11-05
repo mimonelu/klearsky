@@ -1,23 +1,34 @@
 <script lang="ts" setup>
+import { computed, reactive, type ComputedRef } from "vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
-defineProps<{
+const props = defineProps<{
   labels?: Array<TTLabel>
+  type?: "blur" | "blur-media"
   display: boolean
 }>()
+
+const state = reactive<{
+  labelNames: ComputedRef<Array<string>>
+}>({
+  labelNames: computed((): Array<string> => {
+    return Array.from(new Set((props.labels?.map((label: TTLabel) => label.val) ?? [])))
+  }),
+})
 </script>
 
 <template>
   <button
     class="content-filtering-toggle"
     :data-enabled="false"
+    :data-blur="type === 'blur'"
   >
     <SVGIcon name="contentFiltering" />
     <div
-      v-for="label of labels"
-      :key="label.val"
+      v-for="label of state.labelNames"
+      :key="label"
       class="content-filtering-toggle__label"
-    >{{ $t(label.val) }}</div>
+    >{{ $t(label) }}</div>
     <div
       v-if="display"
       class="content-filtering-toggle__state-label"
@@ -44,6 +55,14 @@ defineProps<{
 
     & > .state-label {
       color: var(--fg-color-075);
+    }
+  }
+  &[data-blur="true"] {
+    background-color: rgb(var(--notice-color));
+
+    & > * {
+      --fg-color: var(--bg-color);
+      --notice-color: var(--bg-color);
     }
   }
 
