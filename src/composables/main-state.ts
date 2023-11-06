@@ -728,7 +728,7 @@ function saveSettings () {
   if (state.settings[did].imageAspectRatio == null)
     state.settings[did].imageAspectRatio = "3 / 2"
   if (state.settings[did].imageOption == null)
-    state.settings[did].imageOption = [0]
+    state.settings[did].imageOption = []
   if (state.settings[did].linkcardEmbeddedControl == null)
     state.settings[did].linkcardEmbeddedControl = [
       "giphy",
