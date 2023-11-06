@@ -392,30 +392,50 @@ function filterLabels (
   warns?: Array<TTLabelOnWarn>,
   labels?: Array<TTLabel>
 ): Array<TTLabel> {
-  return labels?.filter((label: TTLabel) => {
+  const results = labels?.filter((label: TTLabel) => {
     const labelBehavior = LABEL_BEHAVIORS[label.val]
 
-    if (warns != null &&
-      labelBehavior != null &&
-      warns.indexOf(labelBehavior?.warn) === - 1
-    ) return false
+    if (labelBehavior?.configurable === false) {
+      if (label.val === "!hide" &&
+        visibilities?.indexOf("hide") !== - 1
+      ) return true
 
-    if (labelBehavior != null &&
-      !labelBehavior.configurable &&
-      (warns == null || (warns != null && warns.indexOf(labelBehavior.warn) !== - 1))
-    ) {
-      return true
+      if (label.val === "!warn" &&
+        visibilities?.indexOf("warn") !== - 1
+      ) return true
+
+      if (labelBehavior?.group === "legal" &&
+        (
+          visibilities?.indexOf("hide") !== - 1 ||
+          visibilities?.indexOf("warn") !== - 1
+        )
+      ) return true
     }
 
     return state.currentPreferences.some((preference: TTPreference) => {
       return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
-        preference.label === labelBehavior?.oldGroup &&
         (
-          visibilities == null ||
-          (visibilities != null && visibilities.indexOf(preference.visibility as TTContentVisibility) !== - 1)
+          labelBehavior?.oldGroup === "" ||
+          preference.label === labelBehavior?.oldGroup
+        ) &&
+        (
+          labelBehavior.configurable && (
+            visibilities == null ||
+            visibilities.indexOf(preference.visibility as TTContentVisibility) !== - 1
+          )
+        ) &&
+        (
+          warns == null ||
+          warns.indexOf(labelBehavior.warn) !== - 1
         )
     })
   }) ?? []
+
+  return results.filter((label: TTLabel, index: number) => {
+    return results?.findIndex((target: TTLabel) => {
+      return target.val === label.val
+    }) === index
+  })
 }
 
 function getContentWarningVisibility (labels?: Array<TTLabel>): TTContentVisibility {

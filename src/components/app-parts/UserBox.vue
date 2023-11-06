@@ -26,7 +26,7 @@ const state = reactive<{
 }>({
   // ラベル対応
   appliedLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(['hide', 'warn'], ['blur', 'blur-media'], props.user.labels)
+    return mainState.filterLabels(["hide", "warn"], undefined, props.user.labels)
   }),
   contentFilteringToggleDisplay: false,
   contentWarningVisibility: computed((): TTContentVisibility => {
@@ -90,7 +90,16 @@ function onActivateContentFilteringToggle () {
         :did="user.did"
         :image="user.avatar"
       />
-      <div class="display-name">{{ user.displayName }}</div>
+      <div class="display-name">
+        <!-- アカウントラベルアイコン -->
+        <SVGIcon
+          v-if="(user.labels?.length ?? 0) > 0"
+          name="contentFiltering"
+          class="account-label-icon"
+        />
+
+        <span>{{ user.displayName }}</span>
+      </div>
       <AuthorHandle :handle="user.handle" />
       <div class="description">{{ user.description || "&#160;" }}</div>
 
@@ -147,11 +156,23 @@ function onActivateContentFilteringToggle () {
 .display-name {
   grid-area: n;
   color: var(--fg-color-075);
+  display: flex;
+  align-items: center;
+  grid-gap: 0.5em;
   font-size: 0.875em;
-  font-weight: bold;
   line-height: 1.25;
   overflow: hidden;
-  white-space: nowrap;
+
+  .account-label-icon {
+    fill: rgb(var(--notice-color));
+  }
+
+  & > span {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .author-handle {

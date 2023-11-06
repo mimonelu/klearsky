@@ -82,6 +82,7 @@ const state = reactive<{
   hasBlurredMedia: ComputedRef<boolean>
   blurredMediaClicked: boolean
   postMediaDisplay: ComputedRef<boolean>
+  alertLabels: ComputedRef<Array<TTLabel>>
 
   // ワードミュートの判定
   isWordMute: ComputedRef<boolean>
@@ -150,7 +151,7 @@ const state = reactive<{
   masked: computed((): boolean => {
     return (
       state.noContentLanguage ||
-      state.contentWarningVisibility === "hide" ||
+      mainState.filterLabels(["hide"], undefined, state.allLabels).length > 0 ||
       state.isWordMute
     ) && (
       props.position !== "preview" &&
@@ -233,6 +234,10 @@ const state = reactive<{
         state.hasBlurredMedia &&
         state.blurredMediaClicked
       )
+  }),
+
+  alertLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(["hide", "warn"], ["alert"], state.allLabels)
   }),
 
   // ワードミュートの判定
@@ -661,6 +666,19 @@ function onActivateHashTag (text: string) {
             v-if="post.indexedAt"
             class="indexed-at"
           >{{ mainState.formatDate(post.indexedAt) }}</div>
+        </div>
+
+        <!-- アラートラベル -->
+        <div
+          v-if="(state.alertLabels?.length ?? 0) > 0"
+          class="labels"
+        >
+          <SVGIcon name="contentFiltering" />
+          <div
+            v-for="label of state.alertLabels"
+            :key="label.val"
+            class="labels__item"
+          >{{ $t(label.val) }}</div>
         </div>
 
         <!-- ポストコンテンツトグル -->

@@ -22,13 +22,8 @@ const state = reactive<{
   profileMenuDisplay: boolean
 
   // ラベル対応
-  contentWarningVisibility: ComputedRef<TTContentVisibility>
-  displayPrivateData: ComputedRef<boolean>
   enabledContentMask: boolean
   contentFilteringToggleDisplay: ComputedRef<boolean>
-
-  // ラベル対応 - アカウント
-  accountDisplay: ComputedRef<boolean>
 
   // ラベル対応 - アカウントコンテンツ
   hasBlurredContent: ComputedRef<boolean>
@@ -42,53 +37,25 @@ const state = reactive<{
   profileMenuDisplay: false,
 
   // ラベル対応
-  contentWarningVisibility: computed((): TTContentVisibility => {
-    return mainState.getContentWarningVisibility(mainState.currentProfile?.labels)
-  }),
-  displayPrivateData: computed((): boolean => {
-    return (
-      state.contentWarningVisibility === "show" ||
-      state.enabledContentMask
-    )
-  }),
-  enabledContentMask: false,
+  enabledContentMask: true,
   contentFilteringToggleDisplay: computed((): boolean => {
-    return state.contentWarningVisibility === 'hide' ||
-      state.hasBlurredContent ||
-      state.hasBlurredMedia
-  }),
-
-  // ラベル対応 - アカウント
-  accountDisplay: computed((): boolean => {
-    return state.contentWarningVisibility !== "hide" ||
-      (
-        state.contentWarningVisibility === "hide" &&
-        state.enabledContentMask
-      )
+    return mainState.filterLabels(["hide", "warn"], ["blur", "blur-media"], mainState.currentProfile?.labels).length > 0
   }),
 
   // ラベル対応 - アカウントコンテンツ
   hasBlurredContent: computed((): boolean => {
-    return mainState.filterLabels(['hide', 'warn'], ['blur'], mainState.currentProfile?.labels).length > 0
+    return mainState.filterLabels(["hide", "warn"], ["blur"], mainState.currentProfile?.labels).length > 0
   }),
   accountContentDisplay: computed((): boolean => {
-    return !state.hasBlurredContent ||
-      (
-        state.hasBlurredContent &&
-        state.enabledContentMask
-      )
+    return !state.enabledContentMask || !state.hasBlurredContent
   }),
 
   // ラベル対応 - アカウントメディア
   hasBlurredMedia: computed((): boolean => {
-    return mainState.filterLabels(['hide', 'warn'], ['blur-media'], mainState.currentProfile?.labels).length > 0
+    return mainState.filterLabels(["hide", "warn"], ["blur-media"], mainState.currentProfile?.labels).length > 0
   }),
   accountMediaDisplay: computed((): boolean => {
-    return !state.hasBlurredMedia ||
-      (
-        state.hasBlurredMedia &&
-        state.enabledContentMask
-      )
+    return !state.enabledContentMask || !state.hasBlurredMedia
   }),
 })
 
@@ -166,7 +133,7 @@ function onActivateAccountMaskToggle () {
           <ContentFilteringToggle
             v-if="state.contentFilteringToggleDisplay"
             :labels="mainState.filterLabels(['hide', 'warn'], ['blur', 'blur-media'], mainState.currentProfile?.labels)"
-            :display="state.enabledContentMask"
+            :display="!state.enabledContentMask"
             @click.prevent.stop="onActivateAccountMaskToggle"
           />
 
@@ -202,11 +169,9 @@ function onActivateAccountMaskToggle () {
         </div>
 
         <div
-          v-if="state.accountDisplay"
           class="profile-view__details"
         >
           <div
-            v-if="state.accountDisplay"
             class="profile-view__details__top"
           >
             <div
@@ -303,14 +268,14 @@ function onActivateAccountMaskToggle () {
               </button>
             </div>
             <HtmlText
-              v-if="state.accountDisplay && state.accountContentDisplay"
+              v-if="state.accountContentDisplay"
               class="description"
               dir="auto"
               :text="mainState.currentProfile?.description ?? '&nbsp;'"
               :processHashTag="true"
             />
             <div
-              v-if="state.accountDisplay"
+              v-if="state.accountContentDisplay"
               class="statistics"
             >
               <dl class="posts-count">
@@ -542,22 +507,7 @@ function onActivateAccountMaskToggle () {
 }
 
 .labels {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  grid-gap: 0.5rem;
-  font-size: 0.875rem;
   margin-bottom: 0.25rem;
-
-  & > .svg-icon {
-    fill: rgb(var(--notice-color));
-  }
-
-  &__item {
-    color: rgb(var(--notice-color));
-    font-weight: bold;
-    word-break: break-word;
-  }
 }
 
 .display-name {
