@@ -395,20 +395,21 @@ function filterLabels (
   const results = labels?.filter((label: TTLabel) => {
     const labelBehavior = LABEL_BEHAVIORS[label.val]
 
-    if (labelBehavior?.configurable === false) {
-      if (label.val === "!hide" &&
-        visibilities?.indexOf("hide") !== - 1
-      ) return true
+    // configurable ではないビルトインラベルの処理
+    if (labelBehavior?.configurable === false &&
+      (
+        warns == null ||
+        warns.indexOf("alert") === - 1
+      )
+    ) {
+      const specifiedHide = visibilities?.indexOf("hide") !== - 1
+      if (label.val === "!hide" && specifiedHide) return true
 
-      if (label.val === "!warn" &&
-        visibilities?.indexOf("warn") !== - 1
-      ) return true
+      const specifiedWarn = visibilities?.indexOf("warn") !== - 1
+      if (label.val === "!warn" && specifiedWarn) return true
 
       if (labelBehavior?.group === "legal" &&
-        (
-          visibilities?.indexOf("hide") !== - 1 ||
-          visibilities?.indexOf("warn") !== - 1
-        )
+        (specifiedHide || specifiedWarn)
       ) return true
     }
 
@@ -431,6 +432,7 @@ function filterLabels (
     })
   }) ?? []
 
+  // 重複削除
   return results.filter((label: TTLabel, index: number) => {
     return results?.findIndex((target: TTLabel) => {
       return target.val === label.val

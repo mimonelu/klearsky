@@ -3,15 +3,22 @@
   flex-wrap: wrap;
   align-items: center;
   grid-gap: 0.5rem;
-  font-size: 0.875rem;
+  user-select: none;
 
   & > .svg-icon {
     fill: rgb(var(--notice-color));
   }
 
-  &__item {
+  &__message {
     color: rgb(var(--notice-color));
     font-weight: bold;
+  }
+
+  &__item {
+    background-color: rgb(var(--notice-color), 0.25);
+    color: rgb(var(--notice-color));
+    font-weight: bold;
+    padding: 0.25rem;
     word-break: break-word;
   }
 }

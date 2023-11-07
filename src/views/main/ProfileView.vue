@@ -23,6 +23,7 @@ const state = reactive<{
 
   // ラベル対応
   enabledContentMask: boolean
+  contentFilteringLabels: ComputedRef<Array<TTLabel>>
   contentFilteringToggleDisplay: ComputedRef<boolean>
 
   // ラベル対応 - アカウントコンテンツ
@@ -38,8 +39,11 @@ const state = reactive<{
 
   // ラベル対応
   enabledContentMask: true,
+  contentFilteringLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(["hide", "warn"], ["blur", "blur-media"], mainState.currentProfile?.labels)
+  }),
   contentFilteringToggleDisplay: computed((): boolean => {
-    return mainState.filterLabels(["hide", "warn"], ["blur", "blur-media"], mainState.currentProfile?.labels).length > 0
+    return state.contentFilteringLabels.length > 0
   }),
 
   // ラベル対応 - アカウントコンテンツ
@@ -132,7 +136,7 @@ function onActivateAccountMaskToggle () {
           <!-- アカウントトグル -->
           <ContentFilteringToggle
             v-if="state.contentFilteringToggleDisplay"
-            :labels="mainState.filterLabels(['hide', 'warn'], ['blur', 'blur-media'], mainState.currentProfile?.labels)"
+            :labels="state.contentFilteringLabels"
             :display="!state.enabledContentMask"
             @click.prevent.stop="onActivateAccountMaskToggle"
           />

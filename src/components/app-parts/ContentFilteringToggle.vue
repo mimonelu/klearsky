@@ -4,7 +4,7 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const props = defineProps<{
   labels?: Array<TTLabel>
-  type?: "blur" | "blur-media"
+  type?: TTLabelOnWarn
   display: boolean
 }>()
 
@@ -42,6 +42,8 @@ const state = reactive<{
 
 <style lang="scss" scoped>
 .content-filtering-toggle {
+  --alpha: 0.5;
+  background-color: rgb(var(--bg-color), 0.75);
   border: 1px solid rgb(var(--notice-color), 0.5);
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -52,13 +54,16 @@ const state = reactive<{
   padding: 0.5em 1em;
   &:focus, &:hover {
     border-color: rgb(var(--notice-color), 0.75);
+    &[data-blur="true"] {
+      background-color: rgb(var(--notice-color));
+    }
 
     & > .state-label {
       color: var(--fg-color-075);
     }
   }
   &[data-blur="true"] {
-    background-color: rgb(var(--notice-color));
+    background-color: rgb(var(--notice-color), 0.75);
 
     & > * {
       --fg-color: var(--bg-color);

@@ -74,6 +74,10 @@ const state = reactive<{
 
   // ラベル対応
   allLabels: ComputedRef<Array<TTLabel>>
+  hideLabels: ComputedRef<Array<TTLabel>>
+  blurLabels: ComputedRef<Array<TTLabel>>
+  blurMediaLabels: ComputedRef<Array<TTLabel>>
+  alertLabels: ComputedRef<Array<TTLabel>>
   contentWarningVisibility: ComputedRef<TTContentVisibility>
   contentWarningLabels: ComputedRef<Array<string>>
   hasBlurredContent: ComputedRef<boolean>
@@ -82,7 +86,6 @@ const state = reactive<{
   hasBlurredMedia: ComputedRef<boolean>
   blurredMediaClicked: boolean
   postMediaDisplay: ComputedRef<boolean>
-  alertLabels: ComputedRef<Array<TTLabel>>
 
   // ワードミュートの判定
   isWordMute: ComputedRef<boolean>
@@ -151,7 +154,7 @@ const state = reactive<{
   masked: computed((): boolean => {
     return (
       state.noContentLanguage ||
-      mainState.filterLabels(["hide"], undefined, state.allLabels).length > 0 ||
+      state.hideLabels.length > 0 ||
       state.isWordMute
     ) && (
       props.position !== "preview" &&
@@ -197,18 +200,28 @@ const state = reactive<{
       ...(props.post.labels ?? [])
     ]
   }),
+  hideLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(["hide"], undefined, state.allLabels)
+  }),
+  blurLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(["hide", "warn"], ["blur"], state.allLabels)
+  }),
+  blurMediaLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(["hide", "warn"], ["blur-media"], state.allLabels)
+  }),
+  alertLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(["hide", "warn"], ["alert"], state.allLabels)
+  }),
   contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(state.allLabels)
   }),
   contentWarningLabels: computed((): Array<string> => {
-    return mainState
-      .filterLabels(["hide"], undefined, state.allLabels)
-      .map((label: TTLabel) => $t(label.val))
+    return state.hideLabels.map((label: TTLabel) => $t(label.val))
   }),
 
   // ラベル対応 - ポストコンテンツ
   hasBlurredContent: computed((): boolean => {
-    return mainState.filterLabels(["hide", "warn"], ["blur"], state.allLabels).length > 0
+    return state.blurLabels.length > 0
   }),
   blurredContentClicked: false,
   postContentDisplay: computed((): boolean => {
@@ -225,7 +238,7 @@ const state = reactive<{
       state.hasImage ||
       state.hasLinkCard ||
       state.hasFeedCard
-    ) && mainState.filterLabels(["hide", "warn"], ["blur-media"], state.allLabels).length > 0
+    ) && state.blurMediaLabels.length > 0
   }),
   blurredMediaClicked: false,
   postMediaDisplay: computed((): boolean => {
@@ -234,10 +247,6 @@ const state = reactive<{
         state.hasBlurredMedia &&
         state.blurredMediaClicked
       )
-  }),
-
-  alertLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide", "warn"], ["alert"], state.allLabels)
   }),
 
   // ワードミュートの判定
@@ -673,19 +682,19 @@ function onActivateHashTag (text: string) {
           v-if="(state.alertLabels?.length ?? 0) > 0"
           class="labels"
         >
-          <SVGIcon name="contentFiltering" />
           <div
             v-for="label of state.alertLabels"
             :key="label.val"
             class="labels__item"
           >{{ $t(label.val) }}</div>
+          <div class="labels__message">{{ $t("warning") }}</div>
         </div>
 
         <!-- ポストコンテンツトグル -->
         <ContentFilteringToggle
           v-if="state.hasBlurredContent"
           type="blur"
-          :labels="mainState.filterLabels(['hide', 'warn'], ['blur'], state.allLabels)"
+          :labels="state.blurLabels"
           :display="state.blurredContentClicked"
           @click.prevent.stop="onActivatePostContentToggle"
         />
@@ -729,7 +738,7 @@ function onActivateHashTag (text: string) {
           <ContentFilteringToggle
             v-if="state.hasBlurredMedia"
             type="blur-media"
-            :labels="mainState.filterLabels(['hide', 'warn'], ['blur-media'], state.allLabels)"
+            :labels="state.blurMediaLabels"
             :display="state.blurredMediaClicked"
             @click.prevent.stop="onActivatePostMediaToggle"
           />
@@ -1085,7 +1094,7 @@ function onActivateHashTag (text: string) {
 
     & > .svg-icon--contentFiltering,
     & > .svg-icon--wordMute {
-      fill: rgb(var(--notice-color), calc(var(--alpha) + 0.25));
+      fill: rgb(var(--notice-color), var(--alpha));
     }
 
     &__content-warning,
@@ -1098,8 +1107,9 @@ function onActivateHashTag (text: string) {
     }
 
     &__content-warning {
-      color: rgb(var(--fg-color), var(--alpha));
+      color: rgb(var(--notice-color), var(--alpha));
       font-size: 0.875em;
+      font-weight: bold;
     }
 
     &__display-name {
@@ -1334,6 +1344,10 @@ function onActivateHashTag (text: string) {
   color: var(--fg-color-05);
   font-size: 0.75em;
   white-space: nowrap;
+}
+
+.labels {
+  font-size: 0.875em;
 }
 
 .content-filtering-toggle {
