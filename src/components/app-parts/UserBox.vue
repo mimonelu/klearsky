@@ -2,7 +2,7 @@
 import { computed, inject, reactive, ref, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
-import ContentWarning from "@/components/app-parts/ContentWarning.vue"
+import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
 import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
@@ -17,24 +17,20 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   // ラベル対応
-  contentWarningForceDisplay: boolean
-  contentWarningDisplay: ComputedRef<boolean>
+  appliedLabels: ComputedRef<Array<TTLabel>>
+  contentFilteringToggleDisplay: boolean
   contentWarningVisibility: ComputedRef<TTContentVisibility>
 
   profileMenuDisplay: boolean
   profileMenuContainer: ComputedRef<undefined | HTMLElement>
 }>({
   // ラベル対応
-  contentWarningForceDisplay: false,
-  contentWarningDisplay: computed((): boolean => {
-    return state.contentWarningVisibility === 'show' ||
-           ((state.contentWarningVisibility === 'always-warn' || state.contentWarningVisibility === 'warn') && state.contentWarningForceDisplay)
+  appliedLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(["hide", "warn"], undefined, props.user.labels)
   }),
+  contentFilteringToggleDisplay: false,
   contentWarningVisibility: computed((): TTContentVisibility => {
-    return mainState.getContentWarningVisibility(
-      props.user.labels,
-      undefined
-    )
+    return mainState.getContentWarningVisibility(props.user.labels)
   }),
 
   profileMenuDisplay: false,
@@ -59,12 +55,8 @@ function closePostMenu () {
 
 // ラベル対応
 
-function showWarningContent () {
-  state.contentWarningForceDisplay = true
-}
-
-function hideWarningContent () {
-  state.contentWarningForceDisplay = false
+function onActivateContentFilteringToggle () {
+  state.contentFilteringToggleDisplay = !state.contentFilteringToggleDisplay
 }
 </script>
 
@@ -73,41 +65,42 @@ function hideWarningContent () {
     class="user-box"
     :to="{ name: 'profile-feeds', query: { account: user.did } }"
     :data-is-following="user.viewer.following != null"
-    :data-content-warning-disabled="contentWarningDisabled"
-    :data-content-warning-visibility="state.contentWarningVisibility"
     @click="onActivateLink"
   >
-    <!-- ラベル対応 -->
-    <ContentWarning
-      v-if="!contentWarningDisabled"
-      :display="state.contentWarningForceDisplay"
-      :authorLabels="user.labels"
-      @show="showWarningContent"
-      @hide="hideWarningContent"
+    <!-- プロフィールトグル -->
+    <ContentFilteringToggle
+      v-if="state.appliedLabels.length > 0"
+      :labels="state.appliedLabels"
+      :display="
+        state.contentWarningVisibility === 'show' ||
+        state.contentFilteringToggleDisplay
+      "
+      :togglable="!contentWarningDisabled"
+      @click.prevent.stop="onActivateContentFilteringToggle"
     />
 
-    <!-- プロフィールラベル -->
-    <div
-      v-if="(contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)) && (user.labels?.length ?? 0) > 0"
-      class="textlabel--alert"
-    >
-      <div class="textlabel__text">
-        <SVGIcon name="contentFiltering" />{{ $t("profileLabel") }}:
-      </div>
-      <div
-        v-for="label of user.labels"
-        :key="label.val"
-        class="textlabel__item"
-      >{{ $t(label.val) }}</div>
-    </div>
-
-    <template v-if="contentWarningDisabled || (!contentWarningDisabled && state.contentWarningDisplay)">
+    <template v-if="
+      contentWarningDisabled || (
+        !contentWarningDisabled && (
+          state.contentWarningVisibility === 'show' ||
+          state.contentFilteringToggleDisplay
+        )
+      )
+    ">
       <AvatarLink
         :did="user.did"
         :image="user.avatar"
-        :labels="user.labels"
       />
-      <div class="display-name">{{ user.displayName }}</div>
+      <div class="display-name">
+        <!-- アカウントラベルアイコン -->
+        <SVGIcon
+          v-if="(user.labels?.length ?? 0) > 0"
+          name="contentFiltering"
+          class="account-label-icon"
+        />
+
+        <span>{{ user.displayName }}</span>
+      </div>
       <AuthorHandle :handle="user.handle" />
       <div class="description">{{ user.description || "&#160;" }}</div>
 
@@ -145,25 +138,15 @@ function hideWarningContent () {
   grid-template-rows: auto auto auto auto 1fr;
   grid-template-areas:
     "c c c c"
-    "o o o o"
     "a n h m"
     "a d d m"
     "b b b b";
   align-items: center;
-  &[data-content-warning-disabled="false"][data-content-warning-visibility="hide"],
-  &[data-content-warning-disabled="false"][data-content-warning-visibility="always-hide"] {
-    pointer-events: none;
-  }
 }
 
-.content-warning {
+.content-filtering-toggle {
   grid-area: c;
-  margin-bottom: 0.5em;
-}
-
-.textlabel--alert {
-  grid-area: o;
-  margin-bottom: 0.5em;
+  margin: 0.5em 0;
 }
 
 .avatar-link {
@@ -174,11 +157,23 @@ function hideWarningContent () {
 .display-name {
   grid-area: n;
   color: var(--fg-color-075);
+  display: flex;
+  align-items: center;
+  grid-gap: 0.5em;
   font-size: 0.875em;
-  font-weight: bold;
   line-height: 1.25;
   overflow: hidden;
-  white-space: nowrap;
+
+  .account-label-icon {
+    fill: rgb(var(--notice-color));
+  }
+
+  & > span {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .author-handle {

@@ -12,6 +12,20 @@ export default async function (
     description: params.description,
   }
 
+  // アカウントラベル
+  if (params.labels.length > 0)
+    profileSchema.labels = {
+      $type: "com.atproto.label.defs#selfLabels",
+      values: params.labels.map((label: string) => {
+        return {
+          src: this.data.did,
+          uri: `at://${this.data.did}/app.bsky.actor.profile/self`,
+          val: label,
+          cts: new Date().toISOString(),
+        }
+      }),
+    }
+
   // 画像処理
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all([
     params.avatar != null && params.avatar[0] != null

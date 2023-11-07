@@ -1,9 +1,20 @@
 [
   {
     "name": "officialApp",
-    "generator": "https://bsky.app/profile/{uri}",
-    "post": "https://bsky.app/profile/{handle}/post/{rkey}",
+    "generator": "https://bsky.app/profile/{uri}"
+  },
+  {
+    "name": "officialAppPost",
+    "post": "https://bsky.app/profile/{handle}/post/{rkey}"
+  },
+  {
+    "name": "officialAppProfile",
+    "post": "https://bsky.app/profile/{handle}",
     "profile": "https://bsky.app/profile/{handle}"
+  },
+  {
+    "post": "separator",
+    "profile": "separator"
   },
   {
     "name": "tokimekiApp",

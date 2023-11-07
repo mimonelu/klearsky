@@ -854,7 +854,6 @@ function broadcastListener (event: MessageEvent) {
     <SelectLabelsPopup
       v-if="state.selectLabelsPopupDisplay"
       :state="state.selectLabelsPopupState"
-      property="labels"
       @close="state.closeSelectLabelsPopup"
       @change=""
     />

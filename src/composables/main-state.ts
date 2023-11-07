@@ -7,7 +7,7 @@ import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
-import LABELS from "@/consts/labels.json"
+import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
 import LANGUAGES from "@/consts/languages.json"
 
 const state = reactive<MainState>({
@@ -83,6 +83,7 @@ const state = reactive<MainState>({
   fetchCurrentAuthorCustomFeeds,
   fetchAuthorReposts,
   fetchAuthorLikes,
+  filterLabels,
   getContentWarningVisibility,
 
   fetchPreferences,
@@ -386,34 +387,65 @@ async function fetchPreferences (): Promise<boolean> {
 
 // ラベル対応
 
-function getContentWarningVisibility (
-  authorLabels?: Array<TTLabel>,
-  postLabels?: Array<TTLabel>,
-): TTContentVisibility {
-  const authorPreferences = state.getConcernedPreferences(authorLabels)
-  const postPreferences = state.getConcernedPreferences(postLabels)
-  for (const preference of authorPreferences) {
-    if (preference.visibility === "always-hide") return "always-hide"
-  }
-  for (const preference of postPreferences) {
-    if (preference.visibility === "always-hide") return "always-hide"
-  }
-  for (const preference of authorPreferences) {
+function filterLabels (
+  visibilities?: Array<TTContentVisibility>,
+  warns?: Array<TTLabelOnWarn>,
+  labels?: Array<TTLabel>
+): Array<TTLabel> {
+  const results = labels?.filter((label: TTLabel) => {
+    const labelBehavior = LABEL_BEHAVIORS[label.val]
+
+    // configurable ではないビルトインラベルの処理
+    if (labelBehavior?.configurable === false &&
+      (
+        warns == null ||
+        warns.indexOf("alert") === - 1
+      )
+    ) {
+      const specifiedHide = visibilities?.indexOf("hide") !== - 1
+      if (label.val === "!hide" && specifiedHide) return true
+
+      const specifiedWarn = visibilities?.indexOf("warn") !== - 1
+      if (label.val === "!warn" && specifiedWarn) return true
+
+      if (labelBehavior?.group === "legal" &&
+        (specifiedHide || specifiedWarn)
+      ) return true
+    }
+
+    return state.currentPreferences.some((preference: TTPreference) => {
+      return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
+        (
+          labelBehavior?.oldGroup === "" ||
+          preference.label === labelBehavior?.oldGroup
+        ) &&
+        (
+          labelBehavior.configurable && (
+            visibilities == null ||
+            visibilities.indexOf(preference.visibility as TTContentVisibility) !== - 1
+          )
+        ) &&
+        (
+          warns == null ||
+          warns.indexOf(labelBehavior.warn) !== - 1
+        )
+    })
+  }) ?? []
+
+  // 重複削除
+  return results.filter((label: TTLabel, index: number) => {
+    return results?.findIndex((target: TTLabel) => {
+      return target.val === label.val
+    }) === index
+  })
+}
+
+function getContentWarningVisibility (labels?: Array<TTLabel>): TTContentVisibility {
+  const preferences = state.getConcernedPreferences(labels)
+  for (const preference of preferences) {
     if (preference.visibility === "hide") return "hide"
   }
-  for (const preference of postPreferences) {
-    if (preference.visibility === "hide") return "hide"
-  }
-  for (const preference of authorPreferences) {
-    if (preference.visibility === "always-warn") return "always-warn"
-  }
-  for (const preference of postPreferences) {
-    if (preference.visibility === "always-warn") return "always-warn"
-  }
-  for (const preference of authorPreferences) {
-    if (preference.visibility === "warn") return "warn"
-  }
-  for (const preference of postPreferences) {
+  for (const preference of preferences) {
     if (preference.visibility === "warn") return "warn"
   }
   return "show"
@@ -422,39 +454,29 @@ function getContentWarningVisibility (
 // label に該当する preference を取得する
 function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> {
   if (labels == null) return []
-
-  const concernedPreferences = state.currentPreferences.filter((preference: TTPreference) => {
-    if (preference.$type !== "app.bsky.actor.defs#contentLabelPref" ||
-        preference.label == null ||
-        preference.visibility === "show") return false
-    const labelGroup = (LABELS.DEFAULTS as any)[preference.label as string]
-    if (labelGroup == null) return false
-    return labels.some((label: TTLabel) => {
-      return labelGroup.includes(label.val)
+  const concernedPreferences = labels
+    .map((label: TTLabel): TTPreference => {
+      const val = Object.keys(LABEL_BEHAVIORS).find((k: string) => k === label.val)
+      if (val == null) return makeCustomLabelPreference(label.val)
+      return state.currentPreferences.find((preference: TTPreference) => {
+        return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
+          preference.label === LABEL_BEHAVIORS[val].oldGroup &&
+          preference.visibility !== "show"
+      }) ?? makeCustomLabelPreference(label.val)
     })
-  })
-
-  if (labels.some((label: TTLabel) => {
-    return LABELS.ALWAYS_HIDE.includes(label.val)
-  })) {
-    concernedPreferences.push({
-      $type: "app.bsky.actor.defs#contentLabelPref",
-      label: "always-hide",
-      visibility: "always-hide",
-    })
-  }
-
-  if (labels.some((label: TTLabel) => {
-    return LABELS.ALWAYS_WARN.includes(label.val)
-  })) {
-    concernedPreferences.push({
-      $type: "app.bsky.actor.defs#contentLabelPref",
-      label: "always-warn",
-      visibility: "always-warn",
-    })
-  }
-
   return concernedPreferences
+}
+
+function makeCustomLabelPreference (label: string): TTPreference {
+  return {
+    $type: "app.bsky.actor.defs#contentLabelPref",
+    label,
+    visibility: label === "!hide"
+      ? "hide"
+      : LABEL_BEHAVIORS[label]?.configurable === false
+        ? "warn"
+        : "show",
+  }
 }
 
 async function fetchTimeline (direction: "old" | "new", middleCursor?: string) {
@@ -708,7 +730,7 @@ function saveSettings () {
   if (state.settings[did].imageAspectRatio == null)
     state.settings[did].imageAspectRatio = "3 / 2"
   if (state.settings[did].imageOption == null)
-    state.settings[did].imageOption = [0]
+    state.settings[did].imageOption = []
   if (state.settings[did].linkcardEmbeddedControl == null)
     state.settings[did].linkcardEmbeddedControl = [
       "giphy",
@@ -933,7 +955,7 @@ function closePostLanguagesPopup () {
 
 // ラベル選択ポップアップの開閉
 
-function openSelectLabelsPopup (params: any) {
+function openSelectLabelsPopup (type: "post" | "account", params: any) {
   state.selectLabelsPopupDisplay = true
   state.selectLabelsPopupState = params
 }

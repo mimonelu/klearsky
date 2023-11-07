@@ -1,22 +1,30 @@
 {
   "LABEL_VISIBILITY": [
-    { "label": "seal", "value": "hide" },
+    { "label": "fold", "value": "hide" },
     { "label": "warn", "value": "warn" },
     { "label": "show", "value": "show" }
   ],
   "ACCOUNT_REPORT_REASON": [
+    { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" },
     { "label": "reportReasonMisleading", "value": "com.atproto.moderation.defs#reasonMisleading" },
-    { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" }
+    { "label": "reportReasonViolation", "value": "com.atproto.moderation.defs#reasonViolation" },
+    { "label": "reportReasonSexual", "value": "com.atproto.moderation.defs#reasonSexual" },
+    { "label": "reportReasonRude", "value": "com.atproto.moderation.defs#reasonRude" },
+    { "label": "reportReasonOther", "value": "com.atproto.moderation.defs#reasonOther" }
   ],
   "POST_REPORT_REASON": [
     { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" },
-    { "label": "reportReasonSexual", "value": "com.atproto.moderation.defs#reasonSexual" },
     { "label": "reportReasonViolation", "value": "com.atproto.moderation.defs#reasonViolation" },
+    { "label": "reportReasonMisleading", "value": "com.atproto.moderation.defs#reasonMisleading" },
+    { "label": "reportReasonSexual", "value": "com.atproto.moderation.defs#reasonSexual" },
     { "label": "reportReasonRude", "value": "com.atproto.moderation.defs#reasonRude" },
     { "label": "reportReasonOther", "value": "com.atproto.moderation.defs#reasonOther" }
   ],
   "FEED_REPORT_REASON": [
+    { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" },
+    { "label": "reportReasonMisleading", "value": "com.atproto.moderation.defs#reasonMisleading" },
     { "label": "reportReasonViolation", "value": "com.atproto.moderation.defs#reasonViolation" },
+    { "label": "reportReasonSexual", "value": "com.atproto.moderation.defs#reasonSexual" },
     { "label": "reportReasonRude", "value": "com.atproto.moderation.defs#reasonRude" },
     { "label": "reportReasonOther", "value": "com.atproto.moderation.defs#reasonOther" }
   ]
