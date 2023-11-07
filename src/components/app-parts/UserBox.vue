@@ -75,6 +75,7 @@ function onActivateContentFilteringToggle () {
         state.contentWarningVisibility === 'show' ||
         state.contentFilteringToggleDisplay
       "
+      :togglable="!contentWarningDisabled"
       @click.prevent.stop="onActivateContentFilteringToggle"
     />
 

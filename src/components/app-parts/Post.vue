@@ -696,6 +696,7 @@ function onActivateHashTag (text: string) {
           type="blur"
           :labels="state.blurLabels"
           :display="state.blurredContentClicked"
+          :togglable="true"
           @click.prevent.stop="onActivatePostContentToggle"
         />
 
@@ -740,6 +741,7 @@ function onActivateHashTag (text: string) {
             type="blur-media"
             :labels="state.blurMediaLabels"
             :display="state.blurredMediaClicked"
+            :togglable="true"
             @click.prevent.stop="onActivatePostMediaToggle"
           />
 

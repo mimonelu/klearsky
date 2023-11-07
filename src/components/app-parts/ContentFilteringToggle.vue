@@ -6,6 +6,7 @@ const props = defineProps<{
   labels?: Array<TTLabel>
   type?: TTLabelOnWarn
   display: boolean
+  togglable: boolean
 }>()
 
 const state = reactive<{
@@ -30,11 +31,11 @@ const state = reactive<{
       class="content-filtering-toggle__label"
     >{{ $t(label) }}</div>
     <div
-      v-if="display"
+      v-if="display && togglable"
       class="content-filtering-toggle__state-label"
     >{{ $t("hide") }}</div>
     <div
-      v-else="display"
+      v-if="!display && togglable"
       class="content-filtering-toggle__state-label"
     >{{ $t("show") }}</div>
   </button>

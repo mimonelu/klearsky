@@ -138,6 +138,7 @@ function onActivateAccountMaskToggle () {
             v-if="state.contentFilteringToggleDisplay"
             :labels="state.contentFilteringLabels"
             :display="!state.enabledContentMask"
+            :togglable="true"
             @click.prevent.stop="onActivateAccountMaskToggle"
           />
 

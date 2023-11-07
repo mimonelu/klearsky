@@ -73,7 +73,7 @@ function scrolledToBottom () {
           :key="user.did"
           class="user"
           :user="user"
-          :contentWarningDisabled="true"
+          :contentWarningDisabled="false"
           @link="close"
         />
       </div>
