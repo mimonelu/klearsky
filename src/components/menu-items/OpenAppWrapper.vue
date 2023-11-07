@@ -73,7 +73,11 @@ function openOtherApp (app: any) {
     >
       <template v-for="app of OTHER_APPS">
         <template v-if="app[type] != null">
-          <button @click.prevent.stop="openOtherApp(app)">
+          <hr v-if="app[type] === 'separator'" />
+          <button
+            v-else
+            @click.prevent.stop="openOtherApp(app)"
+          >
             <SVGIcon name="openInApp" />
             <span>{{ $t(app.name) }}</span>
           </button>
