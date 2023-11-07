@@ -653,19 +653,20 @@ function onActivateHashTag (text: string) {
             @click.stop="$emit('click')"
           />
 
-          <!-- アカウントラベルアイコン -->
-          <SVGIcon
-            v-if="(post.author?.labels?.length ?? 0) > 0"
-            name="contentFiltering"
-            class="account-label-icon"
-          />
-
           <!-- 表示名 -->
-          <div class="display-name">{{
+          <div class="display-name">
+            <!-- アカウントラベルアイコン -->
+            <SVGIcon
+              v-if="(post.author?.labels?.length ?? 0) > 0"
+              name="contentFiltering"
+              class="account-label-icon"
+            />
+
+            <span>{{
             !mainState.currentSetting.postAnonymization
               ? post.author?.displayName ?? "　"
-              : $t("anonymous")
-          }}</div>
+              : $t("anonymous")}}</span>
+          </div>
 
           <!-- ハンドル -->
           <AuthorHandle :handle="post.author?.handle" />
@@ -1312,14 +1313,14 @@ function onActivateHashTag (text: string) {
   grid-area: h;
   display: grid;
   align-items: center;
-  grid-template-columns: auto auto 1fr min-content;
+  grid-template-columns: auto 1fr min-content;
   grid-gap: 0.5em;
   overflow: hidden;
 }
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
   .body__right__header {
-    grid-template-columns: auto auto auto 1fr min-content;
+    grid-template-columns: auto auto 1fr min-content;
   }
 }
 
@@ -1327,19 +1328,26 @@ function onActivateHashTag (text: string) {
   font-size: 1.5em;
 }
 
-.account-label-icon {
-  fill: rgb(var(--notice-color));
-  font-size: 0.875em;
-}
-
 .display-name {
-  color: var(--fg-color-075);
-  font-size: 0.875em;
-  font-weight: bold;
-  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  grid-gap: 0.5em;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+  .account-label-icon {
+    fill: rgb(var(--notice-color));
+    font-size: 0.875em;
+  }
+
+  & > span {
+    color: var(--fg-color-075);
+    font-size: 0.875em;
+    font-weight: bold;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .indexed-at {
