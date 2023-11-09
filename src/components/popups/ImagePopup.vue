@@ -17,11 +17,11 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  isBlob: boolean;
-  loaded: boolean;
-  mode: boolean;
-  x: number;
-  y: number;
+  isBlob: boolean
+  loaded: boolean
+  mode: boolean
+  x: number
+  y: number
 }>({
   isBlob: props.images[props.index].largeUri.startsWith("blob:"),
   loaded: false,
@@ -32,10 +32,14 @@ const state = reactive<{
 
 onBeforeMount(() => {
   hotkeys("esc", close)
+  hotkeys("left", () => { showImage(- 1) })
+  hotkeys("right", () => { showImage(1) })
 })
 
 onBeforeUnmount(() => {
   hotkeys.unbind("esc")
+  hotkeys.unbind("left")
+  hotkeys.unbind("right")
 })
 
 function startDrag (event: MouseEvent | TouchEvent) {
@@ -80,6 +84,7 @@ function onLoadLargeImage () {
 }
 
 function showImage (indexAdding: number) {
+  if (props.images[props.index + indexAdding] == null) return
   mainState.imagePopupProps.index = props.index + indexAdding
 }
 
