@@ -808,6 +808,7 @@ function broadcastListener (event: MessageEvent) {
     <!-- イメージポップアップ -->
     <ImagePopup
       v-if="state.imagePopupProps.display"
+      :did="state.imagePopupProps.did"
       :images="state.imagePopupProps.images"
       :index="state.imagePopupProps.index"
       @close="state.imagePopupProps.display = false"

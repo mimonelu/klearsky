@@ -25,6 +25,7 @@ interface TIAtpWrapper {
   fetchAuthorLikes (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, repo: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchAuthorReposts (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, repo: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchBlob (this: TIAtpWrapper, cid: string, did?: string): Promise<null | Uint8Array>
+  fetchBlobUrl (this: TIAtpWrapper, did: string, image: BlobRef): Promise<undefined | string>
   fetchBlockingUsers (this: TIAtpWrapper, users: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
   fetchCustomFeeds (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, feed: string, limit?: number, cursor?: string, middle?: boolean): Promise<undefined | false | string>
   fetchDid (this: TIAtpWrapper, handle: string): Promise<Error | string>

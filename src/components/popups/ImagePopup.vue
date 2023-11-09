@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onBeforeMount, onBeforeUnmount, reactive } from "vue"
+import { computed, inject, onBeforeMount, onBeforeUnmount, reactive, type ComputedRef } from "vue"
 import hotkeys from "hotkeys-js"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -7,24 +7,24 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  images: Array<{
-    largeUri: string
-    smallUri: string
-  }>
+  did: string
+  images: Array<TTImagePopupPropsImages>
   index: number
 }>()
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  isBlob: boolean
-  loaded: boolean
+  isBlob: ComputedRef<boolean>
+  larges: Array<undefined | string>
   mode: boolean
   x: number
   y: number
 }>({
-  isBlob: props.images[props.index].largeUri.startsWith("blob:"),
-  loaded: false,
+  isBlob: computed((): boolean => {
+    return props.images[props.index].largeUri.startsWith("blob:")
+  }),
+  larges: [],
   mode: false,
   x: 0.5,
   y: 0.5,
@@ -34,6 +34,14 @@ onBeforeMount(() => {
   hotkeys("esc", close)
   hotkeys("left", () => { showImage(- 1) })
   hotkeys("right", () => { showImage(1) })
+
+  props.images.forEach(async (image: TTImagePopupPropsImages, index: number) => {
+    state.larges[index] = undefined
+    if (image.blob == null) return
+    const url: undefined | string = await mainState.atp.fetchBlobUrl(props.did, image.blob)
+    if (url == null) return
+    state.larges[index] = url
+  })
 })
 
 onBeforeUnmount(() => {
@@ -79,10 +87,6 @@ function endDrag () {
   window.document.body.style.overflowY = "scroll"
 }
 
-function onLoadLargeImage () {
-  state.loaded = true
-}
-
 function showImage (indexAdding: number) {
   if (props.images[props.index + indexAdding] == null) return
   mainState.imagePopupProps.index = props.index + indexAdding
@@ -90,7 +94,7 @@ function showImage (indexAdding: number) {
 
 function setBackgroundImage () {
   Util.blurElement()
-  if (!state.loaded) return
+  if (state.isBlob) return
   if (mainState.currentSetting == null) return
   mainState.currentSetting.backgroundImage = props.images[props.index].largeUri
   mainState.saveSettings()
@@ -109,14 +113,13 @@ function close () {
 <template>
   <div
     class="image-popup"
-    :data-loaded="state.loaded"
     :data-mode="state.mode"
   >
     <!-- サムネイル画像 -->
     <div
       class="image"
       :style="`
-        background-image: url(${state.loaded ? '' : images[index].smallUri});
+        background-image: url(${state.larges[index] == null ? images[index].smallUri : ''});
         background-position: ${state.x * 100}% ${state.y * 100}%;
       `"
       @mousedown="startDrag"
@@ -130,19 +133,11 @@ function close () {
       <div
         class="image"
         :style="`
-          background-image: url(${images[index].largeUri});
+          background-image: url(${state.larges[index] ?? images[index].largeUri});
           background-position: ${state.x * 100}% ${state.y * 100}%;
         `"
       />
     </div>
-
-    <!-- ラージ画像の読込判断用 img 要素 -->
-    <img
-      class="large-image-loader"
-      :src="images[index].largeUri"
-      alt=""
-      @load="onLoadLargeImage"
-    >
 
     <!-- 前の画像ボタン -->
     <button
@@ -173,9 +168,8 @@ function close () {
 
     <!-- 画像を別タブで開くボタン -->
     <a
-      v-if="!state.isBlob"
       class="floating-button open-image-button"
-      :href="images[index].largeUri"
+      :href="state.larges[index] ?? images[index].largeUri"
       rel="noreferrer"
       target="_blank"
       @click="blurElement"
@@ -296,10 +290,8 @@ function close () {
 // 壁紙設定ボタン / 画像を別タブで開くボタン
 .background-image-button,
 .open-image-button {
-  [data-loaded="false"] & {
-    & > .svg-icon {
-      fill: rgb(255, 255, 255, 0.25);
-    }
+  & > .svg-icon {
+    fill: rgb(255, 255, 255, 0.25);
   }
 }
 

@@ -59,29 +59,15 @@ onMounted(async () => {
   setBlobToSrc(props.image.image as unknown as BlobRef)
 })
 
-// Blob 画像のみキャッシュ
-async function fetchBlob (link: string): Promise<null | Uint8Array> {
-  let data: null | Uint8Array = Util.cache.get(link)
-  if (data != null) return data
-  data = await mainState.atp.fetchBlob(link, props.did)
-  state.errored = data == null
-  Util.cache.set(link, data)
-  return data
-}
-
 async function setBlobToSrc (image: BlobRef) {
-  const ref = (image.ref as any).$link != null
-    ? (image.ref as any).$link
-    : image.ref.toString()
-  const data: null | Uint8Array = await fetchBlob(ref)
-  if (data == null) {
+  const url: undefined | string = await mainState.atp.fetchBlobUrl(props.did as string, image)
+  state.errored = url == null
+  if (url == null) {
     state.src = "/img/void.png"
     state.loaded = true
     return
   }
-  state.src = URL.createObjectURL(new Blob([data], {
-    type: image.mimeType,
-  }))
+  state.src = url
   state.loaded = true
 }
 

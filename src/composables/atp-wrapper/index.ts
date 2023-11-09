@@ -17,6 +17,7 @@ import fetchAuthorFeed from "@/composables/atp-wrapper/fetch/fetch-author-feed"
 import fetchAuthorLikes from "@/composables/atp-wrapper/fetch/fetch-author-likes"
 import fetchAuthorReposts from "@/composables/atp-wrapper/fetch/fetch-author-reposts"
 import fetchBlob from "@/composables/atp-wrapper/fetch/fetch-blob"
+import fetchBlobUrl from "@/composables/atp-wrapper/fetch/fetch-blob-url"
 import fetchBlockingUsers from "@/composables/atp-wrapper/fetch/fetch-blocking-users"
 import fetchCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-custom-feeds"
 import fetchDid from "@/composables/atp-wrapper/fetch/fetch-did"
@@ -107,6 +108,7 @@ prototype.fetchAuthorFeed = fetchAuthorFeed
 prototype.fetchAuthorLikes = fetchAuthorLikes
 prototype.fetchAuthorReposts = fetchAuthorReposts
 prototype.fetchBlob = fetchBlob
+prototype.fetchBlobUrl = fetchBlobUrl
 prototype.fetchBlockingUsers = fetchBlockingUsers
 prototype.fetchCustomFeeds = fetchCustomFeeds
 prototype.fetchDid = fetchDid
