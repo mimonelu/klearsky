@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onBeforeMount, onBeforeUnmount, reactive, type ComputedRef } from "vue"
 import hotkeys from "hotkeys-js"
+import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -16,7 +17,7 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   isBlob: ComputedRef<boolean>
-  larges: Array<undefined | string>
+  blobs: Array<undefined | string>
   mode: boolean
   x: number
   y: number
@@ -24,7 +25,7 @@ const state = reactive<{
   isBlob: computed((): boolean => {
     return props.images[props.index].largeUri.startsWith("blob:")
   }),
-  larges: [],
+  blobs: [],
   mode: false,
   x: 0.5,
   y: 0.5,
@@ -36,11 +37,11 @@ onBeforeMount(() => {
   hotkeys("right", () => { showImage(1) })
 
   props.images.forEach(async (image: TTImagePopupPropsImages, index: number) => {
-    state.larges[index] = undefined
+    state.blobs[index] = undefined
     if (image.blob == null) return
     const url: undefined | string = await mainState.atp.fetchBlobUrl(props.did, image.blob)
     if (url == null) return
-    state.larges[index] = url
+    state.blobs[index] = url
   })
 })
 
@@ -119,7 +120,11 @@ function close () {
     <div
       class="image"
       :style="`
-        background-image: url(${state.larges[index] == null ? images[index].smallUri : ''});
+        background-image: url(${
+          images[index].blob != null
+            ? ''
+            : images[index].smallUri
+        });
         background-position: ${state.x * 100}% ${state.y * 100}%;
       `"
       @mousedown="startDrag"
@@ -133,10 +138,16 @@ function close () {
       <div
         class="image"
         :style="`
-          background-image: url(${state.larges[index] ?? images[index].largeUri});
+          background-image: url(${
+            images[index].blob != null
+              ? state.blobs[index] ?? ''
+              : images[index].largeUri
+          });
           background-position: ${state.x * 100}% ${state.y * 100}%;
         `"
       />
+
+      <Loader v-if="images[index].blob != null && state.blobs[index] == null" />
     </div>
 
     <!-- 前の画像ボタン -->
@@ -169,7 +180,7 @@ function close () {
     <!-- 画像を別タブで開くボタン -->
     <a
       class="floating-button open-image-button"
-      :href="state.larges[index] ?? images[index].largeUri"
+      :href="state.blobs[index] ?? images[index].largeUri"
       rel="noreferrer"
       target="_blank"
       @click="blurElement"
@@ -225,6 +236,10 @@ function close () {
 // ラージ画像の読込判断用 img 要素
 .large-image-loader {
   display: contents;
+}
+
+.loader {
+  pointer-events: none;
 }
 
 // 壁紙設定ボタン / 画像を別タブで開くボタン / 閉じるボタン
