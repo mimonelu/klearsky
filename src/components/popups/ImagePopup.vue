@@ -122,7 +122,9 @@ function close () {
       :style="`
         background-image: url(${
           images[index].blob != null
-            ? ''
+            ? state.blobs[index] != null
+              ? ''
+              : images[index].smallUri
             : images[index].smallUri
         });
         background-position: ${state.x * 100}% ${state.y * 100}%;
