@@ -40,7 +40,10 @@ onBeforeMount(() => {
     state.blobs[index] = undefined
     if (image.blob == null) return
     const url: undefined | string = await mainState.atp.fetchBlobUrl(props.did, image.blob)
-    if (url == null) return
+    if (url == null) {
+      state.blobs[index] = props.images[index]?.largeUri
+      return
+    }
     state.blobs[index] = url
   })
 })
