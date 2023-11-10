@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive } from "vue"
+import type { BlobRef } from "@atproto/api"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -26,6 +27,12 @@ const state = reactive<{
   errored: false,
 })
 
+const BLOB_MIME_TYPES = [
+  "image/apng",
+  "image/gif",
+  "image/webp"
+]
+
 onMounted(async () => {
   if (props.image == null) return
   if (typeof props.image === "string") {
@@ -33,56 +40,35 @@ onMounted(async () => {
     state.loaded = true
     return
   }
+
+  // アニメーション画像向け対応
+  // ※指定された MIME の画像は blob を表示する
+  if (props.image.image != null &&
+      BLOB_MIME_TYPES.includes(props.image.image.mimeType)) {
+    setBlobToSrc(props.image.image as unknown as BlobRef)
+    return
+  }
+
+  // サムネイル URL　があれば表示する
   if (props.image.thumb != null) {
     state.src = props.image.thumb
     state.loaded = true
     return
   }
 
-  const ref = props.image.image?.ref
-  if (ref == null) {
-    state.src = "/img/void.png"
-    state.loaded = true
-    return
-  }
-
-  const link = ref.$link
-
-  if (link == null) {
-    const cid = ref.toString()
-    const data: null | Uint8Array = await fetchBlob(cid)
-    if (data == null) {
-      state.src = "/img/void.png"
-      state.loaded = true
-      return
-    }
-    state.src = URL.createObjectURL(new Blob([data], {
-      type: props.image.image?.mimeType ?? "image/jpeg",
-    }))
-    state.loaded = true
-    return
-  }
-
-  const data: null | Uint8Array = await fetchBlob(link)
-  if (data == null) {
-    state.src = "/img/void.png"
-    state.loaded = true
-    return
-  }
-  state.src = URL.createObjectURL(new Blob([data], {
-    type: props.image.image?.mimeType ?? "image/jpeg",
-  }))
-  state.loaded = true
+  setBlobToSrc(props.image.image as unknown as BlobRef)
 })
 
-// Blob 画像のみキャッシュ
-async function fetchBlob (link: string): Promise<null | Uint8Array> {
-  let data: null | Uint8Array = Util.cache.get(link)
-  if (data != null) return data
-  data = await mainState.atp.fetchBlob(link, props.did)
-  state.errored = data == null
-  Util.cache.set(link, data)
-  return data
+async function setBlobToSrc (image: BlobRef) {
+  const url: undefined | string = await mainState.atp.fetchBlobUrl(props.did as string, image)
+  state.errored = url == null
+  if (url == null) {
+    state.src = "/img/void.png"
+    state.loaded = true
+    return
+  }
+  state.src = url
+  state.loaded = true
 }
 
 function onActivateAlt (alt: string) {

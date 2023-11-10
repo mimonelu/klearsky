@@ -7,8 +7,8 @@ import Util from "@/composables/util"
 export default async function (
   this: TIAtpWrapper,
   params: TTCreatePostParams
-): Promise<boolean> {
-  if (this.agent == null) return false
+): Promise<undefined | Error> {
+  if (this.agent == null) return Error("No Agent")
 
   const record: AppBskyFeedPost.Record = {
     $type: "app.bsky.feed.post",
@@ -69,7 +69,7 @@ export default async function (
     }
     if (generatorUri != null) {
       const generator: Error | TTFeedGenerator = await this.fetchFeedGenerator(generatorUri)
-      if (generator instanceof Error) return false
+      if (generator instanceof Error) return Error("No Generator")
       feedCard = {
         $type: "app.bsky.embed.record",
         record: {
@@ -86,7 +86,7 @@ export default async function (
         params.url,
         params.urlHasImage?.includes(true) ?? false
       )
-      if (external == null) return false
+      if (external == null) return Error("Failed to parse OGP")
     }
   }
 
@@ -102,6 +102,9 @@ export default async function (
       })
     })
   )
+  if (fileBlobRefs.some((fileBlobRef: null | BlobRef) => fileBlobRef == null)) {
+    return Error("Failed image compression")
+  }
   if (fileBlobRefs.length > 0) {
     const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileBlobRefs
       .map(
@@ -177,5 +180,4 @@ export default async function (
     this.agent as BskyAgent
   ).post(record)
   console.log("[klearsky/post]", response)
-  return true
 }

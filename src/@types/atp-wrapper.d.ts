@@ -10,7 +10,7 @@ interface TIAtpWrapper {
   createFileBlob (this: TIAtpWrapper, params: TTCreateFileBlobParams): Promise<null | BlobRef>
   createFollow (this: TIAtpWrapper, declarationDid: string): Promise<null | string>
   createLike (this: TIAtpWrapper, uri: string, cid: string): Promise<undefined | string>
-  createPost (this: TIAtpWrapper, params: TTCreatePostParams): Promise<boolean>
+  createPost (this: TIAtpWrapper, params: TTCreatePostParams): Promise<undefined | Error>
   createReport (this: TIAtpWrapper, reasonType: string, reason: string, did?: string, cid?: string, uri?: string): Promise<boolean>
   createRepost (this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   deleteAccount (this: TIAtpWrapper, did?: string)
@@ -25,6 +25,7 @@ interface TIAtpWrapper {
   fetchAuthorLikes (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, repo: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchAuthorReposts (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, repo: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchBlob (this: TIAtpWrapper, cid: string, did?: string): Promise<null | Uint8Array>
+  fetchBlobUrl (this: TIAtpWrapper, did: string, image: BlobRef): Promise<undefined | string>
   fetchBlockingUsers (this: TIAtpWrapper, users: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
   fetchCustomFeeds (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, feed: string, limit?: number, cursor?: string, middle?: boolean): Promise<undefined | false | string>
   fetchDid (this: TIAtpWrapper, handle: string): Promise<Error | string>

@@ -122,10 +122,8 @@ type MainState = {
 
   imagePopupProps: {
     display: boolean
-    images: Array<{
-      largeUri: string
-      smallUri: string
-    }>
+    did: string
+    images: Array<TTImagePopupPropsImages>
     index: number
   }
 

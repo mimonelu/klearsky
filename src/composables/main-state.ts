@@ -39,9 +39,10 @@ const state = reactive<MainState>({
     createdAt: undefined,
   },
   imagePopupProps: {
-    display: false,
+    did: "",
     images: [],
     index: 0,
+    display: false,
   },
   errorPopupProps: {
     display: false,

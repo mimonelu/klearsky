@@ -454,10 +454,12 @@ function openImagePopup (imageIndex: number) {
   // ラージ画像のないポスト向け処理（レコードなど）
   if (state.images[imageIndex].fullsize == null) return
 
+  mainState.imagePopupProps.did = props.post.author.did
   mainState.imagePopupProps.images = state.images.map((image: TTImage) => {
     return {
       smallUri: image.thumb ?? "/img/void.png",
-      largeUri: image.fullsize ?? "/img/void.png"
+      largeUri: image.fullsize ?? "/img/void.png",
+      blob: image.image,
     }
   })
   mainState.imagePopupProps.index = imageIndex

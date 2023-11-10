@@ -160,7 +160,8 @@ async function submitCallback () {
       // Lightning
       lightning: mainState.currentSetting.lightning,
     })
-    if (result) emit("closeSnedPostPopup", true)
+    if (result == null) emit("closeSnedPostPopup", true)
+    else mainState.openErrorPopup(result, "SendPostPopup/submitCallback")
   } finally {
     state.popupLoaderDisplay = false
   }

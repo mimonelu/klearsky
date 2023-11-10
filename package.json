@@ -1,6 +1,6 @@
 {
   "name": "klearsky",
-  "version": "0.9.52",
+  "version": "0.9.53",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@atproto/api": "0.6.20",
+    "@atproto/api": "0.6.23",
     "@ipld/car": "^5.1.1",
     "@vueuse/core": "^10.2.0",
     "array-move": "^4.0.0",

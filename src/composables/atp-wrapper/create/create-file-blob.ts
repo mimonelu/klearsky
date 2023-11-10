@@ -20,22 +20,14 @@ function convertBlobTo(
   })
 }
 
-async function compressFileToBlob(params: TTCreateFileBlobParams): Promise<Blob> {
-  // SEE: https://github.com/Donaldcwl/browser-image-compression#main-function
-  return await imageCompression(params.file, {
-    fileType: params.mimeType,
-    maxIteration: 20, // Default: 10
-    maxSizeMB: params.maxSize,
-    maxWidthOrHeight: Math.max(params.maxWidth, params.maxHeight),
-    useWebWorker: true,
-  })
-}
-
-const convertMap: { [mimeType: string]: string } = {
+const convertMapForCompress: { [mimeType: string]: string } = {
+  "image/apng": "image/jpeg",
+  "image/avif": "image/jpeg",
   "image/bmp": "image/jpeg",
   "image/gif": "image/jpeg",
   "image/jpeg": "image/jpeg",
   "image/png": "image/jpeg",
+  "image/svg+xml": "image/jpeg",
   "image/webp": "image/jpeg",
 }
 
@@ -50,14 +42,33 @@ export default async function (
 ): Promise<null | BlobRef> {
   if (this.agent == null) return null
   if (params.file == null) return null
-  const imageMimeType = convertMap[params.file.type]
-  let mimeType = ""
 
-  let blob: undefined | Blob = undefined
-  if (imageMimeType != null) {
+  let mimeType = ""
+  let blob: undefined | Error | Blob
+  const fileSizeMb = params.file.size / 1024 / 1024
+  const imageMimeType = convertMapForCompress[params.file.type]
+
+  // ファイルサイズ上限以上かつ変換可能なファイルの場合は変換する
+  if (fileSizeMb >= params.maxSize && imageMimeType != null) {
     mimeType = imageMimeType
-    blob = await compressFileToBlob({ ...params, mimeType })
+
+    // SEE: https://github.com/Donaldcwl/browser-image-compression#main-function
+    try {
+      blob = await imageCompression(params.file, {
+        fileType: mimeType,
+        maxIteration: 20, // Default: 10
+        maxSizeMB: params.maxSize,
+        maxWidthOrHeight: Math.max(params.maxWidth, params.maxHeight),
+        useWebWorker: true,
+      })
+    } catch (error) {
+      console.error("[klearsky/imageCompression]", error)
+      blob = Error("Failed image compression")
+    }
+
     if (blob instanceof Error) return null
+
+  // ファイルサイズ上限未満または変換不可能なファイルの場合はそのまま
   } else {
     mimeType = params.file.type
     blob = params.file
@@ -70,7 +81,7 @@ export default async function (
     encoding: mimeType,
   }
   const response: ComAtprotoRepoUploadBlob.Response =
-    await (this.agent as BskyAgent).com.atproto.repo.uploadBlob(input, options)
+    await (this.agent as BskyAgent).uploadBlob(input, options)
   console.log("[klearsky/uploadBlob]", response)
   if (!response.success) return null
   return response.data.blob

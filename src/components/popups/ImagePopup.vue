@@ -1,30 +1,31 @@
 <script lang="ts" setup>
-import { inject, onBeforeMount, onBeforeUnmount, reactive } from "vue"
+import { computed, inject, onBeforeMount, onBeforeUnmount, reactive, type ComputedRef } from "vue"
 import hotkeys from "hotkeys-js"
+import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  images: Array<{
-    largeUri: string
-    smallUri: string
-  }>
+  did: string
+  images: Array<TTImagePopupPropsImages>
   index: number
 }>()
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  isBlob: boolean;
-  loaded: boolean;
-  mode: boolean;
-  x: number;
-  y: number;
+  isBlob: ComputedRef<boolean>
+  blobs: Array<undefined | string>
+  mode: boolean
+  x: number
+  y: number
 }>({
-  isBlob: props.images[props.index].largeUri.startsWith("blob:"),
-  loaded: false,
+  isBlob: computed((): boolean => {
+    return props.images[props.index].largeUri.startsWith("blob:")
+  }),
+  blobs: [],
   mode: false,
   x: 0.5,
   y: 0.5,
@@ -32,10 +33,22 @@ const state = reactive<{
 
 onBeforeMount(() => {
   hotkeys("esc", close)
+  hotkeys("left", () => { showImage(- 1) })
+  hotkeys("right", () => { showImage(1) })
+
+  props.images.forEach(async (image: TTImagePopupPropsImages, index: number) => {
+    state.blobs[index] = undefined
+    if (image.blob == null) return
+    const url: undefined | string = await mainState.atp.fetchBlobUrl(props.did, image.blob)
+    if (url == null) return
+    state.blobs[index] = url
+  })
 })
 
 onBeforeUnmount(() => {
   hotkeys.unbind("esc")
+  hotkeys.unbind("left")
+  hotkeys.unbind("right")
 })
 
 function startDrag (event: MouseEvent | TouchEvent) {
@@ -75,17 +88,14 @@ function endDrag () {
   window.document.body.style.overflowY = "scroll"
 }
 
-function onLoadLargeImage () {
-  state.loaded = true
-}
-
 function showImage (indexAdding: number) {
+  if (props.images[props.index + indexAdding] == null) return
   mainState.imagePopupProps.index = props.index + indexAdding
 }
 
 function setBackgroundImage () {
   Util.blurElement()
-  if (!state.loaded) return
+  if (state.isBlob) return
   if (mainState.currentSetting == null) return
   mainState.currentSetting.backgroundImage = props.images[props.index].largeUri
   mainState.saveSettings()
@@ -104,14 +114,19 @@ function close () {
 <template>
   <div
     class="image-popup"
-    :data-loaded="state.loaded"
     :data-mode="state.mode"
   >
     <!-- サムネイル画像 -->
     <div
       class="image"
       :style="`
-        background-image: url(${state.loaded ? '' : images[index].smallUri});
+        background-image: url(${
+          images[index].blob != null
+            ? state.blobs[index] != null
+              ? ''
+              : images[index].smallUri
+            : images[index].smallUri
+        });
         background-position: ${state.x * 100}% ${state.y * 100}%;
       `"
       @mousedown="startDrag"
@@ -125,19 +140,17 @@ function close () {
       <div
         class="image"
         :style="`
-          background-image: url(${images[index].largeUri});
+          background-image: url(${
+            images[index].blob != null
+              ? state.blobs[index] ?? ''
+              : images[index].largeUri
+          });
           background-position: ${state.x * 100}% ${state.y * 100}%;
         `"
       />
-    </div>
 
-    <!-- ラージ画像の読込判断用 img 要素 -->
-    <img
-      class="large-image-loader"
-      :src="images[index].largeUri"
-      alt=""
-      @load="onLoadLargeImage"
-    >
+      <Loader v-if="images[index].blob != null && state.blobs[index] == null" />
+    </div>
 
     <!-- 前の画像ボタン -->
     <button
@@ -168,9 +181,8 @@ function close () {
 
     <!-- 画像を別タブで開くボタン -->
     <a
-      v-if="!state.isBlob"
       class="floating-button open-image-button"
-      :href="images[index].largeUri"
+      :href="state.blobs[index] ?? images[index].largeUri"
       rel="noreferrer"
       target="_blank"
       @click="blurElement"
@@ -226,6 +238,10 @@ function close () {
 // ラージ画像の読込判断用 img 要素
 .large-image-loader {
   display: contents;
+}
+
+.loader {
+  pointer-events: none;
 }
 
 // 壁紙設定ボタン / 画像を別タブで開くボタン / 閉じるボタン
@@ -291,10 +307,8 @@ function close () {
 // 壁紙設定ボタン / 画像を別タブで開くボタン
 .background-image-button,
 .open-image-button {
-  [data-loaded="false"] & {
-    & > .svg-icon {
-      fill: rgb(255, 255, 255, 0.25);
-    }
+  & > .svg-icon {
+    fill: rgb(255, 255, 255, 0.25);
   }
 }
 
