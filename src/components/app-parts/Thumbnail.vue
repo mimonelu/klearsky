@@ -63,7 +63,7 @@ async function setBlobToSrc (image: BlobRef) {
   const url: undefined | string = await mainState.atp.fetchBlobUrl(props.did as string, image)
   state.errored = url == null
   if (url == null) {
-    state.src = "/img/void.png"
+    state.src = props.image?.thumb ?? "/img/void.png"
     state.loaded = true
     return
   }
