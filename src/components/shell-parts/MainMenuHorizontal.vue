@@ -1,10 +1,20 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  query: ComputedRef<string>
+}>({
+  query: computed((): string => {
+    return mainState.currentSearchTerm
+      ? `?text=${mainState.currentSearchTerm}`
+      : ""
+  }),
+})
 
 function openNotificationPopup () {
   Util.blurElement()
@@ -58,7 +68,7 @@ async function openSendPostPopup () {
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
-      to="/search/post"
+      :to="`/search/post${state.query}`"
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
     >
       <SVGIcon name="search" />

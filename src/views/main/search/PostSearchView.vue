@@ -1,52 +1,61 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, watch } from "vue"
+import { inject, onBeforeUnmount, onMounted, watch } from "vue"
 import { useRouter } from "vue-router"
 import Post from "@/components/app-parts/Post.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  text: string
-}>({
-  text: "",
-})
-
 const router = useRouter()
 
-watch(() => router.currentRoute.value.query.text, (value: any) => {
-  updateSearchPostTerm(value)
+const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, async (value: any) => {
+  if (value != null) mainState.currentSearchTerm = value
+  if (mainState.currentSearchTerm !== "" &&
+      mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm)
+    await fetchNewResults()
 }, { immediate: true })
 
-onMounted(() => {
+onMounted(async () => {
   const textbox = document.getElementById("post-term-textbox")
   if (textbox != null) textbox.focus()
+  if (mainState.currentSearchTerm &&
+      mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm)
+    await fetchNewResults()
+})
+
+onBeforeUnmount(() => {
+  unwatchOnQuery()
 })
 
 function updateSearchPostTerm (text: string) {
-  state.text = text
-  if (!text || mainState.currentSearchPostTerm === text) return
-  mainState.currentSearchPostTerm = text
+  const textDecoded = decodeURIComponent(text)
+  if (!textDecoded || mainState.currentSearchTerm === textDecoded) return
+  mainState.currentSearchTerm = textDecoded
   fetchNewResults()
-}
-
-function submitForm () {
-  router.push({ name: "post-search", query: { text: state.text } })
 }
 
 async function fetchNewResults () {
   if (mainState.processing) return
-  if (state.text === "") return
+  mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
   mainState.currentSearchPostResults.splice(0)
+  if (!mainState.currentSearchTerm) return
   mainState.processing = true
   try {
     const results: undefined | false | Array<TTPost> =
-      await mainState.atp.fetchPostSearch(state.text)
+      await mainState.atp.fetchPostSearch(mainState.currentSearchTerm)
     if (results === false) return
     if (results != null) mainState.currentSearchPostResults = results
   } finally {
     mainState.processing = false
+    updateRouter()
   }
+}
+
+function updateRouter () {
+  const query = mainState.currentSearchTerm !== ""
+    ? { text: mainState.currentSearchTerm }
+    : undefined
+  router.push({ name: "post-search", query })
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
@@ -66,9 +75,9 @@ function removeThisPost (uri: string) {
 <template>
   <div class="post-search-view">
     <Portal to="search-view-header">
-      <form @submit.prevent="submitForm">
+      <form @submit.prevent="fetchNewResults">
         <input
-          v-model="state.text"
+          v-model="mainState.currentSearchTerm"
           id="post-term-textbox"
           type="search"
           :placeholder="$t('keyword')"

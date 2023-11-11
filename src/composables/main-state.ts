@@ -603,7 +603,7 @@ async function fetchSearchFeeds (direction: "old" | "new") {
       state.currentSearchFeeds,
       CONSTS.LIMIT_OF_FETCH_POPULAR_FEED_GENERATORS,
       direction === "old" ? state.currentSearchFeedsCursor : undefined,
-      state.currentSearchFeedsTerm
+      state.currentSearchTerm
     )
   if (cursor instanceof Error) state.openErrorPopup(
     "errorApiFailed",

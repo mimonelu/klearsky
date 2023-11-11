@@ -61,22 +61,29 @@ type MainState = {
   getContentWarningVisibility: (labels?: Array<TTLabel>) => TTContentVisibility
   getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
 
+  // 検索
+
+  // 検索 - 現在の検索キーワード
+  currentSearchTerm: string
+
+  // 検索 - 現在のポスト検索結果
+  currentSearchPostResults: Array<TTPost>
+  currentSearchPostsLastTerm?: string
+
+  // 検索 - 現在のフィード検索結果
+  currentSearchFeeds: Array<TTFeedGenerator>
+  currentSearchFeedsCursor?: string
+  currentSearchFeedsLastTerm?: string
+  fetchSearchFeeds: (direction: "new" | "old") => Promise<void>
+
+  // 検索 - 現在のおすすめユーザー検索結果
   currentSearchSuggestionResults: Array<TTUser>
   currentSearchSuggestionCursor?: string
 
+  // 検索 - 現在のユーザー検索結果
   currentSearchUsers: Array<TTUser>
   currentSearchUsersCursor?: string
-  currentSearchUserTerm: string
-  currentSearchLastUserTerm: string
-
-  currentSearchPostTerm: string
-  currentSearchPostResults: Array<TTPost>
-
-  currentSearchFeeds: Array<TTFeedGenerator>
-  currentSearchFeedsCursor?: string
-  currentSearchFeedsTerm: string
-  currentSearchFeedsLastTerm: string
-  fetchSearchFeeds: (direction: "new" | "old") => Promise<void>
+  currentSearchLastUserTerm?: string
 
   currentRepostUsers: Array<TTUser>
   currentRepostUsersUri?: string

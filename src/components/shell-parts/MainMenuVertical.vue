@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -7,6 +7,16 @@ import Util from "@/composables/util"
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  query: ComputedRef<string>
+}>({
+  query: computed((): string => {
+    return mainState.currentSearchTerm
+      ? `?text=${mainState.currentSearchTerm}`
+      : ""
+  }),
+})
 
 async function refreshSession () {
   if (!await mainState.openConfirmationPopup(
@@ -166,7 +176,7 @@ function moveToBottom () {
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
-      to="/search/post"
+      :to="`/search/post${state.query}`"
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
     >
       <div class="icon">
