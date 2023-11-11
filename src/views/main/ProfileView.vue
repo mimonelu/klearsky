@@ -20,6 +20,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   handleHistoryPopupDisplay: boolean
   profileMenuDisplay: boolean
+  endpoint: ComputedRef<undefined | string>
 
   // ラベル対応
   enabledContentMask: boolean
@@ -36,6 +37,12 @@ const state = reactive<{
 }>({
   handleHistoryPopupDisplay: false,
   profileMenuDisplay: false,
+  endpoint: computed((): undefined | string => {
+    const log = mainState.currentProfile?.__log
+    return log != null && log[0] != null
+      ? log[0].operation?.services?.atproto_pds?.endpoint
+      : undefined
+  }),
 
   // ラベル対応
   enabledContentMask: true,
@@ -173,12 +180,9 @@ function onActivateAccountMaskToggle () {
           </div>
         </div>
 
-        <div
-          class="profile-view__details"
-        >
-          <div
-            class="profile-view__details__top"
-          >
+        <div class="profile-view__details">
+          <div class="profile-view__details__top">
+            <!-- アバターボタン -->
             <div
               v-if="state.accountContentDisplay && state.accountMediaDisplay"
               class="profile-view__details__top__left"
@@ -188,6 +192,7 @@ function onActivateAccountMaskToggle () {
                 :image="mainState.currentProfile?.avatar"
               />
             </div>
+
             <div class="profile-view__details__top__right">
               <!-- アカウントラベルアイコン -->
               <div
@@ -202,14 +207,25 @@ function onActivateAccountMaskToggle () {
                 >{{ $t(label.val) }}</div>
               </div>
 
+              <!-- 表示名 -->
               <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
+
+              <!-- ハンドル -->
               <div class="handle">
                 <a @click.stop="state.handleHistoryPopupDisplay = true">
                   <SVGIcon name="history" />
                   <span>{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</span>
                 </a>
               </div>
+
+              <!-- Endpoint (PDS) -->
+              <div class="endpoint">
+                <SVGIcon name="database" />
+                <span>{{ state.endpoint ?? "&nbsp;" }}</span>
+              </div>
+
               <div class="profile-view__details__top__right__bottom">
+                <!-- フォロー中メッセージ -->
                 <div
                   v-if="!isMyProfile() && isFollowed()"
                   class="followed"
@@ -234,6 +250,7 @@ function onActivateAccountMaskToggle () {
               v-if="mainState.currentProfile != null"
               class="button-container"
             >
+              <!-- プロフィール編集ボタン -->
               <RouterLink
                 v-if="isMyProfile()"
                 to="/profile/edit"
@@ -242,6 +259,8 @@ function onActivateAccountMaskToggle () {
                 <SVGIcon name="edit" />
                 <span>{{ $t("editProfile") }}</span>
               </RouterLink>
+
+              <!-- フォロートグル -->
               <FollowButton
                 v-if="!isMyProfile()"
                 :viewer="mainState.currentProfile.viewer"
@@ -249,16 +268,22 @@ function onActivateAccountMaskToggle () {
                 :declarationDid="mainState.currentProfile.did"
               />
               <div class="button-container__separator" />
+
+              <!-- ミュートトグル -->
               <MuteButton
                 v-if="!isMyProfile()"
                 :did="mainState.currentProfile.did"
                 :viewer="mainState.currentProfile.viewer"
               />
+
+              <!-- ブロックトグル -->
               <BlockButton
                 v-if="!isMyProfile()"
                 :did="mainState.currentProfile.did"
                 :viewer="mainState.currentProfile.viewer"
               />
+
+              <!-- プロフィールメニュートグル -->
               <button
                 class="button--bordered menu-button"
                 @click.stop="openPostMenu"
@@ -272,6 +297,8 @@ function onActivateAccountMaskToggle () {
                 />
               </button>
             </div>
+
+            <!-- 説明文 -->
             <HtmlText
               v-if="state.accountContentDisplay"
               class="description"
@@ -279,22 +306,30 @@ function onActivateAccountMaskToggle () {
               :text="mainState.currentProfile?.description ?? '&nbsp;'"
               :processHashTag="true"
             />
+
             <div
               v-if="state.accountContentDisplay"
               class="statistics"
             >
+              <!-- ポスト数 -->
               <dl class="posts-count">
                 <dt>{{ $t("postsCount") }}</dt>
                 <dd>{{ mainState.currentProfile?.postsCount?.toLocaleString() }}</dd>
               </dl>
+
+              <!-- フォローイング数 -->
               <dl class="follows-count">
                 <dt>{{ $t("followingCount") }}</dt>
                 <dd>{{ mainState.currentProfile?.followsCount?.toLocaleString() }}</dd>
               </dl>
+
+              <!-- フォロワー数 -->
               <dl class="followers-count">
                 <dt>{{ $t("followersCount") }}</dt>
                 <dd>{{ mainState.currentProfile?.followersCount?.toLocaleString() }}</dd>
               </dl>
+
+              <!-- アカウント作成日時 -->
               <dl class="created-at">
                 <dt>{{ $t("startedAt") }}</dt>
                 <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt) }}</dd>
@@ -466,9 +501,11 @@ function onActivateAccountMaskToggle () {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        grid-gap: 0.375rem;
 
         &__bottom {
           display: flex;
+          align-items: flex-start;
           flex-grow: 1;
           grid-gap: 0.5rem;
 
@@ -508,28 +545,39 @@ function onActivateAccountMaskToggle () {
 }
 
 .avatar {
-  font-size: 6rem;
-}
-
-.labels {
-  margin-bottom: 0.25rem;
+  font-size: 5rem;
 }
 
 .display-name {
   font-size: 1.5rem;
   font-weight: bold;
-  line-height: 1.25;
-  margin-bottom: 0.25rem;
+  // line-height: 1.25;
   user-select: text;
   word-break: break-word;
 }
 
+.handle > a,
+.endpoint,
+.followed {
+  display: inline-flex;
+  grid-gap: 0.375rem;
+
+  & > .svg-icon {
+    font-size: 0.875rem;
+    margin-top: 0.0625rem;
+  }
+
+  & > span {
+    color: var(--color);
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.25;
+    word-break: break-all;
+  }
+}
+
 .handle > a {
   color: var(--fg-color-075);
-  display: inline-flex;
-  align-items: center;
-  grid-gap: 0.25rem;
-  margin-bottom: 0.5rem;
   [data-log-loaded="true"] & {
     color: var(--accent-color-0875);
     cursor: pointer;
@@ -549,27 +597,37 @@ function onActivateAccountMaskToggle () {
   }
 
   & > span {
-    line-height: 1.25;
     user-select: text;
-    word-break: break-all;
+  }
+}
+
+.endpoint {
+  --color: var(--fg-color-075);
+  display: inline-flex;
+
+  & > .svg-icon {
+    fill: var(--color);
+  }
+  [data-log-loaded="false"] & > .svg-icon {
+    display: none;
+  }
+
+  & > span {
+    color: var(--color);
+    user-select: text;
   }
 }
 
 .followed {
   display: flex;
   flex-grow: 1;
-  grid-gap: 0.5rem;
 
-  .svg-icon {
+  & > .svg-icon {
     fill: rgb(var(--like-color));
   }
 
-  span {
+  & > span {
     color: rgb(var(--like-color));
-    font-size: 0.875rem;
-    font-weight: bold;
-    line-height: 1.25;
-    word-break: break-all;
   }
 }
 
