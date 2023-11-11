@@ -467,12 +467,18 @@ function onActivateAccountMaskToggle () {
   // 折り畳み
   &[data-folding="true"] {
     .banner,
+    .endpoint,
     .profile-view__details__bottom {
       display: none;
     }
+
     .profile-view__details {
       .avatar {
         font-size: 4rem;
+      }
+
+      .display-name {
+        font-size: 1.25rem;
       }
     }
   }
