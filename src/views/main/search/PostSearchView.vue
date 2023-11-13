@@ -35,6 +35,10 @@ function updateSearchPostTerm (text: string) {
 }
 
 async function fetchNewResults () {
+  // 検索ワードを変えておきながら検索せずに画面遷移した場合、
+  // `watch` が後から反応してしまい、ポスト検索画面に遷移してしまう不具合への対応
+  if (router.currentRoute.value.name !== "post-search") return
+
   if (mainState.processing) return
   mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
   mainState.currentSearchPostResults.splice(0)
