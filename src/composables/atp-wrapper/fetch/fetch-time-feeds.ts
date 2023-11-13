@@ -9,6 +9,31 @@ export default async function (
   author: TTUser,
   limit?: number
 ): Promise<Error | undefined | string> {
+  // TODO: PDS分割に伴う暫定処置
+  const query: Record<string, string> = {
+    collection: "app.bsky.feed.post",
+    repo: author.did,
+    reverse: direction === "new" ? "true" : "false",
+  }
+  if (limit != null) query.limit = limit.toString()
+  const rkey: undefined | string = oldPosts.length > 0
+    ? direction === "new"
+      ? Util.getRkey(oldPosts[0].uri)
+      : Util.getRkey((oldPosts.at(- 1) as TTPost).uri)
+    : undefined
+  if (rkey != null) {
+    if (direction === "new") query.rkeyStart = rkey
+    else query.rkeyEnd = rkey
+  }
+  const params = new URLSearchParams(query)
+  const url = `https://bsky.social/xrpc/com.atproto.repo.listRecords?${params}`
+  const response: Response = await fetch(url)
+    .catch((error: any) => console.error("[klearsky/listRecords/authorPosts]", error))
+    .then((value: any) => value)
+  if (!response.ok) return
+  const data = await response.json()
+
+  /*
   if (this.agent == null) return Error("No agent")
   const query: ComAtprotoRepoListRecords.QueryParams = {
     collection: "app.bsky.feed.post",
@@ -32,7 +57,10 @@ export default async function (
   console.log("[klearsky/listRecords/authorPosts]", response)
   if (response instanceof Error) return response
   if (!response.success || response.data.records == null) return Error("Failed")
-  ;(response.data.records as TTRecord[]).forEach((record: TTRecord) => {
+  const data = response.data
+  */
+
+  ;(data.records as TTRecord[]).forEach((record: TTRecord) => {
     if (oldPosts.some((oldPost: TTPost) => oldPost.uri === record.uri)) return
     // @ts-ignore
     const feeds: TTFeed[] = [{
@@ -62,5 +90,5 @@ export default async function (
     if (direction === "new") oldPosts.unshift(feeds[0].post)
     else oldPosts.push(feeds[0].post)
   })
-  return response.data.cursor
+  return data.cursor
 }
