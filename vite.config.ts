@@ -55,7 +55,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         // NOTICE: 実体のある CSS を読み込まないこと
-        additionalData: "@import '@/scss/_variables.scss';",
+        additionalData: "@use 'sass:math'; @import '@/scss/_variables.scss';",
       },
     },
     postcss: {

@@ -4,20 +4,21 @@
   margin: -0.75em;
   padding: 0.75em;
   &:focus, &:hover {
-    & > .svg-icon {
+    .svg-icon {
       fill: rgb(var(--fg-color));
     }
-    & > span {
+
+    span {
       color: rgb(var(--fg-color));
     }
   }
 
-  & > .svg-icon {
+  .svg-icon {
     fill: var(--fg-color-05);
     font-size: 1em;
   }
 
-  & > span {
+  span {
     color: var(--fg-color-05);
     font-size: 0.875em;
     font-weight: bold;

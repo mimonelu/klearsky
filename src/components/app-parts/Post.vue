@@ -6,6 +6,7 @@ import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
+import LikeButton from "@/components/buttons/LikeButton.vue"
 import LinkCard from "@/components/app-parts/LinkCard.vue"
 import Loader from "@/components/common/Loader.vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
@@ -968,15 +969,10 @@ function onActivateHashTag (text: string) {
           </div>
           <div>
             <!-- いいねボタン -->
-            <button
-              class="icon-button like-count"
-              :data-has="post.likeCount > 0"
-              :data-liked="!!post.viewer?.like"
+            <LikeButton
+              :post="post"
               @click.stop="onActivateLikeButton"
-            >
-              <SVGIcon name="like" />
-              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
-            </button>
+            />
           </div>
           <div>
             <!-- Lightning -->
@@ -1527,16 +1523,6 @@ function onActivateHashTag (text: string) {
       top: 2.5rem;
       left: 0;
     }
-  }
-}
-
-.like-count[data-liked="true"] {
-  & > .svg-icon {
-    fill: rgb(var(--like-color));
-  }
-
-  & > span {
-    color: rgb(var(--like-color));
   }
 }
 
