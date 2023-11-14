@@ -121,7 +121,7 @@ async function close () {
     const result = await mainState.openConfirmationPopup($t("cancelPost"), $t("cancelPostMessage"))
     if (!result) return
   }
-  emit("closeSnedPostPopup", false)
+  emit("closeSendPostPopup", false)
 }
 
 function isEmpty (): boolean {
@@ -160,7 +160,7 @@ async function submitCallback () {
       // Lightning
       lightning: mainState.currentSetting.lightning,
     })
-    if (result == null) emit("closeSnedPostPopup", true)
+    if (result == null) emit("closeSendPostPopup", true)
     else mainState.openErrorPopup(result, "SendPostPopup/submitCallback")
   } finally {
     state.popupLoaderDisplay = false
@@ -420,6 +420,9 @@ function onChangeImage () {
     }
     .post-language-button > span:last-child {
       text-transform: uppercase;
+    }
+    .post-date-button > span:nth-child(2) {
+      white-space: nowrap;
     }
   }
 }

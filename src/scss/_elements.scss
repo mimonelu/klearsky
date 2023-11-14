@@ -3,7 +3,8 @@
 }
 
 body {
-  --border-radius: 0.5em;
+  --border-radius: 0.25em;
+  --border-radius-large: 0.5em;
   --image-aspect-ratio: 1 / 1; // 16 / 9;
   --main-area-opacity: 1.0;
   --sp-menu-size: calc(100vw / 7);

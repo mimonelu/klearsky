@@ -26,7 +26,7 @@ watch(() => props.display, (display: boolean) => {
     const innerRect = menuTickerInner.value.getBoundingClientRect()
 
     const left = props.container != null
-      ? props.container.offsetLeft
+      ? props.container.getBoundingClientRect().left
       : 0
     if (left > innerRect.left)
       state.left = left - innerRect.left

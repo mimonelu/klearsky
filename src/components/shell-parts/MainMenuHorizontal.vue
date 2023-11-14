@@ -154,7 +154,7 @@ async function openSendPostPopup () {
 
   &.profile-button {
     .lazy-image {
-      border-radius: var(--border-radius);
+      border-radius: var(--border-radius-large);
       font-size: var(--button-size);
       object-fit: cover;
       min-width: var(--button-size);

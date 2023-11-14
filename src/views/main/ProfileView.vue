@@ -557,7 +557,7 @@ function onActivateAccountMaskToggle () {
 .display-name {
   font-size: 1.5rem;
   font-weight: bold;
-  // line-height: 1.25;
+  line-height: 1.25;
   user-select: text;
   word-break: break-word;
 }

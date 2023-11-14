@@ -315,7 +315,7 @@ function moveToBottom () {
   --padding: 1rem;
   --color: var(--fg-color);
   --alpha: 0.75;
-  border-radius: var(--border-radius);
+  // border-radius: var(--border-radius);
   display: grid;
   grid-gap: 0.5rem;
   overflow: hidden;
@@ -329,7 +329,7 @@ function moveToBottom () {
   }
 
   & > .lazy-image {
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-large);
     font-size: var(--size);
     margin: auto;
     object-fit: cover;
@@ -337,6 +337,10 @@ function moveToBottom () {
     max-width: var(--size);
     min-height: var(--size);
     max-height: var(--size);
+    transition: border-radius 125ms ease-out;
+  }
+  &:hover > .lazy-image {
+    border-radius: 1px;
   }
 
   & > .label {

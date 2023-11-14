@@ -240,7 +240,7 @@ function selectUser (user?: TTUser) {
       }
 
       .lazy-image {
-        border-radius: var(--border-radius);
+        border-radius: var(--border-radius-large);
         font-size: 1.5em;
         object-fit: cover;
         min-width: 1.5rem;

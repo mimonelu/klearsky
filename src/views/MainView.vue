@@ -835,7 +835,7 @@ function broadcastListener (event: MessageEvent) {
       :url="state.sendPostPopupProps.url"
       :fileList="state.sendPostPopupProps.fileList"
       :createdAt="state.sendPostPopupProps.createdAt"
-      @closeSnedPostPopup="closeSendPostPopup"
+      @closeSendPostPopup="closeSendPostPopup"
     />
 
     <!-- マイタグポップアップ -->
