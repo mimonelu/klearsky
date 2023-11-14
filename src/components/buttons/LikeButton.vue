@@ -16,13 +16,13 @@ const mainState = inject("state") as MainState
     :data-liked="!!post.viewer?.like"
   >
     <div class="icon-container">
-      <SVGIcon name="like" />
-
       <!-- Sass の `$number` とそろえること -->
       <div
         v-for="_i in 8"
         class="splash"
       />
+
+      <SVGIcon name="like" />
     </div>
     <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
   </button>
@@ -35,7 +35,7 @@ const mainState = inject("state") as MainState
 
     & > .splash {
       $w: 0.5em;
-      background-color: transparent;
+      background-color: rgb(var(--like-color));
       border-radius: $w;
       margin: math.div($w, - 2) 0 0 math.div($w, - 2);
       position: absolute;
@@ -44,6 +44,10 @@ const mainState = inject("state") as MainState
       width: $w;
       height: $w;
       visibility: hidden;
+    }
+
+    & > .svg-icon {
+      position: relative;
     }
   }
 
@@ -54,7 +58,6 @@ const mainState = inject("state") as MainState
       }
 
       & > .splash {
-        background-color: rgb(var(--like-color));
         transition: all 500ms ease-out;
         visibility: visible;
         $number: 8;
