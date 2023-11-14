@@ -926,7 +926,9 @@ function onActivateHashTag (text: string) {
               :data-has="post.replyCount > 0"
               @click.stop="onActivateReplyButton"
             >
-              <SVGIcon name="reply" />
+              <div class="icon-container">
+                <SVGIcon name="reply" />
+              </div>
               <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
             </button>
           </div>
@@ -938,7 +940,9 @@ function onActivateHashTag (text: string) {
               :data-reposted="!!post.viewer?.repost"
               @click.stop="onActivateRepostMenuTrigger"
             >
-              <SVGIcon name="repost" />
+              <div class="icon-container">
+                <SVGIcon name="repost" />
+              </div>
               <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
 
               <!-- リポストメニュー -->
@@ -983,7 +987,9 @@ function onActivateHashTag (text: string) {
               rel="noreferrer"
               @click.stop
             >
-              <SVGIcon name="lightning" />
+              <div class="icon-container">
+                <SVGIcon name="lightning" />
+              </div>
             </a>
 
             <!-- ポストメニューボタン -->
@@ -991,7 +997,9 @@ function onActivateHashTag (text: string) {
               class="icon-button--nolabel menu-button"
               @click.stop="onActivatePostMenuTrigger"
             >
-              <SVGIcon name="menu" />
+              <div class="icon-container">
+                <SVGIcon name="menu" />
+              </div>
 
               <!-- ポストメニュー -->
               <PostMenuTicker
