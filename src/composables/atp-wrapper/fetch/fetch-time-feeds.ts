@@ -26,7 +26,15 @@ export default async function (
     else query.rkeyEnd = rkey
   }
   const params = new URLSearchParams(query)
-  const url = `https://bsky.social/xrpc/com.atproto.repo.listRecords?${params}`
+
+  // Sandbox PDS 対応
+  let host = "https://bsky.social"
+  if (this.session?.__sandbox) {
+    const logJson = await this.fetchLogAudit(author.did)
+    if (logJson != null) host = logJson[0]?.operation?.services?.atproto_pds?.endpoint ?? host
+  }
+
+  const url = `${host}/xrpc/com.atproto.repo.listRecords?${params}`
   const response: Response = await fetch(url)
     .catch((error: any) => console.error("[klearsky/listRecords/authorPosts]", error))
     .then((value: any) => value)

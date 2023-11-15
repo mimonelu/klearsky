@@ -30,6 +30,7 @@ import fetchInviteCodes from "@/composables/atp-wrapper/fetch/fetch-invite-codes
 import fetchLabels from "@/composables/atp-wrapper/fetch/fetch-labels"
 import fetchLikeUsers from "@/composables/atp-wrapper/fetch/fetch-like-users"
 import fetchListFeed from "@/composables/atp-wrapper/fetch/fetch-list-feed"
+import fetchLogAudit from "@/composables/atp-wrapper/fetch/fetch-log-audit"
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch/fetch-notification-count"
 import fetchNotifications from "@/composables/atp-wrapper/fetch/fetch-notifications"
@@ -121,6 +122,7 @@ prototype.fetchInviteCodes = fetchInviteCodes
 prototype.fetchLabels = fetchLabels
 prototype.fetchLikeUsers = fetchLikeUsers
 prototype.fetchListFeed = fetchListFeed
+prototype.fetchLogAudit = fetchLogAudit
 prototype.fetchMutingUsers = fetchMutingUsers
 prototype.fetchNotificationCount = fetchNotificationCount
 prototype.fetchNotifications = fetchNotifications

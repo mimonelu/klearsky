@@ -263,7 +263,7 @@ async function fetchCurrentProfile (did: string) {
     state.userProfile = state.currentProfile
 
   // ハンドル履歴と利用開始日の取得（非同期で良い）
-  fetchLogAudit()
+  updateCurrentLogAudit()
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
@@ -275,24 +275,13 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
   }
 }
 
-async function fetchLogAudit () {
+async function updateCurrentLogAudit () {
   if (state.currentProfile == null) return
-  let log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
-  let logJson = await log.json()
-  console.log("[klearsky/log/audit]", logJson)
+  const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
+  if (logJson == null) return
   if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
-
-  // Sandbox PDS対応
-  if (!Array.isArray(logJson)) {
-    log = await fetch(`https://plc.bsky-sandbox.dev/${state.currentProfile.did}/log/audit`)
-    logJson = await log.json()
-    console.log("[klearsky/log/audit]", logJson)
-    if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
-    if (!Array.isArray(logJson)) return
-  }
-
   state.currentProfile.__createdAt = logJson[0]?.createdAt
-  state.currentProfile.__log = logJson.reverse()
+  state.currentProfile.__log = [...logJson].reverse()
 }
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string, middleCursor?: string) {
