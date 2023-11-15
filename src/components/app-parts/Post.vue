@@ -1515,8 +1515,10 @@ function onActivateHashTag (text: string) {
 .repost-count {
   position: relative;
   &[data-reposted="true"] {
-    & > .svg-icon {
-      fill: rgb(var(--share-color));
+    & > .icon-container {
+      & > .svg-icon {
+        fill: rgb(var(--share-color));
+      }
     }
 
     & > span {
