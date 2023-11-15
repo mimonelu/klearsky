@@ -12,6 +12,7 @@ import Loader from "@/components/common/Loader.vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import Post from "@/components/app-parts/Post.vue"
 import PostMenuTicker from "@/components/menu-tickers/PostMenuTicker.vue"
+import RepostButton from "@/components/buttons/RepostButton.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Thumbnail from "@/components/app-parts/Thumbnail.vue"
 import Util from "@/composables/util"
@@ -934,17 +935,10 @@ function onActivateHashTag (text: string) {
           </div>
           <div>
             <!-- リポストボタン -->
-            <button
-              class="icon-button repost-count"
-              :data-has="post.repostCount > 0"
-              :data-reposted="!!post.viewer?.repost"
+            <RepostButton
+              :post="post"
               @click.stop="onActivateRepostMenuTrigger"
             >
-              <div class="icon-container">
-                <SVGIcon name="repost" />
-              </div>
-              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
-
               <!-- リポストメニュー -->
               <MenuTicker
                 :display="state.repostMenuDisplay"
@@ -969,7 +963,7 @@ function onActivateHashTag (text: string) {
                   <span>{{ $t("sendQuoteRepost") }}</span>
                 </button>
               </MenuTicker>
-            </button>
+            </RepostButton>
           </div>
           <div>
             <!-- いいねボタン -->
@@ -1512,23 +1506,10 @@ function onActivateHashTag (text: string) {
   }
 }
 
-.repost-count {
+.repost-button {
   position: relative;
-  &[data-reposted="true"] {
-    & > .icon-container {
-      & > .svg-icon {
-        fill: rgb(var(--share-color));
-      }
-    }
-
-    & > span {
-      color: rgb(var(--share-color));
-    }
-  }
 
   .menu-ticker:deep() {
-    display: contents; // TODO: 外すとティッカー表示時にレイアウト崩れ、外さないとティッカー表示位置が若干ずれる
-
     .menu-ticker--inner {
       top: 2.5rem;
       left: 0;

@@ -11,31 +11,32 @@ const mainState = inject("state") as MainState
 
 <template>
   <button
-    class="icon-button like-button"
-    :data-has="post.likeCount > 0"
-    :data-liked="!!post.viewer?.like"
+    class="icon-button repost-button"
+    :data-has="post.repostCount > 0"
+    :data-reposted="!!post.viewer?.repost"
   >
     <div class="icon-container">
       <!-- Sass の `$number` とそろえること -->
       <div
-        v-for="_i in 8"
+        v-for="_i in 3"
         class="splash"
       />
 
-      <SVGIcon name="like" />
+      <SVGIcon name="repost" />
     </div>
-    <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
+    <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
+    <slot />
   </button>
 </template>
 
 <style lang="scss" scoped>
-.like-button {
+.repost-button {
   & > .icon-container {
     position: relative;
 
     & > .splash {
-      $w: 0.5em;
-      background-color: rgb(var(--like-color));
+      $w: 1em;
+      border: 1px solid rgb(var(--share-color), 0.5);
       border-radius: $w;
       margin: math.div($w, - 2) 0 0 math.div($w, - 2);
       position: absolute;
@@ -51,28 +52,29 @@ const mainState = inject("state") as MainState
     }
   }
 
-  &[data-liked="true"] {
+  &[data-reposted="true"] {
     & > .icon-container {
       & > .svg-icon {
-        fill: rgb(var(--like-color));
+        fill: rgb(var(--share-color));
       }
 
       & > .splash {
+        opacity: 1.0;
         transition: all 500ms ease-out;
         visibility: visible;
-        $number: 8;
+        $number: 3;
         @for $i from 1 through $number + 1 {
           &:nth-child(#{$i}) {
-            $x: math.sin(math.div($i, $number) * math.$pi * 2) * 1.5;
-            $y: math.cos(math.div($i, $number) * math.$pi * 2) * 1.5;
-            transform: translate(#{$x}em, #{$y}em) scale(0);
+            opacity: 0;
+            transform: scale(4.0);
+            transition-delay: ($i - 1) * 250ms;
           }
         }
       }
     }
 
     & > span {
-      color: rgb(var(--like-color));
+      color: rgb(var(--share-color));
     }
   }
 }
