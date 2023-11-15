@@ -162,6 +162,12 @@ function moveToBottom () {
       </menu>
     </div>
 
+    <!-- Sandbox ラベル -->
+    <div
+      v-if="mainState.atp.session?.__sandbox"
+      class="sandbox"
+    >Sandbox</div>
+
     <!-- ホームボタン -->
     <RouterLink
       class="link-button"
@@ -353,6 +359,16 @@ function moveToBottom () {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+// Sandbox ラベル
+.sandbox {
+  background-color: rgb(var(--notice-color));
+  border-radius: var(--border-radius);
+  color: rgb(var(--fg-color));
+  font-weight: bold;
+  padding: 0.5rem;
+  text-align: center;
 }
 
 // 各種ボタン
