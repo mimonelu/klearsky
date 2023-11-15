@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { inject, reactive } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -14,6 +14,8 @@ const props = defineProps<{
   uri?: string
   container?: HTMLElement
 }>()
+
+const mainState = inject("state") as MainState
 
 const state = reactive<{
   display: boolean
@@ -38,6 +40,7 @@ function openOtherApp (app: any) {
       const rkey = Util.getRkey(props.uri)
       uri = app.post
         .replace("{did}", props.did)
+        .replace("{mydid}", mainState.atp.data.did)
         .replace("{handle}", props.handle)
         .replace("{rkey}", rkey)
         .replace("{uri}", props.uri)
@@ -46,6 +49,7 @@ function openOtherApp (app: any) {
     case "profile": {
       uri = app.profile
         .replace("{did}", props.did)
+        .replace("{mydid}", mainState.atp.data.did)
         .replace("{handle}", props.handle)
       break
     }

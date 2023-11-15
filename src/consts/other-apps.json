@@ -17,9 +17,19 @@
     "profile": "separator"
   },
   {
+    "name": "langitApp",
+    "generator": "https://langit.pages.dev/u/{mydid}/profile/{uri}",
+    "post": "https://langit.pages.dev/u/{mydid}/profile/{did}/post/{rkey}",
+    "profile": "https://langit.pages.dev/u/{mydid}/profile/{did}"
+  },
+  {
     "name": "tokimekiApp",
     "post": "https://tokimeki.blue/profile/{handle}/post/{rkey}",
     "profile": "https://tokimeki.blue/profile/{handle}"
+  },
+  {
+    "post": "separator",
+    "profile": "separator"
   },
   {
     "name": "didApp",
