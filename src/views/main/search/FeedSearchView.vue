@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, watch } from "vue"
+import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
+import { useRouter } from "vue-router"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Util from "@/composables/util"
@@ -9,45 +10,62 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
 }>({
-  processing: false
+  processing: false,
 })
 
-onMounted(() => {
+const router = useRouter()
+
+const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, (value: any) => {
+  if (value != null) mainState.currentSearchTerm = value
+}, { immediate: true })
+
+// インフィニットスクロール
+const unwatchOnScroll = watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  if (value) fetchContinuousResults("old")
+})
+
+onMounted(async () => {
   const textbox = document.getElementById("feed-term-textbox")
   if (textbox != null) textbox.focus()
+  if (mainState.currentSearchFeedsLastTerm !== mainState.currentSearchTerm)
+    await fetchNewResults()
+})
 
-  // 検索キーワードと検索結果がない場合、すべてのフィードを取得
-  if (mainState.currentSearchFeedsTerm === "" &&
-      mainState.currentSearchFeeds.length === 0)
-    fetchNewResults()
+onBeforeUnmount(() => {
+  unwatchOnQuery()
+  unwatchOnScroll()
 })
 
 async function fetchNewResults () {
   if (state.processing) return
-  mainState.currentSearchFeedsLastTerm = mainState.currentSearchFeedsTerm
+  mainState.currentSearchFeedsLastTerm = mainState.currentSearchTerm
   mainState.currentSearchFeeds.splice(0)
   state.processing = true
   await mainState.fetchSearchFeeds("new")
   state.processing = false
+  updateRouter()
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
   if (state.processing) return
-  if (mainState.currentSearchFeedsLastTerm !== mainState.currentSearchFeedsTerm) {
-    mainState.currentSearchFeedsLastTerm = mainState.currentSearchFeedsTerm
+  if (mainState.currentSearchFeedsLastTerm !== mainState.currentSearchTerm) {
+    mainState.currentSearchFeedsLastTerm = mainState.currentSearchTerm
     mainState.currentSearchFeeds.splice(0)
     mainState.currentSearchFeedsCursor = undefined
+    updateRouter()
   }
   state.processing = true
   await mainState.fetchSearchFeeds(direction)
   state.processing = false
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchContinuousResults("old")
-})
+function updateRouter () {
+  const query = mainState.currentSearchTerm !== ""
+    ? { text: mainState.currentSearchTerm }
+    : undefined
+  router.push({ name: "feed-search", query })
+}
 </script>
 
 <template>
@@ -55,7 +73,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <Portal to="search-view-header">
       <form @submit.prevent="fetchNewResults">
         <input
-          v-model="mainState.currentSearchFeedsTerm"
+          v-model="mainState.currentSearchTerm"
           id="feed-term-textbox"
           type="search"
           :placeholder="$t('keyword')"

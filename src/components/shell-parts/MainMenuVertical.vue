@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -7,6 +7,16 @@ import Util from "@/composables/util"
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  query: ComputedRef<string>
+}>({
+  query: computed((): string => {
+    return mainState.currentSearchTerm
+      ? `?text=${mainState.currentSearchTerm}`
+      : ""
+  }),
+})
 
 async function refreshSession () {
   if (!await mainState.openConfirmationPopup(
@@ -152,6 +162,12 @@ function moveToBottom () {
       </menu>
     </div>
 
+    <!-- Sandbox ラベル -->
+    <div
+      v-if="mainState.atp.session?.__sandbox"
+      class="sandbox"
+    >Sandbox</div>
+
     <!-- ホームボタン -->
     <RouterLink
       class="link-button"
@@ -166,7 +182,7 @@ function moveToBottom () {
     <!-- 検索ボタン -->
     <RouterLink
       class="link-button"
-      to="/search/post"
+      :to="`/search/post${state.query}`"
       :data-is-focus="mainState.currentPath.startsWith('/search/')"
     >
       <div class="icon">
@@ -305,7 +321,7 @@ function moveToBottom () {
   --padding: 1rem;
   --color: var(--fg-color);
   --alpha: 0.75;
-  border-radius: var(--border-radius);
+  // border-radius: var(--border-radius);
   display: grid;
   grid-gap: 0.5rem;
   overflow: hidden;
@@ -319,7 +335,7 @@ function moveToBottom () {
   }
 
   & > .lazy-image {
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-large);
     font-size: var(--size);
     margin: auto;
     object-fit: cover;
@@ -327,6 +343,10 @@ function moveToBottom () {
     max-width: var(--size);
     min-height: var(--size);
     max-height: var(--size);
+    transition: border-radius 125ms ease-out;
+  }
+  &:hover > .lazy-image {
+    border-radius: 1px;
   }
 
   & > .label {
@@ -339,6 +359,16 @@ function moveToBottom () {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+// Sandbox ラベル
+.sandbox {
+  background-color: rgb(var(--notice-color));
+  border-radius: var(--border-radius);
+  color: rgb(var(--fg-color));
+  font-weight: bold;
+  padding: 0.5rem;
+  text-align: center;
 }
 
 // 各種ボタン

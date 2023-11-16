@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, watch } from "vue"
+import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
+import { useRouter } from "vue-router"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
@@ -10,25 +11,40 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
 }>({
-  processing: false
+  processing: false,
 })
 
-onMounted(() => {
+const router = useRouter()
+
+const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, (value: any) => {
+  if (value != null) mainState.currentSearchTerm = value
+}, { immediate: true })
+
+// インフィニットスクロール
+const unwatchOnScroll = watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  if (value) fetchContinuousResults("old")
+})
+
+onMounted(async () => {
   const textbox = document.getElementById("user-term-textbox")
   if (textbox != null) textbox.focus()
+  if (mainState.currentSearchLastUserTerm !== mainState.currentSearchTerm)
+    await fetchNewResults()
+})
 
-  // 検索キーワードと検索結果がない場合はおすすめアカウントを取得
-  if (mainState.currentSearchUsers.length === 0) fetchNewResults()
+onBeforeUnmount(() => {
+  unwatchOnQuery()
+  unwatchOnScroll()
 })
 
 async function fetchNewResults () {
   if (state.processing) return
-  mainState.currentSearchLastUserTerm = mainState.currentSearchUserTerm
+  mainState.currentSearchLastUserTerm = mainState.currentSearchTerm
   mainState.currentSearchUsers.splice(0)
   state.processing = true
   try {
     // おすすめアカウントの取得
-    if (mainState.currentSearchUserTerm === "") {
+    if (mainState.currentSearchTerm === "") {
       await mainState.fetchSuggestions("new")
       mainState.currentSearchUsers.splice(
         0,
@@ -41,30 +57,32 @@ async function fetchNewResults () {
       mainState.currentSearchUsersCursor =
         await mainState.atp.fetchUserSearch(
           mainState.currentSearchUsers,
-          mainState.currentSearchUserTerm,
+          mainState.currentSearchTerm,
           CONSTS.LIMIT_OF_FETCH_USER_SEARCH
         )
     }
   } finally {
     state.processing = false
+    updateRouter()
   }
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
   if (state.processing) return
-  if (mainState.currentSearchUserTerm === "") return
-  if (mainState.currentSearchLastUserTerm !== mainState.currentSearchUserTerm) {
-    mainState.currentSearchLastUserTerm = mainState.currentSearchUserTerm
+  if (mainState.currentSearchTerm === "") return
+  if (mainState.currentSearchLastUserTerm !== mainState.currentSearchTerm) {
+    mainState.currentSearchLastUserTerm = mainState.currentSearchTerm
     mainState.currentSearchUsers.splice(0)
     mainState.currentSearchUsersCursor = undefined
+    updateRouter()
   }
   state.processing = true
   try {
     mainState.currentSearchUsersCursor =
       await mainState.atp.fetchUserSearch(
         mainState.currentSearchUsers,
-        mainState.currentSearchUserTerm,
+        mainState.currentSearchTerm,
         CONSTS.LIMIT_OF_FETCH_USER_SEARCH,
         direction === "new" ? undefined : mainState.currentSearchUsersCursor
       )
@@ -73,10 +91,12 @@ async function fetchContinuousResults (direction: "new" | "old") {
   }
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchContinuousResults('old')
-})
+function updateRouter () {
+  const query = mainState.currentSearchTerm !== ""
+    ? { text: mainState.currentSearchTerm }
+    : undefined
+  router.push({ name: "user-search", query })
+}
 </script>
 
 <template>
@@ -84,7 +104,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <Portal to="search-view-header">
       <form @submit.prevent="fetchNewResults">
         <input
-          v-model="mainState.currentSearchUserTerm"
+          v-model="mainState.currentSearchTerm"
           id="user-term-textbox"
           type="search"
           :placeholder="$t('keyword')"

@@ -13,7 +13,7 @@ export default async function (
     : image.ref.toString()
 
   // キャッシュがあればキャッシュを使用
-  let url: null | string = Util.cache.get(ref)
+  let url: null | string = Util.cache.get("blob", ref)
   if (url != null) return url
 
   // キャッシュがなければダウンロード
@@ -24,7 +24,7 @@ export default async function (
   url = URL.createObjectURL(new Blob([data], {
     type: image.mimeType,
   }))
-  Util.cache.set(ref, url)
+  Util.cache.set("blob", ref, url)
 
   return url
 }

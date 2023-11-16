@@ -108,6 +108,7 @@ const state = reactive<MainState>({
   fetchSuggestions,
 
   fetchPopularFeedGenerators,
+  fetchSearchPosts,
   fetchSearchFeeds,
   fetchCustomFeeds,
 
@@ -263,7 +264,7 @@ async function fetchCurrentProfile (did: string) {
     state.userProfile = state.currentProfile
 
   // ハンドル履歴と利用開始日の取得（非同期で良い）
-  fetchLogAudit()
+  updateCurrentLogAudit()
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
@@ -275,24 +276,13 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
   }
 }
 
-async function fetchLogAudit () {
+async function updateCurrentLogAudit () {
   if (state.currentProfile == null) return
-  let log = await fetch(`https://plc.directory/${state.currentProfile.did}/log/audit`)
-  let logJson = await log.json()
-  console.log("[klearsky/log/audit]", logJson)
+  const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
+  if (logJson == null) return
   if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
-
-  // Sandbox PDS対応
-  if (!Array.isArray(logJson)) {
-    log = await fetch(`https://plc.bsky-sandbox.dev/${state.currentProfile.did}/log/audit`)
-    logJson = await log.json()
-    console.log("[klearsky/log/audit]", logJson)
-    if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
-    if (!Array.isArray(logJson)) return
-  }
-
-  state.currentProfile.__createdAt = logJson[0]?.createdAt
-  state.currentProfile.__log = logJson.reverse()
+  state.currentProfile.__createdAt = logJson.at(- 1)?.createdAt
+  state.currentProfile.__log = logJson
 }
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string, middleCursor?: string) {
@@ -597,13 +587,28 @@ async function fetchPopularFeedGenerators (direction: "old" | "new") {
   else if (cursor != null) state.currentPopularFeedGeneratorsCursor = cursor
 }
 
+async function fetchSearchPosts (direction: "old" | "new") {
+  const cursor: Error | undefined | string =
+    await state.atp.fetchPostSearch(
+      state.currentSearchPostResults,
+      state.currentSearchTerm,
+      CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
+      direction === "old" ? state.currentSearchPostCursor : undefined
+    )
+  if (cursor instanceof Error) state.openErrorPopup(
+    "errorApiFailed",
+    "main-state/fetchSearchPosts"
+  )
+  else if (cursor != null) state.currentSearchPostCursor = cursor
+}
+
 async function fetchSearchFeeds (direction: "old" | "new") {
   const cursor: Error | undefined | string =
     await state.atp.fetchPopularFeedGenerators(
       state.currentSearchFeeds,
       CONSTS.LIMIT_OF_FETCH_POPULAR_FEED_GENERATORS,
       direction === "old" ? state.currentSearchFeedsCursor : undefined,
-      state.currentSearchFeedsTerm
+      state.currentSearchTerm
     )
   if (cursor instanceof Error) state.openErrorPopup(
     "errorApiFailed",

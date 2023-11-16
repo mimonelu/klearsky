@@ -6,11 +6,13 @@ import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
+import LikeButton from "@/components/buttons/LikeButton.vue"
 import LinkCard from "@/components/app-parts/LinkCard.vue"
 import Loader from "@/components/common/Loader.vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import Post from "@/components/app-parts/Post.vue"
 import PostMenuTicker from "@/components/menu-tickers/PostMenuTicker.vue"
+import RepostButton from "@/components/buttons/RepostButton.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Thumbnail from "@/components/app-parts/Thumbnail.vue"
 import Util from "@/composables/util"
@@ -925,21 +927,18 @@ function onActivateHashTag (text: string) {
               :data-has="post.replyCount > 0"
               @click.stop="onActivateReplyButton"
             >
-              <SVGIcon name="reply" />
+              <div class="icon-container">
+                <SVGIcon name="reply" />
+              </div>
               <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
             </button>
           </div>
           <div>
             <!-- リポストボタン -->
-            <button
-              class="icon-button repost-count"
-              :data-has="post.repostCount > 0"
-              :data-reposted="!!post.viewer?.repost"
+            <RepostButton
+              :post="post"
               @click.stop="onActivateRepostMenuTrigger"
             >
-              <SVGIcon name="repost" />
-              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
-
               <!-- リポストメニュー -->
               <MenuTicker
                 :display="state.repostMenuDisplay"
@@ -964,19 +963,14 @@ function onActivateHashTag (text: string) {
                   <span>{{ $t("sendQuoteRepost") }}</span>
                 </button>
               </MenuTicker>
-            </button>
+            </RepostButton>
           </div>
           <div>
             <!-- いいねボタン -->
-            <button
-              class="icon-button like-count"
-              :data-has="post.likeCount > 0"
-              :data-liked="!!post.viewer?.like"
+            <LikeButton
+              :post="post"
               @click.stop="onActivateLikeButton"
-            >
-              <SVGIcon name="like" />
-              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.likeCount > 0 ? post.likeCount : "" }}</span>
-            </button>
+            />
           </div>
           <div>
             <!-- Lightning -->
@@ -987,7 +981,9 @@ function onActivateHashTag (text: string) {
               rel="noreferrer"
               @click.stop
             >
-              <SVGIcon name="lightning" />
+              <div class="icon-container">
+                <SVGIcon name="lightning" />
+              </div>
             </a>
 
             <!-- ポストメニューボタン -->
@@ -995,7 +991,9 @@ function onActivateHashTag (text: string) {
               class="icon-button--nolabel menu-button"
               @click.stop="onActivatePostMenuTrigger"
             >
-              <SVGIcon name="menu" />
+              <div class="icon-container">
+                <SVGIcon name="menu" />
+              </div>
 
               <!-- ポストメニュー -->
               <PostMenuTicker
@@ -1508,35 +1506,14 @@ function onActivateHashTag (text: string) {
   }
 }
 
-.repost-count {
+.repost-button {
   position: relative;
-  &[data-reposted="true"] {
-    & > .svg-icon {
-      fill: rgb(var(--share-color));
-    }
-
-    & > span {
-      color: rgb(var(--share-color));
-    }
-  }
 
   .menu-ticker:deep() {
-    display: contents; // TODO: 外すとティッカー表示時にレイアウト崩れ、外さないとティッカー表示位置が若干ずれる
-
     .menu-ticker--inner {
       top: 2.5rem;
       left: 0;
     }
-  }
-}
-
-.like-count[data-liked="true"] {
-  & > .svg-icon {
-    fill: rgb(var(--like-color));
-  }
-
-  & > span {
-    color: rgb(var(--like-color));
   }
 }
 

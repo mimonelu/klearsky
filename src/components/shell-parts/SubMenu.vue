@@ -16,7 +16,10 @@ const state = reactive<{
 const router = useRouter()
 
 function searchPost () {
-  router.push({ name: "post-search", query: { text: state.text } })
+  const query = state.text !== ""
+    ? { text: state.text }
+    : undefined
+  router.push({ name: "post-search", query })
 }
 </script>
 

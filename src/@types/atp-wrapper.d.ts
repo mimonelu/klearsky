@@ -39,13 +39,14 @@ interface TIAtpWrapper {
   fetchLabels (this: TIAtpWrapper, uriPatterns: Array<string>, ): Promise<undefined | Array<TTLabel>>
   fetchLikeUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchListFeed (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, list: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
+  fetchLogAudit: (this: TIAtpWrapper, did: string) => Promise<undefined | any>
   fetchMutingUsers (this: TIAtpWrapper, users: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
   fetchNotificationCount (this: TIAtpWrapper): Promise<null | number>
   fetchNotifications (this: TIAtpWrapper, values: Array<TTNotificationGroup>, limit?: number, cursor?: string): Promise<undefined | false | { cursor?: string; newNotificationCount: number }>
   fetchOfficialFeedGenerators (this: TIAtpWrapper): Promise<undefined | false | Array<TTFeedGenerator>>
   fetchPopularFeedGenerators (this: TIAtpWrapper, currentValues: Array<TTFeedGenerator>, limit?: number, cursor?: string, term?: string): Promise<Error | undefined | string>
   fetchPosts (this: TIAtpWrapper, uris: Array<string>): Promise<undefined | false | Array<TTPost>>
-  fetchPostSearch (this: TIAtpWrapper, query: string): Promise<undefined | false | Array<TTPost>>
+  fetchPostSearch (this: TIAtpWrapper, currentPosts: Array<TTPost>, q: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchPostThread (this: TIAtpWrapper, uri: string, depth?: number): Promise<undefined | false | Array<TTPost>>
   fetchPreferences (this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile (this: TIAtpWrapper, actor: string): Promise<null | TTProfile>

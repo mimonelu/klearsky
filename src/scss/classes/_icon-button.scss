@@ -4,17 +4,22 @@
   margin: -0.75em;
   padding: 0.75em;
   &:focus, &:hover {
-    & > .svg-icon {
-      fill: rgb(var(--fg-color));
+    & > .icon-container {
+      & > .svg-icon {
+        fill: rgb(var(--fg-color));
+      }
     }
+
     & > span {
       color: rgb(var(--fg-color));
     }
   }
 
-  & > .svg-icon {
-    fill: var(--fg-color-05);
-    font-size: 1em;
+  & > .icon-container {
+    & > .svg-icon {
+      fill: var(--fg-color-05);
+      font-size: 1em;
+    }
   }
 
   & > span {
@@ -29,5 +34,5 @@
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  grid-gap: 0.5em;
+  grid-gap: 0 0.5em;
 }

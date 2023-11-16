@@ -194,18 +194,31 @@ function resetState () {
   state.currentRepostUsers = []
   state.currentRepostUsersUri = undefined
   state.currentRepostUsersCursor = undefined
-  state.currentSearchSuggestionResults = []
-  state.currentSearchSuggestionCursor = undefined
-  state.currentSearchUsers = []
-  state.currentSearchUsersCursor = undefined
-  state.currentSearchUserTerm = ""
-  state.currentSearchLastUserTerm = ""
-  state.currentSearchPostTerm = ""
+
+  // 検索
+
+  // 検索 - 現在の検索キーワード
+  state.currentSearchTerm = ""
+
+  // 検索 - 現在のポスト検索結果
   state.currentSearchPostResults = []
+  state.currentSearchPostCursor = undefined
+  state.currentSearchPostsLastTerm = undefined
+
+  // 検索 - 現在のフィード検索結果
   state.currentSearchFeeds = []
   state.currentSearchFeedsCursor = undefined
-  state.currentSearchFeedsTerm = ""
-  state.currentSearchFeedsLastTerm = ""
+  state.currentSearchFeedsLastTerm = undefined
+
+  // 検索 - 現在のおすすめユーザー検索結果
+  state.currentSearchSuggestionResults = []
+  state.currentSearchSuggestionCursor = undefined
+
+  // 検索 - 現在のユーザー検索結果
+  state.currentSearchUsers = []
+  state.currentSearchUsersCursor = undefined
+  state.currentSearchLastUserTerm = undefined
+
   state.currentMutingUsers = []
   state.currentMutingUsersCursor = undefined
   state.currentBlockingUsers = []
@@ -340,7 +353,7 @@ function updatePageTitle () {
     title += ` - ${state.currentPosts[0].author.displayName}`
 
   else if (state.currentPath.startsWith("/search/post"))
-    title += ` - ${state.currentSearchPostTerm}`
+    title += ` - ${state.currentSearchTerm}`
 
   window.document.title = title
 }
@@ -823,7 +836,7 @@ function broadcastListener (event: MessageEvent) {
       :url="state.sendPostPopupProps.url"
       :fileList="state.sendPostPopupProps.fileList"
       :createdAt="state.sendPostPopupProps.createdAt"
-      @closeSnedPostPopup="closeSendPostPopup"
+      @closeSendPostPopup="closeSendPostPopup"
     />
 
     <!-- マイタグポップアップ -->

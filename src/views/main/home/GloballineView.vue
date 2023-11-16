@@ -30,9 +30,15 @@ onBeforeUnmount(() => {
 
 // subscribeRepo
 
-function connect () {
+async function connect () {
   state.subscriber = new SubscribeRepos(onError, undefined, undefined, undefined, onPost)
-  state.subscriber.connect(`wss://${mainState.atp.session?.__serviceName ?? ""}/xrpc/com.atproto.sync.subscribeRepos`)
+
+  // 同一PDSのみ取得可能
+  let host = mainState.atp.session?.__serviceName ?? ""
+  const logJson = await mainState.atp.fetchLogAudit(mainState.atp.session?.did as string)
+  if (logJson != null) host = logJson[0]?.operation?.services?.atproto_pds?.endpoint?.replace(/^\w+:\/+/, "") ?? host
+
+  state.subscriber.connect(`wss://${host}/xrpc/com.atproto.sync.subscribeRepos`)
   createProfileTimer()
 }
 
