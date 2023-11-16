@@ -15,6 +15,7 @@ export default async function (
   logJson = await log.json()
   console.log("[klearsky/log/audit]", logJson)
   if (!Array.isArray(logJson)) return
+  logJson.reverse()
   Util.cache.set("logAudit", url, logJson)
   return logJson
 }

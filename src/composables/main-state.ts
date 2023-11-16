@@ -281,8 +281,8 @@ async function updateCurrentLogAudit () {
   const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
   if (logJson == null) return
   if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
-  state.currentProfile.__createdAt = logJson[0]?.createdAt
-  state.currentProfile.__log = [...logJson].reverse()
+  state.currentProfile.__createdAt = logJson.at(- 1)?.createdAt
+  state.currentProfile.__log = logJson
 }
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string, middleCursor?: string) {
