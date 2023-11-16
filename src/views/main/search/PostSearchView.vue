@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, watch } from "vue"
 import { useRouter } from "vue-router"
+// TODO: `cursor` を返すようになったらコメントインすること
+// import LoadButton from "@/components/buttons/LoadButton.vue"
 import Post from "@/components/app-parts/Post.vue"
 import Util from "@/composables/util"
 
@@ -15,6 +17,12 @@ const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, async (
     await fetchNewResults()
 }, { immediate: true })
 
+// インフィニットスクロール
+const unwatchOnScroll = watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  // TODO: `cursor` を返すようになったらコメントインすること
+  // if (value) fetchContinuousResults("old")
+})
+
 onMounted(async () => {
   const textbox = document.getElementById("post-term-textbox")
   if (textbox != null) textbox.focus()
@@ -25,6 +33,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   unwatchOnQuery()
+  unwatchOnScroll()
 })
 
 function updateSearchPostTerm (text: string) {
@@ -44,16 +53,26 @@ async function fetchNewResults () {
   mainState.currentSearchPostResults.splice(0)
   if (!mainState.currentSearchTerm) return
   mainState.processing = true
-  try {
-    const results: undefined | false | Array<TTPost> =
-      await mainState.atp.fetchPostSearch(mainState.currentSearchTerm)
-    if (results === false) return
-    if (results != null) mainState.currentSearchPostResults = results
-  } finally {
-    mainState.processing = false
+  await mainState.fetchSearchPosts("new")
+  mainState.processing = false
+  updateRouter()
+}
+
+/* // TODO: `cursor` を返すようになったらコメントインすること
+async function fetchContinuousResults (direction: "new" | "old") {
+  Util.blurElement()
+  if (mainState.processing) return
+  if (mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm) {
+    mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
+    mainState.currentSearchPostResults.splice(0)
+    mainState.currentSearchPostCursor = undefined
     updateRouter()
   }
+  mainState.processing = true
+  await mainState.fetchSearchPosts(direction)
+  mainState.processing = false
 }
+*/
 
 function updateRouter () {
   const query = mainState.currentSearchTerm !== ""
@@ -103,6 +122,14 @@ function removeThisPost (uri: string) {
         @removeThisPost="removeThisPost"
         @onActivateHashTag="updateSearchPostTerm"
       />
+
+      <!-- TODO: `cursor` を返すようになったらコメントインすること
+      <LoadButton
+        direction="old"
+        :processing="mainState.processing"
+        @activate="fetchContinuousResults('old')"
+      />
+      -->
     </div>
   </div>
 </template>

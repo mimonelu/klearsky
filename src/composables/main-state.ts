@@ -108,6 +108,7 @@ const state = reactive<MainState>({
   fetchSuggestions,
 
   fetchPopularFeedGenerators,
+  fetchSearchPosts,
   fetchSearchFeeds,
   fetchCustomFeeds,
 
@@ -584,6 +585,21 @@ async function fetchPopularFeedGenerators (direction: "old" | "new") {
     "main-state/fetchPopularFeedGenerators"
   )
   else if (cursor != null) state.currentPopularFeedGeneratorsCursor = cursor
+}
+
+async function fetchSearchPosts (direction: "old" | "new") {
+  const cursor: Error | undefined | string =
+    await state.atp.fetchPostSearch(
+      state.currentSearchPostResults,
+      state.currentSearchTerm,
+      CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
+      direction === "old" ? state.currentSearchPostCursor : undefined
+    )
+  if (cursor instanceof Error) state.openErrorPopup(
+    "errorApiFailed",
+    "main-state/fetchSearchPosts"
+  )
+  else if (cursor != null) state.currentSearchPostCursor = cursor
 }
 
 async function fetchSearchFeeds (direction: "old" | "new") {

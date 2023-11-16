@@ -202,6 +202,7 @@ function resetState () {
 
   // 検索 - 現在のポスト検索結果
   state.currentSearchPostResults = []
+  state.currentSearchPostCursor = undefined
   state.currentSearchPostsLastTerm = undefined
 
   // 検索 - 現在のフィード検索結果
