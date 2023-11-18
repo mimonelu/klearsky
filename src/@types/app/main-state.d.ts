@@ -9,7 +9,7 @@ type MainState = {
   processing: boolean
   updateKey: number
   forceUpdate: () => void
-  formatDate: Function
+  formatDate: (dateString?: string) => string
 
   // D&D
   isDragOver: boolean
@@ -29,8 +29,8 @@ type MainState = {
   openSettingsPopup: Function
   closeSettingsPopup: Function
   resetSettings: () => void
-  saveSettings: () => void
   updateSettings: () => void
+  saveSettings: () => void
   updateCurrentLanguageSetting: () => void
   updateColorThemeSetting: () => void
 
@@ -110,6 +110,7 @@ type MainState = {
   currentSuggestedFollows: Array<TTUser>
   userProfile: null | TTProfile
   fetchUserProfile: () => Promise<void>
+  updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
   fetchCurrentProfile: (did: string) => Promise<void>
   fetchCurrentAuthorCustomFeeds: (direction: "new" | "old") => Promise<void>
   fetchCurrentAuthorFeed: (direction: "new" | "old", filter?: string, middleCursor?: string) => Promise<void>
@@ -119,7 +120,6 @@ type MainState = {
   fetchFollowings: (direction: "new" | "old") => Promise<void>
   fetchSuggestedFollows: () => Promise<void>
   fetchSuggestions: (direction: "new" | "old") => Promise<void>
-  updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
 
   // ポストスレッド
 
