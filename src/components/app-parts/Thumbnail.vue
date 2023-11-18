@@ -35,6 +35,7 @@ const BLOB_MIME_TYPES = [
 
 onMounted(async () => {
   if (props.image == null) return
+
   if (typeof props.image === "string") {
     state.src = props.image
     state.loaded = true
