@@ -1,21 +1,92 @@
 type MainState = {
+  $setCurrentLanguage?: Function
+  $getCurrentLanguage?: Function
   atp: TIAtpWrapper
-  mounted: boolean
-  updateKey: number
-  hasLogin: boolean
-  processing: boolean
-
-  userProfile: null | TTProfile
-
-  listProcessing: boolean
-
-  timelineFeeds: Array<TTFeed>
-  timelineCursor?: string
-
   currentPath: string
   currentQuery: LocationQuery
+  listProcessing: boolean
+  mounted: boolean
+  processing: boolean
+  updateKey: number
+  forceUpdate: () => void
+  formatDate: Function
 
-  currentPosts: Array<TTPost>
+  // D&D
+  isDragOver: boolean
+
+  // インフィニットスクロール用プロパティ
+  scrolledToBottom: boolean
+
+  // ブロードキャスト
+  broadcastChannel?: BroadcastChannel
+
+  // 設定
+
+  settings: { [did: string]: TTSetting }
+  backgroundImage: ComputedRef<string>
+  currentSetting: TTSetting
+  settingsPopupDisplay: boolean
+  openSettingsPopup: Function
+  closeSettingsPopup: Function
+  resetSettings: () => void
+  saveSettings: () => void
+  updateSettings: () => void
+  updateCurrentLanguageSetting: () => void
+  updateColorThemeSetting: () => void
+
+  // 通知
+
+  notifications: Array<TTNotificationGroup>
+  notificationCursor?: string
+  notificationCount: number
+  notificationFetchedFirst: boolean
+  notificationPopupDisplay: boolean
+  fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
+  openNotificationPopup: Function
+  closeNotificationPopup: Function
+
+  // 招待コード
+
+  inviteCodes: Array<TTInviteCode>
+  numberOfInviteCodes: ComputedRef<number>
+  numberOfAvailableInviteCodes: ComputedRef<number>
+  inviteCodesPopupDisplay: boolean
+  openInviteCodesPopup: Function
+  closeInviteCodesPopup: Function
+
+  // Preferences
+
+  currentPreferences: Array<TTPreference>
+  fetchPreferences: () => Promise<boolean>
+
+  // コンテンツフィルタ
+
+  getContentWarningVisibility: (labels?: Array<TTLabel>) => TTContentVisibility
+  getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
+
+  // ラベル
+
+  filterLabels (
+    visibilities?: Array<TTContentVisibility>,
+    warns?: Array<TTLabelOnWarn>,
+    labels?: Array<TTLabel>
+  ): Array<TTLabel>
+  selectLabelsPopupDisplay: boolean
+  selectLabelsPopupState: any
+  openSelectLabelsPopup: Function
+  closeSelectLabelsPopup: Function
+
+  // ミュートユーザー
+
+  currentMutingUsers: Array<TTUser>
+  currentMutingUsersCursor?: string
+
+  // ブロックユーザー
+
+  currentBlockingUsers: Array<TTUser>
+  currentBlockingUsersCursor?: string
+
+  // プロフィール
 
   inSameProfilePage: boolean
   profileFolding: boolean
@@ -37,29 +108,29 @@ type MainState = {
   currentFollowings: Array<TTUser>
   currentFollowingsCursor?: string
   currentSuggestedFollows: Array<TTUser>
+  userProfile: null | TTProfile
+  fetchUserProfile: () => Promise<void>
+  fetchCurrentProfile: (did: string) => Promise<void>
+  fetchCurrentAuthorCustomFeeds: (direction: "new" | "old") => Promise<void>
+  fetchCurrentAuthorFeed: (direction: "new" | "old", filter?: string, middleCursor?: string) => Promise<void>
+  fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
+  fetchAuthorLikes: (direction: "new" | "old") => Promise<void>
+  fetchFollowers: (direction: "new" | "old") => Promise<void>
+  fetchFollowings: (direction: "new" | "old") => Promise<void>
+  fetchSuggestedFollows: () => Promise<void>
+  fetchSuggestions: (direction: "new" | "old") => Promise<void>
+  updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
 
-  currentPreferences: Array<TTPreference>
-  fetchPreferences: () => Promise<boolean>
-  feedPreferences: ComputedRef<undefined | TTPreference>
-  currentMyFeeds: { [uri: string]: {
-    generator?: TTFeedGenerator
-    feeds: Array<TTFeed>
-    processing: boolean
-    status: boolean
-  } }
-  currentMyFeedGenerators: Array<TTFeedGenerator>
-  fetchMyFeedGenerators: () => Promise<void>
-  sortMyFeedGenerators: () => void
-  sortFeedPreferencesSavedAndPinned: () => void
-  fetchMyFeeds: () => Promise<boolean>
+  // ポストスレッド
 
-  filterLabels (
-    visibilities?: Array<TTContentVisibility>,
-    warns?: Array<TTLabelOnWarn>,
-    labels?: Array<TTLabel>
-  ): Array<TTLabel>
-  getContentWarningVisibility: (labels?: Array<TTLabel>) => TTContentVisibility
-  getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
+  currentPosts: Array<TTPost>
+  fetchPostThread: () => Promise<void>
+
+  // フォロー中フィード
+
+  timelineFeeds: Array<TTFeed>
+  timelineCursor?: string
+  fetchTimeline: (direction: "old" | "new", middleCursor?: string) => Promise<void>
 
   // 検索
 
@@ -87,172 +158,51 @@ type MainState = {
   currentSearchUsersCursor?: string
   currentSearchLastUserTerm?: string
 
-  currentRepostUsers: Array<TTUser>
-  currentRepostUsersUri?: string
-  currentRepostUsersCursor?: string
-  repostUsersPopupDisplay: boolean
+  // カスタムフィード
 
-  currentLikeUsers: Array<TTUser>
-  currentLikeUsersUri?: string
-  currentLikeUsersCursor?: string
-  likeUsersPopupDisplay: boolean
+  currentCustomUri?: string
+  currentCustomFeeds: Array<TTFeed>
+  currentCustomCursor?: string
+  currentMyFeeds: { [uri: string]: {
+    generator?: TTFeedGenerator
+    feeds: Array<TTFeed>
+    processing: boolean
+    status: boolean
+  } }
+  currentMyFeedGenerators: Array<TTFeedGenerator>
+  currentPopularFeedGenerators: Array<TTFeedGenerator>
+  currentPopularFeedGeneratorsCursor?: string
+  feedPreferences: ComputedRef<undefined | TTPreference>
+  fetchCustomFeeds: (direction: "new" | "old", middleCursor?: string) => Promise<void>
+  fetchMyFeedGenerators: () => Promise<void>
+  fetchMyFeeds: () => Promise<boolean>
+  fetchPopularFeedGenerators: (direction: "new" | "old") => Promise<void>
+  sortFeedPreferencesSavedAndPinned: () => void
+  sortMyFeedGenerators: () => void
 
-  currentMutingUsers: Array<TTUser>
-  currentMutingUsersCursor?: string
-
-  currentBlockingUsers: Array<TTUser>
-  currentBlockingUsersCursor?: string
+  // ローカルライン
 
   globallinePosts: Array<TTPost>
   globallineProfiles: { [did: string]: any }
   globallineNumberOfPosts: number
 
-  currentPopularFeedGenerators: Array<TTFeedGenerator>
-  currentPopularFeedGeneratorsCursor?: string
-  fetchPopularFeedGenerators: (direction: "new" | "old") => Promise<void>
-  currentCustomUri?: string
-  currentCustomFeeds: Array<TTFeed>
-  currentCustomCursor?: string
-  fetchCustomFeeds: (direction: "new" | "old", middleCursor?: string) => Promise<void>
+  // ポップアップ
 
-  notifications: Array<TTNotificationGroup>
-  notificationCursor?: string
-  notificationCount: number
-  notificationFetchedFirst: boolean
-
-  loginPopupDisplay: boolean
-  loginPopupAutoDisplay: any // TODO:
-
-  inviteCodes: Array<TTInviteCode>
-  numberOfInviteCodes: ComputedRef<number>
-  numberOfAvailableInviteCodes: ComputedRef<number>
-
-  sendPostPopupProps: TTSendPostPopupParams
-
-  imagePopupProps: {
-    display: boolean
-    did: string
-    images: Array<TTImagePopupPropsImages>
-    index: number
-  }
-
-  settings: { [did: string]: TTSetting }
-  currentSetting: TTSetting
-  saveSettings: () => void
-  resetSettings: () => void
-  updateSettings: () => void
-  updateCurrentLanguageSetting: () => void
-  updateColorThemeSetting: () => void
-  backgroundImage: any // TODO:
-
-  // インフィニットスクロール用プロパティ
-  scrolledToBottom: boolean
-
-  // エラーポップアッププロパティ
+  // ポップアップ - エラーポップアップ
   errorPopupProps: {
     display: boolean
     error: any
     description: any
   }
+  openErrorPopup: Function
+  closeErrorPopup: Function
 
-  // 通知ポップアップの表示スイッチ
-  notificationPopupDisplay: boolean
-
-  // 設定ポップアップの表示スイッチ
-  settingsPopupDisplay: boolean
-
-  // アカウントポップアップの表示スイッチ
-  accountPopupDisplay: boolean
-
-  // コンテンツ言語ポップアップの表示スイッチ
-  contentLanguagesPopupDisplay: boolean
-
-  // ポスト言語ポップアップの表示スイッチ
-  postLanguagesPopupDisplay: boolean
-
-  // ラベル選択ポップアップ
-  selectLabelsPopupDisplay: boolean
-  selectLabelsPopupState: any
-
-  // ポスト日時選択ポップアップ
-  postDatePopupDisplay: boolean
-  postDatePopupDate?: string
-
-  // 招待コード確認ポップアップの表示スイッチ
-  inviteCodesPopupDisplay: boolean
-
-  // マイフィードポップアップの表示スイッチ
-  myFeedsPopupDisplay: boolean
-
-  // タグ
-  currentPostTags: Array<TTTag>
-  myTagPopupProps: TTTagPopupProps
-  openMyTagPopup: Function
-  closeMyTagPopup: Function
-
-  // ワードミュートポップアップの表示スイッチ
-  wordMutePopupDisplay: boolean
-
-  // コンテンツフィルタリングポップアップの表示スイッチ
-  contentFilteringPopupDisplay: boolean
-
-  // ミュートユーザーリストポップアップの表示スイッチ
-  mutingUsersPopupDisplay: boolean
-
-  // ブロックユーザーリストポップアップの表示スイッチ
-  blockingUsersPopupDisplay: boolean
-
-  // アカウントレポート送信ポップアッププロパティ
-  sendAccountReportPopupProps: {
-    display: boolean
-    user?: TTUser
-  }
-
-  // ポストレポート送信ポップアッププロパティ
-  sendPostReportPopupProps: {
-    display: boolean
-    post?: TTPost
-  }
-
-  // フィードレポート送信ポップアッププロパティ
-  sendFeedReportPopupProps: {
-    display: boolean
-    generator?: TTFeedGenerator
-  }
-
-  // D&D
-  isDragOver: boolean
-
-  $setCurrentLanguage?: Function
-  $getCurrentLanguage?: Function
-
-  formatDate: Function
-  forceUpdate: () => void
-  fetchUserProfile: () => Promise<void>
-  fetchCurrentProfile: (did: string) => Promise<void>
-  fetchCurrentAuthorCustomFeeds: (direction: "new" | "old") => Promise<void>
-  fetchCurrentAuthorFeed: (direction: "new" | "old", filter?: string, middleCursor?: string) => Promise<void>
-  fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
-  fetchAuthorLikes: (direction: "new" | "old") => Promise<void>
-  fetchTimeline: (direction: "old" | "new", middleCursor?: string) => Promise<void>
-  fetchPostThread: () => Promise<void>
-  fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
-  fetchFollowers: (direction: "new" | "old") => Promise<void>
-  fetchFollowings: (direction: "new" | "old") => Promise<void>
-  fetchSuggestedFollows: () => Promise<void>
-  fetchSuggestions: (direction: "new" | "old") => Promise<void>
-  updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
-  openSendPostPopup: (params: TTSendPostPopupParams) => Promise<boolean>
-  closeSendPostPopup: (done: boolean) => void
-  openRepostUsersPopup: (uri: string) => void
-  closeRepostUsersPopup: () => void
-  openLikeUsersPopup: (uri: string) => void
-  closeLikeUsersPopup: () => void
-
+  // ポップアップ - メッセージポップアップ
   messagePopupProps: TTMessagePopupProps
   openMessagePopup: (params: Omit<TTMessagePopupProps, "display">) => void
   closeMessagePopup: () => void
 
+  // ポップアップ - 確認ポップアップ
   confirmationPopupDisplay: boolean
   confirmationPopupTitle?: string
   confirmationPopupText?: string
@@ -262,81 +212,119 @@ type MainState = {
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
 
-  // タイムフィード
+  // ポップアップ - ログインポップアップ
+  loginPopupDisplay: boolean
+  loginPopupAutoDisplay: ComputedRef<boolean>
+
+  // ポップアップ - アカウントポップアップ
+  accountPopupDisplay: boolean
+  openAccountPopup: Function
+  closeAccountPopup: Function
+
+  // ポップアップ - コンテンツ言語ポップアップ
+  contentLanguagesPopupDisplay: boolean
+  openContentLanguagesPopup: Function
+  closeContentLanguagesPopup: Function
+
+  // ポップアップ - ポスト言語ポップアップ
+  postLanguagesPopupDisplay: boolean
+  openPostLanguagesPopup: Function
+  closePostLanguagesPopup: Function
+
+  // ポップアップ - コンテンツフィルタリングポップアップ
+  contentFilteringPopupDisplay: boolean
+  openContentFilteringPopup: Function
+  closeContentFilteringPopup: Function
+
+  // ポップアップ - ミュートユーザーリストポップアップ
+  mutingUsersPopupDisplay: boolean
+  openMutingUsersPopup: Function
+  closeMutingUsersPopup: Function
+
+  // ポップアップ - ブロックユーザーリストポップアップ
+  blockingUsersPopupDisplay: boolean
+  openBlockingUsersPopup: Function
+  closeBlockingUsersPopup: Function
+
+  // ポップアップ - ワードミュートポップアップ
+  wordMutePopupDisplay: boolean
+  openWordMutePopup: Function
+  closeWordMutePopup: Function
+
+  // ポップアップ - アカウントレポート送信ポップアップ
+  sendAccountReportPopupProps: {
+    display: boolean
+    user?: TTUser
+  }
+  openSendAccountReportPopup: Function
+  closeSendAccountReportPopup: Function
+
+  // ポップアップ - ポストレポート送信ポップアップ
+  sendPostReportPopupProps: {
+    display: boolean
+    post?: TTPost
+  }
+  openSendPostReportPopup: Function
+  closeSendPostReportPopup: Function
+
+  // ポップアップ - フィードレポート送信ポップアップ
+  sendFeedReportPopupProps: {
+    display: boolean
+    generator?: TTFeedGenerator
+  }
+  openSendFeedReportPopup: Function
+  closeSendFeedReportPopup: Function
+
+  // ポップアップ - イメージポップアップ
+  imagePopupProps: {
+    display: boolean
+    did: string
+    images: Array<TTImagePopupPropsImages>
+    index: number
+  }
+
+  // ポップアップ - リポストユーザーポップアップ
+  currentRepostUsers: Array<TTUser>
+  currentRepostUsersUri?: string
+  currentRepostUsersCursor?: string
+  repostUsersPopupDisplay: boolean
+  openRepostUsersPopup: (uri: string) => void
+  closeRepostUsersPopup: () => void
+
+  // ポップアップ - いいねユーザーポップアップ
+  currentLikeUsers: Array<TTUser>
+  currentLikeUsersUri?: string
+  currentLikeUsersCursor?: string
+  likeUsersPopupDisplay: boolean
+  openLikeUsersPopup: (uri: string) => void
+  closeLikeUsersPopup: () => void
+
+  // ポップアップ - マイフィードポップアップ
+  myFeedsPopupDisplay: boolean
+  openMyFeedsPopup: Function
+  closeMyFeedsPopup: Function
+
+  // ポップアップ - タイムフィードポップアップ
   currentTimeFeeds: Array<TTPost>
   timeFeedsPopupDisplay: boolean
   timeFeedsPopupProps?: TTPost
   openTimeFeedsPopup: (post: TTPost) => void
   closeTimeFeedsPopup: () => void
 
-  // 通知ポップアップの開閉
-  openNotificationPopup: Function
-  closeNotificationPopup: Function
+  // ポップアップ - ポスト送信ポップアップ
+  sendPostPopupProps: TTSendPostPopupParams
+  openSendPostPopup: (params: TTSendPostPopupParams) => Promise<boolean>
+  closeSendPostPopup: (done: boolean) => void
 
-  // 設定ポップアップの開閉
-  openSettingsPopup: Function
-  closeSettingsPopup: Function
+  // ポップアップ - マイタグポップアップ
+  currentPostTags: Array<TTTag>
+  myTagPopupProps: TTTagPopupProps
+  openMyTagPopup: Function
+  closeMyTagPopup: Function
 
-  // アカウントポップアップの開閉
-  openAccountPopup: Function
-  closeAccountPopup: Function
-
-  // コンテンツ言語ポップアップの開閉
-  openContentLanguagesPopup: Function
-  closeContentLanguagesPopup: Function
-
-  // ポスト言語ポップアップの開閉
-  openPostLanguagesPopup: Function
-  closePostLanguagesPopup: Function
-
-  // ラベル選択ポップアップの開閉
-  openSelectLabelsPopup: Function
-  closeSelectLabelsPopup: Function
-
-  // ポスト日時選択ポップアップの開閉
+  // ポップアップ - ポスト日時選択ポップアップ
+  postDatePopupDisplay: boolean
+  postDatePopupDate?: string
   openPostDatePopup: Function
   closePostDatePopup: Function
-
-  // 招待コード確認ポップアップの開閉
-  openInviteCodesPopup: Function
-  closeInviteCodesPopup: Function
-
-  // マイフィードポップアップの開閉
-  openMyFeedsPopup: Function
-  closeMyFeedsPopup: Function
-
-  // ワードミュートポップアップの開閉
-  openWordMutePopup: Function
-  closeWordMutePopup: Function
-
-  // コンテンツフィルタリングポップアップの開閉
-  openContentFilteringPopup: Function
-  closeContentFilteringPopup: Function
-
-  // ミュートユーザーリストポップアップの開閉
-  openMutingUsersPopup: Function
-  closeMutingUsersPopup: Function
-
-  // ブロックユーザーリストポップアップの開閉
-  openBlockingUsersPopup: Function
-  closeBlockingUsersPopup: Function
-
-  // アカウントレポート送信ポップアップの開閉
-  openSendAccountReportPopup: Function
-  closeSendAccountReportPopup: Function
-
-  // ポストレポート送信ポップアップの開閉
-  openSendPostReportPopup: Function
-  closeSendPostReportPopup: Function
-
-  // フィードレポート送信ポップアップの開閉
-  openSendFeedReportPopup: Function
-  closeSendFeedReportPopup: Function
-
-  // エラーポップアップの開閉
-  openErrorPopup: Function
-  closeErrorPopup: Function
-
-  // ブロードキャスト
-  broadcastChannel: BroadcastChannel
 }

@@ -63,6 +63,11 @@ import Util from "@/composables/util"
 
 // @ts-ignore
 class AtpWrapper implements TIAtpWrapper {
+  agent: null | any
+  data: any
+  session?: TTSession
+  lastFetchNotificationsDate?: Date
+
   // @ts-ignore
   constructor (this: TIAtpWrapper) {
     this.agent = null
@@ -70,6 +75,8 @@ class AtpWrapper implements TIAtpWrapper {
       did: "",
       sessions: {},
     }
+    this.session = undefined
+    this.lastFetchNotificationsDate = undefined
 
     // 不正なアカウントデータの修復
     // TODO: このような処理が不要になるように再実装すること
@@ -82,76 +89,78 @@ class AtpWrapper implements TIAtpWrapper {
         }
       }
     }
-
-    this.session = undefined
-    this.lastFetchNotificationsDate = undefined
   }
-}
 
-const prototype = AtpWrapper.prototype as unknown as TIAtpWrapper
-prototype.canLogin = function (this: TIAtpWrapper): boolean { return this.data.sessions[this.data.did] != null }
-prototype.createAgent = createAgent
-prototype.createFileBlob = createFileBlob
-prototype.createFollow = createFollow
-prototype.createLike = createLike
-prototype.createPost = createPost
-prototype.createReport = createReport
-prototype.createRepost = createRepost
-prototype.deleteAccount = deleteAccount
-prototype.deleteFollow = deleteFollow
-prototype.deleteLike = deleteLike
-prototype.deletePost = deletePost
-prototype.deleteRepost = deleteRepost
-prototype.deleteSession = deleteSession
-prototype.fetchActorsTypeahead = fetchActorsTypeahead
-prototype.fetchAuthorCustomFeeds = fetchAuthorCustomFeeds
-prototype.fetchAuthorFeed = fetchAuthorFeed
-prototype.fetchAuthorLikes = fetchAuthorLikes
-prototype.fetchAuthorReposts = fetchAuthorReposts
-prototype.fetchBlob = fetchBlob
-prototype.fetchBlobUrl = fetchBlobUrl
-prototype.fetchBlockingUsers = fetchBlockingUsers
-prototype.fetchCustomFeeds = fetchCustomFeeds
-prototype.fetchDid = fetchDid
-prototype.fetchFeedGenerator = fetchFeedGenerator
-prototype.fetchFeedGenerators = fetchFeedGenerators
-prototype.fetchFirstPost = fetchFirstPost
-prototype.fetchFollowers = fetchFollowers
-prototype.fetchFollowings = fetchFollowings
-prototype.fetchInviteCodes = fetchInviteCodes
-prototype.fetchLabels = fetchLabels
-prototype.fetchLikeUsers = fetchLikeUsers
-prototype.fetchListFeed = fetchListFeed
-prototype.fetchLogAudit = fetchLogAudit
-prototype.fetchMutingUsers = fetchMutingUsers
-prototype.fetchNotificationCount = fetchNotificationCount
-prototype.fetchNotifications = fetchNotifications
-prototype.fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
-prototype.fetchPopularFeedGenerators = fetchPopularFeedGenerators
-prototype.fetchPosts = fetchPosts
-prototype.fetchPostSearch = fetchPostSearch
-prototype.fetchPostThread = fetchPostThread
-prototype.fetchPreferences = fetchPreferences
-prototype.fetchProfile = fetchProfile
-prototype.fetchRepostUsers = fetchRepostUsers
-prototype.fetchSuggestedFollows = fetchSuggestedFollows
-prototype.fetchSuggestions = fetchSuggestions
-prototype.fetchTimeFeeds = fetchTimeFeeds
-prototype.fetchTimeline = fetchTimeline
-prototype.fetchUserSearch = fetchUserSearch
-prototype.hasLogin = function (this: TIAtpWrapper): boolean { return this.session != null }
-prototype.login = login
-prototype.logout = logout
-prototype.refreshSession = refreshSession
-prototype.resetSession = resetSession
-prototype.resumeSession = resumeSession
-prototype.saveData = function (this: TIAtpWrapper) { Util.saveStorage("atp", this.data) }
-prototype.updateBlockToDisable = updateBlockToDisable
-prototype.updateBlockToEnable = updateBlockToEnable
-prototype.updateMuteToDisable = updateMuteToDisable
-prototype.updateMuteToEnable = updateMuteToEnable
-prototype.updateNotificationSeen = updateNotificationSeen
-prototype.updatePreferences = updatePreferences
-prototype.updateProfile = updateProfile
+  canLogin (this: TIAtpWrapper): boolean {
+    return this.data.sessions[this.data.did] != null
+  }
+  createAgent = createAgent
+  createFileBlob = createFileBlob
+  createFollow = createFollow
+  createLike = createLike
+  createPost = createPost
+  createReport = createReport
+  createRepost = createRepost
+  deleteAccount = deleteAccount
+  deleteFollow = deleteFollow
+  deleteLike = deleteLike
+  deletePost = deletePost
+  deleteRepost = deleteRepost
+  deleteSession = deleteSession
+  fetchActorsTypeahead = fetchActorsTypeahead
+  fetchAuthorCustomFeeds = fetchAuthorCustomFeeds
+  fetchAuthorFeed = fetchAuthorFeed
+  fetchAuthorLikes = fetchAuthorLikes
+  fetchAuthorReposts = fetchAuthorReposts
+  fetchBlob = fetchBlob
+  fetchBlobUrl = fetchBlobUrl
+  fetchBlockingUsers = fetchBlockingUsers
+  fetchCustomFeeds = fetchCustomFeeds
+  fetchDid = fetchDid
+  fetchFeedGenerator = fetchFeedGenerator
+  fetchFeedGenerators = fetchFeedGenerators
+  fetchFirstPost = fetchFirstPost
+  fetchFollowers = fetchFollowers
+  fetchFollowings = fetchFollowings
+  fetchInviteCodes = fetchInviteCodes
+  fetchLabels = fetchLabels
+  fetchLikeUsers = fetchLikeUsers
+  fetchListFeed = fetchListFeed
+  fetchLogAudit = fetchLogAudit
+  fetchMutingUsers = fetchMutingUsers
+  fetchNotificationCount = fetchNotificationCount
+  fetchNotifications = fetchNotifications
+  fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
+  fetchPopularFeedGenerators = fetchPopularFeedGenerators
+  fetchPosts = fetchPosts
+  fetchPostSearch = fetchPostSearch
+  fetchPostThread = fetchPostThread
+  fetchPreferences = fetchPreferences
+  fetchProfile = fetchProfile
+  fetchRepostUsers = fetchRepostUsers
+  fetchSuggestedFollows = fetchSuggestedFollows
+  fetchSuggestions = fetchSuggestions
+  fetchTimeFeeds = fetchTimeFeeds
+  fetchTimeline = fetchTimeline
+  fetchUserSearch = fetchUserSearch
+  hasLogin (this: TIAtpWrapper): boolean {
+    return this.session != null
+  }
+  login = login
+  logout = logout
+  refreshSession = refreshSession
+  resetSession = resetSession
+  resumeSession = resumeSession
+  saveData (this: TIAtpWrapper) {
+    Util.saveStorage("atp", this.data)
+  }
+  updateBlockToDisable = updateBlockToDisable
+  updateBlockToEnable = updateBlockToEnable
+  updateMuteToDisable = updateMuteToDisable
+  updateMuteToEnable = updateMuteToEnable
+  updateNotificationSeen = updateNotificationSeen
+  updatePreferences = updatePreferences
+  updateProfile = updateProfile
+}
 
 export default AtpWrapper

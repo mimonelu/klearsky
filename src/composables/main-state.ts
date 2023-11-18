@@ -11,44 +11,29 @@ import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
 import LANGUAGES from "@/consts/languages.json"
 
 const state = reactive<MainState>({
-  // @ts-ignore // TODO:
+  $setCurrentLanguage: undefined,
+  $getCurrentLanguage: undefined,
   atp: new AtpWrapper(),
+  currentPath: "",
+  currentQuery: {},
+  listProcessing: false,
   mounted: false,
   processing: false,
-  loginPopupDisplay: false,
-  loginPopupAutoDisplay: computed((): boolean => {
-    return state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)
-  }),
-  sendAccountReportPopupProps: {
-    display: false,
-    user: undefined,
-  },
-  sendPostReportPopupProps: {
-    display: false,
-    post: undefined,
-  },
-  sendFeedReportPopupProps: {
-    display: false,
-    generator: undefined,
-  },
-  sendPostPopupProps: {
-    display: false,
-    type: "post",
-    post: undefined,
-    fileList: undefined,
-    createdAt: undefined,
-  },
-  imagePopupProps: {
-    did: "",
-    images: [],
-    index: 0,
-    display: false,
-  },
-  errorPopupProps: {
-    display: false,
-    error: undefined,
-    description: undefined,
-  },
+  updateKey: 0,
+  forceUpdate,
+  formatDate,
+
+  // D&D
+  isDragOver: false,
+
+  // インフィニットスクロール用プロパティ
+  scrolledToBottom: false,
+
+  // ブロードキャスト
+  broadcastChannel: undefined,
+
+  // 設定
+
   settings: {},
   backgroundImage: computed((): string => {
     if (state.currentSetting?.backgroundImage == null) return ""
@@ -58,9 +43,30 @@ const state = reactive<MainState>({
       ? `url(${backgroundImage})`
       : backgroundImage
   }),
-  $setCurrentLanguage: undefined,
-  $getCurrentLanguage: undefined,
+  currentSetting: {},
+  settingsPopupDisplay: false,
+  openSettingsPopup,
+  closeSettingsPopup,
+  resetSettings,
+  saveSettings,
+  updateSettings,
+  updateCurrentLanguageSetting,
+  updateColorThemeSetting,
 
+  // 通知
+
+  notifications: [],
+  notificationCursor: undefined,
+  notificationCount: 0,
+  notificationFetchedFirst: false,
+  notificationPopupDisplay: false,
+  fetchNotifications,
+  openNotificationPopup,
+  closeNotificationPopup,
+
+  // 招待コード
+
+  inviteCodes: [],
   numberOfInviteCodes: computed(() => {
     let total = 0
     state.inviteCodes.forEach((inviteCode: TTInviteCode) => {
@@ -75,103 +81,281 @@ const state = reactive<MainState>({
     })
     return total
   }),
+  inviteCodesPopupDisplay: false,
+  openInviteCodesPopup,
+  closeInviteCodesPopup,
 
-  formatDate,
-  forceUpdate,
-  fetchUserProfile,
-  fetchCurrentProfile,
-  fetchCurrentAuthorFeed,
-  fetchCurrentAuthorCustomFeeds,
-  fetchAuthorReposts,
-  fetchAuthorLikes,
-  filterLabels,
+  // Preferences
+
+  currentPreferences: [],
+  fetchPreferences,
+
+  // コンテンツフィルタ
+
+  getConcernedPreferences,
   getContentWarningVisibility,
 
-  fetchPreferences,
-  getConcernedPreferences,
+  // ラベル
+
+  filterLabels,
+  selectLabelsPopupDisplay: false,
+  selectLabelsPopupState: undefined,
+  openSelectLabelsPopup,
+  closeSelectLabelsPopup,
+
+  // ミュートユーザー
+
+  currentMutingUsers: [],
+  currentMutingUsersCursor: undefined,
+
+  // ブロックユーザー
+
+  currentBlockingUsers: [],
+  currentBlockingUsersCursor: undefined,
+
+  // プロフィール
+
+  inSameProfilePage: false,
+  profileFolding: false,
+  currentProfile: null,
+  currentAuthorFeeds: [],
+  currentAuthorFeedsCursor: undefined,
+  currentAuthorFeedsWithReplies: [],
+  currentAuthorFeedsWithRepliesCursor: undefined,
+  currentAuthorFeedsWithMedia: [],
+  currentAuthorFeedsWithMediaCursor: undefined,
+  currentAuthorCustomFeeds: [],
+  currentAuthorCustomFeedsCursor: undefined,
+  currentAuthorReposts: [],
+  currentAuthorRepostsCursor: undefined,
+  currentAuthorLikes: [],
+  currentAuthorLikesCursor: undefined,
+  currentFollowers: [],
+  currentFollowersCursor: undefined,
+  currentFollowings: [],
+  currentFollowingsCursor: undefined,
+  currentSuggestedFollows: [],
+  userProfile: null,
+  fetchUserProfile,
+  fetchCurrentProfile,
+  fetchCurrentAuthorCustomFeeds,
+  fetchCurrentAuthorFeed,
+  fetchAuthorReposts,
+  fetchAuthorLikes,
+  fetchFollowers,
+  fetchFollowings,
+  fetchSuggestedFollows,
+  fetchSuggestions,
+  updateUserProfile,
+
+  // ポストスレッド
+
+  currentPosts: [],
+  fetchPostThread,
+
+  // フォロー中フィード
+
+  timelineFeeds: [],
+  timelineCursor: undefined,
+  fetchTimeline,
+
+  // 検索
+
+  // 検索 - 現在の検索キーワード
+  currentSearchTerm: "",
+
+  // 検索 - 現在のポスト検索結果
+  currentSearchPostResults: [],
+  currentSearchPostCursor: undefined,
+  currentSearchPostsLastTerm: undefined,
+  fetchSearchPosts,
+
+  // 検索 - 現在のフィード検索結果
+  currentSearchFeeds: [],
+  currentSearchFeedsCursor: undefined,
+  currentSearchFeedsLastTerm: undefined,
+  fetchSearchFeeds,
+
+  // 検索 - 現在のおすすめユーザー検索結果
+  currentSearchSuggestionResults: [],
+  currentSearchSuggestionCursor: undefined,
+
+  // 検索 - 現在のユーザー検索結果
+  currentSearchUsers: [],
+  currentSearchUsersCursor: undefined,
+  currentSearchLastUserTerm: undefined,
+
+  // カスタムフィード
+
+  currentCustomUri: undefined,
+  currentCustomFeeds: [],
+  currentCustomCursor: undefined,
+  currentMyFeeds: {},
+  currentMyFeedGenerators: [],
+  currentPopularFeedGenerators: [],
+  currentPopularFeedGeneratorsCursor: undefined,
   feedPreferences: computed((): undefined | TTPreference => {
     return state.currentPreferences.find((preference: TTPreference) => {
       return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
     })
   }),
-  fetchMyFeedGenerators,
-  sortMyFeedGenerators,
-  sortFeedPreferencesSavedAndPinned,
-  fetchMyFeeds,
-
-  fetchTimeline,
-  fetchPostThread,
-  fetchNotifications,
-  fetchFollowers,
-  fetchFollowings,
-  fetchSuggestedFollows,
-  fetchSuggestions,
-
-  fetchPopularFeedGenerators,
-  fetchSearchPosts,
-  fetchSearchFeeds,
   fetchCustomFeeds,
+  fetchMyFeedGenerators,
+  fetchMyFeeds,
+  fetchPopularFeedGenerators,
+  sortFeedPreferencesSavedAndPinned,
+  sortMyFeedGenerators,
 
-  saveSettings,
-  resetSettings,
-  updateSettings,
-  updateCurrentLanguageSetting,
-  updateColorThemeSetting,
+  // ローカルライン
 
-  updateUserProfile,
-  openSendPostPopup,
-  closeSendPostPopup,
-  openRepostUsersPopup,
-  closeRepostUsersPopup,
-  openLikeUsersPopup,
-  closeLikeUsersPopup,
+  globallinePosts: [],
+  globallineProfiles: {},
+  globallineNumberOfPosts: 0,
+
+  // ポップアップ
+
+  // ポップアップ - エラーポップアップ
+  errorPopupProps: {
+    display: false,
+    error: undefined,
+    description: undefined,
+  },
+  openErrorPopup,
+  closeErrorPopup,
+
+  // ポップアップ - メッセージポップアップ
+  messagePopupProps: {
+    display: false,
+    title: undefined,
+    text: undefined,
+    hasTranslateLink: false,
+  },
   openMessagePopup,
   closeMessagePopup,
+
+  // ポップアップ - 確認ポップアップ
+  confirmationPopupDisplay: false,
+  confirmationPopupTitle: undefined,
+  confirmationPopupText: undefined,
+  confirmationPopupDetail: undefined,
+  confirmationPopupResult: false,
   openConfirmationPopup,
   closeConfirmationPopup,
   applyConfirmationPopup,
 
-  // タイムフィードポップアップの開閉
-  openTimeFeedsPopup,
-  closeTimeFeedsPopup,
+  // ポップアップ - ログインポップアップ
+  loginPopupDisplay: false,
+  loginPopupAutoDisplay: computed((): boolean => {
+    return state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)
+  }),
 
-  // 通知ポップアップの開閉
-  openNotificationPopup,
-  closeNotificationPopup,
-
-  // 設定ポップアップの開閉
-  openSettingsPopup,
-  closeSettingsPopup,
-
-  // アカウントポップアップの開閉
+  // ポップアップ - アカウントポップアップ
+  accountPopupDisplay: false,
   openAccountPopup,
   closeAccountPopup,
 
-  // コンテンツ言語ポップアップの開閉
+  // ポップアップ - コンテンツ言語ポップアップ
+  contentLanguagesPopupDisplay: false,
   openContentLanguagesPopup,
   closeContentLanguagesPopup,
 
-  // ポスト言語ポップアップの開閉
+  // ポップアップ - ポスト言語ポップアップ
+  postLanguagesPopupDisplay: false,
   openPostLanguagesPopup,
   closePostLanguagesPopup,
 
-  // ラベル選択ポップアップの開閉
-  openSelectLabelsPopup,
-  closeSelectLabelsPopup,
+  // ポップアップ - コンテンツフィルタリングポップアップ
+  contentFilteringPopupDisplay: false,
+  openContentFilteringPopup,
+  closeContentFilteringPopup,
 
-  // ポスト日時選択ポップアップの開閉
-  openPostDatePopup,
-  closePostDatePopup,
+  // ポップアップ - ミュートユーザーリストポップアップ
+  mutingUsersPopupDisplay: false,
+  openMutingUsersPopup,
+  closeMutingUsersPopup,
 
-  // 招待コード確認ポップアップの開閉
-  openInviteCodesPopup,
-  closeInviteCodesPopup,
+  // ポップアップ - ブロックユーザーリストポップアップ
+  blockingUsersPopupDisplay: false,
+  openBlockingUsersPopup,
+  closeBlockingUsersPopup,
 
-  // マイフィードポップアップの開閉
+  // ポップアップ - ワードミュートポップアップ
+  wordMutePopupDisplay: false,
+  openWordMutePopup,
+  closeWordMutePopup,
+
+  // ポップアップ - アカウントレポート送信ポップアップ
+  sendAccountReportPopupProps: {
+    display: false,
+    user: undefined,
+  },
+  openSendAccountReportPopup,
+  closeSendAccountReportPopup,
+
+  // ポップアップ - ポストレポート送信ポップアップ
+  sendPostReportPopupProps: {
+    display: false,
+    post: undefined,
+  },
+  openSendPostReportPopup,
+  closeSendPostReportPopup,
+
+  // ポップアップ - フィードレポート送信ポップアップ
+  sendFeedReportPopupProps: {
+    display: false,
+    generator: undefined,
+  },
+  openSendFeedReportPopup,
+  closeSendFeedReportPopup,
+
+  // ポップアップ - イメージポップアップ
+  imagePopupProps: {
+    did: "",
+    images: [],
+    index: 0,
+    display: false,
+  },
+
+  // ポップアップ - リポストユーザーポップアップ
+  currentRepostUsers: [],
+  currentRepostUsersUri: undefined,
+  currentRepostUsersCursor: undefined,
+  repostUsersPopupDisplay: false,
+  openRepostUsersPopup,
+  closeRepostUsersPopup,
+
+  // ポップアップ - いいねユーザーポップアップ
+  currentLikeUsers: [],
+  currentLikeUsersUri: undefined,
+  currentLikeUsersCursor: undefined,
+  likeUsersPopupDisplay: false,
+  openLikeUsersPopup,
+  closeLikeUsersPopup,
+
+  // ポップアップ - マイフィードポップアップ
+  myFeedsPopupDisplay: false,
   openMyFeedsPopup,
   closeMyFeedsPopup,
 
-  // タグ
+  // ポップアップ - タイムフィードポップアップ
+  currentTimeFeeds: [],
+  timeFeedsPopupDisplay: false,
+  timeFeedsPopupProps: undefined,
+  openTimeFeedsPopup,
+  closeTimeFeedsPopup,
+
+  // ポップアップ - ポスト送信ポップアップ
+  sendPostPopupProps: {
+    display: false,
+    type: "post",
+    post: undefined,
+    fileList: undefined,
+    createdAt: undefined,
+  },
+  openSendPostPopup,
+  closeSendPostPopup,
+
+  // ポップアップ - マイタグポップアップ
   currentPostTags: [],
   myTagPopupProps: {
     display: false,
@@ -180,37 +364,11 @@ const state = reactive<MainState>({
   openMyTagPopup,
   closeMyTagPopup,
 
-  // ワードミュートポップアップの開閉
-  openWordMutePopup,
-  closeWordMutePopup,
-
-  // コンテンツフィルタリングポップアップの開閉
-  openContentFilteringPopup,
-  closeContentFilteringPopup,
-
-  // ミュートユーザーリストポップアップの開閉
-  openMutingUsersPopup,
-  closeMutingUsersPopup,
-
-  // ブロックユーザーリストポップアップの開閉
-  openBlockingUsersPopup,
-  closeBlockingUsersPopup,
-
-  // アカウントレポート送信ポップアップの開閉
-  openSendAccountReportPopup,
-  closeSendAccountReportPopup,
-
-  // ポストレポート送信ポップアップの開閉
-  openSendPostReportPopup,
-  closeSendPostReportPopup,
-
-  // フィードレポート送信ポップアップの開閉
-  openSendFeedReportPopup,
-  closeSendFeedReportPopup,
-
-  // エラーポップアップの開閉
-  openErrorPopup,
-  closeErrorPopup,
+  // ポップアップ - ポスト日時選択ポップアップ
+  postDatePopupDisplay: false,
+  postDatePopupDate: undefined,
+  openPostDatePopup,
+  closePostDatePopup,
 })
 
 function formatDate (dateString?: string): string {
