@@ -58,8 +58,8 @@ const state = reactive<MainState>({
       ? `url(${backgroundImage})`
       : backgroundImage
   }),
-  $setI18n: undefined,
-  $getI18n: undefined,
+  $setCurrentLanguage: undefined,
+  $getCurrentLanguage: undefined,
 
   numberOfInviteCodes: computed(() => {
     let total = 0
@@ -115,7 +115,7 @@ const state = reactive<MainState>({
   saveSettings,
   resetSettings,
   updateSettings,
-  updateI18nSetting,
+  updateCurrentLanguageSetting,
   updateColorThemeSetting,
 
   updateUserProfile,
@@ -709,8 +709,8 @@ function saveSettings () {
   if (state.settings[did] == null)
     state.settings[did] = {}
   if (state.settings[did].uiLanguage == null)
-    state.settings[did].uiLanguage = state.$getI18n != null
-      ? state.$getI18n()
+    state.settings[did].uiLanguage = state.$getCurrentLanguage != null
+      ? state.$getCurrentLanguage()
       : window.navigator.language
   if (state.settings[did].autoTranslation == null)
     state.settings[did].autoTranslation = false
@@ -787,19 +787,19 @@ function resetSettings () {
 }
 
 function updateSettings () {
-  updateI18nSetting()
+  updateCurrentLanguageSetting()
   updateFontSizeSetting()
   updateColorThemeSetting()
 }
 
-function updateI18nSetting () {
+function updateCurrentLanguageSetting () {
   if (state.currentSetting?.uiLanguage == null) return
 
   // NOTICE: UI言語の変更を即時反映するために `forceUpdate()` を呼び出すと、
   //         すべてのコンポーネントが更新されてしまう。この現象の防止策として、
   //         UI言語の変更以外では `forceUpdate()` を呼び出さないようにしている
-  const oldUiLanguage = state.$getI18n != null ? state.$getI18n() : undefined
-  if (state.$setI18n != null) state.$setI18n(state.currentSetting.uiLanguage)
+  const oldUiLanguage = state.$getCurrentLanguage != null ? state.$getCurrentLanguage() : undefined
+  if (state.$setCurrentLanguage != null) state.$setCurrentLanguage(state.currentSetting.uiLanguage)
   if (oldUiLanguage !== state.currentSetting.uiLanguage) state.forceUpdate()
 }
 

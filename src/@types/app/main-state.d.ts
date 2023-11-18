@@ -141,7 +141,7 @@ type MainState = {
   saveSettings: () => void
   resetSettings: () => void
   updateSettings: () => void
-  updateI18nSetting: () => void
+  updateCurrentLanguageSetting: () => void
   updateColorThemeSetting: () => void
   backgroundImage: any // TODO:
 
@@ -223,8 +223,8 @@ type MainState = {
   // D&D
   isDragOver: boolean
 
-  $setI18n?: Function
-  $getI18n?: Function
+  $setCurrentLanguage?: Function
+  $getCurrentLanguage?: Function
 
   formatDate: Function
   forceUpdate: () => void

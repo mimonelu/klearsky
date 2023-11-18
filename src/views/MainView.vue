@@ -43,8 +43,8 @@ import CONSTS from "@/consts/consts.json"
 const emit = defineEmits<(name: string, value: any) => void>()
 
 const $t = inject("$t") as Function
-state.$setI18n = inject("$setI18n") as Function
-state.$getI18n = inject("$getI18n") as Function
+state.$setCurrentLanguage = inject("$setCurrentLanguage") as Function
+state.$getCurrentLanguage = inject("$getCurrentLanguage") as Function
 
 resetState()
 
