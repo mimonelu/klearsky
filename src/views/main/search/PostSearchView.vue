@@ -115,6 +115,11 @@ function removeThisPost (uri: string) {
       </form>
     </Portal>
     <div class="post-search-view__main">
+      <LoadButton
+        direction="new"
+        :processing="state.processing"
+        @activate="fetchContinuousResults('new')"
+      />
       <div class="post-container">
         <Post
           v-for="post of mainState.currentSearchPostResults"

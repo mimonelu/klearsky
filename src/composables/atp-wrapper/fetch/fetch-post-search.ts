@@ -28,7 +28,8 @@ export default async function (
   // TODO:
   AtpUtil.coherentResponses(newPosts)
 
-  currentPosts.push(...newPosts)
+  if (cursor == null) currentPosts.unshift(...newPosts)
+  else currentPosts.push(...newPosts)
 
   return response.data.cursor
 
