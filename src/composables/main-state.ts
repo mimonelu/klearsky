@@ -10,366 +10,375 @@ import CONSTS from "@/consts/consts.json"
 import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
 import LANGUAGES from "@/consts/languages.json"
 
-const state = reactive<MainState>({
-  $setCurrentLanguage: undefined,
-  $getCurrentLanguage: undefined,
-  atp: new AtpWrapper(),
-  currentPath: "",
-  currentQuery: {},
-  listProcessing: false,
-  mounted: false,
-  processing: false,
-  updateKey: 0,
-  forceUpdate,
-  formatDate,
+export const state = reactive<MainState>({} as MainState)
+state.$setCurrentLanguage = undefined
+state.$getCurrentLanguage = undefined
+state.atp = new AtpWrapper()
+state.currentPath = ""
+state.currentQuery = {}
+state.listProcessing = false
+state.mounted = false
+state.processing = false
+state.updateKey = 0
+state.forceUpdate = forceUpdate
+state.formatDate = formatDate
 
-  // D&D
-  isDragOver: false,
+// D&D
+state.isDragOver = false
 
-  // インフィニットスクロール用プロパティ
-  scrolledToBottom: false,
+// インフィニットスクロール用プロパティ
+state.scrolledToBottom = false
 
-  // ブロードキャスト
-  broadcastChannel: undefined,
+// ブロードキャスト
+state.broadcastChannel = new BroadcastChannel("klearsky")
 
-  // 設定
+// 設定
 
-  settings: {},
-  backgroundImage: computed((): string => {
-    if (state.currentSetting?.backgroundImage == null) return ""
-    const backgroundImage: string = state.currentSetting.backgroundImage
-      .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;")
-    return backgroundImage.match(/^\/|^\w+:\/+/)
-      ? `url(${backgroundImage})`
-      : backgroundImage
-  }),
-  currentSetting: {},
-  settingsPopupDisplay: false,
-  openSettingsPopup,
-  closeSettingsPopup,
-  resetSettings,
-  updateSettings,
-  saveSettings,
-  updateCurrentLanguageSetting,
-  updateColorThemeSetting,
+state.settings = {}
+state.backgroundImage = computed((): string => {
+  if (state.currentSetting?.backgroundImage == null) return ""
+  const backgroundImage: string = state.currentSetting.backgroundImage
+    .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;")
+  return backgroundImage.match(/^\/|^\w+:\/+/)
+    ? `url(${backgroundImage})`
+    : backgroundImage
+})
+state.currentSetting = {}
+state.settingsPopupDisplay = false
+state.openSettingsPopup = openSettingsPopup
+state.closeSettingsPopup = closeSettingsPopup
+state.resetSettings = resetSettings
+state.updateSettings = updateSettings
+state.saveSettings = saveSettings
+state.updateCurrentLanguageSetting = updateCurrentLanguageSetting
+state.updateColorThemeSetting = updateColorThemeSetting
 
   // 通知
 
-  notifications: [],
-  notificationCursor: undefined,
-  notificationCount: 0,
-  notificationFetchedFirst: false,
-  notificationPopupDisplay: false,
-  fetchNotifications,
-  openNotificationPopup,
-  closeNotificationPopup,
+state.notifications = []
+state.notificationCursor = undefined
+state.notificationCount = 0
+state.notificationFetchedFirst = false
+state.notificationPopupDisplay = false
+state.fetchNotifications = fetchNotifications
+state.openNotificationPopup = openNotificationPopup
+state.closeNotificationPopup = closeNotificationPopup
 
-  // 招待コード
+// 招待コード
 
-  inviteCodes: [],
-  numberOfInviteCodes: computed(() => {
-    let total = 0
-    state.inviteCodes.forEach((inviteCode: TTInviteCode) => {
-      total += inviteCode.available
-    })
-    return total
-  }),
-  numberOfAvailableInviteCodes: computed(() => {
-    let total = 0
-    state.inviteCodes.forEach((inviteCode: TTInviteCode) => {
-      total += inviteCode.available - inviteCode.uses.length
-    })
-    return total
-  }),
-  inviteCodesPopupDisplay: false,
-  openInviteCodesPopup,
-  closeInviteCodesPopup,
-
-  // Preferences
-
-  currentPreferences: [],
-  fetchPreferences,
-
-  // コンテンツフィルタ
-
-  getConcernedPreferences,
-  getContentWarningVisibility,
-
-  // ラベル
-
-  filterLabels,
-  selectLabelsPopupDisplay: false,
-  selectLabelsPopupState: undefined,
-  openSelectLabelsPopup,
-  closeSelectLabelsPopup,
-
-  // ミュートユーザー
-
-  currentMutingUsers: [],
-  currentMutingUsersCursor: undefined,
-
-  // ブロックユーザー
-
-  currentBlockingUsers: [],
-  currentBlockingUsersCursor: undefined,
-
-  // プロフィール
-
-  inSameProfilePage: false,
-  profileFolding: false,
-  currentProfile: null,
-  currentAuthorFeeds: [],
-  currentAuthorFeedsCursor: undefined,
-  currentAuthorFeedsWithReplies: [],
-  currentAuthorFeedsWithRepliesCursor: undefined,
-  currentAuthorFeedsWithMedia: [],
-  currentAuthorFeedsWithMediaCursor: undefined,
-  currentAuthorCustomFeeds: [],
-  currentAuthorCustomFeedsCursor: undefined,
-  currentAuthorReposts: [],
-  currentAuthorRepostsCursor: undefined,
-  currentAuthorLikes: [],
-  currentAuthorLikesCursor: undefined,
-  currentFollowers: [],
-  currentFollowersCursor: undefined,
-  currentFollowings: [],
-  currentFollowingsCursor: undefined,
-  currentSuggestedFollows: [],
-  userProfile: null,
-  fetchUserProfile,
-  updateUserProfile,
-  fetchCurrentProfile,
-  fetchCurrentAuthorCustomFeeds,
-  fetchCurrentAuthorFeed,
-  fetchAuthorReposts,
-  fetchAuthorLikes,
-  fetchFollowers,
-  fetchFollowings,
-  fetchSuggestedFollows,
-  fetchSuggestions,
-
-  // ポストスレッド
-
-  currentPosts: [],
-  fetchPostThread,
-
-  // フォロー中フィード
-
-  timelineFeeds: [],
-  timelineCursor: undefined,
-  fetchTimeline,
-
-  // 検索
-
-  // 検索 - 現在の検索キーワード
-  currentSearchTerm: "",
-
-  // 検索 - 現在のポスト検索結果
-  currentSearchPostResults: [],
-  currentSearchPostCursor: undefined,
-  currentSearchPostsLastTerm: undefined,
-  fetchSearchPosts,
-
-  // 検索 - 現在のフィード検索結果
-  currentSearchFeeds: [],
-  currentSearchFeedsCursor: undefined,
-  currentSearchFeedsLastTerm: undefined,
-  fetchSearchFeeds,
-
-  // 検索 - 現在のおすすめユーザー検索結果
-  currentSearchSuggestionResults: [],
-  currentSearchSuggestionCursor: undefined,
-
-  // 検索 - 現在のユーザー検索結果
-  currentSearchUsers: [],
-  currentSearchUsersCursor: undefined,
-  currentSearchLastUserTerm: undefined,
-
-  // カスタムフィード
-
-  currentCustomUri: undefined,
-  currentCustomFeeds: [],
-  currentCustomCursor: undefined,
-  currentMyFeeds: {},
-  currentMyFeedGenerators: [],
-  currentPopularFeedGenerators: [],
-  currentPopularFeedGeneratorsCursor: undefined,
-  feedPreferences: computed((): undefined | TTPreference => {
-    return state.currentPreferences.find((preference: TTPreference) => {
-      return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
-    })
-  }),
-  fetchCustomFeeds,
-  fetchMyFeedGenerators,
-  fetchMyFeeds,
-  fetchPopularFeedGenerators,
-  sortFeedPreferencesSavedAndPinned,
-  sortMyFeedGenerators,
-
-  // ローカルライン
-
-  globallinePosts: [],
-  globallineProfiles: {},
-  globallineNumberOfPosts: 0,
-
-  // ポップアップ
-
-  // ポップアップ - エラーポップアップ
-  errorPopupProps: {
-    display: false,
-    error: undefined,
-    description: undefined,
-  },
-  openErrorPopup,
-  closeErrorPopup,
-
-  // ポップアップ - メッセージポップアップ
-  messagePopupProps: {
-    display: false,
-    title: undefined,
-    text: undefined,
-    hasTranslateLink: false,
-  },
-  openMessagePopup,
-  closeMessagePopup,
-
-  // ポップアップ - 確認ポップアップ
-  confirmationPopupDisplay: false,
-  confirmationPopupTitle: undefined,
-  confirmationPopupText: undefined,
-  confirmationPopupDetail: undefined,
-  confirmationPopupResult: false,
-  openConfirmationPopup,
-  closeConfirmationPopup,
-  applyConfirmationPopup,
-
-  // ポップアップ - ログインポップアップ
-  loginPopupDisplay: false,
-  loginPopupAutoDisplay: computed((): boolean => {
-    return state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)
-  }),
-
-  // ポップアップ - アカウントポップアップ
-  accountPopupDisplay: false,
-  openAccountPopup,
-  closeAccountPopup,
-
-  // ポップアップ - コンテンツ言語ポップアップ
-  contentLanguagesPopupDisplay: false,
-  openContentLanguagesPopup,
-  closeContentLanguagesPopup,
-
-  // ポップアップ - ポスト言語ポップアップ
-  postLanguagesPopupDisplay: false,
-  openPostLanguagesPopup,
-  closePostLanguagesPopup,
-
-  // ポップアップ - コンテンツフィルタリングポップアップ
-  contentFilteringPopupDisplay: false,
-  openContentFilteringPopup,
-  closeContentFilteringPopup,
-
-  // ポップアップ - ミュートユーザーリストポップアップ
-  mutingUsersPopupDisplay: false,
-  openMutingUsersPopup,
-  closeMutingUsersPopup,
-
-  // ポップアップ - ブロックユーザーリストポップアップ
-  blockingUsersPopupDisplay: false,
-  openBlockingUsersPopup,
-  closeBlockingUsersPopup,
-
-  // ポップアップ - ワードミュートポップアップ
-  wordMutePopupDisplay: false,
-  openWordMutePopup,
-  closeWordMutePopup,
-
-  // ポップアップ - アカウントレポート送信ポップアップ
-  sendAccountReportPopupProps: {
-    display: false,
-    user: undefined,
-  },
-  openSendAccountReportPopup,
-  closeSendAccountReportPopup,
-
-  // ポップアップ - ポストレポート送信ポップアップ
-  sendPostReportPopupProps: {
-    display: false,
-    post: undefined,
-  },
-  openSendPostReportPopup,
-  closeSendPostReportPopup,
-
-  // ポップアップ - フィードレポート送信ポップアップ
-  sendFeedReportPopupProps: {
-    display: false,
-    generator: undefined,
-  },
-  openSendFeedReportPopup,
-  closeSendFeedReportPopup,
-
-  // ポップアップ - イメージポップアップ
-  imagePopupProps: {
-    did: "",
-    images: [],
-    index: 0,
-    display: false,
-  },
-
-  // ポップアップ - リポストユーザーポップアップ
-  currentRepostUsers: [],
-  currentRepostUsersUri: undefined,
-  currentRepostUsersCursor: undefined,
-  repostUsersPopupDisplay: false,
-  openRepostUsersPopup,
-  closeRepostUsersPopup,
-
-  // ポップアップ - いいねユーザーポップアップ
-  currentLikeUsers: [],
-  currentLikeUsersUri: undefined,
-  currentLikeUsersCursor: undefined,
-  likeUsersPopupDisplay: false,
-  openLikeUsersPopup,
-  closeLikeUsersPopup,
-
-  // ポップアップ - マイフィードポップアップ
-  myFeedsPopupDisplay: false,
-  openMyFeedsPopup,
-  closeMyFeedsPopup,
-
-  // ポップアップ - タイムフィードポップアップ
-  currentTimeFeeds: [],
-  timeFeedsPopupDisplay: false,
-  timeFeedsPopupProps: undefined,
-  openTimeFeedsPopup,
-  closeTimeFeedsPopup,
-
-  // ポップアップ - ポスト送信ポップアップ
-  sendPostPopupProps: {
-    display: false,
-    type: "post",
-    post: undefined,
-    fileList: undefined,
-    createdAt: undefined,
-  },
-  openSendPostPopup,
-  closeSendPostPopup,
-
-  // ポップアップ - マイタグポップアップ
-  currentPostTags: [],
-  myTagPopupProps: {
-    display: false,
-    mode: "select",
-  },
-  openMyTagPopup,
-  closeMyTagPopup,
-
-  // ポップアップ - ポスト日時選択ポップアップ
-  postDatePopupDisplay: false,
-  postDatePopupDate: undefined,
-  openPostDatePopup,
-  closePostDatePopup,
+state.inviteCodes = []
+state.numberOfInviteCodes = computed(() => {
+  let total = 0
+  state.inviteCodes.forEach((inviteCode: TTInviteCode) => {
+    total += inviteCode.available
+  })
+  return total
 })
+state.numberOfAvailableInviteCodes = computed(() => {
+  let total = 0
+  state.inviteCodes.forEach((inviteCode: TTInviteCode) => {
+    total += inviteCode.available - inviteCode.uses.length
+  })
+  return total
+})
+state.inviteCodesPopupDisplay = false
+state.openInviteCodesPopup = openInviteCodesPopup
+state.closeInviteCodesPopup = closeInviteCodesPopup
+
+// Preferences
+
+state.currentPreferences = []
+state.fetchPreferences = fetchPreferences
+
+// コンテンツフィルタ
+
+state.getConcernedPreferences = getConcernedPreferences
+state.getContentWarningVisibility = getContentWarningVisibility
+
+// ラベル
+
+state.selectLabelsPopupDisplay = false
+state.selectLabelsPopupState = undefined
+state.filterLabels = filterLabels
+state.openSelectLabelsPopup = openSelectLabelsPopup
+state.closeSelectLabelsPopup = closeSelectLabelsPopup
+
+// ミュートユーザー
+
+state.currentMutingUsers = []
+state.currentMutingUsersCursor = undefined
+
+// ブロックユーザー
+
+state.currentBlockingUsers = []
+state.currentBlockingUsersCursor = undefined
+
+// プロフィール
+
+state.inSameProfilePage = false
+state.profileFolding = false
+state.currentProfile = null
+resetProfileState(state)
+state.userProfile = null
+state.fetchUserProfile = fetchUserProfile
+state.updateUserProfile = updateUserProfile
+state.fetchCurrentProfile = fetchCurrentProfile
+state.fetchCurrentAuthorCustomFeeds = fetchCurrentAuthorCustomFeeds
+state.fetchCurrentAuthorFeed = fetchCurrentAuthorFeed
+state.fetchAuthorReposts = fetchAuthorReposts
+state.fetchAuthorLikes = fetchAuthorLikes
+state.fetchFollowers = fetchFollowers
+state.fetchFollowings = fetchFollowings
+state.fetchSuggestedFollows = fetchSuggestedFollows
+state.fetchSuggestions = fetchSuggestions
+
+// ポストスレッド
+
+state.currentPosts = []
+state.fetchPostThread = fetchPostThread
+
+// フォロー中フィード
+
+state.timelineFeeds = []
+state.timelineCursor = undefined
+state.fetchTimeline = fetchTimeline
+
+// 検索
+
+// 検索 - 現在の検索キーワード
+state.currentSearchTerm = ""
+
+// 検索 - 現在のポスト検索結果
+state.currentSearchPostResults = []
+state.currentSearchPostCursor = undefined
+state.currentSearchPostsLastTerm = undefined
+state.fetchSearchPosts = fetchSearchPosts
+
+// 検索 - 現在のフィード検索結果
+state.currentSearchFeeds = []
+state.currentSearchFeedsCursor = undefined
+state.currentSearchFeedsLastTerm = undefined
+state.fetchSearchFeeds = fetchSearchFeeds
+
+// 検索 - 現在のおすすめユーザー検索結果
+state.currentSearchSuggestionResults = []
+state.currentSearchSuggestionCursor = undefined
+
+// 検索 - 現在のユーザー検索結果
+state.currentSearchUsers = []
+state.currentSearchUsersCursor = undefined
+state.currentSearchLastUserTerm = undefined
+
+// カスタムフィード
+
+state.currentCustomUri = undefined
+state.currentCustomFeeds = []
+state.currentCustomCursor = undefined
+state.currentMyFeeds = {}
+state.currentMyFeedGenerators = []
+state.currentPopularFeedGenerators = []
+state.currentPopularFeedGeneratorsCursor = undefined
+state.feedPreferences = computed((): undefined | TTPreference => {
+  return state.currentPreferences.find((preference: TTPreference) => {
+    return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
+  })
+})
+state.fetchCustomFeeds = fetchCustomFeeds
+state.fetchMyFeedGenerators = fetchMyFeedGenerators
+state.fetchMyFeeds = fetchMyFeeds
+state.fetchPopularFeedGenerators = fetchPopularFeedGenerators
+state.sortFeedPreferencesSavedAndPinned = sortFeedPreferencesSavedAndPinned
+state.sortMyFeedGenerators = sortMyFeedGenerators
+
+// ローカルライン
+
+state.globallinePosts = []
+state.globallineProfiles = {}
+state.globallineNumberOfPosts = 0
+
+// ポップアップ
+
+// ポップアップ - エラーポップアップ
+state.errorPopupProps = {
+  display: false,
+  error: undefined,
+  description: undefined,
+}
+state.openErrorPopup = openErrorPopup
+state.closeErrorPopup = closeErrorPopup
+
+// ポップアップ - メッセージポップアップ
+state.messagePopupProps = {
+  display: false,
+  title: undefined,
+  text: undefined,
+  hasTranslateLink: false,
+}
+state.openMessagePopup = openMessagePopup
+state.closeMessagePopup = closeMessagePopup
+
+// ポップアップ - 確認ポップアップ
+state.confirmationPopupDisplay = false
+state.confirmationPopupTitle = undefined
+state.confirmationPopupText = undefined
+state.confirmationPopupDetail = undefined
+state.confirmationPopupResult = false
+state.openConfirmationPopup = openConfirmationPopup
+state.closeConfirmationPopup = closeConfirmationPopup
+state.applyConfirmationPopup = applyConfirmationPopup
+
+// ポップアップ - ログインポップアップ
+state.loginPopupDisplay = false
+state.loginPopupAutoDisplay = computed((): boolean => {
+  return state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)
+})
+
+// ポップアップ - アカウントポップアップ
+state.accountPopupDisplay = false
+state.openAccountPopup = openAccountPopup
+state.closeAccountPopup = closeAccountPopup
+
+// ポップアップ - コンテンツ言語ポップアップ
+state.contentLanguagesPopupDisplay = false
+state.openContentLanguagesPopup = openContentLanguagesPopup
+state.closeContentLanguagesPopup = closeContentLanguagesPopup
+
+// ポップアップ - ポスト言語ポップアップ
+state.postLanguagesPopupDisplay = false
+state.openPostLanguagesPopup = openPostLanguagesPopup
+state.closePostLanguagesPopup = closePostLanguagesPopup
+
+// ポップアップ - コンテンツフィルタリングポップアップ
+state.contentFilteringPopupDisplay = false
+state.openContentFilteringPopup = openContentFilteringPopup
+state.closeContentFilteringPopup = closeContentFilteringPopup
+
+// ポップアップ - ミュートユーザーリストポップアップ
+state.mutingUsersPopupDisplay = false
+state.openMutingUsersPopup = openMutingUsersPopup
+state.closeMutingUsersPopup = closeMutingUsersPopup
+
+// ポップアップ - ブロックユーザーリストポップアップ
+state.blockingUsersPopupDisplay = false
+state.openBlockingUsersPopup = openBlockingUsersPopup
+state.closeBlockingUsersPopup = closeBlockingUsersPopup
+
+// ポップアップ - ワードミュートポップアップ
+state.wordMutePopupDisplay = false
+state.openWordMutePopup = openWordMutePopup
+state.closeWordMutePopup = closeWordMutePopup
+
+// ポップアップ - アカウントレポート送信ポップアップ
+state.sendAccountReportPopupProps = {
+  display: false,
+  user: undefined,
+}
+state.openSendAccountReportPopup = openSendAccountReportPopup
+state.closeSendAccountReportPopup = closeSendAccountReportPopup
+
+// ポップアップ - ポストレポート送信ポップアップ
+state.sendPostReportPopupProps = {
+  display: false,
+  post: undefined,
+}
+state.openSendPostReportPopup = openSendPostReportPopup
+state.closeSendPostReportPopup = closeSendPostReportPopup
+
+// ポップアップ - フィードレポート送信ポップアップ
+state.sendFeedReportPopupProps = {
+  display: false,
+  generator: undefined,
+}
+state.openSendFeedReportPopup = openSendFeedReportPopup
+state.closeSendFeedReportPopup = closeSendFeedReportPopup
+
+// ポップアップ - イメージポップアップ
+state.imagePopupProps = {
+  did: "",
+  images: [],
+  index: 0,
+  display: false,
+}
+
+// ポップアップ - リポストユーザーポップアップ
+state.currentRepostUsers = []
+state.currentRepostUsersUri = undefined
+state.currentRepostUsersCursor = undefined
+state.repostUsersPopupDisplay = false
+state.openRepostUsersPopup = openRepostUsersPopup
+state.closeRepostUsersPopup = closeRepostUsersPopup
+
+// ポップアップ - いいねユーザーポップアップ
+state.currentLikeUsers = []
+state.currentLikeUsersUri = undefined
+state.currentLikeUsersCursor = undefined
+state.likeUsersPopupDisplay = false
+state.openLikeUsersPopup = openLikeUsersPopup
+state.closeLikeUsersPopup = closeLikeUsersPopup
+
+// ポップアップ - マイフィードポップアップ
+state.myFeedsPopupDisplay = false
+state.openMyFeedsPopup = openMyFeedsPopup
+state.closeMyFeedsPopup = closeMyFeedsPopup
+
+// ポップアップ - タイムフィードポップアップ
+state.currentTimeFeeds = []
+state.timeFeedsPopupDisplay = false
+state.timeFeedsPopupProps = undefined
+state.openTimeFeedsPopup = openTimeFeedsPopup
+state.closeTimeFeedsPopup = closeTimeFeedsPopup
+
+// ポップアップ - ポスト送信ポップアップ
+state.sendPostPopupProps = {
+  display: false,
+  type: "post",
+  post: undefined,
+  fileList: undefined,
+  createdAt: undefined,
+}
+state.openSendPostPopup = openSendPostPopup
+state.closeSendPostPopup = closeSendPostPopup
+
+// ポップアップ - マイタグポップアップ
+state.currentPostTags = []
+state.myTagPopupProps = {
+  display: false,
+  mode: "select",
+}
+state.openMyTagPopup = openMyTagPopup
+state.closeMyTagPopup = closeMyTagPopup
+
+// ポップアップ - ポスト日時選択ポップアップ
+state.postDatePopupDisplay = false
+state.postDatePopupDate = undefined
+state.openPostDatePopup = openPostDatePopup
+state.closePostDatePopup = closePostDatePopup
+
+export function resetProfileState (state: MainState) {
+  resetArray(state, "currentAuthorFeeds")
+  state.currentAuthorFeedsCursor = undefined
+  resetArray(state, "currentAuthorFeedsWithReplies")
+  state.currentAuthorFeedsWithRepliesCursor = undefined
+  resetArray(state, "currentAuthorFeedsWithMedia")
+  state.currentAuthorFeedsWithMediaCursor = undefined
+  resetArray(state, "currentAuthorCustomFeeds")
+  state.currentAuthorCustomFeedsCursor = undefined
+  resetArray(state, "currentAuthorReposts")
+  state.currentAuthorRepostsCursor = undefined
+  resetArray(state, "currentAuthorLikes")
+  state.currentAuthorLikesCursor = undefined
+  resetArray(state, "currentFollowers")
+  state.currentFollowersCursor = undefined
+  resetArray(state, "currentFollowings")
+  state.currentFollowingsCursor = undefined
+  resetArray(state, "currentSuggestedFollows")
+}
+
+function resetArray (state: any, key: string) {
+  state[key] == null
+    ? state[key] = []
+    : state[key].splice(0)
+}
 
 function forceUpdate () {
   state.updateKey = new Date().getTime()
@@ -1279,5 +1288,3 @@ function openPostDatePopup () {
 function closePostDatePopup () {
   state.postDatePopupDisplay = false
 }
-
-export default state
