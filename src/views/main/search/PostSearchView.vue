@@ -1,12 +1,17 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted, watch } from "vue"
+import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
-// TODO: `cursor` を返すようになったらコメントインすること
-// import LoadButton from "@/components/buttons/LoadButton.vue"
+import LoadButton from "@/components/buttons/LoadButton.vue"
 import Post from "@/components/app-parts/Post.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
 
 const router = useRouter()
 
@@ -19,8 +24,7 @@ const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, async (
 
 // インフィニットスクロール
 const unwatchOnScroll = watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  // TODO: `cursor` を返すようになったらコメントインすること
-  // if (value) fetchContinuousResults("old")
+  if (value) fetchContinuousResults("old")
 })
 
 onMounted(async () => {
@@ -48,31 +52,29 @@ async function fetchNewResults () {
   // `watch` が後から反応してしまい、ポスト検索画面に遷移してしまう不具合への対応
   if (router.currentRoute.value.name !== "post-search") return
 
-  if (mainState.processing) return
+  if (state.processing) return
   mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
   mainState.currentSearchPostResults.splice(0)
   if (!mainState.currentSearchTerm) return
-  mainState.processing = true
+  state.processing = true
   await mainState.fetchSearchPosts("new")
-  mainState.processing = false
+  state.processing = false
   updateRouter()
 }
 
-/* // TODO: `cursor` を返すようになったらコメントインすること
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
-  if (mainState.processing) return
+  if (state.processing) return
   if (mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm) {
     mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
     mainState.currentSearchPostResults.splice(0)
     mainState.currentSearchPostCursor = undefined
     updateRouter()
   }
-  mainState.processing = true
+  state.processing = true
   await mainState.fetchSearchPosts(direction)
-  mainState.processing = false
+  state.processing = false
 }
-*/
 
 function updateRouter () {
   const query = mainState.currentSearchTerm !== ""
@@ -113,23 +115,22 @@ function removeThisPost (uri: string) {
       </form>
     </Portal>
     <div class="post-search-view__main">
-      <Post
-        v-for="post of mainState.currentSearchPostResults"
-        :key="post.cid"
-        :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
-        :post="post"
-        @updateThisPostThread="updateThisPostThread"
-        @removeThisPost="removeThisPost"
-        @onActivateHashTag="updateSearchPostTerm"
-      />
-
-      <!-- TODO: `cursor` を返すようになったらコメントインすること
+      <div class="post-container">
+        <Post
+          v-for="post of mainState.currentSearchPostResults"
+          :key="post.cid"
+          :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
+          :post="post"
+          @updateThisPostThread="updateThisPostThread"
+          @removeThisPost="removeThisPost"
+          @onActivateHashTag="updateSearchPostTerm"
+        />
+      </div>
       <LoadButton
         direction="old"
-        :processing="mainState.processing"
+        :processing="state.processing"
         @activate="fetchContinuousResults('old')"
       />
-      -->
     </div>
   </div>
 </template>
@@ -138,6 +139,10 @@ function removeThisPost (uri: string) {
 .post-search-view__main {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+}
+
+.post-container {
   flex-grow: 1;
 }
 
