@@ -13,7 +13,7 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
         class="logo__inner__svg"
       />
     </div>
-    <div class="version">v{{ Package.version }} beta (@atproto/api v{{ Package.dependencies["@atproto/api"] }})</div>
+    <div class="version">v{{ Package.version }} alpha (@atproto/api v{{ Package.dependencies["@atproto/api"] }})</div>
   </h1>
 </template>
 
