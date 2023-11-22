@@ -151,6 +151,8 @@ state.currentSearchTerm = ""
 // 検索 - 現在のポスト検索結果
 state.currentSearchPostResults = []
 state.currentSearchPostCursor = undefined
+state.currentSearchPostTotal = undefined
+state.currentSearchPostIsLast = false
 state.currentSearchPostsLastTerm = undefined
 state.fetchSearchPosts = fetchSearchPosts
 
@@ -908,19 +910,25 @@ async function fetchTimeline (direction: "old" | "new", middleCursor?: string) {
 // 検索
 
 // 検索 - 現在のポスト検索結果
-async function fetchSearchPosts (direction: "old" | "new") {
-  const cursor: Error | undefined | string =
+async function fetchSearchPosts (cursor?: string) {
+  const result: Error | undefined | { cursor?: string, hitsTotal?: number } =
     await state.atp.fetchPostSearch(
       state.currentSearchPostResults,
       state.currentSearchTerm,
       CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
-      direction === "old" ? state.currentSearchPostCursor : undefined
+      cursor
     )
-  if (cursor instanceof Error) state.openErrorPopup(
-    "errorApiFailed",
-    "main-state/fetchSearchPosts"
-  )
-  else if (cursor != null) state.currentSearchPostCursor = cursor
+  if (result instanceof Error) {
+    state.openErrorPopup(
+      "errorApiFailed",
+      "main-state/fetchSearchPosts"
+    )
+    return
+  }
+  if (result == null) return
+  // state.currentSearchPostCursor = result.cursor ?? state.currentSearchPostCursor
+  state.currentSearchPostTotal = result.hitsTotal
+  state.currentSearchPostIsLast = result.cursor == null
 }
 
 // 検索 - 現在のフィード検索結果
