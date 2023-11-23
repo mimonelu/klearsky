@@ -97,7 +97,7 @@ function removeThisPost (uri: string) {
           :container="state.postContainer"
           :hasReplyIcon="post.record.reply != null"
           :hasQuoteRepostIcon="post.record.embed?.record != null"
-          :forceFocus="mainState.timeFeedsPopupProps?.uri === post.uri"
+          :data-focus="mainState.timeFeedsPopupProps?.uri === post.uri"
           @click="close"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
