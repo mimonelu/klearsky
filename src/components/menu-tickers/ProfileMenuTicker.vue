@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
+import MenuTickerAccountFeaturesWrapper from "@/components/menu-items/AccountFeaturesWrapper.vue"
 import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
-import MenuTickerFirstPost from "@/components/menu-items/FirstPost.vue"
 import MenuTickerModerateWrapper from "@/components/menu-items/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
@@ -58,8 +58,8 @@ const state = reactive<{
     />
 
     <!-- 最初のポストを見る -->
-    <MenuTickerFirstPost
-      :did="user.did"
+    <MenuTickerAccountFeaturesWrapper
+      :user="user"
       @close="emit('close')"
     />
 
