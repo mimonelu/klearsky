@@ -926,7 +926,6 @@ async function fetchSearchPosts (cursor?: string) {
     return
   }
   if (result == null) return
-  // state.currentSearchPostCursor = result.cursor ?? state.currentSearchPostCursor
   state.currentSearchPostTotal = result.hitsTotal
   state.currentSearchPostIsLast = result.cursor == null
 }

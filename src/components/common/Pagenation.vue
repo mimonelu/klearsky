@@ -165,8 +165,7 @@ const state = reactive<{
 }
 .pager-button,
 .page-label {
-  // flex-grow: 1;
-  // padding: 0.5em 0.375em;
+  min-width: 2em;
 
   & > span {
     font-size: 0.875em;
