@@ -145,6 +145,8 @@ function removeThisPost (uri: string) {
           :key="post.cid"
           :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
           :post="post"
+          :hasReplyIcon="post.record.reply != null"
+          :hasQuoteRepostIcon="post.record.embed?.record != null"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
           @onActivateHashTag="updateSearchPostTerm"
