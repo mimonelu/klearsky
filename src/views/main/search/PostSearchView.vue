@@ -11,6 +11,7 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
+  pagenationDisplay: ComputedRef<boolean>
   pagenationProps: ComputedRef<{
     numberOfPager: number
     total?: number
@@ -20,6 +21,10 @@ const state = reactive<{
   }>
 }>({
   processing: false,
+  pagenationDisplay: computed((): boolean => {
+    return !!mainState.currentSearchTerm ||
+      mainState.currentSearchPostResults?.length > 0
+  }),
   pagenationProps: computed(() => {
     return {
       numberOfPager: CONSTS.NUMBER_OF_POST_SEARCH_BUTTON,
@@ -69,11 +74,11 @@ async function fetchNewResults () {
   mainState.currentSearchPostResults.splice(0)
   mainState.currentSearchPostCursor = undefined
   mainState.currentSearchPostTotal = undefined
+  updateRouter()
   if (!mainState.currentSearchTerm) return
   state.processing = true
   await mainState.fetchSearchPosts()
   state.processing = false
-  updateRouter()
 }
 
 async function fetchPartialResults (page: number) {
@@ -136,6 +141,7 @@ function removeThisPost (uri: string) {
     </Portal>
     <div class="post-search-view__main">
       <Pagenation
+        v-if="state.pagenationDisplay"
         v-bind="state.pagenationProps"
         @paging="paging"
       />
@@ -153,6 +159,7 @@ function removeThisPost (uri: string) {
         />
       </div>
       <Pagenation
+        v-if="state.pagenationDisplay"
         v-bind="state.pagenationProps"
         @paging="paging"
       />
