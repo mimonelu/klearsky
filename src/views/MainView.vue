@@ -70,21 +70,7 @@ onMounted(async () => {
   state.settings = Util.loadStorage("settings") ?? {}
   state.processing = true
   try {
-    if (!await autoLogin()) return
-    await Promise.allSettled([
-      state.fetchPreferences(),
-      state.fetchUserProfile(),
-    ])
-
-    state.fetchMyFeedGenerators().then(() => {
-      state.sortMyFeedGenerators()
-    })
-
-    state.saveSettings()
-    state.updateSettings()
-    setupNotificationInterval()
-    updateInviteCodes()
-    processPage(router.currentRoute.value.name as undefined | null | string)
+    await autoLogin()
   } finally {
     state.mounted = true
     state.processing = false
@@ -172,14 +158,13 @@ function updatePageTitle () {
   window.document.title = title
 }
 
-async function autoLogin (): Promise<boolean> {
-  if (state.atp.hasLogin()) return true
-  if (state.atp.canLogin()) {
-    const loginResult = await state.atp.login()
-    if (!loginResult) return false
-    return true
-  }
-  return false
+async function autoLogin () {
+  const result = state.atp.hasLogin() || (
+    state.atp.canLogin() &&
+    await state.atp.login()
+  )
+  if (!result) return
+  await processAfterLogin()
 }
 
 async function manualLogin (service: string, identifier: string, password: string) {
@@ -190,22 +175,26 @@ async function manualLogin (service: string, identifier: string, password: strin
       return
     }
     if (!state.atp.hasLogin()) return
-    await Promise.allSettled([
-      state.fetchPreferences(),
-      state.fetchUserProfile(),
-    ])
-    state.fetchMyFeedGenerators().then(() => {
-      state.sortMyFeedGenerators()
-    })
     state.loginPopupDisplay = false
-    state.saveSettings()
-    state.updateSettings()
-    setupNotificationInterval()
-    updateInviteCodes()
-    processPage(router.currentRoute.value.name as undefined | null | string)
+    await processAfterLogin()
   } finally {
     state.processing = false
   }
+}
+
+async function processAfterLogin () {
+  await Promise.allSettled([
+    state.fetchPreferences(),
+    state.fetchUserProfile(),
+  ])
+  state.fetchMyFeedGenerators().then(() => {
+    state.sortMyFeedGenerators()
+  })
+  state.saveSettings()
+  state.updateSettings()
+  setupNotificationInterval()
+  updateInviteCodes()
+  processPage(router.currentRoute.value.name as undefined | null | string)
 }
 
 async function processPage (pageName?: null | string) {
