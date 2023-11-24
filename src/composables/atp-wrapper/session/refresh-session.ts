@@ -1,14 +1,15 @@
 import Util from "@/composables/util"
 
 export default async function (this: TIAtpWrapper): Promise<boolean> {
-  if (this.session == null) return false
+  const session = this.data.sessions[this.data.did]
+  if (session == null) return false
 
   // TODO: 本来は @atproto/api の `com.atproto.server.refreshSession` を使用するべきだが、
   //       不明なエラーが発生するため直接サーバを叩いている。原因がわかり次第差し替えること
-  const url = `https://${this.session.__serviceName}/xrpc/com.atproto.server.refreshSession`
+  const url = `https://${session.__serviceName}/xrpc/com.atproto.server.refreshSession`
   const request: RequestInit = {
     method: "POST",
-    headers: { "Authorization": `Bearer ${this.session.refreshJwt}` },
+    headers: { "Authorization": `Bearer ${session.refreshJwt}` },
   }
   const json: any = await fetch(url, request).then(async (response: Response) => {
     console.log("[klearsky/refreshSession]", response)

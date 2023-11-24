@@ -1,4 +1,5 @@
 import type { AtpAgentLoginOpts, BskyAgent, ComAtprotoServerCreateSession } from "@atproto/api"
+import { jwtDecode } from "jwt-decode"
 import Util from "@/composables/util"
 
 export default async function (
@@ -15,6 +16,25 @@ export default async function (
   // 自動ログイン
   if (identifier == null || password == null) {
     if (session == null) return false
+
+    let refreshJwt = undefined
+    let accessJwt = undefined
+    try {
+      refreshJwt = jwtDecode(session.refreshJwt)
+      accessJwt = jwtDecode(session.accessJwt)
+    } catch (error) {
+      throw "jwtDecodeFailed"
+    }
+    if (refreshJwt.exp == null || accessJwt.exp == null) return false
+    const now = Date.now() / 1000 + 60 * 5
+    if (now >= refreshJwt.exp) {
+      console.warn("[klearsky] refreshJwt was expired.")
+      throw { error: "sessionExpired" }
+    }
+    if (now >= accessJwt.exp) {
+      console.warn("[klearsky] accessJwt was expired.")
+      await this.refreshSession()
+    }
     await this.resumeSession(session).catch(() => {
       throw { error: "sessionExpired" }
     })
