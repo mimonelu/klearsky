@@ -23,7 +23,7 @@ const state = reactive<{
 <template>
   <button
     class="button--bordered label-button"
-    @click.prevent="mainState.openSelectLabelsPopup(type, parentState)"
+    @click.prevent="mainState.openSelectLabelsPopup(parentState)"
   >
     <SVGIcon name="contentFiltering" />
     <span>{{ $t("labels") }}:</span>

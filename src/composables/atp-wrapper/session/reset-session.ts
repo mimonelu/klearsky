@@ -5,12 +5,16 @@ export default function (
 ) {
   this.data.did = newSession.did
   const session = this.data.sessions[this.data.did] ?? {}
+
+  // AtpSessionData
   session.accessJwt = newSession.accessJwt ?? session.accessJwt
   session.did = newSession.did ?? session.did
   session.handle = newSession.handle ?? session.handle
   session.email = newSession.email ?? session.email
   session.emailConfirmed = newSession.emailConfirmed ?? session.emailConfirmed
   session.refreshJwt = newSession.refreshJwt ?? session.refreshJwt
+
+  // サービス
   session.__service = service ?? newSession.__service ?? session.__service ?? ""
 
   // __serviceName の取得

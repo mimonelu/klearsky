@@ -36,21 +36,17 @@ import SubMenu from "@/components/shell-parts/SubMenu.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import WordMutePopup from "@/components/popups/WordMutePopup.vue"
-import state from "@/composables/main-state"
+import { state, resetProfileState } from "@/composables/main-state"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<(name: string, value: any) => void>()
 
 const $t = inject("$t") as Function
-state.$setI18n = inject("$setI18n") as Function
-state.$getI18n = inject("$getI18n") as Function
-
-resetState()
+state.$setCurrentLanguage = inject("$setCurrentLanguage") as Function
+state.$getCurrentLanguage = inject("$getCurrentLanguage") as Function
 
 provide("state", state)
-
-let notificationTimer: null | number = null
 
 onBeforeMount(() => {
   hotkeys("n", { keyup: true }, (event: any) => {
@@ -74,21 +70,7 @@ onMounted(async () => {
   state.settings = Util.loadStorage("settings") ?? {}
   state.processing = true
   try {
-    if (!await autoLogin()) return
-    await Promise.allSettled([
-      state.fetchPreferences(),
-      state.fetchUserProfile(),
-    ])
-
-    state.fetchMyFeedGenerators().then(() => {
-      state.sortMyFeedGenerators()
-    })
-
-    state.saveSettings()
-    state.updateSettings()
-    setupNotificationInterval()
-    updateInviteCodes()
-    processPage(router.currentRoute.value.name as undefined | null | string)
+    await autoLogin()
   } finally {
     state.mounted = true
     state.processing = false
@@ -123,23 +105,7 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) =
 
     state.inSameProfilePage = state.currentProfile != null
     if (!state.inSameProfilePage) {
-      state.currentAuthorFeeds?.splice(0)
-      state.currentAuthorFeedsCursor = undefined
-      state.currentAuthorFeedsWithReplies?.splice(0)
-      state.currentAuthorFeedsWithRepliesCursor = undefined
-      state.currentAuthorFeedsWithMedia?.splice(0)
-      state.currentAuthorFeedsWithMediaCursor = undefined
-      state.currentAuthorCustomFeeds?.splice(0)
-      state.currentAuthorCustomFeedsCursor = undefined
-      state.currentAuthorReposts?.splice(0)
-      state.currentAuthorRepostsCursor = undefined
-      state.currentAuthorLikes?.splice(0)
-      state.currentAuthorLikesCursor = undefined
-      state.currentFollowers?.splice(0)
-      state.currentFollowersCursor = undefined
-      state.currentFollowings?.splice(0)
-      state.currentFollowingsCursor = undefined
-      state.currentSuggestedFollows?.splice(0)
+      resetProfileState(state)
     }
   }
 
@@ -162,172 +128,6 @@ router.afterEach(async (to: RouteLocationNormalized) => {
 
   await processPage(to.name as undefined | null | string)
 })
-
-function resetState () {
-  state.updateKey = 0
-  state.userProfile = null
-  state.listProcessing = false
-  state.timelineFeeds = []
-  state.timelineCursor = undefined
-  state.currentPosts = []
-  state.inSameProfilePage = false
-  state.profileFolding = false
-  state.currentProfile = null
-  state.currentAuthorFeeds = []
-  state.currentAuthorFeedsCursor = undefined
-  state.currentAuthorFeedsWithReplies = []
-  state.currentAuthorFeedsWithRepliesCursor = undefined
-  state.currentAuthorFeedsWithMedia = []
-  state.currentAuthorFeedsWithMediaCursor = undefined
-  state.currentAuthorCustomFeeds = []
-  state.currentAuthorCustomFeedsCursor = undefined
-  state.currentAuthorReposts = []
-  state.currentAuthorRepostsCursor = undefined
-  state.currentAuthorLikes = []
-  state.currentAuthorLikesCursor = undefined
-  state.currentFollowers = []
-  state.currentFollowersCursor = undefined
-  state.currentFollowings = []
-  state.currentFollowingsCursor = undefined
-  state.currentSuggestedFollows = []
-  state.currentPreferences = []
-  state.currentRepostUsers = []
-  state.currentRepostUsersUri = undefined
-  state.currentRepostUsersCursor = undefined
-
-  // 検索
-
-  // 検索 - 現在の検索キーワード
-  state.currentSearchTerm = ""
-
-  // 検索 - 現在のポスト検索結果
-  state.currentSearchPostResults = []
-  state.currentSearchPostCursor = undefined
-  state.currentSearchPostsLastTerm = undefined
-
-  // 検索 - 現在のフィード検索結果
-  state.currentSearchFeeds = []
-  state.currentSearchFeedsCursor = undefined
-  state.currentSearchFeedsLastTerm = undefined
-
-  // 検索 - 現在のおすすめユーザー検索結果
-  state.currentSearchSuggestionResults = []
-  state.currentSearchSuggestionCursor = undefined
-
-  // 検索 - 現在のユーザー検索結果
-  state.currentSearchUsers = []
-  state.currentSearchUsersCursor = undefined
-  state.currentSearchLastUserTerm = undefined
-
-  state.currentMutingUsers = []
-  state.currentMutingUsersCursor = undefined
-  state.currentBlockingUsers = []
-  state.currentBlockingUsersCursor = undefined
-  state.currentPath = ""
-  state.currentQuery = {}
-  state.currentSetting = {}
-  state.globallinePosts = []
-  state.globallineProfiles = {}
-  state.globallineNumberOfPosts = 0
-  state.currentMyFeedGenerators = []
-  state.currentMyFeeds = {}
-  state.currentPopularFeedGenerators = []
-  state.currentPopularFeedGeneratorsCursor = undefined
-  state.currentCustomUri = undefined
-  state.currentCustomFeeds = []
-  state.currentCustomCursor = undefined
-  state.inviteCodes = []
-  state.notifications = []
-  state.notificationCursor = undefined
-  state.notificationCount = 0
-  state.notificationFetchedFirst = false
-  state.scrolledToBottom = false
-  state.messagePopupProps = {
-    display: false,
-    title: undefined,
-    text: undefined,
-    hasTranslateLink: undefined,
-  }
-  state.confirmationPopupDisplay = false
-  state.confirmationPopupTitle = undefined
-  state.confirmationPopupText = undefined
-  state.confirmationPopupDetail = undefined
-  state.confirmationPopupResult = false
-
-  // エラーポップアッププロパティ
-  state.errorPopupProps.display = false
-  state.errorPopupProps.error = undefined
-  state.errorPopupProps.description = undefined
-
-  // タイムフィードポップアップ
-  state.currentTimeFeeds = []
-  state.timeFeedsPopupDisplay = false
-  state.timeFeedsPopupProps = undefined
-
-  // 通知ポップアップの表示スイッチ
-  state.notificationPopupDisplay = false
-
-  // 設定ポップアップの表示スイッチ
-  state.settingsPopupDisplay = false
-
-  // アカウントポップアップの表示スイッチ
-  state.accountPopupDisplay = false
-
-  // コンテンツ言語ポップアップの表示スイッチ
-  state.contentLanguagesPopupDisplay = false
-
-  // ポスト言語ポップアップの表示スイッチ
-  state.postLanguagesPopupDisplay = false
-
-  // ラベル選択ポップアップ
-  state.selectLabelsPopupDisplay = false
-  state.selectLabelsPopupState = undefined
-
-  // ポスト日時選択ポップアップ
-  state.postDatePopupDisplay = false
-  state.postDatePopupDate = undefined
-
-  // 招待コード確認ポップアップの表示スイッチ
-  state.inviteCodesPopupDisplay = false
-
-  // マイフィードポップアップの表示スイッチ
-  state.myFeedsPopupDisplay = false
-
-  // タグ
-  state.currentPostTags = []
-  state.myTagPopupProps.display = false
-  state.myTagPopupProps.mode = "select"
-
-  // ワードミュートポップアップの表示スイッチ
-  state.wordMutePopupDisplay = false
-
-  // コンテンツフィルタリングポップアップの表示スイッチ
-  state.contentFilteringPopupDisplay = false
-
-  // ミュートユーザーリストポップアップの表示スイッチ
-  state.mutingUsersPopupDisplay = false
-
-  // ブロックユーザーリストポップアップの表示スイッチ
-  state.blockingUsersPopupDisplay = false
-
-  // アカウントレポート送信ポップアッププロパティ
-  state.sendAccountReportPopupProps.display = false
-  state.sendAccountReportPopupProps.user = undefined
-
-  // ポストレポート送信ポップアッププロパティ
-  state.sendPostReportPopupProps.display = false
-  state.sendPostReportPopupProps.post = undefined
-
-  // フィードレポート送信ポップアッププロパティ
-  state.sendFeedReportPopupProps.display = false
-  state.sendFeedReportPopupProps.generator = undefined
-
-  // D&D用処理
-  state.isDragOver = false
-
-  // ブロードキャスト
-  state.broadcastChannel = new BroadcastChannel("klearsky")
-}
 
 // ページタイトルの更新
 function updatePageTitle () {
@@ -358,14 +158,13 @@ function updatePageTitle () {
   window.document.title = title
 }
 
-async function autoLogin (): Promise<boolean> {
-  if (state.atp.hasLogin()) return true
-  if (state.atp.canLogin()) {
-    const loginResult = await state.atp.login()
-    if (!loginResult) return false
-    return true
-  }
-  return false
+async function autoLogin () {
+  const result = state.atp.hasLogin() || (
+    state.atp.canLogin() &&
+    await state.atp.login()
+  )
+  if (!result) return
+  await processAfterLogin()
 }
 
 async function manualLogin (service: string, identifier: string, password: string) {
@@ -376,22 +175,26 @@ async function manualLogin (service: string, identifier: string, password: strin
       return
     }
     if (!state.atp.hasLogin()) return
-    await Promise.allSettled([
-      state.fetchPreferences(),
-      state.fetchUserProfile(),
-    ])
-    state.fetchMyFeedGenerators().then(() => {
-      state.sortMyFeedGenerators()
-    })
     state.loginPopupDisplay = false
-    state.saveSettings()
-    state.updateSettings()
-    setupNotificationInterval()
-    updateInviteCodes()
-    processPage(router.currentRoute.value.name as undefined | null | string)
+    await processAfterLogin()
   } finally {
     state.processing = false
   }
+}
+
+async function processAfterLogin () {
+  await Promise.allSettled([
+    state.fetchPreferences(),
+    state.fetchUserProfile(),
+  ])
+  state.fetchMyFeedGenerators().then(() => {
+    state.sortMyFeedGenerators()
+  })
+  state.saveSettings()
+  state.updateSettings()
+  setupNotificationInterval()
+  updateInviteCodes()
+  processPage(router.currentRoute.value.name as undefined | null | string)
 }
 
 async function processPage (pageName?: null | string) {
@@ -541,6 +344,8 @@ async function processPage (pageName?: null | string) {
     setTimeout(updatePageTitle, 1)
   }
 }
+
+let notificationTimer: null | number = null
 
 function clearNotificationInterval () {
   if (notificationTimer != null) {

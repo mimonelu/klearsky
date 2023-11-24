@@ -54,12 +54,17 @@ function onLoad () {
 .lazy-image {
   background-color: var(--fg-color-0125);
   display: block;
-  &--src {
-    opacity: 0;
-  }
   &[data-has-load="true"] {
+    @keyframes fade-in {
+      0% { opacity: 0; }
+      100% { opacity: 1.0; }
+    }
     animation: fade-in 250ms ease-out;
     animation-fill-mode: forwards;
+  }
+
+  &--src {
+    opacity: 0;
   }
 }
 </style>

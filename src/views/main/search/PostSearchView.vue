@@ -1,12 +1,39 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted, watch } from "vue"
+import { computed, inject, onBeforeUnmount, onMounted, reactive, watch, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-// TODO: `cursor` を返すようになったらコメントインすること
-// import LoadButton from "@/components/buttons/LoadButton.vue"
+import Loader from "@/components/common/Loader.vue"
+import Pagenation from "@/components/common/Pagenation.vue"
 import Post from "@/components/app-parts/Post.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  processing: boolean
+  pagenationDisplay: ComputedRef<boolean>
+  pagenationProps: ComputedRef<{
+    numberOfPager: number
+    total?: number
+    unit?: number
+    cursor?: number
+    isLast: boolean
+  }>
+}>({
+  processing: false,
+  pagenationDisplay: computed((): boolean => {
+    return mainState.currentSearchPostResults?.length > 0
+  }),
+  pagenationProps: computed(() => {
+    return {
+      numberOfPager: CONSTS.NUMBER_OF_POST_SEARCH_BUTTON,
+      total: mainState.currentSearchPostTotal,
+      unit: CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
+      cursor: mainState.currentSearchPostCursor != null ? parseInt(mainState.currentSearchPostCursor, 10) : mainState.currentSearchPostCursor,
+      isLast: mainState.currentSearchPostIsLast,
+    }
+  }),
+})
 
 const router = useRouter()
 
@@ -16,12 +43,6 @@ const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, async (
       mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm)
     await fetchNewResults()
 }, { immediate: true })
-
-// インフィニットスクロール
-const unwatchOnScroll = watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  // TODO: `cursor` を返すようになったらコメントインすること
-  // if (value) fetchContinuousResults("old")
-})
 
 onMounted(async () => {
   const textbox = document.getElementById("post-term-textbox")
@@ -33,7 +54,6 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   unwatchOnQuery()
-  unwatchOnScroll()
 })
 
 function updateSearchPostTerm (text: string) {
@@ -48,37 +68,43 @@ async function fetchNewResults () {
   // `watch` が後から反応してしまい、ポスト検索画面に遷移してしまう不具合への対応
   if (router.currentRoute.value.name !== "post-search") return
 
-  if (mainState.processing) return
+  if (state.processing) return
   mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
   mainState.currentSearchPostResults.splice(0)
-  if (!mainState.currentSearchTerm) return
-  mainState.processing = true
-  await mainState.fetchSearchPosts("new")
-  mainState.processing = false
+  mainState.currentSearchPostCursor = undefined
+  mainState.currentSearchPostTotal = undefined
   updateRouter()
+  if (!mainState.currentSearchTerm) return
+  state.processing = true
+  await mainState.fetchSearchPosts()
+  state.processing = false
 }
 
-/* // TODO: `cursor` を返すようになったらコメントインすること
-async function fetchContinuousResults (direction: "new" | "old") {
+async function fetchPartialResults (page: number) {
   Util.blurElement()
-  if (mainState.processing) return
+  if (state.processing) return
   if (mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm) {
     mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
-    mainState.currentSearchPostResults.splice(0)
     mainState.currentSearchPostCursor = undefined
+    mainState.currentSearchPostTotal = undefined
     updateRouter()
   }
-  mainState.processing = true
-  await mainState.fetchSearchPosts(direction)
-  mainState.processing = false
+  mainState.currentSearchPostResults.splice(0)
+  state.processing = true
+  await mainState.fetchSearchPosts(page.toString())
+  state.processing = false
+  mainState.currentSearchPostCursor = page.toString()
 }
-*/
 
 function updateRouter () {
   const query = mainState.currentSearchTerm !== ""
     ? { text: mainState.currentSearchTerm }
     : undefined
   router.push({ name: "post-search", query })
+}
+
+async function paging (page: number) {
+  await fetchPartialResults(page)
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
@@ -113,38 +139,65 @@ function removeThisPost (uri: string) {
       </form>
     </Portal>
     <div class="post-search-view__main">
-      <Post
-        v-for="post of mainState.currentSearchPostResults"
-        :key="post.cid"
-        :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
-        :post="post"
-        @updateThisPostThread="updateThisPostThread"
-        @removeThisPost="removeThisPost"
-        @onActivateHashTag="updateSearchPostTerm"
+      <Pagenation
+        v-if="state.pagenationDisplay"
+        v-bind="state.pagenationProps"
+        @paging="paging"
       />
-
-      <!-- TODO: `cursor` を返すようになったらコメントインすること
-      <LoadButton
-        direction="old"
-        :processing="mainState.processing"
-        @activate="fetchContinuousResults('old')"
+      <div class="post-container">
+        <Post
+          v-for="post of mainState.currentSearchPostResults"
+          :key="post.cid"
+          :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
+          :post="post"
+          :hasReplyIcon="post.record.reply != null"
+          :hasQuoteRepostIcon="post.record.embed?.record != null"
+          @updateThisPostThread="updateThisPostThread"
+          @removeThisPost="removeThisPost"
+          @onActivateHashTag="updateSearchPostTerm"
+        />
+      </div>
+      <Pagenation
+        v-if="state.pagenationDisplay"
+        v-bind="state.pagenationProps"
+        @paging="paging"
       />
-      -->
     </div>
+    <Loader v-if="state.processing" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.post-search-view__main {
-  display: flex;
-  flex-direction: column;
+.post-search-view {
+  position: relative;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+}
+
+.post-container {
   flex-grow: 1;
 }
 
 .post {
-  border-bottom: 1px solid var(--fg-color-0125);
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--fg-color-0125);
+  }
   &[data-position="preview"] {
     padding: 1em;
+  }
+}
+
+.pagenation {
+  padding: 0.375rem 0;
+  &:first-child {
+    border-bottom: 1px solid var(--fg-color-025);
+  }
+  &:last-child {
+    border-top: 1px solid var(--fg-color-025);
   }
 }
 </style>

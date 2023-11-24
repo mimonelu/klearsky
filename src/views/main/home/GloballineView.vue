@@ -58,16 +58,21 @@ async function onPost (did: string, post: any) {
   messageContainerHeight = container.clientHeight
 
   // 言語判定
-  // ※コンテンツ言語がひとつも設定されていない場合はブラウザのUI言語を使用
-  // ※ポスト言語がひとつだけ設定されているポストのみ照合
-  const langs = post.record?.langs ?? post.value?.langs
-  if (langs == null || langs.length !== 1) return
+
+  // 言語判定 - ポスト言語が設定されていない場合はスキップ
+  const postLanguages = post.record?.langs ?? post.value?.langs
+  if (postLanguages == null) return
+
+  // 言語判定 - コンテンツ言語がひとつも設定されていない場合（ブラウザの設定言語を使用）
   const contentLanguages = mainState.currentSetting.contentLanguages ?? []
   if (contentLanguages.length === 0) {
-    if (langs[0] !== Util.getUserLanguage()) return
+    if (!postLanguages.includes(Util.getUserLanguage())) return
+
+  // 言語判定 - コンテンツ言語が設定されている場合
   } else {
-    const matched = contentLanguages.includes(langs[0])
-    if (!matched) return
+    if (!contentLanguages.some((contentLanguage: string) => {
+      return postLanguages.includes(contentLanguage)
+    })) return
   }
 
   if (mainState.globallineProfiles[did] == null)

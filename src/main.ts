@@ -6,16 +6,19 @@ import App from "@/App.vue"
 import i18n from "@/plugins/i18n"
 import router from "@/router"
 
-// Messages - Json
-import en from "@/consts/messages/en.json"
-import ja from "@/consts/messages/ja.json"
+// 翻訳
+import translationEn from "@/consts/translations/en.json"
+import translationJa from "@/consts/translations/ja.json"
 
 const app = createApp(App)
 app.use(router)
 app.use(PortalVue)
 
-// Messages - Setup
-const messages = { en, ja }
-app.use(i18n, messages)
+// 翻訳
+const translations = {
+  en: translationEn,
+  ja: translationJa,
+}
+app.use(i18n, translations)
 
 app.mount("#app")

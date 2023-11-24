@@ -211,10 +211,11 @@
   "search": "Search",
   "suggestionSearch": "Suggestions",
   "userSearch": "Find Accounts",
-  "postSearch": "Posts (TBD)",
+  "postSearch": "Posts",
   "feedSearch": "Feeds",
-  "searchWord": "Post Search (TBD)",
+  "searchWord": "Post Search",
   "keyword": "Keyword",
+  "searchAccountPost": "Search post",
 
   "notifications": "Notifications",
 

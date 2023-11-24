@@ -1,31 +1,27 @@
 import type { App } from "vue"
 import Util from "@/composables/util"
 
-declare const window: {
-  navigator: any
-}
-
-type Messages = {
+type TTTranslations = {
   [k: string]: {
     [k: string]: string
   }
 }
 
 export default {
-  install(app: App, messages: Messages) {
+  install(app: App, translations: TTTranslations) {
     let currentLanguage = Util.getUserLanguage()
 
-    const $setI18n = (newLanguage: string) => {
+    const $setCurrentLanguage = (newLanguage: string) => {
       currentLanguage = newLanguage
     }
-    app.provide("$setI18n", $setI18n)
+    app.provide("$setCurrentLanguage", $setCurrentLanguage)
 
-    const $getI18n = (): string => currentLanguage
-    app.provide("$getI18n", $getI18n)
+    const $getCurrentLanguage = (): string => currentLanguage
+    app.provide("$getCurrentLanguage", $getCurrentLanguage)
 
     const $t = (key: string): string => {
-      const message = messages[currentLanguage] ?? messages.en
-      return message[key] ?? messages.en[key] ?? key
+      const translation = translations[currentLanguage] ?? translations.en
+      return translation[key] ?? translations.en[key] ?? key
     }
     app.config.globalProperties.$t = $t
     app.provide("$t", $t)

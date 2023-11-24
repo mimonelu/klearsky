@@ -30,7 +30,6 @@ const props = defineProps<{
   isInFeed?: boolean
   noLink?: boolean
   container?: HTMLElement
-  forceFocus?: boolean
   forceHideImages?: boolean
 }>()
 
@@ -294,7 +293,7 @@ onBeforeUnmount(() => {
 })
 
 function isFocused (): boolean {
-  return props.forceFocus || props.post.uri === mainState.currentQuery.uri
+  return props.post.uri === mainState.currentQuery.uri
 }
 
 async function onActivatePost (post: TTPost, event: Event) {

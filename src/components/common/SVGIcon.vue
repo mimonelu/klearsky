@@ -14,6 +14,8 @@ import clock from "@/svg/clock.svg?raw"
 import contentFiltering from "@/svg/content-filtering.svg?raw"
 import cross from "@/svg/cross.svg?raw"
 import cursorDown from "@/svg/cursor-down.svg?raw"
+import cursorFirst from "@/svg/cursor-first.svg?raw"
+import cursorLast from "@/svg/cursor-last.svg?raw"
 import cursorLeft from "@/svg/cursor-left.svg?raw"
 import cursorRight from "@/svg/cursor-right.svg?raw"
 import cursorUp from "@/svg/cursor-up.svg?raw"
@@ -84,6 +86,8 @@ const icons: { [k: string]: string } = {
   contentFiltering,
   cross,
   cursorDown,
+  cursorFirst,
+  cursorLast,
   cursorLeft,
   cursorRight,
   cursorUp,

@@ -21,6 +21,7 @@
     "date-fns": "^2.30.0",
     "encoding-japanese": "^2.0.0",
     "hotkeys-js": "^3.10.3",
+    "jwt-decode": "^4.0.0",
     "multiformats": "^12.0.1",
     "portal-vue": "^3.0.0",
     "the-new-css-reset": "^1.9.0",

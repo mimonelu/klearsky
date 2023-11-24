@@ -2,74 +2,6 @@
   line-height: 1;
 }
 
-body {
-  --border-radius: 0.25em;
-  --border-radius-large: 0.5em;
-  --image-aspect-ratio: 1 / 1; // 16 / 9;
-  --main-area-opacity: 1.0;
-  --sp-menu-size: calc(100vw / 7);
-  --sp-menu-height: calc(var(--sp-menu-size) + env(safe-area-inset-bottom));
-
-  background-attachment: fixed;
-  background-color: rgb(var(--bg-color));
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  color: rgb(var(--fg-color));
-  font-feature-settings: "palt";
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  -webkit-tap-highlight-color: transparent;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  user-select: none;
-  @include scroll-bar();
-}
-
-// カラーテーマ
-body {
-  // デフォルトのカラーテーマ
-  @include color-theme-light;
-}
-@media (prefers-color-scheme: dark) {
-  body {
-    // ダークモード時のカラーテーマ
-    @include color-theme-dark-gray;
-  }
-}
-[data-color-theme="light"] {
-  @include color-theme-light;
-}
-[data-color-theme="dark"] {
-  @include color-theme-dark;
-}
-[data-color-theme="lightGray"] {
-  @include color-theme-light-gray;
-}
-[data-color-theme="darkGray"] {
-  @include color-theme-dark-gray;
-}
-[data-color-theme="warm"] {
-  @include color-theme-warm;
-}
-[data-color-theme="pink"] {
-  @include color-theme-pink;
-}
-[data-color-theme="red"] {
-  @include color-theme-red;
-}
-[data-color-theme="green"] {
-  @include color-theme-green;
-}
-[data-color-theme="blue"] {
-  @include color-theme-blue;
-}
-[data-color-theme="indigo"] {
-  @include color-theme-indigo;
-}
-
 // 中間色
 * {
   $colors:
@@ -93,6 +25,49 @@ body {
 ::selection {
   background-color: var(--accent-color-05);
 }
+
+body {
+  --border-radius: 0.25em;
+  --border-radius-large: 0.5em;
+  --image-aspect-ratio: 3 / 2;
+  --line-height: 1.5;
+  --main-area-opacity: 1.0;
+  --sp-menu-size: calc(100vw / 7);
+  --sp-menu-height: calc(var(--sp-menu-size) + env(safe-area-inset-bottom));
+
+  background-attachment: fixed;
+  background-color: rgb(var(--bg-color));
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: rgb(var(--fg-color));
+  font-feature-settings: "palt";
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-tap-highlight-color: transparent;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  user-select: none;
+  @include scroll-bar();
+}
+
+// カラーテーマ
+body { @include color-theme-light; } // デフォルトカラーテーマ
+@media (prefers-color-scheme: dark) {
+  body { @include color-theme-dark-gray; } // ダークモード時のデフォルトカラーテーマ
+}
+[data-color-theme="light"] { @include color-theme-light; }
+[data-color-theme="dark"] { @include color-theme-dark; }
+[data-color-theme="lightGray"] { @include color-theme-light-gray; }
+[data-color-theme="darkGray"] { @include color-theme-dark-gray; }
+[data-color-theme="warm"] { @include color-theme-warm; }
+[data-color-theme="pink"] { @include color-theme-pink; }
+[data-color-theme="red"] { @include color-theme-red; }
+[data-color-theme="green"] { @include color-theme-green; }
+[data-color-theme="blue"] { @include color-theme-blue; }
+[data-color-theme="indigo"] { @include color-theme-indigo; }
 
 img {
   vertical-align: middle;
