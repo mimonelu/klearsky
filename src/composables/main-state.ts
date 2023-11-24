@@ -967,7 +967,7 @@ async function fetchCustomFeeds (direction: "old" | "new", middleCursor?: string
 }
 
 async function fetchMyFeedGenerators (): Promise<void> {
-  if (state.feedPreferences.saved == null || state.feedPreferences.saved.length === 0) return
+  if (state.feedPreferences?.saved == null || state.feedPreferences.saved.length === 0) return
   const generators = await state.atp.fetchFeedGenerators(state.feedPreferences.saved)
   if (generators instanceof Error) {
     state.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")

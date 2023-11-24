@@ -8,7 +8,7 @@ export default function (this: TIAtpWrapper, service: string): boolean {
       console.log("[klearsky/persistSession]", `event === ${event}`)
       if (session == null) {
         console.warn("[klearsky/persistSession]", "session == null")
-        throw { error: "sessionExpired" }
+        return
       }
       this.resetSession(session, service)
       this.lastFetchNotificationsDate = undefined
