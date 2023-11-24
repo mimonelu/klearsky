@@ -22,8 +22,7 @@ const state = reactive<{
 }>({
   processing: false,
   pagenationDisplay: computed((): boolean => {
-    return !!mainState.currentSearchTerm ||
-      mainState.currentSearchPostResults?.length > 0
+    return mainState.currentSearchPostResults?.length > 0
   }),
   pagenationProps: computed(() => {
     return {
