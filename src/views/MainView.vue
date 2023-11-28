@@ -76,6 +76,9 @@ onMounted(async () => {
     state.processing = false
     updatePageTitle()
 
+    // ペースト用処理
+    useEventListener(window, "paste", onPaste)
+
     // ブロードキャスト
     useEventListener(state.broadcastChannel, "message", broadcastListener)
 
@@ -427,15 +430,46 @@ function onDragLeave () {
 }
 
 function onDrop (event: DragEvent) {
-  const files = event.dataTransfer?.files
-  if (state.sendPostPopupProps.display)
-    state.sendPostPopupProps.fileList = files
-  else
+  state.isDragOver = false
+  if (!state.atp.hasLogin()) return
+  if (event.dataTransfer?.items == null) return
+  attachFilesToPost(event.dataTransfer.items)
+}
+
+// ペースト用処理
+
+function onPaste (event: ClipboardEvent) {
+  if (!state.atp.hasLogin()) return
+  if (event.clipboardData?.items == null) return
+  if (attachFilesToPost(event.clipboardData.items)) {
+    // ファイル名がテキストエリアにペーストされる現象を回避
+    event.preventDefault()
+  }
+}
+
+// D&D・ペースト用処理共通
+
+function attachFilesToPost (items: DataTransferItemList): boolean {
+  // 対象は画像ファイルのみ
+  const imageItems = Array.from(items)
+    .filter((item: DataTransferItem) => {
+      return item.kind === "file" && item.type.startsWith("image")
+    })
+  if (imageItems.length === 0) return false
+
+  const fileList = imageItems
+    .map((item: DataTransferItem) => {
+      return item.getAsFile()
+    }) as unknown as FileList
+  if (state.sendPostPopupProps.display) {
+    state.sendPostPopupProps.fileList = fileList
+  } else {
     state.openSendPostPopup({
       type: "post",
-      fileList: files,
+      fileList,
     })
-  state.isDragOver = false
+  }
+  return true
 }
 
 // ブロードキャスト
