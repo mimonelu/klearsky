@@ -353,8 +353,6 @@
   "accounts": "Accounts",
   "newLogin": "New Login",
   "logout": "Logout",
-  "refreshSession": "Refresh Session",
-  "refreshSessionDescription": "Your session duration will be extended when refreshing your session, but sessions for the same account logged-in in a different environment may be disconnected.\nDo you accept the above and refresh?",
   "removeAccountHistory": "Delete My Account",
   "removeAccountHistoryMessage": "This account will be deleted from My Accounts. Are you sure?",
   "accountExport": "Export",

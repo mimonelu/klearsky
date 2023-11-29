@@ -17,17 +17,6 @@ function close () {
   emit("close")
 }
 
-async function refreshSession () {
-  if (!await mainState.openConfirmationPopup(
-    $t("refreshSession"),
-    $t("refreshSessionDescription")
-  )) return
-  mainState.processing = true
-  if (!await mainState.atp.refreshSession())
-    mainState.openErrorPopup("errorApiFailed", "AccountSettingsView/refreshSession")
-  mainState.processing = false
-}
-
 async function newLogin () {
   close()
   mainState.processing = true
@@ -67,25 +56,19 @@ async function logout () {
       <div class="account-popup__body">
         <div class="account-popup__button-container">
           <button
-            class="button--bordered"
-            @click.prevent="refreshSession()"
-          >
-            <span>{{ $t("refreshSession") }}</span>
-          </button>
-          <button
             class="button"
             @click.prevent="newLogin()"
           >
             <span>{{ $t("newLogin") }}</span>
           </button>
+          <button
+            class="button--important"
+            @click.prevent="logout"
+          >
+            <span>{{ $t("logout") }}</span>
+          </button>
         </div>
         <AccountList :hasDeleteButton="true" />
-        <button
-          class="button--important"
-          @click.prevent="logout"
-        >
-          <span>{{ $t("logout") }}</span>
-        </button>
       </div>
     </template>
   </Popup>
