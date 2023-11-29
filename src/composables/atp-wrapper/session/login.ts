@@ -6,7 +6,8 @@ export default async function (
   this: TIAtpWrapper,
   service?: string,
   identifier?: string,
-  password?: string
+  password?: string,
+  onRefreshSession?: () => void
 ): Promise<boolean> {
   const session = this.data.sessions[this.data.did]
   service ??= session.__service ?? "https://bsky.social"
@@ -42,7 +43,9 @@ export default async function (
     }
     if (now >= accessJwt.exp) {
       console.warn("[klearsky] accessJwt was expired.")
-      await this.refreshSession()
+      if (await this.refreshSession()) {
+        if (onRefreshSession != null) onRefreshSession()
+      }
     }
     await this.resumeSession(session).catch(() => {
       throw { error: "sessionExpired" }

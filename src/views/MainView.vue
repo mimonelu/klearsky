@@ -79,7 +79,7 @@ onMounted(async () => {
     // ペースト用処理
     useEventListener(window, "paste", onPaste)
 
-    // ブロードキャスト
+    // ブロードキャスト用処理
     useEventListener(state.broadcastChannel, "message", broadcastListener)
 
     // インフィニットスクロール用処理
@@ -164,7 +164,7 @@ function updatePageTitle () {
 async function autoLogin () {
   const result = state.atp.hasLogin() || (
     state.atp.canLogin() &&
-    await state.atp.login()
+    await state.atp.login(undefined, undefined, undefined, onRefreshSession)
   )
   if (!result) return
   await processAfterLogin()
@@ -173,7 +173,7 @@ async function autoLogin () {
 async function manualLogin (service: string, identifier: string, password: string) {
   state.processing = true
   try {
-    if (!await state.atp.login(service, identifier, password)) {
+    if (!await state.atp.login(service, identifier, password, onRefreshSession)) {
       emit("error", $t("loginFailed"))
       return
     }
@@ -183,6 +183,14 @@ async function manualLogin (service: string, identifier: string, password: strin
   } finally {
     state.processing = false
   }
+}
+
+function onRefreshSession () {
+  // セッションの同期
+  state.broadcastChannel?.postMessage({
+    type: "refreshSession",
+    data: JSON.parse(JSON.stringify(state.atp.session)),
+  })
 }
 
 async function processAfterLogin () {
@@ -472,7 +480,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   return true
 }
 
-// ブロードキャスト
+// ブロードキャスト用処理
 
 function broadcastListener (event: MessageEvent) {
   console.log("[klearsky/broadcast]", event.data.type)
