@@ -2,12 +2,12 @@ import type { AppBskyActorSearchActorsTypeahead, BskyAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
-  term?: string,
+  q?: string,
   limit?: number
 ): Promise<Error | Array<TTUser>> {
   if (this.agent == null) return Error("No agent")
   const query: AppBskyActorSearchActorsTypeahead.QueryParams = {}
-  if (term != null) query.term = term
+  if (q != null) query.q = q
   if (limit != null) query.limit = limit
   const response: AppBskyActorSearchActorsTypeahead.Response =
     await (this.agent as BskyAgent).searchActorsTypeahead(query)

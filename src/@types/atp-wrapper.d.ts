@@ -19,7 +19,7 @@ interface TIAtpWrapper {
   deletePost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteSession (this: TIAtpWrapper): Promise<boolean>
-  fetchActorsTypeahead (this: TIAtpWrapper, term?: string, limit?: number): Promise<Error | Array<TTUser>>
+  fetchActorsTypeahead (this: TIAtpWrapper, q?: string, limit?: number): Promise<Error | Array<TTUser>>
   fetchAuthorCustomFeeds (this: TIAtpWrapper, generators: Array<TTFeedGenerator>, author: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchAuthorFeed (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, author: string, limit?: number, cursor?: string, filter?: string, middle?: boolean): Promise<undefined | string>
   fetchAuthorLikes (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, repo: string, limit?: number, cursor?: string): Promise<undefined | string>
@@ -54,7 +54,7 @@ interface TIAtpWrapper {
   fetchSuggestions (this: TIAtpWrapper, dataRef: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
   fetchTimeFeeds (this: TIAtpWrapper, oldPosts: Array<TTPost>, direction: "new" | "old", author: TTUser, limit?: number): Promise<Error | undefined | string>
   fetchTimeline (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, replyControl?: Array<number>, repostControl?: Array<number>, limit?: number, cursor?: string, middle?: boolean): Promise<undefined | false | string>
-  fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, term: string, limit?: number, cursor?: string): Promise<undefined | string>
+  fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<undefined | string>
   hasLogin (this: TIAtpWrapper): boolean
   login (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, onRefreshSession?: () => void): Promise<boolean>
   logout (this: TIAtpWrapper)
