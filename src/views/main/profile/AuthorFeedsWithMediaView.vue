@@ -12,9 +12,7 @@ const state = reactive<{
   medias: computed((): Array<TTMedia> => {
     const results: Array<TTMedia> = []
     mainState.currentAuthorFeedsWithMedia.forEach((feed: TTFeed) => {
-      // メディアがなければ終了
       if (feed.post.embed?.images == null) return
-
       feed.post.embed.images.forEach((image: TTImage) => {
         results.push({
           post: feed.post,
@@ -64,11 +62,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
   .media-list {
     flex-grow: 1;
-  }
-
-  &:deep() .easy-form .checkboxes label {
-    border-radius: 0;
-    border-style: none;
   }
 }
 </style>
