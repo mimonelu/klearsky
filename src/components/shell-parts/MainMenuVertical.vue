@@ -93,11 +93,6 @@ function moveToBottom () {
           <SVGIcon name="tag" />
           <span>{{ $t("myTag") }}</span>
         </a>
-    // セッションの同期
-    mainState.broadcastChannel?.postMessage({
-      type: "refreshSession",
-      data: JSON.parse(JSON.stringify(mainState.atp.session)),
-    })
 
         <!-- マイフィードポップアップトリガー -->
         <a @click.prevent="() => { Util.blurElement(); mainState.openMyFeedsPopup() }">
