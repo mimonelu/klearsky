@@ -50,9 +50,12 @@ const state = reactive<{
       : 1
   }),
   last: computed((): number => {
-    return props.total != null && props.unit != null
-      ? Math.floor(props.total / props.unit) * props.unit
-      : 1
+    if (props.total != null && props.unit != null) {
+      const result = Math.floor(props.total / props.unit) * props.unit
+      if (result === props.total) return props.total - props.unit
+      return result
+    }
+    return 1
   }),
 })
 </script>

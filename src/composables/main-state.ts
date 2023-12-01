@@ -927,7 +927,8 @@ async function fetchSearchPosts (cursor?: string) {
   }
   if (result == null) return
   state.currentSearchPostTotal = result.hitsTotal
-  state.currentSearchPostIsLast = result.cursor == null
+  state.currentSearchPostIsLast = result.cursor == null ||
+    result.cursor === result.hitsTotal?.toString()
 }
 
 // 検索 - 現在のフィード検索結果
