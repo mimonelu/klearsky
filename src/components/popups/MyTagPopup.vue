@@ -45,6 +45,7 @@ const state = reactive<{
       },
       {
         type: "button",
+        classes: "button--bordered",
         icon: "plus",
         onClick () {
           addTag(formState.text)

@@ -12,6 +12,7 @@ type TTEasyFormItem = {
   name?: string // ユーザー用
   type: string
   accept?: string
+  attrs?: { [k: string]: any }
   autocomplete?: string
   buttonLabel?: string
   classes?: string

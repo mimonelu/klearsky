@@ -255,7 +255,9 @@
   "wordMuteEdit": "ワードミュートを編集する",
   "wordMuteAdd": "ワードミュートを追加する",
   "wordMuteEnabled": "有効",
-  "wordMutePlaceholder": "キーワード1 キーワード2 ...",
+  "wordMutePlaceholder": "キーワード1, キーワード2, ...",
+  "wordMuteRemoveConfirmation": "ワードミュートの削除",
+  "wordMuteRemoveConfirmationMessage": "以下のワードミュートを削除します。よろしいですか？",
 
   "timeControl": "時間表記",
   "timeControlRelative": "相対表記",
