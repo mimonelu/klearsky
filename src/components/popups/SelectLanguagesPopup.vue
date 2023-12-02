@@ -4,7 +4,7 @@ import EasyForm from "@/components/form-parts/EasyForm.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
-import LANGUAGES from "@/consts/languages.json"
+import LANGUAGES from "@/consts/languages"
 
 const emit = defineEmits<{(event: string): void}>()
 
