@@ -18,23 +18,6 @@ const state = reactive<{
   }),
 })
 
-async function refreshSession () {
-  if (!await mainState.openConfirmationPopup(
-    $t("refreshSession"),
-    $t("refreshSessionDescription")
-  )) return
-  mainState.processing = true
-  if (!await mainState.atp.refreshSession())
-    mainState.openErrorPopup("errorApiFailed", "SubMenu/refreshSession")
-  else
-    // セッションの同期
-    mainState.broadcastChannel?.postMessage({
-      type: "refreshSession",
-      data: JSON.parse(JSON.stringify(mainState.atp.session)),
-    })
-  mainState.processing = false
-}
-
 function openNotificationPopup () {
   Util.blurElement()
   mainState.openNotificationPopup()
@@ -152,12 +135,6 @@ function moveToBottom () {
         >
           <SVGIcon name="inviteCode" />
           <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
-        </a>
-
-        <!-- セッション更新トリガー -->
-        <a @click.prevent="() => { Util.blurElement(); refreshSession() }">
-          <SVGIcon name="refresh" />
-          <span>{{ $t("refreshSession") }}</span>
         </a>
       </menu>
     </div>

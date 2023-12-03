@@ -3,19 +3,17 @@ import type { AppBskyActorSearchActors, BskyAgent } from "@atproto/api"
 export default async function (
   this: TIAtpWrapper,
   users: Array<TTUser>,
-  term: string,
+  q: string,
   limit?: number,
   cursor?: string
 ): Promise<undefined | string> {
   if (this.agent == null) return
-  const query: AppBskyActorSearchActors.QueryParams = {
-    term,
-    limit,
-    cursor,
-  }
-  const response: AppBskyActorSearchActors.Response = await (
-    this.agent as BskyAgent
-  ).searchActors(query)
+  const query: AppBskyActorSearchActors.QueryParams = {}
+  if (q != null) query.q = q
+  if (limit != null) query.limit = limit
+  if (cursor != null) query.cursor = cursor
+  const response: AppBskyActorSearchActors.Response =
+    await (this.agent as BskyAgent).searchActors(query)
   console.log("[klearsky/searchActors]", response)
   if (!response.success) return
 

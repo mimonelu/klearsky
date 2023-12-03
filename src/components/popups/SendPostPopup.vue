@@ -191,8 +191,28 @@ function onChangeImage () {
   if (urlItem == null) return
   urlItem.display = easyFormState.images.length === 0
 
+  // alt の更新
   // TODO: 意図しない alt が削除される不具合を修正すること
   easyFormState.alts.splice(easyFormState.images.length)
+  easyFormProps.data.splice(
+    0,
+    easyFormProps.data.length,
+    ...easyFormProps.data.filter((data: TTEasyFormItem) => data.name !== "alt")
+  )
+  easyFormState.images.forEach((_: File, index: number) => {
+    if (easyFormState.alts[index] == null) easyFormState.alts[index] = ""
+    easyFormProps.data.push({
+      name: "alt",
+      state: easyFormState.alts,
+      model: index,
+      type: "textarea",
+      placeholder: `${$t('alts')} ${index + 1}`,
+      maxlength: 1000,
+      maxLengthIndicator: true,
+      maxLengthIndicatorByGrapheme: true,
+      rows: 3,
+    })
+  })
 
   onInputUrl()
 }
@@ -287,26 +307,6 @@ function onChangeImage () {
                 }}</span>
               </button>
             </div>
-          </template>
-
-          <!-- alt -->
-          <template #after>
-            <dl v-if="easyFormState.images.length > 0">
-              <dd
-                v-for="_, altIndex of easyFormState.images"
-                :key="altIndex"
-              >
-                <textarea
-                  v-model="easyFormState.alts[altIndex]"
-                  type="text"
-                  autocapitalize="off"
-                  autocomplete="off"
-                  :placeholder="`${$t('alts')} ${altIndex + 1}`"
-                  spellcheck="false"
-                  class="textarea"
-                />
-              </dd>
-            </dl>
           </template>
         </EasyForm>
       </template>

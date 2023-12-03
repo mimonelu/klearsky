@@ -17,10 +17,7 @@ const state = reactive<{
   easyFormProps: computed((): TTEasyForm => {
     const result: TTEasyForm = {
       gridColumns: "auto 1fr auto",
-      hasSubmitButton: true,
-      submitButtonLabel: $t("save"),
-      submitCallback: onSubmit,
-      blurOnSubmit: true,
+      hasSubmitButton: false,
       data: [],
     }
     result.data = mainState.currentSetting.wordMute?.map((wordMute: TTWordMute, index: number) => {
@@ -39,10 +36,17 @@ const state = reactive<{
         },
         {
           type: "button",
+          attrs: { "data-enabled": true },
+          classes: "button--bordered--important",
           icon: "cross",
           index,
-          onClick (item: TTEasyFormItem) {
-            if (item.index != null) mainState.currentSetting.wordMute?.splice(item.index, 1)
+          async onClick (item: TTEasyFormItem) {
+            if (item.index == null) return
+            if (wordMute.keyword && !await mainState.openConfirmationPopup(
+              $t("wordMuteRemoveConfirmation"),
+              `${$t("wordMuteRemoveConfirmationMessage")}\n"${wordMute.keyword}"`
+            )) return
+            mainState.currentSetting.wordMute?.splice(item.index, 1)
           },
         },
       ]
@@ -52,6 +56,7 @@ const state = reactive<{
 })
 
 function close () {
+  mainState.saveSettings()
   emit("close")
 }
 
@@ -62,11 +67,6 @@ function add () {
     enabled: [true],
     keyword: "",
   })
-}
-
-function onSubmit () {
-  mainState.saveSettings()
-  close()
 }
 </script>
 
@@ -88,6 +88,7 @@ function onSubmit () {
         class="button--bordered"
         @click.stop="add"
       >
+        <SVGIcon name="plus" />
         <span>{{ $t("wordMuteAdd") }}</span>
       </button>
       <EasyForm v-bind="state.easyFormProps" />

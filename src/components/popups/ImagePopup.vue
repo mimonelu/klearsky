@@ -104,8 +104,10 @@ function setBackgroundImage () {
   mainState.saveSettings()
 }
 
-function blurElement () {
+async function downloadImage (index: number) {
   Util.blurElement()
+  const url = state.blobs[index] ?? props.images[index].largeUri
+  await Util.downloadImage(url)
 }
 
 function close () {
@@ -183,15 +185,12 @@ function close () {
     </button>
 
     <!-- 画像を別タブで開くボタン -->
-    <a
+    <button
       class="floating-button open-image-button"
-      :href="state.blobs[index] ?? images[index].largeUri"
-      rel="noreferrer"
-      target="_blank"
-      @click="blurElement"
+      @click.prevent="downloadImage(index)"
     >
       <SVGIcon name="openInNew" />
-    </a>
+    </button>
 
     <!-- 閉じるボタン -->
     <button

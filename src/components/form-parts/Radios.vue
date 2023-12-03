@@ -5,7 +5,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
   state: any
-  model: string
+  model: number | string
   options: Array<TTOption>
   required?: boolean
   layout?: "horizontal" | "vertical" | "vertical-2columns"
@@ -30,7 +30,7 @@ function onChange () {
       <input
         v-model="state[model]"
         type="radio"
-        :name="model"
+        :name="model.toString()"
         :value="option.value"
         :required="required ?? false"
         @change="onChange"

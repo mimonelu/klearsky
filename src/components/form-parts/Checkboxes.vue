@@ -5,7 +5,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   state: any
-  model: string
+  model: number | string
   options: Array<TTOption>
   required?: boolean
   limit?: number
@@ -37,7 +37,7 @@ function onChange () {
       <input
         v-model="state[model]"
         type="checkbox"
-        :name="model"
+        :name="model.toString()"
         :value="option.value"
         :required="required ?? false"
         @change="onChange"

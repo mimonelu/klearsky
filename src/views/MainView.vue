@@ -76,7 +76,10 @@ onMounted(async () => {
     state.processing = false
     updatePageTitle()
 
-    // ブロードキャスト
+    // ペースト用処理
+    useEventListener(window, "paste", onPaste)
+
+    // ブロードキャスト用処理
     useEventListener(state.broadcastChannel, "message", broadcastListener)
 
     // インフィニットスクロール用処理
@@ -161,7 +164,7 @@ function updatePageTitle () {
 async function autoLogin () {
   const result = state.atp.hasLogin() || (
     state.atp.canLogin() &&
-    await state.atp.login()
+    await state.atp.login(undefined, undefined, undefined, onRefreshSession)
   )
   if (!result) return
   await processAfterLogin()
@@ -170,7 +173,7 @@ async function autoLogin () {
 async function manualLogin (service: string, identifier: string, password: string) {
   state.processing = true
   try {
-    if (!await state.atp.login(service, identifier, password)) {
+    if (!await state.atp.login(service, identifier, password, onRefreshSession)) {
       emit("error", $t("loginFailed"))
       return
     }
@@ -180,6 +183,14 @@ async function manualLogin (service: string, identifier: string, password: strin
   } finally {
     state.processing = false
   }
+}
+
+function onRefreshSession () {
+  // セッションの同期
+  state.broadcastChannel?.postMessage({
+    type: "refreshSession",
+    data: JSON.parse(JSON.stringify(state.atp.session)),
+  })
 }
 
 async function processAfterLogin () {
@@ -427,18 +438,49 @@ function onDragLeave () {
 }
 
 function onDrop (event: DragEvent) {
-  const files = event.dataTransfer?.files
-  if (state.sendPostPopupProps.display)
-    state.sendPostPopupProps.fileList = files
-  else
-    state.openSendPostPopup({
-      type: "post",
-      fileList: files,
-    })
   state.isDragOver = false
+  if (!state.atp.hasLogin()) return
+  if (event.dataTransfer?.items == null) return
+  attachFilesToPost(event.dataTransfer.items)
 }
 
-// ブロードキャスト
+// ペースト用処理
+
+function onPaste (event: ClipboardEvent) {
+  if (!state.atp.hasLogin()) return
+  if (event.clipboardData?.items == null) return
+  if (attachFilesToPost(event.clipboardData.items)) {
+    // ファイル名がテキストエリアにペーストされる現象を回避
+    event.preventDefault()
+  }
+}
+
+// D&D・ペースト用処理共通
+
+function attachFilesToPost (items: DataTransferItemList): boolean {
+  // 対象は画像ファイルのみ
+  const imageItems = Array.from(items)
+    .filter((item: DataTransferItem) => {
+      return item.kind === "file" && item.type.startsWith("image")
+    })
+  if (imageItems.length === 0) return false
+
+  const fileList = imageItems
+    .map((item: DataTransferItem) => {
+      return item.getAsFile()
+    }) as unknown as FileList
+  if (state.sendPostPopupProps.display) {
+    state.sendPostPopupProps.fileList = fileList
+  } else {
+    state.openSendPostPopup({
+      type: "post",
+      fileList,
+    })
+  }
+  return true
+}
+
+// ブロードキャスト用処理
 
 function broadcastListener (event: MessageEvent) {
   console.log("[klearsky/broadcast]", event.data.type)

@@ -153,6 +153,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               <input
                 v-if="isInput(item.type)"
                 v-model="item.state[item.model]"
+                v-bind="item.attrs"
                 :id="makeItemId(index)"
                 :type="item.type ?? 'text'"
                 :disabled="item.disabled ?? false"
@@ -174,6 +175,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               <textarea
                 v-else-if="item.type === 'textarea'"
                 v-model="item.state[item.model]"
+                v-bind="item.attrs"
                 :id="makeItemId(index)"
                 :disabled="item.disabled ?? false"
                 :required="item.required ?? false"
@@ -192,6 +194,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               <!-- チェックボックス -->
               <Checkboxes
                 v-else-if="item.type === 'checkbox'"
+                v-bind="item.attrs"
                 :state="item.state"
                 :model="item.model"
                 :required="item.required ?? false"
@@ -205,6 +208,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               <!-- ラジオボタン -->
               <Radios
                 v-else-if="item.type === 'radio'"
+                v-bind="item.attrs"
                 :state="item.state"
                 :model="item.model"
                 :required="item.required ?? false"
@@ -217,6 +221,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               <!-- セレクトボックス -->
               <label
                 v-else-if="item.type === 'select'"
+                v-bind="item.attrs"
                 class="selectbox"
                 :class="item.classes"
               >
@@ -236,6 +241,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               <!-- ファイル選択ボックス -->
               <FileBox
                 v-else-if="item.type === 'file'"
+                v-bind="item.attrs"
                 :files="item.state[item.model]"
                 :disabled="item.disabled"
                 :accept="item.accept"
@@ -250,8 +256,8 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
             <!-- ボタン -->
             <button
               v-if="item.type === 'button'"
+              v-bind="item.attrs"
               type="button"
-              class="button--bordered"
               :class="item.classes"
               @click.prevent="onClick(item)"
             >
@@ -353,7 +359,12 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
           flex-grow: 1;
         }
 
+        & > .button,
+        & > .button--invert,
         & > .button--bordered,
+        & > .button--important,
+        & > .button--bordered--important,
+        & > .button--plane,
         & > input,
         & > .checkboxes,
         & > .checkboxes > .checkbox {

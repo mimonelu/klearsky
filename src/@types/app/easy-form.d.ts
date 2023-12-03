@@ -9,8 +9,10 @@ type TTEasyForm = {
 }
 
 type TTEasyFormItem = {
+  name?: string // ユーザー用
   type: string
   accept?: string
+  attrs?: { [k: string]: any }
   autocomplete?: string
   buttonLabel?: string
   classes?: string
@@ -31,7 +33,7 @@ type TTEasyFormItem = {
   maxLengthIndicator?: boolean
   maxLengthIndicatorByGrapheme?: boolean
   maxNumberOfFile?: number
-  model?: string
+  model?: number | string
   options?: Array<TTOption>
   pattern?: string
   placeholder?: string

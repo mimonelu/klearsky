@@ -8,7 +8,7 @@ import AtpWrapper from "@/composables/atp-wrapper"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
-import LANGUAGES from "@/consts/languages.json"
+import LANGUAGES from "@/consts/languages"
 
 export const state = reactive<MainState>({} as MainState)
 state.$setCurrentLanguage = undefined
@@ -927,7 +927,8 @@ async function fetchSearchPosts (cursor?: string) {
   }
   if (result == null) return
   state.currentSearchPostTotal = result.hitsTotal
-  state.currentSearchPostIsLast = result.cursor == null
+  state.currentSearchPostIsLast = result.cursor == null ||
+    result.cursor === result.hitsTotal?.toString()
 }
 
 // 検索 - 現在のフィード検索結果
