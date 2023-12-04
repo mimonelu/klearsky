@@ -196,7 +196,7 @@ type MainState = {
     error: any
     description: any
   }
-  openErrorPopup: Function
+  openErrorPopup: (error: any, description: any) => void
   closeErrorPopup: Function
 
   // ポップアップ - メッセージポップアップ

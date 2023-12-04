@@ -19,6 +19,7 @@ interface TIAtpWrapper {
   deletePost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteSession (this: TIAtpWrapper): Promise<boolean>
+  deleteThreadgate (this: TIAtpWrapper, postUri: string): Promise<boolean | Error>
   fetchActorsTypeahead (this: TIAtpWrapper, q?: string, limit?: number): Promise<Error | Array<TTUser>>
   fetchAuthorCustomFeeds (this: TIAtpWrapper, generators: Array<TTFeedGenerator>, author: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchAuthorFeed (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, author: string, limit?: number, cursor?: string, filter?: string, middle?: boolean): Promise<undefined | string>
@@ -69,4 +70,5 @@ interface TIAtpWrapper {
   updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>
   updatePreferences  (this: TIAtpWrapper, preferences: Array<TTPreference>, ): Promise<boolean>
   updateProfile (this: TIAtpWrapper, params: TTUpdateProfileParams): Promise<boolean>
+  updateThreadgate (this: TIAtpWrapper, postUri: string, allowMention: boolean, allowFollower: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
 }
