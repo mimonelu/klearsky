@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@atproto/api": "^0.6.24",
+    "@atproto/api": "0.6.24",
     "@ipld/car": "^5.1.1",
     "@vueuse/core": "^10.2.0",
     "array-move": "^4.0.0",
@@ -25,7 +25,7 @@
     "multiformats": "^12.0.1",
     "portal-vue": "^3.0.0",
     "the-new-css-reset": "^1.9.0",
-    "vue": "^3.3.4",
+    "vue": "^3.3.10",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {
@@ -44,7 +44,7 @@
     "rollup-plugin-visualizer": "^5.9.2",
     "sass": "^1.63.6",
     "typescript": "~5.1.5",
-    "vite": "^4.3.9",
-    "vue-tsc": "^1.8.2"
+    "vite": "^4.5.1",
+    "vue-tsc": "^1.8.24"
   }
 }

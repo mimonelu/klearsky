@@ -66,6 +66,7 @@ import share from "@/svg/share.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
 import tag from "@/svg/tag.svg?raw"
 import translate from "@/svg/translate.svg?raw"
+import unlock from "@/svg/unlock.svg?raw"
 import volumeOff from "@/svg/volume-off.svg?raw"
 import volumeOn from "@/svg/volume-on.svg?raw"
 import wallpaper from "@/svg/wallpaper.svg?raw"
@@ -138,6 +139,7 @@ const icons: { [k: string]: string } = {
   shimmer,
   tag,
   translate,
+  unlock,
   volumeOff,
   volumeOn,
   wallpaper,

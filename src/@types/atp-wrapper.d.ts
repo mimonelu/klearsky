@@ -70,5 +70,5 @@ interface TIAtpWrapper {
   updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>
   updatePreferences  (this: TIAtpWrapper, preferences: Array<TTPreference>, ): Promise<boolean>
   updateProfile (this: TIAtpWrapper, params: TTUpdateProfileParams): Promise<boolean>
-  updateThreadgate (this: TIAtpWrapper, postUri: string, allowMention: boolean, allowFollower: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
+  updateThreadgate (this: TIAtpWrapper, postUri: string, allowMention: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
 }

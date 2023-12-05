@@ -5,7 +5,7 @@ export default async function (
   this: TIAtpWrapper,
   postUri: string,
   allowMention: boolean,
-  allowFollower: boolean,
+  allowFollowing: boolean,
   listUris?: Array<string>
 ): Promise<Error | TTCidUri> {
   if (this.agent == null) return Error("No Agent")
@@ -18,7 +18,7 @@ export default async function (
   }
   const allow: Array<{ $type: string, list?: string }> = []
   if (allowMention) allow.push({ $type: "app.bsky.feed.threadgate#mentionRule" })
-  if (allowFollower) allow.push({ $type: "app.bsky.feed.threadgate#followingRule" })
+  if (allowFollowing) allow.push({ $type: "app.bsky.feed.threadgate#followingRule" })
   if (listUris != null) listUris.forEach((list: string) => {
     allow.push({
       $type: "app.bsky.feed.threadgate#listRule",

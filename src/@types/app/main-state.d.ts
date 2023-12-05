@@ -329,4 +329,9 @@ type MainState = {
   postDatePopupDate?: string
   openPostDatePopup: Function
   closePostDatePopup: Function
+
+  // ポップアップ - Threadgate ポップアップ
+  threadgatePopupProps: TTThreadgatePopupProps
+  openThreadgatePopup: Function
+  closeThreadgatePopup: Function
 }

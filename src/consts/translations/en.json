@@ -5,6 +5,7 @@
   "yes": "Yes",
   "no": "No",
   "apply": "Apply",
+  "release": "Release",
   "save": "Save",
   "enabled": "Enabled",
   "disabled": "Disabled",
@@ -407,6 +408,13 @@
 
   "showTimeFeeds": "Show in timefeed",
   "timeFeeds": "Timefeed",
+
+  "threadgate": "Threadgate",
+  "threadgateAllowMention": "Allow mention users",
+  "threadgateAllowFollowing": "Allow following users",
+  "threadgateAllowList": "Allow users in berow lists",
+  "threadgateAllowListSample": "AT URIs of list: at://did:plc:xxx/app.bsky.graph.list/xxx, ...",
+  "threadgateNotification": "If apply without checking anything, only you will be able to reply.",
 
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",
