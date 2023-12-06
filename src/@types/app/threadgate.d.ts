@@ -30,4 +30,6 @@ type TTThreadgatePopupProps = {
   display: boolean
   postThreadgate?: TTThreadgate
   postUri?: string
+  onClosed?: Function
+  onUpdated?: Function
 }

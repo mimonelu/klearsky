@@ -52,7 +52,7 @@ function scrolledToBottom () {
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.currentTimeFeeds.forEach((post: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => post.cid === newPost.cid)
-    if (newPost != null) Util.updateReactions(mainState.currentTimeFeeds[index], newPost)
+    if (newPost != null) Util.updatePostProps(mainState.currentTimeFeeds[index], newPost)
   })
 }
 

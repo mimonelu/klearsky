@@ -69,6 +69,7 @@ async function deletePost () {
       v-if="state.isUser"
       :post="post"
       @close="emit('close')"
+      @updateThisPost="emit('updateThisPost')"
     />
 
     <!-- ポストを削除する -->

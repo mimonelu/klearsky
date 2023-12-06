@@ -14,7 +14,7 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
   // MEMO: ポストスレッドの全同一ポストに最新のデータを反映する
   mainState.currentPosts.forEach((post: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => post?.cid === newPost.cid)
-    if (newPost != null) Util.updateReactions(mainState.currentPosts[index], newPost)
+    if (newPost != null) Util.updatePostProps(mainState.currentPosts[index], newPost)
   })
 }
 

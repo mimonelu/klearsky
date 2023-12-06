@@ -11,11 +11,20 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 function onActivate () {
-  emit("close")
-  if (props.post == null) return
+  if (props.post == null) {
+    emit("close")
+    return
+  }
   mainState.openThreadgatePopup({
     postThreadgate: props.post.threadgate,
     postUri: props.post.uri,
+    onClosed () {
+      emit("close")
+    },
+    onUpdated () {
+      emit("updateThisPost")
+      emit("close")
+    },
   })
 }
 </script>

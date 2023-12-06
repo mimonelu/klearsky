@@ -5,7 +5,7 @@ import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
-const emit = defineEmits<{(event: string): void}>()
+const emit = defineEmits<{(event: string, params: any): void}>()
 
 const props = defineProps<{
   display: boolean
@@ -61,8 +61,8 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
-function close () {
-  emit("close")
+function close (params: any) {
+  emit("close", params)
 }
 
 async function reset () {
@@ -74,7 +74,7 @@ async function reset () {
   if (!response || response instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", response)
   } else {
-    close()
+    close("update")
   }
 }
 
@@ -104,7 +104,7 @@ async function update () {
   if (!responseOfUpdate || responseOfUpdate instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", responseOfUpdate)
   } else {
-    close()
+    close("update")
   }
 }
 </script>

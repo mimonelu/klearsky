@@ -10,7 +10,7 @@ import parseOgp from "@/composables/util/parse-ogp"
 import safeJson from "@/composables/util/safe-json"
 import storage from "@/composables/util/storage"
 import translateInExternalService from "@/composables/util/translate-in-external-service"
-import updateReactions from "@/composables/util/update-reactions"
+import updatePostProps from "@/composables/util/update-post-props"
 import wait from "@/composables/util/wait"
 import waitProp from "@/composables/util/wait-prop"
 
@@ -27,7 +27,7 @@ export default {
   ...safeJson,
   ...storage,
   translateInExternalService,
-  updateReactions,
+  updatePostProps,
   wait,
   waitProp,
 }

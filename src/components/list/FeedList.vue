@@ -61,11 +61,11 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
   props.feeds.forEach((feed: TTFeed) => {
     newPosts.forEach((newPost: TTPost) => {
       if (feed.post?.cid === newPost.cid)
-        Util.updateReactions(feed.post, newPost)
+        Util.updatePostProps(feed.post, newPost)
       if (feed.reply?.parent?.cid === newPost.cid)
-        Util.updateReactions(feed.reply.parent, newPost)
+        Util.updatePostProps(feed.reply.parent, newPost)
       if (feed.reply?.root?.cid === newPost.cid)
-        Util.updateReactions(feed.reply.root, newPost)
+        Util.updatePostProps(feed.reply.root, newPost)
     })
   })
 }

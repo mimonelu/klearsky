@@ -446,6 +446,13 @@ async function onRemoveThisPost (uri: string) {
   }
 }
 
+async function updateThisPost () {
+  state.processing = true
+  if (mainState.currentPath.startsWith("/post")) await mainState.fetchPostThread()
+  else await updateThisPostThread()
+  state.processing = false
+}
+
 async function updateThisPostThread () {
   const posts: undefined | false | Array<TTPost> =
     await mainState.atp.fetchPosts([props.post.uri])
@@ -1004,6 +1011,7 @@ function onActivateHashTag (text: string) {
                 :container="container"
                 @close="onClosePostMenu"
                 @removeThisPost="onRemoveThisPost"
+                @updateThisPost="updateThisPost"
               />
             </button>
           </div>
