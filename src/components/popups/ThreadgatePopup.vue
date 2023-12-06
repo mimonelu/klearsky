@@ -87,7 +87,6 @@ async function update () {
     ? easyFormState.listUris.split(",").map((uri: string) => uri.trim()).filter(Boolean)
     : []
   if (listUris.length === 0) listUris = undefined
-  console.log(listUris)
   state.loaderDisplay = true
 
   // Threadgate が設定済みの場合は削除
@@ -122,10 +121,26 @@ async function update () {
       <h2>
         <SVGIcon name="reply" />
         <span>{{ $t("threadgate") }}</span>
+        <span
+          v-if="postThreadgate != null"
+          class="threadgate-popup__state--on"
+        >ON</span>
+        <span
+          v-else
+          class="threadgate-popup__state--off"
+        >OFF</span>
       </h2>
     </template>
     <template #body>
       <EasyForm v-bind="easyFormProps" />
+
+      <!-- 注意文 -->
+      <div class="textlabel--alert">
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("threadgateNotification") }}
+        </div>
+      </div>
+
       <div class="button-container">
         <!-- 解除ボタン -->
         <button
@@ -146,18 +161,28 @@ async function update () {
           <span>{{ $t("apply") }}</span>
         </button>
       </div>
-
-      <!-- 注意文 -->
-      <div class="textlabel--alert">
-        <div class="textlabel__text">
-          <SVGIcon name="alert" />{{ $t("threadgateNotification") }}
-        </div>
-      </div>
     </template>
   </Popup>
 </template>
 
 <style lang="scss" scoped>
+.threadgate-popup {
+  &__state--on,
+  &__state--off {
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    padding: 0.125rem 0.5rem;
+  }
+  &__state--on {
+    background-color: rgb(var(--notice-color), 0.125);
+    color: rgb(var(--notice-color));
+  }
+  &__state--off {
+    background-color: var(--fg-color-0125);
+    color: var(--fg-color-075);
+  }
+}
+
 .button-container {
   display: flex;
   grid-gap: 1rem;

@@ -74,7 +74,15 @@ img {
 }
 
 p {
+  display: flex;
+  align-items: baseline;
+  grid-gap: 0.5em;
   line-height: var(--line-height);
+  word-break: break-all;
+
+  & > .svg-icon {
+    top: 0.125em;
+  }
 }
 
 pre {
