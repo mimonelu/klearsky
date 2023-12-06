@@ -1,17 +1,21 @@
 .icon-button,
 .icon-button--nolabel {
-  cursor: pointer;
+  &:not(:disabled) {
+    cursor: pointer;
+  }
   margin: -0.75em;
   padding: 0.75em;
-  &:focus, &:hover {
-    & > .icon-container {
-      & > .svg-icon {
-        fill: rgb(var(--fg-color));
+  &:not(:disabled) {
+    &:focus, &:hover {
+      & > .icon-container {
+        & > .svg-icon {
+          fill: rgb(var(--fg-color));
+        }
       }
-    }
 
-    & > span {
-      color: rgb(var(--fg-color));
+      & > span {
+        color: rgb(var(--fg-color));
+      }
     }
   }
 
