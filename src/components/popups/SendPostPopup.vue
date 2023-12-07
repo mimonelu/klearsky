@@ -332,7 +332,7 @@ function openThreadgatePopup () {
 
               <!-- Threadgate ポップアップトリガー -->
               <button
-                class="button--bordered post-date-button"
+                class="button--bordered threadgate-button"
                 @click.prevent="openThreadgatePopup"
               >
                 <SVGIcon :name="state.sendThreadgate.applied ? 'lock' : 'unlock'" />
@@ -434,7 +434,7 @@ function openThreadgatePopup () {
       font-size: 0.875rem;
 
       & > .svg-icon {
-        font-size: 1rem;
+        font-size: 0.875rem;
       }
 
       & > span,
@@ -465,6 +465,9 @@ function openThreadgatePopup () {
         --alpha: 1;
         font-size: 0.75rem;
       }
+    }
+    .threadgate-button > b {
+      color: rgb(var(--notice-color));
     }
     .post-date-button > b {
       color: rgb(var(--fg-color));
