@@ -251,16 +251,25 @@ function onChangeImage () {
         >
           <template #free-3>
             <div class="button-container">
+              <!-- ポスト言語選択ポップアップトリガー -->
+              <button
+                class="button--bordered post-language-button"
+                @click.prevent="mainState.openPostLanguagesPopup()"
+              >
+                <SVGIcon name="translate" />
+                <span>{{ $t("languages") }}</span>
+                <b v-if="mainState.currentSetting.postLanguages?.length">{{ mainState.currentSetting.postLanguages?.join(", ") }}</b>
+              </button>
+
               <!-- マイタグポップアップトリガー -->
               <button
                 class="button--bordered post-tag-button"
                 @click.prevent="mainState.openMyTagPopup('select')"
               >
                 <SVGIcon name="tag" />
-                <span>{{ $t("tags") }}:</span>
-                <span v-if="mainState.currentPostTags?.length === 0">-</span>
+                <span>{{ $t("tags") }}</span>
                 <div
-                  v-else
+                  v-if="mainState.currentPostTags?.length"
                   class="post-tag-container"
                 >
                   <div
@@ -271,20 +280,6 @@ function onChangeImage () {
                     <span>{{ tag.text }}</span>
                   </div>
                 </div>
-              </button>
-
-              <!-- ポスト言語選択ポップアップトリガー -->
-              <button
-                class="button--bordered post-language-button"
-                @click.prevent="mainState.openPostLanguagesPopup()"
-              >
-                <SVGIcon name="translate" />
-                <span>{{ $t("languages") }}:</span>
-                <span>{{
-                  mainState.currentSetting.postLanguages?.length === 0
-                  ? "-"
-                  : mainState.currentSetting.postLanguages?.join(", ")
-                }}</span>
               </button>
 
               <!-- ポストラベル選択ポップアップトリガー -->
@@ -299,12 +294,8 @@ function onChangeImage () {
                 @click.prevent="mainState.openPostDatePopup"
               >
                 <SVGIcon name="history" />
-                <span>{{ $t("date") }}:</span>
-                <span>{{
-                  mainState.postDatePopupDate != null
-                  ? format(new Date(mainState.postDatePopupDate), "yyyy/MM/dd HH:mm:ss")
-                  : "-"
-                }}</span>
+                <span>{{ $t("date") }}</span>
+                <b v-if="mainState.postDatePopupDate != null">{{ format(new Date(mainState.postDatePopupDate), "yyyy/MM/dd HH:mm:ss") }}</b>
               </button>
             </div>
           </template>
@@ -387,21 +378,31 @@ function onChangeImage () {
     grid-gap: 1rem 0.5rem;
 
     .button--bordered {
-      min-height: 3rem;
+      min-height: 2.625rem;
+      font-size: 0.875rem;
 
       & > .svg-icon {
         font-size: 1rem;
       }
 
-      & > span {
+      & > span,
+      & > b {
         text-overflow: ellipsis;
       }
-    }
-    .post-tag-button {
-      & > span:nth-child(2) {
+      & > span {
         white-space: nowrap;
       }
-
+      & > b {
+        font-weight: bold;
+        line-height: var(--line-height);
+        word-break: break-word;
+      }
+    }
+    .post-language-button > b {
+      color: rgb(var(--fg-color));
+      text-transform: uppercase;
+    }
+    .post-tag-button {
       .post-tag-container {
         display: flex;
         flex-wrap: wrap;
@@ -409,20 +410,12 @@ function onChangeImage () {
       }
 
       .post-tag {
-        --alpha: 0.75;
-        font-size: 0.875rem;
-      }
-      &:focus, &:hover {
-        .post-tag {
-          --alpha: 1.0;
-        }
+        --alpha: 1;
+        font-size: 0.75rem;
       }
     }
-    .post-language-button > span:last-child {
-      text-transform: uppercase;
-    }
-    .post-date-button > span:nth-child(2) {
-      white-space: nowrap;
+    .post-date-button > b {
+      color: rgb(var(--fg-color));
     }
   }
 }
