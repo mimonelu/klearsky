@@ -34,6 +34,7 @@ function openOtherApp (app: any) {
     case "generator": {
       uri = app.generator
         .replace("{uri}", props.uri)
+        .replace("{uriWithoutFeed}", props.uri?.replace("/feed", "") ?? "")
       break
     }
     case "post": {
