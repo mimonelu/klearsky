@@ -1309,20 +1309,16 @@ function closePostDatePopup () {
 // ポップアップ - Threadgate ポップアップ
 
 function openThreadgatePopup (props: TTThreadgatePopupProps) {
+  state.threadgatePopupProps.mode = props.mode
+  state.threadgatePopupProps.sendThreadgate = props.sendThreadgate
   state.threadgatePopupProps.postThreadgate = props.postThreadgate
   state.threadgatePopupProps.postUri = props.postUri
-  state.threadgatePopupProps.display = true
   state.threadgatePopupProps.onClosed = props.onClosed
-  state.threadgatePopupProps.onUpdated = props.onUpdated
+  state.threadgatePopupProps.display = true
 }
 
 function closeThreadgatePopup (params: any) {
-  // Threadgate 更新後に元ポストを更新する等の対応
-  if (params === "update" && state.threadgatePopupProps.onUpdated != null) {
-    state.threadgatePopupProps.onUpdated()
-  } else if (params == null && state.threadgatePopupProps.onClosed != null) {
-    state.threadgatePopupProps.onClosed()
-  }
-
+  if (state.threadgatePopupProps.onClosed != null)
+    state.threadgatePopupProps.onClosed(params)
   state.threadgatePopupProps.display = false
 }

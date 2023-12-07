@@ -26,10 +26,18 @@ type TTThreadgate = {
   lists: Array<TTThreadgateList>
 }
 
+type TTSendThreadgate = {
+  applied: boolean
+  allowMention: boolean
+  allowFollowing: boolean
+  listUris: Array<string>
+}
+
 type TTThreadgatePopupProps = {
   display: boolean
+  mode?: "send" | "post"
+  sendThreadgate?: TTSendThreadgate
   postThreadgate?: TTThreadgate
   postUri?: string
   onClosed?: Function
-  onUpdated?: Function
 }

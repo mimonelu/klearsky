@@ -16,13 +16,11 @@ function onActivate () {
     return
   }
   mainState.openThreadgatePopup({
+    mode: "post",
     postThreadgate: props.post.threadgate,
     postUri: props.post.uri,
-    onClosed () {
-      emit("close")
-    },
-    onUpdated () {
-      emit("updateThisPost")
+    onClosed (params: any) {
+      if (params?.updated) emit("updateThisPost")
       emit("close")
     },
   })
@@ -31,7 +29,7 @@ function onActivate () {
 
 <template>
   <button @click.prevent.stop="onActivate">
-    <SVGIcon name="reply" />
+    <SVGIcon name="lock" />
     <span>{{ $t("threadgate") }}</span>
   </button>
 </template>

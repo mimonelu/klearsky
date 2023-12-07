@@ -10,7 +10,7 @@ interface TIAtpWrapper {
   createFileBlob (this: TIAtpWrapper, params: TTCreateFileBlobParams): Promise<null | BlobRef>
   createFollow (this: TIAtpWrapper, declarationDid: string): Promise<null | string>
   createLike (this: TIAtpWrapper, uri: string, cid: string): Promise<undefined | string>
-  createPost (this: TIAtpWrapper, params: TTCreatePostParams): Promise<undefined | Error>
+  createPost (this: TIAtpWrapper, params: TTCreatePostParams): Promise<Error | TTCidUri>
   createReport (this: TIAtpWrapper, reasonType: string, reason: string, did?: string, cid?: string, uri?: string): Promise<boolean>
   createRepost (this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   deleteAccount (this: TIAtpWrapper, did?: string)

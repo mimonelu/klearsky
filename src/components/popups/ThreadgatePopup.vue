@@ -9,6 +9,8 @@ const emit = defineEmits<{(event: string, params: any): void}>()
 
 const props = defineProps<{
   display: boolean
+  mode?: "send" | "post"
+  sendThreadgate?: TTSendThreadgate
   postThreadgate?: TTThreadgate
   postUri?: string
 }>()
@@ -19,23 +21,53 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   loaderDisplay: boolean
+  applied: boolean
 }>({
   loaderDisplay: false,
+  applied: props.sendThreadgate?.applied ?? props.postThreadgate != null,
 })
 
 const easyFormState = reactive<{
   allows: Array<string>
   listUris: string
 }>({
-  allows: props.postThreadgate?.record?.allow
-    ?.map((allow: TTThreadgateAllow) => {
-      if (allow.$type.startsWith("app.bsky.feed.threadgate#mentionRule")) return "allowMention"
-      else if (allow.$type.startsWith("app.bsky.feed.threadgate#followingRule")) return "allowFollowing"
-      else if (allow.$type.startsWith("app.bsky.feed.threadgate#listRule")) return "allowList"
-      return ""
-    }) ?? [],
-  listUris: props.postThreadgate?.lists
-    ?.map((list: TTThreadgateList) => list.uri).join(", ") ?? "",
+  allows: (() => {
+    // 送信ポスト用
+    if (props.mode === "send") {
+      const allows: Array<string> = []
+      if (props.sendThreadgate?.allowMention) allows.push("allowMention")
+      if (props.sendThreadgate?.allowFollowing) allows.push("allowFollowing")
+      if ((props.sendThreadgate?.listUris?.length ?? 0) > 0) allows.push("allowList")
+      return allows
+    }
+
+    // 既存ポスト用
+    if (props.mode === "post") {
+      return props.postThreadgate?.record?.allow
+        ?.map((allow: TTThreadgateAllow) => {
+          if (allow.$type.startsWith("app.bsky.feed.threadgate#mentionRule")) return "allowMention"
+          else if (allow.$type.startsWith("app.bsky.feed.threadgate#followingRule")) return "allowFollowing"
+          else if (allow.$type.startsWith("app.bsky.feed.threadgate#listRule")) return "allowList"
+          return ""
+        }) ?? []
+    }
+
+    return []
+  })(),
+  listUris: (() => {
+    // 送信ポスト用
+    if (props.mode === "send") {
+      return props.sendThreadgate?.listUris?.join(", ") ?? ""
+    }
+
+    // 既存ポスト用
+    if (props.mode === "post") {
+      return props.postThreadgate?.lists
+        ?.map((list: TTThreadgateList) => list.uri).join(", ") ?? ""
+    }
+
+    return ""
+  })(),
 })
 
 const easyFormProps: TTEasyForm = {
@@ -67,6 +99,16 @@ function close (params: any) {
 
 async function reset () {
   Util.blurElement()
+
+  // 送信ポスト用
+  if (props.mode === "send") {
+    close({
+      updated: true,
+      reset: true,
+    })
+    return
+  }
+
   if (state.loaderDisplay || props.postUri == null) return
   state.loaderDisplay = true
   const response = await mainState.atp.deleteThreadgate(props.postUri)
@@ -74,19 +116,31 @@ async function reset () {
   if (!response || response instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", response)
   } else {
-    close("update")
+    close({ updated: true })
   }
 }
 
 async function update () {
   Util.blurElement()
-  if (state.loaderDisplay || props.postUri == null) return
   const allowMention = easyFormState.allows.includes("allowMention")
   const allowFollowing = easyFormState.allows.includes("allowFollowing")
   let listUris: undefined | Array<string> = easyFormState.allows.includes("allowList")
     ? easyFormState.listUris.split(",").map((uri: string) => uri.trim()).filter(Boolean)
     : []
   if (listUris.length === 0) listUris = undefined
+
+  // 送信ポスト用
+  if (props.mode === "send") {
+    close({
+      updated: true,
+      allowMention,
+      allowFollowing,
+      listUris,
+    })
+    return
+  }
+
+  if (state.loaderDisplay || props.postUri == null) return
   state.loaderDisplay = true
 
   // Threadgate が設定済みの場合は削除
@@ -104,7 +158,7 @@ async function update () {
   if (!responseOfUpdate || responseOfUpdate instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", responseOfUpdate)
   } else {
-    close("update")
+    close({ updated: true })
   }
 }
 </script>
@@ -114,15 +168,15 @@ async function update () {
     class="threadgate-popup"
     :hasCloseButton="true"
     :loaderDisplay="state.loaderDisplay"
-    :data-has-threadgate="postThreadgate != null"
+    :data-has-threadgate="state.applied"
     @close="close"
   >
     <template #header>
       <h2>
-        <SVGIcon name="reply" />
+        <SVGIcon name="lock" />
         <span>{{ $t("threadgate") }}</span>
         <span
-          v-if="postThreadgate != null"
+          v-if="state.applied"
           class="threadgate-popup__state--on"
         >ON</span>
         <span
@@ -144,7 +198,7 @@ async function update () {
       <div class="button-container">
         <!-- 解除ボタン -->
         <button
-          v-if="postThreadgate != null"
+          v-if="state.applied"
           class="button"
           @click.stop="reset"
         >

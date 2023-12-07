@@ -28,10 +28,17 @@ const state = reactive<{
   labels: Array<string>
   htmlPopupDisplay: boolean
   popupLoaderDisplay: boolean
+  sendThreadgate: TTSendThreadgate
 }>({
   labels: [],
   htmlPopupDisplay: false,
   popupLoaderDisplay: false,
+  sendThreadgate: {
+    applied: false,
+    allowMention: false,
+    allowFollowing: false,
+    listUris: [],
+  },
 })
 
 const easyFormState = reactive<{
@@ -160,8 +167,23 @@ async function submitCallback () {
       // Lightning
       lightning: mainState.currentSetting.lightning,
     })
-    if (result == null) emit("closeSendPostPopup", true)
-    else mainState.openErrorPopup(result, "SendPostPopup/submitCallback")
+    if (result instanceof Error) {
+      mainState.openErrorPopup(result, "SendPostPopup/submitCallback")
+    } else {
+      // Threadgate の適用
+      if (state.sendThreadgate.applied) {
+        const responseOfUpdate = await mainState.atp.updateThreadgate(
+          result.uri,
+          state.sendThreadgate.allowMention,
+          state.sendThreadgate.allowFollowing,
+          state.sendThreadgate.listUris
+        )
+        if (!responseOfUpdate || responseOfUpdate instanceof Error)
+          mainState.openErrorPopup(responseOfUpdate, "SendPostPopup/updateThreadgate")
+      }
+
+      emit("closeSendPostPopup", true)
+    }
   } finally {
     state.popupLoaderDisplay = false
   }
@@ -215,6 +237,26 @@ function onChangeImage () {
   })
 
   onInputUrl()
+}
+
+function openThreadgatePopup () {
+  mainState.openThreadgatePopup({
+    mode: "send",
+    sendThreadgate: state.sendThreadgate,
+    onClosed (params: any) {
+      if (params == null) return
+      state.sendThreadgate.applied = !params.reset
+      if (state.sendThreadgate.applied) {
+        state.sendThreadgate.allowMention = params.allowMention
+        state.sendThreadgate.allowFollowing = params.allowFollowing
+        state.sendThreadgate.listUris.splice(0, state.sendThreadgate.listUris.length, ...(params.listUris ?? []))
+      } else {
+        state.sendThreadgate.allowMention = false
+        state.sendThreadgate.allowFollowing = false
+        state.sendThreadgate.listUris.splice(0)
+      }
+    },
+  })
 }
 </script>
 
@@ -287,6 +329,16 @@ function onChangeImage () {
                 type="post"
                 :parentState="state"
               />
+
+              <!-- Threadgate ポップアップトリガー -->
+              <button
+                class="button--bordered post-date-button"
+                @click.prevent="openThreadgatePopup"
+              >
+                <SVGIcon :name="state.sendThreadgate.applied ? 'lock' : 'unlock'" />
+                <span>{{ $t("threadgate") }}</span>
+                <b v-if="state.sendThreadgate.applied">ON</b>
+              </button>
 
               <!-- ポスト日時選択ポップアップトリガー -->
               <button
