@@ -813,14 +813,12 @@ function broadcastListener (event: MessageEvent) {
     display: none;
   }
   &[data-layout="slimLeft"] .sub-menu {
-    bottom: 3rem;
     right: 0;
   }
   &[data-layout="slimRight"] .sub-menu-wrapper {
     max-width: 0;
 
     .sub-menu {
-      bottom: 3rem;
       left: 0;
     }
   }
