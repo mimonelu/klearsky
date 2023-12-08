@@ -33,6 +33,7 @@ function searchPost () {
       <input
         v-model="state.text"
         type="search"
+        name="searchPost"
         :placeholder="$t('searchWord')"
         autocapitalize="off"
         autocomplete="off"

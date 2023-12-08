@@ -42,6 +42,7 @@ const state = reactive<{
         maxLengthIndicator: true,
         maxLengthIndicatorByGrapheme: true,
         placeholder: $t("newTag"),
+        autocomplete: "off",
       },
       {
         type: "button",
