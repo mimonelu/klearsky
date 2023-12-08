@@ -1310,7 +1310,7 @@ function closePostDatePopup () {
 
 function openThreadgatePopup (props: TTThreadgatePopupProps) {
   state.threadgatePopupProps.mode = props.mode
-  state.threadgatePopupProps.sendThreadgate = props.sendThreadgate
+  state.threadgatePopupProps.draftThreadgate = props.draftThreadgate
   state.threadgatePopupProps.postThreadgate = props.postThreadgate
   state.threadgatePopupProps.postUri = props.postUri
   state.threadgatePopupProps.onClosed = props.onClosed

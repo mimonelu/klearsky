@@ -10,7 +10,7 @@ const emit = defineEmits<{(event: string, params: any): void}>()
 const props = defineProps<{
   display: boolean
   mode?: "send" | "post"
-  sendThreadgate?: TTSendThreadgate
+  draftThreadgate?: TTDraftThreadgate
   postThreadgate?: TTThreadgate
   postUri?: string
 }>()
@@ -24,7 +24,7 @@ const state = reactive<{
   applied: boolean
 }>({
   loaderDisplay: false,
-  applied: props.sendThreadgate?.applied ?? props.postThreadgate != null,
+  applied: props.draftThreadgate?.applied ?? props.postThreadgate != null,
 })
 
 const easyFormState = reactive<{
@@ -35,9 +35,9 @@ const easyFormState = reactive<{
     // 送信ポスト用
     if (props.mode === "send") {
       const allows: Array<string> = []
-      if (props.sendThreadgate?.allowMention) allows.push("allowMention")
-      if (props.sendThreadgate?.allowFollowing) allows.push("allowFollowing")
-      if ((props.sendThreadgate?.listUris?.length ?? 0) > 0) allows.push("allowList")
+      if (props.draftThreadgate?.allowMention) allows.push("allowMention")
+      if (props.draftThreadgate?.allowFollowing) allows.push("allowFollowing")
+      if ((props.draftThreadgate?.listUris?.length ?? 0) > 0) allows.push("allowList")
       return allows
     }
 
@@ -57,7 +57,7 @@ const easyFormState = reactive<{
   listUris: (() => {
     // 送信ポスト用
     if (props.mode === "send") {
-      return props.sendThreadgate?.listUris?.join(", ") ?? ""
+      return props.draftThreadgate?.listUris?.join(", ") ?? ""
     }
 
     // 既存ポスト用

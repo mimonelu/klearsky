@@ -28,12 +28,12 @@ const state = reactive<{
   labels: Array<string>
   htmlPopupDisplay: boolean
   popupLoaderDisplay: boolean
-  sendThreadgate: TTSendThreadgate
+  draftThreadgate: TTDraftThreadgate
 }>({
   labels: [],
   htmlPopupDisplay: false,
   popupLoaderDisplay: false,
-  sendThreadgate: {
+  draftThreadgate: {
     applied: false,
     allowMention: false,
     allowFollowing: false,
@@ -171,12 +171,12 @@ async function submitCallback () {
       mainState.openErrorPopup(result, "SendPostPopup/submitCallback")
     } else {
       // Threadgate の適用
-      if (state.sendThreadgate.applied) {
+      if (state.draftThreadgate.applied) {
         const responseOfUpdate = await mainState.atp.updateThreadgate(
           result.uri,
-          state.sendThreadgate.allowMention,
-          state.sendThreadgate.allowFollowing,
-          state.sendThreadgate.listUris
+          state.draftThreadgate.allowMention,
+          state.draftThreadgate.allowFollowing,
+          state.draftThreadgate.listUris
         )
         if (!responseOfUpdate || responseOfUpdate instanceof Error)
           mainState.openErrorPopup(responseOfUpdate, "SendPostPopup/updateThreadgate")
@@ -242,18 +242,18 @@ function onChangeImage () {
 function openThreadgatePopup () {
   mainState.openThreadgatePopup({
     mode: "send",
-    sendThreadgate: state.sendThreadgate,
+    draftThreadgate: state.draftThreadgate,
     onClosed (params: any) {
       if (params == null) return
-      state.sendThreadgate.applied = !params.reset
-      if (state.sendThreadgate.applied) {
-        state.sendThreadgate.allowMention = params.allowMention
-        state.sendThreadgate.allowFollowing = params.allowFollowing
-        state.sendThreadgate.listUris.splice(0, state.sendThreadgate.listUris.length, ...(params.listUris ?? []))
+      state.draftThreadgate.applied = !params.reset
+      if (state.draftThreadgate.applied) {
+        state.draftThreadgate.allowMention = params.allowMention
+        state.draftThreadgate.allowFollowing = params.allowFollowing
+        state.draftThreadgate.listUris.splice(0, state.draftThreadgate.listUris.length, ...(params.listUris ?? []))
       } else {
-        state.sendThreadgate.allowMention = false
-        state.sendThreadgate.allowFollowing = false
-        state.sendThreadgate.listUris.splice(0)
+        state.draftThreadgate.allowMention = false
+        state.draftThreadgate.allowFollowing = false
+        state.draftThreadgate.listUris.splice(0)
       }
     },
   })
@@ -335,9 +335,9 @@ function openThreadgatePopup () {
                 class="button--bordered threadgate-button"
                 @click.prevent="openThreadgatePopup"
               >
-                <SVGIcon :name="state.sendThreadgate.applied ? 'lock' : 'unlock'" />
+                <SVGIcon :name="state.draftThreadgate.applied ? 'lock' : 'unlock'" />
                 <span>{{ $t("threadgate") }}</span>
-                <b v-if="state.sendThreadgate.applied">ON</b>
+                <b v-if="state.draftThreadgate.applied">ON</b>
               </button>
 
               <!-- ポスト日時選択ポップアップトリガー -->

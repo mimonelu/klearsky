@@ -26,7 +26,7 @@ type TTThreadgate = {
   lists: Array<TTThreadgateList>
 }
 
-type TTSendThreadgate = {
+type TTDraftThreadgate = {
   applied: boolean
   allowMention: boolean
   allowFollowing: boolean
@@ -36,7 +36,7 @@ type TTSendThreadgate = {
 type TTThreadgatePopupProps = {
   display: boolean
   mode?: "send" | "post"
-  sendThreadgate?: TTSendThreadgate
+  draftThreadgate?: TTDraftThreadgate
   postThreadgate?: TTThreadgate
   postUri?: string
   onClosed?: Function
