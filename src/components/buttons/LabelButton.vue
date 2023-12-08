@@ -26,12 +26,8 @@ const state = reactive<{
     @click.prevent="mainState.openSelectLabelsPopup(parentState)"
   >
     <SVGIcon name="contentFiltering" />
-    <span>{{ $t("labels") }}:</span>
-    <span>{{
-      state.labels.length === 0
-      ? "-"
-      : `${state.labels.join(", ")}`
-    }}</span>
+    <span>{{ $t("labels") }}</span>
+    <b v-if="state.labels.length > 0">{{ state.labels.join(", ") }}</b>
   </button>
 </template>
 
@@ -39,8 +35,15 @@ const state = reactive<{
 .label-button {
   --fg-color: var(--notice-color);
 
-  & > span:nth-child(2) {
+  & > span {
     white-space: nowrap;
+  }
+
+  & > b {
+    color: rgb(var(--fg-color));
+    font-weight: bold;
+    line-height: var(--line-height);
+    word-break: break-word;
   }
 }
 </style>

@@ -147,6 +147,7 @@ function closeHtmlPopupDisplay () {
               <label class="selectbox selectbox-is-wide">
                 <select
                   v-model="mainState.currentSetting.uiLanguage"
+                  name="uiLanguage"
                   @change="changeSetting"
                 >
                   <option
@@ -195,6 +196,7 @@ function closeHtmlPopupDisplay () {
                 class="textbox textbox-is-wide"
                 v-model="mainState.currentSetting.autoTranslationIgnoreLanguage"
                 type="text"
+                name="autoTranslationIgnoreLanguage"
                 placeholder="en, zh, es, ..."
                 @change="changeSetting"
               >
@@ -342,6 +344,7 @@ function closeHtmlPopupDisplay () {
               <label class="selectbox selectbox-is-wide">
                 <select
                   v-model="mainState.currentSetting.layout"
+                  name="layout"
                   @change="changeSetting"
                 >
                   <option
@@ -374,6 +377,7 @@ function closeHtmlPopupDisplay () {
               <label class="selectbox selectbox-is-wide">
                 <select
                   v-model="mainState.currentSetting.mainAreaOpacity"
+                  name="mainAreaOpacity"
                   @change="changeSetting"
                 >
                   <option
@@ -401,6 +405,7 @@ function closeHtmlPopupDisplay () {
                 class="textbox textbox-is-wide"
                 v-model="mainState.currentSetting.backgroundImage"
                 type="url"
+                name="backgroundImage"
                 @change="changeSetting"
               >
 
@@ -411,6 +416,7 @@ function closeHtmlPopupDisplay () {
               <label class="selectbox selectbox-is-wide">
                 <select
                   v-model="mainState.currentSetting.backgroundOpacity"
+                  name="backgroundOpacity"
                   @change="changeSetting"
                 >
                   <option
@@ -474,6 +480,7 @@ function closeHtmlPopupDisplay () {
                 class="textbox textbox-is-wide"
                 v-model="mainState.currentSetting.lightning"
                 type="url"
+                name="lightning"
                 placeholder="sample@wallet.com, lnurlxxx, lnbcxxx, ..."
                 @change="changeSetting"
               >

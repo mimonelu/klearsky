@@ -82,7 +82,7 @@ function scrollListener () {
         <button
           v-if="hasCloseButton"
           class="popup-closer"
-          @click.prevent="close"
+          @click="close"
         >
           <SVGIcon name="cross" />
         </button>

@@ -119,7 +119,7 @@ function destroyProfileTimer () {
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.globallinePosts.forEach((post: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => post.cid === newPost.cid)
-    if (newPost != null) Util.updateReactions(mainState.globallinePosts[index], newPost)
+    if (newPost != null) Util.updatePostProps(mainState.globallinePosts[index], newPost)
   })
 }
 

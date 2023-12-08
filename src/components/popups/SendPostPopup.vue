@@ -28,10 +28,17 @@ const state = reactive<{
   labels: Array<string>
   htmlPopupDisplay: boolean
   popupLoaderDisplay: boolean
+  draftThreadgate: TTDraftThreadgate
 }>({
   labels: [],
   htmlPopupDisplay: false,
   popupLoaderDisplay: false,
+  draftThreadgate: {
+    applied: false,
+    allowMention: false,
+    allowFollowing: false,
+    listUris: [],
+  },
 })
 
 const easyFormState = reactive<{
@@ -160,8 +167,23 @@ async function submitCallback () {
       // Lightning
       lightning: mainState.currentSetting.lightning,
     })
-    if (result == null) emit("closeSendPostPopup", true)
-    else mainState.openErrorPopup(result, "SendPostPopup/submitCallback")
+    if (result instanceof Error) {
+      mainState.openErrorPopup(result, "SendPostPopup/submitCallback")
+    } else {
+      // Threadgate の適用
+      if (state.draftThreadgate.applied) {
+        const responseOfUpdate = await mainState.atp.updateThreadgate(
+          result.uri,
+          state.draftThreadgate.allowMention,
+          state.draftThreadgate.allowFollowing,
+          state.draftThreadgate.listUris
+        )
+        if (!responseOfUpdate || responseOfUpdate instanceof Error)
+          mainState.openErrorPopup(responseOfUpdate, "SendPostPopup/updateThreadgate")
+      }
+
+      emit("closeSendPostPopup", true)
+    }
   } finally {
     state.popupLoaderDisplay = false
   }
@@ -216,6 +238,26 @@ function onChangeImage () {
 
   onInputUrl()
 }
+
+function openThreadgatePopup () {
+  mainState.openThreadgatePopup({
+    mode: "send",
+    draftThreadgate: state.draftThreadgate,
+    onClosed (params: any) {
+      if (params == null) return
+      state.draftThreadgate.applied = !params.reset
+      if (state.draftThreadgate.applied) {
+        state.draftThreadgate.allowMention = params.allowMention
+        state.draftThreadgate.allowFollowing = params.allowFollowing
+        state.draftThreadgate.listUris.splice(0, state.draftThreadgate.listUris.length, ...(params.listUris ?? []))
+      } else {
+        state.draftThreadgate.allowMention = false
+        state.draftThreadgate.allowFollowing = false
+        state.draftThreadgate.listUris.splice(0)
+      }
+    },
+  })
+}
 </script>
 
 <template>
@@ -251,16 +293,25 @@ function onChangeImage () {
         >
           <template #free-3>
             <div class="button-container">
+              <!-- ポスト言語選択ポップアップトリガー -->
+              <button
+                class="button--bordered post-language-button"
+                @click.prevent="mainState.openPostLanguagesPopup()"
+              >
+                <SVGIcon name="translate" />
+                <span>{{ $t("languages") }}</span>
+                <b v-if="mainState.currentSetting.postLanguages?.length">{{ mainState.currentSetting.postLanguages?.join(", ") }}</b>
+              </button>
+
               <!-- マイタグポップアップトリガー -->
               <button
                 class="button--bordered post-tag-button"
                 @click.prevent="mainState.openMyTagPopup('select')"
               >
                 <SVGIcon name="tag" />
-                <span>{{ $t("tags") }}:</span>
-                <span v-if="mainState.currentPostTags?.length === 0">-</span>
+                <span>{{ $t("tags") }}</span>
                 <div
-                  v-else
+                  v-if="mainState.currentPostTags?.length"
                   class="post-tag-container"
                 >
                   <div
@@ -273,25 +324,21 @@ function onChangeImage () {
                 </div>
               </button>
 
-              <!-- ポスト言語選択ポップアップトリガー -->
-              <button
-                class="button--bordered post-language-button"
-                @click.prevent="mainState.openPostLanguagesPopup()"
-              >
-                <SVGIcon name="translate" />
-                <span>{{ $t("languages") }}:</span>
-                <span>{{
-                  mainState.currentSetting.postLanguages?.length === 0
-                  ? "-"
-                  : mainState.currentSetting.postLanguages?.join(", ")
-                }}</span>
-              </button>
-
               <!-- ポストラベル選択ポップアップトリガー -->
               <LabelButton
                 type="post"
                 :parentState="state"
               />
+
+              <!-- Threadgate ポップアップトリガー -->
+              <button
+                class="button--bordered threadgate-button"
+                @click.prevent="openThreadgatePopup"
+              >
+                <SVGIcon :name="state.draftThreadgate.applied ? 'lock' : 'unlock'" />
+                <span>{{ $t("threadgate") }}</span>
+                <b v-if="state.draftThreadgate.applied">ON</b>
+              </button>
 
               <!-- ポスト日時選択ポップアップトリガー -->
               <button
@@ -299,12 +346,8 @@ function onChangeImage () {
                 @click.prevent="mainState.openPostDatePopup"
               >
                 <SVGIcon name="history" />
-                <span>{{ $t("date") }}:</span>
-                <span>{{
-                  mainState.postDatePopupDate != null
-                  ? format(new Date(mainState.postDatePopupDate), "yyyy/MM/dd HH:mm:ss")
-                  : "-"
-                }}</span>
+                <span>{{ $t("date") }}</span>
+                <b v-if="mainState.postDatePopupDate != null">{{ format(new Date(mainState.postDatePopupDate), "yyyy/MM/dd HH:mm:ss") }}</b>
               </button>
             </div>
           </template>
@@ -387,21 +430,31 @@ function onChangeImage () {
     grid-gap: 1rem 0.5rem;
 
     .button--bordered {
-      min-height: 3rem;
+      min-height: 2.625rem;
+      font-size: 0.875rem;
 
       & > .svg-icon {
-        font-size: 1rem;
+        font-size: 0.875rem;
       }
 
-      & > span {
+      & > span,
+      & > b {
         text-overflow: ellipsis;
       }
-    }
-    .post-tag-button {
-      & > span:nth-child(2) {
+      & > span {
         white-space: nowrap;
       }
-
+      & > b {
+        font-weight: bold;
+        line-height: var(--line-height);
+        word-break: break-word;
+      }
+    }
+    .post-language-button > b {
+      color: rgb(var(--fg-color));
+      text-transform: uppercase;
+    }
+    .post-tag-button {
       .post-tag-container {
         display: flex;
         flex-wrap: wrap;
@@ -409,20 +462,15 @@ function onChangeImage () {
       }
 
       .post-tag {
-        --alpha: 0.75;
-        font-size: 0.875rem;
-      }
-      &:focus, &:hover {
-        .post-tag {
-          --alpha: 1.0;
-        }
+        --alpha: 1;
+        font-size: 0.75rem;
       }
     }
-    .post-language-button > span:last-child {
-      text-transform: uppercase;
+    .threadgate-button > b {
+      color: rgb(var(--notice-color));
     }
-    .post-date-button > span:nth-child(2) {
-      white-space: nowrap;
+    .post-date-button > b {
+      color: rgb(var(--fg-color));
     }
   }
 }

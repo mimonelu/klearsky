@@ -11,6 +11,7 @@ import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
 import deletePost from "@/composables/atp-wrapper/delete/delete-post"
 import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
 import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
+import deleteThreadgate from "@/composables/atp-wrapper/delete/delete-threadgate"
 import fetchActorsTypeahead from "@/composables/atp-wrapper/fetch/fetch-actors-typeahead"
 import fetchAuthorCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-author-custom-feeds"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch/fetch-author-feed"
@@ -59,6 +60,7 @@ import updateMuteToEnable from "@/composables/atp-wrapper/update/update-mute-to-
 import updateNotificationSeen from "@/composables/atp-wrapper/update/update-notification-seen"
 import updatePreferences from "@/composables/atp-wrapper/update/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update/update-profile"
+import updateThreadgate from "@/composables/atp-wrapper/update/update-threadgate"
 import Util from "@/composables/util"
 
 // @ts-ignore
@@ -107,6 +109,7 @@ class AtpWrapper implements TIAtpWrapper {
   deletePost = deletePost
   deleteRepost = deleteRepost
   deleteSession = deleteSession
+  deleteThreadgate = deleteThreadgate
   fetchActorsTypeahead = fetchActorsTypeahead
   fetchAuthorCustomFeeds = fetchAuthorCustomFeeds
   fetchAuthorFeed = fetchAuthorFeed
@@ -161,6 +164,7 @@ class AtpWrapper implements TIAtpWrapper {
   updateNotificationSeen = updateNotificationSeen
   updatePreferences = updatePreferences
   updateProfile = updateProfile
+  updateThreadgate = updateThreadgate
 }
 
 export default AtpWrapper

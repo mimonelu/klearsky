@@ -88,6 +88,9 @@ const state = reactive<{
   blurredMediaClicked: boolean
   postMediaDisplay: ComputedRef<boolean>
 
+  // Threadgate
+  threadgate: ComputedRef<"none" | "lock" | "unlock">
+
   // ワードミュートの判定
   isWordMute: ComputedRef<boolean>
 }>({
@@ -248,6 +251,13 @@ const state = reactive<{
         state.hasBlurredMedia &&
         state.blurredMediaClicked
       )
+  }),
+
+  // Threadgate
+  threadgate: computed((): "none" | "lock" | "unlock" => {
+    const threadgate = props.post.threadgate as any
+    if (threadgate == null) return "none"
+    return props.post.viewer?.replyDisabled ? "lock" : "unlock"
   }),
 
   // ワードミュートの判定
@@ -444,6 +454,13 @@ async function onRemoveThisPost (uri: string) {
     state.processing = false
     emit("removeThisPost", uri)
   }
+}
+
+async function updateThisPost () {
+  state.processing = true
+  if (mainState.currentPath.startsWith("/post")) await mainState.fetchPostThread()
+  else await updateThisPostThread()
+  state.processing = false
 }
 
 async function updateThisPostThread () {
@@ -926,9 +943,21 @@ function onActivateHashTag (text: string) {
             <!-- リプライボタン -->
             <button
               class="icon-button reply_count"
+              :disabled="state.threadgate === 'lock'"
               :data-has="post.replyCount > 0"
               @click.stop="onActivateReplyButton"
             >
+              <!-- Threadgate -->
+              <SVGIcon
+                v-if="state.threadgate === 'lock'"
+                name="lock"
+              />
+              <SVGIcon
+                v-else-if="state.threadgate === 'unlock'"
+                name="unlock"
+              />
+              <div v-else class="ignore" />
+
               <div class="icon-container">
                 <SVGIcon name="reply" />
               </div>
@@ -1004,6 +1033,7 @@ function onActivateHashTag (text: string) {
                 :container="container"
                 @close="onClosePostMenu"
                 @removeThisPost="onRemoveThisPost"
+                @updateThisPost="updateThisPost"
               />
             </button>
           </div>
@@ -1505,6 +1535,26 @@ function onActivateHashTag (text: string) {
   & > div:last-child {
     display: flex;
     margin-left: auto;
+  }
+}
+
+// リプライボタン
+// ほぼ Threadgate 対応
+.reply_count {
+  grid-template-columns: auto auto 1fr;
+
+  & > .ignore {
+    display: none;
+  }
+
+  & > .svg-icon--lock {
+    fill: var(--fg-color-05);
+    margin-top: -0.25em;
+  }
+
+  & > .svg-icon--unlock {
+    fill: rgb(var(--accent-color));
+    margin-top: -0.25em;
   }
 }
 

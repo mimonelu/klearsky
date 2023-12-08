@@ -7,7 +7,7 @@ import Util from "@/composables/util"
 export default async function (
   this: TIAtpWrapper,
   params: TTCreatePostParams
-): Promise<undefined | Error> {
+): Promise<Error | TTCidUri> {
   if (this.agent == null) return Error("No Agent")
 
   const record: AppBskyFeedPost.Record = {
@@ -176,8 +176,8 @@ export default async function (
       values: params.labels.map((label: string) => ({ val: label })),
     }
 
-  const response: ComAtprotoRepoCreateRecord.OutputSchema = await (
-    this.agent as BskyAgent
-  ).post(record)
+  const response: ComAtprotoRepoCreateRecord.OutputSchema =
+    await (this.agent as BskyAgent).post(record)
   console.log("[klearsky/post]", response)
+  return response
 }

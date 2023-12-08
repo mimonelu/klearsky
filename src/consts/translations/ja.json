@@ -5,6 +5,7 @@
   "yes": "はい",
   "no": "いいえ",
   "apply": "適用する",
+  "release": "解除する",
   "save": "保存する",
   "enabled": "有効",
   "disabled": "無効",
@@ -177,6 +178,7 @@
   "kiteApp": "Kite",
   "laikaApp": "Laika",
   "langitApp": "Langit",
+  "skychatApp": "Skychat",
   "skylineApp": "Skyline",
   "sunriseApp": "Sunrise",
   "tokimekiApp": "TOKIMEKI Bluesky",
@@ -407,6 +409,13 @@
 
   "showTimeFeeds": "タイムフィードで見る",
   "timeFeeds": "タイムフィード",
+
+  "threadgate": "リプライ制限",
+  "threadgateAllowMention": "メンションされたユーザー",
+  "threadgateAllowFollowing": "あなたのフォロワー",
+  "threadgateAllowList": "下記リストに含まれるユーザー",
+  "threadgateAllowListSample": "リストのAT URI: at://did:plc:xxx/app.bsky.graph.list/xxx, ...",
+  "threadgateNotification": "何もチェックせずに適用するとあなた以外リプライできなくなります。",
 
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",

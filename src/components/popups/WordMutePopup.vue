@@ -33,6 +33,7 @@ const state = reactive<{
           model: "keyword",
           type: "text",
           placeholder: $t("wordMutePlaceholder"),
+          autocomplete: "off",
         },
         {
           type: "button",

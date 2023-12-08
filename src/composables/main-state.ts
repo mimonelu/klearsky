@@ -356,6 +356,15 @@ state.postDatePopupDate = undefined
 state.openPostDatePopup = openPostDatePopup
 state.closePostDatePopup = closePostDatePopup
 
+// ポップアップ - Threadgate ポップアップ
+state.threadgatePopupProps = {
+  display: false,
+  postThreadgate: undefined,
+  postUri: undefined,
+}
+state.openThreadgatePopup = openThreadgatePopup
+state.closeThreadgatePopup = closeThreadgatePopup
+
 export function resetProfileState (state: MainState) {
   resetArray(state, "currentAuthorFeeds")
   state.currentAuthorFeedsCursor = undefined
@@ -1295,4 +1304,21 @@ function openPostDatePopup () {
 
 function closePostDatePopup () {
   state.postDatePopupDisplay = false
+}
+
+// ポップアップ - Threadgate ポップアップ
+
+function openThreadgatePopup (props: TTThreadgatePopupProps) {
+  state.threadgatePopupProps.mode = props.mode
+  state.threadgatePopupProps.draftThreadgate = props.draftThreadgate
+  state.threadgatePopupProps.postThreadgate = props.postThreadgate
+  state.threadgatePopupProps.postUri = props.postUri
+  state.threadgatePopupProps.onClosed = props.onClosed
+  state.threadgatePopupProps.display = true
+}
+
+function closeThreadgatePopup (params: any) {
+  if (state.threadgatePopupProps.onClosed != null)
+    state.threadgatePopupProps.onClosed(params)
+  state.threadgatePopupProps.display = false
 }

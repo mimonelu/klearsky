@@ -1,4 +1,4 @@
-export default function updateReactions (src: any, dst: any) {
+export default function updatePostProps (src: any, dst: any) {
   if (src == null || dst == null) return
 
   // 返信数の更新
@@ -18,4 +18,7 @@ export default function updateReactions (src: any, dst: any) {
     if (dst.viewer.like == null) delete src.viewer.like
     else src.viewer.like = dst.viewer.like
   }
+
+  // Threadgate の更新
+  src.threadgate = dst.threadgate
 }

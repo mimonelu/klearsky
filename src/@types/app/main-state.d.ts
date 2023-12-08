@@ -196,7 +196,7 @@ type MainState = {
     error: any
     description: any
   }
-  openErrorPopup: Function
+  openErrorPopup: (error: any, description: any) => void
   closeErrorPopup: Function
 
   // ポップアップ - メッセージポップアップ
@@ -329,4 +329,9 @@ type MainState = {
   postDatePopupDate?: string
   openPostDatePopup: Function
   closePostDatePopup: Function
+
+  // ポップアップ - Threadgate ポップアップ
+  threadgatePopupProps: TTThreadgatePopupProps
+  openThreadgatePopup: Function
+  closeThreadgatePopup: Function
 }

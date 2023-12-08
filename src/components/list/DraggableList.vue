@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { reactive } from "vue"
-import { arrayMoveMutable } from "array-move"
 
 const props = defineProps<{
   items: any[]
@@ -35,7 +34,15 @@ function onDrop (event: DragEvent) {
   const srcIndex = parseInt(event.dataTransfer?.getData("text/plain") ?? "", 10)
   let dstIndex = parseInt(item.getAttribute("data-index") as string, 10)
   if (srcIndex < dstIndex && dstIndex > 0) dstIndex --
-  arrayMoveMutable(props.items, srcIndex, dstIndex)
+  moveElement(props.items, srcIndex, dstIndex)
+}
+
+function moveElement (array: Array<any>, fromIndex: number, toIndex: number) {
+  if (fromIndex < 0 || fromIndex >= array.length) return
+  if (toIndex < 0 || toIndex >= array.length) return
+  const elementToMove = array.splice(fromIndex, 1)[0]
+  array.splice(toIndex, 0, elementToMove)
+  return array
 }
 </script>
 

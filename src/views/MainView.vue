@@ -34,6 +34,7 @@ import SettingsPopup from "@/components/popups/SettingsPopup.vue"
 import SplashScreen from "@/components/shell-parts/SplashScreen.vue"
 import SubMenu from "@/components/shell-parts/SubMenu.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import ThreadgatePopup from "@/components/popups/ThreadgatePopup.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import WordMutePopup from "@/components/popups/WordMutePopup.vue"
 import { state, resetProfileState } from "@/composables/main-state"
@@ -731,6 +732,13 @@ function broadcastListener (event: MessageEvent) {
       @onChange="(params: any) => { state.postDatePopupDate = params }"
     />
 
+    <!-- Threadgate ポップアップ -->
+    <ThreadgatePopup
+      v-if="state.threadgatePopupProps.display"
+      v-bind="state.threadgatePopupProps"
+      @close="state.closeThreadgatePopup"
+    />
+
     <!-- 　D&Dオーバーレイ -->
     <div
       v-if="state.isDragOver"
@@ -805,14 +813,12 @@ function broadcastListener (event: MessageEvent) {
     display: none;
   }
   &[data-layout="slimLeft"] .sub-menu {
-    bottom: 3rem;
     right: 0;
   }
   &[data-layout="slimRight"] .sub-menu-wrapper {
     max-width: 0;
 
     .sub-menu {
-      bottom: 3rem;
       left: 0;
     }
   }
