@@ -218,6 +218,7 @@ async function processPage (pageName?: null | string) {
     case "profile-custom-feeds":
     case "profile-repost":
     case "profile-like":
+    case "profile-list":
     case "profile-following":
     case "profile-follower":
     case "profile-suggested-follows": {
@@ -276,6 +277,14 @@ async function processPage (pageName?: null | string) {
         const tasks: Array<Promise<void>> = []
         if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
           tasks.push(state.fetchAuthorLikes("new"))
+        if (account !== state.currentProfile?.handle &&
+            account !== state.currentProfile?.did)
+          tasks.push(state.fetchCurrentProfile(account as string))
+        await Promise.allSettled(tasks)
+        break
+      }
+      case "profile-list": {
+        const tasks: Array<Promise<void>> = []
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           tasks.push(state.fetchCurrentProfile(account as string))

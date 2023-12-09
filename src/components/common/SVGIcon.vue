@@ -35,6 +35,7 @@ import json from "@/svg/json.svg?raw"
 import lightning from "@/svg/lightning.svg?raw"
 import like from "@/svg/like.svg?raw"
 import link from "@/svg/link.svg?raw"
+import list from "@/svg/list.svg?raw"
 import lock from "@/svg/lock.svg?raw"
 import mail from "@/svg/mail.svg?raw"
 import menu from "@/svg/menu.svg?raw"
@@ -108,6 +109,7 @@ const icons: { [k: string]: string } = {
   lightning,
   like,
   link,
+  list,
   lock,
   mail,
   menu,

@@ -49,8 +49,4 @@ const mainState = inject("state") as MainState
   flex-direction: column;
   flex-grow: 1;
 }
-
-.tab__button {
-  width: 50%;
-}
 </style>

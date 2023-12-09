@@ -343,7 +343,7 @@ function onActivateAccountMaskToggle () {
 
     <!-- タブ -->
     <div class="tab-container">
-      <!-- 上タブ -->
+      <!-- メインタブ -->
       <div class="tab">
         <!-- ポストタブボタン -->
         <RouterLink
@@ -357,12 +357,11 @@ function onActivateAccountMaskToggle () {
 
         <!-- リプライ付きポストタブボタン -->
         <RouterLink
-          class="tab__button tab__button--post"
+          class="tab__button tab__button--reply"
           :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
           :title="$t('postWithReplies')"
         >
           <SVGIcon name="posts" />
-          <span>{{ $t("replies") }}</span>
         </RouterLink>
 
         <!-- メディアタブボタン -->
@@ -372,47 +371,30 @@ function onActivateAccountMaskToggle () {
           :title="$t('medias')"
         >
           <SVGIcon name="image" />
-          <span>{{ $t("medias") }}</span>
         </RouterLink>
 
         <!-- カスタムフィードタブボタン -->
         <RouterLink
-          class="tab__button tab__button--custom-feeds"
+          class="tab__button tab__button--feed"
           :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.did } }"
           :title="$t('customFeeds')"
         >
           <SVGIcon name="feed" />
           <span>{{ $t("feeds") }}</span>
         </RouterLink>
-      </div>
 
-      <!-- 中タブ -->
-      <div
-        v-if="isMyProfile()"
-        class="tab"
-      >
-        <!-- 自分のリポストタブボタン -->
+        <!-- リストタブボタン -->
         <RouterLink
-          class="tab__button tab__button--repost"
-          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('reposts')"
+          class="tab__button tab__button--list"
+          :to="{ path: '/profile/list', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('list')"
         >
-          <SVGIcon name="repost" />
-          <span>{{ $t("reposts") }}</span>
-        </RouterLink>
-
-        <!-- 自分のいいねタブボタン -->
-        <RouterLink
-          class="tab__button tab__button--like"
-          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('likes')"
-        >
-          <SVGIcon name="like" />
-          <span>{{ $t("likes") }}</span>
+          <SVGIcon name="list" />
+          <span>{{ $t("list") }}</span>
         </RouterLink>
       </div>
 
-      <!-- 下タブ -->
+      <!-- ユーザータブ -->
       <div class="tab">
         <!-- 関連ユーザータブボタン -->
         <RouterLink
@@ -442,6 +424,32 @@ function onActivateAccountMaskToggle () {
         >
           <SVGIcon name="person" />
           <span>{{ $t("followers") }}</span>
+        </RouterLink>
+      </div>
+
+      <!-- リアクションタブ -->
+      <div
+        v-if="isMyProfile()"
+        class="tab"
+      >
+        <!-- 自分のリポストタブボタン -->
+        <RouterLink
+          class="tab__button tab__button--repost"
+          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('reposts')"
+        >
+          <SVGIcon name="repost" />
+          <span>{{ $t("reposts") }}</span>
+        </RouterLink>
+
+        <!-- 自分のいいねタブボタン -->
+        <RouterLink
+          class="tab__button tab__button--like"
+          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('likes')"
+        >
+          <SVGIcon name="like" />
+          <span>{{ $t("likes") }}</span>
         </RouterLink>
       </div>
     </div>
@@ -726,35 +734,39 @@ function onActivateAccountMaskToggle () {
   position: sticky;
   top: 3rem;
   z-index: 1;
-}
 
-.tab {
-  &__button {
-    flex: 1;
-  }
-  &:first-child {
-    font-size: 0.9375rem;
+  .tab__button {
+    &--post,
+    &--reply {
+      border-right: unset;
+    }
+    &--reply,
+    &--media {
+      flex: 0.5;
+    }
   }
 
-  &__button--repost > .svg-icon {
+  .tab__button--repost > .svg-icon {
     --fg-color: var(--share-color);
   }
 
-  &__button--like > .svg-icon {
+  .tab__button--like > .svg-icon {
     --fg-color: var(--like-color);
   }
 
-  &__button--post > .svg-icon {
-    --fg-color: var(--post-color);
+  .tab__button--post,
+  .tab__button--reply {
+    & > .svg-icon {
+      --fg-color: var(--post-color);
+    }
   }
 
-  &__button--custom-feeds > .svg-icon {
-    --fg-color: var(--accent-color);
+  .tab__button--feed,
+  .tab__button--list {
+    & > .svg-icon {
+      --fg-color: var(--accent-color);
+    }
   }
-}
-
-.tab--bottom > * {
-  width: 50%;
 }
 
 .feed-list,
