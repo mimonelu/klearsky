@@ -12,7 +12,7 @@ Klearsky is deployed on Cloudflare.
 * Staging: https://staging.klearsky.pages.dev/
 
 ## Development environment
-* Node: v18.12.1 (based on Cloudflare)
+* Node: v18.17.1 (based on Cloudflare)
 * Framework: Vite + Vue3 (see `package.json` )
 
 ## Custom fields
