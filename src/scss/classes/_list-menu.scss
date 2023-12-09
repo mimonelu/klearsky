@@ -8,6 +8,7 @@
   flex-direction: column;
   grid-gap: 0.125em;
   padding: 0.5em 0;
+  user-select: none;
 
   &__header {
     border-bottom: 1px solid var(--fg-color-025);
@@ -30,6 +31,13 @@
     white-space: nowrap;
     &:focus, &:hover {
       background-color: rgb(var(--accent-color), 0.25);
+    }
+    &:disabled {
+      cursor: default;
+      opacity: 0.5;
+      &:focus, &:hover {
+        background-color: unset;
+      }
     }
 
     & > .svg-icon {
