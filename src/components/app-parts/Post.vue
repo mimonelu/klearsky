@@ -464,6 +464,10 @@ async function updateThisPost () {
 }
 
 async function updateThisPostThread () {
+  // レコード更新直後に最新レコードを取得できない現象対策
+  // TODO: 原因不明に付き暫定対応、後日再検証すること
+  await Util.wait(250)
+
   const posts: undefined | false | Array<TTPost> =
     await mainState.atp.fetchPosts([props.post.uri])
   if (!posts || posts.length === 0) return
