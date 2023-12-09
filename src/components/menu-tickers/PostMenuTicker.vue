@@ -67,6 +67,7 @@ async function deletePost () {
     <!-- Threadgate ポップアップトリガー -->
     <MenuTickerOpenThreadgatePopup
       v-if="state.isUser"
+      :disabled="post.record.reply != null"
       :post="post"
       @close="emit('close')"
       @updateThisPost="emit('updateThisPost')"

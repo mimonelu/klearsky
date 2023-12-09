@@ -333,6 +333,7 @@ function openThreadgatePopup () {
               <!-- Threadgate ポップアップトリガー -->
               <button
                 class="button--bordered threadgate-button"
+                :disabled="type === 'reply'"
                 @click.prevent="openThreadgatePopup"
               >
                 <SVGIcon :name="state.draftThreadgate.applied ? 'lock' : 'unlock'" />
