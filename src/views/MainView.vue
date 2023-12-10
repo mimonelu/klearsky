@@ -285,6 +285,8 @@ async function processPage (pageName?: null | string) {
       }
       case "profile-list": {
         const tasks: Array<Promise<void>> = []
+        if (!state.inSameProfilePage || state.currentAuthorLists.length === 0)
+          tasks.push(state.fetchAuthorLists("new"))
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           tasks.push(state.fetchCurrentProfile(account as string))

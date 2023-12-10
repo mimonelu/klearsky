@@ -738,7 +738,7 @@ function onActivateAccountMaskToggle () {
   .tab__button {
     &--post,
     &--reply {
-      border-right: unset;
+      border-right-color: var(--fg-color-0125);
     }
     &--reply,
     &--media {

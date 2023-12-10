@@ -258,6 +258,22 @@ type TTInviteCode = {
   [k: string]: unknown
 }
 
+type TTList = {
+  uri: string
+  cid: string
+  creator: AppBskyActorDefs.ProfileView
+  name: string
+  purpose: ListPurpose
+  description?: string
+  descriptionFacets?: AppBskyRichtextFacet.Main[]
+  avatar?: string
+  viewer?: {
+    muted?: boolean;
+    blocked?: string;
+  }
+  indexedAt: string
+}
+
 type TTNotificationReason = "reply"
   | "quote"
   | "mention"

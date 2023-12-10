@@ -408,6 +408,9 @@
   "noAuthorFeeds": "このユーザーの管理するフィードはありません。",
 
   "list": "リスト",
+  "modList": "モデレーションリスト",
+  "curateList": "キュレーションリスト",
+  "unknownList": "不明なリスト",
 
   "showTimeFeeds": "タイムフィードで見る",
   "timeFeeds": "タイムフィード",

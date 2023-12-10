@@ -408,6 +408,9 @@
   "noAuthorFeeds": "There are no feeds managed by this user.",
 
   "list": "List",
+  "modList": "Moderation list",
+  "curateList": "Curation list",
+  "unknownList": "Unknown list",
 
   "showTimeFeeds": "Show in timefeed",
   "timeFeeds": "Timefeed",

@@ -127,6 +127,7 @@ state.fetchCurrentAuthorCustomFeeds = fetchCurrentAuthorCustomFeeds
 state.fetchCurrentAuthorFeed = fetchCurrentAuthorFeed
 state.fetchAuthorReposts = fetchAuthorReposts
 state.fetchAuthorLikes = fetchAuthorLikes
+state.fetchAuthorLists = fetchAuthorLists
 state.fetchFollowers = fetchFollowers
 state.fetchFollowings = fetchFollowings
 state.fetchSuggestedFollows = fetchSuggestedFollows
@@ -378,6 +379,8 @@ export function resetProfileState (state: MainState) {
   state.currentAuthorRepostsCursor = undefined
   resetArray(state, "currentAuthorLikes")
   state.currentAuthorLikesCursor = undefined
+  resetArray(state, "currentAuthorLists")
+  state.currentAuthorListsCursor = undefined
   resetArray(state, "currentFollowers")
   state.currentFollowersCursor = undefined
   resetArray(state, "currentFollowings")
@@ -716,6 +719,7 @@ async function fetchCurrentProfile (did: string) {
   state.currentProfile = null
   state.currentAuthorReposts.splice(0)
   state.currentAuthorLikes.splice(0)
+  state.currentAuthorLists.splice(0)
   state.currentAuthorCustomFeeds.splice(0)
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
@@ -820,6 +824,22 @@ async function fetchAuthorLikes (direction: "new" | "old") {
     direction === "new" ? undefined : state.currentAuthorLikesCursor
   )
   state.currentAuthorLikesCursor = cursor
+}
+
+async function fetchAuthorLists (direction: "new" | "old") {
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
+  const cursor = await state.atp.fetchLists(
+    state.currentAuthorLists,
+    account,
+    CONSTS.LIMIT_OF_FETCH_AUTHOR_LIST,
+    direction === "new" ? undefined : state.currentAuthorListsCursor
+  )
+  if (cursor instanceof Error) {
+    // TODO:
+    return
+  }
+  state.currentAuthorListsCursor = cursor
 }
 
 async function fetchFollowers (direction: "new" | "old") {
