@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, watch, type ComputedRef } from "vue"
-import List from "@/components/list/List.vue"
+import ListCard from "@/components/list/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Util from "@/composables/util"
 
@@ -40,8 +40,8 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :processing="mainState.listProcessing"
       @activate="fetchLists('new')"
     />
-    <div class="list-container">
-      <List
+    <div class="list-card-container">
+      <ListCard
         v-for="list of state.lists"
         :key="list.uri"
         :list="list"
@@ -61,11 +61,11 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-direction: column;
 }
 
-.list-container {
+.list-card-container {
   flex-grow: 1;
 }
 
-.list:not(:last-of-type) {
+.list-card:not(:last-of-type) {
   border-bottom: 1px solid var(--fg-color-0125);
 }
 </style>

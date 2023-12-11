@@ -185,6 +185,17 @@ type MainState = {
   sortFeedPreferencesSavedAndPinned: () => void
   sortMyFeedGenerators: () => void
 
+  // リスト
+
+  currentList?: TTList
+  currentListItems: Array<TTListItem>
+  currentListItemsCursor?: string
+  currentListFeeds: Array<TTFeed>
+  currentListFeedsCursor?: string
+  currentListFeedsUri?: string
+  fetchList: (direction: "old" | "new", limit = 1) => Promise<boolean>
+  fetchListFeeds: (direction: "old" | "new", middleCursor?: string) => Promise<boolean>
+
   // ローカルライン
 
   globallinePosts: Array<TTPost>

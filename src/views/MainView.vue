@@ -151,6 +151,9 @@ function updatePageTitle () {
   if (state.currentPath === "/home/feeds")
     title += ` - ${state.currentQuery.displayName ?? $t("customFeeds")}`
 
+  else if (state.currentPath === "/home/list-feeds")
+    title += ` - ${state.currentQuery.displayName ?? $t("listFeeds")}`
+
   else if (state.currentPath.startsWith("/post") &&
       state.currentPosts != null &&
       state.currentPosts.length > 0)

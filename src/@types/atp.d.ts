@@ -274,6 +274,22 @@ type TTList = {
   indexedAt: string
 }
 
+type TTListItem = {
+  uri: string
+  subject: {
+    uri: string
+    cid: string
+    creator: AppBskyActorDefs.ProfileView
+    name: string
+    purpose: ListPurpose
+    description?: string
+    descriptionFacets?: AppBskyRichtextFacet.Main[]
+    avatar?: string
+    viewer?: ListViewerState
+    indexedAt: string
+  }
+}
+
 type TTNotificationReason = "reply"
   | "quote"
   | "mention"

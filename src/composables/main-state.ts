@@ -193,6 +193,17 @@ state.fetchPopularFeedGenerators = fetchPopularFeedGenerators
 state.sortFeedPreferencesSavedAndPinned = sortFeedPreferencesSavedAndPinned
 state.sortMyFeedGenerators = sortMyFeedGenerators
 
+// リスト
+
+state.currentList = undefined
+state.currentListItems = []
+state.currentListItemsCursor = undefined
+state.currentListFeeds = []
+state.currentListFeedsCursor = undefined
+state.currentListFeedsUri = undefined
+state.fetchList = fetchList
+state.fetchListFeeds = fetchListFeeds
+
 // ローカルライン
 
 state.globallinePosts = []
@@ -1076,6 +1087,61 @@ function sortMyFeedGenerators () {
           ? - 1
           : 0
   })
+}
+
+// リスト
+
+async function fetchList (direction: "old" | "new", limit = 1): Promise<boolean> {
+  const listUri: undefined | string = state.currentQuery.list
+  if (listUri == null) return false
+  const response: { cursor?: string; list: TTList } | Error =
+    await state.atp.fetchList(
+      state.currentListItems,
+      listUri,
+      limit ?? CONSTS.LIMIT_OF_FETCH_LIST_ITEMS,
+      direction === "old" ? state.currentListItemsCursor : undefined
+    )
+  if (response instanceof Error) {
+    state.openErrorPopup(
+      "errorApiFailed",
+      "main-state/fetchList"
+    )
+    return false
+  }
+  if (response.cursor != null) {
+    state.currentPopularFeedGeneratorsCursor = response.cursor
+  }
+  state.currentList = response.list
+  return true
+}
+
+async function fetchListFeeds (direction: "old" | "new", middleCursor?: string): Promise<boolean> {
+  const listUri: undefined | string = state.currentQuery.list
+  if (listUri == null) return false
+  if (state.currentListFeedsUri !== listUri) {
+    state.currentListFeeds.splice(0)
+    state.currentListFeedsCursor = undefined
+  }
+  const cursor: undefined | string | Error =
+    await state.atp.fetchListFeed(
+      state.currentListFeeds,
+      listUri,
+      CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
+      direction === "old" ? middleCursor ?? state.currentListFeedsCursor : undefined,
+      middleCursor != null
+    )
+  if (cursor instanceof Error) {
+    state.openErrorPopup(
+      "errorApiFailed",
+      "main-state/fetchListFeeds"
+    )
+    return false
+  }
+  if (cursor != null) {
+    state.currentListFeedsCursor = cursor
+  }
+  state.currentListFeedsUri = listUri
+  return true
 }
 
 // ポップアップ

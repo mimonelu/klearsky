@@ -409,8 +409,9 @@
 
   "list": "List",
   "modList": "Moderation list",
-  "curateList": "Curation list",
+  "curateList": "User list",
   "unknownList": "Unknown list",
+  "listFeeds": "List feeds",
 
   "showTimeFeeds": "Show in timefeed",
   "timeFeeds": "Timefeed",

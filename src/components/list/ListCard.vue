@@ -1,19 +1,30 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, ref, type ComputedRef } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const props = defineProps<{
   list: TTList
+  unclickable?: boolean
 }>()
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  routerLinkTo: ComputedRef<any>
   indexedAt: ComputedRef<string>
   purpose: ComputedRef<string>
 }>({
+  routerLinkTo: computed(() => {
+    return {
+      path: "/home/list-feeds", // TODO: purpose で振り分けること
+      query: {
+        list: props.list.uri,
+        displayName: props.list.name,
+      },
+    }
+  }),
   indexedAt: computed((): string => {
     return mainState.formatDate(props.list.indexedAt)
   }),
@@ -23,19 +34,31 @@ const state = reactive<{
     return "unknownList"
   }),
 })
+
+function onClick () {
+  if (!props.unclickable) mainState.currentList = props.list
+}
 </script>
 
 <template>
-  <div
-    class="list"
-    tabindex="0"
+  <component
+    v-bind="unclickable ? null : { to: state.routerLinkTo }"
+    :is="unclickable ? 'div' : 'RouterLink'"
+    class="list-card"
+    @click.native="onClick"
   >
     <!-- リスト画像 -->
-    <LazyImage :src="list.avatar" />
+    <LazyImage
+      class="list-card__avatar"
+      :src="list.avatar"
+    />
 
-    <div class="list__name">{{ list.name }}</div>
+    <!-- リスト名 -->
+    <div class="list-card__name">{{ list.name }}</div>
+
+    <!-- リスト種別 -->
     <div
-      class="list__purpose"
+      class="list-card__purpose"
       :data-purpose="state.purpose"
     >
       <SVGIcon :name="state.purpose === 'curateList'
@@ -45,7 +68,9 @@ const state = reactive<{
           : 'help'" />
       <span>{{ $t(state.purpose) }}</span>
     </div>
-    <div class="list__indexed-at">
+
+    <!-- リスト作成日時 -->
+    <div class="list-card__indexed-at">
       <SVGIcon name="clock" />
       <span>{{ state.indexedAt }}</span>
     </div>
@@ -53,7 +78,7 @@ const state = reactive<{
     <!-- リスト説明文 -->
     <HtmlText
       v-if="list.description"
-      class="list__description"
+      class="list-card__description"
       dir="auto"
       :text="list.description"
       :facets="list.descriptionFacets"
@@ -61,27 +86,42 @@ const state = reactive<{
       @onActivateMention="$emit('onActivateMention')"
       @onActivateHashTag="$emit('onActivateHashTag')"
     />
-  </div>
+  </component>
 </template>
 
 <style lang="scss" scoped>
-.list {
+.list-card {
   display: grid;
-  grid-gap: 0 0.75em;
+  grid-gap: 0.25em 0.75em;
   grid-template-columns: auto auto 1fr;
   grid-template-areas:
     "a n n m"
     "a p i m"
     "d d d d";
-  align-items: center;
+  align-items: flex-start;
   padding: 1em;
 
+  // リスト画像
+  &__avatar {
+    grid-area: a;
+    border-radius: var(--border-radius);
+    display: block;
+    overflow: hidden;
+    min-width: 3em;
+    max-width: 3em;
+    min-height: 3em;
+    max-height: 3em;
+  }
+
+  // リスト名
   &__name {
     grid-area: n;
     font-weight: bold;
     line-height: var(--line-height);
+    word-break: break-word;
   }
 
+  // リスト種別
   &__purpose {
     grid-area: p;
     display: flex;
@@ -107,6 +147,7 @@ const state = reactive<{
     }
   }
 
+  // リスト作成日時
   &__indexed-at {
     grid-area: i;
     color: var(--fg-color-05);
@@ -125,24 +166,14 @@ const state = reactive<{
     }
   }
 
+  // リスト説明文
   &__description {
     grid-area: d;
     font-size: 0.875em;
     line-height: var(--line-height);
-    margin-top: 0.5em;
+    margin-top: 0.25em;
     white-space: pre-wrap;
+    word-break: break-word;
   }
-}
-
-// リスト画像
-.lazy-image {
-  grid-area: a;
-  border-radius: var(--border-radius);
-  display: block;
-  overflow: hidden;
-  min-width: 3em;
-  max-width: 3em;
-  min-height: 3em;
-  max-height: 3em;
 }
 </style>

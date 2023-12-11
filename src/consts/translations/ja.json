@@ -409,8 +409,9 @@
 
   "list": "リスト",
   "modList": "モデレーションリスト",
-  "curateList": "キュレーションリスト",
+  "curateList": "ユーザーリスト",
   "unknownList": "不明なリスト",
+  "listFeeds": "リストフィード",
 
   "showTimeFeeds": "タイムフィードで見る",
   "timeFeeds": "タイムフィード",
