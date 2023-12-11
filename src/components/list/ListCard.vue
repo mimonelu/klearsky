@@ -6,6 +6,7 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const props = defineProps<{
   list: TTList
+  createDisplay?: boolean
   unclickable?: boolean
 }>()
 
@@ -86,18 +87,31 @@ function onClick () {
       @onActivateMention="$emit('onActivateMention')"
       @onActivateHashTag="$emit('onActivateHashTag')"
     />
+
+    <!-- リスト作成者リンク -->
+    <RouterLink
+      v-if="createDisplay"
+      class="list-card__creator"
+      :to="{ name: 'profile-list', query: { account: list.creator.did } }"
+      @click.prevent
+    >
+      <SVGIcon name="person" />
+      <div class="list-card__creator__display-name">{{ list.creator.displayName }}</div>
+      <div class="list-card__creator__handle">{{ list.creator.handle }}</div>
+    </RouterLink>
   </component>
 </template>
 
 <style lang="scss" scoped>
 .list-card {
   display: grid;
-  grid-gap: 0.25em 0.75em;
+  grid-gap: 0 0.75em;
   grid-template-columns: auto auto 1fr;
   grid-template-areas:
     "a n n m"
     "a p i m"
-    "d d d d";
+    "d d d d"
+    "c c c c";
   align-items: flex-start;
   padding: 1em;
 
@@ -118,6 +132,7 @@ function onClick () {
     grid-area: n;
     font-weight: bold;
     line-height: var(--line-height);
+    margin-bottom: 0.25em;
     word-break: break-word;
   }
 
@@ -171,9 +186,53 @@ function onClick () {
     grid-area: d;
     font-size: 0.875em;
     line-height: var(--line-height);
-    margin-top: 0.25em;
+    margin-top: 0.5em;
     white-space: pre-wrap;
     word-break: break-word;
+  }
+
+  // リスト作成者リンク
+  &__creator {
+    grid-area: c;
+    background-clip: padding-box;
+    background-color: rgb(var(--bg-color));
+    border: 1px solid var(--accent-color-025);
+    border-radius: var(--border-radius);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    grid-gap: 0.5em;
+    margin-top: 0.5em;
+    margin-left: auto;
+    padding: 0.5em 1em;
+    &:focus, &:hover {
+      border-color: var(--accent-color-05);
+    }
+
+    & > .svg-icon {
+      fill: var(--accent-color-075);
+      font-size: 0.75em;
+    }
+
+    &__display-name {
+      font-size: 0.875em;
+      font-weight: bold;
+      line-height: var(--line-height);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-break: break-word;
+    }
+
+    &__handle {
+      color: var(--fg-color-075);
+      font-size: 0.875em;
+      line-height: var(--line-height);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-break: break-word;
+    }
   }
 }
 </style>

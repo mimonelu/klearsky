@@ -331,7 +331,7 @@ function closeMenuTicker () {
 
     & > span {
       font-weight: bold;
-      line-height: 1.25;
+      line-height: var(--line-height);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -347,7 +347,7 @@ function closeMenuTicker () {
 
     & > span {
       font-size: 0.875em;
-      line-height: 1.25;
+      line-height: var(--line-height);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -467,7 +467,7 @@ function closeMenuTicker () {
     &__display-name {
       font-size: 0.875em;
       font-weight: bold;
-      line-height: 1.25;
+      line-height: var(--line-height);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -477,7 +477,7 @@ function closeMenuTicker () {
     &__handle {
       color: var(--fg-color-075);
       font-size: 0.875em;
-      line-height: 1.25;
+      line-height: var(--line-height);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

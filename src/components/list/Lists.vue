@@ -45,6 +45,8 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         v-for="list of state.lists"
         :key="list.uri"
         :list="list"
+        :createDisplay="false"
+        :unclickable="false"
       />
     </div>
     <LoadButton

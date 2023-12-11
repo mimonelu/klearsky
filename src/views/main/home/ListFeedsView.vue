@@ -33,6 +33,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <ListCard
       v-if="mainState.currentList"
       :list="mainState.currentList"
+      :createDisplay="true"
       :unclickable="true"
     />
     <LoadButton
