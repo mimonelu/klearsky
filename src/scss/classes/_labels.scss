@@ -1,4 +1,5 @@
-.labels {
+.labels,
+.custom-labels {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -6,19 +7,25 @@
   user-select: none;
 
   & > .svg-icon {
-    fill: rgb(var(--notice-color));
+    fill: rgb(var(--color));
   }
 
   &__message {
-    color: rgb(var(--notice-color));
+    color: rgb(var(--color));
     font-weight: bold;
   }
 
   &__item {
-    background-color: rgb(var(--notice-color), 0.25);
-    color: rgb(var(--notice-color));
+    background-color: rgb(var(--color), 0.25);
+    color: rgb(var(--color));
     font-weight: bold;
     padding: 0.25rem;
     word-break: break-word;
   }
+}
+.labels {
+  --color: var(--notice-color);
+}
+.custom-labels {
+  --color: var(--fg-color);
 }

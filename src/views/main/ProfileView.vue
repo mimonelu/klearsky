@@ -24,6 +24,8 @@ const state = reactive<{
 
   // ラベル対応
   enabledContentMask: boolean
+  harmfulLabels: ComputedRef<Array<TTLabel>>
+  customLabels: ComputedRef<Array<TTLabel>>
   contentFilteringLabels: ComputedRef<Array<TTLabel>>
   contentFilteringToggleDisplay: ComputedRef<boolean>
 
@@ -46,6 +48,12 @@ const state = reactive<{
 
   // ラベル対応
   enabledContentMask: true,
+  harmfulLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(undefined, ["alert", "blur", "blur-media"], mainState.currentProfile?.labels)
+  }),
+  customLabels: computed((): Array<TTLabel> => {
+    return mainState.getCustomLabels(mainState.currentProfile?.labels)
+  }),
   contentFilteringLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(["hide", "warn"], ["blur", "blur-media"], mainState.currentProfile?.labels)
   }),
@@ -194,14 +202,27 @@ function onActivateAccountMaskToggle () {
             </div>
 
             <div class="profile-view__details__top__right">
-              <!-- アカウントラベルアイコン -->
+              <!-- 有害なラベル -->
               <div
-                v-if="(mainState.currentProfile?.labels?.length ?? 0) > 0"
+                v-if="state.harmfulLabels.length > 0"
                 class="labels"
               >
                 <SVGIcon name="contentFiltering" />
                 <div
-                  v-for="label of mainState.currentProfile?.labels"
+                  v-for="label of state.harmfulLabels"
+                  :key="label.val"
+                  class="labels__item"
+                >{{ $t(label.val) }}</div>
+              </div>
+
+              <!-- カスタムラベル -->
+              <div
+                v-if="state.customLabels.length > 0"
+                class="custom-labels"
+              >
+                <SVGIcon name="label" />
+                <div
+                  v-for="label of state.customLabels"
                   :key="label.val"
                   class="labels__item"
                 >{{ $t(label.val) }}</div>

@@ -2,6 +2,7 @@
   "!hide": { "oldGroup": "", "group": "system", "configurable": false, "warn": "blur" },
   "!no-promote": { "oldGroup": "", "group": "system", "configurable": false, "warn": "null" },
   "!warn": { "oldGroup": "", "group": "system", "configurable": false, "warn": "blur" },
+  "!no-unauthenticated": { "oldGroup": "", "group": "system", "configurable": false, "warn": "null" },
   "dmca-violation": { "oldGroup": "", "group": "legal", "configurable": false, "warn": "blur" },
   "doxxing": { "oldGroup": "", "group": "legal", "configurable": false, "warn": "blur" },
   "porn": { "oldGroup": "nsfw", "group": "sexual", "configurable": true, "warn": "blur-media", "selectable": true },
