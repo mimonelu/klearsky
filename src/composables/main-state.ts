@@ -99,6 +99,7 @@ state.getContentWarningVisibility = getContentWarningVisibility
 
 state.selectLabelsPopupDisplay = false
 state.selectLabelsPopupState = undefined
+state.getCustomLabels = getCustomLabels
 state.filterLabels = filterLabels
 state.openSelectLabelsPopup = openSelectLabelsPopup
 state.closeSelectLabelsPopup = closeSelectLabelsPopup
@@ -631,6 +632,12 @@ function makeCustomLabelPreference (label: string): TTPreference {
 
 // ラベル
 
+function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
+  return labels?.filter((label: TTLabel) => {
+    return LABEL_BEHAVIORS[label.val] == null
+  }) ?? []
+}
+
 function filterLabels (
   visibilities?: Array<TTContentVisibility>,
   warns?: Array<TTLabelOnWarn>,
@@ -655,6 +662,8 @@ function filterLabels (
       if (labelBehavior?.group === "legal" &&
         (specifiedHide || specifiedWarn)
       ) return true
+
+      if (label.val === "!no-unauthenticated") return false
     }
 
     return state.currentPreferences.some((preference: TTPreference) => {

@@ -75,12 +75,13 @@ const state = reactive<{
 
   // ラベル対応
   allLabels: ComputedRef<Array<TTLabel>>
+  appliedHarmfulLabels: ComputedRef<Array<TTLabel>>
   hideLabels: ComputedRef<Array<TTLabel>>
   blurLabels: ComputedRef<Array<TTLabel>>
   blurMediaLabels: ComputedRef<Array<TTLabel>>
   alertLabels: ComputedRef<Array<TTLabel>>
-  contentWarningVisibility: ComputedRef<TTContentVisibility>
   contentWarningLabels: ComputedRef<Array<string>>
+  hasAppliedHarmfulLabel: ComputedRef<boolean>
   hasBlurredContent: ComputedRef<boolean>
   blurredContentClicked: boolean
   postContentDisplay: ComputedRef<boolean>
@@ -204,6 +205,9 @@ const state = reactive<{
       ...(props.post.labels ?? [])
     ]
   }),
+  appliedHarmfulLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(["hide", "warn"], ["alert", "blur", "blur-media"], state.allLabels)
+  }),
   hideLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(["hide"], undefined, state.allLabels)
   }),
@@ -216,11 +220,13 @@ const state = reactive<{
   alertLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(["hide", "warn"], ["alert"], state.allLabels)
   }),
-  contentWarningVisibility: computed((): TTContentVisibility => {
-    return mainState.getContentWarningVisibility(state.allLabels)
-  }),
   contentWarningLabels: computed((): Array<string> => {
     return state.hideLabels.map((label: TTLabel) => $t(label.val))
+  }),
+
+  // ラベル対応 - 有害なラベル
+  hasAppliedHarmfulLabel: computed((): boolean => {
+    return state.appliedHarmfulLabels.length > 0
   }),
 
   // ラベル対応 - ポストコンテンツ
@@ -628,7 +634,7 @@ function onActivateHashTag (text: string) {
       />
 
       <!-- アカウントラベル＆ポストラベル -->
-      <template v-if="state.contentWarningVisibility !== 'show'">
+      <template v-if="state.contentWarningLabels.length > 0">
         <SVGIcon name="contentFiltering" />
         <div class="post__mask__content-warning">{{ state.contentWarningLabels.join(", ") }}</div>
       </template>
@@ -680,7 +686,7 @@ function onActivateHashTag (text: string) {
           <div class="display-name">
             <!-- アカウントラベルアイコン -->
             <SVGIcon
-              v-if="(post.author?.labels?.length ?? 0) > 0"
+              v-if="state.hasAppliedHarmfulLabel"
               name="contentFiltering"
               class="account-label-icon"
             />

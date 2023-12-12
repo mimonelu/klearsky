@@ -66,6 +66,7 @@ type MainState = {
 
   // ラベル
 
+  getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
   filterLabels (
     visibilities?: Array<TTContentVisibility>,
     warns?: Array<TTLabelOnWarn>,

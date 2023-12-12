@@ -17,7 +17,8 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   // ラベル対応
-  appliedLabels: ComputedRef<Array<TTLabel>>
+  appliedHarmfulLabels: ComputedRef<Array<TTLabel>>
+  hasAppliedHarmfulLabel: ComputedRef<boolean>
   contentFilteringToggleDisplay: boolean
   contentWarningVisibility: ComputedRef<TTContentVisibility>
 
@@ -25,8 +26,11 @@ const state = reactive<{
   profileMenuContainer: ComputedRef<undefined | HTMLElement>
 }>({
   // ラベル対応
-  appliedLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide", "warn"], undefined, props.user.labels)
+  appliedHarmfulLabels: computed((): Array<TTLabel> => {
+    return mainState.filterLabels(["hide", "warn"], ["alert", "blur", "blur-media"], props.user.labels)
+  }),
+  hasAppliedHarmfulLabel: computed((): boolean => {
+    return state.appliedHarmfulLabels.length > 0
   }),
   contentFilteringToggleDisplay: false,
   contentWarningVisibility: computed((): TTContentVisibility => {
@@ -69,8 +73,8 @@ function onActivateContentFilteringToggle () {
   >
     <!-- プロフィールトグル -->
     <ContentFilteringToggle
-      v-if="state.appliedLabels.length > 0"
-      :labels="state.appliedLabels"
+      v-if="state.hasAppliedHarmfulLabel"
+      :labels="state.appliedHarmfulLabels"
       :display="
         state.contentWarningVisibility === 'show' ||
         state.contentFilteringToggleDisplay
@@ -94,7 +98,7 @@ function onActivateContentFilteringToggle () {
       <div class="display-name">
         <!-- アカウントラベルアイコン -->
         <SVGIcon
-          v-if="(user.labels?.length ?? 0) > 0"
+          v-if="state.hasAppliedHarmfulLabel"
           name="contentFiltering"
           class="account-label-icon"
         />

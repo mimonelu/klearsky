@@ -32,6 +32,8 @@ import home from "@/svg/home.svg?raw"
 import image from "@/svg/image.svg?raw"
 import inviteCode from "@/svg/invite-code.svg?raw"
 import json from "@/svg/json.svg?raw"
+import label from "@/svg/label.svg?raw"
+import labelOff from "@/svg/label-off.svg?raw"
 import lightning from "@/svg/lightning.svg?raw"
 import like from "@/svg/like.svg?raw"
 import link from "@/svg/link.svg?raw"
@@ -105,6 +107,8 @@ const icons: { [k: string]: string } = {
   image,
   inviteCode,
   json,
+  label,
+  labelOff,
   lightning,
   like,
   link,
