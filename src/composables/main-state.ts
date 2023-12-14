@@ -619,14 +619,15 @@ function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> 
 }
 
 function makeCustomLabelPreference (label: string): TTPreference {
+  const visibility = label === "!hide"
+    ? "hide"
+    : LABEL_BEHAVIORS[label]?.configurable === false
+      ? "warn"
+      : "show"
   return {
     $type: "app.bsky.actor.defs#contentLabelPref",
     label,
-    visibility: label === "!hide"
-      ? "hide"
-      : LABEL_BEHAVIORS[label]?.configurable === false
-        ? "warn"
-        : "show",
+    visibility,
   }
 }
 
@@ -647,12 +648,7 @@ function filterLabels (
     const labelBehavior = LABEL_BEHAVIORS[label.val]
 
     // configurable ではないビルトインラベルの処理
-    if (labelBehavior?.configurable === false &&
-      (
-        warns == null ||
-        warns.indexOf("alert") === - 1
-      )
-    ) {
+    if (labelBehavior?.configurable === false) {
       const specifiedHide = visibilities?.indexOf("hide") !== - 1
       if (label.val === "!hide" && specifiedHide) return true
 
