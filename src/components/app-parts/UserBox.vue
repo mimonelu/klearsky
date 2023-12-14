@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, ref, type ComputedRef } from "vue"
+import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
@@ -44,6 +44,10 @@ const state = reactive<{
 })
 
 const profileMenuTrigger = ref()
+
+onMounted(() => {
+  state.contentFilteringToggleDisplay = !state.hasAppliedHarmfulLabel
+})
 
 function onActivateLink () {
   emit("link")
