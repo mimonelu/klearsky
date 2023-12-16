@@ -16,6 +16,7 @@ const state = reactive<{
   routerLinkTo: ComputedRef<any>
   indexedAt: ComputedRef<string>
   purpose: ComputedRef<string>
+  isOwn: ComputedRef<boolean>
 }>({
   routerLinkTo: computed(() => {
     return {
@@ -34,6 +35,9 @@ const state = reactive<{
     else if (props.list.purpose.includes("#curatelist")) return "curateList"
     return "unknownList"
   }),
+  isOwn: computed((): boolean => {
+    return props.list.creator.did === mainState.atp.session?.did
+  }),
 })
 
 function onClick () {
@@ -48,32 +52,34 @@ function onClick () {
     class="list-card"
     @click.native="onClick"
   >
-    <!-- リスト画像 -->
-    <LazyImage
-      class="list-card__avatar"
-      :src="list.avatar"
-    />
+    <div class="list-card__header">
+      <!-- リスト画像 -->
+      <LazyImage
+        class="list-card__avatar"
+        :src="list.avatar"
+      />
 
-    <!-- リスト名 -->
-    <div class="list-card__name">{{ list.name }}</div>
+      <!-- リスト名 -->
+      <div class="list-card__name">{{ list.name }}</div>
 
-    <!-- リスト種別 -->
-    <div
-      class="list-card__purpose"
-      :data-purpose="state.purpose"
-    >
-      <SVGIcon :name="state.purpose === 'curateList'
-        ? 'person'
-        : state.purpose === 'modList'
-          ? 'personOff'
-          : 'help'" />
-      <span>{{ $t(state.purpose) }}</span>
-    </div>
+      <!-- リスト種別 -->
+      <div
+        class="list-card__purpose"
+        :data-purpose="state.purpose"
+      >
+        <SVGIcon :name="state.purpose === 'curateList'
+          ? 'person'
+          : state.purpose === 'modList'
+            ? 'personOff'
+            : 'help'" />
+        <span>{{ $t(state.purpose) }}</span>
+      </div>
 
-    <!-- リスト作成日時 -->
-    <div class="list-card__indexed-at">
-      <SVGIcon name="clock" />
-      <span>{{ state.indexedAt }}</span>
+      <!-- リスト作成日時 -->
+      <div class="list-card__indexed-at">
+        <SVGIcon name="clock" />
+        <span>{{ state.indexedAt }}</span>
+      </div>
     </div>
 
     <!-- リスト説明文 -->
@@ -88,32 +94,54 @@ function onClick () {
       @onActivateHashTag="$emit('onActivateHashTag')"
     />
 
-    <!-- リスト作成者リンク -->
-    <RouterLink
-      v-if="createDisplay"
-      class="list-card__creator"
-      :to="{ name: 'profile-list', query: { account: list.creator.did } }"
-      @click.prevent
+    <!-- ボタンコンテナ -->
+    <div
+      v-if="createDisplay || state.isOwn"
+      class="list-card__button-container"
     >
-      <SVGIcon name="person" />
-      <div class="list-card__creator__display-name">{{ list.creator.displayName }}</div>
-      <div class="list-card__creator__handle">{{ list.creator.handle }}</div>
-    </RouterLink>
+      <!-- リスト作成者リンク -->
+      <RouterLink
+        v-if="createDisplay"
+        class="list-card__creator"
+        :to="{ name: 'profile-list', query: { account: list.creator.did } }"
+        @click.prevent
+      >
+        <SVGIcon name="person" />
+        <div class="list-card__creator__display-name">{{ list.creator.displayName }}</div>
+        <div class="list-card__creator__handle">{{ list.creator.handle }}</div>
+      </RouterLink>
+      <div v-else />
+
+      <!-- 編集ボタン -->
+      <button
+        v-if="state.isOwn"
+        class="button--bordered list-card__edit-button"
+        @click.prevent
+      >
+        <SVGIcon name="edit" />
+        <span>{{ $t("edit") }}</span>
+      </button>
+    </div>
   </component>
 </template>
 
 <style lang="scss" scoped>
 .list-card {
-  display: grid;
-  grid-gap: 0 0.75em;
-  grid-template-columns: auto auto 1fr;
-  grid-template-areas:
-    "a n n m"
-    "a p i m"
-    "d d d d"
-    "c c c c";
-  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  grid-gap: 0.5em;
   padding: 1em;
+
+  // リストヘッダー
+  &__header {
+    display: grid;
+    grid-gap: 0.25em 0.75em;
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas:
+      "a n n"
+      "a p i";
+    align-items: flex-start;
+  }
 
   // リスト画像
   &__avatar {
@@ -132,14 +160,14 @@ function onClick () {
     grid-area: n;
     font-weight: bold;
     line-height: var(--line-height);
-    margin-bottom: 0.25em;
     word-break: break-word;
   }
 
   // リスト種別
   &__purpose {
     grid-area: p;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
     grid-gap: 0.5em;
     line-height: var(--line-height);
@@ -159,6 +187,9 @@ function onClick () {
       color: var(--color);
       font-size: 0.875em;
       font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
@@ -166,7 +197,8 @@ function onClick () {
   &__indexed-at {
     grid-area: i;
     color: var(--fg-color-05);
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
     grid-gap: 0.5em;
     line-height: var(--line-height);
@@ -178,31 +210,35 @@ function onClick () {
 
     & > span {
       font-size: 0.875em;
+      white-space: nowrap;
     }
   }
 
   // リスト説明文
   &__description {
-    grid-area: d;
     font-size: 0.875em;
     line-height: var(--line-height);
-    margin-top: 0.5em;
     white-space: pre-wrap;
     word-break: break-word;
   }
 
+  // ボタンコンテナ
+  &__button-container {
+    display: grid;
+    grid-gap: 0.75em;
+    grid-template-columns: 1fr auto;
+  }
+
   // リスト作成者リンク
   &__creator {
-    grid-area: c;
     background-clip: padding-box;
     background-color: rgb(var(--bg-color));
     border: 1px solid var(--accent-color-025);
     border-radius: var(--border-radius);
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto auto 1fr;
     align-items: center;
     grid-gap: 0.5em;
-    margin-top: 0.5em;
     margin-left: auto;
     padding: 0.5em 1em;
     &:focus, &:hover {
@@ -231,8 +267,13 @@ function onClick () {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      word-break: break-word;
+      word-break: break-all;
     }
+  }
+
+  // 編集ボタン
+  &__edit-button {
+    font-size: 0.875em;
   }
 }
 </style>
