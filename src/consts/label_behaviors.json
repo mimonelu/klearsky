@@ -20,7 +20,7 @@
   "intolerant": { "oldGroup": "hate", "group": "intolerance", "configurable": true, "warn": "blur", "selectable": true },
   "icon-intolerant": { "oldGroup": "hate", "group": "intolerance", "configurable": true, "warn": "blur-media" },
   "threat": { "oldGroup": "hate", "group": "rude", "configurable": true, "warn": "blur" },
-  "spoiler": { "oldGroup": "spam", "group": "curation", "configurable": true, "warn": "blur" },
+  "spoiler": { "oldGroup": "spam", "group": "curation", "configurable": true, "warn": "blur", "selectable": true },
   "spam": { "oldGroup": "spam", "group": "spam", "configurable": true, "warn": "blur", "selectable": true },
   "account-security": { "oldGroup": "impersonation", "group": "misinfo", "configurable": true, "warn": "blur" },
   "net-abuse": { "oldGroup": "impersonation", "group": "misinfo", "configurable": true, "warn": "blur" },
