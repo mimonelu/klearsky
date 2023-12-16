@@ -82,7 +82,7 @@ function close () {
     line-height: var(--line-height);
     user-select: text;
     white-space: pre-wrap;
-    word-break: break-word;
+    word-break: break-all;
   }
 
   .created-at {

@@ -448,7 +448,7 @@ function openThreadgatePopup () {
       & > b {
         font-weight: bold;
         line-height: var(--line-height);
-        word-break: break-word;
+        word-break: break-all;
       }
     }
     .post-language-button > b {

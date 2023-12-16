@@ -43,7 +43,7 @@ const state = reactive<{
     color: rgb(var(--fg-color));
     font-weight: bold;
     line-height: var(--line-height);
-    word-break: break-word;
+    word-break: break-all;
   }
 }
 </style>

@@ -144,6 +144,10 @@ async function copyCode (code: string) {
     & > .svg-icon {
       fill: rgb(var(--fg-color));
     }
+
+    & > span {
+      word-break: break-all;
+    }
   }
 
   &__slot-container {

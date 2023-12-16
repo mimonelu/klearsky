@@ -22,6 +22,7 @@
   & > span {
     font-weight: bold;
     line-height: var(--line-height);
+    overflow: hidden;
     word-break: break-word;
   }
 

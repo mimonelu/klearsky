@@ -59,6 +59,7 @@ function onActivate (colorValue: string) {
 
     &__label {
       color: rgb(var(--fg-color));
+      word-break: break-word;
     }
     &:focus > &__label,
     &:hover > &__label {
