@@ -146,7 +146,7 @@ async function copyCode (code: string) {
     }
 
     & > span {
-      word-break: break-word;
+      word-break: break-all;
     }
   }
 

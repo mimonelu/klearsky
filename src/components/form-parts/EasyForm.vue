@@ -411,7 +411,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
   color: rgb(var(--fg-color));
   font-size: 0.875rem;
   margin: 0.5rem 0 0 auto;
-  word-break: break-word;
+  word-break: break-all;
   &[data-over-maxlength="true"] {
     color: rgb(var(--notice-color));
   }
