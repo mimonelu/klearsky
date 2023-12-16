@@ -731,6 +731,7 @@ function onActivateAccountMaskToggle () {
     display: flex;
     align-items: baseline;
     grid-gap: 0.5rem;
+    overflow: hidden;
 
     & > dt {
       font-size: 0.875rem;

@@ -1215,6 +1215,7 @@ function onActivateHashTag (text: string) {
   display: flex;
   align-items: center;
   grid-gap: 0.25em;
+  overflow: hidden;
 
   & > .svg-icon,
   & > span {
@@ -1351,14 +1352,14 @@ function onActivateHashTag (text: string) {
   grid-area: h;
   display: grid;
   align-items: center;
-  grid-template-columns: auto 1fr min-content;
+  grid-template-columns: auto 1fr auto;
   grid-gap: 0.5em;
   overflow: hidden;
 }
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
   .body__right__header {
-    grid-template-columns: auto auto 1fr min-content;
+    grid-template-columns: auto auto 1fr auto;
   }
 }
 
@@ -1391,6 +1392,7 @@ function onActivateHashTag (text: string) {
 .indexed-at {
   color: var(--fg-color-05);
   font-size: 0.75em;
+  overflow: hidden;
   white-space: nowrap;
 }
 

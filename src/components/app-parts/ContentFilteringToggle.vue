@@ -81,6 +81,7 @@ const state = reactive<{
   &__state-label {
     font-weight: bold;
     line-height: var(--line-height);
+    word-break: break-word;
   }
 
   &__label {

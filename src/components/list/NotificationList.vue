@@ -247,6 +247,7 @@ function makeSubjectTo (notification: TTNotification): any {
 
   & > span {
     font-weight: bold;
+    overflow: hidden;
   }
 
   & > .icon--cursor {
@@ -258,7 +259,7 @@ function makeSubjectTo (notification: TTNotification): any {
 // 通知
 .notification {
   display: grid;
-  grid-template-columns: min-content min-content auto 1fr max-content;
+  grid-template-columns: min-content min-content auto 1fr auto;
   align-items: center;
   grid-gap: 0 0.5rem;
   overflow: hidden;
@@ -273,7 +274,7 @@ function makeSubjectTo (notification: TTNotification): any {
     margin-bottom: 0.25rem;
   }
   &[data-is-new="true"] {
-    grid-template-columns: min-content min-content min-content auto 1fr max-content;
+    grid-template-columns: min-content min-content min-content auto 1fr auto;
 
     .text {
       grid-column: 4 / 7;
@@ -346,6 +347,7 @@ function makeSubjectTo (notification: TTNotification): any {
   font-weight: bold;
   line-height: 1.25;
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -355,6 +357,7 @@ function makeSubjectTo (notification: TTNotification): any {
   font-size: 0.875rem;
   line-height: 1.25;
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

@@ -14,11 +14,16 @@
     flex-grow: 1;
     font-weight: bold;
     grid-gap: 0.25rem;
+    overflow: hidden;
     padding: 0.5rem 0;
     min-height: 2.5rem;
     text-align: center;
     &:not(:last-child) {
       border-right: 1px solid var(--fg-color-025);
+    }
+
+    & > span {
+      overflow: hidden;
     }
 
     & > .svg-icon {

@@ -54,5 +54,6 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 .version {
   color: var(--fg-color-05);
   font-size: 0.375em;
+  word-break: break-word;
 }
 </style>

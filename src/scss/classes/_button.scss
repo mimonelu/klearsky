@@ -11,6 +11,7 @@
   align-items: center;
   justify-content: center;
   grid-gap: 0.5em;
+  overflow: hidden;
   padding: 0.5em 1em;
   user-select: none;
 
@@ -22,6 +23,7 @@
   & > span {
     font-weight: bold;
     line-height: var(--line-height);
+    overflow: hidden;
     word-break: break-word;
   }
 
