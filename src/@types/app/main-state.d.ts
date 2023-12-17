@@ -321,6 +321,11 @@ type MainState = {
   openMyFeedsPopup: Function
   closeMyFeedsPopup: Function
 
+  // ポップアップ - リスト編集ポップアップ
+  listEditPopupProps: TTListEditPopupProps
+  openListEditPopup: Function
+  closeListEditPopup: Function
+
   // ポップアップ - タイムフィードポップアップ
   currentTimeFeeds: Array<TTPost>
   timeFeedsPopupDisplay: boolean

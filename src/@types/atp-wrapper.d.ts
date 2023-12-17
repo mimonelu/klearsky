@@ -67,6 +67,7 @@ interface TIAtpWrapper {
   saveData (this: TIAtpWrapper)
   updateBlockToDisable (this: TIAtpWrapper, uri: string): Promise<boolean>
   updateBlockToEnable (this: TIAtpWrapper, did: string): Promise<null | string>
+  updateList (this: TIAtpWrapper, list: TTList): Promise<undefined | Error>
   updateMuteToDisable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateMuteToEnable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>

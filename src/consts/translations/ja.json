@@ -413,6 +413,10 @@
   "unknownList": "不明なリスト",
   "listFeeds": "リストフィード",
   "listUsers": "一覧",
+  "listEdit": "リストの編集",
+  "listAvatar": "サムネイル",
+  "listName": "名前",
+  "listDescription": "説明",
 
   "showTimeFeeds": "タイムフィードで見る",
   "timeFeeds": "タイムフィード",

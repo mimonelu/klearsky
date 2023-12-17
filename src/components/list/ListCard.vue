@@ -43,6 +43,12 @@ const state = reactive<{
 function onClick () {
   if (!props.unclickable) mainState.currentList = props.list
 }
+
+function openListEditPopup () {
+  mainState.openListEditPopup({
+    list: props.list,
+  })
+}
 </script>
 
 <template>
@@ -51,7 +57,7 @@ function onClick () {
     :is="unclickable || state.purpose === 'modList' ? 'div' : 'RouterLink'"
     class="list-card"
     :data-purpose="state.purpose"
-    @click.native="onClick"
+    @click.native.stop="onClick"
   >
     <div class="list-card__header">
       <!-- リスト画像 -->
@@ -117,7 +123,7 @@ function onClick () {
       <button
         v-if="state.isOwn"
         class="button list-card__edit-button"
-        @click.prevent
+        @click.prevent="openListEditPopup"
       >
         <SVGIcon name="edit" />
         <span>{{ $t("edit") }}</span>

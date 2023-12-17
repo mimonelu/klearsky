@@ -336,6 +336,14 @@ state.myFeedsPopupDisplay = false
 state.openMyFeedsPopup = openMyFeedsPopup
 state.closeMyFeedsPopup = closeMyFeedsPopup
 
+// ポップアップ - リスト編集ポップアップ
+state.listEditPopupProps = {
+  display: false,
+  list: undefined,
+}
+state.openListEditPopup = openListEditPopup
+state.closeListEditPopup = closeListEditPopup
+
 // ポップアップ - タイムフィードポップアップ
 state.currentTimeFeeds = []
 state.timeFeedsPopupDisplay = false
@@ -1339,6 +1347,17 @@ function openMyFeedsPopup () {
 
 function closeMyFeedsPopup () {
   state.myFeedsPopupDisplay = false
+}
+
+// ポップアップ - リスト編集ポップアップ
+
+function openListEditPopup (props: TTListEditPopupProps) {
+  state.listEditPopupProps.list = props.list
+  state.listEditPopupProps.display = true
+}
+
+function closeListEditPopup () {
+  state.listEditPopupProps.display = false
 }
 
 // ポップアップ - タイムフィードポップアップ

@@ -413,6 +413,10 @@
   "unknownList": "Unknown list",
   "listFeeds": "List feeds",
   "listUsers": "Users",
+  "listEdit": "Edit list",
+  "listAvatar": "Thumbnail",
+  "listName": "Name",
+  "listDescription": "Description",
 
   "showTimeFeeds": "Show in timefeed",
   "timeFeeds": "Timefeed",
