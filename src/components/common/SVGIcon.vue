@@ -45,6 +45,7 @@ import offImage from "@/svg/off-image.svg?raw"
 import openInApp from "@/svg/open-in-app.svg?raw"
 import openInNew from "@/svg/open-in-new.svg?raw"
 import pause from "@/svg/pause.svg?raw"
+import people from "@/svg/people.svg?raw"
 import person from "@/svg/person.svg?raw"
 import personOff from "@/svg/person-off.svg?raw"
 import pin from "@/svg/pin.svg?raw"
@@ -121,6 +122,7 @@ const icons: { [k: string]: string } = {
   openInApp,
   openInNew,
   pause,
+  people,
   person,
   personOff,
   pin,

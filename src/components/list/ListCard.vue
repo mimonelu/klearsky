@@ -48,8 +48,9 @@ function onClick () {
 <template>
   <component
     v-bind="unclickable ? null : { to: state.routerLinkTo }"
-    :is="unclickable ? 'div' : 'RouterLink'"
+    :is="unclickable || state.purpose === 'modList' ? 'div' : 'RouterLink'"
     class="list-card"
+    :data-purpose="state.purpose"
     @click.native="onClick"
   >
     <div class="list-card__header">
@@ -112,14 +113,24 @@ function onClick () {
       </RouterLink>
       <div v-else />
 
-      <!-- 編集ボタン -->
+      <!-- リスト編集ボタン -->
       <button
         v-if="state.isOwn"
-        class="button--bordered list-card__edit-button"
+        class="button list-card__edit-button"
         @click.prevent
       >
         <SVGIcon name="edit" />
         <span>{{ $t("edit") }}</span>
+      </button>
+
+      <!-- リストユーザー一覧ボタン -->
+      <button
+        v-if="state.isOwn"
+        class="button--bordered list-card__users-button"
+        @click.prevent
+      >
+        <SVGIcon name="people" />
+        <span>{{ $t("listUsers") }}</span>
       </button>
     </div>
   </component>
@@ -131,6 +142,9 @@ function onClick () {
   flex-direction: column;
   grid-gap: 0.5em;
   padding: 1em;
+  &[data-purpose="modList"] {
+    background-color: rgb(var(--notice-color), 0.0625);
+  }
 
   // リストヘッダー
   &__header {
@@ -225,8 +239,8 @@ function onClick () {
   // ボタンコンテナ
   &__button-container {
     display: grid;
-    grid-gap: 0.75em;
-    grid-template-columns: 1fr auto;
+    grid-gap: 0.5em;
+    grid-template-columns: 1fr auto auto;
   }
 
   // リスト作成者リンク
@@ -271,8 +285,10 @@ function onClick () {
     }
   }
 
-  // 編集ボタン
-  &__edit-button {
+  // リスト編集ボタン
+  // リストユーザー一覧ボタン
+  &__edit-button,
+  &__users-button {
     font-size: 0.875em;
   }
 }

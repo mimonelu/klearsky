@@ -67,7 +67,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-grow: 1;
 }
 
-.list-card:not(:last-of-type) {
+.list-card:not(:last-child) {
   border-bottom: 1px solid var(--fg-color-0125);
 }
 </style>
