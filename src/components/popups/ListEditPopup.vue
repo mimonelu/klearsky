@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive, ref } from "vue"
+import { inject, nextTick, reactive, ref } from "vue"
 import { BlobRef } from "@atproto/api"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -115,8 +115,19 @@ async function submitCallback () {
     mainState.openErrorPopup("errorApiFailed", "ListEditPopup/updateList")
     return
   }
-  props.list.name = easyFormState.name
-  props.list.description = easyFormState.description
+
+  // 元データを更新
+  // WANT: avatar を手動で構築してAPIをコールしないようにしたい
+  const response: { cursor?: string; list: TTList } | Error =
+    await mainState.atp.fetchList([], props.list.uri, 1)
+  if (response instanceof Error) {
+    mainState.openErrorPopup("errorApiFailed", "ListEditPopup/fetchList")
+    return
+  }
+  props.list.avatar = response.list.avatar
+  props.list.name = response.list.name
+  props.list.description = response.list.description
+
   close()
 }
 
