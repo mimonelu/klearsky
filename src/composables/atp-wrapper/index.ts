@@ -1,5 +1,5 @@
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
-import createFileBlob from "@/composables/atp-wrapper/create/create-file-blob"
+import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob-ref"
 import createFollow from "@/composables/atp-wrapper/create/create-follow"
 import createLike from "@/composables/atp-wrapper/create/create-like"
 import createPost from "@/composables/atp-wrapper/create/create-post"
@@ -100,7 +100,7 @@ class AtpWrapper implements TIAtpWrapper {
     return this.data.sessions[this.data.did] != null
   }
   createAgent = createAgent
-  createFileBlob = createFileBlob
+  createFileBlobRef = createFileBlobRef
   createFollow = createFollow
   createLike = createLike
   createPost = createPost

@@ -1,9 +1,10 @@
-import type { BskyAgent, ComAtprotoRepoPutRecord } from "@atproto/api"
+import type { BlobRef, BskyAgent, ComAtprotoRepoPutRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
-  list: TTList
+  list: TTList,
+  avatarBlobRef?: BlobRef
 ): Promise<undefined | Error> {
   if (this.agent == null) return Error("No Agent")
   const rkey = Util.getRkey(list.uri)
@@ -19,6 +20,7 @@ export default async function (
       purpose: list.purpose,
     },
   }
+  if (avatarBlobRef != null) (query.record as any).avatar = avatarBlobRef
   const response: ComAtprotoRepoPutRecord.Response =
     await (this.agent as BskyAgent).com.atproto.repo.putRecord(query)
       .then((value: ComAtprotoRepoPutRecord.Response) => value)

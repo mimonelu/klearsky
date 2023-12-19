@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { inject, reactive } from "vue"
+import { BlobRef } from "@atproto/api"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -22,7 +23,7 @@ const state = reactive<{
 })
 
 const easyFormState = reactive<{
-  avatar: null | File
+  avatar: null | Array<File>
   name: string
   description: string
 }>({
@@ -38,7 +39,7 @@ const easyFormProps: TTEasyForm = {
   blurOnSubmit: true,
   data: [
     {
-      state,
+      state: easyFormState,
       model: "avatar",
       label: $t("listAvatar"),
       type: "file",
@@ -78,18 +79,50 @@ async function submitCallback () {
   Util.blurElement()
   if (props.list == null) return
   state.loaderDisplay = true
+  const avatarBlobRef: undefined | Error | BlobRef = await makeAvatarBlobRef()
+  if (avatarBlobRef instanceof Error) {
+    state.loaderDisplay = false
+    mainState.openErrorPopup(avatarBlobRef, "ListEditPopup/makeAvatarBlobRef")
+    return
+  }
   const result = await mainState.atp.updateList({
     ...props.list,
     name: easyFormState.name,
     description: easyFormState.description,
-  })
+  }, avatarBlobRef)
   state.loaderDisplay = false
   if (result instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", "ListEditPopup/updateList")
-  } else {
-    props.list.name = easyFormState.name
-    props.list.description = easyFormState.description
-    close()
+    return
+  }
+  props.list.name = easyFormState.name
+  props.list.description = easyFormState.description
+  close()
+}
+
+async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
+  if (easyFormState.avatar != null && easyFormState.avatar[0] != null) {
+    // サムネイルが指定されている場合は作成
+    const blobRef = await mainState.atp.createFileBlobRef({
+      file: easyFormState.avatar[0],
+      // TODO: 以下要確認
+      maxWidth: 2000,
+      maxHeight: 2000,
+      maxSize: 0.953671875,
+    })
+    if (blobRef == null) return Error("Failed createFileBlobRef")
+    return blobRef
+  } else if (props.list?.avatar != null) {
+    // サムネイルが指定されていない場合、かつ既存のサムネイルが存在する場合は再取得
+    const uri = props.list.avatar
+    const blocks = uri.match(/\/([^\/]+?)@/)
+    if (blocks == null || blocks[1] == null) return Error("Failed uri.match")
+    const cid = blocks[1]
+    const blob = await mainState.atp.fetchBlob(cid)
+    if (blob == null) return Error("Failed fetchBlob")
+    const blobRef = new BlobRef({ $link: cid } as any, blob.type, blob.size)
+    if (blobRef == null) return Error("Failed BlobRef")
+    return blobRef
   }
 }
 </script>
@@ -112,9 +145,3 @@ async function submitCallback () {
     </template>
   </Popup>
 </template>
-
-<style lang="scss" scoped>
-.list-edit-popup {
-  //
-}
-</style>

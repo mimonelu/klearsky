@@ -94,7 +94,7 @@ export default async function (
   let images: null | any = null
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all(
     params.images.map((file: File): Promise<null | BlobRef> => {
-      return this.createFileBlob({
+      return this.createFileBlobRef({
         file,
         maxWidth: 2000,
         maxHeight: 2000,

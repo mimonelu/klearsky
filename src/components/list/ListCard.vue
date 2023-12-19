@@ -102,10 +102,7 @@ function openListEditPopup () {
     />
 
     <!-- ボタンコンテナ -->
-    <div
-      v-if="createDisplay || state.isOwn"
-      class="list-card__button-container"
-    >
+    <div class="list-card__button-container">
       <!-- リスト作成者リンク -->
       <RouterLink
         v-if="createDisplay"
@@ -131,7 +128,6 @@ function openListEditPopup () {
 
       <!-- リストユーザー一覧ボタン -->
       <button
-        v-if="state.isOwn"
         class="button--bordered list-card__users-button"
         @click.prevent
       >

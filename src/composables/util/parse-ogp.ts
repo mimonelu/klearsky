@@ -86,7 +86,7 @@ export default async function (
       const size = await imagesize(blob as File)
       if ((size?.width ?? 0) < (548 / 2)) return external
 
-      const blobRef = await atpWrapper.createFileBlob({
+      const blobRef = await atpWrapper.createFileBlobRef({
         file: blob as File,
         maxWidth: 2000,
         maxHeight: 2000,

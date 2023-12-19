@@ -1,6 +1,6 @@
 type TTPostType = "post" | "reply" | "quoteRepost"
 
-type TTCreateFileBlobParams = {
+type TTCreateFileBlobRefParams = {
   file: File
   mimeType?: string
   maxWidth: number

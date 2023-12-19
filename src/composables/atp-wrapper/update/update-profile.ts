@@ -29,7 +29,7 @@ export default async function (
   // 画像処理
   const fileBlobRefs: Array<null | BlobRef> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
-      ? this.createFileBlob({
+      ? this.createFileBlobRef({
           file: params.avatar[0],
           maxWidth: 2000,
           maxHeight: 2000,
@@ -37,7 +37,7 @@ export default async function (
         })
       : null,
     params.banner != null && params.banner[0] != null
-      ? this.createFileBlob({
+      ? this.createFileBlobRef({
           file: params.banner[0],
           maxWidth: 3000,
           maxHeight: 1000,

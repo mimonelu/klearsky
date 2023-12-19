@@ -1,10 +1,10 @@
-import type { BskyAgent, ComAtprotoSyncGetBlob } from "@atproto/api"
+// import type { BskyAgent, ComAtprotoSyncGetBlob } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
   cid: string,
   did?: string
-): Promise<null | Uint8Array> {
+): Promise<null | Blob> {
   // PDS移管に伴うアニメーション画像再生の不具合対応
   // TODO: PDS分割に伴う暫定処置
   if (this.session == null) return null
@@ -27,7 +27,7 @@ export default async function (
     .catch((error: any) => console.error("[klearsky/getBlob]", error))
     .then((value: any) => value)
   if (!response.ok) return null
-  return await response.blob() as unknown as Uint8Array
+  return await response.blob()
 
   /*
   if (this.agent == null) return null

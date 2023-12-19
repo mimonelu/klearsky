@@ -7,7 +7,7 @@ interface TIAtpWrapper {
   // Prototype methods
   canLogin (this: TIAtpWrapper): boolean
   createAgent (this: TIAtpWrapper, service?: string): boolean
-  createFileBlob (this: TIAtpWrapper, params: TTCreateFileBlobParams): Promise<null | BlobRef>
+  createFileBlobRef (this: TIAtpWrapper, params: TTCreateFileBlobRefParams): Promise<null | BlobRef>
   createFollow (this: TIAtpWrapper, declarationDid: string): Promise<null | string>
   createLike (this: TIAtpWrapper, uri: string, cid: string): Promise<undefined | string>
   createPost (this: TIAtpWrapper, params: TTCreatePostParams): Promise<Error | TTCidUri>
@@ -25,7 +25,7 @@ interface TIAtpWrapper {
   fetchAuthorFeed (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, author: string, limit?: number, cursor?: string, filter?: string, middle?: boolean): Promise<undefined | string>
   fetchAuthorLikes (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, repo: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchAuthorReposts (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, repo: string, limit?: number, cursor?: string): Promise<undefined | string>
-  fetchBlob (this: TIAtpWrapper, cid: string, did?: string): Promise<null | Uint8Array>
+  fetchBlob (this: TIAtpWrapper, cid: string, did?: string): Promise<null | Blob>
   fetchBlobUrl (this: TIAtpWrapper, did: string, image: BlobRef): Promise<undefined | string>
   fetchBlockingUsers (this: TIAtpWrapper, users: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
   fetchCustomFeeds (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, feed: string, limit?: number, cursor?: string, middle?: boolean): Promise<undefined | false | string>
@@ -67,7 +67,7 @@ interface TIAtpWrapper {
   saveData (this: TIAtpWrapper)
   updateBlockToDisable (this: TIAtpWrapper, uri: string): Promise<boolean>
   updateBlockToEnable (this: TIAtpWrapper, did: string): Promise<null | string>
-  updateList (this: TIAtpWrapper, list: TTList): Promise<undefined | Error>
+  updateList (this: TIAtpWrapper, list: TTList, avatarBlobRef?: BlobRef): Promise<undefined | Error>
   updateMuteToDisable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateMuteToEnable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>
