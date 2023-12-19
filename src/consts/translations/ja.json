@@ -197,10 +197,10 @@
   "editProfile": "プロフィールの編集",
   "displayName": "名前",
   "description": "紹介文",
-  "avatar": "アバター",
-  "detachAvatar": "アバター画像を取り外す",
+  "avatar": "サムネイル",
+  "detachAvatar": "サムネイルを取り外す",
   "banner": "バナー",
-  "detachBanner": "バナー画像を取り外す",
+  "detachBanner": "バナーを取り外す",
 
   "home": "ホーム",
   "timeline": "フォロー中",

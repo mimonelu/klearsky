@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject, reactive, ref } from "vue"
 import { BlobRef } from "@atproto/api"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -11,6 +11,8 @@ const emit = defineEmits<{(event: string): void}>()
 const props = defineProps<{
   list?: TTList
 }>()
+
+const easyForm = ref()
 
 const $t = inject("$t") as Function
 
@@ -24,10 +26,12 @@ const state = reactive<{
 
 const easyFormState = reactive<{
   avatar: null | Array<File>
+  detachAvatar: Array<boolean>,
   name: string
   description: string
 }>({
   avatar: null,
+  detachAvatar: [],
   name: props.list?.name ?? "",
   description: props.list?.description ?? "",
 })
@@ -43,9 +47,25 @@ const easyFormProps: TTEasyForm = {
       model: "avatar",
       label: $t("listAvatar"),
       type: "file",
-      // accept: "image/png, image/jpeg",
       isMultipleFile: false,
       maxNumberOfFile: 1,
+    },
+    {
+      state: easyFormState,
+      model: "detachAvatar",
+      type: "checkbox",
+      display: props.list?.avatar != null,
+      options: [{ label: $t("detachAvatar"), value: true }],
+      // 画像取り外しチェックボックスの処理
+      onUpdate (_: TTEasyFormItem, form: TTEasyForm) {
+        const item = form.data.find((item: TTEasyFormItem) => {
+          return item.model === "avatar"
+        })
+        if (item == null) return
+        item.display = !easyFormState.detachAvatar.includes(true)
+        easyFormState.avatar = null
+        easyForm.value.forceUpdate()
+      },
     },
     {
       state: easyFormState,
@@ -101,8 +121,11 @@ async function submitCallback () {
 }
 
 async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
+  // サムネイルの取り外しが指定されている場合はスキップ
+  if (easyFormState.detachAvatar.includes(true)) return
+
+  // サムネイルが指定されている場合は作成
   if (easyFormState.avatar != null && easyFormState.avatar[0] != null) {
-    // サムネイルが指定されている場合は作成
     const blobRef = await mainState.atp.createFileBlobRef({
       file: easyFormState.avatar[0],
       // TODO: 以下要確認
@@ -112,8 +135,10 @@ async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
     })
     if (blobRef == null) return Error("Failed createFileBlobRef")
     return blobRef
-  } else if (props.list?.avatar != null) {
-    // サムネイルが指定されていない場合、かつ既存のサムネイルが存在する場合は再取得
+  }
+
+  // サムネイルが指定されていない場合、かつ既存のサムネイルが存在する場合は再取得
+  if (props.list?.avatar != null) {
     const uri = props.list.avatar
     const blocks = uri.match(/\/([^\/]+?)@/)
     if (blocks == null || blocks[1] == null) return Error("Failed uri.match")
@@ -141,7 +166,10 @@ async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
       </h2>
     </template>
     <template #body>
-      <EasyForm v-bind="easyFormProps" />
+      <EasyForm
+        v-bind="easyFormProps"
+        ref="easyForm"
+      />
     </template>
   </Popup>
 </template>
