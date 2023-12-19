@@ -42,7 +42,8 @@ function onChange (event: Event) {
   const newFiles = getFiles(event)
   if (newFiles == null) return
   // WANT: 同一ファイルを追加できないようにしたい
-  state.files.push(...newFiles)
+  if (props.maxNumber === 1) state.files.unshift(...newFiles)
+  else state.files.push(...newFiles)
   resetFiles()
   emit("change", state.files)
 }
@@ -59,7 +60,10 @@ function getFiles (event: Event): null | Array<File> {
 }
 
 function setPreviews (files: Array<File>) {
-  if (files.length === 0) return
+  if (files.length === 0) {
+    state.previews.splice(0)
+    return
+  }
   const objectUrls = files.map((file: File) => window.URL.createObjectURL(file))
   state.previews.splice(0, state.previews.length, ...objectUrls)
 }

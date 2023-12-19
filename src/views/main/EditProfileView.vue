@@ -65,7 +65,6 @@ const easyFormProps: TTEasyForm = {
       model: "avatar",
       label: $t("avatar"),
       type: "file",
-      // accept: "image/png, image/jpeg",
       isMultipleFile: false,
       maxNumberOfFile: 1,
     },
@@ -76,10 +75,11 @@ const easyFormProps: TTEasyForm = {
       options: [{ label: $t("detachAvatar"), value: true }],
       // 画像取り外しチェックボックスの処理
       onUpdate (_: TTEasyFormItem, form: TTEasyForm) {
-        const item = form.data
-          .find((item: TTEasyFormItem) => item.model === "avatar")
+        const item = form.data.find((item: TTEasyFormItem) => {
+          return item.model === "avatar"
+        })
         if (item == null) return
-        item.disabled = state.detachAvatar.includes(true)
+        item.display = !state.detachAvatar.includes(true)
         state.avatar = null
         easyForm.value.forceUpdate()
       },
@@ -89,7 +89,6 @@ const easyFormProps: TTEasyForm = {
       model: "banner",
       label: $t("banner"),
       type: "file",
-      // accept: "image/png, image/jpeg",
       isMultipleFile: false,
       maxNumberOfFile: 1,
     },
@@ -100,10 +99,11 @@ const easyFormProps: TTEasyForm = {
       options: [{ label: $t("detachBanner"), value: true }],
       // 画像取り外しチェックボックスの処理
       onUpdate (_: TTEasyFormItem, form: TTEasyForm) {
-        const item = form.data
-          .find((item: TTEasyFormItem) => item.model === "banner")
+        const item = form.data.find((item: TTEasyFormItem) => {
+          return item.model === "banner"
+        })
         if (item == null) return
-        item.disabled = state.detachBanner.includes(true)
+        item.display = !state.detachBanner.includes(true)
         state.banner = null
         easyForm.value.forceUpdate()
       },
