@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive, ref, type ComputedRef } from "vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
+import ListMenuTicker from "@/components/menu-tickers/ListMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const props = defineProps<{
@@ -17,6 +18,8 @@ const state = reactive<{
   indexedAt: ComputedRef<string>
   purpose: ComputedRef<string>
   isOwn: ComputedRef<boolean>
+  menuTickerDisplay: boolean
+  menuTickerContainer: ComputedRef<undefined | HTMLElement>
 }>({
   routerLinkTo: computed(() => {
     return {
@@ -38,7 +41,13 @@ const state = reactive<{
   isOwn: computed((): boolean => {
     return props.list.creator.did === mainState.atp.session?.did
   }),
+  menuTickerDisplay: false,
+  menuTickerContainer: computed((): undefined | HTMLElement => {
+    return menuTickerContainer.value?.closest(".popup-body") ?? undefined
+  }),
 })
+
+const menuTickerContainer = ref()
 
 function onClick () {
   if (!props.unclickable) mainState.currentList = props.list
@@ -56,6 +65,14 @@ function updateList (list: TTList) {
   props.list.avatar = list.avatar
   props.list.name = list.name
   props.list.description = list.description
+}
+
+function openMenuTicker () {
+  state.menuTickerDisplay = !state.menuTickerDisplay
+}
+
+function closeMenuTicker () {
+  state.menuTickerDisplay = false
 }
 </script>
 
@@ -95,6 +112,23 @@ function updateList (list: TTList) {
         <SVGIcon name="clock" />
         <span>{{ state.indexedAt }}</span>
       </div>
+
+      <!-- リストメニュートリガー -->
+      <button
+        class="list-card__menu-button"
+        ref="menuTickerContainer"
+        @click.prevent.stop="openMenuTicker"
+      >
+        <SVGIcon name="menu" />
+
+        <!-- リストメニュー -->
+        <ListMenuTicker
+          :list="list"
+          :display="state.menuTickerDisplay"
+          :container="state.menuTickerContainer"
+          @close="closeMenuTicker"
+        />
+      </button>
     </div>
 
     <!-- リスト説明文 -->
@@ -152,6 +186,7 @@ function updateList (list: TTList) {
   flex-direction: column;
   grid-gap: 0.5em;
   padding: 1em;
+  position: relative;
   &[data-purpose="modList"] {
     background-color: rgb(var(--notice-color), 0.0625);
   }
@@ -160,10 +195,10 @@ function updateList (list: TTList) {
   &__header {
     display: grid;
     grid-gap: 0.25em 0.75em;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto auto 1fr auto;
     grid-template-areas:
-      "a n n"
-      "a p i";
+      "a n n m"
+      "a p i m";
     align-items: flex-start;
   }
 
@@ -238,6 +273,31 @@ function updateList (list: TTList) {
     & > span {
       font-size: 0.875em;
       white-space: nowrap;
+    }
+  }
+
+  // リストメニュートリガー
+  &__menu-button {
+    --color: var(--fg-color-075);
+    grid-area: m;
+    cursor: pointer;
+    margin: -1em;
+    padding: 1em;
+    &:focus, &:hover {
+      --color: var(--fg-color-0875);
+    }
+
+    & > .svg-icon {
+      fill: var(--color);
+      font-size: 1.25em;
+    }
+  }
+
+  // リストメニュー
+  .menu-ticker:deep() {
+    & > .menu-ticker--inner {
+      top: 3rem;
+      right: 0.5rem;
     }
   }
 

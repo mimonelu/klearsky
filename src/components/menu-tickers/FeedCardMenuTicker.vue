@@ -30,7 +30,6 @@ const state = reactive<{
     return `https://bsky.app/profile/${props.generator.creator.did}/feed/${rkey}`
   }),
 })
-
 </script>
 
 <template>
