@@ -2,6 +2,7 @@ import createAgent from "@/composables/atp-wrapper/create/create-agent"
 import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob-ref"
 import createFollow from "@/composables/atp-wrapper/create/create-follow"
 import createLike from "@/composables/atp-wrapper/create/create-like"
+import createList from "@/composables/atp-wrapper/create/create-list"
 import createPost from "@/composables/atp-wrapper/create/create-post"
 import createReport from "@/composables/atp-wrapper/create/create-report"
 import createRepost from "@/composables/atp-wrapper/create/create-repost"
@@ -103,6 +104,7 @@ class AtpWrapper implements TIAtpWrapper {
   createFileBlobRef = createFileBlobRef
   createFollow = createFollow
   createLike = createLike
+  createList = createList
   createPost = createPost
   createReport = createReport
   createRepost = createRepost

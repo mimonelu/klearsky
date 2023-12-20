@@ -391,6 +391,7 @@
   "emptyPostConfirmation": "Empty Post Confirmation",
   "emptyPostConfirmationMessage": "This post seems to be empty. Do you want to post this as is?",
 
+  "create": "Create",
   "delete": "Delete",
   "edit": "Edit",
   "like": "Like",
@@ -413,7 +414,9 @@
   "unknownList": "Unknown list",
   "listFeeds": "List feeds",
   "listUsers": "Users",
+  "listCreate": "Create list",
   "listEdit": "Edit list",
+  "listEditShort": "Edit",
   "listAvatar": "Thumbnail",
   "listName": "Name",
   "listDescription": "Description",

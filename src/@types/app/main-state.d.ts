@@ -112,6 +112,7 @@ type MainState = {
   currentFollowingsCursor?: string
   currentSuggestedFollows: Array<TTUser>
   userProfile: null | TTProfile
+  isMyProfile: () => boolean
   fetchUserProfile: () => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
   fetchCurrentProfile: (did: string) => Promise<void>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import { RouterView, type LocationQueryValue } from "vue-router"
+import { RouterView } from "vue-router"
 import AvatarButton from "@/components/buttons/AvatarButton.vue"
 import BlockButton from "@/components/buttons/BlockButton.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
@@ -78,12 +78,6 @@ const state = reactive<{
   }),
 })
 
-function isMyProfile (): boolean {
-  const account = mainState.currentQuery.account as LocationQueryValue
-  return account === mainState.atp.session?.handle ||
-         account === mainState.atp.session?.did
-}
-
 function isFollowed (): boolean {
   return mainState.currentProfile?.viewer?.followedBy != null
 }
@@ -124,7 +118,7 @@ function onActivateAccountMaskToggle () {
   <div
     class="profile-view"
     :data-folding="mainState.profileFolding"
-    :data-is-my-profile="isMyProfile()"
+    :data-is-my-profile="mainState.isMyProfile()"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
     <Portal to="router-view-wrapper-header">
@@ -248,7 +242,7 @@ function onActivateAccountMaskToggle () {
               <div class="profile-view__details__top__right__bottom">
                 <!-- フォロー中メッセージ -->
                 <div
-                  v-if="!isMyProfile() && isFollowed()"
+                  v-if="!mainState.isMyProfile() && isFollowed()"
                   class="followed"
                 >
                   <SVGIcon name="like" />
@@ -273,7 +267,7 @@ function onActivateAccountMaskToggle () {
             >
               <!-- プロフィール編集ボタン -->
               <RouterLink
-                v-if="isMyProfile()"
+                v-if="mainState.isMyProfile()"
                 to="/profile/edit"
                 class="button edit-button"
               >
@@ -283,7 +277,7 @@ function onActivateAccountMaskToggle () {
 
               <!-- フォロートグル -->
               <FollowButton
-                v-if="!isMyProfile()"
+                v-if="!mainState.isMyProfile()"
                 :viewer="mainState.currentProfile.viewer"
                 :did="mainState.currentProfile.did"
                 :declarationDid="mainState.currentProfile.did"
@@ -292,14 +286,14 @@ function onActivateAccountMaskToggle () {
 
               <!-- ミュートトグル -->
               <MuteButton
-                v-if="!isMyProfile()"
+                v-if="!mainState.isMyProfile()"
                 :did="mainState.currentProfile.did"
                 :viewer="mainState.currentProfile.viewer"
               />
 
               <!-- ブロックトグル -->
               <BlockButton
-                v-if="!isMyProfile()"
+                v-if="!mainState.isMyProfile()"
                 :did="mainState.currentProfile.did"
                 :viewer="mainState.currentProfile.viewer"
               />
@@ -311,7 +305,7 @@ function onActivateAccountMaskToggle () {
               >
                 <SVGIcon name="menu" />
                 <ProfileMenuTicker
-                  :isUser="isMyProfile()"
+                  :isUser="mainState.isMyProfile()"
                   :display="state.profileMenuDisplay"
                   :user="(mainState.currentProfile as TTProfile)"
                   @close="closePostMenu"
@@ -450,7 +444,7 @@ function onActivateAccountMaskToggle () {
 
       <!-- リアクションタブ -->
       <div
-        v-if="isMyProfile()"
+        v-if="mainState.isMyProfile()"
         class="tab"
       >
         <!-- 自分のリポストタブボタン -->

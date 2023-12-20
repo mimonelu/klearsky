@@ -391,6 +391,7 @@
   "emptyPostConfirmation": "空ポストの確認",
   "emptyPostConfirmationMessage": "ポストが空のようです。このまま投稿しますか？",
 
+  "create": "作成する",
   "delete": "削除する",
   "edit": "編集",
   "like": "いいね",
@@ -413,7 +414,9 @@
   "unknownList": "不明なリスト",
   "listFeeds": "リストフィード",
   "listUsers": "一覧",
+  "listCreate": "リストの作成",
   "listEdit": "リストの編集",
+  "listEditShort": "編集",
   "listAvatar": "サムネイル",
   "listName": "名前",
   "listDescription": "説明",

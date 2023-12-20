@@ -46,8 +46,16 @@ function onClick () {
 
 function openListEditPopup () {
   mainState.openListEditPopup({
+    mode: "edit",
     list: props.list,
+    callback: updateList,
   })
+}
+
+function updateList (list: TTList) {
+  props.list.avatar = list.avatar
+  props.list.name = list.name
+  props.list.description = list.description
 }
 </script>
 
@@ -116,16 +124,6 @@ function openListEditPopup () {
       </RouterLink>
       <div v-else />
 
-      <!-- リスト編集ボタン -->
-      <button
-        v-if="state.isOwn"
-        class="button list-card__edit-button"
-        @click.prevent="openListEditPopup"
-      >
-        <SVGIcon name="edit" />
-        <span>{{ $t("edit") }}</span>
-      </button>
-
       <!-- リストユーザー一覧ボタン -->
       <button
         class="button--bordered list-card__users-button"
@@ -133,6 +131,16 @@ function openListEditPopup () {
       >
         <SVGIcon name="people" />
         <span>{{ $t("listUsers") }}</span>
+      </button>
+
+      <!-- リスト編集ボタン -->
+      <button
+        v-if="state.isOwn"
+        class="button list-card__edit-button"
+        @click.prevent="openListEditPopup"
+      >
+        <SVGIcon name="edit" />
+        <span>{{ $t("listEditShort") }}</span>
       </button>
     </div>
   </component>
@@ -241,7 +249,6 @@ function openListEditPopup () {
   // ボタンコンテナ
   &__button-container {
     display: grid;
-    grid-gap: 0.5em;
     grid-template-columns: 1fr auto auto;
   }
 
@@ -287,11 +294,12 @@ function openListEditPopup () {
     }
   }
 
-  // リスト編集ボタン
   // リストユーザー一覧ボタン
-  &__edit-button,
-  &__users-button {
+  // リスト編集ボタン
+  &__users-button,
+  &__edit-button {
     font-size: 0.875em;
+    margin-left: 0.5em;
   }
 }
 </style>

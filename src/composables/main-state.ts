@@ -121,6 +121,7 @@ state.profileFolding = false
 state.currentProfile = null
 resetProfileState(state)
 state.userProfile = null
+state.isMyProfile = isMyProfile
 state.fetchUserProfile = fetchUserProfile
 state.updateUserProfile = updateUserProfile
 state.fetchCurrentProfile = fetchCurrentProfile
@@ -338,6 +339,7 @@ state.closeMyFeedsPopup = closeMyFeedsPopup
 
 // ポップアップ - リスト編集ポップアップ
 state.listEditPopupProps = {
+  mode: undefined,
   display: false,
   list: undefined,
 }
@@ -721,6 +723,12 @@ function closeSelectLabelsPopup () {
 }
 
 // プロフィール
+
+function isMyProfile (): boolean {
+  const account = state.currentQuery.account as LocationQueryValue
+  return account === state.atp.session?.handle ||
+         account === state.atp.session?.did
+}
 
 async function fetchUserProfile () {
   state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle as string)
@@ -1352,7 +1360,9 @@ function closeMyFeedsPopup () {
 // ポップアップ - リスト編集ポップアップ
 
 function openListEditPopup (props: TTListEditPopupProps) {
+  state.listEditPopupProps.mode = props.mode
   state.listEditPopupProps.list = props.list
+  state.listEditPopupProps.callback = props.callback
   state.listEditPopupProps.display = true
 }
 

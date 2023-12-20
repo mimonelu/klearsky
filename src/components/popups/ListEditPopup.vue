@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, nextTick, reactive, ref } from "vue"
+import { inject, reactive, ref } from "vue"
 import { BlobRef } from "@atproto/api"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -9,7 +9,9 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
+  mode?: "create" | "edit"
   list?: TTList
+  callback?: (list: TTList) => void
 }>()
 
 const easyForm = ref()
@@ -38,7 +40,7 @@ const easyFormState = reactive<{
 
 const easyFormProps: TTEasyForm = {
   hasSubmitButton: true,
-  submitButtonLabel: $t("save"),
+  submitButtonLabel: $t(props.mode === "create" ? "create" : "save"),
   submitCallback,
   blurOnSubmit: true,
   data: [
@@ -97,7 +99,7 @@ function close () {
 
 async function submitCallback () {
   Util.blurElement()
-  if (props.list == null) return
+  if (props.mode !== "create" && props.list == null) return
   state.loaderDisplay = true
   const avatarBlobRef: undefined | Error | BlobRef = await makeAvatarBlobRef()
   if (avatarBlobRef instanceof Error) {
@@ -105,13 +107,19 @@ async function submitCallback () {
     mainState.openErrorPopup(avatarBlobRef, "ListEditPopup/makeAvatarBlobRef")
     return
   }
-  const result = await mainState.atp.updateList({
-    ...props.list,
-    name: easyFormState.name,
-    description: easyFormState.description,
-  }, avatarBlobRef)
-  state.loaderDisplay = false
+  const result: undefined | string | Error = props.mode === "create"
+    ? await mainState.atp.createList(
+      easyFormState.name,
+      easyFormState.description,
+      avatarBlobRef
+    )
+    : await mainState.atp.updateList({
+      ...props.list as TTList,
+      name: easyFormState.name,
+      description: easyFormState.description,
+    }, avatarBlobRef)
   if (result instanceof Error) {
+    state.loaderDisplay = false
     mainState.openErrorPopup("errorApiFailed", "ListEditPopup/updateList")
     return
   }
@@ -119,14 +127,24 @@ async function submitCallback () {
   // 元データを更新
   // WANT: avatar を手動で構築してAPIをコールしないようにしたい
   const response: { cursor?: string; list: TTList } | Error =
-    await mainState.atp.fetchList([], props.list.uri, 1)
+    await mainState.atp.fetchList([], props.list?.uri ?? result as string, 1)
+  state.loaderDisplay = false
   if (response instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", "ListEditPopup/fetchList")
     return
   }
-  props.list.avatar = response.list.avatar
-  props.list.name = response.list.name
-  props.list.description = response.list.description
+  /*
+  if (props.list != null) {
+    props.list.avatar = response.list.avatar
+    props.list.name = response.list.name
+    props.list.description = response.list.description
+  }
+  */
+
+  // コールバック
+  if (props.callback != null) {
+    props.callback(response.list)
+  }
 
   close()
 }
@@ -173,7 +191,7 @@ async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
     <template #header>
       <h2>
         <SVGIcon name="list" />
-        <span>{{ $t("listEdit") }}</span>
+        <span>{{ $t(mode === "create" ? "listCreate" : "listEdit") }}</span>
       </h2>
     </template>
     <template #body>
