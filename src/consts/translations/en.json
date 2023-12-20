@@ -409,6 +409,7 @@
   "noAuthorFeeds": "There are no feeds managed by this user.",
 
   "list": "List",
+  "listPurpose": "Type",
   "modList": "Moderation list",
   "curateList": "User list",
   "unknownList": "Unknown list",

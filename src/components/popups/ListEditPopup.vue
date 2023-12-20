@@ -29,11 +29,13 @@ const state = reactive<{
 const easyFormState = reactive<{
   avatar: null | Array<File>
   detachAvatar: Array<boolean>,
+  purpose: string,
   name: string
   description: string
 }>({
   avatar: null,
   detachAvatar: [],
+  purpose: "curatelist",
   name: props.list?.name ?? "",
   description: props.list?.description ?? "",
 })
@@ -44,6 +46,18 @@ const easyFormProps: TTEasyForm = {
   submitCallback,
   blurOnSubmit: true,
   data: [
+    {
+      state: easyFormState,
+      model: "purpose",
+      label: $t("listPurpose"),
+      type: "radio",
+      display: props.mode === "create",
+      required: true,
+      options: [
+        { label: $t("curateList"), value: "curatelist" },
+        { label: $t("modList"), value: "modlist" },
+      ],
+    },
     {
       state: easyFormState,
       model: "avatar",
@@ -109,6 +123,7 @@ async function submitCallback () {
   }
   const result: undefined | string | Error = props.mode === "create"
     ? await mainState.atp.createList(
+      easyFormState.purpose,
       easyFormState.name,
       easyFormState.description,
       avatarBlobRef
@@ -124,7 +139,7 @@ async function submitCallback () {
     return
   }
 
-  // 元データを更新
+  // 作成データの取得
   // WANT: avatar を手動で構築してAPIをコールしないようにしたい
   const response: { cursor?: string; list: TTList } | Error =
     await mainState.atp.fetchList([], props.list?.uri ?? result as string, 1)
@@ -133,13 +148,6 @@ async function submitCallback () {
     mainState.openErrorPopup("errorApiFailed", "ListEditPopup/fetchList")
     return
   }
-  /*
-  if (props.list != null) {
-    props.list.avatar = response.list.avatar
-    props.list.name = response.list.name
-    props.list.description = response.list.description
-  }
-  */
 
   // コールバック
   if (props.callback != null) {

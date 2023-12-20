@@ -409,6 +409,7 @@
   "noAuthorFeeds": "このユーザーの管理するフィードはありません。",
 
   "list": "リスト",
+  "listPurpose": "種類",
   "modList": "モデレーションリスト",
   "curateList": "ユーザーリスト",
   "unknownList": "不明なリスト",

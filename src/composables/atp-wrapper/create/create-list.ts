@@ -2,7 +2,8 @@ import type { BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/ap
 
 export default async function (
   this: TIAtpWrapper,
-  name?: string,
+  purpose: string,
+  name: string,
   description?: string,
   avatarBlobRef?: BlobRef
 ): Promise<string | Error> {
@@ -16,7 +17,7 @@ export default async function (
       createdAt,
       description,
       name,
-      purpose: "app.bsky.graph.defs#curatelist",
+      purpose: `app.bsky.graph.defs#${purpose}`,
     },
   }
   if (avatarBlobRef != null) (query.record as any).avatar = avatarBlobRef

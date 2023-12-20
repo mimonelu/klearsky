@@ -201,6 +201,9 @@ function updateList (list: TTList) {
     &[data-purpose="modList"] {
       --color: rgb(var(--notice-color));
     }
+    &[data-purpose="unknownList"] {
+      --color: rgb(var(--fg-color));
+    }
 
     & > .svg-icon {
       fill: var(--color);
