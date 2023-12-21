@@ -3,7 +3,10 @@ import { computed, inject, reactive, ref, type ComputedRef } from "vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import ListMenuTicker from "@/components/menu-tickers/ListMenuTicker.vue"
+import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+
+const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   list: TTList
@@ -20,6 +23,7 @@ const state = reactive<{
   isOwn: ComputedRef<boolean>
   menuTickerDisplay: boolean
   menuTickerContainer: ComputedRef<undefined | HTMLElement>
+  loaderDisplay: boolean
 }>({
   routerLinkTo: computed(() => {
     return {
@@ -45,6 +49,7 @@ const state = reactive<{
   menuTickerContainer: computed((): undefined | HTMLElement => {
     return menuTickerContainer.value?.closest(".popup-body") ?? undefined
   }),
+  loaderDisplay: false,
 })
 
 const menuTickerContainer = ref()
@@ -73,6 +78,17 @@ function openMenuTicker () {
 
 function closeMenuTicker () {
   state.menuTickerDisplay = false
+}
+
+async function deleteList () {
+  state.loaderDisplay = true
+  const result = await mainState.atp.deleteList(props.list.uri)
+  state.loaderDisplay = false
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "ListMenuTicker/deleteList")
+    return
+  }
+  emit("deleteList")
 }
 </script>
 
@@ -127,6 +143,7 @@ function closeMenuTicker () {
           :display="state.menuTickerDisplay"
           :container="state.menuTickerContainer"
           @close="closeMenuTicker"
+          @deleteList="deleteList"
         />
       </button>
     </div>
@@ -177,6 +194,8 @@ function closeMenuTicker () {
         <span>{{ $t("listEditShort") }}</span>
       </button>
     </div>
+
+    <Loader v-if="state.loaderDisplay" />
   </component>
 </template>
 

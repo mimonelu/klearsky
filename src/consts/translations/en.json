@@ -418,6 +418,8 @@
   "listCreate": "Create list",
   "listEdit": "Edit list",
   "listEditShort": "Edit",
+  "listDelete": "Delete list",
+  "listDeleteMessage": "This list will be deleted. Are you sure?",
   "listAvatar": "Thumbnail",
   "listName": "Name",
   "listDescription": "Description",

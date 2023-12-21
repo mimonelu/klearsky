@@ -27,6 +27,14 @@ async function fetchLists (direction: "new" | "old") {
   mainState.listProcessing = false
 }
 
+function deleteList (listUri: string) {
+  const targetIndex = props.lists.findIndex((list: TTList) => {
+    return list.uri === listUri
+  })
+  if (targetIndex === - 1) return
+  props.lists.splice(targetIndex, 1)
+}
+
 // インフィニットスクロール
 watch(() => mainState.scrolledToBottom, (value: boolean) => {
   if (value) fetchLists("old")
@@ -47,6 +55,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         :list="list"
         :createDisplay="false"
         :unclickable="false"
+        @deleteList="deleteList(list.uri)"
       />
     </div>
     <LoadButton

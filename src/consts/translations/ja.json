@@ -418,6 +418,8 @@
   "listCreate": "リストの作成",
   "listEdit": "リストの編集",
   "listEditShort": "編集",
+  "listDelete": "リストを削除する",
+  "listDeleteMessage": "このリストを削除します。よろしいですか？",
   "listAvatar": "サムネイル",
   "listName": "名前",
   "listDescription": "説明",

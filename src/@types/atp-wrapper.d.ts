@@ -17,6 +17,7 @@ interface TIAtpWrapper {
   deleteAccount (this: TIAtpWrapper, did?: string)
   deleteFollow (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteLike (this: TIAtpWrapper, uri: string): Promise<boolean>
+  deleteList (this: TIAtpWrapper, listUri: string): Promise<true | Error>
   deletePost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteSession (this: TIAtpWrapper): Promise<boolean>

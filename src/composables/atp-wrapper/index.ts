@@ -9,6 +9,7 @@ import createRepost from "@/composables/atp-wrapper/create/create-repost"
 import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
 import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
+import deleteList from "@/composables/atp-wrapper/delete/delete-list"
 import deletePost from "@/composables/atp-wrapper/delete/delete-post"
 import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
 import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
@@ -111,6 +112,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteAccount = deleteAccount
   deleteFollow = deleteFollow
   deleteLike = deleteLike
+  deleteList = deleteList
   deletePost = deletePost
   deleteRepost = deleteRepost
   deleteSession = deleteSession
