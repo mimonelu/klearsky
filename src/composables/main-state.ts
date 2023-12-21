@@ -206,7 +206,7 @@ state.currentListFeedsUri = undefined
 state.fetchList = fetchList
 state.fetchListFeeds = fetchListFeeds
 
-// ローカルライン
+// グローバルライン
 
 state.globallinePosts = []
 state.globallineProfiles = {}

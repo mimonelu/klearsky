@@ -198,7 +198,7 @@ type MainState = {
   fetchList: (direction: "old" | "new", limit = 1) => Promise<boolean>
   fetchListFeeds: (direction: "old" | "new", middleCursor?: string) => Promise<boolean>
 
-  // ローカルライン
+  // グローバルライン
 
   globallinePosts: Array<TTPost>
   globallineProfiles: { [did: string]: any }
