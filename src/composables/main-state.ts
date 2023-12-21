@@ -193,7 +193,7 @@ state.fetchPopularFeedGenerators = fetchPopularFeedGenerators
 state.sortFeedPreferencesSavedAndPinned = sortFeedPreferencesSavedAndPinned
 state.sortMyFeedGenerators = sortMyFeedGenerators
 
-// ローカルライン
+// グローバルライン
 
 state.globallinePosts = []
 state.globallineProfiles = {}

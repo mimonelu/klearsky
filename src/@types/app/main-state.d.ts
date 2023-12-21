@@ -183,7 +183,7 @@ type MainState = {
   sortFeedPreferencesSavedAndPinned: () => void
   sortMyFeedGenerators: () => void
 
-  // ローカルライン
+  // グローバルライン
 
   globallinePosts: Array<TTPost>
   globallineProfiles: { [did: string]: any }
