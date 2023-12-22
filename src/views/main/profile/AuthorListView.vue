@@ -1,9 +1,19 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, watch, type ComputedRef } from "vue"
 import Lists from "@/components/list/Lists.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  lists: ComputedRef<Array<TTList>>
+}>({
+  lists: computed((): Array<TTList> => {
+    return mainState.isMyProfile()
+      ? mainState.myList
+      : mainState.currentAuthorLists
+  }),
+})
 
 function openListEditPopup () {
   mainState.openListEditPopup({
@@ -12,9 +22,20 @@ function openListEditPopup () {
   })
 }
 
-function addList (list: TTList) {
-  mainState.currentAuthorLists.unshift(list)
+async function fetchLists (direction: "new" | "old") {
+  mainState.listProcessing = true
+  await mainState.fetchAuthorLists(direction)
+  mainState.listProcessing = false
 }
+
+function addList (list: TTList) {
+  state.lists.unshift(list)
+}
+
+// インフィニットスクロール
+watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  if (value) fetchLists("old")
+})
 </script>
 
 <template>
@@ -34,7 +55,10 @@ function addList (list: TTList) {
     </div>
 
     <!-- リスト一覧 -->
-    <Lists :lists="mainState.currentAuthorLists" />
+    <Lists
+      :lists="state.lists"
+      @fetch="fetchLists"
+    />
   </div>
 </template>
 

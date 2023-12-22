@@ -88,16 +88,22 @@ function moveToBottom () {
           <span>{{ $t("postLanguages") }}</span>
         </a>
 
-        <!-- マイタグポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openMyTagPopup({ mode: 'edit' }) }">
-          <SVGIcon name="tag" />
-          <span>{{ $t("myTag") }}</span>
-        </a>
-
         <!-- マイフィードポップアップトリガー -->
         <a @click.prevent="() => { Util.blurElement(); mainState.openMyFeedsPopup() }">
           <SVGIcon name="feed" />
           <span>{{ $t("myFeeds") }}</span>
+        </a>
+
+        <!-- マイリストポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openMyListPopup() }">
+          <SVGIcon name="list" />
+          <span>{{ $t("myList") }}</span>
+        </a>
+
+        <!-- マイタグポップアップトリガー -->
+        <a @click.prevent="() => { Util.blurElement(); mainState.openMyTagPopup({ mode: 'edit' }) }">
+          <SVGIcon name="tag" />
+          <span>{{ $t("myTag") }}</span>
         </a>
 
         <hr />
@@ -134,7 +140,7 @@ function moveToBottom () {
           @click.prevent="() => { Util.blurElement(); mainState.openInviteCodesPopup() }"
         >
           <SVGIcon name="inviteCode" />
-          <span>{{ mainState.numberOfAvailableInviteCodes }} {{ $t("inviteCodes") }}</span>
+          <span>{{ $t("inviteCodes") }} ({{ mainState.numberOfAvailableInviteCodes }} / {{ mainState.numberOfInviteCodes }})</span>
         </a>
       </menu>
     </div>

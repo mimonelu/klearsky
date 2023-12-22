@@ -20,6 +20,7 @@ import MainMenuVertical from "@/components/shell-parts/MainMenuVertical.vue"
 import MessagePopup from "@/components/popups/MessagePopup.vue"
 import MutingUsersPopup from "@/components/popups/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
+import MyListPopup from "@/components/popups/MyListPopup.vue"
 import MyTagPopup from "@/components/popups/MyTagPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
@@ -206,6 +207,7 @@ async function processAfterLogin () {
   state.fetchMyFeedGenerators().then(() => {
     state.sortMyFeedGenerators()
   })
+  state.fetchMyLists("new")
   state.saveSettings()
   state.updateSettings()
   setupNotificationInterval()
@@ -350,6 +352,10 @@ async function processPage (pageName?: null | string) {
         if (state.currentCustomUri !== state.currentQuery.feed ||
             state.currentCustomFeeds.length === 0)
           await state.fetchCustomFeeds("new")
+        break
+      }
+      case "list-feeds-home": {
+          await state.fetchListFeeds("new")
         break
       }
       case "post": {
@@ -634,6 +640,12 @@ function broadcastListener (event: MessageEvent) {
     <MyFeedsPopup
       v-if="state.myFeedsPopupDisplay"
       @close="state.closeMyFeedsPopup"
+    />
+
+    <!-- マイリストポップアップ -->
+    <MyListPopup
+      v-if="state.myListPopupDisplay"
+      @close="state.closeMyListPopup"
     />
 
     <!-- リスト編集ポップアップ -->

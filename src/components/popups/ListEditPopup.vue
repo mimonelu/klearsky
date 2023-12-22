@@ -210,3 +210,14 @@ async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
     </template>
   </Popup>
 </template>
+
+<style lang="scss" scoped>
+.list-edit-popup {
+  &:deep() {
+    .popup-header > h2 > .svg-icon--list {
+      fill: rgb(var(--accent-color));
+    }
+  }
+}
+</style>
+

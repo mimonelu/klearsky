@@ -55,7 +55,9 @@ const state = reactive<{
 const menuTickerContainer = ref()
 
 function onClick () {
-  if (!props.unclickable) mainState.currentList = props.list
+  if (props.unclickable) return
+  mainState.currentList = props.list
+  emit("clicked")
 }
 
 function openListEditPopup () {
@@ -98,7 +100,7 @@ async function deleteList () {
     :is="unclickable || state.purpose === 'modList' ? 'div' : 'RouterLink'"
     class="list-card"
     :data-purpose="state.purpose"
-    @click.native.stop="onClick"
+    @click.stop="onClick"
   >
     <div class="list-card__header">
       <!-- リスト画像 -->
@@ -167,7 +169,7 @@ async function deleteList () {
         v-if="createDisplay"
         class="list-card__creator"
         :to="{ name: 'profile-list', query: { account: list.creator.did } }"
-        @click.prevent
+        @click.prevent.stop
       >
         <SVGIcon name="person" />
         <div class="list-card__creator__display-name">{{ list.creator.displayName }}</div>
@@ -178,7 +180,7 @@ async function deleteList () {
       <!-- リストユーザー一覧ボタン -->
       <button
         class="button--bordered list-card__users-button"
-        @click.prevent
+        @click.prevent.stop
       >
         <SVGIcon name="people" />
         <span>{{ $t("listUsers") }}</span>
@@ -188,7 +190,7 @@ async function deleteList () {
       <button
         v-if="state.isOwn"
         class="button list-card__edit-button"
-        @click.prevent="openListEditPopup"
+        @click.prevent.stop="openListEditPopup"
       >
         <SVGIcon name="edit" />
         <span>{{ $t("listEditShort") }}</span>

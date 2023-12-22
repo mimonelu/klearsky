@@ -76,63 +76,70 @@ function closeHtmlPopupDisplay () {
               <!-- コンテンツ言語選択ポップアップトリガー -->
               <button @click.prevent="mainState.openContentLanguagesPopup">
                 <SVGIcon name="translate" />
-                <span>{{ $t("contentLanguagesEdit") }}</span>
+                <span>{{ $t("contentLanguages") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
               <!-- ポスト言語選択ポップアップトリガー -->
               <button @click.prevent="mainState.openPostLanguagesPopup">
                 <SVGIcon name="translate" />
-                <span>{{ $t("postLanguagesEdit") }}</span>
-                <SVGIcon name="cursorRight" />
-              </button>
-
-              <!-- マイタグポップアップトリガー -->
-              <button @click.prevent="mainState.openMyTagPopup({ mode: 'edit' })">
-                <SVGIcon name="tag" />
-                <span>{{ $t("tagEdit") }}</span>
+                <span>{{ $t("postLanguages") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
               <!-- マイフィードポップアップトリガー -->
               <button @click.prevent="mainState.openMyFeedsPopup">
                 <SVGIcon name="feed" />
-                <span>{{ $t("myFeedsEdit") }}</span>
+                <span>{{ $t("myFeeds") }}</span>
+                <SVGIcon name="cursorRight" />
+              </button>
+
+              <!-- マイリストポップアップトリガー -->
+              <button @click.prevent="mainState.openMyListPopup">
+                <SVGIcon name="list" />
+                <span>{{ $t("myList") }}</span>
+                <SVGIcon name="cursorRight" />
+              </button>
+
+              <!-- マイタグポップアップトリガー -->
+              <button @click.prevent="mainState.openMyTagPopup({ mode: 'edit' })">
+                <SVGIcon name="tag" />
+                <span>{{ $t("myTag") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
               <!-- コンテンツフィルタリングポップアップトリガー -->
               <button @click.prevent="mainState.openContentFilteringPopup">
                 <SVGIcon name="contentFiltering" />
-                <span>{{ $t("modifyContentFiltering") }}</span>
+                <span>{{ $t("contentFiltering") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
               <!-- ミュートユーザーリストポップアップトリガー -->
               <button @click.prevent="mainState.openMutingUsersPopup">
                 <SVGIcon name="volumeOff" />
-                <span>{{ $t("checkMutingUsers") }}</span>
+                <span>{{ $t("mutingUsers") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
               <!-- ブロックユーザーリストポップアップトリガー -->
               <button @click.prevent="mainState.openBlockingUsersPopup">
                 <SVGIcon name="personOff" />
-                <span>{{ $t("checkBlockingUsers") }}</span>
+                <span>{{ $t("blockingUsers") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
               <!-- ワードミュートポップアップトリガー -->
               <button @click.prevent="mainState.openWordMutePopup">
                 <SVGIcon name="wordMute" />
-                <span>{{ $t("wordMuteEdit") }}</span>
+                <span>{{ $t("wordMute") }}</span>
                 <SVGIcon name="cursorRight" />
               </button>
 
               <!-- 招待コード確認ポップアップトリガー -->
               <button @click.prevent="mainState.openInviteCodesPopup">
                 <SVGIcon name="inviteCode" />
-                <span>{{ $t("confirmInviteCodes") }} ({{ mainState.numberOfAvailableInviteCodes }} / {{ mainState.numberOfInviteCodes }})</span>
+                <span>{{ $t("inviteCodes") }} ({{ mainState.numberOfAvailableInviteCodes }} / {{ mainState.numberOfInviteCodes }})</span>
                 <SVGIcon name="cursorRight" />
               </button>
             </div>
@@ -595,7 +602,8 @@ function closeHtmlPopupDisplay () {
     }
   }
 
-  .svg-icon--feed {
+  .svg-icon--feed,
+  .svg-icon--list {
     --icon-color: var(--accent-color);
   }
   .svg-icon--wordMute,

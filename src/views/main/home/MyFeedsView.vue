@@ -36,6 +36,14 @@ function openMyFeedsPopup () {
       >
         <SVGIcon name="feed" />
       </button>
+
+      <!-- マイリストポップアップトリガー -->
+      <button
+        class="my-list-trigger"
+        @click.stop="mainState.openMyListPopup"
+      >
+        <SVGIcon name="list" />
+      </button>
     </Portal>
 
     <!-- マイフィード未取得エラーラベル -->

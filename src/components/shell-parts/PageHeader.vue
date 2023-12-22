@@ -107,7 +107,8 @@ function onActivateBackButton () {
       }
     }
 
-    .my-feeds-trigger {
+    .my-feeds-trigger,
+    .my-list-trigger {
       --fg-color: var(--accent-color);
     }
 

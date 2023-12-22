@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, watch, type ComputedRef } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import ListCard from "@/components/list/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Util from "@/composables/util"
+
+const emit = defineEmits<{(event: string, params: any): void}>()
 
 const props = defineProps<{
   lists: Array<TTList>
@@ -20,11 +22,9 @@ const state = reactive<{
   }),
 })
 
-async function fetchLists (direction: "new" | "old") {
+function fetchLists (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listProcessing = true
-  await mainState.fetchAuthorLists(direction)
-  mainState.listProcessing = false
+  emit("fetch", direction)
 }
 
 function deleteList (listUri: string) {
@@ -34,11 +34,6 @@ function deleteList (listUri: string) {
   if (targetIndex === - 1) return
   props.lists.splice(targetIndex, 1)
 }
-
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchLists("old")
-})
 </script>
 
 <template>
@@ -55,6 +50,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         :list="list"
         :createDisplay="false"
         :unclickable="false"
+        @clicked="$emit('clicked')"
         @deleteList="deleteList(list.uri)"
       />
     </div>

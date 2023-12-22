@@ -131,12 +131,8 @@ function changeCustomFeedOrder () {
   }
 
   .popup-header {
-    & > h2 {
-      color: rgb(var(--accent-color));
-
-      & > .svg-icon {
-        fill: rgb(var(--accent-color));
-      }
+    & > h2 > .svg-icon {
+      fill: rgb(var(--accent-color));
     }
   }
 

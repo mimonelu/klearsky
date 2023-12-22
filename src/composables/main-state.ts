@@ -206,6 +206,12 @@ state.currentListFeedsUri = undefined
 state.fetchList = fetchList
 state.fetchListFeeds = fetchListFeeds
 
+// リスト - マイリスト
+
+state.myList = []
+state.myListCursor = undefined
+state.fetchMyLists = fetchMyLists
+
 // グローバルライン
 
 state.globallinePosts = []
@@ -336,6 +342,11 @@ state.closeLikeUsersPopup = closeLikeUsersPopup
 state.myFeedsPopupDisplay = false
 state.openMyFeedsPopup = openMyFeedsPopup
 state.closeMyFeedsPopup = closeMyFeedsPopup
+
+// ポップアップ - マイリストポップアップ
+state.myListPopupDisplay = false
+state.openMyListPopup = openMyListPopup
+state.closeMyListPopup = closeMyListPopup
 
 // ポップアップ - リスト編集ポップアップ
 state.listEditPopupProps = {
@@ -1112,6 +1123,22 @@ function sortMyFeedGenerators () {
 
 // リスト
 
+async function fetchMyLists (direction: "new" | "old") {
+  const account = state.atp.session?.did
+  if (!account) return
+  const cursor = await state.atp.fetchLists(
+    state.myList,
+    account,
+    CONSTS.LIMIT_OF_FETCH_AUTHOR_LIST,
+    direction === "new" ? undefined : state.myListCursor
+  )
+  if (cursor instanceof Error) {
+    // TODO:
+    return
+  }
+  state.myListCursor = cursor
+}
+
 async function fetchList (direction: "old" | "new", limit = 1): Promise<boolean> {
   const listUri: undefined | string = state.currentQuery.list
   if (listUri == null) return false
@@ -1355,6 +1382,16 @@ function openMyFeedsPopup () {
 
 function closeMyFeedsPopup () {
   state.myFeedsPopupDisplay = false
+}
+
+// ポップアップ - マイリストポップアップ
+
+function openMyListPopup () {
+  state.myListPopupDisplay = true
+}
+
+function closeMyListPopup () {
+  state.myListPopupDisplay = false
 }
 
 // ポップアップ - リスト編集ポップアップ

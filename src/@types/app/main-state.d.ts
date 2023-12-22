@@ -198,6 +198,12 @@ type MainState = {
   fetchList: (direction: "old" | "new", limit = 1) => Promise<boolean>
   fetchListFeeds: (direction: "old" | "new", middleCursor?: string) => Promise<boolean>
 
+  // リスト - マイリスト
+
+  myList: Array<TTList>
+  myListCursor?: string
+  fetchMyLists: Function
+
   // グローバルライン
 
   globallinePosts: Array<TTPost>
@@ -321,6 +327,11 @@ type MainState = {
   myFeedsPopupDisplay: boolean
   openMyFeedsPopup: Function
   closeMyFeedsPopup: Function
+
+  // ポップアップ - マイリストポップアップ
+  myListPopupDisplay: boolean
+  openMyListPopup: Function
+  closeMyListPopup: Function
 
   // ポップアップ - リスト編集ポップアップ
   listEditPopupProps: TTListEditPopupProps
