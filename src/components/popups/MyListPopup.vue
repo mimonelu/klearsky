@@ -62,16 +62,21 @@ function addList (list: TTList) {
 <style lang="scss" scoped>
 .my-list-popup {
   &:deep() {
-    .popup-header > h2 {
-      margin-left: 1.5rem;
+    .popup {
+      flex-grow: 1;
+      height: 100%;
 
-      & > .svg-icon {
-        fill: rgb(var(--accent-color));
+      &-header > h2 {
+        margin-left: 1.5rem;
+
+        & > .svg-icon {
+          fill: rgb(var(--accent-color));
+        }
       }
-    }
 
-    .popup-body {
-      padding: 0;
+      &-body {
+        padding: 0;
+      }
     }
   }
 
