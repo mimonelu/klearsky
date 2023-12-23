@@ -207,7 +207,7 @@ async function processAfterLogin () {
   state.fetchMyFeedGenerators().then(() => {
     state.sortMyFeedGenerators()
   })
-  state.fetchMyLists("new")
+  state.fetchMyLists()
   state.saveSettings()
   state.updateSettings()
   setupNotificationInterval()
@@ -291,7 +291,7 @@ async function processPage (pageName?: null | string) {
       }
       case "profile-list": {
         const tasks: Array<Promise<void>> = []
-        if (!state.inSameProfilePage || state.currentAuthorLists.length === 0)
+        if (!state.isMyProfile() && (!state.inSameProfilePage || state.currentAuthorLists.length === 0))
           tasks.push(state.fetchAuthorLists("new"))
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
@@ -355,7 +355,22 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "list-feeds-home": {
-          await state.fetchListFeeds("new")
+        // 現在のリストを取得
+        // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
+        state.currentList = undefined
+        state.currentList = state.myList.find((list: TTList) => {
+          return list.uri === state.currentQuery.list
+        })
+        if (state.currentList == null) {
+          state.currentList = state.currentAuthorLists.find((list: TTList) => {
+            return list.uri === state.currentQuery.list
+          })
+          if (state.currentList == null) {
+            state.fetchList("new", 1)
+          }
+        }
+
+        await state.fetchListFeeds("new")
         break
       }
       case "post": {

@@ -39,6 +39,7 @@ function deleteList (listUri: string) {
 <template>
   <div class="lists">
     <LoadButton
+      v-if="!mainState.isMyProfile()"
       direction="new"
       :processing="mainState.listProcessing"
       @activate="fetchLists('new')"
@@ -55,6 +56,7 @@ function deleteList (listUri: string) {
       />
     </div>
     <LoadButton
+      v-if="!mainState.isMyProfile()"
       direction="old"
       :processing="mainState.listProcessing"
       @activate="fetchLists('old')"

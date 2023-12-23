@@ -209,7 +209,6 @@ state.fetchListFeeds = fetchListFeeds
 // リスト - マイリスト
 
 state.myList = []
-state.myListCursor = undefined
 state.fetchMyLists = fetchMyLists
 
 // グローバルライン
@@ -1123,20 +1122,27 @@ function sortMyFeedGenerators () {
 
 // リスト
 
-async function fetchMyLists (direction: "new" | "old") {
+async function fetchMyLists () {
   const account = state.atp.session?.did
   if (!account) return
-  const cursor = await state.atp.fetchLists(
-    state.myList,
-    account,
-    CONSTS.LIMIT_OF_FETCH_AUTHOR_LIST,
-    direction === "new" ? undefined : state.myListCursor
-  )
-  if (cursor instanceof Error) {
-    // TODO:
-    return
-  }
-  state.myListCursor = cursor
+
+  // 非同期で全マイリストを取得
+  setTimeout(async () => {
+    let cursor
+    for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_ITERATION; i ++) {
+      cursor = await state.atp.fetchLists(
+        state.myList,
+        account,
+        CONSTS.LIMIT_OF_FETCH_MY_LIST,
+        cursor
+      )
+      if (cursor instanceof Error) {
+        // TODO:
+        break
+      }
+      if (cursor == null) break
+    }
+  }, 0)
 }
 
 async function fetchList (direction: "old" | "new", limit = 1): Promise<boolean> {

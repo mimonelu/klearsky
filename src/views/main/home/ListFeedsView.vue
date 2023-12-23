@@ -11,9 +11,8 @@ const mainState = inject("state") as MainState
 onMounted(() => {
   // `await` は不要
   if (mainState.currentList == null) {
-    mainState.fetchList("new", 1)
+    // mainState.fetchList("new", 1)
   }
-  fetchFeeds("new")
 })
 
 async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
@@ -45,6 +44,10 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :list="mainState.currentList"
       :createDisplay="true"
       :unclickable="true"
+    />
+    <div
+      v-else
+      class="list-feeds__list-card-skeleton"
     />
     <LoadButton
       direction="new"
@@ -83,6 +86,11 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+
+  &__list-card-skeleton {
+    border-bottom: 1px solid var(--fg-color-025);
+    min-height: 8rem;
+  }
 }
 
 .list-card {

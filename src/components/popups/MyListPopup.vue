@@ -23,12 +23,6 @@ function onClicked () {
   close()
 }
 
-async function fetchLists (direction: "new" | "old") {
-  mainState.listProcessing = true
-  await mainState.fetchMyLists(direction)
-  mainState.listProcessing = false
-}
-
 function addList (list: TTList) {
   mainState.myList.unshift(list)
 }
@@ -39,7 +33,6 @@ function addList (list: TTList) {
     class="my-list-popup"
     :hasCloseButton="true"
     @close="close"
-    @scrolledToBottom="fetchLists('old')"
   >
     <template #header>
       <h2>
@@ -60,7 +53,6 @@ function addList (list: TTList) {
       <Lists
         :lists="mainState.myList"
         @clicked="onClicked"
-        @fetch="fetchLists"
       />
     </template>
   </Popup>

@@ -25,5 +25,5 @@ export default async function (
   if (cursor == null) currentLists.unshift(...newLists)
   else currentLists.push(...newLists)
 
-  return response.data.cursor
+  return newLists.length === 0 ? undefined : response.data.cursor
 }

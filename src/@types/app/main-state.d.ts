@@ -201,7 +201,6 @@ type MainState = {
   // リスト - マイリスト
 
   myList: Array<TTList>
-  myListCursor?: string
   fetchMyLists: Function
 
   // グローバルライン
