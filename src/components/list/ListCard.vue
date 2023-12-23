@@ -183,7 +183,8 @@ async function deleteList () {
         @click.prevent.stop
       >
         <SVGIcon name="people" />
-        <span>{{ $t("listUsers") }}</span>
+        <span v-if="list.items == null">{{ $t("listUsers") }}</span>
+        <span v-else>{{ list.items.length }} {{ $t("users") }}</span>
       </button>
 
       <!-- リスト編集ボタン -->
