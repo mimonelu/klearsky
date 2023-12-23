@@ -15,8 +15,8 @@ async function fetchAuthorCustomFeeds (direction: "new" | "old") {
 }
 
 // インフィニットスクロール
-watch(() => mainState.scrolledToBottom, () => {
-  fetchAuthorCustomFeeds("old")
+watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  if (value) fetchAuthorCustomFeeds("old")
 })
 </script>
 

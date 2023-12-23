@@ -454,7 +454,8 @@ function scrollListener () {
     if (!isEnter &&
       state.mounted &&
       state.atp.hasLogin() &&
-      !state.processing
+      !state.processing &&
+      !state.listProcessing
     ) state.scrolledToBottom = true
     isEnter = true
   } else {
