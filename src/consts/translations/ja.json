@@ -157,8 +157,8 @@
   "copyUri": "AT URIをコピー",
   "copyDid": "DIDをコピー",
   "copyDisplayName": "表示名をコピー",
-  "likeUsers": "いいねしたアカウント",
-  "repostUsers": "リポストしたアカウント",
+  "likeUsers": "いいねしたユーザー",
+  "repostUsers": "リポストしたユーザー",
   "copyPostText": "テキストをコピー",
   "translate": "翻訳する",
   "firstPost": "最初のポストを見る",
@@ -423,6 +423,7 @@
   "listAvatar": "サムネイル",
   "listName": "名前",
   "listDescription": "説明",
+  "listUserManagement": "リストに追加する",
   "myList": "マイリスト",
 
   "showTimeFeeds": "タイムフィードで見る",

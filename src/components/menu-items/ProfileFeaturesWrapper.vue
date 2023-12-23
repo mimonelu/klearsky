@@ -3,6 +3,7 @@ import { reactive } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import MenuTickerFirstPost from "@/components/menu-items/FirstPost.vue"
 import MenuTickerSearchAccountPost from "@/components/menu-items/SearchAccountPost.vue"
+import MenuTickerSendMention from "@/components/menu-items/SendMention.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -33,12 +34,18 @@ function showSubMenuTicker () {
     <SVGIcon name="cursorLeft" />
     <span>{{ $t("postFeatures") }}</span>
 
-    <!-- アカウント機能メニュー -->
+    <!-- プロフィール機能メニュー -->
     <MenuTicker
       :display="state.display"
       :container="container"
       class="menu-ticker__sub"
     >
+      <!-- メンションを送る -->
+      <MenuTickerSendMention
+        :mentionTo="user.handle"
+        @close="emit('close')"
+      />
+
       <!-- 最初のポストを見る -->
       <MenuTickerFirstPost
         :did="user.did"

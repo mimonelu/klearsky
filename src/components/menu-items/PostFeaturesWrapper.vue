@@ -4,6 +4,8 @@ import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import MenuTickerOpenTimeFeedsPopup from "@/components/menu-items/OpenTimeFeedsPopup.vue"
 import MenuTickerSendMention from "@/components/menu-items/SendMention.vue"
 import MenuTickerSendPostAfter from "@/components/menu-items/SendPostAfter.vue"
+import MenuTickerShowLikeUsers from "@/components/menu-items/ShowLikeUsers.vue"
+import MenuTickerShowRepostUsers from "@/components/menu-items/ShowRepostUsers.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -43,6 +45,18 @@ function showSubMenuTicker () {
       <!-- メンションを送る -->
       <MenuTickerSendMention
         :mentionTo="post.author.handle"
+        @close="emit('close')"
+      />
+
+      <!-- リポストユーザーリストポップアップトリガー -->
+      <MenuTickerShowRepostUsers
+        :uri="post.uri"
+        @close="emit('close')"
+      />
+
+      <!-- ライクユーザーリストポップアップトリガー -->
+      <MenuTickerShowLikeUsers
+        :uri="post.uri"
         @close="emit('close')"
       />
 

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
-import MenuTickerAccountFeaturesWrapper from "@/components/menu-items/AccountFeaturesWrapper.vue"
 import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
 import MenuTickerModerateWrapper from "@/components/menu-items/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
+import MenuTickerOpenListUserManagementPopup from "@/components/menu-items/OpenListUserManagementPopup.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
-import MenuTickerSendMention from "@/components/menu-items/SendMention.vue"
+import MenuTickerProfileFeaturesWrapper from "@/components/menu-items/ProfileFeaturesWrapper.vue"
 import MenuTickerTranslateText from "@/components/menu-items/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menu-items/WebShare.vue"
 
@@ -51,14 +51,14 @@ const state = reactive<{
       @close="emit('close')"
     />
 
-    <!-- メンションを送る -->
-    <MenuTickerSendMention
-      :mentionTo="user.handle"
+    <!-- リストに追加する -->
+    <MenuTickerOpenListUserManagementPopup
+      :user="user"
       @close="emit('close')"
     />
 
-    <!-- 最初のポストを見る -->
-    <MenuTickerAccountFeaturesWrapper
+    <!-- プロフィール機能メニュー -->
+    <MenuTickerProfileFeaturesWrapper
       :user="user"
       @close="emit('close')"
     />

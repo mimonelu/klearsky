@@ -4,11 +4,10 @@ import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
 import MenuTickerModerateWrapper from "@/components/menu-items/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
+import MenuTickerOpenListUserManagementPopup from "@/components/menu-items/OpenListUserManagementPopup.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
 import MenuTickerOpenThreadgatePopup from "@/components/menu-items/OpenThreadgatePopup.vue"
 import MenuTickerPostFeaturesWrapper from "@/components/menu-items/PostFeaturesWrapper.vue"
-import MenuTickerShowLikeUsers from "@/components/menu-items/ShowLikeUsers.vue"
-import MenuTickerShowRepostUsers from "@/components/menu-items/ShowRepostUsers.vue"
 import MenuTickerTranslateText from "@/components/menu-items/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menu-items/WebShare.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -64,6 +63,12 @@ async function deletePost () {
       @close="emit('close')"
     />
 
+    <!-- リストに追加する -->
+    <MenuTickerOpenListUserManagementPopup
+      :user="post.author"
+      @close="emit('close')"
+    />
+
     <!-- Threadgate ポップアップトリガー -->
     <MenuTickerOpenThreadgatePopup
       v-if="state.isUser"
@@ -81,18 +86,6 @@ async function deletePost () {
       <SVGIcon name="remove" />
       <span>{{ $t("deletePost") }}</span>
     </button>
-
-    <!-- リポストユーザーリストポップアップトリガー -->
-    <MenuTickerShowRepostUsers
-      :uri="post.uri"
-      @close="emit('close')"
-    />
-
-    <!-- ライクユーザーリストポップアップトリガー -->
-    <MenuTickerShowLikeUsers
-      :uri="post.uri"
-      @close="emit('close')"
-    />
 
     <!-- ポスト機能 -->
     <MenuTickerPostFeaturesWrapper
