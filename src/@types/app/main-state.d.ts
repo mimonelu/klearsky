@@ -201,7 +201,6 @@ type MainState = {
   // リスト - マイリスト
 
   myList: Array<TTList>
-  myListUsers: { [k: string]: Array<TTListItem> }
   fetchMyLists: Function
 
   // グローバルライン

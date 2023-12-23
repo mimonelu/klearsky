@@ -209,7 +209,6 @@ state.fetchListFeeds = fetchListFeeds
 // リスト - マイリスト
 
 state.myList = []
-state.myListUsers = {}
 state.fetchMyLists = fetchMyLists
 
 // グローバルライン
@@ -1148,10 +1147,10 @@ function fetchMyLists () {
     // 全マイリストユーザーの取得
     for (const list of state.myList) {
       let cursor: undefined | string
-      state.myListUsers[list.uri] = []
+      list.items = []
       for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS_ITERATION; i ++) {
         const result = await state.atp.fetchList(
-          state.myListUsers[list.uri],
+          list.items,
           list.uri,
           CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS,
           cursor
