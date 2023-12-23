@@ -410,6 +410,7 @@
 
   "list": "List",
   "listPurpose": "Type",
+  "noList": "No list.",
   "modList": "Moderation list",
   "curateList": "User list",
   "unknownList": "Unknown list",

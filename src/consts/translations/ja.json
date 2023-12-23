@@ -410,6 +410,7 @@
 
   "list": "リスト",
   "listPurpose": "種類",
+  "noList": "リストはありません。",
   "modList": "モデレーションリスト",
   "curateList": "ユーザーリスト",
   "unknownList": "不明なリスト",

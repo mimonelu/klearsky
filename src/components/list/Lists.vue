@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import ListCard from "@/components/list/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string, params: any): void}>()
@@ -46,6 +47,16 @@ function deleteList (listUri: string) {
       @activate="fetchLists('new')"
     />
     <div class="list-card-container">
+      <!-- 空リストメッセージ -->
+      <div
+        v-if="!mainState.listProcessing && state.lists.length === 0"
+        class="textlabel lists__nolist"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("noList") }}
+        </div>
+      </div>
+
       <ListCard
         v-for="list of state.lists"
         :key="list.uri"
@@ -69,6 +80,10 @@ function deleteList (listUri: string) {
 .lists {
   display: flex;
   flex-direction: column;
+
+  &__nolist {
+    margin: 1rem;
+  }
 }
 
 .list-card-container {
