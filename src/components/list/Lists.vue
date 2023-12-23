@@ -8,6 +8,7 @@ const emit = defineEmits<{(event: string, params: any): void}>()
 
 const props = defineProps<{
   lists: Array<TTList>
+  loaderDisplay: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -39,7 +40,7 @@ function deleteList (listUri: string) {
 <template>
   <div class="lists">
     <LoadButton
-      v-if="!mainState.isMyProfile()"
+      v-if="loaderDisplay"
       direction="new"
       :processing="mainState.listProcessing"
       @activate="fetchLists('new')"
@@ -56,7 +57,7 @@ function deleteList (listUri: string) {
       />
     </div>
     <LoadButton
-      v-if="!mainState.isMyProfile()"
+      v-if="loaderDisplay"
       direction="old"
       :processing="mainState.listProcessing"
       @activate="fetchLists('old')"

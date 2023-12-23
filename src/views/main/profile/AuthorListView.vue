@@ -60,6 +60,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <!-- リスト一覧 -->
     <Lists
       :lists="state.lists"
+      :loaderDisplay="!mainState.isMyProfile()"
       @fetch="fetchLists"
     />
   </div>
