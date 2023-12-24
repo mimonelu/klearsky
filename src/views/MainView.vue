@@ -13,6 +13,7 @@ import ImagePopup from "@/components/popups/ImagePopup.vue"
 import InviteCodesPopup from "@/components/popups/InviteCodesPopup.vue"
 import LikeUsersPopup from "@/components/popups/LikeUsersPopup.vue"
 import ListEditPopup from "@/components/popups/ListEditPopup.vue"
+import ListUserManagementPopup from "@/components/popups/ListUserManagementPopup.vue"
 import Loader from "@/components/common/Loader.vue"
 import LoginPopup from "@/components/popups/LoginPopup.vue"
 import MainMenuHorizontal from "@/components/shell-parts/MainMenuHorizontal.vue"
@@ -669,6 +670,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.listEditPopupProps.display"
       v-bind="state.listEditPopupProps"
       @close="state.closeListEditPopup"
+    />
+
+    <!-- リストユーザー管理ポップアップ -->
+    <ListUserManagementPopup
+      v-if="state.listUserManagementPopupProps.display"
+      v-bind="state.listUserManagementPopupProps"
+      @close="state.closeListUserManagementPopup"
     />
 
     <!-- ワードミュートポップアップ -->

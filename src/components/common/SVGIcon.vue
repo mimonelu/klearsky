@@ -41,6 +41,7 @@ import list from "@/svg/list.svg?raw"
 import lock from "@/svg/lock.svg?raw"
 import mail from "@/svg/mail.svg?raw"
 import menu from "@/svg/menu.svg?raw"
+import minus from "@/svg/minus.svg?raw"
 import offImage from "@/svg/off-image.svg?raw"
 import openInApp from "@/svg/open-in-app.svg?raw"
 import openInNew from "@/svg/open-in-new.svg?raw"
@@ -118,6 +119,7 @@ const icons: { [k: string]: string } = {
   lock,
   mail,
   menu,
+  minus,
   offImage,
   openInApp,
   openInNew,

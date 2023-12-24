@@ -141,9 +141,9 @@ function onActivateContentFilteringToggle () {
 .user-box {
   color: rgb(var(--fg-color));
   display: grid;
-  grid-gap: 0 0.5em;
+  grid-gap: 0 0.75em;
   grid-template-columns: min-content auto 1fr auto;
-  grid-template-rows: auto auto auto auto 1fr;
+  grid-template-rows: auto auto auto 1fr;
   grid-template-areas:
     "c c c c"
     "a n h m"
@@ -168,16 +168,17 @@ function onActivateContentFilteringToggle () {
   display: flex;
   align-items: center;
   grid-gap: 0.5em;
-  font-size: 0.875em;
-  line-height: 1.25;
   overflow: hidden;
 
   .account-label-icon {
     fill: rgb(var(--notice-color));
+    font-size: 0.875em;
   }
 
   & > span {
+    font-size: 0.875em;
     font-weight: bold;
+    line-height: 1.25;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

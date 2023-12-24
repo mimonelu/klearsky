@@ -53,6 +53,8 @@ function addList (list: TTList) {
       <Lists
         :lists="mainState.myList"
         :loaderDisplay="false"
+        :isCompact="false"
+        :unclickable="false"
         @clicked="onClicked"
       />
     </template>

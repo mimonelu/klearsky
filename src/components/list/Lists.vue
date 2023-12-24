@@ -10,6 +10,8 @@ const emit = defineEmits<{(event: string, params: any): void}>()
 const props = defineProps<{
   lists: Array<TTList>
   loaderDisplay: boolean
+  isCompact: boolean
+  unclickable: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -36,6 +38,10 @@ function deleteList (listUri: string) {
   if (targetIndex === - 1) return
   props.lists.splice(targetIndex, 1)
 }
+
+function clicked (list?: TTList) {
+  emit("clicked", list)
+}
 </script>
 
 <template>
@@ -46,26 +52,31 @@ function deleteList (listUri: string) {
       :processing="mainState.listProcessing"
       @activate="fetchLists('new')"
     />
-    <div class="list-card-container">
-      <!-- 空リストメッセージ -->
-      <div
-        v-if="!mainState.listProcessing && state.lists.length === 0"
-        class="textlabel lists__nolist"
-      >
-        <div class="textlabel__text">
-          <SVGIcon name="alert" />{{ $t("noList") }}
-        </div>
-      </div>
 
+    <!-- 空リストメッセージ -->
+    <div
+      v-if="!mainState.listProcessing && state.lists.length === 0"
+      class="textlabel lists__nolist"
+    >
+      <div class="textlabel__text">
+        <SVGIcon name="alert" />{{ $t("noList") }}
+      </div>
+    </div>
+
+    <div class="lists__list-card-container">
       <ListCard
         v-for="list of state.lists"
+        v-slot="{ list }"
         :key="list.uri"
         :list="list"
+        :isCompact="isCompact"
         :createDisplay="false"
-        :unclickable="false"
-        @clicked="$emit('clicked')"
+        :unclickable="unclickable"
+        @clicked="clicked"
         @deleteList="deleteList(list.uri)"
-      />
+      >
+        <slot :list="list" />
+      </ListCard>
     </div>
     <LoadButton
       v-if="loaderDisplay"
@@ -84,10 +95,10 @@ function deleteList (listUri: string) {
   &__nolist {
     margin: 1rem;
   }
-}
 
-.list-card-container {
-  flex-grow: 1;
+  &__list-card-container {
+    flex-grow: 1;
+  }
 }
 
 .list-card:not(:last-child) {

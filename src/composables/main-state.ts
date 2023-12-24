@@ -356,6 +356,14 @@ state.listEditPopupProps = {
 state.openListEditPopup = openListEditPopup
 state.closeListEditPopup = closeListEditPopup
 
+// ポップアップ - リストユーザー管理ポップアップ
+state.listUserManagementPopupProps = {
+  display: false,
+  user: undefined,
+}
+state.openListUserManagementPopup = openListUserManagementPopup
+state.closeListUserManagementPopup = closeListUserManagementPopup
+
 // ポップアップ - タイムフィードポップアップ
 state.currentTimeFeeds = []
 state.timeFeedsPopupDisplay = false
@@ -1432,6 +1440,17 @@ function openListEditPopup (props: TTListEditPopupProps) {
 
 function closeListEditPopup () {
   state.listEditPopupProps.display = false
+}
+
+// ポップアップ - リストユーザー管理ポップアップ
+
+function openListUserManagementPopup (props: TTListUserManagementPopupProps) {
+  state.listUserManagementPopupProps.user = props.user
+  state.listUserManagementPopupProps.display = true
+}
+
+function closeListUserManagementPopup () {
+  state.listUserManagementPopupProps.display = false
 }
 
 // ポップアップ - タイムフィードポップアップ

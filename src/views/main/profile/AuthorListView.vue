@@ -61,6 +61,8 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <Lists
       :lists="state.lists"
       :loaderDisplay="!mainState.isMyProfile()"
+      :isCompact="false"
+      :unclickable="false"
       @fetch="fetchLists"
     />
   </div>

@@ -337,6 +337,11 @@ type MainState = {
   openListEditPopup: Function
   closeListEditPopup: Function
 
+  // ポップアップ - リストユーザー管理ポップアップ
+  listUserManagementPopupProps: TTListUserManagementPopupProps
+  openListUserManagementPopup: Function
+  closeListUserManagementPopup: Function
+
   // ポップアップ - タイムフィードポップアップ
   currentTimeFeeds: Array<TTPost>
   timeFeedsPopupDisplay: boolean

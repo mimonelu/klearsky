@@ -4,3 +4,8 @@ type TTListEditPopupProps = {
   list?: TTList
   callback?: (list: TTList) => void
 }
+
+type TTListUserManagementPopupProps = {
+  display: boolean
+  user?: TTUser
+}

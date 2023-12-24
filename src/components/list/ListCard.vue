@@ -6,10 +6,11 @@ import ListMenuTicker from "@/components/menu-tickers/ListMenuTicker.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
-const emit = defineEmits<{(event: string): void}>()
+const emit = defineEmits<{(event: string, list?: TTList): void}>()
 
 const props = defineProps<{
   list: TTList
+  isCompact?: boolean
   createDisplay?: boolean
   unclickable?: boolean
 }>()
@@ -55,9 +56,13 @@ const state = reactive<{
 const menuTickerContainer = ref()
 
 function onClick () {
+  if (props.isCompact) {
+    emit("clicked", props.list)
+    return
+  }
   if (props.unclickable) return
   mainState.currentList = props.list
-  emit("clicked")
+  emit("clicked", props.list)
 }
 
 function openListEditPopup () {
@@ -99,9 +104,11 @@ async function deleteList () {
     v-bind="unclickable ? null : { to: state.routerLinkTo }"
     :is="unclickable || state.purpose === 'modList' ? 'div' : 'RouterLink'"
     class="list-card"
+    :data-is-compact="isCompact"
     :data-purpose="state.purpose"
     @click.stop="onClick"
   >
+    <slot :list="list" />
     <div class="list-card__header">
       <!-- リスト画像 -->
       <LazyImage
@@ -133,6 +140,7 @@ async function deleteList () {
 
       <!-- リストメニュートリガー -->
       <button
+        v-if="!isCompact"
         class="list-card__menu-button"
         ref="menuTickerContainer"
         @click.prevent.stop="openMenuTicker"
@@ -152,7 +160,7 @@ async function deleteList () {
 
     <!-- リスト説明文 -->
     <HtmlText
-      v-if="list.description"
+      v-if="list.description && !isCompact"
       class="list-card__description"
       dir="auto"
       :text="list.description"
@@ -163,7 +171,10 @@ async function deleteList () {
     />
 
     <!-- ボタンコンテナ -->
-    <div class="list-card__button-container">
+    <div
+      v-if="!isCompact"
+      class="list-card__button-container"
+    >
       <!-- リスト作成者リンク -->
       <RouterLink
         v-if="createDisplay"
@@ -212,6 +223,9 @@ async function deleteList () {
   &[data-purpose="modList"] {
     background-color: rgb(var(--notice-color), 0.0625);
   }
+  &[data-purpose="unknownList"] {
+    background-color: var(--fg-color-00625);
+  }
 
   // リストヘッダー
   &__header {
@@ -222,6 +236,14 @@ async function deleteList () {
       "a n n m"
       "a p i m";
     align-items: flex-start;
+  }
+
+  // リストヘッダー - コンパクトモードのリストメニュー非表示に関わるレイアウト調整
+  &[data-is-compact="true"] &__header {
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas:
+      "a n n"
+      "a p i";
   }
 
   // リスト画像
@@ -259,7 +281,7 @@ async function deleteList () {
       --color: rgb(var(--notice-color));
     }
     &[data-purpose="unknownList"] {
-      --color: rgb(var(--fg-color));
+      --color: var(--fg-color-05);
     }
 
     & > .svg-icon {

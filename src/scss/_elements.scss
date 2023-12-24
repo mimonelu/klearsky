@@ -12,6 +12,7 @@
     --like-color,
     --share-color;
   @each $color in $colors {
+    #{$color}-00625: color-mix(in srgb, rgb(var(#{$color})) 6.25%, rgb(var(--bg-color)));
     #{$color}-0125: color-mix(in srgb, rgb(var(#{$color})) 12.5%, rgb(var(--bg-color)));
     #{$color}-025: color-mix(in srgb, rgb(var(#{$color})) 25%, rgb(var(--bg-color)));
     #{$color}-0375: color-mix(in srgb, rgb(var(#{$color})) 37.5%, rgb(var(--bg-color)));

@@ -5,7 +5,7 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  user?: TTUser;
+  user: TTUser;
 }>()
 
 const mainState = inject("state") as MainState
@@ -15,17 +15,9 @@ function onActivate () {
     emit("close")
     return
   }
-  /*
-  mainState.openThreadgatePopup({
-    mode: "post",
-    postThreadgate: props.post.threadgate,
-    postUri: props.post.uri,
-    onClosed (params: any) {
-      if (params?.updated) emit("updateThisPost")
-      emit("close")
-    },
+  mainState.openListUserManagementPopup({
+    user: props.user,
   })
-  */
   emit("close")
 }
 </script>
