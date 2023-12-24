@@ -64,6 +64,7 @@ function clicked (list: TTList) {
       <UserBox
         v-if="user != null"
         :user="user"
+        :menuDisplay="false"
         :contentWarningDisabled="false"
       />
 

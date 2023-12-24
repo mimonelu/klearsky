@@ -107,6 +107,7 @@ async function submitCallback () {
     <template #body>
       <UserBox
         :user="user"
+        :menuDisplay="false"
         :contentWarningDisabled="true"
         @keydown.prevent.stop
         @keyup.prevent.stop

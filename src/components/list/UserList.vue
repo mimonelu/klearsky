@@ -57,6 +57,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         v-for="user of currentUsers"
         :key="user.did"
         :user="user as TTUser"
+        :menuDisplay="true"
         :contentWarningDisabled="false"
       >
         <template #bottom>

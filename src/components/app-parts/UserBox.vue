@@ -11,6 +11,7 @@ const emit = defineEmits<(name: string) => void>()
 const props = defineProps<{
   user: TTUser
   contentWarningDisabled: boolean
+  menuDisplay: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -72,6 +73,7 @@ function onActivateContentFilteringToggle () {
   <RouterLink
     class="user-box"
     :to="{ name: 'profile-feeds', query: { account: user.did } }"
+    :data-menu-display="menuDisplay"
     :data-is-following="user.viewer.following != null"
     @click="onActivateLink"
   >
@@ -114,6 +116,7 @@ function onActivateContentFilteringToggle () {
 
       <!-- プロフィールメニュートリガー -->
       <button
+        v-if="menuDisplay"
         class="menu-button"
         ref="profileMenuTrigger"
         @click.prevent.stop="openPostMenu"
@@ -150,6 +153,14 @@ function onActivateContentFilteringToggle () {
     "a d d m"
     "b b b b";
   align-items: center;
+  &[data-menu-display="false"] {
+    grid-template-columns: min-content auto 1fr;
+    grid-template-areas:
+      "c c c"
+      "a n h"
+      "a d d"
+      "b b b";
+  }
 }
 
 .content-filtering-toggle {

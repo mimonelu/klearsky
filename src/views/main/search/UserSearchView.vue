@@ -123,6 +123,7 @@ function updateRouter () {
           :key="user.did"
           class="user"
           :user="user"
+          :menuDisplay="true"
           :contentWarningDisabled="false"
         />
       </div>
