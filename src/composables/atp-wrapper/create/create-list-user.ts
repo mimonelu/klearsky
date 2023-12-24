@@ -1,27 +1,23 @@
-import type { BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
-  purpose: string,
-  name: string,
-  description?: string,
-  avatarBlobRef?: BlobRef
+  listUri: string,
+  userDid: string
 ): Promise<string | Error> {
   if (this.agent == null) return Error("No Agent")
   if (this.session == null) return Error("No Session")
   const createdAt = new Date().toISOString()
   const query: ComAtprotoRepoCreateRecord.InputSchema = {
     repo: this.session.did,
-    collection: "app.bsky.graph.list",
+    collection: "app.bsky.graph.listitem",
     record: {
-      $type: "app.bsky.graph.list",
+      $type: "app.bsky.graph.listitem",
       createdAt,
-      description,
-      name,
-      purpose: `app.bsky.graph.defs#${purpose}`,
+      list: listUri,
+      subject: userDid,
     },
   }
-  if (avatarBlobRef != null) (query.record as any).avatar = avatarBlobRef
   const response: ComAtprotoRepoCreateRecord.Response =
     await (this.agent as BskyAgent).com.atproto.repo.createRecord(query)
       .then((value: ComAtprotoRepoCreateRecord.Response) => value)

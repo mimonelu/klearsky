@@ -3,6 +3,7 @@ import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob
 import createFollow from "@/composables/atp-wrapper/create/create-follow"
 import createLike from "@/composables/atp-wrapper/create/create-like"
 import createList from "@/composables/atp-wrapper/create/create-list"
+import createListUser from "@/composables/atp-wrapper/create/create-list-user"
 import createPost from "@/composables/atp-wrapper/create/create-post"
 import createReport from "@/composables/atp-wrapper/create/create-report"
 import createRepost from "@/composables/atp-wrapper/create/create-repost"
@@ -10,6 +11,7 @@ import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
 import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
 import deleteList from "@/composables/atp-wrapper/delete/delete-list"
+import deleteListUser from "@/composables/atp-wrapper/delete/delete-list-user"
 import deletePost from "@/composables/atp-wrapper/delete/delete-post"
 import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
 import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
@@ -106,6 +108,7 @@ class AtpWrapper implements TIAtpWrapper {
   createFollow = createFollow
   createLike = createLike
   createList = createList
+  createListUser = createListUser
   createPost = createPost
   createReport = createReport
   createRepost = createRepost
@@ -113,6 +116,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteFollow = deleteFollow
   deleteLike = deleteLike
   deleteList = deleteList
+  deleteListUser = deleteListUser
   deletePost = deletePost
   deleteRepost = deleteRepost
   deleteSession = deleteSession

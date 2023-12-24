@@ -149,6 +149,9 @@ async function submitCallback () {
     return
   }
 
+  // マイリストに items を追加
+  if (response.list.items == null) response.list.items = []
+
   // コールバック
   if (props.callback != null) {
     props.callback(response.list)

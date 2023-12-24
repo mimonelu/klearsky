@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import Lists from "@/components/list/Lists.vue"
+import Loader from "@/components/common/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import UserBox from "@/components/app-parts/UserBox.vue"
@@ -16,12 +17,12 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  loaderDisplay: boolean
+  loaderDisplayMap: { [k: string]: boolean }
 
   // 各リストにおける対象ユーザーの存在フラグマップ
   userMap: ComputedRef<TTUserMap>
 }>({
-  loaderDisplay: false,
+  loaderDisplayMap: {},
 
   // 各リストにおける対象ユーザーの存在フラグマップ
   userMap: computed((): TTUserMap => {
@@ -40,9 +41,45 @@ function close () {
   emit("close")
 }
 
-function clicked (list: TTList) {
-  // TODO:
-  console.log(list)
+async function clicked (list: TTList) {
+  if (state.loaderDisplayMap[list.uri]) return
+  if (props.user == null) return
+
+  // 対象マイリスト
+  const myList = mainState.myList.find((myList: TTList) => {
+    return myList.uri === list.uri
+  })
+  if (myList?.items == null) return
+
+  if (state.userMap[list.uri]) {
+    // リストユーザーの削除
+    const listItemIndex = myList.items.findIndex((listItem: TTListItem) => {
+      return listItem.subject.did === props.user?.did
+    })
+    if (listItemIndex === - 1) return
+    const listItem = myList.items[listItemIndex]
+    state.loaderDisplayMap[list.uri] = true
+    const result = await mainState.atp.deleteListUser(listItem.uri)
+    state.loaderDisplayMap[list.uri] = false
+    if (result instanceof Error) {
+      // TODO:
+      return
+    }
+    myList.items.splice(listItemIndex, 1)
+  } else {
+    // リストユーザーの追加
+    state.loaderDisplayMap[list.uri] = true
+    const result = await mainState.atp.createListUser(list.uri, props.user.did)
+    state.loaderDisplayMap[list.uri] = false
+    if (result instanceof Error) {
+      // TODO:
+      return
+    }
+    myList.items.unshift({
+      uri: result,
+      subject: props.user,
+    })
+  }
 }
 </script>
 
@@ -50,7 +87,6 @@ function clicked (list: TTList) {
   <Popup
     class="list-user-management-popup"
     :hasCloseButton="true"
-    :loaderDisplay="state.loaderDisplay"
     @close="close"
   >
     <template #header>
@@ -84,6 +120,8 @@ function clicked (list: TTList) {
         >
           <SVGIcon :name="state.userMap[list.uri] ? 'check' : 'minus'" />
         </div>
+
+        <Loader v-if="state.loaderDisplayMap[list.uri] ?? false" />
       </Lists>
     </template>
   </Popup>

@@ -11,6 +11,7 @@ interface TIAtpWrapper {
   createFollow (this: TIAtpWrapper, declarationDid: string): Promise<null | string>
   createLike (this: TIAtpWrapper, uri: string, cid: string): Promise<undefined | string>
   createList (this: TIAtpWrapper, purpose: string, name: string, description?: string, avatarBlobRef?: BlobRef): Promise<string | Error>
+  createListUser (this: TIAtpWrapper, listUri: string, userDid: string): Promise<string | Error>
   createPost (this: TIAtpWrapper, params: TTCreatePostParams): Promise<Error | TTCidUri>
   createReport (this: TIAtpWrapper, reasonType: string, reason: string, did?: string, cid?: string, uri?: string): Promise<boolean>
   createRepost (this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
@@ -18,6 +19,7 @@ interface TIAtpWrapper {
   deleteFollow (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteLike (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteList (this: TIAtpWrapper, listUri: string): Promise<true | Error>
+  deleteListUser (this: TIAtpWrapper, userUri: string): Promise<true | Error>
   deletePost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteRepost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteSession (this: TIAtpWrapper): Promise<boolean>
