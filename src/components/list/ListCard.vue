@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, ref, type ComputedRef } from "vue"
+import { useRouter } from "vue-router"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import ListMenuTicker from "@/components/menu-tickers/ListMenuTicker.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+
+const router = useRouter()
 
 const emit = defineEmits<{(event: string, list?: TTList): void}>()
 
@@ -96,6 +99,13 @@ async function deleteList () {
     return
   }
   emit("deleteList", props.list)
+
+  // 削除したマイリストのリストフィードページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
+  if (props.list.creator.did === mainState.atp.session?.did &&
+      mainState.currentPath === "/home/list-feeds" &&
+      mainState.currentQuery.list === props.list.uri) {
+    await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
+  }
 }
 </script>
 
