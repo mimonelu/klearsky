@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, watch } from "vue"
+import { inject, watch } from "vue"
 import Feed from "@/components/app-parts/Feed.vue"
 import ListCard from "@/components/list/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
@@ -8,18 +8,21 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
-onMounted(() => {
-  // `await` は不要
-  if (mainState.currentList == null) {
-    // mainState.fetchList("new", 1)
-  }
-})
-
 async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
   Util.blurElement()
   mainState.listProcessing = true
   await mainState.fetchListFeeds(direction, middleCursor)
   mainState.listProcessing = false
+}
+
+// マイリストの削除
+async function deleteList (list: TTList) {
+  if (list.creator.did !== mainState.atp.session?.did) return
+  const targetIndex = mainState.myList.findIndex((myList: TTList) => {
+    return myList.uri === list.uri
+  })
+  if (targetIndex === - 1) return
+  mainState.myList.splice(targetIndex, 1)
 }
 
 // インフィニットスクロール
@@ -44,6 +47,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :list="mainState.currentList"
       :createDisplay="true"
       :unclickable="true"
+      @deleteList="deleteList"
     />
     <div
       v-else

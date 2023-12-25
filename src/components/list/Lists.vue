@@ -31,9 +31,9 @@ function fetchLists (direction: "new" | "old") {
   emit("fetch", direction)
 }
 
-function deleteList (listUri: string) {
-  const targetIndex = props.lists.findIndex((list: TTList) => {
-    return list.uri === listUri
+function deleteList (list: TTList) {
+  const targetIndex = props.lists.findIndex((myList: TTList) => {
+    return myList.uri === list.uri
   })
   if (targetIndex === - 1) return
   props.lists.splice(targetIndex, 1)
@@ -73,7 +73,7 @@ function clicked (list?: TTList) {
         :createDisplay="false"
         :unclickable="unclickable"
         @clicked="clicked"
-        @deleteList="deleteList(list.uri)"
+        @deleteList="deleteList"
       >
         <slot :list="list" />
       </ListCard>

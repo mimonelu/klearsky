@@ -95,7 +95,7 @@ async function deleteList () {
     mainState.openErrorPopup(result, "ListMenuTicker/deleteList")
     return
   }
-  emit("deleteList")
+  emit("deleteList", props.list)
 }
 </script>
 

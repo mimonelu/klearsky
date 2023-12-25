@@ -139,6 +139,10 @@ async function submitCallback () {
     return
   }
 
+  // リスト作成直後に取得を試みると稀にエラーが発生する、その対策
+  // TODO: 要検討
+  await Util.wait(500)
+
   // 作成データの取得
   // WANT: avatar を手動で構築してAPIをコールしないようにしたい
   const response: { cursor?: string; list: TTList } | Error =
