@@ -20,9 +20,15 @@ const state = reactive<{
   lists: ComputedRef<Array<TTList>>
 }>({
   lists: computed((): Array<TTList> => {
-    return props.lists.filter((list: TTList) => {
-      return !list.viewer?.muted && !list.viewer?.blocked
-    })
+    return Array.from(props.lists)
+      .filter((list: TTList) => {
+        return !list.viewer?.muted && !list.viewer?.blocked
+      })
+      .sort((a: TTList, b: TTList): number => {
+        const aTerm = a.name || a.indexedAt
+        const bTerm = b.name || b.indexedAt
+        return aTerm < bTerm ? - 1 : aTerm > bTerm ? 1 : 0
+      })
   }),
 })
 
