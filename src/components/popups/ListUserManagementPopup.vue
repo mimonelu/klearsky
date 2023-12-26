@@ -42,6 +42,7 @@ function close () {
 }
 
 async function clicked (list: TTList) {
+  console.log(list)
   if (state.loaderDisplayMap[list.uri]) return
   if (props.user == null) return
 
@@ -110,7 +111,6 @@ async function clicked (list: TTList) {
         :lists="mainState.myList"
         :loaderDisplay="false"
         :isCompact="true"
-        :unclickable="true"
         @clicked="clicked"
       >
         <!-- リストユーザーステータスアイコン -->

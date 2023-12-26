@@ -541,6 +541,7 @@ function onActivateAccountMaskToggle () {
           button {
             font-size: 0.75rem;
             margin-left: auto;
+            white-space: nowrap;
           }
         }
       }

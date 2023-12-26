@@ -11,7 +11,6 @@ const props = defineProps<{
   lists: Array<TTList>
   loaderDisplay: boolean
   isCompact: boolean
-  unclickable: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -77,9 +76,11 @@ function clicked (list?: TTList) {
         :list="list"
         :isCompact="isCompact"
         :createDisplay="false"
-        :unclickable="unclickable"
-        @clicked="clicked"
+        @click="clicked(list)"
+        @close="$emit('close')"
         @deleteList="deleteList"
+        @onActivateMention="$emit('onActivateMention')"
+        @onActivateHashTag="$emit('onActivateHashTag')"
       >
         <slot :list="list" />
       </ListCard>

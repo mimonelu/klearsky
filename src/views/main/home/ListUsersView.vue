@@ -46,7 +46,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       v-if="mainState.currentList"
       :list="mainState.currentList"
       :createDisplay="true"
-      :unclickable="true"
       @deleteList="deleteList"
     />
     <div

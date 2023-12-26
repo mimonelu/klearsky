@@ -19,10 +19,6 @@ function openListEditPopup () {
   })
 }
 
-function onClicked () {
-  close()
-}
-
 function addList (list: TTList) {
   mainState.myList.unshift(list)
 }
@@ -41,7 +37,7 @@ function addList (list: TTList) {
           class="button my-list-popup__create-button"
           @click.prevent.stop="openListEditPopup"
         >
-          <span>{{ $t("listCreate") }}</span>
+          <span>{{ $t("add") }}</span>
         </button>
 
         <SVGIcon name="list" />
@@ -54,8 +50,9 @@ function addList (list: TTList) {
         :lists="mainState.myList"
         :loaderDisplay="false"
         :isCompact="false"
-        :unclickable="false"
-        @clicked="onClicked"
+        @close="close"
+        @onActivateMention="close"
+        @onActivateHashTag="close"
       />
     </template>
   </Popup>

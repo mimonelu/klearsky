@@ -8,7 +8,8 @@
     --fg-color-025: var(--accent-color-0375);
     --fg-color-05: var(--accent-color-075);
   }
-  &[disabled] {
+  &:disabled,
+  &[disabled="true"] {
     border-style: none;
     background-image: repeating-linear-gradient(
       -45deg,

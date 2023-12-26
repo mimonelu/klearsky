@@ -15,7 +15,6 @@ const props = defineProps<{
   list: TTList
   isCompact?: boolean
   createDisplay?: boolean
-  unclickable?: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -28,14 +27,15 @@ const state = reactive<{
   indexedAt: ComputedRef<string>
   purpose: ComputedRef<string>
   isOwn: ComputedRef<boolean>
-  usersButtonLabel: ComputedRef<string>
+  isListFeedsPage: boolean
+  isListUsersPage: boolean
   menuTickerDisplay: boolean
   menuTickerContainer: ComputedRef<undefined | HTMLElement>
   loaderDisplay: boolean
 }>({
   routerLinkToListFeeds: computed(() => {
     return {
-      path: "/home/list-feeds", // TODO: purpose で振り分けること
+      path: "/home/list-feeds",
       query: {
         list: props.list.uri,
         displayName: props.list.name,
@@ -62,11 +62,10 @@ const state = reactive<{
   isOwn: computed((): boolean => {
     return props.list.creator.did === mainState.atp.session?.did
   }),
-  usersButtonLabel: computed((): string => {
-    return props.list.items == null
-      ? $t("listUsers")
-      : `${props.list.items.length} ${$t("users")}`
-  }),
+  isListFeedsPage: mainState.currentPath === "/home/list-feeds"
+    && mainState.currentQuery.list === props.list.uri,
+  isListUsersPage: mainState.currentPath === "/home/list-users"
+    && mainState.currentQuery.list === props.list.uri,
   menuTickerDisplay: false,
   menuTickerContainer: computed((): undefined | HTMLElement => {
     return menuTickerContainer.value?.closest(".popup-body") ?? undefined
@@ -75,15 +74,6 @@ const state = reactive<{
 })
 
 const menuTickerContainer = ref()
-
-function onClick () {
-  if (props.isCompact) {
-    emit("clicked", props.list)
-    return
-  }
-  if (props.unclickable) return
-  emit("clicked", props.list)
-}
 
 function openListEditPopup () {
   mainState.openListEditPopup({
@@ -130,13 +120,10 @@ async function deleteList () {
 </script>
 
 <template>
-  <component
-    v-bind="unclickable ? null : { to: state.routerLinkToListFeeds }"
-    :is="unclickable || state.purpose === 'modList' ? 'div' : 'RouterLink'"
+  <div
     class="list-card"
     :data-is-compact="isCompact"
     :data-purpose="state.purpose"
-    @click.stop="onClick"
   >
     <slot :list="list" />
     <div class="list-card__header">
@@ -147,7 +134,15 @@ async function deleteList () {
       />
 
       <!-- リスト名 -->
-      <div class="list-card__name">{{ list.name }}</div>
+      <div class="list-card__name">
+        <span class="list-card__name__label">{{ list.name }}</span>
+
+        <!-- リストユーザー数 -->
+        <span
+          v-if="list.items != null"
+          class="list-card__name__number"
+        >({{ list.items.length }})</span>
+      </div>
 
       <!-- リスト種別 -->
       <div
@@ -207,7 +202,7 @@ async function deleteList () {
     >
       <!-- リスト作成者リンク -->
       <RouterLink
-        v-if="createDisplay"
+        v-if="!state.isOwn"
         class="list-card__creator"
         :to="{ name: 'profile-list', query: { account: list.creator.did } }"
         @click.prevent.stop
@@ -218,14 +213,26 @@ async function deleteList () {
       </RouterLink>
       <div v-else />
 
+      <!-- リストフィードボタン -->
+      <RouterLink
+        :class="`${state.isListFeedsPage ? 'button--plane' : 'button--bordered'} list-card__feeds-button`"
+        :disabled="state.isListFeedsPage"
+        :to="state.routerLinkToListFeeds"
+        @click.prevent.stop="$emit('close')"
+      >
+        <SVGIcon name="post" />
+        <span>{{ $t("feeds") }}</span>
+      </RouterLink>
+
       <!-- リストユーザー一覧ボタン -->
       <RouterLink
-        class="button--bordered list-card__users-button"
+        :class="`${state.isListUsersPage ? 'button--plane' : 'button--bordered'} list-card__users-button`"
+        :disabled="state.isListUsersPage"
         :to="state.routerLinkToListUsers"
-        @click.prevent.stop
+        @click.prevent.stop="$emit('close')"
       >
         <SVGIcon name="people" />
-        <span>{{ state.usersButtonLabel }}</span>
+        <span>{{ $t("users") }}</span>
       </RouterLink>
 
       <!-- リスト編集ボタン -->
@@ -234,13 +241,12 @@ async function deleteList () {
         class="button list-card__edit-button"
         @click.prevent.stop="openListEditPopup"
       >
-        <SVGIcon name="edit" />
         <span>{{ $t("listEditShort") }}</span>
       </button>
     </div>
 
     <Loader v-if="state.loaderDisplay" />
-  </component>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -291,9 +297,19 @@ async function deleteList () {
   // リスト名
   &__name {
     grid-area: n;
+    display: inline;
     font-weight: bold;
     line-height: var(--line-height);
-    word-break: break-word;
+    word-break: break-all;
+
+    &__label {
+      margin-right: 0.5em;
+    }
+
+    // リストユーザー数
+    &__number {
+      color: var(--fg-color-05);
+    }
   }
 
   // リスト種別
@@ -386,7 +402,12 @@ async function deleteList () {
   // ボタンコンテナ
   &__button-container {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr max-content max-content max-content;
+    justify-content: flex-end;
+
+    & > *:not(:last-child) {
+      margin-right: 0.5em;
+    }
   }
 
   // リスト作成者リンク
@@ -431,12 +452,17 @@ async function deleteList () {
     }
   }
 
+  // リストフィードボタン
   // リストユーザー一覧ボタン
   // リスト編集ボタン
+  &__feeds-button,
   &__users-button,
   &__edit-button {
     font-size: 0.875em;
-    margin-left: 0.5em;
+
+    & > span {
+      white-space: nowrap;
+    }
   }
 }
 </style>

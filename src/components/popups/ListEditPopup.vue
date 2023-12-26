@@ -206,7 +206,7 @@ async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
     <template #header>
       <h2>
         <SVGIcon name="list" />
-        <span>{{ $t(mode === "create" ? "listCreate" : "listEdit") }}</span>
+        <span>{{ $t(mode === "create" ? "listAdd" : "listEdit") }}</span>
       </h2>
     </template>
     <template #body>

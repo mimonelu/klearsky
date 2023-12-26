@@ -26,7 +26,8 @@
     word-break: break-word;
   }
 
-  &[disabled] {
+  &:disabled,
+  &[disabled="true"] {
     opacity: 0.5;
     pointer-events: none;
   }

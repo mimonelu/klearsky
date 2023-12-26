@@ -53,7 +53,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         @click.prevent="openListEditPopup"
       >
         <SVGIcon name="plus" />
-        <span>{{ $t("listCreate") }}</span>
+        <span>{{ $t("listAdd") }}</span>
       </button>
     </div>
 
@@ -62,7 +62,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :lists="state.lists"
       :loaderDisplay="!mainState.isMyProfile()"
       :isCompact="false"
-      :unclickable="false"
       @fetch="fetchLists"
     />
   </div>

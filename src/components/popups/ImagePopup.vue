@@ -257,7 +257,8 @@ function close () {
   position: absolute;
   width: 4rem;
   min-height: 4rem;
-  &[disabled] {
+  &:disabled,
+  &[disabled="true"] {
     opacity: 0.25;
   }
   [data-mode="true"] & {
