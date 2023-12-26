@@ -360,12 +360,14 @@ async function processPage (pageName?: null | string) {
       }
       case "list-feeds-home": {
         await updateCurrentList()
-        await state.fetchCurrentListFeeds("new")
+        if (state.currentListFeeds.length === 0)
+          await state.fetchCurrentListFeeds("new")
         break
       }
       case "list-users-home": {
         await updateCurrentList()
-        await state.fetchCurrentListItems("new")
+        if (state.currentListItems.length === 0)
+          await state.fetchCurrentListItems("new")
         break
       }
       case "post": {
@@ -391,14 +393,13 @@ async function processPage (pageName?: null | string) {
 async function updateCurrentList () {
   const listUri: undefined | string = state.currentQuery.list
   if (listUri == null) return
+  if (state.currentList?.uri === listUri) return
 
   // リストデータのリセット
-  if (state.currentList?.uri !== listUri) {
-    state.currentListFeeds.splice(0)
-    state.currentListFeedsCursor = undefined
-    state.currentListItems.splice(0)
-    state.currentListItemsCursor = undefined
-  }
+  state.currentListFeeds.splice(0)
+  state.currentListFeedsCursor = undefined
+  state.currentListItems.splice(0)
+  state.currentListItemsCursor = undefined
 
   // 現在のリストを取得
   // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
