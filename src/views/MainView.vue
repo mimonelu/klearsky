@@ -157,6 +157,9 @@ function updatePageTitle () {
   else if (state.currentPath === "/home/list-feeds")
     title += ` - ${state.currentQuery.displayName ?? $t("listFeeds")}`
 
+  else if (state.currentPath === "/home/list-users")
+    title += ` - ${state.currentQuery.displayName ?? $t("listUsers")}`
+
   else if (state.currentPath.startsWith("/post") &&
       state.currentPosts != null &&
       state.currentPosts.length > 0)
@@ -356,22 +359,13 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "list-feeds-home": {
-        // 現在のリストを取得
-        // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
-        state.currentList = undefined
-        state.currentList = state.myList.find((list: TTList) => {
-          return list.uri === state.currentQuery.list
-        })
-        if (state.currentList == null) {
-          state.currentList = state.currentAuthorLists.find((list: TTList) => {
-            return list.uri === state.currentQuery.list
-          })
-          if (state.currentList == null) {
-            state.fetchList("new", 1)
-          }
-        }
-
-        await state.fetchListFeeds("new")
+        await updateCurrentList()
+        await state.fetchCurrentListFeeds("new")
+        break
+      }
+      case "list-users-home": {
+        await updateCurrentList()
+        await state.fetchCurrentListItems("new")
         break
       }
       case "post": {
@@ -391,6 +385,34 @@ async function processPage (pageName?: null | string) {
       pageName?.startsWith("search-post")) {
     //　TODO: "search-post"　特有の問題のために setTimeout している。使わずに対処すること
     setTimeout(updatePageTitle, 1)
+  }
+}
+
+async function updateCurrentList () {
+  const listUri: undefined | string = state.currentQuery.list
+  if (listUri == null) return
+
+  // リストデータのリセット
+  if (state.currentList?.uri !== listUri) {
+    state.currentListFeeds.splice(0)
+    state.currentListFeedsCursor = undefined
+    state.currentListItems.splice(0)
+    state.currentListItemsCursor = undefined
+  }
+
+  // 現在のリストを取得
+  // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
+  state.currentList = undefined
+  state.currentList = state.myList.find((list: TTList) => {
+    return list.uri === listUri
+  })
+  if (state.currentList == null) {
+    state.currentList = state.currentAuthorLists.find((list: TTList) => {
+      return list.uri === listUri
+    })
+    if (state.currentList == null) {
+      await state.fetchCurrentList(listUri)
+    }
   }
 }
 

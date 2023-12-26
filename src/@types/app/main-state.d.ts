@@ -194,9 +194,9 @@ type MainState = {
   currentListItemsCursor?: string
   currentListFeeds: Array<TTFeed>
   currentListFeedsCursor?: string
-  currentListFeedsUri?: string
-  fetchList: (direction: "old" | "new", limit = 1) => Promise<boolean>
-  fetchListFeeds: (direction: "old" | "new", middleCursor?: string) => Promise<boolean>
+  fetchCurrentList: (listUri: string) => Promise<boolean>
+  fetchCurrentListItems: (direction: "old" | "new") => Promise<boolean>
+  fetchCurrentListFeeds: (direction: "old" | "new", middleCursor?: string) => Promise<boolean>
 
   // リスト - マイリスト
 

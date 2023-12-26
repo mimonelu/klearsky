@@ -18,20 +18,33 @@ const props = defineProps<{
   unclickable?: boolean
 }>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  routerLinkTo: ComputedRef<any>
+  routerLinkToListFeeds: ComputedRef<any>
+  routerLinkToListUsers: ComputedRef<any>
   indexedAt: ComputedRef<string>
   purpose: ComputedRef<string>
   isOwn: ComputedRef<boolean>
+  usersButtonLabel: ComputedRef<string>
   menuTickerDisplay: boolean
   menuTickerContainer: ComputedRef<undefined | HTMLElement>
   loaderDisplay: boolean
 }>({
-  routerLinkTo: computed(() => {
+  routerLinkToListFeeds: computed(() => {
     return {
       path: "/home/list-feeds", // TODO: purpose で振り分けること
+      query: {
+        list: props.list.uri,
+        displayName: props.list.name,
+      },
+    }
+  }),
+  routerLinkToListUsers: computed(() => {
+    return {
+      path: "/home/list-users",
       query: {
         list: props.list.uri,
         displayName: props.list.name,
@@ -49,6 +62,11 @@ const state = reactive<{
   isOwn: computed((): boolean => {
     return props.list.creator.did === mainState.atp.session?.did
   }),
+  usersButtonLabel: computed((): string => {
+    return props.list.items == null
+      ? $t("listUsers")
+      : `${props.list.items.length} ${$t("users")}`
+  }),
   menuTickerDisplay: false,
   menuTickerContainer: computed((): undefined | HTMLElement => {
     return menuTickerContainer.value?.closest(".popup-body") ?? undefined
@@ -64,7 +82,6 @@ function onClick () {
     return
   }
   if (props.unclickable) return
-  mainState.currentList = props.list
   emit("clicked", props.list)
 }
 
@@ -100,9 +117,12 @@ async function deleteList () {
   }
   emit("deleteList", props.list)
 
-  // 削除したマイリストのリストフィードページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
+  // 削除したマイリストのリストフィード／ユーザーページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
   if (props.list.creator.did === mainState.atp.session?.did &&
-      mainState.currentPath === "/home/list-feeds" &&
+      (
+        mainState.currentPath === "/home/list-feeds" ||
+        mainState.currentPath === "/home/list-users"
+      ) &&
       mainState.currentQuery.list === props.list.uri) {
     await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
   }
@@ -111,7 +131,7 @@ async function deleteList () {
 
 <template>
   <component
-    v-bind="unclickable ? null : { to: state.routerLinkTo }"
+    v-bind="unclickable ? null : { to: state.routerLinkToListFeeds }"
     :is="unclickable || state.purpose === 'modList' ? 'div' : 'RouterLink'"
     class="list-card"
     :data-is-compact="isCompact"
@@ -199,14 +219,14 @@ async function deleteList () {
       <div v-else />
 
       <!-- リストユーザー一覧ボタン -->
-      <button
+      <RouterLink
         class="button--bordered list-card__users-button"
+        :to="state.routerLinkToListUsers"
         @click.prevent.stop
       >
         <SVGIcon name="people" />
-        <span v-if="list.items == null">{{ $t("listUsers") }}</span>
-        <span v-else>{{ list.items.length }} {{ $t("users") }}</span>
-      </button>
+        <span>{{ state.usersButtonLabel }}</span>
+      </RouterLink>
 
       <!-- リスト編集ボタン -->
       <button

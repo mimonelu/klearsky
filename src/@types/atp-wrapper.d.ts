@@ -43,7 +43,8 @@ interface TIAtpWrapper {
   fetchInviteCodes (this: TIAtpWrapper): Promise<Error | TTInviteCode[]>
   fetchLabels (this: TIAtpWrapper, uriPatterns: Array<string>, ): Promise<undefined | Array<TTLabel>>
   fetchLikeUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
-  fetchList (this: TIAtpWrapper, currentListItems: Array<TTListItem>, list: string, limit?: number, cursor?: string): Promise<{ cursor?: string; list: TTList } | Error>
+  fetchList (this: TIAtpWrapper, list: string): Promise<TTList | Error>
+  fetchListItems (this: TIAtpWrapper, currentListItems: Array<TTListItem>, list: string, limit?: number, cursor?: string): Promise<undefined | string | Error>
   fetchLists (this: TIAtpWrapper, currentLists: Array<TTList>, actor: string, limit?: number, cursor?: string): Promise<undefined | string | Error>
   fetchListFeed (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, list: string, limit?: number, cursor?: string, middle?: boolean): Promise<Error | undefined | string>
   fetchLogAudit: (this: TIAtpWrapper, did: string) => Promise<undefined | any>

@@ -145,8 +145,8 @@ async function submitCallback () {
 
   // 作成データの取得
   // WANT: avatar を手動で構築してAPIをコールしないようにしたい
-  const response: { cursor?: string; list: TTList } | Error =
-    await mainState.atp.fetchList([], props.list?.uri ?? result as string, 1)
+  const response: TTList | Error =
+    await mainState.atp.fetchList(props.list?.uri ?? result as string)
   state.loaderDisplay = false
   if (response instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", "ListEditPopup/fetchList")
@@ -154,11 +154,11 @@ async function submitCallback () {
   }
 
   // マイリストに items を追加
-  if (response.list.items == null) response.list.items = []
+  if (response.items == null) response.items = []
 
   // コールバック
   if (props.callback != null) {
-    props.callback(response.list)
+    props.callback(response)
   }
 
   close()

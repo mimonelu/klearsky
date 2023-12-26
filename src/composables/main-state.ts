@@ -202,9 +202,9 @@ state.currentListItems = []
 state.currentListItemsCursor = undefined
 state.currentListFeeds = []
 state.currentListFeedsCursor = undefined
-state.currentListFeedsUri = undefined
-state.fetchList = fetchList
-state.fetchListFeeds = fetchListFeeds
+state.fetchCurrentList = fetchCurrentList
+state.fetchCurrentListItems = fetchCurrentListItems
+state.fetchCurrentListFeeds = fetchCurrentListFeeds
 
 // リスト - マイリスト
 
@@ -1157,7 +1157,7 @@ function fetchMyLists () {
       let cursor: undefined | string
       list.items = []
       for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS_ITERATION; i ++) {
-        const result = await state.atp.fetchList(
+        const result = await state.atp.fetchListItems(
           list.items,
           list.uri,
           CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS,
@@ -1167,23 +1167,16 @@ function fetchMyLists () {
           // TODO:
           break
         }
-        if (result.cursor == null) break
-        cursor = result.cursor
+        if (result == null) break
+        cursor = result
       }
     }
   }, 0)
 }
 
-async function fetchList (direction: "old" | "new", limit = 1): Promise<boolean> {
-  const listUri: undefined | string = state.currentQuery.list
-  if (listUri == null) return false
-  const response: { cursor?: string; list: TTList } | Error =
-    await state.atp.fetchList(
-      state.currentListItems,
-      listUri,
-      limit ?? CONSTS.LIMIT_OF_FETCH_LIST_ITEMS,
-      direction === "old" ? state.currentListItemsCursor : undefined
-    )
+async function fetchCurrentList (listUri: string): Promise<boolean> {
+  const response: TTList | Error =
+    await state.atp.fetchList(listUri)
   if (response instanceof Error) {
     state.openErrorPopup(
       "errorApiFailed",
@@ -1191,24 +1184,38 @@ async function fetchList (direction: "old" | "new", limit = 1): Promise<boolean>
     )
     return false
   }
-  if (response.cursor != null) {
-    state.currentPopularFeedGeneratorsCursor = response.cursor
-  }
-  state.currentList = response.list
+  state.currentList = response
   return true
 }
 
-async function fetchListFeeds (direction: "old" | "new", middleCursor?: string): Promise<boolean> {
-  const listUri: undefined | string = state.currentQuery.list
-  if (listUri == null) return false
-  if (state.currentListFeedsUri !== listUri) {
-    state.currentListFeeds.splice(0)
-    state.currentListFeedsCursor = undefined
+async function fetchCurrentListItems (direction: "old" | "new"): Promise<boolean> {
+  if (state.currentList == null) return false
+  const cursor: undefined | string | Error =
+    await state.atp.fetchListItems(
+      state.currentListItems,
+      state.currentList.uri,
+      CONSTS.LIMIT_OF_FETCH_LIST_ITEMS,
+      direction === "old" ? state.currentListItemsCursor : undefined
+    )
+  if (cursor instanceof Error) {
+    state.openErrorPopup(
+      "errorApiFailed",
+      "main-state/fetchListItems"
+    )
+    return false
   }
+  if (cursor != null) {
+    state.currentListItemsCursor = cursor
+  }
+  return true
+}
+
+async function fetchCurrentListFeeds (direction: "old" | "new", middleCursor?: string): Promise<boolean> {
+  if (state.currentList == null) return false
   const cursor: undefined | string | Error =
     await state.atp.fetchListFeed(
       state.currentListFeeds,
-      listUri,
+      state.currentList.uri,
       CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
       direction === "old" ? middleCursor ?? state.currentListFeedsCursor : undefined,
       middleCursor != null
@@ -1223,7 +1230,6 @@ async function fetchListFeeds (direction: "old" | "new", middleCursor?: string):
   if (cursor != null) {
     state.currentListFeedsCursor = cursor
   }
-  state.currentListFeedsUri = listUri
   return true
 }
 

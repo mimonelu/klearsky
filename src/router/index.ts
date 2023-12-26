@@ -12,6 +12,7 @@ import TimelineView from "@/views/main/home/TimelineView.vue"
 import MyFeedsView from "@/views/main/home/MyFeedsView.vue"
 import FeedsView from "@/views/main/home/FeedsView.vue"
 import ListFeedsView from "@/views/main/home/ListFeedsView.vue"
+import ListUsersView from "@/views/main/home/ListUsersView.vue"
 import GloballineView from "@/views/main/home/GloballineView.vue"
 
 // Main - Profile
@@ -88,6 +89,12 @@ const router = createRouter({
               name: "list-feeds-home",
               meta: { label: "listFeeds" },
               component: ListFeedsView,
+            },
+            {
+              path: "list-users",
+              name: "list-users-home",
+              meta: { label: "listUsers" },
+              component: ListUsersView,
             },
             {
               path: "globalline",

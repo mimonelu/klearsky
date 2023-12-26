@@ -35,6 +35,7 @@ import fetchInviteCodes from "@/composables/atp-wrapper/fetch/fetch-invite-codes
 import fetchLabels from "@/composables/atp-wrapper/fetch/fetch-labels"
 import fetchLikeUsers from "@/composables/atp-wrapper/fetch/fetch-like-users"
 import fetchList from "@/composables/atp-wrapper/fetch/fetch-list"
+import fetchListItems from "@/composables/atp-wrapper/fetch/fetch-list-items"
 import fetchLists from "@/composables/atp-wrapper/fetch/fetch-lists"
 import fetchListFeed from "@/composables/atp-wrapper/fetch/fetch-list-feed"
 import fetchLogAudit from "@/composables/atp-wrapper/fetch/fetch-log-audit"
@@ -140,6 +141,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchLabels = fetchLabels
   fetchLikeUsers = fetchLikeUsers
   fetchList = fetchList
+  fetchListItems = fetchListItems
   fetchLists = fetchLists
   fetchListFeed = fetchListFeed
   fetchLogAudit = fetchLogAudit

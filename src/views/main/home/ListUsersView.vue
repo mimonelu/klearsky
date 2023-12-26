@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import { inject, watch } from "vue"
-import Feed from "@/components/app-parts/Feed.vue"
 import ListCard from "@/components/list/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
-async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
+async function fetchListItems (direction: "new" | "old") {
   Util.blurElement()
   mainState.listProcessing = true
-  await mainState.fetchCurrentListFeeds(direction, middleCursor)
+  await mainState.fetchCurrentListItems(direction)
   mainState.listProcessing = false
 }
 
@@ -27,12 +27,12 @@ async function deleteList (list: TTList) {
 
 // インフィニットスクロール
 watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchFeeds("old")
+  if (value) fetchListItems("old")
 })
 </script>
 
 <template>
-  <div class="list-feeds">
+  <div class="list-users">
     <Portal to="home-view-header-top">
       <!-- マイリストポップアップトリガー -->
       <button
@@ -51,42 +51,32 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     />
     <div
       v-else
-      class="list-feeds__list-card-skeleton"
+      class="list-users__list-card-skeleton"
     />
     <LoadButton
       direction="new"
       :processing="mainState.listProcessing"
-      @activate="fetchFeeds('new')"
+      @activate="fetchListItems('new')"
     />
-    <div class="feeds">
-      <template
-        v-for="feed of mainState.currentListFeeds"
-        :key="feed.__id"
-      >
-        <Feed
-          :feed="feed"
-          :data-is-middle="feed.__cursor != null"
-        />
-
-        <!-- 抜け漏れ取得ボタン -->
-        <LoadButton
-          v-if="feed.__cursor != null"
-          direction="middle"
-          :processing="mainState.listProcessing"
-          @activate="fetchFeeds('old', feed.__cursor)"
-        />
-      </template>
+    <div class="list-users__list-item-container">
+      <UserBox
+        v-for="listItem of mainState.currentListItems"
+        :key="listItem.uri"
+        :user="listItem.subject"
+        :contentWarningDisabled="true"
+        :menuDisplay="true"
+      />
     </div>
     <LoadButton
       direction="old"
       :processing="mainState.listProcessing"
-      @activate="fetchFeeds('old')"
+      @activate="fetchListItems('old')"
     />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.list-feeds {
+.list-users {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -95,25 +85,22 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     border-bottom: 1px solid var(--fg-color-025);
     min-height: 8rem;
   }
+
+  &__list-item-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
 }
 
 .list-card {
   border-bottom: 1px solid var(--fg-color-025);
 }
 
-.feeds {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.feed {
-  display: flex;
-  flex-direction: column;
-  &:not(:empty):not(:last-child)::after {
+.user-box {
+  padding: 1em;
+  &:not(:last-child) {
     border-bottom: 1px solid var(--fg-color-0125);
-    content: "";
-    display: block;
   }
 }
 </style>
