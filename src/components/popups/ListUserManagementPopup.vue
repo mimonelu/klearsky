@@ -152,10 +152,14 @@ async function clicked (list: TTList) {
       }
     }
 
+    .user-box {
+      pointer-events: none;
+    }
+
     .list-card {
       cursor: pointer;
       flex-direction: row;
-      align-items: flex-start;
+      align-items: center;
       grid-gap: 1em;
       &:first-child {
         border-top: 1px solid var(--fg-color-0125);

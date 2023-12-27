@@ -143,32 +143,32 @@ function endAwait () {
   >
     <slot :list="list" />
 
-    <!-- リストヘッダー -->
-    <div
-      v-if="state.isMuted || state.isBlocked"
-      class="list-card__header"
-    >
-      <!-- リストミュートラベル-->
-      <div
-        v-if="state.isMuted"
-        class="list-card__muted-label"
-      >
-        <SVGIcon name="volumeOff" />
-        <span>{{ $t("listMuted") }}</span>
-      </div>
-
-      <!-- リストブロックラベル-->
-      <div
-        v-if="state.isBlocked"
-        class="list-card__blocked-label"
-      >
-        <SVGIcon name="personOff" />
-        <span>{{ $t("listBlocked") }}</span>
-      </div>
-    </div>
-
     <!-- リスト詳細 -->
     <div class="list-card__detail">
+      <!-- リストヘッダー -->
+      <div
+        v-if="state.isMuted || state.isBlocked"
+        class="list-card__header"
+      >
+        <!-- リストミュートラベル-->
+        <div
+          v-if="state.isMuted"
+          class="list-card__muted-label"
+        >
+          <SVGIcon name="volumeOff" />
+          <span>{{ $t("listMuted") }}</span>
+        </div>
+
+        <!-- リストブロックラベル-->
+        <div
+          v-if="state.isBlocked"
+          class="list-card__blocked-label"
+        >
+          <SVGIcon name="personOff" />
+          <span>{{ $t("listBlocked") }}</span>
+        </div>
+      </div>
+
       <!-- リスト画像 -->
       <LazyImage
         class="list-card__avatar"
@@ -307,10 +307,33 @@ function endAwait () {
     background-color: var(--fg-color-00625);
   }
 
+  // リスト詳細
+  &__detail {
+    display: grid;
+    grid-gap: 0 0.75em;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas:
+      "h h h h"
+      "a n n m"
+      "a p i m";
+    align-items: flex-start;
+  }
+
+  // リスト詳細 - コンパクトモードのリストメニュー非表示に関わるレイアウト調整
+  &[data-is-compact="true"] &__detail {
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas:
+      "h h h"
+      "a n n"
+      "a p i";
+  }
+
   // リストヘッダー
   &__header {
+    grid-area: h;
     display: flex;
     grid-gap: 0.5em;
+    margin-bottom: 0.25em;
   }
 
   // リストミュートラベル
@@ -335,25 +358,6 @@ function endAwait () {
     }
   }
 
-  // リスト詳細
-  &__detail {
-    display: grid;
-    grid-gap: 0.25em 0.75em;
-    grid-template-columns: auto auto 1fr auto;
-    grid-template-areas:
-      "a n n m"
-      "a p i m";
-    align-items: flex-start;
-  }
-
-  // リスト詳細 - コンパクトモードのリストメニュー非表示に関わるレイアウト調整
-  &[data-is-compact="true"] &__detail {
-    grid-template-columns: auto auto 1fr;
-    grid-template-areas:
-      "a n n"
-      "a p i";
-  }
-
   // リスト画像
   &__avatar {
     grid-area: a;
@@ -372,6 +376,7 @@ function endAwait () {
     display: inline;
     font-weight: bold;
     line-height: var(--line-height);
+    margin-bottom: 0.25em;
     word-break: break-all;
 
     &__label {
