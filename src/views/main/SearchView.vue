@@ -41,7 +41,7 @@ const state = reactive<{
           class="tab__button"
           :to="`/search/user${state.query}`"
         >
-          <span>{{ $t("accounts") }}</span>
+          <span>{{ $t("users") }}</span>
         </RouterLink>
       </div>
       <div class="search-view__form">
