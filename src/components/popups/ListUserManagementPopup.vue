@@ -19,16 +19,26 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   loaderDisplayMap: { [k: string]: boolean }
 
+  // マイリストにおける自分が作成したリストの配列
+  lists: ComputedRef<Array<TTList>>
+
   // 各リストにおける対象ユーザーの存在フラグマップ
   userMap: ComputedRef<TTUserMap>
 }>({
   loaderDisplayMap: {},
 
+  // マイリストにおける自分が作成したリストの配列
+  lists: computed((): Array<TTList> => {
+    return mainState.myList.filter((list: TTList) => {
+      return list.creator.did === mainState.atp.session?.did
+    })
+  }),
+
   // 各リストにおける対象ユーザーの存在フラグマップ
   userMap: computed((): TTUserMap => {
     if (props.user == null) return {}
     const map: TTUserMap = {}
-    mainState.myList.forEach((list: TTList) => {
+    state.lists.forEach((list: TTList) => {
       map[list.uri] = (list.items?.findIndex((listItem: TTListItem) => {
         return listItem.subject.did === props.user?.did
       }) ?? - 1) !== - 1
@@ -46,7 +56,7 @@ async function clicked (list: TTList) {
   if (props.user == null) return
 
   // 対象マイリスト
-  const myList = mainState.myList.find((myList: TTList) => {
+  const myList = state.lists.find((myList: TTList) => {
     return myList.uri === list.uri
   })
   if (myList?.items == null) return
@@ -120,7 +130,7 @@ async function clicked (list: TTList) {
       <!-- リスト一覧 -->
       <Lists
         v-slot="{ list }"
-        :lists="mainState.myList"
+        :lists="state.lists"
         :loaderDisplay="false"
         :isCompact="true"
         @clicked="clicked"
@@ -159,7 +169,7 @@ async function clicked (list: TTList) {
     .list-card {
       cursor: pointer;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-end;
       grid-gap: 1em;
       &:first-child {
         border-top: 1px solid var(--fg-color-0125);
