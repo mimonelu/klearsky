@@ -427,6 +427,7 @@
   "listName": "名前",
   "listDescription": "説明",
   "listUserManagement": "リストで管理",
+  "listUserManagementDetail": "リストユーザーの追加／削除",
   "myList": "マイリスト",
 
   "showTimeFeeds": "タイムフィードで見る",

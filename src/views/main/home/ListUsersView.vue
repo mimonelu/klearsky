@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, watch } from "vue"
+import { computed, inject, reactive, watch, type ComputedRef } from "vue"
 import ListCard from "@/components/list/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -7,6 +7,14 @@ import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  isOwn: ComputedRef<boolean>
+}>({
+  isOwn: computed((): boolean => {
+    return mainState.currentList?.creator.did === mainState.atp.session?.did
+  }),
+})
 
 async function fetchListItems (direction: "new" | "old") {
   Util.blurElement()
@@ -23,6 +31,10 @@ async function deleteList (list: TTList) {
   })
   if (targetIndex === - 1) return
   mainState.myList.splice(targetIndex, 1)
+}
+
+function openListUserManagementPopup (user: TTUser) {
+  mainState.openListUserManagementPopup({ user })
 }
 
 // インフィニットスクロール
@@ -64,7 +76,21 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         :user="listItem.subject"
         :contentWarningDisabled="true"
         :menuDisplay="true"
-      />
+      >
+        <template
+          v-if="state.isOwn"
+          #bottom
+        >
+          <!-- リスト管理ボタン -->
+          <button
+            class="button list-users__manage-button"
+            @click.prevent="openListUserManagementPopup(listItem.subject)"
+          >
+            <SVGIcon name="list" />
+            <span>{{ $t("listUserManagement") }}</span>
+          </button>
+        </template>
+      </UserBox>
     </div>
     <LoadButton
       direction="old"
@@ -89,6 +115,10 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+  }
+
+  &__manage-button {
+    font-size: 0.875rem;
   }
 }
 

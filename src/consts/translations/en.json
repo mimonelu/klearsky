@@ -427,6 +427,7 @@
   "listName": "Name",
   "listDescription": "Description",
   "listUserManagement": "Manage by list",
+  "listUserManagementDetail": "Add/delete list user",
   "myList": "My List",
 
   "showTimeFeeds": "Show in timefeed",

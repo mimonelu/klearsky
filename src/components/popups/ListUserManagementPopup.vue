@@ -42,7 +42,6 @@ function close () {
 }
 
 async function clicked (list: TTList) {
-  console.log(list)
   if (state.loaderDisplayMap[list.uri]) return
   if (props.user == null) return
 
@@ -53,7 +52,7 @@ async function clicked (list: TTList) {
   if (myList?.items == null) return
 
   if (state.userMap[list.uri]) {
-    // リストユーザーの削除
+    // リストユーザーをマイリストから削除
     const listItemIndex = myList.items.findIndex((listItem: TTListItem) => {
       return listItem.subject.did === props.user?.did
     })
@@ -67,8 +66,16 @@ async function clicked (list: TTList) {
       return
     }
     myList.items.splice(listItemIndex, 1)
+
+    // リストユーザーを現在のリストから削除
+    if (mainState.currentList?.uri !== list.uri) return
+    const currentListItemIndex = mainState.currentListItems.findIndex((listItem: TTListItem) => {
+      return listItem.subject.did === props.user?.did
+    })
+    if (currentListItemIndex === - 1) return
+    mainState.currentListItems.splice(currentListItemIndex, 1)
   } else {
-    // リストユーザーの追加
+    // リストユーザーをマイリストに追加
     state.loaderDisplayMap[list.uri] = true
     const result = await mainState.atp.createListUser(list.uri, props.user.did)
     state.loaderDisplayMap[list.uri] = false
@@ -76,10 +83,15 @@ async function clicked (list: TTList) {
       // TODO:
       return
     }
-    myList.items.unshift({
+    const newListItem: TTListItem = {
       uri: result,
       subject: props.user,
-    })
+    }
+    myList.items.unshift(newListItem)
+
+    // リストユーザーを現在のリストに追加
+    if (mainState.currentList?.uri !== list.uri) return
+    mainState.currentListItems.unshift(newListItem)
   }
 }
 </script>
@@ -93,7 +105,7 @@ async function clicked (list: TTList) {
     <template #header>
       <h2>
         <SVGIcon name="list" />
-        <span>{{ $t("listUserManagement") }}</span>
+        <span>{{ $t("listUserManagementDetail") }}</span>
       </h2>
     </template>
     <template #body>
