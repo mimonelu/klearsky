@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, watch, type ComputedRef } from "vue"
+import { inject, watch } from "vue"
 import ListCard from "@/components/list/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -7,14 +7,6 @@ import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
-
-const state = reactive<{
-  isOwn: ComputedRef<boolean>
-}>({
-  isOwn: computed((): boolean => {
-    return mainState.currentList?.creator.did === mainState.atp.session?.did
-  }),
-})
 
 async function fetchListItems (direction: "new" | "old") {
   Util.blurElement()
@@ -77,10 +69,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         :contentWarningDisabled="true"
         :menuDisplay="true"
       >
-        <template
-          v-if="state.isOwn"
-          #bottom
-        >
+        <template #bottom>
           <!-- リスト管理ボタン -->
           <button
             class="button list-users__manage-button"

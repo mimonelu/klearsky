@@ -430,6 +430,7 @@
   "listUserManagementDetail": "Add/delete list user",
   "listMuted": "Muted",
   "listBlocked": "Blocked",
+  "listCreatedBy": "by",
   "myList": "My List",
 
   "showTimeFeeds": "Show in timefeed",

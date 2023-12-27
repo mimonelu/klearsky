@@ -228,35 +228,36 @@ function endAwait () {
     </div>
 
     <!-- リスト説明文 -->
-    <HtmlText
-      v-if="list.description && !isCompact"
-      class="list-card__description"
-      dir="auto"
-      :text="list.description"
-      :facets="list.descriptionFacets"
-      :processHashTag="true"
-      @onActivateMention="$emit('onActivateMention')"
-      @onActivateHashTag="$emit('onActivateHashTag')"
-    />
+    <div v-if="(list.description && !isCompact) || !state.isOwn">
+      <HtmlText
+        v-if="list.description && !isCompact"
+        class="list-card__description"
+        dir="auto"
+        :text="list.description"
+        :facets="list.descriptionFacets"
+        :processHashTag="true"
+        @onActivateMention="$emit('onActivateMention')"
+        @onActivateHashTag="$emit('onActivateHashTag')"
+      />
+
+      <!-- リスト作成者リンク -->
+      <div v-if="!state.isOwn">
+        <RouterLink
+          class="textlink list-card__creator"
+          :to="{ name: 'profile-list', query: { account: list.creator.did } }"
+          @click.prevent.stop="$emit('onActivateMention')"
+        >
+          <span class="list-card__creator__prefix">{{ $t("listCreatedBy") }}</span>
+          <span class="list-card__creator__display-name">{{ list.creator.displayName || list.creator.handle }}</span>
+        </RouterLink>
+      </div>
+    </div>
 
     <!-- ボタンコンテナ -->
     <div
       v-if="!isCompact"
       class="list-card__button-container"
     >
-      <!-- リスト作成者リンク -->
-      <RouterLink
-        v-if="!state.isOwn"
-        class="list-card__creator"
-        :to="{ name: 'profile-list', query: { account: list.creator.did } }"
-        @click.prevent.stop
-      >
-        <SVGIcon name="person" />
-        <div class="list-card__creator__display-name">{{ list.creator.displayName }}</div>
-        <div class="list-card__creator__handle">{{ list.creator.handle }}</div>
-      </RouterLink>
-      <div v-else />
-
       <!-- リストフィードボタン -->
       <RouterLink
         :class="`${state.isListFeedsPage ? 'button--plane' : 'button--bordered'} list-card__feeds-button`"
@@ -476,56 +477,27 @@ function endAwait () {
     word-break: break-word;
   }
 
+  // リスト作成者リンク
+  &__creator {
+    font-size: 0.875em;
+
+    &__prefix {
+      margin-right: 0.5em;
+    }
+
+    &__display-name {
+      font-weight: bold;
+    }
+  }
+
   // ボタンコンテナ
   &__button-container {
     display: grid;
-    grid-template-columns: 1fr max-content max-content max-content;
+    grid-template-columns: max-content max-content max-content;
     justify-content: flex-end;
 
     & > *:not(:last-child) {
       margin-right: 0.5em;
-    }
-  }
-
-  // リスト作成者リンク
-  &__creator {
-    background-clip: padding-box;
-    background-color: rgb(var(--bg-color));
-    border: 1px solid var(--accent-color-025);
-    border-radius: var(--border-radius);
-    display: grid;
-    grid-template-columns: auto auto 1fr;
-    align-items: center;
-    grid-gap: 0.5em;
-    margin-left: auto;
-    padding: 0.5em 1em;
-    &:focus, &:hover {
-      border-color: var(--accent-color-05);
-    }
-
-    & > .svg-icon {
-      fill: var(--accent-color-075);
-      font-size: 0.75em;
-    }
-
-    &__display-name {
-      font-size: 0.875em;
-      font-weight: bold;
-      line-height: var(--line-height);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      word-break: break-word;
-    }
-
-    &__handle {
-      color: var(--fg-color-075);
-      font-size: 0.875em;
-      line-height: var(--line-height);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      word-break: break-all;
     }
   }
 

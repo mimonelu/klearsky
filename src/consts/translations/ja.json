@@ -430,6 +430,7 @@
   "listUserManagementDetail": "リストユーザーの追加／削除",
   "listMuted": "ミュート中",
   "listBlocked": "ブロック中",
+  "listCreatedBy": "by",
   "myList": "マイリスト",
 
   "showTimeFeeds": "タイムフィードで見る",
