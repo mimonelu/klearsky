@@ -1136,8 +1136,40 @@ function fetchMyLists () {
 
   // 非同期で全マイリストと全マイリストユーザーを取得
   setTimeout(async () => {
-    // 全マイリストの取得
     let cursor: undefined | string | Error
+
+    // ミュートリストを取得
+    cursor = undefined
+    for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_ITERATION; i ++) {
+      cursor = await state.atp.fetchListMutes(
+        state.myList,
+        CONSTS.LIMIT_OF_FETCH_MY_LIST,
+        cursor as undefined | string
+      )
+      if (cursor instanceof Error) {
+        // TODO:
+        break
+      }
+      if (cursor == null) break
+    }
+
+    // ブロックリストを取得
+    cursor = undefined
+    for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_ITERATION; i ++) {
+      cursor = await state.atp.fetchListBlocks(
+        state.myList,
+        CONSTS.LIMIT_OF_FETCH_MY_LIST,
+        cursor as undefined | string
+      )
+      if (cursor instanceof Error) {
+        // TODO:
+        break
+      }
+      if (cursor == null) break
+    }
+
+    // 全マイリストの取得
+    cursor = undefined
     for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_ITERATION; i ++) {
       cursor = await state.atp.fetchLists(
         state.myList,
@@ -1154,7 +1186,7 @@ function fetchMyLists () {
 
     // 全マイリストユーザーの取得
     for (const list of state.myList) {
-      let cursor: undefined | string
+      cursor = undefined
       list.items = []
       for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS_ITERATION; i ++) {
         const result = await state.atp.fetchListItems(
