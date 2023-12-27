@@ -428,6 +428,8 @@
   "listDescription": "Description",
   "listUserManagement": "Manage by list",
   "listUserManagementDetail": "Add/delete list user",
+  "listMuted": "Muted",
+  "listBlocked": "Blocked",
   "myList": "My List",
 
   "showTimeFeeds": "Show in timefeed",

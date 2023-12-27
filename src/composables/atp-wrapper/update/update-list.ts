@@ -21,10 +21,11 @@ export default async function (
     },
   }
   if (avatarBlobRef != null) (query.record as any).avatar = avatarBlobRef
-  const response: ComAtprotoRepoPutRecord.Response =
+  const response: ComAtprotoRepoPutRecord.Response | Error =
     await (this.agent as BskyAgent).com.atproto.repo.putRecord(query)
       .then((value: ComAtprotoRepoPutRecord.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/putRecord]", response)
+  if (response instanceof Error) return response
   if (!response.success) return Error("Failed")
 }

@@ -20,9 +20,6 @@ const state = reactive<{
 }>({
   lists: computed((): Array<TTList> => {
     return Array.from(props.lists)
-      .filter((list: TTList) => {
-        return !list.viewer?.muted && !list.viewer?.blocked
-      })
       .sort((a: TTList, b: TTList): number => {
         const aTerm = a.name || a.indexedAt
         const bTerm = b.name || b.indexedAt

@@ -428,6 +428,8 @@
   "listDescription": "説明",
   "listUserManagement": "リストで管理",
   "listUserManagementDetail": "リストユーザーの追加／削除",
+  "listMuted": "ミュート中",
+  "listBlocked": "ブロック中",
   "myList": "マイリスト",
 
   "showTimeFeeds": "タイムフィードで見る",

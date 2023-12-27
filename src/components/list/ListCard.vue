@@ -24,6 +24,8 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   routerLinkToListFeeds: ComputedRef<any>
   routerLinkToListUsers: ComputedRef<any>
+  isMuted: ComputedRef<boolean>
+  isBlocked: ComputedRef<boolean>
   indexedAt: ComputedRef<string>
   purpose: ComputedRef<string>
   isOwn: ComputedRef<boolean>
@@ -50,6 +52,12 @@ const state = reactive<{
         displayName: props.list.name,
       },
     }
+  }),
+  isMuted: computed((): boolean => {
+    return props.list.viewer?.muted ?? false
+  }),
+  isBlocked: computed((): boolean => {
+    return props.list.viewer?.blocked != null
   }),
   indexedAt: computed((): string => {
     return mainState.formatDate(props.list.indexedAt)
@@ -117,6 +125,14 @@ async function deleteList () {
     await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
   }
 }
+
+function startAwait () {
+  state.loaderDisplay = true
+}
+
+function endAwait () {
+  state.loaderDisplay = false
+}
 </script>
 
 <template>
@@ -126,7 +142,33 @@ async function deleteList () {
     :data-purpose="state.purpose"
   >
     <slot :list="list" />
-    <div class="list-card__header">
+
+    <!-- リストヘッダー -->
+    <div
+      v-if="state.isMuted || state.isBlocked"
+      class="list-card__header"
+    >
+      <!-- リストミュートラベル-->
+      <div
+        v-if="state.isMuted"
+        class="list-card__muted-label"
+      >
+        <SVGIcon name="volumeOff" />
+        <span>{{ $t("listMuted") }}</span>
+      </div>
+
+      <!-- リストブロックラベル-->
+      <div
+        v-if="state.isBlocked"
+        class="list-card__blocked-label"
+      >
+        <SVGIcon name="personOff" />
+        <span>{{ $t("listBlocked") }}</span>
+      </div>
+    </div>
+
+    <!-- リスト詳細 -->
+    <div class="list-card__detail">
       <!-- リスト画像 -->
       <LazyImage
         class="list-card__avatar"
@@ -179,6 +221,8 @@ async function deleteList () {
           :container="state.menuTickerContainer"
           @close="closeMenuTicker"
           @deleteList="deleteList"
+          @startAwait="startAwait"
+          @endAwait="endAwait"
         />
       </button>
     </div>
@@ -265,6 +309,34 @@ async function deleteList () {
 
   // リストヘッダー
   &__header {
+    display: flex;
+    grid-gap: 0.5em;
+  }
+
+  // リストミュートラベル
+  // リストブロックラベル
+  &__muted-label,
+  &__blocked-label {
+    background-color: rgb(var(--notice-color));
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    grid-gap: 0.25em;
+    padding: 0.25em 0.5em;
+
+    & > .svg-icon {
+      fill: white;
+      font-size: 0.75em;
+    }
+
+    & > span {
+      color: white;
+      font-size: 0.875em;
+    }
+  }
+
+  // リスト詳細
+  &__detail {
     display: grid;
     grid-gap: 0.25em 0.75em;
     grid-template-columns: auto auto 1fr auto;
@@ -274,8 +346,8 @@ async function deleteList () {
     align-items: flex-start;
   }
 
-  // リストヘッダー - コンパクトモードのリストメニュー非表示に関わるレイアウト調整
-  &[data-is-compact="true"] &__header {
+  // リスト詳細 - コンパクトモードのリストメニュー非表示に関わるレイアウト調整
+  &[data-is-compact="true"] &__detail {
     grid-template-columns: auto auto 1fr;
     grid-template-areas:
       "a n n"

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
@@ -19,7 +19,81 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const isOwn = props.list.creator.did === mainState.atp.session?.did
+const state = reactive<{
+  isMuted: ComputedRef<boolean>
+  isBlocked: ComputedRef<boolean>
+  isOwn: ComputedRef<boolean>
+}>({
+  isMuted: computed((): boolean => {
+    return props.list.viewer?.muted ?? false
+  }),
+  isBlocked: computed((): boolean => {
+    return props.list.viewer?.blocked != null
+  }),
+  isOwn: computed((): boolean => {
+    return props.list.creator.did === mainState.atp.session?.did
+  }),
+})
+
+async function toggleListMute () {
+  Util.blurElement()
+  emit("close")
+
+  // リストミュートの無効化
+  if (state.isMuted) {
+    emit("startAwait")
+    const result = await mainState.atp.updateListMuteToDisable(props.list.uri)
+    emit("endAwait")
+    if (result instanceof Error) {
+      // TODO:
+      return
+    }
+    if (props.list.viewer == null) props.list.viewer = {}
+    props.list.viewer.muted = false
+
+  // リストミュートの有効化
+  } else {
+    emit("startAwait")
+    const result = await mainState.atp.updateListMuteToEnable(props.list.uri)
+    emit("endAwait")
+    if (result instanceof Error) {
+      // TODO:
+      return
+    }
+    if (props.list.viewer == null) props.list.viewer = {}
+    props.list.viewer.muted = true
+  }
+}
+
+async function toggleListBlock () {
+  Util.blurElement()
+  emit("close")
+
+  // リストブロックの無効化
+  if (state.isBlocked) {
+    emit("startAwait")
+    const result = await mainState.atp.updateListBlockToDisable(props.list.uri)
+    emit("endAwait")
+    if (result instanceof Error) {
+      // TODO:
+      return
+    }
+    if (props.list.viewer == null) props.list.viewer = {}
+    delete props.list.viewer.blocked
+
+  // リストブロックの有効化
+  } else {
+    emit("startAwait")
+    const result = await mainState.atp.updateListBlockToEnable(props.list.uri)
+    emit("endAwait")
+    if (result instanceof Error) {
+      // TODO:
+      return
+    }
+    if (props.list.viewer == null) props.list.viewer = {}
+    props.list.viewer.blocked = result
+  }
+}
 
 async function deleteList () {
   Util.blurElement()
@@ -43,9 +117,21 @@ async function deleteList () {
       @close="emit('close')"
     />
 
+    <!-- リストミュートのトグル -->
+    <button @click.prevent.stop="toggleListMute">
+      <SVGIcon :name="state.isMuted ? 'volumeOn' : 'volumeOff'" />
+      <span>{{ $t(state.isMuted ? "muteOff" : "muteOn") }}</span>
+    </button>
+
+    <!-- リストブロックのトグル -->
+    <button @click.prevent.stop="toggleListBlock">
+      <SVGIcon :name="state.isBlocked ? 'person' : 'personOff'" />
+      <span>{{ $t(state.isBlocked ? "unblock" : "block") }}</span>
+    </button>
+
     <!-- フィードを削除する -->
     <button
-      v-if="isOwn"
+      v-if="state.isOwn"
       @click.prevent.stop="deleteList"
     >
       <SVGIcon name="remove" />

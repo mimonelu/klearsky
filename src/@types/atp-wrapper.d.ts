@@ -73,6 +73,10 @@ interface TIAtpWrapper {
   updateBlockToDisable (this: TIAtpWrapper, uri: string): Promise<boolean>
   updateBlockToEnable (this: TIAtpWrapper, did: string): Promise<null | string>
   updateList (this: TIAtpWrapper, list: TTList, avatarBlobRef?: BlobRef): Promise<undefined | Error>
+  updateListBlockToDisable (this: TIAtpWrapper, listUri: string): Promise<undefined | Error>
+  updateListBlockToEnable (this: TIAtpWrapper, listUri: string): Promise<string | Error>
+  updateListMuteToDisable (this: TIAtpWrapper, listUri: string): Promise<undefined | Error>
+  updateListMuteToEnable (this: TIAtpWrapper, listUri: string): Promise<undefined | Error>
   updateMuteToDisable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateMuteToEnable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>
