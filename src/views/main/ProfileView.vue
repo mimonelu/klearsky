@@ -13,6 +13,7 @@ import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -151,35 +152,8 @@ function onActivateAccountMaskToggle () {
             @click.prevent.stop="onActivateAccountMaskToggle"
           />
 
-          <!-- ミュートしている -->
-          <div
-            v-if="mainState.currentProfile?.viewer.muted"
-            class="textlabel--alert"
-          >
-            <div class="textlabel__text">
-              <SVGIcon name="volumeOff" />{{ $t("muting") }}
-            </div>
-          </div>
-
-          <!-- ブロックしている -->
-          <div
-            v-if="mainState.currentProfile?.viewer.blocking != null"
-            class="textlabel--alert"
-          >
-            <div class="textlabel__text">
-              <SVGIcon name="alert" />{{ $t("blocking") }}
-            </div>
-          </div>
-
-          <!-- ブロックされている -->
-          <div
-            v-if="mainState.currentProfile?.viewer.blockedBy"
-            class="textlabel--alert"
-          >
-            <div class="textlabel__text">
-              <SVGIcon name="alert" />{{ $t("blocked") }}
-            </div>
-          </div>
+          <!-- Viewer ラベル -->
+          <ViewerLabels :viewer="mainState.currentProfile?.viewer" />
         </div>
 
         <div class="profile-view__details">
@@ -559,7 +533,7 @@ function onActivateAccountMaskToggle () {
 .danger-zone {
   display: flex;
   flex-direction: column;
-  grid-gap: 0.5rem;
+  grid-gap: 1rem;
   &:empty {
     display: contents;
   }

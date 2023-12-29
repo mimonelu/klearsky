@@ -6,6 +6,7 @@ import LazyImage from "@/components/common/LazyImage.vue"
 import ListMenuTicker from "@/components/menu-tickers/ListMenuTicker.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 
 const router = useRouter()
 
@@ -145,29 +146,11 @@ function endAwait () {
 
     <!-- リスト詳細 -->
     <div class="list-card__detail">
-      <!-- リストヘッダー -->
-      <div
+      <!-- Viewer ラベル -->
+      <ViewerLabels
         v-if="state.isMuted || state.isBlocked"
-        class="list-card__header"
-      >
-        <!-- リストミュートラベル-->
-        <div
-          v-if="state.isMuted"
-          class="list-card__muted-label"
-        >
-          <SVGIcon name="volumeOff" />
-          <span>{{ $t("listMuted") }}</span>
-        </div>
-
-        <!-- リストブロックラベル-->
-        <div
-          v-if="state.isBlocked"
-          class="list-card__blocked-label"
-        >
-          <SVGIcon name="personOff" />
-          <span>{{ $t("listBlocked") }}</span>
-        </div>
-      </div>
+        :viewer="list.viewer as any"
+      />
 
       <!-- リスト画像 -->
       <LazyImage
@@ -314,7 +297,7 @@ function endAwait () {
     grid-gap: 0 0.75em;
     grid-template-columns: auto auto 1fr auto;
     grid-template-areas:
-      "h h h h"
+      "v v v v"
       "a n n m"
       "a p i m";
     align-items: flex-start;
@@ -324,39 +307,15 @@ function endAwait () {
   &[data-is-compact="true"] &__detail {
     grid-template-columns: auto auto 1fr;
     grid-template-areas:
-      "h h h"
+      "v v v"
       "a n n"
       "a p i";
   }
 
-  // リストヘッダー
-  &__header {
-    grid-area: h;
-    display: flex;
-    grid-gap: 0.5em;
-    margin-bottom: 0.25em;
-  }
-
-  // リストミュートラベル
-  // リストブロックラベル
-  &__muted-label,
-  &__blocked-label {
-    background-color: rgb(var(--notice-color));
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    grid-gap: 0.25em;
-    padding: 0.25em 0.5em;
-
-    & > .svg-icon {
-      fill: white;
-      font-size: 0.75em;
-    }
-
-    & > span {
-      color: white;
-      font-size: 0.875em;
-    }
+  // Viewer ラベル
+  .viewer-labels {
+    grid-area: v;
+    margin-bottom: 0.5em;
   }
 
   // リスト画像

@@ -80,12 +80,12 @@
 
   "muteOn": "Mute",
   "muteOff": "Unmute",
-  "muting": "You are muting this user.",
+  "muting": "Muting",
 
   "block": "Block",
   "unblock": "Unblock",
-  "blocked": "You are blocked by this user.",
-  "blocking": "You are blocking this user.",
+  "blocked": "Blocked",
+  "blocking": "Blocking",
   "postBlocked": "This post cannot be displayed.",
   "postNotFound": "This post does not exist.",
 
@@ -430,7 +430,9 @@
   "listUserManagement": "Manage by list",
   "listUserManagementDetail": "Add/delete list user",
   "listMuted": "Muted",
+  "listMuting": "List muting",
   "listBlocked": "Blocked",
+  "listBlocking": "List blocking",
   "listCreatedBy": "by",
   "myList": "My List",
 

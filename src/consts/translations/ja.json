@@ -80,12 +80,12 @@
 
   "muteOn": "ミュートする",
   "muteOff": "ミュートを解除する",
-  "muting": "このユーザーをミュートしています",
+  "muting": "ミュート中",
 
   "block": "ブロックする",
   "unblock": "ブロックを解除する",
-  "blocked": "このユーザーからブロックされています。",
-  "blocking": "このユーザーをブロックしています。",
+  "blocked": "被ブロック中",
+  "blocking": "ブロック中",
   "postBlocked": "このポストを表示することはできません。",
   "postNotFound": "このポストは存在しません。",
 
@@ -430,7 +430,9 @@
   "listUserManagement": "リストで管理",
   "listUserManagementDetail": "リストユーザーの追加／削除",
   "listMuted": "ミュート中",
+  "listMuting": "リストミュート中",
   "listBlocked": "ブロック中",
+  "listBlocking": "リストブロック中",
   "listCreatedBy": "by",
   "myList": "マイリスト",
 
