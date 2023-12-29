@@ -1,7 +1,39 @@
 <script lang="ts" setup>
+import { inject } from "vue"
 import UserList from "@/components/list/UserList.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
+
+const mainState = inject("state") as MainState
 </script>
 
 <template>
-  <UserList type="follower" />
+  <div class="follower-list">
+    <!-- 空メッセージ -->
+    <div
+      v-if="!mainState.listProcessing && mainState.currentFollowers.length === 0"
+      class="textlabel follower-list__no-followers"
+    >
+      <div class="textlabel__text">
+        <SVGIcon name="alert" />{{ $t("noFollowers") }}
+      </div>
+    </div>
+
+    <UserList type="follower" />
+  </div>
 </template>
+
+<style lang="scss" scoped>
+.follower-list {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  &__no-followers {
+    margin: 1rem;
+  }
+
+  .user-list {
+    flex-grow: 1;
+  }
+}
+</style>

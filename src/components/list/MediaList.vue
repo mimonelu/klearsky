@@ -18,7 +18,7 @@ const mainState = inject("state") as MainState
       class="textlabel margin1"
     >
       <div class="textlabel__text">
-        <SVGIcon name="alert" />{{ $t("noMedias") }}
+        <SVGIcon name="alert" />{{ $t("noPostsInFeed") }}
       </div>
     </div>
 

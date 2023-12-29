@@ -879,6 +879,13 @@ async function fetchAuthorLikes (direction: "new" | "old") {
 async function fetchAuthorLists (direction: "new" | "old") {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
+
+  // ブロックしている
+  if (state.currentProfile?.viewer.blocking != null) return
+
+  // ブロックされている
+  if (state.currentProfile?.viewer.blockedBy) return
+
   const cursor = await state.atp.fetchLists(
     state.currentAuthorLists,
     account,
@@ -933,13 +940,6 @@ async function fetchFollowings (direction: "new" | "old") {
 async function fetchSuggestedFollows () {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
-
-  // ブロックしている
-  if (state.currentProfile?.viewer.blocking != null) return
-
-  // ブロックされている
-  if (state.currentProfile?.viewer.blockedBy) return
-
   await state.atp.fetchSuggestedFollows(state.currentSuggestedFollows, account)
 }
 
