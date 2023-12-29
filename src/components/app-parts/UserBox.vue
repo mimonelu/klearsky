@@ -5,6 +5,7 @@ import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
 import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 
 const emit = defineEmits<(name: string) => void>()
 
@@ -97,6 +98,9 @@ function onActivateContentFilteringToggle () {
         )
       )
     ">
+      <!-- Viewer ラベル -->
+      <ViewerLabels :viewer="user.viewer" />
+
       <AvatarLink
         :did="user.did"
         :image="user.avatar"
@@ -149,6 +153,7 @@ function onActivateContentFilteringToggle () {
   grid-template-rows: auto auto auto 1fr;
   grid-template-areas:
     "c c c c"
+    "v v v v"
     "a n h m"
     "a d d m"
     "b b b b";
@@ -157,6 +162,7 @@ function onActivateContentFilteringToggle () {
     grid-template-columns: min-content auto 1fr;
     grid-template-areas:
       "c c c"
+      "v v v"
       "a n h"
       "a d d"
       "b b b";
@@ -166,6 +172,11 @@ function onActivateContentFilteringToggle () {
 .content-filtering-toggle {
   grid-area: c;
   margin: 0.5em 0;
+}
+
+.viewer-labels {
+  grid-area: v;
+  margin-bottom: 0.5em;
 }
 
 .avatar-link {
