@@ -12,7 +12,7 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  processing: boolean;
+  processing: boolean
 }>({
   processing: false,
 })
@@ -43,6 +43,7 @@ async function toggleMute () {
 <template>
   <button
     class="button--bordered--important mute-button"
+    :disabled="viewer.mutedByList != null"
     :data-enabled="viewer.muted"
     :data-is-processing="state.processing"
     @click.prevent="toggleMute"

@@ -5,7 +5,7 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  user?: TTUser;
+  user?: TTUser,
 }>()
 
 const mainState = inject("state") as MainState
@@ -33,7 +33,10 @@ async function toggleMute () {
 </script>
 
 <template>
-  <button @click.prevent.stop="toggleMute">
+  <button
+    :disabled="user?.viewer.mutedByList != null"
+    @click.prevent.stop="toggleMute"
+  >
     <template v-if="user?.viewer.muted">
       <SVGIcon name="volumeOn" />
       <span>{{ $t("muteOff") }}</span>

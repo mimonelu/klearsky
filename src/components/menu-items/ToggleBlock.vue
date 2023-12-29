@@ -5,7 +5,7 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  user?: TTUser;
+  user?: TTUser,
 }>()
 
 const mainState = inject("state") as MainState
@@ -43,7 +43,10 @@ async function unblock () {
 </script>
 
 <template>
-  <button @click.prevent.stop="onActivate">
+  <button
+    :disabled="user?.viewer.blockingByList != null"
+    @click.prevent.stop="onActivate"
+  >
     <template v-if="user?.viewer.blocking == null">
       <SVGIcon name="personOff" />
       <span>{{ $t("block") }}</span>

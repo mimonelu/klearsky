@@ -12,7 +12,7 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  processing: boolean;
+  processing: boolean
 }>({
   processing: false,
 })
@@ -43,6 +43,7 @@ async function toggleBlock () {
 <template>
   <button
     class="button--bordered--important block-button"
+    :disabled="viewer.blockingByList != null"
     :data-enabled="viewer.blocking != null"
     :data-is-processing="state.processing"
     @click.prevent="toggleBlock"

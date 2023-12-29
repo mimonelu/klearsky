@@ -23,8 +23,10 @@ type TTServerInfo = {
 
 type TTUserViewer = {
   muted: boolean
+  mutedByList?: any
   blockedBy?: boolean
   blocking?: string
+  blockingByList?: any
   following?: string
   followedBy?: string
   [k: string]: unknown
