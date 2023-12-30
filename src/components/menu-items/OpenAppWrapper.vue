@@ -8,7 +8,7 @@ import OTHER_APPS from "@/consts/other-apps.json"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  type: "generator" | "post" | "profile"
+  type: "generator" | "list" | "post" | "profile"
   did?: string
   handle?: string
   uri?: string
@@ -35,6 +35,16 @@ function openOtherApp (app: any) {
       uri = app.generator
         .replace("{uri}", props.uri)
         .replace("{uriWithoutFeed}", props.uri?.replace("/feed", "") ?? "")
+      break
+    }
+    case "list": {
+      const rkey = Util.getRkey(props.uri)
+      uri = app.list
+        .replace("{did}", props.did)
+        .replace("{mydid}", mainState.atp.data.did)
+        .replace("{handle}", props.handle)
+        .replace("{rkey}", rkey)
+        .replace("{uri}", props.uri)
       break
     }
     case "post": {

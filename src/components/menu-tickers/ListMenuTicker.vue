@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
+import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
 import MenuTickerTranslateText from "@/components/menu-items/TranslateText.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -142,6 +143,16 @@ async function deleteList () {
     <MenuTickerCopyTextWrapper
       :displayName="list.name"
       :text="list.description"
+      :uri="list.uri"
+      :container="container"
+      @close="emit('close')"
+    />
+
+    <!-- 外部アプリで開く -->
+    <MenuTickerOpenAppWrapper
+      type="list"
+      :did="list.creator.did"
+      :handle="list.creator.handle"
       :uri="list.uri"
       :container="container"
       @close="emit('close')"

@@ -1,7 +1,8 @@
 [
   {
     "name": "officialApp",
-    "generator": "https://bsky.app/profile/{uri}"
+    "generator": "https://bsky.app/profile/{uri}",
+    "list": "https://bsky.app/profile/{handle}/lists/{rkey}"
   },
   {
     "name": "officialAppPost",
@@ -25,11 +26,13 @@
   {
     "name": "skychatApp",
     "generator": "https://skychat.social/#feed/{uriWithoutFeed}",
+    "list": "https://skychat.social/#list/{did}/{rkey}",
     "post": "https://skychat.social/#thread/{did}/{rkey}",
     "profile": "https://skychat.social/#profile/{did}"
   },
   {
     "name": "tokimekiApp",
+    "list": "https://tokimeki.blue/profile/{did}/lists/{rkey}",
     "post": "https://tokimeki.blue/profile/{handle}/post/{rkey}",
     "profile": "https://tokimeki.blue/profile/{handle}"
   },
