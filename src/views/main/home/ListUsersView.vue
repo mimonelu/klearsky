@@ -59,6 +59,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         :user="listItem.subject"
         :contentWarningDisabled="true"
         :menuDisplay="true"
+        :viewerDisplay="false"
       >
         <template #bottom>
           <!-- リスト管理ボタン -->

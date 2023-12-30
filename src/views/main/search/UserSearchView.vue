@@ -125,6 +125,7 @@ function updateRouter () {
           :user="user"
           :menuDisplay="true"
           :contentWarningDisabled="false"
+          :viewerDisplay="true"
         />
       </div>
       <LoadButton

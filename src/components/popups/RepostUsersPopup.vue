@@ -69,6 +69,7 @@ function scrolledToBottom () {
           :user="user"
           :menuDisplay="true"
           :contentWarningDisabled="false"
+          :viewerDisplay="true"
         />
       </div>
     </template>

@@ -59,6 +59,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         :user="user as TTUser"
         :menuDisplay="true"
         :contentWarningDisabled="false"
+        :viewerDisplay="true"
       >
         <template #bottom>
           <div class="relations">

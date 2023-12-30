@@ -109,6 +109,7 @@ async function submitCallback () {
         :user="user"
         :menuDisplay="false"
         :contentWarningDisabled="true"
+        :viewerDisplay="true"
         @keydown.prevent.stop
         @keyup.prevent.stop
       />

@@ -13,6 +13,7 @@ const props = defineProps<{
   user: TTUser
   contentWarningDisabled: boolean
   menuDisplay: boolean
+  viewerDisplay: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -99,7 +100,10 @@ function onActivateContentFilteringToggle () {
       )
     ">
       <!-- Viewer ラベル -->
-      <ViewerLabels :viewer="user.viewer" />
+      <ViewerLabels
+        v-if="viewerDisplay"
+        :viewer="user.viewer"
+      />
 
       <AvatarLink
         :did="user.did"

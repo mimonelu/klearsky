@@ -75,6 +75,7 @@ function scrolledToBottom () {
           :user="user"
           :menuDisplay="true"
           :contentWarningDisabled="false"
+          :viewerDisplay="true"
           @link="close"
         />
       </div>

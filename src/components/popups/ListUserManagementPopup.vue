@@ -125,6 +125,7 @@ async function clicked (list: TTList) {
         :user="user"
         :menuDisplay="false"
         :contentWarningDisabled="false"
+        :viewerDisplay="true"
       />
 
       <!-- リスト一覧 -->
