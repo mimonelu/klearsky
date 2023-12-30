@@ -472,5 +472,19 @@ function endAwait () {
       white-space: nowrap;
     }
   }
+  &__feeds-button,
+  &__users-button {
+    &[disabled="true"] {
+      opacity: unset;
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color));
+      }
+
+      & > span {
+        color: rgb(var(--fg-color));
+      }
+    }
+  }
 }
 </style>
