@@ -3,8 +3,6 @@ import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import FeedList from "@/components/list/FeedList.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
-import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
@@ -34,11 +32,6 @@ const state = reactive<{
     return generator
   }),
 })
-
-function openMyFeedsPopup () {
-  Util.blurElement()
-  mainState.openMyFeedsPopup()
-}
 </script>
 
 <template>
@@ -46,15 +39,6 @@ function openMyFeedsPopup () {
     class="feeds-view"
     :data-processing="!(state.generator != null)"
   >
-    <Portal to="home-view-header-top">
-      <!-- マイフィードポップアップトリガー -->
-      <button
-        class="my-feeds-trigger"
-        @click.stop="openMyFeedsPopup"
-      >
-        <SVGIcon name="feed" />
-      </button>
-    </Portal>
     <FeedCard
       v-if="state.generator != null"
       :generator="state.generator"

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, provide } from "vue"
-import type { LocationQueryValue, RouteLocationNormalized } from "vue-router"
-import { useRouter } from "vue-router"
+import { useRouter, type LocationQueryValue, type RouteLocationNormalized } from "vue-router"
 import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
@@ -97,7 +96,7 @@ onUnmounted(() => {
 
 const router = useRouter()
 
-router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+router.beforeEach((to: RouteLocationNormalized, _from: RouteLocationNormalized) => {
   state.currentPath = to.path
   state.currentQuery = to.query
 

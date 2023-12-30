@@ -1,8 +1,20 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+function openMyFeedsPopup () {
+  Util.blurElement()
+  mainState.openMyFeedsPopup()
+}
+
+function openMyListPopup () {
+  Util.blurElement()
+  mainState.openMyListPopup()
+}
 </script>
 
 <template>
@@ -15,6 +27,22 @@ const mainState = inject("state") as MainState
       >
         <template #right>
           <PortalTarget name="home-view-header-top" />
+
+          <!-- マイフィードポップアップトリガー -->
+          <button
+            class="my-feeds-trigger"
+            @click.stop="openMyFeedsPopup"
+          >
+            <SVGIcon name="feed" />
+          </button>
+
+          <!-- マイリストポップアップトリガー -->
+          <button
+            class="my-list-trigger"
+            @click.stop="openMyListPopup"
+          >
+            <SVGIcon name="list" />
+          </button>
         </template>
       </PageHeader>
       <div class="tab">

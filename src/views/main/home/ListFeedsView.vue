@@ -3,7 +3,6 @@ import { inject, watch } from "vue"
 import Feed from "@/components/app-parts/Feed.vue"
 import ListCard from "@/components/list/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -33,15 +32,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="list-feeds">
-    <Portal to="home-view-header-top">
-      <!-- マイリストポップアップトリガー -->
-      <button
-        class="my-list-trigger"
-        @click.stop="mainState.openMyListPopup"
-      >
-        <SVGIcon name="list" />
-      </button>
-    </Portal>
     <ListCard
       v-if="mainState.currentList"
       :list="mainState.currentList"

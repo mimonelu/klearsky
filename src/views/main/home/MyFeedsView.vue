@@ -15,11 +15,6 @@ async function updateMyFeeds () {
   await mainState.fetchMyFeeds()
   mainState.listProcessing = false
 }
-
-function openMyFeedsPopup () {
-  Util.blurElement()
-  mainState.openMyFeedsPopup()
-}
 </script>
 
 <template>
@@ -27,22 +22,6 @@ function openMyFeedsPopup () {
     <Portal to="home-view-header-top">
       <button @click.stop="updateMyFeeds">
         <SVGIcon name="refresh" />
-      </button>
-
-      <!-- マイフィードポップアップトリガー -->
-      <button
-        class="my-feeds-trigger"
-        @click.stop="openMyFeedsPopup"
-      >
-        <SVGIcon name="feed" />
-      </button>
-
-      <!-- マイリストポップアップトリガー -->
-      <button
-        class="my-list-trigger"
-        @click.stop="mainState.openMyListPopup"
-      >
-        <SVGIcon name="list" />
       </button>
     </Portal>
 

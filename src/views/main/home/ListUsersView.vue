@@ -37,15 +37,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="list-users">
-    <Portal to="home-view-header-top">
-      <!-- マイリストポップアップトリガー -->
-      <button
-        class="my-list-trigger"
-        @click.stop="mainState.openMyListPopup"
-      >
-        <SVGIcon name="list" />
-      </button>
-    </Portal>
     <ListCard
       v-if="mainState.currentList"
       :list="mainState.currentList"
