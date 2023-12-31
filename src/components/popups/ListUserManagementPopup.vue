@@ -132,6 +132,7 @@ async function clicked (list: TTList) {
       <Lists
         v-slot="{ list }"
         :lists="state.lists"
+        :headerDisplay="false"
         :loaderDisplay="false"
         :isCompact="true"
         @clicked="clicked"

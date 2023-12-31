@@ -9,9 +9,12 @@ const emit = defineEmits<{(event: string, params: any): void}>()
 
 const props = defineProps<{
   lists: Array<TTList>
+  headerDisplay: boolean
   loaderDisplay: boolean
   isCompact: boolean
 }>()
+
+const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
@@ -33,6 +36,30 @@ function fetchLists (direction: "new" | "old") {
   emit("fetch", direction)
 }
 
+async function updateMylist () {
+  Util.blurElement()
+  if (!await mainState.openConfirmationPopup(
+    $t("confirmation"),
+    $t("myListConfirmation")
+  )) return
+  mainState.myList.splice(0)
+  mainState.processing = true
+  await mainState.fetchMyLists()
+  mainState.processing = false
+}
+
+function openListEditPopup () {
+  Util.blurElement()
+  mainState.openListEditPopup({
+    mode: "create",
+    callback: addList,
+  })
+}
+
+function addList (list: TTList) {
+  props.lists.unshift(list)
+}
+
 function deleteList (list: TTList) {
   const targetIndex = props.lists.findIndex((myList: TTList) => {
     return myList.uri === list.uri
@@ -48,6 +75,30 @@ function clicked (list?: TTList) {
 
 <template>
   <div class="lists">
+    <!-- リストヘッダー -->
+    <div
+      v-if="headerDisplay"
+      class="lists__header"
+    >
+      <!-- マイリスト更新ボタン -->
+      <button
+        class="button--bordered lists__update-button"
+        @click.prevent="updateMylist"
+      >
+        <SVGIcon name="refresh" />
+        <span>{{ $t("listUpdate") }}</span>
+      </button>
+
+      <!-- マイリスト作成ボタン -->
+      <button
+        class="button lists__create-button"
+        @click.prevent="openListEditPopup"
+      >
+        <SVGIcon name="plus" />
+        <span>{{ $t("listAdd") }}</span>
+      </button>
+    </div>
+
     <LoadButton
       v-if="loaderDisplay"
       direction="new"
@@ -95,6 +146,23 @@ function clicked (list?: TTList) {
 .lists {
   display: flex;
   flex-direction: column;
+
+  &__header {
+    background-color: var(--fg-color-0125);
+    border-bottom: 1px solid var(--fg-color-025);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-gap: 0.25rem;
+    padding: 0.25rem;
+  }
+
+  // マイリスト更新ボタン
+  // マイリスト作成ボタン
+  &__update-button,
+  &__create-button {
+    font-size: 0.875rem;
+  }
 
   &__nolist {
     margin: 1rem;

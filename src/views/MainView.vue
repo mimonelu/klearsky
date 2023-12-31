@@ -210,7 +210,10 @@ async function processAfterLogin () {
   state.fetchMyFeedGenerators().then(() => {
     state.sortMyFeedGenerators()
   })
+
+  // 非同期で全マイリストと全マイリストユーザーを取得
   state.fetchMyLists()
+
   state.saveSettings()
   state.updateSettings()
   setupNotificationInterval()

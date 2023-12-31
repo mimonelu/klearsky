@@ -4,6 +4,7 @@
   "cancel": "Cancel",
   "yes": "Yes",
   "no": "No",
+  "confirmation": "Confirmation",
   "apply": "Apply",
   "release": "Release",
   "add": "Add",
@@ -420,6 +421,7 @@
   "listFeeds": "List feeds",
   "listUsers": "List users",
   "listAdd": "Add list",
+  "listUpdate": "Refresh lists",
   "listEdit": "Edit list",
   "listEditShort": "Edit",
   "listDelete": "Delete list",
@@ -435,6 +437,7 @@
   "listBlocking": "List blocking",
   "listCreatedBy": "by",
   "myList": "My List",
+  "myListConfirmation": "Refresh My List.\nThis may be a time-consuming process depending on the number of lists, is this OK?",
 
   "showTimeFeeds": "Show in timefeed",
   "timeFeeds": "Timefeed",

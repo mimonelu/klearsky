@@ -11,17 +11,6 @@ const mainState = inject("state") as MainState
 function close () {
   emit("close")
 }
-
-function openListEditPopup () {
-  mainState.openListEditPopup({
-    mode: "create",
-    callback: addList,
-  })
-}
-
-function addList (list: TTList) {
-  mainState.myList.unshift(list)
-}
 </script>
 
 <template>
@@ -32,14 +21,6 @@ function addList (list: TTList) {
   >
     <template #header>
       <h2>
-        <!-- リスト作成ボタン -->
-        <button
-          class="button my-list-popup__create-button"
-          @click.prevent.stop="openListEditPopup"
-        >
-          <span>{{ $t("add") }}</span>
-        </button>
-
         <SVGIcon name="list" />
         <span>{{ $t("myList") }}</span>
       </h2>
@@ -48,6 +29,7 @@ function addList (list: TTList) {
       <!-- リスト一覧 -->
       <Lists
         :lists="mainState.myList"
+        :headerDisplay="true"
         :loaderDisplay="false"
         :isCompact="false"
         @close="close"
@@ -66,8 +48,6 @@ function addList (list: TTList) {
       height: 100%;
 
       &-header > h2 {
-        margin-left: 1.5rem;
-
         & > .svg-icon {
           fill: rgb(var(--accent-color));
         }
