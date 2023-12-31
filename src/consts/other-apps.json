@@ -14,6 +14,7 @@
     "profile": "https://bsky.app/profile/{handle}"
   },
   {
+    "list": "separator",
     "post": "separator",
     "profile": "separator"
   },

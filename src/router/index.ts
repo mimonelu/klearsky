@@ -136,7 +136,7 @@ const router = createRouter({
             {
               path: "list",
               name: "profile-list",
-              meta: { label: "list" },
+              meta: { label: "lists" },
               component: AuthorListView,
             },
             {

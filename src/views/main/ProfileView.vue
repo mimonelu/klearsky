@@ -376,10 +376,10 @@ function onActivateAccountMaskToggle () {
         <RouterLink
           class="tab__button tab__button--list"
           :to="{ path: '/profile/list', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('list')"
+          :title="$t('lists')"
         >
           <SVGIcon name="list" />
-          <span>{{ $t("list") }}</span>
+          <span>{{ $t("lists") }}</span>
         </RouterLink>
       </div>
 
