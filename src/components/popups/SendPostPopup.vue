@@ -229,7 +229,7 @@ function onChangeImage () {
       model: index,
       type: "textarea",
       placeholder: `${$t('alts')} ${index + 1}`,
-      maxlength: 1000,
+      maxlength: 5000,
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
       rows: 3,
