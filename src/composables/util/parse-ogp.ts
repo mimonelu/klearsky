@@ -1,4 +1,5 @@
 import Encoding from "encoding-japanese"
+import Util from "@/composables/util"
 
 async function imagesize (file: File): Promise<{ width: number; height: number; }> {
   return new Promise((resolve, reject) => {
@@ -53,14 +54,24 @@ export default async function (
   const ogTitleElement = html.querySelector("meta[property='og:title']")
   const descriptionElement = html.querySelector("meta[name='description']")
   const ogDescriptionElement = html.querySelector("meta[property='og:description']")
-  const title = titleElement?.innerHTML ?? ""
-  const ogTitle = ogTitleElement?.getAttribute("content") ?? ""
-  const description = descriptionElement?.getAttribute("content") ?? ""
-  const ogDscription = ogDescriptionElement?.getAttribute("content") ?? ""
+  const titleText = titleElement?.innerText ?? ""
+  const ogTitleText = ogTitleElement?.getAttribute("content") ?? ""
+  const descriptionText = descriptionElement?.getAttribute("content") ?? ""
+  const ogDscriptionText = ogDescriptionElement?.getAttribute("content") ?? ""
+  let title = ogTitleText || titleText || ""
+  let description  = ogDscriptionText || descriptionText || ""
+
+  // 最大文字数まで切り詰め
+  // SEE: https://github.com/bluesky-social/atproto/blob/ad0d976188d1f07401b9675b5c6045c91e82a84e/lexicons/app/bsky/embed/external.json#L21-L30
+  const titleLength = Util.getGraphemeLength(title)
+  if (titleLength > 300) title = Util.unicodeSubstring(title, 0, 300)
+  const descriptionLength = Util.getGraphemeLength(description)
+  if (descriptionLength > 1000) description = Util.unicodeSubstring(description, 0, 1000)
+
   const external = {
     uri,
-    title: ogTitle || title || "",
-    description: ogDscription || description || "",
+    title,
+    description,
   }
 
   // OGP 画像の対応

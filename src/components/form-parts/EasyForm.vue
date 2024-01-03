@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { nextTick, onMounted, reactive, ref } from "vue"
-import { RichText } from "@atproto/api"
 import AccountSuggestionList from "@/components/list/AccountSuggestionList.vue"
 import Checkboxes from "@/components/form-parts/Checkboxes.vue"
 import FileBox from "@/components/form-parts/FileBox.vue"
@@ -62,8 +61,7 @@ function getCharacterLength (item: TTEasyFormItem): number {
   if (item.model == null) return 0
   const text = item.state[item.model]
   if (item.maxLengthIndicatorByGrapheme) {
-    const richText = new RichText({ text })
-    return richText.graphemeLength
+    return Util.getGraphemeLength(text)
   } else {
     return new Blob([text]).size
   }
