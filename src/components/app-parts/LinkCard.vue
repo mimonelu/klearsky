@@ -19,6 +19,7 @@ const state = reactive<{
     if (embeddedContentType === "graysky" && settingValues.includes("graysky")) return "graysky"
     if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
     if (embeddedContentType === "spotify" && settingValues.includes("spotify")) return "spotify"
+    if (embeddedContentType === "twitch" && settingValues.includes("twitch")) return "twitch"
     if (embeddedContentType === "twitter" && settingValues.includes("twitter")) return "twitter"
     if (embeddedContentType === "youtube" && settingValues.includes("youtube")) return "youtube"
     return ""
@@ -29,6 +30,7 @@ const externalComponent = ref()
 
 let embeddedContentType: null | string = null
 let embeddedContentId: null | string = null
+const klearskyHostname = window.location.hostname
 let SoptifyType: string = "album"
 
 watch(() => mainState.currentSetting.linkcardEmbeddedControl, () => {
@@ -51,7 +53,7 @@ function getEmbeddedContentId () {
   }
 
   // Graysky 対応
-  if (url.hostname.endsWith("graysky.app")) {
+  else if (url.hostname.endsWith("graysky.app")) {
     const matches = url.pathname.match(/\/gif\/(.+?)\.mp4/)
     if (matches != null && matches[1] != null) {
       embeddedContentType = "graysky"
@@ -62,7 +64,7 @@ function getEmbeddedContentId () {
   }
 
   // Nicovideo 対応 1
-  if (url.hostname === "www.nicovideo.jp") {
+  else if (url.hostname === "www.nicovideo.jp") {
     const matches = url.pathname.match(/\/watch\/([^\/]+)/)
     if (matches != null && matches[1] != null) {
       embeddedContentType = "nicovideo"
@@ -72,7 +74,7 @@ function getEmbeddedContentId () {
   }
 
   // Spotify 対応
-  if (url.hostname === "open.spotify.com") {
+  else if (url.hostname === "open.spotify.com") {
     const matches = url.pathname.match(/\/(album|artist|track)\/([^\/]+)/)
     if (matches != null && matches[1] != null && matches[2] != null) {
       embeddedContentType = "spotify"
@@ -82,8 +84,18 @@ function getEmbeddedContentId () {
     }
   }
 
+  // Twitch 対応
+  else if (url.hostname === "www.twitch.tv") {
+    const matches = url.pathname.match(/^\/([^\/]+)/)
+    if (matches != null && matches[1] != null) {
+      embeddedContentType = "twitch"
+      embeddedContentId = matches[1]
+      return
+    }
+  }
+
   // Twitter 対応 1
-  if (url.hostname === "twitter.com") {
+  else if (url.hostname === "twitter.com") {
     const matches = url.pathname.match(/\/status\/([^\/]+)/)
     if (matches != null && matches[1] != null) {
       embeddedContentType = "twitter"
@@ -93,7 +105,7 @@ function getEmbeddedContentId () {
   }
 
   // YouTube 対応
-  if (
+  else if (
     url.hostname === "www.youtube.com" &&
     url.pathname === "/watch"
   ) {
@@ -217,6 +229,19 @@ getEmbeddedContentId()
         scrolling="no"
         width="100%"
         :height="SoptifyType === 'album' ? 352 : 152"
+      />
+
+      <!-- Twitch 対応 -->
+      <iframe
+        v-else-if="state.type === 'twitch'"
+        class="external--twitch"
+        :src="`https://player.twitch.tv/?channel=${embeddedContentId}&parent=${klearskyHostname}&autoplay=false`"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        allowfullscreen
+        frameborder="0"
+        loading="lazy"
+        scrolling="no"
+        width="100%"
       />
 
       <!-- Twitter 対応 -->
@@ -347,6 +372,13 @@ getEmbeddedContentId()
 
   // Spotify 対応
   &--spotify {
+    background-color: var(--fg-color-0125);
+    border-radius: var(--border-radius);
+  }
+
+  // Twitch 対応
+  &--twitch {
+    aspect-ratio: 1 / 0.6;
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }

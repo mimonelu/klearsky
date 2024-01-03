@@ -527,6 +527,7 @@ function saveSettings () {
       "giphy",
       "graysky",
       "spotify",
+      "twitch",
       "twitter",
       "youtube",
       "nicovideo",
