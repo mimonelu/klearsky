@@ -141,20 +141,17 @@ function onActivateAccountMaskToggle () {
 
     <div class="profile-view__top">
       <div class="profile-view__top__inner">
-        <!-- Danger zone -->
-        <div class="danger-zone">
-          <!-- アカウントトグル -->
-          <ContentFilteringToggle
-            v-if="state.contentFilteringToggleDisplay"
-            :labels="state.contentFilteringLabels"
-            :display="!state.enabledContentMask"
-            :togglable="true"
-            @click.prevent.stop="onActivateAccountMaskToggle"
-          />
+        <!-- アカウントトグル -->
+        <ContentFilteringToggle
+          v-if="state.contentFilteringToggleDisplay"
+          :labels="state.contentFilteringLabels"
+          :display="!state.enabledContentMask"
+          :togglable="true"
+          @click.prevent.stop="onActivateAccountMaskToggle"
+        />
 
-          <!-- Viewer ラベル -->
-          <ViewerLabels :viewer="mainState.currentProfile?.viewer" />
-        </div>
+        <!-- Viewer ラベル -->
+        <ViewerLabels :viewer="mainState.currentProfile?.viewer" />
 
         <div class="profile-view__details">
           <div class="profile-view__details__top">
@@ -529,14 +526,9 @@ function onActivateAccountMaskToggle () {
   }
 }
 
-// Danger zone
-.danger-zone {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 1rem;
-  &:empty {
-    display: contents;
-  }
+// Viewer ラベル
+.viewer-labels:empty {
+  display: contents;
 }
 
 .banner {
