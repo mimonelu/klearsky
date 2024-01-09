@@ -57,6 +57,7 @@ import fetchSuggestions from "@/composables/atp-wrapper/fetch/fetch-suggestions"
 import fetchTimeFeeds from "@/composables/atp-wrapper/fetch/fetch-time-feeds"
 import fetchTimeline from "@/composables/atp-wrapper/fetch/fetch-timeline"
 import fetchUserSearch from "@/composables/atp-wrapper/fetch/fetch-user-search"
+import fetchWithoutAgent from "@/composables/atp-wrapper/fetch/fetch-without-agent"
 import login from "@/composables/atp-wrapper/session/login"
 import logout from "@/composables/atp-wrapper/session/logout"
 import refreshSession from "@/composables/atp-wrapper/session/refresh-session"
@@ -169,6 +170,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchTimeFeeds = fetchTimeFeeds
   fetchTimeline = fetchTimeline
   fetchUserSearch = fetchUserSearch
+  fetchWithoutAgent = fetchWithoutAgent
   hasLogin (this: TIAtpWrapper): boolean {
     return this.session != null
   }

@@ -1,5 +1,3 @@
-import type { BskyAgent, ComAtprotoRepoListRecords } from "@atproto/api"
-
 export default async function (
   this: TIAtpWrapper,
   currentFeeds: Array<TTFeed>,
@@ -7,19 +5,20 @@ export default async function (
   limit?: number,
   cursor?: string
 ): Promise<undefined | string> {
-  if (this.agent == null) return
-  const query: ComAtprotoRepoListRecords.QueryParams = {
+  const query: Record<string, string> = {
     collection: "app.bsky.feed.repost",
     repo,
   }
-  if (limit != null) query.limit = limit
+  if (limit != null) query.limit = limit.toString()
   if (cursor != null) query.rkeyEnd = cursor
-  const response: ComAtprotoRepoListRecords.Response =
-    await (this.agent as BskyAgent).api.com.atproto.repo.listRecords(query)
-  console.log("[klearsky/listRecords/repost]", response)
-  if (!response.success) return
 
-  const uris: Array<string> = response.data.records.map((record: any) => {
+  // TODO: PDS分割に伴う暫定処置
+  const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", repo, query)
+
+  if (response == null) return
+  const data = await response.json()
+  if (data?.records == null) return
+  const uris: Array<string> = data.records.map((record: any) => {
     return record.value.subject.uri
   })
   const posts: undefined | false | Array<TTPost> = await this.fetchPosts(uris)
@@ -33,7 +32,7 @@ export default async function (
       })
       .map((post: TTPost) => {
         // ソート用プロパティ `__createdAt` の作成
-        const record = response.data.records.find((record: any) => {
+        const record = data.records.find((record: any) => {
           return (record.value as any).subject.cid === post.cid
         })
         const createdAt = record != null
@@ -55,5 +54,5 @@ export default async function (
     return aCreatedAt < bCreatedAt ? 1 : aCreatedAt > bCreatedAt ? -1 : 0
   })
 
-  return response.data.cursor
+  return data.cursor
 }

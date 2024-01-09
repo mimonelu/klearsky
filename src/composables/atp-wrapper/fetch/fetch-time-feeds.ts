@@ -1,4 +1,3 @@
-import type { BskyAgent, ComAtprotoRepoListRecords } from "@atproto/api"
 import AtpUtil from "@/composables/atp-wrapper/atp-util"
 import Util from "@/composables/util"
 
@@ -9,7 +8,6 @@ export default async function (
   author: TTUser,
   limit?: number
 ): Promise<Error | undefined | string> {
-  // TODO: PDS分割に伴う暫定処置
   const query: Record<string, string> = {
     collection: "app.bsky.feed.post",
     repo: author.did,
@@ -25,49 +23,13 @@ export default async function (
     if (direction === "new") query.rkeyStart = rkey
     else query.rkeyEnd = rkey
   }
-  const params = new URLSearchParams(query)
 
-  // Sandbox PDS 対応
-  let host = "https://bsky.social"
-  if (this.session?.__sandbox) {
-    const logJson = await this.fetchLogAudit(author.did)
-    if (logJson != null) host = logJson[0]?.operation?.services?.atproto_pds?.endpoint ?? host
-  }
+  // TODO: PDS分割に伴う暫定処置
+  const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", author.did, query)
 
-  const url = `${host}/xrpc/com.atproto.repo.listRecords?${params}`
-  const response: Response = await fetch(url)
-    .catch((error: any) => console.error("[klearsky/listRecords/authorPosts]", error))
-    .then((value: any) => value)
-  if (!response.ok) return
+  if (response == null) return
   const data = await response.json()
-
-  /*
-  if (this.agent == null) return Error("No agent")
-  const query: ComAtprotoRepoListRecords.QueryParams = {
-    collection: "app.bsky.feed.post",
-    repo: author.did,
-    reverse: direction === "new" ? true : false,
-  }
-  if (limit != null) query.limit = limit
-  const rkey: undefined | string = oldPosts.length > 0
-    ? direction === "new"
-      ? Util.getRkey(oldPosts[0].uri)
-      : Util.getRkey((oldPosts.at(- 1) as TTPost).uri)
-    : undefined
-  if (rkey != null) {
-    if (direction === "new") query.rkeyStart = rkey
-    else query.rkeyEnd = rkey
-  }
-  const response: ComAtprotoRepoListRecords.Response =
-    await (this.agent as BskyAgent).api.com.atproto.repo.listRecords(query)
-      .then((value: ComAtprotoRepoListRecords.Response) => value)
-      .catch((error: any) => error)
-  console.log("[klearsky/listRecords/authorPosts]", response)
-  if (response instanceof Error) return response
-  if (!response.success || response.data.records == null) return Error("Failed")
-  const data = response.data
-  */
-
+  if (data?.records == null) return
   ;(data.records as TTRecord[]).forEach((record: TTRecord) => {
     if (oldPosts.some((oldPost: TTPost) => oldPost.uri === record.uri)) return
     // @ts-ignore

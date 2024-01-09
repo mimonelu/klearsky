@@ -359,6 +359,25 @@ function onActivateAccountMaskToggle () {
           <SVGIcon name="image" />
         </RouterLink>
 
+        <!-- リポスト一覧タブボタン -->
+        <RouterLink
+          class="tab__button tab__button--repost"
+          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('reposts')"
+        >
+          <SVGIcon name="repost" />
+        </RouterLink>
+
+        <!-- 自分のいいね一覧タブボタン -->
+        <Component
+          :is="mainState.isMyProfile() ? 'RouterLink' : 'div'"
+          class="tab__button tab__button--like"
+          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('likes')"
+        >
+          <SVGIcon name="like" />
+        </Component>
+
         <!-- カスタムフィードタブボタン -->
         <RouterLink
           class="tab__button tab__button--feed"
@@ -410,32 +429,6 @@ function onActivateAccountMaskToggle () {
         >
           <SVGIcon name="person" />
           <span>{{ $t("followers") }}</span>
-        </RouterLink>
-      </div>
-
-      <!-- リアクションタブ -->
-      <div
-        v-if="mainState.isMyProfile()"
-        class="tab"
-      >
-        <!-- 自分のリポストタブボタン -->
-        <RouterLink
-          class="tab__button tab__button--repost"
-          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('reposts')"
-        >
-          <SVGIcon name="repost" />
-          <span>{{ $t("reposts") }}</span>
-        </RouterLink>
-
-        <!-- 自分のいいねタブボタン -->
-        <RouterLink
-          class="tab__button tab__button--like"
-          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('likes')"
-        >
-          <SVGIcon name="like" />
-          <span>{{ $t("likes") }}</span>
         </RouterLink>
       </div>
     </div>
@@ -723,8 +716,11 @@ function onActivateAccountMaskToggle () {
     &--reply {
       border-right-color: var(--fg-color-0125);
     }
+    &--post,
     &--reply,
-    &--media {
+    &--media,
+    &--like,
+    &--repost {
       flex: 0.5;
     }
   }
