@@ -148,7 +148,6 @@ function clicked (list?: TTList) {
   flex-direction: column;
 
   &__header {
-    background-color: var(--fg-color-0125);
     border-bottom: 1px solid var(--fg-color-025);
     display: flex;
     align-items: center;

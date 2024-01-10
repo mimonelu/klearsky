@@ -118,13 +118,13 @@ const router = createRouter({
             {
               path: "feeds-with-replies",
               name: "profile-feeds-with-replies",
-              meta: { label: "reply" },
+              meta: { label: "postWithReplies" },
               component: AuthorFeedsWithRepliesView,
             },
             {
               path: "feeds-with-media",
               name: "profile-feeds-with-media",
-              meta: { label: "media" },
+              meta: { label: "postWithMedia" },
               component: AuthorFeedsWithMediaView,
             },
             {

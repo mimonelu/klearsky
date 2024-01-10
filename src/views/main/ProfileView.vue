@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import { RouterView } from "vue-router"
+import { RouterView, useRouter } from "vue-router"
 import AvatarButton from "@/components/buttons/AvatarButton.vue"
 import BlockButton from "@/components/buttons/BlockButton.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
@@ -16,12 +16,17 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 import Util from "@/composables/util"
 
+const router = useRouter()
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
   handleHistoryPopupDisplay: boolean
   profileMenuDisplay: boolean
   endpoint: ComputedRef<undefined | string>
+  isPagePostFeeds: ComputedRef<boolean>
+  isPagePostFeedsWithReplies: ComputedRef<boolean>
+  isPagePostFeedsWithMedia: ComputedRef<boolean>
 
   // ラベル対応
   enabledContentMask: boolean
@@ -45,6 +50,15 @@ const state = reactive<{
     return log != null && log[0] != null
       ? log[0].operation?.services?.atproto_pds?.endpoint
       : undefined
+  }),
+  isPagePostFeeds: computed((): boolean => {
+    return router.currentRoute.value.name === 'profile-feeds'
+  }),
+  isPagePostFeedsWithReplies: computed((): boolean => {
+    return router.currentRoute.value.name === 'profile-feeds-with-replies'
+  }),
+  isPagePostFeedsWithMedia: computed((): boolean => {
+    return router.currentRoute.value.name === 'profile-feeds-with-media'
   }),
 
   // ラベル対応
@@ -341,25 +355,7 @@ function onActivateAccountMaskToggle () {
           <span>{{ $t("posts") }}</span>
         </RouterLink>
 
-        <!-- リプライ付きポストタブボタン -->
-        <RouterLink
-          class="tab__button tab__button--reply"
-          :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('postWithReplies')"
-        >
-          <SVGIcon name="posts" />
-        </RouterLink>
-
-        <!-- メディアタブボタン -->
-        <RouterLink
-          class="tab__button tab__button--media"
-          :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('medias')"
-        >
-          <SVGIcon name="image" />
-        </RouterLink>
-
-        <!-- リポスト一覧タブボタン -->
+        <!-- リプロフィールポストページタブボタン -->
         <RouterLink
           class="tab__button tab__button--repost"
           :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
@@ -369,14 +365,14 @@ function onActivateAccountMaskToggle () {
         </RouterLink>
 
         <!-- 自分のいいね一覧タブボタン -->
-        <Component
-          :is="mainState.isMyProfile() ? 'RouterLink' : 'div'"
+        <RouterLink
+          v-if="mainState.isMyProfile()"
           class="tab__button tab__button--like"
           :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
           :title="$t('likes')"
         >
           <SVGIcon name="like" />
-        </Component>
+        </RouterLink>
 
         <!-- カスタムフィードタブボタン -->
         <RouterLink
@@ -431,6 +427,36 @@ function onActivateAccountMaskToggle () {
           <span>{{ $t("followers") }}</span>
         </RouterLink>
       </div>
+    </div>
+
+    <!-- プロフィールポストページ用リンクコンテナ -->
+    <div
+      v-if="
+        state.isPagePostFeeds ||
+        state.isPagePostFeedsWithReplies ||
+        state.isPagePostFeedsWithMedia
+      "
+      class="profile-view_link-container"
+    >
+      <!-- リプライ付きポストページリンク -->
+      <Component
+        :class="state.isPagePostFeedsWithReplies ? 'button--plane' : 'button--bordered'"
+        :is="state.isPagePostFeedsWithReplies ? 'div' : 'RouterLink'"
+        :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
+      >
+        <SVGIcon name="posts" />
+        <span>{{ $t("postWithReplies") }}</span>
+      </Component>
+
+      <!-- メディア一覧ページリンク -->
+      <Component
+        :class="state.isPagePostFeedsWithMedia ? 'button--plane' : 'button--bordered'"
+        :is="state.isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
+        :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
+      >
+        <SVGIcon name="image" />
+        <span>{{ $t("postWithMedia") }}</span>
+      </Component>
     </div>
 
     <RouterView class="profile-view__router-view" />
@@ -515,6 +541,24 @@ function onActivateAccountMaskToggle () {
       display: flex;
       flex-direction: column;
       grid-gap: 1rem;
+    }
+  }
+
+  // プロフィールポストページ用リンクコンテナ
+  &_link-container {
+    border-bottom: 1px solid var(--fg-color-025);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-gap: 0.25rem;
+    padding: 0.25rem;
+
+    & > .button--bordered,
+    & > .button--plane {
+      font-size: 0.875rem;
+    }
+    & > .button--plane {
+      pointer-events: none;
     }
   }
 }
@@ -716,9 +760,6 @@ function onActivateAccountMaskToggle () {
     &--reply {
       border-right-color: var(--fg-color-0125);
     }
-    &--post,
-    &--reply,
-    &--media,
     &--like,
     &--repost {
       flex: 0.5;
