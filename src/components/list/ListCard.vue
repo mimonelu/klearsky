@@ -486,5 +486,9 @@ function endAwait () {
       }
     }
   }
+
+  .button--plane {
+    background-color: rgb(var(--accent-color), 0.25);
+  }
 }
 </style>

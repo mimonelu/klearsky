@@ -361,6 +361,7 @@ function onActivateAccountMaskToggle () {
         <!-- ポストタブボタン -->
         <RouterLink
           class="tab__button tab__button--post"
+          :class="state.isPagePostFeedsWithReplies || state.isPagePostFeedsWithMedia ? 'router-link-active' : ''"
           :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
           :title="$t('posts')"
         >
@@ -571,6 +572,7 @@ function onActivateAccountMaskToggle () {
       font-size: 0.875rem;
     }
     & > .button--plane {
+      background-color: rgb(var(--accent-color), 0.25);
       pointer-events: none;
     }
   }
