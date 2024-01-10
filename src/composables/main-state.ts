@@ -99,6 +99,7 @@ state.getContentWarningVisibility = getContentWarningVisibility
 
 state.selectLabelsPopupDisplay = false
 state.selectLabelsPopupState = undefined
+state.hasLabel = hasLabel
 state.getCustomLabels = getCustomLabels
 state.filterLabels = filterLabels
 state.openSelectLabelsPopup = openSelectLabelsPopup
@@ -675,6 +676,12 @@ function makeCustomLabelPreference (label: string): TTPreference {
 }
 
 // ラベル
+
+function hasLabel (target: string, labels?: Array<TTLabel>): boolean {
+  return (labels?.findIndex((label: TTLabel) => {
+    return label.val === target
+  }) ?? - 1) !== - 1
+}
 
 function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {

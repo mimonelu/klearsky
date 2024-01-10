@@ -66,6 +66,7 @@ type MainState = {
 
   // ラベル
 
+  hasLabel (target: string, labels?: Array<TTLabel>): boolean
   getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
   filterLabels (
     visibilities?: Array<TTContentVisibility>,

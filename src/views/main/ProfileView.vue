@@ -30,6 +30,7 @@ const state = reactive<{
 
   // ラベル対応
   enabledContentMask: boolean
+  hasNoUnauthenticated: ComputedRef<boolean>
   harmfulLabels: ComputedRef<Array<TTLabel>>
   customLabels: ComputedRef<Array<TTLabel>>
   contentFilteringLabels: ComputedRef<Array<TTLabel>>
@@ -63,6 +64,9 @@ const state = reactive<{
 
   // ラベル対応
   enabledContentMask: true,
+  hasNoUnauthenticated: computed((): boolean => {
+    return mainState.hasLabel("!no-unauthenticated", mainState.currentProfile?.labels)
+  }),
   harmfulLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(undefined, ["alert", "blur", "blur-media"], mainState.currentProfile?.labels)
   }),
@@ -267,6 +271,15 @@ function onActivateAccountMaskToggle () {
                 :did="mainState.currentProfile.did"
                 :declarationDid="mainState.currentProfile.did"
               />
+
+              <!-- パブリックアイコン -->
+              <div
+                v-if="mainState.isMyProfile() && !state.hasNoUnauthenticated"
+                class="unauthenticated"
+              >
+                <SVGIcon name="earth" />
+              </div>
+
               <div class="button-container__separator" />
 
               <!-- ミュートトグル -->
@@ -693,6 +706,18 @@ function onActivateAccountMaskToggle () {
 .edit-button {
   & > .svg-icon {
     font-size: 0.75rem;
+  }
+}
+
+// パブリックアイコン
+.unauthenticated {
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  margin-left: 0.5rem;
+
+  & > .svg-icon {
+    fill: rgb(var(--fg-color));
   }
 }
 

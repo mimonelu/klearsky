@@ -21,6 +21,8 @@ import cursorRight from "@/svg/cursor-right.svg?raw"
 import cursorUp from "@/svg/cursor-up.svg?raw"
 import database from "@/svg/database.svg?raw"
 import drag from "@/svg/drag.svg?raw"
+import earth from "@/svg/earth.svg?raw"
+import earthOff from "@/svg/earth-off.svg?raw"
 import edit from "@/svg/edit.svg?raw"
 import email from "@/svg/email.svg?raw"
 import feed from "@/svg/feed.svg?raw"
@@ -99,6 +101,8 @@ const icons: { [k: string]: string } = {
   cursorUp,
   database,
   drag,
+  earth,
+  earthOff,
   edit,
   email,
   feed,
