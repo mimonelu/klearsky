@@ -15,6 +15,7 @@ const state = reactive<{
   type: computed((): string => {
     const settingValues = mainState.currentSetting.linkcardEmbeddedControl
     if (settingValues == null) return ""
+    if (embeddedContentType === "applemusic" && settingValues.includes("applemusic")) return "applemusic"
     if (embeddedContentType === "giphy" && settingValues.includes("giphy")) return "giphy"
     if (embeddedContentType === "graysky" && settingValues.includes("graysky")) return "graysky"
     if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
@@ -41,6 +42,16 @@ onMounted(updateEmbeddedContents)
 
 function getEmbeddedContentId () {
   const url = new URL(props.external.uri)
+
+  // Apple Music 対応
+  if (url.hostname.endsWith("music.apple.com")) {
+    const matches = url.pathname.match(/^([^?].+)/)
+    if (matches != null && matches[1] != null) {
+      embeddedContentType = "applemusic"
+      embeddedContentId = matches[1]
+      return
+    }
+  }
 
   // Giphy 対応
   if (url.hostname.endsWith("giphy.com")) {
@@ -179,6 +190,21 @@ getEmbeddedContentId()
       </div>
     </a>
     <div v-else>
+      <!-- Apple Music 対応 -->
+      <iframe
+        v-if="state.type === 'applemusic'"
+        class="external--applemusic"
+        :src="`https://embed.music.apple.com/${embeddedContentId}`"
+        allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+        allowfullScreen
+        frameBorder="0"
+        loading="lazy"
+        sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+        scrolling="no"
+        width="100%"
+        height="450"
+      />
+
       <!-- Giphy 対応 -->
       <iframe
         v-if="state.type === 'giphy'"
@@ -338,6 +364,12 @@ getEmbeddedContentId()
       color: var(--fg-color-075);
       font-size: 0.875em;
     }
+  }
+
+  // Apple Music 対応
+  &--applemusic {
+    background-color: var(--fg-color-0125);
+    border-radius: var(--border-radius);
   }
 
   // Giphy 対応

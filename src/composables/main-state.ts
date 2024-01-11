@@ -525,6 +525,7 @@ function saveSettings () {
     state.settings[did].imageOption = []
   if (state.settings[did].linkcardEmbeddedControl == null)
     state.settings[did].linkcardEmbeddedControl = [
+      "applemusic",
       "giphy",
       "graysky",
       "spotify",

@@ -43,6 +43,7 @@
     { "label": "singleImageHasNoAspectRatio", "value": 0 }
   ],
   "LINKCARD_EMBEDDED_CONTROL": [
+    { "label": "pnAppleMusic", "value": "applemusic" },
     { "label": "pnGiphy", "value": "giphy" },
     { "label": "pnGraysky", "value": "graysky" },
     { "label": "pnSpotify", "value": "spotify" },

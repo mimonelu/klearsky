@@ -451,6 +451,7 @@
   "threadgateAllowListSample": "リストのAT URI: at://did:plc:xxx/app.bsky.graph.list/xxx, ...",
   "threadgateNotification": "何もチェックせずに適用するとあなた以外リプライできなくなります。",
 
+  "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",
   "pnSpotify": "Spotify",
