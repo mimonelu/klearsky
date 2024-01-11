@@ -71,6 +71,9 @@ async function onPost (did: string, post: any) {
     })) return
   }
 
+  // リプライは非表示
+  if (post.record.reply != null) return
+
   if (mainState.globallineProfiles[did] == null)
     mainState.globallineProfiles[did] = {}
   post.author = mainState.globallineProfiles[did]
