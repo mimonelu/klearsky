@@ -532,6 +532,7 @@ function saveSettings () {
       "twitch",
       "twitter",
       "youtube",
+      "vimeo",
       "nicovideo",
     ]
   if (state.settings[did].globallineLayout == null)

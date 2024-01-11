@@ -23,6 +23,7 @@ const state = reactive<{
     if (embeddedContentType === "twitch" && settingValues.includes("twitch")) return "twitch"
     if (embeddedContentType === "twitter" && settingValues.includes("twitter")) return "twitter"
     if (embeddedContentType === "youtube" && settingValues.includes("youtube")) return "youtube"
+    if (embeddedContentType === "vimeo" && settingValues.includes("vimeo")) return "vimeo"
     return ""
   }),
 })
@@ -45,7 +46,7 @@ function getEmbeddedContentId () {
 
   // Apple Music 対応
   if (url.hostname.endsWith("music.apple.com")) {
-    const matches = url.pathname.match(/^([^?].+)/)
+    const matches = url.pathname.match(/^\/([^?].+)/)
     if (matches != null && matches[1] != null) {
       embeddedContentType = "applemusic"
       embeddedContentId = matches[1]
@@ -54,7 +55,7 @@ function getEmbeddedContentId () {
   }
 
   // Giphy 対応
-  if (url.hostname.endsWith("giphy.com")) {
+  else if (url.hostname.endsWith("giphy.com")) {
     const matches = url.pathname.match(/([0-9a-zA-Z]{10,})(?:$|\/)/)
     if (matches != null && matches[1] != null) {
       embeddedContentType = "giphy"
@@ -130,6 +131,16 @@ function getEmbeddedContentId () {
     embeddedContentType = "youtube"
     embeddedContentId = url.pathname.substring(1)
     return
+  }
+
+  // Vimeo 対応
+  else if (url.hostname === "vimeo.com") {
+    const matches = url.pathname.match(/^\/([^?]+)/)
+    if (matches != null && matches[1] != null) {
+      embeddedContentType = "vimeo"
+      embeddedContentId = matches[1]
+      return
+    }
   }
 }
 
@@ -289,6 +300,19 @@ getEmbeddedContentId()
         width="100%"
       />
 
+      <!-- Vimeo 対応 -->
+      <iframe
+        v-else-if="state.type === 'vimeo'"
+        class="external--vimeo"
+        :src="`https://player.vimeo.com/video/${embeddedContentId}`"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+        frameborder="0"
+        loading="lazy"
+        scrolling="no"
+        width="100%"
+      />
+
       <a
         class="external__meta--special"
         :href="external.uri"
@@ -430,6 +454,13 @@ getEmbeddedContentId()
   // YouTube 対応
   &--youtube {
     aspect-ratio: 16 / 9;
+    background-color: var(--fg-color-0125);
+    border-radius: var(--border-radius);
+  }
+
+  // Vimeo 対応
+  &--vimeo {
+    aspect-ratio: 4 / 3;
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }

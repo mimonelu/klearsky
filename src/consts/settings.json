@@ -50,6 +50,7 @@
     { "label": "pnTwitch", "value": "twitch" },
     { "label": "pnTwitter", "value": "twitter" },
     { "label": "pnYoutube", "value": "youtube" },
+    { "label": "pnVimeo", "value": "vimeo" },
     { "label": "pnNicovideo", "value": "nicovideo" }
   ],
   "LAYOUTS": [
