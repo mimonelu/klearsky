@@ -21,7 +21,6 @@ const state = reactive<{
     if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
     if (embeddedContentType === "spotify" && settingValues.includes("spotify")) return "spotify"
     if (embeddedContentType === "twitch" && settingValues.includes("twitch")) return "twitch"
-    if (embeddedContentType === "twitter" && settingValues.includes("twitter")) return "twitter"
     if (embeddedContentType === "youtube" && settingValues.includes("youtube")) return "youtube"
     if (embeddedContentType === "vimeo" && settingValues.includes("vimeo")) return "vimeo"
     return ""
@@ -106,16 +105,6 @@ function getEmbeddedContentId () {
     }
   }
 
-  // Twitter 対応 1
-  else if (url.hostname === "twitter.com") {
-    const matches = url.pathname.match(/\/status\/([^\/]+)/)
-    if (matches != null && matches[1] != null) {
-      embeddedContentType = "twitter"
-      embeddedContentId = matches[1]
-      return
-    }
-  }
-
   // YouTube 対応
   else if (
     url.hostname === "www.youtube.com" &&
@@ -152,18 +141,6 @@ function updateEmbeddedContents () {
       const script = document.createElement("script")
       script.setAttribute("src", `https://embed.nicovideo.jp/watch/${embeddedContentId}/script`)
       parent.appendChild(script)
-    }
-  }
-
-  // Twitter 対応 2
-  // SEE: https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-javascript-factory-function
-  else if (state.type === "twitter") {
-    const parent = externalComponent.value.querySelector(".external--twitter")
-    if (parent.children.length === 0) {
-      ;(window as any).twttr?.widgets?.createTweet(embeddedContentId, parent, {
-        dnt: true,
-        theme: isDarkMode() ? "dark" : undefined,
-      })
     }
   }
 }
@@ -279,12 +256,6 @@ getEmbeddedContentId()
         loading="lazy"
         scrolling="no"
         width="100%"
-      />
-
-      <!-- Twitter 対応 -->
-      <div
-        v-else-if="state.type === 'twitter'"
-        class="external--twitter twitter-tweet"
       />
 
       <!-- YouTube 対応 -->
@@ -437,18 +408,6 @@ getEmbeddedContentId()
     aspect-ratio: 1 / 0.6;
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
-  }
-
-  // Twitter 対応
-  &--twitter:deep() {
-    .twitter-tweet {
-      margin: 0 !important;
-      max-width: 100% !important;
-
-      & > iframe {
-        width: 100% !important;
-      }
-    }
   }
 
   // YouTube 対応

@@ -530,7 +530,6 @@ function saveSettings () {
       "graysky",
       "spotify",
       "twitch",
-      "twitter",
       "youtube",
       "vimeo",
       "nicovideo",
