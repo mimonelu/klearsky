@@ -10,17 +10,17 @@ const yyyy = (new Date).getFullYear()
       href="https://github.com/mimonelu/klearsky"
       rel="noreferrer"
       target="_blank"
-    >@GitHub</a>
+    >GitHub</a>
     <RouterLink
       class="textlink"
       :to="{ path: '/profile/feeds', query: { account: 'mimonelu.net' } }"
-    >@Bluesky</RouterLink>
+    >Bluesky</RouterLink>
     <a
       class="textlink"
       href="https://twitter.com/mimonelu"
       rel="noreferrer"
       target="_blank"
-    >@X(Twitter)</a>
+    >X(Twitter)</a>
     <span>/</span>
     <small>Bluesky &copy; {{ yyyy }} Bluesky PBC</small>
     <a
@@ -28,13 +28,13 @@ const yyyy = (new Date).getFullYear()
       href="https://blueskyweb.xyz/"
       rel="noreferrer"
       target="_blank"
-    >@Web</a>
+    >Web</a>
     <a
       class="textlink"
       href="https://twitter.com/bluesky"
       rel="noreferrer"
       target="_blank"
-    >@X(Twitter)</a>
+    >X(Twitter)</a>
   </div>
 </template>
 
