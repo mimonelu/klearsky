@@ -117,6 +117,40 @@ function openImagePopup (uri: string) {
   mainState.imagePopupProps.display = true
 }
 
+async function toggleNoUnauthenticated () {
+  if (mainState.userProfile == null) return
+  const params: TTUpdateProfileParams = {
+    displayName: mainState.userProfile.displayName ?? "",
+    description: mainState.userProfile.description ?? "",
+    labels: mainState.userProfile.labels?.map((label: TTLabel) => label.val) ?? [],
+    avatar: null,
+    detachAvatar: [false],
+    banner: null,
+    detachBanner: [false],
+  }
+
+  // 外部公開状態の追加／削除
+  if (state.hasNoUnauthenticated) {
+    const index = params.labels.indexOf("!no-unauthenticated")
+    if (index !== - 1) {
+      params.labels.splice(index, 1)
+    }
+  } else {
+    if (!params.labels.includes("!no-unauthenticated")) {
+      params.labels.push("!no-unauthenticated")
+    }
+  }
+
+  mainState.processing = true
+  await mainState.updateUserProfile(params)
+  const did = mainState.atp.session?.did
+  if (did != null) {
+    await Util.wait(500)
+    await mainState.fetchCurrentProfile(did)
+  }
+  mainState.processing = false
+}
+
 function openPostMenu () {
   Util.blurElement()
   state.profileMenuDisplay = !state.profileMenuDisplay
@@ -272,13 +306,15 @@ function onActivateAccountMaskToggle () {
                 :declarationDid="mainState.currentProfile.did"
               />
 
-              <!-- パブリックアイコン -->
-              <div
-                v-if="mainState.isMyProfile() && !state.hasNoUnauthenticated"
-                class="unauthenticated"
+              <!-- 外部公開状態トグル -->
+              <button
+                v-if="mainState.isMyProfile()"
+                class="button--bordered no-unauthenticated-toggle"
+                :data-no-unauthenticated="state.hasNoUnauthenticated"
+                @click.stop="toggleNoUnauthenticated"
               >
-                <SVGIcon name="earth" />
-              </div>
+                <SVGIcon :name="state.hasNoUnauthenticated ? 'earthOff' : 'earth'" />
+              </button>
 
               <div class="button-container__separator" />
 
@@ -711,14 +747,16 @@ function onActivateAccountMaskToggle () {
   }
 }
 
-// パブリックアイコン
-.unauthenticated {
+// 外部公開状態トグル
+.no-unauthenticated-toggle {
   display: flex;
   align-items: center;
   font-size: 1.25rem;
-  margin-left: 0.5rem;
 
-  & > .svg-icon {
+  &[data-no-unauthenticated="true"] > .svg-icon {
+    fill: var(--fg-color-05);
+  }
+  &[data-no-unauthenticated="false"] > .svg-icon {
     fill: rgb(var(--fg-color));
   }
 }

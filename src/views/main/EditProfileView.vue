@@ -128,7 +128,10 @@ async function submit () {
   try {
     await mainState.updateUserProfile(state as TTUpdateProfileParams)
     const did = mainState.atp.session?.did
-    await mainState.fetchCurrentProfile(did as string)
+    if (did != null) {
+      await Util.wait(500)
+      await mainState.fetchCurrentProfile(did)
+    }
     await router.push({ name: "profile-feeds", query: { account: did } })
   } finally {
     state.processing = false
