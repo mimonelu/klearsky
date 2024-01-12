@@ -206,8 +206,6 @@ function removeMyFeed (uri: string) {
 .my-feed-list {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  margin-bottom: 2rem;
   overflow: hidden;
   position: relative;
 

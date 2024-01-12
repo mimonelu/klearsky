@@ -74,13 +74,13 @@ function searchPost () {
 }
 
 // マイフィードリスト
-.my-feed {
+.my-feed-list {
   flex-grow: 1;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 // コピーライト
 .copyright {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 </style>
