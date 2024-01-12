@@ -371,4 +371,9 @@ type MainState = {
   threadgatePopupProps: TTThreadgatePopupProps
   openThreadgatePopup: Function
   closeThreadgatePopup: Function
+
+  // ポップアップ - リスト選択ポップアップ
+  selectListsPopupProps: TTSelectListsPopupProps
+  openSelectListsPopup: Function
+  closeSelectListsPopup: Function
 }

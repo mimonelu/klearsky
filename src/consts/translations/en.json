@@ -447,9 +447,10 @@
   "threadgate": "Reply controls",
   "threadgateAllowMention": "Allow mention users",
   "threadgateAllowFollowing": "Allow following users",
-  "threadgateAllowList": "Allow users in berow lists",
-  "threadgateAllowListSample": "AT URIs of list: at://did:plc:xxx/app.bsky.graph.list/xxx, ...",
+  "threadgateAllowList": "Allow users in lists",
   "threadgateNotification": "If apply without checking anything, only you will be able to reply.",
+  "selectLists": "Select allowed lists",
+  "selectListsNotification": "Number of selectable lists: ",
 
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",

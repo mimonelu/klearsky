@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -22,14 +22,32 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   loaderDisplay: boolean
   applied: boolean
+  checkedLists: { [k: string]: string }
+  listUris: ComputedRef<Array<string>>
 }>({
   loaderDisplay: false,
   applied: props.draftThreadgate?.applied ?? props.postThreadgate != null,
+  checkedLists: (() => {
+    const result: { [k: string]: string } = {}
+    if (props.mode === "send") {
+      props.draftThreadgate?.listUris.forEach((uri: string) => {
+        const myList = mainState.myList.find((list: TTList) => list.uri === uri)
+        if (myList != null) result[uri] = myList.name
+      })
+    } else if (props.mode === "post") {
+      props.postThreadgate?.lists.forEach((list: TTThreadgateList) => {
+        result[list.uri] = list.name
+      })
+    }
+    return result
+  })(),
+  listUris: computed((): Array<string> => {
+    return Object.keys(state.checkedLists)
+  }),
 })
 
 const easyFormState = reactive<{
   allows: Array<string>
-  listUris: string
 }>({
   allows: (() => {
     // 送信ポスト用
@@ -37,7 +55,7 @@ const easyFormState = reactive<{
       const allows: Array<string> = []
       if (props.draftThreadgate?.allowMention) allows.push("allowMention")
       if (props.draftThreadgate?.allowFollowing) allows.push("allowFollowing")
-      if ((props.draftThreadgate?.listUris?.length ?? 0) > 0) allows.push("allowList")
+      if (state.listUris.length > 0) allows.push("allowList")
       return allows
     }
 
@@ -54,20 +72,6 @@ const easyFormState = reactive<{
 
     return []
   })(),
-  listUris: (() => {
-    // 送信ポスト用
-    if (props.mode === "send") {
-      return props.draftThreadgate?.listUris?.join(", ") ?? ""
-    }
-
-    // 既存ポスト用
-    if (props.mode === "post") {
-      return props.postThreadgate?.lists
-        ?.map((list: TTThreadgateList) => list.uri).join(", ") ?? ""
-    }
-
-    return ""
-  })(),
 })
 
 const easyFormProps: TTEasyForm = {
@@ -80,15 +84,7 @@ const easyFormProps: TTEasyForm = {
       options: [
         { label: $t("threadgateAllowMention"), value: "allowMention" },
         { label: $t("threadgateAllowFollowing"), value: "allowFollowing" },
-        { label: $t("threadgateAllowList"), value: "allowList" },
       ],
-    },
-    {
-      state: easyFormState,
-      model: "listUris",
-      type: "textarea",
-      rows: 3,
-      placeholder: $t("threadgateAllowListSample"),
     },
   ],
 }
@@ -124,10 +120,6 @@ async function update () {
   Util.blurElement()
   const allowMention = easyFormState.allows.includes("allowMention")
   const allowFollowing = easyFormState.allows.includes("allowFollowing")
-  let listUris: undefined | Array<string> = easyFormState.allows.includes("allowList")
-    ? easyFormState.listUris.split(",").map((uri: string) => uri.trim()).filter(Boolean)
-    : []
-  if (listUris.length === 0) listUris = undefined
 
   // 送信ポスト用
   if (props.mode === "send") {
@@ -135,7 +127,7 @@ async function update () {
       updated: true,
       allowMention,
       allowFollowing,
-      listUris,
+      listUris: state.listUris,
     })
     return
   }
@@ -153,13 +145,20 @@ async function update () {
     }
   }
 
-  const responseOfUpdate = await mainState.atp.updateThreadgate(props.postUri, allowMention, allowFollowing, listUris)
+  const responseOfUpdate = await mainState.atp.updateThreadgate(props.postUri, allowMention, allowFollowing, state.listUris)
   state.loaderDisplay = false
   if (!responseOfUpdate || responseOfUpdate instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", responseOfUpdate)
   } else {
     close({ updated: true })
   }
+}
+
+async function openSelectListsPopup () {
+  mainState.openSelectListsPopup({
+    checkedLists: state.checkedLists,
+  })
+  await Util.waitProp(() => mainState.selectListsPopupProps.display, false)
 }
 </script>
 
@@ -187,6 +186,23 @@ async function update () {
     </template>
     <template #body>
       <EasyForm v-bind="easyFormProps" />
+
+      <!-- リスト追加ボタン -->
+      <div class="threadgate-popup__list">
+        <button
+          class="button--bordered"
+          @click.prevent="openSelectListsPopup"
+        >
+          <SVGIcon name="list" />
+          <span>{{ $t("threadgateAllowList") }}</span>
+        </button>
+        <ul v-if="state.listUris.length > 0">
+          <li
+            v-for="name, uri in state.checkedLists"
+            :key="uri"
+          >"{{ name }}"</li>
+        </ul>
+      </div>
 
       <!-- 注意文 -->
       <div class="textlabel--alert">
@@ -234,6 +250,28 @@ async function update () {
   &__state--off {
     background-color: var(--fg-color-0125);
     color: var(--fg-color-075);
+  }
+
+  // リスト追加ボタン
+  &__list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    grid-gap: 0.5rem;
+
+    & > ul {
+      display: flex;
+      flex-wrap: wrap;
+      grid-gap: 0.125rem 0.5rem;
+      margin-left: 1rem;
+
+      & > li {
+        color: var(--fg-color-075);
+        font-weight: bold;
+        line-height: var(--line-height);
+        word-break: break-word;
+      }
+    }
   }
 }
 

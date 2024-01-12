@@ -28,6 +28,7 @@ import ScrollButton from "@/components/buttons/ScrollButton.vue"
 import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
 import SelectLabelsPopup from "@/components/popups/SelectLabelsPopup.vue"
 import SelectLanguagesPopup from "@/components/popups/SelectLanguagesPopup.vue"
+import SelectListsPopup from "@/components/popups/SelectListsPopup.vue"
 import SendAccountReportPopup from "@/components/popups/SendAccountReportPopup.vue"
 import SendFeedReportPopup from "@/components/popups/SendFeedReportPopup.vue"
 import SendPostPopup from "@/components/popups/SendPostPopup.vue"
@@ -812,6 +813,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.threadgatePopupProps.display"
       v-bind="state.threadgatePopupProps"
       @close="state.closeThreadgatePopup"
+    />
+
+    <!-- リスト選択ポップアップ -->
+    <SelectListsPopup
+      v-if="state.selectListsPopupProps.display"
+      v-bind="state.selectListsPopupProps"
+      @close="state.closeSelectListsPopup"
     />
 
     <!-- 　D&Dオーバーレイ -->

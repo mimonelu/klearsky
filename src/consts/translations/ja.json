@@ -445,11 +445,12 @@
   "timeFeeds": "タイムフィード",
 
   "threadgate": "リプライ制限",
-  "threadgateAllowMention": "メンションされたユーザー",
-  "threadgateAllowFollowing": "あなたのフォロワー",
-  "threadgateAllowList": "下記リストに含まれるユーザー",
-  "threadgateAllowListSample": "リストのAT URI: at://did:plc:xxx/app.bsky.graph.list/xxx, ...",
+  "threadgateAllowMention": "メンションされたユーザーを許可",
+  "threadgateAllowFollowing": "あなたのフォロワーを許可",
+  "threadgateAllowList": "リストユーザーを許可",
   "threadgateNotification": "何もチェックせずに適用するとあなた以外リプライできなくなります。",
+  "selectLists": "許可リストの選択",
+  "selectListsNotification": "選択可能なリスト数：",
 
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",

@@ -137,10 +137,10 @@ async function clicked (list: TTList) {
         :isCompact="true"
         @clicked="clicked"
       >
-        <!-- リストユーザーステータスアイコン -->
+        <!-- リストチェックアイコン -->
         <div
-          class="list-user-management-popup__icon"
-          :data-has-user="state.userMap[list.uri]"
+          class="list-card__check-icon"
+          :data-checked="state.userMap[list.uri]"
         >
           <SVGIcon :name="state.userMap[list.uri] ? 'check' : 'minus'" />
         </div>
@@ -182,24 +182,6 @@ async function clicked (list: TTList) {
   // 対象リストユーザー
   .user-box {
     margin: 1em 1em 0;
-  }
-
-  // リストユーザーステータスアイコン
-  &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 3em;
-
-    & > .svg-icon {
-      font-size: 1.5em;
-    }
-    &[data-has-user="true"] {
-      fill: rgb(var(--fg-color));
-    }
-    &[data-has-user="false"] {
-      fill: var(--fg-color-025);
-    }
   }
 }
 </style>

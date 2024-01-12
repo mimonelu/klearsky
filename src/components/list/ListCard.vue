@@ -490,5 +490,25 @@ function endAwait () {
   .button--plane {
     background-color: rgb(var(--accent-color), 0.25);
   }
+
+  // リストチェックアイコン
+  &:deep() {
+    .list-card__check-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3em;
+
+      & > .svg-icon {
+        font-size: 1.5em;
+      }
+      &[data-checked="true"] {
+        fill: rgb(var(--fg-color));
+      }
+      &[data-checked="false"] {
+        fill: var(--fg-color-025);
+      }
+    }
+  }
 }
 </style>
