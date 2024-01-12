@@ -10,10 +10,10 @@ const mainState = inject("state") as MainState
 
 async function updateMyFeeds () {
   Util.blurElement()
-  if (mainState.listProcessing) return
-  mainState.listProcessing = true
+  if (mainState.listLoaderDisplay) return
+  mainState.listLoaderDisplay = true
   await mainState.fetchMyFeeds()
-  mainState.listProcessing = false
+  mainState.listLoaderDisplay = false
 }
 </script>
 
@@ -27,7 +27,7 @@ async function updateMyFeeds () {
 
     <!-- マイフィード未取得エラーラベル -->
     <div
-      v-if="!mainState.listProcessing && Object.keys(mainState.currentMyFeeds).length === 0"
+      v-if="!mainState.listLoaderDisplay && Object.keys(mainState.currentMyFeeds).length === 0"
       class="textlabel"
     >
       <div class="textlabel__text">
@@ -92,7 +92,7 @@ async function updateMyFeeds () {
         </div>
       </template>
     </div>
-    <Loader v-if="mainState.listProcessing" />
+    <Loader v-if="mainState.listLoaderDisplay" />
   </div>
 </template>
 

@@ -105,9 +105,9 @@ function importAccounts (event: Event) {
     }
     Util.saveStorage("atp", mainState.atp.data)
 
-    mainState.processing = true
+    mainState.loaderDisplay = true
     location.reload()
-    mainState.processing = false
+    mainState.loaderDisplay = false
   }
   reader.readAsText(file)
 }

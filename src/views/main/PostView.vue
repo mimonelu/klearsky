@@ -24,9 +24,9 @@ function removeThisPost (uri: string) {
 
 async function updateAll () {
   Util.blurElement()
-  mainState.listProcessing = true
+  mainState.listLoaderDisplay = true
   await mainState.fetchPostThread()
-  mainState.listProcessing = false
+  mainState.listLoaderDisplay = false
 }
 </script>
 
@@ -54,7 +54,7 @@ async function updateAll () {
       @updateThisPostThread="updateThisPostThread"
       @removeThisPost="removeThisPost"
     />
-    <Loader v-if="mainState.listProcessing" />
+    <Loader v-if="mainState.listLoaderDisplay" />
   </div>
 </template>
 

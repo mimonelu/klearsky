@@ -18,9 +18,9 @@ async function fetchLists (direction: "new" | "old") {
   // マイリストは起動時にすべて読み込むため取得不要
   if (mainState.isMyProfile()) return
 
-  mainState.listProcessing = true
+  mainState.listLoaderDisplay = true
   await mainState.fetchAuthorLists(direction)
-  mainState.listProcessing = false
+  mainState.listLoaderDisplay = false
 }
 
 // インフィニットスクロール

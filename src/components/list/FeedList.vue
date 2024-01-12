@@ -16,7 +16,7 @@ const mainState = inject("state") as MainState
 
 async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
   Util.blurElement()
-  mainState.listProcessing = true
+  mainState.listLoaderDisplay = true
   try {
     switch (props.type) {
       case "authorFeeds": {
@@ -49,7 +49,7 @@ async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
       }
     }
   } finally {
-    mainState.listProcessing = false
+    mainState.listLoaderDisplay = false
   }
 }
 
@@ -92,13 +92,13 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <LoadButton
       v-if="hasLoadButton"
       direction="new"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchFeeds('new')"
     />
     <div class="feeds">
       <!-- 空のコンテンツメッセージ -->
       <div
-        v-if="!mainState.listProcessing && feeds?.length === 0"
+        v-if="!mainState.listLoaderDisplay && feeds?.length === 0"
         class="textlabel margin1"
       >
         <div class="textlabel__text">
@@ -121,7 +121,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         <LoadButton
           v-if="feed.__cursor != null"
           direction="middle"
-          :processing="mainState.listProcessing"
+          :processing="mainState.listLoaderDisplay"
           @activate="fetchFeeds('old', feed.__cursor)"
         />
       </template>
@@ -129,7 +129,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <LoadButton
       v-if="hasLoadButton"
       direction="old"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchFeeds('old')"
     />
   </div>

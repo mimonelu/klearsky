@@ -9,9 +9,9 @@ const mainState = inject("state") as MainState
 
 async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
   Util.blurElement()
-  mainState.listProcessing = true
+  mainState.listLoaderDisplay = true
   await mainState.fetchCurrentListFeeds(direction, middleCursor)
-  mainState.listProcessing = false
+  mainState.listLoaderDisplay = false
 }
 
 // マイリストの削除
@@ -44,7 +44,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     />
     <LoadButton
       direction="new"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchFeeds('new')"
     />
     <div class="feeds">
@@ -61,14 +61,14 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         <LoadButton
           v-if="feed.__cursor != null"
           direction="middle"
-          :processing="mainState.listProcessing"
+          :processing="mainState.listLoaderDisplay"
           @activate="fetchFeeds('old', feed.__cursor)"
         />
       </template>
     </div>
     <LoadButton
       direction="old"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchFeeds('old')"
     />
   </div>

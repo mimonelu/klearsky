@@ -12,8 +12,8 @@ const mainState = inject("state") as MainState
 
 async function toggleMute () {
   emit("close")
-  if (mainState.processing) return
-  mainState.processing = true
+  if (mainState.centerLoaderDisplay) return
+  mainState.centerLoaderDisplay = true
   try {
     if (props.user?.viewer.muted) {
       await mainState.atp.updateMuteToDisable(props.user.did)
@@ -27,7 +27,7 @@ async function toggleMute () {
       props.user.viewer.muted = true
     }
   } finally {
-    mainState.processing = false
+    mainState.centerLoaderDisplay = false
   }
 }
 </script>

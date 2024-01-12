@@ -19,23 +19,23 @@ function close () {
 
 async function newLogin () {
   close()
-  mainState.processing = true
+  mainState.loaderDisplay = true
   mainState.atp.logout()
   await router.push({ name: "home" })
   location.reload()
-  mainState.processing = false
+  mainState.loaderDisplay = false
 }
 
 async function logout () {
   close()
-  mainState.processing = true
+  mainState.loaderDisplay = true
   try {
     await mainState.atp.deleteSession()
   } finally {
     mainState.atp.logout()
     await router.push({ name: "home" })
     location.reload()
-    mainState.processing = false
+    mainState.loaderDisplay = false
   }
 }
 </script>

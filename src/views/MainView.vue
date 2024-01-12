@@ -72,12 +72,12 @@ onMounted(async () => {
   state.currentPath = router.currentRoute.value.path
   state.currentQuery = router.currentRoute.value.query
   state.settings = Util.loadStorage("settings") ?? {}
-  state.processing = true
+  state.loaderDisplay = true
   try {
     await autoLogin()
   } finally {
     state.mounted = true
-    state.processing = false
+    state.loaderDisplay = false
     updatePageTitle()
 
     // ペースト用処理
@@ -181,7 +181,7 @@ async function autoLogin () {
 }
 
 async function manualLogin (service: string, identifier: string, password: string) {
-  state.processing = true
+  state.loaderDisplay = true
   try {
     if (!await state.atp.login(service, identifier, password, onRefreshSession)) {
       emit("error", $t("loginFailed"))
@@ -191,7 +191,7 @@ async function manualLogin (service: string, identifier: string, password: strin
     state.loginPopupDisplay = false
     await processAfterLogin()
   } finally {
-    state.processing = false
+    state.loaderDisplay = false
   }
 }
 
@@ -244,7 +244,7 @@ async function processPage (pageName?: null | string) {
     }
   }
 
-  state.listProcessing = true
+  state.listLoaderDisplay = true
   try {
     switch (pageName) {
       case "profile-feeds": {
@@ -373,7 +373,7 @@ async function processPage (pageName?: null | string) {
       }
     }
   } finally {
-    state.listProcessing = false
+    state.listLoaderDisplay = false
   }
 
   // 現在ページの該当データを取得してからページタイトルを更新
@@ -473,8 +473,8 @@ function scrollListener () {
     if (!isEnter &&
       state.mounted &&
       state.atp.hasLogin() &&
-      !state.processing &&
-      !state.listProcessing
+      !state.loaderDisplay &&
+      !state.listLoaderDisplay
     ) state.scrolledToBottom = true
     isEnter = true
   } else {
@@ -600,12 +600,19 @@ function broadcastListener (event: MessageEvent) {
           v-if="state.mounted"
           @updatePageTitle="updatePageTitle"
         />
+
+        <!-- 中央ローダー -->
+        <Loader
+          v-if="state.centerLoaderDisplay"
+          class="center-loader"
+        />
       </div>
 
       <!-- サブメニュー -->
       <div class="sub-menu-wrapper">
         <SubMenu />
       </div>
+
       <ScrollButton />
     </div>
 
@@ -863,7 +870,10 @@ function broadcastListener (event: MessageEvent) {
     />
 
     <!-- 全画面ローダー -->
-    <Loader v-if="state.processing" />
+    <Loader
+      v-if="state.loaderDisplay"
+      class="fullscreen-loader"
+    />
 
     <!-- スプラッシュスクリーン -->
     <SplashScreen />
@@ -1084,8 +1094,17 @@ function broadcastListener (event: MessageEvent) {
   }
 }
 
+// 中央ローダー
+.center-loader {
+  margin: 0 auto;
+  position: fixed;
+  left: 0;
+  right: 0;
+  max-width: $router-view-width;
+}
+
 // 全画面ローダー
-.loader {
+.fullscreen-loader {
   position: fixed;
 }
 </style>

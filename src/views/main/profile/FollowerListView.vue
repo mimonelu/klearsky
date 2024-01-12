@@ -10,7 +10,7 @@ const mainState = inject("state") as MainState
   <div class="follower-list">
     <!-- 空メッセージ -->
     <div
-      v-if="!mainState.listProcessing && mainState.currentFollowers.length === 0"
+      v-if="!mainState.listLoaderDisplay && mainState.currentFollowers.length === 0"
       class="textlabel follower-list__no-followers"
     >
       <div class="textlabel__text">

@@ -16,9 +16,10 @@ state.$getCurrentLanguage = undefined
 state.atp = new AtpWrapper()
 state.currentPath = ""
 state.currentQuery = {}
-state.listProcessing = false
 state.mounted = false
-state.processing = false
+state.loaderDisplay = false
+state.centerLoaderDisplay = false
+state.listLoaderDisplay = false
 state.updateKey = 0
 state.forceUpdate = forceUpdate
 state.formatDate = formatDate
@@ -774,11 +775,11 @@ async function fetchUserProfile () {
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
-  state.processing = true
+  state.loaderDisplay = true
   try {
     await state.atp.updateProfile(profile)
   } finally {
-    state.processing = false
+    state.loaderDisplay = false
   }
 }
 

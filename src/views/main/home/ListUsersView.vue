@@ -10,9 +10,9 @@ const mainState = inject("state") as MainState
 
 async function fetchListItems (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listProcessing = true
+  mainState.listLoaderDisplay = true
   await mainState.fetchCurrentListItems(direction)
-  mainState.listProcessing = false
+  mainState.listLoaderDisplay = false
 }
 
 // マイリストの削除
@@ -49,7 +49,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     />
     <LoadButton
       direction="new"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchListItems('new')"
     />
     <div class="list-users__list-item-container">
@@ -75,7 +75,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     </div>
     <LoadButton
       direction="old"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchListItems('old')"
     />
   </div>

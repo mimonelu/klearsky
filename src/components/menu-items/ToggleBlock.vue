@@ -17,20 +17,20 @@ async function onActivate () {
 
 async function block () {
   emit("close")
-  if (mainState.processing) return
+  if (mainState.centerLoaderDisplay) return
   if (props.user?.viewer.blocking != null) return
-  mainState.processing = true
+  mainState.centerLoaderDisplay = true
   const blocking = await mainState.atp.updateBlockToEnable(props.user?.did as string)
   if (blocking != null && props.user != null)
     props.user.viewer.blocking = blocking
-  mainState.processing = false
+  mainState.centerLoaderDisplay = false
 }
 
 async function unblock () {
   emit("close")
-  if (mainState.processing) return
+  if (mainState.centerLoaderDisplay) return
   if (props.user?.viewer.blocking == null) return
-  mainState.processing = true
+  mainState.centerLoaderDisplay = true
   await mainState.atp.updateBlockToDisable(props.user.viewer.blocking)
 
   mainState.currentBlockingUsers = mainState.currentBlockingUsers.filter((user: TTUser) => {
@@ -38,7 +38,7 @@ async function unblock () {
   })
 
   delete props.user.viewer.blocking
-  mainState.processing = false
+  mainState.centerLoaderDisplay = false
 }
 </script>
 

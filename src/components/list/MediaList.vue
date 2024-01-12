@@ -14,7 +14,7 @@ const mainState = inject("state") as MainState
   <div class="media-list">
     <!-- 空のコンテンツメッセージ -->
     <div
-      v-if="!mainState.listProcessing && medias?.length === 0"
+      v-if="!mainState.listLoaderDisplay && medias?.length === 0"
       class="textlabel margin1"
     >
       <div class="textlabel__text">

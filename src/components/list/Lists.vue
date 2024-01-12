@@ -43,9 +43,9 @@ async function updateMylist () {
     $t("myListConfirmation")
   )) return
   mainState.myList.splice(0)
-  mainState.processing = true
+  mainState.loaderDisplay = true
   await mainState.fetchMyLists()
-  mainState.processing = false
+  mainState.loaderDisplay = false
 }
 
 function openListEditPopup () {
@@ -102,13 +102,13 @@ function clicked (list?: TTList) {
     <LoadButton
       v-if="loaderDisplay"
       direction="new"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchLists('new')"
     />
 
     <!-- 空リストメッセージ -->
     <div
-      v-if="!mainState.listProcessing && state.lists.length === 0"
+      v-if="!mainState.listLoaderDisplay && state.lists.length === 0"
       class="textlabel lists__nolist"
     >
       <div class="textlabel__text">
@@ -136,7 +136,7 @@ function clicked (list?: TTList) {
     <LoadButton
       v-if="loaderDisplay"
       direction="old"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchLists('old')"
     />
   </div>

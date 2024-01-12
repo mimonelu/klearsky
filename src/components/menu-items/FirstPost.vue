@@ -18,8 +18,8 @@ async function moveToFirstPost (event: Event) {
   Util.blurElement()
   emit("close")
   if (props.did == null) return
-  if (mainState.processing) return
-  mainState.processing = true
+  if (mainState.centerLoaderDisplay) return
+  mainState.centerLoaderDisplay = true
   try {
     const uri = await mainState.atp.fetchFirstPost(props.did)
     if (uri == null) return
@@ -31,7 +31,7 @@ async function moveToFirstPost (event: Event) {
     }
     await router.push(postUrl)
   } finally {
-    mainState.processing = false
+    mainState.centerLoaderDisplay = false
   }
 }
 </script>

@@ -20,7 +20,7 @@ const currentUsers = props.type === "follower"
 
 async function fetchUsers (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listProcessing = true
+  mainState.listLoaderDisplay = true
   try {
     switch (props.type) {
       case "follower": {
@@ -37,7 +37,7 @@ async function fetchUsers (direction: "new" | "old") {
       }
     }
   } finally {
-    mainState.listProcessing = false
+    mainState.listLoaderDisplay = false
   }
 }
 
@@ -82,12 +82,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <LoadButton
       v-if="type !== 'suggestedFollows'"
       direction="old"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchUsers('old')"
     />
 
     <!-- おすすめユーザー用ローダー -->
-    <Loader v-if="type === 'suggestedFollows' && mainState.listProcessing" />
+    <Loader v-if="type === 'suggestedFollows' && mainState.listLoaderDisplay" />
   </div>
 </template>
 

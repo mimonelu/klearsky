@@ -4,9 +4,10 @@ type MainState = {
   atp: TIAtpWrapper
   currentPath: string
   currentQuery: LocationQuery
-  listProcessing: boolean
+  loaderDisplay: boolean
+  centerLoaderDisplay: boolean
+  listLoaderDisplay: boolean
   mounted: boolean
-  processing: boolean
   updateKey: number
   forceUpdate: () => void
   formatDate: (dateString?: string) => string

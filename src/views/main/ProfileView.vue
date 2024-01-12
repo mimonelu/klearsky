@@ -141,14 +141,14 @@ async function toggleNoUnauthenticated () {
     }
   }
 
-  mainState.processing = true
+  mainState.centerLoaderDisplay = true
   await mainState.updateUserProfile(params)
   const did = mainState.atp.session?.did
   if (did != null) {
     await Util.wait(500)
     await mainState.fetchCurrentProfile(did)
   }
-  mainState.processing = false
+  mainState.centerLoaderDisplay = false
 }
 
 function openPostMenu () {
@@ -387,7 +387,7 @@ function onActivateAccountMaskToggle () {
           </div>
         </div>
       </div>
-      <Loader v-if="mainState.currentProfile == null && mainState.listProcessing" />
+      <Loader v-if="mainState.currentProfile == null && mainState.listLoaderDisplay" />
     </div>
 
     <!-- タブ -->

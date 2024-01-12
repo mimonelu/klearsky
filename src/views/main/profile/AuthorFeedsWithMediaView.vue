@@ -27,9 +27,9 @@ const state = reactive<{
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listProcessing = true
+  mainState.listLoaderDisplay = true
   await mainState.fetchCurrentAuthorFeed(direction, "posts_with_media")
-  mainState.listProcessing = false
+  mainState.listLoaderDisplay = false
 }
 
 // インフィニットスクロール
@@ -42,13 +42,13 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   <div class="author-media-view">
     <LoadButton
       direction="new"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchCurrentAuthorFeed('new')"
     />
     <MediaList :medias="state.medias" />
     <LoadButton
       direction="old"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchCurrentAuthorFeed('old')"
     />
   </div>

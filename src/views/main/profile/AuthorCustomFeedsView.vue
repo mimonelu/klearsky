@@ -9,9 +9,9 @@ const mainState = inject("state") as MainState
 
 async function fetchAuthorCustomFeeds (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listProcessing = true
+  mainState.listLoaderDisplay = true
   await mainState.fetchCurrentAuthorCustomFeeds(direction)
-  mainState.listProcessing = false
+  mainState.listLoaderDisplay = false
 }
 
 // インフィニットスクロール
@@ -24,13 +24,13 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   <div class="author-custom-feeds-view">
     <LoadButton
       direction="new"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchAuthorCustomFeeds('new')"
     />
 
     <!-- 空のコンテンツメッセージ -->
     <div
-      v-if="!mainState.listProcessing && mainState.currentAuthorCustomFeeds?.length === 0"
+      v-if="!mainState.listLoaderDisplay && mainState.currentAuthorCustomFeeds?.length === 0"
       class="textlabel margin1"
     >
       <div class="textlabel__text">
@@ -50,7 +50,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     </div>
     <LoadButton
       direction="old"
-      :processing="mainState.listProcessing"
+      :processing="mainState.listLoaderDisplay"
       @activate="fetchAuthorCustomFeeds('old')"
     />
   </div>
