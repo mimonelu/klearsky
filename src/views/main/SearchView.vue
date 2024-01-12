@@ -22,7 +22,6 @@ const state = reactive<{
       <PageHeader
         :hasBackButton="true"
         :title="$t('search')"
-        :subTitle="mainState.atp.session?.__serviceName ?? ''"
       />
       <div class="tab">
         <RouterLink

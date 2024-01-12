@@ -23,7 +23,6 @@ function openMyListPopup () {
       <PageHeader
         :hasBackButton="true"
         :title="$t('home')"
-        :subTitle="mainState.atp.session?.__serviceName ?? ''"
       >
         <template #right>
           <PortalTarget name="home-view-header-top" />
