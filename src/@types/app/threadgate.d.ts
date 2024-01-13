@@ -41,8 +41,3 @@ type TTThreadgatePopupProps = {
   postUri?: string
   onClosed?: Function
 }
-
-type TTSelectListsPopupProps = {
-  display: boolean
-  checkedLists: { [k: string]: string }
-}

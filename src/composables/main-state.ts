@@ -408,14 +408,6 @@ state.threadgatePopupProps = {
 state.openThreadgatePopup = openThreadgatePopup
 state.closeThreadgatePopup = closeThreadgatePopup
 
-// ポップアップ - リスト選択ポップアップ
-state.selectListsPopupProps = {
-  display: false,
-  checkedLists: {},
-}
-state.openSelectListsPopup = openSelectListsPopup
-state.closeSelectListsPopup = closeSelectListsPopup
-
 export function resetProfileState (state: MainState) {
   resetArray(state, "currentAuthorFeeds")
   state.currentAuthorFeedsCursor = undefined
@@ -1576,15 +1568,4 @@ function closeThreadgatePopup (params: any) {
   if (state.threadgatePopupProps.onClosed != null)
     state.threadgatePopupProps.onClosed(params)
   state.threadgatePopupProps.display = false
-}
-
-// ポップアップ - リスト選択ポップアップ
-
-function openSelectListsPopup (props: TTSelectListsPopupProps) {
-  state.selectListsPopupProps.checkedLists = props.checkedLists
-  state.selectListsPopupProps.display = true
-}
-
-function closeSelectListsPopup () {
-  state.selectListsPopupProps.display = false
 }

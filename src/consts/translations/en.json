@@ -449,8 +449,6 @@
   "threadgateAllowFollowing": "Allow following users",
   "threadgateAllowList": "Allow users in lists",
   "threadgateNotification": "If apply without checking anything, only you will be able to reply.",
-  "selectLists": "Select allowed lists",
-  "selectListsNotification": "Number of selectable lists: ",
 
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",

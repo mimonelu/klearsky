@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { inject, reactive } from "vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -22,40 +22,29 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   loaderDisplay: boolean
   applied: boolean
-  checkedLists: { [k: string]: string }
-  listUris: ComputedRef<Array<string>>
 }>({
   loaderDisplay: false,
   applied: props.draftThreadgate?.applied ?? props.postThreadgate != null,
-  checkedLists: (() => {
-    const result: { [k: string]: string } = {}
-    if (props.mode === "send") {
-      props.draftThreadgate?.listUris.forEach((uri: string) => {
-        const myList = mainState.myList.find((list: TTList) => list.uri === uri)
-        if (myList != null) result[uri] = myList.name
-      })
-    } else if (props.mode === "post") {
-      props.postThreadgate?.lists.forEach((list: TTThreadgateList) => {
-        result[list.uri] = list.name
-      })
-    }
-    return result
-  })(),
-  listUris: computed((): Array<string> => {
-    return Object.keys(state.checkedLists)
-  }),
 })
 
 const easyFormState = reactive<{
   allows: Array<string>
+  options: Array<TTOption>
 }>({
   allows: (() => {
     // 送信ポスト用
     if (props.mode === "send") {
       const allows: Array<string> = []
-      if (props.draftThreadgate?.allowMention) allows.push("allowMention")
-      if (props.draftThreadgate?.allowFollowing) allows.push("allowFollowing")
-      if (state.listUris.length > 0) allows.push("allowList")
+      if (props.draftThreadgate?.allowMention) {
+        allows.push("allowMention")
+      }
+      if (props.draftThreadgate?.allowFollowing) {
+        allows.push("allowFollowing")
+      }
+      props.draftThreadgate?.listUris
+        .forEach((listUri: string) => {
+          allows.push(listUri)
+        })
       return allows
     }
 
@@ -63,14 +52,38 @@ const easyFormState = reactive<{
     if (props.mode === "post") {
       return props.postThreadgate?.record?.allow
         ?.map((allow: TTThreadgateAllow) => {
-          if (allow.$type.startsWith("app.bsky.feed.threadgate#mentionRule")) return "allowMention"
-          else if (allow.$type.startsWith("app.bsky.feed.threadgate#followingRule")) return "allowFollowing"
-          else if (allow.$type.startsWith("app.bsky.feed.threadgate#listRule")) return "allowList"
+          if (allow.$type.startsWith("app.bsky.feed.threadgate#mentionRule")) {
+            return "allowMention"
+          } else if (allow.$type.startsWith("app.bsky.feed.threadgate#followingRule")) {
+            return "allowFollowing"
+          } else if (allow.$type.startsWith("app.bsky.feed.threadgate#listRule")) {
+            // TODO: `allow.list` は `string[]` と定義されているが、実際は `string` 。要調査
+            return (allow.list as undefined | string) ?? ""
+          }
           return ""
         }) ?? []
     }
 
     return []
+  })(),
+  options: (() => {
+    const results: Array<TTOption> = [
+      { label: $t("threadgateAllowMention"), value: "allowMention" },
+      { label: $t("threadgateAllowFollowing"), value: "allowFollowing" },
+    ]
+
+    // マイリストを選択肢に追加
+    Array.from(mainState.myList)
+      .sort((a: TTList, b: TTList): number => {
+        const aTerm = a.name || a.indexedAt
+        const bTerm = b.name || b.indexedAt
+        return aTerm < bTerm ? - 1 : aTerm > bTerm ? 1 : 0
+      })
+      .forEach((myList: TTList) => {
+        results.push({ label: `${$t("list")}: ${myList.name}`, value: myList.uri })
+      })
+
+    return results
   })(),
 })
 
@@ -81,10 +94,7 @@ const easyFormProps: TTEasyForm = {
       state: easyFormState,
       model: "allows",
       type: "checkbox",
-      options: [
-        { label: $t("threadgateAllowMention"), value: "allowMention" },
-        { label: $t("threadgateAllowFollowing"), value: "allowFollowing" },
-      ],
+      options: easyFormState.options,
     },
   ],
 }
@@ -121,13 +131,18 @@ async function update () {
   const allowMention = easyFormState.allows.includes("allowMention")
   const allowFollowing = easyFormState.allows.includes("allowFollowing")
 
+  // 許可リスト
+  let listUris: undefined | Array<string> = easyFormState.allows
+    .filter((allow: string) => allow.startsWith("at://"))
+  if (listUris.length === 0) listUris = undefined
+
   // 送信ポスト用
   if (props.mode === "send") {
     close({
       updated: true,
       allowMention,
       allowFollowing,
-      listUris: state.listUris,
+      listUris,
     })
     return
   }
@@ -145,20 +160,18 @@ async function update () {
     }
   }
 
-  const responseOfUpdate = await mainState.atp.updateThreadgate(props.postUri, allowMention, allowFollowing, state.listUris)
+  const responseOfUpdate = await mainState.atp.updateThreadgate(
+    props.postUri,
+    allowMention,
+    allowFollowing,
+    listUris
+  )
   state.loaderDisplay = false
   if (!responseOfUpdate || responseOfUpdate instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", responseOfUpdate)
   } else {
     close({ updated: true })
   }
-}
-
-async function openSelectListsPopup () {
-  mainState.openSelectListsPopup({
-    checkedLists: state.checkedLists,
-  })
-  await Util.waitProp(() => mainState.selectListsPopupProps.display, false)
 }
 </script>
 
@@ -186,23 +199,6 @@ async function openSelectListsPopup () {
     </template>
     <template #body>
       <EasyForm v-bind="easyFormProps" />
-
-      <!-- リスト追加ボタン -->
-      <div class="threadgate-popup__list">
-        <button
-          class="button--bordered"
-          @click.prevent="openSelectListsPopup"
-        >
-          <SVGIcon name="list" />
-          <span>{{ $t("threadgateAllowList") }}</span>
-        </button>
-        <ul v-if="state.listUris.length > 0">
-          <li
-            v-for="name, uri in state.checkedLists"
-            :key="uri"
-          >"{{ name }}"</li>
-        </ul>
-      </div>
 
       <!-- 注意文 -->
       <div class="textlabel--alert">
@@ -250,28 +246,6 @@ async function openSelectListsPopup () {
   &__state--off {
     background-color: var(--fg-color-0125);
     color: var(--fg-color-075);
-  }
-
-  // リスト追加ボタン
-  &__list {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    grid-gap: 0.5rem;
-
-    & > ul {
-      display: flex;
-      flex-wrap: wrap;
-      grid-gap: 0.125rem 0.5rem;
-      margin-left: 1rem;
-
-      & > li {
-        color: var(--fg-color-075);
-        font-weight: bold;
-        line-height: var(--line-height);
-        word-break: break-word;
-      }
-    }
   }
 }
 
