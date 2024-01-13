@@ -88,9 +88,13 @@ function close () {
     }
   }
 
-  .checkbox:first-child,
-  .checkbox:nth-child(2) {
-    border-top-style: none;
+  .checkbox {
+    min-height: unset !important;
+
+    &:first-child,
+    &:nth-child(2) {
+      border-top-style: none;
+    }
   }
 
   .svg-icon--help {

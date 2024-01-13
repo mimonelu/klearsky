@@ -1,6 +1,6 @@
 .list-menu {
   background-color: rgb(var(--bg-color));
-  border: 1px solid rgb(var(--accent-color));
+  border: 1px solid var(--fg-color-05);
   border-radius: var(--border-radius);
   box-shadow: 0 0 0 1px rgb(var(--bg-color));
   color: rgb(var(--fg-color));
@@ -69,6 +69,6 @@
   }
 
   & > hr {
-    border-bottom: 1px solid rgb(var(--accent-color), 0.25);
+    border-bottom: 1px solid var(--fg-color-025);
   }
 }

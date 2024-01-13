@@ -67,9 +67,6 @@
       &:not(:last-child) {
         border-right-style: none;
       }
-      &[data-checked="true"] + * {
-        border-left-color: var(--fg-color-0375);
-      }
     }
   }
   &[data-layout="vertical"] {
@@ -85,9 +82,6 @@
       }
       &:not(:last-child) {
         border-bottom-style: none;
-      }
-      &[data-checked="true"] + * {
-        border-top-color: var(--fg-color-0375);
       }
     }
   }

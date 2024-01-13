@@ -9,14 +9,14 @@
   padding: 0.5em 1em;
   position: relative;
   &:focus, &:hover {
-    border-color: rgb(var(--accent-color));
+    border-color: var(--fg-color-05);
 
     & > .svg-icon {
-      fill: rgb(var(--accent-color));
+      fill: rgb(var(--fg-color));
     }
 
     & > span {
-      color: rgb(var(--accent-color));
+      color: rgb(var(--fg-color));
     }
   }
   &:focus {

@@ -241,6 +241,10 @@ function removeCurrentPostTag (index: number) {
   }
   &__search-button {
     font-size: 1.25rem;
+
+    & > .svg-icon {
+      opacity: 0.5;
+    }
   }
   &__remove-button {
     --fg-color: var(--notice-color);
