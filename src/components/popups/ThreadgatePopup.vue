@@ -5,6 +5,8 @@ import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
+const NUMBER_OF_SELECTABLE_ITEMS = 5
+
 const emit = defineEmits<{(event: string, params: any): void}>()
 
 const props = defineProps<{
@@ -80,7 +82,7 @@ const easyFormState = reactive<{
         return aTerm < bTerm ? - 1 : aTerm > bTerm ? 1 : 0
       })
       .forEach((myList: TTList) => {
-        results.push({ label: `${$t("list")}: ${myList.name}`, value: myList.uri })
+        results.push({ label: `${$t("threadgateAllowList")}: ${myList.name}`, value: myList.uri })
       })
 
     return results
@@ -95,6 +97,7 @@ const easyFormProps: TTEasyForm = {
       model: "allows",
       type: "checkbox",
       options: easyFormState.options,
+      limit: NUMBER_OF_SELECTABLE_ITEMS,
     },
   ],
 }
@@ -201,9 +204,14 @@ async function update () {
       <EasyForm v-bind="easyFormProps" />
 
       <!-- 注意文 -->
+      <div class="textlabel">
+        <div class="textlabel__text">
+          <SVGIcon name="point" />{{ $t("threadgateNotification1") }}
+        </div>
+      </div>
       <div class="textlabel--alert">
         <div class="textlabel__text">
-          <SVGIcon name="alert" />{{ $t("threadgateNotification") }}
+          <SVGIcon name="point" />{{ $t("threadgateNotification2") }}
         </div>
       </div>
 

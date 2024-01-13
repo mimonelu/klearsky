@@ -3,13 +3,13 @@
   border-radius: var(--border-radius);
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   grid-gap: 0.25em 0.5em;
 
   &__text {
     display: flex;
     grid-gap: 0.25em 0.5em;
     line-height: var(--line-height);
+    margin-top: -0.25em;
 
     & > .svg-icon {
       margin-top: 0.25em;
@@ -22,9 +22,6 @@
   }
 }
 .textlabel {
-  background-color: var(--fg-color-0125);
-  padding: 0.5em 1em;
-
   &__text > .svg-icon {
     fill: rgb(var(--fg-color));
   }

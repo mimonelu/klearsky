@@ -447,8 +447,9 @@
   "threadgate": "リプライ制限",
   "threadgateAllowMention": "メンションされたユーザーを許可",
   "threadgateAllowFollowing": "あなたのフォロワーを許可",
-  "threadgateAllowList": "リストユーザーを許可",
-  "threadgateNotification": "何もチェックせずに適用するとあなた以外リプライできなくなります。",
+  "threadgateAllowList": "リストを許可",
+  "threadgateNotification1": "5項目まで選択できます。",
+  "threadgateNotification2": "何もチェックせずに適用するとあなた以外リプライできなくなります。",
 
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",

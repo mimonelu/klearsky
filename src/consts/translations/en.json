@@ -447,8 +447,9 @@
   "threadgate": "Reply controls",
   "threadgateAllowMention": "Allow mention users",
   "threadgateAllowFollowing": "Allow following users",
-  "threadgateAllowList": "Allow users in lists",
-  "threadgateNotification": "If apply without checking anything, only you will be able to reply.",
+  "threadgateAllowList": "Allow list",
+  "threadgateNotification1": "Up to 5 items can be selected.",
+  "threadgateNotification2": "If apply without checking anything, only you will be able to reply.",
 
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",

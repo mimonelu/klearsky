@@ -56,6 +56,7 @@ import pinOffOutline from "@/svg/pin-off-outline.svg?raw"
 import pinOutline from "@/svg/pin-outline.svg?raw"
 import play from "@/svg/play.svg?raw"
 import plus from "@/svg/plus.svg?raw"
+import point from "@/svg/point.svg?raw"
 import post from "@/svg/post.svg?raw"
 import posts from "@/svg/comment-multiple.svg?raw"
 import question from "@/svg/question.svg?raw"
@@ -136,6 +137,7 @@ const icons: { [k: string]: string } = {
   pinOutline,
   play,
   plus,
+  point,
   post,
   posts,
   question,
