@@ -740,23 +740,25 @@ function onActivateHashTag (text: string) {
           class="post__content"
         >
           <!-- 本文 -->
-          <HtmlText
-            v-if="position !== 'slim'"
-            class="text"
-            dir="auto"
-            :text="state.text"
-            :facets="post.record?.facets ?? post.value?.facets"
-            :entities="post.record?.entities ?? post.value?.entities"
-            :processHashTag="false"
-            :hasTranslateLink="state.hasOtherLanguages"
-            @onActivateHashTag="onActivateHashTag"
-            @translate="onForceTranslate"
-          />
-          <div
-            v-else
-            class="text--slim"
-            dir="auto"
-          >{{ state.text }}</div>
+          <template v-if="state.text !== ''">
+            <HtmlText
+              v-if="position !== 'slim'"
+              class="text"
+              dir="auto"
+              :text="state.text"
+              :facets="post.record?.facets ?? post.value?.facets"
+              :entities="post.record?.entities ?? post.value?.entities"
+              :processHashTag="false"
+              :hasTranslateLink="state.hasOtherLanguages"
+              @onActivateHashTag="onActivateHashTag"
+              @translate="onForceTranslate"
+            />
+            <div
+              v-else
+              class="text--slim"
+              dir="auto"
+            >{{ state.text }}</div>
+          </template>
 
           <!-- 自動翻訳 -->
           <div
@@ -1110,15 +1112,13 @@ function onActivateHashTag (text: string) {
     }
   }
   &[data-is-masked="false"] {
-    padding-top: 0.75em;
-
     .header:not(:empty) {
       margin-bottom: 0.5em;
     }
 
     .post__mask {
       margin: -0.75em -1em 0;
-      padding: 0.75em 1em;
+      padding: 0.5em 1em;
     }
   }
   &__mask {
@@ -1210,7 +1210,7 @@ function onActivateHashTag (text: string) {
   grid-template-columns: 1fr 1fr;
   grid-gap: 1em;
   margin: -0.75em -1em 0.5em;
-  padding: 0.75em 1em 0;
+  padding: 0.5em 1em 0;
 }
 
 // リプライ／引用リポストアイコン
@@ -1252,7 +1252,7 @@ function onActivateHashTag (text: string) {
   display: grid;
   grid-template-columns: auto auto 1fr;
   align-items: center;
-  grid-gap: 0.25em;
+  grid-gap: 0.5em;
   margin: -0.75em -1em -0.5em;
   padding: 0.75em 1em 0.5em;
 
@@ -1415,6 +1415,9 @@ function onActivateHashTag (text: string) {
   flex-grow: 1;
   grid-gap: 0.5em;
   position: relative;
+  &:empty {
+    display: contents;
+  }
 }
 
 .text,
@@ -1496,6 +1499,11 @@ function onActivateHashTag (text: string) {
   }
   [data-position="slim"] & > .post {
     padding: 0.5em;
+  }
+
+  &.textlabel {
+    opacity: 0.5;
+    padding: 0.75em 0.75em 0.5em;
   }
 }
 
