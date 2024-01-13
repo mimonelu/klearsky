@@ -65,6 +65,7 @@ import resetSession from "@/composables/atp-wrapper/session/reset-session"
 import resumeSession from "@/composables/atp-wrapper/session/resume-session"
 import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
+import updateJwt from "@/composables/atp-wrapper/session/update-jwt"
 import updateList from "@/composables/atp-wrapper/update/update-list"
 import updateListBlockToDisable from "@/composables/atp-wrapper/update/update-list-block-to-disable"
 import updateListBlockToEnable from "@/composables/atp-wrapper/update/update-list-block-to-enable"
@@ -184,6 +185,7 @@ class AtpWrapper implements TIAtpWrapper {
   }
   updateBlockToDisable = updateBlockToDisable
   updateBlockToEnable = updateBlockToEnable
+  updateJwt = updateJwt
   updateList = updateList
   updateListBlockToDisable = updateListBlockToDisable
   updateListBlockToEnable = updateListBlockToEnable

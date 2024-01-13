@@ -91,6 +91,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  clearUpdateJwtInterval()
   clearNotificationInterval()
 })
 
@@ -203,6 +204,7 @@ function onRefreshSession () {
 }
 
 async function processAfterLogin () {
+  setupUpdateJwtInterval()
   await Promise.allSettled([
     state.fetchPreferences(),
     state.fetchUserProfile(),
@@ -379,36 +381,26 @@ async function processPage (pageName?: null | string) {
   if (pageName?.startsWith("post") ||
       pageName?.startsWith("profile") ||
       pageName?.startsWith("search-post")) {
-    //　TODO: "search-post"　特有の問題のために setTimeout している。使わずに対処すること
+    // TODO: "search-post" 特有の問題のために setTimeout している。使わずに対処すること
     setTimeout(updatePageTitle, 1)
   }
 }
 
-async function updateCurrentList () {
-  const listUri: undefined | string = state.currentQuery.list
-  if (listUri == null) return
-  if (state.currentList?.uri === listUri) return
+let updateJwtTimer: null | number = null
 
-  // リストデータのリセット
-  state.currentListFeeds.splice(0)
-  state.currentListFeedsCursor = undefined
-  state.currentListItems.splice(0)
-  state.currentListItemsCursor = undefined
-
-  // 現在のリストを取得
-  // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
-  state.currentList = undefined
-  state.currentList = state.myList.find((list: TTList) => {
-    return list.uri === listUri
-  })
-  if (state.currentList == null) {
-    state.currentList = state.currentAuthorLists.find((list: TTList) => {
-      return list.uri === listUri
-    })
-    if (state.currentList == null) {
-      await state.fetchCurrentList(listUri)
-    }
+function clearUpdateJwtInterval () {
+  if (updateJwtTimer != null) {
+    clearInterval(updateJwtTimer)
+    updateJwtTimer = null
   }
+}
+
+async function setupUpdateJwtInterval () {
+  clearUpdateJwtInterval()
+  // @ts-ignore // TODO:
+  updateJwtTimer = setInterval(() => {
+    state.atp.updateJwt()
+  }, CONSTS.INTERVAL_OF_UPDATE_JWT)
 }
 
 let notificationTimer: null | number = null
@@ -437,6 +429,33 @@ async function updateNotification () {
   if (canFetched) {
     // NOTICE: 念のため + 1 している
     await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
+  }
+}
+
+async function updateCurrentList () {
+  const listUri: undefined | string = state.currentQuery.list
+  if (listUri == null) return
+  if (state.currentList?.uri === listUri) return
+
+  // リストデータのリセット
+  state.currentListFeeds.splice(0)
+  state.currentListFeedsCursor = undefined
+  state.currentListItems.splice(0)
+  state.currentListItemsCursor = undefined
+
+  // 現在のリストを取得
+  // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
+  state.currentList = undefined
+  state.currentList = state.myList.find((list: TTList) => {
+    return list.uri === listUri
+  })
+  if (state.currentList == null) {
+    state.currentList = state.currentAuthorLists.find((list: TTList) => {
+      return list.uri === listUri
+    })
+    if (state.currentList == null) {
+      await state.fetchCurrentList(listUri)
+    }
   }
 }
 
