@@ -123,7 +123,7 @@ function onClickFileBox (event: Event) {
     <!-- マイアカウントが存在しない場合のメッセージ -->
     <div
       v-if="state.sessionCount === 0"
-      class="textlabel"
+      class="textlabel account-list__no-my-accounts-message"
     >
       <div class="textlabel__text">
         <SVGIcon name="alert" />{{ $t("noMyAccounts") }}
@@ -225,6 +225,15 @@ function onClickFileBox (event: Event) {
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
+
+  &__no-my-accounts-message {
+    color: var(--fg-color-075);
+    font-size: 0.875rem;
+
+    .svg-icon {
+      fill: var(--fg-color-075);
+    }
+  }
 
   &__service {
     display: grid;

@@ -107,36 +107,47 @@ function submitCallback () {
 </template>
 
 <style lang="scss" scoped>
-$width: 800px;
+$width: 768px;
 
 .login-popup {
+  background-color: var(--fg-color-00625);
   display: flex;
-  align-items: center;
   justify-content: center;
   min-height: 100vh;
 
   &__inner {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr auto auto;
     flex-grow: 1;
     grid-gap: 2rem;
-    padding: 4rem 2rem;
-    max-width: $width;
+    padding-bottom: 4rem;
   }
 
   &__header {
+    background-color: rgb(var(--bg-color));
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     grid-gap: 1rem;
+    padding: 4rem 2rem;
   }
 
   &__body {
     grid-gap: 2rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+    max-width: $width;
+
+    // 縦長
     @media (max-width: $width) {
       display: flex;
       flex-direction: column;
+      width: 100%;
+      max-width: 576px;
     }
+
+    // 横長
     @media not all and (max-width: $width) {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -146,7 +157,7 @@ $width: 800px;
 }
 
 .logo {
-  font-size: 3.5rem;
+  font-size: max(3.5rem, 6vmax);
 
   &:deep() {
     .version {
@@ -166,13 +177,6 @@ $width: 800px;
   margin-left: auto;
 }
 
-.easy-form,
-.account-container {
-  background-color: color-mix(in srgb, rgb(var(--fg-color)) 6.25%, rgb(var(--bg-color)));
-  border-radius: var(--border-radius);
-  padding: 1rem;
-}
-
 .account-container {
   display: flex;
   flex-direction: column;
@@ -185,6 +189,7 @@ $width: 800px;
 
 .copyright {
   font-size: 0.875rem;
+  padding: 0 2rem;
   text-align: center;
 }
 </style>
