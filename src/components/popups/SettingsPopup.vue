@@ -576,24 +576,26 @@ function closeHtmlPopupDisplay () {
 
   button {
     --icon-color: var(--fg-color);
-    --alpha: 0.875;
+    --font-alpha: 0.875;
+    --icon-alpha: 0.5;
     border-bottom: 1px solid var(--fg-color-025);
     cursor: pointer;
     display: grid;
     align-items: center;
     grid-gap: 1em;
     grid-template-columns: auto 1fr auto;
-    padding: 0.625em 1em;
+    padding: 0.625em 0.625em 0.625em 1em;
     &:focus, &:hover {
-      --alpha: 1.0;
+      --font-alpha: 1.0;
+      --icon-alpha: 1.0;
     }
 
     & > .svg-icon {
-      fill: rgb(var(--icon-color), var(--alpha));
+      fill: rgb(var(--icon-color), var(--icon-alpha));
     }
 
     & > span {
-      color: rgb(var(--fg-color), var(--alpha));
+      color: rgb(var(--fg-color), var(--font-alpha));
       font-weight: bold;
       line-height: 1.25;
       overflow: hidden;
