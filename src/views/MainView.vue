@@ -634,251 +634,254 @@ function broadcastListener (event: MessageEvent) {
       <ScrollButton />
     </div>
 
-    <!-- 通知ポップアップ -->
-    <NotificationPopup
-      v-if="state.notificationPopupDisplay"
-      @close="state.closeNotificationPopup"
-      @updatePageTitle="updatePageTitle"
-    />
+    <!-- ポップアップコンテナ -->
+    <div class="popup-container">
+      <!-- 通知ポップアップ -->
+      <NotificationPopup
+        v-if="state.notificationPopupDisplay"
+        @close="state.closeNotificationPopup"
+        @updatePageTitle="updatePageTitle"
+      />
 
-    <!-- 設定ポップアップ -->
-    <SettingsPopup
-      v-if="state.settingsPopupDisplay"
-      @close="state.closeSettingsPopup"
-    />
+      <!-- 設定ポップアップ -->
+      <SettingsPopup
+        v-if="state.settingsPopupDisplay"
+        @close="state.closeSettingsPopup"
+      />
 
-    <!-- アカウントポップアップ -->
-    <AccountPopup
-      v-if="state.accountPopupDisplay"
-      @close="state.closeAccountPopup"
-    />
+      <!-- アカウントポップアップ -->
+      <AccountPopup
+        v-if="state.accountPopupDisplay"
+        @close="state.closeAccountPopup"
+      />
 
-    <!-- コンテンツ言語選択ポップアップ -->
-    <SelectLanguagesPopup
-      v-if="state.contentLanguagesPopupDisplay"
-      :state="state.currentSetting"
-      property="contentLanguages"
-      title="contentLanguages"
-      @close="state.closeContentLanguagesPopup"
-      @change="state.saveSettings"
-    >
-      <template #html-popup-content>
-        <ul class="bullet-points">
-          <li>{{ $t("contentLanguagesDetail1") }}</li>
-          <li>{{ $t("contentLanguagesDetail2") }}</li>
-          <li>{{ $t("contentLanguagesDetail3") }}</li>
-          <li>{{ $t("contentLanguagesDetail4") }}</li>
-        </ul>
-      </template>
-    </SelectLanguagesPopup>
+      <!-- コンテンツ言語選択ポップアップ -->
+      <SelectLanguagesPopup
+        v-if="state.contentLanguagesPopupDisplay"
+        :state="state.currentSetting"
+        property="contentLanguages"
+        title="contentLanguages"
+        @close="state.closeContentLanguagesPopup"
+        @change="state.saveSettings"
+      >
+        <template #html-popup-content>
+          <ul class="bullet-points">
+            <li>{{ $t("contentLanguagesDetail1") }}</li>
+            <li>{{ $t("contentLanguagesDetail2") }}</li>
+            <li>{{ $t("contentLanguagesDetail3") }}</li>
+            <li>{{ $t("contentLanguagesDetail4") }}</li>
+          </ul>
+        </template>
+      </SelectLanguagesPopup>
 
-    <!-- タイムフィードポップアップ -->
-    <TimeFeedsPopup
-      v-if="state.timeFeedsPopupDisplay"
-      @close="state.closeTimeFeedsPopup"
-    />
+      <!-- タイムフィードポップアップ -->
+      <TimeFeedsPopup
+        v-if="state.timeFeedsPopupDisplay"
+        @close="state.closeTimeFeedsPopup"
+      />
 
-    <!-- リポストユーザーリストポップアップ -->
-    <RepostUsersPopup
-      v-if="state.repostUsersPopupDisplay"
-      @close="state.closeRepostUsersPopup"
-    />
+      <!-- リポストユーザーリストポップアップ -->
+      <RepostUsersPopup
+        v-if="state.repostUsersPopupDisplay"
+        @close="state.closeRepostUsersPopup"
+      />
 
-    <!-- ライクユーザーリストポップアップ -->
-    <LikeUsersPopup
-      v-if="state.likeUsersPopupDisplay"
-      @close="state.closeLikeUsersPopup"
-    />
+      <!-- ライクユーザーリストポップアップ -->
+      <LikeUsersPopup
+        v-if="state.likeUsersPopupDisplay"
+        @close="state.closeLikeUsersPopup"
+      />
 
-    <!-- 招待コード確認ポップアップ -->
-    <InviteCodesPopup
-      v-if="state.inviteCodesPopupDisplay"
-      @close="state.closeInviteCodesPopup"
-    />
+      <!-- 招待コード確認ポップアップ -->
+      <InviteCodesPopup
+        v-if="state.inviteCodesPopupDisplay"
+        @close="state.closeInviteCodesPopup"
+      />
 
-    <!-- マイフィードポップアップ -->
-    <MyFeedsPopup
-      v-if="state.myFeedsPopupDisplay"
-      @close="state.closeMyFeedsPopup"
-    />
+      <!-- マイフィードポップアップ -->
+      <MyFeedsPopup
+        v-if="state.myFeedsPopupDisplay"
+        @close="state.closeMyFeedsPopup"
+      />
 
-    <!-- マイリストポップアップ -->
-    <MyListPopup
-      v-if="state.myListPopupDisplay"
-      @close="state.closeMyListPopup"
-    />
+      <!-- マイリストポップアップ -->
+      <MyListPopup
+        v-if="state.myListPopupDisplay"
+        @close="state.closeMyListPopup"
+      />
 
-    <!-- リスト編集ポップアップ -->
-    <ListEditPopup
-      v-if="state.listEditPopupProps.display"
-      v-bind="state.listEditPopupProps"
-      @close="state.closeListEditPopup"
-    />
+      <!-- リスト編集ポップアップ -->
+      <ListEditPopup
+        v-if="state.listEditPopupProps.display"
+        v-bind="state.listEditPopupProps"
+        @close="state.closeListEditPopup"
+      />
 
-    <!-- リストユーザー管理ポップアップ -->
-    <ListUserManagementPopup
-      v-if="state.listUserManagementPopupProps.display"
-      v-bind="state.listUserManagementPopupProps"
-      @close="state.closeListUserManagementPopup"
-    />
+      <!-- リストユーザー管理ポップアップ -->
+      <ListUserManagementPopup
+        v-if="state.listUserManagementPopupProps.display"
+        v-bind="state.listUserManagementPopupProps"
+        @close="state.closeListUserManagementPopup"
+      />
 
-    <!-- ワードミュートポップアップ -->
-    <WordMutePopup
-      v-if="state.wordMutePopupDisplay"
-      @close="state.closeWordMutePopup"
-    />
+      <!-- ワードミュートポップアップ -->
+      <WordMutePopup
+        v-if="state.wordMutePopupDisplay"
+        @close="state.closeWordMutePopup"
+      />
 
-    <!-- コンテンツフィルタリングポップアップ -->
-    <ContentFilteringPopup
-      v-if="state.contentFilteringPopupDisplay"
-      @close="state.closeContentFilteringPopup"
-    />
+      <!-- コンテンツフィルタリングポップアップ -->
+      <ContentFilteringPopup
+        v-if="state.contentFilteringPopupDisplay"
+        @close="state.closeContentFilteringPopup"
+      />
 
-    <!-- ミュートユーザーリストポップアップ -->
-    <MutingUsersPopup
-      v-if="state.mutingUsersPopupDisplay"
-      @close="state.closeMutingUsersPopup"
-    />
+      <!-- ミュートユーザーリストポップアップ -->
+      <MutingUsersPopup
+        v-if="state.mutingUsersPopupDisplay"
+        @close="state.closeMutingUsersPopup"
+      />
 
-    <!-- ブロックユーザーリストポップアップ -->
-    <BlockingUsersPopup
-      v-if="state.blockingUsersPopupDisplay"
-      @close="state.closeBlockingUsersPopup"
-    />
+      <!-- ブロックユーザーリストポップアップ -->
+      <BlockingUsersPopup
+        v-if="state.blockingUsersPopupDisplay"
+        @close="state.closeBlockingUsersPopup"
+      />
 
-    <!-- アカウントレポート送信ポップアップ -->
-    <SendAccountReportPopup
-      v-if="state.sendAccountReportPopupProps.display"
-      :user="state.sendAccountReportPopupProps.user as TTUser"
-      @close="state.closeSendAccountReportPopup"
-    />
+      <!-- アカウントレポート送信ポップアップ -->
+      <SendAccountReportPopup
+        v-if="state.sendAccountReportPopupProps.display"
+        :user="state.sendAccountReportPopupProps.user as TTUser"
+        @close="state.closeSendAccountReportPopup"
+      />
 
-    <!-- ポストレポート送信ポップアップ -->
-    <SendPostReportPopup
-      v-if="state.sendPostReportPopupProps.display"
-      :post="state.sendPostReportPopupProps.post as TTPost"
-      @close="state.closeSendPostReportPopup"
-    />
+      <!-- ポストレポート送信ポップアップ -->
+      <SendPostReportPopup
+        v-if="state.sendPostReportPopupProps.display"
+        :post="state.sendPostReportPopupProps.post as TTPost"
+        @close="state.closeSendPostReportPopup"
+      />
 
-    <!-- フィードレポート送信ポップアップ -->
-    <SendFeedReportPopup
-      v-if="state.sendFeedReportPopupProps.display"
-      :generator="state.sendFeedReportPopupProps.generator as TTFeedGenerator"
-      @close="state.closeSendFeedReportPopup"
-    />
+      <!-- フィードレポート送信ポップアップ -->
+      <SendFeedReportPopup
+        v-if="state.sendFeedReportPopupProps.display"
+        :generator="state.sendFeedReportPopupProps.generator as TTFeedGenerator"
+        @close="state.closeSendFeedReportPopup"
+      />
 
-    <!-- イメージポップアップ -->
-    <ImagePopup
-      v-if="state.imagePopupProps.display"
-      :did="state.imagePopupProps.did"
-      :images="state.imagePopupProps.images"
-      :index="state.imagePopupProps.index"
-      @close="state.imagePopupProps.display = false"
-    />
+      <!-- イメージポップアップ -->
+      <ImagePopup
+        v-if="state.imagePopupProps.display"
+        :did="state.imagePopupProps.did"
+        :images="state.imagePopupProps.images"
+        :index="state.imagePopupProps.index"
+        @close="state.imagePopupProps.display = false"
+      />
 
-    <!-- ポスト送信ポップアップ -->
-    <SendPostPopup
-      v-if="state.sendPostPopupProps.display"
-      :type="state.sendPostPopupProps.type"
-      :post="state.sendPostPopupProps.post"
-      :text="state.sendPostPopupProps.text"
-      :url="state.sendPostPopupProps.url"
-      :fileList="state.sendPostPopupProps.fileList"
-      :createdAt="state.sendPostPopupProps.createdAt"
-      @closeSendPostPopup="closeSendPostPopup"
-    />
+      <!-- ポスト送信ポップアップ -->
+      <SendPostPopup
+        v-if="state.sendPostPopupProps.display"
+        :type="state.sendPostPopupProps.type"
+        :post="state.sendPostPopupProps.post"
+        :text="state.sendPostPopupProps.text"
+        :url="state.sendPostPopupProps.url"
+        :fileList="state.sendPostPopupProps.fileList"
+        :createdAt="state.sendPostPopupProps.createdAt"
+        @closeSendPostPopup="closeSendPostPopup"
+      />
 
-    <!-- マイタグポップアップ -->
-    <MyTagPopup
-      v-if="state.myTagPopupProps.display"
-      v-bind="state.myTagPopupProps"
-      @close="state.closeMyTagPopup"
-    />
+      <!-- マイタグポップアップ -->
+      <MyTagPopup
+        v-if="state.myTagPopupProps.display"
+        v-bind="state.myTagPopupProps"
+        @close="state.closeMyTagPopup"
+      />
 
-    <!-- ポスト言語選択ポップアップ -->
-    <SelectLanguagesPopup
-      v-if="state.postLanguagesPopupDisplay"
-      :state="state.currentSetting"
-      property="postLanguages"
-      title="postLanguages"
-      :limit="3"
-      @close="state.closePostLanguagesPopup"
-      @change="state.saveSettings"
-    >
-      <template #html-popup-content>
-        <ul class="bullet-points">
-          <li>{{ $t("postLanguagesDetail1") }}</li>
-          <li>{{ $t("postLanguagesDetail2") }}</li>
-        </ul>
-      </template>
-    </SelectLanguagesPopup>
+      <!-- ポスト言語選択ポップアップ -->
+      <SelectLanguagesPopup
+        v-if="state.postLanguagesPopupDisplay"
+        :state="state.currentSetting"
+        property="postLanguages"
+        title="postLanguages"
+        :limit="3"
+        @close="state.closePostLanguagesPopup"
+        @change="state.saveSettings"
+      >
+        <template #html-popup-content>
+          <ul class="bullet-points">
+            <li>{{ $t("postLanguagesDetail1") }}</li>
+            <li>{{ $t("postLanguagesDetail2") }}</li>
+          </ul>
+        </template>
+      </SelectLanguagesPopup>
 
-    <!-- ラベル選択ポップアップ -->
-    <SelectLabelsPopup
-      v-if="state.selectLabelsPopupDisplay"
-      :state="state.selectLabelsPopupState"
-      @close="state.closeSelectLabelsPopup"
-      @change=""
-    />
+      <!-- ラベル選択ポップアップ -->
+      <SelectLabelsPopup
+        v-if="state.selectLabelsPopupDisplay"
+        :state="state.selectLabelsPopupState"
+        @close="state.closeSelectLabelsPopup"
+        @change=""
+      />
 
-    <!-- ポスト日時選択ポップアップ -->
-    <SelectDatePopup
-      v-if="state.postDatePopupDisplay"
-      :date="state.postDatePopupDate"
-      textTitle="postDatePopupTitle"
-      textDescription="postDatePopupDescription"
-      textReset="postDatePopupReset"
-      textResetDescription="postDatePopupResetDescription"
-      @close="state.closePostDatePopup"
-      @onChange="(params: any) => { state.postDatePopupDate = params }"
-    />
+      <!-- ポスト日時選択ポップアップ -->
+      <SelectDatePopup
+        v-if="state.postDatePopupDisplay"
+        :date="state.postDatePopupDate"
+        textTitle="postDatePopupTitle"
+        textDescription="postDatePopupDescription"
+        textReset="postDatePopupReset"
+        textResetDescription="postDatePopupResetDescription"
+        @close="state.closePostDatePopup"
+        @onChange="(params: any) => { state.postDatePopupDate = params }"
+      />
 
-    <!-- Threadgate ポップアップ -->
-    <ThreadgatePopup
-      v-if="state.threadgatePopupProps.display"
-      v-bind="state.threadgatePopupProps"
-      @close="state.closeThreadgatePopup"
-    />
+      <!-- Threadgate ポップアップ -->
+      <ThreadgatePopup
+        v-if="state.threadgatePopupProps.display"
+        v-bind="state.threadgatePopupProps"
+        @close="state.closeThreadgatePopup"
+      />
 
-    <!-- 　D&Dオーバーレイ -->
-    <div
-      v-if="state.isDragOver"
-      class="drag-and-drop-overlay"
-      @click="onDragLeave"
-      @dragenter.prevent
-      @dragover.prevent
-      @dragleave.prevent="onDragLeave"
-      @drop.prevent.stop="onDrop"
-    >
-      <SVGIcon name="image" />
+      <!-- 　D&Dオーバーレイ -->
+      <div
+        v-if="state.isDragOver"
+        class="drag-and-drop-overlay"
+        @click="onDragLeave"
+        @dragenter.prevent
+        @dragover.prevent
+        @dragleave.prevent="onDragLeave"
+        @drop.prevent.stop="onDrop"
+      >
+        <SVGIcon name="image" />
+      </div>
+
+      <!-- ログインポップアップ -->
+      <LoginPopup
+        v-if="state.loginPopupAutoDisplay"
+        @login="manualLogin"
+      />
+
+      <!-- メッセージポップアップ -->
+      <MessagePopup
+        v-if="state.messagePopupProps.display"
+        @close="state.closeMessagePopup"
+      />
+
+      <!-- 確認ポップアップ -->
+      <ConfirmationPopup
+        v-if="state.confirmationPopupDisplay"
+        @close="state.closeConfirmationPopup"
+        @apply="state.applyConfirmationPopup"
+      />
+
+      <!-- エラーポップアップ -->
+      <ErrorPopup
+        v-if="state.errorPopupProps.display"
+        :error="state.errorPopupProps.error"
+        :description="state.errorPopupProps.description"
+        @close="state.closeErrorPopup"
+      />
     </div>
-
-    <!-- ログインポップアップ -->
-    <LoginPopup
-      v-if="state.loginPopupAutoDisplay"
-      @login="manualLogin"
-    />
-
-    <!-- メッセージポップアップ -->
-    <MessagePopup
-      v-if="state.messagePopupProps.display"
-      @close="state.closeMessagePopup"
-    />
-
-    <!-- 確認ポップアップ -->
-    <ConfirmationPopup
-      v-if="state.confirmationPopupDisplay"
-      @close="state.closeConfirmationPopup"
-      @apply="state.applyConfirmationPopup"
-    />
-
-    <!-- エラーポップアップ -->
-    <ErrorPopup
-      v-if="state.errorPopupProps.display"
-      :error="state.errorPopupProps.error"
-      :description="state.errorPopupProps.description"
-      @close="state.closeErrorPopup"
-    />
 
     <!-- 全画面ローダー -->
     <Loader
@@ -931,6 +934,27 @@ function broadcastListener (event: MessageEvent) {
   &[data-layout="slimRight"] {
     .sub-menu:deep() .copyright {
       display: none;
+    }
+  }
+
+  // ポップアップの重なり調整
+  @for $i from 2 through 8 {
+    $margins: (
+      2: 1,
+      3: 1.5,
+      4: 2,
+      5: 2.5,
+      6: 3,
+      7: 3.5,
+      8: 4
+    );
+    &:deep() .popup-container > div:nth-of-type(#{$i}) {
+      &.popup-overlay,
+      & > .popup-overlay {
+        & > .popup {
+          --margin: #{map-get($margins, $i)}rem;
+        }
+      }
     }
   }
 

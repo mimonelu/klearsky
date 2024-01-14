@@ -33,10 +33,6 @@ function close () {
 
 <style lang="scss" scoped>
 .html-popup {
-  &:deep() .popup {
-    width: calc($router-view-width - 4rem);
-  }
-
   .html {
     line-height: var(--line-height);
     user-select: text;

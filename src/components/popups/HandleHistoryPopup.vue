@@ -60,12 +60,8 @@ function close () {
 <style lang="scss" scoped>
 .handle-history-popup {
   &:deep() {
-    .popup {
-      width: calc($router-view-width - 4rem);
-
-      &-body {
-        grid-gap: 0.5rem;
-      }
+    .popup-body {
+      grid-gap: 0.5rem;
     }
   }
 

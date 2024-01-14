@@ -72,31 +72,25 @@ function close () {
 </script>
 
 <template>
-  <div>
-    <Popup
-      class="select-labels-popup"
-      :hasCloseButton="true"
-      @close="close"
-    >
-      <template #header>
-        <h2>
-          <SVGIcon name="contentFiltering" />
-          <span>{{ $t("selectLabels") }}</span>
-        </h2>
-      </template>
-      <template #body>
-        <EasyForm v-bind="easyFormProps" />
-      </template>
-    </Popup>
-  </div>
+  <Popup
+    class="select-labels-popup"
+    :hasCloseButton="true"
+    @close="close"
+  >
+    <template #header>
+      <h2>
+        <SVGIcon name="contentFiltering" />
+        <span>{{ $t("selectLabels") }}</span>
+      </h2>
+    </template>
+    <template #body>
+      <EasyForm v-bind="easyFormProps" />
+    </template>
+  </Popup>
 </template>
 
 <style lang="scss" scoped>
 .select-labels-popup:deep() {
-  .popup {
-    width: calc($router-view-width - 4rem);
-  }
-
   .popup-header > h2 {
     color: rgb(var(--notice-color));
 

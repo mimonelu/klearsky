@@ -37,7 +37,6 @@ function close () {
 .global-error-popup:deep() {
   .popup {
     --fg-color: var(--notice-color);
-    width: calc($router-view-width - 4rem);
   }
 }
 

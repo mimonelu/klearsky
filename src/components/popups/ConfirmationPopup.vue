@@ -66,10 +66,6 @@ function apply () {
 
 <style lang="scss" scoped>
 .confirmation-popup {
-  &:deep() .popup {
-    width: calc($router-view-width - 4rem);
-  }
-
   .text,
   .detail {
     line-height: var(--line-height);

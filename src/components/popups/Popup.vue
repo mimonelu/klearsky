@@ -102,6 +102,8 @@ function scrollListener () {
 
 <style lang="scss" scoped>
 .popup-overlay {
+  --margin: 0.5rem;
+
   background-color: rgb(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
@@ -127,18 +129,19 @@ function scrollListener () {
   overflow: hidden;
   overscroll-behavior: none;
   position: relative;
-  width: calc($router-view-width - 2rem);
-  max-width: calc(100% - 2rem);
-  max-height: calc(100% - 2rem);
+  --margin2: calc(var(--margin) * 2);
+  width: calc($router-view-width - var(--margin2));
+  max-width: calc(100% - var(--margin2));
+  max-height: calc(100% - var(--margin2));
 
   // SP幅以上
   @media (min-width: $sp-width) {
-    margin: 1rem;
+    margin: var(--margin);
   }
 
   // SP幅未満
   @media not all and (min-width: $sp-width) {
-    margin: calc(1rem + env(safe-area-inset-top)) 1rem calc(1rem + var(--sp-menu-height));
+    margin: calc(var(--margin) + env(safe-area-inset-top)) var(--margin) calc(var(--margin) + var(--sp-menu-height));
   }
 }
 

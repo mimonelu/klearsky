@@ -43,10 +43,6 @@ function translate () {
 
 <style lang="scss" scoped>
 .message-popup {
-  &:deep() .popup {
-    width: calc($router-view-width - 4rem);
-  }
-
   .html-text {
     line-height: var(--line-height);
     user-select: text;

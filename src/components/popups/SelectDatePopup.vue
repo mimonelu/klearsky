@@ -56,39 +56,33 @@ async function reset () {
 </script>
 
 <template>
-  <div>
-    <Popup
-      class="select-date-popup"
-      :hasCloseButton="true"
-      @close="close"
-    >
-      <template #header>
-        <h2>
-          <SVGIcon name="history" />
-          <span>{{ $t(textTitle) }}</span>
-        </h2>
-      </template>
-      <template #body>
-        <p>{{ $t(textDescription) }}</p>
-        <EasyForm v-bind="easyFormProps" />
-        <button
-          class="button--bordered"
-          :disabled="state.date == null"
-          @click.prevent="reset"
-        >
-          <span>{{ $t(textReset) }}</span>
-        </button>
-      </template>
-    </Popup>
-  </div>
+  <Popup
+    class="select-date-popup"
+    :hasCloseButton="true"
+    @close="close"
+  >
+    <template #header>
+      <h2>
+        <SVGIcon name="history" />
+        <span>{{ $t(textTitle) }}</span>
+      </h2>
+    </template>
+    <template #body>
+      <p>{{ $t(textDescription) }}</p>
+      <EasyForm v-bind="easyFormProps" />
+      <button
+        class="button--bordered"
+        :disabled="state.date == null"
+        @click.prevent="reset"
+      >
+        <span>{{ $t(textReset) }}</span>
+      </button>
+    </template>
+  </Popup>
 </template>
 
 <style lang="scss" scoped>
-.select-date-popup:deep() {
-  .popup {
-    width: calc($router-view-width - 4rem);
-  }
-
+.select-date-popup {
   .button--bordered {
     margin: 0 auto;
     width: max-content;
