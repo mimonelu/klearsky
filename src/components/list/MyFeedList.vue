@@ -268,7 +268,7 @@ function removeMyFeed (uri: string) {
       fill: var(--fg-color-05);
     }
     .svg-icon--pin {
-      fill: rgb(var(--accent-color), 0.75);
+      fill: var(--accent-color-075);
     }
     .svg-icon--pinOutline {
       fill: var(--fg-color-025);

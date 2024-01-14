@@ -30,7 +30,7 @@
     padding: 0.5rem 1rem;
     white-space: nowrap;
     &:focus, &:hover {
-      background-color: rgb(var(--accent-color), 0.25);
+      background-color: var(--accent-color-025);
     }
     &:disabled {
       cursor: default;

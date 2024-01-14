@@ -608,7 +608,7 @@ function onActivateAccountMaskToggle () {
       font-size: 0.875rem;
     }
     & > .button--plane {
-      background-color: rgb(var(--accent-color), 0.25);
+      background-color: var(--accent-color-025);
       pointer-events: none;
     }
   }

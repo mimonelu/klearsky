@@ -266,7 +266,7 @@ function removeCurrentPostTag (index: number) {
     cursor: pointer;
     padding-left: 0.5rem;
     &:focus, &:hover {
-      background-color: rgb(var(--accent-color), 0.25);
+      background-color: var(--accent-color-025);
     }
     &[data-selected="true"] {
       border-color: rgb(var(--accent-color));
