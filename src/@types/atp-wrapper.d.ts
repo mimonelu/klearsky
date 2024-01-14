@@ -69,7 +69,7 @@ interface TIAtpWrapper {
   hasLogin (this: TIAtpWrapper): boolean
   login (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, onRefreshSession?: () => void): Promise<boolean>
   logout (this: TIAtpWrapper)
-  refreshSession (this: TIAtpWrapper): Promise<boolean>
+  refreshSession (this: TIAtpWrapper): Promise<undefined | Error>
   resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): void
   resumeSession (this: TIAtpWrapper, session: TTSession): Promise<boolean>
   saveData (this: TIAtpWrapper)

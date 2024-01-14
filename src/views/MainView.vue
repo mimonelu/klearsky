@@ -399,7 +399,7 @@ async function setupUpdateJwtInterval () {
   clearUpdateJwtInterval()
   // @ts-ignore // TODO:
   updateJwtTimer = setInterval(() => {
-    state.atp.updateJwt()
+    state.atp.updateJwt(onRefreshSession)
   }, CONSTS.INTERVAL_OF_UPDATE_JWT)
 }
 

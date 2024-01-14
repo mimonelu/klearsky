@@ -54,7 +54,6 @@ const easyFormProps: TTEasyForm = {
       required: true,
       autocomplete: "on",
       inputmode: "email",
-      focus: currentSession == null,
     },
     {
       state,
@@ -64,7 +63,6 @@ const easyFormProps: TTEasyForm = {
       required: true,
       autocomplete: "off",
       inputmode: "text",
-      focus: currentSession != null,
     }
   ],
 }
@@ -137,6 +135,7 @@ $width: 768px;
     grid-gap: 2rem;
     margin: 0 auto;
     padding: 0 2rem;
+    width: $width;
     max-width: $width;
 
     // 縦長

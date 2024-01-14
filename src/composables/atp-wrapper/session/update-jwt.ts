@@ -26,18 +26,19 @@ export default async function (
   refreshDate.setTime(refreshJwt.exp * 1000)
   accessDate.setTime(accessJwt.exp * 1000)
   console.log(
-    `[klearsky] refreshJwt will be expired: ${refreshDate.toLocaleString()}\n` +
-    `[klearsky] accessJwt will be expired: ${accessDate.toLocaleString()}`
+    `[klearsky] refreshJwt will be expired at ${refreshDate.toLocaleString()}\n` +
+    `[klearsky] accessJwt will be expired at ${accessDate.toLocaleString()}`
   )
 
   const now = Date.now() / 1000 + 60 * 5
   if (now >= refreshJwt.exp) {
-    console.warn("[klearsky] refreshJwt was expired.")
+    console.error("[klearsky] refreshJwt was expired.")
     throw { error: "sessionExpired" }
   }
   if (now >= accessJwt.exp) {
     console.warn("[klearsky] accessJwt was expired.")
-    if (await this.refreshSession()) {
+    const response = await this.refreshSession()
+    if (response == null) {
       if (onRefreshSession != null) onRefreshSession()
     }
   }
