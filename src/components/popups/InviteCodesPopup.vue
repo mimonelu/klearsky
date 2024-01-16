@@ -23,6 +23,15 @@ function close () {
   emit("close")
 }
 
+async function updateInviteCodes () {
+  mainState.loaderDisplay = true
+  const result = await mainState.updateInviteCodes()
+  mainState.loaderDisplay = false
+
+  // セッションキャッシュの更新
+  if (result) mainState.myWorker.setSessionCache("inviteCodes", mainState.inviteCodes)
+}
+
 async function copyCode (code: string) {
   await navigator.clipboard.writeText(code)
 }
@@ -36,6 +45,14 @@ async function copyCode (code: string) {
   >
     <template #header>
       <h2>
+        <!-- 更新ボタン -->
+        <button
+          class="button--bordered invite-codes-popup__update-button"
+          @click.prevent="updateInviteCodes"
+        >
+          <SVGIcon name="refresh" />
+        </button>
+
         <SVGIcon name="inviteCode" />
         <span>{{ $t("inviteCodes") }}</span>
       </h2>
@@ -54,7 +71,7 @@ async function copyCode (code: string) {
       <!-- 招待コードがある場合 -->
       <div
         v-else
-        class="invite-code-container"
+        class="invite-codes-popup__invite-code-container"
       >
         <div
           v-for="inviteCode of state.sortedInviteCodes"
@@ -100,35 +117,44 @@ async function copyCode (code: string) {
 </template>
 
 <style lang="scss" scoped>
-.invite-code-container {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-gap: 1rem;
-
-  // SP幅以上
-  @media (min-width: $sp-width) {
-    .invite-code__slot-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
+.invite-codes-popup {
+  // 更新ボタン
+  &__update-button {
+    position: absolute;
+    left: 0.5rem;
   }
 
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
-    grid-template-columns: 1fr;
+  &__invite-code-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 1rem;
 
-    .invite-code__code {
-      padding: 0;
+    // SP幅以上
+    @media (min-width: $sp-width) {
+      .invite-code__slot-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
-    .invite-code__slot-container {
-      flex-direction: column;
-      flex-wrap: unset;
+    // SP幅未満
+    @media not all and (min-width: $sp-width) {
+      grid-template-columns: 1fr;
+
+      .invite-code__code {
+        padding: 0;
+      }
+
+      .invite-code__slot-container {
+        flex-direction: column;
+        flex-wrap: unset;
+      }
+
+      .invite-code__slot {
+        width: 100%;
+      }
     }
 
-    .invite-code__slot {
-      width: 100%;
-    }
   }
 }
 

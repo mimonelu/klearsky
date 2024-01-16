@@ -12,6 +12,9 @@ type MainState = {
   forceUpdate: () => void
   formatDate: (dateString?: string) => string
 
+  // MyWorker
+  myWorker: TTMyWorker
+
   // D&D
   isDragOver: boolean
 
@@ -51,6 +54,10 @@ type MainState = {
   inviteCodes: Array<TTInviteCode>
   numberOfInviteCodes: ComputedRef<number>
   numberOfAvailableInviteCodes: ComputedRef<number>
+  updateInviteCodes: () => Promise<boolean>
+
+  // 招待コードポップアップ
+
   inviteCodesPopupDisplay: boolean
   openInviteCodesPopup: Function
   closeInviteCodesPopup: Function

@@ -54,6 +54,7 @@ function onActivate () {
   // 抜け漏れ取得ボタン
   &[data-direction="middle"] {
     background-color: var(--accent-color-025);
+    border-bottom: 1px solid var(--fg-color-0125);
   }
 
   & > .svg-icon {

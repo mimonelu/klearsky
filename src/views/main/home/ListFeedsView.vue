@@ -22,6 +22,9 @@ async function deleteList (list: TTList) {
   })
   if (targetIndex === - 1) return
   mainState.myList.splice(targetIndex, 1)
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myList)
 }
 
 // インフィニットスクロール

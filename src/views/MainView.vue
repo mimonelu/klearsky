@@ -198,28 +198,63 @@ async function manualLogin (service: string, identifier: string, password: strin
 function onRefreshSession () {
   // セッションの同期
   state.broadcastChannel?.postMessage({
-    type: "refreshSession",
+    name: "refreshSession",
     data: JSON.parse(JSON.stringify(state.atp.session)),
-  })
+  } as TTPostMessageData)
 }
 
 async function processAfterLogin () {
   setupUpdateJwtInterval()
-  await Promise.allSettled([
-    state.fetchPreferences(),
-    state.fetchUserProfile(),
-  ])
-  state.fetchMyFeedGenerators().then(() => {
-    state.sortMyFeedGenerators()
-  })
 
-  // 非同期で全マイリストと全マイリストユーザーを取得
-  state.fetchMyLists()
+  // プリファレンスとユーザープロフィールの取得
+  const tasks: { [k: string]: any } = {}
+  if (state.currentPreferences.length === 0) {
+    tasks.currentPreferences = state.fetchPreferences()
+  }
+  if (state.userProfile == null) {
+    tasks.userProfile = state.fetchUserProfile()
+  }
+  await Promise.allSettled(Object.values(tasks))
+
+  // プリファレンスとユーザープロフィールの取得 - セッションキャッシュの設定
+  if (tasks.currentPreferences != null) {
+    state.myWorker.setSessionCache("currentPreferences", state.currentPreferences)
+  }
+  if (tasks.userProfile != null) {
+    state.myWorker.setSessionCache("userProfile", state.userProfile)
+  }
+
+  // マイフィードの取得
+  if (state.currentMyFeedGenerators.length === 0) {
+    state.fetchMyFeedGenerators().then(() => {
+      state.sortMyFeedGenerators()
+
+      // セッションキャッシュの設定
+      state.myWorker.setSessionCache("currentMyFeedGenerators", state.currentMyFeedGenerators)
+    })
+  }
+
+  // 全マイリストと全マイリストユーザーの取得
+  if (state.myList.length === 0) {
+    state.fetchMyLists().then(() => {
+
+      // セッションキャッシュの設定
+      state.myWorker.setSessionCache("myList", state.myList)
+    })
+  }
+
+  // 招待コードの取得
+  if (state.inviteCodes.length === 0) {
+    state.updateInviteCodes().then(() => {
+
+      // セッションキャッシュの設定
+      state.myWorker.setSessionCache("inviteCodes", state.inviteCodes)
+    })
+  }
 
   state.saveSettings()
   state.updateSettings()
   setupNotificationInterval()
-  updateInviteCodes()
   processPage(router.currentRoute.value.name as undefined | null | string)
 }
 
@@ -459,12 +494,6 @@ async function updateCurrentList () {
   }
 }
 
-async function updateInviteCodes () {
-  const inviteCodes = await state.atp.fetchInviteCodes()
-  if (inviteCodes instanceof Error) return
-  state.inviteCodes.splice(0, state.inviteCodes.length, ...inviteCodes)
-}
-
 async function closeSendPostPopup (done: boolean) {
   state.closeSendPostPopup(done)
 }
@@ -558,13 +587,55 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 // ブロードキャスト用処理
 
 function broadcastListener (event: MessageEvent) {
-  console.log("[klearsky/broadcast]", event.data.type)
-  switch (event.data.type) {
+  console.log("[klearsky/broadcast]", event.data.name)
+  switch (event.data.name) {
     // セッションの同期
     case "refreshSession": {
       if (event.data.data == null) break
       if (event.data.data.did !== state.atp.data.did) break
       state.atp.resetSession(event.data.data)
+      break
+    }
+
+    // セッションキャッシュの反映
+    case "setSessionCacheResponse": {
+      const data: TTPostMessageData = event.data
+      if (data.did != state.atp.data.did || data.key == null || data.value == null) {
+        break
+      }
+      switch (data.key) {
+        // セッションキャッシュの反映 - プリファレンス
+        case "currentPreferences": {
+          state.currentPreferences = data.value
+          break
+        }
+
+        // セッションキャッシュの反映 - ユーザープロフィール
+        case "userProfile": {
+          state.userProfile = data.value
+          break
+        }
+
+        // セッションキャッシュの反映 - マイフィード
+        case "currentMyFeedGenerators": {
+          state.currentMyFeedGenerators = data.value
+          break
+        }
+
+        // セッションキャッシュの反映 - マイリスト
+        case "myList": {
+          state.myList = data.value
+          break
+        }
+
+        // セッションキャッシュの反映 - 招待コード
+        case "inviteCodes": {
+          state.inviteCodes = data.value
+          break
+        }
+
+        default: break
+      }
       break
     }
   }

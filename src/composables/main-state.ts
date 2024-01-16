@@ -5,6 +5,7 @@ import isSameYear from "date-fns/isSameYear"
 import { computed, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
+import MyWorker from "@/composables/main-state-my-worker"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
@@ -82,6 +83,15 @@ state.numberOfAvailableInviteCodes = computed(() => {
   })
   return total
 })
+state.updateInviteCodes = async (): Promise<boolean> => {
+  const inviteCodes = await state.atp.fetchInviteCodes()
+  if (inviteCodes instanceof Error) return false
+  state.inviteCodes.splice(0, state.inviteCodes.length, ...inviteCodes)
+  return true
+}
+
+// 招待コードポップアップ
+
 state.inviteCodesPopupDisplay = false
 state.openInviteCodesPopup = openInviteCodesPopup
 state.closeInviteCodesPopup = closeInviteCodesPopup
@@ -408,6 +418,9 @@ state.threadgatePopupProps = {
 state.openThreadgatePopup = openThreadgatePopup
 state.closeThreadgatePopup = closeThreadgatePopup
 
+// MyWorker
+state.myWorker = new MyWorker(state)
+
 export function resetProfileState (state: MainState) {
   resetArray(state, "currentAuthorFeeds")
   state.currentAuthorFeedsCursor = undefined
@@ -616,7 +629,7 @@ function closeNotificationPopup () {
   state.notificationPopupDisplay = false
 }
 
-// 招待コード
+// 招待コードポップアップ
 
 function openInviteCodesPopup () {
   state.inviteCodesPopupDisplay = true
@@ -786,8 +799,12 @@ async function fetchCurrentProfile (did: string) {
   state.currentSuggestedFollows.splice(0)
   state.currentProfile = await state.atp.fetchProfile(did)
   if (state.currentProfile == null) return
-  if (did === state.atp.session?.did)
+  if (did === state.atp.session?.did) {
     state.userProfile = state.currentProfile
+
+    // セッションキャッシュの設定
+    state.myWorker.setSessionCache("userProfile", state.userProfile)
+  }
 
   // ハンドル履歴と利用開始日の取得（非同期で良い）
   updateCurrentLogAudit()

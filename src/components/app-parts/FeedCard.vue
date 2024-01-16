@@ -102,9 +102,15 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
 
   mainState.sortMyFeedGenerators()
   state.processing = true
-  if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
-    mainState.openErrorPopup("errorApiFailed", "FeedCard/updatePreferences")
+  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+  if (!result) mainState.openErrorPopup("errorApiFailed", "FeedCard/updatePreferences")
   state.processing = false
+
+  // セッションキャッシュの更新
+  if (result) {
+    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+    mainState.myWorker.setSessionCache("currentMyFeedGenerators", mainState.currentMyFeedGenerators)
+  }
 }
 
 function changeCustomFeedOrder (direction: "up" | "down") {

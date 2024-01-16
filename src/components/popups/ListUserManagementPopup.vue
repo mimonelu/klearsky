@@ -103,6 +103,9 @@ async function clicked (list: TTList) {
     if (mainState.currentList?.uri !== list.uri) return
     mainState.currentListItems.unshift(newListItem)
   }
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myList)
 }
 </script>
 

@@ -96,6 +96,9 @@ function updateList (list: TTList) {
   props.list.avatar = list.avatar
   props.list.name = list.name
   props.list.description = list.description
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myList)
 }
 
 function openMenuTicker () {
@@ -115,6 +118,9 @@ async function deleteList () {
     return
   }
   emit("deleteList", props.list)
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myList)
 
   // 削除したマイリストのリストフィード／ユーザーページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
   if (props.list.creator.did === mainState.atp.session?.did &&

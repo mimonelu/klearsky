@@ -115,9 +115,16 @@ async function apply () {
     }
   })
   state.popupLoaderDisplay = true
-  if (!await mainState.atp.updatePreferences(mainState.currentPreferences))
-    mainState.openErrorPopup("errorApiFailed", "ContentFilteringPopup/updatePreferences")
+  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+  if (!result) mainState.openErrorPopup("errorApiFailed", "ContentFilteringPopup/updatePreferences")
   state.popupLoaderDisplay = false
+
+  // セッションキャッシュの更新
+  if (result) {
+    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+    mainState.myWorker.setSessionCache("currentMyFeedGenerators", mainState.currentMyFeedGenerators)
+  }
+
   close()
 }
 </script>

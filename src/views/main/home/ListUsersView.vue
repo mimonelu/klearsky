@@ -11,8 +11,11 @@ const mainState = inject("state") as MainState
 async function fetchListItems (direction: "new" | "old") {
   Util.blurElement()
   mainState.listLoaderDisplay = true
-  await mainState.fetchCurrentListItems(direction)
+  const result = await mainState.fetchCurrentListItems(direction)
   mainState.listLoaderDisplay = false
+
+  // セッションキャッシュの更新
+  if (result) mainState.myWorker.setSessionCache("myList", mainState.myList)
 }
 
 // マイリストの削除
@@ -23,6 +26,9 @@ async function deleteList (list: TTList) {
   })
   if (targetIndex === - 1) return
   mainState.myList.splice(targetIndex, 1)
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myList)
 }
 
 function openListUserManagementPopup (user: TTUser) {
