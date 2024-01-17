@@ -12,6 +12,16 @@
     --like-color,
     --share-color;
   @each $color in $colors {
+    #{$color}-00625: rgb(var(#{$color}), 0.0625);
+    #{$color}-0125: rgb(var(#{$color}), 0.125);
+    #{$color}-025: rgb(var(#{$color}), 0.25);
+    #{$color}-0375: rgb(var(#{$color}), 0.375);
+    #{$color}-05: rgb(var(#{$color}), 0.5);
+    #{$color}-0625: rgb(var(#{$color}), 0.625);
+    #{$color}-075: rgb(var(#{$color}), 0.75);
+    #{$color}-0875: rgb(var(#{$color}), 0.875);
+
+    /* TODO: `color-mix` は一般に浸透したら使うこと
     #{$color}-00625: color-mix(in srgb, rgb(var(#{$color})) 6.25%, rgb(var(--bg-color)));
     #{$color}-0125: color-mix(in srgb, rgb(var(#{$color})) 12.5%, rgb(var(--bg-color)));
     #{$color}-025: color-mix(in srgb, rgb(var(#{$color})) 25%, rgb(var(--bg-color)));
@@ -20,6 +30,7 @@
     #{$color}-0625: color-mix(in srgb, rgb(var(#{$color})) 62.5%, rgb(var(--bg-color)));
     #{$color}-075: color-mix(in srgb, rgb(var(#{$color})) 75%, rgb(var(--bg-color)));
     #{$color}-0875: color-mix(in srgb, rgb(var(#{$color})) 87.5%, rgb(var(--bg-color)));
+    */
   }
 }
 
