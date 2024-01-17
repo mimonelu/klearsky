@@ -10,6 +10,7 @@ import getUserLanguage from "@/composables/util/get-user-language"
 import parseOgp from "@/composables/util/parse-ogp"
 import safeJson from "@/composables/util/safe-json"
 import storage from "@/composables/util/storage"
+// import translateInDeepL from "@/composables/util/translate-in-deep-l" // DeepL: 未使用
 import translateInMyMemory from "@/composables/util/translate-in-my-memory"
 import translateInExternalService from "@/composables/util/translate-in-external-service"
 import unicodeSubstring from "@/composables/util/unicode-substring"
@@ -30,6 +31,7 @@ export default {
   parseOgp,
   ...safeJson,
   ...storage,
+  // translateInDeepL, // DeepL: 未使用
   translateInMyMemory,
   translateInExternalService,
   unicodeSubstring,

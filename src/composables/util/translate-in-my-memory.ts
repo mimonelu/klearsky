@@ -1,11 +1,11 @@
-interface TTTranslateInDeepLParams {
+interface TTTranslateInMyMemoryParams {
   text: string
   langpair?: string
   dstLanguage: string
   email?: string
 }
 
-export default async function (params: TTTranslateInDeepLParams): Promise<Error | string> {
+export default async function (params: TTTranslateInMyMemoryParams): Promise<Error | string> {
   // SEE: https://mymemory.translated.net/doc/spec.php
   const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(params.text)}&langpair=${params.langpair}|${params.dstLanguage}&de=${encodeURIComponent(params.email ?? "")}`
   try {
