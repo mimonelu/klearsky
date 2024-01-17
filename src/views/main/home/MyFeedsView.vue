@@ -59,7 +59,7 @@ async function updateMyFeeds () {
       <!-- カスタムフィードの取得エラーラベル -->
       <div
         v-else-if="!myFeeds.status"
-        class="textlabel"
+        class="textlabel--alert"
       >
         <div class="textlabel__text">
           <SVGIcon name="alert" />{{ $t("errorMessage") }}
@@ -158,7 +158,8 @@ async function updateMyFeeds () {
       height: 3rem;
     }
 
-    .textlabel {
+    .textlabel,
+    .textlabel--alert {
       margin: 1rem;
     }
   }

@@ -114,7 +114,7 @@ function changeCustomFeedOrder () {
       <template v-else>
         <FeedCard
           v-for="generator of mainState.currentMyFeedGenerators"
-          :key="generator.cid"
+          :key="generator.uri"
           :generator="generator"
           :menuDisplay="true"
           :orderButtonDisplay="true"

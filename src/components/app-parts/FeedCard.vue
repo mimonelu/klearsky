@@ -256,7 +256,7 @@ function closeMenuTicker () {
 
       <!-- フィード作成者 -->
       <RouterLink
-        v-if="creatorDisplay"
+        v-if="creatorDisplay && generator.creator.did"
         class="feed-card__creator"
         :to="{ name: 'profile-custom-feeds', query: { account: generator.creator.did } }"
         @click.prevent
