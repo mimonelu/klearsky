@@ -10,6 +10,7 @@ import getUserLanguage from "@/composables/util/get-user-language"
 import parseOgp from "@/composables/util/parse-ogp"
 import safeJson from "@/composables/util/safe-json"
 import storage from "@/composables/util/storage"
+import translateInMyMemory from "@/composables/util/translate-in-my-memory"
 import translateInExternalService from "@/composables/util/translate-in-external-service"
 import unicodeSubstring from "@/composables/util/unicode-substring"
 import updatePostProps from "@/composables/util/update-post-props"
@@ -29,6 +30,7 @@ export default {
   parseOgp,
   ...safeJson,
   ...storage,
+  translateInMyMemory,
   translateInExternalService,
   unicodeSubstring,
   updatePostProps,

@@ -530,23 +530,18 @@ async function translateText (forceTranslate: boolean) {
     return
   }
   const langpair = srcLanguages.find((srcLanguage: string) => srcLanguage !== dstLanguage)
-  // SEE: https://mymemory.translated.net/doc/spec.php
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langpair}|${dstLanguage}&de=${encodeURIComponent(mainState.atp.session?.email ?? "")}`
-  const response = await fetch(url).catch(() => {
-    state.translation = "failed"
+  const response: Error | string = await Util.translateInMyMemory({
+    text,
+    langpair,
+    dstLanguage,
+    email: mainState.atp.session?.email,
   })
-  if (state.translation === "failed") return
-  if (response == null) {
-    state.translation = "failed"
-    return
-  }
-  const json = await (response as Response).json()
-  if (!(json?.responseData?.translatedText)) {
+  if (response instanceof Error) {
     state.translation = "failed"
     return
   }
   state.translation = "done"
-  props.post.__custom.translatedText = json.responseData.translatedText
+  props.post.__custom.translatedText = response
 }
 
 function onActivateHashTag (text: string) {
