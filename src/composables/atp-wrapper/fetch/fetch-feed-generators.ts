@@ -4,7 +4,7 @@ export default async function (
   this: TIAtpWrapper,
   feeds: Array<string>
 ): Promise<Error | Array<TTFeedGenerator>> {
-  if (this.agent == null) return Error("No agent")
+  if (this.agent == null) return Error("noAgentError")
   const query: AppBskyFeedGetFeedGenerators.QueryParams = { feeds }
   const response: AppBskyFeedGetFeedGenerators.Response =
     await (this.agent as BskyAgent).app.bsky.feed.getFeedGenerators(query)
@@ -12,7 +12,7 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/getFeedGenerators]", response)
   if (response instanceof Error) return response
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
 
   // ジェネレーターのソート
   const generators: Array<TTFeedGenerator> = []

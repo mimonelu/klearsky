@@ -43,8 +43,6 @@ import { state, resetProfileState } from "@/composables/main-state"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
-const emit = defineEmits<(name: string, value: any) => void>()
-
 const $t = inject("$t") as Function
 state.$setCurrentLanguage = inject("$setCurrentLanguage") as Function
 state.$getCurrentLanguage = inject("$getCurrentLanguage") as Function
@@ -71,23 +69,23 @@ onMounted(async () => {
   state.currentPath = router.currentRoute.value.path
   state.currentQuery = router.currentRoute.value.query
   state.settings = Util.loadStorage("settings") ?? {}
+
   state.loaderDisplay = true
-  try {
-    await autoLogin()
-  } finally {
-    state.mounted = true
-    state.loaderDisplay = false
-    updatePageTitle()
+  await autoLogin()
+  state.loaderDisplay = false
 
-    // ペースト用処理
-    useEventListener(window, "paste", onPaste)
+  updatePageTitle()
 
-    // ブロードキャスト用処理
-    useEventListener(state.broadcastChannel, "message", broadcastListener)
+  // ペースト用処理
+  useEventListener(window, "paste", onPaste)
 
-    // インフィニットスクロール用処理
-    useEventListener(window, "scroll", scrollListener)
-  }
+  // ブロードキャスト用処理
+  useEventListener(state.broadcastChannel, "message", broadcastListener)
+
+  // インフィニットスクロール用処理
+  useEventListener(window, "scroll", scrollListener)
+
+  state.mounted = true
 })
 
 onUnmounted(() => {
@@ -172,27 +170,35 @@ function updatePageTitle () {
 }
 
 async function autoLogin () {
-  const result = state.atp.hasLogin() || (
-    state.atp.canLogin() &&
-    await state.atp.login(undefined, undefined, undefined, onRefreshSession)
-  )
-  if (!result) return
-  await processAfterLogin()
+  if (state.atp.hasLogin()) {
+    await processAfterLogin()
+  } else if (state.atp.canLogin()) {
+    const response = await state.atp.login(undefined, undefined, undefined, onRefreshSession)
+    if (response instanceof Error) {
+      state.openErrorPopup(
+        typeof(response.message) === "string"
+          ? $t(response.message)
+          : response,
+        "MainView/autoLogin"
+      )
+      return
+    }
+    await processAfterLogin()
+  }
 }
 
 async function manualLogin (service: string, identifier: string, password: string) {
   state.loaderDisplay = true
-  try {
-    if (!await state.atp.login(service, identifier, password, onRefreshSession)) {
-      emit("error", $t("loginFailed"))
-      return
-    }
-    if (!state.atp.hasLogin()) return
-    state.loginPopupDisplay = false
-    await processAfterLogin()
-  } finally {
-    state.loaderDisplay = false
+  const response = await state.atp.login(service, identifier, password, onRefreshSession)
+  state.loaderDisplay = false
+  if (response instanceof Error || !state.atp.hasLogin()) {
+    state.openErrorPopup($t("getSessionError"), "MainView/manualLogin")
+    return
   }
+  state.loginPopupDisplay = false
+  state.loaderDisplay = true
+  await processAfterLogin()
+  state.loaderDisplay = false
 }
 
 function onRefreshSession () {

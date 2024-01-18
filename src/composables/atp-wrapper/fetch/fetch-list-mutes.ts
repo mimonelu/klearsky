@@ -6,7 +6,7 @@ export default async function (
   limit?: number,
   cursor?: string
 ): Promise<undefined | string | Error> {
-  if (this.agent == null) return Error("No Agent")
+  if (this.agent == null) return Error("noAgentError")
   const query: AppBskyGraphGetListMutes.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
@@ -17,7 +17,7 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/getListMutes]", response)
   if (response instanceof Error) return response
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
 
   const newLists: Array<TTList> = response.data.lists
     .filter((list: TTList) => !lists

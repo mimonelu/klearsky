@@ -7,7 +7,7 @@ export default async function (
   limit?: number,
   cursor?: string
 ): Promise<Error | undefined | string> {
-  if (this.agent == null) return Error("No agent")
+  if (this.agent == null) return Error("noAgentError")
   const query: AppBskyFeedGetActorFeeds.QueryParams = { actor: author }
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
@@ -17,7 +17,7 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/getActorFeeds]", response)
   if (response instanceof Error) return response
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
 
   const newGenerators = (response.data.feeds as Array<TTFeedGenerator>)
     .filter((feed: TTFeedGenerator) =>

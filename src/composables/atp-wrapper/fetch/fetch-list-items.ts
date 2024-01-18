@@ -7,7 +7,7 @@ export default async function (
   limit?: number,
   cursor?: string
 ): Promise<undefined | string | Error> {
-  if (this.agent == null) return Error("No Agent")
+  if (this.agent == null) return Error("noAgentError")
   const query: AppBskyGraphGetList.QueryParams = { list }
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
@@ -17,7 +17,7 @@ export default async function (
       .then((value: AppBskyGraphGetList.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/getList(fetchListItems)]", response)
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
 
   const newListItems: Array<TTListItem> =
     (response.data.items as unknown as Array<TTListItem>)

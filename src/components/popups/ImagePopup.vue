@@ -13,6 +13,8 @@ const props = defineProps<{
   index: number
 }>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
@@ -107,7 +109,10 @@ function setBackgroundImage () {
 async function downloadImage (index: number) {
   Util.blurElement()
   const url = state.blobs[index] ?? props.images[index].largeUri
-  await Util.downloadImage(url)
+  const response = await Util.downloadImage(url)
+  if (response instanceof Error) {
+    mainState.openErrorPopup($t(response.message), "ImagePopup/downloadImage")
+  }
 }
 
 function close () {

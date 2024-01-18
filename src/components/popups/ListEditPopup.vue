@@ -177,7 +177,7 @@ async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
       maxHeight: 2000,
       maxSize: 0.953671875,
     })
-    if (blobRef == null) return Error("Failed createFileBlobRef")
+    if (blobRef == null) return Error("makeAvatarBlobRefError")
     return blobRef
   }
 
@@ -185,12 +185,12 @@ async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
   if (props.list?.avatar != null) {
     const uri = props.list.avatar
     const blocks = uri.match(/\/([^\/]+?)@/)
-    if (blocks == null || blocks[1] == null) return Error("Failed uri.match")
+    if (blocks == null || blocks[1] == null) return Error("makeAvatarBlobRefError")
     const cid = blocks[1]
     const blob = await mainState.atp.fetchBlob(cid)
-    if (blob == null) return Error("Failed fetchBlob")
+    if (blob == null) return Error("makeAvatarBlobRefError")
     const blobRef = new BlobRef({ $link: cid } as any, blob.type, blob.size)
-    if (blobRef == null) return Error("Failed BlobRef")
+    if (blobRef == null) return Error("makeAvatarBlobRefError")
     return blobRef
   }
 }

@@ -23,7 +23,7 @@ export default async function (
   atpWrapper: TIAtpWrapper,
   uri: string,
   urlHasImage?: boolean
-): Promise<{
+): Promise<Error | {
   uri: string,
   title: string,
   description: string
@@ -33,12 +33,11 @@ export default async function (
       headers: { "user-agent": "Klearsky" },
     })
     .then((response: Response) => {
-      if (!response.ok) throw `Fetch error: ${response.statusText}`
+      if (!response.ok) return Error("fetchOgpError")
       return response
     })
-    .catch((error: any) => {
-      throw error
-    })
+    .catch((error: any) => error)
+  if (response instanceof Error) return Error("fetchOgpError")
 
   // 文字エンコードの変換 (for Japanese Language)
   const arrayBuffer = await response.arrayBuffer()
@@ -84,7 +83,7 @@ export default async function (
           headers: { "user-agent": "Klearsky" },
         })
         .then((response: Response) => {
-          if (!response.ok) return Error(`Fetch error: ${response.statusText}`)
+          if (!response.ok) return Error("fetchOgpError")
           return response
         })
         .catch((error: any) => error)

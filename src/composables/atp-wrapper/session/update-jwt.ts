@@ -3,9 +3,9 @@ import { jwtDecode } from "jwt-decode"
 export default async function (
   this: TIAtpWrapper,
   onRefreshSession?: () => void
-): Promise<boolean> {
+): Promise<undefined | Error> {
   const session = this.data.sessions[this.data.did]
-  if (session == null) return false
+  if (session == null) return Error("noSessionError")
 
   let refreshJwt = undefined
   let accessJwt = undefined
@@ -13,12 +13,12 @@ export default async function (
     refreshJwt = jwtDecode(session.refreshJwt)
     accessJwt = jwtDecode(session.accessJwt)
   } catch (error) {
-    throw "jwtDecodeFailed"
+    return Error("jwtDecodeError")
   }
   if (
     refreshJwt.exp == null ||
     accessJwt.exp == null
-  ) return false
+  ) return Error("invalidJwtError")
 
   // 開発用
   const refreshDate = new Date()
@@ -33,15 +33,12 @@ export default async function (
   const now = Date.now() / 1000 + 60 * 5
   if (now >= refreshJwt.exp) {
     console.error("[klearsky] refreshJwt was expired.")
-    throw { error: "sessionExpired" }
+    return Error("refreshJwtExpired")
   }
   if (now >= accessJwt.exp) {
     console.warn("[klearsky] accessJwt was expired.")
     const response = await this.refreshSession()
-    if (response == null) {
-      if (onRefreshSession != null) onRefreshSession()
-    }
+    if (response instanceof Error) return response
+    if (onRefreshSession != null) onRefreshSession()
   }
-
-  return true
 }

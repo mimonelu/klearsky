@@ -4,7 +4,7 @@ export default async function (
   this: TIAtpWrapper,
   handle: string
 ): Promise<Error | string> {
-  if (this.agent == null) return Error("No agent")
+  if (this.agent == null) return Error("noAgentError")
   const query: ComAtprotoIdentityResolveHandle.QueryParams = { handle }
   const response: Error | ComAtprotoIdentityResolveHandle.Response =
     await (this.agent as BskyAgent).resolveHandle(query)
@@ -12,6 +12,6 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/resolveHandle]", response)
   if (response instanceof Error) return response
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
   return response.data.did
 }

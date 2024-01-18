@@ -9,7 +9,7 @@ export default async function (
   cursor?: string,
   middle?: boolean
 ): Promise<Error | undefined | string> {
-  if (this.agent == null) return Error("No agent")
+  if (this.agent == null) return Error("noAgentError")
 
   const query: AppBskyFeedGetListFeed.QueryParams = { list }
   if (limit != null) query.limit = limit
@@ -21,7 +21,7 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/getListFeed]", response)
   if (response instanceof Error) return response
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
 
   // TODO:
   AtpUtil.coherentResponses(response.data.feed)

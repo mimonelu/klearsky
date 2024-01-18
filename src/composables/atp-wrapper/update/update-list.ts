@@ -6,7 +6,7 @@ export default async function (
   list: TTList,
   avatarBlobRef?: BlobRef
 ): Promise<undefined | Error> {
-  if (this.agent == null) return Error("No Agent")
+  if (this.agent == null) return Error("noAgentError")
   const rkey = Util.getRkey(list.uri)
   const query: ComAtprotoRepoPutRecord.InputSchema = {
     repo: this.session?.did as string,
@@ -27,5 +27,5 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/putRecord]", response)
   if (response instanceof Error) return response
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
 }

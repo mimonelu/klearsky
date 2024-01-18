@@ -4,7 +4,7 @@ export default async function (
   this: TIAtpWrapper,
   listUri: string
 ): Promise<undefined | Error> {
-  if (this.agent == null) return Error("No Agent")
+  if (this.agent == null) return Error("noAgentError")
   const response: void | Error =
     await (this.agent as BskyAgent).unblockModList(listUri)
       .then((value: any) => value)

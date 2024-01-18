@@ -20,14 +20,14 @@ export default async function (params: TTTranslateInDeepLParams): Promise<Error 
       mode: "no-cors",
     })
     if (response == null) {
-      return Error("Translation Failed")
+      return Error("translationError")
     }
     const json = await response.json()
     if (json?.responseData?.translations?.[0]?.text == null) {
-      return Error("Translation Failed")
+      return Error("translationError")
     }
     return json.responseData.translations[0].text
   } catch (_error) {
-    return Error("Translation Failed")
+    return Error("translationError")
   }
 }

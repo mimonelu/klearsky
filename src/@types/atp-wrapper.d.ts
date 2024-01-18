@@ -67,15 +67,15 @@ interface TIAtpWrapper {
   fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchWithoutAgent (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, string>): Promise<undefined | Response>
   hasLogin (this: TIAtpWrapper): boolean
-  login (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, onRefreshSession?: () => void): Promise<boolean>
+  login (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, onRefreshSession?: () => void): Promise<undefined | Error>
   logout (this: TIAtpWrapper)
   refreshSession (this: TIAtpWrapper): Promise<undefined | Error>
   resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): void
-  resumeSession (this: TIAtpWrapper, session: TTSession): Promise<boolean>
+  resumeSession (this: TIAtpWrapper, session: TTSession): Promise<undefined | Error>
   saveData (this: TIAtpWrapper)
   updateBlockToDisable (this: TIAtpWrapper, uri: string): Promise<boolean>
   updateBlockToEnable (this: TIAtpWrapper, did: string): Promise<null | string>
-  updateJwt (this: TIAtpWrapper, onRefreshSession?: () => void): Promise<boolean>
+  updateJwt (this: TIAtpWrapper, onRefreshSession?: () => void): Promise<undefined | Error>
   updateList (this: TIAtpWrapper, list: TTList, avatarBlobRef?: BlobRef): Promise<undefined | Error>
   updateListBlockToDisable (this: TIAtpWrapper, listUri: string): Promise<undefined | Error>
   updateListBlockToEnable (this: TIAtpWrapper, listUri: string): Promise<string | Error>

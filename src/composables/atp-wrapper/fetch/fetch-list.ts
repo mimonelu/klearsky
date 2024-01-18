@@ -4,7 +4,7 @@ export default async function (
   this: TIAtpWrapper,
   list: string
 ): Promise<TTList | Error> {
-  if (this.agent == null) return Error("No Agent")
+  if (this.agent == null) return Error("noAgentError")
   const query: AppBskyGraphGetList.QueryParams = {
     list,
     limit: 1,
@@ -14,6 +14,6 @@ export default async function (
       .then((value: AppBskyGraphGetList.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/getList(fetchList)]", response)
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
   return response.data.list
 }

@@ -7,10 +7,10 @@ addExtension({
   Class: CID,
   tag: 42,
   encode () {
-    throw new Error("Cannot encode cids")
+    throw Error("cidEncodeError")
   },
   decode (bytes: Uint8Array) {
-    if (bytes[0] !== 0) throw new Error("Invalid cid")
+    if (bytes[0] !== 0) throw Error("invalidCidError")
     return CID.decode(bytes.subarray(1))
   },
 })

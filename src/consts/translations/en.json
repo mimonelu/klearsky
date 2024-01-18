@@ -458,5 +458,25 @@
   "pnTwitch": "Twitch",
   "pnYoutube": "Youtube",
   "pnVimeo": "Vimeo",
-  "pnNicovideo": "Nicovideo"
+  "pnNicovideo": "Nicovideo",
+
+  "apiError": "An error occurred while connecting to the API.",
+  "cidEncodeError": "An error occurred while encoding the CID.",
+  "downloadImageError": "An error occurred while downloading images.",
+  "fetchOgpError": "An error occurred while retrieving OGP. Klearsky's link server may be down. Please contact @mimonelu.net .",
+  "getSessionError": "Login failed. Please check your entries.",
+  "imageCompressionError": "An error occurred while compressing the image.",
+  "invalidCidError": "Invalid CID.",
+  "invalidJwtError": "Invalid JWT.",
+  "jwtDecodeError": "An error occurred during JWT encoding.",
+  "makeAvatarBlobRefError": "An error occurred while processing avatar image.",
+  "noAgentError": "No agent.",
+  "noGeneratorError": "No feed generator.",
+  "noSessionError": "No active session. Please log in again.",
+  "offlineError": "No Internet connection.",
+  "parseOgpError": "An error occurred while parsing OGP.",
+  "refreshJwtExpired": "refreshJWT has expired. Please log in again.",
+  "refreshSessionError": "An error occurred while refreshing the session.",
+  "resumeSessionError": "An error occurred while restoring the session.\nThe session may be expired. Please log in again.",
+  "translationError": "An error occurred during translation."
 }

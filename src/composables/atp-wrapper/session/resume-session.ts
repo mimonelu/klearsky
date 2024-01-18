@@ -3,9 +3,9 @@ import type { AtpSessionData, BskyAgent, ComAtprotoServerGetSession } from "@atp
 export default async function (
   this: TIAtpWrapper,
   session: AtpSessionData
-): Promise<boolean> {
-  if (this.agent == null) return false
-  const response: ComAtprotoServerGetSession.Response =
+): Promise<undefined | Error> {
+  if (this.agent == null) return Error("noAgentError")
+  const response: Error | ComAtprotoServerGetSession.Response =
     await (this.agent as BskyAgent).resumeSession({
       accessJwt: session.accessJwt,
       did: session.did,
@@ -14,6 +14,9 @@ export default async function (
       handle: session.handle,
       refreshJwt: session.refreshJwt,
     })
+      .then((value: ComAtprotoServerGetSession.Response) => value)
+      .catch((error: any) => error)
   console.log("[klearsky/resumeSession]", response)
-  return response.success
+  if (response instanceof Error) return Error("resumeSessionError")
+  if (!response.success) return Error("resumeSessionError")
 }

@@ -8,7 +8,7 @@ export default async function (
   this: TIAtpWrapper,
   params: TTCreatePostParams
 ): Promise<Error | TTCidUri> {
-  if (this.agent == null) return Error("No Agent")
+  if (this.agent == null) return Error("noAgentError")
 
   const record: AppBskyFeedPost.Record = {
     $type: "app.bsky.feed.post",
@@ -69,7 +69,7 @@ export default async function (
     }
     if (generatorUri != null) {
       const generator: Error | TTFeedGenerator = await this.fetchFeedGenerator(generatorUri)
-      if (generator instanceof Error) return Error("No Generator")
+      if (generator instanceof Error) return Error("noGeneratorError")
       feedCard = {
         $type: "app.bsky.embed.record",
         record: {
@@ -86,7 +86,7 @@ export default async function (
         params.url,
         params.urlHasImage?.includes(true) ?? false
       )
-      if (external == null) return Error("Failed to parse OGP")
+      if (external == null || external instanceof Error) return Error("parseOgpError")
     }
   }
 
@@ -103,7 +103,7 @@ export default async function (
     })
   )
   if (fileBlobRefs.some((fileBlobRef: null | BlobRef) => fileBlobRef == null)) {
-    return Error("Failed image compression")
+    return Error("imageCompressionError")
   }
   if (fileBlobRefs.length > 0) {
     const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileBlobRefs

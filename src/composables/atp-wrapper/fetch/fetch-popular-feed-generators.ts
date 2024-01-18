@@ -7,7 +7,7 @@ export default async function (
   cursor?: string,
   term?: string
 ): Promise<Error | undefined | string> {
-  if (this.agent == null) return Error("No agent")
+  if (this.agent == null) return Error("noAgentError")
 
   const query: AppBskyUnspeccedGetPopularFeedGenerators.QueryParams = {}
   if (limit != null) query.limit = limit
@@ -20,7 +20,7 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/getPopularFeedGenerators]", response)
   if (response instanceof Error) return response
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
 
   ;(response.data.feeds as Array<TTFeedGenerator>).forEach((newGenerator: TTFeedGenerator) => {
     if (currentValues.every((currentGenerator: TTFeedGenerator) => {

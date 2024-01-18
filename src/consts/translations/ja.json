@@ -458,5 +458,25 @@
   "pnTwitch": "Twitch",
   "pnYoutube": "Youtube",
   "pnVimeo": "Vimeo",
-  "pnNicovideo": "ニコニコ動画"
+  "pnNicovideo": "ニコニコ動画",
+
+  "apiError": "APIへの接続中にエラーが発生しました。",
+  "cidEncodeError": "CIDのエンコードでエラーが発生しました。",
+  "downloadImageError": "画像のダウンロード中にエラーが発生しました。",
+  "fetchOgpError": "OGPの取得でエラーが発生しました。Klearskyのリンクサーバが落ちている可能性があります。 @mimonelu.net にご連絡ください。",
+  "getSessionError": "ログインに失敗しました。入力内容を確認してください。",
+  "imageCompressionError": "画像の圧縮中にエラーが発生しました。",
+  "invalidCidError": "不正なCIDです。",
+  "invalidJwtError": "不正なJWTです。",
+  "jwtDecodeError": "JWTのエンコードでエラーが発生しました。",
+  "makeAvatarBlobRefError": "アバター画像の処理中にエラーが発生しました。",
+  "noAgentError": "エージェントがありません。",
+  "noGeneratorError": "フィードジェネレーターがありません。",
+  "noSessionError": "有効なセッションがありません。再ログインしてください。",
+  "offlineError": "インターネットに接続されていません。",
+  "parseOgpError": "OGPの解析中にエラーが発生しました。",
+  "refreshJwtExpired": "refreshJWTの期限が切れました。再ログインしてください。",
+  "refreshSessionError": "セッションの更新中にエラーが発生しました。",
+  "resumeSessionError": "セッションの復帰中にエラーが発生しました。\nセッションが切れている可能性があります。再ログインしてください。",
+  "translationError": "翻訳中にエラーが発生しました。"
 }

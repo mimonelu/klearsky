@@ -5,8 +5,8 @@ export default async function (
   this: TIAtpWrapper,
   listUri: string
 ): Promise<true | Error> {
-  if (this.agent == null) return Error("No Agent")
-  if (this.session == null) return Error("No Session")
+  if (this.agent == null) return Error("noAgentError")
+  if (this.session == null) return Error("noSessionError")
   const rkey = Util.getRkey(listUri)
   const query: ComAtprotoRepoDeleteRecord.InputSchema = {
     repo: this.session.did,

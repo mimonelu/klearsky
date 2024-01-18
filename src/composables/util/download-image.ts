@@ -1,9 +1,9 @@
-export default async (url: string): Promise<void> => {
+export default async (url: string): Promise<undefined | Error> => {
   const anchorElement: HTMLAnchorElement = document.createElement("a")
   if (url.startsWith("blob:")) {
     const response = await fetch(url)
     if (!response.ok) {
-      throw { error: `Failed to fetch Blob data. Status: ${response.status}` }
+      return Error("downloadImageError")
     }
     const blobData: Blob = await response.blob()
     url = URL.createObjectURL(blobData)
@@ -11,7 +11,7 @@ export default async (url: string): Promise<void> => {
   anchorElement.href = url
   let fileName: undefined | string = getFileNameFromUrl(url)
   if (fileName == null) {
-    throw { error: "Invalid URL: Unable to extract filename." }
+    return Error("downloadImageError")
   }
   anchorElement.download = fileName
   anchorElement.target = "_blank"

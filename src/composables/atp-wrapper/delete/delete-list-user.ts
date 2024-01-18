@@ -5,19 +5,20 @@ export default async function (
   this: TIAtpWrapper,
   userUri: string,
 ): Promise<true | Error> {
-  if (this.agent == null) return Error("No Agent")
-  if (this.session == null) return Error("No Session")
+  if (this.agent == null) return Error("noAgentError")
+  if (this.session == null) return Error("noSessionError")
   const rkey = Util.getRkey(userUri)
   const query: ComAtprotoRepoDeleteRecord.InputSchema = {
     repo: this.session.did,
     collection: "app.bsky.graph.listitem",
     rkey,
   }
-  const response: ComAtprotoRepoDeleteRecord.Response =
+  const response: Error | ComAtprotoRepoDeleteRecord.Response =
     await (this.agent as BskyAgent).com.atproto.repo.deleteRecord(query)
       .then((value: ComAtprotoRepoDeleteRecord.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/deleteRecord]", response)
-  if (!response.success) return Error("Failed")
+  if (response instanceof Error) return response
+  if (!response.success) return Error("apiError")
   return true
 }

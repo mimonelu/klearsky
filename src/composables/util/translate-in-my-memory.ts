@@ -11,14 +11,14 @@ export default async function (params: TTTranslateInMyMemoryParams): Promise<Err
   try {
     const response: null | Response = await fetch(url)
     if (response == null) {
-      return Error("Translation Failed")
+      return Error("translationError")
     }
     const json = await response.json()
     if (!(json?.responseData?.translatedText)) {
-      return Error("Translation Failed")
+      return Error("translationError")
     }
     return json.responseData.translatedText
   } catch (_error) {
-    return Error("Translation Failed")
+    return Error("translationError")
   }
 }

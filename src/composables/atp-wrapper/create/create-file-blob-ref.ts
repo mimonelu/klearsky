@@ -63,7 +63,7 @@ export default async function (
       })
     } catch (error) {
       console.error("[klearsky/imageCompression]", error)
-      blob = Error("Failed image compression")
+      blob = Error("imageCompressionError")
     }
 
     if (blob instanceof Error) return null

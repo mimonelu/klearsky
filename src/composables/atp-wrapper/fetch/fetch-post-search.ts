@@ -8,7 +8,7 @@ export default async function (
   limit?: number,
   cursor?: string
 ): Promise<Error | undefined | { cursor?: string, hitsTotal?: number }> {
-  if (this.agent == null) return Error("No Agent")
+  if (this.agent == null) return Error("noAgentError")
   const query: AppBskyFeedSearchPosts.QueryParams = { q }
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
@@ -17,7 +17,7 @@ export default async function (
       .then((value: AppBskyFeedSearchPosts.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/fetchPostSearch]", response)
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
   const newPosts: Array<TTPost> = (response.data.posts as Array<TTPost>)
     .filter((post: TTPost) => {
       return currentPosts.every((currentPost: TTPost) => {

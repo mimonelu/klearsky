@@ -1,7 +1,7 @@
 import type { BskyAgent, ComAtprotoServerGetAccountInviteCodes } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper): Promise<Error | TTInviteCode[]> {
-  if (this.agent == null) return Error("No agent")
+  if (this.agent == null) return Error("noAgentError")
   const query: ComAtprotoServerGetAccountInviteCodes.QueryParams = {
     includeUsed: true,
     createAvailable: true,
@@ -12,6 +12,6 @@ export default async function (this: TIAtpWrapper): Promise<Error | TTInviteCode
       .catch((error: any) => error)
   console.log("[klearsky/getAccountInviteCodes]", response)
   if (response instanceof Error) return response
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
   return response.data.codes
 }

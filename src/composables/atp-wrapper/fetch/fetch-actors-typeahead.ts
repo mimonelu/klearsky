@@ -5,7 +5,7 @@ export default async function (
   q?: string,
   limit?: number
 ): Promise<Error | Array<TTUser>> {
-  if (this.agent == null) return Error("No agent")
+  if (this.agent == null) return Error("noAgentError")
   const query: AppBskyActorSearchActorsTypeahead.QueryParams = {}
   if (q != null) query.q = q
   if (limit != null) query.limit = limit
@@ -15,6 +15,6 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/searchActorsTypeahead]", response)
   if (response instanceof Error) return response
-  if (!response.success) return Error("Failed")
+  if (!response.success) return Error("apiError")
   return response.data.actors as Array<TTUser>
 }
