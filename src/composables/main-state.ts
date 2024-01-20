@@ -1060,15 +1060,16 @@ async function fetchCustomFeeds (direction: "old" | "new", middleCursor?: string
     state.currentCustomFeeds.splice(0)
     state.currentCustomCursor = undefined
   }
-  const cursor: undefined | false | string =
+  const cursor: undefined | string | Error =
     await state.atp.fetchCustomFeeds(
       state.currentCustomFeeds,
       state.currentQuery.feed,
       CONSTS.LIMIT_OF_FETCH_FEEDS,
       direction === "old" ? middleCursor ?? state.currentCustomCursor : undefined,
-      middleCursor != null
+      middleCursor != null,
+      (feedUri: any): boolean => feedUri === state.currentQuery.feed,
     )
-  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchCustomFeeds")
+  if (cursor instanceof Error) state.openErrorPopup(cursor, "main-state/fetchCustomFeeds")
   else if (cursor != null) state.currentCustomCursor = cursor
   state.currentCustomUri = state.currentQuery.feed
 }
@@ -1108,8 +1109,13 @@ async function fetchMyFeeds (): Promise<boolean> {
   pinned.forEach(async (uri: string) => {
     if (state.currentMyFeeds[uri] == null) return
     state.currentMyFeeds[uri].processing = true
-    const status = await state.atp.fetchCustomFeeds(state.currentMyFeeds[uri].feeds, uri, CONSTS.LIMIT_OF_FETCH_MY_FEEDS)
-    state.currentMyFeeds[uri].status = status !== false
+    const status: undefined | string | Error =
+      await state.atp.fetchCustomFeeds(
+        state.currentMyFeeds[uri].feeds,
+        uri,
+        CONSTS.LIMIT_OF_FETCH_MY_FEEDS
+      )
+    state.currentMyFeeds[uri].status = !(status instanceof Error)
     state.currentMyFeeds[uri].processing = false
   })
 

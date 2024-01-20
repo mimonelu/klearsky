@@ -32,7 +32,7 @@ interface TIAtpWrapper {
   fetchBlob (this: TIAtpWrapper, cid: string, did?: string): Promise<null | Blob>
   fetchBlobUrl (this: TIAtpWrapper, did: string, image: BlobRef): Promise<undefined | string>
   fetchBlockingUsers (this: TIAtpWrapper, users: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
-  fetchCustomFeeds (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, feed: string, limit?: number, cursor?: string, middle?: boolean): Promise<undefined | false | string>
+  fetchCustomFeeds (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, feed: string, limit?: number, cursor?: string, middle?: boolean, checkIdentity?: (params: any) => boolean): Promise<undefined | string | Error>
   fetchDid (this: TIAtpWrapper, handle: string): Promise<Error | string>
   fetchFeedGenerator (this: TIAtpWrapper, feed: string): Promise<Error | TTFeedGenerator>
   fetchFeedGenerators (this: TIAtpWrapper, feeds: Array<string>): Promise<Error | Array<TTFeedGenerator>>
