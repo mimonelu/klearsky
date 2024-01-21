@@ -1,4 +1,4 @@
-import MyWorker from "@/worker/my-worker.ts?sharedworker"
+import MyWorker from "@/worker/my-worker?sharedworker"
 
 export default class {
   public mainState: MainState
