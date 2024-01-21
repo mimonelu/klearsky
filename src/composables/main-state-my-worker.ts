@@ -1,3 +1,5 @@
+import MyWorker from "@/worker/my-worker.ts?sharedworker"
+
 export default class {
   public mainState: MainState
   public worker?: SharedWorker
@@ -5,13 +7,7 @@ export default class {
   constructor (mainState: MainState) {
     this.mainState = mainState
     if (window.SharedWorker == null) return
-    this.worker = new window.SharedWorker(
-      new URL("@/worker/my-worker.ts", import.meta.url),
-      {
-        type: "module",
-        name: "my-worker",
-      }
-    )
+    this.worker = new MyWorker()
     this.worker.port.start()
     this.worker.port.onmessage = (event: MessageEvent) => {
       const data: TTPostMessageData = event.data
