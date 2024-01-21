@@ -8,6 +8,8 @@ export default async function (
   password?: string,
   onRefreshSession?: () => void
 ): Promise<undefined | Error> {
+  if (!window.navigator.onLine) return Error("offlineError")
+
   const session = this.data.sessions[this.data.did]
   service ??= session.__service ?? "https://bsky.social"
   if (!this.createAgent(service)) return Error("noAgentError")
