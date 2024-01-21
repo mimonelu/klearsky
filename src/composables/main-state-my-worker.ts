@@ -58,12 +58,15 @@ export default class {
     } as TTPostMessageData)
   }
 
-  setSessionCache (key: string, value: any) {
+  setSessionCache (key: string, json: any) {
+    const value = JSON.parse(JSON.stringify(json))
+
+    // Worker にキャッシュ
     this.worker?.port.postMessage({
       name: "setSessionCacheRequest",
       did: this.mainState.atp.data.did,
       key: key,
-      value: JSON.parse(JSON.stringify(value)),
+      value,
     } as TTPostMessageData)
 
     // 変更をブロードキャスト
@@ -71,7 +74,7 @@ export default class {
       name: "setSessionCacheResponse",
       did: this.mainState.atp.data.did,
       key: key,
-      value: JSON.parse(JSON.stringify(value)),
+      value,
     } as TTPostMessageData)
   }
 }

@@ -137,8 +137,10 @@ function transformInternalLink (uri: string): undefined | string {
 }
 
 async function openWindowIfCan (segment: RichParam) {
-  const valid = validateUrl(segment.param ?? "", segment.text)
-  if (valid && await mainState.openConfirmationPopup(
+  const urlObject: undefined | URL = getUrlObject(segment.param ?? "")
+  if (urlObject == null) return
+  const valid = validateUrl(urlObject, segment.text)
+  if (valid || await mainState.openConfirmationPopup(
     $t("confirmUrl"),
     $t("confirmUrlNotification"),
     segment.param
@@ -150,14 +152,13 @@ async function openWindowIfCan (segment: RichParam) {
   }
 }
 
-function validateUrl (url: string, text: string): boolean {
-  let urlObject: undefined | URL
+function getUrlObject (url: string): undefined | URL {
   try {
-    urlObject = new URL(url)
-  } catch (error) {
-    return false
-  }
+    return new URL(url)
+  } catch (error) { /**/ }
+}
 
+function validateUrl (urlObject: URL, text: string): boolean {
   // 末尾のスラッシュを削除して照合
   const pathname = urlObject.pathname.replace(/\/$/, "")
 
@@ -179,7 +180,7 @@ function validateUrl (url: string, text: string): boolean {
       <template v-if="segment.type === 'externalLink'">
         <span
           class="external-link"
-          :class="validateUrl(segment.param ?? '', segment.text) ? 'textlink' : ''"
+          :class="getUrlObject(segment.param ?? '') != null ? 'textlink' : ''"
           @click.stop="openWindowIfCan(segment)"
         >{{ segment.text }}</span>
       </template>
