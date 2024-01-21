@@ -138,7 +138,7 @@ function transformInternalLink (uri: string): undefined | string {
 
 async function openWindowIfCan (segment: RichParam) {
   const valid = validateUrl(segment.param ?? "", segment.text)
-  if (valid || await mainState.openConfirmationPopup(
+  if (valid && await mainState.openConfirmationPopup(
     $t("confirmUrl"),
     $t("confirmUrlNotification"),
     segment.param
@@ -178,7 +178,8 @@ function validateUrl (url: string, text: string): boolean {
       <!-- 外部リンク -->
       <template v-if="segment.type === 'externalLink'">
         <span
-          class="textlink external-link"
+          class="external-link"
+          :class="validateUrl(segment.param ?? '', segment.text) ? 'textlink' : ''"
           @click.stop="openWindowIfCan(segment)"
         >{{ segment.text }}</span>
       </template>

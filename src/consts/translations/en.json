@@ -468,6 +468,7 @@
   "imageCompressionError": "An error occurred while compressing the image.",
   "invalidCidError": "Invalid CID.",
   "invalidJwtError": "Invalid JWT.",
+  "invalidUrlError": "Invalid URL.",
   "jwtDecodeError": "An error occurred during JWT encoding.",
   "makeAvatarBlobRefError": "An error occurred while processing avatar image.",
   "noAgentError": "No agent.",

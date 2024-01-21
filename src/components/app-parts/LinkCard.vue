@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
 import LazyImage from "@/components/common/LazyImage.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const props = defineProps<{
   external: TTExternal
@@ -29,6 +30,7 @@ const state = reactive<{
 
 const externalComponent = ref()
 
+let isInvalidUrl = false
 let embeddedContentType: null | string = null
 let embeddedContentId: null | string = null
 const klearskyHostname = window.location.hostname
@@ -41,7 +43,14 @@ watch(() => mainState.currentSetting.linkcardEmbeddedControl, () => {
 onMounted(updateEmbeddedContents)
 
 function getEmbeddedContentId () {
-  const url = new URL(props.external.uri)
+  let url: undefined | URL
+  try {
+    url = new URL(props.external.uri)
+  } catch (error) {
+    isInvalidUrl = true
+    return
+  }
+  if (url == null) return
 
   // Apple Music 対応
   if (url.hostname.endsWith("music.apple.com")) {
@@ -145,12 +154,6 @@ function updateEmbeddedContents () {
   }
 }
 
-function isDarkMode (): boolean {
-  return window.matchMedia != null
-    ? window.matchMedia("(prefers-color-scheme: dark)")?.matches ?? false
-    : false
-}
-
 getEmbeddedContentId()
 </script>
 
@@ -159,8 +162,18 @@ getEmbeddedContentId()
     ref="externalComponent"
     class="external"
   >
+    <!-- 不正な URL -->
+    <div
+      v-if="isInvalidUrl"
+      class="external--default external--invalid textlabel--alert"
+    >
+      <div class="textlabel__text">
+        <SVGIcon name="alert" />{{ $t("invalidUrlError") }}
+      </div>
+    </div>
+
     <a
-      v-if="state.type === ''"
+      v-else-if="state.type === ''"
       class="external--default"
       :href="external.uri"
       rel="noreferrer"
@@ -320,6 +333,11 @@ getEmbeddedContentId()
       width: 100%;
       min-height: 100%;
     }
+  }
+
+  &--invalid {
+    padding: 0.75em 0.75em 0.5em;
+    pointer-events: none;
   }
 
   &__meta {
