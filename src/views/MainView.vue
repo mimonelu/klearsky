@@ -300,83 +300,93 @@ async function processPage (pageName?: null | string) {
       }
       case "profile-feeds-with-replies": {
         // ブロック情報などを取得するために Promise.allSettled はしない
-        if (!state.inSameProfilePage || state.currentAuthorFeedsWithReplies.length === 0)
-          await state.fetchCurrentAuthorFeed("new", "posts_with_replies")
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           await state.fetchCurrentProfile(account as string)
+        if (!state.inSameProfilePage || state.currentAuthorFeedsWithReplies.length === 0)
+          await state.fetchCurrentAuthorFeed("new", "posts_with_replies")
         break
       }
       case "profile-feeds-with-media": {
         // ブロック情報などを取得するために Promise.allSettled はしない
-        if (!state.inSameProfilePage || state.currentAuthorFeedsWithMedia.length === 0)
-          await state.fetchCurrentAuthorFeed("new", "posts_with_media")
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           await state.fetchCurrentProfile(account as string)
+
+        if (!state.inSameProfilePage || state.currentAuthorFeedsWithMedia.length === 0)
+          await state.fetchCurrentAuthorFeed("new", "posts_with_media")
         break
       }
       case "profile-repost": {
         // ブロック情報などを取得するために Promise.allSettled はしない
-        if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0)
-          await state.fetchAuthorReposts("new")
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           await state.fetchCurrentProfile(account as string)
+
+        if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0)
+          await state.fetchAuthorReposts("new")
         break
       }
       case "profile-like": {
         // ブロック情報などを取得するために Promise.allSettled はしない
-        if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
-          await state.fetchAuthorLikes("new")
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           await state.fetchCurrentProfile(account as string)
+
+        if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0)
+          await state.fetchAuthorLikes("new")
+
         break
       }
       case "profile-list": {
         // ブロック情報などを取得するために Promise.allSettled はしない
-        if (!state.isMyProfile() && (!state.inSameProfilePage || state.currentAuthorLists.length === 0))
-          await state.fetchAuthorLists("new")
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           await state.fetchCurrentProfile(account as string)
+
+        if (!state.isMyProfile() && (!state.inSameProfilePage || state.currentAuthorLists.length === 0))
+          await state.fetchAuthorLists("new")
+
         break
       }
       case "profile-custom-feeds": {
         // ブロック情報などを取得するために Promise.allSettled はしない
-        if (!state.inSameProfilePage || state.currentAuthorCustomFeeds.length === 0)
-          await state.fetchCurrentAuthorCustomFeeds("new")
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           await state.fetchCurrentProfile(account as string)
+
+        if (!state.inSameProfilePage || state.currentAuthorCustomFeeds.length === 0)
+          await state.fetchCurrentAuthorCustomFeeds("new")
+
         break
       }
       case "profile-following": {
         // ブロック情報などを取得するために Promise.allSettled はしない
-        if (!state.inSameProfilePage || state.currentFollowings.length === 0)
-          await state.fetchFollowings("new")
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           await state.fetchCurrentProfile(account as string)
+
+        if (!state.inSameProfilePage || state.currentFollowings.length === 0)
+          await state.fetchFollowings("new")
         break
       }
       case "profile-follower": {
         // ブロック情報などを取得するために Promise.allSettled はしない
-        if (!state.inSameProfilePage || state.currentFollowers.length === 0)
-          await state.fetchFollowers("new")
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           await state.fetchCurrentProfile(account as string)
+
+        if (!state.inSameProfilePage || state.currentFollowers.length === 0)
+          await state.fetchFollowers("new")
         break
       }
       case "profile-suggested-follows": {
         const tasks: Array<Promise<void>> = []
-        if (!state.inSameProfilePage || state.currentSuggestedFollows.length === 0)
-          tasks.push(state.fetchSuggestedFollows())
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did)
           tasks.push(state.fetchCurrentProfile(account as string))
+        if (!state.inSameProfilePage || state.currentSuggestedFollows.length === 0)
+          tasks.push(state.fetchSuggestedFollows())
         await Promise.allSettled(tasks)
         break
       }
