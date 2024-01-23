@@ -231,12 +231,12 @@ async function processAfterLogin () {
   }
 
   // マイフィードの取得
-  if (state.currentMyFeedGenerators.length === 0) {
-    state.fetchMyFeedGenerators().then(() => {
-      state.sortMyFeedGenerators()
+  if (state.myFeeds.items.length === 0) {
+    state.myFeeds.fetchItems().then(() => {
+      state.myFeeds.sortItems()
 
       // セッションキャッシュの設定
-      state.myWorker.setSessionCache("currentMyFeedGenerators", state.currentMyFeedGenerators)
+      state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
     })
   }
 
@@ -392,11 +392,6 @@ async function processPage (pageName?: null | string) {
       }
       case "timeline-home": {
         await state.fetchTimeline("new")
-        break
-      }
-      case "my-feeds-home": {
-        if (Object.keys(state.currentMyFeeds).length === 0)
-          await state.fetchMyFeeds()
         break
       }
       case "feeds-home": {
@@ -633,8 +628,8 @@ function broadcastListener (event: MessageEvent) {
         }
 
         // セッションキャッシュの反映 - マイフィード
-        case "currentMyFeedGenerators": {
-          state.currentMyFeedGenerators = data.value
+        case "myFeeds.items": {
+          state.myFeeds.items.splice(0, state.myFeeds.items.length, ...data.value)
           break
         }
 

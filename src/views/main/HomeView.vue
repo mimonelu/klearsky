@@ -53,12 +53,6 @@ function openMyListPopup () {
         </RouterLink>
         <RouterLink
           class="tab__button"
-          to="/home/my"
-        >
-          <span>{{ $t("myFeeds") }}</span>
-        </RouterLink>
-        <RouterLink
-          class="tab__button"
           to="/home/globalline"
         >
           <span>{{ $t("globalline") }}</span>

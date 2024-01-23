@@ -122,7 +122,7 @@ async function apply () {
   // セッションキャッシュの更新
   if (result) {
     mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("currentMyFeedGenerators", mainState.currentMyFeedGenerators)
+    mainState.myWorker.setSessionCache("myFeeds.items", mainState.myFeeds.items)
   }
 
   close()

@@ -11,32 +11,28 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   editMode: boolean,
-  backupGenerators: TTFeedGenerator[],
+  backupMyFeedsItems: Array<TTMyFeedsItem>,
   backupPinned: string[],
-  pinnedGenerators: ComputedRef<Array<TTFeedGenerator>>,
+  pinnedMyFeedsItems: ComputedRef<Array<TTMyFeedsItem>>,
   processing: boolean,
 }>({
   editMode: false,
-  backupGenerators: [],
+  backupMyFeedsItems: [],
   backupPinned: [],
-  pinnedGenerators: computed((): Array<TTFeedGenerator> => {
-    const pinned = mainState.feedPreferences?.pinned
-    if (pinned == null) return []
-    return mainState.currentMyFeedGenerators.filter((generator: TTFeedGenerator) => {
-      return pinned.includes(generator.uri)
-    })
+  pinnedMyFeedsItems: computed((): Array<TTMyFeedsItem> => {
+    return mainState.myFeeds.pinnedItems
   }),
   processing: false,
 })
 
 function startEdit () {
-  state.backupGenerators = JSON.parse(JSON.stringify(mainState.currentMyFeedGenerators))
+  state.backupMyFeedsItems = JSON.parse(JSON.stringify(mainState.myFeeds.items))
   state.backupPinned = JSON.parse(JSON.stringify(mainState.feedPreferences?.pinned ?? []))
   state.editMode = true
 }
 
 function cancelEdit () {
-  mainState.currentMyFeedGenerators = state.backupGenerators
+  mainState.myFeeds.items = state.backupMyFeedsItems
   if (mainState.feedPreferences?.pinned != null) mainState.feedPreferences.pinned = state.backupPinned
   state.editMode = false
 }
@@ -45,7 +41,6 @@ async function saveMyFeed () {
   if (state.processing) return
   if (mainState.feedPreferences == null) return
   state.processing = true
-  mainState.sortMyFeedGenerators()
   mainState.sortFeedPreferencesSavedAndPinned()
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   if (!result) mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
@@ -55,7 +50,7 @@ async function saveMyFeed () {
   // セッションキャッシュの更新
   if (result) {
     mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("currentMyFeedGenerators", mainState.currentMyFeedGenerators)
+    mainState.myWorker.setSessionCache("myFeeds.items", mainState.myFeeds.items)
   }
 }
 
@@ -80,11 +75,7 @@ function removeMyFeed (uri: string) {
     const index = mainState.feedPreferences.pinned.indexOf(uri)
     if (index !== - 1) mainState.feedPreferences.pinned.splice(index, 1)
   }
-  const index = mainState.currentMyFeedGenerators
-    .findIndex((generator: TTFeedGenerator) => {
-      return generator.uri === uri
-    })
-  if (index !== - 1) mainState.currentMyFeedGenerators.splice(index, 1)
+  mainState.myFeeds.removeItem(uri)
 }
 </script>
 
@@ -136,22 +127,40 @@ function removeMyFeed (uri: string) {
       class="my-feed-list__body"
     >
       <div
-        v-for="generator of state.pinnedGenerators"
-        :key="generator.uri"
+        v-for="item of state.pinnedMyFeedsItems"
+        :key="item.value.uri"
         class="my-feed-list__item"
       >
+        <!-- カスタムフィード -->
         <RouterLink
+          v-if="item.kind === 'feed'"
           :to="{
             path: '/home/feeds',
             query: {
-              feed: generator.uri,
-              displayName: generator.displayName,
+              feed: item.value.uri,
+              displayName: item.value.displayName,
             },
           }"
           class="my-feed-list__content"
         >
-          <LazyImage :src="generator.avatar" />
-          <span>{{ generator.displayName }}</span>
+          <LazyImage :src="item.value.avatar" />
+          <span>{{ item.value.displayName }}</span>
+        </RouterLink>
+
+        <!-- リストフィード -->
+        <RouterLink
+          v-else-if="item.kind === 'list'"
+          :to="{
+            path: '/home/list-feeds',
+            query: {
+              list: item.value.uri,
+              displayName: item.value.name,
+            },
+          }"
+          class="my-feed-list__content"
+        >
+          <LazyImage :src="item.value.avatar" />
+          <span>{{ item.value.name }}</span>
         </RouterLink>
       </div>
     </div>
@@ -161,12 +170,12 @@ function removeMyFeed (uri: string) {
       v-else
       v-slot="{ item, focused }"
       class="my-feed-list__body"
-      :items="mainState.currentMyFeedGenerators"
+      :items="mainState.myFeeds.items"
     >
       <div
         class="my-feed-list__item"
         :data-focused="focused"
-        :data-is-pinned="isPinned(item.uri)"
+        :data-is-pinned="isPinned(item.value.uri)"
       >
         <div class="my-feed-list__icon">
           <SVGIcon name="drag" />
@@ -174,30 +183,30 @@ function removeMyFeed (uri: string) {
 
         <!-- ピンボタン -->
         <button
-          v-if="isPinned(item.uri)"
+          v-if="isPinned(item.value.uri)"
           class="my-feed-list__icon"
-          @click.prevent="togglePinned(item.uri)"
+          @click.prevent="togglePinned(item.value.uri)"
         >
           <SVGIcon name="pin" />
         </button>
         <button
           v-else
           class="my-feed-list__icon"
-          @click.prevent="togglePinned(item.uri)"
+          @click.prevent="togglePinned(item.value.uri)"
         >
           <SVGIcon name="pinOutline" />
         </button>
 
         <!-- フィードリンク -->
         <div class="my-feed-list__content">
-          <LazyImage :src="item.avatar" />
-          <span>{{ item.displayName }}</span>
+          <LazyImage :src="item.value.avatar" />
+          <span>{{ item.value.displayName ?? item.value.name }}</span>
         </div>
 
         <!-- フィード削除ボタン -->
         <button
           class="my-feed-list__icon"
-          @click.prevent="removeMyFeed(item.uri)"
+          @click.prevent="removeMyFeed(item.value.uri)"
         >
           <SVGIcon name="cross" />
         </button>

@@ -9,7 +9,6 @@ import PostView from "@/views/main/PostView.vue"
 // Main - Home
 import HomeView from "@/views/main/HomeView.vue"
 import TimelineView from "@/views/main/home/TimelineView.vue"
-import MyFeedsView from "@/views/main/home/MyFeedsView.vue"
 import FeedsView from "@/views/main/home/FeedsView.vue"
 import ListFeedsView from "@/views/main/home/ListFeedsView.vue"
 import ListUsersView from "@/views/main/home/ListUsersView.vue"
@@ -71,12 +70,6 @@ const router = createRouter({
               name: "timeline-home",
               meta: { label: "The Bluesky Client" },
               component: TimelineView,
-            },
-            {
-              path: "my",
-              name: "my-feeds-home",
-              meta: { label: "myFeeds" },
-              component: MyFeedsView,
             },
             {
               path: "feeds",

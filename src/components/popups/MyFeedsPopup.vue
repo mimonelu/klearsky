@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive } from "vue"
+import { inject, reactive } from "vue"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
+import ListCard from "@/components/list/ListCard.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
@@ -13,42 +14,12 @@ const state = reactive<{
   popupLoaderDisplay: boolean
 }>({
   orderChanged: false,
-  popupLoaderDisplay: true,
-})
-
-onMounted(async () => {
-  // Preferences の取得
-  state.popupLoaderDisplay = true
-  const preferences = await mainState.fetchPreferences()
-  state.popupLoaderDisplay = false
-  if (!preferences) {
-    mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchPreferences")
-    return
-  }
-
-  // ブックマークが存在しない
-  if (mainState.feedPreferences?.saved == null) {
-    mainState.currentMyFeedGenerators.splice(0)
-    return
-  }
-
-  // ブックマークが存在する＆差分がない
-  const savedBefore = JSON.stringify(mainState.currentMyFeedGenerators
-    .map((generator: TTFeedGenerator) => generator.uri))
-  const savedAfter = JSON.stringify(mainState.feedPreferences?.saved ?? [])
-  if (savedBefore === savedAfter && mainState.currentMyFeedGenerators.length > 0) return
-
-  // マイフィードジェネレーターの取得
-  state.popupLoaderDisplay = true
-  await mainState.fetchMyFeedGenerators()
-  mainState.sortMyFeedGenerators()
-  state.popupLoaderDisplay = false
+  popupLoaderDisplay: false,
 })
 
 async function close () {
   if (state.orderChanged) {
     state.popupLoaderDisplay = true
-    mainState.sortMyFeedGenerators()
     mainState.sortFeedPreferencesSavedAndPinned()
     const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
     if (!result) mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
@@ -57,33 +28,41 @@ async function close () {
     // セッションキャッシュの更新
     if (result) {
       mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-      mainState.myWorker.setSessionCache("currentMyFeedGenerators", mainState.currentMyFeedGenerators)
+      mainState.myWorker.setSessionCache("myFeeds.items", mainState.myFeeds.items)
     }
   }
   emit("close")
+}
+
+async function fetchMyFeeds () {
+  // Preferences の取得
+  state.popupLoaderDisplay = true
+  const preferences = await mainState.fetchPreferences()
+  if (!preferences) {
+    mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchPreferences")
+    state.popupLoaderDisplay = false
+    return
+  }
+
+  // ブックマークが存在しない
+  if (mainState.feedPreferences?.saved == null) {
+    mainState.myFeeds.clearItems()
+    state.popupLoaderDisplay = false
+    return
+  }
+
+  // マイフィードジェネレーターの取得
+  await mainState.myFeeds.fetchItems()
+  mainState.myFeeds.sortItems()
+  state.popupLoaderDisplay = false
 }
 
 function changeCustomFeedOrder () {
   const saved = mainState.feedPreferences?.saved
   if (saved == null) return
 
-  // マイフィードジェネレーターのソート
-  const generators: Array<TTFeedGenerator> = []
-  saved.forEach((uri: string) => {
-    const generator = mainState.currentMyFeedGenerators.find((generator: TTFeedGenerator) => generator.uri === uri)
-    if (generator == null) return
-    generators.push(generator)
-  })
-  mainState.currentMyFeedGenerators.splice(0, mainState.currentMyFeedGenerators.length, ...generators)
-
   // マイフィードのソート
-  const myFeeds: {[uri: string]: any} = {}
-  saved.forEach((uri: string) => {
-    const myFeed = mainState.currentMyFeeds[uri]
-    if (myFeed == null) return
-    myFeeds[uri] = myFeed
-  })
-  mainState.currentMyFeeds = myFeeds
+  mainState.myFeeds.sortItems()
 
   state.orderChanged = true
 }
@@ -97,6 +76,9 @@ function changeCustomFeedOrder () {
     @close="close"
   >
     <template #header>
+      <button @click.stop="fetchMyFeeds">
+        <SVGIcon name="refresh" />
+      </button>
       <h2>
         <SVGIcon name="feed" />
         <span>{{ $t("myFeeds") }}</span>
@@ -104,7 +86,7 @@ function changeCustomFeedOrder () {
     </template>
     <template #body>
       <div
-        v-if="!state.popupLoaderDisplay && mainState.currentMyFeedGenerators.length === 0"
+        v-if="!state.popupLoaderDisplay && mainState.myFeeds.items.length === 0"
         class="textlabel"
       >
         <div class="textlabel__text">
@@ -112,18 +94,34 @@ function changeCustomFeedOrder () {
         </div>
       </div>
       <template v-else>
-        <FeedCard
-          v-for="generator of mainState.currentMyFeedGenerators"
-          :key="generator.uri"
-          :generator="generator"
-          :menuDisplay="true"
-          :orderButtonDisplay="true"
-          :creatorDisplay="true"
-          @click="close"
-          @changeCustomFeedOrder="changeCustomFeedOrder"
-          @onActivateMention="close"
-          @onActivateHashTag="close"
-        />
+        <template
+          v-for="item of mainState.myFeeds.items"
+          :key="item.value.uri"
+        >
+          <!-- フィードカード -->
+          <FeedCard
+            v-if="item.kind === 'feed'"
+            :generator="item.value"
+            :menuDisplay="true"
+            :orderButtonDisplay="true"
+            :creatorDisplay="true"
+            @click="close"
+            @changeCustomFeedOrder="changeCustomFeedOrder"
+            @onActivateMention="close"
+            @onActivateHashTag="close"
+          />
+
+          <!-- リストカード -->
+          <ListCard
+            v-else-if="item.kind === 'list'"
+            :list="item.value"
+            :isCompact="false"
+            :createDisplay="true"
+            @close="close"
+            @onActivateMention="close"
+            @onActivateHashTag="close"
+          />
+        </template>
       </template>
     </template>
   </Popup>
@@ -148,8 +146,11 @@ function changeCustomFeedOrder () {
     padding: unset;
   }
 
-  .feed-card:not(:last-child) {
-    border-bottom: 1px solid var(--fg-color-0125);
+  .feed-card,
+  .list-card {
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--fg-color-0125);
+    }
   }
 
   .textlabel {

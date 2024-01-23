@@ -77,10 +77,7 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
     // フィードブックマークの削除はフィードピンが有効の場合のみ
     if (type === "saved" && state.pinned) return
 
-    mainState.currentMyFeedGenerators = mainState.currentMyFeedGenerators
-      .filter((generator: TTFeedGenerator) => {
-        return generator.uri !== props.generator.uri
-      })
+    if (type === "saved") mainState.myFeeds.removeItem(props.generator.uri)
 
     mainState.feedPreferences[type].splice(
       0,
@@ -94,13 +91,11 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
     // ピンの追加はフィードブックマークが無効の場合のみ
     if (type === "pinned" && !state.saved) return
 
-    if (mainState.currentMyFeedGenerators.findIndex((generator: TTFeedGenerator) => {
-      return generator.uri === props.generator.uri
-    }) === - 1) mainState.currentMyFeedGenerators.push(props.generator)
+    if (type === "saved") mainState.myFeeds.addItem(props.generator)
+
     mainState.feedPreferences[type].push(props.generator.uri)
   }
 
-  mainState.sortMyFeedGenerators()
   state.processing = true
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   if (!result) mainState.openErrorPopup("errorApiFailed", "FeedCard/updatePreferences")
@@ -109,7 +104,7 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
   // セッションキャッシュの更新
   if (result) {
     mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("currentMyFeedGenerators", mainState.currentMyFeedGenerators)
+    mainState.myWorker.setSessionCache("myFeeds.items", mainState.myFeeds.items)
   }
 }
 

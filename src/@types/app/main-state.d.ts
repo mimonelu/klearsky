@@ -179,22 +179,15 @@ type MainState = {
   currentCustomUri?: string
   currentCustomFeeds: Array<TTFeed>
   currentCustomCursor?: string
-  currentMyFeeds: { [uri: string]: {
-    generator?: TTFeedGenerator
-    feeds: Array<TTFeed>
-    processing: boolean
-    status: boolean
-  } }
-  currentMyFeedGenerators: Array<TTFeedGenerator>
   currentPopularFeedGenerators: Array<TTFeedGenerator>
   currentPopularFeedGeneratorsCursor?: string
   feedPreferences: ComputedRef<undefined | TTPreference>
   fetchCustomFeeds: (direction: "new" | "old", middleCursor?: string) => Promise<void>
-  fetchMyFeedGenerators: () => Promise<void>
-  fetchMyFeeds: () => Promise<boolean>
   fetchPopularFeedGenerators: (direction: "new" | "old") => Promise<void>
   sortFeedPreferencesSavedAndPinned: () => void
-  sortMyFeedGenerators: () => void
+
+  // マイフィード
+  myFeeds: TTMyFeeds
 
   // リスト
 

@@ -28,8 +28,8 @@ export default class {
           }
 
           // 全セッションキャッシュの反映 - マイフィード
-          if (sessionCache.currentMyFeedGenerators != null) {
-            mainState.currentMyFeedGenerators = sessionCache.currentMyFeedGenerators
+          if (sessionCache.myFeedsItems != null) {
+            mainState.myFeeds.items.splice(0, mainState.myFeeds.items.length, ...sessionCache.myFeedsItems)
           }
 
           // 全セッションキャッシュの反映 - マイリスト
@@ -61,7 +61,7 @@ export default class {
     this.worker?.port.postMessage({
       name: "setSessionCacheRequest",
       did: this.mainState.atp.data.did,
-      key: key,
+      key,
       value,
     } as TTPostMessageData)
 
@@ -69,7 +69,7 @@ export default class {
     this.mainState.broadcastChannel?.postMessage({
       name: "setSessionCacheResponse",
       did: this.mainState.atp.data.did,
-      key: key,
+      key,
       value,
     } as TTPostMessageData)
   }

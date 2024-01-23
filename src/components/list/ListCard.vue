@@ -199,7 +199,7 @@ function endAwait () {
         v-if="!isCompact"
         class="list-card__menu-button"
         ref="menuTickerContainer"
-        @click.prevent.stop="openMenuTicker"
+        @click.stop.prevent="openMenuTicker"
       >
         <SVGIcon name="menu" />
 
@@ -234,7 +234,7 @@ function endAwait () {
         <RouterLink
           class="textlink list-card__creator"
           :to="{ name: 'profile-list', query: { account: list.creator.did } }"
-          @click.prevent.stop="$emit('onActivateMention')"
+          @click.prevent="$emit('onActivateMention')"
         >
           <span class="list-card__creator__prefix">{{ $t("listCreatedBy") }}</span>
           <span class="list-card__creator__display-name">{{ list.creator.displayName || list.creator.handle }}</span>
@@ -252,7 +252,7 @@ function endAwait () {
         :class="`${state.isListFeedsPage ? 'button--plane' : 'button--bordered'} list-card__feeds-button`"
         :disabled="state.isListFeedsPage"
         :to="state.routerLinkToListFeeds"
-        @click.prevent.stop="$emit('close')"
+        @click.prevent="$emit('close')"
       >
         <SVGIcon name="post" />
         <span>{{ $t("feeds") }}</span>
@@ -263,7 +263,7 @@ function endAwait () {
         :class="`${state.isListUsersPage ? 'button--plane' : 'button--bordered'} list-card__users-button`"
         :disabled="state.isListUsersPage"
         :to="state.routerLinkToListUsers"
-        @click.prevent.stop="$emit('close')"
+        @click.prevent="$emit('close')"
       >
         <SVGIcon name="people" />
         <span>{{ $t("users") }}</span>
@@ -273,7 +273,7 @@ function endAwait () {
       <button
         v-if="state.isOwn"
         class="button list-card__edit-button"
-        @click.prevent.stop="openListEditPopup"
+        @click.stop.prevent="openListEditPopup"
       >
         <span>{{ $t("listEditShort") }}</span>
       </button>

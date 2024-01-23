@@ -5,7 +5,8 @@ import isSameYear from "date-fns/isSameYear"
 import { computed, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
-import MyWorker from "@/composables/main-state-my-worker"
+import MyFeeds from "@/composables/main-state/my-feeds"
+import MyWorker from "@/composables/main-state/my-worker"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
@@ -191,8 +192,6 @@ state.currentSearchLastUserTerm = undefined
 state.currentCustomUri = undefined
 state.currentCustomFeeds = []
 state.currentCustomCursor = undefined
-state.currentMyFeeds = {}
-state.currentMyFeedGenerators = []
 state.currentPopularFeedGenerators = []
 state.currentPopularFeedGeneratorsCursor = undefined
 state.feedPreferences = computed((): undefined | TTPreference => {
@@ -201,11 +200,11 @@ state.feedPreferences = computed((): undefined | TTPreference => {
   })
 })
 state.fetchCustomFeeds = fetchCustomFeeds
-state.fetchMyFeedGenerators = fetchMyFeedGenerators
-state.fetchMyFeeds = fetchMyFeeds
 state.fetchPopularFeedGenerators = fetchPopularFeedGenerators
 state.sortFeedPreferencesSavedAndPinned = sortFeedPreferencesSavedAndPinned
-state.sortMyFeedGenerators = sortMyFeedGenerators
+
+// マイフィード
+state.myFeeds = new MyFeeds(state)
 
 // リスト
 
@@ -1074,54 +1073,6 @@ async function fetchCustomFeeds (direction: "old" | "new", middleCursor?: string
   state.currentCustomUri = state.currentQuery.feed
 }
 
-async function fetchMyFeedGenerators (): Promise<void> {
-  if (state.feedPreferences?.saved == null || state.feedPreferences.saved.length === 0) return
-  const generators = await state.atp.fetchFeedGenerators(state.feedPreferences.saved)
-  if (generators instanceof Error) {
-    state.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
-    return
-  }
-  state.currentMyFeedGenerators.splice(0, state.currentMyFeedGenerators.length, ...generators)
-}
-
-async function fetchMyFeeds (): Promise<boolean> {
-  const pinned: undefined | Array<string> =
-    state.feedPreferences?.saved.filter((uri: string) => state.feedPreferences?.pinned.includes(uri))
-  if (pinned == null || pinned.length === 0) return false
-  const generators = await state.atp.fetchFeedGenerators(pinned)
-  if (generators instanceof Error) {
-    state.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchFeedGenerators")
-    return false
-  }
-
-  for (const uri in state.currentMyFeeds) {
-    delete state.currentMyFeeds[uri]
-  }
-
-  pinned.forEach((uri: string) => {
-    if (state.currentMyFeeds[uri] != null) return
-    const generator = generators.find((generator: TTFeedGenerator) => generator.uri === uri)
-    if (generator == null) return
-    state.currentMyFeeds[uri] = { generator, feeds: [], processing: false, status: true }
-  })
-
-  // あえて並列同期していない
-  pinned.forEach(async (uri: string) => {
-    if (state.currentMyFeeds[uri] == null) return
-    state.currentMyFeeds[uri].processing = true
-    const status: undefined | string | Error =
-      await state.atp.fetchCustomFeeds(
-        state.currentMyFeeds[uri].feeds,
-        uri,
-        CONSTS.LIMIT_OF_FETCH_MY_FEEDS
-      )
-    state.currentMyFeeds[uri].status = !(status instanceof Error)
-    state.currentMyFeeds[uri].processing = false
-  })
-
-  return true
-}
-
 async function fetchPopularFeedGenerators (direction: "old" | "new") {
   const cursor: Error | undefined | string =
     await state.atp.fetchPopularFeedGenerators(
@@ -1138,27 +1089,12 @@ async function fetchPopularFeedGenerators (direction: "old" | "new") {
 
 function sortFeedPreferencesSavedAndPinned () {
   if (state.feedPreferences?.saved != null)
-    state.feedPreferences.saved = state.currentMyFeedGenerators
-      .map((generator: TTFeedGenerator) => generator.uri)
+    state.feedPreferences.saved = state.myFeeds.items
+      .map((item: TTMyFeedsItem) => item.value.uri)
   if (state.feedPreferences?.pinned != null)
-    state.feedPreferences.pinned = state.currentMyFeedGenerators
-      .filter((generator: TTFeedGenerator) => state.feedPreferences.pinned.includes(generator.uri))
-      .map((generator: TTFeedGenerator) => generator.uri)
-}
-
-function sortMyFeedGenerators () {
-  if (state.feedPreferences?.pinned == null) return
-  state.currentMyFeedGenerators.sort((a: TTFeedGenerator, b: TTFeedGenerator) => {
-    const aIsPinned = state.feedPreferences.pinned.indexOf(a.uri)
-    const bIsPinned = state.feedPreferences.pinned.indexOf(b.uri)
-    return (aIsPinned !== - 1 && bIsPinned !== - 1) || (aIsPinned === - 1 && bIsPinned === - 1)
-      ? 0
-      : aIsPinned === - 1 && bIsPinned !== - 1
-        ? 1
-        : aIsPinned !== - 1 && bIsPinned === - 1
-          ? - 1
-          : 0
-  })
+    state.feedPreferences.pinned = state.myFeeds.items
+      .filter((item: TTMyFeedsItem) => state.feedPreferences.pinned.includes(item.value.uri))
+      .map((item: TTMyFeedsItem) => item.value.uri)
 }
 
 // リスト

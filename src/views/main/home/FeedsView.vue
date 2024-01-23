@@ -15,7 +15,7 @@ const state = reactive<{
 
     // 現在のフィードジェネレーターをマイフィードジェネレーターとポピュラーフィードジェネレーターから検索
     let generator: undefined | Error | TTFeedGenerator = [
-      ...mainState.currentMyFeedGenerators,
+      ...mainState.myFeeds.feedGenerators,
       ...mainState.currentPopularFeedGenerators,
     ]
     .find((generator: TTFeedGenerator) => generator.uri === uri)
