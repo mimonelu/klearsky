@@ -30,11 +30,22 @@ export default class {
 
   get pinnedItems (): Array<TTMyFeedsItem> {
     const pinned = this.mainState.feedPreferences?.pinned
-    if (pinned == null || pinned.length === 0) return []
+    if (pinned == null || pinned.length === 0) {
+      return this.customItems
+    }
     return this.items.filter((item: TTMyFeedsItem) => {
       return pinned.includes(item.value.uri) || (
-        item.kind === "followings" || // TODO:
-        item.kind === "globalline"
+        item.kind !== "feed" &&
+        item.kind !== "list"
+      )
+    })
+  }
+
+  get customItems (): Array<TTMyFeedsItem> {
+    return this.items.filter((item: TTMyFeedsItem) => {
+      return (
+        item.kind !== "feed" &&
+        item.kind !== "list"
       )
     })
   }
@@ -56,6 +67,7 @@ export default class {
     this.items.push({
       kind: "followings",
       value: {
+        uri: "followings",
         displayName: "followings",
       },
     })
@@ -64,6 +76,7 @@ export default class {
     this.items.push({
       kind: "globalline",
       value: {
+        uri: "globalline",
         displayName: "globalline",
       },
     })
@@ -129,23 +142,20 @@ export default class {
   sortItems () {
     const saved = this.mainState.feedPreferences?.saved
     if (saved == null) return
+    const myFeedsIndex = this.mainState.currentSetting.myFeedsIndex ?? []
     this.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
-      const aSavedIndex = a.kind === "followings"
-        ? 0 // TODO:
-        : a.kind === "globalline"
-          ? 0 // TODO:
-          : saved.indexOf(a.value.uri)
-      const bSavedIndex = b.kind === "followings"
-        ? 0 // TODO:
-        : b.kind === "globalline"
-          ? 0 // TODO:
-          : saved.indexOf(b.value.uri)
-      const aIndex = aSavedIndex !== - 1
-        ? aSavedIndex
-        : Number.MAX_SAFE_INTEGER
-      const bIndex = bSavedIndex !== - 1
-        ? bSavedIndex
-        : Number.MAX_SAFE_INTEGER
+      let aIndex = myFeedsIndex.indexOf(a.value.uri)
+      if (aIndex === - 1) aIndex = saved.indexOf(a.value.uri)
+      if (aIndex === - 1) {
+        if (a.kind !== "feed" && a.kind !== "list") aIndex = 0
+        else aIndex = Number.MAX_SAFE_INTEGER
+      }
+      let bIndex = myFeedsIndex.indexOf(b.value.uri)
+      if (bIndex === - 1) bIndex = saved.indexOf(b.value.uri)
+      if (bIndex === - 1) {
+        if (b.kind !== "feed" && b.kind !== "list") bIndex = 0
+        else bIndex = Number.MAX_SAFE_INTEGER
+      }
       return aIndex < bIndex ? - 1 : aIndex > bIndex ? 1 : 0
     })
   }
@@ -181,5 +191,17 @@ export default class {
       return item.value.uri === uri
     })
     if (index !== - 1) this.items.splice(index, 1)
+  }
+
+  saveCustomItemSettings () {
+    if (this.mainState.currentSetting.myFeedsIndex == null)
+      this.mainState.currentSetting.myFeedsIndex = []
+    this.mainState.currentSetting.myFeedsIndex.splice(0)
+    this.mainState.currentSetting.myFeedsIndex.push(
+      ...this.items.map((item: TTMyFeedsItem) => {
+        return item.value.uri
+      })
+    )
+    this.mainState.saveSettings()
   }
 }

@@ -42,6 +42,7 @@ async function saveMyFeed () {
   if (mainState.feedPreferences == null) return
   state.processing = true
   mainState.sortFeedPreferencesSavedAndPinned()
+  mainState.myFeeds.saveCustomItemSettings()
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   if (!result) mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
   state.processing = false

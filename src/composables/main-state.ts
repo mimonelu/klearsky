@@ -561,6 +561,8 @@ function saveSettings () {
     state.settings[did].backgroundOpacity = 0.5
   if (state.settings[did].hideNumberOfReaction == null)
     state.settings[did].hideNumberOfReaction = false
+  if (state.settings[did].myFeedsIndex == null)
+    state.settings[did].myFeedsIndex = []
   if (state.settings[did].postAnonymization == null)
     state.settings[did].postAnonymization = false
   if (state.settings[did].postLanguages == null)

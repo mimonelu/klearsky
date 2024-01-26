@@ -21,6 +21,7 @@ async function close () {
   if (state.orderChanged) {
     state.popupLoaderDisplay = true
     mainState.sortFeedPreferencesSavedAndPinned()
+    mainState.myFeeds.saveCustomItemSettings()
     const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
     if (!result) mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
     state.popupLoaderDisplay = false

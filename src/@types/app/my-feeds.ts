@@ -11,6 +11,7 @@ interface TTMyFeeds {
   detectItemKind (uri: string): TTMyFeedsItemKind
   addItem (target: TTMyFeedsItemValue): void
   removeItem (uri: string): void
+  saveCustomItemSettings (): void
 }
 
 type TTMyFeedsItem = {
@@ -22,6 +23,7 @@ type TTMyFeedsItem = {
 } | {
   kind: "followings" | "globalline"
   value: {
+    uri: string
     displayName: string
   }
 } | {

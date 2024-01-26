@@ -15,6 +15,7 @@ type TTSetting = {
   lightning?: string
   linkcardEmbeddedControl?: Array<string>
   mainAreaOpacity?: number
+  myFeedsIndex?: Array<string>
   postAnonymization?: boolean
   postLanguages?: Array<string>
   replyControl?: Array<number>
