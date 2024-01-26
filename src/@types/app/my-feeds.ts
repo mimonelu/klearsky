@@ -1,6 +1,8 @@
 interface TTMyFeeds {
   mainState: MainState
   items: Array<TTMyFeedsItem>
+  get savedUris (): Array<string>
+  get pinnedUris (): Array<string>
   get pinnedItems (): Array<TTMyFeedsItem>
   get feedGenerators (): Array<TTFeedGenerator>
   fetchItems (): Promise<boolean>
@@ -17,6 +19,11 @@ type TTMyFeedsItem = {
 } | {
   kind: "list",
   value: TTList
+} | {
+  kind: "followings" | "globalline"
+  value: {
+    displayName: string
+  }
 } | {
   kind: "unknown",
   value: any

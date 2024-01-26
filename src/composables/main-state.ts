@@ -1089,12 +1089,9 @@ async function fetchPopularFeedGenerators (direction: "old" | "new") {
 
 function sortFeedPreferencesSavedAndPinned () {
   if (state.feedPreferences?.saved != null)
-    state.feedPreferences.saved = state.myFeeds.items
-      .map((item: TTMyFeedsItem) => item.value.uri)
+    state.feedPreferences.saved = state.myFeeds.savedUris
   if (state.feedPreferences?.pinned != null)
-    state.feedPreferences.pinned = state.myFeeds.items
-      .filter((item: TTMyFeedsItem) => state.feedPreferences.pinned.includes(item.value.uri))
-      .map((item: TTMyFeedsItem) => item.value.uri)
+    state.feedPreferences.pinned = state.myFeeds.pinnedUris
 }
 
 // リスト

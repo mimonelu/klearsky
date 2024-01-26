@@ -131,9 +131,29 @@ function removeMyFeed (uri: string) {
         :key="item.value.uri"
         class="my-feed-list__item"
       >
+        <!-- フォロー中フィード -->
+        <RouterLink
+          v-if="item.kind === 'followings'"
+          to="/home/timeline"
+          class="my-feed-list__content"
+        >
+          <SVGIcon name="shimmer" />
+          <span>{{ $t(item.value.displayName) }}</span>
+        </RouterLink>
+
+        <!-- グローバルライン -->
+        <RouterLink
+          v-else-if="item.kind === 'globalline'"
+          to="/home/globalline"
+          class="my-feed-list__content"
+        >
+          <SVGIcon name="shimmer" />
+          <span>{{ $t(item.value.displayName) }}</span>
+        </RouterLink>
+
         <!-- カスタムフィード -->
         <RouterLink
-          v-if="item.kind === 'feed'"
+          v-else-if="item.kind === 'feed'"
           :to="{
             path: '/home/feeds',
             query: {
@@ -182,29 +202,42 @@ function removeMyFeed (uri: string) {
         </div>
 
         <!-- ピンボタン -->
-        <button
-          v-if="isPinned(item.value.uri)"
-          class="my-feed-list__icon"
-          @click.prevent="togglePinned(item.value.uri)"
-        >
-          <SVGIcon name="pin" />
-        </button>
-        <button
-          v-else
-          class="my-feed-list__icon"
-          @click.prevent="togglePinned(item.value.uri)"
-        >
-          <SVGIcon name="pinOutline" />
-        </button>
+        <template v-if="item.kind === 'feed' || item.kind === 'list'">
+          <button
+            v-if="isPinned(item.value.uri)"
+            class="my-feed-list__icon"
+            @click.prevent="togglePinned(item.value.uri)"
+          >
+            <SVGIcon name="pin" />
+          </button>
+          <button
+            v-else
+            class="my-feed-list__icon"
+            @click.prevent="togglePinned(item.value.uri)"
+          >
+            <SVGIcon name="pinOutline" />
+          </button>
+        </template>
 
         <!-- フィードリンク -->
-        <div class="my-feed-list__content">
+        <div
+          v-if="item.kind === 'feed' || item.kind === 'list'"
+          class="my-feed-list__content"
+        >
           <LazyImage :src="item.value.avatar" />
           <span>{{ item.value.displayName ?? item.value.name }}</span>
+        </div>
+        <div
+          v-else
+          class="my-feed-list__content"
+        >
+          <SVGIcon name="shimmer" />
+          <span>{{ $t(item.value.displayName) }}</span>
         </div>
 
         <!-- フィード削除ボタン -->
         <button
+          v-if="item.kind === 'feed' || item.kind === 'list'"
           class="my-feed-list__icon"
           @click.prevent="removeMyFeed(item.value.uri)"
         >
@@ -315,6 +348,7 @@ function removeMyFeed (uri: string) {
     grid-gap: 0.5rem;
     overflow: hidden;
 
+    .svg-icon--shimmer,
     .lazy-image {
       border-radius: 1px;
       overflow: hidden;
@@ -322,6 +356,10 @@ function removeMyFeed (uri: string) {
       max-width: 1.5em;
       min-height: 1.5em;
       max-height: 1.5em;
+    }
+
+    .svg-icon--shimmer {
+      fill: var(--fg-color-05);
     }
 
     span {

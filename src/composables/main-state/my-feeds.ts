@@ -7,11 +7,35 @@ export default class {
     this.items = []
   }
 
+  get savedUris (): Array<string> {
+    return this.items
+      .filter((item: TTMyFeedsItem) => {
+        return item.kind === "feed" || item.kind === "list"
+      })
+      .map((item: TTMyFeedsItem) => {
+        return item.value.uri
+      })
+  }
+
+  get pinnedUris (): Array<string> {
+    return this.items
+      .filter((item: TTMyFeedsItem) => {
+        return (item.kind === "feed" || item.kind === "list") &&
+          this.mainState.feedPreferences?.pinned.includes(item.value.uri)
+      })
+      .map((item: TTMyFeedsItem) => {
+        return item.value.uri
+      })
+  }
+
   get pinnedItems (): Array<TTMyFeedsItem> {
     const pinned = this.mainState.feedPreferences?.pinned
     if (pinned == null || pinned.length === 0) return []
     return this.items.filter((item: TTMyFeedsItem) => {
-      return pinned.includes(item.value.uri)
+      return pinned.includes(item.value.uri) || (
+        item.kind === "followings" || // TODO:
+        item.kind === "globalline"
+      )
     })
   }
 
@@ -26,6 +50,24 @@ export default class {
   }
 
   async fetchItems (): Promise<boolean> {
+    this.items.splice(0)
+
+    // フォロー中フィードの追加
+    this.items.push({
+      kind: "followings",
+      value: {
+        displayName: "followings",
+      },
+    })
+
+    // グローバルラインの追加
+    this.items.push({
+      kind: "globalline",
+      value: {
+        displayName: "globalline",
+      },
+    })
+
     // フィードジェネレーターのURL配列を取得
     const savedFeeds: undefined | Array<string> =
       this.mainState.feedPreferences?.saved?.filter((uri: string) => {
@@ -53,7 +95,6 @@ export default class {
     }
 
     const responses = await Promise.allSettled(tasks)
-    this.items.splice(0)
     responses.forEach((response: PromiseSettledResult<any>) => {
       if (response.status === "rejected") {
         this.mainState.openErrorPopup("errorApiFailed", "MyFeeds/fetchList")
@@ -81,6 +122,7 @@ export default class {
         })
       }
     })
+
     return true
   }
 
@@ -88,14 +130,22 @@ export default class {
     const saved = this.mainState.feedPreferences?.saved
     if (saved == null) return
     this.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
-      const aSavedIndex = saved.indexOf(a.value.uri)
-      const bSavedIndex = saved.indexOf(b.value.uri)
+      const aSavedIndex = a.kind === "followings"
+        ? 0 // TODO:
+        : a.kind === "globalline"
+          ? 0 // TODO:
+          : saved.indexOf(a.value.uri)
+      const bSavedIndex = b.kind === "followings"
+        ? 0 // TODO:
+        : b.kind === "globalline"
+          ? 0 // TODO:
+          : saved.indexOf(b.value.uri)
       const aIndex = aSavedIndex !== - 1
-          ? aSavedIndex
-          : Number.MAX_SAFE_INTEGER
+        ? aSavedIndex
+        : Number.MAX_SAFE_INTEGER
       const bIndex = bSavedIndex !== - 1
-          ? bSavedIndex
-          : Number.MAX_SAFE_INTEGER
+        ? bSavedIndex
+        : Number.MAX_SAFE_INTEGER
       return aIndex < bIndex ? - 1 : aIndex > bIndex ? 1 : 0
     })
   }
