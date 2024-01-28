@@ -63,7 +63,6 @@ const router = createRouter({
           path: "/home",
           name: "home",
           component: HomeView,
-          redirect: "/home/timeline",
           children: [
             {
               path: "timeline",

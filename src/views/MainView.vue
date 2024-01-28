@@ -95,7 +95,9 @@ onUnmounted(() => {
 
 const router = useRouter()
 
-router.beforeEach((to: RouteLocationNormalized, _from: RouteLocationNormalized) => {
+router.beforeEach(async (to: RouteLocationNormalized, _from: RouteLocationNormalized) => {
+  if (to.name === "home") return
+
   state.currentPath = to.path
   state.currentQuery = to.query
 
@@ -121,6 +123,11 @@ router.beforeEach((to: RouteLocationNormalized, _from: RouteLocationNormalized) 
 })
 
 router.afterEach(async (to: RouteLocationNormalized) => {
+  if (to.name === "home") {
+    await moveToDefaultHome()
+    return
+  }
+
   updatePageTitle()
 
   // ページフォワード時はページトップへスクロール
@@ -211,6 +218,7 @@ function onRefreshSession () {
 
 async function processAfterLogin () {
   setupUpdateJwtInterval()
+  setupNotificationInterval()
 
   // プリファレンスとユーザープロフィールの取得
   const tasks: { [k: string]: any } = {}
@@ -230,14 +238,16 @@ async function processAfterLogin () {
     state.myWorker.setSessionCache("userProfile", state.userProfile)
   }
 
+  state.saveSettings()
+  state.updateSettings()
+
   // マイフィードの取得
   if (state.myFeeds.items.length === 0) {
-    state.myFeeds.fetchItems().then(() => {
-      state.myFeeds.sortItems()
+    await state.myFeeds.fetchItems()
+    state.myFeeds.sortItems()
 
-      // セッションキャッシュの設定
-      state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
-    })
+    // セッションキャッシュの設定
+    state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
   }
 
   // 全マイリストと全マイリストユーザーの取得
@@ -258,10 +268,36 @@ async function processAfterLogin () {
     })
   }
 
-  state.saveSettings()
-  state.updateSettings()
-  setupNotificationInterval()
+  if (router.currentRoute.value.name === "home") {
+    await moveToDefaultHome()
+    return
+  }
+
   processPage(router.currentRoute.value.name as undefined | null | string)
+}
+
+async function moveToDefaultHome () {
+  const item = state.myFeeds.items[0]
+  if (item == null)
+    await router.push("/home/timeline")
+  else if (item.kind === "feed")
+    await router.push({
+      path: "/home/feeds",
+      query: {
+        feed: item.value.uri,
+        displayName: item.value.displayName,
+      },
+    })
+  else if (item.kind === "list")
+    await router.push({
+      path: "/home/list-feeds",
+      query: {
+        list: item.value.uri,
+        displayName: item.value.name,
+      },
+    })
+  else
+    await router.push("/home/timeline")
 }
 
 async function processPage (pageName?: null | string) {
@@ -279,7 +315,7 @@ async function processPage (pageName?: null | string) {
     case "profile-suggested-follows": {
       account = state.currentQuery.account as LocationQueryValue
       if (!account) {
-        await router.push({ name: "timeline-home" })
+        await router.push({ name: "home" })
         break
       }
       break
