@@ -21,7 +21,7 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   routerLinkToFeedsPage: ComputedRef<any>
-  processing: boolean
+  loaderDisplay: boolean
   saved: ComputedRef<boolean>
   pinned: ComputedRef<boolean>
   menuTickerDisplay: boolean
@@ -36,7 +36,7 @@ const state = reactive<{
       },
     }
   }),
-  processing: false,
+  loaderDisplay: false,
   saved: computed((): boolean => {
     return mainState.myFeeds.findIndexByUri(props.generator.uri) !== - 1
   }),
@@ -62,18 +62,18 @@ function closeMenuTicker () {
 
 async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
   Util.blurElement()
-  if (state.processing) return
-  state.processing = true
+  if (state.loaderDisplay) return
+  state.loaderDisplay = true
   if (generator.viewer.like == null)
     await likeFeedGenerator(generator)
   else
     await unlikeFeedGenerator(generator)
-  state.processing = false
+  state.loaderDisplay = false
 }
 
 async function toggleSavedOrPinned (type: "saved" | "pinned") {
   Util.blurElement()
-  if (state.processing) return
+  if (state.loaderDisplay) return
   if (mainState.feedPreferences == null) return
   if (mainState.feedPreferences[type] == null) mainState.feedPreferences[type] = []
 
@@ -121,10 +121,10 @@ async function unlikeFeedGenerator (generator: TTFeedGenerator) {
 }
 
 async function updatePreferences () {
-  state.processing = true
+  state.loaderDisplay = true
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   if (!result) mainState.openErrorPopup("errorApiFailed", "FeedCard/updatePreferences")
-  state.processing = false
+  state.loaderDisplay = false
 
   // セッションキャッシュの更新
   if (result) {
@@ -208,7 +208,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       <!-- フィードカードメニュートリガー -->
       <button
         v-if="menuDisplay"
-        class="menu-button"
+        class="feed-card__menu-button"
         ref="menuTicker"
         @click.prevent.stop="openMenuTicker"
       >
@@ -268,7 +268,7 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       </template>
     </div>
     <Loader
-      v-if="state.processing"
+      v-if="state.loaderDisplay"
       @click.prevent
     />
   </component>
@@ -322,22 +322,6 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     margin-bottom: 0.25em;
     word-break: break-all;
   }
-
-  /*
-  &__like-count,
-  &__indexed-at {
-    color: var(--fg-color-05);
-    overflow: hidden;
-
-    & > span {
-      font-size: 0.875em;
-      line-height: var(--line-height);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-  */
 
   // フィードライク数
   // フィード作成日時
@@ -399,10 +383,9 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     }
   }
 
-  // フィードピン・フィードブックマーク・フィードカードメニュートリガー
+  // フィードピン・フィードブックマーク
   &__pin,
-  &__bookmark,
-  .menu-button {
+  &__bookmark {
     --color: var(--accent-color-0875);
     cursor: pointer;
     margin: -0.5em;
@@ -428,14 +411,23 @@ function changeCustomFeedOrder (direction: "up" | "down") {
   }
 
   // フィードカードメニュートリガー
-  .menu-button {
+  &__menu-button {
     --color: var(--fg-color-075);
     grid-area: m;
+    cursor: pointer;
+    margin: -1em;
+    padding: 1em;
     &:focus, &:hover {
       --color: var(--fg-color-0875);
     }
+
+    & > .svg-icon {
+      fill: var(--color);
+      font-size: 1.25em;
+    }
   }
 
+  // フィードメニュー
   .menu-ticker:deep() {
     & > .menu-ticker--inner {
       top: 3rem;

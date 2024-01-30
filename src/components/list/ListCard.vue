@@ -6,6 +6,7 @@ import LazyImage from "@/components/common/LazyImage.vue"
 import ListMenuTicker from "@/components/menu-tickers/ListMenuTicker.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import Util from "@/composables/util"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 
 const router = useRouter()
@@ -32,6 +33,8 @@ const state = reactive<{
   isOwn: ComputedRef<boolean>
   isListFeedsPage: boolean
   isListUsersPage: boolean
+  saved: ComputedRef<boolean>
+  pinned: ComputedRef<boolean>
   menuTickerDisplay: boolean
   menuTickerContainer: ComputedRef<undefined | HTMLElement>
   loaderDisplay: boolean
@@ -79,6 +82,13 @@ const state = reactive<{
   isListUsersPage:
     mainState.currentPath === "/home/list-users" &&
     mainState.currentQuery.list === props.list.uri,
+  saved: computed((): boolean => {
+    return mainState.myFeeds.findIndexByUri(props.list.uri) !== - 1
+  }),
+  pinned: computed((): boolean => {
+    return mainState.feedPreferences?.pinned
+      .some((uri: string) => uri === props.list.uri) ?? false
+  }),
   menuTickerDisplay: false,
   menuTickerContainer: computed((): undefined | HTMLElement => {
     return menuTickerContainer.value?.closest(".popup-body") ?? undefined
@@ -144,6 +154,49 @@ async function deleteList () {
     await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
   }
 }
+
+async function toggleSavedOrPinned (type: "saved" | "pinned") {
+  Util.blurElement()
+  if (state.loaderDisplay) return
+  if (mainState.feedPreferences == null) return
+  if (mainState.feedPreferences[type] == null) mainState.feedPreferences[type] = []
+
+  // フィードブックマーク／フィードピンの削除
+  if (state[type]) {
+    // フィードブックマークの削除はフィードピンが有効の場合のみ
+    if (type === "saved" && state.pinned) return
+
+    if (type === "saved") mainState.myFeeds.removeItem(props.list.uri)
+    const index = mainState.feedPreferences[type].findIndex((uri: string) => {
+      return uri === props.list.uri
+    })
+    if (index === - 1) return
+    mainState.feedPreferences[type].splice(index, 1)
+
+  // フィードブックマーク／フィードピンの追加
+  } else {
+    // ピンの追加はフィードブックマークが無効の場合のみ
+    if (type === "pinned" && !state.saved) return
+
+    if (type === "saved") mainState.myFeeds.addItem(props.list)
+    mainState.feedPreferences[type].push(props.list.uri)
+  }
+
+  await updatePreferences()
+}
+
+async function updatePreferences () {
+  state.loaderDisplay = true
+  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+  if (!result) mainState.openErrorPopup("errorApiFailed", "ListCard/updatePreferences")
+  state.loaderDisplay = false
+
+  // セッションキャッシュの更新
+  if (result) {
+    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+    mainState.myWorker.setSessionCache("myFeeds.items", mainState.myFeeds.items)
+  }
+}
 </script>
 
 <template>
@@ -197,6 +250,32 @@ async function deleteList () {
         <SVGIcon name="clock" />
         <span>{{ state.indexedAt }}</span>
       </div>
+
+      <!-- フィードピン -->
+      <button
+        class="list-card__pin"
+        @click.prevent.stop="toggleSavedOrPinned('pinned')"
+      >
+        <SVGIcon :name="state.pinned
+          ? 'pin'
+          : state.saved
+            ? 'pinOutline'
+            : 'pinOffOutline'
+        " />
+      </button>
+
+      <!-- フィードブックマーク -->
+      <button
+        class="list-card__bookmark"
+        @click.prevent.stop="toggleSavedOrPinned('saved')"
+      >
+        <SVGIcon :name="state.saved
+          ? state.pinned
+            ? 'bookmarkOff'
+            : 'bookmark'
+          : 'bookmarkOutline'
+        " />
+      </button>
 
       <!-- リストメニュートリガー -->
       <button
@@ -307,9 +386,9 @@ async function deleteList () {
     grid-gap: 0 0.75em;
     grid-template-columns: auto auto 1fr auto;
     grid-template-areas:
-      "v v v v"
-      "a n n m"
-      "a p i m";
+      "v v v v v v"
+      "a n n p b m"
+      "a t i i i m";
     align-items: flex-start;
   }
 
@@ -319,7 +398,7 @@ async function deleteList () {
     grid-template-areas:
       "v v v"
       "a n n"
-      "a p i";
+      "a t i";
   }
 
   // Viewer ラベル
@@ -361,7 +440,7 @@ async function deleteList () {
 
   // リスト種別
   &__purpose {
-    grid-area: p;
+    grid-area: t;
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
@@ -411,6 +490,33 @@ async function deleteList () {
       font-size: 0.875em;
       white-space: nowrap;
     }
+  }
+
+  // フィードピン・フィードブックマーク
+  &__pin,
+  &__bookmark {
+    --color: var(--accent-color-0875);
+    cursor: pointer;
+    margin: -0.5em;
+    padding: 0.5em;
+    &:focus, &:hover {
+      --color: rgb(var(--accent-color));
+    }
+
+    & > .svg-icon {
+      fill: var(--color);
+      font-size: 1.25em;
+    }
+  }
+
+  // フィードピン
+  &__pin {
+    grid-area: p;
+  }
+
+  // フィードブックマーク
+  &__bookmark {
+    grid-area: b;
   }
 
   // リストメニュートリガー
