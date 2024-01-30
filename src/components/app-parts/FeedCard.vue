@@ -20,16 +20,25 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  routerLinkToFeedsPage: ComputedRef<any>
   processing: boolean
   saved: ComputedRef<boolean>
   pinned: ComputedRef<boolean>
   menuTickerDisplay: boolean
   menuTickerContainer: ComputedRef<undefined | HTMLElement>
 }>({
+  routerLinkToFeedsPage: computed(() => {
+    return {
+      path: "/home/feeds",
+      query: {
+        feed: props.generator.uri,
+        displayName: props.generator.displayName,
+      },
+    }
+  }),
   processing: false,
   saved: computed((): boolean => {
-    return mainState.feedPreferences?.saved
-      .some((uri: string) => uri === props.generator.uri) ?? false
+    return mainState.myFeeds.findIndexByUri(props.generator.uri) !== - 1
   }),
   pinned: computed((): boolean => {
     return mainState.feedPreferences?.pinned
@@ -43,26 +52,22 @@ const state = reactive<{
 
 const menuTicker = ref()
 
+function openMenuTicker () {
+  state.menuTickerDisplay = !state.menuTickerDisplay
+}
+
+function closeMenuTicker () {
+  state.menuTickerDisplay = false
+}
+
 async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
   Util.blurElement()
   if (state.processing) return
   state.processing = true
-  if (generator.viewer.like == null) {
-    const uri = await mainState.atp.createLike(generator.uri, generator.cid)
-    if (uri != null) {
-      generator.viewer.like = uri
-      generator.likeCount ++
-    } else {
-      mainState.openErrorPopup("errorApiFailed", "FeedCard/createLike")
-    }
-  } else {
-    if (await mainState.atp.deleteLike(generator.viewer.like)) {
-      delete generator.viewer.like
-      generator.likeCount --
-    } else {
-      mainState.openErrorPopup("errorApiFailed", "FeedCard/deleteLike")
-    }
-  }
+  if (generator.viewer.like == null)
+    await likeFeedGenerator(generator)
+  else
+    await unlikeFeedGenerator(generator)
   state.processing = false
 }
 
@@ -78,24 +83,44 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
     if (type === "saved" && state.pinned) return
 
     if (type === "saved") mainState.myFeeds.removeItem(props.generator.uri)
-
-    mainState.feedPreferences[type].splice(
-      0,
-      mainState.feedPreferences[type].length,
-      ...mainState.feedPreferences[type].filter((uri: string) => uri !== props.generator.uri)
-    )
-  }
+    const index = mainState.feedPreferences[type].findIndex((uri: string) => {
+      return uri === props.generator.uri
+    })
+    if (index === - 1) return
+    mainState.feedPreferences[type].splice(index, 1)
 
   // フィードブックマーク／フィードピンの追加
-  else {
+  } else {
     // ピンの追加はフィードブックマークが無効の場合のみ
     if (type === "pinned" && !state.saved) return
 
     if (type === "saved") mainState.myFeeds.addItem(props.generator)
-
     mainState.feedPreferences[type].push(props.generator.uri)
   }
 
+  await updatePreferences()
+}
+
+async function likeFeedGenerator (generator: TTFeedGenerator) {
+  const uri = await mainState.atp.createLike(generator.uri, generator.cid)
+  if (uri != null) {
+    generator.viewer.like = uri
+    generator.likeCount ++
+  } else {
+    mainState.openErrorPopup("errorApiFailed", "FeedCard/createLike")
+  }
+}
+
+async function unlikeFeedGenerator (generator: TTFeedGenerator) {
+  if (await mainState.atp.deleteLike(generator.viewer.like as string)) {
+    delete generator.viewer.like
+    generator.likeCount --
+  } else {
+    mainState.openErrorPopup("errorApiFailed", "FeedCard/deleteLike")
+  }
+}
+
+async function updatePreferences () {
   state.processing = true
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   if (!result) mainState.openErrorPopup("errorApiFailed", "FeedCard/updatePreferences")
@@ -109,23 +134,13 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
 }
 
 function changeCustomFeedOrder (direction: "up" | "down") {
-  const saved = mainState.feedPreferences?.saved
-  if (saved == null) return
-  const index = saved.findIndex((uri: string) => uri === props.generator.uri)
-  if (index == null) return
+  const index = mainState.myFeeds.findIndexByUri(props.generator.uri)
+  if (index === - 1) return
   if (direction === "up" && index > 0)
-    [saved[index], saved[index - 1]] = [saved[index - 1], saved[index]]
-  else if (direction === "down" && index < saved.length - 1)
-    [saved[index], saved[index + 1]] = [saved[index + 1], saved[index]]
+    mainState.myFeeds.swapItem(index, index - 1)
+  else if (direction === "down" && index < mainState.myFeeds.items.length - 1)
+    mainState.myFeeds.swapItem(index, index + 1)
   emit("changeCustomFeedOrder")
-}
-
-function openMenuTicker () {
-  state.menuTickerDisplay = !state.menuTickerDisplay
-}
-
-function closeMenuTicker () {
-  state.menuTickerDisplay = false
 }
 </script>
 
@@ -134,100 +149,103 @@ function closeMenuTicker () {
     class="feed-card"
     :is="unclickable ? 'div' : 'RouterLink'"
     v-bind="unclickable ? null : {
-      to: {
-        path: '/home/feeds',
-        query: {
-          feed: generator.uri,
-          displayName: generator.displayName,
-        },
-      },
+      to: state.routerLinkToFeedsPage,
     }"
     :data-unclickable="unclickable"
     @click.stop
   >
-    <div class="feed-card__top">
+    <div class="feed-card__detail">
       <!-- フィード画像 -->
       <LazyImage :src="generator.avatar" />
 
-      <div class="feed-card__top__right">
-        <!-- フィード名 -->
-        <div class="feed-card__display-name">
-          <span>{{ generator.displayName }}</span>
-        </div>
-
-        <!-- フィードライク数 -->
-        <button
-          class="feed-card__like-count"
-          :data-on="generator.viewer.like != null"
-          @click.prevent.stop="toggleFeedGeneratorLike(generator)"
-        >
-          <SVGIcon name="like" />
-          <span>{{ generator.likeCount }}</span>
-        </button>
-
-        <!-- フィード作成日時 -->
-        <div class="feed-card__indexed-at">
-          <SVGIcon name="clock" />
-          <span>{{ mainState.formatDate(generator.indexedAt) }}</span>
-        </div>
-
-        <div class="feed-card__top__right__right">
-          <!-- フィードピン -->
-          <button
-            class="feed-card__pin"
-            @click.prevent.stop="toggleSavedOrPinned('pinned')"
-          >
-            <SVGIcon :name="state.pinned
-              ? 'pin'
-              : state.saved
-                ? 'pinOutline'
-                : 'pinOffOutline'
-            " />
-          </button>
-
-          <!-- フィードブックマーク -->
-          <button
-            class="feed-card__bookmark"
-            @click.prevent.stop="toggleSavedOrPinned('saved')"
-          >
-            <SVGIcon :name="state.saved
-              ? state.pinned
-                ? 'bookmarkOff'
-                : 'bookmark'
-              : 'bookmarkOutline'
-            " />
-          </button>
-
-          <!-- フィードカードメニュートリガー -->
-          <button
-            v-if="menuDisplay"
-            class="menu-button"
-            ref="menuTicker"
-            @click.prevent.stop="openMenuTicker"
-          >
-            <SVGIcon name="menu" />
-
-            <!-- フィードカードメニュー -->
-            <FeedCardMenuTicker
-              :generator="generator"
-              :display="state.menuTickerDisplay"
-              :container="state.menuTickerContainer"
-              @close="closeMenuTicker"
-            />
-          </button>
-        </div>
+      <!-- フィード名 -->
+      <div class="feed-card__display-name">
+        <span>{{ generator.displayName }}</span>
       </div>
+
+      <!-- フィードライク数 -->
+      <button
+        class="feed-card__like-count"
+        :data-on="generator.viewer.like != null"
+        @click.prevent.stop="toggleFeedGeneratorLike(generator)"
+      >
+        <SVGIcon name="like" />
+        <span>{{ generator.likeCount }}</span>
+      </button>
+
+      <!-- フィード作成日時 -->
+      <div class="feed-card__indexed-at">
+        <SVGIcon name="clock" />
+        <span>{{ mainState.formatDate(generator.indexedAt) }}</span>
+      </div>
+
+      <!-- フィードピン -->
+      <button
+        class="feed-card__pin"
+        @click.prevent.stop="toggleSavedOrPinned('pinned')"
+      >
+        <SVGIcon :name="state.pinned
+          ? 'pin'
+          : state.saved
+            ? 'pinOutline'
+            : 'pinOffOutline'
+        " />
+      </button>
+
+      <!-- フィードブックマーク -->
+      <button
+        class="feed-card__bookmark"
+        @click.prevent.stop="toggleSavedOrPinned('saved')"
+      >
+        <SVGIcon :name="state.saved
+          ? state.pinned
+            ? 'bookmarkOff'
+            : 'bookmark'
+          : 'bookmarkOutline'
+        " />
+      </button>
+
+      <!-- フィードカードメニュートリガー -->
+      <button
+        v-if="menuDisplay"
+        class="menu-button"
+        ref="menuTicker"
+        @click.prevent.stop="openMenuTicker"
+      >
+        <SVGIcon name="menu" />
+
+        <!-- フィードカードメニュー -->
+        <FeedCardMenuTicker
+          :generator="generator"
+          :display="state.menuTickerDisplay"
+          :container="state.menuTickerContainer"
+          @close="closeMenuTicker"
+        />
+      </button>
     </div>
 
-    <!-- フィード説明文 -->
-    <HtmlText
-      class="feed-card__description"
-      dir="auto"
-      :text="generator.description ?? '&nbsp;'"
-      :processHashTag="true"
-      @onActivateMention="emit('onActivateMention')"
-      @onActivateHashTag="emit('onActivateHashTag')"
-    />
+    <div>
+      <!-- フィード説明文 -->
+      <HtmlText
+        class="feed-card__description"
+        dir="auto"
+        :text="generator.description ?? '&nbsp;'"
+        :processHashTag="true"
+        @onActivateMention="emit('onActivateMention')"
+        @onActivateHashTag="emit('onActivateHashTag')"
+      />
+
+      <!-- フィード作成者リンク -->
+      <RouterLink
+        v-if="creatorDisplay && generator.creator.did"
+        class="textlink feed-card__creator"
+        :to="{ name: 'profile-custom-feeds', query: { account: generator.creator.did } }"
+        @click.prevent
+      >
+        <span class="feed-card__creator__prefix">{{ $t("by") }}</span>
+        <span class="feed-card__creator__display-name">{{ generator.creator.displayName || generator.creator.handle }}</span>
+      </RouterLink>
+    </div>
 
     <div
       v-if="orderButtonDisplay || creatorDisplay"
@@ -248,18 +266,6 @@ function closeMenuTicker () {
           <SVGIcon name="cursorDown" />
         </button>
       </template>
-
-      <!-- フィード作成者 -->
-      <RouterLink
-        v-if="creatorDisplay && generator.creator.did"
-        class="feed-card__creator"
-        :to="{ name: 'profile-custom-feeds', query: { account: generator.creator.did } }"
-        @click.prevent
-      >
-        <SVGIcon name="person" />
-        <div class="feed-card__creator__display-name">{{ generator.creator.displayName }}</div>
-        <div class="feed-card__creator__handle">{{ generator.creator.handle }}</div>
-      </RouterLink>
     </div>
     <Loader
       v-if="state.processing"
@@ -284,30 +290,15 @@ function closeMenuTicker () {
     user-select: text;
   }
 
-  &__top {
-    color: rgb(var(--fg-color));
-    display: flex;
-    align-items: center;
-    grid-gap: 0.75em;
-
-    &__right {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      grid-template-areas:
-        "n n r"
-        "l i r";
-      flex-grow: 1;
-      grid-gap: 0.5em 0.75em;
-
-      &__right {
-        grid-area: r;
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-end;
-        flex-grow: 1;
-        grid-gap: 1em;
-      }
-    }
+  &__detail {
+    display: grid;
+    grid-gap: 0 0.75em;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas:
+      "v v v v v v"
+      "a n n p b m"
+      "a l i i i m";
+    align-items: flex-start;
   }
 
   // フィード画像
@@ -325,25 +316,17 @@ function closeMenuTicker () {
   // フィード名
   &__display-name {
     grid-area: n;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-gap: 0.5em;
-    overflow: hidden;
-
-    & > span {
-      font-weight: bold;
-      line-height: var(--line-height);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    display: inline;
+    font-weight: bold;
+    line-height: var(--line-height);
+    margin-bottom: 0.25em;
+    word-break: break-all;
   }
 
+  /*
   &__like-count,
   &__indexed-at {
-    display: flex;
-    align-items: center;
-    grid-gap: 0.5em;
+    color: var(--fg-color-05);
     overflow: hidden;
 
     & > span {
@@ -354,12 +337,33 @@ function closeMenuTicker () {
       white-space: nowrap;
     }
   }
+  */
+
+  // フィードライク数
+  // フィード作成日時
+  &__like-count,
+  &__indexed-at {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    grid-gap: 0.5em;
+    line-height: var(--line-height);
+
+    & > .svg-icon {
+      font-size: 0.75em;
+    }
+
+    & > span {
+      font-size: 0.875em;
+      white-space: nowrap;
+    }
+  }
 
   // フィードライク数
   &__like-count {
     --color: var(--fg-color-05);
-    cursor: pointer;
     grid-area: l;
+    cursor: pointer;
     margin: -0.5em;
     padding: 0.5em;
     &[data-on="true"] {
@@ -376,6 +380,7 @@ function closeMenuTicker () {
 
     & > .svg-icon {
       fill: var(--color);
+      font-size: 0.875em;
     }
 
     & > span {
@@ -387,20 +392,16 @@ function closeMenuTicker () {
   // フィード作成日時
   &__indexed-at {
     grid-area: i;
+    color: var(--fg-color-05);
 
     & > .svg-icon {
       fill: var(--fg-color-05);
-      font-size: 0.75em;
-    }
-
-    & > span {
-      color: var(--fg-color-05);
     }
   }
 
-  // フィードブックマーク・フィードピン・フィードカードメニュートリガー
-  &__bookmark,
+  // フィードピン・フィードブックマーク・フィードカードメニュートリガー
   &__pin,
+  &__bookmark,
   .menu-button {
     --color: var(--accent-color-0875);
     cursor: pointer;
@@ -415,8 +416,21 @@ function closeMenuTicker () {
       font-size: 1.25em;
     }
   }
+
+  // フィードピン
+  &__pin {
+    grid-area: p;
+  }
+
+  // フィードブックマーク
+  &__bookmark {
+    grid-area: b;
+  }
+
+  // フィードカードメニュートリガー
   .menu-button {
     --color: var(--fg-color-075);
+    grid-area: m;
     &:focus, &:hover {
       --color: var(--fg-color-0875);
     }
@@ -446,43 +460,15 @@ function closeMenuTicker () {
 
   // フィード作成者
   &__creator {
-    background-clip: padding-box;
-    background-color: rgb(var(--bg-color));
-    border: 1px solid var(--accent-color-025);
-    border-radius: var(--border-radius);
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    grid-gap: 0.5em;
-    margin-left: auto;
-    padding: 0.5em 1em;
-    &:focus, &:hover {
-      border-color: var(--accent-color-05);
-    }
+    font-size: 0.875em;
+    line-height: var(--line-height);
 
-    & > .svg-icon {
-      fill: var(--accent-color-075);
-      font-size: 0.75em;
+    &__prefix {
+      margin-right: 0.5em;
     }
 
     &__display-name {
-      font-size: 0.875em;
       font-weight: bold;
-      line-height: var(--line-height);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      word-break: break-word;
-    }
-
-    &__handle {
-      color: var(--fg-color-075);
-      font-size: 0.875em;
-      line-height: var(--line-height);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      word-break: break-word;
     }
   }
 }

@@ -437,7 +437,7 @@
   "listMuting": "リストミュート中",
   "listBlocked": "ブロック中",
   "listBlocking": "リストブロック中",
-  "listCreatedBy": "by",
+  "by": "by",
   "myList": "マイリスト",
   "myListConfirmation": "マイリストを再取得します。\nリストの数によっては時間のかかる処理になりますが、よろしいですか？",
 

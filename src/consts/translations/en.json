@@ -437,7 +437,7 @@
   "listMuting": "List muting",
   "listBlocked": "Blocked",
   "listBlocking": "List blocking",
-  "listCreatedBy": "by",
+  "by": "by",
   "myList": "My List",
   "myListConfirmation": "Refresh My List.\nThis may be a time-consuming process depending on the number of lists, is this OK?",
 

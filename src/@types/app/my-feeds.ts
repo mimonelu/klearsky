@@ -9,8 +9,10 @@ interface TTMyFeeds {
   sortItems (): void
   clearItems (): void
   detectItemKind (uri: string): TTMyFeedsItemKind
+  findIndexByUri (uri: string): number
   addItem (target: TTMyFeedsItemValue): void
   removeItem (uri: string): void
+  swapItem (aIndex: number, bIndex: number): void
   saveCustomItemSettings (): void
 }
 

@@ -59,11 +59,13 @@ async function fetchMyFeeds () {
 }
 
 function changeCustomFeedOrder () {
+  /*
   const saved = mainState.feedPreferences?.saved
   if (saved == null) return
 
   // マイフィードのソート
   mainState.myFeeds.sortItems()
+  */
 
   state.orderChanged = true
 }
@@ -99,9 +101,19 @@ function changeCustomFeedOrder () {
           v-for="item of mainState.myFeeds.items"
           :key="item.value.uri"
         >
+          <!-- フォロー中フィード -->
+          <div
+            v-if="item.kind === 'followings'"
+          >Followings</div>
+
+          <!-- グローバルライン -->
+          <div
+            v-else-if="item.kind === 'globalline'"
+          >Globalline</div>
+
           <!-- フィードカード -->
           <FeedCard
-            v-if="item.kind === 'feed'"
+            v-else-if="item.kind === 'feed'"
             :generator="item.value"
             :menuDisplay="true"
             :orderButtonDisplay="true"

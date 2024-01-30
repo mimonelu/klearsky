@@ -170,6 +170,12 @@ export default class {
     return "unknown"
   }
 
+  findIndexByUri (uri: string): number {
+    return this.items.findIndex((item: TTMyFeedsItem) => {
+      return item.value.uri === uri
+    })
+  }
+
   addItem (target: TTMyFeedsItemValue) {
     if (this.items.findIndex((item: TTMyFeedsItem) => {
       return item.value.uri === target.uri
@@ -191,6 +197,10 @@ export default class {
       return item.value.uri === uri
     })
     if (index !== - 1) this.items.splice(index, 1)
+  }
+
+  swapItem (aIndex: number, bIndex: number) {
+    [this.items[aIndex], this.items[bIndex]] = [this.items[bIndex], this.items[aIndex]]
   }
 
   saveCustomItemSettings () {

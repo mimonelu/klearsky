@@ -64,17 +64,21 @@ const state = reactive<{
     return mainState.formatDate(props.list.indexedAt)
   }),
   purpose: computed((): string => {
-    if (props.list.purpose.includes("#modlist")) return "modList"
-    else if (props.list.purpose.includes("#curatelist")) return "curateList"
-    return "unknownList"
+    return props.list.purpose.includes("#modlist")
+      ? "modList"
+      : props.list.purpose.includes("#curatelist")
+        ? "curateList"
+        : "unknownList"
   }),
   isOwn: computed((): boolean => {
     return props.list.creator.did === mainState.atp.session?.did
   }),
-  isListFeedsPage: mainState.currentPath === "/home/list-feeds"
-    && mainState.currentQuery.list === props.list.uri,
-  isListUsersPage: mainState.currentPath === "/home/list-users"
-    && mainState.currentQuery.list === props.list.uri,
+  isListFeedsPage:
+    mainState.currentPath === "/home/list-feeds" &&
+    mainState.currentQuery.list === props.list.uri,
+  isListUsersPage:
+    mainState.currentPath === "/home/list-users" &&
+    mainState.currentQuery.list === props.list.uri,
   menuTickerDisplay: false,
   menuTickerContainer: computed((): undefined | HTMLElement => {
     return menuTickerContainer.value?.closest(".popup-body") ?? undefined
@@ -92,6 +96,22 @@ function openListEditPopup () {
   })
 }
 
+function openMenuTicker () {
+  state.menuTickerDisplay = !state.menuTickerDisplay
+}
+
+function closeMenuTicker () {
+  state.menuTickerDisplay = false
+}
+
+function startAwait () {
+  state.loaderDisplay = true
+}
+
+function endAwait () {
+  state.loaderDisplay = false
+}
+
 function updateList (list: TTList) {
   props.list.avatar = list.avatar
   props.list.name = list.name
@@ -99,14 +119,6 @@ function updateList (list: TTList) {
 
   // セッションキャッシュの更新
   mainState.myWorker.setSessionCache("myList", mainState.myList)
-}
-
-function openMenuTicker () {
-  state.menuTickerDisplay = !state.menuTickerDisplay
-}
-
-function closeMenuTicker () {
-  state.menuTickerDisplay = false
 }
 
 async function deleteList () {
@@ -131,14 +143,6 @@ async function deleteList () {
       mainState.currentQuery.list === props.list.uri) {
     await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
   }
-}
-
-function startAwait () {
-  state.loaderDisplay = true
-}
-
-function endAwait () {
-  state.loaderDisplay = false
 }
 </script>
 
@@ -236,7 +240,7 @@ function endAwait () {
           :to="{ name: 'profile-list', query: { account: list.creator.did } }"
           @click.prevent="$emit('onActivateMention')"
         >
-          <span class="list-card__creator__prefix">{{ $t("listCreatedBy") }}</span>
+          <span class="list-card__creator__prefix">{{ $t("by") }}</span>
           <span class="list-card__creator__display-name">{{ list.creator.displayName || list.creator.handle }}</span>
         </RouterLink>
       </div>
@@ -445,6 +449,7 @@ function endAwait () {
   // リスト作成者リンク
   &__creator {
     font-size: 0.875em;
+    line-height: var(--line-height);
 
     &__prefix {
       margin-right: 0.5em;
