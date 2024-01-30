@@ -3,6 +3,7 @@ import { inject, reactive } from "vue"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import ListCard from "@/components/list/ListCard.vue"
 import Popup from "@/components/popups/Popup.vue"
+import SpecialFeedCard from "@/components/app-parts/SpecialFeedCard.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -58,15 +59,25 @@ async function fetchMyFeeds () {
   state.popupLoaderDisplay = false
 }
 
-function changeCustomFeedOrder () {
-  /*
-  const saved = mainState.feedPreferences?.saved
-  if (saved == null) return
-
-  // マイフィードのソート
-  mainState.myFeeds.sortItems()
-  */
-
+function changeCustomFeedOrder (params: any) {
+  const direction = params.direction as "top" | "up" | "down" | "bottom"
+  const item = params.item as TTMyFeedsItemValue
+  const index = mainState.myFeeds.findIndexByUri(item.uri)
+  if (index === - 1) return
+  const lastIndex = mainState.myFeeds.items.length - 1
+  if (direction === "top" && index !== 0) {
+    const temp = mainState.myFeeds.items[index]
+    mainState.myFeeds.items.splice(index, 1)
+    mainState.myFeeds.items.unshift(temp)
+  } else if (direction === "up" && index > 0) {
+    mainState.myFeeds.swapItem(index, index - 1)
+  } else if (direction === "down" && index < lastIndex) {
+    mainState.myFeeds.swapItem(index, index + 1)
+  } else if (direction === "bottom" && index !== lastIndex) {
+    const temp = mainState.myFeeds.items[index]
+    mainState.myFeeds.items.splice(index, 1)
+    mainState.myFeeds.items.push(temp)
+  }
   state.orderChanged = true
 }
 </script>
@@ -102,14 +113,20 @@ function changeCustomFeedOrder () {
           :key="item.value.uri"
         >
           <!-- フォロー中フィード -->
-          <div
+          <SpecialFeedCard
             v-if="item.kind === 'followings'"
-          >Followings</div>
+            :item="item"
+            @click="close"
+            @changeCustomFeedOrder="changeCustomFeedOrder"
+          />
 
           <!-- グローバルライン -->
-          <div
+          <SpecialFeedCard
             v-else-if="item.kind === 'globalline'"
-          >Globalline</div>
+            :item="item"
+            @click="close"
+            @changeCustomFeedOrder="changeCustomFeedOrder"
+          />
 
           <!-- フィードカード -->
           <FeedCard
@@ -162,6 +179,7 @@ function changeCustomFeedOrder () {
   }
 
   .feed-card,
+  .special-feed-card,
   .list-card {
     &:not(:last-child) {
       border-bottom: 1px solid var(--fg-color-0125);

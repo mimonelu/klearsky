@@ -207,8 +207,9 @@
   "detachBanner": "Detach banner image",
 
   "home": "Home",
-  "timeline": "Following",
-  "globalline": "Global",
+  "followingsDescription": "Show posts of users you follow.",
+  "globalline": "Global feed",
+  "globallineDescription": "Show all posts in real time.",
 
   "customFeeds": "Custom Feeds",
   "myFeeds": "My Feeds",

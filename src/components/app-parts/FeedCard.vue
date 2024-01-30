@@ -4,10 +4,11 @@ import FeedCardMenuTicker from "@/components/menu-tickers/FeedCardMenuTicker.vue
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
+import OrderButtons from "@/components/buttons/OrderButtons.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
-const emit = defineEmits<{(name: string): void}>()
+const emit = defineEmits<{(name: string, params?: any): void}>()
 
 const props = defineProps<{
   generator: TTFeedGenerator
@@ -134,23 +135,10 @@ async function updatePreferences () {
 }
 
 function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
-  const index = mainState.myFeeds.findIndexByUri(props.generator.uri)
-  if (index === - 1) return
-  const lastIndex = mainState.myFeeds.items.length - 1
-  if (direction === "top" && index !== 0) {
-    const temp = mainState.myFeeds.items[index]
-    mainState.myFeeds.items.splice(index, 1)
-    mainState.myFeeds.items.unshift(temp)
-  } else if (direction === "up" && index > 0) {
-    mainState.myFeeds.swapItem(index, index - 1)
-  } else if (direction === "down" && index < lastIndex) {
-    mainState.myFeeds.swapItem(index, index + 1)
-  } else if (direction === "bottom" && index !== lastIndex) {
-    const temp = mainState.myFeeds.items[index]
-    mainState.myFeeds.items.splice(index, 1)
-    mainState.myFeeds.items.push(temp)
-  }
-  emit("changeCustomFeedOrder")
+  emit("changeCustomFeedOrder", {
+    direction,
+    item: props.generator,
+  })
 }
 </script>
 
@@ -257,36 +245,14 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </RouterLink>
     </div>
 
-    <!-- オーダーボタンコンテナ -->
-    <div
+    <!-- オーダーボタン -->
+    <OrderButtons
       v-if="orderButtonDisplay && creatorDisplay"
-      class="feed-card__order-button-container"
-    >
-      <button
-        class="button--bordered"
-        @click.prevent.stop="changeCustomFeedOrder('top')"
-      >
-        <SVGIcon name="cursorTop" />
-      </button>
-      <button
-        class="button--bordered"
-        @click.prevent.stop="changeCustomFeedOrder('up')"
-      >
-        <SVGIcon name="cursorUp" />
-      </button>
-      <button
-        class="button--bordered"
-        @click.prevent.stop="changeCustomFeedOrder('down')"
-      >
-        <SVGIcon name="cursorDown" />
-      </button>
-      <button
-        class="button--bordered"
-        @click.prevent.stop="changeCustomFeedOrder('bottom')"
-      >
-        <SVGIcon name="cursorBottom" />
-      </button>
-    </div>
+      @moveTop="changeCustomFeedOrder('top')"
+      @moveUp="changeCustomFeedOrder('up')"
+      @moveDown="changeCustomFeedOrder('down')"
+      @moveBottom="changeCustomFeedOrder('bottom')"
+    />
 
     <Loader
       v-if="state.loaderDisplay"
@@ -314,7 +280,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   &__detail {
     display: grid;
     grid-gap: 0 0.75em;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: auto auto 1fr auto auto auto;
     grid-template-areas:
       "v v v v v v"
       "a n n p b m"
@@ -478,32 +444,10 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       font-weight: bold;
     }
   }
+}
 
-  // オーダーボタンコンテナ
-  &__order-button-container {
-    color: rgb(var(--fg-color));
-    display: flex;
-
-    & > button {
-      font-size: 0.875em;
-      &:not(:last-child) {
-        border-right-style: none;
-      }
-      &:first-child {
-        border-top-right-radius: unset;
-        border-bottom-right-radius: unset;
-      }
-      &:last-child {
-        border-top-left-radius: unset;
-        border-bottom-left-radius: unset;
-      }
-      &:not(:first-child):not(:last-child) {
-        border-radius: unset;
-      }
-      &:focus, &:hover {
-        border-color: var(--fg-color-025);
-      }
-    }
-  }
+// オーダーボタン
+.order-buttons {
+  font-size: 0.875em;
 }
 </style>

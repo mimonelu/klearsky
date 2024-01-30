@@ -33,6 +33,6 @@ type TTMyFeedsItem = {
   value: any
 }
 
-type TTMyFeedsItemKind = "feed" | "list" | "unknown"
+type TTMyFeedsItemKind = "feed" | "list" | "followings" | "globalline" | "unknown"
 
 type TTMyFeedsItemValue = TTFeedGenerator | TTList

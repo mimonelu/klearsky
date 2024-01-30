@@ -207,8 +207,9 @@
   "detachBanner": "バナーを取り外す",
 
   "home": "ホーム",
-  "timeline": "フォロー中",
-  "globalline": "グローバル",
+  "followingsDescription": "あなたがフォローしているユーザーのポストを表示します。",
+  "globalline": "グローバルフィード",
+  "globallineDescription": "すべてのポストをリアルタイムに表示します。",
 
   "customFeeds": "カスタムフィード",
   "myFeeds": "マイフィード",
