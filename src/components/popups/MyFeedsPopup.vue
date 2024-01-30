@@ -129,8 +129,10 @@ function changeCustomFeedOrder () {
             v-else-if="item.kind === 'list'"
             :list="item.value"
             :isCompact="false"
+            :orderButtonDisplay="true"
             :createDisplay="true"
             @close="close"
+            @changeCustomFeedOrder="changeCustomFeedOrder"
             @onActivateMention="close"
             @onActivateHashTag="close"
           />

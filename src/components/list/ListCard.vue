@@ -16,6 +16,7 @@ const emit = defineEmits<{(event: string, list?: TTList): void}>()
 const props = defineProps<{
   list: TTList
   isCompact?: boolean
+  orderButtonDisplay?: boolean
   createDisplay?: boolean
 }>()
 
@@ -197,6 +198,26 @@ async function updatePreferences () {
     mainState.myWorker.setSessionCache("myFeeds.items", mainState.myFeeds.items)
   }
 }
+
+function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
+  const index = mainState.myFeeds.findIndexByUri(props.list.uri)
+  if (index === - 1) return
+  const lastIndex = mainState.myFeeds.items.length - 1
+  if (direction === "top" && index !== 0) {
+    const temp = mainState.myFeeds.items[index]
+    mainState.myFeeds.items.splice(index, 1)
+    mainState.myFeeds.items.unshift(temp)
+  } else if (direction === "up" && index > 0) {
+    mainState.myFeeds.swapItem(index, index - 1)
+  } else if (direction === "down" && index < lastIndex) {
+    mainState.myFeeds.swapItem(index, index + 1)
+  } else if (direction === "bottom" && index !== lastIndex) {
+    const temp = mainState.myFeeds.items[index]
+    mainState.myFeeds.items.splice(index, 1)
+    mainState.myFeeds.items.push(temp)
+  }
+  emit("changeCustomFeedOrder")
+}
 </script>
 
 <template>
@@ -253,6 +274,7 @@ async function updatePreferences () {
 
       <!-- フィードピン -->
       <button
+        v-if="!isCompact"
         class="list-card__pin"
         @click.prevent.stop="toggleSavedOrPinned('pinned')"
       >
@@ -266,6 +288,7 @@ async function updatePreferences () {
 
       <!-- フィードブックマーク -->
       <button
+        v-if="!isCompact"
         class="list-card__bookmark"
         @click.prevent.stop="toggleSavedOrPinned('saved')"
       >
@@ -293,6 +316,7 @@ async function updatePreferences () {
           :container="state.menuTickerContainer"
           @close="closeMenuTicker"
           @deleteList="deleteList"
+          @editList="openListEditPopup"
           @startAwait="startAwait"
           @endAwait="endAwait"
         />
@@ -325,10 +349,41 @@ async function updatePreferences () {
       </div>
     </div>
 
-    <!-- ボタンコンテナ -->
+    <!-- オーダーボタンコンテナ -->
+    <div
+      v-if="orderButtonDisplay"
+      class="list-card__order-button-container"
+    >
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('top')"
+      >
+        <SVGIcon name="cursorTop" />
+      </button>
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('up')"
+      >
+        <SVGIcon name="cursorUp" />
+      </button>
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('down')"
+      >
+        <SVGIcon name="cursorDown" />
+      </button>
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('bottom')"
+      >
+        <SVGIcon name="cursorBottom" />
+      </button>
+    </div>
+
+    <!-- リストボタンコンテナ -->
     <div
       v-if="!isCompact"
-      class="list-card__button-container"
+      class="list-card__list-button-container"
     >
       <!-- リストフィードボタン -->
       <RouterLink
@@ -351,15 +406,6 @@ async function updatePreferences () {
         <SVGIcon name="people" />
         <span>{{ $t("users") }}</span>
       </RouterLink>
-
-      <!-- リスト編集ボタン -->
-      <button
-        v-if="state.isOwn"
-        class="button list-card__edit-button"
-        @click.stop.prevent="openListEditPopup"
-      >
-        <span>{{ $t("listEditShort") }}</span>
-      </button>
     </div>
 
     <Loader v-if="state.loaderDisplay" />
@@ -566,8 +612,35 @@ async function updatePreferences () {
     }
   }
 
-  // ボタンコンテナ
-  &__button-container {
+  // オーダーボタンコンテナ
+  &__order-button-container {
+    color: rgb(var(--fg-color));
+    display: flex;
+
+    & > button {
+      font-size: 0.875em;
+      &:not(:last-child) {
+        border-right-style: none;
+      }
+      &:first-child {
+        border-top-right-radius: unset;
+        border-bottom-right-radius: unset;
+      }
+      &:last-child {
+        border-top-left-radius: unset;
+        border-bottom-left-radius: unset;
+      }
+      &:not(:first-child):not(:last-child) {
+        border-radius: unset;
+      }
+      &:focus, &:hover {
+        border-color: var(--fg-color-025);
+      }
+    }
+  }
+
+  // リストボタンコンテナ
+  &__list-button-container {
     display: grid;
     grid-template-columns: max-content max-content max-content;
     justify-content: flex-end;
@@ -579,18 +652,17 @@ async function updatePreferences () {
 
   // リストフィードボタン
   // リストユーザー一覧ボタン
-  // リスト編集ボタン
   &__feeds-button,
-  &__users-button,
-  &__edit-button {
+  &__users-button {
     font-size: 0.875em;
+    &.button--plane {
+      background-color: var(--accent-color-025);
+    }
 
     & > span {
       white-space: nowrap;
     }
-  }
-  &__feeds-button,
-  &__users-button {
+
     &[disabled="true"] {
       opacity: unset;
 
@@ -602,10 +674,6 @@ async function updatePreferences () {
         color: rgb(var(--fg-color));
       }
     }
-  }
-
-  .button--plane {
-    background-color: var(--accent-color-025);
   }
 
   // リストチェックアイコン

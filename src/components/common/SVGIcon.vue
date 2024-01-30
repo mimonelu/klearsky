@@ -13,11 +13,13 @@ import clipboard from "@/svg/clipboard.svg?raw"
 import clock from "@/svg/clock.svg?raw"
 import contentFiltering from "@/svg/content-filtering.svg?raw"
 import cross from "@/svg/cross.svg?raw"
+import cursorBottom from "@/svg/cursor-bottom.svg?raw"
 import cursorDown from "@/svg/cursor-down.svg?raw"
 import cursorFirst from "@/svg/cursor-first.svg?raw"
 import cursorLast from "@/svg/cursor-last.svg?raw"
 import cursorLeft from "@/svg/cursor-left.svg?raw"
 import cursorRight from "@/svg/cursor-right.svg?raw"
+import cursorTop from "@/svg/cursor-top.svg?raw"
 import cursorUp from "@/svg/cursor-up.svg?raw"
 import database from "@/svg/database.svg?raw"
 import drag from "@/svg/drag.svg?raw"
@@ -94,11 +96,13 @@ const icons: { [k: string]: string } = {
   clock,
   contentFiltering,
   cross,
+  cursorBottom,
   cursorDown,
   cursorFirst,
   cursorLast,
   cursorLeft,
   cursorRight,
+  cursorTop,
   cursorUp,
   database,
   drag,

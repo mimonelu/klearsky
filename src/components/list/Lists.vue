@@ -132,6 +132,7 @@ function clicked (list?: TTList) {
         :key="list.uri"
         :list="list"
         :isCompact="isCompact"
+        :orderButtonDisplay="false"
         :createDisplay="false"
         @click="clicked(list)"
         @close="$emit('close')"

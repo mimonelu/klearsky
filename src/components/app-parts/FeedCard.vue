@@ -133,13 +133,23 @@ async function updatePreferences () {
   }
 }
 
-function changeCustomFeedOrder (direction: "up" | "down") {
+function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   const index = mainState.myFeeds.findIndexByUri(props.generator.uri)
   if (index === - 1) return
-  if (direction === "up" && index > 0)
+  const lastIndex = mainState.myFeeds.items.length - 1
+  if (direction === "top" && index !== 0) {
+    const temp = mainState.myFeeds.items[index]
+    mainState.myFeeds.items.splice(index, 1)
+    mainState.myFeeds.items.unshift(temp)
+  } else if (direction === "up" && index > 0) {
     mainState.myFeeds.swapItem(index, index - 1)
-  else if (direction === "down" && index < mainState.myFeeds.items.length - 1)
+  } else if (direction === "down" && index < lastIndex) {
     mainState.myFeeds.swapItem(index, index + 1)
+  } else if (direction === "bottom" && index !== lastIndex) {
+    const temp = mainState.myFeeds.items[index]
+    mainState.myFeeds.items.splice(index, 1)
+    mainState.myFeeds.items.push(temp)
+  }
   emit("changeCustomFeedOrder")
 }
 </script>
@@ -247,26 +257,37 @@ function changeCustomFeedOrder (direction: "up" | "down") {
       </RouterLink>
     </div>
 
+    <!-- オーダーボタンコンテナ -->
     <div
-      v-if="orderButtonDisplay || creatorDisplay"
-      class="feed-card__bottom"
+      v-if="orderButtonDisplay && creatorDisplay"
+      class="feed-card__order-button-container"
     >
-      <!-- フィードオーダーボタン -->
-      <template v-if="orderButtonDisplay">
-        <button
-          class="button--bordered"
-          @click.prevent.stop="changeCustomFeedOrder('up')"
-        >
-          <SVGIcon name="cursorUp" />
-        </button>
-        <button
-          class="button--bordered"
-          @click.prevent.stop="changeCustomFeedOrder('down')"
-        >
-          <SVGIcon name="cursorDown" />
-        </button>
-      </template>
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('top')"
+      >
+        <SVGIcon name="cursorTop" />
+      </button>
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('up')"
+      >
+        <SVGIcon name="cursorUp" />
+      </button>
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('down')"
+      >
+        <SVGIcon name="cursorDown" />
+      </button>
+      <button
+        class="button--bordered"
+        @click.prevent.stop="changeCustomFeedOrder('bottom')"
+      >
+        <SVGIcon name="cursorBottom" />
+      </button>
     </div>
+
     <Loader
       v-if="state.loaderDisplay"
       @click.prevent
@@ -444,12 +465,6 @@ function changeCustomFeedOrder (direction: "up" | "down") {
     word-break: break-word;
   }
 
-  &__bottom {
-    color: rgb(var(--fg-color));
-    display: flex;
-    grid-gap: 0.5em;
-  }
-
   // フィード作成者
   &__creator {
     font-size: 0.875em;
@@ -461,6 +476,33 @@ function changeCustomFeedOrder (direction: "up" | "down") {
 
     &__display-name {
       font-weight: bold;
+    }
+  }
+
+  // オーダーボタンコンテナ
+  &__order-button-container {
+    color: rgb(var(--fg-color));
+    display: flex;
+
+    & > button {
+      font-size: 0.875em;
+      &:not(:last-child) {
+        border-right-style: none;
+      }
+      &:first-child {
+        border-top-right-radius: unset;
+        border-bottom-right-radius: unset;
+      }
+      &:last-child {
+        border-top-left-radius: unset;
+        border-bottom-left-radius: unset;
+      }
+      &:not(:first-child):not(:last-child) {
+        border-radius: unset;
+      }
+      &:focus, &:hover {
+        border-color: var(--fg-color-025);
+      }
     }
   }
 }

@@ -36,6 +36,12 @@ const state = reactive<{
   }),
 })
 
+function editList () {
+  Util.blurElement()
+  emit("close")
+  emit("editList")
+}
+
 async function toggleListMute () {
   Util.blurElement()
   emit("close")
@@ -112,6 +118,15 @@ async function deleteList () {
     :display="display"
     :container="container"
   >
+    <!-- リスト編集ボタン -->
+    <button
+      v-if="state.isOwn"
+      @click.prevent.stop="editList"
+    >
+      <SVGIcon name="edit" />
+      <span>{{ $t("listEdit") }}</span>
+    </button>
+
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
       :text="list.description"
