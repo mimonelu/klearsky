@@ -310,7 +310,6 @@ function toggleDetail () {
           :container="state.menuTickerContainer"
           @close="closeMenuTicker"
           @deleteList="deleteList"
-          @editList="openListEditPopup"
           @startAwait="startAwait"
           @endAwait="endAwait"
         />
@@ -392,6 +391,15 @@ function toggleDetail () {
         <SVGIcon name="people" />
         <span>{{ $t("users") }}</span>
       </RouterLink>
+
+      <!-- リスト編集ボタン -->
+      <button
+        v-if="state.isOwn"
+        class="button list-card__edit-button"
+        @click.stop.prevent="openListEditPopup"
+      >
+        <span>{{ $t("listEditShort") }}</span>
+      </button>
     </div>
 
     <Loader v-if="state.loaderDisplay" />
@@ -622,8 +630,10 @@ function toggleDetail () {
 
   // リストフィードボタン
   // リストユーザー一覧ボタン
+  // リスト編集ボタン
   &__feeds-button,
-  &__users-button {
+  &__users-button,
+  &__edit-button {
     font-size: 0.875em;
     &.button--plane {
       background-color: var(--accent-color-025);
