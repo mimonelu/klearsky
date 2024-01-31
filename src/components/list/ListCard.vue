@@ -40,6 +40,7 @@ const state = reactive<{
   menuTickerDisplay: boolean
   menuTickerContainer: ComputedRef<undefined | HTMLElement>
   loaderDisplay: boolean
+  detailDisplay: boolean
 }>({
   routerLinkToListFeeds: computed(() => {
     return {
@@ -96,6 +97,7 @@ const state = reactive<{
     return menuTickerContainer.value?.closest(".popup-body") ?? undefined
   }),
   loaderDisplay: false,
+  detailDisplay: !props.orderButtonDisplay,
 })
 
 const menuTickerContainer = ref()
@@ -206,6 +208,10 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     item: props.list,
   })
 }
+
+function toggleDetail () {
+  state.detailDisplay = !state.detailDisplay
+}
 </script>
 
 <template>
@@ -312,7 +318,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     </div>
 
     <!-- リスト説明文 -->
-    <div v-if="(list.description && !isCompact) || !state.isOwn">
+    <div v-if="state.detailDisplay && ((list.description && !isCompact) || !state.isOwn)">
       <HtmlText
         v-if="list.description && !isCompact"
         class="list-card__description"
@@ -337,15 +343,28 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </div>
     </div>
 
-    <!-- オーダーボタン -->
-    <OrderButtons
+    <!-- その他のボタンコンテナ -->
+    <div
       v-if="orderButtonDisplay"
-      class="list-card__order-button-container"
-      @moveTop="changeCustomFeedOrder('top')"
-      @moveUp="changeCustomFeedOrder('up')"
-      @moveDown="changeCustomFeedOrder('down')"
-      @moveBottom="changeCustomFeedOrder('bottom')"
-    />
+      class="list-card__etc-button-container"
+    >
+      <!-- オーダーボタン -->
+      <OrderButtons
+        v-if="orderButtonDisplay"
+        @moveTop="changeCustomFeedOrder('top')"
+        @moveUp="changeCustomFeedOrder('up')"
+        @moveDown="changeCustomFeedOrder('down')"
+        @moveBottom="changeCustomFeedOrder('bottom')"
+      />
+
+      <!-- 詳細トグル -->
+      <button
+        class="button--bordered list-card__detail-toggle"
+        @click.prevent.stop="toggleDetail"
+      >
+        <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
+      </button>
+    </div>
 
     <!-- リストボタンコンテナ -->
     <div
@@ -577,6 +596,17 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     &__display-name {
       font-weight: bold;
     }
+  }
+
+  // その他のボタンコンテナ
+  &__etc-button-container {
+    display: flex;
+    grid-gap: 0.5em;
+  }
+
+  // 詳細トグル
+  &__detail-toggle {
+    font-size: 0.875em;
   }
 
   // リストボタンコンテナ

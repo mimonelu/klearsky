@@ -91,6 +91,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     max-width: 3em;
     min-height: 3em;
     max-height: 3em;
+    transform: scale(0.75);
   }
 
   // フィード名

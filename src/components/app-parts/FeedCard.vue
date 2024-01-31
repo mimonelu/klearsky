@@ -27,6 +27,7 @@ const state = reactive<{
   pinned: ComputedRef<boolean>
   menuTickerDisplay: boolean
   menuTickerContainer: ComputedRef<undefined | HTMLElement>
+  detailDisplay: boolean
 }>({
   routerLinkToFeedsPage: computed(() => {
     return {
@@ -49,6 +50,7 @@ const state = reactive<{
   menuTickerContainer: computed((): undefined | HTMLElement => {
     return menuTicker.value?.closest(".popup-body") ?? undefined
   }),
+  detailDisplay: !props.orderButtonDisplay,
 })
 
 const menuTicker = ref()
@@ -140,6 +142,10 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     item: props.generator,
   })
 }
+
+function toggleDetail () {
+  state.detailDisplay = !state.detailDisplay
+}
 </script>
 
 <template>
@@ -222,7 +228,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </button>
     </div>
 
-    <div>
+    <div v-if="state.detailDisplay">
       <!-- フィード説明文 -->
       <HtmlText
         class="feed-card__description"
@@ -245,14 +251,28 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </RouterLink>
     </div>
 
-    <!-- オーダーボタン -->
-    <OrderButtons
-      v-if="orderButtonDisplay && creatorDisplay"
-      @moveTop="changeCustomFeedOrder('top')"
-      @moveUp="changeCustomFeedOrder('up')"
-      @moveDown="changeCustomFeedOrder('down')"
-      @moveBottom="changeCustomFeedOrder('bottom')"
-    />
+    <!-- その他のボタンコンテナ -->
+    <div
+      v-if="orderButtonDisplay"
+      class="feed-card__etc-button-container"
+    >
+      <!-- オーダーボタン -->
+      <OrderButtons
+        v-if="orderButtonDisplay"
+        @moveTop="changeCustomFeedOrder('top')"
+        @moveUp="changeCustomFeedOrder('up')"
+        @moveDown="changeCustomFeedOrder('down')"
+        @moveBottom="changeCustomFeedOrder('bottom')"
+      />
+
+      <!-- 詳細トグル -->
+      <button
+        class="button--bordered feed-card__detail-toggle"
+        @click.prevent.stop="toggleDetail"
+      >
+        <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
+      </button>
+    </div>
 
     <Loader
       v-if="state.loaderDisplay"
@@ -443,6 +463,17 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     &__display-name {
       font-weight: bold;
     }
+  }
+
+  // その他のボタンコンテナ
+  &__etc-button-container {
+    display: flex;
+    grid-gap: 0.5em;
+  }
+
+  // 詳細トグル
+  &__detail-toggle {
+    font-size: 0.875em;
   }
 }
 

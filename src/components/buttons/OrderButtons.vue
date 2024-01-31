@@ -8,25 +8,25 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
       class="button--bordered"
       @click.prevent.stop="$emit('moveTop')"
     >
-      <SVGIcon name="cursorTop" />
+      <SVGIcon name="arrowTop" />
     </button>
     <button
       class="button--bordered"
       @click.prevent.stop="$emit('moveUp')"
     >
-      <SVGIcon name="cursorUp" />
+      <SVGIcon name="arrowUp" />
     </button>
     <button
       class="button--bordered"
       @click.prevent.stop="$emit('moveDown')"
     >
-      <SVGIcon name="cursorDown" />
+      <SVGIcon name="arrowDown" />
     </button>
     <button
       class="button--bordered"
       @click.prevent.stop="$emit('moveBottom')"
     >
-      <SVGIcon name="cursorBottom" />
+      <SVGIcon name="arrowBottom" />
     </button>
   </div>
 </template>

@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
 import alert from "@/svg/alert.svg?raw"
+import arrowBottom from "@/svg/arrow-bottom.svg?raw"
+import arrowDown from "@/svg/arrow-down.svg?raw"
+import arrowTop from "@/svg/arrow-top.svg?raw"
+import arrowUp from "@/svg/arrow-up.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
 import bookmark from "@/svg/bookmark.svg?raw"
@@ -84,6 +88,10 @@ import wordMute from "@/svg/word-mute.svg?raw"
 
 const icons: { [k: string]: string } = {
   alert,
+  arrowBottom,
+  arrowDown,
+  arrowTop,
+  arrowUp,
   at,
   bell,
   bookmark,
