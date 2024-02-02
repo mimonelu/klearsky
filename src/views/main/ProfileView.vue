@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { RouterView, useRouter } from "vue-router"
+import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarButton from "@/components/buttons/AvatarButton.vue"
 import BlockButton from "@/components/buttons/BlockButton.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
@@ -252,7 +253,7 @@ function onActivateAccountMaskToggle () {
               <div class="handle">
                 <a @click.stop="state.handleHistoryPopupDisplay = true">
                   <SVGIcon name="history" />
-                  <span>{{ mainState.currentProfile?.handle ?? "&nbsp;" }}</span>
+                  <AuthorHandle :handle="mainState.currentProfile?.handle ?? '&nbsp;'" />
                 </a>
               </div>
 
@@ -680,8 +681,15 @@ function onActivateAccountMaskToggle () {
     fill: var(--accent-color-0875);
   }
 
-  & > span {
+  & > .author-handle {
+    color: var(--color);
+    font-size: 0.875rem;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: unset;
     user-select: text;
+    word-break: break-all;
+    white-space: unset;
   }
 }
 
