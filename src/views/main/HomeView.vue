@@ -76,7 +76,7 @@ function openMyListPopup () {
 
           <!-- カスタムフィード -->
           <RouterLink
-            v-else-if="item.kind === 'feed'"
+            v-else-if="item.kind === 'feed' && !!item.value.cid"
             class="slider-menu__link"
             :to="{
               path: '/home/feeds',
@@ -93,7 +93,7 @@ function openMyListPopup () {
 
           <!-- リストフィード -->
           <RouterLink
-            v-else-if="item.kind === 'list'"
+            v-else-if="item.kind === 'list' && !!item.value.cid"
             class="slider-menu__link"
             :to="{
               path: '/home/list-feeds',

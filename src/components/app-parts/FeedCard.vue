@@ -28,6 +28,7 @@ const state = reactive<{
   menuTickerDisplay: boolean
   menuTickerContainer: ComputedRef<undefined | HTMLElement>
   detailDisplay: boolean
+  isUnknown: boolean
 }>({
   routerLinkToFeedsPage: computed(() => {
     return {
@@ -51,6 +52,7 @@ const state = reactive<{
     return menuTicker.value?.closest(".popup-body") ?? undefined
   }),
   detailDisplay: !props.orderButtonDisplay,
+  isUnknown: !props.generator.cid
 })
 
 const menuTicker = ref()
@@ -151,10 +153,11 @@ function toggleDetail () {
 <template>
   <component
     class="feed-card"
-    :is="unclickable ? 'div' : 'RouterLink'"
-    v-bind="unclickable ? null : {
+    :is="unclickable || state.isUnknown ? 'div' : 'RouterLink'"
+    v-bind="unclickable || state.isUnknown ? null : {
       to: state.routerLinkToFeedsPage,
     }"
+    :data-is-unknown="state.isUnknown"
     :data-unclickable="unclickable"
     @click.stop
   >
@@ -171,7 +174,7 @@ function toggleDetail () {
       <button
         class="feed-card__like-count"
         :data-on="generator.viewer.like != null"
-        @click.prevent.stop="toggleFeedGeneratorLike(generator)"
+        @click.prevent.stop="!state.isUnknown && toggleFeedGeneratorLike(generator)"
       >
         <SVGIcon name="like" />
         <span>{{ generator.likeCount }}</span>
@@ -289,6 +292,9 @@ function toggleDetail () {
   grid-gap: 0.5em;
   padding: 1em;
   position: relative;
+  &[data-is-unknown="true"] {
+    background-color: var(--fg-color-00625);
+  }
 
   // テキスト選択
   &[data-unclickable="true"] &__display-name,

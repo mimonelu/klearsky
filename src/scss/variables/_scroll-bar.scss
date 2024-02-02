@@ -1,12 +1,12 @@
 @mixin scroll-bar () {
   // for WebKit
   &::-webkit-scrollbar {
-    background-color: var(--fg-color-0125);
+    background-color: var(--fg-color-00625);
   }
   &::-webkit-scrollbar-thumb {
     background-color: var(--fg-color-025);
   }
 
   // for Firefox
-  scrollbar-color: var(--fg-color-025) var(--fg-color-0125);
+  scrollbar-color: var(--fg-color-025) var(--fg-color-00625);
 }

@@ -245,6 +245,7 @@ async function processAfterLogin () {
   if (state.myFeeds.items.length === 0) {
     await state.myFeeds.fetchItems()
     state.myFeeds.sortItems()
+    state.myFeeds.synchronizeToMyList()
 
     // セッションキャッシュの設定
     state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
@@ -253,6 +254,7 @@ async function processAfterLogin () {
   // 全マイリストと全マイリストユーザーの取得
   if (state.myList.length === 0) {
     state.fetchMyLists().then(() => {
+      state.myFeeds.synchronizeToMyList()
 
       // セッションキャッシュの設定
       state.myWorker.setSessionCache("myList", state.myList)
@@ -279,9 +281,9 @@ async function processAfterLogin () {
 async function moveToDefaultHome () {
   const item = state.myFeeds.items[0]
   if (item == null)
-    await router.push("/home/timeline")
+    await router.replace("/home/timeline")
   else if (item.kind === "feed")
-    await router.push({
+    await router.replace({
       path: "/home/feeds",
       query: {
         feed: item.value.uri,
@@ -289,7 +291,7 @@ async function moveToDefaultHome () {
       },
     })
   else if (item.kind === "list")
-    await router.push({
+    await router.replace({
       path: "/home/list-feeds",
       query: {
         list: item.value.uri,
@@ -666,12 +668,14 @@ function broadcastListener (event: MessageEvent) {
         // セッションキャッシュの反映 - マイフィード
         case "myFeeds.items": {
           state.myFeeds.items.splice(0, state.myFeeds.items.length, ...data.value)
+          state.myFeeds.synchronizeToMyList()
           break
         }
 
         // セッションキャッシュの反映 - マイリスト
         case "myList": {
           state.myList = data.value
+          state.myFeeds.synchronizeToMyList()
           break
         }
 

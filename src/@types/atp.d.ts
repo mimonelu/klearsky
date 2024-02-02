@@ -352,7 +352,7 @@ type TTFeedGenerator = {
   description: string
   did: string
   displayName: string
-  indexedAt:string
+  indexedAt: string
   likeCount: number
   uri: string
   viewer: {

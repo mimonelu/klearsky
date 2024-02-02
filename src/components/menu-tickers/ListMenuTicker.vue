@@ -64,6 +64,9 @@ async function toggleListMute () {
     if (props.list.viewer == null) props.list.viewer = {}
     props.list.viewer.muted = true
   }
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myList)
 }
 
 async function toggleListBlock () {
@@ -94,6 +97,9 @@ async function toggleListBlock () {
     if (props.list.viewer == null) props.list.viewer = {}
     props.list.viewer.blocked = result
   }
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myList)
 }
 
 async function deleteList () {

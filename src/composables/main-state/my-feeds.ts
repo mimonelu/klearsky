@@ -109,12 +109,12 @@ export default class {
 
     const responses = await Promise.allSettled(tasks)
     responses.forEach((response: PromiseSettledResult<any>) => {
-      if (response.status === "rejected") {
-        this.mainState.openErrorPopup("errorApiFailed", "MyFeeds/fetchList")
-        return
-      }
-      if (response instanceof Error) {
-        this.mainState.openErrorPopup("errorApiFailed", "MyFeeds/fetchList")
+      if (response == null ||
+          response.status === "rejected" ||
+          response.value instanceof Error) {
+        // TODO: いったん退避
+        // this.mainState.openErrorPopup("errorApiFailed", "MyFeeds/fetchItems")
+
         return
       }
 
@@ -134,6 +134,52 @@ export default class {
           value: response.value,
         })
       }
+    })
+
+    // 不明なアイテムの処理
+    this.mainState.feedPreferences?.saved?.forEach((uri: string, index: number) => {
+      if (this.items.findIndex((item: TTMyFeedsItem) => {
+        return item.value.uri === uri
+      }) !== - 1) return
+      const kind = this.detectItemKind(uri)
+      const value = kind === "feed"
+        ? {
+          avatar: "",
+          cid: "",
+          creator: {
+            did: "",
+            displayName: "",
+            handle: "",
+            viewer: {
+              muted: false,
+            },
+          },
+          description: uri,
+          did: "",
+          displayName: "(Unknown feed)",
+          indexedAt: new Date().toISOString(),
+          likeCount: 0,
+          uri,
+          viewer: {},
+        }
+        : kind === "list"
+          ? {
+            uri,
+            cid: "",
+            creator: {
+              did: "",
+              handle: "",
+            },
+            name: "(Unknown list)",
+            purpose: "unknownList",
+            description: uri,
+            indexedAt: new Date().toISOString(),
+          }
+          : {
+            uri,
+            displayName: "(Unknown item)",
+          }
+      this.items.splice(index, 0, { kind, value } as TTMyFeedsItem)
     })
 
     return true
@@ -187,7 +233,7 @@ export default class {
     }
   }
 
-  removeItem (uri: string) {
+  removeItem (uri: string): boolean {
     /*
     this.items = this.items.filter((item: TTMyFeedsItem) => {
       return item.uri !== uri
@@ -196,7 +242,11 @@ export default class {
     const index = this.items.findIndex((item: TTMyFeedsItem) => {
       return item.value.uri === uri
     })
-    if (index !== - 1) this.items.splice(index, 1)
+    if (index !== - 1) {
+      this.items.splice(index, 1)
+      return true
+    }
+    return false
   }
 
   swapItem (aIndex: number, bIndex: number) {
@@ -213,5 +263,15 @@ export default class {
       })
     )
     this.mainState.saveSettings()
+  }
+
+  synchronizeToMyList () {
+    this.mainState.myList.forEach((myList: TTList) => {
+      const index = this.items.findIndex((item: TTMyFeedsItem) => {
+        return item.value.uri === myList.uri
+      })
+      if (index === - 1) return
+      this.items[index].value = myList
+    })
   }
 }

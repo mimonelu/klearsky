@@ -11,9 +11,10 @@ interface TTMyFeeds {
   detectItemKind (uri: string): TTMyFeedsItemKind
   findIndexByUri (uri: string): number
   addItem (target: TTMyFeedsItemValue): void
-  removeItem (uri: string): void
+  removeItem (uri: string): boolean
   swapItem (aIndex: number, bIndex: number): void
   saveCustomItemSettings (): void
+  synchronizeToMyList (): void
 }
 
 type TTMyFeedsItem = {

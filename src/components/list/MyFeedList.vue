@@ -154,7 +154,7 @@ function removeMyFeed (uri: string) {
 
         <!-- カスタムフィード -->
         <RouterLink
-          v-else-if="item.kind === 'feed'"
+          v-else-if="item.kind === 'feed' && !!item.value.cid"
           :to="{
             path: '/home/feeds',
             query: {
@@ -170,7 +170,7 @@ function removeMyFeed (uri: string) {
 
         <!-- リストフィード -->
         <RouterLink
-          v-else-if="item.kind === 'list'"
+          v-else-if="item.kind === 'list' && !!item.value.cid"
           :to="{
             path: '/home/list-feeds',
             query: {

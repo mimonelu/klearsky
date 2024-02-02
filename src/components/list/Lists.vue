@@ -45,6 +45,7 @@ async function updateMylist () {
   mainState.myList.splice(0)
   mainState.loaderDisplay = true
   await mainState.fetchMyLists()
+  mainState.myFeeds.synchronizeToMyList()
   mainState.loaderDisplay = false
 
   // セッションキャッシュの更新

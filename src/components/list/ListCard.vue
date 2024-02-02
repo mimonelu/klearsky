@@ -145,6 +145,13 @@ async function deleteList () {
   }
   emit("deleteList", props.list)
 
+  // マイフィードから削除
+  if (mainState.myFeeds.removeItem(props.list.uri)) {
+    mainState.sortFeedPreferencesSavedAndPinned()
+    mainState.myFeeds.saveCustomItemSettings()
+    await updatePreferences()
+  }
+
   // セッションキャッシュの更新
   mainState.myWorker.setSessionCache("myList", mainState.myList)
 
@@ -330,7 +337,7 @@ function toggleDetail () {
       />
 
       <!-- リスト作成者リンク -->
-      <div v-if="!state.isOwn">
+      <div v-if="!state.isOwn && list.creator.did">
         <RouterLink
           class="textlink list-card__creator"
           :to="{ name: 'profile-list', query: { account: list.creator.did } }"
@@ -367,7 +374,7 @@ function toggleDetail () {
 
     <!-- リストボタンコンテナ -->
     <div
-      v-if="!isCompact"
+      v-if="!isCompact && !!props.list.cid"
       class="list-card__list-button-container"
     >
       <!-- リストフィードボタン -->

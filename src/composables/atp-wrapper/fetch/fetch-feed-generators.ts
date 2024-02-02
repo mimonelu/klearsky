@@ -37,7 +37,7 @@ export default async function (
           muted: false,
         },
       },
-      description: "",
+      description: uri,
       did: "",
       displayName: "(Unknown feed)",
       indexedAt: new Date().toISOString(),

@@ -9,11 +9,12 @@ export default async function (
     list,
     limit: 1,
   }
-  const response: AppBskyGraphGetList.Response =
+  const response: Error | AppBskyGraphGetList.Response =
     await (this.agent as BskyAgent).app.bsky.graph.getList(query)
       .then((value: AppBskyGraphGetList.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/getList(fetchList)]", response)
+  if (response instanceof Error) return response
   if (!response.success) return Error("apiError")
   return response.data.list
 }
