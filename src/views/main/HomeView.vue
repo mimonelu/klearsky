@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import LazyImage from "@/components/common/LazyImage.vue"
+// import LazyImage from "@/components/common/LazyImage.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -59,7 +59,7 @@ function openMyListPopup () {
             to="/home/timeline"
             :data-is-selected="true"
           >
-            <SVGIcon name="shimmer" />
+            <!-- SVGIcon name="shimmer" / -->
             <span>{{ $t(item.value.displayName) }}</span>
           </RouterLink>
 
@@ -70,7 +70,7 @@ function openMyListPopup () {
             to="/home/globalline"
             :data-is-selected="true"
           >
-            <SVGIcon name="shimmer" />
+            <!-- SVGIcon name="shimmer" / -->
             <span>{{ $t(item.value.displayName) }}</span>
           </RouterLink>
 
@@ -87,7 +87,7 @@ function openMyListPopup () {
             }"
             :data-is-selected="mainState.currentQuery.feed === item.value.uri"
           >
-            <LazyImage :src="item.value.avatar" />
+            <!-- LazyImage :src="item.value.avatar" / -->
             <span>{{ item.value.displayName }}</span>
           </RouterLink>
 
@@ -104,9 +104,11 @@ function openMyListPopup () {
             }"
             :data-is-selected="mainState.currentQuery.list === item.value.uri"
           >
-            <LazyImage :src="item.value.avatar" />
+            <!-- LazyImage :src="item.value.avatar" / -->
             <span>{{ item.value.name }}</span>
           </RouterLink>
+
+          <div class="slider-menu__separator" />
         </template>
       </div>
 
@@ -142,7 +144,7 @@ function openMyListPopup () {
     align-items: center;
     grid-gap: 0.5rem;
     padding: 0 0.75rem;
-    max-width: 12rem;
+    max-width: 50%;
     min-height: 3rem;
     max-height: 3rem;
     --color: var(--fg-color-075);
@@ -153,6 +155,7 @@ function openMyListPopup () {
       background-color: var(--accent-color-025);
     }
 
+    /*
     .svg-icon--shimmer,
     .lazy-image {
       border-radius: 1px;
@@ -166,6 +169,7 @@ function openMyListPopup () {
     .svg-icon--shimmer {
       fill: var(--fg-color-05);
     }
+    */
 
     & > span {
       color: var(--color);
@@ -176,6 +180,17 @@ function openMyListPopup () {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+  }
+
+  &__separator {
+    background-color: var(--fg-color-025);
+    min-width: 1px;
+    max-width: 1px;
+    height: 1.5rem;
+    & + &,
+    &:last-child {
+      display: none;
     }
   }
 }
