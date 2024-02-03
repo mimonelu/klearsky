@@ -480,6 +480,7 @@ function toggleDetail () {
   // 詳細トグル
   &__detail-toggle {
     font-size: 0.875em;
+    margin-left: auto;
   }
 }
 
