@@ -1214,7 +1214,8 @@ async function fetchCurrentListFeeds (direction: "old" | "new", middleCursor?: s
       state.currentList.uri,
       CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
       direction === "old" ? middleCursor ?? state.currentListFeedsCursor : undefined,
-      middleCursor != null
+      middleCursor != null,
+      (listUri: any): boolean => listUri === state.currentList?.uri,
     )
   if (cursor instanceof Error) {
     state.openErrorPopup(

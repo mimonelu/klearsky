@@ -7,7 +7,8 @@ export default async function (
   list: string,
   limit?: number,
   cursor?: string,
-  middle?: boolean
+  middle?: boolean,
+  checkIdentity?: (params: any) => boolean
 ): Promise<Error | undefined | string> {
   if (this.agent == null) return Error("noAgentError")
 
@@ -22,6 +23,9 @@ export default async function (
   console.log("[klearsky/getListFeed]", response)
   if (response instanceof Error) return response
   if (!response.success) return Error("apiError")
+
+  // 現在のフィードと異なるフィードかどうかの判定
+  if (checkIdentity != null && !checkIdentity(list)) return
 
   // TODO:
   AtpUtil.coherentResponses(response.data.feed)
