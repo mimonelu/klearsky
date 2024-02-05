@@ -67,10 +67,9 @@ body {
 }
 
 // カラーテーマ
-body { @include color-theme-light; } // デフォルトカラーテーマ
+:root { @include color-theme-light; } // デフォルトカラーテーマ
 @media (prefers-color-scheme: dark) {
-  :root { color-scheme: dark; }
-  body { @include color-theme-dark-gray; } // ダークモード時のデフォルトカラーテーマ
+  :root { @include color-theme-dark-gray; } // ダークモード時のデフォルトカラーテーマ
 }
 [data-color-theme="light"] { @include color-theme-light; }
 [data-color-theme="dark"] { @include color-theme-dark; }

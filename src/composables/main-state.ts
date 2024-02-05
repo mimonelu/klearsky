@@ -600,7 +600,7 @@ function updateFontSizeSetting () {
 
 function updateColorThemeSetting () {
   if (state.currentSetting?.colorTheme != null) {
-    window.document.body.setAttribute(
+    window.document.documentElement.setAttribute(
       "data-color-theme",
       state.currentSetting.colorTheme as string
     )

@@ -1,6 +1,4 @@
 @mixin scroll-bar ($type: "transparent") {
-  --scrollbar-color-thumb: var(--fg-color-025);
-
   $bgColor: transparent;
   @if $type == "fgColor" {
     $bgColor: var(--fg-color-00625);
@@ -12,7 +10,7 @@
 
   @supports (scrollbar-width: auto) {
     & {
-      scrollbar-color: var(--scrollbar-color-thumb) $bgColor;
+      scrollbar-color: var(--fg-color-025) $bgColor;
 
       // 幅は変更しない
       // scrollbar-width: var(--scrollbar-width);
@@ -27,7 +25,7 @@
     // }
 
     &::-webkit-scrollbar-thumb {
-      background-color: var(--scrollbar-color-thumb);
+      background-color: var(--fg-color-025);
     }
     &::-webkit-scrollbar-track {
       background-color: $bgColor;
