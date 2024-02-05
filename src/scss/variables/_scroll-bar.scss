@@ -1,12 +1,36 @@
-@mixin scroll-bar () {
-  // for WebKit
-  &::-webkit-scrollbar {
-    background-color: var(--fg-color-00625);
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--fg-color-025);
+@mixin scroll-bar ($type: "transparent") {
+  --scrollbar-color-thumb: var(--fg-color-025);
+
+  $bgColor: transparent;
+  @if $type == "fgColor" {
+    $bgColor: var(--fg-color-00625);
   }
 
-  // for Firefox
-  scrollbar-color: var(--fg-color-025) var(--fg-color-00625);
+  // 幅は変更しない
+  // --scrollbar-width: thin;
+  // --scrollbar-width-legacy: 1rem;
+
+  @supports (scrollbar-width: auto) {
+    & {
+      scrollbar-color: var(--scrollbar-color-thumb) $bgColor;
+
+      // 幅は変更しない
+      // scrollbar-width: var(--scrollbar-width);
+    }
+  }
+
+  @supports selector(::-webkit-scrollbar) {
+    // 幅は変更しない
+    // &::-webkit-scrollbar {
+    //   max-width: var(--scrollbar-width-legacy);
+    //   max-height: var(--scrollbar-width-legacy);
+    // }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-color-thumb);
+    }
+    &::-webkit-scrollbar-track {
+      background-color: $bgColor;
+    }
+  }
 }

@@ -58,16 +58,18 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   overflow-y: scroll;
+  scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   user-select: none;
-  @include scroll-bar();
+  @include scroll-bar("transparent");
 }
 
 // カラーテーマ
 body { @include color-theme-light; } // デフォルトカラーテーマ
 @media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark; }
   body { @include color-theme-dark-gray; } // ダークモード時のデフォルトカラーテーマ
 }
 [data-color-theme="light"] { @include color-theme-light; }

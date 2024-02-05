@@ -277,7 +277,7 @@ function removeMyFeed (uri: string) {
   }
 
   &__body {
-    @include scroll-bar;
+    @include scroll-bar("transparent");
     display: flex;
     flex-direction: column;
     flex-grow: 1;

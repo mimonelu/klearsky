@@ -208,7 +208,7 @@ function scrollListener () {
   overflow-y: auto;
   overscroll-behavior: none;
   padding: 1.5rem;
-  @include scroll-bar();
+  @include scroll-bar("fgColor");
   &:first-child {
     padding-top: 1.5rem;
   }

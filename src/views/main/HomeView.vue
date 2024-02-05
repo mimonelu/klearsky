@@ -125,13 +125,19 @@ function openMyListPopup () {
   flex-grow: 1;
 }
 
+.page-header {
+  border-bottom-color: transparent;
+}
+
 .slider-menu {
   background-color: rgb(var(--bg-color));
   border-bottom: 1px solid var(--fg-color-025);
   display: flex;
   align-items: center;
   overflow-x: auto;
-  @include scroll-bar();
+  @include scroll-bar("transparent");
+
+  --link-border-width: 2px;
 
   &::before {
     content: "";
@@ -140,6 +146,8 @@ function openMyListPopup () {
   }
 
   &__link {
+    border-top: var(--link-border-width) solid transparent;
+    border-bottom: var(--link-border-width) solid transparent;
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;
@@ -152,7 +160,8 @@ function openMyListPopup () {
       --color: rgb(var(--fg-color));
     }
     &.router-link-active[data-is-selected="true"] {
-      background-color: var(--accent-color-025);
+      --color: rgb(var(--accent-color));
+      border-top: var(--link-border-width) solid rgb(var(--accent-color));
     }
 
     /*

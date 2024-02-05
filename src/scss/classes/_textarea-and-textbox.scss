@@ -33,7 +33,7 @@
 }
 .textarea {
   word-break: break-word;
-  @include scroll-bar;
+  @include scroll-bar("transparent");
 }
 .textarea-is-wide,
 .textbox-is-wide {
