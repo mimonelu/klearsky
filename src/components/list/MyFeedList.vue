@@ -34,7 +34,9 @@ function startEdit () {
 
 function cancelEdit () {
   mainState.myFeeds.items = state.backupMyFeedsItems
-  if (mainState.feedPreferences?.pinned != null) mainState.feedPreferences.pinned = state.backupPinned
+  if (mainState.feedPreferences?.pinned != null) {
+    mainState.feedPreferences.pinned = state.backupPinned
+  }
   state.editMode = false
 }
 
@@ -138,6 +140,7 @@ function removeMyFeed (uri: string) {
           v-if="item.kind === 'followings'"
           to="/home/timeline"
           class="my-feed-list__content"
+          :data-is-selected="true"
         >
           <SVGIcon name="shimmer" />
           <span>{{ $t(item.value.displayName) }}</span>
@@ -148,6 +151,7 @@ function removeMyFeed (uri: string) {
           v-else-if="item.kind === 'globalline'"
           to="/home/globalline"
           class="my-feed-list__content"
+          :data-is-selected="true"
         >
           <SVGIcon name="shimmer" />
           <span>{{ $t(item.value.displayName) }}</span>
@@ -164,6 +168,7 @@ function removeMyFeed (uri: string) {
             },
           }"
           class="my-feed-list__content"
+          :data-is-selected="mainState.currentQuery.feed === item.value.uri"
         >
           <LazyImage :src="item.value.avatar" />
           <span>{{ item.value.displayName }}</span>
@@ -180,6 +185,7 @@ function removeMyFeed (uri: string) {
             },
           }"
           class="my-feed-list__content"
+          :data-is-selected="mainState.currentQuery.list === item.value.uri"
         >
           <LazyImage :src="item.value.avatar" />
           <span>{{ item.value.name }}</span>
@@ -291,8 +297,13 @@ function removeMyFeed (uri: string) {
     align-items: center;
     grid-gap: 0.25rem;
     &:hover, &:focus {
-      .my-feed-list__content > span {
-        color: rgb(var(--fg-color));
+      .my-feed-list__content {
+        & > span {
+          color: rgb(var(--fg-color));
+        }
+        &.router-link-active[data-is-selected="true"] > span {
+          color: rgb(var(--accent-color));
+        }
       }
     }
   }
@@ -370,6 +381,10 @@ function removeMyFeed (uri: string) {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+    &.router-link-active[data-is-selected="true"] > span {
+      color: var(--accent-color-075);
+      font-weight: bold;
     }
   }
   &[data-edit-mode="false"] &__content {
