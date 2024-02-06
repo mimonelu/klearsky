@@ -1,4 +1,5 @@
 import MyWorker from "@/worker/my-worker.ts?sharedworker"
+import Util from "@/composables/util"
 
 export default class {
   public mainState: MainState
@@ -55,7 +56,8 @@ export default class {
   }
 
   setSessionCache (key: string, json: any) {
-    const value = JSON.parse(JSON.stringify(json))
+    const value = Util.cloneJson(json)
+    if (value == null) return
 
     // Worker にキャッシュ
     this.worker?.port.postMessage({

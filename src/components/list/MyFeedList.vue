@@ -4,6 +4,7 @@ import DraggableList from "@/components/list/DraggableList.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const $t = inject("$t") as Function
 
@@ -26,8 +27,8 @@ const state = reactive<{
 })
 
 function startEdit () {
-  state.backupMyFeedsItems = JSON.parse(JSON.stringify(mainState.myFeeds.items))
-  state.backupPinned = JSON.parse(JSON.stringify(mainState.feedPreferences?.pinned ?? []))
+  state.backupMyFeedsItems = Util.cloneJson(mainState.myFeeds.items) ?? []
+  state.backupPinned = Util.cloneJson(mainState.feedPreferences?.pinned ?? []) ?? []
   state.editMode = true
 }
 

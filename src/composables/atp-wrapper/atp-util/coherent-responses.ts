@@ -1,4 +1,5 @@
 import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 
 export default function (responses: Array<any>) {
   // __custom プロパティの作成
@@ -12,7 +13,7 @@ export default function (responses: Array<any>) {
   // embeds[0] -> embed
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "embeds" && child[0] != null) {
-      parent.embed = JSON.parse(JSON.stringify(child[0]))
+      parent.embed = Util.cloneJson(child[0])
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
     }
   })
@@ -20,7 +21,7 @@ export default function (responses: Array<any>) {
   // PARENT.value.embed -> PARENT.embed
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "value" && child.embed != null && parent.embed == null) {
-      parent.embed = JSON.parse(JSON.stringify(child.embed))
+      parent.embed = Util.cloneJson(child.embed)
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
     }
   })
@@ -28,7 +29,7 @@ export default function (responses: Array<any>) {
   // PARENT.embed.media.external -> PARENT.embed.external
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "media" && child.external != null) {
-      parent.external = JSON.parse(JSON.stringify(child.external))
+      parent.external = Util.cloneJson(child.external)
       parent.external.__comment =
         "❗ This 'external' was duplicated by Klearsky."
     }
@@ -37,7 +38,7 @@ export default function (responses: Array<any>) {
   // PARENT.embed.media.images -> PARENT.embed.images
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "media" && child.images != null && parent.images == null) {
-      parent.images = JSON.parse(JSON.stringify(child.images))
+      parent.images = Util.cloneJson(child.images)
       parent.images.__comment = "❗ This 'images' was duplicated by Klearsky."
     }
   })
@@ -45,7 +46,7 @@ export default function (responses: Array<any>) {
   // PARENT.record.record -> PARENT.record
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "record" && child.record != null) {
-      parent.record = JSON.parse(JSON.stringify(child.record))
+      parent.record = Util.cloneJson(child.record)
       parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
     }
   })
@@ -55,14 +56,14 @@ export default function (responses: Array<any>) {
     if ((key === "record" || key === "value") && child.embed != null) {
       if (child.embed.external != null && parent.embed?.external == null) {
         if (parent.embed == null) parent.embed = {}
-        parent.embed.external = JSON.parse(JSON.stringify(child.embed.external))
+        parent.embed.external = Util.cloneJson(child.embed.external)
         parent.embed.external.__comment =
           "❗ This 'external' was duplicated by Klearsky."
       }
       if (child.embed.images != null) {
         if (parent.embed?.images == null) {
           if (parent.embed == null) parent.embed = {}
-          parent.embed.images = JSON.parse(JSON.stringify(child.embed.images))
+          parent.embed.images = Util.cloneJson(child.embed.images)
           parent.embed.images.__comment =
             "❗ This 'images' was duplicated by Klearsky."
         }

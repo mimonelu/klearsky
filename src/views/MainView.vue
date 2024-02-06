@@ -212,7 +212,7 @@ function onRefreshSession () {
   // セッションの同期
   state.broadcastChannel?.postMessage({
     name: "refreshSession",
-    data: JSON.parse(JSON.stringify(state.atp.session)),
+    data: Util.cloneJson(state.atp.session),
   } as TTPostMessageData)
 }
 

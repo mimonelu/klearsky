@@ -59,7 +59,8 @@ function getDidColor (did: string): string {
 }
 
 function exportAccounts () {
-  const jsonData = JSON.parse(JSON.stringify(mainState.atp.data.sessions))
+  const jsonData = Util.cloneJson(mainState.atp.data.sessions)
+  if (jsonData == null) return
 
   // アカウント出力から JWT を削除
   for (const did in jsonData) {
