@@ -8,11 +8,22 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   query: ComputedRef<string>
+  isAtProfilePage: ComputedRef<boolean>
 }>({
   query: computed((): string => {
     return mainState.currentSearchTerm
       ? `?text=${mainState.currentSearchTerm}`
       : ""
+  }),
+  isAtProfilePage: computed((): boolean => {
+    return (
+      mainState.currentPath.startsWith('/profile/') &&
+      (
+        mainState.currentQuery.account === mainState.atp.session?.handle ||
+        mainState.currentQuery.account === mainState.atp.session?.did
+      )
+    ) ||
+    mainState.currentPath.startsWith('/profile/edit')
   }),
 })
 
@@ -39,24 +50,6 @@ async function openSendPostPopup () {
 
 <template>
   <div class="main-menu-horizontal">
-    <!-- プロフィールボタン -->
-    <RouterLink
-      class="link-button profile-button"
-      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.did } }"
-      :data-is-focus="
-        (
-          mainState.currentPath.startsWith('/profile/') &&
-          (
-            mainState.currentQuery.account === mainState.atp.session?.handle ||
-            mainState.currentQuery.account === mainState.atp.session?.did
-          )
-        ) ||
-        mainState.currentPath.startsWith('/profile/edit')
-      "
-    >
-      <LazyImage :src="mainState.userProfile?.avatar" />
-    </RouterLink>
-
     <!-- ホームボタン -->
     <RouterLink
       class="link-button"
@@ -88,6 +81,15 @@ async function openSendPostPopup () {
       >{{ mainState.notificationCount }}</div>
     </button>
 
+    <!-- プロフィールボタン -->
+    <RouterLink
+      class="link-button profile-button"
+      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.did } }"
+      :data-is-focus="state.isAtProfilePage"
+    >
+      <LazyImage :src="mainState.userProfile?.avatar" />
+    </RouterLink>
+
     <!-- 設定ボタン -->
     <button
       class="link-button"
@@ -116,7 +118,6 @@ async function openSendPostPopup () {
 
 <style lang="scss" scoped>
 .main-menu-horizontal {
-  --button-size: 2.125rem;
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
   border-top: 1px solid var(--fg-color-025);
   display: grid;
@@ -151,6 +152,8 @@ async function openSendPostPopup () {
   }
 
   &.profile-button {
+    --button-size: 2.125rem;
+
     .lazy-image {
       border-radius: var(--border-radius-large);
       font-size: var(--button-size);
