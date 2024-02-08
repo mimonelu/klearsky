@@ -220,6 +220,9 @@ async function processAfterLogin () {
   setupUpdateJwtInterval()
   setupNotificationInterval()
 
+  // 現在のサーバ情報の取得
+  state.fetchCurrentServerInfo()
+
   // プリファレンスとユーザープロフィールの取得
   const tasks: { [k: string]: any } = {}
   if (state.currentPreferences.length === 0) {

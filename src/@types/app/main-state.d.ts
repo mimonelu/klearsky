@@ -24,6 +24,11 @@ type MainState = {
   // ブロードキャスト
   broadcastChannel?: BroadcastChannel
 
+  // 現在のサーバ情報
+
+  currentServerInfo?: TTServerInfo
+  fetchCurrentServerInfo: () => void
+
   // 設定
 
   settings: { [did: string]: TTSetting }

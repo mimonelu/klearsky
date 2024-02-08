@@ -35,6 +35,11 @@ state.scrolledToBottom = false
 // ブロードキャスト
 state.broadcastChannel = new BroadcastChannel("klearsky")
 
+// サーバ情報
+
+state.currentServerInfo = undefined
+state.fetchCurrentServerInfo = fetchCurrentServerInfo
+
 // 設定
 
 state.settings = {}
@@ -475,6 +480,14 @@ function formatDate (dateString?: string): string {
 
   // 去年以前
   return format(the, "yyyy/MM/dd")
+}
+
+// 現在のサーバ情報
+
+async function fetchCurrentServerInfo () {
+  const response = await state.atp.fetchServerInfo()
+  if (response instanceof Error) return
+  state.currentServerInfo = response
 }
 
 // 設定

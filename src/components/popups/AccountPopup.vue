@@ -55,12 +55,15 @@ async function logout () {
     <template #body>
       <div class="account-popup__body">
         <div class="account-popup__button-container">
+          <!-- 新規ログインボタン -->
           <button
             class="button"
             @click.prevent="newLogin()"
           >
             <span>{{ $t("newLogin") }}</span>
           </button>
+
+          <!-- ログアウトボタン -->
           <button
             class="button--important"
             @click.prevent="logout"
@@ -68,6 +71,8 @@ async function logout () {
             <span>{{ $t("logout") }}</span>
           </button>
         </div>
+
+        <!-- アカウントリスト -->
         <AccountList :hasDeleteButton="true" />
       </div>
     </template>

@@ -51,6 +51,9 @@
   "select": "Select",
   "users": "Users",
 
+  "privacyPolicy": "Privacy policy",
+  "termsOfService": "Terms of service",
+
   "tag": "Tag",
   "tags": "Tags",
   "tagEdit": "Edit my tags",

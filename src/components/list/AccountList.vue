@@ -192,7 +192,41 @@ function onClickFileBox (event: Event) {
           </div>
         </div>
       </div>
+
+      <!-- 現在のサーバ情報 -->
+      <div
+        v-if="
+          service === mainState.atp.session?.__service &&
+          mainState.currentServerInfo?.links != null
+        "
+        class="server-info"
+      >
+        <!-- 現在のサーバ情報 - プライバシーポリシー -->
+        <a
+          v-if="mainState.currentServerInfo?.links?.privacyPolicy"
+          class="textlink--icon"
+          :href="mainState.currentServerInfo?.links?.privacyPolicy"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <SVGIcon name="cursorRight" />
+          <span>{{ $t("privacyPolicy") }}</span>
+        </a>
+
+        <!-- 現在のサーバ情報 - 利用規約 -->
+        <a
+          v-if="mainState.currentServerInfo?.links?.privacyPolicy"
+          class="textlink--icon"
+          :href="mainState.currentServerInfo?.links?.termsOfService"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <SVGIcon name="cursorRight" />
+          <span>{{ $t("termsOfService") }}</span>
+        </a>
+      </div>
     </div>
+
     <div class="button-contaienr">
       <!-- エクスポートボタン -->
       <button
@@ -381,6 +415,15 @@ function onClickFileBox (event: Event) {
       }
     }
   }
+}
+
+// 現在のサーバ情報
+.server-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  grid-gap: 0.375rem;
+  margin-top: 0.25rem;
 }
 
 .button-contaienr {

@@ -61,6 +61,7 @@ interface TIAtpWrapper {
   fetchPreferences (this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile (this: TIAtpWrapper, actor: string): Promise<null | TTProfile>
   fetchRepostUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
+  fetchServerInfo (this: TIAtpWrapper): Promise<Error | TTServerInfo>
   fetchSuggestions (this: TIAtpWrapper, dataRef: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
   fetchTimeFeeds (this: TIAtpWrapper, oldPosts: Array<TTPost>, direction: "new" | "old", author: TTUser, limit?: number): Promise<Error | undefined | string>
   fetchTimeline (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, replyControl?: Array<number>, repostControl?: Array<number>, limit?: number, cursor?: string, middle?: boolean): Promise<undefined | false | string>

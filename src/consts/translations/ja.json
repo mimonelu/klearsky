@@ -51,6 +51,9 @@
   "select": "選択",
   "users": "ユーザー",
 
+  "privacyPolicy": "プライバシーポリシー",
+  "termsOfService": "利用規約",
+
   "tag": "タグ",
   "tags": "タグ",
   "tagEdit": "マイタグを編集する",
