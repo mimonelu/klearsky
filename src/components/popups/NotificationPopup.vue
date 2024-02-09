@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted, reactive } from "vue"
+import { computed, inject, onBeforeUnmount, onMounted, reactive, type ComputedRef } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import NotificationList from "@/components/list/NotificationList.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -13,8 +13,20 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
+  total: ComputedRef<number>
 }>({
-  processing: false
+  processing: false,
+  total: computed((): number => {
+    let result = 0
+    mainState.notifications
+      .forEach((notificationGroup: TTNotificationGroup) => {
+        notificationGroup.notifications
+          .forEach(() => {
+            result ++
+          })
+      })
+    return result
+  }),
 })
 
 onBeforeUnmount(() => {
@@ -74,7 +86,7 @@ function scrolledToBottom () {
     <template #header>
       <h2>
         <SVGIcon name="bell" />
-        <span>{{ $t("notifications") }}</span>
+        <span>{{ $t("notifications") }} ({{ state.total }})</span>
       </h2>
     </template>
     <template #header-after>
