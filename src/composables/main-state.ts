@@ -643,13 +643,12 @@ async function updateNotifications (): Promise<boolean> {
   const canFetched = state.notificationCount < count
   if (count > 0) {
     state.notificationCount = count
-    return true
   }
   if (canFetched) {
     // NOTICE: 念のため + 1 している
     await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
   }
-  return false
+  return count > 0
 }
 
 function updateColorThemeSetting () {
