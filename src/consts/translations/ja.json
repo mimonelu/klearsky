@@ -342,6 +342,9 @@
   "backgroundOpacity": "壁紙 - 不透明度",
 
   "psySafety": "心理的安全性",
+  "hideNotificationBadge": "通知バッジの非表示",
+  "hideNotificationBadgeOff": "無効",
+  "hideNotificationBadgeOn": "有効",
   "hideNumberOfReaction": "リアクション数の非表示",
   "hideNumberOfReactionOff": "無効",
   "hideNumberOfReactionOn": "有効",

@@ -466,6 +466,19 @@ function closeHtmlPopupDisplay () {
               <span>💚 {{ $t("psySafety") }}</span>
             </div>
             <div class="settings-section__body">
+              <!-- 心理的安全性 - 通知バッジの非表示 -->
+              <div class="settings-section__sub-header">
+                <span>{{ $t("hideNotificationBadge") }}</span>
+              </div>
+              <Radios
+                class="radios-is-wide"
+                :state="mainState.currentSetting"
+                model="hideNotificationBadge"
+                :options="SETTINGS.HIDE_NOTIFICATION_BADGE"
+                layout="horizontal"
+                @update="saveSetting"
+              />
+
               <!-- 心理的安全性 - リアクション数の非表示 -->
               <div class="settings-section__sub-header">
                 <span>{{ $t("hideNumberOfReaction") }}</span>

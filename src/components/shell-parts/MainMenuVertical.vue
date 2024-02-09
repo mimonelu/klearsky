@@ -184,7 +184,7 @@ function moveToBottom () {
 
         <!-- 通知バッジ -->
         <div
-          v-if="mainState.notificationCount > 0"
+          v-if="mainState.notificationCount > 0 && !mainState.currentSetting.hideNotificationBadge"
           class="notification-count"
         >{{ mainState.notificationCount }}</div>
       </div>

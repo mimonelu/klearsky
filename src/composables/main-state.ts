@@ -582,6 +582,8 @@ function saveSettings () {
     state.settings[did].backgroundImage = undefined
   if (state.settings[did].backgroundOpacity == null)
     state.settings[did].backgroundOpacity = 0.5
+  if (state.settings[did].hideNotificationBadge == null)
+    state.settings[did].hideNotificationBadge = false
   if (state.settings[did].hideNumberOfReaction == null)
     state.settings[did].hideNumberOfReaction = false
   if (state.settings[did].myFeedsIndex == null)

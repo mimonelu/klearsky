@@ -7,6 +7,7 @@ type TTSetting = {
   contentLanguages?: Array<string>
   fontSize?: string
   globallineLayout?: "post" | "slim"
+  hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean
   imageAspectRatio?: string
   imageOption?: Array<number>

@@ -342,6 +342,9 @@
   "backgroundOpacity": "Wallpaper - Opacity",
 
   "psySafety": "Psychological Safety",
+  "hideNotificationBadge": "Hide notification badge",
+  "hideNotificationBadgeOff": "Disable",
+  "hideNotificationBadgeOn": "Enable",
   "hideNumberOfReaction": "Hide number of reactions",
   "hideNumberOfReactionOff": "Disable",
   "hideNumberOfReactionOn": "Enable",
