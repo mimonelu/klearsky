@@ -11,6 +11,10 @@ export default async function (
   checkIdentity?: (params: any) => boolean
 ): Promise<undefined | string | Error> {
   if (this.agent == null) return Error("noAgentError")
+
+  // 暫定処置
+  if (!feed) return
+
   const query: AppBskyFeedGetFeed.QueryParams = { feed }
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor

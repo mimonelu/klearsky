@@ -631,8 +631,25 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
     limit,
     direction === "new" ? undefined : state.notificationCursor
   )
-  if (result === false) state.openErrorPopup("errorApiFailed", "main-state/fetchNotifications")
-  else if (result != null) state.notificationCursor = result.cursor
+  if (result === false) {
+    state.openErrorPopup("errorApiFailed", "main-state/fetchNotifications")
+  } else if (result != null) {
+    if (result.cursor == null) {
+      return
+    }
+    if (state.notificationCursor == null) {
+      state.notificationCursor = result.cursor
+      return
+    }
+    const oldDate = new Date(state.notificationCursor)
+    const newDate = new Date(result.cursor)
+    if (Number.isNaN(oldDate.getTime()) ||
+        Number.isNaN(newDate.getTime()) ||
+        oldDate > newDate
+    ) {
+      state.notificationCursor = result.cursor
+    }
+  }
 }
 
 function openNotificationPopup () {
