@@ -244,6 +244,29 @@ function closeHtmlPopupDisplay () {
             </div>
           </div>
 
+          <!-- 通知取得間隔 -->
+          <div class="settings-section">
+            <div class="settings-section__header">
+              <span>{{ $t("notificationFetchInterval") }}</span>
+            </div>
+            <div class="settings-section__body">
+              <label class="selectbox selectbox-is-wide">
+                <select
+                  v-model="mainState.currentSetting.notificationFetchInterval"
+                  name="notificationFetchInterval"
+                  @change="changeSetting"
+                >
+                  <option
+                    v-for="interval, intervalIndex in SETTINGS.NOTIFICATION_FETCH_INTERVAL"
+                    :key="intervalIndex"
+                    :value="interval.value"
+                    :selected="interval.value === mainState.currentSetting.notificationFetchInterval"
+                  >{{ $t(interval.label) }}</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
           <!-- タイムラインの制御 -->
           <div class="settings-section">
             <div class="settings-section__header">

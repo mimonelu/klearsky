@@ -273,6 +273,12 @@
   "timeControlRelative": "相対表記",
   "timeControlAbsolute": "絶対表記",
 
+  "notificationFetchInterval": "通知を取得する間隔",
+  "notificationFetchInterval1": "取得しない",
+  "notificationFetchInterval2": "15秒ごと",
+  "notificationFetchInterval3": "30秒ごと",
+  "notificationFetchInterval4": "1分ごと",
+
   "timelineControl": "フォロー中フィードの制御",
   "timelineControlDescription": "次のダウンロードから有効です。",
   "replyControl": "リプライの制御",

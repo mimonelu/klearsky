@@ -54,6 +54,13 @@ type MainState = {
   openNotificationPopup: Function
   closeNotificationPopup: Function
 
+  // 通知タイマー
+
+  notificationTimer: null | number = null
+  clearNotificationInterval: () => void
+  updateNotifications: () => Promise<boolean>
+  updateNotificationInterval: () => void
+
   // 招待コード
 
   inviteCodes: Array<TTInviteCode>

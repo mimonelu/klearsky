@@ -12,6 +12,12 @@
     { "label": "timeControlRelative", "value": "relative" },
     { "label": "timeControlAbsolute", "value": "absolute" }
   ],
+  "NOTIFICATION_FETCH_INTERVAL": [
+    { "label": "notificationFetchInterval1", "value": 0 },
+    { "label": "notificationFetchInterval2", "value": 15000 },
+    { "label": "notificationFetchInterval3", "value": 30000 },
+    { "label": "notificationFetchInterval4", "value": 60000 }
+  ],
   "REPLY_CONTROLS": [
     { "label": "replyControl1", "value": 1 },
     { "label": "replyControl2", "value": 2 },

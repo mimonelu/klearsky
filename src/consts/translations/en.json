@@ -269,6 +269,12 @@
   "wordMuteRemoveConfirmation": "Delete word mute",
   "wordMuteRemoveConfirmationMessage": "Delete the following word mute. Are you sure?",
 
+  "notificationFetchInterval": "Interval to Fetch Notifications",
+  "notificationFetchInterval1": "OFF",
+  "notificationFetchInterval2": "Every 15 sec.",
+  "notificationFetchInterval3": "Every 30 sec.",
+  "notificationFetchInterval4": "Every 1 min.",
+
   "timeControl": "Time Representation",
   "timeControlRelative": "Relative",
   "timeControlAbsolute": "Absolute",

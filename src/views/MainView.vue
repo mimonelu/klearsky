@@ -90,7 +90,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   clearUpdateJwtInterval()
-  clearNotificationInterval()
+  state.clearNotificationInterval()
 })
 
 const router = useRouter()
@@ -490,32 +490,10 @@ async function setupUpdateJwtInterval () {
   }, CONSTS.INTERVAL_OF_UPDATE_JWT)
 }
 
-let notificationTimer: null | number = null
-
-function clearNotificationInterval () {
-  if (notificationTimer != null) {
-    clearInterval(notificationTimer)
-    notificationTimer = null
-  }
-}
-
 async function setupNotificationInterval () {
-  clearNotificationInterval()
-  await updateNotification()
-  // @ts-ignore // TODO:
-  notificationTimer = setInterval(updateNotification, CONSTS.INTERVAL_OF_FETCH_NOTIFICATIONS)
-}
-
-async function updateNotification () {
-  const count = await state.atp.fetchNotificationCount() ?? 0
-  const canFetched = state.notificationCount < count
-  if (count > 0) {
-    state.notificationCount = count
+  state.updateNotificationInterval()
+  if (await state.updateNotifications()) {
     updatePageTitle()
-  }
-  if (canFetched) {
-    // NOTICE: 念のため + 1 している
-    await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
   }
 }
 

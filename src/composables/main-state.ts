@@ -61,7 +61,7 @@ state.saveSettings = saveSettings
 state.updateCurrentLanguageSetting = updateCurrentLanguageSetting
 state.updateColorThemeSetting = updateColorThemeSetting
 
-  // 通知
+// 通知
 
 state.notifications = []
 state.notificationCursor = undefined
@@ -71,6 +71,13 @@ state.notificationPopupDisplay = false
 state.fetchNotifications = fetchNotifications
 state.openNotificationPopup = openNotificationPopup
 state.closeNotificationPopup = closeNotificationPopup
+
+// 通知タイマー
+
+state.notificationTimer = null
+state.clearNotificationInterval = clearNotificationInterval
+state.updateNotifications = updateNotifications
+state.updateNotificationInterval = updateNotificationInterval
 
 // 招待コード
 
@@ -512,6 +519,7 @@ function resetSettings () {
 function updateSettings () {
   updateCurrentLanguageSetting()
   updateFontSizeSetting()
+  updateNotificationInterval()
   updateColorThemeSetting()
 }
 
@@ -533,6 +541,8 @@ function saveSettings () {
   else state.settings[did].contentLanguages = getSanitizedLanguages(state.settings[did].contentLanguages)
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
+  if (state.settings[did].notificationFetchInterval == null)
+    state.settings[did].notificationFetchInterval = 15000
   if (state.settings[did].tags == null)
     state.settings[did].tags = []
   if (state.settings[did].wordMute == null)
@@ -609,6 +619,37 @@ function updateFontSizeSetting () {
     "data-font-size",
     state.currentSetting?.fontSize ?? "medium"
   )
+}
+
+function clearNotificationInterval () {
+  if (state.notificationTimer != null) {
+    clearInterval(state.notificationTimer)
+    state.notificationTimer = null
+  }
+}
+
+function updateNotificationInterval () {
+  state.clearNotificationInterval()
+  if (state.currentSetting.notificationFetchInterval === 0) return
+  // @ts-ignore // TODO:
+  state.notificationTimer = setInterval(
+    state.updateNotifications,
+    state.currentSetting.notificationFetchInterval ?? CONSTS.DEFAULT_NOTIFICATION_FETCH_INTERVAL
+  )
+}
+
+async function updateNotifications (): Promise<boolean> {
+  const count = await state.atp.fetchNotificationCount() ?? 0
+  const canFetched = state.notificationCount < count
+  if (count > 0) {
+    state.notificationCount = count
+    return true
+  }
+  if (canFetched) {
+    // NOTICE: 念のため + 1 している
+    await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
+  }
+  return false
 }
 
 function updateColorThemeSetting () {
