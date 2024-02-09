@@ -13,30 +13,30 @@ export default async function (
   const query: AppBskyNotificationListNotifications.QueryParams = {}
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
-  const response: AppBskyNotificationListNotifications.Response =
+  const response: Error | AppBskyNotificationListNotifications.Response =
     await (this.agent as BskyAgent).listNotifications(query)
       .then((value: AppBskyNotificationListNotifications.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/listNotifications]", response)
+  if (response instanceof Error) return false
   if (!response.success) return false
 
   let newNotificationCount = 0
 
   const newValues: Array<TTNotificationGroup> = [...values]
 
-  response.data.notifications.forEach(
-    (notification: AppBskyNotificationListNotifications.Notification) => {
-      const existence = newValues.some(
-        (valueGroup: TTNotificationGroup) =>
-          valueGroup.notifications.some(
-            (value: TTNotification) => value.cid === notification.cid
-          )
-      )
+  response.data.notifications
+    .forEach((notification: AppBskyNotificationListNotifications.Notification) => {
+      const existence = newValues.some((valueGroup: TTNotificationGroup) => {
+        return valueGroup.notifications.some((value: TTNotification) => {
+          return value.cid === notification.cid
+        })
+      })
       if (existence) return
       if (cursor == null) newNotificationCount ++
       const reason =
         // フィードジェネレーターへのいいねかどうか
-        notification.reason === "like" && (notification.reasonSubject?.indexOf("app.bsky.feed.generator") ?? - 1) !== - 1
+        notification.reason === "like" && isSubjectFeedGenerator(notification.reasonSubject)
           ? "likeGenerator"
           : notification.reason
       const reasonSubject =
@@ -60,8 +60,9 @@ export default async function (
         uri: notification.uri,
         isRead: notification.isRead,
       }
-      const existenceGroup = newValues.find((value: TTNotificationGroup) =>
-        value.reason === reason && value.reasonSubject === reasonSubject)
+      const existenceGroup = newValues.find((value: TTNotificationGroup) => {
+        return value.reason === reason && value.reasonSubject === reasonSubject
+      })
       if (existenceGroup == null) newValues.push({
           id: notification.cid,
           indexedAt: new Date(notification.indexedAt),
@@ -79,27 +80,34 @@ export default async function (
   newValues.forEach((group: TTNotificationGroup) => {
     if (group.post != null) return
     if (group.reason !== "like" &&
-      group.reason !== "quote" &&
-      group.reason !== "reply" &&
-      group.reason !== "repost") return
+        group.reason !== "quote" &&
+        group.reason !== "reply" &&
+        group.reason !== "repost") return
+
+    // フィードジェネレーターの引用RPはスキップ
+    if (group.reason === "quote" && isSubjectFeedGenerator(group.reasonSubject)) return
+
     uris.add(group.reasonSubject as string)
   })
   const posts: undefined | false | Array<TTPost> = await this.fetchPosts(Array.from(uris))
   if (Array.isArray(posts))
     newValues.forEach((value: TTNotificationGroup) => {
-      const post: undefined | TTPost =
-        posts.find((post: TTPost) => value.reasonSubject === post.uri)
+      const post: undefined | TTPost = posts.find((post: TTPost) => {
+        return value.reasonSubject === post.uri
+      })
       if (post != null) value.post = post
     })
 
   // フィードジェネレーターの取得
   const generatorUris: Set<string> = new Set()
   newValues.forEach((group: TTNotificationGroup) => {
-    if (group.reason === "likeGenerator")
+    if (group.reason === "likeGenerator" ||
+        (group.reason === "quote" && isSubjectFeedGenerator(group.reasonSubject)))
       generatorUris.add(group.reasonSubject as string)
   })
   if (generatorUris.size > 0) {
-    const generators: Error | Array<TTFeedGenerator> = await this.fetchFeedGenerators(Array.from(generatorUris))
+    const generators: Error | Array<TTFeedGenerator> =
+      await this.fetchFeedGenerators(Array.from(generatorUris))
     if (!(generators instanceof Error))
       newValues.forEach((value: TTNotificationGroup) => {
         const generator: undefined | TTFeedGenerator =
@@ -145,4 +153,8 @@ export default async function (
     cursor: response.data.cursor,
     newNotificationCount,
   }
+}
+
+function isSubjectFeedGenerator (reasonSubject?: string): boolean {
+  return (reasonSubject?.indexOf("/app.bsky.feed.generator/") ?? - 1) !== - 1
 }
