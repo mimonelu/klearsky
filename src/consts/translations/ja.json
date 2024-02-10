@@ -92,7 +92,7 @@
   "blocked": "被ブロック中",
   "blocking": "ブロック中",
   "postBlocked": "このポストを表示することはできません。",
-  "postNotFound": "このポストは存在しません。",
+  "postNotFound": "このコンテンツは存在しません。",
 
   "reportSendAccount": "ユーザーをレポートする",
   "reportSendPost": "ポストをレポートする",

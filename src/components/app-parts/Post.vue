@@ -8,6 +8,7 @@ import FeedCard from "@/components/app-parts/FeedCard.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LikeButton from "@/components/buttons/LikeButton.vue"
 import LinkCard from "@/components/app-parts/LinkCard.vue"
+import ListCard from "@/components/list/ListCard.vue"
 import Loader from "@/components/common/Loader.vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import Post from "@/components/app-parts/Post.vue"
@@ -58,6 +59,9 @@ const state = reactive<{
 
   // フィードカード
   hasFeedCard: ComputedRef<boolean>
+
+  // リストカード
+  hasListCard: ComputedRef<boolean>
 
   // ポストマスクの表示
   masked: ComputedRef<boolean>
@@ -154,6 +158,9 @@ const state = reactive<{
 
   // フィードカード
   hasFeedCard: computed((): boolean => props.post.embed?.record?.$type === "app.bsky.feed.defs#generatorView"),
+
+  // リストカード
+  hasListCard: computed((): boolean => props.post.embed?.record?.$type === "app.bsky.graph.defs#listView"),
 
   // ポストマスクの表示
   masked: computed((): boolean => {
@@ -544,6 +551,21 @@ async function translateText (forceTranslate: boolean) {
   props.post.__custom.translatedText = response
 }
 
+// マイリストの削除
+async function deleteList (list: TTList) {
+  if (list.creator.did !== mainState.atp.session?.did) return
+  const targetIndex = mainState.myList.findIndex((myList: TTList) => {
+    return myList.uri === list.uri
+  })
+  if (targetIndex === - 1) return
+  mainState.myList.splice(targetIndex, 1)
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myList)
+
+  delete props.post.embed?.record
+}
+
 function onActivateHashTag (text: string) {
   emit("onActivateHashTag", text)
 }
@@ -876,6 +898,19 @@ function onActivateHashTag (text: string) {
               @onActivateMention="$emit('click')"
               @onActivateHashTag="$emit('click')"
             />
+
+            <!-- リストカード -->
+            <ListCard
+              v-if="state.hasListCard"
+              :list="(post.embed as any).record"
+              :isCompact="false"
+              :orderButtonDisplay="false"
+              :createDisplay="true"
+              @click.prevent.stop
+              @deleteList="deleteList"
+              @onActivateMention="$emit('click')"
+              @onActivateHashTag="$emit('click')"
+            />
           </template>
 
           <!-- ポストタグ -->
@@ -900,9 +935,9 @@ function onActivateHashTag (text: string) {
           </div>
         </div>
 
-        <!-- 引用リポスト -->
+        <!-- 引用リポスト／リストカード -->
         <template v-if="post.embed?.record != null">
-          <!-- 引用リポスト - 見つからない -->
+          <!-- 引用リポスト／リストカード - 見つからない -->
           <div
             v-if="post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'"
             class="textlabel repost"
@@ -912,7 +947,7 @@ function onActivateHashTag (text: string) {
             </div>
           </div>
 
-          <!-- 引用リポスト - ブロック中／被ブロック中 -->
+          <!-- 引用リポスト／リストカード - ブロック中／被ブロック中 -->
           <div
             v-else-if="
               post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
@@ -1087,6 +1122,7 @@ function onActivateHashTag (text: string) {
     .image-folder-button,
     .quad-images,
     .feed-card,
+    .list-card,
     .reaction-container {
       display: none;
     }
@@ -1502,13 +1538,20 @@ function onActivateHashTag (text: string) {
   }
 }
 
-.feed-card {
-  background-color: var(--accent-color-0125);
+// フィードカード
+// リストカード
+.feed-card,
+.list-card {
   border: 1px solid var(--accent-color-025);
   border-radius: var(--border-radius);
   &:focus, &:hover {
     border-color: var(--accent-color-05);
   }
+}
+
+// フィードカード
+.feed-card {
+  background-color: var(--accent-color-0125);
 }
 
 .post-tag-container {
