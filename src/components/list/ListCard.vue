@@ -132,7 +132,7 @@ function updateList (list: TTList) {
   props.list.description = list.description
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myList)
+  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
 }
 
 async function deleteList () {
@@ -153,7 +153,7 @@ async function deleteList () {
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myList)
+  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
 
   // 削除したマイリストのリストフィード／ユーザーページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
   if (props.list.creator.did === mainState.atp.session?.did &&

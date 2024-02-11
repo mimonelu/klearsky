@@ -28,7 +28,7 @@ function close () {
     <template #body>
       <!-- リスト一覧 -->
       <Lists
-        :lists="mainState.myList"
+        :lists="mainState.myLists.items"
         :headerDisplay="true"
         :loaderDisplay="false"
         :isCompact="false"

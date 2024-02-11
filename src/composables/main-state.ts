@@ -6,6 +6,7 @@ import { computed, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import MyFeeds from "@/composables/main-state/my-feeds"
+import MyLists from "@/composables/main-state/my-lists"
 import MyWorker from "@/composables/main-state/my-worker"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
@@ -229,10 +230,9 @@ state.fetchCurrentList = fetchCurrentList
 state.fetchCurrentListItems = fetchCurrentListItems
 state.fetchCurrentListFeeds = fetchCurrentListFeeds
 
-// リスト - マイリスト
+// マイリスト
 
-state.myList = []
-state.fetchMyLists = fetchMyLists
+state.myLists = new MyLists(state)
 
 // グローバルライン
 
@@ -1169,78 +1169,6 @@ function sortFeedPreferencesSavedAndPinned () {
 }
 
 // リスト
-
-async function fetchMyLists () {
-  const account = state.atp.session?.did
-  if (!account) return
-  let cursor: undefined | string | Error
-
-  // ミュートリストを取得
-  cursor = undefined
-  for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_ITERATION; i ++) {
-    cursor = await state.atp.fetchListMutes(
-      state.myList,
-      CONSTS.LIMIT_OF_FETCH_MY_LIST,
-      cursor as undefined | string
-    )
-    if (cursor instanceof Error) {
-      // TODO:
-      break
-    }
-    if (cursor == null) break
-  }
-
-  // ブロックリストを取得
-  cursor = undefined
-  for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_ITERATION; i ++) {
-    cursor = await state.atp.fetchListBlocks(
-      state.myList,
-      CONSTS.LIMIT_OF_FETCH_MY_LIST,
-      cursor as undefined | string
-    )
-    if (cursor instanceof Error) {
-      // TODO:
-      break
-    }
-    if (cursor == null) break
-  }
-
-  // 全マイリストの取得
-  cursor = undefined
-  for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_ITERATION; i ++) {
-    cursor = await state.atp.fetchLists(
-      state.myList,
-      account,
-      CONSTS.LIMIT_OF_FETCH_MY_LIST,
-      cursor as undefined | string
-    )
-    if (cursor instanceof Error) {
-      // TODO:
-      break
-    }
-    if (cursor == null) break
-  }
-
-  // 全マイリストユーザーの取得
-  for (const list of state.myList) {
-    cursor = undefined
-    list.items = []
-    for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS_ITERATION; i ++) {
-      const result = await state.atp.fetchListItems(
-        list.items,
-        list.uri,
-        CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS,
-        cursor
-      )
-      if (result instanceof Error) {
-        // TODO:
-        break
-      }
-      if (result == null) break
-      cursor = result
-    }
-  }
-}
 
 async function fetchCurrentList (listUri: string): Promise<boolean> {
   const response: TTList | Error =

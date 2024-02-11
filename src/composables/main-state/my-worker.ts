@@ -35,7 +35,7 @@ export default class {
 
           // 全セッションキャッシュの反映 - マイリスト
           if (sessionCache.myList != null) {
-            mainState.myList = sessionCache.myList
+            mainState.myLists.items = sessionCache.myList
           }
 
           // 全セッションキャッシュの反映 - 招待コード

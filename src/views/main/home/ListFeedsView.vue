@@ -16,15 +16,10 @@ async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
 
 // マイリストの削除
 async function deleteList (list: TTList) {
-  if (list.creator.did !== mainState.atp.session?.did) return
-  const targetIndex = mainState.myList.findIndex((myList: TTList) => {
-    return myList.uri === list.uri
-  })
-  if (targetIndex === - 1) return
-  mainState.myList.splice(targetIndex, 1)
+  if (!mainState.myLists.remove(list.uri)) return
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myList)
+  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
 }
 
 // インフィニットスクロール

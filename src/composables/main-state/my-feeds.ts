@@ -266,7 +266,7 @@ export default class {
   }
 
   synchronizeToMyList () {
-    this.mainState.myList.forEach((myList: TTList) => {
+    this.mainState.myLists.items.forEach((myList: TTList) => {
       const index = this.items.findIndex((item: TTMyFeedsItem) => {
         return item.value.uri === myList.uri
       })

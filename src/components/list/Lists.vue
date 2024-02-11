@@ -42,14 +42,14 @@ async function updateMylist () {
     $t("confirmation"),
     $t("myListConfirmation")
   )) return
-  mainState.myList.splice(0)
+  mainState.myLists.items.splice(0)
   mainState.loaderDisplay = true
-  await mainState.fetchMyLists()
+  await mainState.myLists.fetchAll()
   mainState.myFeeds.synchronizeToMyList()
   mainState.loaderDisplay = false
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myList)
+  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
 }
 
 function openListEditPopup () {
@@ -64,18 +64,14 @@ function addList (list: TTList) {
   props.lists.unshift(list)
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myList)
+  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
 }
 
 function deleteList (list: TTList) {
-  const targetIndex = props.lists.findIndex((myList: TTList) => {
-    return myList.uri === list.uri
-  })
-  if (targetIndex === - 1) return
-  props.lists.splice(targetIndex, 1)
+  if (!mainState.myLists.remove(list.uri)) return
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myList)
+  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
 }
 
 function clicked (list?: TTList) {

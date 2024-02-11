@@ -212,10 +212,9 @@ type MainState = {
   fetchCurrentListItems: (direction: "old" | "new") => Promise<boolean>
   fetchCurrentListFeeds: (direction: "old" | "new", middleCursor?: string) => Promise<boolean>
 
-  // リスト - マイリスト
+  // マイリスト
 
-  myList: Array<TTList>
-  fetchMyLists: Function
+  myLists: TTMyLists
 
   // グローバルライン
 

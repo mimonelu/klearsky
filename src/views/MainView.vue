@@ -255,12 +255,12 @@ async function processAfterLogin () {
   }
 
   // 全マイリストと全マイリストユーザーの取得
-  if (state.myList.length === 0) {
-    state.fetchMyLists().then(() => {
+  if (state.myLists.items.length === 0) {
+    state.myLists.fetchAll().then(() => {
       state.myFeeds.synchronizeToMyList()
 
       // セッションキャッシュの設定
-      state.myWorker.setSessionCache("myList", state.myList)
+      state.myWorker.setSessionCache("myList", state.myLists.items)
     })
   }
 
@@ -511,7 +511,7 @@ async function updateCurrentList () {
   // 現在のリストを取得
   // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
   state.currentList = undefined
-  state.currentList = state.myList.find((list: TTList) => {
+  state.currentList = state.myLists.items.find((list: TTList) => {
     return list.uri === listUri
   })
   if (state.currentList == null) {
@@ -655,7 +655,7 @@ function broadcastListener (event: MessageEvent) {
 
         // セッションキャッシュの反映 - マイリスト
         case "myList": {
-          state.myList = data.value
+          state.myLists.items = data.value
           state.myFeeds.synchronizeToMyList()
           break
         }
