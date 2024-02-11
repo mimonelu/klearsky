@@ -4,6 +4,7 @@ import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
+import MenuTickerSendLinkCard from "@/components/menu-items/SendLinkCard.vue"
 import MenuTickerTranslateText from "@/components/menu-items/TranslateText.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -118,6 +119,12 @@ async function deleteList () {
     :display="display"
     :container="container"
   >
+    <!-- リンクカードで投稿する -->
+    <MenuTickerSendLinkCard
+      :uri="list.uri"
+      @close="emit('close')"
+    />
+
     <!-- テキストを翻訳する -->
     <MenuTickerTranslateText
       :text="list.description"

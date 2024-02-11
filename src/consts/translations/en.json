@@ -486,6 +486,7 @@
   "makeAvatarBlobRefError": "An error occurred while processing avatar image.",
   "noAgentError": "No agent.",
   "noGeneratorError": "No feed generator.",
+  "noListError": "No list.",
   "noSessionError": "No active session. Please log in again.",
   "offlineError": "No Internet connection.",
   "parseOgpError": "An error occurred while parsing OGP. The web page may not be using OGP. please send again without the OGP image attached.",

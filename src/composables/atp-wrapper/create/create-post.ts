@@ -50,43 +50,50 @@ export default async function (
   // カスタムフィールド - Lightning
   if (params.lightning) record.lightning = params.lightning
 
-  // リンクカード／フィードカード
+  // リンクカード
   let external: null | any = null
-  let feedCard: undefined | any
+  let feedOrLinkCard: undefined | any
   if (params.url?.length > 0) {
-    // フィードカード
-    let generatorUri: undefined | string
-    const isAtUri = params.url.match(/^at:\/\/did:plc:[\w\.\-]+\/app\.bsky\.feed\.generator\/[\w\.\-]+$/) != null
-    if (isAtUri) {
-      generatorUri = params.url
-    } else {
-      const matches = params.url.match(/^https?:\/\/[\w\.\-]+\/profile\/did:plc:([\w\.\-]+)\/feed\/([\w\.\-]+)$/)
-      if (matches != null) {
-        const did = matches[1]
-        const id = matches[2]
-        generatorUri = `at://did:plc:${did}/app.bsky.feed.generator/${id}`
-      }
-    }
+    // リンクカード - フィードカード
+    const generatorUri = isFeedGeneratorAtUri(params.url)
+      ? params.url
+      : convertFeedGeneratorUriToAtUri(params.url)
     if (generatorUri != null) {
       const generator: Error | TTFeedGenerator = await this.fetchFeedGenerator(generatorUri)
       if (generator instanceof Error) return Error("noGeneratorError")
-      feedCard = {
+      feedOrLinkCard = {
         $type: "app.bsky.embed.record",
         record: {
           cid: generator.cid,
           uri: generator.uri,
         },
       }
-    }
 
-    // リンクカード
-    else {
-      external = await Util.parseOgp(
-        this,
-        params.url,
-        params.urlHasImage?.includes(true) ?? false
-      )
-      if (external == null || external instanceof Error) return Error("parseOgpError")
+    } else {
+      // リンクカード - リストカード
+      const listUri = isListAtUri(params.url)
+        ? params.url
+        : convertListUriToAtUri(params.url)
+      if (listUri != null) {
+        const list: Error | TTList = await this.fetchList(listUri)
+        if (list instanceof Error) return Error("noListError")
+        feedOrLinkCard = {
+          $type: "app.bsky.embed.record",
+          record: {
+            cid: list.cid,
+            uri: list.uri,
+          },
+        }
+
+      // リンクカード - リンクカード 
+      } else {
+        external = await Util.parseOgp(
+          this,
+          params.url,
+          params.urlHasImage?.includes(true) ?? false
+        )
+        if (external == null || external instanceof Error) return Error("parseOgpError")
+      }
     }
   }
 
@@ -155,8 +162,8 @@ export default async function (
       record.embed.media = { $type: "app.bsky.embed.images", images }
     else if (external != null)
       record.embed.media = { $type: "app.bsky.embed.external", external }
-    else if (feedCard != null)
-      record.embed.media = feedCard
+    else if (feedOrLinkCard != null)
+      record.embed.media = feedOrLinkCard
   }
 
   // 画像またはリンクカード
@@ -165,8 +172,8 @@ export default async function (
       record.embed = { $type: "app.bsky.embed.images", images }
     else if (external != null)
       record.embed = { $type: "app.bsky.embed.external", external }
-    else if (feedCard != null)
-      record.embed = feedCard
+    else if (feedOrLinkCard != null)
+      record.embed = feedOrLinkCard
   }
 
   // セルフポストラベル
@@ -180,4 +187,28 @@ export default async function (
     await (this.agent as BskyAgent).post(record)
   console.log("[klearsky/post]", response)
   return response
+}
+
+function isFeedGeneratorAtUri (uri: string): boolean {
+  return uri.match(/^at:\/\/did:plc:[\w\.\-]+\/app\.bsky\.feed\.generator\/[\w\.\-]+$/) != null
+}
+
+function isListAtUri (uri: string): boolean {
+  return uri.match(/^at:\/\/did:plc:[\w\.\-]+\/app\.bsky\.graph\.list\/[\w\.\-]+$/) != null
+}
+
+function convertFeedGeneratorUriToAtUri (uri: string): null | string {
+  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/profile\/did:plc:([\w\.\-]+)\/feed\/([\w\.\-]+)$/)
+  if (matches?.[1] == null || matches?.[2] == null) return null
+  const did = matches[1]
+  const rkey = matches[2]
+  return `at://did:plc:${did}/app.bsky.feed.generator/${rkey}`
+}
+
+function convertListUriToAtUri (uri: string): null | string {
+  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/profile\/did:plc:([\w\.\-]+)\/lists\/([\w\.\-]+)$/)
+  if (matches?.[1] == null || matches?.[2] == null) return null
+  const did = matches[1]
+  const rkey = matches[2]
+  return `at://did:plc:${did}/app.bsky.graph.list/${rkey}`
 }
