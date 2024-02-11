@@ -84,8 +84,13 @@ export default async function (
         group.reason !== "reply" &&
         group.reason !== "repost") return
 
-    // フィードジェネレーターの引用RPはスキップ
-    if (group.reason === "quote" && isSubjectFeedGenerator(group.reasonSubject)) return
+    if (group.reason === "quote") {
+      // フィードジェネレーターの引用RPはスキップ
+      if (isSubjectFeedGenerator(group.reasonSubject)) return
+
+      // リストの引用RPはスキップ
+      if (isSubjectList(group.reasonSubject)) return
+    }
 
     postUris.add(group.reasonSubject as string)
   })
@@ -116,6 +121,23 @@ export default async function (
           generators.find((generator: TTFeedGenerator) => value.reasonSubject === generator.uri)
         if (generator != null) value.generator = generator
       })
+  }
+
+  // リストの取得
+  const listUris: Set<string> = new Set()
+  newValues.forEach((group: TTNotificationGroup) => {
+    if (group.list != null) return
+    if (group.reason === "quote" && isSubjectList(group.reasonSubject)) {
+      listUris.add(group.reasonSubject as string)
+    }
+  })
+  if (listUris.size > 0) {
+    const lists: Array<TTList> = await this.fetchLists(Array.from(listUris))
+    newValues.forEach((value: TTNotificationGroup) => {
+      const list: undefined | TTList =
+        lists.find((list: TTList) => value.reasonSubject === list.uri)
+      if (list != null) value.list = list
+    })
   }
 
   currentValues.splice(0, currentValues.length, ...newValues)
@@ -159,4 +181,8 @@ export default async function (
 
 function isSubjectFeedGenerator (reasonSubject?: string): boolean {
   return (reasonSubject?.indexOf("/app.bsky.feed.generator/") ?? - 1) !== - 1
+}
+
+function isSubjectList (reasonSubject?: string): boolean {
+  return (reasonSubject?.indexOf("/app.bsky.graph.list/") ?? - 1) !== - 1
 }

@@ -313,6 +313,7 @@ type TTNotificationGroup = {
   notifications: Array<TTNotification>
   post?: TTPost
   generator?: TTFeedGenerator
+  list?: TTList
   reason: TTNotificationReason
   reasonSubject?: string
   __folding: boolean

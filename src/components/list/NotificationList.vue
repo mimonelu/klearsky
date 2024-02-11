@@ -3,6 +3,7 @@ import { inject } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
+import ListCard from "@/components/list/ListCard.vue"
 import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
@@ -51,6 +52,17 @@ function makeSubjectTo (notification: TTNotification): any {
       return { name: "post", query: { uri: notification.uri } }
     }
   }
+}
+
+// マイリストの削除
+async function deleteList (notificationGroup: TTNotificationGroup) {
+  if (notificationGroup.list == null) return
+  if (!mainState.myLists.remove(notificationGroup.list.uri)) return
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+
+  delete notificationGroup.list
 }
 </script>
 
@@ -150,25 +162,41 @@ function makeSubjectTo (notification: TTNotification): any {
         </template>
       </div>
 
-      <!-- ユーザーポスト -->
-      <Post
-        v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.post != null"
-        position="slim"
-        :post="notificationGroup.post"
-        @click="$emit('close')"
-      />
+      <template v-if="isGroupingReason(notificationGroup.reason)">
+        <!-- ユーザーポスト -->
+        <Post
+          v-if="notificationGroup.post != null"
+          position="slim"
+          :post="notificationGroup.post"
+          @click="$emit('close')"
+        />
 
-      <!-- フィードジェネレーター -->
-      <FeedCard
-        v-if="isGroupingReason(notificationGroup.reason) && notificationGroup.generator != null"
-        :generator="notificationGroup.generator"
-        :menuDisplay="true"
-        :orderButtonDisplay="false"
-        :creatorDisplay="false"
-        @click="$emit('close')"
-        @onActivateMention="$emit('close')"
-        @onActivateHashTag="$emit('close')"
-      />
+        <!-- フィードジェネレーター -->
+        <FeedCard
+          v-if="notificationGroup.generator != null"
+          :generator="notificationGroup.generator"
+          :menuDisplay="true"
+          :orderButtonDisplay="false"
+          :creatorDisplay="false"
+          @click="$emit('close')"
+          @onActivateMention="$emit('close')"
+          @onActivateHashTag="$emit('close')"
+        />
+
+        <!-- リストカード -->
+        <ListCard
+          v-if="notificationGroup.list != null"
+          :list="notificationGroup.list"
+          :isCompact="false"
+          :orderButtonDisplay="false"
+          :createDisplay="true"
+          @click.prevent.stop
+          @close="$emit('close')"
+          @deleteList="deleteList(notificationGroup)"
+          @onActivateMention="$emit('close')"
+          @onActivateHashTag="$emit('close')"
+        />
+      </template>
     </div>
   </div>
 </template>

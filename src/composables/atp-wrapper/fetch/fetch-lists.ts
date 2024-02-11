@@ -1,29 +1,19 @@
-import type { AppBskyGraphGetLists, BskyAgent } from "@atproto/api"
-
 export default async function (
   this: TIAtpWrapper,
-  currentLists: Array<TTList>,
-  actor: string,
-  limit?: number,
-  cursor?: string
-): Promise<undefined | string | Error> {
-  if (this.agent == null) return Error("noAgentError")
-  const query: AppBskyGraphGetLists.QueryParams = { actor }
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
-
-  const response: AppBskyGraphGetLists.Response =
-    await (this.agent as BskyAgent).app.bsky.graph.getLists(query)
-      .then((value: AppBskyGraphGetLists.Response) => value)
-      .catch((error: any) => error)
-  console.log("[klearsky/getLists]", response)
-  if (!response.success) return Error("apiError")
-
-  const newLists: Array<TTList> = response.data.lists
-    .filter((list: TTList) => !currentLists
-      .some((current: TTList) => list.uri === current.uri))
-  if (cursor == null) currentLists.unshift(...newLists)
-  else currentLists.push(...newLists)
-
-  return newLists.length < (limit ?? 1) ? undefined : response.data.cursor
+  lists: string[]
+): Promise<TTList[]> {
+  const results: TTList[] = []
+  const tasks = lists.map((list: string) => {
+    return this.fetchList(list)
+  })
+  const responses = await Promise.allSettled(tasks)
+  responses.forEach((response: PromiseSettledResult<any>) => {
+    if (response == null ||
+        response.status === "rejected" ||
+        response.value instanceof Error) {
+      return
+    }
+    results.push(response.value)
+  })
+  return results
 }

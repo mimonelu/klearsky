@@ -47,8 +47,9 @@ interface TIAtpWrapper {
   fetchListBlocks (this: TIAtpWrapper, lists: Array<TTList>, limit?: number, cursor?: string): Promise<undefined | string | Error>
   fetchListItems (this: TIAtpWrapper, currentListItems: Array<TTListItem>, list: string, limit?: number, cursor?: string): Promise<undefined | string | Error>
   fetchListMutes (this: TIAtpWrapper, lists: Array<TTList>, limit?: number, cursor?: string): Promise<undefined | string | Error>
-  fetchLists (this: TIAtpWrapper, currentLists: Array<TTList>, actor: string, limit?: number, cursor?: string): Promise<undefined | string | Error>
+  fetchActorLists (this: TIAtpWrapper, currentLists: Array<TTList>, actor: string, limit?: number, cursor?: string): Promise<undefined | string | Error>
   fetchListFeed (this: TIAtpWrapper, currentFeeds: Array<TTFeed>, list: string, limit?: number, cursor?: string, middle?: boolean, checkIdentity?: (params: any) => boolean): Promise<Error | undefined | string>
+  fetchLists (this: TIAtpWrapper, lists: string[]): Promise<TTList[]>
   fetchLogAudit: (this: TIAtpWrapper, did: string) => Promise<undefined | any>
   fetchMutingUsers (this: TIAtpWrapper, users: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
   fetchNotificationCount (this: TIAtpWrapper): Promise<null | number>

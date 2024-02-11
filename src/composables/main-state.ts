@@ -986,7 +986,7 @@ async function fetchAuthorLists (direction: "new" | "old") {
   // ブロックされている
   if (state.currentProfile?.viewer.blockedBy) return
 
-  const cursor = await state.atp.fetchLists(
+  const cursor = await state.atp.fetchActorLists(
     state.currentAuthorLists,
     account,
     CONSTS.LIMIT_OF_FETCH_AUTHOR_LIST,

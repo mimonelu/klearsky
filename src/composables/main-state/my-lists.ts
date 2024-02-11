@@ -47,7 +47,7 @@ export default class {
     // 全マイリストの取得
     cursor = undefined
     for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_ITERATION; i ++) {
-      cursor = await this.mainState.atp.fetchLists(
+      cursor = await this.mainState.atp.fetchActorLists(
         this.items,
         account,
         CONSTS.LIMIT_OF_FETCH_MY_LIST,
