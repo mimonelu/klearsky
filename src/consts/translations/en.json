@@ -387,7 +387,7 @@
   "replyUnknown": "Reply address unknown",
   "quoteRepost": "Quote repost",
   "text": "Text",
-  "LinkCardPlaceHolder": "Link card's URL / feed's AT URI",
+  "LinkCardPlaceHolder": "URL/AT URI(feed or list)",
   "urlHasImage": "Attach OGP image to link card",
   "imageBoxes": "Images",
   "alts": "ALT texts",

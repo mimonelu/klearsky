@@ -387,7 +387,7 @@
   "replyUnknown": "リプライ先不明",
   "quoteRepost": "引用リポスト",
   "text": "テキスト",
-  "LinkCardPlaceHolder": "リンクカードのURL／フィードのAT URI",
+  "LinkCardPlaceHolder": "URL／AT URI（フィードかリスト）",
   "urlHasImage": "リンクカードにOGP画像を添付する",
   "imageBoxes": "画像",
   "alts": "代替テキスト",
