@@ -11,9 +11,17 @@ type RichParam = {
 
 const INTERNAL_LINK_ITEMS = [
   // カスタムフィードページ
+  // TODO: DID指定だけではなくハンドル指定も対応すること
   {
     src: new RegExp("^https:\/\/bsky\.app\/profile\/did:plc:([^\/]+)\/feed\/([^\/]+)"),
     dst: "/home/feeds?feed=at://did:plc:[1]/app.bsky.feed.generator/[2]",
+  },
+
+  // リストフィードページ
+  // TODO: DID指定だけではなくハンドル指定も対応すること
+  {
+    src: new RegExp("^https:\/\/bsky\.app\/profile\/did:plc:([^\/]+)\/lists\/([^\/]+)"),
+    dst: "/home/list-feeds?list=at://did:plc:[1]/app.bsky.graph.list/[2]",
   },
 
   // ポストスレッドページ
