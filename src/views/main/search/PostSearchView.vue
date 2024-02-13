@@ -149,17 +149,22 @@ function removeThisPost (uri: string) {
         @paging="paging"
       />
       <div class="post-container">
-        <Post
+        <template
           v-for="post of mainState.currentSearchPostResults"
           :key="post.cid"
-          :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
-          :post="post"
-          :hasReplyIcon="post.record.reply != null"
-          :hasQuoteRepostIcon="post.record.embed?.record != null"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
-          @onActivateHashTag="updateSearchPostTerm"
-        />
+        >
+          <!-- NOTICE: ミュートユーザーは非表示 -->
+          <Post
+            v-if="!post.author.viewer.muted && post.author.viewer.mutedByList == null"
+            :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
+            :post="post"
+            :hasReplyIcon="post.record.reply != null"
+            :hasQuoteRepostIcon="post.record.embed?.record != null"
+            @updateThisPostThread="updateThisPostThread"
+            @removeThisPost="removeThisPost"
+            @onActivateHashTag="updateSearchPostTerm"
+          />
+        </template>
       </div>
       <Pagenation
         v-if="state.pagenationDisplay"
