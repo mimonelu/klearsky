@@ -1090,10 +1090,19 @@ async function fetchTimeline (direction: "old" | "new", middleCursor?: string) {
 
 // 検索 - 現在のポスト検索結果
 async function fetchSearchPosts (cursor?: string) {
+  // `from:me` 対応
+  const q = state.currentSearchTerm
+    .replace(/(?:^|\s)from:me(?=$|\s)/g, (substring: string) => {
+      if (state.atp.session?.handle == null) {
+        return substring.replace("from:me", "")
+      }
+      return substring.replace("me", state.atp.session.handle)
+    })
+
   const result: Error | undefined | { cursor?: string, hitsTotal?: number } =
     await state.atp.fetchPostSearch(
       state.currentSearchPostResults,
-      state.currentSearchTerm,
+      q,
       CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
       cursor
     )
