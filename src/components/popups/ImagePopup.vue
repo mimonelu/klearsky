@@ -67,9 +67,7 @@ function startDrag (event: MouseEvent | TouchEvent) {
   state.mode = true
   state.x = (e.clientX / window.innerWidth)
   state.y = (e.clientY / window.innerHeight)
-  // TODO: やや危険、別の方法を模索すること
-  window.document.body.style.overflowX = "hidden"
-  window.document.body.style.overflowY = "hidden"
+  hideScroll()
 }
 
 function moveDrag (event: MouseEvent | TouchEvent) {
@@ -88,9 +86,7 @@ function endDrag () {
   state.x = 0.5
   state.y = 0.5
   state.mode = false
-  // TODO: やや危険、別の方法を模索すること
-  window.document.body.style.overflowX = "hidden"
-  window.document.body.style.overflowY = "scroll"
+  showScroll()
 }
 
 function showImage (indexAdding: number) {
@@ -115,8 +111,21 @@ async function downloadImage (index: number) {
   }
 }
 
+function hideScroll () {
+  // TODO: やや危険、別の方法を模索すること
+  window.document.body.style.overflowX = "hidden"
+  window.document.body.style.overflowY = "hidden"
+}
+
+function showScroll () {
+  // TODO: やや危険、別の方法を模索すること
+  window.document.body.style.overflowX = ""
+  window.document.body.style.overflowY = ""
+}
+
 function close () {
   Util.blurElement()
+  showScroll()
   emit("close")
 }
 </script>
