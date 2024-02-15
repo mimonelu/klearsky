@@ -243,15 +243,24 @@ function toggleDetail () {
       />
 
       <!-- フィード作成者リンク -->
-      <RouterLink
+      <div
         v-if="creatorDisplay && generator.creator.did"
-        class="textlink feed-card__creator"
-        :to="{ name: 'profile-custom-feeds', query: { account: generator.creator.did } }"
-        @click.prevent
+        class="feed-card__creator"
       >
-        <span class="feed-card__creator__prefix">{{ $t("by") }}</span>
-        <span class="feed-card__creator__display-name">{{ generator.creator.displayName || generator.creator.handle }}</span>
-      </RouterLink>
+        <RouterLink
+          class="textlink feed-card__creator__by"
+          :to="{ name: 'profile-custom-feeds', query: { account: generator.creator.did } }"
+          @click.prevent
+        >
+          <span>{{ $t("by") }} <b>{{ generator.creator.displayName || generator.creator.handle }}</b></span>
+        </RouterLink>
+
+        <!-- SkyFeed ラベル -->
+        <div
+          v-if="generator.did === 'did:web:skyfeed.me'"
+          class="feed-card__creator__via"
+        >(SkyFeed)</div>
+      </div>
     </div>
 
     <!-- その他のボタンコンテナ -->
@@ -352,6 +361,8 @@ function toggleDetail () {
 
     & > span {
       font-size: 0.875em;
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
   }
@@ -459,15 +470,25 @@ function toggleDetail () {
 
   // フィード作成者
   &__creator {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     font-size: 0.875em;
-    line-height: var(--line-height);
+    grid-gap: 0 0.5rem;
 
-    &__prefix {
-      margin-right: 0.5em;
+    &__by {
+      line-height: var(--line-height);
+      word-break: break-word;
+
+      b {
+        font-weight: bold;
+      }
     }
 
-    &__display-name {
-      font-weight: bold;
+    &__via {
+      color: var(--fg-color-05);
+      line-height: var(--line-height);
+      word-break: break-word;
     }
   }
 

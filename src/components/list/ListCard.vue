@@ -535,6 +535,8 @@ function toggleDetail () {
 
     & > span {
       font-size: 0.875em;
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
   }
