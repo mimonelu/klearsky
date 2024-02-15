@@ -46,6 +46,7 @@ import CONSTS from "@/consts/consts.json"
 const $t = inject("$t") as Function
 state.$setCurrentLanguage = inject("$setCurrentLanguage") as Function
 state.$getCurrentLanguage = inject("$getCurrentLanguage") as Function
+state.updatePageTitle = updatePageTitle
 
 provide("state", state)
 
@@ -74,7 +75,7 @@ onMounted(async () => {
   await autoLogin()
   state.loaderDisplay = false
 
-  updatePageTitle()
+  state.updatePageTitle()
 
   // ペースト用処理
   useEventListener(window, "paste", onPaste)
@@ -128,7 +129,7 @@ router.afterEach(async (to: RouteLocationNormalized) => {
     return
   }
 
-  updatePageTitle()
+  state.updatePageTitle()
 
   // ページフォワード時はページトップへスクロール
   if (window.history.state.forward == null) {
@@ -469,7 +470,7 @@ async function processPage (pageName?: null | string) {
       pageName?.startsWith("profile") ||
       pageName?.startsWith("search-post")) {
     // TODO: "search-post" 特有の問題のために setTimeout している。使わずに対処すること
-    setTimeout(updatePageTitle, 1)
+    setTimeout(state.updatePageTitle, 1)
   }
 }
 
@@ -492,9 +493,7 @@ async function setupUpdateJwtInterval () {
 
 async function setupNotificationInterval () {
   state.updateNotificationInterval()
-  if (await state.updateNotifications()) {
-    updatePageTitle()
-  }
+  await state.updateNotifications()
 }
 
 async function updateCurrentList () {
@@ -719,7 +718,7 @@ function broadcastListener (event: MessageEvent) {
 
         <RouterView
           v-if="state.mounted"
-          @updatePageTitle="updatePageTitle"
+          @updatePageTitle="state.updatePageTitle"
         />
 
         <!-- 中央ローダー -->
@@ -743,7 +742,7 @@ function broadcastListener (event: MessageEvent) {
       <NotificationPopup
         v-if="state.notificationPopupDisplay"
         @close="state.closeNotificationPopup"
-        @updatePageTitle="updatePageTitle"
+        @updatePageTitle="state.updatePageTitle"
       />
 
       <!-- 設定ポップアップ -->

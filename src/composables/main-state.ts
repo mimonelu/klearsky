@@ -640,17 +640,17 @@ function updateNotificationInterval () {
   )
 }
 
-async function updateNotifications (): Promise<boolean> {
+async function updateNotifications () {
   const count = await state.atp.fetchNotificationCount() ?? 0
   const canFetched = state.notificationCount < count
   if (count > 0) {
     state.notificationCount = count
+    state.updatePageTitle()
   }
   if (canFetched) {
     // NOTICE: 念のため + 1 している
     await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
   }
-  return count > 0
 }
 
 function updateColorThemeSetting () {

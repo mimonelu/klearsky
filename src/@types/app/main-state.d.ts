@@ -11,6 +11,7 @@ type MainState = {
   updateKey: number
   forceUpdate: () => void
   formatDate: (dateString?: string) => string
+  updatePageTitle: () => void
 
   // MyWorker
   myWorker: TTMyWorker
@@ -58,7 +59,7 @@ type MainState = {
 
   notificationTimer: null | number = null
   clearNotificationInterval: () => void
-  updateNotifications: () => Promise<boolean>
+  updateNotifications: () => Promise<void>
   updateNotificationInterval: () => void
 
   // 招待コード
