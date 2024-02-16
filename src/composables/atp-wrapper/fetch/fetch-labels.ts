@@ -1,15 +1,20 @@
-import type { BskyAgent, ComAtprotoLabelQueryLabels } from "@atproto/api"
+import type { BskyAgent, ComAtprotoTempFetchLabels } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
-  uriPatterns: Array<string>,
-): Promise<undefined | Array<TTLabel>> {
-  if (this.agent == null) return
-  const query: ComAtprotoLabelQueryLabels.QueryParams = { uriPatterns }
-  const response: ComAtprotoLabelQueryLabels.Response =
-    await (this.agent as BskyAgent).api.com.atproto.label.queryLabels(query)
-  console.log("[klearsky/queryLabels]", response)
-  if (!response.success) return
-  // TODO: cursor にも対応すること
+  since?: number,
+  limit?: number
+): Promise<Error | Array<TTLabel>> {
+  if (this.agent == null) return Error("noAgentError")
+  const query: ComAtprotoTempFetchLabels.QueryParams = {}
+  if (since != null) query.since = since
+  if (limit != null) query.limit = limit
+  const response: Error | ComAtprotoTempFetchLabels.Response =
+    await (this.agent as BskyAgent).api.com.atproto.temp.fetchLabels(query)
+      .then((value: ComAtprotoTempFetchLabels.Response) => value)
+      .catch((error: any) => error)
+  console.log("[klearsky/fetchLabels]", response)
+  if (response instanceof Error) return response
+  if (!response.success) return Error("apiError")
   return response.data.labels
 }

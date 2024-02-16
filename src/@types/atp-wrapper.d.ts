@@ -41,7 +41,7 @@ interface TIAtpWrapper {
   fetchFollowings (this: TIAtpWrapper, users: Array<TTUser> | Array<TTUser>, handle: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchSuggestedFollows (this: TIAtpWrapper, users: Array<TTUser> | Array<TTUser>, actor: string): Promise<Error | undefined>
   fetchInviteCodes (this: TIAtpWrapper): Promise<Error | TTInviteCode[]>
-  fetchLabels (this: TIAtpWrapper, uriPatterns: Array<string>, ): Promise<undefined | Array<TTLabel>>
+  fetchLabels (this: TIAtpWrapper, since?: number, limit?: number ): Promise<Error | Array<TTLabel>>
   fetchLikeUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchList (this: TIAtpWrapper, list: string): Promise<TTList | Error>
   fetchListBlocks (this: TIAtpWrapper, lists: Array<TTList>, limit?: number, cursor?: string): Promise<undefined | string | Error>
