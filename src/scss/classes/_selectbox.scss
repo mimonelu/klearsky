@@ -6,14 +6,16 @@
     background-color: rgb(var(--bg-color), 0.25);
     border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius);
-    color: rgb(var(--fg-color));
+    color: var(--fg-color-075);
     cursor: pointer;
     display: block;
+    font-weight: bold;
     line-height: var(--line-height);
     padding: 0.5em 2.5em 0.5em 1em;
     width: 100%;
     &:focus, &:hover {
       border-color: var(--fg-color-0375);
+      color: rgb(var(--fg-color));
     }
 
     & > option {

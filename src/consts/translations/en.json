@@ -49,7 +49,11 @@
   "accountLabels": "Account labels",
   "customLabels": "Custom labels",
   "select": "Select",
+  "notSelected": "Not selected",
   "users": "Users",
+  "design": "Design",
+  "etc": "Etc.",
+  "moderation": "Moderation",
 
   "privacyPolicy": "Privacy policy",
   "termsOfService": "Terms of service",
@@ -338,8 +342,8 @@
   "mainAreaOpacity": "Main Area Opacity",
 
   "background": "Wallpaper",
-  "backgroundImage": "Wallpaper - URL",
-  "backgroundOpacity": "Wallpaper - Opacity",
+  "backgroundImage": "Wallpaper URL",
+  "backgroundOpacity": "Wallpaper Opacity",
 
   "psySafety": "Psychological Safety",
   "hideNotificationBadge": "Hide notification badge",

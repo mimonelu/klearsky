@@ -32,7 +32,7 @@ import SendAccountReportPopup from "@/components/popups/SendAccountReportPopup.v
 import SendFeedReportPopup from "@/components/popups/SendFeedReportPopup.vue"
 import SendPostPopup from "@/components/popups/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/popups/SendPostReportPopup.vue"
-import SettingsPopup from "@/components/popups/SettingsPopup.vue"
+import SettingsPopup from "@/components/popups/SettingsPopup2.vue" // TODO:
 import SplashScreen from "@/components/shell-parts/SplashScreen.vue"
 import SubMenu from "@/components/shell-parts/SubMenu.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"

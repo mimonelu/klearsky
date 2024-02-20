@@ -296,7 +296,7 @@ function removeMyFeed (uri: string) {
     display: flex;
     align-items: center;
     grid-gap: 0.25rem;
-    &:hover, &:focus {
+    &:focus, &:hover {
       .my-feed-list__content {
         & > span {
           color: rgb(var(--fg-color));

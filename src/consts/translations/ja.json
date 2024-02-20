@@ -49,7 +49,11 @@
   "accountLabels": "ユーザーラベル",
   "customLabels": "カスタムラベル",
   "select": "選択",
+  "notSelected": "未選択",
   "users": "ユーザー",
+  "design": "デザイン",
+  "etc": "その他",
+  "moderation": "モデレーション",
 
   "privacyPolicy": "プライバシーポリシー",
   "termsOfService": "利用規約",
@@ -338,8 +342,8 @@
   "mainAreaOpacity": "メインエリアの不透明度",
 
   "background": "壁紙",
-  "backgroundImage": "壁紙 - URL",
-  "backgroundOpacity": "壁紙 - 不透明度",
+  "backgroundImage": "壁紙のURL",
+  "backgroundOpacity": "壁紙の不透明度",
 
   "psySafety": "心理的安全性",
   "hideNotificationBadge": "通知バッジの非表示",

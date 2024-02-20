@@ -53,14 +53,17 @@ state.backgroundImage = computed((): string => {
     : backgroundImage
 })
 state.currentSetting = {}
-state.settingsPopupDisplay = false
-state.openSettingsPopup = openSettingsPopup
-state.closeSettingsPopup = closeSettingsPopup
 state.resetSettings = resetSettings
 state.updateSettings = updateSettings
 state.saveSettings = saveSettings
 state.updateCurrentLanguageSetting = updateCurrentLanguageSetting
 state.updateColorThemeSetting = updateColorThemeSetting
+
+// 設定 - 設定ポップアップ
+
+state.settingsPopupDisplay = false
+state.openSettingsPopup = openSettingsPopup
+state.closeSettingsPopup = closeSettingsPopup
 
 // 通知
 
@@ -499,14 +502,6 @@ async function fetchCurrentServerInfo () {
 
 // 設定
 
-function openSettingsPopup () {
-  state.settingsPopupDisplay = true
-}
-
-function closeSettingsPopup () {
-  state.settingsPopupDisplay = false
-}
-
 function resetSettings () {
   const did = state.atp.session?.did
   if (did == null) return
@@ -660,6 +655,16 @@ function updateColorThemeSetting () {
       state.currentSetting.colorTheme as string
     )
   }
+}
+
+// 設定 - 設定ポップアップ
+
+function openSettingsPopup () {
+  state.settingsPopupDisplay = true
+}
+
+function closeSettingsPopup () {
+  state.settingsPopupDisplay = false
 }
 
 // 通知

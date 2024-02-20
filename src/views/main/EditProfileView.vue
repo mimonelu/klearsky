@@ -178,7 +178,7 @@ async function submit () {
     z-index: 1;
   }
 
-  &::v-deep() {
+  &:deep() {
     .label-button {
       width: fit-content;
     }

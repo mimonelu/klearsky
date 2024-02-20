@@ -35,14 +35,17 @@ type MainState = {
   settings: { [did: string]: TTSetting }
   backgroundImage: ComputedRef<string>
   currentSetting: TTSetting
-  settingsPopupDisplay: boolean
-  openSettingsPopup: Function
-  closeSettingsPopup: Function
   resetSettings: () => void
   updateSettings: () => void
   saveSettings: () => void
   updateCurrentLanguageSetting: () => void
   updateColorThemeSetting: () => void
+
+  // 設定 - 設定ポップアップ
+
+  settingsPopupDisplay: boolean
+  openSettingsPopup: Function
+  closeSettingsPopup: Function
 
   // 通知
 
