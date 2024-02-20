@@ -20,11 +20,15 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   page: "top" | "language" | "post" | "design" | "psySafety" | "etc"
   pageTitle?: string
+  htmlPopupDisplay: boolean
+  htmlPopupType?: string
   contentLanguages: ComputedRef<string[]>
   postLanguages: ComputedRef<string[]>
 }>({
   page: "top",
   pageTitle: undefined,
+  htmlPopupDisplay: false,
+  htmlPopupType: undefined,
   contentLanguages: computed((): string[] => {
     return mainState.currentSetting.contentLanguages?.map((contentLanguage: string) => {
       return LANGUAGES.find((language: TTOption) => {
@@ -146,6 +150,15 @@ function openWordMutePopup () {
 function openInviteCodesPopup () {
   Util.blurElement()
   mainState.openInviteCodesPopup()
+}
+
+function showDescription (type: string) {
+  state.htmlPopupType = type
+  state.htmlPopupDisplay = true
+}
+
+function closeHtmlPopupDisplay () {
+  state.htmlPopupDisplay = false
 }
 </script>
 
@@ -371,9 +384,11 @@ function openInviteCodesPopup () {
           <div class="settings-popup__form">
             <div class="settings-popup__form__header">
               <span>{{ $t("autoTranslation") }}</span>
+
+              <!-- ヘルプボタン -->
               <button
-                class="description-button"
-                @click.prevent
+                class="settings-popup__help-button"
+                @click.prevent="showDescription('autoTranslation')"
               >
                 <SVGIcon name="help" />
               </button>
@@ -390,9 +405,11 @@ function openInviteCodesPopup () {
               <!-- 設定ページ - ポスト設定ページ - 自動翻訳 - 除外する言語 -->
               <div class="settings-popup__form__header">
                 <span>{{ $t("autoTranslationIgnoreLanguage") }}</span>
+
+                <!-- ヘルプボタン -->
                 <button
-                  class="description-button"
-                  @click.prevent
+                  class="settings-popup__help-button"
+                  @click.prevent="showDescription('autoTranslationIgnoreLanguage')"
                 >
                   <SVGIcon name="help" />
                 </button>
@@ -412,9 +429,11 @@ function openInviteCodesPopup () {
           <div class="settings-popup__form">
             <div class="settings-popup__form__header">
               <span>{{ $t("timelineControl") }}</span>
+
+              <!-- ヘルプボタン -->
               <button
-                class="description-button"
-                @click.prevent
+                class="settings-popup__help-button"
+                @click.prevent="showDescription('timelineControl')"
               >
                 <SVGIcon name="help" />
               </button>
@@ -720,9 +739,11 @@ function openInviteCodesPopup () {
           <div class="settings-popup__form">
             <div class="settings-popup__form__header">
               <span>{{ $t("lightning") }}</span>
+
+              <!-- ヘルプボタン -->
               <button
-                class="description-button"
-                @click.prevent
+                class="settings-popup__help-button"
+                @click.prevent="showDescription('lightning')"
               >
                 <SVGIcon name="help" />
               </button>
@@ -756,6 +777,37 @@ function openInviteCodesPopup () {
         </div>
       </template>
     </Popup>
+
+    <!-- 説明用HTMLポップアップ -->
+    <HtmlPopup
+      v-if="state.htmlPopupDisplay"
+      :title="`${$t('help')} - ${$t(state.htmlPopupType)}`"
+      @close="closeHtmlPopupDisplay"
+    >
+      <template v-if="state.htmlPopupType === 'autoTranslation'">
+        <ul class="bullet-points">
+          <li>{{ $t("autoTranslationRemarks1") }}</li>
+          <li>{{ $t("autoTranslationRemarks2") }}</li>
+          <li>{{ $t("autoTranslationRemarks3") }}</li>
+          <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
+        </ul>
+      </template>
+      <template v-else-if="state.htmlPopupType === 'autoTranslationIgnoreLanguage'">
+        <ul class="bullet-points">
+          <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
+        </ul>
+      </template>
+      <template v-else-if="state.htmlPopupType === 'timelineControl'">
+        <ul class="bullet-points">
+          <li>{{ $t("timelineControlDescription") }}</li>
+        </ul>
+      </template>
+      <template v-else-if="state.htmlPopupType === 'lightning'">
+        <ul class="bullet-points">
+          <li>{{ $t("lightningDescription") }}</li>
+        </ul>
+      </template>
+    </HtmlPopup>
   </div>
 </template>
 
@@ -879,6 +931,21 @@ function openInviteCodesPopup () {
       input[type="url"] {
         width: 100%;
       }
+    }
+  }
+
+  // ヘルプボタン
+  &__help-button {
+    --alpha: 0.75;
+    cursor: pointer;
+    margin: -0.5em;
+    padding: 0.5em;
+    &:focus, &:hover {
+      --alpha: 1.0;
+    }
+
+    & > .svg-icon {
+      fill: rgb(var(--accent-color), var(--alpha));
     }
   }
 
