@@ -1,0 +1,167 @@
+<script lang="ts" setup>
+import { inject } from "vue"
+import Checkboxes from "@/components/form-parts/Checkboxes.vue"
+import Popup from "@/components/popups/Popup.vue"
+import Radios from "@/components/form-parts/Radios.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
+import SETTINGS from "@/consts/settings.json"
+
+const mainState = inject("state") as MainState
+</script>
+
+<template>
+  <Popup
+    class="settings-popup"
+    :hasCloseButton="true"
+    @close="$emit('close')"
+  >
+    <template #header>
+      <h2>
+        <SVGIcon name="setting" />
+        <span>{{ $t("settings") }} - {{ $t("post") }}</span>
+      </h2>
+    </template>
+    <template #body>
+      <div class="settings-popup__form-page">
+        <!-- 自動翻訳 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("autoTranslation") }}</span>
+
+            <!-- ヘルプボタン -->
+            <button
+              class="settings-popup__help-button"
+              @click.prevent="$emit('showDescription', 'autoTranslation')"
+            >
+              <SVGIcon name="help" />
+            </button>
+          </div>
+          <div class="settings-popup__form__body">
+            <Radios
+              :state="mainState.currentSetting"
+              model="autoTranslation"
+              :options="SETTINGS.AUTO_TRANSLATIONS"
+              layout="horizontal"
+              @update="$emit('saveSetting')"
+            />
+
+            <!-- 自動翻訳 - 除外する言語 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("autoTranslationIgnoreLanguage") }}</span>
+
+              <!-- ヘルプボタン -->
+              <button
+                class="settings-popup__help-button"
+                @click.prevent="$emit('showDescription', 'autoTranslationIgnoreLanguage')"
+              >
+                <SVGIcon name="help" />
+              </button>
+            </div>
+            <input
+              class="textbox"
+              v-model="mainState.currentSetting.autoTranslationIgnoreLanguage"
+              type="text"
+              name="autoTranslationIgnoreLanguage"
+              placeholder="en, zh, es, ..."
+              @change="$emit('changeSetting')"
+            >
+          </div>
+        </div>
+
+        <!-- タイムラインの制御 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("timelineControl") }}</span>
+
+            <!-- ヘルプボタン -->
+            <button
+              class="settings-popup__help-button"
+              @click.prevent="$emit('showDescription', 'timelineControl')"
+            >
+              <SVGIcon name="help" />
+            </button>
+          </div>
+          <div class="settings-popup__form__body">
+            <!-- タイムラインの制御 - リプライ -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("replyControl") }}</span>
+            </div>
+            <Checkboxes
+              :state="mainState.currentSetting"
+              model="replyControl"
+              :options="SETTINGS.REPLY_CONTROLS"
+              @update="$emit('saveSetting')"
+            />
+
+            <!-- タイムラインの制御 - リポスト -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("repostControl") }}</span>
+            </div>
+            <Checkboxes
+              :state="mainState.currentSetting"
+              model="repostControl"
+              :options="SETTINGS.REPOST_CONTROLS"
+              @update="$emit('saveSetting')"
+            />
+          </div>
+        </div>
+
+        <!-- 画像 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("image") }}</span>
+          </div>
+          <div class="settings-popup__form__body">
+            <!-- 画像 - 画像の制御 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("imageControl") }}</span>
+            </div>
+            <Radios
+              :state="mainState.currentSetting"
+              model="imageControl"
+              :options="SETTINGS.IMAGE_CONTROLS"
+              @update="$emit('saveSetting')"
+            />
+
+            <!-- 画像 - 画像サイズの比率 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("imageAspectRatio") }}</span>
+            </div>
+            <Radios
+              :state="mainState.currentSetting"
+              model="imageAspectRatio"
+              :options="SETTINGS.IMAGE_ASPECT_RATIO"
+              layout="horizontal"
+              @update="$emit('saveSetting')"
+            />
+
+            <!-- 画像 - 画像オプション -->
+            <Checkboxes
+              :state="mainState.currentSetting"
+              model="imageOption"
+              :options="SETTINGS.IMAGE_OPTION"
+              layout="vertical"
+              @update="$emit('saveSetting')"
+            />
+          </div>
+        </div>
+
+        <!-- リンクカード -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("linkcardEmbeddedControl") }}</span>
+          </div>
+          <div class="settings-popup__form__body">
+            <Checkboxes
+              :state="mainState.currentSetting"
+              model="linkcardEmbeddedControl"
+              :options="SETTINGS.LINKCARD_EMBEDDED_CONTROL"
+              layout="vertical"
+              @update="$emit('saveSetting')"
+            />
+          </div>
+        </div>
+      </div>
+    </template>
+  </Popup>
+</template>

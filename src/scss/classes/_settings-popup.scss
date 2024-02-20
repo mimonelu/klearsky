@@ -1,0 +1,63 @@
+.settings-popup {
+  // フォーム設定ページ
+  &__form-page {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 2rem;
+  }
+
+  // 設定フォーム
+  &__form {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 1rem;
+
+    &__header {
+      display: flex;
+      align-items: center;
+      grid-gap: 1rem;
+      font-size: 1.125rem;
+      font-weight: bold;
+
+      & > span {
+        line-height: 1.25;
+        overflow: hidden;
+        word-wrap: break-word;
+      }
+    }
+    &__body > &__header {
+      font-size: 1rem;
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+      grid-gap: 1rem;
+
+      input[type="text"],
+      input[type="url"] {
+        width: 100%;
+      }
+    }
+  }
+
+  // ヘルプボタン
+  &__help-button {
+    --alpha: 0.75;
+    cursor: pointer;
+    margin: -0.5em;
+    padding: 0.5em;
+    &:focus, &:hover {
+      --alpha: 1.0;
+    }
+
+    & > .svg-icon {
+      fill: rgb(var(--accent-color), var(--alpha));
+    }
+  }
+
+  &__button-has-multi-labels {
+    flex-flow: wrap;
+    justify-content: flex-start;
+  }
+}

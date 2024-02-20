@@ -748,7 +748,7 @@ function broadcastListener (event: MessageEvent) {
       <!-- 設定ポップアップ -->
       <SettingsPopup
         v-if="state.settingsPopupDisplay"
-        @close="state.closeSettingsPopup"
+        @closeSettingsPopup="state.closeSettingsPopup"
       />
 
       <!-- アカウントポップアップ -->
