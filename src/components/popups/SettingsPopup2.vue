@@ -117,7 +117,7 @@ function openMyListPopup () {
 
 function openMyTagPopup () {
   Util.blurElement()
-  mainState.openMyTagPopup()
+  mainState.openMyTagPopup({ mode: "edit" })
 }
 
 function openContentFilteringPopup () {

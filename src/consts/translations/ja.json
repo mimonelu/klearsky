@@ -272,6 +272,7 @@
   "wordMutePlaceholder": "キーワード1, キーワード2, ...",
   "wordMuteRemoveConfirmation": "ワードミュートの削除",
   "wordMuteRemoveConfirmationMessage": "以下のワードミュートを削除します。よろしいですか？",
+  "wordMuteEmpty": "ワードミュートはありません。",
 
   "timeControl": "時間表記",
   "timeControlRelative": "相対表記",

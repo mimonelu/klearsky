@@ -85,6 +85,8 @@ function add () {
     </template>
     <template #body>
       <slot name="header" />
+
+      <!-- ワードミュート追加ボタン -->
       <button
         class="button--bordered"
         @click.stop="add"
@@ -92,7 +94,19 @@ function add () {
         <SVGIcon name="plus" />
         <span>{{ $t("wordMuteAdd") }}</span>
       </button>
-      <EasyForm v-bind="state.easyFormProps" />
+
+      <!-- ワードミュートがないメッセージ -->
+      <div
+        v-if="!mainState.currentSetting.wordMute?.length"
+        class="textlabel"
+      >
+        <div class="textlabel__text">{{ $t("wordMuteEmpty") }}</div>
+      </div>
+
+      <EasyForm
+        v-else
+        v-bind="state.easyFormProps"
+      />
     </template>
   </Popup>
 </template>
