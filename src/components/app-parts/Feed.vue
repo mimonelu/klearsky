@@ -33,7 +33,6 @@ function removeThisPost (uri: string) {
       <div
         v-if="feed.reply != null"
         class="folder__item"
-        :data-is-following="feed.post.author.viewer?.following != null"
       >
         <SVGIcon name="reply" />
         <div class="display-name">{{
@@ -48,7 +47,6 @@ function removeThisPost (uri: string) {
       <div
         v-if="feed.reason != null"
         class="folder__item"
-        :data-is-following="feed.reason.by.viewer?.following != null"
       >
         <SVGIcon name="repost" />
         <div class="display-name">{{

@@ -76,7 +76,6 @@ function onActivateContentFilteringToggle () {
     class="user-box"
     :to="{ name: 'profile-feeds', query: { account: user.did } }"
     :data-menu-display="menuDisplay"
-    :data-is-following="user.viewer.following != null"
     @click="onActivateLink"
   >
     <!-- プロフィールトグル -->

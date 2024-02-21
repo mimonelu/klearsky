@@ -122,7 +122,6 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             :to="makeSubjectTo(notification)"
             class="notification"
             :data-is-new="!notification.isRead"
-            :data-is-following="notification.following"
             @click="$emit('close')"
           >
             <!-- 新着通知アイコン -->

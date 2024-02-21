@@ -42,19 +42,5 @@ const state = reactive<{
     --fg-color: var(--notice-color);
     font-weight: bold;
   }
-
-  // フォローイングドット
-  [data-is-following="true"] &::before {
-    background-image: radial-gradient(
-      circle at center,
-      var(--fg-color-05) 37.5%,
-      transparent 37.5%
-    );
-    content: "";
-    display: inline-block;
-    margin-right: 0.5em;
-    width: 0.375em;
-    height: 0.75em;
-  }
 }
 </style>

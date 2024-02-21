@@ -605,7 +605,6 @@ function onActivateHashTag (text: string) {
       <button
         v-if="parentPost != null"
         class="replier"
-        :data-is-following="parentPost?.author?.viewer?.following != null"
         @click.stop="onActivateReplierLink"
       >
         <SVGIcon name="reply" />
@@ -621,7 +620,6 @@ function onActivateHashTag (text: string) {
       <button
         v-if="post.__custom?.reason != null"
         class="reposter"
-        :data-is-following="post.__custom?.reason?.by?.viewer?.following != null"
         @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.did as string)"
       >
         <SVGIcon name="repost" />
@@ -675,7 +673,6 @@ function onActivateHashTag (text: string) {
     <div
       v-if="post.__custom.unmask || !state.masked"
       class="body"
-      :data-is-following="post.author.viewer?.following != null"
     >
       <slot name="body-before" />
 
