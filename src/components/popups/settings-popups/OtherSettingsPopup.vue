@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import Popup from "@/components/popups/Popup.vue"
-import Radios from "@/components/form-parts/Radios.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
-import SETTINGS from "@/consts/settings.json"
 
 const mainState = inject("state") as MainState
 </script>
@@ -22,22 +20,6 @@ const mainState = inject("state") as MainState
     </template>
     <template #body>
       <div class="settings-popup__form-page">
-        <!-- 時間表記 -->
-        <div class="settings-popup__form">
-          <div class="settings-popup__form__header">
-            <span>{{ $t("timeControl") }}</span>
-          </div>
-          <div class="settings-popup__form__body">
-            <Radios
-              :state="mainState.currentSetting"
-              model="timeControl"
-              :options="SETTINGS.TIME_CONTROLS"
-              layout="horizontal"
-              @update="$emit('saveSetting')"
-            />
-          </div>
-        </div>
-
         <!-- Lightning -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">

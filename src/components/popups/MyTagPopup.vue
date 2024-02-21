@@ -205,6 +205,12 @@ function removeCurrentPostTag (index: number) {
 
 <style lang="scss" scoped>
 .my-tag-popup {
+  &:deep() {
+    .popup-header > h2 > .svg-icon {
+      fill: rgb(var(--accent-color));
+    }
+  }
+
   // モード切替ボタン
   &__mode-switch-button {
     font-size: 0.75rem;
