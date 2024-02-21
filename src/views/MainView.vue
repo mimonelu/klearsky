@@ -32,7 +32,7 @@ import SendAccountReportPopup from "@/components/popups/SendAccountReportPopup.v
 import SendFeedReportPopup from "@/components/popups/SendFeedReportPopup.vue"
 import SendPostPopup from "@/components/popups/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/popups/SendPostReportPopup.vue"
-import SettingsPopup from "@/components/popups/SettingsPopup2.vue" // TODO:
+import SettingsPopup from "@/components/popups/SettingsPopup.vue"
 import SplashScreen from "@/components/shell-parts/SplashScreen.vue"
 import SubMenu from "@/components/shell-parts/SubMenu.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -678,7 +678,6 @@ function broadcastListener (event: MessageEvent) {
     class="main-view"
     :key="state.updateKey"
     :data-path="state.currentPath"
-    :data-layout="state.currentSetting.layout"
     :style="{
       '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 1.0,
       '--image-aspect-ratio': state.currentSetting.imageAspectRatio ?? '1 / 1'
@@ -1001,44 +1000,6 @@ function broadcastListener (event: MessageEvent) {
   background-color: rgb(var(--bg-color));
   transition: background-color 500ms ease-out;
 
-  // カスタムレイアウト
-  &[data-layout="defaultLeft"],
-  &[data-layout="slimLeft"] {
-    .main {
-      justify-content: unset;
-      margin-left: unset;
-      margin-right: unset;
-    }
-  }
-  &[data-layout="defaultRight"],
-  &[data-layout="slimRight"] {
-    .main {
-      justify-content: flex-end;
-      margin-left: auto;
-      margin-right: unset;
-    }
-  }
-  &[data-layout="slim"] .sub-menu-wrapper {
-    display: none;
-  }
-  &[data-layout="slimLeft"] .sub-menu {
-    right: 0;
-  }
-  &[data-layout="slimRight"] .sub-menu-wrapper {
-    max-width: 0;
-
-    .sub-menu {
-      left: 0;
-    }
-  }
-  &[data-layout="slim"],
-  &[data-layout="slimLeft"],
-  &[data-layout="slimRight"] {
-    .sub-menu:deep() .copyright {
-      display: none;
-    }
-  }
-
   // ポップアップの重なり調整
   @for $i from 2 through 8 {
     $margins: (
@@ -1117,30 +1078,11 @@ function broadcastListener (event: MessageEvent) {
   @media not all and (min-width: $sp-width) {
     display: none;
   }
-
-  // カスタムレイアウト
-  .main-view[data-layout="slim"] &,
-  .main-view[data-layout="slimLeft"] &,
-  .main-view[data-layout="slimRight"] & {
-    min-width: $main-menu-min-width;
-    max-width: $main-menu-min-width;
-  }
 }
 
 // PC用メニュー
 .main-menu-vertical {
   position: fixed;
-
-  // カスタムレイアウト
-  .main-view[data-layout="default"] &,
-  .main-view[data-layout="defaultLeft"] &,
-  .main-view[data-layout="defaultRight"] & {
-    // 最大幅以上
-    @media not all and (max-width: $max-width-with-scrollbar) {
-      min-width: $menu-max-width;
-      max-width: $menu-max-width;
-    }
-  }
 }
 
 // SP用メニュー

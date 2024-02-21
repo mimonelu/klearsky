@@ -274,11 +274,6 @@ function moveToBottom () {
   @media (max-width: $max-width-with-scrollbar) {
     @include slimLayout;
   }
-  .main-view[data-layout="slim"] &,
-  .main-view[data-layout="slimLeft"] &,
-  .main-view[data-layout="slimRight"] & {
-    @include slimLayout;
-  }
 
   // フルレイアウト
   @media not all and (max-width: $max-width-with-scrollbar) {

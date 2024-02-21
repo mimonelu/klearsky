@@ -319,14 +319,6 @@
   "linkcard": "Link card",
   "linkcardEmbeddedControl": "Link Card Embedded Content Control",
 
-  "layout": "Layout",
-  "layoutDefault": "Default",
-  "layoutDefaultLeft": "Default - Left",
-  "layoutDefaultRight": "Default - Right",
-  "layoutSlim": "Slim - Center",
-  "layoutSlimLeft": "Slim - Left",
-  "layoutSlimRight": "Slim - Right",
-
   "colorTheme": "Color Theme",
   "colorThemeAuto": "Auto",
   "colorThemeLight": "Light",

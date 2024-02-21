@@ -319,14 +319,6 @@
   "linkcard": "リンクカード",
   "linkcardEmbeddedControl": "リンクカードの埋込コンテンツ制御",
 
-  "layout": "レイアウト",
-  "layoutDefault": "通常",
-  "layoutDefaultLeft": "通常 - 左",
-  "layoutDefaultRight": "通常 - 右",
-  "layoutSlim": "スリム - 中央",
-  "layoutSlimLeft": "スリム - 左",
-  "layoutSlimRight": "スリム - 右",
-
   "colorTheme": "カラーテーマ",
   "colorThemeAuto": "自動",
   "colorThemeLight": "ライト",

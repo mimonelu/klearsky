@@ -58,14 +58,6 @@
     { "label": "pnVimeo", "value": "vimeo" },
     { "label": "pnNicovideo", "value": "nicovideo" }
   ],
-  "LAYOUTS": [
-    { "label": "layoutDefault", "value": "default" },
-    { "label": "layoutDefaultLeft", "value": "defaultLeft" },
-    { "label": "layoutDefaultRight", "value": "defaultRight" },
-    { "label": "layoutSlim", "value": "slim" },
-    { "label": "layoutSlimLeft", "value": "slimLeft" },
-    { "label": "layoutSlimRight", "value": "slimRight" }
-  ],
   "COLOR_THEMES": [
     { "label": "colorThemeAuto", "value": "auto" },
     { "label": "colorThemeLight", "value": "light" },

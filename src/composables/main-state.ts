@@ -567,8 +567,6 @@ function saveSettings () {
     ]
   if (state.settings[did].globallineLayout == null)
     state.settings[did].globallineLayout = "post"
-  if (state.settings[did].layout == null)
-    state.settings[did].layout = "default"
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].mainAreaOpacity == null)

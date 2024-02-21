@@ -49,29 +49,6 @@ const mainState = inject("state") as MainState
           </div>
         </div>
 
-        <!-- レイアウト -->
-        <div class="settings-popup__form">
-          <div class="settings-popup__form__header">
-            <span>{{ $t("layout") }}</span>
-          </div>
-          <div class="settings-popup__form__body">
-            <label class="selectbox">
-              <select
-                v-model="mainState.currentSetting.layout"
-                name="layout"
-                @change="$emit('changeSetting')"
-              >
-                <option
-                  v-for="layout, layoutIndex in SETTINGS.LAYOUTS"
-                  :key="layoutIndex"
-                  :value="layout.value"
-                  :selected="layout.value === mainState.currentSetting.layout"
-                >{{ $t(layout.label) }}</option>
-              </select>
-            </label>
-          </div>
-        </div>
-
         <!-- メインエリアの不透明度 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
