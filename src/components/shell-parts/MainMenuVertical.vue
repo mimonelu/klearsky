@@ -299,7 +299,7 @@ function moveToBottom () {
   --padding: 1rem;
   --color: var(--fg-color);
   --alpha: 0.75;
-  // border-radius: var(--border-radius);
+
   display: grid;
   grid-gap: 0.5rem;
   overflow: hidden;
@@ -345,8 +345,15 @@ function moveToBottom () {
   border-radius: var(--border-radius);
   color: rgb(var(--fg-color));
   font-weight: bold;
+  overflow: hidden;
   padding: 0.5rem;
   text-align: center;
+  text-overflow: ellipsis;
+
+  // 最大幅未満
+  @media (max-width: $max-width-with-scrollbar) {
+    display: none;
+  }
 }
 
 // 各種ボタン

@@ -1058,10 +1058,9 @@ function broadcastListener (event: MessageEvent) {
 }
 
 // メインメニュー
-.main-menu-vertical-wrapper {
-  overflow: hidden;
-  position: relative;
-
+// PC用メニュー
+.main-menu-vertical-wrapper,
+.main-menu-vertical {
   // 最大幅未満
   @media (max-width: $max-width-with-scrollbar) {
     min-width: $main-menu-min-width;
@@ -1073,6 +1072,12 @@ function broadcastListener (event: MessageEvent) {
     min-width: $menu-max-width;
     max-width: $menu-max-width;
   }
+}
+
+// メインメニュー
+.main-menu-vertical-wrapper {
+  overflow: hidden;
+  position: relative;
 
   // SP幅未満
   @media not all and (min-width: $sp-width) {
