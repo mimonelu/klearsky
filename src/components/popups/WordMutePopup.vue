@@ -100,7 +100,9 @@ function add () {
         v-if="!mainState.currentSetting.wordMute?.length"
         class="textlabel"
       >
-        <div class="textlabel__text">{{ $t("wordMuteEmpty") }}</div>
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("wordMuteEmpty") }}
+        </div>
       </div>
 
       <EasyForm

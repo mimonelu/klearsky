@@ -163,7 +163,9 @@ function removeCurrentPostTag (index: number) {
         v-if="mainState.currentSetting.tags?.length === 0"
         class="textlabel"
       >
-        <div class="textlabel__text">{{ $t("noTag") }}</div>
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("noTag") }}
+        </div>
       </div>
 
       <div
