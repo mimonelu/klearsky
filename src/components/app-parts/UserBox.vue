@@ -118,7 +118,10 @@ function onActivateContentFilteringToggle () {
 
         <span>{{ user.displayName }}</span>
       </div>
-      <AuthorHandle :handle="user.handle" />
+      <AuthorHandle
+        :handle="user.handle"
+        :anonymizable="true"
+      />
       <div class="description">{{ user.description || "&#160;" }}</div>
 
       <!-- プロフィールメニュートリガー -->

@@ -253,7 +253,10 @@ function onActivateAccountMaskToggle () {
               <div class="handle">
                 <a @click.stop="state.handleHistoryPopupDisplay = true">
                   <SVGIcon name="history" />
-                  <AuthorHandle :handle="mainState.currentProfile?.handle ?? '&nbsp;'" />
+                  <AuthorHandle
+                    :handle="mainState.currentProfile?.handle ?? '&nbsp;'"
+                    :anonymizable="false"
+                  />
                 </a>
               </div>
 

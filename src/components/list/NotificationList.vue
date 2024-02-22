@@ -147,7 +147,10 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             <div class="display-name">{{ notification.displayName }}</div>
 
             <!-- ハンドル -->
-            <AuthorHandle :handle="notification.handle" />
+            <AuthorHandle
+              :handle="notification.handle"
+              :anonymizable="true"
+            />
 
             <!-- リアクション日時 -->
             <div class="indexed-at">{{ mainState.formatDate(notification.indexedAt) }}</div>

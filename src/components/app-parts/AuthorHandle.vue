@@ -3,20 +3,21 @@ import { computed, inject, reactive, type ComputedRef } from "vue"
 
 const props = defineProps<{
   handle?: string
+  anonymizable?: boolean
 }>()
 
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
+const isInvalid = props.handle === "handle.invalid"
+
 const state = reactive<{
-  isInvalid?: ComputedRef<boolean>
   handle?: ComputedRef<string>
 }>({
-  isInvalid: computed((): boolean => props.handle === "handle.invalid"),
-  handle: computed((): string => mainState.currentSetting.postAnonymization
+  handle: computed((): string => props.anonymizable && mainState.currentSetting.postAnonymization
     ? ""
-    : state.isInvalid
+    : isInvalid
       ? $t("invalidHandle")
       : props.handle
   ),
@@ -26,7 +27,7 @@ const state = reactive<{
 <template>
   <div
     class="author-handle"
-    :data-is-invalid="state.isInvalid"
+    :data-is-invalid="isInvalid"
   >{{ state.handle }}</div>
 </template>
 

@@ -613,7 +613,10 @@ function onActivateHashTag (text: string) {
             ? parentPost?.author?.displayName
             : $t("anonymous")
         }}</div>
-        <AuthorHandle :handle="parentPost.author?.handle" />
+        <AuthorHandle
+          :handle="parentPost.author?.handle"
+          :anonymizable="true"
+        />
       </button>
 
       <!-- リポストユーザー -->
@@ -628,7 +631,10 @@ function onActivateHashTag (text: string) {
             ? post.__custom?.reason?.by?.displayName
             : $t("anonymous")
         }}</div>
-        <AuthorHandle :handle="post.__custom?.reason?.by?.handle" />
+        <AuthorHandle
+          :handle="post.__custom?.reason?.by?.handle"
+          :anonymizable="true"
+        />
       </button>
     </div>
 
@@ -680,7 +686,7 @@ function onActivateHashTag (text: string) {
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
         :did="post.author?.did"
-        :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
+        :image="post.author?.avatar"
         @click.stop="$emit('click')"
       />
 
@@ -691,7 +697,7 @@ function onActivateHashTag (text: string) {
             v-if="position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
             :did="post.author?.did"
-            :image="!mainState.currentSetting.postAnonymization ? post.author?.avatar : undefined"
+            :image="post.author?.avatar"
             @click.stop="$emit('click')"
           />
 
@@ -711,7 +717,10 @@ function onActivateHashTag (text: string) {
           </div>
 
           <!-- ハンドル -->
-          <AuthorHandle :handle="post.author?.handle" />
+          <AuthorHandle
+            :handle="post.author?.handle"
+            :anonymizable="true"
+          />
 
           <!-- ポスト時間 -->
           <div

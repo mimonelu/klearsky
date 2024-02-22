@@ -40,7 +40,10 @@ function removeThisPost (uri: string) {
             ? feed.post.author.displayName
             : $t("anonymous")
         }}</div>
-        <AuthorHandle :handle="feed.post.author.handle" />
+        <AuthorHandle
+          :handle="feed.post.author.handle"
+          :anonymizable="true"
+        />
       </div>
 
       <!-- 折り畳みリポストオープナー -->
@@ -54,7 +57,10 @@ function removeThisPost (uri: string) {
             ? feed.reason.by.displayName
             : $t("anonymous")
         }}</div>
-        <AuthorHandle :handle="feed.reason.by.handle" />
+        <AuthorHandle
+          :handle="feed.reason.by.handle"
+          :anonymizable="true"
+        />
       </div>
     </div>
 

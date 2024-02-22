@@ -1,10 +1,13 @@
 <script lang="ts" setup>
+import { inject } from "vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 
 defineProps<{
   did?: string
   image?: string
 }>()
+
+const mainState = inject("state") as MainState
 </script>
 
 <template>
@@ -12,7 +15,7 @@ defineProps<{
     :to="{ name: 'profile-feeds', query: { account: did } }"
     class="avatar-link"
   >
-    <LazyImage :src="image" />
+    <LazyImage :src="mainState.currentSetting.postAnonymization ? undefined : image" />
   </RouterLink>
 </template>
 
