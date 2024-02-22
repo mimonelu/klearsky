@@ -63,6 +63,66 @@ function closeLanguageSettingsPopup () {
   state.languageSettingsPopupDisplay = false
 }
 
+function openContentLanguagesPopup () {
+  Util.blurElement()
+  mainState.openContentLanguagesPopup()
+}
+
+function openPostLanguagesPopup () {
+  Util.blurElement()
+  mainState.openPostLanguagesPopup()
+}
+
+function openMyFeedsPopup () {
+  Util.blurElement()
+  mainState.openMyFeedsPopup()
+
+  // ポップアップから画面遷移するため
+  closeSettingsPopup()
+}
+
+function openMyListPopup () {
+  Util.blurElement()
+  mainState.openMyListPopup()
+
+  // ポップアップから画面遷移するため
+  closeSettingsPopup()
+}
+
+function openMyTagPopup () {
+  Util.blurElement()
+  mainState.openMyTagPopup({ mode: "edit" })
+
+  // ポップアップから画面遷移するため
+  closeSettingsPopup()
+}
+
+function openContentFilteringPopup () {
+  Util.blurElement()
+  mainState.openContentFilteringPopup()
+}
+
+function openMutingUsersPopup () {
+  Util.blurElement()
+  mainState.openMutingUsersPopup()
+
+  // ポップアップから画面遷移するため
+  closeSettingsPopup()
+}
+
+function openBlockingUsersPopup () {
+  Util.blurElement()
+  mainState.openBlockingUsersPopup()
+
+  // ポップアップから画面遷移するため
+  closeSettingsPopup()
+}
+
+function openWordMutePopup () {
+  Util.blurElement()
+  mainState.openWordMutePopup()
+}
+
 function openDesignSettingsPopup () {
   state.designSettingsPopupDisplay = true
 }
@@ -95,54 +155,12 @@ function closeOtherSettingsPopup () {
   state.otherSettingsPopupDisplay = false
 }
 
-function openContentLanguagesPopup () {
-  Util.blurElement()
-  mainState.openContentLanguagesPopup()
-}
-
-function openPostLanguagesPopup () {
-  Util.blurElement()
-  mainState.openPostLanguagesPopup()
-}
-
-function openMyFeedsPopup () {
-  Util.blurElement()
-  mainState.openMyFeedsPopup()
-}
-
-function openMyListPopup () {
-  Util.blurElement()
-  mainState.openMyListPopup()
-}
-
-function openMyTagPopup () {
-  Util.blurElement()
-  mainState.openMyTagPopup({ mode: "edit" })
-}
-
-function openContentFilteringPopup () {
-  Util.blurElement()
-  mainState.openContentFilteringPopup()
-}
-
-function openMutingUsersPopup () {
-  Util.blurElement()
-  mainState.openMutingUsersPopup()
-}
-
-function openBlockingUsersPopup () {
-  Util.blurElement()
-  mainState.openBlockingUsersPopup()
-}
-
-function openWordMutePopup () {
-  Util.blurElement()
-  mainState.openWordMutePopup()
-}
-
 function openInviteCodesPopup () {
   Util.blurElement()
   mainState.openInviteCodesPopup()
+
+  // ポップアップから画面遷移するため
+  closeSettingsPopup()
 }
 
 function showDescription (type: string) {
