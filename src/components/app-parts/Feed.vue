@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
+import DisplayName from "@/components/app-parts/DisplayName.vue"
 import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
@@ -35,11 +36,10 @@ function removeThisPost (uri: string) {
         class="folder__item"
       >
         <SVGIcon name="reply" />
-        <div class="display-name">{{
-          !mainState.currentSetting.postAnonymization
-            ? feed.post.author.displayName
-            : $t("anonymous")
-        }}</div>
+        <DisplayName
+          :displayName="feed.post.author.displayName"
+          :anonymizable="true"
+        />
         <AuthorHandle
           :handle="feed.post.author.handle"
           :anonymizable="true"
@@ -52,11 +52,10 @@ function removeThisPost (uri: string) {
         class="folder__item"
       >
         <SVGIcon name="repost" />
-        <div class="display-name">{{
-          !mainState.currentSetting.postAnonymization
-            ? feed.reason.by.displayName
-            : $t("anonymous")
-        }}</div>
+        <DisplayName
+          :displayName="feed.reason.by.displayName"
+          :anonymizable="true"
+        />
         <AuthorHandle
           :handle="feed.reason.by.handle"
           :anonymizable="true"
@@ -141,11 +140,6 @@ function removeThisPost (uri: string) {
     & > .display-name {
       color: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
-      font-weight: bold;
-      line-height: 1.25;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     & > .author-handle {

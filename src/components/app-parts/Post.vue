@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
+import DisplayName from "@/components/app-parts/DisplayName.vue"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LikeButton from "@/components/buttons/LikeButton.vue"
@@ -608,11 +609,11 @@ function onActivateHashTag (text: string) {
         @click.stop="onActivateReplierLink"
       >
         <SVGIcon name="reply" />
-        <div class="replier__display-name">{{
-          !mainState.currentSetting.postAnonymization
-            ? parentPost?.author?.displayName
-            : $t("anonymous")
-        }}</div>
+        <DisplayName
+          class="replier__display-name"
+          :displayName="parentPost?.author?.displayName"
+          :anonymizable="true"
+        />
         <AuthorHandle
           :handle="parentPost.author?.handle"
           :anonymizable="true"
@@ -626,11 +627,11 @@ function onActivateHashTag (text: string) {
         @click.stop="onActivateProfileLink(post.__custom?.reason?.by?.did as string)"
       >
         <SVGIcon name="repost" />
-        <div class="reposter__display-name">{{
-          !mainState.currentSetting.postAnonymization
-            ? post.__custom?.reason?.by?.displayName
-            : $t("anonymous")
-        }}</div>
+        <DisplayName
+          class="reposter__display-name"
+          :displayName="post.__custom?.reason?.by?.displayName"
+          :anonymizable="true"
+        />
         <AuthorHandle
           :handle="post.__custom?.reason?.by?.handle"
           :anonymizable="true"
@@ -663,11 +664,12 @@ function onActivateHashTag (text: string) {
         v-show="state.isWordMute"
         name="wordMute"
       />
-      <div class="post__mask__display-name">{{
-        !mainState.currentSetting.postAnonymization
-          ? post.author?.displayName
-          : $t("anonymous")
-      }}</div>
+      <DisplayName
+        class="post__mask__display-name"
+        :displayName="post.author?.displayName"
+        :anonymizable="true"
+      />
+      <!-- TODO: -->
       <div class="post__mask__handle">{{
         !mainState.currentSetting.postAnonymization
           ? post.author?.handle
@@ -702,19 +704,18 @@ function onActivateHashTag (text: string) {
           />
 
           <!-- 表示名 -->
-          <div class="display-name">
+          <DisplayName
+            class="body__right__header__display-name"
+            :displayName="post.author?.displayName ?? '　'"
+            :anonymizable="true"
+          >
             <!-- アカウントラベルアイコン -->
             <SVGIcon
               v-if="state.hasAppliedHarmfulLabel"
               name="contentFiltering"
               class="account-label-icon"
             />
-
-            <span>{{
-            !mainState.currentSetting.postAnonymization
-              ? post.author?.displayName ?? "　"
-              : $t("anonymous")}}</span>
-          </div>
+          </DisplayName>
 
           <!-- ハンドル -->
           <AuthorHandle
@@ -1175,7 +1176,6 @@ function onActivateHashTag (text: string) {
     }
 
     &__content-warning,
-    &__display-name,
     &__handle {
       line-height: 1.25;
       overflow: hidden;
@@ -1192,7 +1192,6 @@ function onActivateHashTag (text: string) {
     &__display-name {
       color: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875em;
-      font-weight: bold;
     }
 
     &__handle {
@@ -1294,11 +1293,6 @@ function onActivateHashTag (text: string) {
 
   &__display-name {
     font-size: 0.875em;
-    font-weight: bold;
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 
@@ -1391,6 +1385,18 @@ function onActivateHashTag (text: string) {
   grid-template-columns: auto 1fr auto;
   grid-gap: 0.5em;
   overflow: hidden;
+
+  &__display-name {
+    color: var(--fg-color-075);
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5em;
+    font-size: 0.875em;
+
+    .account-label-icon {
+      fill: rgb(var(--notice-color));
+    }
+  }
 }
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
@@ -1401,28 +1407,6 @@ function onActivateHashTag (text: string) {
 
 .avatar-in-post {
   font-size: 1.5em;
-}
-
-.display-name {
-  display: flex;
-  align-items: center;
-  grid-gap: 0.5em;
-  overflow: hidden;
-
-  .account-label-icon {
-    fill: rgb(var(--notice-color));
-    font-size: 0.875em;
-  }
-
-  & > span {
-    color: var(--fg-color-075);
-    font-size: 0.875em;
-    font-weight: bold;
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
 }
 
 .indexed-at {

@@ -5,6 +5,7 @@ import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarButton from "@/components/buttons/AvatarButton.vue"
 import BlockButton from "@/components/buttons/BlockButton.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
+import DisplayName from "@/components/app-parts/DisplayName.vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
 import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
@@ -247,7 +248,10 @@ function onActivateAccountMaskToggle () {
               </div>
 
               <!-- 表示名 -->
-              <div class="display-name">{{ mainState.currentProfile?.displayName ?? "&nbsp;" }}</div>
+              <DisplayName
+                :displayName="mainState.currentProfile?.displayName ?? '&nbsp;'"
+                :anonymizable="false"
+              />
 
               <!-- ハンドル -->
               <div class="handle">
@@ -638,10 +642,6 @@ function onActivateAccountMaskToggle () {
 
 .display-name {
   font-size: 1.5rem;
-  font-weight: bold;
-  line-height: 1.25;
-  user-select: text;
-  word-break: break-word;
 }
 
 .handle > a,

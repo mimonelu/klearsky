@@ -3,6 +3,7 @@ import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vu
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
+import DisplayName from "@/components/app-parts/DisplayName.vue"
 import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
@@ -108,16 +109,17 @@ function onActivateContentFilteringToggle () {
         :did="user.did"
         :image="user.avatar"
       />
-      <div class="display-name">
+      <DisplayName
+        :displayName="user.displayName"
+        :anonymizable="true"
+      >
         <!-- アカウントラベルアイコン -->
         <SVGIcon
           v-if="state.hasAppliedHarmfulLabel"
           name="contentFiltering"
           class="account-label-icon"
         />
-
-        <span>{{ user.displayName }}</span>
-      </div>
+      </DisplayName>
       <AuthorHandle
         :handle="user.handle"
         :anonymizable="true"
@@ -192,24 +194,18 @@ function onActivateContentFilteringToggle () {
 
 .display-name {
   grid-area: n;
-  color: var(--fg-color-075);
   display: flex;
   align-items: center;
   grid-gap: 0.5em;
-  overflow: hidden;
 
   .account-label-icon {
     fill: rgb(var(--notice-color));
     font-size: 0.875em;
   }
 
-  & > span {
+  &:deep() > span {
+    color: var(--fg-color-075);
     font-size: 0.875em;
-    font-weight: bold;
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 

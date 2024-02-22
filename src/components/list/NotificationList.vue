@@ -2,6 +2,7 @@
 import { inject } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
+import DisplayName from "@/components/app-parts/DisplayName.vue"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import ListCard from "@/components/list/ListCard.vue"
 import Post from "@/components/app-parts/Post.vue"
@@ -144,7 +145,10 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             />
 
             <!-- 表示名 -->
-            <div class="display-name">{{ notification.displayName }}</div>
+            <DisplayName
+              :displayName="notification.displayName"
+              :anonymizable="true"
+            />
 
             <!-- ハンドル -->
             <AuthorHandle
@@ -372,13 +376,11 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 
 // 表示名
 .display-name {
-  color: var(--fg-color-075);
   font-size: 0.875rem;
-  font-weight: bold;
-  line-height: 1.25;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+  &:deep() > span {
+    color: var(--fg-color-075);
+  }
 }
 
 // リアクション日時
