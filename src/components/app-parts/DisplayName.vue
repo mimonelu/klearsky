@@ -29,6 +29,9 @@ const state = reactive<{
 
 <style lang="scss" scoped>
 .display-name {
+  display: flex;
+  overflow: hidden;
+
   & > span {
     font-weight: bold;
     line-height: 1.25;

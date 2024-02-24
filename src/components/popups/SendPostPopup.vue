@@ -430,9 +430,10 @@ function openThreadgatePopup () {
     flex-wrap: wrap;
     grid-gap: 1rem 0.5rem;
 
-    .button--bordered {
-      min-height: 2.625rem;
+    .button--bordered:deep() {
       font-size: 0.875rem;
+      overflow: hidden;
+      min-height: 2.625rem;
 
       & > .svg-icon {
         font-size: 0.875rem;

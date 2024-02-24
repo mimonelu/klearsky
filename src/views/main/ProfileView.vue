@@ -280,9 +280,9 @@ function onActivateAccountMaskToggle () {
                   <span>{{ $t("followed") }}</span>
                 </div>
 
-                <!-- 折り畳みトグルボタン -->
+                <!-- 折り畳みトグル -->
                 <button
-                  class="button--bordered"
+                  class="button--bordered folding-toggle"
                   @click="toggleFolding"
                 >
                   <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
@@ -580,6 +580,16 @@ function onActivateAccountMaskToggle () {
         flex-grow: 1;
         grid-gap: 0.375rem;
 
+        .display-name {
+          display: unset;
+          font-size: 1.5rem;
+
+          &:deep() > span {
+            white-space: unset;
+            word-break: break-word;
+          }
+        }
+
         &__bottom {
           display: flex;
           align-items: flex-start;
@@ -590,6 +600,11 @@ function onActivateAccountMaskToggle () {
             font-size: 0.75rem;
             margin-left: auto;
             white-space: nowrap;
+          }
+
+          // 折り畳みトグル
+          .folding-toggle {
+            white-space: unset;
           }
         }
       }
@@ -638,10 +653,6 @@ function onActivateAccountMaskToggle () {
 
 .avatar {
   font-size: 5rem;
-}
-
-.display-name {
-  font-size: 1.5rem;
 }
 
 .handle > a,

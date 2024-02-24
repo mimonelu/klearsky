@@ -52,6 +52,7 @@ const state = reactive<{
   flex-wrap: wrap;
   align-items: center;
   grid-gap: 0.5em;
+  overflow: hidden;
   padding: 0.5em 1em;
   &:focus, &:hover {
     border-color: rgb(var(--notice-color), 0.75);
@@ -76,24 +77,22 @@ const state = reactive<{
     fill: rgb(var(--notice-color));
   }
 
-
   &__label,
   &__state-label {
     font-weight: bold;
     line-height: var(--line-height);
-    word-break: break-word;
+    word-break: break-all;
   }
 
   &__label {
     color: rgb(var(--notice-color));
-    word-break: break-word;
   }
 
   &__state-label {
     color: var(--fg-color-05);
     font-size: 0.875em;
     margin-left: auto;
-    white-space: nowrap;
+    overflow: hidden;
   }
 }
 </style>

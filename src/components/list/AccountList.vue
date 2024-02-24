@@ -424,6 +424,7 @@ function onClickFileBox (event: Event) {
   align-items: flex-start;
   grid-gap: 0.375rem;
   margin-top: 0.25rem;
+  overflow: hidden;
 }
 
 .button-contaienr {
