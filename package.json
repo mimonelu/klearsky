@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@atproto/api": "0.9.6",
+    "@atproto/api": "0.10.1",
     "@ipld/car": "^5.1.1",
     "@vueuse/core": "^10.2.0",
     "browser-image-compression": "^2.0.2",
