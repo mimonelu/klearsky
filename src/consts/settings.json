@@ -61,9 +61,9 @@
   "COLOR_THEMES": [
     { "label": "colorThemeAuto", "value": "auto" },
     { "label": "colorThemeLight", "value": "light" },
-    { "label": "colorThemeDarkGray", "value": "darkGray" },
-    { "label": "colorThemeLightGray", "value": "lightGray" },
     { "label": "colorThemeDark", "value": "dark" },
+    { "label": "colorThemeLightGray", "value": "lightGray" },
+    { "label": "colorThemeDarkGray", "value": "darkGray" },
     { "label": "colorThemeWarm", "value": "warm" },
     { "label": "colorThemePink", "value": "pink" },
     { "label": "colorThemeRed", "value": "red" },

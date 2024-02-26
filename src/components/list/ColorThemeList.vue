@@ -22,8 +22,10 @@ function onActivate (colorValue: string) {
       :data-selected="colorTheme.value === mainState.currentSetting.colorTheme"
       @click="onActivate(colorTheme.value)"
     >
-      <SVGIcon name="shimmer" />
-      <div class="color-theme-list__box__label">{{ $t(colorTheme.label) }}</div>
+      <div
+        v-if="colorTheme.value !== 'auto'"
+        class="color-theme-list__box__label"
+      >Aa</div>
     </div>
   </div>
 </template>
@@ -31,39 +33,40 @@ function onActivate (colorValue: string) {
 <style lang="scss" scoped>
 .color-theme-list {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 0.5rem;
 
   &__box {
     background-color: rgb(var(--bg-color));
-    border: 1px solid var(--fg-color-025);
+    border: 1px solid transparent;
     border-radius: var(--border-radius);
     display: flex;
     align-items: center;
+    justify-content: center;
     grid-gap: 0.25rem;
     line-height: 1.25;
-    padding: 0.5rem;
-    &:first-child {
-      grid-column: 1 / 3;
-    }
+    overflow: hidden;
+    min-height: 3rem;
     &[data-selected="true"] {
       box-shadow: 0 0 0 2px rgb(var(--accent-color));
     }
     &:focus, &:hover {
       cursor: pointer;
     }
+    &[data-color-theme="auto"] {
+      // 自動配色の背景色は厳密にカラーテーマに沿わなくとも良い
+      background-image: linear-gradient(
+        to bottom right,
+        rgb(255, 255, 255) 49.5%,
+        rgb(0, 0, 0) 50.5%
+      );
 
-    & > .svg-icon {
-      fill: rgb(var(--accent-color));
+      border-color: rgb(var(--fg-color));
     }
 
     &__label {
-      color: rgb(var(--fg-color));
-      word-break: break-word;
-    }
-    &:focus > &__label,
-    &:hover > &__label {
       color: rgb(var(--accent-color));
+      font-weight: bold;
     }
   }
 }
