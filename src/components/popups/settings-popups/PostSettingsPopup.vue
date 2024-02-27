@@ -132,12 +132,13 @@ const mainState = inject("state") as MainState
           <div class="settings-popup__form__body">
             <!-- 画像 - 画像の制御 -->
             <div class="settings-popup__form__header">
-              <span>{{ $t("imageControl") }}</span>
+              <span>{{ $t("imageFolding") }}</span>
             </div>
             <Radios
               :state="mainState.currentSetting"
-              model="imageControl"
-              :options="SETTINGS.IMAGE_CONTROLS"
+              model="imageFolding"
+              :options="SETTINGS.IMAGE_FOLDINGS"
+              layout="horizontal"
               @update="$emit('saveSetting')"
             />
 

@@ -114,38 +114,33 @@ const state = reactive<{
   hasImage: computed((): boolean => state.images.length > 0 && (props.level ?? 1) < 3),
   isImagefreeSize: computed((): boolean => mainState.currentSetting.imageOption?.includes(0) ?? false),
 
-  // 画像 - 表示制御
+  // 画像の折り畳み
   // TODO: 引用リポストに対応すること
   displayImage: computed((): boolean => {
-    // すべて表示
-    if (mainState.currentSetting.imageControl === "all") return true
+    // なし - すべて表示
+    if (mainState.currentSetting.imageFolding === "none") return true
 
-    // 自身とフォロイーとフォロイーのリポスト、およびプロフィールユーザーのみ表示
-    if (mainState.currentSetting.imageControl === "followingEx" && (
-      // 自身である
-      props.post.author?.did === mainState.atp.session?.did ||
-      // フォロイーである
-      props.post.author.viewer?.following != null ||
-      // フォロイーのリポストである
-      props.post.__custom?.reason?.by.viewer?.following != null ||
-      // プロフィールユーザーである
-      (
-        mainState.currentPath.startsWith('/profile/') &&
-        props.post.author?.did === mainState.currentProfile?.did
-      )
-    )) return true
+    // 適度 - 自身とフォロイーとフォロイーのリポスト、およびプロフィールユーザーのみ表示
+    else if (mainState.currentSetting.imageFolding === "recommended") {
+      if (
+        // 自身である
+        props.post.author?.did === mainState.atp.session?.did ||
+        // フォロイーである
+        props.post.author.viewer?.following != null ||
+        // フォロイーのリポストである
+        props.post.__custom?.reason?.by.viewer?.following != null ||
+        // プロフィールユーザーである
+        (
+          mainState.currentPath.startsWith('/profile/') &&
+          props.post.author?.did === mainState.currentProfile?.did
+        )
+      ) return true
+    }
 
-    // 自身とフォロイーのみ表示
-    if (mainState.currentSetting.imageControl === "following" && (
-      // 自身である
-      props.post.author?.did === mainState.atp.session?.did ||
-      // フォロイーである
-      props.post.author.viewer?.following != null
-    )) return true
-
-    // 自身のみ表示
-    if (mainState.currentSetting.imageControl === "self" &&
-      props.post.author?.did === mainState.atp.session?.did) return true
+    // すべて - 自身以外
+    else if (mainState.currentSetting.imageFolding === "all") {
+      if (props.post.author?.did === mainState.atp.session?.did) return true
+    }
 
     return false
   }),

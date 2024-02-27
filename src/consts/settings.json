@@ -28,12 +28,10 @@
     { "label": "repostFolding2", "value": "recommended" },
     { "label": "repostFolding3", "value": "all" }
   ],
-  "IMAGE_CONTROLS": [
-    { "label": "imageControl1", "value": "all" },
-    { "label": "imageControl2", "value": "followingEx" },
-    { "label": "imageControl3", "value": "following" },
-    { "label": "imageControl4", "value": "self" },
-    { "label": "imageControl5", "value": "none" }
+  "IMAGE_FOLDINGS": [
+    { "label": "imageFolding1", "value": "none" },
+    { "label": "imageFolding2", "value": "recommended" },
+    { "label": "imageFolding3", "value": "all" }
   ],
   "IMAGE_ASPECT_RATIO": [
     { "label": "imageAspectRatio1", "value": "1 / 1" },

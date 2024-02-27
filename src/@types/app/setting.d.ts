@@ -11,7 +11,7 @@ type TTSetting = {
   hideNumberOfReaction?: boolean
   imageAspectRatio?: string
   imageOption?: Array<number>
-  imageControl?: "all" | "followingEx" | "following" | "self" | "none"
+  imageFolding?: "none" | "recommended" | "all"
   lightning?: string
   linkcardEmbeddedControl?: Array<string>
   mainAreaOpacity?: number

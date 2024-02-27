@@ -300,13 +300,11 @@
   "repostFolding2": "適度",
   "repostFolding3": "すべて",
 
-  "image": "画像",
-  "imageControl": "画像の制御",
-  "imageControl1": "すべての画像を折り畳まない",
-  "imageControl2": "あなたとフォロイーが投稿した画像、フォロイーがリポストした画像、プロフィールユーザーが投稿した画像のみ折り畳まない",
-  "imageControl3": "あなたとフォロイーが投稿した画像のみ折り畳まない",
-  "imageControl4": "あなたが投稿した画像のみ折り畳まない",
-  "imageControl5": "すべての画像を折り畳む",
+  "image": "画像の制御",
+  "imageFolding": "画像の折り畳み",
+  "imageFolding1": "なし",
+  "imageFolding2": "適度",
+  "imageFolding3": "すべて",
   "showImage": "画像を表示する",
   "hideImage": "画像を隠す",
 

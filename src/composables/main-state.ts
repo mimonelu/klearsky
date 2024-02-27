@@ -548,8 +548,8 @@ function saveSettings () {
     state.settings[did].repostFolding = "recommended"
   if (state.settings[did].timeControl == null)
     state.settings[did].timeControl = "relative"
-  if (state.settings[did].imageControl == null)
-    state.settings[did].imageControl = "all"
+  if (state.settings[did].imageFolding == null)
+    state.settings[did].imageFolding = "none"
   if (state.settings[did].imageAspectRatio == null)
     state.settings[did].imageAspectRatio = "3 / 2"
   if (state.settings[did].imageOption == null)
