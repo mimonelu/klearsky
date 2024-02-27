@@ -322,6 +322,7 @@ function closeHtmlPopupDisplay () {
     @close="closeDesignSettingsPopup"
     @saveSetting="saveSetting"
     @changeSetting="changeSetting"
+    @showDescription="(name: string) => { showDescription(name) }"
   />
 
   <!-- ポスト設定ポップアップ -->
@@ -365,16 +366,26 @@ function closeHtmlPopupDisplay () {
         <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
       </ul>
     </template>
+
     <template v-else-if="state.htmlPopupType === 'autoTranslationIgnoreLanguage'">
       <ul class="bullet-points">
         <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
       </ul>
     </template>
+
+    <template v-else-if="state.htmlPopupType === 'backgroundImage'">
+      <ul class="bullet-points">
+        <li>{{ $t("backgroundImage1") }}</li>
+        <li>{{ $t("backgroundImage2") }}</li>
+      </ul>
+    </template>
+
     <template v-else-if="state.htmlPopupType === 'timelineControl'">
       <ul class="bullet-points">
         <li>{{ $t("timelineControlDescription") }}</li>
       </ul>
     </template>
+
     <template v-else-if="state.htmlPopupType === 'lightning'">
       <ul class="bullet-points">
         <li>{{ $t("lightningDescription") }}</li>

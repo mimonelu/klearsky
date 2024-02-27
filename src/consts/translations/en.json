@@ -265,6 +265,9 @@
   "fontSizeMedium": "Medium",
   "fontSizeLarge": "Large",
 
+  "backgroundImage1": "Depending on the server where the background image is placed, it may not be displayed.",
+  "backgroundImage2": "You can also set the value of the CSS property `background-image`.\ne.g. linear-gradient(to bottom, pink, cyan)",
+
   "wordMute": "Muted Words",
   "wordMuteEdit": "Edit muted words",
   "wordMuteAdd": "Add muted word",

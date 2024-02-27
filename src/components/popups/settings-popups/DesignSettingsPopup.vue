@@ -58,6 +58,14 @@ const mainState = inject("state") as MainState
             <!-- 背景画像 - URL -->
             <div class="settings-popup__form__header">
               <span>{{ $t("backgroundImage") }}</span>
+
+              <!-- ヘルプボタン -->
+              <button
+                class="settings-popup__help-button"
+                @click.prevent="$emit('showDescription', 'backgroundImage')"
+              >
+                <SVGIcon name="help" />
+              </button>
             </div>
             <input
               class="textbox"
