@@ -1,6 +1,17 @@
 @mixin color-theme-light {
   color-scheme: light;
   --bg-color: 255, 255, 255;
+  --fg-color: 16, 16, 16;
+  --accent-color: 0, 128, 255;
+  --notice-color: 240, 32, 32;
+  --post-color: 0, 160, 240;
+  --like-color: 240, 64, 128;
+  --share-color: 0, 160, 32;
+}
+
+@mixin color-theme-light-gray {
+  color-scheme: light;
+  --bg-color: 224, 220, 216;
   --fg-color: 32, 32, 32;
   --accent-color: 0, 128, 255;
   --notice-color: 240, 32, 32;
@@ -15,95 +26,18 @@
   --fg-color: 224, 224, 224;
   --accent-color: 0, 128, 255;
   --notice-color: 240, 32, 32;
-  --post-color: 32, 160, 240;
-  --like-color: 240, 64, 128;
-  --share-color: 32, 192, 64;
-}
-
-@mixin color-theme-light-gray {
-  color-scheme: light;
-  --bg-color: 224, 224, 224;
-  --fg-color: 32, 32, 32;
-  --accent-color: 0, 128, 255;
-  --notice-color: 240, 32, 32;
   --post-color: 0, 160, 240;
   --like-color: 240, 64, 128;
-  --share-color: 0, 160, 32;
+  --share-color: 32, 192, 64;
 }
 
 @mixin color-theme-dark-gray {
   color-scheme: dark;
-  --bg-color: 32, 32, 32;
+  --bg-color: 24, 28, 32;
   --fg-color: 224, 224, 224;
-  --accent-color: 64, 128, 255;
-  --notice-color: 240, 32, 32;
-  --post-color: 32, 160, 240;
-  --like-color: 240, 64, 128;
-  --share-color: 32, 192, 64;
-}
-
-@mixin color-theme-warm {
-  color-scheme: light;
-  --bg-color: 255, 240, 224;
-  --fg-color: 56, 40, 24;
-  --accent-color: 255, 96, 0;
+  --accent-color: 0, 128, 255;
   --notice-color: 240, 32, 32;
   --post-color: 0, 160, 240;
-  --like-color: 240, 64, 128;
-  --share-color: 0, 160, 32;
-}
-
-@mixin color-theme-pink {
-  color-scheme: light;
-  --bg-color: 255, 224, 240;
-  --fg-color: 0, 48, 96;
-  --accent-color: 64, 128, 255;
-  --notice-color: 255, 32, 32;
-  --post-color: 0, 160, 224;
-  --like-color: 240, 64, 128;
-  --share-color: 32, 160, 64;
-}
-
-@mixin color-theme-red {
-  color-scheme: light;
-  --bg-color: 64, 32, 32;
-  --fg-color: 240, 224, 224;
-  --accent-color: 240, 128, 128;
-  --notice-color: 255, 64, 64;
-  --post-color: 32, 192, 240;
-  --like-color: 240, 64, 128;
-  --share-color: 0, 192, 32;
-}
-
-@mixin color-theme-green {
-  color-scheme: light;
-  --bg-color: 160, 192, 160;
-  --fg-color: 16, 32, 16;
-  --accent-color: 255, 255, 0;
-  --notice-color: 192, 32, 32;
-  --post-color: 0, 64, 255;
-  --like-color: 255, 32, 128;
-  --share-color: 0, 128, 0;
-}
-
-@mixin color-theme-blue {
-  color-scheme: light;
-  --bg-color: 0, 0, 192;
-  --fg-color: 224, 224, 240;
-  --accent-color: 240, 64, 240;
-  --notice-color: 240, 32, 32;
-  --post-color: 0, 192, 240;
-  --like-color: 240, 64, 128;
-  --share-color: 32, 224, 64;
-}
-
-@mixin color-theme-indigo {
-  color-scheme: dark;
-  --bg-color: 16, 32, 48;
-  --fg-color: 192, 224, 255;
-  --accent-color: 224, 224, 128;
-  --notice-color: 240, 32, 32;
-  --post-color: 32, 160, 240;
   --like-color: 240, 64, 128;
   --share-color: 32, 192, 64;
 }

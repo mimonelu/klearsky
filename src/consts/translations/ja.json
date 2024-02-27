@@ -322,15 +322,9 @@
   "colorTheme": "カラーテーマ",
   "colorThemeAuto": "自動",
   "colorThemeLight": "ライト",
-  "colorThemeDark": "ダーク",
   "colorThemeLightGray": "ライトグレー",
+  "colorThemeDark": "ダーク",
   "colorThemeDarkGray": "ダークグレー",
-  "colorThemeWarm": "ウォームサンド",
-  "colorThemePink": "ピンキーブルー",
-  "colorThemeRed": "レッドワイン",
-  "colorThemeGreen": "グリーンティー",
-  "colorThemeBlue": "ターミナル",
-  "colorThemeIndigo": "ナイトスター",
 
   "mainAreaOpacity": "メインエリアの不透明度",
 

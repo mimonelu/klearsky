@@ -322,15 +322,9 @@
   "colorTheme": "Color Theme",
   "colorThemeAuto": "Auto",
   "colorThemeLight": "Light",
-  "colorThemeDark": "Dark",
   "colorThemeLightGray": "Light gray",
+  "colorThemeDark": "Dark",
   "colorThemeDarkGray": "Dark gray",
-  "colorThemeWarm": "Warm sand",
-  "colorThemePink": "Pinky blue",
-  "colorThemeRed": "Red wine",
-  "colorThemeGreen": "Green tea",
-  "colorThemeBlue": "Terminal",
-  "colorThemeIndigo": "Night stars",
 
   "mainAreaOpacity": "Main Area Opacity",
 
