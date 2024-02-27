@@ -49,29 +49,6 @@ const mainState = inject("state") as MainState
           </div>
         </div>
 
-        <!-- メインエリアの不透明度 -->
-        <div class="settings-popup__form">
-          <div class="settings-popup__form__header">
-            <span>{{ $t("mainAreaOpacity") }}</span>
-          </div>
-          <div class="settings-popup__form__body">
-            <label class="selectbox">
-              <select
-                v-model="mainState.currentSetting.mainAreaOpacity"
-                name="mainAreaOpacity"
-                @change="$emit('changeSetting')"
-              >
-                <option
-                  v-for="mainAreaOpacity, mainAreaOpacityIndex in SETTINGS.MAIN_AREA_OPACITIES"
-                  :key="mainAreaOpacityIndex"
-                  :value="mainAreaOpacity.value"
-                  :selected="mainAreaOpacity.value === mainState.currentSetting.mainAreaOpacity"
-                >{{ $t(mainAreaOpacity.label) }}</option>
-              </select>
-            </label>
-          </div>
-        </div>
-
         <!-- 背景画像 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
@@ -106,6 +83,29 @@ const mainState = inject("state") as MainState
                   :value="backgroundOpacity.value"
                   :selected="backgroundOpacity.value === mainState.currentSetting.backgroundOpacity"
                 >{{ $t(backgroundOpacity.label) }}</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <!-- メインエリアの不透明度 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("mainAreaOpacity") }}</span>
+          </div>
+          <div class="settings-popup__form__body">
+            <label class="selectbox">
+              <select
+                v-model="mainState.currentSetting.mainAreaOpacity"
+                name="mainAreaOpacity"
+                @change="$emit('changeSetting')"
+              >
+                <option
+                  v-for="mainAreaOpacity, mainAreaOpacityIndex in SETTINGS.MAIN_AREA_OPACITIES"
+                  :key="mainAreaOpacityIndex"
+                  :value="mainAreaOpacity.value"
+                  :selected="mainAreaOpacity.value === mainState.currentSetting.mainAreaOpacity"
+                >{{ $t(mainAreaOpacity.label) }}</option>
               </select>
             </label>
           </div>
