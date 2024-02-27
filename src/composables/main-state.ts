@@ -542,10 +542,10 @@ function saveSettings () {
     state.settings[did].tags = []
   if (state.settings[did].wordMute == null)
     state.settings[did].wordMute = []
-  if (state.settings[did].replyControl == null)
-    state.settings[did].replyControl = []
-  if (state.settings[did].repostControl == null)
-    state.settings[did].repostControl = []
+  if (state.settings[did].replyFolding == null)
+    state.settings[did].replyFolding = "recommended"
+  if (state.settings[did].repostFolding == null)
+    state.settings[did].repostFolding = "recommended"
   if (state.settings[did].timeControl == null)
     state.settings[did].timeControl = "relative"
   if (state.settings[did].imageControl == null)
@@ -1079,8 +1079,8 @@ async function fetchTimeline (direction: "old" | "new", middleCursor?: string) {
   const cursor: undefined | false | string =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
-      state.currentSetting.replyControl,
-      state.currentSetting.repostControl,
+      state.currentSetting.replyFolding,
+      state.currentSetting.repostFolding,
       CONSTS.LIMIT_OF_FETCH_FEEDS,
       direction === "old" ? middleCursor ?? state.timelineCursor : undefined,
       middleCursor != null

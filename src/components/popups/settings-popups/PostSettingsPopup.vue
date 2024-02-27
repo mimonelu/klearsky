@@ -100,23 +100,25 @@ const mainState = inject("state") as MainState
           <div class="settings-popup__form__body">
             <!-- タイムラインの制御 - リプライ -->
             <div class="settings-popup__form__header">
-              <span>{{ $t("replyControl") }}</span>
+              <span>{{ $t("replyFolding") }}</span>
             </div>
-            <Checkboxes
+            <Radios
               :state="mainState.currentSetting"
-              model="replyControl"
-              :options="SETTINGS.REPLY_CONTROLS"
+              model="replyFolding"
+              :options="SETTINGS.REPLY_FOLDINGS"
+              layout="horizontal"
               @update="$emit('saveSetting')"
             />
 
             <!-- タイムラインの制御 - リポスト -->
             <div class="settings-popup__form__header">
-              <span>{{ $t("repostControl") }}</span>
+              <span>{{ $t("repostFolding") }}</span>
             </div>
-            <Checkboxes
+            <Radios
               :state="mainState.currentSetting"
-              model="repostControl"
-              :options="SETTINGS.REPOST_CONTROLS"
+              model="repostFolding"
+              :options="SETTINGS.REPOST_FOLDINGS"
+              layout="horizontal"
               @update="$emit('saveSetting')"
             />
           </div>

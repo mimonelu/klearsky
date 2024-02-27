@@ -18,19 +18,15 @@
     { "label": "notificationFetchInterval3", "value": 30000 },
     { "label": "notificationFetchInterval4", "value": 60000 }
   ],
-  "REPLY_CONTROLS": [
-    { "label": "replyControl1", "value": 1 },
-    { "label": "replyControl2", "value": 2 },
-    { "label": "replyControl3", "value": 3 },
-    { "label": "replyControl4", "value": 4 },
-    { "label": "replyControl5", "value": 5 }
+  "REPLY_FOLDINGS": [
+    { "label": "replyFolding1", "value": "none" },
+    { "label": "replyFolding2", "value": "recommended" },
+    { "label": "replyFolding3", "value": "all" }
   ],
-  "REPOST_CONTROLS": [
-    { "label": "repostControl1", "value": 1 },
-    { "label": "repostControl2", "value": 2 },
-    { "label": "repostControl3", "value": 3 },
-    { "label": "repostControl4", "value": 4 },
-    { "label": "repostControl5", "value": 5 }
+  "REPOST_FOLDINGS": [
+    { "label": "repostFolding1", "value": "none" },
+    { "label": "repostFolding2", "value": "recommended" },
+    { "label": "repostFolding3", "value": "all" }
   ],
   "IMAGE_CONTROLS": [
     { "label": "imageControl1", "value": "all" },

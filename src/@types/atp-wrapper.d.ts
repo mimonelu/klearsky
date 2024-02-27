@@ -65,7 +65,7 @@ interface TIAtpWrapper {
   fetchServerInfo (this: TIAtpWrapper): Promise<Error | TTServerInfo>
   fetchSuggestions (this: TIAtpWrapper, dataRef: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
   fetchTimeFeeds (this: TIAtpWrapper, oldPosts: Array<TTPost>, direction: "new" | "old", author: TTUser, limit?: number): Promise<Error | undefined | string>
-  fetchTimeline (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, replyControl?: Array<number>, repostControl?: Array<number>, limit?: number, cursor?: string, middle?: boolean): Promise<undefined | false | string>
+  fetchTimeline (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, replyFolding?: string, repostFolding?: string, limit?: number, cursor?: string, middle?: boolean): Promise<undefined | false | string>
   fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchWithoutAgent (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, string>): Promise<undefined | Response>
   hasLogin (this: TIAtpWrapper): boolean

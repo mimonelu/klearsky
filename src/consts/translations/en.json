@@ -289,18 +289,16 @@
 
   "timelineControl": "Following Feed Visibility",
   "timelineControlDescription": "Effective from the next download.",
-  "replyControl": "Reply Visibility",
-  "replyControl1": "Collapse replies to the user himself",
-  "replyControl2": "Collapse replies to you",
-  "replyControl3": "Collapse replies to users who don't follow you",
-  "replyControl4": "Collapse replies to users you don't follow",
-  "replyControl5": "Collapse replies to users you follow",
-  "repostControl": "Repost Visibility",
-  "repostControl1": "Collapse reposts of posts by the user himself",
-  "repostControl2": "Collapse reposts of posts by you",
-  "repostControl3": "Collapse reposts of posts by users who don't follow you",
-  "repostControl4": "Collapse reposts of posts by users you don't follow",
-  "repostControl5": "Collapse reposts of posts by users you follow",
+
+  "replyFolding": "Reply Folding",
+  "replyFolding1": "None",
+  "replyFolding2": "Moderate",
+  "replyFolding3": "All",
+
+  "repostFolding": "Repost Folding",
+  "repostFolding1": "None",
+  "repostFolding2": "Moderate",
+  "repostFolding3": "All",
 
   "image": "Image",
   "imageControl": "Image Visibility",

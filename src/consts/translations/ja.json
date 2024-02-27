@@ -289,18 +289,16 @@
 
   "timelineControl": "フォロー中フィードの制御",
   "timelineControlDescription": "次のダウンロードから有効です。",
-  "replyControl": "リプライの制御",
-  "replyControl1": "自分自身へのリプライを折り畳む",
-  "replyControl2": "あなたへのリプライを折り畳む",
-  "replyControl3": "あなたをフォローしていないユーザーへのリプライを折り畳む",
-  "replyControl4": "あなたがフォローしていないユーザーへのリプライを折り畳む",
-  "replyControl5": "あなたがフォローしているユーザーへのリプライを折り畳む",
-  "repostControl": "リポストの制御",
-  "repostControl1": "自分自身によるポストのリポストを折り畳む",
-  "repostControl2": "あなたによるポストのリポストを折り畳む",
-  "repostControl3": "あなたをフォローしていないユーザーによるポストのリポストを折り畳む",
-  "repostControl4": "あなたがフォローしていないユーザーによるポストのリポストを折り畳む",
-  "repostControl5": "あなたがフォローしているユーザーによるポストのリポストを折り畳む",
+
+  "replyFolding": "リプライの折り畳み",
+  "replyFolding1": "なし",
+  "replyFolding2": "適度",
+  "replyFolding3": "すべて",
+
+  "repostFolding": "リポストの折り畳み",
+  "repostFolding1": "なし",
+  "repostFolding2": "適度",
+  "repostFolding3": "すべて",
 
   "image": "画像",
   "imageControl": "画像の制御",
