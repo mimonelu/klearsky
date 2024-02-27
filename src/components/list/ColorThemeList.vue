@@ -64,7 +64,7 @@ function onActivate (colorValue: string) {
     }
 
     &__label {
-      color: rgb(var(--accent-color));
+      color: rgb(var(--fg-color));
       font-weight: bold;
     }
   }
