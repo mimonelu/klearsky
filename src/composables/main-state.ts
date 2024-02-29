@@ -574,7 +574,7 @@ function saveSettings () {
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].mainAreaOpacity == null)
-    state.settings[did].mainAreaOpacity = 0.5
+    state.settings[did].mainAreaOpacity = 1.0
   if (state.settings[did].backgroundImage == null)
     state.settings[did].backgroundImage = undefined
   if (state.settings[did].backgroundOpacity == null)
