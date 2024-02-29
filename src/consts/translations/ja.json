@@ -322,6 +322,8 @@
   "imageAspectRatio4": "3 / 1",
   "singleImageHasNoAspectRatio": "画像が1枚だけの場合はなるべく原寸比を維持する",
 
+  "imageAutoPlay": "アニメーション画像の自動再生",
+
   "linkcard": "リンクカード",
   "linkcardEmbeddedControl": "リンクカードの埋込コンテンツ制御",
 

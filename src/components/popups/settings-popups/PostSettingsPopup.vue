@@ -160,6 +160,18 @@ const mainState = inject("state") as MainState
               layout="vertical"
               @update="$emit('saveSetting')"
             />
+
+            <!-- 画像 - アニメーション画像の自動再生 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("imageAutoPlay") }}</span>
+            </div>
+            <Radios
+              :state="mainState.currentSetting"
+              model="imageAutoPlay"
+              :options="SETTINGS.IMAGE_AUTO_PLAY"
+              layout="horizontal"
+              @update="$emit('saveSetting')"
+            />
           </div>
         </div>
 

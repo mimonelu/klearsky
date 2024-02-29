@@ -318,6 +318,8 @@
   "imageAspectRatio4": "3 / 1",
   "singleImageHasNoAspectRatio": "If only one image is attached, preserve the original size ratio as much as possible",
 
+  "imageAutoPlay": "Autoplay animated images",
+
   "linkcard": "Link card",
   "linkcardEmbeddedControl": "Link Card Embedded Content Control",
 

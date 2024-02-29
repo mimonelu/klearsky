@@ -54,6 +54,10 @@
   "IMAGE_OPTION": [
     { "label": "singleImageHasNoAspectRatio", "value": 0 }
   ],
+  "IMAGE_AUTO_PLAY": [
+    { "label": "disabled", "value": false },
+    { "label": "enabled", "value": true }
+  ],
   "LINKCARD_EMBEDDED_CONTROL": [
     { "label": "pnAppleMusic", "value": "applemusic" },
     { "label": "pnGiphy", "value": "giphy" },

@@ -14,6 +14,7 @@ type TTSetting = {
   imageAspectRatio?: string
   imageOption?: Array<number>
   imageFolding?: "none" | "recommended" | "all"
+  imageAutoPlay?: boolean
   lightning?: string
   linkcardEmbeddedControl?: Array<string>
   mainAreaOpacity?: number

@@ -45,6 +45,7 @@ onMounted(async () => {
   // アニメーション画像向け対応
   // ※指定された MIME の画像は blob を表示する
   if (props.image.image != null &&
+      mainState.currentSetting.imageAutoPlay &&
       BLOB_MIME_TYPES.includes(props.image.image.mimeType)) {
     setBlobToSrc(props.image.image as unknown as BlobRef)
     return

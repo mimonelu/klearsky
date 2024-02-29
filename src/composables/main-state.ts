@@ -558,6 +558,8 @@ function saveSettings () {
     state.settings[did].imageAspectRatio = "3 / 2"
   if (state.settings[did].imageOption == null)
     state.settings[did].imageOption = []
+  if (state.settings[did].imageAutoPlay == null)
+    state.settings[did].imageAutoPlay = true
   if (state.settings[did].linkcardEmbeddedControl == null)
     state.settings[did].linkcardEmbeddedControl = [
       "applemusic",
