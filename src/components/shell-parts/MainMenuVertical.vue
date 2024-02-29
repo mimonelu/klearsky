@@ -145,12 +145,6 @@ function moveToBottom () {
       </menu>
     </div>
 
-    <!-- Sandbox ラベル -->
-    <div
-      v-if="mainState.atp.session?.__sandbox"
-      class="sandbox"
-    >Sandbox</div>
-
     <!-- ホームボタン -->
     <RouterLink
       class="link-button"
@@ -336,23 +330,6 @@ function moveToBottom () {
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-}
-
-// Sandbox ラベル
-.sandbox {
-  background-color: rgb(var(--notice-color));
-  border-radius: var(--border-radius);
-  color: rgb(var(--fg-color));
-  font-weight: bold;
-  overflow: hidden;
-  padding: 0.5rem;
-  text-align: center;
-  text-overflow: ellipsis;
-
-  // 最大幅未満
-  @media (max-width: $max-width-with-scrollbar) {
-    display: none;
   }
 }
 

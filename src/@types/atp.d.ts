@@ -8,7 +8,6 @@ type TTSession = {
   refreshJwt: string
   __service?: string // Injected
   __serviceName?: string // Injected
-  __sandbox?: boolean // Injected
   __avatar?: string // Injected
 }
 

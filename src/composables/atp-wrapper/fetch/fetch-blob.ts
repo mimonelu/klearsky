@@ -13,7 +13,6 @@ export default async function (
   }
 
   const response = await this.fetchWithoutAgent("com.atproto.sync.getBlob", did, query)
-
   if (response == null) return null
   return await response.blob()
 }

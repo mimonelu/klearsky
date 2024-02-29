@@ -29,9 +29,6 @@ export default function (
   }
   session.__serviceName = hostName ?? newSession.__serviceName ?? session.__serviceName ?? ""
 
-  // Sandbox フラグ
-  session.__sandbox = session.__serviceName !== "bsky.social"
-
   this.data.sessions[this.data.did] = this.session = session
   console.log("[klearsky/resetSession]")
 }
