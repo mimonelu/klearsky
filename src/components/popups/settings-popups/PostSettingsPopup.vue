@@ -102,11 +102,10 @@ const mainState = inject("state") as MainState
             <div class="settings-popup__form__header">
               <span>{{ $t("replyFolding") }}</span>
             </div>
-            <Radios
+            <Checkboxes
               :state="mainState.currentSetting"
               model="replyFolding"
               :options="SETTINGS.REPLY_FOLDINGS"
-              layout="horizontal"
               @update="$emit('saveSetting')"
             />
 
@@ -114,11 +113,10 @@ const mainState = inject("state") as MainState
             <div class="settings-popup__form__header">
               <span>{{ $t("repostFolding") }}</span>
             </div>
-            <Radios
+            <Checkboxes
               :state="mainState.currentSetting"
               model="repostFolding"
               :options="SETTINGS.REPOST_FOLDINGS"
-              layout="horizontal"
               @update="$emit('saveSetting')"
             />
           </div>

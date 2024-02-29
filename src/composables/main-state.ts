@@ -543,9 +543,9 @@ function saveSettings () {
   if (state.settings[did].wordMute == null)
     state.settings[did].wordMute = []
   if (state.settings[did].replyFolding == null)
-    state.settings[did].replyFolding = "recommended"
+    state.settings[did].replyFolding = [4]
   if (state.settings[did].repostFolding == null)
-    state.settings[did].repostFolding = "recommended"
+    state.settings[did].repostFolding = [1, 2, 5]
   if (state.settings[did].timeControl == null)
     state.settings[did].timeControl = "relative"
   if (state.settings[did].imageFolding == null)

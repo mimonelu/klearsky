@@ -19,14 +19,18 @@
     { "label": "notificationFetchInterval4", "value": 60000 }
   ],
   "REPLY_FOLDINGS": [
-    { "label": "replyFolding1", "value": "none" },
-    { "label": "replyFolding2", "value": "recommended" },
-    { "label": "replyFolding3", "value": "all" }
+    { "label": "replyFolding1", "value": 1 },
+    { "label": "replyFolding2", "value": 2 },
+    { "label": "replyFolding3", "value": 3 },
+    { "label": "replyFolding4", "value": 4 },
+    { "label": "replyFolding5", "value": 5 }
   ],
   "REPOST_FOLDINGS": [
-    { "label": "repostFolding1", "value": "none" },
-    { "label": "repostFolding2", "value": "recommended" },
-    { "label": "repostFolding3", "value": "all" }
+    { "label": "repostFolding1", "value": 1 },
+    { "label": "repostFolding2", "value": 2 },
+    { "label": "repostFolding3", "value": 3 },
+    { "label": "repostFolding4", "value": 4 },
+    { "label": "repostFolding5", "value": 5 }
   ],
   "IMAGE_FOLDINGS": [
     { "label": "imageFolding1", "value": "none" },
