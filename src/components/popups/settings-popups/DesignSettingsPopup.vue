@@ -33,29 +33,48 @@ const mainState = inject("state") as MainState
           </div>
         </div>
 
-        <!-- フォントサイズ -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
-            <span>{{ $t("fontSize") }}</span>
+            <span>{{ $t("font") }}</span>
           </div>
           <div class="settings-popup__form__body">
-            <Radios
-              :state="mainState.currentSetting"
-              model="fontSize"
-              :options="SETTINGS.FONT_SIZES"
-              layout="horizontal"
-              @update="$emit('changeSetting')"
-            />
+            <!-- フォントサイズ -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("fontSize") }}</span>
+            </div>
+            <div class="settings-popup__form__body">
+              <Radios
+                :state="mainState.currentSetting"
+                model="fontSize"
+                :options="SETTINGS.FONT_SIZES"
+                layout="horizontal"
+                @update="$emit('changeSetting')"
+              />
+            </div>
+
+            <!-- フォントのカーニング -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("fontKerning") }}</span>
+            </div>
+            <div class="settings-popup__form__body">
+              <Radios
+                :state="mainState.currentSetting"
+                model="fontKerning"
+                :options="SETTINGS.FONT_KERNINGS"
+                layout="horizontal"
+                @update="$emit('changeSetting')"
+              />
+            </div>
           </div>
         </div>
 
-        <!-- 背景画像 -->
+        <!-- 壁紙 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
             <span>{{ $t("background") }}</span>
           </div>
           <div class="settings-popup__form__body">
-            <!-- 背景画像 - URL -->
+            <!-- 壁紙 - URL -->
             <div class="settings-popup__form__header">
               <span>{{ $t("backgroundImage") }}</span>
 
@@ -75,7 +94,7 @@ const mainState = inject("state") as MainState
               @change="$emit('changeSetting')"
             >
 
-            <!-- 背景画像 - 不透明度 -->
+            <!-- 壁紙 - 不透明度 -->
             <div class="settings-popup__form__header">
               <span>{{ $t("backgroundOpacity") }}</span>
             </div>

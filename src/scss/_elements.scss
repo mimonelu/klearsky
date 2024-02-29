@@ -38,6 +38,13 @@
   background-color: var(--accent-color-05);
 }
 
+:root {
+  // フォントのカーニング
+  &[data-font-kerning="true"] {
+    font-feature-settings: "palt";
+  }
+}
+
 body {
   --border-radius: 0.25em;
   --border-radius-large: 0.5em;
@@ -53,7 +60,6 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   color: rgb(var(--fg-color));
-  font-feature-settings: "palt";
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;

@@ -8,6 +8,10 @@
     { "label": "fontSizeMedium", "value": "medium" },
     { "label": "fontSizeLarge", "value": "large" }
   ],
+  "FONT_KERNINGS": [
+    { "label": "disabled", "value": false },
+    { "label": "enabled", "value": true }
+  ],
   "TIME_CONTROLS": [
     { "label": "timeControlRelative", "value": "relative" },
     { "label": "timeControlAbsolute", "value": "absolute" }

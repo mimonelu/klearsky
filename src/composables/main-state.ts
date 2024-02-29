@@ -513,7 +513,7 @@ function resetSettings () {
 
 function updateSettings () {
   updateCurrentLanguageSetting()
-  updateFontSizeSetting()
+  updateFontSetting()
   updateNotificationInterval()
   updateColorThemeSetting()
 }
@@ -536,6 +536,8 @@ function saveSettings () {
   else state.settings[did].contentLanguages = getSanitizedLanguages(state.settings[did].contentLanguages)
   if (state.settings[did].fontSize == null)
     state.settings[did].fontSize = "medium"
+  if (state.settings[did].fontKerning == null)
+    state.settings[did].fontKerning = false
   if (state.settings[did].notificationFetchInterval == null)
     state.settings[did].notificationFetchInterval = 15000
   if (state.settings[did].tags == null)
@@ -609,10 +611,22 @@ function updateCurrentLanguageSetting () {
   if (oldUiLanguage !== state.currentSetting.uiLanguage) state.forceUpdate()
 }
 
+function updateFontSetting () {
+  updateFontSizeSetting()
+  updateFontKerningSetting()
+}
+
 function updateFontSizeSetting () {
   window.document.documentElement.setAttribute(
     "data-font-size",
     state.currentSetting?.fontSize ?? "medium"
+  )
+}
+
+function updateFontKerningSetting () {
+  window.document.documentElement.setAttribute(
+    "data-font-kerning",
+    (!!state.currentSetting?.fontKerning).toString()
   )
 }
 

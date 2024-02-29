@@ -6,6 +6,7 @@ type TTSetting = {
   colorTheme?: string
   contentLanguages?: Array<string>
   fontSize?: string
+  fontKerning?: boolean
   globallineLayout?: "post" | "slim"
   hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean
