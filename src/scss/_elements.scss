@@ -43,6 +43,12 @@
   &[data-font-kerning="true"] {
     font-feature-settings: "palt";
   }
+
+  // フォントのアンチエイリアス
+  &[data-font-antialiasing="true"] {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+  }
 }
 
 body {
@@ -60,8 +66,6 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   color: rgb(var(--fg-color));
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;

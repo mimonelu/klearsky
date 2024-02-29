@@ -12,6 +12,10 @@
     { "label": "disabled", "value": false },
     { "label": "enabled", "value": true }
   ],
+  "FONT_ANTIALIASINGS": [
+    { "label": "disabled", "value": false },
+    { "label": "enabled", "value": true }
+  ],
   "TIME_CONTROLS": [
     { "label": "timeControlRelative", "value": "relative" },
     { "label": "timeControlAbsolute", "value": "absolute" }

@@ -538,6 +538,8 @@ function saveSettings () {
     state.settings[did].fontSize = "medium"
   if (state.settings[did].fontKerning == null)
     state.settings[did].fontKerning = false
+  if (state.settings[did].fontAntialiasing == null)
+    state.settings[did].fontAntialiasing = true
   if (state.settings[did].notificationFetchInterval == null)
     state.settings[did].notificationFetchInterval = 15000
   if (state.settings[did].tags == null)
@@ -614,6 +616,7 @@ function updateCurrentLanguageSetting () {
 function updateFontSetting () {
   updateFontSizeSetting()
   updateFontKerningSetting()
+  updateFontAntialiasingSetting()
 }
 
 function updateFontSizeSetting () {
@@ -627,6 +630,13 @@ function updateFontKerningSetting () {
   window.document.documentElement.setAttribute(
     "data-font-kerning",
     (!!state.currentSetting?.fontKerning).toString()
+  )
+}
+
+function updateFontAntialiasingSetting () {
+  window.document.documentElement.setAttribute(
+    "data-font-antialiasing",
+    (!!state.currentSetting?.fontAntialiasing).toString()
   )
 }
 

@@ -182,8 +182,8 @@
   "moderate": "モデレートする",
   "openOtherApp": "外部アプリで開く",
   "officialApp": "公式アプリ",
-  "officialAppProfile": "公式アプリ（プロフィール）",
-  "officialAppPost": "公式アプリ（ポスト）",
+  "officialAppProfile": "公式アプリ - プロフィール",
+  "officialAppPost": "公式アプリ - ポスト",
   "wrapperApp": "Bluesky Wrapper",
   "flatApp": "Flat",
   "kiteApp": "Kite",
@@ -266,6 +266,7 @@
   "fontSizeMedium": "中",
   "fontSizeLarge": "大",
   "fontKerning": "フォントのカーニング",
+  "fontAntialiasing": "フォントのアンチエイリアス",
 
   "backgroundImage1": "背景画像を置いているサーバによっては表示できない場合があります。",
   "backgroundImage2": "CSSプロパティ `background-image` の値も設定できます。\n例： linear-gradient(to bottom, pink, cyan)",

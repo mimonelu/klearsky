@@ -65,6 +65,20 @@ const mainState = inject("state") as MainState
                 @update="$emit('changeSetting')"
               />
             </div>
+
+            <!-- フォントのアンチエイリアス -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("fontAntialiasing") }}</span>
+            </div>
+            <div class="settings-popup__form__body">
+              <Radios
+                :state="mainState.currentSetting"
+                model="fontAntialiasing"
+                :options="SETTINGS.FONT_ANTIALIASINGS"
+                layout="horizontal"
+                @update="$emit('changeSetting')"
+              />
+            </div>
           </div>
         </div>
 

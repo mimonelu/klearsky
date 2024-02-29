@@ -182,8 +182,8 @@
   "moderate": "Moderate",
   "openOtherApp": "Open in other apps",
   "officialApp": "Official App",
-  "officialAppProfile": "Official App (Profile)",
-  "officialAppPost": "Official App (Post)",
+  "officialAppProfile": "Official App - Profile",
+  "officialAppPost": "Official App - Post",
   "wrapperApp": "Bluesky Wrapper",
   "flatApp": "Flat",
   "kiteApp": "Kite",
@@ -266,6 +266,7 @@
   "fontSizeMedium": "Medium",
   "fontSizeLarge": "Large",
   "fontKerning": "Font Kerning",
+  "fontAntialiasing": "Font Anti-aliasing",
 
   "backgroundImage1": "Depending on the server where the background image is placed, it may not be displayed.",
   "backgroundImage2": "You can also set the value of the CSS property `background-image`.\ne.g. linear-gradient(to bottom, pink, cyan)",
