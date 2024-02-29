@@ -367,6 +367,7 @@ function openThreadgatePopup () {
         <li>{{ $t("sendPostNotification2") }}</li>
         <li>{{ $t("sendPostNotification3") }}</li>
         <li>{{ $t("sendPostNotification4") }}</li>
+        <li>{{ $t("sendPostNotification5") }}</li>
       </ul>
     </HtmlPopup>
   </div>
