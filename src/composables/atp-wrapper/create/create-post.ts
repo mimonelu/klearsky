@@ -148,12 +148,10 @@ export default async function (
   // 引用リポスト
   else if (params.type === "quoteRepost" && params.post != null) {
     record.embed = {
-      $type:
-        images != null || external != null
-          ? "app.bsky.embed.recordWithMedia"
-          : "app.bsky.embed.record",
+      $type: images != null || external != null
+        ? "app.bsky.embed.recordWithMedia"
+        : "app.bsky.embed.record",
       record: {
-        record: params.post,
         cid: params.post?.cid,
         uri: params.post?.uri,
       },
@@ -183,9 +181,12 @@ export default async function (
       values: params.labels.map((label: string) => ({ val: label })),
     }
 
-  const response: ComAtprotoRepoCreateRecord.OutputSchema =
+  const response: Error | TTCidUri =
     await (this.agent as BskyAgent).post(record)
+      .then((value: TTCidUri) => value)
+      .catch((error: any) => error)
   console.log("[klearsky/post]", response)
+  if (response instanceof Error) return response
   return response
 }
 
