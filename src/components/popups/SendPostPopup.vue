@@ -9,7 +9,7 @@ import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
-const emit = defineEmits<{(event: string, done: boolean): void}>()
+const emit = defineEmits<{(event: string, done: boolean, hidden: boolean): void}>()
 
 const props = defineProps<{
   type: TTPostType
@@ -124,18 +124,19 @@ onMounted(() => {
 })
 
 async function close () {
-  if (!isEmpty() && !state.popupLoaderDisplay) {
-    const result = await mainState.openConfirmationPopup($t("cancelPost"), $t("cancelPostMessage"))
-    if (!result) return
-  }
-  emit("closeSendPostPopup", false)
+  emit("closeSendPostPopup", false, true)
 }
 
-function isEmpty (): boolean {
-  return !easyFormState.text &&
-    !easyFormState.url &&
-    easyFormState.images.length === 0 &&
-    easyFormState.alts.length === 0
+async function reset () {
+  const result = await mainState.openConfirmationPopup($t("sendPostReset"), $t("sendPostResetMessage"))
+  if (!result) return
+  emit("closeSendPostPopup", false, false)
+  setTimeout(() => {
+    mainState.openSendPostPopup({
+      type: props.type,
+      post: props.post,
+    })
+  }, 1)
 }
 
 async function submitCallback () {
@@ -178,11 +179,13 @@ async function submitCallback () {
           state.draftThreadgate.allowFollowing,
           state.draftThreadgate.listUris
         )
-        if (!responseOfUpdate || responseOfUpdate instanceof Error)
+        if (!responseOfUpdate || responseOfUpdate instanceof Error) {
           mainState.openErrorPopup(responseOfUpdate, "SendPostPopup/updateThreadgate")
+          return
+        }
       }
 
-      emit("closeSendPostPopup", true)
+      emit("closeSendPostPopup", true, false)
     }
   } finally {
     state.popupLoaderDisplay = false
@@ -353,6 +356,16 @@ function openThreadgatePopup () {
             </div>
           </template>
         </EasyForm>
+
+        <div>
+          <div
+            class="textlink--icon"
+            @click="reset"
+          >
+            <SVGIcon name="alert" />
+            <span>{{ $t("sendPostReset") }}</span>
+          </div>
+        </div>
       </template>
     </Popup>
 

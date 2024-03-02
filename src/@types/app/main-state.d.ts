@@ -369,7 +369,7 @@ type MainState = {
   // ポップアップ - ポスト送信ポップアップ
   sendPostPopupProps: TTSendPostPopupParams
   openSendPostPopup: (params: TTSendPostPopupParams) => Promise<boolean>
-  closeSendPostPopup: (done: boolean) => void
+  closeSendPostPopup: (done: boolean, hidden: boolean) => void
 
   // ポップアップ - マイタグポップアップ
   currentPostTags: Array<TTTag>

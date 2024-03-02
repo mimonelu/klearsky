@@ -25,6 +25,7 @@ type TTCreatePostParams = {
 
 type TTSendPostPopupParams = {
   display?: boolean
+  visibility?: boolean
   type: TTPostType
   post?: TTPost
   text?: string

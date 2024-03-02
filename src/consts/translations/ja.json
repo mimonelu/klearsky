@@ -396,8 +396,8 @@
   "sendPostNotification3": "リンクカードのURLにはWebページのURL、フィードのAT URI、リストのAT URIを指定できます。",
   "sendPostNotification4": "アニメーション画像は .gif / .apng / .webp に対応しています（公式未対応）。",
   "sendPostNotification5": "最大文字数を超えても送信自体は可能です。",
-  "cancelPost": "ポストのキャンセル",
-  "cancelPostMessage": "入力内容はリセットされます。よろしいですか？",
+  "sendPostReset": "入力内容のリセット",
+  "sendPostResetMessage": "入力内容をリセットします。よろしいですか？",
 
   "postDate": "ポスト日時",
   "postDatePopupTitle": "ポスト日時の設定",

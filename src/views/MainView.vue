@@ -56,7 +56,7 @@ onBeforeMount(() => {
       !state.repostUsersPopupDisplay &&
       !state.likeUsersPopupDisplay &&
       !state.imagePopupProps.display &&
-      !state.sendPostPopupProps.display &&
+      !state.sendPostPopupProps.visibility &&
       !state.loginPopupAutoDisplay)
       state.openSendPostPopup({ type: "post" })
   })
@@ -523,8 +523,8 @@ async function updateCurrentList () {
   }
 }
 
-async function closeSendPostPopup (done: boolean) {
-  state.closeSendPostPopup(done)
+async function closeSendPostPopup (done: boolean, hidden: boolean) {
+  state.closeSendPostPopup(done, hidden)
 }
 
 function scrollToFocused () {
@@ -602,7 +602,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     .map((item: DataTransferItem) => {
       return item.getAsFile()
     }) as unknown as FileList
-  if (state.sendPostPopupProps.display) {
+  if (state.sendPostPopupProps.visibility) {
     state.sendPostPopupProps.fileList = fileList
   } else {
     state.openSendPostPopup({
@@ -882,6 +882,7 @@ function broadcastListener (event: MessageEvent) {
       <!-- ポスト送信ポップアップ -->
       <SendPostPopup
         v-if="state.sendPostPopupProps.display"
+        v-show="state.sendPostPopupProps.visibility"
         :type="state.sendPostPopupProps.type"
         :post="state.sendPostPopupProps.post"
         :text="state.sendPostPopupProps.text"

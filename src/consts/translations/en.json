@@ -396,8 +396,8 @@
   "sendPostNotification3": "The URL of link card can be set to the URL of a web page, AT URI of a feed, or AT URI of a list.",
   "sendPostNotification4": "Animated images are supported in .gif / .apng / .webp (not officially supported).",
   "sendPostNotification5": "It is possible to send more than the maximum number of characters.",
-  "cancelPost": "Cancel Post",
-  "cancelPostMessage": "The entered information will be reset. Are you sure?",
+  "sendPostReset": "Reset all entries",
+  "sendPostResetMessage": "Reset all entries. Are you sure?",
 
   "postDate": "Post date",
   "postDatePopupTitle": "Set post date",

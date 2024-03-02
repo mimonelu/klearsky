@@ -1513,20 +1513,24 @@ let isSendPostDone = false
 
 async function openSendPostPopup (params: TTSendPostPopupParams): Promise<boolean> {
   state.sendPostPopupProps.display = true
+  state.sendPostPopupProps.visibility = true
   state.sendPostPopupProps.type = params.type
   state.sendPostPopupProps.post = params.post
   state.sendPostPopupProps.text = params.text
   state.sendPostPopupProps.url = params.url
   state.sendPostPopupProps.fileList = params.fileList
   state.sendPostPopupProps.createdAt = params.createdAt
-  state.currentPostTags.splice(0)
-  await Util.waitProp(() => state.sendPostPopupProps.display, false)
+  await Util.waitProp(() => state.sendPostPopupProps.visibility, false)
   return isSendPostDone
 }
 
-function closeSendPostPopup (done: boolean) {
+function closeSendPostPopup (done: boolean, hidden: boolean) {
   isSendPostDone = done
-  state.sendPostPopupProps.display = false
+  if (!hidden) {
+    state.sendPostPopupProps.display = false
+    state.currentPostTags.splice(0)
+  }
+  state.sendPostPopupProps.visibility = false
 }
 
 // ポップアップ - マイタグポップアップ
