@@ -7,6 +7,10 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
+defineExpose({
+  scrollToTop,
+})
+
 defineProps<{
   hasCloseButton?: boolean
   loaderDisplay?: boolean
@@ -37,11 +41,11 @@ function close () {
   emit("close")
 }
 
-function scrollToTop () {
+function scrollToTop (behavior: undefined | string) {
   popupBody?.value?.scrollTo({
     left: 0,
     top: 0,
-    behavior: "smooth",
+    behavior,
   })
 }
 
@@ -76,7 +80,7 @@ function scrollListener () {
       <header
         v-if="$slots.header"
         class="popup-header"
-        @click="scrollToTop"
+        @click="scrollToTop('smooth')"
       >
         <slot name="header" />
         <button

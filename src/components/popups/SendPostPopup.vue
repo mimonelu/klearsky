@@ -104,7 +104,18 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
+const popup = ref(null)
+
 const easyForm = ref(null)
+
+// ポップアップを開いた際のUX改善処置
+watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
+  if (!value) return
+  setTimeout(() => {
+    ;(popup.value as any)?.scrollToTop()
+    ;(easyForm.value as any)?.setFocus()
+  }, 0)
+})
 
 // D&D用処置
 watch(() => props.fileList, (value?: FileList) => {
@@ -267,6 +278,7 @@ function openThreadgatePopup () {
   <div>
     <Popup
       class="send-post-popup"
+      ref="popup"
       :hasCloseButton="true"
       :loaderDisplay="state.popupLoaderDisplay"
       @close="close"

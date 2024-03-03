@@ -11,6 +11,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 defineExpose({
   forceUpdate,
+  setFocus,
 })
 
 const props = defineProps<{
@@ -33,19 +34,20 @@ const state = reactive<{
 
 const easyForm = ref(null)
 
-onMounted(() => {
-  props.data.forEach((prop: TTEasyFormItem, index: number) => {
-    if (prop.focus) {
-      const itemId: string = makeItemId(index)
-      const itemElement: null | HTMLElement = document.getElementById(itemId)
-      if (itemElement == null) return
-      itemElement.focus()
-    }
-  })
-})
+onMounted(setFocus)
 
 function forceUpdate () {
   state.updateKey = new Date().getTime()
+}
+
+function setFocus () {
+  props.data.forEach((prop: TTEasyFormItem, index: number) => {
+    if (!prop.focus) return
+    const itemId: string = makeItemId(index)
+    const itemElement: null | HTMLElement = document.getElementById(itemId)
+    if (itemElement == null) return
+    itemElement.focus()
+  })
 }
 
 function makeItemId (index: number) {
