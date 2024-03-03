@@ -265,8 +265,8 @@
   "fontSizeSmall": "Small",
   "fontSizeMedium": "Medium",
   "fontSizeLarge": "Large",
-  "fontKerning": "Font Kerning",
-  "fontAntialiasing": "Font Anti-aliasing",
+  "fontKerning": "Font Kerning (env-dep)",
+  "fontAntialiasing": "Font Anti-aliasing (env-dep)",
 
   "backgroundImage1": "Depending on the server where the background image is placed, it may not be displayed.",
   "backgroundImage2": "You can also set the value of the CSS property `background-image`.\ne.g. linear-gradient(to bottom, pink, cyan)",
