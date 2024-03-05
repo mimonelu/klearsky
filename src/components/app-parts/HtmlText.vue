@@ -215,7 +215,7 @@ function validateUrl (urlObject: URL, text: string): boolean {
       <template v-else-if="segment.type === 'tag'">
         <RouterLink
           class="textlink hash-tag"
-          :to="`/search/post?text=${segment.param}`"
+          :to="`/search/post?text=%23${segment.param}`"
           @click.stop="emit('onActivateHashTag', segment.param)"
         >{{ segment.text }}</RouterLink>
       </template>
