@@ -883,10 +883,13 @@ async function fetchUserProfile () {
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
   state.loaderDisplay = true
-  try {
-    await state.atp.updateProfile(profile)
-  } finally {
-    state.loaderDisplay = false
+  const response = await state.atp.updateProfile(profile)
+  state.loaderDisplay = false
+  if (response instanceof Error) {
+    state.openErrorPopup(
+      response,
+      "main-state/updateUserProfile"
+    )
   }
 }
 

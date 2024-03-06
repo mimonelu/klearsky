@@ -87,6 +87,6 @@ interface TIAtpWrapper {
   updateMuteToEnable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>
   updatePreferences  (this: TIAtpWrapper, preferences: Array<TTPreference>, ): Promise<boolean>
-  updateProfile (this: TIAtpWrapper, params: TTUpdateProfileParams): Promise<boolean>
+  updateProfile (this: TIAtpWrapper, params: TTUpdateProfileParams): Promise<undefined | Error>
   updateThreadgate (this: TIAtpWrapper, postUri: string, allowMention: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
 }

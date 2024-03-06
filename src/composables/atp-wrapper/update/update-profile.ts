@@ -3,8 +3,8 @@ import type { AppBskyActorProfile, BlobRef, BskyAgent } from "@atproto/api"
 export default async function (
   this: TIAtpWrapper,
   params: TTUpdateProfileParams
-): Promise<boolean> {
-  if (this.agent == null) return false
+): Promise<undefined | Error> {
+  if (this.agent == null) return Error("noAgentError")
 
   // クエリーオブジェクト
   const profileSchema: AppBskyActorProfile.Record = {
@@ -50,24 +50,26 @@ export default async function (
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
 
-  await (this.agent as BskyAgent).upsertProfile(
-    (
-      existing: AppBskyActorProfile.Record | undefined
-    ): AppBskyActorProfile.Record => {
-      // アバター画像が未指定の場合、既存の画像を指定する
-      if (!params.detachAvatar.includes(true) &&
-          profileSchema.avatar == null &&
-          existing?.avatar != null)
-        profileSchema.avatar = existing.avatar
+  try {
+    await (this.agent as BskyAgent).upsertProfile(
+      (existing: AppBskyActorProfile.Record | undefined): AppBskyActorProfile.Record => {
+        // アバター画像が未指定の場合、既存の画像を指定する
+        if (!params.detachAvatar.includes(true) &&
+            profileSchema.avatar == null &&
+            existing?.avatar != null)
+          profileSchema.avatar = existing.avatar
 
-      // バナー画像が未指定の場合、既存の画像を指定する
-      if (!params.detachBanner.includes(true) &&
-          profileSchema.banner == null &&
-          existing?.banner != null)
-        profileSchema.banner = existing.banner
+        // バナー画像が未指定の場合、既存の画像を指定する
+        if (!params.detachBanner.includes(true) &&
+            profileSchema.banner == null &&
+            existing?.banner != null)
+          profileSchema.banner = existing.banner
 
-      return profileSchema
-    }
-  )
-  return true
+        return profileSchema
+      }
+    )
+  } catch (error: any) {
+    console.log("[klearsky/upsertProfile]", error)
+    return error
+  }
 }

@@ -57,7 +57,7 @@ const easyFormProps: TTEasyForm = {
       type: "textarea",
       maxlength: 255,
       maxLengthIndicator: true,
-      maxLengthIndicatorByGrapheme: false,
+      maxLengthIndicatorByGrapheme: true,
       rows: 8,
     },
     {
