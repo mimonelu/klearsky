@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { computed, inject, reactive, ref, type ComputedRef } from "vue"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import ListCard from "@/components/list/ListCard.vue"
+import MyFeedSortMenuTicker from "@/components/menu-tickers/MyFeedSortMenuTicker.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SpecialFeedCard from "@/components/app-parts/SpecialFeedCard.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -13,10 +14,18 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   orderChanged: boolean
   popupLoaderDisplay: boolean
+  menuTickerDisplay: boolean
+  menuTickerContainer: ComputedRef<undefined | HTMLElement>
 }>({
   orderChanged: false,
   popupLoaderDisplay: false,
+  menuTickerDisplay: false,
+  menuTickerContainer: computed((): undefined | HTMLElement => {
+    return menuTicker.value?.closest(".popup-body") ?? undefined
+  }),
 })
+
+const menuTicker = ref()
 
 async function close () {
   if (state.orderChanged) {
@@ -59,6 +68,157 @@ async function fetchMyFeeds () {
   state.popupLoaderDisplay = false
 }
 
+function openMenuTicker () {
+  state.menuTickerDisplay = !state.menuTickerDisplay
+}
+
+function closeMenuTicker () {
+  state.menuTickerDisplay = false
+}
+
+async function sortMyFeeds (
+  { type, order }:
+  { type: "like" | "name" | "uri" | "indexedAt", order: "asc" | "desc" }
+) {
+  interface TISpecialItem {
+    kind: TTMyFeedsItemKind
+    index: number
+  }
+
+  // 特殊フィードの保存
+  const specialKinds: TTMyFeedsItemKind[] = ["followings", "globalline"]
+  const specialItems: TISpecialItem[] = specialKinds.map((kind: TTMyFeedsItemKind) => {
+    const index = mainState.myFeeds.items.findIndex((item: TTMyFeedsItem) => {
+      return item.kind === kind
+    })
+    return {
+      kind,
+      index,
+    }
+  })
+  specialItems.sort((a: TISpecialItem, b: TISpecialItem) => {
+    return a.index < b.index ? - 1 : a.index > b.index ? 1 : 0
+  })
+
+  const orderA = order === "asc" ? 1 : - 1
+  const orderB = order === "asc" ? - 1 : 1
+
+  switch (type) {
+    // フィードのいいね順
+    case "like": {
+      mainState.myFeeds.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
+        if (a.kind === "feed" && b.kind === "feed") {
+          return a.value.likeCount < b.value.likeCount
+            ? orderB
+            : a.value.likeCount > b.value.likeCount
+              ? orderA
+              : 0
+        }
+        if (a.kind === "feed" && b.kind !== "feed") {
+          return - 1
+        }
+        if (a.kind !== "feed" && b.kind === "feed") {
+          return 1
+        }
+        return 0
+      })
+      break
+    }
+
+    // 名前順
+    case "name": {
+      mainState.myFeeds.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
+        const aIsTarget = a.kind === "feed" || a.kind === "list"
+        const bIsTarget = b.kind === "feed" || b.kind === "list"
+        if (aIsTarget && bIsTarget) {
+          const aName = ((a.value as any).displayName ?? (a.value as any).name ?? "").toLowerCase()
+          const bName = ((b.value as any).displayName ?? (b.value as any).name ?? "").toLowerCase()
+          return aName < bName
+            ? orderB
+            : aName > bName
+              ? orderA
+              : 0
+        }
+        if (aIsTarget && !bIsTarget) {
+          return - 1
+        }
+        if (!aIsTarget && bIsTarget) {
+          return 1
+        }
+        return 0
+      })
+      break
+    }
+
+    // URI順
+    case "uri": {
+      mainState.myFeeds.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
+        const aIsTarget = a.kind === "feed" || a.kind === "list"
+        const bIsTarget = b.kind === "feed" || b.kind === "list"
+        if (aIsTarget && bIsTarget) {
+          return a.value.uri < b.value.uri
+            ? orderB
+            : a.value.uri > b.value.uri
+              ? orderA
+              : 0
+        }
+        if (aIsTarget && !bIsTarget) {
+          return - 1
+        }
+        if (!aIsTarget && bIsTarget) {
+          return 1
+        }
+        return 0
+      })
+      break
+    }
+
+    // 作成日順
+    case "indexedAt": {
+      mainState.myFeeds.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
+        const aIsTarget = a.kind === "feed" || a.kind === "list"
+        const bIsTarget = b.kind === "feed" || b.kind === "list"
+        if (aIsTarget && bIsTarget) {
+          return a.value.indexedAt < b.value.indexedAt
+            ? orderB
+            : a.value.indexedAt > b.value.indexedAt
+              ? orderA
+              : 0
+        }
+        if (aIsTarget && !bIsTarget) {
+          return - 1
+        }
+        if (!aIsTarget && bIsTarget) {
+          return 1
+        }
+        return 0
+      })
+      break
+    }
+  }
+
+  // 特殊フィードの復帰
+  specialItems.forEach((specialItem: TISpecialItem) => {
+    const currentIndex = mainState.myFeeds.items.findIndex((item: TTMyFeedsItem) => {
+      return item.kind === specialItem.kind
+    })
+    if (currentIndex === - 1 || specialItem.index === - 1) return
+    moveArray(mainState.myFeeds.items, currentIndex, specialItem.index)
+  })
+}
+
+function moveArray <T>(array: T[], fromIndex: number, toIndex: number) {
+  if (fromIndex < 0 ||
+      fromIndex >= array.length ||
+      toIndex < 0 ||
+      toIndex >= array.length ||
+      fromIndex === toIndex) {
+    return array
+  }
+  const element = array.splice(fromIndex, 1)[0]
+  array.splice(toIndex, 0, element)
+}
+
 function changeCustomFeedOrder (params: any) {
   const direction = params.direction as "top" | "up" | "down" | "bottom"
   const item = params.item as TTMyFeedsItemValue
@@ -90,9 +250,28 @@ function changeCustomFeedOrder (params: any) {
     @close="close"
   >
     <template #header>
+      <!-- 更新ボタン -->
       <button @click.stop="fetchMyFeeds">
         <SVGIcon name="refresh" />
       </button>
+
+      <!-- ソートメニュートリガー -->
+      <button
+        class="my-feeds-popup__sort-menu-trigger"
+        ref="menuTicker"
+        @click.stop="openMenuTicker"
+      >
+        <SVGIcon name="refresh" />
+
+        <!-- ソートメニュー -->
+        <MyFeedSortMenuTicker
+          :display="state.menuTickerDisplay"
+          :container="state.menuTickerContainer"
+          @close="closeMenuTicker"
+          @sort="sortMyFeeds"
+        />
+      </button>
+
       <h2>
         <SVGIcon name="feed" />
         <span>{{ $t("myFeeds") }}</span>
@@ -160,22 +339,36 @@ function changeCustomFeedOrder (params: any) {
 </template>
 
 <style lang="scss" scoped>
-.my-feeds-popup:deep() {
-  .popup {
-    flex-grow: 1;
-    height: 100%;
-  }
+.my-feeds-popup {
+  &:deep() {
+    .popup {
+      flex-grow: 1;
+      height: 100%;
 
-  .popup-header {
-    & > h2 > .svg-icon {
-      fill: rgb(var(--accent-color));
+      &-header {
+        & > h2 > .svg-icon {
+          fill: rgb(var(--accent-color));
+        }
+      }
+
+      &-body {
+        flex-grow: 1;
+        grid-gap: unset;
+        padding: unset;
+      }
     }
   }
 
-  .popup-body {
-    flex-grow: 1;
-    grid-gap: unset;
-    padding: unset;
+  &__sort-menu-trigger {
+    position: relative;
+
+    // ソートメニュー
+    .menu-ticker:deep() {
+      & > .menu-ticker--inner {
+        top: calc(3rem - 1px);
+        left: 0;
+      }
+    }
   }
 
   .feed-card,
