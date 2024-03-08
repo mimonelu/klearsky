@@ -322,10 +322,6 @@ type TTProfile = {
   __log?: any // Injected
   __createdAt?: string // Injected
   did: string
-  declaration: {
-    actorType: string
-    cid: string
-  }
   handle: string
   displayName: string
   description?: string
@@ -334,15 +330,14 @@ type TTProfile = {
   followsCount: number
   followersCount: number
   postsCount: number
-  creator: string
+  associated?: {
+    lists: number
+    feedgens: number
+    labeler: boolean
+  }
   indexedAt: string
   labels?: Array<TTLabel>
   viewer: TTUserViewer
-  myState: {
-    follow?: string
-    muted: boolean
-  }
-  [k: string]: unknown
 }
 
 type TTFeedGenerator = {

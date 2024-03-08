@@ -98,7 +98,7 @@ function createProfileTimer () {
         if (profile.handle != null) continue
         const newProfile = await mainState.atp.fetchProfile(did)
         for (const key in newProfile) {
-          mainState.globallineProfiles[did][key] = newProfile[key]
+          mainState.globallineProfiles[did][key] = (newProfile as any)[key]
         }
         break
       }

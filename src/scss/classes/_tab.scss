@@ -29,6 +29,9 @@
       fill: var(--fg-color-075);
     }
 
+    &[data-disabled="true"] {
+      filter: contrast(0);
+    }
     &.router-link-active {
       background-color: var(--accent-color-025);
     }

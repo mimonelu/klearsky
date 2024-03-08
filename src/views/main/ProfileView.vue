@@ -437,6 +437,7 @@ function onActivateAccountMaskToggle () {
           class="tab__button tab__button--feed"
           :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.did } }"
           :title="$t('customFeeds')"
+          :data-disabled="!mainState.currentProfile?.associated?.feedgens"
         >
           <SVGIcon name="feed" />
           <span>{{ $t("feeds") }}</span>
@@ -447,6 +448,7 @@ function onActivateAccountMaskToggle () {
           class="tab__button tab__button--list"
           :to="{ path: '/profile/list', query: { account: mainState.currentProfile?.did } }"
           :title="$t('lists')"
+          :data-disabled="!mainState.currentProfile?.associated?.lists"
         >
           <SVGIcon name="list" />
           <span>{{ $t("lists") }}</span>
