@@ -15,6 +15,10 @@
     font-weight: bold;
     padding: 0.25rem 1rem 0.75rem 1rem;
     word-wrap: break-word;
+    &:not(:first-child) {
+      border-top: 1px solid var(--fg-color-025);
+      padding-top: 0.75rem;
+    }
 
     & > .svg-icon {
       fill: rgb(var(--fg-color), 0.5);

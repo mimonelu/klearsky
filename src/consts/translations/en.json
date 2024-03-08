@@ -464,6 +464,14 @@
   "threadgateNotification1": "Up to 5 items can be selected.",
   "threadgateNotification2": "If apply without checking anything, only you will be able to reply.",
 
+  "sortInAsc": "Sort in asc",
+  "sortInDesc": "Sort in desc",
+  "sortByLike": "Sort by likes",
+  "sortByName": "Sort by name",
+  "sortByUri": "Sort by URI",
+  "sortByIndexedAt": "Sort by date",
+  "sortMyFeedsConfirmation": "My Feeds will be sorted.\nYou cannot redo this operation. Are you sure?",
+
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
 import alert from "@/svg/alert.svg?raw"
+import alphaA from "@/svg/alpha-a.svg?raw"
 import arrowBottom from "@/svg/arrow-bottom.svg?raw"
 import arrowDown from "@/svg/arrow-down.svg?raw"
 import arrowTop from "@/svg/arrow-top.svg?raw"
@@ -79,6 +80,7 @@ import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
 import share from "@/svg/share.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
+import sort from "@/svg/sort.svg?raw"
 import tag from "@/svg/tag.svg?raw"
 import translate from "@/svg/translate.svg?raw"
 import unlock from "@/svg/unlock.svg?raw"
@@ -89,6 +91,7 @@ import wordMute from "@/svg/word-mute.svg?raw"
 
 const icons: { [k: string]: string } = {
   alert,
+  alphaA,
   arrowBottom,
   arrowDown,
   arrowTop,
@@ -167,6 +170,7 @@ const icons: { [k: string]: string } = {
   setting,
   share,
   shimmer,
+  sort,
   tag,
   translate,
   unlock,

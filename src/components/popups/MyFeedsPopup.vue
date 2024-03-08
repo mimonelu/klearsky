@@ -261,7 +261,7 @@ function changeCustomFeedOrder (params: any) {
         ref="menuTicker"
         @click.stop="openMenuTicker"
       >
-        <SVGIcon name="refresh" />
+        <SVGIcon name="sort" />
 
         <!-- ソートメニュー -->
         <MyFeedSortMenuTicker
@@ -361,6 +361,10 @@ function changeCustomFeedOrder (params: any) {
 
   &__sort-menu-trigger {
     position: relative;
+
+    & > .svg-icon {
+      font-size: 1.25rem;
+    }
 
     // ソートメニュー
     .menu-ticker:deep() {

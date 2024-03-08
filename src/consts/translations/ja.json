@@ -464,6 +464,14 @@
   "threadgateNotification1": "5項目まで選択できます。",
   "threadgateNotification2": "何もチェックせずに適用するとあなた以外リプライできなくなります。",
 
+  "sortInAsc": "昇順でソート",
+  "sortInDesc": "降順でソート",
+  "sortByLike": "いいね数でソート",
+  "sortByName": "名前でソート",
+  "sortByUri": "URIでソート",
+  "sortByIndexedAt": "更新日でソート",
+  "sortMyFeedsConfirmation": "マイフィードをソートします。\nこの操作をやり直すことはできません。よろしいですか？",
+
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",
