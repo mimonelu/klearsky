@@ -15,6 +15,7 @@ function openImagePopup () {
     largeUri: props.image,
     smallUri: "",
   }]
+  mainState.imagePopupProps.alts = [""]
   mainState.imagePopupProps.index = 0
   mainState.imagePopupProps.display = true
 }

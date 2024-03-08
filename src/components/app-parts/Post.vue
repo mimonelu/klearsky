@@ -496,6 +496,7 @@ function openImagePopup (imageIndex: number) {
       blob: image.image,
     }
   })
+  mainState.imagePopupProps.alts = state.images.map((image: TTImage) => image.alt)
   mainState.imagePopupProps.index = imageIndex
   mainState.imagePopupProps.display = true
 }

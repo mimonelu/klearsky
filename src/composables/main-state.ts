@@ -343,6 +343,7 @@ state.closeSendFeedReportPopup = closeSendFeedReportPopup
 state.imagePopupProps = {
   did: "",
   images: [],
+  alts: [],
   index: 0,
   display: false,
 }

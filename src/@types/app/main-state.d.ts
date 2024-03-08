@@ -319,7 +319,8 @@ type MainState = {
   imagePopupProps: {
     display: boolean
     did: string
-    images: Array<TTImagePopupPropsImages>
+    images: TTImagePopupPropsImages[]
+    alts: string[]
     index: number
   }
 

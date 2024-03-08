@@ -115,6 +115,7 @@ function openImagePopup (uri: string) {
     largeUri: uri,
     smallUri: "",
   }]
+  mainState.imagePopupProps.alts = [""]
   mainState.imagePopupProps.index = 0
   mainState.imagePopupProps.display = true
 }

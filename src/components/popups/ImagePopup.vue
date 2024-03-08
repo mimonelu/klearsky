@@ -9,7 +9,8 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   did: string
-  images: Array<TTImagePopupPropsImages>
+  images: TTImagePopupPropsImages[]
+  alts: string[]
   index: number
 }>()
 
@@ -171,6 +172,9 @@ function close () {
       <Loader v-if="images[index].blob != null && state.blobs[index] == null" />
     </div>
 
+    <!-- Alt -->
+    <div class="alt">{{ alts[index] }}</div>
+
     <!-- 前の画像ボタン -->
     <button
       class="floating-button previous-image-button"
@@ -258,6 +262,30 @@ function close () {
 
 .loader {
   pointer-events: none;
+}
+
+.alt {
+  line-height: var(--line-height);
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  // SP幅以上
+  @media (min-width: $sp-width) {
+    margin-top: 1rem;
+  }
+
+  // SP幅未満
+  @media not all and (min-width: $sp-width) {
+    font-size: 0.875rem;
+    margin: 1rem 0 calc(5rem + env(safe-area-inset-bottom));
+  }
+
+  &:empty,
+  [data-mode="true"] & {
+    display: none;
+  }
 }
 
 // 壁紙設定ボタン / 画像を別タブで開くボタン / 閉じるボタン
