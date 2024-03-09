@@ -4,10 +4,19 @@
   flex-wrap: wrap;
   align-items: center;
   grid-gap: 0.5rem;
+  font-size: 0.875rem;
   user-select: none;
 
   & > .svg-icon {
     fill: rgb(var(--color));
+  }
+  &[data-labeler="true"] > .svg-icon {
+    fill: rgb(var(--share-color));
+  }
+
+  &__labeler {
+    color: rgb(var(--share-color));
+    font-weight: bold;
   }
 
   &__message {

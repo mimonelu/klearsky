@@ -45,6 +45,7 @@
   "confirmUrlNotification": "下記URLを開きます。よろしいですか？",
   "date": "日時",
   "label": "ラベル",
+  "labelerOn": "3p labeler",
   "labels": "ラベル",
   "accountLabels": "ユーザーラベル",
   "customLabels": "カスタムラベル",

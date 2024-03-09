@@ -237,10 +237,18 @@ function onActivateAccountMaskToggle () {
 
               <!-- カスタムラベル -->
               <div
-                v-if="state.customLabels.length > 0"
+                v-if="state.customLabels.length > 0 || mainState.currentProfile?.associated?.labeler"
                 class="custom-labels"
+                :data-labeler="mainState.currentProfile?.associated?.labeler"
               >
                 <SVGIcon name="label" />
+
+                <!-- Labeler -->
+                <div
+                  v-if="mainState.currentProfile?.associated?.labeler"
+                  class="custom-labels__labeler"
+                >{{ $t("labelerOn") }}</div>
+
                 <div
                   v-for="label of state.customLabels"
                   :key="label.val"
