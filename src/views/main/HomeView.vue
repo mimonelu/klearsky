@@ -131,7 +131,7 @@ function openMyListPopup () {
 
 .slider-menu {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-bottom: 1px solid var(--fg-color-025);
+  border-bottom: 1px solid var(--fg-color-0125);
   display: flex;
   align-items: center;
   overflow-x: auto;
@@ -193,7 +193,7 @@ function openMyListPopup () {
   }
 
   &__separator {
-    background-color: var(--fg-color-025);
+    background-color: var(--fg-color-0125);
     min-width: 1px;
     max-width: 1px;
     height: 1.5rem;

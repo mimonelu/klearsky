@@ -324,6 +324,9 @@ function onClickFileBox (event: Event) {
       --color: var(--accent-color);
     }
   }
+  &:not(:first-child) &__left {
+    border-top-color: var(--fg-color-0125);
+  }
   &[data-is-me="true"] &__left {
     background-color: var(--accent-color-025);
   }

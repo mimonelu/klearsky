@@ -203,10 +203,10 @@ function removeThisPost (uri: string) {
 .pagenation {
   padding: 0.375rem 0;
   &:first-child {
-    border-bottom: 1px solid var(--fg-color-025);
+    border-bottom: 1px solid var(--fg-color-0125);
   }
   &:last-child {
-    border-top: 1px solid var(--fg-color-025);
+    border-top: 1px solid var(--fg-color-0125);
   }
 }
 </style>

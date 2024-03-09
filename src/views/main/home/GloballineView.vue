@@ -264,7 +264,7 @@ function onMutated () {
   // グローバルラインヘッダー
   &__header {
     background-color: rgb(var(--bg-color), var(--main-area-opacity));
-    border-bottom: 1px solid var(--fg-color-025);
+    border-bottom: 1px solid var(--fg-color-0125);
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;

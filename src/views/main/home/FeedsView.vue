@@ -75,7 +75,7 @@ const state = reactive<{
     --opacity: 0.25;
   }
 
-  border-top: 1px solid var(--fg-color-025);
+  border-top: 1px solid var(--fg-color-0125);
   display: flex;
   flex-direction: column;
   flex-grow: 1;

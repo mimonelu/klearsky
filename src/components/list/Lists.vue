@@ -155,7 +155,7 @@ function clicked (list?: TTList) {
   flex-direction: column;
 
   &__header {
-    border-bottom: 1px solid var(--fg-color-025);
+    border-bottom: 1px solid var(--fg-color-0125);
     display: flex;
     align-items: center;
     justify-content: flex-end;

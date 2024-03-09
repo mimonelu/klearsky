@@ -80,13 +80,13 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-grow: 1;
 
   &__list-card-skeleton {
-    border-bottom: 1px solid var(--fg-color-025);
+    border-bottom: 1px solid var(--fg-color-0125);
     min-height: 8rem;
   }
 }
 
 .list-card {
-  border-bottom: 1px solid var(--fg-color-025);
+  border-bottom: 1px solid var(--fg-color-0125);
 }
 
 .feeds {

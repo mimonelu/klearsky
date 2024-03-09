@@ -45,10 +45,10 @@ function onActivate () {
   position: relative;
   min-height: 3rem;
   &:not(:last-child) {
-    border-bottom: 1px solid var(--fg-color-025);
+    border-bottom: 1px solid var(--fg-color-0125);
   }
   &:last-child {
-    border-top: 1px solid var(--fg-color-025);
+    border-top: 1px solid var(--fg-color-0125);
   }
 
   // 抜け漏れ取得ボタン

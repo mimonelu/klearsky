@@ -66,7 +66,7 @@ function close () {
   }
 
   .item {
-    border-bottom: 1px solid var(--fg-color-025);
+    border-bottom: 1px solid var(--fg-color-0125);
     display: flex;
     align-items: baseline;
     justify-content: space-between;

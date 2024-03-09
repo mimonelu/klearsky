@@ -505,7 +505,7 @@ function onActivateAccountMaskToggle () {
         state.isPagePostFeedsWithReplies ||
         state.isPagePostFeedsWithMedia
       "
-      class="profile-view_link-container"
+      class="profile-view__link-container"
     >
       <!-- リプライ付きポストページリンク -->
       <Component
@@ -567,7 +567,7 @@ function onActivateAccountMaskToggle () {
 
   &__top {
     &__inner {
-      border-bottom: 1px solid var(--fg-color-025);
+      border-bottom: 1px solid var(--fg-color-0125);
       display: flex;
       flex-direction: column;
       grid-gap: 1rem;
@@ -629,8 +629,8 @@ function onActivateAccountMaskToggle () {
   }
 
   // プロフィールポストページ用リンクコンテナ
-  &_link-container {
-    border-bottom: 1px solid var(--fg-color-025);
+  &__link-container {
+    border-bottom: 1px solid var(--fg-color-0125);
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -655,7 +655,7 @@ function onActivateAccountMaskToggle () {
 
 .banner {
   aspect-ratio: 3/1;
-  border-bottom: 1px solid var(--fg-color-025);
+  border-bottom: 1px solid var(--fg-color-0125);
   object-fit: cover;
   &[data-has-banner="true"] {
     cursor: pointer;

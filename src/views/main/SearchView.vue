@@ -54,7 +54,7 @@ const state = reactive<{
 <style lang="scss" scoped>
 .search-view__form {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-bottom: 1px solid var(--fg-color-025);
+  border-bottom: 1px solid var(--fg-color-0125);
 
   &:deep() {
     & > form {
