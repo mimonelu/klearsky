@@ -2,11 +2,14 @@
 .textbox {
   &:hover {
     --fg-color-025: var(--fg-color-0375);
+    --fg-color-075: rgb(var(--fg-color));
   }
   &:focus {
-    --fg-color-0125: var(--accent-color-0125);
-    --fg-color-025: var(--accent-color-0375);
+    background-color: var(--accent-color-0125);
+    --fg-color-0125: var(--accent-color-025);
+    --fg-color-025: var(--accent-color-05);
     --fg-color-05: var(--accent-color-075);
+    --fg-color-075: rgb(var(--fg-color));
   }
   &:disabled,
   &[disabled="true"] {
@@ -20,10 +23,9 @@
     );
   }
 
-  background-color: var(--fg-color-0125);
   border: 1px solid var(--fg-color-025);
   border-radius: var(--border-radius);
-  color: rgb(var(--fg-color));
+  color: var(--fg-color-075);
   line-height: var(--line-height);
   padding: 0.5rem 1rem;
 

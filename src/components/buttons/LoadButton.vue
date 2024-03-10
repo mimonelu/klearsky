@@ -59,12 +59,12 @@ function onActivate () {
 
   & > .svg-icon {
     font-size: 1.5rem;
-    fill: var(--fg-color-025);
+    fill: var(--fg-color-075);
   }
 
   &:focus, &:hover {
     & > .svg-icon {
-      fill: var(--fg-color-075);
+      fill: rgb(var(--fg-color));
     }
   }
 
