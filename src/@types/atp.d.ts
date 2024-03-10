@@ -128,10 +128,13 @@ type TTImage = {
 type TTLabel = {
   cid?: string // Only post
   cts: string // Date
+  exp?: string
   neg?: boolean
+  sig?: number
   src: string // DID
   uri: string
   val: string
+  ver?: number
 }
 
 type TTContentVisibility = "hide" | "show" | "warn"
