@@ -152,8 +152,14 @@ export default async function (
         ? "app.bsky.embed.recordWithMedia"
         : "app.bsky.embed.record",
       record: {
-        cid: params.post?.cid,
-        uri: params.post?.uri,
+        cid: params.post.cid,
+        uri: params.post.uri,
+
+        // TODO: 添付付きポストを引用リポストしようとするとエラーが発生する不具合の暫定対応
+        record: {
+          cid: params.post.cid,
+          uri: params.post.uri,
+        }
       },
     }
     if (images != null)
