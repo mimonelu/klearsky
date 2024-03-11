@@ -112,6 +112,12 @@ const easyForm = ref(null)
 watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
   if (!value) return
   setTimeout(() => {
+    // 「メンションを送る」使用時の対策
+    if (props.text) easyFormState.text = `${props.text} ${easyFormState.text}`
+
+    // 「リンクカードにする」使用時の対策
+    if (props.url) easyFormState.url = props.url
+
     ;(popup.value as any)?.scrollToTop()
     ;(easyForm.value as any)?.setFocus()
   }, 0)
