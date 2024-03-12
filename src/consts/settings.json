@@ -53,12 +53,6 @@
     { "label": "imageMaxHeight5", "value": 75 },
     { "label": "imageMaxHeight6", "value": 0 }
   ],
-  "IMAGE_ASPECT_RATIO": [
-    { "label": "imageAspectRatio1", "value": "1 / 1" },
-    { "label": "imageAspectRatio2", "value": "3 / 2" },
-    { "label": "imageAspectRatio3", "value": "2 / 1" },
-    { "label": "imageAspectRatio4", "value": "3 / 1" }
-  ],
   "IMAGE_OPTION": [
     { "label": "singleImageHasNoAspectRatio", "value": 0 }
   ],

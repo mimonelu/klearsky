@@ -152,18 +152,6 @@ const mainState = inject("state") as MainState
               @update="$emit('saveSetting')"
             />
 
-            <!-- 画像 - 画像サイズの比率 -->
-            <div class="settings-popup__form__header">
-              <span>{{ $t("imageAspectRatio") }}</span>
-            </div>
-            <Radios
-              :state="mainState.currentSetting"
-              model="imageAspectRatio"
-              :options="SETTINGS.IMAGE_ASPECT_RATIO"
-              layout="horizontal"
-              @update="$emit('saveSetting')"
-            />
-
             <!-- 画像 - 画像オプション -->
             <Checkboxes
               :state="mainState.currentSetting"
