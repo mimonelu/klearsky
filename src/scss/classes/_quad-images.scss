@@ -9,7 +9,7 @@
       border-radius: var(--border-radius);
 
       & > img {
-        max-height: 75vh; // TODO:
+        max-height: var(--image-max-height);
       }
     }
   }

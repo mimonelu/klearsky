@@ -45,6 +45,14 @@
     { "label": "imageFolding2", "value": "recommended" },
     { "label": "imageFolding3", "value": "all" }
   ],
+  "IMAGE_MAX_HEIGHT": [
+    { "label": "imageMaxHeight1", "value": 25 },
+    { "label": "imageMaxHeight2", "value": 37.5 },
+    { "label": "imageMaxHeight3", "value": 50 },
+    { "label": "imageMaxHeight4", "value": 62.5 },
+    { "label": "imageMaxHeight5", "value": 75 },
+    { "label": "imageMaxHeight6", "value": 0 }
+  ],
   "IMAGE_ASPECT_RATIO": [
     { "label": "imageAspectRatio1", "value": "1 / 1" },
     { "label": "imageAspectRatio2", "value": "3 / 2" },

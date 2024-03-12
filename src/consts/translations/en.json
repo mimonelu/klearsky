@@ -316,6 +316,14 @@
   "showImage": "Show images",
   "hideImage": "Hide images",
 
+  "imageMaxHeight": "Image Max Height",
+  "imageMaxHeight1": "Slightly short",
+  "imageMaxHeight2": "Short",
+  "imageMaxHeight3": "Middle",
+  "imageMaxHeight4": "Slightly long",
+  "imageMaxHeight5": "Long",
+  "imageMaxHeight6": "None",
+
   "imageAspectRatio": "Image Aspect Ratio",
   "imageAspectRatio1": "1 / 1",
   "imageAspectRatio2": "3 / 2",

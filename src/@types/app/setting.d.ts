@@ -12,6 +12,7 @@ type TTSetting = {
   hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean
   imageAspectRatio?: string
+  imageMaxHeight?: number
   imageOption?: Array<number>
   imageFolding?: "none" | "recommended" | "all"
   imageAutoPlay?: boolean

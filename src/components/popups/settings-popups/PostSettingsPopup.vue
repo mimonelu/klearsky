@@ -140,6 +140,18 @@ const mainState = inject("state") as MainState
               @update="$emit('saveSetting')"
             />
 
+            <!-- 画像 - 画像の高さの最大値 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("imageMaxHeight") }}</span>
+            </div>
+            <Radios
+              :state="mainState.currentSetting"
+              model="imageMaxHeight"
+              :options="SETTINGS.IMAGE_MAX_HEIGHT"
+              layout="vertical"
+              @update="$emit('saveSetting')"
+            />
+
             <!-- 画像 - 画像サイズの比率 -->
             <div class="settings-popup__form__header">
               <span>{{ $t("imageAspectRatio") }}</span>

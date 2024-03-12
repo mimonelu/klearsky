@@ -316,6 +316,14 @@
   "showImage": "画像を表示する",
   "hideImage": "画像を隠す",
 
+  "imageMaxHeight": "画像の高さの最大値",
+  "imageMaxHeight1": "短め",
+  "imageMaxHeight2": "やや短め",
+  "imageMaxHeight3": "普通",
+  "imageMaxHeight4": "やや長め",
+  "imageMaxHeight5": "長め",
+  "imageMaxHeight6": "なし",
+
   "imageAspectRatio": "画像サイズの比率",
   "imageAspectRatio1": "1 / 1",
   "imageAspectRatio2": "3 / 2",

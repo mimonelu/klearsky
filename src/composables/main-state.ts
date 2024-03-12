@@ -555,6 +555,8 @@ function saveSettings () {
     state.settings[did].timeControl = "relative"
   if (state.settings[did].imageFolding == null)
     state.settings[did].imageFolding = "none"
+  if (state.settings[did].imageMaxHeight == null)
+    state.settings[did].imageMaxHeight = 75
   if (state.settings[did].imageAspectRatio == null)
     state.settings[did].imageAspectRatio = "3 / 2"
   if (state.settings[did].imageOption == null)
