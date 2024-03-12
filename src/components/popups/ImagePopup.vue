@@ -168,12 +168,12 @@ function close () {
           background-position: ${state.x * 100}% ${state.y * 100}%;
         `"
       />
-
-      <Loader v-if="images[index].blob != null && state.blobs[index] == null" />
     </div>
 
     <!-- Alt -->
     <div class="alt">{{ alts[index] }}</div>
+
+    <Loader v-if="images[index].blob != null && state.blobs[index] == null" />
 
     <!-- 前の画像ボタン -->
     <button
@@ -265,6 +265,7 @@ function close () {
 }
 
 .alt {
+  color: white;
   line-height: var(--line-height);
   overflow: hidden;
   max-width: 100%;

@@ -680,7 +680,6 @@ function broadcastListener (event: MessageEvent) {
     :data-path="state.currentPath"
     :style="{
       '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 1.0,
-      '--image-aspect-ratio': state.currentSetting.imageAspectRatio ?? '1 / 1'
     }"
     @dragenter.prevent="onDragEnter"
   >
@@ -689,7 +688,7 @@ function broadcastListener (event: MessageEvent) {
       class="background-image"
       :style="{
         'background-image': state.backgroundImage,
-        'opacity': 1.0 - (state.currentSetting.backgroundOpacity ?? 0)
+        'opacity': 1.0 - (state.currentSetting.backgroundOpacity ?? 0),
       }"
     />
 

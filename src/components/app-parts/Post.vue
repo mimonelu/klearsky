@@ -833,7 +833,6 @@ function onActivateHashTag (text: string) {
                     v-if="state.images.length === 1 && state.isImagefreeSize"
                     :image="state.images[0]"
                     :did="post.author.did"
-                    :hasAspectRatio="!state.isImagefreeSize"
                     :hasTranslateLink="state.hasOtherLanguages"
                     :data-has-no-fullsize="state.images[0].fullsize == null"
                     @click.stop="openImagePopup(0)"
@@ -854,7 +853,6 @@ function onActivateHashTag (text: string) {
                         :key="post.cid"
                         :image="image"
                         :did="post.author.did"
-                        :hasAspectRatio="true"
                         :hasTranslateLink="state.hasOtherLanguages"
                         :data-has-no-fullsize="state.images[imageIndex].fullsize == null"
                         @click.stop="openImagePopup(imageIndex)"
@@ -871,7 +869,6 @@ function onActivateHashTag (text: string) {
                     :key="imageIndex"
                     :image="image"
                     :did="post.author.did"
-                    :hasAspectRatio="true"
                     @click.stop="openImagePopup(imageIndex)"
                   />
                 </div>

@@ -123,6 +123,12 @@ type TTImage = {
   fullsize?: string
 
   alt: string
+  aspectRatio?: TTAspectRatio
+}
+
+type TTAspectRatio = {
+  width: number
+  height: number
 }
 
 type TTLabel = {

@@ -112,6 +112,24 @@ export default async function (
   if (fileBlobRefs.some((fileBlobRef: null | BlobRef) => fileBlobRef == null)) {
     return Error("imageCompressionError")
   }
+
+  // 画像サイズのアスペクト比（実際にはサイズ）を取得
+  const aspectRatios: Array<undefined | TTAspectRatio> = []
+  for (const file of params.images) {
+    const img = new Image()
+    img.src = URL.createObjectURL(file)
+    try {
+      await img.decode()
+      aspectRatios.push({
+        width: img.width,
+        height: img.height,
+      })
+    } catch (error: any) {
+      console.error("[klearsky/post]", error)
+      aspectRatios.push(undefined)
+    }
+  }
+
   if (fileBlobRefs.length > 0) {
     const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileBlobRefs
       .map(
@@ -119,12 +137,15 @@ export default async function (
           fileBlobRef: null | BlobRef,
           index: number
         ): null | AppBskyEmbedImages.Image => {
-          return fileBlobRef == null
-            ? null
-            : {
-                image: fileBlobRef,
-                alt: params.alts[index] ?? "",
-              }
+          if (fileBlobRef == null) return null
+          const result: AppBskyEmbedImages.Image = {
+            image: fileBlobRef,
+            alt: params.alts[index] ?? "",
+          }
+          if (aspectRatios[index] != null) {
+            result.aspectRatio = aspectRatios[index]
+          }
+          return result
         }
       )
       .filter((image: null | AppBskyEmbedImages.Image) => image != null)

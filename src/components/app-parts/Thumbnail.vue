@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive } from "vue"
+import { computed, inject, onMounted, reactive, type ComputedRef } from "vue"
 import type { BlobRef } from "@atproto/api"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
@@ -9,7 +9,6 @@ import Util from "@/composables/util"
 const props = defineProps<{
   image?: TTImage
   did?: string
-  hasAspectRatio?: boolean
   hasTranslateLink?: boolean
 }>()
 
@@ -18,18 +17,29 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  src: null | string;
-  loaded: boolean;
-  errored: boolean;
+  src: null | string
+  loaded: boolean
+  errored: boolean
+
+  // 画像のアスペクト比
+  aspectRatio: ComputedRef<string>
 }>({
   src: null,
   loaded: false,
   errored: false,
+
+  // 画像のアスペクト比
+  aspectRatio: computed((): string => {
+    if (props.image?.aspectRatio == null) return "1 / 1"
+    const height = props.image.aspectRatio.height / props.image.aspectRatio.width
+    return `1 / ${height}`
+  }),
 })
 
 const BLOB_MIME_TYPES = [
   "image/apng",
   "image/gif",
+  "image/svg+xml",
   "image/webp"
 ]
 
@@ -84,13 +94,11 @@ function onActivateAlt (alt: string) {
 </script>
 
 <template>
-  <div
-    class="thumbnail"
-    :data-has-aspect-ratio="hasAspectRatio"
-  >
+  <div class="thumbnail">
     <LazyImage
       :src="state.src ?? undefined"
       :alt="image?.alt"
+      :style="{ 'aspect-ratio': state.aspectRatio }"
     />
     <button
       v-if="image?.alt"
@@ -126,15 +134,6 @@ function onActivateAlt (alt: string) {
   & > .lazy-image {
     display: block;
     object-fit: cover;
-  }
-
-  // アスペクト比の調節あり
-  &[data-has-aspect-ratio="true"] > .lazy-image {
-    aspect-ratio: var(--image-aspect-ratio);
-  }
-
-  // アスペクト比の調節なし（＝添付画像が1枚だけの場合）
-  &[data-has-aspect-ratio="false"] > .lazy-image {
     min-height: calc(2em + 4px); // NOTICE: ALTボタンを考慮
 
     // TODO: 暫定対応

@@ -193,8 +193,23 @@ function deleteFile (index: number) {
 }
 
 .thumbnail {
+  background-color: var(--fg-color-0125);
+  border-radius: var(--border-radius);
   cursor: unset !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  position: relative;
+
+  & > .lazy-image {
+    display: block;
+    object-fit: cover;
+    min-height: calc(2em + 4px); // NOTICE: ALTボタンを考慮
+
+    // TODO: 暫定対応
+    max-height: 200vh;
+  }
 }
 
 .delete-button {

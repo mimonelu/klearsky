@@ -1,5 +1,4 @@
 .quad-images {
-  aspect-ratio: var(--image-aspect-ratio);
   display: grid;
   grid-gap: 1px;
   overflow: hidden;
@@ -8,10 +7,25 @@
   &[data-number-of-images="1"] {
     & > .quad-image  > .thumbnail {
       border-radius: var(--border-radius);
+
+      & > img {
+        max-height: 75vh; // TODO:
+      }
+    }
+  }
+  &:not([data-number-of-images="1"]) {
+    & > .quad-image  > .thumbnail {
+      align-items: unset;
+      min-height: 100%;
+      max-height: 100%;
     }
   }
   &[data-number-of-images="2"] {
     grid-template-areas: "a b";
+    grid-auto-columns: 0.5fr;
+    grid-auto-rows: 1fr;
+    aspect-ratio: 2 / 1;
+
     & > .quad-image:nth-child(1) {
       grid-area: a;
 
@@ -29,6 +43,10 @@
   }
   &[data-number-of-images="3"] {
     grid-template-areas: "a b" "a c";
+    grid-auto-columns: 0.5fr;
+    grid-auto-rows: 0.5fr;
+    aspect-ratio: 3 / 2;
+
     & > .quad-image:nth-child(1) {
       grid-area: a;
 
@@ -53,6 +71,10 @@
   }
   &[data-number-of-images="4"] {
     grid-template-areas: "a b" "c d";
+    grid-auto-columns: 0.5fr;
+    grid-auto-rows: 0.5fr;
+    aspect-ratio: 1 / 1;
+
     & > .quad-image:nth-child(1) {
       grid-area: a;
 
@@ -86,17 +108,8 @@
   & > .quad-image {
     overflow: hidden;
 
-    & > .thumbnail {
-      position: relative;
-      height: 100%;
-
-      & > img {
-        aspect-ratio: var(--image-aspect-ratio);
-        display: block;
-        object-fit: cover;
-        width: 100%;
-        min-height: 100%;
-      }
+    & > .thumbnail > img {
+      width: 100%;
     }
   }
 }
