@@ -152,15 +152,6 @@ const mainState = inject("state") as MainState
               @update="$emit('saveSetting')"
             />
 
-            <!-- 画像 - 画像オプション -->
-            <Checkboxes
-              :state="mainState.currentSetting"
-              model="imageOption"
-              :options="SETTINGS.IMAGE_OPTION"
-              layout="vertical"
-              @update="$emit('saveSetting')"
-            />
-
             <!-- 画像 - アニメーション画像の自動再生 -->
             <div class="settings-popup__form__header">
               <span>{{ $t("imageAutoPlay") }}</span>

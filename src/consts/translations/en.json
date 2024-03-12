@@ -324,8 +324,6 @@
   "imageMaxHeight5": "Long",
   "imageMaxHeight6": "None",
 
-  "singleImageHasNoAspectRatio": "If only one image is attached, preserve the original size ratio as much as possible",
-
   "imageAutoPlay": "Autoplay animated images",
 
   "linkcard": "Link card",

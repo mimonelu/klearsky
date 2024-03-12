@@ -11,9 +11,8 @@ type TTSetting = {
   globallineLayout?: "post" | "slim"
   hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean
-  imageMaxHeight?: number
-  imageOption?: Array<number>
   imageFolding?: "none" | "recommended" | "all"
+  imageMaxHeight?: number
   imageAutoPlay?: boolean
   lightning?: string
   linkcardEmbeddedControl?: Array<string>

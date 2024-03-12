@@ -53,9 +53,6 @@
     { "label": "imageMaxHeight5", "value": 75 },
     { "label": "imageMaxHeight6", "value": 0 }
   ],
-  "IMAGE_OPTION": [
-    { "label": "singleImageHasNoAspectRatio", "value": 0 }
-  ],
   "IMAGE_AUTO_PLAY": [
     { "label": "disabled", "value": false },
     { "label": "enabled", "value": true }

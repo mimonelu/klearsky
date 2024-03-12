@@ -324,8 +324,6 @@
   "imageMaxHeight5": "長め",
   "imageMaxHeight6": "なし",
 
-  "singleImageHasNoAspectRatio": "画像が1枚だけの場合はなるべく原寸比を維持する",
-
   "imageAutoPlay": "アニメーション画像の自動再生",
 
   "linkcard": "リンクカード",

@@ -50,7 +50,6 @@ const state = reactive<{
   // 画像
   images: ComputedRef<Array<TTImage>>
   hasImage: ComputedRef<boolean>
-  isImagefreeSize: ComputedRef<boolean>
   displayImage: ComputedRef<boolean>
   foldingImage: boolean
 
@@ -112,7 +111,6 @@ const state = reactive<{
   // 画像
   images: computed(() => props.post.embed?.images ?? []),
   hasImage: computed((): boolean => state.images.length > 0 && (props.level ?? 1) < 3),
-  isImagefreeSize: computed((): boolean => mainState.currentSetting.imageOption?.includes(0) ?? false),
 
   // 画像の折り畳み
   // TODO: 引用リポストに対応すること
@@ -828,19 +826,7 @@ function onActivateHashTag (text: string) {
 
                 <!-- イメージボックス -->
                 <template v-if="state.displayImage || (!state.displayImage && !state.foldingImage)">
-                  <!-- イメージがひとつだけの場合 -->
-                  <Thumbnail
-                    v-if="state.images.length === 1 && state.isImagefreeSize"
-                    :image="state.images[0]"
-                    :did="post.author.did"
-                    :hasTranslateLink="state.hasOtherLanguages"
-                    :data-has-no-fullsize="state.images[0].fullsize == null"
-                    @click.stop="openImagePopup(0)"
-                  />
-
-                  <!-- イメージが複数ある場合 -->
                   <div
-                    v-else
                     class="quad-images"
                     :data-number-of-images="state.images.length"
                   >

@@ -557,8 +557,6 @@ function saveSettings () {
     state.settings[did].imageFolding = "none"
   if (state.settings[did].imageMaxHeight == null)
     state.settings[did].imageMaxHeight = 75
-  if (state.settings[did].imageOption == null)
-    state.settings[did].imageOption = []
   if (state.settings[did].imageAutoPlay == null)
     state.settings[did].imageAutoPlay = true
   if (state.settings[did].linkcardEmbeddedControl == null)
