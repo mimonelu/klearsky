@@ -680,9 +680,6 @@ function broadcastListener (event: MessageEvent) {
     :data-path="state.currentPath"
     :style="{
       '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 1.0,
-      '--image-max-height': !state.currentSetting.imageMaxHeight
-        ? '75vh'
-        : `${state.currentSetting.imageMaxHeight}vh`,
     }"
     @dragenter.prevent="onDragEnter"
   >

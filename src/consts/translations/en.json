@@ -316,13 +316,13 @@
   "showImage": "Show images",
   "hideImage": "Hide images",
 
-  "imageMaxHeight": "Image Max Height",
-  "imageMaxHeight1": "Slightly short",
-  "imageMaxHeight2": "Short",
-  "imageMaxHeight3": "Middle",
-  "imageMaxHeight4": "Slightly long",
-  "imageMaxHeight5": "Long",
-  "imageMaxHeight6": "None",
+  "imageMaxHeightRatio": "Image Max Height Ratio",
+  "imageMaxHeightRatio1": "x0.5",
+  "imageMaxHeightRatio2": "x0.75",
+  "imageMaxHeightRatio3": "x1.0",
+  "imageMaxHeightRatio4": "x1.5",
+  "imageMaxHeightRatio5": "x2.0",
+  "imageMaxHeightRatio6": "Unlimited",
 
   "imageAutoPlay": "Autoplay animated images",
 

@@ -654,7 +654,7 @@ function onActivateAccountMaskToggle () {
 }
 
 .banner {
-  aspect-ratio: 3/1;
+  aspect-ratio: 3 / 1;
   border-bottom: 1px solid var(--fg-color-0125);
   object-fit: cover;
   &[data-has-banner="true"] {

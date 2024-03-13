@@ -7,10 +7,6 @@
   &[data-number-of-images="1"] {
     & > .quad-image  > .thumbnail {
       border-radius: var(--border-radius);
-
-      & > img {
-        max-height: var(--image-max-height);
-      }
     }
   }
   &:not([data-number-of-images="1"]) {

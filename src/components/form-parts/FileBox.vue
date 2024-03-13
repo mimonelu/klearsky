@@ -208,7 +208,7 @@ function deleteFile (index: number) {
     min-height: calc(2em + 4px); // NOTICE: ALTボタンを考慮
 
     // TODO: 暫定対応
-    max-height: 200vh;
+    max-height: 100vh;
   }
 }
 

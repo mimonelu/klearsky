@@ -316,13 +316,13 @@
   "showImage": "画像を表示する",
   "hideImage": "画像を隠す",
 
-  "imageMaxHeight": "画像の高さの最大値",
-  "imageMaxHeight1": "短め",
-  "imageMaxHeight2": "やや短め",
-  "imageMaxHeight3": "普通",
-  "imageMaxHeight4": "やや長め",
-  "imageMaxHeight5": "長め",
-  "imageMaxHeight6": "なし",
+  "imageMaxHeightRatio": "画像の最大高さの割合",
+  "imageMaxHeightRatio1": "x0.5",
+  "imageMaxHeightRatio2": "x0.75",
+  "imageMaxHeightRatio3": "x1.0",
+  "imageMaxHeightRatio4": "x1.5",
+  "imageMaxHeightRatio5": "x2.0",
+  "imageMaxHeightRatio6": "制限なし",
 
   "imageAutoPlay": "アニメーション画像の自動再生",
 

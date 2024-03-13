@@ -30,9 +30,18 @@ const state = reactive<{
 
   // 画像のアスペクト比
   aspectRatio: computed((): string => {
-    if (props.image?.aspectRatio == null) return "1 / 1"
-    const height = props.image.aspectRatio.height / props.image.aspectRatio.width
-    return `1 / ${height}`
+    if (props.image?.aspectRatio == null) {
+      return "unset"
+    }
+    const aspectHeight = props.image.aspectRatio.height / props.image.aspectRatio.width
+    if (!mainState.currentSetting.imageMaxHeightRatio) {
+      return `1 / ${aspectHeight}`
+    }
+    const computedHeight = Math.min(
+      aspectHeight,
+      mainState.currentSetting.imageMaxHeightRatio
+    )
+    return `1 / ${computedHeight}`
   }),
 })
 
@@ -137,7 +146,7 @@ function onActivateAlt (alt: string) {
     min-height: calc(2em + 4px); // NOTICE: ALTボタンを考慮
 
     // TODO: 暫定対応
-    max-height: 200vh;
+    max-height: 400vh;
   }
 }
 

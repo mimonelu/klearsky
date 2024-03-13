@@ -12,7 +12,7 @@ type TTSetting = {
   hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean
   imageFolding?: "none" | "recommended" | "all"
-  imageMaxHeight?: number
+  imageMaxHeightRatio?: number
   imageAutoPlay?: boolean
   lightning?: string
   linkcardEmbeddedControl?: Array<string>
