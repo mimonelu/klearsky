@@ -8,7 +8,7 @@ export default async function (
   limit?: number,
   cursor?: string,
   filter?: string,
-  middle?: boolean
+  direction?: TTDirection
 ): Promise<undefined | string> {
   if (this.agent == null) return
   const query: AppBskyFeedGetAuthorFeed.QueryParams = { actor: author }
@@ -31,18 +31,20 @@ export default async function (
 
   // TODO:
   AtpUtil.coherentResponses(response.data.feed)
-  const isNotFirstFetch = oldFeeds.length > 0
+  const isFirstFetch = oldFeeds.length === 0
   const isAllNew = AtpUtil.mergeFeeds(
     oldFeeds,
     response.data.feed as Array<TTFeed>,
     cursor == null,
-    middle ? cursor : undefined
+    direction === "middle" ? cursor : undefined
   )
-  if (isNotFirstFetch && isAllNew && (cursor == null || middle)) {
+  if (!isFirstFetch && isAllNew && (cursor == null || direction === "middle")) {
     const initialFeed = response.data.feed[0]
     if (initialFeed != null) initialFeed.__cursor = response.data.cursor
   }
   // AtpUtil.sortFeeds(oldFeeds)
+
+  if (direction !== "old" && !isFirstFetch) return
 
   return response.data.cursor
 }

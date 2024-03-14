@@ -7,7 +7,7 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
-async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
+async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
   Util.blurElement()
   mainState.listLoaderDisplay = true
   await mainState.fetchCurrentListFeeds(direction, middleCursor)
@@ -61,7 +61,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
           v-if="feed.__cursor != null"
           direction="middle"
           :processing="mainState.listLoaderDisplay"
-          @activate="fetchFeeds('old', feed.__cursor)"
+          @activate="fetchFeeds('middle', feed.__cursor)"
         />
       </template>
     </div>

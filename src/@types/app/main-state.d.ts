@@ -142,9 +142,9 @@ type MainState = {
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
   fetchCurrentProfile: (did: string) => Promise<void>
   fetchCurrentAuthorCustomFeeds: (direction: "new" | "old") => Promise<void>
-  fetchCurrentAuthorFeed: (direction: "new" | "old", filter?: string, middleCursor?: string) => Promise<void>
-  fetchAuthorReposts: (direction: "new" | "old") => Promise<void>
-  fetchAuthorLikes: (direction: "new" | "old") => Promise<void>
+  fetchCurrentAuthorFeed: (direction: TTDirection, filter?: string, middleCursor?: string) => Promise<void>
+  fetchAuthorReposts: (direction: TTDirection) => Promise<void>
+  fetchAuthorLikes: (direction: TTDirection) => Promise<void>
   fetchAuthorLists: (direction: "new" | "old") => Promise<void>
   fetchFollowers: (direction: "new" | "old") => Promise<void>
   fetchFollowings: (direction: "new" | "old") => Promise<void>
@@ -160,7 +160,7 @@ type MainState = {
 
   timelineFeeds: Array<TTFeed>
   timelineCursor?: string
-  fetchTimeline: (direction: "old" | "new", middleCursor?: string) => Promise<void>
+  fetchTimeline: (direction: TTDirection, middleCursor?: string) => Promise<void>
 
   // 検索
 
@@ -198,7 +198,7 @@ type MainState = {
   currentPopularFeedGenerators: Array<TTFeedGenerator>
   currentPopularFeedGeneratorsCursor?: string
   feedPreferences: ComputedRef<undefined | TTPreference>
-  fetchCustomFeeds: (direction: "new" | "old", middleCursor?: string) => Promise<void>
+  fetchCustomFeeds: (direction: TTDirection, middleCursor?: string) => Promise<void>
   fetchPopularFeedGenerators: (direction: "new" | "old") => Promise<void>
   sortFeedPreferencesSavedAndPinned: () => void
 
@@ -214,7 +214,7 @@ type MainState = {
   currentListFeedsCursor?: string
   fetchCurrentList: (listUri: string) => Promise<boolean>
   fetchCurrentListItems: (direction: "old" | "new") => Promise<boolean>
-  fetchCurrentListFeeds: (direction: "old" | "new", middleCursor?: string) => Promise<boolean>
+  fetchCurrentListFeeds: (direction: TTDirection, middleCursor?: string) => Promise<boolean>
 
   // マイリスト
 

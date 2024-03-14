@@ -1,3 +1,5 @@
+type TTDirection = "new" | "old" | "middle"
+
 type TTPostType = "post" | "reply" | "quoteRepost"
 
 type TTCreateFileBlobRefParams = {

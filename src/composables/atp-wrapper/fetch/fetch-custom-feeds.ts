@@ -7,7 +7,7 @@ export default async function (
   feed: string,
   limit?: number,
   cursor?: string,
-  middle?: boolean,
+  direction?: TTDirection,
   checkIdentity?: (params: any) => boolean
 ): Promise<undefined | string | Error> {
   if (this.agent == null) return Error("noAgentError")
@@ -31,18 +31,20 @@ export default async function (
 
   // TODO:
   AtpUtil.coherentResponses(response.data.feed)
-  const isNotFirstFetch = oldFeeds.length > 0
+  const isFirstFetch = oldFeeds.length === 0
   const isAllNew = AtpUtil.mergeFeeds(
     oldFeeds,
     response.data.feed as Array<TTFeed>,
     cursor == null,
-    middle ? cursor : undefined
+    direction === "middle" ? cursor : undefined
   )
-  if (isNotFirstFetch && isAllNew && (cursor == null || middle)) {
+  if (!isFirstFetch && isAllNew && (cursor == null || direction === "middle")) {
     const initialFeed = response.data.feed[0]
     if (initialFeed != null) initialFeed.__cursor = response.data.cursor
   }
   // AtpUtil.sortFeeds(oldFeeds) // ソートはしない
+
+  if (direction !== "old" && !isFirstFetch) return
 
   return response.data.cursor
 }

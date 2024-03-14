@@ -944,7 +944,7 @@ async function fetchCurrentAuthorCustomFeeds (direction: "new" | "old") {
   if (cursor != null) state.currentAuthorCustomFeedsCursor = cursor
 }
 
-async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string, middleCursor?: string) {
+async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, middleCursor?: string) {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
 
@@ -971,9 +971,9 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string
       feeds as Array<TTFeed>,
       account,
       CONSTS.LIMIT_OF_FETCH_AUTHOR_FEEDS,
-      direction === "old" ? middleCursor ?? cursor : undefined,
+      direction === "old" ? cursor : middleCursor,
       filter ?? "posts_no_replies",
-      middleCursor != null
+      direction
     )
   if (resultCursor != null)
     filter === "posts_with_replies"
@@ -983,7 +983,7 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old", filter?: string
         : state.currentAuthorFeedsCursor = resultCursor
 }
 
-async function fetchAuthorReposts (direction: "new" | "old") {
+async function fetchAuthorReposts (direction: TTDirection) {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
   const cursor: undefined | string = await state.atp.fetchAuthorReposts(
@@ -995,7 +995,7 @@ async function fetchAuthorReposts (direction: "new" | "old") {
   state.currentAuthorRepostsCursor = cursor
 }
 
-async function fetchAuthorLikes (direction: "new" | "old") {
+async function fetchAuthorLikes (direction: TTDirection) {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
   const cursor: undefined | string = await state.atp.fetchAuthorLikes(
@@ -1103,15 +1103,15 @@ async function fetchPostThread () {
 
 // フォロー中フィード
 
-async function fetchTimeline (direction: "old" | "new", middleCursor?: string) {
+async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
   const cursor: undefined | false | string =
     await state.atp.fetchTimeline(
       state.timelineFeeds,
       state.currentSetting.replyFolding,
       state.currentSetting.repostFolding,
       CONSTS.LIMIT_OF_FETCH_FEEDS,
-      direction === "old" ? middleCursor ?? state.timelineCursor : undefined,
-      middleCursor != null
+      direction === "old" ? state.timelineCursor : middleCursor,
+      direction
     )
   if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
   else if (cursor != null) state.timelineCursor = cursor
@@ -1168,7 +1168,7 @@ async function fetchSearchFeeds (direction: "old" | "new") {
 
 // カスタムフィード
 
-async function fetchCustomFeeds (direction: "old" | "new", middleCursor?: string) {
+async function fetchCustomFeeds (direction: TTDirection, middleCursor?: string) {
   if (state.currentCustomUri !== state.currentQuery.feed) {
     state.currentCustomFeeds.splice(0)
     state.currentCustomCursor = undefined
@@ -1178,8 +1178,8 @@ async function fetchCustomFeeds (direction: "old" | "new", middleCursor?: string
       state.currentCustomFeeds,
       state.currentQuery.feed,
       CONSTS.LIMIT_OF_FETCH_FEEDS,
-      direction === "old" ? middleCursor ?? state.currentCustomCursor : undefined,
-      middleCursor != null,
+      direction === "old" ? state.currentCustomCursor : middleCursor,
+      direction,
       (feedUri: any): boolean => feedUri === state.currentQuery.feed,
     )
   if (cursor instanceof Error) state.openErrorPopup(cursor, "main-state/fetchCustomFeeds")
@@ -1246,15 +1246,15 @@ async function fetchCurrentListItems (direction: "old" | "new"): Promise<boolean
   return true
 }
 
-async function fetchCurrentListFeeds (direction: "old" | "new", middleCursor?: string): Promise<boolean> {
+async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: string): Promise<boolean> {
   if (state.currentList == null) return false
   const cursor: undefined | string | Error =
     await state.atp.fetchListFeed(
       state.currentListFeeds,
       state.currentList.uri,
       CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
-      direction === "old" ? middleCursor ?? state.currentListFeedsCursor : undefined,
-      middleCursor != null,
+      direction === "old" ? state.currentListFeedsCursor : middleCursor,
+      direction,
       (listUri: any): boolean => listUri === state.currentList?.uri,
     )
   if (cursor instanceof Error) {

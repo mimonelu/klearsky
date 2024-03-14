@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
+async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
   Util.blurElement()
   mainState.listLoaderDisplay = true
   try {
@@ -36,7 +36,7 @@ async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
         break
       }
       case "feeds": {
-        await mainState.fetchCustomFeeds(direction, middleCursor)
+        await mainState.fetchCustomFeeds(middleCursor != null ? "middle" : direction, middleCursor)
         break
       }
       case "post": {
@@ -44,7 +44,7 @@ async function fetchFeeds (direction: "new" | "old", middleCursor?: string) {
         break
       }
       case "timeline": {
-        await mainState.fetchTimeline(direction, middleCursor)
+        await mainState.fetchTimeline(middleCursor != null ? "middle" : direction, middleCursor)
         break
       }
     }
@@ -122,7 +122,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
           v-if="feed.__cursor != null"
           direction="middle"
           :processing="mainState.listLoaderDisplay"
-          @activate="fetchFeeds('old', feed.__cursor)"
+          @activate="fetchFeeds('middle', feed.__cursor)"
         />
       </template>
     </div>
