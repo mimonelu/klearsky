@@ -283,27 +283,29 @@ async function processAfterLogin () {
 }
 
 async function moveToDefaultHome () {
-  const item = state.myFeeds.items[0]
-  if (item == null)
+  const pinnedItems = state.myFeeds.pinnedItems
+  const firstPinnedItem = pinnedItems[0]
+  if (firstPinnedItem == null) {
     await router.replace("/home/timeline")
-  else if (item.kind === "feed")
+  } else if (firstPinnedItem.kind === "feed") {
     await router.replace({
       path: "/home/feeds",
       query: {
-        feed: item.value.uri,
-        displayName: item.value.displayName,
+        feed: firstPinnedItem.value.uri,
+        displayName: firstPinnedItem.value.displayName,
       },
     })
-  else if (item.kind === "list")
+  } else if (firstPinnedItem.kind === "list") {
     await router.replace({
       path: "/home/list-feeds",
       query: {
-        list: item.value.uri,
-        displayName: item.value.name,
+        list: firstPinnedItem.value.uri,
+        displayName: firstPinnedItem.value.name,
       },
     })
-  else
+  } else {
     await router.push("/home/timeline")
+  }
 }
 
 async function processPage (pageName?: null | string) {
