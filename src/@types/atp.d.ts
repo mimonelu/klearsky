@@ -136,7 +136,7 @@ type TTLabel = {
   cts: string // Date
   exp?: string
   neg?: boolean
-  sig?: number
+  sig?: Uint8Array
   src: string // DID
   uri: string
   val: string
