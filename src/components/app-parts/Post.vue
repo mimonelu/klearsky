@@ -110,7 +110,7 @@ const state = reactive<{
 
   // 画像
   images: computed(() => props.post.embed?.images ?? []),
-  hasImage: computed((): boolean => state.images.length > 0 && (props.level ?? 1) < 3),
+  hasImage: computed((): boolean => state.images.length > 0),
 
   // 画像の折り畳み
   // TODO: 引用リポストに対応すること
@@ -483,9 +483,8 @@ async function updateThisPostThread () {
 
 // 画像ポップアップ
 function openImagePopup (imageIndex: number) {
-  // ラージ画像のないポスト向け処理（レコードなど）
-  if (state.images[imageIndex].fullsize == null) return
-
+  if (state.images[imageIndex].fullsize == null &&
+      state.images[imageIndex].image == null) return
   mainState.imagePopupProps.did = props.post.author.did
   mainState.imagePopupProps.images = state.images.map((image: TTImage) => {
     return {
@@ -840,7 +839,6 @@ function onActivateHashTag (text: string) {
                         :image="image"
                         :did="post.author.did"
                         :hasTranslateLink="state.hasOtherLanguages"
-                        :data-has-no-fullsize="state.images[imageIndex].fullsize == null"
                         @click.stop="openImagePopup(imageIndex)"
                       />
                     </div>
@@ -943,7 +941,10 @@ function onActivateHashTag (text: string) {
           </div>
 
           <!-- 引用リポスト -->
-          <template v-else-if="post.embed.record.$type === 'app.bsky.embed.record#viewRecord'">
+          <template v-else-if="
+            post.embed.record.$type === 'app.bsky.embed.record#viewRecord' &&
+            (props.level ?? 1) < 3
+          ">
             <div class="repost">
               <Post
                 :level="(level ?? 1) + 1"
@@ -1459,11 +1460,6 @@ function onActivateHashTag (text: string) {
 
 .quad-images {
   grid-area: i;
-
-  // ラージ画像のないポスト向け処理（レコードなど）
-  .thumbnail[data-has-no-fullsize="true"] {
-    cursor: unset;
-  }
 }
 
 .image-list {
