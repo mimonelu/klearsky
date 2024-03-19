@@ -125,3 +125,13 @@
 .button-is-wide {
   border-radius: unset;
 }
+
+.button__suffix {
+  color: var(--fg-color-05);
+  font-size: 0.875em;
+  font-weight: bold;
+  line-height: var(--line-height);
+  margin-left: auto;
+  overflow: hidden;
+  word-break: break-all;
+}

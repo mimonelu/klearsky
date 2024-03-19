@@ -20,7 +20,7 @@ const state = reactive<{
 
 <template>
   <button
-    class="content-filtering-toggle"
+    class="button--bordered content-filtering-toggle"
     :data-enabled="false"
     :data-blur="type === 'blur'"
   >
@@ -32,11 +32,11 @@ const state = reactive<{
     >{{ $t(label) }}</div>
     <div
       v-if="display && togglable"
-      class="content-filtering-toggle__state-label"
+      class="button__suffix"
     >{{ $t("hide") }}</div>
     <div
       v-if="!display && togglable"
-      class="content-filtering-toggle__state-label"
+      class="button__suffix"
     >{{ $t("show") }}</div>
   </button>
 </template>
@@ -46,14 +46,6 @@ const state = reactive<{
   --alpha: 0.5;
   background-color: rgb(var(--bg-color), 0.75);
   border: 1px solid rgb(var(--notice-color), 0.5);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  grid-gap: 0.5em;
-  overflow: hidden;
-  padding: 0.5em 1em;
   &:focus, &:hover {
     border-color: rgb(var(--notice-color), 0.75);
     &[data-blur="true"] {
@@ -77,22 +69,11 @@ const state = reactive<{
     fill: rgb(var(--notice-color));
   }
 
-  &__label,
-  &__state-label {
+  &__label {
+    color: rgb(var(--notice-color));
     font-weight: bold;
     line-height: var(--line-height);
     word-break: break-all;
-  }
-
-  &__label {
-    color: rgb(var(--notice-color));
-  }
-
-  &__state-label {
-    color: var(--fg-color-05);
-    font-size: 0.875em;
-    margin-left: auto;
-    overflow: hidden;
   }
 }
 </style>

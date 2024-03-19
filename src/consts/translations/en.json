@@ -14,6 +14,8 @@
   "feed": "Feed",
   "feeds": "Feeds",
   "show": "Show",
+  "showOldestQuotedPost": "Show quote",
+  "hideOldestQuotedPost": "Hide quote",
   "warn": "Warn",
   "warning": "Warning",
   "hide": "Hide",

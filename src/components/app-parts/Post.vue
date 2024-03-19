@@ -63,6 +63,9 @@ const state = reactive<{
   // リストカード
   hasListCard: ComputedRef<boolean>
 
+  // 最古の引用元ポストかどうか
+  isOldestQuotedPost: ComputedRef<boolean>
+
   // ポストマスクの表示
   masked: ComputedRef<boolean>
 
@@ -155,6 +158,9 @@ const state = reactive<{
 
   // リストカード
   hasListCard: computed((): boolean => props.post.embed?.record?.$type === "app.bsky.graph.defs#listView"),
+
+  // 最古の引用元ポストかどうか
+  isOldestQuotedPost: computed((): boolean => (props.level ?? 1) >= 3 - 1),
 
   // ポストマスクの表示
   masked: computed((): boolean => {
@@ -558,6 +564,12 @@ async function deleteList (list: TTList) {
 function onActivateHashTag (text: string) {
   emit("onActivateHashTag", text)
 }
+
+// 最古の引用元ポストをトグル
+function toggleOldestQuotedPostDisplay () {
+  Util.blurElement()
+  props.post.__custom.oldestQuotedPostDisplay = !props.post.__custom.oldestQuotedPostDisplay
+}
 </script>
 
 <template>
@@ -941,11 +953,36 @@ function onActivateHashTag (text: string) {
           </div>
 
           <!-- 引用リポスト -->
-          <template v-else-if="
-            post.embed.record.$type === 'app.bsky.embed.record#viewRecord' &&
-            (props.level ?? 1) < 3
-          ">
-            <div class="repost">
+          <template v-else-if="post.embed.record.$type === 'app.bsky.embed.record#viewRecord'">
+            <!-- 最古の引用元ポストトグル -->
+            <div
+              v-if="state.isOldestQuotedPost"
+              class="oldest-quoted-post-toggle"
+            >
+              <button
+                class="button--plane"
+                @click.prevent.stop="toggleOldestQuotedPostDisplay"
+              >
+                <template v-if="post.__custom.oldestQuotedPostDisplay">
+                  <SVGIcon name="cursorUp" />
+                  <span>{{ $t("hideOldestQuotedPost") }}</span>
+                </template>
+                <template v-else>
+                  <SVGIcon name="cursorDown" />
+                  <span>{{ $t("showOldestQuotedPost") }}</span>
+                </template>
+              </button>
+            </div>
+
+            <div v-if="
+              !state.isOldestQuotedPost ||
+              (
+                state.isOldestQuotedPost &&
+                post.__custom.oldestQuotedPostDisplay
+              )
+            "
+              class="repost"
+            >
               <Post
                 :level="(level ?? 1) + 1"
                 :position="position === 'slim' ? 'slim' : 'postInPost'"
@@ -1475,6 +1512,13 @@ function onActivateHashTag (text: string) {
       font-size: 0.5rem;
     }
   }
+}
+
+// 最古の引用元ポストトグル
+.oldest-quoted-post-toggle {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.875em;
 }
 
 .repost {

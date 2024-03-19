@@ -14,6 +14,8 @@
   "feed": "フィード",
   "feeds": "フィード",
   "show": "表示する",
+  "showOldestQuotedPost": "引用元を表示する",
+  "hideOldestQuotedPost": "引用元を隠す",
   "warn": "警告する",
   "warning": "警告",
   "hide": "隠す",
