@@ -397,7 +397,7 @@
   "submit": "Submit",
   "sendPostNotification1": "You can also link with [TEXT](URL) .",
   "sendPostNotification2": "You can make Zap link with @zap (lightning setting required).",
-  "sendPostNotification3": "The URL of link card can be set to the URL of a web page, AT URI of a feed, or AT URI of a list.",
+  "sendPostNotification3": "The URL of link card can be set to the URL of a web page, AT URI of a post, AT URI of a feed, or AT URI of a list.",
   "sendPostNotification4": "Animated images are supported in .gif / .apng / .webp (not officially supported).",
   "sendPostNotification5": "It is possible to send more than the maximum number of characters.",
   "sendPostReset": "Reset all entries",

@@ -51,48 +51,59 @@ export default async function (
   if (params.lightning) record.lightning = params.lightning
 
   // リンクカード
+  let replyQuoteRepost: undefined | TTPost = undefined
   let external: null | any = null
   let feedOrLinkCard: undefined | any
   if (params.url?.length > 0) {
-    // リンクカード - フィードカード
-    const generatorUri = isFeedGeneratorAtUri(params.url)
-      ? params.url
-      : convertFeedGeneratorUriToAtUri(params.url)
-    if (generatorUri != null) {
-      const generator: Error | TTFeedGenerator = await this.fetchFeedGenerator(generatorUri)
-      if (generator instanceof Error) return Error("noGeneratorError")
-      feedOrLinkCard = {
-        $type: "app.bsky.embed.record",
-        record: {
-          cid: generator.cid,
-          uri: generator.uri,
-        },
+    // AT URI指定引用リポスト
+    const postUri = isPostAtUri(params.url) ? params.url : null
+    if (postUri != null) {
+      const posts = await this.fetchPosts([postUri])
+      if (!posts || posts[0] == null) {
+        return Error("noPost")
       }
-
+      replyQuoteRepost = posts[0]
     } else {
-      // リンクカード - リストカード
-      const listUri = isListAtUri(params.url)
+      // リンクカード - フィードカード
+      const generatorUri = isFeedGeneratorAtUri(params.url)
         ? params.url
-        : convertListUriToAtUri(params.url)
-      if (listUri != null) {
-        const list: Error | TTList = await this.fetchList(listUri)
-        if (list instanceof Error) return Error("noListError")
+        : convertFeedGeneratorUriToAtUri(params.url)
+      if (generatorUri != null) {
+        const generator: Error | TTFeedGenerator = await this.fetchFeedGenerator(generatorUri)
+        if (generator instanceof Error) return Error("noGeneratorError")
         feedOrLinkCard = {
           $type: "app.bsky.embed.record",
           record: {
-            cid: list.cid,
-            uri: list.uri,
+            cid: generator.cid,
+            uri: generator.uri,
           },
         }
 
-      // リンクカード - リンクカード 
       } else {
-        external = await Util.parseOgp(
-          this,
-          params.url,
-          params.urlHasImage?.includes(true) ?? false
-        )
-        if (external == null || external instanceof Error) return Error("parseOgpError")
+        // リンクカード - リストカード
+        const listUri = isListAtUri(params.url)
+          ? params.url
+          : convertListUriToAtUri(params.url)
+        if (listUri != null) {
+          const list: Error | TTList = await this.fetchList(listUri)
+          if (list instanceof Error) return Error("noListError")
+          feedOrLinkCard = {
+            $type: "app.bsky.embed.record",
+            record: {
+              cid: list.cid,
+              uri: list.uri,
+            },
+          }
+
+        // リンクカード - リンクカード 
+        } else {
+          external = await Util.parseOgp(
+            this,
+            params.url,
+            params.urlHasImage?.includes(true) ?? false
+          )
+          if (external == null || external instanceof Error) return Error("parseOgpError")
+        }
       }
     }
   }
@@ -167,19 +178,22 @@ export default async function (
   }
 
   // 引用リポスト
-  else if (params.type === "quoteRepost" && params.post != null) {
+  if ((params.type === "quoteRepost" || replyQuoteRepost != null) && params.post != null) {
+    const quotePost = params.type === "quoteRepost"
+      ? params.post
+      : replyQuoteRepost ?? params.post
     record.embed = {
       $type: images != null || external != null
         ? "app.bsky.embed.recordWithMedia"
         : "app.bsky.embed.record",
       record: {
-        cid: params.post.cid,
-        uri: params.post.uri,
+        cid: quotePost.cid,
+        uri: quotePost.uri,
 
         // TODO: 添付付きポストを引用リポストしようとするとエラーが発生する不具合の暫定対応
         record: {
-          cid: params.post.cid,
-          uri: params.post.uri,
+          cid: quotePost.cid,
+          uri: quotePost.uri,
         }
       },
     }
@@ -192,7 +206,7 @@ export default async function (
   }
 
   // 画像またはリンクカード
-  if (params.type !== "quoteRepost") {
+  if (params.type !== "quoteRepost" && replyQuoteRepost == null) {
     if (images != null)
       record.embed = { $type: "app.bsky.embed.images", images }
     else if (external != null)
@@ -215,6 +229,10 @@ export default async function (
   console.log("[klearsky/post]", response)
   if (response instanceof Error) return response
   return response
+}
+
+function isPostAtUri (uri: string): boolean {
+  return uri.match(/^at:\/\/did:plc:[\w\.\-]+\/app\.bsky\.feed\.post\/[\w\.\-]+$/) != null
 }
 
 function isFeedGeneratorAtUri (uri: string): boolean {

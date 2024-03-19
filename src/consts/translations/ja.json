@@ -397,7 +397,7 @@
   "submit": "送信する",
   "sendPostNotification1": "[文字列](URL) でカスタムリンクを作成できます。",
   "sendPostNotification2": "@zap でZapリンクを作成できます（要Lightning設定）。",
-  "sendPostNotification3": "リンクカードのURLにはWebページのURL、フィードのAT URI、リストのAT URIを指定できます。",
+  "sendPostNotification3": "リンクカードのURLにはWebページのURL、ポストのAT URI、フィードのAT URI、リストのAT URIを指定できます。",
   "sendPostNotification4": "アニメーション画像は .gif / .apng / .webp に対応しています（公式未対応）。",
   "sendPostNotification5": "最大文字数を超えても送信自体は可能です。",
   "sendPostReset": "入力内容のリセット",
