@@ -1518,7 +1518,11 @@ function toggleOldestQuotedPostDisplay () {
 .oldest-quoted-post-toggle {
   display: flex;
   justify-content: flex-end;
-  font-size: 0.875em;
+
+  & > button {
+    font-size: 0.875em;
+    margin: -0.5em -1em -0.5em 0;
+  }
 }
 
 .repost {
