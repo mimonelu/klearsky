@@ -167,6 +167,7 @@ type TTPost = {
     reason?: TTReason
     translatedText?: string
     unmask?: boolean
+    oldestQuotedPostDisplay?: boolean
   }
 
   author: TTUser
