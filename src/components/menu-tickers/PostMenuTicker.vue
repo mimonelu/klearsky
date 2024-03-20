@@ -96,6 +96,7 @@ async function deletePost () {
 
     <!-- コピーする -->
     <MenuTickerCopyTextWrapper
+      place="post"
       :uri="post.uri"
       :did="post.author.did"
       :handle="post.author.handle"

@@ -154,9 +154,11 @@ async function deleteList () {
 
     <!-- コピーする -->
     <MenuTickerCopyTextWrapper
+      place="list"
       :displayName="list.name"
       :text="list.description"
       :uri="list.uri"
+      :handle="list.creator.handle"
       :container="container"
       @close="emit('close')"
     />

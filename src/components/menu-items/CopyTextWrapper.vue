@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { computed, reactive, type ComputedRef } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import MenuTickerCopyText from "@/components/menu-items/CopyText.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
-defineProps<{
+const props = defineProps<{
+  place?: "feed" | "list" | "post" | "profile"
   uri?: string
   did?: string
   displayName?: string
@@ -17,8 +19,28 @@ defineProps<{
 
 const state = reactive<{
   display: boolean
+  officialUrl: ComputedRef<undefined | string>
 }>({
   display: false,
+  officialUrl: computed((): undefined | string => {
+    switch (props.place) {
+      case "feed": {
+        const uri = props.uri?.replace('at://', '').replace('app.bsky.feed.generator', 'feed')
+        return `https://bsky.app/profile/${uri}`
+      }
+      case "list": {
+        const rkey = Util.getRkey(props.uri)
+        return `https://bsky.app/profile/${props.handle}/lists/${rkey}`
+      }
+      case "post": {
+        const rkey = Util.getRkey(props.uri)
+        return `https://bsky.app/profile/${props.handle}/post/${rkey}`
+      }
+      case "profile": {
+        return `https://bsky.app/profile/${props.handle}`
+      }
+    }
+  }),
 })
 
 function showSubMenuTicker () {
@@ -42,10 +64,18 @@ function showSubMenuTicker () {
       :container="container"
       class="menu-ticker__sub"
     >
+      <!-- 公式 URL をコピーする -->
+      <MenuTickerCopyText
+        v-if="place != null"
+        label="copyOfficialUrl"
+        :text="state.officialUrl"
+        @close="emit('close')"
+      />
+
       <!-- URI をコピーする -->
       <MenuTickerCopyText
         v-if="uri != null"
-        label="copyUri"
+        label="copyAtUri"
         :text="uri"
         @close="emit('close')"
       />

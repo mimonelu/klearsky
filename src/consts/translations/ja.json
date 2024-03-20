@@ -168,7 +168,8 @@
 
   "copy": "コピーする",
   "copyHandle": "ハンドルをコピー",
-  "copyUri": "AT URIをコピー",
+  "copyOfficialUrl": "公式URLをコピー",
+  "copyAtUri": "AT URIをコピー",
   "copyDid": "DIDをコピー",
   "copyDisplayName": "表示名をコピー",
   "likeUsers": "いいねしたユーザー",

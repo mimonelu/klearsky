@@ -168,7 +168,8 @@
 
   "copy": "Copy",
   "copyHandle": "Copy handle",
-  "copyUri": "Copy AT URI",
+  "copyOfficialUrl": "Copy Official URL",
+  "copyAtUri": "Copy URI",
   "copyDid": "Copy DID",
   "copyDisplayName": "Copy display name",
   "likeUsers": "Liked by",

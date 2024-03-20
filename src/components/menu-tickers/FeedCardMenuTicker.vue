@@ -51,6 +51,7 @@ const state = reactive<{
 
     <!-- コピーする -->
     <MenuTickerCopyTextWrapper
+      place="feed"
       :did="generator.did"
       :displayName="generator.displayName"
       :text="generator.description"

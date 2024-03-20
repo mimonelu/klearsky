@@ -65,6 +65,7 @@ const state = reactive<{
 
     <!-- コピーする -->
     <MenuTickerCopyTextWrapper
+      place="profile"
       :did="user.did"
       :handle="user.handle"
       :text="user.description"
