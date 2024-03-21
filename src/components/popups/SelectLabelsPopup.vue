@@ -47,7 +47,7 @@ const easyFormProps: TTEasyForm = {
       },
     },
     {
-      state: state,
+      state,
       model: "customLabels",
       type: "text",
       placeholder: `${$t("customLabels")}, ...`,

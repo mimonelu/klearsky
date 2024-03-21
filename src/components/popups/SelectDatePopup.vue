@@ -22,16 +22,14 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   date?: string
 }>({
-  date: props.date != null
-    ? format(new Date(props.date), "yyyy-MM-dd HH:mm:ss")
-    : props.date,
+  date: makeDate(),
 })
 
 const easyFormProps: TTEasyForm = {
   hasSubmitButton: false,
   data: [
     {
-      state: state,
+      state,
       model: "date",
       type: "datetime-local",
       onInput () {
@@ -39,6 +37,13 @@ const easyFormProps: TTEasyForm = {
       },
     },
   ],
+}
+
+function makeDate (): undefined | string {
+  if (props.date == null) return
+  const date = new Date(props.date)
+  if (Number.isNaN(date.getTime())) return
+  return format(new Date(props.date), "yyyy-MM-dd HH:mm:ss")
 }
 
 function close () {
