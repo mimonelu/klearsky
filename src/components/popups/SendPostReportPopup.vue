@@ -53,6 +53,9 @@ const easyFormProps: TTEasyForm = {
       type: "textarea",
       placeholder: $t("reportReasonDescription"),
       rows: 6,
+      maxlength: 300,
+      maxLengthIndicator: true,
+      maxLengthIndicatorByGrapheme: true,
     },
   ],
 }

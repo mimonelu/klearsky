@@ -63,7 +63,7 @@ function getCharacterLength (item: TTEasyFormItem): number {
   if (item.model == null) return 0
   const text = item.state[item.model]
   if (item.maxLengthIndicatorByGrapheme) {
-    return Util.getGraphemeLength(text)
+    return Util.getGraphemeLength(text ?? "")
   } else {
     return new Blob([text]).size
   }
