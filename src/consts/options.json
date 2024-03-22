@@ -27,5 +27,13 @@
     { "label": "reportReasonSexual", "value": "com.atproto.moderation.defs#reasonSexual" },
     { "label": "reportReasonRude", "value": "com.atproto.moderation.defs#reasonRude" },
     { "label": "reportReasonOther", "value": "com.atproto.moderation.defs#reasonOther" }
+  ],
+  "LIST_REPORT_REASON": [
+    { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" },
+    { "label": "reportReasonMisleading", "value": "com.atproto.moderation.defs#reasonMisleading" },
+    { "label": "reportReasonViolation", "value": "com.atproto.moderation.defs#reasonViolation" },
+    { "label": "reportReasonSexual", "value": "com.atproto.moderation.defs#reasonSexual" },
+    { "label": "reportReasonRude", "value": "com.atproto.moderation.defs#reasonRude" },
+    { "label": "reportReasonOther", "value": "com.atproto.moderation.defs#reasonOther" }
   ]
 }

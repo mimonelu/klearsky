@@ -3,6 +3,7 @@ import { reactive } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import MenuTickerSendAccountReport from "@/components/menu-items/SendAccountReport.vue"
 import MenuTickerSendFeedReport from "@/components/menu-items/SendFeedReport.vue"
+import MenuTickerSendListReport from "@/components/menu-items/SendListReport.vue"
 import MenuTickerSendPostReport from "@/components/menu-items/SendPostReport.vue"
 import MenuTickerToggleBlock from "@/components/menu-items/ToggleBlock.vue"
 import MenuTickerToggleMute from "@/components/menu-items/ToggleMute.vue"
@@ -15,6 +16,7 @@ defineProps<{
   user?: TTUser
   post?: TTPost
   generator?: TTFeedGenerator
+  list?: TTList
   container?: HTMLElement
 }>()
 
@@ -47,14 +49,14 @@ function showSubMenuTicker () {
     >
       <!-- ミュートのトグル -->
       <MenuTickerToggleMute
-        v-if="!isUser && generator == null"
+        v-if="!isUser && generator == null && list == null"
         :user="user"
         @close="emit('close')"
       />
 
       <!-- ブロックのトグル -->
       <MenuTickerToggleBlock
-        v-if="!isUser && generator == null"
+        v-if="!isUser && generator == null && list == null"
         :user="user"
         @close="emit('close')"
       />
@@ -77,6 +79,13 @@ function showSubMenuTicker () {
       <MenuTickerSendFeedReport
         v-if="generator != null"
         :generator="generator"
+        @close="emit('close')"
+      />
+
+      <!-- リストレポート送信ポップアップを開く -->
+      <MenuTickerSendListReport
+        v-if="list != null"
+        :list="list"
         @close="emit('close')"
       />
     </MenuTicker>

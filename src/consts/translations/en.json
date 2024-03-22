@@ -104,6 +104,7 @@
   "reportSendAccount": "Report user",
   "reportSendPost": "Report post",
   "reportSendFeed": "Report custom feed",
+  "reportSendList": "Report list",
   "reportSendConfirmation": "Confirmation of sending report",
   "reportSendConfirmationMessage": "This report will be sent. Are you sure?",
   "reportReasonType": "Reason",

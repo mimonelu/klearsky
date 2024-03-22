@@ -30,6 +30,7 @@ import SelectLabelsPopup from "@/components/popups/SelectLabelsPopup.vue"
 import SelectLanguagesPopup from "@/components/popups/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/popups/SendAccountReportPopup.vue"
 import SendFeedReportPopup from "@/components/popups/SendFeedReportPopup.vue"
+import SendListReportPopup from "@/components/popups/SendListReportPopup.vue"
 import SendPostPopup from "@/components/popups/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/popups/SendPostReportPopup.vue"
 import SettingsPopup from "@/components/popups/SettingsPopup.vue"
@@ -869,6 +870,13 @@ function broadcastListener (event: MessageEvent) {
         v-if="state.sendFeedReportPopupProps.display"
         :generator="state.sendFeedReportPopupProps.generator as TTFeedGenerator"
         @close="state.closeSendFeedReportPopup"
+      />
+
+      <!-- リストレポート送信ポップアップ -->
+      <SendListReportPopup
+        v-if="state.sendListReportPopupProps.display"
+        :list="state.sendListReportPopupProps.list as TTList"
+        @close="state.closeSendListReportPopup"
       />
 
       <!-- イメージポップアップ -->

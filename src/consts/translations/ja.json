@@ -104,6 +104,7 @@
   "reportSendAccount": "ユーザーをレポートする",
   "reportSendPost": "ポストをレポートする",
   "reportSendFeed": "フィードをレポートする",
+  "reportSendList": "リストをレポートする",
   "reportSendConfirmation": "レポートの送信確認",
   "reportSendConfirmationMessage": "レポートを送信します。よろしいですか？",
   "reportReasonType": "レポート事由",

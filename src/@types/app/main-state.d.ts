@@ -315,6 +315,14 @@ type MainState = {
   openSendFeedReportPopup: Function
   closeSendFeedReportPopup: Function
 
+  // ポップアップ - リストレポート送信ポップアップ
+  sendListReportPopupProps: {
+    display: boolean
+    list?: TTList
+  }
+  openSendListReportPopup: Function
+  closeSendListReportPopup: Function
+
   // ポップアップ - イメージポップアップ
   imagePopupProps: {
     display: boolean

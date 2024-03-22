@@ -339,6 +339,14 @@ state.sendFeedReportPopupProps = {
 state.openSendFeedReportPopup = openSendFeedReportPopup
 state.closeSendFeedReportPopup = closeSendFeedReportPopup
 
+// ポップアップ - リストレポート送信ポップアップ
+state.sendListReportPopupProps = {
+  display: false,
+  list: undefined,
+}
+state.openSendListReportPopup = openSendListReportPopup
+state.closeSendListReportPopup = closeSendListReportPopup
+
 // ポップアップ - イメージポップアップ
 state.imagePopupProps = {
   did: "",
@@ -1420,6 +1428,17 @@ function openSendFeedReportPopup (generator: TTFeedGenerator) {
 
 function closeSendFeedReportPopup () {
   state.sendFeedReportPopupProps.display = false
+}
+
+// ポップアップ - リストレポート送信ポップアップ
+
+function openSendListReportPopup (list: TTList) {
+  state.sendListReportPopupProps.list = list
+  state.sendListReportPopupProps.display = true
+}
+
+function closeSendListReportPopup () {
+  state.sendListReportPopupProps.display = false
 }
 
 // ポップアップ - リポストユーザーポップアップ
