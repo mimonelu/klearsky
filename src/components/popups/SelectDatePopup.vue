@@ -73,7 +73,7 @@ async function reset () {
       </h2>
     </template>
     <template #body>
-      <p>{{ $t(textDescription) }}</p>
+      <p class="select-date-popup__description">{{ $t(textDescription) }}</p>
       <EasyForm v-bind="easyFormProps" />
       <button
         class="button--bordered"
@@ -91,6 +91,10 @@ async function reset () {
   .button--bordered {
     margin: 0 auto;
     width: max-content;
+  }
+
+  &__description {
+    white-space: pre-wrap;
   }
 }
 </style>

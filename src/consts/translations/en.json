@@ -406,7 +406,7 @@
 
   "postDate": "Post date",
   "postDatePopupTitle": "Set post date",
-  "postDatePopupDescription": "This post will be sent as the following date. Date is valid only for past.",
+  "postDatePopupDescription": "This post will be sent as the following date.\nValid only from 10 A.D. to the present date and time.",
   "postDatePopupReset": "Reset date",
   "postDatePopupResetDescription": "Reset the date. Are you sure?",
 

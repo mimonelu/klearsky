@@ -406,7 +406,7 @@
 
   "postDate": "ポスト日時",
   "postDatePopupTitle": "ポスト日時の設定",
-  "postDatePopupDescription": "下記の日時でポストを投稿します。過去の日時のみ有効です。",
+  "postDatePopupDescription": "下記の日時でポストを投稿します。\n西暦10年から現在の日時のみ有効です。",
   "postDatePopupReset": "日時をリセットする",
   "postDatePopupResetDescription": "日時をリセットします。よろしいですか？",
 
