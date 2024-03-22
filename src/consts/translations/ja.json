@@ -491,7 +491,7 @@
   "apiError": "APIへの接続中にエラーが発生しました。",
   "cidEncodeError": "CIDのエンコードでエラーが発生しました。",
   "downloadImageError": "画像のダウンロード中にエラーが発生しました。",
-  "fetchOgpError": "OGPの取得でエラーが発生しました。Klearskyのリンクサーバが落ちている可能性があります。 @mimonelu.net にご連絡ください。",
+  "fetchOgpError": "OGPの取得でエラーが発生しました。Blueskyのリンクサーバが落ちている可能性があります。",
   "getSessionError": "ログインに失敗しました。入力内容を確認してください。",
   "imageCompressionError": "画像の圧縮中にエラーが発生しました。",
   "invalidCidError": "不正なCIDです。",

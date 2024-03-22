@@ -18,7 +18,6 @@
     "cbor-x": "^1.5.3",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.30.0",
-    "encoding-japanese": "^2.0.0",
     "hotkeys-js": "^3.10.3",
     "jwt-decode": "^4.0.0",
     "multiformats": "^12.0.1",
