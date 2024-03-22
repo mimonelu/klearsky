@@ -117,7 +117,21 @@ async function submitCallback () {
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
-      <EasyForm v-bind="easyFormProps" />
+      <EasyForm v-bind="easyFormProps">
+        <template #free-1>
+          <div class="send-post-report-popup__link-container">
+            <a
+              class="textlink--icon"
+              href="https://bsky.social/about/support/copyright"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <SVGIcon name="cursorRight" />
+              <span>{{ $t("reportCopyrightViolation") }}</span>
+            </a>
+          </div>
+        </template>
+      </EasyForm>
     </template>
   </Popup>
 </template>
@@ -141,6 +155,10 @@ async function submitCallback () {
     opacity: 0.875;
     padding: 1rem;
     pointer-events: none;
+  }
+
+  &__link-container {
+    text-align: right;
   }
 }
 </style>

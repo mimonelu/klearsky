@@ -115,6 +115,7 @@
   "reportReasonViolation": "Violation: Copyright violation, Violation of terms of Service",
   "reportReasonRude": "Rude: Harassment, Trolling, Intolerance",
   "reportReasonOther": "Other",
+  "reportCopyrightViolation": "Reporting copyright violation",
 
   "profileLabel": "User labels",
   "postLabel": "Post labels",

@@ -115,6 +115,7 @@
   "reportReasonViolation": "違法：著作憲法違反、利用規約違反など",
   "reportReasonRude": "迷惑行為：ハラスメント、荒らし、差別など",
   "reportReasonOther": "その他",
+  "reportCopyrightViolation": "著作権侵害の報告について",
 
   "profileLabel": "ユーザーラベル",
   "postLabel": "ポストラベル",
