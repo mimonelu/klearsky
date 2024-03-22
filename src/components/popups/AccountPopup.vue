@@ -54,7 +54,7 @@ async function logout () {
     </template>
     <template #body>
       <div class="account-popup__body">
-        <div class="account-popup__button-container">
+        <div class="account-popup__button-container group-buttons">
           <!-- 新規ログインボタン -->
           <button
             class="button"
@@ -87,10 +87,8 @@ async function logout () {
     grid-gap: 1rem;
   }
 
-  &__button-container {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-gap: 0.5rem;
+  &__button-container > button {
+    flex-grow: 1;
   }
 }
 </style>

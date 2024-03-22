@@ -375,7 +375,7 @@ function toggleDetail () {
     <!-- リストボタンコンテナ -->
     <div
       v-if="!isCompact && !!props.list.cid"
-      class="list-card__list-button-container"
+      class="list-card__list-button-container group-buttons"
     >
       <!-- リストフィードボタン -->
       <RouterLink
@@ -629,13 +629,7 @@ function toggleDetail () {
 
   // リストボタンコンテナ
   &__list-button-container {
-    display: grid;
-    grid-template-columns: max-content max-content max-content;
     justify-content: flex-end;
-
-    & > *:not(:last-child) {
-      margin-right: 0.5em;
-    }
   }
 
   // リストフィードボタン

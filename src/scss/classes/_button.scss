@@ -135,3 +135,32 @@
   overflow: hidden;
   word-break: break-all;
 }
+
+.group-buttons {
+  display: flex;
+  align-items: center;
+
+  & > .button,
+  & > .button--bordered,
+  & > .button--important,
+  & > .button--plane {
+    &:not(:last-child) {
+      border-right-style: none;
+    }
+    &:first-child {
+      border-top-right-radius: unset;
+      border-bottom-right-radius: unset;
+    }
+    &:last-child {
+      border-top-left-radius: unset;
+      border-bottom-left-radius: unset;
+    }
+    &:not(:first-child):not(:last-child) {
+      border-radius: unset;
+    }
+  }
+  & > .button--bordered,
+  & > .button--plane {
+    border-color: var(--fg-color-025);
+  }
+}
