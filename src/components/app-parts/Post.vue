@@ -1220,7 +1220,7 @@ function toggleOldestQuotedPostDisplay () {
   // リプライライン
   &[data-has-child="true"],
   &[data-has-child="false"] {
-    --top: 0.75em;
+    --top: 1em;
     --gap: 1em;
     &[data-has-mask="true"] {
       --top: 1.5em;
