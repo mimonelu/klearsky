@@ -1257,8 +1257,6 @@ function toggleOldestQuotedPostDisplay () {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1em;
-  margin: -0.75em -1em 0.5em;
-  padding: 0.5em 1em 0;
 }
 
 // リプライ／引用リポストアイコン
