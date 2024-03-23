@@ -27,15 +27,16 @@ export default function (responses: Array<any>) {
   })
 
   // PARENT.embed.media.external -> PARENT.embed.external
+  // NOTICE: おそらく古いフォーマット向け
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "media" && child.external != null) {
       parent.external = Util.cloneJson(child.external)
-      parent.external.__comment =
-        "❗ This 'external' was duplicated by Klearsky."
+      parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
     }
   })
 
   // PARENT.embed.media.images -> PARENT.embed.images
+  // NOTICE: おそらく古いフォーマット向け
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "media" && child.images != null && parent.images == null) {
       parent.images = Util.cloneJson(child.images)
@@ -44,6 +45,7 @@ export default function (responses: Array<any>) {
   })
 
   // PARENT.record.record -> PARENT.record
+  // NOTICE: おそらく古いフォーマット向け
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "record" && child.record != null) {
       parent.record = Util.cloneJson(child.record)
@@ -54,25 +56,28 @@ export default function (responses: Array<any>) {
   // PARENT.record/value.embed.external/images -> PARENT.embed.external/images
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if ((key === "record" || key === "value") && child.embed != null) {
+      /* // TODO: 不要であれば削除すること
       if (child.embed.external != null && parent.embed?.external == null) {
         if (parent.embed == null) parent.embed = {}
         parent.embed.external = Util.cloneJson(child.embed.external)
-        parent.embed.external.__comment =
-          "❗ This 'external' was duplicated by Klearsky."
+        parent.embed.external.__comment = "❗ This 'external' was duplicated by Klearsky."
       }
+      */
       if (child.embed.images != null) {
+        /* // TODO: 不要であれば削除すること
         if (parent.embed?.images == null) {
           if (parent.embed == null) parent.embed = {}
           parent.embed.images = Util.cloneJson(child.embed.images)
-          parent.embed.images.__comment =
-            "❗ This 'images' was duplicated by Klearsky."
+          parent.embed.images.__comment = "❗ This 'images' was duplicated by Klearsky."
         }
+        */
 
         // アニメーション画像向けに BlobRef をコピー
         if (parent.embed?.images != null) {
           parent.embed.images.forEach((image: any, index: number) => {
             if (image.image == null && child.embed.images[index]?.image != null)
               image.image = child.embed.images[index].image
+              image.__comment = "❗ This 'image' was duplicated by Klearsky."
           })
         }
       }
