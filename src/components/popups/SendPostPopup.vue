@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, ref, watch } from "vue"
+import { computed, inject, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
 import format from "date-fns/format"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
@@ -29,6 +29,7 @@ const state = reactive<{
   htmlPopupDisplay: boolean
   popupLoaderDisplay: boolean
   draftThreadgate: TTDraftThreadgate
+  postDatePopupDate: ComputedRef<undefined | string>
 }>({
   labels: [],
   htmlPopupDisplay: false,
@@ -39,6 +40,12 @@ const state = reactive<{
     allowFollowing: false,
     listUris: [],
   },
+  postDatePopupDate: computed((): undefined | string => {
+    if (mainState.postDatePopupDate == null) return
+    const date = new Date(mainState.postDatePopupDate)
+    if (Number.isNaN(date.getTime())) return
+    return format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'")
+  }),
 })
 
 const easyFormState = reactive<{
@@ -177,7 +184,7 @@ async function submitCallback () {
       ...easyFormState,
       type: props.type,
       post: props.post,
-      createdAt: mainState.postDatePopupDate,
+      createdAt: state.postDatePopupDate,
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
       tags: mainState.currentPostTags,
@@ -369,7 +376,7 @@ function openThreadgatePopup () {
               >
                 <SVGIcon name="history" />
                 <span>{{ $t("date") }}</span>
-                <b v-if="mainState.postDatePopupDate != null">{{ format(new Date(mainState.postDatePopupDate), "yyyy/MM/dd HH:mm:ss") }}</b>
+                <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
               </button>
             </div>
           </template>

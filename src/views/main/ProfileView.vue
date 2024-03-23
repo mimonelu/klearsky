@@ -505,7 +505,7 @@ function onActivateAccountMaskToggle () {
         state.isPagePostFeedsWithReplies ||
         state.isPagePostFeedsWithMedia
       "
-      class="profile-view__link-container"
+      class="profile-view__link-container group-buttons"
     >
       <!-- リプライ付きポストページリンク -->
       <Component
@@ -631,10 +631,7 @@ function onActivateAccountMaskToggle () {
   // プロフィールポストページ用リンクコンテナ
   &__link-container {
     border-bottom: 1px solid var(--fg-color-0125);
-    display: flex;
-    align-items: center;
     justify-content: flex-end;
-    grid-gap: 0.25rem;
     padding: 0.25rem;
 
     & > .button--bordered,

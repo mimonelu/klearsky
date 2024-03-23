@@ -13,7 +13,7 @@ interface TIAtpWrapper {
   createList (this: TIAtpWrapper, purpose: string, name: string, description?: string, avatarBlobRef?: BlobRef): Promise<string | Error>
   createListUser (this: TIAtpWrapper, listUri: string, userDid: string): Promise<string | Error>
   createPost (this: TIAtpWrapper, params: TTCreatePostParams): Promise<Error | TTCidUri>
-  createReport (this: TIAtpWrapper, reasonType: string, reason: string, did?: string, cid?: string, uri?: string): Promise<boolean>
+  createReport (this: TIAtpWrapper, reasonType: string, reason: string, did?: string, cid?: string, uri?: string, type?: string): Promise<boolean>
   createRepost (this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   deleteAccount (this: TIAtpWrapper, did?: string)
   deleteFollow (this: TIAtpWrapper, uri: string): Promise<boolean>

@@ -53,6 +53,9 @@ const easyFormProps: TTEasyForm = {
       type: "textarea",
       placeholder: $t("reportReasonDescription"),
       rows: 6,
+      maxlength: 300,
+      maxLengthIndicator: true,
+      maxLengthIndicatorByGrapheme: true,
     },
   ],
 }
@@ -115,7 +118,21 @@ async function submitCallback () {
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
-      <EasyForm v-bind="easyFormProps" />
+      <EasyForm v-bind="easyFormProps">
+        <template #free-1>
+          <div class="send-feed-report-popup__link-container">
+            <a
+              class="textlink--icon"
+              href="https://bsky.social/about/support/copyright"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <SVGIcon name="cursorRight" />
+              <span>{{ $t("reportCopyrightViolation") }}</span>
+            </a>
+          </div>
+        </template>
+      </EasyForm>
     </template>
   </Popup>
 </template>
@@ -138,6 +155,10 @@ async function submitCallback () {
     font-size: 0.875rem;
     opacity: 0.875;
     pointer-events: none;
+  }
+
+  &__link-container {
+    text-align: right;
   }
 }
 </style>

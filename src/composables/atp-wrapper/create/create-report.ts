@@ -6,7 +6,8 @@ export default async function (
   reason: string,
   did?: string,
   cid?: string,
-  uri?: string
+  uri?: string,
+  type?: string
 ): Promise<boolean> {
   if (this.agent == null) return false
   const query: ComAtprotoModerationCreateReport.InputSchema = {
@@ -19,6 +20,7 @@ export default async function (
       did,
       cid,
       uri,
+      type,
     },
   }
   const response: ComAtprotoModerationCreateReport.Response =

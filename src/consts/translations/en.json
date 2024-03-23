@@ -104,6 +104,7 @@
   "reportSendAccount": "Report user",
   "reportSendPost": "Report post",
   "reportSendFeed": "Report custom feed",
+  "reportSendList": "Report list",
   "reportSendConfirmation": "Confirmation of sending report",
   "reportSendConfirmationMessage": "This report will be sent. Are you sure?",
   "reportReasonType": "Reason",
@@ -115,6 +116,7 @@
   "reportReasonViolation": "Violation: Copyright violation, Violation of terms of Service",
   "reportReasonRude": "Rude: Harassment, Trolling, Intolerance",
   "reportReasonOther": "Other",
+  "reportCopyrightViolation": "Reporting copyright violation",
 
   "profileLabel": "User labels",
   "postLabel": "Post labels",
@@ -168,7 +170,8 @@
 
   "copy": "Copy",
   "copyHandle": "Copy handle",
-  "copyUri": "Copy AT URI",
+  "copyOfficialUrl": "Copy Official URL",
+  "copyAtUri": "Copy URI",
   "copyDid": "Copy DID",
   "copyDisplayName": "Copy display name",
   "likeUsers": "Liked by",
@@ -397,7 +400,7 @@
   "submit": "Submit",
   "sendPostNotification1": "You can also link with [TEXT](URL) .",
   "sendPostNotification2": "You can make Zap link with @zap (lightning setting required).",
-  "sendPostNotification3": "The URL of link card can be set to the URL of a web page, AT URI of a feed, or AT URI of a list.",
+  "sendPostNotification3": "The URL of link card can be set to the URL of a web page, AT URI of a post, AT URI of a feed, or AT URI of a list.",
   "sendPostNotification4": "Animated images are supported in .gif / .apng / .webp (not officially supported).",
   "sendPostNotification5": "It is possible to send more than the maximum number of characters.",
   "sendPostReset": "Reset all entries",
@@ -405,7 +408,7 @@
 
   "postDate": "Post date",
   "postDatePopupTitle": "Set post date",
-  "postDatePopupDescription": "This post will be sent as the following date. Date is valid only for past.",
+  "postDatePopupDescription": "This post will be sent as the following date.\nValid only from 10 A.D. to the present date and time.",
   "postDatePopupReset": "Reset date",
   "postDatePopupResetDescription": "Reset the date. Are you sure?",
 
@@ -488,7 +491,7 @@
   "apiError": "An error occurred while connecting to the API.",
   "cidEncodeError": "An error occurred while encoding the CID.",
   "downloadImageError": "An error occurred while downloading images.",
-  "fetchOgpError": "An error occurred while retrieving OGP. Klearsky's link server may be down. Please contact @mimonelu.net .",
+  "fetchOgpError": "An error occurred while retrieving OGP. Bluesky's link server may be down.",
   "getSessionError": "Login failed. Please check your entries.",
   "imageCompressionError": "An error occurred while compressing the image.",
   "invalidCidError": "Invalid CID.",

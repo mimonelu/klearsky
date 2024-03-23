@@ -227,7 +227,7 @@ function onClickFileBox (event: Event) {
       </div>
     </div>
 
-    <div class="button-contaienr">
+    <div class="button-container group-buttons">
       <!-- エクスポートボタン -->
       <button
         class="button--bordered"
@@ -239,9 +239,7 @@ function onClickFileBox (event: Event) {
       </button>
 
       <!-- インポートボタン -->
-      <label
-        class="button--bordered button--filebox"
-      >
+      <label class="button--bordered button--filebox">
         <input
           type="file"
           accept=".json"
@@ -430,19 +428,10 @@ function onClickFileBox (event: Event) {
   overflow: hidden;
 }
 
-.button-contaienr {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 0.5rem;
-  align-items: center;
-
-  button, label {
-    padding-left: 0;
-    padding-right: 0;
-
-    .svg-icon {
-      font-size: 1rem;
-    }
+.button-container {
+  & > button,
+  & > label {
+    flex-grow: 1;
   }
 }
 </style>

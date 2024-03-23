@@ -84,7 +84,7 @@ function clicked (list?: TTList) {
     <!-- リストヘッダー -->
     <div
       v-if="headerDisplay"
-      class="lists__header"
+      class="lists__header group-buttons"
     >
       <!-- マイリスト更新ボタン -->
       <button
@@ -156,10 +156,7 @@ function clicked (list?: TTList) {
 
   &__header {
     border-bottom: 1px solid var(--fg-color-0125);
-    display: flex;
-    align-items: center;
     justify-content: flex-end;
-    grid-gap: 0.25rem;
     padding: 0.25rem;
   }
 

@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
+import MenuTickerModerateWrapper from "@/components/menu-items/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
 import MenuTickerSendLinkCard from "@/components/menu-items/SendLinkCard.vue"
@@ -154,9 +155,19 @@ async function deleteList () {
 
     <!-- コピーする -->
     <MenuTickerCopyTextWrapper
+      place="list"
       :displayName="list.name"
       :text="list.description"
       :uri="list.uri"
+      :handle="list.creator.handle"
+      :container="container"
+      @close="emit('close')"
+    />
+
+    <!-- モデレートする -->
+    <MenuTickerModerateWrapper
+      v-if="!state.isOwn"
+      :list="list"
       :container="container"
       @close="emit('close')"
     />
