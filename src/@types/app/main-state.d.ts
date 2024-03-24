@@ -170,8 +170,6 @@ type MainState = {
   // 検索 - 現在のポスト検索結果
   currentSearchPostResults: Array<TTPost>
   currentSearchPostCursor?: string
-  currentSearchPostTotal?: number
-  currentSearchPostIsLast: boolean
   currentSearchPostsLastTerm?: string
   fetchSearchPosts: (cursor?: string) => Promise<void>
 

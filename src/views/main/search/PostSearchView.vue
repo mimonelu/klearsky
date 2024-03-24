@@ -1,42 +1,16 @@
 <script lang="ts" setup>
-import { computed, inject, onBeforeUnmount, onMounted, reactive, watch, type ComputedRef } from "vue"
+import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
-import Loader from "@/components/common/Loader.vue"
-import Pagenation from "@/components/common/Pagenation.vue"
+import LoadButton from "@/components/buttons/LoadButton.vue"
 import Post from "@/components/app-parts/Post.vue"
 import Util from "@/composables/util"
-import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
-  pagenationDisplay: ComputedRef<boolean>
-  pagenationProps: ComputedRef<{
-    numberOfPager: number
-    total?: number
-    unit?: number
-    cursor?: number
-    isLast: boolean
-  }>
 }>({
   processing: false,
-  pagenationDisplay: computed((): boolean => {
-    return !!mainState.currentSearchTerm && (
-      mainState.currentSearchPostResults?.length > 0 ||
-      mainState.currentSearchPostCursor != null ||
-      mainState.currentSearchPostTotal != null
-    )
-  }),
-  pagenationProps: computed(() => {
-    return {
-      numberOfPager: CONSTS.NUMBER_OF_POST_SEARCH_BUTTON,
-      total: mainState.currentSearchPostTotal,
-      unit: CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
-      cursor: mainState.currentSearchPostCursor != null ? parseInt(mainState.currentSearchPostCursor, 10) : mainState.currentSearchPostCursor,
-      isLast: mainState.currentSearchPostIsLast,
-    }
-  }),
 })
 
 const router = useRouter()
@@ -48,6 +22,11 @@ const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, async (
     await fetchNewResults()
 }, { immediate: true })
 
+// インフィニットスクロール
+const unwatchOnScroll = watch(() => mainState.scrolledToBottom, (value: boolean) => {
+  if (value) fetchContinuousResults("old")
+})
+
 onMounted(async () => {
   const textbox = document.getElementById("post-term-textbox")
   if (textbox != null) textbox.focus()
@@ -58,6 +37,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   unwatchOnQuery()
+  unwatchOnScroll()
 })
 
 function updateSearchPostTerm (text: string) {
@@ -76,7 +56,6 @@ async function fetchNewResults () {
   mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
   mainState.currentSearchPostResults.splice(0)
   mainState.currentSearchPostCursor = undefined
-  mainState.currentSearchPostTotal = undefined
   updateRouter()
   if (!mainState.currentSearchTerm) return
   state.processing = true
@@ -84,20 +63,22 @@ async function fetchNewResults () {
   state.processing = false
 }
 
-async function fetchPartialResults (page: number) {
+async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
   if (state.processing) return
   if (mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm) {
     mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
+    mainState.currentSearchPostResults.splice(0)
     mainState.currentSearchPostCursor = undefined
-    mainState.currentSearchPostTotal = undefined
     updateRouter()
   }
-  mainState.currentSearchPostResults.splice(0)
   state.processing = true
-  await mainState.fetchSearchPosts(page.toString())
+  await mainState.fetchSearchPosts(
+    direction === "new"
+      ? undefined
+      : mainState.currentSearchPostCursor
+  )
   state.processing = false
-  mainState.currentSearchPostCursor = page.toString()
 }
 
 function updateRouter () {
@@ -105,10 +86,6 @@ function updateRouter () {
     ? { text: mainState.currentSearchTerm }
     : undefined
   router.push({ name: "post-search", query })
-}
-
-async function paging (page: number) {
-  await fetchPartialResults(page)
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
@@ -143,10 +120,10 @@ function removeThisPost (uri: string) {
       </form>
     </Portal>
     <div class="post-search-view__main">
-      <Pagenation
-        v-if="state.pagenationDisplay"
-        v-bind="state.pagenationProps"
-        @paging="paging"
+      <LoadButton
+        direction="new"
+        :processing="state.processing"
+        @activate="fetchContinuousResults('new')"
       />
       <div class="post-container">
         <template
@@ -166,13 +143,12 @@ function removeThisPost (uri: string) {
           />
         </template>
       </div>
-      <Pagenation
-        v-if="state.pagenationDisplay"
-        v-bind="state.pagenationProps"
-        @paging="paging"
+      <LoadButton
+        direction="old"
+        :processing="state.processing"
+        @activate="fetchContinuousResults('old')"
       />
     </div>
-    <Loader v-if="state.processing" />
   </div>
 </template>
 
@@ -197,16 +173,6 @@ function removeThisPost (uri: string) {
   }
   &[data-position="preview"] {
     padding: 1em;
-  }
-}
-
-.pagenation {
-  padding: 0.375rem 0;
-  &:first-child {
-    border-bottom: 1px solid var(--fg-color-0125);
-  }
-  &:last-child {
-    border-top: 1px solid var(--fg-color-0125);
   }
 }
 </style>
