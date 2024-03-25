@@ -909,6 +909,7 @@ async function fetchCurrentProfile (did: string) {
   state.currentSuggestedFollows.splice(0)
   state.currentProfile = await state.atp.fetchProfile(did)
   if (state.currentProfile == null) return
+  state.currentProfile.__isDidPlc = state.currentProfile.did.startsWith("did:plc")
   if (did === state.atp.session?.did) {
     state.userProfile = state.currentProfile
 
@@ -921,7 +922,7 @@ async function fetchCurrentProfile (did: string) {
 }
 
 async function updateCurrentLogAudit () {
-  if (state.currentProfile == null) return
+  if (!state.currentProfile?.__isDidPlc) return
   const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
   if (logJson == null) return
   if (state.currentProfile == null) return // await　中に初期化される恐れがあるため

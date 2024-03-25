@@ -48,6 +48,7 @@ function showSubMenuTicker () {
 
       <!-- 最初のポストを見る -->
       <MenuTickerFirstPost
+        v-if="user.__isDidPlc"
         :did="user.did"
         @close="emit('close')"
       />

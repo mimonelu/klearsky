@@ -3,7 +3,7 @@ import { inject } from "vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 
 const props = defineProps<{
-  handle?: string
+  isLabeler?: boolean
   image?: string
 }>()
 
@@ -24,6 +24,7 @@ function openImagePopup () {
 <template>
   <button
     class="avatar"
+    :data-is-labeler="!!isLabeler"
     @click.stop="openImagePopup"
   >
     <LazyImage :src="image" />
@@ -36,12 +37,17 @@ function openImagePopup () {
   display: block;
 
   & > .lazy-image {
-    border-radius: var(--border-radius-large);
     min-width: 1em;
     max-width: 1em;
     min-height: 1em;
     max-height: 1em;
     transition: border-radius 125ms ease-out;
+  }
+  &[data-is-labeler="false"] > .lazy-image {
+    border-radius: var(--border-radius-large);
+  }
+  &[data-is-labeler="true"] > .lazy-image {
+    border-radius: var(--border-radius);
   }
   &:hover > .lazy-image {
     border-radius: 1px;
