@@ -692,6 +692,7 @@ function toggleOldestQuotedPostDisplay () {
       <!-- アバター -->
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
+        :isLabeler="post.author?.associated?.labeler"
         :did="post.author?.did"
         :image="post.author?.avatar"
         @click.stop="$emit('click')"
@@ -703,6 +704,7 @@ function toggleOldestQuotedPostDisplay () {
           <AvatarLink
             v-if="position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
+            :isLabeler="post.author?.associated?.labeler"
             :did="post.author?.did"
             :image="post.author?.avatar"
             @click.stop="$emit('click')"
@@ -714,6 +716,13 @@ function toggleOldestQuotedPostDisplay () {
             :displayName="post.author?.displayName ?? '　'"
             :anonymizable="true"
           >
+            <!-- ラベラーアイコン -->
+            <SVGIcon
+              v-if="post.author?.associated?.labeler"
+              name="label"
+              class="account-labeler-icon"
+            />
+
             <!-- アカウントラベルアイコン -->
             <SVGIcon
               v-if="state.hasAppliedHarmfulLabel"
@@ -1409,6 +1418,12 @@ function toggleOldestQuotedPostDisplay () {
     grid-gap: 0.5em;
     font-size: 0.875em;
 
+    // ラベラーアイコン
+    .account-labeler-icon {
+      fill: rgb(var(--share-color));
+    }
+
+    // アカウントラベルアイコン
     .account-label-icon {
       fill: rgb(var(--notice-color));
     }

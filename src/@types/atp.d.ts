@@ -32,6 +32,11 @@ type TTUserViewer = {
 }
 
 type TTUser = {
+  associated?: {
+    lists: number
+    feedgens: number
+    labeler: boolean
+  }
   avatar?: string
   description?: string
   did: string
