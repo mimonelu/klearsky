@@ -72,6 +72,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
     mainState.currentSearchPostCursor = undefined
     updateRouter()
   }
+  if (!mainState.currentSearchTerm) return
   state.processing = true
   await mainState.fetchSearchPosts(
     direction === "new"
