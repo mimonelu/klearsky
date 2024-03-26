@@ -42,6 +42,11 @@
     "profile": "separator"
   },
   {
+    "name": "uniresolverApp",
+    "post": "https://dev.uniresolver.io/#{did}",
+    "profile": "https://dev.uniresolver.io/#{did}"
+  },
+  {
     "name": "didApp",
     "post": "https://web.plc.directory/did/{did}",
     "profile": "https://web.plc.directory/did/{did}"
