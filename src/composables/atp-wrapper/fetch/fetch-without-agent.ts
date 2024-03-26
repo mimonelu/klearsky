@@ -7,7 +7,16 @@ export default async function (
   const params = new URLSearchParams(query)
   let host = "https://bsky.social"
   const logJson = await this.fetchLogAudit(did)
-  if (logJson != null) host = logJson[0]?.operation?.services?.atproto_pds?.endpoint ?? host
+  if (logJson != null) {
+    host = (
+      Array.isArray(logJson)
+        // did:plc:
+        ? logJson[0]?.operation?.services?.atproto_pds?.endpoint
+
+        // did:plc: 以外
+        : logJson?.didDocument?.service?.[0]?.serviceEndpoint
+    ) ?? host
+  }
   const url = `${host}/xrpc/${pathToXrpc}?${params}`
   const response: Error | Response =
     await fetch(url)

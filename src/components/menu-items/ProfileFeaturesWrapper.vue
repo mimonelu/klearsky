@@ -48,7 +48,6 @@ function showSubMenuTicker () {
 
       <!-- 最初のポストを見る -->
       <MenuTickerFirstPost
-        v-if="user.did.startsWith('did:plc')"
         :did="user.did"
         @close="emit('close')"
       />

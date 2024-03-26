@@ -443,7 +443,6 @@ function onActivateAccountMaskToggle () {
 
         <!-- リポストページタブボタン -->
         <RouterLink
-          v-if="mainState.currentProfile?.__isDidPlc"
           class="tab__button tab__button--repost"
           :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
           :title="$t('reposts')"
