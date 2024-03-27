@@ -1122,7 +1122,7 @@ function toggleOldestQuotedPostDisplay () {
 
   display: flex;
   flex-direction: column;
-  padding: 1em;
+  padding: 0.75em 1em;
   position: relative;
 
   // フォーカスポスト
@@ -1229,7 +1229,7 @@ function toggleOldestQuotedPostDisplay () {
   // リプライライン
   &[data-has-child="true"],
   &[data-has-child="false"] {
-    --top: 1em;
+    --top: 0.75em;
     --gap: 1em;
     &[data-has-mask="true"] {
       --top: 1.5em;
@@ -1548,7 +1548,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   :not([data-position="slim"]) & > .post {
-    padding: 0.875em;
+    padding: 0.75em;
   }
   [data-position="slim"] & > .post {
     padding: 0.5em;
