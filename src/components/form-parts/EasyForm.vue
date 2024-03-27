@@ -305,13 +305,13 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
         </dl>
       </template>
     </div>
-    <slot name="after" />
     <button
       v-if="hasSubmitButton ?? true"
       class="button submit-button"
     >
       <span>{{ submitButtonLabel ?? $t("submit") }}</span>
     </button>
+    <slot name="after" />
     <div class="update-key">{{ state.updateKey }}</div>
   </form>
 </template>

@@ -178,6 +178,21 @@ function updatePageTitle () {
   window.document.title = title
 }
 
+async function signUp (service: string, email: string, handle: string, password: string, inviteCode?: string) {
+  state.loaderDisplay = true
+  const response = await state.atp.signUp(service, email, handle, password, inviteCode)
+  state.loaderDisplay = false
+  if (response instanceof Error) {
+    state.openErrorPopup($t("getSessionError"), response)
+    return
+  }
+  state.loaderDisplay = true
+  await Util.wait(1000)
+  state.loaderDisplay = false
+  state.loginPopupDisplay = false
+  await manualLogin(service, email, handle, password)
+}
+
 async function autoLogin () {
   if (state.atp.hasLogin()) {
     await processAfterLogin()
@@ -196,7 +211,7 @@ async function autoLogin () {
   }
 }
 
-async function manualLogin (service: string, identifier: string, password: string) {
+async function manualLogin (service: string, _email: string, identifier: string, password: string) {
   state.loaderDisplay = true
   const response = await state.atp.login(service, identifier, password, onRefreshSession)
   state.loaderDisplay = false
@@ -967,6 +982,7 @@ function broadcastListener (event: MessageEvent) {
       <!-- ログインポップアップ -->
       <LoginPopup
         v-if="state.loginPopupAutoDisplay"
+        @signUp="signUp"
         @login="manualLogin"
       />
 

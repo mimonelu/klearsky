@@ -57,6 +57,10 @@
   "design": "Design",
   "etc": "Others",
   "moderation": "Moderation",
+  "signUp": "Create account (for dev)",
+  "email": "Email",
+  "handle": "Handle",
+  "inviteCode": "Invite code",
 
   "privacyPolicy": "Privacy policy",
   "termsOfService": "Terms of service",

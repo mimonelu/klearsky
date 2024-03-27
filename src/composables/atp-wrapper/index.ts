@@ -65,6 +65,7 @@ import logout from "@/composables/atp-wrapper/session/logout"
 import refreshSession from "@/composables/atp-wrapper/session/refresh-session"
 import resetSession from "@/composables/atp-wrapper/session/reset-session"
 import resumeSession from "@/composables/atp-wrapper/session/resume-session"
+import signUp from "@/composables/atp-wrapper/session/sign-up"
 import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
 import updateJwt from "@/composables/atp-wrapper/session/update-jwt"
@@ -187,6 +188,7 @@ class AtpWrapper implements TIAtpWrapper {
   saveData (this: TIAtpWrapper) {
     Util.saveStorage("atp", this.data)
   }
+  signUp = signUp
   updateBlockToDisable = updateBlockToDisable
   updateBlockToEnable = updateBlockToEnable
   updateJwt = updateJwt

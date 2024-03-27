@@ -75,6 +75,7 @@ interface TIAtpWrapper {
   resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): void
   resumeSession (this: TIAtpWrapper, session: TTSession): Promise<undefined | Error>
   saveData (this: TIAtpWrapper)
+  signUp (this: TIAtpWrapper, service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<undefined | Error>
   updateBlockToDisable (this: TIAtpWrapper, uri: string): Promise<boolean>
   updateBlockToEnable (this: TIAtpWrapper, did: string): Promise<null | string>
   updateJwt (this: TIAtpWrapper, onRefreshSession?: () => void): Promise<undefined | Error>

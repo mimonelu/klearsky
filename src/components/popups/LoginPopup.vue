@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject, reactive, ref } from "vue"
 import AccountList from "@/components/list/AccountList.vue"
 import Copyright from "@/components/shell-parts/Copyright.vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
@@ -9,8 +9,10 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 const emit = defineEmits<{(
   event: string,
   service: string,
+  email: string,
   identifier: string,
-  password: string
+  password: string,
+  inviteCode?: string
 ): void}>()
 
 const $t = inject("$t") as Function
@@ -21,18 +23,24 @@ const currentSession: undefined | TTSession =
   mainState.atp.data.sessions[mainState.atp.data.did]
 
 const state = reactive<{
+  isSignUp: boolean
   service: string
+  email: string
   identifier: string
   password: string
+  inviteCode?: string
 }>({
+  isSignUp: false,
   service: currentSession?.__service ?? "https://bsky.social",
+  email: currentSession?.email ?? "",
   identifier: currentSession?.handle ?? "",
-  password: ""
+  password: "",
+  inviteCode: undefined,
 })
 
 const easyFormProps: TTEasyForm = {
-  hasSubmitButton: true,
-  submitButtonLabel: $t("login"),
+  hasSubmitButton: false,
+  submitButtonLabel: state.isSignUp ? $t("signUp") : $t("login"),
   submitCallback,
   blurOnSubmit: true,
   data: [
@@ -47,9 +55,19 @@ const easyFormProps: TTEasyForm = {
       inputmode: "url",
     },
     {
+      display: state.isSignUp,
+      state,
+      model: "email",
+      label: $t("email"),
+      type: "text",
+      required: state.isSignUp,
+      autocomplete: "on",
+      inputmode: "email",
+    },
+    {
       state,
       model: "identifier",
-      label: $t("identifier"),
+      label: state.isSignUp ? $t("handle") : $t("identifier"),
       type: "text",
       required: true,
       autocomplete: "on",
@@ -63,12 +81,46 @@ const easyFormProps: TTEasyForm = {
       required: true,
       autocomplete: "off",
       inputmode: "text",
+    },
+    {
+      display: state.isSignUp,
+      state,
+      model: "inviteCode",
+      label: $t("inviteCode"),
+      type: "password",
+      autocomplete: "off",
+      inputmode: "text",
     }
   ],
 }
 
+const easyForm = ref()
+
+function toggleMode () {
+  state.isSignUp = !state.isSignUp
+  easyFormProps.submitButtonLabel = state.isSignUp ? $t("signUp") : $t("login")
+  easyFormProps.data.forEach((data: TTEasyFormItem) => {
+    switch (data.model) {
+      case "email": {
+        data.display = state.isSignUp
+        data.required = state.isSignUp
+        break
+      }
+      case "identifier": {
+        data.label = state.isSignUp ? $t("handle") : $t("identifier")
+        break
+      }
+      case "inviteCode": {
+        data.display = state.isSignUp
+        break
+      }
+    }
+  })
+  ;(easyForm.value as any)?.forceUpdate()
+}
+
 function submitCallback () {
-  emit("login", state.service, state.identifier, state.password)
+  emit(state.isSignUp ? "signUp" : "login", state.service, state.email, state.identifier, state.password, state.inviteCode)
 }
 </script>
 
@@ -80,17 +132,49 @@ function submitCallback () {
         <div class="description">The web client for Bluesky.</div>
       </div>
       <div class="login-popup__body">
-        <EasyForm v-bind="easyFormProps">
+        <EasyForm
+          v-bind="easyFormProps"
+          ref="easyForm"
+        >
           <!-- App Passwords 導線 -->
-          <template #after>
+          <template #free-4>
             <a
-              class="textlink--icon app-password-link"
+              class="textlink--icon"
               href="https://bsky.app/settings/app-passwords"
               rel="noreferrer"
               target="_blank"
             >
               <SVGIcon name="cursorRight" />
               <span>{{ $t("getAppPassword") }}</span>
+            </a>
+          </template>
+
+          <template #after>
+            <!-- サインインボタン -->
+            <button
+              v-if="!state.isSignUp"
+              type="submit"
+              class="button"
+            >
+              <span>{{ $t("login") }}</span>
+            </button>
+
+            <!-- サインアップボタン -->
+            <button
+              v-else
+              type="submit"
+              class="button--important"
+            >
+              <span>{{ $t("signUp") }}</span>
+            </button>
+
+            <!-- モードトグルボタン -->
+            <a
+              class="textlink--icon"
+              @click.prevent="toggleMode"
+            >
+              <SVGIcon name="cursorRight" />
+              <span>{{ state.isSignUp ? $t("login") : $t("signUp") }}</span>
             </a>
           </template>
         </EasyForm>
@@ -170,7 +254,7 @@ $width: 768px;
   font-size: 1.25rem;
 }
 
-.app-password-link {
+.textlink--icon {
   font-size: 0.9375rem;
   font-weight: bold;
   margin-left: auto;
