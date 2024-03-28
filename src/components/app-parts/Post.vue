@@ -695,7 +695,7 @@ function toggleOldestQuotedPostDisplay () {
         :isLabeler="post.author?.associated?.labeler"
         :did="post.author?.did"
         :image="post.author?.avatar"
-        @click.stop="$emit('click')"
+        @click.stop="$emit('click', $event)"
       />
 
       <div class="body__right">
@@ -707,7 +707,7 @@ function toggleOldestQuotedPostDisplay () {
             :isLabeler="post.author?.associated?.labeler"
             :did="post.author?.did"
             :image="post.author?.avatar"
-            @click.stop="$emit('click')"
+            @click.stop="$emit('click', $event)"
           />
 
           <!-- 表示名 -->
@@ -894,9 +894,9 @@ function toggleOldestQuotedPostDisplay () {
               :menuDisplay="true"
               :orderButtonDisplay="false"
               :creatorDisplay="true"
-              @click="$emit('click')"
-              @onActivateMention="$emit('click')"
-              @onActivateHashTag="$emit('click')"
+              @click="$emit('click', $event)"
+              @onActivateMention="$emit('click', $event)"
+              @onActivateHashTag="$emit('click', $event)"
             />
 
             <!-- リストカード -->
@@ -908,8 +908,8 @@ function toggleOldestQuotedPostDisplay () {
               :createDisplay="true"
               @click.prevent.stop
               @deleteList="deleteList"
-              @onActivateMention="$emit('click')"
-              @onActivateHashTag="$emit('click')"
+              @onActivateMention="$emit('click', $event)"
+              @onActivateHashTag="$emit('click', $event)"
             />
           </template>
 
@@ -998,7 +998,7 @@ function toggleOldestQuotedPostDisplay () {
                 :post="post.embed.record as TTPost"
                 :hasReplyIcon="post.embed.record.value?.reply != null"
                 :noLink="noLink"
-                @click="$emit('click')"
+                @click="$emit('click', $event)"
               />
             </div>
           </template>
