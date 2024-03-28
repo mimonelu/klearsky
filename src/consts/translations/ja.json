@@ -79,6 +79,7 @@
 
   "errorNotification": "再試行する際は事前にブラウザをリロードしてください。\nエラーが再度発生した場合、エラー内容を添えてご連絡ください。",
   "errorApiFailed": "APIリクエストが失敗しました。",
+  "errorDirectAccessFailed": "XRPCへのダイレクトリクエストが失敗しました。",
 
   "follow": "フォローする",
   "followed": "あなたをフォロー中",

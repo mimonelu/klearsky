@@ -79,6 +79,7 @@
 
   "errorNotification": "Please reload your browser before retrying.\nIf the error occurs again, please contact me with the details of the error.",
   "errorApiFailed": "API request failed.",
+  "errorDirectAccessFailed": "Direct request to XRPC API failed.",
 
   "follow": "Follow",
   "followed": "Follows you",
