@@ -369,8 +369,11 @@ type MainState = {
   // ポップアップ - タイムフィードポップアップ
   currentTimeFeeds: Array<TTPost>
   timeFeedsPopupDisplay: boolean
-  timeFeedsPopupProps?: TTPost
-  openTimeFeedsPopup: (post: TTPost) => void
+  timeFeedsPopupProps?: {
+    targetPost: TTPost
+    direction: "old" | "new"
+  }
+  openTimeFeedsPopup: (post: TTPost, direction: "old" | "new") => void
   closeTimeFeedsPopup: () => void
 
   // ポップアップ - ポスト送信ポップアップ

@@ -1516,10 +1516,13 @@ function closeListUserManagementPopup () {
 
 // ポップアップ - タイムフィードポップアップ
 
-function openTimeFeedsPopup (post: TTPost) {
+function openTimeFeedsPopup (post: TTPost, direction: "old" | "new") {
   state.currentTimeFeeds.splice(0)
   state.currentTimeFeeds.push(post)
-  state.timeFeedsPopupProps = post
+  state.timeFeedsPopupProps = {
+    targetPost: post,
+    direction,
+  }
   state.timeFeedsPopupDisplay = true
 }
 

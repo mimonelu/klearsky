@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-async function openFirstPost (event: Event) {
+async function openFirstPost () {
   Util.blurElement()
   emit("close")
   if (props.did == null) return
@@ -24,7 +24,7 @@ async function openFirstPost (event: Event) {
     return
   }
   if (post == null) return
-  mainState.openTimeFeedsPopup(post)
+  mainState.openTimeFeedsPopup(post, "new")
 }
 </script>
 
