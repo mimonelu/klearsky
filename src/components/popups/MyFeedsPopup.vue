@@ -295,7 +295,7 @@ function changeCustomFeedOrder (params: any) {
           <SpecialFeedCard
             v-if="item.kind === 'followings'"
             :item="item"
-            @click="close"
+            @click.exact="close"
             @changeCustomFeedOrder="changeCustomFeedOrder"
           />
 
@@ -303,7 +303,7 @@ function changeCustomFeedOrder (params: any) {
           <SpecialFeedCard
             v-else-if="item.kind === 'globalline'"
             :item="item"
-            @click="close"
+            @click.exact="close"
             @changeCustomFeedOrder="changeCustomFeedOrder"
           />
 
@@ -314,7 +314,7 @@ function changeCustomFeedOrder (params: any) {
             :menuDisplay="true"
             :orderButtonDisplay="true"
             :creatorDisplay="true"
-            @click="close"
+            @click.exact="close"
             @changeCustomFeedOrder="changeCustomFeedOrder"
             @onActivateMention="close"
             @onActivateHashTag="close"
