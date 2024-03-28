@@ -112,7 +112,7 @@ const state = reactive<{
   }),
 
   // 画像
-  images: computed(() => props.post.embed?.images ?? []),
+  images: computed(() => props.post.embed?.images ?? props.post.record?.embed?.images ?? []),
   hasImage: computed((): boolean => state.images.length > 0),
 
   // 画像の折り畳み
@@ -150,7 +150,7 @@ const state = reactive<{
   foldingImage: false,
 
   // リンクカード
-  linkCard: computed(() => props.post.embed?.external),
+  linkCard: computed(() => props.post.embed?.external ?? props.post.record?.embed?.external),
   hasLinkCard: computed((): boolean => state.linkCard != null && props.position !== 'slim'),
 
   // フィードカード

@@ -56,7 +56,7 @@ export default function (responses: Array<any>) {
   // PARENT.record/value.embed.external/images -> PARENT.embed.external/images
   AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
     if ((key === "record" || key === "value") && child.embed != null) {
-      /* // TODO: 不要であれば削除すること
+      /* // TODO: 生レコード用。不要であれば削除すること
       if (child.embed.external != null && parent.embed?.external == null) {
         if (parent.embed == null) parent.embed = {}
         parent.embed.external = Util.cloneJson(child.embed.external)
@@ -64,7 +64,7 @@ export default function (responses: Array<any>) {
       }
       */
       if (child.embed.images != null) {
-        /* // TODO: 不要であれば削除すること
+        /* // TODO: 生レコード用。不要であれば削除すること
         if (parent.embed?.images == null) {
           if (parent.embed == null) parent.embed = {}
           parent.embed.images = Util.cloneJson(child.embed.images)

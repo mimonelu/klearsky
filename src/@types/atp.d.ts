@@ -192,13 +192,8 @@ type TTPost = {
     createdAt: string
     embed?: {
       $type: string
-      images?: Array<{
-        alt: string
-        image: {
-          cid: string
-          mimeType: string
-        }
-      }>
+      images?: Array<TTImage>
+      external?: TTExternal
       [k: string]: unknown
     }
     entities?: Array<TTEntity>
