@@ -78,7 +78,7 @@ async function donwloadPostedImages () {
     zip.file(`${index + 1}.jpg`, blob)
   })
   const zipBlob = await zip.generateAsync({ type: "blob" })
-  const zipName = `bluesky-medias-${props.user.handle}.zip`
+  const zipName = `bluesky-images-${props.user.handle}.zip`
   saveAs(zipBlob, zipName)
 
   // 完了
