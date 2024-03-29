@@ -75,7 +75,7 @@ async function donwloadPostedImages () {
   // .zip ファイルの作成
   const zip = new JSZip()
   blobs.forEach((blob, index) => {
-    zip.file(`${index + 1}.jpg`, blob)
+    zip.file(`${props.user.handle}-${("000" + (index + 1)).slice(- 3)}.jpg`, blob)
   })
   const zipBlob = await zip.generateAsync({ type: "blob" })
   const zipName = `bluesky-images-${props.user.handle}.zip`
