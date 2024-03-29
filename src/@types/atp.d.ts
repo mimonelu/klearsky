@@ -55,10 +55,7 @@ type TTRecord = {
     createdAt: string
     embed?: {
       $type: string
-      images?: {
-        alt: string
-        image: BrobRef
-      }
+      images?: TTImages[]
       record?: TTPost
     }
     facets?: any
