@@ -21,10 +21,17 @@ const state = reactive<{
   }),
 })
 
+const popup = ref()
+
 const postContainer = ref()
 
 onBeforeMount(async () => {
-  await fetchContinuousResults("old")
+  await fetchContinuousResults(mainState.timeFeedsPopupProps?.direction ?? "old")
+
+  // 過去のポストを読み込む指定であればポップアップを最下部までスクロール
+  if (mainState.timeFeedsPopupProps?.direction === "new") {
+    popup.value?.scrollToBottom()
+  }
 })
 
 function close () {
@@ -34,12 +41,12 @@ function close () {
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
   if (state.processing) return
-  if (mainState.timeFeedsPopupProps == null) return
+  if (mainState.timeFeedsPopupProps?.targetPost == null) return
   state.processing = true
   await mainState.atp.fetchTimeFeeds(
     mainState.currentTimeFeeds,
     direction,
-    mainState.timeFeedsPopupProps.author,
+    mainState.timeFeedsPopupProps.targetPost.author,
     CONSTS.LIMIT_OF_FETCH_AUTHOR_FEEDS
   )
   state.processing = false
@@ -67,6 +74,7 @@ function removeThisPost (uri: string) {
 <template>
   <Popup
     class="time-feeds-popup"
+    ref="popup"
     :hasCloseButton="true"
     @close="close"
     @scrolledToBottom="scrolledToBottom"
@@ -74,7 +82,7 @@ function removeThisPost (uri: string) {
     <template #header>
       <h2>
         <SVGIcon name="history" />
-        <span>{{ $t("timeFeeds") }} - {{ mainState.timeFeedsPopupProps?.author?.displayName }}</span>
+        <span>{{ $t("timeFeeds") }} - {{ mainState.timeFeedsPopupProps?.targetPost.author?.displayName }}</span>
       </h2>
     </template>
     <template #header-after>
@@ -97,8 +105,8 @@ function removeThisPost (uri: string) {
           :container="state.postContainer"
           :hasReplyIcon="post.record.reply != null"
           :hasQuoteRepostIcon="post.record.embed?.record != null"
-          :data-focus="mainState.timeFeedsPopupProps?.uri === post.uri"
-          @click="close"
+          :data-focus="mainState.timeFeedsPopupProps?.targetPost.uri === post.uri"
+          @click.exact="close"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
           @onActivateHashTag="close"

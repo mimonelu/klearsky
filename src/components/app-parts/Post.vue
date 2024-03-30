@@ -112,7 +112,7 @@ const state = reactive<{
   }),
 
   // 画像
-  images: computed(() => props.post.embed?.images ?? []),
+  images: computed(() => props.post.embed?.images ?? props.post.record?.embed?.images ?? []),
   hasImage: computed((): boolean => state.images.length > 0),
 
   // 画像の折り畳み
@@ -150,7 +150,7 @@ const state = reactive<{
   foldingImage: false,
 
   // リンクカード
-  linkCard: computed(() => props.post.embed?.external),
+  linkCard: computed(() => props.post.embed?.external ?? props.post.record?.embed?.external),
   hasLinkCard: computed((): boolean => state.linkCard != null && props.position !== 'slim'),
 
   // フィードカード
@@ -692,9 +692,10 @@ function toggleOldestQuotedPostDisplay () {
       <!-- アバター -->
       <AvatarLink
         v-if="position !== 'postInPost' && position !== 'slim'"
+        :isLabeler="post.author?.associated?.labeler"
         :did="post.author?.did"
         :image="post.author?.avatar"
-        @click.stop="$emit('click')"
+        @click.stop="$emit('click', $event)"
       />
 
       <div class="body__right">
@@ -703,17 +704,25 @@ function toggleOldestQuotedPostDisplay () {
           <AvatarLink
             v-if="position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
+            :isLabeler="post.author?.associated?.labeler"
             :did="post.author?.did"
             :image="post.author?.avatar"
-            @click.stop="$emit('click')"
+            @click.stop="$emit('click', $event)"
           />
 
           <!-- 表示名 -->
           <DisplayName
             class="body__right__header__display-name"
-            :displayName="post.author?.displayName ?? '　'"
+            :displayName="post.author?.displayName"
             :anonymizable="true"
           >
+            <!-- ラベラーアイコン -->
+            <SVGIcon
+              v-if="post.author?.associated?.labeler"
+              name="label"
+              class="account-labeler-icon"
+            />
+
             <!-- アカウントラベルアイコン -->
             <SVGIcon
               v-if="state.hasAppliedHarmfulLabel"
@@ -885,9 +894,9 @@ function toggleOldestQuotedPostDisplay () {
               :menuDisplay="true"
               :orderButtonDisplay="false"
               :creatorDisplay="true"
-              @click="$emit('click')"
-              @onActivateMention="$emit('click')"
-              @onActivateHashTag="$emit('click')"
+              @click="$emit('click', $event)"
+              @onActivateMention="$emit('click', $event)"
+              @onActivateHashTag="$emit('click', $event)"
             />
 
             <!-- リストカード -->
@@ -899,8 +908,8 @@ function toggleOldestQuotedPostDisplay () {
               :createDisplay="true"
               @click.prevent.stop
               @deleteList="deleteList"
-              @onActivateMention="$emit('click')"
-              @onActivateHashTag="$emit('click')"
+              @onActivateMention="$emit('click', $event)"
+              @onActivateHashTag="$emit('click', $event)"
             />
           </template>
 
@@ -989,7 +998,7 @@ function toggleOldestQuotedPostDisplay () {
                 :post="post.embed.record as TTPost"
                 :hasReplyIcon="post.embed.record.value?.reply != null"
                 :noLink="noLink"
-                @click="$emit('click')"
+                @click="$emit('click', $event)"
               />
             </div>
           </template>
@@ -1113,7 +1122,7 @@ function toggleOldestQuotedPostDisplay () {
 
   display: flex;
   flex-direction: column;
-  padding: 1em;
+  padding: 0.75em 1em;
   position: relative;
 
   // フォーカスポスト
@@ -1168,7 +1177,7 @@ function toggleOldestQuotedPostDisplay () {
 
     .post__mask {
       margin: -0.75em -1em 0;
-      padding: 0.5em 1em;
+      padding: 0.75em 1em 0.5em;
     }
   }
   &__mask {
@@ -1257,8 +1266,7 @@ function toggleOldestQuotedPostDisplay () {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1em;
-  margin: -0.75em -1em 0.5em;
-  padding: 0.5em 1em 0;
+  margin-bottom: 0.25em;
 }
 
 // リプライ／引用リポストアイコン
@@ -1410,6 +1418,12 @@ function toggleOldestQuotedPostDisplay () {
     grid-gap: 0.5em;
     font-size: 0.875em;
 
+    // ラベラーアイコン
+    .account-labeler-icon {
+      fill: rgb(var(--share-color));
+    }
+
+    // アカウントラベルアイコン
     .account-label-icon {
       fill: rgb(var(--notice-color));
     }
@@ -1534,7 +1548,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   :not([data-position="slim"]) & > .post {
-    padding: 0.875em;
+    padding: 0.75em;
   }
   [data-position="slim"] & > .post {
     padding: 0.5em;

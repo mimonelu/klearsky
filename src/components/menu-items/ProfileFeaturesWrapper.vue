@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { reactive } from "vue"
 import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
+import MenuTickerDownloadPostedImages from "@/components/menu-items/DownloadPostedImages.vue"
 import MenuTickerFirstPost from "@/components/menu-items/FirstPost.vue"
 import MenuTickerSearchAccountPost from "@/components/menu-items/SearchAccountPost.vue"
 import MenuTickerSendMention from "@/components/menu-items/SendMention.vue"
@@ -54,6 +55,12 @@ function showSubMenuTicker () {
 
       <!-- このユーザーのポストを検索 -->
       <MenuTickerSearchAccountPost
+        :user="user"
+        @close="emit('close')"
+      />
+
+      <!-- 投稿画像をダウンロード -->
+      <MenuTickerDownloadPostedImages
         :user="user"
         @close="emit('close')"
       />

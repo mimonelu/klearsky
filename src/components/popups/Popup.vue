@@ -9,6 +9,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 defineExpose({
   scrollToTop,
+  scrollToBottom,
 })
 
 defineProps<{
@@ -45,6 +46,14 @@ function scrollToTop (behavior: undefined | string) {
   popupBody?.value?.scrollTo({
     left: 0,
     top: 0,
+    behavior,
+  })
+}
+
+function scrollToBottom (behavior: undefined | string) {
+  popupBody?.value?.scrollTo({
+    left: 0,
+    top: Number.MAX_SAFE_INTEGER,
     behavior,
   })
 }

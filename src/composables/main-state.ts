@@ -183,8 +183,6 @@ state.currentSearchTerm = ""
 // 検索 - 現在のポスト検索結果
 state.currentSearchPostResults = []
 state.currentSearchPostCursor = undefined
-state.currentSearchPostTotal = undefined
-state.currentSearchPostIsLast = false
 state.currentSearchPostsLastTerm = undefined
 state.fetchSearchPosts = fetchSearchPosts
 
@@ -440,6 +438,15 @@ state.threadgatePopupProps = {
 }
 state.openThreadgatePopup = openThreadgatePopup
 state.closeThreadgatePopup = closeThreadgatePopup
+
+// ポップアップ - 進捗ポップアップ
+state.progressPopupDisplay = false
+state.progressPopupProps = {
+  value: 0,
+  message: undefined,
+}
+state.openProgressPopup = openProgressPopup
+state.closeProgressPopup = closeProgressPopup
 
 // MyWorker
 state.myWorker = new MyWorker(state)
@@ -911,6 +918,7 @@ async function fetchCurrentProfile (did: string) {
   state.currentSuggestedFollows.splice(0)
   state.currentProfile = await state.atp.fetchProfile(did)
   if (state.currentProfile == null) return
+  state.currentProfile.__isDidPlc = state.currentProfile.did.startsWith("did:plc:")
   if (did === state.atp.session?.did) {
     state.userProfile = state.currentProfile
 
@@ -923,11 +931,13 @@ async function fetchCurrentProfile (did: string) {
 }
 
 async function updateCurrentLogAudit () {
-  if (state.currentProfile == null) return
+  if (!state.currentProfile?.__isDidPlc) return
   const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
   if (logJson == null) return
   if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
-  state.currentProfile.__createdAt = logJson.at(- 1)?.createdAt
+  state.currentProfile.__createdAt = Array.isArray(logJson)
+    ? logJson.at(- 1)?.createdAt
+    : undefined
   state.currentProfile.__log = logJson
 }
 
@@ -1138,24 +1148,22 @@ async function fetchSearchPosts (cursor?: string) {
       return substring.replace("me", state.atp.session.handle)
     })
 
-  const result: Error | undefined | { cursor?: string, hitsTotal?: number } =
+  const newCursor: Error | undefined | string =
     await state.atp.fetchPostSearch(
       state.currentSearchPostResults,
       q,
       CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
       cursor
     )
-  if (result instanceof Error) {
+  if (newCursor instanceof Error) {
     state.openErrorPopup(
       "errorApiFailed",
       "main-state/fetchSearchPosts"
     )
     return
   }
-  if (result == null) return
-  state.currentSearchPostTotal = result.hitsTotal
-  state.currentSearchPostIsLast = result.cursor == null ||
-    result.cursor === result.hitsTotal?.toString()
+  if (newCursor == null) return
+  state.currentSearchPostCursor = newCursor
 }
 
 // 検索 - 現在のフィード検索結果
@@ -1517,10 +1525,13 @@ function closeListUserManagementPopup () {
 
 // ポップアップ - タイムフィードポップアップ
 
-function openTimeFeedsPopup (post: TTPost) {
+function openTimeFeedsPopup (post: TTPost, direction: "old" | "new") {
   state.currentTimeFeeds.splice(0)
   state.currentTimeFeeds.push(post)
-  state.timeFeedsPopupProps = post
+  state.timeFeedsPopupProps = {
+    targetPost: post,
+    direction,
+  }
   state.timeFeedsPopupDisplay = true
 }
 
@@ -1550,6 +1561,7 @@ function closeSendPostPopup (done: boolean, hidden: boolean) {
   if (!hidden) {
     state.sendPostPopupProps.display = false
     state.currentPostTags.splice(0)
+    state.postDatePopupDate = undefined
   }
   state.sendPostPopupProps.visibility = false
 }
@@ -1590,4 +1602,16 @@ function closeThreadgatePopup (params: any) {
   if (state.threadgatePopupProps.onClosed != null)
     state.threadgatePopupProps.onClosed(params)
   state.threadgatePopupProps.display = false
+}
+
+// ポップアップ - 進捗ポップアップ
+
+function openProgressPopup (value = 0, message?: string) {
+  state.progressPopupProps.value = value
+  state.progressPopupProps.message = message
+  state.progressPopupDisplay = true
+}
+
+function closeProgressPopup () {
+  state.progressPopupDisplay = false
 }

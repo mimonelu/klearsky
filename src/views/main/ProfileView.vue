@@ -29,6 +29,7 @@ const state = reactive<{
   isPagePostFeeds: ComputedRef<boolean>
   isPagePostFeedsWithReplies: ComputedRef<boolean>
   isPagePostFeedsWithMedia: ComputedRef<boolean>
+  isLabeler: ComputedRef<boolean>
 
   // ラベル対応
   enabledContentMask: boolean
@@ -62,6 +63,9 @@ const state = reactive<{
   }),
   isPagePostFeedsWithMedia: computed((): boolean => {
     return router.currentRoute.value.name === 'profile-feeds-with-media'
+  }),
+  isLabeler: computed((): boolean => {
+    return mainState.currentProfile?.associated?.labeler ?? false
   }),
 
   // ラベル対応
@@ -154,12 +158,21 @@ async function toggleNoUnauthenticated () {
   mainState.centerLoaderDisplay = false
 }
 
-function openPostMenu () {
+function openHandleHistoryPopup () {
+  if (mainState.currentProfile?.__log == null) return
+  state.handleHistoryPopupDisplay = true
+}
+
+function closeHandleHistoryPopup () {
+  state.handleHistoryPopupDisplay = false
+}
+
+function openProfileMenu () {
   Util.blurElement()
   state.profileMenuDisplay = !state.profileMenuDisplay
 }
 
-function closePostMenu () {
+function closeProfileMenu () {
   state.profileMenuDisplay = false
 }
 
@@ -216,7 +229,7 @@ function onActivateAccountMaskToggle () {
               class="profile-view__details__top__left"
             >
               <AvatarButton
-                :handle="mainState.currentProfile?.handle"
+                :isLabeler="state.isLabeler"
                 :image="mainState.currentProfile?.avatar"
               />
             </div>
@@ -237,15 +250,15 @@ function onActivateAccountMaskToggle () {
 
               <!-- カスタムラベル -->
               <div
-                v-if="state.customLabels.length > 0 || mainState.currentProfile?.associated?.labeler"
+                v-if="state.customLabels.length > 0 || state.isLabeler"
                 class="custom-labels"
-                :data-labeler="mainState.currentProfile?.associated?.labeler"
+                :data-labeler="state.isLabeler"
               >
                 <SVGIcon name="label" />
 
                 <!-- Labeler -->
                 <div
-                  v-if="mainState.currentProfile?.associated?.labeler"
+                  v-if="state.isLabeler"
                   class="custom-labels__labeler"
                 >{{ $t("labelerOn") }}</div>
 
@@ -264,7 +277,7 @@ function onActivateAccountMaskToggle () {
 
               <!-- ハンドル -->
               <div class="handle">
-                <a @click.stop="state.handleHistoryPopupDisplay = true">
+                <a @click.stop="openHandleHistoryPopup">
                   <SVGIcon name="history" />
                   <AuthorHandle
                     :handle="mainState.currentProfile?.handle ?? '&nbsp;'"
@@ -274,7 +287,10 @@ function onActivateAccountMaskToggle () {
               </div>
 
               <!-- Endpoint (PDS) -->
-              <div class="endpoint">
+              <div
+                v-if="state.endpoint"
+                class="endpoint"
+              >
                 <SVGIcon name="database" />
                 <span>{{ state.endpoint ?? "&nbsp;" }}</span>
               </div>
@@ -352,14 +368,14 @@ function onActivateAccountMaskToggle () {
               <!-- プロフィールメニュートグル -->
               <button
                 class="button--bordered menu-button"
-                @click.stop="openPostMenu"
+                @click.stop="openProfileMenu"
               >
                 <SVGIcon name="menu" />
                 <ProfileMenuTicker
                   :isUser="mainState.isMyProfile()"
                   :display="state.profileMenuDisplay"
                   :user="(mainState.currentProfile as TTProfile)"
-                  @close="closePostMenu"
+                  @close="closeProfileMenu"
                 />
               </button>
             </div>
@@ -396,7 +412,10 @@ function onActivateAccountMaskToggle () {
               </dl>
 
               <!-- アカウント作成日時 -->
-              <dl class="created-at">
+              <dl
+                v-if="mainState.currentProfile?.__createdAt != null"
+                class="created-at"
+              >
                 <dt>{{ $t("startedAt") }}</dt>
                 <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt) }}</dd>
               </dl>
@@ -422,7 +441,7 @@ function onActivateAccountMaskToggle () {
           <span>{{ $t("posts") }}</span>
         </RouterLink>
 
-        <!-- リプロフィールポストページタブボタン -->
+        <!-- リポストページタブボタン -->
         <RouterLink
           class="tab__button tab__button--repost"
           :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
@@ -431,7 +450,7 @@ function onActivateAccountMaskToggle () {
           <SVGIcon name="repost" />
         </RouterLink>
 
-        <!-- 自分のいいね一覧タブボタン -->
+        <!-- いいね一覧タブボタン -->
         <RouterLink
           v-if="mainState.isMyProfile()"
           class="tab__button tab__button--like"
@@ -534,7 +553,7 @@ function onActivateAccountMaskToggle () {
     <HandleHistoryPopup
       v-if="state.handleHistoryPopupDisplay"
       :log="mainState.currentProfile?.__log"
-      @close="state.handleHistoryPopupDisplay = false"
+      @close="closeHandleHistoryPopup"
     />
   </div>
 </template>
@@ -566,6 +585,7 @@ function onActivateAccountMaskToggle () {
   }
 
   &__top {
+    border-top: 1px solid var(--fg-color-0125);
     &__inner {
       border-bottom: 1px solid var(--fg-color-0125);
       display: flex;
@@ -594,6 +614,7 @@ function onActivateAccountMaskToggle () {
         .display-name {
           display: unset;
           font-size: 1.5rem;
+          user-select: text;
 
           &:deep() > span {
             white-space: unset;
@@ -652,7 +673,6 @@ function onActivateAccountMaskToggle () {
 
 .banner {
   aspect-ratio: 3 / 1;
-  border-bottom: 1px solid var(--fg-color-0125);
   object-fit: cover;
   &[data-has-banner="true"] {
     cursor: pointer;

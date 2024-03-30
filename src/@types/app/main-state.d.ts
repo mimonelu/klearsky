@@ -170,8 +170,6 @@ type MainState = {
   // 検索 - 現在のポスト検索結果
   currentSearchPostResults: Array<TTPost>
   currentSearchPostCursor?: string
-  currentSearchPostTotal?: number
-  currentSearchPostIsLast: boolean
   currentSearchPostsLastTerm?: string
   fetchSearchPosts: (cursor?: string) => Promise<void>
 
@@ -371,8 +369,11 @@ type MainState = {
   // ポップアップ - タイムフィードポップアップ
   currentTimeFeeds: Array<TTPost>
   timeFeedsPopupDisplay: boolean
-  timeFeedsPopupProps?: TTPost
-  openTimeFeedsPopup: (post: TTPost) => void
+  timeFeedsPopupProps?: {
+    targetPost: TTPost
+    direction: "old" | "new"
+  }
+  openTimeFeedsPopup: (post: TTPost, direction: "old" | "new") => void
   closeTimeFeedsPopup: () => void
 
   // ポップアップ - ポスト送信ポップアップ
@@ -396,4 +397,13 @@ type MainState = {
   threadgatePopupProps: TTThreadgatePopupProps
   openThreadgatePopup: Function
   closeThreadgatePopup: Function
+
+  // ポップアップ - 進捗ポップアップ
+  progressPopupDisplay: boolean
+  progressPopupProps: {
+    value: number
+    message?: string
+  }
+  openProgressPopup: Function
+  closeProgressPopup: Function
 }

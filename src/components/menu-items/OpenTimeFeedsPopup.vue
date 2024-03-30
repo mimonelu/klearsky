@@ -14,7 +14,7 @@ const mainState = inject("state") as MainState
 async function openTimeFeedsPopup () {
   Util.blurElement()
   emit("close")
-  mainState.openTimeFeedsPopup(props.post)
+  mainState.openTimeFeedsPopup(props.post, "old")
 }
 </script>
 

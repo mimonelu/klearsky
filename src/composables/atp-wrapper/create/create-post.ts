@@ -1,5 +1,5 @@
 import Package from "@/../package.json"
-import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import AtpUtil from "@/composables/atp-wrapper/atp-util"
 import Util from "@/composables/util"
@@ -51,7 +51,7 @@ export default async function (
   if (params.lightning) record.lightning = params.lightning
 
   // リンクカード
-  let replyQuoteRepost: undefined | TTPost = undefined
+  let manualQuoteRepost: undefined | TTPost = undefined
   let external: null | any = null
   let feedOrLinkCard: undefined | any
   if (params.url?.length > 0) {
@@ -62,7 +62,7 @@ export default async function (
       if (!posts || posts[0] == null) {
         return Error("noPost")
       }
-      replyQuoteRepost = posts[0]
+      manualQuoteRepost = posts[0]
     } else {
       // リンクカード - フィードカード
       const generatorUri = isFeedGeneratorAtUri(params.url)
@@ -102,7 +102,12 @@ export default async function (
             params.url,
             params.urlHasImage?.includes(true) ?? false
           )
-          if (external == null || external instanceof Error) return Error("parseOgpError")
+          if (external == null) {
+            return Error("parseOgpError")
+          }
+          if (external instanceof Error) {
+            return external
+          }
         }
       }
     }
@@ -178,10 +183,10 @@ export default async function (
   }
 
   // 引用リポスト
-  if ((params.type === "quoteRepost" || replyQuoteRepost != null) && params.post != null) {
+  if ((params.type === "quoteRepost" && params.post != null) || manualQuoteRepost != null) {
     const quotePost = params.type === "quoteRepost"
-      ? params.post
-      : replyQuoteRepost ?? params.post
+      ? params.post as TTPost
+      : manualQuoteRepost as TTPost
     record.embed = {
       $type: images != null || external != null
         ? "app.bsky.embed.recordWithMedia"
@@ -206,7 +211,7 @@ export default async function (
   }
 
   // 画像またはリンクカード
-  if (params.type !== "quoteRepost" && replyQuoteRepost == null) {
+  if (params.type !== "quoteRepost" && manualQuoteRepost == null) {
     if (images != null)
       record.embed = { $type: "app.bsky.embed.images", images }
     else if (external != null)
@@ -232,29 +237,29 @@ export default async function (
 }
 
 function isPostAtUri (uri: string): boolean {
-  return uri.match(/^at:\/\/did:plc:[\w\.\-]+\/app\.bsky\.feed\.post\/[\w\.\-]+$/) != null
+  return uri.match(/^at:\/\/did:\w+:[\w\.\-]+\/app\.bsky\.feed\.post\/[\w\.\-]+$/) != null
 }
 
 function isFeedGeneratorAtUri (uri: string): boolean {
-  return uri.match(/^at:\/\/did:plc:[\w\.\-]+\/app\.bsky\.feed\.generator\/[\w\.\-]+$/) != null
+  return uri.match(/^at:\/\/did:\w+:[\w\.\-]+\/app\.bsky\.feed\.generator\/[\w\.\-]+$/) != null
 }
 
 function isListAtUri (uri: string): boolean {
-  return uri.match(/^at:\/\/did:plc:[\w\.\-]+\/app\.bsky\.graph\.list\/[\w\.\-]+$/) != null
+  return uri.match(/^at:\/\/did:\w+:[\w\.\-]+\/app\.bsky\.graph\.list\/[\w\.\-]+$/) != null
 }
 
 function convertFeedGeneratorUriToAtUri (uri: string): null | string {
-  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/profile\/did:plc:([\w\.\-]+)\/feed\/([\w\.\-]+)$/)
+  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/profile\/(did:\w+:[\w\.\-]+)\/feed\/([\w\.\-]+)$/)
   if (matches?.[1] == null || matches?.[2] == null) return null
   const did = matches[1]
   const rkey = matches[2]
-  return `at://did:plc:${did}/app.bsky.feed.generator/${rkey}`
+  return `at://${did}/app.bsky.feed.generator/${rkey}`
 }
 
 function convertListUriToAtUri (uri: string): null | string {
-  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/profile\/did:plc:([\w\.\-]+)\/lists\/([\w\.\-]+)$/)
+  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/profile\/(did:\w+:[\w\.\-]+)\/lists\/([\w\.\-]+)$/)
   if (matches?.[1] == null || matches?.[2] == null) return null
   const did = matches[1]
   const rkey = matches[2]
-  return `at://did:plc:${did}/app.bsky.graph.list/${rkey}`
+  return `at://${did}/app.bsky.graph.list/${rkey}`
 }

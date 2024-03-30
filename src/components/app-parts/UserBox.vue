@@ -106,6 +106,7 @@ function onActivateContentFilteringToggle () {
       />
 
       <AvatarLink
+        :isLabeler="user.associated?.labeler"
         :did="user.did"
         :image="user.avatar"
       />
@@ -113,6 +114,13 @@ function onActivateContentFilteringToggle () {
         :displayName="user.displayName"
         :anonymizable="true"
       >
+        <!-- ラベラーアイコン -->
+        <SVGIcon
+          v-if="user.associated?.labeler"
+          name="label"
+          class="account-labeler-icon"
+        />
+
         <!-- アカウントラベルアイコン -->
         <SVGIcon
           v-if="state.hasAppliedHarmfulLabel"
@@ -198,9 +206,17 @@ function onActivateContentFilteringToggle () {
   align-items: center;
   grid-gap: 0.5em;
 
+  // ラベラーアイコン
+  // アカウントラベルアイコン
+  .account-labeler-icon,
+  .account-label-icon {
+    font-size: 0.875em;
+  }
+  .account-labeler-icon {
+    fill: rgb(var(--share-color));
+  }
   .account-label-icon {
     fill: rgb(var(--notice-color));
-    font-size: 0.875em;
   }
 
   &:deep() > span {

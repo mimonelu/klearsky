@@ -32,6 +32,11 @@ type TTUserViewer = {
 }
 
 type TTUser = {
+  associated?: {
+    lists: number
+    feedgens: number
+    labeler: boolean
+  }
   avatar?: string
   description?: string
   did: string
@@ -50,10 +55,7 @@ type TTRecord = {
     createdAt: string
     embed?: {
       $type: string
-      images?: {
-        alt: string
-        image: BrobRef
-      }
+      images?: TTImages[]
       record?: TTPost
     }
     facets?: any
@@ -187,13 +189,8 @@ type TTPost = {
     createdAt: string
     embed?: {
       $type: string
-      images?: Array<{
-        alt: string
-        image: {
-          cid: string
-          mimeType: string
-        }
-      }>
+      images?: Array<TTImage>
+      external?: TTExternal
       [k: string]: unknown
     }
     entities?: Array<TTEntity>
@@ -330,6 +327,7 @@ type TTNotificationGroup = {
 
 type TTProfile = {
   __log?: any // Injected
+  __isDidPlc?: boolean // Injected
   __createdAt?: string // Injected
   did: string
   handle: string

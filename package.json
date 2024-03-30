@@ -1,6 +1,6 @@
 {
   "name": "klearsky",
-  "version": "0.9.66",
+  "version": "0.9.67",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -18,7 +18,9 @@
     "cbor-x": "^1.5.3",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.30.0",
+    "file-saver": "^2.0.5",
     "hotkeys-js": "^3.10.3",
+    "jszip": "^3.10.1",
     "jwt-decode": "^4.0.0",
     "multiformats": "^12.0.1",
     "portal-vue": "^3.0.0",

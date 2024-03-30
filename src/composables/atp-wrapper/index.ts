@@ -47,6 +47,7 @@ import fetchNotificationCount from "@/composables/atp-wrapper/fetch/fetch-notifi
 import fetchNotifications from "@/composables/atp-wrapper/fetch/fetch-notifications"
 import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-official-feed-generators"
 import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-popular-feed-generators"
+import fetchPostedImageRefs from "@/composables/atp-wrapper/fetch/fetch-posted-image-refs"
 import fetchPosts from "@/composables/atp-wrapper/fetch/fetch-posts"
 import fetchPostSearch from "@/composables/atp-wrapper/fetch/fetch-post-search"
 import fetchPostThread from "@/composables/atp-wrapper/fetch/fetch-post-thread"
@@ -65,6 +66,7 @@ import logout from "@/composables/atp-wrapper/session/logout"
 import refreshSession from "@/composables/atp-wrapper/session/refresh-session"
 import resetSession from "@/composables/atp-wrapper/session/reset-session"
 import resumeSession from "@/composables/atp-wrapper/session/resume-session"
+import signUp from "@/composables/atp-wrapper/session/sign-up"
 import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
 import updateJwt from "@/composables/atp-wrapper/session/update-jwt"
@@ -163,6 +165,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchNotifications = fetchNotifications
   fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
   fetchPopularFeedGenerators = fetchPopularFeedGenerators
+  fetchPostedImageRefs = fetchPostedImageRefs
   fetchPosts = fetchPosts
   fetchPostSearch = fetchPostSearch
   fetchPostThread = fetchPostThread
@@ -187,6 +190,7 @@ class AtpWrapper implements TIAtpWrapper {
   saveData (this: TIAtpWrapper) {
     Util.saveStorage("atp", this.data)
   }
+  signUp = signUp
   updateBlockToDisable = updateBlockToDisable
   updateBlockToEnable = updateBlockToEnable
   updateJwt = updateJwt

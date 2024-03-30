@@ -15,6 +15,7 @@ export default async function (
   // TODO: PDS分割に伴う暫定処置
   const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", repo, query)
 
+  if (response instanceof Error) return
   if (response == null) return
   const data = await response.json()
   if (data?.records == null) return

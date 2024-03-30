@@ -7,7 +7,7 @@ export default async function (
   q: string,
   limit?: number,
   cursor?: string
-): Promise<Error | undefined | { cursor?: string, hitsTotal?: number }> {
+): Promise<Error | undefined | string> {
   if (this.agent == null) return Error("noAgentError")
   const query: AppBskyFeedSearchPosts.QueryParams = { q }
   if (limit != null) query.limit = limit
@@ -28,10 +28,10 @@ export default async function (
   // TODO:
   AtpUtil.coherentResponses(newPosts)
 
-  currentPosts.splice(0, currentPosts.length, ...newPosts)
-
-  return {
-    cursor: response.data.cursor,
-    hitsTotal: response.data.hitsTotal,
+  if (cursor == null) {
+    currentPosts.unshift(...newPosts)
+  } else {
+    currentPosts.push(...newPosts)
   }
+  return response.data.cursor
 }
