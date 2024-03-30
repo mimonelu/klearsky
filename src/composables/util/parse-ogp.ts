@@ -56,7 +56,7 @@ export default async function (
       })
       .then((response: Response) => {
         if (!response.ok) {
-          return Error("fetchOgpError")
+          return Error("fetchOgpImageError")
         }
         return response
       })

@@ -102,7 +102,12 @@ export default async function (
             params.url,
             params.urlHasImage?.includes(true) ?? false
           )
-          if (external == null || external instanceof Error) return Error("parseOgpError")
+          if (external == null) {
+            return Error("parseOgpError")
+          }
+          if (external instanceof Error) {
+            return external
+          }
         }
       }
     }
