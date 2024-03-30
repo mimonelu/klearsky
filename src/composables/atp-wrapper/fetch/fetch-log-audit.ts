@@ -14,6 +14,11 @@ export default async function (
   let logJson: undefined | any = Util.cache.get("logAudit", url)
   if (logJson != null) return logJson
   const log = await fetch(url)
+    .then((value: any) => value)
+    .catch((error: any) => error)
+  if (log == null) return
+  if (log instanceof Error) return
+  if (!log.ok) return
   logJson = await log.json()
   console.log("[klearsky/log/audit]", logJson)
 
