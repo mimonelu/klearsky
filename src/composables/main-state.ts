@@ -439,6 +439,15 @@ state.threadgatePopupProps = {
 state.openThreadgatePopup = openThreadgatePopup
 state.closeThreadgatePopup = closeThreadgatePopup
 
+// ポップアップ - 進捗ポップアップ
+state.progressPopupDisplay = false
+state.progressPopupProps = {
+  value: 0,
+  message: undefined,
+}
+state.openProgressPopup = openProgressPopup
+state.closeProgressPopup = closeProgressPopup
+
 // MyWorker
 state.myWorker = new MyWorker(state)
 
@@ -1593,4 +1602,16 @@ function closeThreadgatePopup (params: any) {
   if (state.threadgatePopupProps.onClosed != null)
     state.threadgatePopupProps.onClosed(params)
   state.threadgatePopupProps.display = false
+}
+
+// ポップアップ - 進捗ポップアップ
+
+function openProgressPopup (value = 0, message?: string) {
+  state.progressPopupProps.value = value
+  state.progressPopupProps.message = message
+  state.progressPopupDisplay = true
+}
+
+function closeProgressPopup () {
+  state.progressPopupDisplay = false
 }

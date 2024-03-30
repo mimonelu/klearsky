@@ -23,6 +23,7 @@ import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
 import MyTagPopup from "@/components/popups/MyTagPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
+import ProgressPopup from "@/components/popups/ProgressPopup.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
 import ScrollButton from "@/components/buttons/ScrollButton.vue"
 import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
@@ -1007,6 +1008,12 @@ function broadcastListener (event: MessageEvent) {
         @close="state.closeErrorPopup"
       />
     </div>
+
+    <!-- 進捗ポップアップ -->
+    <ProgressPopup
+      v-if="state.progressPopupDisplay"
+      v-bind="state.progressPopupProps"
+    />
 
     <!-- 全画面ローダー -->
     <Loader

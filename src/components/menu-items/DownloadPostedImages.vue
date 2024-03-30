@@ -39,12 +39,14 @@ async function donwloadPostedImages () {
   let numberOfSucceed = 0
   let numberOfFailed = 0
 
+  // 進捗ポップアップを開く
+  mainState.openProgressPopup(0, $t("donwloadPostedImagesOnProgress"))
+
   // 画像 blob の取得
   const blobs: Blob[] = []
   const urls = refs.map((ref: string) => {
     return `https://cdn.bsky.app/img/feed_thumbnail/plain/${props.user.did}/${ref}@jpeg`
   })
-  mainState.loaderDisplay = true
   for (let i = 0; i < urls.length; i ++) {
     const url = urls[i]
     const response =
@@ -53,6 +55,10 @@ async function donwloadPostedImages () {
       })
         .then((response: any) => response)
         .catch((error: any) => error)
+
+    // 進捗ポップアップのインクリメント
+    mainState.progressPopupProps.value = (i / urls.length) * 100
+
     if (response instanceof Error || !response.ok) {
       numberOfFailed ++
       continue
@@ -61,7 +67,9 @@ async function donwloadPostedImages () {
     blobs.push(blob)
     numberOfSucceed ++
   }
-  mainState.loaderDisplay = false
+
+  // 進捗ポップアップを閉じる
+  mainState.closeProgressPopup()
 
   // 画像がない場合
   if (blobs.length === 0) {
@@ -74,11 +82,14 @@ async function donwloadPostedImages () {
 
   // .zip ファイルの作成
   const zip = new JSZip()
+  const userName = props.user.handle === "handle.invalid"
+    ? props.user.did
+    : props.user.handle
   blobs.forEach((blob, index) => {
-    zip.file(`${props.user.handle}-${("000" + (index + 1)).slice(- 3)}.jpg`, blob)
+    zip.file(`${userName}-${("000" + (index + 1)).slice(- 3)}.jpg`, blob)
   })
   const zipBlob = await zip.generateAsync({ type: "blob" })
-  const zipName = `bluesky-images-${props.user.handle}.zip`
+  const zipName = `bluesky-images-${userName}.zip`
   saveAs(zipBlob, zipName)
 
   // 完了

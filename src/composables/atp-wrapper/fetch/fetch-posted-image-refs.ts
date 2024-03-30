@@ -1,16 +1,20 @@
 import Util from "@/composables/util"
 
+const POSTED_IMAGE_REFS_ITERATION = 10
+const POSTED_IMAGE_REFS_LIMIT = 100
+const POSTED_IMAGE_REFS_MAX_RESULTS = 100
+
 export default async function (
   this: TIAtpWrapper,
   did: string
 ): Promise<Error | string[]> {
   const results: string[] = []
   let cursor: undefined | string
-  for (let i = 0; i < 10; i ++) { // TODO:
+  for (let i = 0; i < POSTED_IMAGE_REFS_ITERATION; i ++) {
     const query: Record<string, string> = {
       collection: "app.bsky.feed.post",
       repo: did,
-      limit: "100", // TODO:
+      limit: POSTED_IMAGE_REFS_LIMIT.toString(),
     }
     if (cursor != null) {
       query.rkeyEnd = Util.getRkey(cursor)
@@ -20,16 +24,16 @@ export default async function (
       return response
     }
     if (response == null) {
-      return results
+      return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)
     }
     const data = await response.json()
     if (data == null) {
-      return results
+      return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)
     }
     const records: undefined | TTRecord[] = data.records
     if (!records?.length) {
       // 通常時の終了箇所
-      return results
+      return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)
     }
     records.forEach((record: TTRecord) => {
       const images = record.value?.embed?.images
@@ -46,9 +50,9 @@ export default async function (
     })
     const lastRecord = records.at(- 1)
     if (lastRecord?.uri == null) {
-      return results
+      return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)
     }
     cursor = lastRecord.uri
   }
-  return results.splice(0, 100) // TODO:
+  return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)
 }

@@ -192,6 +192,7 @@
   "donwloadPostedImagesOnConfirmation": "このユーザーが投稿した画像を一括ダウンロードします。\n\n* この機能は試験的に実装されています。\n* 画像は .zip ファイルにまとめられます。\n* 直近のポスト1000件のうち、100件までの画像をダウンロードします。\n* リポストは対象外です。\n* 最低品質の画像をダウンロードします。\n* 完了まで数分かかる可能性があります。",
   "donwloadPostedImagesOnCancel": "このユーザーが投稿した画像はありませんでした。",
   "donwloadPostedImagesOnComplete": "このユーザーが投稿した画像をダウンロードしました。",
+  "donwloadPostedImagesOnProgress": "ダウンロード中...",
   "deletePost": "ポストを削除する",
   "deletePostMessage": "このポストを削除します。よろしいですか？",
   "moderate": "モデレートする",

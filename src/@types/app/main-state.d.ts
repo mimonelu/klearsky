@@ -397,4 +397,13 @@ type MainState = {
   threadgatePopupProps: TTThreadgatePopupProps
   openThreadgatePopup: Function
   closeThreadgatePopup: Function
+
+  // ポップアップ - 進捗ポップアップ
+  progressPopupDisplay: boolean
+  progressPopupProps: {
+    value: number
+    message?: string
+  }
+  openProgressPopup: Function
+  closeProgressPopup: Function
 }
