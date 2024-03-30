@@ -1,5 +1,5 @@
 import Package from "@/../package.json"
-import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import AtpUtil from "@/composables/atp-wrapper/atp-util"
 import Util from "@/composables/util"

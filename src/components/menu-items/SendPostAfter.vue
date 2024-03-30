@@ -19,12 +19,9 @@ async function sendPostAfter () {
   // １ミリセカンド進める
   const createdAtDate = new Date(props.createdAt)
   createdAtDate.setMilliseconds(createdAtDate.getMilliseconds() + 1)
-  const createdAtString = createdAtDate.toISOString()
 
-  await mainState.openSendPostPopup({
-    type: "post",
-    createdAt: createdAtString,
-  })
+  mainState.postDatePopupDate = createdAtDate.toISOString()
+  await mainState.openSendPostPopup({ type: "post" })
 }
 </script>
 

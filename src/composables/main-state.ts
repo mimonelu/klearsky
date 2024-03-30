@@ -1552,6 +1552,7 @@ function closeSendPostPopup (done: boolean, hidden: boolean) {
   if (!hidden) {
     state.sendPostPopupProps.display = false
     state.currentPostTags.splice(0)
+    state.postDatePopupDate = undefined
   }
   state.sendPostPopupProps.visibility = false
 }

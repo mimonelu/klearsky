@@ -17,7 +17,6 @@ const props = defineProps<{
   text?: string
   url?: string
   fileList?: FileList
-  createdAt?: string
 }>()
 
 const $t = inject("$t") as Function
@@ -143,8 +142,6 @@ onMounted(() => {
   if (props.fileList != null) easyFormState.images = Array.from(props.fileList)
   onInputUrl()
   onChangeImage()
-
-  mainState.postDatePopupDate = props.createdAt
 })
 
 async function close () {
