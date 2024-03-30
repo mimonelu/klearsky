@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import { saveAs } from "file-saver"
-import JSZip from "jszip"
+import JSZip from "jszip/dist/jszip"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
