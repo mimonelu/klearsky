@@ -12,8 +12,6 @@ import Util from "@/composables/util"
 
 const emit = defineEmits(["closeSettingsPopup"])
 
-const $t = inject("$t") as Function
-
 const mainState = inject("state") as MainState
 
 const state = reactive<{
@@ -45,14 +43,6 @@ function saveSetting () {
 function changeSetting () {
   mainState.saveSettings()
   mainState.updateSettings()
-}
-
-async function resetSettings () {
-  Util.blurElement()
-  const result = await mainState.openConfirmationPopup($t("resetSettings"), $t("resetSettingsDetail"))
-  if (!result) return
-  mainState.resetSettings()
-  location.reload()
 }
 
 function openLanguageSettingsPopup () {
@@ -348,7 +338,6 @@ function closeHtmlPopupDisplay () {
     @close="closeOtherSettingsPopup"
     @saveSetting="saveSetting"
     @changeSetting="changeSetting"
-    @resetSettings="resetSettings"
     @showDescription="(name: string) => { showDescription(name) }"
   />
 

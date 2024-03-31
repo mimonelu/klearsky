@@ -2,8 +2,19 @@
 import { inject } from "vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import Util from "@/composables/util"
+
+const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+async function resetSettings () {
+  Util.blurElement()
+  const result = await mainState.openConfirmationPopup($t("resetSettings"), $t("resetSettingsDetail"))
+  if (!result) return
+  mainState.resetSettings()
+  location.reload()
+}
 </script>
 
 <template>
@@ -53,7 +64,7 @@ const mainState = inject("state") as MainState
           <div class="settings-popup__form__body">
             <button
               class="button--important"
-              @click.prevent="$emit('resetSettings')"
+              @click.prevent="resetSettings"
             >
               <span>{{ $t("resetSettings") }}</span>
             </button>
