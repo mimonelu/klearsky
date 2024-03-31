@@ -35,7 +35,14 @@ async function fetchContinuousResults (direction: "new" | "old") {
       CONSTS.LIMIT_OF_FETCH_MUTING_USERS,
       direction === "old" ? mainState.currentMutingUsersCursor : undefined
     )
-    if (cursor != null) mainState.currentMutingUsersCursor = cursor
+    if (cursor != null && (
+      direction === "old" || (
+        direction === "new" &&
+        mainState.currentMutingUsersCursor == null
+      )
+    )) {
+      mainState.currentMutingUsersCursor = cursor
+    }
   } finally {
     state.processing = false
   }

@@ -36,7 +36,14 @@ async function fetchContinuousResults (direction: "new" | "old") {
       CONSTS.LIMIT_OF_FETCH_LIKE_USERS,
       direction === "old" ? mainState.currentLikeUsersCursor : undefined
     )
-    if (cursor != null) mainState.currentLikeUsersCursor = cursor
+    if (cursor != null && (
+      direction === "old" || (
+        direction === "new" &&
+        mainState.currentLikeUsersCursor == null
+      )
+    )) {
+      mainState.currentLikeUsersCursor = cursor
+    }
   } finally {
     state.processing = false
   }
