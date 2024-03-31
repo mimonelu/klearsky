@@ -13,7 +13,7 @@ export default async function (
     repo,
   }
   if (limit != null) query.limit = limit
-  if (cursor != null) query.rkeyEnd = cursor
+  if (cursor != null) query.cursor = cursor
   const response: ComAtprotoRepoListRecords.Response =
     await (this.agent as BskyAgent).api.com.atproto.repo.listRecords(query)
   console.log("[klearsky/listRecords/like]", response)

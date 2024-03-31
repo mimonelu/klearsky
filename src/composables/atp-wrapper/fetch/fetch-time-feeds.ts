@@ -20,8 +20,7 @@ export default async function (
       : Util.getRkey((oldPosts.at(- 1) as TTPost).uri)
     : undefined
   if (rkey != null) {
-    if (direction === "new") query.rkeyStart = rkey
-    else query.rkeyEnd = rkey
+    query.cursor = rkey
   }
 
   // TODO: PDS分割に伴う暫定処置

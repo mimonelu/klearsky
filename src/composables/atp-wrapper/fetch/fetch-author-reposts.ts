@@ -10,7 +10,7 @@ export default async function (
     repo,
   }
   if (limit != null) query.limit = limit.toString()
-  if (cursor != null) query.rkeyEnd = cursor
+  if (cursor != null) query.cursor = cursor
 
   // TODO: PDS分割に伴う暫定処置
   const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", repo, query)

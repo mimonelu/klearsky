@@ -17,7 +17,7 @@ export default async function (
       limit: POSTED_IMAGE_REFS_LIMIT.toString(),
     }
     if (cursor != null) {
-      query.rkeyEnd = Util.getRkey(cursor)
+      query.cursor = Util.getRkey(cursor)
     }
     const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", did, query)
     if (response instanceof Error) {
