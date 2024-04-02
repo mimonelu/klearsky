@@ -32,7 +32,6 @@ const state = reactive<{
 
 const iconMap: { [reason: string]: string } = {
   follow: "person",
-  invite: "mail",
   mention: "at",
   quote: "quoteRepost",
   reply: "reply",
@@ -59,7 +58,6 @@ function isGroupingReason (reason: string): boolean {
 function makeSubjectTo (notification: TTNotification): any {
   switch (notification.reason) {
     case "follow":
-    case "invite":
     case "repost":
     case "like": {
       return { name: "profile-feeds", query: { account: notification.did } }
@@ -364,9 +362,6 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 // reason アイコン
 .icon--reason {
   [data-reason="follow"] & {
-    fill: rgb(var(--fg-color));
-  }
-  [data-reason="invite"] & {
     fill: rgb(var(--fg-color));
   }
   [data-reason="mention"] & {

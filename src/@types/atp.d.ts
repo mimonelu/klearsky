@@ -296,7 +296,6 @@ type TTNotificationReason = "reply"
   | "repost"
   | "like"
   | "follow"
-  | "invite"
   | (string & {})
 
 type TTNotification = {
