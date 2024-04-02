@@ -54,6 +54,7 @@ type MainState = {
   notificationCount: number
   notificationFetchedFirst: boolean
   notificationPopupDisplay: boolean
+  notificationReasonFilter?: TTNotificationReason
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
   openNotificationPopup: Function
   closeNotificationPopup: Function

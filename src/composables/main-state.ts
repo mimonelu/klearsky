@@ -72,6 +72,7 @@ state.notificationCursor = undefined
 state.notificationCount = 0
 state.notificationFetchedFirst = false
 state.notificationPopupDisplay = false
+state.notificationReasonFilter = undefined
 state.fetchNotifications = fetchNotifications
 state.openNotificationPopup = openNotificationPopup
 state.closeNotificationPopup = closeNotificationPopup

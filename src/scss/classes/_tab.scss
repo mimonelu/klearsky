@@ -32,7 +32,8 @@
     &[data-disabled="true"] {
       filter: contrast(0);
     }
-    &.router-link-active {
+    &.router-link-active,
+    &[data-focused="true"] {
       background-color: var(--accent-color-025);
     }
     &:focus, &:hover {

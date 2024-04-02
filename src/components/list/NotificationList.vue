@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import DisplayName from "@/components/app-parts/DisplayName.vue"
@@ -9,6 +9,26 @@ import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  filteredNotifications: ComputedRef<TTNotificationGroup[]>
+}>({
+  filteredNotifications: computed((): TTNotificationGroup[] => {
+    if (mainState.notificationReasonFilter == null) {
+      return mainState.notifications
+    }
+    return mainState.notifications
+      .filter((notificationGroup: TTNotificationGroup) => {
+        // フィードジェネレーターへのいいねは通常のいいねとセットで返す
+        if (mainState.notificationReasonFilter === "like") {
+          return notificationGroup.reason === "like" ||
+                 notificationGroup.reason === "likeGenerator"
+        }
+
+        return notificationGroup.reason === mainState.notificationReasonFilter
+      })
+  }),
+})
 
 const iconMap: { [reason: string]: string } = {
   follow: "person",
@@ -71,7 +91,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   <div class="notification-list">
     <!-- 通知グループ -->
     <div
-      v-for="notificationGroup of mainState.notifications"
+      v-for="notificationGroup of state.filteredNotifications"
       :key="notificationGroup.id"
       class="notification-group"
       tabindex="0"
