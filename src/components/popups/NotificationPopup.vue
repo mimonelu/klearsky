@@ -13,16 +13,26 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
-  total: ComputedRef<number>
+  numberByReason: ComputedRef<any>
 }>({
   processing: false,
-  total: computed((): number => {
-    let result = 0
+  numberByReason: computed((): any => {
+    const results: { [k: string]: number } = {
+      all: 0,
+      reply: 0,
+      quote: 0,
+      mention: 0,
+      repost: 0,
+      like: 0,
+      follow: 0,
+    }
     mainState.notifications
       .forEach((notificationGroup: TTNotificationGroup) => {
-        result += notificationGroup.notifications.length
+        const numberOfNotifications = notificationGroup.notifications.length
+        results.all += numberOfNotifications
+        results[notificationGroup.reason] += numberOfNotifications
       })
-    return result
+    return results
   }),
 })
 
@@ -45,6 +55,10 @@ onMounted(async () => {
 
 function close () {
   emit("close")
+}
+
+function clipBadge (value: number): string {
+  return value > 999 ? "+" : value.toString()
 }
 
 async function updateNotificationSeen () {
@@ -89,7 +103,7 @@ function scrolledToBottom () {
     <template #header>
       <h2>
         <SVGIcon name="bell" />
-        <span>{{ $t("notifications") }} ({{ state.total }})</span>
+        <span>{{ $t("notifications") }} ({{ state.numberByReason.all }})</span>
       </h2>
     </template>
     <template #header-after>
@@ -102,7 +116,7 @@ function scrolledToBottom () {
           :data-focused="mainState.notificationReasonFilter == null"
           @click="setReasonFilter()"
         >
-          <span>ALL</span>
+          <SVGIcon name="shimmer" />
         </button>
 
         <!-- 通知フィルタータブ - リプライ -->
@@ -113,6 +127,10 @@ function scrolledToBottom () {
           @click="setReasonFilter('reply')"
         >
           <SVGIcon name="reply" />
+          <span
+            v-if="state.numberByReason.reply > 0"
+            class="tab__button__badge"
+          >{{ clipBadge(state.numberByReason.reply) }}</span>
         </button>
 
         <!-- 通知フィルタータブ - メンション -->
@@ -123,6 +141,10 @@ function scrolledToBottom () {
           @click="setReasonFilter('mention')"
         >
           <SVGIcon name="at" />
+          <span
+            v-if="state.numberByReason.mention > 0"
+            class="tab__button__badge"
+          >{{ clipBadge(state.numberByReason.mention) }}</span>
         </button>
 
         <!-- 通知フィルタータブ - 引用リポスト -->
@@ -133,6 +155,10 @@ function scrolledToBottom () {
           @click="setReasonFilter('quote')"
         >
           <SVGIcon name="quoteRepost" />
+          <span
+            v-if="state.numberByReason.quote > 0"
+            class="tab__button__badge"
+          >{{ clipBadge(state.numberByReason.quote) }}</span>
         </button>
 
         <!-- 通知フィルタータブ - リポスト -->
@@ -143,6 +169,10 @@ function scrolledToBottom () {
           @click="setReasonFilter('repost')"
         >
           <SVGIcon name="repost" />
+          <span
+            v-if="state.numberByReason.repost > 0"
+            class="tab__button__badge"
+          >{{ clipBadge(state.numberByReason.repost) }}</span>
         </button>
 
         <!-- 通知フィルタータブ - いいね -->
@@ -153,6 +183,10 @@ function scrolledToBottom () {
           @click="setReasonFilter('like')"
         >
           <SVGIcon name="like" />
+          <span
+            v-if="state.numberByReason.like > 0"
+            class="tab__button__badge"
+          >{{ clipBadge(state.numberByReason.like) }}</span>
         </button>
 
         <!-- 通知フィルタータブ - フォロー -->
@@ -163,6 +197,10 @@ function scrolledToBottom () {
           @click="setReasonFilter('follow')"
         >
           <SVGIcon name="person" />
+          <span
+            v-if="state.numberByReason.follow > 0"
+            class="tab__button__badge"
+          >{{ clipBadge(state.numberByReason.follow) }}</span>
         </button>
       </div>
 
@@ -208,6 +246,10 @@ function scrolledToBottom () {
   // 通知フィルタータブ
   &__filter-tab {
     & > .tab__button {
+      & > .svg-icon {
+        font-size: 1.25rem;
+      }
+
       &--reply > .svg-icon,
       &--mention > .svg-icon {
         fill: rgb(var(--post-color));
