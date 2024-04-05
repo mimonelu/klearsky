@@ -368,3 +368,9 @@ type TTCidUri = {
   cid: string
   [k: string]: unknown
 }
+
+interface TITaggedSuggestions {
+  [tag: string]: {
+    [type: string]: string[]
+  }
+}
