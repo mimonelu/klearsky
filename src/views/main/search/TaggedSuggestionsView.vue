@@ -111,7 +111,7 @@ async function onIntersected (did: string) {
   &__user-container {
     display: flex;
     grid-gap: 0.5rem;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     @include scroll-bar("transparent");
   }
