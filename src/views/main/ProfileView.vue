@@ -276,21 +276,19 @@ function onActivateAccountMaskToggle () {
               />
 
               <!-- ハンドル -->
-              <div class="handle">
-                <a @click.stop="openHandleHistoryPopup">
-                  <SVGIcon name="history" />
-                  <AuthorHandle
-                    :handle="mainState.currentProfile?.handle ?? '&nbsp;'"
-                    :anonymizable="false"
-                  />
-                </a>
-              </div>
+              <a
+                class="handle"
+                @click.stop="openHandleHistoryPopup"
+              >
+                <SVGIcon name="history" />
+                <AuthorHandle
+                  :handle="mainState.currentProfile?.handle ?? '&nbsp;'"
+                  :anonymizable="false"
+                />
+              </a>
 
               <!-- Endpoint (PDS) -->
-              <div
-                v-if="state.endpoint"
-                class="endpoint"
-              >
+              <div class="endpoint">
                 <SVGIcon name="database" />
                 <span>{{ state.endpoint ?? "&nbsp;" }}</span>
               </div>
@@ -609,6 +607,7 @@ function onActivateAccountMaskToggle () {
         flex-direction: column;
         flex-grow: 1;
         grid-gap: 0.375rem;
+        overflow: hidden;
 
         .display-name {
           display: unset;
@@ -682,7 +681,7 @@ function onActivateAccountMaskToggle () {
   font-size: 5rem;
 }
 
-.handle > a,
+.handle,
 .endpoint,
 .followed {
   display: inline-flex;
@@ -690,7 +689,6 @@ function onActivateAccountMaskToggle () {
 
   & > .svg-icon {
     font-size: 0.875rem;
-    margin-top: 0.0625rem;
   }
 
   & > span {
@@ -702,8 +700,11 @@ function onActivateAccountMaskToggle () {
   }
 }
 
-.handle > a {
+.handle {
   color: var(--fg-color-075);
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
   [data-log-loaded="true"] & {
     color: var(--accent-color-0875);
     cursor: pointer;
@@ -727,16 +728,16 @@ function onActivateAccountMaskToggle () {
     font-size: 0.875rem;
     font-weight: bold;
     overflow: hidden;
-    text-overflow: unset;
+    text-overflow: ellipsis;
     user-select: text;
-    word-break: break-all;
-    white-space: unset;
+    white-space: nowrap;
   }
 }
 
 .endpoint {
   --color: var(--fg-color-075);
   display: inline-flex;
+  align-items: center;
 
   & > .svg-icon {
     fill: var(--color);
@@ -747,7 +748,10 @@ function onActivateAccountMaskToggle () {
 
   & > span {
     color: var(--color);
+    overflow: hidden;
+    text-overflow: ellipsis;
     user-select: text;
+    white-space: nowrap;
   }
 }
 
