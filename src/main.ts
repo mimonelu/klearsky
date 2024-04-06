@@ -4,6 +4,7 @@ import { createApp } from "vue"
 import PortalVue from "portal-vue"
 import App from "@/App.vue"
 import i18n from "@/plugins/i18n"
+import IntersectionObserverDirective from "@/plugins/intersection-observer-directive"
 import router from "@/router"
 
 // 翻訳
@@ -13,6 +14,7 @@ import translationJa from "@/consts/translations/ja.json"
 const app = createApp(App)
 app.use(router)
 app.use(PortalVue)
+app.directive("intersection-observer", IntersectionObserverDirective)
 
 // 翻訳
 const translations = {

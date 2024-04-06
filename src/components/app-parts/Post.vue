@@ -713,7 +713,7 @@ function toggleOldestQuotedPostDisplay () {
           <!-- 表示名 -->
           <DisplayName
             class="body__right__header__display-name"
-            :displayName="post.author?.displayName"
+            :displayName="post.author?.displayName || '　'"
             :anonymizable="true"
           >
             <!-- ラベラーアイコン -->

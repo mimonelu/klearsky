@@ -585,7 +585,6 @@ function onActivateAccountMaskToggle () {
   }
 
   &__top {
-    border-top: 1px solid var(--fg-color-0125);
     &__inner {
       border-bottom: 1px solid var(--fg-color-0125);
       display: flex;

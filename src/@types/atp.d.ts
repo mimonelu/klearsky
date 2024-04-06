@@ -369,8 +369,9 @@ type TTCidUri = {
   [k: string]: unknown
 }
 
-interface TITaggedSuggestions {
-  [tag: string]: {
-    [type: string]: string[]
-  }
+interface TITaggedSuggestion {
+  tag: string
+  feeds: string[]
+  users: string[]
+  profiles?: TTProfile[]
 }

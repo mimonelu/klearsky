@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { RouterView } from "vue-router"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
 
@@ -24,23 +25,36 @@ const state = reactive<{
         :title="$t('search')"
       />
       <div class="tab">
+        <!-- ポスト検索ページ -->
         <RouterLink
           class="tab__button"
           :to="`/search/post${state.query}`"
         >
           <span>{{ $t("postSearch") }}</span>
         </RouterLink>
+
+        <!-- フィード検索ページ -->
         <RouterLink
           class="tab__button"
           :to="`/search/feed${state.query}`"
         >
           <span>{{ $t("feedSearch") }}</span>
         </RouterLink>
+
+        <!-- ユーザー検索ページ -->
         <RouterLink
           class="tab__button"
           :to="`/search/user${state.query}`"
         >
           <span>{{ $t("users") }}</span>
+        </RouterLink>
+
+        <!-- タグ付けされた提案ページ -->
+        <RouterLink
+          class="tab__button tab__button--tagged-suggestions"
+          to="/search/tagged-suggestions"
+        >
+          <SVGIcon name="fire" />
         </RouterLink>
       </div>
       <div class="search-view__form">
@@ -52,27 +66,36 @@ const state = reactive<{
 </template>
 
 <style lang="scss" scoped>
-.search-view__form {
-  background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-bottom: 1px solid var(--fg-color-0125);
-
-  &:deep() {
-    & > form {
-      display: grid;
-      padding: 1rem;
-    }
-  }
-}
-
 .search-view {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+
+  &__form {
+    background-color: rgb(var(--bg-color), var(--main-area-opacity));
+    border-bottom: 1px solid var(--fg-color-0125);
+
+    &:deep() {
+      & > form {
+        display: grid;
+        padding: 1rem;
+      }
+    }
+  }
 }
 
 .child-view {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+
+// タグ付けされた提案ページ
+.tab__button--tagged-suggestions > .svg-icon {
+  --fg-color: 255, 0, 0;
+  font-size: 1.5rem;
+}
+[data-path="/search/tagged-suggestions"] .search-view__form {
+  border-bottom-style: none;
 }
 </style>

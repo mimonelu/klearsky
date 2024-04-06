@@ -92,19 +92,17 @@ let timer: undefined | NodeJS.Timeout = undefined
 
 function createProfileTimer () {
   timer = setTimeout(async () => {
-    try {
-      for (const did in mainState.globallineProfiles) {
-        const profile = mainState.globallineProfiles[did]
-        if (profile.handle != null) continue
-        const newProfile = await mainState.atp.fetchProfile(did)
-        for (const key in newProfile) {
-          mainState.globallineProfiles[did][key] = (newProfile as any)[key]
-        }
-        break
+    for (const did in mainState.globallineProfiles) {
+      const profile = mainState.globallineProfiles[did]
+      if (profile.handle != null) continue
+      const newProfile = await mainState.atp.fetchProfile(did)
+      if (newProfile instanceof Error) continue
+      for (const key in newProfile) {
+        mainState.globallineProfiles[did][key] = (newProfile as any)[key]
       }
-    } finally {
-      createProfileTimer()
+      break
     }
+    createProfileTimer()
   }, 500)
 }
 
