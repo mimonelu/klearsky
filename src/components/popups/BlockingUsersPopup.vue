@@ -35,7 +35,14 @@ async function fetchContinuousResults (direction: "new" | "old") {
       CONSTS.LIMIT_OF_FETCH_BLOCKING_USERS,
       direction === "old" ? mainState.currentBlockingUsersCursor : undefined
     )
-    if (cursor != null) mainState.currentBlockingUsersCursor = cursor
+    if (cursor != null && (
+      direction === "old" || (
+        direction === "new" &&
+        mainState.currentBlockingUsersCursor == null
+      )
+    )) {
+      mainState.currentBlockingUsersCursor = cursor
+    }
   } finally {
     state.processing = false
   }

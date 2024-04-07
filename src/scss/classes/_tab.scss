@@ -6,21 +6,21 @@
   max-height: 3rem;
 
   &__button {
-    color: var(--fg-color-075);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     flex: 1;
     flex-grow: 1;
-    font-weight: bold;
     grid-gap: 0.5rem;
     overflow: hidden;
     padding: 0.5rem 0;
+    position: relative;
     min-height: 2.5rem;
-    text-align: center;
 
     & > span {
+      color: var(--fg-color-075);
+      font-weight: bold;
       line-height: var(--line-height);
       overflow: hidden;
     }
@@ -29,10 +29,23 @@
       fill: var(--fg-color-075);
     }
 
+    &__badge {
+      background-color: rgb(var(--bg-color));
+      border-radius: 2px;
+      font-size: 0.75rem;
+      line-height: unset !important;
+      padding: 0.125rem 0.25rem;
+      pointer-events: none;
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+    }
+
     &[data-disabled="true"] {
       filter: contrast(0);
     }
-    &.router-link-active {
+    &.router-link-active,
+    &[data-focused="true"] {
       background-color: var(--accent-color-025);
     }
     &:focus, &:hover {

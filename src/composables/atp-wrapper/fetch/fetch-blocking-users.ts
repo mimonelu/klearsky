@@ -25,11 +25,13 @@ export default async function (
   if (cursor == null) users.unshift(...newUsers)
   else users.push(...newUsers)
 
+  /* TODO: 不要であれば削除すること
   users.sort((a: TTUser, b: TTUser) => {
     const aDate = new Date((a as any).indexedAt)
     const bDate = new Date((b as any).indexedAt)
     return aDate < bDate ? 1 : aDate > bDate ? - 1 : 0
   })
+  */
 
   return response.data.cursor
 }

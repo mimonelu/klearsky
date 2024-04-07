@@ -54,6 +54,7 @@ type MainState = {
   notificationCount: number
   notificationFetchedFirst: boolean
   notificationPopupDisplay: boolean
+  notificationReasonFilter?: TTNotificationReason
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
   openNotificationPopup: Function
   closeNotificationPopup: Function
@@ -187,6 +188,10 @@ type MainState = {
   currentSearchUsers: Array<TTUser>
   currentSearchUsersCursor?: string
   currentSearchLastUserTerm?: string
+
+  // 検索 - タグ付けされた提案
+  currentTaggedSuggestions: TITaggedSuggestion[]
+  currentTaggedProfiles: { [did: string]: null | TTProfile }
 
   // カスタムフィード
 

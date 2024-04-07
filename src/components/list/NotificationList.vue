@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import DisplayName from "@/components/app-parts/DisplayName.vue"
@@ -10,9 +10,28 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  filteredNotifications: ComputedRef<TTNotificationGroup[]>
+}>({
+  filteredNotifications: computed((): TTNotificationGroup[] => {
+    if (mainState.notificationReasonFilter == null) {
+      return mainState.notifications
+    }
+    return mainState.notifications
+      .filter((notificationGroup: TTNotificationGroup) => {
+        // フィードジェネレーターへのいいねは通常のいいねとセットで返す
+        if (mainState.notificationReasonFilter === "like") {
+          return notificationGroup.reason === "like" ||
+                 notificationGroup.reason === "likeGenerator"
+        }
+
+        return notificationGroup.reason === mainState.notificationReasonFilter
+      })
+  }),
+})
+
 const iconMap: { [reason: string]: string } = {
   follow: "person",
-  invite: "mail",
   mention: "at",
   quote: "quoteRepost",
   reply: "reply",
@@ -39,7 +58,6 @@ function isGroupingReason (reason: string): boolean {
 function makeSubjectTo (notification: TTNotification): any {
   switch (notification.reason) {
     case "follow":
-    case "invite":
     case "repost":
     case "like": {
       return { name: "profile-feeds", query: { account: notification.did } }
@@ -71,7 +89,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   <div class="notification-list">
     <!-- 通知グループ -->
     <div
-      v-for="notificationGroup of mainState.notifications"
+      v-for="notificationGroup of state.filteredNotifications"
       :key="notificationGroup.id"
       class="notification-group"
       tabindex="0"
@@ -344,9 +362,6 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 // reason アイコン
 .icon--reason {
   [data-reason="follow"] & {
-    fill: rgb(var(--fg-color));
-  }
-  [data-reason="invite"] & {
     fill: rgb(var(--fg-color));
   }
   [data-reason="mention"] & {

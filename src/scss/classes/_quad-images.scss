@@ -1,6 +1,6 @@
 .quad-images {
   display: grid;
-  grid-gap: 1px;
+  grid-gap: 0.25rem;
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -24,17 +24,9 @@
 
     & > .quad-image:nth-child(1) {
       grid-area: a;
-
-      & > .thumbnail {
-        border-radius: var(--border-radius) 0 0 var(--border-radius);
-      }
     }
     & > .quad-image:nth-child(2) {
       grid-area: b;
-
-      & > .thumbnail {
-        border-radius: 0 var(--border-radius) var(--border-radius) 0;
-      }
     }
   }
   &[data-number-of-images="3"] {
@@ -45,24 +37,12 @@
 
     & > .quad-image:nth-child(1) {
       grid-area: a;
-
-      & > .thumbnail {
-        border-radius: var(--border-radius) 0 0 var(--border-radius);
-      }
     }
     & > .quad-image:nth-child(2) {
       grid-area: b;
-
-      & > .thumbnail {
-        border-radius: 0 var(--border-radius) 0 0 ;
-      }
     }
     & > .quad-image:nth-child(3) {
       grid-area: c;
-
-      & > .thumbnail {
-        border-radius: 0 0 var(--border-radius) 0;
-      }
     }
   }
   &[data-number-of-images="4"] {
@@ -73,39 +53,27 @@
 
     & > .quad-image:nth-child(1) {
       grid-area: a;
-
-      & > .thumbnail {
-        border-radius: var(--border-radius) 0 0 0;
-      }
     }
     & > .quad-image:nth-child(2) {
       grid-area: b;
-
-      & > .thumbnail {
-        border-radius: 0 var(--border-radius) 0 0;
-      }
     }
     & > .quad-image:nth-child(3) {
       grid-area: c;
-
-      & > .thumbnail {
-        border-radius: 0 0 0 var(--border-radius);
-      }
     }
     & > .quad-image:nth-child(4) {
       grid-area: d;
-
-      & > .thumbnail {
-        border-radius: 0 0 var(--border-radius) 0;
-      }
     }
   }
 
   & > .quad-image {
     overflow: hidden;
 
-    & > .thumbnail > img {
-      width: 100%;
+    & > .thumbnail {
+      border-radius: var(--border-radius);
+
+      & > img {
+        width: 100%;
+      }
     }
   }
 }

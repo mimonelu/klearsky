@@ -713,7 +713,7 @@ function toggleOldestQuotedPostDisplay () {
           <!-- 表示名 -->
           <DisplayName
             class="body__right__header__display-name"
-            :displayName="post.author?.displayName"
+            :displayName="post.author?.displayName || '　'"
             :anonymizable="true"
           >
             <!-- ラベラーアイコン -->
@@ -1122,7 +1122,7 @@ function toggleOldestQuotedPostDisplay () {
 
   display: flex;
   flex-direction: column;
-  padding: 0.75em 1em;
+  padding: 0.75em;
   position: relative;
 
   // フォーカスポスト
@@ -1242,7 +1242,7 @@ function toggleOldestQuotedPostDisplay () {
       display: block;
       position: absolute;
       top: calc(var(--top) + var(--avatar-size) + var(--gap));
-      left: calc(2.5em - 1.5px);
+      left: calc(2.25em - 1.5px);
       width: 3px;
       height: calc(100% - var(--avatar-size) - var(--gap) - var(--gap));
     }
@@ -1309,8 +1309,8 @@ function toggleOldestQuotedPostDisplay () {
   grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
-  margin: -0.75em -1em -0.5em;
-  padding: 0.75em 1em 0.5em;
+  margin: -0.75em 0 -0.5em;
+  padding: 0.75em 0 0.5em;
 
   & > .svg-icon {
     font-size: 0.875em;
@@ -1380,7 +1380,7 @@ function toggleOldestQuotedPostDisplay () {
 .body {
   display: grid;
   grid-template-columns: var(--avatar-size) 1fr;
-  grid-gap: 1em;
+  grid-gap: 0.75em;
   align-items: flex-start;
   position: relative;
 }
@@ -1654,7 +1654,7 @@ function toggleOldestQuotedPostDisplay () {
 }
 
 .menu-button {
-  margin: -0.75em -1em;
+  margin: -0.75em -0.75em;
   padding: 0.75em 1.5em;
   position: relative;
 

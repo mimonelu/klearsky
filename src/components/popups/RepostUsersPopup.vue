@@ -36,7 +36,14 @@ async function fetchContinuousResults (direction: "new" | "old") {
       CONSTS.LIMIT_OF_FETCH_REPOST_USERS,
       direction === "old" ? mainState.currentRepostUsersCursor : undefined
     )
-    if (cursor != null) mainState.currentRepostUsersCursor = cursor
+    if (cursor != null && (
+      direction === "old" || (
+        direction === "new" &&
+        mainState.currentRepostUsersCursor == null
+      )
+    )) {
+      mainState.currentRepostUsersCursor = cursor
+    }
   } finally {
     state.processing = false
   }

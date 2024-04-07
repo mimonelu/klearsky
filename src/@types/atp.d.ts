@@ -296,7 +296,6 @@ type TTNotificationReason = "reply"
   | "repost"
   | "like"
   | "follow"
-  | "invite"
   | (string & {})
 
 type TTNotification = {
@@ -368,4 +367,11 @@ type TTCidUri = {
   uri: string
   cid: string
   [k: string]: unknown
+}
+
+interface TITaggedSuggestion {
+  tag: string
+  feeds: string[]
+  users: string[]
+  profiles?: TTProfile[]
 }

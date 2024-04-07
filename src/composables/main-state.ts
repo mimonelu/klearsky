@@ -72,6 +72,7 @@ state.notificationCursor = undefined
 state.notificationCount = 0
 state.notificationFetchedFirst = false
 state.notificationPopupDisplay = false
+state.notificationReasonFilter = undefined
 state.fetchNotifications = fetchNotifications
 state.openNotificationPopup = openNotificationPopup
 state.closeNotificationPopup = closeNotificationPopup
@@ -200,6 +201,10 @@ state.currentSearchSuggestionCursor = undefined
 state.currentSearchUsers = []
 state.currentSearchUsersCursor = undefined
 state.currentSearchLastUserTerm = undefined
+
+// 検索 - タグ付けされた提案
+state.currentTaggedSuggestions = []
+state.currentTaggedProfiles = {}
 
 // カスタムフィード
 
@@ -888,7 +893,12 @@ function isMyProfile (): boolean {
 }
 
 async function fetchUserProfile () {
-  state.userProfile = await state.atp.fetchProfile(state.atp.session?.handle as string)
+  const userProfile = await state.atp.fetchProfile(state.atp.session?.handle as string)
+  if (userProfile instanceof Error) {
+    state.userProfile = null
+    return
+  }
+  state.userProfile = userProfile
 
   // 現在のセッションにアバター画像を設定
   if (state.atp.session != null && state.userProfile?.avatar != null)
@@ -916,8 +926,12 @@ async function fetchCurrentProfile (did: string) {
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
   state.currentSuggestedFollows.splice(0)
-  state.currentProfile = await state.atp.fetchProfile(did)
-  if (state.currentProfile == null) return
+  const currentProfile = await state.atp.fetchProfile(did)
+  if (currentProfile instanceof Error) {
+    state.currentProfile = null
+    return
+  }
+  state.currentProfile = currentProfile
   state.currentProfile.__isDidPlc = state.currentProfile.did.startsWith("did:plc:")
   if (did === state.atp.session?.did) {
     state.userProfile = state.currentProfile

@@ -111,9 +111,9 @@ function removeThisPost (uri: string) {
   cursor: pointer;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 0.5em;
+  grid-gap: 1em;
   align-items: center;
-  padding: 0.75em 1em;
+  padding: 0.75em;
   &:focus, &:hover {
     .folder__item {
       --alpha: 0.75;

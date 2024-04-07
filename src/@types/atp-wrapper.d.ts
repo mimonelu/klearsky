@@ -61,10 +61,12 @@ interface TIAtpWrapper {
   fetchPostSearch (this: TIAtpWrapper, currentPosts: Array<TTPost>, q: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchPostThread (this: TIAtpWrapper, uri: string, depth?: number): Promise<undefined | false | Array<TTPost>>
   fetchPreferences (this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
-  fetchProfile (this: TIAtpWrapper, actor: string): Promise<null | TTProfile>
+  fetchProfile (this: TIAtpWrapper, actor: string): Promise<Error | TTProfile>
+  fetchProfiles (this: TIAtpWrapper, actors: string[]): Promise<Error | TTProfile[]>
   fetchRepostUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchServerInfo (this: TIAtpWrapper): Promise<Error | TTServerInfo>
   fetchSuggestions (this: TIAtpWrapper, dataRef: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
+  fetchTaggedSuggestions (this: TIAtpWrapper): Promise<Error | TITaggedSuggestion[]>
   fetchTimeFeeds (this: TIAtpWrapper, oldPosts: Array<TTPost>, direction: "new" | "old", author: TTUser, limit?: number): Promise<Error | undefined | string>
   fetchTimeline (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection): Promise<undefined | false | string>
   fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<undefined | string>
