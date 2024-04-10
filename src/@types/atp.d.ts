@@ -184,6 +184,7 @@ type TTPost = {
   indexedAt: string
   labels?: Array<TTLabel>
   likeCount: number
+  notFound?: boolean
   record: {
     $type: string
     createdAt: string

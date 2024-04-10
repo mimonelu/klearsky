@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { inject } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import DisplayName from "@/components/app-parts/DisplayName.vue"
 import Post from "@/components/app-parts/Post.vue"
@@ -7,11 +6,13 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
-defineProps<{
+const props = defineProps<{
   feed: TTFeed
 }>()
 
-const mainState = inject("state") as MainState
+function toggleReplyDisplay () {
+  props.feed.__replyDisplay = !props.feed.__replyDisplay
+}
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
   emit("updateThisPostThread", newPosts)
@@ -68,7 +69,7 @@ function removeThisPost (uri: string) {
       <template v-if="feed.__replyDisplay && (feed.reply?.root != null || feed.reply?.parent != null)">
         <!-- ルートポスト -->
         <Post
-          v-if="feed.reply?.root != null && feed.reply.root.cid !== feed.reply.parent?.cid"
+          v-if="feed.reply?.root != null && !feed.reply?.root.notFound && feed.reply.root.cid !== feed.reply.parent?.cid"
           position="root"
           :post="feed.reply.root"
           :isInFeed="true"
@@ -79,7 +80,7 @@ function removeThisPost (uri: string) {
 
         <!-- リプライポスト -->
         <Post
-          v-if="feed.reply?.parent != null"
+          v-if="feed.reply?.parent != null && !feed.reply?.parent.notFound"
           position="parent"
           :post="feed.reply.parent"
           :rootPost="feed.reply?.root"
@@ -98,7 +99,7 @@ function removeThisPost (uri: string) {
         :rootPost="feed.reply?.root"
         :parentPost="feed.reply?.parent"
         :isInFeed="true"
-        @onClickReplier="feed.__replyDisplay = !feed.__replyDisplay"
+        @onClickReplier="toggleReplyDisplay"
         @updateThisPostThread="updateThisPostThread"
         @removeThisPost="removeThisPost"
       />

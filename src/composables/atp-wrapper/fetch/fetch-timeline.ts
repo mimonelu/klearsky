@@ -29,33 +29,33 @@ export default async function (
       // 投稿者自身へのリプライ
       if (
         replyFolding.includes(1) &&
-        feed.reply?.parent.author.did === feed.post.author.did
+        feed.reply?.parent.author?.did === feed.post.author.did
       ) feed.__folding = true
 
       // あなたへのリプライ
       if (
         replyFolding.includes(2) &&
-        feed.reply?.parent.author.did === this.session?.did
+        feed.reply?.parent.author?.did === this.session?.did
       ) feed.__folding = true
 
       // あなたをフォローしていないユーザーへのリプライ
       if (
         replyFolding.includes(3) &&
-        feed.reply?.parent.author.did !== this.session?.did &&
-        feed.reply?.parent.author.viewer.followedBy == null
+        feed.reply?.parent.author?.did !== this.session?.did &&
+        feed.reply?.parent.author?.viewer.followedBy == null
       ) feed.__folding = true
 
       // あなたがフォローしていないユーザーへのリプライ
       if (
         replyFolding.includes(4) &&
-        feed.reply?.parent.author.did !== this.session?.did &&
-        feed.reply?.parent.author.viewer.following == null
+        feed.reply?.parent.author?.did !== this.session?.did &&
+        feed.reply?.parent.author?.viewer.following == null
       ) feed.__folding = true
 
       // あなたがフォローしているユーザーへのリプライ
       if (
         replyFolding.includes(5) &&
-        feed.reply?.parent.author.viewer.following != null
+        feed.reply?.parent.author?.viewer.following != null
       ) feed.__folding = true
     }
 
