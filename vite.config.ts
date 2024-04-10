@@ -19,7 +19,7 @@ export default defineConfig({
   build: {
     // for `TypeError: xx is not a constructor`
     // SEE: stackoverflow.com/a/73470097
-    commonjsOptions: { include: [] },
+    // commonjsOptions: { include: [] },
 
     chunkSizeWarningLimit: 600,
 
@@ -67,7 +67,9 @@ export default defineConfig({
 
   // for `TypeError: xx is not a constructor`
   // SEE: stackoverflow.com/a/73470097
+  /*
   optimizeDeps: {
     disabled: false,
   },
+  */
 })
