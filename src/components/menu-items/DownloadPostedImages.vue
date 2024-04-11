@@ -3,7 +3,7 @@ import { inject } from "vue"
 import { saveAs } from "file-saver"
 
 // 本番ビルド時に不明なエラーが発生するためビルド済みファイルを使用
-import JSZip from "jszip/dist/jszip"
+import JSZip from "jszip"
 
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
