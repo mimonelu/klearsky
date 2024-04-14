@@ -59,7 +59,7 @@ state.saveSettings = saveSettings
 state.updateCurrentLanguageSetting = updateCurrentLanguageSetting
 state.updateColorThemeSetting = updateColorThemeSetting
 
-// 設定 - 設定ポップアップ
+// 設定 - 設定ポップオーバー
 
 state.settingsPopupDisplay = false
 state.openSettingsPopup = openSettingsPopup
@@ -108,11 +108,40 @@ state.updateInviteCodes = async (): Promise<boolean> => {
   return true
 }
 
-// 招待コードポップアップ
+// 設定 - デザイン設定ポップアップ
+
+state.designSettingsPopupDisplay = false
+state.openDesignSettingsPopup = openDesignSettingsPopup
+state.closeDesignSettingsPopup = closeDesignSettingsPopup
+
+// 設定 - ポスト設定ポップアップ
+
+state.postSettingsPopupDisplay = false
+state.openPostSettingsPopup = openPostSettingsPopup
+state.closePostSettingsPopup = closePostSettingsPopup
+
+// 設定 - 心理的安全性設定ポップアップ
+
+state.psySafetySettingsPopupDisplay = false
+state.openPsySafetySettingsPopup = openPsySafetySettingsPopup
+state.closePsySafetySettingsPopup = closePsySafetySettingsPopup
+
+// 設定 - その他設定ポップアップ
+
+state.otherSettingsPopupDisplay = false
+state.openOtherSettingsPopup = openOtherSettingsPopup
+state.closeOtherSettingsPopup = closeOtherSettingsPopup
+
+// 設定 - 招待コードポップアップ
 
 state.inviteCodesPopupDisplay = false
 state.openInviteCodesPopup = openInviteCodesPopup
 state.closeInviteCodesPopup = closeInviteCodesPopup
+
+// 設定 - 説明用ポップアップ
+
+state.htmlPopupDisplay = false
+state.htmlPopupType = undefined
 
 // Preferences
 
@@ -700,7 +729,7 @@ function updateColorThemeSetting () {
   }
 }
 
-// 設定 - 設定ポップアップ
+// 設定 - 設定ポップオーバー
 
 function openSettingsPopup (selector: string, direction: "toRight" | "toUp") {
   state.settingsPopupSelector = selector
@@ -752,7 +781,47 @@ function closeNotificationPopup () {
   state.notificationPopupDisplay = false
 }
 
-// 招待コードポップアップ
+// 設定 - デザイン設定ポップアップ
+
+function openDesignSettingsPopup () {
+  state.designSettingsPopupDisplay = true
+}
+
+function closeDesignSettingsPopup () {
+  state.designSettingsPopupDisplay = false
+}
+
+// 設定 - ポスト設定ポップアップ
+
+function openPostSettingsPopup () {
+  state.postSettingsPopupDisplay = true
+}
+
+function closePostSettingsPopup () {
+  state.postSettingsPopupDisplay = false
+}
+
+// 設定 - 心理的安全性設定ポップアップ
+
+function openPsySafetySettingsPopup () {
+  state.psySafetySettingsPopupDisplay = true
+}
+
+function closePsySafetySettingsPopup () {
+  state.psySafetySettingsPopupDisplay = false
+}
+
+// 設定 - その他設定ポップアップ
+
+function openOtherSettingsPopup () {
+  state.otherSettingsPopupDisplay = true
+}
+
+function closeOtherSettingsPopup () {
+  state.otherSettingsPopupDisplay = false
+}
+
+// 設定 - 招待コードポップアップ
 
 function openInviteCodesPopup () {
   state.inviteCodesPopupDisplay = true

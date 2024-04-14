@@ -71,83 +71,6 @@ function moveToBottom () {
       <div class="label">{{ mainState.userProfile?.handle }}</div>
     </RouterLink>
 
-    <!-- ショートカットプルダウン -->
-    <div
-      class="pulldown-button"
-      tabindex="0"
-    >
-      <span>{{ $t("shortcuts") }}</span>
-      <SVGIcon name="cursorDown" />
-      <menu class="list-menu">
-        <!-- コンテンツ言語選択ポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openContentLanguagesPopup() }">
-          <SVGIcon name="translate" />
-          <span>{{ $t("contentLanguages") }}</span>
-        </a>
-
-        <!-- ポスト言語選択ポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openPostLanguagesPopup() }">
-          <SVGIcon name="translate" />
-          <span>{{ $t("postLanguages") }}</span>
-        </a>
-
-        <!-- マイフィードポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openMyFeedsPopup() }">
-          <SVGIcon name="feed" />
-          <span>{{ $t("myFeeds") }}</span>
-        </a>
-
-        <!-- マイリストポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openMyListPopup() }">
-          <SVGIcon name="list" />
-          <span>{{ $t("myList") }}</span>
-        </a>
-
-        <!-- マイタグポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openMyTagPopup({ mode: 'edit' }) }">
-          <SVGIcon name="tag" />
-          <span>{{ $t("myTag") }}</span>
-        </a>
-
-        <hr />
-
-        <!-- コンテンツフィルタリングポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openContentFilteringPopup() }">
-          <SVGIcon name="contentFiltering" />
-          <span>{{ $t("contentFiltering") }}</span>
-        </a>
-
-        <!-- ミュート中のユーザーポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openMutingUsersPopup() }">
-          <SVGIcon name="volumeOff" />
-          <span>{{ $t("mutingUsers") }}</span>
-        </a>
-
-        <!-- ブロック中のユーザーポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openBlockingUsersPopup() }">
-          <SVGIcon name="personOff" />
-          <span>{{ $t("blockingUsers") }}</span>
-        </a>
-
-        <!-- ワードミュートポップアップトリガー -->
-        <a @click.prevent="() => { Util.blurElement(); mainState.openWordMutePopup() }">
-          <SVGIcon name="wordMute" />
-          <span>{{ $t("wordMute") }}</span>
-        </a>
-
-        <hr />
-
-        <!-- 招待コード確認ポップアップトリガー -->
-        <a
-          v-if="mainState.numberOfAvailableInviteCodes > 0"
-          @click.prevent="() => { Util.blurElement(); mainState.openInviteCodesPopup() }"
-        >
-          <SVGIcon name="inviteCode" />
-          <span>{{ $t("inviteCodes") }} ({{ mainState.numberOfAvailableInviteCodes }} / {{ mainState.numberOfInviteCodes }})</span>
-        </a>
-      </menu>
-    </div>
-
     <!-- ホームボタン -->
     <RouterLink
       class="link-button"
@@ -237,11 +160,6 @@ function moveToBottom () {
 @mixin slimLayout {
   padding: 0 0.5rem 0.75rem;
 
-  // ショートカットプルダウン
-  .pulldown-button {
-    display: none;
-  }
-
   .profile-button {
     --size: 2rem;
     --padding: 0.5rem;
@@ -279,14 +197,6 @@ function moveToBottom () {
     .move-to-bottom-button {
       display: none;
     }
-  }
-}
-
-// ショートカットプルダウン
-.pulldown-button {
-  margin-bottom: 1rem;
-  &:not(:focus) {
-    background-color: transparent;
   }
 }
 

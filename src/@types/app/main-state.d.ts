@@ -41,13 +41,48 @@ type MainState = {
   updateCurrentLanguageSetting: () => void
   updateColorThemeSetting: () => void
 
-  // 設定 - 設定ポップアップ
+  // 設定 - 設定ポップオーバー
 
   settingsPopupDisplay: boolean
   settingsPopupSelector: string
   settingsPopupDirection: "toRight" | "toUp"
   openSettingsPopup: Function
   closeSettingsPopup: Function
+
+  // 設定 - デザイン設定ポップアップ
+
+  designSettingsPopupDisplay: boolean
+  openDesignSettingsPopup: Function
+  closeDesignSettingsPopup: Function
+
+  // 設定 - ポスト設定ポップアップ
+
+  postSettingsPopupDisplay: boolean
+  openPostSettingsPopup: Function
+  closePostSettingsPopup: Function
+
+  // 設定 - 心理的安全性設定ポップアップ
+
+  psySafetySettingsPopupDisplay: boolean
+  openPsySafetySettingsPopup: Function
+  closePsySafetySettingsPopup: Function
+
+  // 設定 - その他設定ポップアップ
+
+  otherSettingsPopupDisplay: boolean
+  openOtherSettingsPopup: Function
+  closeOtherSettingsPopup: Function
+
+  // 設定 - 説明用ポップアップ
+
+  htmlPopupDisplay: boolean
+  htmlPopupType?: string
+
+  // 設定 - 招待コードポップアップ
+
+  inviteCodesPopupDisplay: boolean
+  openInviteCodesPopup: Function
+  closeInviteCodesPopup: Function
 
   // 通知
 
@@ -74,12 +109,6 @@ type MainState = {
   numberOfInviteCodes: ComputedRef<number>
   numberOfAvailableInviteCodes: ComputedRef<number>
   updateInviteCodes: () => Promise<boolean>
-
-  // 招待コードポップアップ
-
-  inviteCodesPopupDisplay: boolean
-  openInviteCodesPopup: Function
-  closeInviteCodesPopup: Function
 
   // Preferences
 

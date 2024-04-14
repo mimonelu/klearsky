@@ -7,7 +7,9 @@ import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
 import ContentFilteringPopup from "@/components/popups/ContentFilteringPopup.vue"
+import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
+import HtmlPopup from "@/components/popups/HtmlPopup.vue"
 import ImagePopup from "@/components/popups/ImagePopup.vue"
 import InviteCodesPopup from "@/components/popups/InviteCodesPopup.vue"
 import LikeUsersPopup from "@/components/popups/LikeUsersPopup.vue"
@@ -23,7 +25,10 @@ import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
 import MyTagPopup from "@/components/popups/MyTagPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
+import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
+import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
+import PsySafetySettingsPopup from "@/components/popups/settings-popups/PsySafetySettingsPopup.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
 import ScrollButton from "@/components/buttons/ScrollButton.vue"
 import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
@@ -35,7 +40,6 @@ import SendListReportPopup from "@/components/popups/SendListReportPopup.vue"
 import SendPostPopup from "@/components/popups/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/popups/SendPostReportPopup.vue"
 import SettingsPopover from "@/components/popovers/SettingsPopover.vue"
-import SettingsPopup from "@/components/popups/SettingsPopup.vue"
 import SplashScreen from "@/components/shell-parts/SplashScreen.vue"
 import SubMenu from "@/components/shell-parts/SubMenu.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -555,6 +559,26 @@ function scrollToFocused () {
   })
 }
 
+// 設定用
+
+function saveSetting () {
+  state.saveSettings()
+}
+
+function changeSetting () {
+  state.saveSettings()
+  state.updateSettings()
+}
+
+function showDescription (type: string) {
+  state.htmlPopupType = type
+  state.htmlPopupDisplay = true
+}
+
+function closeHtmlPopupDisplay () {
+  state.htmlPopupDisplay = false
+}
+
 // インフィニットスクロール用処理
 
 let isEnter = false
@@ -763,18 +787,93 @@ function broadcastListener (event: MessageEvent) {
         @updatePageTitle="state.updatePageTitle"
       />
 
-      <!-- 設定ポップアップ
-      <SettingsPopup
-        v-if="state.settingsPopupDisplay"
-        @closeSettingsPopup="state.closeSettingsPopup"
-      />
-      -->
-
-      <!-- 設定ポップオーバー -->
+      <!-- 設定 - 設定ポップオーバー -->
       <SettingsPopover
         v-if="state.settingsPopupDisplay"
         @close="state.closeSettingsPopup"
       />
+
+      <!-- 設定 - デザイン設定ポップアップ -->
+      <DesignSettingsPopup
+        v-if="state.designSettingsPopupDisplay"
+        @close="state.closeDesignSettingsPopup"
+        @saveSetting="saveSetting"
+        @changeSetting="changeSetting"
+        @showDescription="(name: string) => { showDescription(name) }"
+      />
+
+      <!-- 設定 - ポスト設定ポップアップ -->
+      <PostSettingsPopup
+        v-if="state.postSettingsPopupDisplay"
+        @close="state.closePostSettingsPopup"
+        @saveSetting="saveSetting"
+        @changeSetting="changeSetting"
+        @showDescription="(name: string) => { showDescription(name) }"
+      />
+
+      <!-- 設定 - 心理的安全性設定ポップアップ -->
+      <PsySafetySettingsPopup
+        v-if="state.psySafetySettingsPopupDisplay"
+        @close="state.closePsySafetySettingsPopup"
+        @saveSetting="saveSetting"
+        @changeSetting="changeSetting"
+      />
+
+      <!-- 設定 - その他設定ポップアップ -->
+      <OtherSettingsPopup
+        v-if="state.otherSettingsPopupDisplay"
+        @close="state.closeOtherSettingsPopup"
+        @saveSetting="saveSetting"
+        @changeSetting="changeSetting"
+        @showDescription="(name: string) => { showDescription(name) }"
+      />
+
+      <!-- 設定 - 招待コード確認ポップアップ -->
+      <InviteCodesPopup
+        v-if="state.inviteCodesPopupDisplay"
+        @close="state.closeInviteCodesPopup"
+      />
+
+      <!-- 設定 - 説明用HTMLポップアップ -->
+      <HtmlPopup
+        v-if="state.htmlPopupDisplay"
+        :title="`${$t('help')} - ${$t(state.htmlPopupType)}`"
+        @close="closeHtmlPopupDisplay"
+      >
+        <template v-if="state.htmlPopupType === 'autoTranslation'">
+          <ul class="bullet-points">
+            <li>{{ $t("autoTranslationRemarks1") }}</li>
+            <li>{{ $t("autoTranslationRemarks2") }}</li>
+            <li>{{ $t("autoTranslationRemarks3") }}</li>
+            <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
+          </ul>
+        </template>
+
+        <template v-else-if="state.htmlPopupType === 'autoTranslationIgnoreLanguage'">
+          <ul class="bullet-points">
+            <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
+          </ul>
+        </template>
+
+        <template v-else-if="state.htmlPopupType === 'backgroundImage'">
+          <ul class="bullet-points">
+            <li>{{ $t("backgroundImage1") }}</li>
+            <li>{{ $t("backgroundImage2") }}</li>
+          </ul>
+        </template>
+
+        <template v-else-if="state.htmlPopupType === 'timelineControl'">
+          <ul class="bullet-points">
+            <li>{{ $t("timelineControlDescription") }}</li>
+          </ul>
+        </template>
+
+        <template v-else-if="state.htmlPopupType === 'lightning'">
+          <ul class="bullet-points">
+            <li>{{ $t("lightningDescription") }}</li>
+          </ul>
+        </template>
+      </HtmlPopup>
 
       <!-- アカウントポップアップ -->
       <AccountPopup
@@ -817,12 +916,6 @@ function broadcastListener (event: MessageEvent) {
       <LikeUsersPopup
         v-if="state.likeUsersPopupDisplay"
         @close="state.closeLikeUsersPopup"
-      />
-
-      <!-- 招待コード確認ポップアップ -->
-      <InviteCodesPopup
-        v-if="state.inviteCodesPopupDisplay"
-        @close="state.closeInviteCodesPopup"
       />
 
       <!-- マイフィードポップアップ -->

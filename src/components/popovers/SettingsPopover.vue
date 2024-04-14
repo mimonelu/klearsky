@@ -78,6 +78,22 @@ function process (type: string) {
       mainState.openWordMutePopup() 
       break
     }
+    case "design": {
+      mainState.openDesignSettingsPopup()
+      break
+    }
+    case "post": {
+      mainState.openPostSettingsPopup()
+      break
+    }
+    case "psySafety": {
+      mainState.openPsySafetySettingsPopup()
+      break
+    }
+    case "etc": {
+      mainState.openOtherSettingsPopup()
+      break
+    }
     case "inviteCode": {
       mainState.openInviteCodesPopup()
       break
@@ -149,6 +165,32 @@ function process (type: string) {
       <a @click.prevent="process('wordMute')">
         <SVGIcon name="wordMute" />
         <span>{{ $t("wordMute") }}</span>
+      </a>
+
+      <hr />
+
+      <!-- デザイン設定ポップアップトリガー -->
+      <a @click.prevent="process('design')">
+        <SVGIcon name="palette" />
+        <span>{{ $t("design") }}</span>
+      </a>
+
+      <!-- ポスト設定ポップアップトリガー -->
+      <a @click.prevent="process('post')">
+        <SVGIcon name="post" />
+        <span>{{ $t("post") }}</span>
+      </a>
+
+      <!-- 心理的安全性設定ポップアップトリガー -->
+      <a @click.prevent="process('psySafety')">
+        <SVGIcon name="like" />
+        <span>{{ $t("psySafety") }}</span>
+      </a>
+
+      <!-- その他設定ポップアップトリガー -->
+      <a @click.prevent="process('etc')">
+        <SVGIcon name="shimmer" />
+        <span>{{ $t("etc") }}</span>
       </a>
 
       <template v-if="mainState.numberOfAvailableInviteCodes > 0">
