@@ -26,7 +26,7 @@ async function resetSettings () {
     <template #header>
       <h2>
         <SVGIcon name="setting" />
-        <span>{{ $t("settings") }} - {{ $t("etc") }}</span>
+        <span>{{ $t("etcSettings") }}</span>
       </h2>
     </template>
     <template #body>

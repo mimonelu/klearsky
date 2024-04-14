@@ -54,8 +54,6 @@
   "select": "Select",
   "notSelected": "Not selected",
   "users": "Users",
-  "design": "Design",
-  "etc": "Others",
   "moderation": "Moderation",
   "signUp": "Create account (for dev)",
   "email": "Email",
@@ -252,9 +250,10 @@
   "notifications": "Notifications",
 
   "settings": "Settings",
-  "klearskySettings": "Klearsky Settings",
-  "blueskySettings": "Bluesky Settings",
-  "accountSettings": "Accounts Settings",
+  "designSettings": "Design Settings",
+  "postSettings": "Post Settings",
+  "psySafetySettings": "Psychological Safety Settings",
+  "etcSettings": "Others Settings",
 
   "uiLanguage": "UI Language",
   "contentLanguages": "Content Languages",

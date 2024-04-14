@@ -32,9 +32,9 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
-function openSettingsPopup () {
+function openSettingsPopover () {
   Util.blurElement()
-  mainState.openSettingsPopup(
+  mainState.openSettingsPopover(
     ".main-menu-horizontal__settings-popover-trigger",
     "toUp"
   )
@@ -96,7 +96,7 @@ async function openSendPostPopup () {
     <!-- 設定ボタン -->
     <button
       class="link-button main-menu-horizontal__settings-popover-trigger"
-      @click.prevent="openSettingsPopup"
+      @click.prevent="openSettingsPopover"
     >
       <SVGIcon name="setting" />
     </button>

@@ -61,9 +61,9 @@ state.updateColorThemeSetting = updateColorThemeSetting
 
 // 設定 - 設定ポップオーバー
 
-state.settingsPopupDisplay = false
-state.openSettingsPopup = openSettingsPopup
-state.closeSettingsPopup = closeSettingsPopup
+state.settingsPopoverDisplay = false
+state.openSettingsPopover = openSettingsPopover
+state.closeSettingsPopover = closeSettingsPopover
 
 // 通知
 
@@ -731,14 +731,14 @@ function updateColorThemeSetting () {
 
 // 設定 - 設定ポップオーバー
 
-function openSettingsPopup (selector: string, direction: "toRight" | "toUp") {
-  state.settingsPopupSelector = selector
-  state.settingsPopupDirection = direction
-  state.settingsPopupDisplay = true
+function openSettingsPopover (selector: string, direction: "toRight" | "toUp") {
+  state.settingsPopoverSelector = selector
+  state.settingsPopoverDirection = direction
+  state.settingsPopoverDisplay = true
 }
 
-function closeSettingsPopup () {
-  state.settingsPopupDisplay = false
+function closeSettingsPopover () {
+  state.settingsPopoverDisplay = false
 }
 
 // 通知

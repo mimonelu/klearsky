@@ -43,11 +43,11 @@ type MainState = {
 
   // 設定 - 設定ポップオーバー
 
-  settingsPopupDisplay: boolean
-  settingsPopupSelector: string
-  settingsPopupDirection: "toRight" | "toUp"
-  openSettingsPopup: Function
-  closeSettingsPopup: Function
+  settingsPopoverDisplay: boolean
+  settingsPopoverSelector: string
+  settingsPopoverDirection: "toRight" | "toUp"
+  openSettingsPopover: Function
+  closeSettingsPopover: Function
 
   // 設定 - デザイン設定ポップアップ
 

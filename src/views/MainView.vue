@@ -789,8 +789,8 @@ function broadcastListener (event: MessageEvent) {
 
       <!-- 設定 - 設定ポップオーバー -->
       <SettingsPopover
-        v-if="state.settingsPopupDisplay"
-        @close="state.closeSettingsPopup"
+        v-if="state.settingsPopoverDisplay"
+        @close="state.closeSettingsPopover"
       />
 
       <!-- 設定 - デザイン設定ポップアップ -->

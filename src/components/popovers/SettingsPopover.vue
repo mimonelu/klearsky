@@ -18,8 +18,8 @@ function open () {
     return
   }
   ;(popover.value as typeof Popover).open(
-    mainState.settingsPopupSelector,
-    mainState.settingsPopupDirection === "toRight"
+    mainState.settingsPopoverSelector,
+    mainState.settingsPopoverDirection === "toRight"
       ? {
         positionX: "right",
         positionY: "middle",
@@ -107,7 +107,7 @@ function process (type: string) {
   <Popover
     class="settings-popover"
     ref="popover"
-    :data-direction="mainState.settingsPopupDirection"
+    :data-direction="mainState.settingsPopoverDirection"
     @close="close"
   >
     <menu class="list-menu">
@@ -172,25 +172,25 @@ function process (type: string) {
       <!-- デザイン設定ポップアップトリガー -->
       <a @click.prevent="process('design')">
         <SVGIcon name="palette" />
-        <span>{{ $t("design") }}</span>
+        <span>{{ $t("designSettings") }}</span>
       </a>
 
       <!-- ポスト設定ポップアップトリガー -->
       <a @click.prevent="process('post')">
         <SVGIcon name="post" />
-        <span>{{ $t("post") }}</span>
+        <span>{{ $t("postSettings") }}</span>
       </a>
 
       <!-- 心理的安全性設定ポップアップトリガー -->
       <a @click.prevent="process('psySafety')">
         <SVGIcon name="like" />
-        <span>{{ $t("psySafety") }}</span>
+        <span>{{ $t("psySafetySettings") }}</span>
       </a>
 
       <!-- その他設定ポップアップトリガー -->
       <a @click.prevent="process('etc')">
         <SVGIcon name="shimmer" />
-        <span>{{ $t("etc") }}</span>
+        <span>{{ $t("etcSettings") }}</span>
       </a>
 
       <template v-if="mainState.numberOfAvailableInviteCodes > 0">

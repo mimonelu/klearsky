@@ -54,8 +54,6 @@
   "select": "選択",
   "notSelected": "未選択",
   "users": "ユーザー",
-  "design": "デザイン",
-  "etc": "その他",
   "moderation": "モデレーション",
   "signUp": "アカウントを作成（開発者向け）",
   "email": "メールアドレス",
@@ -252,9 +250,10 @@
   "notifications": "通知",
 
   "settings": "設定",
-  "klearskySettings": "Klearsky設定",
-  "blueskySettings": "Bluesky設定",
-  "accountSettings": "アカウント設定",
+  "designSettings": "デザイン設定",
+  "postSettings": "ポスト設定",
+  "psySafetySettings": "心理的安全性の設定",
+  "etcSettings": "その他の設定",
 
   "uiLanguage": "UI言語",
   "contentLanguages": "コンテンツ言語",

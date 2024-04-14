@@ -23,9 +23,9 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
-function openSettingsPopup () {
+function openSettingsPopover () {
   Util.blurElement()
-  mainState.openSettingsPopup(
+  mainState.openSettingsPopover(
     ".main-menu-vertical__settings-popover-trigger",
     "toRight"
   )
@@ -114,7 +114,7 @@ function moveToBottom () {
     <!-- 設定ボタン -->
     <button
       class="link-button main-menu-vertical__settings-popover-trigger"
-      @click.prevent="openSettingsPopup"
+      @click.prevent="openSettingsPopover"
     >
       <div class="icon">
         <SVGIcon name="setting" />
