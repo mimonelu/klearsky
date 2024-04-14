@@ -44,6 +44,8 @@ type MainState = {
   // 設定 - 設定ポップアップ
 
   settingsPopupDisplay: boolean
+  settingsPopupSelector: string
+  settingsPopupDirection: "toRight" | "toUp"
   openSettingsPopup: Function
   closeSettingsPopup: Function
 

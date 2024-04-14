@@ -25,7 +25,10 @@ function openNotificationPopup () {
 
 function openSettingsPopup () {
   Util.blurElement()
-  mainState.openSettingsPopup()
+  mainState.openSettingsPopup(
+    ".main-menu-vertical__settings-popover-trigger",
+    "toRight"
+  )
 }
 
 function openAccountPopup () {
@@ -187,7 +190,7 @@ function moveToBottom () {
 
     <!-- 設定ボタン -->
     <button
-      class="link-button"
+      class="link-button main-menu-vertical__settings-popover-trigger"
       @click.prevent="openSettingsPopup"
     >
       <div class="icon">

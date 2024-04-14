@@ -34,6 +34,7 @@ import SendFeedReportPopup from "@/components/popups/SendFeedReportPopup.vue"
 import SendListReportPopup from "@/components/popups/SendListReportPopup.vue"
 import SendPostPopup from "@/components/popups/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/popups/SendPostReportPopup.vue"
+import SettingsPopover from "@/components/popovers/SettingsPopover.vue"
 import SettingsPopup from "@/components/popups/SettingsPopup.vue"
 import SplashScreen from "@/components/shell-parts/SplashScreen.vue"
 import SubMenu from "@/components/shell-parts/SubMenu.vue"
@@ -762,10 +763,17 @@ function broadcastListener (event: MessageEvent) {
         @updatePageTitle="state.updatePageTitle"
       />
 
-      <!-- 設定ポップアップ -->
+      <!-- 設定ポップアップ
       <SettingsPopup
         v-if="state.settingsPopupDisplay"
         @closeSettingsPopup="state.closeSettingsPopup"
+      />
+      -->
+
+      <!-- 設定ポップオーバー -->
+      <SettingsPopover
+        v-if="state.settingsPopupDisplay"
+        @close="state.closeSettingsPopup"
       />
 
       <!-- アカウントポップアップ -->

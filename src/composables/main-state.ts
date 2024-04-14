@@ -702,7 +702,9 @@ function updateColorThemeSetting () {
 
 // 設定 - 設定ポップアップ
 
-function openSettingsPopup () {
+function openSettingsPopup (selector: string, direction: "toRight" | "toUp") {
+  state.settingsPopupSelector = selector
+  state.settingsPopupDirection = direction
   state.settingsPopupDisplay = true
 }
 
