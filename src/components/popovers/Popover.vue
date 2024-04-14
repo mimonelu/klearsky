@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, reactive, ref, type ComputedRef } from "vue"
+import { computed, nextTick, reactive, ref, type ComputedRef } from "vue"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -12,11 +12,15 @@ const state = reactive<{
   display: boolean
   left?: number
   top?: number
+  directionX: string
+  directionY: string
   style: ComputedRef<any>
 }>({
   display: false,
   top: undefined,
   left: undefined,
+  directionX: "",
+  directionY: "",
   style: computed((): any => {
     const result: any = {}
     if (state.left != null) {
@@ -31,12 +35,16 @@ const state = reactive<{
 
 const popoverContent = ref(null)
 
-function open (selector: string, options?: {
+async function open (selector: string, options?: {
   positionX?: "left" | "center" | "right",
   positionY?: "top" | "middle" | "bottom",
   directionX?: "left" | "center" | "right",
   directionY?: "up" | "middle" | "down"
 }) {
+  state.directionX = options?.directionX ?? "right"
+  state.directionY = options?.directionY ?? "down"
+  await nextTick()
+
   const targetElement = document.querySelector(selector)
   if (targetElement == null) {
     return
@@ -65,16 +73,14 @@ function open (selector: string, options?: {
       : (targetRect.top + targetRect.bottom) / 2
 
   const selfRect = selfElement.getBoundingClientRect()
-  const directionX = options?.directionX ?? "right"
-  const directionY = options?.directionY ?? "down"
-  if (directionX === "left") {
+  if (state.directionX === "left") {
     state.left -= selfRect.width
-  } else if (directionX === "center") {
+  } else if (state.directionX === "center") {
     state.left -= selfRect.width / 2
   }
-  if (directionY === "up") {
+  if (state.directionY === "up") {
     state.top -= selfRect.height
-  } else if (directionY === "middle") {
+  } else if (state.directionY === "middle") {
     state.top -= selfRect.height / 2
   }
 
@@ -97,6 +103,8 @@ function close () {
       ref="popoverContent"
       :style="state.style"
       :data-display="state.display"
+      :data-direction-x="state.directionX"
+      :data-direction-y="state.directionY"
     >
       <slot />
     </div>
@@ -114,11 +122,25 @@ function close () {
   height: 100vh;
 
   &__content {
+    --offset-x: 0;
+    --offset-y: 0;
     position: absolute;
-    // transform: scale(0.875);
-    // transition: transform 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translate(var(--offset-x), var(--offset-y));
+    transition: transform 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    &[data-direction-x="left"] {
+      --offset-x: 1.0rem;
+    }
+    &[data-direction-x="right"] {
+      --offset-x: -1.0rem;
+    }
+    &[data-direction-y="up"] {
+      --offset-y: 1.0rem;
+    }
+    &[data-direction-y="down"] {
+      --offset-y: -1.0rem;
+    }
     &[data-display="true"] {
-      // transform: scale(1.0);
+      transform: translate(0, 0);
     }
   }
 }
