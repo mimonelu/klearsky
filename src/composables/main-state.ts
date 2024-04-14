@@ -108,6 +108,12 @@ state.updateInviteCodes = async (): Promise<boolean> => {
   return true
 }
 
+// 設定 - UI言語設定ポップアップ
+
+state.uiLanguageSettingsPopupDisplay = false
+state.openUiLanguageSettingsPopup = openUiLanguageSettingsPopup
+state.closeUiLanguageSettingsPopup = closeUiLanguageSettingsPopup
+
 // 設定 - デザイン設定ポップアップ
 
 state.designSettingsPopupDisplay = false
@@ -779,6 +785,16 @@ function openNotificationPopup () {
 
 function closeNotificationPopup () {
   state.notificationPopupDisplay = false
+}
+
+// 設定 - UI言語設定ポップアップ
+
+function openUiLanguageSettingsPopup () {
+  state.uiLanguageSettingsPopupDisplay = true
+}
+
+function closeUiLanguageSettingsPopup () {
+  state.uiLanguageSettingsPopupDisplay = false
 }
 
 // 設定 - デザイン設定ポップアップ

@@ -42,6 +42,10 @@ function close () {
 function process (type: string) {
   Util.blurElement()
   switch (type) {
+    case "uiLanguage": {
+      mainState.openUiLanguageSettingsPopup() 
+      break
+    }
     case "contentLanguages": {
       mainState.openContentLanguagesPopup() 
       break
@@ -111,6 +115,12 @@ function process (type: string) {
     @close="close"
   >
     <menu class="list-menu">
+      <!-- UI言語選択ポップアップトリガー -->
+      <a @click.prevent="process('uiLanguage')">
+        <SVGIcon name="translate" />
+        <span>{{ $t("uiLanguage") }}</span>
+      </a>
+
       <!-- コンテンツ言語選択ポップアップトリガー -->
       <a @click.prevent="process('contentLanguages')">
         <SVGIcon name="translate" />

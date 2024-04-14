@@ -49,6 +49,12 @@ type MainState = {
   openSettingsPopover: Function
   closeSettingsPopover: Function
 
+  // 設定 - UI言語設定ポップアップ
+
+  uiLanguageSettingsPopupDisplay: boolean
+  openUiLanguageSettingsPopup: Function
+  closeUiLanguageSettingsPopup: Function
+
   // 設定 - デザイン設定ポップアップ
 
   designSettingsPopupDisplay: boolean

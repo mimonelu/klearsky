@@ -45,6 +45,7 @@ import SubMenu from "@/components/shell-parts/SubMenu.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import ThreadgatePopup from "@/components/popups/ThreadgatePopup.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
+import UiLanguageSettingsPopup from "@/components/popups/settings-popups/UiLanguageSettingsPopup.vue"
 import WordMutePopup from "@/components/popups/WordMutePopup.vue"
 import { state, resetProfileState } from "@/composables/main-state"
 import Util from "@/composables/util"
@@ -791,6 +792,13 @@ function broadcastListener (event: MessageEvent) {
       <SettingsPopover
         v-if="state.settingsPopoverDisplay"
         @close="state.closeSettingsPopover"
+      />
+
+      <!-- 設定 - UI言語設定ポップアップ -->
+      <UiLanguageSettingsPopup
+        v-if="state.uiLanguageSettingsPopupDisplay"
+        @close="state.closeUiLanguageSettingsPopup"
+        @changeSetting="changeSetting"
       />
 
       <!-- 設定 - デザイン設定ポップアップ -->
