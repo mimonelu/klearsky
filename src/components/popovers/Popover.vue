@@ -39,7 +39,9 @@ async function open (selector: string, options?: {
   positionX?: "left" | "center" | "right",
   positionY?: "top" | "middle" | "bottom",
   directionX?: "left" | "center" | "right",
-  directionY?: "up" | "middle" | "down"
+  directionY?: "up" | "middle" | "down",
+  collideX?: boolean,
+  collideY?: boolean,
 }) {
   state.directionX = options?.directionX ?? "right"
   state.directionY = options?.directionY ?? "down"
@@ -82,6 +84,25 @@ async function open (selector: string, options?: {
     state.top -= selfRect.height
   } else if (state.directionY === "middle") {
     state.top -= selfRect.height / 2
+  }
+
+  if (options?.collideX) {
+    const diffX = (state.left + selfRect.width) - window.innerWidth
+    if (diffX > 0) {
+      state.left -= diffX
+    }
+    if (state.left < 0) {
+      state.left = 0
+    }
+  }
+  if (options?.collideY) {
+    const diffY = (state.top + selfRect.height) - window.innerHeight
+    if (diffY > 0) {
+      state.top -= diffY
+    }
+    if (state.top < 0) {
+      state.top = 0
+    }
   }
 
   // selfElement.focus()

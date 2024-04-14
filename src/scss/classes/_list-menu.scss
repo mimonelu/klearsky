@@ -6,8 +6,8 @@
   color: rgb(var(--fg-color));
   display: flex;
   flex-direction: column;
-  grid-gap: 0.125em;
-  padding: 0.5em 0;
+  grid-gap: 1px;
+  padding: var(--border-radius) 0;
   user-select: none;
 
   &__header {

@@ -25,12 +25,16 @@ function open () {
         positionY: "middle",
         directionX: "right",
         directionY: "middle",
+        collideX: true,
+        collideY: true,
       }
       : {
         positionX: "center",
         positionY: "top",
         directionX: "center",
         directionY: "up",
+        collideX: true,
+        collideY: true,
       }
   )
 }
@@ -111,7 +115,6 @@ function process (type: string) {
   <Popover
     class="settings-popover"
     ref="popover"
-    :data-direction="mainState.settingsPopoverDirection"
     @close="close"
   >
     <menu class="list-menu">
@@ -218,14 +221,9 @@ function process (type: string) {
 
 <style lang="scss" scoped>
 .settings-popover {
-  &[data-direction="toRight"]:deep() {
+  &:deep() {
     .popover__content {
-      margin-left: 0.5rem;
-    }
-  }
-  &[data-direction="toUp"]:deep() {
-    .popover__content {
-      margin-top: -0.5rem;
+      padding: 0.5rem;
     }
   }
 }

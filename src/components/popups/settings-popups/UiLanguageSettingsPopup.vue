@@ -23,9 +23,6 @@ const mainState = inject("state") as MainState
       <div class="settings-popup__form-page">
         <!-- UI言語 -->
         <div class="settings-popup__form">
-          <div class="settings-popup__form__header">
-            <span>{{ $t("uiLanguage") }}</span>
-          </div>
           <div class="settings-popup__form__body">
             <label class="selectbox">
               <select
