@@ -15,21 +15,24 @@ const state = reactive<{
   directionX: string
   directionY: string
   style: ComputedRef<any>
+  hornDirection?: "left" | "right" | "top" | "bottom"
+  hornLeft?: number
+  hornTop?: number
+  hornStyle: ComputedRef<any>
 }>({
   display: false,
-  top: undefined,
   left: undefined,
+  top: undefined,
   directionX: "",
   directionY: "",
   style: computed((): any => {
-    const result: any = {}
-    if (state.left != null) {
-      result.left = `${state.left}px`
-    }
-    if (state.top != null) {
-      result.top = `${state.top}px`
-    }
-    return result
+    return makeStyle(state.left, state.top)
+  }),
+  hornDirection: undefined,
+  hornLeft: undefined,
+  hornTop: undefined,
+  hornStyle: computed((): any => {
+    return makeStyle(state.hornLeft, state.hornTop)
   }),
 })
 
@@ -42,6 +45,7 @@ async function open (selector: string, options?: {
   directionY?: "up" | "middle" | "down",
   collideX?: boolean,
   collideY?: boolean,
+  hornDirection?: "left" | "right" | "top" | "bottom",
 }) {
   state.directionX = options?.directionX ?? "right"
   state.directionY = options?.directionY ?? "down"
@@ -51,8 +55,8 @@ async function open (selector: string, options?: {
   if (targetElement == null) {
     return
   }
-  const selfElement = popoverContent.value as null | HTMLElement
-  if (selfElement == null) {
+  const contentElement = popoverContent.value as null | HTMLElement
+  if (contentElement == null) {
     return
   }
 
@@ -74,20 +78,20 @@ async function open (selector: string, options?: {
       ? targetRect.bottom
       : (targetRect.top + targetRect.bottom) / 2
 
-  const selfRect = selfElement.getBoundingClientRect()
+  const contentfRect = contentElement.getBoundingClientRect()
   if (state.directionX === "left") {
-    state.left -= selfRect.width
+    state.left -= contentfRect.width
   } else if (state.directionX === "center") {
-    state.left -= selfRect.width / 2
+    state.left -= contentfRect.width / 2
   }
   if (state.directionY === "up") {
-    state.top -= selfRect.height
+    state.top -= contentfRect.height
   } else if (state.directionY === "middle") {
-    state.top -= selfRect.height / 2
+    state.top -= contentfRect.height / 2
   }
 
   if (options?.collideX) {
-    const diffX = (state.left + selfRect.width) - window.innerWidth
+    const diffX = (state.left + contentfRect.width) - window.innerWidth
     if (diffX > 0) {
       state.left -= diffX
     }
@@ -96,7 +100,7 @@ async function open (selector: string, options?: {
     }
   }
   if (options?.collideY) {
-    const diffY = (state.top + selfRect.height) - window.innerHeight
+    const diffY = (state.top + contentfRect.height) - window.innerHeight
     if (diffY > 0) {
       state.top -= diffY
     }
@@ -105,15 +109,49 @@ async function open (selector: string, options?: {
     }
   }
 
-  const focusElement = selfElement.querySelector("a, button")
-  if (focusElement != null) {
-    (focusElement as HTMLElement).focus()
+  if (options?.hornDirection != null) {
+    state.hornDirection = options.hornDirection
+    switch (options.hornDirection) {
+      case "left": {
+        state.hornLeft = 1
+        state.hornTop = targetRect.top + (targetRect.height / 2) - state.top
+        break
+      }
+      case "right": {
+        state.hornLeft = contentfRect.width - 1
+        state.hornTop = targetRect.top + (targetRect.height / 2) - state.top
+        break
+      }
+      case "top": {
+        state.hornLeft = targetRect.left + (targetRect.width / 2) - state.left
+        state.hornTop = 1
+        break
+      }
+      case "bottom": {
+        state.hornLeft = targetRect.left + (targetRect.width / 2) - state.left
+        state.hornTop = contentfRect.height - 1
+        break
+      }
+    }
   }
+
+  (contentElement as HTMLElement).focus()
 }
 
 function close () {
   state.display = false
   emit("close")
+}
+
+function makeStyle (left?: number, top?: number) {
+  const result: any = {}
+  if (left != null) {
+    result.left = `${left}px`
+  }
+  if (top != null) {
+    result.top = `${top}px`
+  }
+  return result
 }
 </script>
 
@@ -129,8 +167,14 @@ function close () {
       :data-display="state.display"
       :data-direction-x="state.directionX"
       :data-direction-y="state.directionY"
+      tabindex="0"
     >
       <slot />
+      <div
+        class="popover__horn"
+        :data-horn-direction="state.hornDirection"
+        :style="state.hornStyle"
+      />
     </div>
   </div>
 </template>
@@ -148,6 +192,7 @@ function close () {
   &__content {
     --offset-x: 0;
     --offset-y: 0;
+    filter: drop-shadow(0 0 1rem rgb(0, 0, 0, 0.5));
     position: absolute;
     transform: translate(var(--offset-x), var(--offset-y));
     transition: transform 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -165,6 +210,23 @@ function close () {
     }
     &[data-display="true"] {
       transform: translate(0, 0);
+    }
+  }
+
+  &__horn {
+    pointer-events: none;
+    position: fixed;
+    &[data-horn-direction="left"] {
+      @include triangle(left, 1rem, 1rem, rgb(var(--fg-color)));
+    }
+    &[data-horn-direction="right"] {
+      @include triangle(right, 1rem, 1rem, rgb(var(--fg-color)));
+    }
+    &[data-horn-direction="top"] {
+      @include triangle(top, 1rem, 1rem, rgb(var(--fg-color)));
+    }
+    &[data-horn-direction="bottom"] {
+      @include triangle(bottom, 1rem, 1rem, rgb(var(--fg-color)));
     }
   }
 }

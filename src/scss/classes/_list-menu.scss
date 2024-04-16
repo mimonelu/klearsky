@@ -1,9 +1,7 @@
 .list-menu {
-  background-color: rgb(var(--bg-color));
-  border: 1px solid var(--fg-color-05);
+  background-color: rgb(var(--fg-color));
   border-radius: var(--border-radius);
-  box-shadow: 0 0 0 1px rgb(var(--bg-color));
-  color: rgb(var(--fg-color));
+  color: rgb(var(--bg-color));
   display: flex;
   flex-direction: column;
   grid-gap: 1px;
@@ -11,17 +9,15 @@
   user-select: none;
 
   &__header {
-    border-bottom: 1px solid var(--fg-color-025);
     font-weight: bold;
     padding: 0.25rem 1rem 0.75rem 1rem;
     word-wrap: break-word;
     &:not(:first-child) {
-      border-top: 1px solid var(--fg-color-025);
       padding-top: 0.75rem;
     }
 
     & > .svg-icon {
-      fill: rgb(var(--fg-color), 0.5);
+      fill: rgb(var(--bg-color), 0.5);
     }
   }
 
@@ -31,6 +27,7 @@
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;
+    font-weight: bold;
     padding: 0.5rem 1rem;
     white-space: nowrap;
     &:focus, &:hover {
@@ -73,6 +70,6 @@
   }
 
   & > hr {
-    border-bottom: 1px solid var(--fg-color-025);
+    border-bottom: 1px solid rgb(var(--bg-color), 0.125);
   }
 }

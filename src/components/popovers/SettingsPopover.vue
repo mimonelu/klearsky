@@ -27,6 +27,7 @@ function open () {
         directionY: "middle",
         collideX: true,
         collideY: true,
+        hornDirection: "left",
       }
       : {
         positionX: "center",
@@ -35,6 +36,7 @@ function open () {
         directionY: "up",
         collideX: true,
         collideY: true,
+        hornDirection: "bottom",
       }
   )
 }

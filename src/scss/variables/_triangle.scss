@@ -1,0 +1,24 @@
+@use "sass:math";
+
+@mixin triangle ($direction, $base, $height, $color) {
+  width: 0;
+  height: 0;
+  border: transparent math.div($base, 2) solid;
+  @if $direction == top {
+    border-bottom-color: $color;
+    border-bottom-width: $height;
+    transform: translate(- math.div($base, 2), - $height);
+  } @else if $direction == bottom {
+    border-top-color: $color;
+    border-top-width: $height;
+    transform: translate(- math.div($base, 2), - math.div($base, 2));
+  } @else if $direction == left {
+    border-right-color: $color;
+    border-right-width: $height;
+    transform: translate(-$height, - math.div($base, 2));
+  } @else if $direction == right {
+    border-left-color: $color;
+    border-left-width: $height;
+    transform: translate(- math.div($height, 2), - math.div($base, 2));
+  }
+}
