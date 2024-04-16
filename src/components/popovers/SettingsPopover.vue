@@ -119,101 +119,146 @@ function process (type: string) {
   >
     <menu class="list-menu">
       <!-- UI言語選択ポップアップトリガー -->
-      <a @click.prevent="process('uiLanguage')">
+      <button
+        type="button"
+        @click.prevent="process('uiLanguage')"
+      >
         <SVGIcon name="translate" />
         <span>{{ $t("uiLanguage") }}</span>
-      </a>
+      </button>
 
       <!-- コンテンツ言語選択ポップアップトリガー -->
-      <a @click.prevent="process('contentLanguages')">
+      <button
+        type="button"
+        @click.prevent="process('contentLanguages')"
+      >
         <SVGIcon name="translate" />
         <span>{{ $t("contentLanguages") }}</span>
-      </a>
+      </button>
 
       <!-- ポスト言語選択ポップアップトリガー -->
-      <a @click.prevent="process('postLanguages')">
+      <button
+        type="button"
+        @click.prevent="process('postLanguages')"
+      >
         <SVGIcon name="translate" />
         <span>{{ $t("postLanguages") }}</span>
-      </a>
+      </button>
 
       <!-- マイフィードポップアップトリガー -->
-      <a @click.prevent="process('myFeeds')">
+      <button
+        type="button"
+        @click.prevent="process('myFeeds')"
+      >
         <SVGIcon name="feed" />
         <span>{{ $t("myFeeds") }}</span>
-      </a>
+      </button>
 
       <!-- マイリストポップアップトリガー -->
-      <a @click.prevent="process('myList')">
+      <button
+        type="button"
+        @click.prevent="process('myList')"
+      >
         <SVGIcon name="list" />
         <span>{{ $t("myList") }}</span>
-      </a>
+      </button>
 
       <!-- マイタグポップアップトリガー -->
-      <a @click.prevent="process('myTag')">
+      <button
+        type="button"
+        @click.prevent="process('myTag')"
+      >
         <SVGIcon name="tag" />
         <span>{{ $t("myTag") }}</span>
-      </a>
+      </button>
 
       <hr />
 
       <!-- コンテンツフィルタリングポップアップトリガー -->
-      <a @click.prevent="process('contentFiltering')">
+      <button
+        type="button"
+        @click.prevent="process('contentFiltering')"
+      >
         <SVGIcon name="contentFiltering" />
         <span>{{ $t("contentFiltering") }}</span>
-      </a>
+      </button>
 
       <!-- ミュート中のユーザーポップアップトリガー -->
-      <a @click.prevent="process('mutingUsers')">
+      <button
+        type="button"
+        @click.prevent="process('mutingUsers')"
+      >
         <SVGIcon name="volumeOff" />
         <span>{{ $t("mutingUsers") }}</span>
-      </a>
+      </button>
 
       <!-- ブロック中のユーザーポップアップトリガー -->
-      <a @click.prevent="process('blockingUsers')">
+      <button
+        type="button"
+        @click.prevent="process('blockingUsers')"
+      >
         <SVGIcon name="personOff" />
         <span>{{ $t("blockingUsers") }}</span>
-      </a>
+      </button>
 
       <!-- ワードミュートポップアップトリガー -->
-      <a @click.prevent="process('wordMute')">
+      <button
+        type="button"
+        @click.prevent="process('wordMute')"
+      >
         <SVGIcon name="wordMute" />
         <span>{{ $t("wordMute") }}</span>
-      </a>
+      </button>
 
       <hr />
 
       <!-- デザイン設定ポップアップトリガー -->
-      <a @click.prevent="process('design')">
+      <button
+        type="button"
+        @click.prevent="process('design')"
+      >
         <SVGIcon name="palette" />
         <span>{{ $t("designSettings") }}</span>
-      </a>
+      </button>
 
       <!-- ポスト設定ポップアップトリガー -->
-      <a @click.prevent="process('post')">
+      <button
+        type="button"
+        @click.prevent="process('post')"
+      >
         <SVGIcon name="post" />
         <span>{{ $t("postSettings") }}</span>
-      </a>
+      </button>
 
       <!-- 心理的安全性設定ポップアップトリガー -->
-      <a @click.prevent="process('psySafety')">
+      <button
+        type="button"
+        @click.prevent="process('psySafety')"
+      >
         <SVGIcon name="like" />
         <span>{{ $t("psySafetySettings") }}</span>
-      </a>
+      </button>
 
       <!-- その他設定ポップアップトリガー -->
-      <a @click.prevent="process('etc')">
+      <button
+        type="button"
+        @click.prevent="process('etc')"
+      >
         <SVGIcon name="shimmer" />
         <span>{{ $t("etcSettings") }}</span>
-      </a>
+      </button>
 
       <template v-if="mainState.numberOfAvailableInviteCodes > 0">
         <hr />
 
         <!-- 招待コード確認ポップアップトリガー -->
-        <a @click.prevent="process('inviteCode')">
+        <button
+          type="button"
+          @click.prevent="process('inviteCode')"
+        >
           <SVGIcon name="inviteCode" />
           <span>{{ $t("inviteCodes") }} ({{ mainState.numberOfAvailableInviteCodes }} / {{ mainState.numberOfInviteCodes }})</span>
-        </a>
+        </button>
       </template>
     </menu>
   </Popover>

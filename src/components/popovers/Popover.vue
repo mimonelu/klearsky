@@ -105,7 +105,10 @@ async function open (selector: string, options?: {
     }
   }
 
-  // selfElement.focus()
+  const focusElement = selfElement.querySelector("a, button")
+  if (focusElement != null) {
+    (focusElement as HTMLElement).focus()
+  }
 }
 
 function close () {
