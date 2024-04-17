@@ -69,6 +69,7 @@ async function open (selector: string, options?: {
   state.display = true
   state.top = undefined
   state.left = undefined
+  state.maxHeight = undefined
 
   // 位置 `position` の処理
   const targetRect = targetElement.getBoundingClientRect()
@@ -128,6 +129,8 @@ async function open (selector: string, options?: {
 
   // ツノ `horn` の処理
   if (options?.hornDirection != null) {
+    state.hornLeft = undefined
+    state.hornTop = undefined
     state.hornDirection = options.hornDirection
     switch (options.hornDirection) {
       case "left": {
@@ -222,7 +225,7 @@ function makeStyle (left?: number, top?: number) {
   &__content {
     --offset-x: 0;
     --offset-y: 0;
-    filter: drop-shadow(0 0 1rem rgb(0, 0, 0, 0.5));
+    filter: drop-shadow(0 0 1rem rgb(0, 0, 0, 0.375));
     position: absolute;
     transform: translate(var(--offset-x), var(--offset-y));
     transition: transform 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
