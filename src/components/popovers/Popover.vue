@@ -12,6 +12,7 @@ const state = reactive<{
   display: boolean
   left?: number
   top?: number
+  maxHeight?: number
   directionX: string
   directionY: string
   style: ComputedRef<any>
@@ -23,6 +24,7 @@ const state = reactive<{
   display: false,
   left: undefined,
   top: undefined,
+  maxHeight: undefined,
   directionX: "",
   directionY: "",
   style: computed((): any => {
@@ -38,6 +40,8 @@ const state = reactive<{
 
 const popoverContent = ref(null)
 
+const popoverInner = ref(null)
+
 async function open (selector: string, options?: {
   positionX?: "left" | "center" | "right",
   positionY?: "top" | "middle" | "bottom",
@@ -51,6 +55,7 @@ async function open (selector: string, options?: {
   state.directionY = options?.directionY ?? "down"
   await nextTick()
 
+  // DOM要素の取得
   const targetElement = document.querySelector(selector)
   if (targetElement == null) {
     return
@@ -60,10 +65,12 @@ async function open (selector: string, options?: {
     return
   }
 
+  // 初期化
   state.display = true
   state.top = undefined
   state.left = undefined
 
+  // 位置 `position` の処理
   const targetRect = targetElement.getBoundingClientRect()
   const positionX = options?.positionX ?? "left"
   const positionY = options?.positionY ?? "top"
@@ -78,20 +85,22 @@ async function open (selector: string, options?: {
       ? targetRect.bottom
       : (targetRect.top + targetRect.bottom) / 2
 
-  const contentfRect = contentElement.getBoundingClientRect()
+  // 方向 `direction` の処理
+  const contentRect = contentElement.getBoundingClientRect()
   if (state.directionX === "left") {
-    state.left -= contentfRect.width
+    state.left -= contentRect.width
   } else if (state.directionX === "center") {
-    state.left -= contentfRect.width / 2
+    state.left -= contentRect.width / 2
   }
   if (state.directionY === "up") {
-    state.top -= contentfRect.height
+    state.top -= contentRect.height
   } else if (state.directionY === "middle") {
-    state.top -= contentfRect.height / 2
+    state.top -= contentRect.height / 2
   }
 
+  // 衝突 `collide` 処理
   if (options?.collideX) {
-    const diffX = (state.left + contentfRect.width) - window.innerWidth
+    const diffX = (state.left + contentRect.width) - window.innerWidth
     if (diffX > 0) {
       state.left -= diffX
     }
@@ -100,7 +109,7 @@ async function open (selector: string, options?: {
     }
   }
   if (options?.collideY) {
-    const diffY = (state.top + contentfRect.height) - window.innerHeight
+    const diffY = (state.top + contentRect.height) - window.innerHeight
     if (diffY > 0) {
       state.top -= diffY
     }
@@ -109,6 +118,15 @@ async function open (selector: string, options?: {
     }
   }
 
+  // はみ出し処理
+  const innerElement = popoverInner.value as null | HTMLElement
+  if (innerElement != null) {
+    const innerRect = innerElement.getBoundingClientRect()
+    const clippingDiffY = (state.top + contentRect.height) - window.innerHeight
+    state.maxHeight = innerRect.height - clippingDiffY
+  }
+
+  // ツノ `horn` の処理
   if (options?.hornDirection != null) {
     state.hornDirection = options.hornDirection
     switch (options.hornDirection) {
@@ -118,7 +136,7 @@ async function open (selector: string, options?: {
         break
       }
       case "right": {
-        state.hornLeft = contentfRect.width - 1
+        state.hornLeft = contentRect.width - 1
         state.hornTop = targetRect.top + (targetRect.height / 2) - state.top
         break
       }
@@ -129,12 +147,13 @@ async function open (selector: string, options?: {
       }
       case "bottom": {
         state.hornLeft = targetRect.left + (targetRect.width / 2) - state.left
-        state.hornTop = contentfRect.height - 1
+        state.hornTop = contentRect.height - 1
         break
       }
     }
   }
 
+  // フォーカスの設定
   (contentElement as HTMLElement).focus()
 }
 
@@ -160,6 +179,7 @@ function makeStyle (left?: number, top?: number) {
     class="popover"
     @click.self="close"
   >
+    <!-- 本体要素 -->
     <div
       class="popover__content"
       ref="popoverContent"
@@ -169,7 +189,16 @@ function makeStyle (left?: number, top?: number) {
       :data-direction-y="state.directionY"
       tabindex="0"
     >
-      <slot />
+      <!-- はみ出し処理用要素 -->
+      <div
+        class="popover__inner"
+        ref="popoverInner"
+        :style="{ maxHeight: `${state.maxHeight}px` }"
+      >
+        <slot />
+      </div>
+
+      <!-- ツノ -->
       <div
         class="popover__horn"
         :data-horn-direction="state.hornDirection"
@@ -189,6 +218,7 @@ function makeStyle (left?: number, top?: number) {
   width: 100vw;
   height: 100vh;
 
+  // 本体要素
   &__content {
     --offset-x: 0;
     --offset-y: 0;
@@ -213,6 +243,14 @@ function makeStyle (left?: number, top?: number) {
     }
   }
 
+  // はみ出し処理用要素
+  &__inner {
+    @include scroll-bar("transparent");
+    overflow-y: auto;
+    overscroll-behavior: none;
+  }
+
+  // ツノ
   &__horn {
     pointer-events: none;
     position: fixed;
