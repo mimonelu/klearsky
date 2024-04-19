@@ -266,6 +266,19 @@ type MainState = {
   globallineProfiles: { [did: string]: any }
   globallineNumberOfPosts: number
 
+  // ポップオーバー
+
+  // ポップオーバー - プロフィールポップオーバー
+
+  profilePopoverProps: {
+    display: boolean
+    isUser: boolean
+    user?: TTUser
+  }
+  profilePopoverSelector?: string | HTMLElement
+  openProfilePopover: Function
+  closeProfilePopover: Function
+
   // ポップアップ
 
   // ポップアップ - エラーポップアップ

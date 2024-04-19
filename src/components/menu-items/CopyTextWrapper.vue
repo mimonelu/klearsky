@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { computed, reactive, type ComputedRef } from "vue"
-import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
+import { computed, nextTick, reactive, ref, type ComputedRef } from "vue"
 import MenuTickerCopyText from "@/components/menu-items/CopyText.vue"
+import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -43,74 +43,102 @@ const state = reactive<{
   }),
 })
 
-function showSubMenuTicker () {
-  setTimeout(() => { state.display = true }, 1)
+const trigger = ref(null)
+
+const popover = ref(null)
+
+async function open () {
+  state.display = true
+  await nextTick()
+  if (trigger.value == null || popover.value == null) {
+    return
+  }
+  ;(popover.value as typeof Popover).open(
+    trigger.value,
+    {
+      positionX: "left",
+      positionY: "middle",
+      directionX: "left",
+      directionY: "middle",
+      collideX: true,
+      collideY: true,
+      hornDirection: "right",
+      isChild: true,
+    }
+  )
+}
+
+function close () {
+  state.display = false
 }
 </script>
 
 <template>
   <button
     class="menu-ticker__sub-trigger"
+    ref="trigger"
     @click.prevent.stop
-    @mouseenter="showSubMenuTicker"
-    @mouseleave="state.display = false"
+    @mouseenter="open"
+    @mouseleave="close"
   >
     <SVGIcon name="cursorLeft" />
     <span>{{ $t("copy") }}</span>
 
     <!-- コピーするメニュー -->
-    <MenuTicker
-      :display="state.display"
-      :container="container"
-      class="menu-ticker__sub"
+    <Popover
+      v-if="state.display"
+      ref="popover"
+      @close="close"
     >
-      <!-- 公式 URL をコピーする -->
-      <MenuTickerCopyText
-        v-if="place != null"
-        label="copyOfficialUrl"
-        :text="state.officialUrl"
-        @close="emit('close')"
-      />
+      <menu class="list-menu">
+        <!-- 公式 URL をコピーする -->
+        <MenuTickerCopyText
+          v-if="place != null"
+          label="copyOfficialUrl"
+          :text="state.officialUrl"
+          @close="emit('close')"
+        />
 
-      <!-- URI をコピーする -->
-      <MenuTickerCopyText
-        v-if="uri != null"
-        label="copyAtUri"
-        :text="uri"
-        @close="emit('close')"
-      />
+        <!-- URI をコピーする -->
+        <MenuTickerCopyText
+          v-if="uri != null"
+          label="copyAtUri"
+          :text="uri"
+          @close="emit('close')"
+        />
 
-      <!-- DID をコピーする -->
-      <MenuTickerCopyText
-        v-if="did != null"
-        label="copyDid"
-        :text="did"
-        @close="emit('close')"
-      />
+        <!-- DID をコピーする -->
+        <MenuTickerCopyText
+          v-if="did != null"
+          label="copyDid"
+          :text="did"
+          @close="emit('close')"
+        />
 
-      <!-- 表示名をコピーする -->
-      <MenuTickerCopyText
-        v-if="displayName != null"
-        label="copyDisplayName"
-        :text="displayName"
-        @close="emit('close')"
-      />
+        <!-- 表示名をコピーする -->
+        <MenuTickerCopyText
+          v-if="displayName != null"
+          label="copyDisplayName"
+          :text="displayName"
+          @close="emit('close')"
+        />
 
-      <!-- ハンドルをコピーする -->
-      <MenuTickerCopyText
-        v-if="handle != null"
-        label="copyHandle"
-        :text="handle"
-        @close="emit('close')"
-      />
+        <!-- ハンドルをコピーする -->
+        <MenuTickerCopyText
+          v-if="handle != null"
+          label="copyHandle"
+          :text="handle"
+          @close="emit('close')"
+        />
 
-      <!-- テキストをコピーする -->
-      <MenuTickerCopyText
-        v-if="text != null"
-        label="copyPostText"
-        :text="text"
-        @close="emit('close')"
-      />
-    </MenuTicker>
+        <!-- テキストをコピーする -->
+        <MenuTickerCopyText
+          v-if="text != null"
+          label="copyPostText"
+          :text="text"
+          @close="emit('close')"
+        />
+      </menu>
+    </Popover>
   </button>
 </template>

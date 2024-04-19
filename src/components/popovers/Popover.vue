@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, nextTick, reactive, ref, type ComputedRef } from "vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -9,6 +10,7 @@ defineExpose({
 })
 
 const state = reactive<{
+  ignore: boolean
   display: boolean
   left?: number
   top?: number
@@ -21,6 +23,7 @@ const state = reactive<{
   hornTop?: number
   hornStyle: ComputedRef<any>
 }>({
+  ignore: true,
   display: false,
   left: undefined,
   top: undefined,
@@ -38,11 +41,13 @@ const state = reactive<{
   }),
 })
 
+const popover = ref(null)
+
 const popoverContent = ref(null)
 
 const popoverInner = ref(null)
 
-async function open (selector: string, options?: {
+async function open (selector: string | HTMLElement, options?: {
   positionX?: "left" | "center" | "right",
   positionY?: "top" | "middle" | "bottom",
   directionX?: "left" | "center" | "right",
@@ -50,13 +55,21 @@ async function open (selector: string, options?: {
   collideX?: boolean,
   collideY?: boolean,
   hornDirection?: "left" | "right" | "top" | "bottom",
+  isChild?: boolean,
 }) {
+  state.ignore = true
   state.directionX = options?.directionX ?? "right"
   state.directionY = options?.directionY ?? "down"
   await nextTick()
 
   // DOM要素の取得
-  const targetElement = document.querySelector(selector)
+  const popoverElement = popover.value as null | HTMLElement
+  if (popoverElement == null) {
+    return
+  }
+  const targetElement = typeof selector === "string"
+    ? document.querySelector(selector)
+    : selector
   if (targetElement == null) {
     return
   }
@@ -85,6 +98,15 @@ async function open (selector: string, options?: {
     : positionY === "bottom"
       ? targetRect.bottom
       : (targetRect.top + targetRect.bottom) / 2
+
+  // 子ポップオーバーの処理
+  if (options?.isChild) {
+    const popoverRect = popoverElement.getBoundingClientRect()
+    popoverElement.style.left = `-${popoverRect.left}px`
+    popoverElement.style.top = `-${popoverRect.top}px`
+    popoverElement.style.width = "unset"
+    popoverElement.style.height = "unset"
+  }
 
   // 方向 `direction` の処理
   const contentRect = contentElement.getBoundingClientRect()
@@ -158,6 +180,9 @@ async function open (selector: string, options?: {
 
   // フォーカスの設定
   (contentElement as HTMLElement).focus()
+
+  await Util.wait(125)
+  state.ignore = false
 }
 
 function close () {
@@ -180,6 +205,8 @@ function makeStyle (left?: number, top?: number) {
 <template>
   <div
     class="popover"
+    ref="popover"
+    :data-ignore="state.ignore"
     @click.self="close"
   >
     <!-- 本体要素 -->
@@ -220,6 +247,9 @@ function makeStyle (left?: number, top?: number) {
   z-index: 2;
   width: 100vw;
   height: 100vh;
+  &[data-ignore="true"] {
+    pointer-events: none;
+  }
 
   // 本体要素
   &__content {

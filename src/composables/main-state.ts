@@ -281,6 +281,18 @@ state.globallinePosts = []
 state.globallineProfiles = {}
 state.globallineNumberOfPosts = 0
 
+// ポップオーバー
+
+// ポップオーバー - プロフィールポップオーバー
+state.profilePopoverProps = {
+  display: false,
+  isUser: false,
+  user: undefined,
+}
+state.profilePopoverSelector = undefined
+state.openProfilePopover = openProfilePopover
+state.closeProfilePopover = closeProfilePopover
+
 // ポップアップ
 
 // ポップアップ - エラーポップアップ
@@ -1385,6 +1397,19 @@ async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: str
     state.currentListFeedsCursor = cursor
   }
   return true
+}
+
+// ポップオーバー
+
+// ポップオーバー - プロフィールポップオーバー
+
+function openProfilePopover (selector: string | HTMLElement) {
+  state.profilePopoverSelector = selector
+  state.profilePopoverProps.display = true
+}
+
+function closeProfilePopover () {
+  state.profilePopoverProps.display = false
 }
 
 // ポップアップ

@@ -17,12 +17,14 @@
   & > .svg-icon {
     fill: rgb(var(--bg-color));
     font-size: 0.875em;
+    pointer-events: none;
   }
 
   & > span {
     font-weight: bold;
     line-height: var(--line-height);
     overflow: hidden;
+    pointer-events: none;
     word-break: break-word;
   }
 

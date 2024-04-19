@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
-import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
+import { inject, nextTick, reactive, ref } from "vue"
+import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 import OTHER_APPS from "@/consts/other-apps.json"
@@ -23,8 +23,33 @@ const state = reactive<{
   display: false,
 })
 
-function showSubMenuTicker () {
-  setTimeout(() => { state.display = true }, 1)
+const trigger = ref(null)
+
+const popover = ref(null)
+
+async function open () {
+  state.display = true
+  await nextTick()
+  if (trigger.value == null || popover.value == null) {
+    return
+  }
+  ;(popover.value as typeof Popover).open(
+    trigger.value,
+    {
+      positionX: "left",
+      positionY: "middle",
+      directionX: "left",
+      directionY: "middle",
+      collideX: true,
+      collideY: true,
+      hornDirection: "right",
+      isChild: true,
+    }
+  )
+}
+
+function close () {
+  state.display = false
 }
 
 function openOtherApp (app: any) {
@@ -73,31 +98,34 @@ function openOtherApp (app: any) {
 <template>
   <button
     class="menu-ticker__sub-trigger"
+    ref="trigger"
     @click.prevent.stop
-    @mouseenter="showSubMenuTicker"
-    @mouseleave="state.display = false"
+    @mouseenter="open"
+    @mouseleave="close"
   >
     <SVGIcon name="cursorLeft" />
     <span>{{ $t("openOtherApp") }}</span>
 
     <!-- 外部アプリで開くメニュー -->
-    <MenuTicker
-      class="menu-ticker__sub"
-      :display="state.display"
-      :container="container"
+    <Popover
+      v-if="state.display"
+      ref="popover"
+      @close="close"
     >
-      <template v-for="app of OTHER_APPS">
-        <template v-if="app[type] != null">
-          <hr v-if="app[type] === 'separator'" />
-          <button
-            v-else
-            @click.prevent.stop="openOtherApp(app)"
-          >
-            <SVGIcon name="openInApp" />
-            <span>{{ $t(app.name) }}</span>
-          </button>
+      <menu class="list-menu">
+        <template v-for="app of OTHER_APPS">
+          <template v-if="app[type] != null">
+            <hr v-if="app[type] === 'separator'" />
+            <button
+              v-else
+              @click.prevent.stop="openOtherApp(app)"
+            >
+              <SVGIcon name="openInApp" />
+              <span>{{ $t(app.name) }}</span>
+            </button>
+          </template>
         </template>
-      </template>
-    </MenuTicker>
+      </menu>
+    </Popover>
   </button>
 </template>

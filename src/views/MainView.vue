@@ -27,6 +27,7 @@ import MyTagPopup from "@/components/popups/MyTagPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
 import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
+import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
 import PsySafetySettingsPopup from "@/components/popups/settings-popups/PsySafetySettingsPopup.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
@@ -882,6 +883,13 @@ function broadcastListener (event: MessageEvent) {
           </ul>
         </template>
       </HtmlPopup>
+
+      <!-- プロフィールポップオーバー -->
+      <ProfilePopover
+        v-if="state.profilePopoverProps.display"
+        v-bind="state.profilePopoverProps"
+        @close="state.closeProfilePopover"
+      />
 
       <!-- アカウントポップアップ -->
       <AccountPopup
