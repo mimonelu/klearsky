@@ -299,6 +299,15 @@ type MainState = {
   openListCardPopover: Function
   closeListCardPopover: Function
 
+  // ポップオーバー - マイフィードソートポップオーバー
+
+  myFeedsSortPopoverProps: {
+    display: boolean
+  }
+  myFeedsSortPopoverSelector?: string | HTMLElement
+  openMyFeedsSortPopover: Function
+  closeMyFeedsSortPopover: Function
+
   // ポップアップ
 
   // ポップアップ - エラーポップアップ

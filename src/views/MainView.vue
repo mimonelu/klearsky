@@ -24,6 +24,7 @@ import MainMenuVertical from "@/components/shell-parts/MainMenuVertical.vue"
 import MessagePopup from "@/components/popups/MessagePopup.vue"
 import MutingUsersPopup from "@/components/popups/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
+import MyFeedsSortPopover from "@/components/popovers/MyFeedsSortPopover.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
 import MyTagPopup from "@/components/popups/MyTagPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
@@ -807,6 +808,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.listCardPopoverProps.display"
       v-bind="state.listCardPopoverProps"
       @close="state.closeListCardPopover"
+    />
+
+    <!-- マイフィードソートポップオーバー -->
+    <MyFeedsSortPopover
+      v-if="state.myFeedsSortPopoverProps.display"
+      v-bind="state.myFeedsSortPopoverProps"
+      @close="state.closeMyFeedsSortPopover"
     />
 
     <!-- ポップアップコンテナ -->
