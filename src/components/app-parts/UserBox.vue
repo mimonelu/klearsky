@@ -230,6 +230,7 @@ function onActivateContentFilteringToggle () {
 
   & > .svg-icon {
     fill: var(--fg-color-05);
+    pointer-events: none;
   }
   &:focus, &:hover {
     --fg-color-0125: var(--fg-color-025);

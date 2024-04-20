@@ -279,6 +279,16 @@ type MainState = {
   openProfilePopover: Function
   closeProfilePopover: Function
 
+  // ポップオーバー - フィードカードポップオーバー
+
+  feedCardPopoverProps: {
+    display: boolean
+    generator?: TTFeedGenerator
+  }
+  feedCardPopoverSelector?: string | HTMLElement
+  openFeedCardPopover: Function
+  closeFeedCardPopover: Function
+
   // ポップアップ
 
   // ポップアップ - エラーポップアップ

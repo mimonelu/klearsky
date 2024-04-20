@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, ref, type ComputedRef } from "vue"
-import FeedCardMenuTicker from "@/components/menu-tickers/FeedCardMenuTicker.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
@@ -25,8 +24,6 @@ const state = reactive<{
   loaderDisplay: boolean
   saved: ComputedRef<boolean>
   pinned: ComputedRef<boolean>
-  menuTickerDisplay: boolean
-  menuTickerContainer: ComputedRef<undefined | HTMLElement>
   detailDisplay: boolean
   isUnknown: boolean
 }>({
@@ -47,22 +44,14 @@ const state = reactive<{
     return mainState.feedPreferences?.pinned
       .some((uri: string) => uri === props.generator.uri) ?? false
   }),
-  menuTickerDisplay: false,
-  menuTickerContainer: computed((): undefined | HTMLElement => {
-    return menuTicker.value?.closest(".popup-body") ?? undefined
-  }),
   detailDisplay: !props.orderButtonDisplay,
   isUnknown: !props.generator.cid
 })
 
-const menuTicker = ref()
-
-function openMenuTicker () {
-  state.menuTickerDisplay = !state.menuTickerDisplay
-}
-
-function closeMenuTicker () {
-  state.menuTickerDisplay = false
+function openFeedCardPopover ($event: Event) {
+  Util.blurElement()
+  mainState.feedCardPopoverProps.generator = props.generator
+  mainState.openFeedCardPopover($event.target)
 }
 
 async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
@@ -212,22 +201,13 @@ function toggleDetail () {
         " />
       </button>
 
-      <!-- フィードカードメニュートリガー -->
+      <!-- フィードカードポップオーバートリガー -->
       <button
         v-if="menuDisplay"
         class="feed-card__menu-button"
-        ref="menuTicker"
-        @click.prevent.stop="openMenuTicker"
+        @click.prevent.stop="openFeedCardPopover"
       >
         <SVGIcon name="menu" />
-
-        <!-- フィードカードメニュー -->
-        <FeedCardMenuTicker
-          :generator="generator"
-          :display="state.menuTickerDisplay"
-          :container="state.menuTickerContainer"
-          @close="closeMenuTicker"
-        />
       </button>
     </div>
 
@@ -448,14 +428,7 @@ function toggleDetail () {
     & > .svg-icon {
       fill: var(--color);
       font-size: 1.25em;
-    }
-  }
-
-  // フィードメニュー
-  .menu-ticker:deep() {
-    & > .menu-ticker--inner {
-      top: 3rem;
-      right: 0.5rem;
+      pointer-events: none;
     }
   }
 

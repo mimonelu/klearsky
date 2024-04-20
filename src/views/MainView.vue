@@ -9,6 +9,7 @@ import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
 import ContentFilteringPopup from "@/components/popups/ContentFilteringPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
+import FeedCardPopover from "@/components/popovers/FeedCardPopover.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
 import ImagePopup from "@/components/popups/ImagePopup.vue"
 import InviteCodesPopup from "@/components/popups/InviteCodesPopup.vue"
@@ -791,6 +792,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.profilePopoverProps.display"
       v-bind="state.profilePopoverProps"
       @close="state.closeProfilePopover"
+    />
+
+    <!-- フィードカードポップオーバー -->
+    <FeedCardPopover
+      v-if="state.feedCardPopoverProps.display"
+      v-bind="state.feedCardPopoverProps"
+      @close="state.closeFeedCardPopover"
     />
 
     <!-- ポップアップコンテナ -->

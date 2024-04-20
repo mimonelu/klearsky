@@ -293,6 +293,15 @@ state.profilePopoverSelector = undefined
 state.openProfilePopover = openProfilePopover
 state.closeProfilePopover = closeProfilePopover
 
+// ポップオーバー - フィードカードポップオーバー
+state.feedCardPopoverProps = {
+  display: false,
+  generator: undefined,
+}
+state.feedCardPopoverSelector = undefined
+state.openFeedCardPopover = openFeedCardPopover
+state.closeFeedCardPopover = closeFeedCardPopover
+
 // ポップアップ
 
 // ポップアップ - エラーポップアップ
@@ -1410,6 +1419,17 @@ function openProfilePopover (selector: string | HTMLElement) {
 
 function closeProfilePopover () {
   state.profilePopoverProps.display = false
+}
+
+// ポップオーバー - フィードカードポップオーバー
+
+function openFeedCardPopover (selector: string | HTMLElement) {
+  state.feedCardPopoverSelector = selector
+  state.feedCardPopoverProps.display = true
+}
+
+function closeFeedCardPopover () {
+  state.feedCardPopoverProps.display = false
 }
 
 // ポップアップ
