@@ -316,6 +316,7 @@ state.myFeedsSortPopoverProps = {
   display: false,
 }
 state.myFeedsSortPopoverSelector = undefined
+state.myFeedsSortPopoverCallback = undefined
 state.openMyFeedsSortPopover = openMyFeedsSortPopover
 state.closeMyFeedsSortPopover = closeMyFeedsSortPopover
 
@@ -1467,8 +1468,7 @@ function openMyFeedsSortPopover (selector: string | HTMLElement) {
   state.myFeedsSortPopoverProps.display = true
 }
 
-function closeMyFeedsSortPopover (changed = false) {
-  console.log(changed)
+function closeMyFeedsSortPopover () {
   state.myFeedsSortPopoverProps.display = false
 }
 

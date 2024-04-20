@@ -305,6 +305,7 @@ type MainState = {
     display: boolean
   }
   myFeedsSortPopoverSelector?: string | HTMLElement
+  myFeedsSortPopoverCallback?: Function
   openMyFeedsSortPopover: Function
   closeMyFeedsSortPopover: Function
 
