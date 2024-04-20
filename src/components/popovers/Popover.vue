@@ -244,7 +244,7 @@ function makeStyle (left?: number, top?: number) {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 2;
+  z-index: 3;
   width: 100vw;
   height: 100vh;
   &[data-ignore="true"] {

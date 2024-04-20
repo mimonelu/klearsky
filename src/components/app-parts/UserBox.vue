@@ -4,8 +4,8 @@ import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
 import DisplayName from "@/components/app-parts/DisplayName.vue"
-import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import Util from "@/composables/util"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 
 const emit = defineEmits<(name: string) => void>()
@@ -25,9 +25,6 @@ const state = reactive<{
   hasAppliedHarmfulLabel: ComputedRef<boolean>
   contentFilteringToggleDisplay: boolean
   contentWarningVisibility: ComputedRef<TTContentVisibility>
-
-  profileMenuDisplay: boolean
-  profileMenuContainer: ComputedRef<undefined | HTMLElement>
 }>({
   // ラベル対応
   appliedHarmfulLabels: computed((): Array<TTLabel> => {
@@ -39,11 +36,6 @@ const state = reactive<{
   contentFilteringToggleDisplay: false,
   contentWarningVisibility: computed((): TTContentVisibility => {
     return mainState.getContentWarningVisibility(props.user.labels)
-  }),
-
-  profileMenuDisplay: false,
-  profileMenuContainer: computed((): undefined | HTMLElement => {
-    return profileMenuTrigger.value?.closest(".popup-body") ?? undefined
   }),
 })
 
@@ -57,12 +49,11 @@ function onActivateLink () {
   emit("link")
 }
 
-function openPostMenu () {
-  state.profileMenuDisplay = !state.profileMenuDisplay
-}
-
-function closePostMenu () {
-  state.profileMenuDisplay = false
+function openProfilePopover ($event: Event) {
+  Util.blurElement()
+  mainState.profilePopoverProps.isUser = props.user.handle === mainState.atp.session?.handle
+  mainState.profilePopoverProps.user = props.user
+  mainState.openProfilePopover($event.target)
 }
 
 // ラベル対応
@@ -134,23 +125,14 @@ function onActivateContentFilteringToggle () {
       />
       <div class="description">{{ user.description || "&#160;" }}</div>
 
-      <!-- プロフィールメニュートリガー -->
+      <!-- プロフィールポップオーバートグル -->
       <button
         v-if="menuDisplay"
         class="menu-button"
         ref="profileMenuTrigger"
-        @click.prevent.stop="openPostMenu"
+        @click.prevent.stop="openProfilePopover"
       >
         <SVGIcon name="menu" />
-
-        <!-- プロフィールメニュー -->
-        <ProfileMenuTicker
-          :isUser="user.handle === mainState.atp.session?.handle"
-          :display="state.profileMenuDisplay"
-          :user="user"
-          :container="state.profileMenuContainer"
-          @close="closePostMenu"
-        />
       </button>
 
       <div class="bottom">
@@ -254,13 +236,6 @@ function onActivateContentFilteringToggle () {
 
     & > .svg-icon {
       --fg-color-05: var(--fg-color-075);
-    }
-  }
-
-  .menu-ticker:deep() {
-    & > .menu-ticker--inner {
-      top: 3em;
-      right: 0.5em;
     }
   }
 }

@@ -13,7 +13,6 @@ import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
-// TODO: 削除 import ProfileMenuTicker from "@/components/menu-tickers/ProfileMenuTicker.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 import Util from "@/composables/util"
@@ -24,7 +23,6 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   handleHistoryPopupDisplay: boolean
-  // TODO: 削除 profileMenuDisplay: boolean
   endpoint: ComputedRef<undefined | string>
   isPagePostFeeds: ComputedRef<boolean>
   isPagePostFeedsWithReplies: ComputedRef<boolean>
@@ -48,7 +46,6 @@ const state = reactive<{
   accountMediaDisplay: ComputedRef<boolean>
 }>({
   handleHistoryPopupDisplay: false,
-  // TODO: 削除 profileMenuDisplay: false,
   endpoint: computed((): undefined | string => {
     const log = mainState.currentProfile?.__log
     return log != null && log[0] != null
@@ -169,17 +166,10 @@ function closeHandleHistoryPopup () {
 
 function openProfilePopover ($event: Event) {
   Util.blurElement()
-  // TODO: 削除 state.profileMenuDisplay = !state.profileMenuDisplay
   mainState.profilePopoverProps.isUser = mainState.isMyProfile()
   mainState.profilePopoverProps.user = mainState.currentProfile as TTProfile
   mainState.openProfilePopover($event.target)
 }
-
-/* TODO: 削除
-function closeProfileMenu () {
-  state.profileMenuDisplay = false
-}
-*/
 
 // ラベル対応
 
@@ -374,14 +364,6 @@ function onActivateAccountMaskToggle () {
                 @click.stop="openProfilePopover"
               >
                 <SVGIcon name="menu" />
-                <!-- TODO: 削除
-                <ProfileMenuTicker
-                  :isUser="mainState.isMyProfile()"
-                  :display="state.profileMenuDisplay"
-                  :user="(mainState.currentProfile as TTProfile)"
-                  @close="closeProfileMenu"
-                />
-                -->
               </button>
             </div>
 
@@ -836,13 +818,6 @@ function onActivateAccountMaskToggle () {
   position: relative;
   min-width: 4rem;
   max-width: 4rem;
-
-  /* TODO: 削除
-  .menu-ticker:deep() > .menu-ticker--inner {
-    top: 2.75rem;
-    right: 0;
-  }
-  */
 }
 
 .description {

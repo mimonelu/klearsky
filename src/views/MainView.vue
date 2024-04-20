@@ -780,6 +780,19 @@ function broadcastListener (event: MessageEvent) {
       <ScrollButton />
     </div>
 
+    <!-- 設定ポップオーバー -->
+    <SettingsPopover
+      v-if="state.settingsPopoverDisplay"
+      @close="state.closeSettingsPopover"
+    />
+
+    <!-- プロフィールポップオーバー -->
+    <ProfilePopover
+      v-if="state.profilePopoverProps.display"
+      v-bind="state.profilePopoverProps"
+      @close="state.closeProfilePopover"
+    />
+
     <!-- ポップアップコンテナ -->
     <div class="popup-container">
       <!-- 通知ポップアップ -->
@@ -787,12 +800,6 @@ function broadcastListener (event: MessageEvent) {
         v-if="state.notificationPopupDisplay"
         @close="state.closeNotificationPopup"
         @updatePageTitle="state.updatePageTitle"
-      />
-
-      <!-- 設定 - 設定ポップオーバー -->
-      <SettingsPopover
-        v-if="state.settingsPopoverDisplay"
-        @close="state.closeSettingsPopover"
       />
 
       <!-- 設定 - UI言語設定ポップアップ -->
@@ -883,13 +890,6 @@ function broadcastListener (event: MessageEvent) {
           </ul>
         </template>
       </HtmlPopup>
-
-      <!-- プロフィールポップオーバー -->
-      <ProfilePopover
-        v-if="state.profilePopoverProps.display"
-        v-bind="state.profilePopoverProps"
-        @close="state.closeProfilePopover"
-      />
 
       <!-- アカウントポップアップ -->
       <AccountPopup
