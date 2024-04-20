@@ -289,6 +289,16 @@ type MainState = {
   openFeedCardPopover: Function
   closeFeedCardPopover: Function
 
+  // ポップオーバー - リストカードポップオーバー
+
+  listCardPopoverProps: {
+    display: boolean
+    list?: TTList
+  }
+  listCardPopoverSelector?: string | HTMLElement
+  openListCardPopover: Function
+  closeListCardPopover: Function
+
   // ポップアップ
 
   // ポップアップ - エラーポップアップ

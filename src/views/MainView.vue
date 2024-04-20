@@ -14,6 +14,7 @@ import HtmlPopup from "@/components/popups/HtmlPopup.vue"
 import ImagePopup from "@/components/popups/ImagePopup.vue"
 import InviteCodesPopup from "@/components/popups/InviteCodesPopup.vue"
 import LikeUsersPopup from "@/components/popups/LikeUsersPopup.vue"
+import ListCardPopover from "@/components/popovers/ListCardPopover.vue"
 import ListEditPopup from "@/components/popups/ListEditPopup.vue"
 import ListUserManagementPopup from "@/components/popups/ListUserManagementPopup.vue"
 import Loader from "@/components/common/Loader.vue"
@@ -799,6 +800,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.feedCardPopoverProps.display"
       v-bind="state.feedCardPopoverProps"
       @close="state.closeFeedCardPopover"
+    />
+
+    <!-- リストカードポップオーバー -->
+    <ListCardPopover
+      v-if="state.listCardPopoverProps.display"
+      v-bind="state.listCardPopoverProps"
+      @close="state.closeListCardPopover"
     />
 
     <!-- ポップアップコンテナ -->

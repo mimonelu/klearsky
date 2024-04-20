@@ -302,6 +302,15 @@ state.feedCardPopoverSelector = undefined
 state.openFeedCardPopover = openFeedCardPopover
 state.closeFeedCardPopover = closeFeedCardPopover
 
+// ポップオーバー - リストカードポップオーバー
+state.listCardPopoverProps = {
+  display: false,
+  list: undefined,
+}
+state.listCardPopoverSelector = undefined
+state.openListCardPopover = openListCardPopover
+state.closeListCardPopover = closeListCardPopover
+
 // ポップアップ
 
 // ポップアップ - エラーポップアップ
@@ -1430,6 +1439,17 @@ function openFeedCardPopover (selector: string | HTMLElement) {
 
 function closeFeedCardPopover () {
   state.feedCardPopoverProps.display = false
+}
+
+// ポップオーバー - リストカードポップオーバー
+
+function openListCardPopover (selector: string | HTMLElement) {
+  state.listCardPopoverSelector = selector
+  state.listCardPopoverProps.display = true
+}
+
+function closeListCardPopover () {
+  state.listCardPopoverProps.display = false
 }
 
 // ポップアップ

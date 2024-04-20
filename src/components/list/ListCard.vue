@@ -1,16 +1,12 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, ref, type ComputedRef } from "vue"
-import { useRouter } from "vue-router"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
-import ListMenuTicker from "@/components/menu-tickers/ListMenuTicker.vue"
 import Loader from "@/components/common/Loader.vue"
 import OrderButtons from "@/components/buttons/OrderButtons.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
-
-const router = useRouter()
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -37,8 +33,6 @@ const state = reactive<{
   isListUsersPage: boolean
   saved: ComputedRef<boolean>
   pinned: ComputedRef<boolean>
-  menuTickerDisplay: boolean
-  menuTickerContainer: ComputedRef<undefined | HTMLElement>
   loaderDisplay: boolean
   detailDisplay: boolean
 }>({
@@ -92,15 +86,9 @@ const state = reactive<{
     return mainState.feedPreferences?.pinned
       .some((uri: string) => uri === props.list.uri) ?? false
   }),
-  menuTickerDisplay: false,
-  menuTickerContainer: computed((): undefined | HTMLElement => {
-    return menuTickerContainer.value?.closest(".popup-body") ?? undefined
-  }),
   loaderDisplay: false,
   detailDisplay: !props.orderButtonDisplay,
 })
-
-const menuTickerContainer = ref()
 
 function openListEditPopup () {
   mainState.openListEditPopup({
@@ -110,20 +98,10 @@ function openListEditPopup () {
   })
 }
 
-function openMenuTicker () {
-  state.menuTickerDisplay = !state.menuTickerDisplay
-}
-
-function closeMenuTicker () {
-  state.menuTickerDisplay = false
-}
-
-function startAwait () {
-  state.loaderDisplay = true
-}
-
-function endAwait () {
-  state.loaderDisplay = false
+function openListCardPopover ($event: Event) {
+  Util.blurElement()
+  mainState.listCardPopoverProps.list = props.list
+  mainState.openListCardPopover($event.target)
 }
 
 function updateList (list: TTList) {
@@ -133,37 +111,6 @@ function updateList (list: TTList) {
 
   // セッションキャッシュの更新
   mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
-}
-
-async function deleteList () {
-  state.loaderDisplay = true
-  const result = await mainState.atp.deleteList(props.list.uri)
-  state.loaderDisplay = false
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "ListMenuTicker/deleteList")
-    return
-  }
-  emit("deleteList", props.list)
-
-  // マイフィードから削除
-  if (mainState.myFeeds.removeItem(props.list.uri)) {
-    mainState.sortFeedPreferencesSavedAndPinned()
-    mainState.myFeeds.saveCustomItemSettings()
-    await updatePreferences()
-  }
-
-  // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
-
-  // 削除したマイリストのリストフィード／ユーザーページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
-  if (props.list.creator.did === mainState.atp.session?.did &&
-      (
-        mainState.currentPath === "/home/list-feeds" ||
-        mainState.currentPath === "/home/list-users"
-      ) &&
-      mainState.currentQuery.list === props.list.uri) {
-    await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
-  }
 }
 
 async function toggleSavedOrPinned (type: "saved" | "pinned") {
@@ -301,25 +248,13 @@ function toggleDetail () {
         " />
       </button>
 
-      <!-- リストメニュートリガー -->
+      <!-- リストポップオーバートリガー -->
       <button
         v-if="!isCompact"
         class="list-card__menu-button"
-        ref="menuTickerContainer"
-        @click.stop.prevent="openMenuTicker"
+        @click.stop.prevent="openListCardPopover"
       >
         <SVGIcon name="menu" />
-
-        <!-- リストメニュー -->
-        <ListMenuTicker
-          :list="list"
-          :display="state.menuTickerDisplay"
-          :container="state.menuTickerContainer"
-          @close="closeMenuTicker"
-          @deleteList="deleteList"
-          @startAwait="startAwait"
-          @endAwait="endAwait"
-        />
       </button>
     </div>
 
@@ -568,7 +503,7 @@ function toggleDetail () {
     grid-area: b;
   }
 
-  // リストメニュートリガー
+  // リストポップオーバートリガー
   &__menu-button {
     --color: var(--fg-color-075);
     grid-area: m;
@@ -582,14 +517,7 @@ function toggleDetail () {
     & > .svg-icon {
       fill: var(--color);
       font-size: 1.25em;
-    }
-  }
-
-  // リストメニュー
-  .menu-ticker:deep() {
-    & > .menu-ticker--inner {
-      top: 3rem;
-      right: 0.5rem;
+      pointer-events: none;
     }
   }
 
