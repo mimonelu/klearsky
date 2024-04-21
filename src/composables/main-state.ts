@@ -293,6 +293,16 @@ state.profilePopoverSelector = undefined
 state.openProfilePopover = openProfilePopover
 state.closeProfilePopover = closeProfilePopover
 
+// ポップオーバー - リポストポップオーバー
+state.repostPopoverProps = {
+  display: false,
+  post: undefined,
+}
+state.repostPopoverSelector = undefined
+state.repostPopoverCallback = undefined
+state.openRepostPopover = openRepostPopover
+state.closeRepostPopover = closeRepostPopover
+
 // ポップオーバー - フィードカードポップオーバー
 state.feedCardPopoverProps = {
   display: false,
@@ -1438,6 +1448,17 @@ function openProfilePopover (selector: string | HTMLElement) {
 
 function closeProfilePopover () {
   state.profilePopoverProps.display = false
+}
+
+// ポップオーバー - リポストポップオーバー
+
+function openRepostPopover (selector: string | HTMLElement) {
+  state.repostPopoverSelector = selector
+  state.repostPopoverProps.display = true
+}
+
+function closeRepostPopover () {
+  state.repostPopoverProps.display = false
 }
 
 // ポップオーバー - フィードカードポップオーバー

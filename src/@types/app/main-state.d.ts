@@ -279,6 +279,17 @@ type MainState = {
   openProfilePopover: Function
   closeProfilePopover: Function
 
+  // ポップオーバー - リポストポップオーバー
+
+  repostPopoverProps: {
+    display: boolean
+    post?: TTPost
+  }
+  repostPopoverSelector?: string | HTMLElement
+  repostPopoverCallback?: (type: "createRepost" | "deleteRepost" | "createQuoteRepost") => Promise<void>
+  openRepostPopover: Function
+  closeRepostPopover: Function
+
   // ポップオーバー - フィードカードポップオーバー
 
   feedCardPopoverProps: {

@@ -33,6 +33,7 @@ import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsP
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
 import PsySafetySettingsPopup from "@/components/popups/settings-popups/PsySafetySettingsPopup.vue"
+import RepostPopover from "@/components/popovers/RepostPopover.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
 import ScrollButton from "@/components/buttons/ScrollButton.vue"
 import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
@@ -794,6 +795,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.profilePopoverProps.display"
       v-bind="state.profilePopoverProps"
       @close="state.closeProfilePopover"
+    />
+
+    <!-- リポストポップオーバー -->
+    <RepostPopover
+      v-if="state.repostPopoverProps.display"
+      v-bind="state.repostPopoverProps"
+      @close="state.closeRepostPopover"
     />
 
     <!-- フィードカードポップオーバー -->

@@ -11,7 +11,6 @@ import LikeButton from "@/components/buttons/LikeButton.vue"
 import LinkCard from "@/components/app-parts/LinkCard.vue"
 import ListCard from "@/components/list/ListCard.vue"
 import Loader from "@/components/common/Loader.vue"
-import MenuTicker from "@/components/menu-tickers/MenuTicker.vue"
 import Post from "@/components/app-parts/Post.vue"
 import PostMenuTicker from "@/components/menu-tickers/PostMenuTicker.vue"
 import RepostButton from "@/components/buttons/RepostButton.vue"
@@ -41,7 +40,6 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   postMenuDisplay: boolean
-  repostMenuDisplay: boolean
   processing: boolean
 
   // 本文
@@ -103,7 +101,6 @@ const state = reactive<{
   isWordMute: ComputedRef<boolean>
 }>({
   postMenuDisplay: false,
-  repostMenuDisplay: false,
   processing: false,
 
   // 本文
@@ -381,13 +378,31 @@ async function onActivateReplyButton () {
   }
 }
 
-async function onActivateRepostMenuTrigger () {
-  state.repostMenuDisplay = !state.repostMenuDisplay
+async function onOpenRepostPopover ($event: Event) {
+  Util.blurElement()
+  mainState.repostPopoverProps.post = props.post
+  mainState.repostPopoverCallback = repostPopoverCallback
+  mainState.openRepostPopover($event.target)
 }
 
-async function onActivateSendRepostButton () {
-  Util.blurElement()
-  state.repostMenuDisplay = false
+async function repostPopoverCallback (type: "createRepost" | "deleteRepost" | "createQuoteRepost") {
+  switch (type) {
+    case "createRepost": {
+      await createRepost()
+      break
+    }
+    case "deleteRepost": {
+      await deleteRepost()
+      break
+    }
+    case "createQuoteRepost": {
+      await createQuoteRepost()
+      break
+    }
+  }
+}
+
+async function createRepost () {
   state.processing = true
   try {
     const result = await mainState.atp.createRepost(
@@ -400,10 +415,8 @@ async function onActivateSendRepostButton () {
   }
 }
 
-async function onActivateDeleteRepostButton () {
-  Util.blurElement()
+async function deleteRepost () {
   if (props.post.viewer?.repost == null) return
-  state.repostMenuDisplay = false
   state.processing = true
   try {
     await mainState.atp.deleteRepost(props.post.viewer.repost)
@@ -413,9 +426,7 @@ async function onActivateDeleteRepostButton () {
   }
 }
 
-async function onActivateQuoteRepostButton () {
-  Util.blurElement()
-  state.repostMenuDisplay = false
+async function createQuoteRepost () {
   const done = await mainState.openSendPostPopup({ type: "quoteRepost", post: props.post })
   state.processing = true
   try {
@@ -1035,36 +1046,11 @@ function toggleOldestQuotedPostDisplay () {
             </button>
           </div>
           <div>
-            <!-- リポストボタン -->
+            <!-- リポストポップオーバートリガー -->
             <RepostButton
               :post="post"
-              @click.stop="onActivateRepostMenuTrigger"
-            >
-              <!-- リポストメニュー -->
-              <MenuTicker
-                :display="state.repostMenuDisplay"
-                :container="container"
-              >
-                <button
-                  v-if="post.viewer?.repost == null"
-                  @click.stop="onActivateSendRepostButton"
-                >
-                  <SVGIcon name="repost" />
-                  <span>{{ $t("sendRepost") }}</span>
-                </button>
-                <button
-                  v-else
-                  @click.stop="onActivateDeleteRepostButton"
-                >
-                  <SVGIcon name="repost" />
-                  <span>{{ $t("deleteRepost") }}</span>
-                </button>
-                <button @click.stop="onActivateQuoteRepostButton">
-                  <SVGIcon name="quoteRepost" />
-                  <span>{{ $t("sendQuoteRepost") }}</span>
-                </button>
-              </MenuTicker>
-            </RepostButton>
+              @click.stop="onOpenRepostPopover"
+            />
           </div>
           <div>
             <!-- いいねボタン -->
@@ -1640,13 +1626,6 @@ function toggleOldestQuotedPostDisplay () {
 
 .repost-button {
   position: relative;
-
-  .menu-ticker:deep() {
-    .menu-ticker--inner {
-      top: 2.5rem;
-      left: 0;
-    }
-  }
 }
 
 .lightning-link {

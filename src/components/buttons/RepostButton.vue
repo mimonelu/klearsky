@@ -25,13 +25,13 @@ const mainState = inject("state") as MainState
       <SVGIcon name="repost" />
     </div>
     <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.repostCount > 0 ? post.repostCount : "" }}</span>
-    <slot />
   </button>
 </template>
 
 <style lang="scss" scoped>
 .repost-button {
   & > .icon-container {
+    pointer-events: none;
     position: relative;
 
     & > .splash {
@@ -76,6 +76,10 @@ const mainState = inject("state") as MainState
     & > span {
       color: rgb(var(--share-color));
     }
+  }
+
+  & > span {
+    pointer-events: none;
   }
 }
 </style>
