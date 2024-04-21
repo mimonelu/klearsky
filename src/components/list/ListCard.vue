@@ -139,7 +139,7 @@ async function deleteList () {
   const result = await mainState.atp.deleteList(props.list.uri)
   state.loaderDisplay = false
   if (result instanceof Error) {
-    mainState.openErrorPopup(result, "ListMenuTicker/deleteList")
+    mainState.openErrorPopup(result, "ListCard/deleteList")
     return
   }
   emit("deleteList", props.list)
