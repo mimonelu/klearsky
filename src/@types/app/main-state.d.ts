@@ -296,6 +296,7 @@ type MainState = {
     list?: TTList
   }
   listCardPopoverSelector?: string | HTMLElement
+  listCardPopoverCallback?: (type: "startAwait" | "endAwait" | "deleteList") => Promise<void>
   openListCardPopover: Function
   closeListCardPopover: Function
 

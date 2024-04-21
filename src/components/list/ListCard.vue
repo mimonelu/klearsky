@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, ref, type ComputedRef } from "vue"
+import { useRouter } from "vue-router"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
@@ -7,6 +8,8 @@ import OrderButtons from "@/components/buttons/OrderButtons.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
+
+const router = useRouter()
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -101,7 +104,25 @@ function openListEditPopup () {
 function openListCardPopover ($event: Event) {
   Util.blurElement()
   mainState.listCardPopoverProps.list = props.list
+  mainState.listCardPopoverCallback = listCardPopoverCallback
   mainState.openListCardPopover($event.target)
+}
+
+async function listCardPopoverCallback (type: "startAwait" | "endAwait" | "deleteList") {
+  switch (type) {
+    case "startAwait": {
+      state.loaderDisplay = true
+      break
+    }
+    case "endAwait": {
+      state.loaderDisplay = false
+      break
+    }
+    case "deleteList": {
+      await deleteList()
+      break
+    }
+  }
 }
 
 function updateList (list: TTList) {
@@ -111,6 +132,37 @@ function updateList (list: TTList) {
 
   // セッションキャッシュの更新
   mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+}
+
+async function deleteList () {
+  state.loaderDisplay = true
+  const result = await mainState.atp.deleteList(props.list.uri)
+  state.loaderDisplay = false
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "ListMenuTicker/deleteList")
+    return
+  }
+  emit("deleteList", props.list)
+
+  // マイフィードから削除
+  if (mainState.myFeeds.removeItem(props.list.uri)) {
+    mainState.sortFeedPreferencesSavedAndPinned()
+    mainState.myFeeds.saveCustomItemSettings()
+    await updatePreferences()
+  }
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+
+  // 削除したマイリストのリストフィード／ユーザーページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
+  if (props.list.creator.did === mainState.atp.session?.did &&
+      (
+        mainState.currentPath === "/home/list-feeds" ||
+        mainState.currentPath === "/home/list-users"
+      ) &&
+      mainState.currentQuery.list === props.list.uri) {
+    await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
+  }
 }
 
 async function toggleSavedOrPinned (type: "saved" | "pinned") {

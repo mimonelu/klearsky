@@ -308,6 +308,7 @@ state.listCardPopoverProps = {
   list: undefined,
 }
 state.listCardPopoverSelector = undefined
+state.listCardPopoverCallback = undefined
 state.openListCardPopover = openListCardPopover
 state.closeListCardPopover = closeListCardPopover
 

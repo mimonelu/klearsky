@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
-import { useRouter } from "vue-router"
 import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
 import MenuTickerModerateWrapper from "@/components/menu-items/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
@@ -38,18 +37,16 @@ const state = reactive<{
   }),
 })
 
-const router = useRouter()
-
 async function toggleListMute () {
-  if (props.list == null) return
+  if (props.list == null || mainState.listCardPopoverCallback == null) return
   Util.blurElement()
   emit("close")
 
   // リストミュートの無効化
   if (state.isMuted) {
-    mainState.loaderDisplay = true
+    await mainState.listCardPopoverCallback("startAwait")
     const result = await mainState.atp.updateListMuteToDisable(props.list.uri)
-    mainState.loaderDisplay = false
+    await mainState.listCardPopoverCallback("endAwait")
     if (result instanceof Error) {
       // TODO:
       return
@@ -59,9 +56,9 @@ async function toggleListMute () {
 
   // リストミュートの有効化
   } else {
-    mainState.loaderDisplay = true
+    await mainState.listCardPopoverCallback("startAwait")
     const result = await mainState.atp.updateListMuteToEnable(props.list.uri)
-    mainState.loaderDisplay = false
+    await mainState.listCardPopoverCallback("endAwait")
     if (result instanceof Error) {
       // TODO:
       return
@@ -75,15 +72,15 @@ async function toggleListMute () {
 }
 
 async function toggleListBlock () {
-  if (props.list == null) return
+  if (props.list == null || mainState.listCardPopoverCallback == null) return
   Util.blurElement()
   emit("close")
 
   // リストブロックの無効化
   if (state.isBlocked) {
-    mainState.loaderDisplay = true
+    await mainState.listCardPopoverCallback("startAwait")
     const result = await mainState.atp.updateListBlockToDisable(props.list.uri)
-    mainState.loaderDisplay = false
+    await mainState.listCardPopoverCallback("endAwait")
     if (result instanceof Error) {
       // TODO:
       return
@@ -93,9 +90,9 @@ async function toggleListBlock () {
 
   // リストブロックの有効化
   } else {
-    mainState.loaderDisplay = true
+    await mainState.listCardPopoverCallback("startAwait")
     const result = await mainState.atp.updateListBlockToEnable(props.list.uri)
-    mainState.loaderDisplay = false
+    await mainState.listCardPopoverCallback("endAwait")
     if (result instanceof Error) {
       // TODO:
       return
@@ -109,58 +106,14 @@ async function toggleListBlock () {
 }
 
 async function deleteList () {
-  if (props.list == null) return
   Util.blurElement()
   emit("close")
-
   const isConfirmed = await mainState.openConfirmationPopup(
     $t("listDelete"),
     $t("listDeleteMessage")
   )
-  if (!isConfirmed) return
-
-  mainState.loaderDisplay = true
-  const result = await mainState.atp.deleteList(props.list.uri)
-  mainState.loaderDisplay = false
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "ListCardPopover/deleteList")
-    return
-  }
-
-  // マイリストから削除
-  if (!mainState.myLists.remove(props.list.uri)) return
-
-  // マイフィードから削除
-  if (mainState.myFeeds.removeItem(props.list.uri)) {
-    mainState.sortFeedPreferencesSavedAndPinned()
-    mainState.myFeeds.saveCustomItemSettings()
-    await updatePreferences()
-  }
-
-  // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
-
-  // 削除したマイリストのリストフィード／ユーザーページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
-  if (props.list.creator.did === mainState.atp.session?.did &&
-      (
-        mainState.currentPath === "/home/list-feeds" ||
-        mainState.currentPath === "/home/list-users"
-      ) &&
-      mainState.currentQuery.list === props.list.uri) {
-    await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
-  }
-}
-
-async function updatePreferences () {
-  mainState.loaderDisplay = true
-  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
-  if (!result) mainState.openErrorPopup("errorApiFailed", "ListCardPopover/updatePreferences")
-  mainState.loaderDisplay = false
-
-  // セッションキャッシュの更新
-  if (result) {
-    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("myFeeds.items", mainState.myFeeds.items)
+  if (isConfirmed && mainState.listCardPopoverCallback != null) {
+    await mainState.listCardPopoverCallback("deleteList")
   }
 }
 

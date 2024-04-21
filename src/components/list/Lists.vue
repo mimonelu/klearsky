@@ -67,6 +67,13 @@ function addList (list: TTList) {
   mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
 }
 
+function deleteList (list: TTList) {
+  if (!mainState.myLists.remove(list.uri)) return
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+}
+
 function clicked (list?: TTList) {
   emit("clicked", list)
 }
@@ -126,6 +133,7 @@ function clicked (list?: TTList) {
         :createDisplay="false"
         @click="clicked(list)"
         @close="$emit('close')"
+        @deleteList="deleteList"
         @onActivateMention="$emit('onActivateMention')"
         @onActivateHashTag="$emit('onActivateHashTag')"
       >
