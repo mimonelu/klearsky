@@ -29,6 +29,7 @@ import MyListPopup from "@/components/popups/MyListPopup.vue"
 import MyTagPopup from "@/components/popups/MyTagPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
+import PostPopover from "@/components/popovers/PostPopover.vue"
 import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
@@ -795,6 +796,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.profilePopoverProps.display"
       v-bind="state.profilePopoverProps"
       @close="state.closeProfilePopover"
+    />
+
+    <!-- ポストポップオーバー -->
+    <PostPopover
+      v-if="state.postPopoverProps.display"
+      v-bind="state.postPopoverProps"
+      @close="state.closePostPopover"
     />
 
     <!-- リポストポップオーバー -->

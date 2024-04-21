@@ -1,11 +1,9 @@
 .icon-button,
 .icon-button--nolabel {
-  &:not(:disabled) {
-    cursor: pointer;
-  }
   margin: -0.75em;
   padding: 0.75em;
   &:not(:disabled) {
+    cursor: pointer;
     &:focus, &:hover {
       & > .icon-container {
         & > .svg-icon {
@@ -20,6 +18,8 @@
   }
 
   & > .icon-container {
+    pointer-events: none;
+
     & > .svg-icon {
       fill: var(--fg-color-05);
       font-size: 1em;
@@ -31,6 +31,7 @@
     font-size: 0.875em;
     font-weight: bold;
     overflow: hidden;
+    pointer-events: none;
     text-overflow: ellipsis;
   }
 }

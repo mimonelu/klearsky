@@ -31,7 +31,6 @@ const mainState = inject("state") as MainState
 <style lang="scss" scoped>
 .repost-button {
   & > .icon-container {
-    pointer-events: none;
     position: relative;
 
     & > .splash {
@@ -76,10 +75,6 @@ const mainState = inject("state") as MainState
     & > span {
       color: rgb(var(--share-color));
     }
-  }
-
-  & > span {
-    pointer-events: none;
   }
 }
 </style>

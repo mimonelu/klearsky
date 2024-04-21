@@ -12,7 +12,6 @@ import LinkCard from "@/components/app-parts/LinkCard.vue"
 import ListCard from "@/components/list/ListCard.vue"
 import Loader from "@/components/common/Loader.vue"
 import Post from "@/components/app-parts/Post.vue"
-import PostMenuTicker from "@/components/menu-tickers/PostMenuTicker.vue"
 import RepostButton from "@/components/buttons/RepostButton.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Thumbnail from "@/components/app-parts/Thumbnail.vue"
@@ -39,7 +38,6 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  postMenuDisplay: boolean
   processing: boolean
 
   // 本文
@@ -100,7 +98,6 @@ const state = reactive<{
   // ワードミュートの判定
   isWordMute: ComputedRef<boolean>
 }>({
-  postMenuDisplay: false,
   processing: false,
 
   // 本文
@@ -371,7 +368,7 @@ async function onActivateReplyButton () {
   try {
     if (done) {
       if (mainState.currentPath.startsWith("/post")) await mainState.fetchPostThread()
-      else await updateThisPostThread()
+      else await updatePostThread()
     }
   } finally {
     state.processing = false
@@ -409,7 +406,7 @@ async function createRepost () {
       props.post.uri,
       props.post.cid
     )
-    if (result) await updateThisPostThread()
+    if (result) await updatePostThread()
   } finally {
     state.processing = false
   }
@@ -420,7 +417,7 @@ async function deleteRepost () {
   state.processing = true
   try {
     await mainState.atp.deleteRepost(props.post.viewer.repost)
-    await updateThisPostThread()
+    await updatePostThread()
   } finally {
     state.processing = false
   }
@@ -430,7 +427,7 @@ async function createQuoteRepost () {
   const done = await mainState.openSendPostPopup({ type: "quoteRepost", post: props.post })
   state.processing = true
   try {
-    if (done) await updateThisPostThread()
+    if (done) await updatePostThread()
   } finally {
     state.processing = false
   }
@@ -444,23 +441,33 @@ async function onActivateLikeButton () {
     if (props.post.viewer?.like != null)
       await mainState.atp.deleteLike(props.post.viewer.like as string)
     else await mainState.atp.createLike(props.post.uri, props.post.cid)
-    await updateThisPostThread()
+    await updatePostThread()
   } finally {
     state.processing = false
   }
 }
 
-function onActivatePostMenuTrigger () {
+function openPostPopover ($event: Event) {
   Util.blurElement()
-  state.postMenuDisplay = !state.postMenuDisplay
+  mainState.postPopoverProps.post = props.post
+  mainState.postPopoverCallback = postPopoverCallback
+  mainState.openPostPopover($event.target)
 }
 
-function onClosePostMenu () {
-  state.postMenuDisplay = false
+async function postPopoverCallback (type: "deletePost" | "updatePost") {
+  switch (type) {
+    case "deletePost": {
+      await deletePost(props.post.uri)
+      break
+    }
+    case "updatePost": {
+      await updatePost()
+      break
+    }
+  }
 }
 
 async function onForceTranslate () {
-  onClosePostMenu()
   state.processing = true
   try {
     await translateText(true)
@@ -469,7 +476,7 @@ async function onForceTranslate () {
   }
 }
 
-async function onRemoveThisPost (uri: string) {
+async function deletePost (uri: string) {
   if (state.processing) return
   state.processing = true
   try {
@@ -480,17 +487,17 @@ async function onRemoveThisPost (uri: string) {
   }
 }
 
-async function updateThisPost () {
+async function updatePost () {
   state.processing = true
   if (mainState.currentPath.startsWith("/post")) await mainState.fetchPostThread()
-  else await updateThisPostThread()
+  else await updatePostThread()
   state.processing = false
 }
 
-async function updateThisPostThread () {
+async function updatePostThread () {
   // レコード更新直後に最新レコードを取得できない現象対策
   // TODO: 原因不明に付き暫定対応、後日再検証すること
-  await Util.wait(250)
+  await Util.wait(375)
 
   const posts: undefined | false | Array<TTPost> =
     await mainState.atp.fetchPosts([props.post.uri])
@@ -1073,24 +1080,14 @@ function toggleOldestQuotedPostDisplay () {
               </div>
             </a>
 
-            <!-- ポストメニューボタン -->
+            <!-- ポストポップオーバートリガー -->
             <button
               class="icon-button--nolabel menu-button"
-              @click.stop="onActivatePostMenuTrigger"
+              @click.stop="openPostPopover"
             >
               <div class="icon-container">
                 <SVGIcon name="menu" />
               </div>
-
-              <!-- ポストメニュー -->
-              <PostMenuTicker
-                :post="post"
-                :display="state.postMenuDisplay"
-                :container="container"
-                @close="onClosePostMenu"
-                @removeThisPost="onRemoveThisPost"
-                @updateThisPost="updateThisPost"
-              />
             </button>
           </div>
         </div>
@@ -1636,12 +1633,5 @@ function toggleOldestQuotedPostDisplay () {
   margin: -0.75em -0.75em;
   padding: 0.75em 1.5em;
   position: relative;
-
-  .menu-ticker:deep() {
-    & > .menu-ticker--inner {
-      top: 2.5rem;
-      right: 0.5rem;
-    }
-  }
 }
 </style>

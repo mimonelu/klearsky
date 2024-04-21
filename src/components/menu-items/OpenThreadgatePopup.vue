@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -11,17 +12,26 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 function onActivate () {
+  emit("close")
   if (props.post == null) {
-    emit("close")
     return
   }
   mainState.openThreadgatePopup({
     mode: "post",
     postThreadgate: props.post.threadgate,
     postUri: props.post.uri,
-    onClosed (params: any) {
-      if (params?.updated) emit("updateThisPost")
-      emit("close")
+    onClosed: async (params: any) => {
+      if (params?.updated) {
+
+        // TODO: ポストポップオーバーのコールバックで更新しているが、適切な手段ではない。要検討
+        if (mainState.postPopoverCallback != null) {
+          // レコード更新直後に最新レコードを取得できない現象対策
+          // TODO: 原因不明に付き暫定対応、後日再検証すること
+          await Util.wait(375)
+
+          mainState.postPopoverCallback("updatePost")
+        }
+      }
     },
   })
 }
