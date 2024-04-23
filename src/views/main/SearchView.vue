@@ -74,11 +74,18 @@ const state = reactive<{
   &__form {
     background-color: rgb(var(--bg-color), var(--main-area-opacity));
     border-bottom: 1px solid var(--fg-color-0125);
+    display: flex;
+    grid-gap: 0.5rem;
+    padding: 0.5rem;
 
     &:deep() {
-      & > form {
+      form {
         display: grid;
-        padding: 1rem;
+        flex-grow: 1;
+      }
+
+      .svg-icon {
+        font-size: 1.5rem;
       }
     }
   }

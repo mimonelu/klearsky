@@ -21,6 +21,7 @@ type TTSetting = {
   notificationFetchInterval?: number
   postAnonymization?: boolean
   postLanguages?: Array<string>
+  postSearchKeywordHistory?: Array<string>
   replyFolding?: Array<number>
   repostFolding?: Array<number>
   tags?: Array<TTMyTag>

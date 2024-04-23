@@ -3,6 +3,7 @@ import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Post from "@/components/app-parts/Post.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -61,6 +62,13 @@ async function fetchNewResults () {
   state.processing = true
   await mainState.fetchSearchPosts()
   state.processing = false
+
+  // キーワード履歴に保存
+  mainState.addKeywordHistory(
+    mainState.currentSearchTerm,
+    mainState.currentSetting.postSearchKeywordHistory
+  )
+  mainState.saveSettings()
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
@@ -101,11 +109,24 @@ function removeThisPost (uri: string) {
   mainState.currentSearchPostResults = mainState.currentSearchPostResults
     .filter((post: TTPost) => post.uri !== uri)
 }
+
+function openKeywordHistoryPopover ($event: Event) {
+  mainState.openKeywordHistoryPopover(
+    "postSearchKeywordHistory",
+    $event.target,
+    mainState.currentSetting.postSearchKeywordHistory,
+    (keyword: string) => {
+      mainState.currentSearchTerm = keyword
+      fetchNewResults()
+    }
+  )
+}
 </script>
 
 <template>
   <div class="post-search-view">
     <Portal to="search-view-header">
+      <!-- キーワードボックス -->
       <form @submit.prevent="fetchNewResults">
         <input
           v-model="mainState.currentSearchTerm"
@@ -119,6 +140,15 @@ function removeThisPost (uri: string) {
           class="textbox"
         >
       </form>
+
+      <!-- キーワード履歴ポップオーバートリガー -->
+      <button
+        class="button--bordered"
+        type="button"
+        @click.prevent="openKeywordHistoryPopover"
+      >
+        <SVGIcon name="history" />
+      </button>
     </Portal>
     <div class="post-search-view__main">
       <LoadButton

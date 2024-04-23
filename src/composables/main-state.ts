@@ -341,6 +341,17 @@ state.myFeedsSortPopoverCallback = undefined
 state.openMyFeedsSortPopover = openMyFeedsSortPopover
 state.closeMyFeedsSortPopover = closeMyFeedsSortPopover
 
+// ポップオーバー - キーワード履歴ポップオーバー
+state.keywordHistoryPopoverProps = {
+  display: false,
+  kind: undefined,
+  selector: undefined,
+  keywords: [],
+}
+state.openKeywordHistoryPopover = openKeywordHistoryPopover
+state.closeKeywordHistoryPopover = closeKeywordHistoryPopover
+state.addKeywordHistory = addKeywordHistory
+
 // ポップアップ
 
 // ポップアップ - エラーポップアップ
@@ -706,6 +717,8 @@ function saveSettings () {
   if (state.settings[did].postLanguages == null)
     state.settings[did].postLanguages = [Util.getUserLanguage()]
   else state.settings[did].postLanguages = getSanitizedLanguages(state.settings[did].postLanguages)
+  if (state.settings[did].postSearchKeywordHistory == null)
+    state.settings[did].postSearchKeywordHistory = []
   if (state.settings[did].lightning == null)
     state.settings[did].lightning = undefined
   state.currentSetting = state.settings[did]
@@ -1513,6 +1526,35 @@ function openMyFeedsSortPopover (selector: string | HTMLElement) {
 
 function closeMyFeedsSortPopover () {
   state.myFeedsSortPopoverProps.display = false
+}
+
+// ポップオーバー - キーワード履歴ポップオーバー
+
+function openKeywordHistoryPopover (
+  kind: "postSearchKeywordHistory",
+  selector: string | HTMLElement,
+  keywords: string[],
+  callback?: Function
+) {
+  state.keywordHistoryPopoverProps.kind = kind
+  state.keywordHistoryPopoverProps.selector = selector
+  state.keywordHistoryPopoverProps.keywords = keywords
+  state.keywordHistoryPopoverProps.callback = callback
+  state.keywordHistoryPopoverProps.display = true
+}
+
+function closeKeywordHistoryPopover () {
+  state.keywordHistoryPopoverProps.display = false
+}
+
+function addKeywordHistory (newword: string, keywords?: string[]) {
+  if (keywords == null) return
+  const index = keywords.findIndex((keyword: string) => keyword === newword)
+  if (index !== - 1) {
+    keywords.splice(index, 1)
+  }
+  keywords.unshift(newword)
+  keywords.splice(CONSTS.LIMIT_OF_KEYWORD_HISTORY)
 }
 
 // ポップアップ

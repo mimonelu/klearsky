@@ -332,6 +332,19 @@ type MainState = {
   openMyFeedsSortPopover: Function
   closeMyFeedsSortPopover: Function
 
+  // ポップオーバー - キーワード履歴ポップオーバー
+
+  keywordHistoryPopoverProps: {
+    display: boolean
+    kind?: "postSearchKeywordHistory"
+    selector?: string | HTMLElement
+    keywords: string[]
+    callback?: Function
+  }
+  openKeywordHistoryPopover: Function
+  closeKeywordHistoryPopover: Function
+  addKeywordHistory: Function
+
   // ポップアップ
 
   // ポップアップ - エラーポップアップ

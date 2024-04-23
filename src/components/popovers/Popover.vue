@@ -215,8 +215,7 @@ function makeStyle (left?: number, top?: number) {
       ref="popoverContent"
       :style="state.style"
       :data-display="state.display"
-      :data-direction-x="state.directionX"
-      :data-direction-y="state.directionY"
+      :data-horn-direction="state.hornDirection"
       tabindex="0"
     >
       <!-- はみ出し処理用要素 -->
@@ -231,7 +230,6 @@ function makeStyle (left?: number, top?: number) {
       <!-- ツノ -->
       <div
         class="popover__horn"
-        :data-horn-direction="state.hornDirection"
         :style="state.hornStyle"
       />
     </div>
@@ -259,16 +257,16 @@ function makeStyle (left?: number, top?: number) {
     position: absolute;
     transform: translate(var(--offset-x), var(--offset-y));
     transition: transform 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
-    &[data-direction-x="left"] {
+    &[data-horn-direction="left"] {
       --offset-x: 1.0rem;
     }
-    &[data-direction-x="right"] {
+    &[data-horn-direction="right"] {
       --offset-x: -1.0rem;
     }
-    &[data-direction-y="up"] {
+    &[data-horn-direction="top"] {
       --offset-y: 1.0rem;
     }
-    &[data-direction-y="down"] {
+    &[data-horn-direction="bottom"] {
       --offset-y: -1.0rem;
     }
     &[data-display="true"] {
@@ -287,16 +285,16 @@ function makeStyle (left?: number, top?: number) {
   &__horn {
     pointer-events: none;
     position: fixed;
-    &[data-horn-direction="left"] {
+    [data-horn-direction="left"] & {
       @include triangle(left, 1rem, 1rem, rgb(var(--fg-color)));
     }
-    &[data-horn-direction="right"] {
+    [data-horn-direction="right"] & {
       @include triangle(right, 1rem, 1rem, rgb(var(--fg-color)));
     }
-    &[data-horn-direction="top"] {
+    [data-horn-direction="top"] & {
       @include triangle(top, 1rem, 1rem, rgb(var(--fg-color)));
     }
-    &[data-horn-direction="bottom"] {
+    [data-horn-direction="bottom"] & {
       @include triangle(bottom, 1rem, 1rem, rgb(var(--fg-color)));
     }
   }

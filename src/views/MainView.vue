@@ -13,6 +13,7 @@ import FeedCardPopover from "@/components/popovers/FeedCardPopover.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
 import ImagePopup from "@/components/popups/ImagePopup.vue"
 import InviteCodesPopup from "@/components/popups/InviteCodesPopup.vue"
+import KeywordHistoryPopover from "@/components/popovers/KeywordHistoryPopover.vue"
 import LikeUsersPopup from "@/components/popups/LikeUsersPopup.vue"
 import ListCardPopover from "@/components/popovers/ListCardPopover.vue"
 import ListEditPopup from "@/components/popups/ListEditPopup.vue"
@@ -831,6 +832,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.myFeedsSortPopoverProps.display"
       v-bind="state.myFeedsSortPopoverProps"
       @close="state.closeMyFeedsSortPopover"
+    />
+
+    <!-- キーワード履歴ポップオーバー -->
+    <KeywordHistoryPopover
+      v-if="state.keywordHistoryPopoverProps.display"
+      v-bind="state.keywordHistoryPopoverProps"
+      @close="state.closeKeywordHistoryPopover"
     />
 
     <!-- ポップアップコンテナ -->
