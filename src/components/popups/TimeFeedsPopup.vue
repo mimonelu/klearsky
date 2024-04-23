@@ -126,7 +126,7 @@ function removeThisPost (uri: string) {
 <style lang="scss" scoped>
 .time-feeds-popup:deep() {
   .popup {
-    height: 100%;
+    flex-grow: 1;
 
     &-body {
       padding: 0;

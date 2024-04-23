@@ -44,9 +44,6 @@ function close () {
 .my-list-popup {
   &:deep() {
     .popup {
-      flex-grow: 1;
-      height: 100%;
-
       &-header > h2 {
         & > .svg-icon {
           fill: rgb(var(--accent-color));
