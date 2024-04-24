@@ -67,7 +67,7 @@ function remove (index: number) {
       <div
         v-if="keywords.length === 0"
         class="keyword-history-popover__message"
-      >履歴はありません。</div>
+      >{{ $t("noHistory") }}</div>
       <template v-else>
         <button
           v-for="keyword, index of keywords"
@@ -101,7 +101,6 @@ function remove (index: number) {
   }
 
   &__message {
-    color: rgb(var(--bg-color), 0.75);
     font-weight: bold;
     padding: 0.25rem 1rem;
   }
