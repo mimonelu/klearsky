@@ -121,7 +121,7 @@ function close () {
 </template>
 
 <style lang="scss" scoped>
-.list-card-popover {
+.my-feeds-sort-popover {
   &:deep() {
     .popover__content {
       padding: 0.5rem;

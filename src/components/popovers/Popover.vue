@@ -11,7 +11,6 @@ defineExpose({
 
 const state = reactive<{
   ignore: boolean
-  display: boolean
   left?: number
   top?: number
   maxHeight?: number
@@ -24,7 +23,6 @@ const state = reactive<{
   hornStyle: ComputedRef<any>
 }>({
   ignore: true,
-  display: false,
   left: undefined,
   top: undefined,
   maxHeight: undefined,
@@ -79,7 +77,6 @@ async function open (selector: string | HTMLElement, options?: {
   }
 
   // 初期化
-  state.display = true
   state.top = undefined
   state.left = undefined
   state.maxHeight = undefined
@@ -156,23 +153,23 @@ async function open (selector: string | HTMLElement, options?: {
     state.hornDirection = options.hornDirection
     switch (options.hornDirection) {
       case "left": {
-        state.hornLeft = 1
-        state.hornTop = targetRect.top + (targetRect.height / 2) - state.top
+        state.hornLeft = - 16
+        state.hornTop = targetRect.top + (targetRect.height / 2) - state.top - 8
         break
       }
       case "right": {
-        state.hornLeft = contentRect.width - 1
-        state.hornTop = targetRect.top + (targetRect.height / 2) - state.top
+        state.hornLeft = contentRect.width - 8
+        state.hornTop = targetRect.top + (targetRect.height / 2) - state.top - 8
         break
       }
       case "top": {
-        state.hornLeft = targetRect.left + (targetRect.width / 2) - state.left
-        state.hornTop = 1
+        state.hornLeft = targetRect.left + (targetRect.width / 2) - state.left - 8
+        state.hornTop = - 16
         break
       }
       case "bottom": {
-        state.hornLeft = targetRect.left + (targetRect.width / 2) - state.left
-        state.hornTop = contentRect.height - 1
+        state.hornLeft = targetRect.left + (targetRect.width / 2) - state.left - 8
+        state.hornTop = contentRect.height
         break
       }
     }
@@ -186,7 +183,6 @@ async function open (selector: string | HTMLElement, options?: {
 }
 
 function close () {
-  state.display = false
   emit("close")
 }
 
@@ -214,7 +210,6 @@ function makeStyle (left?: number, top?: number) {
       class="popover__content"
       ref="popoverContent"
       :style="state.style"
-      :data-display="state.display"
       :data-horn-direction="state.hornDirection"
       tabindex="0"
     >
@@ -251,27 +246,26 @@ function makeStyle (left?: number, top?: number) {
 
   // 本体要素
   &__content {
-    --offset-x: 0;
-    --offset-y: 0;
     filter: drop-shadow(0 0 1rem rgb(0, 0, 0, 0.375));
     position: absolute;
-    transform: translate(var(--offset-x), var(--offset-y));
-    transition: transform 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
     &[data-horn-direction="left"] {
-      --offset-x: 1.0rem;
+      margin-left: -1rem;
+      transform: translateX(1rem);
     }
     &[data-horn-direction="right"] {
-      --offset-x: -1.0rem;
+      margin-left: 1rem;
+      transform: translateX(-1rem);
     }
     &[data-horn-direction="top"] {
-      --offset-y: 1.0rem;
+      margin-top: -1rem;
+      transform: translateY(1rem);
     }
     &[data-horn-direction="bottom"] {
-      --offset-y: -1.0rem;
+      margin-top: 1rem;
+      transform: translateY(-1rem);
     }
-    &[data-display="true"] {
-      transform: translate(0, 0);
-    }
+    transition: transform 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   // はみ出し処理用要素
@@ -286,16 +280,16 @@ function makeStyle (left?: number, top?: number) {
     pointer-events: none;
     position: fixed;
     [data-horn-direction="left"] & {
-      @include triangle(left, 1rem, 1rem, rgb(var(--fg-color)));
+      @include triangle(left, 16px, 16px, rgb(var(--fg-color)));
     }
     [data-horn-direction="right"] & {
-      @include triangle(right, 1rem, 1rem, rgb(var(--fg-color)));
+      @include triangle(right, 16px, 16px, rgb(var(--fg-color)));
     }
     [data-horn-direction="top"] & {
-      @include triangle(top, 1rem, 1rem, rgb(var(--fg-color)));
+      @include triangle(top, 16px, 16px, rgb(var(--fg-color)));
     }
     [data-horn-direction="bottom"] & {
-      @include triangle(bottom, 1rem, 1rem, rgb(var(--fg-color)));
+      @include triangle(bottom, 16px, 16px, rgb(var(--fg-color)));
     }
   }
 }
