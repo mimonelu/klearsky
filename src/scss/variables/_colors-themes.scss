@@ -1,6 +1,7 @@
 @mixin color-theme-light {
   color-scheme: light;
   --bg-color: 255, 255, 255;
+  --bg-sub-color: 240, 240, 240;
   --fg-color: 32, 32, 32;
   --accent-color: 0, 128, 255;
   --notice-color: 240, 32, 32;
@@ -12,6 +13,7 @@
 @mixin color-theme-light-gray {
   color-scheme: light;
   --bg-color: 240, 238, 236;
+  --bg-sub-color: 224, 222, 220;
   --fg-color: 32, 28, 24;
   --accent-color: 0, 128, 255;
   --notice-color: 240, 32, 32;
@@ -23,6 +25,7 @@
 @mixin color-theme-dark {
   color-scheme: dark;
   --bg-color: 0, 0, 0;
+  --bg-sub-color: 32, 32, 32;
   --fg-color: 224, 224, 224;
   --accent-color: 0, 128, 255;
   --notice-color: 240, 32, 32;
@@ -34,6 +37,7 @@
 @mixin color-theme-dark-gray {
   color-scheme: dark;
   --bg-color: 24, 28, 32;
+  --bg-sub-color: 40, 44, 48;
   --fg-color: 216, 220, 224;
   --accent-color: 0, 128, 255;
   --notice-color: 240, 32, 32;

@@ -34,7 +34,7 @@ function open () {
       directionY: "down",
       collideX: true,
       collideY: true,
-      hornDirection: "top",
+      animationDirection: "down",
       isChild: false,
     }
   )

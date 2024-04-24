@@ -33,7 +33,7 @@ function open () {
       directionY: "down",
       collideX: true,
       collideY: true,
-      hornDirection: "top",
+      animationDirection: "down",
       isChild: false,
     }
   )
@@ -93,7 +93,7 @@ function callback (type: "createRepost" | "deleteRepost" | "createQuoteRepost") 
 .repost-popover {
   &:deep() {
     .popover__content {
-      padding: 0.5rem;
+      padding: 0 0.5rem 0.5rem 0.5rem;
     }
   }
 }

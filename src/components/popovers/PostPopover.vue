@@ -63,13 +63,13 @@ function open () {
   ;(popover.value as typeof Popover).open(
     mainState.postPopoverSelector,
     {
-      positionX: "left",
-      positionY: "middle",
+      positionX: "right",
+      positionY: "bottom",
       directionX: "left",
-      directionY: "middle",
+      directionY: "down",
       collideX: true,
       collideY: true,
-      hornDirection: "right",
+      animationDirection: "down",
       isChild: false,
     }
   )

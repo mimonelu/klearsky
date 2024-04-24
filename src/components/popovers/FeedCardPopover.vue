@@ -44,13 +44,13 @@ function open () {
   ;(popover.value as typeof Popover).open(
     mainState.feedCardPopoverSelector,
     {
-      positionX: "left",
-      positionY: "middle",
+      positionX: "right",
+      positionY: "bottom",
       directionX: "left",
-      directionY: "middle",
+      directionY: "down",
       collideX: true,
       collideY: true,
-      hornDirection: "right",
+      animationDirection: "down",
       isChild: false,
     }
   )
@@ -128,7 +128,7 @@ function close () {
 .feed-card-popover {
   &:deep() {
     .popover__content {
-      padding: 0.5rem;
+      padding: 0 0.5rem 0.5rem 0.5rem;
     }
   }
 }

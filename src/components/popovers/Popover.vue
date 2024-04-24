@@ -17,10 +17,7 @@ const state = reactive<{
   directionX: string
   directionY: string
   style: ComputedRef<any>
-  hornDirection?: "left" | "right" | "top" | "bottom"
-  hornLeft?: number
-  hornTop?: number
-  hornStyle: ComputedRef<any>
+  animationDirection?: "left" | "right" | "up" | "down"
 }>({
   ignore: true,
   left: undefined,
@@ -31,12 +28,7 @@ const state = reactive<{
   style: computed((): any => {
     return makeStyle(state.left, state.top)
   }),
-  hornDirection: undefined,
-  hornLeft: undefined,
-  hornTop: undefined,
-  hornStyle: computed((): any => {
-    return makeStyle(state.hornLeft, state.hornTop)
-  }),
+  animationDirection: undefined,
 })
 
 const popover = ref(null)
@@ -52,7 +44,7 @@ async function open (selector: string | HTMLElement, options?: {
   directionY?: "up" | "middle" | "down",
   collideX?: boolean,
   collideY?: boolean,
-  hornDirection?: "left" | "right" | "top" | "bottom",
+  animationDirection?: "left" | "right" | "up" | "down",
   isChild?: boolean,
 }) {
   state.ignore = true
@@ -146,37 +138,10 @@ async function open (selector: string | HTMLElement, options?: {
     state.maxHeight = innerRect.height - clippingDiffY
   }
 
-  // ツノ `horn` の処理
-  if (options?.hornDirection != null) {
-    state.hornLeft = undefined
-    state.hornTop = undefined
-    state.hornDirection = options.hornDirection
-    switch (options.hornDirection) {
-      case "left": {
-        state.hornLeft = - 16
-        state.hornTop = targetRect.top + (targetRect.height / 2) - state.top - 8
-        break
-      }
-      case "right": {
-        state.hornLeft = contentRect.width - 8
-        state.hornTop = targetRect.top + (targetRect.height / 2) - state.top - 8
-        break
-      }
-      case "top": {
-        state.hornLeft = targetRect.left + (targetRect.width / 2) - state.left - 8
-        state.hornTop = - 16
-        break
-      }
-      case "bottom": {
-        state.hornLeft = targetRect.left + (targetRect.width / 2) - state.left - 8
-        state.hornTop = contentRect.height
-        break
-      }
-    }
-  }
+  state.animationDirection = options?.animationDirection
 
   // フォーカスの設定
-  (contentElement as HTMLElement).focus()
+  ;(contentElement as HTMLElement).focus()
 
   await Util.wait(125)
   state.ignore = false
@@ -210,7 +175,7 @@ function makeStyle (left?: number, top?: number) {
       class="popover__content"
       ref="popoverContent"
       :style="state.style"
-      :data-horn-direction="state.hornDirection"
+      :data-animation-direction="state.animationDirection"
       tabindex="0"
     >
       <!-- はみ出し処理用要素 -->
@@ -221,12 +186,6 @@ function makeStyle (left?: number, top?: number) {
       >
         <slot />
       </div>
-
-      <!-- ツノ -->
-      <div
-        class="popover__horn"
-        :style="state.hornStyle"
-      />
     </div>
   </div>
 </template>
@@ -246,24 +205,23 @@ function makeStyle (left?: number, top?: number) {
 
   // 本体要素
   &__content {
-    filter: drop-shadow(0 0 1rem rgb(0, 0, 0, 0.375));
     position: absolute;
 
-    &[data-horn-direction="left"] {
-      margin-left: -1rem;
-      transform: translateX(1rem);
-    }
-    &[data-horn-direction="right"] {
+    &[data-animation-direction="left"] {
       margin-left: 1rem;
       transform: translateX(-1rem);
     }
-    &[data-horn-direction="top"] {
-      margin-top: -1rem;
-      transform: translateY(1rem);
+    &[data-animation-direction="right"] {
+      margin-left: -1rem;
+      transform: translateX(1rem);
     }
-    &[data-horn-direction="bottom"] {
+    &[data-animation-direction="up"] {
       margin-top: 1rem;
       transform: translateY(-1rem);
+    }
+    &[data-animation-direction="down"] {
+      margin-top: -1rem;
+      transform: translateY(1rem);
     }
     transition: transform 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
@@ -271,26 +229,12 @@ function makeStyle (left?: number, top?: number) {
   // はみ出し処理用要素
   &__inner {
     @include scroll-bar("transparent");
+    background-color: rgb(var(--bg-sub-color));
+    border: 1px solid var(--fg-color-025);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 1rem 0 var(--fg-color-0125);
     overflow-y: auto;
     overscroll-behavior: none;
-  }
-
-  // ツノ
-  &__horn {
-    pointer-events: none;
-    position: fixed;
-    [data-horn-direction="left"] & {
-      @include triangle(left, 16px, 16px, rgb(var(--fg-color)));
-    }
-    [data-horn-direction="right"] & {
-      @include triangle(right, 16px, 16px, rgb(var(--fg-color)));
-    }
-    [data-horn-direction="top"] & {
-      @include triangle(top, 16px, 16px, rgb(var(--fg-color)));
-    }
-    [data-horn-direction="bottom"] & {
-      @include triangle(bottom, 16px, 16px, rgb(var(--fg-color)));
-    }
   }
 }
 </style>

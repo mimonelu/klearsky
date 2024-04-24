@@ -45,7 +45,7 @@ async function open () {
       directionY: "middle",
       collideX: true,
       collideY: true,
-      hornDirection: "right",
+      animationDirection: "left",
       isChild: true,
     }
   )
@@ -119,3 +119,13 @@ function close () {
     </Popover>
   </button>
 </template>
+
+<style lang="scss" scoped>
+.popover {
+  &:deep() {
+    .popover__content {
+      padding: 0.5rem;
+    }
+  }
+}
+</style>

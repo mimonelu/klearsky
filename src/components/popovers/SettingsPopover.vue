@@ -27,7 +27,7 @@ function open () {
         directionY: "middle",
         collideX: true,
         collideY: true,
-        hornDirection: "left",
+        animationDirection: "right",
       }
       : {
         positionX: "center",
@@ -36,7 +36,7 @@ function open () {
         directionY: "up",
         collideX: true,
         collideY: true,
-        hornDirection: "bottom",
+        animationDirection: "up",
       }
   )
 }

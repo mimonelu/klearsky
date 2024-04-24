@@ -1,7 +1,5 @@
 .list-menu {
-  background-color: rgb(var(--fg-color));
-  border-radius: var(--border-radius);
-  color: rgb(var(--bg-color));
+  color: rgb(var(--fg-color));
   display: flex;
   flex-direction: column;
   grid-gap: 1px;
@@ -17,7 +15,7 @@
     }
 
     & > .svg-icon {
-      fill: rgb(var(--bg-color), 0.5);
+      fill: rgb(var(--fg-color), 0.5);
     }
   }
 
@@ -70,7 +68,7 @@
   }
 
   & > hr {
-    border-bottom: 1px solid rgb(var(--bg-color), 0.125);
+    border-bottom: 1px solid var(--fg-color-0125);
     margin: 0 0.5rem;
   }
 }
