@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
+import { inject, onMounted, ref } from "vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -8,7 +8,6 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   display: boolean
-  kind?: "postSearchKeywordHistory"
   selector?: string | HTMLElement
   keywords: string[]
   callback?: Function

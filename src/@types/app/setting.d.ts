@@ -5,6 +5,7 @@ type TTSetting = {
   backgroundOpacity?: number
   colorTheme?: string
   contentLanguages?: Array<string>
+  feedSearchKeywordHistory?: Array<string>
   fontSize?: string
   fontKerning?: boolean
   fontAntialiasing?: boolean

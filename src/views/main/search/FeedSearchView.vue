@@ -3,6 +3,7 @@ import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import FeedCard from "@/components/app-parts/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -44,6 +45,13 @@ async function fetchNewResults () {
   await mainState.fetchSearchFeeds("new")
   state.processing = false
   updateRouter()
+
+  // キーワード履歴に保存
+  mainState.addKeywordHistory(
+    mainState.currentSearchTerm,
+    mainState.currentSetting.feedSearchKeywordHistory
+  )
+  mainState.saveSettings()
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
@@ -66,11 +74,23 @@ function updateRouter () {
     : undefined
   router.push({ name: "feed-search", query })
 }
+
+function openKeywordHistoryPopover ($event: Event) {
+  mainState.openKeywordHistoryPopover(
+    $event.target,
+    mainState.currentSetting.feedSearchKeywordHistory,
+    (keyword: string) => {
+      mainState.currentSearchTerm = keyword
+      fetchNewResults()
+    }
+  )
+}
 </script>
 
 <template>
   <div class="feed-search-view">
     <Portal to="search-view-header">
+      <!-- キーワードボックス -->
       <form @submit.prevent="fetchNewResults">
         <input
           v-model="mainState.currentSearchTerm"
@@ -84,6 +104,15 @@ function updateRouter () {
           class="textbox"
         >
       </form>
+
+      <!-- キーワード履歴ポップオーバートリガー -->
+      <button
+        class="button--bordered"
+        type="button"
+        @click.prevent="openKeywordHistoryPopover"
+      >
+        <SVGIcon name="history" />
+      </button>
     </Portal>
     <div class="feed-search-view__main">
       <div class="feed-card-container">

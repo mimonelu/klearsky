@@ -344,7 +344,6 @@ state.closeMyFeedsSortPopover = closeMyFeedsSortPopover
 // ポップオーバー - キーワード履歴ポップオーバー
 state.keywordHistoryPopoverProps = {
   display: false,
-  kind: undefined,
   selector: undefined,
   keywords: [],
 }
@@ -700,6 +699,8 @@ function saveSettings () {
     state.settings[did].globallineLayout = "post"
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
+  if (state.settings[did].feedSearchKeywordHistory == null)
+    state.settings[did].feedSearchKeywordHistory = []
   if (state.settings[did].mainAreaOpacity == null)
     state.settings[did].mainAreaOpacity = 1.0
   if (state.settings[did].backgroundImage == null)
@@ -1531,12 +1532,10 @@ function closeMyFeedsSortPopover () {
 // ポップオーバー - キーワード履歴ポップオーバー
 
 function openKeywordHistoryPopover (
-  kind: "postSearchKeywordHistory",
   selector: string | HTMLElement,
   keywords: string[],
   callback?: Function
 ) {
-  state.keywordHistoryPopoverProps.kind = kind
   state.keywordHistoryPopoverProps.selector = selector
   state.keywordHistoryPopoverProps.keywords = keywords
   state.keywordHistoryPopoverProps.callback = callback

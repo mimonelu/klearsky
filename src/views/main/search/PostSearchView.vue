@@ -112,7 +112,6 @@ function removeThisPost (uri: string) {
 
 function openKeywordHistoryPopover ($event: Event) {
   mainState.openKeywordHistoryPopover(
-    "postSearchKeywordHistory",
     $event.target,
     mainState.currentSetting.postSearchKeywordHistory,
     (keyword: string) => {
