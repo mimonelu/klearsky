@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
-// import LazyImage from "@/components/common/LazyImage.vue"
+import LazyImage from "@/components/common/LazyImage.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -48,7 +48,7 @@ async function autoScrollSliderMenu () {
   selectedElement.scrollIntoView({
     behavior: "smooth",
     block: "end",
-    inline: "nearest",
+    inline: "center",
   })
 }
 </script>
@@ -97,7 +97,7 @@ async function autoScrollSliderMenu () {
             to="/home/timeline"
             :data-is-selected="true"
           >
-            <!-- SVGIcon name="shimmer" / -->
+            <SVGIcon name="shimmer" />
             <span>{{ $t(item.value.displayName) }}</span>
           </RouterLink>
 
@@ -108,7 +108,7 @@ async function autoScrollSliderMenu () {
             to="/home/globalline"
             :data-is-selected="true"
           >
-            <!-- SVGIcon name="shimmer" / -->
+            <SVGIcon name="shimmer" />
             <span>{{ $t(item.value.displayName) }}</span>
           </RouterLink>
 
@@ -125,7 +125,7 @@ async function autoScrollSliderMenu () {
             }"
             :data-is-selected="mainState.currentQuery.feed === item.value.uri"
           >
-            <!-- LazyImage :src="item.value.avatar" / -->
+            <LazyImage :src="item.value.avatar" />
             <span>{{ item.value.displayName }}</span>
           </RouterLink>
 
@@ -142,7 +142,7 @@ async function autoScrollSliderMenu () {
             }"
             :data-is-selected="mainState.currentQuery.list === item.value.uri"
           >
-            <!-- LazyImage :src="item.value.avatar" / -->
+            <LazyImage :src="item.value.avatar" />
             <span>{{ item.value.name }}</span>
           </RouterLink>
 
@@ -202,7 +202,6 @@ async function autoScrollSliderMenu () {
       border-top: var(--link-border-width) solid rgb(var(--accent-color));
     }
 
-    /*
     .svg-icon--shimmer,
     .lazy-image {
       border-radius: 1px;
@@ -212,19 +211,19 @@ async function autoScrollSliderMenu () {
       min-height: 1.5em;
       max-height: 1.5em;
     }
-
     .svg-icon--shimmer {
       fill: var(--fg-color-05);
     }
-    */
 
     & > span {
       color: var(--color);
       cursor: pointer;
       display: block;
+      font-size: 0.875rem;
       font-weight: bold;
       line-height: var(--line-height);
       overflow: hidden;
+      max-width: 8rem;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
