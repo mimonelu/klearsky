@@ -47,7 +47,7 @@ async function autoScrollSliderMenu () {
   }
   selectedElement.scrollIntoView({
     behavior: "smooth",
-    block: "end",
+    block: "nearest",
     inline: "center",
   })
 }
