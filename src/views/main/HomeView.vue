@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, onMounted, ref, watch } from "vue"
+import { useRouter } from "vue-router"
 // import LazyImage from "@/components/common/LazyImage.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -15,6 +16,40 @@ function openMyFeedsPopup () {
 function openMyListPopup () {
   Util.blurElement()
   mainState.openMyListPopup()
+}
+
+// SliderMenu の自動スクロール
+
+const router = useRouter()
+
+const sliderMenu = ref(null)
+
+onMounted(async () => {
+  // 画面遷移時
+  await Util.wait(125)
+  await autoScrollSliderMenu()
+})
+
+watch(() => router.currentRoute.value.fullPath, async () => {
+  // HomeView 内における画面遷移時
+  await Util.wait(125)
+  await autoScrollSliderMenu()
+})
+
+async function autoScrollSliderMenu () {
+  const sliderMenuElement = sliderMenu.value as null | HTMLElement
+  if (sliderMenuElement == null) {
+    return
+  }
+  const selectedElement = sliderMenuElement.querySelector(".router-link-active[data-is-selected='true']")
+  if (selectedElement == null) {
+    return
+  }
+  selectedElement.scrollIntoView({
+    behavior: "smooth",
+    block: "end",
+    inline: "nearest",
+  })
 }
 </script>
 
@@ -47,7 +82,10 @@ function openMyListPopup () {
       </PageHeader>
 
       <!-- スライダーメニュー -->
-      <div class="slider-menu">
+      <div
+        class="slider-menu"
+        ref="sliderMenu"
+      >
         <template
           v-for="item of mainState.myFeeds.pinnedItems"
           :key="item.value.uri"
