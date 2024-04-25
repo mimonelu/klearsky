@@ -105,7 +105,7 @@ function close () {
 <style lang="scss" scoped>
 .popover {
   &:deep() {
-    .popover__content {
+    & > .popover__content {
       padding: 0.5rem;
     }
   }

@@ -269,7 +269,7 @@ function process (type: string) {
 <style lang="scss" scoped>
 .settings-popover {
   &:deep() {
-    .popover__content {
+    & > .popover__content {
       padding: 0.5rem;
     }
   }

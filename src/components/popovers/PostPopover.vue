@@ -182,7 +182,7 @@ function callback (type: "deletePost" | "updatePost") {
 <style lang="scss" scoped>
 .post-popover {
   &:deep() {
-    .popover__content {
+    & > .popover__content {
       padding: 0.5rem;
     }
   }

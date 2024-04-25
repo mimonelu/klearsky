@@ -168,6 +168,7 @@ function openProfilePopover ($event: Event) {
   Util.blurElement()
   mainState.profilePopoverProps.isUser = mainState.isMyProfile()
   mainState.profilePopoverProps.user = mainState.currentProfile as TTProfile
+  mainState.profilePopoverFrom = "profile-view"
   mainState.openProfilePopover($event.target)
 }
 

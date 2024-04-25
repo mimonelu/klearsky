@@ -277,6 +277,7 @@ type MainState = {
     user?: TTUser
   }
   profilePopoverSelector?: string | HTMLElement
+  profilePopoverFrom?: string
   openProfilePopover: Function
   closeProfilePopover: Function
 

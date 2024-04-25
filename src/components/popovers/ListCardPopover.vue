@@ -229,7 +229,7 @@ function close () {
 <style lang="scss" scoped>
 .list-card-popover {
   &:deep() {
-    .popover__content {
+    & > .popover__content {
       padding: 0 0.5rem 0.5rem 0.5rem;
     }
   }

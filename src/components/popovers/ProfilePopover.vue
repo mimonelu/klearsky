@@ -66,6 +66,7 @@ function close () {
   <Popover
     class="profile-popover"
     ref="popover"
+    :data-from="mainState.profilePopoverFrom"
     @close="close"
   >
     <menu
@@ -143,8 +144,13 @@ function close () {
 <style lang="scss" scoped>
 .profile-popover {
   &:deep() {
-    .popover__content {
-      padding: 0.5rem 0 0.5rem 0.5rem;
+    & > .popover__content {
+      padding: 0.5rem;
+    }
+  }
+  &[data-from="profile-view"]:deep() {
+    & > .popover__content {
+      padding-right: 0;
     }
   }
 }

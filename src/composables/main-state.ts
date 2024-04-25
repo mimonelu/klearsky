@@ -286,6 +286,7 @@ state.profilePopoverProps = {
   user: undefined,
 }
 state.profilePopoverSelector = undefined
+state.profilePopoverFrom = undefined
 state.openProfilePopover = openProfilePopover
 state.closeProfilePopover = closeProfilePopover
 

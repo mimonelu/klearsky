@@ -92,7 +92,7 @@ function callback (type: "createRepost" | "deleteRepost" | "createQuoteRepost") 
 <style lang="scss" scoped>
 .repost-popover {
   &:deep() {
-    .popover__content {
+    & > .popover__content {
       padding: 0 0.5rem 0.5rem 0.5rem;
     }
   }

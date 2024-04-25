@@ -93,7 +93,7 @@ function remove (index: number) {
 <style lang="scss" scoped>
 .keyword-history-popover {
   &:deep() {
-    .popover__content {
+    & > .popover__content {
       padding: 0.5rem;
       max-width: $sp-width;
     }

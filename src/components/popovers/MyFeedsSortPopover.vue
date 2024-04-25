@@ -123,7 +123,7 @@ function close () {
 <style lang="scss" scoped>
 .my-feeds-sort-popover {
   &:deep() {
-    .popover__content {
+    & > .popover__content {
       padding: 0.5rem;
     }
   }
