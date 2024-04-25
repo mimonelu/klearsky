@@ -28,6 +28,7 @@ type TTSetting = {
   tags?: Array<TTMyTag>
   timeControl?: string
   uiLanguage?: string
+  userSearchKeywordHistory?: Array<string>
   wordMute?: Array<TTWordMute>
   [k: string]: any
 }

@@ -2,6 +2,7 @@
 import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import UserBox from "@/components/app-parts/UserBox.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
@@ -65,6 +66,13 @@ async function fetchNewResults () {
     state.processing = false
     updateRouter()
   }
+
+  // キーワード履歴に保存
+  mainState.addKeywordHistory(
+    mainState.currentSearchTerm,
+    mainState.currentSetting.userSearchKeywordHistory
+  )
+  mainState.saveSettings()
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
@@ -97,11 +105,23 @@ function updateRouter () {
     : undefined
   router.push({ name: "user-search", query })
 }
+
+function openKeywordHistoryPopover ($event: Event) {
+  mainState.openKeywordHistoryPopover(
+    $event.target,
+    mainState.currentSetting.userSearchKeywordHistory,
+    (keyword: string) => {
+      mainState.currentSearchTerm = keyword
+      fetchNewResults()
+    }
+  )
+}
 </script>
 
 <template>
   <div class="user-search-view">
     <Portal to="search-view-header">
+      <!-- キーワードボックス -->
       <form @submit.prevent="fetchNewResults">
         <input
           v-model="mainState.currentSearchTerm"
@@ -115,6 +135,15 @@ function updateRouter () {
           class="textbox"
         >
       </form>
+
+      <!-- キーワード履歴ポップオーバートリガー -->
+      <button
+        class="button--bordered"
+        type="button"
+        @click.prevent="openKeywordHistoryPopover"
+      >
+        <SVGIcon name="history" />
+      </button>
     </Portal>
     <div class="user-search-view__main">
       <div class="users">

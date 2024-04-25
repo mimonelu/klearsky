@@ -722,6 +722,8 @@ function saveSettings () {
     state.settings[did].postSearchKeywordHistory = []
   if (state.settings[did].lightning == null)
     state.settings[did].lightning = undefined
+  if (state.settings[did].userSearchKeywordHistory == null)
+    state.settings[did].userSearchKeywordHistory = []
   state.currentSetting = state.settings[did]
   Util.saveStorage("settings", state.settings)
 }
@@ -1547,7 +1549,7 @@ function closeKeywordHistoryPopover () {
 }
 
 function addKeywordHistory (newword: string, keywords?: string[]) {
-  if (keywords == null) return
+  if (newword === "" || keywords == null) return
   const index = keywords.findIndex((keyword: string) => keyword === newword)
   if (index !== - 1) {
     keywords.splice(index, 1)
