@@ -135,6 +135,7 @@ type MainState = {
     warns?: Array<TTLabelOnWarn>,
     labels?: Array<TTLabel>
   ): Array<TTLabel>
+  filterCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
   selectLabelsPopupDisplay: boolean
   selectLabelsPopupState: any
   openSelectLabelsPopup: Function

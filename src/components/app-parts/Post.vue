@@ -83,6 +83,7 @@ const state = reactive<{
   blurLabels: ComputedRef<Array<TTLabel>>
   blurMediaLabels: ComputedRef<Array<TTLabel>>
   alertLabels: ComputedRef<Array<TTLabel>>
+  customPostLabels: ComputedRef<Array<TTLabel>>
   contentWarningLabels: ComputedRef<Array<string>>
   hasAppliedHarmfulLabel: ComputedRef<boolean>
   hasBlurredContent: ComputedRef<boolean>
@@ -220,6 +221,9 @@ const state = reactive<{
   }),
   alertLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(["hide", "warn"], ["alert"], state.allLabels)
+  }),
+  customPostLabels: computed((): Array<TTLabel> => {
+    return mainState.filterCustomLabels(props.post.labels)
   }),
   contentWarningLabels: computed((): Array<string> => {
     return state.hideLabels.map((label: TTLabel) => $t(label.val))
@@ -964,6 +968,17 @@ function toggleOldestQuotedPostDisplay () {
               <span>{{ postTag }}</span>
             </RouterLink>
           </div>
+
+          <!-- カスタムラベル -->
+          <ul class="custom-label-container">
+            <li
+              v-for="label of state.customPostLabels"
+              :key="label.uri"
+            >
+              <SVGIcon name="label" />
+              <span>{{ label.val }}</span>
+            </li>
+          </ul>
         </div>
 
         <!-- 引用リポスト／リストカード -->
@@ -1586,6 +1601,7 @@ function toggleOldestQuotedPostDisplay () {
   background-color: var(--accent-color-0125);
 }
 
+// ポストタグ
 .post-tag-container {
   display: flex;
   flex-wrap: wrap;
@@ -1599,6 +1615,36 @@ function toggleOldestQuotedPostDisplay () {
     &:focus, &:hover {
       --alpha: 1.0;
       --fg-color: var(--accent-color);
+    }
+  }
+}
+
+// カスタムラベル
+.custom-label-container {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 1em;
+  &:empty {
+    display: contents;
+  }
+
+  & > li {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.25em;
+
+    & > .svg-icon--label {
+      fill: var(--share-color-075);
+      font-size: 0.75em;
+    }
+
+    & > span {
+      color: var(--share-color-075);
+      font-size: 0.875em;
+      font-weight: bold;
+      line-height: 1.25;
+      user-select: none;
+      word-break: break-all;
     }
   }
 }

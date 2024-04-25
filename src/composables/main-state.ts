@@ -166,6 +166,7 @@ state.selectLabelsPopupState = undefined
 state.hasLabel = hasLabel
 state.getCustomLabels = getCustomLabels
 state.filterLabels = filterLabels
+state.filterCustomLabels = filterCustomLabels
 state.openSelectLabelsPopup = openSelectLabelsPopup
 state.closeSelectLabelsPopup = closeSelectLabelsPopup
 
@@ -1036,6 +1037,12 @@ function filterLabels (
       return target.val === label.val
     }) === index
   })
+}
+
+function filterCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
+  return labels?.filter((label: TTLabel) => {
+    return LABEL_BEHAVIORS[label.val] == null
+  }) ?? []
 }
 
 function openSelectLabelsPopup (params: any) {
