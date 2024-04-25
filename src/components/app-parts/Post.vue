@@ -626,22 +626,35 @@ function toggleOldestQuotedPostDisplay () {
       </div>
 
       <!-- リプライ先ユーザー -->
-      <button
-        v-if="parentPost != null"
-        class="replier"
-        @click.stop="onActivateReplierLink"
-      >
-        <SVGIcon name="reply" />
-        <DisplayName
-          class="replier__display-name"
-          :displayName="parentPost?.author?.displayName"
-          :anonymizable="true"
-        />
-        <AuthorHandle
-          :handle="parentPost.author?.handle"
-          :anonymizable="true"
-        />
-      </button>
+      <template v-if="parentPost != null">
+        <!-- リプライ先ポストは存在しない -->
+        <div
+          v-if="parentPost.notFound"
+          class="replier"
+          disabled="true"
+        >
+          <SVGIcon name="reply" />
+          <span>{{ $t("replyUnknown") }}</span>
+        </div>
+
+        <!-- リプライ先ポストは存在する -->
+        <button
+          v-else
+          class="replier"
+          @click.stop="onActivateReplierLink"
+        >
+          <SVGIcon name="reply" />
+          <DisplayName
+            class="replier__display-name"
+            :displayName="parentPost?.author?.displayName"
+            :anonymizable="true"
+          />
+          <AuthorHandle
+            :handle="parentPost.author?.handle"
+            :anonymizable="true"
+          />
+        </button>
+      </template>
 
       <!-- リポストユーザー -->
       <button
@@ -1287,16 +1300,26 @@ function toggleOldestQuotedPostDisplay () {
 
 .replier,
 .reposter {
-  cursor: pointer;
   display: grid;
   grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
   margin: -0.75em 0 -0.5em;
   padding: 0.75em 0 0.5em;
+  &:not([disabled="true"]) {
+    cursor: pointer;
+  }
+
+  &[disabled="true"] > span {
+    color: var(--fg-color-05);
+    font-size: 0.875em;
+  }
 
   & > .svg-icon {
     font-size: 0.875em;
+  }
+  &[disabled="true"] > .svg-icon {
+    fill: var(--fg-color-05);
   }
 
   &__display-name {
@@ -1305,17 +1328,19 @@ function toggleOldestQuotedPostDisplay () {
 }
 
 .replier {
-  &:focus, &:hover {
-    & > .svg-icon {
-      fill: rgb(var(--post-color));
-    }
+  &:not([disabled="true"]) {
+    &:focus, &:hover {
+      & > .svg-icon {
+        fill: rgb(var(--post-color));
+      }
 
-    .replier__display-name {
-      color: rgb(var(--post-color));
-    }
+      .replier__display-name {
+        color: rgb(var(--post-color));
+      }
 
-    .author-handle {
-      --fg-color-05: var(--fg-color-075);
+      .author-handle {
+        --fg-color-05: var(--fg-color-075);
+      }
     }
   }
 
@@ -1333,17 +1358,19 @@ function toggleOldestQuotedPostDisplay () {
 }
 
 .reposter {
-  &:focus, &:hover {
-    & > .svg-icon {
-      fill: rgb(var(--share-color));
-    }
+  &:not([disabled="true"]) {
+    &:focus, &:hover {
+      & > .svg-icon {
+        fill: rgb(var(--share-color));
+      }
 
-    .reposter__display-name {
-      color: rgb(var(--share-color));
-    }
+      .reposter__display-name {
+        color: rgb(var(--share-color));
+      }
 
-    .author-handle {
-      --fg-color-05: var(--fg-color-075);
+      .author-handle {
+        --fg-color-05: var(--fg-color-075);
+      }
     }
   }
 
