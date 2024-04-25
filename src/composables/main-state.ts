@@ -144,11 +144,6 @@ state.inviteCodesPopupDisplay = false
 state.openInviteCodesPopup = openInviteCodesPopup
 state.closeInviteCodesPopup = closeInviteCodesPopup
 
-// 設定 - 説明用ポップアップ
-
-state.htmlPopupDisplay = false
-state.htmlPopupType = undefined
-
 // Preferences
 
 state.currentPreferences = []
@@ -549,6 +544,14 @@ state.threadgatePopupProps = {
 }
 state.openThreadgatePopup = openThreadgatePopup
 state.closeThreadgatePopup = closeThreadgatePopup
+
+// ポップアップ - HTML ポップアップ
+state.htmlPopupProps = {
+  display: false,
+  type: undefined,
+}
+state.openHtmlPopup = openHtmlPopup
+state.closeHtmlPopup = closeHtmlPopup
 
 // ポップアップ - 進捗ポップアップ
 state.progressPopupDisplay = false
@@ -1881,6 +1884,17 @@ function closeThreadgatePopup (params: any) {
   if (state.threadgatePopupProps.onClosed != null)
     state.threadgatePopupProps.onClosed(params)
   state.threadgatePopupProps.display = false
+}
+
+// ポップアップ - HTML ポップアップ
+
+function openHtmlPopup (type: string) {
+  state.htmlPopupProps.type = type
+  state.htmlPopupProps.display = true
+}
+
+function closeHtmlPopup () {
+  state.htmlPopupProps.display = false
 }
 
 // ポップアップ - 進捗ポップアップ

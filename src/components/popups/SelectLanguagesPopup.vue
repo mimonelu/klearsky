@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { inject } from "vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
-import HtmlPopup from "@/components/popups/HtmlPopup.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import LANGUAGES from "@/consts/languages"
@@ -15,11 +14,7 @@ const props = defineProps<{
   limit?: number
 }>()
 
-const state = reactive<{
-  htmlPopupDisplay: boolean
-}>({
-  htmlPopupDisplay: false,
-})
+const mainState = inject("state") as MainState
 
 const easyFormProps: TTEasyForm = {
   hasSubmitButton: false,
@@ -45,35 +40,24 @@ function close () {
 </script>
 
 <template>
-  <div>
-    <Popup
-      class="select-languages-popup"
-      :hasCloseButton="true"
-      @close="close"
-    >
-      <template #header>
-        <button @click.stop="state.htmlPopupDisplay = true">
-          <SVGIcon name="help" />
-        </button>
-        <h2>
-          <SVGIcon name="translate" />
-          <span>{{ $t(title) }}</span>
-        </h2>
-      </template>
-      <template #body>
-        <EasyForm v-bind="easyFormProps" />
-      </template>
-    </Popup>
-
-    <!-- 説明用HTMLポップアップ -->
-    <HtmlPopup
-      v-if="state.htmlPopupDisplay"
-      :title="`${$t('help')} - ${$t(title)}`"
-      @close="state.htmlPopupDisplay = false"
-    >
-      <slot name="html-popup-content" />
-    </HtmlPopup>
-  </div>
+  <Popup
+    class="select-languages-popup"
+    :hasCloseButton="true"
+    @close="close"
+  >
+    <template #header>
+      <button @click.stop="mainState.openHtmlPopup(title)">
+        <SVGIcon name="help" />
+      </button>
+      <h2>
+        <SVGIcon name="translate" />
+        <span>{{ $t(title) }}</span>
+      </h2>
+    </template>
+    <template #body>
+      <EasyForm v-bind="easyFormProps" />
+    </template>
+  </Popup>
 </template>
 
 <style lang="scss" scoped>

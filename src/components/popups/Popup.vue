@@ -114,6 +114,26 @@ function scrollListener () {
 </template>
 
 <style lang="scss" scoped>
+@keyframes popup-overlay-animation {
+  0% {
+    background-color: rgb(0, 0, 0, 0);
+  }
+  100% {
+    background-color: rgb(0, 0, 0, 0.5);
+  }
+}
+
+@keyframes popup-content-animation {
+  0% {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  100% {
+    opacity: 1.0;
+    transform: translateY(0);
+  }
+}
+
 .popup-overlay {
   --margin: 0.5rem;
 
@@ -129,6 +149,30 @@ function scrollListener () {
   z-index: 2;
   width: 100%;
   height: 100%;
+
+  // アニメーション
+  &.v-enter-from,
+  &.v-leave-from {
+    pointer-events: none;
+  }
+  &.v-enter-to,
+  &.v-leave-to {
+    pointer-events: unset;
+  }
+  &.v-enter-active {
+    animation: popup-overlay-animation 125ms linear;
+
+    .popup {
+      animation: popup-content-animation 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+  }
+  &.v-leave-active {
+    animation: popup-overlay-animation 125ms linear reverse;
+
+    .popup {
+      animation: popup-content-animation 125ms cubic-bezier(0.34, 1.56, 0.64, 1) reverse;
+    }
+  }
 }
 
 .popup {
@@ -146,6 +190,7 @@ function scrollListener () {
   width: calc($router-view-width - var(--margin2));
   max-width: calc(100% - var(--margin2));
   max-height: calc(100% - var(--margin2));
+  transform: translateY(0);
 
   // SP幅以上
   @media (min-width: $sp-width) {

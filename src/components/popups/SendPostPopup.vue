@@ -2,7 +2,6 @@
 import { computed, inject, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
 import format from "date-fns/format"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
-import HtmlPopup from "@/components/popups/HtmlPopup.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/app-parts/Post.vue"
@@ -25,13 +24,11 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   labels: Array<string>
-  htmlPopupDisplay: boolean
   popupLoaderDisplay: boolean
   draftThreadgate: TTDraftThreadgate
   postDatePopupDate: ComputedRef<undefined | string>
 }>({
   labels: [],
-  htmlPopupDisplay: false,
   popupLoaderDisplay: false,
   draftThreadgate: {
     applied: false,
@@ -285,127 +282,110 @@ function openThreadgatePopup () {
 </script>
 
 <template>
-  <div>
-    <Popup
-      class="send-post-popup"
-      ref="popup"
-      :hasCloseButton="true"
-      :loaderDisplay="state.popupLoaderDisplay"
-      @close="close"
-    >
-      <template #header>
-        <button @click.stop="state.htmlPopupDisplay = true">
-          <SVGIcon name="help" />
-        </button>
-        <h2>
-          <SVGIcon :name="type" />
-          <span>{{ $t(type) }}</span>
-        </h2>
-      </template>
-      <template #body>
-        <Post
-          v-if="type === 'reply' || type === 'quoteRepost'"
-          position="preview"
-          :post="post as TTPost"
-          :noLink="true"
-          @keydown.prevent.stop
-          @keyup.prevent.stop
-        />
-        <EasyForm
-          v-bind="easyFormProps"
-          ref="easyForm"
-          @clickClearButton="onClickClearButton"
-        >
-          <template #free-3>
-            <div class="button-container">
-              <!-- ポスト言語選択ポップアップトリガー -->
-              <button
-                class="button--bordered post-language-button"
-                @click.prevent="mainState.openPostLanguagesPopup()"
-              >
-                <SVGIcon name="translate" />
-                <span>{{ $t("languages") }}</span>
-                <b v-if="mainState.currentSetting.postLanguages?.length">{{ mainState.currentSetting.postLanguages?.join(", ") }}</b>
-              </button>
+  <Popup
+    class="send-post-popup"
+    ref="popup"
+    :hasCloseButton="true"
+    :loaderDisplay="state.popupLoaderDisplay"
+    @close="close"
+  >
+    <template #header>
+      <button @click.stop="mainState.openHtmlPopup('post')">
+        <SVGIcon name="help" />
+      </button>
+      <h2>
+        <SVGIcon :name="type" />
+        <span>{{ $t(type) }}</span>
+      </h2>
+    </template>
+    <template #body>
+      <Post
+        v-if="type === 'reply' || type === 'quoteRepost'"
+        position="preview"
+        :post="post as TTPost"
+        :noLink="true"
+        @keydown.prevent.stop
+        @keyup.prevent.stop
+      />
+      <EasyForm
+        v-bind="easyFormProps"
+        ref="easyForm"
+        @clickClearButton="onClickClearButton"
+      >
+        <template #free-3>
+          <div class="button-container">
+            <!-- ポスト言語選択ポップアップトリガー -->
+            <button
+              class="button--bordered post-language-button"
+              @click.prevent="mainState.openPostLanguagesPopup()"
+            >
+              <SVGIcon name="translate" />
+              <span>{{ $t("languages") }}</span>
+              <b v-if="mainState.currentSetting.postLanguages?.length">{{ mainState.currentSetting.postLanguages?.join(", ") }}</b>
+            </button>
 
-              <!-- マイタグポップアップトリガー -->
-              <button
-                class="button--bordered post-tag-button"
-                @click.prevent="mainState.openMyTagPopup('select')"
+            <!-- マイタグポップアップトリガー -->
+            <button
+              class="button--bordered post-tag-button"
+              @click.prevent="mainState.openMyTagPopup('select')"
+            >
+              <SVGIcon name="tag" />
+              <span>{{ $t("tags") }}</span>
+              <div
+                v-if="mainState.currentPostTags?.length"
+                class="post-tag-container"
               >
-                <SVGIcon name="tag" />
-                <span>{{ $t("tags") }}</span>
                 <div
-                  v-if="mainState.currentPostTags?.length"
-                  class="post-tag-container"
+                  v-for="tag, index of mainState.currentPostTags"
+                  :key="index"
+                  class="post-tag"
                 >
-                  <div
-                    v-for="tag, index of mainState.currentPostTags"
-                    :key="index"
-                    class="post-tag"
-                  >
-                    <span>{{ tag.text }}</span>
-                  </div>
+                  <span>{{ tag.text }}</span>
                 </div>
-              </button>
+              </div>
+            </button>
 
-              <!-- ポストラベル選択ポップアップトリガー -->
-              <LabelButton
-                type="post"
-                :parentState="state"
-              />
+            <!-- ポストラベル選択ポップアップトリガー -->
+            <LabelButton
+              type="post"
+              :parentState="state"
+            />
 
-              <!-- Threadgate ポップアップトリガー -->
-              <button
-                class="button--bordered threadgate-button"
-                :disabled="type === 'reply'"
-                @click.prevent="openThreadgatePopup"
-              >
-                <SVGIcon :name="state.draftThreadgate.applied ? 'lock' : 'unlock'" />
-                <span>{{ $t("threadgate") }}</span>
-                <b v-if="state.draftThreadgate.applied">ON</b>
-              </button>
+            <!-- Threadgate ポップアップトリガー -->
+            <button
+              class="button--bordered threadgate-button"
+              :disabled="type === 'reply'"
+              @click.prevent="openThreadgatePopup"
+            >
+              <SVGIcon :name="state.draftThreadgate.applied ? 'lock' : 'unlock'" />
+              <span>{{ $t("threadgate") }}</span>
+              <b v-if="state.draftThreadgate.applied">ON</b>
+            </button>
 
-              <!-- ポスト日時選択ポップアップトリガー -->
-              <button
-                class="button--bordered post-date-button"
-                @click.prevent="mainState.openPostDatePopup"
-              >
-                <SVGIcon name="history" />
-                <span>{{ $t("date") }}</span>
-                <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
-              </button>
-            </div>
-          </template>
-        </EasyForm>
-
-        <div>
-          <div
-            class="textlink--icon"
-            @click="reset"
-          >
-            <SVGIcon name="alert" />
-            <span>{{ $t("sendPostReset") }}</span>
+            <!-- ポスト日時選択ポップアップトリガー -->
+            <button
+              class="button--bordered post-date-button"
+              @click.prevent="mainState.openPostDatePopup"
+            >
+              <SVGIcon name="history" />
+              <span>{{ $t("date") }}</span>
+              <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
+            </button>
           </div>
-        </div>
-      </template>
-    </Popup>
+        </template>
+      </EasyForm>
 
-    <!-- 説明用HTMLポップアップ -->
-    <HtmlPopup
-      v-if="state.htmlPopupDisplay"
-      :title="`${$t('help')} - ${$t('post')}`"
-      @close="state.htmlPopupDisplay = false"
-    >
-      <ul class="bullet-points">
-        <li>{{ $t("sendPostNotification1") }}</li>
-        <li>{{ $t("sendPostNotification2") }}</li>
-        <li>{{ $t("sendPostNotification3") }}</li>
-        <li>{{ $t("sendPostNotification4") }}</li>
-        <li>{{ $t("sendPostNotification5") }}</li>
-      </ul>
-    </HtmlPopup>
-  </div>
+      <div>
+        <div
+          class="textlink--icon"
+          @click="reset"
+        >
+          <SVGIcon name="alert" />
+          <span>{{ $t("sendPostReset") }}</span>
+        </div>
+      </div>
+    </template>
+  </Popup>
 </template>
 
 <style lang="scss" scoped>

@@ -520,6 +520,11 @@ type MainState = {
   openThreadgatePopup: Function
   closeThreadgatePopup: Function
 
+  // ポップアップ - HTML ポップアップ
+  htmlPopupProps: TTHtmlPopupProps
+  openHtmlPopup: Function
+  closeHtmlPopup: Function
+
   // ポップアップ - 進捗ポップアップ
   progressPopupDisplay: boolean
   progressPopupProps: {

@@ -578,15 +578,6 @@ function changeSetting () {
   state.updateSettings()
 }
 
-function showDescription (type: string) {
-  state.htmlPopupType = type
-  state.htmlPopupDisplay = true
-}
-
-function closeHtmlPopupDisplay () {
-  state.htmlPopupDisplay = false
-}
-
 // インフィニットスクロール用処理
 
 let isEnter = false
@@ -844,334 +835,418 @@ function broadcastListener (event: MessageEvent) {
     <!-- ポップアップコンテナ -->
     <div class="popup-container">
       <!-- 通知ポップアップ -->
-      <NotificationPopup
-        v-if="state.notificationPopupDisplay"
-        @close="state.closeNotificationPopup"
-        @updatePageTitle="state.updatePageTitle"
-      />
+      <Transition>
+        <NotificationPopup
+          v-if="state.notificationPopupDisplay"
+          @close="state.closeNotificationPopup"
+          @updatePageTitle="state.updatePageTitle"
+        />
+      </Transition>
 
       <!-- 設定 - UI言語設定ポップアップ -->
-      <UiLanguageSettingsPopup
-        v-if="state.uiLanguageSettingsPopupDisplay"
-        @close="state.closeUiLanguageSettingsPopup"
-        @changeSetting="changeSetting"
-      />
+      <Transition>
+        <UiLanguageSettingsPopup
+          v-if="state.uiLanguageSettingsPopupDisplay"
+          @close="state.closeUiLanguageSettingsPopup"
+          @changeSetting="changeSetting"
+        />
+      </Transition>
 
       <!-- 設定 - デザイン設定ポップアップ -->
-      <DesignSettingsPopup
-        v-if="state.designSettingsPopupDisplay"
-        @close="state.closeDesignSettingsPopup"
-        @saveSetting="saveSetting"
-        @changeSetting="changeSetting"
-        @showDescription="(name: string) => { showDescription(name) }"
-      />
+      <Transition>
+        <DesignSettingsPopup
+          v-if="state.designSettingsPopupDisplay"
+          @close="state.closeDesignSettingsPopup"
+          @saveSetting="saveSetting"
+          @changeSetting="changeSetting"
+          @showDescription="state.openHtmlPopup"
+        />
+      </Transition>
 
       <!-- 設定 - ポスト設定ポップアップ -->
-      <PostSettingsPopup
-        v-if="state.postSettingsPopupDisplay"
-        @close="state.closePostSettingsPopup"
-        @saveSetting="saveSetting"
-        @changeSetting="changeSetting"
-        @showDescription="(name: string) => { showDescription(name) }"
-      />
+      <Transition>
+        <PostSettingsPopup
+          v-if="state.postSettingsPopupDisplay"
+          @close="state.closePostSettingsPopup"
+          @saveSetting="saveSetting"
+          @changeSetting="changeSetting"
+          @showDescription="state.openHtmlPopup"
+        />
+      </Transition>
 
       <!-- 設定 - 心理的安全性設定ポップアップ -->
-      <PsySafetySettingsPopup
-        v-if="state.psySafetySettingsPopupDisplay"
-        @close="state.closePsySafetySettingsPopup"
-        @saveSetting="saveSetting"
-        @changeSetting="changeSetting"
-      />
+      <Transition>
+        <PsySafetySettingsPopup
+          v-if="state.psySafetySettingsPopupDisplay"
+          @close="state.closePsySafetySettingsPopup"
+          @saveSetting="saveSetting"
+          @changeSetting="changeSetting"
+        />
+      </Transition>
 
       <!-- 設定 - その他設定ポップアップ -->
-      <OtherSettingsPopup
-        v-if="state.otherSettingsPopupDisplay"
-        @close="state.closeOtherSettingsPopup"
-        @saveSetting="saveSetting"
-        @changeSetting="changeSetting"
-        @showDescription="(name: string) => { showDescription(name) }"
-      />
+      <Transition>
+        <OtherSettingsPopup
+          v-if="state.otherSettingsPopupDisplay"
+          @close="state.closeOtherSettingsPopup"
+          @saveSetting="saveSetting"
+          @changeSetting="changeSetting"
+          @showDescription="state.openHtmlPopup"
+        />
+      </Transition>
 
       <!-- 設定 - 招待コード確認ポップアップ -->
-      <InviteCodesPopup
-        v-if="state.inviteCodesPopupDisplay"
-        @close="state.closeInviteCodesPopup"
-      />
-
-      <!-- 設定 - 説明用HTMLポップアップ -->
-      <HtmlPopup
-        v-if="state.htmlPopupDisplay"
-        :title="`${$t('help')} - ${$t(state.htmlPopupType)}`"
-        @close="closeHtmlPopupDisplay"
-      >
-        <template v-if="state.htmlPopupType === 'autoTranslation'">
-          <ul class="bullet-points">
-            <li>{{ $t("autoTranslationRemarks1") }}</li>
-            <li>{{ $t("autoTranslationRemarks2") }}</li>
-            <li>{{ $t("autoTranslationRemarks3") }}</li>
-            <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
-          </ul>
-        </template>
-
-        <template v-else-if="state.htmlPopupType === 'autoTranslationIgnoreLanguage'">
-          <ul class="bullet-points">
-            <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
-          </ul>
-        </template>
-
-        <template v-else-if="state.htmlPopupType === 'backgroundImage'">
-          <ul class="bullet-points">
-            <li>{{ $t("backgroundImage1") }}</li>
-            <li>{{ $t("backgroundImage2") }}</li>
-          </ul>
-        </template>
-
-        <template v-else-if="state.htmlPopupType === 'timelineControl'">
-          <ul class="bullet-points">
-            <li>{{ $t("timelineControlDescription") }}</li>
-          </ul>
-        </template>
-
-        <template v-else-if="state.htmlPopupType === 'lightning'">
-          <ul class="bullet-points">
-            <li>{{ $t("lightningDescription") }}</li>
-          </ul>
-        </template>
-      </HtmlPopup>
+      <Transition>
+        <InviteCodesPopup
+          v-if="state.inviteCodesPopupDisplay"
+          @close="state.closeInviteCodesPopup"
+        />
+      </Transition>
 
       <!-- アカウントポップアップ -->
-      <AccountPopup
-        v-if="state.accountPopupDisplay"
-        @close="state.closeAccountPopup"
-      />
+      <Transition>
+        <AccountPopup
+          v-if="state.accountPopupDisplay"
+          @close="state.closeAccountPopup"
+        />
+      </Transition>
 
       <!-- コンテンツ言語選択ポップアップ -->
-      <SelectLanguagesPopup
-        v-if="state.contentLanguagesPopupDisplay"
-        :state="state.currentSetting"
-        property="contentLanguages"
-        title="contentLanguages"
-        @close="state.closeContentLanguagesPopup"
-        @change="state.saveSettings"
-      >
-        <template #html-popup-content>
-          <ul class="bullet-points">
-            <li>{{ $t("contentLanguagesDetail1") }}</li>
-            <li>{{ $t("contentLanguagesDetail2") }}</li>
-            <li>{{ $t("contentLanguagesDetail3") }}</li>
-            <li>{{ $t("contentLanguagesDetail4") }}</li>
-          </ul>
-        </template>
-      </SelectLanguagesPopup>
+      <Transition>
+        <SelectLanguagesPopup
+          v-if="state.contentLanguagesPopupDisplay"
+          :state="state.currentSetting"
+          property="contentLanguages"
+          title="contentLanguages"
+          @close="state.closeContentLanguagesPopup"
+          @change="state.saveSettings"
+        />
+      </Transition>
 
       <!-- タイムフィードポップアップ -->
-      <TimeFeedsPopup
-        v-if="state.timeFeedsPopupDisplay"
-        @close="state.closeTimeFeedsPopup"
-      />
+      <Transition>
+        <TimeFeedsPopup
+          v-if="state.timeFeedsPopupDisplay"
+          @close="state.closeTimeFeedsPopup"
+        />
+      </Transition>
 
       <!-- リポストユーザーリストポップアップ -->
-      <RepostUsersPopup
-        v-if="state.repostUsersPopupDisplay"
-        @close="state.closeRepostUsersPopup"
-      />
+      <Transition>
+        <RepostUsersPopup
+          v-if="state.repostUsersPopupDisplay"
+          @close="state.closeRepostUsersPopup"
+        />
+      </Transition>
 
       <!-- ライクユーザーリストポップアップ -->
-      <LikeUsersPopup
-        v-if="state.likeUsersPopupDisplay"
-        @close="state.closeLikeUsersPopup"
-      />
+      <Transition>
+        <LikeUsersPopup
+          v-if="state.likeUsersPopupDisplay"
+          @close="state.closeLikeUsersPopup"
+        />
+      </Transition>
 
       <!-- マイフィードポップアップ -->
-      <MyFeedsPopup
-        v-if="state.myFeedsPopupDisplay"
-        @close="state.closeMyFeedsPopup"
-      />
+      <Transition>
+        <MyFeedsPopup
+          v-if="state.myFeedsPopupDisplay"
+          @close="state.closeMyFeedsPopup"
+        />
+      </Transition>
 
       <!-- マイリストポップアップ -->
-      <MyListPopup
-        v-if="state.myListPopupDisplay"
-        @close="state.closeMyListPopup"
-      />
+      <Transition>
+        <MyListPopup
+          v-if="state.myListPopupDisplay"
+          @close="state.closeMyListPopup"
+        />
+      </Transition>
 
       <!-- リスト編集ポップアップ -->
-      <ListEditPopup
-        v-if="state.listEditPopupProps.display"
-        v-bind="state.listEditPopupProps"
-        @close="state.closeListEditPopup"
-      />
+      <Transition>
+        <ListEditPopup
+          v-if="state.listEditPopupProps.display"
+          v-bind="state.listEditPopupProps"
+          @close="state.closeListEditPopup"
+        />
+      </Transition>
 
       <!-- リストユーザー管理ポップアップ -->
-      <ListUserManagementPopup
-        v-if="state.listUserManagementPopupProps.display"
-        v-bind="state.listUserManagementPopupProps"
-        @close="state.closeListUserManagementPopup"
-      />
+      <Transition>
+        <ListUserManagementPopup
+          v-if="state.listUserManagementPopupProps.display"
+          v-bind="state.listUserManagementPopupProps"
+          @close="state.closeListUserManagementPopup"
+        />
+      </Transition>
 
       <!-- ワードミュートポップアップ -->
-      <WordMutePopup
-        v-if="state.wordMutePopupDisplay"
-        @close="state.closeWordMutePopup"
-      />
+      <Transition>
+        <WordMutePopup
+          v-if="state.wordMutePopupDisplay"
+          @close="state.closeWordMutePopup"
+        />
+      </Transition>
 
       <!-- コンテンツフィルタリングポップアップ -->
-      <ContentFilteringPopup
-        v-if="state.contentFilteringPopupDisplay"
-        @close="state.closeContentFilteringPopup"
-      />
+      <Transition>
+        <ContentFilteringPopup
+          v-if="state.contentFilteringPopupDisplay"
+          @close="state.closeContentFilteringPopup"
+        />
+      </Transition>
 
       <!-- ミュートユーザーリストポップアップ -->
-      <MutingUsersPopup
-        v-if="state.mutingUsersPopupDisplay"
-        @close="state.closeMutingUsersPopup"
-      />
+      <Transition>
+        <MutingUsersPopup
+          v-if="state.mutingUsersPopupDisplay"
+          @close="state.closeMutingUsersPopup"
+        />
+      </Transition>
 
       <!-- ブロックユーザーリストポップアップ -->
-      <BlockingUsersPopup
-        v-if="state.blockingUsersPopupDisplay"
-        @close="state.closeBlockingUsersPopup"
-      />
+      <Transition>
+        <BlockingUsersPopup
+          v-if="state.blockingUsersPopupDisplay"
+          @close="state.closeBlockingUsersPopup"
+        />
+      </Transition>
 
       <!-- アカウントレポート送信ポップアップ -->
-      <SendAccountReportPopup
-        v-if="state.sendAccountReportPopupProps.display"
-        :user="state.sendAccountReportPopupProps.user as TTUser"
-        @close="state.closeSendAccountReportPopup"
-      />
+      <Transition>
+        <SendAccountReportPopup
+          v-if="state.sendAccountReportPopupProps.display"
+          :user="state.sendAccountReportPopupProps.user as TTUser"
+          @close="state.closeSendAccountReportPopup"
+        />
+      </Transition>
 
       <!-- ポストレポート送信ポップアップ -->
-      <SendPostReportPopup
-        v-if="state.sendPostReportPopupProps.display"
-        :post="state.sendPostReportPopupProps.post as TTPost"
-        @close="state.closeSendPostReportPopup"
-      />
+      <Transition>
+        <SendPostReportPopup
+          v-if="state.sendPostReportPopupProps.display"
+          :post="state.sendPostReportPopupProps.post as TTPost"
+          @close="state.closeSendPostReportPopup"
+        />
+      </Transition>
 
       <!-- フィードレポート送信ポップアップ -->
-      <SendFeedReportPopup
-        v-if="state.sendFeedReportPopupProps.display"
-        :generator="state.sendFeedReportPopupProps.generator as TTFeedGenerator"
-        @close="state.closeSendFeedReportPopup"
-      />
+      <Transition>
+        <SendFeedReportPopup
+          v-if="state.sendFeedReportPopupProps.display"
+          :generator="state.sendFeedReportPopupProps.generator as TTFeedGenerator"
+          @close="state.closeSendFeedReportPopup"
+        />
+      </Transition>
 
       <!-- リストレポート送信ポップアップ -->
-      <SendListReportPopup
-        v-if="state.sendListReportPopupProps.display"
-        :list="state.sendListReportPopupProps.list as TTList"
-        @close="state.closeSendListReportPopup"
-      />
+      <Transition>
+        <SendListReportPopup
+          v-if="state.sendListReportPopupProps.display"
+          :list="state.sendListReportPopupProps.list as TTList"
+          @close="state.closeSendListReportPopup"
+        />
+      </Transition>
 
       <!-- イメージポップアップ -->
-      <ImagePopup
-        v-if="state.imagePopupProps.display"
-        v-bind="state.imagePopupProps"
-        @close="state.imagePopupProps.display = false"
-      />
+      <Transition>
+        <ImagePopup
+          v-if="state.imagePopupProps.display"
+          v-bind="state.imagePopupProps"
+          @close="state.imagePopupProps.display = false"
+        />
+      </Transition>
 
       <!-- ポスト送信ポップアップ -->
-      <SendPostPopup
-        v-if="state.sendPostPopupProps.display"
-        v-show="state.sendPostPopupProps.visibility"
-        :type="state.sendPostPopupProps.type"
-        :post="state.sendPostPopupProps.post"
-        :text="state.sendPostPopupProps.text"
-        :url="state.sendPostPopupProps.url"
-        :fileList="state.sendPostPopupProps.fileList"
-        :createdAt="state.sendPostPopupProps.createdAt"
-        @closeSendPostPopup="closeSendPostPopup"
-      />
+      <Transition>
+        <SendPostPopup
+          v-if="state.sendPostPopupProps.display"
+          v-show="state.sendPostPopupProps.visibility"
+          :type="state.sendPostPopupProps.type"
+          :post="state.sendPostPopupProps.post"
+          :text="state.sendPostPopupProps.text"
+          :url="state.sendPostPopupProps.url"
+          :fileList="state.sendPostPopupProps.fileList"
+          :createdAt="state.sendPostPopupProps.createdAt"
+          @closeSendPostPopup="closeSendPostPopup"
+        />
+      </Transition>
 
       <!-- マイタグポップアップ -->
-      <MyTagPopup
-        v-if="state.myTagPopupProps.display"
-        v-bind="state.myTagPopupProps"
-        @close="state.closeMyTagPopup"
-      />
+      <Transition>
+        <MyTagPopup
+          v-if="state.myTagPopupProps.display"
+          v-bind="state.myTagPopupProps"
+          @close="state.closeMyTagPopup"
+        />
+      </Transition>
 
       <!-- ポスト言語選択ポップアップ -->
-      <SelectLanguagesPopup
-        v-if="state.postLanguagesPopupDisplay"
-        :state="state.currentSetting"
-        property="postLanguages"
-        title="postLanguages"
-        :limit="3"
-        @close="state.closePostLanguagesPopup"
-        @change="state.saveSettings"
-      >
-        <template #html-popup-content>
-          <ul class="bullet-points">
-            <li>{{ $t("postLanguagesDetail1") }}</li>
-            <li>{{ $t("postLanguagesDetail2") }}</li>
-          </ul>
-        </template>
-      </SelectLanguagesPopup>
+      <Transition>
+        <SelectLanguagesPopup
+          v-if="state.postLanguagesPopupDisplay"
+          :state="state.currentSetting"
+          property="postLanguages"
+          title="postLanguages"
+          :limit="3"
+          @close="state.closePostLanguagesPopup"
+          @change="state.saveSettings"
+        />
+      </Transition>
 
       <!-- ラベル選択ポップアップ -->
-      <SelectLabelsPopup
-        v-if="state.selectLabelsPopupDisplay"
-        :state="state.selectLabelsPopupState"
-        @close="state.closeSelectLabelsPopup"
-        @change=""
-      />
+      <Transition>
+        <SelectLabelsPopup
+          v-if="state.selectLabelsPopupDisplay"
+          :state="state.selectLabelsPopupState"
+          @close="state.closeSelectLabelsPopup"
+          @change=""
+        />
+      </Transition>
 
       <!-- ポスト日時選択ポップアップ -->
-      <SelectDatePopup
-        v-if="state.postDatePopupDisplay"
-        :date="state.postDatePopupDate"
-        textTitle="postDatePopupTitle"
-        textDescription="postDatePopupDescription"
-        textReset="postDatePopupReset"
-        textResetDescription="postDatePopupResetDescription"
-        @close="state.closePostDatePopup"
-        @onChange="(params: any) => { state.postDatePopupDate = params }"
-      />
+      <Transition>
+        <SelectDatePopup
+          v-if="state.postDatePopupDisplay"
+          :date="state.postDatePopupDate"
+          textTitle="postDatePopupTitle"
+          textDescription="postDatePopupDescription"
+          textReset="postDatePopupReset"
+          textResetDescription="postDatePopupResetDescription"
+          @close="state.closePostDatePopup"
+          @onChange="(params: any) => { state.postDatePopupDate = params }"
+        />
+      </Transition>
 
       <!-- Threadgate ポップアップ -->
-      <ThreadgatePopup
-        v-if="state.threadgatePopupProps.display"
-        v-bind="state.threadgatePopupProps"
-        @close="state.closeThreadgatePopup"
-      />
+      <Transition>
+        <ThreadgatePopup
+          v-if="state.threadgatePopupProps.display"
+          v-bind="state.threadgatePopupProps"
+          @close="state.closeThreadgatePopup"
+        />
+      </Transition>
+
+      <!-- 設定 - 説明用HTMLポップアップ -->
+      <Transition>
+        <HtmlPopup
+          v-if="state.htmlPopupProps.display"
+          :title="`${$t('help')} - ${$t(state.htmlPopupProps.type)}`"
+          @close="state.closeHtmlPopup"
+        >
+          <template v-if="state.htmlPopupProps.type === 'contentLanguages'">
+            <ul class="bullet-points">
+              <li>{{ $t("contentLanguagesDetail1") }}</li>
+              <li>{{ $t("contentLanguagesDetail2") }}</li>
+              <li>{{ $t("contentLanguagesDetail3") }}</li>
+              <li>{{ $t("contentLanguagesDetail4") }}</li>
+            </ul>
+          </template>
+
+          <template v-else-if="state.htmlPopupProps.type === 'postLanguages'">
+            <ul class="bullet-points">
+              <li>{{ $t("postLanguagesDetail1") }}</li>
+              <li>{{ $t("postLanguagesDetail2") }}</li>
+            </ul>
+          </template>
+
+          <template v-else-if="state.htmlPopupProps.type === 'autoTranslation'">
+            <ul class="bullet-points">
+              <li>{{ $t("autoTranslationRemarks1") }}</li>
+              <li>{{ $t("autoTranslationRemarks2") }}</li>
+              <li>{{ $t("autoTranslationRemarks3") }}</li>
+              <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
+            </ul>
+          </template>
+
+          <template v-else-if="state.htmlPopupProps.type === 'autoTranslationIgnoreLanguage'">
+            <ul class="bullet-points">
+              <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
+            </ul>
+          </template>
+
+          <template v-else-if="state.htmlPopupProps.type === 'backgroundImage'">
+            <ul class="bullet-points">
+              <li>{{ $t("backgroundImage1") }}</li>
+              <li>{{ $t("backgroundImage2") }}</li>
+            </ul>
+          </template>
+
+          <template v-else-if="state.htmlPopupProps.type === 'timelineControl'">
+            <ul class="bullet-points">
+              <li>{{ $t("timelineControlDescription") }}</li>
+            </ul>
+          </template>
+
+          <template v-else-if="state.htmlPopupProps.type === 'lightning'">
+            <ul class="bullet-points">
+              <li>{{ $t("lightningDescription") }}</li>
+            </ul>
+          </template>
+
+          <template v-else-if="state.htmlPopupProps.type === 'post'">
+            <ul class="bullet-points">
+              <li>{{ $t("sendPostNotification1") }}</li>
+              <li>{{ $t("sendPostNotification2") }}</li>
+              <li>{{ $t("sendPostNotification3") }}</li>
+              <li>{{ $t("sendPostNotification4") }}</li>
+              <li>{{ $t("sendPostNotification5") }}</li>
+            </ul>
+          </template>
+        </HtmlPopup>
+      </Transition>
 
       <!-- 　D&Dオーバーレイ -->
-      <div
-        v-if="state.isDragOver"
-        class="drag-and-drop-overlay"
-        @click="onDragLeave"
-        @dragenter.prevent
-        @dragover.prevent
-        @dragleave.prevent="onDragLeave"
-        @drop.prevent.stop="onDrop"
-      >
-        <SVGIcon name="image" />
-      </div>
+      <Transition>
+        <div
+          v-if="state.isDragOver"
+          class="drag-and-drop-overlay"
+          @click="onDragLeave"
+          @dragenter.prevent
+          @dragover.prevent
+          @dragleave.prevent="onDragLeave"
+          @drop.prevent.stop="onDrop"
+        >
+          <SVGIcon name="image" />
+        </div>
+      </Transition>
 
       <!-- ログインポップアップ -->
-      <LoginPopup
-        v-if="state.loginPopupAutoDisplay"
-        @signUp="signUp"
-        @login="manualLogin"
-      />
+      <Transition>
+        <LoginPopup
+          v-if="state.loginPopupAutoDisplay"
+          @signUp="signUp"
+          @login="manualLogin"
+        />
+      </Transition>
 
       <!-- メッセージポップアップ -->
-      <MessagePopup
-        v-if="state.messagePopupProps.display"
-        @close="state.closeMessagePopup"
-      />
+      <Transition>
+        <MessagePopup
+          v-if="state.messagePopupProps.display"
+          @close="state.closeMessagePopup"
+        />
+      </Transition>
 
       <!-- 確認ポップアップ -->
-      <ConfirmationPopup
-        v-if="state.confirmationPopupDisplay"
-        @close="state.closeConfirmationPopup"
-        @apply="state.applyConfirmationPopup"
-      />
+      <Transition>
+        <ConfirmationPopup
+          v-if="state.confirmationPopupDisplay"
+          @close="state.closeConfirmationPopup"
+          @apply="state.applyConfirmationPopup"
+        />
+      </Transition>
 
       <!-- エラーポップアップ -->
-      <ErrorPopup
-        v-if="state.errorPopupProps.display"
-        :error="state.errorPopupProps.error"
-        :description="state.errorPopupProps.description"
-        @close="state.closeErrorPopup"
-      />
+      <Transition>
+        <ErrorPopup
+          v-if="state.errorPopupProps.display"
+          :error="state.errorPopupProps.error"
+          :description="state.errorPopupProps.description"
+          @close="state.closeErrorPopup"
+        />
+      </Transition>
     </div>
 
     <!-- 進捗ポップアップ -->
