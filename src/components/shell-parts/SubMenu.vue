@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import CopyRight from "@/components/shell-parts/Copyright.vue"
 import Logo from "@/components/shell-parts/Logo.vue"
 import MyFeedList from "@/components/list/MyFeedList.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const $t = inject("$t") as Function
 
@@ -13,6 +14,8 @@ const state = reactive<{
   text: "",
 })
 
+const mainState = inject("state") as MainState
+
 const router = useRouter()
 
 function searchPost () {
@@ -21,6 +24,17 @@ function searchPost () {
     : undefined
   router.push({ name: "post-search", query })
 }
+
+function openKeywordHistoryPopover ($event: Event) {
+  mainState.openKeywordHistoryPopover(
+    $event.target,
+    mainState.currentSetting.postSearchKeywordHistory,
+    (keyword: string) => {
+      state.text = keyword
+      searchPost()
+    }
+  )
+}
 </script>
 
 <template>
@@ -28,20 +42,32 @@ function searchPost () {
     <!-- ロゴ -->
     <Logo />
 
-    <!-- ポスト検索ボックス -->
-    <form @submit.prevent="searchPost">
-      <input
-        v-model="state.text"
-        type="search"
-        name="searchPost"
-        :placeholder="$t('searchWord')"
-        autocapitalize="off"
-        autocomplete="off"
-        inputmode="search"
-        spellcheck="false"
-        class="textbox"
+    <!-- ポスト検索フォーム -->
+    <div class="search-post-form">
+      <!-- キーワードボックス -->
+      <form @submit.prevent="searchPost">
+        <input
+          v-model="state.text"
+          type="search"
+          name="searchPost"
+          :placeholder="$t('searchWord')"
+          autocapitalize="off"
+          autocomplete="off"
+          inputmode="search"
+          spellcheck="false"
+          class="textbox"
+        >
+      </form>
+
+      <!-- キーワード履歴ポップオーバートリガー -->
+      <button
+        class="button--bordered"
+        type="button"
+        @click.prevent="openKeywordHistoryPopover"
       >
-    </form>
+        <SVGIcon name="history" />
+      </button>
+    </div>
 
     <!-- マイフィードリスト -->
     <MyFeedList />
@@ -66,11 +92,26 @@ function searchPost () {
   margin-bottom: 2rem;
 }
 
-// ポスト検索ボックス
-.textbox {
-  font-size: 0.875rem;
+// ポスト検索フォーム
+.search-post-form {
+  display: flex;
+  grid-gap: 0.5rem;
   margin-bottom: 1rem;
-  width: 100%;
+
+  // キーワードボックス
+  & > form {
+    flex-grow: 1;
+
+    .textbox {
+      font-size: 0.875rem;
+      width: 100%;
+    }
+  }
+
+  // キーワード履歴ポップオーバートリガー
+  .button--bordered > .svg-icon {
+    font-size: 1.125rem;
+  }
 }
 
 // マイフィードリスト

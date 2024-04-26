@@ -85,7 +85,7 @@ const state = reactive<{
       }
 
       .svg-icon {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
       }
     }
   }
