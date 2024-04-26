@@ -21,12 +21,16 @@ export default async function (
     })
     .catch((error: any) => error)
   console.log("[klearsky/parse-ogp", response)
+
+  // エラーをスルー
+  /*
   if (response instanceof Error) {
     return response
   }
   if (response.error) {
     return Error("fetchOgpError")
   }
+  */
 
   let title = response.title || ""
   let description = response.description || ""
@@ -62,7 +66,8 @@ export default async function (
       })
       .catch((error: any) => error)
     if (response instanceof Error) {
-      return response
+      // エラーをスルー
+      return external
     }
     const blob = await response.blob()
 
