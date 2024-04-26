@@ -695,6 +695,7 @@ function saveSettings () {
       "giphy",
       "graysky",
       "spotify",
+      "tenor",
       "twitch",
       "youtube",
       "vimeo",

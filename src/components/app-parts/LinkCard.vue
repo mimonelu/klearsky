@@ -21,6 +21,7 @@ const state = reactive<{
     if (embeddedContentType === "graysky" && settingValues.includes("graysky")) return "graysky"
     if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
     if (embeddedContentType === "spotify" && settingValues.includes("spotify")) return "spotify"
+    if (embeddedContentType === "tenor" && settingValues.includes("tenor")) return "tenor"
     if (embeddedContentType === "twitch" && settingValues.includes("twitch")) return "twitch"
     if (embeddedContentType === "youtube" && settingValues.includes("youtube")) return "youtube"
     if (embeddedContentType === "vimeo" && settingValues.includes("vimeo")) return "vimeo"
@@ -102,6 +103,14 @@ function getEmbeddedContentId () {
       SoptifyType = matches[1]
       return
     }
+  }
+
+  // Tenor 対応
+  // e.g. https://media.tenor.com/3GgX9XG4fe0AAAAC/blue-fly.gif?hh=280&ww=498
+  else if (url.hostname.endsWith(".tenor.com")) {
+    embeddedContentType = "tenor"
+    embeddedContentId = url.href
+    return
   }
 
   // Twitch 対応
@@ -257,6 +266,19 @@ getEmbeddedContentId()
         width="100%"
         :height="SoptifyType === 'album' ? 352 : 152"
       />
+
+      <!-- Tenor 対応 -->
+      <div
+        v-else-if="state.type === 'tenor'"
+        class="external--tenor"
+      >
+        <img
+          :src="embeddedContentId as string"
+          alt=""
+          decoding="async"
+          loading="lazy"
+        />
+      </div>
 
       <!-- Twitch 対応 -->
       <iframe
@@ -419,6 +441,16 @@ getEmbeddedContentId()
   &--spotify {
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
+  }
+
+  // Tenor 対応
+  &--tenor {
+    aspect-ratio: 560 / 300;
+    background-color: var(--fg-color-0125);
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
   }
 
   // Twitch 対応

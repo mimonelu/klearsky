@@ -62,6 +62,7 @@
     { "label": "pnGiphy", "value": "giphy" },
     { "label": "pnGraysky", "value": "graysky" },
     { "label": "pnSpotify", "value": "spotify" },
+    { "label": "pnTenor", "value": "tenor" },
     { "label": "pnTwitch", "value": "twitch" },
     { "label": "pnYoutube", "value": "youtube" },
     { "label": "pnVimeo", "value": "vimeo" },
