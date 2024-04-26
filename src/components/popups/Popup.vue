@@ -115,12 +115,8 @@ function scrollListener () {
 
 <style lang="scss" scoped>
 @keyframes popup-overlay-animation {
-  0% {
-    background-color: rgb(0, 0, 0, 0);
-  }
-  100% {
-    background-color: rgb(0, 0, 0, 0.5);
-  }
+  0% {}
+  100% {}
 }
 
 @keyframes popup-content-animation {
@@ -161,14 +157,14 @@ function scrollListener () {
     animation: popup-overlay-animation 125ms linear;
 
     .popup {
-      animation: popup-content-animation 125ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: popup-content-animation 125ms ease-out;
     }
   }
   &.v-leave-active {
     animation: popup-overlay-animation 125ms linear reverse;
 
     .popup {
-      animation: popup-content-animation 125ms cubic-bezier(0.34, 1.56, 0.64, 1) reverse;
+      animation: popup-content-animation 125ms ease-out reverse;
     }
   }
 }
