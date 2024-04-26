@@ -538,11 +538,13 @@ function onActivateAccountMaskToggle () {
     <RouterView class="profile-view__router-view" />
 
     <!-- ハンドル履歴ポップアップ -->
-    <HandleHistoryPopup
-      v-if="state.handleHistoryPopupDisplay"
-      :log="mainState.currentProfile?.__log"
-      @close="closeHandleHistoryPopup"
-    />
+    <Transition>
+      <HandleHistoryPopup
+        v-if="state.handleHistoryPopupDisplay"
+        :log="mainState.currentProfile?.__log"
+        @close="closeHandleHistoryPopup"
+      />
+    </Transition>
   </div>
 </template>
 

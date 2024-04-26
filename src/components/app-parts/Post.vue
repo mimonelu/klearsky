@@ -1170,7 +1170,9 @@ function toggleOldestQuotedPostDisplay () {
   // マスク
   &[data-is-masked="true"] {
     cursor: pointer;
-    padding: 0.75em 1em;
+    &:not(:last-child) {
+      padding-bottom: 0;
+    }
     &[data-position="postInPost"] .post__mask {
       margin: 0;
       padding: 0;
@@ -1180,6 +1182,10 @@ function toggleOldestQuotedPostDisplay () {
         --alpha: 0.75;
       }
     }
+
+    .header:not(:empty) ~ .post__mask:nth-child(2) {
+      margin-top: 0.25em;
+    }
   }
   &[data-is-masked="false"] {
     .header:not(:empty) {
@@ -1187,8 +1193,8 @@ function toggleOldestQuotedPostDisplay () {
     }
 
     .post__mask {
-      margin: -0.75em -1em 0;
-      padding: 0.75em 1em 0.5em;
+      margin: -0.75em -0.75em 0;
+      padding: 0.75em;
     }
   }
   &__mask {
@@ -1319,8 +1325,8 @@ function toggleOldestQuotedPostDisplay () {
   grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
-  margin: -0.75em 0 -0.5em;
-  padding: 0.75em 0 0.5em;
+  margin: -0.75em -0.75em -0.5em;
+  padding: 0.75em;
   &:not([disabled="true"]) {
     cursor: pointer;
   }
@@ -1623,7 +1629,7 @@ function toggleOldestQuotedPostDisplay () {
 .custom-label-container {
   display: flex;
   flex-wrap: wrap;
-  grid-gap: 1em;
+  grid-gap: 0.5em 1em;
   &:empty {
     display: contents;
   }

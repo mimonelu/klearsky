@@ -246,10 +246,12 @@ function onMutated () {
     </div>
 
     <!-- グローバルライン設定ポップアップ -->
-    <GloballineSettingsPopup
-      v-if="state.globallineSettingsPopupDisplay"
-      @close="closeGloballineSettingsPopup"
-    />
+    <Transition>
+      <GloballineSettingsPopup
+        v-if="state.globallineSettingsPopupDisplay"
+        @close="closeGloballineSettingsPopup"
+      />
+    </Transition>
   </div>
 </template>
 
