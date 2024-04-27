@@ -57,6 +57,11 @@
     { "label": "disabled", "value": false },
     { "label": "enabled", "value": true }
   ],
+  "LINKCARD_LAYOUT": [
+    { "label": "linkcardLayoutVertical", "value": "vertical" },
+    { "label": "linkcardLayoutHorizontal", "value": "horizontal" },
+    { "label": "linkcardLayoutNone", "value": "none" }
+  ],
   "LINKCARD_EMBEDDED_CONTROL": [
     { "label": "pnAppleMusic", "value": "applemusic" },
     { "label": "pnGiphy", "value": "giphy" },

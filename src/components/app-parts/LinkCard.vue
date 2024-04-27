@@ -53,7 +53,7 @@ function getEmbeddedContentId () {
   }
   if (url == null) return
 
-  // Apple Music 対応
+  // 埋込型リンクカード - Apple Music
   if (url.hostname.endsWith("music.apple.com")) {
     const matches = url.pathname.match(/^\/([^?].+)/)
     if (matches != null && matches[1] != null) {
@@ -63,7 +63,7 @@ function getEmbeddedContentId () {
     }
   }
 
-  // Giphy 対応
+  // 埋込型リンクカード - Giphy
   else if (url.hostname.endsWith("giphy.com")) {
     const matches = url.pathname.match(/([0-9a-zA-Z]{10,})(?:$|\/)/)
     if (matches != null && matches[1] != null) {
@@ -73,7 +73,7 @@ function getEmbeddedContentId () {
     }
   }
 
-  // Graysky 対応
+  // 埋込型リンクカード - Graysky
   else if (url.hostname.endsWith("graysky.app")) {
     const matches = url.pathname.match(/\/gif\/(.+?)\.mp4/)
     if (matches != null && matches[1] != null) {
@@ -84,7 +84,7 @@ function getEmbeddedContentId () {
     }
   }
 
-  // Nicovideo 対応 1
+  // 埋込型リンクカード - Nicovideo 1
   else if (url.hostname === "www.nicovideo.jp") {
     const matches = url.pathname.match(/\/watch\/([^\/]+)/)
     if (matches != null && matches[1] != null) {
@@ -94,7 +94,7 @@ function getEmbeddedContentId () {
     }
   }
 
-  // Spotify 対応
+  // 埋込型リンクカード - Spotify
   else if (url.hostname === "open.spotify.com") {
     const matches = url.pathname.match(/\/(album|artist|track)\/([^\/]+)/)
     if (matches != null && matches[1] != null && matches[2] != null) {
@@ -105,7 +105,7 @@ function getEmbeddedContentId () {
     }
   }
 
-  // Tenor 対応
+  // 埋込型リンクカード - Tenor
   // e.g. https://media.tenor.com/3GgX9XG4fe0AAAAC/blue-fly.gif?hh=280&ww=498
   else if (url.hostname.endsWith(".tenor.com")) {
     embeddedContentType = "tenor"
@@ -113,7 +113,7 @@ function getEmbeddedContentId () {
     return
   }
 
-  // Twitch 対応
+  // 埋込型リンクカード - Twitch
   else if (url.hostname === "www.twitch.tv") {
     const matches = url.pathname.match(/^\/([^\/]+)/)
     if (matches != null && matches[1] != null) {
@@ -123,7 +123,7 @@ function getEmbeddedContentId () {
     }
   }
 
-  // YouTube 対応
+  // 埋込型リンクカード - YouTube
   else if (
     url.hostname === "www.youtube.com" &&
     url.pathname === "/watch"
@@ -140,7 +140,7 @@ function getEmbeddedContentId () {
     return
   }
 
-  // Vimeo 対応
+  // 埋込型リンクカード - Vimeo
   else if (url.hostname === "vimeo.com") {
     const matches = url.pathname.match(/^\/([^?]+)/)
     if (matches != null && matches[1] != null) {
@@ -152,7 +152,7 @@ function getEmbeddedContentId () {
 }
 
 function updateEmbeddedContents () {
-  // Nicovideo 対応 2
+  // 埋込型リンクカード - Nicovideo 2
   if (state.type === "nicovideo") {
     const parent = externalComponent.value.querySelector(".external--nicovideo")
     if (parent.children.length === 0) {
@@ -174,33 +174,43 @@ getEmbeddedContentId()
     <!-- 不正な URL -->
     <div
       v-if="isInvalidUrl"
-      class="external--default external--invalid textlabel--alert"
+      class="external--invalid textlabel--alert"
     >
       <div class="textlabel__text">
         <SVGIcon name="alert" />{{ $t("invalidUrlError") }}
       </div>
     </div>
 
+    <!-- 通常のリンクカード -->
     <a
       v-else-if="state.type === ''"
       class="external--default"
+      :data-layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
       :href="external.uri"
       rel="noreferrer"
       target="_blank"
       @click.stop
     >
       <LazyImage
-        v-if="displayImage && typeof external.thumb === 'string'"
+        v-if="
+          displayImage &&
+          mainState.currentSetting.linkcardLayout !== 'none' &&
+          typeof external.thumb === 'string'
+        "
         :src="external.thumb"
       />
+
+      <!-- 通常のリンクカードの情報 -->
       <div class="external__meta">
         <div class="external__meta__title">{{ external.title ?? '' }}</div>
         <div class="external__meta__uri">{{ external.uri }}</div>
         <div class="external__meta__description">{{ external.description ?? '' }}</div>
       </div>
     </a>
+
+    <!-- 埋込型リンクカード -->
     <div v-else>
-      <!-- Apple Music 対応 -->
+      <!-- 埋込型リンクカード - Apple Music -->
       <iframe
         v-if="state.type === 'applemusic'"
         class="external--applemusic"
@@ -215,7 +225,7 @@ getEmbeddedContentId()
         height="450"
       />
 
-      <!-- Giphy 対応 -->
+      <!-- 埋込型リンクカード - Giphy -->
       <iframe
         v-if="state.type === 'giphy'"
         class="external--giphy"
@@ -228,7 +238,7 @@ getEmbeddedContentId()
         height="300"
       />
 
-      <!-- Graysky 対応 -->
+      <!-- 埋込型リンクカード - Graysky -->
       <video
         v-if="state.type === 'graysky'"
         class="external--graysky"
@@ -247,13 +257,13 @@ getEmbeddedContentId()
         />
       </video>
 
-      <!-- Nicovideo 対応 -->
+      <!-- 埋込型リンクカード - Nicovideo -->
       <div
         v-else-if="state.type === 'nicovideo'"
         class="external--nicovideo"
       />
 
-      <!-- Spotify 対応 -->
+      <!-- 埋込型リンクカード - Spotify -->
       <iframe
         v-else-if="state.type === 'spotify'"
         class="external--spotify"
@@ -267,7 +277,7 @@ getEmbeddedContentId()
         :height="SoptifyType === 'album' ? 352 : 152"
       />
 
-      <!-- Tenor 対応 -->
+      <!-- 埋込型リンクカード - Tenor -->
       <div
         v-else-if="state.type === 'tenor'"
         class="external--tenor"
@@ -280,7 +290,7 @@ getEmbeddedContentId()
         />
       </div>
 
-      <!-- Twitch 対応 -->
+      <!-- 埋込型リンクカード - Twitch -->
       <iframe
         v-else-if="state.type === 'twitch'"
         class="external--twitch"
@@ -293,7 +303,7 @@ getEmbeddedContentId()
         width="100%"
       />
 
-      <!-- YouTube 対応 -->
+      <!-- 埋込型リンクカード - YouTube -->
       <iframe
         v-else-if="state.type === 'youtube'"
         class="external--youtube"
@@ -306,7 +316,7 @@ getEmbeddedContentId()
         width="100%"
       />
 
-      <!-- Vimeo 対応 -->
+      <!-- 埋込型リンクカード - Vimeo -->
       <iframe
         v-else-if="state.type === 'vimeo'"
         class="external--vimeo"
@@ -319,6 +329,7 @@ getEmbeddedContentId()
         width="100%"
       />
 
+      <!-- 埋込型リンクカードの情報 -->
       <a
         class="external__meta--special"
         :href="external.uri"
@@ -336,36 +347,61 @@ getEmbeddedContentId()
 
 <style lang="scss" scoped>
 .external {
+  // 不正なリンクカード
+  &--invalid {
+    background-color: var(--fg-color-0125);
+    border: 1px solid var(--fg-color-025);
+    border-radius: var(--border-radius);
+    padding: 0.75em 0.75em 0.5em;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // 通常のリンクカード
   &--default {
     background-color: var(--fg-color-0125);
     border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius);
     cursor: pointer;
-    display: block;
+    display: flex;
     overflow: hidden;
     position: relative;
-    height: 100%;
     &:focus, &:hover {
       border-color: var(--fg-color-0375);
     }
 
-    .lazy-image {
-      aspect-ratio: 1.91 / 1;
-      object-fit: cover;
-      width: 100%;
-      min-height: 100%;
+    // 横レイアウト
+    &[data-layout="horizontal"] {
+      .lazy-image {
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        width: 6rem;
+      }
+    }
+
+    // 縦レイアウト
+    &[data-layout="vertical"] {
+      flex-direction: column;
+      height: 100%;
+
+      .lazy-image {
+        aspect-ratio: 1.91 / 1;
+        object-fit: cover;
+        width: 100%;
+        min-height: 100%;
+      }
     }
   }
 
-  &--invalid {
-    padding: 0.75em 0.75em 0.5em;
-    pointer-events: none;
-  }
-
+  // リンクカードの情報
   &__meta {
     display: grid;
+    align-items: center;
     grid-template-rows: auto auto auto;
     padding: 0.75em;
+    [data-layout="horizontal"] & {
+      grid-template-rows: 1fr auto 1fr;
+    }
 
     &--special {
       display: grid;
@@ -401,18 +437,18 @@ getEmbeddedContentId()
     }
   }
 
-  // Apple Music 対応
+  // 埋込型リンクカード - Apple Music
   &--applemusic {
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
 
-  // Giphy 対応
+  // 埋込型リンクカード - Giphy
   &--giphy {
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
-  // Giphy 対応 - SP幅未満
+  // 埋込型リンクカード - Giphy - SP幅未満
   @media not all and (min-width: $sp-width) {
     &--giphy {
       aspect-ratio: 1 / 1;
@@ -420,14 +456,14 @@ getEmbeddedContentId()
     }
   }
 
-  // Graysky 対応
+  // 埋込型リンクカード - Graysky
   &--graysky {
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
     width: 100%;
   }
 
-  // Nicovideo 対応
+  // 埋込型リンクカード - Nicovideo
   &--nicovideo:deep() {
     iframe[src^="https://embed.nicovideo."] {
       aspect-ratio: 640 / 360;
@@ -437,13 +473,13 @@ getEmbeddedContentId()
     }
   }
 
-  // Spotify 対応
+  // 埋込型リンクカード - Spotify
   &--spotify {
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
 
-  // Tenor 対応
+  // 埋込型リンクカード - Tenor
   &--tenor {
     aspect-ratio: 560 / 300;
     background-color: var(--fg-color-0125);
@@ -453,21 +489,21 @@ getEmbeddedContentId()
     overflow: hidden;
   }
 
-  // Twitch 対応
+  // 埋込型リンクカード - Twitch
   &--twitch {
     aspect-ratio: 1 / 0.6;
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
 
-  // YouTube 対応
+  // 埋込型リンクカード - YouTube
   &--youtube {
     aspect-ratio: 16 / 9;
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius);
   }
 
-  // Vimeo 対応
+  // 埋込型リンクカード - Vimeo
   &--vimeo {
     aspect-ratio: 4 / 3;
     background-color: var(--fg-color-0125);

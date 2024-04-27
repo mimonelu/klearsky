@@ -689,6 +689,8 @@ function saveSettings () {
     state.settings[did].imageMaxHeightRatio = 1.5
   if (state.settings[did].imageAutoPlay == null)
     state.settings[did].imageAutoPlay = true
+  if (state.settings[did].linkcardLayout == null)
+    state.settings[did].linkcardLayout = "vertical"
   if (state.settings[did].linkcardEmbeddedControl == null)
     state.settings[did].linkcardEmbeddedControl = [
       "applemusic",

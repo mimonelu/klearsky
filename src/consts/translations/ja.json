@@ -346,6 +346,11 @@
   "imageAutoPlay": "アニメーション画像の自動再生",
 
   "linkcard": "リンクカード",
+  "linkCardControl": "リンクカードの制御",
+  "linkcardLayout": "リンクカードのレイアウト",
+  "linkcardLayoutVertical": "縦",
+  "linkcardLayoutHorizontal": "横",
+  "linkcardLayoutNone": "画像なし",
   "linkcardEmbeddedControl": "リンクカードの埋込コンテンツ制御",
 
   "colorTheme": "カラーテーマ",

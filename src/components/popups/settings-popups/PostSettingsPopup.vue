@@ -169,16 +169,34 @@ const mainState = inject("state") as MainState
         <!-- リンクカード -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
-            <span>{{ $t("linkcardEmbeddedControl") }}</span>
+            <span>{{ $t("linkCardControl") }}</span>
           </div>
           <div class="settings-popup__form__body">
-            <Checkboxes
+            <!-- リンクカード - リンクカードのレイアウト -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("linkcardLayout") }}</span>
+            </div>
+            <Radios
               :state="mainState.currentSetting"
-              model="linkcardEmbeddedControl"
-              :options="SETTINGS.LINKCARD_EMBEDDED_CONTROL"
+              model="linkcardLayout"
+              :options="SETTINGS.LINKCARD_LAYOUT"
               layout="vertical"
               @update="$emit('saveSetting')"
             />
+
+            <!-- リンクカード - リンクカードの埋込コンテンツ制御 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("linkcardEmbeddedControl") }}</span>
+            </div>
+            <div class="settings-popup__form__body">
+              <Checkboxes
+                :state="mainState.currentSetting"
+                model="linkcardEmbeddedControl"
+                :options="SETTINGS.LINKCARD_EMBEDDED_CONTROL"
+                layout="vertical"
+                @update="$emit('saveSetting')"
+              />
+            </div>
           </div>
         </div>
       </div>

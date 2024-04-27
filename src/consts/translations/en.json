@@ -346,6 +346,11 @@
   "imageAutoPlay": "Autoplay animated images",
 
   "linkcard": "Link card",
+  "linkCardControl": "Link Card Control",
+  "linkcardLayout": "Link Card Layout",
+  "linkcardLayoutVertical": "Vertical",
+  "linkcardLayoutHorizontal": "Horizontal",
+  "linkcardLayoutNone": "No image",
   "linkcardEmbeddedControl": "Link Card Embedded Content Control",
 
   "colorTheme": "Color Theme",

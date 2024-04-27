@@ -16,6 +16,7 @@ type TTSetting = {
   imageMaxHeightRatio?: number
   imageAutoPlay?: boolean
   lightning?: string
+  linkcardLayout?: "none" | "horizontal" | "vertical"
   linkcardEmbeddedControl?: Array<string>
   mainAreaOpacity?: number
   myFeedsIndex?: Array<string>
