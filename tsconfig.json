@@ -9,7 +9,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "target": "ES6",
     "lib": [
@@ -19,7 +19,7 @@
   },
   "references": [
     {
-      "path": "./tsconfig.config.json",
+      "path": "./tsconfig.config.json"
     }
-  ],
+  ]
 }
