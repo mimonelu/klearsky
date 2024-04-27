@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, provide } from "vue"
+import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, provide, ref } from "vue"
 import { useRouter, type LocationQueryValue, type RouteLocationNormalized } from "vue-router"
 import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
@@ -62,6 +62,8 @@ const $t = inject("$t") as Function
 state.$setCurrentLanguage = inject("$setCurrentLanguage") as Function
 state.$getCurrentLanguage = inject("$getCurrentLanguage") as Function
 state.updatePageTitle = updatePageTitle
+
+const loginPopup = ref(null)
 
 provide("state", state)
 
@@ -211,7 +213,7 @@ async function autoLogin () {
   if (state.atp.hasLogin()) {
     await processAfterLogin()
   } else if (state.atp.canLogin()) {
-    const response = await state.atp.login(undefined, undefined, undefined, onRefreshSession)
+    const response = await state.atp.login(undefined, undefined, undefined, undefined, onRefreshSession)
     if (response instanceof Error) {
       state.openErrorPopup(
         typeof(response.message) === "string"
@@ -225,13 +227,34 @@ async function autoLogin () {
   }
 }
 
-async function manualLogin (service: string, _email: string, identifier: string, password: string) {
+async function manualLogin (
+  service: string,
+  _email: string,
+  identifier: string,
+  password: string,
+  authFactorToken?: string
+) {
   state.loaderDisplay = true
-  const response = await state.atp.login(service, identifier, password, onRefreshSession)
+  const response = await state.atp.login(
+    service,
+    identifier,
+    password,
+    authFactorToken,
+    onRefreshSession
+  )
   state.loaderDisplay = false
-  if (response instanceof Error || !state.atp.hasLogin()) {
-    state.openErrorPopup($t("getSessionError"), "MainView/manualLogin")
-    return
+  if (response instanceof Error) {
+    // 2FAエラー - トークン要求
+    if (response.message === "AuthFactorTokenRequired") {
+      (loginPopup.value as any)?.setHasAuthFactorToken(true)
+      return
+    }
+
+    // 手動ログインエラー
+    if (!state.atp.hasLogin()) {
+      state.openErrorPopup($t("getSessionError"), "MainView/manualLogin")
+      return
+    }
   }
   state.loginPopupDisplay = false
   state.loaderDisplay = true
@@ -1216,6 +1239,7 @@ function broadcastListener (event: MessageEvent) {
       <Transition>
         <LoginPopup
           v-if="state.loginPopupAutoDisplay"
+          ref="loginPopup"
           @signUp="signUp"
           @login="manualLogin"
         />

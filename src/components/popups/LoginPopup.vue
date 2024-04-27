@@ -1,10 +1,14 @@
 <script lang="ts" setup>
-import { inject, reactive, ref } from "vue"
+import { inject, nextTick, reactive, ref } from "vue"
 import AccountList from "@/components/list/AccountList.vue"
 import Copyright from "@/components/shell-parts/Copyright.vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Logo from "@/components/shell-parts/Logo.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+
+defineExpose({
+  setHasAuthFactorToken,
+})
 
 const emit = defineEmits<{(
   event: string,
@@ -12,6 +16,7 @@ const emit = defineEmits<{(
   email: string,
   identifier: string,
   password: string,
+  authFactorToken?: string,
   inviteCode?: string
 ): void}>()
 
@@ -24,17 +29,21 @@ const currentSession: undefined | TTSession =
 
 const state = reactive<{
   isSignUp: boolean
+  hasAuthFactorToken: boolean
   service: string
   email: string
   identifier: string
   password: string
+  authFactorToken?: string
   inviteCode?: string
 }>({
   isSignUp: false,
+  hasAuthFactorToken: false,
   service: currentSession?.__service ?? "https://bsky.social",
   email: currentSession?.email ?? "",
   identifier: currentSession?.handle ?? "",
   password: "",
+  authFactorToken: undefined,
   inviteCode: undefined,
 })
 
@@ -53,6 +62,7 @@ const easyFormProps: TTEasyForm = {
       placeholder: "https://bsky.social",
       autocomplete: "url",
       inputmode: "url",
+      onInput: disableAuthFactorToken,
     },
     {
       display: state.isSignUp,
@@ -72,6 +82,7 @@ const easyFormProps: TTEasyForm = {
       required: true,
       autocomplete: "on",
       inputmode: "email",
+      onInput: disableAuthFactorToken,
     },
     {
       state,
@@ -79,6 +90,16 @@ const easyFormProps: TTEasyForm = {
       label: $t("password"),
       type: "password",
       required: true,
+      autocomplete: "off",
+      inputmode: "text",
+      onInput: disableAuthFactorToken,
+    },
+    {
+      display: !state.isSignUp && state.hasAuthFactorToken,
+      state,
+      model: "authFactorToken",
+      label: $t("authFactorToken"),
+      type: "password",
       autocomplete: "off",
       inputmode: "text",
     },
@@ -98,6 +119,29 @@ const easyForm = ref()
 
 function toggleMode () {
   state.isSignUp = !state.isSignUp
+  updateEasyFormProps()
+}
+
+async function setHasAuthFactorToken (value: boolean) {
+  state.hasAuthFactorToken = value
+  updateEasyFormProps()
+
+  // 2FAのテキストボックスを自動フォーカス
+  if (state.hasAuthFactorToken) {
+    await nextTick()
+    const authFactorTokenElement = window.document.querySelector("#easy-form--default__4") as null | HTMLElement
+    authFactorTokenElement?.focus()
+  }
+}
+
+function disableAuthFactorToken () {
+  if (!state.hasAuthFactorToken) return
+  state.authFactorToken = undefined
+  state.hasAuthFactorToken = false
+  updateEasyFormProps()
+}
+
+function updateEasyFormProps () {
   easyFormProps.submitButtonLabel = state.isSignUp ? $t("signUp") : $t("login")
   easyFormProps.data.forEach((data: TTEasyFormItem) => {
     switch (data.model) {
@@ -110,6 +154,11 @@ function toggleMode () {
         data.label = state.isSignUp ? $t("handle") : $t("identifier")
         break
       }
+      case "authFactorToken": {
+        data.display = !state.isSignUp && state.hasAuthFactorToken
+        data.required = data.display
+        break
+      }
       case "inviteCode": {
         data.display = state.isSignUp
         break
@@ -120,7 +169,15 @@ function toggleMode () {
 }
 
 function submitCallback () {
-  emit(state.isSignUp ? "signUp" : "login", state.service, state.email, state.identifier, state.password, state.inviteCode)
+  emit(
+    state.isSignUp ? "signUp" : "login",
+    state.service,
+    state.email,
+    state.identifier,
+    state.password,
+    state.authFactorToken?.trim(),
+    state.inviteCode
+  )
 }
 </script>
 
@@ -147,6 +204,14 @@ function submitCallback () {
               <SVGIcon name="cursorRight" />
               <span>{{ $t("getAppPassword") }}</span>
             </a>
+          </template>
+
+          <!-- 2FA - トークン要求メッセージ -->
+          <template #free-5>
+            <p
+              v-if="!state.isSignUp && state.hasAuthFactorToken"
+              class="login-popup__message"
+            >{{ $t("authFactorTokenMessage") }}</p>
           </template>
 
           <template #after>
@@ -236,6 +301,10 @@ $width: 768px;
       grid-template-columns: 1fr 1fr;
       align-items: flex-start;
     }
+  }
+
+  &__message {
+    font-size: 0.875rem;
   }
 }
 

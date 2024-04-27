@@ -164,10 +164,12 @@
   "misleading": "Misleading",
 
   "login": "Login",
-  "service": "Service",
+  "service": "Hosting Provider",
   "identifier": "Email or Handle or DID",
   "password": "Password or App Password",
   "getAppPassword": "Get App Password",
+  "authFactorToken": "Confirmation code",
+  "authFactorTokenMessage": "A confirmation code for 2FA has been sent to you. Please enter it in the box above and login again.",
   "myAccounts": "My Accounts",
   "loginFailed": "Login failed. Please check your entry.",
   "sessionExpired": "Session expired. Please login again.",

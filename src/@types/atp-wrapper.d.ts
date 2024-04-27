@@ -72,7 +72,7 @@ interface TIAtpWrapper {
   fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchWithoutAgent (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, string>): Promise<undefined | Error | Response>
   hasLogin (this: TIAtpWrapper): boolean
-  login (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, onRefreshSession?: () => void): Promise<undefined | Error>
+  login (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, authFactorToken?: string, onRefreshSession?: () => void): Promise<undefined | Error>
   logout (this: TIAtpWrapper)
   refreshSession (this: TIAtpWrapper): Promise<undefined | Error>
   resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): void
