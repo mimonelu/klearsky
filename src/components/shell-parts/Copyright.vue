@@ -15,12 +15,6 @@ const yyyy = (new Date).getFullYear()
       class="textlink"
       :to="{ path: '/profile/feeds', query: { account: 'mimonelu.net' } }"
     >Bluesky</RouterLink>
-    <a
-      class="textlink"
-      href="https://twitter.com/mimonelu"
-      rel="noreferrer"
-      target="_blank"
-    >X(Twitter)</a>
     <span>/</span>
     <small>Bluesky &copy; {{ yyyy }} Bluesky PBC</small>
     <a
@@ -29,12 +23,6 @@ const yyyy = (new Date).getFullYear()
       rel="noreferrer"
       target="_blank"
     >Web</a>
-    <a
-      class="textlink"
-      href="https://twitter.com/bluesky"
-      rel="noreferrer"
-      target="_blank"
-    >X(Twitter)</a>
   </div>
 </template>
 
