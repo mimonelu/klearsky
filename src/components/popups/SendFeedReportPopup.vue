@@ -113,6 +113,7 @@ async function submitCallback () {
       <FeedCard
         :generator="generator"
         :menuDisplay="false"
+        :toggleDisplay="false"
         :orderButtonDisplay="false"
         :creatorDisplay="true"
         @keydown.prevent.stop

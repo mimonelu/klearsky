@@ -295,6 +295,7 @@ function openMyFeedsSortPopover ($event: Event) {
             v-else-if="item.kind === 'feed'"
             :generator="item.value"
             :menuDisplay="true"
+            :toggleDisplay="true"
             :orderButtonDisplay="true"
             :creatorDisplay="true"
             @click.exact="close"

@@ -200,6 +200,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
           v-if="notificationGroup.generator != null"
           :generator="notificationGroup.generator"
           :menuDisplay="true"
+          :toggleDisplay="false"
           :orderButtonDisplay="false"
           :creatorDisplay="false"
           @click="$emit('close')"

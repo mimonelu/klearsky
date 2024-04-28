@@ -12,6 +12,7 @@ const emit = defineEmits<{(name: string, params?: any): void}>()
 const props = defineProps<{
   generator: TTFeedGenerator
   menuDisplay: boolean
+  toggleDisplay: boolean
   orderButtonDisplay: boolean
   creatorDisplay: boolean
   unclickable?: boolean
@@ -44,7 +45,7 @@ const state = reactive<{
     return mainState.feedPreferences?.pinned
       .some((uri: string) => uri === props.generator.uri) ?? false
   }),
-  detailDisplay: !props.orderButtonDisplay,
+  detailDisplay: !props.toggleDisplay,
   isUnknown: !props.generator.cid
 })
 
@@ -245,7 +246,7 @@ function toggleDetail () {
 
     <!-- その他のボタンコンテナ -->
     <div
-      v-if="orderButtonDisplay"
+      v-if="toggleDisplay"
       class="feed-card__etc-button-container"
     >
       <!-- オーダーボタン -->

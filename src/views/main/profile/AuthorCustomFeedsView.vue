@@ -44,6 +44,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         :key="generator.cid"
         :generator="generator"
         :menuDisplay="true"
+        :toggleDisplay="false"
         :orderButtonDisplay="false"
         :creatorDisplay="false"
       />

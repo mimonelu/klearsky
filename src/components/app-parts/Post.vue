@@ -927,6 +927,7 @@ function toggleOldestQuotedPostDisplay () {
               v-if="state.hasFeedCard"
               :generator="post.embed?.record as unknown as TTFeedGenerator"
               :menuDisplay="true"
+              :toggleDisplay="false"
               :orderButtonDisplay="false"
               :creatorDisplay="true"
               @click="$emit('click', $event)"
