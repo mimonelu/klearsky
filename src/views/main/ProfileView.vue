@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarButton from "@/components/buttons/AvatarButton.vue"
@@ -13,6 +13,7 @@ import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 import Util from "@/composables/util"
@@ -28,6 +29,7 @@ const state = reactive<{
   isPagePostFeedsWithReplies: ComputedRef<boolean>
   isPagePostFeedsWithMedia: ComputedRef<boolean>
   isLabeler: ComputedRef<boolean>
+  profilePostPopverDisplay: boolean
 
   // ラベル対応
   enabledContentMask: boolean
@@ -64,6 +66,7 @@ const state = reactive<{
   isLabeler: computed((): boolean => {
     return mainState.currentProfile?.associated?.labeler ?? false
   }),
+  profilePostPopverDisplay: false,
 
   // ラベル対応
   enabledContentMask: true,
@@ -170,6 +173,36 @@ function openProfilePopover ($event: Event) {
   mainState.profilePopoverProps.user = mainState.currentProfile as TTProfile
   mainState.profilePopoverFrom = "profile-view"
   mainState.openProfilePopover($event.target)
+}
+
+// プロフィールポストポップオーバー
+
+const popover = ref(null)
+
+async function openProfilePostPopver ($event: Event) {
+  Util.blurElement()
+  state.profilePostPopverDisplay = true
+  await nextTick()
+  if (popover.value == null) {
+    return
+  }
+  ;(popover.value as typeof Popover).open(
+    $event.target,
+    {
+      positionX: "left",
+      positionY: "bottom",
+      directionX: "right",
+      directionY: "down",
+      collideX: true,
+      collideY: true,
+      animationDirection: "down",
+      isChild: false,
+    }
+  )
+}
+
+function closeProfilePostPopver () {
+  state.profilePostPopverDisplay = false
 }
 
 // ラベル対応
@@ -418,16 +451,76 @@ function onActivateAccountMaskToggle () {
     <div class="tab-container">
       <!-- メインタブ -->
       <div class="tab">
-        <!-- ポストタブボタン -->
-        <RouterLink
+        <!-- プロフィールポストポップオーバートリガー -->
+        <button
+          type="button"
           class="tab__button tab__button--post"
-          :class="state.isPagePostFeedsWithReplies || state.isPagePostFeedsWithMedia ? 'router-link-active' : ''"
-          :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('posts')"
+          :class="
+            state.isPagePostFeeds ||
+            state.isPagePostFeedsWithReplies ||
+            state.isPagePostFeedsWithMedia
+              ? 'router-link-active'
+              : ''
+          "
+          to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
+          @click.stop.self="openProfilePostPopver"
         >
-          <SVGIcon name="post" />
+          <SVGIcon :name="
+            state.isPagePostFeedsWithReplies
+              ? 'posts'
+              : state.isPagePostFeedsWithMedia
+                ? 'image'
+                : 'post'
+          " />
           <span>{{ $t("posts") }}</span>
-        </RouterLink>
+          <SVGIcon name="cursorDown" />
+
+          <!-- プロフィールポストポップオーバー -->
+          <Popover
+            v-if="state.profilePostPopverDisplay"
+            class="profile-post-popover"
+            ref="popover"
+            @close="closeProfilePostPopver"
+          >
+            <menu class="list-menu">
+              <!-- ポストページリンク -->
+              <Component
+                :is="state.isPagePostFeeds ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :data-selected="state.isPagePostFeeds"
+                :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
+                @click.stop="closeProfilePostPopver"
+              >
+                <SVGIcon name="post" />
+                <span>{{ $t("posts") }}</span>
+              </Component>
+
+              <!-- リプライ付きポストページリンク -->
+              <Component
+                :is="state.isPagePostFeedsWithReplies ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :data-selected="state.isPagePostFeedsWithReplies"
+                :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
+                @click.stop="closeProfilePostPopver"
+              >
+                <SVGIcon name="posts" />
+                <span>{{ $t("postWithReplies") }}</span>
+              </Component>
+
+              <!-- メディア一覧ページリンク -->
+              <Component
+               :is="state.isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :data-selected="state.isPagePostFeedsWithMedia"
+                :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
+                @click.stop="closeProfilePostPopver"
+              >
+                <SVGIcon name="image" />
+                <span>{{ $t("postWithMedia") }}</span>
+              </Component>
+            </menu>
+          </Popover>
+        </button>
 
         <!-- リポストページタブボタン -->
         <RouterLink
@@ -503,36 +596,6 @@ function onActivateAccountMaskToggle () {
           <span>{{ $t("followers") }}</span>
         </RouterLink>
       </div>
-    </div>
-
-    <!-- プロフィールポストページ用リンクコンテナ -->
-    <div
-      v-if="
-        state.isPagePostFeeds ||
-        state.isPagePostFeedsWithReplies ||
-        state.isPagePostFeedsWithMedia
-      "
-      class="profile-view__link-container group-buttons"
-    >
-      <!-- リプライ付きポストページリンク -->
-      <Component
-        :class="state.isPagePostFeedsWithReplies ? 'button--plane' : 'button--bordered'"
-        :is="state.isPagePostFeedsWithReplies ? 'div' : 'RouterLink'"
-        :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
-      >
-        <SVGIcon name="posts" />
-        <span>{{ $t("postWithReplies") }}</span>
-      </Component>
-
-      <!-- メディア一覧ページリンク -->
-      <Component
-        :class="state.isPagePostFeedsWithMedia ? 'button--plane' : 'button--bordered'"
-        :is="state.isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
-        :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
-      >
-        <SVGIcon name="image" />
-        <span>{{ $t("postWithMedia") }}</span>
-      </Component>
     </div>
 
     <RouterView class="profile-view__router-view" />
@@ -636,22 +699,6 @@ function onActivateAccountMaskToggle () {
       display: flex;
       flex-direction: column;
       grid-gap: 1rem;
-    }
-  }
-
-  // プロフィールポストページ用リンクコンテナ
-  &__link-container {
-    border-bottom: 1px solid var(--fg-color-0125);
-    justify-content: flex-end;
-    padding: 0.25rem;
-
-    & > .button--bordered,
-    & > .button--plane {
-      font-size: 0.875rem;
-    }
-    & > .button--plane {
-      background-color: var(--accent-color-025);
-      pointer-events: none;
     }
   }
 }
@@ -861,8 +908,7 @@ function onActivateAccountMaskToggle () {
   z-index: 1;
 
   .tab__button {
-    &--post,
-    &--reply {
+    &--post {
       border-right-color: var(--fg-color-0125);
     }
     &--like,
@@ -879,10 +925,13 @@ function onActivateAccountMaskToggle () {
     --fg-color: var(--like-color);
   }
 
-  .tab__button--post,
-  .tab__button--reply {
-    & > .svg-icon {
+  .tab__button--post {
+    & > .svg-icon:not(.svg-icon--cursorDown) {
       --fg-color: var(--post-color);
+    }
+
+    & > .svg-icon--cursorDown {
+      font-size: 0.875rem;
     }
   }
 
@@ -890,6 +939,14 @@ function onActivateAccountMaskToggle () {
   .tab__button--list {
     & > .svg-icon {
       --fg-color: var(--accent-color);
+    }
+  }
+}
+
+.profile-post-popover {
+  &:deep() {
+    & > .popover__content {
+      padding: 0.5rem;
     }
   }
 }

@@ -20,7 +20,8 @@
   }
 
   & > a,
-  & > button {
+  & > button,
+  & > &__item {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -28,6 +29,9 @@
     font-weight: bold;
     padding: 0.5rem 1rem;
     white-space: nowrap;
+    &[data-selected="true"] {
+      color: rgb(var(--accent-color));
+    }
     &:focus, &:hover {
       background-color: var(--accent-color-025);
     }

@@ -23,10 +23,12 @@
       font-weight: bold;
       line-height: var(--line-height);
       overflow: hidden;
+      pointer-events: none;
     }
 
     & > .svg-icon {
       fill: var(--fg-color-075);
+      pointer-events: none;
     }
 
     &__badge {
