@@ -66,6 +66,7 @@ interface TIAtpWrapper {
   fetchProfile (this: TIAtpWrapper, actor: string): Promise<Error | TTProfile>
   fetchProfiles (this: TIAtpWrapper, actors: string[]): Promise<Error | TTProfile[]>
   fetchRecords (this: TIAtpWrapper, repo: string, collection: string, limit?: number, cursor?: string, reverse?: boolean ): Promise<Error | { cursor?: string; records: TICommonRecord[] }>
+  fetchRepo (this: TIAtpWrapper, repo: string): Promise<Error | {}>
   fetchRepostUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchServerInfo (this: TIAtpWrapper): Promise<Error | TTServerInfo>
   fetchSuggestions (this: TIAtpWrapper, dataRef: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
