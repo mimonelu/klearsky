@@ -5,6 +5,7 @@ import createLike from "@/composables/atp-wrapper/create/create-like"
 import createList from "@/composables/atp-wrapper/create/create-list"
 import createListUser from "@/composables/atp-wrapper/create/create-list-user"
 import createPost from "@/composables/atp-wrapper/create/create-post"
+import createRecord from "@/composables/atp-wrapper/create/create-record"
 import createReport from "@/composables/atp-wrapper/create/create-report"
 import createRepost from "@/composables/atp-wrapper/create/create-repost"
 import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
@@ -13,9 +14,11 @@ import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
 import deleteList from "@/composables/atp-wrapper/delete/delete-list"
 import deleteListUser from "@/composables/atp-wrapper/delete/delete-list-user"
 import deletePost from "@/composables/atp-wrapper/delete/delete-post"
+import deleteRecord from "@/composables/atp-wrapper/delete/delete-record"
 import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
 import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
 import deleteThreadgate from "@/composables/atp-wrapper/delete/delete-threadgate"
+import fetchActorLists from "@/composables/atp-wrapper/fetch/fetch-actor-lists"
 import fetchActorsTypeahead from "@/composables/atp-wrapper/fetch/fetch-actors-typeahead"
 import fetchAuthorCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-author-custom-feeds"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch/fetch-author-feed"
@@ -38,7 +41,6 @@ import fetchList from "@/composables/atp-wrapper/fetch/fetch-list"
 import fetchListBlocks from "@/composables/atp-wrapper/fetch/fetch-list-blocks"
 import fetchListItems from "@/composables/atp-wrapper/fetch/fetch-list-items"
 import fetchListMutes from "@/composables/atp-wrapper/fetch/fetch-list-mutes"
-import fetchActorLists from "@/composables/atp-wrapper/fetch/fetch-actor-lists"
 import fetchListFeed from "@/composables/atp-wrapper/fetch/fetch-list-feed"
 import fetchLists from "@/composables/atp-wrapper/fetch/fetch-lists"
 import fetchLogAudit from "@/composables/atp-wrapper/fetch/fetch-log-audit"
@@ -54,6 +56,7 @@ import fetchPostThread from "@/composables/atp-wrapper/fetch/fetch-post-thread"
 import fetchPreferences from "@/composables/atp-wrapper/fetch/fetch-preferences"
 import fetchProfile from "@/composables/atp-wrapper/fetch/fetch-profile"
 import fetchProfiles from "@/composables/atp-wrapper/fetch/fetch-profiles"
+import fetchRecords from "@/composables/atp-wrapper/fetch/fetch-records"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch/fetch-repost-users"
 import fetchServerInfo from "@/composables/atp-wrapper/fetch/fetch-server-info"
 import fetchSuggestedFollows from "@/composables/atp-wrapper/fetch/fetch-suggested-follows"
@@ -82,6 +85,7 @@ import updateMuteToEnable from "@/composables/atp-wrapper/update/update-mute-to-
 import updateNotificationSeen from "@/composables/atp-wrapper/update/update-notification-seen"
 import updatePreferences from "@/composables/atp-wrapper/update/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update/update-profile"
+import updateRecord from "@/composables/atp-wrapper/update/update-record"
 import updateThreadgate from "@/composables/atp-wrapper/update/update-threadgate"
 import Util from "@/composables/util"
 
@@ -125,6 +129,7 @@ class AtpWrapper implements TIAtpWrapper {
   createList = createList
   createListUser = createListUser
   createPost = createPost
+  createRecord = createRecord
   createReport = createReport
   createRepost = createRepost
   deleteAccount = deleteAccount
@@ -133,9 +138,11 @@ class AtpWrapper implements TIAtpWrapper {
   deleteList = deleteList
   deleteListUser = deleteListUser
   deletePost = deletePost
+  deleteRecord = deleteRecord
   deleteRepost = deleteRepost
   deleteSession = deleteSession
   deleteThreadgate = deleteThreadgate
+  fetchActorLists = fetchActorLists
   fetchActorsTypeahead = fetchActorsTypeahead
   fetchAuthorCustomFeeds = fetchAuthorCustomFeeds
   fetchAuthorFeed = fetchAuthorFeed
@@ -158,7 +165,6 @@ class AtpWrapper implements TIAtpWrapper {
   fetchListBlocks = fetchListBlocks
   fetchListItems = fetchListItems
   fetchListMutes = fetchListMutes
-  fetchActorLists = fetchActorLists
   fetchListFeed = fetchListFeed
   fetchLists = fetchLists
   fetchLogAudit = fetchLogAudit
@@ -174,6 +180,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchPreferences = fetchPreferences
   fetchProfile = fetchProfile
   fetchProfiles = fetchProfiles
+  fetchRecords = fetchRecords
   fetchRepostUsers = fetchRepostUsers
   fetchServerInfo = fetchServerInfo
   fetchSuggestedFollows = fetchSuggestedFollows
@@ -208,6 +215,7 @@ class AtpWrapper implements TIAtpWrapper {
   updateNotificationSeen = updateNotificationSeen
   updatePreferences = updatePreferences
   updateProfile = updateProfile
+  updateRecord = updateRecord
   updateThreadgate = updateThreadgate
 }
 

@@ -20,6 +20,12 @@ type TTServerInfo = {
   }
 }
 
+interface TICommonRecord {
+  uri: string
+  cid: string
+  value: {}
+}
+
 type TTUserViewer = {
   muted: boolean
   mutedByList?: any

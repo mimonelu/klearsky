@@ -13,6 +13,7 @@ interface TIAtpWrapper {
   createList (this: TIAtpWrapper, purpose: string, name: string, description?: string, avatarBlobRef?: BlobRef): Promise<string | Error>
   createListUser (this: TIAtpWrapper, listUri: string, userDid: string): Promise<string | Error>
   createPost (this: TIAtpWrapper, params: TTCreatePostParams): Promise<Error | TTCidUri>
+  createRecord (this: TIAtpWrapper, repo: string, collection: string, record: { [k: string]: any }, rkey?: string, validate?: boolean, swapCommit?: string): Promise<Error | TTCidUri>
   createReport (this: TIAtpWrapper, reasonType: string, reason: string, did?: string, cid?: string, uri?: string, type?: string): Promise<boolean>
   createRepost (this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   deleteAccount (this: TIAtpWrapper, did?: string)
@@ -21,6 +22,7 @@ interface TIAtpWrapper {
   deleteList (this: TIAtpWrapper, listUri: string): Promise<true | Error>
   deleteListUser (this: TIAtpWrapper, userUri: string): Promise<true | Error>
   deletePost (this: TIAtpWrapper, uri: string): Promise<boolean>
+  deleteRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, swapCommit?: string, swapRecord?: string): Promise<Error | undefined>
   deleteRepost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteSession (this: TIAtpWrapper): Promise<boolean>
   deleteThreadgate (this: TIAtpWrapper, postUri: string): Promise<boolean | Error>
@@ -63,6 +65,7 @@ interface TIAtpWrapper {
   fetchPreferences (this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile (this: TIAtpWrapper, actor: string): Promise<Error | TTProfile>
   fetchProfiles (this: TIAtpWrapper, actors: string[]): Promise<Error | TTProfile[]>
+  fetchRecords (this: TIAtpWrapper, repo: string, collection: string, limit?: number, cursor?: string, reverse?: boolean ): Promise<Error | { cursor?: string; records: TICommonRecord[] }>
   fetchRepostUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchServerInfo (this: TIAtpWrapper): Promise<Error | TTServerInfo>
   fetchSuggestions (this: TIAtpWrapper, dataRef: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
@@ -92,5 +95,6 @@ interface TIAtpWrapper {
   updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>
   updatePreferences  (this: TIAtpWrapper, preferences: Array<TTPreference>, ): Promise<boolean>
   updateProfile (this: TIAtpWrapper, params: TTUpdateProfileParams): Promise<undefined | Error>
+  updateRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, record: { [k: string]: any }, validate?: boolean, swapCommit?: string, swapRecord?: string): Promise<Error | TTCidUri>
   updateThreadgate (this: TIAtpWrapper, postUri: string, allowMention: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
 }
