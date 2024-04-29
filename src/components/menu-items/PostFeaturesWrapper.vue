@@ -5,6 +5,7 @@ import MenuTickerSendMention from "@/components/menu-items/SendMention.vue"
 import MenuTickerSendPostAfter from "@/components/menu-items/SendPostAfter.vue"
 import MenuTickerShowLikeUsers from "@/components/menu-items/ShowLikeUsers.vue"
 import MenuTickerShowRepostUsers from "@/components/menu-items/ShowRepostUsers.vue"
+import MenuTickerTogglePinnedPost from "@/components/menu-items/TogglePinnedPost.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
@@ -83,6 +84,12 @@ function close () {
         <!-- ライクユーザーリストポップアップトリガー -->
         <MenuTickerShowLikeUsers
           :uri="post.uri"
+          @close="emit('close')"
+        />
+
+        <!-- 固定ポストトグル -->
+        <MenuTickerTogglePinnedPost
+          :post="post"
           @close="emit('close')"
         />
 

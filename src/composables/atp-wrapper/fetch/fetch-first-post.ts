@@ -11,7 +11,6 @@ export default async function (
   const response: undefined | Response | Error =
     await this.fetchWithoutAgent("com.atproto.repo.listRecords", did, query)
   if (response instanceof Error) return response
-  if (response == null) return
   const data = await response.json()
   if (data?.records == null || data.records[0]?.uri == null) return
   const posts = await this.fetchPosts([data.records[0].uri])

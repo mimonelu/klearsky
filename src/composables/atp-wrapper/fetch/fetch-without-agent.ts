@@ -3,7 +3,7 @@ export default async function (
   pathToXrpc: string,
   did: string,
   query: Record<string, string>
-): Promise<undefined | Error | Response> {
+): Promise<Error | Response> {
   const params = new URLSearchParams(query)
   let host = "https://bsky.social"
   const logJson = await this.fetchLogAudit(did)
@@ -23,7 +23,11 @@ export default async function (
       .then((value: any) => value)
       .catch((error: any) => error)
   console.log(`[klearsky/${host}/xrpc/${pathToXrpc}]`, response)
-  if (response instanceof Error) return response
-  if (!response.ok) return Error("errorDirectAccessFailed")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.ok) {
+    return Error("errorDirectAccessFailed")
+  }
   return response
 }

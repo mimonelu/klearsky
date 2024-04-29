@@ -16,7 +16,6 @@ export default async function (
   const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", repo, query)
 
   if (response instanceof Error) return
-  if (response == null) return
   const data = await response.json()
   if (data?.records == null) return
   const uris: Array<string> = data.records.map((record: any) => {

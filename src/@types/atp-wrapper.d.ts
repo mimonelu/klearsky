@@ -65,6 +65,7 @@ interface TIAtpWrapper {
   fetchPreferences (this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile (this: TIAtpWrapper, actor: string): Promise<Error | TTProfile>
   fetchProfiles (this: TIAtpWrapper, actors: string[]): Promise<Error | TTProfile[]>
+  fetchRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, cid?: string): Promise<Error | { uri: string; cid?: string; value: {} }>
   fetchRecords (this: TIAtpWrapper, repo: string, collection: string, limit?: number, cursor?: string, reverse?: boolean ): Promise<Error | { cursor?: string; records: TICommonRecord[] }>
   fetchRepo (this: TIAtpWrapper, repo: string): Promise<Error | {}>
   fetchRepostUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
@@ -74,7 +75,7 @@ interface TIAtpWrapper {
   fetchTimeFeeds (this: TIAtpWrapper, oldPosts: Array<TTPost>, direction: "new" | "old", author: TTUser, limit?: number): Promise<Error | undefined | string>
   fetchTimeline (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection): Promise<undefined | false | string>
   fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<undefined | string>
-  fetchWithoutAgent (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, string>): Promise<undefined | Error | Response>
+  fetchWithoutAgent (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, string>): Promise<Error | Response>
   hasLogin (this: TIAtpWrapper): boolean
   login (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, authFactorToken?: string, onRefreshSession?: () => void): Promise<undefined | Error>
   logout (this: TIAtpWrapper)
@@ -94,6 +95,7 @@ interface TIAtpWrapper {
   updateMuteToDisable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateMuteToEnable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>
+  updatePinnedPost (this: TIAtpWrapper, uri?: string): Promise<Error | boolean>
   updatePreferences  (this: TIAtpWrapper, preferences: Array<TTPreference>, ): Promise<boolean>
   updateProfile (this: TIAtpWrapper, params: TTUpdateProfileParams): Promise<undefined | Error>
   updateRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, record: { [k: string]: any }, validate?: boolean, swapCommit?: string, swapRecord?: string): Promise<Error | TTCidUri>

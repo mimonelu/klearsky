@@ -20,20 +20,24 @@ export default async function (
   const query: ComAtprotoRepoListRecords.QueryParams = {
     repo,
     collection,
-    limit,
-    cursor,
-    reverse,
   }
-  const response: Error | ComAtprotoRepoListRecords.Response =
-    await (this.agent as BskyAgent).com.atproto.repo.listRecords(query)
-      .then((value: ComAtprotoRepoListRecords.Response) => value)
-      .catch((error: any) => error)
-  console.log("[klearsky/listRecords]", response)
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
+  if (reverse != null) {
+    query.reverse = reverse
+  }
+  const response: Error | Response =
+    await this.fetchWithoutAgent(
+      "com.atproto.repo.listRecords",
+      repo,
+      query as unknown as Record<string, string>
+    )
   if (response instanceof Error) {
     return response
   }
-  if (!response.success) {
-    return Error("apiError")
-  }
-  return response.data
+  return await response.json()
 }

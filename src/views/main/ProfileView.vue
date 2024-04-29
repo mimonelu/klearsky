@@ -14,6 +14,7 @@ import Loader from "@/components/common/Loader.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import Popover from "@/components/popovers/Popover.vue"
+import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 import Util from "@/composables/util"
@@ -598,6 +599,24 @@ function onActivateAccountMaskToggle () {
       </div>
     </div>
 
+    <!-- 固定ポスト -->
+    <Post
+      v-if="
+        state.isPagePostFeeds &&
+        mainState.currentAuthorPinnedPost != null
+      "
+      position="post"
+      :post="mainState.currentAuthorPinnedPost"
+      class="pinned-post"
+    >
+      <template #header-before>
+        <div class="pinned-post__header">
+          <SVGIcon name="pinOutline" />
+          <span>{{ $t("pinnedPost") }}</span>
+        </div>
+      </template>
+    </Post>
+
     <RouterView class="profile-view__router-view" />
 
     <!-- ハンドル履歴ポップアップ -->
@@ -948,6 +967,37 @@ function onActivateAccountMaskToggle () {
     & > .popover__content {
       padding: 0.5rem;
     }
+  }
+}
+
+// 固定ポスト
+.pinned-post {
+  --fg-color: 255, 255, 255;
+  background-image: linear-gradient(
+    135deg,
+    rgb(0, 0, 240),
+    rgb(240, 0, 0)
+  );
+
+  &__header {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5em;
+    font-size: 0.875em;
+    margin-bottom: 0.25em;
+
+    & > .svg-icon {
+      fill: var(--fg-color-075);
+    }
+
+    & > span {
+      color: var(--fg-color-075);
+      font-weight: bold;
+    }
+  }
+
+  & ~ .profile-view__router-view {
+    border-top: 1px solid var(--fg-color-0125);
   }
 }
 

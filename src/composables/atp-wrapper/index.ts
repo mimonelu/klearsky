@@ -56,6 +56,7 @@ import fetchPostThread from "@/composables/atp-wrapper/fetch/fetch-post-thread"
 import fetchPreferences from "@/composables/atp-wrapper/fetch/fetch-preferences"
 import fetchProfile from "@/composables/atp-wrapper/fetch/fetch-profile"
 import fetchProfiles from "@/composables/atp-wrapper/fetch/fetch-profiles"
+import fetchRecord from "@/composables/atp-wrapper/fetch/fetch-record"
 import fetchRecords from "@/composables/atp-wrapper/fetch/fetch-records"
 import fetchRepo from "@/composables/atp-wrapper/fetch/fetch-repo"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch/fetch-repost-users"
@@ -84,6 +85,7 @@ import updateListMuteToEnable from "@/composables/atp-wrapper/update/update-list
 import updateMuteToDisable from "@/composables/atp-wrapper/update/update-mute-to-disable"
 import updateMuteToEnable from "@/composables/atp-wrapper/update/update-mute-to-enable"
 import updateNotificationSeen from "@/composables/atp-wrapper/update/update-notification-seen"
+import updatePinnedPost from "@/composables/atp-wrapper/update/update-pinned-post"
 import updatePreferences from "@/composables/atp-wrapper/update/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update/update-profile"
 import updateRecord from "@/composables/atp-wrapper/update/update-record"
@@ -181,6 +183,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchPreferences = fetchPreferences
   fetchProfile = fetchProfile
   fetchProfiles = fetchProfiles
+  fetchRecord = fetchRecord
   fetchRecords = fetchRecords
   fetchRepo = fetchRepo
   fetchRepostUsers = fetchRepostUsers
@@ -215,6 +218,7 @@ class AtpWrapper implements TIAtpWrapper {
   updateMuteToDisable = updateMuteToDisable
   updateMuteToEnable = updateMuteToEnable
   updateNotificationSeen = updateNotificationSeen
+  updatePinnedPost = updatePinnedPost
   updatePreferences = updatePreferences
   updateProfile = updateProfile
   updateRecord = updateRecord

@@ -23,9 +23,6 @@ export default async function (
     if (response instanceof Error) {
       return response
     }
-    if (response == null) {
-      return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)
-    }
     const data = await response.json()
     if (data == null) {
       return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)

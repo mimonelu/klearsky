@@ -586,6 +586,7 @@ export function resetProfileState (state: MainState) {
   resetArray(state, "currentFollowings")
   state.currentFollowingsCursor = undefined
   resetArray(state, "currentSuggestedFollows")
+  state.currentAuthorPinnedPost = undefined
 }
 
 function resetArray (state: any, key: string) {
@@ -1070,16 +1071,20 @@ function isMyProfile (): boolean {
 }
 
 async function fetchUserProfile () {
-  const userProfile = await state.atp.fetchProfile(state.atp.session?.handle as string)
+  const userProfile = await state.atp.fetchProfile(state.atp.session?.did as string)
   if (userProfile instanceof Error) {
     state.userProfile = null
     return
   }
   state.userProfile = userProfile
 
+  // 固定ポストのインポート
+  await fetchPinnedPost(state.atp.session?.did as string, state.userProfile)
+
   // 現在のセッションにアバター画像を設定
-  if (state.atp.session != null && state.userProfile?.avatar != null)
+  if (state.atp.session != null && state.userProfile?.avatar != null) {
     state.atp.session.__avatar = state.userProfile?.avatar
+  }
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
@@ -1103,6 +1108,7 @@ async function fetchCurrentProfile (did: string) {
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
   state.currentSuggestedFollows.splice(0)
+  state.currentAuthorPinnedPost = undefined
   const currentProfile = await state.atp.fetchProfile(did)
   if (currentProfile instanceof Error) {
     state.currentProfile = null
@@ -1110,6 +1116,8 @@ async function fetchCurrentProfile (did: string) {
   }
   state.currentProfile = currentProfile
   state.currentProfile.__isDidPlc = state.currentProfile.did.startsWith("did:plc:")
+
+  // 現在のプロフィールがユーザーのプロフィールの場合
   if (did === state.atp.session?.did) {
     state.userProfile = state.currentProfile
 
@@ -1117,19 +1125,56 @@ async function fetchCurrentProfile (did: string) {
     state.myWorker.setSessionCache("userProfile", state.userProfile)
   }
 
-  // ハンドル履歴と利用開始日の取得（非同期で良い）
-  updateCurrentLogAudit()
+  // ハンドル履歴と利用開始日の取得
+  await updateCurrentLogAudit()
+
+  // 固定ポストのインポート
+  await fetchPinnedPost(did, state.currentProfile)
 }
 
 async function updateCurrentLogAudit () {
-  if (!state.currentProfile?.__isDidPlc) return
+  if (!state.currentProfile?.__isDidPlc) {
+    return
+  }
   const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
-  if (logJson == null) return
-  if (state.currentProfile == null) return // await　中に初期化される恐れがあるため
+  if (logJson == null) {
+    return
+  }
+  if (state.currentProfile == null) {
+    return // await　中に初期化される恐れがあるため
+  }
   state.currentProfile.__createdAt = Array.isArray(logJson)
     ? logJson.at(- 1)?.createdAt
     : undefined
   state.currentProfile.__log = logJson
+}
+
+// 固定ポストの取得
+async function fetchPinnedPost (did: string, profile?: TTProfile) {
+  if (profile == null) {
+    return
+  }
+
+  // プロフィールレコード（固定ポストURI）の取得
+  // TODO: fetchRecord にすること
+  const records = await state.atp.fetchRecords(did, "app.bsky.actor.profile")
+  if (records instanceof Error) {
+    return
+  }
+  const pinnedPostUri = records.records?.[0]?.value?.pinnedPost
+  if (pinnedPostUri != null) {
+    profile.pinnedPost = pinnedPostUri
+
+    // 固定ポストの取得
+    // TODO: fetchPost にすること
+    const pinnedPosts = await state.atp.fetchPosts([pinnedPostUri])
+    if (pinnedPosts != null && pinnedPosts !== false && pinnedPosts[0] != null) {
+      state.currentAuthorPinnedPost = pinnedPosts[0]
+    }
+  } else {
+    delete profile.pinnedPost
+    state.currentAuthorPinnedPost = undefined
+  }
 }
 
 async function fetchCurrentAuthorCustomFeeds (direction: "new" | "old") {

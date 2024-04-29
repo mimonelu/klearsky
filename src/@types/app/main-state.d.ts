@@ -170,6 +170,7 @@ type MainState = {
   currentAuthorLikesCursor?: string
   currentAuthorLists: Array<TTList>
   currentAuthorListsCursor?: string
+  currentAuthorPinnedPost?: TTPost
   currentFollowers: Array<TTUser>
   currentFollowersCursor?: string
   currentFollowings: Array<TTUser>

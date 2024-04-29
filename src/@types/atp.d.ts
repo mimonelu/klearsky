@@ -23,7 +23,7 @@ type TTServerInfo = {
 interface TICommonRecord {
   uri: string
   cid: string
-  value: {}
+  value: { [k: string]: any }
 }
 
 type TTUserViewer = {
@@ -352,6 +352,9 @@ type TTProfile = {
   indexedAt: string
   labels?: Array<TTLabel>
   viewer: TTUserViewer
+
+  // 固定ポスト
+  pinnedPost?: string
 }
 
 type TTFeedGenerator = {

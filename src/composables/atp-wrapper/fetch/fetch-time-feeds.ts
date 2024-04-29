@@ -27,7 +27,6 @@ export default async function (
   const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", author.did, query)
 
   if (response instanceof Error) return response
-  if (response == null) return
   const data = await response.json()
   if (data?.records == null) return
   ;(data.records as TTRecord[]).forEach((record: TTRecord) => {
