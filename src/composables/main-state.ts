@@ -1078,13 +1078,13 @@ async function fetchUserProfile () {
   }
   state.userProfile = userProfile
 
-  // 固定ポストのインポート
-  await fetchPinnedPost(state.atp.session?.did as string, state.userProfile)
-
   // 現在のセッションにアバター画像を設定
   if (state.atp.session != null && state.userProfile?.avatar != null) {
     state.atp.session.__avatar = state.userProfile?.avatar
   }
+
+  // 固定ポストのインポート
+  await fetchPinnedPost(state.userProfile)
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
@@ -1129,7 +1129,7 @@ async function fetchCurrentProfile (did: string) {
   await updateCurrentLogAudit()
 
   // 固定ポストのインポート
-  await fetchPinnedPost(did, state.currentProfile)
+  await fetchPinnedPost(state.currentProfile)
 }
 
 async function updateCurrentLogAudit () {
@@ -1150,26 +1150,24 @@ async function updateCurrentLogAudit () {
 }
 
 // 固定ポストの取得
-async function fetchPinnedPost (did: string, profile?: TTProfile) {
+async function fetchPinnedPost (profile?: TTProfile) {
   if (profile == null) {
     return
   }
 
   // プロフィールレコード（固定ポストURI）の取得
-  // TODO: fetchRecord にすること
-  const records = await state.atp.fetchRecords(did, "app.bsky.actor.profile")
+  const records = await state.atp.fetchRecords(profile.did, "app.bsky.actor.profile")
   if (records instanceof Error) {
     return
   }
-  const pinnedPostUri = records.records?.[0]?.value?.pinnedPost
-  if (pinnedPostUri != null) {
-    profile.pinnedPost = pinnedPostUri
+  const uri = records.records?.[0]?.value?.pinnedPost
+  if (uri != null) {
+    profile.pinnedPost = uri
 
     // 固定ポストの取得
-    // TODO: fetchPost にすること
-    const pinnedPosts = await state.atp.fetchPosts([pinnedPostUri])
-    if (pinnedPosts != null && pinnedPosts !== false && pinnedPosts[0] != null) {
-      state.currentAuthorPinnedPost = pinnedPosts[0]
+    const posts = await state.atp.fetchPosts([uri])
+    if (posts != null && posts !== false && posts[0] != null) {
+      state.currentAuthorPinnedPost = posts[0]
     }
   } else {
     delete profile.pinnedPost

@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoListRecords } from "@atproto/api"
+import type { ComAtprotoRepoListRecords } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -11,9 +11,6 @@ export default async function (
   cursor?: string
   records: TICommonRecord[]
 }> {
-  if (this.agent == null) {
-    return Error("noAgentError")
-  }
   if (this.session == null) {
     return Error("noSessionError")
   }

@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoGetRecord } from "@atproto/api"
+import type { ComAtprotoRepoGetRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -12,9 +12,6 @@ export default async function (
   cid?: string
   value: {}
 }> {
-  if (this.agent == null) {
-    return Error("noAgentError")
-  }
   if (this.session == null) {
     return Error("noSessionError")
   }
@@ -27,16 +24,14 @@ export default async function (
   if (cid != null) {
     query.cid = cid
   }
-  const response: Error | ComAtprotoRepoGetRecord.Response =
-    await (this.agent as BskyAgent).com.atproto.repo.getRecord(query)
-      .then((value: ComAtprotoRepoGetRecord.Response) => value)
-      .catch((error: any) => error)
-  console.log("[klearsky/getRecord]", response)
+  const response: Error | Response =
+    await this.fetchWithoutAgent(
+      "com.atproto.repo.getRecord",
+      repo,
+      query as unknown as Record<string, string>
+    )
   if (response instanceof Error) {
     return response
   }
-  if (!response.success) {
-    return Error("apiError")
-  }
-  return response.data
+  return await response.json()
 }
