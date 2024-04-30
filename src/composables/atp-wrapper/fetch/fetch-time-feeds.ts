@@ -8,29 +8,27 @@ export default async function (
   author: TTUser,
   limit?: number
 ): Promise<Error | undefined | string> {
-  const query: Record<string, string> = {
-    collection: "app.bsky.feed.post",
-    repo: author.did,
-    reverse: direction === "new" ? "true" : "false",
-  }
-  if (limit != null) query.limit = limit.toString()
   const rkey: undefined | string = oldPosts.length > 0
     ? direction === "new"
       ? Util.getRkey(oldPosts[0].uri)
       : Util.getRkey((oldPosts.at(- 1) as TTPost).uri)
     : undefined
-  if (rkey != null) {
-    query.cursor = rkey
+
+  const response = await this.fetchRecords(
+    author.did,
+    "app.bsky.feed.post",
+    limit,
+    rkey,
+    direction === "new"
+  )
+  if (response instanceof Error) {
+    return response
   }
+  response.records.forEach((record: TICommonRecord) => {
+    if (oldPosts.some((oldPost: TTPost) => oldPost.uri === record.uri)) {
+      return
+    }
 
-  // TODO: PDS分割に伴う暫定処置
-  const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", author.did, query)
-
-  if (response instanceof Error) return response
-  const data = await response.json()
-  if (data?.records == null) return
-  ;(data.records as TTRecord[]).forEach((record: TTRecord) => {
-    if (oldPosts.some((oldPost: TTPost) => oldPost.uri === record.uri)) return
     // @ts-ignore
     const feeds: TTFeed[] = [{
       post: {
@@ -51,13 +49,25 @@ export default async function (
         viewer: {},
       },
     }]
-    if (record.value.embed != null) feeds[0].post.record.embed = record.value.embed as any
-    if (record.value.facets != null) feeds[0].post.record.facets = record.value.facets
-    if (record.value.langs != null) feeds[0].post.record.langs = record.value.langs
-    if (record.value.reply != null) feeds[0].post.record.reply = record.value.reply
+
+    if (record.value.embed != null) {
+      feeds[0].post.record.embed = record.value.embed as any
+    }
+    if (record.value.facets != null) {
+      feeds[0].post.record.facets = record.value.facets
+    }
+    if (record.value.langs != null) {
+      feeds[0].post.record.langs = record.value.langs
+    }
+    if (record.value.reply != null) {
+      feeds[0].post.record.reply = record.value.reply
+    }
     AtpUtil.coherentResponses(feeds)
-    if (direction === "new") oldPosts.unshift(feeds[0].post)
-    else oldPosts.push(feeds[0].post)
+    if (direction === "new") {
+      oldPosts.unshift(feeds[0].post)
+    } else {
+      oldPosts.push(feeds[0].post)
+    }
   })
-  return data.cursor
+  return response.cursor
 }

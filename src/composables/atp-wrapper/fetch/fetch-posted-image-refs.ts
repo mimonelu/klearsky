@@ -11,28 +11,21 @@ export default async function (
   const results: string[] = []
   let cursor: undefined | string
   for (let i = 0; i < POSTED_IMAGE_REFS_ITERATION; i ++) {
-    const query: Record<string, string> = {
-      collection: "app.bsky.feed.post",
-      repo: did,
-      limit: POSTED_IMAGE_REFS_LIMIT.toString(),
-    }
-    if (cursor != null) {
-      query.cursor = Util.getRkey(cursor)
-    }
-    const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", did, query)
+    const response = await this.fetchRecords(
+      did,
+      "app.bsky.feed.post",
+      POSTED_IMAGE_REFS_LIMIT,
+      cursor != null ? Util.getRkey(cursor) : undefined
+    )
     if (response instanceof Error) {
       return response
     }
-    const data = await response.json()
-    if (data == null) {
-      return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)
-    }
-    const records: undefined | TTRecord[] = data.records
+    const records: TICommonRecord[] = response.records
     if (!records?.length) {
       // 通常時の終了箇所
       return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)
     }
-    records.forEach((record: TTRecord) => {
+    records.forEach((record: TICommonRecord) => {
       const images = record.value?.embed?.images
       if (images == null) {
         return

@@ -36,5 +36,7 @@ export default async function (
   if (response instanceof Error) {
     return response
   }
-  return await response.json()
+  const json = await response.json()
+  console.log("[klearsky/fetchRecords", json)
+  return json
 }

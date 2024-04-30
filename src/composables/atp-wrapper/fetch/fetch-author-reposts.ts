@@ -5,24 +5,26 @@ export default async function (
   limit?: number,
   cursor?: string
 ): Promise<undefined | string> {
-  const query: Record<string, string> = {
-    collection: "app.bsky.feed.repost",
+  const response = await this.fetchRecords(
     repo,
+    "app.bsky.feed.repost",
+    limit,
+    cursor
+  )
+  if (response instanceof Error) {
+    return
   }
-  if (limit != null) query.limit = limit.toString()
-  if (cursor != null) query.cursor = cursor
+  if (response.records == null) {
+    return
+  }
 
-  // TODO: PDS分割に伴う暫定処置
-  const response = await this.fetchWithoutAgent("com.atproto.repo.listRecords", repo, query)
-
-  if (response instanceof Error) return
-  const data = await response.json()
-  if (data?.records == null) return
-  const uris: Array<string> = data.records.map((record: any) => {
+  const uris: Array<string> = response.records.map((record: TICommonRecord) => {
     return record.value.subject.uri
   })
   const posts: undefined | false | Array<TTPost> = await this.fetchPosts(uris)
-  if (posts === false) return
+  if (posts === false) {
+    return
+  }
   if (posts != null) {
     const newFeeds: Array<TTFeed> = posts
       .filter((post: TTPost) => {
@@ -32,11 +34,11 @@ export default async function (
       })
       .map((post: TTPost) => {
         // ソート用プロパティ `__createdAt` の作成
-        const record = data.records.find((record: any) => {
-          return (record.value as any).subject.cid === post.cid
+        const record = response.records.find((record: TICommonRecord) => {
+          return record.value.subject.cid === post.cid
         })
         const createdAt = record != null
-          ? (record.value as any).createdAt
+          ? record.value.createdAt
           : post.indexedAt
 
         return {
@@ -54,5 +56,5 @@ export default async function (
     return aCreatedAt < bCreatedAt ? 1 : aCreatedAt > bCreatedAt ? -1 : 0
   })
 
-  return data.cursor
+  return response.cursor
 }
