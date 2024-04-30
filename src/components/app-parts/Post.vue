@@ -606,6 +606,8 @@ function toggleOldestQuotedPostDisplay () {
     :data-is-masked="!post.__custom.unmask && state.masked"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
+    <slot name="post-before" />
+
     <!-- ポストヘッダー -->
     <div
       class="header"
@@ -1171,9 +1173,6 @@ function toggleOldestQuotedPostDisplay () {
   // マスク
   &[data-is-masked="true"] {
     cursor: pointer;
-    &:not(:last-child) {
-      padding-bottom: 0;
-    }
     &[data-position="postInPost"] .post__mask {
       margin: 0;
       padding: 0;

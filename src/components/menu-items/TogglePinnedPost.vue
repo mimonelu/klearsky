@@ -23,14 +23,14 @@ async function updatePinnedPost (uri?: string) {
     )
     return
   }
-  if (mainState.currentProfile == null) {
+  if (mainState.userProfile == null) {
     return
   }
   if (pinned) {
-    mainState.currentProfile.pinnedPost = uri
+    mainState.userProfile.pinnedPost = uri
     mainState.currentAuthorPinnedPost = props.post
   } else {
-    delete mainState.currentProfile.pinnedPost
+    delete mainState.userProfile.pinnedPost
     mainState.currentAuthorPinnedPost = undefined
   }
 }
@@ -39,7 +39,7 @@ async function updatePinnedPost (uri?: string) {
 <template>
   <!-- 固定ポストの解除 -->
   <button
-    v-if="mainState.currentProfile?.pinnedPost === post.uri"
+    v-if="mainState.userProfile?.pinnedPost === post.uri"
     @click.prevent.stop="updatePinnedPost()"
   >
     <SVGIcon name="pinOffOutline" />

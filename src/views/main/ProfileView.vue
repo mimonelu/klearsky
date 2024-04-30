@@ -609,7 +609,7 @@ function onActivateAccountMaskToggle () {
       :post="mainState.currentAuthorPinnedPost"
       class="pinned-post"
     >
-      <template #header-before>
+      <template #post-before>
         <div class="pinned-post__header">
           <SVGIcon name="pinOutline" />
           <span>{{ $t("pinnedPost") }}</span>
@@ -972,27 +972,26 @@ function onActivateAccountMaskToggle () {
 
 // 固定ポスト
 .pinned-post {
-  --fg-color: 255, 255, 255;
-  background-image: linear-gradient(
-    135deg,
-    rgb(0, 0, 240),
-    rgb(240, 0, 0)
-  );
+  background-color: rgb(var(--like-color), 0.125);
 
   &__header {
     display: flex;
     align-items: center;
     grid-gap: 0.5em;
     font-size: 0.875em;
-    margin-bottom: 0.25em;
+    margin-bottom: 0.75em;
+    overflow: hidden;
+    white-space: nowrap;
 
     & > .svg-icon {
-      fill: var(--fg-color-075);
+      fill: rgb(var(--like-color));
     }
 
     & > span {
-      color: var(--fg-color-075);
+      color: rgb(var(--like-color));
       font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 

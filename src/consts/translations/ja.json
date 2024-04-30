@@ -182,7 +182,7 @@
   "copyDisplayName": "表示名をコピー",
   "likeUsers": "いいねしたユーザー",
   "repostUsers": "リポストしたユーザー",
-  "pinnedPost": "固定ポスト（Klearskyのみ）",
+  "pinnedPost": "固定ポスト（非公式機能）",
   "pinnedPostOn": "固定ポストに選択",
   "pinnedPostOff": "固定ポストを解除",
   "copyPostText": "テキストをコピー",
