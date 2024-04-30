@@ -21,7 +21,7 @@ export default class {
     return this.items
       .filter((item: TTMyFeedsItem) => {
         return (item.kind === "feed" || item.kind === "list") &&
-          this.mainState.feedPreferences?.pinned.includes(item.value.uri)
+          this.mainState.currentFeedPreference?.pinned.includes(item.value.uri)
       })
       .map((item: TTMyFeedsItem) => {
         return item.value.uri
@@ -29,7 +29,7 @@ export default class {
   }
 
   get pinnedItems (): Array<TTMyFeedsItem> {
-    const pinned = this.mainState.feedPreferences?.pinned
+    const pinned = this.mainState.currentFeedPreference?.pinned
     if (pinned == null || pinned.length === 0) {
       return this.customItems
     }
@@ -83,13 +83,13 @@ export default class {
 
     // フィードジェネレーターのURL配列を取得
     const savedFeeds: undefined | Array<string> =
-      this.mainState.feedPreferences?.saved?.filter((uri: string) => {
+      this.mainState.currentFeedPreference?.saved?.filter((uri: string) => {
         return this.detectItemKind(uri) === "feed"
       })
 
     // リストのURL配列を取得
     const savedLists: undefined | Array<string> =
-      this.mainState.feedPreferences?.saved?.filter((uri: string) => {
+      this.mainState.currentFeedPreference?.saved?.filter((uri: string) => {
         return this.detectItemKind(uri) === "list"
       })
 
@@ -137,7 +137,7 @@ export default class {
     })
 
     // 不明なアイテムの処理
-    this.mainState.feedPreferences?.saved?.forEach((uri: string, index: number) => {
+    this.mainState.currentFeedPreference?.saved?.forEach((uri: string, index: number) => {
       if (this.items.findIndex((item: TTMyFeedsItem) => {
         return item.value.uri === uri
       }) !== - 1) return
@@ -186,7 +186,7 @@ export default class {
   }
 
   sortItems () {
-    const saved = this.mainState.feedPreferences?.saved
+    const saved = this.mainState.currentFeedPreference?.saved
     if (saved == null) return
     const myFeedsIndex = this.mainState.currentSetting.myFeedsIndex ?? []
     this.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {

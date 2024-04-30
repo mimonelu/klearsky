@@ -239,12 +239,12 @@ state.currentTaggedProfiles = {}
 
 // カスタムフィード
 
-state.currentCustomUri = undefined
+state.currentCustomFeedsUri = undefined
 state.currentCustomFeeds = []
-state.currentCustomCursor = undefined
+state.currentCustomFeedsCursor = undefined
 state.currentPopularFeedGenerators = []
 state.currentPopularFeedGeneratorsCursor = undefined
-state.feedPreferences = computed((): undefined | TTPreference => {
+state.currentFeedPreference = computed((): undefined | TTPreference => {
   return state.currentPreferences.find((preference: TTPreference) => {
     return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
   })
@@ -252,6 +252,7 @@ state.feedPreferences = computed((): undefined | TTPreference => {
 state.fetchCustomFeeds = fetchCustomFeeds
 state.fetchPopularFeedGenerators = fetchPopularFeedGenerators
 state.sortFeedPreferencesSavedAndPinned = sortFeedPreferencesSavedAndPinned
+state.removeFeedPreferenceByUri = removeFeedPreferenceByUri
 
 // マイフィード
 state.myFeeds = new MyFeeds(state)
@@ -1409,32 +1410,38 @@ async function fetchSearchFeeds (direction: "old" | "new") {
       direction === "old" ? state.currentSearchFeedsCursor : undefined,
       state.currentSearchTerm
     )
-  if (cursor instanceof Error) state.openErrorPopup(
-    "errorApiFailed",
-    "main-state/fetchSearchFeeds"
-  )
-  else if (cursor != null) state.currentSearchFeedsCursor = cursor
+  if (cursor instanceof Error) {
+    state.openErrorPopup(
+      "errorApiFailed",
+      "main-state/fetchSearchFeeds"
+    )
+  } else if (cursor != null) {
+    state.currentSearchFeedsCursor = cursor
+  }
 }
 
 // カスタムフィード
 
 async function fetchCustomFeeds (direction: TTDirection, middleCursor?: string) {
-  if (state.currentCustomUri !== state.currentQuery.feed) {
+  if (state.currentCustomFeedsUri !== state.currentQuery.feed) {
     state.currentCustomFeeds.splice(0)
-    state.currentCustomCursor = undefined
+    state.currentCustomFeedsCursor = undefined
   }
   const cursor: undefined | string | Error =
     await state.atp.fetchCustomFeeds(
       state.currentCustomFeeds,
       state.currentQuery.feed,
       CONSTS.LIMIT_OF_FETCH_FEEDS,
-      direction === "old" ? state.currentCustomCursor : middleCursor,
+      direction === "old" ? state.currentCustomFeedsCursor : middleCursor,
       direction,
       (feedUri: any): boolean => feedUri === state.currentQuery.feed,
     )
-  if (cursor instanceof Error) state.openErrorPopup(cursor, "main-state/fetchCustomFeeds")
-  else if (cursor != null) state.currentCustomCursor = cursor
-  state.currentCustomUri = state.currentQuery.feed
+  if (cursor instanceof Error) {
+    state.openErrorPopup(cursor, "main-state/fetchCustomFeeds")
+  } else if (cursor != null) {
+    state.currentCustomFeedsCursor = cursor
+  }
+  state.currentCustomFeedsUri = state.currentQuery.feed
 }
 
 async function fetchPopularFeedGenerators (direction: "old" | "new") {
@@ -1444,18 +1451,35 @@ async function fetchPopularFeedGenerators (direction: "old" | "new") {
       CONSTS.LIMIT_OF_FETCH_POPULAR_FEED_GENERATORS,
       direction === "old" ? state.currentPopularFeedGeneratorsCursor : undefined
     )
-  if (cursor instanceof Error) state.openErrorPopup(
-    "errorApiFailed",
-    "main-state/fetchPopularFeedGenerators"
-  )
-  else if (cursor != null) state.currentPopularFeedGeneratorsCursor = cursor
+  if (cursor instanceof Error) {
+    state.openErrorPopup(
+      "errorApiFailed",
+      "main-state/fetchPopularFeedGenerators"
+    )
+  } else if (cursor != null) {
+    state.currentPopularFeedGeneratorsCursor = cursor
+  }
 }
 
 function sortFeedPreferencesSavedAndPinned () {
-  if (state.feedPreferences?.saved != null)
-    state.feedPreferences.saved = state.myFeeds.savedUris
-  if (state.feedPreferences?.pinned != null)
-    state.feedPreferences.pinned = state.myFeeds.pinnedUris
+  if (state.currentFeedPreference?.saved != null) {
+    state.currentFeedPreference.saved = state.myFeeds.savedUris
+  }
+  if (state.currentFeedPreference?.pinned != null) {
+    state.currentFeedPreference.pinned = state.myFeeds.pinnedUris
+  }
+}
+
+function removeFeedPreferenceByUri (type: TTPreferenceFeedType, uri: string): boolean {
+  const index = state.currentFeedPreference[type]
+    .findIndex((currentUri: string) => {
+      return currentUri === uri
+    })
+  if (index === - 1) {
+    return false
+  }
+  state.currentFeedPreference[type].splice(index, 1)
+  return true
 }
 
 // リスト

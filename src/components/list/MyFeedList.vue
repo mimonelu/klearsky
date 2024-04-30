@@ -28,21 +28,21 @@ const state = reactive<{
 
 function startEdit () {
   state.backupMyFeedsItems = Util.cloneJson(mainState.myFeeds.items) ?? []
-  state.backupPinned = Util.cloneJson(mainState.feedPreferences?.pinned ?? []) ?? []
+  state.backupPinned = Util.cloneJson(mainState.currentFeedPreference?.pinned ?? []) ?? []
   state.editMode = true
 }
 
 function cancelEdit () {
   mainState.myFeeds.items = state.backupMyFeedsItems
-  if (mainState.feedPreferences?.pinned != null) {
-    mainState.feedPreferences.pinned = state.backupPinned
+  if (mainState.currentFeedPreference?.pinned != null) {
+    mainState.currentFeedPreference.pinned = state.backupPinned
   }
   state.editMode = false
 }
 
 async function saveMyFeed () {
   if (state.processing) return
-  if (mainState.feedPreferences == null) return
+  if (mainState.currentFeedPreference == null) return
   state.processing = true
   mainState.sortFeedPreferencesSavedAndPinned()
   mainState.myFeeds.saveCustomItemSettings()
@@ -59,25 +59,25 @@ async function saveMyFeed () {
 }
 
 function isPinned (uri: string): boolean {
-  return mainState.feedPreferences?.pinned?.includes(uri) ?? false
+  return mainState.currentFeedPreference?.pinned?.includes(uri) ?? false
 }
 
 function togglePinned (uri: string) {
-  if (mainState.feedPreferences == null) return
-  if (mainState.feedPreferences.pinned == null) mainState.feedPreferences.pinned = [] // pinned の作成
-  const index = mainState.feedPreferences.pinned.indexOf(uri)
-  if (index === - 1) mainState.feedPreferences.pinned.push(uri)
-  else mainState.feedPreferences.pinned.splice(index, 1)
+  if (mainState.currentFeedPreference == null) return
+  if (mainState.currentFeedPreference.pinned == null) mainState.currentFeedPreference.pinned = [] // pinned の作成
+  const index = mainState.currentFeedPreference.pinned.indexOf(uri)
+  if (index === - 1) mainState.currentFeedPreference.pinned.push(uri)
+  else mainState.currentFeedPreference.pinned.splice(index, 1)
 }
 
 function removeMyFeed (uri: string) {
-  if (mainState.feedPreferences?.saved != null) {
-    const index = mainState.feedPreferences.saved.indexOf(uri)
-    if (index !== - 1) mainState.feedPreferences.saved.splice(index, 1)
+  if (mainState.currentFeedPreference?.saved != null) {
+    const index = mainState.currentFeedPreference.saved.indexOf(uri)
+    if (index !== - 1) mainState.currentFeedPreference.saved.splice(index, 1)
   }
-  if (mainState.feedPreferences?.pinned != null) {
-    const index = mainState.feedPreferences.pinned.indexOf(uri)
-    if (index !== - 1) mainState.feedPreferences.pinned.splice(index, 1)
+  if (mainState.currentFeedPreference?.pinned != null) {
+    const index = mainState.currentFeedPreference.pinned.indexOf(uri)
+    if (index !== - 1) mainState.currentFeedPreference.pinned.splice(index, 1)
   }
   mainState.myFeeds.removeItem(uri)
 }

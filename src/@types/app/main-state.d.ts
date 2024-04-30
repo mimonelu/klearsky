@@ -234,15 +234,16 @@ type MainState = {
 
   // カスタムフィード
 
-  currentCustomUri?: string
+  currentCustomFeedsUri?: string
   currentCustomFeeds: Array<TTFeed>
-  currentCustomCursor?: string
+  currentCustomFeedsCursor?: string
   currentPopularFeedGenerators: Array<TTFeedGenerator>
   currentPopularFeedGeneratorsCursor?: string
-  feedPreferences: ComputedRef<undefined | TTPreference>
+  currentFeedPreference: ComputedRef<undefined | TTPreference>
   fetchCustomFeeds: (direction: TTDirection, middleCursor?: string) => Promise<void>
   fetchPopularFeedGenerators: (direction: "new" | "old") => Promise<void>
   sortFeedPreferencesSavedAndPinned: () => void
+  removeFeedPreferenceByUri: (type: TTPreferenceFeedType, uri: string) => boolean
 
   // マイフィード
   myFeeds: TTMyFeeds

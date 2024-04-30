@@ -492,7 +492,7 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "feeds-home": {
-        if (state.currentCustomUri !== state.currentQuery.feed ||
+        if (state.currentCustomFeedsUri !== state.currentQuery.feed ||
             state.currentCustomFeeds.length === 0)
           await state.fetchCustomFeeds("new")
         break

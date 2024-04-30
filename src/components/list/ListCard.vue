@@ -86,7 +86,7 @@ const state = reactive<{
     return mainState.myFeeds.findIndexByUri(props.list.uri) !== - 1
   }),
   pinned: computed((): boolean => {
-    return mainState.feedPreferences?.pinned
+    return mainState.currentFeedPreference?.pinned
       .some((uri: string) => uri === props.list.uri) ?? false
   }),
   loaderDisplay: false,
@@ -168,8 +168,8 @@ async function deleteList () {
 async function toggleSavedOrPinned (type: "saved" | "pinned") {
   Util.blurElement()
   if (state.loaderDisplay) return
-  if (mainState.feedPreferences == null) return
-  if (mainState.feedPreferences[type] == null) mainState.feedPreferences[type] = []
+  if (mainState.currentFeedPreference == null) return
+  if (mainState.currentFeedPreference[type] == null) mainState.currentFeedPreference[type] = []
 
   // フィードブックマーク／フィードピンの削除
   if (state[type]) {
@@ -177,11 +177,11 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
     if (type === "saved" && state.pinned) return
 
     if (type === "saved") mainState.myFeeds.removeItem(props.list.uri)
-    const index = mainState.feedPreferences[type].findIndex((uri: string) => {
+    const index = mainState.currentFeedPreference[type].findIndex((uri: string) => {
       return uri === props.list.uri
     })
     if (index === - 1) return
-    mainState.feedPreferences[type].splice(index, 1)
+    mainState.currentFeedPreference[type].splice(index, 1)
 
   // フィードブックマーク／フィードピンの追加
   } else {
@@ -189,7 +189,7 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
     if (type === "pinned" && !state.saved) return
 
     if (type === "saved") mainState.myFeeds.addItem(props.list)
-    mainState.feedPreferences[type].push(props.list.uri)
+    mainState.currentFeedPreference[type].push(props.list.uri)
   }
 
   await updatePreferences()

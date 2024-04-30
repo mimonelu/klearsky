@@ -42,7 +42,7 @@ const state = reactive<{
     return mainState.myFeeds.findIndexByUri(props.generator.uri) !== - 1
   }),
   pinned: computed((): boolean => {
-    return mainState.feedPreferences?.pinned
+    return mainState.currentFeedPreference?.pinned
       .some((uri: string) => uri === props.generator.uri) ?? false
   }),
   detailDisplay: !props.toggleDisplay,
@@ -66,31 +66,43 @@ async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
   state.loaderDisplay = false
 }
 
-async function toggleSavedOrPinned (type: "saved" | "pinned") {
+async function toggleSavedOrPinned (type: TTPreferenceFeedType) {
   Util.blurElement()
-  if (state.loaderDisplay) return
-  if (mainState.feedPreferences == null) return
-  if (mainState.feedPreferences[type] == null) mainState.feedPreferences[type] = []
+  if (state.loaderDisplay) {
+    return
+  }
+  if (mainState.currentFeedPreference == null) {
+    return
+  }
+  if (mainState.currentFeedPreference[type] == null) {
+    mainState.currentFeedPreference[type] = []
+  }
 
   // フィードブックマーク／フィードピンの削除
   if (state[type]) {
     // フィードブックマークの削除はフィードピンが有効の場合のみ
-    if (type === "saved" && state.pinned) return
+    if (type === "saved" && state.pinned) {
+      return
+    }
 
-    if (type === "saved") mainState.myFeeds.removeItem(props.generator.uri)
-    const index = mainState.feedPreferences[type].findIndex((uri: string) => {
-      return uri === props.generator.uri
-    })
-    if (index === - 1) return
-    mainState.feedPreferences[type].splice(index, 1)
+    if (type === "saved") {
+      mainState.myFeeds.removeItem(props.generator.uri)
+    }
+    if (!mainState.removeFeedPreferenceByUri(type, props.generator.uri)) {
+      return
+    }
 
   // フィードブックマーク／フィードピンの追加
   } else {
     // ピンの追加はフィードブックマークが無効の場合のみ
-    if (type === "pinned" && !state.saved) return
+    if (type === "pinned" && !state.saved) {
+      return
+    }
 
-    if (type === "saved") mainState.myFeeds.addItem(props.generator)
-    mainState.feedPreferences[type].push(props.generator.uri)
+    if (type === "saved") {
+      mainState.myFeeds.addItem(props.generator)
+    }
+    mainState.currentFeedPreference[type].push(props.generator.uri)
   }
 
   await updatePreferences()

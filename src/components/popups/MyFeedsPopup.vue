@@ -48,7 +48,7 @@ async function fetchMyFeeds () {
   }
 
   // ブックマークが存在しない
-  if (mainState.feedPreferences?.saved == null) {
+  if (mainState.currentFeedPreference?.saved == null) {
     mainState.myFeeds.clearItems()
     state.popupLoaderDisplay = false
     return
