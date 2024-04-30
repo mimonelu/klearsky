@@ -32,12 +32,16 @@ async function updatePinnedPost (uri?: string) {
   // 固定ポスト作成時
   if (pinned) {
     mainState.userProfile.pinnedPost = uri
-    mainState.currentAuthorPinnedPost = props.post
+    if (mainState.currentProfile?.did === mainState.userProfile.did) {
+      mainState.currentAuthorPinnedPost = props.post
+    }
 
   // 固定ポスト削除時
   } else {
     delete mainState.userProfile.pinnedPost
-    mainState.currentAuthorPinnedPost = undefined
+    if (mainState.currentProfile?.did === mainState.userProfile.did) {
+      mainState.currentAuthorPinnedPost = undefined
+    }
   }
 }
 </script>
