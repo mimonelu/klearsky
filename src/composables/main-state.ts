@@ -1134,9 +1134,11 @@ async function fetchCurrentProfile (did: string) {
 }
 
 async function updateCurrentLogAudit () {
+  // TODO: __isDidPlc を削除すること
   if (!state.currentProfile?.__isDidPlc) {
     return
   }
+
   const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
   if (logJson == null) {
     return

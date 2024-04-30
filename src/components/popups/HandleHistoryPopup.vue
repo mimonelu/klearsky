@@ -2,24 +2,54 @@
 import { inject } from "vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import traverseJson from "@/composables/atp-wrapper/atp-util/traverse-json"
 
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  log?: any;
+  log?: any
 }>()
 
 const mainState = inject("state") as MainState
 
-function makeAlsoKnownAs (alsoKnownAs?: Array<string>): string {
-  if (alsoKnownAs == null) return ""
-  return alsoKnownAs
-    .map((item: string) => item.replace("at://", ""))
-    .join(", ")
-}
-
 function close () {
   emit("close")
+}
+
+function getHandle (item: any): undefined | string {
+  let result: undefined | string
+  traverseJson(item, (key: string, value: any) => {
+    if (key === "handle") {
+      result = value
+    } else if (key === "alsoKnownAs") {
+      if (typeof value?.[0] === "string") {
+        result = value[0].replace("at://", "")
+      }
+    }
+  })
+  return result
+}
+
+function getAtProtoEndpoint (item: any): undefined | string {
+  let result: undefined | string
+  traverseJson(item, (key: string, value: any) => {
+    if (key === "service") {
+      result = value
+    } else if (key === "atproto_pds") {
+      result = value?.endpoint
+    }
+  })
+  return result
+}
+
+function getLabelerEndpoint (item: any): undefined | string {
+  let result: undefined | string
+  traverseJson(item, (key: string, value: any) => {
+    if (key === "atproto_labeler") {
+      result = value?.endpoint
+    }
+  })
+  return result
 }
 </script>
 
@@ -37,21 +67,35 @@ function close () {
     </template>
     <template #body>
       <template v-if="log != null">
-        <div
+        <ol
           v-for="item, itemIndex of log"
           :key="itemIndex"
           class="item"
         >
-          <div
-            v-if="item.operation?.handle"
-            class="handle"
-          >{{ item.operation?.handle }}</div>
-          <div
-            v-else
-            class="handle"
-          >{{ makeAlsoKnownAs(item.operation?.alsoKnownAs) }}</div>
-          <div class="created-at">{{ mainState.formatDate(item.createdAt) }}</div>
-        </div>
+          <!-- createdAt -->
+          <li class="created-at">{{ mainState.formatDate(item.createdAt) }}</li>
+
+          <!-- ハンドル -->
+          <li class="handle">{{ getHandle(item) }}</li>
+
+          <!-- エンドポイント -->
+          <li class="endpoint">
+            <!-- ATProto エンドポイント -->
+            <div class="endpoint__atproto">
+              <SVGIcon name="database" />
+              <span>{{ getAtProtoEndpoint(item) }}</span>
+            </div>
+
+            <!-- ラベラーエンドポイント -->
+            <div
+              v-if="getLabelerEndpoint(item)"
+              class="endpoint__labeler"
+            >
+              <SVGIcon name="label" />
+              <span>{{ getLabelerEndpoint(item) }}</span>
+            </div>
+          </li>
+        </ol>
       </template>
     </template>
   </Popup>
@@ -61,31 +105,78 @@ function close () {
 .handle-history-popup {
   &:deep() {
     .popup-body {
-      grid-gap: 0.5rem;
+      grid-gap: 1rem;
     }
   }
 
   .item {
-    border-bottom: 1px solid var(--fg-color-0125);
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    grid-gap: 0.5rem;
-    padding: 0 0.5rem 0.25rem;
+    flex-direction: column;
+    grid-gap: 0.25rem;
+    user-select: text;
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--fg-color-0125);
+      padding-bottom: 1rem;
+    }
   }
 
-  .handle {
-    line-height: var(--line-height);
-    user-select: text;
-    white-space: pre-wrap;
+  // createdAt
+  .created-at {
+    color: var(--fg-color-05);
     word-break: break-all;
   }
 
-  .created-at {
-    color: var(--fg-color-05);
-    font-size: 0.875rem;
-    line-height: var(--line-height);
-    white-space: nowrap;
+  // ハンドル
+  .handle {
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1.25;
+    word-break: break-all;
+  }
+
+  // エンドポイント
+  .endpoint {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 0.25rem;
+
+    &__atproto,
+    &__labeler {
+      display: flex;
+      align-items: center;
+      grid-gap: 0.375rem;
+
+      & > .svg-icon {
+        font-size: 0.875rem;
+      }
+
+      & > span {
+        line-height: 1.25;
+        word-break: break-all;
+      }
+    }
+
+    // ATProto エンドポイント
+    &__atproto {
+      & > .svg-icon {
+        fill: var(--fg-color-05);
+      }
+
+      & > span {
+        color: var(--fg-color-075);
+      }
+    }
+
+    // ラベラーエンドポイント
+    &__labeler {
+      & > .svg-icon {
+        fill: rgb(var(--share-color));
+      }
+
+      & > span {
+        color: rgb(var(--share-color));
+      }
+    }
   }
 }
 </style>
