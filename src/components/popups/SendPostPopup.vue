@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
+import { computed, inject, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
 import format from "date-fns/format"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import LinkCard from "@/components/app-parts/LinkCard.vue"
+import Loader from "@/components/common/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -290,11 +291,14 @@ function openThreadgatePopup () {
 // プレビューリンクカード
 const PreviewLinkCardFeature: {
   timer?: any
+  loading: Ref<boolean>
   external: TTExternal
   threshold: () => void
   execute: () => Promise<void>
 } = {
   timer: undefined,
+
+  loading: ref(false),
 
   external: reactive({
     uri: "",
@@ -328,11 +332,13 @@ const PreviewLinkCardFeature: {
     this.external.title = undefined
     this.external.description = undefined
     this.external.thumb = undefined
+    this.loading.value = true
     const external = await Util.parseOgp(
       mainState.atp,
       easyFormState.url,
       false
     )
+    this.loading.value = false
     if (external instanceof Error) {
       this.external.uri = ""
       return
@@ -394,7 +400,14 @@ const PreviewLinkCardFeature: {
             "
             :noLink="true"
             :noEmbedded="true"
-          />
+          >
+            <template #after>
+              <Loader
+                v-if="PreviewLinkCardFeature.loading.value"
+                class="link-card-loader"
+              />
+            </template>
+          </LinkCard>
 
           <div class="button-container">
             <!-- ポスト言語選択ポップアップトリガー -->
@@ -522,6 +535,10 @@ const PreviewLinkCardFeature: {
 
   .svg-icon--help {
     font-size: 1.25rem;
+  }
+
+  .link-card-loader {
+    font-size: 0.75rem;
   }
 
   .button-container {

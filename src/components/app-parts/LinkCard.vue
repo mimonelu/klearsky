@@ -347,11 +347,15 @@ getEmbeddedContentId()
         <div class="external__meta__description">{{ external.description ?? '' }}</div>
       </a>
     </div>
+
+    <slot name="after" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .external {
+  position: relative;
+
   // 不正なリンクカード
   &--invalid {
     background-color: var(--fg-color-0125);
