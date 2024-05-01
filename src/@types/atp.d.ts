@@ -115,6 +115,9 @@ type TTExternal = {
   thumb?: string
   title?: string
   description?: string
+
+  // プレビューリンクカード用
+  preview?: string
 }
 
 type TTImage = {

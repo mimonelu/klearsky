@@ -4,11 +4,7 @@ export default async function (
   atpWrapper: TIAtpWrapper,
   uri: string,
   urlHasImage?: boolean
-): Promise<Error | {
-  uri: string,
-  title: string,
-  description: string
-}> {
+): Promise<Error | TTExternal> {
   const response: Error | any =
     await fetch(`https://cardyb.bsky.app/v1/extract?url=${uri}`, {
       headers: { "user-agent": "Klearsky" },
@@ -47,10 +43,11 @@ export default async function (
     description = Util.unicodeSubstring(description, 0, 1000)
   }
 
-  const external = {
+  const external: TTExternal = {
     uri,
     title,
     description,
+    preview: response.image,
   }
 
   if (urlHasImage && imageFetchUrl) {
@@ -83,7 +80,7 @@ export default async function (
       maxSize: 0.953671875,
     })
     if (blobRef == null) return external
-    ;(external as any).thumb = blobRef
+    external.thumb = blobRef
   }
 
   return external

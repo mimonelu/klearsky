@@ -3,6 +3,7 @@ import { computed, inject, onMounted, reactive, ref, watch, type ComputedRef } f
 import format from "date-fns/format"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
+import LinkCard from "@/components/app-parts/LinkCard.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -121,6 +122,9 @@ watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
     // 「リンクカードにする」使用時の対策
     if (props.url) easyFormState.url = props.url
 
+    // プレビューリンクカード
+    PreviewLinkCardFeature.execute()
+
     ;(popup.value as any)?.scrollToTop()
     ;(easyForm.value as any)?.setFocus()
   }, 0)
@@ -211,6 +215,9 @@ async function submitCallback () {
 }
 
 function onInputUrl () {
+  // プレビューリンクカード
+  PreviewLinkCardFeature.threshold()
+
   // リンクカードの画像添付チェックボックスの出し分け
   const urlHasImageItem = easyFormProps.data.find((item: TTEasyFormItem) => {
     return item.model === "urlHasImage"
@@ -279,6 +286,65 @@ function openThreadgatePopup () {
     },
   })
 }
+
+// プレビューリンクカード
+const PreviewLinkCardFeature: {
+  timer?: any
+  external: TTExternal
+  threshold: () => void
+  execute: () => Promise<void>
+} = {
+  timer: undefined,
+
+  external: reactive({
+    uri: "",
+    title: undefined,
+    description: undefined,
+    thumb: undefined,
+  }),
+
+  threshold () {
+    if (this.timer != null) {
+      clearTimeout(this.timer)
+    }
+    this.timer = setTimeout(() => {
+      this.timer = undefined
+      this.execute()
+    }, 1000)
+  },
+
+  async execute () {
+    if (this.external.uri === easyFormState.url) {
+      return
+    }
+
+    // `http` or `https` から始まるURLライクな文字列のみ処理
+    if (!easyFormState.url.match(/https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/)) {
+      this.external.uri = ""
+      return
+    }
+
+    this.external.uri = easyFormState.url
+    this.external.title = undefined
+    this.external.description = undefined
+    this.external.thumb = undefined
+    const external = await Util.parseOgp(
+      mainState.atp,
+      easyFormState.url,
+      false
+    )
+    if (external instanceof Error) {
+      this.external.uri = ""
+      return
+    }
+    this.external.uri = external.uri
+    this.external.title = external.title
+    this.external.description = external.description
+
+    // プロキシサーバから送られたプレビュー用イメージを設定
+    this.external.thumb = external.preview
+  },
+}
 </script>
 
 <template>
@@ -313,6 +379,23 @@ function openThreadgatePopup () {
         @clickClearButton="onClickClearButton"
       >
         <template #free-3>
+          <!-- プレビューリンクカード -->
+          <LinkCard
+            v-if="
+              !!PreviewLinkCardFeature.external.uri &&
+              easyFormState.url !== '' &&
+              !easyFormState.images.length
+            "
+            :external="PreviewLinkCardFeature.external"
+            layout="vertical"
+            :displayImage="
+              !!PreviewLinkCardFeature.external.thumb &&
+              !!easyFormState.urlHasImage.length
+            "
+            :noLink="true"
+            :noEmbedded="true"
+          />
+
           <div class="button-container">
             <!-- ポスト言語選択ポップアップトリガー -->
             <button

@@ -5,7 +5,10 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const props = defineProps<{
   external: TTExternal
+  layout?: "none" | "horizontal" | "vertical"
   displayImage?: boolean
+  noLink?: boolean
+  noEmbedded?: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -14,6 +17,7 @@ const state = reactive<{
   type: ComputedRef<string>
 }>({
   type: computed((): string => {
+    if (props.noEmbedded) return ""
     const settingValues = mainState.currentSetting.linkcardEmbeddedControl
     if (settingValues == null) return ""
     if (embeddedContentType === "applemusic" && settingValues.includes("applemusic")) return "applemusic"
@@ -182,10 +186,11 @@ getEmbeddedContentId()
     </div>
 
     <!-- 通常のリンクカード -->
-    <a
+    <Component
       v-else-if="state.type === ''"
+      :is="noLink ? 'div' : 'a'"
       class="external--default"
-      :data-layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
+      :data-layout="layout"
       :href="external.uri"
       rel="noreferrer"
       target="_blank"
@@ -194,7 +199,7 @@ getEmbeddedContentId()
       <LazyImage
         v-if="
           displayImage &&
-          mainState.currentSetting.linkcardLayout !== 'none' &&
+          layout !== 'none' &&
           typeof external.thumb === 'string'
         "
         :src="external.thumb"
@@ -206,7 +211,7 @@ getEmbeddedContentId()
         <div class="external__meta__uri">{{ external.uri }}</div>
         <div class="external__meta__description">{{ external.description ?? '' }}</div>
       </div>
-    </a>
+    </Component>
 
     <!-- 埋込型リンクカード -->
     <div v-else>
@@ -362,7 +367,6 @@ getEmbeddedContentId()
     background-color: var(--fg-color-0125);
     border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius);
-    cursor: pointer;
     display: flex;
     overflow: hidden;
     position: relative;
@@ -375,14 +379,14 @@ getEmbeddedContentId()
       .lazy-image {
         aspect-ratio: 1 / 1;
         object-fit: cover;
-        width: 6rem;
+        min-width: 6rem;
+        max-width: 6rem;
       }
     }
 
     // 縦レイアウト
     &[data-layout="vertical"] {
       flex-direction: column;
-      height: 100%;
 
       .lazy-image {
         aspect-ratio: 1.91 / 1;
@@ -391,6 +395,9 @@ getEmbeddedContentId()
         min-height: 100%;
       }
     }
+  }
+  a.external--default {
+    cursor: pointer;
   }
 
   // リンクカードの情報

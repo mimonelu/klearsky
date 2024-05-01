@@ -921,7 +921,10 @@ function toggleOldestQuotedPostDisplay () {
             <LinkCard
               v-if="state.hasLinkCard"
               :external="state.linkCard as TTExternal"
+              :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
               :displayImage="!forceHideImages"
+              :noLink="false"
+              :noEmbedded="false"
             />
 
             <!-- フィードカード -->
