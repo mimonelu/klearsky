@@ -86,8 +86,8 @@
   "followers": "フォロワー",
   "following": "フォロー中",
   "followings": "フォロー中",
-  "followingCount": "フォロー数",
-  "followersCount": "フォロワー数",
+  "followingCount": "フォロー",
+  "followersCount": "フォロワー",
 
   "contentFiltering": "コンテンツフィルタ",
   "modifyContentFiltering": "コンテンツフィルタを編集する",
@@ -224,8 +224,9 @@
   "sendQuoteRepost": "引用リポストする",
 
   "handleHistory": "ハンドル変更履歴",
-  "postsCount": "ポスト数",
-  "startedAt": "利用開始日",
+  "postsCount": "ポスト",
+  "numberOfPostsPerDay": "1日あたり",
+  "startedAt": "開始日",
   "editProfile": "プロフィールの編集",
   "displayName": "名前",
   "description": "紹介文",

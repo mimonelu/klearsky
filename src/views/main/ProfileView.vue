@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
 import { RouterView, useRouter } from "vue-router"
+import { differenceInDays } from "date-fns"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarButton from "@/components/buttons/AvatarButton.vue"
 import BlockButton from "@/components/buttons/BlockButton.vue"
@@ -30,6 +31,7 @@ const state = reactive<{
   isPagePostFeedsWithReplies: ComputedRef<boolean>
   isPagePostFeedsWithMedia: ComputedRef<boolean>
   isLabeler: ComputedRef<boolean>
+  numberOfPostsPerDay: ComputedRef<undefined | number>
   profilePostPopverDisplay: boolean
 
   // ラベル対応
@@ -66,6 +68,20 @@ const state = reactive<{
   }),
   isLabeler: computed((): boolean => {
     return mainState.currentProfile?.associated?.labeler ?? false
+  }),
+  numberOfPostsPerDay: computed((): undefined | number => {
+    if (mainState.currentProfile == null ||
+        mainState.currentProfile.__createdAt == null
+    ) {
+      return
+    }
+    const days = differenceInDays(
+      new Date(),
+      new Date(mainState.currentProfile.__createdAt)
+    )
+    return days > 0
+      ? Math.ceil(mainState.currentProfile.postsCount / days)
+      : mainState.currentProfile.postsCount
   }),
   profilePostPopverDisplay: false,
 
@@ -419,6 +435,15 @@ function onActivateAccountMaskToggle () {
               <dl class="posts-count">
                 <dt>{{ $t("postsCount") }}</dt>
                 <dd>{{ mainState.currentProfile?.postsCount?.toLocaleString() }}</dd>
+              </dl>
+
+              <!-- 1日あたりの投稿数 -->
+              <dl
+                v-if="state.numberOfPostsPerDay != null"
+                class="number-of-posts-per-day"
+              >
+                <dt>{{ $t("numberOfPostsPerDay") }}</dt>
+                <dd>{{ state.numberOfPostsPerDay.toLocaleString() }}</dd>
               </dl>
 
               <!-- フォローイング数 -->
@@ -904,18 +929,19 @@ function onActivateAccountMaskToggle () {
   position: relative;
 
   dl {
-    color: var(--fg-color-075);
     display: flex;
     align-items: baseline;
-    grid-gap: 0.5rem;
+    grid-gap: 0.25rem;
     overflow: hidden;
 
     & > dt {
+      color: var(--fg-color-075);
       font-size: 0.875rem;
       line-height: 1.25;
     }
 
     & > dd {
+      color: rgb(var(--fg-color));
       font-weight: bold;
     }
   }

@@ -225,6 +225,7 @@
 
   "handleHistory": "Handle Change History",
   "postsCount": "Posts",
+  "numberOfPostsPerDay": "Per day",
   "startedAt": "Started on",
   "editProfile": "Edit Profile",
   "displayName": "Display Name",
