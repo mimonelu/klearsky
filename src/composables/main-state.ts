@@ -999,14 +999,14 @@ function hasLabel (target: string, labels?: Array<TTLabel>): boolean {
 function getLabelersLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {
     return LABEL_BEHAVIORS[label.val] == null &&
-           !label.uri.startsWith("at://")
+           (label.ver ?? 0) >= 1
   }) ?? []
 }
 
 function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {
     return LABEL_BEHAVIORS[label.val] == null &&
-           label.uri.startsWith("at://")
+           !label.ver
   }) ?? []
 }
 

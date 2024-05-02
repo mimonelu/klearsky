@@ -1646,7 +1646,7 @@ function toggleOldestQuotedPostDisplay () {
 
 // 無害なラベル
 .harmless-labels {
-  --alpha: 0.5;
+  --alpha: 1.0;
   font-size: 0.875em;
 }
 
