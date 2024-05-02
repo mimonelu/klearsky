@@ -129,7 +129,10 @@ function getEmbeddedContentId () {
 
   // 埋込型リンクカード - YouTube
   else if (
-    url.hostname === "www.youtube.com" &&
+    (
+      url.hostname === "www.youtube.com" ||
+      url.hostname === "music.youtube.com"
+    ) &&
     url.pathname === "/watch"
   ) {
     embeddedContentType = "youtube"
