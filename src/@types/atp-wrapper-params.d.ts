@@ -44,4 +44,7 @@ type TTUpdateProfileParams = {
   detachAvatar: Array<boolean>
   banner: null | Array<File>
   detachBanner: Array<boolean>
+
+  // 固定ポスト
+  pinnedPost?: string
 }

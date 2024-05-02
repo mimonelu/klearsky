@@ -126,7 +126,12 @@ async function submit () {
   if (state.processing) return
   state.processing = true
   try {
-    await mainState.updateUserProfile(state as TTUpdateProfileParams)
+    await mainState.updateUserProfile({
+      ...state as TTUpdateProfileParams,
+
+      // 固定ポスト
+      pinnedPost: mainState.userProfile?.pinnedPost,
+    })
     const did = mainState.atp.session?.did
     if (did != null) {
       await Util.wait(500)

@@ -142,7 +142,9 @@ function openImagePopup (uri: string) {
 }
 
 async function toggleNoUnauthenticated () {
-  if (mainState.userProfile == null) return
+  if (mainState.userProfile == null) {
+    return
+  }
   const params: TTUpdateProfileParams = {
     displayName: mainState.userProfile.displayName ?? "",
     description: mainState.userProfile.description ?? "",
@@ -151,6 +153,9 @@ async function toggleNoUnauthenticated () {
     detachAvatar: [false],
     banner: null,
     detachBanner: [false],
+
+    // 固定ポスト
+    pinnedPost: mainState.userProfile.pinnedPost,
   }
 
   // 外部公開状態の追加／削除

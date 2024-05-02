@@ -7,9 +7,16 @@ export default async function (
   if (this.agent == null) return Error("noAgentError")
 
   // クエリーオブジェクト
-  const profileSchema: AppBskyActorProfile.Record = {
-    displayName: params.displayName,
-    description: params.description,
+  const profileSchema: AppBskyActorProfile.Record = {}
+
+  // 表示名
+  if (params.displayName != null) {
+    profileSchema.displayName = params.displayName
+  }
+
+  // 説明文
+  if (params.description != null) {
+    profileSchema.description = params.description
   }
 
   // アカウントラベル
@@ -50,20 +57,27 @@ export default async function (
   if (avatarSchema != null) profileSchema.avatar = avatarSchema
   if (bannerSchema != null) profileSchema.banner = bannerSchema
 
+  // 固定ポスト
+  if (params.pinnedPost != null) {
+    profileSchema.pinnedPost = params.pinnedPost
+  }
+
   try {
     await (this.agent as BskyAgent).upsertProfile(
       (existing: AppBskyActorProfile.Record | undefined): AppBskyActorProfile.Record => {
         // アバター画像が未指定の場合、既存の画像を指定する
         if (!params.detachAvatar.includes(true) &&
             profileSchema.avatar == null &&
-            existing?.avatar != null)
+            existing?.avatar != null) {
           profileSchema.avatar = existing.avatar
+        }
 
         // バナー画像が未指定の場合、既存の画像を指定する
         if (!params.detachBanner.includes(true) &&
             profileSchema.banner == null &&
-            existing?.banner != null)
+            existing?.banner != null) {
           profileSchema.banner = existing.banner
+        }
 
         return profileSchema
       }
