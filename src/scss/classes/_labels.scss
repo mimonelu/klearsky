@@ -1,5 +1,5 @@
-.labels,
-.custom-labels {
+.labels {
+  --color: var(--notice-color);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -32,9 +32,46 @@
     word-break: break-word;
   }
 }
-.labels {
-  --color: var(--notice-color);
-}
-.custom-labels {
-  --color: var(--fg-color);
+
+.harmless-labels {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 0.5em 1em;
+  &:empty {
+    display: contents;
+  }
+
+  & > li {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.25em;
+
+    & > .svg-icon {
+      fill: var(--color);
+      font-size: 0.75em;
+    }
+
+    & > span {
+      color: var(--color);
+      font-weight: bold;
+      line-height: 1.125;
+      user-select: none;
+      word-break: break-all;
+    }
+  }
+
+  // ラベラー
+  &__labeler {
+    --color: rgb(var(--share-color), var(--alpha, 1.0));
+  }
+
+  // ラベラーによるラベル
+  &__labelers-label {
+    --color: rgb(var(--share-color), var(--alpha, 1.0));
+  }
+
+  // カスタムラベル
+  &__custom-label {
+    --color: rgb(var(--fg-color), var(--alpha, 1.0));
+  }
 }

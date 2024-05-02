@@ -129,13 +129,13 @@ type MainState = {
   // ラベル
 
   hasLabel (target: string, labels?: Array<TTLabel>): boolean
+  getLabelersLabels (labels?: Array<TTLabel>): Array<TTLabel>
   getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
   filterLabels (
     visibilities?: Array<TTContentVisibility>,
     warns?: Array<TTLabelOnWarn>,
     labels?: Array<TTLabel>
   ): Array<TTLabel>
-  filterCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
   selectLabelsPopupDisplay: boolean
   selectLabelsPopupState: any
   openSelectLabelsPopup: Function

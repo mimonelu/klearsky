@@ -83,7 +83,8 @@ const state = reactive<{
   blurLabels: ComputedRef<Array<TTLabel>>
   blurMediaLabels: ComputedRef<Array<TTLabel>>
   alertLabels: ComputedRef<Array<TTLabel>>
-  customPostLabels: ComputedRef<Array<TTLabel>>
+  labelersLabelsInPost: ComputedRef<Array<TTLabel>>
+  customLabelsInPost: ComputedRef<Array<TTLabel>>
   contentWarningLabels: ComputedRef<Array<string>>
   hasAppliedHarmfulLabel: ComputedRef<boolean>
   hasBlurredContent: ComputedRef<boolean>
@@ -222,8 +223,11 @@ const state = reactive<{
   alertLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(["hide", "warn"], ["alert"], state.allLabels)
   }),
-  customPostLabels: computed((): Array<TTLabel> => {
-    return mainState.filterCustomLabels(props.post.labels)
+  labelersLabelsInPost: computed((): Array<TTLabel> => {
+    return mainState.getLabelersLabels(props.post.labels)
+  }),
+  customLabelsInPost: computed((): Array<TTLabel> => {
+    return mainState.getCustomLabels(props.post.labels)
   }),
   contentWarningLabels: computed((): Array<string> => {
     return state.hideLabels.map((label: TTLabel) => $t(label.val))
@@ -975,11 +979,23 @@ function toggleOldestQuotedPostDisplay () {
             </RouterLink>
           </div>
 
-          <!-- カスタムラベル -->
-          <ul class="custom-label-container">
+          <!-- 無害なラベル -->
+          <ul class="harmless-labels">
+            <!-- ラベラーによるラベル -->
             <li
-              v-for="label of state.customPostLabels"
+              v-for="label of state.labelersLabelsInPost"
               :key="label.uri"
+              class="harmless-labels__labelers-label"
+            >
+              <SVGIcon name="label" />
+              <span>{{ label.val }}</span>
+            </li>
+
+            <!-- カスタムラベル -->
+            <li
+              v-for="label of state.customLabelsInPost"
+              :key="label.uri"
+              class="harmless-labels__custom-label"
             >
               <SVGIcon name="label" />
               <span>{{ label.val }}</span>
@@ -1628,34 +1644,10 @@ function toggleOldestQuotedPostDisplay () {
   }
 }
 
-// カスタムラベル
-.custom-label-container {
-  display: flex;
-  flex-wrap: wrap;
-  grid-gap: 0.5em 1em;
-  &:empty {
-    display: contents;
-  }
-
-  & > li {
-    display: flex;
-    align-items: center;
-    grid-gap: 0.25em;
-
-    & > .svg-icon--label {
-      fill: var(--share-color-075);
-      font-size: 0.75em;
-    }
-
-    & > span {
-      color: var(--share-color-075);
-      font-size: 0.875em;
-      font-weight: bold;
-      line-height: 1.25;
-      user-select: none;
-      word-break: break-all;
-    }
-  }
+// 無害なラベル
+.harmless-labels {
+  --alpha: 0.5;
+  font-size: 0.875em;
 }
 
 .reaction-container {

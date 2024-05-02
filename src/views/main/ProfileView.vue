@@ -38,6 +38,7 @@ const state = reactive<{
   enabledContentMask: boolean
   hasNoUnauthenticated: ComputedRef<boolean>
   harmfulLabels: ComputedRef<Array<TTLabel>>
+  labelersLabels: ComputedRef<Array<TTLabel>>
   customLabels: ComputedRef<Array<TTLabel>>
   contentFilteringLabels: ComputedRef<Array<TTLabel>>
   contentFilteringToggleDisplay: ComputedRef<boolean>
@@ -95,6 +96,9 @@ const state = reactive<{
   }),
   harmfulLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(undefined, ["alert", "blur", "blur-media"], mainState.currentProfile?.labels)
+  }),
+  labelersLabels: computed((): Array<TTLabel> => {
+    return mainState.getLabelersLabels(mainState.currentProfile?.labels)
   }),
   customLabels: computed((): Array<TTLabel> => {
     return mainState.getCustomLabels(mainState.currentProfile?.labels)
@@ -302,25 +306,44 @@ function onActivateAccountMaskToggle () {
                 >{{ $t(label.val) }}</div>
               </div>
 
-              <!-- カスタムラベル -->
+              <!-- 無害なラベル -->
               <div
-                v-if="state.customLabels.length > 0 || state.isLabeler"
-                class="custom-labels"
+                v-if="
+                  state.labelersLabels.length > 0 ||
+                  state.customLabels.length > 0 ||
+                  state.isLabeler
+                "
+                class="harmless-labels"
                 :data-labeler="state.isLabeler"
               >
-                <SVGIcon name="label" />
-
-                <!-- Labeler -->
-                <div
+                <!-- ラベラー -->
+                <li
                   v-if="state.isLabeler"
-                  class="custom-labels__labeler"
-                >{{ $t("labelerOn") }}</div>
+                  class="harmless-labels__labeler"
+                >
+                  <SVGIcon name="labeler" />
+                  <span>{{ $t("labelerOn") }}</span>
+                </li>
 
-                <div
+                <!-- ラベラーによるラベル -->
+                <li
+                  v-for="label of state.labelersLabels"
+                  :key="label.val"
+                  class="harmless-labels__labelers-label"
+                >
+                  <SVGIcon name="label" />
+                  <span>{{ $t(label.val) }}</span>
+                </li>
+
+                <!-- カスタムラベル -->
+                <li
                   v-for="label of state.customLabels"
                   :key="label.val"
-                  class="labels__item"
-                >{{ $t(label.val) }}</div>
+                  class="harmless-labels__custom-label"
+                >
+                  <SVGIcon name="label" />
+                  <span>{{ $t(label.val) }}</span>
+                </li>
               </div>
 
               <!-- 表示名 -->
@@ -770,6 +793,10 @@ function onActivateAccountMaskToggle () {
 
 .avatar {
   font-size: 5rem;
+}
+
+.harmless-labels {
+  --alpha: 0.75;
 }
 
 .handle,

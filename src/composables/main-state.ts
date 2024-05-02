@@ -159,9 +159,9 @@ state.getContentWarningVisibility = getContentWarningVisibility
 state.selectLabelsPopupDisplay = false
 state.selectLabelsPopupState = undefined
 state.hasLabel = hasLabel
+state.getLabelersLabels = getLabelersLabels
 state.getCustomLabels = getCustomLabels
 state.filterLabels = filterLabels
-state.filterCustomLabels = filterCustomLabels
 state.openSelectLabelsPopup = openSelectLabelsPopup
 state.closeSelectLabelsPopup = closeSelectLabelsPopup
 
@@ -996,9 +996,17 @@ function hasLabel (target: string, labels?: Array<TTLabel>): boolean {
   }) ?? - 1) !== - 1
 }
 
+function getLabelersLabels (labels?: Array<TTLabel>): Array<TTLabel> {
+  return labels?.filter((label: TTLabel) => {
+    return LABEL_BEHAVIORS[label.val] == null &&
+           !label.uri.startsWith("at://")
+  }) ?? []
+}
+
 function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {
-    return LABEL_BEHAVIORS[label.val] == null
+    return LABEL_BEHAVIORS[label.val] == null &&
+           label.uri.startsWith("at://")
   }) ?? []
 }
 
@@ -1050,12 +1058,6 @@ function filterLabels (
       return target.val === label.val
     }) === index
   })
-}
-
-function filterCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
-  return labels?.filter((label: TTLabel) => {
-    return LABEL_BEHAVIORS[label.val] == null
-  }) ?? []
 }
 
 function openSelectLabelsPopup (params: any) {
