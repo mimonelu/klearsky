@@ -1116,7 +1116,6 @@ async function fetchCurrentProfile (did: string) {
     return
   }
   state.currentProfile = currentProfile
-  state.currentProfile.__isDidPlc = state.currentProfile.did.startsWith("did:plc:")
 
   // 現在のプロフィールがユーザーのプロフィールの場合
   if (did === state.atp.session?.did) {
@@ -1134,11 +1133,9 @@ async function fetchCurrentProfile (did: string) {
 }
 
 async function updateCurrentLogAudit () {
-  // TODO: __isDidPlc を削除すること
-  if (!state.currentProfile?.__isDidPlc) {
+  if (state.currentProfile == null) {
     return
   }
-
   const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
   if (logJson == null) {
     return

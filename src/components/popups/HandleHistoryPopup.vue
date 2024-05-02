@@ -6,11 +6,17 @@ import traverseJson from "@/composables/atp-wrapper/atp-util/traverse-json"
 
 const emit = defineEmits<{(event: string): void}>()
 
-defineProps<{
+const props = defineProps<{
   log?: any
 }>()
 
 const mainState = inject("state") as MainState
+
+const rootLog = props.log != null
+  ? Array.isArray(props.log)
+    ? props.log
+    : [props.log.didDocument] ?? undefined
+  : undefined
 
 function close () {
   emit("close")
@@ -32,11 +38,13 @@ function getHandle (item: any): undefined | string {
 
 function getAtProtoEndpoint (item: any): undefined | string {
   let result: undefined | string
-  traverseJson(item, (key: string, value: any) => {
-    if (key === "service") {
+  traverseJson(item, (key: string, value: any, parent: any) => {
+    if (key === "service" && !Array.isArray(value)) {
       result = value
     } else if (key === "atproto_pds") {
       result = value?.endpoint
+    } else if (key === "serviceEndpoint" && parent.type === "AtprotoPersonalDataServer") {
+      result = value
     }
   })
   return result
@@ -44,9 +52,11 @@ function getAtProtoEndpoint (item: any): undefined | string {
 
 function getLabelerEndpoint (item: any): undefined | string {
   let result: undefined | string
-  traverseJson(item, (key: string, value: any) => {
+  traverseJson(item, (key: string, value: any, parent: any) => {
     if (key === "atproto_labeler") {
       result = value?.endpoint
+    } else if (key === "serviceEndpoint" && parent.type === "AtprotoLabeler") {
+      result = value
     }
   })
   return result
@@ -66,9 +76,9 @@ function getLabelerEndpoint (item: any): undefined | string {
       </h2>
     </template>
     <template #body>
-      <template v-if="log != null">
+      <template v-if="rootLog != null">
         <ol
-          v-for="item, itemIndex of log"
+          v-for="item, itemIndex of rootLog"
           :key="itemIndex"
           class="item"
         >

@@ -53,9 +53,12 @@ const state = reactive<{
   handleHistoryPopupDisplay: false,
   endpoint: computed((): undefined | string => {
     const log = mainState.currentProfile?.__log
-    return log != null && log[0] != null
+    if (log == null) {
+      return
+    }
+    return log[0] != null
       ? log[0].operation?.services?.atproto_pds?.endpoint
-      : undefined
+      : log.didDocument?.service?.[0]?.serviceEndpoint ?? undefined
   }),
   isPagePostFeeds: computed((): boolean => {
     return router.currentRoute.value.name === 'profile-feeds'

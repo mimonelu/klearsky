@@ -343,7 +343,6 @@ type TTNotificationGroup = {
 
 type TTProfile = {
   __log?: any // Injected
-  __isDidPlc?: boolean // Injected
   __createdAt?: string // Injected
   did: string
   handle: string
