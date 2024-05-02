@@ -165,6 +165,10 @@ state.filterCustomLabels = filterCustomLabels
 state.openSelectLabelsPopup = openSelectLabelsPopup
 state.closeSelectLabelsPopup = closeSelectLabelsPopup
 
+// ラベラー
+
+state.setAtprotoAcceptLabelers = setAtprotoAcceptLabelers
+
 // ミュートユーザー
 
 state.currentMutingUsers = []
@@ -1061,6 +1065,20 @@ function openSelectLabelsPopup (params: any) {
 
 function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
+}
+
+// ラベラー
+
+function setAtprotoAcceptLabelers () {
+  if (state.currentPreferences == null) {
+    return
+  }
+  const labelerPreference =
+    state.currentPreferences.find((preference) => {
+      return preference.$type === "app.bsky.actor.defs#labelersPref"
+    })
+  const labelerDids = labelerPreference?.labelers?.map((labeler) => labeler.did) ?? []
+  state.atp.agent.configureLabelersHeader(labelerDids)
 }
 
 // プロフィール

@@ -295,6 +295,9 @@ async function processAfterLogin () {
     state.myWorker.setSessionCache("userProfile", state.userProfile)
   }
 
+  // ラベラーのHTTPヘッダーを設定
+  state.setAtprotoAcceptLabelers()
+
   state.saveSettings()
   state.updateSettings()
 

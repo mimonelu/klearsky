@@ -141,6 +141,10 @@ type MainState = {
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: Function
 
+  // ラベラー
+
+  setAtprotoAcceptLabelers (): void
+
   // ミュートユーザー
 
   currentMutingUsers: Array<TTUser>

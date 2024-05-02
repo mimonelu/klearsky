@@ -166,6 +166,9 @@ type TTPreference = {
   label?: string
   visibility?: TTContentVisibility
 
+  // ラベラー
+  labelers?: Array<{ did: string }>
+
   // カスタムフィード - savedFeedsPref
   pinned?: Array<string>
   saved?: Array<string>
