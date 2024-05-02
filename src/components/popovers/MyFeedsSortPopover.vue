@@ -66,6 +66,7 @@ function close () {
   >
     <menu class="list-menu">
       <div class="list-menu__header">{{ $t("sortInAsc") }}</div>
+      <hr />
 
       <!-- フィードのいいね順 -->
       <button @click.stop="sortBy('like', 'asc')">
@@ -92,6 +93,7 @@ function close () {
       </button>
 
       <div class="list-menu__header">{{ $t("sortInDesc") }}</div>
+      <hr />
 
       <!-- フィードのいいね順 -->
       <button @click.stop="sortBy('like', 'desc')">

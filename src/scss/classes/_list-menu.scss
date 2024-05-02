@@ -7,9 +7,12 @@
   user-select: none;
 
   &__header {
+    font-size: 0.875rem;
     font-weight: bold;
+    overflow: hidden;
     padding: 0.25rem 1rem 0.75rem 1rem;
-    word-wrap: break-word;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     &:not(:first-child) {
       padding-top: 0.75rem;
     }
