@@ -18,6 +18,7 @@ Klearsky is deployed on Cloudflare.
 ## Custom fields
 * `POST.record.via?: string` Client name (Klearsky)
 * `POST.record.lightning?: string` Used in Zap! link
+* `PROFILE.record.pinnedPost?: string` Used in pinned post
 
 ## External linkage services
 * MyMemory: 自動翻訳で使用。ユーザーのメールアドレスを自動付与している
@@ -25,9 +26,6 @@ Klearsky is deployed on Cloudflare.
 
 ## Coproduct
 * `/coproduct/stats.html`: `npm run build` で rollup-plugin-visualizer によるバンドルファイルの一覧を副次的に生成
-
-## Tools
-* `svg-list.js`: `node tools/svg-list.js` で使用中のSVGファイルを一覧できるHTMLを生成
 
 ## Design resources
 * Logo font: https://fonts.google.com/specimen/Albert+Sans?preview.text=Klearsky&preview.size=64&preview.text_type=custom&category=Sans+Serif,Display
