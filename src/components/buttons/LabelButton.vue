@@ -42,7 +42,7 @@ const state = reactive<{
   & > b {
     color: rgb(var(--fg-color));
     font-weight: bold;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     word-break: break-all;
   }
 }

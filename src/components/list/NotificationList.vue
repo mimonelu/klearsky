@@ -414,7 +414,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   color: rgb(var(--post-color));
   font-size: 0.875rem;
   grid-column: 3 / 6;
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   word-break: break-all;
 }
 

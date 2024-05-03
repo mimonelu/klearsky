@@ -34,7 +34,7 @@ function close () {
 <style lang="scss" scoped>
 .html-popup {
   .html {
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     user-select: text;
     white-space: pre-wrap;
     word-break: break-word;

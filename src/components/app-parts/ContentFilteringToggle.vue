@@ -74,7 +74,7 @@ const state = reactive<{
   &__label {
     color: rgb(var(--notice-color));
     font-weight: bold;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     word-break: break-all;
   }
 }

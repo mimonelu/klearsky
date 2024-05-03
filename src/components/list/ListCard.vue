@@ -458,7 +458,7 @@ function toggleDetail () {
     grid-area: n;
     display: inline;
     font-weight: bold;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     margin-bottom: 0.25em;
     word-break: break-all;
 
@@ -479,7 +479,7 @@ function toggleDetail () {
     grid-template-columns: auto 1fr;
     align-items: center;
     grid-gap: 0.5em;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     &[data-purpose="curateList"] {
       --color: rgb(var(--share-color));
     }
@@ -513,7 +513,7 @@ function toggleDetail () {
     grid-template-columns: auto 1fr;
     align-items: center;
     grid-gap: 0.5em;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
 
     & > .svg-icon {
       fill: var(--fg-color-05);
@@ -576,7 +576,7 @@ function toggleDetail () {
   // リスト説明文
   &__description {
     font-size: 0.875em;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     white-space: pre-wrap;
     word-break: break-word;
   }
@@ -584,7 +584,7 @@ function toggleDetail () {
   // リスト作成者リンク
   &__creator {
     font-size: 0.875em;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
 
     &__prefix {
       margin-right: 0.5em;

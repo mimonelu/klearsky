@@ -221,7 +221,7 @@ async function autoScrollSliderMenu () {
       display: block;
       font-size: 0.875rem;
       font-weight: bold;
-      line-height: var(--line-height);
+      line-height: var(--line-height-high);
       overflow: hidden;
       max-width: 8rem;
       text-overflow: ellipsis;

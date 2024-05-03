@@ -49,7 +49,7 @@ function close () {
 
 .message {
   background-color: var(--fg-color-0125);
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   padding: 1rem;
   user-select: text;
   white-space: pre-wrap;
@@ -58,7 +58,7 @@ function close () {
 
 .help {
   font-size: 0.875rem;
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   padding: 0 1rem;
   user-select: text;
   white-space: pre-wrap;

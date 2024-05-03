@@ -564,7 +564,7 @@ const PreviewLinkCardFeature: {
       }
       & > b {
         font-weight: bold;
-        line-height: var(--line-height);
+        line-height: var(--line-height-high);
         word-break: break-all;
       }
     }

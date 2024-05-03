@@ -35,7 +35,7 @@
     }
 
     & > .svg-icon {
-      fill: rgb(var(--accent-color));
+      fill: var(--accent-color-05);
       margin-right: 0.5rem;
     }
     &[data-checked="true"] > .svg-icon {
@@ -43,10 +43,12 @@
     }
 
     & > span {
-      color: var(--fg-color-0875);
-      line-height: var(--line-height);
+      color: var(--fg-color-075);
+      font-weight: bold;
+      line-height: var(--line-height-middle);
       word-break: break-all;
     }
+    &[data-checked="true"] > span,
     &:focus > span,
     &:hover > span {
       color: rgb(var(--fg-color));

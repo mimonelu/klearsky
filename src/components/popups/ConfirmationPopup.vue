@@ -68,7 +68,7 @@ function apply () {
 .confirmation-popup {
   .text,
   .detail {
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     user-select: text;
     white-space: pre-wrap;
     word-break: break-word;

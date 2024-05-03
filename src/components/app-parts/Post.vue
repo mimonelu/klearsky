@@ -1527,7 +1527,7 @@ function toggleOldestQuotedPostDisplay () {
 .text,
 .text--slim {
   color: rgb(var(--fg-color));
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   word-break: break-word;
   &:empty {
     display: contents;
@@ -1548,7 +1548,7 @@ function toggleOldestQuotedPostDisplay () {
   padding-top: 0.5em;
   color: var(--fg-color-075);
   font-style: italic;
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   white-space: pre-wrap;
   word-break: break-word;
 }

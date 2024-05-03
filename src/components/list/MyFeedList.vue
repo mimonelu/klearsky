@@ -377,7 +377,7 @@ function removeMyFeed (uri: string) {
 
     span {
       color: var(--fg-color-05);
-      line-height: var(--line-height);
+      line-height: var(--line-height-high);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

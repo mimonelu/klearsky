@@ -333,7 +333,7 @@ function toggleDetail () {
     grid-area: n;
     display: inline;
     font-weight: bold;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     margin-bottom: 0.25em;
     word-break: break-all;
   }
@@ -346,7 +346,7 @@ function toggleDetail () {
     grid-template-columns: auto 1fr;
     align-items: center;
     grid-gap: 0.5em;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
 
     & > .svg-icon {
       font-size: 0.75em;
@@ -449,7 +449,7 @@ function toggleDetail () {
   &__description {
     color: rgb(var(--fg-color));
     font-size: 0.875em;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     white-space: pre-wrap;
     word-break: break-word;
   }
@@ -463,7 +463,7 @@ function toggleDetail () {
     grid-gap: 0 0.5rem;
 
     &__by {
-      line-height: var(--line-height);
+      line-height: var(--line-height-high);
       word-break: break-word;
 
       b {
@@ -473,7 +473,7 @@ function toggleDetail () {
 
     &__via {
       color: var(--fg-color-05);
-      line-height: var(--line-height);
+      line-height: var(--line-height-high);
       word-break: break-word;
     }
   }

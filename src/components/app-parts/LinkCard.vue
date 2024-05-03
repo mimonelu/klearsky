@@ -429,7 +429,7 @@ getEmbeddedContentId()
     &__title,
     &__uri,
     &__description {
-      line-height: var(--line-height);
+      line-height: var(--line-height-high);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

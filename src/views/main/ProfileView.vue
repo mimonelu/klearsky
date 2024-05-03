@@ -950,7 +950,7 @@ function onActivateAccountMaskToggle () {
 }
 
 .description {
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   user-select: text;
   white-space: pre-wrap;
   word-break: break-word;

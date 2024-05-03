@@ -54,7 +54,9 @@
 body {
   --border-radius: 0.25em;
   --border-radius-large: 0.5em;
-  --line-height: 1.5;
+  --line-height-low: 1.25;
+  --line-height-middle: 1.375;
+  --line-height-high: 1.5;
   --main-area-opacity: 1.0;
   --sp-menu-size: calc(100vw / 7);
   --sp-menu-height: calc(var(--sp-menu-size) + env(safe-area-inset-bottom));
@@ -93,7 +95,7 @@ p {
   display: flex;
   align-items: baseline;
   grid-gap: 0.5em;
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   word-break: break-all;
 
   & > .svg-icon {

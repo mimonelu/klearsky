@@ -134,7 +134,7 @@ function onActivatePostContentToggle () {
   &__text {
     font-size: 0.75rem;
     font-style: italic;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     margin-right: 0.375rem;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -146,7 +146,7 @@ function onActivatePostContentToggle () {
 
   &__created-at {
     font-size: 0.75rem;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     margin-left: auto;
     white-space: nowrap;
   }

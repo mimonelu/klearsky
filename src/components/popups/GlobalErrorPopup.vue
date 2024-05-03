@@ -42,7 +42,7 @@ function close () {
 
 .message-string {
   background-color: var(--notice-color-0125);
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   padding: 1rem;
   user-select: text;
   white-space: pre-wrap;
@@ -52,7 +52,7 @@ function close () {
 .message-object {
   color: var(--fg-color);
   font-size: 0.875rem;
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   padding: 0 1rem;
   user-select: text;
   white-space: pre-wrap;

@@ -266,7 +266,7 @@ function close () {
 
 .alt {
   color: white;
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   overflow: hidden;
   max-width: 100%;
   text-overflow: ellipsis;

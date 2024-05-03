@@ -99,7 +99,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     grid-area: n;
     display: inline;
     font-weight: bold;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     margin-bottom: 0.25em;
     word-break: break-all;
   }
@@ -109,7 +109,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     grid-area: d;
     color: var(--fg-color-05);
     font-size: 0.875em;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     word-break: break-all;
   }
 }

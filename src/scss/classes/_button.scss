@@ -22,7 +22,7 @@
 
   & > span {
     font-weight: bold;
-    line-height: var(--line-height);
+    line-height: var(--line-height-high);
     overflow: hidden;
     pointer-events: none;
     word-break: break-word;
@@ -132,7 +132,7 @@
   color: var(--fg-color-05);
   font-size: 0.875em;
   font-weight: bold;
-  line-height: var(--line-height);
+  line-height: var(--line-height-high);
   margin-left: auto;
   overflow: hidden;
   word-break: break-all;
