@@ -36,15 +36,20 @@
 .harmless-labels {
   display: flex;
   flex-wrap: wrap;
-  grid-gap: 0.5em 1em;
+  grid-gap: 0.5em;
   &:empty {
     display: contents;
   }
 
-  & > li {
+  &__labelers-label,
+  &__custom-label,
+  & > div {
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
     display: flex;
     align-items: center;
     grid-gap: 0.25em;
+    padding: 0.25em 0.5em;
 
     & > .svg-icon {
       fill: var(--color);
@@ -54,7 +59,7 @@
     & > span {
       color: var(--color);
       font-weight: bold;
-      line-height: 1.125;
+      line-height: var(--line-height-low);
       user-select: none;
       word-break: break-all;
     }
@@ -63,15 +68,23 @@
   // ラベラー
   &__labeler {
     --color: rgb(var(--share-color), var(--alpha, 1.0));
+    background-color: var(--share-color-0125);
   }
 
   // ラベラーによるラベル
   &__labelers-label {
     --color: rgb(var(--share-color), var(--alpha, 1.0));
+    background-color: var(--share-color-0125);
+    border-color: var(--share-color-025);
+    &:focus,
+    &:hover {
+      --alpha: 1.0;
+    }
   }
 
   // カスタムラベル
   &__custom-label {
     --color: rgb(var(--fg-color), var(--alpha, 1.0));
+    background-color: var(--fg-color-0125);
   }
 }

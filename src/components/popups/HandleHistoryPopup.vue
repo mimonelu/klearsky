@@ -101,7 +101,7 @@ function getLabelerEndpoint (item: any): undefined | string {
               v-if="getLabelerEndpoint(item)"
               class="endpoint__labeler"
             >
-              <SVGIcon name="label" />
+              <SVGIcon name="labeler" />
               <span>{{ getLabelerEndpoint(item) }}</span>
             </div>
           </li>

@@ -317,33 +317,35 @@ function onActivateAccountMaskToggle () {
                 :data-labeler="state.isLabeler"
               >
                 <!-- ラベラー -->
-                <li
+                <div
                   v-if="state.isLabeler"
                   class="harmless-labels__labeler"
                 >
                   <SVGIcon name="labeler" />
                   <span>{{ $t("labelerOn") }}</span>
-                </li>
+                </div>
 
                 <!-- ラベラーによるラベル -->
-                <li
+                <RouterLink
                   v-for="label of state.labelersLabels"
                   :key="label.val"
+                  :to="{ path: '/profile/feeds', query: { account: label.src } }"
                   class="harmless-labels__labelers-label"
+                  @click.prevent.stop
                 >
                   <SVGIcon name="label" />
                   <span>{{ $t(label.val) }}</span>
-                </li>
+                </RouterLink>
 
                 <!-- カスタムラベル -->
-                <li
+                <div
                   v-for="label of state.customLabels"
                   :key="label.val"
                   class="harmless-labels__custom-label"
                 >
                   <SVGIcon name="label" />
                   <span>{{ $t(label.val) }}</span>
-                </li>
+                </div>
               </div>
 
               <!-- 表示名 -->
@@ -797,6 +799,7 @@ function onActivateAccountMaskToggle () {
 
 .harmless-labels {
   --alpha: 0.75;
+  font-size: 0.875rem;
 }
 
 .handle,

@@ -980,7 +980,7 @@ function toggleOldestQuotedPostDisplay () {
           </div>
 
           <!-- 無害なラベル -->
-          <ul
+          <div
             v-if="
               position !== 'postInPost' &&
               position !== 'preview' &&
@@ -989,25 +989,27 @@ function toggleOldestQuotedPostDisplay () {
             class="harmless-labels"
           >
             <!-- ラベラーによるラベル -->
-            <li
+            <RouterLink
               v-for="label of state.labelersLabelsInPost"
               :key="label.uri"
+              :to="{ path: '/profile/feeds', query: { account: label.src } }"
               class="harmless-labels__labelers-label"
+              @click.prevent.stop
             >
               <SVGIcon name="label" />
               <span>{{ label.val }}</span>
-            </li>
+            </RouterLink>
 
             <!-- カスタムラベル -->
-            <li
+            <div
               v-for="label of state.customLabelsInPost"
               :key="label.uri"
               class="harmless-labels__custom-label"
             >
               <SVGIcon name="label" />
               <span>{{ label.val }}</span>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
 
         <!-- 引用リポスト／リストカード -->
@@ -1653,7 +1655,7 @@ function toggleOldestQuotedPostDisplay () {
 
 // 無害なラベル
 .harmless-labels {
-  --alpha: 1.0;
+  --alpha: 0.75;
   font-size: 0.875em;
 }
 
