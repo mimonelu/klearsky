@@ -218,11 +218,11 @@ type TTPost = {
     langs?: Array<string>
     lightning?: string // カスタムフィールド
     reply?: {
-      parent?: {
+      root?: {
         cid: string
         uri: string
       }
-      root?: {
+      parent?: {
         cid: string
         uri: string
       }
@@ -255,6 +255,7 @@ type TTFeed = {
   post: TTPost
   reply?: {
     root: TTPost
+    grandparentAuthor?: TTProfile
     parent: TTPost
     [k: string]: unknown
   }

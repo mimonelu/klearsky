@@ -25,6 +25,7 @@ const props = defineProps<{
   post: TTPost
   rootPost?: TTPost
   parentPost?: TTPost
+  grandparentAuthor?: TTProfile
   hasReplyIcon?: boolean
   hasQuoteRepostIcon?: boolean
   isInFeed?: boolean
@@ -607,6 +608,7 @@ function toggleOldestQuotedPostDisplay () {
     :data-repost="post.__custom?.reason != null"
     :data-focus="isFocused()"
     :data-has-mask="state.masked"
+    :data-has-grandparent-author="grandparentAuthor != null"
     :data-is-masked="!post.__custom.unmask && state.masked"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
@@ -656,7 +658,7 @@ function toggleOldestQuotedPostDisplay () {
           <SVGIcon name="reply" />
           <DisplayName
             class="replier__display-name"
-            :displayName="parentPost?.author?.displayName"
+            :displayName="parentPost.author?.displayName"
             :anonymizable="true"
           />
           <AuthorHandle
@@ -665,6 +667,23 @@ function toggleOldestQuotedPostDisplay () {
           />
         </button>
       </template>
+
+      <div
+        v-if="grandparentAuthor != null"
+        class="replier"
+        disabled="true"
+      >
+        <SVGIcon name="reply" />
+        <DisplayName
+          class="replier__display-name"
+          :displayName="grandparentAuthor.displayName"
+          :anonymizable="true"
+        />
+        <AuthorHandle
+          :handle="grandparentAuthor.handle"
+          :anonymizable="true"
+        />
+      </div>
 
       <!-- リポストユーザー -->
       <button
@@ -1276,7 +1295,8 @@ function toggleOldestQuotedPostDisplay () {
   &[data-has-child="false"] {
     --top: 0.75em;
     --gap: 1em;
-    &[data-has-mask="true"] {
+    &[data-has-mask="true"],
+    &[data-has-grandparent-author="true"] {
       --top: 1.5em;
       --gap: 2em;
     }
@@ -1358,21 +1378,32 @@ function toggleOldestQuotedPostDisplay () {
   &:not([disabled="true"]) {
     cursor: pointer;
   }
+  &[disabled="true"] {
+    --post-color: var(--fg-color);
 
-  &[disabled="true"] > span {
-    color: var(--fg-color-05);
-    font-size: 0.875em;
+    & > .svg-icon {
+      fill: var(--fg-color-05);
+    }
+
+    & > span {
+      color: var(--fg-color-05);
+      font-size: 0.875em;
+    }
+
+    & > .author-handle {
+      color: var(--fg-color-025);
+    }
   }
 
   & > .svg-icon {
     font-size: 0.875em;
   }
-  &[disabled="true"] > .svg-icon {
-    fill: var(--fg-color-05);
-  }
 
   &__display-name {
     font-size: 0.875em;
+  }
+  &[disabled="true"] > &__display-name {
+    color: var(--fg-color-05);
   }
 }
 

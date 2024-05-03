@@ -78,12 +78,18 @@ function removeThisPost (uri: string) {
           @removeThisPost="removeThisPost"
         />
 
-        <!-- リプライポスト -->
+        <!-- 親ポスト -->
         <Post
           v-if="feed.reply?.parent != null && !feed.reply?.parent.notFound"
           position="parent"
           :post="feed.reply.parent"
           :rootPost="feed.reply?.root"
+          :grandparentAuthor="
+            // root と grandparentAuthor が同一アカウントの場合は grandparentAuthor を表示しない
+            feed.reply?.grandparentAuthor?.did !== feed.reply?.root?.author?.did
+              ? feed.reply?.grandparentAuthor
+              : undefined
+          "
           :isInFeed="true"
           :data-has-child="feed.reply.parent.cid === feed.post?.record?.reply?.parent?.cid"
           @updateThisPostThread="updateThisPostThread"
