@@ -7,10 +7,10 @@
   user-select: none;
 
   &__header {
-    font-size: 0.875rem;
+    color: var(--fg-color-05);
     font-weight: bold;
     overflow: hidden;
-    padding: 0.25rem 1rem 0.75rem 1rem;
+    padding: 0.25rem 1rem 0.5rem 1rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     &:not(:first-child) {

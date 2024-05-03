@@ -206,7 +206,7 @@ function makeStyle (left?: number, top?: number) {
   // 本体要素
   &__content {
     position: absolute;
-    max-width: 280px;
+    max-width: 300px;
 
     &[data-animation-direction="left"] {
       margin-left: 1rem;

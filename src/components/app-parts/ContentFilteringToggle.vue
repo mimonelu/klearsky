@@ -46,6 +46,8 @@ const state = reactive<{
   --alpha: 0.5;
   background-color: rgb(var(--bg-color), 0.75);
   border: 1px solid rgb(var(--notice-color), 0.5);
+  flex-wrap: wrap;
+  justify-content: flex-start;
   &:focus, &:hover {
     border-color: rgb(var(--notice-color), 0.75);
     &[data-blur="true"] {
