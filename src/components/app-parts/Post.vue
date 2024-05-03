@@ -980,7 +980,14 @@ function toggleOldestQuotedPostDisplay () {
           </div>
 
           <!-- 無害なラベル -->
-          <ul class="harmless-labels">
+          <ul
+            v-if="
+              position !== 'postInPost' &&
+              position !== 'preview' &&
+              position !== 'slim'
+            "
+            class="harmless-labels"
+          >
             <!-- ラベラーによるラベル -->
             <li
               v-for="label of state.labelersLabelsInPost"
