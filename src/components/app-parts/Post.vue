@@ -947,7 +947,7 @@ function toggleOldestQuotedPostDisplay () {
               :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
               :displayImage="!forceHideImages"
               :noLink="false"
-              :noEmbedded="false"
+              :noEmbedded="forceHideImages === true"
             />
 
             <!-- フィードカード -->
