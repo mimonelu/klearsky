@@ -10,7 +10,9 @@ addExtension({
     throw Error("cidEncodeError")
   },
   decode (bytes: Uint8Array) {
-    if (bytes[0] !== 0) throw Error("invalidCidError")
+    if (bytes[0] !== 0) {
+      throw Error("invalidCidError")
+    }
     return CID.decode(bytes.subarray(1))
   },
 })
@@ -18,22 +20,22 @@ addExtension({
 export default class {
   socket?: WebSocket
   socketState: number
-  errorListener: (this: WebSocket, ev: Event) => any
-  openListener: (this: WebSocket, ev: Event) => any
-  closeListener: (this: WebSocket, ev: Event) => any
+  errorListener: (this: WebSocket, event: Event) => any
+  openListener: (this: WebSocket, event: Event) => any
+  closeListener: (this: WebSocket, event: Event) => any
   messageListener: (messageEvent: MessageEvent<any>) => Promise<void>
-  errorCallback?: Function
-  openCallback?: Function
-  closeCallback?: Function
-  messageCallback?: Function
-  postCallback?: Function
+  errorCallback?: (event: Event) => void
+  openCallback?: () => void
+  closeCallback?: () => void
+  messageCallback?: () => void
+  postCallback?: (did: string, post: TTPost) => void
 
   constructor (
-    onError?: Function,
-    onOpen?: Function,
-    onClose?: Function,
-    onMessage?: Function,
-    onPost?: Function
+    onError?: (event: Event) => void,
+    onOpen?: () => void,
+    onClose?: () => void,
+    onMessage?: () => void,
+    onPost?: (did: string, post: TTPost) => void
   ) {
     this.socket = undefined
     this.socketState = 0
@@ -68,20 +70,28 @@ export default class {
 
   onError (event: Event) {
     console.error("[klearsky/subscribeRepos]", event)
-    if (this.errorCallback != null) this.errorCallback(event)
+    if (this.errorCallback != null) {
+      this.errorCallback(event)
+    }
   }
 
   onOpen () {
     this.socketState = 2
-    if (this.openCallback != null) this.openCallback()
+    if (this.openCallback != null) {
+      this.openCallback()
+    }
   }
 
   onClose () {
-    if (this.closeCallback != null) this.closeCallback()
+    if (this.closeCallback != null) {
+      this.closeCallback()
+    }
   }
 
   async onMessage (messageEvent: MessageEvent) {
-    if (!(messageEvent.data instanceof Blob)) return
+    if (!(messageEvent.data instanceof Blob)) {
+      return
+    }
     const arrayBuffer = await messageEvent.data.arrayBuffer()
     const uint8Array: Uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)
     const data = decodeMultiple(uint8Array) as Array<any>
@@ -97,8 +107,9 @@ export default class {
       return
     }
     const car = CarBufferReader.fromBytes(body.blocks)
-
-    if (this.messageCallback != null) this.messageCallback()
+    if (this.messageCallback != null) {
+      this.messageCallback()
+    }
 
     let cid = undefined
     const did = body.repo
@@ -106,19 +117,29 @@ export default class {
     let record = undefined
     for (const op of body.ops) {
       // 何らかのレコードが削除された
-      if (!op.cid) continue
+      if (!op.cid) {
+        continue
+      }
       const block = car.get(op.cid)
-      if (!block) continue
+      if (!block) {
+        continue
+      }
       const currentRecord = decode(block.bytes)
-      if (currentRecord == null) continue
+      if (currentRecord == null) {
+        continue
+      }
       // ポスト・引用リポスト・リプライのみ処理
       if (typeof currentRecord.$type === "string" &&
-          currentRecord.$type !== "app.bsky.feed.post") return
+          currentRecord.$type !== "app.bsky.feed.post") {
+        return
+      }
       cid = op.cid.toString()
       rkey = op.path.split("/").at(- 1)
       record = currentRecord
     }
-    if (record == null) return
+    if (record == null) {
+      return
+    }
 
     const feeds: Array<TTFeed> = [{
       // @ts-ignore
@@ -135,7 +156,8 @@ export default class {
     }]
     AtpUtil.coherentResponses(feeds)
     const post = feeds[0].post
-
-    if (this.postCallback != null) this.postCallback(did, post)
+    if (this.postCallback != null) {
+      this.postCallback(did, post)
+    }
   }
 }

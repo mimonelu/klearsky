@@ -10,8 +10,8 @@ import Util from "@/composables/util"
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  subscriber?: SubscribeRepos;
-  globallineSettingsPopupDisplay: boolean;
+  subscriber?: SubscribeRepos
+  globallineSettingsPopupDisplay: boolean
 }>({
   subscriber: undefined,
   globallineSettingsPopupDisplay: false,
@@ -33,7 +33,9 @@ onBeforeUnmount(() => {
 async function connect () {
   state.subscriber = new SubscribeRepos(onError, undefined, undefined, undefined, onPost)
   let host = mainState.atp.session?.__serviceName ?? ""
-  if (host.match(/bsky\.(?:network|social)$/)) host = "bsky.network"
+  if (host.match(/bsky\.(?:network|social)$/)) {
+    host = "bsky.network"
+  }
   state.subscriber.connect(`wss://${host}/xrpc/com.atproto.sync.subscribeRepos`)
   createProfileTimer()
 }
@@ -50,60 +52,97 @@ async function onPost (did: string, post: any) {
   mainState.globallineNumberOfPosts ++
 
   const container = messageContainer.value as unknown as HTMLElement
-  if (container == null) return
+  if (container == null) {
+    return
+  }
   messageContainerHeight = container.clientHeight
 
   // 言語判定
 
   // 言語判定 - ポスト言語が設定されていない場合はスキップ
   const postLanguages = post.record?.langs ?? post.value?.langs
-  if (postLanguages == null) return
+  if (postLanguages == null) {
+    return
+  }
 
   // 言語判定 - コンテンツ言語がひとつも設定されていない場合（ブラウザの設定言語を使用）
   const contentLanguages = mainState.currentSetting.contentLanguages ?? []
   if (contentLanguages.length === 0) {
-    if (!postLanguages.includes(Util.getUserLanguage())) return
+    if (!postLanguages.includes(Util.getUserLanguage())) {
+      return
+    }
 
   // 言語判定 - コンテンツ言語が設定されている場合
   } else {
     if (!contentLanguages.some((contentLanguage: string) => {
       return postLanguages.includes(contentLanguage)
-    })) return
+    })) {
+      return
+    }
   }
 
   // リプライは非表示
-  if (post.record.reply != null) return
+  if (post.record.reply != null) {
+    return
+  }
 
-  if (mainState.globallineProfiles[did] == null)
+  // プロフィールの設定
+  if (mainState.globallineProfiles[did] == null) {
     mainState.globallineProfiles[did] = {}
+  }
   post.author = mainState.globallineProfiles[did]
+
   mainState.globallinePosts.unshift(post)
 }
 
 function toggleConnect () {
   Util.blurElement()
-  if (state.subscriber?.socketState === 0) connect()
-  else if (state.subscriber?.socketState === 2) disconnect()
+  if (state.subscriber?.socketState === 0) {
+    connect()
+  } else if (state.subscriber?.socketState === 2) {
+    disconnect()
+  }
 }
 
-// subscribeRepo - プロフィール取得
+// プロフィールの取得
 
 let timer: undefined | NodeJS.Timeout = undefined
 
 function createProfileTimer () {
   timer = setTimeout(async () => {
+    // 取得対象のプロフィール
+    const targetProfiles: any[] = []
     for (const did in mainState.globallineProfiles) {
       const profile = mainState.globallineProfiles[did]
-      if (profile.handle != null) continue
-      const newProfile = await mainState.atp.fetchProfile(did)
-      if (newProfile instanceof Error) continue
-      for (const key in newProfile) {
-        mainState.globallineProfiles[did][key] = (newProfile as any)[key]
+
+      // DID を取得待ちかどうかの判定に利用
+      if (profile.did != null) {
+        continue
       }
-      break
+      profile.did = did
+
+      // 一度に取得する最大プロフィール数の超過判定
+      targetProfiles.push(profile)
+      if (targetProfiles.length >= 10) {
+        break
+      }
     }
+
+    // プロフィールの取得
+    if (targetProfiles.length > 0) {
+      const dids = targetProfiles.map((targetProfile: any) => {
+        return targetProfile.did
+      })
+      const newProfiles = await mainState.atp.fetchProfiles(dids)
+      if (!(newProfiles instanceof Error)) {
+        for (const newProfile of newProfiles) {
+          Object.assign(mainState.globallineProfiles[newProfile.did], newProfile)
+        }
+      }
+    }
+
     createProfileTimer()
-  }, 500)
+  }, 1000)
 }
 
 function destroyProfileTimer () {
@@ -115,8 +154,12 @@ function destroyProfileTimer () {
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.globallinePosts.forEach((post: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) => post.cid === newPost.cid)
-    if (newPost != null) Util.updatePostProps(mainState.globallinePosts[index], newPost)
+    const newPost = newPosts.find((newPost: TTPost) => {
+      return post.cid === newPost.cid
+    })
+    if (newPost != null) {
+      Util.updatePostProps(mainState.globallinePosts[index], newPost)
+    }
   })
 }
 
@@ -146,7 +189,9 @@ let messageContainerHeight = 0
 
 function startControlToScroll () {
   const container = messageContainer.value as unknown as HTMLElement
-  if (container == null) return
+  if (container == null) {
+    return
+  }
   mutationObserver = new MutationObserver(onMutated)
   mutationObserver.observe(container, {
     childList: true,
@@ -163,9 +208,13 @@ function endControlToScroll () {
 
 function onMutated () {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-  if (scrollTop == 0) return
+  if (scrollTop == 0) {
+    return
+  }
   const container = messageContainer.value as unknown as HTMLElement
-  if (container == null) return
+  if (container == null) {
+    return
+  }
   const heightDiff = container.clientHeight - messageContainerHeight
   window.scrollTo({
     left: 0,
