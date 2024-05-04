@@ -51,11 +51,11 @@ function onError () {
 async function onPost (did: string, post: any) {
   mainState.globallineNumberOfPosts ++
 
-  const container = messageContainer.value as unknown as HTMLElement
+  const container = postContainer.value as unknown as HTMLElement
   if (container == null) {
     return
   }
-  messageContainerHeight = container.clientHeight
+  postContainerHeight = container.clientHeight
 
   // 言語判定
 
@@ -101,6 +101,12 @@ function toggleConnect () {
     connect()
   } else if (state.subscriber?.socketState === 2) {
     disconnect()
+  }
+
+  // 停止ライン
+  if (mainState.globallinePosts[0] != null &&
+      mainState.globallinePosts[0].__isLatestPost == null) {
+    mainState.globallinePosts[0].__isLatestPost = true
   }
 }
 
@@ -184,11 +190,11 @@ function closeGloballineSettingsPopup () {
 // スクロール制御
 
 let mutationObserver: undefined | MutationObserver = undefined
-const messageContainer = ref(null)
-let messageContainerHeight = 0
+const postContainer = ref(null)
+let postContainerHeight = 0
 
 function startControlToScroll () {
-  const container = messageContainer.value as unknown as HTMLElement
+  const container = postContainer.value as unknown as HTMLElement
   if (container == null) {
     return
   }
@@ -211,11 +217,11 @@ function onMutated () {
   if (scrollTop == 0) {
     return
   }
-  const container = messageContainer.value as unknown as HTMLElement
+  const container = postContainer.value as unknown as HTMLElement
   if (container == null) {
     return
   }
-  const heightDiff = container.clientHeight - messageContainerHeight
+  const heightDiff = container.clientHeight - postContainerHeight
   window.scrollTo({
     left: 0,
     top: scrollTop + heightDiff
@@ -268,25 +274,26 @@ function onMutated () {
 
     <!-- タイムライン -->
     <div
-      class="message-container"
-      ref="messageContainer"
+      class="post-container"
+      ref="postContainer"
       >
       <div
-        v-for="message of mainState.globallinePosts"
-        :key="message.cid"
-        class="message-wrapper"
-        :data-is-reply="message.record.reply != null"
-        :data-is-quote-repost="message.record.embed?.record != null"
-        :data-is-loaded="message.author.did != null"
-        :data-is-muted="message.author.viewer?.muted"
-        :data-is-blocking="message.author.viewer?.blocking != null"
+        v-for="post of mainState.globallinePosts"
+        :key="post.cid"
+        class="post-wrapper"
+        :data-is-reply="post.record.reply != null"
+        :data-is-quote-repost="post.record.embed?.record != null"
+        :data-is-loaded="post.author.did != null"
+        :data-is-muted="post.author.viewer?.muted"
+        :data-is-blocking="post.author.viewer?.blocking != null"
+        :data-is-latest="post.__isLatestPost"
       >
         <!-- ポスト -->
         <Post
           :position="mainState.currentSetting.globallineLayout ?? 'post'"
-          :post="message"
-          :hasReplyIcon="message.record.reply != null"
-          :hasQuoteRepostIcon="message.record.embed?.record != null"
+          :post="post"
+          :hasReplyIcon="post.record.reply != null"
+          :hasQuoteRepostIcon="post.record.embed?.record != null"
           :forceHideImages="true"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
@@ -322,14 +329,14 @@ function onMutated () {
   }
 }
 
-.message-container {
+.post-container {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   padding: 0.5em 0 var(--sp-menu-height);
 }
 
-.message-wrapper {
+.post-wrapper {
   position: relative;
 
   &[data-is-loaded="false"] {
@@ -338,6 +345,11 @@ function onMutated () {
   &[data-is-muted="true"],
   &[data-is-blocking="true"] {
     display: none;
+  }
+
+  // 停止ライン
+  &:not(:first-child)[data-is-latest="true"] {
+    border-top: 0.5em solid var(--fg-color-0125);
   }
 }
 
