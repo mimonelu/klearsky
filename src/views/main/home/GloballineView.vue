@@ -356,6 +356,7 @@ function onMutated () {
         :state="mainState.currentSetting"
         property="globallineContentLanguages"
         title="globallineContentLanguages"
+        :hasHelpButton="false"
         @close="closeGloballineContentLanguagesSettingsPopup"
         @change="mainState.saveSettings"
       />

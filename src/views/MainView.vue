@@ -944,6 +944,7 @@ function broadcastListener (event: MessageEvent) {
           :state="state.currentSetting"
           property="contentLanguages"
           title="contentLanguages"
+          :hasHelpButton="true"
           @close="state.closeContentLanguagesPopup"
           @change="state.saveSettings"
         />

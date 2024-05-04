@@ -12,6 +12,7 @@ const props = defineProps<{
   property: string
   title: string
   limit?: number
+  hasHelpButton?: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -46,7 +47,10 @@ function close () {
     @close="close"
   >
     <template #header>
-      <button @click.stop="mainState.openHtmlPopup(title)">
+      <button
+        v-if="hasHelpButton"
+        @click.stop="mainState.openHtmlPopup(title)"
+      >
         <SVGIcon name="help" />
       </button>
       <h2>
