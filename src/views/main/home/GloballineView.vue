@@ -25,6 +25,9 @@ const LIMIT_OF_PROFILES = 1000
 const LIMIT_OF_POSTS = 1000
 const LIMIT_OF_FETCHING_PROFILES = 10
 
+// プロフィールの取得間隔
+const FETCHING_PROFILES_INTERVAL = 1000
+
 onMounted(() => {
   startControlToScroll()
   connect()
@@ -66,7 +69,6 @@ async function onPost (did: string, post: any) {
   postContainerHeight = container.clientHeight
 
   // 言語判定
-
   const postLanguages = post.record?.langs ?? post.value?.langs
   if (postLanguages == null) {
     // 言語判定 - ポスト言語が設定されていない場合はスキップ
@@ -177,12 +179,20 @@ function createProfileTimer () {
     }
 
     createProfileTimer()
-  }, 1000)
+  }, FETCHING_PROFILES_INTERVAL)
 }
 
 function destroyProfileTimer () {
   clearInterval(timer)
   timer = undefined
+}
+
+function isPostVisible (post: TTPost): boolean {
+  return mainState.currentSetting.globallineMinFollowersCount == null ||
+    (
+      mainState.currentSetting.globallineMinFollowersCount != null &&
+      (((post.author?.followersCount as number) ?? 0) >= Number(mainState.currentSetting.globallineMinFollowersCount))
+    )
 }
 
 // ポストアクション
@@ -338,6 +348,7 @@ function onMutated () {
       >
         <!-- ポスト -->
         <Post
+          v-if="isPostVisible(post)"
           :position="mainState.currentSetting.globallineLayout ?? 'post'"
           :post="post"
           :hasReplyIcon="post.record.reply != null"
@@ -411,6 +422,7 @@ function onMutated () {
   // 停止ライン
   &:not(:first-child)[data-is-latest="true"] {
     border-top: 0.5em solid var(--fg-color-0125);
+    margin-top: 1px;
   }
 }
 

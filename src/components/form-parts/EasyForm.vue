@@ -341,7 +341,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
 
       & > dt {
         font-weight: bold;
-        line-height: 1.25;
+        line-height: var(--line-height-middle);
         word-wrap: break-word;
       }
 
@@ -402,7 +402,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
 .footnote {
   color: var(--fg-color-075);
   font-size: 0.875rem;
-  line-height: 1.25;
+  line-height: var(--line-height-middle);
   text-align: right;
   word-wrap: break-word;
 }

@@ -16,6 +16,20 @@ const easyFormProps: TTEasyForm = {
   submitCallback: close,
   blurOnSubmit: true,
   data: [
+    // ポスト言語を持たないポストのフィルタリング
+    {
+      state: mainState.currentSetting,
+      model: "globallineSkipPostHasNoLanguage",
+      label: $t("globallineSkipPostHasNoLanguage"),
+      type: "radio",
+      options: [
+        { label: "yes", value: true },
+        { label: "no", value: false },
+      ],
+      layout: "horizontal",
+      onUpdate: saveSetting,
+    },
+
     // ポストの種別フィルタリング
     {
       state: mainState.currentSetting,
@@ -31,18 +45,17 @@ const easyFormProps: TTEasyForm = {
       onUpdate: saveSetting,
     },
 
-    // ポスト言語を持たないポストのフィルタリング
+    // フォロワー数の最小値によるフィルタリング
     {
       state: mainState.currentSetting,
-      model: "globallineSkipPostHasNoLanguage",
-      label: $t("globallineSkipPostHasNoLanguage"),
-      type: "radio",
-      options: [
-        { label: "yes", value: true },
-        { label: "no", value: false },
-      ],
-      layout: "horizontal",
-      onUpdate: saveSetting,
+      model: "globallineMinFollowersCount",
+      label: $t("globallineMinFollowersCount"),
+      placeholder: $t("globallineMinFollowersCountPlaceholder"),
+      type: "text",
+      autocomplete: "off",
+      inputmode: "numeric",
+      pattern: "^[0-9]+$",
+      onInput: saveSetting,
     },
 
     // ポストのレイアウト
