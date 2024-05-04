@@ -19,12 +19,12 @@ const easyFormProps: TTEasyForm = {
     {
       state: mainState.currentSetting,
       model: "globallineLayout",
-      label: $t("layout"),
+      label: $t("globallineLayout"),
       type: "radio",
       required: true,
       options: [
-        { label: "Post", value: "post" },
-        { label: "Slim", value: "slim" },
+        { label: "globallineLayoutPost", value: "post" },
+        { label: "globallineLayoutSlim", value: "slim" },
       ],
       layout: "horizontal",
       onUpdate: saveSetting,

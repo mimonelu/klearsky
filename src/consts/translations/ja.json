@@ -239,6 +239,9 @@
   "followingsDescription": "あなたがフォローしているユーザーのポストを表示します。",
   "globalline": "グローバルフィード",
   "globallineDescription": "すべてのポストをリアルタイムに表示します。",
+  "globallineLayout": "ポストのレイアウト",
+  "globallineLayoutPost": "通常",
+  "globallineLayoutSlim": "スリム",
 
   "customFeeds": "カスタムフィード",
   "myFeeds": "マイフィード",

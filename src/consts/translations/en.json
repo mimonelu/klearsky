@@ -239,6 +239,9 @@
   "followingsDescription": "Show posts of users you follow.",
   "globalline": "Global feed",
   "globallineDescription": "Show all posts in real time.",
+  "globallineLayout": "Post layout",
+  "globallineLayoutPost": "Normal",
+  "globallineLayoutSlim": "Slim",
 
   "customFeeds": "Custom Feeds",
   "myFeeds": "My Feeds",
