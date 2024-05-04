@@ -173,7 +173,9 @@ function createProfileTimer () {
       const newProfiles = await mainState.atp.fetchProfiles(dids)
       if (!(newProfiles instanceof Error)) {
         for (const newProfile of newProfiles) {
-          Object.assign(mainState.globallineProfiles[newProfile.did], newProfile)
+          if (mainState.globallineProfiles[newProfile.did] != null) {
+            Object.assign(mainState.globallineProfiles[newProfile.did], newProfile)
+          }
         }
       }
     }
