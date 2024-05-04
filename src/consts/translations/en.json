@@ -240,6 +240,7 @@
   "globalline": "Global feed",
   "globallineDescription": "Show all posts in real time.",
   "globallinePostTypes": "Post type filtering",
+  "globallineSkipPostHasNoLanguage": "Filtering posts without post language",
   "globallineLayout": "Post layout",
   "globallineLayoutPost": "Normal",
   "globallineLayoutSlim": "Slim",

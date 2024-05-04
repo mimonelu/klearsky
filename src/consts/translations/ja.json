@@ -240,6 +240,7 @@
   "globalline": "グローバルフィード",
   "globallineDescription": "すべてのポストをリアルタイムに表示します。",
   "globallinePostTypes": "ポストの種別フィルタリング",
+  "globallineSkipPostHasNoLanguage": "ポスト言語のないポストをフィルタリング",
   "globallineLayout": "ポストのレイアウト",
   "globallineLayoutPost": "通常",
   "globallineLayoutSlim": "スリム",

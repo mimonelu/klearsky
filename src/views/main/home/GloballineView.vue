@@ -64,25 +64,27 @@ async function onPost (did: string, post: any) {
 
   // 言語判定
 
-  // 言語判定 - ポスト言語が設定されていない場合はスキップ
   const postLanguages = post.record?.langs ?? post.value?.langs
   if (postLanguages == null) {
-    return
-  }
-
-  // 言語判定 - コンテンツ言語がひとつも設定されていない場合（ブラウザの設定言語を使用）
-  const contentLanguages = mainState.currentSetting.contentLanguages ?? []
-  if (contentLanguages.length === 0) {
-    if (!postLanguages.includes(Util.getUserLanguage())) {
+    // 言語判定 - ポスト言語が設定されていない場合はスキップ
+    if (mainState.currentSetting.globallineSkipPostHasNoLanguage) {
       return
     }
-
-  // 言語判定 - コンテンツ言語が設定されている場合
   } else {
-    if (!contentLanguages.some((contentLanguage: string) => {
-      return postLanguages.includes(contentLanguage)
-    })) {
-      return
+    // 言語判定 - コンテンツ言語がひとつも設定されていない場合（ブラウザの設定言語を使用）
+    const contentLanguages = mainState.currentSetting.contentLanguages ?? []
+    if (contentLanguages.length === 0) {
+      if (!postLanguages.includes(Util.getUserLanguage())) {
+        return
+      }
+
+    // 言語判定 - コンテンツ言語が設定されている場合
+    } else {
+      if (!contentLanguages.some((contentLanguage: string) => {
+        return postLanguages.includes(contentLanguage)
+      })) {
+        return
+      }
     }
   }
 

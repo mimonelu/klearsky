@@ -713,6 +713,8 @@ function saveSettings () {
     state.settings[did].globallineLayout = "post"
   if (state.settings[did].globallinePostTypes == null)
     state.settings[did].globallinePostTypes = ["post"]
+  if (state.settings[did].globallineSkipPostHasNoLanguage == null)
+    state.settings[did].globallineSkipPostHasNoLanguage = true
   if (state.settings[did].colorTheme == null)
     state.settings[did].colorTheme = "auto"
   if (state.settings[did].feedSearchKeywordHistory == null)

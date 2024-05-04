@@ -31,6 +31,20 @@ const easyFormProps: TTEasyForm = {
       onUpdate: saveSetting,
     },
 
+    // ポスト言語を持たないポストのフィルタリング
+    {
+      state: mainState.currentSetting,
+      model: "globallineSkipPostHasNoLanguage",
+      label: $t("globallineSkipPostHasNoLanguage"),
+      type: "radio",
+      options: [
+        { label: "yes", value: true },
+        { label: "no", value: false },
+      ],
+      layout: "horizontal",
+      onUpdate: saveSetting,
+    },
+
     // ポストのレイアウト
     {
       state: mainState.currentSetting,

@@ -11,6 +11,7 @@ type TTSetting = {
   fontAntialiasing?: boolean
   globallineLayout?: "post" | "slim"
   globallinePostTypes?: Array<string>
+  globallineSkipPostHasNoLanguage?: boolean
   hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean
   imageFolding?: "none" | "recommended" | "all"
