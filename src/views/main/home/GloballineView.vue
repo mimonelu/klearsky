@@ -3,6 +3,7 @@ import { inject, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import GloballineSettingsPopup from "@/components/popups/GloballineSettingsPopup.vue"
 import Loader from "@/components/common/Loader.vue"
 import Post from "@/components/app-parts/Post.vue"
+import SelectLanguagesPopup from "@/components/popups/SelectLanguagesPopup.vue"
 import SubscribeRepos from "@/composables/atp-wrapper/atp-util/subscribe-repos"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -12,9 +13,11 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   subscriber?: SubscribeRepos
   globallineSettingsPopupDisplay: boolean
+  globallineContentLanguagesSettingsPopupDisplay: boolean
 }>({
   subscriber: undefined,
   globallineSettingsPopupDisplay: false,
+  globallineContentLanguagesSettingsPopupDisplay: false,
 })
 
 // 各種最大数
@@ -71,24 +74,19 @@ async function onPost (did: string, post: any) {
       return
     }
   } else {
-    // 言語判定 - コンテンツ言語がひとつも設定されていない場合（ブラウザの設定言語を使用）
-    const contentLanguages = mainState.currentSetting.contentLanguages ?? []
-    if (contentLanguages.length === 0) {
-      if (!postLanguages.includes(Util.getUserLanguage())) {
-        return
-      }
-
-    // 言語判定 - コンテンツ言語が設定されている場合
-    } else {
-      if (!contentLanguages.some((contentLanguage: string) => {
-        return postLanguages.includes(contentLanguage)
-      })) {
+    // 言語判定 - グローバルフィード用コンテンツ言語が設定されている＆ポスト言語をひとつでも含んでいる場合
+    if (mainState.currentSetting.globallineContentLanguages?.length) {
+      const hasContentLanguages = mainState.currentSetting.globallineContentLanguages
+        ?.some((contentLanguage: string) => {
+          return postLanguages.includes(contentLanguage)
+        })
+      if (!hasContentLanguages) {
         return
       }
     }
   }
 
-  // グローバルラインのポストの種別フィルタリング
+  // グローバルフィードのポストの種別フィルタリング
   if (mainState.currentSetting.globallinePostTypes != null) {
     const wantsPost = mainState.currentSetting.globallinePostTypes.includes("post")
     const wantsReply = mainState.currentSetting.globallinePostTypes.includes("reply")
@@ -103,11 +101,11 @@ async function onPost (did: string, post: any) {
     }
   }
 
-  // グローバルラインプロフィールの設定
+  // グローバルフィードプロフィールの設定
   if (mainState.globallineProfiles[did] == null) {
     mainState.globallineProfiles[did] = {}
 
-    // グローバルラインプロフィールの最大数制限
+    // グローバルフィードプロフィールの最大数制限
     const profileKeys = Object.keys(mainState.globallineProfiles)
     if (profileKeys.length > LIMIT_OF_PROFILES) {
       profileKeys
@@ -119,10 +117,10 @@ async function onPost (did: string, post: any) {
   }
   post.author = mainState.globallineProfiles[did]
 
-  // グローバルラインポストの追加
+  // グローバルフィードポストの追加
   mainState.globallinePosts.unshift(post)
 
-  // グローバルラインポストの最大数制限
+  // グローバルフィードポストの最大数制限
   mainState.globallinePosts.splice(LIMIT_OF_POSTS)
 }
 
@@ -141,7 +139,7 @@ function toggleConnect () {
   }
 }
 
-// グローバルラインプロフィールの取得
+// グローバルフィードプロフィールの取得
 
 let timer: undefined | NodeJS.Timeout = undefined
 
@@ -165,7 +163,7 @@ function createProfileTimer () {
       }
     }
 
-    // グローバルラインプロフィールの取得
+    // グローバルフィードプロフィールの取得
     if (targetProfiles.length > 0) {
       const dids = targetProfiles.map((targetProfile: any) => {
         return targetProfile.did
@@ -207,7 +205,18 @@ function removeThisPost (uri: string) {
     })
 }
 
-// グローバルライン設定ポップアップ
+// グローバルフィード用コンテンツ言語設定ポップアップ
+
+function openGloballineContentLanguagesSettingsPopup () {
+  Util.blurElement()
+  state.globallineContentLanguagesSettingsPopupDisplay = true
+}
+
+function closeGloballineContentLanguagesSettingsPopup () {
+  state.globallineContentLanguagesSettingsPopupDisplay = false
+}
+
+// グローバルフィード設定ポップアップ
 
 function openGloballineSettingsPopup () {
   Util.blurElement()
@@ -262,7 +271,7 @@ function onMutated () {
 
 <template>
   <div class="globalline-view">
-    <!-- グローバルラインヘッダー -->
+    <!-- グローバルフィードヘッダー -->
     <Portal to="home-view-header-bottom">
       <div class="globalline-view__header">
         <!-- 情報 -->
@@ -293,7 +302,15 @@ function onMutated () {
           </template>
         </button>
 
-        <!-- グローバルライン設定ポップアップトリガー -->
+        <!-- グローバルフィード用コンテンツ言語設定ポップアップトリガー -->
+        <button
+          class="button--bordered globalline-content-languages-settings-popup-button"
+          @click.stop="openGloballineContentLanguagesSettingsPopup"
+        >
+          <SVGIcon name="translate" />
+        </button>
+
+        <!-- グローバルフィード設定ポップアップトリガー -->
         <button
           class="button--bordered globalline-settings-popup-button"
           @click.stop="openGloballineSettingsPopup"
@@ -332,7 +349,19 @@ function onMutated () {
       </div>
     </div>
 
-    <!-- グローバルライン設定ポップアップ -->
+    <!-- グローバルフィード用コンテンツ言語設定ポップアップ -->
+    <Transition>
+      <SelectLanguagesPopup
+        v-if="state.globallineContentLanguagesSettingsPopupDisplay"
+        :state="mainState.currentSetting"
+        property="globallineContentLanguages"
+        title="globallineContentLanguages"
+        @close="closeGloballineContentLanguagesSettingsPopup"
+        @change="mainState.saveSettings"
+      />
+    </Transition>
+
+    <!-- グローバルフィード設定ポップアップ -->
     <Transition>
       <GloballineSettingsPopup
         v-if="state.globallineSettingsPopupDisplay"
@@ -348,7 +377,7 @@ function onMutated () {
   flex-direction: column;
   flex-grow: 1;
 
-  // グローバルラインヘッダー
+  // グローバルフィードヘッダー
   &__header {
     background-color: rgb(var(--bg-color), var(--main-area-opacity));
     border-bottom: 1px solid var(--fg-color-0125);

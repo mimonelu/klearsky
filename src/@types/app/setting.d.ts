@@ -9,9 +9,10 @@ type TTSetting = {
   fontSize?: string
   fontKerning?: boolean
   fontAntialiasing?: boolean
-  globallineLayout?: "post" | "slim"
-  globallinePostTypes?: Array<string>
+  globallineContentLanguages?: Array<string>
   globallineSkipPostHasNoLanguage?: boolean
+  globallinePostTypes?: Array<string>
+  globallineLayout?: "post" | "slim"
   hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean
   imageFolding?: "none" | "recommended" | "all"

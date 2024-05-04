@@ -101,7 +101,7 @@ async function autoScrollSliderMenu () {
             <span>{{ $t(item.value.displayName) }}</span>
           </RouterLink>
 
-          <!-- グローバルライン -->
+          <!-- グローバルフィード -->
           <RouterLink
             v-else-if="item.kind === 'globalline'"
             class="slider-menu__link"

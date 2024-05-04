@@ -282,7 +282,7 @@ function openMyFeedsSortPopover ($event: Event) {
             @changeCustomFeedOrder="changeCustomFeedOrder"
           />
 
-          <!-- グローバルライン -->
+          <!-- グローバルフィード -->
           <SpecialFeedCard
             v-else-if="item.kind === 'globalline'"
             :item="item"

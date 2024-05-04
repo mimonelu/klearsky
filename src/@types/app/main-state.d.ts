@@ -267,7 +267,7 @@ type MainState = {
 
   myLists: TTMyLists
 
-  // グローバルライン
+  // グローバルフィード
 
   globallinePosts: Array<TTPost>
   globallineProfiles: { [did: string]: any }

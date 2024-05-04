@@ -146,7 +146,7 @@ function removeMyFeed (uri: string) {
           <span>{{ $t(item.value.displayName) }}</span>
         </RouterLink>
 
-        <!-- グローバルライン -->
+        <!-- グローバルフィード -->
         <RouterLink
           v-else-if="item.kind === 'globalline'"
           to="/home/globalline"

@@ -72,7 +72,7 @@ export default class {
       },
     })
 
-    // グローバルラインの追加
+    // グローバルフィードの追加
     this.items.push({
       kind: "globalline",
       value: {
