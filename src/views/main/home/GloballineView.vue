@@ -17,6 +17,11 @@ const state = reactive<{
   globallineSettingsPopupDisplay: false,
 })
 
+// 各種最大数
+const LIMIT_OF_PROFILES = 1000
+const LIMIT_OF_POSTS = 1000
+const LIMIT_OF_FETCHING_PROFILES = 10
+
 onMounted(() => {
   startControlToScroll()
   connect()
@@ -86,13 +91,27 @@ async function onPost (did: string, post: any) {
     return
   }
 
-  // プロフィールの設定
+  // グローバルラインプロフィールの設定
   if (mainState.globallineProfiles[did] == null) {
     mainState.globallineProfiles[did] = {}
+
+    // グローバルラインプロフィールの最大数制限
+    const profileKeys = Object.keys(mainState.globallineProfiles)
+    if (profileKeys.length > LIMIT_OF_PROFILES) {
+      profileKeys
+        .splice(0, LIMIT_OF_PROFILES)
+        .forEach((profileKey: string) => {
+          delete mainState.globallineProfiles[profileKey]
+        })
+    }
   }
   post.author = mainState.globallineProfiles[did]
 
+  // グローバルラインポストの追加
   mainState.globallinePosts.unshift(post)
+
+  // グローバルラインポストの最大数制限
+  mainState.globallinePosts.splice(LIMIT_OF_POSTS)
 }
 
 function toggleConnect () {
@@ -110,7 +129,7 @@ function toggleConnect () {
   }
 }
 
-// プロフィールの取得
+// グローバルラインプロフィールの取得
 
 let timer: undefined | NodeJS.Timeout = undefined
 
@@ -129,12 +148,12 @@ function createProfileTimer () {
 
       // 一度に取得する最大プロフィール数の超過判定
       targetProfiles.push(profile)
-      if (targetProfiles.length >= 10) {
+      if (targetProfiles.length >= LIMIT_OF_FETCHING_PROFILES) {
         break
       }
     }
 
-    // プロフィールの取得
+    // グローバルラインプロフィールの取得
     if (targetProfiles.length > 0) {
       const dids = targetProfiles.map((targetProfile: any) => {
         return targetProfile.did
