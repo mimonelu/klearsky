@@ -86,9 +86,19 @@ async function onPost (did: string, post: any) {
     }
   }
 
-  // リプライは非表示
-  if (post.record.reply != null) {
-    return
+  // グローバルラインのポストの種別フィルタリング
+  if (mainState.currentSetting.globallinePostTypes != null) {
+    const wantsPost = mainState.currentSetting.globallinePostTypes.includes("post")
+    const wantsReply = mainState.currentSetting.globallinePostTypes.includes("reply")
+    const wantsQuoteRepost = mainState.currentSetting.globallinePostTypes.includes("quoteRepost")
+    const isPost = post.record.reply == null && post.record.embed?.record == null
+    const isReply = post.record.reply != null
+    const isQuoteRepost = post.record.embed?.record != null
+    if ((isPost && !wantsPost) ||
+        (isReply && !wantsReply) ||
+        (isQuoteRepost && !wantsQuoteRepost)) {
+      return
+    }
   }
 
   // グローバルラインプロフィールの設定

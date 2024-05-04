@@ -16,6 +16,22 @@ const easyFormProps: TTEasyForm = {
   submitCallback: close,
   blurOnSubmit: true,
   data: [
+    // ポストの種別フィルタリング
+    {
+      state: mainState.currentSetting,
+      model: "globallinePostTypes",
+      label: $t("globallinePostTypes"),
+      type: "checkbox",
+      options: [
+        { label: "post", value: "post" },
+        { label: "reply", value: "reply" },
+        { label: "quoteRepost", value: "quoteRepost" },
+      ],
+      layout: "vertical",
+      onUpdate: saveSetting,
+    },
+
+    // ポストのレイアウト
     {
       state: mainState.currentSetting,
       model: "globallineLayout",

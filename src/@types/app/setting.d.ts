@@ -10,6 +10,7 @@ type TTSetting = {
   fontKerning?: boolean
   fontAntialiasing?: boolean
   globallineLayout?: "post" | "slim"
+  globallinePostTypes?: Array<string>
   hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean
   imageFolding?: "none" | "recommended" | "all"

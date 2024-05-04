@@ -239,6 +239,7 @@
   "followingsDescription": "Show posts of users you follow.",
   "globalline": "Global feed",
   "globallineDescription": "Show all posts in real time.",
+  "globallinePostTypes": "Post type filtering",
   "globallineLayout": "Post layout",
   "globallineLayoutPost": "Normal",
   "globallineLayoutSlim": "Slim",
