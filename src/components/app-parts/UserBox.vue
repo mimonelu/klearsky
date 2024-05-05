@@ -124,7 +124,7 @@ function onActivateContentFilteringToggle () {
         :handle="user.handle"
         :anonymizable="true"
       />
-      <div class="description">{{ user.description || "&#160;" }}</div>
+      <div class="description">{{ user.description || "&emsp;" }}</div>
 
       <!-- プロフィールポップオーバートグル -->
       <button
@@ -176,6 +176,9 @@ function onActivateContentFilteringToggle () {
 .viewer-labels {
   grid-area: v;
   margin-bottom: 0.5em;
+  &:empty {
+    display: contents;
+  }
 }
 
 .avatar-link {

@@ -229,7 +229,7 @@ function toggleDetail () {
       <HtmlText
         class="feed-card__description"
         dir="auto"
-        :text="generator.description ?? '&nbsp;'"
+        :text="generator.description ?? '&emsp;'"
         :processHashTag="true"
         @onActivateMention="emit('onActivateMention')"
         @onActivateHashTag="emit('onActivateHashTag')"

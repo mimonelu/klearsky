@@ -350,7 +350,7 @@ function onActivateAccountMaskToggle () {
 
               <!-- 表示名 -->
               <DisplayName
-                :displayName="mainState.currentProfile?.displayName ?? '&nbsp;'"
+                :displayName="mainState.currentProfile?.displayName ?? '&emsp;'"
                 :anonymizable="false"
               />
 
@@ -456,7 +456,7 @@ function onActivateAccountMaskToggle () {
               v-if="state.accountContentDisplay"
               class="description"
               dir="auto"
-              :text="mainState.currentProfile?.description ?? '&nbsp;'"
+              :text="mainState.currentProfile?.description ?? '&emsp;'"
               :processHashTag="true"
             />
 

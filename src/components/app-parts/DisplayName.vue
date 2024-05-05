@@ -13,17 +13,18 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   displayName?: ComputedRef<string>
 }>({
-  displayName: computed((): string => props.anonymizable && mainState.currentSetting.postAnonymization
-    ? $t("anonymous")
-    : props.displayName
-  ),
+  displayName: computed((): string => {
+    return props.anonymizable && mainState.currentSetting.postAnonymization
+      ? $t("anonymous")
+      : props.displayName
+  }),
 })
 </script>
 
 <template>
   <div class="display-name">
     <slot />
-    <span>{{ state.displayName }}</span>
+    <span>{{ state.displayName || "&emsp;" }}</span>
   </div>
 </template>
 
