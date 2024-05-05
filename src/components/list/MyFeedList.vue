@@ -47,8 +47,10 @@ async function saveMyFeed () {
   mainState.sortFeedPreferencesSavedAndPinned()
   mainState.myFeeds.saveCustomItemSettings()
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
-  if (!result) mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
   state.processing = false
+  if (!result) {
+    mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
+  }
   state.editMode = false
 
   // セッションキャッシュの更新

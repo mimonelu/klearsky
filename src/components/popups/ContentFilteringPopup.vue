@@ -116,8 +116,10 @@ async function apply () {
   })
   state.popupLoaderDisplay = true
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
-  if (!result) mainState.openErrorPopup("errorApiFailed", "ContentFilteringPopup/updatePreferences")
   state.popupLoaderDisplay = false
+  if (!result) {
+    mainState.openErrorPopup("errorApiFailed", "ContentFilteringPopup/updatePreferences")
+  }
 
   // セッションキャッシュの更新
   if (result) {

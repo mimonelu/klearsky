@@ -48,6 +48,8 @@
   "date": "日時",
   "label": "ラベル",
   "labelerOn": "ラベラー",
+  "subscribeLabel": "ラベラーを登録する",
+  "unsubscribeLabel": "ラベラーを登録中",
   "labels": "ラベル",
   "accountLabels": "ユーザーラベル",
   "customLabels": "カスタムラベル",

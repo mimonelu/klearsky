@@ -198,8 +198,10 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
 async function updatePreferences () {
   state.loaderDisplay = true
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
-  if (!result) mainState.openErrorPopup("errorApiFailed", "ListCard/updatePreferences")
   state.loaderDisplay = false
+  if (!result) {
+    mainState.openErrorPopup("errorApiFailed", "ListCard/updatePreferences")
+  }
 
   // セッションキャッシュの更新
   if (result) {

@@ -48,6 +48,8 @@
   "date": "Date",
   "label": "Label",
   "labelerOn": "Labeler",
+  "subscribeLabel": "Subscribe labeler",
+  "unsubscribeLabel": "Subscribing labeler",
   "labels": "Labels",
   "accountLabels": "Account labels",
   "customLabels": "Custom labels",
