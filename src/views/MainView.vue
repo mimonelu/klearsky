@@ -296,7 +296,7 @@ async function processAfterLogin () {
   }
 
   // ラベラーのHTTPヘッダーを設定
-  state.setAtprotoAcceptLabelers()
+  state.myLabeler.setAtprotoAcceptLabelers()
 
   state.saveSettings()
   state.updateSettings()

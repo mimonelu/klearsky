@@ -143,7 +143,7 @@ type MainState = {
 
   // ラベラー
 
-  setAtprotoAcceptLabelers (): void
+  myLabeler: TIMyLabeler
 
   // ミュートユーザー
 

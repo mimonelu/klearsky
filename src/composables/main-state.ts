@@ -6,6 +6,7 @@ import { computed, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import MyFeeds from "@/composables/main-state/my-feeds"
+import MyLabeler from "@/composables/main-state/my-labeler"
 import MyLists from "@/composables/main-state/my-lists"
 import MyWorker from "@/composables/main-state/my-worker"
 import Util from "@/composables/util"
@@ -167,7 +168,7 @@ state.closeSelectLabelsPopup = closeSelectLabelsPopup
 
 // ラベラー
 
-state.setAtprotoAcceptLabelers = setAtprotoAcceptLabelers
+state.myLabeler = new MyLabeler(state)
 
 // ミュートユーザー
 
@@ -1075,20 +1076,6 @@ function openSelectLabelsPopup (params: any) {
 
 function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
-}
-
-// ラベラー
-
-function setAtprotoAcceptLabelers () {
-  if (state.currentPreferences == null) {
-    return
-  }
-  const labelerPreference =
-    state.currentPreferences.find((preference) => {
-      return preference.$type === "app.bsky.actor.defs#labelersPref"
-    })
-  const labelerDids = labelerPreference?.labelers?.map((labeler) => labeler.did) ?? []
-  state.atp.agent.configureLabelersHeader(labelerDids)
 }
 
 // プロフィール
