@@ -83,7 +83,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   // フィード画像
   &__avatar {
     grid-area: a;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: block;
     fill: var(--fg-color-05);
     overflow: hidden;

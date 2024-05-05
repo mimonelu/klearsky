@@ -377,7 +377,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
 
 .clear-button {
   background-color: rgb(var(--bg-color));
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   cursor: pointer;
   display: flex;
   align-items: center;

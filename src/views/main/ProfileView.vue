@@ -698,6 +698,7 @@ function onActivateAccountMaskToggle () {
   // 折り畳み
   &[data-folding="true"] {
     .banner,
+    .harmless-labels,
     .endpoint,
     .profile-view__details__bottom {
       display: none;

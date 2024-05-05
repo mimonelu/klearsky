@@ -237,7 +237,7 @@ function removeCurrentPostTag (index: number) {
 // タグ
 .tag {
   border: 2px solid var(--fg-color-0125);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   display: flex;
 
   & > .svg-icon {

@@ -444,7 +444,7 @@ function toggleDetail () {
   // リスト画像
   &__avatar {
     grid-area: a;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: block;
     overflow: hidden;
     min-width: 3em;

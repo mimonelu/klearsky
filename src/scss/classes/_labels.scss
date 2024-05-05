@@ -45,7 +45,7 @@
   &__custom-label,
   & > div {
     border: 1px solid transparent;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: flex;
     align-items: center;
     grid-gap: 0.25em;

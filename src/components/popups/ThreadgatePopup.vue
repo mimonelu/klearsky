@@ -243,7 +243,7 @@ async function update () {
 .threadgate-popup {
   &__state--on,
   &__state--off {
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     font-size: 0.875rem;
     padding: 0.125rem 0.5rem;
   }

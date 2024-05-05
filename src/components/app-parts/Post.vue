@@ -1302,7 +1302,7 @@ function toggleOldestQuotedPostDisplay () {
     }
 
     &::before {
-      border-radius: var(--border-radius);
+      border-radius: var(--border-radius-middle);
       content: "";
       display: block;
       position: absolute;
@@ -1632,7 +1632,7 @@ function toggleOldestQuotedPostDisplay () {
 .repost {
   grid-area: r;
   border: 1px solid var(--fg-color-025);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   &:focus, &:hover {
     border-color: var(--fg-color-0375);
   }
@@ -1655,7 +1655,7 @@ function toggleOldestQuotedPostDisplay () {
 .feed-card,
 .list-card {
   border: 1px solid var(--accent-color-025);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   &:focus, &:hover {
     border-color: var(--accent-color-05);
   }

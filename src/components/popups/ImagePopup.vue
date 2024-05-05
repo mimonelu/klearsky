@@ -292,7 +292,7 @@ function close () {
 // 壁紙設定ボタン / 画像を別タブで開くボタン / 閉じるボタン
 .floating-button {
   background-color: rgb(0, 0, 0, 0.25);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   cursor: pointer;
   display: flex;
   align-items: center;

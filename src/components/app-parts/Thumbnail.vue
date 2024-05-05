@@ -132,7 +132,7 @@ function onActivateAlt (alt: string) {
 <style lang="scss" scoped>
 .thumbnail {
   background-color: var(--fg-color-0125);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -151,7 +151,7 @@ function onActivateAlt (alt: string) {
 }
 
 .alt-button {
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   font-size: 0.75em;
   position: absolute;
   bottom: 2px;

@@ -256,7 +256,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   &[data-has-folder="true"] {
     .notification-folder {
       border: 1px solid var(--fg-color-025);
-      border-radius: var(--border-radius);
+      border-radius: var(--border-radius-middle);
     }
 
     .notification {
@@ -268,7 +268,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   & > .feed-card {
     background-color: var(--accent-color-0125);
     border: 1px solid var(--accent-color-025);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     margin-top: 0.5rem;
     &:focus, &:hover {
       border-color: var(--accent-color-05);
@@ -354,7 +354,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 .new {
   background-color: rgb(var(--bg-color));
   border: 1px solid rgb(var(--accent-color));
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   color: rgb(var(--accent-color));
   font-weight: bold;
   padding: 0.25rem 0.5rem;
@@ -422,7 +422,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 .post {
   background-color: var(--fg-color-0125);
   border: 1px solid var(--fg-color-025);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   font-size: 0.875rem;
   margin-top: 0.5rem;
   padding: 0.5rem;

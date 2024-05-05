@@ -67,7 +67,7 @@ defineProps<{
 
   &__label {
     background-color: rgb(var(--notice-color));
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: flex;
     flex-wrap: wrap;
     align-items: center;

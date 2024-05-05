@@ -1,7 +1,7 @@
 .post-tag {
   --alpha: 0.5;
   border: 2px solid rgb(var(--fg-color), calc(var(--alpha) * 0.25));
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   display: flex;
   align-items: center;
   grid-gap: 0.25em;

@@ -47,7 +47,7 @@ function openImagePopup () {
     border-radius: var(--border-radius-large);
   }
   &[data-is-labeler="true"] > .lazy-image {
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-small);
   }
   &:hover > .lazy-image {
     border-radius: 1px;

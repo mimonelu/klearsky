@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import Loader from "@/components/common/Loader.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{
@@ -37,11 +38,13 @@ async function toggleFollow () {
 
 <template>
   <button
-    class="button follow-button"
+    class="follow-button"
+    :class="viewer.following != null ? 'button' : 'button--bordered'"
     :data-is-following="viewer.following != null"
     :data-is-processing="state.processing"
     @click.prevent="toggleFollow"
   >
+    <SVGIcon name="like" />
     <span v-if="viewer.following != null">{{ $t("following") }}</span>
     <span v-else>{{ $t("follow") }}</span>
     <Loader v-if="state.processing" />
@@ -50,13 +53,8 @@ async function toggleFollow () {
 
 <style lang="scss" scoped>
 .follow-button {
+  --fg-color: var(--like-color);
   position: relative;
-  &[data-is-following="true"] {
-    background-color: var(--like-color-0875);
-    &:focus, &:hover {
-      background-color: rgb(var(--like-color));
-    }
-  }
   &[data-is-processing="true"] {
     pointer-events: none;
   }

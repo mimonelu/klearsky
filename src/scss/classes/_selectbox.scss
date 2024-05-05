@@ -5,7 +5,7 @@
   & > select {
     background-color: rgb(var(--bg-color), 0.25);
     border: 1px solid var(--fg-color-025);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     color: var(--fg-color-075);
     cursor: pointer;
     display: block;

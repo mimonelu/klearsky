@@ -363,7 +363,7 @@ getEmbeddedContentId()
   &--invalid {
     background-color: var(--fg-color-0125);
     border: 1px solid var(--fg-color-025);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     padding: 0.75em 0.75em 0.5em;
     pointer-events: none;
     user-select: none;
@@ -373,7 +373,7 @@ getEmbeddedContentId()
   &--default {
     background-color: var(--fg-color-0125);
     border: 1px solid var(--fg-color-025);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: flex;
     overflow: hidden;
     position: relative;
@@ -454,13 +454,13 @@ getEmbeddedContentId()
   // 埋込型リンクカード - Apple Music
   &--applemusic {
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
   }
 
   // 埋込型リンクカード - Giphy
   &--giphy {
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
   }
   // 埋込型リンクカード - Giphy - SP幅未満
   @media not all and (min-width: $sp-width) {
@@ -473,7 +473,7 @@ getEmbeddedContentId()
   // 埋込型リンクカード - Graysky
   &--graysky {
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     width: 100%;
   }
 
@@ -482,7 +482,7 @@ getEmbeddedContentId()
     iframe[src^="https://embed.nicovideo."] {
       aspect-ratio: 640 / 360;
       background-color: var(--fg-color-0125);
-      border-radius: var(--border-radius);
+      border-radius: var(--border-radius-middle);
       height: unset !important;
     }
   }
@@ -490,14 +490,14 @@ getEmbeddedContentId()
   // 埋込型リンクカード - Spotify
   &--spotify {
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
   }
 
   // 埋込型リンクカード - Tenor
   &--tenor {
     aspect-ratio: 560 / 300;
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: flex;
     justify-content: center;
     overflow: hidden;
@@ -507,21 +507,21 @@ getEmbeddedContentId()
   &--twitch {
     aspect-ratio: 1 / 0.6;
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
   }
 
   // 埋込型リンクカード - YouTube
   &--youtube {
     aspect-ratio: 16 / 9;
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
   }
 
   // 埋込型リンクカード - Vimeo
   &--vimeo {
     aspect-ratio: 4 / 3;
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
   }
 }
 </style>

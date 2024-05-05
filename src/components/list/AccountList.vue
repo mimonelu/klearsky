@@ -290,15 +290,15 @@ function onClickFileBox (event: Event) {
 .account-button {
   display: flex;
   &:first-child:not(:last-child) &__left {
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    border-radius: var(--border-radius-middle) var(--border-radius-middle) 0 0;
   }
   &:last-child:not(:first-child) &__left {
     border-bottom-style: solid;
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-radius: 0 0 var(--border-radius-middle) var(--border-radius-middle);
   }
   &:first-child:last-child &__left {
     border-bottom-style: solid;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
   }
 
   &__left {

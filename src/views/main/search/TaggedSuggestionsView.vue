@@ -119,7 +119,7 @@ async function onIntersected (did: string) {
   // ユーザー
   &__user {
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: flex;
     align-items: center;
     justify-content: center;

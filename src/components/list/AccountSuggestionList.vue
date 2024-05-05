@@ -217,7 +217,7 @@ function selectUser (user?: TTUser) {
 .account-suggestion-list {
   &__suggestion {
     border: 1px solid var(--fg-color-025);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: flex;
     flex-direction: column;
     overflow: hidden;

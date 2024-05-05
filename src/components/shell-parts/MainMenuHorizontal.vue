@@ -180,7 +180,7 @@ async function openSendPostPopup () {
 .notification-count {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   color: white;
   font-size: 0.75rem;
   font-weight: bold;

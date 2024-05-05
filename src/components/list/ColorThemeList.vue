@@ -38,7 +38,7 @@ function onActivate (colorValue: string) {
   &__box {
     background-color: rgb(var(--bg-color));
     border: 1px solid transparent;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: flex;
     align-items: center;
     justify-content: center;

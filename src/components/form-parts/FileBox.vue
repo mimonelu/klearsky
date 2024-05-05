@@ -183,7 +183,7 @@ function deleteFile (index: number) {
   background-repeat: no-repeat;
   background-size: cover;
   border: 1px solid rgb(var(--fg-color));
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   position: relative;
   min-width: 5rem;
   height: 5rem;
@@ -194,7 +194,7 @@ function deleteFile (index: number) {
 
 .thumbnail {
   background-color: var(--fg-color-0125);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   cursor: unset !important;
   display: flex;
   align-items: center;
@@ -214,7 +214,7 @@ function deleteFile (index: number) {
 
 .delete-button {
   background-color: rgb(var(--bg-color));
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   padding: 0.5rem;
   position: absolute;
   top: 0.25rem;

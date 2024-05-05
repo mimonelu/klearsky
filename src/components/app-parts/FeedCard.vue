@@ -319,7 +319,7 @@ function toggleDetail () {
   // フィード画像
   .lazy-image {
     grid-area: a;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     display: block;
     overflow: hidden;
     min-width: 3em;

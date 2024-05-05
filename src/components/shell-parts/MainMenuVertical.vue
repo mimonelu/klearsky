@@ -248,7 +248,7 @@ function moveToBottom () {
 
 // 各種ボタン
 .link-button {
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   cursor: pointer;
   display: grid;
   grid-template-columns: min-content 1fr;
@@ -258,7 +258,7 @@ function moveToBottom () {
   width: 100%;
 
   .lazy-image {
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     font-size: 2rem;
     margin: 0.5rem;
     object-fit: cover;
@@ -335,7 +335,7 @@ function moveToBottom () {
 .notification-count {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-middle);
   color: white;
   font-size: 0.75rem;
   font-weight: bold;

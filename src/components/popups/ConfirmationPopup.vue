@@ -75,7 +75,7 @@ function apply () {
   }
   .detail {
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-middle);
     color: var(--fg-color-075);
     padding: 0.5rem 1rem;
   }

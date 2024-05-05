@@ -6,7 +6,7 @@
   width: 100%;
   &[data-number-of-images="1"] {
     & > .quad-image  > .thumbnail {
-      border-radius: var(--border-radius);
+      border-radius: var(--border-radius-middle);
     }
   }
   &:not([data-number-of-images="1"]) {
@@ -69,7 +69,7 @@
     overflow: hidden;
 
     & > .thumbnail {
-      border-radius: var(--border-radius);
+      border-radius: var(--border-radius-middle);
 
       & > img {
         width: 100%;
