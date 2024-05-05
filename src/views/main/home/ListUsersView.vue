@@ -105,14 +105,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   }
 }
 
-.list-card {
-  border-bottom: 1px solid var(--fg-color-0125);
-}
-
 .user-box {
   padding: 1em;
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--fg-color-0125);
-  }
 }
 </style>

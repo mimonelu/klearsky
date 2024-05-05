@@ -70,23 +70,13 @@ const state = reactive<{
 
 .feed-list:deep() {
   --opacity: 0.125;
-
-  // 抜け漏れ取得ボタン
-  &[data-is-middle="true"] {
-    --opacity: 0.25;
-  }
-
-  border-top: 1px solid var(--fg-color-0125);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 
-  .feed:not(:last-child) {
-    border-bottom: 1px solid rgb(var(--fg-color), var(--opacity));
-  }
-
-  .feed:not(:empty):not(:last-child)::after {
-    border-bottom-style: none;
+  // 抜け漏れ取得ボタン
+  &[data-is-middle="true"] {
+    --opacity: 0.25;
   }
 }
 </style>

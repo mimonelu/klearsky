@@ -716,7 +716,6 @@ function onActivateAccountMaskToggle () {
 
   &__top {
     &__inner {
-      border-bottom: 1px solid var(--fg-color-0125);
       display: flex;
       flex-direction: column;
       grid-gap: 1rem;
@@ -1014,7 +1013,7 @@ function onActivateAccountMaskToggle () {
     }
 
     & > .svg-icon--cursorDown {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
     }
   }
 
@@ -1057,10 +1056,6 @@ function onActivateAccountMaskToggle () {
       overflow: hidden;
       text-overflow: ellipsis;
     }
-  }
-
-  & ~ .profile-view__router-view {
-    border-top: 1px solid var(--fg-color-0125);
   }
 }
 

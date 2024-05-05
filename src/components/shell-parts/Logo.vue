@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import Package from "@/../package.json"
 import logo from "@/svg/logo.svg?raw"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 </script>
@@ -13,7 +12,6 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
         class="logo__inner__svg"
       />
     </div>
-    <div class="version">v{{ Package.version }} alpha (@atproto/api v{{ Package.dependencies["@atproto/api"] }})</div>
   </h1>
 </template>
 
@@ -49,11 +47,5 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
       }
     }
   }
-}
-
-.version {
-  color: var(--fg-color-05);
-  font-size: 0.375em;
-  word-break: break-word;
 }
 </style>

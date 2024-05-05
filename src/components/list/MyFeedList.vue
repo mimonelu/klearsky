@@ -269,10 +269,22 @@ function removeMyFeed (uri: string) {
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 
     .textlink--icon {
+      --alpha: 0.5;
       font-size: 0.875rem;
+      &:focus, &:hover {
+        --alpha: 1.0;
+      }
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color), var(--alpha));
+      }
+
+      & > span {
+        color: rgb(var(--fg-color), var(--alpha));
+      }
     }
 
     button {
@@ -383,7 +395,7 @@ function removeMyFeed (uri: string) {
       white-space: nowrap;
     }
     &.router-link-active[data-is-selected="true"] > span {
-      color: var(--accent-color-075);
+      color: rgb(var(--accent-color));
       font-weight: bold;
     }
   }

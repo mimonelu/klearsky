@@ -10,7 +10,7 @@
 
 <style lang="scss" scoped>
 .loader {
-  background-color: rgb(0, 0, 0, 0.125);
+  background-color: rgb(0, 0, 0, 0.0625);
   cursor: wait;
   display: flex;
   align-items: center;

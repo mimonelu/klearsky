@@ -26,13 +26,13 @@ function moveToBottom () {
     class="scroll-button scroll-button--up"
     @click.prevent="moveToTop"
   >
-    <SVGIcon name="cursorUp" />
+    <SVGIcon name="arrowUp" />
   </button>
   <button
     class="scroll-button scroll-button--down"
     @click.prevent="moveToBottom"
   >
-    <SVGIcon name="cursorDown" />
+    <SVGIcon name="arrowDown" />
   </button>
 </template>
 

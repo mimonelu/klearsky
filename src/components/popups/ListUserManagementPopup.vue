@@ -176,9 +176,6 @@ async function clicked (list: TTList) {
       flex-direction: row;
       align-items: flex-end;
       grid-gap: 1em;
-      &:first-child {
-        border-top: 1px solid var(--fg-color-0125);
-      }
     }
   }
 

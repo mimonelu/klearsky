@@ -57,7 +57,6 @@ function onActivateBackButton () {
 <style lang="scss" scoped>
 .page-header {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-bottom: 1px solid var(--fg-color-0125);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -102,18 +101,9 @@ function onActivateBackButton () {
       }
 
       & > .svg-icon {
-        fill: var(--fg-color-075);
+        fill: var(--fg-color-05);
         font-size: 1.25rem;
       }
-    }
-
-    .my-feeds-trigger,
-    .my-list-trigger {
-      --fg-color: var(--accent-color);
-    }
-
-    .popular-feeds-trigger {
-      --fg-color: var(--notice-color);
     }
   }
 }

@@ -72,6 +72,10 @@
     & > .svg-icon--wordMute {
       fill: rgb(var(--notice-color));
     }
+
+    & > span {
+      color: var(--fg-color-0875);
+    }
   }
 
   & > hr {

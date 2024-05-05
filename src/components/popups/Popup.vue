@@ -171,7 +171,6 @@ function scrollListener () {
 
 .popup {
   background-color: rgb(var(--bg-color));
-  border: 1px solid var(--fg-color-025);
   border-radius: var(--border-radius);
   box-shadow: 0 0 1rem 0 rgb(0, 0, 0, 0.5);
   color: rgb(var(--fg-color));
@@ -198,7 +197,6 @@ function scrollListener () {
 }
 
 .popup-header {
-  border-bottom: 1px solid var(--fg-color-025);
   cursor: pointer;
   display: flex;
   position: relative;

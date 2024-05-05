@@ -230,10 +230,9 @@ function makeStyle (left?: number, top?: number) {
   // はみ出し処理用要素
   &__inner {
     @include scroll-bar("transparent");
-    background-color: rgb(var(--bg-sub-color));
+    background-color: rgb(var(--bg-color));
     border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius);
-    box-shadow: 0 0 1rem 0 rgb(0, 0, 0, 0.125);
     overflow-y: auto;
     overscroll-behavior: none;
   }

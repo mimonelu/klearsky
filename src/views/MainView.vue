@@ -1406,22 +1406,11 @@ function broadcastListener (event: MessageEvent) {
 // ルータービュー
 .router-view-wrapper {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-left: 1px solid var(--fg-color-0125);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   overflow-x: clip;
   max-width: $router-view-width;
-
-  // タブレット幅以上
-  @media (min-width: calc($router-view-width + $main-menu-min-width)) {
-    border-right: 1px solid var(--fg-color-0125);
-  }
-
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
-    border-left-style: none;
-  }
 
   // ルータービューヘッダー
   &__header {
