@@ -24,11 +24,11 @@ function onActivate () {
     <template v-if="!processing">
       <SVGIcon
         v-if="direction === 'new'"
-        name="cursorUp"
+        name="arrowUp"
       />
       <SVGIcon
         v-else
-        name="cursorDown"
+        name="arrowDown"
       />
     </template>
     <Loader v-else />
@@ -44,22 +44,15 @@ function onActivate () {
   justify-content: center;
   position: relative;
   min-height: 3rem;
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--fg-color-0125);
-  }
-  &:last-child {
-    border-top: 1px solid var(--fg-color-0125);
-  }
 
   // 抜け漏れ取得ボタン
   &[data-direction="middle"] {
-    background-color: var(--accent-color-025);
-    border-bottom: 1px solid var(--fg-color-0125);
+    background-color: var(--fg-color-0125);
   }
 
   & > .svg-icon {
     font-size: 1.5rem;
-    fill: var(--fg-color-075);
+    fill: var(--fg-color-05);
   }
 
   &:focus, &:hover {
@@ -69,6 +62,7 @@ function onActivate () {
   }
 
   & > .loader {
+    background-color: unset;
     font-size: 0.75rem;
     z-index: 1;
   }

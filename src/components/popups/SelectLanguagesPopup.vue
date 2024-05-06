@@ -78,11 +78,6 @@ function close () {
 
   .checkbox {
     min-height: unset !important;
-
-    &:first-child,
-    &:nth-child(2) {
-      border-top-style: none;
-    }
   }
 
   .svg-icon--help {

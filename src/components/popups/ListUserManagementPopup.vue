@@ -163,12 +163,9 @@ async function clicked (list: TTList) {
       }
 
       &-body {
+        grid-gap: 0;
         padding: 0;
       }
-    }
-
-    .user-box {
-      pointer-events: none;
     }
 
     .list-card {
@@ -176,15 +173,17 @@ async function clicked (list: TTList) {
       flex-direction: row;
       align-items: flex-end;
       grid-gap: 1em;
-      &:first-child {
-        border-top: 1px solid var(--fg-color-0125);
-      }
     }
   }
 
   // 対象リストユーザー
   .user-box {
-    margin: 1em 1em 0;
+    background-color: rgb(var(--bg-color));
+    padding: 1em;
+    pointer-events: none;
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }
 }
 </style>

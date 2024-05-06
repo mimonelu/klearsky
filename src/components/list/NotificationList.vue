@@ -230,9 +230,6 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 // 通知グループ
 .notification-group {
   padding: 1rem;
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--fg-color-0125);
-  }
   &[data-is-new="true"] {
     background-color: var(--accent-color-0125);
   }

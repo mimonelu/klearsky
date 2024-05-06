@@ -73,10 +73,12 @@ const state = reactive<{
 
   &__form {
     background-color: rgb(var(--bg-color), var(--main-area-opacity));
-    border-bottom: 1px solid var(--fg-color-0125);
     display: flex;
     grid-gap: 0.5rem;
     padding: 0.5rem;
+    &:empty {
+      display: none;
+    }
 
     &:deep() {
       form {
@@ -101,8 +103,5 @@ const state = reactive<{
 .tab__button--tagged-suggestions > .svg-icon {
   --fg-color: 255, 0, 0;
   font-size: 1.5rem;
-}
-[data-path="/search/tagged-suggestions"] .search-view__form {
-  border-bottom-style: none;
 }
 </style>

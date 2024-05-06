@@ -271,10 +271,22 @@ function removeMyFeed (uri: string) {
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 
     .textlink--icon {
+      --alpha: 0.5;
       font-size: 0.875rem;
+      &:focus, &:hover {
+        --alpha: 1.0;
+      }
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color), var(--alpha));
+      }
+
+      & > span {
+        color: rgb(var(--fg-color), var(--alpha));
+      }
     }
 
     button {
@@ -384,14 +396,25 @@ function removeMyFeed (uri: string) {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    &.router-link-active[data-is-selected="true"] > span {
-      color: var(--accent-color-075);
-      font-weight: bold;
+
+    &.router-link-active[data-is-selected="true"] {
+      .svg-icon--shimmer {
+        fill: rgb(var(--accent-color));
+      }
+
+      .lazy-image {
+        box-shadow: 0 0 0 2px rgb(var(--accent-color));
+      }
+
+      & > span {
+        color: rgb(var(--accent-color));
+        font-weight: bold;
+      }
     }
   }
   &[data-edit-mode="false"] &__content {
     border-top: 2px solid transparent;
-    padding: calc(0.25rem - 2px) 0 0.25rem;
+    padding: calc(0.25rem - 2px) 0 0.25rem 2px;
   }
 }
 </style>

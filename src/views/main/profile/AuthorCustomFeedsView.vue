@@ -67,8 +67,4 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 .feed-card-container {
   flex-grow: 1;
 }
-
-.feed-card:not(:last-child) {
-  border-bottom: 1px solid var(--fg-color-0125);
-}
 </style>

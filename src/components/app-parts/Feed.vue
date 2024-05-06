@@ -31,6 +31,8 @@ function removeThisPost (uri: string) {
       class="folder"
       @click="feed.__folding = !feed.__folding"
     >
+      <SVGIcon name="cursorUp" />
+
       <!-- 折り畳みリプライオープナー -->
       <div
         v-if="feed.reply != null"
@@ -115,24 +117,27 @@ function removeThisPost (uri: string) {
 
 <style lang="scss" scoped>
 .folder {
+  --alpha: 0.5;
   cursor: pointer;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1em;
+  grid-template-columns: auto 1fr 1fr;
+  grid-gap: 0.5em;
   align-items: center;
   padding: 0.75em;
   &:focus, &:hover {
-    .folder__item {
-      --alpha: 0.75;
+    --alpha: 0.75;
 
-      & > .author-handle {
-        --fg-color-05: unset;
-      }
+    .folder__item  > .author-handle {
+      --fg-color-05: unset;
     }
   }
 
+  & > .svg-icon {
+    fill: rgb(var(--fg-color), var(--alpha));
+    font-size: 0.875em;
+  }
+
   &__item {
-    --alpha: 0.5;
     display: grid;
     grid-gap: 0.5em;
     grid-template-columns: auto auto 1fr;

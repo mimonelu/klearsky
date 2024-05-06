@@ -155,7 +155,6 @@ function clicked (list?: TTList) {
   flex-direction: column;
 
   &__header {
-    border-bottom: 1px solid var(--fg-color-0125);
     justify-content: flex-end;
     padding: 0.25rem;
   }
@@ -174,9 +173,5 @@ function clicked (list?: TTList) {
   &__list-card-container {
     flex-grow: 1;
   }
-}
-
-.list-card:not(:last-child) {
-  border-bottom: 1px solid var(--fg-color-0125);
 }
 </style>

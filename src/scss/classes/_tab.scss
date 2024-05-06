@@ -1,18 +1,19 @@
 .tab {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-bottom: 1px solid var(--fg-color-0125);
   display: flex;
   min-height: 3rem;
   max-height: 3rem;
 
   &__button {
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     flex: 1;
     flex-grow: 1;
-    grid-gap: 0.5rem;
+    grid-gap: 0.25rem;
     overflow: hidden;
     padding: 0.5rem 0;
     position: relative;
@@ -46,10 +47,6 @@
     &[data-disabled="true"] {
       filter: contrast(0);
     }
-    &.router-link-active,
-    &[data-focused="true"] {
-      background-color: var(--accent-color-025);
-    }
     &:focus, &:hover {
       & > span {
         color: rgb(var(--fg-color));
@@ -57,6 +54,18 @@
 
       & > .svg-icon {
         fill: rgb(var(--fg-color));
+      }
+    }
+    &.router-link-active,
+    &[data-focused="true"] {
+      border-top-color: rgb(var(--accent-color));
+
+      & > span {
+        color: rgb(var(--accent-color));
+      }
+
+      & > .svg-icon {
+        fill: rgb(var(--accent-color));
       }
     }
   }

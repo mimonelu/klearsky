@@ -351,14 +351,6 @@ function openMyFeedsSortPopover ($event: Event) {
     }
   }
 
-  .feed-card,
-  .special-feed-card,
-  .list-card {
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--fg-color-0125);
-    }
-  }
-
   .textlabel {
     margin: 1rem;
   }

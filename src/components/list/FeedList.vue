@@ -151,10 +151,5 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 .feed {
   display: flex;
   flex-direction: column;
-  &:not(:empty):not(:last-child)::after {
-    border-bottom: 1px solid var(--fg-color-0125);
-    content: "";
-    display: block;
-  }
 }
 </style>

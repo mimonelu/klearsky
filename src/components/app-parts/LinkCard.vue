@@ -490,7 +490,7 @@ getEmbeddedContentId()
   // 埋込型リンクカード - Spotify
   &--spotify {
     background-color: var(--fg-color-0125);
-    border-radius: var(--border-radius-middle);
+    border-radius: 1rem;
   }
 
   // 埋込型リンクカード - Tenor

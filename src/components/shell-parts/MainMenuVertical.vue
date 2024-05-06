@@ -236,7 +236,7 @@ function moveToBottom () {
 
   & > .label {
     color: rgb(var(--color), var(--alpha));
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: bold;
     line-height: 1.25;
     overflow: hidden;
@@ -306,7 +306,15 @@ function moveToBottom () {
   }
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
-    background-color: var(--accent-color-025);
+    --fg-color: var(--accent-color);
+
+    .svg-icon {
+      fill: rgb(var(--accent-color));
+    }
+
+    .label {
+      color: rgb(var(--accent-color));
+    }
   }
 
   // ポスト送信ポップアップトリガー

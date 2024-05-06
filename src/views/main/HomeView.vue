@@ -145,8 +145,6 @@ async function autoScrollSliderMenu () {
             <LazyImage :src="item.value.avatar" />
             <span>{{ item.value.name }}</span>
           </RouterLink>
-
-          <div class="slider-menu__separator" />
         </template>
       </div>
 
@@ -169,7 +167,6 @@ async function autoScrollSliderMenu () {
 
 .slider-menu {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-bottom: 1px solid var(--fg-color-0125);
   display: flex;
   align-items: center;
   overflow-x: auto;
@@ -199,7 +196,15 @@ async function autoScrollSliderMenu () {
     }
     &.router-link-active[data-is-selected="true"] {
       --color: rgb(var(--accent-color));
-      border-top: var(--link-border-width) solid rgb(var(--accent-color));
+      border-top-color: rgb(var(--accent-color));
+
+      .svg-icon--shimmer {
+        fill: rgb(var(--accent-color));
+      }
+
+      .lazy-image {
+        box-shadow: 0 0 0 2px rgb(var(--accent-color));
+      }
     }
 
     .svg-icon--shimmer,
@@ -226,17 +231,6 @@ async function autoScrollSliderMenu () {
       max-width: 8rem;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-  }
-
-  &__separator {
-    background-color: var(--fg-color-0125);
-    min-width: 1px;
-    max-width: 1px;
-    height: 1.5rem;
-    & + &,
-    &:last-child {
-      display: none;
     }
   }
 }

@@ -125,7 +125,6 @@ function getLabelerEndpoint (item: any): undefined | string {
     grid-gap: 0.25rem;
     user-select: text;
     &:not(:last-child) {
-      border-bottom: 1px solid var(--fg-color-0125);
       padding-bottom: 1rem;
     }
   }

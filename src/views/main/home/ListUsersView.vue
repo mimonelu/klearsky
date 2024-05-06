@@ -90,7 +90,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-grow: 1;
 
   &__list-card-skeleton {
-    border-bottom: 1px solid var(--fg-color-0125);
     min-height: 8rem;
   }
 
@@ -105,14 +104,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   }
 }
 
-.list-card {
-  border-bottom: 1px solid var(--fg-color-0125);
-}
-
 .user-box {
   padding: 1em;
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--fg-color-0125);
-  }
 }
 </style>

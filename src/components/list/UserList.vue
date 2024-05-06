@@ -130,7 +130,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 .follow-button {
   font-size: 0.875rem;
   padding: 0.25rem 0;
-  min-width: 7rem;
+  min-width: 8rem;
 }
 
 .loader {

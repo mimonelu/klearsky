@@ -197,12 +197,7 @@ function openKeywordHistoryPopover ($event: Event) {
   flex-grow: 1;
 }
 
-.post {
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--fg-color-0125);
-  }
-  &[data-position="preview"] {
-    padding: 1em;
-  }
+.post[data-position="preview"] {
+  padding: 1em;
 }
 </style>

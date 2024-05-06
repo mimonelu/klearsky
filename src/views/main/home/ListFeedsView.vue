@@ -80,13 +80,8 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-grow: 1;
 
   &__list-card-skeleton {
-    border-bottom: 1px solid var(--fg-color-0125);
     min-height: 8rem;
   }
-}
-
-.list-card {
-  border-bottom: 1px solid var(--fg-color-0125);
 }
 
 .feeds {
@@ -98,10 +93,5 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 .feed {
   display: flex;
   flex-direction: column;
-  &:not(:empty):not(:last-child)::after {
-    border-bottom: 1px solid var(--fg-color-0125);
-    content: "";
-    display: block;
-  }
 }
 </style>

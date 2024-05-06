@@ -122,7 +122,6 @@ async function openSendPostPopup () {
 <style lang="scss" scoped>
 .main-menu-horizontal {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-top: 1px solid var(--fg-color-025);
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   min-height: var(--sp-menu-height);

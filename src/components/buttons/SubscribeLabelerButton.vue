@@ -21,6 +21,9 @@ const state = reactive<{
 
 async function toggleLabelerSubscribe () {
   Util.blurElement()
+  if (state.processing) {
+    return
+  }
   if (mainState.currentProfile == null) {
     return
   }
