@@ -968,8 +968,8 @@ function toggleOldestQuotedPostDisplay () {
               v-if="state.hasListCard"
               :list="(post.embed as any).record"
               :isCompact="false"
+              :toggleDisplay="false"
               :orderButtonDisplay="false"
-              :createDisplay="true"
               @click.prevent.stop
               @deleteList="deleteList"
               @onActivateMention="$emit('click', $event)"

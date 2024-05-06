@@ -16,6 +16,7 @@ const emit = defineEmits<{(event: string, params?: any): void}>()
 const props = defineProps<{
   list: TTList
   isCompact?: boolean
+  toggleDisplay: boolean
   orderButtonDisplay?: boolean
   createDisplay?: boolean
 }>()
@@ -90,7 +91,7 @@ const state = reactive<{
       .some((uri: string) => uri === props.list.uri) ?? false
   }),
   loaderDisplay: false,
-  detailDisplay: !props.orderButtonDisplay,
+  detailDisplay: !props.toggleDisplay,
 })
 
 function openListEditPopup () {
@@ -340,7 +341,7 @@ function toggleDetail () {
 
     <!-- その他のボタンコンテナ -->
     <div
-      v-if="orderButtonDisplay"
+      v-if="toggleDisplay"
       class="list-card__etc-button-container"
     >
       <!-- オーダーボタン -->

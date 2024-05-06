@@ -115,8 +115,8 @@ async function submitCallback () {
         :list="list"
         :isCompact="true"
         :menuDisplay="false"
+        :toggleDisplay="false"
         :orderButtonDisplay="false"
-        :creatorDisplay="true"
         @keydown.prevent.stop
         @keyup.prevent.stop
       />

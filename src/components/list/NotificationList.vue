@@ -213,8 +213,8 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
           v-if="notificationGroup.list != null"
           :list="notificationGroup.list"
           :isCompact="false"
+          :toggleDisplay="false"
           :orderButtonDisplay="false"
-          :createDisplay="true"
           @click.prevent.stop
           @close="$emit('close')"
           @deleteList="deleteList(notificationGroup)"
@@ -264,8 +264,9 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
     }
   }
 
-  // フィードジェネレーター
-  & > .feed-card {
+  // フィードカード・リストカード
+  & > .feed-card,
+  & > .list-card {
     background-color: var(--accent-color-0125);
     border: 1px solid var(--accent-color-025);
     border-radius: var(--border-radius-middle);
