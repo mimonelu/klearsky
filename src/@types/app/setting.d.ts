@@ -12,7 +12,7 @@ type TTSetting = {
   globallineContentLanguages?: Array<string>
   globallineSkipPostHasNoLanguage?: boolean
   globallinePostTypes?: Array<string>
-  globallineMinFollowersCount?: string
+  globallineFollowersCountThreshold?: string
   globallineLayout?: "post" | "slim"
   hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean

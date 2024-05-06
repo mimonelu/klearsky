@@ -716,8 +716,8 @@ function saveSettings () {
     state.settings[did].globallineSkipPostHasNoLanguage = true
   if (state.settings[did].globallinePostTypes == null)
     state.settings[did].globallinePostTypes = ["post"]
-  if (state.settings[did].globallineMinFollowersCount == null)
-    state.settings[did].globallineMinFollowersCount = undefined
+  if (state.settings[did].globallineFollowersCountThreshold == null)
+    state.settings[did].globallineFollowersCountThreshold = undefined
   if (state.settings[did].globallineLayout == null)
     state.settings[did].globallineLayout = "post"
   if (state.settings[did].colorTheme == null)

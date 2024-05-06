@@ -45,16 +45,16 @@ const easyFormProps: TTEasyForm = {
       onUpdate: saveSetting,
     },
 
-    // フォロワー数の最小値によるフィルタリング
+    // フォロワー数によるフィルタリング
     {
       state: mainState.currentSetting,
-      model: "globallineMinFollowersCount",
-      label: $t("globallineMinFollowersCount"),
-      placeholder: $t("globallineMinFollowersCountPlaceholder"),
+      model: "globallineFollowersCountThreshold",
+      label: $t("globallineFollowersCountThreshold"),
+      placeholder: $t("globallineFollowersCountThresholdPlaceholder"),
       type: "text",
       autocomplete: "off",
       inputmode: "numeric",
-      pattern: "^[0-9]+$",
+      pattern: "^[\\-0-9]+$",
       onInput: saveSetting,
     },
 
@@ -97,7 +97,11 @@ function saveSetting () {
       </h2>
     </template>
     <template #body>
-      <EasyForm v-bind="easyFormProps" />
+      <EasyForm v-bind="easyFormProps">
+        <template #free-3>
+          <p>{{ $t("globallineFollowersCountThresholdDescription") }}</p>
+        </template>
+      </EasyForm>
     </template>
   </Popup>
 </template>

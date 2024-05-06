@@ -106,7 +106,15 @@ export default class {
       console.warn("[klearsky/subscribeRepos]", "body?.blocks == null", data)
       return
     }
-    const car = CarBufferReader.fromBytes(body.blocks)
+    let car
+
+    // Unexpected end of data 対策
+    try {
+      car = CarBufferReader.fromBytes(body.blocks)
+    } catch (error: any) {
+      console.error("[klearsky/CarBufferReader.fromBytes]", error)
+    }
+
     if (this.messageCallback != null) {
       this.messageCallback()
     }
@@ -120,7 +128,7 @@ export default class {
       if (!op.cid) {
         continue
       }
-      const block = car.get(op.cid)
+      const block = car?.get(op.cid)
       if (!block) {
         continue
       }

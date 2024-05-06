@@ -190,11 +190,17 @@ function destroyProfileTimer () {
 }
 
 function isPostVisible (post: TTPost): boolean {
-  return mainState.currentSetting.globallineMinFollowersCount == null ||
-    (
-      mainState.currentSetting.globallineMinFollowersCount != null &&
-      (((post.author?.followersCount as number) ?? 0) >= Number(mainState.currentSetting.globallineMinFollowersCount))
-    )
+  const followersCountThresholdString = mainState.currentSetting.globallineFollowersCountThreshold
+  if (followersCountThresholdString == null || followersCountThresholdString === "") {
+    return true
+  }
+  const followersCountThreshold = Number(followersCountThresholdString)
+  const authorFollowersCount = post.author?.followersCount as undefined | number
+  return followersCountThreshold === 0
+    ? (authorFollowersCount ?? - 1) === followersCountThreshold
+    : followersCountThreshold > 0
+      ? (authorFollowersCount ?? 0) >= followersCountThreshold
+      : (authorFollowersCount ?? Number.MAX_SAFE_INTEGER) <= Math.abs(followersCountThreshold)
 }
 
 // ポストアクション
@@ -339,7 +345,7 @@ function onMutated () {
       >
       <div
         v-for="post of mainState.globallinePosts"
-        :key="post.cid"
+        :key="post.uri"
         class="post-wrapper"
         :data-is-reply="post.record.reply != null"
         :data-is-quote-repost="post.record.embed?.record != null"
