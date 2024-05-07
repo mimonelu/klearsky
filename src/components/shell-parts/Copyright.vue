@@ -8,23 +8,29 @@ const yyyy = (new Date).getFullYear()
   <div class="copyright">
     <small>Klearsky v{{ Package.version }} alpha (@atproto/api v{{ Package.dependencies["@atproto/api"] }}) &copy; {{ yyyy }} mimonelu</small>
     <a
-      class="textlink"
+      class="textlink--underline"
       href="https://github.com/mimonelu/klearsky"
       rel="noreferrer"
       target="_blank"
-    >GitHub</a>
+    >
+      <span>GitHub</span>
+    </a>
     <RouterLink
-      class="textlink"
+      class="textlink--underline"
       :to="{ path: '/profile/feeds', query: { account: 'mimonelu.net' } }"
-    >Bluesky</RouterLink>
+    >
+      <span>Bluesky</span>
+    </RouterLink>
     <span>/</span>
     <small>Bluesky &copy; {{ yyyy }} Bluesky PBC</small>
     <a
-      class="textlink"
+      class="textlink--underline"
       href="https://blueskyweb.xyz/"
       rel="noreferrer"
       target="_blank"
-    >Web</a>
+    >
+      <span>Web</span>
+    </a>
   </div>
 </template>
 
@@ -43,6 +49,10 @@ const yyyy = (new Date).getFullYear()
     &:last-child {
       margin-right: 0;
     }
+  }
+
+  .textlink--underline {
+    --accent-color: var(--fg-color-05);
   }
 }
 </style>

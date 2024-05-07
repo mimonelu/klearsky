@@ -1183,13 +1183,21 @@ function broadcastListener (event: MessageEvent) {
               <li>{{ $t("autoTranslationRemarks1") }}</li>
               <li>{{ $t("autoTranslationRemarks2") }}</li>
               <li>{{ $t("autoTranslationRemarks3") }}</li>
-              <li><a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">{{ $t("autoTranslationRemarks4") }}</a></li>
+              <li>
+                <a class="textlink" href="https://mymemory.translated.net/" rel="noreferrer" target="_blank">
+                  <span>{{ $t("autoTranslationRemarks4") }}</span>
+                </a>
+              </li>
             </ul>
           </template>
 
           <template v-else-if="state.htmlPopupProps.type === 'autoTranslationIgnoreLanguage'">
             <ul class="bullet-points">
-              <li><a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">List of ISO 639-1 codes</a></li>
+              <li>
+                <a class="textlink" href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" rel="noreferrer" target="_blank">
+                  <span>List of ISO 639-1 codes</span>
+                </a>
+              </li>
             </ul>
           </template>
 

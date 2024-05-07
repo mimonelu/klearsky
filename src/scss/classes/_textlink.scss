@@ -1,23 +1,42 @@
 .textlink,
-.textlink--icon {
+.textlink--icon,
+.textlink--underline {
   color: rgb(var(--accent-color));
   cursor: pointer;
-  line-height: 1.25;
+  line-height: var(--line-height-low);
 
   & > .svg-icon {
     fill: rgb(var(--accent-color));
   }
 
   & > span {
-    line-height: 1.25;
-  }
-
-  &:focus, &:hover {
-    filter: hue-rotate(45deg);
+    line-height: var(--line-height-low);
   }
 }
+
+.textlink {
+  &:focus > span, &:hover > span {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
 .textlink--icon {
   display: inline-flex;
   align-items: center;
   grid-gap: 0.5rem;
+
+  &:focus, &:hover {
+    filter: brightness(1.25);
+  }
+}
+
+.textlink--underline {
+  & > span {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  &:focus > span, &:hover > span {
+    text-decoration: unset;
+  }
 }

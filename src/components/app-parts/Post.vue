@@ -1570,7 +1570,7 @@ function toggleOldestQuotedPostDisplay () {
   white-space: pre-wrap;
 
   // 折り返されたURLの隙間が選択されないようにする
-  &:deep(.textlink) {
+  &:deep(.textlink > span) {
     padding-top: 0.125em;
     padding-bottom: 0.125em;
   }

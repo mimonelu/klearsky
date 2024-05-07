@@ -186,11 +186,12 @@ function validateUrl (urlObject: URL, text: string): boolean {
     <template v-for="segment of state.segments">
       <!-- 外部リンク -->
       <template v-if="segment.type === 'externalLink'">
-        <span
-          class="external-link"
-          :class="getUrlObject(segment.param ?? '') != null ? 'textlink' : ''"
+        <a
+          class="textlink external-link"
           @click.stop="openWindowIfCan(segment)"
-        >{{ segment.text }}</span>
+        >
+          <span>{{ segment.text }}</span>
+        </a>
       </template>
 
       <!-- 内部リンク -->
@@ -199,7 +200,9 @@ function validateUrl (urlObject: URL, text: string): boolean {
           class="textlink internal-link"
           :to="segment.param"
           @click.stop
-        >{{ segment.text }}</RouterLink>
+        >
+          <span>{{ segment.text }}</span>
+        </RouterLink>
       </template>
 
       <!-- メンション -->
@@ -208,7 +211,9 @@ function validateUrl (urlObject: URL, text: string): boolean {
           class="textlink mention"
           :to="`/profile/feeds?account=${segment.param}`"
           @click.stop="$emit('onActivateMention')"
-        >{{ segment.text }}</RouterLink>
+        >
+          <span>{{ segment.text }}</span>
+        </RouterLink>
       </template>
 
       <!-- ハッシュタグ -->
@@ -217,7 +222,9 @@ function validateUrl (urlObject: URL, text: string): boolean {
           class="textlink hash-tag"
           :to="`/search/post?text=%23${segment.param}`"
           @click.stop="emit('onActivateHashTag', segment.param)"
-        >{{ segment.text }}</RouterLink>
+        >
+          <span>{{ segment.text }}</span>
+        </RouterLink>
       </template>
 
       <!-- テキスト -->
@@ -230,7 +237,9 @@ function validateUrl (urlObject: URL, text: string): boolean {
         v-if="hasTranslateLink"
         class="textlink translate-link"
         @click.prevent.stop="$emit('translate')"
-      >{{ $t("translate") }}</a>
+      >
+        <span>{{ $t("translate") }}</span>
+      </a>
     </template>
   </div>
 </template>
@@ -242,15 +251,16 @@ function validateUrl (urlObject: URL, text: string): boolean {
 }
 
 .translate-link {
-  --accent-color: var(--fg-color);
-  --opacity: 0.5;
-  border-radius: 0.25em;
-  color: rgb(var(--accent-color), var(--opacity));
-  font-size: 0.875em;
-  padding: 0 0.25em;
+  padding: 0.125em 0.25em;
+  & > span {
+    --opacity: 0.5;
+    color: rgb(var(--fg-color), var(--opacity));
+    font-size: 0.875em;
+  }
   &:focus, &:hover {
-    --opacity: 0.75;
-    background-color: var(--accent-color-0125);
+    & > span {
+      --opacity: 1.0;
+    }
   }
 }
 </style>

@@ -348,13 +348,12 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       & > span {
         font-weight: bold;
         line-height: var(--line-height-high);
-        text-decoration: underline;
-        text-underline-offset: 2px;
         word-break: break-word;
       }
       &:focus, &:hover {
         & > span {
-          text-decoration: none;
+          text-decoration: underline;
+          text-underline-offset: 2px;
         }
       }
     }

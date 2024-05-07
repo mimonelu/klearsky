@@ -282,7 +282,6 @@ function removeMyFeed (uri: string) {
     & > .textlink--icon {
       --alpha: 0.5;
       font-size: 0.875rem;
-      grid-gap: 0.25rem;
       overflow: hidden;
       &:focus, &:hover {
         --alpha: 1.0;

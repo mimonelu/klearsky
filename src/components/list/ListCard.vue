@@ -490,7 +490,8 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       &:focus, &:hover {
         .list-card__name__label {
-          text-decoration: none;
+          text-decoration: underline;
+          text-underline-offset: 2px;
         }
       }
     }
@@ -498,8 +499,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     &__label {
       font-weight: bold;
       line-height: var(--line-height-high);
-      text-decoration: underline;
-      text-underline-offset: 2px;
       word-break: break-word;
     }
 

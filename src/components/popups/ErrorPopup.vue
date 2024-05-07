@@ -35,7 +35,7 @@ function close () {
         href="https://bsky.app/profile/mimonelu.net"
         rel="noreferrer"
         target="_blank"
-      >@mimonelu.net</a> </pre>
+      ><span>@mimonelu.net</span></a> </pre>
     </template>
   </Popup>
 </template>
