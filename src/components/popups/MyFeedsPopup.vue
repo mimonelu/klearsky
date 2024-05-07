@@ -336,7 +336,7 @@ function openMyFeedsSortPopover ($event: Event) {
 
       &-body {
         flex-grow: 1;
-        grid-gap: unset;
+        grid-gap: 1px;
         padding: unset;
       }
     }

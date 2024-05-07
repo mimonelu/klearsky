@@ -171,7 +171,10 @@ function clicked (list?: TTList) {
   }
 
   &__list-card-container {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+    grid-gap: 1px;
   }
 }
 </style>

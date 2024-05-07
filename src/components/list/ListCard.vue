@@ -411,10 +411,10 @@ function toggleDetail () {
   padding: 1em;
   position: relative;
   &[data-purpose="modList"] {
-    background-color: rgb(var(--notice-color), 0.0625);
+    background-color: rgb(var(--notice-color), 0.125);
   }
   &[data-purpose="unknownList"] {
-    background-color: var(--fg-color-00625);
+    background-color: var(--fg-color-0125);
   }
 
   // リスト詳細

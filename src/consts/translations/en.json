@@ -13,6 +13,8 @@
   "disabled": "Disabled",
   "feed": "Feed",
   "feeds": "Feeds",
+  "feedsAll": "All feeds",
+  "feedsPinned": "Pinned feeds",
   "show": "Show",
   "showOldestQuotedPost": "Show quote",
   "hideOldestQuotedPost": "Hide quote",

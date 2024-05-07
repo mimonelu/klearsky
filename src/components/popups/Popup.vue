@@ -171,7 +171,7 @@ function scrollListener () {
 
 .popup {
   background-color: rgb(var(--bg-color));
-  border: 1px solid var(--fg-color-0125);
+  border: 1px solid var(--fg-color-025);
   border-radius: var(--border-radius-large);
   box-shadow: 0 0 1rem 0 rgb(0, 0, 0, 0.5);
   color: rgb(var(--fg-color));
@@ -259,7 +259,7 @@ function scrollListener () {
   overflow-y: auto;
   overscroll-behavior: none;
   padding: 1.5rem;
-  @include scroll-bar("fgColor");
+  @include scroll-bar("transparent");
   &:first-child {
     padding-top: 1.5rem;
   }

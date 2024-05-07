@@ -95,8 +95,14 @@ function removeMyFeed (uri: string) {
         class="textlink--icon"
         @click="mainState.openMyFeedsPopup"
       >
-        <SVGIcon name="feed" />
-        <span>{{ $t("myFeeds") }}</span>
+        <template v-if="state.editMode">
+          <SVGIcon name="feed" />
+          <span>{{ $t("feedsAll") }}</span>
+        </template>
+        <template v-else>
+          <SVGIcon name="pin" />
+          <span>{{ $t("feedsPinned") }}</span>
+        </template>
       </a>
 
       <!-- 編集ボタン -->
@@ -273,9 +279,11 @@ function removeMyFeed (uri: string) {
     grid-gap: 0.5rem;
     margin-bottom: 0.5rem;
 
-    .textlink--icon {
+    & > .textlink--icon {
       --alpha: 0.5;
       font-size: 0.875rem;
+      grid-gap: 0.25rem;
+      overflow: hidden;
       &:focus, &:hover {
         --alpha: 1.0;
       }
@@ -286,13 +294,18 @@ function removeMyFeed (uri: string) {
 
       & > span {
         color: rgb(var(--fg-color), var(--alpha));
+        white-space: nowrap;
       }
     }
 
-    button {
+    & > button {
       font-size: 0.5rem;
       &:nth-child(2) {
         margin-left: auto;
+      }
+
+      & > span {
+        white-space: nowrap;
       }
     }
   }
