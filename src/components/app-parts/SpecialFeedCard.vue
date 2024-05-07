@@ -117,5 +117,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 // オーダーボタン
 .order-buttons {
   font-size: 0.875em;
+  justify-content: flex-end;
 }
 </style>

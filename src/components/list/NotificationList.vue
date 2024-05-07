@@ -200,7 +200,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
           v-if="notificationGroup.generator != null"
           :generator="notificationGroup.generator"
           :menuDisplay="true"
-          :toggleDisplay="false"
+          :detailDisplay="false"
           :orderButtonDisplay="false"
           :creatorDisplay="false"
           @click="$emit('close')"
@@ -212,8 +212,8 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
         <ListCard
           v-if="notificationGroup.list != null"
           :list="notificationGroup.list"
-          :isCompact="false"
-          :toggleDisplay="false"
+          :menuDisplay="true"
+          :detailDisplay="false"
           :orderButtonDisplay="false"
           @click.prevent.stop
           @close="$emit('close')"

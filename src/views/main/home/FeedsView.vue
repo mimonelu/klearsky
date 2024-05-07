@@ -43,7 +43,7 @@ const state = reactive<{
       v-if="state.generator != null"
       :generator="state.generator"
       :menuDisplay="true"
-      :toggleDisplay="true"
+      :detailDisplay="false"
       :orderButtonDisplay="false"
       :creatorDisplay="true"
       :unclickable="true"

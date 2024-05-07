@@ -121,7 +121,7 @@ function openKeywordHistoryPopover ($event: Event) {
           :key="generator.cid"
           :generator="generator"
           :menuDisplay="true"
-          :toggleDisplay="false"
+          :detailDisplay="true"
           :orderButtonDisplay="false"
           :creatorDisplay="true"
         />

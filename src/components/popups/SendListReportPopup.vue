@@ -113,9 +113,8 @@ async function submitCallback () {
     <template #body>
       <ListCard
         :list="list"
-        :isCompact="true"
         :menuDisplay="false"
-        :toggleDisplay="false"
+        :detailDisplay="true"
         :orderButtonDisplay="false"
         @keydown.prevent.stop
         @keyup.prevent.stop

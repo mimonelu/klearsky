@@ -12,7 +12,7 @@ const emit = defineEmits<{(name: string, params?: any): void}>()
 const props = defineProps<{
   generator: TTFeedGenerator
   menuDisplay: boolean
-  toggleDisplay: boolean
+  detailDisplay: boolean
   orderButtonDisplay: boolean
   creatorDisplay: boolean
   unclickable?: boolean
@@ -45,9 +45,14 @@ const state = reactive<{
     return mainState.currentFeedPreference?.pinned
       .some((uri: string) => uri === props.generator.uri) ?? false
   }),
-  detailDisplay: !props.toggleDisplay,
+  detailDisplay: props.detailDisplay,
   isUnknown: !props.generator.cid
 })
+
+function toggleDetailDisplay () {
+  Util.blurElement()
+  state.detailDisplay = !state.detailDisplay
+}
 
 function openFeedCardPopover ($event: Event) {
   Util.blurElement()
@@ -148,10 +153,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     item: props.generator,
   })
 }
-
-function toggleDetail () {
-  state.detailDisplay = !state.detailDisplay
-}
 </script>
 
 <template>
@@ -171,7 +172,13 @@ function toggleDetail () {
 
       <!-- フィード名 -->
       <div class="feed-card__display-name">
-        <span>{{ generator.displayName }}</span>
+        <button
+          type="button"
+          @click.prevent.stop="toggleDetailDisplay"
+        >
+          <SVGIcon :name="state.detailDisplay ? 'cursorDown' : 'cursorUp'" />
+          <span>{{ generator.displayName }}</span>
+        </button>
       </div>
 
       <!-- フィードライク数 -->
@@ -260,25 +267,16 @@ function toggleDetail () {
 
     <!-- その他のボタンコンテナ -->
     <div
-      v-if="toggleDisplay"
+      v-if="orderButtonDisplay"
       class="feed-card__etc-button-container"
     >
       <!-- オーダーボタン -->
       <OrderButtons
-        v-if="orderButtonDisplay"
         @moveTop="changeCustomFeedOrder('top')"
         @moveUp="changeCustomFeedOrder('up')"
         @moveDown="changeCustomFeedOrder('down')"
         @moveBottom="changeCustomFeedOrder('bottom')"
       />
-
-      <!-- 詳細トグル -->
-      <button
-        class="button--bordered feed-card__detail-toggle"
-        @click.prevent.stop="toggleDetail"
-      >
-        <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
-      </button>
     </div>
 
     <Loader
@@ -301,7 +299,6 @@ function toggleDetail () {
   }
 
   // テキスト選択
-  &[data-unclickable="true"] &__display-name,
   &[data-unclickable="true"] &__description {
     cursor: auto;
     user-select: text;
@@ -333,11 +330,34 @@ function toggleDetail () {
   // フィード名
   &__display-name {
     grid-area: n;
-    display: inline;
-    font-weight: bold;
-    line-height: var(--line-height-high);
     margin-bottom: 0.25em;
-    word-break: break-all;
+
+    & > button {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      grid-gap: 0.5em;
+      margin: -0.5em -0.5em 0;
+      padding: 0.5em 0.5em 0;
+
+      & > .svg-icon {
+        fill: var(--fg-color-05);
+        font-size: 0.875em;
+      }
+
+      & > span {
+        font-weight: bold;
+        line-height: var(--line-height-high);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        word-break: break-word;
+      }
+      &:focus, &:hover {
+        & > span {
+          text-decoration: none;
+        }
+      }
+    }
   }
 
   // フィードライク数
@@ -407,8 +427,8 @@ function toggleDetail () {
   &__bookmark {
     --color: var(--accent-color-0875);
     cursor: pointer;
-    margin: -0.5em;
-    padding: 0.5em;
+    margin: -0.625em -0.125em -0.625em -0.625em;
+    padding: 0.625em;
     &:focus, &:hover {
       --color: rgb(var(--accent-color));
     }
@@ -434,8 +454,8 @@ function toggleDetail () {
     --color: var(--fg-color-075);
     grid-area: m;
     cursor: pointer;
-    margin: -1em;
-    padding: 1em;
+    margin: -0.625em;
+    padding: 0.625em;
     &:focus, &:hover {
       --color: var(--fg-color-0875);
     }
@@ -483,13 +503,8 @@ function toggleDetail () {
   // その他のボタンコンテナ
   &__etc-button-container {
     display: flex;
+    justify-content: flex-end;
     grid-gap: 0.5em;
-  }
-
-  // 詳細トグル
-  &__detail-toggle {
-    font-size: 0.875em;
-    margin-left: auto;
   }
 }
 

@@ -16,7 +16,8 @@ const emit = defineEmits<{(event: string, params?: any): void}>()
 const props = defineProps<{
   list: TTList
   isCompact?: boolean
-  toggleDisplay: boolean
+  menuDisplay: boolean
+  detailDisplay: boolean
   orderButtonDisplay?: boolean
   createDisplay?: boolean
 }>()
@@ -91,8 +92,16 @@ const state = reactive<{
       .some((uri: string) => uri === props.list.uri) ?? false
   }),
   loaderDisplay: false,
-  detailDisplay: !props.toggleDisplay,
+  detailDisplay: props.detailDisplay,
 })
+
+function toggleDetailDisplay () {
+  Util.blurElement()
+  if (props.isCompact) {
+    return
+  }
+  state.detailDisplay = !state.detailDisplay
+}
 
 function openListEditPopup () {
   mainState.openListEditPopup({
@@ -217,10 +226,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     item: props.list,
   })
 }
-
-function toggleDetail () {
-  state.detailDisplay = !state.detailDisplay
-}
 </script>
 
 <template>
@@ -247,13 +252,19 @@ function toggleDetail () {
 
       <!-- リスト名 -->
       <div class="list-card__name">
-        <span class="list-card__name__label">{{ list.name }}</span>
+        <button
+          type="button"
+          @click.prevent.stop="toggleDetailDisplay"
+        >
+          <SVGIcon :name="state.detailDisplay ? 'cursorDown' : 'cursorUp'" />
+          <span class="list-card__name__label">{{ list.name }}</span>
 
-        <!-- リストユーザー数 -->
-        <span
-          v-if="list.items != null"
-          class="list-card__name__number"
-        >({{ list.items.length }})</span>
+          <!-- リストユーザー数 -->
+          <span
+            v-if="list.items != null"
+            class="list-card__name__number"
+          >({{ list.items.length }})</span>
+        </button>
       </div>
 
       <!-- リスト種別 -->
@@ -305,7 +316,7 @@ function toggleDetail () {
 
       <!-- リストポップオーバートリガー -->
       <button
-        v-if="!isCompact"
+        v-if="menuDisplay && !isCompact"
         class="list-card__menu-button"
         @click.stop.prevent="openListCardPopover"
       >
@@ -314,9 +325,9 @@ function toggleDetail () {
     </div>
 
     <!-- リスト説明文 -->
-    <div v-if="state.detailDisplay && ((list.description && !isCompact) || !state.isOwn)">
+    <div v-if="state.detailDisplay && !isCompact && (list.description || !state.isOwn)">
       <HtmlText
-        v-if="list.description && !isCompact"
+        v-if="list.description"
         class="list-card__description"
         dir="auto"
         :text="list.description"
@@ -341,30 +352,21 @@ function toggleDetail () {
 
     <!-- その他のボタンコンテナ -->
     <div
-      v-if="toggleDisplay"
+      v-if="orderButtonDisplay && !isCompact"
       class="list-card__etc-button-container"
     >
       <!-- オーダーボタン -->
       <OrderButtons
-        v-if="orderButtonDisplay"
         @moveTop="changeCustomFeedOrder('top')"
         @moveUp="changeCustomFeedOrder('up')"
         @moveDown="changeCustomFeedOrder('down')"
         @moveBottom="changeCustomFeedOrder('bottom')"
       />
-
-      <!-- 詳細トグル -->
-      <button
-        class="button--bordered list-card__detail-toggle"
-        @click.prevent.stop="toggleDetail"
-      >
-        <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
-      </button>
     </div>
 
     <!-- リストボタンコンテナ -->
     <div
-      v-if="!isCompact && !!props.list.cid"
+      v-if="!!props.list.cid && !isCompact && menuDisplay"
       class="list-card__list-button-container group-buttons"
     >
       <!-- リストフィードボタン -->
@@ -436,6 +438,18 @@ function toggleDetail () {
       "v v v"
       "a n n"
       "a t i";
+
+    .list-card__name {
+      pointer-events: none;
+
+      .svg-icon {
+        display: none;
+      }
+
+      &__label {
+        text-decoration: unset;
+      }
+    }
   }
 
   // Viewer ラベル
@@ -459,14 +473,34 @@ function toggleDetail () {
   // リスト名
   &__name {
     grid-area: n;
-    display: inline;
-    font-weight: bold;
-    line-height: var(--line-height-high);
     margin-bottom: 0.25em;
-    word-break: break-all;
+
+    & > button {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      grid-gap: 0.5em;
+      margin: -0.5em -0.5em 0;
+      padding: 0.5em 0.5em 0;
+
+      & > .svg-icon {
+        fill: var(--fg-color-05);
+        font-size: 0.875em;
+      }
+
+      &:focus, &:hover {
+        .list-card__name__label {
+          text-decoration: none;
+        }
+      }
+    }
 
     &__label {
-      margin-right: 0.5em;
+      font-weight: bold;
+      line-height: var(--line-height-high);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      word-break: break-word;
     }
 
     // リストユーザー数
@@ -536,8 +570,8 @@ function toggleDetail () {
   &__bookmark {
     --color: var(--accent-color-0875);
     cursor: pointer;
-    margin: -0.5em;
-    padding: 0.5em;
+    margin: -0.625em -0.125em -0.625em -0.625em;
+    padding: 0.625em;
     &:focus, &:hover {
       --color: rgb(var(--accent-color));
     }
@@ -563,8 +597,8 @@ function toggleDetail () {
     --color: var(--fg-color-075);
     grid-area: m;
     cursor: pointer;
-    margin: -1em;
-    padding: 1em;
+    margin: -0.625em;
+    padding: 0.625em;
     &:focus, &:hover {
       --color: var(--fg-color-0875);
     }
@@ -601,13 +635,8 @@ function toggleDetail () {
   // その他のボタンコンテナ
   &__etc-button-container {
     display: flex;
+    justify-content: flex-end;
     grid-gap: 0.5em;
-  }
-
-  // 詳細トグル
-  &__detail-toggle {
-    font-size: 0.875em;
-    margin-left: auto;
   }
 
   // リストボタンコンテナ

@@ -33,7 +33,8 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <ListCard
       v-if="mainState.currentList"
       :list="mainState.currentList"
-      :toggleDisplay="true"
+      :menuDisplay="true"
+      :detailDisplay="false"
       :orderButtonDisplay="false"
       @deleteList="deleteList"
     />
