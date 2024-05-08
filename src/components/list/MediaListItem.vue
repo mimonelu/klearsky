@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
+import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 

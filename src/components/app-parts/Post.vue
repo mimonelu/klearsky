@@ -3,7 +3,7 @@ import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type Compu
 import { useRouter } from "vue-router"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
-import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
+import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/app-parts/DisplayName.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"

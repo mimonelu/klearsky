@@ -2,7 +2,7 @@
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
-import ContentFilteringToggle from "@/components/app-parts/ContentFilteringToggle.vue"
+import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/app-parts/DisplayName.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
