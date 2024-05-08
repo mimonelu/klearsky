@@ -51,7 +51,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 </script>
 
 <template>
-  <div class="user-list">
+  <div class="user-box-list">
     <div class="users">
       <UserBox
         v-for="user of currentUsers"
@@ -92,7 +92,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 </template>
 
 <style lang="scss" scoped>
-.user-list {
+.user-box-list {
   display: flex;
   flex-direction: column;
   position: relative;

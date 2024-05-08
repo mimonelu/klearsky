@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import UserList from "@/components/list/UserList.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import UserBoxList from "@/components/list/UserBoxList.vue"
 
 const mainState = inject("state") as MainState
 </script>
@@ -18,7 +18,7 @@ const mainState = inject("state") as MainState
       </div>
     </div>
 
-    <UserList type="following" />
+    <UserBoxList type="following" />
   </div>
 </template>
 
@@ -32,7 +32,7 @@ const mainState = inject("state") as MainState
     margin: 1rem;
   }
 
-  .user-list {
+  .user-box-list {
     flex-grow: 1;
   }
 }

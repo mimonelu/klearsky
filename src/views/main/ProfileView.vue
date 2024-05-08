@@ -1078,7 +1078,7 @@ function onActivateAccountMaskToggle () {
 }
 
 .feed-list,
-.user-list {
+.user-box-list {
   flex-grow: 1;
 }
 </style>

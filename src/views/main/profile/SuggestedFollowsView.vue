@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import UserList from "@/components/list/UserList.vue"
+import UserBoxList from "@/components/list/UserBoxList.vue"
 </script>
 
 <template>
-  <UserList type="suggestedFollows" />
+  <UserBoxList type="suggestedFollows" />
 </template>
