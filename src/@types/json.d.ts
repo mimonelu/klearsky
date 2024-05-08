@@ -6,7 +6,7 @@ interface TTLabelBehavior {
   selectable?: boolean
 }
 
-declare module "@/consts/label_behaviors.json" {
+declare module "@/consts/label-behaviors.json" {
   const data: {
     [k: string]: TTLabelBehavior
   };

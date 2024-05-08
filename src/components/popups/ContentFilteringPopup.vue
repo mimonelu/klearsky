@@ -3,7 +3,7 @@ import { inject, onMounted, reactive } from "vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
-import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
+import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
 import OPTIONS from "@/consts/options.json"
 
 const emit = defineEmits<{(event: string): void}>()

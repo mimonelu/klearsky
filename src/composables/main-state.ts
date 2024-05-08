@@ -11,7 +11,7 @@ import MyLists from "@/composables/main-state/my-lists"
 import MyWorker from "@/composables/main-state/my-worker"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
-import LABEL_BEHAVIORS from "@/consts/label_behaviors.json"
+import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
 import LANGUAGES from "@/consts/languages"
 
 export const state = reactive<MainState>({} as MainState)
