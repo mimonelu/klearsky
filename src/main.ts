@@ -8,8 +8,8 @@ import IntersectionObserverDirective from "@/plugins/intersection-observer-direc
 import router from "@/router"
 
 // 翻訳
-import translationEn from "@/consts/translations/en.json"
-import translationJa from "@/consts/translations/ja.json"
+import translationEn from "@/translations/en.json"
+import translationJa from "@/translations/ja.json"
 
 const app = createApp(App)
 app.use(router)
