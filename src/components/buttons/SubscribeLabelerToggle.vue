@@ -53,7 +53,7 @@ async function toggleLabelerSubscribe () {
 
 <template>
   <button
-    class="subscribe-labeler-button"
+    class="subscribe-labeler-toggle"
     :class="state.isLabelerSubscribing ? 'button' : 'button--bordered'"
     @click.stop="toggleLabelerSubscribe"
   >
@@ -64,7 +64,7 @@ async function toggleLabelerSubscribe () {
 </template>
 
 <style lang="scss" scoped>
-.subscribe-labeler-button {
+.subscribe-labeler-toggle {
   --fg-color: var(--share-color);
   position: relative;
   &[data-is-processing="true"] {

@@ -16,7 +16,7 @@ import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/app-parts/Post.vue"
-import SubscribeLabelerButton from "@/components/buttons/SubscribeLabelerButton.vue"
+import SubscribeLabelerToggle from "@/components/buttons/SubscribeLabelerToggle.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 import Util from "@/composables/util"
@@ -457,8 +457,8 @@ function onActivateAccountMaskToggle () {
               v-if="state.isLabeler"
               class="button-container"
             >
-              <!-- ラベラーサブスクライブボタン -->
-              <SubscribeLabelerButton />
+              <!-- ラベラーサブスクライブトグル -->
+              <SubscribeLabelerToggle />
             </div>
 
             <!-- 説明文 -->
@@ -962,8 +962,8 @@ function onActivateAccountMaskToggle () {
   max-width: 4rem;
 }
 
-// ラベラーサブスクライブボタン
-.subscribe-labeler-button:deep() {
+// ラベラーサブスクライブトグル
+.subscribe-labeler-toggle:deep() {
   & > span {
     font-size: 0.875rem;
   }
