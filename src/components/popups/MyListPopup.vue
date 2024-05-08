@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import ListCardList from "@/components/list/ListCardList.vue"
+import ListCardList from "@/components/lists/ListCardList.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 

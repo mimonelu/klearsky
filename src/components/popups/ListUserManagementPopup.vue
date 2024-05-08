@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import ListCardList from "@/components/list/ListCardList.vue"
+import ListCardList from "@/components/lists/ListCardList.vue"
 import Loader from "@/components/common/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"

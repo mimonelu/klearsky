@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import MediaListItem from "@/components/list/MediaListItem.vue"
+import MediaListItem from "@/components/lists/MediaListItem.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 defineProps<{

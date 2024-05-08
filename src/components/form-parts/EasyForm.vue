@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { nextTick, onMounted, reactive, ref } from "vue"
-import AccountSuggestionList from "@/components/list/AccountSuggestionList.vue"
+import AccountSuggestionList from "@/components/lists/AccountSuggestionList.vue"
 import Checkboxes from "@/components/form-parts/Checkboxes.vue"
 import FileBox from "@/components/form-parts/FileBox.vue"
 import Radios from "@/components/form-parts/Radios.vue"

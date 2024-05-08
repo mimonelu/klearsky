@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, watch, type ComputedRef } from "vue"
-import ListCardList from "@/components/list/ListCardList.vue"
+import ListCardList from "@/components/lists/ListCardList.vue"
 
 const mainState = inject("state") as MainState
 

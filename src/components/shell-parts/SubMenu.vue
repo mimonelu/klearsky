@@ -3,7 +3,7 @@ import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
 import CopyRight from "@/components/app-parts/Copyright.vue"
 import Logo from "@/components/app-parts/Logo.vue"
-import MyFeedList from "@/components/list/MyFeedList.vue"
+import MyFeedList from "@/components/lists/MyFeedList.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const $t = inject("$t") as Function

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
-import UserBoxList from "@/components/list/UserBoxList.vue"
+import UserBoxList from "@/components/lists/UserBoxList.vue"
 
 const mainState = inject("state") as MainState
 </script>

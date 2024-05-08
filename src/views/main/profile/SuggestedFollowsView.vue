@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import UserBoxList from "@/components/list/UserBoxList.vue"
+import UserBoxList from "@/components/lists/UserBoxList.vue"
 </script>
 
 <template>
