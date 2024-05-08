@@ -15,7 +15,7 @@ const state = reactive<{
     if (mainState.currentProfile == null) {
       return false
     }
-    return mainState.myLabeler.findIndex(mainState.currentProfile.did) !== - 1
+    return mainState.myLabeler.indexOfMyLabelerPrefferences(mainState.currentProfile.did) !== - 1
   }),
 })
 

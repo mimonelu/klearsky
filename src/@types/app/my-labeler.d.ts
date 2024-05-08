@@ -1,9 +1,11 @@
 interface TIMyLabeler {
   mainState: MainState
-  findIndex (did: string): number
+  labelers: Array<TILabeler>
   subscribe (did: string)
   unsubscribe (did: string)
-  getLabelers (): Array<{ did: string }>
-  getLabelerDids (): string[]
+  indexOfMyLabelerPrefferences (did: string): number
+  getMyLabelerPrefferences (): Array<{ did: string }>
+  getMyLabelerPrefferenceDids (): string[]
+  async fetchMyLabelers(): Promise<boolean>
   setAtprotoAcceptLabelers (): void
 }

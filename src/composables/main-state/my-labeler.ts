@@ -1,47 +1,65 @@
 export default class MyLabeler {
   public mainState: MainState
 
+  public labelers: Array<TILabeler>
+
   constructor (mainState: MainState) {
     this.mainState = mainState
-  }
-
-  findIndex (did: string): number {
-    const labelerDids = this.getLabelerDids()
-    return labelerDids.indexOf(did)
+    this.labelers = []
   }
 
   subscribe (did: string) {
-    if (this.findIndex(did) !== - 1) {
+    if (this.indexOfMyLabelerPrefferences(did) !== - 1) {
       return
     }
-    const labelers = this.getLabelers()
+
+    // Prefferences へ追加
+    const labelers = this.getMyLabelerPrefferences()
     labelers?.push({ did })
   }
 
   unsubscribe (did: string) {
-    const index = this.findIndex(did)
+    const index = this.indexOfMyLabelerPrefferences(did)
     if (index === - 1) {
       return
     }
-    const labelers = this.getLabelers()
+
+    // Prefferences から削除
+    const labelers = this.getMyLabelerPrefferences()
     labelers.splice(index, 1)
   }
 
-  getLabelers (): Array<{ did: string }> {
+  indexOfMyLabelerPrefferences (did: string): number {
+    const labelerDids = this.getMyLabelerPrefferenceDids()
+    return labelerDids.indexOf(did)
+  }
+
+  getMyLabelerPrefferences (): Array<{ did: string }> {
     return this.mainState.currentPreferences?.find((preference) => {
       return preference.$type === "app.bsky.actor.defs#labelersPref"
     })?.labelers ?? []
   }
 
-  getLabelerDids (): string[] {
-    const labelers = this.getLabelers()
+  getMyLabelerPrefferenceDids (): string[] {
+    const labelers = this.getMyLabelerPrefferences()
     return labelers.map((labeler) => {
       return labeler.did
     }) ?? []
   }
 
+  async fetchMyLabelers (): Promise<boolean> {
+    const labelerDids = this.getMyLabelerPrefferenceDids()
+    const response = await this.mainState.atp.fetchLabelers(labelerDids, true)
+    if (response instanceof Error) {
+      this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/fetchMyLabelers")
+      return false
+    }
+    this.labelers.splice(0, this.labelers.length, ...response)
+    return true
+  }
+
   setAtprotoAcceptLabelers () {
-    const labelerDids = this.getLabelerDids()
+    const labelerDids = this.getMyLabelerPrefferenceDids()
     this.mainState.atp.agent.configureLabelersHeader(labelerDids)
   }
 }
