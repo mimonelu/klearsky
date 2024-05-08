@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import { useRouter } from "vue-router"
-import CopyRight from "@/components/shell-parts/Copyright.vue"
-import Logo from "@/components/shell-parts/Logo.vue"
+import CopyRight from "@/components/app-parts/Copyright.vue"
+import Logo from "@/components/app-parts/Logo.vue"
 import MyFeedList from "@/components/list/MyFeedList.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 

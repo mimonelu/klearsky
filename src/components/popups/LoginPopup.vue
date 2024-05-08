@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject, nextTick, reactive, ref } from "vue"
 import AccountList from "@/components/list/AccountList.vue"
-import Copyright from "@/components/shell-parts/Copyright.vue"
+import Copyright from "@/components/app-parts/Copyright.vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
-import Logo from "@/components/shell-parts/Logo.vue"
+import Logo from "@/components/app-parts/Logo.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 defineExpose({
