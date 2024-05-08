@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
-import FeedCard from "@/components/app-parts/FeedCard.vue"
+import FeedCard from "@/components/cards/FeedCard.vue"
 import FeedList from "@/components/list/FeedList.vue"
 
 const mainState = inject("state") as MainState

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, watch } from "vue"
 import Feed from "@/components/app-parts/Feed.vue"
-import ListCard from "@/components/list/ListCard.vue"
+import ListCard from "@/components/cards/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Util from "@/composables/util"
 

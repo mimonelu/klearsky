@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
-import ListCard from "@/components/list/ListCard.vue"
+import ListCard from "@/components/cards/ListCard.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"

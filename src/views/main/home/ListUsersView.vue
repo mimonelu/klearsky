@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, watch } from "vue"
-import ListCard from "@/components/list/ListCard.vue"
+import ListCard from "@/components/cards/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import UserBox from "@/components/app-parts/UserBox.vue"

@@ -3,7 +3,7 @@ import { computed, inject, onMounted, reactive, ref, watch, type ComputedRef, ty
 import format from "date-fns/format"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
-import LinkCard from "@/components/app-parts/LinkCard.vue"
+import LinkCard from "@/components/cards/LinkCard.vue"
 import Loader from "@/components/common/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/app-parts/Post.vue"
