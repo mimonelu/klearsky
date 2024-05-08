@@ -83,15 +83,15 @@ function clicked (list?: TTList) {
 </script>
 
 <template>
-  <div class="lists">
+  <div class="list-card-list">
     <!-- リストヘッダー -->
     <div
       v-if="headerDisplay"
-      class="lists__header group-buttons"
+      class="list-card-list__header group-buttons"
     >
       <!-- マイリスト更新ボタン -->
       <button
-        class="button--bordered lists__update-button"
+        class="button--bordered list-card-list__update-button"
         @click.prevent="updateMylist"
       >
         <SVGIcon name="refresh" />
@@ -100,7 +100,7 @@ function clicked (list?: TTList) {
 
       <!-- マイリスト作成ボタン -->
       <button
-        class="button lists__create-button"
+        class="button list-card-list__create-button"
         @click.prevent="openListEditPopup"
       >
         <SVGIcon name="plus" />
@@ -118,14 +118,14 @@ function clicked (list?: TTList) {
     <!-- 空リストメッセージ -->
     <div
       v-if="!mainState.listLoaderDisplay && state.lists.length === 0"
-      class="textlabel lists__nolist"
+      class="textlabel list-card-list__nolist"
     >
       <div class="textlabel__text">
         <SVGIcon name="alert" />{{ $t("noList") }}
       </div>
     </div>
 
-    <div class="lists__list-card-container">
+    <div class="list-card-list__container">
       <ListCard
         v-for="list of state.lists"
         v-slot="{ list }"
@@ -154,7 +154,7 @@ function clicked (list?: TTList) {
 </template>
 
 <style lang="scss" scoped>
-.lists {
+.list-card-list {
   display: flex;
   flex-direction: column;
 
@@ -174,7 +174,7 @@ function clicked (list?: TTList) {
     margin: 1rem;
   }
 
-  &__list-card-container {
+  &__container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;

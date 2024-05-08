@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import Lists from "@/components/list/Lists.vue"
+import ListCardList from "@/components/list/ListCardList.vue"
 import Loader from "@/components/common/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -132,7 +132,7 @@ async function clicked (list: TTList) {
       />
 
       <!-- リスト一覧 -->
-      <Lists
+      <ListCardList
         v-slot="{ list }"
         :lists="state.lists"
         :headerDisplay="false"
@@ -149,7 +149,7 @@ async function clicked (list: TTList) {
         </div>
 
         <Loader v-if="state.loaderDisplayMap[list.uri] ?? false" />
-      </Lists>
+      </ListCardList>
     </template>
   </Popup>
 </template>

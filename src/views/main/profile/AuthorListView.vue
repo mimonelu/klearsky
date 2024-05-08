@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, watch, type ComputedRef } from "vue"
-import Lists from "@/components/list/Lists.vue"
+import ListCardList from "@/components/list/ListCardList.vue"
 
 const mainState = inject("state") as MainState
 
@@ -32,7 +32,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 <template>
   <div class="author-list">
     <!-- リスト一覧 -->
-    <Lists
+    <ListCardList
       :lists="state.lists"
       :headerDisplay="mainState.isMyProfile()"
       :loaderDisplay="!mainState.isMyProfile()"
@@ -50,7 +50,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 }
 
 // リスト一覧
-.lists {
+.list-card-list {
   flex-grow: 1;
 }
 </style>

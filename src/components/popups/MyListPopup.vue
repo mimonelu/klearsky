@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import Lists from "@/components/list/Lists.vue"
+import ListCardList from "@/components/list/ListCardList.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
@@ -27,7 +27,7 @@ function close () {
     </template>
     <template #body>
       <!-- リスト一覧 -->
-      <Lists
+      <ListCardList
         :lists="mainState.myLists.items"
         :headerDisplay="true"
         :loaderDisplay="false"
