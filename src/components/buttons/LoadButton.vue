@@ -37,6 +37,7 @@ function onActivate () {
 
 <style lang="scss" scoped>
 .load-button {
+  --fill-color: var(--fg-color-05);
   background-clip: content-box;
   cursor: pointer;
   display: flex;
@@ -52,13 +53,11 @@ function onActivate () {
 
   & > .svg-icon {
     font-size: 1.5rem;
-    fill: var(--fg-color-05);
+    fill: var(--fill-color);
   }
 
   &:focus, &:hover {
-    & > .svg-icon {
-      fill: rgb(var(--fg-color));
-    }
+    --fill-color: rgb(var(--fg-color));
   }
 
   & > .loader {

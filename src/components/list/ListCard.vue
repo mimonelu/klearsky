@@ -491,7 +491,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       &:focus, &:hover {
         .list-card__name__label {
           text-decoration: underline;
-          text-underline-offset: 2px;
+          text-underline-offset: 0.25em;
         }
       }
     }

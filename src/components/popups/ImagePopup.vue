@@ -181,7 +181,7 @@ function close () {
       :disabled="index === 0"
       @click.prevent="showImage(- 1)"
     >
-      <SVGIcon name="cursorLeft" />
+      <SVGIcon name="arrowLeft" />
     </button>
 
     <!-- 次の画像ボタン -->
@@ -190,7 +190,7 @@ function close () {
       :disabled="index + 1 === images.length"
       @click.prevent="showImage(1)"
     >
-      <SVGIcon name="cursorRight" />
+      <SVGIcon name="arrowRight" />
     </button>
 
     <!-- 壁紙設定ボタン -->

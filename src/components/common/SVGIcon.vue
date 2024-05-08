@@ -4,6 +4,8 @@ import alert from "@/svg/alert.svg?raw"
 import alphaA from "@/svg/alpha-a.svg?raw"
 import arrowBottom from "@/svg/arrow-bottom.svg?raw"
 import arrowDown from "@/svg/arrow-down.svg?raw"
+import arrowLeft from "@/svg/arrow-left.svg?raw"
+import arrowRight from "@/svg/arrow-right.svg?raw"
 import arrowTop from "@/svg/arrow-top.svg?raw"
 import arrowUp from "@/svg/arrow-up.svg?raw"
 import at from "@/svg/at.svg?raw"
@@ -96,6 +98,8 @@ const icons: { [k: string]: string } = {
   alphaA,
   arrowBottom,
   arrowDown,
+  arrowLeft,
+  arrowRight,
   arrowTop,
   arrowUp,
   at,

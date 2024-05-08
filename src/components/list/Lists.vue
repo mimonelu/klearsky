@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import { useRouter } from "vue-router"
 import ListCard from "@/components/list/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -30,6 +31,8 @@ const state = reactive<{
       })
   }),
 })
+
+const router = useRouter()
 
 function fetchLists (direction: "new" | "old") {
   Util.blurElement()
@@ -130,7 +133,7 @@ function clicked (list?: TTList) {
         :list="list"
         :isCompact="isCompact"
         :menuDisplay="true"
-        :detailDisplay="true"
+        :detailDisplay="router.currentRoute.value.name === 'profile-list'"
         :orderButtonDisplay="false"
         @click="clicked(list)"
         @close="$emit('close')"

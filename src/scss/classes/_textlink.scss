@@ -17,7 +17,7 @@
 .textlink {
   &:focus > span, &:hover > span {
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-underline-offset: 0.25em;
   }
 }
 
@@ -34,7 +34,7 @@
 .textlink--underline {
   & > span {
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-underline-offset: 0.25em;
   }
   &:focus > span, &:hover > span {
     text-decoration: unset;

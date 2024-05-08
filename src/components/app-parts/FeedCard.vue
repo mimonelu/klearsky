@@ -353,7 +353,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       &:focus, &:hover {
         & > span {
           text-decoration: underline;
-          text-underline-offset: 2px;
+          text-underline-offset: 0.25em;
         }
       }
     }

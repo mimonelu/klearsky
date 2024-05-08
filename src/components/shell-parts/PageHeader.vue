@@ -37,7 +37,7 @@ function onActivateBackButton () {
       class="page-header__back-button"
       @click.prevent.stop="onActivateBackButton"
     >
-      <SVGIcon name="cursorLeft" />
+      <SVGIcon name="arrowLeft" />
     </button>
     <h1 v-if="title">{{ title }}</h1>
     <div
