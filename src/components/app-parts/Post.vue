@@ -1294,11 +1294,11 @@ function toggleOldestQuotedPostDisplay () {
   &[data-has-child="true"],
   &[data-has-child="false"] {
     --top: 0.75em;
-    --gap: 1em;
+    --gap: 0.75em;
     &[data-has-mask="true"],
     &[data-has-grandparent-author="true"] {
-      --top: 1.5em;
-      --gap: 2em;
+      --top: 1.75em;
+      --gap: 1.75em;
     }
 
     &::before {
