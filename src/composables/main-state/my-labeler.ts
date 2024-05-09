@@ -33,7 +33,7 @@ export default class MyLabeler {
   }
 
   indexOfMyLabelerPrefferences (did: string): number {
-    const labelerDids = this.getMyLabelerPrefferenceDids()
+    const labelerDids = this.makeMyLabelerPrefferenceDids()
     return labelerDids.indexOf(did)
   }
 
@@ -43,15 +43,18 @@ export default class MyLabeler {
     })?.labelers ?? []
   }
 
-  getMyLabelerPrefferenceDids (): string[] {
+  makeMyLabelerPrefferenceDids (): string[] {
     const labelers = this.getMyLabelerPrefferences()
-    return labelers.map((labeler) => {
-      return labeler.did
-    }) ?? []
+    const dids = labelers.map((labeler) => labeler.did) ?? []
+
+    // 公式ラベラーを追加
+    dids.unshift("did:plc:ar7c4by46qjdydhdevvrndac")
+
+    return dids
   }
 
   async fetchMyLabelers (): Promise<boolean> {
-    const labelerDids = this.getMyLabelerPrefferenceDids()
+    const labelerDids = this.makeMyLabelerPrefferenceDids()
     const response = await this.mainState.atp.fetchLabelers(labelerDids, true)
     if (response instanceof Error) {
       this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/fetchMyLabelers")
@@ -102,7 +105,7 @@ export default class MyLabeler {
   }
 
   setAtprotoAcceptLabelers () {
-    const labelerDids = this.getMyLabelerPrefferenceDids()
+    const labelerDids = this.makeMyLabelerPrefferenceDids()
     this.mainState.atp.agent.configureLabelersHeader(labelerDids)
   }
 }
