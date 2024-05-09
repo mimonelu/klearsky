@@ -224,6 +224,8 @@ async function autoLogin () {
       return
     }
     await processAfterLogin()
+
+    state.myLabeler.fetchMyLabelers()
   }
 }
 

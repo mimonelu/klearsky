@@ -39,7 +39,7 @@ const state = reactive<{
   enabledContentMask: boolean
   hasNoUnauthenticated: ComputedRef<boolean>
   harmfulLabels: ComputedRef<Array<TTLabel>>
-  labelersLabels: ComputedRef<Array<TTLabel>>
+  labelerLabels: ComputedRef<Array<TILabelerLabel>>
   customLabels: ComputedRef<Array<TTLabel>>
   contentFilteringLabels: ComputedRef<Array<TTLabel>>
   contentFilteringToggleDisplay: ComputedRef<boolean>
@@ -98,8 +98,8 @@ const state = reactive<{
   harmfulLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(undefined, ["alert", "blur", "blur-media"], mainState.currentProfile?.labels)
   }),
-  labelersLabels: computed((): Array<TTLabel> => {
-    return mainState.getLabelersLabels(mainState.currentProfile?.labels)
+  labelerLabels: computed((): Array<TILabelerLabel> => {
+    return mainState.myLabeler.makeMyLabelerLabels(mainState.getLabelerLabels(mainState.currentProfile?.labels))
   }),
   customLabels: computed((): Array<TTLabel> => {
     return mainState.getCustomLabels(mainState.currentProfile?.labels)
@@ -310,7 +310,7 @@ function onActivateAccountMaskToggle () {
               <!-- 無害なラベル -->
               <div
                 v-if="
-                  state.labelersLabels.length > 0 ||
+                  state.labelerLabels.length > 0 ||
                   state.customLabels.length > 0 ||
                   state.isLabeler
                 "
@@ -328,14 +328,15 @@ function onActivateAccountMaskToggle () {
 
                 <!-- ラベラーによるラベル -->
                 <RouterLink
-                  v-for="label of state.labelersLabels"
-                  :key="label.val"
-                  :to="{ path: '/profile/feeds', query: { account: label.src } }"
+                  v-for="label of state.labelerLabels"
+                  :key="label.id"
+                  :to="{ path: '/profile/feeds', query: { account: label.did } }"
                   class="harmless-labels__labelers-label"
-                  @click.prevent.stop
+                  :title="label.description ?? ''"
+                  @click.stop
                 >
                   <SVGIcon name="label" />
-                  <span>{{ $t(label.val) }}</span>
+                  <span>{{ $t(label.name) }}</span>
                 </RouterLink>
 
                 <!-- カスタムラベル -->

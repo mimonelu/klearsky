@@ -58,6 +58,47 @@ export default class MyLabeler {
     return true
   }
 
+  findMyLabelerLabel (did: string, val: string): undefined | TILabelerLabel {
+    let result: undefined | TILabelerLabel
+    this.labelers.some((labeler) => {
+      if (labeler.creator.did !== did) {
+        return false
+      }
+      const definition = labeler.policies.labelValueDefinitions.find((definition) => {
+        return definition.identifier === val
+      })
+      if (definition == null) {
+        return false
+      }
+      const locale = definition.locales.find((locale) => {
+        return locale.lang === this.mainState.$getCurrentLanguage?.()
+      }) ?? definition.locales[0]
+      if (locale == null) {
+        return false
+      }
+      result = {
+        id: `${did}-${definition.identifier}`,
+        description: locale.description,
+        did: labeler.creator.did,
+        name: locale.name,
+      }
+      return true
+    })
+    return result
+  }
+
+  makeMyLabelerLabels (labels: Array<TTLabel>): Array<TILabelerLabel> {
+    return labels.map((label) => {
+      // TILabelerLabel (My Label) に該当ラベルがなければ TTLabel で代用
+      return this.findMyLabelerLabel(label.src, label.val) ?? {
+        id: label.uri,
+        description: undefined,
+        did: label.src,
+        name: label.val,
+      }
+    })
+  }
+
   setAtprotoAcceptLabelers () {
     const labelerDids = this.getMyLabelerPrefferenceDids()
     this.mainState.atp.agent.configureLabelersHeader(labelerDids)

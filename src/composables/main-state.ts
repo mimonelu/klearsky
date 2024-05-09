@@ -160,7 +160,7 @@ state.getContentWarningVisibility = getContentWarningVisibility
 state.selectLabelsPopupDisplay = false
 state.selectLabelsPopupState = undefined
 state.hasLabel = hasLabel
-state.getLabelersLabels = getLabelersLabels
+state.getLabelerLabels = getLabelerLabels
 state.getCustomLabels = getCustomLabels
 state.filterLabels = filterLabels
 state.openSelectLabelsPopup = openSelectLabelsPopup
@@ -1005,7 +1005,7 @@ function hasLabel (target: string, labels?: Array<TTLabel>): boolean {
   }) ?? - 1) !== - 1
 }
 
-function getLabelersLabels (labels?: Array<TTLabel>): Array<TTLabel> {
+function getLabelerLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {
     return LABEL_BEHAVIORS[label.val] == null &&
            (label.ver ?? 0) >= 1

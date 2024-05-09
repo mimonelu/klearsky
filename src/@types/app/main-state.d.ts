@@ -129,7 +129,7 @@ type MainState = {
   // ラベル
 
   hasLabel (target: string, labels?: Array<TTLabel>): boolean
-  getLabelersLabels (labels?: Array<TTLabel>): Array<TTLabel>
+  getLabelerLabels (labels?: Array<TTLabel>): Array<TTLabel>
   getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
   filterLabels (
     visibilities?: Array<TTContentVisibility>,

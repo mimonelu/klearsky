@@ -1,3 +1,10 @@
+interface TILabelerLabel {
+  id: string
+  description?: string
+  did: string
+  name: string
+}
+
 interface TILabeler {
   $type: string
   uri: string

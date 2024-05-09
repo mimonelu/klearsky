@@ -84,7 +84,7 @@ const state = reactive<{
   blurLabels: ComputedRef<Array<TTLabel>>
   blurMediaLabels: ComputedRef<Array<TTLabel>>
   alertLabels: ComputedRef<Array<TTLabel>>
-  labelersLabelsInPost: ComputedRef<Array<TTLabel>>
+  labelerLabelsInPost: ComputedRef<Array<TILabelerLabel>>
   customLabelsInPost: ComputedRef<Array<TTLabel>>
   contentWarningLabels: ComputedRef<Array<string>>
   hasAppliedHarmfulLabel: ComputedRef<boolean>
@@ -224,8 +224,8 @@ const state = reactive<{
   alertLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(["hide", "warn"], ["alert"], state.allLabels)
   }),
-  labelersLabelsInPost: computed((): Array<TTLabel> => {
-    return mainState.getLabelersLabels(props.post.labels)
+  labelerLabelsInPost: computed((): Array<TILabelerLabel> => {
+    return mainState.myLabeler.makeMyLabelerLabels(mainState.getLabelerLabels(props.post.labels))
   }),
   customLabelsInPost: computed((): Array<TTLabel> => {
     return mainState.getCustomLabels(props.post.labels)
@@ -991,7 +991,7 @@ function toggleOldestQuotedPostDisplay () {
               v-for="postTag of post.record.tags"
               :to="`/search/post?text=${encodeURIComponent(postTag)}`"
               class="post-tag"
-              @click.prevent.stop
+              @click.stop
             >
               <SVGIcon name="tag" />
               <span>{{ postTag }}</span>
@@ -1009,14 +1009,15 @@ function toggleOldestQuotedPostDisplay () {
           >
             <!-- ラベラーによるラベル -->
             <RouterLink
-              v-for="label of state.labelersLabelsInPost"
-              :key="label.uri"
-              :to="{ path: '/profile/feeds', query: { account: label.src } }"
+              v-for="label of state.labelerLabelsInPost"
+              :key="label.id"
+              :to="{ path: '/profile/feeds', query: { account: label.did } }"
               class="harmless-labels__labelers-label"
-              @click.prevent.stop
+              :title="label.description ?? ''"
+              @click.stop
             >
               <SVGIcon name="label" />
-              <span>{{ label.val }}</span>
+              <span>{{ label.name }}</span>
             </RouterLink>
 
             <!-- カスタムラベル -->
