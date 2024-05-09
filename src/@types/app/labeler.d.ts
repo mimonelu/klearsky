@@ -1,7 +1,7 @@
 interface TILabelerLabel {
-  id: string
+  id: string // :key 用
   description?: string
-  did: string
+  did: string // Creator の did
   name: string
 }
 
