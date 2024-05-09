@@ -5,6 +5,7 @@ import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(name: string): void}>()
 
@@ -74,6 +75,15 @@ function openLabelerCardPopover (_$event: Event) {
       <div class="labeler-card__indexed-at">
         <SVGIcon name="clock" />
         <span>{{ mainState.formatDate(labeler.indexedAt) }}</span>
+      </div>
+
+      <!-- 公式マーカー -->
+      <div
+        v-if="labeler.creator.did === CONSTS.OFFICIAL_LABELER_DID"
+        class="labeler-card__official-marker"
+      >
+        <SVGIcon name="bluesky" />
+        <span>{{ $t("official") }}</span>
       </div>
 
       <!-- ラベラーカードポップオーバートリガー -->
@@ -147,11 +157,10 @@ function openLabelerCardPopover (_$event: Event) {
   &__content {
     display: grid;
     grid-gap: 0 0.75em;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: auto auto auto 1fr auto;
     grid-template-areas:
-      "v v v v"
-      "a n n m"
-      "a l i m";
+      "a n n n m"
+      "a l i o m";
     align-items: flex-start;
   }
 
@@ -201,12 +210,14 @@ function openLabelerCardPopover (_$event: Event) {
 
   // ラベラーライク数
   // ラベラー作成日時
+  // 公式マーカー
   &__like-count,
-  &__indexed-at {
+  &__indexed-at,
+  &__official-marker {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    grid-gap: 0.5em;
+    grid-gap: 0.375em;
     line-height: var(--line-height-high);
 
     & > .svg-icon {
@@ -258,6 +269,17 @@ function openLabelerCardPopover (_$event: Event) {
 
     & > .svg-icon {
       fill: var(--fg-color-05);
+    }
+  }
+
+  // 公式マーカー
+  &__official-marker {
+    grid-area: o;
+    color: rgb(var(--accent-color));
+    font-weight: bold;
+
+    & > .svg-icon {
+      fill: rgb(var(--accent-color));
     }
   }
 

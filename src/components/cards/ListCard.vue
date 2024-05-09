@@ -514,7 +514,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    grid-gap: 0.5em;
+    grid-gap: 0.375em;
     line-height: var(--line-height-high);
     &[data-purpose="curateList"] {
       --color: rgb(var(--share-color));
@@ -548,7 +548,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    grid-gap: 0.5em;
+    grid-gap: 0.375em;
     line-height: var(--line-height-high);
 
     & > .svg-icon {

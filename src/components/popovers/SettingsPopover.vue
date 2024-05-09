@@ -127,6 +127,7 @@ function process (type: string) {
       <!-- UI言語選択ポップアップトリガー -->
       <button
         type="button"
+        data-type="uiLanguage"
         @click.prevent="process('uiLanguage')"
       >
         <SVGIcon name="translate" />
@@ -136,6 +137,7 @@ function process (type: string) {
       <!-- コンテンツ言語選択ポップアップトリガー -->
       <button
         type="button"
+        data-type="contentLanguages"
         @click.prevent="process('contentLanguages')"
       >
         <SVGIcon name="translate" />
@@ -145,6 +147,7 @@ function process (type: string) {
       <!-- ポスト言語選択ポップアップトリガー -->
       <button
         type="button"
+        data-type="postLanguages"
         @click.prevent="process('postLanguages')"
       >
         <SVGIcon name="translate" />
@@ -154,6 +157,7 @@ function process (type: string) {
       <!-- マイフィードポップアップトリガー -->
       <button
         type="button"
+        data-type="myFeeds"
         @click.prevent="process('myFeeds')"
       >
         <SVGIcon name="feed" />
@@ -163,6 +167,7 @@ function process (type: string) {
       <!-- マイリストポップアップトリガー -->
       <button
         type="button"
+        data-type="myList"
         @click.prevent="process('myList')"
       >
         <SVGIcon name="list" />
@@ -172,6 +177,7 @@ function process (type: string) {
       <!-- マイタグポップアップトリガー -->
       <button
         type="button"
+        data-type="myTag"
         @click.prevent="process('myTag')"
       >
         <SVGIcon name="tag" />
@@ -181,6 +187,7 @@ function process (type: string) {
       <!-- マイラベラーポップアップトリガー -->
       <button
         type="button"
+        data-type="myLabeler"
         @click.prevent="process('myLabeler')"
       >
         <SVGIcon name="labeler" />
@@ -192,6 +199,7 @@ function process (type: string) {
       <!-- コンテンツフィルタリングポップアップトリガー -->
       <button
         type="button"
+        data-type="contentFiltering"
         @click.prevent="process('contentFiltering')"
       >
         <SVGIcon name="contentFiltering" />
@@ -201,6 +209,7 @@ function process (type: string) {
       <!-- ミュート中のユーザーポップアップトリガー -->
       <button
         type="button"
+        data-type="mutingUsers"
         @click.prevent="process('mutingUsers')"
       >
         <SVGIcon name="volumeOff" />
@@ -210,6 +219,7 @@ function process (type: string) {
       <!-- ブロック中のユーザーポップアップトリガー -->
       <button
         type="button"
+        data-type="blockingUsers"
         @click.prevent="process('blockingUsers')"
       >
         <SVGIcon name="personOff" />
@@ -219,6 +229,7 @@ function process (type: string) {
       <!-- ワードミュートポップアップトリガー -->
       <button
         type="button"
+        data-type="wordMute"
         @click.prevent="process('wordMute')"
       >
         <SVGIcon name="wordMute" />
@@ -230,6 +241,7 @@ function process (type: string) {
       <!-- デザイン設定ポップアップトリガー -->
       <button
         type="button"
+        data-type="design"
         @click.prevent="process('design')"
       >
         <SVGIcon name="palette" />
@@ -239,6 +251,7 @@ function process (type: string) {
       <!-- ポスト設定ポップアップトリガー -->
       <button
         type="button"
+        data-type="post"
         @click.prevent="process('post')"
       >
         <SVGIcon name="post" />
@@ -248,6 +261,7 @@ function process (type: string) {
       <!-- 心理的安全性設定ポップアップトリガー -->
       <button
         type="button"
+        data-type="psySafety"
         @click.prevent="process('psySafety')"
       >
         <SVGIcon name="like" />
@@ -257,6 +271,7 @@ function process (type: string) {
       <!-- その他設定ポップアップトリガー -->
       <button
         type="button"
+        data-type="etc"
         @click.prevent="process('etc')"
       >
         <SVGIcon name="shimmer" />
@@ -269,6 +284,7 @@ function process (type: string) {
         <!-- 招待コード確認ポップアップトリガー -->
         <button
           type="button"
+          data-type="inviteCode"
           @click.prevent="process('inviteCode')"
         >
           <SVGIcon name="inviteCode" />
@@ -286,5 +302,22 @@ function process (type: string) {
       padding: 0.5rem;
     }
   }
+
+  button[data-type="uiLanguage"] > .svg-icon { fill: rgb(var(--fg-color)); }
+  button[data-type="contentLanguages"] > .svg-icon { fill: rgb(var(--fg-color)); }
+  button[data-type="postLanguages"] > .svg-icon { fill: rgb(var(--fg-color)); }
+  button[data-type="myFeeds"] > .svg-icon { /**/ }
+  button[data-type="myList"] > .svg-icon { /**/ }
+  button[data-type="myTag"] > .svg-icon { /**/ }
+  button[data-type="myLabeler"] > .svg-icon { fill: rgb(var(--share-color)); }
+  button[data-type="contentFiltering"] > .svg-icon { /**/ }
+  button[data-type="mutingUsers"] > .svg-icon { /**/ }
+  button[data-type="blockingUsers"] > .svg-icon { /**/ }
+  button[data-type="wordMute"] > .svg-icon { /**/ }
+  button[data-type="design"] > .svg-icon { fill: rgb(var(--fg-color)); }
+  button[data-type="post"] > .svg-icon { /**/ }
+  button[data-type="psySafety"] > .svg-icon { /**/ }
+  button[data-type="etc"] > .svg-icon { /**/ }
+  button[data-type="inviteCode"] > .svg-icon { fill: rgb(var(--fg-color)); }
 }
 </style>

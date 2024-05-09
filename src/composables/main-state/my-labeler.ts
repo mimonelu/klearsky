@@ -1,3 +1,5 @@
+import CONSTS from "@/consts/consts.json"
+
 export default class MyLabeler {
   public mainState: MainState
 
@@ -48,7 +50,7 @@ export default class MyLabeler {
     const dids = labelers.map((labeler) => labeler.did) ?? []
 
     // 公式ラベラーを追加
-    dids.unshift("did:plc:ar7c4by46qjdydhdevvrndac")
+    dids.unshift(CONSTS.OFFICIAL_LABELER_DID)
 
     return dids
   }
