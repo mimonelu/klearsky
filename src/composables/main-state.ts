@@ -426,6 +426,15 @@ state.wordMutePopupDisplay = false
 state.openWordMutePopup = openWordMutePopup
 state.closeWordMutePopup = closeWordMutePopup
 
+// ポップアップ - ラベラーリストポップアップ
+state.labelerListPopupProps = {
+  display: false,
+  title: "",
+  labelers: [],
+}
+state.openLabelerListPopup = openLabelerListPopup
+state.closeLabelerListPopup = closeLabelerListPopup
+
 // ポップアップ - アカウントレポート送信ポップアップ
 state.sendAccountReportPopupProps = {
   display: false,
@@ -1770,6 +1779,18 @@ function openWordMutePopup () {
 
 function closeWordMutePopup () {
   state.wordMutePopupDisplay = false
+}
+
+// ポップアップ - ラベラーリストポップアップ
+
+function openLabelerListPopup (title: string, labelers: Array<TILabeler>) {
+  state.labelerListPopupProps.title = title
+  state.labelerListPopupProps.labelers = labelers
+  state.labelerListPopupProps.display = true
+}
+
+function closeLabelerListPopup () {
+  state.labelerListPopupProps.display = false
 }
 
 // ポップアップ - アカウントレポート送信ポップアップ

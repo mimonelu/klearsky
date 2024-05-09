@@ -323,7 +323,7 @@ function onActivateAccountMaskToggle () {
                   class="harmless-labels__labeler"
                 >
                   <SVGIcon name="labeler" />
-                  <span>{{ $t("labelerOn") }}</span>
+                  <span>{{ $t("labeler") }}</span>
                 </div>
 
                 <!-- ラベラーによるラベル -->

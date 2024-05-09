@@ -126,6 +126,16 @@ type MainState = {
   getContentWarningVisibility: (labels?: Array<TTLabel>) => TTContentVisibility
   getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
 
+  // ラベラーリストポップアップ
+
+  labelerListPopupProps: {
+    display: boolean
+    title: string
+    labelers: Array<TILabeler>
+  }
+  openLabelerListPopup: Function
+  closeLabelerListPopup: Function
+
   // ラベル
 
   hasLabel (target: string, labels?: Array<TTLabel>): boolean

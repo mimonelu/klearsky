@@ -14,6 +14,7 @@ import HtmlPopup from "@/components/popups/HtmlPopup.vue"
 import ImagePopup from "@/components/popups/ImagePopup.vue"
 import InviteCodesPopup from "@/components/popups/InviteCodesPopup.vue"
 import KeywordHistoryPopover from "@/components/popovers/KeywordHistoryPopover.vue"
+import LabelerListPopup from "@/components/popups/LabelerListPopup.vue"
 import LikeUsersPopup from "@/components/popups/LikeUsersPopup.vue"
 import ListCardPopover from "@/components/popovers/ListCardPopover.vue"
 import ListEditPopup from "@/components/popups/ListEditPopup.vue"
@@ -1006,6 +1007,15 @@ function broadcastListener (event: MessageEvent) {
         <WordMutePopup
           v-if="state.wordMutePopupDisplay"
           @close="state.closeWordMutePopup"
+        />
+      </Transition>
+
+      <!-- ラベラーリストポップアップ -->
+      <Transition>
+        <LabelerListPopup
+          v-if="state.labelerListPopupProps.display"
+          v-bind="state.labelerListPopupProps"
+          @close="state.closeLabelerListPopup"
         />
       </Transition>
 

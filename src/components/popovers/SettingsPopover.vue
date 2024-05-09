@@ -49,43 +49,47 @@ function process (type: string) {
   Util.blurElement()
   switch (type) {
     case "uiLanguage": {
-      mainState.openUiLanguageSettingsPopup() 
+      mainState.openUiLanguageSettingsPopup()
       break
     }
     case "contentLanguages": {
-      mainState.openContentLanguagesPopup() 
+      mainState.openContentLanguagesPopup()
       break
     }
     case "postLanguages": {
-      mainState.openPostLanguagesPopup() 
+      mainState.openPostLanguagesPopup()
       break
     }
     case "myFeeds": {
-      mainState.openMyFeedsPopup() 
+      mainState.openMyFeedsPopup()
       break
     }
     case "myList": {
-      mainState.openMyListPopup() 
+      mainState.openMyListPopup()
       break
     }
     case "myTag": {
-      mainState.openMyTagPopup({ mode: 'edit' }) 
+      mainState.openMyTagPopup({ mode: 'edit' })
+      break
+    }
+    case "myLabeler": {
+      mainState.openLabelerListPopup("myLabeler", mainState.myLabeler.labelers)
       break
     }
     case "contentFiltering": {
-      mainState.openContentFilteringPopup() 
+      mainState.openContentFilteringPopup()
       break
     }
     case "mutingUsers": {
-      mainState.openMutingUsersPopup() 
+      mainState.openMutingUsersPopup()
       break
     }
     case "blockingUsers": {
-      mainState.openBlockingUsersPopup() 
+      mainState.openBlockingUsersPopup()
       break
     }
     case "wordMute": {
-      mainState.openWordMutePopup() 
+      mainState.openWordMutePopup()
       break
     }
     case "design": {
@@ -172,6 +176,15 @@ function process (type: string) {
       >
         <SVGIcon name="tag" />
         <span>{{ $t("myTag") }}</span>
+      </button>
+
+      <!-- マイラベラーポップアップトリガー -->
+      <button
+        type="button"
+        @click.prevent="process('myLabeler')"
+      >
+        <SVGIcon name="labeler" />
+        <span>{{ $t("myLabeler") }}</span>
       </button>
 
       <hr />
