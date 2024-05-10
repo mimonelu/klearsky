@@ -4,7 +4,6 @@ interface TIMyLabeler {
   labelMap: { [did: string]: TILabelerLabel }
   subscribe (did: string)
   unsubscribe (did: string)
-  indexOfMyLabelerPrefferences (did: string): number
   getMyLabelerPrefferences (): Array<{ did: string }>
   makeMyLabelerPrefferenceDids (): string[]
   async fetchMyLabelers(): Promise<boolean>

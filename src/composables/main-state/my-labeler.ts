@@ -15,8 +15,8 @@ export default class MyLabeler {
 
   subscribe (did: string) {
     // Prefferences へ追加
-    if (this.indexOfMyLabelerPrefferences(did) === - 1) {
-      const myLabelers = this.getMyLabelerPrefferences()
+    const myLabelers = this.getMyLabelerPrefferences()
+    if (myLabelers.every((myLabeler) => myLabeler.did !== did)) {
       myLabelers?.push({ did })
     }
 
@@ -31,9 +31,9 @@ export default class MyLabeler {
     }
 
     // Prefferences から削除
-    const myLabelerIndex = this.indexOfMyLabelerPrefferences(did)
+    const myLabelers = this.getMyLabelerPrefferences()
+    const myLabelerIndex = myLabelers.findIndex((myLabeler) => myLabeler.did === did)
     if (myLabelerIndex !== - 1) {
-      const myLabelers = this.getMyLabelerPrefferences()
       myLabelers.splice(myLabelerIndex, 1)
     }
 
@@ -45,18 +45,13 @@ export default class MyLabeler {
     }
   }
 
-  indexOfMyLabelerPrefferences (did: string): number {
-    const myLabelerDids = this.makeMyLabelerPrefferenceDids()
-    return myLabelerDids.indexOf(did)
-  }
-
   getMyLabelerPrefferences (): Array<{ did: string }> {
     const myLabelers = this.mainState.currentPreferences?.find((preference) => {
       return preference.$type === "app.bsky.actor.defs#labelersPref"
     })?.labelers ?? []
 
     // 公式ラベラーを追加
-    if (!myLabelers.some((myLabeler) => myLabeler.did === CONSTS.OFFICIAL_LABELER_DID)) {
+    if (myLabelers.every((myLabeler) => myLabeler.did !== CONSTS.OFFICIAL_LABELER_DID)) {
       myLabelers.unshift({ did: CONSTS.OFFICIAL_LABELER_DID })
     }
 
@@ -65,8 +60,7 @@ export default class MyLabeler {
 
   makeMyLabelerPrefferenceDids (): string[] {
     const myLabelers = this.getMyLabelerPrefferences()
-    const dids = myLabelers.map((myLabeler) => myLabeler.did) ?? []
-    return dids
+    return myLabelers.map((myLabeler) => myLabeler.did) ?? []
   }
 
   async fetchMyLabelers (): Promise<boolean> {

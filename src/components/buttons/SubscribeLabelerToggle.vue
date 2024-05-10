@@ -17,7 +17,8 @@ const state = reactive<{
     if (mainState.currentProfile == null) {
       return false
     }
-    return mainState.myLabeler.indexOfMyLabelerPrefferences(mainState.currentProfile.did) !== - 1
+    const myLabelerDids = mainState.myLabeler.makeMyLabelerPrefferenceDids()
+    return myLabelerDids.indexOf(mainState.currentProfile.did) !== - 1
   }),
   isLabelerOfficial: computed((): boolean => {
     return mainState.currentProfile?.did === CONSTS.OFFICIAL_LABELER_DID
