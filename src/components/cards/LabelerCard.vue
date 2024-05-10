@@ -4,6 +4,7 @@ import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
@@ -34,10 +35,12 @@ function toggleDetailDisplay () {
   state.detailDisplay = !state.detailDisplay
 }
 
-function openLabelerCardPopover (_$event: Event) {
+function openProfilePopover ($event: Event) {
   Util.blurElement()
-  // mainState.labelerCardPopoverProps.labeler = props.labeler
-  // mainState.openLabelerCardPopover($event.target)
+  mainState.profilePopoverProps.isUser = props.labeler.creator.did === mainState.atp.data.did
+  mainState.profilePopoverProps.user = props.labeler.creator
+  mainState.profilePopoverFrom = "labeler-card"
+  mainState.openProfilePopover($event.target)
 }
 </script>
 
@@ -46,6 +49,9 @@ function openLabelerCardPopover (_$event: Event) {
     class="labeler-card"
     @click.stop
   >
+    <!-- Viewer ラベル -->
+    <ViewerLabels :viewer="labeler.creator.viewer" />
+
     <div class="labeler-card__content">
       <!-- ラベラー画像 -->
       <LazyImage :src="labeler.creator.avatar" />
@@ -86,11 +92,11 @@ function openLabelerCardPopover (_$event: Event) {
         <span>{{ $t("official") }}</span>
       </div>
 
-      <!-- ラベラーカードポップオーバートリガー -->
+      <!-- プロフィールポップオーバートリガー -->
       <button
         v-if="menuDisplay"
         class="labeler-card__menu-button"
-        @click.prevent.stop="openLabelerCardPopover"
+        @click.prevent.stop="openProfilePopover"
       >
         <SVGIcon name="menu" />
       </button>
@@ -275,11 +281,11 @@ function openLabelerCardPopover (_$event: Event) {
   // 公式マーカー
   &__official-marker {
     grid-area: o;
-    color: rgb(var(--accent-color));
+    color: rgb(var(--share-color));
     font-weight: bold;
 
     & > .svg-icon {
-      fill: rgb(var(--accent-color));
+      fill: rgb(var(--share-color));
     }
   }
 
