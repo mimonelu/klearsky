@@ -75,7 +75,7 @@ export default class MyLabeler {
       delete this.labelMap[key]
     })
     this.labelers.forEach((labeler) => {
-      labeler.policies.labelValueDefinitions.forEach((definition) => {
+      labeler.policies.labelValueDefinitions?.forEach((definition) => {
         const locale = definition.locales.find((locale) => {
           return locale.lang === this.mainState.$getCurrentLanguage?.()
         }) ?? definition.locales[0]
@@ -91,6 +91,12 @@ export default class MyLabeler {
         }
       })
     })
+  }
+
+  getProperLocale (locales: Array<TILabelerDefinitionLocale>): undefined | TILabelerDefinitionLocale {
+    return locales.find((locale) => {
+      return locale.lang === this.mainState.$getCurrentLanguage?.()
+    }) ?? locales[0]
   }
 
   makeMyLabelerLabels (labels: Array<TTLabel>): Array<TILabelerLabel> {

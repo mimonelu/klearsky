@@ -42,6 +42,11 @@ function openProfilePopover ($event: Event) {
   mainState.profilePopoverFrom = "labeler-card"
   mainState.openProfilePopover($event.target)
 }
+
+function openLabelerSettingsPopup () {
+  Util.blurElement()
+  mainState.openLabelerSettingsPopup(props.labeler)
+}
 </script>
 
 <template>
@@ -137,7 +142,7 @@ function openProfilePopover ($event: Event) {
       <button
         type="button"
         class="button labeler-card__settings-button"
-        @click.stop.prevent
+        @click.stop.prevent="openLabelerSettingsPopup"
       >
         <SVGIcon name="setting" />
         <span>{{ $t("settings") }}</span>
@@ -159,6 +164,11 @@ function openProfilePopover ($event: Event) {
   grid-gap: 0.5em;
   padding: 1em;
   position: relative;
+
+  // Viewer ラベル
+  .viewer-labels:empty {
+    display: contents;
+  }
 
   &__content {
     display: grid;

@@ -10,27 +10,27 @@ interface TILabeler {
   uri: string
   cid: string
   creator: TTProfile
-  likeCount: number
-  viewer: TTUserViewer
+  likeCount?: number
+  viewer?: TTUserViewer
   indexedAt: string
-  labels: Array<TTLabel>
+  labels?: Array<TTLabel>
   policies: {
     description: string
-    labelValueDefinitions: Array<TILabelerDifinision>
+    labelValueDefinitions?: Array<TILabelerDefinition>
     labelValues: Array<string>
   }
 }
 
-interface TILabelerDifinision {
-  adultsOnly: boolean
-  blurs: string
-  defaultSetting: string
+interface TILabelerDefinition {
+  adultsOnly?: boolean
+  blurs: "content" | "media" | "none"
+  defaultSetting: "ignore" | "warn" | "hide"
   identifier: string
-  locales: Array<TILabelerDifinisionLocale>
-  severity: string
+  locales: Array<TILabelerDefinitionLocale>
+  severity: "inform" | "alert" | "none"
 }
 
-interface TILabelerDifinisionLocale {
+interface TILabelerDefinitionLocale {
   description: string
   lang: string
   name: string

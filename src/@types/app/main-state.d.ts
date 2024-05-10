@@ -136,6 +136,15 @@ type MainState = {
   openLabelerListPopup: Function
   closeLabelerListPopup: Function
 
+  //　ラベラー設定ポップアップ
+
+  labelerSettingsPopupProps: {
+    display: boolean
+    labeler?: TILabeler
+  }
+  openLabelerSettingsPopup: Function
+  closeLabelerSettingsPopup: Function
+
   // ラベル
 
   hasLabel (target: string, labels?: Array<TTLabel>): boolean

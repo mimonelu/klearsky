@@ -435,6 +435,14 @@ state.labelerListPopupProps = {
 state.openLabelerListPopup = openLabelerListPopup
 state.closeLabelerListPopup = closeLabelerListPopup
 
+// ポップアップ - ラベラー設定ポップアップ
+state.labelerSettingsPopupProps = {
+  display: false,
+  labeler: undefined,
+}
+state.openLabelerSettingsPopup = openLabelerSettingsPopup
+state.closeLabelerSettingsPopup = closeLabelerSettingsPopup
+
 // ポップアップ - アカウントレポート送信ポップアップ
 state.sendAccountReportPopupProps = {
   display: false,
@@ -1791,6 +1799,17 @@ function openLabelerListPopup (title: string, labelers: Array<TILabeler>) {
 
 function closeLabelerListPopup () {
   state.labelerListPopupProps.display = false
+}
+
+// ポップアップ - ラベラー設定ポップアップ
+
+function openLabelerSettingsPopup (labeler: TILabeler) {
+  state.labelerSettingsPopupProps.labeler = labeler
+  state.labelerSettingsPopupProps.display = true
+}
+
+function closeLabelerSettingsPopup () {
+  state.labelerSettingsPopupProps.display = false
 }
 
 // ポップアップ - アカウントレポート送信ポップアップ
