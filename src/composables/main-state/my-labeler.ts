@@ -14,50 +14,64 @@ export default class MyLabeler {
   }
 
   subscribe (did: string) {
-    if (this.indexOfMyLabelerPrefferences(did) !== - 1) {
-      return
+    // Prefferences へ追加
+    if (this.indexOfMyLabelerPrefferences(did) === - 1) {
+      const myLabelers = this.getMyLabelerPrefferences()
+      myLabelers?.push({ did })
     }
 
-    // Prefferences へ追加
-    const labelers = this.getMyLabelerPrefferences()
-    labelers?.push({ did })
+    // クラスへ追加
+    // TODO:
   }
 
   unsubscribe (did: string) {
-    const index = this.indexOfMyLabelerPrefferences(did)
-    if (index === - 1) {
+    // 公式は削除不可
+    if (did === CONSTS.OFFICIAL_LABELER_DID) {
       return
     }
 
     // Prefferences から削除
-    const labelers = this.getMyLabelerPrefferences()
-    labelers.splice(index, 1)
+    const myLabelerIndex = this.indexOfMyLabelerPrefferences(did)
+    if (myLabelerIndex !== - 1) {
+      const myLabelers = this.getMyLabelerPrefferences()
+      myLabelers.splice(myLabelerIndex, 1)
+    }
+
+    // クラスから削除
+    const labelerIndex = this.labelers.findIndex((labeler) => labeler.creator.did === did)
+    if (labelerIndex !== - 1) {
+      this.labelers.splice(labelerIndex, 1)
+      this.updateLabelMap()
+    }
   }
 
   indexOfMyLabelerPrefferences (did: string): number {
-    const labelerDids = this.makeMyLabelerPrefferenceDids()
-    return labelerDids.indexOf(did)
+    const myLabelerDids = this.makeMyLabelerPrefferenceDids()
+    return myLabelerDids.indexOf(did)
   }
 
   getMyLabelerPrefferences (): Array<{ did: string }> {
-    return this.mainState.currentPreferences?.find((preference) => {
+    const myLabelers = this.mainState.currentPreferences?.find((preference) => {
       return preference.$type === "app.bsky.actor.defs#labelersPref"
     })?.labelers ?? []
+
+    // 公式ラベラーを追加
+    if (!myLabelers.some((myLabeler) => myLabeler.did === CONSTS.OFFICIAL_LABELER_DID)) {
+      myLabelers.unshift({ did: CONSTS.OFFICIAL_LABELER_DID })
+    }
+
+    return myLabelers
   }
 
   makeMyLabelerPrefferenceDids (): string[] {
-    const labelers = this.getMyLabelerPrefferences()
-    const dids = labelers.map((labeler) => labeler.did) ?? []
-
-    // 公式ラベラーを追加
-    dids.unshift(CONSTS.OFFICIAL_LABELER_DID)
-
+    const myLabelers = this.getMyLabelerPrefferences()
+    const dids = myLabelers.map((myLabeler) => myLabeler.did) ?? []
     return dids
   }
 
   async fetchMyLabelers (): Promise<boolean> {
-    const labelerDids = this.makeMyLabelerPrefferenceDids()
-    const response = await this.mainState.atp.fetchLabelers(labelerDids, true)
+    const myLabelerDids = this.makeMyLabelerPrefferenceDids()
+    const response = await this.mainState.atp.fetchLabelers(myLabelerDids, true)
     if (response instanceof Error) {
       this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/fetchMyLabelers")
       return false
@@ -76,9 +90,7 @@ export default class MyLabeler {
     })
     this.labelers.forEach((labeler) => {
       labeler.policies.labelValueDefinitions?.forEach((definition) => {
-        const locale = definition.locales.find((locale) => {
-          return locale.lang === this.mainState.$getCurrentLanguage?.()
-        }) ?? definition.locales[0]
+        const locale = this.getProperLocale(definition.locales)
         if (locale == null) {
           return
         }
@@ -113,7 +125,7 @@ export default class MyLabeler {
   }
 
   setAtprotoAcceptLabelers () {
-    const labelerDids = this.makeMyLabelerPrefferenceDids()
-    this.mainState.atp.agent.configureLabelersHeader(labelerDids)
+    const myLabelerDids = this.makeMyLabelerPrefferenceDids()
+    this.mainState.atp.agent.configureLabelersHeader(myLabelerDids)
   }
 }

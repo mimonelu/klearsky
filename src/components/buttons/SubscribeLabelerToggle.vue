@@ -3,12 +3,14 @@ import { computed, inject, reactive, type ComputedRef } from "vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
   isLabelerSubscribing: ComputedRef<boolean>
+  isLabelerOfficial: ComputedRef<boolean>
 }>({
   processing: false,
   isLabelerSubscribing: computed((): boolean => {
@@ -16,6 +18,9 @@ const state = reactive<{
       return false
     }
     return mainState.myLabeler.indexOfMyLabelerPrefferences(mainState.currentProfile.did) !== - 1
+  }),
+  isLabelerOfficial: computed((): boolean => {
+    return mainState.currentProfile?.did === CONSTS.OFFICIAL_LABELER_DID
   }),
 })
 
@@ -25,6 +30,9 @@ async function toggleLabelerSubscribe () {
     return
   }
   if (mainState.currentProfile == null) {
+    return
+  }
+  if (state.isLabelerOfficial) {
     return
   }
   if (state.isLabelerSubscribing) {
@@ -55,6 +63,7 @@ async function toggleLabelerSubscribe () {
   <button
     class="subscribe-labeler-toggle"
     :class="state.isLabelerSubscribing ? 'button' : 'button--bordered'"
+    :disabled="state.isLabelerOfficial"
     @click.stop="toggleLabelerSubscribe"
   >
     <SVGIcon name="labeler" />
