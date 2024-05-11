@@ -88,7 +88,7 @@ async function toggleLabelerSubscribe () {
     :disabled="labeler == null || state.isLabelerOfficial"
     @click.stop="toggleLabelerSubscribe"
   >
-    <SVGIcon name="labeler" />
+    <SVGIcon :name="state.isLabelerSubscribing ? 'labeler' : 'labelerOff'" />
     <span>{{ $t(state.isLabelerSubscribing ? "unsubscribeLabel" : "subscribeLabel") }}</span>
     <Loader v-if="state.processing" />
   </button>

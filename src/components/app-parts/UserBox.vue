@@ -107,11 +107,18 @@ function onActivateContentFilteringToggle () {
         :anonymizable="true"
       >
         <!-- ラベラーアイコン -->
-        <SVGIcon
-          v-if="user.associated?.labeler"
-          name="label"
-          class="account-labeler-icon"
-        />
+        <template v-if="user.associated?.labeler">
+          <SVGIcon
+            v-if="mainState.myLabeler.isSubscribed(user.did)"
+            name="labeler"
+            class="account-labeler-icon"
+          />
+          <SVGIcon
+            v-else
+            name="labelerOff"
+            class="account-labeler-icon"
+          />
+        </template>
 
         <!-- アカウントラベルアイコン -->
         <SVGIcon

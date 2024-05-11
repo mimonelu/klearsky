@@ -777,11 +777,18 @@ function toggleOldestQuotedPostDisplay () {
             :anonymizable="true"
           >
             <!-- ラベラーアイコン -->
-            <SVGIcon
-              v-if="post.author?.associated?.labeler"
-              name="label"
-              class="account-labeler-icon"
-            />
+            <template v-if="post.author?.associated?.labeler">
+              <SVGIcon
+                v-if="mainState.myLabeler.isSubscribed(post.author?.did)"
+                name="labeler"
+                class="account-labeler-icon"
+              />
+              <SVGIcon
+                v-else
+                name="labelerOff"
+                class="account-labeler-icon"
+              />
+            </template>
 
             <!-- アカウントラベルアイコン -->
             <SVGIcon

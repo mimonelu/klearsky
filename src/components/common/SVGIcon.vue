@@ -46,8 +46,9 @@ import image from "@/svg/image.svg?raw"
 import inviteCode from "@/svg/invite-code.svg?raw"
 import json from "@/svg/json.svg?raw"
 import label from "@/svg/label.svg?raw"
-import labeler from "@/svg/labeler.svg?raw"
 import labelOff from "@/svg/label-off.svg?raw"
+import labeler from "@/svg/labeler.svg?raw"
+import labelerOff from "@/svg/labeler-off.svg?raw"
 import lightning from "@/svg/lightning.svg?raw"
 import like from "@/svg/like.svg?raw"
 import link from "@/svg/link.svg?raw"
@@ -141,8 +142,9 @@ const icons: { [k: string]: string } = {
   inviteCode,
   json,
   label,
-  labeler,
   labelOff,
+  labeler,
+  labelerOff,
   lightning,
   like,
   link,
