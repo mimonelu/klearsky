@@ -817,8 +817,8 @@ function toggleOldestQuotedPostDisplay () {
           class="labels"
         >
           <div
-            v-for="label of state.alertLabels"
-            :key="label.val"
+            v-for="label, labelIndex of state.alertLabels"
+            :key="labelIndex"
             class="labels__item"
           >{{ $t(label.val) }}</div>
           <div class="labels__message">{{ $t("warning") }}</div>
@@ -923,7 +923,6 @@ function toggleOldestQuotedPostDisplay () {
                       class="quad-image"
                     >
                       <Thumbnail
-                        :key="post.cid"
                         :image="image"
                         :did="post.author.did"
                         :hasTranslateLink="state.hasOtherLanguages"
@@ -1016,8 +1015,8 @@ function toggleOldestQuotedPostDisplay () {
           >
             <!-- ラベラーによるラベル -->
             <RouterLink
-              v-for="label of state.labelerLabelsInPost"
-              :key="label.id"
+              v-for="label, labelIndex of state.labelerLabelsInPost"
+              :key="labelIndex"
               :to="{ path: '/profile/feeds', query: { account: label.did } }"
               class="harmless-labels__labelers-label"
               :title="label.description ?? ''"
@@ -1029,8 +1028,8 @@ function toggleOldestQuotedPostDisplay () {
 
             <!-- カスタムラベル -->
             <div
-              v-for="label of state.customLabelsInPost"
-              :key="label.uri"
+              v-for="label, labelIndex of state.customLabelsInPost"
+              :key="labelIndex"
               class="harmless-labels__custom-label"
             >
               <SVGIcon name="label" />
