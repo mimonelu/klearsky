@@ -11,6 +11,7 @@ export default async function (
     // did:plc: 以外
     : `https://dev.uniresolver.io/1.0/identifiers/${did}`
 
+  // TODO: 読込中も考慮すること
   let logJson: undefined | any = Util.cache.get("logAudit", url)
   if (logJson != null) return logJson
   const log = await fetch(url)

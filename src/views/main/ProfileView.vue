@@ -459,7 +459,7 @@ function onActivateAccountMaskToggle () {
               class="button-container"
             >
               <!-- ラベラーサブスクライブトグル -->
-              <SubscribeLabelerToggle />
+              <SubscribeLabelerToggle :labeler="mainState.currentLabeler" />
             </div>
 
             <!-- 説明文 -->

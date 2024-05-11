@@ -7,6 +7,10 @@ import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
+const props = defineProps<{
+  labeler?: TILabeler
+}>()
+
 const state = reactive<{
   processing: boolean
   isLabelerSubscribing: ComputedRef<boolean>
@@ -14,33 +18,33 @@ const state = reactive<{
 }>({
   processing: false,
   isLabelerSubscribing: computed((): boolean => {
-    if (mainState.currentProfile == null) {
+    if (props.labeler == null) {
       return false
     }
     const myLabelerDids = mainState.myLabeler.makeMyLabelerPrefferenceDids()
-    return myLabelerDids.indexOf(mainState.currentProfile.did) !== - 1
+    return myLabelerDids.indexOf(props.labeler.creator.did) !== - 1
   }),
   isLabelerOfficial: computed((): boolean => {
-    return mainState.currentProfile?.did === CONSTS.OFFICIAL_LABELER_DID
+    return props.labeler?.creator.did === CONSTS.OFFICIAL_LABELER_DID
   }),
 })
 
 async function toggleLabelerSubscribe () {
   Util.blurElement()
-  if (state.processing) {
-    return
-  }
-  if (mainState.currentProfile == null) {
-    return
-  }
-  if (state.isLabelerOfficial) {
+  if (state.processing ||
+      props.labeler == null ||
+      state.isLabelerOfficial
+  ) {
     return
   }
   if (state.isLabelerSubscribing) {
-    mainState.myLabeler.unsubscribe(mainState.currentProfile.did)
+    mainState.myLabeler.unsubscribe(props.labeler.creator.did)
   } else {
-    mainState.myLabeler.subscribe(mainState.currentProfile.did)
+    mainState.myLabeler.subscribe(props.labeler.creator.did, props.labeler)
   }
+
+  // ラベラーのHTTPヘッダーを設定
+  mainState.myLabeler.setAtprotoAcceptLabelers()
 
   // プリファレンスの保存
   state.processing = true
@@ -49,9 +53,6 @@ async function toggleLabelerSubscribe () {
   if (!result) {
     mainState.openErrorPopup("errorApiFailed", "ProfileView/updatePreferences")
   }
-
-  // ラベラーのHTTPヘッダーを設定
-  mainState.myLabeler.setAtprotoAcceptLabelers()
 
   // セッションキャッシュの更新
   if (result) {
@@ -64,7 +65,7 @@ async function toggleLabelerSubscribe () {
   <button
     class="subscribe-labeler-toggle"
     :class="state.isLabelerSubscribing ? 'button' : 'button--bordered'"
-    :disabled="state.isLabelerOfficial"
+    :disabled="labeler == null || state.isLabelerOfficial"
     @click.stop="toggleLabelerSubscribe"
   >
     <SVGIcon name="labeler" />

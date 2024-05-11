@@ -163,6 +163,7 @@ type MainState = {
   // ラベラー
 
   myLabeler: TIMyLabeler
+  currentLabeler?: TILabeler
 
   // ミュートユーザー
 

@@ -169,6 +169,7 @@ state.closeSelectLabelsPopup = closeSelectLabelsPopup
 // ラベラー
 
 state.myLabeler = new MyLabeler(state)
+state.currentLabeler = undefined
 
 // ミュートユーザー
 
@@ -1161,7 +1162,7 @@ async function fetchCurrentProfile (did: string) {
   await updateCurrentLogAudit()
 
   // 固定ポストのインポート
-  await fetchPinnedPost(state.currentProfile)
+  fetchPinnedPost(state.currentProfile)
 }
 
 async function updateCurrentLogAudit () {

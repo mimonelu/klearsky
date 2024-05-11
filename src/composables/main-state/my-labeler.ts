@@ -13,7 +13,7 @@ export default class MyLabeler {
     this.labelMap = {}
   }
 
-  subscribe (did: string) {
+  subscribe (did: string, labeler: TILabeler) {
     // Prefferences へ追加
     const myLabelers = this.getMyLabelerPrefferences()
     if (myLabelers.every((myLabeler) => myLabeler.did !== did)) {
@@ -21,7 +21,11 @@ export default class MyLabeler {
     }
 
     // クラスへ追加
-    // TODO:
+    const labelerIndex = this.labelers.findIndex((labeler) => labeler.creator.did === did)
+    if (labelerIndex === - 1) {
+      this.labelers.push(labeler)
+      this.updateLabelMap()
+    }
   }
 
   unsubscribe (did: string) {
@@ -63,11 +67,25 @@ export default class MyLabeler {
     return myLabelers.map((myLabeler) => myLabeler.did) ?? []
   }
 
-  async fetchMyLabelers (): Promise<boolean> {
+  async fetchLabeler (did: string): Promise<undefined | TILabeler> {
+    const response = await this.mainState.atp.fetchLabelers([did], true)
+    if (response instanceof Error) {
+      this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/fetchLabeler")
+      return
+    }
+    return response[0]
+  }
+
+  async updateCurrentLabeler (did: string): Promise<boolean> {
+    this.mainState.currentLabeler = await this.fetchLabeler(did)
+    return this.mainState.currentLabeler != null
+  }
+
+  async updateMyLabelers (): Promise<boolean> {
     const myLabelerDids = this.makeMyLabelerPrefferenceDids()
     const response = await this.mainState.atp.fetchLabelers(myLabelerDids, true)
     if (response instanceof Error) {
-      this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/fetchMyLabelers")
+      this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/updateMyLabelers")
       return false
     }
     this.labelers.splice(0, this.labelers.length, ...response)
