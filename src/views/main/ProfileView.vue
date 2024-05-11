@@ -10,6 +10,7 @@ import DisplayName from "@/components/app-parts/DisplayName.vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
 import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
+import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPopupTrigger.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
@@ -460,6 +461,9 @@ function onActivateAccountMaskToggle () {
             >
               <!-- ラベラーサブスクライブトグル -->
               <SubscribeLabelerToggle :labeler="mainState.currentLabeler" />
+
+              <!-- ラベラー設定ポップアップトリガー -->
+              <LabelerSettingsPopupTrigger :labeler="mainState.currentLabeler" />
             </div>
 
             <!-- 説明文 -->
