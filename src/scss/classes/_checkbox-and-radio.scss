@@ -24,6 +24,11 @@
     &[data-checked="true"] {
       background-color: var(--accent-color-025);
     }
+    &[data-disabled="true"] {
+      filter: grayscale(1.0);
+      opacity: 0.5;
+      pointer-events: none;
+    }
 
     // Chrome のバリデーションメッセージ対応
     & > input {

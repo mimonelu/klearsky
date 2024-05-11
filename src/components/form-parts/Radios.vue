@@ -8,6 +8,7 @@ defineProps<{
   model: number | string
   options: Array<TTOption>
   required?: boolean
+  disabled?: boolean
   layout?: "horizontal" | "vertical" | "vertical-2columns"
 }>()
 
@@ -26,6 +27,7 @@ function onChange () {
       :key="option.value"
       class="radio"
       :data-checked="state[model] === option.value"
+      :data-disabled="disabled ?? false"
     >
       <input
         v-model="state[model]"
@@ -33,6 +35,7 @@ function onChange () {
         :name="model.toString()"
         :value="option.value"
         :required="required ?? false"
+        :disabled="disabled ?? false"
         @change="onChange"
       >
       <SVGIcon :name="state[model] === option.value ? 'radioOn' : 'radioOff'" />

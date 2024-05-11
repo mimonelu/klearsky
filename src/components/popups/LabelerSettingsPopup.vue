@@ -21,6 +21,9 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+const myLabelers = mainState.myLabeler.getMyLabelerPrefferences()
+const isMyLabeler = myLabelers.findIndex((myLabeler) => myLabeler.did === props.labeler?.creator.did) !== - 1
+
 const state = reactive<{
   definitions: Array<TILabelerDefinitionEx>
 }>({
@@ -123,6 +126,7 @@ function toggleDetailDisplay (definition: TILabelerDefinitionEx) {
             :state="definition"
             model="setting"
             :options="definition.options"
+            :disabled="!isMyLabeler"
             layout="horizontal"
           />
         </div>
