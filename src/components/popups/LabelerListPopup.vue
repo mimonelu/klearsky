@@ -29,8 +29,8 @@ function close () {
     </template>
     <template #body>
       <LabelerCard
-        v-for="labeler of labelers"
-        :key="labeler.uri"
+        v-for="labeler, labelerIndex of labelers"
+        :key="labelerIndex"
         :labeler="labeler"
         :menuDisplay="true"
         :detailDisplay="false"
