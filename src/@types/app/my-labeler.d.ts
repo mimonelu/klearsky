@@ -15,5 +15,8 @@ interface TIMyLabeler {
   updateLabelMap (): void
   getProperLocale (locales: Array<TILabelerDefinitionLocale>): undefined | TILabelerDefinitionLocale
   makeMyLabelerLabels (labels: Array<TTLabel>): Array<TILabelerLabel>
+  getLabelPreference (did: string, label: string): undefined | TTPreference
+  addLabelPrefference (did: string, label: string, visibility: TTContentVisibility)
+  cleanLabelPrefferences (): void
   setAtprotoAcceptLabelers (): void
 }

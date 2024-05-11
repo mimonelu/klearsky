@@ -6,9 +6,9 @@ import Radios from "@/components/form-parts/Radios.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
-interface TILabelerDefinitionEx extends TILabelerDefinition {
+interface TIPseudoLabelerDefinition extends TILabelerDefinition {
   locale?: TILabelerDefinitionLocale
-  setting: "ignore" | "warn" | "hide"
+  setting: TTContentVisibility
   options: Array<TTOption>
   detailDisplay: boolean
 }
@@ -22,32 +22,20 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const myLabelers = mainState.myLabeler.getMyLabelerPrefferences()
+
 const isMyLabeler = myLabelers.findIndex((myLabeler) => myLabeler.did === props.labeler?.creator.did) !== - 1
 
 const state = reactive<{
-  definitions: Array<TILabelerDefinitionEx>
+  pseudoDefinitions: Array<TIPseudoLabelerDefinition>
 }>({
-  definitions: props.labeler?.policies.labelValueDefinitions?.map((definition) => {
+  pseudoDefinitions: props.labeler?.policies.labelValueDefinitions?.map((definition) => {
     const locale = mainState.myLabeler.getProperLocale(definition.locales)
-
-    // 選択肢の作成
-    // SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/moderation/useLabelBehaviorDescription.ts
-    const options: Array<TTOption> = []
-    options.push({ "label": "off", "value": "ignore" })
-    if (definition.blurs === "content" ||
-        definition.blurs === "media" ||
-        definition.severity === "alert"
-    ) {
-      options.push({ "label": "warn", "value": "warn" })
-    } else if (definition.severity === "inform") {
-      options.push({ "label": "showBadge", "value": "warn" })
-    }
-    options.push({ "label": "hide", "value": "hide" })
-
+    const setting = getLabelPreferenceVisibility(definition)
+    const options: Array<TTOption> = makeOptions(definition)
     return {
       ...definition,
       locale,
-      setting: definition.defaultSetting,
+      setting,
       options,
       detailDisplay: false,
     }
@@ -55,12 +43,68 @@ const state = reactive<{
 })
 
 function close () {
+  updateLabelPreferences()
   emit("close")
 }
 
-function toggleDetailDisplay (definition: TILabelerDefinitionEx) {
+function getLabelPreferenceVisibility (definition: TILabelerDefinition): TTContentVisibility {
+  if (props.labeler == null) {
+    return definition.defaultSetting
+  }
+  const labelPreference = mainState.myLabeler.getLabelPreference(
+    props.labeler.creator.did,
+    definition.identifier
+  )
+  return labelPreference?.visibility ?? definition.defaultSetting
+}
+
+// 選択肢の作成
+// SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/moderation/useLabelBehaviorDescription.ts
+function makeOptions (definition: TILabelerDefinition): Array<TTOption> {
+  const options: Array<TTOption> = []
+  options.push({ "label": "off", "value": "ignore" })
+  if (definition.blurs === "content" ||
+      definition.blurs === "media" ||
+      definition.severity === "alert"
+  ) {
+    options.push({ "label": "warn", "value": "warn" })
+  } else if (definition.severity === "inform") {
+    options.push({ "label": "showBadge", "value": "warn" })
+  }
+  options.push({ "label": "hide", "value": "hide" })
+  return options
+}
+
+async function updateLabelPreferences () {
+  if (!updated) {
+    return
+  }
+  state.pseudoDefinitions.forEach((pseudoDefinition) => {
+    if (props.labeler == null) {
+      return
+    }
+    mainState.myLabeler.addLabelPrefference(
+      props.labeler.creator.did,
+      pseudoDefinition.identifier,
+      pseudoDefinition.setting
+    )
+  })
+  mainState.myLabeler.cleanLabelPrefferences()
+  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+  if (!result) {
+    mainState.openErrorPopup("errorApiFailed", "LabelerSettingsPopup/close")
+  }
+}
+
+let updated = false
+
+function update () {
+  updated = true
+}
+
+function toggleDetailDisplay (pseudoDefinition: TIPseudoLabelerDefinition) {
   Util.blurElement()
-  definition.detailDisplay = !definition.detailDisplay
+  pseudoDefinition.detailDisplay = !pseudoDefinition.detailDisplay
 }
 </script>
 
@@ -100,34 +144,35 @@ function toggleDetailDisplay (definition: TILabelerDefinitionEx) {
 
         <!-- ラベル設定 -->
         <div
-          v-for="definition of state.definitions"
-          :key="definition.identifier"
+          v-for="pseudoDefinition of state.pseudoDefinitions"
+          :key="pseudoDefinition.identifier"
           class="labeler-settings-popup__label-setting"
         >
           <!-- ラベル名（ラベル説明トグル） -->
           <div class="labeler-settings-popup__label-name">
             <button
               type="button"
-              @click.prevent.stop="toggleDetailDisplay(definition)"
+              @click.prevent.stop="toggleDetailDisplay(pseudoDefinition)"
             >
-              <span>{{ definition.locale?.name ?? definition.identifier }}</span>
-              <SVGIcon :name="definition.detailDisplay ? 'cursorDown' : 'cursorUp'" />
+              <span>{{ pseudoDefinition.locale?.name ?? pseudoDefinition.identifier }}</span>
+              <SVGIcon :name="pseudoDefinition.detailDisplay ? 'cursorDown' : 'cursorUp'" />
             </button>
           </div>
 
           <!-- ラベル説明 -->
           <div
-            v-if="definition.detailDisplay"
+            v-if="pseudoDefinition.detailDisplay"
             class="labeler-settings-popup__label-description"
-          >{{ definition.locale?.description }}</div>
+          >{{ pseudoDefinition.locale?.description }}</div>
 
           <!-- 設定ラジオボタン -->
           <Radios
-            :state="definition"
+            :state="pseudoDefinition"
             model="setting"
-            :options="definition.options"
+            :options="pseudoDefinition.options"
             :disabled="!isMyLabeler"
             layout="horizontal"
+            @update="update"
           />
         </div>
       </div>

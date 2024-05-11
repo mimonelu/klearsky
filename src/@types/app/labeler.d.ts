@@ -24,7 +24,7 @@ interface TILabeler {
 interface TILabelerDefinition {
   adultsOnly?: boolean
   blurs: "content" | "media" | "none"
-  defaultSetting: "ignore" | "warn" | "hide"
+  defaultSetting: TTContentVisibility
   identifier: string
   locales: Array<TILabelerDefinitionLocale>
   severity: "inform" | "alert" | "none"

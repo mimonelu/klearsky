@@ -154,7 +154,7 @@ type TTLabel = {
   ver?: number
 }
 
-type TTContentVisibility = "hide" | "show" | "warn"
+type TTContentVisibility = "hide" | "show" | "warn" | "ignore"
 
 type TTLabelOnWarn = "null" | "blur" | "blur-media" | "alert"
 
@@ -168,6 +168,7 @@ type TTPreference = {
 
   // ラベラー
   labelers?: Array<{ did: string }>
+  labelerDid?: string
 
   // カスタムフィード - savedFeedsPref
   pinned?: Array<string>

@@ -165,6 +165,61 @@ export default class MyLabeler {
     })
   }
 
+  getLabelPreference (did: string, label: string): undefined | TTPreference {
+    return this.mainState.currentPreferences?.find((prefference) => {
+      return prefference.$type === "app.bsky.actor.defs#contentLabelPref" &&
+             prefference.labelerDid === did &&
+             prefference.label === label
+    })
+  }
+
+  addLabelPrefference (did: string, label: string, visibility: TTContentVisibility) {
+    const existing = this.getLabelPreference(did, label)
+    if (existing != null) {
+      existing.visibility = visibility
+    } else {
+      this.mainState.currentPreferences?.push({
+        $type: "app.bsky.actor.defs#contentLabelPref",
+        labelerDid: did,
+        label,
+        visibility,
+      })
+    }
+  }
+
+  cleanLabelPrefferences () {
+    if (this.mainState.currentPreferences == null) {
+      return
+    }
+    const results = this.mainState.currentPreferences.filter((preference) => {
+      // ラベラーではない、または labelerDid がなければそのまま
+      if (preference.$type !== "app.bsky.actor.defs#contentLabelPref" ||
+          preference.labelerDid == null
+      ) {
+        return true
+      }
+
+      // labelerDid が未登録ラベラーであれば削除
+      const labeler = this.labelers.find((labeler) => {
+        return labeler.creator.did === preference.labelerDid
+      })
+      if (labeler == null) {
+        return false
+      }
+
+      // visibility が既定値と同じであれば削除
+      const definition = labeler.policies.labelValueDefinitions?.find((definition) => {
+        return definition.identifier === preference.label
+      })
+      if (definition?.defaultSetting === preference.visibility) {
+        return false
+      }
+
+      return true
+    })
+    this.mainState.currentPreferences.splice(0, this.mainState.currentPreferences.length, ...results)
+  }
+
   setAtprotoAcceptLabelers () {
     const myLabelerDids = this.makeMyLabelerPrefferenceDids()
     this.mainState.atp.agent.configureLabelersHeader(myLabelerDids)
