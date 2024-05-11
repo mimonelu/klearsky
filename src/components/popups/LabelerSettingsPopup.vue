@@ -21,7 +21,7 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const myLabelers = mainState.myLabeler.getMyLabelerPrefferences()
+const myLabelers = mainState.myLabeler.getMyLabelerPreferences()
 
 const isMyLabeler = myLabelers.findIndex((myLabeler) => myLabeler.did === props.labeler?.creator.did) !== - 1
 
@@ -83,13 +83,13 @@ async function updateLabelPreferences () {
     if (props.labeler == null) {
       return
     }
-    mainState.myLabeler.addLabelPrefference(
+    mainState.myLabeler.addLabelPreference(
       props.labeler.creator.did,
       pseudoDefinition.identifier,
       pseudoDefinition.setting
     )
   })
-  mainState.myLabeler.cleanLabelPrefferences()
+  mainState.myLabeler.cleanLabelPreferences()
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   if (!result) {
     mainState.openErrorPopup("errorApiFailed", "LabelerSettingsPopup/close")

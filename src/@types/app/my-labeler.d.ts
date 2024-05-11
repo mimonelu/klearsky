@@ -7,8 +7,8 @@ interface TIMyLabeler {
   isSubscribed (did?: string): boolean
   isOfficial (did?: string): boolean
   belowMyLabelerLimit (): boolean
-  getMyLabelerPrefferences (): Array<{ did: string }>
-  makeMyLabelerPrefferenceDids (): string[]
+  getMyLabelerPreferences (): Array<{ did: string }>
+  makeMyLabelerPreferenceDids (): string[]
   async fetchLabeler (did: string): Promise<undefined | TILabeler>
   async updateCurrentLabeler (did: string): Promise<boolean>
   async updateMyLabelers(): Promise<boolean>
@@ -16,7 +16,7 @@ interface TIMyLabeler {
   getProperLocale (locales: Array<TILabelerDefinitionLocale>): undefined | TILabelerDefinitionLocale
   makeMyLabelerLabels (labels: Array<TTLabel>): Array<TILabelerLabel>
   getLabelPreference (did: string, label: string): undefined | TTPreference
-  addLabelPrefference (did: string, label: string, visibility: TTContentVisibility)
-  cleanLabelPrefferences (): void
+  addLabelPreference (did: string, label: string, visibility: TTContentVisibility)
+  cleanLabelPreferences (): void
   setAtprotoAcceptLabelers (): void
 }

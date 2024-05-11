@@ -19,8 +19,8 @@ export default class MyLabeler {
       return false
     }
 
-    // Prefferences へ追加
-    const myLabelers = this.getMyLabelerPrefferences()
+    // Preferences へ追加
+    const myLabelers = this.getMyLabelerPreferences()
     if (myLabelers.every((myLabeler) => myLabeler.did !== did)) {
       myLabelers?.push({ did })
     }
@@ -41,8 +41,8 @@ export default class MyLabeler {
       return false
     }
 
-    // Prefferences から削除
-    const myLabelers = this.getMyLabelerPrefferences()
+    // Preferences から削除
+    const myLabelers = this.getMyLabelerPreferences()
     const myLabelerIndex = myLabelers.findIndex((myLabeler) => myLabeler.did === did)
     if (myLabelerIndex !== - 1) {
       myLabelers.splice(myLabelerIndex, 1)
@@ -62,7 +62,7 @@ export default class MyLabeler {
     if (did == null) {
       return false
     }
-    const myLabelerDids = this.makeMyLabelerPrefferenceDids()
+    const myLabelerDids = this.makeMyLabelerPreferenceDids()
     return myLabelerDids.indexOf(did) !== - 1
   }
 
@@ -74,11 +74,11 @@ export default class MyLabeler {
   }
 
   belowMyLabelerLimit (): boolean {
-    const myLabelers = this.getMyLabelerPrefferences()
+    const myLabelers = this.getMyLabelerPreferences()
     return myLabelers.length <= (CONSTS.LABELER_UPPER_LIMIT - 1)
   }
 
-  getMyLabelerPrefferences (): Array<{ did: string }> {
+  getMyLabelerPreferences (): Array<{ did: string }> {
     const myLabelers = this.mainState.currentPreferences?.find((preference) => {
       return preference.$type === "app.bsky.actor.defs#labelersPref"
     })?.labelers ?? []
@@ -91,8 +91,8 @@ export default class MyLabeler {
     return myLabelers
   }
 
-  makeMyLabelerPrefferenceDids (): string[] {
-    const myLabelers = this.getMyLabelerPrefferences()
+  makeMyLabelerPreferenceDids (): string[] {
+    const myLabelers = this.getMyLabelerPreferences()
     return myLabelers.map((myLabeler) => myLabeler.did) ?? []
   }
 
@@ -111,7 +111,7 @@ export default class MyLabeler {
   }
 
   async updateMyLabelers (): Promise<boolean> {
-    const myLabelerDids = this.makeMyLabelerPrefferenceDids()
+    const myLabelerDids = this.makeMyLabelerPreferenceDids()
     const response = await this.mainState.atp.fetchLabelers(myLabelerDids, true)
     if (response instanceof Error) {
       this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/updateMyLabelers")
@@ -166,14 +166,14 @@ export default class MyLabeler {
   }
 
   getLabelPreference (did: string, label: string): undefined | TTPreference {
-    return this.mainState.currentPreferences?.find((prefference) => {
-      return prefference.$type === "app.bsky.actor.defs#contentLabelPref" &&
-             prefference.labelerDid === did &&
-             prefference.label === label
+    return this.mainState.currentPreferences?.find((preference) => {
+      return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
+             preference.labelerDid === did &&
+             preference.label === label
     })
   }
 
-  addLabelPrefference (did: string, label: string, visibility: TTContentVisibility) {
+  addLabelPreference (did: string, label: string, visibility: TTContentVisibility) {
     const existing = this.getLabelPreference(did, label)
     if (existing != null) {
       existing.visibility = visibility
@@ -187,7 +187,7 @@ export default class MyLabeler {
     }
   }
 
-  cleanLabelPrefferences () {
+  cleanLabelPreferences () {
     if (this.mainState.currentPreferences == null) {
       return
     }
@@ -221,7 +221,7 @@ export default class MyLabeler {
   }
 
   setAtprotoAcceptLabelers () {
-    const myLabelerDids = this.makeMyLabelerPrefferenceDids()
+    const myLabelerDids = this.makeMyLabelerPreferenceDids()
     this.mainState.atp.agent.configureLabelersHeader(myLabelerDids)
   }
 }
