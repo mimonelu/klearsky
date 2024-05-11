@@ -63,9 +63,6 @@ async function toggleLabelerSubscribe () {
     }
   }
 
-  // ラベラーのHTTPヘッダーを設定
-  mainState.myLabeler.setAtprotoAcceptLabelers()
-
   // プリファレンスの保存
   state.processing = true
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)

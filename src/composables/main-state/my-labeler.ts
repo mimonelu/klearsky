@@ -32,6 +32,9 @@ export default class MyLabeler {
       this.updateLabelMap()
     }
 
+    // ラベラーのHTTPヘッダーを設定
+    this.setAtprotoAcceptLabelers()
+
     return true
   }
 
@@ -54,6 +57,12 @@ export default class MyLabeler {
       this.labelers.splice(labelerIndex, 1)
       this.updateLabelMap()
     }
+
+    // 不要なラベルプリファレンスを削除
+    this.cleanLabelPreferences()
+
+    // ラベラーのHTTPヘッダーを設定
+    this.setAtprotoAcceptLabelers()
 
     return true
   }

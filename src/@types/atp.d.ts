@@ -154,6 +154,7 @@ type TTLabel = {
   ver?: number
 }
 
+// TODO: "show" が不要であれば削除すること
 type TTContentVisibility = "hide" | "show" | "warn" | "ignore"
 
 type TTLabelOnWarn = "null" | "blur" | "blur-media" | "alert"
