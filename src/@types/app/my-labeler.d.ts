@@ -2,8 +2,11 @@ interface TIMyLabeler {
   mainState: MainState
   labelers: Array<TILabeler>
   labelMap: { [did: string]: TILabelerLabel }
-  subscribe (did: string, labeler: TILabeler)
-  unsubscribe (did: string)
+  subscribe (did: string, labeler: TILabeler): boolean
+  unsubscribe (did: string): boolean
+  isSubscribed (did?: string): boolean
+  isOfficial (did?: string): boolean
+  belowMyLabelerLimit (): boolean
   getMyLabelerPrefferences (): Array<{ did: string }>
   makeMyLabelerPrefferenceDids (): string[]
   async fetchLabeler (did: string): Promise<undefined | TILabeler>

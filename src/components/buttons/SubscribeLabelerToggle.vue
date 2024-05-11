@@ -3,9 +3,10 @@ import { computed, inject, reactive, type ComputedRef } from "vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
-import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
+
+const $t = inject("$t") as Function
 
 const props = defineProps<{
   labeler?: TILabeler
@@ -13,19 +14,23 @@ const props = defineProps<{
 
 const state = reactive<{
   processing: boolean
+
+  // 登録済みラベラーかどうか
   isLabelerSubscribing: ComputedRef<boolean>
+
+  // 公式ラベラーかどうか
   isLabelerOfficial: ComputedRef<boolean>
 }>({
   processing: false,
+
+  // 登録済みラベラーかどうか
   isLabelerSubscribing: computed((): boolean => {
-    if (props.labeler == null) {
-      return false
-    }
-    const myLabelerDids = mainState.myLabeler.makeMyLabelerPrefferenceDids()
-    return myLabelerDids.indexOf(props.labeler.creator.did) !== - 1
+    return mainState.myLabeler.isSubscribed(props.labeler?.creator.did)
   }),
+
+  // 公式ラベラーかどうか
   isLabelerOfficial: computed((): boolean => {
-    return props.labeler?.creator.did === CONSTS.OFFICIAL_LABELER_DID
+    return mainState.myLabeler.isOfficial(props.labeler?.creator.did)
   }),
 })
 
@@ -38,9 +43,24 @@ async function toggleLabelerSubscribe () {
     return
   }
   if (state.isLabelerSubscribing) {
-    mainState.myLabeler.unsubscribe(props.labeler.creator.did)
+    // ラベラーの解除
+    if (!mainState.myLabeler.unsubscribe(props.labeler.creator.did)) {
+      return
+    }
   } else {
-    mainState.myLabeler.subscribe(props.labeler.creator.did, props.labeler)
+    // ラベラーの上限値チェック
+    if (!mainState.myLabeler.belowMyLabelerLimit()) {
+      mainState.openMessagePopup({
+        title: $t("error"),
+        text: $t("labelerOverLimit"),
+      })
+      return
+    }
+
+    // ラベラーの登録
+    if (!mainState.myLabeler.subscribe(props.labeler.creator.did, props.labeler)) {
+      return
+    }
   }
 
   // ラベラーのHTTPヘッダーを設定

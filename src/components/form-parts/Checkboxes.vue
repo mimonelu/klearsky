@@ -8,6 +8,7 @@ const props = defineProps<{
   model: number | string
   options: Array<TTOption>
   required?: boolean
+  disabled?: boolean
   limit?: number
   layout?: "horizontal" | "vertical" | "vertical-2columns"
 }>()
@@ -40,6 +41,7 @@ function onChange () {
         :name="model.toString()"
         :value="option.value"
         :required="required ?? false"
+        :data-disabled="disabled ?? false"
         @change="onChange"
       >
       <SVGIcon :name="state[model]?.includes(option.value) ? 'checkboxOn' : 'checkboxOff'" />

@@ -57,6 +57,7 @@
   "labelerSettings": "Labeler Settings",
   "subscribeLabel": "Subscribe labeler",
   "unsubscribeLabel": "Subscribing labeler",
+  "labelerOverLimit": "Cannot register this labeler because the subscribed labeler has reached the upper limit.",
   "myLabeler": "My Labeler",
   "labels": "Labels",
   "accountLabels": "Account labels",

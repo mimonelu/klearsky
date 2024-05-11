@@ -13,7 +13,12 @@ export default class MyLabeler {
     this.labelMap = {}
   }
 
-  subscribe (did: string, labeler: TILabeler) {
+  subscribe (did: string, labeler: TILabeler): boolean {
+    // 公式は追加不可
+    if (did === CONSTS.OFFICIAL_LABELER_DID) {
+      return false
+    }
+
     // Prefferences へ追加
     const myLabelers = this.getMyLabelerPrefferences()
     if (myLabelers.every((myLabeler) => myLabeler.did !== did)) {
@@ -26,12 +31,14 @@ export default class MyLabeler {
       this.labelers.push(labeler)
       this.updateLabelMap()
     }
+
+    return true
   }
 
-  unsubscribe (did: string) {
+  unsubscribe (did: string): boolean {
     // 公式は削除不可
     if (did === CONSTS.OFFICIAL_LABELER_DID) {
-      return
+      return false
     }
 
     // Prefferences から削除
@@ -47,6 +54,28 @@ export default class MyLabeler {
       this.labelers.splice(labelerIndex, 1)
       this.updateLabelMap()
     }
+
+    return true
+  }
+
+  isSubscribed (did?: string): boolean {
+    if (did == null) {
+      return false
+    }
+    const myLabelerDids = this.makeMyLabelerPrefferenceDids()
+    return myLabelerDids.indexOf(did) !== - 1
+  }
+
+  isOfficial (did?: string): boolean {
+    if (did == null) {
+      return false
+    }
+    return did === CONSTS.OFFICIAL_LABELER_DID
+  }
+
+  belowMyLabelerLimit (): boolean {
+    const myLabelers = this.getMyLabelerPrefferences()
+    return myLabelers.length <= (CONSTS.LABELER_UPPER_LIMIT - 1)
   }
 
   getMyLabelerPrefferences (): Array<{ did: string }> {
