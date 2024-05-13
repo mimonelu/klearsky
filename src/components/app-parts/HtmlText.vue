@@ -9,58 +9,6 @@ type RichParam = {
   param: string
 }
 
-const INTERNAL_LINK_ITEMS = [
-  // カスタムフィードページ
-  // TODO: DID指定だけではなくハンドル指定も対応すること
-  {
-    src: new RegExp("^https:\/\/bsky\.app\/profile\/did:\w+:([^\/]+)\/feed\/([^\/]+)"),
-    dst: "/home/feeds?feed=at://did:\w+:[1]/app.bsky.feed.generator/[2]",
-  },
-
-  // リストフィードページ
-  // TODO: DID指定だけではなくハンドル指定も対応すること
-  {
-    src: new RegExp("^https:\/\/bsky\.app\/profile\/did:\w+:([^\/]+)\/lists\/([^\/]+)"),
-    dst: "/home/list-feeds?list=at://did:\w+:[1]/app.bsky.graph.list/[2]",
-  },
-
-  // ポストスレッドページ
-  {
-    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)\/post\/([^\/]+)"),
-    dst: "/post?handle=[1]&rkey=[2]",
-  },
-
-  // プロフィールページ
-  {
-    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)$"),
-    dst: "/profile/feeds?account=[1]",
-  },
-
-  // フォロイー一覧ページ
-  {
-    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)\/follows$"),
-    dst: "/profile/following?account=[1]",
-  },
-
-  // フォロワー一覧ページ
-  {
-    src: new RegExp("^https:\/\/bsky\.app\/profile\/([^\/]+)\/followers$"),
-    dst: "/profile/follower?account=[1]",
-  },
-
-  // ポスト検索ページ
-  {
-    src: new RegExp("^https:\/\/bsky\.app\/search\\?q=([^&]+)$"),
-    dst: "/search/post?text=[1]",
-  },
-
-  // フィード検索ページ
-  {
-    src: new RegExp("^https:\/\/bsky\.app\/search\/feeds$"),
-    dst: "/search/feed",
-  },
-]
-
 const emit = defineEmits<{(name: string, text: string): void}>()
 
 const props = defineProps<{
@@ -135,12 +83,94 @@ const state = reactive<{
 })
 
 function transformInternalLink (uri: string): undefined | string {
-  for (const item of INTERNAL_LINK_ITEMS) {
-    const matches = uri.match(item.src)
-    if (matches == null) continue
-    return item.dst
-      .replace("[1]", matches[1])
-      .replace("[2]", matches[2])
+  let url: undefined | URL
+  try {
+    url = new URL(uri)
+  } catch (error) {
+    console.error("[klearsky/transformInternalLink]", error)
+    return
+  }
+  if (url == null) {
+    return
+  }
+  switch (url.hostname) {
+    // 公式URL
+    case "bsky.app": {
+      const paths = url.pathname.split("/")
+      switch (paths[1]) {
+        // プロフィール関連
+        case "profile": {
+          if (paths[2] == null) {
+            return
+          }
+
+          // プロフィールページ
+          if (paths[3] == null) {
+            return `/profile/feeds?account=${paths[2]}`
+          }
+
+          // プロフィールページ以外
+          switch (paths[3]) {
+            // カスタムフィードページ
+            case "feed": {
+              if (!paths[4]) {
+                return
+              }
+              if (!paths[2].startsWith("did:")) {
+                // TODO: ハンドルの場合は DID を取得すること
+                return
+              }
+              return `/home/feeds?feed=at://${paths[2]}/app.bsky.feed.generator/${paths[4]}`
+            }
+
+            // リストフィードページ
+            case "lists": {
+              if (!paths[4]) {
+                return
+              }
+              if (!paths[2].startsWith("did:")) {
+                // TODO: ハンドルの場合は DID を取得すること
+                return
+              }
+              return `/home/list-feeds?list=at://${paths[2]}/app.bsky.graph.list/${paths[4]}`
+            }
+
+            // フォロイー一覧ページ
+            case "follows": {
+              return `/profile/following?account=${paths[2]}`
+            }
+
+            // フォロワー一覧ページ
+            case "followers": {
+              return `/profile/follower?account=${paths[2]}`
+            }
+
+            // ポストスレッドページ
+            case "post": {
+              if (!paths[4]) {
+                return
+              }
+              if (paths[2].startsWith("did:")) {
+                // TODO: DID の場合はハンドルを取得すること
+                return
+              }
+              return `/post?handle=${paths[2]}&rkey=${paths[4]}`
+            }
+          }
+          break
+        }
+
+        // 検索関連
+        case "search": {
+          const q = url.searchParams.get("q")
+          if (!q) {
+            return
+          }
+          return `/search/post?text=${q}`
+        }
+      }
+      break
+    }
   }
 }
 
