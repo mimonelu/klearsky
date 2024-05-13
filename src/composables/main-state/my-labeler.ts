@@ -19,7 +19,7 @@ export default class MyLabeler {
       return false
     }
 
-    // Preferences へ追加
+    // プリファレンスへ追加
     const myLabelers = this.getMyLabelerPreferences()
     if (myLabelers.every((myLabeler) => myLabeler.did !== did)) {
       myLabelers?.push({ did })
@@ -44,7 +44,7 @@ export default class MyLabeler {
       return false
     }
 
-    // Preferences から削除
+    // プリファレンスから削除
     const myLabelers = this.getMyLabelerPreferences()
     const myLabelerIndex = myLabelers.findIndex((myLabeler) => myLabeler.did === did)
     if (myLabelerIndex !== - 1) {

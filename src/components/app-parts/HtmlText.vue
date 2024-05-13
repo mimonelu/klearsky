@@ -87,7 +87,7 @@ function transformInternalLink (uri: string): undefined | string {
   try {
     url = new URL(uri)
   } catch (error) {
-    console.error("[klearsky/transformInternalLink]", error)
+    console.warn(`[klearsky/transformInternalLink/${uri}]`, error)
     return
   }
   if (url == null) {

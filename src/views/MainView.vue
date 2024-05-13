@@ -56,7 +56,7 @@ import ThreadgatePopup from "@/components/popups/ThreadgatePopup.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import UiLanguageSettingsPopup from "@/components/popups/settings-popups/UiLanguageSettingsPopup.vue"
 import WordMutePopup from "@/components/popups/WordMutePopup.vue"
-import { state, resetProfileState } from "@/composables/main-state"
+import { state } from "@/composables/main-state"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
@@ -133,7 +133,7 @@ router.beforeEach(async (to: RouteLocationNormalized, _from: RouteLocationNormal
 
     state.inSameProfilePage = state.currentProfile != null
     if (!state.inSameProfilePage) {
-      resetProfileState(state)
+      state.resetProfileState()
     }
   }
 
@@ -1052,7 +1052,7 @@ function broadcastListener (event: MessageEvent) {
         />
       </Transition>
 
-      <!-- ラベラーリストポップアップ -->
+      <!-- ラベラー一覧ポップアップ -->
       <Transition>
         <LabelerListPopup
           v-if="state.labelerListPopupProps.display"

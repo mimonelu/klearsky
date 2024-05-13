@@ -27,6 +27,10 @@ state.listLoaderDisplay = false
 state.updateKey = 0
 state.forceUpdate = forceUpdate
 state.formatDate = formatDate
+// state.updatePageTitle = updatePageTitle
+
+// MyWorker
+state.myWorker = new MyWorker(state)
 
 // D&D
 state.isDragOver = false
@@ -37,13 +41,11 @@ state.scrolledToBottom = false
 // ブロードキャスト
 state.broadcastChannel = new BroadcastChannel("klearsky")
 
-// サーバ情報
-
+// 現在のサーバ情報
 state.currentServerInfo = undefined
 state.fetchCurrentServerInfo = fetchCurrentServerInfo
 
 // 設定
-
 state.settings = {}
 state.backgroundImage = computed((): string => {
   if (state.currentSetting?.backgroundImage == null) return ""
@@ -60,33 +62,21 @@ state.saveSettings = saveSettings
 state.updateCurrentLanguageSetting = updateCurrentLanguageSetting
 state.updateColorThemeSetting = updateColorThemeSetting
 
-// 設定 - 設定ポップオーバー
-
-state.settingsPopoverDisplay = false
-state.openSettingsPopover = openSettingsPopover
-state.closeSettingsPopover = closeSettingsPopover
-
 // 通知
-
 state.notifications = []
 state.notificationCursor = undefined
 state.notificationCount = 0
 state.notificationFetchedFirst = false
-state.notificationPopupDisplay = false
 state.notificationReasonFilter = undefined
 state.fetchNotifications = fetchNotifications
-state.openNotificationPopup = openNotificationPopup
-state.closeNotificationPopup = closeNotificationPopup
 
 // 通知タイマー
-
 state.notificationTimer = null
 state.clearNotificationInterval = clearNotificationInterval
 state.updateNotifications = updateNotifications
 state.updateNotificationInterval = updateNotificationInterval
 
 // 招待コード
-
 state.inviteCodes = []
 state.numberOfInviteCodes = computed(() => {
   let total = 0
@@ -109,85 +99,38 @@ state.updateInviteCodes = async (): Promise<boolean> => {
   return true
 }
 
-// 設定 - UI言語設定ポップアップ
-
-state.uiLanguageSettingsPopupDisplay = false
-state.openUiLanguageSettingsPopup = openUiLanguageSettingsPopup
-state.closeUiLanguageSettingsPopup = closeUiLanguageSettingsPopup
-
-// 設定 - デザイン設定ポップアップ
-
-state.designSettingsPopupDisplay = false
-state.openDesignSettingsPopup = openDesignSettingsPopup
-state.closeDesignSettingsPopup = closeDesignSettingsPopup
-
-// 設定 - ポスト設定ポップアップ
-
-state.postSettingsPopupDisplay = false
-state.openPostSettingsPopup = openPostSettingsPopup
-state.closePostSettingsPopup = closePostSettingsPopup
-
-// 設定 - 心理的安全性設定ポップアップ
-
-state.psySafetySettingsPopupDisplay = false
-state.openPsySafetySettingsPopup = openPsySafetySettingsPopup
-state.closePsySafetySettingsPopup = closePsySafetySettingsPopup
-
-// 設定 - その他設定ポップアップ
-
-state.otherSettingsPopupDisplay = false
-state.openOtherSettingsPopup = openOtherSettingsPopup
-state.closeOtherSettingsPopup = closeOtherSettingsPopup
-
-// 設定 - 招待コードポップアップ
-
-state.inviteCodesPopupDisplay = false
-state.openInviteCodesPopup = openInviteCodesPopup
-state.closeInviteCodesPopup = closeInviteCodesPopup
-
-// Preferences
-
+// プリファレンス
 state.currentPreferences = []
 state.fetchPreferences = fetchPreferences
 
-// コンテンツフィルタ
-
-state.getConcernedPreferences = getConcernedPreferences
-state.getContentWarningVisibility = getContentWarningVisibility
-
 // ラベル
-
-state.selectLabelsPopupDisplay = false
-state.selectLabelsPopupState = undefined
 state.hasLabel = hasLabel
 state.getLabelerLabels = getLabelerLabels
 state.getCustomLabels = getCustomLabels
 state.filterLabels = filterLabels
-state.openSelectLabelsPopup = openSelectLabelsPopup
-state.closeSelectLabelsPopup = closeSelectLabelsPopup
+state.getLabelsContentVisibility = getLabelsContentVisibility
 
 // ラベラー
-
 state.myLabeler = new MyLabeler(state)
 state.currentLabeler = undefined
 
 // ミュートユーザー
-
 state.currentMutingUsers = []
 state.currentMutingUsersCursor = undefined
 
 // ブロックユーザー
-
 state.currentBlockingUsers = []
 state.currentBlockingUsersCursor = undefined
 
 // プロフィール
-
 state.inSameProfilePage = false
 state.profileFolding = false
-state.currentProfile = null
-resetProfileState(state)
 state.userProfile = null
+state.currentProfile = null
+// -------------------------------- resetProfileState() 対象エリア
+resetProfileState()
+// -------------------------------- resetProfileState() 対象エリア
+state.resetProfileState = resetProfileState
 state.isMyProfile = isMyProfile
 state.fetchUserProfile = fetchUserProfile
 state.updateUserProfile = updateUserProfile
@@ -203,12 +146,10 @@ state.fetchSuggestedFollows = fetchSuggestedFollows
 state.fetchSuggestions = fetchSuggestions
 
 // ポストスレッド
-
 state.currentPosts = []
 state.fetchPostThread = fetchPostThread
 
 // フォロー中フィード
-
 state.timelineFeeds = []
 state.timelineCursor = undefined
 state.fetchTimeline = fetchTimeline
@@ -244,7 +185,6 @@ state.currentTaggedSuggestions = []
 state.currentTaggedProfiles = {}
 
 // カスタムフィード
-
 state.currentCustomFeedsUri = undefined
 state.currentCustomFeeds = []
 state.currentCustomFeedsCursor = undefined
@@ -264,7 +204,6 @@ state.removeFeedPreferenceByUri = removeFeedPreferenceByUri
 state.myFeeds = new MyFeeds(state)
 
 // リスト
-
 state.currentList = undefined
 state.currentListItems = []
 state.currentListItemsCursor = undefined
@@ -275,16 +214,21 @@ state.fetchCurrentListItems = fetchCurrentListItems
 state.fetchCurrentListFeeds = fetchCurrentListFeeds
 
 // マイリスト
-
 state.myLists = new MyLists(state)
 
 // グローバルフィード
-
 state.globallinePosts = []
 state.globallineProfiles = {}
 state.globallineNumberOfPosts = 0
 
 // ポップオーバー
+
+// ポップオーバー - 設定ポップオーバー
+state.settingsPopoverDisplay = false
+state.settingsPopoverSelector = ""
+state.settingsPopoverDirection = "toRight"
+state.openSettingsPopover = openSettingsPopover
+state.closeSettingsPopover = closeSettingsPopover
 
 // ポップオーバー - プロフィールポップオーバー
 state.profilePopoverProps = {
@@ -397,6 +341,41 @@ state.accountPopupDisplay = false
 state.openAccountPopup = openAccountPopup
 state.closeAccountPopup = closeAccountPopup
 
+// ポップアップ - 通知ポップアップ
+state.notificationPopupDisplay = false
+state.openNotificationPopup = openNotificationPopup
+state.closeNotificationPopup = closeNotificationPopup
+
+// ポップアップ - UI言語設定ポップアップ
+state.uiLanguageSettingsPopupDisplay = false
+state.openUiLanguageSettingsPopup = openUiLanguageSettingsPopup
+state.closeUiLanguageSettingsPopup = closeUiLanguageSettingsPopup
+
+// ポップアップ - デザイン設定ポップアップ
+state.designSettingsPopupDisplay = false
+state.openDesignSettingsPopup = openDesignSettingsPopup
+state.closeDesignSettingsPopup = closeDesignSettingsPopup
+
+// ポップアップ - ポスト設定ポップアップ
+state.postSettingsPopupDisplay = false
+state.openPostSettingsPopup = openPostSettingsPopup
+state.closePostSettingsPopup = closePostSettingsPopup
+
+// ポップアップ - 心理的安全性設定ポップアップ
+state.psySafetySettingsPopupDisplay = false
+state.openPsySafetySettingsPopup = openPsySafetySettingsPopup
+state.closePsySafetySettingsPopup = closePsySafetySettingsPopup
+
+// ポップアップ - その他設定ポップアップ
+state.otherSettingsPopupDisplay = false
+state.openOtherSettingsPopup = openOtherSettingsPopup
+state.closeOtherSettingsPopup = closeOtherSettingsPopup
+
+// ポップアップ - 招待コードポップアップ
+state.inviteCodesPopupDisplay = false
+state.openInviteCodesPopup = openInviteCodesPopup
+state.closeInviteCodesPopup = closeInviteCodesPopup
+
 // ポップアップ - コンテンツ言語ポップアップ
 state.contentLanguagesPopupDisplay = false
 state.openContentLanguagesPopup = openContentLanguagesPopup
@@ -427,7 +406,7 @@ state.wordMutePopupDisplay = false
 state.openWordMutePopup = openWordMutePopup
 state.closeWordMutePopup = closeWordMutePopup
 
-// ポップアップ - ラベラーリストポップアップ
+// ポップアップ - ラベラー一覧ポップアップ
 state.labelerListPopupProps = {
   display: false,
   title: "",
@@ -443,6 +422,12 @@ state.labelerSettingsPopupProps = {
 }
 state.openLabelerSettingsPopup = openLabelerSettingsPopup
 state.closeLabelerSettingsPopup = closeLabelerSettingsPopup
+
+// ポップアップ - ラベル選択ポップアップ
+state.selectLabelsPopupDisplay = false
+state.selectLabelsPopupState = undefined
+state.openSelectLabelsPopup = openSelectLabelsPopup
+state.closeSelectLabelsPopup = closeSelectLabelsPopup
 
 // ポップアップ - アカウントレポート送信ポップアップ
 state.sendAccountReportPopupProps = {
@@ -587,37 +572,7 @@ state.progressPopupProps = {
 state.openProgressPopup = openProgressPopup
 state.closeProgressPopup = closeProgressPopup
 
-// MyWorker
-state.myWorker = new MyWorker(state)
-
-export function resetProfileState (state: MainState) {
-  resetArray(state, "currentAuthorFeeds")
-  state.currentAuthorFeedsCursor = undefined
-  resetArray(state, "currentAuthorFeedsWithReplies")
-  state.currentAuthorFeedsWithRepliesCursor = undefined
-  resetArray(state, "currentAuthorFeedsWithMedia")
-  state.currentAuthorFeedsWithMediaCursor = undefined
-  resetArray(state, "currentAuthorCustomFeeds")
-  state.currentAuthorCustomFeedsCursor = undefined
-  resetArray(state, "currentAuthorReposts")
-  state.currentAuthorRepostsCursor = undefined
-  resetArray(state, "currentAuthorLikes")
-  state.currentAuthorLikesCursor = undefined
-  resetArray(state, "currentAuthorLists")
-  state.currentAuthorListsCursor = undefined
-  resetArray(state, "currentFollowers")
-  state.currentFollowersCursor = undefined
-  resetArray(state, "currentFollowings")
-  state.currentFollowingsCursor = undefined
-  resetArray(state, "currentSuggestedFollows")
-  state.currentAuthorPinnedPost = undefined
-}
-
-function resetArray (state: any, key: string) {
-  state[key] == null
-    ? state[key] = []
-    : state[key].splice(0)
-}
+// ---------------------------------------------------------------- 関数定義
 
 function forceUpdate () {
   state.updateKey = new Date().getTime()
@@ -648,6 +603,8 @@ function formatDate (dateString?: string): string {
   return format(the, "yyyy/MM/dd")
 }
 
+// updatePageTitle: () => void
+
 // 現在のサーバ情報
 
 async function fetchCurrentServerInfo () {
@@ -670,53 +627,76 @@ function resetSettings () {
 function updateSettings () {
   updateCurrentLanguageSetting()
   updateFontSetting()
-  updateNotificationInterval()
   updateColorThemeSetting()
+
+  // 通知タイマーの更新
+  updateNotificationInterval()
 }
 
 function saveSettings () {
   const did = state.atp.session?.did
-  if (did == null) return
-  if (state.settings[did] == null)
+  if (did == null) {
+    return
+  }
+  if (state.settings[did] == null) {
     state.settings[did] = {}
-  if (state.settings[did].uiLanguage == null)
+  }
+  if (state.settings[did].uiLanguage == null) {
     state.settings[did].uiLanguage = state.$getCurrentLanguage != null
       ? state.$getCurrentLanguage()
       : window.navigator.language
-  if (state.settings[did].autoTranslation == null)
+  }
+  if (state.settings[did].autoTranslation == null) {
     state.settings[did].autoTranslation = false
-  if (state.settings[did].autoTranslationIgnoreLanguage == null)
+  }
+  if (state.settings[did].autoTranslationIgnoreLanguage == null) {
     state.settings[did].autoTranslationIgnoreLanguage = undefined
-  if (state.settings[did].contentLanguages == null)
+  }
+  if (state.settings[did].contentLanguages == null) {
     state.settings[did].contentLanguages = []
-  else state.settings[did].contentLanguages = getSanitizedLanguages(state.settings[did].contentLanguages)
-  if (state.settings[did].fontSize == null)
+  } else {
+    state.settings[did].contentLanguages = getSanitizedLanguages(state.settings[did].contentLanguages)
+  }
+  if (state.settings[did].fontSize == null) {
     state.settings[did].fontSize = "medium"
-  if (state.settings[did].fontKerning == null)
+  }
+  if (state.settings[did].fontKerning == null) {
     state.settings[did].fontKerning = false
-  if (state.settings[did].fontAntialiasing == null)
+  }
+  if (state.settings[did].fontAntialiasing == null) {
     state.settings[did].fontAntialiasing = true
-  if (state.settings[did].notificationFetchInterval == null)
+  }
+  if (state.settings[did].notificationFetchInterval == null) {
     state.settings[did].notificationFetchInterval = 15000
-  if (state.settings[did].tags == null)
+  }
+  if (state.settings[did].tags == null) {
     state.settings[did].tags = []
-  if (state.settings[did].wordMute == null)
+  }
+  if (state.settings[did].wordMute == null) {
     state.settings[did].wordMute = []
-  if (state.settings[did].replyFolding == null)
+  }
+  if (state.settings[did].replyFolding == null) {
     state.settings[did].replyFolding = [4]
-  if (state.settings[did].repostFolding == null)
+  }
+  if (state.settings[did].repostFolding == null) {
     state.settings[did].repostFolding = [1, 2, 5]
-  if (state.settings[did].timeControl == null)
+  }
+  if (state.settings[did].timeControl == null) {
     state.settings[did].timeControl = "relative"
-  if (state.settings[did].imageFolding == null)
+  }
+  if (state.settings[did].imageFolding == null) {
     state.settings[did].imageFolding = "none"
-  if (state.settings[did].imageMaxHeightRatio == null)
+  }
+  if (state.settings[did].imageMaxHeightRatio == null) {
     state.settings[did].imageMaxHeightRatio = 1.5
-  if (state.settings[did].imageAutoPlay == null)
+  }
+  if (state.settings[did].imageAutoPlay == null) {
     state.settings[did].imageAutoPlay = true
-  if (state.settings[did].linkcardLayout == null)
+  }
+  if (state.settings[did].linkcardLayout == null) {
     state.settings[did].linkcardLayout = "vertical"
-  if (state.settings[did].linkcardEmbeddedControl == null)
+  }
+  if (state.settings[did].linkcardEmbeddedControl == null) {
     state.settings[did].linkcardEmbeddedControl = [
       "applemusic",
       "giphy",
@@ -728,43 +708,63 @@ function saveSettings () {
       "vimeo",
       "nicovideo",
     ]
-  if (state.settings[did].globallineContentLanguages == null)
+  }
+  if (state.settings[did].globallineContentLanguages == null) {
     state.settings[did].globallineContentLanguages = [Util.getUserLanguage()]
-  if (state.settings[did].globallineSkipPostHasNoLanguage == null)
+  }
+  if (state.settings[did].globallineSkipPostHasNoLanguage == null) {
     state.settings[did].globallineSkipPostHasNoLanguage = true
-  if (state.settings[did].globallinePostTypes == null)
+  }
+  if (state.settings[did].globallinePostTypes == null) {
     state.settings[did].globallinePostTypes = ["post"]
-  if (state.settings[did].globallineFollowersCountThreshold == null)
+  }
+  if (state.settings[did].globallineFollowersCountThreshold == null) {
     state.settings[did].globallineFollowersCountThreshold = undefined
-  if (state.settings[did].globallineLayout == null)
+  }
+  if (state.settings[did].globallineLayout == null) {
     state.settings[did].globallineLayout = "post"
-  if (state.settings[did].colorTheme == null)
+  }
+  if (state.settings[did].colorTheme == null) {
     state.settings[did].colorTheme = "auto"
-  if (state.settings[did].feedSearchKeywordHistory == null)
+  }
+  if (state.settings[did].feedSearchKeywordHistory == null) {
     state.settings[did].feedSearchKeywordHistory = []
-  if (state.settings[did].mainAreaOpacity == null)
+  }
+  if (state.settings[did].mainAreaOpacity == null) {
     state.settings[did].mainAreaOpacity = 1.0
-  if (state.settings[did].backgroundImage == null)
+  }
+  if (state.settings[did].backgroundImage == null) {
     state.settings[did].backgroundImage = undefined
-  if (state.settings[did].backgroundOpacity == null)
+  }
+  if (state.settings[did].backgroundOpacity == null) {
     state.settings[did].backgroundOpacity = 0.5
-  if (state.settings[did].hideNotificationBadge == null)
+  }
+  if (state.settings[did].hideNotificationBadge == null) {
     state.settings[did].hideNotificationBadge = false
-  if (state.settings[did].hideNumberOfReaction == null)
+  }
+  if (state.settings[did].hideNumberOfReaction == null) {
     state.settings[did].hideNumberOfReaction = false
-  if (state.settings[did].myFeedsIndex == null)
+  }
+  if (state.settings[did].myFeedsIndex == null) {
     state.settings[did].myFeedsIndex = []
-  if (state.settings[did].postAnonymization == null)
+  }
+  if (state.settings[did].postAnonymization == null) {
     state.settings[did].postAnonymization = false
-  if (state.settings[did].postLanguages == null)
+  }
+  if (state.settings[did].postLanguages == null) {
     state.settings[did].postLanguages = [Util.getUserLanguage()]
-  else state.settings[did].postLanguages = getSanitizedLanguages(state.settings[did].postLanguages)
-  if (state.settings[did].postSearchKeywordHistory == null)
+  } else {
+    state.settings[did].postLanguages = getSanitizedLanguages(state.settings[did].postLanguages)
+  }
+  if (state.settings[did].postSearchKeywordHistory == null) {
     state.settings[did].postSearchKeywordHistory = []
-  if (state.settings[did].lightning == null)
+  }
+  if (state.settings[did].lightning == null) {
     state.settings[did].lightning = undefined
-  if (state.settings[did].userSearchKeywordHistory == null)
+  }
+  if (state.settings[did].userSearchKeywordHistory == null) {
     state.settings[did].userSearchKeywordHistory = []
+  }
   state.currentSetting = state.settings[did]
   Util.saveStorage("settings", state.settings)
 }
@@ -813,36 +813,6 @@ function updateFontAntialiasingSetting () {
   )
 }
 
-function clearNotificationInterval () {
-  if (state.notificationTimer != null) {
-    clearInterval(state.notificationTimer)
-    state.notificationTimer = null
-  }
-}
-
-function updateNotificationInterval () {
-  state.clearNotificationInterval()
-  if (state.currentSetting.notificationFetchInterval === 0) return
-  // @ts-ignore // TODO:
-  state.notificationTimer = setInterval(
-    state.updateNotifications,
-    state.currentSetting.notificationFetchInterval ?? CONSTS.DEFAULT_NOTIFICATION_FETCH_INTERVAL
-  )
-}
-
-async function updateNotifications () {
-  const count = await state.atp.fetchNotificationCount() ?? 0
-  const canFetched = state.notificationCount < count
-  if (count > 0) {
-    state.notificationCount = count
-    state.updatePageTitle()
-  }
-  if (canFetched) {
-    // NOTICE: 念のため + 1 している
-    await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
-  }
-}
-
 function updateColorThemeSetting () {
   if (state.currentSetting?.colorTheme != null) {
     window.document.documentElement.setAttribute(
@@ -850,18 +820,6 @@ function updateColorThemeSetting () {
       state.currentSetting.colorTheme as string
     )
   }
-}
-
-// 設定 - 設定ポップオーバー
-
-function openSettingsPopover (selector: string, direction: "toRight" | "toUp") {
-  state.settingsPopoverSelector = selector
-  state.settingsPopoverDirection = direction
-  state.settingsPopoverDisplay = true
-}
-
-function closeSettingsPopover () {
-  state.settingsPopoverDisplay = false
 }
 
 // 通知
@@ -896,123 +854,45 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
   }
 }
 
-function openNotificationPopup () {
-  state.notificationPopupDisplay = true
+// 通知タイマー
+
+function clearNotificationInterval () {
+  if (state.notificationTimer != null) {
+    clearInterval(state.notificationTimer)
+    state.notificationTimer = null
+  }
 }
 
-function closeNotificationPopup () {
-  state.notificationPopupDisplay = false
+function updateNotificationInterval () {
+  state.clearNotificationInterval()
+  if (state.currentSetting.notificationFetchInterval === 0) return
+  // @ts-ignore // TODO:
+  state.notificationTimer = setInterval(
+    state.updateNotifications,
+    state.currentSetting.notificationFetchInterval ?? CONSTS.DEFAULT_NOTIFICATION_FETCH_INTERVAL
+  )
 }
 
-// 設定 - UI言語設定ポップアップ
-
-function openUiLanguageSettingsPopup () {
-  state.uiLanguageSettingsPopupDisplay = true
+async function updateNotifications () {
+  const count = await state.atp.fetchNotificationCount() ?? 0
+  const canFetched = state.notificationCount < count
+  if (count > 0) {
+    state.notificationCount = count
+    state.updatePageTitle()
+  }
+  if (canFetched) {
+    // NOTICE: 念のため + 1 している
+    await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
+  }
 }
 
-function closeUiLanguageSettingsPopup () {
-  state.uiLanguageSettingsPopupDisplay = false
-}
-
-// 設定 - デザイン設定ポップアップ
-
-function openDesignSettingsPopup () {
-  state.designSettingsPopupDisplay = true
-}
-
-function closeDesignSettingsPopup () {
-  state.designSettingsPopupDisplay = false
-}
-
-// 設定 - ポスト設定ポップアップ
-
-function openPostSettingsPopup () {
-  state.postSettingsPopupDisplay = true
-}
-
-function closePostSettingsPopup () {
-  state.postSettingsPopupDisplay = false
-}
-
-// 設定 - 心理的安全性設定ポップアップ
-
-function openPsySafetySettingsPopup () {
-  state.psySafetySettingsPopupDisplay = true
-}
-
-function closePsySafetySettingsPopup () {
-  state.psySafetySettingsPopupDisplay = false
-}
-
-// 設定 - その他設定ポップアップ
-
-function openOtherSettingsPopup () {
-  state.otherSettingsPopupDisplay = true
-}
-
-function closeOtherSettingsPopup () {
-  state.otherSettingsPopupDisplay = false
-}
-
-// 設定 - 招待コードポップアップ
-
-function openInviteCodesPopup () {
-  state.inviteCodesPopupDisplay = true
-}
-
-function closeInviteCodesPopup () {
-  state.inviteCodesPopupDisplay = false
-}
-
-// Preferences
+// プリファレンス
 
 async function fetchPreferences (): Promise<boolean> {
   const preferences = await state.atp.fetchPreferences()
   if (preferences == null) return false
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
   return true
-}
-
-// コンテンツフィルタ
-
-function getContentWarningVisibility (labels?: Array<TTLabel>): TTContentVisibility {
-  const preferences = state.getConcernedPreferences(labels)
-  for (const preference of preferences) {
-    if (preference.visibility === "hide") return "hide"
-  }
-  for (const preference of preferences) {
-    if (preference.visibility === "warn") return "warn"
-  }
-  return "show"
-}
-
-// label に該当する preference を取得する
-function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> {
-  if (labels == null) return []
-  const concernedPreferences = labels
-    .map((label: TTLabel): TTPreference => {
-      const val = Object.keys(LABEL_BEHAVIORS).find((k: string) => k === label.val)
-      if (val == null) return makeCustomLabelPreference(label.val)
-      return state.currentPreferences.find((preference: TTPreference) => {
-        return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
-          preference.label === LABEL_BEHAVIORS[val].oldGroup &&
-          preference.visibility !== "show"
-      }) ?? makeCustomLabelPreference(label.val)
-    })
-  return concernedPreferences
-}
-
-function makeCustomLabelPreference (label: string): TTPreference {
-  const visibility = label === "!hide"
-    ? "hide"
-    : LABEL_BEHAVIORS[label]?.configurable === false
-      ? "warn"
-      : "show"
-  return {
-    $type: "app.bsky.actor.defs#contentLabelPref",
-    label,
-    visibility,
-  }
 }
 
 // ラベル
@@ -1087,16 +967,76 @@ function filterLabels (
   })
 }
 
-function openSelectLabelsPopup (params: any) {
-  state.selectLabelsPopupDisplay = true
-  state.selectLabelsPopupState = params
+function getLabelsContentVisibility (labels?: Array<TTLabel>): TTContentVisibility {
+  const preferences = getConcernedPreferences(labels)
+  for (const preference of preferences) {
+    if (preference.visibility === "hide") return "hide"
+  }
+  for (const preference of preferences) {
+    if (preference.visibility === "warn") return "warn"
+  }
+  return "show"
 }
 
-function closeSelectLabelsPopup () {
-  state.selectLabelsPopupDisplay = false
+// label に該当する preference を取得する
+function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> {
+  if (labels == null) return []
+  const concernedPreferences = labels
+    .map((label: TTLabel): TTPreference => {
+      const val = Object.keys(LABEL_BEHAVIORS).find((k: string) => k === label.val)
+      if (val == null) return makeCustomLabelPreference(label.val)
+      return state.currentPreferences.find((preference: TTPreference) => {
+        return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
+          preference.label === LABEL_BEHAVIORS[val].oldGroup &&
+          preference.visibility !== "show"
+      }) ?? makeCustomLabelPreference(label.val)
+    })
+  return concernedPreferences
+}
+
+function makeCustomLabelPreference (label: string): TTPreference {
+  const visibility = label === "!hide"
+    ? "hide"
+    : LABEL_BEHAVIORS[label]?.configurable === false
+      ? "warn"
+      : "show"
+  return {
+    $type: "app.bsky.actor.defs#contentLabelPref",
+    label,
+    visibility,
+  }
 }
 
 // プロフィール
+
+function resetProfileState () {
+  resetArray(state, "currentAuthorFeeds")
+  state.currentAuthorFeedsCursor = undefined
+  resetArray(state, "currentAuthorFeedsWithReplies")
+  state.currentAuthorFeedsWithRepliesCursor = undefined
+  resetArray(state, "currentAuthorFeedsWithMedia")
+  state.currentAuthorFeedsWithMediaCursor = undefined
+  resetArray(state, "currentAuthorCustomFeeds")
+  state.currentAuthorCustomFeedsCursor = undefined
+  resetArray(state, "currentAuthorReposts")
+  state.currentAuthorRepostsCursor = undefined
+  resetArray(state, "currentAuthorLikes")
+  state.currentAuthorLikesCursor = undefined
+  resetArray(state, "currentAuthorLists")
+  state.currentAuthorListsCursor = undefined
+  resetArray(state, "currentFollowers")
+  state.currentFollowersCursor = undefined
+  resetArray(state, "currentFollowings")
+  state.currentFollowingsCursor = undefined
+  resetArray(state, "currentSuggestedFollows")
+  state.currentAuthorPinnedPost = undefined
+}
+
+function resetArray (state: any, key: string) {
+  state[key] == null
+    ? state[key] = []
+    : state[key].splice(0)
+}
 
 function isMyProfile (): boolean {
   const account = state.currentQuery.account as LocationQueryValue
@@ -1578,6 +1518,18 @@ async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: str
 
 // ポップオーバー
 
+// ポップオーバー - 設定ポップオーバー
+
+function openSettingsPopover (selector: string, direction: "toRight" | "toUp") {
+  state.settingsPopoverSelector = selector
+  state.settingsPopoverDirection = direction
+  state.settingsPopoverDisplay = true
+}
+
+function closeSettingsPopover () {
+  state.settingsPopoverDisplay = false
+}
+
 // ポップオーバー - プロフィールポップオーバー
 
 function openProfilePopover (selector: string | HTMLElement) {
@@ -1730,6 +1682,76 @@ function closeAccountPopup () {
   state.accountPopupDisplay = false
 }
 
+// ポップアップ - 通知ポップアップ
+
+function openNotificationPopup () {
+  state.notificationPopupDisplay = true
+}
+
+function closeNotificationPopup () {
+  state.notificationPopupDisplay = false
+}
+
+// ポップアップ - UI言語設定ポップアップ
+
+function openUiLanguageSettingsPopup () {
+  state.uiLanguageSettingsPopupDisplay = true
+}
+
+function closeUiLanguageSettingsPopup () {
+  state.uiLanguageSettingsPopupDisplay = false
+}
+
+// ポップアップ - デザイン設定ポップアップ
+
+function openDesignSettingsPopup () {
+  state.designSettingsPopupDisplay = true
+}
+
+function closeDesignSettingsPopup () {
+  state.designSettingsPopupDisplay = false
+}
+
+// ポップアップ - ポスト設定ポップアップ
+
+function openPostSettingsPopup () {
+  state.postSettingsPopupDisplay = true
+}
+
+function closePostSettingsPopup () {
+  state.postSettingsPopupDisplay = false
+}
+
+// ポップアップ - 心理的安全性設定ポップアップ
+
+function openPsySafetySettingsPopup () {
+  state.psySafetySettingsPopupDisplay = true
+}
+
+function closePsySafetySettingsPopup () {
+  state.psySafetySettingsPopupDisplay = false
+}
+
+// ポップアップ - その他設定ポップアップ
+
+function openOtherSettingsPopup () {
+  state.otherSettingsPopupDisplay = true
+}
+
+function closeOtherSettingsPopup () {
+  state.otherSettingsPopupDisplay = false
+}
+
+// ポップアップ - 招待コードポップアップ
+
+function openInviteCodesPopup () {
+  state.inviteCodesPopupDisplay = true
+}
+
+function closeInviteCodesPopup () {
+  state.inviteCodesPopupDisplay = false
+}
+
 // ポップアップ - コンテンツ言語ポップアップ
 
 function openContentLanguagesPopup () {
@@ -1790,7 +1812,7 @@ function closeWordMutePopup () {
   state.wordMutePopupDisplay = false
 }
 
-// ポップアップ - ラベラーリストポップアップ
+// ポップアップ - ラベラー一覧ポップアップ
 
 function openLabelerListPopup (title: string, labelers: Array<TILabeler>) {
   state.labelerListPopupProps.title = title
@@ -1811,6 +1833,17 @@ function openLabelerSettingsPopup (labeler: TILabeler) {
 
 function closeLabelerSettingsPopup () {
   state.labelerSettingsPopupProps.display = false
+}
+
+// ポップアップ - ラベル選択ポップアップ
+
+function openSelectLabelsPopup (params: any) {
+  state.selectLabelsPopupDisplay = true
+  state.selectLabelsPopupState = params
+}
+
+function closeSelectLabelsPopup () {
+  state.selectLabelsPopupDisplay = false
 }
 
 // ポップアップ - アカウントレポート送信ポップアップ

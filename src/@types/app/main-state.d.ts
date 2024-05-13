@@ -4,10 +4,10 @@ type MainState = {
   atp: TIAtpWrapper
   currentPath: string
   currentQuery: LocationQuery
+  mounted: boolean
   loaderDisplay: boolean
   centerLoaderDisplay: boolean
   listLoaderDisplay: boolean
-  mounted: boolean
   updateKey: number
   forceUpdate: () => void
   formatDate: (dateString?: string) => string
@@ -26,12 +26,10 @@ type MainState = {
   broadcastChannel?: BroadcastChannel
 
   // 現在のサーバ情報
-
   currentServerInfo?: TTServerInfo
   fetchCurrentServerInfo: () => void
 
   // 設定
-
   settings: { [did: string]: TTSetting }
   backgroundImage: ComputedRef<string>
   currentSetting: TTSetting
@@ -41,112 +39,31 @@ type MainState = {
   updateCurrentLanguageSetting: () => void
   updateColorThemeSetting: () => void
 
-  // 設定 - 設定ポップオーバー
-
-  settingsPopoverDisplay: boolean
-  settingsPopoverSelector: string
-  settingsPopoverDirection: "toRight" | "toUp"
-  openSettingsPopover: Function
-  closeSettingsPopover: Function
-
-  // 設定 - UI言語設定ポップアップ
-
-  uiLanguageSettingsPopupDisplay: boolean
-  openUiLanguageSettingsPopup: Function
-  closeUiLanguageSettingsPopup: Function
-
-  // 設定 - デザイン設定ポップアップ
-
-  designSettingsPopupDisplay: boolean
-  openDesignSettingsPopup: Function
-  closeDesignSettingsPopup: Function
-
-  // 設定 - ポスト設定ポップアップ
-
-  postSettingsPopupDisplay: boolean
-  openPostSettingsPopup: Function
-  closePostSettingsPopup: Function
-
-  // 設定 - 心理的安全性設定ポップアップ
-
-  psySafetySettingsPopupDisplay: boolean
-  openPsySafetySettingsPopup: Function
-  closePsySafetySettingsPopup: Function
-
-  // 設定 - その他設定ポップアップ
-
-  otherSettingsPopupDisplay: boolean
-  openOtherSettingsPopup: Function
-  closeOtherSettingsPopup: Function
-
-  // 設定 - 説明用ポップアップ
-
-  htmlPopupDisplay: boolean
-  htmlPopupType?: string
-
-  // 設定 - 招待コードポップアップ
-
-  inviteCodesPopupDisplay: boolean
-  openInviteCodesPopup: Function
-  closeInviteCodesPopup: Function
-
   // 通知
-
   notifications: Array<TTNotificationGroup>
   notificationCursor?: string
   notificationCount: number
   notificationFetchedFirst: boolean
-  notificationPopupDisplay: boolean
   notificationReasonFilter?: TTNotificationReason
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
-  openNotificationPopup: Function
-  closeNotificationPopup: Function
 
   // 通知タイマー
-
   notificationTimer: null | number = null
   clearNotificationInterval: () => void
   updateNotifications: () => Promise<void>
   updateNotificationInterval: () => void
 
   // 招待コード
-
   inviteCodes: Array<TTInviteCode>
   numberOfInviteCodes: ComputedRef<number>
   numberOfAvailableInviteCodes: ComputedRef<number>
   updateInviteCodes: () => Promise<boolean>
 
-  // Preferences
-
+  // プリファレンス
   currentPreferences: Array<TTPreference>
   fetchPreferences: () => Promise<boolean>
 
-  // コンテンツフィルタ
-
-  getContentWarningVisibility: (labels?: Array<TTLabel>) => TTContentVisibility
-  getConcernedPreferences: (labels?: Array<TTLabel>) => Array<TTPreference>
-
-  // ラベラーリストポップアップ
-
-  labelerListPopupProps: {
-    display: boolean
-    title: string
-    labelers: Array<TILabeler>
-  }
-  openLabelerListPopup: Function
-  closeLabelerListPopup: Function
-
-  //　ラベラー設定ポップアップ
-
-  labelerSettingsPopupProps: {
-    display: boolean
-    labeler?: TILabeler
-  }
-  openLabelerSettingsPopup: Function
-  closeLabelerSettingsPopup: Function
-
   // ラベル
-
   hasLabel (target: string, labels?: Array<TTLabel>): boolean
   getLabelerLabels (labels?: Array<TTLabel>): Array<TTLabel>
   getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
@@ -155,31 +72,26 @@ type MainState = {
     warns?: Array<TTLabelOnWarn>,
     labels?: Array<TTLabel>
   ): Array<TTLabel>
-  selectLabelsPopupDisplay: boolean
-  selectLabelsPopupState: any
-  openSelectLabelsPopup: Function
-  closeSelectLabelsPopup: Function
+  getLabelsContentVisibility: (labels?: Array<TTLabel>) => TTContentVisibility
 
   // ラベラー
-
   myLabeler: TIMyLabeler
   currentLabeler?: TILabeler
 
   // ミュートユーザー
-
   currentMutingUsers: Array<TTUser>
   currentMutingUsersCursor?: string
 
   // ブロックユーザー
-
   currentBlockingUsers: Array<TTUser>
   currentBlockingUsersCursor?: string
 
   // プロフィール
-
   inSameProfilePage: boolean
   profileFolding: boolean
+  userProfile: null | TTProfile
   currentProfile: null | TTProfile
+  // -------------------------------- resetProfileState() 対象エリア
   currentAuthorFeeds: Array<TTFeed>
   currentAuthorFeedsCursor?: string
   currentAuthorFeedsWithReplies: Array<TTFeed>
@@ -200,7 +112,8 @@ type MainState = {
   currentFollowings: Array<TTUser>
   currentFollowingsCursor?: string
   currentSuggestedFollows: Array<TTUser>
-  userProfile: null | TTProfile
+  // -------------------------------- resetProfileState() 対象エリア
+  resetProfileState: () => void
   isMyProfile: () => boolean
   fetchUserProfile: () => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
@@ -216,12 +129,10 @@ type MainState = {
   fetchSuggestions: (direction: "new" | "old") => Promise<void>
 
   // ポストスレッド
-
   currentPosts: Array<TTPost>
   fetchPostThread: () => Promise<void>
 
   // フォロー中フィード
-
   timelineFeeds: Array<TTFeed>
   timelineCursor?: string
   fetchTimeline: (direction: TTDirection, middleCursor?: string) => Promise<void>
@@ -257,7 +168,6 @@ type MainState = {
   currentTaggedProfiles: { [did: string]: null | TTProfile }
 
   // カスタムフィード
-
   currentCustomFeedsUri?: string
   currentCustomFeeds: Array<TTFeed>
   currentCustomFeedsCursor?: string
@@ -273,7 +183,6 @@ type MainState = {
   myFeeds: TTMyFeeds
 
   // リスト
-
   currentList?: TTList
   currentListItems: Array<TTListItem>
   currentListItemsCursor?: string
@@ -284,19 +193,23 @@ type MainState = {
   fetchCurrentListFeeds: (direction: TTDirection, middleCursor?: string) => Promise<boolean>
 
   // マイリスト
-
   myLists: TTMyLists
 
   // グローバルフィード
-
   globallinePosts: Array<TTPost>
   globallineProfiles: { [did: string]: any }
   globallineNumberOfPosts: number
 
   // ポップオーバー
 
-  // ポップオーバー - プロフィールポップオーバー
+  // ポップオーバー - 設定ポップオーバー
+  settingsPopoverDisplay: boolean
+  settingsPopoverSelector: string
+  settingsPopoverDirection: "toRight" | "toUp"
+  openSettingsPopover: Function
+  closeSettingsPopover: Function
 
+  // ポップオーバー - プロフィールポップオーバー
   profilePopoverProps: {
     display: boolean
     isUser: boolean
@@ -308,7 +221,6 @@ type MainState = {
   closeProfilePopover: Function
 
   // ポップオーバー - ポストポップオーバー
-
   postPopoverProps: {
     display: boolean
     post?: TTPost
@@ -319,7 +231,6 @@ type MainState = {
   closePostPopover: Function
 
   // ポップオーバー - リポストポップオーバー
-
   repostPopoverProps: {
     display: boolean
     post?: TTPost
@@ -330,7 +241,6 @@ type MainState = {
   closeRepostPopover: Function
 
   // ポップオーバー - フィードカードポップオーバー
-
   feedCardPopoverProps: {
     display: boolean
     generator?: TTFeedGenerator
@@ -340,7 +250,6 @@ type MainState = {
   closeFeedCardPopover: Function
 
   // ポップオーバー - リストカードポップオーバー
-
   listCardPopoverProps: {
     display: boolean
     list?: TTList
@@ -351,7 +260,6 @@ type MainState = {
   closeListCardPopover: Function
 
   // ポップオーバー - マイフィードソートポップオーバー
-
   myFeedsSortPopoverProps: {
     display: boolean
   }
@@ -361,7 +269,6 @@ type MainState = {
   closeMyFeedsSortPopover: Function
 
   // ポップオーバー - キーワード履歴ポップオーバー
-
   keywordHistoryPopoverProps: {
     display: boolean
     kind?: "postSearchKeywordHistory"
@@ -408,6 +315,45 @@ type MainState = {
   openAccountPopup: Function
   closeAccountPopup: Function
 
+  // ポップアップ - 通知ポップアップ
+  notificationPopupDisplay: boolean
+  openNotificationPopup: Function
+  closeNotificationPopup: Function
+
+  // ポップアップ - UI言語設定ポップアップ
+  uiLanguageSettingsPopupDisplay: boolean
+  openUiLanguageSettingsPopup: Function
+  closeUiLanguageSettingsPopup: Function
+
+  // ポップアップ - デザイン設定ポップアップ
+  designSettingsPopupDisplay: boolean
+  openDesignSettingsPopup: Function
+  closeDesignSettingsPopup: Function
+
+  // ポップアップ - ポスト設定ポップアップ
+  postSettingsPopupDisplay: boolean
+  openPostSettingsPopup: Function
+  closePostSettingsPopup: Function
+
+  // ポップアップ - 心理的安全性設定ポップアップ
+  psySafetySettingsPopupDisplay: boolean
+  openPsySafetySettingsPopup: Function
+  closePsySafetySettingsPopup: Function
+
+  // ポップアップ - その他設定ポップアップ
+  otherSettingsPopupDisplay: boolean
+  openOtherSettingsPopup: Function
+  closeOtherSettingsPopup: Function
+
+  // ポップアップ - 説明用ポップアップ
+  htmlPopupDisplay: boolean
+  htmlPopupType?: string
+
+  // ポップアップ - 招待コードポップアップ
+  inviteCodesPopupDisplay: boolean
+  openInviteCodesPopup: Function
+  closeInviteCodesPopup: Function
+
   // ポップアップ - コンテンツ言語ポップアップ
   contentLanguagesPopupDisplay: boolean
   openContentLanguagesPopup: Function
@@ -437,6 +383,29 @@ type MainState = {
   wordMutePopupDisplay: boolean
   openWordMutePopup: Function
   closeWordMutePopup: Function
+
+  // ポップアップ - ラベラー一覧ポップアップ
+  labelerListPopupProps: {
+    display: boolean
+    title: string
+    labelers: Array<TILabeler>
+  }
+  openLabelerListPopup: Function
+  closeLabelerListPopup: Function
+
+  //ポップアップ - 　ラベラー設定ポップアップ
+  labelerSettingsPopupProps: {
+    display: boolean
+    labeler?: TILabeler
+  }
+  openLabelerSettingsPopup: Function
+  closeLabelerSettingsPopup: Function
+
+  // ポップアップ - ラベル選択ポップアップ
+  selectLabelsPopupDisplay: boolean
+  selectLabelsPopupState: any
+  openSelectLabelsPopup: Function
+  closeSelectLabelsPopup: Function
 
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {

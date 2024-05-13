@@ -40,7 +40,7 @@ async function close () {
 }
 
 async function fetchMyFeeds () {
-  // Preferences の取得
+  // プリファレンスの取得
   state.popupLoaderDisplay = true
   const preferences = await mainState.fetchPreferences()
   if (!preferences) {

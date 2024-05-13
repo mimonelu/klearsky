@@ -35,7 +35,7 @@ const state = reactive<{
   }),
   contentFilteringToggleDisplay: false,
   contentWarningVisibility: computed((): TTContentVisibility => {
-    return mainState.getContentWarningVisibility(props.user.labels)
+    return mainState.getLabelsContentVisibility(props.user.labels)
   }),
 })
 
