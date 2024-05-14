@@ -1,39 +1,4 @@
 .labels {
-  --color: var(--notice-color);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  grid-gap: 0.5rem;
-  font-size: 0.875rem;
-  user-select: none;
-
-  & > .svg-icon {
-    fill: rgb(var(--color));
-  }
-  &[data-labeler="true"] > .svg-icon {
-    fill: rgb(var(--share-color));
-  }
-
-  &__labeler {
-    color: rgb(var(--share-color));
-    font-weight: bold;
-  }
-
-  &__message {
-    color: rgb(var(--color));
-    font-weight: bold;
-  }
-
-  &__item {
-    background-color: rgb(var(--color), 0.25);
-    color: rgb(var(--color));
-    font-weight: bold;
-    padding: 0.25rem;
-    word-break: break-word;
-  }
-}
-
-.harmless-labels {
   display: flex;
   flex-wrap: wrap;
   grid-gap: 0.5em;
@@ -41,6 +6,7 @@
     display: contents;
   }
 
+  &__harmful-label,
   &__labelers-label,
   &__custom-label,
   & > div {
@@ -69,6 +35,12 @@
   &__labeler {
     --color: rgb(var(--share-color), var(--alpha, 1.0));
     background-color: var(--share-color-0125);
+  }
+
+  // 有害なラベル
+  &__harmful-label {
+    --color: rgb(var(--notice-color), var(--alpha, 1.0));
+    background-color: var(--notice-color-0125);
   }
 
   // ラベラーによるラベル

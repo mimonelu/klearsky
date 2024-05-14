@@ -11,6 +11,7 @@ import FollowButton from "@/components/buttons/FollowButton.vue"
 import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPopupTrigger.vue"
+import LabelTags from "@/components/app-parts/LabelTags.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
@@ -39,9 +40,6 @@ const state = reactive<{
   // ラベル対応
   enabledContentMask: boolean
   hasNoUnauthenticated: ComputedRef<boolean>
-  harmfulLabels: ComputedRef<Array<TTLabel>>
-  labelerLabels: ComputedRef<Array<TILabelerLabel>>
-  customLabels: ComputedRef<Array<TTLabel>>
   contentFilteringLabels: ComputedRef<Array<TTLabel>>
   contentFilteringToggleDisplay: ComputedRef<boolean>
 
@@ -95,15 +93,6 @@ const state = reactive<{
   enabledContentMask: true,
   hasNoUnauthenticated: computed((): boolean => {
     return mainState.hasLabel("!no-unauthenticated", mainState.currentProfile?.labels)
-  }),
-  harmfulLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(undefined, ["alert", "blur", "blur-media"], mainState.currentProfile?.labels)
-  }),
-  labelerLabels: computed((): Array<TILabelerLabel> => {
-    return mainState.myLabeler.makeMyLabelerLabels(mainState.getLabelerLabels(mainState.currentProfile?.labels))
-  }),
-  customLabels: computed((): Array<TTLabel> => {
-    return mainState.getCustomLabels(mainState.currentProfile?.labels)
   }),
   contentFilteringLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(["hide", "warn"], ["blur", "blur-media"], mainState.currentProfile?.labels)
@@ -295,61 +284,17 @@ function onActivateAccountMaskToggle () {
             </div>
 
             <div class="profile-view__details__top__right">
-              <!-- 有害なラベル -->
-              <div
-                v-if="state.harmfulLabels.length > 0"
-                class="labels"
-              >
-                <SVGIcon name="contentFiltering" />
-                <div
-                  v-for="label of state.harmfulLabels"
-                  :key="label.val"
-                  class="labels__item"
-                >{{ $t(label.val) }}</div>
-              </div>
-
-              <!-- 無害なラベル -->
-              <div
-                v-if="
-                  state.labelerLabels.length > 0 ||
-                  state.customLabels.length > 0 ||
-                  state.isLabeler
-                "
-                class="harmless-labels"
-                :data-labeler="state.isLabeler"
-              >
+              <!-- ラベルタグ -->
+              <LabelTags :labels="mainState.currentProfile?.labels">
                 <!-- ラベラー -->
                 <div
                   v-if="state.isLabeler"
-                  class="harmless-labels__labeler"
+                  class="label-tags__labeler"
                 >
                   <SVGIcon name="labeler" />
                   <span>{{ $t("labeler") }}</span>
                 </div>
-
-                <!-- ラベラーによるラベル -->
-                <RouterLink
-                  v-for="label of state.labelerLabels"
-                  :key="label.id"
-                  :to="{ path: '/profile/feeds', query: { account: label.did } }"
-                  class="harmless-labels__labelers-label"
-                  :title="label.description ?? ''"
-                  @click.stop
-                >
-                  <SVGIcon name="label" />
-                  <span>{{ $t(label.name) }}</span>
-                </RouterLink>
-
-                <!-- カスタムラベル -->
-                <div
-                  v-for="label of state.customLabels"
-                  :key="label.val"
-                  class="harmless-labels__custom-label"
-                >
-                  <SVGIcon name="label" />
-                  <span>{{ $t(label.val) }}</span>
-                </div>
-              </div>
+              </LabelTags>
 
               <!-- 表示名 -->
               <DisplayName
@@ -713,7 +658,7 @@ function onActivateAccountMaskToggle () {
   // 折り畳み
   &[data-folding="true"] {
     .banner,
-    .harmless-labels,
+    .label-tags,
     .endpoint,
     .profile-view__details__bottom {
       display: none;
@@ -812,7 +757,8 @@ function onActivateAccountMaskToggle () {
   font-size: 5rem;
 }
 
-.harmless-labels {
+// ラベルタグ
+.label-tags {
   --alpha: 0.75;
   font-size: 0.875rem;
 }

@@ -105,6 +105,7 @@ state.fetchPreferences = fetchPreferences
 
 // ラベル
 state.hasLabel = hasLabel
+state.getHarmfulLabels = getHarmfulLabels
 state.getLabelerLabels = getLabelerLabels
 state.getCustomLabels = getCustomLabels
 state.filterLabels = filterLabels
@@ -901,6 +902,15 @@ function hasLabel (target: string, labels?: Array<TTLabel>): boolean {
   return (labels?.findIndex((label: TTLabel) => {
     return label.val === target
   }) ?? - 1) !== - 1
+}
+
+function getHarmfulLabels (labels?: Array<TTLabel>): Array<TTLabel> {
+  return labels?.filter((label: TTLabel) => {
+    if (label.val === "!no-unauthenticated") {
+      return false
+    }
+    return LABEL_BEHAVIORS[label.val] != null
+  }) ?? []
 }
 
 function getLabelerLabels (labels?: Array<TTLabel>): Array<TTLabel> {

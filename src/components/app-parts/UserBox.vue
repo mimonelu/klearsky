@@ -4,6 +4,7 @@ import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/app-parts/DisplayName.vue"
+import LabelTags from "@/components/app-parts/LabelTags.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
@@ -71,6 +72,9 @@ function onActivateContentFilteringToggle () {
     :data-menu-display="menuDisplay"
     @click="onActivateLink"
   >
+    <!-- ラベルタグ -->
+    <LabelTags :labels="user.labels" />
+
     <!-- プロフィールトグル -->
     <ContentFilteringToggle
       v-if="state.hasAppliedHarmfulLabel"
@@ -158,6 +162,7 @@ function onActivateContentFilteringToggle () {
   grid-template-columns: min-content auto 1fr auto;
   grid-template-rows: auto auto auto 1fr;
   grid-template-areas:
+    "l l l l"
     "c c c c"
     "v v v v"
     "a n h m"
@@ -167,6 +172,7 @@ function onActivateContentFilteringToggle () {
   &[data-menu-display="false"] {
     grid-template-columns: min-content auto 1fr;
     grid-template-areas:
+      "l l l"
       "c c c"
       "v v v"
       "a n h"
@@ -177,7 +183,15 @@ function onActivateContentFilteringToggle () {
 
 .content-filtering-toggle {
   grid-area: c;
-  margin: 0.5em 0;
+  margin-bottom: 0.5em;
+}
+
+// ラベルタグ
+.label-tags {
+  grid-area: l;
+  --alpha: 0.75;
+  font-size: 0.75em;
+  margin-bottom: 0.5em;
 }
 
 .viewer-labels {

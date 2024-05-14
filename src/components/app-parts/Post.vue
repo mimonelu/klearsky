@@ -7,6 +7,7 @@ import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.
 import DisplayName from "@/components/app-parts/DisplayName.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
+import LabelTags from "@/components/app-parts/LabelTags.vue"
 import LikeButton from "@/components/buttons/LikeButton.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
 import ListCard from "@/components/cards/ListCard.vue"
@@ -83,9 +84,6 @@ const state = reactive<{
   hideLabels: ComputedRef<Array<TTLabel>>
   blurLabels: ComputedRef<Array<TTLabel>>
   blurMediaLabels: ComputedRef<Array<TTLabel>>
-  alertLabels: ComputedRef<Array<TTLabel>>
-  labelerLabelsInPost: ComputedRef<Array<TILabelerLabel>>
-  customLabelsInPost: ComputedRef<Array<TTLabel>>
   contentWarningLabels: ComputedRef<Array<string>>
   hasAppliedHarmfulLabel: ComputedRef<boolean>
   hasBlurredContent: ComputedRef<boolean>
@@ -220,15 +218,6 @@ const state = reactive<{
   }),
   blurMediaLabels: computed((): Array<TTLabel> => {
     return mainState.filterLabels(["hide", "warn"], ["blur-media"], state.allLabels)
-  }),
-  alertLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide", "warn"], ["alert"], state.allLabels)
-  }),
-  labelerLabelsInPost: computed((): Array<TILabelerLabel> => {
-    return mainState.myLabeler.makeMyLabelerLabels(mainState.getLabelerLabels(props.post.labels))
-  }),
-  customLabelsInPost: computed((): Array<TTLabel> => {
-    return mainState.getCustomLabels(props.post.labels)
   }),
   contentWarningLabels: computed((): Array<string> => {
     return state.hideLabels.map((label: TTLabel) => $t(label.val))
@@ -811,19 +800,6 @@ function toggleOldestQuotedPostDisplay () {
           >{{ mainState.formatDate(post.indexedAt) }}</div>
         </div>
 
-        <!-- アラートラベル -->
-        <div
-          v-if="(state.alertLabels?.length ?? 0) > 0"
-          class="labels"
-        >
-          <div
-            v-for="label, labelIndex of state.alertLabels"
-            :key="labelIndex"
-            class="labels__item"
-          >{{ $t(label.val) }}</div>
-          <div class="labels__message">{{ $t("warning") }}</div>
-        </div>
-
         <!-- ポストコンテンツトグル -->
         <ContentFilteringToggle
           v-if="state.hasBlurredContent"
@@ -987,8 +963,6 @@ function toggleOldestQuotedPostDisplay () {
           <div
             v-if="
               post.record?.tags != null &&
-              position !== 'postInPost' &&
-              position !== 'preview' &&
               position !== 'slim'
             "
             class="post-tag-container"
@@ -1003,40 +977,13 @@ function toggleOldestQuotedPostDisplay () {
               <span>{{ postTag }}</span>
             </RouterLink>
           </div>
-
-          <!-- 無害なラベル -->
-          <div
-            v-if="
-              position !== 'postInPost' &&
-              position !== 'preview' &&
-              position !== 'slim'
-            "
-            class="harmless-labels"
-          >
-            <!-- ラベラーによるラベル -->
-            <RouterLink
-              v-for="label, labelIndex of state.labelerLabelsInPost"
-              :key="labelIndex"
-              :to="{ path: '/profile/feeds', query: { account: label.did } }"
-              class="harmless-labels__labelers-label"
-              :title="label.description ?? ''"
-              @click.stop
-            >
-              <SVGIcon name="label" />
-              <span>{{ label.name }}</span>
-            </RouterLink>
-
-            <!-- カスタムラベル -->
-            <div
-              v-for="label, labelIndex of state.customLabelsInPost"
-              :key="labelIndex"
-              class="harmless-labels__custom-label"
-            >
-              <SVGIcon name="label" />
-              <span>{{ label.val }}</span>
-            </div>
-          </div>
         </div>
+
+        <!-- ラベルタグ -->
+        <LabelTags
+          v-if="position !== 'slim'"
+          :labels="state.allLabels"
+        />
 
         <!-- 引用リポスト／リストカード -->
         <template v-if="post.embed?.record != null">
@@ -1544,10 +1491,6 @@ function toggleOldestQuotedPostDisplay () {
   white-space: nowrap;
 }
 
-.labels {
-  font-size: 0.875em;
-}
-
 .content-filtering-toggle {
   font-size: 0.875em;
 }
@@ -1691,10 +1634,10 @@ function toggleOldestQuotedPostDisplay () {
   }
 }
 
-// 無害なラベル
-.harmless-labels {
+// ラベルタグ
+.label-tags {
   --alpha: 0.75;
-  font-size: 0.875em;
+  font-size: 0.75em;
 }
 
 .reaction-container {

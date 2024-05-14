@@ -65,6 +65,7 @@ type MainState = {
 
   // ラベル
   hasLabel (target: string, labels?: Array<TTLabel>): boolean
+  getHarmfulLabels (labels?: Array<TTLabel>): Array<TTLabel>
   getLabelerLabels (labels?: Array<TTLabel>): Array<TTLabel>
   getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
   filterLabels (
