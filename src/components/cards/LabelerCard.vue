@@ -14,6 +14,7 @@ const props = defineProps<{
   labeler: TILabeler
   menuDisplay: boolean
   detailDisplay: boolean
+  settingsButtonDisplay: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -140,6 +141,7 @@ function openLabelerSettingsPopup () {
 
       <!-- 設定ボタン -->
       <button
+        v-if="settingsButtonDisplay"
         type="button"
         class="button labeler-card__settings-button"
         @click.stop.prevent="openLabelerSettingsPopup"

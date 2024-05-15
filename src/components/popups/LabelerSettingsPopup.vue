@@ -130,8 +130,9 @@ function toggleDetailDisplay (pseudoDefinition: TIPseudoLabelerDefinition) {
       <!-- ラベラーカード -->
       <LabelerCard
         :labeler="labeler"
-        :menuDisplay="false"
+        :menuDisplay="true"
         :detailDisplay="false"
+        :settingsButtonDisplay="false"
         @close="close"
         @onActivateMention="close"
         @onActivateHashTag="close"

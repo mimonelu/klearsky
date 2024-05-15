@@ -44,6 +44,16 @@ const state = reactive<{
     return mainState.getCustomLabels(props.labels)
   }),
 })
+
+function openLabelerSettingsPopup (labelSetting?: TILabelSetting) {
+  const labeler = mainState.myLabeler.labelers.find((labeler) => {
+    return labeler.creator.did === labelSetting?.did
+  })
+  if (labeler == null) {
+    return
+  }
+  mainState.openLabelerSettingsPopup(labeler)
+}
 </script>
 
 <template>
@@ -68,17 +78,17 @@ const state = reactive<{
     </div>
 
     <!-- ラベラーによるラベル -->
-    <RouterLink
+    <button
       v-for="label, labelIndex of state.labelerLabels"
       :key="labelIndex"
-      :to="{ path: '/profile/feeds', query: { account: label?.did } }"
+      type="button"
       class="labels__labelers-label"
       :title="label?.locale.description ?? ''"
-      @click.stop
+      @click.stop="openLabelerSettingsPopup(label)"
     >
       <SVGIcon name="label" />
       <span>{{ $t(label?.locale.name) }}</span>
-    </RouterLink>
+    </button>
 
     <!-- カスタムラベル -->
     <div
@@ -143,6 +153,7 @@ const state = reactive<{
     --color: rgb(var(--share-color), var(--alpha, 1.0));
     background-color: var(--share-color-0125);
     border-color: var(--share-color-025);
+    cursor: pointer;
     &:focus,
     &:hover {
       --alpha: 1.0;

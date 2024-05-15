@@ -149,11 +149,11 @@
     &:not(:last-child) {
       border-right-style: none;
     }
-    &:first-child {
+    &:first-child:not(:last-child) {
       border-top-right-radius: unset;
       border-bottom-right-radius: unset;
     }
-    &:last-child {
+    &:last-child:not(:first-child) {
       border-top-left-radius: unset;
       border-bottom-left-radius: unset;
     }

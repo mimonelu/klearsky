@@ -34,6 +34,7 @@ function close () {
         :labeler="labeler"
         :menuDisplay="true"
         :detailDisplay="false"
+        :settingsButtonDisplay="true"
         @close="close"
         @onActivateMention="close"
         @onActivateHashTag="close"
