@@ -158,7 +158,8 @@ function toggleDetailDisplay (pseudoDefinition: TIPseudoLabelerDefinition) {
               type="button"
               @click.prevent.stop="toggleDetailDisplay(pseudoDefinition)"
             >
-              <span>{{ pseudoDefinition.locale?.name ?? pseudoDefinition.identifier }}</span>
+              <span>{{ pseudoDefinition.locale?.name || $t(`label-name-${pseudoDefinition.identifier}`) }}</span>
+              <i>{{ pseudoDefinition.blurs }}</i>
               <SVGIcon :name="pseudoDefinition.detailDisplay ? 'cursorDown' : 'cursorUp'" />
             </button>
           </div>
@@ -167,7 +168,7 @@ function toggleDetailDisplay (pseudoDefinition: TIPseudoLabelerDefinition) {
           <div
             v-if="pseudoDefinition.detailDisplay"
             class="labeler-settings-popup__label-description"
-          >{{ pseudoDefinition.locale?.description }}</div>
+          >{{ pseudoDefinition.locale?.description || $t(`label-description-${pseudoDefinition.identifier}`) }}</div>
 
           <!-- 設定ラジオボタン -->
           <Radios
@@ -252,6 +253,16 @@ function toggleDetailDisplay (pseudoDefinition: TIPseudoLabelerDefinition) {
           text-decoration: underline;
           text-underline-offset: 0.25rem;
         }
+      }
+
+      // Blurs
+      & > i {
+        background-color: var(--fg-color-0125);
+        border-radius: var(--border-radius-small);
+        color: var(--fg-color-075);
+        font-size: 0.75rem;
+        padding: 0.25rem;
+        white-space: nowrap;
       }
     }
   }

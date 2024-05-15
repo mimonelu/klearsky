@@ -227,9 +227,6 @@ async function autoLogin () {
       return
     }
     await processAfterLogin()
-
-    // TODO:
-    state.myLabeler.updateMyLabelers()
   }
 }
 
@@ -300,6 +297,9 @@ async function processAfterLogin () {
   if (tasks.userProfile != null) {
     state.myWorker.setSessionCache("userProfile", state.userProfile)
   }
+
+  // ラベラーの取得
+  await state.myLabeler.updateMyLabelers()
 
   // ラベラーのHTTPヘッダーを設定
   state.myLabeler.setAtprotoAcceptLabelers()

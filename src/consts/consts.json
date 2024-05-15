@@ -3,6 +3,12 @@
   "DEFAULT_NOTIFICATION_FETCH_INTERVAL": 15000,
   "LABELER_UPPER_LIMIT": 9,
   "OFFICIAL_LABELER_DID": "did:plc:ar7c4by46qjdydhdevvrndac",
+  "OFFICIAL_SPECIAL_LABELERS": [
+    "nudity",
+    "graphic-media",
+    "sexual",
+    "porn"
+  ],
   "LIMIT_OF_FETCH_ACTORS_TYPEAHEAD": 10,
   "LIMIT_OF_FETCH_AUTHOR_FEEDS": 30,
   "LIMIT_OF_FETCH_AUTHOR_REPOSTS": 20,

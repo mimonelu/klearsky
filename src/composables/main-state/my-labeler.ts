@@ -93,7 +93,9 @@ export default class MyLabeler {
     })?.labelers ?? []
 
     // 公式ラベラーを追加
-    if (myLabelers.every((myLabeler) => myLabeler.did !== CONSTS.OFFICIAL_LABELER_DID)) {
+    if (myLabelers.every((myLabeler) => {
+      return myLabeler.did !== CONSTS.OFFICIAL_LABELER_DID
+    })) {
       myLabelers.unshift({ did: CONSTS.OFFICIAL_LABELER_DID })
     }
 
@@ -135,7 +137,7 @@ export default class MyLabeler {
   }
 
   updateLabelMap () {
-    /*
+    /* // TODO:
     Object.keys(this.labelMap).forEach((key) => {
       delete this.labelMap[key]
     })
@@ -149,16 +151,27 @@ export default class MyLabeler {
         const did = labeler.creator.did
         const id = `${did}-${definition.identifier}`
         const preference = this.getLabelPreference(did, definition.identifier)
+
+        // SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/moderation/useLabelBehaviorDescription.ts
+        const isBadge =
+          definition.severity === "inform" &&
+          (
+            definition.blurs !== "content" &&
+            definition.blurs !== "media"
+          )
+
         if (this.labelMap[id] == null) {
           this.labelMap[id] = {
             did,
             definition,
+            isBadge,
             locale,
             preference,
           }
         } else {
           this.labelMap[id].did = did
           this.labelMap[id].definition = definition
+          this.labelMap[id].isBadge = isBadge
           this.labelMap[id].locale = locale
           this.labelMap[id].preference = preference
         }
@@ -172,11 +185,45 @@ export default class MyLabeler {
     }) ?? locales[0]
   }
 
+  getSpecificLabels (
+    labels: Array<TTLabel>,
+    visibility: Array<TTContentVisibility>,
+    blurs: Array<TTLabelBlurs>
+  ): Array<TILabelSetting> {
+    return labels
+      .map((label) => {
+        let labelSetting = this.labelMap[`${label.src}-${label.val}`]
+        if (labelSetting == null) {
+          // 公式ラベルと同名のカスタムラベルは公式ラベルとして処理
+          labelSetting = this.labelMap[`${CONSTS.OFFICIAL_LABELER_DID}-${label.val}`]
+          if (labelSetting == null) {
+            return
+          }
+        }
+        return labelSetting
+      })
+      .filter((labelSetting?: TILabelSetting) => {
+        if (labelSetting == null) {
+          return false
+        }
+        const dstVisibility = labelSetting.preference?.visibility ?? labelSetting.definition.defaultSetting
+        const dstVisibilityModified = labelSetting.isBadge && dstVisibility === "warn" ? "show" : dstVisibility
+        return visibility.includes(dstVisibilityModified) &&
+               blurs.includes(labelSetting.definition.blurs)
+      }) as Array<TILabelSetting>
+  }
+
   getLabelPreference (did: string, label: string): undefined | TTPreference {
     return this.mainState.currentPreferences?.find((preference) => {
       return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
-             preference.labelerDid === did &&
-             preference.label === label
+             preference.label === label &&
+             (
+               preference.labelerDid === did ||
+               (
+                 preference.labelerDid == null &&
+                 CONSTS.OFFICIAL_SPECIAL_LABELERS.includes(label)
+               )
+             )
     })
   }
 
@@ -224,6 +271,14 @@ export default class MyLabeler {
 
       return true
     })
+
+    // 特別な公式ラベルの labelerDid を削除
+    results.forEach((result) => {
+      if (result.label != null && CONSTS.OFFICIAL_SPECIAL_LABELERS.includes(result.label)) {
+        delete result.labelerDid
+      }
+    })
+
     this.mainState.currentPreferences.splice(0, this.mainState.currentPreferences.length, ...results)
   }
 

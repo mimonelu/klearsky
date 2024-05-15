@@ -1,6 +1,7 @@
 interface TILabelSetting {
   did: string
   definition: TILabelerDefinition
+  isBadge: boolean
   locale: TILabelerDefinitionLocale
   preference?: TTPreference
 }
@@ -22,13 +23,15 @@ interface TILabeler {
 }
 
 interface TILabelerDefinition {
-  adultsOnly?: boolean
-  blurs: "content" | "media" | "none"
+  adultOnly?: boolean
+  blurs: TTLabelBlurs
   defaultSetting: TTContentVisibility
   identifier: string
   locales: Array<TILabelerDefinitionLocale>
   severity: "inform" | "alert" | "none"
 }
+
+type TTLabelBlurs = "content" | "media" | "none"
 
 interface TILabelerDefinitionLocale {
   description: string

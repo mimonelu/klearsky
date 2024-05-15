@@ -289,7 +289,10 @@ function onActivateAccountMaskToggle () {
 
             <div class="profile-view__details__top__right">
               <!-- ラベルタグ -->
-              <LabelTags :labels="mainState.currentProfile?.labels">
+              <LabelTags
+                :labels="mainState.currentProfile?.labels"
+                :harmfulDisplay="true"
+              >
                 <!-- ラベラー -->
                 <div
                   v-if="state.isLabeler"

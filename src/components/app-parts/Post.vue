@@ -80,12 +80,10 @@ const state = reactive<{
 
   // ラベル対応
   allLabels: ComputedRef<Array<TTLabel>>
-  appliedHarmfulLabels: ComputedRef<Array<TTLabel>>
-  hideLabels: ComputedRef<Array<TTLabel>>
-  blurLabels: ComputedRef<Array<TTLabel>>
-  blurMediaLabels: ComputedRef<Array<TTLabel>>
-  contentWarningLabels: ComputedRef<Array<string>>
-  hasAppliedHarmfulLabel: ComputedRef<boolean>
+  hideLabels: ComputedRef<Array<TILabelSetting>>
+  hideLabelNames: ComputedRef<Array<string>>
+  blurContentLabels: ComputedRef<Array<TILabelSetting>>
+  blurMediaLabels: ComputedRef<Array<TILabelSetting>>
   hasBlurredContent: ComputedRef<boolean>
   blurredContentClicked: boolean
   postContentDisplay: ComputedRef<boolean>
@@ -207,30 +205,22 @@ const state = reactive<{
       ...(props.post.labels ?? [])
     ]
   }),
-  appliedHarmfulLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide", "warn"], ["alert", "blur", "blur-media"], state.allLabels)
+  hideLabels: computed((): Array<TILabelSetting> => {
+    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide"], ["none"])
   }),
-  hideLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide"], undefined, state.allLabels)
+  hideLabelNames: computed((): Array<string> => {
+    return state.hideLabels.map((label) => label.locale.name)
   }),
-  blurLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide", "warn"], ["blur"], state.allLabels)
+  blurContentLabels: computed((): Array<TILabelSetting> => {
+    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide", "warn"], ["none", "content"])
   }),
-  blurMediaLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide", "warn"], ["blur-media"], state.allLabels)
-  }),
-  contentWarningLabels: computed((): Array<string> => {
-    return state.hideLabels.map((label: TTLabel) => $t(label.val))
-  }),
-
-  // ラベル対応 - 有害なラベル
-  hasAppliedHarmfulLabel: computed((): boolean => {
-    return state.appliedHarmfulLabels.length > 0
+  blurMediaLabels: computed((): Array<TILabelSetting> => {
+    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide", "warn"], ["media"])
   }),
 
   // ラベル対応 - ポストコンテンツ
   hasBlurredContent: computed((): boolean => {
-    return state.blurLabels.length > 0
+    return state.blurContentLabels.length > 0
   }),
   blurredContentClicked: false,
   postContentDisplay: computed((): boolean => {
@@ -657,6 +647,7 @@ function toggleOldestQuotedPostDisplay () {
         </button>
       </template>
 
+      <!-- リプライ先のリプライ先 -->
       <div
         v-if="grandparentAuthor != null"
         class="replier"
@@ -709,9 +700,9 @@ function toggleOldestQuotedPostDisplay () {
       />
 
       <!-- アカウントラベル＆ポストラベル -->
-      <template v-if="state.contentWarningLabels.length > 0">
+      <template v-if="state.hideLabelNames.length > 0">
         <SVGIcon name="contentFiltering" />
-        <div class="post__mask__content-warning">{{ state.contentWarningLabels.join(", ") }}</div>
+        <div class="post__mask__content-warning">{{ state.hideLabelNames.join(", ") }}</div>
       </template>
 
       <SVGIcon
@@ -778,13 +769,6 @@ function toggleOldestQuotedPostDisplay () {
                 class="account-labeler-icon"
               />
             </template>
-
-            <!-- アカウントラベルアイコン -->
-            <SVGIcon
-              v-if="state.hasAppliedHarmfulLabel"
-              name="contentFiltering"
-              class="account-label-icon"
-            />
           </DisplayName>
 
           <!-- ハンドル -->
@@ -804,7 +788,7 @@ function toggleOldestQuotedPostDisplay () {
         <ContentFilteringToggle
           v-if="state.hasBlurredContent"
           type="blur"
-          :labels="state.blurLabels"
+          :labels="state.blurContentLabels"
           :display="state.blurredContentClicked"
           :togglable="true"
           @click.prevent.stop="onActivatePostContentToggle"
@@ -983,6 +967,7 @@ function toggleOldestQuotedPostDisplay () {
         <LabelTags
           v-if="position !== 'slim'"
           :labels="state.allLabels"
+          :harmfulDisplay="false"
         />
 
         <!-- 引用リポスト／リストカード -->
@@ -1465,11 +1450,6 @@ function toggleOldestQuotedPostDisplay () {
     // ラベラーアイコン
     .account-labeler-icon {
       fill: rgb(var(--share-color));
-    }
-
-    // アカウントラベルアイコン
-    .account-label-icon {
-      fill: rgb(var(--notice-color));
     }
   }
 }

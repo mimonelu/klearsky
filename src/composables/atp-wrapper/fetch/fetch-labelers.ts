@@ -1,4 +1,5 @@
 import type { AppBskyLabelerGetServices, BskyAgent } from "@atproto/api"
+import CONSTS from "@/consts/consts.json"
 
 export default async function (
   this: TIAtpWrapper,
@@ -23,5 +24,30 @@ export default async function (
   if (!response.success) {
     return Error("apiError")
   }
-  return response.data.views as unknown as Array<TILabeler>
+  const labelers = response.data.views as unknown as Array<TILabeler>
+
+  // SEE: https://github.com/bluesky-social/atproto/blob/main/packages/api/definitions/labels.json
+  const officialLabeler = labelers.find((labeler) => {
+    return labeler.creator.did === CONSTS.OFFICIAL_LABELER_DID
+  })
+  if (officialLabeler != null) {
+    CONSTS.OFFICIAL_SPECIAL_LABELERS.forEach((identifier: string) => {
+      officialLabeler.policies.labelValueDefinitions?.unshift({
+        adultOnly: false,
+        blurs: "media",
+        defaultSetting: "warn",
+        identifier,
+        locales: [
+          {
+            description: "",
+            lang: "en",
+            name: "",
+          },
+        ],
+        severity: "alert",
+      })
+    })
+  }
+
+  return labelers
 }

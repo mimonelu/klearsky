@@ -73,7 +73,10 @@ function onActivateContentFilteringToggle () {
     @click="onActivateLink"
   >
     <!-- ラベルタグ -->
-    <LabelTags :labels="user.labels" />
+    <LabelTags
+      :labels="user.labels"
+      :harmfulDisplay="true"
+    />
 
     <!-- プロフィールトグル -->
     <ContentFilteringToggle

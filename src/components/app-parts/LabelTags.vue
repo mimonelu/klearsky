@@ -4,6 +4,7 @@ import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const props = defineProps<{
   labels?: Array<TTLabel>
+  harmfulDisplay: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -14,7 +15,7 @@ const state = reactive<{
   customLabels: ComputedRef<Array<TTLabel>>
 }>({
   harmfulLabels: computed((): Array<TTLabel> => {
-    return mainState.getHarmfulLabels(props.labels)
+    return props.harmfulDisplay ? mainState.getHarmfulLabels(props.labels) : []
   }),
   labelerLabels: computed((): Array<undefined | TILabelSetting> => {
     return mainState.getLabelerLabels(props.labels)
@@ -23,17 +24,12 @@ const state = reactive<{
       })
 
       // ラベラーラベルは「バッジを表示」以外の設定では表示しない
-      // SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/moderation/useLabelBehaviorDescription.ts
-      .filter((label) => {
-        if (label == null) {
+      .filter((labelSetting) => {
+        if (labelSetting == null) {
           return false
         }
-        if (label.definition.severity === "inform" &&
-          (
-            label.definition.blurs !== "content" &&
-            label.definition.blurs !== "media"
-          ) &&
-          (label.preference?.visibility ?? label.definition.defaultSetting) === "warn"
+        if (labelSetting.isBadge &&
+          (labelSetting.preference?.visibility ?? labelSetting.definition.defaultSetting) === "warn"
         ) {
           return true
         }
@@ -71,7 +67,7 @@ function openLabelerSettingsPopup (labelSetting?: TILabelSetting) {
     <div
       v-for="label, labelIndex of state.harmfulLabels"
       :key="labelIndex"
-      class="labels__harmful-label"
+      class="label-tags__harmful-label"
     >
       <SVGIcon name="label" />
       <span>{{ $t(label.val) }}</span>
@@ -82,9 +78,9 @@ function openLabelerSettingsPopup (labelSetting?: TILabelSetting) {
       v-for="label, labelIndex of state.labelerLabels"
       :key="labelIndex"
       type="button"
-      class="labels__labelers-label"
+      class="label-tags__labelers-label"
       :title="label?.locale.description ?? ''"
-      @click.stop="openLabelerSettingsPopup(label)"
+      @click.prevent.stop="openLabelerSettingsPopup(label)"
     >
       <SVGIcon name="label" />
       <span>{{ $t(label?.locale.name) }}</span>
@@ -94,7 +90,7 @@ function openLabelerSettingsPopup (labelSetting?: TILabelSetting) {
     <div
       v-for="label, labelIndex of state.customLabels"
       :key="labelIndex"
-      class="labels__custom-label"
+      class="label-tags__custom-label"
     >
       <SVGIcon name="label" />
       <span>{{ $t(label.val) }}</span>
