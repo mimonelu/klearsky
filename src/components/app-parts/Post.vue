@@ -1626,7 +1626,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   .post-tag {
-    font-size: 0.875em;
+    font-size: 0.75em;
     &:focus, &:hover {
       --alpha: 1.0;
       --fg-color: var(--accent-color);

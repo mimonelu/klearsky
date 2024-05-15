@@ -1,7 +1,7 @@
 interface TIMyLabeler {
   mainState: MainState
   labelers: Array<TILabeler>
-  labelMap: { [did: string]: TILabelerLabel }
+  labelMap: { [did: string]: TILabelSetting }
   subscribe (did: string, labeler: TILabeler): boolean
   unsubscribe (did: string): boolean
   isSubscribed (did?: string): boolean
@@ -14,7 +14,6 @@ interface TIMyLabeler {
   async updateMyLabelers(): Promise<boolean>
   updateLabelMap (): void
   getProperLocale (locales: Array<TILabelerDefinitionLocale>): undefined | TILabelerDefinitionLocale
-  makeMyLabelerLabels (labels: Array<TTLabel>): Array<TILabelerLabel>
   getLabelPreference (did: string, label: string): undefined | TTPreference
   addLabelPreference (did: string, label: string, visibility: TTContentVisibility)
   cleanLabelPreferences (): void

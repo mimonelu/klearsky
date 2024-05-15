@@ -5,7 +5,7 @@ export default class MyLabeler {
 
   public labelers: Array<TILabeler>
 
-  public labelMap: { [did: string]: TILabelerLabel }
+  public labelMap: { [did: string]: TILabelSetting }
 
   constructor (mainState: MainState) {
     this.mainState = mainState
@@ -135,21 +135,32 @@ export default class MyLabeler {
   }
 
   updateLabelMap () {
+    /*
     Object.keys(this.labelMap).forEach((key) => {
       delete this.labelMap[key]
     })
+    */
     this.labelers.forEach((labeler) => {
       labeler.policies.labelValueDefinitions?.forEach((definition) => {
         const locale = this.getProperLocale(definition.locales)
         if (locale == null) {
           return
         }
-        const id = `${labeler.creator.did}-${definition.identifier}`
-        this.labelMap[id] = {
-          id,
-          description: locale.description,
-          did: labeler.creator.did,
-          name: locale.name,
+        const did = labeler.creator.did
+        const id = `${did}-${definition.identifier}`
+        const preference = this.getLabelPreference(did, definition.identifier)
+        if (this.labelMap[id] == null) {
+          this.labelMap[id] = {
+            did,
+            definition,
+            locale,
+            preference,
+          }
+        } else {
+          this.labelMap[id].did = did
+          this.labelMap[id].definition = definition
+          this.labelMap[id].locale = locale
+          this.labelMap[id].preference = preference
         }
       })
     })
@@ -159,19 +170,6 @@ export default class MyLabeler {
     return locales.find((locale) => {
       return locale.lang === this.mainState.$getCurrentLanguage?.()
     }) ?? locales[0]
-  }
-
-  makeMyLabelerLabels (labels: Array<TTLabel>): Array<TILabelerLabel> {
-    return labels.map((label) => {
-      // TILabelerLabel (My Label) に該当ラベルがなければ TTLabel で代用
-      const id = `${label.src}-${label.val}`
-      return this.labelMap[id] ?? {
-        id: label.uri,
-        description: undefined,
-        did: label.src,
-        name: label.val,
-      }
-    })
   }
 
   getLabelPreference (did: string, label: string): undefined | TTPreference {

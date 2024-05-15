@@ -94,6 +94,9 @@ async function updateLabelPreferences () {
   if (!result) {
     mainState.openErrorPopup("errorApiFailed", "LabelerSettingsPopup/close")
   }
+
+  // labelMap の更新も同時に行う
+  mainState.myLabeler.updateLabelMap()
 }
 
 let updated = false

@@ -10,14 +10,35 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   harmfulLabels: ComputedRef<Array<TTLabel>>
-  labelerLabels: ComputedRef<Array<TILabelerLabel>>
+  labelerLabels: ComputedRef<Array<undefined | TILabelSetting>>
   customLabels: ComputedRef<Array<TTLabel>>
 }>({
   harmfulLabels: computed((): Array<TTLabel> => {
     return mainState.getHarmfulLabels(props.labels)
   }),
-  labelerLabels: computed((): Array<TILabelerLabel> => {
-    return mainState.myLabeler.makeMyLabelerLabels(mainState.getLabelerLabels(props.labels))
+  labelerLabels: computed((): Array<undefined | TILabelSetting> => {
+    return mainState.getLabelerLabels(props.labels)
+      .map((label) => {
+        return mainState.myLabeler.labelMap[`${label.src}-${label.val}`]
+      })
+
+      // ラベラーラベルは「バッジを表示」以外の設定では表示しない
+      // SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/moderation/useLabelBehaviorDescription.ts
+      .filter((label) => {
+        if (label == null) {
+          return false
+        }
+        if (label.definition.severity === "inform" &&
+          (
+            label.definition.blurs !== "content" &&
+            label.definition.blurs !== "media"
+          ) &&
+          (label.preference?.visibility ?? label.definition.defaultSetting) === "warn"
+        ) {
+          return true
+        }
+        return false
+      })
   }),
   customLabels: computed((): Array<TTLabel> => {
     return mainState.getCustomLabels(props.labels)
@@ -48,21 +69,21 @@ const state = reactive<{
 
     <!-- ラベラーによるラベル -->
     <RouterLink
-      v-for="label of state.labelerLabels"
-      :key="label.id"
-      :to="{ path: '/profile/feeds', query: { account: label.did } }"
+      v-for="label, labelIndex of state.labelerLabels"
+      :key="labelIndex"
+      :to="{ path: '/profile/feeds', query: { account: label?.did } }"
       class="labels__labelers-label"
-      :title="label.description ?? ''"
+      :title="label?.locale.description ?? ''"
       @click.stop
     >
       <SVGIcon name="label" />
-      <span>{{ $t(label.name) }}</span>
+      <span>{{ $t(label?.locale.name) }}</span>
     </RouterLink>
 
     <!-- カスタムラベル -->
     <div
-      v-for="label of state.customLabels"
-      :key="label.val"
+      v-for="label, labelIndex of state.customLabels"
+      :key="labelIndex"
       class="labels__custom-label"
     >
       <SVGIcon name="label" />

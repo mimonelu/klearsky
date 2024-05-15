@@ -1,8 +1,8 @@
-interface TILabelerLabel {
-  id: string // :key 用
-  description?: string
-  did: string // Creator の did
-  name: string
+interface TILabelSetting {
+  did: string
+  definition: TILabelerDefinition
+  locale: TILabelerDefinitionLocale
+  preference?: TTPreference
 }
 
 interface TILabeler {
