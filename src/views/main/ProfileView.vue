@@ -16,6 +16,7 @@ import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import PageHeaderButtons from "@/components/shell-parts/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/app-parts/Post.vue"
 import SubscribeLabelerToggle from "@/components/buttons/SubscribeLabelerToggle.vue"
@@ -242,9 +243,12 @@ function onActivateAccountMaskToggle () {
     <Portal to="router-view-wrapper-header">
       <PageHeader
         :hasBackButton="true"
-        :title="$t('profile')"
-        :subTitle="mainState.currentProfile?.displayName"
-      />
+        :title="mainState.currentProfile?.displayName || mainState.currentProfile?.handle"
+      >
+        <template #right>
+          <PageHeaderButtons />
+        </template>
+      </PageHeader>
     </Portal>
 
     <!-- バナー -->

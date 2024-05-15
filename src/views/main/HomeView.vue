@@ -3,20 +3,11 @@ import { inject, onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 import LazyImage from "@/components/common/LazyImage.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import PageHeaderButtons from "@/components/shell-parts/PageHeaderButtons.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
-
-function openMyFeedsPopup () {
-  Util.blurElement()
-  mainState.openMyFeedsPopup()
-}
-
-function openMyListPopup () {
-  Util.blurElement()
-  mainState.openMyListPopup()
-}
 
 // SliderMenu の自動スクロール
 
@@ -62,22 +53,7 @@ async function autoScrollSliderMenu () {
       >
         <template #right>
           <PortalTarget name="home-view-header-top" />
-
-          <!-- マイフィードポップアップトリガー -->
-          <button
-            class="my-feeds-trigger"
-            @click.stop="openMyFeedsPopup"
-          >
-            <SVGIcon name="feed" />
-          </button>
-
-          <!-- マイリストポップアップトリガー -->
-          <button
-            class="my-list-trigger"
-            @click.stop="openMyListPopup"
-          >
-            <SVGIcon name="list" />
-          </button>
+          <PageHeaderButtons />
         </template>
       </PageHeader>
 

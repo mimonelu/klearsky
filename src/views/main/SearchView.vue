@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { RouterView } from "vue-router"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import PageHeaderButtons from "@/components/shell-parts/PageHeaderButtons.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
@@ -23,7 +24,11 @@ const state = reactive<{
       <PageHeader
         :hasBackButton="true"
         :title="$t('search')"
-      />
+      >
+        <template #right>
+          <PageHeaderButtons />
+        </template>
+      </PageHeader>
       <div class="tab">
         <!-- ポスト検索ページ -->
         <RouterLink
