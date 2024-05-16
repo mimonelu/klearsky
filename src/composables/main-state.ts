@@ -108,7 +108,6 @@ state.hasLabel = hasLabel
 state.getHarmfulLabels = getHarmfulLabels
 state.getLabelerLabels = getLabelerLabels
 state.getCustomLabels = getCustomLabels
-state.getLabelsContentVisibility = getLabelsContentVisibility
 
 // ラベラー
 state.myLabeler = new MyLabeler(state)
@@ -919,46 +918,6 @@ function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
     return LABEL_BEHAVIORS[label.val] == null &&
            !label.ver
   }) ?? []
-}
-
-function getLabelsContentVisibility (labels?: Array<TTLabel>): TTContentVisibility {
-  const preferences = getConcernedPreferences(labels)
-  for (const preference of preferences) {
-    if (preference.visibility === "hide") return "hide"
-  }
-  for (const preference of preferences) {
-    if (preference.visibility === "warn") return "warn"
-  }
-  return "show"
-}
-
-// label に該当する preference を取得する
-function getConcernedPreferences (labels?: Array<TTLabel>): Array<TTPreference> {
-  if (labels == null) return []
-  const concernedPreferences = labels
-    .map((label: TTLabel): TTPreference => {
-      const val = Object.keys(LABEL_BEHAVIORS).find((k: string) => k === label.val)
-      if (val == null) return makeCustomLabelPreference(label.val)
-      return state.currentPreferences.find((preference: TTPreference) => {
-        return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
-          preference.label === LABEL_BEHAVIORS[val].oldGroup &&
-          preference.visibility !== "show"
-      }) ?? makeCustomLabelPreference(label.val)
-    })
-  return concernedPreferences
-}
-
-function makeCustomLabelPreference (label: string): TTPreference {
-  const visibility = label === "!hide"
-    ? "hide"
-    : LABEL_BEHAVIORS[label]?.configurable === false
-      ? "warn"
-      : "show"
-  return {
-    $type: "app.bsky.actor.defs#contentLabelPref",
-    label,
-    visibility,
-  }
 }
 
 // プロフィール

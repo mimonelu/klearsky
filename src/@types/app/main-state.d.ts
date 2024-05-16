@@ -68,7 +68,6 @@ type MainState = {
   getHarmfulLabels (labels?: Array<TTLabel>): Array<TTLabel>
   getLabelerLabels (labels?: Array<TTLabel>): Array<TTLabel>
   getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
-  getLabelsContentVisibility: (labels?: Array<TTLabel>) => TTContentVisibility
 
   // ラベラー
   myLabeler: TIMyLabeler

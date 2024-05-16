@@ -25,7 +25,6 @@ const state = reactive<{
   appliedHarmfulLabels: ComputedRef<Array<TILabelSetting>>
   hasAppliedHarmfulLabel: ComputedRef<boolean>
   contentFilteringToggleDisplay: boolean
-  contentWarningVisibility: ComputedRef<TTContentVisibility>
 }>({
   // ラベル対応
   appliedHarmfulLabels: computed((): Array<TILabelSetting> => {
@@ -38,9 +37,6 @@ const state = reactive<{
     return state.appliedHarmfulLabels.length > 0
   }),
   contentFilteringToggleDisplay: false,
-  contentWarningVisibility: computed((): TTContentVisibility => {
-    return mainState.getLabelsContentVisibility(props.user.labels)
-  }),
 })
 
 const profileMenuTrigger = ref()
@@ -85,21 +81,14 @@ function onActivateContentFilteringToggle () {
     <ContentFilteringToggle
       v-if="state.hasAppliedHarmfulLabel"
       :labels="state.appliedHarmfulLabels"
-      :display="
-        state.contentWarningVisibility === 'show' ||
-        state.contentFilteringToggleDisplay
-      "
+      :display="state.contentFilteringToggleDisplay"
       :togglable="!contentWarningDisabled"
       @click.prevent.stop="onActivateContentFilteringToggle"
     />
 
     <template v-if="
-      contentWarningDisabled || (
-        !contentWarningDisabled && (
-          state.contentWarningVisibility === 'show' ||
-          state.contentFilteringToggleDisplay
-        )
-      )
+      contentWarningDisabled ||
+      (!contentWarningDisabled && state.contentFilteringToggleDisplay)
     ">
       <!-- Viewer ラベル -->
       <ViewerLabels
