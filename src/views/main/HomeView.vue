@@ -167,9 +167,10 @@ async function autoScrollSliderMenu () {
 
 .slider-menu {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  display: none;
+  display: flex;
   align-items: center;
   overflow-x: auto;
+  overflow-y: hidden;
   @include scroll-bar("transparent");
 
   --link-border-width: 2px;

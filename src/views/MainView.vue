@@ -1418,6 +1418,7 @@ function broadcastListener (event: MessageEvent) {
   flex-direction: column;
   flex-grow: 1;
   overflow-x: clip;
+  position: relative;
   max-width: $router-view-width;
 
   // ルータービューヘッダー
@@ -1426,7 +1427,7 @@ function broadcastListener (event: MessageEvent) {
     top: 0;
     z-index: 2;
     width: 100%;
-    max-width: $router-view-width;
+    max-width: 100%;
     &:empty {
       display: none;
     }
