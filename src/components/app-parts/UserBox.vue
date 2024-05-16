@@ -22,14 +22,17 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   // ラベル対応
-  appliedHarmfulLabels: ComputedRef<Array<TTLabel>>
+  appliedHarmfulLabels: ComputedRef<Array<TILabelSetting>>
   hasAppliedHarmfulLabel: ComputedRef<boolean>
   contentFilteringToggleDisplay: boolean
   contentWarningVisibility: ComputedRef<TTContentVisibility>
 }>({
   // ラベル対応
-  appliedHarmfulLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide", "warn"], ["alert", "blur", "blur-media"], props.user.labels)
+  appliedHarmfulLabels: computed((): Array<TILabelSetting> => {
+    if (props.user.labels == null) {
+      return []
+    }
+    return mainState.myLabeler.getSpecificLabels(props.user.labels, ["hide", "warn"], ["content", "media", "none"])
   }),
   hasAppliedHarmfulLabel: computed((): boolean => {
     return state.appliedHarmfulLabels.length > 0
