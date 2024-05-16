@@ -61,8 +61,6 @@ async function autoScrollSliderMenu () {
         :title="$t('home')"
       >
         <template #right>
-          <PortalTarget name="home-view-header-top" />
-
           <!-- マイフィードポップアップトリガー -->
           <button
             class="my-feeds-trigger"
@@ -147,8 +145,6 @@ async function autoScrollSliderMenu () {
           </RouterLink>
         </template>
       </div>
-
-      <PortalTarget name="home-view-header-bottom" />
     </Portal>
     <RouterView />
   </div>
@@ -167,7 +163,7 @@ async function autoScrollSliderMenu () {
 
 .slider-menu {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  display: flex;
+  display: none;
   align-items: center;
   overflow-x: auto;
   @include scroll-bar("transparent");
