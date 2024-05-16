@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-import { computed, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+
+const $t = inject("$t") as Function
 
 const props = defineProps<{
   labels?: Array<TILabelSetting>
@@ -10,12 +12,12 @@ const props = defineProps<{
 }>()
 
 const state = reactive<{
-  labelNames: ComputedRef<Array<string>>
+  labelNames: ComputedRef<string>
 }>({
-  labelNames: computed((): Array<string> => {
+  labelNames: computed((): string => {
     return Array.from(new Set((props.labels?.map((label) => {
-      return label.locale.name || label.definition.identifier
-    }) ?? [])))
+      return $t(label.locale.name || label.definition.identifier)
+    }) ?? []))).join(", ")
   }),
 })
 </script>
@@ -24,14 +26,10 @@ const state = reactive<{
   <button
     class="button--bordered content-filtering-toggle"
     :data-enabled="false"
-    :data-blur="type === 'blur'"
+    :data-show="display"
   >
     <SVGIcon name="contentFiltering" />
-    <div
-      v-for="label, labelIndex of state.labelNames"
-      :key="labelIndex"
-      class="content-filtering-toggle__label"
-    >{{ $t(label) }}</div>
+    <div class="content-filtering-toggle__label">{{ state.labelNames }}</div>
     <div
       v-if="display && togglable"
       class="button__suffix"
@@ -45,39 +43,29 @@ const state = reactive<{
 
 <style lang="scss" scoped>
 .content-filtering-toggle {
-  --alpha: 0.5;
-  background-color: rgb(var(--bg-color), 0.75);
-  border: 1px solid rgb(var(--notice-color), 0.5);
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  --alpha: 0.75;
+  background-color: var(--notice-color-0125);
+  border: 1px solid rgb(var(--notice-color), calc(var(--alpha) / 2));
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   &:focus, &:hover {
-    border-color: rgb(var(--notice-color), 0.75);
-    &[data-blur="true"] {
-      background-color: rgb(var(--notice-color));
-    }
-
-    & > .state-label {
-      color: var(--fg-color-075);
-    }
+    --alpha: 1.0;
   }
-  &[data-blur="true"] {
-    background-color: rgb(var(--notice-color), 0.75);
-
-    & > * {
-      --fg-color: var(--bg-color);
-      --notice-color: var(--bg-color);
-    }
+  &[data-show="true"] {
+    border-color: transparent;
   }
 
   & > .svg-icon {
-    fill: rgb(var(--notice-color));
+    fill: rgb(var(--notice-color), var(--alpha));
   }
 
   &__label {
-    color: rgb(var(--notice-color));
+    color: rgb(var(--notice-color), var(--alpha));
     font-weight: bold;
     line-height: var(--line-height-high);
-    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 </style>

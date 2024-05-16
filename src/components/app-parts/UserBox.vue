@@ -186,7 +186,7 @@ function onActivateContentFilteringToggle () {
 // ラベルタグ
 .label-tags {
   grid-area: l;
-  --alpha: 0.75;
+  --alpha: 0.5;
   font-size: 0.75em;
   margin-bottom: 0.5em;
 }

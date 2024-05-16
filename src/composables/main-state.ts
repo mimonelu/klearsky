@@ -899,9 +899,6 @@ function hasLabel (target: string, labels?: Array<TTLabel>): boolean {
 
 function getHarmfulLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {
-    if (label.val === "!no-unauthenticated") {
-      return false
-    }
     return LABEL_BEHAVIORS[label.val] != null
   }) ?? []
 }
@@ -915,6 +912,9 @@ function getLabelerLabels (labels?: Array<TTLabel>): Array<TTLabel> {
 
 function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {
+    if (label.val === "!no-unauthenticated") {
+      return false
+    }
     return LABEL_BEHAVIORS[label.val] == null &&
            !label.ver
   }) ?? []

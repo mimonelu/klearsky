@@ -12,9 +12,6 @@ const props = defineProps<{
 }>()
 
 const options = Object.keys(LABEL_BEHAVIORS)
-  .filter((key: string) => {
-    return LABEL_BEHAVIORS[key].selectable
-  })
   .map((key: string) => {
     return {
       label: key,

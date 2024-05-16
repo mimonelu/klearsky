@@ -339,7 +339,6 @@ async function onActivateProfileLink (did: string) {
 }
 
 function onActivateImageFolderButton () {
-  Util.blurElement()
   state.foldingImage = !state.foldingImage
 }
 
@@ -969,7 +968,7 @@ function toggleOldestQuotedPostDisplay () {
         <LabelTags
           v-if="position !== 'slim'"
           :labels="state.allLabels"
-          :harmfulDisplay="true"
+          :harmfulDisplay="false"
         />
 
         <!-- 引用リポスト／リストカード -->
