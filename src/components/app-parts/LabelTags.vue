@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import CONSTS from "@/consts/consts.json"
 
 const props = defineProps<{
   labels?: Array<TTLabel>
@@ -41,9 +42,9 @@ const state = reactive<{
   }),
 })
 
-function openLabelerSettingsPopup (labelSetting?: TILabelSetting) {
+function openLabelerSettingsPopup (did?: string) {
   const labeler = mainState.myLabeler.labelers.find((labeler) => {
-    return labeler.creator.did === labelSetting?.did
+    return labeler.creator.did === did
   })
   if (labeler == null) {
     return
@@ -64,14 +65,16 @@ function openLabelerSettingsPopup (labelSetting?: TILabelSetting) {
     <slot />
 
     <!-- 有害なラベル -->
-    <div
+    <button
       v-for="label, labelIndex of state.harmfulLabels"
       :key="labelIndex"
+      type="button"
       class="label-tags__harmful-label"
+      @click.prevent.stop="openLabelerSettingsPopup(CONSTS.OFFICIAL_LABELER_DID)"
     >
       <SVGIcon name="label" />
       <span>{{ $t(label.val) }}</span>
-    </div>
+    </button>
 
     <!-- ラベラーによるラベル -->
     <button
@@ -80,7 +83,7 @@ function openLabelerSettingsPopup (labelSetting?: TILabelSetting) {
       type="button"
       class="label-tags__labelers-label"
       :title="label?.locale.description ?? ''"
-      @click.prevent.stop="openLabelerSettingsPopup(label)"
+      @click.prevent.stop="openLabelerSettingsPopup(label?.did)"
     >
       <SVGIcon name="label" />
       <span>{{ $t(label?.locale.name) }}</span>
@@ -142,6 +145,12 @@ function openLabelerSettingsPopup (labelSetting?: TILabelSetting) {
   &__harmful-label {
     --color: rgb(var(--notice-color), var(--alpha, 1.0));
     background-color: var(--notice-color-0125);
+    border-color: var(--notice-color-025);
+    cursor: pointer;
+    &:focus,
+    &:hover {
+      --alpha: 1.0;
+    }
   }
 
   // ラベラーによるラベル
