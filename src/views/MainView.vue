@@ -1434,7 +1434,7 @@ function broadcastListener (event: MessageEvent) {
   }
 
   &__content {
-    overflow: hidden;
+    position: relative;
   }
 
   & > .feed-list {

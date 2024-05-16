@@ -85,11 +85,14 @@ async function onIntersected (did: string) {
 
 <style lang="scss" scoped>
 .tagged-suggestions-view {
+  overflow: hidden;
+
   &__main {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     grid-gap: 1rem;
+    overflow: hidden;
     padding: 1rem;
   }
 
@@ -99,6 +102,7 @@ async function onIntersected (did: string) {
     flex-direction: column;
     grid-gap: 0.5rem;
     overflow: hidden;
+    position: relative;
   }
 
   // タグ名
