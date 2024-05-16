@@ -170,6 +170,7 @@ async function autoScrollSliderMenu () {
   display: flex;
   align-items: center;
   overflow-x: auto;
+  overflow-y: hidden;
   @include scroll-bar("transparent");
 
   --link-border-width: 2px;

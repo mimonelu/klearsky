@@ -95,8 +95,7 @@ async function onIntersected (did: string) {
 
   // タグコンテナ
   &__tag-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     grid-gap: 0.5rem;
   }
 
