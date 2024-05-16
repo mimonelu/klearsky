@@ -301,6 +301,7 @@ function onActivateAccountMaskToggle () {
               <LabelTags
                 :labels="mainState.currentProfile?.labels"
                 :harmfulDisplay="true"
+                :customDisplay="true"
               >
                 <!-- ラベラー -->
                 <div

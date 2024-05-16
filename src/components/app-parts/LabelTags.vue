@@ -6,6 +6,7 @@ import CONSTS from "@/consts/consts.json"
 const props = defineProps<{
   labels?: Array<TTLabel>
   harmfulDisplay: boolean
+  customDisplay: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -38,7 +39,7 @@ const state = reactive<{
       })
   }),
   customLabels: computed((): Array<TTLabel> => {
-    return mainState.getCustomLabels(props.labels)
+    return props.customDisplay ? mainState.getCustomLabels(props.labels) : []
   }),
 })
 

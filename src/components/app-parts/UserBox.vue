@@ -71,12 +71,6 @@ function onActivateContentFilteringToggle () {
     :data-menu-display="menuDisplay"
     @click="onActivateLink"
   >
-    <!-- ラベルタグ -->
-    <LabelTags
-      :labels="user.labels"
-      :harmfulDisplay="false"
-    />
-
     <!-- プロフィールトグル -->
     <ContentFilteringToggle
       v-if="state.hasAppliedHarmfulLabel"
@@ -90,6 +84,13 @@ function onActivateContentFilteringToggle () {
       contentWarningDisabled ||
       (!contentWarningDisabled && state.contentFilteringToggleDisplay)
     ">
+      <!-- ラベルタグ -->
+      <LabelTags
+        :labels="user.labels"
+        :harmfulDisplay="true"
+        :customDisplay="true"
+      />
+
       <!-- Viewer ラベル -->
       <ViewerLabels
         v-if="viewerDisplay"
@@ -157,8 +158,8 @@ function onActivateContentFilteringToggle () {
   grid-template-columns: min-content auto 1fr auto;
   grid-template-rows: auto auto auto 1fr;
   grid-template-areas:
-    "l l l l"
     "c c c c"
+    "l l l l"
     "v v v v"
     "a n h m"
     "a d d m"
@@ -167,8 +168,8 @@ function onActivateContentFilteringToggle () {
   &[data-menu-display="false"] {
     grid-template-columns: min-content auto 1fr;
     grid-template-areas:
-      "l l l"
       "c c c"
+      "l l l"
       "v v v"
       "a n h"
       "a d d"
@@ -188,7 +189,9 @@ function onActivateContentFilteringToggle () {
   grid-area: l;
   --alpha: 0.5;
   font-size: 0.75em;
-  margin-bottom: 0.5em;
+  &:not(:last-child) {
+    margin-bottom: 0.5em;
+  }
 }
 
 .viewer-labels {

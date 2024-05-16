@@ -60,7 +60,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         v-for="listItem of mainState.currentListItems"
         :key="listItem.uri"
         :user="listItem.subject"
-        :contentWarningDisabled="true"
+        :contentWarningDisabled="false"
         :menuDisplay="true"
         :viewerDisplay="true"
       >

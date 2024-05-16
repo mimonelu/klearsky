@@ -969,6 +969,7 @@ function toggleOldestQuotedPostDisplay () {
           v-if="position !== 'slim'"
           :labels="state.allLabels"
           :harmfulDisplay="false"
+          :customDisplay="false"
         />
 
         <!-- 引用リポスト／リストカード -->
