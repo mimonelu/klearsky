@@ -98,6 +98,7 @@ async function onIntersected (did: string) {
     display: flex;
     flex-direction: column;
     grid-gap: 0.5rem;
+    overflow: hidden;
   }
 
   // タグ名

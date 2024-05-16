@@ -785,6 +785,7 @@ function broadcastListener (event: MessageEvent) {
 
         <RouterView
           v-if="state.mounted"
+          class="router-view-wrapper__content"
           @updatePageTitle="state.updatePageTitle"
         />
 
@@ -1430,6 +1431,10 @@ function broadcastListener (event: MessageEvent) {
     &:empty {
       display: none;
     }
+  }
+
+  &__content {
+    overflow: hidden;
   }
 
   & > .feed-list {
