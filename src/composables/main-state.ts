@@ -387,11 +387,6 @@ state.postLanguagesPopupDisplay = false
 state.openPostLanguagesPopup = openPostLanguagesPopup
 state.closePostLanguagesPopup = closePostLanguagesPopup
 
-// ポップアップ - コンテンツフィルタリングポップアップ
-state.contentFilteringPopupDisplay = false
-state.openContentFilteringPopup = openContentFilteringPopup
-state.closeContentFilteringPopup = closeContentFilteringPopup
-
 // ポップアップ - ミュートユーザーリストポップアップ
 state.mutingUsersPopupDisplay = false
 state.openMutingUsersPopup = openMutingUsersPopup
@@ -1780,16 +1775,6 @@ function openPostLanguagesPopup () {
 
 function closePostLanguagesPopup () {
   state.postLanguagesPopupDisplay = false
-}
-
-// ポップアップ - コンテンツフィルタリングポップアップ
-
-function openContentFilteringPopup () {
-  state.contentFilteringPopupDisplay = true
-}
-
-function closeContentFilteringPopup () {
-  state.contentFilteringPopupDisplay = false
 }
 
 // ポップアップ - ミュートユーザーリストポップアップ

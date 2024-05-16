@@ -6,7 +6,6 @@ import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
-import ContentFilteringPopup from "@/components/popups/ContentFilteringPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
 import FeedCardPopover from "@/components/popovers/FeedCardPopover.vue"
@@ -1067,14 +1066,6 @@ function broadcastListener (event: MessageEvent) {
           v-if="state.labelerSettingsPopupProps.display"
           v-bind="state.labelerSettingsPopupProps"
           @close="state.closeLabelerSettingsPopup"
-        />
-      </Transition>
-
-      <!-- コンテンツフィルタリングポップアップ -->
-      <Transition>
-        <ContentFilteringPopup
-          v-if="state.contentFilteringPopupDisplay"
-          @close="state.closeContentFilteringPopup"
         />
       </Transition>
 

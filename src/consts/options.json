@@ -1,9 +1,4 @@
 {
-  "LABEL_VISIBILITY": [
-    { "label": "fold", "value": "hide" },
-    { "label": "warn", "value": "warn" },
-    { "label": "show", "value": "show" }
-  ],
   "ACCOUNT_REPORT_REASON": [
     { "label": "reportReasonSpam", "value": "com.atproto.moderation.defs#reasonSpam" },
     { "label": "reportReasonMisleading", "value": "com.atproto.moderation.defs#reasonMisleading" },

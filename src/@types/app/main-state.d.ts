@@ -365,11 +365,6 @@ type MainState = {
   openPostLanguagesPopup: Function
   closePostLanguagesPopup: Function
 
-  // ポップアップ - コンテンツフィルタリングポップアップ
-  contentFilteringPopupDisplay: boolean
-  openContentFilteringPopup: Function
-  closeContentFilteringPopup: Function
-
   // ポップアップ - ミュートユーザーリストポップアップ
   mutingUsersPopupDisplay: boolean
   openMutingUsersPopup: Function

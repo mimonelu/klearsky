@@ -76,10 +76,6 @@ function process (type: string) {
       mainState.openLabelerListPopup("myLabeler", mainState.myLabeler.labelers)
       break
     }
-    case "contentFiltering": {
-      mainState.openContentFilteringPopup()
-      break
-    }
     case "mutingUsers": {
       mainState.openMutingUsersPopup()
       break
@@ -195,16 +191,6 @@ function process (type: string) {
       </button>
 
       <hr />
-
-      <!-- コンテンツフィルタリングポップアップトリガー -->
-      <button
-        type="button"
-        data-type="contentFiltering"
-        @click.prevent="process('contentFiltering')"
-      >
-        <SVGIcon name="contentFiltering" />
-        <span>{{ $t("contentFiltering") }}</span>
-      </button>
 
       <!-- ミュート中のユーザーポップアップトリガー -->
       <button
