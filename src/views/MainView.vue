@@ -1485,11 +1485,11 @@ function broadcastListener (event: MessageEvent) {
 
   // ルータービューヘッダー
   &__header {
+    display: grid;
     position: sticky;
     top: 0;
     z-index: 2;
     width: 100%;
-    max-width: $router-view-width;
     &:empty {
       display: none;
     }
