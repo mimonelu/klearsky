@@ -78,7 +78,7 @@ function onActivateContentFilteringToggle () {
     <!-- ラベルタグ -->
     <LabelTags
       :labels="user.labels"
-      :harmfulDisplay="true"
+      :harmfulDisplay="false"
     />
 
     <!-- プロフィールトグル -->
@@ -189,7 +189,9 @@ function onActivateContentFilteringToggle () {
 
 .content-filtering-toggle {
   grid-area: c;
-  margin-bottom: 0.5em;
+  &:not(:last-child) {
+    margin-bottom: 0.5em;
+  }
 }
 
 // ラベルタグ
