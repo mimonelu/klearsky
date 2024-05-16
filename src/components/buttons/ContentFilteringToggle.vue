@@ -29,8 +29,8 @@ const state = reactive<{
   >
     <SVGIcon name="contentFiltering" />
     <div
-      v-for="label of state.labelNames"
-      :key="label"
+      v-for="label, labelIndex of state.labelNames"
+      :key="labelIndex"
       class="content-filtering-toggle__label"
     >{{ $t(label) }}</div>
     <div

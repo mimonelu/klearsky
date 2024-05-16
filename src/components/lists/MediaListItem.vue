@@ -12,7 +12,7 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   allLabels: ComputedRef<Array<TTLabel>>
-  blurMediaLabels: ComputedRef<Array<TTLabel>>
+  blurMediaLabels: ComputedRef<Array<TILabelSetting>>
   hasBlurredMedia: ComputedRef<boolean>
   contentFilteringDisplay: boolean
   imageDisplay: ComputedRef<boolean>
@@ -24,8 +24,8 @@ const state = reactive<{
       ...(props.media.post.labels ?? [])
     ]
   }),
-  blurMediaLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide", "warn"], ["blur-media"], state.allLabels)
+  blurMediaLabels: computed((): Array<TILabelSetting> => {
+    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide", "warn"], ["media", "none"])
   }),
   hasBlurredMedia: computed((): boolean => {
     return state.blurMediaLabels.length > 0
@@ -62,7 +62,7 @@ function onActivatePostContentToggle () {
     <ContentFilteringToggle
       v-if="state.hasBlurredMedia"
       type="blur"
-      :labels="media.post.labels"
+      :labels="state.blurMediaLabels"
       :display="state.contentFilteringDisplay"
       :togglable="true"
       @click.prevent="onActivatePostContentToggle"

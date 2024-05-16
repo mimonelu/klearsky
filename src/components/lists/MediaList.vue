@@ -24,8 +24,8 @@ const mainState = inject("state") as MainState
 
     <div class="media-list__item-container">
       <MediaListItem
-        v-for="media of medias"
-        :key="media.uri"
+        v-for="media, mediaIndex of medias"
+        :key="mediaIndex"
         :media="media"
       />
     </div>
