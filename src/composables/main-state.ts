@@ -108,7 +108,6 @@ state.hasLabel = hasLabel
 state.getHarmfulLabels = getHarmfulLabels
 state.getLabelerLabels = getLabelerLabels
 state.getCustomLabels = getCustomLabels
-state.filterLabels = filterLabels
 state.getLabelsContentVisibility = getLabelsContentVisibility
 
 // ラベラー
@@ -920,56 +919,6 @@ function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
     return LABEL_BEHAVIORS[label.val] == null &&
            !label.ver
   }) ?? []
-}
-
-function filterLabels (
-  visibilities?: Array<TTContentVisibility>,
-  warns?: Array<TTLabelOnWarn>,
-  labels?: Array<TTLabel>
-): Array<TTLabel> {
-  const results = labels?.filter((label: TTLabel) => {
-    const labelBehavior = LABEL_BEHAVIORS[label.val]
-
-    // configurable ではないビルトインラベルの処理
-    if (labelBehavior?.configurable === false) {
-      const specifiedHide = visibilities?.indexOf("hide") !== - 1
-      if (label.val === "!hide" && specifiedHide) return true
-
-      const specifiedWarn = visibilities?.indexOf("warn") !== - 1
-      if (label.val === "!warn" && specifiedWarn) return true
-
-      if (labelBehavior?.group === "legal" &&
-        (specifiedHide || specifiedWarn)
-      ) return true
-
-      if (label.val === "!no-unauthenticated") return false
-    }
-
-    return state.currentPreferences.some((preference: TTPreference) => {
-      return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
-        (
-          labelBehavior?.oldGroup === "" ||
-          preference.label === labelBehavior?.oldGroup
-        ) &&
-        (
-          labelBehavior.configurable && (
-            visibilities == null ||
-            visibilities.indexOf(preference.visibility as TTContentVisibility) !== - 1
-          )
-        ) &&
-        (
-          warns == null ||
-          warns.indexOf(labelBehavior.warn) !== - 1
-        )
-    })
-  }) ?? []
-
-  // 重複削除
-  return results.filter((label: TTLabel, index: number) => {
-    return results?.findIndex((target: TTLabel) => {
-      return target.val === label.val
-    }) === index
-  })
 }
 
 function getLabelsContentVisibility (labels?: Array<TTLabel>): TTContentVisibility {
