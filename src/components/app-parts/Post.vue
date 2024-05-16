@@ -206,10 +206,12 @@ const state = reactive<{
     ]
   }),
   hideLabels: computed((): Array<TILabelSetting> => {
-    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide"], ["none"])
+    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide"], ["none", "content", "media"])
   }),
   hideLabelNames: computed((): Array<string> => {
-    return state.hideLabels.map((label) => label.locale.name)
+    return state.hideLabels.map((label) => {
+      return $t(label.locale?.name || label.definition?.identifier || "")
+    })
   }),
   blurContentLabels: computed((): Array<TILabelSetting> => {
     return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide", "warn"], ["none", "content"])
@@ -967,7 +969,7 @@ function toggleOldestQuotedPostDisplay () {
         <LabelTags
           v-if="position !== 'slim'"
           :labels="state.allLabels"
-          :harmfulDisplay="false"
+          :harmfulDisplay="true"
         />
 
         <!-- 引用リポスト／リストカード -->

@@ -194,7 +194,7 @@ export default class MyLabeler {
       .map((label) => {
         let labelSetting = this.labelMap[`${label.src}-${label.val}`]
         if (labelSetting == null) {
-          // 公式ラベルと同名のカスタムラベルは公式ラベルとして処理
+          // 公式ラベルと同名のラベルは公式ラベルとして処理
           labelSetting = this.labelMap[`${CONSTS.OFFICIAL_LABELER_DID}-${label.val}`]
           if (labelSetting == null) {
             return
