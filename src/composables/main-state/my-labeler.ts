@@ -1,4 +1,5 @@
 import CONSTS from "@/consts/consts.json"
+import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
 
 export default class MyLabeler {
   public mainState: MainState
@@ -177,6 +178,33 @@ export default class MyLabeler {
         }
       })
     })
+
+    // !hide の追加設定
+    const hideId = `${CONSTS.OFFICIAL_LABELER_DID}-!hide`
+    this.labelMap[hideId] = this.makeLabelSetting("!hide", "hide")
+
+    // !warn の追加設定
+    const warnId = `${CONSTS.OFFICIAL_LABELER_DID}-!warn`
+    this.labelMap[warnId] = this.makeLabelSetting("!warn", "warn")
+  }
+
+  makeLabelSetting (identifier: string, defaultSetting: TTContentVisibility): TILabelSetting {
+    return {
+      did: CONSTS.OFFICIAL_LABELER_DID,
+      definition: {
+        blurs: "none",
+        defaultSetting,
+        identifier,
+        locales: [],
+        severity: "none",
+      },
+      isBadge: false,
+      locale: {
+        description: "",
+        lang: "en",
+        name: "",
+      },
+    }
   }
 
   getProperLocale (locales: Array<TILabelerDefinitionLocale>): undefined | TILabelerDefinitionLocale {
@@ -191,10 +219,13 @@ export default class MyLabeler {
     blurs: Array<TTLabelBlurs>
   ): Array<TILabelSetting> {
     return labels
-      .map((label) => {
+      .map((label): undefined | TILabelSetting => {
         let labelSetting = this.labelMap[`${label.src}-${label.val}`]
         if (labelSetting == null) {
-          // 公式ラベルと同名のラベルは公式ラベルとして処理
+          // 特別な公式ラベルの処理
+          if (!LABEL_BEHAVIORS[label.val]?.selectable) {
+            return
+          }
           labelSetting = this.labelMap[`${CONSTS.OFFICIAL_LABELER_DID}-${label.val}`]
           if (labelSetting == null) {
             return
