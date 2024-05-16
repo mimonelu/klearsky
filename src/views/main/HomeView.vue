@@ -61,6 +61,8 @@ async function autoScrollSliderMenu () {
         :title="$t('home')"
       >
         <template #right>
+          <PortalTarget name="home-view-header-top" />
+
           <!-- マイフィードポップアップトリガー -->
           <button
             class="my-feeds-trigger"
@@ -145,6 +147,8 @@ async function autoScrollSliderMenu () {
           </RouterLink>
         </template>
       </div>
+
+      <PortalTarget name="home-view-header-bottom" />
     </Portal>
     <RouterView />
   </div>
