@@ -41,7 +41,7 @@ const state = reactive<{
   // ラベル対応
   enabledContentMask: boolean
   hasNoUnauthenticated: ComputedRef<boolean>
-  contentFilteringLabels: ComputedRef<Array<TTLabel>>
+  contentFilteringLabels: ComputedRef<Array<TILabelSetting>>
   contentFilteringToggleDisplay: ComputedRef<boolean>
 
   // ラベル対応 - アカウントコンテンツ
@@ -95,8 +95,11 @@ const state = reactive<{
   hasNoUnauthenticated: computed((): boolean => {
     return mainState.hasLabel("!no-unauthenticated", mainState.currentProfile?.labels)
   }),
-  contentFilteringLabels: computed((): Array<TTLabel> => {
-    return mainState.filterLabels(["hide", "warn"], ["blur", "blur-media"], mainState.currentProfile?.labels)
+  contentFilteringLabels: computed((): Array<TILabelSetting> => {
+    if (mainState.currentProfile?.labels == null) {
+      return []
+    }
+    return mainState.myLabeler.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "media", "none"])
   }),
   contentFilteringToggleDisplay: computed((): boolean => {
     return state.contentFilteringLabels.length > 0
@@ -104,7 +107,10 @@ const state = reactive<{
 
   // ラベル対応 - アカウントコンテンツ
   hasBlurredContent: computed((): boolean => {
-    return mainState.filterLabels(["hide", "warn"], ["blur"], mainState.currentProfile?.labels).length > 0
+    if (mainState.currentProfile?.labels == null) {
+      return true
+    }
+    return mainState.myLabeler.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "none"]).length > 0
   }),
   accountContentDisplay: computed((): boolean => {
     return !state.enabledContentMask || !state.hasBlurredContent
@@ -112,7 +118,10 @@ const state = reactive<{
 
   // ラベル対応 - アカウントメディア
   hasBlurredMedia: computed((): boolean => {
-    return mainState.filterLabels(["hide", "warn"], ["blur-media"], mainState.currentProfile?.labels).length > 0
+    if (mainState.currentProfile?.labels == null) {
+      return true
+    }
+    return mainState.myLabeler.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["media"]).length > 0
   }),
   accountMediaDisplay: computed((): boolean => {
     return !state.enabledContentMask || !state.hasBlurredMedia
