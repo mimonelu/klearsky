@@ -3,7 +3,7 @@ import { computed, reactive, type ComputedRef } from "vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const props = defineProps<{
-  labels?: Array<TTLabel | TILabelSetting>
+  labels?: Array<TILabelSetting>
   type?: TTLabelOnWarn
   display: boolean
   togglable: boolean
@@ -13,9 +13,8 @@ const state = reactive<{
   labelNames: ComputedRef<Array<string>>
 }>({
   labelNames: computed((): Array<string> => {
-    return Array.from(new Set((props.labels?.map((label: any) => {
-      // TODO:
-      return label.locale?.name || label.definition?.identifier || label.val
+    return Array.from(new Set((props.labels?.map((label) => {
+      return label.locale.name || label.definition.identifier
     }) ?? [])))
   }),
 })
