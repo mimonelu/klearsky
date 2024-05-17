@@ -13,7 +13,6 @@ import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPopupTrigger.vue"
 import LabelTags from "@/components/app-parts/LabelTags.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
-import Loader from "@/components/common/Loader.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import PageHeaderButtons from "@/components/shell-parts/PageHeaderButtons.vue"
@@ -29,6 +28,7 @@ const router = useRouter()
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  loaderDisplay: ComputedRef<boolean>
   handleHistoryPopupDisplay: boolean
   endpoint: ComputedRef<undefined | string>
   isPagePostFeeds: ComputedRef<boolean>
@@ -52,6 +52,9 @@ const state = reactive<{
   hasBlurredMedia: ComputedRef<boolean>
   accountMediaDisplay: ComputedRef<boolean>
 }>({
+  loaderDisplay: computed((): boolean => {
+    return mainState.currentProfile == null && mainState.listLoaderDisplay
+  }),
   handleHistoryPopupDisplay: false,
   endpoint: computed((): undefined | string => {
     const log = mainState.currentProfile?.__log
@@ -262,15 +265,15 @@ function onActivateAccountMaskToggle () {
 
     <!-- バナー -->
     <LazyImage
-      v-if="state.accountContentDisplay && state.accountMediaDisplay"
+      v-if="state.loaderDisplay || (state.accountContentDisplay && state.accountMediaDisplay)"
       class="banner"
       :src="mainState.currentProfile?.banner"
       :data-has-banner="!!mainState.currentProfile?.banner"
       @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
     />
 
-    <div class="profile-view__top">
-      <div class="profile-view__top__inner">
+    <div class="profile-view__top-wrapper">
+      <div class="profile-view__top">
         <!-- アカウントトグル -->
         <ContentFilteringToggle
           v-if="state.contentFilteringToggleDisplay"
@@ -287,7 +290,7 @@ function onActivateAccountMaskToggle () {
           <div class="profile-view__details__top">
             <!-- アバターボタン -->
             <div
-              v-if="state.accountContentDisplay && state.accountMediaDisplay"
+              v-if="state.loaderDisplay || (state.accountContentDisplay && state.accountMediaDisplay)"
               class="profile-view__details__top__left"
             >
               <AvatarButton
@@ -349,6 +352,7 @@ function onActivateAccountMaskToggle () {
 
                 <!-- 折り畳みトグル -->
                 <button
+                  v-if="!state.loaderDisplay"
                   class="button--bordered folding-toggle"
                   @click="toggleFolding"
                 >
@@ -480,11 +484,13 @@ function onActivateAccountMaskToggle () {
           </div>
         </div>
       </div>
-      <Loader v-if="mainState.currentProfile == null && mainState.listLoaderDisplay" />
     </div>
 
     <!-- タブ -->
-    <div class="tab-container">
+    <div
+      class="tab-container"
+      :data-disabled="state.loaderDisplay"
+    >
       <!-- メインタブ -->
       <div class="tab">
         <!-- プロフィールポストポップオーバートリガー -->
@@ -545,7 +551,7 @@ function onActivateAccountMaskToggle () {
 
               <!-- メディア一覧ページリンク -->
               <Component
-               :is="state.isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
+              :is="state.isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
                 class="list-menu__item"
                 :data-selected="state.isPagePostFeedsWithMedia"
                 :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
@@ -692,14 +698,16 @@ function onActivateAccountMaskToggle () {
     }
   }
 
+  &__top-wrapper {
+    position: relative;
+  }
+
   &__top {
-    &__inner {
-      display: flex;
-      flex-direction: column;
-      grid-gap: 1rem;
-      padding: 1rem;
-      position: relative;
-    }
+    display: flex;
+    flex-direction: column;
+    grid-gap: 1rem;
+    padding: 1rem;
+    position: relative;
   }
 
   &__details {
@@ -974,6 +982,10 @@ function onActivateAccountMaskToggle () {
   position: sticky;
   top: 3rem;
   z-index: 1;
+  &[data-disabled="true"] {
+    opacity: 0.9375;
+    pointer-events: none;
+  }
 
   .tab__button {
     &--post {
