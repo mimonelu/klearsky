@@ -62,6 +62,7 @@ function onActivateBackButton () {
   align-items: center;
   overflow: hidden;
   padding: 0.75rem 0;
+  max-width: 100%;
   min-height: 3rem;
 
   & > h1,
