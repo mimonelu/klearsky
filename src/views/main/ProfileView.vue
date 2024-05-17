@@ -791,9 +791,10 @@ function onActivateAccountMaskToggle () {
 .handle,
 .endpoint,
 .followed {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   grid-gap: 0.375rem;
-  overflow: hidden;
+  align-items: center;
 
   & > .svg-icon {
     font-size: 0.875rem;
@@ -810,8 +811,6 @@ function onActivateAccountMaskToggle () {
 
 .handle {
   color: var(--fg-color-075);
-  display: inline-flex;
-  align-items: center;
   overflow: hidden;
   [data-log-loaded="true"] & {
     color: var(--accent-color-0875);
@@ -844,8 +843,6 @@ function onActivateAccountMaskToggle () {
 
 .endpoint {
   --color: var(--fg-color-075);
-  display: inline-flex;
-  align-items: center;
 
   & > .svg-icon {
     fill: var(--color);
@@ -864,9 +861,6 @@ function onActivateAccountMaskToggle () {
 }
 
 .followed {
-  display: flex;
-  flex-grow: 1;
-
   & > .svg-icon {
     fill: rgb(var(--like-color));
   }
