@@ -4,6 +4,8 @@ import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
+const emit = defineEmits<{(event: string): void}>()
+
 const mainState = inject("state") as MainState
 
 const $t = inject("$t") as Function
@@ -47,6 +49,7 @@ async function toggleLabelerSubscribe () {
     if (!mainState.myLabeler.unsubscribe(props.labeler.creator.did)) {
       return
     }
+    emit("unsubscribed")
   } else {
     // ラベラーの上限値チェック
     if (!mainState.myLabeler.belowMyLabelerLimit()) {
@@ -61,6 +64,8 @@ async function toggleLabelerSubscribe () {
     if (!mainState.myLabeler.subscribe(props.labeler.creator.did, props.labeler)) {
       return
     }
+
+    emit("subscribed")
   }
 
   // プリファレンスの保存
@@ -80,7 +85,7 @@ async function toggleLabelerSubscribe () {
 
 <template>
   <button
-    class="subscribe-labeler-toggle"
+    class="labeler-subscribe-toggle"
     :class="state.isLabelerSubscribing ? 'button' : 'button--bordered'"
     :disabled="labeler == null || state.isLabelerOfficial"
     @click.stop="toggleLabelerSubscribe"
@@ -92,7 +97,7 @@ async function toggleLabelerSubscribe () {
 </template>
 
 <style lang="scss" scoped>
-.subscribe-labeler-toggle {
+.labeler-subscribe-toggle {
   --fg-color: var(--share-color);
   position: relative;
   &[data-is-processing="true"] {

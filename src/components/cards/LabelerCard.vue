@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
+import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPopupTrigger.vue"
+import LabelerSubscribeToggle from "@/components/buttons/LabelerSubscribeToggle.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import Loader from "@/components/common/Loader.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
@@ -14,6 +16,7 @@ const props = defineProps<{
   labeler: TILabeler
   menuDisplay: boolean
   detailDisplay: boolean
+  subscribeButtonDisplay: boolean
   settingsButtonDisplay: boolean
 }>()
 
@@ -42,11 +45,6 @@ function openProfilePopover ($event: Event) {
   mainState.profilePopoverProps.user = props.labeler.creator
   mainState.profilePopoverFrom = "labeler-card"
   mainState.openProfilePopover($event.target)
-}
-
-function openLabelerSettingsPopup () {
-  Util.blurElement()
-  mainState.openLabelerSettingsPopup(props.labeler)
 }
 </script>
 
@@ -125,6 +123,14 @@ function openLabelerSettingsPopup () {
       v-if="menuDisplay"
       class="labeler-card__button-container group-buttons"
     >
+      <!-- ラベラーサブスクライブトグル -->
+      <LabelerSubscribeToggle
+        v-if="subscribeButtonDisplay"
+        :labeler="labeler"
+        @subscribed="emit('subscribed')"
+        @unsubscribed="emit('unsubscribed')"
+      />
+
       <!-- プロフィールリンクボタン -->
       <RouterLink
         :class="state.isProfileFeedsPage ? 'button--plane' : 'button--bordered'"
@@ -139,16 +145,11 @@ function openLabelerSettingsPopup () {
         <span>{{ $t("profile") }}</span>
       </RouterLink>
 
-      <!-- 設定ボタン -->
-      <button
+      <!-- ラベラー設定ポップアップトリガー -->
+      <LabelerSettingsPopupTrigger
         v-if="settingsButtonDisplay"
-        type="button"
-        class="button labeler-card__settings-button"
-        @click.stop.prevent="openLabelerSettingsPopup"
-      >
-        <SVGIcon name="setting" />
-        <span>{{ $t("settings") }}</span>
-      </button>
+        :labeler="labeler"
+      />
     </div>
 
     <Loader
@@ -333,10 +334,13 @@ function openLabelerSettingsPopup () {
     justify-content: flex-end;
   }
 
+  // ラベラーサブスクライブトグル
+  .labeler-subscribe-toggle {
+    font-size: 0.875em;
+  }
+
   // プロフィールリンクボタン
-  // 設定ボタン
-  &__profile-button,
-  &__settings-button {
+  &__profile-button {
     font-size: 0.875em;
     &.button--plane {
       background-color: var(--accent-color-025);
@@ -357,6 +361,11 @@ function openLabelerSettingsPopup () {
         color: rgb(var(--fg-color));
       }
     }
+  }
+
+  // ラベラー設定ポップアップトリガー
+  .labeler-settings-popup-trigger {
+    font-size: 0.875em;
   }
 }
 </style>

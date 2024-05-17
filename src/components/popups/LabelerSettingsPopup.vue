@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import LabelerCard from "@/components/cards/LabelerCard.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Radios from "@/components/form-parts/Radios.vue"
@@ -23,13 +23,16 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const myLabelers = mainState.myLabeler.getMyLabelerPreferences()
-
-const isMyLabeler = myLabelers.findIndex((myLabeler) => myLabeler.did === props.labeler?.creator.did) !== - 1
-
 const state = reactive<{
+  isMyLabeler: ComputedRef<boolean>
   pseudoDefinitions: Array<TIPseudoLabelerDefinition>
 }>({
+  isMyLabeler: computed((): boolean => {
+    const myLabelers = mainState.myLabeler.getMyLabelerPreferences()
+    return myLabelers.findIndex((myLabeler) => {
+      return myLabeler.did === props.labeler?.creator.did
+    }) !== - 1
+  }),
   pseudoDefinitions: props.labeler?.policies.labelValueDefinitions?.map((definition) => {
     const locale = mainState.myLabeler.getProperLocale(definition.locales)
     const setting = getLabelPreferenceVisibility(definition)
@@ -112,7 +115,7 @@ function toggleDetailDisplay (pseudoDefinition: TIPseudoLabelerDefinition) {
   pseudoDefinition.detailDisplay = !pseudoDefinition.detailDisplay
 }
 
-async function reset () {
+async function resetAfterConfirmation () {
   Util.blurElement()
   const result = await mainState.openConfirmationPopup(
     $t("labelerReset"),
@@ -121,10 +124,14 @@ async function reset () {
   if (!result) {
     return
   }
+  reset()
+  update()
+}
+
+function reset () {
   state.pseudoDefinitions.forEach((pseudoDefinition) => {
     pseudoDefinition.setting = pseudoDefinition.defaultSetting
   })
-  update()
 }
 </script>
 
@@ -149,7 +156,9 @@ async function reset () {
         :labeler="labeler"
         :menuDisplay="true"
         :detailDisplay="false"
+        :subscribeButtonDisplay="true"
         :settingsButtonDisplay="false"
+        @unsubscribed="reset"
         @close="close"
         @onActivateMention="close"
         @onActivateHashTag="close"
@@ -192,17 +201,17 @@ async function reset () {
             :state="pseudoDefinition"
             model="setting"
             :options="pseudoDefinition.options"
-            :disabled="!isMyLabeler"
+            :disabled="!state.isMyLabeler"
             layout="horizontal"
             @update="update"
           />
         </div>
 
         <!-- リセットボタン -->
-        <div>
+        <div v-if="state.isMyLabeler">
           <div
             class="textlink--icon"
-            @click="reset"
+            @click="resetAfterConfirmation"
           >
             <SVGIcon name="alert"/>
             <span>{{ $t("labelerReset") }}</span>

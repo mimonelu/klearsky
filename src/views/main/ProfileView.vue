@@ -11,6 +11,7 @@ import FollowButton from "@/components/buttons/FollowButton.vue"
 import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
 import HtmlText from "@/components/app-parts/HtmlText.vue"
 import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPopupTrigger.vue"
+import LabelerSubscribeToggle from "@/components/buttons/LabelerSubscribeToggle.vue"
 import LabelTags from "@/components/app-parts/LabelTags.vue"
 import LazyImage from "@/components/common/LazyImage.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
@@ -18,7 +19,6 @@ import PageHeader from "@/components/shell-parts/PageHeader.vue"
 import PageHeaderButtons from "@/components/shell-parts/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/app-parts/Post.vue"
-import SubscribeLabelerToggle from "@/components/buttons/SubscribeLabelerToggle.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
 import Util from "@/composables/util"
@@ -423,10 +423,10 @@ function onActivateAccountMaskToggle () {
             <!-- ラベラー行 -->
             <div
               v-if="state.isLabeler"
-              class="button-container"
+              class="group-buttons"
             >
               <!-- ラベラーサブスクライブトグル -->
-              <SubscribeLabelerToggle :labeler="mainState.currentLabeler" />
+              <LabelerSubscribeToggle :labeler="mainState.currentLabeler" />
 
               <!-- ラベラー設定ポップアップトリガー -->
               <LabelerSettingsPopupTrigger :labeler="mainState.currentLabeler" />
@@ -939,7 +939,9 @@ function onActivateAccountMaskToggle () {
 }
 
 // ラベラーサブスクライブトグル
-.subscribe-labeler-toggle:deep() {
+// ラベラー設定ポップアップトリガー
+.labeler-subscribe-toggle:deep(),
+.labeler-settings-popup-trigger:deep() {
   & > span {
     font-size: 0.875rem;
   }
