@@ -60,6 +60,7 @@ function onActivateBackButton () {
   cursor: pointer;
   display: flex;
   align-items: center;
+  overflow: hidden;
   padding: 0.75rem 0;
   min-height: 3rem;
 
