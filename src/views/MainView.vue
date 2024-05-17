@@ -397,11 +397,11 @@ async function processPage (pageName?: null | string) {
       case "profile-feeds": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0) {
           await state.fetchCurrentAuthorFeed("new")
@@ -411,11 +411,11 @@ async function processPage (pageName?: null | string) {
       case "profile-feeds-with-replies": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.inSameProfilePage || state.currentAuthorFeedsWithReplies.length === 0) {
           await state.fetchCurrentAuthorFeed("new", "posts_with_replies")
@@ -425,11 +425,11 @@ async function processPage (pageName?: null | string) {
       case "profile-feeds-with-media": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.inSameProfilePage || state.currentAuthorFeedsWithMedia.length === 0) {
           await state.fetchCurrentAuthorFeed("new", "posts_with_media")
@@ -439,11 +439,11 @@ async function processPage (pageName?: null | string) {
       case "profile-repost": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0) {
           await state.fetchAuthorReposts("new")
@@ -453,11 +453,11 @@ async function processPage (pageName?: null | string) {
       case "profile-like": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0) {
           await state.fetchAuthorLikes("new")
@@ -467,11 +467,11 @@ async function processPage (pageName?: null | string) {
       case "profile-list": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.isMyProfile() && (!state.inSameProfilePage || state.currentAuthorLists.length === 0)) {
           await state.fetchAuthorLists("new")
@@ -481,11 +481,11 @@ async function processPage (pageName?: null | string) {
       case "profile-custom-feeds": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.inSameProfilePage || state.currentAuthorCustomFeeds.length === 0) {
           await state.fetchCurrentAuthorCustomFeeds("new")
@@ -495,11 +495,11 @@ async function processPage (pageName?: null | string) {
       case "profile-following": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.inSameProfilePage || state.currentFollowings.length === 0) {
           await state.fetchFollowings("new")
@@ -509,11 +509,11 @@ async function processPage (pageName?: null | string) {
       case "profile-follower": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.inSameProfilePage || state.currentFollowers.length === 0) {
           await state.fetchFollowers("new")
@@ -523,11 +523,11 @@ async function processPage (pageName?: null | string) {
       case "profile-suggested-follows": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
-          // ブロック情報などを先に取得するために並列処理はしない
+          // DIDやブロック情報などを先に取得するために並列処理はしない
           await state.fetchCurrentProfile(account as string)
         }
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(account as string)
+          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
         if (!state.inSameProfilePage || state.currentSuggestedFollows.length === 0) {
           await state.fetchSuggestedFollows()
