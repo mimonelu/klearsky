@@ -19,6 +19,8 @@ const props = defineProps<{
   labeler?: TILabeler
 }>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const myLabelers = mainState.myLabeler.getMyLabelerPreferences()
@@ -109,6 +111,21 @@ function toggleDetailDisplay (pseudoDefinition: TIPseudoLabelerDefinition) {
   Util.blurElement()
   pseudoDefinition.detailDisplay = !pseudoDefinition.detailDisplay
 }
+
+async function reset () {
+  Util.blurElement()
+  const result = await mainState.openConfirmationPopup(
+    $t("labelerReset"),
+    $t("labelerResetMessage")
+  )
+  if (!result) {
+    return
+  }
+  state.pseudoDefinitions.forEach((pseudoDefinition) => {
+    pseudoDefinition.setting = pseudoDefinition.defaultSetting
+  })
+  update()
+}
 </script>
 
 <template>
@@ -179,6 +196,17 @@ function toggleDetailDisplay (pseudoDefinition: TIPseudoLabelerDefinition) {
             layout="horizontal"
             @update="update"
           />
+        </div>
+
+        <!-- リセットボタン -->
+        <div>
+          <div
+            class="textlink--icon"
+            @click="reset"
+          >
+            <SVGIcon name="alert"/>
+            <span>{{ $t("labelerReset") }}</span>
+          </div>
         </div>
       </div>
     </template>

@@ -66,6 +66,8 @@
   "subscribeLabel": "ラベラーを登録する",
   "unsubscribeLabel": "ラベラーを登録中",
   "labelerOverLimit": "登録済みのラベラーが上限値に達しているため、このラベラーを登録できません。",
+  "labelerReset": "設定のリセット",
+  "labelerResetMessage": "設定をリセットします。よろしいですか？",
   "myLabeler": "マイラベラー",
   "labels": "ラベル",
   "accountLabels": "ユーザーラベル",

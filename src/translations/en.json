@@ -66,6 +66,8 @@
   "subscribeLabel": "Subscribe labeler",
   "unsubscribeLabel": "Subscribing labeler",
   "labelerOverLimit": "Cannot register this labeler because the subscribed labeler has reached the upper limit.",
+  "labelerReset": "Reset all settings",
+  "labelerResetMessage": "Reset all settings. Are you sure?",
   "myLabeler": "My Labeler",
   "labels": "Labels",
   "accountLabels": "Account labels",
