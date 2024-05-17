@@ -25,6 +25,8 @@
       line-height: var(--line-height-high);
       overflow: hidden;
       pointer-events: none;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     & > .svg-icon {

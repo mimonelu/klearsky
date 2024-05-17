@@ -793,6 +793,7 @@ function onActivateAccountMaskToggle () {
 .followed {
   display: inline-flex;
   grid-gap: 0.375rem;
+  overflow: hidden;
 
   & > .svg-icon {
     font-size: 0.875rem;
