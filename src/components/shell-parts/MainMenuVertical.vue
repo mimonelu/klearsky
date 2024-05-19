@@ -25,11 +25,7 @@ function openNotificationPopup () {
 
 async function openChatPopup () {
   Util.blurElement()
-  await mainState.myChat.setDeclaration("all")
-  await mainState.myChat.updateConvos()
-  const myConbo = await mainState.myChat.upsertConvo(["did:plc:vxbbfhlyhoppzbyvsmldr76l"])
-  await myConbo?.createMessage("💩 ﾌﾟﾘｯ 三三三🦀")
-  await myConbo?.updateMessages()
+  mainState.openChatListPopup()
 }
 
 function openSettingsPopover () {

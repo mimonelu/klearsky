@@ -5,6 +5,7 @@ import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
+import ChatListPopup from "@/components/popups/ChatListPopup.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
@@ -325,6 +326,9 @@ async function processAfterLogin () {
       state.myWorker.setSessionCache("myList", state.myLists.items)
     })
   }
+
+  // チャット一覧の更新
+  await state.myChat.updateConvos()
 
   // 招待コードの取得
   if (state.inviteCodes.length === 0) {
@@ -1066,6 +1070,15 @@ function broadcastListener (event: MessageEvent) {
           v-if="state.labelerSettingsPopupProps.display"
           v-bind="state.labelerSettingsPopupProps"
           @close="state.closeLabelerSettingsPopup"
+        />
+      </Transition>
+
+      <!-- チャット一覧ポップアップ -->
+      <Transition>
+        <ChatListPopup
+          v-if="state.chatListPopupProps.display"
+          v-bind="state.chatListPopupProps"
+          @close="state.closeChatListPopup"
         />
       </Transition>
 

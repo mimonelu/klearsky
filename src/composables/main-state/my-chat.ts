@@ -44,9 +44,9 @@ export default class MyChat {
       // TODO:
       return false
     }
-    this.myConvos.splice(0, this.myConvos.length, ...convos.convos.map((convo) => {
-      return this.updateConvo(convo)
-    }))
+    convos.convos.forEach((convo) => {
+      this.updateConvo(convo)
+    })
     return true
   }
 
@@ -57,7 +57,7 @@ export default class MyChat {
       return myConvo.data?.id === newConvo.id
     })
     if (myConvoIndex === - 1) {
-      this.myConvos.unshift(myConvo)
+      this.myConvos.push(myConvo)
     } else {
       this.myConvos[myConvoIndex] = myConvo
     }
@@ -111,5 +111,9 @@ class MyConvo {
       }
     })
     return true
+  }
+
+  findMember (did: string): undefined | TTProfile {
+    return this.data?.members.find((member) => member.did === did)
   }
 }

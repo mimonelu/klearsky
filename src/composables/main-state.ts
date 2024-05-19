@@ -427,6 +427,13 @@ state.selectLabelsPopupState = undefined
 state.openSelectLabelsPopup = openSelectLabelsPopup
 state.closeSelectLabelsPopup = closeSelectLabelsPopup
 
+// ポップアップ - チャット一覧ポップアップ
+state.chatListPopupProps = {
+  display: false,
+}
+state.openChatListPopup = openChatListPopup
+state.closeChatListPopup = closeChatListPopup
+
 // ポップアップ - アカウントレポート送信ポップアップ
 state.sendAccountReportPopupProps = {
   display: false,
@@ -1751,6 +1758,16 @@ function openSelectLabelsPopup (params: any) {
 
 function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
+}
+
+// ポップアップ - チャット一覧ポップアップ
+
+function openChatListPopup (params: any) {
+  state.chatListPopupProps.display = true
+}
+
+function closeChatListPopup () {
+  state.chatListPopupProps.display = false
 }
 
 // ポップアップ - アカウントレポート送信ポップアップ

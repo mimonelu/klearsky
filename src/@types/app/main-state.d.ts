@@ -400,6 +400,13 @@ type MainState = {
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: Function
 
+  // ポップアップ - チャット一覧ポップアップ
+  chatListPopupProps: {
+    display: boolean
+  }
+  openChatListPopup: Function
+  closeChatListPopup: Function
+
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {
     display: boolean
