@@ -75,6 +75,9 @@ type MainState = {
 
   // チャット
   myChat: TIMyChat
+  chatListTimer: undefined | any
+  endChatListTimer: () => void
+  startChatListTimer: () => void
 
   // ミュートユーザー
   currentMutingUsers: Array<TTUser>

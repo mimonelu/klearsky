@@ -112,6 +112,7 @@ onMounted(async () => {
 onUnmounted(() => {
   clearUpdateJwtInterval()
   state.clearNotificationInterval()
+  state.endChatListTimer()
 })
 
 const router = useRouter()
@@ -329,7 +330,8 @@ async function processAfterLogin () {
   }
 
   // チャット一覧の更新
-  await state.myChat.updateConvos(100)
+  state.myChat.updateConvos(100)
+  state.startChatListTimer()
 
   // 招待コードの取得
   if (state.inviteCodes.length === 0) {

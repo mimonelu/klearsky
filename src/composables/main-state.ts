@@ -116,6 +116,19 @@ state.currentLabeler = undefined
 
 // チャット
 state.myChat = new MyChat(state)
+state.chatListTimer = undefined
+state.endChatListTimer = function () {
+  if (state.chatListTimer != null) {
+    clearInterval(state.chatListTimer)
+    state.chatListTimer = undefined
+  }
+}
+state.startChatListTimer = function () {
+  state.endChatListTimer()
+  state.chatListTimer = setInterval(async () => {
+    await state.myChat.updateConvos(100)
+  }, 30000)
+}
 
 // ミュートユーザー
 state.currentMutingUsers = []
