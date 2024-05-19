@@ -2,18 +2,15 @@
 .textlabel--alert {
   border-radius: var(--border-radius-middle);
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   grid-gap: 0.25em 0.5em;
 
   &__text {
     display: flex;
+    align-items: center;
     grid-gap: 0.25em 0.5em;
     line-height: var(--line-height-high);
-    margin-top: -0.25em;
-
-    & > .svg-icon {
-      margin-top: 0.25em;
-    }
   }
 
   &__item {

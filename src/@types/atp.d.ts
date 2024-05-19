@@ -42,6 +42,9 @@ type TTUser = {
     lists: number
     feedgens: number
     labeler: boolean
+    chat?: {
+      allowIncoming: TTAllowIncoming
+    }
   }
   avatar?: string
   description?: string
@@ -363,6 +366,9 @@ type TTProfile = {
     lists: number
     feedgens: number
     labeler: boolean
+    chat?: {
+      allowIncoming: TTAllowIncoming
+    }
   }
   indexedAt: string
   labels?: Array<TTLabel>

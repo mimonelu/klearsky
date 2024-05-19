@@ -32,7 +32,7 @@ export default class MyChat {
   async upsertConvo (dids: Array<string>): Promise<undefined | TIMyConvo> {
     const convo = await this.mainState.atp.fetchChatConvo(dids)
     if (convo instanceof Error) {
-      // TODO:
+      this.mainState.openErrorPopup(convo, "MyChat/upsertConvo")
       return
     }
     return this.updateConvo(convo)

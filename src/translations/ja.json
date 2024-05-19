@@ -86,6 +86,9 @@
   "termsOfService": "利用規約",
 
   "chat": "チャット",
+  "noChat": "チャットがありません。",
+  "noChatMessage": "メッセージがありません。",
+  "startChat": "チャットを開始",
 
   "tag": "タグ",
   "tags": "タグ",

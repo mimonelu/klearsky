@@ -3,6 +3,7 @@ import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vu
 import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
 import MenuTickerModerateWrapper from "@/components/menu-items/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
+import MenuTickerOpenChatConvoPopup from "@/components/menu-items/OpenChatConvoPopup.vue"
 import MenuTickerOpenListUserManagementPopup from "@/components/menu-items/OpenListUserManagementPopup.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
 import MenuTickerTranslateText from "@/components/menu-items/TranslateText.vue"
@@ -88,6 +89,12 @@ function close () {
 
       <!-- リストに追加する -->
       <MenuTickerOpenListUserManagementPopup
+        :user="user"
+        @close="emit('close')"
+      />
+
+      <!-- チャットを開始する -->
+      <MenuTickerOpenChatConvoPopup
         :user="user"
         @close="emit('close')"
       />

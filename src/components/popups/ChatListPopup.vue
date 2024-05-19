@@ -59,69 +59,87 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
     </template>
     <template #body>
       <div
-        v-for="myConvo,myConvoIndex of mainState.myChat.myConvos"
-        :key="myConvoIndex"
-        class="convo-card"
-        :data-has-unread-messages="myConvo.data?.unreadCount > 0"
-        :data-muted="myConvo.data?.muted"
-        @click="openChatConvoPopup(myConvo)"
+        v-if="mainState.myChat.myConvos.length === 0"
+        class="textlabel chat-list-popup__no-chat"
       >
-        <div
-          v-if="myConvo.data?.unreadCount"
-          class="convo-card__unread-count"
-        >
-          <SVGIcon name="chat" />
-          <span>{{ myConvo.data?.unreadCount }}</span>
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("noChat") }}
         </div>
-        <div class="convo-card__avatars">
-          <div
-            v-for="member, memberIndex of myConvo.data?.members"
-            :key="memberIndex"
-            clas="convo-card__avatars__item"
-          >
-            <AvatarLink
-              v-if="member.did !== mainState.atp.data.did"
-              :isLabeler="member.associated?.labeler"
-              :did="member.did"
-              :image="member.avatar"
-              :title="member.displayName || member.handle"
-              @click.stop="close"
-            />
-          </div>
-        </div>
-        <div class="convo-card__last-message">
-          <Post
-            v-if="myConvo.data?.lastMessage != null"
-            position="slim"
-            :post="makeLastPost(myConvo)"
-          />
-        </div>
-        <div class="convo-card__right">
-          <button
-            class="button--plane"
-            @click.stop
-          >
-            <SVGIcon name="menu" />
-          </button>
-        </div>
-
-        <!--
-        <div class="group-buttons">
-          <button
-            v-if="myConvo.data?.muted"
-            class="button--important"
-          >
-            <span>{{ $t("muting") }}</span>
-          </button>
-          <button
-            v-else
-            class="button"
-          >
-            <span>{{ $t("muteOn") }}</span>
-          </button>
-        </div>
-        -->
       </div>
+      <template v-else>
+        <div
+          v-for="myConvo,myConvoIndex of mainState.myChat.myConvos"
+          :key="myConvoIndex"
+          class="convo-card"
+          :data-has-unread-messages="myConvo.data?.unreadCount > 0"
+          :data-muted="myConvo.data?.muted"
+          @click="openChatConvoPopup(myConvo)"
+        >
+          <div
+            v-if="myConvo.data?.unreadCount"
+            class="convo-card__unread-count"
+          >
+            <SVGIcon name="chat" />
+            <span>{{ myConvo.data?.unreadCount }}</span>
+          </div>
+          <div class="convo-card__avatars">
+            <div
+              v-for="member, memberIndex of myConvo.data?.members"
+              :key="memberIndex"
+              clas="convo-card__avatars__item"
+            >
+              <AvatarLink
+                v-if="member.did !== mainState.atp.data.did"
+                :isLabeler="member.associated?.labeler"
+                :did="member.did"
+                :image="member.avatar"
+                :title="member.displayName || member.handle"
+                @click.stop="close"
+              />
+            </div>
+          </div>
+          <div class="convo-card__last-message">
+            <Post
+              v-if="myConvo.data?.lastMessage != null"
+              position="slim"
+              :post="makeLastPost(myConvo)"
+            />
+            <div
+              v-else
+              class="textlabel chat-list-popup__no-message"
+            >
+              <div class="textlabel__text">
+                <SVGIcon name="alert" />{{ $t("noChatMessage") }}
+              </div>
+            </div>
+          </div>
+          <div class="convo-card__right">
+            <button
+              class="button--plane"
+              @click.stop
+            >
+              <SVGIcon name="menu" />
+            </button>
+          </div>
+
+          <!--
+          <div class="group-buttons">
+            <button
+              v-if="myConvo.data?.muted"
+              class="button--important"
+            >
+              <span>{{ $t("muting") }}</span>
+            </button>
+            <button
+              v-else
+              class="button"
+            >
+              <span>{{ $t("muteOn") }}</span>
+            </button>
+          </div>
+          -->
+        </div>
+      </template>
     </template>
   </Popup>
 </template>
@@ -134,6 +152,14 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
       grid-gap: 1px;
       padding: unset;
     }
+  }
+
+  &__no-chat {
+    padding: 1rem;
+  }
+
+  &__no-message {
+    margin: 0 1rem;
   }
 }
 
@@ -209,6 +235,8 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
     grid-area: l;
     border: 1px solid var(--fg-color-0125);
     border-radius: var(--border-radius-middle);
+    display: flex;
+    align-items: center;
 
     .post {
       padding: 0.5em;

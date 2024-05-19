@@ -86,6 +86,9 @@
   "termsOfService": "Terms of service",
 
   "chat": "Chat",
+  "noChat": "No chat.",
+  "noChatMessage": "No message.",
+  "startChat": "Start chat",
 
   "tag": "Tag",
   "tags": "Tags",
