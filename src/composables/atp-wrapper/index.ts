@@ -1,4 +1,6 @@
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
+import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
+import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
 import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob-ref"
 import createFollow from "@/composables/atp-wrapper/create/create-follow"
 import createLike from "@/composables/atp-wrapper/create/create-like"
@@ -9,6 +11,7 @@ import createRecord from "@/composables/atp-wrapper/create/create-record"
 import createReport from "@/composables/atp-wrapper/create/create-report"
 import createRepost from "@/composables/atp-wrapper/create/create-repost"
 import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
+import deleteChatDeclaration from "@/composables/atp-wrapper/chat/delete-chat-declaration"
 import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
 import deleteList from "@/composables/atp-wrapper/delete/delete-list"
@@ -27,6 +30,10 @@ import fetchAuthorReposts from "@/composables/atp-wrapper/fetch/fetch-author-rep
 import fetchBlob from "@/composables/atp-wrapper/fetch/fetch-blob"
 import fetchBlobUrl from "@/composables/atp-wrapper/fetch/fetch-blob-url"
 import fetchBlockingUsers from "@/composables/atp-wrapper/fetch/fetch-blocking-users"
+import fetchChatConvo from "@/composables/atp-wrapper/chat/fetch-chat-convo"
+import fetchChatConvos from "@/composables/atp-wrapper/chat/fetch-chat-convos"
+import fetchChatDeclarations from "@/composables/atp-wrapper/chat/fetch-chat-declarations"
+import fetchChatMessages from "@/composables/atp-wrapper/chat/fetch-chat-messages"
 import fetchCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-custom-feeds"
 import fetchDid from "@/composables/atp-wrapper/fetch/fetch-did"
 import fetchFeedGenerator from "@/composables/atp-wrapper/fetch/fetch-feed-generator"
@@ -127,6 +134,8 @@ class AtpWrapper implements TIAtpWrapper {
     return this.data.sessions[this.data.did] != null
   }
   createAgent = createAgent
+  createChatDeclaration = createChatDeclaration
+  createChatMessage = createChatMessage
   createFileBlobRef = createFileBlobRef
   createFollow = createFollow
   createLike = createLike
@@ -137,6 +146,7 @@ class AtpWrapper implements TIAtpWrapper {
   createReport = createReport
   createRepost = createRepost
   deleteAccount = deleteAccount
+  deleteChatDeclaration = deleteChatDeclaration
   deleteFollow = deleteFollow
   deleteLike = deleteLike
   deleteList = deleteList
@@ -155,6 +165,10 @@ class AtpWrapper implements TIAtpWrapper {
   fetchBlob = fetchBlob
   fetchBlobUrl = fetchBlobUrl
   fetchBlockingUsers = fetchBlockingUsers
+  fetchChatConvo = fetchChatConvo
+  fetchChatConvos = fetchChatConvos
+  fetchChatDeclarations = fetchChatDeclarations
+  fetchChatMessages = fetchChatMessages
   fetchCustomFeeds = fetchCustomFeeds
   fetchDid = fetchDid
   fetchFeedGenerator = fetchFeedGenerator

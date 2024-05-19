@@ -2,20 +2,23 @@ export default async function (
   this: TIAtpWrapper,
   pathToXrpc: string,
   did: string,
-  query: Record<string, string>
+  query: Record<string, any>,
+  server?: string
 ): Promise<Error | Response> {
   const params = new URLSearchParams(query)
-  let host = "https://bsky.social"
-  const logJson = await this.fetchLogAudit(did)
-  if (logJson != null) {
-    host = (
-      Array.isArray(logJson)
-        // did:plc:
-        ? logJson[0]?.operation?.services?.atproto_pds?.endpoint
+  let host = server ?? "https://bsky.social"
+  if (server == null) {
+    const logJson = await this.fetchLogAudit(did)
+    if (logJson != null) {
+      host = (
+        Array.isArray(logJson)
+          // did:plc:
+          ? logJson[0]?.operation?.services?.atproto_pds?.endpoint
 
-        // did:plc: 以外
-        : logJson?.didDocument?.service?.[0]?.serviceEndpoint
-    ) ?? host
+          // did:plc: 以外
+          : logJson?.didDocument?.service?.[0]?.serviceEndpoint
+      ) ?? host
+    }
   }
   const url = `${host}/xrpc/${pathToXrpc}?${params}`
   const response: Error | Response =
