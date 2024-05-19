@@ -41,7 +41,7 @@ function makeLastPost (myConvo: TIMyConvo): TTPost {
 }
 
 function openChatConvoPopup (myConvo: TIMyConvo) {
-  console.log(myConvo)
+  mainState.openChatConvoPopup(myConvo)
 }
 </script>
 
@@ -161,7 +161,7 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
     grid-gap: 0.25rem;
     padding: 0.125rem 0;
     position: absolute;
-    top: -0.75rem;
+    bottom: 0.5rem;
     left: 1rem;
     width: 3rem;
     max-width: 3rem;
@@ -170,8 +170,8 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
       content: "";
       display: block;
       position: absolute;
-      bottom: calc(-0.75rem + 1px);
-      @include triangle("bottom", 0.5rem, 0.5rem, rgb(var(--notice-color)));
+      top: calc(-0.75rem + 1px);
+      @include triangle("top", 0.5rem, 0.5rem, rgb(var(--notice-color)));
     }
 
     & > .svg-icon {

@@ -434,6 +434,14 @@ state.chatListPopupProps = {
 state.openChatListPopup = openChatListPopup
 state.closeChatListPopup = closeChatListPopup
 
+// ポップアップ - チャットルームポップアップ
+state.chatConvoPopupProps = {
+  display: false,
+  myConvo: undefined,
+}
+state.openChatConvoPopup = openChatConvoPopup
+state.closeChatConvoPopup = closeChatConvoPopup
+
 // ポップアップ - アカウントレポート送信ポップアップ
 state.sendAccountReportPopupProps = {
   display: false,
@@ -1762,12 +1770,23 @@ function closeSelectLabelsPopup () {
 
 // ポップアップ - チャット一覧ポップアップ
 
-function openChatListPopup (params: any) {
+function openChatListPopup () {
   state.chatListPopupProps.display = true
 }
 
 function closeChatListPopup () {
   state.chatListPopupProps.display = false
+}
+
+// ポップアップ - チャットルームポップアップ
+
+function openChatConvoPopup (myConvo: TIMyConvo) {
+  state.chatConvoPopupProps.myConvo = myConvo
+  state.chatConvoPopupProps.display = true
+}
+
+function closeChatConvoPopup () {
+  state.chatConvoPopupProps.display = false
 }
 
 // ポップアップ - アカウントレポート送信ポップアップ

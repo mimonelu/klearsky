@@ -5,6 +5,7 @@ import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
+import ChatConvoPopup from "@/components/popups/ChatConvoPopup.vue"
 import ChatListPopup from "@/components/popups/ChatListPopup.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
@@ -328,7 +329,7 @@ async function processAfterLogin () {
   }
 
   // チャット一覧の更新
-  await state.myChat.updateConvos()
+  await state.myChat.updateConvos(100)
 
   // 招待コードの取得
   if (state.inviteCodes.length === 0) {
@@ -1079,6 +1080,15 @@ function broadcastListener (event: MessageEvent) {
           v-if="state.chatListPopupProps.display"
           v-bind="state.chatListPopupProps"
           @close="state.closeChatListPopup"
+        />
+      </Transition>
+
+      <!-- チャットルームポップアップ -->
+      <Transition>
+        <ChatConvoPopup
+          v-if="state.chatConvoPopupProps.display"
+          v-bind="state.chatConvoPopupProps"
+          @close="state.closeChatConvoPopup"
         />
       </Transition>
 

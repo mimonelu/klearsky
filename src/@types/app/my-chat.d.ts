@@ -3,7 +3,7 @@ interface TIMyChat {
   myConvos: Array<MyConvo>
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean>
   async upsertConvo (dids: Array<string>): Promise<undefined | TIMyConvo>
-  async updateConvos (): Promise<boolean>
+  async updateConvos (limit?: number): Promise<boolean>
 }
 
 interface TIMyConvo {
@@ -11,6 +11,6 @@ interface TIMyConvo {
   data?: TIChatConvo
   messages: Array<TIChatMessage>
   async createMessage (text: string): Promise<boolean>
-  async updateMessages (): Promise<boolean>
+  async updateMessages (limit?: number): Promise<boolean>
   findMember (did: string): undefined | TTProfile
 }

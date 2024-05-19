@@ -407,6 +407,14 @@ type MainState = {
   openChatListPopup: Function
   closeChatListPopup: Function
 
+  // ポップアップ - チャットルームポップアップ
+  chatConvoPopupProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+  }
+  openChatConvoPopup: Function
+  closeChatConvoPopup: Function
+
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {
     display: boolean

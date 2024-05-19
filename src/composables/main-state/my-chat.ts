@@ -38,8 +38,8 @@ export default class MyChat {
     return this.updateConvo(convo)
   }
 
-  async updateConvos (): Promise<boolean> {
-    const convos = await this.mainState.atp.fetchChatConvos(100)
+  async updateConvos (limit?: number): Promise<boolean> {
+    const convos = await this.mainState.atp.fetchChatConvos(limit)
     if (convos instanceof Error) {
       // TODO:
       return false
@@ -87,15 +87,16 @@ class MyConvo {
       // TODO:
       return false
     }
-    this.messages.unshift(message)
+    this.messages.push(message)
+    this.sortMessages()
     return true
   }
 
-  async updateMessages (): Promise<boolean> {
+  async updateMessages (limit?: number): Promise<boolean> {
     if (this.data == null) {
       return false
     }
-    const messages = await this.mainState.atp.fetchChatMessages(this.data.id, 30)
+    const messages = await this.mainState.atp.fetchChatMessages(this.data.id, limit)
     if (messages instanceof Error) {
       // TODO:
       return false
@@ -105,12 +106,21 @@ class MyConvo {
         return src.id === dst.id
       })
       if (srcIndex === - 1) {
-        this.messages.unshift(dst)
+        this.messages.push(dst)
       } else {
         this.messages[srcIndex] = dst
       }
     })
+    this.sortMessages()
     return true
+  }
+
+  sortMessages () {
+    this.messages.sort((a, b) => {
+      const dateA = new Date(a.sentAt)
+      const dateB = new Date(b.sentAt)
+      return dateA < dateB ? - 1 : dateA > dateB ? 1 : 0
+    })
   }
 
   findMember (did: string): undefined | TTProfile {
