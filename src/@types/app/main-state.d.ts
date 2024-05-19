@@ -73,6 +73,12 @@ type MainState = {
   myLabeler: TIMyLabeler
   currentLabeler?: TILabeler
 
+  // チャット
+  myChat: TIMyChat
+  chatListTimer: undefined | any
+  endChatListTimer: () => void
+  startChatListTimer: () => void
+
   // ミュートユーザー
   currentMutingUsers: Array<TTUser>
   currentMutingUsersCursor?: string
@@ -396,6 +402,21 @@ type MainState = {
   selectLabelsPopupState: any
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: Function
+
+  // ポップアップ - チャット一覧ポップアップ
+  chatListPopupProps: {
+    display: boolean
+  }
+  openChatListPopup: Function
+  closeChatListPopup: Function
+
+  // ポップアップ - チャットルームポップアップ
+  chatConvoPopupProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+  }
+  openChatConvoPopup: Function
+  closeChatConvoPopup: Function
 
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {

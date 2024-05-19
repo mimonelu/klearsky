@@ -5,6 +5,8 @@ import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
+import ChatConvoPopup from "@/components/popups/ChatConvoPopup.vue"
+import ChatListPopup from "@/components/popups/ChatListPopup.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
@@ -110,6 +112,7 @@ onMounted(async () => {
 onUnmounted(() => {
   clearUpdateJwtInterval()
   state.clearNotificationInterval()
+  state.endChatListTimer()
 })
 
 const router = useRouter()
@@ -325,6 +328,10 @@ async function processAfterLogin () {
       state.myWorker.setSessionCache("myList", state.myLists.items)
     })
   }
+
+  // チャット一覧の更新
+  state.myChat.updateConvos(100)
+  state.startChatListTimer()
 
   // 招待コードの取得
   if (state.inviteCodes.length === 0) {
@@ -1066,6 +1073,24 @@ function broadcastListener (event: MessageEvent) {
           v-if="state.labelerSettingsPopupProps.display"
           v-bind="state.labelerSettingsPopupProps"
           @close="state.closeLabelerSettingsPopup"
+        />
+      </Transition>
+
+      <!-- チャット一覧ポップアップ -->
+      <Transition>
+        <ChatListPopup
+          v-if="state.chatListPopupProps.display"
+          v-bind="state.chatListPopupProps"
+          @close="state.closeChatListPopup"
+        />
+      </Transition>
+
+      <!-- チャットルームポップアップ -->
+      <Transition>
+        <ChatConvoPopup
+          v-if="state.chatConvoPopupProps.display"
+          v-bind="state.chatConvoPopupProps"
+          @close="state.closeChatConvoPopup"
         />
       </Transition>
 

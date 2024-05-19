@@ -23,6 +23,11 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
+async function openChatPopup () {
+  Util.blurElement()
+  mainState.openChatListPopup()
+}
+
 function openSettingsPopover () {
   Util.blurElement()
   mainState.openSettingsPopover(
@@ -111,6 +116,17 @@ function moveToBottom () {
       <div class="label">{{ $t("notifications") }}</div>
     </button>
 
+    <!-- チャットポップアップトリガー -->
+    <button
+      class="link-button"
+      @click.prevent="openChatPopup"
+    >
+      <div class="icon">
+        <SVGIcon name="chat" />
+      </div>
+      <div class="label">{{ $t("chat") }}</div>
+    </button>
+
     <!-- 設定ボタン -->
     <button
       class="link-button main-menu-vertical__settings-popover-trigger"
@@ -183,7 +199,7 @@ function moveToBottom () {
 .main-menu-vertical {
   display: flex;
   flex-direction: column;
-  grid-gap: 0.5rem;
+  grid-gap: 0.25rem;
 
   // スリムレイアウト
   @media (max-width: $max-width-with-scrollbar) {

@@ -5,13 +5,14 @@ import isSameYear from "date-fns/isSameYear"
 import { computed, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
+import MyChat from "@/composables/main-state/my-chat"
 import MyFeeds from "@/composables/main-state/my-feeds"
 import MyLabeler from "@/composables/main-state/my-labeler"
 import MyLists from "@/composables/main-state/my-lists"
 import MyWorker from "@/composables/main-state/my-worker"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
-import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
+// import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
 import LANGUAGES from "@/consts/languages"
 
 export const state = reactive<MainState>({} as MainState)
@@ -112,6 +113,22 @@ state.getCustomLabels = getCustomLabels
 // ラベラー
 state.myLabeler = new MyLabeler(state)
 state.currentLabeler = undefined
+
+// チャット
+state.myChat = new MyChat(state)
+state.chatListTimer = undefined
+state.endChatListTimer = function () {
+  if (state.chatListTimer != null) {
+    clearInterval(state.chatListTimer)
+    state.chatListTimer = undefined
+  }
+}
+state.startChatListTimer = function () {
+  state.endChatListTimer()
+  state.chatListTimer = setInterval(async () => {
+    await state.myChat.updateConvos(100)
+  }, 30000)
+}
 
 // ミュートユーザー
 state.currentMutingUsers = []
@@ -422,6 +439,21 @@ state.selectLabelsPopupDisplay = false
 state.selectLabelsPopupState = undefined
 state.openSelectLabelsPopup = openSelectLabelsPopup
 state.closeSelectLabelsPopup = closeSelectLabelsPopup
+
+// ポップアップ - チャット一覧ポップアップ
+state.chatListPopupProps = {
+  display: false,
+}
+state.openChatListPopup = openChatListPopup
+state.closeChatListPopup = closeChatListPopup
+
+// ポップアップ - チャットルームポップアップ
+state.chatConvoPopupProps = {
+  display: false,
+  myConvo: undefined,
+}
+state.openChatConvoPopup = openChatConvoPopup
+state.closeChatConvoPopup = closeChatConvoPopup
 
 // ポップアップ - アカウントレポート送信ポップアップ
 state.sendAccountReportPopupProps = {
@@ -1747,6 +1779,27 @@ function openSelectLabelsPopup (params: any) {
 
 function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
+}
+
+// ポップアップ - チャット一覧ポップアップ
+
+function openChatListPopup () {
+  state.chatListPopupProps.display = true
+}
+
+function closeChatListPopup () {
+  state.chatListPopupProps.display = false
+}
+
+// ポップアップ - チャットルームポップアップ
+
+function openChatConvoPopup (myConvo: TIMyConvo) {
+  state.chatConvoPopupProps.myConvo = myConvo
+  state.chatConvoPopupProps.display = true
+}
+
+function closeChatConvoPopup () {
+  state.chatConvoPopupProps.display = false
 }
 
 // ポップアップ - アカウントレポート送信ポップアップ

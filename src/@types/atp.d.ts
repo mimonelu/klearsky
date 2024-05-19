@@ -42,6 +42,9 @@ type TTUser = {
     lists: number
     feedgens: number
     labeler: boolean
+    chat?: {
+      allowIncoming: TTAllowIncoming
+    }
   }
   avatar?: string
   description?: string
@@ -363,6 +366,9 @@ type TTProfile = {
     lists: number
     feedgens: number
     labeler: boolean
+    chat?: {
+      allowIncoming: TTAllowIncoming
+    }
   }
   indexedAt: string
   labels?: Array<TTLabel>
@@ -399,4 +405,41 @@ interface TITaggedSuggestion {
   feeds: string[]
   users: string[]
   profiles?: TTProfile[]
+}
+
+interface TIFetchChatDeclarationsResponse {
+  cursor?: string | undefined
+  records: {
+    uri: string
+    value: {
+      allowIncoming: TTAllowIncoming
+    }
+  }[]
+}
+
+type TTAllowIncoming = "all" | "none" | "following" | (string & {})
+
+interface TIFetchChatConvosResponse {
+  cursor?: string
+  convos: Array<TIChatConvo>
+}
+
+interface TIChatConvo {
+  id: string
+  rev: string
+  members: TTProfile[]
+  lastMessage?: TIChatMessage
+  muted: boolean
+  unreadCount: number
+}
+
+interface TIChatMessage {
+  id: string
+  rev: string
+  text: string
+  facets?: any
+  embed?: any
+  sender: { did: string }
+  sentAt: string
+  [k: string]: unknown
 }

@@ -85,6 +85,11 @@
   "privacyPolicy": "Privacy policy",
   "termsOfService": "Terms of service",
 
+  "chat": "Chat",
+  "noChat": "No chat.",
+  "noChatMessage": "No message.",
+  "startChat": "Start chat",
+
   "tag": "Tag",
   "tags": "Tags",
   "tagEdit": "Edit my tags",
