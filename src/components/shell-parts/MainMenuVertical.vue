@@ -24,49 +24,12 @@ function openNotificationPopup () {
 }
 
 async function openChatPopup () {
-  const declarations = await mainState.atp.fetchChatDeclarations(mainState.atp.data.did, 10)
-  if (declarations instanceof Error) {
-    // TODO:
-    return
-  }
-  declarations.records.forEach((record) => console.log(record.value.allowIncoming))
-
-  for (const record of declarations.records) {
-    await mainState.atp.deleteChatDeclaration(mainState.atp.data.did, record.uri)
-  }
-
-  const result = await mainState.atp.createChatDeclaration(mainState.atp.data.did, "following")
-  if (result instanceof Error) {
-    // TODO:
-    return
-  }
-
-  const convos = await mainState.atp.fetchChatConvos(100)
-  if (convos instanceof Error) {
-    // TODO:
-    return
-  }
-  console.log(convos.convos)
-
-  const convo = await mainState.atp.fetchChatConvo(["did:plc:vxbbfhlyhoppzbyvsmldr76l"])
-  if (convo instanceof Error) {
-    // TODO:
-    return
-  }
-  console.log(convo)
-
-  const message = await mainState.atp.createChatMessage(convo.id, "💩 ﾌﾟﾘｯ 三三三🦀")
-  if (message instanceof Error) {
-    // TODO:
-    return
-  }
-
-  const messages = await mainState.atp.fetchChatMessages(convo.id)
-  if (messages instanceof Error) {
-    // TODO:
-    return
-  }
-  console.log(messages)
+  Util.blurElement()
+  await mainState.myChat.setDeclaration("all")
+  await mainState.myChat.updateConvos()
+  const myConbo = await mainState.myChat.upsertConvo(["did:plc:vxbbfhlyhoppzbyvsmldr76l"])
+  await myConbo?.createMessage("💩 ﾌﾟﾘｯ 三三三🦀")
+  await myConbo?.updateMessages()
 }
 
 function openSettingsPopover () {

@@ -73,6 +73,9 @@ type MainState = {
   myLabeler: TIMyLabeler
   currentLabeler?: TILabeler
 
+  // チャット
+  myChat: TIMyChat
+
   // ミュートユーザー
   currentMutingUsers: Array<TTUser>
   currentMutingUsersCursor?: string
