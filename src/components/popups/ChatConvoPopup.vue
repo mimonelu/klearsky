@@ -32,11 +32,11 @@ const easyFormProps: TTEasyForm = {
       type: "textarea",
       placeholder: $t("text"),
       maxlength: 300,
-      maxLengthIndicator: true,
-      maxLengthIndicatorByGrapheme: true,
+      maxLengthIndicator: false,
+      maxLengthIndicatorByGrapheme: false,
       rows: 2,
       hasAccountSuggestion: true,
-      focus: true,
+      focus: false,
     },
   ],
 }
@@ -145,9 +145,16 @@ function makePost (myConvo: TIMyConvo, message: TIChatMessage): TTPost {
       v-if="myConvo != null"
       #footer
     >
-      <EasyForm
-        v-bind="easyFormProps"
-      />
+      <div class="chat-convo-popup__form-container">
+        <EasyForm v-bind="easyFormProps" />
+        <button
+          type="button"
+          class="button--plane"
+          @click="submitCallback"
+        >
+          <SVGIcon name="chat" />
+        </button>
+      </div>
     </template>
   </Popup>
 </template>
@@ -175,7 +182,7 @@ function makePost (myConvo: TIMyConvo, message: TIChatMessage): TTPost {
   &__message {
     border-radius: var(--border-radius-large);
     position: relative;
-    max-width: 75%;
+    max-width: 87.5%;
     &[data-is-mine="true"] {
       background-color: var(--fg-color-0125);
       margin-left: auto;
@@ -207,8 +214,19 @@ function makePost (myConvo: TIMyConvo, message: TIChatMessage): TTPost {
     pointer-events: none;
   }
 
-  .easy-form {
-    padding: 1rem;
+  &__form-container {
+    display: flex;
+    padding: 1rem 0 1rem 1rem;
+
+    .easy-form {
+      flex-grow: 1;
+    }
+
+    .button--plane {
+      .svg-icon--chat {
+        font-size: 2rem;
+      }
+    }
   }
 }
 </style>
