@@ -23,7 +23,7 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
-async function openChatPopup () {
+function openChatListPopup () {
   Util.blurElement()
   mainState.openChatListPopup()
 }
@@ -116,17 +116,17 @@ function moveToBottom () {
       <div class="label">{{ $t("notifications") }}</div>
     </button>
 
-    <!-- チャットポップアップトリガー -->
+    <!-- チャットボタン -->
     <button
       class="link-button"
-      @click.prevent="openChatPopup"
+      @click.prevent="openChatListPopup"
     >
       <div class="icon">
         <SVGIcon name="chat" />
 
         <!-- 未読チャットバッジ -->
         <div
-          v-if="mainState.myChat.unread > 0 && !mainState.currentSetting.hideNotificationBadge"
+          v-if="mainState.myChat.unread > 0"
           class="unread-badge"
         >{{ mainState.myChat.unread }}</div>
       </div>
@@ -205,7 +205,7 @@ function moveToBottom () {
 .main-menu-vertical {
   display: flex;
   flex-direction: column;
-  grid-gap: 0.25rem;
+  grid-gap: 1px;
 
   // スリムレイアウト
   @media (max-width: $max-width-with-scrollbar) {

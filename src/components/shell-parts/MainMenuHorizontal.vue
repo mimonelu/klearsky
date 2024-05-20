@@ -32,6 +32,11 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
+function openChatListPopup () {
+  Util.blurElement()
+  mainState.openChatListPopup()
+}
+
 function openSettingsPopover () {
   Util.blurElement()
   mainState.openSettingsPopover(
@@ -53,6 +58,15 @@ async function openSendPostPopup () {
 
 <template>
   <div class="main-menu-horizontal">
+    <!-- プロフィールボタン -->
+    <RouterLink
+      class="link-button profile-button"
+      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.did } }"
+      :data-is-focus="state.isAtProfilePage"
+    >
+      <LazyImage :src="mainState.userProfile?.avatar" />
+    </RouterLink>
+
     <!-- ホームボタン -->
     <RouterLink
       class="link-button"
@@ -77,21 +91,26 @@ async function openSendPostPopup () {
     >
       <SVGIcon name="bell" />
 
-      <!-- 通知バッジ -->
+      <!-- 未読通知バッジ -->
       <div
         v-if="mainState.notificationCount > 0 && !mainState.currentSetting.hideNotificationBadge"
-        class="notification-count"
+        class="unread-badge"
       >{{ mainState.notificationCount }}</div>
     </button>
 
-    <!-- プロフィールボタン -->
-    <RouterLink
-      class="link-button profile-button"
-      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.did } }"
-      :data-is-focus="state.isAtProfilePage"
+    <!-- チャットボタン -->
+    <button
+      class="link-button"
+      @click.prevent="openChatListPopup"
     >
-      <LazyImage :src="mainState.userProfile?.avatar" />
-    </RouterLink>
+      <SVGIcon name="chat" />
+
+      <!-- 未読チャットバッジ -->
+      <div
+        v-if="mainState.myChat.unread > 0"
+        class="unread-badge"
+      >{{ mainState.myChat.unread }}</div>
+    </button>
 
     <!-- 設定ボタン -->
     <button
@@ -123,7 +142,7 @@ async function openSendPostPopup () {
 .main-menu-horizontal {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   min-height: var(--sp-menu-height);
   max-height: var(--sp-menu-height);
 }
@@ -176,7 +195,7 @@ async function openSendPostPopup () {
 }
 
 // 通知バッジ
-.notification-count {
+.unread-badge {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
   border-radius: var(--border-radius-middle);
