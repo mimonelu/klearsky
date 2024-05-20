@@ -107,10 +107,10 @@ function moveToBottom () {
       <div class="icon">
         <SVGIcon name="bell" />
 
-        <!-- 通知バッジ -->
+        <!-- 未読通知バッジ -->
         <div
           v-if="mainState.notificationCount > 0 && !mainState.currentSetting.hideNotificationBadge"
-          class="notification-count"
+          class="unread-badge"
         >{{ mainState.notificationCount }}</div>
       </div>
       <div class="label">{{ $t("notifications") }}</div>
@@ -123,6 +123,12 @@ function moveToBottom () {
     >
       <div class="icon">
         <SVGIcon name="chat" />
+
+        <!-- 未読チャットバッジ -->
+        <div
+          v-if="mainState.myChat.unread > 0 && !mainState.currentSetting.hideNotificationBadge"
+          class="unread-badge"
+        >{{ mainState.myChat.unread }}</div>
       </div>
       <div class="label">{{ $t("chat") }}</div>
     </button>
@@ -355,8 +361,8 @@ function moveToBottom () {
   }
 }
 
-// 通知バッジ
-.notification-count {
+// 未読バッジ
+.unread-badge {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
   border-radius: var(--border-radius-middle);

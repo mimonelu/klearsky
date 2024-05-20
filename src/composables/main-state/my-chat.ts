@@ -3,9 +3,12 @@ export default class MyChat {
 
   myConvos: Array<MyConvo>
 
+  unread: number
+
   constructor (mainState: MainState) {
     this.mainState = mainState
     this.myConvos = []
+    this.unread = 0
   }
 
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean> {
@@ -35,7 +38,7 @@ export default class MyChat {
       this.mainState.openErrorPopup(convo, "MyChat/upsertConvo")
       return
     }
-    return this.updateConvo(convo)
+    return this.updateMyConvo(convo)
   }
 
   async updateConvos (limit?: number): Promise<boolean> {
@@ -45,12 +48,13 @@ export default class MyChat {
       return false
     }
     convos.convos.forEach((convo) => {
-      this.updateConvo(convo)
+      this.updateMyConvo(convo)
     })
+    this.updateUnread()
     return true
   }
 
-  updateConvo (newConvo: TIChatConvo): TIMyConvo {
+  updateMyConvo (newConvo: TIChatConvo): TIMyConvo {
     const myConvo = new MyConvo(this.mainState)
     myConvo.data = newConvo
     const myConvoIndex = this.myConvos.findIndex((myConvo) => {
@@ -62,6 +66,13 @@ export default class MyChat {
       this.myConvos[myConvoIndex] = myConvo
     }
     return myConvo
+  }
+
+  updateUnread () {
+    this.unread = 0
+    this.myConvos.forEach((myConvo) => {
+      this.unread += myConvo.data?.unreadCount ?? 0
+    })
   }
 }
 
@@ -125,6 +136,7 @@ class MyConvo {
       return false
     }
     this.data.unreadCount = 0
+    this.mainState.myChat.updateUnread()
     return true
   }
 
