@@ -46,12 +46,8 @@ const popup = ref(null)
 let timer: undefined | any
 
 onMounted(async () => {
-  if (props.myConvo == null) {
-    return
-  }
-  await props.myConvo.updateMessages(30)
-  ;(popup.value as any)?.scrollToBottom()
-  update()
+  await updateMessages()
+  updateTimer()
 })
 
 onBeforeUnmount(() => {
@@ -65,14 +61,25 @@ function close () {
   emit("close")
 }
 
-function update () {
+function updateTimer () {
   timer = setTimeout(async () => {
-    // TODO: カーソルを指定すること
-    await props.myConvo?.updateMessages(10)
-
-    ;(popup.value as any)?.scrollToBottom()
-    update()
+    await updateMessages()
+    updateTimer()
   }, 5000)
+}
+
+async function updateMessages () {
+  if (props.myConvo == null) {
+    return
+  }
+
+  // TODO: カーソルを指定すること
+  await props.myConvo.updateMessages(30)
+
+  ;(popup.value as any)?.scrollToBottom()
+
+  // TODO: messageId を渡すこと
+  await props.myConvo.updateRead()
 }
 
 async function submitCallback () {

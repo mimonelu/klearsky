@@ -115,6 +115,19 @@ class MyConvo {
     return true
   }
 
+  async updateRead (messageId?: string): Promise<boolean> {
+    if (this.data == null) {
+      return false
+    }
+    const messages = await this.mainState.atp.updateConvoRead(this.data.id, messageId)
+    if (messages instanceof Error) {
+      // TODO:
+      return false
+    }
+    this.data.unreadCount = 0
+    return true
+  }
+
   sortMessages () {
     this.messages.sort((a, b) => {
       const dateA = new Date(a.sentAt)

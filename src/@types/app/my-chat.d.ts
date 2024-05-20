@@ -12,5 +12,6 @@ interface TIMyConvo {
   messages: Array<TIChatMessage>
   async createMessage (text: string): Promise<boolean>
   async updateMessages (limit?: number): Promise<boolean>
+  async updateRead (messageId?: string): Promise<boolean>
   findMember (did: string): undefined | TTProfile
 }
