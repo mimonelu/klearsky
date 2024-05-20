@@ -380,6 +380,30 @@ type MainState = {
   openWordMutePopup: Function
   closeWordMutePopup: Function
 
+  // ポップアップ - チャット一覧ポップアップ
+  chatListPopupProps: {
+    display: boolean
+  }
+  openChatListPopup: Function
+  closeChatListPopup: Function
+
+  // ポップアップ - チャットルームポップアップ
+  chatConvoPopupProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+  }
+  openChatConvoPopup: Function
+  closeChatConvoPopup: Function
+
+  // ポップアップ - チャットメンバー選択ポップアップ
+  chatMembersSelectPopupProps: {
+    display: boolean
+    users: Array<TTUser>
+    limit: number
+  }
+  openChatMembersSelectPopup: Function
+  closeChatMembersSelectPopup: Function
+
   // ポップアップ - ラベラー一覧ポップアップ
   labelerListPopupProps: {
     display: boolean
@@ -402,21 +426,6 @@ type MainState = {
   selectLabelsPopupState: any
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: Function
-
-  // ポップアップ - チャット一覧ポップアップ
-  chatListPopupProps: {
-    display: boolean
-  }
-  openChatListPopup: Function
-  closeChatListPopup: Function
-
-  // ポップアップ - チャットルームポップアップ
-  chatConvoPopupProps: {
-    display: boolean
-    myConvo?: TIMyConvo
-  }
-  openChatConvoPopup: Function
-  closeChatConvoPopup: Function
 
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {

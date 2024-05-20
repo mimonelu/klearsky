@@ -89,6 +89,13 @@
   "noChat": "No chat.",
   "noChatMessage": "No message.",
   "startChat": "Start chat",
+  "addChatMember": "Select chat member",
+  "chatMemberPlaceholder": "Display name or handle",
+  "chatOk": "Ok chat",
+  "chatNo": "No chat",
+  "allow-incoming-all": "Everyone Ok",
+  "allow-incoming-none": "Everyone No",
+  "allow-incoming-following": "Only following",
 
   "tag": "Tag",
   "tags": "Tags",

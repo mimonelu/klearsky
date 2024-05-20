@@ -35,7 +35,7 @@ const easyFormProps: TTEasyForm = {
       maxLengthIndicator: false,
       maxLengthIndicatorByGrapheme: false,
       rows: 2,
-      hasAccountSuggestion: true,
+      hasMentionSuggestion: true,
       focus: false,
     },
   ],
@@ -45,12 +45,15 @@ const popup = ref(null)
 
 let timer: undefined | any
 
+let unmounted = false
+
 onMounted(async () => {
   await updateMessages()
   updateTimer()
 })
 
 onBeforeUnmount(() => {
+  unmounted = true
   if (timer != null) {
     clearTimeout(timer)
     timer = undefined
@@ -62,6 +65,9 @@ function close () {
 }
 
 function updateTimer () {
+  if (unmounted) {
+    return
+  }
   timer = setTimeout(async () => {
     await updateMessages()
     updateTimer()

@@ -4,6 +4,7 @@ import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -40,7 +41,25 @@ function makeLastPost (myConvo: TIMyConvo): TTPost {
   }
 }
 
+async function openChatMembersSelectPopup () {
+  Util.blurElement()
+  mainState.openChatMembersSelectPopup()
+  await Util.waitProp(() => mainState.chatMembersSelectPopupProps.display, false)
+  if (mainState.chatMembersSelectPopupProps.users.length === 0) {
+    return
+  }
+  const dids = mainState.chatMembersSelectPopupProps.users.map((user) => user.did)
+  mainState.loaderDisplay = true
+  const myConvo = await mainState.myChat.upsertConvo(dids)
+  mainState.loaderDisplay = false
+  if (myConvo == null) {
+    return
+  }
+  mainState.openChatConvoPopup(myConvo)
+}
+
 function openChatConvoPopup (myConvo: TIMyConvo) {
+  Util.blurElement()
   mainState.openChatConvoPopup(myConvo)
 }
 </script>
@@ -52,6 +71,13 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
     @close="close"
   >
     <template #header>
+      <button
+        type="button"
+        class="button--plane chat-list-popup__create-convo-button"
+        @click.stop="openChatMembersSelectPopup"
+      >
+        <SVGIcon name="chatPlus" />
+      </button>
       <h2>
         <SVGIcon name="chat" />
         <span>{{ $t("chat") }}</span>
@@ -152,6 +178,10 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
       grid-gap: 1px;
       padding: unset;
     }
+  }
+
+  &__create-convo-button {
+    font-size: 1.5rem;
   }
 
   &__no-chat {

@@ -75,7 +75,7 @@ const easyFormProps: TTEasyForm = {
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
       rows: 6,
-      hasAccountSuggestion: true,
+      hasMentionSuggestion: true,
       focus: true,
     },
     {

@@ -7,6 +7,7 @@ import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
 import ChatConvoPopup from "@/components/popups/ChatConvoPopup.vue"
 import ChatListPopup from "@/components/popups/ChatListPopup.vue"
+import ChatMembersSelectPopup from "@/components/popups/ChatMembersSelectPopup.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
@@ -1058,24 +1059,6 @@ function broadcastListener (event: MessageEvent) {
         />
       </Transition>
 
-      <!-- ラベラー一覧ポップアップ -->
-      <Transition>
-        <LabelerListPopup
-          v-if="state.labelerListPopupProps.display"
-          v-bind="state.labelerListPopupProps"
-          @close="state.closeLabelerListPopup"
-        />
-      </Transition>
-
-      <!-- ラベラー設定ポップアップ -->
-      <Transition>
-        <LabelerSettingsPopup
-          v-if="state.labelerSettingsPopupProps.display"
-          v-bind="state.labelerSettingsPopupProps"
-          @close="state.closeLabelerSettingsPopup"
-        />
-      </Transition>
-
       <!-- チャット一覧ポップアップ -->
       <Transition>
         <ChatListPopup
@@ -1091,6 +1074,33 @@ function broadcastListener (event: MessageEvent) {
           v-if="state.chatConvoPopupProps.display"
           v-bind="state.chatConvoPopupProps"
           @close="state.closeChatConvoPopup"
+        />
+      </Transition>
+
+      <!-- チャットメンバー選択ポップアップ -->
+      <Transition>
+        <ChatMembersSelectPopup
+          v-if="state.chatMembersSelectPopupProps.display"
+          v-bind="state.chatMembersSelectPopupProps"
+          @close="state.closeChatMembersSelectPopup"
+        />
+      </Transition>
+
+      <!-- ラベラー一覧ポップアップ -->
+      <Transition>
+        <LabelerListPopup
+          v-if="state.labelerListPopupProps.display"
+          v-bind="state.labelerListPopupProps"
+          @close="state.closeLabelerListPopup"
+        />
+      </Transition>
+
+      <!-- ラベラー設定ポップアップ -->
+      <Transition>
+        <LabelerSettingsPopup
+          v-if="state.labelerSettingsPopupProps.display"
+          v-bind="state.labelerSettingsPopupProps"
+          @close="state.closeLabelerSettingsPopup"
         />
       </Transition>
 

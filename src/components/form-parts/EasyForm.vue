@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { nextTick, onMounted, reactive, ref } from "vue"
-import AccountSuggestionList from "@/components/lists/AccountSuggestionList.vue"
 import Checkboxes from "@/components/form-parts/Checkboxes.vue"
 import FileBox from "@/components/form-parts/FileBox.vue"
+import MentionSuggestionList from "@/components/lists/MentionSuggestionList.vue"
 import Radios from "@/components/form-parts/Radios.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -289,9 +289,9 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               "
             >{{ getCharacterLength(item) }} / {{ item.maxlength }}</div>
 
-            <!-- アカウントサジェスト -->
-            <AccountSuggestionList
-              v-if="item.model != null && item.hasAccountSuggestion"
+            <!-- メンションサジェスト -->
+            <MentionSuggestionList
+              v-if="item.model != null && item.hasMentionSuggestion"
               :text="item.state[item.model]"
               @select="(params: any) => { onUpdateText(item, index, params) }"
             />
@@ -417,8 +417,8 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
   }
 }
 
-.account-suggestion-list:deep() {
-  .account-suggestion-list__suggestion {
+.mention-suggestion-list:deep() {
+  .mention-suggestion-list__suggestion {
     margin-top: 1rem;
     z-index: 1;
     width: 100%;

@@ -41,6 +41,7 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
+  text: ComputedRef<undefined | string>
 
   // 画像
   images: ComputedRef<Array<TTImage>>
@@ -95,6 +96,9 @@ const state = reactive<{
   isWordMute: ComputedRef<boolean>
 }>({
   processing: false,
+  text: computed((): undefined | string => {
+    return props.post.record?.text ?? props.post.value?.text
+  }),
 
   // 画像
   images: computed(() => props.post.embed?.images ?? props.post.record?.embed?.images ?? []),
@@ -167,7 +171,7 @@ const state = reactive<{
   // 翻訳リンクの設置可否
   hasOtherLanguages: computed((): boolean => {
     if (props.noLink) return false
-    if (!text) return false
+    if (!state.text) return false
     if (state.postLanguages == null) return false
     if (state.postLanguages.length === 0) return false
     if (state.postLanguages.length >= 2) return true
@@ -251,7 +255,7 @@ const state = reactive<{
 
   // ワードミュートの判定
   isWordMute: computed((): boolean => {
-    const target = text?.toLowerCase() ?? ""
+    const target = state.text?.toLowerCase() ?? ""
     if (!target) return false
     return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
       if (!wordMute.enabled[0] || wordMute.keyword === "") return false
@@ -271,9 +275,7 @@ const router = useRouter()
 
 const postElement = ref()
 
-const text = props.post.record?.text ?? props.post.value?.text
-
-const isTextSingleEmoji = text?.match(/^\p{RGI_Emoji}$/v) != null
+const isTextSingleEmoji = state.text?.match(/^\p{RGI_Emoji}$/v) != null
 
 // 自動翻訳
 const observer = mainState.currentSetting.autoTranslation
@@ -513,7 +515,7 @@ async function translateText (forceTranslate: boolean) {
     state.translation = "done"
     return
   }
-  if (text == null) {
+  if (state.text == null) {
     state.translation = "ignore"
     return
   }
@@ -540,7 +542,7 @@ async function translateText (forceTranslate: boolean) {
   }
   const langpair = srcLanguages.find((srcLanguage: string) => srcLanguage !== dstLanguage)
   const response: Error | string = await Util.translateInMyMemory({
-    text,
+    text: state.text,
     langpair,
     dstLanguage,
     email: mainState.atp.session?.email,
@@ -796,12 +798,12 @@ function toggleOldestQuotedPostDisplay () {
           class="post__content"
         >
           <!-- 本文 -->
-          <template v-if="text !== ''">
+          <template v-if="state.text !== ''">
             <HtmlText
               v-if="position !== 'slim'"
               class="text"
               dir="auto"
-              :text="text"
+              :text="state.text"
               :facets="post.record?.facets ?? post.value?.facets"
               :entities="post.record?.entities ?? post.value?.entities"
               :processHashTag="false"
@@ -814,7 +816,7 @@ function toggleOldestQuotedPostDisplay () {
               v-else
               class="text--slim"
               dir="auto"
-            >{{ text }}</div>
+            >{{ state.text }}</div>
           </template>
 
           <!-- 自動翻訳 -->

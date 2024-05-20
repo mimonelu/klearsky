@@ -13,6 +13,7 @@ const emit = defineEmits<(name: string) => void>()
 
 const props = defineProps<{
   user: TTUser
+  noLink?: boolean
   contentWarningDisabled: boolean
   menuDisplay: boolean
   viewerDisplay: boolean
@@ -65,7 +66,8 @@ function onActivateContentFilteringToggle () {
 </script>
 
 <template>
-  <RouterLink
+  <Component
+    :is="noLink ? 'div' : 'RouterLink'"
     class="user-box"
     :to="{ name: 'profile-feeds', query: { account: user.did } }"
     :data-menu-display="menuDisplay"
@@ -98,6 +100,7 @@ function onActivateContentFilteringToggle () {
       />
 
       <AvatarLink
+        :noLink="noLink"
         :isLabeler="user.associated?.labeler"
         :did="user.did"
         :image="user.avatar"
@@ -131,7 +134,13 @@ function onActivateContentFilteringToggle () {
         :handle="user.handle"
         :anonymizable="true"
       />
-      <div class="description">{{ user.description || "&emsp;" }}</div>
+      <div class="description">
+        <template v-if="$slots.content == null">{{ user.description || "&emsp;" }}</template>
+        <slot
+          v-else
+          name="content"
+        />
+      </div>
 
       <!-- プロフィールポップオーバートグル -->
       <button
@@ -147,7 +156,7 @@ function onActivateContentFilteringToggle () {
         <slot name="bottom" />
       </div>
     </template>
-  </RouterLink>
+  </Component>
 </template>
 
 <style lang="scss" scoped>

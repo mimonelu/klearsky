@@ -417,6 +417,30 @@ state.wordMutePopupDisplay = false
 state.openWordMutePopup = openWordMutePopup
 state.closeWordMutePopup = closeWordMutePopup
 
+// ポップアップ - チャット一覧ポップアップ
+state.chatListPopupProps = {
+  display: false,
+}
+state.openChatListPopup = openChatListPopup
+state.closeChatListPopup = closeChatListPopup
+
+// ポップアップ - チャットルームポップアップ
+state.chatConvoPopupProps = {
+  display: false,
+  myConvo: undefined,
+}
+state.openChatConvoPopup = openChatConvoPopup
+state.closeChatConvoPopup = closeChatConvoPopup
+
+// ポップアップ - チャットメンバー選択ポップアップ
+state.chatMembersSelectPopupProps = {
+  display: false,
+  users: [],
+  limit: 1,
+}
+state.openChatMembersSelectPopup = openChatMembersSelectPopup
+state.closeChatMembersSelectPopup = closeChatMembersSelectPopup
+
 // ポップアップ - ラベラー一覧ポップアップ
 state.labelerListPopupProps = {
   display: false,
@@ -439,21 +463,6 @@ state.selectLabelsPopupDisplay = false
 state.selectLabelsPopupState = undefined
 state.openSelectLabelsPopup = openSelectLabelsPopup
 state.closeSelectLabelsPopup = closeSelectLabelsPopup
-
-// ポップアップ - チャット一覧ポップアップ
-state.chatListPopupProps = {
-  display: false,
-}
-state.openChatListPopup = openChatListPopup
-state.closeChatListPopup = closeChatListPopup
-
-// ポップアップ - チャットルームポップアップ
-state.chatConvoPopupProps = {
-  display: false,
-  myConvo: undefined,
-}
-state.openChatConvoPopup = openChatConvoPopup
-state.closeChatConvoPopup = closeChatConvoPopup
 
 // ポップアップ - アカウントレポート送信ポップアップ
 state.sendAccountReportPopupProps = {
@@ -1747,6 +1756,38 @@ function closeWordMutePopup () {
   state.wordMutePopupDisplay = false
 }
 
+// ポップアップ - チャット一覧ポップアップ
+
+function openChatListPopup () {
+  state.chatListPopupProps.display = true
+}
+
+function closeChatListPopup () {
+  state.chatListPopupProps.display = false
+}
+
+// ポップアップ - チャットルームポップアップ
+
+function openChatConvoPopup (myConvo: TIMyConvo) {
+  state.chatConvoPopupProps.myConvo = myConvo
+  state.chatConvoPopupProps.display = true
+}
+
+function closeChatConvoPopup () {
+  state.chatConvoPopupProps.display = false
+}
+
+// ポップアップ - チャットメンバー選択ポップアップ
+
+function openChatMembersSelectPopup () {
+  state.chatMembersSelectPopupProps.users.splice(0)
+  state.chatMembersSelectPopupProps.display = true
+}
+
+function closeChatMembersSelectPopup () {
+  state.chatMembersSelectPopupProps.display = false
+}
+
 // ポップアップ - ラベラー一覧ポップアップ
 
 function openLabelerListPopup (title: string, labelers: Array<TILabeler>) {
@@ -1779,27 +1820,6 @@ function openSelectLabelsPopup (params: any) {
 
 function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
-}
-
-// ポップアップ - チャット一覧ポップアップ
-
-function openChatListPopup () {
-  state.chatListPopupProps.display = true
-}
-
-function closeChatListPopup () {
-  state.chatListPopupProps.display = false
-}
-
-// ポップアップ - チャットルームポップアップ
-
-function openChatConvoPopup (myConvo: TIMyConvo) {
-  state.chatConvoPopupProps.myConvo = myConvo
-  state.chatConvoPopupProps.display = true
-}
-
-function closeChatConvoPopup () {
-  state.chatConvoPopupProps.display = false
 }
 
 // ポップアップ - アカウントレポート送信ポップアップ

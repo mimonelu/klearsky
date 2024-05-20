@@ -152,7 +152,7 @@ function onKeyUp () {
     resetState()
     return
   }
-  if (element.id !== textarea?.id && element.className !== "account-suggestion-list__suggestion__item") resetState()
+  if (element.id !== textarea?.id && element.className !== "mention-suggestion-list__suggestion__item") resetState()
 }
 
 function moveSuggestButtonFocus (direction: "up" | "down") {
@@ -165,7 +165,7 @@ function moveSuggestButtonFocus (direction: "up" | "down") {
   state.inputMode = "keyboard"
 
   nextTick(() => {
-    const focusElement = document.querySelector(".account-suggestion-list__suggestion__item[data-focus='true']")
+    const focusElement = document.querySelector(".mention-suggestion-list__suggestion__item[data-focus='true']")
     if (focusElement == null) return
     focusElement.scrollIntoView({ block: "nearest" })
   })
@@ -190,10 +190,10 @@ function selectUser (user?: TTUser) {
 </script>
 
 <template>
-  <div class="account-suggestion-list">
+  <div class="mention-suggestion-list">
     <div
       v-if="state.display"
-      class="account-suggestion-list__suggestion"
+      class="mention-suggestion-list__suggestion"
       :data-input-mode="state.inputMode"
       @mousemove="state.inputMode = 'mouse'"
     >
@@ -201,20 +201,20 @@ function selectUser (user?: TTUser) {
         v-for="user, index of state.users"
         :key="user.did"
         ref="suggestButtons"
-        class="account-suggestion-list__suggestion__item"
+        class="mention-suggestion-list__suggestion__item"
         :data-focus="state.index === index"
         @click.prevent="selectUser(user)"
       >
         <LazyImage :src="user.avatar" />
-        <div class="account-suggestion-list__suggestion__item__display-name">{{ user.displayName }}</div>
-        <div class="account-suggestion-list__suggestion__item__handle">{{ user.handle }}</div>
+        <div class="mention-suggestion-list__suggestion__item__display-name">{{ user.displayName }}</div>
+        <div class="mention-suggestion-list__suggestion__item__handle">{{ user.handle }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.account-suggestion-list {
+.mention-suggestion-list {
   &__suggestion {
     border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius-middle);

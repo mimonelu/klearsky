@@ -89,6 +89,13 @@
   "noChat": "チャットがありません。",
   "noChatMessage": "メッセージがありません。",
   "startChat": "チャットを開始",
+  "addChatMember": "チャットメンバーの選択",
+  "chatMemberPlaceholder": "表示名またはハンドル",
+  "chatOk": "チャット可",
+  "chatNo": "チャット不可",
+  "allow-incoming-all": "全員可",
+  "allow-incoming-none": "全員不可",
+  "allow-incoming-following": "フォロー中のみ",
 
   "tag": "タグ",
   "tags": "タグ",
