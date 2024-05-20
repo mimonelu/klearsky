@@ -42,9 +42,6 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
 
-  // 本文
-  text: ComputedRef<undefined | string>
-
   // 画像
   images: ComputedRef<Array<TTImage>>
   hasImage: ComputedRef<boolean>
@@ -98,11 +95,6 @@ const state = reactive<{
   isWordMute: ComputedRef<boolean>
 }>({
   processing: false,
-
-  // 本文
-  text: computed((): undefined | string => {
-    return props.post.record?.text ?? props.post.value?.text
-  }),
 
   // 画像
   images: computed(() => props.post.embed?.images ?? props.post.record?.embed?.images ?? []),
@@ -175,7 +167,7 @@ const state = reactive<{
   // 翻訳リンクの設置可否
   hasOtherLanguages: computed((): boolean => {
     if (props.noLink) return false
-    if (!state.text) return false
+    if (!text) return false
     if (state.postLanguages == null) return false
     if (state.postLanguages.length === 0) return false
     if (state.postLanguages.length >= 2) return true
@@ -259,7 +251,7 @@ const state = reactive<{
 
   // ワードミュートの判定
   isWordMute: computed((): boolean => {
-    const target = state.text?.toLowerCase() ?? ""
+    const target = text?.toLowerCase() ?? ""
     if (!target) return false
     return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
       if (!wordMute.enabled[0] || wordMute.keyword === "") return false
@@ -278,6 +270,10 @@ state.foldingImage = !state.displayImage
 const router = useRouter()
 
 const postElement = ref()
+
+const text = props.post.record?.text ?? props.post.value?.text
+
+const isTextSingleEmoji = text?.match(/^\p{RGI_Emoji}$/v) != null
 
 // 自動翻訳
 const observer = mainState.currentSetting.autoTranslation
@@ -517,7 +513,6 @@ async function translateText (forceTranslate: boolean) {
     state.translation = "done"
     return
   }
-  const text = state.text
   if (text == null) {
     state.translation = "ignore"
     return
@@ -801,16 +796,17 @@ function toggleOldestQuotedPostDisplay () {
           class="post__content"
         >
           <!-- 本文 -->
-          <template v-if="state.text !== ''">
+          <template v-if="text !== ''">
             <HtmlText
               v-if="position !== 'slim'"
               class="text"
               dir="auto"
-              :text="state.text"
+              :text="text"
               :facets="post.record?.facets ?? post.value?.facets"
               :entities="post.record?.entities ?? post.value?.entities"
               :processHashTag="false"
               :hasTranslateLink="state.hasOtherLanguages"
+              :data-single-emoji="isTextSingleEmoji"
               @onActivateHashTag="onActivateHashTag"
               @translate="onForceTranslate"
             />
@@ -818,7 +814,7 @@ function toggleOldestQuotedPostDisplay () {
               v-else
               class="text--slim"
               dir="auto"
-            >{{ state.text }}</div>
+            >{{ text }}</div>
           </template>
 
           <!-- 自動翻訳 -->
@@ -1505,6 +1501,12 @@ function toggleOldestQuotedPostDisplay () {
   &:deep(.textlink > span) {
     padding-top: 0.125em;
     padding-bottom: 0.125em;
+  }
+
+  // デカ絵文字
+  &[data-single-emoji="true"] {
+    font-size: 4em;
+    line-height: 1;
   }
 }
 
