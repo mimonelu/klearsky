@@ -89,6 +89,12 @@ class MyConvo {
     this.messages = []
   }
 
+  getMemberNames (): Array<string> {
+    return this.data?.members
+      .filter((member) => member.did !== this.mainState.atp.data.did)
+      .map((member) => member.displayName || member.handle) ?? []
+  }
+
   async createMessage (text: string): Promise<boolean> {
     if (this.data == null) {
       return false

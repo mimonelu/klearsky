@@ -12,6 +12,7 @@ interface TIMyConvo {
   mainState: MainState
   data?: TIChatConvo
   messages: Array<TIChatMessage>
+  getMemberNames (): Array<string>
   async createMessage (text: string): Promise<boolean>
   async updateMessages (limit?: number): Promise<boolean>
   async updateRead (messageId?: string): Promise<boolean>

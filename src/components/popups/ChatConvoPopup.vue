@@ -4,6 +4,8 @@ import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import data from "@/consts/label-behaviors.json"
+import DisplayName from "../app-parts/DisplayName.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -133,7 +135,7 @@ function makePost (myConvo: TIMyConvo, message: TIChatMessage): TTPost {
     <template #header>
       <h2>
         <SVGIcon name="chat" />
-        <span>{{ $t("chat") }}</span>
+        <span>{{ myConvo != null ? myConvo.getMemberNames().join(", ") : $t("chat") }}</span>
       </h2>
     </template>
     <template
