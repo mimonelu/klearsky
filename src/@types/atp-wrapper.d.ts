@@ -8,7 +8,7 @@ interface TIAtpWrapper {
   canLogin (this: TIAtpWrapper): boolean
   createAgent (this: TIAtpWrapper, service?: string): boolean
   createChatDeclaration (this: TIAtpWrapper, repo: string, allowIncoming: TTAllowIncoming): Promise<Error | TTCidUri>
-  createChatMessage (this: TIAtpWrapper, convoId: string, text: string): Promise<Error | TIChatMessage>
+  createChatMessage (this: TIAtpWrapper, convoId: string, params: TTCreatePostParams): Promise<Error | TIChatMessage>
   createFileBlobRef (this: TIAtpWrapper, params: TTCreateFileBlobRefParams): Promise<null | BlobRef>
   createFollow (this: TIAtpWrapper, declarationDid: string): Promise<null | string>
   createLike (this: TIAtpWrapper, uri: string, cid: string): Promise<undefined | string>

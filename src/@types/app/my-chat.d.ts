@@ -14,7 +14,7 @@ interface TIMyConvo {
   messages: Array<TIChatMessage>
   cursor?: string
   getMemberNames (): Array<string>
-  async createMessage (text: string): Promise<boolean>
+  async createMessage (params: TTCreatePostParams): Promise<boolean>
   async updateMessages (limit?: number, isNew = true): Promise<number>
   async deleteMessage (messageId: string): Promise<boolean>
   async updateRead (messageId?: string): Promise<boolean>

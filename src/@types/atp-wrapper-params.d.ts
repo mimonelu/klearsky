@@ -11,14 +11,14 @@ type TTCreateFileBlobRefParams = {
 }
 
 type TTCreatePostParams = {
-  type: TTPostType
+  type?: TTPostType
   post?: TTPost
-  text: string
+  text?: string
   createdAt?: string
-  url: string
+  url?: string
   urlHasImage?: Array<boolean>
-  images: Array<File>
-  alts: Array<string>
+  images?: Array<File>
+  alts?: Array<string>
   languages?: Array<string>
   labels?: Array<string>
   lightning?: string

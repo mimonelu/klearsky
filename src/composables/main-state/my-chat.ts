@@ -100,11 +100,14 @@ class MyConvo {
       .map((member) => member.displayName || member.handle) ?? []
   }
 
-  async createMessage (text: string): Promise<boolean> {
+  async createMessage (params: TTCreatePostParams): Promise<boolean> {
     if (this.data == null) {
       return false
     }
-    const message = await this.mainState.atp.createChatMessage(this.data.id, text)
+    const message = await this.mainState.atp.createChatMessage(
+      this.data.id,
+      params
+    )
     if (message instanceof Error) {
       this.mainState.openErrorPopup(message, "MyChat/createMessage")
       return false

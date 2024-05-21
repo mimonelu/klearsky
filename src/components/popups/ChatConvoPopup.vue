@@ -115,7 +115,9 @@ async function updateRead () {
 }
 
 async function submitCallback () {
-  if (!await props.myConvo?.createMessage(easyFormState.text)) {
+  if (!await props.myConvo?.createMessage({
+    text: easyFormState.text,
+  })) {
     return
   }
   easyFormState.text = ""
