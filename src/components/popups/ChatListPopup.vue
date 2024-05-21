@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
+import ChatPost from "@/components/app-parts/ChatPost.vue"
 import Popup from "@/components/popups/Popup.vue"
-import Post from "@/components/app-parts/Post.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -12,33 +12,6 @@ const mainState = inject("state") as MainState
 
 function close () {
   emit("close")
-}
-
-function makeLastPost (myConvo: TIMyConvo): TTPost {
-  const message = myConvo.data?.lastMessage as TIChatMessage
-  const author = myConvo.findMember(message.sender.did) ?? {
-    did: "",
-    displayName: "",
-    handle: "",
-    viewer: { muted: false },
-  }
-  return {
-    __custom: { unmask: false },
-    author,
-    cid: "",
-    indexedAt: message.sentAt,
-    record: {
-      $type: "",
-      createdAt: message.sentAt,
-      embed: message.embed,
-      facets: message.facets,
-      text: message.text,
-    },
-    likeCount: 0,
-    replyCount: 0,
-    repostCount: 0,
-    uri: "",
-  }
 }
 
 async function openChatMembersSelectPopup () {
@@ -61,6 +34,10 @@ async function openChatMembersSelectPopup () {
 function openChatConvoPopup (myConvo: TIMyConvo) {
   Util.blurElement()
   mainState.openChatConvoPopup(myConvo)
+}
+
+function isMine (message: TIChatMessage): boolean {
+  return message.sender.did === mainState.atp.data.did
 }
 </script>
 
@@ -109,11 +86,7 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
             <span>{{ myConvo.data?.unreadCount }}</span>
           </div>
           <div class="convo-card__avatars">
-            <div
-              v-for="member, memberIndex of myConvo.data?.members"
-              :key="memberIndex"
-              clas="convo-card__avatars__item"
-            >
+            <template v-for="member of myConvo.data?.members">
               <AvatarLink
                 v-if="member.did !== mainState.atp.data.did"
                 :isLabeler="member.associated?.labeler"
@@ -122,17 +95,34 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
                 :title="member.displayName || member.handle"
                 @click.stop="close"
               />
-            </div>
+            </template>
           </div>
-          <div class="convo-card__last-message">
-            <Post
+          <div class="convo-card__middle">
+            <div class="convo-card__user-list">
+              <template v-for="member of myConvo.data?.members">
+                <div
+                  v-if="member.did !== mainState.atp.data.did"
+                  class="convo-card__user-list__item"
+                >
+                  <AvatarLink
+                    :did="member.did"
+                    :image="member.avatar"
+                    :isLabeler="member.associated?.labeler"
+                    :noLink="true"
+                  />
+                  <div class="convo-card__user-list__name">{{ member.displayName || member.handle }}</div>
+                </div>
+              </template>
+            </div>
+            <ChatPost
               v-if="myConvo.data?.lastMessage != null"
-              position="slim"
-              :post="makeLastPost(myConvo)"
+              class="convo-card__last-message"
+              :myConvo="myConvo"
+              :isMine="isMine(myConvo.data.lastMessage)"
             />
             <div
               v-else
-              class="textlabel chat-list-popup__no-message"
+              class="textlabel convo-card__no-message"
             >
               <div class="textlabel__text">
                 <SVGIcon name="alert" />{{ $t("noChatMessage") }}
@@ -187,10 +177,6 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
   &__no-chat {
     padding: 1rem;
   }
-
-  &__no-message {
-    margin: 0 1rem;
-  }
 }
 
 .convo-card {
@@ -199,6 +185,7 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
   grid-gap: 0.5rem 0;
   grid-template-columns: auto 1fr;
   grid-template-areas: "a l r";
+  align-items: flex-start;
   padding: 1rem 0 1rem 1rem;
   position: relative;
   &[data-has-unread-messages="true"] {
@@ -254,26 +241,62 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
 
   &__avatars {
     grid-area: a;
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 1px;
     margin-right: 1rem;
+    max-width: 3rem;
 
-    .avatar-link {
+    & > .avatar-link {
       font-size: 3rem;
+
+      &:not(:first-child) {
+        font-size: calc(1rem - 1px);
+      }
+    }
+  }
+
+  &__middle {
+    grid-area: l;
+    display: grid;
+    grid-gap: 0.5rem;
+  }
+
+  &__user-list {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 0.5em;
+    font-size: 0.875rem;
+    overflow: hidden;
+
+    &__item {
+      display: flex;
+      align-items: center;
+      grid-gap: 0.25em;
+      overflow: hidden;
+
+      & > .avatar-link {
+        font-size: 1rem;
+      }
+    }
+
+    &__name {
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
   &__last-message {
-    grid-area: l;
-    border: 1px solid var(--fg-color-0125);
+    background-color: var(--fg-color-00625);
     border-radius: var(--border-radius-middle);
-    display: flex;
-    align-items: center;
+    font-size: 0.875rem;
+    overflow: hidden;
+    padding: 0.5em;
+  }
 
-    .post {
-      padding: 0.5em;
-
-      // TODO:
-      pointer-events: none;
-    }
+  &__no-message {
+    opacity: 0.75;
   }
 
   &__right {

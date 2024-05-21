@@ -22,16 +22,14 @@ const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
   level?: number
-  position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim"
+  position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim" | "chatMessage"
   post: TTPost
   rootPost?: TTPost
   parentPost?: TTPost
   grandparentAuthor?: TTProfile
   hasReplyIcon?: boolean
   hasQuoteRepostIcon?: boolean
-  isInFeed?: boolean
   noLink?: boolean
-  container?: HTMLElement
   forceHideImages?: boolean
 }>()
 
@@ -42,6 +40,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
   text: ComputedRef<undefined | string>
+  isTextSingleEmoji: ComputedRef<boolean>
 
   // 画像
   images: ComputedRef<Array<TTImage>>
@@ -98,6 +97,9 @@ const state = reactive<{
   processing: false,
   text: computed((): undefined | string => {
     return props.post.record?.text ?? props.post.value?.text
+  }),
+  isTextSingleEmoji: computed((): boolean => {
+    return state.text?.match(/^\p{RGI_Emoji}$/v) != null
   }),
 
   // 画像
@@ -274,8 +276,6 @@ state.foldingImage = !state.displayImage
 const router = useRouter()
 
 const postElement = ref()
-
-const isTextSingleEmoji = state.text?.match(/^\p{RGI_Emoji}$/v) != null
 
 // 自動翻訳
 const observer = mainState.currentSetting.autoTranslation
@@ -727,9 +727,9 @@ function toggleOldestQuotedPostDisplay () {
     >
       <slot name="body-before" />
 
-      <!-- アバター -->
+      <!-- アバターリンク -->
       <AvatarLink
-        v-if="position !== 'postInPost' && position !== 'slim'"
+        v-if="position !== 'chatMessage' && position !== 'postInPost' && position !== 'slim'"
         :isLabeler="post.author?.associated?.labeler"
         :did="post.author?.did"
         :image="post.author?.avatar"
@@ -738,20 +738,25 @@ function toggleOldestQuotedPostDisplay () {
 
       <div class="body__right">
         <div class="body__right__header">
-          <!-- アバター -->
+          <!-- アバターリンク -->
           <AvatarLink
-            v-if="position === 'postInPost' || position === 'slim'"
+            v-if="position === 'chatMessage' || position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
-            :isLabeler="post.author?.associated?.labeler"
             :did="post.author?.did"
             :image="post.author?.avatar"
+            :isLabeler="post.author?.associated?.labeler"
+            :noLink="position === 'chatMessage'"
             @click.stop="$emit('click', $event)"
           />
 
           <!-- 表示名 -->
           <DisplayName
             class="body__right__header__display-name"
-            :displayName="post.author?.displayName || '　'"
+            :displayName="(
+              position === 'chatMessage'
+                ? (post.author?.displayName || post.author?.handle)
+                : post.author?.displayName
+            ) || '　'"
             :anonymizable="true"
           >
             <!-- ラベラーアイコン -->
@@ -771,6 +776,7 @@ function toggleOldestQuotedPostDisplay () {
 
           <!-- ハンドル -->
           <AuthorHandle
+            v-if="position !== 'chatMessage'"
             :handle="post.author?.handle"
             :anonymizable="true"
           />
@@ -808,7 +814,7 @@ function toggleOldestQuotedPostDisplay () {
               :entities="post.record?.entities ?? post.value?.entities"
               :processHashTag="false"
               :hasTranslateLink="state.hasOtherLanguages"
-              :data-single-emoji="isTextSingleEmoji"
+              :data-single-emoji="state.isTextSingleEmoji"
               @onActivateHashTag="onActivateHashTag"
               @translate="onForceTranslate"
             />
@@ -1029,7 +1035,12 @@ function toggleOldestQuotedPostDisplay () {
             >
               <Post
                 :level="(level ?? 1) + 1"
-                :position="position === 'slim' ? 'slim' : 'postInPost'"
+                :position="position === 'chatMessage'
+                  ? 'chatMessage'
+                  : position === 'slim'
+                    ? 'slim'
+                    : 'postInPost'
+                "
                 :post="post.embed.record as TTPost"
                 :hasReplyIcon="post.embed.record.value?.reply != null"
                 :noLink="noLink"
@@ -1041,7 +1052,7 @@ function toggleOldestQuotedPostDisplay () {
 
         <!-- リアクションコンテナ -->
         <div
-          v-if="position !== 'postInPost' && position !== 'slim'"
+          v-if="position !== 'chatMessage' && position !== 'postInPost' && position !== 'slim'"
           class="reaction-container"
         >
           <div>
@@ -1413,6 +1424,7 @@ function toggleOldestQuotedPostDisplay () {
   align-items: flex-start;
   position: relative;
 }
+.post[data-position="chatMessage"],
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
   .body {
@@ -1453,6 +1465,13 @@ function toggleOldestQuotedPostDisplay () {
     }
   }
 }
+
+.post[data-position="chatMessage"] {
+  .body__right__header {
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
   .body__right__header {
@@ -1507,7 +1526,7 @@ function toggleOldestQuotedPostDisplay () {
 
   // デカ絵文字
   &[data-single-emoji="true"] {
-    font-size: 4em;
+    font-size: 3em;
     line-height: 1;
   }
 }

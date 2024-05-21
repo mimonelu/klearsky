@@ -281,11 +281,11 @@ function validateUrl (urlObject: URL, text: string): boolean {
 }
 
 .translate-link {
+  font-size: min(0.875em, 0.875rem);
   padding: 0.125em 0.25em;
   & > span {
     --opacity: 0.5;
     color: rgb(var(--fg-color), var(--opacity));
-    font-size: 0.875em;
   }
   &:focus, &:hover {
     & > span {
