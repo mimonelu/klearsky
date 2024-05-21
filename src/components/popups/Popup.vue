@@ -10,6 +10,8 @@ const emit = defineEmits<{(event: string): void}>()
 defineExpose({
   scrollToTop,
   scrollToBottom,
+  scrollTop,
+  diffScrollBottom,
 })
 
 defineProps<{
@@ -58,15 +60,28 @@ function scrollToBottom (behavior: undefined | string) {
   })
 }
 
+function scrollTop (): undefined | number {
+  return popupBody?.value?.scrollTop
+}
+
+function diffScrollBottom (): undefined | number {
+  if (popupBody?.value == null) {
+    return
+  }
+  return popupBody.value.scrollTop - (
+    popupBody.value.scrollHeight -
+    popupBody.value.clientHeight
+  )
+}
+
 // インフィニットスクロール用処理
 let isEnter = false
 function scrollListener () {
-  if (popupBody?.value == null) return
+  if (popupBody?.value == null) {
+    return
+  }
   const threshold = 64
-  const diff = Math.abs(popupBody.value.scrollTop - (
-    popupBody.value.scrollHeight -
-    popupBody.value.clientHeight
-  ))
+  const diff = Math.abs(diffScrollBottom() as number)
   state.scrolledToBottom = false
   if (diff < threshold) {
     if (!isEnter) {

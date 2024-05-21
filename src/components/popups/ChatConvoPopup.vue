@@ -48,7 +48,7 @@ let timer: undefined | any
 let unmounted = false
 
 onMounted(async () => {
-  await updateMessages()
+  await updateMessagesOnMounted()
   updateTimer()
 })
 
@@ -69,23 +69,49 @@ function updateTimer () {
     return
   }
   timer = setTimeout(async () => {
-    await updateMessages()
+    await updateMessagesOnTick()
     updateTimer()
   }, 10000)
 }
 
-async function updateMessages () {
+async function updateMessagesOnMounted () {
   if (props.myConvo == null) {
     return
   }
+  await props.myConvo.updateMessages(100)
+  ;(popup.value as any)?.scrollToBottom("smooth")
+  await updateRead()
+}
 
-  // TODO: カーソルを指定すること
-  await props.myConvo.updateMessages(30)
+async function updateMessagesOnTick () {
+  if (props.myConvo == null) {
+    return
+  }
+  const diff = (popup.value as any).diffScrollBottom()
 
-  ;(popup.value as any)?.scrollToBottom()
+  // 通信量削減のため、通常は1つのみ取得し、段階的に取得数を増やしている
+  const numberOfNewMessages = await props.myConvo.updateMessages(1)
+  if (numberOfNewMessages >= 1) {
+    const numberOfNewMessages = await props.myConvo.updateMessages(10)
+    if (numberOfNewMessages >= 10) {
+      await props.myConvo.updateMessages(100)
+    }
+  }
 
-  // TODO: messageId を渡すこと
-  await props.myConvo.updateRead()
+  if (diff >= - 8) {
+    ;(popup.value as any)?.scrollToBottom("smooth")
+  }
+  if (numberOfNewMessages >= 1) {
+    await updateRead()
+  }
+}
+
+async function updateRead () {
+  if (props.myConvo == null) {
+    return
+  }
+  const lastMessageId = props.myConvo.messages.at(- 1)?.id
+  await props.myConvo.updateRead(lastMessageId)
 }
 
 async function submitCallback () {
@@ -93,7 +119,7 @@ async function submitCallback () {
     return
   }
   easyFormState.text = ""
-  ;(popup.value as any)?.scrollToBottom()
+  ;(popup.value as any)?.scrollToBottom("smooth")
 }
 
 function isMine (message: TIChatMessage): boolean {

@@ -85,10 +85,13 @@ class MyConvo {
 
   messages: Array<TIChatMessage>
 
+  cursor?: string
+
   constructor (mainState: MainState) {
     this.mainState = mainState
     this.data = undefined
     this.messages = []
+    this.cursor = undefined
   }
 
   getMemberNames (): Array<string> {
@@ -111,27 +114,34 @@ class MyConvo {
     return true
   }
 
-  async updateMessages (limit?: number): Promise<boolean> {
+  async updateMessages (limit?: number, isNew = true): Promise<number> {
     if (this.data == null) {
-      return false
+      return - 1
     }
-    const messages = await this.mainState.atp.fetchChatMessages(this.data.id, limit)
+    const messages = await this.mainState.atp.fetchChatMessages(
+      this.data.id,
+      limit,
+      isNew ? undefined : this.cursor
+    )
     if (messages instanceof Error) {
       // TODO:
-      return false
+      return - 1
     }
+    this.cursor = messages.cursor
+    let numberOfNewMessages = 0
     messages.messages.forEach((dst) => {
       const srcIndex = this.messages.findIndex((src) => {
         return src.id === dst.id
       })
       if (srcIndex === - 1) {
         this.messages.push(dst)
+        numberOfNewMessages ++
       } else {
         this.messages[srcIndex] = dst
       }
     })
     this.sortMessages()
-    return true
+    return numberOfNewMessages
   }
 
   async deleteMessage (messageId: string): Promise<boolean> {
