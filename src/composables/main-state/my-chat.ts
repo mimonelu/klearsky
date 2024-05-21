@@ -134,6 +134,22 @@ class MyConvo {
     return true
   }
 
+  async deleteMessage (messageId: string): Promise<boolean> {
+    if (this.data == null) {
+      return false
+    }
+    const result = await this.mainState.atp.deleteChatMessage(this.data.id, messageId)
+    if (result instanceof Error) {
+      this.mainState.openErrorPopup(result, "MyChat/deleteMessage")
+      return false
+    }
+    const index = this.messages.findIndex((message) => message.id === messageId)
+    if (index !== - 1) {
+      this.messages.splice(index, 1)
+    }
+    return true
+  }
+
   async updateRead (messageId?: string): Promise<boolean> {
     if (this.data == null) {
       return false

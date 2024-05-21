@@ -20,6 +20,7 @@ interface TIAtpWrapper {
   createRepost (this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   deleteAccount (this: TIAtpWrapper, did?: string)
   deleteChatDeclaration (this: TIAtpWrapper, repo: string, uri: string): Promise<Error | void>
+  deleteChatMessage (this: TIAtpWrapper, convoId: string, messageId: string): Promise<Error | boolean>
   deleteFollow (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteLike (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteList (this: TIAtpWrapper, listUri: string): Promise<true | Error>

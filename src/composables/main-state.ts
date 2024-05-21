@@ -315,6 +315,17 @@ state.chatConvoPopoverCallback = undefined
 state.openChatConvoPopover = openChatConvoPopover
 state.closeChatConvoPopover = closeChatConvoPopover
 
+// ポップオーバー - チャットメッセージポップオーバー
+state.chatMessagePopoverProps = {
+  display: false,
+  myConvo: undefined,
+  message: undefined,
+}
+state.chatMessagePopoverSelector = undefined
+state.chatMessagePopoverCallback = undefined
+state.openChatMessagePopover = openChatMessagePopover
+state.closeChatMessagePopover = closeChatMessagePopover
+
 // ポップオーバー - キーワード履歴ポップオーバー
 state.keywordHistoryPopoverProps = {
   display: false,
@@ -1569,6 +1580,17 @@ function openChatConvoPopover (selector: string | HTMLElement) {
 
 function closeChatConvoPopover () {
   state.chatConvoPopoverProps.display = false
+}
+
+// ポップオーバー - チャットメッセージポップオーバー
+
+function openChatMessagePopover (selector: string | HTMLElement) {
+  state.chatMessagePopoverSelector = selector
+  state.chatMessagePopoverProps.display = true
+}
+
+function closeChatMessagePopover () {
+  state.chatMessagePopoverProps.display = false
 }
 
 // ポップオーバー - キーワード履歴ポップオーバー

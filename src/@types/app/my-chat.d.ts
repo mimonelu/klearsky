@@ -15,6 +15,7 @@ interface TIMyConvo {
   getMemberNames (): Array<string>
   async createMessage (text: string): Promise<boolean>
   async updateMessages (limit?: number): Promise<boolean>
+  async deleteMessage (messageId: string): Promise<boolean>
   async updateRead (messageId?: string): Promise<boolean>
   async mute (): Promise<boolean>
   async unmute (): Promise<boolean>

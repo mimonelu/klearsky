@@ -786,6 +786,8 @@ function toggleOldestQuotedPostDisplay () {
             v-if="post.indexedAt"
             class="indexed-at"
           >{{ mainState.formatDate(post.indexedAt) }}</div>
+
+          <slot name="header-after" />
         </div>
 
         <!-- ポストコンテンツトグル -->

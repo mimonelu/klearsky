@@ -4,8 +4,6 @@ import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import ChatPost from "@/components/app-parts/ChatPost.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
-import data from "@/consts/label-behaviors.json"
-import DisplayName from "../app-parts/DisplayName.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -73,7 +71,7 @@ function updateTimer () {
   timer = setTimeout(async () => {
     await updateMessages()
     updateTimer()
-  }, 5000)
+  }, 10000)
 }
 
 async function updateMessages () {

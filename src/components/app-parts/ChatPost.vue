@@ -1,12 +1,16 @@
 <script lang="ts" setup>
-import { computed, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import Post from "@/components/app-parts/Post.vue"
+import SVGIcon from "@/components/common/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const props = defineProps<{
   myConvo: TIMyConvo
   message?: TIChatMessage
   isMine: boolean
 }>()
+
+const mainState = inject("state") as MainState
 
 const state = reactive<{
   post: ComputedRef<TTPost>
@@ -39,6 +43,28 @@ const state = reactive<{
     }
   }),
 })
+
+function openChatMessagePopover ($event: Event) {
+  Util.blurElement()
+  mainState.chatMessagePopoverProps.myConvo = props.myConvo
+  mainState.chatMessagePopoverProps.message = props.message
+  mainState.chatMessagePopoverCallback = chatMessagePopoverCallback
+  mainState.openChatMessagePopover($event.target)
+}
+
+async function chatMessagePopoverCallback (type: string) {
+  switch (type) {
+    case "deleteMessage": {
+      if (props.message?.id == null) {
+        return
+      }
+      mainState.loaderDisplay = true
+      await props.myConvo.deleteMessage(props.message.id)
+      mainState.loaderDisplay = false
+      break
+    }
+  }
+}
 </script>
 
 <template>
@@ -49,7 +75,19 @@ const state = reactive<{
     :noLink="true"
     :data-is-mine="isMine"
     :data-is-last-message="message == null"
-  />
+  >
+    <template
+      v-if="message != null"
+      #header-after
+    >
+      <button
+        class="button--plane"
+        @click.stop="openChatMessagePopover"
+      >
+        <SVGIcon name="menu" />
+      </button>
+    </template>
+  </Post>
 </template>
 
 <style lang="scss" scoped>
@@ -86,6 +124,14 @@ const state = reactive<{
 
   // チャットルーム用
   &[data-is-last-message="false"] {
+    &:deep(.body__right__header) {
+      grid-template-columns: auto 1fr auto auto;
+      margin-right: -1em;
+
+      & > .button--plane {
+        margin-left: -0.5em;
+      }
+    }
     &:deep(.post__content) {
       padding: 1em;
     }

@@ -279,6 +279,17 @@ type MainState = {
   openChatConvoPopover: Function
   closeChatConvoPopover: Function
 
+  // ポップオーバー - チャットメッセージポップオーバー
+  chatMessagePopoverProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+    message?: TIChatMessage
+  }
+  chatMessagePopoverSelector?: string | HTMLElement
+  chatMessagePopoverCallback?: Function
+  openChatMessagePopover: Function
+  closeChatMessagePopover: Function
+
   // ポップオーバー - キーワード履歴ポップオーバー
   keywordHistoryPopoverProps: {
     display: boolean

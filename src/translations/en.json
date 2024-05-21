@@ -99,6 +99,7 @@
   "muteChatConvo": "Mute",
   "unmuteChatConvo": "Unmute",
   "leaveChatConvo": "Leave",
+  "deleteChatMessage": "Delete for me",
 
   "tag": "Tag",
   "tags": "Tags",

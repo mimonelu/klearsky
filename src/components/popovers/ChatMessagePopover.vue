@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
+import MenuTickerTranslateText from "@/components/menu-items/TranslateText.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -9,7 +10,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
   display: boolean
-  myConvo?: TIMyConvo
+  message?: TIChatMessage
 }>()
 
 const $t = inject("$t") as Function
@@ -26,7 +27,7 @@ function open () {
     return
   }
   ;(popover.value as typeof Popover).open(
-    mainState.chatConvoPopoverSelector,
+    mainState.chatMessagePopoverSelector,
     {
       positionX: "right",
       positionY: "bottom",
@@ -44,54 +45,42 @@ function close () {
   emit("close")
 }
 
-async function callback (type: "muteConvo" | "unmuteConvo" | "leaveConvo") {
+async function callback (type: "deleteMessage") {
   Util.blurElement()
   close()
-  if (mainState.chatConvoPopoverCallback != null) {
-    mainState.chatConvoPopoverCallback(type)
+  if (mainState.chatMessagePopoverCallback != null) {
+    mainState.chatMessagePopoverCallback(type)
   }
 }
 </script>
 
 <template>
   <Popover
-    class="chat-convo-popover"
+    class="chat-message-popover"
     ref="popover"
     @close="close"
   >
     <menu
-      v-if="myConvo != null"
+      v-if="message != null"
       class="list-menu"
     >
-      <!-- チャットルームのミュート -->
-      <button
-        v-if="!myConvo?.data?.muted"
-        @click.stop="callback('muteConvo')"
-      >
-        <SVGIcon name="volumeOff" />
-        <span>{{ $t("muteChatConvo") }}</span>
-      </button>
+      <!-- テキストを翻訳する -->
+      <MenuTickerTranslateText
+        :text="message.text"
+        @close="emit('close')"
+      />
 
-      <!-- チャットルームのミュート解除 -->
-      <button
-        v-else
-        @click.stop="callback('unmuteConvo')"
-      >
-        <SVGIcon name="volumeOn" />
-        <span>{{ $t("unmuteChatConvo") }}</span>
-      </button>
-
-      <!-- 退室 -->
-      <button @click.stop="callback('leaveConvo')">
-        <SVGIcon name="alert" />
-        <span>{{ $t("leaveChatConvo") }}</span>
+      <!-- 削除 -->
+      <button @click.stop="callback('deleteMessage')">
+        <SVGIcon name="remove" />
+        <span>{{ $t("deleteChatMessage") }}</span>
       </button>
 
       <hr />
 
       <!-- ソースを表示する -->
       <MenuTickerOpenSource
-        :source="myConvo.data"
+        :source="message"
         @close="close"
       />
     </menu>
@@ -99,7 +88,7 @@ async function callback (type: "muteConvo" | "unmuteConvo" | "leaveConvo") {
 </template>
 
 <style lang="scss" scoped>
-.chat-convo-popover {
+.chat-message-popover {
   &:deep() {
     & > .popover__content {
       padding: 0 0.5rem 0.5rem 0.5rem;

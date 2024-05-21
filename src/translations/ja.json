@@ -99,6 +99,7 @@
   "muteChatConvo": "ミュートする",
   "unmuteChatConvo": "ミュートを解除する",
   "leaveChatConvo": "退室する",
+  "deleteChatMessage": "自分だけ削除",
 
   "tag": "タグ",
   "tags": "タグ",
