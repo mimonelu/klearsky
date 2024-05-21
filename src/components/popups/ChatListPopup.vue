@@ -256,6 +256,7 @@ function isMine (message: TIChatMessage): boolean {
     display: flex;
     justify-content: center;
     padding: 0.25rem 0;
+    pointer-events: none;
     position: absolute;
     left: 0.5rem;
     top: 2rem;

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue"
+import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
 import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
 import MenuTickerTranslateText from "@/components/menu-items/TranslateText.vue"
 import Popover from "@/components/popovers/Popover.vue"
@@ -66,6 +67,13 @@ async function callback (type: "deleteMessage") {
     >
       <!-- テキストを翻訳する -->
       <MenuTickerTranslateText
+        :text="message.text"
+        @close="emit('close')"
+      />
+
+      <!-- コピーする -->
+      <MenuTickerCopyTextWrapper
+        :did="message.sender.did"
         :text="message.text"
         @close="emit('close')"
       />
