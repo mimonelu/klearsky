@@ -17,8 +17,16 @@ const mainState = inject("state") as MainState
 
 const easyFormState = reactive<{
   text: string
+  url: string
+  urlHasImage: Array<boolean>
+  images: Array<File>
+  alts: Array<string>
 }>({
   text: "",
+  url: "",
+  urlHasImage: [true],
+  images: [],
+  alts: [],
 })
 
 const easyFormProps: TTEasyForm = {
@@ -38,10 +46,40 @@ const easyFormProps: TTEasyForm = {
       hasMentionSuggestion: true,
       focus: false,
     },
+    {
+      state: easyFormState,
+      model: "url",
+      type: "text",
+      placeholder: "URL",
+      autocomplete: "url",
+      inputmode: "url",
+      clearButton: true,
+      onInput: onInputUrl,
+    },
+    {
+      state: easyFormState,
+      model: "urlHasImage",
+      type: "checkbox",
+      options: [{ label: $t("urlHasImage"), value: true }],
+      display: false,
+    },
+    {
+      state: easyFormState,
+      model: "images",
+      type: "file",
+      placeholder: $t("imageBoxes"),
+      // accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
+      isMultipleFile: true,
+      maxNumberOfFile: 4,
+      quadLayout: true,
+      // onChange: onChangeImage,
+    },
   ],
 }
 
 const popup = ref(null)
+
+const easyForm = ref(null)
 
 let timer: undefined | any
 
@@ -59,6 +97,22 @@ onBeforeUnmount(() => {
     timer = undefined
   }
 })
+
+function onInputUrl () {
+  /* TODO:
+  // リンクカードの画像添付チェックボックスの出し分け
+  const urlHasImageItem = easyFormProps.data.find((item: TTEasyFormItem) => {
+    return item.model === "urlHasImage"
+  })
+  if (urlHasImageItem == null) {
+    return
+  }
+  urlHasImageItem.display = !!easyFormState.url // TODO: && easyFormState.images.length === 0
+
+  // TODO: 要修正
+  ;(easyForm.value as any)?.forceUpdate()
+  */
+}
 
 function close () {
   emit("close")
@@ -116,11 +170,16 @@ async function updateRead () {
 
 async function submitCallback () {
   if (!await props.myConvo?.createMessage({
+    type: "post",
     text: easyFormState.text,
+    url: easyFormState.url,
+    urlHasImage: easyFormState.urlHasImage,
+    images: easyFormState.images,
   })) {
     return
   }
   easyFormState.text = ""
+  easyFormState.url = ""
   ;(popup.value as any)?.scrollToBottom("smooth")
 }
 
@@ -167,7 +226,10 @@ function isMine (message: TIChatMessage): boolean {
       #footer
     >
       <div class="chat-convo-popup__form-container">
-        <EasyForm v-bind="easyFormProps" />
+        <EasyForm
+          v-bind="easyFormProps"
+          ref="easyForm"
+        />
         <button
           type="button"
           class="button--plane"
