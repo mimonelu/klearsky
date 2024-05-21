@@ -36,6 +36,32 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
   mainState.openChatConvoPopup(myConvo)
 }
 
+function openChatConvoPopover ($event: Event, myConvo: TIMyConvo) {
+  Util.blurElement()
+  mainState.chatConvoPopoverProps.myConvo = myConvo
+  mainState.chatConvoPopoverCallback = chatConvoPopoverCallback
+  mainState.openChatConvoPopover($event.target)
+}
+
+async function chatConvoPopoverCallback (type: string) {
+  mainState.loaderDisplay = true
+  switch (type) {
+    case "muteConvo": {
+      await mainState.chatConvoPopoverProps.myConvo?.mute()
+      break
+    }
+    case "unmuteConvo": {
+      await mainState.chatConvoPopoverProps.myConvo?.unmute()
+      break
+    }
+    case "leaveConvo": {
+      await mainState.chatConvoPopoverProps.myConvo?.leave()
+      break
+    }
+  }
+  mainState.loaderDisplay = false
+}
+
 function isMine (message: TIChatMessage): boolean {
   return message.sender.did === mainState.atp.data.did
 }
@@ -85,6 +111,12 @@ function isMine (message: TIChatMessage): boolean {
             <SVGIcon name="chat" />
             <span>{{ myConvo.data?.unreadCount }}</span>
           </div>
+          <div
+            v-if="myConvo.data?.muted"
+            class="convo-card__muting"
+          >
+            <SVGIcon name="volumeOff" />
+          </div>
           <div class="convo-card__avatars">
             <template v-for="member of myConvo.data?.members">
               <AvatarLink
@@ -132,28 +164,11 @@ function isMine (message: TIChatMessage): boolean {
           <div class="convo-card__right">
             <button
               class="button--plane"
-              @click.stop
+              @click.stop="openChatConvoPopover($event, myConvo)"
             >
               <SVGIcon name="menu" />
             </button>
           </div>
-
-          <!--
-          <div class="group-buttons">
-            <button
-              v-if="myConvo.data?.muted"
-              class="button--important"
-            >
-              <span>{{ $t("muting") }}</span>
-            </button>
-            <button
-              v-else
-              class="button"
-            >
-              <span>{{ $t("muteOn") }}</span>
-            </button>
-          </div>
-          -->
         </div>
       </template>
     </template>
@@ -192,20 +207,25 @@ function isMine (message: TIChatMessage): boolean {
     background-color: var(--accent-color-0125);
   }
   &[data-muted="true"] {
-    background-color: var(--accent-color-0125);
+    background-color: var(--fg-color-0125);
   }
 
   &__unread-count {
     background-color: rgb(var(--notice-color));
-    border-radius: var(--border-radius-small);
+    border-radius:
+      var(--border-radius-small)
+      var(--border-radius-small)
+      var(--border-radius-small)
+      0;
     display: flex;
     align-items: center;
     justify-content: center;
     grid-gap: 0.25rem;
     padding: 0.125rem 0;
     position: absolute;
-    bottom: 0.5rem;
     left: 1rem;
+    top: 0.5rem;
+    z-index: 1;
     width: 3rem;
     max-width: 3rem;
 
@@ -213,8 +233,9 @@ function isMine (message: TIChatMessage): boolean {
       content: "";
       display: block;
       position: absolute;
-      top: calc(-0.75rem + 1px);
-      @include triangle("top", 0.5rem, 0.5rem, rgb(var(--notice-color)));
+      left: 0;
+      bottom: calc(-0.75rem + 1px);
+      @include triangle("bottom", 0.5rem, 0.5rem, rgb(var(--notice-color)));
     }
 
     & > .svg-icon {
@@ -229,14 +250,23 @@ function isMine (message: TIChatMessage): boolean {
     }
   }
 
-  &__muted {
+  &__muting {
+    background-color: rgb(var(--fg-color));
     border-radius: var(--border-radius-small);
-    color: rgb(var(--notice-color));
-    display: grid;
-    font-size: 0.875rem;
-    font-weight: bold;
-    margin-left: auto;
-    padding: 0.125rem 0;
+    display: flex;
+    justify-content: center;
+    padding: 0.25rem 0;
+    position: absolute;
+    left: 0.5rem;
+    top: 2rem;
+    z-index: 1;
+    width: 4rem;
+    max-width: 4rem;
+
+    & > .svg-icon {
+      fill: rgb(var(--bg-color), 0.75);
+      font-size: 0.75rem;
+    }
   }
 
   &__avatars {
@@ -288,7 +318,7 @@ function isMine (message: TIChatMessage): boolean {
   }
 
   &__last-message {
-    background-color: var(--fg-color-00625);
+    border: 1px solid var(--fg-color-0125);
     border-radius: var(--border-radius-middle);
     font-size: 0.875rem;
     overflow: hidden;
@@ -306,13 +336,5 @@ function isMine (message: TIChatMessage): boolean {
       padding: 1em;
     }
   }
-
-  /*
-  .group-buttons {
-    grid-area: b;
-    justify-content: flex-end;
-    font-size: 0.75rem;
-  }
-  */
 }
 </style>

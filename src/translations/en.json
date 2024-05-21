@@ -96,6 +96,9 @@
   "allow-incoming-all": "Everyone Ok",
   "allow-incoming-none": "Everyone No",
   "allow-incoming-following": "Only following",
+  "muteChatConvo": "Mute",
+  "unmuteChatConvo": "Unmute",
+  "leaveChatConvo": "Leave",
 
   "tag": "Tag",
   "tags": "Tags",

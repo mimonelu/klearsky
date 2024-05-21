@@ -5,6 +5,7 @@ import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
+import ChatConvoPopover from "@/components/popovers/ChatConvoPopover.vue"
 import ChatConvoPopup from "@/components/popups/ChatConvoPopup.vue"
 import ChatListPopup from "@/components/popups/ChatListPopup.vue"
 import ChatMembersSelectPopup from "@/components/popups/ChatMembersSelectPopup.vue"
@@ -901,6 +902,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.myFeedsSortPopoverProps.display"
       v-bind="state.myFeedsSortPopoverProps"
       @close="state.closeMyFeedsSortPopover"
+    />
+
+    <!-- チャットルームポップオーバー -->
+    <ChatConvoPopover
+      v-if="state.chatConvoPopoverProps.display"
+      v-bind="state.chatConvoPopoverProps"
+      @close="state.closeChatConvoPopover"
     />
 
     <!-- キーワード履歴ポップオーバー -->

@@ -269,6 +269,16 @@ type MainState = {
   openMyFeedsSortPopover: Function
   closeMyFeedsSortPopover: Function
 
+  // ポップオーバー - チャットルームポップオーバー
+  chatConvoPopoverProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+  }
+  chatConvoPopoverSelector?: string | HTMLElement
+  chatConvoPopoverCallback?: Function
+  openChatConvoPopover: Function
+  closeChatConvoPopover: Function
+
   // ポップオーバー - キーワード履歴ポップオーバー
   keywordHistoryPopoverProps: {
     display: boolean

@@ -16,5 +16,8 @@ interface TIMyConvo {
   async createMessage (text: string): Promise<boolean>
   async updateMessages (limit?: number): Promise<boolean>
   async updateRead (messageId?: string): Promise<boolean>
+  async mute (): Promise<boolean>
+  async unmute (): Promise<boolean>
+  async leave (): Promise<boolean>
   findMember (did: string): undefined | TTProfile
 }

@@ -99,7 +99,7 @@ const state = reactive<{
     return props.post.record?.text ?? props.post.value?.text
   }),
   isTextSingleEmoji: computed((): boolean => {
-    return state.text?.match(/^\p{RGI_Emoji}$/v) != null
+    return state.text?.match(/^[\p{RGI_Emoji}]{1,3}$/v) != null
   }),
 
   // 画像

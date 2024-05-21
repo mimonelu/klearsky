@@ -76,15 +76,18 @@ import fetchTimeFeeds from "@/composables/atp-wrapper/fetch/fetch-time-feeds"
 import fetchTimeline from "@/composables/atp-wrapper/fetch/fetch-timeline"
 import fetchUserSearch from "@/composables/atp-wrapper/fetch/fetch-user-search"
 import fetchWithoutAgent from "@/composables/atp-wrapper/fetch/fetch-without-agent"
+import leaveChatConvo from "@/composables/atp-wrapper/chat/leave-chat-convo"
 import login from "@/composables/atp-wrapper/session/login"
 import logout from "@/composables/atp-wrapper/session/logout"
+import muteChatConvo from "@/composables/atp-wrapper/chat/mute-chat-convo"
 import refreshSession from "@/composables/atp-wrapper/session/refresh-session"
 import resetSession from "@/composables/atp-wrapper/session/reset-session"
 import resumeSession from "@/composables/atp-wrapper/session/resume-session"
 import signUp from "@/composables/atp-wrapper/session/sign-up"
+import unmuteChatConvo from "@/composables/atp-wrapper/chat/unmute-chat-convo"
 import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
-import updateConvoRead from "@/composables/atp-wrapper/chat/update-convo-read"
+import updateChatConvoRead from "@/composables/atp-wrapper/chat/update-chat-convo-read"
 import updateJwt from "@/composables/atp-wrapper/session/update-jwt"
 import updateList from "@/composables/atp-wrapper/update/update-list"
 import updateListBlockToDisable from "@/composables/atp-wrapper/update/update-list-block-to-disable"
@@ -215,8 +218,10 @@ class AtpWrapper implements TIAtpWrapper {
   hasLogin (this: TIAtpWrapper): boolean {
     return this.session != null
   }
+  leaveChatConvo = leaveChatConvo
   login = login
   logout = logout
+  muteChatConvo = muteChatConvo
   refreshSession = refreshSession
   resetSession = resetSession
   resumeSession = resumeSession
@@ -224,9 +229,10 @@ class AtpWrapper implements TIAtpWrapper {
     Util.saveStorage("atp", this.data)
   }
   signUp = signUp
+  unmuteChatConvo = unmuteChatConvo
   updateBlockToDisable = updateBlockToDisable
   updateBlockToEnable = updateBlockToEnable
-  updateConvoRead = updateConvoRead
+  updateChatConvoRead = updateChatConvoRead
   updateJwt = updateJwt
   updateList = updateList
   updateListBlockToDisable = updateListBlockToDisable

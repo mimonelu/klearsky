@@ -14,7 +14,7 @@ export default class MyChat {
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean> {
     const declarations = await this.mainState.atp.fetchChatDeclarations(this.mainState.atp.data.did, 10)
     if (declarations instanceof Error) {
-      // TODO:
+      this.mainState.openErrorPopup(declarations, "MyChat/setDeclaration")
       return false
     }
 
@@ -26,7 +26,7 @@ export default class MyChat {
   
     const result = await this.mainState.atp.createChatDeclaration(this.mainState.atp.data.did, allowFollowing)
     if (result instanceof Error) {
-      // TODO:
+      this.mainState.openErrorPopup(result, "MyChat/setDeclaration")
       return false
     }
     return true
@@ -71,7 +71,9 @@ export default class MyChat {
   updateUnread () {
     this.unread = 0
     this.myConvos.forEach((myConvo) => {
-      this.unread += myConvo.data?.unreadCount ?? 0
+      if (!myConvo.data?.muted) {
+        this.unread += myConvo.data?.unreadCount ?? 0
+      }
     })
   }
 }
@@ -101,7 +103,7 @@ class MyConvo {
     }
     const message = await this.mainState.atp.createChatMessage(this.data.id, text)
     if (message instanceof Error) {
-      // TODO:
+      this.mainState.openErrorPopup(message, "MyChat/createMessage")
       return false
     }
     this.messages.push(message)
@@ -136,13 +138,61 @@ class MyConvo {
     if (this.data == null) {
       return false
     }
-    const messages = await this.mainState.atp.updateConvoRead(this.data.id, messageId)
+    const messages = await this.mainState.atp.updateChatConvoRead(this.data.id, messageId)
     if (messages instanceof Error) {
       // TODO:
       return false
     }
     this.data.unreadCount = 0
     this.mainState.myChat.updateUnread()
+    return true
+  }
+
+  async mute (): Promise<boolean> {
+    if (this.data == null) {
+      return false
+    }
+    const result = await this.mainState.atp.muteChatConvo(this.data.id)
+    if (result instanceof Error) {
+      this.mainState.openErrorPopup(result, "MyChat/mute")
+      return false
+    }
+    const myConvo = this.mainState.myChat.myConvos.find((myConvo) => myConvo.data?.id === this.data?.id)
+    if (myConvo.data != null) {
+      myConvo.data.muted = true
+    }
+    return true
+  }
+
+  async unmute (): Promise<boolean> {
+    if (this.data == null) {
+      return false
+    }
+    const result = await this.mainState.atp.unmuteChatConvo(this.data.id)
+    if (result instanceof Error) {
+      this.mainState.openErrorPopup(result, "MyChat/unmute")
+      return false
+    }
+    const myConvo = this.mainState.myChat.myConvos.find((myConvo) => myConvo.data?.id === this.data?.id)
+    if (myConvo.data != null) {
+      myConvo.data.muted = false
+    }
+    return true
+  }
+
+  async leave (): Promise<boolean> {
+    if (this.data == null) {
+      return false
+    }
+    const result = await this.mainState.atp.leaveChatConvo(this.data.id)
+    if (result instanceof Error) {
+      this.mainState.openErrorPopup(result, "MyChat/leave")
+      return false
+    }
+    const index = this.mainState.myChat.myConvos.findIndex((myConvo) => myConvo.data?.id === this.data?.id)
+    if (index !== - 1) {
+      this.mainState.myChat.myConvos.splice(index, 1)
+    }
     return true
   }
 

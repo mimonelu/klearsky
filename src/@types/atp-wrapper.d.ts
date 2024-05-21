@@ -85,16 +85,19 @@ interface TIAtpWrapper {
   fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchWithoutAgent (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, any>, server?: string): Promise<Error | Response>
   hasLogin (this: TIAtpWrapper): boolean
+  leaveChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
   login (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, authFactorToken?: string, onRefreshSession?: () => void): Promise<undefined | Error>
   logout (this: TIAtpWrapper)
+  muteChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
   refreshSession (this: TIAtpWrapper): Promise<undefined | Error>
   resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): void
   resumeSession (this: TIAtpWrapper, session: TTSession): Promise<undefined | Error>
   saveData (this: TIAtpWrapper)
   signUp (this: TIAtpWrapper, service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<undefined | Error>
+  unmuteChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
   updateBlockToDisable (this: TIAtpWrapper, uri: string): Promise<boolean>
   updateBlockToEnable (this: TIAtpWrapper, did: string): Promise<null | string>
-  updateConvoRead (this: TIAtpWrapper, convoId: string, messageId?: string): Promise<Error | TIChatConvo>
+  updateChatConvoRead (this: TIAtpWrapper, convoId: string, messageId?: string): Promise<Error | TIChatConvo>
   updateJwt (this: TIAtpWrapper, onRefreshSession?: () => void): Promise<undefined | Error>
   updateList (this: TIAtpWrapper, list: TTList, avatarBlobRef?: BlobRef): Promise<undefined | Error>
   updateListBlockToDisable (this: TIAtpWrapper, listUri: string): Promise<undefined | Error>

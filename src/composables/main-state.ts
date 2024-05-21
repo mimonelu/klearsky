@@ -305,6 +305,16 @@ state.myFeedsSortPopoverCallback = undefined
 state.openMyFeedsSortPopover = openMyFeedsSortPopover
 state.closeMyFeedsSortPopover = closeMyFeedsSortPopover
 
+// ポップオーバー - チャットルームポップオーバー
+state.chatConvoPopoverProps = {
+  display: false,
+  myConvo: undefined,
+}
+state.chatConvoPopoverSelector = undefined
+state.chatConvoPopoverCallback = undefined
+state.openChatConvoPopover = openChatConvoPopover
+state.closeChatConvoPopover = closeChatConvoPopover
+
 // ポップオーバー - キーワード履歴ポップオーバー
 state.keywordHistoryPopoverProps = {
   display: false,
@@ -1548,6 +1558,17 @@ function openMyFeedsSortPopover (selector: string | HTMLElement) {
 
 function closeMyFeedsSortPopover () {
   state.myFeedsSortPopoverProps.display = false
+}
+
+// ポップオーバー - チャットルームポップオーバー
+
+function openChatConvoPopover (selector: string | HTMLElement) {
+  state.chatConvoPopoverSelector = selector
+  state.chatConvoPopoverProps.display = true
+}
+
+function closeChatConvoPopover () {
+  state.chatConvoPopoverProps.display = false
 }
 
 // ポップオーバー - キーワード履歴ポップオーバー
