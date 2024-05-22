@@ -106,6 +106,14 @@ function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
   if (item.onChange != null) item.onChange(item, props)
 }
 
+function onFocus (item: TTEasyFormItem) {
+  if (item.onFocus != null) item.onFocus(item, props)
+}
+
+function onBlur (item: TTEasyFormItem) {
+  if (item.onBlur != null) item.onBlur(item, props)
+}
+
 function onInput (item: TTEasyFormItem) {
   if (item.onInput != null) item.onInput(item, props)
 }
@@ -187,6 +195,8 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
                 spellcheck="false"
                 class="textarea"
                 :class="item.classes"
+                @focus="onFocus(item)"
+                @blur="onBlur(item)"
                 @input="onInput(item)"
                 @keydown.enter="onEnterKeyDown"
               />

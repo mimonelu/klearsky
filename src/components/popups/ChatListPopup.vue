@@ -207,7 +207,7 @@ function isMine (message: TIChatMessage): boolean {
     background-color: var(--accent-color-0125);
   }
   &[data-muted="true"] {
-    background-color: var(--fg-color-0125);
+    background-color: var(--fg-color-00625);
   }
 
   &__unread-count {
@@ -251,22 +251,22 @@ function isMine (message: TIChatMessage): boolean {
   }
 
   &__muting {
-    background-color: rgb(var(--fg-color));
-    border-radius: var(--border-radius-small);
+    background-color: rgb(0, 0, 0, 0.75);
+    border-radius: 4rem;
     display: flex;
+    align-items: center;
     justify-content: center;
-    padding: 0.25rem 0;
     pointer-events: none;
     position: absolute;
-    left: 0.5rem;
-    top: 2rem;
+    left: 1rem;
+    top: 1rem;
     z-index: 1;
-    width: 4rem;
-    max-width: 4rem;
+    width: 3rem;
+    height: 3rem;
 
     & > .svg-icon {
-      fill: rgb(var(--bg-color), 0.75);
-      font-size: 0.75rem;
+      fill: white;
+      font-size: 1.5rem;
     }
   }
 

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive, ref } from "vue"
+import ChatPost from "@/components/app-parts/ChatPost.vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
-import ChatPost from "@/components/app-parts/ChatPost.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -17,16 +17,20 @@ const mainState = inject("state") as MainState
 
 const easyFormState = reactive<{
   text: string
+  /* // TODO: 一時退避
   url: string
   urlHasImage: Array<boolean>
   images: Array<File>
   alts: Array<string>
+  */
 }>({
   text: "",
+  /* // TODO: 一時退避
   url: "",
   urlHasImage: [true],
   images: [],
   alts: [],
+  */
 })
 
 const easyFormProps: TTEasyForm = {
@@ -38,14 +42,30 @@ const easyFormProps: TTEasyForm = {
       state: easyFormState,
       model: "text",
       type: "textarea",
-      placeholder: $t("text"),
+      placeholder: $t("chatMessagePlaceholder"),
       maxlength: 300,
       maxLengthIndicator: false,
       maxLengthIndicatorByGrapheme: false,
-      rows: 2,
+      rows: 1,
       hasMentionSuggestion: true,
       focus: false,
+      onFocus (item: TTEasyFormItem) {
+        item.rows = 3
+
+        // TODO: 要修正
+        ;(easyForm.value as any)?.forceUpdate()
+      },
+      onBlur (item: TTEasyFormItem) {
+        // ラグを挟むことで送信ボタンを押し損ねる事態を防ぐ
+        setTimeout(() => {
+          item.rows = 1
+
+          // TODO: 要修正
+          ;(easyForm.value as any)?.forceUpdate()
+        }, 250)
+      },
     },
+    /* // TODO: 一時退避
     {
       state: easyFormState,
       model: "url",
@@ -74,6 +94,7 @@ const easyFormProps: TTEasyForm = {
       quadLayout: true,
       // onChange: onChangeImage,
     },
+    */
   ],
 }
 
@@ -98,8 +119,8 @@ onBeforeUnmount(() => {
   }
 })
 
+/* // TODO: 一時退避
 function onInputUrl () {
-  /* TODO:
   // リンクカードの画像添付チェックボックスの出し分け
   const urlHasImageItem = easyFormProps.data.find((item: TTEasyFormItem) => {
     return item.model === "urlHasImage"
@@ -111,8 +132,8 @@ function onInputUrl () {
 
   // TODO: 要修正
   ;(easyForm.value as any)?.forceUpdate()
-  */
 }
+*/
 
 function close () {
   emit("close")
@@ -169,17 +190,25 @@ async function updateRead () {
 }
 
 async function submitCallback () {
+  if (easyFormState.text === "") {
+    return
+  }
+  const text = easyFormState.text
+  easyFormState.text = ""
   if (!await props.myConvo?.createMessage({
     type: "post",
-    text: easyFormState.text,
+    text,
+    /* // TODO: 一時退避
     url: easyFormState.url,
     urlHasImage: easyFormState.urlHasImage,
     images: easyFormState.images,
+    */
   })) {
+    easyFormState.text = text
     return
   }
-  easyFormState.text = ""
-  easyFormState.url = ""
+  // TODO: 一時退避
+  // easyFormState.url = ""
   ;(popup.value as any)?.scrollToBottom("smooth")
 }
 
@@ -232,7 +261,7 @@ function isMine (message: TIChatMessage): boolean {
         />
         <button
           type="button"
-          class="button--plane"
+          class="button--important chat-convo-popup__submit-button"
           @click="submitCallback"
         >
           <SVGIcon name="chat" />
@@ -271,17 +300,17 @@ function isMine (message: TIChatMessage): boolean {
   }
 
   &__form-container {
-    display: flex;
-    padding: 1rem 0 1rem 1rem;
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: 1fr auto;
+    padding: 1rem;
+  }
 
-    .easy-form {
-      flex-grow: 1;
-    }
-
-    .button--plane {
-      .svg-icon--chat {
-        font-size: 2rem;
-      }
+  &__submit-button {
+    --bg-color: 255, 255, 255;
+    --notice-color: var(--accent-color);
+    .svg-icon--chat {
+      font-size: 1.5rem;
     }
   }
 }
