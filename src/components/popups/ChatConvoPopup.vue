@@ -143,6 +143,7 @@ function updateTimer () {
   if (unmounted) {
     return
   }
+  // TODO:
   timer = setTimeout(async () => {
     await updateMessagesOnTick()
     updateTimer()
@@ -153,6 +154,7 @@ async function updateMessagesOnMounted () {
   if (props.myConvo == null) {
     return
   }
+  // TODO:
   await props.myConvo.updateMessages(100)
   ;(popup.value as any)?.scrollToBottom("smooth")
   await updateRead()
@@ -164,12 +166,13 @@ async function updateMessagesOnTick () {
   }
   const diff = (popup.value as any).diffScrollBottom()
 
+  // TODO:
   // 通信量削減のため、通常は1つのみ取得し、段階的に取得数を増やしている
   const numberOfNewMessages = await props.myConvo.updateMessages(1)
   if (numberOfNewMessages >= 1) {
     const numberOfNewMessages = await props.myConvo.updateMessages(10)
     if (numberOfNewMessages >= 10) {
-      await props.myConvo.updateMessages(100)
+      await props.myConvo.updateMessages(30)
     }
   }
 
@@ -185,8 +188,9 @@ async function updateRead () {
   if (props.myConvo == null) {
     return
   }
-  const lastMessageId = props.myConvo.messages.at(- 1)?.id
-  await props.myConvo.updateRead(lastMessageId)
+
+  // messageId は指定しない
+  await props.myConvo.updateRead()
 }
 
 async function submitCallback () {

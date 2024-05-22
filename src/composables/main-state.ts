@@ -125,9 +125,11 @@ state.endChatListTimer = function () {
 }
 state.startChatListTimer = function () {
   state.endChatListTimer()
+
+  // TODO:
   state.chatListTimer = setInterval(async () => {
-    await state.myChat.updateConvos(100)
-  }, 30000)
+    await state.myChat.updateConvosAll()
+  }, 60000)
 }
 
 // ミュートユーザー

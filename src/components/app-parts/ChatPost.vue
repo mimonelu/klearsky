@@ -75,6 +75,7 @@ async function chatMessagePopoverCallback (type: string) {
     :noLink="true"
     :data-is-mine="isMine"
     :data-is-last-message="message == null"
+    :data-is-message-empty="!state.post.record.text"
   >
     <template
       v-if="message != null"
@@ -95,6 +96,9 @@ async function chatMessagePopoverCallback (type: string) {
   &:deep(.post__content) {
     position: relative;
     width: fit-content;
+  }
+  &[data-is-message-empty="true"]:deep(.post__content) {
+    display: none;
   }
   &[data-is-mine="true"]:deep(.post__content) {
     background-color: var(--accent-color-025);

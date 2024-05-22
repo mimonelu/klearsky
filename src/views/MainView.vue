@@ -334,7 +334,7 @@ async function processAfterLogin () {
   }
 
   // チャット一覧の更新
-  state.myChat.updateConvos(100)
+  state.myChat.updateConvosAll()
   state.startChatListTimer()
 
   // 招待コードの取得

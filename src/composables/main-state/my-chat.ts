@@ -35,7 +35,7 @@ export default class MyChat {
       this.mainState.openErrorPopup(convo, "MyChat/upsertConvo")
       return
     }
-    return this.updateMyConvo(convo)
+    return this.updateMyConvo(convo, "unshift")
   }
 
   async updateConvos (limit?: number): Promise<boolean> {
@@ -45,24 +45,56 @@ export default class MyChat {
       return false
     }
     convos.convos.forEach((convo) => {
-      this.updateMyConvo(convo)
+      this.updateMyConvo(convo, "push")
     })
+    this.sortMyConvos()
     this.updateUnread()
     return true
   }
 
-  updateMyConvo (newConvo: TIChatConvo): TIMyConvo {
+  async updateConvosAll (): Promise<boolean> {
+    let cursor: undefined | string
+    // TODO:
+    for (let i = 0; i < 10; i ++) {
+      // TODO:
+      const result = await this.mainState.atp.fetchChatConvos(25, cursor)
+      if (result instanceof Error) {
+        // TODO:
+        continue
+      }
+      result.convos.forEach((convo) => {
+        this.updateMyConvo(convo, "push")
+      })
+      if (result.cursor == null || result.convos.length === 0) {
+        break
+      }
+      cursor = result.cursor
+    }
+    this.sortMyConvos()
+    this.updateUnread()
+    return true
+  }
+
+  updateMyConvo (newConvo: TIChatConvo, method: "push" | "unshift"): TIMyConvo {
     const myConvo = new MyConvo(this.mainState)
     myConvo.data = newConvo
     const myConvoIndex = this.myConvos.findIndex((myConvo) => {
       return myConvo.data?.id === newConvo.id
     })
     if (myConvoIndex === - 1) {
-      this.myConvos.push(myConvo)
+      this.myConvos[method](myConvo)
     } else {
       this.myConvos[myConvoIndex] = myConvo
     }
     return myConvo
+  }
+
+  sortMyConvos () {
+    this.myConvos.sort((a, b) => {
+      const aDate = new Date(a.data?.lastMessage?.sentAt ?? 0)
+      const bDate = new Date(b.data?.lastMessage?.sentAt ?? 0)
+      return aDate < bDate ? 1 : aDate > bDate ? - 1 : 0
+    })
   }
 
   updateUnread () {
@@ -111,6 +143,10 @@ class MyConvo {
     }
     this.messages.push(message)
     this.sortMessages()
+
+    this.data.lastMessage = message
+    this.mainState.myChat.sortMyConvos()
+
     return true
   }
 

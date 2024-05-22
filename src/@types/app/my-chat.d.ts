@@ -5,6 +5,8 @@ interface TIMyChat {
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean>
   async upsertConvo (dids: Array<string>): Promise<undefined | TIMyConvo>
   async updateConvos (limit?: number): Promise<boolean>
+  async updateConvosAll (): Promise<boolean>
+  sortMyConvos(): void
   updateUnread(): void
 }
 
