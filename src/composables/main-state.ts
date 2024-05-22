@@ -129,6 +129,7 @@ state.startChatListTimer = function () {
   // TODO:
   state.chatListTimer = setInterval(async () => {
     await state.myChat.updateConvosAll()
+    state.updatePageTitle()
   }, 60000)
 }
 

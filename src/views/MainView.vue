@@ -170,7 +170,8 @@ router.afterEach(async (to: RouteLocationNormalized) => {
 
 // ページタイトルの更新
 function updatePageTitle () {
-  let title = state.notificationCount === 0 ? "" : `(${state.notificationCount}) `
+  const unreadCount = state.notificationCount + state.myChat.unread
+  let title = unreadCount === 0 ? "" : `(${unreadCount}) `
   title += "Klearsky"
 
   if (state.currentPath.startsWith("/search/"))
