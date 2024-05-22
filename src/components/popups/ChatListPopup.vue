@@ -8,6 +8,8 @@ import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
@@ -68,22 +70,28 @@ function openChatConvoPopover ($event: Event, myConvo: TIMyConvo) {
 }
 
 async function chatConvoPopoverCallback (type: string) {
-  mainState.loaderDisplay = true
   switch (type) {
     case "muteConvo": {
+      mainState.loaderDisplay = true
       await mainState.chatConvoPopoverProps.myConvo?.mute()
+      mainState.loaderDisplay = false
       break
     }
     case "unmuteConvo": {
+      mainState.loaderDisplay = true
       await mainState.chatConvoPopoverProps.myConvo?.unmute()
+      mainState.loaderDisplay = false
       break
     }
     case "leaveConvo": {
-      await mainState.chatConvoPopoverProps.myConvo?.leave()
+      if (await mainState.openConfirmationPopup($t("confirmation"), $t("leaveChatConvoConfirmation"))) {
+        mainState.loaderDisplay = true
+        await mainState.chatConvoPopoverProps.myConvo?.leave()
+        mainState.loaderDisplay = false
+      }
       break
     }
   }
-  mainState.loaderDisplay = false
 }
 
 function isMine (message: TIChatMessage): boolean {

@@ -101,6 +101,7 @@
   "leaveChatConvo": "Leave",
   "deleteChatMessage": "Delete for me",
   "chatMessagePlaceholder": "Message",
+  "leaveChatConvoConfirmation": "You will leave the chat. You can re-enter, but you will not be able to retrieve your current messages. Are you sure?",
 
   "tag": "Tag",
   "tags": "Tags",

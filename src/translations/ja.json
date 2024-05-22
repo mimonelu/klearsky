@@ -101,6 +101,7 @@
   "leaveChatConvo": "退室する",
   "deleteChatMessage": "自分だけ削除",
   "chatMessagePlaceholder": "メッセージ",
+  "leaveChatConvoConfirmation": "チャットから退室します。再入室は可能ですが、現在のメッセージは取得できなくなります。よろしいですか？",
 
   "tag": "タグ",
   "tags": "タグ",
