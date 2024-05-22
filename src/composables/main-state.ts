@@ -71,7 +71,7 @@ state.notificationFetchedFirst = false
 state.notificationReasonFilter = undefined
 state.fetchNotifications = fetchNotifications
 
-// 通知タイマー
+// 新着通知タイマー
 state.notificationTimer = null
 state.clearNotificationInterval = clearNotificationInterval
 state.updateNotifications = updateNotifications
@@ -125,12 +125,16 @@ state.endChatListTimer = function () {
 }
 state.startChatListTimer = function () {
   state.endChatListTimer()
-
-  // TODO:
+  if (!state.currentSetting?.chatFetchInterval) {
+    return
+  }
   state.chatListTimer = setInterval(async () => {
+    if (!state.currentSetting?.chatFetchInterval) {
+      return
+    }
     await state.myChat.updateConvosAll()
     state.updatePageTitle()
-  }, 60000)
+  }, state.currentSetting?.chatFetchInterval ?? 60000)
 }
 
 // ミュートユーザー
@@ -697,8 +701,11 @@ function updateSettings () {
   updateFontSetting()
   updateColorThemeSetting()
 
-  // 通知タイマーの更新
+  // 新着通知タイマーの更新
   updateNotificationInterval()
+
+  // 新着チャットタイマーの更新
+  state.startChatListTimer()
 }
 
 function saveSettings () {
@@ -720,6 +727,9 @@ function saveSettings () {
   if (state.settings[did].autoTranslationIgnoreLanguage == null) {
     state.settings[did].autoTranslationIgnoreLanguage = undefined
   }
+  if (state.settings[did].chatFetchInterval == null) {
+    state.settings[did].chatFetchInterval = 60000
+  }
   if (state.settings[did].contentLanguages == null) {
     state.settings[did].contentLanguages = []
   } else {
@@ -735,7 +745,7 @@ function saveSettings () {
     state.settings[did].fontAntialiasing = true
   }
   if (state.settings[did].notificationFetchInterval == null) {
-    state.settings[did].notificationFetchInterval = 15000
+    state.settings[did].notificationFetchInterval = 30000
   }
   if (state.settings[did].tags == null) {
     state.settings[did].tags = []
@@ -922,7 +932,7 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
   }
 }
 
-// 通知タイマー
+// 新着通知タイマー
 
 function clearNotificationInterval () {
   if (state.notificationTimer != null) {

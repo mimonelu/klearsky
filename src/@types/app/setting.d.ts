@@ -3,6 +3,7 @@ type TTSetting = {
   autoTranslationIgnoreLanguage?: string
   backgroundImage?: string
   backgroundOpacity?: number
+  chatFetchInterval?: number
   colorTheme?: string
   contentLanguages?: Array<string>
   feedSearchKeywordHistory?: Array<string>

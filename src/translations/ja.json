@@ -353,11 +353,21 @@
   "timeControlRelative": "相対表記",
   "timeControlAbsolute": "絶対表記",
 
-  "notificationFetchInterval": "通知を取得する間隔",
+  "notificationFetchInterval": "新着通知を取得する間隔",
   "notificationFetchInterval1": "取得しない",
   "notificationFetchInterval2": "15秒ごと",
   "notificationFetchInterval3": "30秒ごと",
   "notificationFetchInterval4": "1分ごと",
+  "notificationFetchInterval5": "3分ごと",
+  "notificationFetchInterval6": "5分ごと",
+
+  "chatFetchInterval": "新着チャットを取得する間隔",
+  "chatFetchInterval1": "取得しない",
+  "chatFetchInterval2": "30秒ごと",
+  "chatFetchInterval3": "1分ごと",
+  "chatFetchInterval4": "3分ごと",
+  "chatFetchInterval5": "10分ごと",
+  "chatFetchInterval6": "1時間ごと",
 
   "timelineControl": "フォロー中フィードの制御",
   "timelineControlDescription": "次のダウンロードから有効です。",
@@ -416,7 +426,7 @@
   "backgroundOpacity": "壁紙の不透明度",
 
   "psySafety": "心理的安全性",
-  "hideNotificationBadge": "通知バッジの非表示",
+  "hideNotificationBadge": "新着バッジの非表示",
   "hideNotificationBadgeOff": "無効",
   "hideNotificationBadgeOn": "有効",
   "hideNumberOfReaction": "リアクション数の非表示",
