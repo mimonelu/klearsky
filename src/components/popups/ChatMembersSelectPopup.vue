@@ -53,6 +53,34 @@ const easyFormProps: TTEasyForm = {
           if (results instanceof Error) {
             return
           }
+
+          // ユーザーのソート
+          results.sort((a, b) => {
+            const aOk =
+              a.associated?.chat?.allowIncoming === "all" ||
+              (
+                (
+                  a.associated?.chat?.allowIncoming == null ||
+                  a.associated?.chat?.allowIncoming === "following"
+                ) &&
+                a.viewer.followedBy != null
+              )
+            const bOk =
+              b.associated?.chat?.allowIncoming === "all" ||
+              (
+                (
+                  b.associated?.chat?.allowIncoming == null ||
+                  b.associated?.chat?.allowIncoming === "following"
+                ) &&
+                b.viewer.followedBy != null
+              )
+            return aOk && !bOk
+              ? - 1
+              : !aOk && bOk
+                ? 1
+                : 0
+          })
+
           easyFormState.users.splice(0)
           await nextTick()
           easyFormState.users.push(...results)
@@ -215,13 +243,13 @@ function unselect (index: number) {
     }
 
     [data-allow-incoming="all"] {
-      color: var(--share-color-075);
+      color: rgb(var(--share-color));
+    }
+    [data-allow-incoming="following"] {
+      color: rgb(var(--fg-color));
     }
     [data-allow-incoming="none"] {
       color: var(--fg-color-025);
-    }
-    [data-allow-incoming="following"] {
-      color: var(--share-color-05);
     }
   }
 
