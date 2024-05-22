@@ -1,5 +1,6 @@
 interface TIAtpWrapper {
   agent: null | BskyAgent
+  proxies: { [k: string]: undefined | string }
   data: { did: string; sessions: { [did: string]: TTSession } }
   session?: TTSession
   lastFetchNotificationsDate?: Date

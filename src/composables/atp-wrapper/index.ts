@@ -1,3 +1,4 @@
+import type { BskyAgent } from "@atproto/api"
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
 import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
@@ -107,14 +108,22 @@ import Util from "@/composables/util"
 
 // @ts-ignore
 class AtpWrapper implements TIAtpWrapper {
-  agent: null | any
-  data: any
+  agent: null | BskyAgent
+
+  proxies: { [k: string]: undefined | string }
+
+  data: { did: string; sessions: { [did: string]: TTSession } }
+
   session?: TTSession
+
   lastFetchNotificationsDate?: Date
 
   // @ts-ignore
   constructor (this: TIAtpWrapper) {
     this.agent = null
+    this.proxies = {
+      chat: "did:web:api.bsky.chat#bsky_chat",
+    }
     this.data = Util.loadStorage("atp") ?? {
       did: "",
       sessions: {},

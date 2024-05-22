@@ -19,8 +19,11 @@ export default async function (
   if (cursor != null) {
     query.cursor = cursor
   }
-  const headers = { "atproto-proxy": "did:web:api.bsky.chat#bsky_chat" }
-  const response = await (this.agent as BskyAgent).api.chat.bsky.convo.getMessages(query, { headers })
+  const options: ChatBskyConvoGetMessages.CallOptions = { headers: {} }
+  if (options.headers != null && this.proxies.chat != null) {
+    options.headers["atproto-proxy"] = this.proxies.chat
+  }
+  const response = await (this.agent as BskyAgent).api.chat.bsky.convo.getMessages(query, options)
     .then((value: ChatBskyConvoGetMessages.Response) => value)
     .catch((error: Error) => error)
   console.log("[klearsky/api.chat.bsky.convo.getMessages]", response)

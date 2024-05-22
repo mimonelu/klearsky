@@ -16,11 +16,15 @@ export default async function (
     convoId,
     messageId,
   }
+  const options: ChatBskyConvoDeleteMessageForSelf.CallOptions = {
+    headers: {},
+    encoding: "application/json",
+  }
+  if (options.headers != null && this.proxies.chat != null) {
+    options.headers["atproto-proxy"] = this.proxies.chat
+  }
   const response = await (this.agent as BskyAgent).api.chat.bsky.convo
-    .deleteMessageForSelf(query, {
-      headers,
-      encoding: "application/json",
-    })
+    .deleteMessageForSelf(query, options)
       .then((value: ChatBskyConvoDeleteMessageForSelf.Response) => value)
       .catch((error: Error) => error)
   console.log("[klearsky/api.chat.bsky.convo.deleteMessageForSelf]", response)
