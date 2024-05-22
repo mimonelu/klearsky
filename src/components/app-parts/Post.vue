@@ -40,7 +40,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
   text: ComputedRef<undefined | string>
-  isTextSingleEmoji: ComputedRef<boolean>
+  isTextOnlyEmoji: ComputedRef<boolean>
 
   // 画像
   images: ComputedRef<Array<TTImage>>
@@ -98,8 +98,8 @@ const state = reactive<{
   text: computed((): undefined | string => {
     return props.post.record?.text ?? props.post.value?.text
   }),
-  isTextSingleEmoji: computed((): boolean => {
-    return state.text?.match(/^[\p{RGI_Emoji}]{1,3}$/v) != null
+  isTextOnlyEmoji: computed((): boolean => {
+    return state.text?.match(/^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,3}$/u) != null
   }),
 
   // 画像
@@ -816,7 +816,7 @@ function toggleOldestQuotedPostDisplay () {
               :entities="post.record?.entities ?? post.value?.entities"
               :processHashTag="false"
               :hasTranslateLink="state.hasOtherLanguages"
-              :data-single-emoji="state.isTextSingleEmoji"
+              :data-is-text-only-emoji="state.isTextOnlyEmoji"
               @onActivateHashTag="onActivateHashTag"
               @translate="onForceTranslate"
             />
@@ -1527,7 +1527,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   // デカ絵文字
-  &[data-single-emoji="true"] {
+  &[data-is-text-only-emoji="true"] {
     font-size: 3em;
     line-height: 1;
   }
