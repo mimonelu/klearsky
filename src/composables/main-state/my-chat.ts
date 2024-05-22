@@ -14,7 +14,7 @@ export default class MyChat {
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean> {
     // 古い Declaration を削除
     // TODO:
-    const declarations = await this.mainState.atp.fetchChatDeclarations(this.mainState.atp.data.did, 10)
+    const declarations = await this.mainState.atp.fetchChatDeclarations(this.mainState.atp.data.did, 3)
     if (!(declarations instanceof Error)) {
       for (const record of declarations.records) {
         await this.mainState.atp.deleteChatDeclaration(this.mainState.atp.data.did, record.uri)

@@ -97,7 +97,7 @@ async function chatMessagePopoverCallback (type: string) {
     width: fit-content;
   }
   &[data-is-mine="true"]:deep(.post__content) {
-    background-color: var(--accent-color-0125);
+    background-color: var(--accent-color-025);
   }
   &[data-is-mine="false"]:deep(.post__content) {
     background-color: var(--fg-color-0125);

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, ref } from "vue"
+import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/common/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -13,6 +13,14 @@ defineProps<{
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  allowIncoming: ComputedRef<TTAllowIncoming>
+}>({
+  allowIncoming: computed((): TTAllowIncoming => {
+    return mainState.userProfile?.associated?.chat?.allowIncoming ?? "following"
+  }),
+})
 
 const popover = ref(null)
 
@@ -60,7 +68,7 @@ async function callback (type: TTAllowIncoming) {
     <menu class="list-menu">
       <!-- 全員可 -->
       <button
-        :disabled="mainState.currentProfile?.associated?.chat?.allowIncoming === 'all'"
+        :disabled="state.allowIncoming === 'all'"
         @click.stop="callback('all')"
       >
         <SVGIcon name="people" />
@@ -69,7 +77,7 @@ async function callback (type: TTAllowIncoming) {
 
       <!-- フォロー中のみ -->
       <button
-        :disabled="mainState.currentProfile?.associated?.chat?.allowIncoming === 'following'"
+        :disabled="state.allowIncoming === 'following'"
         @click.stop="callback('following')"
       >
         <SVGIcon name="personHeart" />
@@ -78,7 +86,7 @@ async function callback (type: TTAllowIncoming) {
 
       <!-- 全員不可 -->
       <button
-        :disabled="mainState.currentProfile?.associated?.chat?.allowIncoming === 'none'"
+        :disabled="state.allowIncoming === 'none'"
         @click.stop="callback('none')"
       >
         <SVGIcon name="personOff" />

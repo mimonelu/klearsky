@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import AvatarLink from "@/components/app-parts/AvatarLink.vue"
 import ChatPost from "@/components/app-parts/ChatPost.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -9,6 +9,14 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string): void}>()
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  allowIncoming: ComputedRef<TTAllowIncoming>
+}>({
+  allowIncoming: computed((): TTAllowIncoming => {
+    return mainState.userProfile?.associated?.chat?.allowIncoming ?? "following"
+  }),
+})
 
 function close () {
   emit("close")
@@ -45,8 +53,8 @@ function openChatDeclarationSelectPopover ($event: Event) {
 async function chatDeclarationSelectPopoverCallback (type: TTAllowIncoming) {
   mainState.loaderDisplay = true
   if (await mainState.myChat.setDeclaration(type)) {
-    if (mainState.currentProfile?.associated?.chat != null) {
-      mainState.currentProfile.associated.chat.allowIncoming = type
+    if (mainState.userProfile?.associated?.chat != null) {
+      mainState.userProfile.associated.chat.allowIncoming = type
     }
   }
   mainState.loaderDisplay = false
@@ -103,9 +111,9 @@ function isMine (message: TIChatMessage): boolean {
         @click.stop="openChatDeclarationSelectPopover"
       >
         <SVGIcon :name="
-          mainState.currentProfile?.associated?.chat?.allowIncoming === 'all'
+          state.allowIncoming === 'all'
             ? 'people'
-            : mainState.currentProfile?.associated?.chat?.allowIncoming === 'following'
+            : state.allowIncoming === 'following'
               ? 'personHeart'
               : 'personOff'
         " />
