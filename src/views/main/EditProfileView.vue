@@ -117,7 +117,13 @@ async function setDefaultValues () {
   state.processing = true
   state.displayName = mainState.userProfile?.displayName ?? ""
   state.description = mainState.userProfile?.description ?? ""
-  state.labels = mainState.userProfile?.labels?.map((label: TTLabel) => label.val) ?? []
+  state.labels = mainState.userProfile?.labels
+    ?.filter((label) => {
+      return !label.ver
+    })
+    .map((label) => {
+      return label.val
+    }) ?? []
   state.processing = false
 }
 
