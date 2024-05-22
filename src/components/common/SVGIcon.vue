@@ -66,6 +66,7 @@ import palette from "@/svg/palette.svg?raw"
 import pause from "@/svg/pause.svg?raw"
 import people from "@/svg/people.svg?raw"
 import person from "@/svg/person.svg?raw"
+import personHeart from "@/svg/person-heart.svg?raw"
 import personOff from "@/svg/person-off.svg?raw"
 import pin from "@/svg/pin.svg?raw"
 import pinOffOutline from "@/svg/pin-off-outline.svg?raw"
@@ -164,6 +165,7 @@ const icons: { [k: string]: string } = {
   pause,
   people,
   person,
+  personHeart,
   personOff,
   pin,
   pinOffOutline,

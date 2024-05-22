@@ -315,6 +315,15 @@ state.chatConvoPopoverCallback = undefined
 state.openChatConvoPopover = openChatConvoPopover
 state.closeChatConvoPopover = closeChatConvoPopover
 
+// ポップオーバー - チャット公開設定ポップオーバー
+state.chatDeclarationSelectPopoverProps = {
+  display: false,
+}
+state.chatDeclarationSelectPopoverSelector = undefined
+state.chatDeclarationSelectPopoverCallback = undefined
+state.openChatDeclarationSelectPopover = openChatDeclarationSelectPopover
+state.closeChatDeclarationSelectPopover = closeChatDeclarationSelectPopover
+
 // ポップオーバー - チャットメッセージポップオーバー
 state.chatMessagePopoverProps = {
   display: false,
@@ -1580,6 +1589,17 @@ function openChatConvoPopover (selector: string | HTMLElement) {
 
 function closeChatConvoPopover () {
   state.chatConvoPopoverProps.display = false
+}
+
+// ポップオーバー - チャット公開設置ポップオーバー
+
+function openChatDeclarationSelectPopover (selector: string | HTMLElement) {
+  state.chatDeclarationSelectPopoverSelector = selector
+  state.chatDeclarationSelectPopoverProps.display = true
+}
+
+function closeChatDeclarationSelectPopover () {
+  state.chatDeclarationSelectPopoverProps.display = false
 }
 
 // ポップオーバー - チャットメッセージポップオーバー

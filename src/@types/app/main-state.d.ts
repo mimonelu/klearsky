@@ -279,6 +279,15 @@ type MainState = {
   openChatConvoPopover: Function
   closeChatConvoPopover: Function
 
+  // ポップオーバー - チャット公開設定ポップオーバー
+  chatDeclarationSelectPopoverProps: {
+    display: boolean
+  }
+  chatDeclarationSelectPopoverSelector?: string | HTMLElement
+  chatDeclarationSelectPopoverCallback?: Function
+  openChatDeclarationSelectPopover: Function
+  closeChatDeclarationSelectPopover: Function
+
   // ポップオーバー - チャットメッセージポップオーバー
   chatMessagePopoverProps: {
     display: boolean

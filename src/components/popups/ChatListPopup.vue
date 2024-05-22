@@ -36,6 +36,22 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
   mainState.openChatConvoPopup(myConvo)
 }
 
+function openChatDeclarationSelectPopover ($event: Event) {
+  Util.blurElement()
+  mainState.chatDeclarationSelectPopoverCallback = chatDeclarationSelectPopoverCallback
+  mainState.openChatDeclarationSelectPopover($event.target)
+}
+
+async function chatDeclarationSelectPopoverCallback (type: TTAllowIncoming) {
+  mainState.loaderDisplay = true
+  if (await mainState.myChat.setDeclaration(type)) {
+    if (mainState.currentProfile?.associated?.chat != null) {
+      mainState.currentProfile.associated.chat.allowIncoming = type
+    }
+  }
+  mainState.loaderDisplay = false
+}
+
 function openChatConvoPopover ($event: Event, myConvo: TIMyConvo) {
   Util.blurElement()
   mainState.chatConvoPopoverProps.myConvo = myConvo
@@ -80,6 +96,19 @@ function isMine (message: TIChatMessage): boolean {
         @click.stop="openChatMembersSelectPopup"
       >
         <SVGIcon name="chatPlus" />
+      </button>
+      <button
+        type="button"
+        class="button--plane chat-list-popup__chat-declaration-select-popover-trigger"
+        @click.stop="openChatDeclarationSelectPopover"
+      >
+        <SVGIcon :name="
+          mainState.currentProfile?.associated?.chat?.allowIncoming === 'all'
+            ? 'people'
+            : mainState.currentProfile?.associated?.chat?.allowIncoming === 'following'
+              ? 'personHeart'
+              : 'personOff'
+        " />
       </button>
       <h2>
         <SVGIcon name="chat" />
@@ -185,8 +214,16 @@ function isMine (message: TIChatMessage): boolean {
     }
   }
 
-  &__create-convo-button {
-    font-size: 1.5rem;
+  &__create-convo-button > .svg-icon {
+    font-size: 1.25rem;
+  }
+
+  &__chat-declaration-select-popover-trigger > .svg-icon {
+    --fg-color: var(--accent-color);
+    font-size: 1.25rem;
+    &.svg-icon--personOff {
+      --fg-color: var(--notice-color);
+    }
   }
 
   &__no-chat {
@@ -313,6 +350,7 @@ function isMine (message: TIChatMessage): boolean {
 
     &__name {
       font-weight: bold;
+      line-height: var(--line-height-low);
       overflow: hidden;
       text-overflow: ellipsis;
     }

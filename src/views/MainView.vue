@@ -7,6 +7,7 @@ import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
 import ChatConvoPopover from "@/components/popovers/ChatConvoPopover.vue"
 import ChatConvoPopup from "@/components/popups/ChatConvoPopup.vue"
+import ChatDeclarationSelectPopover from "@/components/popovers/ChatDeclarationSelectPopover.vue"
 import ChatListPopup from "@/components/popups/ChatListPopup.vue"
 import ChatMembersSelectPopup from "@/components/popups/ChatMembersSelectPopup.vue"
 import ChatMessagePopover from "@/components/popovers/ChatMessagePopover.vue"
@@ -910,6 +911,13 @@ function broadcastListener (event: MessageEvent) {
       v-if="state.chatConvoPopoverProps.display"
       v-bind="state.chatConvoPopoverProps"
       @close="state.closeChatConvoPopover"
+    />
+
+    <!-- チャット公開設定ポップオーバー -->
+    <ChatDeclarationSelectPopover
+      v-if="state.chatDeclarationSelectPopoverProps.display"
+      v-bind="state.chatDeclarationSelectPopoverProps"
+      @close="state.closeChatDeclarationSelectPopover"
     />
 
     <!-- チャットメッセージポップオーバー -->

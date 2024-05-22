@@ -12,18 +12,15 @@ export default class MyChat {
   }
 
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean> {
-    const declarations = await this.mainState.atp.fetchChatDeclarations(this.mainState.atp.data.did, 10)
-    if (declarations instanceof Error) {
-      this.mainState.openErrorPopup(declarations, "MyChat/setDeclaration")
-      return false
-    }
-
     // 古い Declaration を削除
     // TODO:
-    for (const record of declarations.records) {
-      await this.mainState.atp.deleteChatDeclaration(this.mainState.atp.data.did, record.uri)
+    const declarations = await this.mainState.atp.fetchChatDeclarations(this.mainState.atp.data.did, 10)
+    if (!(declarations instanceof Error)) {
+      for (const record of declarations.records) {
+        await this.mainState.atp.deleteChatDeclaration(this.mainState.atp.data.did, record.uri)
+      }
     }
-  
+
     const result = await this.mainState.atp.createChatDeclaration(this.mainState.atp.data.did, allowFollowing)
     if (result instanceof Error) {
       this.mainState.openErrorPopup(result, "MyChat/setDeclaration")
