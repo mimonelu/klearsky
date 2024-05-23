@@ -54,6 +54,7 @@ const easyFormProps: TTEasyForm = {
 
         // TODO: 要修正
         ;(easyForm.value as any)?.forceUpdate()
+        scrollToBottom()
       },
       onBlur (item: TTEasyFormItem) {
         // ラグを挟むことで送信ボタンを押し損ねる事態を防ぐ
@@ -320,7 +321,7 @@ function isMine (message: TIChatMessage): boolean {
   &__form-container {
     display: grid;
     grid-gap: 0.5rem;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto min-content;
     padding: 1rem;
   }
 

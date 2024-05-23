@@ -26,7 +26,10 @@ export default async function (
   const response = await (this.agent as BskyAgent).api.chat.bsky.convo.getMessages(query, options)
     .then((value: ChatBskyConvoGetMessages.Response) => value)
     .catch((error: Error) => error)
-  console.log("[klearsky/api.chat.bsky.convo.getMessages]", response)
+
+  // 定期取得時に邪魔になるためコメントアウト
+  // console.log("[klearsky/api.chat.bsky.convo.getMessages]", response)
+
   if (response instanceof Error) {
     return response
   }

@@ -248,6 +248,7 @@ function unselect (index: number) {
     display: grid;
     grid-gap: 0.5rem;
     grid-template-columns: auto auto auto 1fr;
+    line-height: var(--line-height-middle);
 
     & > .svg-icon--check,
     & > .svg-icon--people {
