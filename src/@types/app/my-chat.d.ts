@@ -2,6 +2,7 @@ interface TIMyChat {
   mainState: MainState
   myConvos: Array<MyConvo>
   unread: number
+  lastCursor?: string
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean>
   async upsertConvo (dids: Array<string>): Promise<undefined | TIMyConvo>
   async updateConvos (limit?: number): Promise<undefined | string>

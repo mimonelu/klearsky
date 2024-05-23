@@ -5,6 +5,8 @@ export default class MyChat {
 
   unread: number
 
+  lastCursor?: string
+
   constructor (mainState: MainState) {
     this.mainState = mainState
     this.myConvos = []

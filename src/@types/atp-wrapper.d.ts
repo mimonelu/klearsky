@@ -42,6 +42,7 @@ interface TIAtpWrapper {
   fetchChatConvo (this: TIAtpWrapper, members: Array<string>): Promise<Error | TIChatConvo>
   fetchChatConvos (this: TIAtpWrapper, limit?: number, cursor?: string): Promise<Error | TIFetchChatConvosResponse>
   fetchChatDeclarations (this: TIAtpWrapper, repo: string, limit?: number, cursor?: string): Promise<Error | TIFetchChatDeclarationsResponse>
+  fetchChatLogs (this: TIAtpWrapper, cursor?: string): Promise<Error | Array<TIChatLog>>
   fetchChatMessages (this: TIAtpWrapper, convoId: string, limit?: number, cursor?: string): Promise<Error | { cursor?: string; messages: Array<TIChatMessage> }>
   fetchCustomFeeds (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, feed: string, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<undefined | string | Error>
   fetchDid (this: TIAtpWrapper, handle: string): Promise<Error | string>
