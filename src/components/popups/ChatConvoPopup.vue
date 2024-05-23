@@ -297,6 +297,10 @@ function isMine (message: TIChatMessage): boolean {
         padding: unset;
       }
     }
+
+    .mention-suggestion-list__suggestion {
+      margin-top: 0.5rem;
+    }
   }
 
   &__messages {
