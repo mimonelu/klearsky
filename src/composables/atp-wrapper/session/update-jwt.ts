@@ -26,8 +26,8 @@ export default async function (
   refreshDate.setTime(refreshJwt.exp * 1000)
   accessDate.setTime(accessJwt.exp * 1000)
   console.log(
-    `[klearsky] refreshJwt will be expired at ${refreshDate.toLocaleString()}\n` +
-    `[klearsky] accessJwt will be expired at ${accessDate.toLocaleString()}`
+    `[klearsky] refreshJwt will be expired at ${refreshDate.toLocaleString()}, ` +
+    `accessJwt will be expired at ${accessDate.toLocaleString()}`
   )
 
   const now = Date.now() / 1000 + 60 * 5

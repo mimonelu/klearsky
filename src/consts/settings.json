@@ -5,11 +5,11 @@
   ],
   "CHAT_FETCH_INTERVAL": [
     { "label": "chatFetchInterval1", "value": 0 },
-    { "label": "chatFetchInterval2", "value": 30000 },
-    { "label": "chatFetchInterval3", "value": 60000 },
-    { "label": "chatFetchInterval4", "value": 180000 },
-    { "label": "chatFetchInterval5", "value": 600000 },
-    { "label": "chatFetchInterval6", "value": 3600000 }
+    { "label": "chatFetchInterval2", "value": 15000 },
+    { "label": "chatFetchInterval3", "value": 30000 },
+    { "label": "chatFetchInterval4", "value": 60000 },
+    { "label": "chatFetchInterval5", "value": 300000 },
+    { "label": "chatFetchInterval6", "value": 600000 }
   ],
   "FONT_SIZES": [
     { "label": "fontSizeSmall", "value": "small" },

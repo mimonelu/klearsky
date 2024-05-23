@@ -363,11 +363,11 @@
 
   "chatFetchInterval": "新着チャットを取得する間隔",
   "chatFetchInterval1": "取得しない",
-  "chatFetchInterval2": "30秒ごと",
-  "chatFetchInterval3": "1分ごと",
-  "chatFetchInterval4": "3分ごと",
-  "chatFetchInterval5": "10分ごと",
-  "chatFetchInterval6": "1時間ごと",
+  "chatFetchInterval2": "15秒ごと",
+  "chatFetchInterval3": "30秒ごと",
+  "chatFetchInterval4": "1分ごと",
+  "chatFetchInterval5": "5分ごと",
+  "chatFetchInterval6": "10分ごと",
 
   "timelineControl": "フォロー中フィードの制御",
   "timelineControlDescription": "次のダウンロードから有効です。",

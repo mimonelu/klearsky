@@ -363,11 +363,11 @@
 
   "chatFetchInterval": "Interval to Fetch Chats",
   "chatFetchInterval1": "OFF",
-  "chatFetchInterval2": "Every 30 sec.",
-  "chatFetchInterval3": "Every 1 min.",
-  "chatFetchInterval4": "Every 3 min.",
-  "chatFetchInterval5": "Every 10 min.",
-  "chatFetchInterval6": "Every hour",
+  "chatFetchInterval2": "Every 15 sec.",
+  "chatFetchInterval3": "Every 30 sec.",
+  "chatFetchInterval4": "Every 1 min.",
+  "chatFetchInterval5": "Every 5 min.",
+  "chatFetchInterval6": "Every 10 min.",
 
   "timelineControl": "Following Feed Control",
   "timelineControlDescription": "Effective from the next download.",
