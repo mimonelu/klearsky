@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onBeforeUnmount, onMounted, reactive, ref } from "vue"
+import { inject, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import ChatPost from "@/components/app-parts/ChatPost.vue"
 import EasyForm from "@/components/form-parts/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -156,7 +156,7 @@ async function updateMessagesOnMounted () {
   }
   // TODO:
   await props.myConvo.updateMessages(100)
-  ;(popup.value as any)?.scrollToBottom("smooth")
+  scrollToBottom()
   await updateRead()
 }
 
@@ -177,7 +177,7 @@ async function updateMessagesOnTick () {
   }
 
   if (diff >= - 8) {
-    ;(popup.value as any)?.scrollToBottom("smooth")
+    scrollToBottom()
   }
   if (numberOfNewMessages >= 1) {
     await updateRead()
@@ -213,7 +213,16 @@ async function submitCallback () {
   }
   // TODO: 一時退避
   // easyFormState.url = ""
-  ;(popup.value as any)?.scrollToBottom("smooth")
+  scrollToBottom()
+}
+
+async function scrollToBottom () {
+  const value = popup.value as any
+  if (value == null) {
+    return
+  }
+  await nextTick()
+  value?.scrollToBottom("smooth")
 }
 
 function isMine (message: TIChatMessage): boolean {
