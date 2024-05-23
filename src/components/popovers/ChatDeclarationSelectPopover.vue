@@ -102,6 +102,16 @@ async function callback (type: TTAllowIncoming) {
     & > .popover__content {
       padding: 0 0.5rem 0.5rem 0.5rem;
     }
+
+    .svg-icon--people {
+      fill: rgb(var(--share-color));
+    }
+    .svg-icon--personHeart {
+      fill: rgb(var(--fg-color));
+    }
+    .svg-icon--personOff {
+      fill: rgb(var(--notice-color));
+    }
   }
 }
 </style>

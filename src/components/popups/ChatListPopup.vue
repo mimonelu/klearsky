@@ -235,8 +235,10 @@ function isMine (message: TIChatMessage): boolean {
   }
 
   &__chat-declaration-select-popover-trigger > .svg-icon {
-    --fg-color: var(--accent-color);
     font-size: 1.25rem;
+    &.svg-icon--people {
+      --fg-color: var(--share-color);
+    }
     &.svg-icon--personOff {
       --fg-color: var(--notice-color);
     }

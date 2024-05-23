@@ -54,7 +54,7 @@ const easyFormProps: TTEasyForm = {
             return
           }
 
-          // ユーザーのソート
+          // なるべく元の順番を保ちつつチャット可能なユーザーが上に来るようにソート
           results.sort((a, b) => {
             const aOk =
               a.associated?.chat?.allowIncoming === "all" ||
@@ -110,6 +110,20 @@ function canChat (user: TTUser): boolean {
   return user.viewer.followedBy != null
 }
 
+function getAllowIncoming (user: TTUser): TTAllowIncoming {
+  return user.associated?.chat?.allowIncoming ?? "following"
+}
+
+const userIcon: { [k in TTAllowIncoming]: string } = {
+  all: "people",
+  following: "personHeart",
+  none: "personOff",
+}
+function getUserIcon (user: TTUser): string {
+  const allowIncoming = getAllowIncoming(user)
+  return userIcon[allowIncoming]
+}
+
 function toggleOrSubmit (user: TTUser) {
   if (props.limit === 1) {
     props.users.push(user)
@@ -163,8 +177,10 @@ function unselect (index: number) {
         >
           <template #content>
             <div class="chat-members-select-popup__user-state">
+              <SVGIcon :name="canChat(user) ? 'check' : 'cross'" />
               <div :data-can-chat="canChat(user)">{{ $t(canChat(user) ? "chatOk" : "chatNo") }}</div>
-              <div :data-allow-incoming="user.associated?.chat?.allowIncoming ?? 'following'">{{ $t(`allow-incoming-${user.associated?.chat?.allowIncoming ?? "following"}`) }}</div>
+              <SVGIcon :name="getUserIcon(user)" />
+              <div :data-allow-incoming="getAllowIncoming(user)">{{ $t(`allow-incoming-${getAllowIncoming(user)}`) }}</div>
             </div>
           </template>
         </UserBox>
@@ -231,7 +247,21 @@ function unselect (index: number) {
   &__user-state {
     display: grid;
     grid-gap: 0.5rem;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto auto 1fr;
+
+    & > .svg-icon--check,
+    & > .svg-icon--people {
+      fill: rgb(var(--share-color));
+    }
+    & > .svg-icon--cross {
+      fill: var(--fg-color-025);
+    }
+    & > .svg-icon--personHeart {
+      fill: rgb(var(--fg-color));
+    }
+    & > .svg-icon--personOff {
+      fill: rgb(var(--notice-color));
+    }
 
     [data-can-chat="true"] {
       color: rgb(var(--share-color));
