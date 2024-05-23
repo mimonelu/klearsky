@@ -93,6 +93,13 @@ async function chatMessagePopoverCallback (type: string) {
 
 <style lang="scss" scoped>
 .chat-post {
+  --chat-post-bg-color: var(--fg-color-0125);
+  &[data-is-mine="true"] {
+    --chat-post-bg-color: var(--accent-color-025);
+  }
+  &[data-is-mine="false"] {
+    --chat-post-bg-color: var(--fg-color-0125);
+  }
   &:deep(.post__content) {
     position: relative;
     width: fit-content;
@@ -100,21 +107,15 @@ async function chatMessagePopoverCallback (type: string) {
   &[data-is-message-empty="true"]:deep(.post__content) {
     display: none;
   }
-  &[data-is-mine="true"]:deep(.post__content) {
-    background-color: var(--accent-color-025);
-  }
-  &[data-is-mine="false"]:deep(.post__content) {
-    background-color: var(--fg-color-0125);
-  }
 
     // チャット一覧用
   &[data-is-last-message="true"] {
+    background-color: var(--chat-post-bg-color);
     pointer-events: none;
 
     &:deep() {
       .post__content {
         border-radius: var(--border-radius-middle);
-        padding: 0.5em;
         max-width: 100%;
       }
 
@@ -137,6 +138,7 @@ async function chatMessagePopoverCallback (type: string) {
       }
     }
     &:deep(.post__content) {
+      background-color: var(--chat-post-bg-color);
       padding: 1em;
     }
     &[data-is-mine="true"]:deep(.post__content) {
