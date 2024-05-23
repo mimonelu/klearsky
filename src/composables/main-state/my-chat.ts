@@ -38,29 +38,28 @@ export default class MyChat {
     return this.updateMyConvo(convo, "unshift")
   }
 
-  async updateConvos (limit?: number): Promise<boolean> {
-    const convos = await this.mainState.atp.fetchChatConvos(limit)
-    if (convos instanceof Error) {
-      // TODO:
-      return false
+  async updateConvos (limit?: number): Promise<undefined | string> {
+    const result = await this.mainState.atp.fetchChatConvos(limit)
+    if (result instanceof Error) {
+      // エラーメッセージは表示しない
+      return
     }
-    convos.convos.forEach((convo) => {
+    result.convos.forEach((convo) => {
       this.updateMyConvo(convo, "push")
     })
     this.sortMyConvos()
     this.updateUnread()
-    return true
+    return result.cursor
   }
 
   async updateConvosAll (): Promise<boolean> {
     let cursor: undefined | string
-    // TODO:
-    for (let i = 0; i < 10; i ++) {
-      // TODO:
-      const result = await this.mainState.atp.fetchChatConvos(25, cursor)
+    // 実際には全件ではなく 50 * 20 = 1000 件まで取得する
+    for (let i = 0; i < 20; i ++) {
+      const result = await this.mainState.atp.fetchChatConvos(undefined, cursor)
       if (result instanceof Error) {
-        // TODO:
-        continue
+        // 途中でエラーが発生したら終了。エラーメッセージは表示しない
+        return false
       }
       result.convos.forEach((convo) => {
         this.updateMyConvo(convo, "push")

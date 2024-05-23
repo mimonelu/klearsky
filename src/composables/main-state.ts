@@ -116,26 +116,11 @@ state.currentLabeler = undefined
 
 // チャット
 state.myChat = new MyChat(state)
+
+// 新着チャットタイマー
 state.chatListTimer = undefined
-state.endChatListTimer = function () {
-  if (state.chatListTimer != null) {
-    clearInterval(state.chatListTimer)
-    state.chatListTimer = undefined
-  }
-}
-state.startChatListTimer = function () {
-  state.endChatListTimer()
-  if (!state.currentSetting?.chatFetchInterval) {
-    return
-  }
-  state.chatListTimer = setInterval(async () => {
-    if (!state.currentSetting?.chatFetchInterval) {
-      return
-    }
-    await state.myChat.updateConvosAll()
-    state.updatePageTitle()
-  }, state.currentSetting?.chatFetchInterval ?? 60000)
-}
+state.endChatListTimer = endChatListTimer
+state.startChatListTimer = startChatListTimer
 
 // ミュートユーザー
 state.currentMutingUsers = []
@@ -1002,6 +987,38 @@ function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
     return label.src !== CONSTS.OFFICIAL_LABELER_DID &&
            !label.ver
   }) ?? []
+}
+
+// 新着チャットタイマー
+
+function endChatListTimer () {
+  if (state.chatListTimer != null) {
+    clearInterval(state.chatListTimer)
+    state.chatListTimer = undefined
+  }
+}
+
+function startChatListTimer () {
+  state.endChatListTimer()
+  if (!state.currentSetting?.chatFetchInterval) {
+    return
+  }
+
+  // 通常は convo を1件のみ取得し、 cursor に差異があれば全件取得する
+  let prevCursor: undefined | string = "UNUSED_CURSOR"
+  state.chatListTimer = setInterval(async () => {
+    if (!state.currentSetting?.chatFetchInterval) {
+      return
+    }
+    const currentCursor = await state.myChat.updateConvos(1)
+    if (prevCursor !== "UNUSED_CURSOR" &&
+        prevCursor !== currentCursor
+    ) {
+      await state.myChat.updateConvosAll()
+    }
+    prevCursor = currentCursor
+    state.updatePageTitle()
+  }, state.currentSetting?.chatFetchInterval ?? 60000)
 }
 
 // プロフィール

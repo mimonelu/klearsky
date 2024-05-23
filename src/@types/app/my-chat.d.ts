@@ -4,7 +4,7 @@ interface TIMyChat {
   unread: number
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean>
   async upsertConvo (dids: Array<string>): Promise<undefined | TIMyConvo>
-  async updateConvos (limit?: number): Promise<boolean>
+  async updateConvos (limit?: number): Promise<undefined | string>
   async updateConvosAll (): Promise<boolean>
   sortMyConvos(): void
   updateUnread(): void

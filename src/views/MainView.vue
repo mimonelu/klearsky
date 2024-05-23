@@ -334,7 +334,7 @@ async function processAfterLogin () {
     })
   }
 
-  // チャット一覧の更新
+  // チャット一覧の更新とチャットタイマーの起動
   state.myChat.updateConvosAll()
   state.startChatListTimer()
 

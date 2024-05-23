@@ -156,12 +156,6 @@ function isMine (message: TIChatMessage): boolean {
             <SVGIcon name="chat" />
             <span>{{ myConvo.data?.unreadCount }}</span>
           </div>
-          <div
-            v-if="myConvo.data?.muted"
-            class="convo-card__muting"
-          >
-            <SVGIcon name="volumeOff" />
-          </div>
           <div class="convo-card__avatars">
             <template v-for="member of myConvo.data?.members">
               <AvatarLink
@@ -173,6 +167,12 @@ function isMine (message: TIChatMessage): boolean {
                 @click.stop="close"
               />
             </template>
+          </div>
+          <div
+            v-if="myConvo.data?.muted"
+            class="convo-card__muting"
+          >
+            <SVGIcon name="volumeOff" />
           </div>
           <div class="convo-card__middle">
             <div class="convo-card__user-list">
@@ -313,7 +313,6 @@ function isMine (message: TIChatMessage): boolean {
     position: absolute;
     left: 1rem;
     top: 1rem;
-    z-index: 1;
     width: 3rem;
     height: 3rem;
 
