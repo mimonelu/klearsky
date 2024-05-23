@@ -207,6 +207,7 @@ async function submitCallback () {
     urlHasImage: easyFormState.urlHasImage,
     images: easyFormState.images,
     */
+    lightning: mainState.currentSetting.lightning,
   })) {
     easyFormState.text = text
     return
