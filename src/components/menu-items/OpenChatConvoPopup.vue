@@ -12,10 +12,13 @@ const mainState = inject("state") as MainState
 
 const allowIncoming = props.user.associated?.chat?.allowIncoming
 const isDisabled =
-  (allowIncoming === "none") ||
+  props.user.did === mainState.atp.data.did ||
   (
-    (allowIncoming == null || allowIncoming === "following") &&
-    (props.user.viewer.followedBy == null)
+    (allowIncoming === "none") ||
+    (
+      (allowIncoming == null || allowIncoming === "following") &&
+      (props.user.viewer.followedBy == null)
+    )
   )
 
 async function onActivate () {

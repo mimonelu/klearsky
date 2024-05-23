@@ -321,7 +321,7 @@ function isMine (message: TIChatMessage): boolean {
   &__form-container {
     display: grid;
     grid-gap: 0.5rem;
-    grid-template-columns: auto min-content;
+    grid-template-columns: 1fr auto;
     padding: 1rem;
   }
 
