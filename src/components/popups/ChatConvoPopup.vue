@@ -147,7 +147,7 @@ function updateTimer () {
   timer = setTimeout(async () => {
     await updateMessagesOnTick()
     updateTimer()
-  }, 10000)
+  }, 5000)
 }
 
 async function updateMessagesOnMounted () {
