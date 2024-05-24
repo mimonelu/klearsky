@@ -44,7 +44,7 @@ function close () {
   emit("close")
 }
 
-async function callback (type: "muteConvo" | "unmuteConvo" | "leaveConvo") {
+async function callback (type: "unreadConvo" | "muteConvo" | "unmuteConvo" | "leaveConvo") {
   Util.blurElement()
   close()
   if (mainState.chatConvoPopoverCallback != null) {
@@ -63,6 +63,15 @@ async function callback (type: "muteConvo" | "unmuteConvo" | "leaveConvo") {
       v-if="myConvo != null"
       class="list-menu"
     >
+      <!-- チャットルームの既読化 -->
+      <button
+        :disabled="(myConvo?.data?.unreadCount ?? 0) === 0"
+        @click.stop="callback('unreadConvo')"
+      >
+        <SVGIcon name="check" />
+        <span>{{ $t("unreadChatConvo") }}</span>
+      </button>
+
       <!-- チャットルームのミュート -->
       <button
         v-if="!myConvo?.data?.muted"

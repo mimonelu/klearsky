@@ -96,6 +96,7 @@
   "allow-incoming-all": "Everyone Ok",
   "allow-incoming-none": "Everyone No",
   "allow-incoming-following": "Only following",
+  "unreadChatConvo": "Unread",
   "muteChatConvo": "Mute",
   "unmuteChatConvo": "Unmute",
   "leaveChatConvo": "Leave",

@@ -117,6 +117,7 @@ export default class MyChat {
         this.unread += myConvo.data?.unreadCount ?? 0
       }
     })
+    this.mainState.updatePageTitle()
   }
 }
 

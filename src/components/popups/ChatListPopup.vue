@@ -71,6 +71,12 @@ function openChatConvoPopover ($event: Event, myConvo: TIMyConvo) {
 
 async function chatConvoPopoverCallback (type: string) {
   switch (type) {
+    case "unreadConvo": {
+      mainState.loaderDisplay = true
+      await mainState.chatConvoPopoverProps.myConvo?.updateRead()
+      mainState.loaderDisplay = false
+      break
+    }
     case "muteConvo": {
       mainState.loaderDisplay = true
       await mainState.chatConvoPopoverProps.myConvo?.mute()

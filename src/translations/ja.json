@@ -96,6 +96,7 @@
   "allow-incoming-all": "全員可",
   "allow-incoming-none": "全員不可",
   "allow-incoming-following": "フォロー中のみ",
+  "unreadChatConvo": "既読にする",
   "muteChatConvo": "ミュートする",
   "unmuteChatConvo": "ミュートを解除する",
   "leaveChatConvo": "退室する",
