@@ -33,7 +33,7 @@ async function openChatMembersSelectPopup () {
   }
   const dids = mainState.chatMembersSelectPopupProps.users.map((user) => user.did)
   mainState.loaderDisplay = true
-  const myConvo = await mainState.myChat.upsertConvo(dids)
+  const myConvo = await mainState.myChat.fetchMyConvo(dids)
   mainState.loaderDisplay = false
   if (myConvo == null) {
     return

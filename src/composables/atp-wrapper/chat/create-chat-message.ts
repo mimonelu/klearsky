@@ -13,7 +13,6 @@ export default async function (
   if (this.session == null) {
     return Error("noSessionError")
   }
-  const headers = { "atproto-proxy": "did:web:api.bsky.chat#bsky_chat" }
   const message: ChatBskyConvoDefs.MessageInput = { text: params.text ?? "" }
 
   // Zapリンク
@@ -65,5 +64,5 @@ export default async function (
   if (response instanceof Error) {
     return response
   }
-  return response.data
+  return response.data as TIChatMessage
 }

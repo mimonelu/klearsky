@@ -34,7 +34,7 @@ const state = reactive<{
         createdAt: message.sentAt,
         embed: message.embed,
         facets: message.facets,
-        text: message.text,
+        text: message.text ?? "",
       },
       likeCount: 0,
       replyCount: 0,

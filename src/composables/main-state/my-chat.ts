@@ -17,6 +17,8 @@ export default class MyChat {
   }
 
   async updateDisabled (): Promise<void> {
+    // 引数なしで getLog() をコールし、失敗すればチャットを利用できない環境とみなしている
+    // TODO: AppPasswords にチャット権限がない、もしくは非公式 PDS であるかどうかで判定すること
     const chatLogs = await this.mainState.atp.fetchChatLogs()
     this.disabled = chatLogs instanceof Error
   }
@@ -52,17 +54,18 @@ export default class MyChat {
         return false
       }
     }
-
     return true
   }
 
-  async upsertConvo (dids: Array<string>): Promise<undefined | TIMyConvo> {
+  async fetchMyConvo (dids: Array<string>): Promise<undefined | TIMyConvo> {
     const convo = await this.mainState.atp.fetchChatConvo(dids)
     if (convo instanceof Error) {
       if ((convo as any).error === "InvalidToken") {
-        this.mainState.openErrorPopup("errorInvalidChatToken", "MyChat/upsertConvo")
+        // AppPasswords にチャット権限がない場合は専用メッセージを表示
+        this.mainState.openErrorPopup("errorInvalidChatToken", "MyChat/fetchMyConvo")
       } else {
-        this.mainState.openErrorPopup(convo, "MyChat/upsertConvo")
+        // 上記以外のエラーは通常通り表示
+        this.mainState.openErrorPopup(convo, "MyChat/fetchMyConvo")
       }
       return
     }
@@ -95,7 +98,9 @@ export default class MyChat {
       result.convos.forEach((convo) => {
         this.updateMyConvo(convo, "push")
       })
-      if (result.cursor == null || result.convos.length === 0) {
+      if (result.cursor == null ||
+          result.convos.length === 0
+      ) {
         break
       }
       cursor = result.cursor
@@ -127,10 +132,10 @@ export default class MyChat {
       return aDate < bDate ? 1 : aDate > bDate ? - 1 : 0
     })
 
-    // ミュートチャットを未読チャットの下に移動
+    // ミュートチャットを最下段へ移動
     this.myConvos.sort((a, b) => {
-      const aScore = ((a.data?.unreadCount ?? 0) > 0 ? 1 : 0) + ((a.data?.muted ?? false) ? 0 : 1)
-      const bScore = ((b.data?.unreadCount ?? 0) > 0 ? 1 : 0) + ((b.data?.muted ?? false) ? 0 : 1)
+      const aScore = (a.data?.muted ?? false) ? 0 : 1
+      const bScore = (b.data?.muted ?? false) ? 0 : 1
       return aScore < bScore ? 1 : aScore > bScore ? - 1 : 0
     })
   }
@@ -182,10 +187,8 @@ class MyConvo {
     }
     this.messages.push(message)
     this.sortMessages()
-
     this.data.lastMessage = message
     this.mainState.myChat.sortMyConvos()
-
     return true
   }
 
@@ -232,6 +235,10 @@ class MyConvo {
     if (index !== - 1) {
       this.messages.splice(index, 1)
     }
+    if (this.data?.lastMessage != null) {
+      delete this.data.lastMessage.text
+    }
+    this.mainState.myChat.sortMyConvos()
     return true
   }
 
@@ -258,10 +265,13 @@ class MyConvo {
       this.mainState.openErrorPopup(result, "MyChat/mute")
       return false
     }
-    const myConvo = this.mainState.myChat.myConvos.find((myConvo) => myConvo.data?.id === this.data?.id)
+    const myConvo = this.mainState.myChat.myConvos.find((myConvo) => {
+      return myConvo.data?.id === this.data?.id
+    })
     if (myConvo.data != null) {
       myConvo.data.muted = true
     }
+    this.mainState.myChat.sortMyConvos()
     return true
   }
 
@@ -274,10 +284,13 @@ class MyConvo {
       this.mainState.openErrorPopup(result, "MyChat/unmute")
       return false
     }
-    const myConvo = this.mainState.myChat.myConvos.find((myConvo) => myConvo.data?.id === this.data?.id)
+    const myConvo = this.mainState.myChat.myConvos.find((myConvo) => {
+      return myConvo.data?.id === this.data?.id
+    })
     if (myConvo.data != null) {
       myConvo.data.muted = false
     }
+    this.mainState.myChat.sortMyConvos()
     return true
   }
 
@@ -290,7 +303,9 @@ class MyConvo {
       this.mainState.openErrorPopup(result, "MyChat/leave")
       return false
     }
-    const index = this.mainState.myChat.myConvos.findIndex((myConvo) => myConvo.data?.id === this.data?.id)
+    const index = this.mainState.myChat.myConvos.findIndex((myConvo) => {
+      return myConvo.data?.id === this.data?.id
+    })
     if (index !== - 1) {
       this.mainState.myChat.myConvos.splice(index, 1)
     }

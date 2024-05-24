@@ -435,9 +435,10 @@ interface TIChatConvo {
 }
 
 interface TIChatMessage {
+  $type: string
   id: string
   rev: string
-  text: string
+  text?: string
   facets?: any
   embed?: any
   sender: { did: string }
