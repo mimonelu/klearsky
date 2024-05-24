@@ -21,21 +21,38 @@ export default class MyChat {
     this.disabled = chatLogs instanceof Error
   }
 
-  async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean> {
-    // 古い Declaration を削除
-    // TODO:
-    const declarations = await this.mainState.atp.fetchChatDeclarations(this.mainState.atp.data.did, 3)
-    if (!(declarations instanceof Error)) {
-      for (const record of declarations.records) {
-        await this.mainState.atp.deleteChatDeclaration(this.mainState.atp.data.did, record.uri)
+  async setDeclaration (allowIncoming: TTAllowIncoming): Promise<boolean> {
+    const declarations = await this.mainState.atp.fetchChatDeclarations(this.mainState.atp.data.did, 1)
+    if (declarations instanceof Error || declarations.records.length === 0) {
+      // 作成
+      const result = await this.mainState.atp.createChatDeclaration(
+        this.mainState.atp.data.did,
+        allowIncoming
+      )
+      if (result instanceof Error) {
+        this.mainState.openErrorPopup(result, "MyChat/setDeclaration")
+        return false
+      }
+    } else {
+      // 更新
+      const uri = declarations.records[0].uri
+
+      // BskyAgent に更新用のメソッドがないため、直接レコードを更新している
+      const result = await this.mainState.atp.updateRecord(
+        this.mainState.atp.data.did,
+        "chat.bsky.actor.declaration",
+        uri,
+        {
+          "$type": "chat.bsky.actor.declaration",
+          allowIncoming,
+        }
+      )
+      if (result instanceof Error) {
+        this.mainState.openErrorPopup(result, "MyChat/setDeclaration")
+        return false
       }
     }
 
-    const result = await this.mainState.atp.createChatDeclaration(this.mainState.atp.data.did, allowFollowing)
-    if (result instanceof Error) {
-      this.mainState.openErrorPopup(result, "MyChat/setDeclaration")
-      return false
-    }
     return true
   }
 
