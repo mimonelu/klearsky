@@ -953,7 +953,9 @@ async function updateNotifications () {
 
 async function fetchPreferences (): Promise<boolean> {
   const preferences = await state.atp.fetchPreferences()
-  if (preferences == null) return false
+  if (preferences == null) {
+    return false
+  }
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
   return true
 }
@@ -1075,7 +1077,7 @@ async function fetchUserProfile () {
   }
 
   // 固定ポストのインポート
-  await fetchPinnedPost(state.userProfile)
+  fetchPinnedPost(state.userProfile)
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {

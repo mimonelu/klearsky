@@ -306,7 +306,7 @@ async function processAfterLogin () {
   }
 
   // ラベラーの取得
-  state.myLabeler.updateMyLabelers()
+  await state.myLabeler.updateMyLabelers()
     .then(() => {
       // ラベラーのHTTPヘッダーを設定
       state.myLabeler.setAtprotoAcceptLabelers()
@@ -336,19 +336,25 @@ async function processAfterLogin () {
   }
 
   // チャットの利用可否を更新
-  await state.myChat.updateDisabled()
+  state.myChat.updateDisabled()
+    .then(() => {
+      if (state.myChat.disabled) {
+        return
+      }
 
-  // チャット一覧の更新とチャットタイマーの起動
-  if (!state.myChat.disabled) {
-    state.myChat.updateConvosAll()
-      .then((result) => {
-        if (!result) {
-          return
-        }
-        state.updatePageTitle()
-        state.startChatListTimer()
-      })
-  }
+      // チャット一覧の更新
+      state.myChat.updateConvosAll()
+        .then((result) => {
+          if (!result) {
+            return
+          }
+
+          // チャットタイマーの起動
+          state.startChatListTimer()
+
+          state.updatePageTitle()
+        })
+    })
 
   // 招待コードの取得
   if (state.inviteCodes.length === 0) {
@@ -360,9 +366,7 @@ async function processAfterLogin () {
       })
   }
 
-  state.saveSettings()
-  state.updateSettings()
-
+  changeSetting()
   if (router.currentRoute.value.name === "home") {
     await moveToDefaultHome()
     return
