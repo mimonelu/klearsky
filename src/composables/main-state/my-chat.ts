@@ -103,10 +103,18 @@ export default class MyChat {
   }
 
   sortMyConvos () {
+    // lastMessage の日時でソート
     this.myConvos.sort((a, b) => {
       const aDate = new Date(a.data?.lastMessage?.sentAt ?? 0)
       const bDate = new Date(b.data?.lastMessage?.sentAt ?? 0)
       return aDate < bDate ? 1 : aDate > bDate ? - 1 : 0
+    })
+
+    // ミュートチャットを未読チャットの下に移動
+    this.myConvos.sort((a, b) => {
+      const aScore = ((a.data?.unreadCount ?? 0) > 0 ? 1 : 0) + ((a.data?.muted ?? false) ? 0 : 1)
+      const bScore = ((b.data?.unreadCount ?? 0) > 0 ? 1 : 0) + ((b.data?.muted ?? false) ? 0 : 1)
+      return aScore < bScore ? 1 : aScore > bScore ? - 1 : 0
     })
   }
 
