@@ -1,4 +1,7 @@
+import type { BskyAgent } from "@atproto/api"
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
+import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
+import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
 import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob-ref"
 import createFollow from "@/composables/atp-wrapper/create/create-follow"
 import createLike from "@/composables/atp-wrapper/create/create-like"
@@ -9,6 +12,8 @@ import createRecord from "@/composables/atp-wrapper/create/create-record"
 import createReport from "@/composables/atp-wrapper/create/create-report"
 import createRepost from "@/composables/atp-wrapper/create/create-repost"
 import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
+import deleteChatDeclaration from "@/composables/atp-wrapper/chat/delete-chat-declaration"
+import deleteChatMessage from "@/composables/atp-wrapper/chat/delete-chat-message"
 import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
 import deleteList from "@/composables/atp-wrapper/delete/delete-list"
@@ -27,6 +32,11 @@ import fetchAuthorReposts from "@/composables/atp-wrapper/fetch/fetch-author-rep
 import fetchBlob from "@/composables/atp-wrapper/fetch/fetch-blob"
 import fetchBlobUrl from "@/composables/atp-wrapper/fetch/fetch-blob-url"
 import fetchBlockingUsers from "@/composables/atp-wrapper/fetch/fetch-blocking-users"
+import fetchChatConvo from "@/composables/atp-wrapper/chat/fetch-chat-convo"
+import fetchChatConvos from "@/composables/atp-wrapper/chat/fetch-chat-convos"
+import fetchChatDeclarations from "@/composables/atp-wrapper/chat/fetch-chat-declarations"
+import fetchChatLogs from "@/composables/atp-wrapper/chat/fetch-chat-logs"
+import fetchChatMessages from "@/composables/atp-wrapper/chat/fetch-chat-messages"
 import fetchCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-custom-feeds"
 import fetchDid from "@/composables/atp-wrapper/fetch/fetch-did"
 import fetchFeedGenerator from "@/composables/atp-wrapper/fetch/fetch-feed-generator"
@@ -69,14 +79,18 @@ import fetchTimeFeeds from "@/composables/atp-wrapper/fetch/fetch-time-feeds"
 import fetchTimeline from "@/composables/atp-wrapper/fetch/fetch-timeline"
 import fetchUserSearch from "@/composables/atp-wrapper/fetch/fetch-user-search"
 import fetchWithoutAgent from "@/composables/atp-wrapper/fetch/fetch-without-agent"
+import leaveChatConvo from "@/composables/atp-wrapper/chat/leave-chat-convo"
 import login from "@/composables/atp-wrapper/session/login"
 import logout from "@/composables/atp-wrapper/session/logout"
+import muteChatConvo from "@/composables/atp-wrapper/chat/mute-chat-convo"
 import refreshSession from "@/composables/atp-wrapper/session/refresh-session"
 import resetSession from "@/composables/atp-wrapper/session/reset-session"
 import resumeSession from "@/composables/atp-wrapper/session/resume-session"
 import signUp from "@/composables/atp-wrapper/session/sign-up"
+import unmuteChatConvo from "@/composables/atp-wrapper/chat/unmute-chat-convo"
 import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
+import updateChatConvoRead from "@/composables/atp-wrapper/chat/update-chat-convo-read"
 import updateJwt from "@/composables/atp-wrapper/session/update-jwt"
 import updateList from "@/composables/atp-wrapper/update/update-list"
 import updateListBlockToDisable from "@/composables/atp-wrapper/update/update-list-block-to-disable"
@@ -95,14 +109,22 @@ import Util from "@/composables/util"
 
 // @ts-ignore
 class AtpWrapper implements TIAtpWrapper {
-  agent: null | any
-  data: any
+  agent: null | BskyAgent
+
+  proxies: { [k: string]: undefined | string }
+
+  data: { did: string; sessions: { [did: string]: TTSession } }
+
   session?: TTSession
+
   lastFetchNotificationsDate?: Date
 
   // @ts-ignore
   constructor (this: TIAtpWrapper) {
     this.agent = null
+    this.proxies = {
+      chat: "did:web:api.bsky.chat#bsky_chat",
+    }
     this.data = Util.loadStorage("atp") ?? {
       did: "",
       sessions: {},
@@ -127,6 +149,8 @@ class AtpWrapper implements TIAtpWrapper {
     return this.data.sessions[this.data.did] != null
   }
   createAgent = createAgent
+  createChatDeclaration = createChatDeclaration
+  createChatMessage = createChatMessage
   createFileBlobRef = createFileBlobRef
   createFollow = createFollow
   createLike = createLike
@@ -137,6 +161,8 @@ class AtpWrapper implements TIAtpWrapper {
   createReport = createReport
   createRepost = createRepost
   deleteAccount = deleteAccount
+  deleteChatDeclaration = deleteChatDeclaration
+  deleteChatMessage = deleteChatMessage
   deleteFollow = deleteFollow
   deleteLike = deleteLike
   deleteList = deleteList
@@ -155,6 +181,11 @@ class AtpWrapper implements TIAtpWrapper {
   fetchBlob = fetchBlob
   fetchBlobUrl = fetchBlobUrl
   fetchBlockingUsers = fetchBlockingUsers
+  fetchChatConvo = fetchChatConvo
+  fetchChatConvos = fetchChatConvos
+  fetchChatDeclarations = fetchChatDeclarations
+  fetchChatLogs = fetchChatLogs
+  fetchChatMessages = fetchChatMessages
   fetchCustomFeeds = fetchCustomFeeds
   fetchDid = fetchDid
   fetchFeedGenerator = fetchFeedGenerator
@@ -200,8 +231,10 @@ class AtpWrapper implements TIAtpWrapper {
   hasLogin (this: TIAtpWrapper): boolean {
     return this.session != null
   }
+  leaveChatConvo = leaveChatConvo
   login = login
   logout = logout
+  muteChatConvo = muteChatConvo
   refreshSession = refreshSession
   resetSession = resetSession
   resumeSession = resumeSession
@@ -209,8 +242,10 @@ class AtpWrapper implements TIAtpWrapper {
     Util.saveStorage("atp", this.data)
   }
   signUp = signUp
+  unmuteChatConvo = unmuteChatConvo
   updateBlockToDisable = updateBlockToDisable
   updateBlockToEnable = updateBlockToEnable
+  updateChatConvoRead = updateChatConvoRead
   updateJwt = updateJwt
   updateList = updateList
   updateListBlockToDisable = updateListBlockToDisable

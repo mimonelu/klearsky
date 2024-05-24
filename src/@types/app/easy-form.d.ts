@@ -21,7 +21,7 @@ type TTEasyFormItem = {
   display?: boolean
   focus?: boolean
   footnote?: string
-  hasAccountSuggestion?: boolean
+  hasMentionSuggestion?: boolean
   icon?: string
   index?: number // ボタンのコールバック用
   inputmode?: "text" | "url" | "none" | "tel" | "email" | "numeric" | "decimal" | "search" | undefined
@@ -41,8 +41,10 @@ type TTEasyFormItem = {
   required?: boolean
   rows?: number
   state?: any
+  onBlur?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onChange?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onClick?: (item: TTEasyFormItem, form: TTEasyForm) => void
+  onFocus?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onInput?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onUpdate?: (item: TTEasyFormItem, form: TTEasyForm) => void
 }

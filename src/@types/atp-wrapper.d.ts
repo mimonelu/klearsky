@@ -1,5 +1,6 @@
 interface TIAtpWrapper {
   agent: null | BskyAgent
+  proxies: { [k: string]: undefined | string }
   data: { did: string; sessions: { [did: string]: TTSession } }
   session?: TTSession
   lastFetchNotificationsDate?: Date
@@ -7,6 +8,8 @@ interface TIAtpWrapper {
   // Prototype methods
   canLogin (this: TIAtpWrapper): boolean
   createAgent (this: TIAtpWrapper, service?: string): boolean
+  createChatDeclaration (this: TIAtpWrapper, repo: string, allowIncoming: TTAllowIncoming): Promise<Error | TTCidUri>
+  createChatMessage (this: TIAtpWrapper, convoId: string, params: TTCreatePostParams): Promise<Error | TIChatMessage>
   createFileBlobRef (this: TIAtpWrapper, params: TTCreateFileBlobRefParams): Promise<null | BlobRef>
   createFollow (this: TIAtpWrapper, declarationDid: string): Promise<null | string>
   createLike (this: TIAtpWrapper, uri: string, cid: string): Promise<undefined | string>
@@ -17,6 +20,8 @@ interface TIAtpWrapper {
   createReport (this: TIAtpWrapper, reasonType: string, reason: string, did?: string, cid?: string, uri?: string, type?: string): Promise<boolean>
   createRepost (this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   deleteAccount (this: TIAtpWrapper, did?: string)
+  deleteChatDeclaration (this: TIAtpWrapper, repo: string, uri: string): Promise<Error | void>
+  deleteChatMessage (this: TIAtpWrapper, convoId: string, messageId: string): Promise<Error | boolean>
   deleteFollow (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteLike (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteList (this: TIAtpWrapper, listUri: string): Promise<true | Error>
@@ -34,6 +39,11 @@ interface TIAtpWrapper {
   fetchBlob (this: TIAtpWrapper, cid: string, did?: string): Promise<null | Blob>
   fetchBlobUrl (this: TIAtpWrapper, did: string, image: BlobRef): Promise<undefined | string>
   fetchBlockingUsers (this: TIAtpWrapper, users: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
+  fetchChatConvo (this: TIAtpWrapper, members: Array<string>): Promise<Error | TIChatConvo>
+  fetchChatConvos (this: TIAtpWrapper, limit?: number, cursor?: string): Promise<Error | TIFetchChatConvosResponse>
+  fetchChatDeclarations (this: TIAtpWrapper, repo: string, limit?: number, cursor?: string): Promise<Error | TIFetchChatDeclarationsResponse>
+  fetchChatLogs (this: TIAtpWrapper, cursor?: string): Promise<Error | Array<TIChatLog>>
+  fetchChatMessages (this: TIAtpWrapper, convoId: string, limit?: number, cursor?: string): Promise<Error | { cursor?: string; messages: Array<TIChatMessage> }>
   fetchCustomFeeds (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, feed: string, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<undefined | string | Error>
   fetchDid (this: TIAtpWrapper, handle: string): Promise<Error | string>
   fetchFeedGenerator (this: TIAtpWrapper, feed: string): Promise<Error | TTFeedGenerator>
@@ -44,7 +54,7 @@ interface TIAtpWrapper {
   fetchSuggestedFollows (this: TIAtpWrapper, users: Array<TTUser> | Array<TTUser>, actor: string): Promise<Error | undefined>
   fetchInviteCodes (this: TIAtpWrapper): Promise<Error | TTInviteCode[]>
   fetchLabelers (this: TIAtpWrapper, dids: string[], detailed?: boolean): Promise<Error | Array<TILabeler>>
-  fetchLabels (this: TIAtpWrapper, since?: number, limit?: number ): Promise<Error | Array<TTLabel>>
+  fetchLabels (this: TIAtpWrapper, since?: number, limit?: number): Promise<Error | Array<TTLabel>>
   fetchLikeUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchList (this: TIAtpWrapper, list: string): Promise<TTList | Error>
   fetchListBlocks (this: TIAtpWrapper, lists: Array<TTList>, limit?: number, cursor?: string): Promise<undefined | string | Error>
@@ -67,7 +77,7 @@ interface TIAtpWrapper {
   fetchProfile (this: TIAtpWrapper, actor: string): Promise<Error | TTProfile>
   fetchProfiles (this: TIAtpWrapper, actors: string[]): Promise<Error | TTProfile[]>
   fetchRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, cid?: string): Promise<Error | { uri: string; cid?: string; value: {} }>
-  fetchRecords (this: TIAtpWrapper, repo: string, collection: string, limit?: number, cursor?: string, reverse?: boolean ): Promise<Error | { cursor?: string; records: TICommonRecord[] }>
+  fetchRecords (this: TIAtpWrapper, repo: string, collection: string, limit?: number, cursor?: string, reverse?: boolean): Promise<Error | { cursor?: string; records: TICommonRecord[] }>
   fetchRepo (this: TIAtpWrapper, repo: string): Promise<Error | {}>
   fetchRepostUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchServerInfo (this: TIAtpWrapper): Promise<Error | TTServerInfo>
@@ -76,17 +86,21 @@ interface TIAtpWrapper {
   fetchTimeFeeds (this: TIAtpWrapper, oldPosts: Array<TTPost>, direction: "new" | "old", author: TTUser, limit?: number): Promise<Error | undefined | string>
   fetchTimeline (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection): Promise<undefined | false | string>
   fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<undefined | string>
-  fetchWithoutAgent (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, string>): Promise<Error | Response>
+  fetchWithoutAgent (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, any>, server?: string): Promise<Error | Response>
   hasLogin (this: TIAtpWrapper): boolean
+  leaveChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
   login (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, authFactorToken?: string, onRefreshSession?: () => void): Promise<undefined | Error>
   logout (this: TIAtpWrapper)
+  muteChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
   refreshSession (this: TIAtpWrapper): Promise<undefined | Error>
   resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): void
-  resumeSession (this: TIAtpWrapper, session: TTSession): Promise<undefined | Error>
+  resumeSession (this: TIAtpWrapper, session: TTSession): Promise<Error | ComAtprotoServerGetSession.OutputSchema>
   saveData (this: TIAtpWrapper)
   signUp (this: TIAtpWrapper, service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<undefined | Error>
+  unmuteChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
   updateBlockToDisable (this: TIAtpWrapper, uri: string): Promise<boolean>
   updateBlockToEnable (this: TIAtpWrapper, did: string): Promise<null | string>
+  updateChatConvoRead (this: TIAtpWrapper, convoId: string, messageId?: string): Promise<Error | TIChatConvo>
   updateJwt (this: TIAtpWrapper, onRefreshSession?: () => void): Promise<undefined | Error>
   updateList (this: TIAtpWrapper, list: TTList, avatarBlobRef?: BlobRef): Promise<undefined | Error>
   updateListBlockToDisable (this: TIAtpWrapper, listUri: string): Promise<undefined | Error>
@@ -97,7 +111,7 @@ interface TIAtpWrapper {
   updateMuteToEnable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>
   updatePinnedPost (this: TIAtpWrapper, uri?: string): Promise<Error | boolean>
-  updatePreferences  (this: TIAtpWrapper, preferences: Array<TTPreference>, ): Promise<boolean>
+  updatePreferences  (this: TIAtpWrapper, preferences: Array<TTPreference>): Promise<boolean>
   updateProfile (this: TIAtpWrapper, params: TTUpdateProfileParams): Promise<undefined | Error>
   updateRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, record: { [k: string]: any }, validate?: boolean, swapCommit?: string, swapRecord?: string): Promise<Error | TTCidUri>
   updateThreadgate (this: TIAtpWrapper, postUri: string, allowMention: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>

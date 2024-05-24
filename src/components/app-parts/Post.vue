@@ -22,16 +22,14 @@ const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
   level?: number
-  position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim"
+  position: "post" | "root" | "parent" | "postInPost" | "preview" | "slim" | "chatMessage"
   post: TTPost
   rootPost?: TTPost
   parentPost?: TTPost
   grandparentAuthor?: TTProfile
   hasReplyIcon?: boolean
   hasQuoteRepostIcon?: boolean
-  isInFeed?: boolean
   noLink?: boolean
-  container?: HTMLElement
   forceHideImages?: boolean
 }>()
 
@@ -41,9 +39,8 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
-
-  // 本文
   text: ComputedRef<undefined | string>
+  isTextOnlyEmoji: ComputedRef<boolean>
 
   // 画像
   images: ComputedRef<Array<TTImage>>
@@ -98,10 +95,11 @@ const state = reactive<{
   isWordMute: ComputedRef<boolean>
 }>({
   processing: false,
-
-  // 本文
   text: computed((): undefined | string => {
     return props.post.record?.text ?? props.post.value?.text
+  }),
+  isTextOnlyEmoji: computed((): boolean => {
+    return state.text?.match(/^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,3}$/u) != null
   }),
 
   // 画像
@@ -517,8 +515,7 @@ async function translateText (forceTranslate: boolean) {
     state.translation = "done"
     return
   }
-  const text = state.text
-  if (text == null) {
+  if (state.text == null) {
     state.translation = "ignore"
     return
   }
@@ -545,7 +542,7 @@ async function translateText (forceTranslate: boolean) {
   }
   const langpair = srcLanguages.find((srcLanguage: string) => srcLanguage !== dstLanguage)
   const response: Error | string = await Util.translateInMyMemory({
-    text,
+    text: state.text,
     langpair,
     dstLanguage,
     email: mainState.atp.session?.email,
@@ -730,9 +727,9 @@ function toggleOldestQuotedPostDisplay () {
     >
       <slot name="body-before" />
 
-      <!-- アバター -->
+      <!-- アバターリンク -->
       <AvatarLink
-        v-if="position !== 'postInPost' && position !== 'slim'"
+        v-if="position !== 'chatMessage' && position !== 'postInPost' && position !== 'slim'"
         :isLabeler="post.author?.associated?.labeler"
         :did="post.author?.did"
         :image="post.author?.avatar"
@@ -741,20 +738,25 @@ function toggleOldestQuotedPostDisplay () {
 
       <div class="body__right">
         <div class="body__right__header">
-          <!-- アバター -->
+          <!-- アバターリンク -->
           <AvatarLink
-            v-if="position === 'postInPost' || position === 'slim'"
+            v-if="position === 'chatMessage' || position === 'postInPost' || position === 'slim'"
             class="avatar-in-post"
-            :isLabeler="post.author?.associated?.labeler"
             :did="post.author?.did"
             :image="post.author?.avatar"
+            :isLabeler="post.author?.associated?.labeler"
+            :noLink="position === 'chatMessage'"
             @click.stop="$emit('click', $event)"
           />
 
           <!-- 表示名 -->
           <DisplayName
             class="body__right__header__display-name"
-            :displayName="post.author?.displayName || '　'"
+            :displayName="(
+              position === 'chatMessage'
+                ? (post.author?.displayName || post.author?.handle)
+                : post.author?.displayName
+            ) || '　'"
             :anonymizable="true"
           >
             <!-- ラベラーアイコン -->
@@ -774,6 +776,7 @@ function toggleOldestQuotedPostDisplay () {
 
           <!-- ハンドル -->
           <AuthorHandle
+            v-if="position !== 'chatMessage'"
             :handle="post.author?.handle"
             :anonymizable="true"
           />
@@ -783,6 +786,8 @@ function toggleOldestQuotedPostDisplay () {
             v-if="post.indexedAt"
             class="indexed-at"
           >{{ mainState.formatDate(post.indexedAt) }}</div>
+
+          <slot name="header-after" />
         </div>
 
         <!-- ポストコンテンツトグル -->
@@ -811,6 +816,7 @@ function toggleOldestQuotedPostDisplay () {
               :entities="post.record?.entities ?? post.value?.entities"
               :processHashTag="false"
               :hasTranslateLink="state.hasOtherLanguages"
+              :data-is-text-only-emoji="state.isTextOnlyEmoji"
               @onActivateHashTag="onActivateHashTag"
               @translate="onForceTranslate"
             />
@@ -1031,7 +1037,12 @@ function toggleOldestQuotedPostDisplay () {
             >
               <Post
                 :level="(level ?? 1) + 1"
-                :position="position === 'slim' ? 'slim' : 'postInPost'"
+                :position="position === 'chatMessage'
+                  ? 'chatMessage'
+                  : position === 'slim'
+                    ? 'slim'
+                    : 'postInPost'
+                "
                 :post="post.embed.record as TTPost"
                 :hasReplyIcon="post.embed.record.value?.reply != null"
                 :noLink="noLink"
@@ -1043,7 +1054,7 @@ function toggleOldestQuotedPostDisplay () {
 
         <!-- リアクションコンテナ -->
         <div
-          v-if="position !== 'postInPost' && position !== 'slim'"
+          v-if="position !== 'chatMessage' && position !== 'postInPost' && position !== 'slim'"
           class="reaction-container"
         >
           <div>
@@ -1415,6 +1426,7 @@ function toggleOldestQuotedPostDisplay () {
   align-items: flex-start;
   position: relative;
 }
+.post[data-position="chatMessage"],
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
   .body {
@@ -1455,6 +1467,13 @@ function toggleOldestQuotedPostDisplay () {
     }
   }
 }
+
+.post[data-position="chatMessage"] {
+  .body__right__header {
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
   .body__right__header {
@@ -1505,6 +1524,12 @@ function toggleOldestQuotedPostDisplay () {
   &:deep(.textlink > span) {
     padding-top: 0.125em;
     padding-bottom: 0.125em;
+  }
+
+  // デカ絵文字
+  &[data-is-text-only-emoji="true"] {
+    font-size: 3em;
+    line-height: 1;
   }
 }
 

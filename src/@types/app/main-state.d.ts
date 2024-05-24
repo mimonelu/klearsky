@@ -73,6 +73,12 @@ type MainState = {
   myLabeler: TIMyLabeler
   currentLabeler?: TILabeler
 
+  // チャット
+  myChat: TIMyChat
+  chatListTimer: undefined | any
+  endChatListTimer: () => void
+  startChatListTimer: () => void
+
   // ミュートユーザー
   currentMutingUsers: Array<TTUser>
   currentMutingUsersCursor?: string
@@ -263,6 +269,36 @@ type MainState = {
   openMyFeedsSortPopover: Function
   closeMyFeedsSortPopover: Function
 
+  // ポップオーバー - チャットルームポップオーバー
+  chatConvoPopoverProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+  }
+  chatConvoPopoverSelector?: string | HTMLElement
+  chatConvoPopoverCallback?: Function
+  openChatConvoPopover: Function
+  closeChatConvoPopover: Function
+
+  // ポップオーバー - チャット公開設定ポップオーバー
+  chatDeclarationSelectPopoverProps: {
+    display: boolean
+  }
+  chatDeclarationSelectPopoverSelector?: string | HTMLElement
+  chatDeclarationSelectPopoverCallback?: Function
+  openChatDeclarationSelectPopover: Function
+  closeChatDeclarationSelectPopover: Function
+
+  // ポップオーバー - チャットメッセージポップオーバー
+  chatMessagePopoverProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+    message?: TIChatMessage
+  }
+  chatMessagePopoverSelector?: string | HTMLElement
+  chatMessagePopoverCallback?: Function
+  openChatMessagePopover: Function
+  closeChatMessagePopover: Function
+
   // ポップオーバー - キーワード履歴ポップオーバー
   keywordHistoryPopoverProps: {
     display: boolean
@@ -373,6 +409,30 @@ type MainState = {
   wordMutePopupDisplay: boolean
   openWordMutePopup: Function
   closeWordMutePopup: Function
+
+  // ポップアップ - チャット一覧ポップアップ
+  chatListPopupProps: {
+    display: boolean
+  }
+  openChatListPopup: Function
+  closeChatListPopup: Function
+
+  // ポップアップ - チャットルームポップアップ
+  chatConvoPopupProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+  }
+  openChatConvoPopup: Function
+  closeChatConvoPopup: Function
+
+  // ポップアップ - チャットメンバー選択ポップアップ
+  chatMembersSelectPopupProps: {
+    display: boolean
+    users: Array<TTUser>
+    limit: number
+  }
+  openChatMembersSelectPopup: Function
+  closeChatMembersSelectPopup: Function
 
   // ポップアップ - ラベラー一覧ポップアップ
   labelerListPopupProps: {

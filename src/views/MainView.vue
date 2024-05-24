@@ -5,6 +5,12 @@ import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
+import ChatConvoPopover from "@/components/popovers/ChatConvoPopover.vue"
+import ChatConvoPopup from "@/components/popups/ChatConvoPopup.vue"
+import ChatDeclarationSelectPopover from "@/components/popovers/ChatDeclarationSelectPopover.vue"
+import ChatListPopup from "@/components/popups/ChatListPopup.vue"
+import ChatMembersSelectPopup from "@/components/popups/ChatMembersSelectPopup.vue"
+import ChatMessagePopover from "@/components/popovers/ChatMessagePopover.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
@@ -110,6 +116,7 @@ onMounted(async () => {
 onUnmounted(() => {
   clearUpdateJwtInterval()
   state.clearNotificationInterval()
+  state.endChatListTimer()
 })
 
 const router = useRouter()
@@ -163,7 +170,8 @@ router.afterEach(async (to: RouteLocationNormalized) => {
 
 // ページタイトルの更新
 function updatePageTitle () {
-  let title = state.notificationCount === 0 ? "" : `(${state.notificationCount}) `
+  const unreadCount = state.notificationCount + state.myChat.unread
+  let title = unreadCount === 0 ? "" : `(${unreadCount}) `
   title += "Klearsky"
 
   if (state.currentPath.startsWith("/search/"))
@@ -299,47 +307,70 @@ async function processAfterLogin () {
 
   // ラベラーの取得
   await state.myLabeler.updateMyLabelers()
-
-  // ラベラーのHTTPヘッダーを設定
-  state.myLabeler.setAtprotoAcceptLabelers()
-
-  state.saveSettings()
-  state.updateSettings()
+    .then(() => {
+      // ラベラーのHTTPヘッダーを設定
+      state.myLabeler.setAtprotoAcceptLabelers()
+    })
 
   // マイフィードの取得
   if (state.myFeeds.items.length === 0) {
-    await state.myFeeds.fetchItems()
-    state.myFeeds.sortItems()
-    state.myFeeds.synchronizeToMyList()
+    state.myFeeds.fetchItems()
+      .then(() => {
+        state.myFeeds.sortItems()
+        state.myFeeds.synchronizeToMyList()
 
-    // セッションキャッシュの設定
-    state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
+        // セッションキャッシュの設定
+        state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
+      })
   }
 
   // 全マイリストと全マイリストユーザーの取得
   if (state.myLists.items.length === 0) {
-    state.myLists.fetchAll().then(() => {
-      state.myFeeds.synchronizeToMyList()
+    state.myLists.fetchAll()
+      .then(() => {
+        state.myFeeds.synchronizeToMyList()
 
-      // セッションキャッシュの設定
-      state.myWorker.setSessionCache("myList", state.myLists.items)
-    })
+        // セッションキャッシュの設定
+        state.myWorker.setSessionCache("myList", state.myLists.items)
+      })
   }
+
+  // チャットの利用可否を更新
+  state.myChat.updateDisabled()
+    .then(() => {
+      if (state.myChat.disabled) {
+        return
+      }
+
+      // チャット一覧の更新
+      state.myChat.updateConvosAll()
+        .then((result) => {
+          if (!result) {
+            return
+          }
+
+          // チャットタイマーの起動
+          state.startChatListTimer()
+
+          state.updatePageTitle()
+        })
+    })
 
   // 招待コードの取得
   if (state.inviteCodes.length === 0) {
-    state.updateInviteCodes().then(() => {
+    state.updateInviteCodes()
+      .then(() => {
 
-      // セッションキャッシュの設定
-      state.myWorker.setSessionCache("inviteCodes", state.inviteCodes)
-    })
+        // セッションキャッシュの設定
+        state.myWorker.setSessionCache("inviteCodes", state.inviteCodes)
+      })
   }
 
+  changeSetting()
   if (router.currentRoute.value.name === "home") {
     await moveToDefaultHome()
     return
   }
-
   processPage(router.currentRoute.value.name as undefined | null | string)
 }
 
@@ -895,6 +926,27 @@ function broadcastListener (event: MessageEvent) {
       @close="state.closeMyFeedsSortPopover"
     />
 
+    <!-- チャットルームポップオーバー -->
+    <ChatConvoPopover
+      v-if="state.chatConvoPopoverProps.display"
+      v-bind="state.chatConvoPopoverProps"
+      @close="state.closeChatConvoPopover"
+    />
+
+    <!-- チャット公開設定ポップオーバー -->
+    <ChatDeclarationSelectPopover
+      v-if="state.chatDeclarationSelectPopoverProps.display"
+      v-bind="state.chatDeclarationSelectPopoverProps"
+      @close="state.closeChatDeclarationSelectPopover"
+    />
+
+    <!-- チャットメッセージポップオーバー -->
+    <ChatMessagePopover
+      v-if="state.chatMessagePopoverProps.display"
+      v-bind="state.chatMessagePopoverProps"
+      @close="state.closeChatMessagePopover"
+    />
+
     <!-- キーワード履歴ポップオーバー -->
     <KeywordHistoryPopover
       v-if="state.keywordHistoryPopoverProps.display"
@@ -1048,6 +1100,33 @@ function broadcastListener (event: MessageEvent) {
         <WordMutePopup
           v-if="state.wordMutePopupDisplay"
           @close="state.closeWordMutePopup"
+        />
+      </Transition>
+
+      <!-- チャット一覧ポップアップ -->
+      <Transition>
+        <ChatListPopup
+          v-if="state.chatListPopupProps.display"
+          v-bind="state.chatListPopupProps"
+          @close="state.closeChatListPopup"
+        />
+      </Transition>
+
+      <!-- チャットルームポップアップ -->
+      <Transition>
+        <ChatConvoPopup
+          v-if="state.chatConvoPopupProps.display"
+          v-bind="state.chatConvoPopupProps"
+          @close="state.closeChatConvoPopup"
+        />
+      </Transition>
+
+      <!-- チャットメンバー選択ポップアップ -->
+      <Transition>
+        <ChatMembersSelectPopup
+          v-if="state.chatMembersSelectPopupProps.display"
+          v-bind="state.chatMembersSelectPopupProps"
+          @close="state.closeChatMembersSelectPopup"
         />
       </Transition>
 

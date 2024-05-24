@@ -22,7 +22,7 @@ const mainState = inject("state") as MainState
     </template>
     <template #body>
       <div class="settings-popup__form-page">
-        <!-- 通知取得間隔 -->
+        <!-- 新着通知取得間隔 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
             <span>{{ $t("notificationFetchInterval") }}</span>
@@ -45,7 +45,30 @@ const mainState = inject("state") as MainState
           </div>
         </div>
 
-        <!-- 通知バッジの非表示 -->
+        <!-- 新着チャット取得間隔 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("chatFetchInterval") }}</span>
+          </div>
+          <div class="settings-popup__form__body">
+            <label class="selectbox">
+              <select
+                v-model="mainState.currentSetting.chatFetchInterval"
+                name="chatFetchInterval"
+                @change="$emit('changeSetting')"
+              >
+                <option
+                  v-for="interval, intervalIndex in SETTINGS.CHAT_FETCH_INTERVAL"
+                  :key="intervalIndex"
+                  :value="interval.value"
+                  :selected="interval.value === mainState.currentSetting.chatFetchInterval"
+                >{{ $t(interval.label) }}</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <!-- 新着バッジの非表示 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
             <span>{{ $t("hideNotificationBadge") }}</span>

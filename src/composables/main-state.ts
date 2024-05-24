@@ -5,13 +5,14 @@ import isSameYear from "date-fns/isSameYear"
 import { computed, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
+import MyChat from "@/composables/main-state/my-chat"
 import MyFeeds from "@/composables/main-state/my-feeds"
 import MyLabeler from "@/composables/main-state/my-labeler"
 import MyLists from "@/composables/main-state/my-lists"
 import MyWorker from "@/composables/main-state/my-worker"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
-import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
+// import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
 import LANGUAGES from "@/consts/languages"
 
 export const state = reactive<MainState>({} as MainState)
@@ -70,7 +71,7 @@ state.notificationFetchedFirst = false
 state.notificationReasonFilter = undefined
 state.fetchNotifications = fetchNotifications
 
-// 通知タイマー
+// 新着通知タイマー
 state.notificationTimer = null
 state.clearNotificationInterval = clearNotificationInterval
 state.updateNotifications = updateNotifications
@@ -112,6 +113,14 @@ state.getCustomLabels = getCustomLabels
 // ラベラー
 state.myLabeler = new MyLabeler(state)
 state.currentLabeler = undefined
+
+// チャット
+state.myChat = new MyChat(state)
+
+// 新着チャットタイマー
+state.chatListTimer = undefined
+state.endChatListTimer = endChatListTimer
+state.startChatListTimer = startChatListTimer
 
 // ミュートユーザー
 state.currentMutingUsers = []
@@ -288,6 +297,36 @@ state.myFeedsSortPopoverCallback = undefined
 state.openMyFeedsSortPopover = openMyFeedsSortPopover
 state.closeMyFeedsSortPopover = closeMyFeedsSortPopover
 
+// ポップオーバー - チャットルームポップオーバー
+state.chatConvoPopoverProps = {
+  display: false,
+  myConvo: undefined,
+}
+state.chatConvoPopoverSelector = undefined
+state.chatConvoPopoverCallback = undefined
+state.openChatConvoPopover = openChatConvoPopover
+state.closeChatConvoPopover = closeChatConvoPopover
+
+// ポップオーバー - チャット公開設定ポップオーバー
+state.chatDeclarationSelectPopoverProps = {
+  display: false,
+}
+state.chatDeclarationSelectPopoverSelector = undefined
+state.chatDeclarationSelectPopoverCallback = undefined
+state.openChatDeclarationSelectPopover = openChatDeclarationSelectPopover
+state.closeChatDeclarationSelectPopover = closeChatDeclarationSelectPopover
+
+// ポップオーバー - チャットメッセージポップオーバー
+state.chatMessagePopoverProps = {
+  display: false,
+  myConvo: undefined,
+  message: undefined,
+}
+state.chatMessagePopoverSelector = undefined
+state.chatMessagePopoverCallback = undefined
+state.openChatMessagePopover = openChatMessagePopover
+state.closeChatMessagePopover = closeChatMessagePopover
+
 // ポップオーバー - キーワード履歴ポップオーバー
 state.keywordHistoryPopoverProps = {
   display: false,
@@ -399,6 +438,30 @@ state.closeBlockingUsersPopup = closeBlockingUsersPopup
 state.wordMutePopupDisplay = false
 state.openWordMutePopup = openWordMutePopup
 state.closeWordMutePopup = closeWordMutePopup
+
+// ポップアップ - チャット一覧ポップアップ
+state.chatListPopupProps = {
+  display: false,
+}
+state.openChatListPopup = openChatListPopup
+state.closeChatListPopup = closeChatListPopup
+
+// ポップアップ - チャットルームポップアップ
+state.chatConvoPopupProps = {
+  display: false,
+  myConvo: undefined,
+}
+state.openChatConvoPopup = openChatConvoPopup
+state.closeChatConvoPopup = closeChatConvoPopup
+
+// ポップアップ - チャットメンバー選択ポップアップ
+state.chatMembersSelectPopupProps = {
+  display: false,
+  users: [],
+  limit: 1,
+}
+state.openChatMembersSelectPopup = openChatMembersSelectPopup
+state.closeChatMembersSelectPopup = closeChatMembersSelectPopup
 
 // ポップアップ - ラベラー一覧ポップアップ
 state.labelerListPopupProps = {
@@ -623,8 +686,11 @@ function updateSettings () {
   updateFontSetting()
   updateColorThemeSetting()
 
-  // 通知タイマーの更新
+  // 新着通知タイマーの更新
   updateNotificationInterval()
+
+  // 新着チャットタイマーの更新
+  state.startChatListTimer()
 }
 
 function saveSettings () {
@@ -646,6 +712,9 @@ function saveSettings () {
   if (state.settings[did].autoTranslationIgnoreLanguage == null) {
     state.settings[did].autoTranslationIgnoreLanguage = undefined
   }
+  if (state.settings[did].chatFetchInterval == null) {
+    state.settings[did].chatFetchInterval = 30000
+  }
   if (state.settings[did].contentLanguages == null) {
     state.settings[did].contentLanguages = []
   } else {
@@ -661,7 +730,7 @@ function saveSettings () {
     state.settings[did].fontAntialiasing = true
   }
   if (state.settings[did].notificationFetchInterval == null) {
-    state.settings[did].notificationFetchInterval = 15000
+    state.settings[did].notificationFetchInterval = 30000
   }
   if (state.settings[did].tags == null) {
     state.settings[did].tags = []
@@ -848,7 +917,7 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
   }
 }
 
-// 通知タイマー
+// 新着通知タイマー
 
 function clearNotificationInterval () {
   if (state.notificationTimer != null) {
@@ -884,7 +953,9 @@ async function updateNotifications () {
 
 async function fetchPreferences (): Promise<boolean> {
   const preferences = await state.atp.fetchPreferences()
-  if (preferences == null) return false
+  if (preferences == null) {
+    return false
+  }
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
   return true
 }
@@ -918,6 +989,41 @@ function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
     return label.src !== CONSTS.OFFICIAL_LABELER_DID &&
            !label.ver
   }) ?? []
+}
+
+// 新着チャットタイマー
+
+function endChatListTimer () {
+  if (state.chatListTimer != null) {
+    clearInterval(state.chatListTimer)
+    state.chatListTimer = undefined
+  }
+}
+
+async function startChatListTimer () {
+  state.endChatListTimer()
+  if (state.myChat.disabled) {
+    return
+  }
+  if (!state.currentSetting?.chatFetchInterval) {
+    return
+  }
+
+  // 通常は convo を1件のみ取得し、 cursor に差異があれば全件取得する
+  let prevCursor: undefined | string = "UNUSED_CURSOR"
+  state.chatListTimer = setInterval(async () => {
+    if (!state.currentSetting?.chatFetchInterval) {
+      return
+    }
+    const currentCursor = await state.myChat.updateConvos(1)
+    if (prevCursor !== "UNUSED_CURSOR" &&
+        prevCursor !== currentCursor
+    ) {
+      await state.myChat.updateConvosAll()
+    }
+    prevCursor = currentCursor
+    state.updatePageTitle()
+  }, state.currentSetting?.chatFetchInterval ?? 60000)
 }
 
 // プロフィール
@@ -971,7 +1077,7 @@ async function fetchUserProfile () {
   }
 
   // 固定ポストのインポート
-  await fetchPinnedPost(state.userProfile)
+  fetchPinnedPost(state.userProfile)
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
@@ -1509,6 +1615,39 @@ function closeMyFeedsSortPopover () {
   state.myFeedsSortPopoverProps.display = false
 }
 
+// ポップオーバー - チャットルームポップオーバー
+
+function openChatConvoPopover (selector: string | HTMLElement) {
+  state.chatConvoPopoverSelector = selector
+  state.chatConvoPopoverProps.display = true
+}
+
+function closeChatConvoPopover () {
+  state.chatConvoPopoverProps.display = false
+}
+
+// ポップオーバー - チャット公開設置ポップオーバー
+
+function openChatDeclarationSelectPopover (selector: string | HTMLElement) {
+  state.chatDeclarationSelectPopoverSelector = selector
+  state.chatDeclarationSelectPopoverProps.display = true
+}
+
+function closeChatDeclarationSelectPopover () {
+  state.chatDeclarationSelectPopoverProps.display = false
+}
+
+// ポップオーバー - チャットメッセージポップオーバー
+
+function openChatMessagePopover (selector: string | HTMLElement) {
+  state.chatMessagePopoverSelector = selector
+  state.chatMessagePopoverProps.display = true
+}
+
+function closeChatMessagePopover () {
+  state.chatMessagePopoverProps.display = false
+}
+
 // ポップオーバー - キーワード履歴ポップオーバー
 
 function openKeywordHistoryPopover (
@@ -1713,6 +1852,38 @@ function openWordMutePopup () {
 
 function closeWordMutePopup () {
   state.wordMutePopupDisplay = false
+}
+
+// ポップアップ - チャット一覧ポップアップ
+
+function openChatListPopup () {
+  state.chatListPopupProps.display = true
+}
+
+function closeChatListPopup () {
+  state.chatListPopupProps.display = false
+}
+
+// ポップアップ - チャットルームポップアップ
+
+function openChatConvoPopup (myConvo: TIMyConvo) {
+  state.chatConvoPopupProps.myConvo = myConvo
+  state.chatConvoPopupProps.display = true
+}
+
+function closeChatConvoPopup () {
+  state.chatConvoPopupProps.display = false
+}
+
+// ポップアップ - チャットメンバー選択ポップアップ
+
+function openChatMembersSelectPopup () {
+  state.chatMembersSelectPopupProps.users.splice(0)
+  state.chatMembersSelectPopupProps.display = true
+}
+
+function closeChatMembersSelectPopup () {
+  state.chatMembersSelectPopupProps.display = false
 }
 
 // ポップアップ - ラベラー一覧ポップアップ

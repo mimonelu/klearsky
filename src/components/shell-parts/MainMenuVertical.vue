@@ -23,6 +23,11 @@ function openNotificationPopup () {
   mainState.openNotificationPopup()
 }
 
+function openChatListPopup () {
+  Util.blurElement()
+  mainState.openChatListPopup()
+}
+
 function openSettingsPopover () {
   Util.blurElement()
   mainState.openSettingsPopover(
@@ -102,13 +107,30 @@ function moveToBottom () {
       <div class="icon">
         <SVGIcon name="bell" />
 
-        <!-- 通知バッジ -->
+        <!-- 未読通知バッジ -->
         <div
           v-if="mainState.notificationCount > 0 && !mainState.currentSetting.hideNotificationBadge"
-          class="notification-count"
+          class="unread-badge"
         >{{ mainState.notificationCount }}</div>
       </div>
       <div class="label">{{ $t("notifications") }}</div>
+    </button>
+
+    <!-- チャットボタン -->
+    <button
+      class="link-button"
+      @click.prevent="openChatListPopup"
+    >
+      <div class="icon">
+        <SVGIcon name="chat" />
+
+        <!-- 未読チャットバッジ -->
+        <div
+          v-if="mainState.myChat.unread > 0 && !mainState.currentSetting.hideNotificationBadge"
+          class="unread-badge"
+        >{{ mainState.myChat.unread }}</div>
+      </div>
+      <div class="label">{{ $t("chat") }}</div>
     </button>
 
     <!-- 設定ボタン -->
@@ -183,7 +205,7 @@ function moveToBottom () {
 .main-menu-vertical {
   display: flex;
   flex-direction: column;
-  grid-gap: 0.5rem;
+  grid-gap: 1px;
 
   // スリムレイアウト
   @media (max-width: $max-width-with-scrollbar) {
@@ -339,8 +361,8 @@ function moveToBottom () {
   }
 }
 
-// 通知バッジ
-.notification-count {
+// 未読バッジ
+.unread-badge {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
   border-radius: var(--border-radius-middle);
