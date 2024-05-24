@@ -126,7 +126,9 @@ export default class MyLabeler {
     const myLabelerDids = this.makeMyLabelerPreferenceDids()
     const response = await this.mainState.atp.fetchLabelers(myLabelerDids, true)
     if (response instanceof Error) {
-      this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/updateMyLabelers")
+      // Sandbox PDS では存在しないためコメントアウト
+      // this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/updateMyLabelers")
+
       return false
     }
     this.labelers.splice(0, this.labelers.length, ...response)

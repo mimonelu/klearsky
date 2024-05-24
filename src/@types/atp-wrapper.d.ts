@@ -94,7 +94,7 @@ interface TIAtpWrapper {
   muteChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
   refreshSession (this: TIAtpWrapper): Promise<undefined | Error>
   resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): void
-  resumeSession (this: TIAtpWrapper, session: TTSession): Promise<undefined | Error>
+  resumeSession (this: TIAtpWrapper, session: TTSession): Promise<Error | ComAtprotoServerGetSession.OutputSchema>
   saveData (this: TIAtpWrapper)
   signUp (this: TIAtpWrapper, service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<undefined | Error>
   unmuteChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>

@@ -1,6 +1,8 @@
 export default class MyChat {
   mainState: MainState
 
+  disabled: boolean
+
   myConvos: Array<MyConvo>
 
   unread: number
@@ -9,8 +11,14 @@ export default class MyChat {
 
   constructor (mainState: MainState) {
     this.mainState = mainState
+    this.disabled = true
     this.myConvos = []
     this.unread = 0
+  }
+
+  async updateDisabled (): Promise<void> {
+    const chatLogs = await this.mainState.atp.fetchChatLogs()
+    this.disabled = chatLogs instanceof Error
   }
 
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean> {
@@ -34,7 +42,11 @@ export default class MyChat {
   async upsertConvo (dids: Array<string>): Promise<undefined | TIMyConvo> {
     const convo = await this.mainState.atp.fetchChatConvo(dids)
     if (convo instanceof Error) {
-      this.mainState.openErrorPopup(convo, "MyChat/upsertConvo")
+      if ((convo as any).error === "InvalidToken") {
+        this.mainState.openErrorPopup("errorInvalidChatToken", "MyChat/upsertConvo")
+      } else {
+        this.mainState.openErrorPopup(convo, "MyChat/upsertConvo")
+      }
       return
     }
     return this.updateMyConvo(convo, "unshift")

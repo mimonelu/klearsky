@@ -102,6 +102,7 @@
   "deleteChatMessage": "Delete for me",
   "chatMessagePlaceholder": "Message",
   "leaveChatConvoConfirmation": "You will leave the chat. You can re-enter, but you will not be able to retrieve your current messages. Are you sure?",
+  "errorInvalidChatToken": "Failed to start chat.\nPlease grant chat privileges to App passwords if you are using that.",
 
   "tag": "Tag",
   "tags": "Tags",
@@ -202,8 +203,8 @@
   "login": "Login",
   "service": "Hosting Provider",
   "identifier": "Email or Handle or DID",
-  "password": "Password or App Password",
-  "getAppPassword": "Get App Password",
+  "password": "Password or App password",
+  "getAppPassword": "Get App password",
   "authFactorToken": "Confirmation code",
   "authFactorTokenMessage": "A confirmation code for 2FA has been sent to you. Please enter it in the box above and login again.",
   "myAccounts": "My Accounts",
@@ -501,7 +502,7 @@
   "repost": "Repost",
   "reposts": "Reposts",
 
-  "noInviteCodes": "No invite codes. Please note that if you are logged in with AppPasswords, you can not get an invite codes.",
+  "noInviteCodes": "No invite codes. Please note that if you are logged in with App passwords, you can not get an invite codes.",
   "noMyAccounts": "No My Accounts. Please log in first. You can create an account on the official client.",
   "noMyFeeds": "No My Feeds. Please save feeds.",
   "noPostsInFeed": "No posts in this feed.",

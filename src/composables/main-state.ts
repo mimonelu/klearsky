@@ -998,8 +998,11 @@ function endChatListTimer () {
   }
 }
 
-function startChatListTimer () {
+async function startChatListTimer () {
   state.endChatListTimer()
+  if (state.myChat.disabled) {
+    return
+  }
   if (!state.currentSetting?.chatFetchInterval) {
     return
   }

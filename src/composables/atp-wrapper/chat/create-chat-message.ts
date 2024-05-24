@@ -14,7 +14,7 @@ export default async function (
     return Error("noSessionError")
   }
   const headers = { "atproto-proxy": "did:web:api.bsky.chat#bsky_chat" }
-  const message: ChatBskyConvoDefs.Message = { text: params.text ?? "" }
+  const message: ChatBskyConvoDefs.MessageInput = { text: params.text ?? "" }
 
   // Zapリンク
   if (params.lightning != null) {

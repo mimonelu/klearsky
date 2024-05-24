@@ -306,54 +306,67 @@ async function processAfterLogin () {
   }
 
   // ラベラーの取得
-  await state.myLabeler.updateMyLabelers()
-
-  // ラベラーのHTTPヘッダーを設定
-  state.myLabeler.setAtprotoAcceptLabelers()
-
-  state.saveSettings()
-  state.updateSettings()
+  state.myLabeler.updateMyLabelers()
+    .then(() => {
+      // ラベラーのHTTPヘッダーを設定
+      state.myLabeler.setAtprotoAcceptLabelers()
+    })
 
   // マイフィードの取得
   if (state.myFeeds.items.length === 0) {
-    await state.myFeeds.fetchItems()
-    state.myFeeds.sortItems()
-    state.myFeeds.synchronizeToMyList()
+    state.myFeeds.fetchItems()
+      .then(() => {
+        state.myFeeds.sortItems()
+        state.myFeeds.synchronizeToMyList()
 
-    // セッションキャッシュの設定
-    state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
+        // セッションキャッシュの設定
+        state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
+      })
   }
 
   // 全マイリストと全マイリストユーザーの取得
   if (state.myLists.items.length === 0) {
-    state.myLists.fetchAll().then(() => {
-      state.myFeeds.synchronizeToMyList()
+    state.myLists.fetchAll()
+      .then(() => {
+        state.myFeeds.synchronizeToMyList()
 
-      // セッションキャッシュの設定
-      state.myWorker.setSessionCache("myList", state.myLists.items)
-    })
+        // セッションキャッシュの設定
+        state.myWorker.setSessionCache("myList", state.myLists.items)
+      })
   }
 
+  // チャットの利用可否を更新
+  await state.myChat.updateDisabled()
+
   // チャット一覧の更新とチャットタイマーの起動
-  state.myChat.updateConvosAll().then(() => {
-    state.updatePageTitle()
-  })
-  state.startChatListTimer()
+  if (!state.myChat.disabled) {
+    state.myChat.updateConvosAll()
+      .then((result) => {
+        if (!result) {
+          return
+        }
+        state.updatePageTitle()
+        state.startChatListTimer()
+      })
+  }
 
   // 招待コードの取得
   if (state.inviteCodes.length === 0) {
-    state.updateInviteCodes().then(() => {
+    state.updateInviteCodes()
+      .then(() => {
 
-      // セッションキャッシュの設定
-      state.myWorker.setSessionCache("inviteCodes", state.inviteCodes)
-    })
+        // セッションキャッシュの設定
+        state.myWorker.setSessionCache("inviteCodes", state.inviteCodes)
+      })
   }
+
+  state.saveSettings()
+  state.updateSettings()
 
   if (router.currentRoute.value.name === "home") {
     await moveToDefaultHome()
     return
   }
-
   processPage(router.currentRoute.value.name as undefined | null | string)
 }
 

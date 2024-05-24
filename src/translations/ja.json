@@ -102,6 +102,7 @@
   "deleteChatMessage": "自分だけ削除",
   "chatMessagePlaceholder": "メッセージ",
   "leaveChatConvoConfirmation": "チャットから退室します。再入室は可能ですが、現在のメッセージは取得できなくなります。よろしいですか？",
+  "errorInvalidChatToken": "チャットの開始に失敗しました。\nアプリパスワードを使用中の場合はチャット権限を付与してください。",
 
   "tag": "タグ",
   "tags": "タグ",
