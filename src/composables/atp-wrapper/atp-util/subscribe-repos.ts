@@ -69,7 +69,7 @@ export default class {
   }
 
   onError (event: Event) {
-    console.error("[klearsky/subscribeRepos]", event)
+    console.warn("[klearsky/subscribeRepos]", event)
     if (this.errorCallback != null) {
       this.errorCallback(event)
     }
@@ -112,7 +112,7 @@ export default class {
     try {
       car = CarBufferReader.fromBytes(body.blocks)
     } catch (error: any) {
-      console.error("[klearsky/CarBufferReader.fromBytes]", error)
+      console.warn("[klearsky/CarBufferReader.fromBytes]", error)
     }
 
     if (this.messageCallback != null) {

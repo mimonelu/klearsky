@@ -32,7 +32,7 @@ export default async function (
 
   const now = Date.now() / 1000 + 60 * 5
   if (now >= refreshJwt.exp) {
-    console.error("[klearsky] refreshJwt was expired.")
+    console.warn("[klearsky] refreshJwt was expired.")
     return Error("refreshJwtExpired")
   }
   if (now >= accessJwt.exp) {

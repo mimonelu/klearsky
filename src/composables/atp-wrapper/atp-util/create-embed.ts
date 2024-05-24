@@ -102,7 +102,7 @@ export default async function (
           height: img.height,
         })
       } catch (error: any) {
-        console.error("[klearsky/post]", error)
+        console.warn("[klearsky/createEmbed]", error)
         aspectRatios.push(undefined)
       }
     }

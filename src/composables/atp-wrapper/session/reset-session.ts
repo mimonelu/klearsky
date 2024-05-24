@@ -24,7 +24,7 @@ export default function (
       const url = new URL(session.__service)
       hostName = url.hostname
     } catch (error) {
-      console.error(`[klearsky/__serviceName] ${error}`)
+      console.warn(`[klearsky/__serviceName] ${error}`)
     }
   }
   session.__serviceName = hostName ?? newSession.__serviceName ?? session.__serviceName ?? ""
