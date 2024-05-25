@@ -541,8 +541,11 @@ function openImagePopup (imageIndex: number) {
     }
 
     // 表示速度向上のため JPEG と PNG のみ blob を参照しない
-    if (image.image?.mimeType !== "image/jpeg" &&
+    if (image.fullsize == null ||
+      (
+        image.image?.mimeType !== "image/jpeg" &&
         image.image?.mimeType !== "image/png"
+      )
     ) {
       result.blob = image.image
     }
