@@ -1,7 +1,7 @@
 import { addExtension, decode, decodeMultiple } from "cbor-x/decode"
 import { CarBufferReader } from "@ipld/car/buffer-reader"
 import { CID } from "multiformats/cid"
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 
 addExtension({
   Class: CID,
@@ -162,7 +162,7 @@ export default class {
         viewer: {},
       },
     }]
-    AtpUtil.coherentResponses(feeds)
+    Util.coherentResponses(feeds)
     const post = feeds[0].post
     if (this.postCallback != null) {
       this.postCallback(did, post)

@@ -4,8 +4,8 @@ import GloballineSettingsPopup from "@/components/popups/GloballineSettingsPopup
 import Loader from "@/components/common/Loader.vue"
 import Post from "@/components/app-parts/Post.vue"
 import SelectLanguagesPopup from "@/components/popups/SelectLanguagesPopup.vue"
-import SubscribeRepos from "@/composables/atp-wrapper/atp-util/subscribe-repos"
 import SVGIcon from "@/components/common/SVGIcon.vue"
+import SubscribeRepos from "@/composables/util/subscribe-repos"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -493,3 +493,4 @@ function onMutated () {
   }
 }
 </style>
+@/composables/util/subscribe-repos

@@ -1,4 +1,4 @@
-import { type Facet } from "@atproto/api"
+import type { Facet } from "@atproto/api"
 
 const CUSTOM_LINK_REGEXP = /\[([^\[\]]+)\]\(((?:https?:\/\/|lightning:)[^\(\)\s]+)\)/g
 

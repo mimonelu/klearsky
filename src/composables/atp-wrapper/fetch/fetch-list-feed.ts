@@ -1,5 +1,5 @@
 import type { AppBskyFeedGetListFeed, BskyAgent } from "@atproto/api"
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -28,9 +28,9 @@ export default async function (
   if (checkIdentity != null && !checkIdentity(list)) return
 
   // TODO:
-  AtpUtil.coherentResponses(response.data.feed)
+  Util.coherentResponses(response.data.feed)
   const isFirstFetch = currentFeeds.length === 0
-  const isAllNew = AtpUtil.mergeFeeds(
+  const isAllNew = Util.mergeFeeds(
     currentFeeds,
     response.data.feed as Array<TTFeed>,
     cursor == null,

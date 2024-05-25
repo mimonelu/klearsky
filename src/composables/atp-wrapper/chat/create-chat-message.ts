@@ -1,6 +1,6 @@
 import type { BskyAgent, ChatBskyConvoDefs, ChatBskyConvoSendMessage } from "@atproto/api"
 import { RichText } from "@atproto/api"
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -21,7 +21,7 @@ export default async function (
   }
 
   // カスタムリンク
-  const customLinks = AtpUtil.makeCustomLinks(message.text)
+  const customLinks = Util.makeCustomLinks(message.text)
   message.text = customLinks.text
   if (customLinks.facets.length > 0) {
     message.facets = customLinks.facets
@@ -40,7 +40,7 @@ export default async function (
   }
 
   // Embed
-  const embedResult = await AtpUtil.createEmbed(this, message, params)
+  const embedResult = await Util.createEmbed(this, message, params)
   if (embedResult instanceof Error) {
     return embedResult
   }

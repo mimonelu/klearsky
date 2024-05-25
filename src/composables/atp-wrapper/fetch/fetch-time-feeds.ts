@@ -1,4 +1,3 @@
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
 import Util from "@/composables/util"
 
 export default async function (
@@ -62,7 +61,7 @@ export default async function (
     if (record.value.reply != null) {
       feeds[0].post.record.reply = record.value.reply
     }
-    AtpUtil.coherentResponses(feeds)
+    Util.coherentResponses(feeds)
     if (direction === "new") {
       oldPosts.unshift(feeds[0].post)
     } else {

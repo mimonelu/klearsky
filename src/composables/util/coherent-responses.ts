@@ -1,17 +1,16 @@
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
 import Util from "@/composables/util"
 
 export default function (responses: Array<any>) {
   // __custom プロパティの作成
   // TODO: 確実にポスト直下に作成するようにすること
-  AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
+  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if ((key === "cid" || key === "record") && child != null) {
       parent.__custom = {}
     }
   })
 
   // embeds[0] -> embed
-  AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
+  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "embeds" && child[0] != null) {
       parent.embed = Util.cloneJson(child[0])
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
@@ -19,7 +18,7 @@ export default function (responses: Array<any>) {
   })
 
   // PARENT.value.embed -> PARENT.embed
-  AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
+  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "value" && child.embed != null && parent.embed == null) {
       parent.embed = Util.cloneJson(child.embed)
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
@@ -28,7 +27,7 @@ export default function (responses: Array<any>) {
 
   // PARENT.embed.media.external -> PARENT.embed.external
   // NOTICE: おそらく古いフォーマット向け
-  AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
+  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "media" && child.external != null) {
       parent.external = Util.cloneJson(child.external)
       parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
@@ -37,7 +36,7 @@ export default function (responses: Array<any>) {
 
   // PARENT.embed.media.images -> PARENT.embed.images
   // NOTICE: おそらく古いフォーマット向け
-  AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
+  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "media" && child.images != null && parent.images == null) {
       parent.images = Util.cloneJson(child.images)
       parent.images.__comment = "❗ This 'images' was duplicated by Klearsky."
@@ -46,7 +45,7 @@ export default function (responses: Array<any>) {
 
   // PARENT.record.record -> PARENT.record
   // NOTICE: おそらく古いフォーマット向け
-  AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
+  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "record" && child.record != null) {
       parent.record = Util.cloneJson(child.record)
       parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
@@ -54,7 +53,7 @@ export default function (responses: Array<any>) {
   })
 
   // PARENT.record/value.embed.external/images -> PARENT.embed.external/images
-  AtpUtil.traverseJson(responses, (key: string, child: any, parent: any) => {
+  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if ((key === "record" || key === "value") && child.embed != null) {
       /* // TODO: 生レコード用。不要であれば削除すること
       if (child.embed.external != null && parent.embed?.external == null) {
@@ -85,7 +84,7 @@ export default function (responses: Array<any>) {
   })
 
   // Reason
-  AtpUtil.traverseJson(responses, (key: string, value: any, parent: any) => {
+  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
     if (key === "reason" && value != null && parent?.post != null) {
       parent.post.__custom.reason = value
     }
