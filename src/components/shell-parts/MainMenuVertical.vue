@@ -205,7 +205,7 @@ function moveToBottom () {
 .main-menu-vertical {
   display: flex;
   flex-direction: column;
-  grid-gap: 1px;
+  grid-gap: 0.5rem;
 
   // スリムレイアウト
   @media (max-width: $max-width-with-scrollbar) {
@@ -215,6 +215,13 @@ function moveToBottom () {
   // フルレイアウト
   @media not all and (max-width: $max-width-with-scrollbar) {
     padding: 1rem 1rem 1.25rem;
+
+    // 内部スクロール
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: none;
+    max-height: 100%;
+    @include scroll-bar("transparent");
 
     .move-to-bottom-button {
       display: none;
@@ -231,7 +238,7 @@ function moveToBottom () {
 
   display: grid;
   grid-gap: 0.5rem;
-  overflow: hidden;
+  justify-content: center;
   padding: var(--padding);
   &:focus, &:hover {
     --alpha: 1.0;
