@@ -61,7 +61,7 @@ import ThreadgatePopup from "@/components/popups/ThreadgatePopup.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import UiLanguageSettingsPopup from "@/components/popups/settings-popups/UiLanguageSettingsPopup.vue"
 import WordMutePopup from "@/components/popups/WordMutePopup.vue"
-import { state } from "@/composables/main-state"
+import { state } from "@/composables/main-state/main-state"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
@@ -1621,3 +1621,4 @@ function broadcastListener (event: MessageEvent) {
   position: fixed;
 }
 </style>
+@/composables/main-state/main-state

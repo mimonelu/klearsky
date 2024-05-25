@@ -1,3 +1,15 @@
+type TTThreadgate = {
+  uri: string
+  cid: string
+  record: {
+    post: string
+    $type: string
+    allow: Array<TTThreadgateAllow>
+    createdAt: string
+  }
+  lists: Array<TTThreadgateList>
+}
+
 type TTThreadgateAllow = {
   $type: string
   list?: Array<string>
@@ -12,18 +24,6 @@ type TTThreadgateList = {
   viewer: {
     muted: boolean
   }
-}
-
-type TTThreadgate = {
-  uri: string
-  cid: string
-  record: {
-    post: string
-    $type: string
-    allow: Array<TTThreadgateAllow>
-    createdAt: string
-  }
-  lists: Array<TTThreadgateList>
 }
 
 type TTDraftThreadgate = {

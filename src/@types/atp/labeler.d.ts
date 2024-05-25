@@ -1,11 +1,3 @@
-interface TILabelSetting {
-  did: string
-  definition: TILabelerDefinition
-  isBadge: boolean
-  locale: TILabelerDefinitionLocale
-  preference?: TTPreference
-}
-
 interface TILabeler {
   $type: string
   uri: string
@@ -30,8 +22,6 @@ interface TILabelerDefinition {
   locales: Array<TILabelerDefinitionLocale>
   severity: "inform" | "alert" | "none"
 }
-
-type TTLabelBlurs = "content" | "media" | "none"
 
 interface TILabelerDefinitionLocale {
   description: string

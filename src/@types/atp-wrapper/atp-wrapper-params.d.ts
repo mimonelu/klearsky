@@ -25,17 +25,6 @@ type TTCreatePostParams = {
   tags?: Array<TTMyTag>
 }
 
-type TTSendPostPopupParams = {
-  display?: boolean
-  visibility?: boolean
-  type: TTPostType
-  post?: TTPost
-  text?: string
-  url?: string
-  fileList?: FileList
-  createdAt?: string
-}
-
 type TTUpdateProfileParams = {
   displayName: string
   description: string

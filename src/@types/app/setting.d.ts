@@ -7,22 +7,22 @@ type TTSetting = {
   colorTheme?: string
   contentLanguages?: Array<string>
   feedSearchKeywordHistory?: Array<string>
-  fontSize?: string
-  fontKerning?: boolean
   fontAntialiasing?: boolean
+  fontKerning?: boolean
+  fontSize?: string
   globallineContentLanguages?: Array<string>
-  globallineSkipPostHasNoLanguage?: boolean
-  globallinePostTypes?: Array<string>
   globallineFollowersCountThreshold?: string
   globallineLayout?: "post" | "slim"
+  globallinePostTypes?: Array<string>
+  globallineSkipPostHasNoLanguage?: boolean
   hideNotificationBadge?: boolean
   hideNumberOfReaction?: boolean
+  imageAutoPlay?: boolean
   imageFolding?: "none" | "recommended" | "all"
   imageMaxHeightRatio?: number
-  imageAutoPlay?: boolean
   lightning?: string
-  linkcardLayout?: "none" | "horizontal" | "vertical"
   linkcardEmbeddedControl?: Array<string>
+  linkcardLayout?: "none" | "horizontal" | "vertical"
   mainAreaOpacity?: number
   myFeedsIndex?: Array<string>
   notificationFetchInterval?: number
