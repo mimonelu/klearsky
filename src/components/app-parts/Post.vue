@@ -185,13 +185,20 @@ const state = reactive<{
   noContentLanguage: computed((): boolean => {
     // コンテンツ言語設定はポストスレッドとプロフィールポストでは無効
     if (mainState.currentPath === "/post" ||
-        mainState.currentPath.startsWith("/profile/")) return false
+        mainState.currentPath.startsWith("/profile/")
+    ) {
+      return false
+    }
 
-    if (!(mainState.currentSetting.contentLanguages?.length)) return false
-    if (!(state.postLanguages?.length)) return false
-    return !(state.postLanguages?.some((language: any) =>
-      mainState.currentSetting.contentLanguages?.includes(language) ?? false
-    ) ?? false)
+    if (!(mainState.currentSetting.contentLanguages?.length)) {
+      return false
+    }
+    if (!(state.postLanguages?.length)) {
+      return false
+    }
+    return !(state.postLanguages?.some((language: any) => {
+      return mainState.currentSetting.contentLanguages?.includes(language) ?? false
+    }) ?? false)
   }),
 
   translation: "none",
@@ -251,14 +258,18 @@ const state = reactive<{
   // Threadgate
   threadgate: computed((): "none" | "lock" | "unlock" => {
     const threadgate = props.post.threadgate as any
-    if (threadgate == null) return "none"
+    if (threadgate == null) {
+      return "none"
+    }
     return props.post.viewer?.replyDisabled ? "lock" : "unlock"
   }),
 
   // ワードミュートの判定
   isWordMute: computed((): boolean => {
     const target = state.text?.toLowerCase() ?? ""
-    if (!target) return false
+    if (!target) {
+      return false
+    }
     return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
       if (!wordMute.enabled[0] || wordMute.keyword === "") return false
       const keywords = wordMute.keyword.toLowerCase().split(",")
@@ -281,9 +292,13 @@ const postElement = ref()
 const observer = mainState.currentSetting.autoTranslation
   ? new IntersectionObserver((items) => {
     items.forEach((item) => {
-      if (!item.isIntersecting) return
+      if (!item.isIntersecting) {
+        return
+      }
       const cid = item.target.getAttribute("data-cid")
-      if (cid !== props.post.cid || state.translation !== "none") return
+      if (cid !== props.post.cid || state.translation !== "none") {
+        return
+      }
       state.translation = "waiting"
       translateText(false) // No await
     })
@@ -354,8 +369,11 @@ async function onActivateReplyButton () {
   state.processing = true
   try {
     if (done) {
-      if (mainState.currentPath.startsWith("/post")) await mainState.fetchPostThread()
-      else await updatePostThread()
+      if (mainState.currentPath.startsWith("/post")) {
+        await mainState.fetchPostThread()
+      } else {
+        await updatePostThread()
+      }
     }
   } finally {
     state.processing = false
@@ -393,14 +411,18 @@ async function createRepost () {
       props.post.uri,
       props.post.cid
     )
-    if (result) await updatePostThread()
+    if (result) {
+      await updatePostThread()
+    }
   } finally {
     state.processing = false
   }
 }
 
 async function deleteRepost () {
-  if (props.post.viewer?.repost == null) return
+  if (props.post.viewer?.repost == null) {
+    return
+  }
   state.processing = true
   try {
     await mainState.atp.deleteRepost(props.post.viewer.repost)
@@ -414,20 +436,26 @@ async function createQuoteRepost () {
   const done = await mainState.openSendPostPopup({ type: "quoteRepost", post: props.post })
   state.processing = true
   try {
-    if (done) await updatePostThread()
+    if (done) {
+      await updatePostThread()
+    }
   } finally {
     state.processing = false
   }
 }
 
 async function onActivateLikeButton () {
-  if (state.processing) return
+  if (state.processing) {
+    return
+  }
   Util.blurElement()
   state.processing = true
   try {
-    if (props.post.viewer?.like != null)
+    if (props.post.viewer?.like != null) {
       await mainState.atp.deleteLike(props.post.viewer.like as string)
-    else await mainState.atp.createLike(props.post.uri, props.post.cid)
+    } else {
+      await mainState.atp.createLike(props.post.uri, props.post.cid)
+    }
     await updatePostThread()
   } finally {
     state.processing = false
@@ -464,7 +492,9 @@ async function onForceTranslate () {
 }
 
 async function deletePost (uri: string) {
-  if (state.processing) return
+  if (state.processing) {
+    return
+  }
   state.processing = true
   try {
     await mainState.atp.deletePost(uri)
@@ -476,8 +506,11 @@ async function deletePost (uri: string) {
 
 async function updatePost () {
   state.processing = true
-  if (mainState.currentPath.startsWith("/post")) await mainState.fetchPostThread()
-  else await updatePostThread()
+  if (mainState.currentPath.startsWith("/post")) {
+    await mainState.fetchPostThread()
+  } else {
+    await updatePostThread()
+  }
   state.processing = false
 }
 
@@ -486,23 +519,35 @@ async function updatePostThread () {
   // TODO: 原因不明に付き暫定対応、後日再検証すること
   await Util.wait(375)
 
-  const posts: undefined | false | Array<TTPost> =
-    await mainState.atp.fetchPosts([props.post.uri])
-  if (!posts || posts.length === 0) return
+  const posts: undefined | false | Array<TTPost> = await mainState.atp.fetchPosts([props.post.uri])
+  if (!posts || posts.length === 0) {
+    return
+  }
   emit("updateThisPostThread", posts)
 }
 
 // 画像ポップアップ
 function openImagePopup (imageIndex: number) {
   if (state.images[imageIndex].fullsize == null &&
-      state.images[imageIndex].image == null) return
+      state.images[imageIndex].image == null
+  ) {
+    return
+  }
   mainState.imagePopupProps.did = props.post.author.did
   mainState.imagePopupProps.images = state.images.map((image: TTImage) => {
-    return {
+    const result: TTImagePopupPropsImages = {
       smallUri: image.thumb ?? "/img/void.png",
       largeUri: image.fullsize ?? "/img/void.png",
-      blob: image.image,
     }
+
+    // 表示速度向上のため JPEG と PNG のみ blob を参照しない
+    if (image.image?.mimeType !== "image/jpeg" &&
+        image.image?.mimeType !== "image/png"
+    ) {
+      result.blob = image.image
+    }
+
+    return result
   })
   mainState.imagePopupProps.alts = state.images.map((image: TTImage) => image.alt)
   mainState.imagePopupProps.index = imageIndex
@@ -557,7 +602,9 @@ async function translateText (forceTranslate: boolean) {
 
 // マイリストの削除
 async function deleteList (list: TTList) {
-  if (!mainState.myLists.remove(list.uri)) return
+  if (!mainState.myLists.remove(list.uri)) {
+    return
+  }
 
   // セッションキャッシュの更新
   mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
