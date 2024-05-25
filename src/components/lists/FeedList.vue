@@ -54,11 +54,9 @@ async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
-  if (props.feeds == null) return
-
   // MEMO: 全フィードの全同一ポストに最新のデータを反映する
   // WANT: このために「画面には1つのフィードのみ表示する」としているが、何とかしたい
-  props.feeds.forEach((feed: TTFeed) => {
+  props.feeds?.forEach((feed: TTFeed) => {
     newPosts.forEach((newPost: TTPost) => {
       if (feed.post?.cid === newPost.cid)
         Util.updatePostProps(feed.post, newPost)

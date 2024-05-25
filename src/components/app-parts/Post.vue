@@ -1109,7 +1109,7 @@ function toggleOldestQuotedPostDisplay () {
             <button
               class="icon-button reply_count"
               :disabled="state.threadgate === 'lock'"
-              :data-has="post.replyCount > 0"
+              :data-has-threadgate="state.threadgate !== 'none'"
               @click.stop="onActivateReplyButton"
             >
               <!-- Threadgate -->
@@ -1697,6 +1697,7 @@ function toggleOldestQuotedPostDisplay () {
 .reaction-container {
   grid-area: f;
   display: grid;
+  grid-gap: 0.5em;
   grid-template-columns: 1fr 1fr 1fr 1fr; // for Android
   align-items: center;
   &:not(:first-child) {
@@ -1722,7 +1723,12 @@ function toggleOldestQuotedPostDisplay () {
 // リプライボタン
 // ほぼ Threadgate 対応
 .reply_count {
-  grid-template-columns: auto auto 1fr;
+  &[data-has-threadgate="false"] {
+    grid-template-columns: auto 1fr;
+  }
+  &[data-has-threadgate="true"] {
+    grid-template-columns: auto auto 1fr;
+  }
 
   & > .ignore {
     display: none;
@@ -1737,10 +1743,6 @@ function toggleOldestQuotedPostDisplay () {
     fill: rgb(var(--accent-color));
     margin-top: -0.25em;
   }
-}
-
-.repost-button {
-  position: relative;
 }
 
 .lightning-link {

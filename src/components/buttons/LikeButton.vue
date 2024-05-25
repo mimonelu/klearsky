@@ -12,7 +12,6 @@ const mainState = inject("state") as MainState
 <template>
   <button
     class="icon-button like-button"
-    :data-has="post.likeCount > 0"
     :data-liked="!!post.viewer?.like"
   >
     <div class="icon-container">

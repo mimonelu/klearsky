@@ -12,7 +12,6 @@ const mainState = inject("state") as MainState
 <template>
   <button
     class="icon-button repost-button"
-    :data-has="post.repostCount > 0"
     :data-reposted="!!post.viewer?.repost"
   >
     <div class="icon-container">
