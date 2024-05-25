@@ -12,6 +12,7 @@ import getUserLanguage from "@/composables/util/get-user-language"
 import makeCustomLinks from "@/composables/util/make-custom-links"
 import mergeFeeds from "@/composables/util/merge-feeds"
 import parseOgp from "@/composables/util/parse-ogp"
+import proxyFetch from "@/composables/util/proxy-fetch"
 import safeJson from "@/composables/util/safe-json"
 import sortFeeds from "@/composables/util/sort-feeds"
 import storage from "@/composables/util/storage"
@@ -40,6 +41,7 @@ export default {
   makeCustomLinks,
   mergeFeeds,
   parseOgp,
+  proxyFetch,
   ...safeJson,
   sortFeeds,
   ...storage,
