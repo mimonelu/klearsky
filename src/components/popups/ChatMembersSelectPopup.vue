@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject, nextTick, reactive, ref } from "vue"
-import EasyForm from "@/components/form-parts/EasyForm.vue"
+import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
-import UserBox from "@/components/app-parts/UserBox.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import UserBox from "@/components/compositions/UserBox.vue"
 import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()

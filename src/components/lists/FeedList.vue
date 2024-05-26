@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject, watch } from "vue"
-import Feed from "@/components/app-parts/Feed.vue"
+import Feed from "@/components/compositions/Feed.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{

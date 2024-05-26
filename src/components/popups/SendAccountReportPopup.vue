@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import EasyForm from "@/components/form-parts/EasyForm.vue"
+import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
-import UserBox from "@/components/app-parts/UserBox.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
 import OPTIONS from "@/consts/options.json"
 

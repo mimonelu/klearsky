@@ -2,8 +2,8 @@
 import { inject, onBeforeMount, reactive } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Popup from "@/components/popups/Popup.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
-import UserBox from "@/components/app-parts/UserBox.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 

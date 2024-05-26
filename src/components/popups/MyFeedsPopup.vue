@@ -4,7 +4,7 @@ import FeedCard from "@/components/cards/FeedCard.vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SpecialFeedCard from "@/components/cards/SpecialFeedCard.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()

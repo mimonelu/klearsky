@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
 import format from "date-fns/format"
-import EasyForm from "@/components/form-parts/EasyForm.vue"
+import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
-import Loader from "@/components/common/Loader.vue"
+import Loader from "@/components/shells/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
-import Post from "@/components/app-parts/Post.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Post from "@/components/compositions/Post.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string, done: boolean, hidden: boolean): void}>()

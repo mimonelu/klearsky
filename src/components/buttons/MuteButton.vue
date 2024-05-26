@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import Loader from "@/components/common/Loader.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Loader from "@/components/shells/Loader.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{

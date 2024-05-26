@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue"
-import ChatPost from "@/components/app-parts/ChatPost.vue"
-import EasyForm from "@/components/form-parts/EasyForm.vue"
+import ChatPost from "@/components/compositions/ChatPost.vue"
+import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 

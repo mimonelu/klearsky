@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
 

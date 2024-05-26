@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, nextTick, onBeforeUnmount, reactive, ref, watch } from "vue"
-import LazyImage from "@/components/common/LazyImage.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
 import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string, params: any): void}>()

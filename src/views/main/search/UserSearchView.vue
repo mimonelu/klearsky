@@ -2,8 +2,8 @@
 import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
-import UserBox from "@/components/app-parts/UserBox.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 

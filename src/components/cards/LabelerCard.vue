@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import HtmlText from "@/components/app-parts/HtmlText.vue"
+import HtmlText from "@/components/labels/HtmlText.vue"
 import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPopupTrigger.vue"
 import LabelerSubscribeToggle from "@/components/buttons/LabelerSubscribeToggle.vue"
-import LazyImage from "@/components/common/LazyImage.vue"
-import Loader from "@/components/common/Loader.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
-import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
+import Loader from "@/components/shells/Loader.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import ViewerLabels from "@/components/labels/ViewerLabels.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 

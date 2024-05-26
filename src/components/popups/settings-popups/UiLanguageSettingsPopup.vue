@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import Popup from "@/components/popups/Popup.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import UI_LANGUAGES from "@/consts/ui-languages.json"
 
 const mainState = inject("state") as MainState

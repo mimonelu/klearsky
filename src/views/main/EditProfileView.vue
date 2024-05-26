@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, ref } from "vue"
 import { useRouter } from "vue-router"
-import EasyForm from "@/components/form-parts/EasyForm.vue"
+import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
-import PageHeader from "@/components/shell-parts/PageHeader.vue"
+import PageHeader from "@/components/shells/PageHeader.vue"
 import Util from "@/composables/util"
 
 const $t = inject("$t") as Function

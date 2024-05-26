@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-import HtmlText from "@/components/app-parts/HtmlText.vue"
-import LazyImage from "@/components/common/LazyImage.vue"
-import Loader from "@/components/common/Loader.vue"
+import HtmlText from "@/components/labels/HtmlText.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
+import Loader from "@/components/shells/Loader.vue"
 import OrderButtons from "@/components/buttons/OrderButtons.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
-import ViewerLabels from "@/components/app-parts/ViewerLabels.vue"
+import ViewerLabels from "@/components/labels/ViewerLabels.vue"
 
 const router = useRouter()
 

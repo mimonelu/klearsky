@@ -2,8 +2,8 @@
 import { inject, watch } from "vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
-import UserBox from "@/components/app-parts/UserBox.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

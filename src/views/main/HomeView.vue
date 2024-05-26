@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
-import LazyImage from "@/components/common/LazyImage.vue"
-import PageHeader from "@/components/shell-parts/PageHeader.vue"
-import PageHeaderButtons from "@/components/shell-parts/PageHeaderButtons.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
+import PageHeader from "@/components/shells/PageHeader.vue"
+import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

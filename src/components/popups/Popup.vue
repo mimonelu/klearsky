@@ -2,8 +2,8 @@
 import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
-import Loader from "@/components/common/Loader.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Loader from "@/components/shells/Loader.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 

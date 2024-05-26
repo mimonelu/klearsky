@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import DraggableList from "@/components/lists/DraggableList.vue"
-import LazyImage from "@/components/common/LazyImage.vue"
-import Loader from "@/components/common/Loader.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
+import Loader from "@/components/shells/Loader.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const $t = inject("$t") as Function
