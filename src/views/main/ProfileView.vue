@@ -243,6 +243,16 @@ function closeProfilePostPopver () {
 function onActivateAccountMaskToggle () {
   state.enabledContentMask = !state.enabledContentMask
 }
+
+// 固定ポスト
+
+function updateThisPostThread (newPosts: Array<TTPost>) {
+  Util.updatePostProps(mainState.currentAuthorPinnedPost, newPosts[0])
+}
+
+function removeThisPost () {
+  mainState.currentAuthorPinnedPost = undefined
+}
 </script>
 
 <template>
@@ -649,6 +659,8 @@ function onActivateAccountMaskToggle () {
       position="post"
       :post="mainState.currentAuthorPinnedPost"
       class="pinned-post"
+      @updateThisPostThread="updateThisPostThread"
+      @removeThisPost="removeThisPost"
     >
       <template #post-before>
         <div class="pinned-post__header">
