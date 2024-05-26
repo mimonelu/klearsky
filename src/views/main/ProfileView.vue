@@ -586,7 +586,7 @@ function onActivateAccountMaskToggle () {
         <!-- カスタムフィードタブボタン -->
         <RouterLink
           class="tab__button tab__button--feed"
-          :to="{ path: '/profile/custom-feeds', query: { account: mainState.currentProfile?.did } }"
+          :to="{ path: '/profile/feed-generators', query: { account: mainState.currentProfile?.did } }"
           :title="$t('customFeeds')"
           :data-disabled="!mainState.currentProfile?.associated?.feedgens"
         >

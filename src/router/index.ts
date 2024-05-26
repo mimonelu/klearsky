@@ -121,8 +121,8 @@ const router = createRouter({
               component: AuthorFeedsWithMediaView,
             },
             {
-              path: "custom-feeds",
-              name: "profile-custom-feeds",
+              path: "feed-generators",
+              name: "profile-feed-generators",
               meta: { label: "customFeeds" },
               component: AuthorFeedGeneratorsView,
             },

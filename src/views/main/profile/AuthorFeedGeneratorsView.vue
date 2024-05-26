@@ -21,7 +21,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 </script>
 
 <template>
-  <div class="author-custom-feeds-view">
+  <div class="author-feed-generators-view">
     <LoadButton
       direction="new"
       :processing="mainState.listLoaderDisplay"
@@ -58,7 +58,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 </template>
 
 <style lang="scss" scoped>
-.author-custom-feeds-view {
+.author-feed-generators-view {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

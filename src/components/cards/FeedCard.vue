@@ -251,7 +251,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       >
         <RouterLink
           class="textlink feed-card__creator__by"
-          :to="{ name: 'profile-custom-feeds', query: { account: generator.creator.did } }"
+          :to="{ name: 'profile-feed-generators', query: { account: generator.creator.did } }"
           @click.prevent
         >
           <span>{{ $t("by") }} <b>{{ generator.creator.displayName || generator.creator.handle }}</b></span>

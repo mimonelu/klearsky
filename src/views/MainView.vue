@@ -406,7 +406,7 @@ async function processPage (pageName?: null | string) {
     case "profile-feeds":
     case "profile-feeds-with-replies":
     case "profile-feeds-with-media":
-    case "profile-custom-feeds":
+    case "profile-feed-generators":
     case "profile-repost":
     case "profile-like":
     case "profile-list":
@@ -509,7 +509,7 @@ async function processPage (pageName?: null | string) {
         }
         break
       }
-      case "profile-custom-feeds": {
+      case "profile-feed-generators": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
           // DIDやブロック情報などを先に取得するために並列処理はしない
