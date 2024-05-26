@@ -371,8 +371,8 @@
   "chatFetchInterval5": "5分ごと",
   "chatFetchInterval6": "10分ごと",
 
-  "timelineControl": "フォロー中フィードの制御",
-  "timelineControlDescription": "次のダウンロードから有効です。",
+  "feedControl": "フィードの制御",
+  "feedControlDescription": "次のダウンロードから有効です。",
 
   "replyFolding": "リプライの折り畳み",
   "replyFolding1": "投稿者自身へのリプライ",

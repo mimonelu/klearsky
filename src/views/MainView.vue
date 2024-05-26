@@ -1341,9 +1341,9 @@ function broadcastListener (event: MessageEvent) {
             </ul>
           </template>
 
-          <template v-else-if="state.htmlPopupProps.type === 'timelineControl'">
+          <template v-else-if="state.htmlPopupProps.type === 'feedControl'">
             <ul class="bullet-points">
-              <li>{{ $t("timelineControlDescription") }}</li>
+              <li>{{ $t("feedControlDescription") }}</li>
             </ul>
           </template>
 
