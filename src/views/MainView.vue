@@ -518,8 +518,8 @@ async function processPage (pageName?: null | string) {
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
           state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
-        if (!state.inSameProfilePage || state.currentAuthorCustomFeeds.length === 0) {
-          await state.fetchCurrentAuthorCustomFeeds("new")
+        if (!state.inSameProfilePage || state.currentAuthorFeedGenerators.length === 0) {
+          await state.fetchCurrentAuthorFeedGenerators("new")
         }
         break
       }

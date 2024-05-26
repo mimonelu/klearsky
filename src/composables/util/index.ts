@@ -9,6 +9,7 @@ import downloadImage from "@/composables/util/download-image"
 import getGraphemeLength from "@/composables/util/get-grapheme-length"
 import getRkey from "@/composables/util/get-rkey"
 import getUserLanguage from "@/composables/util/get-user-language"
+import injectFoldingToFeeds from "@/composables/util/inject-folding-to-feeds"
 import makeCustomLinks from "@/composables/util/make-custom-links"
 import mergeFeeds from "@/composables/util/merge-feeds"
 import parseOgp from "@/composables/util/parse-ogp"
@@ -38,6 +39,7 @@ export default {
   getGraphemeLength,
   getRkey,
   getUserLanguage,
+  injectFoldingToFeeds,
   makeCustomLinks,
   mergeFeeds,
   parseOgp,

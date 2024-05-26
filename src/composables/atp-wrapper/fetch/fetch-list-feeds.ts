@@ -5,6 +5,8 @@ export default async function (
   this: TIAtpWrapper,
   currentFeeds: Array<TTFeed>,
   list: string,
+  replyFolding?: Array<number>,
+  repostFolding?: Array<number>,
   limit?: number,
   cursor?: string,
   direction?: TTDirection,
@@ -26,6 +28,14 @@ export default async function (
 
   // 現在のフィードと異なるフィードかどうかの判定
   if (checkIdentity != null && !checkIdentity(list)) return
+
+  // 折り畳みプロパティをインジェクト
+  Util.injectFoldingToFeeds(
+    response.data.feed as Array<TTFeed>,
+    this.session?.did,
+    replyFolding,
+    repostFolding
+  )
 
   // TODO:
   Util.coherentResponses(response.data.feed)

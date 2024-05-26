@@ -7,16 +7,16 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
-async function fetchAuthorCustomFeeds (direction: "new" | "old") {
+async function fetchAuthorFeedGenerators (direction: "new" | "old") {
   Util.blurElement()
   mainState.listLoaderDisplay = true
-  await mainState.fetchCurrentAuthorCustomFeeds(direction)
+  await mainState.fetchCurrentAuthorFeedGenerators(direction)
   mainState.listLoaderDisplay = false
 }
 
 // インフィニットスクロール
 watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchAuthorCustomFeeds("old")
+  if (value) fetchAuthorFeedGenerators("old")
 })
 </script>
 
@@ -25,12 +25,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <LoadButton
       direction="new"
       :processing="mainState.listLoaderDisplay"
-      @activate="fetchAuthorCustomFeeds('new')"
+      @activate="fetchAuthorFeedGenerators('new')"
     />
 
     <!-- 空のコンテンツメッセージ -->
     <div
-      v-if="!mainState.listLoaderDisplay && mainState.currentAuthorCustomFeeds?.length === 0"
+      v-if="!mainState.listLoaderDisplay && mainState.currentAuthorFeedGenerators?.length === 0"
       class="textlabel margin1"
     >
       <div class="textlabel__text">
@@ -40,7 +40,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
     <div class="feed-card-container">
       <FeedCard
-        v-for="generator of mainState.currentAuthorCustomFeeds"
+        v-for="generator of mainState.currentAuthorFeedGenerators"
         :key="generator.cid"
         :generator="generator"
         :menuDisplay="true"
@@ -52,7 +52,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <LoadButton
       direction="old"
       :processing="mainState.listLoaderDisplay"
-      @activate="fetchAuthorCustomFeeds('old')"
+      @activate="fetchAuthorFeedGenerators('old')"
     />
   </div>
 </template>

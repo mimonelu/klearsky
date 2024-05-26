@@ -25,7 +25,7 @@ import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
 import deleteThreadgate from "@/composables/atp-wrapper/delete/delete-threadgate"
 import fetchActorLists from "@/composables/atp-wrapper/fetch/fetch-actor-lists"
 import fetchActorsTypeahead from "@/composables/atp-wrapper/fetch/fetch-actors-typeahead"
-import fetchAuthorCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-author-custom-feeds"
+import fetchAuthorFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-author-feed-generators"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch/fetch-author-feed"
 import fetchAuthorLikes from "@/composables/atp-wrapper/fetch/fetch-author-likes"
 import fetchAuthorReposts from "@/composables/atp-wrapper/fetch/fetch-author-reposts"
@@ -52,7 +52,7 @@ import fetchList from "@/composables/atp-wrapper/fetch/fetch-list"
 import fetchListBlocks from "@/composables/atp-wrapper/fetch/fetch-list-blocks"
 import fetchListItems from "@/composables/atp-wrapper/fetch/fetch-list-items"
 import fetchListMutes from "@/composables/atp-wrapper/fetch/fetch-list-mutes"
-import fetchListFeed from "@/composables/atp-wrapper/fetch/fetch-list-feed"
+import fetchListFeeds from "@/composables/atp-wrapper/fetch/fetch-list-feeds"
 import fetchLists from "@/composables/atp-wrapper/fetch/fetch-lists"
 import fetchLogAudit from "@/composables/atp-wrapper/fetch/fetch-log-audit"
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch/fetch-muting-users"
@@ -174,7 +174,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteThreadgate = deleteThreadgate
   fetchActorLists = fetchActorLists
   fetchActorsTypeahead = fetchActorsTypeahead
-  fetchAuthorCustomFeeds = fetchAuthorCustomFeeds
+  fetchAuthorFeedGenerators = fetchAuthorFeedGenerators
   fetchAuthorFeed = fetchAuthorFeed
   fetchAuthorLikes = fetchAuthorLikes
   fetchAuthorReposts = fetchAuthorReposts
@@ -201,7 +201,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchListBlocks = fetchListBlocks
   fetchListItems = fetchListItems
   fetchListMutes = fetchListMutes
-  fetchListFeed = fetchListFeed
+  fetchListFeeds = fetchListFeeds
   fetchLists = fetchLists
   fetchLogAudit = fetchLogAudit
   fetchMutingUsers = fetchMutingUsers
