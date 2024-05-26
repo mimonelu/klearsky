@@ -364,7 +364,7 @@ getEmbeddedContentId()
     background-color: var(--fg-color-0125);
     border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius-middle);
-    padding: 0.75em 0.75em 0.5em;
+    padding: 0.5em 0.75em;
     pointer-events: none;
     user-select: none;
   }

@@ -306,6 +306,7 @@ function isMine (message: TIChatMessage): boolean {
 
   &__messages {
     display: grid;
+    grid-gap: 0.5rem;
   }
 
   &__message {

@@ -129,18 +129,32 @@ async function chatMessagePopoverCallback (type: string) {
 
   // チャットルーム用
   &[data-is-last-message="false"] {
-    &:deep(.body__right__header) {
-      grid-template-columns: auto 1fr auto auto;
-      margin-right: -1em;
+    padding: 0 1em;
 
-      & > .button--plane {
-        margin-left: -0.5em;
+    &:deep() {
+      .body__right {
+        grid-gap: 0;
+      }
+
+      .body__right__header {
+        grid-template-columns: auto 1fr auto auto;
+        margin-right: -1em;
+
+        & > .button--plane {
+          margin-left: -0.5em;
+        }
+      }
+
+      .display-name {
+        color: var(--fg-color-05);
+      }
+
+      .post__content {
+        background-color: var(--chat-post-bg-color);
+        padding: 1em;
       }
     }
-    &:deep(.post__content) {
-      background-color: var(--chat-post-bg-color);
-      padding: 1em;
-    }
+
     &[data-is-mine="true"]:deep(.post__content) {
       border-radius:
         var(--border-radius-large)
