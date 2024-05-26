@@ -1,24 +1,3 @@
-type TTProfile = {
-  __log?: any // Injected
-  __createdAt?: string // Injected
-  associated?: TIAssociated
-  avatar: string
-  banner: string
-  description?: string
-  did: string
-  displayName: string
-  followersCount: number
-  followsCount: number
-  handle: string
-  indexedAt: string
-  labels?: Array<TTLabel>
-  postsCount: number
-  viewer: TTUserViewer
-
-  // 固定ポスト
-  pinnedPost?: string
-}
-
 type TTUser = {
   associated?: TIAssociated
   avatar?: string

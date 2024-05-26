@@ -95,28 +95,6 @@ type TTExternal = {
   preview?: string
 }
 
-type TTImage = {
-  image?: {
-    mimeType: string
-    ref: {
-      $link: string
-      bytes?: Uint8Array
-    }
-    size: number
-  }
-
-  thumb?: string
-  fullsize?: string
-
-  alt: string
-  aspectRatio?: TTAspectRatio
-}
-
-type TTAspectRatio = {
-  width: number
-  height: number
-}
-
 type TTEntity = {
   type: string
   index: {
@@ -124,4 +102,32 @@ type TTEntity = {
     start: number
   }
   value: string
+}
+
+type TTPostType = "post" | "reply" | "quoteRepost"
+
+type TTCreatePostParams = {
+  type?: TTPostType
+  post?: TTPost
+  text?: string
+  createdAt?: string
+  url?: string
+  urlHasImage?: Array<boolean>
+  images?: Array<File>
+  alts?: Array<string>
+  languages?: Array<string>
+  labels?: Array<string>
+  lightning?: string
+  tags?: Array<TTMyTag>
+}
+
+type TTSendPostPopupParams = {
+  display?: boolean
+  visibility?: boolean
+  type: TTPostType
+  post?: TTPost
+  text?: string
+  url?: string
+  fileList?: FileList
+  createdAt?: string
 }

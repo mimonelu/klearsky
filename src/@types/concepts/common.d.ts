@@ -9,3 +9,10 @@ interface TICommonRecord {
   cid: string
   value: { [k: string]: any }
 }
+
+type TTDirection = "new" | "old" | "middle"
+
+type TTOption = {
+  label: string
+  value: any
+}
