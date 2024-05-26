@@ -416,7 +416,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     background-color: rgb(var(--notice-color), 0.125);
   }
   &[data-purpose="unknownList"] {
-    background-color: var(--fg-color-0125);
+    background-color: var(--fg-color-00625);
   }
 
   // リスト詳細

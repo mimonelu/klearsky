@@ -256,6 +256,7 @@
   "atlasApp": "BSky Experiments",
   "atscanApp": "ATScan",
   "showSource": "ソースを表示する",
+  "callApi": "APIをコールする",
 
   "sendRepost": "リポストする",
   "deleteRepost": "リポストを取り消す",

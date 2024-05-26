@@ -256,6 +256,7 @@
   "atlasApp": "BSky Experiments",
   "atscanApp": "ATScan",
   "showSource": "Show source",
+  "callApi": "Call API",
 
   "sendRepost": "Repost",
   "deleteRepost": "Delete repost",

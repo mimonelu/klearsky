@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
+import MenuTickerAPICallWrapper from "@/components/menus/APICallWrapper.vue"
 import MenuTickerCopyTextWrapper from "@/components/menus/CopyTextWrapper.vue"
 import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
@@ -138,6 +139,11 @@ function close () {
       />
 
       <hr />
+
+      <MenuTickerAPICallWrapper
+        :user="user"
+        @close="emit('close')"
+      />
 
       <!-- ソースを表示する -->
       <MenuTickerOpenSource
