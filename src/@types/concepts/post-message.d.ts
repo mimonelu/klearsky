@@ -5,6 +5,6 @@ interface TTPostMessageData {
     | "setSessionCacheRequest"
     | "setSessionCacheResponse"
   did?: string
-  key?: string
+  key?: keyof TTMyWorkerSessionCache
   value?: any
 }

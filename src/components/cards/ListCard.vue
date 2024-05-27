@@ -216,7 +216,7 @@ async function updatePreferences () {
   // セッションキャッシュの更新
   if (result) {
     mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("myFeeds.items", mainState.myFeeds.items)
+    mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
   }
 }
 

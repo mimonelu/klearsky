@@ -320,7 +320,7 @@ async function processAfterLogin () {
         state.myFeeds.synchronizeToMyList()
 
         // セッションキャッシュの設定
-        state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
+        state.myWorker.setSessionCache("myFeedsItems", state.myFeeds.items)
       })
   }
 
@@ -764,8 +764,11 @@ function broadcastListener (event: MessageEvent) {
   switch (event.data.name) {
     // セッションの同期
     case "refreshSession": {
-      if (event.data.data == null) break
-      if (event.data.data.did !== state.atp.data.did) break
+      if (event.data.data == null ||
+          event.data.data.did !== state.atp.data.did
+      ) {
+        break
+      }
       state.atp.resetSession(event.data.data)
       break
     }
@@ -773,7 +776,10 @@ function broadcastListener (event: MessageEvent) {
     // セッションキャッシュの反映
     case "setSessionCacheResponse": {
       const data: TTPostMessageData = event.data
-      if (data.did != state.atp.data.did || data.key == null || data.value == null) {
+      if (data.did !== state.atp.data.did ||
+          data.key == null ||
+          data.value == null
+      ) {
         break
       }
       switch (data.key) {
@@ -790,7 +796,7 @@ function broadcastListener (event: MessageEvent) {
         }
 
         // セッションキャッシュの反映 - マイフィード
-        case "myFeeds.items": {
+        case "myFeedsItems": {
           state.myFeeds.items.splice(0, state.myFeeds.items.length, ...data.value)
           state.myFeeds.synchronizeToMyList()
           break

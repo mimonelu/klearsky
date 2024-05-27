@@ -9,5 +9,9 @@ interface TTMyWorkerSessionCaches {
 }
 
 interface TTMyWorkerSessionCache {
-  [k: string]: any
+  currentPreferences?: any
+  inviteCodes?: any
+  myFeedsItems?: any
+  myList?: any
+  userProfile?: any
 }
