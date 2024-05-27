@@ -58,7 +58,7 @@
   },
   {
     "name": "atlasApp",
-    "post": "https://bsky.jazco.dev/?s={handle}",
-    "profile": "https://bsky.jazco.dev/?s={handle}"
+    "post": "https://bsky.jazco.dev/thread/view?author_did={did}&post={rkey}",
+    "profile": "https://bsky.jazco.dev/atlas?s={handle}"
   }
 ]

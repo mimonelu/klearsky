@@ -1,5 +1,5 @@
 import type { AppBskyFeedGetPostThread, BskyAgent } from "@atproto/api"
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 
 interface TTThread {
   parent: TTThread
@@ -23,7 +23,7 @@ export default async function (
   if (!response.success) return false
   const posts: Array<TTPost> = []
   traverseThread(response.data.thread as unknown as TTThread, posts)
-  AtpUtil.coherentResponses(posts)
+  Util.coherentResponses(posts)
   return posts
 }
 

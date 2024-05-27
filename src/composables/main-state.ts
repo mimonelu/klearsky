@@ -5,11 +5,11 @@ import isSameYear from "date-fns/isSameYear"
 import { computed, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
-import MyChat from "@/composables/main-state/my-chat"
-import MyFeeds from "@/composables/main-state/my-feeds"
-import MyLabeler from "@/composables/main-state/my-labeler"
-import MyLists from "@/composables/main-state/my-lists"
-import MyWorker from "@/composables/main-state/my-worker"
+import MyChat from "@/composables/main-state-classes/my-chat"
+import MyFeeds from "@/composables/main-state-classes/my-feeds"
+import MyLabeler from "@/composables/main-state-classes/my-labeler"
+import MyLists from "@/composables/main-state-classes/my-lists"
+import MyWorker from "@/composables/main-state-classes/my-worker"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 // import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
@@ -143,7 +143,7 @@ state.isMyProfile = isMyProfile
 state.fetchUserProfile = fetchUserProfile
 state.updateUserProfile = updateUserProfile
 state.fetchCurrentProfile = fetchCurrentProfile
-state.fetchCurrentAuthorCustomFeeds = fetchCurrentAuthorCustomFeeds
+state.fetchCurrentAuthorFeedGenerators = fetchCurrentAuthorFeedGenerators
 state.fetchCurrentAuthorFeed = fetchCurrentAuthorFeed
 state.fetchAuthorReposts = fetchAuthorReposts
 state.fetchAuthorLikes = fetchAuthorLikes
@@ -1035,8 +1035,8 @@ function resetProfileState () {
   state.currentAuthorFeedsWithRepliesCursor = undefined
   resetArray(state, "currentAuthorFeedsWithMedia")
   state.currentAuthorFeedsWithMediaCursor = undefined
-  resetArray(state, "currentAuthorCustomFeeds")
-  state.currentAuthorCustomFeedsCursor = undefined
+  resetArray(state, "currentAuthorFeedGenerators")
+  state.currentAuthorFeedGeneratorsCursor = undefined
   resetArray(state, "currentAuthorReposts")
   state.currentAuthorRepostsCursor = undefined
   resetArray(state, "currentAuthorLikes")
@@ -1097,7 +1097,7 @@ async function fetchCurrentProfile (did: string) {
   state.currentAuthorReposts.splice(0)
   state.currentAuthorLikes.splice(0)
   state.currentAuthorLists.splice(0)
-  state.currentAuthorCustomFeeds.splice(0)
+  state.currentAuthorFeedGenerators.splice(0)
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
   state.currentSuggestedFollows.splice(0)
@@ -1167,7 +1167,7 @@ async function fetchPinnedPost (profile?: TTProfile) {
   }
 }
 
-async function fetchCurrentAuthorCustomFeeds (direction: "new" | "old") {
+async function fetchCurrentAuthorFeedGenerators (direction: "new" | "old") {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
 
@@ -1178,14 +1178,14 @@ async function fetchCurrentAuthorCustomFeeds (direction: "new" | "old") {
   if (state.currentProfile?.viewer.blockedBy) return
 
   const cursor: Error | undefined | string =
-    await state.atp.fetchAuthorCustomFeeds(
-      state.currentAuthorCustomFeeds as Array<TTFeedGenerator>,
+    await state.atp.fetchAuthorFeedGenerators(
+      state.currentAuthorFeedGenerators as Array<TTFeedGenerator>,
       account,
       CONSTS.LIMIT_OF_FETCH_AUTHOR_CUSTOM_FEEDS,
-      direction === "old" ? state.currentAuthorCustomFeedsCursor : undefined
+      direction === "old" ? state.currentAuthorFeedGeneratorsCursor : undefined
     )
   if (cursor instanceof Error) return
-  if (cursor != null) state.currentAuthorCustomFeedsCursor = cursor
+  if (cursor != null) state.currentAuthorFeedGeneratorsCursor = cursor
 }
 
 async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, middleCursor?: string) {
@@ -1422,6 +1422,8 @@ async function fetchCustomFeeds (direction: TTDirection, middleCursor?: string) 
     await state.atp.fetchCustomFeeds(
       state.currentCustomFeeds,
       state.currentQuery.feed,
+      state.currentSetting.replyFolding,
+      state.currentSetting.repostFolding,
       CONSTS.LIMIT_OF_FETCH_FEEDS,
       direction === "old" ? state.currentCustomFeedsCursor : middleCursor,
       direction,
@@ -1514,9 +1516,11 @@ async function fetchCurrentListItems (direction: "old" | "new"): Promise<boolean
 async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: string): Promise<boolean> {
   if (state.currentList == null) return false
   const cursor: undefined | string | Error =
-    await state.atp.fetchListFeed(
+    await state.atp.fetchListFeeds(
       state.currentListFeeds,
       state.currentList.uri,
+      state.currentSetting.replyFolding,
+      state.currentSetting.repostFolding,
       CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
       direction === "old" ? state.currentListFeedsCursor : middleCursor,
       direction,

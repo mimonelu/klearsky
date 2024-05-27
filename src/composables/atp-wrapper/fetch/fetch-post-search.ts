@@ -1,5 +1,5 @@
 import type { AppBskyFeedSearchPosts, BskyAgent } from "@atproto/api"
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -26,7 +26,7 @@ export default async function (
     })
 
   // TODO:
-  AtpUtil.coherentResponses(newPosts)
+  Util.coherentResponses(newPosts)
 
   if (cursor == null) {
     currentPosts.unshift(...newPosts)

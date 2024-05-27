@@ -3,7 +3,7 @@ import { computed, inject, onBeforeUnmount, onMounted, reactive, ref, type Compu
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import NotificationList from "@/components/lists/NotificationList.vue"
 import Popup from "@/components/popups/Popup.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 

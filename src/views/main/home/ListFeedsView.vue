@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, watch } from "vue"
-import Feed from "@/components/app-parts/Feed.vue"
+import Feed from "@/components/compositions/Feed.vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Util from "@/composables/util"
@@ -20,6 +20,32 @@ async function deleteList (list: TTList) {
 
   // セッションキャッシュの更新
   mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+}
+
+function updateThisPostThread (newPosts: Array<TTPost>) {
+  // MEMO: 全フィードの全同一ポストに最新のデータを反映する
+  // WANT: このために「画面には1つのフィードのみ表示する」としているが、何とかしたい
+  mainState.currentListFeeds?.forEach((feed: TTFeed) => {
+    newPosts.forEach((newPost: TTPost) => {
+      if (feed.post?.cid === newPost.cid)
+        Util.updatePostProps(feed.post, newPost)
+      if (feed.reply?.parent?.cid === newPost.cid)
+        Util.updatePostProps(feed.reply.parent, newPost)
+      if (feed.reply?.root?.cid === newPost.cid)
+        Util.updatePostProps(feed.reply.root, newPost)
+    })
+  })
+}
+
+function removeThisPost (uri: string) {
+  mainState.currentListFeeds?.forEach((feed: TTFeed) => {
+    // @ts-ignore // TODO:
+    if (feed.post?.uri === uri) delete feed.post
+    // @ts-ignore // TODO:
+    if (feed.reply?.parent?.uri === uri) delete feed.reply.parent
+    // @ts-ignore // TODO:
+    if (feed.reply?.root?.uri === uri) delete feed.reply.root
+  })
 }
 
 // インフィニットスクロール
@@ -55,6 +81,8 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         <Feed
           :feed="feed"
           :data-is-middle="feed.__cursor != null"
+          @updateThisPostThread="updateThisPostThread"
+          @removeThisPost="removeThisPost"
         />
 
         <!-- 抜け漏れ取得ボタン -->

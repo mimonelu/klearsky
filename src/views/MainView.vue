@@ -25,10 +25,10 @@ import LikeUsersPopup from "@/components/popups/LikeUsersPopup.vue"
 import ListCardPopover from "@/components/popovers/ListCardPopover.vue"
 import ListEditPopup from "@/components/popups/ListEditPopup.vue"
 import ListUserManagementPopup from "@/components/popups/ListUserManagementPopup.vue"
-import Loader from "@/components/common/Loader.vue"
+import Loader from "@/components/shells/Loader.vue"
 import LoginPopup from "@/components/popups/LoginPopup.vue"
-import MainMenuHorizontal from "@/components/shell-parts/MainMenuHorizontal.vue"
-import MainMenuVertical from "@/components/shell-parts/MainMenuVertical.vue"
+import MainMenuHorizontal from "@/components/shells/MainMenuHorizontal.vue"
+import MainMenuVertical from "@/components/shells/MainMenuVertical.vue"
 import MessagePopup from "@/components/popups/MessagePopup.vue"
 import MutingUsersPopup from "@/components/popups/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
@@ -54,9 +54,9 @@ import SendListReportPopup from "@/components/popups/SendListReportPopup.vue"
 import SendPostPopup from "@/components/popups/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/popups/SendPostReportPopup.vue"
 import SettingsPopover from "@/components/popovers/SettingsPopover.vue"
-import SplashScreen from "@/components/shell-parts/SplashScreen.vue"
-import SubMenu from "@/components/shell-parts/SubMenu.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SplashScreen from "@/components/shells/SplashScreen.vue"
+import SubMenu from "@/components/shells/SubMenu.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import ThreadgatePopup from "@/components/popups/ThreadgatePopup.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import UiLanguageSettingsPopup from "@/components/popups/settings-popups/UiLanguageSettingsPopup.vue"
@@ -406,7 +406,7 @@ async function processPage (pageName?: null | string) {
     case "profile-feeds":
     case "profile-feeds-with-replies":
     case "profile-feeds-with-media":
-    case "profile-custom-feeds":
+    case "profile-feed-generators":
     case "profile-repost":
     case "profile-like":
     case "profile-list":
@@ -509,7 +509,7 @@ async function processPage (pageName?: null | string) {
         }
         break
       }
-      case "profile-custom-feeds": {
+      case "profile-feed-generators": {
         if (account !== state.currentProfile?.handle &&
             account !== state.currentProfile?.did) {
           // DIDやブロック情報などを先に取得するために並列処理はしない
@@ -518,8 +518,8 @@ async function processPage (pageName?: null | string) {
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
           state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
-        if (!state.inSameProfilePage || state.currentAuthorCustomFeeds.length === 0) {
-          await state.fetchCurrentAuthorCustomFeeds("new")
+        if (!state.inSameProfilePage || state.currentAuthorFeedGenerators.length === 0) {
+          await state.fetchCurrentAuthorFeedGenerators("new")
         }
         break
       }
@@ -1341,9 +1341,9 @@ function broadcastListener (event: MessageEvent) {
             </ul>
           </template>
 
-          <template v-else-if="state.htmlPopupProps.type === 'timelineControl'">
+          <template v-else-if="state.htmlPopupProps.type === 'feedControl'">
             <ul class="bullet-points">
-              <li>{{ $t("timelineControlDescription") }}</li>
+              <li>{{ $t("feedControlDescription") }}</li>
             </ul>
           </template>
 
@@ -1621,3 +1621,4 @@ function broadcastListener (event: MessageEvent) {
   position: fixed;
 }
 </style>
+@/composables/main-state/main-state@/composables/main-state

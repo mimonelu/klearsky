@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import Checkboxes from "@/components/form-parts/Checkboxes.vue"
+import Checkboxes from "@/components/forms/Checkboxes.vue"
 import Popup from "@/components/popups/Popup.vue"
-import Radios from "@/components/form-parts/Radios.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Radios from "@/components/forms/Radios.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import SETTINGS from "@/consts/settings.json"
 
 const mainState = inject("state") as MainState
@@ -84,21 +84,21 @@ const mainState = inject("state") as MainState
           </div>
         </div>
 
-        <!-- タイムラインの制御 -->
+        <!-- フィードの制御 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
-            <span>{{ $t("timelineControl") }}</span>
+            <span>{{ $t("feedControl") }}</span>
 
             <!-- ヘルプボタン -->
             <button
               class="settings-popup__help-button"
-              @click.prevent="$emit('showDescription', 'timelineControl')"
+              @click.prevent="$emit('showDescription', 'feedControl')"
             >
               <SVGIcon name="help" />
             </button>
           </div>
           <div class="settings-popup__form__body">
-            <!-- タイムラインの制御 - リプライ -->
+            <!-- フィードの制御 - リプライ -->
             <div class="settings-popup__form__header">
               <span>{{ $t("replyFolding") }}</span>
             </div>
@@ -109,7 +109,7 @@ const mainState = inject("state") as MainState
               @update="$emit('saveSetting')"
             />
 
-            <!-- タイムラインの制御 - リポスト -->
+            <!-- フィードの制御 - リポスト -->
             <div class="settings-popup__form__header">
               <span>{{ $t("repostFolding") }}</span>
             </div>

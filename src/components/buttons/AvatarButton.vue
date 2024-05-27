@@ -1,42 +1,35 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import LazyImage from "@/components/common/LazyImage.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
 
-const props = defineProps<{
-  isLabeler?: boolean
+defineProps<{
+  did?: string
   image?: string
+  isLabeler?: boolean
+  noLink?: boolean
 }>()
 
 const mainState = inject("state") as MainState
-
-function openImagePopup () {
-  if (!props.image) return
-  mainState.imagePopupProps.images = [{
-    largeUri: props.image,
-    smallUri: "",
-  }]
-  mainState.imagePopupProps.alts = [""]
-  mainState.imagePopupProps.index = 0
-  mainState.imagePopupProps.display = true
-}
 </script>
 
 <template>
-  <button
-    class="avatar"
+  <Component
+    :is="noLink ? 'div' : 'RouterLink'"
+    :to="{ name: 'profile-feeds', query: { account: did } }"
+    class="avatar-button"
     :data-is-labeler="!!isLabeler"
-    @click.stop="openImagePopup"
   >
-    <LazyImage :src="image" />
-  </button>
+    <LazyImage :src="mainState.currentSetting.postAnonymization ? undefined : image" />
+  </Component>
 </template>
 
 <style lang="scss" scoped>
-.avatar {
-  cursor: pointer;
+.avatar-button {
   display: block;
+  position: relative;
 
   & > .lazy-image {
+    display: block;
     min-width: 1em;
     max-width: 1em;
     min-height: 1em;
@@ -49,6 +42,10 @@ function openImagePopup () {
   &[data-is-labeler="true"] > .lazy-image {
     border-radius: var(--border-radius-small);
   }
+}
+a.avatar-button {
+  cursor: pointer;
+
   &:hover > .lazy-image {
     border-radius: 1px;
   }

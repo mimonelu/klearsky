@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import format from "date-fns/format"
-import LazyImage from "@/components/common/LazyImage.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 defineProps<{

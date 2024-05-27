@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import MediaListItem from "@/components/lists/MediaListItem.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 defineProps<{
   medias: Array<TTMedia>

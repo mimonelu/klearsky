@@ -2,8 +2,8 @@
 import { computed, inject, onBeforeMount, reactive, ref, type ComputedRef } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Popup from "@/components/popups/Popup.vue"
-import Post from "@/components/app-parts/Post.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Post from "@/components/compositions/Post.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 

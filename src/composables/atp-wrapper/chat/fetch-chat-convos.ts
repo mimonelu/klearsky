@@ -25,11 +25,8 @@ export default async function (
   const response = await (this.agent as BskyAgent).api.chat.bsky.convo.listConvos(query, options)
     .then((value: ChatBskyConvoListConvos.Response) => value)
     .catch((error: Error) => error)
-
-  // 定期取得時に邪魔になるためコメントアウト
-  // console.log("[klearsky/api.chat.bsky.convo.listConvos]", response)
-
   if (response instanceof Error) {
+    console.warn("[klearsky/api.chat.bsky.convo.listConvos]", response)
     return response
   }
   return response.data as unknown as TIFetchChatConvosResponse

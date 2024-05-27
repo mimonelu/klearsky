@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
-import MenuTickerCopyTextWrapper from "@/components/menu-items/CopyTextWrapper.vue"
-import MenuTickerModerateWrapper from "@/components/menu-items/ModerateWrapper.vue"
-import MenuTickerOpenAppWrapper from "@/components/menu-items/OpenAppWrapper.vue"
-import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
-import MenuTickerSendLinkCard from "@/components/menu-items/SendLinkCard.vue"
-import MenuTickerTranslateText from "@/components/menu-items/TranslateText.vue"
+import MenuTickerCopyTextWrapper from "@/components/menus/CopyTextWrapper.vue"
+import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
+import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
+import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
+import MenuTickerSendLinkCard from "@/components/menus/SendLinkCard.vue"
+import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import Popover from "@/components/popovers/Popover.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()

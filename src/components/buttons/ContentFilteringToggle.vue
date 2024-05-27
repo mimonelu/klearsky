@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const $t = inject("$t") as Function
 

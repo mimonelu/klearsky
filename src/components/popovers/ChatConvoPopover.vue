@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue"
-import MenuTickerOpenSource from "@/components/menu-items/OpenSource.vue"
+import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
 import Popover from "@/components/popovers/Popover.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()

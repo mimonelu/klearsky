@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import AuthorHandle from "@/components/app-parts/AuthorHandle.vue"
-import AvatarLink from "@/components/app-parts/AvatarLink.vue"
-import DisplayName from "@/components/app-parts/DisplayName.vue"
+import AuthorHandle from "@/components/labels/AuthorHandle.vue"
+import AvatarButton from "@/components/buttons/AvatarButton.vue"
+import DisplayName from "@/components/labels/DisplayName.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import ListCard from "@/components/cards/ListCard.vue"
-import Post from "@/components/app-parts/Post.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Post from "@/components/compositions/Post.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
 
@@ -156,7 +156,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             />
 
             <!-- アバターリンク -->
-            <AvatarLink
+            <AvatarButton
               :did="notification.did"
               :image="notification.avatar"
               @click.stop="$emit('close')"
@@ -384,7 +384,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 }
 
 // アバターリンク
-.avatar-link {
+.avatar-button {
   font-size: 2rem;
 }
 

@@ -2,8 +2,8 @@
 import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import Post from "@/components/app-parts/Post.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Post from "@/components/compositions/Post.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

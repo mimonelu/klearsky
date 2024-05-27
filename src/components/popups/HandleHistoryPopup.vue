@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import Popup from "@/components/popups/Popup.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
-import traverseJson from "@/composables/atp-wrapper/atp-util/traverse-json"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -24,7 +24,7 @@ function close () {
 
 function getHandle (item: any): undefined | string {
   let result: undefined | string
-  traverseJson(item, (key: string, value: any) => {
+  Util.traverseJson(item, (key: string, value: any) => {
     if (key === "handle") {
       result = value
     } else if (key === "alsoKnownAs") {
@@ -38,7 +38,7 @@ function getHandle (item: any): undefined | string {
 
 function getAtProtoEndpoint (item: any): undefined | string {
   let result: undefined | string
-  traverseJson(item, (key: string, value: any, parent: any) => {
+  Util.traverseJson(item, (key: string, value: any, parent: any) => {
     if (key === "service" && !Array.isArray(value)) {
       result = value
     } else if (key === "atproto_pds") {
@@ -52,7 +52,7 @@ function getAtProtoEndpoint (item: any): undefined | string {
 
 function getLabelerEndpoint (item: any): undefined | string {
   let result: undefined | string
-  traverseJson(item, (key: string, value: any, parent: any) => {
+  Util.traverseJson(item, (key: string, value: any, parent: any) => {
     if (key === "atproto_labeler") {
       result = value?.endpoint
     } else if (key === "serviceEndpoint" && parent.type === "AtprotoLabeler") {
@@ -189,3 +189,4 @@ function getLabelerEndpoint (item: any): undefined | string {
   }
 }
 </style>
+@/composables/util/traverse-json

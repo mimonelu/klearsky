@@ -18,14 +18,16 @@ export default async function (
   if (!response.success) return undefined
 
   // ブロックユーザーをフィルタリング
-  response.data.followers = (response.data.followers as Array<TTUser>).filter((follow: TTUser) => {
-    return !follow.viewer?.blocking && !follow.viewer?.blockedBy
-  })
+  response.data.followers = (response.data.followers as Array<TTUser>)
+    .filter((follow: TTUser) => {
+      return !follow.viewer?.blocking && !follow.viewer?.blockedBy
+    })
 
-  ;(response.data.followers as Array<TTUser>).forEach((follower: TTUser) => {
-    if (!users.some((user: TTUser) => user.did === follower.did))
-      users.push(follower)
-  })
+  ;(response.data.followers as Array<TTUser>)
+    .forEach((follower: TTUser) => {
+      if (!users.some((user: TTUser) => user.did === follower.did))
+        users.push(follower)
+    })
 
   return response.data.cursor
 }

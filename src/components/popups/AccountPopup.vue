@@ -3,7 +3,7 @@ import { inject } from "vue"
 import { useRouter } from "vue-router"
 import AccountList from "@/components/lists/AccountList.vue"
 import Popup from "@/components/popups/Popup.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 

@@ -2,8 +2,8 @@
 import { inject } from "vue"
 import ColorThemeList from "@/components/lists/ColorThemeList.vue"
 import Popup from "@/components/popups/Popup.vue"
-import Radios from "@/components/form-parts/Radios.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Radios from "@/components/forms/Radios.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import SETTINGS from "@/consts/settings.json"
 
 const mainState = inject("state") as MainState

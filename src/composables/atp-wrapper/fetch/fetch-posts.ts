@@ -1,5 +1,5 @@
 import type { AppBskyFeedGetPosts, BskyAgent } from "@atproto/api"
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
 export default async function (
@@ -34,7 +34,7 @@ export default async function (
     }
 
     // TODO:
-    AtpUtil.coherentResponses(response.value.data.posts)
+    Util.coherentResponses(response.value.data.posts)
 
     results.push(...(response.value.data.posts as Array<TTPost>))
   })

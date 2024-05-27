@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import SVGIcon from "@/components/common/SVGIcon.vue"
-import Loader from "@/components/common/Loader.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import Loader from "@/components/shells/Loader.vue"
 
 const emit = defineEmits<(name: string, direction: "old" | "middle" | "new") => void>()
 

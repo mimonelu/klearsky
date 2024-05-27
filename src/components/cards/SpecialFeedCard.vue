@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, reactive, type ComputedRef } from "vue"
 import OrderButtons from "@/components/buttons/OrderButtons.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(name: string, params?: any): void}>()
 

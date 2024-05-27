@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import GloballineSettingsPopup from "@/components/popups/GloballineSettingsPopup.vue"
-import Loader from "@/components/common/Loader.vue"
-import Post from "@/components/app-parts/Post.vue"
+import Loader from "@/components/shells/Loader.vue"
+import Post from "@/components/compositions/Post.vue"
 import SelectLanguagesPopup from "@/components/popups/SelectLanguagesPopup.vue"
-import SubscribeRepos from "@/composables/atp-wrapper/atp-util/subscribe-repos"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import SubscribeRepos from "@/composables/util/subscribe-repos"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -493,3 +493,4 @@ function onMutated () {
   }
 }
 </style>
+@/composables/util/subscribe-repos

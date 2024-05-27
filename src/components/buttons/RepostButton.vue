@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 defineProps<{
   post: TTPost
@@ -12,7 +12,6 @@ const mainState = inject("state") as MainState
 <template>
   <button
     class="icon-button repost-button"
-    :data-has="post.repostCount > 0"
     :data-reposted="!!post.viewer?.repost"
   >
     <div class="icon-container">

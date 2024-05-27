@@ -2,7 +2,7 @@
 import { inject } from "vue"
 import ListCardList from "@/components/lists/ListCardList.vue"
 import Popup from "@/components/popups/Popup.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 

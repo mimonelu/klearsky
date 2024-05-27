@@ -1,10 +1,12 @@
 import type { AppBskyFeedGetFeed, BskyAgent } from "@atproto/api"
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
   oldFeeds: Array<TTFeed>,
   feed: string,
+  replyFolding?: Array<number>,
+  repostFolding?: Array<number>,
   limit?: number,
   cursor?: string,
   direction?: TTDirection,
@@ -29,10 +31,18 @@ export default async function (
   // 現在のフィードと異なるフィードかどうかの判定
   if (checkIdentity != null && !checkIdentity(feed)) return
 
+  // 折り畳みプロパティをインジェクト
+  Util.injectFoldingToFeeds(
+    response.data.feed as Array<TTFeed>,
+    this.session?.did,
+    replyFolding,
+    repostFolding
+  )
+
   // TODO:
-  AtpUtil.coherentResponses(response.data.feed)
+  Util.coherentResponses(response.data.feed)
   const isFirstFetch = oldFeeds.length === 0
-  const isAllNew = AtpUtil.mergeFeeds(
+  const isAllNew = Util.mergeFeeds(
     oldFeeds,
     response.data.feed as Array<TTFeed>,
     cursor == null,
@@ -42,7 +52,7 @@ export default async function (
     const initialFeed = response.data.feed[0]
     if (initialFeed != null) initialFeed.__cursor = response.data.cursor
   }
-  // AtpUtil.sortFeeds(oldFeeds) // ソートはしない
+  // Util.sortFeeds(oldFeeds) // ソートはしない
 
   if (direction !== "old" && !isFirstFetch) return
 

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
-import LazyImage from "@/components/common/LazyImage.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const props = defineProps<{
   external: TTExternal
@@ -364,7 +364,7 @@ getEmbeddedContentId()
     background-color: var(--fg-color-0125);
     border: 1px solid var(--fg-color-025);
     border-radius: var(--border-radius-middle);
-    padding: 0.75em 0.75em 0.5em;
+    padding: 0.5em 0.75em;
     pointer-events: none;
     user-select: none;
   }

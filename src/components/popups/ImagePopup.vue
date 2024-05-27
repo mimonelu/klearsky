@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, inject, onBeforeMount, onBeforeUnmount, reactive, type ComputedRef } from "vue"
 import hotkeys from "hotkeys-js"
-import Loader from "@/components/common/Loader.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Loader from "@/components/shells/Loader.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()

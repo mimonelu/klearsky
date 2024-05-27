@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import HtmlText from "@/components/app-parts/HtmlText.vue"
+import HtmlText from "@/components/labels/HtmlText.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Util from "@/composables/util"
 

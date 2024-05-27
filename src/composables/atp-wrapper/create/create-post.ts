@@ -1,7 +1,7 @@
 import Package from "@/../package.json"
 import type { AppBskyFeedPost, BskyAgent } from "@atproto/api"
 import { RichText } from "@atproto/api"
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -33,7 +33,7 @@ export default async function (
     record.text = record.text.replace(/@zap(?=\W|$)/gi, `[⚡️Zap!](lightning:${params.lightning})`)
 
   // カスタムリンク
-  const customLinks = AtpUtil.makeCustomLinks(record.text)
+  const customLinks = Util.makeCustomLinks(record.text)
   record.text = customLinks.text
   if (customLinks.facets.length > 0) {
     record.facets = customLinks.facets
@@ -57,7 +57,7 @@ export default async function (
   }
 
   // Embed
-  const embedResult = await AtpUtil.createEmbed(this, record, params)
+  const embedResult = await Util.createEmbed(this, record, params)
   if (embedResult instanceof Error) {
     return embedResult
   }

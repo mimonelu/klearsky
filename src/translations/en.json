@@ -253,9 +253,10 @@
   "tokimekiApp": "TOKIMEKI Bluesky",
   "uniresolverApp": "Universal Resolver",
   "didApp": "did:plc Directory",
-  "atlasApp": "BSky Atlas",
+  "atlasApp": "BSky Experiments",
   "atscanApp": "ATScan",
   "showSource": "Show source",
+  "callApi": "Call API",
 
   "sendRepost": "Repost",
   "deleteRepost": "Delete repost",
@@ -371,8 +372,8 @@
   "chatFetchInterval5": "Every 5 min.",
   "chatFetchInterval6": "Every 10 min.",
 
-  "timelineControl": "Following Feed Control",
-  "timelineControlDescription": "Effective from the next download.",
+  "feedControl": "Feeds Control",
+  "feedControlDescription": "Effective from the next download.",
 
   "replyFolding": "Reply Folding",
   "replyFolding1": "Fold replies to the users themselves",

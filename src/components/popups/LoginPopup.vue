@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { inject, nextTick, reactive, ref } from "vue"
 import AccountList from "@/components/lists/AccountList.vue"
-import Copyright from "@/components/app-parts/Copyright.vue"
-import EasyForm from "@/components/form-parts/EasyForm.vue"
-import Logo from "@/components/app-parts/Logo.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import Copyright from "@/components/labels/Copyright.vue"
+import EasyForm from "@/components/forms/EasyForm.vue"
+import Logo from "@/components/images/Logo.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 
 defineExpose({
   setHasAuthFactorToken,

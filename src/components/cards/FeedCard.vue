@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import HtmlText from "@/components/app-parts/HtmlText.vue"
-import LazyImage from "@/components/common/LazyImage.vue"
-import Loader from "@/components/common/Loader.vue"
+import HtmlText from "@/components/labels/HtmlText.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
+import Loader from "@/components/shells/Loader.vue"
 import OrderButtons from "@/components/buttons/OrderButtons.vue"
-import SVGIcon from "@/components/common/SVGIcon.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(name: string, params?: any): void}>()
@@ -251,7 +251,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       >
         <RouterLink
           class="textlink feed-card__creator__by"
-          :to="{ name: 'profile-custom-feeds', query: { account: generator.creator.did } }"
+          :to="{ name: 'profile-feed-generators', query: { account: generator.creator.did } }"
           @click.prevent
         >
           <span>{{ $t("by") }} <b>{{ generator.creator.displayName || generator.creator.handle }}</b></span>

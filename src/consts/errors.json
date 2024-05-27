@@ -1,0 +1,8 @@
+{
+  "IGNORE": [
+    "AuthenticationRequired"
+  ],
+  "REPLACE": [
+    "sessionExpired"
+  ]
+}

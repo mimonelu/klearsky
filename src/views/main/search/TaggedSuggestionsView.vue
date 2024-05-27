@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import SVGIcon from "@/components/common/SVGIcon.vue";
+import SVGIcon from "@/components/images/SVGIcon.vue";
 import { inject, onMounted } from "vue"
 
 const mainState = inject("state") as MainState

@@ -1,5 +1,5 @@
 import type { AppBskyFeedGetTimeline, BskyAgent } from "@atproto/api"
-import AtpUtil from "@/composables/atp-wrapper/atp-util"
+import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -23,89 +23,19 @@ export default async function (
       .catch((error: any) => error)
   console.log("[klearsky/getTimeline]", response)
   if (!response.success) return false
-  ;(response.data.feed as Array<TTFeed>).forEach((feed: TTFeed) => {
-    // リプライ
-    if (feed.reply != null && replyFolding != null) {
-      // 投稿者自身へのリプライ
-      if (
-        replyFolding.includes(1) &&
-        feed.reply?.parent.author?.did === feed.post.author.did
-      ) feed.__folding = true
 
-      // あなたへのリプライ
-      if (
-        replyFolding.includes(2) &&
-        feed.reply?.parent.author?.did === this.session?.did
-      ) feed.__folding = true
-
-      // あなたをフォローしていないユーザーへのリプライ
-      if (
-        replyFolding.includes(3) &&
-        feed.reply?.parent.author?.did !== this.session?.did &&
-        feed.reply?.parent.author?.viewer.followedBy == null
-      ) feed.__folding = true
-
-      // あなたがフォローしていないユーザーへのリプライ
-      if (
-        replyFolding.includes(4) &&
-        feed.reply?.parent.author?.did !== this.session?.did &&
-        feed.reply?.parent.author?.viewer.following == null
-      ) feed.__folding = true
-
-      // あなたがフォローしているユーザーへのリプライ
-      if (
-        replyFolding.includes(5) &&
-        feed.reply?.parent.author?.viewer.following != null
-      ) feed.__folding = true
-    }
-
-    // リポスト
-    if (feed.reason != null && repostFolding != null) {
-      // 自分自身のポストのリポスト
-      if (
-        repostFolding.includes(1) &&
-        feed.reason?.by.did === feed.post.author.did
-      ) feed.__folding = true
-
-      // あなたのポストのリポスト
-      if (
-        repostFolding.includes(2) &&
-        feed.post.author.did === this.session?.did
-      ) feed.__folding = true
-
-      // あなたをフォローしていないユーザーのポストのリポスト
-      if (
-        repostFolding.includes(3) &&
-        feed.post.author.did !== this.session?.did &&
-        feed.post.author.viewer.followedBy == null
-      ) feed.__folding = true
-
-      // あなたがフォローしていないユーザーのポストのリポスト
-      if (
-        repostFolding.includes(4) &&
-        feed.post.author.did !== this.session?.did &&
-        feed.post.author.viewer.following == null
-      ) feed.__folding = true
-
-      // あなたがフォローしているユーザーのポストのリポスト
-      if (
-        repostFolding.includes(5) &&
-        feed.post.author.viewer.following != null
-      ) feed.__folding = true
-    }
-
-    // TODO: 引用リポスト
-    /*
-    if (feed.post.embed?.$type === "app.bsky.embed.record#view") {
-      feed.__folding = true
-    }
-    */
-  })
+  // 折り畳みプロパティをインジェクト
+  Util.injectFoldingToFeeds(
+    response.data.feed as Array<TTFeed>,
+    this.session?.did,
+    replyFolding,
+    repostFolding
+  )
 
   // TODO:
-  AtpUtil.coherentResponses(response.data.feed)
+  Util.coherentResponses(response.data.feed)
   const isFirstFetch = oldFeeds.length === 0
-  const isAllNew = AtpUtil.mergeFeeds(
+  const isAllNew = Util.mergeFeeds(
     oldFeeds,
     response.data.feed as Array<TTFeed>,
     cursor == null,
@@ -115,7 +45,7 @@ export default async function (
     const initialFeed = response.data.feed[0]
     if (initialFeed != null) initialFeed.__cursor = response.data.cursor
   }
-  // AtpUtil.sortFeeds(oldFeeds)
+  // Util.sortFeeds(oldFeeds)
 
   if (direction !== "old" && !isFirstFetch) return
 
