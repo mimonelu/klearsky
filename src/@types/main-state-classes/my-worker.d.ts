@@ -10,12 +10,12 @@ interface TIMyWorkerSessionCaches {
 
 interface TIMyWorkerSessionCache {
   session?: TTSession
-  currentPreferences?: any
-  inviteCodes?: any
-  myFeedsItems?: any
-  myLabeler?: any
-  myList?: any
-  userProfile?: any
+  currentPreferences?: Array<TTPreference>
+  inviteCodes?: Array<TTInviteCode>
+  myFeedsItems?: Array<TTMyFeedsItem>
+  myLabeler?: Array<TILabeler>
+  myList?: Array<TTList>
+  userProfile?: TTProfile
 }
 
 interface TIPostMessageData {

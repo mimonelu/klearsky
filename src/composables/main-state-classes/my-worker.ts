@@ -25,38 +25,38 @@ export default class {
 
     // DID が合わないメッセージはスルー
     if (data.did !== this.mainState.atp.data.did) {
-      console.log("[klearsky/onMessage]", "💔")
+      console.log("[klearsky/worker]", "❌")
       return
     }
 
-    console.log("[klearsky/onMessage]", "💕", data)
+    console.log("[klearsky/worker]", "🔻", data.name)
     switch (data.name) {
       // セッションキャッシュの取得
       case "getSessionCachesResponse": {
         const sessionCache: TIMyWorkerSessionCache = data.value
 
-        // 全セッションキャッシュの反映 - セッションデータ
+        // セッションキャッシュの反映 - セッションデータ
         if (sessionCache.session != null) {
           this.mainState.atp.resetSession(sessionCache.session)
         }
 
-        // 全セッションキャッシュの反映 - プリファレンス
+        // セッションキャッシュの反映 - プリファレンス
         if (sessionCache.currentPreferences != null) {
           Util.setArray(this.mainState.currentPreferences, sessionCache.currentPreferences)
         }
 
-        // 全セッションキャッシュの反映 - ユーザープロフィール
+        // セッションキャッシュの反映 - ユーザープロフィール
         if (sessionCache.userProfile != null) {
           this.mainState.userProfile = sessionCache.userProfile
         }
 
-        // 全セッションキャッシュの反映 - マイフィード
+        // セッションキャッシュの反映 - マイフィード
         if (sessionCache.myFeedsItems != null) {
           Util.setArray(this.mainState.myFeeds.items, sessionCache.myFeedsItems)
           this.mainState.myFeeds.synchronizeToMyList()
         }
 
-        // 全セッションキャッシュの反映 - マイラベラー
+        // セッションキャッシュの反映 - マイラベラー
         if (sessionCache.myLabeler != null) {
           Util.setArray(this.mainState.myLabeler.labelers, sessionCache.myLabeler)
           this.mainState.myLabeler.updateLabelMap()
@@ -65,13 +65,13 @@ export default class {
           this.mainState.myLabeler.setAtprotoAcceptLabelers()
         }
 
-        // 全セッションキャッシュの反映 - マイリスト
+        // セッションキャッシュの反映 - マイリスト
         if (sessionCache.myList != null) {
           Util.setArray(this.mainState.myLists.items, sessionCache.myList)
           this.mainState.myFeeds.synchronizeToMyList()
         }
 
-        // 全セッションキャッシュの反映 - 招待コード
+        // セッションキャッシュの反映 - 招待コード
         if (sessionCache.inviteCodes != null) {
           Util.setArray(this.mainState.inviteCodes, sessionCache.inviteCodes)
         }
@@ -88,6 +88,7 @@ export default class {
     if (value == null) {
       return
     }
+    console.log("[klearsky/worker]", "🔺", key)
 
     // セッションキャッシュの設定
     this.worker?.port.postMessage({
