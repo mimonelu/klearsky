@@ -104,9 +104,6 @@ onMounted(async () => {
   // ペースト用処理
   useEventListener(window, "paste", onPaste)
 
-  // ブロードキャスト用処理
-  useEventListener(state.broadcastChannel, "message", broadcastListener)
-
   // インフィニットスクロール用処理
   useEventListener(window, "scroll", scrollListener)
 
@@ -273,14 +270,12 @@ async function manualLogin (
 }
 
 function onRefreshSession () {
-  // セッションの同期
-  state.broadcastChannel?.postMessage({
-    name: "refreshSession",
-    data: Util.cloneJson(state.atp.session),
-  } as TTPostMessageData)
+  // セッションデータの同期
+  state.myWorker.setSessionCache("session", state.atp.session)
 }
 
 async function processAfterLogin () {
+  onRefreshSession()
   setupUpdateJwtInterval()
   setupNotificationInterval()
 
@@ -755,71 +750,6 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     })
   }
   return true
-}
-
-// ブロードキャスト用処理
-
-function broadcastListener (event: MessageEvent) {
-  console.log("[klearsky/broadcast]", event.data.name)
-  switch (event.data.name) {
-    // セッションの同期
-    case "refreshSession": {
-      if (event.data.data == null ||
-          event.data.data.did !== state.atp.data.did
-      ) {
-        break
-      }
-      state.atp.resetSession(event.data.data)
-      break
-    }
-
-    // セッションキャッシュの反映
-    case "setSessionCacheResponse": {
-      const data: TTPostMessageData = event.data
-      if (data.did !== state.atp.data.did ||
-          data.key == null ||
-          data.value == null
-      ) {
-        break
-      }
-      switch (data.key) {
-        // セッションキャッシュの反映 - プリファレンス
-        case "currentPreferences": {
-          state.currentPreferences = data.value
-          break
-        }
-
-        // セッションキャッシュの反映 - ユーザープロフィール
-        case "userProfile": {
-          state.userProfile = data.value
-          break
-        }
-
-        // セッションキャッシュの反映 - マイフィード
-        case "myFeedsItems": {
-          state.myFeeds.items.splice(0, state.myFeeds.items.length, ...data.value)
-          state.myFeeds.synchronizeToMyList()
-          break
-        }
-
-        // セッションキャッシュの反映 - マイリスト
-        case "myList": {
-          state.myLists.items = data.value
-          state.myFeeds.synchronizeToMyList()
-          break
-        }
-
-        // セッションキャッシュの反映 - 招待コード
-        case "inviteCodes": {
-          state.inviteCodes = data.value
-          break
-        }
-
-        default: break
-      }
-      break
-    }
-  }
 }
 </script>
 

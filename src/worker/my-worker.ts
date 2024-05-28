@@ -1,40 +1,60 @@
-const sessionCaches: TTMyWorkerSessionCaches = {}
+const connections: Array<MessagePort> = []
+
+const sessionCaches: TIMyWorkerSessionCaches = {}
 
 ;(self as any).onconnect = (event: MessageEvent) => {
-  const port = event.ports[0]
-  if (port == null) {
+  const currentPort = event.ports[0]
+  if (currentPort == null) {
     return
   }
-  port.onmessage = (event: MessageEvent) => {
-    const data: TTPostMessageData = event.data
-    const key = data.key
-    const did = data.did
-    switch (data.name) {
-      // 全セッションキャッシュの取得
-      case "getSessionCachesRequest": {
-        if (did == null) {
-          break
-        }
-        port.postMessage({
-          name: "getSessionCachesResponse",
-          value: sessionCaches[did] ?? {},
-        } as TTPostMessageData)
+  connections.push(currentPort)
+  currentPort.onmessage = (event: MessageEvent) => {
+    onMessage(event, currentPort)
+  }
+  currentPort.start()
+}
+
+function postMessageAll (data: TIPostMessageData) {
+  connections.forEach((connection) => {
+    connection.postMessage(data)
+  })
+}
+
+function onMessage (event: MessageEvent, currentPort: MessagePort) {
+  const data: TIPostMessageData = event.data
+  const key = data.key
+  const did = data.did
+  switch (data.name) {
+    // セッションキャッシュの取得
+    case "getSessionCachesRequest": {
+      if (did == null) {
         break
       }
-
-      // セッションキャッシュの設定
-      case "setSessionCacheRequest": {
-        if (did == null || key == null) {
-          break
-        }
-        if (sessionCaches[did] == null) {
-          sessionCaches[did] = {}
-        }
-        sessionCaches[did][key] = data.value
-        break
-      }
-
-      default: break
+      currentPort.postMessage({
+        name: "getSessionCachesResponse",
+        did,
+        value: sessionCaches[did] ?? {},
+      })
+      break
     }
+
+    // セッションキャッシュの設定
+    case "setSessionCacheRequest": {
+      if (did == null || key == null) {
+        break
+      }
+      if (sessionCaches[did] == null) {
+        sessionCaches[did] = {}
+      }
+      sessionCaches[did][key] = data.value
+      postMessageAll({
+        name: "getSessionCachesResponse",
+        did,
+        value: sessionCaches[did] ?? {},
+      })
+      break
+    }
+
+    default: break
   }
 }

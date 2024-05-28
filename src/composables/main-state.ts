@@ -39,9 +39,6 @@ state.isDragOver = false
 // インフィニットスクロール用プロパティ
 state.scrolledToBottom = false
 
-// ブロードキャスト
-state.broadcastChannel = new BroadcastChannel("klearsky")
-
 // 現在のサーバ情報
 state.currentServerInfo = undefined
 state.fetchCurrentServerInfo = fetchCurrentServerInfo

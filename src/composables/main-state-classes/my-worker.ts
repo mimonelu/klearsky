@@ -12,25 +12,37 @@ export default class {
       return
     }
     this.worker = new MyWorker()
+    this.worker.port.onmessage = this.onMessage.bind(this)
     this.worker.port.start()
-    this.worker.port.onmessage = this.listenOnMessage
     this.worker.port.postMessage({
       name: "getSessionCachesRequest",
       did: this.mainState.atp.data.did,
-    } as TTPostMessageData)
+    })
   }
 
-  listenOnMessage (event: MessageEvent) {
-    const data: TTPostMessageData = event.data
-    console.log("[klearsky/listenOnMessage]", data)
+  onMessage (event: MessageEvent) {
+    const data: TIPostMessageData = event.data
+
+    // DID が合わないメッセージはスルー
+    if (data.did !== this.mainState.atp.data.did) {
+      console.log("[klearsky/onMessage]", "💔")
+      return
+    }
+
+    console.log("[klearsky/onMessage]", "💕", data)
     switch (data.name) {
-      // 全セッションキャッシュの反映
+      // セッションキャッシュの取得
       case "getSessionCachesResponse": {
-        const sessionCache: TTMyWorkerSessionCache = data.value
+        const sessionCache: TIMyWorkerSessionCache = data.value
+
+        // 全セッションキャッシュの反映 - セッションデータ
+        if (sessionCache.session != null) {
+          this.mainState.atp.resetSession(sessionCache.session)
+        }
 
         // 全セッションキャッシュの反映 - プリファレンス
         if (sessionCache.currentPreferences != null) {
-          this.mainState.currentPreferences = sessionCache.currentPreferences
+          Util.setArray(this.mainState.currentPreferences, sessionCache.currentPreferences)
         }
 
         // 全セッションキャッシュの反映 - ユーザープロフィール
@@ -40,21 +52,19 @@ export default class {
 
         // 全セッションキャッシュの反映 - マイフィード
         if (sessionCache.myFeedsItems != null) {
-          this.mainState.myFeeds.items.splice(
-            0,
-            this.mainState.myFeeds.items.length,
-            ...sessionCache.myFeedsItems
-          )
+          Util.setArray(this.mainState.myFeeds.items, sessionCache.myFeedsItems)
+          this.mainState.myFeeds.synchronizeToMyList()
         }
 
         // 全セッションキャッシュの反映 - マイリスト
         if (sessionCache.myList != null) {
-          this.mainState.myLists.items = sessionCache.myList
+          Util.setArray(this.mainState.myLists.items, sessionCache.myList)
+          this.mainState.myFeeds.synchronizeToMyList()
         }
 
         // 全セッションキャッシュの反映 - 招待コード
         if (sessionCache.inviteCodes != null) {
-          this.mainState.inviteCodes = sessionCache.inviteCodes
+          Util.setArray(this.mainState.inviteCodes, sessionCache.inviteCodes)
         }
 
         break
@@ -70,20 +80,12 @@ export default class {
       return
     }
 
-    // Worker にキャッシュ
+    // セッションキャッシュの設定
     this.worker?.port.postMessage({
       name: "setSessionCacheRequest",
       did: this.mainState.atp.data.did,
       key,
       value,
-    } as TTPostMessageData)
-
-    // 変更をブロードキャスト
-    this.mainState.broadcastChannel?.postMessage({
-      name: "setSessionCacheResponse",
-      did: this.mainState.atp.data.did,
-      key,
-      value,
-    } as TTPostMessageData)
+    })
   }
 }

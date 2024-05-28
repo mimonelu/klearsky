@@ -1,17 +1,29 @@
-interface TTMyWorker {
+interface TIMyWorker {
   mainState: MainState
   worker?: SharedWorker
   setSessionCache: (key: string, value: any) => void
 }
 
-interface TTMyWorkerSessionCaches {
-  [did: string]: TTMyWorkerSessionCache
+interface TIMyWorkerSessionCaches {
+  [did: string]: TIMyWorkerSessionCache
 }
 
-interface TTMyWorkerSessionCache {
+interface TIMyWorkerSessionCache {
+  session?: TTSession
   currentPreferences?: any
   inviteCodes?: any
   myFeedsItems?: any
   myList?: any
   userProfile?: any
+}
+
+interface TIPostMessageData {
+  name:
+      "getSessionCachesRequest"
+    | "getSessionCachesResponse"
+    | "setSessionCacheRequest"
+    | "setSessionCacheResponse"
+  did?: string
+  key?: keyof TIMyWorkerSessionCache
+  value?: any
 }

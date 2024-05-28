@@ -15,6 +15,7 @@ import mergeFeeds from "@/composables/util/merge-feeds"
 import parseOgp from "@/composables/util/parse-ogp"
 import proxyFetch from "@/composables/util/proxy-fetch"
 import safeJson from "@/composables/util/safe-json"
+import setArray from "@/composables/util/set-array"
 import sortFeeds from "@/composables/util/sort-feeds"
 import storage from "@/composables/util/storage"
 import SubscribeRepos from "@/composables/util/subscribe-repos"
@@ -45,6 +46,7 @@ export default {
   parseOgp,
   proxyFetch,
   ...safeJson,
+  setArray,
   sortFeeds,
   ...storage,
   SubscribeRepos,

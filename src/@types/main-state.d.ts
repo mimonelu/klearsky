@@ -14,16 +14,13 @@ type MainState = {
   updatePageTitle: () => void
 
   // MyWorker
-  myWorker: TTMyWorker
+  myWorker: TIMyWorker
 
   // D&D
   isDragOver: boolean
 
   // インフィニットスクロール用プロパティ
   scrolledToBottom: boolean
-
-  // ブロードキャスト
-  broadcastChannel?: BroadcastChannel
 
   // 現在のサーバ情報
   currentServerInfo?: TTServerInfo
