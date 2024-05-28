@@ -18,6 +18,7 @@ import safeJson from "@/composables/util/safe-json"
 import setArray from "@/composables/util/set-array"
 import sortFeeds from "@/composables/util/sort-feeds"
 import storage from "@/composables/util/storage"
+import sanitizePreferences from "@/composables/util/sanitize-preferences"
 import SubscribeRepos from "@/composables/util/subscribe-repos"
 // import translateInDeepL from "@/composables/util/translate-in-deep-l" // DeepL: 未使用
 import translateInExternalService from "@/composables/util/translate-in-external-service"
@@ -49,6 +50,7 @@ export default {
   setArray,
   sortFeeds,
   ...storage,
+  sanitizePreferences,
   SubscribeRepos,
   // translateInDeepL, // DeepL: 未使用
   translateInExternalService,
