@@ -56,6 +56,15 @@ export default class {
           this.mainState.myFeeds.synchronizeToMyList()
         }
 
+        // 全セッションキャッシュの反映 - マイラベラー
+        if (sessionCache.myLabeler != null) {
+          Util.setArray(this.mainState.myLabeler.labelers, sessionCache.myLabeler)
+          this.mainState.myLabeler.updateLabelMap()
+
+          // ラベラーのHTTPヘッダーを設定
+          this.mainState.myLabeler.setAtprotoAcceptLabelers()
+        }
+
         // 全セッションキャッシュの反映 - マイリスト
         if (sessionCache.myList != null) {
           Util.setArray(this.mainState.myLists.items, sessionCache.myList)

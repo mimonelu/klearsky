@@ -301,11 +301,16 @@ async function processAfterLogin () {
   }
 
   // ラベラーの取得
-  await state.myLabeler.updateMyLabelers()
-    .then(() => {
-      // ラベラーのHTTPヘッダーを設定
-      state.myLabeler.setAtprotoAcceptLabelers()
-    })
+  if (state.myLabeler.labelers.length === 0) {
+    await state.myLabeler.updateMyLabelers()
+      .then(() => {
+        // ラベラーのHTTPヘッダーを設定
+        state.myLabeler.setAtprotoAcceptLabelers()
+
+        // セッションキャッシュの設定
+        state.myWorker.setSessionCache("myLabeler", state.myLabeler.labelers)
+      })
+  }
 
   // マイフィードの取得
   if (state.myFeeds.items.length === 0) {

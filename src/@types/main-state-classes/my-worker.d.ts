@@ -13,6 +13,7 @@ interface TIMyWorkerSessionCache {
   currentPreferences?: any
   inviteCodes?: any
   myFeedsItems?: any
+  myLabeler?: any
   myList?: any
   userProfile?: any
 }

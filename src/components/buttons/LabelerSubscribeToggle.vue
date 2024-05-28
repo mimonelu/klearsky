@@ -79,6 +79,7 @@ async function toggleLabelerSubscribe () {
   // セッションキャッシュの更新
   if (result) {
     mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+    mainState.myWorker.setSessionCache("myLabeler", mainState.myLabeler.labelers)
   }
 }
 </script>
