@@ -31,6 +31,11 @@ export default class {
 
     console.log("[klearsky/worker]", "🔻", data.name)
     switch (data.name) {
+      case "echo": {
+        console.log("[klearsky/worker]", "📣", data.value)
+        break
+      }
+
       // セッションキャッシュの取得
       case "getSessionCachesResponse": {
         const sessionCache: TIMyWorkerSessionCache = data.value

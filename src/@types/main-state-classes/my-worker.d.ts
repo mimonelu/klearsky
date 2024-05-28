@@ -19,8 +19,8 @@ interface TIMyWorkerSessionCache {
 }
 
 interface TIPostMessageData {
-  name:
-      "getSessionCachesRequest"
+  name: "echo"
+    | "getSessionCachesRequest"
     | "getSessionCachesResponse"
     | "setSessionCacheRequest"
     | "setSessionCacheResponse"
