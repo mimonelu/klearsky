@@ -34,7 +34,7 @@ export default async function (
     }
 
     // TODO:
-    Util.coherentResponses(response.value.data.posts)
+    Util.sanitizePostsOrFeeds(response.value.data.posts)
 
     results.push(...(response.value.data.posts as Array<TTPost>))
   })

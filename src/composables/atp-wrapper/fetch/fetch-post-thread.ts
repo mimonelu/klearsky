@@ -23,7 +23,7 @@ export default async function (
   if (!response.success) return false
   const posts: Array<TTPost> = []
   traverseThread(response.data.thread as unknown as TTThread, posts)
-  Util.coherentResponses(posts)
+  Util.sanitizePostsOrFeeds(posts)
   return posts
 }
 
