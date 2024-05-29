@@ -1350,7 +1350,7 @@ async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
       state.timelineFeeds,
       state.currentSetting.replyFolding,
       state.currentSetting.repostFolding,
-      CONSTS.LIMIT_OF_FETCH_FEEDS,
+      CONSTS.LIMIT_OF_FETCH_TIMELINE,
       direction === "old" ? state.timelineCursor : middleCursor,
       direction
     )
