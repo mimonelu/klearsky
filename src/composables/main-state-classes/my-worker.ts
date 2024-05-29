@@ -38,11 +38,21 @@ export default class {
 
       // セッションキャッシュの取得
       case "getSessionCachesResponse": {
-        const sessionCache: TIMyWorkerSessionCache = data.value
+        const sessionCache: undefined | TIMyWorkerSessionCache = data.value
+        if (sessionCache == null) {
+          break
+        }
 
         // セッションキャッシュの反映 - セッションデータ
         if (sessionCache.session != null) {
           this.mainState.atp.resetSession(sessionCache.session)
+        }
+
+        // セッションキャッシュの反映 - 設定
+        if (sessionCache.setting != null) {
+          this.mainState.settings[data.did] = sessionCache.setting
+          this.mainState.currentSetting = this.mainState.settings[data.did]
+          this.mainState.updateSettings()
         }
 
         // セッションキャッシュの反映 - プリファレンス

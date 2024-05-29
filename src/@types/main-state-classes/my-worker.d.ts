@@ -10,6 +10,7 @@ interface TIMyWorkerSessionCaches {
 
 interface TIMyWorkerSessionCache {
   session?: TTSession
+  setting?: TTSetting
   currentPreferences?: Array<TTPreference>
   inviteCodes?: Array<TTInviteCode>
   myFeedsItems?: Array<TTMyFeedsItem>

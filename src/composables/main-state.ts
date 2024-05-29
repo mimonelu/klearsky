@@ -827,6 +827,9 @@ function saveSettings () {
   }
   state.currentSetting = state.settings[did]
   Util.saveStorage("settings", state.settings)
+
+  //セッションキャッシュの設定
+  state.myWorker.setSessionCache("setting", state.settings[did])
 }
 
 function getSanitizedLanguages (languages?: Array<string>) {

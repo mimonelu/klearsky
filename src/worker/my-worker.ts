@@ -36,7 +36,7 @@ function onMessage (event: MessageEvent, currentPort: MessagePort) {
       currentPort.postMessage({
         name: "getSessionCachesResponse",
         did,
-        value: sessionCaches[did] ?? {},
+        value: sessionCaches[did],
       })
       break
     }
@@ -53,7 +53,7 @@ function onMessage (event: MessageEvent, currentPort: MessagePort) {
       postMessageAll(currentPort, {
         name: "getSessionCachesResponse",
         did,
-        value: sessionCaches[did] ?? {},
+        value: sessionCaches[did],
       })
       break
     }
