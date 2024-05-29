@@ -94,11 +94,9 @@ onMounted(async () => {
   state.currentPath = router.currentRoute.value.path
   state.currentQuery = router.currentRoute.value.query
   state.settings = Util.loadStorage("settings") ?? {}
-
   state.loaderDisplay = true
   await autoLogin()
   state.loaderDisplay = false
-
   state.updatePageTitle()
 
   // ペースト用処理
@@ -220,7 +218,13 @@ async function autoLogin () {
   if (state.atp.hasLogin()) {
     await processAfterLogin()
   } else if (state.atp.canLogin()) {
-    const response = await state.atp.login(undefined, undefined, undefined, undefined, onRefreshSession)
+    const response = await state.atp.login(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      onRefreshSession
+    )
     if (response instanceof Error) {
       state.openErrorPopup(
         typeof(response.message) === "string"
@@ -278,9 +282,6 @@ async function processAfterLogin () {
   onRefreshSession()
   setupUpdateJwtInterval()
   setupNotificationInterval()
-
-  // 現在のサーバ情報の取得
-  state.fetchCurrentServerInfo()
 
   // プリファレンスとユーザープロフィールの取得
   const tasks: { [k: string]: any } = {}
@@ -365,6 +366,9 @@ async function processAfterLogin () {
         state.myWorker.setSessionCache("inviteCodes", state.inviteCodes)
       })
   }
+
+  // 現在のサーバ情報の取得
+  state.fetchCurrentServerInfo()
 
   changeSetting()
   if (router.currentRoute.value.name === "home") {

@@ -1,4 +1,4 @@
-const connections: Array<MessagePort> = []
+const ports: Array<MessagePort> = []
 
 const sessionCaches: TIMyWorkerSessionCaches = {}
 
@@ -7,16 +7,19 @@ const sessionCaches: TIMyWorkerSessionCaches = {}
   if (currentPort == null) {
     return
   }
-  connections.push(currentPort)
+  ports.push(currentPort)
   currentPort.onmessage = (event: MessageEvent) => {
     onMessage(event, currentPort)
   }
   currentPort.start()
 }
 
-function postMessageAll (data: TIPostMessageData) {
-  connections.forEach((connection) => {
-    connection.postMessage(data)
+function postMessageAll (currentPort: MessagePort, data: TIPostMessageData) {
+  ports.forEach((port) => {
+    // このポートには送信しない
+    if (port !== currentPort) {
+      port.postMessage(data)
+    }
   })
 }
 
@@ -47,7 +50,7 @@ function onMessage (event: MessageEvent, currentPort: MessagePort) {
         sessionCaches[did] = {}
       }
       sessionCaches[did][key] = data.value
-      postMessageAll({
+      postMessageAll(currentPort, {
         name: "getSessionCachesResponse",
         did,
         value: sessionCaches[did] ?? {},

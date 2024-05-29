@@ -25,11 +25,11 @@ export default class {
 
     // DID が合わないメッセージはスルー
     if (data.did !== this.mainState.atp.data.did) {
-      console.log("[klearsky/worker]", "❌")
+      console.log("[klearsky/worker]", "➖ DID")
       return
     }
 
-    console.log("[klearsky/worker]", "🔻", data.name)
+    console.log("[klearsky/worker]", "🔻 GET", data.name)
     switch (data.name) {
       case "echo": {
         console.log("[klearsky/worker]", "📣", data.value)
@@ -93,7 +93,7 @@ export default class {
     if (value == null) {
       return
     }
-    console.log("[klearsky/worker]", "🔺", key)
+    console.log("[klearsky/worker]", "🔺 SET", key)
 
     // セッションキャッシュの設定
     this.worker?.port.postMessage({
