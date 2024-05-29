@@ -159,7 +159,13 @@ async function toggleNoUnauthenticated () {
   const params: TTUpdateProfileParams = {
     displayName: mainState.userProfile.displayName ?? "",
     description: mainState.userProfile.description ?? "",
-    labels: mainState.userProfile.labels?.map((label: TTLabel) => label.val) ?? [],
+    labels: mainState.userProfile.labels
+      ?.filter((label) => {
+        return !label.ver
+      })
+      .map((label) => {
+        return label.val
+      }) ?? [],
     avatar: null,
     detachAvatar: [false],
     banner: null,
