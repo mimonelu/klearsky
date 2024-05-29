@@ -1024,6 +1024,7 @@ function toggleOldestQuotedPostDisplay () {
         <LabelTags
           v-if="position !== 'slim'"
           :labels="state.allLabels"
+          :unauthenticatedDisplay="false"
           :harmfulDisplay="false"
           :customDisplay="false"
         />

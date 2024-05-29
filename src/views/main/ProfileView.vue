@@ -313,6 +313,7 @@ function removeThisPost () {
               <!-- ラベルタグ -->
               <LabelTags
                 :labels="mainState.currentProfile?.labels"
+                :unauthenticatedDisplay="true"
                 :harmfulDisplay="true"
                 :customDisplay="true"
               >

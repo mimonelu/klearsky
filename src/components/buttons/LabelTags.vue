@@ -5,6 +5,7 @@ import CONSTS from "@/consts/consts.json"
 
 const props = defineProps<{
   labels?: Array<TTLabel>
+  unauthenticatedDisplay: boolean
   harmfulDisplay: boolean
   customDisplay: boolean
 }>()
@@ -12,10 +13,17 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  hasNoUnauthenticated: ComputedRef<boolean>
   harmfulLabels: ComputedRef<Array<TTLabel>>
   labelerLabels: ComputedRef<Array<undefined | TILabelSetting>>
   customLabels: ComputedRef<Array<TTLabel>>
 }>({
+  hasNoUnauthenticated: computed((): boolean => {
+    if (props.labels == null) {
+      return true
+    }
+    return mainState.hasLabel("!no-unauthenticated", props.labels)
+  }),
   harmfulLabels: computed((): Array<TTLabel> => {
     return props.harmfulDisplay ? mainState.getHarmfulLabels(props.labels) : []
   }),
@@ -57,6 +65,7 @@ function openLabelerSettingsPopup (did?: string) {
 <template>
   <div
     v-if="
+      (unauthenticatedDisplay && !state.hasNoUnauthenticated) ||
       state.harmfulLabels.length > 0 ||
       state.labelerLabels.length > 0 ||
       state.customLabels.length > 0
@@ -64,6 +73,15 @@ function openLabelerSettingsPopup (did?: string) {
     class="label-tags"
   >
     <slot />
+
+    <!-- 外部公開状態ラベル -->
+    <div
+      v-if="unauthenticatedDisplay && !state.hasNoUnauthenticated"
+      class="label-tags__unauthenticated-label"
+    >
+      <SVGIcon name="earth" />
+      <span>{{ $t("unauthenticated") }}</span>
+    </div>
 
     <!-- 有害なラベル -->
     <button
@@ -112,6 +130,7 @@ function openLabelerSettingsPopup (did?: string) {
   }
 
   &:deep(.label-tags__labeler),
+  &__unauthenticated-label,
   &__harmful-label,
   &__labelers-label,
   &__custom-label {
@@ -140,6 +159,12 @@ function openLabelerSettingsPopup (did?: string) {
   &:deep(.label-tags__labeler) {
     --color: rgb(var(--share-color), var(--alpha, 1.0));
     background-color: var(--share-color-0125);
+  }
+
+  // 外部公開状態ラベル
+  &__unauthenticated-label {
+    --color: rgb(var(--accent-color));
+    background-color: var(--accent-color-025);
   }
 
   // 有害なラベル

@@ -81,6 +81,7 @@
   "handle": "Handle",
   "inviteCode": "Invite code",
   "noHistory": "No history",
+  "unauthenticated": "Public",
 
   "privacyPolicy": "Privacy policy",
   "termsOfService": "Terms of service",
