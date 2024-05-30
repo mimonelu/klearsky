@@ -5,6 +5,7 @@ import CONSTS from "@/consts/consts.json"
 
 const props = defineProps<{
   labels?: Array<TTLabel>
+  labelerDisplay: boolean
   unauthenticatedDisplay: boolean
   harmfulDisplay: boolean
   customDisplay: boolean
@@ -65,6 +66,7 @@ function openLabelerSettingsPopup (did?: string) {
 <template>
   <div
     v-if="
+      labelerDisplay ||
       (unauthenticatedDisplay && !state.hasNoUnauthenticated) ||
       state.harmfulLabels.length > 0 ||
       state.labelerLabels.length > 0 ||
@@ -72,8 +74,6 @@ function openLabelerSettingsPopup (did?: string) {
     "
     class="label-tags"
   >
-    <slot />
-
     <!-- 外部公開状態ラベル -->
     <div
       v-if="unauthenticatedDisplay && !state.hasNoUnauthenticated"
@@ -81,6 +81,15 @@ function openLabelerSettingsPopup (did?: string) {
     >
       <SVGIcon name="earth" />
       <span>{{ $t("unauthenticated") }}</span>
+    </div>
+
+    <!-- ラベラー -->
+    <div
+      v-if="labelerDisplay"
+      class="label-tags__labeler"
+    >
+      <SVGIcon name="labeler" />
+      <span>{{ $t("labeler") }}</span>
     </div>
 
     <!-- 有害なラベル -->

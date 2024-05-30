@@ -319,19 +319,11 @@ function removeThisPost () {
               <!-- ラベルタグ -->
               <LabelTags
                 :labels="mainState.currentProfile?.labels"
+                :labelerDisplay="state.isLabeler"
                 :unauthenticatedDisplay="true"
                 :harmfulDisplay="true"
                 :customDisplay="true"
-              >
-                <!-- ラベラー -->
-                <div
-                  v-if="state.isLabeler"
-                  class="label-tags__labeler"
-                >
-                  <SVGIcon name="labeler" />
-                  <span>{{ $t("labeler") }}</span>
-                </div>
-              </LabelTags>
+              />
 
               <!-- 表示名 -->
               <DisplayName

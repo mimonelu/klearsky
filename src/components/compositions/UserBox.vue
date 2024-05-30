@@ -89,6 +89,7 @@ function onActivateContentFilteringToggle () {
       <!-- ラベルタグ -->
       <LabelTags
         :labels="user.labels"
+        :labelerDisplay="false"
         :unauthenticatedDisplay="false"
         :harmfulDisplay="true"
         :customDisplay="true"
