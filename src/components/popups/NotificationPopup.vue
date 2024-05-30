@@ -62,8 +62,10 @@ function clipBadge (value: number): string {
 }
 
 async function updateNotificationSeen () {
-  if (mainState.notificationCount <= 0) return
-  await mainState.atp.updateNotificationSeen()
+  if (mainState.notificationCount <= 0) {
+    return
+  }
+  await mainState.atp.updateNotificationSeen(mainState.lastFetchNotificationsDate)
 }
 
 function updateNotificationIsRead () {

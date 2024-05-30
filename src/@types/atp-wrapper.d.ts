@@ -3,7 +3,6 @@ interface TIAtpWrapper {
   proxies: { [k: string]: undefined | string }
   data: { did: string; sessions: { [did: string]: TTSession } }
   session?: TTSession
-  lastFetchNotificationsDate?: Date
 
   // Prototype methods
   canLogin (this: TIAtpWrapper): boolean
@@ -109,7 +108,7 @@ interface TIAtpWrapper {
   updateListMuteToEnable (this: TIAtpWrapper, listUri: string): Promise<undefined | Error>
   updateMuteToDisable (this: TIAtpWrapper, did: string): Promise<boolean>
   updateMuteToEnable (this: TIAtpWrapper, did: string): Promise<boolean>
-  updateNotificationSeen (this: TIAtpWrapper): Promise<boolean>
+  updateNotificationSeen (this: TIAtpWrapper, seenAtDate?: Date): Promise<boolean>
   updatePinnedPost (this: TIAtpWrapper, uri?: string): Promise<Error | boolean>
   updatePreferences  (this: TIAtpWrapper, preferences: Array<TTPreference>): Promise<boolean>
   updateProfile (this: TIAtpWrapper, params: TTUpdateProfileParams): Promise<undefined | Error>

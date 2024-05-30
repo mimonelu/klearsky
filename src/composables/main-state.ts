@@ -66,6 +66,7 @@ state.notificationCursor = undefined
 state.notificationCount = 0
 state.notificationFetchedFirst = false
 state.notificationReasonFilter = undefined
+state.lastFetchNotificationsDate = undefined
 state.fetchNotifications = fetchNotifications
 
 // 新着通知タイマー
@@ -896,6 +897,10 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
     limit,
     direction === "new" ? undefined : state.notificationCursor
   )
+
+  // 最後に通知を取得した日時を保存（ updateSeenNotifications で使用）
+  state.lastFetchNotificationsDate = new Date()
+
   if (result === false) {
     state.openErrorPopup("errorApiFailed", "main-state/fetchNotifications")
   } else if (result != null) {

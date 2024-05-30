@@ -42,6 +42,7 @@ type MainState = {
   notificationCount: number
   notificationFetchedFirst: boolean
   notificationReasonFilter?: TTNotificationReason
+  lastFetchNotificationsDate?: Date
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
 
   // 通知タイマー
