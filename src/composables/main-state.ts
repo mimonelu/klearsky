@@ -1075,9 +1075,6 @@ async function fetchUserProfile () {
   if (state.atp.session != null && state.userProfile?.avatar != null) {
     state.atp.session.__avatar = state.userProfile?.avatar
   }
-
-  // 固定ポストのインポート
-  fetchPinnedPost(state.userProfile)
 }
 
 async function updateUserProfile (profile: TTUpdateProfileParams) {
