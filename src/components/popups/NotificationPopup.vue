@@ -38,19 +38,19 @@ const state = reactive<{
 
 const popup = ref()
 
-onBeforeUnmount(() => {
-  updateNotificationSeen()
-  updateNotificationIsRead()
-  mainState.notificationCount = 0
-  emit("updatePageTitle")
-})
-
 onMounted(async () => {
   if (!mainState.notificationFetchedFirst) {
     mainState.notificationFetchedFirst = true
     await fetchNotifications("new")
   }
   updateNotificationSeen()
+})
+
+onBeforeUnmount(() => {
+  updateNotificationSeen()
+  updateNotificationIsRead()
+  mainState.notificationCount = 0
+  emit("updatePageTitle")
 })
 
 function close () {

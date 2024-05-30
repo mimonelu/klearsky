@@ -74,6 +74,11 @@ const loginPopup = ref(null)
 
 provide("state", state)
 
+// ワーカーの削除
+window.addEventListener("beforeunload", () => {
+  state.myWorker.close()
+})
+
 onBeforeMount(() => {
   hotkeys("n", { keyup: true }, (event: any) => {
     if (event.type === "keyup" &&
@@ -84,10 +89,6 @@ onBeforeMount(() => {
       !state.loginPopupAutoDisplay)
       state.openSendPostPopup({ type: "post" })
   })
-})
-
-onBeforeUnmount(() => {
-  hotkeys.unbind("n")
 })
 
 onMounted(async () => {
@@ -106,6 +107,10 @@ onMounted(async () => {
   useEventListener(window, "scroll", scrollListener)
 
   state.mounted = true
+})
+
+onBeforeUnmount(() => {
+  hotkeys.unbind("n")
 })
 
 onUnmounted(() => {

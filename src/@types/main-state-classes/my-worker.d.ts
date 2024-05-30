@@ -1,6 +1,7 @@
 interface TIMyWorker {
   mainState: MainState
   worker?: SharedWorker
+  close: () => void
   setSessionCache: (key: string, value: any) => void
 }
 
@@ -20,7 +21,8 @@ interface TIMyWorkerSessionCache {
 }
 
 interface TIPostMessageData {
-  name: "echo"
+  name: "close"
+    | "echo"
     | "getSessionCachesRequest"
     | "getSessionCachesResponse"
     | "setSessionCacheRequest"

@@ -20,7 +20,14 @@ export default class {
     })
   }
 
-  onMessage (event: MessageEvent) {
+  close () {
+    this.worker?.port.postMessage({
+      name: "close",
+      did: this.mainState.atp.data.did,
+    })
+  }
+
+  async onMessage (event: MessageEvent) {
     const data: TIPostMessageData = event.data
 
     // DID が合わないメッセージはスルー
