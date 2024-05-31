@@ -28,8 +28,8 @@ export default async function (
     .getLog(query, options)
       .then((value: ChatBskyConvoGetLog.Response) => value)
       .catch((error: Error) => error)
-  console.log("[klearsky/api.chat.bsky.convo.getLog]", response)
   if (response instanceof Error) {
+    console.warn("[klearsky/api.chat.bsky.convo.getLog]", response)
     return response
   }
   return response.data.logs as unknown as Array<TIChatLog>

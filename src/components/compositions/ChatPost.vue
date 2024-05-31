@@ -130,7 +130,6 @@ async function chatMessagePopoverCallback (type: string) {
   // チャットルーム用
   &[data-is-last-message="false"] {
     padding: 0 1em;
-
     &:deep() {
       .body__right {
         grid-gap: 0;
@@ -153,16 +152,29 @@ async function chatMessagePopoverCallback (type: string) {
         background-color: var(--chat-post-bg-color);
         padding: 1em;
       }
+
+      .label-tags {
+        margin-top: 0.5em;
+      }
     }
 
-    &[data-is-mine="true"]:deep(.post__content) {
-      border-radius:
-        var(--border-radius-large)
-        0
-        var(--border-radius-large)
-        var(--border-radius-large);
-      margin-left: auto;
+    // 自分のチャットメッセージ
+    &[data-is-mine="true"] {
+      &:deep(.post__content) {
+        border-radius:
+          var(--border-radius-large)
+          0
+          var(--border-radius-large)
+          var(--border-radius-large);
+        margin-left: auto;
+      }
+
+      &:deep(.label-tags) {
+        justify-content: flex-end;
+      }
     }
+
+    // 自分以外のチャットメッセージ
     &[data-is-mine="false"]:deep(.post__content) {
       border-radius:
         0
