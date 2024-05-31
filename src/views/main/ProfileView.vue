@@ -21,6 +21,7 @@ import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
+import WhiteWinds from "@/components/compositions/WhiteWinds.vue"
 import Util from "@/composables/util"
 
 const router = useRouter()
@@ -668,6 +669,12 @@ function removeThisPost () {
         </div>
       </template>
     </Post>
+
+    <!-- WhiteWind 導線 -->
+    <WhiteWinds
+      v-if="state.isPagePostFeeds"
+      :profile="mainState.currentProfile ?? undefined"
+    />
 
     <RouterView class="profile-view__router-view" />
 
