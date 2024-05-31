@@ -26,12 +26,10 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   labels: Array<string>
-  popupLoaderDisplay: boolean
   draftThreadgate: TTDraftThreadgate
   postDatePopupDate: ComputedRef<undefined | string>
 }>({
   labels: [],
-  popupLoaderDisplay: false,
   draftThreadgate: {
     applied: false,
     allowMention: false,
@@ -165,19 +163,29 @@ async function reset () {
 async function submitCallback () {
   Util.blurElement()
 
-  // 空ポストの確認
+  // 空ポストの確認ポップアップを表示
   if (easyFormState.text.trim() === "" &&
       easyFormState.images.length === 0 &&
-      easyFormState.url.trim() === "") {
+      easyFormState.url.trim() === ""
+  ) {
     const result = await mainState.openConfirmationPopup(
       $t("emptyPostConfirmation"),
       $t("emptyPostConfirmationMessage")
     )
-    if (!result) return
+    if (!result) {
+      return
+    }
   }
 
-  if (state.popupLoaderDisplay) return
-  state.popupLoaderDisplay = true
+  // 送信中であれば中断
+  if (mainState.sendPostPopupProcessing) {
+    return
+  }
+
+  // ポップアップを閉じる
+  close()
+
+  mainState.sendPostPopupProcessing = true
   try {
     const result = await mainState.atp.createPost({
       ...easyFormState,
@@ -211,7 +219,7 @@ async function submitCallback () {
       emit("closeSendPostPopup", true, false)
     }
   } finally {
-    state.popupLoaderDisplay = false
+    mainState.sendPostPopupProcessing = false
   }
 }
 
@@ -358,7 +366,7 @@ const PreviewLinkCardFeature: {
     class="send-post-popup"
     ref="popup"
     :hasCloseButton="true"
-    :loaderDisplay="state.popupLoaderDisplay"
+    :loaderDisplay="mainState.sendPostPopupProcessing"
     @close="close"
   >
     <template #header>

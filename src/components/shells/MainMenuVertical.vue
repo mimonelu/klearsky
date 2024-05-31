@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
+import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -161,7 +162,11 @@ function moveToBottom () {
       @click.prevent="openSendPostPopup"
     >
       <div class="icon">
-        <SVGIcon name="sendPost" />
+        <SVGIcon
+          v-if="!mainState.sendPostPopupProcessing"
+          name="sendPost"
+        />
+        <Loader v-else />
       </div>
       <div class="label">{{ $t("sendPost") }}</div>
     </button>
@@ -354,6 +359,10 @@ function moveToBottom () {
 
     .label {
       color: var(--post-color-075);
+    }
+
+    .loader {
+      font-size: 0.5rem;
     }
 
     &:focus, &:hover {

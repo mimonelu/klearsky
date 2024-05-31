@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
+import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -133,7 +134,11 @@ async function openSendPostPopup () {
       class="link-button send-post-button"
       @click.prevent="openSendPostPopup"
     >
-      <SVGIcon name="sendPost" />
+      <SVGIcon
+        v-if="!mainState.sendPostPopupProcessing"
+        name="sendPost"
+      />
+      <Loader v-else />
     </button>
   </div>
 </template>
@@ -190,6 +195,10 @@ async function openSendPostPopup () {
   &.send-post-button {
     .svg-icon {
       fill: rgb(var(--post-color));
+    }
+
+    .loader {
+      font-size: 0.5rem;
     }
   }
 }

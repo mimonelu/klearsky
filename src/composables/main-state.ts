@@ -583,6 +583,7 @@ state.sendPostPopupProps = {
   fileList: undefined,
   createdAt: undefined,
 }
+state.sendPostPopupProcessing = false
 state.openSendPostPopup = openSendPostPopup
 state.closeSendPostPopup = closeSendPostPopup
 
