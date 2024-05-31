@@ -65,6 +65,7 @@ const state = reactive<{
           "
           class="white-winds__item"
           :href="record.value.href"
+          rel="noreferrer"
           target="_blank"
         >
           <div class="white-winds__header">
