@@ -33,7 +33,7 @@ const state = reactive<{
       return []
     }
 
-    // テンプレート構文用プロパティの注入_
+    // テンプレート構文用プロパティのインジェクション
     results.records.forEach((record) => {
       if (record.value == null) {
         record.value = {}
@@ -41,8 +41,8 @@ const state = reactive<{
       const partOfHref = record.uri
         .replace("at://", "")
         .replace("com.whtwnd.blog.entry/", "")
-      record.value.href = `https://whtwnd.com/${partOfHref}/${record.cid}`
-      record.value.createdAt = mainState.formatDate(record.value.createdAt)
+      record.value.__href = `https://whtwnd.com/${partOfHref}/${record.cid}`
+      record.value.__createdAt = mainState.formatDate(record.value.createdAt)
     })
 
     // プロフィールデータにキャッシュを保存
@@ -64,7 +64,7 @@ const state = reactive<{
             record.value.visibility === 'url'
           "
           class="white-winds__item"
-          :href="record.value.href"
+          :href="record.value.__href"
           rel="noreferrer"
           target="_blank"
         >
@@ -74,7 +74,7 @@ const state = reactive<{
           </div>
           <div class="white-winds__title">{{ record.value.title }}</div>
           <div class="white-winds__content">{{ record.value.content }}</div>
-          <div class="white-winds__createdAt">{{ record.value.createdAt }}</div>
+          <div class="white-winds__createdAt">{{ record.value.__createdAt }}</div>
         </a>
       </template>
     </div>
