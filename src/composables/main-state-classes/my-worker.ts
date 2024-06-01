@@ -93,6 +93,11 @@ export default class {
           this.mainState.myFeeds.synchronizeToMyList()
         }
 
+        // セッションキャッシュの反映 - サーバ情報
+        if (sessionCache.serverInfo != null) {
+          this.mainState.currentServerInfo = sessionCache.serverInfo
+        }
+
         // セッションキャッシュの反映 - 招待コード
         if (sessionCache.inviteCodes != null) {
           Util.setArray(this.mainState.inviteCodes, sessionCache.inviteCodes)

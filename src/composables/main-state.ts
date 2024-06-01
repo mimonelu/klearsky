@@ -659,14 +659,20 @@ function formatDate (dateString?: string): string {
   return format(the, "yyyy/MM/dd")
 }
 
-// updatePageTitle: () => void
-
 // 現在のサーバ情報
 
 async function fetchCurrentServerInfo () {
+  if (state.currentServerInfo != null) {
+    return
+  }
   const response = await state.atp.fetchServerInfo()
-  if (response instanceof Error) return
+  if (response instanceof Error) {
+    return
+  }
   state.currentServerInfo = response
+
+  //セッションキャッシュの設定
+  state.myWorker.setSessionCache("serverInfo", state.currentServerInfo)
 }
 
 // 設定
