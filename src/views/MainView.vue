@@ -789,11 +789,13 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     <!-- メインエリア -->
     <div
       v-show="!state.loginPopupAutoDisplay"
-      class="main"
+      class="main-view__main"
     >
       <!-- PC用メニュー -->
       <div class="main-menu-vertical-wrapper">
-        <MainMenuVertical />
+        <div class="main-menu-vertical-wrapper__inner">
+          <MainMenuVertical />
+        </div>
       </div>
 
       <!-- SP用メニュー -->
@@ -1408,6 +1410,21 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     }
   }
 
+  // メインエリア
+  &__main {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    position: relative;
+    max-width: $max-width;
+    min-height: 100vh;
+
+    // SPレイアウト
+    @include media-sp-layout() {
+      padding-bottom: var(--sp-menu-height);
+    }
+  }
+
   // スクロールボタン用処理
   &:deep() .scroll-button {
     @media (max-width: #{$max-width-with-scrollbar + 64px}) {
@@ -1427,21 +1444,6 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   top: 0;
   width: 100%;
   height: 100vh;
-}
-
-// メインエリア
-.main {
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  position: relative;
-  max-width: $max-width;
-  min-height: 100vh;
-
-  // SPレイアウト
-  @include media-sp-layout() {
-    padding-bottom: var(--sp-menu-height);
-  }
 }
 
 // メインメニュー
@@ -1466,6 +1468,13 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   overflow: hidden;
   position: relative;
 
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+  }
+
   // SPレイアウト
   @include media-sp-layout() {
     display: none;
@@ -1474,7 +1483,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 
 // PC用メニュー
 .main-menu-vertical {
-  position: fixed;
+  flex-grow: 1;
 }
 
 // SP用メニュー

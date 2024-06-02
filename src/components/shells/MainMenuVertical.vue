@@ -77,109 +77,112 @@ function moveToBottom () {
       <div class="label">{{ mainState.userProfile?.handle }}</div>
     </RouterLink>
 
-    <!-- ホームボタン -->
-    <RouterLink
-      class="link-button"
-      to="/home"
-    >
-      <div class="icon">
-        <SVGIcon name="home" />
-      </div>
-      <div class="label">{{ $t("home") }}</div>
-    </RouterLink>
+    <!-- スクローラー -->
+    <div class="main-menu-vertical__scroller">
+      <!-- ホームボタン -->
+      <RouterLink
+        class="link-button"
+        to="/home"
+      >
+        <div class="icon">
+          <SVGIcon name="home" />
+        </div>
+        <div class="label">{{ $t("home") }}</div>
+      </RouterLink>
 
-    <!-- 検索ボタン -->
-    <RouterLink
-      class="link-button"
-      :to="`/search/post${state.query}`"
-      :data-is-focus="mainState.currentPath.startsWith('/search/')"
-    >
-      <div class="icon">
-        <SVGIcon name="search" />
-      </div>
-      <div class="label">{{ $t("search") }}</div>
-    </RouterLink>
+      <!-- 検索ボタン -->
+      <RouterLink
+        class="link-button"
+        :to="`/search/post${state.query}`"
+        :data-is-focus="mainState.currentPath.startsWith('/search/')"
+      >
+        <div class="icon">
+          <SVGIcon name="search" />
+        </div>
+        <div class="label">{{ $t("search") }}</div>
+      </RouterLink>
 
-    <!-- 通知ボタン -->
-    <button
-      class="link-button"
-      @click.prevent="openNotificationPopup"
-    >
-      <div class="icon">
-        <SVGIcon name="bell" />
+      <!-- 通知ボタン -->
+      <button
+        class="link-button"
+        @click.prevent="openNotificationPopup"
+      >
+        <div class="icon">
+          <SVGIcon name="bell" />
 
-        <!-- 未読通知バッジ -->
-        <div
-          v-if="mainState.notificationCount > 0 && !mainState.currentSetting.hideNotificationBadge"
-          class="unread-badge"
-        >{{ mainState.notificationCount }}</div>
-      </div>
-      <div class="label">{{ $t("notifications") }}</div>
-    </button>
+          <!-- 未読通知バッジ -->
+          <div
+            v-if="mainState.notificationCount > 0 && !mainState.currentSetting.hideNotificationBadge"
+            class="unread-badge"
+          >{{ mainState.notificationCount }}</div>
+        </div>
+        <div class="label">{{ $t("notifications") }}</div>
+      </button>
 
-    <!-- チャットボタン -->
-    <button
-      class="link-button"
-      @click.prevent="openChatListPopup"
-    >
-      <div class="icon">
-        <SVGIcon name="chat" />
+      <!-- チャットボタン -->
+      <button
+        class="link-button"
+        @click.prevent="openChatListPopup"
+      >
+        <div class="icon">
+          <SVGIcon name="chat" />
 
-        <!-- 未読チャットバッジ -->
-        <div
-          v-if="mainState.myChat.unread > 0 && !mainState.currentSetting.hideNotificationBadge"
-          class="unread-badge"
-        >{{ mainState.myChat.unread }}</div>
-      </div>
-      <div class="label">{{ $t("chat") }}</div>
-    </button>
+          <!-- 未読チャットバッジ -->
+          <div
+            v-if="mainState.myChat.unread > 0 && !mainState.currentSetting.hideNotificationBadge"
+            class="unread-badge"
+          >{{ mainState.myChat.unread }}</div>
+        </div>
+        <div class="label">{{ $t("chat") }}</div>
+      </button>
 
-    <!-- 設定ボタン -->
-    <button
-      class="link-button main-menu-vertical__settings-popover-trigger"
-      @click.prevent="openSettingsPopover"
-    >
-      <div class="icon">
-        <SVGIcon name="setting" />
-      </div>
-      <div class="label">{{ $t("settings") }}</div>
-    </button>
+      <!-- 設定ボタン -->
+      <button
+        class="link-button main-menu-vertical__settings-popover-trigger"
+        @click.prevent="openSettingsPopover"
+      >
+        <div class="icon">
+          <SVGIcon name="setting" />
+        </div>
+        <div class="label">{{ $t("settings") }}</div>
+      </button>
 
-    <!-- アカウントポップアップトリガー -->
-    <button
-      class="link-button"
-      @click.prevent="openAccountPopup"
-    >
-      <div class="icon">
-        <SVGIcon name="person" />
-      </div>
-      <div class="label">{{ $t("myAccounts") }}</div>
-    </button>
+      <!-- アカウントポップアップトリガー -->
+      <button
+        class="link-button"
+        @click.prevent="openAccountPopup"
+      >
+        <div class="icon">
+          <SVGIcon name="person" />
+        </div>
+        <div class="label">{{ $t("myAccounts") }}</div>
+      </button>
 
-    <!-- ポスト送信ポップアップトリガー -->
-    <button
-      class="link-button send-post-button"
-      @click.prevent="openSendPostPopup"
-    >
-      <div class="icon">
-        <SVGIcon
-          v-if="!mainState.sendPostPopupProcessing"
-          name="sendPost"
-        />
-        <Loader v-else />
-      </div>
-      <div class="label">{{ $t("sendPost") }}</div>
-    </button>
+      <!-- ポスト送信ポップアップトリガー -->
+      <button
+        class="link-button send-post-button"
+        @click.prevent="openSendPostPopup"
+      >
+        <div class="icon">
+          <SVGIcon
+            v-if="!mainState.sendPostPopupProcessing"
+            name="sendPost"
+          />
+          <Loader v-else />
+        </div>
+        <div class="label">{{ $t("sendPost") }}</div>
+      </button>
 
-    <!-- スクロールダウンボタン -->
-    <button
-      class="move-button move-to-bottom-button"
-      @click.prevent="moveToBottom"
-    >
-      <div class="icon">
-        <SVGIcon name="cursorDown" />
-      </div>
-    </button>
+      <!-- スクロールダウンボタン -->
+      <button
+        class="move-button move-to-bottom-button"
+        @click.prevent="moveToBottom"
+      >
+        <div class="icon">
+          <SVGIcon name="cursorDown" />
+        </div>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -219,18 +222,28 @@ function moveToBottom () {
 
   // フルレイアウト
   @include media-full-layout() {
+    overflow: hidden;
     padding: 1rem 1rem 1.25rem;
 
     // 内部スクロール
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior: none;
-    max-height: 100%;
-    @include scroll-bar("transparent");
+    &__scroller {
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: none;
+      max-height: 100%;
+      @include scroll-bar("transparent");
+    }
 
     .move-to-bottom-button {
       display: none;
     }
+  }
+
+  // スクローラー
+  &__scroller {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 0.5rem;
   }
 }
 
