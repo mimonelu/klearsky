@@ -200,6 +200,7 @@ async function submitCallback () {
       lightning: mainState.currentSetting.lightning,
     })
     if (result instanceof Error) {
+      mainState.openSendPostPopup()
       mainState.openErrorPopup($t(result.message), "SendPostPopup/submitCallback")
     } else {
       // Threadgate の適用
