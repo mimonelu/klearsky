@@ -412,9 +412,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   grid-gap: 0.5em;
   padding: 1em;
   position: relative;
-  &[data-purpose="modList"] {
-    background-color: rgb(var(--notice-color), 0.125);
-  }
   &[data-purpose="unknownList"] {
     background-color: var(--fg-color-00625);
   }
@@ -611,6 +608,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // リスト説明文
   &__description {
+    color: var(--fg-color-075);
     font-size: 0.875em;
     line-height: var(--line-height-high);
     white-space: pre-wrap;

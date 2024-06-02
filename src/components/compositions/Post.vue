@@ -1304,6 +1304,10 @@ function toggleOldestQuotedPostDisplay () {
       --top: 1.75em;
       --gap: 1.75em;
     }
+    &[data-has-mask="true"][data-has-grandparent-author="true"] {
+      --top: 2.5em;
+      --gap: 2.5em;
+    }
 
     &::before {
       border-radius: var(--border-radius-middle);

@@ -468,7 +468,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // フィード説明文
   &__description {
-    color: rgb(var(--fg-color));
+    color: var(--fg-color-075);
     font-size: 0.875em;
     line-height: var(--line-height-high);
     white-space: pre-wrap;
