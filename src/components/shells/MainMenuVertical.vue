@@ -44,7 +44,7 @@ function openAccountPopup () {
 
 async function openSendPostPopup () {
   Util.blurElement()
-  await mainState.openSendPostPopup({ type: "post" })
+  await mainState.openSendPostPopup()
 }
 
 function moveToBottom () {

@@ -2071,13 +2071,15 @@ function closeTimeFeedsPopup () {
 
 let isSendPostDone = false
 
-async function openSendPostPopup (params: TTSendPostPopupParams): Promise<boolean> {
-  state.sendPostPopupProps.type = params.type
-  state.sendPostPopupProps.post = params.post
-  state.sendPostPopupProps.text = params.text
-  state.sendPostPopupProps.url = params.url
-  state.sendPostPopupProps.fileList = params.fileList
-  state.sendPostPopupProps.createdAt = params.createdAt
+async function openSendPostPopup (params?: TTSendPostPopupParams): Promise<boolean> {
+  if (params != null) {
+    state.sendPostPopupProps.type = params.type
+    state.sendPostPopupProps.post = params.post
+    state.sendPostPopupProps.text = params.text
+    state.sendPostPopupProps.url = params.url
+    state.sendPostPopupProps.fileList = params.fileList
+    state.sendPostPopupProps.createdAt = params.createdAt
+  }
   state.sendPostPopupProps.display = true
   state.sendPostPopupProps.visibility = true
   await Util.waitProp(() => state.sendPostPopupProps.visibility, false)

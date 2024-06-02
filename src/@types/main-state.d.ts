@@ -545,7 +545,7 @@ type MainState = {
   // ポップアップ - ポスト送信ポップアップ
   sendPostPopupProps: TTSendPostPopupParams
   sendPostPopupProcessing: boolean
-  openSendPostPopup: (params: TTSendPostPopupParams) => Promise<boolean>
+  openSendPostPopup: (params?: TTSendPostPopupParams) => Promise<boolean>
   closeSendPostPopup: (done: boolean, hidden: boolean) => void
 
   // ポップアップ - マイタグポップアップ
