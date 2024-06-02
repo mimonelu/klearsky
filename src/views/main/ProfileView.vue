@@ -21,19 +21,40 @@ import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
+import WhiteWinds from "@/components/compositions/WhiteWinds.vue"
 import Util from "@/composables/util"
 
 const router = useRouter()
 
 const mainState = inject("state") as MainState
 
+const svgIconNamesOfPostTabButton: { [k: string]: string } = {
+  "profile-feeds": "post",
+  "profile-feeds-with-replies": "posts",
+  "profile-feeds-with-media": "image",
+  "profile-repost": "repost",
+  "profile-like": "like",
+}
+
+const labelsOfPostTabButton: { [k: string]: string } = {
+  "profile-feeds": "post",
+  "profile-feeds-with-replies": "reply",
+  "profile-feeds-with-media": "media",
+  "profile-repost": "reposts",
+  "profile-like": "likes",
+}
+
 const state = reactive<{
   loaderDisplay: ComputedRef<boolean>
   handleHistoryPopupDisplay: boolean
   endpoint: ComputedRef<undefined | string>
+  svgIconNameOfPostTabButton: ComputedRef<string>
+  labelOfPostTabButton: ComputedRef<string>
   isPagePostFeeds: ComputedRef<boolean>
   isPagePostFeedsWithReplies: ComputedRef<boolean>
   isPagePostFeedsWithMedia: ComputedRef<boolean>
+  isPageRepostList: ComputedRef<boolean>
+  isPageLikeList: ComputedRef<boolean>
   isLabeler: ComputedRef<boolean>
   numberOfPostsPerDay: ComputedRef<undefined | number>
   profilePostPopverDisplay: boolean
@@ -65,14 +86,26 @@ const state = reactive<{
       ? log[0].operation?.services?.atproto_pds?.endpoint
       : log.didDocument?.service?.[0]?.serviceEndpoint ?? undefined
   }),
+  svgIconNameOfPostTabButton: computed((): string => {
+    return svgIconNamesOfPostTabButton[(router.currentRoute.value.name ?? "") as string] ?? "post"
+  }),
+  labelOfPostTabButton: computed((): string => {
+    return labelsOfPostTabButton[(router.currentRoute.value.name ?? "") as string] ?? "post"
+  }),
   isPagePostFeeds: computed((): boolean => {
-    return router.currentRoute.value.name === 'profile-feeds'
+    return router.currentRoute.value.name === "profile-feeds"
   }),
   isPagePostFeedsWithReplies: computed((): boolean => {
-    return router.currentRoute.value.name === 'profile-feeds-with-replies'
+    return router.currentRoute.value.name === "profile-feeds-with-replies"
   }),
   isPagePostFeedsWithMedia: computed((): boolean => {
-    return router.currentRoute.value.name === 'profile-feeds-with-media'
+    return router.currentRoute.value.name === "profile-feeds-with-media"
+  }),
+  isPageRepostList: computed((): boolean => {
+    return router.currentRoute.value.name === "profile-repost"
+  }),
+  isPageLikeList: computed((): boolean => {
+    return router.currentRoute.value.name === "profile-like"
   }),
   isLabeler: computed((): boolean => {
     return mainState.currentProfile?.associated?.labeler ?? false
@@ -159,7 +192,13 @@ async function toggleNoUnauthenticated () {
   const params: TTUpdateProfileParams = {
     displayName: mainState.userProfile.displayName ?? "",
     description: mainState.userProfile.description ?? "",
-    labels: mainState.userProfile.labels?.map((label: TTLabel) => label.val) ?? [],
+    labels: mainState.userProfile.labels
+      ?.filter((label) => {
+        return !label.ver
+      })
+      .map((label) => {
+        return label.val
+      }) ?? [],
     avatar: null,
     detachAvatar: [false],
     banner: null,
@@ -313,18 +352,11 @@ function removeThisPost () {
               <!-- ラベルタグ -->
               <LabelTags
                 :labels="mainState.currentProfile?.labels"
+                :labelerDisplay="state.isLabeler"
+                :unauthenticatedDisplay="true"
                 :harmfulDisplay="true"
                 :customDisplay="true"
-              >
-                <!-- ラベラー -->
-                <div
-                  v-if="state.isLabeler"
-                  class="label-tags__labeler"
-                >
-                  <SVGIcon name="labeler" />
-                  <span>{{ $t("labeler") }}</span>
-                </div>
-              </LabelTags>
+              />
 
               <!-- 表示名 -->
               <DisplayName
@@ -510,21 +542,17 @@ function removeThisPost () {
           :class="
             state.isPagePostFeeds ||
             state.isPagePostFeedsWithReplies ||
-            state.isPagePostFeedsWithMedia
+            state.isPagePostFeedsWithMedia ||
+            state.isPageRepostList ||
+            state.isPageLikeList
               ? 'router-link-active'
               : ''
           "
           to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
           @click.stop.self="openProfilePostPopver"
         >
-          <SVGIcon :name="
-            state.isPagePostFeedsWithReplies
-              ? 'posts'
-              : state.isPagePostFeedsWithMedia
-                ? 'image'
-                : 'post'
-          " />
-          <span>{{ $t("posts") }}</span>
+          <SVGIcon :name="state.svgIconNameOfPostTabButton" />
+          <span>{{ $t(state.labelOfPostTabButton) }}</span>
           <SVGIcon name="cursorDown" />
 
           <!-- プロフィールポストポップオーバー -->
@@ -561,7 +589,7 @@ function removeThisPost () {
 
               <!-- メディア一覧ページリンク -->
               <Component
-              :is="state.isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
+                :is="state.isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
                 class="list-menu__item"
                 :data-selected="state.isPagePostFeedsWithMedia"
                 :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
@@ -570,28 +598,34 @@ function removeThisPost () {
                 <SVGIcon name="image" />
                 <span>{{ $t("postWithMedia") }}</span>
               </Component>
+
+              <!-- リポスト一覧ページリンク -->
+              <Component
+                :is="state.isPageRepostList ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :data-selected="state.isPageRepostList"
+                :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
+                @click.stop="closeProfilePostPopver"
+              >
+                <SVGIcon name="repost" />
+                <span>{{ $t("reposts") }}</span>
+              </Component>
+
+              <!-- いいね一覧ページリンク -->
+              <Component
+                v-if="mainState.isMyProfile()"
+                :is="state.isPageLikeList ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :data-selected="state.isPageLikeList"
+                :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
+                @click.stop="closeProfilePostPopver"
+              >
+                <SVGIcon name="like" />
+                <span>{{ $t("likes") }}</span>
+              </Component>
             </menu>
           </Popover>
         </button>
-
-        <!-- リポストページタブボタン -->
-        <RouterLink
-          class="tab__button tab__button--repost"
-          :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('reposts')"
-        >
-          <SVGIcon name="repost" />
-        </RouterLink>
-
-        <!-- いいね一覧タブボタン -->
-        <RouterLink
-          v-if="mainState.isMyProfile()"
-          class="tab__button tab__button--like"
-          :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
-          :title="$t('likes')"
-        >
-          <SVGIcon name="like" />
-        </RouterLink>
 
         <!-- カスタムフィードタブボタン -->
         <RouterLink
@@ -669,6 +703,12 @@ function removeThisPost () {
         </div>
       </template>
     </Post>
+
+    <!-- WhiteWind 導線 -->
+    <WhiteWinds
+      v-if="state.isPagePostFeeds"
+      :profile="mainState.currentProfile ?? undefined"
+    />
 
     <RouterView class="profile-view__router-view" />
 
@@ -996,38 +1036,9 @@ function removeThisPost () {
     pointer-events: none;
   }
 
-  .tab__button {
-    &--post {
-      border-right-color: var(--fg-color-0125);
-    }
-    &--like,
-    &--repost {
-      flex: 0.5;
-    }
-  }
-
-  .tab__button--repost > .svg-icon {
-    --fg-color: var(--share-color);
-  }
-
-  .tab__button--like > .svg-icon {
-    --fg-color: var(--like-color);
-  }
-
   .tab__button--post {
-    & > .svg-icon:not(.svg-icon--cursorDown) {
-      --fg-color: var(--post-color);
-    }
-
     & > .svg-icon--cursorDown {
       font-size: 0.75rem;
-    }
-  }
-
-  .tab__button--feed,
-  .tab__button--list {
-    & > .svg-icon {
-      --fg-color: var(--accent-color);
     }
   }
 }

@@ -32,9 +32,6 @@
     font-weight: bold;
     padding: 0.5rem 1rem;
     white-space: nowrap;
-    &[data-selected="true"] {
-      color: rgb(var(--accent-color));
-    }
     &:focus, &:hover {
       background-color: var(--accent-color-025);
     }
@@ -76,6 +73,9 @@
 
     & > span {
       color: var(--fg-color-0875);
+    }
+    &[data-selected="true"] > span {
+      color: rgb(var(--accent-color));
     }
   }
 

@@ -117,8 +117,6 @@ class AtpWrapper implements TIAtpWrapper {
 
   session?: TTSession
 
-  lastFetchNotificationsDate?: Date
-
   // @ts-ignore
   constructor (this: TIAtpWrapper) {
     this.agent = null
@@ -130,7 +128,6 @@ class AtpWrapper implements TIAtpWrapper {
       sessions: {},
     }
     this.session = undefined
-    this.lastFetchNotificationsDate = undefined
 
     // 不正なアカウントデータの修復
     // TODO: このような処理が不要になるように再実装すること

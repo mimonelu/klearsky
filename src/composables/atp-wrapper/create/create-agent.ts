@@ -11,7 +11,6 @@ export default function (this: TIAtpWrapper, service: string): boolean {
         return
       }
       this.resetSession(session, service)
-      this.lastFetchNotificationsDate = undefined
     },
   })
   return this.agent != null

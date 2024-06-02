@@ -162,7 +162,7 @@ export default class {
         viewer: {},
       },
     }]
-    Util.coherentResponses(feeds)
+    Util.sanitizePostsOrFeeds(feeds)
     const post = feeds[0].post
     if (this.postCallback != null) {
       this.postCallback(did, post)

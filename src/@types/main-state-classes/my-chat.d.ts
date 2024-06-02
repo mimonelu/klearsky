@@ -3,7 +3,6 @@ interface TIMyChat {
   disabled: boolean
   myConvos: Array<MyConvo>
   unread: number
-  lastCursor?: string
   async updateDisabled (): Promise<void>
   async setDeclaration (allowFollowing: TTAllowIncoming): Promise<boolean>
   async fetchMyConvo (dids: Array<string>): Promise<undefined | TIMyConvo>

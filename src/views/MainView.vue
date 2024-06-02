@@ -74,6 +74,11 @@ const loginPopup = ref(null)
 
 provide("state", state)
 
+// ワーカーの削除
+window.addEventListener("beforeunload", () => {
+  state.myWorker.close()
+})
+
 onBeforeMount(() => {
   hotkeys("n", { keyup: true }, (event: any) => {
     if (event.type === "keyup" &&
@@ -86,31 +91,26 @@ onBeforeMount(() => {
   })
 })
 
-onBeforeUnmount(() => {
-  hotkeys.unbind("n")
-})
-
 onMounted(async () => {
   state.currentPath = router.currentRoute.value.path
   state.currentQuery = router.currentRoute.value.query
   state.settings = Util.loadStorage("settings") ?? {}
-
   state.loaderDisplay = true
   await autoLogin()
   state.loaderDisplay = false
-
   state.updatePageTitle()
 
   // ペースト用処理
   useEventListener(window, "paste", onPaste)
 
-  // ブロードキャスト用処理
-  useEventListener(state.broadcastChannel, "message", broadcastListener)
-
   // インフィニットスクロール用処理
   useEventListener(window, "scroll", scrollListener)
 
   state.mounted = true
+})
+
+onBeforeUnmount(() => {
+  hotkeys.unbind("n")
 })
 
 onUnmounted(() => {
@@ -223,7 +223,13 @@ async function autoLogin () {
   if (state.atp.hasLogin()) {
     await processAfterLogin()
   } else if (state.atp.canLogin()) {
-    const response = await state.atp.login(undefined, undefined, undefined, undefined, onRefreshSession)
+    const response = await state.atp.login(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      onRefreshSession
+    )
     if (response instanceof Error) {
       state.openErrorPopup(
         typeof(response.message) === "string"
@@ -273,19 +279,14 @@ async function manualLogin (
 }
 
 function onRefreshSession () {
-  // セッションの同期
-  state.broadcastChannel?.postMessage({
-    name: "refreshSession",
-    data: Util.cloneJson(state.atp.session),
-  } as TTPostMessageData)
+  // セッションデータの同期
+  state.myWorker.setSessionCache("session", state.atp.session)
 }
 
 async function processAfterLogin () {
+  onRefreshSession()
   setupUpdateJwtInterval()
   setupNotificationInterval()
-
-  // 現在のサーバ情報の取得
-  state.fetchCurrentServerInfo()
 
   // プリファレンスとユーザープロフィールの取得
   const tasks: { [k: string]: any } = {}
@@ -306,11 +307,16 @@ async function processAfterLogin () {
   }
 
   // ラベラーの取得
-  await state.myLabeler.updateMyLabelers()
-    .then(() => {
-      // ラベラーのHTTPヘッダーを設定
-      state.myLabeler.setAtprotoAcceptLabelers()
-    })
+  if (state.myLabeler.labelers.length === 0) {
+    await state.myLabeler.updateMyLabelers()
+      .then(() => {
+        // ラベラーのHTTPヘッダーを設定
+        state.myLabeler.setAtprotoAcceptLabelers()
+
+        // セッションキャッシュの設定
+        state.myWorker.setSessionCache("myLabeler", state.myLabeler.labelers)
+      })
+  }
 
   // マイフィードの取得
   if (state.myFeeds.items.length === 0) {
@@ -320,7 +326,7 @@ async function processAfterLogin () {
         state.myFeeds.synchronizeToMyList()
 
         // セッションキャッシュの設定
-        state.myWorker.setSessionCache("myFeeds.items", state.myFeeds.items)
+        state.myWorker.setSessionCache("myFeedsItems", state.myFeeds.items)
       })
   }
 
@@ -365,6 +371,9 @@ async function processAfterLogin () {
         state.myWorker.setSessionCache("inviteCodes", state.inviteCodes)
       })
   }
+
+  // 現在のサーバ情報の取得
+  state.fetchCurrentServerInfo()
 
   changeSetting()
   if (router.currentRoute.value.name === "home") {
@@ -755,65 +764,6 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     })
   }
   return true
-}
-
-// ブロードキャスト用処理
-
-function broadcastListener (event: MessageEvent) {
-  console.log("[klearsky/broadcast]", event.data.name)
-  switch (event.data.name) {
-    // セッションの同期
-    case "refreshSession": {
-      if (event.data.data == null) break
-      if (event.data.data.did !== state.atp.data.did) break
-      state.atp.resetSession(event.data.data)
-      break
-    }
-
-    // セッションキャッシュの反映
-    case "setSessionCacheResponse": {
-      const data: TTPostMessageData = event.data
-      if (data.did != state.atp.data.did || data.key == null || data.value == null) {
-        break
-      }
-      switch (data.key) {
-        // セッションキャッシュの反映 - プリファレンス
-        case "currentPreferences": {
-          state.currentPreferences = data.value
-          break
-        }
-
-        // セッションキャッシュの反映 - ユーザープロフィール
-        case "userProfile": {
-          state.userProfile = data.value
-          break
-        }
-
-        // セッションキャッシュの反映 - マイフィード
-        case "myFeeds.items": {
-          state.myFeeds.items.splice(0, state.myFeeds.items.length, ...data.value)
-          state.myFeeds.synchronizeToMyList()
-          break
-        }
-
-        // セッションキャッシュの反映 - マイリスト
-        case "myList": {
-          state.myLists.items = data.value
-          state.myFeeds.synchronizeToMyList()
-          break
-        }
-
-        // セッションキャッシュの反映 - 招待コード
-        case "inviteCodes": {
-          state.inviteCodes = data.value
-          break
-        }
-
-        default: break
-      }
-      break
-    }
-  }
 }
 </script>
 

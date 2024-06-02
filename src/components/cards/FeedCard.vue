@@ -143,7 +143,7 @@ async function updatePreferences () {
   // セッションキャッシュの更新
   if (result) {
     mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("myFeeds.items", mainState.myFeeds.items)
+    mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
   }
 }
 
@@ -468,7 +468,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // フィード説明文
   &__description {
-    color: rgb(var(--fg-color));
+    color: var(--fg-color-075);
     font-size: 0.875em;
     line-height: var(--line-height-high);
     white-space: pre-wrap;

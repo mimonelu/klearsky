@@ -1024,6 +1024,8 @@ function toggleOldestQuotedPostDisplay () {
         <LabelTags
           v-if="position !== 'slim'"
           :labels="state.allLabels"
+          :labelerDisplay="false"
+          :unauthenticatedDisplay="false"
           :harmfulDisplay="false"
           :customDisplay="false"
         />
@@ -1301,6 +1303,10 @@ function toggleOldestQuotedPostDisplay () {
     &[data-has-grandparent-author="true"] {
       --top: 1.75em;
       --gap: 1.75em;
+    }
+    &[data-has-mask="true"][data-has-grandparent-author="true"] {
+      --top: 2.5em;
+      --gap: 2.5em;
     }
 
     &::before {

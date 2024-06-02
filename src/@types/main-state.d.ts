@@ -14,16 +14,13 @@ type MainState = {
   updatePageTitle: () => void
 
   // MyWorker
-  myWorker: TTMyWorker
+  myWorker: TIMyWorker
 
   // D&D
   isDragOver: boolean
 
   // インフィニットスクロール用プロパティ
   scrolledToBottom: boolean
-
-  // ブロードキャスト
-  broadcastChannel?: BroadcastChannel
 
   // 現在のサーバ情報
   currentServerInfo?: TTServerInfo
@@ -45,6 +42,7 @@ type MainState = {
   notificationCount: number
   notificationFetchedFirst: boolean
   notificationReasonFilter?: TTNotificationReason
+  lastFetchNotificationsDate?: Date
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
 
   // 通知タイマー
@@ -546,6 +544,7 @@ type MainState = {
 
   // ポップアップ - ポスト送信ポップアップ
   sendPostPopupProps: TTSendPostPopupParams
+  sendPostPopupProcessing: boolean
   openSendPostPopup: (params: TTSendPostPopupParams) => Promise<boolean>
   closeSendPostPopup: (done: boolean, hidden: boolean) => void
 

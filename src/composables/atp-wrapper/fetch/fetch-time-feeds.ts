@@ -61,7 +61,7 @@ export default async function (
     if (record.value.reply != null) {
       feeds[0].post.record.reply = record.value.reply
     }
-    Util.coherentResponses(feeds)
+    Util.sanitizePostsOrFeeds(feeds)
     if (direction === "new") {
       oldPosts.unshift(feeds[0].post)
     } else {

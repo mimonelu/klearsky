@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import Package from "@/../package.json"
 
+const atprotoApiVersion = (Package.dependencies["@atproto/api"] ?? "").replace(/^[\^|~]/, "")
+
 const yyyy = (new Date).getFullYear()
 </script>
 
 <template>
   <div class="copyright">
-    <small>Klearsky v{{ Package.version }} alpha (@atproto/api v{{ Package.dependencies["@atproto/api"] }}) &copy; {{ yyyy }} mimonelu</small>
+    <small>Klearsky v{{ Package.version }} alpha (@atproto/api v{{ atprotoApiVersion }}) &copy; {{ yyyy }} mimonelu</small>
     <a
       class="textlink--underline"
       href="https://github.com/mimonelu/klearsky"

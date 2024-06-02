@@ -26,7 +26,7 @@ export default async function (
     })
 
   // TODO:
-  Util.coherentResponses(newPosts)
+  Util.sanitizePostsOrFeeds(newPosts)
 
   if (cursor == null) {
     currentPosts.unshift(...newPosts)

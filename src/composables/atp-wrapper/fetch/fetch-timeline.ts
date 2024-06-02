@@ -33,7 +33,7 @@ export default async function (
   )
 
   // TODO:
-  Util.coherentResponses(response.data.feed)
+  Util.sanitizePostsOrFeeds(response.data.feed)
   const isFirstFetch = oldFeeds.length === 0
   const isAllNew = Util.mergeFeeds(
     oldFeeds,

@@ -38,19 +38,19 @@ const state = reactive<{
 
 const popup = ref()
 
-onBeforeUnmount(() => {
-  updateNotificationSeen()
-  updateNotificationIsRead()
-  mainState.notificationCount = 0
-  emit("updatePageTitle")
-})
-
 onMounted(async () => {
   if (!mainState.notificationFetchedFirst) {
     mainState.notificationFetchedFirst = true
     await fetchNotifications("new")
   }
   updateNotificationSeen()
+})
+
+onBeforeUnmount(() => {
+  updateNotificationSeen()
+  updateNotificationIsRead()
+  mainState.notificationCount = 0
+  emit("updatePageTitle")
 })
 
 function close () {
@@ -62,8 +62,10 @@ function clipBadge (value: number): string {
 }
 
 async function updateNotificationSeen () {
-  if (mainState.notificationCount <= 0) return
-  await mainState.atp.updateNotificationSeen()
+  if (mainState.notificationCount <= 0) {
+    return
+  }
+  await mainState.atp.updateNotificationSeen(mainState.lastFetchNotificationsDate)
 }
 
 function updateNotificationIsRead () {

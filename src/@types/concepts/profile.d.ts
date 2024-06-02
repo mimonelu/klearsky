@@ -17,6 +17,9 @@ type TTProfile = {
 
   // 固定ポスト
   pinnedPost?: string
+
+  // WhiteWind
+  __whiteWinds?: Array<TICommonRecord>
 }
 
 type TTUpdateProfileParams = {
