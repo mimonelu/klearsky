@@ -74,6 +74,7 @@ body {
   -webkit-tap-highlight-color: transparent;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  transition: background-color 500ms ease-out;
   user-select: none;
   @include scroll-bar("transparent");
 }

@@ -212,13 +212,13 @@ function moveToBottom () {
   flex-direction: column;
   grid-gap: 0.5rem;
 
-  // スリムレイアウト
-  @media (max-width: $max-width-with-scrollbar) {
+  // タブレットレイアウト
+  @include media-tablet-layout() {
     @include slimLayout;
   }
 
   // フルレイアウト
-  @media not all and (max-width: $max-width-with-scrollbar) {
+  @include media-full-layout() {
     padding: 1rem 1rem 1.25rem;
 
     // 内部スクロール

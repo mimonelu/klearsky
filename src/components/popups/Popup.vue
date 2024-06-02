@@ -201,13 +201,13 @@ function scrollListener () {
   max-height: calc(100% - var(--margin2));
   transform: translateY(0);
 
-  // SP幅以上
-  @media (min-width: $sp-width) {
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
     margin: var(--margin);
   }
 
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
+  // SPレイアウト
+  @include media-sp-layout() {
     margin: calc(var(--margin) + env(safe-area-inset-top)) var(--margin) calc(var(--margin) + var(--sp-menu-height));
   }
 }

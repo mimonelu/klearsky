@@ -1387,9 +1387,6 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 
 <style lang="scss" scoped>
 .main-view {
-  background-color: rgb(var(--bg-color));
-  transition: background-color 500ms ease-out;
-
   // ポップアップの重なり調整
   @for $i from 2 through 8 {
     $margins: (
@@ -1441,8 +1438,8 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   max-width: $max-width;
   min-height: 100vh;
 
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
+  // SPレイアウト
+  @include media-sp-layout() {
     padding-bottom: var(--sp-menu-height);
   }
 }
@@ -1451,14 +1448,14 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 // PC用メニュー
 .main-menu-vertical-wrapper,
 .main-menu-vertical {
-  // 最大幅未満
-  @media (max-width: $max-width-with-scrollbar) {
+  // タブレットレイアウト
+  @include media-tablet-layout() {
     min-width: $main-menu-min-width;
     max-width: $main-menu-min-width;
   }
 
-  // 最大幅以上
-  @media not all and (max-width: $max-width-with-scrollbar) {
+  // フルレイアウト
+  @include media-full-layout() {
     min-width: $menu-max-width;
     max-width: $menu-max-width;
   }
@@ -1469,8 +1466,8 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   overflow: hidden;
   position: relative;
 
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
+  // SPレイアウト
+  @include media-sp-layout() {
     display: none;
   }
 }
@@ -1488,8 +1485,8 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   z-index: 2;
   width: 100%;
 
-  // SP幅以上
-  @media (min-width: $sp-width) {
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
     display: none;
   }
 }
@@ -1522,6 +1519,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 
 // サブメニュー
 .sub-menu-wrapper {
+  // サブメニューの表示制御
   @media (max-width: 1024px) {
     display: none;
   }
@@ -1571,4 +1569,3 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   position: fixed;
 }
 </style>
-@/composables/main-state/main-state@/composables/main-state
