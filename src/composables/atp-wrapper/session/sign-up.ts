@@ -8,9 +8,15 @@ export default async function (
   password: string,
   inviteCode?: string
 ): Promise<undefined | Error> {
-  if (!window.navigator.onLine) return Error("offlineError")
-  if (!this.createAgent(service)) return Error("noAgentError")
-  if (this.agent == null) return Error("noAgentError")
+  if (!window.navigator.onLine) {
+    return Error("offlineError")
+  }
+  if (!this.createAgent(service)) {
+    return Error("noAgentError")
+  }
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: ComAtprotoServerCreateAccount.InputSchema = {
     email,
     handle,

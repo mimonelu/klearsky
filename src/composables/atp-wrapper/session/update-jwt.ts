@@ -5,8 +5,9 @@ export default async function (
   onRefreshSession?: () => void
 ): Promise<undefined | Error> {
   const session = this.data.sessions[this.data.did]
-  if (session == null) return Error("noSessionError")
-
+  if (session == null) {
+    return Error("noSessionError")
+  }
   let refreshJwt = undefined
   let accessJwt = undefined
   try {
@@ -18,27 +19,33 @@ export default async function (
   if (
     refreshJwt.exp == null ||
     accessJwt.exp == null
-  ) return Error("invalidJwtError")
-
-  // 開発用
-  const refreshDate = new Date()
-  const accessDate = new Date()
-  refreshDate.setTime(refreshJwt.exp * 1000)
-  accessDate.setTime(accessJwt.exp * 1000)
-  console.log(
-    `[klearsky] refreshJwt will be expired at ${refreshDate.toLocaleString()}, ` +
-    `accessJwt will be expired at ${accessDate.toLocaleString()}`
-  )
+  ) {
+    return Error("invalidJwtError")
+  }
 
   const now = Date.now() / 1000 + 60 * 5
   if (now >= refreshJwt.exp) {
-    console.warn("[klearsky] refreshJwt was expired.")
+    // 開発用
+    const refreshDate = new Date()
+    refreshDate.setTime(refreshJwt.exp * 1000)
+    console.warn(`[klearsky] refreshJwt was expired at ${refreshDate.toLocaleString()}.`)
+
     return Error("refreshJwtExpired")
   }
   if (now >= accessJwt.exp) {
-    console.warn("[klearsky] accessJwt was expired.")
+    // 開発用
+    const accessDate = new Date()
+    accessDate.setTime(accessJwt.exp * 1000)
+    console.warn(`[klearsky] accessJwt was expired at ${accessDate.toLocaleString()}.`)
+
     const response = await this.refreshSession()
-    if (response instanceof Error) return response
-    if (onRefreshSession != null) onRefreshSession()
+    if (response instanceof Error) {
+      return response
+    }
+
+    // TODO: Error でなければ onRefreshSession を実行するように修正
+    if (onRefreshSession != null) {
+      onRefreshSession()
+    }
   }
 }

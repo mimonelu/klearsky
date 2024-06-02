@@ -10,11 +10,12 @@ export default async function (
   const response: Error | ComAtprotoServerGetSession.Response =
     await (this.agent as BskyAgent).resumeSession({
       accessJwt: session.accessJwt,
+      refreshJwt: session.refreshJwt,
       did: session.did,
       email: session.email,
+      emailAuthFactor: session.emailAuthFactor,
       emailConfirmed: session.emailConfirmed,
       handle: session.handle,
-      refreshJwt: session.refreshJwt,
     })
       .then((value: ComAtprotoServerGetSession.Response) => value)
       .catch((error: any) => error)

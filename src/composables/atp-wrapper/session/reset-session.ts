@@ -4,31 +4,32 @@ export default function (
   service?: string
 ) {
   this.data.did = newSession.did
-  const session = this.data.sessions[this.data.did] ?? {}
+  const currentSession = this.data.sessions[this.data.did] ?? {}
 
-  // AtpSessionData
-  session.accessJwt = newSession.accessJwt ?? session.accessJwt
-  session.did = newSession.did ?? session.did
-  session.handle = newSession.handle ?? session.handle
-  session.email = newSession.email ?? session.email
-  session.emailConfirmed = newSession.emailConfirmed ?? session.emailConfirmed
-  session.refreshJwt = newSession.refreshJwt ?? session.refreshJwt
+  // セッションデータの更新
+  currentSession.accessJwt = newSession.accessJwt ?? currentSession.accessJwt
+  currentSession.refreshJwt = newSession.refreshJwt ?? currentSession.refreshJwt
+  currentSession.did = newSession.did ?? currentSession.did
+  currentSession.handle = newSession.handle ?? currentSession.handle
+  currentSession.email = newSession.email ?? currentSession.email
+  currentSession.emailAuthFactor = newSession.emailAuthFactor ?? currentSession.emailAuthFactor
+  currentSession.emailConfirmed = newSession.emailConfirmed ?? currentSession.emailConfirmed
 
-  // サービス
-  session.__service = service ?? newSession.__service ?? session.__service ?? ""
+  // プロトコル付きサービスアドレスの更新
+  currentSession.__service = service ?? newSession.__service ?? currentSession.__service ?? ""
 
-  // __serviceName の取得
+  // プロトコルなしサービスアドレス（ホスト名）の更新
   let hostName = ""
-  if (session.__service != null) {
+  if (currentSession.__service != null) {
     try {
-      const url = new URL(session.__service)
+      const url = new URL(currentSession.__service)
       hostName = url.hostname
     } catch (error) {
-      console.warn(`[klearsky/__serviceName] ${error}`)
+      console.warn(`[klearsky/resetSession] ${error}`)
     }
   }
-  session.__serviceName = hostName ?? newSession.__serviceName ?? session.__serviceName ?? ""
+  currentSession.__serviceName = hostName ?? newSession.__serviceName ?? currentSession.__serviceName ?? ""
 
-  this.data.sessions[this.data.did] = this.session = session
+  this.data.sessions[this.data.did] = this.session = currentSession
   console.log("[klearsky/resetSession]")
 }
