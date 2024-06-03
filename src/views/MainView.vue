@@ -1507,7 +1507,11 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   flex-direction: column;
   flex-grow: 1;
   overflow-x: clip;
-  max-width: $router-view-width;
+
+  // タブレットレイアウト
+  @include media-tablet-layout() {
+    max-width: $router-view-width;
+  }
 
   // ルータービューヘッダー
   &__header {
@@ -1528,13 +1532,12 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 
 // サブメニュー
 .sub-menu-wrapper {
-  // サブメニューの表示制御
-  @media (max-width: 1024px) {
+  min-width: $menu-max-width;
+  max-width: $menu-max-width;
+
+  // サブメニュー非表示
+  @media not all and (min-width: 1024px) {
     display: none;
-  }
-  @media not all and (max-width: 1024px) {
-    flex-grow: 1;
-    max-width: $menu-max-width;
   }
 
   & > .sub-menu {
