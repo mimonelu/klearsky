@@ -25,13 +25,6 @@
     "profile": "https://langit.pages.dev/u/{mydid}/profile/{did}"
   },
   {
-    "name": "skychatApp",
-    "generator": "https://skychat.social/#feed/{uriWithoutFeed}",
-    "list": "https://skychat.social/#list/{did}/{rkey}",
-    "post": "https://skychat.social/#thread/{did}/{rkey}",
-    "profile": "https://skychat.social/#profile/{did}"
-  },
-  {
     "name": "tokimekiApp",
     "list": "https://tokimeki.blue/profile/{did}/lists/{rkey}",
     "post": "https://tokimeki.blue/profile/{handle}/post/{rkey}",
