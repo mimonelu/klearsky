@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
+import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
 import format from "date-fns/format"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
@@ -149,15 +149,19 @@ async function close () {
 }
 
 async function reset () {
-  const result = await mainState.openConfirmationPopup($t("sendPostReset"), $t("sendPostResetMessage"))
-  if (!result) return
+  const result = await mainState.openConfirmationPopup(
+    $t("sendPostReset"),
+    $t("sendPostResetMessage")
+  )
+  if (!result) {
+    return
+  }
   emit("closeSendPostPopup", false, false)
-  setTimeout(() => {
-    mainState.openSendPostPopup({
-      type: props.type,
-      post: props.post,
-    })
-  }, 1)
+  await nextTick()
+  mainState.openSendPostPopup({
+    type: "post",
+    post: props.post,
+  })
 }
 
 async function submitCallback () {
