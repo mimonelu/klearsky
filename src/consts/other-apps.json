@@ -19,12 +19,6 @@
     "profile": "separator"
   },
   {
-    "name": "langitApp",
-    "generator": "https://langit.pages.dev/u/{mydid}/profile/{uri}",
-    "post": "https://langit.pages.dev/u/{mydid}/profile/{did}/post/{rkey}",
-    "profile": "https://langit.pages.dev/u/{mydid}/profile/{did}"
-  },
-  {
     "name": "tokimekiApp",
     "list": "https://tokimeki.blue/profile/{did}/lists/{rkey}",
     "post": "https://tokimeki.blue/profile/{handle}/post/{rkey}",
