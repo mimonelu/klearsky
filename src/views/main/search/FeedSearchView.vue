@@ -45,13 +45,6 @@ async function fetchNewResults () {
   await mainState.fetchSearchFeeds("new")
   state.processing = false
   updateRouter()
-
-  // キーワード履歴に保存
-  mainState.addKeywordHistory(
-    mainState.currentSearchTerm,
-    mainState.currentSetting.feedSearchKeywordHistory
-  )
-  mainState.saveSettings()
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {

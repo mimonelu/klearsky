@@ -66,13 +66,6 @@ async function fetchNewResults () {
     state.processing = false
     updateRouter()
   }
-
-  // キーワード履歴に保存
-  mainState.addKeywordHistory(
-    mainState.currentSearchTerm,
-    mainState.currentSetting.userSearchKeywordHistory
-  )
-  mainState.saveSettings()
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {

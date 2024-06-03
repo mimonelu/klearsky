@@ -62,13 +62,6 @@ async function fetchNewResults () {
   state.processing = true
   await mainState.fetchSearchPosts()
   state.processing = false
-
-  // キーワード履歴に保存
-  mainState.addKeywordHistory(
-    mainState.currentSearchTerm,
-    mainState.currentSetting.postSearchKeywordHistory
-  )
-  mainState.saveSettings()
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
