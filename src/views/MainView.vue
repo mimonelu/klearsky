@@ -824,7 +824,9 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 
       <!-- サブメニュー -->
       <div class="sub-menu-wrapper">
-        <SubMenu />
+        <div class="sub-menu-wrapper__inner">
+          <SubMenu />
+        </div>
       </div>
 
       <ScrollButton />
@@ -1468,22 +1470,17 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   overflow: hidden;
   position: relative;
 
-  &__inner {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    height: 100vh;
-  }
-
   // SPレイアウト
   @include media-sp-layout() {
     display: none;
   }
-}
 
-// PC用メニュー
-.main-menu-vertical {
-  flex-grow: 1;
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100%;
+  }
 }
 
 // SP用メニュー
@@ -1532,6 +1529,8 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 
 // サブメニュー
 .sub-menu-wrapper {
+  overflow: hidden;
+  position: relative;
   min-width: $menu-max-width;
   max-width: $menu-max-width;
 
@@ -1540,9 +1539,17 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     display: none;
   }
 
-  & > .sub-menu {
+  &__inner {
+    display: flex;
+    flex-direction: column;
     position: fixed;
-    width: $menu-max-width;
+    height: 100%;
+  }
+
+  .sub-menu {
+    min-width: $menu-max-width;
+    max-width: $menu-max-width;
+    height: 100%;
   }
 }
 
