@@ -16,7 +16,7 @@ async function fetchTaggedSuggestions () {
   const taggedSuggestions = await mainState.atp.fetchTaggedSuggestions()
   if (taggedSuggestions instanceof Error) {
     mainState.centerLoaderDisplay = false
-    mainState.openErrorPopup(taggedSuggestions, "FeedCard/deleteLike")
+    mainState.openErrorPopup(taggedSuggestions, "TaggedSuggestionsView/fetchTaggedSuggestions")
     return
   }
   mainState.currentTaggedSuggestions = taggedSuggestions

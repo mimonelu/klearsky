@@ -32,6 +32,7 @@
   "posts": "ポスト",
   "postWithReplies": "リプライ付きポスト",
   "postWithMedia": "メディア付きポスト",
+  "reload": "リロード",
   "loading": "読込中...",
   "more": "もっと見る",
   "klearsky": "Klearsky",
@@ -295,6 +296,7 @@
   "keyword": "キーワード",
   "searchAccountPost": "ポストを検索",
   "taggedSuggestions": "ジャンル別オススメ",
+  "trendTags": "トレンドタグ with SkyFeed",
 
   "notifications": "通知",
 

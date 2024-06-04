@@ -1,6 +1,11 @@
+<script lang="ts" setup>
+import TrendTags from "@/components/compositions/TrendTags.vue";
+</script>
+
 <template>
   <div class="trend-tags-view">
     <div class="trend-tags-view__main">
+      <TrendTags />
     </div>
   </div>
 </template>
@@ -12,6 +17,10 @@
     flex-direction: column;
     flex-grow: 1;
     padding: 1rem;
+  }
+
+  .trend-tags {
+    flex-grow: 1;
   }
 }
 </style>

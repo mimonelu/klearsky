@@ -162,6 +162,9 @@ type MainState = {
   currentSearchUsersCursor?: string
   currentSearchLastUserTerm?: string
 
+  // 検索 - トレンドタグ
+  currentTrendTags: Array<TITrendTag>
+
   // 検索 - タグ付けされた提案
   currentTaggedSuggestions: TITaggedSuggestion[]
   currentTaggedProfiles: { [did: string]: null | TTProfile }

@@ -32,6 +32,7 @@
   "posts": "Posts",
   "postWithReplies": "Posts with replies",
   "postWithMedia": "Posts with media",
+  "reload": "Reload",
   "loading": "Loading...",
   "more": "See more",
   "klearsky": "Klearsky",
@@ -295,6 +296,7 @@
   "keyword": "Keyword",
   "searchAccountPost": "Search post",
   "taggedSuggestions": "Tagged Suggestions",
+  "trendTags": "Trend Tags with SkyFeed",
 
   "notifications": "Notifications",
 
