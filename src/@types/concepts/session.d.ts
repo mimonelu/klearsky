@@ -1,5 +1,6 @@
 type TTSession = {
   [index: string]: any
+  active: boolean
   accessJwt: string
   refreshJwt: string
   did: string
