@@ -54,6 +54,14 @@ const state = reactive<{
           <span>{{ $t("users") }}</span>
         </RouterLink>
 
+        <!-- トレンドタグページ -->
+        <RouterLink
+          class="tab__button tab__button--trend-tags"
+          to="/search/trend-tags"
+        >
+          <SVGIcon name="hash" />
+        </RouterLink>
+
         <!-- タグ付けされた提案ページ -->
         <RouterLink
           class="tab__button tab__button--tagged-suggestions"
@@ -102,6 +110,12 @@ const state = reactive<{
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+
+// トレンドタグページ
+.tab__button--trend-tags > .svg-icon {
+  --fg-color: var(--post-color);
+  font-size: 1.5rem;
 }
 
 // タグ付けされた提案ページ
