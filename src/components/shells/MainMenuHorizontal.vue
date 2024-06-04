@@ -154,6 +154,7 @@ async function openSendPostPopup () {
 
 // 各種ボタン
 .link-button {
+  border-top: 2px solid transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -162,7 +163,7 @@ async function openSendPostPopup () {
   min-height: var(--sp-menu-size);
   max-height: var(--sp-menu-size);
 
-  .svg-icon {
+  & > .svg-icon {
     fill: var(--fg-color-075);
     font-size: 1.5rem;
   }
@@ -174,7 +175,11 @@ async function openSendPostPopup () {
   }
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
-    background-color: var(--accent-color-025);
+    border-top-color: rgb(var(--accent-color));
+
+    & > .svg-icon {
+      fill: rgb(var(--accent-color));
+    }
   }
 
   &.profile-button {
