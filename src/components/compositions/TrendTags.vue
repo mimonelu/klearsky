@@ -29,7 +29,6 @@ async function fetchTrendTags () {
     {
       headers: {
         "Content-Type": "application/json",
-        "user-agent": "Klearsky",
       },
       mode: "cors",
     },
