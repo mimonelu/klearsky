@@ -34,38 +34,43 @@ const state = reactive<{
         <RouterLink
           class="tab__button"
           :to="`/search/post${state.query}`"
+          :title="$t('postSearch')"
         >
-          <span>{{ $t("postSearch") }}</span>
+          <SVGIcon name="post" />
         </RouterLink>
 
         <!-- フィード検索ページ -->
         <RouterLink
           class="tab__button"
           :to="`/search/feed${state.query}`"
+          :title="$t('feedSearch')"
         >
-          <span>{{ $t("feedSearch") }}</span>
+          <SVGIcon name="feed" />
         </RouterLink>
 
         <!-- ユーザー検索ページ -->
         <RouterLink
           class="tab__button"
           :to="`/search/user${state.query}`"
+          :title="$t('userSearch')"
         >
-          <span>{{ $t("users") }}</span>
+          <SVGIcon name="person" />
         </RouterLink>
 
         <!-- トレンドタグページ -->
         <RouterLink
-          class="tab__button tab__button--trend-tags"
+          class="tab__button"
           to="/search/trend-tags"
+          :title="$t('trendTags')"
         >
           <SVGIcon name="hash" />
         </RouterLink>
 
         <!-- タグ付けされた提案ページ -->
         <RouterLink
-          class="tab__button tab__button--tagged-suggestions"
+          class="tab__button"
           to="/search/tagged-suggestions"
+          :title="$t('taggedSuggestions')"
         >
           <SVGIcon name="fire" />
         </RouterLink>
@@ -112,15 +117,7 @@ const state = reactive<{
   flex-grow: 1;
 }
 
-// トレンドタグページ
-.tab__button--trend-tags > .svg-icon {
-  --fg-color: var(--post-color);
-  font-size: 1.5rem;
-}
-
-// タグ付けされた提案ページ
-.tab__button--tagged-suggestions > .svg-icon {
-  --fg-color: 255, 0, 0;
-  font-size: 1.5rem;
+.tab__button {
+  font-size: 1.25rem;
 }
 </style>

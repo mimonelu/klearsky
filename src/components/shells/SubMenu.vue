@@ -50,7 +50,7 @@ function openKeywordHistoryPopover ($event: Event) {
           v-model="state.text"
           type="search"
           name="searchPost"
-          :placeholder="$t('searchWord')"
+          :placeholder="$t('postSearch')"
           autocapitalize="off"
           autocomplete="off"
           inputmode="search"

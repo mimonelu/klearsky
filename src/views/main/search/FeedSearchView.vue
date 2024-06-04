@@ -10,8 +10,10 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
+  mode: "popular" | "related"
 }>({
   processing: false,
+  mode: "popular",
 })
 
 const router = useRouter()
@@ -44,6 +46,7 @@ async function fetchNewResults () {
   state.processing = true
   await mainState.fetchSearchFeeds("new")
   state.processing = false
+  state.mode = mainState.currentSearchTerm === "" ? "popular" : "related"
   updateRouter()
 }
 
@@ -89,7 +92,7 @@ function openKeywordHistoryPopover ($event: Event) {
           v-model="mainState.currentSearchTerm"
           id="feed-term-textbox"
           type="search"
-          :placeholder="$t('keyword')"
+          :placeholder="$t('feedSearch')"
           autocapitalize="off"
           autocomplete="off"
           inputmode="search"
@@ -108,6 +111,14 @@ function openKeywordHistoryPopover ($event: Event) {
       </button>
     </Portal>
     <div class="feed-search-view__main">
+      <div
+        v-if="state.mode === 'popular' && !state.processing"
+        class="textlabel"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="feed" />{{ $t("popularFeeds") }}
+        </div>
+      </div>
       <div class="feed-card-container">
         <FeedCard
           v-for="generator of mainState.currentSearchFeeds"
@@ -129,10 +140,17 @@ function openKeywordHistoryPopover ($event: Event) {
 </template>
 
 <style lang="scss" scoped>
-.feed-search-view__main {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+.feed-search-view {
+  .textlabel {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
 }
 
 .feed-card-container {

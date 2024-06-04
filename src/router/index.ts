@@ -180,13 +180,13 @@ const router = createRouter({
             {
               path: "feed",
               name: "feed-search",
-              meta: { label: "customFeeds" },
+              meta: { label: "feedSearch" },
               component: FeedSearchView,
             },
             {
               path: "user",
               name: "user-search",
-              meta: { label: "account" },
+              meta: { label: "userSearch" },
               component: UserSearchView,
             },
             {

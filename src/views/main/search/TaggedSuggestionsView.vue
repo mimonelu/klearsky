@@ -37,6 +37,12 @@ async function onIntersected (did: string) {
 <template>
   <div class="tagged-suggestions-view">
     <div class="tagged-suggestions-view__main">
+      <div class="textlabel">
+        <div class="textlabel__text">
+          <SVGIcon name="fire" />{{ $t("taggedSuggestions") }}
+        </div>
+      </div>
+
       <!-- タグコンテナ -->
       <div
         v-for="taggedSuggestion of mainState.currentTaggedSuggestions"

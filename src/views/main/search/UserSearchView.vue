@@ -11,8 +11,10 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
+  mode: "recommended" | "related"
 }>({
   processing: false,
+  mode: "recommended",
 })
 
 const router = useRouter()
@@ -52,6 +54,7 @@ async function fetchNewResults () {
         mainState.currentSearchUsers.length,
         ...mainState.currentSearchSuggestionResults
       )
+      state.mode = "recommended"
 
     // アカウント検索結果の取得
     } else {
@@ -61,6 +64,7 @@ async function fetchNewResults () {
           mainState.currentSearchTerm,
           CONSTS.LIMIT_OF_FETCH_USER_SEARCH
         )
+        state.mode = "related"
     }
   } finally {
     state.processing = false
@@ -120,7 +124,7 @@ function openKeywordHistoryPopover ($event: Event) {
           v-model="mainState.currentSearchTerm"
           id="user-term-textbox"
           type="search"
-          :placeholder="$t('keyword')"
+          :placeholder="$t('userSearch')"
           autocapitalize="off"
           autocomplete="off"
           inputmode="search"
@@ -139,6 +143,14 @@ function openKeywordHistoryPopover ($event: Event) {
       </button>
     </Portal>
     <div class="user-search-view__main">
+      <div
+        v-if="state.mode === 'recommended' && !state.processing"
+        class="textlabel"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="person" />{{ $t("recommendedUsers") }}
+        </div>
+      </div>
       <div class="users">
         <UserBox
           v-for="user of mainState.currentSearchUsers"
@@ -160,10 +172,17 @@ function openKeywordHistoryPopover ($event: Event) {
 </template>
 
 <style lang="scss" scoped>
-.user-search-view__main {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+.user-search-view {
+  .textlabel {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
 }
 
 .users {

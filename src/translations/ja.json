@@ -289,12 +289,13 @@
 
   "search": "検索",
   "suggestionSearch": "おすすめ",
-  "userSearch": "ユーザーを探す",
-  "postSearch": "ポスト",
-  "feedSearch": "フィード",
-  "searchWord": "ポスト検索",
+  "userSearch": "ユーザーを見つける",
+  "postSearch": "ポストを見つける",
+  "feedSearch": "フィードを見つける",
   "keyword": "キーワード",
   "searchAccountPost": "ポストを検索",
+  "popularFeeds": "人気フィード",
+  "recommendedUsers": "オススメユーザー",
   "taggedSuggestions": "ジャンル別オススメ",
   "trendTags": "トレンドタグ with SkyFeed",
 

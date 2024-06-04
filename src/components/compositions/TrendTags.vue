@@ -26,7 +26,13 @@ async function fetchTrendTags () {
   state.loaderDisplay = true
   const response = await fetch(
     "https://skyfeed-trending-tags.b-cdn.net/xrpc/app.skyfeed.feed.getTrendingTags?minutes=60",
-    { headers: { "user-agent": "Klearsky" } },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "user-agent": "Klearsky",
+      },
+      mode: "cors",
+    },
   )
     .then((value: Response) => value)
     .catch((error: Error) => error)
@@ -49,10 +55,14 @@ async function fetchTrendTags () {
 <template>
   <div class="trend-tags">
     <div class="trend-tags__header">
-      <h2>{{ $t("trendTags") }}</h2>
+      <div class="textlabel">
+        <div class="textlabel__text">
+          <SVGIcon name="hash" />{{ $t("trendTags") }}
+        </div>
+      </div>
       <button
         type="button"
-        class="button--plane"
+        class="textlink--icon"
         :disabled="state.loaderDisplay"
         @click.stop="fetchTrendTags"
       >
@@ -82,12 +92,12 @@ async function fetchTrendTags () {
 
   &__header {
     display: grid;
+    grid-gap: 0.5rem;
     grid-template-columns: 1fr auto;
     align-items: center;
+    margin-bottom: 1rem;
 
-    & > h2 {
-      color: var(--fg-color-075);
-      font-weight: bold;
+    .textlabel {
       word-break: break-all;
     }
   }
@@ -114,7 +124,7 @@ async function fetchTrendTags () {
   // フォントサイズの変更
   @for $i from 1 through 10 {
     &:nth-child(#{$i}) {
-      font-size: ((11 - $i) / 20 + 1) + rem;
+      font-size: (math.div(11 - $i, 20) + 1) + rem;
     }
   }
 
