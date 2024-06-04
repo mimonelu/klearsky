@@ -2093,6 +2093,7 @@ function closeSendPostPopup (done: boolean, hidden: boolean) {
   isSendPostDone = done
   if (!hidden) {
     state.sendPostPopupProps.display = false
+    state.sendPostPopupProps.type = "post"
     state.currentPostTags.splice(0)
     state.postDatePopupDate = undefined
   }
