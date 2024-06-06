@@ -146,6 +146,7 @@ function callback (type: "deletePost" | "updatePost") {
         place="post"
         :uri="post.uri"
         :did="post.author.did"
+        :displayName="post.author.displayName"
         :handle="post.author.handle"
         :text="post.record?.text"
         @close="emit('close')"

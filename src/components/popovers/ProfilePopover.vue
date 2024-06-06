@@ -110,6 +110,7 @@ function close () {
       <MenuTickerCopyTextWrapper
         place="profile"
         :did="user.did"
+        :displayName="user.displayName"
         :handle="user.handle"
         :text="user.description"
         @close="emit('close')"
