@@ -101,7 +101,7 @@ function close () {
 
         <!-- このポストの直後に投稿する -->
         <MenuTickerSendPostAfter
-          :createdAt="post.record.createdAt"
+          :createdAt="post.record?.createdAt"
           @close="emit('close')"
         />
       </menu>

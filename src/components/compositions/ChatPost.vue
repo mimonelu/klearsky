@@ -24,23 +24,25 @@ const state = reactive<{
       handle: "",
       viewer: { muted: false },
     }
-    return {
+    const post = {
       __custom: { unmask: false },
       author,
       cid: "",
       indexedAt: message.sentAt,
       record: {
-        $type: "",
+        $type: "app.bsky.feed.post",
         createdAt: message.sentAt,
-        embed: message.embed,
         facets: message.facets,
         text: message.text ?? "",
       },
+      embed: message.embed,
       likeCount: 0,
       replyCount: 0,
       repostCount: 0,
       uri: "",
     }
+    Util.sanitizePostsOrFeeds([post])
+    return post
   }),
 })
 
@@ -100,29 +102,30 @@ async function chatMessagePopoverCallback (type: string) {
   &[data-is-mine="false"] {
     --chat-post-bg-color: var(--fg-color-0125);
   }
-  &:deep(.post__content) {
+
+  &:deep() > .body > .body__right > .post__content {
     position: relative;
     width: fit-content;
   }
-  &[data-is-message-empty="true"]:deep(.post__content) {
+  &[data-is-message-empty="true"]:deep() > .body > .body__right > .post__content {
     display: none;
   }
 
-    // チャット一覧用
+  // チャット一覧用
   &[data-is-last-message="true"] {
     background-color: var(--chat-post-bg-color);
     pointer-events: none;
 
-    &:deep() {
-      .post__content {
+    &:deep() > .body > .body__right {
+      & > .post__content {
         border-radius: var(--border-radius-middle);
         max-width: 100%;
-      }
 
-      .html-text {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        & > .html-text {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
     }
   }
@@ -130,57 +133,63 @@ async function chatMessagePopoverCallback (type: string) {
   // チャットルーム用
   &[data-is-last-message="false"] {
     padding: 0 1em;
-    &:deep() {
-      .body__right {
-        grid-gap: 0;
-      }
 
-      .body__right__header {
-        grid-template-columns: auto 1fr auto auto;
-        margin-right: -1em;
+    &:deep() > .body {
+      & > .body__right {
+        grid-gap: 0.5em;
 
-        & > .button--plane {
-          margin-left: -0.5em;
+        & > .body__right__header {
+          grid-template-columns: auto 1fr auto auto;
+          margin-right: -1em;
+
+          & > .display-name {
+            color: var(--fg-color-05);
+          }
+
+          & > .button--plane {
+            margin-left: -0.5em;
+          }
         }
-      }
 
-      .display-name {
-        color: var(--fg-color-05);
-      }
+        & > .post__content {
+          background-color: var(--chat-post-bg-color);
+          margin-top: -0.5em;
+          padding: 0.5em 1em;
+        }
 
-      .post__content {
-        background-color: var(--chat-post-bg-color);
-        padding: 1em;
-      }
-
-      .label-tags {
-        margin-top: 0.5em;
+        & > .repost {
+          font-size: 0.875em;
+        }
       }
     }
 
     // 自分のチャットメッセージ
     &[data-is-mine="true"] {
-      &:deep(.post__content) {
-        border-radius:
-          var(--border-radius-large)
-          0
-          var(--border-radius-large)
-          var(--border-radius-large);
-        margin-left: auto;
-      }
+      &:deep() > .body > .body__right {
+        & > .post__content {
+          border-radius:
+            var(--border-radius-large)
+            0
+            var(--border-radius-large)
+            var(--border-radius-large);
+          margin-left: auto;
+        }
 
-      &:deep(.label-tags) {
-        justify-content: flex-end;
+        & > .label-tags {
+          justify-content: flex-end;
+        }
       }
     }
 
     // 自分以外のチャットメッセージ
-    &[data-is-mine="false"]:deep(.post__content) {
-      border-radius:
-        0
-        var(--border-radius-large)
-        var(--border-radius-large)
-        var(--border-radius-large);
+    &[data-is-mine="false"] {
+      &:deep() > .body > .body__right > .post__content {
+        border-radius:
+          0
+          var(--border-radius-large)
+          var(--border-radius-large)
+          var(--border-radius-large);
+      }
     }
   }
 }
