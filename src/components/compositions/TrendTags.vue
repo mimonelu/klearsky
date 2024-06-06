@@ -26,12 +26,7 @@ async function fetchTrendTags () {
   state.loaderDisplay = true
   const response = await fetch(
     "https://skyfeed-trending-tags.b-cdn.net/xrpc/app.skyfeed.feed.getTrendingTags?minutes=60",
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-    },
+    { mode: "cors" },
   )
     .then((value: Response) => value)
     .catch((error: Error) => error)
