@@ -104,8 +104,10 @@
   "leaveChatConvo": "退室する",
   "deleteChatMessage": "自分だけ削除",
   "chatMessagePlaceholder": "メッセージ",
+  "chatUrlPlaceholder": "埋め込みポストのAT URI",
   "leaveChatConvoConfirmation": "チャットから退室します。再入室は可能ですが、現在のメッセージは取得できなくなります。よろしいですか？",
   "errorInvalidChatToken": "チャットの開始に失敗しました。\nアプリパスワードを使用中の場合はチャット権限を付与してください。",
+  "chatUrlNotification": "URLの形式がポストのAT URIではありません。",
 
   "tag": "タグ",
   "tags": "タグ",

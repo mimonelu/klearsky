@@ -12,7 +12,7 @@ export default async function (
   let feedOrLinkCard: undefined | any
   if (params.url != null && params.url.length > 0) {
     // AT URI指定引用リポスト
-    const postUri = isPostAtUri(params.url) ? params.url : null
+    const postUri = Util.isPostAtUri(params.url) ? params.url : null
     if (postUri != null) {
       const posts = await atp.fetchPosts([postUri])
       if (!posts || posts[0] == null) {
@@ -21,7 +21,7 @@ export default async function (
       manualQuoteRepost = posts[0]
     } else {
       // リンクカード - フィードカード
-      const generatorUri = isFeedGeneratorAtUri(params.url)
+      const generatorUri = Util.isFeedGeneratorAtUri(params.url)
         ? params.url
         : convertFeedGeneratorUriToAtUri(params.url)
       if (generatorUri != null) {
@@ -39,7 +39,7 @@ export default async function (
 
       } else {
         // リンクカード - リストカード
-        const listUri = isListAtUri(params.url)
+        const listUri = Util.isListAtUri(params.url)
           ? params.url
           : convertListUriToAtUri(params.url)
         if (listUri != null) {
@@ -167,18 +167,6 @@ export default async function (
     else if (feedOrLinkCard != null)
       parent.embed = feedOrLinkCard
   }
-}
-
-function isPostAtUri (uri: string): boolean {
-  return uri.match(/^at:\/\/did:\w+:[\w\.\-]+\/app\.bsky\.feed\.post\/[\w\.\-]+$/) != null
-}
-
-function isFeedGeneratorAtUri (uri: string): boolean {
-  return uri.match(/^at:\/\/did:\w+:[\w\.\-]+\/app\.bsky\.feed\.generator\/[\w\.\-]+$/) != null
-}
-
-function isListAtUri (uri: string): boolean {
-  return uri.match(/^at:\/\/did:\w+:[\w\.\-]+\/app\.bsky\.graph\.list\/[\w\.\-]+$/) != null
 }
 
 function convertFeedGeneratorUriToAtUri (uri: string): null | string {

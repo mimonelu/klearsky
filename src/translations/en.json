@@ -104,8 +104,10 @@
   "leaveChatConvo": "Leave",
   "deleteChatMessage": "Delete for me",
   "chatMessagePlaceholder": "Message",
+  "chatUrlPlaceholder": "AT URI for embedded post",
   "leaveChatConvoConfirmation": "You will leave the chat. You can re-enter, but you will not be able to retrieve your current messages. Are you sure?",
   "errorInvalidChatToken": "Failed to start chat.\nPlease grant chat privileges to App passwords if you are using that.",
+  "chatUrlNotification": "The URL format is not a post AT URI.",
 
   "tag": "Tag",
   "tags": "Tags",
