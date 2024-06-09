@@ -1665,7 +1665,7 @@ function toggleOldestQuotedPostDisplay () {
 
   &.textlabel {
     opacity: 0.5;
-    padding: 0.75em 0.75em 0.5em;
+    padding: 0.75em;
   }
 }
 

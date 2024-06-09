@@ -31,12 +31,12 @@ export default function (responses: Array<any>) {
   // PARENT.embed.media.external/images -> PARENT.embed.external/images
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "media") {
-      if (child.external != null) {
-        parent.external = Util.cloneJson(child.external)
+      if (child.external != null && parent.external == null) {
+        parent.external = child.external // Util.cloneJson(child.external)
         parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
       }
       if (child.images != null && parent.images == null) {
-        parent.images = Util.cloneJson(child.images)
+        parent.images = child.images // Util.cloneJson(child.images)
         parent.images.__comment = "❗ This 'images' was duplicated by Klearsky."
       }
     }
@@ -45,7 +45,7 @@ export default function (responses: Array<any>) {
   // PARENT.record.record -> PARENT.record
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "record" && child.record != null) {
-      parent.record = Util.cloneJson(child.record)
+      parent.record = child.record // Util.cloneJson(child.record)
       parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
     }
   })
