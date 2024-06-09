@@ -272,13 +272,13 @@ function close () {
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  // SP幅以上
-  @media (min-width: $sp-width) {
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
     margin-top: 1rem;
   }
 
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
+  // SPレイアウト
+  @include media-sp-layout() {
     font-size: 0.875rem;
     margin: 1rem 0 calc(5rem + env(safe-area-inset-bottom));
   }
@@ -324,13 +324,13 @@ function close () {
 
 // 前の画像ボタン
 .previous-image-button {
-  // SP幅以上
-  @media (min-width: $sp-width) {
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
     left: 1rem;
   }
 
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
+  // SPレイアウト
+  @include media-sp-layout() {
     bottom: calc(1rem + env(safe-area-inset-bottom));
     left: 1rem;
   }
@@ -338,13 +338,13 @@ function close () {
 
 // 次の画像ボタン
 .next-image-button {
-  // SP幅以上
-  @media (min-width: $sp-width) {
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
     right: 1rem;
   }
 
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
+  // SPレイアウト
+  @include media-sp-layout() {
     bottom: calc(1rem + env(safe-area-inset-bottom));
     left: 6rem;
   }
@@ -372,14 +372,14 @@ function close () {
 
 // 閉じるボタン
 .close-button {
-  // SP幅以上
-  @media (min-width: $sp-width) {
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
     top: 1rem;
     right: 1rem;
   }
 
-  // SP幅未満
-  @media not all and (min-width: $sp-width) {
+  // SPレイアウト
+  @include media-sp-layout() {
     bottom: calc(1rem + env(safe-area-inset-bottom));
     right: 1rem;
   }

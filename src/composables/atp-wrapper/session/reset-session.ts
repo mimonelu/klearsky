@@ -7,6 +7,7 @@ export default function (
   const currentSession = this.data.sessions[this.data.did] ?? {}
 
   // セッションデータの更新
+  currentSession.active = newSession.active ?? currentSession.active ?? true
   currentSession.accessJwt = newSession.accessJwt ?? currentSession.accessJwt
   currentSession.refreshJwt = newSession.refreshJwt ?? currentSession.refreshJwt
   currentSession.did = newSession.did ?? currentSession.did

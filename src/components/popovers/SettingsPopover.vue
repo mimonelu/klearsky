@@ -76,10 +76,6 @@ function process (type: string) {
       mainState.openLabelerListPopup("myLabeler", mainState.myLabeler.labelers)
       break
     }
-    case "chat": {
-      mainState.openChatListPopup()
-      break
-    }
     case "mutingUsers": {
       mainState.openMutingUsersPopup()
       break
@@ -194,16 +190,6 @@ function process (type: string) {
         <span>{{ $t("myLabeler") }}</span>
       </button>
 
-      <!-- チャットリストポップアップトリガー -->
-      <button
-        type="button"
-        data-type="chat"
-        @click.prevent="process('chat')"
-      >
-        <SVGIcon name="chat" />
-        <span>{{ $t("chat") }}</span>
-      </button>
-
       <hr />
 
       <!-- ミュート中のユーザーポップアップトリガー -->
@@ -310,7 +296,6 @@ function process (type: string) {
   button[data-type="myList"] > .svg-icon { /**/ }
   button[data-type="myTag"] > .svg-icon { /**/ }
   button[data-type="myLabeler"] > .svg-icon { fill: rgb(var(--share-color)); }
-  button[data-type="chat"] > .svg-icon { fill: rgb(var(--fg-color)); }
   button[data-type="contentFiltering"] > .svg-icon { /**/ }
   button[data-type="mutingUsers"] > .svg-icon { /**/ }
   button[data-type="blockingUsers"] > .svg-icon { /**/ }

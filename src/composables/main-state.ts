@@ -186,6 +186,9 @@ state.currentSearchUsers = []
 state.currentSearchUsersCursor = undefined
 state.currentSearchLastUserTerm = undefined
 
+// 検索 - トレンドタグ
+state.currentTrendTags = []
+
 // 検索 - タグ付けされた提案
 state.currentTaggedSuggestions = []
 state.currentTaggedProfiles = {}
@@ -2091,6 +2094,7 @@ function closeSendPostPopup (done: boolean, hidden: boolean) {
   if (!hidden) {
     state.sendPostPopupProps.display = false
     state.sendPostPopupProps.type = "post"
+    state.sendPostPopupProps.fileList = undefined
     state.currentPostTags.splice(0)
     state.postDatePopupDate = undefined
   }

@@ -375,9 +375,23 @@ const PreviewLinkCardFeature: {
     @close="close"
   >
     <template #header>
-      <button @click.stop="mainState.openHtmlPopup('post')">
+      <!-- ヘルプボタン -->
+      <button
+        type="button"
+        @click.stop="mainState.openHtmlPopup('post')"
+      >
         <SVGIcon name="help" />
       </button>
+
+      <!-- リセットボタン -->
+      <button
+        type="button"
+        class="reset-button"
+        @click.stop="reset"
+      >
+        <SVGIcon name="remove" />
+      </button>
+
       <h2>
         <SVGIcon :name="type" />
         <span>{{ $t(type) }}</span>
@@ -483,16 +497,6 @@ const PreviewLinkCardFeature: {
           </div>
         </template>
       </EasyForm>
-
-      <div>
-        <div
-          class="textlink--icon"
-          @click="reset"
-        >
-          <SVGIcon name="alert" />
-          <span>{{ $t("sendPostReset") }}</span>
-        </div>
-      </div>
     </template>
   </Popup>
 </template>
@@ -516,6 +520,10 @@ const PreviewLinkCardFeature: {
 
     .popup-header {
       border-bottom-style: none;
+
+      & > h2 {
+        margin-right: 3rem;
+      }
     }
 
     .popup-body {
@@ -546,8 +554,14 @@ const PreviewLinkCardFeature: {
     }
   }
 
+  // ヘルプボタン
   .svg-icon--help {
     font-size: 1.25rem;
+  }
+
+  // リセットボタン
+  .reset-button > .svg-icon {
+    --fg-color: var(--notice-color);
   }
 
   .link-card-loader {

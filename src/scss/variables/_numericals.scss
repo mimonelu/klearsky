@@ -4,3 +4,31 @@ $menu-max-width: 276px;
 $main-menu-min-width: 4rem;
 $router-view-width: 640px;
 $sp-width: 512px;
+
+// SPレイアウト
+@mixin media-sp-layout () {
+  @media not all and (min-width: $sp-width) {
+    @content;
+  }
+}
+
+// 非SPレイアウト
+@mixin media-not-sp-layout () {
+  @media (min-width: $sp-width) {
+    @content;
+  }
+}
+
+// タブレットレイアウト
+@mixin media-tablet-layout () {
+  @media (max-width: $max-width-with-scrollbar) {
+    @content;
+  }
+}
+
+// フルレイアウト
+@mixin media-full-layout () {
+  @media not all and (max-width: $max-width-with-scrollbar) {
+    @content;
+  }
+}

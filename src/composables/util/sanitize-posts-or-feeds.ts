@@ -4,15 +4,17 @@ export default function (responses: Array<any>) {
   // __custom プロパティの作成
   // TODO: 確実にポスト直下に作成するようにすること
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if ((key === "cid" || key === "record") && child != null) {
+    if ((key === "cid" || key === "record") && child != null && parent.__custom == null) {
       parent.__custom = {}
     }
   })
 
-  // embeds[0] -> embed
+  // PARENT.embeds[0] -> PARENT.embed
+  // おそらく三段階目の引用RP
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "embeds" && child[0] != null) {
-      parent.embed = Util.cloneJson(child[0])
+    if (key === "embeds" && child[0] != null && parent.embed == null) {
+      // parent.embed = Util.cloneJson(child[0])
+      parent.embed = child[0]
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
     }
   })
@@ -20,34 +22,30 @@ export default function (responses: Array<any>) {
   // PARENT.value.embed -> PARENT.embed
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "value" && child.embed != null && parent.embed == null) {
-      parent.embed = Util.cloneJson(child.embed)
+      // parent.embed = Util.cloneJson(child.embed)
+      parent.embed = child.embed
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
     }
   })
 
-  // PARENT.embed.media.external -> PARENT.embed.external
-  // NOTICE: おそらく古いフォーマット向け
+  // PARENT.embed.media.external/images -> PARENT.embed.external/images
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "media" && child.external != null) {
-      parent.external = Util.cloneJson(child.external)
-      parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
-    }
-  })
-
-  // PARENT.embed.media.images -> PARENT.embed.images
-  // NOTICE: おそらく古いフォーマット向け
-  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "media" && child.images != null && parent.images == null) {
-      parent.images = Util.cloneJson(child.images)
-      parent.images.__comment = "❗ This 'images' was duplicated by Klearsky."
+    if (key === "media") {
+      if (child.external != null && parent.external == null) {
+        parent.external = child.external // Util.cloneJson(child.external)
+        parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
+      }
+      if (child.images != null && parent.images == null) {
+        parent.images = child.images // Util.cloneJson(child.images)
+        parent.images.__comment = "❗ This 'images' was duplicated by Klearsky."
+      }
     }
   })
 
   // PARENT.record.record -> PARENT.record
-  // NOTICE: おそらく古いフォーマット向け
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "record" && child.record != null) {
-      parent.record = Util.cloneJson(child.record)
+      parent.record = child.record // Util.cloneJson(child.record)
       parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
     }
   })

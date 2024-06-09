@@ -4,6 +4,7 @@ import ChatPost from "@/components/compositions/ChatPost.vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -17,16 +18,16 @@ const mainState = inject("state") as MainState
 
 const easyFormState = reactive<{
   text: string
-  /* // TODO: 一時退避
   url: string
+  /* // TODO: 一時退避
   urlHasImage: Array<boolean>
   images: Array<File>
   alts: Array<string>
   */
 }>({
   text: "",
-  /* // TODO: 一時退避
   url: "",
+  /* // TODO: 一時退避
   urlHasImage: [true],
   images: [],
   alts: [],
@@ -66,17 +67,17 @@ const easyFormProps: TTEasyForm = {
         }, 250)
       },
     },
-    /* // TODO: 一時退避
     {
       state: easyFormState,
       model: "url",
       type: "text",
-      placeholder: "URL",
+      placeholder: $t("chatUrlPlaceholder"),
       autocomplete: "url",
       inputmode: "url",
       clearButton: true,
       onInput: onInputUrl,
     },
+    /* // TODO: 一時退避
     {
       state: easyFormState,
       model: "urlHasImage",
@@ -120,8 +121,8 @@ onBeforeUnmount(() => {
   }
 })
 
-/* // TODO: 一時退避
 function onInputUrl () {
+  /* // TODO: 一時退避
   // リンクカードの画像添付チェックボックスの出し分け
   const urlHasImageItem = easyFormProps.data.find((item: TTEasyFormItem) => {
     return item.model === "urlHasImage"
@@ -130,11 +131,11 @@ function onInputUrl () {
     return
   }
   urlHasImageItem.display = !!easyFormState.url // TODO: && easyFormState.images.length === 0
+  */
 
   // TODO: 要修正
   ;(easyForm.value as any)?.forceUpdate()
 }
-*/
 
 function close () {
   emit("close")
@@ -195,26 +196,42 @@ async function updateRead () {
 }
 
 async function submitCallback () {
-  if (easyFormState.text === "") {
+  // メッセージが空でURLも空であればキャンセル
+  if (easyFormState.text === "" &&
+      easyFormState.url === ""
+  ) {
     return
   }
+
+  // URL がポストの AT URI でなければキャンセル
+  if (easyFormState.url !== "" && !Util.isPostAtUri(easyFormState.url)) {
+    mainState.openMessagePopup({
+      title: $t("error"),
+      text: $t("chatUrlNotification"),
+    })
+    return
+  }
+
   const text = easyFormState.text
+  const url = easyFormState.url
   easyFormState.text = ""
+  easyFormState.url = ""
   if (!await props.myConvo?.createMessage({
     type: "post",
     text,
+    url,
     /* // TODO: 一時退避
-    url: easyFormState.url,
     urlHasImage: easyFormState.urlHasImage,
     images: easyFormState.images,
     */
     lightning: mainState.currentSetting.lightning,
   })) {
     easyFormState.text = text
+    easyFormState.url = url
+    mainState.openErrorPopup("errorApiFailed", "ChatCOnvoPopup/submitCallback")
     return
   }
-  // TODO: 一時退避
-  // easyFormState.url = ""
+  easyFormState.url = ""
   scrollToBottom()
 }
 
@@ -273,14 +290,17 @@ function isMine (message: TIChatMessage): boolean {
         <EasyForm
           v-bind="easyFormProps"
           ref="easyForm"
-        />
-        <button
-          type="button"
-          class="button--important chat-convo-popup__submit-button"
-          @click="submitCallback"
         >
-          <SVGIcon name="chat" />
-        </button>
+          <template #after>
+            <button
+              type="button"
+              class="button--important chat-convo-popup__submit-button"
+              @click="submitCallback"
+            >
+              <SVGIcon name="chat" />
+            </button>
+          </template>
+        </EasyForm>
       </div>
     </template>
   </Popup>
@@ -296,6 +316,21 @@ function isMine (message: TIChatMessage): boolean {
         flex-grow: 1;
         grid-gap: 1px;
         padding: unset;
+      }
+    }
+
+    .easy-form {
+      display: grid;
+      grid-gap: 0.5rem;
+      grid-template-columns: 1fr auto;
+
+      &__body {
+        display: contents;
+
+        // メッセージテキストエリアを最大幅にする
+        & > dl:nth-child(1) {
+          grid-column: 2 span;
+        }
       }
     }
 

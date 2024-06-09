@@ -9,6 +9,7 @@ export default async function (
   }
   const response: Error | ComAtprotoServerGetSession.Response =
     await (this.agent as BskyAgent).resumeSession({
+      active: true,
       accessJwt: session.accessJwt,
       refreshJwt: session.refreshJwt,
       did: session.did,

@@ -321,7 +321,7 @@ function isFocused (): boolean {
 
 async function onActivatePost (post: TTPost, event: Event) {
   // ポストマスクの無効化
-  if (!props.post.__custom.unmask && state.masked) {
+  if (!props.post.__custom?.unmask && state.masked) {
     props.post.__custom.unmask = true
     return
   }
@@ -340,7 +340,9 @@ function onActivatePostMask () {
   Util.blurElement()
 
   // ポストマスクのトグル
-  props.post.__custom.unmask = !props.post.__custom.unmask
+  if (props.post.__custom != null) {
+    props.post.__custom.unmask = !props.post.__custom.unmask
+  }
 }
 
 function onActivateReplierLink () {
@@ -559,7 +561,7 @@ function openImagePopup (imageIndex: number) {
 
 // 自動翻訳
 async function translateText (forceTranslate: boolean) {
-  if (props.post.__custom.translatedText != null) {
+  if (props.post.__custom?.translatedText != null) {
     state.translation = "done"
     return
   }
@@ -600,7 +602,9 @@ async function translateText (forceTranslate: boolean) {
     return
   }
   state.translation = "done"
-  props.post.__custom.translatedText = response
+  if (props.post.__custom != null) {
+    props.post.__custom.translatedText = response
+  }
 }
 
 // マイリストの削除
@@ -622,7 +626,9 @@ function onActivateHashTag (text: string) {
 // 最古の引用元ポストをトグル
 function toggleOldestQuotedPostDisplay () {
   Util.blurElement()
-  props.post.__custom.oldestQuotedPostDisplay = !props.post.__custom.oldestQuotedPostDisplay
+  if (props.post.__custom != null) {
+    props.post.__custom.oldestQuotedPostDisplay = !props.post.__custom.oldestQuotedPostDisplay
+  }
 }
 </script>
 
@@ -636,7 +642,7 @@ function toggleOldestQuotedPostDisplay () {
     :data-focus="isFocused()"
     :data-has-mask="state.masked"
     :data-has-grandparent-author="grandparentAuthor != null"
-    :data-is-masked="!post.__custom.unmask && state.masked"
+    :data-is-masked="!(post.__custom?.unmask) && state.masked"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
     <slot name="post-before" />
@@ -738,7 +744,7 @@ function toggleOldestQuotedPostDisplay () {
       class="post__mask"
       @click.stop="onActivatePostMask"
     >
-      <SVGIcon :name="post.__custom.unmask
+      <SVGIcon :name="post.__custom?.unmask
         ? 'cursorDown'
         : 'cursorUp'
       " />
@@ -772,7 +778,7 @@ function toggleOldestQuotedPostDisplay () {
 
     <!-- ポストボディ -->
     <div
-      v-if="post.__custom.unmask || !state.masked"
+      v-if="post.__custom?.unmask || !state.masked"
       class="body"
     >
       <slot name="body-before" />
@@ -885,7 +891,7 @@ function toggleOldestQuotedPostDisplay () {
           >
             <template v-if="state.translation === 'waiting'">（翻訳中）</template>
             <template v-else-if="state.translation === 'failed'">（翻訳に失敗しました）</template>
-            <template v-else-if="state.translation === 'done'">{{ props.post.__custom.translatedText }}</template>
+            <template v-else-if="state.translation === 'done'">{{ props.post.__custom?.translatedText }}</template>
           </div>
 
           <!-- ポストメディアトグル -->
@@ -1067,7 +1073,7 @@ function toggleOldestQuotedPostDisplay () {
                 class="button--plane"
                 @click.prevent.stop="toggleOldestQuotedPostDisplay"
               >
-                <template v-if="post.__custom.oldestQuotedPostDisplay">
+                <template v-if="post.__custom?.oldestQuotedPostDisplay">
                   <SVGIcon name="cursorUp" />
                   <span>{{ $t("hideOldestQuotedPost") }}</span>
                 </template>
@@ -1082,7 +1088,7 @@ function toggleOldestQuotedPostDisplay () {
               !state.isOldestQuotedPost ||
               (
                 state.isOldestQuotedPost &&
-                post.__custom.oldestQuotedPostDisplay
+                post.__custom?.oldestQuotedPostDisplay
               )
             "
               class="repost"
@@ -1090,14 +1096,14 @@ function toggleOldestQuotedPostDisplay () {
               <Post
                 :level="(level ?? 1) + 1"
                 :position="position === 'chatMessage'
-                  ? 'chatMessage'
+                  ? 'postInPost'
                   : position === 'slim'
                     ? 'slim'
                     : 'postInPost'
                 "
                 :post="post.embed.record as TTPost"
                 :hasReplyIcon="post.embed.record.value?.reply != null"
-                :noLink="noLink"
+                :noLink="position === 'chatMessage' ? false : noLink"
                 @click="$emit('click', $event)"
               />
             </div>
@@ -1659,7 +1665,7 @@ function toggleOldestQuotedPostDisplay () {
 
   &.textlabel {
     opacity: 0.5;
-    padding: 0.75em 0.75em 0.5em;
+    padding: 0.75em;
   }
 }
 
@@ -1711,16 +1717,6 @@ function toggleOldestQuotedPostDisplay () {
   align-items: center;
   &:not(:first-child) {
     margin-top: 0.25em;
-  }
-
-  // タブレット幅以上
-  @media (min-width: calc($router-view-width + $main-menu-min-width)) {
-    grid-template-columns: min min min 2fr;
-  }
-
-  // タブレット幅未満
-  @media not all and (min-width: calc($router-view-width + $main-menu-min-width)) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 
   & > div:last-child {

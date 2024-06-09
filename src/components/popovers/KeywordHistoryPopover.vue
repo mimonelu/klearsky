@@ -15,6 +15,8 @@ const props = defineProps<{
 
 const $t = inject("$t") as Function
 
+const mainState = inject("state") as MainState
+
 const popover = ref(null)
 
 onMounted(open)
@@ -43,6 +45,17 @@ function close () {
   emit("close")
 }
 
+function add () {
+  close()
+
+  // キーワード履歴に保存
+  mainState.addKeywordHistory(
+    mainState.currentSearchTerm,
+    props.keywords
+  )
+  mainState.saveSettings()
+}
+
 function select (keyword: string) {
   close()
   if (props.callback != null) {
@@ -63,14 +76,24 @@ function remove (index: number) {
     @close="close"
   >
     <menu class="list-menu">
+      <button
+        type="button"
+        @click.stop="add"
+      >
+        <SVGIcon name="plus" />
+        <span>{{ $t("add") }}</span>
+      </button>
+      <hr />
+
       <div
         v-if="keywords.length === 0"
-        class="keyword-history-popover__message"
+        class="list-menu__header"
       >{{ $t("noHistory") }}</div>
       <template v-else>
         <button
           v-for="keyword, index of keywords"
           :key="index"
+          type="button"
           class="keyword-history-popover__item-button"
           @click="select(keyword)"
         >

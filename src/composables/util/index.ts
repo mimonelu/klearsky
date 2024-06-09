@@ -26,6 +26,7 @@ import translateInMyMemory from "@/composables/util/translate-in-my-memory"
 import traverseJson from "@/composables/util/traverse-json"
 import unicodeSubstring from "@/composables/util/unicode-substring"
 import updatePostProps from "@/composables/util/update-post-props"
+import uri from "@/composables/util/uri"
 import wait from "@/composables/util/wait"
 import waitProp from "@/composables/util/wait-prop"
 
@@ -58,6 +59,7 @@ export default {
   traverseJson,
   unicodeSubstring,
   updatePostProps,
+  ...uri,
   wait,
   waitProp,
 }

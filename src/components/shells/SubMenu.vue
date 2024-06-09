@@ -50,7 +50,7 @@ function openKeywordHistoryPopover ($event: Event) {
           v-model="state.text"
           type="search"
           name="searchPost"
-          :placeholder="$t('searchWord')"
+          :placeholder="$t('postSearch')"
           autocapitalize="off"
           autocomplete="off"
           inputmode="search"
@@ -83,7 +83,6 @@ function openKeywordHistoryPopover ($event: Event) {
   flex-direction: column;
   padding: 2rem 1rem 1rem;
   position: relative;
-  height: 100vh;
 }
 
 // ロゴ
@@ -118,6 +117,7 @@ function openKeywordHistoryPopover ($event: Event) {
 .my-feed-list {
   flex-grow: 1;
   margin-bottom: 1rem;
+  overflow: hidden;
 }
 
 // コピーライト

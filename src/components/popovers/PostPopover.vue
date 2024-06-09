@@ -36,7 +36,7 @@ const state = reactive<{
     ? props.post?.uri
     : undefined,
   shareText: computed((): string => {
-    return `"${props.post?.record.text}" - ${props.post?.author.displayName}(${props.post?.author.handle}) ${state.shareUrl}`
+    return `"${props.post?.record?.text}" - ${props.post?.author.displayName}(${props.post?.author.handle}) ${state.shareUrl}`
   }),
   shareUrl: computed((): string => {
     const rkey = Util.getRkey(props.post?.uri)
@@ -121,7 +121,7 @@ function callback (type: "deletePost" | "updatePost") {
       <!-- Threadgate ポップアップトリガー -->
       <MenuTickerOpenThreadgatePopup
         v-if="state.isUser"
-        :disabled="post.record.reply != null"
+        :disabled="post.record?.reply != null"
         :post="post"
         @close="emit('close')"
       />
@@ -146,6 +146,7 @@ function callback (type: "deletePost" | "updatePost") {
         place="post"
         :uri="post.uri"
         :did="post.author.did"
+        :displayName="post.author.displayName"
         :handle="post.author.handle"
         :text="post.record?.text"
         @close="emit('close')"

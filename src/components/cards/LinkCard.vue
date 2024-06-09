@@ -463,7 +463,7 @@ getEmbeddedContentId()
     border-radius: var(--border-radius-middle);
   }
   // 埋込型リンクカード - Giphy - SP幅未満
-  @media not all and (min-width: $sp-width) {
+  @include media-sp-layout() {
     &--giphy {
       aspect-ratio: 1 / 1;
       height: unset !important;
