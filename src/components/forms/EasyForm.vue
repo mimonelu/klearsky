@@ -118,7 +118,12 @@ function onInput (item: TTEasyFormItem) {
   if (item.onInput != null) item.onInput(item, props)
 }
 
-function onEnterKeyDown (event: KeyboardEvent) {
+function onEnterKeyDownOnInput (event: KeyboardEvent) {
+  if (!event.isComposing && (event.ctrlKey || event.metaKey)) onSubmit()
+  else event.preventDefault()
+}
+
+function onEnterKeyDownOnTextarea (event: KeyboardEvent) {
   if (!event.isComposing && (event.ctrlKey || event.metaKey)) onSubmit()
 }
 
@@ -176,7 +181,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
                 class="textbox"
                 :class="item.classes"
                 @input="onInput(item)"
-                @keydown.enter="onEnterKeyDown"
+                @keydown.enter="onEnterKeyDownOnInput"
               >
 
               <!-- テキストエリア -->
@@ -198,7 +203,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
                 @focus="onFocus(item)"
                 @blur="onBlur(item)"
                 @input="onInput(item)"
-                @keydown.enter="onEnterKeyDown"
+                @keydown.enter="onEnterKeyDownOnTextarea"
               />
 
               <!-- チェックボックス -->
