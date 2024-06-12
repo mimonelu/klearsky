@@ -83,6 +83,8 @@ const state = reactive<{
 
 <style lang="scss" scoped>
 .white-winds {
+  display:  grid;
+
   .pinned-post ~ & {
     margin-top: 0.5rem;
   }
