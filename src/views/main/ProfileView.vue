@@ -383,15 +383,6 @@ function removeThisPost () {
               </div>
 
               <div class="profile-view__details__top__right__bottom">
-                <!-- フォロー中メッセージ -->
-                <div
-                  v-if="!mainState.isMyProfile() && isFollowed()"
-                  class="followed"
-                >
-                  <SVGIcon name="like" />
-                  <span>{{ $t("followed") }}</span>
-                </div>
-
                 <!-- 折り畳みトグル -->
                 <button
                   v-if="!state.loaderDisplay"
@@ -405,61 +396,87 @@ function removeThisPost () {
             </div>
           </div>
           <div class="profile-view__details__bottom">
+            <!-- ボタンコンテナ -->
             <div
               v-if="mainState.currentProfile != null"
               class="button-container"
             >
-              <!-- プロフィール編集ボタン -->
-              <RouterLink
-                v-if="mainState.isMyProfile()"
-                to="/profile/edit"
-                class="button edit-button"
-              >
-                <SVGIcon name="edit" />
-                <span>{{ $t("editProfile") }}</span>
-              </RouterLink>
-
-              <!-- フォロートグル -->
-              <FollowButton
+              <!-- 段落ちボタンコンテナ -->
+              <div
                 v-if="!mainState.isMyProfile()"
-                :viewer="mainState.currentProfile.viewer"
-                :did="mainState.currentProfile.did"
-                :declarationDid="mainState.currentProfile.did"
-              />
-
-              <!-- 外部公開状態トグル -->
-              <button
-                v-if="mainState.isMyProfile()"
-                class="button--bordered no-unauthenticated-toggle"
-                :data-no-unauthenticated="state.hasNoUnauthenticated"
-                @click.stop="toggleNoUnauthenticated"
+                class="button-container__dropoff"
               >
-                <SVGIcon :name="state.hasNoUnauthenticated ? 'earthOff' : 'earth'" />
-              </button>
+                <!-- フォロートグル -->
+                <FollowButton
+                  :viewer="mainState.currentProfile.viewer"
+                  :did="mainState.currentProfile.did"
+                  :declarationDid="mainState.currentProfile.did"
+                />
 
-              <div class="button-container__separator" />
+                <!-- フォロー状態 -->
+                <div
+                  v-if="isFollowed()"
+                  class="followed"
+                >
+                  <SVGIcon name="like" />
+                  <span>{{ $t("followed") }}</span>
+                </div>
+              </div>
 
-              <!-- ミュートトグル -->
-              <MuteButton
-                v-if="!mainState.isMyProfile()"
-                :did="mainState.currentProfile.did"
-                :viewer="mainState.currentProfile.viewer"
-              />
+              <!-- 段落ちなしボタンコンテナ -->
+              <div class="button-container__nodropoff">
+                <!-- プロフィール編集ボタン -->
+                <RouterLink
+                  v-if="mainState.isMyProfile()"
+                  to="/profile/edit"
+                  class="button edit-button"
+                >
+                  <SVGIcon name="edit" />
+                  <span>{{ $t("editProfile") }}</span>
+                </RouterLink>
 
-              <!-- ブロックトグル -->
-              <BlockButton
-                v-if="!mainState.isMyProfile()"
-                :did="mainState.currentProfile.did"
-                :viewer="mainState.currentProfile.viewer"
-              />
+                <!-- 外部公開状態トグル -->
+                <button
+                  v-if="mainState.isMyProfile()"
+                  class="button--bordered no-unauthenticated-toggle"
+                  :data-no-unauthenticated="state.hasNoUnauthenticated"
+                  @click.stop="toggleNoUnauthenticated"
+                >
+                  <SVGIcon :name="state.hasNoUnauthenticated ? 'earthOff' : 'earth'" />
+                </button>
 
-              <!-- プロフィールポップオーバートグル -->
-              <button
-                class="button--bordered menu-button"
-                @click.stop="openProfilePopover"
-              >
-                <SVGIcon name="menu" />
-              </button>
+                <!-- 高さ合わせ兼セパレータ用ボタン -->
+                <button
+                  type="button"
+                  class="button button-container__hidden-button"
+                  tabindex="-1"
+                >
+                  <SVGIcon name="like" />
+                  <span>-</span>
+                </button>
+
+                <!-- ミュートトグル -->
+                <MuteButton
+                  v-if="!mainState.isMyProfile()"
+                  :did="mainState.currentProfile.did"
+                  :viewer="mainState.currentProfile.viewer"
+                />
+
+                <!-- ブロックトグル -->
+                <BlockButton
+                  v-if="!mainState.isMyProfile()"
+                  :did="mainState.currentProfile.did"
+                  :viewer="mainState.currentProfile.viewer"
+                />
+
+                <!-- プロフィールポップオーバートグル -->
+                <button
+                  class="button--bordered menu-button"
+                  @click.stop="openProfilePopover"
+                >
+                  <SVGIcon name="menu" />
+                </button>
+              </div>
             </div>
 
             <!-- ラベラー行 -->
@@ -922,13 +939,34 @@ function removeThisPost () {
   }
 }
 
+// ボタンコンテナ
 .button-container {
   display: flex;
-  flex-wrap: wrap;
+  align-items: flex-start;
   grid-gap: 0.5rem;
 
-  &__separator {
+  // 段落ちボタンコンテナ
+  &__dropoff {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 0.5rem 1rem;
+  }
+
+  // 段落ちなしボタンコンテナ
+  &__nodropoff {
+    display: flex;
+    justify-content: space-between;
     flex-grow: 1;
+    grid-gap: 0.5rem;
+  }
+
+  // 高さ合わせ兼セパレータ用ボタン
+  &__hidden-button {
+    flex-grow: 1;
+    font-size: 0.875rem;
+    padding-left: 0;
+    padding-right: 0;
+    visibility: hidden;
   }
 }
 
