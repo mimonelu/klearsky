@@ -25,6 +25,14 @@ function removeThisPost (uri: string) {
 
 <template>
   <div class="feed">
+    <!-- 新規取得ライン -->
+    <div
+      v-if="feed.__fetchingLine === true"
+      class="feed__fetching-line"
+    >
+      <SVGIcon name="shimmer" />
+    </div>
+
     <!-- オープナー -->
     <div
       v-if="feed.__folding"
@@ -116,6 +124,37 @@ function removeThisPost (uri: string) {
 </template>
 
 <style lang="scss" scoped>
+.feed {
+  // 新規取得ライン
+  &__fetching-line {
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    & > .svg-icon {
+      fill: var(--fg-color-05);
+      font-size: 1.5em;
+      position: relative;
+    }
+
+    &::before {
+      content: "";
+      background-image: linear-gradient(
+        to right,
+        var(--fg-color-025) 45%,
+        transparent 45%,
+        transparent 55%,
+        var(--fg-color-025) 55%
+      );
+      display: block;
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+    }
+  }
+}
+
 .folder {
   --alpha: 0.5;
   cursor: pointer;

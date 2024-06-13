@@ -6,10 +6,17 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const props = defineProps<{
-  type: "authorFeeds" | "authorFeedsWithReplies" | "authorReposts" | "authorLikes" | "feeds" | "post" | "timeline";
-  feeds: null | Array<TTFeed>;
-  hasLoadButton?: boolean;
-  disabledInfinitScroll?: boolean;
+  type:
+    "authorFeeds" |
+    "authorFeedsWithReplies" |
+    "authorReposts" |
+    "authorLikes" |
+    "feeds" |
+    "post" |
+    "timeline"
+  feeds: null | Array<TTFeed>
+  hasLoadButton?: boolean
+  disabledInfinitScroll?: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -81,7 +88,9 @@ function removeThisPost (uri: string) {
 
 // インフィニットスクロール
 watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (!props.disabledInfinitScroll && value) fetchFeeds("old")
+  if (!props.disabledInfinitScroll && value) {
+    fetchFeeds("old")
+  }
 })
 </script>
 

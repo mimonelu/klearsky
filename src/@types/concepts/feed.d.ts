@@ -11,6 +11,7 @@ type TTFeed = {
   __id: string // Injected
   __folding?: boolean // Injected
   __replyDisplay?: boolean // Injected
+  __fetchingLine?: boolean // Injected
   [k: string]: unknown
 }
 

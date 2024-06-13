@@ -11,22 +11,29 @@ export default function (
   // 重複フィード（リポスト）を除去
   const map = new Map()
   targetFeeds.reverse().forEach((targetFeed: TTFeed) => {
-    if (!map.has(targetFeed.post.cid))
+    if (!map.has(targetFeed.post.cid)) {
       map.set(targetFeed.post.cid, targetFeed)
+    }
   })
 
   // 抜け漏れフラグ
   let isAllNew = true
 
   Array.from(map.values()).reverse().forEach((targetFeed: TTFeed) => {
-    if (targetFeed.__id == null) targetFeed.__id = `feed-${id ++}`
+    // `__id` のインジェクション
+    if (targetFeed.__id == null) {
+      targetFeed.__id = `feed-${id ++}`
+    }
 
     const oldIndex: number = oldFeeds.findIndex((oldFeed: TTFeed) => {
       return oldFeed.post?.cid === targetFeed.post?.cid
     })
 
     // 新規フィード
-    if (oldIndex === - 1) addings.push(targetFeed)
+    if (oldIndex === - 1) {
+      addings.push(targetFeed)
+    }
+
     // 既存フィード
     else {
       isAllNew = false
@@ -53,6 +60,8 @@ export default function (
         )
 
         if (oldDate > targetDate) return
+        // 現インジェクションプロパティの退避
+        // NOTICE: __fetchingLine は不要
         const oldCursor = oldFeed.__cursor
         const oldId = oldFeed.__id
         const oldFolding = oldFeed.__folding
@@ -68,6 +77,8 @@ export default function (
         oldFeeds[oldIndex] = targetFeed
         oldFeed = oldFeeds[oldIndex]
 
+        // 現インジェクションプロパティの復帰
+        // NOTICE: __fetchingLine は不要
         oldFeed.__cursor = oldCursor
         oldFeed.__id = oldId
         oldFeed.__folding = oldFolding
@@ -91,6 +102,14 @@ export default function (
 
   // 新着フィード
   if (doesUnshift) {
+    // 新規取得ライン
+    if (oldFeeds[0] != null && addings.length !== 0) {
+      oldFeeds.forEach((oldFeed) => {
+        delete oldFeed.__fetchingLine
+      })
+      oldFeeds[0].__fetchingLine = true
+    }
+
     oldFeeds.unshift(...addings)
   }
 
