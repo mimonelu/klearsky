@@ -125,6 +125,11 @@ function removeThisPost (uri: string) {
 
 <style lang="scss" scoped>
 .feed {
+  // 新規取得ラインと抜け漏れ取得ボタンとの間に隙間を取る
+  [data-direction="middle"] ~ & > &__fetching-line {
+    margin-top: 1em;
+  }
+
   // 新規取得ライン
   &__fetching-line {
     display: flex;
