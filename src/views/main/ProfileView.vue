@@ -47,7 +47,6 @@ const labelsOfPostTabButton: { [k: string]: string } = {
 const state = reactive<{
   loaderDisplay: ComputedRef<boolean>
   handleHistoryPopupDisplay: boolean
-  endpoint: ComputedRef<undefined | string>
   svgIconNameOfPostTabButton: ComputedRef<string>
   labelOfPostTabButton: ComputedRef<string>
   isPagePostFeeds: ComputedRef<boolean>
@@ -77,15 +76,6 @@ const state = reactive<{
     return mainState.currentProfile == null && mainState.listLoaderDisplay
   }),
   handleHistoryPopupDisplay: false,
-  endpoint: computed((): undefined | string => {
-    const log = mainState.currentProfile?.__log
-    if (log == null) {
-      return
-    }
-    return log[0] != null
-      ? log[0].operation?.services?.atproto_pds?.endpoint
-      : log.didDocument?.service?.[0]?.serviceEndpoint ?? undefined
-  }),
   svgIconNameOfPostTabButton: computed((): string => {
     return svgIconNamesOfPostTabButton[(router.currentRoute.value.name ?? "") as string] ?? "post"
   }),
@@ -375,12 +365,6 @@ function removeThisPost () {
                   :anonymizable="false"
                 />
               </a>
-
-              <!-- Endpoint (PDS) -->
-              <div class="endpoint">
-                <SVGIcon name="database" />
-                <span>{{ state.endpoint ?? "&nbsp;" }}</span>
-              </div>
 
               <div class="profile-view__details__top__right__bottom">
                 <!-- 折り畳みトグル -->
@@ -751,7 +735,6 @@ function removeThisPost () {
   &[data-folding="true"] {
     .banner,
     .label-tags,
-    .endpoint,
     .profile-view__details__bottom {
       display: none;
     }
@@ -858,7 +841,6 @@ function removeThisPost () {
 }
 
 .handle,
-.endpoint,
 .followed {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -903,25 +885,6 @@ function removeThisPost () {
     color: var(--color);
     font-size: 0.875rem;
     font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    user-select: text;
-    white-space: nowrap;
-  }
-}
-
-.endpoint {
-  --color: var(--fg-color-075);
-
-  & > .svg-icon {
-    fill: var(--color);
-  }
-  [data-log-loaded="false"] & > .svg-icon {
-    display: none;
-  }
-
-  & > span {
-    color: var(--color);
     overflow: hidden;
     text-overflow: ellipsis;
     user-select: text;
