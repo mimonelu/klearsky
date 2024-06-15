@@ -63,10 +63,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       >
         <template #bottom>
           <div class="relations">
-            <div
-              v-if="user.viewer.followedBy"
-              class="you-followed"
-            >{{ $t("followed") }}</div>
             <FollowButton
               v-if="user.did !== mainState.atp.session?.did"
               :viewer="user.viewer"
@@ -116,15 +112,6 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   grid-area: r;
   display: flex;
   grid-gap: 0.5rem;
-}
-
-.you-followed {
-  color: rgb(var(--like-color));
-  display: flex;
-  align-items: center;
-  font-size: 0.875rem;
-  font-weight: bold;
-  line-height: 1.25;
 }
 
 .follow-button {

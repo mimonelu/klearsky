@@ -44,9 +44,32 @@ async function toggleFollow () {
     :data-is-processing="state.processing"
     @click.prevent="toggleFollow"
   >
-    <SVGIcon name="like" />
-    <span v-if="viewer.following != null">{{ $t("following") }}</span>
-    <span v-else>{{ $t("follow") }}</span>
+    <!-- どちらもフォローなし -->
+    <SVGIcon
+      v-if="viewer.following == null && viewer.followedBy == null"
+      name="likeOutline"
+    />
+
+    <!-- 自分からのみフォロー -->
+    <SVGIcon
+      v-else-if="viewer.following != null && viewer.followedBy == null"
+      name="likeHalf"
+    />
+
+    <!-- 相手からのみフォロー -->
+    <SVGIcon
+      v-else-if="viewer.following == null && viewer.followedBy != null"
+      name="likeHalf"
+      :reverseH="true"
+    />
+
+    <!-- 相互フォロー -->
+    <SVGIcon
+      v-else
+      name="like"
+    />
+
+    <span>{{ $t(viewer.following != null ? "following" : "follow") }}</span>
     <Loader v-if="state.processing" />
   </button>
 </template>
@@ -60,7 +83,7 @@ async function toggleFollow () {
   }
 
   & > .loader {
-    font-size: 0.5rem;
+    font-size: 0.75em;
     position: absolute;
   }
 }

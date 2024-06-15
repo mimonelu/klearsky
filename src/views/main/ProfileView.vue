@@ -14,6 +14,7 @@ import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPop
 import LabelerSubscribeToggle from "@/components/buttons/LabelerSubscribeToggle.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
+import KnownFollowers from "@/components/lists/KnownFollowers.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
@@ -153,10 +154,6 @@ const state = reactive<{
     return !state.enabledContentMask || !state.hasBlurredMedia
   }),
 })
-
-function isFollowed (): boolean {
-  return mainState.currentProfile?.viewer?.followedBy != null
-}
 
 function toggleFolding () {
   Util.blurElement()
@@ -397,14 +394,11 @@ function removeThisPost () {
                   :declarationDid="mainState.currentProfile.did"
                 />
 
-                <!-- フォロー状態 -->
-                <div
-                  v-if="isFollowed()"
-                  class="followed"
-                >
-                  <SVGIcon name="like" />
-                  <span>{{ $t("followed") }}</span>
-                </div>
+                <!-- Known Followers -->
+                <KnownFollowers
+                  v-if="mainState.currentProfile?.viewer?.knownFollowers?.followers != null"
+                  :followers="mainState.currentProfile.viewer.knownFollowers.followers"
+                />
               </div>
 
               <!-- 段落ちなしボタンコンテナ -->
@@ -735,6 +729,7 @@ function removeThisPost () {
   &[data-folding="true"] {
     .banner,
     .label-tags,
+    .known-followers,
     .profile-view__details__bottom {
       display: none;
     }
@@ -791,7 +786,6 @@ function removeThisPost () {
 
         &__bottom {
           display: flex;
-          align-items: flex-start;
           flex-grow: 1;
           grid-gap: 0.5rem;
 
@@ -840,8 +834,7 @@ function removeThisPost () {
   font-size: 0.875rem;
 }
 
-.handle,
-.followed {
+.handle {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 0.375rem;
@@ -892,16 +885,6 @@ function removeThisPost () {
   }
 }
 
-.followed {
-  & > .svg-icon {
-    fill: rgb(var(--like-color));
-  }
-
-  & > span {
-    color: rgb(var(--like-color));
-  }
-}
-
 // ボタンコンテナ
 .button-container {
   display: flex;
@@ -911,8 +894,9 @@ function removeThisPost () {
   // 段落ちボタンコンテナ
   &__dropoff {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    grid-gap: 0.5rem 1rem;
+    grid-gap: 0.5rem 0.75rem;
   }
 
   // 段落ちなしボタンコンテナ
@@ -931,6 +915,11 @@ function removeThisPost () {
     padding-right: 0;
     visibility: hidden;
   }
+}
+
+// Known Followers
+.known-followers {
+  font-size: 1.75rem;
 }
 
 .edit-button,

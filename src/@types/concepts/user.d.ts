@@ -28,5 +28,9 @@ type TTUserViewer = {
   following?: string
   muted: boolean
   mutedByList?: any
+  knownFollowers?: {
+    count: number
+    followers: Array<TTUser>
+  }
   [k: string]: unknown
 }

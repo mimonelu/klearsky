@@ -54,6 +54,8 @@ import labeler from "@/svg/labeler.svg?raw"
 import labelerOff from "@/svg/labeler-off.svg?raw"
 import lightning from "@/svg/lightning.svg?raw"
 import like from "@/svg/like.svg?raw"
+import likeHalf from "@/svg/like-half.svg?raw"
+import likeOutline from "@/svg/like-outline.svg?raw"
 import link from "@/svg/link.svg?raw"
 import list from "@/svg/list.svg?raw"
 import lock from "@/svg/lock.svg?raw"
@@ -154,6 +156,8 @@ const icons: { [k: string]: string } = {
   labelerOff,
   lightning,
   like,
+  likeHalf,
+  likeOutline,
   link,
   list,
   lock,
@@ -202,6 +206,7 @@ const icons: { [k: string]: string } = {
 
 defineProps<{
   name: string
+  reverseH?: boolean
 }>()
 </script>
 
@@ -210,6 +215,7 @@ defineProps<{
     v-html="icons[name]"
     class="svg-icon"
     :class="`svg-icon--${name}`"
+    :data-reverse-h="reverseH"
   />
 </template>
 
@@ -223,6 +229,9 @@ defineProps<{
   min-width: 1em;
   max-width: 1em;
   height: 1em;
+  &[data-reverse-h="true"] {
+    transform: scaleX(-1.0);
+  }
 
   &:deep(svg) {
     height: 100%;
