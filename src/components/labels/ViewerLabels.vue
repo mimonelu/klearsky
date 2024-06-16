@@ -76,14 +76,12 @@ defineProps<{
 
     & > .svg-icon {
       fill: white;
-      font-size: 0.875em;
-      word-break: break-all;
     }
 
     & > span {
       color: white;
       font-weight: bold;
-      line-height: var(--line-height-low);
+      line-height: var(--line-height-high);
       word-break: break-all;
     }
   }

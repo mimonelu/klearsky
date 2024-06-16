@@ -824,6 +824,19 @@ function removeThisPost () {
   }
 }
 
+// 折り畳みトグル
+.folding-toggle {
+  float: right;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+  padding: 0.25em 0.5em;
+  white-space: nowrap;
+
+  & > span {
+    line-height: var(--line-height-low);
+  }
+}
+
 // Viewer ラベル
 .viewer-labels {
   font-size: 0.75rem;
@@ -842,27 +855,20 @@ function removeThisPost () {
 
 // 表示名
 .display-name {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
-  user-select: text;
+  display: contents;
 
   &:deep() > span {
+    font-size: 1.5rem;
+    user-select: text;
     white-space: unset;
     word-break: break-all;
   }
 }
 
-// 折り畳みトグル
-.folding-toggle {
-  float: right;
-  font-size: 0.625rem;
-  margin-left: 0.5rem;
-  white-space: nowrap;
-}
-
 // ハンドル
 .handle {
   display: flex;
+  margin-top: 0.25rem;
 
   & > a {
     display: flex;
