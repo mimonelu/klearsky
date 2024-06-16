@@ -351,28 +351,25 @@ function removeThisPost () {
                 :anonymizable="false"
               />
 
-              <!-- ハンドル -->
-              <a
-                class="handle"
-                @click.stop="openHandleHistoryPopup"
+              <!-- 折り畳みトグル -->
+              <button
+                v-if="!state.loaderDisplay"
+                class="button--bordered folding-toggle"
+                @click="toggleFolding"
               >
-                <SVGIcon name="history" />
-                <AuthorHandle
-                  :handle="mainState.currentProfile?.handle ?? '&nbsp;'"
-                  :anonymizable="false"
-                />
-              </a>
+                <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
+                <span>{{ $t(mainState.profileFolding ? "showDetail" : "hideDetail") }}</span>
+              </button>
 
-              <div class="profile-view__details__top__right__bottom">
-                <!-- 折り畳みトグル -->
-                <button
-                  v-if="!state.loaderDisplay"
-                  class="button--bordered folding-toggle"
-                  @click="toggleFolding"
-                >
-                  <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
-                  <span>{{ $t(mainState.profileFolding ? "showDetail" : "hideDetail") }}</span>
-                </button>
+              <!-- ハンドル -->
+              <div class="handle">
+                <a @click.stop="openHandleHistoryPopup">
+                  <SVGIcon name="history" />
+                  <AuthorHandle
+                    :handle="mainState.currentProfile?.handle ?? '&nbsp;'"
+                    :anonymizable="false"
+                  />
+                </a>
               </div>
             </div>
           </div>
@@ -767,39 +764,8 @@ function removeThisPost () {
       grid-gap: 1rem;
 
       &__right {
-        display: flex;
-        flex-direction: column;
         flex-grow: 1;
-        grid-gap: 0.375rem;
         overflow: hidden;
-
-        .display-name {
-          display: unset;
-          font-size: 1.5rem;
-          user-select: text;
-
-          &:deep() > span {
-            white-space: unset;
-            word-break: break-word;
-          }
-        }
-
-        &__bottom {
-          display: flex;
-          flex-grow: 1;
-          grid-gap: 0.5rem;
-
-          button {
-            font-size: 0.75rem;
-            margin-left: auto;
-            white-space: nowrap;
-          }
-
-          // 折り畳みトグル
-          .folding-toggle {
-            white-space: unset;
-          }
-        }
       }
     }
 
@@ -816,6 +782,7 @@ function removeThisPost () {
   display: contents;
 }
 
+// バナー
 .banner {
   aspect-ratio: 3 / 1;
   object-fit: cover;
@@ -824,6 +791,7 @@ function removeThisPost () {
   }
 }
 
+// アバターボタン
 .avatar {
   font-size: 5rem;
 }
@@ -831,57 +799,75 @@ function removeThisPost () {
 // ラベルタグ
 .label-tags {
   --alpha: 0.75;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
 }
 
-.handle {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-gap: 0.375rem;
-  align-items: center;
+// 表示名
+.display-name {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  user-select: text;
 
-  & > .svg-icon {
-    font-size: 0.875rem;
-  }
-
-  & > span {
-    color: var(--color);
-    font-size: 0.875rem;
-    font-weight: bold;
-    line-height: 1.25;
+  &:deep() > span {
+    white-space: unset;
     word-break: break-all;
   }
 }
 
+// 折り畳みトグル
+.folding-toggle {
+  float: right;
+  font-size: 0.625rem;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+// ハンドル
 .handle {
-  color: var(--fg-color-075);
-  overflow: hidden;
-  [data-log-loaded="true"] & {
-    color: var(--accent-color-0875);
-    cursor: pointer;
-    &:focus, &:hover {
-      color: rgb(var(--accent-color));
+  display: flex;
+
+  & > a {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.375rem;
+    font-size: 0.875rem;
+    overflow: hidden;
+
+    & > .svg-icon {
+      fill: var(--fg-color-05);
+    }
+    [data-log-loaded="true"] & {
       & > .svg-icon {
-        fill: rgb(var(--accent-color));
+        fill: var(--accent-color-0875);
+      }
+      &:focus, &:hover {
+        & > .svg-icon {
+          fill: rgb(var(--accent-color));
+        }
       }
     }
-  }
+    [data-log-loaded="false"] & > .svg-icon {
+      display: none;
+    }
 
-  [data-log-loaded="false"] & > .svg-icon {
-    display: none;
-  }
-  [data-log-loaded="true"] & > .svg-icon {
-    fill: var(--accent-color-0875);
-  }
-
-  & > .author-handle {
-    color: var(--color);
-    font-size: 0.875rem;
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    user-select: text;
-    white-space: nowrap;
+    & > .author-handle {
+      color: var(--fg-color-05);
+      font-size: 0.875rem;
+      font-weight: bold;
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      user-select: text;
+      white-space: nowrap;
+    }
+    [data-log-loaded="true"] & > .author-handle {
+      color: var(--accent-color-0875);
+      cursor: pointer;
+      &:focus, &:hover {
+        color: rgb(var(--accent-color));
+      }
+    }
   }
 }
 
@@ -919,7 +905,7 @@ function removeThisPost () {
 
 // Known Followers
 .known-followers {
-  font-size: 1.75rem;
+  font-size: 2rem;
 }
 
 .edit-button,

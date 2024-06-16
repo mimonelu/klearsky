@@ -10,7 +10,7 @@ const state = reactive<{
   followers: ComputedRef<Array<TTUser>>
 }>({
   followers: computed((): Array<TTUser> => {
-    return [...props.followers].reverse()
+    return [...props.followers].splice(0, 5).reverse()
   }),
 })
 </script>
