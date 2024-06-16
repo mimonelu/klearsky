@@ -207,6 +207,7 @@ function onActivateContentFilteringToggle () {
 
 .viewer-labels {
   grid-area: v;
+  font-size: 0.75rem;
   margin-bottom: 0.5em;
   &:empty {
     display: contents;

@@ -169,8 +169,11 @@ function openProfilePopover ($event: Event) {
   position: relative;
 
   // Viewer ラベル
-  .viewer-labels:empty {
-    display: contents;
+  .viewer-labels {
+    font-size: 0.75rem;
+    &:empty {
+      display: contents;
+    }
   }
 
   &__content {

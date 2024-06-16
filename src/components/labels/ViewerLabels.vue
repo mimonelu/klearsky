@@ -67,7 +67,7 @@ defineProps<{
 
   &__label {
     background-color: rgb(var(--notice-color));
-    border-radius: var(--border-radius-middle);
+    border-radius: var(--border-radius-small);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -76,13 +76,14 @@ defineProps<{
 
     & > .svg-icon {
       fill: white;
-      font-size: 0.75em;
+      font-size: 0.875em;
       word-break: break-all;
     }
 
     & > span {
       color: white;
-      font-size: 0.875em;
+      font-weight: bold;
+      line-height: var(--line-height-low);
       word-break: break-all;
     }
   }

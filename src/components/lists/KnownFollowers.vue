@@ -41,7 +41,7 @@ const state = reactive<{
     }
 
     &:deep() > img {
-      box-shadow: 0 0 0 1px rgb(var(--like-color));
+      box-shadow: 0 0 0 2px rgb(var(--bg-color));
     }
   }
 }

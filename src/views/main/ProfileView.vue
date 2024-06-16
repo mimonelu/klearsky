@@ -285,6 +285,7 @@ function removeThisPost () {
   <div
     class="profile-view"
     :data-folding="mainState.profileFolding"
+    :data-content-filtering="!(state.accountContentDisplay && state.accountMediaDisplay)"
     :data-is-my-profile="mainState.isMyProfile()"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
@@ -310,7 +311,7 @@ function removeThisPost () {
 
     <div class="profile-view__top-wrapper">
       <div class="profile-view__top">
-        <!-- アカウントトグル -->
+        <!-- コンテンツフィルタトグル -->
         <ContentFilteringToggle
           v-if="state.contentFilteringToggleDisplay"
           :labels="state.contentFilteringLabels"
@@ -318,9 +319,6 @@ function removeThisPost () {
           :togglable="true"
           @click.prevent.stop="onActivateAccountMaskToggle"
         />
-
-        <!-- Viewer ラベル -->
-        <ViewerLabels :viewer="mainState.currentProfile?.viewer" />
 
         <div class="profile-view__details">
           <div class="profile-view__details__top">
@@ -336,6 +334,19 @@ function removeThisPost () {
             </div>
 
             <div class="profile-view__details__top__right">
+              <!-- 折り畳みトグル -->
+              <button
+                v-if="!state.loaderDisplay"
+                class="button--bordered folding-toggle"
+                @click="toggleFolding"
+              >
+                <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
+                <span>{{ $t(mainState.profileFolding ? "showDetail" : "hideDetail") }}</span>
+              </button>
+
+              <!-- Viewer ラベル -->
+              <ViewerLabels :viewer="mainState.currentProfile?.viewer" />
+
               <!-- ラベルタグ -->
               <LabelTags
                 :labels="mainState.currentProfile?.labels"
@@ -350,16 +361,6 @@ function removeThisPost () {
                 :displayName="mainState.currentProfile?.displayName ?? '&emsp;'"
                 :anonymizable="false"
               />
-
-              <!-- 折り畳みトグル -->
-              <button
-                v-if="!state.loaderDisplay"
-                class="button--bordered folding-toggle"
-                @click="toggleFolding"
-              >
-                <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
-                <span>{{ $t(mainState.profileFolding ? "showDetail" : "hideDetail") }}</span>
-              </button>
 
               <!-- ハンドル -->
               <div class="handle">
@@ -722,6 +723,18 @@ function removeThisPost () {
   flex-grow: 1;
   position: relative;
 
+  --avatar-size: 10rem;
+
+  // SPレイアウト
+  @include media-sp-layout() {
+    --avatar-size: 5rem;
+  }
+
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
+    --avatar-size: 10rem;
+  }
+
   // 折り畳み
   &[data-folding="true"] {
     .banner,
@@ -731,14 +744,10 @@ function removeThisPost () {
       display: none;
     }
 
-    .profile-view__details {
-      .avatar {
-        font-size: 4rem;
-      }
-
-      .display-name {
-        font-size: 1.25rem;
-      }
+    .profile-view__details,
+    .avatar {
+      --avatar-size: 5rem;
+      position: unset;
     }
   }
 
@@ -749,7 +758,7 @@ function removeThisPost () {
   &__top {
     display: flex;
     flex-direction: column;
-    grid-gap: 1rem;
+    grid-gap: 0.5rem;
     padding: 1rem;
     position: relative;
   }
@@ -760,8 +769,15 @@ function removeThisPost () {
     grid-gap: 1rem;
 
     &__top {
-      display: flex;
+      display: grid;
+      grid-template-columns: var(--avatar-size) 1fr;
       grid-gap: 1rem;
+      position: relative;
+
+      // コンテンツフィルタトグル
+      [data-content-filtering="true"] & {
+        grid-template-columns: 1fr;
+      }
 
       &__right {
         flex-grow: 1;
@@ -777,9 +793,10 @@ function removeThisPost () {
   }
 }
 
-// Viewer ラベル
-.viewer-labels:empty {
-  display: contents;
+// コンテンツフィルタトグル
+.content-filtering-toggle {
+  position: relative;
+  z-index: 1;
 }
 
 // バナー
@@ -793,7 +810,27 @@ function removeThisPost () {
 
 // アバターボタン
 .avatar {
-  font-size: 5rem;
+  font-size: var(--avatar-size);
+
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
+    position: absolute;
+    bottom: 0;
+  }
+
+  &:deep() > img {
+    background-color: rgb(var(--bg-color));
+    box-shadow: 0 0 0 2px rgb(var(--bg-color));
+  }
+}
+
+// Viewer ラベル
+.viewer-labels {
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+  &:empty {
+    display: contents;
+  }
 }
 
 // ラベルタグ
@@ -831,7 +868,6 @@ function removeThisPost () {
     display: flex;
     align-items: center;
     grid-gap: 0.375rem;
-    font-size: 0.875rem;
     overflow: hidden;
 
     & > .svg-icon {
@@ -853,7 +889,7 @@ function removeThisPost () {
 
     & > .author-handle {
       color: var(--fg-color-05);
-      font-size: 0.875rem;
+      font-size: 1rem;
       font-weight: bold;
       line-height: 1.25;
       overflow: hidden;
