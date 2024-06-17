@@ -61,11 +61,11 @@ export default function (
 
         if (oldDate > targetDate) return
         // 現インジェクションプロパティの退避
-        // NOTICE: __fetchingLine は不要
         const oldCursor = oldFeed.__cursor
         const oldId = oldFeed.__id
         const oldFolding = oldFeed.__folding
         const oldReplyDisplay = oldFeed.__replyDisplay
+        const oldFetchLine = oldFeed.__fetchingLine
 
         // __custom の退避
         const oldCustomPropsOfPost = oldFeed.post.__custom
@@ -78,11 +78,11 @@ export default function (
         oldFeed = oldFeeds[oldIndex]
 
         // 現インジェクションプロパティの復帰
-        // NOTICE: __fetchingLine は不要
         oldFeed.__cursor = oldCursor
         oldFeed.__id = oldId
         oldFeed.__folding = oldFolding
         oldFeed.__replyDisplay = oldReplyDisplay
+        oldFeed.__fetchingLine = oldFetchLine
 
         // __custom の復帰
         oldFeed.post.__custom = oldCustomPropsOfPost
