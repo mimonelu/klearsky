@@ -170,13 +170,13 @@ function close () {
 
       <!-- リストミュートのトグル -->
       <button @click.prevent.stop="toggleListMute">
-        <SVGIcon :name="state.isMuted ? 'volumeOn' : 'volumeOff'" />
+        <SVGIcon :name="state.isMuted ? 'volumeOff' : 'volumeOn'" />
         <span>{{ $t(state.isMuted ? "muteOff" : "muteOn") }}</span>
       </button>
 
       <!-- リストブロックのトグル -->
       <button @click.prevent.stop="toggleListBlock">
-        <SVGIcon :name="state.isBlocked ? 'person' : 'personOff'" />
+        <SVGIcon :name="state.isBlocked ? 'personOff' : 'person'" />
         <span>{{ $t(state.isBlocked ? "unblock" : "block") }}</span>
       </button>
 
