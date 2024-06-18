@@ -23,6 +23,8 @@ type TTPost = {
   viewer?: {
     repost?: string
     like?: string
+    replyDisabled?: boolean
+    threadMuted?: boolean
     [k: string]: unknown
   }
   [k: string]: unknown

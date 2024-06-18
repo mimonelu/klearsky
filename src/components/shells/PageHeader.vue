@@ -102,7 +102,7 @@ function onActivateBackButton () {
       }
 
       & > .svg-icon {
-        fill: var(--fg-color-05);
+        fill: var(--fg-color-075);
         font-size: 1.25rem;
       }
     }

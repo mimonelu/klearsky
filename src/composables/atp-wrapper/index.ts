@@ -105,6 +105,8 @@ import updatePreferences from "@/composables/atp-wrapper/update/update-preferenc
 import updateProfile from "@/composables/atp-wrapper/update/update-profile"
 import updateRecord from "@/composables/atp-wrapper/update/update-record"
 import updateThreadgate from "@/composables/atp-wrapper/update/update-threadgate"
+import updateThreadMuteToDisable from "@/composables/atp-wrapper/update/update-thread-mute-to-disable"
+import updateThreadMuteToEnable from "@/composables/atp-wrapper/update/update-thread-mute-to-enable"
 import Util from "@/composables/util"
 
 // @ts-ignore
@@ -257,6 +259,8 @@ class AtpWrapper implements TIAtpWrapper {
   updateProfile = updateProfile
   updateRecord = updateRecord
   updateThreadgate = updateThreadgate
+  updateThreadMuteToDisable = updateThreadMuteToDisable
+  updateThreadMuteToEnable = updateThreadMuteToEnable
 }
 
 export default AtpWrapper

@@ -114,4 +114,6 @@ interface TIAtpWrapper {
   updateProfile (this: TIAtpWrapper, params: TTUpdateProfileParams): Promise<undefined | Error>
   updateRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, record: { [k: string]: any }, validate?: boolean, swapCommit?: string, swapRecord?: string): Promise<Error | TTCidUri>
   updateThreadgate (this: TIAtpWrapper, postUri: string, allowMention: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
+  updateThreadMuteToDisable (this: TIAtpWrapper, uri: string): Promise<Error | boolean>
+  updateThreadMuteToEnable (this: TIAtpWrapper, uri: string): Promise<Error | boolean>
 }

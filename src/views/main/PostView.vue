@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import Loader from "@/components/shells/Loader.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
 import Post from "@/components/compositions/Post.vue"
@@ -8,25 +8,60 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
+const state = reactive<{
+  rootPost: ComputedRef<undefined | TTPost>
+}>({
+  rootPost: computed((): undefined | TTPost => {
+    return mainState.currentPosts[0]
+  }),
+})
+
+// ポストの更新
 function updateThisPostThread (newPosts: Array<TTPost>) {
-  if (mainState.currentPosts == null) return
+  if (mainState.currentPosts == null) {
+    return
+  }
 
   // MEMO: ポストスレッドの全同一ポストに最新のデータを反映する
   mainState.currentPosts.forEach((post: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) => post?.cid === newPost.cid)
-    if (newPost != null) Util.updatePostProps(mainState.currentPosts[index], newPost)
+    const newPost = newPosts.find((newPost: TTPost) => {
+      return post?.cid === newPost.cid
+    })
+    if (newPost != null) {
+      Util.updatePostProps(mainState.currentPosts[index], newPost)
+    }
   })
 }
 
+// ポストの削除
 function removeThisPost (uri: string) {
-  mainState.currentPosts = mainState.currentPosts.filter((post: TTPost) => post.uri !== uri)
+  mainState.currentPosts = mainState.currentPosts.filter((post: TTPost) => {
+    return post.uri !== uri
+  })
 }
 
+// 再取得
 async function updateAll () {
   Util.blurElement()
-  mainState.listLoaderDisplay = true
+  mainState.centerLoaderDisplay = true
   await mainState.fetchPostThread()
-  mainState.listLoaderDisplay = false
+  mainState.centerLoaderDisplay = false
+}
+
+// スレッドミュートのトグル
+async function toggleThreadMute () {
+  Util.blurElement()
+  if (state.rootPost?.uri == null) {
+    return
+  }
+  mainState.centerLoaderDisplay = true
+  const response = state.rootPost?.viewer?.threadMuted
+    ? await mainState.atp.updateThreadMuteToDisable(state.rootPost?.uri)
+    : await mainState.atp.updateThreadMuteToEnable(state.rootPost?.uri)
+  if (response && state.rootPost.viewer != null) {
+    state.rootPost.viewer.threadMuted = !state.rootPost.viewer.threadMuted
+  }
+  mainState.centerLoaderDisplay = false
 }
 </script>
 
@@ -36,11 +71,21 @@ async function updateAll () {
       <PageHeader
         :hasBackButton="true"
         :title="$t('post')"
-        :subTitle="mainState.currentPosts[0] != null ? mainState.currentPosts[0].author.displayName : ''"
+        :subTitle="state.rootPost?.author.displayName ?? ''"
       >
         <template #right>
+          <!-- 再取得ボタン -->
           <button @click.stop="updateAll">
             <SVGIcon name="refresh" />
+          </button>
+
+          <!-- スレッドミュートトグル -->
+          <button
+            class="post-view__thread-mute-toggle"
+            :data-enable="state.rootPost?.viewer?.threadMuted"
+            @click.stop="toggleThreadMute"
+          >
+            <SVGIcon :name="state.rootPost?.viewer?.threadMuted ? 'volumeOff' : 'volumeOn'" />
           </button>
         </template>
       </PageHeader>
@@ -65,6 +110,11 @@ async function updateAll () {
   flex-grow: 1;
   padding-bottom: var(--sp-menu-height);
   position: relative;
+
+  // スレッドミュートトグル
+  &__thread-mute-toggle[data-enable="true"] {
+    --fg-color: var(--notice-color);
+  }
 }
 
 .post[data-focus="true"] {
