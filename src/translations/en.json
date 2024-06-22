@@ -293,6 +293,8 @@
   "suggestionSearch": "Suggestions",
   "userSearch": "Find Users",
   "postSearch": "Find Posts",
+  "postSearchLatest": "Latest",
+  "postSearchTop": "Popular",
   "feedSearch": "Find Feeds",
   "keyword": "Keyword",
   "searchAccountPost": "Search post",

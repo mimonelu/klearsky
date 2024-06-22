@@ -9,7 +9,7 @@ type TTTranslations = {
 
 export default {
   install(app: App, translations: TTTranslations) {
-    let currentLanguage = Util.getUserLanguage()
+    let currentLanguage = Util.getUserLanguage() ?? "en"
 
     const $setCurrentLanguage = (newLanguage: string) => {
       currentLanguage = newLanguage

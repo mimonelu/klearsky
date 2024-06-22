@@ -380,9 +380,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
         & > .button--important,
         & > .button--bordered--important,
         & > .button--plane,
-        & > input,
-        & > .checkboxes,
-        & > .checkboxes > .checkbox {
+        & > input {
           min-height: 3rem;
         }
       }

@@ -69,7 +69,7 @@ interface TIAtpWrapper {
   fetchPopularFeedGenerators (this: TIAtpWrapper, currentValues: Array<TTFeedGenerator>, limit?: number, cursor?: string, term?: string): Promise<Error | undefined | string>
   fetchPostedImageRefs (this: TIAtpWrapper, did: string): Promise<Error | string[]>
   fetchPosts (this: TIAtpWrapper, uris: Array<string>): Promise<undefined | false | Array<TTPost>>
-  fetchPostSearch (this: TIAtpWrapper, currentPosts: Array<TTPost>, q: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
+  fetchPostSearch (this: TIAtpWrapper, currentPosts: Array<TTPost>, q: string, params: { [k: string]: any }, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchPostThread (this: TIAtpWrapper, uri: string, depth?: number): Promise<undefined | false | Array<TTPost>>
   fetchPreferences (this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile (this: TIAtpWrapper, actor: string): Promise<Error | TTProfile>

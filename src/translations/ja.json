@@ -293,6 +293,8 @@
   "suggestionSearch": "おすすめ",
   "userSearch": "ユーザーを見つける",
   "postSearch": "ポストを見つける",
+  "postSearchLatest": "最新",
+  "postSearchTop": "人気",
   "feedSearch": "フィードを見つける",
   "keyword": "キーワード",
   "searchAccountPost": "ポストを検索",

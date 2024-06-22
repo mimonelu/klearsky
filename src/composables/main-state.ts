@@ -165,6 +165,13 @@ state.fetchTimeline = fetchTimeline
 // 検索 - 現在の検索キーワード
 state.currentSearchTerm = ""
 
+// 検索 - 現在のポスト検索フォーム
+state.currentSearchPostFormState = {
+  sort: "latest",
+  lang: Util.getUserLanguage() != null ? [Util.getUserLanguage() as string] : [],
+  author: [],
+}
+
 // 検索 - 現在のポスト検索結果
 state.currentSearchPostResults = []
 state.currentSearchPostCursor = undefined
@@ -781,7 +788,7 @@ function saveSettings () {
     ]
   }
   if (state.settings[did].globallineContentLanguages == null) {
-    state.settings[did].globallineContentLanguages = [Util.getUserLanguage()]
+    state.settings[did].globallineContentLanguages = [Util.getUserLanguage() ?? "en"]
   }
   if (state.settings[did].globallineSkipPostHasNoLanguage == null) {
     state.settings[did].globallineSkipPostHasNoLanguage = true
@@ -823,7 +830,7 @@ function saveSettings () {
     state.settings[did].postAnonymization = false
   }
   if (state.settings[did].postLanguages == null) {
-    state.settings[did].postLanguages = [Util.getUserLanguage()]
+    state.settings[did].postLanguages = [Util.getUserLanguage() ?? "en"]
   } else {
     state.settings[did].postLanguages = getSanitizedLanguages(state.settings[did].postLanguages)
   }
@@ -1377,19 +1384,21 @@ async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
 
 // 検索 - 現在のポスト検索結果
 async function fetchSearchPosts (cursor?: string) {
-  // `from:me` 対応
-  const q = state.currentSearchTerm
-    .replace(/(?:^|\s)from:me(?=$|\s)/g, (substring: string) => {
-      if (state.atp.session?.handle == null) {
-        return substring.replace("from:me", "")
-      }
-      return substring.replace("me", state.atp.session.handle)
-    })
+  // ポスト検索フォームの設定
+  const params: { [k: string]: any } = {}
+  params.sort = state.currentSearchPostFormState.sort
+  if (state.currentSearchPostFormState.lang?.[0] != null) {
+    params.lang = state.currentSearchPostFormState.lang[0]
+  }
+  if (state.currentSearchPostFormState.author?.[0] != null) {
+    params.author = state.currentSearchPostFormState.author[0]
+  }
 
   const newCursor: Error | undefined | string =
     await state.atp.fetchPostSearch(
       state.currentSearchPostResults,
-      q,
+      state.currentSearchTerm,
+      params,
       CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
       cursor
     )

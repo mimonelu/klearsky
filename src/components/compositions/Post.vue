@@ -177,7 +177,7 @@ const state = reactive<{
     if (state.postLanguages == null) return false
     if (state.postLanguages.length === 0) return false
     if (state.postLanguages.length >= 2) return true
-    const userLanguage = Util.getUserLanguage()
+    const userLanguage = Util.getUserLanguage() ?? "en"
     return state.postLanguages[0] !== userLanguage
   }),
 
@@ -585,7 +585,7 @@ async function translateText (forceTranslate: boolean) {
       }
     }
   }
-  const dstLanguage = Util.getUserLanguage()
+  const dstLanguage = Util.getUserLanguage() ?? "en"
   if (srcLanguages.length === 1 && srcLanguages[0] === dstLanguage) {
     state.translation = "ignore"
     return

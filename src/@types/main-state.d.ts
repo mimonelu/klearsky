@@ -141,6 +141,13 @@ type MainState = {
   // 検索 - 現在の検索キーワード
   currentSearchTerm: string
 
+  // 検索 - 現在のポスト検索フォーム
+  currentSearchPostFormState: {
+    sort: "top" | "latest"
+    lang?: Array<string>
+    author?: Array<string>
+  }
+
   // 検索 - 現在のポスト検索結果
   currentSearchPostResults: Array<TTPost>
   currentSearchPostCursor?: string

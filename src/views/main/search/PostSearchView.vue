@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
+import EasyForm from "@/components/forms/EasyForm.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+
+const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
@@ -13,6 +16,41 @@ const state = reactive<{
 }>({
   processing: false,
 })
+
+const easyFormProps: TTEasyForm = {
+  hasSubmitButton: false,
+  gridColumns: "auto auto auto 1fr",
+  data: [
+    {
+      state: mainState.currentSearchPostFormState,
+      model: "sort",
+      type: "radio",
+      layout: "horizontal",
+      options: [
+        { label: $t("postSearchLatest"), value: "latest" },
+        { label: $t("postSearchTop"), value: "top" },
+      ],
+    },
+    {
+      state: mainState.currentSearchPostFormState,
+      model: "lang",
+      type: "checkbox",
+      layout: "horizontal",
+      options: [
+        { label: (Util.getUserLanguage() ?? "-").toUpperCase(), value: Util.getUserLanguage() },
+      ],
+    },
+    {
+      state: mainState.currentSearchPostFormState,
+      model: "author",
+      type: "checkbox",
+      layout: "horizontal",
+      options: [
+        { label: "me", value: mainState.atp.data.did },
+      ],
+    },
+  ],
+}
 
 const router = useRouter()
 
@@ -143,6 +181,12 @@ function openKeywordHistoryPopover ($event: Event) {
       </button>
     </Portal>
     <div class="post-search-view__main">
+      <!-- ポスト検索フォーム -->
+      <EasyForm
+        v-bind="easyFormProps"
+        @change="fetchNewResults"
+      />
+
       <LoadButton
         direction="new"
         :processing="state.processing"
@@ -183,6 +227,10 @@ function openKeywordHistoryPopover ($event: Event) {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+
+    .easy-form {
+      padding: 0 0.5rem;
+    }
   }
 }
 
