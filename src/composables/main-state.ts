@@ -168,7 +168,7 @@ state.currentSearchTerm = ""
 // 検索 - 現在のポスト検索フォーム
 state.currentSearchPostFormState = {
   sort: "latest",
-  lang: Util.getUserLanguage() != null ? [Util.getUserLanguage() as string] : [],
+  lang: [],
   author: [],
 }
 
