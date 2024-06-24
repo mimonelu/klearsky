@@ -98,8 +98,10 @@ const state = reactive<{
   text: computed((): undefined | string => {
     return props.post.record?.text ?? props.post.value?.text
   }),
+
+  // デカ絵文字
   isTextOnlyEmoji: computed((): boolean => {
-    return state.text?.match(/^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,3}$/u) != null
+    return state.text?.match(/^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,7}$/u) != null
   }),
 
   // 画像
