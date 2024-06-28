@@ -798,6 +798,12 @@ function removeThisPost () {
   position: relative;
   z-index: 1;
 }
+.profile-view[data-folding="false"] .content-filtering-toggle[data-show="true"] {
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
+    margin-left: calc(var(--avatar-size) + 1rem);
+  }
+}
 
 // バナー
 .banner {
