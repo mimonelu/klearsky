@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import CONSTS from "@/consts/consts.json"
 
@@ -61,6 +62,15 @@ function openLabelerSettingsPopup (did?: string) {
   }
   mainState.openLabelerSettingsPopup(labeler)
 }
+
+function getLabelerAvatar (label?: TILabelSetting): string {
+  if (label == null) {
+    return ""
+  }
+  return mainState.myLabeler.labelers.find((labeler) => {
+    return labeler.creator.did === label.did
+  })?.creator.avatar ?? ""
+}
 </script>
 
 <template>
@@ -113,7 +123,7 @@ function openLabelerSettingsPopup (did?: string) {
       :title="label?.locale.description ?? ''"
       @click.prevent.stop="openLabelerSettingsPopup(label?.did)"
     >
-      <SVGIcon name="label" />
+      <LazyImage :src="getLabelerAvatar(label)" />
       <span>{{ $t(label?.locale.name) }}</span>
     </button>
 
@@ -194,9 +204,19 @@ function openLabelerSettingsPopup (did?: string) {
     background-color: var(--share-color-0125);
     border-color: rgb(var(--share-color), calc(var(--alpha) / 2));
     cursor: pointer;
+    grid-gap: 0.5em;
+    padding: 0.125em 0.5em 0.125em 0.125em;
     &:focus,
     &:hover {
       --alpha: 1.0;
+    }
+
+    & > .lazy-image {
+      border-radius: var(--border-radius-small);
+      min-width: 1.5em;
+      max-width: 1.5em;
+      min-height: 1.5em;
+      max-height: 1.5em;
     }
   }
 
