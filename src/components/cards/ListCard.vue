@@ -260,10 +260,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
           <span class="list-card__name__label">{{ list.name }}</span>
 
           <!-- リストユーザー数 -->
-          <span
-            v-if="list.items != null"
-            class="list-card__name__number"
-          >({{ list.items.length }})</span>
+          <span class="list-card__name__number">({{ list.listItemCount }})</span>
         </button>
       </div>
 

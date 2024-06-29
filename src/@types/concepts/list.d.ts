@@ -2,6 +2,7 @@ type TTList = {
   uri: string
   cid: string
   creator: AppBskyActorDefs.ProfileView
+  listItemCount: number
   name: string
   purpose: ListPurpose
   description?: string
