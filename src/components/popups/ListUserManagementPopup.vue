@@ -77,6 +77,11 @@ async function clicked (list: TTList) {
     }
     myList.items.splice(listItemIndex, 1)
 
+    // リストユーザー数をデクリメント
+    if (list.listItemCount != null) {
+      list.listItemCount --
+    }
+
     // リストユーザーを現在のリストから削除
     if (mainState.currentList?.uri !== list.uri) return
     const currentListItemIndex = mainState.currentListItems.findIndex((listItem: TTListItem) => {
@@ -98,6 +103,11 @@ async function clicked (list: TTList) {
       subject: props.user,
     }
     myList.items.unshift(newListItem)
+
+    // リストユーザー数をインクリメント
+    if (list.listItemCount != null) {
+      list.listItemCount ++
+    }
 
     // リストユーザーを現在のリストに追加
     if (mainState.currentList?.uri !== list.uri) return
