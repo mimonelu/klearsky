@@ -1,5 +1,9 @@
-const regexp = /\/([^\/]+)$/
+import { AtUri } from "@atproto/api"
 
 export default function (text?: string): string {
-  return (text?.match(regexp) ?? ["", ""])[1]
+  if (text == null) {
+    return ""
+  }
+  const { rkey } = new AtUri(text)
+  return rkey
 }
