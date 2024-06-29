@@ -59,6 +59,9 @@ const state = reactive<{
   numberOfPostsPerDay: ComputedRef<undefined | number>
   profilePostPopverDisplay: boolean
 
+  // 登録時に使用したスターターパック
+  joinedStarterPackUrl: ComputedRef<undefined | string>
+
   // ラベル対応
   enabledContentMask: boolean
   hasNoUnauthenticated: ComputedRef<boolean>
@@ -114,6 +117,13 @@ const state = reactive<{
       : mainState.currentProfile.postsCount
   }),
   profilePostPopverDisplay: false,
+
+  // 登録時に使用したスターターパック
+  joinedStarterPackUrl: computed((): undefined | string => {
+    return mainState.currentProfile?.joinedViaStarterPack != null
+      ? `https://bsky.app/starter-pack/${mainState.currentProfile.joinedViaStarterPack.creator.handle}/${Util.getRkey(mainState.currentProfile.joinedViaStarterPack.uri)}`
+      : undefined
+  }),
 
   // ラベル対応
   enabledContentMask: true,
@@ -512,6 +522,19 @@ function removeThisPost () {
               >
                 <dt>{{ $t("startedAt") }}</dt>
                 <dd>{{ mainState.formatDate(mainState.currentProfile.createdAt) }}</dd>
+
+                <!-- 登録時に使用したスターターパック -->
+                <dd v-if="state.joinedStarterPackUrl != null">
+                  <a
+                    class="button--plane joined-starter-pack"
+                    :href="state.joinedStarterPackUrl"
+                    rel="noreferrer"
+                    target="_blank"
+                    :title="$t('joinedStarterPack')"
+                  >
+                    <SVGIcon name="cards" />
+                  </a>
+                </dd>
               </dl>
             </div>
           </div>
@@ -1025,6 +1048,7 @@ function removeThisPost () {
 
 .statistics {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   grid-gap: 0.5rem 1rem;
   padding-right: 2rem;
@@ -1047,6 +1071,13 @@ function removeThisPost () {
       font-weight: bold;
     }
   }
+}
+
+// 登録時に使用したスターターパック
+.joined-starter-pack {
+  --fg-color: var(--like-color);
+  margin: -0.5em -0.5em -0.5em -0.25em;
+  padding: 0.5em;
 }
 
 .tab-container {

@@ -13,6 +13,7 @@ type TTProfile = {
   indexedAt: string
   labels?: Array<TTLabel>
   postsCount: number
+  joinedViaStarterPack?: TIStarterPack
   viewer: TTUserViewer
 
   // 固定ポスト
