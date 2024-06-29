@@ -74,7 +74,7 @@ function moveToBottom () {
       "
     >
       <LazyImage :src="mainState.userProfile?.avatar" />
-      <div class="label">{{ mainState.userProfile?.handle }}</div>
+      <div class="label">{{ mainState.userProfile?.handle ?? "&nbsp;" }}</div>
     </RouterLink>
 
     <!-- スクローラー -->
