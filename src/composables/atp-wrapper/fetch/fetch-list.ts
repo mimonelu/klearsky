@@ -16,5 +16,5 @@ export default async function (
   console.log("[klearsky/getList(fetchList)]", response)
   if (response instanceof Error) return response
   if (!response.success) return Error("apiError")
-  return response.data.list
+  return response.data.list as TTList
 }

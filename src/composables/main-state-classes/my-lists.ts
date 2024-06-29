@@ -89,4 +89,25 @@ export default class {
     this.items.splice(targetIndex, 1)
     return true
   }
+
+  getShortPurpose (purpose?: TTListPurpose): string {
+    if (purpose == null) {
+      return "unknownlist"
+    }
+    // 大文字・小文字注意
+    return purpose.includes("#modlist")
+      ? "modlist"
+      : purpose.includes("#curatelist")
+        ? "curatelist"
+        : purpose.includes("#referencelist")
+          ? "referencelist"
+          : "unknownlist"
+  }
+
+  getLongPurpose (purpose?: string): TTListPurpose {
+    if (purpose == null) {
+      return "app.bsky.graph.defs#unknownlist"
+    }
+    return `app.bsky.graph.defs#${purpose}` as TTListPurpose
+  }
 }

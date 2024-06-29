@@ -19,7 +19,7 @@ export default async function (
   console.log("[klearsky/getLists]", response)
   if (!response.success) return Error("apiError")
 
-  const newLists: Array<TTList> = response.data.lists
+  const newLists: Array<TTList> = (response.data.lists as Array<TTList>)
     .filter((list: TTList) => !currentLists
       .some((current: TTList) => list.uri === current.uri))
   if (cursor == null) currentLists.unshift(...newLists)

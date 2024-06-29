@@ -19,7 +19,7 @@ export default async function (
   if (response instanceof Error) return response
   if (!response.success) return Error("apiError")
 
-  const newLists: Array<TTList> = response.data.lists
+  const newLists: Array<TTList> = (response.data.lists as Array<TTList>)
     .filter((list: TTList) => !lists
       .some((current: TTList) => list.uri === current.uri))
   if (cursor == null) lists.unshift(...newLists)

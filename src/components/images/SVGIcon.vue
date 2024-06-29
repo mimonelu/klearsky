@@ -14,6 +14,7 @@ import bluesky from "@/svg/bluesky.svg?raw"
 import bookmark from "@/svg/bookmark.svg?raw"
 import bookmarkOff from "@/svg/bookmark-off.svg?raw"
 import bookmarkOutline from "@/svg/bookmark-outline.svg?raw"
+import cards from "@/svg/cards.svg?raw"
 import chat from "@/svg/chat.svg?raw"
 import chatPlus from "@/svg/chat-plus.svg?raw"
 import check from "@/svg/check.svg?raw"
@@ -116,6 +117,7 @@ const icons: { [k: string]: string } = {
   bookmark,
   bookmarkOff,
   bookmarkOutline,
+  cards,
   chat,
   chatPlus,
   check,

@@ -171,7 +171,7 @@ export default class {
               handle: "",
             },
             name: "(Unknown list)",
-            purpose: "unknownList",
+            purpose: "unknownlist",
             description: uri,
             indexedAt: new Date().toISOString(),
           }

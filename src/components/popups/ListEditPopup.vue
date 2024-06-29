@@ -35,7 +35,9 @@ const easyFormState = reactive<{
 }>({
   avatar: null,
   detachAvatar: [],
-  purpose: "curatelist",
+  purpose: props.list != null
+    ? mainState.myLists.getShortPurpose(props.list?.purpose)
+    : "curatelist",
   name: props.list?.name ?? "",
   description: props.list?.description ?? "",
 })
@@ -51,11 +53,12 @@ const easyFormProps: TTEasyForm = {
       model: "purpose",
       label: $t("listPurpose"),
       type: "radio",
-      display: props.mode === "create",
       required: true,
       options: [
-        { label: $t("curateList"), value: "curatelist" },
-        { label: $t("modList"), value: "modlist" },
+        // 大文字・小文字注意
+        { label: $t("curatelist"), value: "curatelist" },
+        { label: $t("modlist"), value: "modlist" },
+        { label: $t("referencelist"), value: "referencelist" },
       ],
     },
     {
@@ -132,6 +135,7 @@ async function submitCallback () {
       ...props.list as TTList,
       name: easyFormState.name,
       description: easyFormState.description,
+      purpose: mainState.myLists.getLongPurpose(easyFormState.purpose),
     }, avatarBlobRef)
   if (result instanceof Error) {
     state.loaderDisplay = false

@@ -69,11 +69,7 @@ const state = reactive<{
     return mainState.formatDate(props.list.indexedAt)
   }),
   purpose: computed((): string => {
-    return props.list.purpose.includes("#modlist")
-      ? "modList"
-      : props.list.purpose.includes("#curatelist")
-        ? "curateList"
-        : "unknownList"
+    return mainState.myLists.getShortPurpose(props.list.purpose)
   }),
   isOwn: computed((): boolean => {
     return props.list.creator.did === mainState.atp.session?.did
@@ -139,6 +135,7 @@ function updateList (list: TTList) {
   props.list.avatar = list.avatar
   props.list.name = list.name
   props.list.description = list.description
+  props.list.purpose = list.purpose
 
   // セッションキャッシュの更新
   mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
@@ -269,11 +266,13 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         class="list-card__purpose"
         :data-purpose="state.purpose"
       >
-        <SVGIcon :name="state.purpose === 'curateList'
+        <SVGIcon :name="state.purpose === 'curatelist'
           ? 'person'
-          : state.purpose === 'modList'
+          : state.purpose === 'modlist'
             ? 'personOff'
-            : 'help'" />
+            : state.purpose === 'referencelist'
+              ? 'cards'
+              : 'help'" />
         <span>{{ $t(state.purpose) }}</span>
       </div>
 
@@ -409,7 +408,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   grid-gap: 0.5em;
   padding: 1em;
   position: relative;
-  &[data-purpose="unknownList"] {
+  &[data-purpose="unknownlist"] {
     background-color: var(--fg-color-00625);
   }
 
@@ -511,13 +510,20 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     align-items: center;
     grid-gap: 0.375em;
     line-height: var(--line-height-high);
-    &[data-purpose="curateList"] {
+    &[data-purpose="curatelist"] {
       --color: rgb(var(--share-color));
     }
-    &[data-purpose="modList"] {
+    &[data-purpose="modlist"] {
       --color: rgb(var(--notice-color));
     }
-    &[data-purpose="unknownList"] {
+    &[data-purpose="referencelist"] {
+      --color: rgb(var(--like-color));
+
+      & > .svg-icon {
+        font-size: 0.875em;
+      }
+    }
+    &[data-purpose="unknownlist"] {
       --color: var(--fg-color-05);
     }
 
