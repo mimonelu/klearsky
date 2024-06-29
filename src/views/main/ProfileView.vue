@@ -102,14 +102,12 @@ const state = reactive<{
     return mainState.currentProfile?.associated?.labeler ?? false
   }),
   numberOfPostsPerDay: computed((): undefined | number => {
-    if (mainState.currentProfile == null ||
-        mainState.currentProfile.__createdAt == null
-    ) {
+    if (mainState.currentProfile == null) {
       return
     }
     const days = differenceInDays(
       new Date(),
-      new Date(mainState.currentProfile.__createdAt)
+      new Date(mainState.currentProfile.createdAt)
     )
     return days > 0
       ? Math.ceil(mainState.currentProfile.postsCount / days)
@@ -509,11 +507,11 @@ function removeThisPost () {
 
               <!-- アカウント作成日時 -->
               <dl
-                v-if="mainState.currentProfile?.__createdAt != null"
+                v-if="mainState.currentProfile?.createdAt != null"
                 class="created-at"
               >
                 <dt>{{ $t("startedAt") }}</dt>
-                <dd>{{ mainState.formatDate(mainState.currentProfile?.__createdAt) }}</dd>
+                <dd>{{ mainState.formatDate(mainState.currentProfile.createdAt) }}</dd>
               </dl>
             </div>
           </div>

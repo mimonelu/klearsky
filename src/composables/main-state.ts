@@ -1136,7 +1136,7 @@ async function fetchCurrentProfile (did: string) {
     state.myWorker.setSessionCache("userProfile", state.userProfile)
   }
 
-  // ハンドル履歴と利用開始日の取得
+  // ハンドル履歴の取得
   await updateCurrentLogAudit()
 
   // 固定ポストのインポート
@@ -1154,9 +1154,6 @@ async function updateCurrentLogAudit () {
   if (state.currentProfile == null) {
     return // await　中に初期化される恐れがあるため
   }
-  state.currentProfile.__createdAt = Array.isArray(logJson)
-    ? logJson.at(- 1)?.createdAt
-    : undefined
   state.currentProfile.__log = logJson
 }
 

@@ -1,6 +1,6 @@
 type TTProfile = {
   __log?: any // Injected
-  __createdAt?: string // Injected
+  createdAt: string
   associated?: TIAssociated
   avatar: string
   banner: string
