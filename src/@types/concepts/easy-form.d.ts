@@ -41,6 +41,7 @@ type TTEasyFormItem = {
   required?: boolean
   rows?: number
   state?: any
+  submitWhenEnter?: boolean
   onBlur?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onChange?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onClick?: (item: TTEasyFormItem, form: TTEasyForm) => void

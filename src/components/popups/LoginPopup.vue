@@ -62,6 +62,7 @@ const easyFormProps: TTEasyForm = {
       placeholder: "https://bsky.social",
       autocomplete: "url",
       inputmode: "url",
+      submitWhenEnter: true,
       onInput: disableAuthFactorToken,
     },
     {
@@ -73,6 +74,7 @@ const easyFormProps: TTEasyForm = {
       required: state.isSignUp,
       autocomplete: "on",
       inputmode: "email",
+      submitWhenEnter: true,
     },
     {
       state,
@@ -82,6 +84,7 @@ const easyFormProps: TTEasyForm = {
       required: true,
       autocomplete: "on",
       inputmode: "email",
+      submitWhenEnter: true,
       onInput: disableAuthFactorToken,
     },
     {
@@ -92,6 +95,7 @@ const easyFormProps: TTEasyForm = {
       required: true,
       autocomplete: "off",
       inputmode: "text",
+      submitWhenEnter: true,
       onInput: disableAuthFactorToken,
     },
     {
@@ -102,6 +106,7 @@ const easyFormProps: TTEasyForm = {
       type: "password",
       autocomplete: "off",
       inputmode: "text",
+      submitWhenEnter: true,
     },
     {
       display: state.isSignUp,
@@ -111,6 +116,7 @@ const easyFormProps: TTEasyForm = {
       type: "password",
       autocomplete: "off",
       inputmode: "text",
+      submitWhenEnter: true,
     }
   ],
 }
