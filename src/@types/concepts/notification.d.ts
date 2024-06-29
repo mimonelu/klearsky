@@ -1,10 +1,13 @@
-type TTNotificationReason = "reply"
-  | "quote"
-  | "mention"
-  | "repost"
-  | "like"
-  | "follow"
-  | (string & {})
+type TTNotificationReason =
+  "reply" |
+  "quote" |
+  "mention" |
+  "repost" |
+  "like" |
+  "follow" |
+  "likeGenerator" |
+  "starterpack-joined"
+  (string & {})
 
 type TTNotification = {
   avatar?: string

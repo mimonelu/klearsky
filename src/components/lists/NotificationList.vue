@@ -25,12 +25,18 @@ const state = reactive<{
                  notificationGroup.reason === "likeGenerator"
         }
 
+        // スターターパック使用時はフォローとセットで返す
+        if (mainState.notificationReasonFilter === "follow") {
+          return notificationGroup.reason === "follow" ||
+                 notificationGroup.reason === "starterpack-joined"
+        }
+
         return notificationGroup.reason === mainState.notificationReasonFilter
       })
   }),
 })
 
-const iconMap: { [reason: string]: string } = {
+const iconMap: { [reason in TTNotificationReason]: string } = {
   follow: "person",
   mention: "at",
   quote: "quoteRepost",
@@ -38,6 +44,7 @@ const iconMap: { [reason: string]: string } = {
   repost: "repost",
   like: "like",
   likeGenerator: "like",
+  "starterpack-joined": "cards",
 }
 
 function notificationGroupHasNew (notificationGroup: TTNotificationGroup): boolean {
@@ -59,7 +66,8 @@ function makeSubjectTo (notification: TTNotification): any {
   switch (notification.reason) {
     case "follow":
     case "repost":
-    case "like": {
+    case "like":
+    case "starterpack-joined": {
       return { name: "profile-feeds", query: { account: notification.did } }
     }
     case "likeGenerator": {
@@ -69,6 +77,9 @@ function makeSubjectTo (notification: TTNotification): any {
     case "quote":
     case "reply": {
       return { name: "post", query: { uri: notification.uri } }
+    }
+    default: {
+      return { name: "home" }
     }
   }
 }
@@ -118,7 +129,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 
           <SVGIcon
             class="icon icon--reason"
-            :name="iconMap[notificationGroup.reason]"
+            :name="iconMap[notificationGroup.reason] ?? 'help'"
           />
           <span>+ {{ notificationGroup.notifications.length }}</span>
           <SVGIcon
@@ -152,7 +163,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             <!-- reason アイコン -->
             <SVGIcon
               class="icon icon--reason"
-              :name="iconMap[notification.reason]"
+              :name="iconMap[notification.reason] ?? 'help'"
             />
 
             <!-- アバターリンク -->
@@ -360,6 +371,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 
 // reason アイコン
 .icon--reason {
+  fill: var(--fg-color-05);
   [data-reason="follow"] & {
     fill: rgb(var(--fg-color));
   }
@@ -380,6 +392,9 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   }
   [data-reason="likeGenerator"] & {
     fill: rgb(var(--post-color));
+  }
+  [data-reason="starterpack-joined"] & {
+    fill: rgb(var(--like-color));
   }
 }
 

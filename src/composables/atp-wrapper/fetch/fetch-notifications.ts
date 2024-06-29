@@ -53,7 +53,7 @@ export default async function (
         handle: notification.author.handle,
         following: notification.author.viewer?.following != null,
         indexedAt: notification.indexedAt,
-        reason: notification.reason,
+        reason: notification.reason as TTNotificationReason,
         text: notification.reason === "follow"
           ? notification.author.description
           : (notification.record as any)?.text,
@@ -67,7 +67,7 @@ export default async function (
           id: notification.cid,
           indexedAt: new Date(notification.indexedAt),
           notifications: [newNotification],
-          reason,
+          reason: reason as TTNotificationReason,
           reasonSubject,
           __folding: true,
         })

@@ -30,7 +30,12 @@ const state = reactive<{
       .forEach((notificationGroup: TTNotificationGroup) => {
         const numberOfNotifications = notificationGroup.notifications.length
         results.all += numberOfNotifications
-        results[notificationGroup.reason] += numberOfNotifications
+        const reason = notificationGroup.reason === "likeGenerator"
+          ? "like"
+          : notificationGroup.reason === "starterpack-joined"
+            ? "follow"
+            : notificationGroup.reason
+        results[reason] += numberOfNotifications
       })
     return results
   }),
@@ -214,10 +219,7 @@ function scrolledToBottom () {
     </template>
     <template #body>
       <div class="notifications-view__main">
-        <NotificationList
-          :reason-filter="mainState.notificationReasonFilter"
-          @close="close"
-        />
+        <NotificationList @close="close" />
       </div>
     </template>
     <template #footer>
