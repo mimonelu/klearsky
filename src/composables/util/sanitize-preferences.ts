@@ -1,16 +1,29 @@
 export default function (preferences: Array<TTPreference>) {
-  // savedFeedsPref がなければ作成
-  // TODO: V2 が普及次第撤去すること
-  const hasSavedFeedsPref = preferences
+  // savedFeedsPrefV1 がなければ作成
+  const hasSavedFeedsPrefV1 = preferences
     .some((preference: TTPreference) => {
       return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
     })
-  if (!hasSavedFeedsPref) {
+  if (!hasSavedFeedsPrefV1) {
     preferences.push({
       $type: "app.bsky.actor.defs#savedFeedsPref",
       pinned: [],
       saved: [],
     })
+  }
+
+  // savedFeedsPrefV1 の重複する保存されたフィードとピン留めされたフィードを丸める
+  const savedFeedsPrefV1 = preferences
+    .find((preference: TTPreference) => {
+      return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
+    })
+  if (savedFeedsPrefV1 != null) {
+    if (savedFeedsPrefV1.pinned != null) {
+      savedFeedsPrefV1.pinned = Array.from(new Set(savedFeedsPrefV1.pinned))
+    }
+    if (savedFeedsPrefV1.saved != null) {
+      savedFeedsPrefV1.saved = Array.from(new Set(savedFeedsPrefV1.saved))
+    }
   }
 
   /*
@@ -25,17 +38,16 @@ export default function (preferences: Array<TTPreference>) {
       items: [],
     })
   }
-  */
 
-  preferences.forEach((preference) => {
-    // 重複する保存されたフィードとピン留めされたフィードを丸める
-    if (preference.$type === "app.bsky.actor.defs#savedFeedsPref") {
-      if (preference.pinned != null) {
-        preference.pinned = Array.from(new Set(preference.pinned))
-      }
-      if (preference.saved != null) {
-        preference.saved = Array.from(new Set(preference.saved))
-      }
+  // savedFeedsPrefV2 の重複する保存されたフィードとピン留めされたフィードを丸める
+  const savedFeedsPrefV2 = preferences
+    .find((preference: TTPreference) => {
+      return preference.$type === "app.bsky.actor.defs#savedFeedsPrefV2"
+    })
+  if (savedFeedsPrefV2 != null) {
+    if (savedFeedsPrefV2.items != null) {
+      savedFeedsPrefV2.items = Array.from(new Set(savedFeedsPrefV2.items))
     }
-  })
+  }
+  */
 }
