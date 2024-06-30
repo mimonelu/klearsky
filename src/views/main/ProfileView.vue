@@ -662,6 +662,17 @@ function removeThisPost () {
           <SVGIcon name="list" />
           <span>{{ $t("lists") }}</span>
         </RouterLink>
+
+        <!-- スターターパックタブボタン -->
+        <RouterLink
+          class="tab__button tab__button--starter-pack"
+          :to="{ path: '/profile/starterPacks', query: { account: mainState.currentProfile?.did } }"
+          :title="$t('starterPacks')"
+          :data-disabled="!mainState.currentProfile?.associated?.starterPacks"
+        >
+          <SVGIcon name="cards" />
+          <span>{{ $t("packs") }}</span>
+        </RouterLink>
       </div>
 
       <!-- ユーザータブ -->
@@ -1090,6 +1101,8 @@ function removeThisPost () {
   }
 
   .tab__button--post {
+    min-width: 28.75%;
+
     & > .svg-icon--cursorDown {
       font-size: 0.75rem;
     }

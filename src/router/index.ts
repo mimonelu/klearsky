@@ -23,6 +23,7 @@ import AuthorFeedGeneratorsView from "@/views/main/profile/AuthorFeedGeneratorsV
 import AuthorListView from "@/views/main/profile/AuthorListView.vue"
 import AuthorRepostView from "@/views/main/profile/AuthorRepostView.vue"
 import AuthorLikeView from "@/views/main/profile/AuthorLikeView.vue"
+import AuthorStarterPacksView from "@/views/main/profile/AuthorStarterPacksView.vue"
 import FollowerListView from "@/views/main/profile/FollowerListView.vue"
 import FollowingListView from "@/views/main/profile/FollowingListView.vue"
 import SuggestedFollowsView from "@/views/main/profile/SuggestedFollowsView.vue"
@@ -144,6 +145,12 @@ const router = createRouter({
               name: "profile-like",
               meta: { label: "likes" },
               component: AuthorLikeView,
+            },
+            {
+              path: "starterPacks",
+              name: "profile-starter-packs",
+              meta: { label: "starterPacks" },
+              component: AuthorStarterPacksView,
             },
             {
               path: "follower",

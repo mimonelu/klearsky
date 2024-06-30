@@ -271,7 +271,9 @@
   "banner": "Banner",
   "detachBanner": "Detach banner image",
 
-  "joinedStarterPack": "via Starter Pack",
+  "packs": "packs",
+  "starterPacks": "Starter packs",
+  "joinedStarterPack": "via Starter pack",
 
   "home": "Home",
   "followingsDescription": "Show posts of users you follow.",

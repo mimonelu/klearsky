@@ -17,6 +17,7 @@ interface TIAssociated {
   feedgens?: number
   labeler?: boolean
   lists?: number
+  starterPacks?: number
   [k: string]: unknown
 }
 
