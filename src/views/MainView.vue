@@ -1536,12 +1536,12 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   overflow-x: clip;
   max-width: $router-view-width;
 
-  // タブレットレイアウト
-  @include media-tablet-layout() {
-    max-width: $router-view-width;
+  // SPレイアウト
+  @include media-sp-layout() {
+    max-width: 100%;
   }
 
-  // ルータービューヘッダー
+    // ルータービューヘッダー
   &__header {
     display: grid;
     position: sticky;
