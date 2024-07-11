@@ -140,6 +140,9 @@ const state = reactive<{
       color: rgb(var(--accent-color));
       font-weight: bold;
       line-height: var(--line-height-middle);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
