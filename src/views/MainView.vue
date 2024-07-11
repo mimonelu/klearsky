@@ -1504,6 +1504,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   flex-direction: column;
   flex-grow: 1;
   overflow-x: clip;
+  max-width: $router-view-width;
 
   // タブレットレイアウト
   @include media-tablet-layout() {
