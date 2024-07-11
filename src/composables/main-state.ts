@@ -146,6 +146,7 @@ state.fetchCurrentAuthorFeed = fetchCurrentAuthorFeed
 state.fetchAuthorReposts = fetchAuthorReposts
 state.fetchAuthorLikes = fetchAuthorLikes
 state.fetchAuthorLists = fetchAuthorLists
+state.fetchAuthorStarterPacks = fetchAuthorStarterPacks
 state.fetchFollowers = fetchFollowers
 state.fetchFollowings = fetchFollowings
 state.fetchSuggestedFollows = fetchSuggestedFollows
@@ -1065,6 +1066,8 @@ function resetProfileState () {
   state.currentAuthorLikesCursor = undefined
   resetArray(state, "currentAuthorLists")
   state.currentAuthorListsCursor = undefined
+  resetArray(state, "currentAuthorStarterPacks")
+  state.currentAuthorStarterPacksCursor = undefined
   resetArray(state, "currentFollowers")
   state.currentFollowersCursor = undefined
   resetArray(state, "currentFollowings")
@@ -1288,6 +1291,29 @@ async function fetchAuthorLists (direction: "new" | "old") {
     return
   }
   state.currentAuthorListsCursor = cursor
+}
+
+async function fetchAuthorStarterPacks (direction: "new" | "old") {
+  const account = state.currentQuery.account as LocationQueryValue
+  if (!account) return
+
+  // ブロックしている
+  if (state.currentProfile?.viewer.blocking != null) return
+
+  // ブロックされている
+  if (state.currentProfile?.viewer.blockedBy) return
+
+  const cursor = await state.atp.fetchActorStarterPacks(
+    state.currentAuthorStarterPacks,
+    account,
+    CONSTS.LIMIT_OF_FETCH_AUTHOR_STARTER_PACKS,
+    direction === "new" ? undefined : state.currentAuthorStarterPacksCursor
+  )
+  if (cursor instanceof Error) {
+    // TODO:
+    return
+  }
+  state.currentAuthorStarterPacksCursor = cursor
 }
 
 async function fetchFollowers (direction: "new" | "old") {

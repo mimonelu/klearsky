@@ -274,6 +274,7 @@
   "packs": "パック",
   "starterPacks": "スターターパック",
   "joinedStarterPack": "スターターパック",
+  "noStarterPacks": "このユーザーの管理するスターターパックはありません。",
 
   "home": "ホーム",
   "followingsDescription": "あなたがフォローしているユーザーのポストを表示します。",

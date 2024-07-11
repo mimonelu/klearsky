@@ -274,6 +274,7 @@
   "packs": "packs",
   "starterPacks": "Starter packs",
   "joinedStarterPack": "via Starter pack",
+  "noStarterPacks": "There are no starter packs managed by this user.",
 
   "home": "Home",
   "followingsDescription": "Show posts of users you follow.",

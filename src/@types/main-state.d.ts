@@ -106,6 +106,8 @@ type MainState = {
   currentAuthorLists: Array<TTList>
   currentAuthorListsCursor?: string
   currentAuthorPinnedPost?: TTPost
+  currentAuthorStarterPacks: Array<TIStarterPack>
+  currentAuthorStarterPacksCursor?: string
   currentFollowers: Array<TTUser>
   currentFollowersCursor?: string
   currentFollowings: Array<TTUser>
@@ -122,6 +124,7 @@ type MainState = {
   fetchAuthorReposts: (direction: TTDirection) => Promise<void>
   fetchAuthorLikes: (direction: TTDirection) => Promise<void>
   fetchAuthorLists: (direction: "new" | "old") => Promise<void>
+  fetchAuthorStarterPacks: (direction: "new" | "old") => Promise<void>
   fetchFollowers: (direction: "new" | "old") => Promise<void>
   fetchFollowings: (direction: "new" | "old") => Promise<void>
   fetchSuggestedFollows: () => Promise<void>

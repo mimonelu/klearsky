@@ -31,6 +31,7 @@ interface TIAtpWrapper {
   deleteSession (this: TIAtpWrapper): Promise<boolean>
   deleteThreadgate (this: TIAtpWrapper, postUri: string): Promise<boolean | Error>
   fetchActorLists (this: TIAtpWrapper, currentLists: Array<TTList>, actor: string, limit?: number, cursor?: string): Promise<undefined | string | Error>
+  fetchActorStarterPacks (this: TIAtpWrapper, currentStarterPacks: Array<TIStarterPack>, actor: string, limit?: number, cursor?: string): Promise<undefined | string | Error>
   fetchActorsTypeahead (this: TIAtpWrapper, q?: string, limit?: number): Promise<Error | Array<TTUser>>
   fetchAuthorFeedGenerators (this: TIAtpWrapper, generators: Array<TTFeedGenerator>, author: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchAuthorFeed (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, author: string, limit?: number, cursor?: string, filter?: string, direction?: TTDirection): Promise<undefined | string>

@@ -24,6 +24,7 @@ import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
 import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
 import deleteThreadgate from "@/composables/atp-wrapper/delete/delete-threadgate"
 import fetchActorLists from "@/composables/atp-wrapper/fetch/fetch-actor-lists"
+import fetchActorStarterPacks from "@/composables/atp-wrapper/fetch/fetch-actor-starter-packs"
 import fetchActorsTypeahead from "@/composables/atp-wrapper/fetch/fetch-actors-typeahead"
 import fetchAuthorFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-author-feed-generators"
 import fetchAuthorFeed from "@/composables/atp-wrapper/fetch/fetch-author-feed"
@@ -172,6 +173,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteSession = deleteSession
   deleteThreadgate = deleteThreadgate
   fetchActorLists = fetchActorLists
+  fetchActorStarterPacks = fetchActorStarterPacks
   fetchActorsTypeahead = fetchActorsTypeahead
   fetchAuthorFeedGenerators = fetchAuthorFeedGenerators
   fetchAuthorFeed = fetchAuthorFeed
