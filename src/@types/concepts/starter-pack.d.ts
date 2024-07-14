@@ -13,6 +13,7 @@ interface TIStarterPack {
     name: string
   }
   creator: TTUser
+  labels?: Array<TTLabel>
   listItemCount?: number
   joinedWeekCount?: number
   joinedAllTimeCount?: number

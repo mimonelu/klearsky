@@ -2,6 +2,7 @@
 import { computed, inject, reactive, watch, type ComputedRef } from "vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -47,24 +48,15 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       </div>
 
       <template v-else>
-        <div
+        <StarterPackCard
           v-for="starterPack of mainState.currentAuthorStarterPacks"
           :key="starterPack.cid"
-        >
-          <div>{{ starterPack.record?.name }}</div>
-          <HtmlText
-            v-if="starterPack.record?.description"
-            dir="auto"
-            :text="starterPack.record.description"
-            :facets="starterPack.record?.descriptionFacets"
-            :processHashTag="true"
-            @onActivateMention="$emit('onActivateMention')"
-            @onActivateHashTag="$emit('onActivateHashTag')"
-          />
-          <div>{{ starterPack.record?.$type }}</div>
-          <div>{{ starterPack.record?.list }}</div>
-          <div>{{ starterPack.record?.feeds?.length }}</div>
-        </div>
+          :starterPack="starterPack"
+          :menuDisplay="true"
+          :detailDisplay="true"
+          :creatorDisplay="false"
+          :unclickable="false"
+        />
       </template>
     </div>
     <LoadButton
