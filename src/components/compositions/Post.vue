@@ -14,6 +14,7 @@ import ListCard from "@/components/cards/ListCard.vue"
 import Loader from "@/components/shells/Loader.vue"
 import Post from "@/components/compositions/Post.vue"
 import RepostButton from "@/components/buttons/RepostButton.vue"
+import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
 import Util from "@/composables/util"
@@ -57,6 +58,10 @@ const state = reactive<{
 
   // リストカード
   hasListCard: ComputedRef<boolean>
+
+  // スターターパックカード
+  hasStarterPackCard: ComputedRef<boolean>
+  pseudoStarterPack: ComputedRef<undefined | TIStarterPack>
 
   // 最古の引用元ポストかどうか
   isOldestQuotedPost: ComputedRef<boolean>
@@ -151,6 +156,27 @@ const state = reactive<{
 
   // リストカード
   hasListCard: computed((): boolean => props.post.embed?.record?.$type === "app.bsky.graph.defs#listView"),
+
+  // スターターパックカード
+  hasStarterPackCard: computed((): boolean => props.post.embed?.record?.$type === "app.bsky.graph.starterpack"),
+  pseudoStarterPack: computed((): undefined | TIStarterPack => {
+    if (!state.hasStarterPackCard ||
+        props.post.embed?.record == null
+    ) {
+      return
+    }
+    return {
+      uri: props.post.uri,
+      cid: props.post.cid,
+      record: props.post.embed.record as any,
+      creator: props.post.author,
+      listItemCount: undefined,
+      joinedWeekCount: undefined,
+      joinedAllTimeCount: undefined,
+      labels: undefined,
+      indexedAt: props.post.indexedAt,
+    }
+  }),
 
   // 最古の引用元ポストかどうか
   isOldestQuotedPost: computed((): boolean => (props.level ?? 1) >= 3 - 1),
@@ -579,7 +605,7 @@ async function translateText (forceTranslate: boolean) {
   if (!forceTranslate) {
     const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
     if (autoTranslationIgnoreLanguage != null) {
-      const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/gs, "").split(",")
+      const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/g, "").split(",")
       const ignored = ignoreLanguages.some((ignore: string) => srcLanguages.includes(ignore))
       if (ignored) {
         state.translation = "ignore"
@@ -1006,6 +1032,18 @@ function toggleOldestQuotedPostDisplay () {
               @onActivateMention="$emit('click', $event)"
               @onActivateHashTag="$emit('click', $event)"
             />
+
+            <!-- スターターパックカード -->
+            <StarterPackCard
+              v-if="state.hasStarterPackCard && state.pseudoStarterPack != null"
+              :starterPack="state.pseudoStarterPack"
+              :menuDisplay="true"
+              :detailDisplay="true"
+              :creatorDisplay="true"
+              :unclickable="false"
+              @onActivateMention="$emit('click', $event)"
+              @onActivateHashTag="$emit('click', $event)"
+            />
           </template>
 
           <!-- ポストタグ -->
@@ -1224,6 +1262,7 @@ function toggleOldestQuotedPostDisplay () {
     .quad-images,
     .feed-card,
     .list-card,
+    .starter-pack-card,
     .reaction-container {
       display: none;
     }
@@ -1673,8 +1712,10 @@ function toggleOldestQuotedPostDisplay () {
 
 // フィードカード
 // リストカード
+// スターターパックカード
 .feed-card,
-.list-card {
+.list-card,
+.starter-pack-card {
   border: 1px solid var(--accent-color-025);
   border-radius: var(--border-radius-middle);
   &:focus, &:hover {

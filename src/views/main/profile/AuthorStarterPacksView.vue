@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, watch, type ComputedRef } from "vue"
-import HtmlText from "@/components/labels/HtmlText.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"

@@ -8,12 +8,11 @@ interface TIStarterPack {
     descriptionFacets?: Array<any>
     feeds?: Array<{
       uri: string
-    }>
+    } | TTFeedGenerator>
     list?: string
     name: string
   }
   creator: TTUser
-  labels?: Array<TTLabel>
   listItemCount?: number
   joinedWeekCount?: number
   joinedAllTimeCount?: number
