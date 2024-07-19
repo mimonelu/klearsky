@@ -174,7 +174,7 @@ const state = reactive<{
       joinedWeekCount: undefined,
       joinedAllTimeCount: undefined,
       labels: undefined,
-      indexedAt: props.post.indexedAt,
+      indexedAt: undefined,
     }
   }),
 

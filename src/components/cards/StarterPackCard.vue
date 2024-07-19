@@ -203,26 +203,35 @@ async function deleteList () {
         </button>
       </div>
 
+      <!-- フィード数 -->
+      <div
+        v-if="starterPack.record?.feeds != null"
+        class="starter-pack-card__feeds_count"
+      >
+        <SVGIcon name="feed" />
+        <span>{{ starterPack.record.feeds.length ?? '-' }}</span>
+      </div>
+
       <!-- リストアイテム数 -->
       <div class="starter-pack-card__list_item_count">
         <SVGIcon name="list" />
         <span>{{ starterPack.listItemCount ?? '-' }}</span>
       </div>
 
-      <!-- フィード数 -->
-      <div class="starter-pack-card__feeds_count">
-        <SVGIcon name="feed" />
-        <span>{{ starterPack.record?.feeds?.length ?? '-' }}</span>
-      </div>
-
       <!-- 使用数 -->
-      <div class="starter-pack-card__joined_count">
+      <div
+        v-if="starterPack.joinedAllTimeCount != null"
+        class="starter-pack-card__joined_count"
+      >
         <SVGIcon name="person" />
         <span>{{ starterPack.joinedAllTimeCount ?? '-' }} (+{{ starterPack.joinedWeekCount ?? '-' }})</span>
       </div>
 
       <!-- 作成日時 -->
-      <div class="starter-pack-card__indexed-at">
+      <div
+        v-if="starterPack.indexedAt != null"
+        class="starter-pack-card__indexed-at"
+      >
         <SVGIcon name="clock" />
         <span>{{ state.indexedAt }}</span>
       </div>
@@ -249,18 +258,18 @@ async function deleteList () {
         @onActivateMention="$emit('onActivateMention')"
         @onActivateHashTag="$emit('onActivateHashTag')"
       />
+    </div>
 
-      <!-- 作成者リンク -->
-      <div v-if="creatorDisplay && starterPack.creator.did">
-        <RouterLink
-          class="textlink starter-pack-card__creator"
-          :to="{ name: 'profile-list', query: { account: starterPack.creator.did } }"
-          @click.prevent="$emit('onActivateMention')"
-        >
-          <span class="starter-pack-card__creator__prefix">{{ $t("by") }}</span>
-          <span class="starter-pack-card__creator__display-name">{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
-        </RouterLink>
-      </div>
+    <!-- 作成者リンク -->
+    <div v-if="creatorDisplay && starterPack.creator.did">
+      <RouterLink
+        class="textlink starter-pack-card__creator"
+        :to="state.routerLinkToPage"
+        @click.prevent="$emit('onActivateMention')"
+      >
+        <span class="starter-pack-card__creator__prefix">{{ $t("by") }}</span>
+        <span class="starter-pack-card__creator__display-name">{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
+      </RouterLink>
     </div>
   </component>
 </template>
@@ -284,7 +293,7 @@ async function deleteList () {
     grid-template-columns: auto auto auto auto 1fr auto;
     grid-template-areas:
       "a n n n n m"
-      "a l f j i m";
+      "a f l j i m";
     align-items: flex-start;
   }
 
@@ -341,8 +350,8 @@ async function deleteList () {
   }
 
   // 名称下部にある変数群
-  &__list_item_count,
   &__feeds_count,
+  &__list_item_count,
   &__joined_count,
   &__indexed-at {
     color: var(--fg-color-05);

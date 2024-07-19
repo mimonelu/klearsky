@@ -17,5 +17,5 @@ interface TIStarterPack {
   joinedWeekCount?: number
   joinedAllTimeCount?: number
   labels?: Array<TTLabel>
-  indexedAt: string
+  indexedAt?: string
 }
