@@ -900,6 +900,7 @@ function removeThisPost () {
     user-select: text;
     white-space: unset;
     word-break: break-all;
+    word-break: break-word;
   }
 }
 
