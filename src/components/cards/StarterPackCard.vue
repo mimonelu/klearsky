@@ -6,12 +6,12 @@ import HtmlText from "@/components/labels/HtmlText.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
-const router = useRouter()
+// const router = useRouter()
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
-  starterPack: TIStarterPack
+  starterPack?: TIStarterPack
   menuDisplay: boolean
   detailDisplay: boolean
   creatorDisplay: boolean
@@ -23,7 +23,8 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  routerLinkToPage: ComputedRef<any>
+  routerLinkToParticularPage: ComputedRef<any>
+  routerLinkToListPage: ComputedRef<any>
   /*
   routerLinkToListFeeds: ComputedRef<any>
   routerLinkToListUsers: ComputedRef<any>
@@ -38,11 +39,19 @@ const state = reactive<{
   */
   detailDisplay: boolean
 }>({
-  routerLinkToPage: computed(() => {
+  routerLinkToParticularPage: computed(() => {
+    return {
+      path: "/home/starter-pack",
+      query: {
+        uri: props.starterPack?.uri,
+      },
+    }
+  }),
+  routerLinkToListPage: computed(() => {
     return {
       path: "/profile/starterPacks",
       query: {
-        account: props.starterPack.creator.did,
+        account: props.starterPack?.creator.did,
       },
     }
   }),
@@ -67,7 +76,7 @@ const state = reactive<{
   }),
   */
   indexedAt: computed((): string => {
-    return mainState.formatDate(props.starterPack.indexedAt)
+    return mainState.formatDate(props.starterPack?.indexedAt)
   }),
   /*
   purpose: computed((): string => {
@@ -177,10 +186,11 @@ async function deleteList () {
 
 <template>
   <component
+    v-if="starterPack != null"
     class="starter-pack-card"
     :is="unclickable ? 'div' : 'RouterLink'"
     v-bind="unclickable ? null : {
-      to: state.routerLinkToPage,
+      to: state.routerLinkToParticularPage,
     }"
     :data-unclickable="unclickable"
     @click.stop
@@ -215,7 +225,8 @@ async function deleteList () {
       <!-- リストアイテム数 -->
       <div class="starter-pack-card__list_item_count">
         <SVGIcon name="list" />
-        <span>{{ starterPack.listItemCount ?? '-' }}</span>
+        <!-- WANT: 後日再検証 -->
+        <span>{{ starterPack.listItemCount ?? starterPack.list?.listItemCount ?? '-' }}</span>
       </div>
 
       <!-- 使用数 -->
@@ -264,7 +275,7 @@ async function deleteList () {
     <div v-if="creatorDisplay && starterPack.creator.did">
       <RouterLink
         class="textlink starter-pack-card__creator"
-        :to="state.routerLinkToPage"
+        :to="state.routerLinkToListPage"
         @click.prevent="$emit('onActivateMention')"
       >
         <span class="starter-pack-card__creator__prefix">{{ $t("by") }}</span>

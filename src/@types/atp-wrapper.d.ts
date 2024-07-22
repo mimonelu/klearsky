@@ -80,6 +80,7 @@ interface TIAtpWrapper {
   fetchRepo (this: TIAtpWrapper, repo: string): Promise<Error | {}>
   fetchRepostUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchServerInfo (this: TIAtpWrapper): Promise<Error | TTServerInfo>
+  fetchStarterPack (this: TIAtpWrapper, uri: string): Promise<Error | TIStarterPack>
   fetchSuggestedFollows (this: TIAtpWrapper, users: Array<TTUser> | Array<TTUser>, actor: string): Promise<Error | undefined>
   fetchSuggestions (this: TIAtpWrapper, dataRef: Array<TTUser>, limit?: number, cursor?: string): Promise<undefined | string>
   fetchTaggedSuggestions (this: TIAtpWrapper): Promise<Error | TITaggedSuggestion[]>

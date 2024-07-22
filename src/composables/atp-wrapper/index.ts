@@ -73,6 +73,7 @@ import fetchRecords from "@/composables/atp-wrapper/fetch/fetch-records"
 import fetchRepo from "@/composables/atp-wrapper/fetch/fetch-repo"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch/fetch-repost-users"
 import fetchServerInfo from "@/composables/atp-wrapper/fetch/fetch-server-info"
+import fetchStarterPack from "@/composables/atp-wrapper/fetch/fetch-starter-pack"
 import fetchSuggestedFollows from "@/composables/atp-wrapper/fetch/fetch-suggested-follows"
 import fetchSuggestions from "@/composables/atp-wrapper/fetch/fetch-suggestions"
 import fetchTaggedSuggestions from "@/composables/atp-wrapper/fetch/fetch-tagged-suggestions"
@@ -222,6 +223,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchRepo = fetchRepo
   fetchRepostUsers = fetchRepostUsers
   fetchServerInfo = fetchServerInfo
+  fetchStarterPack = fetchStarterPack
   fetchSuggestedFollows = fetchSuggestedFollows
   fetchSuggestions = fetchSuggestions
   fetchTaggedSuggestions = fetchTaggedSuggestions

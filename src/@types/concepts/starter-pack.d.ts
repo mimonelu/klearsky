@@ -13,9 +13,14 @@ interface TIStarterPack {
     name: string
   }
   creator: TTUser
-  listItemCount?: number
+  indexedAt?: string
   joinedWeekCount?: number
   joinedAllTimeCount?: number
   labels?: Array<TTLabel>
-  indexedAt?: string
+  list?: TTList
+  listItemCount?: number
+  listItemsSample?: Array<{
+    subject: TTUser
+    uri: string
+  }>
 }
