@@ -542,7 +542,7 @@ async function processPage (pageName?: null | string) {
         if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
           state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
         }
-        if (!state.isMyProfile() && (!state.inSameProfilePage || state.currentAuthorStarterPacks.length === 0)) {
+        if (!state.inSameProfilePage || state.currentAuthorStarterPacks.length === 0) {
           await state.fetchAuthorStarterPacks("new")
         }
         break
@@ -572,21 +572,6 @@ async function processPage (pageName?: null | string) {
         }
         if (!state.inSameProfilePage || state.currentFollowers.length === 0) {
           await state.fetchFollowers("new")
-        }
-        break
-      }
-      case "profile-starter-packs": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
-        }
-        if (!state.inSameProfilePage || state.currentAuthorFeedGenerators.length === 0) {
-          // TODO:
-          // await state.fetchCurrentAuthorFeedGenerators("new")
         }
         break
       }
