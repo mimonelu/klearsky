@@ -20,8 +20,10 @@ interface TIStarterPack {
   labels?: Array<TTLabel>
   list?: TTList
   listItemCount?: number
-  listItemsSample?: Array<{
-    subject: TTUser
-    uri: string
-  }>
+  listItemsSample?: Array<TIListItemsSample>
+}
+
+interface TIListItemsSample {
+  subject: TTUser
+  uri: string
 }

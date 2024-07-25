@@ -1,16 +1,18 @@
 <script lang="ts" setup>
-import { inject, reactive, watch, type Ref } from "vue"
+import { computed, inject, reactive, watch, type ComputedRef, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import Feed from "@/components/compositions/Feed.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
+import UserSlider from "@/components/compositions/UserSlider.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
   starterPack: Ref<undefined | TIStarterPack>
+  users: ComputedRef<undefined | Array<TTUser>>
 }>({
   starterPack: computedAsync(async () => {
     const uri = mainState.currentQuery.uri
@@ -43,6 +45,14 @@ const state = reactive<{
     }
 
     return mainState.currentStarterPack
+  }),
+  users: computed((): undefined | Array<TTUser> => {
+    if (state.starterPack == null) {
+      return
+    }
+    return state.starterPack.listItemsSample?.map((listItem) => {
+      return listItem.subject
+    })
   }),
 })
 
@@ -96,16 +106,29 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :unclickable="false"
     />
 
-    <!-- スターターパックフィードジェネレーター -->
-    <FeedCard
-      v-for="generator of state.starterPack?.feeds"
-      :generator="generator"
-      :menuDisplay="true"
-      :detailDisplay="false"
-      :orderButtonDisplay="false"
-      :creatorDisplay="true"
-      :unclickable="false"
-    />
+    <div class="strike-header">
+      <span>{{ $t("feeds") }}</span>
+    </div>
+
+    <!-- スターターパックフィードカード -->
+    <div class="starter-pack-view__feed-card-container">
+      <FeedCard
+        v-for="generator of state.starterPack?.feeds"
+        :generator="generator"
+        :menuDisplay="true"
+        :detailDisplay="false"
+        :orderButtonDisplay="false"
+        :creatorDisplay="true"
+        :unclickable="false"
+      />
+    </div>
+
+    <div class="strike-header">
+      <span>{{ $t("users") }}</span>
+    </div>
+
+    <!-- スターターパックリストユーザースライダー -->
+    <UserSlider :users="state.users" />
 
     <!-- スターターパックリストフィード -->
     <LoadButton
@@ -113,7 +136,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :processing="mainState.listLoaderDisplay"
       @activate="fetchFeeds('new')"
     />
-    <div class="feeds">
+    <div class="starter-pack-view__feed-container">
       <template
         v-for="feed of mainState.currentStarterPackListFeeds"
         :key="feed.__id"
@@ -148,15 +171,43 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-direction: column;
   flex-grow: 1;
 
-  .feeds {
+  .strike-header {
+    margin: 0 1rem;
+  }
+
+  .user-slider {
+    margin: 1rem 1rem 0;
+  }
+
+  &__feed-container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
   }
+}
 
-  .feed {
-    display: flex;
-    flex-direction: column;
+.strike-header {
+  display: flex;
+  grid-gap: 1rem;
+  justify-content: center;
+  position: relative;
+
+  & > span {
+    color: var(--fg-color-05);
+    font-weight: bold;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    background-color: var(--fg-color-025);
+    display: block;
+    position: relative;
+    top: 50%;
+    width: 100%;
+    height: 1px;
   }
 }
 </style>
