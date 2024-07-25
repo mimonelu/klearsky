@@ -207,6 +207,12 @@ type MainState = {
   // マイリスト
   myLists: TTMyLists
 
+  // スターターパック
+  currentStarterPack?: TIStarterPack
+  currentStarterPackListFeeds: Array<TTFeed>
+  currentStarterPackListFeedsCursor?: string
+  fetchCurrentStarterPackListFeeds: (direction: TTDirection, middleCursor?: string) => Promise<boolean>
+
   // グローバルフィード
   globallinePosts: Array<TTPost>
   globallineProfiles: { [did: string]: any }

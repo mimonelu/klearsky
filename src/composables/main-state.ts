@@ -233,6 +233,12 @@ state.fetchCurrentListFeeds = fetchCurrentListFeeds
 // マイリスト
 state.myLists = new MyLists(state)
 
+// スターターパック
+state.currentStarterPack = undefined
+state.currentStarterPackListFeeds = []
+state.currentStarterPackListFeedsCursor = undefined
+state.fetchCurrentStarterPackListFeeds = fetchCurrentStarterPackListFeeds
+
 // グローバルフィード
 state.globallinePosts = []
 state.globallineProfiles = {}
@@ -1579,6 +1585,39 @@ async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: str
   }
   if (cursor != null) {
     state.currentListFeedsCursor = cursor
+  }
+  return true
+}
+
+// スターターパック
+
+async function fetchCurrentStarterPackListFeeds (
+  direction: TTDirection,
+  middleCursor?: string
+): Promise<boolean> {
+  if (state.currentStarterPack?.list == null) {
+    return false
+  }
+  const cursor: undefined | string | Error =
+    await state.atp.fetchListFeeds(
+      state.currentStarterPackListFeeds,
+      state.currentStarterPack.list.uri,
+      state.currentSetting.replyFolding,
+      state.currentSetting.repostFolding,
+      CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
+      direction === "old" ? state.currentStarterPackListFeedsCursor : middleCursor,
+      direction,
+      (listUri: any): boolean => listUri === state.currentStarterPack?.list?.uri,
+    )
+  if (cursor instanceof Error) {
+    state.openErrorPopup(
+      "errorApiFailed",
+      "main-state/fetchCurrentStarterPackListFeeds"
+    )
+    return false
+  }
+  if (cursor != null) {
+    state.currentStarterPackListFeedsCursor = cursor
   }
   return true
 }
