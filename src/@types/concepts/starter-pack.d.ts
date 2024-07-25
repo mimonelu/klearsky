@@ -13,6 +13,7 @@ interface TIStarterPack {
     name: string
   }
   creator: TTUser
+  feeds?: Array<TTFeedGenerator>
   indexedAt?: string
   joinedWeekCount?: number
   joinedAllTimeCount?: number

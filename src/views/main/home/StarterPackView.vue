@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
+import FeedCard from "@/components/cards/FeedCard.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 
 const mainState = inject("state") as MainState
@@ -46,6 +47,15 @@ const state = reactive<{
       :starterPack="state.starterPack"
       :menuDisplay="true"
       :detailDisplay="true"
+      :creatorDisplay="true"
+      :unclickable="false"
+    />
+    <FeedCard
+      v-for="generator of state.starterPack?.feeds"
+      :generator="generator"
+      :menuDisplay="true"
+      :detailDisplay="false"
+      :orderButtonDisplay="false"
       :creatorDisplay="true"
       :unclickable="false"
     />
