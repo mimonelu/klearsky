@@ -39,7 +39,9 @@ const state = reactive<{
         mainState.currentStarterPackListFeedsCursor = undefined
       }
 
+      mainState.centerLoaderDisplay = true
       const starterPack: undefined | Error | TIStarterPack = await mainState.atp.fetchStarterPack(uri)
+      mainState.centerLoaderDisplay = false
       if (starterPack == null || starterPack instanceof Error) {
         mainState.openErrorPopup("errorApiFailed", "StarterPackView/fetchStarterPack")
         return
@@ -111,62 +113,68 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :unclickable="false"
     />
 
-    <div class="strike-header">
-      <span>{{ $t("feeds") }}</span>
-    </div>
+    <template v-if="!mainState.centerLoaderDisplay">
+      <template v-if="(state.starterPack?.feeds?.length ?? 0) > 0">
+        <div class="strike-header">
+          <span>{{ $t("feeds") }}</span>
+        </div>
 
-    <!-- スターターパックフィードカード -->
-    <div class="starter-pack-view__feed-card-container">
-      <FeedCard
-        v-for="generator of state.starterPack?.feeds"
-        :generator="generator"
-        :menuDisplay="true"
-        :detailDisplay="false"
-        :orderButtonDisplay="false"
-        :creatorDisplay="true"
-        :unclickable="false"
-      />
-    </div>
-
-    <div class="strike-header">
-      <span>{{ $t("users") }}</span>
-    </div>
-
-    <!-- スターターパックリストユーザースライダー -->
-    <UserSlider :users="state.users" />
-
-    <!-- スターターパックリストフィード -->
-    <LoadButton
-      direction="new"
-      :processing="mainState.listLoaderDisplay"
-      @activate="fetchFeeds('new')"
-    />
-    <div class="starter-pack-view__feed-container">
-      <template
-        v-for="feed of mainState.currentStarterPackListFeeds"
-        :key="feed.__id"
-      >
-        <Feed
-          :feed="feed"
-          :data-is-middle="feed.__cursor != null"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
-        />
-
-        <!-- 抜け漏れ取得ボタン -->
-        <LoadButton
-          v-if="feed.__cursor != null"
-          direction="middle"
-          :processing="mainState.listLoaderDisplay"
-          @activate="fetchFeeds('middle', feed.__cursor)"
-        />
+        <!-- スターターパックフィードカード -->
+        <div class="starter-pack-view__feed-card-container">
+          <FeedCard
+            v-for="generator of state.starterPack?.feeds"
+            :generator="generator"
+            :menuDisplay="true"
+            :detailDisplay="false"
+            :orderButtonDisplay="false"
+            :creatorDisplay="true"
+            :unclickable="false"
+          />
+        </div>
       </template>
-    </div>
-    <LoadButton
-      direction="old"
-      :processing="mainState.listLoaderDisplay"
-      @activate="fetchFeeds('old')"
-    />
+
+      <template v-if="(state.users?.length ?? 0) > 0">
+        <div class="strike-header">
+          <span>{{ $t("users") }}</span>
+        </div>
+
+        <!-- スターターパックリストユーザースライダー -->
+        <UserSlider :users="state.users" />
+      </template>
+
+      <!-- スターターパックリストフィード -->
+      <LoadButton
+        direction="new"
+        :processing="mainState.listLoaderDisplay"
+        @activate="fetchFeeds('new')"
+      />
+      <div class="starter-pack-view__feed-container">
+        <template
+          v-for="feed of mainState.currentStarterPackListFeeds"
+          :key="feed.__id"
+        >
+          <Feed
+            :feed="feed"
+            :data-is-middle="feed.__cursor != null"
+            @updateThisPostThread="updateThisPostThread"
+            @removeThisPost="removeThisPost"
+          />
+
+          <!-- 抜け漏れ取得ボタン -->
+          <LoadButton
+            v-if="feed.__cursor != null"
+            direction="middle"
+            :processing="mainState.listLoaderDisplay"
+            @activate="fetchFeeds('middle', feed.__cursor)"
+          />
+        </template>
+      </div>
+      <LoadButton
+        direction="old"
+        :processing="mainState.listLoaderDisplay"
+        @activate="fetchFeeds('old')"
+      />
+    </template>
   </div>
 </template>
 
