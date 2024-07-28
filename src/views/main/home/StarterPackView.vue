@@ -33,7 +33,12 @@ const state = reactive<{
     */
 
     // 上記になければ取得（ページ更新時は取得確定）
-    if (mainState.currentStarterPack == null) {
+    if (mainState.currentStarterPack?.uri !== uri) {
+      if (mainState.currentStarterPack?.uri !== mainState.currentQuery.uri) {
+        mainState.currentStarterPackListFeeds.splice(0)
+        mainState.currentStarterPackListFeedsCursor = undefined
+      }
+
       const starterPack: undefined | Error | TIStarterPack = await mainState.atp.fetchStarterPack(uri)
       if (starterPack == null || starterPack instanceof Error) {
         mainState.openErrorPopup("errorApiFailed", "StarterPackView/fetchStarterPack")
