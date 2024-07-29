@@ -255,13 +255,11 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         >
           <SVGIcon :name="state.detailDisplay ? 'cursorDown' : 'cursorUp'" />
           <span class="list-card__name__label">{{ list.name }}</span>
-
-          <!-- リストユーザー数 -->
-          <span class="list-card__name__number">({{ list.listItemCount }})</span>
         </button>
       </div>
 
       <!-- リスト種別 -->
+      <!-- リストユーザー数 -->
       <div
         class="list-card__purpose"
         :data-purpose="state.purpose"
@@ -273,6 +271,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
             : state.purpose === 'referencelist'
               ? 'cards'
               : 'help'" />
+        <span>{{ list.listItemCount }}</span>
         <span>{{ $t(state.purpose) }}</span>
       </div>
 
@@ -420,7 +419,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     grid-template-areas:
       "v v v v v v"
       "a n n p b m"
-      "a t i i i m";
+      "a t i i i i";
     align-items: flex-start;
   }
 
@@ -495,18 +494,13 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       line-height: var(--line-height-high);
       word-break: break-word;
     }
-
-    // リストユーザー数
-    &__number {
-      color: var(--fg-color-05);
-    }
   }
 
   // リスト種別
   &__purpose {
     grid-area: t;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto 1fr;
     align-items: center;
     grid-gap: 0.375em;
     line-height: var(--line-height-high);
@@ -535,10 +529,12 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     & > span {
       color: var(--color);
       font-size: 0.875em;
-      font-weight: bold;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      &:nth-child(2) {
+        font-weight: bold;
+      }
     }
   }
 
