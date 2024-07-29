@@ -76,7 +76,6 @@ import fetchServerInfo from "@/composables/atp-wrapper/fetch/fetch-server-info"
 import fetchStarterPack from "@/composables/atp-wrapper/fetch/fetch-starter-pack"
 import fetchSuggestedFollows from "@/composables/atp-wrapper/fetch/fetch-suggested-follows"
 import fetchSuggestions from "@/composables/atp-wrapper/fetch/fetch-suggestions"
-import fetchTaggedSuggestions from "@/composables/atp-wrapper/fetch/fetch-tagged-suggestions"
 import fetchTimeFeeds from "@/composables/atp-wrapper/fetch/fetch-time-feeds"
 import fetchTimeline from "@/composables/atp-wrapper/fetch/fetch-timeline"
 import fetchUserSearch from "@/composables/atp-wrapper/fetch/fetch-user-search"
@@ -226,7 +225,6 @@ class AtpWrapper implements TIAtpWrapper {
   fetchStarterPack = fetchStarterPack
   fetchSuggestedFollows = fetchSuggestedFollows
   fetchSuggestions = fetchSuggestions
-  fetchTaggedSuggestions = fetchTaggedSuggestions
   fetchTimeFeeds = fetchTimeFeeds
   fetchTimeline = fetchTimeline
   fetchUserSearch = fetchUserSearch

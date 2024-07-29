@@ -197,10 +197,6 @@ state.currentSearchLastUserTerm = undefined
 // 検索 - トレンドタグ
 state.currentTrendTags = []
 
-// 検索 - タグ付けされた提案
-state.currentTaggedSuggestions = []
-state.currentTaggedProfiles = {}
-
 // カスタムフィード
 state.currentCustomFeedsUri = undefined
 state.currentCustomFeeds = []

@@ -65,15 +65,6 @@ const state = reactive<{
         >
           <SVGIcon name="hash" />
         </RouterLink>
-
-        <!-- タグ付けされた提案ページ -->
-        <RouterLink
-          class="tab__button"
-          to="/search/tagged-suggestions"
-          :title="$t('taggedSuggestions')"
-        >
-          <SVGIcon name="fire" />
-        </RouterLink>
       </div>
       <div class="search-view__form">
         <PortalTarget name="search-view-header" />
