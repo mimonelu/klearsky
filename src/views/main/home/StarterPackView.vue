@@ -16,7 +16,7 @@ const state = reactive<{
 }>({
   starterPack: computedAsync(async () => {
     const uri = mainState.currentQuery.uri
-    if (uri == null) {
+    if (uri == null || !Util.isStarterPackAtUri(uri)) {
       return
     }
 

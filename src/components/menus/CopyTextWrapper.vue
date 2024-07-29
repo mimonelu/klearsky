@@ -121,7 +121,7 @@ function close () {
 
         <!-- 表示名をコピーする -->
         <MenuTickerCopyText
-          v-if="displayName != null"
+          v-if="displayName"
           label="copyDisplayName"
           :text="displayName"
           @close="emit('close')"
@@ -129,7 +129,7 @@ function close () {
 
         <!-- ハンドルをコピーする -->
         <MenuTickerCopyText
-          v-if="handle != null"
+          v-if="handle"
           label="copyHandle"
           :text="handle"
           @close="emit('close')"
@@ -137,7 +137,7 @@ function close () {
 
         <!-- テキストをコピーする -->
         <MenuTickerCopyText
-          v-if="text != null"
+          v-if="text"
           label="copyPostText"
           :text="text"
           @close="emit('close')"

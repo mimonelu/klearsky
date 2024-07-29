@@ -9,7 +9,7 @@ export default async function (
   // リンクカード
   let manualQuoteRepost: undefined | TTPost = undefined
   let external: null | any = null
-  let feedOrLinkCard: undefined | any
+  let feedOrLinkOrStarterPackCard: undefined | any
   if (params.url != null && params.url.length > 0) {
     // AT URI指定引用リポスト
     const postUri = Util.isPostAtUri(params.url) ? params.url : null
@@ -29,7 +29,7 @@ export default async function (
         if (generator instanceof Error) {
           return Error("noGeneratorError")
         }
-        feedOrLinkCard = {
+        feedOrLinkOrStarterPackCard = {
           $type: "app.bsky.embed.record",
           record: {
             cid: generator.cid,
@@ -47,7 +47,7 @@ export default async function (
           if (list instanceof Error) {
             return Error("noListError")
           }
-          feedOrLinkCard = {
+          feedOrLinkOrStarterPackCard = {
             $type: "app.bsky.embed.record",
             record: {
               cid: list.cid,
@@ -55,18 +55,37 @@ export default async function (
             },
           }
 
-        // リンクカード - リンクカード 
+        // リンクカード - スターターパックカード
         } else {
-          external = await Util.parseOgp(
-            atp,
-            params.url,
-            params.urlHasImage?.includes(true) ?? false
-          )
-          if (external == null) {
-            return Error("parseOgpError")
-          }
-          if (external instanceof Error) {
-            return external
+          const starterPackUri = Util.isStarterPackAtUri(params.url)
+            ? params.url
+            : convertStarterPackUriToAtUri(params.url)
+          if (starterPackUri != null) {
+            const starterPack: Error | TIStarterPack = await atp.fetchStarterPack(starterPackUri)
+            if (starterPack instanceof Error) {
+              return Error("noStarterPackError")
+            }
+            feedOrLinkOrStarterPackCard = {
+              $type: "app.bsky.embed.record",
+              record: {
+                cid: starterPack.cid,
+                uri: starterPack.uri,
+              },
+            }
+
+          // リンクカード - リンクカード
+          } else {
+            external = await Util.parseOgp(
+              atp,
+              params.url,
+              params.urlHasImage?.includes(true) ?? false
+            )
+            if (external == null) {
+              return Error("parseOgpError")
+            }
+            if (external instanceof Error) {
+              return external
+            }
           }
         }
       }
@@ -154,8 +173,8 @@ export default async function (
       parent.embed.media = { $type: "app.bsky.embed.images", images }
     else if (external != null)
       parent.embed.media = { $type: "app.bsky.embed.external", external }
-    else if (feedOrLinkCard != null)
-      parent.embed.media = feedOrLinkCard
+    else if (feedOrLinkOrStarterPackCard != null)
+      parent.embed.media = feedOrLinkOrStarterPackCard
   }
 
   // 画像またはリンクカード
@@ -164,8 +183,8 @@ export default async function (
       parent.embed = { $type: "app.bsky.embed.images", images }
     else if (external != null)
       parent.embed = { $type: "app.bsky.embed.external", external }
-    else if (feedOrLinkCard != null)
-      parent.embed = feedOrLinkCard
+    else if (feedOrLinkOrStarterPackCard != null)
+      parent.embed = feedOrLinkOrStarterPackCard
   }
 }
 
@@ -183,4 +202,12 @@ function convertListUriToAtUri (uri: string): null | string {
   const did = matches[1]
   const rkey = matches[2]
   return `at://${did}/app.bsky.graph.list/${rkey}`
+}
+
+function convertStarterPackUriToAtUri (uri: string): null | string {
+  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/starter-pack\/(did:\w+:[\w\.\-]+)\/([\w\.\-]+)$/)
+  if (matches?.[1] == null || matches?.[2] == null) return null
+  const did = matches[1]
+  const rkey = matches[2]
+  return `at://${did}/app.bsky.graph.starterpack/${rkey}`
 }

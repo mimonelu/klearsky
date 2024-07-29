@@ -161,20 +161,28 @@ const state = reactive<{
   hasStarterPackCard: computed((): boolean => props.post.embed?.record?.$type === "app.bsky.graph.starterpack"),
   pseudoStarterPack: computed((): undefined | TIStarterPack => {
     if (!state.hasStarterPackCard ||
-        props.post.embed?.record == null
+        props.post.embed?.record == null ||
+        props.post.record.embed?.record == null
     ) {
       return
     }
+    const uri = props.post.record.embed.record.uri ?? ""
+    const did = (uri.match(/at:\/\/([^\/]+)/) ?? ["", ""])[1]
     return {
-      uri: props.post.uri,
-      cid: props.post.cid,
+      uri,
+      cid: props.post.record.embed.record.cid ?? "",
       record: props.post.embed.record as any,
-      creator: props.post.author,
+      creator: {
+        did,
+        displayName: "",
+        handle: "",
+        viewer: { muted: false },
+      },
       listItemCount: undefined,
       joinedWeekCount: undefined,
       joinedAllTimeCount: undefined,
       labels: undefined,
-      indexedAt: undefined,
+      indexedAt: props.post.embed.record.createdAt as string,
     }
   }),
 

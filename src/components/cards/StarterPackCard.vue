@@ -270,7 +270,11 @@ async function deleteStarterPack () {
     </div>
 
     <!-- 作成者リンク -->
-    <div v-if="creatorDisplay && starterPack.creator.did">
+    <div v-if="
+      creatorDisplay &&
+      starterPack.creator.did &&
+      starterPack.creator.handle
+    ">
       <RouterLink
         class="textlink starter-pack-card__creator"
         :to="state.routerLinkToListPage"
