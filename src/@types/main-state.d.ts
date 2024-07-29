@@ -273,6 +273,16 @@ type MainState = {
   openListCardPopover: Function
   closeListCardPopover: Function
 
+  // ポップオーバー - スターターパックカードポップオーバー
+  starterPackCardPopoverProps: {
+    display: boolean
+    starterPack?: TIStarterPack
+  }
+  starterPackCardPopoverSelector?: string | HTMLElement
+  starterPackCardPopoverCallback?: (type: "startAwait" | "endAwait" | "deleteStarterPack") => Promise<void>
+  openStarterPackCardPopover: Function
+  closeStarterPackCardPopover: Function
+
   // ポップオーバー - マイフィードソートポップオーバー
   myFeedsSortPopoverProps: {
     display: boolean

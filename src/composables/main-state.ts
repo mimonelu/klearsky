@@ -299,6 +299,16 @@ state.listCardPopoverCallback = undefined
 state.openListCardPopover = openListCardPopover
 state.closeListCardPopover = closeListCardPopover
 
+// ポップオーバー - スターターパックカードポップオーバー
+state.starterPackCardPopoverProps = {
+  display: false,
+  starterPack: undefined,
+}
+state.starterPackCardPopoverSelector = undefined
+state.starterPackCardPopoverCallback = undefined
+state.openStarterPackCardPopover = openStarterPackCardPopover
+state.closeStarterPackCardPopover = closeStarterPackCardPopover
+
 // ポップオーバー - マイフィードソートポップオーバー
 state.myFeedsSortPopoverProps = {
   display: false,
@@ -1685,6 +1695,17 @@ function openListCardPopover (selector: string | HTMLElement) {
 
 function closeListCardPopover () {
   state.listCardPopoverProps.display = false
+}
+
+// ポップオーバー - スターターパックカードポップオーバー
+
+function openStarterPackCardPopover (selector: string | HTMLElement) {
+  state.starterPackCardPopoverSelector = selector
+  state.starterPackCardPopoverProps.display = true
+}
+
+function closeStarterPackCardPopover () {
+  state.starterPackCardPopoverProps.display = false
 }
 
 // ポップオーバー - マイフィードソートポップオーバー

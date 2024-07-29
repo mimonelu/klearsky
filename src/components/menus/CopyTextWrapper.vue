@@ -8,7 +8,7 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  place?: "feed" | "list" | "post" | "profile"
+  place?: "feed" | "list" | "post" | "profile" | "starterPack"
   uri?: string
   did?: string
   displayName?: string
@@ -38,6 +38,10 @@ const state = reactive<{
       }
       case "profile": {
         return `https://bsky.app/profile/${props.handle}`
+      }
+      case "starterPack": {
+        const rkey = Util.getRkey(props.uri)
+        return `https://bsky.app/starter-pack/${props.did}/${rkey}`
       }
     }
   }),

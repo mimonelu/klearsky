@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import { useRouter } from "vue-router"
+// import { useRouter } from "vue-router"
 import HtmlText from "@/components/labels/HtmlText.vue"
-// import Loader from "@/components/shells/Loader.vue"
+import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -38,6 +38,7 @@ const state = reactive<{
   loaderDisplay: boolean
   */
   detailDisplay: boolean
+  loaderDisplay: boolean
 }>({
   routerLinkToParticularPage: computed(() => {
     return {
@@ -94,6 +95,7 @@ const state = reactive<{
   loaderDisplay: false,
   */
   detailDisplay: props.detailDisplay,
+  loaderDisplay: false,
 })
 
 function toggleDetailDisplay () {
@@ -112,15 +114,12 @@ function openListEditPopup () {
 
 function openPopover ($event: Event) {
   Util.blurElement()
-  /*
-  mainState.starterPackCardPopoverProps.list = props.list
+  mainState.starterPackCardPopoverProps.starterPack = props.starterPack
   mainState.starterPackCardPopoverCallback = starterPackCardPopoverCallback
   mainState.openStarterPackCardPopover($event.target)
-  */
 }
 
-/*
-async function listCardPopoverCallback (type: "startAwait" | "endAwait" | "deleteList") {
+async function starterPackCardPopoverCallback (type: "startAwait" | "endAwait" | "deleteStarterPack") {
   switch (type) {
     case "startAwait": {
       state.loaderDisplay = true
@@ -130,13 +129,12 @@ async function listCardPopoverCallback (type: "startAwait" | "endAwait" | "delet
       state.loaderDisplay = false
       break
     }
-    case "deleteList": {
-      await deleteList()
+    case "deleteStarterPack": {
+      await deleteStarterPack()
       break
     }
   }
 }
-*/
 
 /*
 function updateList (list: TTList) {
@@ -150,8 +148,8 @@ function updateList (list: TTList) {
 }
 */
 
-/*
-async function deleteList () {
+async function deleteStarterPack () {
+  /*
   state.loaderDisplay = true
   const result = await mainState.atp.deleteList(props.list.uri)
   state.loaderDisplay = false
@@ -180,8 +178,8 @@ async function deleteList () {
       mainState.currentQuery.list === props.list.uri) {
     await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
   }
+  */
 }
-*/
 </script>
 
 <template>
@@ -282,6 +280,8 @@ async function deleteList () {
         <span class="starter-pack-card__creator__display-name">{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
       </RouterLink>
     </div>
+
+    <Loader v-if="state.loaderDisplay" />
   </component>
 </template>
 

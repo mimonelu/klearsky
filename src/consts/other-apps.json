@@ -2,7 +2,8 @@
   {
     "name": "officialApp",
     "generator": "https://bsky.app/profile/{uri}",
-    "list": "https://bsky.app/profile/{handle}/lists/{rkey}"
+    "list": "https://bsky.app/profile/{handle}/lists/{rkey}",
+    "starterPack": "https://bsky.app/starter-pack/{did}/{rkey}"
   },
   {
     "name": "officialAppPost",

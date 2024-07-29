@@ -8,7 +8,7 @@ import OTHER_APPS from "@/consts/other-apps.json"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  type: "generator" | "list" | "post" | "profile"
+  type: "generator" | "list" | "post" | "profile" | "starterPack"
   did?: string
   handle?: string
   uri?: string
@@ -87,6 +87,13 @@ function openOtherApp (app: any) {
         .replace("{did}", props.did)
         .replace("{mydid}", mainState.atp.data.did)
         .replace("{handle}", props.handle)
+      break
+    }
+    case "starterPack": {
+      const rkey = Util.getRkey(props.uri)
+      uri = app.starterPack
+        .replace("{did}", props.did)
+        .replace("{rkey}", rkey)
       break
     }
     default: break

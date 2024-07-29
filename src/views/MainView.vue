@@ -55,6 +55,7 @@ import SendPostPopup from "@/components/popups/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/popups/SendPostReportPopup.vue"
 import SettingsPopover from "@/components/popovers/SettingsPopover.vue"
 import SplashScreen from "@/components/shells/SplashScreen.vue"
+import StarterPackCardPopover from "@/components/popovers/StarterPackCardPopover.vue"
 import SubMenu from "@/components/shells/SubMenu.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import ThreadgatePopup from "@/components/popups/ThreadgatePopup.vue"
@@ -886,6 +887,13 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
       v-if="state.listCardPopoverProps.display"
       v-bind="state.listCardPopoverProps"
       @close="state.closeListCardPopover"
+    />
+
+    <!-- スターターパックカードポップオーバー -->
+    <StarterPackCardPopover
+      v-if="state.starterPackCardPopoverProps.display"
+      v-bind="state.starterPackCardPopoverProps"
+      @close="state.closeStarterPackCardPopover"
     />
 
     <!-- マイフィードソートポップオーバー -->
