@@ -256,34 +256,36 @@ async function deleteStarterPack () {
     </div>
 
     <!-- 説明文 -->
-    <div v-if="state.detailDisplay && starterPack.record?.description">
-      <HtmlText
-        v-if="starterPack.record?.description"
-        class="starter-pack-card__description"
-        dir="auto"
-        :text="starterPack.record?.description"
-        :facets="starterPack.record?.descriptionFacets"
-        :processHashTag="true"
-        @onActivateMention="$emit('onActivateMention')"
-        @onActivateHashTag="$emit('onActivateHashTag')"
-      />
-    </div>
+    <template v-if="state.detailDisplay">
+      <div v-if="starterPack.record?.description">
+        <HtmlText
+          v-if="starterPack.record?.description"
+          class="starter-pack-card__description"
+          dir="auto"
+          :text="starterPack.record?.description"
+          :facets="starterPack.record?.descriptionFacets"
+          :processHashTag="true"
+          @onActivateMention="$emit('onActivateMention')"
+          @onActivateHashTag="$emit('onActivateHashTag')"
+        />
+      </div>
 
-    <!-- 作成者リンク -->
-    <div v-if="
-      creatorDisplay &&
-      starterPack.creator.did &&
-      starterPack.creator.handle
-    ">
-      <RouterLink
-        class="textlink starter-pack-card__creator"
-        :to="state.routerLinkToListPage"
-        @click.prevent="$emit('onActivateMention')"
-      >
-        <span class="starter-pack-card__creator__prefix">{{ $t("by") }}</span>
-        <span class="starter-pack-card__creator__display-name">{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
-      </RouterLink>
-    </div>
+      <!-- 作成者リンク -->
+      <div v-if="
+        creatorDisplay &&
+        starterPack.creator.did &&
+        starterPack.creator.handle
+      ">
+        <RouterLink
+          class="textlink starter-pack-card__creator"
+          :to="state.routerLinkToListPage"
+          @click.prevent="$emit('onActivateMention')"
+        >
+          <span class="starter-pack-card__creator__prefix">{{ $t("by") }}</span>
+          <span class="starter-pack-card__creator__display-name">{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
+        </RouterLink>
+      </div>
+    </template>
 
     <Loader v-if="state.loaderDisplay" />
   </component>
