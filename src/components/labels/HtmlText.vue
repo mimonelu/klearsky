@@ -218,7 +218,7 @@ function validateUrl (urlObject: URL, text: string): boolean {
       <template v-if="segment.type === 'externalLink'">
         <a
           class="textlink external-link"
-          @click.stop="openWindowIfCan(segment)"
+          @click.prevent.stop="openWindowIfCan(segment)"
         >
           <span>{{ segment.text }}</span>
         </a>
