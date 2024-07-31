@@ -32,5 +32,6 @@ type TTNotificationGroup = {
   list?: TTList
   reason: TTNotificationReason
   reasonSubject?: string
+  starterPack?: TIStarterPack
   __folding: boolean
 }

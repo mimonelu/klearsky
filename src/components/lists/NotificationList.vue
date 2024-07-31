@@ -6,6 +6,7 @@ import DisplayName from "@/components/labels/DisplayName.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import Post from "@/components/compositions/Post.vue"
+import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
@@ -232,6 +233,19 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
           @onActivateMention="$emit('close')"
           @onActivateHashTag="$emit('close')"
         />
+
+        <!-- スターターパックカード -->
+        <StarterPackCard
+          v-if="notificationGroup.starterPack != null"
+          :starterPack="notificationGroup.starterPack"
+          :menuDisplay="true"
+          :detailDisplay="true"
+          :creatorDisplay="false"
+          :unclickable="false"
+          @click="$emit('close')"
+          @onActivateMention="$emit('close')"
+          @onActivateHashTag="$emit('close')"
+        />
       </template>
     </div>
   </div>
@@ -272,9 +286,10 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
     }
   }
 
-  // フィードカード・リストカード
+  // フィードカード・リストカード・スターターパックカード
   & > .feed-card,
-  & > .list-card {
+  & > .list-card,
+  & > .starter-pack-card {
     background-color: var(--accent-color-0125);
     border: 1px solid var(--accent-color-025);
     border-radius: var(--border-radius-middle);

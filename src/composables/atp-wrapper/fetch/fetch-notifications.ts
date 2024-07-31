@@ -90,6 +90,9 @@ export default async function (
 
       // リストの引用RPはスキップ
       if (isSubjectList(group.reasonSubject)) return
+
+      // スターターパックの引用RPはスキップ
+      if (isSubjectStarterPack(group.reasonSubject)) return
     }
 
     postUris.add(group.reasonSubject as string)
@@ -140,6 +143,30 @@ export default async function (
     })
   }
 
+  // スターターパックの取得
+  const starterPackUris: Set<string> = new Set()
+  newValues.forEach((group) => {
+    if (group.starterPack != null) {
+      return
+    }
+    if (group.reason === "quote" && isSubjectStarterPack(group.reasonSubject)) {
+      starterPackUris.add(group.reasonSubject as string)
+    }
+  })
+  if (starterPackUris.size > 0) {
+    const starterPacks = await this.fetchStarterPacks(Array.from(starterPackUris))
+    if (!(starterPacks instanceof Error)) {
+      newValues.forEach((value) => {
+        const starterPack = starterPacks.find((starterPack) => {
+          return value.reasonSubject === starterPack.uri
+        })
+        if (starterPack != null) {
+          value.starterPack = starterPack
+        }
+      })
+    }
+  }
+
   currentValues.splice(0, currentValues.length, ...newValues)
 
   // 新着通知があればフォールディングを展開する（いいねとリポスト以外）
@@ -182,4 +209,8 @@ function isSubjectFeedGenerator (reasonSubject?: string): boolean {
 
 function isSubjectList (reasonSubject?: string): boolean {
   return (reasonSubject?.indexOf("/app.bsky.graph.list/") ?? - 1) !== - 1
+}
+
+function isSubjectStarterPack (reasonSubject?: string): boolean {
+  return (reasonSubject?.indexOf("/app.bsky.graph.starterpack/") ?? - 1) !== - 1
 }
