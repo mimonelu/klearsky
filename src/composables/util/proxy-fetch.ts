@@ -14,20 +14,31 @@ export default function () {
       return prop === "__TEST__"
     },
     apply (target, _, argumentsList: [RequestInfo, RequestInit?]) {
-      const [url, options = {}] = argumentsList
+      const [url = "", options = {}] = argumentsList
+
+      // タイムアウトを取得
+      let timeout = CONSTS.TIMEOUT_DEFAULT
+      CONSTS.TIMEOUT_DETAILS.some((detail) => {
+        if ((url as string).endsWith(detail.url)) {
+          timeout = detail.timeout
+          return true
+        }
+        return false
+      })
+
       const controller = new AbortController()
       const signal = controller.signal
       options.signal = signal
-      const timeout = new Promise<Response>((_, reject) => {
+      const setTimeoutPromise = new Promise<Response>((_, reject) => {
         setTimeout(() => {
           const error = new Error("Request timed out")
           controller.abort(error)
           reject(error)
-        }, CONSTS.FETCH_TIMEOUT)
+        }, timeout)
       })
       return Promise.race([
         target(url, options),
-        timeout,
+        setTimeoutPromise,
       ])
     }
   })
