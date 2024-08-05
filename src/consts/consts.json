@@ -1,5 +1,11 @@
 {
-  "FETCH_TIMEOUT": 15000,
+  "TIMEOUT_DEFAULT": 15000,
+  "TIMEOUT_DETAILS": [
+    {
+      "url": "com.atproto.repo.uploadBlob",
+      "timeout": 150000
+    }
+  ],
   "INTERVAL_OF_UPDATE_JWT": 60000,
   "DEFAULT_NOTIFICATION_FETCH_INTERVAL": 15000,
   "LABELER_UPPER_LIMIT": 20,
