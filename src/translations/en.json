@@ -277,6 +277,8 @@
   "noStarterPacks": "There are no starter packs managed by this user.",
   "showStarterPackListFeeds": "Show list feeds",
   "showStarterPackListUsers": "Show list users",
+  "starterPackDelete": "Delete starter pack",
+  "starterPackDeleteMessage": "Remove this starter pack. Are you sure?\nThe list referenced by this starter pack will not be deleted.",
 
   "home": "Home",
   "followingsDescription": "Show posts of users you follow.",

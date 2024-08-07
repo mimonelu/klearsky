@@ -29,6 +29,7 @@ interface TIAtpWrapper {
   deleteRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, swapCommit?: string, swapRecord?: string): Promise<Error | undefined>
   deleteRepost (this: TIAtpWrapper, uri: string): Promise<boolean>
   deleteSession (this: TIAtpWrapper): Promise<boolean>
+  deleteStarterPack (this: TIAtpWrapper, uri: string): Promise<undefined | Error>
   deleteThreadgate (this: TIAtpWrapper, postUri: string): Promise<boolean | Error>
   fetchActorLists (this: TIAtpWrapper, currentLists: Array<TTList>, actor: string, limit?: number, cursor?: string): Promise<undefined | string | Error>
   fetchActorStarterPacks (this: TIAtpWrapper, currentStarterPacks: Array<TIStarterPack>, actor: string, limit?: number, cursor?: string): Promise<undefined | string | Error>

@@ -22,6 +22,7 @@ import deletePost from "@/composables/atp-wrapper/delete/delete-post"
 import deleteRecord from "@/composables/atp-wrapper/delete/delete-record"
 import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
 import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
+import deleteStarterPack from "@/composables/atp-wrapper/delete/delete-starter-pack"
 import deleteThreadgate from "@/composables/atp-wrapper/delete/delete-threadgate"
 import fetchActorLists from "@/composables/atp-wrapper/fetch/fetch-actor-lists"
 import fetchActorStarterPacks from "@/composables/atp-wrapper/fetch/fetch-actor-starter-packs"
@@ -172,6 +173,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteRecord = deleteRecord
   deleteRepost = deleteRepost
   deleteSession = deleteSession
+  deleteStarterPack = deleteStarterPack
   deleteThreadgate = deleteThreadgate
   fetchActorLists = fetchActorLists
   fetchActorStarterPacks = fetchActorStarterPacks

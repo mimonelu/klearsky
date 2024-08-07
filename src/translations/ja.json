@@ -277,6 +277,8 @@
   "noStarterPacks": "このユーザーの管理するスターターパックはありません。",
   "showStarterPackListFeeds": "リストフィードを見る",
   "showStarterPackListUsers": "リストユーザーを見る",
+  "starterPackDelete": "スターターパックを削除",
+  "starterPackDeleteMessage": "このスターターパックを削除します。よろしいですか？\nスターターパックが参照しているリストは削除されません。",
 
   "home": "ホーム",
   "followingsDescription": "あなたがフォローしているユーザーのポストを表示します。",

@@ -2,7 +2,6 @@
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
 import MenuTickerCopyTextWrapper from "@/components/menus/CopyTextWrapper.vue"
-import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
 import MenuTickerSendLinkCard from "@/components/menus/SendLinkCard.vue"
@@ -132,7 +131,7 @@ function close () {
         @close="emit('close')"
       />
 
-      <!-- スターターパックを削除する // TODO:
+      <!-- スターターパックを削除する -->
       <button
         v-if="state.isOwn"
         @click.prevent.stop="deleteStarterPack"
@@ -140,7 +139,6 @@ function close () {
         <SVGIcon name="remove" />
         <span>{{ $t("starterPackDelete") }}</span>
       </button>
-      -->
 
       <!-- コピーする -->
       <MenuTickerCopyTextWrapper

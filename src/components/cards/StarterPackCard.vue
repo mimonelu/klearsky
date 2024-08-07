@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-// import { useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
-// const router = useRouter()
+const router = useRouter()
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -149,36 +149,39 @@ function updateList (list: TTList) {
 */
 
 async function deleteStarterPack () {
-  /*
-  state.loaderDisplay = true
-  const result = await mainState.atp.deleteList(props.list.uri)
-  state.loaderDisplay = false
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "ListCard/deleteList")
+  if (props.starterPack == null) {
     return
   }
-  emit("deleteList", props.list)
 
-  // マイフィードから削除
-  if (mainState.myFeeds.removeItem(props.list.uri)) {
-    mainState.sortFeedPreferencesSavedAndPinned()
-    mainState.myFeeds.saveCustomItemSettings()
-    await updatePreferences()
+  // 削除APIをコール
+  state.loaderDisplay = true
+  const result = await mainState.atp.deleteStarterPack(props.starterPack.uri)
+  state.loaderDisplay = false
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "StarterPackCard/deleteStarterPack")
+    return
+  }
+  emit("deleteStarterPack", props.starterPack)
+
+  // 現在のスターターパック一覧から削除
+  const index = mainState.currentAuthorStarterPacks
+    .findIndex((starterPack) => {
+      return starterPack.uri === props.starterPack?.uri
+    })
+  if (index !== - 1) {
+    mainState.currentAuthorStarterPacks.splice(index, 1)
   }
 
-  // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
-
-  // 削除したマイリストのリストフィード／ユーザーページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
-  if (props.list.creator.did === mainState.atp.session?.did &&
-      (
-        mainState.currentPath === "/home/list-feeds" ||
-        mainState.currentPath === "/home/list-users"
-      ) &&
-      mainState.currentQuery.list === props.list.uri) {
-    await router.push({ name: 'profile-list', query: { account: props.list.creator.did } })
+  // 削除したスターターパックページにいる場合、スターターパック一覧ページへ強制遷移
+  if (props.starterPack.creator.did === mainState.atp.session?.did &&
+      mainState.currentPath === "/home/starter-pack" &&
+      mainState.currentQuery.uri === props.starterPack.uri
+  ) {
+    await router.push({
+      name: 'profile-starter-packs',
+      query: { account: props.starterPack.creator.did },
+    })
   }
-  */
 }
 </script>
 
