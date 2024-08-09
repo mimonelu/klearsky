@@ -162,7 +162,7 @@ const state = reactive<{
   pseudoStarterPack: computed((): undefined | TIStarterPack => {
     if (!state.hasStarterPackCard ||
         props.post.embed?.record == null ||
-        props.post.record.embed?.record == null
+        props.post.record?.embed?.record == null
     ) {
       return
     }
