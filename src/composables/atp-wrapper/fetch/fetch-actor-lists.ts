@@ -1,5 +1,3 @@
-import type { AppBskyGraphGetLists, BskyAgent } from "@atproto/api"
-
 export default async function (
   this: TIAtpWrapper,
   currentLists: Array<TTList>,
@@ -7,23 +5,38 @@ export default async function (
   limit?: number,
   cursor?: string
 ): Promise<undefined | string | Error> {
-  if (this.agent == null) return Error("noAgentError")
-  const query: AppBskyGraphGetLists.QueryParams = { actor }
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
 
-  const response: AppBskyGraphGetLists.Response =
-    await (this.agent as BskyAgent).app.bsky.graph.getLists(query)
-      .then((value: AppBskyGraphGetLists.Response) => value)
-      .catch((error: any) => error)
-  console.log("[klearsky/getLists]", response)
-  if (!response.success) return Error("apiError")
+  // `app.bsky.graph.getLists` はリファレンスリストを返さないため、
+  // まずは `fetchRecords` でレコードを取得
+  const response = await this.fetchRecords(
+    actor,
+    "app.bsky.graph.list",
+    limit,
+    cursor
+  )
+  if (response instanceof Error) {
+    return Error("apiError")
+  }
 
-  const newLists: Array<TTList> = (response.data.lists as Array<TTList>)
-    .filter((list: TTList) => !currentLists
-      .some((current: TTList) => list.uri === current.uri))
-  if (cursor == null) currentLists.unshift(...newLists)
-  else currentLists.push(...newLists)
+  // 次にリストを取得
+  const uris = response.records.map((record) => record.uri)
+  const lists = await this.fetchLists(uris)
 
-  return newLists.length < (limit ?? 1) ? undefined : response.data.cursor
+  const newLists: Array<TTList> = lists
+    .filter((list) => {
+      return !currentLists.some((current: TTList) => {
+        return list.uri === current.uri
+      })
+    })
+  if (cursor == null) {
+    currentLists.unshift(...newLists)
+  } else {
+    currentLists.push(...newLists)
+  }
+  return newLists.length < (limit ?? 1)
+    ? undefined
+    : response.cursor
 }
