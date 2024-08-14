@@ -1639,7 +1639,7 @@ function toggleOldestQuotedPostDisplay () {
 
   // デカ絵文字
   &[data-is-text-only-emoji="true"] {
-    font-size: 3em;
+    font-size: 2.5em;
     line-height: 1;
   }
 }
