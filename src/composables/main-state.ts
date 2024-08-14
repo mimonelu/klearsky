@@ -591,6 +591,15 @@ state.listUserManagementPopupProps = {
 state.openListUserManagementPopup = openListUserManagementPopup
 state.closeListUserManagementPopup = closeListUserManagementPopup
 
+// ポップアップ - スターターパック編集ポップアップ
+state.starterPackEditPopupProps = {
+  display: false,
+  mode: undefined,
+  starterPack: undefined,
+}
+state.openStarterPackEditPopup = openStarterPackEditPopup
+state.closeStarterPackEditPopup = closeStarterPackEditPopup
+
 // ポップアップ - タイムフィードポップアップ
 state.currentTimeFeeds = []
 state.timeFeedsPopupDisplay = false
@@ -2140,6 +2149,17 @@ function openListUserManagementPopup (props: TTListUserManagementPopupProps) {
 
 function closeListUserManagementPopup () {
   state.listUserManagementPopupProps.display = false
+}
+
+// ポップアップ - スターターパック編集ポップアップ
+function openStarterPackEditPopup (props: TIStarterPackEditPopupProps) {
+  state.starterPackEditPopupProps.mode = props.mode
+  state.starterPackEditPopupProps.starterPack = props.starterPack
+  state.starterPackEditPopupProps.display = true
+}
+
+function closeStarterPackEditPopup () {
+  state.starterPackEditPopupProps.display = false
 }
 
 // ポップアップ - タイムフィードポップアップ

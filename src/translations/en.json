@@ -277,6 +277,9 @@
   "noStarterPacks": "There are no starter packs managed by this user.",
   "showStarterPackListFeeds": "Show list feeds",
   "showStarterPackListUsers": "Show list users",
+  "starterPackEdit": "Edit starter pack",
+  "starterPackName": "Name",
+  "starterPackDescription": "Description",
   "starterPackDelete": "Delete starter pack",
   "starterPackDeleteMessage": "Remove this starter pack. Are you sure?\nThe list referenced by this starter pack will not be deleted.",
 

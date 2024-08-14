@@ -277,6 +277,9 @@
   "noStarterPacks": "このユーザーの管理するスターターパックはありません。",
   "showStarterPackListFeeds": "リストフィードを見る",
   "showStarterPackListUsers": "リストユーザーを見る",
+  "starterPackEdit": "スターターパックを編集",
+  "starterPackName": "名前",
+  "starterPackDescription": "説明",
   "starterPackDelete": "スターターパックを削除",
   "starterPackDeleteMessage": "このスターターパックを削除します。よろしいですか？\nスターターパックが参照しているリストは削除されません。",
 

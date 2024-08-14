@@ -54,6 +54,14 @@ async function moveToList (type: "feeds" | "users") {
   })
 }
 
+async function editStarterPack () {
+  Util.blurElement()
+  emit("close")
+  if (mainState.starterPackCardPopoverCallback != null) {
+    await mainState.starterPackCardPopoverCallback("editStarterPack")
+  }
+}
+
 async function deleteStarterPack () {
   Util.blurElement()
   emit("close")
@@ -130,6 +138,15 @@ function close () {
         :text="starterPack.record.description"
         @close="emit('close')"
       />
+
+      <!-- スターターパックを編集する -->
+      <button
+        v-if="state.isOwn"
+        @click.prevent.stop="editStarterPack"
+      >
+        <SVGIcon name="edit" />
+        <span>{{ $t("starterPackEdit") }}</span>
+      </button>
 
       <!-- スターターパックを削除する -->
       <button

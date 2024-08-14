@@ -103,15 +103,6 @@ function toggleDetailDisplay () {
   state.detailDisplay = !state.detailDisplay
 }
 
-function openListEditPopup () {
-  /*
-  mainState.openListEditPopup({
-    starterPack: props.starterPack,
-    callback: updateList,
-  })
-  */
-}
-
 function openPopover ($event: Event) {
   Util.blurElement()
   mainState.starterPackCardPopoverProps.starterPack = props.starterPack
@@ -119,7 +110,7 @@ function openPopover ($event: Event) {
   mainState.openStarterPackCardPopover($event.target)
 }
 
-async function starterPackCardPopoverCallback (type: "startAwait" | "endAwait" | "deleteStarterPack") {
+async function starterPackCardPopoverCallback (type: "startAwait" | "endAwait" | "editStarterPack" | "deleteStarterPack") {
   switch (type) {
     case "startAwait": {
       state.loaderDisplay = true
@@ -127,6 +118,10 @@ async function starterPackCardPopoverCallback (type: "startAwait" | "endAwait" |
     }
     case "endAwait": {
       state.loaderDisplay = false
+      break
+    }
+    case "editStarterPack": {
+      await editStarterPack()
       break
     }
     case "deleteStarterPack": {
@@ -147,6 +142,17 @@ function updateList (list: TTList) {
   mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
 }
 */
+
+async function editStarterPack () {
+  if (props.starterPack == null) {
+    return
+  }
+  mainState.openStarterPackEditPopup({
+    display: true,
+    mode: "edit",
+    starterPack: props.starterPack,
+  })
+}
 
 async function deleteStarterPack () {
   if (props.starterPack == null) {

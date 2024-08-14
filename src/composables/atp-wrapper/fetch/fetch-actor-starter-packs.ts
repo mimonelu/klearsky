@@ -30,7 +30,7 @@ export default async function (
   }
   const newStarterPacks = response.data.starterPacks.filter((starterPack) => {
     return !currentStarterPacks.some((currentStarterPack) => {
-      return currentStarterPack.cid === starterPack.cid
+      return currentStarterPack.uri === starterPack.uri
     })
   }) as unknown as Array<TIStarterPack>
   if (cursor == null) {

@@ -110,6 +110,7 @@ import updateRecord from "@/composables/atp-wrapper/update/update-record"
 import updateThreadgate from "@/composables/atp-wrapper/update/update-threadgate"
 import updateThreadMuteToDisable from "@/composables/atp-wrapper/update/update-thread-mute-to-disable"
 import updateThreadMuteToEnable from "@/composables/atp-wrapper/update/update-thread-mute-to-enable"
+import updateStarterPack from "@/composables/atp-wrapper/update/update-starter-pack"
 import Util from "@/composables/util"
 
 // @ts-ignore
@@ -267,6 +268,7 @@ class AtpWrapper implements TIAtpWrapper {
   updateThreadgate = updateThreadgate
   updateThreadMuteToDisable = updateThreadMuteToDisable
   updateThreadMuteToEnable = updateThreadMuteToEnable
+  updateStarterPack = updateStarterPack
 }
 
 export default AtpWrapper

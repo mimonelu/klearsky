@@ -279,7 +279,7 @@ type MainState = {
     starterPack?: TIStarterPack
   }
   starterPackCardPopoverSelector?: string | HTMLElement
-  starterPackCardPopoverCallback?: (type: "startAwait" | "endAwait" | "deleteStarterPack") => Promise<void>
+  starterPackCardPopoverCallback?: (type: "startAwait" | "endAwait" | "editStarterPack" | "deleteStarterPack") => Promise<void>
   openStarterPackCardPopover: Function
   closeStarterPackCardPopover: Function
 
@@ -556,6 +556,11 @@ type MainState = {
   listUserManagementPopupProps: TTListUserManagementPopupProps
   openListUserManagementPopup: Function
   closeListUserManagementPopup: Function
+
+  // ポップアップ - スターターパック編集ポップアップ
+  starterPackEditPopupProps: TIStarterPackEditPopupProps
+  openStarterPackEditPopup: (props: TIStarterPackEditPopupProps) => void
+  closeStarterPackEditPopup: Function
 
   // ポップアップ - タイムフィードポップアップ
   currentTimeFeeds: Array<TTPost>

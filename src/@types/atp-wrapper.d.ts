@@ -119,4 +119,5 @@ interface TIAtpWrapper {
   updateThreadgate (this: TIAtpWrapper, postUri: string, allowMention: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
   updateThreadMuteToDisable (this: TIAtpWrapper, uri: string): Promise<Error | boolean>
   updateThreadMuteToEnable (this: TIAtpWrapper, uri: string): Promise<Error | boolean>
+  updateStarterPack (this: TIAtpWrapper, starterPack: TIStarterPack): Promise<undefined | Error>
 }

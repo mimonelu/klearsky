@@ -27,3 +27,9 @@ interface TIListItemsSample {
   subject: TTUser
   uri: string
 }
+
+interface TIStarterPackEditPopupProps {
+  display: boolean
+  mode?: "create" | "edit"
+  starterPack?: TIStarterPack
+}

@@ -25,7 +25,7 @@ export default async function (
     await (this.agent as BskyAgent).com.atproto.repo.putRecord(query)
       .then((value: ComAtprotoRepoPutRecord.Response) => value)
       .catch((error: any) => error)
-  console.log("[klearsky/putRecord]", response)
+  console.log("[klearsky/updateList]", response)
   if (response instanceof Error) return response
   if (!response.success) return Error("apiError")
 }
