@@ -2182,6 +2182,7 @@ function closeSendPostPopup (done: boolean, hidden: boolean) {
   if (!hidden) {
     state.sendPostPopupProps.display = false
     state.sendPostPopupProps.type = "post"
+    state.sendPostPopupProps.url = undefined
     state.sendPostPopupProps.fileList = undefined
     state.currentPostTags.splice(0)
     state.postDatePopupDate = undefined
