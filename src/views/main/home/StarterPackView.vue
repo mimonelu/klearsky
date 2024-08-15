@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, watch, type ComputedRef, type Ref } from "vue"
-import { computedAsync } from "@vueuse/core"
+import { computed, inject, onMounted, reactive, watch, type ComputedRef } from "vue"
 import Feed from "@/components/compositions/Feed.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
@@ -11,56 +10,35 @@ import Util from "@/composables/util"
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  starterPack: Ref<undefined | TIStarterPack>
   users: ComputedRef<undefined | Array<TTUser>>
 }>({
-  starterPack: computedAsync(async () => {
-    const uri = mainState.currentQuery.uri
-    if (uri == null || !Util.isStarterPackAtUri(uri)) {
-      return
-    }
-
-    // 指定されたスターターパックを現在のプロフィールユーザーのスターターパックリストから検索
-    /*
-    let starterPack: undefined | Error | TIStarterPack =
-      // WANT: 後日再検証
-      // getStarterPack と getActorStarterPacks のレスポンスの乖離が激しいため
-      // 一時的かつ強制的に getStarterPack を走らせている
-      undefined
-      // mainState.currentAuthorStarterPacks.find((starterPack: TIStarterPack) => {
-      //   return starterPack.uri === uri
-      // })
-    */
-
-    // 上記になければ取得（ページ更新時は取得確定）
-    if (mainState.currentStarterPack?.uri !== uri) {
-      if (mainState.currentStarterPack?.uri !== mainState.currentQuery.uri) {
-        mainState.currentStarterPackListFeeds.splice(0)
-        mainState.currentStarterPackListFeedsCursor = undefined
-      }
-
-      mainState.centerLoaderDisplay = true
-      const starterPack: undefined | Error | TIStarterPack = await mainState.atp.fetchStarterPack(uri)
-      mainState.centerLoaderDisplay = false
-      if (starterPack == null || starterPack instanceof Error) {
-        mainState.openErrorPopup("errorApiFailed", "StarterPackView/fetchStarterPack")
-        return
-      }
-      mainState.currentStarterPack = starterPack
-
-      await fetchFeeds("new")
-    }
-
-    return mainState.currentStarterPack
-  }),
   users: computed((): undefined | Array<TTUser> => {
-    if (state.starterPack == null) {
-      return
-    }
-    return state.starterPack.listItemsSample?.map((listItem) => {
+    return mainState.currentStarterPack?.listItemsSample?.map((listItem) => {
       return listItem.subject
     })
   }),
+})
+
+onMounted(async () => {
+  const uri = mainState.currentQuery.uri
+  if (uri == null ||
+      !Util.isStarterPackAtUri(uri) ||
+      mainState.currentStarterPack?.uri === uri
+  ) {
+    return
+  }
+
+  mainState.currentStarterPack = undefined
+  mainState.centerLoaderDisplay = true
+  const starterPack: undefined | Error | TIStarterPack = await mainState.atp.fetchStarterPack(uri)
+  mainState.centerLoaderDisplay = false
+  if (starterPack == null || starterPack instanceof Error) {
+    mainState.openErrorPopup("errorApiFailed", "StarterPackView/fetchStarterPack")
+    return
+  }
+  mainState.currentStarterPack = starterPack
+
+  await fetchFeeds("new")
 })
 
 async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
@@ -106,7 +84,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   <div class="starter-pack-view">
     <!-- スターターパックカード -->
     <StarterPackCard
-      :starterPack="state.starterPack"
+      :starterPack="mainState.currentStarterPack"
       :menuDisplay="true"
       :detailDisplay="true"
       :creatorDisplay="true"
@@ -114,7 +92,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     />
 
     <template v-if="!mainState.centerLoaderDisplay">
-      <template v-if="(state.starterPack?.feeds?.length ?? 0) > 0">
+      <template v-if="(mainState.currentStarterPack?.feeds?.length ?? 0) > 0">
         <div class="strike-header">
           <span>{{ $t("feeds") }}</span>
         </div>
@@ -122,7 +100,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         <!-- スターターパックフィードカード -->
         <div class="starter-pack-view__feed-card-container">
           <FeedCard
-            v-for="generator of state.starterPack?.feeds"
+            v-for="generator of mainState.currentStarterPack?.feeds"
             :generator="generator"
             :menuDisplay="true"
             :detailDisplay="false"

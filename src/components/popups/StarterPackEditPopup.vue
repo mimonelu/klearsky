@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, ref } from "vue"
 import { RichText } from "@atproto/api"
+import extend from "extend"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -28,9 +29,28 @@ const state = reactive<{
 const easyFormState = reactive<{
   name: string
   description: string
+  list?: string
+  listOptions: Array<TTOption>
 }>({
   name: props.starterPack?.record.name ?? "",
   description: props.starterPack?.record.description ?? "",
+  list: props.starterPack?.record.list,
+  listOptions: (() => {
+    const results: Array<TTOption> = []
+
+    // マイリストを選択肢に追加
+    Array.from(mainState.myLists.items)
+      .sort((a: TTList, b: TTList): number => {
+        const aTerm = a.name || a.indexedAt
+        const bTerm = b.name || b.indexedAt
+        return aTerm < bTerm ? - 1 : aTerm > bTerm ? 1 : 0
+      })
+      .forEach((myList: TTList) => {
+        results.push({ label: `${myList.name}`, value: myList.uri })
+      })
+
+    return results
+  })(),
 })
 
 const easyFormProps: TTEasyForm = {
@@ -60,6 +80,14 @@ const easyFormProps: TTEasyForm = {
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
     },
+    {
+      state: easyFormState,
+      model: "list",
+      label: $t("list"),
+      type: "radio",
+      options: easyFormState.listOptions,
+      required: true,
+    },
   ],
 }
 
@@ -74,14 +102,18 @@ async function submitCallback () {
   }
   state.loaderDisplay = true
   const query = { ...props.starterPack } as TIStarterPack
+
+  // 入力内容の設定
   query.record.name = easyFormState.name
   query.record.description = easyFormState.description
+  query.record.list = easyFormState.list
 
+  // `descriptionFacets` の設定
   const richText = new RichText({ text: easyFormState.description })
   await richText.detectFacets(mainState.atp.agent)
   query.record.descriptionFacets = richText.facets
-  console.log(richText.facets)
 
+  // 更新
   const result: undefined | Error = await mainState.atp.updateStarterPack(query)
   if (result instanceof Error) {
     state.loaderDisplay = false
@@ -91,6 +123,22 @@ async function submitCallback () {
 
   // 更新成功時
   if (props.mode === "edit") {
+    if (props.starterPack == null) {
+      return
+    }
+
+    // レコードの反映待ち
+    // TODO: 要検討
+    await Util.wait(1000)
+
+    // 再取得
+    const newStarterPack: Error | TIStarterPack =
+      await mainState.atp.fetchStarterPack(props.starterPack.uri)
+    if (newStarterPack instanceof Error) {
+      mainState.openErrorPopup("errorApiFailed", "StarterPackEditPopup/fetchStarterPack")
+      return
+    }
+
     // ユーザーのスターターパックを上書き
     mainState.currentAuthorStarterPacks.some((starterPack) => {
       if (props.starterPack == null) {
@@ -99,10 +147,18 @@ async function submitCallback () {
       if (props.starterPack.uri !== starterPack.uri) {
         return false
       }
-      starterPack.record.name = props.starterPack.record.name
-      starterPack.record.description = props.starterPack.record.description
+      extend(true, starterPack, newStarterPack)
       return true
     })
+
+    // スターターパックページのスターターパックを上書き
+    if (mainState.currentStarterPack?.uri === props.starterPack.uri) {
+      mainState.currentStarterPackListFeeds.splice(0)
+      mainState.currentStarterPackListFeedsCursor = undefined
+      mainState.currentStarterPack.feeds?.splice(0)
+      mainState.currentStarterPack.listItemsSample?.splice(0)
+      extend(true, mainState.currentStarterPack, newStarterPack)
+    }
   }
 
   close()

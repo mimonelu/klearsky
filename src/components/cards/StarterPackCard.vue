@@ -25,18 +25,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   routerLinkToParticularPage: ComputedRef<any>
   routerLinkToListPage: ComputedRef<any>
-  /*
-  routerLinkToListFeeds: ComputedRef<any>
-  routerLinkToListUsers: ComputedRef<any>
-  */
   indexedAt: ComputedRef<string>
-  /*
-  purpose: ComputedRef<string>
-  isOwn: ComputedRef<boolean>
-  isListFeedsPage: boolean
-  isListUsersPage: boolean
-  loaderDisplay: boolean
-  */
   detailDisplay: boolean
   loaderDisplay: boolean
 }>({
@@ -56,44 +45,9 @@ const state = reactive<{
       },
     }
   }),
-  /*
-  routerLinkToListFeeds: computed(() => {
-    return {
-      path: "/home/list-feeds",
-      query: {
-        list: props.list.uri,
-        displayName: props.list.name,
-      },
-    }
-  }),
-  routerLinkToListUsers: computed(() => {
-    return {
-      path: "/home/list-users",
-      query: {
-        list: props.list.uri,
-        displayName: props.list.name,
-      },
-    }
-  }),
-  */
   indexedAt: computed((): string => {
     return mainState.formatDate(props.starterPack?.indexedAt)
   }),
-  /*
-  purpose: computed((): string => {
-    return mainState.myLists.getShortPurpose(props.list.purpose)
-  }),
-  isOwn: computed((): boolean => {
-    return props.list.creator.did === mainState.atp.session?.did
-  }),
-  isListFeedsPage:
-    mainState.currentPath === "/home/list-feeds" &&
-    mainState.currentQuery.list === props.list.uri,
-  isListUsersPage:
-    mainState.currentPath === "/home/list-users" &&
-    mainState.currentQuery.list === props.list.uri,
-  loaderDisplay: false,
-  */
   detailDisplay: props.detailDisplay,
   loaderDisplay: false,
 })
@@ -130,18 +84,6 @@ async function starterPackCardPopoverCallback (type: "startAwait" | "endAwait" |
     }
   }
 }
-
-/*
-function updateList (list: TTList) {
-  props.list.avatar = list.avatar
-  props.list.name = list.name
-  props.list.description = list.description
-  props.list.purpose = list.purpose
-
-  // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
-}
-*/
 
 async function editStarterPack () {
   if (props.starterPack == null) {
