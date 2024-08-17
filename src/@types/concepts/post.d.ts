@@ -67,8 +67,26 @@ interface TIEmbed {
   $type: string
   external?: TTExternal
   images?: Array<TTImage>
+  video?: TIBlob
   record?: TTPost
   [k: string]: unknown
+}
+
+interface TIBlob {
+  $type: "blob"
+  mimeType: string
+  ref: Blob
+  size: number
+}
+
+interface TIVideo {
+  $type: "app.bsky.embed.video"
+  alt?: string
+  aspectRatio?: {
+    width?: number
+    height?: number
+  }
+  video: TIBlob
 }
 
 type TTReason = {

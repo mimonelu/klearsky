@@ -11,10 +11,10 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "target": "ES6",
+    "target": "es2017",
     "lib": [
       "DOM",
-      "ES6"
+      "es2017"
     ]
   },
   "references": [
