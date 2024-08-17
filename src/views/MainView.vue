@@ -761,14 +761,18 @@ function onPaste (event: ClipboardEvent) {
 // D&D・ペースト用処理共通
 
 function attachFilesToPost (items: DataTransferItemList): boolean {
-  // 対象は画像ファイルのみ
-  const imageItems = Array.from(items)
+  const attachingItems = Array.from(items)
     .filter((item: DataTransferItem) => {
-      return item.kind === "file" && item.type.startsWith("image")
+      // 対象はメディアファイルのみ
+      return item.kind === "file" && (
+        item.type.startsWith("image/") ||
+        item.type.startsWith("video/")
+      )
     })
-  if (imageItems.length === 0) return false
-
-  const fileList = imageItems
+  if (attachingItems.length === 0) {
+    return false
+  }
+  const fileList = attachingItems
     .map((item: DataTransferItem) => {
       return item.getAsFile()
     }) as unknown as FileList

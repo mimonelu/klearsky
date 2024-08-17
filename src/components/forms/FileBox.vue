@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { onMounted, reactive, watch } from "vue"
+import { inject, onMounted, reactive, watch } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import VideoSource from "@/components/images/VideoSource.vue"
 
 const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
 
@@ -13,6 +14,8 @@ const props = defineProps<{
   maxNumber?: number
   quadLayout?: boolean
 }>()
+
+const mainState = inject("state") as MainState
 
 const state = reactive<{
   files: Array<File>
@@ -126,10 +129,30 @@ function deleteFile (index: number) {
           class="quad-image"
         >
           <div class="thumbnail">
+            <!-- 動画プレビュー -->
+            <div v-if="files != null && files[index]?.type?.startsWith('video/')">
+              <video
+                controls
+                loading="lazy"
+                loop
+                muted
+                preload="metadata"
+                width="100%"
+                height="100%"
+              >
+                <Suspense>
+                  <VideoSource :src="preview" />
+                </Suspense>
+              </video>
+            </div>
+
+            <!-- 画像プレビュー -->
             <LazyImage
+              v-else
               :src="preview"
               @click.prevent.stop
             />
+
             <button
               class="delete-button"
               @click.prevent="deleteFile(index)"

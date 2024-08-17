@@ -48,13 +48,13 @@ const easyFormState = reactive<{
   text: string
   url: string
   urlHasImage: Array<boolean>
-  images: Array<File>
+  medias: Array<File>
   alts: Array<string>
 }>({
   text: props.text ?? "",
   url: props.url ?? "",
   urlHasImage: [true],
-  images: [],
+  medias: [],
   alts: [],
 })
 
@@ -95,7 +95,7 @@ const easyFormProps: TTEasyForm = {
     },
     {
       state: easyFormState,
-      model: "images",
+      model: "medias",
       type: "file",
       placeholder: $t("imageBoxes"),
       // accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
@@ -132,14 +132,14 @@ watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
 // D&D用処置
 watch(() => props.fileList, (value?: FileList) => {
   const files = value != null ? Array.from(value) : []
-  files.unshift(...easyFormState.images)
-  easyFormState.images = files
+  files.unshift(...easyFormState.medias)
+  easyFormState.medias = files
   onInputUrl()
   onChangeImage()
 })
 
 onMounted(() => {
-  if (props.fileList != null) easyFormState.images = Array.from(props.fileList)
+  if (props.fileList != null) easyFormState.medias = Array.from(props.fileList)
   onInputUrl()
   onChangeImage()
 })
@@ -169,7 +169,7 @@ async function submitCallback () {
 
   // 空ポストの確認ポップアップを表示
   if (easyFormState.text.trim() === "" &&
-      easyFormState.images.length === 0 &&
+      easyFormState.medias.length === 0 &&
       easyFormState.url.trim() === ""
   ) {
     const result = await mainState.openConfirmationPopup(
@@ -237,7 +237,7 @@ function onInputUrl () {
     return item.model === "urlHasImage"
   })
   if (urlHasImageItem == null) return
-  urlHasImageItem.display = !!easyFormState.url && easyFormState.images.length === 0
+  urlHasImageItem.display = !!easyFormState.url && easyFormState.medias.length === 0
 
   // TODO: 要修正
   ;(easyForm.value as any)?.forceUpdate()
@@ -253,17 +253,17 @@ function onChangeImage () {
     return item.model === "url"
   })
   if (urlItem == null) return
-  urlItem.display = easyFormState.images.length === 0
+  urlItem.display = easyFormState.medias.length === 0
 
   // alt の更新
   // TODO: 意図しない alt が削除される不具合を修正すること
-  easyFormState.alts.splice(easyFormState.images.length)
+  easyFormState.alts.splice(easyFormState.medias.length)
   easyFormProps.data.splice(
     0,
     easyFormProps.data.length,
     ...easyFormProps.data.filter((data: TTEasyFormItem) => data.name !== "alt")
   )
-  easyFormState.images.forEach((_: File, index: number) => {
+  easyFormState.medias.forEach((_: File, index: number) => {
     if (easyFormState.alts[index] == null) easyFormState.alts[index] = ""
     easyFormProps.data.push({
       name: "alt",
@@ -417,7 +417,7 @@ const PreviewLinkCardFeature: {
             v-if="
               !!PreviewLinkCardFeature.external.uri &&
               easyFormState.url !== '' &&
-              !easyFormState.images.length
+              !easyFormState.medias.length
             "
             :external="PreviewLinkCardFeature.external"
             layout="vertical"

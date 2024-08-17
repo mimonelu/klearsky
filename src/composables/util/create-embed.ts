@@ -1,4 +1,4 @@
-import type { AppBskyEmbedImages, AppBskyFeedPost, BlobRef, BskyAgent } from "@atproto/api"
+import type { AppBskyEmbedImages, BlobRef } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -93,48 +93,57 @@ export default async function (
   }
 
   // 画像
-  let images: null | any = null
-  const fileBlobRefs: Array<null | BlobRef> = await Promise.all(
-    params.images?.map((file: File): Promise<null | BlobRef> => {
-      return atp.createFileBlobRef({
-        file,
-        maxWidth: 2000,
-        maxHeight: 2000,
-        maxSize: 0.953671875,
-      })
-    }) ?? []
-  )
-  if (fileBlobRefs.some((fileBlobRef: null | BlobRef) => fileBlobRef == null)) {
-    return Error("imageCompressionError")
-  }
+  const images: Array<AppBskyEmbedImages.Image> = []
 
-  // 画像サイズのアスペクト比（実際にはサイズ）を取得
-  const aspectRatios: Array<undefined | TTAspectRatio> = []
-  if (params.images != null) {
-    for (const file of params.images) {
-      const img = new Image()
-      img.src = URL.createObjectURL(file)
-      try {
-        await img.decode()
-        aspectRatios.push({
-          width: img.width,
-          height: img.height,
+  // 動画
+  let video: undefined | any
+  const videoFileIndex = params.medias?.findIndex((media) => {
+    return media.type?.startsWith("video/") ?? false
+  }) ?? - 1
+
+  // 動画ファイルがない場合
+  if (videoFileIndex === - 1) {
+    const fileBlobRefs: Array<null | BlobRef> = await Promise.all(
+      params.medias?.map((file: File): Promise<null | BlobRef> => {
+        return atp.createFileBlobRef({
+          file,
+          maxWidth: 2000,
+          maxHeight: 2000,
+          maxSize: 0.953671875,
         })
-      } catch (error: any) {
-        console.warn("[klearsky/createEmbed]", error)
-        aspectRatios.push(undefined)
+      }) ?? []
+    )
+    if (fileBlobRefs.some((fileBlobRef: null | BlobRef) => {
+      return fileBlobRef == null
+    })) {
+      return Error("imageCompressionError")
+    }
+
+    // 画像サイズのアスペクト比（実際にはサイズ）を取得
+    const aspectRatios: Array<undefined | TTAspectRatio> = []
+    if (params.medias != null) {
+      for (const file of params.medias) {
+        const img = new Image()
+        img.src = URL.createObjectURL(file)
+        try {
+          await img.decode()
+          aspectRatios.push({
+            width: img.width,
+            height: img.height,
+          })
+        } catch (error: any) {
+          console.warn("[klearsky/createEmbed]", error)
+          aspectRatios.push(undefined)
+        }
       }
     }
-  }
 
-  if (fileBlobRefs.length > 0) {
-    const imageObjects: Array<null | AppBskyEmbedImages.Image> = fileBlobRefs
-      .map(
-        (
-          fileBlobRef: null | BlobRef,
-          index: number
-        ): null | AppBskyEmbedImages.Image => {
-          if (fileBlobRef == null) return null
+    if (fileBlobRefs.length > 0) {
+      const imageObjects = fileBlobRefs
+        .map((fileBlobRef: null | BlobRef, index: number): null | AppBskyEmbedImages.Image => {
+          if (fileBlobRef == null) {
+            return null
+          }
           const result: AppBskyEmbedImages.Image = {
             image: fileBlobRef,
             alt: params.alts?.[index] ?? "",
@@ -143,10 +152,30 @@ export default async function (
             result.aspectRatio = aspectRatios[index]
           }
           return result
-        }
-      )
-      .filter((image: null | AppBskyEmbedImages.Image) => image != null)
-    if (imageObjects.length > 0) images = imageObjects
+        })
+        .filter((image: null | AppBskyEmbedImages.Image) => {
+          return image != null
+        }) as Array<AppBskyEmbedImages.Image>
+      if (imageObjects.length > 0) {
+        images.splice(0, images.length, ...imageObjects)
+      }
+    }
+
+  // 動画ファイルがある場合
+  } else if (params.medias != null) {
+    const videoBlob = await atp.createFileBlobRef({
+      file: params.medias[videoFileIndex],
+    })
+    if (videoBlob == null) {
+      return Error("createFileBlobRefError")
+    }
+    video = {
+      $type: "app.bsky.embed.video",
+      alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "",
+      // TODO:
+      // aspectRatio: {},
+      video: videoBlob,
+    }
   }
 
   // 引用リポスト
@@ -155,7 +184,7 @@ export default async function (
       ? params.post as TTPost
       : manualQuoteRepost as TTPost
     parent.embed = {
-      $type: images != null || external != null
+      $type: images.length > 0 || video != null || external != null
         ? "app.bsky.embed.recordWithMedia"
         : "app.bsky.embed.record",
       record: {
@@ -169,8 +198,10 @@ export default async function (
         }
       },
     }
-    if (images != null)
+    if (images.length > 0)
       parent.embed.media = { $type: "app.bsky.embed.images", images }
+    else if (video != null)
+      parent.embed.media = video
     else if (external != null)
       parent.embed.media = { $type: "app.bsky.embed.external", external }
     else if (feedOrLinkOrStarterPackCard != null)
@@ -179,8 +210,10 @@ export default async function (
 
   // 画像またはリンクカード
   if (params.type !== "quoteRepost" && manualQuoteRepost == null) {
-    if (images != null)
+    if (images.length > 0)
       parent.embed = { $type: "app.bsky.embed.images", images }
+    else if (video != null)
+      parent.embed = video
     else if (external != null)
       parent.embed = { $type: "app.bsky.embed.external", external }
     else if (feedOrLinkOrStarterPackCard != null)

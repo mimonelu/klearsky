@@ -29,7 +29,7 @@ interface TTImagePopupPropsImages {
 type TTCreateFileBlobRefParams = {
   file: File
   mimeType?: string
-  maxWidth: number
-  maxHeight: number
-  maxSize: number
+  maxWidth?: number
+  maxHeight?: number
+  maxSize?: number
 }

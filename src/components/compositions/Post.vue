@@ -1023,6 +1023,7 @@ function toggleOldestQuotedPostDisplay () {
                       preload="metadata"
                       width="100%"
                       :style="{ 'aspect-ratio': state.videoAspectRatio }"
+                      @click.stop
                     >
                       <Suspense>
                         <VideoSource

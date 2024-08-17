@@ -21,7 +21,7 @@ const easyFormState = reactive<{
   url: string
   /* // TODO: 一時退避
   urlHasImage: Array<boolean>
-  images: Array<File>
+  medias: Array<File>
   alts: Array<string>
   */
 }>({
@@ -29,7 +29,7 @@ const easyFormState = reactive<{
   url: "",
   /* // TODO: 一時退避
   urlHasImage: [true],
-  images: [],
+  medias: [],
   alts: [],
   */
 })
@@ -87,7 +87,7 @@ const easyFormProps: TTEasyForm = {
     },
     {
       state: easyFormState,
-      model: "images",
+      model: "medias",
       type: "file",
       placeholder: $t("imageBoxes"),
       // accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
@@ -130,7 +130,7 @@ function onInputUrl () {
   if (urlHasImageItem == null) {
     return
   }
-  urlHasImageItem.display = !!easyFormState.url // TODO: && easyFormState.images.length === 0
+  urlHasImageItem.display = !!easyFormState.url // TODO: && easyFormState.medias.length === 0
   */
 
   // TODO: 要修正
@@ -222,7 +222,7 @@ async function submitCallback () {
     url,
     /* // TODO: 一時退避
     urlHasImage: easyFormState.urlHasImage,
-    images: easyFormState.images,
+    medias: easyFormState.medias,
     */
     lightning: mainState.currentSetting.lightning,
   })) {

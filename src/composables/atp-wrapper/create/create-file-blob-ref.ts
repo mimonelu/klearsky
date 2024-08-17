@@ -33,12 +33,7 @@ const convertMapForCompress: { [mimeType: string]: string } = {
 
 export default async function (
   this: TIAtpWrapper,
-  params: {
-    file: File
-    maxWidth: number
-    maxHeight: number
-    maxSize: number
-  }
+  params: TTCreateFileBlobRefParams
 ): Promise<null | BlobRef> {
   if (this.agent == null) return null
   if (params.file == null) return null
@@ -49,7 +44,7 @@ export default async function (
   const imageMimeType = convertMapForCompress[params.file.type]
 
   // ファイルサイズ上限以上かつ変換可能なファイルの場合は変換する
-  if (fileSizeMb >= params.maxSize && imageMimeType != null) {
+  if (params.maxSize != null && fileSizeMb >= params.maxSize && imageMimeType != null) {
     mimeType = imageMimeType
 
     // SEE: https://github.com/Donaldcwl/browser-image-compression#main-function
@@ -58,7 +53,7 @@ export default async function (
         fileType: mimeType,
         maxIteration: 20, // Default: 10
         maxSizeMB: params.maxSize,
-        maxWidthOrHeight: Math.max(params.maxWidth, params.maxHeight),
+        maxWidthOrHeight: Math.max(params.maxWidth ?? 0, params.maxHeight ?? 0) || undefined,
         useWebWorker: true,
       })
     } catch (error) {
@@ -80,9 +75,16 @@ export default async function (
   const options: ComAtprotoRepoUploadBlob.CallOptions = {
     encoding: mimeType,
   }
-  const response: ComAtprotoRepoUploadBlob.Response =
+  const response: Error | ComAtprotoRepoUploadBlob.Response =
     await (this.agent as BskyAgent).uploadBlob(input, options)
+      .then((value) => value)
+      .catch((error: Error) => error)
   console.log("[klearsky/uploadBlob]", response)
-  if (!response.success) return null
+  if (response instanceof Error) {
+    return null
+  }
+  if (!response.success) {
+    return null
+  }
   return response.data.blob
 }
