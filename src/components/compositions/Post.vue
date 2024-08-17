@@ -17,6 +17,7 @@ import RepostButton from "@/components/buttons/RepostButton.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
+import VideoSource from "@/components/images/VideoSource.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
@@ -31,7 +32,7 @@ const props = defineProps<{
   hasReplyIcon?: boolean
   hasQuoteRepostIcon?: boolean
   noLink?: boolean
-  forceHideImages?: boolean
+  forceHideMedia?: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -43,11 +44,13 @@ const state = reactive<{
   text: ComputedRef<undefined | string>
   isTextOnlyEmoji: ComputedRef<boolean>
 
-  // 画像
+  // メディア
   images: ComputedRef<Array<TTImage>>
-  hasImage: ComputedRef<boolean>
-  displayImage: ComputedRef<boolean>
-  foldingImage: boolean
+  video: ComputedRef<undefined | TIVideo>
+  videoAspectRatio: ComputedRef<string>
+  hasMedia: ComputedRef<boolean>
+  displayMedia: ComputedRef<boolean>
+  foldingMedia: boolean
 
   // リンクカード
   linkCard: ComputedRef<undefined | TTExternal>
@@ -109,13 +112,28 @@ const state = reactive<{
     return state.text?.match(/^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,7}$/u) != null
   }),
 
-  // 画像
+  // メディア
   images: computed(() => props.post.embed?.images ?? props.post.record?.embed?.images ?? []),
-  hasImage: computed((): boolean => state.images.length > 0),
+  video: computed(() => {
+    const embed = props.post.embed ?? props.post.record?.embed
+    return embed == null || embed.$type !== "app.bsky.embed.video"
+      ? undefined
+      : embed as unknown as TIVideo
+  }),
+  videoAspectRatio: computed((): string => {
+    if (state.video?.aspectRatio == null ||
+        state.video.aspectRatio.width == null ||
+        state.video.aspectRatio.height == null
+    ) {
+      return "unset"
+    }
+    return `1 / ${state.video.aspectRatio.height / state.video.aspectRatio.width}`
+  }),
+  hasMedia: computed((): boolean => state.images.length > 0 || state.video != null),
 
-  // 画像の折り畳み
+  // メディアの折り畳み
   // TODO: 引用リポストに対応すること
-  displayImage: computed((): boolean => {
+  displayMedia: computed((): boolean => {
     // なし - すべて表示
     if (mainState.currentSetting.imageFolding === "none") return true
 
@@ -144,8 +162,8 @@ const state = reactive<{
     return false
   }),
 
-  // TODO: displayImage 共々 post に内包するべき
-  foldingImage: false,
+  // TODO: displayMedia 共々 post に内包するべき
+  foldingMedia: false,
 
   // リンクカード
   linkCard: computed(() => props.post.embed?.external ?? props.post.record?.embed?.external),
@@ -277,7 +295,7 @@ const state = reactive<{
   // ラベル対応 - ポストメディア
   hasBlurredMedia: computed((): boolean => {
     return (
-      state.hasImage ||
+      state.hasMedia ||
       state.hasLinkCard ||
       state.hasFeedCard
     ) && state.blurMediaLabels.length > 0
@@ -318,7 +336,7 @@ const state = reactive<{
   }),
 })
 
-state.foldingImage = !state.displayImage
+state.foldingMedia = !state.displayMedia
 
 const router = useRouter()
 
@@ -390,7 +408,7 @@ async function onActivateProfileLink (did: string) {
 }
 
 function onActivateImageFolderButton () {
-  state.foldingImage = !state.foldingImage
+  state.foldingMedia = !state.foldingMedia
 }
 
 function onActivatePostContentToggle () {
@@ -943,8 +961,8 @@ function toggleOldestQuotedPostDisplay () {
           <!-- ポストメディア -->
           <template v-if="state.postMediaDisplay">
             <!-- 画像 -->
-            <template v-if="state.hasImage">
-              <template v-if="forceHideImages">
+            <template v-if="state.hasMedia">
+              <template v-if="forceHideMedia">
                 <div class="omit-images">
                   <SVGIcon
                     v-for="_, index of state.images"
@@ -954,13 +972,13 @@ function toggleOldestQuotedPostDisplay () {
                 </div>
               </template>
               <template v-else-if="position !== 'slim'">
-                <!-- 画像フォルダーボタン -->
+                <!-- メディアフォルダーボタン -->
                 <button
-                  v-if="!state.displayImage"
+                  v-if="!state.displayMedia"
                   class="button--bordered image-folder-button"
                   @click.prevent.stop="onActivateImageFolderButton"
                 >
-                  <template v-if="state.foldingImage">
+                  <template v-if="state.foldingMedia">
                     <SVGIcon name="image" />
                     <span>{{ $t("showImage") }}</span>
                   </template>
@@ -970,9 +988,11 @@ function toggleOldestQuotedPostDisplay () {
                   </template>
                 </button>
 
-                <!-- イメージボックス -->
-                <template v-if="state.displayImage || (!state.displayImage && !state.foldingImage)">
+                <!-- メディアボックス -->
+                <template v-if="state.displayMedia || (!state.displayMedia && !state.foldingMedia)">
+                  <!-- 画像 -->
                   <div
+                    v-if="state.images.length > 0"
                     class="quad-images"
                     :data-number-of-images="state.images.length"
                   >
@@ -988,6 +1008,30 @@ function toggleOldestQuotedPostDisplay () {
                         @click.stop="openImagePopup(imageIndex)"
                       />
                     </div>
+                  </div>
+
+                  <!-- 動画 -->
+                  <div
+                    v-if="state.video != null"
+                    class="video-container"
+                  >
+                    <video
+                      controls
+                      loading="lazy"
+                      loop
+                      muted
+                      preload="metadata"
+                      width="100%"
+                      :style="{ 'aspect-ratio': state.videoAspectRatio }"
+                    >
+                      <Suspense>
+                        <VideoSource
+                          :did="post.author.did"
+                          :cid="(state.video.video.ref) + ''"
+                        />
+                      </Suspense>
+                    </video>
+                    <p v-if="state.video.alt">{{ state.video.alt }}</p>
                   </div>
                 </template>
               </template>
@@ -1010,9 +1054,9 @@ function toggleOldestQuotedPostDisplay () {
               v-if="state.hasLinkCard"
               :external="state.linkCard as TTExternal"
               :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
-              :displayImage="!forceHideImages"
+              :displayImage="!forceHideMedia"
               :noLink="false"
-              :noEmbedded="forceHideImages === true"
+              :noEmbedded="forceHideMedia === true"
             />
 
             <!-- フィードカード -->
@@ -1268,6 +1312,7 @@ function toggleOldestQuotedPostDisplay () {
     .content-filtering-toggle,
     .image-folder-button,
     .quad-images,
+    .video-container,
     .feed-card,
     .list-card,
     .starter-pack-card,
@@ -1667,7 +1712,8 @@ function toggleOldestQuotedPostDisplay () {
   font-size: 0.875em;
 }
 
-.quad-images {
+.quad-images,
+.video-container {
   grid-area: i;
 }
 
@@ -1683,6 +1729,18 @@ function toggleOldestQuotedPostDisplay () {
     & > .loader {
       font-size: 0.5rem;
     }
+  }
+}
+
+.video-container {
+  & > video {
+    border-radius: var(--border-radius-middle);
+  }
+
+  & > p {
+    color: var(--fg-color-075);
+    font-size: 0.875em;
+    margin-top: 0.5em;
   }
 }
 

@@ -361,7 +361,7 @@ function onMutated () {
           :post="post"
           :hasReplyIcon="post.record.reply != null"
           :hasQuoteRepostIcon="post.record.embed?.record != null"
-          :forceHideImages="true"
+          :forceHideMedia="true"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         />
