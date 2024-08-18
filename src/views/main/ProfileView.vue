@@ -521,7 +521,7 @@ function removeThisPost () {
                 class="created-at"
               >
                 <dt>{{ $t("startedAt") }}</dt>
-                <dd>{{ mainState.formatDate(mainState.currentProfile.createdAt) }}</dd>
+                <dd>{{ mainState.formatDate(mainState.currentProfile.createdAt) }} ({{ differenceInDays(new Date(), new Date(mainState.currentProfile.createdAt)) }}{{ $t("daysAgo") }})</dd>
 
                 <!-- 登録時に使用したスターターパック -->
                 <dd v-if="state.joinedStarterPackUrl != null">
