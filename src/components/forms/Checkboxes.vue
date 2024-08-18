@@ -45,6 +45,10 @@ function onChange () {
         @change="onChange"
       >
       <SVGIcon :name="state[model]?.includes(option.value) ? 'checkboxOn' : 'checkboxOff'" />
+      <SVGIcon
+        v-if="option.icon != null"
+        :name="option.icon"
+      />
       <span>{{ $t(option.label) }}</span>
     </label>
   </div>

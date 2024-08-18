@@ -170,6 +170,7 @@ export default class {
               did: "",
               handle: "",
             },
+            listItemCount: 0,
             name: "(Unknown list)",
             purpose: "unknownlist",
             description: uri,

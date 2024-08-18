@@ -6,6 +6,7 @@ import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import DESIGN_CONSTS from "@/consts/design-consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -69,6 +70,7 @@ const easyFormState = reactive<{
         results.push({
           label: `${myList.name}`,
           value: myList.uri,
+          icon: DESIGN_CONSTS.LIST_PURPOSE_ICON_MAP[myList.purpose] ?? "help",
         })
       })
 
@@ -228,6 +230,22 @@ async function submitCallback () {
   &:deep() {
     .popup-header > h2 > .svg-icon--cards {
       fill: rgb(var(--like-color));
+    }
+
+    // リストラジオボタンのアイコン
+    .easy-form .radios {
+      .svg-icon--person {
+        fill: rgb(var(--share-color));
+      }
+      .svg-icon--personOff {
+        fill: rgb(var(--notice-color));
+      }
+      .svg-icon--cards {
+        fill: rgb(var(--like-color));
+      }
+      .svg-icon--help {
+        fill: var(--fg-color-05);
+      }
     }
   }
 }

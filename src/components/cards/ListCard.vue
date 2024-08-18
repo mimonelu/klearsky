@@ -8,6 +8,7 @@ import OrderButtons from "@/components/buttons/OrderButtons.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
+import DESIGN_CONSTS from "@/consts/design-consts.json"
 
 const router = useRouter()
 
@@ -90,6 +91,13 @@ const state = reactive<{
   loaderDisplay: false,
   detailDisplay: props.detailDisplay,
 })
+
+const iconMap = {
+  "app.bsky.graph.defs#curatelist": "person",
+  "app.bsky.graph.defs#modlist": "personOff",
+  "app.bsky.graph.defs#referencelist": "cards",
+  "app.bsky.graph.defs#unknownlist": "help",
+}
 
 function toggleDetailDisplay () {
   Util.blurElement()
@@ -264,13 +272,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         class="list-card__purpose"
         :data-purpose="state.purpose"
       >
-        <SVGIcon :name="state.purpose === 'curatelist'
-          ? 'person'
-          : state.purpose === 'modlist'
-            ? 'personOff'
-            : state.purpose === 'referencelist'
-              ? 'cards'
-              : 'help'" />
+        <SVGIcon :name="DESIGN_CONSTS.LIST_PURPOSE_ICON_MAP[list.purpose] ?? 'help'" />
         <span>{{ list.listItemCount }}</span>
         <span>{{ $t(state.purpose) }}</span>
       </div>

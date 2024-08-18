@@ -39,6 +39,10 @@ function onChange () {
         @change="onChange"
       >
       <SVGIcon :name="state[model] === option.value ? 'radioOn' : 'radioOff'" />
+      <SVGIcon
+        v-if="option.icon != null"
+        :name="option.icon"
+      />
       <span>{{ $t(option.label) }}</span>
     </label>
   </div>
