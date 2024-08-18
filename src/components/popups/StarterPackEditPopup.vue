@@ -29,24 +29,47 @@ const state = reactive<{
 const easyFormState = reactive<{
   name: string
   description: string
+  feeds?: Array<string>
+  feedsOptions: Array<TTOption>
   list?: string
   listOptions: Array<TTOption>
 }>({
   name: props.starterPack?.record.name ?? "",
   description: props.starterPack?.record.description ?? "",
+  feeds: (props.starterPack?.record.feeds ?? []).map((feed) => feed.uri),
+  feedsOptions: (() => {
+    const results: Array<TTOption> = []
+
+    // マイフィードを選択肢に追加
+    Array.from(mainState.myFeeds.items)
+      .filter((item) => {
+        return item.kind === "feed"
+      })
+      .forEach((item) => {
+        results.push({
+          label: item.value.displayName,
+          value: item.value.uri,
+        })
+      })
+
+    return results
+  })(),
   list: props.starterPack?.record.list,
   listOptions: (() => {
     const results: Array<TTOption> = []
 
     // マイリストを選択肢に追加
     Array.from(mainState.myLists.items)
-      .sort((a: TTList, b: TTList): number => {
+      .sort((a, b): number => {
         const aTerm = a.name || a.indexedAt
         const bTerm = b.name || b.indexedAt
         return aTerm < bTerm ? - 1 : aTerm > bTerm ? 1 : 0
       })
-      .forEach((myList: TTList) => {
-        results.push({ label: `${myList.name}`, value: myList.uri })
+      .forEach((myList) => {
+        results.push({
+          label: `${myList.name}`,
+          value: myList.uri,
+        })
       })
 
     return results
@@ -82,6 +105,14 @@ const easyFormProps: TTEasyForm = {
     },
     {
       state: easyFormState,
+      model: "feeds",
+      label: $t("feeds"),
+      type: "checkbox",
+      options: easyFormState.feedsOptions,
+      limit: 3,
+    },
+    {
+      state: easyFormState,
       model: "list",
       label: $t("list"),
       type: "radio",
@@ -106,6 +137,7 @@ async function submitCallback () {
   // 入力内容の設定
   query.record.name = easyFormState.name
   query.record.description = easyFormState.description
+  query.record.feeds = easyFormState.feeds?.map((uri) => ({ uri })) ?? []
   query.record.list = easyFormState.list
 
   // `descriptionFacets` の設定
@@ -147,6 +179,9 @@ async function submitCallback () {
       if (props.starterPack.uri !== starterPack.uri) {
         return false
       }
+      starterPack.feeds?.splice(0)
+      starterPack.record.feeds?.splice(0)
+      starterPack.listItemsSample?.splice(0)
       extend(true, starterPack, newStarterPack)
       return true
     })
@@ -156,6 +191,7 @@ async function submitCallback () {
       mainState.currentStarterPackListFeeds.splice(0)
       mainState.currentStarterPackListFeedsCursor = undefined
       mainState.currentStarterPack.feeds?.splice(0)
+      mainState.currentStarterPack.record.feeds?.splice(0)
       mainState.currentStarterPack.listItemsSample?.splice(0)
       extend(true, mainState.currentStarterPack, newStarterPack)
     }
