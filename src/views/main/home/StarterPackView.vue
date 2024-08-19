@@ -38,6 +38,7 @@ onMounted(async () => {
   }
   mainState.currentStarterPack = starterPack
 
+  mainState.currentStarterPackListFeeds.splice(0)
   await fetchFeeds("new")
 })
 
