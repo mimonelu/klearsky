@@ -278,6 +278,7 @@
   "noStarterPacks": "There are no starter packs managed by this user.",
   "showStarterPackListFeeds": "Show list feeds",
   "showStarterPackListUsers": "Show list users",
+  "starterPackCreate": "Create starter pack",
   "starterPackEdit": "Edit starter pack",
   "starterPackName": "Name",
   "starterPackDescription": "Description",

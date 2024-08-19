@@ -134,7 +134,14 @@ async function submitCallback () {
     return
   }
   state.loaderDisplay = true
-  const query = { ...props.starterPack } as TIStarterPack
+  const query = props.starterPack == null
+    ? {
+      $type: "app.bsky.graph.starterpack",
+      record: {
+        createdAt: new Date().toISOString(),
+      },
+    } as unknown as TIStarterPack
+    : { ...props.starterPack } as TIStarterPack
 
   // 入力内容の設定
   query.record.name = easyFormState.name
@@ -147,16 +154,38 @@ async function submitCallback () {
   await richText.detectFacets(mainState.atp.agent)
   query.record.descriptionFacets = richText.facets
 
-  // 更新
-  const result: undefined | Error = await mainState.atp.updateStarterPack(query)
-  if (result instanceof Error) {
-    state.loaderDisplay = false
-    mainState.openErrorPopup("errorApiFailed", "StarterPackEditPopup/updateStarterPack")
-    return
-  }
+  // 作成
+  if (props.mode === "create") {
+    const result = await mainState.atp.createStarterPack(query)
+    if (result instanceof Error) {
+      state.loaderDisplay = false
+      mainState.openErrorPopup("errorApiFailed", "StarterPackEditPopup/createStarterPack")
+      return
+    }
 
-  // 更新成功時
-  if (props.mode === "edit") {
+    // レコードの反映待ち
+    // TODO: 要検討
+    await Util.wait(1000)
+
+    // 再取得
+    const newStarterPack: Error | TIStarterPack =
+      await mainState.atp.fetchStarterPack(result.uri)
+    if (newStarterPack instanceof Error) {
+      mainState.openErrorPopup("errorApiFailed", "StarterPackEditPopup/fetchStarterPack")
+      return
+    }
+
+    // ユーザーのスターターパックに追加
+    mainState.currentAuthorStarterPacks.unshift(newStarterPack)
+
+  // 更新
+  } else if (props.mode === "edit") {
+    const result: undefined | Error = await mainState.atp.updateStarterPack(query)
+    if (result instanceof Error) {
+      state.loaderDisplay = false
+      mainState.openErrorPopup("errorApiFailed", "StarterPackEditPopup/updateStarterPack")
+      return
+    }
     if (props.starterPack == null) {
       return
     }

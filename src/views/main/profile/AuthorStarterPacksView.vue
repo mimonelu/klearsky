@@ -22,6 +22,14 @@ async function fetchStarterPacks (direction: "new" | "old") {
   mainState.listLoaderDisplay = false
 }
 
+function openStarterPackEditPopup () {
+  Util.blurElement()
+  mainState.openStarterPackEditPopup({
+    display: true,
+    mode: "create",
+  })
+}
+
 // インフィニットスクロール
 watch(() => mainState.scrolledToBottom, (value: boolean) => {
   if (value) fetchStarterPacks("old")
@@ -30,6 +38,17 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
 <template>
   <div class="author-starter-packs">
+    <header v-if="mainState.isMyProfile()">
+      <!-- スターターパック作成ボタン -->
+      <button
+        class="button"
+        @click.prevent="openStarterPackEditPopup"
+      >
+        <SVGIcon name="plus" />
+        <span>{{ $t("starterPackCreate") }}</span>
+      </button>
+    </header>
+
     <LoadButton
       direction="new"
       :processing="mainState.listLoaderDisplay"
@@ -71,6 +90,17 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+
+  & > header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.25rem;
+
+    // スターターパック作成ボタン
+    & > button {
+      font-size: 0.875rem;
+    }
+  }
 }
 
 .starter-pack-card__container {

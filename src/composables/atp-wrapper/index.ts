@@ -11,6 +11,7 @@ import createPost from "@/composables/atp-wrapper/create/create-post"
 import createRecord from "@/composables/atp-wrapper/create/create-record"
 import createReport from "@/composables/atp-wrapper/create/create-report"
 import createRepost from "@/composables/atp-wrapper/create/create-repost"
+import createStarterPack from "@/composables/atp-wrapper/create/create-starter-pack"
 import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
 import deleteChatDeclaration from "@/composables/atp-wrapper/chat/delete-chat-declaration"
 import deleteChatMessage from "@/composables/atp-wrapper/chat/delete-chat-message"
@@ -163,6 +164,7 @@ class AtpWrapper implements TIAtpWrapper {
   createRecord = createRecord
   createReport = createReport
   createRepost = createRepost
+  createStarterPack = createStarterPack
   deleteAccount = deleteAccount
   deleteChatDeclaration = deleteChatDeclaration
   deleteChatMessage = deleteChatMessage
