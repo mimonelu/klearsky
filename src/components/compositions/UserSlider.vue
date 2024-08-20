@@ -1,6 +1,11 @@
 <script lang="ts" setup>
+import { type RouteLocationRaw } from "vue-router"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+
 defineProps<{
   users?: Array<TTUser>
+  showMoreButton?: boolean
+  moreLocation?: RouteLocationRaw
 }>()
 </script>
 
@@ -22,6 +27,15 @@ defineProps<{
         <div class="user-slider__user__link__name">{{ user.displayName || user.handle }}</div>
       </RouterLink>
     </div>
+
+    <!-- もっと見るボタン -->
+    <RouterLink
+      v-if="showMoreButton && moreLocation != null"
+      :to="moreLocation"
+      class="user-slider__more-button"
+    >
+      <SVGIcon name="list" />
+    </RouterLink>
   </div>
 </template>
 
@@ -76,6 +90,32 @@ defineProps<{
         white-space: nowrap;
         width: 100%;
       }
+    }
+  }
+
+  // もっと見るボタン
+  &__more-button {
+    --color-1: var(--fg-color-0125);
+    --color-2: var(--fg-color-05);
+    background-color: var(--color-1);
+    border-radius: var(--border-radius-middle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    width: 7rem;
+    min-width: 7rem;
+    max-width: 7rem;
+    height: 9rem;
+    &:focus, &:hover {
+      --color-1: var(--fg-color-025);
+      --color-2: rgb(var(--fg-color));
+    }
+
+    & > .svg-icon {
+      fill: var(--color-2);
+      font-size: 2rem;
     }
   }
 }

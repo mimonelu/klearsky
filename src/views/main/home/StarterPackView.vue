@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, watch, type ComputedRef } from "vue"
+import { type RouteLocationRaw } from "vue-router"
 import Feed from "@/components/compositions/Feed.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
@@ -11,11 +12,24 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   users: ComputedRef<undefined | Array<TTUser>>
+  listLocation: ComputedRef<undefined | RouteLocationRaw>
 }>({
   users: computed((): undefined | Array<TTUser> => {
     return mainState.currentStarterPack?.listItemsSample?.map((listItem) => {
       return listItem.subject
     })
+  }),
+  listLocation: computed((): undefined | RouteLocationRaw => {
+    if (mainState.currentStarterPack == null) {
+      return
+    }
+    return {
+      name: 'list-users-home',
+      query: {
+        list: mainState.currentStarterPack?.list?.uri ?? mainState.currentStarterPack?.record.list,
+        displayName: mainState.currentStarterPack?.record.name,
+      },
+    }
   }),
 })
 
@@ -118,7 +132,11 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         </div>
 
         <!-- スターターパックリストユーザースライダー -->
-        <UserSlider :users="state.users" />
+        <UserSlider
+          :users="state.users"
+          :showMoreButton="mainState.currentStarterPack?.record.list != null"
+          :moreLocation="state.listLocation"
+        />
       </template>
 
       <!-- スターターパックリストフィード -->
