@@ -168,6 +168,14 @@ function transformInternalLink (uri: string): undefined | string {
           }
           return `/search/post?text=${q}`
         }
+
+        // スターターパック
+        case "starter-pack": {
+          if (!paths[2] || !paths[3]) {
+            return
+          }
+          return `/home/starter-pack?uri=at://${paths[2]}/app.bsky.graph.starterpack/${paths[3]}`
+        }
       }
       break
     }
