@@ -2197,10 +2197,12 @@ async function openSendPostPopup (params?: TTSendPostPopupParams): Promise<boole
   return isSendPostDone
 }
 
-function closeSendPostPopup (done: boolean, hidden: boolean) {
+async function closeSendPostPopup (done: boolean, hidden: boolean) {
   isSendPostDone = done
   if (!hidden) {
     state.sendPostPopupProps.display = false
+
+    // ポスト送信ポップアップの入力内容のリセット
     state.sendPostPopupProps.type = "post"
     state.sendPostPopupProps.url = undefined
     state.sendPostPopupProps.fileList = undefined
