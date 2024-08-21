@@ -372,6 +372,7 @@ const PreviewLinkCardFeature: {
     ref="popup"
     :hasCloseButton="true"
     :loaderDisplay="mainState.sendPostPopupProcessing"
+    :data-type="type"
     @close="close"
   >
     <template #header>
@@ -503,6 +504,15 @@ const PreviewLinkCardFeature: {
 
 <style lang="scss" scoped>
 .send-post-popup {
+  // ポスト種別に応じて配色を変更
+  --type-color: var(--fg-color);
+  &[data-type="reply"] {
+    --type-color: var(--post-color);
+  }
+  &[data-type="quoteRepost"] {
+    --type-color: var(--share-color);
+  }
+
   &:deep() {
     // ポップアップとテキストエリアを縦に最大化
     .popup,
@@ -515,6 +525,7 @@ const PreviewLinkCardFeature: {
     }
 
     .popup {
+      border-color: rgb(var(--type-color), 0.25);
       max-height: $router-view-width;
     }
 
@@ -522,7 +533,12 @@ const PreviewLinkCardFeature: {
       border-bottom-style: none;
 
       & > h2 {
+        color: rgb(var(--type-color));
         margin-right: 3rem;
+
+        & > .svg-icon {
+          fill: rgb(var(--type-color));
+        }
       }
     }
 
@@ -536,6 +552,7 @@ const PreviewLinkCardFeature: {
 
     // プレビューポストのテキスト選択
     .post {
+      margin: 0.5rem -0.5rem 0;
       .text {
         pointer-events: fill;
         user-select: text;
