@@ -39,19 +39,20 @@ const state = reactive<{
   }),
 })
 
-async function moveToList (type: "feeds" | "users") {
+async function shareStarterPack () {
   Util.blurElement()
   emit("close")
   if (props.starterPack == null) {
     return
   }
-  await router.push({
-    name: `list-${type}-home`,
-    query: {
-      list: props.starterPack.list?.uri ?? props.starterPack.record.list,
-      displayName: props.starterPack.record.name,
-    }
-  })
+  mainState.loaderDisplay = true
+  const sharedUrl = await mainState.atp.fetchStarterPackSharedUrl(props.starterPack)
+  mainState.loaderDisplay = false
+  if (sharedUrl instanceof Error) {
+    mainState.openErrorPopup(sharedUrl, "StarterPackCardPopover/shareStarterPack")
+    return
+  }
+  await navigator.clipboard.writeText(sharedUrl)
 }
 
 async function editStarterPack () {
@@ -72,6 +73,21 @@ async function deleteStarterPack () {
   if (isConfirmed && mainState.starterPackCardPopoverCallback != null) {
     await mainState.starterPackCardPopoverCallback("deleteStarterPack")
   }
+}
+
+async function moveToList (type: "feeds" | "users") {
+  Util.blurElement()
+  emit("close")
+  if (props.starterPack == null) {
+    return
+  }
+  await router.push({
+    name: `list-${type}-home`,
+    query: {
+      list: props.starterPack.list?.uri ?? props.starterPack.record.list,
+      displayName: props.starterPack.record.name,
+    }
+  })
 }
 
 const popover = ref(null)
@@ -113,6 +129,32 @@ function close () {
       v-if="starterPack != null"
       class="list-menu"
     >
+      <!-- スターターパックの短縮URLをコピー -->
+      <button @click.prevent.stop="shareStarterPack">
+        <SVGIcon name="clipboard" />
+        <span>{{ $t("starterPackShare") }}</span>
+      </button>
+
+      <!-- スターターパックを編集する -->
+      <button
+        v-if="state.isOwn"
+        @click.prevent.stop="editStarterPack"
+      >
+        <SVGIcon name="edit" />
+        <span>{{ $t("starterPackEdit") }}</span>
+      </button>
+
+      <!-- スターターパックを削除する -->
+      <button
+        v-if="state.isOwn"
+        @click.prevent.stop="deleteStarterPack"
+      >
+        <SVGIcon name="remove" />
+        <span>{{ $t("starterPackDelete") }}</span>
+      </button>
+
+      <hr />
+
       <!-- リストフィードを見る -->
       <button @click.prevent.stop="moveToList('feeds')">
         <SVGIcon name="post" />
@@ -138,24 +180,6 @@ function close () {
         :text="starterPack.record.description"
         @close="emit('close')"
       />
-
-      <!-- スターターパックを編集する -->
-      <button
-        v-if="state.isOwn"
-        @click.prevent.stop="editStarterPack"
-      >
-        <SVGIcon name="edit" />
-        <span>{{ $t("starterPackEdit") }}</span>
-      </button>
-
-      <!-- スターターパックを削除する -->
-      <button
-        v-if="state.isOwn"
-        @click.prevent.stop="deleteStarterPack"
-      >
-        <SVGIcon name="remove" />
-        <span>{{ $t("starterPackDelete") }}</span>
-      </button>
 
       <!-- コピーする -->
       <MenuTickerCopyTextWrapper

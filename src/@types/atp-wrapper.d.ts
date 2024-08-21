@@ -82,6 +82,7 @@ interface TIAtpWrapper {
   fetchRepo (this: TIAtpWrapper, repo: string): Promise<Error | {}>
   fetchRepostUsers (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<undefined | string>
   fetchServerInfo (this: TIAtpWrapper): Promise<Error | TTServerInfo>
+  fetchStarterPackSharedUrl (this: TIAtpWrapper, starterPack: TIStarterPack): Promise<Error | string>
   fetchStarterPack (this: TIAtpWrapper, uri: string): Promise<Error | TIStarterPack>
   fetchStarterPacks (this: TIAtpWrapper, uris: Array<string>): Promise<Error | Array<TIStarterPack>>
   fetchSuggestedFollows (this: TIAtpWrapper, users: Array<TTUser> | Array<TTUser>, actor: string): Promise<Error | undefined>

@@ -278,6 +278,7 @@
   "noStarterPacks": "このユーザーの管理するスターターパックはありません。",
   "showStarterPackListFeeds": "リストフィードを見る",
   "showStarterPackListUsers": "リストユーザーを見る",
+  "starterPackShare": "共有リンクをコピー",
   "starterPackCreate": "スターターパックを作成",
   "starterPackEdit": "スターターパックを編集",
   "starterPackName": "名前",
