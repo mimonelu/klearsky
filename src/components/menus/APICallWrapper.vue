@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { BskyAgent } from "@atproto/api"
+import type { AtpAgent } from "@atproto/api"
 import { inject, nextTick, reactive, ref } from "vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -55,7 +55,7 @@ async function activate (type: string) {
   mainState.loaderDisplay = true
   switch (type) {
     case "getRecommendedDidCredentials": {
-      response = await (mainState.atp.agent as BskyAgent).com.atproto.identity
+      response = await (mainState.atp.agent as AtpAgent).com.atproto.identity
         .getRecommendedDidCredentials()
           .then((value) => value)
           .catch((error: Error) => error)
@@ -82,7 +82,7 @@ async function activate (type: string) {
       break
     }
     case "listMissingBlobs": {
-      response = await (mainState.atp.agent as BskyAgent).com.atproto.repo
+      response = await (mainState.atp.agent as AtpAgent).com.atproto.repo
         .listMissingBlobs()
           .then((value) => value)
           .catch((error: Error) => error)
@@ -102,7 +102,7 @@ async function activate (type: string) {
       break
     }
     case "checkAccountStatus": {
-      response = await (mainState.atp.agent as BskyAgent).com.atproto.server
+      response = await (mainState.atp.agent as AtpAgent).com.atproto.server
         .checkAccountStatus()
           .then((value) => value)
           .catch((error: Error) => error)

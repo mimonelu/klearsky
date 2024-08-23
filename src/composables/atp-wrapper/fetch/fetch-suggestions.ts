@@ -1,4 +1,4 @@
-import type { AppBskyActorGetSuggestions, BskyAgent } from "@atproto/api"
+import type { AppBskyActorGetSuggestions, AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -12,7 +12,7 @@ export default async function (
     cursor,
   }
   const response: AppBskyActorGetSuggestions.Response =
-    await (this.agent as BskyAgent).getSuggestions(query)
+    await (this.agent as AtpAgent).getSuggestions(query)
   console.log("[klearsky/getSuggestions]", response)
   if (!response.success) return
 

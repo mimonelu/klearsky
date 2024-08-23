@@ -1,4 +1,4 @@
-import type { AtpAgentLoginOpts, BskyAgent, ComAtprotoServerCreateSession } from "@atproto/api"
+import type { AtpAgentLoginOpts, AtpAgent, ComAtprotoServerCreateSession } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -38,6 +38,8 @@ export default async function (
       return responseOfResumeSession
     }
 
+    this.resetSession(responseOfResumeSession, service)
+
   // 新規ログイン
   } else {
     const optinos: AtpAgentLoginOpts = {
@@ -46,7 +48,7 @@ export default async function (
       authFactorToken,
     }
     const response: Error | ComAtprotoServerCreateSession.Response =
-      await (this.agent as BskyAgent).login(optinos)
+      await (this.agent as AtpAgent).login(optinos)
         .then((value: ComAtprotoServerCreateSession.Response) => value)
         .catch((error: any) => error)
     console.log("[klearsky/login]", response)
@@ -59,9 +61,9 @@ export default async function (
       // 通常エラー
       return Error("getSessionError")
     }
-  }
 
-  // ここで persistSession が入る
+    // ここで persistSession が入る
+  }
 
   Util.saveStorage("atp", this.data)
 }

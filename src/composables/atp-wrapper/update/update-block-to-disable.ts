@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoDeleteRecord } from "@atproto/api"
+import type { AtpAgent, ComAtprotoRepoDeleteRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -11,6 +11,6 @@ export default async function (
     repo: this.session?.did as string,
     rkey,
   }
-  await (this.agent as BskyAgent).app.bsky.graph.block.delete(query)
+  await (this.agent as AtpAgent).app.bsky.graph.block.delete(query)
   return true
 }

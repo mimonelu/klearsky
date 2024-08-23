@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetFeed, BskyAgent } from "@atproto/api"
+import type { AppBskyFeedGetFeed, AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -21,7 +21,7 @@ export default async function (
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
   const response: Error | AppBskyFeedGetFeed.Response =
-    await (this.agent as BskyAgent).app.bsky.feed.getFeed(query)
+    await (this.agent as AtpAgent).app.bsky.feed.getFeed(query)
       .then((value: AppBskyFeedGetFeed.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/getFeed]", response)

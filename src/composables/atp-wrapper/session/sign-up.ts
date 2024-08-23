@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoServerCreateAccount } from "@atproto/api"
+import type { AtpAgent, ComAtprotoServerCreateAccount } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -24,7 +24,7 @@ export default async function (
     inviteCode
   }
   const response: Error | ComAtprotoServerCreateAccount.Response =
-    await (this.agent as BskyAgent).createAccount(query)
+    await (this.agent as AtpAgent).createAccount(query)
       .then((value: ComAtprotoServerCreateAccount.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/signUp]", response)

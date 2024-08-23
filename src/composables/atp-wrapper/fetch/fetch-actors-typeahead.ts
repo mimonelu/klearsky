@@ -1,4 +1,4 @@
-import type { AppBskyActorSearchActorsTypeahead, BskyAgent } from "@atproto/api"
+import type { AppBskyActorSearchActorsTypeahead, AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -10,7 +10,7 @@ export default async function (
   if (q != null) query.q = q
   if (limit != null) query.limit = limit
   const response: AppBskyActorSearchActorsTypeahead.Response =
-    await (this.agent as BskyAgent).searchActorsTypeahead(query)
+    await (this.agent as AtpAgent).searchActorsTypeahead(query)
       .then((value: AppBskyActorSearchActorsTypeahead.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/searchActorsTypeahead]", response)

@@ -1,4 +1,4 @@
-import type { BskyAgent } from "@atproto/api"
+import type { AtpAgent } from "@atproto/api"
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
 import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
@@ -117,7 +117,7 @@ import Util from "@/composables/util"
 
 // @ts-ignore
 class AtpWrapper implements TIAtpWrapper {
-  agent: null | BskyAgent
+  agent: null | AtpAgent
 
   proxies: { [k: string]: undefined | string }
 

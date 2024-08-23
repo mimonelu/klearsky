@@ -1,4 +1,4 @@
-import type { AtpSessionData, BskyAgent, ComAtprotoServerGetSession } from "@atproto/api"
+import type { AtpSessionData, AtpAgent, ComAtprotoServerGetSession } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -8,7 +8,7 @@ export default async function (
     return Error("noAgentError")
   }
   const response: Error | ComAtprotoServerGetSession.Response =
-    await (this.agent as BskyAgent).resumeSession({
+    await (this.agent as AtpAgent).resumeSession({
       active: true,
       accessJwt: session.accessJwt,
       refreshJwt: session.refreshJwt,

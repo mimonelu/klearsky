@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { AtpAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -12,7 +12,7 @@ export default async function (
     uri: string;
     cid: string;
   } = await (
-    this.agent as BskyAgent
+    this.agent as AtpAgent
   ).app.bsky.graph.block.create(query, {
     createdAt: new Date().toISOString(),
     subject: did,

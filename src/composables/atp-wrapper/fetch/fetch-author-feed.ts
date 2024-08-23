@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetAuthorFeed, BskyAgent } from "@atproto/api"
+import type { AppBskyFeedGetAuthorFeed, AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -16,7 +16,7 @@ export default async function (
   if (cursor != null) query.cursor = cursor
   if (filter != null) query.filter = filter
   let responseTemp: any = undefined
-  await (this.agent as BskyAgent)
+  await (this.agent as AtpAgent)
     .getAuthorFeed(query)
     .catch(() => {
       // if (error.error === "BlockedActor") ブロックしている

@@ -1,4 +1,4 @@
-import type { BlobRef, BskyAgent, ComAtprotoRepoUploadBlob } from "@atproto/api"
+import type { BlobRef, AtpAgent, ComAtprotoRepoUploadBlob } from "@atproto/api"
 import imageCompression from "browser-image-compression/dist/browser-image-compression"
 
 function convertBlobTo(
@@ -76,7 +76,7 @@ export default async function (
     encoding: mimeType,
   }
   const response: Error | ComAtprotoRepoUploadBlob.Response =
-    await (this.agent as BskyAgent).uploadBlob(input, options)
+    await (this.agent as AtpAgent).uploadBlob(input, options)
       .then((value) => value)
       .catch((error: Error) => error)
   console.log("[klearsky/uploadBlob]", response)

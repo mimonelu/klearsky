@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoModerationCreateReport } from "@atproto/api"
+import type { AtpAgent, ComAtprotoModerationCreateReport } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -24,7 +24,7 @@ export default async function (
     },
   }
   const response: ComAtprotoModerationCreateReport.Response =
-    await (this.agent as BskyAgent).com.atproto.moderation.createReport(query)
+    await (this.agent as AtpAgent).com.atproto.moderation.createReport(query)
       .then((value: ComAtprotoModerationCreateReport.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/createReport]", response)

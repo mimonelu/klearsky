@@ -1,5 +1,5 @@
 interface TIAtpWrapper {
-  agent: null | BskyAgent
+  agent: null | AtpAgent
   proxies: { [k: string]: undefined | string }
   data: { did: string; sessions: { [did: string]: TTSession } }
   session?: TTSession

@@ -1,4 +1,4 @@
-import type { BlobRef, BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { BlobRef, AtpAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -23,7 +23,7 @@ export default async function (
   }
   if (avatarBlobRef != null) (query.record as any).avatar = avatarBlobRef
   const response: Error | ComAtprotoRepoCreateRecord.Response =
-    await (this.agent as BskyAgent).com.atproto.repo.createRecord(query)
+    await (this.agent as AtpAgent).com.atproto.repo.createRecord(query)
       .then((value: ComAtprotoRepoCreateRecord.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/createRecord]", response)

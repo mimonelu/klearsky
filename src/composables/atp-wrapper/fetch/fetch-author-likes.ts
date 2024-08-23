@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoListRecords } from "@atproto/api"
+import type { AtpAgent, ComAtprotoRepoListRecords } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -15,7 +15,7 @@ export default async function (
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
   const response: ComAtprotoRepoListRecords.Response =
-    await (this.agent as BskyAgent).api.com.atproto.repo.listRecords(query)
+    await (this.agent as AtpAgent).api.com.atproto.repo.listRecords(query)
   console.log("[klearsky/listRecords/like]", response)
   if (!response.success) return
 

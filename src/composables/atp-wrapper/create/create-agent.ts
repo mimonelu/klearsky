@@ -1,8 +1,8 @@
 import type { AtpSessionData, AtpSessionEvent } from "@atproto/api"
-import { BskyAgent } from "@atproto/api"
+import { AtpAgent } from "@atproto/api"
 
 export default function (this: TIAtpWrapper, service: string): boolean {
-  this.agent = new BskyAgent({
+  this.agent = new AtpAgent({
     service,
     persistSession: (event: AtpSessionEvent, session?: AtpSessionData | TTSession) => {
       console.log("[klearsky/persistSession]", `event === ${event}`)

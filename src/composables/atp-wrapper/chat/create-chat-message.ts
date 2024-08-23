@@ -1,4 +1,4 @@
-import type { BskyAgent, ChatBskyConvoDefs, ChatBskyConvoSendMessage } from "@atproto/api"
+import type { AtpAgent, ChatBskyConvoDefs, ChatBskyConvoSendMessage } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
 
@@ -56,7 +56,7 @@ export default async function (
   if (options.headers != null && this.proxies.chat != null) {
     options.headers["atproto-proxy"] = this.proxies.chat
   }
-  const response = await (this.agent as BskyAgent).api.chat.bsky.convo
+  const response = await (this.agent as AtpAgent).api.chat.bsky.convo
     .sendMessage(query, options)
       .then((value: ChatBskyConvoSendMessage.Response) => value)
       .catch((error: Error) => error)

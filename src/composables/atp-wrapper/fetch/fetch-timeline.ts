@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetTimeline, BskyAgent } from "@atproto/api"
+import type { AppBskyFeedGetTimeline, AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -18,7 +18,7 @@ export default async function (
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
   const response: AppBskyFeedGetTimeline.Response =
-    await (this.agent as BskyAgent).getTimeline(query)
+    await (this.agent as AtpAgent).getTimeline(query)
       .then((value: AppBskyFeedGetTimeline.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/getTimeline]", response)

@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoDescribeRepo } from "@atproto/api"
+import type { AtpAgent, ComAtprotoRepoDescribeRepo } from "@atproto/api"
 
 // NOTICE: 異なる PDS のリポジトリに対して実行するとエラーとなる
 export default async function (
@@ -15,7 +15,7 @@ export default async function (
     repo,
   }
   const response: Error | ComAtprotoRepoDescribeRepo.Response =
-    await (this.agent as BskyAgent).com.atproto.repo.describeRepo(query)
+    await (this.agent as AtpAgent).com.atproto.repo.describeRepo(query)
       .then((value: ComAtprotoRepoDescribeRepo.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/describeRepo]", response)

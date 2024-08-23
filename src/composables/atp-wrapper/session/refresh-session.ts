@@ -1,4 +1,4 @@
-// import type { BskyAgent, ComAtprotoServerRefreshSession } from "@atproto/api"
+// import type { AtpAgent, ComAtprotoServerRefreshSession } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (this: TIAtpWrapper): Promise<undefined | Error> {
@@ -46,7 +46,7 @@ export default async function (this: TIAtpWrapper): Promise<undefined | Error> {
     return Error("noSessionError")
   }
   const response: undefined | Error =
-    await (this.agent as BskyAgent).refreshSession()
+    await (this.agent as AtpAgent).refreshSession()
       .then(() => {})
       .catch((error: any) => error)
   console.log("[klearsky/refreshSession]", response)
