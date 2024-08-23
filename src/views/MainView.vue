@@ -1455,6 +1455,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     justify-content: center;
     margin: auto;
     position: relative;
+    z-index: 1;
     max-width: $max-width;
     min-height: 100vh;
 
@@ -1481,6 +1482,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   position: fixed;
   left: 0;
   top: 0;
+  z-index: 0;
   width: 100%;
   height: 100vh;
 }
