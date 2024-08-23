@@ -1133,7 +1133,10 @@ function toggleOldestQuotedPostDisplay () {
         <template v-if="post.embed?.record != null">
           <!-- 引用リポスト／リストカード - 見つからない -->
           <div
-            v-if="post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'"
+            v-if="
+              post.embed.record.$type === 'app.bsky.embed.record#viewNotFound' ||
+              post.embed.record.$type === 'app.bsky.embed.record#viewDetached'
+            "
             class="textlabel repost"
           >
             <div class="textlabel__text">
