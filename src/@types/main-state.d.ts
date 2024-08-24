@@ -529,6 +529,14 @@ type MainState = {
   openRepostUsersPopup: (uri: string) => void
   closeRepostUsersPopup: () => void
 
+  // ポップアップ - 引用リポスト一覧ポップアップ
+  currentQuoteReposts: Array<TTPost>
+  currentQuoteRepostsUri?: string
+  currentQuoteRepostsCursor?: string
+  quoteRepostsPopupDisplay: boolean
+  openQuoteRepostsPopup: (uri: string) => void
+  closeQuoteRepostsPopup: () => void
+
   // ポップアップ - いいねユーザーポップアップ
   currentLikeUsers: Array<TTUser>
   currentLikeUsersUri?: string

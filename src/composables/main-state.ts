@@ -556,6 +556,14 @@ state.repostUsersPopupDisplay = false
 state.openRepostUsersPopup = openRepostUsersPopup
 state.closeRepostUsersPopup = closeRepostUsersPopup
 
+// ポップアップ - 引用リポスト一覧ポップアップ
+state.currentQuoteReposts = []
+state.currentQuoteRepostsUri = undefined
+state.currentQuoteRepostsCursor = undefined
+state.quoteRepostsPopupDisplay = false
+state.openQuoteRepostsPopup = openQuoteRepostsPopup
+state.closeQuoteRepostsPopup = closeQuoteRepostsPopup
+
 // ポップアップ - いいねユーザーポップアップ
 state.currentLikeUsers = []
 state.currentLikeUsersUri = undefined
@@ -2090,6 +2098,21 @@ async function openRepostUsersPopup (uri: string) {
 
 function closeRepostUsersPopup () {
   state.repostUsersPopupDisplay = false
+}
+
+// ポップアップ - 引用リポスト一覧ポップアップ
+
+async function openQuoteRepostsPopup (uri: string) {
+  if (state.currentQuoteRepostsUri !== uri) {
+    state.currentQuoteReposts = []
+    state.currentQuoteRepostsUri = uri
+    state.currentQuoteRepostsCursor = undefined
+  }
+  state.quoteRepostsPopupDisplay = true
+}
+
+function closeQuoteRepostsPopup () {
+  state.quoteRepostsPopupDisplay = false
 }
 
 // ポップアップ - いいねユーザーポップアップ

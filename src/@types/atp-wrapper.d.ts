@@ -77,6 +77,7 @@ interface TIAtpWrapper {
   fetchPreferences (this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile (this: TIAtpWrapper, actor: string): Promise<Error | TTProfile>
   fetchProfiles (this: TIAtpWrapper, actors: string[]): Promise<Error | TTProfile[]>
+  fetchQuoteReposts (this: TIAtpWrapper, currentPosts: Array<TTPost>, uri: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, cid?: string): Promise<Error | { uri: string; cid?: string; value: {} }>
   fetchRecords (this: TIAtpWrapper, repo: string, collection: string, limit?: number, cursor?: string, reverse?: boolean): Promise<Error | { cursor?: string; records: TICommonRecord[] }>
   fetchRepo (this: TIAtpWrapper, repo: string): Promise<Error | {}>

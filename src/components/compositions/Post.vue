@@ -33,6 +33,7 @@ const props = defineProps<{
   hasQuoteRepostIcon?: boolean
   noLink?: boolean
   forceHideMedia?: boolean
+  hideQuoteRepost?: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -1156,7 +1157,10 @@ function toggleOldestQuotedPostDisplay () {
           </div>
 
           <!-- 引用リポスト -->
-          <template v-else-if="post.embed.record.$type === 'app.bsky.embed.record#viewRecord'">
+          <template v-else-if="
+            post.embed.record.$type === 'app.bsky.embed.record#viewRecord' &&
+            !hideQuoteRepost
+          ">
             <!-- 最古の引用元ポストトグル -->
             <div
               v-if="state.isOldestQuotedPost"
