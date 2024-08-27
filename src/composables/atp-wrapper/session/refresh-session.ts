@@ -5,10 +5,18 @@ export default async function (this: TIAtpWrapper): Promise<undefined | Error> {
   // TODO: 本来は @atproto/api の `com.atproto.server.refreshSession` を使用するべきだが、
   //       不明なエラーが発生するため直接サーバを叩いている。原因がわかり次第差し替えること
   const session = this.data.sessions[this.data.did]
-  if (session == null) {
+  if (session?.__service == null) {
     return Error("noSessionError")
   }
-  const url = `https://${session.__serviceName}/xrpc/com.atproto.server.refreshSession`
+  let hostName = ""
+  try {
+    const url = new URL(session.__service)
+    hostName = url.hostname
+  } catch (error) {
+    console.warn("[klearsky/refreshSession]", error)
+    return Error("refreshSessionError")
+  }
+  const url = `https://${hostName}/xrpc/com.atproto.server.refreshSession`
   const request: RequestInit = {
     method: "POST",
     headers: { "Authorization": `Bearer ${session.refreshJwt}` },
@@ -33,7 +41,10 @@ export default async function (this: TIAtpWrapper): Promise<undefined | Error> {
     return Error("refreshSessionError")
   }
   this.data.did = json.did
-  this.resetSession(json)
+  const responseOfResetSession = this.resetSession(json)
+  if (responseOfResetSession instanceof Error) {
+    return responseOfResetSession
+  }
 
   // TODO:
   Util.saveStorage("atp", this.data)

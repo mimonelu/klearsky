@@ -596,6 +596,7 @@
   "invalidJwtError": "Invalid JWT.",
   "invalidUrlError": "Invalid URL.",
   "jwtDecodeError": "An error occurred during JWT encoding.",
+  "noJwtError": "JWT is missing. Please log in again.",
   "makeAvatarBlobRefError": "An error occurred while processing avatar image.",
   "noAgentError": "No agent.",
   "noGeneratorError": "No feed generator.",

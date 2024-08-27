@@ -6,7 +6,7 @@ interface TIAtpWrapper {
 
   // Prototype methods
   canLogin (this: TIAtpWrapper): boolean
-  createAgent (this: TIAtpWrapper, service?: string): boolean
+  createAgent (this: TIAtpWrapper, service: string, pdsUrl?: string): boolean
   createChatDeclaration (this: TIAtpWrapper, repo: string, allowIncoming: TTAllowIncoming): Promise<Error | TTCidUri>
   createChatMessage (this: TIAtpWrapper, convoId: string, params: TTCreatePostParams): Promise<Error | TIChatMessage>
   createFileBlobRef (this: TIAtpWrapper, params: TTCreateFileBlobRefParams): Promise<null | BlobRef>
@@ -98,7 +98,7 @@ interface TIAtpWrapper {
   logout (this: TIAtpWrapper)
   muteChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
   refreshSession (this: TIAtpWrapper): Promise<undefined | Error>
-  resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): void
+  resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): Error | undefined
   resumeSession (this: TIAtpWrapper, session: TTSession): Promise<Error | ComAtprotoServerGetSession.OutputSchema>
   saveData (this: TIAtpWrapper)
   signUp (this: TIAtpWrapper, service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<undefined | Error>

@@ -1,20 +1,24 @@
 type TTSession = {
   [index: string]: any
   active: boolean
-  accessJwt: string
-  refreshJwt: string
+  accessJwt?: string
+  refreshJwt?: string
   did: string
   email?: string
   emailAuthFactor?: boolean
   emailConfirmed?: boolean
   handle: string
+  status?: string
 
-  // プロトコル付きサービスアドレス
+  // サービスアドレス
   __service?: string // Injected
 
-  // プロトコルなしサービスアドレス（ホスト名）
-  __serviceName?: string // Injected
+  // PDS URL
+  __pdsUrl?: string // Injected
 
   // アバター画像URL（ AccountList で使用）
   __avatar?: string // Injected
+
+  // 最終ログイン日時（JWT強制削除用）
+  __lastLoggedinAt?: string // Injected
 }

@@ -1,11 +1,15 @@
-import type { AtpSessionData, AtpAgent, ComAtprotoServerGetSession } from "@atproto/api"
+import type { AtpAgent, ComAtprotoServerGetSession } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
-  session: AtpSessionData
+  session: TTSession
 ): Promise<Error | ComAtprotoServerGetSession.OutputSchema> {
   if (this.agent == null) {
     return Error("noAgentError")
+  }
+  if (session.accessJwt == null ||
+      session.refreshJwt == null) {
+    return Error("noJwtError")
   }
   const response: Error | ComAtprotoServerGetSession.Response =
     await (this.agent as AtpAgent).resumeSession({
@@ -17,6 +21,7 @@ export default async function (
       emailAuthFactor: session.emailAuthFactor,
       emailConfirmed: session.emailConfirmed,
       handle: session.handle,
+      status: session.status,
     })
       .then((value: ComAtprotoServerGetSession.Response) => value)
       .catch((error: any) => error)

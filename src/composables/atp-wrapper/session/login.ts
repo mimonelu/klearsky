@@ -14,8 +14,8 @@ export default async function (
   }
 
   const session = this.data.sessions[this.data.did]
-  service ??= session.__service ?? "https://bsky.social"
-  if (!this.createAgent(service)) {
+  service ??= session?.__service ?? "https://bsky.social"
+  if (!this.createAgent(service, session?.__pdsUrl)) {
     return Error("noAgentError")
   }
 
@@ -38,7 +38,10 @@ export default async function (
       return responseOfResumeSession
     }
 
-    this.resetSession(responseOfResumeSession, service)
+    const responseOfResetSession = this.resetSession(responseOfResumeSession, service)
+    if (responseOfResetSession instanceof Error) {
+      return responseOfResetSession
+    }
 
   // 新規ログイン
   } else {

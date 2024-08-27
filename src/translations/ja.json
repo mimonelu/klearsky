@@ -595,6 +595,7 @@
   "invalidCidError": "不正なCIDです。",
   "invalidJwtError": "不正なJWTです。",
   "invalidUrlError": "不正なURLです。",
+  "noJwtError": "JWTがありません。再ログインしてください。",
   "jwtDecodeError": "JWTのエンコードでエラーが発生しました。",
   "makeAvatarBlobRefError": "アバター画像の処理中にエラーが発生しました。",
   "noAgentError": "エージェントがありません。",

@@ -8,6 +8,11 @@ export default async function (
   if (session == null) {
     return Error("noSessionError")
   }
+  if (session.refreshJwt == null ||
+      session.accessJwt == null
+  ) {
+    return Error("noJwtError")
+  }
   let refreshJwt = undefined
   let accessJwt = undefined
   try {
