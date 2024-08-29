@@ -27,12 +27,17 @@ export default async function (
     return Error("apiError")
   }
 
-  /*
-  // ブロックユーザーをフィルタリング
-  response.data.repostedBy = (response.data.repostedBy as Array<TTPost>).filter((post: TTPost) => {
-    return !post.viewer?.blocking && !post.viewer?.blockedBy
-  })
-  */
+  // ブロックユーザーを除去
+  response.data.posts = (response.data.posts as Array<TTPost>)
+    .filter((post) => {
+      return !post.viewer?.blocking && !post.viewer?.blockedBy
+    })
+
+  // detached されたポストを除去
+  response.data.posts = (response.data.posts as Array<TTPost>)
+    .filter((post) => {
+      return !post.embed?.record?.detached
+    })
 
   const newPosts: Array<TTPost> = []
   ;(response.data.posts as Array<TTPost>).forEach((newPost) => {

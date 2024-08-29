@@ -69,7 +69,10 @@ interface TIEmbed {
   external?: TTExternal
   images?: Array<TTImage>
   video?: TIBlob
-  record?: TTPost
+  record?: TTPost & {
+    $type: string
+    detached?: boolean
+  }
   [k: string]: unknown
 }
 

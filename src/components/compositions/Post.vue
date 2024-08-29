@@ -1136,7 +1136,10 @@ function toggleOldestQuotedPostDisplay () {
           <div
             v-if="
               post.embed.record.$type === 'app.bsky.embed.record#viewNotFound' ||
-              post.embed.record.$type === 'app.bsky.embed.record#viewDetached'
+              (
+                post.embed.record.$type === 'app.bsky.embed.record#viewDetached' &&
+                !hideQuoteRepost
+              )
             "
             class="textlabel repost"
           >
