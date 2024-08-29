@@ -12,7 +12,7 @@ import Util from "@/composables/util"
 import translationEn from "@/translations/en.json"
 import translationJa from "@/translations/ja.json"
 
-Util.proxyFetch()
+// Util.proxyFetch()
 
 const app = createApp(App)
 app.use(router)

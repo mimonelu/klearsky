@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoServerDeleteSession } from "@atproto/api"
+import type { AtpAgent, ComAtprotoServerDeleteSession } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper): Promise<boolean> {
   if (this.agent == null) return false
@@ -6,7 +6,7 @@ export default async function (this: TIAtpWrapper): Promise<boolean> {
 
   // TODO: API は成功するが、セッションが削除されない。要調査
   const response: ComAtprotoServerDeleteSession.Response = await (
-    this.agent as BskyAgent
+    this.agent as AtpAgent
   ).api.com.atproto.server.deleteSession(undefined, {
     headers: {
       authorization: `Bearer ${this.session.refreshJwt}`,

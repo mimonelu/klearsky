@@ -39,7 +39,7 @@ export default class MyChat {
       // 更新
       const uri = declarations.records[0].uri
 
-      // BskyAgent に更新用のメソッドがないため、直接レコードを更新している
+      // AtpAgent に更新用のメソッドがないため、直接レコードを更新している
       const result = await this.mainState.atp.updateRecord(
         this.mainState.atp.data.did,
         "chat.bsky.actor.declaration",

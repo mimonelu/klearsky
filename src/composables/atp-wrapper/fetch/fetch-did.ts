@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoIdentityResolveHandle } from "@atproto/api"
+import type { AtpAgent, ComAtprotoIdentityResolveHandle } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -7,7 +7,7 @@ export default async function (
   if (this.agent == null) return Error("noAgentError")
   const query: ComAtprotoIdentityResolveHandle.QueryParams = { handle }
   const response: Error | ComAtprotoIdentityResolveHandle.Response =
-    await (this.agent as BskyAgent).resolveHandle(query)
+    await (this.agent as AtpAgent).resolveHandle(query)
       .then((value: ComAtprotoIdentityResolveHandle.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/resolveHandle]", response)

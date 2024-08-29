@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoTempFetchLabels } from "@atproto/api"
+import type { AtpAgent, ComAtprotoTempFetchLabels } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -10,7 +10,7 @@ export default async function (
   if (since != null) query.since = since
   if (limit != null) query.limit = limit
   const response: Error | ComAtprotoTempFetchLabels.Response =
-    await (this.agent as BskyAgent).api.com.atproto.temp.fetchLabels(query)
+    await (this.agent as AtpAgent).api.com.atproto.temp.fetchLabels(query)
       .then((value: ComAtprotoTempFetchLabels.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/fetchLabels]", response)

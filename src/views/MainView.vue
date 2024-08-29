@@ -42,6 +42,7 @@ import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsP
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
 import PsySafetySettingsPopup from "@/components/popups/settings-popups/PsySafetySettingsPopup.vue"
+import QuoteRepostsPopup from "@/components/popups/QuoteRepostsPopup.vue"
 import RepostPopover from "@/components/popovers/RepostPopover.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
 import ScrollButton from "@/components/buttons/ScrollButton.vue"
@@ -85,6 +86,7 @@ onBeforeMount(() => {
   hotkeys("n", { keyup: true }, (event: any) => {
     if (event.type === "keyup" &&
       !state.repostUsersPopupDisplay &&
+      !state.quoteRepostsPopupDisplay &&
       !state.likeUsersPopupDisplay &&
       !state.imagePopupProps.display &&
       !state.sendPostPopupProps.visibility &&
@@ -148,6 +150,7 @@ router.beforeEach(async (to: RouteLocationNormalized, _from: RouteLocationNormal
   state.currentPosts?.splice(0)
 
   state.repostUsersPopupDisplay = false
+  state.quoteRepostsPopupDisplay = false
   state.likeUsersPopupDisplay = false
 })
 
@@ -1041,6 +1044,14 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
         <RepostUsersPopup
           v-if="state.repostUsersPopupDisplay"
           @close="state.closeRepostUsersPopup"
+        />
+      </Transition>
+
+      <!-- 引用リポスト一覧リストポップアップ -->
+      <Transition>
+        <QuoteRepostsPopup
+          v-if="state.quoteRepostsPopupDisplay"
+          @close="state.closeQuoteRepostsPopup"
         />
       </Transition>
 

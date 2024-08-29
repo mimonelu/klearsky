@@ -13,8 +13,17 @@ export default function () {
     get (_, prop: string) {
       return prop === "__TEST__"
     },
-    apply (target, _, argumentsList: [RequestInfo, RequestInit?]) {
-      const [url = "", options = {}] = argumentsList
+    apply (target, _, argumentsList: [string | URL | Request, Request?]) {
+      console.log(1111, typeof argumentsList[0], argumentsList)
+
+      const url: string = typeof argumentsList[0] === "string"
+        ? argumentsList[0]
+        : (argumentsList[0] as URL).href != null
+          ? (argumentsList[0] as URL).href
+          : (argumentsList[0] as unknown as Request).url
+      const options = argumentsList[1] == null
+        ? argumentsList[0] as Request
+        : argumentsList[1] as Request
 
       // タイムアウトを取得
       let timeout = CONSTS.TIMEOUT_DEFAULT
@@ -27,8 +36,12 @@ export default function () {
       })
 
       const controller = new AbortController()
-      const signal = controller.signal
-      options.signal = signal
+
+      if (options != null) {
+        const signal = controller.signal
+        ;(options as any).signal = signal
+      }
+
       const setTimeoutPromise = new Promise<Response>((_, reject) => {
         setTimeout(() => {
           const error = new Error("Request timed out")

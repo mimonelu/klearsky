@@ -1,4 +1,4 @@
-import type { AppBskyActorProfile, BlobRef, BskyAgent } from "@atproto/api"
+import type { AppBskyActorProfile, BlobRef, AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -63,7 +63,7 @@ export default async function (
   }
 
   try {
-    await (this.agent as BskyAgent).upsertProfile(
+    await (this.agent as AtpAgent).upsertProfile(
       (existing: AppBskyActorProfile.Record | undefined): AppBskyActorProfile.Record => {
         // アバター画像が未指定の場合、既存の画像を指定する
         if (!params.detachAvatar.includes(true) &&

@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoDeleteRecord } from "@atproto/api"
+import type { AtpAgent, ComAtprotoRepoDeleteRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -13,7 +13,7 @@ export default async function (
     rkey: Util.getRkey(uri),
   }
   const response: undefined | Error =
-    await (this.agent as BskyAgent).app.bsky.graph.starterpack.delete(query)
+    await (this.agent as AtpAgent).app.bsky.graph.starterpack.delete(query)
       .catch((error: any) => error)
   console.log("[klearsky/deleteStarterPack]", response)
   if (response instanceof Error) {

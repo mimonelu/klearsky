@@ -1,4 +1,4 @@
-import type { BskyAgent } from "@atproto/api"
+import type { AtpAgent } from "@atproto/api"
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
 import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
@@ -70,6 +70,7 @@ import fetchPostThread from "@/composables/atp-wrapper/fetch/fetch-post-thread"
 import fetchPreferences from "@/composables/atp-wrapper/fetch/fetch-preferences"
 import fetchProfile from "@/composables/atp-wrapper/fetch/fetch-profile"
 import fetchProfiles from "@/composables/atp-wrapper/fetch/fetch-profiles"
+import fetchQuoteReposts from "@/composables/atp-wrapper/fetch/fetch-quote-reposts"
 import fetchRecord from "@/composables/atp-wrapper/fetch/fetch-record"
 import fetchRecords from "@/composables/atp-wrapper/fetch/fetch-records"
 import fetchRepo from "@/composables/atp-wrapper/fetch/fetch-repo"
@@ -117,7 +118,7 @@ import Util from "@/composables/util"
 
 // @ts-ignore
 class AtpWrapper implements TIAtpWrapper {
-  agent: null | BskyAgent
+  agent: null | AtpAgent
 
   proxies: { [k: string]: undefined | string }
 
@@ -224,6 +225,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchPreferences = fetchPreferences
   fetchProfile = fetchProfile
   fetchProfiles = fetchProfiles
+  fetchQuoteReposts = fetchQuoteReposts
   fetchRecord = fetchRecord
   fetchRecords = fetchRecords
   fetchRepo = fetchRepo

@@ -1,4 +1,4 @@
-import type { AppBskyGraphGetSuggestedFollowsByActor, BskyAgent } from "@atproto/api"
+import type { AppBskyGraphGetSuggestedFollowsByActor, AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -8,7 +8,7 @@ export default async function (
   if (this.agent == null) return Error("noAgentError")
   const query: AppBskyGraphGetSuggestedFollowsByActor.QueryParams = { actor }
   const response: Error | AppBskyGraphGetSuggestedFollowsByActor.Response =
-    await (this.agent as BskyAgent).app.bsky.graph.getSuggestedFollowsByActor(query)
+    await (this.agent as AtpAgent).app.bsky.graph.getSuggestedFollowsByActor(query)
       .then((value: AppBskyGraphGetSuggestedFollowsByActor.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/getSuggestedFollowsByActor]", response)

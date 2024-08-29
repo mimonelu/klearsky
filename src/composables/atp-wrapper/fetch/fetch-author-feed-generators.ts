@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetActorFeeds, BskyAgent } from "@atproto/api"
+import type { AppBskyFeedGetActorFeeds, AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -12,7 +12,7 @@ export default async function (
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
   const response: Error | AppBskyFeedGetActorFeeds.Response =
-    await (this.agent as BskyAgent).app.bsky.feed.getActorFeeds(query)
+    await (this.agent as AtpAgent).app.bsky.feed.getActorFeeds(query)
       .then((value: AppBskyFeedGetActorFeeds.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/getActorFeeds]", response)

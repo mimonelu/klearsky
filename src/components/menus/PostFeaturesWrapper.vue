@@ -4,6 +4,7 @@ import MenuTickerOpenTimeFeedsPopup from "@/components/menus/OpenTimeFeedsPopup.
 import MenuTickerSendMention from "@/components/menus/SendMention.vue"
 import MenuTickerSendPostAfter from "@/components/menus/SendPostAfter.vue"
 import MenuTickerShowLikeUsers from "@/components/menus/ShowLikeUsers.vue"
+import MenuTickerShowQuoteReposts from "@/components/menus/ShowQuoteReposts.vue"
 import MenuTickerShowRepostUsers from "@/components/menus/ShowRepostUsers.vue"
 import MenuTickerTogglePinnedPost from "@/components/menus/TogglePinnedPost.vue"
 import Popover from "@/components/popovers/Popover.vue"
@@ -77,6 +78,12 @@ function close () {
 
         <!-- リポストユーザーリストポップアップトリガー -->
         <MenuTickerShowRepostUsers
+          :uri="post.uri"
+          @close="emit('close')"
+        />
+
+        <!-- 引用リポストリストポップアップトリガー -->
+        <MenuTickerShowQuoteReposts
           :uri="post.uri"
           @close="emit('close')"
         />

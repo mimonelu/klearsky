@@ -1,5 +1,5 @@
 import Package from "@/../package.json"
-import type { AppBskyFeedPost, BskyAgent } from "@atproto/api"
+import type { AppBskyFeedPost, AtpAgent } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
 
@@ -84,7 +84,7 @@ export default async function (
     }
 
   const response: Error | TTCidUri =
-    await (this.agent as BskyAgent).post(record)
+    await (this.agent as AtpAgent).post(record)
       .then((value: TTCidUri) => value)
       .catch((error: any) => error)
   console.log("[klearsky/post]", response)

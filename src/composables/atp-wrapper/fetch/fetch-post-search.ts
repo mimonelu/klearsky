@@ -1,4 +1,4 @@
-import type { AppBskyFeedSearchPosts, BskyAgent } from "@atproto/api"
+import type { AppBskyFeedSearchPosts, AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -20,7 +20,7 @@ export default async function (
     query.cursor = cursor
   }
   const response: AppBskyFeedSearchPosts.Response =
-    await (this.agent as BskyAgent).app.bsky.feed.searchPosts(query)
+    await (this.agent as AtpAgent).app.bsky.feed.searchPosts(query)
       .then((value: AppBskyFeedSearchPosts.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/fetchPostSearch]", response)

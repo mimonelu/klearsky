@@ -1,4 +1,4 @@
-import type { AppBskyGraphUnmuteActorList, BskyAgent } from "@atproto/api"
+import type { AppBskyGraphUnmuteActorList, AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -6,7 +6,7 @@ export default async function (
 ): Promise<undefined | Error> {
   if (this.agent == null) return Error("noAgentError")
   const response: AppBskyGraphUnmuteActorList.Response | Error =
-    await (this.agent as BskyAgent).unmuteModList(listUri)
+    await (this.agent as AtpAgent).unmuteModList(listUri)
       .then((value: AppBskyGraphUnmuteActorList.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/unmuteModList]", response)

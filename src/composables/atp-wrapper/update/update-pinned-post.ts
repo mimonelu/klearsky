@@ -1,4 +1,4 @@
-import type { AppBskyActorProfile, BskyAgent } from "@atproto/api"
+import type { AppBskyActorProfile, AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -9,7 +9,7 @@ export default async function (
   }
   let pinned = false
   const response: undefined | Error =
-    await (this.agent as BskyAgent)
+    await (this.agent as AtpAgent)
       .upsertProfile((existing?: any): AppBskyActorProfile.Record => {
         // プロフィールレコード未作成時
         if (existing == null) {

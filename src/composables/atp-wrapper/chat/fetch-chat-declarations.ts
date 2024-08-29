@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoListRecords } from "@atproto/api"
+import type { AtpAgent, ComAtprotoRepoListRecords } from "@atproto/api"
 
 type TTRequest = Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>
 
@@ -21,7 +21,7 @@ export default async function (
   if (cursor != null) {
     query.cursor = cursor
   }
-  const response = await (this.agent as BskyAgent).api.chat.bsky.actor.declaration.list(query)
+  const response = await (this.agent as AtpAgent).api.chat.bsky.actor.declaration.list(query)
     .then((value: TIFetchChatDeclarationsResponse) => value)
     .catch((error: Error) => error)
   console.log("[klearsky/api.chat.bsky.actor.declaration.list]", response)

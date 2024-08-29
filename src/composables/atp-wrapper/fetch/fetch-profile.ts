@@ -1,4 +1,4 @@
-import type { AppBskyActorGetProfile, BskyAgent } from "@atproto/api"
+import type { AppBskyActorGetProfile, AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -6,7 +6,7 @@ export default async function (
 ): Promise<Error | TTProfile> {
   if (this.agent == null) return Error("noAgentError")
   const response: Error | AppBskyActorGetProfile.Response =
-    await (this.agent as BskyAgent).getProfile({ actor })
+    await (this.agent as AtpAgent).getProfile({ actor })
       .then((value: AppBskyActorGetProfile.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/getProfile]", response)

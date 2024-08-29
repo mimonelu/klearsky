@@ -1,4 +1,4 @@
-import type { AppBskyNotificationListNotifications, BskyAgent } from "@atproto/api"
+import type { AppBskyNotificationListNotifications, AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -14,7 +14,7 @@ export default async function (
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor
   const response: Error | AppBskyNotificationListNotifications.Response =
-    await (this.agent as BskyAgent).listNotifications(query)
+    await (this.agent as AtpAgent).listNotifications(query)
       .then((value: AppBskyNotificationListNotifications.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/listNotifications]", response)

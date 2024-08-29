@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoDeleteRecord } from "@atproto/api"
+import type { AtpAgent, ComAtprotoRepoDeleteRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -24,7 +24,7 @@ export default async function (
     swapCommit,
   }
   const response: Error | ComAtprotoRepoDeleteRecord.Response =
-    await (this.agent as BskyAgent).com.atproto.repo.deleteRecord(query)
+    await (this.agent as AtpAgent).com.atproto.repo.deleteRecord(query)
       .then((value: ComAtprotoRepoDeleteRecord.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/deleteRecord]", response)

@@ -1,4 +1,4 @@
-import type { BskyAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { AtpAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -24,7 +24,7 @@ export default async function (
     swapCommit,
   }
   const response: Error | ComAtprotoRepoCreateRecord.Response =
-    await (this.agent as BskyAgent).com.atproto.repo.createRecord(query)
+    await (this.agent as AtpAgent).com.atproto.repo.createRecord(query)
       .then((value: ComAtprotoRepoCreateRecord.Response) => value)
       .catch((error: any) => error)
   console.log("[klearsky/createRecord]", response)

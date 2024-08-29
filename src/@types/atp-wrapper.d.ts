@@ -1,12 +1,12 @@
 interface TIAtpWrapper {
-  agent: null | BskyAgent
+  agent: null | AtpAgent
   proxies: { [k: string]: undefined | string }
   data: { did: string; sessions: { [did: string]: TTSession } }
   session?: TTSession
 
   // Prototype methods
   canLogin (this: TIAtpWrapper): boolean
-  createAgent (this: TIAtpWrapper, service?: string): boolean
+  createAgent (this: TIAtpWrapper, service: string, pdsUrl?: string): boolean
   createChatDeclaration (this: TIAtpWrapper, repo: string, allowIncoming: TTAllowIncoming): Promise<Error | TTCidUri>
   createChatMessage (this: TIAtpWrapper, convoId: string, params: TTCreatePostParams): Promise<Error | TIChatMessage>
   createFileBlobRef (this: TIAtpWrapper, params: TTCreateFileBlobRefParams): Promise<null | BlobRef>
@@ -77,6 +77,7 @@ interface TIAtpWrapper {
   fetchPreferences (this: TIAtpWrapper): Promise<undefined | Array<TTPreference>>
   fetchProfile (this: TIAtpWrapper, actor: string): Promise<Error | TTProfile>
   fetchProfiles (this: TIAtpWrapper, actors: string[]): Promise<Error | TTProfile[]>
+  fetchQuoteReposts (this: TIAtpWrapper, currentPosts: Array<TTPost>, uri: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchRecord (this: TIAtpWrapper, repo: string, collection: string, uri: string, cid?: string): Promise<Error | { uri: string; cid?: string; value: {} }>
   fetchRecords (this: TIAtpWrapper, repo: string, collection: string, limit?: number, cursor?: string, reverse?: boolean): Promise<Error | { cursor?: string; records: TICommonRecord[] }>
   fetchRepo (this: TIAtpWrapper, repo: string): Promise<Error | {}>
@@ -97,7 +98,7 @@ interface TIAtpWrapper {
   logout (this: TIAtpWrapper)
   muteChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
   refreshSession (this: TIAtpWrapper): Promise<undefined | Error>
-  resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): void
+  resetSession (this: TIAtpWrapper, newSession: TTSession, service?: string): Error | undefined
   resumeSession (this: TIAtpWrapper, session: TTSession): Promise<Error | ComAtprotoServerGetSession.OutputSchema>
   saveData (this: TIAtpWrapper)
   signUp (this: TIAtpWrapper, service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<undefined | Error>

@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetPosts, BskyAgent } from "@atproto/api"
+import type { AppBskyFeedGetPosts, AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
@@ -19,7 +19,7 @@ export default async function (
   const tasks = chunkArray(uris, CONSTS.LIMIT_OF_FETCH_POSTS)
     .map(async (uris: string[]) => {
       const query: AppBskyFeedGetPosts.QueryParams = { uris }
-      return (this.agent as BskyAgent).getPosts(query)
+      return (this.agent as AtpAgent).getPosts(query)
         .then((value: AppBskyFeedGetPosts.Response) => value)
         .catch((error: any) => error)
     })

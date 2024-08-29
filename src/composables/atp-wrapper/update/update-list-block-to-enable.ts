@@ -1,4 +1,4 @@
-import type { BskyAgent } from "@atproto/api"
+import type { AtpAgent } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -6,7 +6,7 @@ export default async function (
 ): Promise<string | Error> {
   if (this.agent == null) return Error("noAgentError")
   const response: TTCidUri | Error =
-    await (this.agent as BskyAgent).blockModList(listUri)
+    await (this.agent as AtpAgent).blockModList(listUri)
       .then((value: TTCidUri) => value)
       .catch((error: any) => error)
   console.log("[klearsky/blockModList]", response)
