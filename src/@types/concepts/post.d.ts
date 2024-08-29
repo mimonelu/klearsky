@@ -84,10 +84,12 @@ interface TIBlob {
 }
 
 interface TIVideo {
-  $type: "app.bsky.embed.video"
-  alt?: string
+  $type: "app.bsky.embed.video#view"
+  cid: string
+  playlist: string
+  thumbnail: string
   aspectRatio?: TTAspectRatio
-  video: TIBlob
+  alt?: string // Injected
 }
 
 type TTReason = {

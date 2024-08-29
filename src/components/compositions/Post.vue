@@ -116,8 +116,8 @@ const state = reactive<{
   // メディア
   images: computed(() => props.post.embed?.images ?? props.post.record?.embed?.images ?? []),
   video: computed(() => {
-    const embed = props.post.embed ?? props.post.record?.embed
-    return embed == null || embed.$type !== "app.bsky.embed.video"
+    const embed = props.post.embed
+    return embed == null || embed.$type !== "app.bsky.embed.video#view"
       ? undefined
       : embed as unknown as TIVideo
   }),
@@ -1021,6 +1021,7 @@ function toggleOldestQuotedPostDisplay () {
                       loading="lazy"
                       loop
                       muted
+                      :poster="state.video.thumbnail"
                       preload="metadata"
                       width="100%"
                       :style="{ 'aspect-ratio': state.videoAspectRatio }"
@@ -1029,7 +1030,7 @@ function toggleOldestQuotedPostDisplay () {
                       <Suspense>
                         <VideoSource
                           :did="post.author.did"
-                          :cid="(state.video.video.ref) + ''"
+                          :cid="state.video.cid"
                         />
                       </Suspense>
                     </video>
@@ -1744,8 +1745,11 @@ function toggleOldestQuotedPostDisplay () {
 }
 
 .video-container {
+  background-color: var(--fg-color-0125);
+
   & > video {
     border-radius: var(--border-radius-middle);
+    max-height: 100vh;
   }
 
   & > p {

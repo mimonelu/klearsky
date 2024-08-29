@@ -19,6 +19,7 @@ interface TIAtpWrapper {
   createReport (this: TIAtpWrapper, reasonType: string, reason: string, did?: string, cid?: string, uri?: string, type?: string): Promise<boolean>
   createRepost (this: TIAtpWrapper, uri: string, cid: string): Promise<boolean>
   createStarterPack (this: TIAtpWrapper, starterPack: TIStarterPack): Promise<Error | TTCidUri>
+  createVideo (this: TIAtpWrapper, file: File): Promise<Error | AppBskyVideoUploadVideo.OutputSchema>
   deleteAccount (this: TIAtpWrapper, did?: string)
   deleteChatDeclaration (this: TIAtpWrapper, repo: string, uri: string): Promise<Error | void>
   deleteChatMessage (this: TIAtpWrapper, convoId: string, messageId: string): Promise<Error | boolean>

@@ -171,11 +171,29 @@ export default async function (
     }
     video = {
       $type: "app.bsky.embed.video",
-      alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "",
+
       // TODO:
       // aspectRatio: {},
+
       video: videoBlob,
+      alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "", // Injected
     }
+
+    /* TODO: APIが実装され次第、コメントアウト
+    const response = await atp.createVideo(params.medias[videoFileIndex])
+    if (response instanceof Error) {
+      return response
+    }
+    video = {
+      $type: "app.bsky.embed.video",
+
+      // TODO:
+      // aspectRatio: {},
+
+      video: response.data.jobStatus?.blob,
+      alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "", // Injected
+    }
+    */
   }
 
   // 引用リポスト
@@ -210,14 +228,21 @@ export default async function (
 
   // 画像またはリンクカード
   if (params.type !== "quoteRepost" && manualQuoteRepost == null) {
-    if (images.length > 0)
-      parent.embed = { $type: "app.bsky.embed.images", images }
-    else if (video != null)
+    if (images.length > 0) {
+      parent.embed = {
+        $type: "app.bsky.embed.images",
+        images,
+      }
+    } else if (video != null) {
       parent.embed = video
-    else if (external != null)
-      parent.embed = { $type: "app.bsky.embed.external", external }
-    else if (feedOrLinkOrStarterPackCard != null)
+    } else if (external != null) {
+      parent.embed = {
+        $type: "app.bsky.embed.external",
+        external,
+      }
+    } else if (feedOrLinkOrStarterPackCard != null) {
       parent.embed = feedOrLinkOrStarterPackCard
+    }
   }
 }
 
