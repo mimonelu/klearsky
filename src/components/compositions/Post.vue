@@ -1748,7 +1748,7 @@ function toggleOldestQuotedPostDisplay () {
   & > video {
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius-middle);
-    max-height: 100vh;
+    max-height: 75vh;
   }
 
   & > p {
