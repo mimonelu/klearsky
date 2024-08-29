@@ -13,7 +13,6 @@ import injectFoldingToFeeds from "@/composables/util/inject-folding-to-feeds"
 import makeCustomLinks from "@/composables/util/make-custom-links"
 import mergeFeeds from "@/composables/util/merge-feeds"
 import parseOgp from "@/composables/util/parse-ogp"
-import proxyFetch from "@/composables/util/proxy-fetch"
 import safeJson from "@/composables/util/safe-json"
 import setArray from "@/composables/util/set-array"
 import sortFeeds from "@/composables/util/sort-feeds"
@@ -46,7 +45,6 @@ export default {
   makeCustomLinks,
   mergeFeeds,
   parseOgp,
-  proxyFetch,
   ...safeJson,
   setArray,
   sortFeeds,

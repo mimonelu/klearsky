@@ -1745,9 +1745,8 @@ function toggleOldestQuotedPostDisplay () {
 }
 
 .video-container {
-  background-color: var(--fg-color-0125);
-
   & > video {
+    background-color: var(--fg-color-0125);
     border-radius: var(--border-radius-middle);
     max-height: 100vh;
   }
