@@ -81,7 +81,10 @@ function callback (type: "createRepost" | "deleteRepost" | "createQuoteRepost") 
       </button>
 
       <!-- 引用リポスト -->
-      <button @click.stop="callback('createQuoteRepost')">
+      <button
+        :disabled="post.viewer?.embeddingDisabled"
+        @click.stop="callback('createQuoteRepost')"
+      >
         <SVGIcon name="quoteRepost" />
         <span>{{ $t("sendQuoteRepost") }}</span>
       </button>

@@ -25,6 +25,7 @@ type TTPost = {
     like?: string
     replyDisabled?: boolean
     threadMuted?: boolean
+    embeddingDisabled?: boolean
     [k: string]: unknown
   }
   [k: string]: unknown
