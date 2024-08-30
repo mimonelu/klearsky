@@ -281,7 +281,9 @@ function onActivateAccountMaskToggle () {
 // 固定ポスト
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
-  Util.updatePostProps(mainState.currentAuthorPinnedPost, newPosts[0])
+  if (mainState.currentAuthorPinnedPost != null) {
+    Util.updatePostProps(mainState.currentAuthorPinnedPost, newPosts[0])
+  }
 }
 
 function removeThisPost () {

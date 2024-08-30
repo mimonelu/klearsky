@@ -39,6 +39,7 @@ const state = reactive<{
       likeCount: 0,
       replyCount: 0,
       repostCount: 0,
+      quoteCount: 0,
       uri: "",
     }
     Util.sanitizePostsOrFeeds([post])

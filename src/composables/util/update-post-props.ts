@@ -1,4 +1,4 @@
-export default function updatePostProps (src: any, dst: any) {
+export default function updatePostProps (src: TTPost, dst: TTPost) {
   if (src == null || dst == null) return
 
   // 返信数の更新
@@ -10,6 +10,15 @@ export default function updatePostProps (src: any, dst: any) {
   if (src.viewer != null && dst.viewer != null) {
     if (dst.viewer.repost == null) delete src.viewer.repost
     else src.viewer.repost = dst.viewer.repost
+  }
+
+  // 引用リポスト数の更新
+  src.quoteCount = dst.quoteCount
+
+  // 引用リポストの無効化フラグの更新
+  if (src.viewer != null && dst.viewer != null) {
+    if (dst.viewer.embeddingDisabled == null) delete src.viewer.embeddingDisabled
+    else src.viewer.embeddingDisabled = dst.viewer.embeddingDisabled
   }
 
   // いいね数といいね情報の更新

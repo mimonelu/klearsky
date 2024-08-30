@@ -28,16 +28,25 @@
 
   & > span {
     color: var(--fg-color-05);
-    font-size: 0.875em;
     font-weight: bold;
     overflow: hidden;
     pointer-events: none;
     text-overflow: ellipsis;
+
+    // 非SPレイアウト
+    @include media-not-sp-layout() {
+      font-size: 0.875em;
+    }
+
+  // SPレイアウト
+    @include media-sp-layout() {
+      font-size: 0.75em;
+    }
   }
 }
 .icon-button {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  grid-gap: 0 0.5em;
+  grid-gap: 0 0.375em;
 }

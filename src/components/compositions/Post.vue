@@ -1846,6 +1846,10 @@ function toggleOldestQuotedPostDisplay () {
     display: flex;
     margin-left: auto;
   }
+
+  .icon-button:deep() > span {
+    white-space: nowrap;
+  }
 }
 
 // リプライボタン

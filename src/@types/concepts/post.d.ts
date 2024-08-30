@@ -18,6 +18,7 @@ type TTPost = {
   record: TIPostValue
   replyCount: number
   repostCount: number
+  quoteCount: number
   uri: string
   value?: TIPostValue
   viewer?: {
