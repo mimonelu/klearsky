@@ -550,9 +550,10 @@ const PreviewLinkCardFeature: {
       margin: 0 -0.5rem;
     }
 
-    // プレビューポストのテキスト選択
-    .post {
+    // プレビューポスト
+    .post[data-position="preview"] {
       margin: 0.5rem -0.5rem 0;
+
       .text {
         pointer-events: fill;
         user-select: text;
