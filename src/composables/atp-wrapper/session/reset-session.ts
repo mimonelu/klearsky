@@ -1,4 +1,4 @@
-import { FORCE_DELETE_JWT_DATE } from "@/consts/consts.json"
+import { LOGGEDIN_VERSION } from "@/consts/consts.json"
 
 export default function (
   this: TIAtpWrapper,
@@ -26,20 +26,18 @@ export default function (
   currentSession.__pdsUrl = newSession.didDoc?.service?.[0]?.serviceEndpoint ?? currentSession.__pdsUrl
 
   // JWT強制削除
-  currentSession.__lastLoggedinAt = newSession.__lastLoggedinAt ?? currentSession.__lastLoggedinAt
-  if (currentSession.__lastLoggedinAt == null) {
+  currentSession.__loggedinVersion = newSession.__loggedinVersion ?? currentSession.__loggedinVersion
+  if (currentSession.__loggedinVersion == null) {
     delete currentSession.accessJwt
     delete currentSession.refreshJwt
-    const error = Error("noJwtError")
+    const error = Error("jwtUpdateError")
     console.log("[klearsky/resetSession]", error)
     return error
-  } else if (FORCE_DELETE_JWT_DATE) {
-    const currentDate = new Date(FORCE_DELETE_JWT_DATE)
-    const lastLoggedinDate = new Date(currentSession.__lastLoggedinAt)
-    if (currentDate > lastLoggedinDate) {
+  } else if (LOGGEDIN_VERSION) {
+    if (currentSession.__loggedinVersion < LOGGEDIN_VERSION) {
       delete currentSession.accessJwt
       delete currentSession.refreshJwt
-      const error = Error("invalidJwtError")
+      const error = Error("jwtUpdateError")
       console.log("[klearsky/resetSession]", error)
       return error
     }

@@ -20,5 +20,5 @@ type TTSession = {
   __avatar?: string // Injected
 
   // 最終ログイン日時（JWT強制削除用）
-  __lastLoggedinAt?: string // Injected
+  __loggedinVersion?: number // Injected
 }

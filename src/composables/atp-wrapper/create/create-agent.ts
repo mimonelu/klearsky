@@ -11,8 +11,8 @@ export default function (this: TIAtpWrapper, service: string, pdsUrl?: string): 
         return
       }
 
-      // JWT強制削除 - 最終ログイン日時を設定
-      ;(session as TTSession).__lastLoggedinAt = new Date().toISOString()
+      // JWT強制削除 - ログインバージョンを設定
+      ;(session as TTSession).__loggedinVersion = CONSTS.LOGGEDIN_VERSION
 
       this.resetSession(session, service)
     },
