@@ -1,3 +1,5 @@
+import Util from "@/composables/util"
+
 interface TTTranslateInDeepLParams {
   url: string
   authKey: string
@@ -7,7 +9,7 @@ interface TTTranslateInDeepLParams {
 
 export default async function (params: TTTranslateInDeepLParams): Promise<Error | string> {
   try {
-    const response: null | Response = await fetch(params.url, {
+    const response: null | Response = await Util.fetchWithTimeout(params.url, {
       headers: {
         "Authorization": `DeepL-Auth-Key ${params.authKey}`,
         "Content-Type": "application/json",

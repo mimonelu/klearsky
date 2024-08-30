@@ -3,12 +3,16 @@
   "TIMEOUT_DEFAULT": 15000,
   "TIMEOUT_DETAILS": [
     {
+      "url": "app.bsky.video.uploadVideo",
+      "timeout": 1500000
+    },
+    {
       "url": "com.atproto.repo.uploadBlob",
       "timeout": 150000
     },
     {
-      "url": "app.bsky.video.uploadVideo",
-      "timeout": 1500000
+      "url": "com.atproto.sync.getBlob",
+      "timeout": 150000
     }
   ],
   "INTERVAL_OF_UPDATE_JWT": 60000,

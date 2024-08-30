@@ -2,7 +2,7 @@ import Util from "@/composables/util"
 
 export default async function (this: TIAtpWrapper, starterPack: TIStarterPack): Promise<Error | string> {
   const rkey = Util.getRkey(starterPack.uri)
-  const response = await fetch("https://go.bsky.app/link", {
+  const response = await Util.fetchWithTimeout("https://go.bsky.app/link", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

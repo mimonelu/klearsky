@@ -1,3 +1,5 @@
+import Util from "@/composables/util"
+
 interface TTTranslateInMyMemoryParams {
   text: string
   langpair?: string
@@ -9,7 +11,7 @@ export default async function (params: TTTranslateInMyMemoryParams): Promise<Err
   // SEE: https://mymemory.translated.net/doc/spec.php
   const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(params.text)}&langpair=${params.langpair}|${params.dstLanguage}&de=${encodeURIComponent(params.email ?? "")}`
   try {
-    const response: null | Response = await fetch(url)
+    const response: null | Response = await Util.fetchWithTimeout(url)
     if (response == null) {
       return Error("translationError")
     }

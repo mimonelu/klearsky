@@ -14,7 +14,7 @@ export default async function (
   // TODO: 読込中も考慮すること
   let logJson: undefined | any = Util.cache.get("logAudit", url)
   if (logJson != null) return logJson
-  const log = await fetch(url)
+  const log = await Util.fetchWithTimeout(url)
     .then((value: any) => value)
     .catch((error: any) => error)
   if (log == null) return

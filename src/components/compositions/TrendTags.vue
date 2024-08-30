@@ -24,7 +24,7 @@ async function fetchTrendTags () {
   }
   mainState.currentTrendTags.splice(0)
   state.loaderDisplay = true
-  const response = await fetch(
+  const response = await Util.fetchWithTimeout(
     "https://skyfeed-trending-tags.b-cdn.net/xrpc/app.skyfeed.feed.getTrendingTags?minutes=60",
     { mode: "cors" },
   )

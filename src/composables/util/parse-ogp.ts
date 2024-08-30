@@ -6,7 +6,7 @@ export default async function (
   urlHasImage?: boolean
 ): Promise<Error | TTExternal> {
   const response: Error | any =
-    await fetch(`https://cardyb.bsky.app/v1/extract?url=${uri}`, {
+    await Util.fetchWithTimeout(`https://cardyb.bsky.app/v1/extract?url=${uri}`, {
       headers: { "user-agent": "Klearsky" },
     })
     .then((response: Response) => {
@@ -52,7 +52,7 @@ export default async function (
 
   if (urlHasImage && imageFetchUrl) {
     const response =
-      await fetch(imageFetchUrl, {
+      await Util.fetchWithTimeout(imageFetchUrl, {
         headers: { "user-agent": "Klearsky" },
       })
       .then((response: Response) => {

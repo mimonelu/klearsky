@@ -1,3 +1,5 @@
+import Util from "@/composables/util"
+
 export default async function (
   this: TIAtpWrapper,
   pathToXrpc: string,
@@ -22,7 +24,7 @@ export default async function (
   }
   const url = `${host}/xrpc/${pathToXrpc}?${params}`
   const response: Error | Response =
-    await fetch(url)
+    await Util.fetchWithTimeout(url)
       .then((value: any) => value)
       .catch((error: any) => error)
   console.log(`[klearsky/${host}/xrpc/${pathToXrpc}]`, response)

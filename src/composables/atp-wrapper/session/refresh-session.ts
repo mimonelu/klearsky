@@ -21,7 +21,7 @@ export default async function (this: TIAtpWrapper): Promise<undefined | Error> {
     method: "POST",
     headers: { "Authorization": `Bearer ${session.refreshJwt}` },
   }
-  const response: Response = await fetch(url, request)
+  const response: Response = await Util.fetchWithTimeout(url, request)
     .then((response: Response) => response)
     .catch((error: any) => error)
   console.log("[klearsky/refreshSession]", response)

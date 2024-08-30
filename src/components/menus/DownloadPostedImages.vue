@@ -53,7 +53,7 @@ async function donwloadPostedImages () {
   for (let i = 0; i < urls.length; i ++) {
     const url = urls[i]
     const response =
-      await fetch(`https://mimonelu.net:4649/${url}`, {
+      await Util.fetchWithTimeout(`https://mimonelu.net:4649/${url}`, {
         headers: { "user-agent": "Klearsky" },
       })
         .then((response: any) => response)

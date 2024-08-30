@@ -6,6 +6,7 @@ import createEmbed from "@/composables/util/create-embed"
 import displayJson from "@/composables/util/display-json"
 import downloadBlob from "@/composables/util/download-blob"
 import downloadImage from "@/composables/util/download-image"
+import fetchWithTimeout from "@/composables/util/fetch-with-timeout"
 import getGraphemeLength from "@/composables/util/get-grapheme-length"
 import getRkey from "@/composables/util/get-rkey"
 import getUserLanguage from "@/composables/util/get-user-language"
@@ -38,6 +39,7 @@ export default {
   displayJson,
   downloadBlob,
   downloadImage,
+  fetchWithTimeout,
   getGraphemeLength,
   getRkey,
   getUserLanguage,

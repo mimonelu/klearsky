@@ -1,7 +1,9 @@
+import Util from "@/composables/util"
+
 export default async (url: string): Promise<undefined | Error> => {
   const anchorElement: HTMLAnchorElement = document.createElement("a")
   if (url.startsWith("blob:")) {
-    const response = await fetch(url)
+    const response = await Util.fetchWithTimeout(url)
     if (!response.ok) {
       return Error("downloadImageError")
     }
