@@ -92,6 +92,7 @@ interface TIAtpWrapper {
   fetchTimeFeeds (this: TIAtpWrapper, oldPosts: Array<TTPost>, direction: "new" | "old", author: TTUser, limit?: number): Promise<Error | undefined | string>
   fetchTimeline (this: TIAtpWrapper, oldFeeds: Array<TTFeed>, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection): Promise<undefined | false | string>
   fetchUserSearch (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<undefined | string>
+  fetchVideoLimits (this: TIAtpWrapper): Promise<Error | AppBskyVideoGetUploadLimits.OutputSchema>
   fetchWithoutAgent (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, any>, server?: string): Promise<Error | Response>
   hasLogin (this: TIAtpWrapper): boolean
   leaveChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
