@@ -94,6 +94,7 @@ import setting from "@/svg/setting.svg?raw"
 import share from "@/svg/share.svg?raw"
 import shimmer from "@/svg/shimmer.svg?raw"
 import sort from "@/svg/sort.svg?raw"
+import star from "@/svg/star.svg?raw"
 import tag from "@/svg/tag.svg?raw"
 import translate from "@/svg/translate.svg?raw"
 import unlock from "@/svg/unlock.svg?raw"
@@ -197,6 +198,7 @@ const icons: { [k: string]: string } = {
   share,
   shimmer,
   sort,
+  star,
   tag,
   translate,
   unlock,

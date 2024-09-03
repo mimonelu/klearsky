@@ -131,6 +131,7 @@
   & > .checkbox,
   & > .radio {
     border-radius: 0 !important;
+    border-color: transparent !important;
   }
   &[data-layout="horizontal"] {
     & > .checkbox,

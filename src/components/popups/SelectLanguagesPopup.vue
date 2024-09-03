@@ -78,6 +78,14 @@ function close () {
 
   .checkbox {
     min-height: unset !important;
+
+    // 主要言語トップ30の区切り線
+    // TODO: より機能的な手法に差し替えること
+    &:nth-child(31),
+    &:nth-child(32) {
+      border-top-color: var(--fg-color-025) !important;
+      border-top-style: solid !important;
+    }
   }
 
   .svg-icon--help {
