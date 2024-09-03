@@ -1,10 +1,28 @@
 <script lang="ts" setup>
 import { inject } from "vue"
+import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import UI_LANGUAGES from "@/consts/ui-languages.json"
 
+const emit = defineEmits<{(event: string): void}>()
+
 const mainState = inject("state") as MainState
+
+const easyFormProps: TTEasyForm = {
+  hasSubmitButton: false,
+  data: [
+    {
+      state: mainState.currentSetting,
+      model: "uiLanguage",
+      type: "radio",
+      options: UI_LANGUAGES,
+      onUpdate () {
+        emit("changeSetting")
+      },
+    },
+  ],
+}
 </script>
 
 <template>
@@ -21,23 +39,9 @@ const mainState = inject("state") as MainState
     </template>
     <template #body>
       <div class="settings-popup__form-page">
-        <!-- UI言語 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__body">
-            <label class="selectbox">
-              <select
-                v-model="mainState.currentSetting.uiLanguage"
-                name="uiLanguage"
-                @change="$emit('changeSetting')"
-              >
-                <option
-                  v-for="language, languageIndex in UI_LANGUAGES"
-                  :key="languageIndex"
-                  :value="language.value"
-                  :selected="language.value === mainState.currentSetting.uiLanguage"
-                >{{ $t(language.label) }}</option>
-              </select>
-            </label>
+            <EasyForm v-bind="easyFormProps" />
           </div>
         </div>
       </div>
