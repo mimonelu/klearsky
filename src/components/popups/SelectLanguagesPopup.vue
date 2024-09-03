@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -16,6 +16,14 @@ const props = defineProps<{
 }>()
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  numberOfSelected: ComputedRef<number>
+}>({
+  numberOfSelected: computed((): number => {
+    return mainState.currentSetting[props.property]?.length ?? 0
+  }),
+})
 
 const easyFormProps: TTEasyForm = {
   hasSubmitButton: false,
@@ -56,6 +64,7 @@ function close () {
       <h2>
         <SVGIcon name="translate" />
         <span>{{ $t(title) }}</span>
+        <span v-if="state.numberOfSelected > 0">({{ state.numberOfSelected }})</span>
       </h2>
     </template>
     <template #body>

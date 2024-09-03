@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, ref } from "vue"
+import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -7,6 +7,18 @@ import Util from "@/composables/util"
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const mainState = inject("state") as MainState
+
+const state = reactive<{
+  numberOfContentLanguages: ComputedRef<number>
+  numberOfPostLanguages: ComputedRef<number>
+}>({
+  numberOfContentLanguages: computed((): number => {
+    return mainState.currentSetting.contentLanguages?.length ?? 0
+  }),
+  numberOfPostLanguages: computed((): number => {
+    return mainState.currentSetting.postLanguages?.length ?? 0
+  }),
+})
 
 const popover = ref(null)
 
@@ -138,6 +150,7 @@ function process (type: string) {
       >
         <SVGIcon name="translate" />
         <span>{{ $t("contentLanguages") }}</span>
+        <span v-if="state.numberOfContentLanguages > 0">({{ state.numberOfContentLanguages }})</span>
       </button>
 
       <!-- ポスト言語選択ポップアップトリガー -->
@@ -148,6 +161,7 @@ function process (type: string) {
       >
         <SVGIcon name="translate" />
         <span>{{ $t("postLanguages") }}</span>
+        <span v-if="state.numberOfPostLanguages > 0">({{ state.numberOfPostLanguages }})</span>
       </button>
 
       <!-- マイフィードポップアップトリガー -->
