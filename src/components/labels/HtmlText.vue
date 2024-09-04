@@ -186,11 +186,11 @@ async function openWindowIfCan (segment: RichParam) {
   const urlObject: undefined | URL = getUrlObject(segment.param ?? "")
   if (urlObject == null) return
   const valid = validateUrl(urlObject, segment.text)
-  if (valid || await mainState.openConfirmationPopup(
-    $t("confirmUrl"),
-    $t("confirmUrlNotification"),
-    segment.param
-  )) {
+  if (valid || await mainState.openConfirmationPopup({
+    title: $t("confirmUrl"),
+    text: $t("confirmUrlNotification"),
+    detail: segment.param,
+  })) {
     if (segment.param.startsWith("lightning:"))
       location.href = segment.param
     else

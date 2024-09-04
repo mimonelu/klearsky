@@ -149,10 +149,10 @@ async function close () {
 }
 
 async function reset () {
-  const result = await mainState.openConfirmationPopup(
-    $t("sendPostReset"),
-    $t("sendPostResetMessage")
-  )
+  const result = await mainState.openConfirmationPopup({
+    title: $t("sendPostReset"),
+    text: $t("sendPostResetMessage"),
+  })
   if (!result) {
     return
   }
@@ -172,10 +172,10 @@ async function submitCallback () {
       easyFormState.medias.length === 0 &&
       easyFormState.url.trim() === ""
   ) {
-    const result = await mainState.openConfirmationPopup(
-      $t("emptyPostConfirmation"),
-      $t("emptyPostConfirmationMessage")
-    )
+    const result = await mainState.openConfirmationPopup({
+      title: $t("emptyPostConfirmation"),
+      text: $t("emptyPostConfirmationMessage"),
+    })
     if (!result) {
       return
     }

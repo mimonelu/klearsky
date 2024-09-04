@@ -66,10 +66,10 @@ async function editStarterPack () {
 async function deleteStarterPack () {
   Util.blurElement()
   emit("close")
-  const isConfirmed = await mainState.openConfirmationPopup(
-    $t("starterPackDelete"),
-    $t("starterPackDeleteMessage")
-  )
+  const isConfirmed = await mainState.openConfirmationPopup({
+    title: $t("starterPackDelete"),
+    text: $t("starterPackDeleteMessage"),
+  })
   if (isConfirmed && mainState.starterPackCardPopoverCallback != null) {
     await mainState.starterPackCardPopoverCallback("deleteStarterPack")
   }

@@ -108,10 +108,10 @@ async function toggleListBlock () {
 async function deleteList () {
   Util.blurElement()
   emit("close")
-  const isConfirmed = await mainState.openConfirmationPopup(
-    $t("listDelete"),
-    $t("listDeleteMessage")
-  )
+  const isConfirmed = await mainState.openConfirmationPopup({
+    title: $t("listDelete"),
+    text: $t("listDeleteMessage"),
+  })
   if (isConfirmed && mainState.listCardPopoverCallback != null) {
     await mainState.listCardPopoverCallback("deleteList")
   }

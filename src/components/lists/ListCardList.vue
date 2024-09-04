@@ -41,10 +41,10 @@ function fetchLists (direction: "new" | "old") {
 
 async function updateMylist () {
   Util.blurElement()
-  if (!await mainState.openConfirmationPopup(
-    $t("confirmation"),
-    $t("myListConfirmation")
-  )) return
+  if (!await mainState.openConfirmationPopup({
+    title: $t("confirmation"),
+    text: $t("myListConfirmation"),
+  })) return
   mainState.myLists.items.splice(0)
   mainState.loaderDisplay = true
   await mainState.myLists.fetchAll()

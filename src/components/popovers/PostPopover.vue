@@ -48,7 +48,11 @@ async function deletePost () {
   Util.blurElement()
   if (state.deletePostUri == null) return
   emit("close")
-  const result = await mainState.openConfirmationPopup($t("deletePost"), $t("deletePostMessage"))
+  const result = await mainState.openConfirmationPopup({
+    title: $t("deletePost"),
+    text: $t("deletePostMessage"),
+    post: props.post,
+  })
   if (result) callback("deletePost")
 }
 

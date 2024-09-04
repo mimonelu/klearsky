@@ -23,10 +23,10 @@ async function donwloadPostedImages () {
   emit("close")
 
   // 確認
-  if (!await mainState.openConfirmationPopup(
-      $t("confirmation"),
-      $t("donwloadPostedImagesOnConfirmation")
-  )) {
+  if (!await mainState.openConfirmationPopup({
+    title: $t("confirmation"),
+    text: $t("donwloadPostedImagesOnConfirmation"),
+  })) {
     return
   }
 

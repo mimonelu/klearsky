@@ -68,10 +68,10 @@ async function submitCallback () {
   Util.blurElement()
 
   // 送信確認
-  const result = await mainState.openConfirmationPopup(
-    $t("reportSendConfirmation"),
-    $t("reportSendConfirmationMessage")
-  )
+  const result = await mainState.openConfirmationPopup({
+    title: $t("reportSendConfirmation"),
+    text: $t("reportSendConfirmationMessage"),
+  })
   if (!result) return
 
   if (state.popupLoaderDisplay) return

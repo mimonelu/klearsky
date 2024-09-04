@@ -270,16 +270,6 @@ state.postPopoverCallback = undefined
 state.openPostPopover = openPostPopover
 state.closePostPopover = closePostPopover
 
-// ポップオーバー - リポストポップオーバー
-state.repostPopoverProps = {
-  display: false,
-  post: undefined,
-}
-state.repostPopoverSelector = undefined
-state.repostPopoverCallback = undefined
-state.openRepostPopover = openRepostPopover
-state.closeRepostPopover = closeRepostPopover
-
 // ポップオーバー - フィードカードポップオーバー
 state.feedCardPopoverProps = {
   display: false,
@@ -380,11 +370,13 @@ state.openMessagePopup = openMessagePopup
 state.closeMessagePopup = closeMessagePopup
 
 // ポップアップ - 確認ポップアップ
-state.confirmationPopupDisplay = false
-state.confirmationPopupTitle = undefined
-state.confirmationPopupText = undefined
-state.confirmationPopupDetail = undefined
-state.confirmationPopupResult = false
+state.confirmationPopupProps = {
+  display: false,
+  title: undefined,
+  text: undefined,
+  detail: undefined,
+  result: false,
+}
 state.openConfirmationPopup = openConfirmationPopup
 state.closeConfirmationPopup = closeConfirmationPopup
 state.applyConfirmationPopup = applyConfirmationPopup
@@ -1681,17 +1673,6 @@ function closePostPopover () {
   state.postPopoverProps.display = false
 }
 
-// ポップオーバー - リポストポップオーバー
-
-function openRepostPopover (selector: string | HTMLElement) {
-  state.repostPopoverSelector = selector
-  state.repostPopoverProps.display = true
-}
-
-function closeRepostPopover () {
-  state.repostPopoverProps.display = false
-}
-
 // ポップオーバー - フィードカードポップオーバー
 
 function openFeedCardPopover (selector: string | HTMLElement) {
@@ -1825,24 +1806,25 @@ function closeMessagePopup () {
 
 // ポップアップ - 確認ポップアップ
 
-async function openConfirmationPopup (title?: string, text?: string, detail?: string): Promise<boolean> {
-  state.confirmationPopupTitle = title
-  state.confirmationPopupText = text
-  state.confirmationPopupDetail = detail
-  state.confirmationPopupResult = false
-  state.confirmationPopupDisplay = true
-  await Util.waitProp(() => state.confirmationPopupDisplay, false)
-  return state.confirmationPopupResult
+async function openConfirmationPopup (params: Omit<TIConfirmationPopupProps, "display" | "result">): Promise<boolean> {
+  state.confirmationPopupProps.title = params.title
+  state.confirmationPopupProps.text = params.text
+  state.confirmationPopupProps.detail = params.detail
+  state.confirmationPopupProps.post = params.post
+  state.confirmationPopupProps.result = false
+  state.confirmationPopupProps.display = true
+  await Util.waitProp(() => state.confirmationPopupProps.display, false)
+  return state.confirmationPopupProps.result
 }
 
 function closeConfirmationPopup () {
-  state.confirmationPopupResult = false
-  state.confirmationPopupDisplay = false
+  state.confirmationPopupProps.result = false
+  state.confirmationPopupProps.display = false
 }
 
 function applyConfirmationPopup () {
-  state.confirmationPopupResult = true
-  state.confirmationPopupDisplay = false
+  state.confirmationPopupProps.result = true
+  state.confirmationPopupProps.display = false
 }
 
 // ポップアップ - アカウントポップアップ

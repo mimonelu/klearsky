@@ -18,6 +18,7 @@ const state = reactive<{
   // TODO:
   post: computed((): TTPost => {
     const message = props.message ?? props.myConvo.data?.lastMessage as TIChatMessage
+    console.log(message)
     const author = props.myConvo.findMember(message.sender.did) ?? {
       did: "",
       displayName: "",
@@ -148,13 +149,13 @@ async function chatMessagePopoverCallback (type: string) {
           }
 
           & > .button--plane {
-            margin-left: -0.5em;
+            grid-area: m;
+            margin: 0 0.5em 0 -0.5em;
           }
         }
 
         & > .post__content {
           background-color: var(--chat-post-bg-color);
-          margin-top: -0.5em;
           padding: 0.5em 1em;
         }
 

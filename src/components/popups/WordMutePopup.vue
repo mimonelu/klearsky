@@ -43,10 +43,10 @@ const state = reactive<{
           index,
           async onClick (item: TTEasyFormItem) {
             if (item.index == null) return
-            if (wordMute.keyword && !await mainState.openConfirmationPopup(
-              $t("wordMuteRemoveConfirmation"),
-              `${$t("wordMuteRemoveConfirmationMessage")}\n"${wordMute.keyword}"`
-            )) return
+            if (wordMute.keyword && !await mainState.openConfirmationPopup({
+              title: $t("wordMuteRemoveConfirmation"),
+              text: `${$t("wordMuteRemoveConfirmationMessage")}\n"${wordMute.keyword}"`,
+            })) return
             mainState.currentSetting.wordMute?.splice(item.index, 1)
           },
         },

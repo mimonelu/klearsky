@@ -244,16 +244,6 @@ type MainState = {
   openPostPopover: Function
   closePostPopover: Function
 
-  // ポップオーバー - リポストポップオーバー
-  repostPopoverProps: {
-    display: boolean
-    post?: TTPost
-  }
-  repostPopoverSelector?: string | HTMLElement
-  repostPopoverCallback?: (type: "createRepost" | "deleteRepost" | "createQuoteRepost") => Promise<void>
-  openRepostPopover: Function
-  closeRepostPopover: Function
-
   // ポップオーバー - フィードカードポップオーバー
   feedCardPopoverProps: {
     display: boolean
@@ -351,12 +341,8 @@ type MainState = {
   closeMessagePopup: () => void
 
   // ポップアップ - 確認ポップアップ
-  confirmationPopupDisplay: boolean
-  confirmationPopupTitle?: string
-  confirmationPopupText?: string
-  confirmationPopupDetail?: string
-  confirmationPopupResult: boolean
-  openConfirmationPopup: (title?: string, text?: string, detail?: string) => Promise<boolean>
+  confirmationPopupProps: TIConfirmationPopupProps
+  openConfirmationPopup: (params: Omit<TIConfirmationPopupProps, "display" | "result">) => Promise<boolean>
   closeConfirmationPopup: () => void
   applyConfirmationPopup: () => void
 

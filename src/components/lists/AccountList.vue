@@ -47,10 +47,10 @@ async function login (session: TTSession) {
 
 async function deleteAccount (session: TTSession) {
   Util.blurElement()
-  const result = await mainState.openConfirmationPopup(
-    $t("removeAccountHistory"),
-    $t("removeAccountHistoryMessage")
-  )
+  const result = await mainState.openConfirmationPopup({
+    title: $t("removeAccountHistory"),
+    text: $t("removeAccountHistoryMessage"),
+  })
   if (result) mainState.atp.deleteAccount(session.did)
 }
 
@@ -86,10 +86,10 @@ function importAccounts (event: Event) {
     if (contents == null) return
     const jsonData = JSON.parse(contents)
     if (jsonData == null) return
-    if (!await mainState.openConfirmationPopup(
-      $t("accountImport"),
-      $t("accountImportNotification")
-    )) return
+    if (!await mainState.openConfirmationPopup({
+      title: $t("accountImport"),
+      text: $t("accountImportNotification"),
+    })) return
 
     // 既存のセッションデータにインポートしたセッションデータを「上書き」する
     for (const did in jsonData) {

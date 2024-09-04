@@ -23,7 +23,7 @@ const mainState = inject("state") as MainState
 
       <SVGIcon name="repost" />
     </div>
-    <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ !post.repostCount ? (!post.quoteCount ? "" : "0") : post.repostCount }}{{ !post.quoteCount ? "" : ` + ${post.quoteCount}` }}</span>
+    <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.repostCount ? post.repostCount : "" }}</span>
   </button>
 </template>
 

@@ -84,10 +84,10 @@ function searchTag (index: number) {
 
 async function removeTag (index: number) {
   if (mainState.currentSetting.tags == null) return
-  const result = await mainState.openConfirmationPopup(
-    $t("deleteTag"),
-    `${$t("deleteTagMessage")}: "${mainState.currentSetting.tags[index].text}"`
-  )
+  const result = await mainState.openConfirmationPopup({
+    title: $t("deleteTag"),
+    text: `${$t("deleteTagMessage")}: "${mainState.currentSetting.tags[index].text}"`,
+  })
   if (!result) return
 
   // マイタグ削除時は選択済みのポストタグも削除

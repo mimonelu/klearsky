@@ -17,10 +17,10 @@ const mainState = inject("state") as MainState
 async function sortBy (type: "like" | "name" | "uri" | "indexedAt", order: "asc" | "desc") {
   Util.blurElement()
   close()
-  const result = await mainState.openConfirmationPopup(
-    $t("confirmation"),
-    $t("sortMyFeedsConfirmation")
-  )
+  const result = await mainState.openConfirmationPopup({
+    title: $t("confirmation"),
+    text: $t("sortMyFeedsConfirmation"),
+  })
   if (!result) return
 
   // マイフィードポップアップの関数をコール

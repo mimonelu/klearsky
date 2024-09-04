@@ -90,7 +90,10 @@ async function chatConvoPopoverCallback (type: string) {
       break
     }
     case "leaveConvo": {
-      if (await mainState.openConfirmationPopup($t("confirmation"), $t("leaveChatConvoConfirmation"))) {
+      if (await mainState.openConfirmationPopup({
+        title: $t("confirmation"),
+        text: $t("leaveChatConvoConfirmation"),
+      })) {
         mainState.loaderDisplay = true
         await mainState.chatConvoPopoverProps.myConvo?.leave()
         mainState.loaderDisplay = false

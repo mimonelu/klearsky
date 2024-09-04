@@ -43,7 +43,6 @@ import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
 import PsySafetySettingsPopup from "@/components/popups/settings-popups/PsySafetySettingsPopup.vue"
 import QuoteRepostsPopup from "@/components/popups/QuoteRepostsPopup.vue"
-import RepostPopover from "@/components/popovers/RepostPopover.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
 import ScrollButton from "@/components/buttons/ScrollButton.vue"
 import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
@@ -884,13 +883,6 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
       @close="state.closePostPopover"
     />
 
-    <!-- リポストポップオーバー -->
-    <RepostPopover
-      v-if="state.repostPopoverProps.display"
-      v-bind="state.repostPopoverProps"
-      @close="state.closeRepostPopover"
-    />
-
     <!-- フィードカードポップオーバー -->
     <FeedCardPopover
       v-if="state.feedCardPopoverProps.display"
@@ -1411,7 +1403,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
       <!-- 確認ポップアップ -->
       <Transition>
         <ConfirmationPopup
-          v-if="state.confirmationPopupDisplay"
+          v-if="state.confirmationPopupProps.display"
           @close="state.closeConfirmationPopup"
           @apply="state.applyConfirmationPopup"
         />

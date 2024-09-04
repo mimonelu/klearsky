@@ -13,6 +13,7 @@ import LinkCard from "@/components/cards/LinkCard.vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import Loader from "@/components/shells/Loader.vue"
 import Post from "@/components/compositions/Post.vue"
+import QuoteRepostButton from "@/components/buttons/QuoteRepostButton.vue"
 import RepostButton from "@/components/buttons/RepostButton.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -437,31 +438,25 @@ async function onActivateReplyButton () {
   }
 }
 
-async function onOpenRepostPopover ($event: Event) {
+async function onActivateRepostButton () {
   Util.blurElement()
-  mainState.repostPopoverProps.post = props.post
-  mainState.repostPopoverCallback = repostPopoverCallback
-  mainState.openRepostPopover($event.target)
-}
-
-async function repostPopoverCallback (type: "createRepost" | "deleteRepost" | "createQuoteRepost") {
-  switch (type) {
-    case "createRepost": {
-      await createRepost()
-      break
-    }
-    case "deleteRepost": {
-      await deleteRepost()
-      break
-    }
-    case "createQuoteRepost": {
-      await createQuoteRepost()
-      break
-    }
+  if (props.post.viewer?.repost == null) {
+    await createRepost()
+  } else {
+    await deleteRepost()
   }
 }
 
 async function createRepost () {
+  Util.blurElement()
+  const result = await mainState.openConfirmationPopup({
+    title: $t("createRepost"),
+    text: $t("createRepostConfirmation"),
+    post: props.post,
+  })
+  if (!result) {
+    return
+  }
   state.processing = true
   try {
     const result = await mainState.atp.createRepost(
@@ -477,7 +472,16 @@ async function createRepost () {
 }
 
 async function deleteRepost () {
+  Util.blurElement()
   if (props.post.viewer?.repost == null) {
+    return
+  }
+  const result = await mainState.openConfirmationPopup({
+    title: $t("deleteRepost"),
+    text: $t("deleteRepostConfirmation"),
+    post: props.post,
+  })
+  if (!result) {
     return
   }
   state.processing = true
@@ -490,7 +494,16 @@ async function deleteRepost () {
 }
 
 async function createQuoteRepost () {
-  const done = await mainState.openSendPostPopup({ type: "quoteRepost", post: props.post })
+  await mainState.openSendPostPopup({
+    type: "quoteRepost",
+    post: props.post,
+  })
+
+  /* // TODO: 引用リポスト送信完了後に該当ポストを更新すること
+  const done = await mainState.openSendPostPopup({
+    type: "quoteRepost",
+    post: props.post,
+  })
   state.processing = true
   try {
     if (done) {
@@ -499,6 +512,7 @@ async function createQuoteRepost () {
   } finally {
     state.processing = false
   }
+  */
 }
 
 async function onActivateLikeButton () {
@@ -704,6 +718,7 @@ function toggleOldestQuotedPostDisplay () {
 
     <!-- ポストヘッダー -->
     <div
+      v-if="position !== 'preview'"
       class="header"
       @click.stop
     >
@@ -852,7 +867,7 @@ function toggleOldestQuotedPostDisplay () {
           <!-- アバターリンク -->
           <AvatarButton
             v-if="position === 'chatMessage' || position === 'postInPost' || position === 'slim'"
-            class="avatar-in-post"
+            class="body__right__header__avatar-in-post"
             :did="post.author?.did"
             :image="post.author?.avatar"
             :isLabeler="post.author?.associated?.labeler"
@@ -885,18 +900,41 @@ function toggleOldestQuotedPostDisplay () {
             </template>
           </DisplayName>
 
-          <!-- ハンドル -->
-          <AuthorHandle
-            v-if="position !== 'chatMessage'"
-            :handle="post.author?.handle"
-            :anonymizable="true"
-          />
+          <div class="body__right__header__handle-and-indexed-at">
+            <!-- ハンドル -->
+            <AuthorHandle
+              class="body__right__header__author-handle"
+              :handle="post.author?.handle"
+              :anonymizable="true"
+            />
 
-          <!-- ポスト時間 -->
-          <div
-            v-if="post.indexedAt"
-            class="indexed-at"
-          >{{ mainState.formatDate(post.indexedAt) }}</div>
+            <SVGIcon
+              class="body__right__header__point"
+              name="point"
+            />
+
+            <!-- ポスト時間 -->
+            <div
+              v-if="post.indexedAt"
+              class="body__right__header__indexed-at"
+            >{{ mainState.formatDate(post.indexedAt) }}</div>
+          </div>
+
+          <!-- ポストポップオーバートリガー -->
+          <button
+            v-if="
+              position !== 'chatMessage' &&
+              position !== 'postInPost' &&
+              position !== 'preview' &&
+              position !== 'slim'
+            "
+            class="icon-button--nolabel body__right__header__menu-button"
+            @click.stop="openPostPopover"
+          >
+            <div class="icon-container">
+              <SVGIcon name="menu" />
+            </div>
+          </button>
 
           <slot name="header-after" />
         </div>
@@ -1123,7 +1161,7 @@ function toggleOldestQuotedPostDisplay () {
 
         <!-- ラベルタグ -->
         <LabelTags
-          v-if="position !== 'slim'"
+          v-if="position !== 'preview' && position !== 'slim'"
           :labels="state.allLabels"
           :labelerDisplay="false"
           :unauthenticatedDisplay="false"
@@ -1218,6 +1256,7 @@ function toggleOldestQuotedPostDisplay () {
         <div
           v-if="position !== 'chatMessage' && position !== 'postInPost' && position !== 'slim'"
           class="reaction-container"
+          :data-has-lightning="!!post.record?.lightning"
         >
           <div>
             <!-- リプライボタン -->
@@ -1245,10 +1284,17 @@ function toggleOldestQuotedPostDisplay () {
             </button>
           </div>
           <div>
-            <!-- リポストポップオーバートリガー -->
+            <!-- リポストボタン -->
             <RepostButton
               :post="post"
-              @click.stop="onOpenRepostPopover"
+              @click.stop="onActivateRepostButton"
+            />
+          </div>
+          <div>
+            <!-- 引用リポストボタン -->
+            <QuoteRepostButton
+              :post="post"
+              @click.stop="createQuoteRepost"
             />
           </div>
           <div>
@@ -1271,16 +1317,6 @@ function toggleOldestQuotedPostDisplay () {
                 <SVGIcon name="lightning" />
               </div>
             </a>
-
-            <!-- ポストポップオーバートリガー -->
-            <button
-              class="icon-button--nolabel menu-button"
-              @click.stop="openPostPopover"
-            >
-              <div class="icon-container">
-                <SVGIcon name="menu" />
-              </div>
-            </button>
           </div>
         </div>
       </div>
@@ -1311,12 +1347,12 @@ function toggleOldestQuotedPostDisplay () {
 
   // 引用ポスト
   &[data-position="postInPost"] {
-    font-size: 0.9375em;
+    font-size: 0.875em;
   }
 
   // プレビューポスト
   &[data-position="preview"] {
-    font-size: 0.9375em;
+    font-size: 0.875em;
     padding: 0;
     pointer-events: none;
 
@@ -1618,11 +1654,20 @@ function toggleOldestQuotedPostDisplay () {
   grid-area: h;
   display: grid;
   align-items: center;
-  grid-template-columns: auto 1fr auto;
-  grid-gap: 0.5em;
-  overflow: hidden;
+  grid-template-areas:
+    "d m"
+    "h m";
+  grid-template-columns: 1fr auto;
+  grid-gap: 0.125em 0.5em;
+  // overflow: hidden;
+
+  &__avatar-in-post {
+    grid-area: a;
+    font-size: 2em;
+  }
 
   &__display-name {
+    grid-area: d;
     color: var(--fg-color-075);
     display: flex;
     align-items: center;
@@ -1634,30 +1679,47 @@ function toggleOldestQuotedPostDisplay () {
       fill: rgb(var(--share-color));
     }
   }
-}
 
-.post[data-position="chatMessage"] {
-  .body__right__header {
-    grid-template-columns: auto 1fr auto;
+  &__handle-and-indexed-at {
+    grid-area: h;
+    display: grid;
+    align-items: center;
+    justify-content: flex-start;
+    grid-template-columns: auto auto auto;
+    grid-gap: 0.25em;
+    overflow: hidden;
+  }
+
+  // &__author-handle {}
+
+  &__point {
+    fill: var(--fg-color-025);
+    font-size: 0.5em;
+  }
+
+  &__indexed-at {
+    color: var(--fg-color-05);
+    font-size: 0.75em;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  &__menu-button {
+    grid-area: m;
+    margin: -0.5em -0.75em -0.5em 0;
+    padding: 1em 1em;
+    position: relative;
   }
 }
-
+.post[data-position="chatMessage"],
 .post[data-position="postInPost"],
 .post[data-position="slim"] {
   .body__right__header {
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas:
+      "a d m"
+      "a h m";
+    grid-template-columns: auto 1fr auto;
   }
-}
-
-.avatar-in-post {
-  font-size: 1.5em;
-}
-
-.indexed-at {
-  color: var(--fg-color-05);
-  font-size: 0.75em;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 .content-filtering-toggle {
@@ -1835,9 +1897,11 @@ function toggleOldestQuotedPostDisplay () {
 .reaction-container {
   grid-area: f;
   display: grid;
-  grid-gap: 0.5em;
   grid-template-columns: 1fr 1fr 1fr 1fr; // for Android
   align-items: center;
+  &[data-has-lightning="true"] {
+    grid-template-columns: 1fr 1fr 1fr 1fr auto; // for Android
+  }
   &:not(:first-child) {
     margin-top: 0.25em;
   }
@@ -1849,6 +1913,16 @@ function toggleOldestQuotedPostDisplay () {
 
   .icon-button:deep() > span {
     white-space: nowrap;
+  }
+
+  // 非SPレイアウト
+  @include media-not-sp-layout() {
+    grid-gap: 0.5em;
+  }
+
+  // SPレイアウト
+  @include media-sp-layout() {
+    grid-gap: 0.375em;
   }
 }
 
@@ -1867,7 +1941,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   & > .svg-icon--lock {
-    fill: var(--fg-color-05);
+    fill: var(--fg-color-025);
     margin-top: -0.25em;
   }
 
@@ -1875,15 +1949,5 @@ function toggleOldestQuotedPostDisplay () {
     fill: rgb(var(--accent-color));
     margin-top: -0.25em;
   }
-}
-
-.lightning-link {
-  margin-right: 0.75em;
-}
-
-.menu-button {
-  margin: -0.75em -0.75em;
-  padding: 0.75em 1.5em;
-  position: relative;
 }
 </style>

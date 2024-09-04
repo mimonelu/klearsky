@@ -51,10 +51,10 @@ function close () {
 }
 
 async function reset () {
-  if (!await mainState.openConfirmationPopup(
-    $t(props.textReset),
-    $t(props.textResetDescription)
-  )) return
+  if (!await mainState.openConfirmationPopup({
+    title: $t(props.textReset),
+    text: $t(props.textResetDescription)
+  })) return
   state.date = undefined
   emit("onChange", state.date)
 }

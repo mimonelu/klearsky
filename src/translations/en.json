@@ -256,8 +256,10 @@
   "showSource": "Show source",
   "callApi": "Call API",
 
-  "sendRepost": "Repost",
+  "createRepost": "Repost",
+  "createRepostConfirmation": "Repost this post. Are you sure?",
   "deleteRepost": "Delete repost",
+  "deleteRepostConfirmation": "Cancel the repost of this post. Are you sure?",
   "sendQuoteRepost": "Quote repost",
 
   "handleHistory": "Handle Change History",

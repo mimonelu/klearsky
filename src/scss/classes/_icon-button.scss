@@ -2,6 +2,13 @@
 .icon-button--nolabel {
   margin: -0.75em;
   padding: 0.75em;
+  &:disabled {
+    & > .icon-container {
+      & > .svg-icon {
+        fill: var(--fg-color-025);
+      }
+    }
+  }
   &:not(:disabled) {
     cursor: pointer;
     &:focus, &:hover {
@@ -38,7 +45,7 @@
       font-size: 0.875em;
     }
 
-  // SPレイアウト
+    // SPレイアウト
     @include media-sp-layout() {
       font-size: 0.75em;
     }

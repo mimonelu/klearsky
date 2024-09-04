@@ -9,3 +9,12 @@ type TTMessagePopupProps = {
   text?: string
   hasTranslateLink?: boolean
 }
+
+interface TIConfirmationPopupProps {
+  display: boolean
+  title?: string
+  text?: string
+  detail?: string
+  post?: TTPost
+  result: boolean
+}

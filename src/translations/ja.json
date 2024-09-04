@@ -45,7 +45,7 @@
   "suggestedFollows": "おすすめ",
   "help": "ヘルプ",
   "media": "メディア",
-  "invalidHandle": "（不正なハンドル）",
+  "invalidHandle": "(不正なハンドル)",
   "share": "共有する",
   "postFeatures": "機能",
   "showDetail": "詳細を表示",
@@ -256,8 +256,10 @@
   "showSource": "ソースを表示する",
   "callApi": "APIをコールする",
 
-  "sendRepost": "リポストする",
+  "createRepost": "リポストする",
+  "createRepostConfirmation": "このポストをリポストします。よろしいですか？",
   "deleteRepost": "リポストを取り消す",
+  "deleteRepostConfirmation": "このポストのリポストを取り消します。よろしいですか？",
   "sendQuoteRepost": "引用リポストする",
 
   "handleHistory": "ハンドル変更履歴",

@@ -10,7 +10,10 @@ const mainState = inject("state") as MainState
 
 async function resetSettings () {
   Util.blurElement()
-  const result = await mainState.openConfirmationPopup($t("resetSettings"), $t("resetSettingsDetail"))
+  const result = await mainState.openConfirmationPopup({
+    title: $t("resetSettings"),
+    text: $t("resetSettingsDetail"),
+  })
   if (!result) return
   mainState.resetSettings()
   location.reload()

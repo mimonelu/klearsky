@@ -121,10 +121,10 @@ function toggleDetailDisplay (pseudoDefinition: TIPseudoLabelerDefinition) {
 
 async function resetAfterConfirmation () {
   Util.blurElement()
-  const result = await mainState.openConfirmationPopup(
-    $t("labelerReset"),
-    $t("labelerResetMessage")
-  )
+  const result = await mainState.openConfirmationPopup({
+    title: $t("labelerReset"),
+    text: $t("labelerResetMessage"),
+  })
   if (!result) {
     return
   }

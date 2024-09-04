@@ -68,10 +68,10 @@ async function submitCallback () {
   Util.blurElement()
 
   // 送信確認
-  const result = await mainState.openConfirmationPopup(
-    $t("reportSendConfirmation"),
-    $t("reportSendConfirmationMessage")
-  )
+  const result = await mainState.openConfirmationPopup({
+    title: $t("reportSendConfirmation"),
+    text: $t("reportSendConfirmationMessage"),
+  })
   if (!result) return
 
   if (state.popupLoaderDisplay) return
@@ -148,10 +148,9 @@ async function submitCallback () {
   }
 
   .user-box {
-    --fg-color: var(--notice-color);
     background-color: rgb(var(--notice-color), 0.125);
-    font-size: 0.875rem;
-    opacity: 0.875;
+    border-radius: var(--border-radius-middle);
+    font-size: 0.75em;
     padding: 1rem;
     pointer-events: none;
   }
