@@ -1347,7 +1347,7 @@ function toggleOldestQuotedPostDisplay () {
 
   // 引用ポスト
   &[data-position="postInPost"] {
-    font-size: 0.875em;
+    font-size: 0.9375em;
   }
 
   // プレビューポスト

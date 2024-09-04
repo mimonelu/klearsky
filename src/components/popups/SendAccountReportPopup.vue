@@ -151,7 +151,7 @@ async function submitCallback () {
     background-color: rgb(var(--notice-color), 0.125);
     border-radius: var(--border-radius-middle);
     font-size: 0.75em;
-    padding: 1rem;
+    padding: 0.75rem;
     pointer-events: none;
   }
 
