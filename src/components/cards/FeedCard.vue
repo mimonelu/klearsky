@@ -347,7 +347,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       & > span {
         font-weight: bold;
-        line-height: var(--line-height-high);
+        line-height: var(--line-height-low);
         word-break: break-word;
       }
       &:focus, &:hover {
@@ -367,7 +367,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     grid-template-columns: auto 1fr;
     align-items: center;
     grid-gap: 0.375em;
-    line-height: var(--line-height-high);
+    line-height: var(--line-height-low);
 
     & > .svg-icon {
       font-size: 0.75em;

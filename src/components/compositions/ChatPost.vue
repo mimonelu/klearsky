@@ -18,7 +18,6 @@ const state = reactive<{
   // TODO:
   post: computed((): TTPost => {
     const message = props.message ?? props.myConvo.data?.lastMessage as TIChatMessage
-    console.log(message)
     const author = props.myConvo.findMember(message.sender.did) ?? {
       did: "",
       displayName: "",

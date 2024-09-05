@@ -900,7 +900,7 @@ function removeThisPost () {
   &:deep() > span {
     font-size: 1.5rem;
     user-select: text;
-    white-space: unset;
+    white-space: pre-line;
     word-break: break-all;
     word-break: break-word;
   }

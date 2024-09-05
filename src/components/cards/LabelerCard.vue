@@ -218,7 +218,7 @@ function openProfilePopover ($event: Event) {
 
       & > span {
         font-weight: bold;
-        line-height: var(--line-height-high);
+        line-height: var(--line-height-low);
         word-break: break-word;
       }
       &:focus, &:hover {
@@ -240,7 +240,7 @@ function openProfilePopover ($event: Event) {
     grid-template-columns: auto 1fr;
     align-items: center;
     grid-gap: 0.375em;
-    line-height: var(--line-height-high);
+    line-height: var(--line-height-low);
 
     & > .svg-icon {
       font-size: 0.75em;

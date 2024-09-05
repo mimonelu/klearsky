@@ -83,7 +83,6 @@ function getEmbeddedContentId () {
     if (matches != null && matches[1] != null) {
       embeddedContentType = "graysky"
       embeddedContentId = matches[1]
-      console.log(embeddedContentId)
       return
     }
   }

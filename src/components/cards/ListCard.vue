@@ -493,7 +493,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
     &__label {
       font-weight: bold;
-      line-height: var(--line-height-high);
+      line-height: var(--line-height-low);
       word-break: break-word;
     }
   }
@@ -505,7 +505,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     grid-template-columns: auto auto 1fr;
     align-items: center;
     grid-gap: 0.375em;
-    line-height: var(--line-height-high);
+    line-height: var(--line-height-low);
     &[data-purpose="curatelist"] {
       --color: rgb(var(--share-color));
     }
@@ -548,7 +548,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     grid-template-columns: auto 1fr;
     align-items: center;
     grid-gap: 0.375em;
-    line-height: var(--line-height-high);
+    line-height: var(--line-height-low);
 
     & > .svg-icon {
       fill: var(--fg-color-05);
