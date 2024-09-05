@@ -1,16 +1,22 @@
-import type { AtpAgent, ComAtprotoRepoDeleteRecord } from "@atproto/api"
+import type { AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
   uri: string
-): Promise<boolean> {
-  if (this.agent == null) return false
+): Promise<undefined | Error> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const rkey = Util.getRkey(uri)
-  const query: Omit<ComAtprotoRepoDeleteRecord.InputSchema, "collection"> = {
+  const query = {
     repo: this.session?.did as string,
     rkey,
   }
-  await (this.agent as AtpAgent).app.bsky.graph.block.delete(query)
-  return true
+  const response: Error | void =
+    await (this.agent as AtpAgent).app.bsky.graph.block.delete(query)
+      .catch((error) => error)
+  if (response instanceof Error) {
+    return response
+  }
 }

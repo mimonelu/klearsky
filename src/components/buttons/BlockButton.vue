@@ -19,23 +19,32 @@ const state = reactive<{
 
 async function toggleBlock () {
   Util.blurElement()
-  if (state.processing) return
+  if (state.processing) {
+    return
+  }
   state.processing = true
-  try {
-    if (props.viewer.blocking) {
-      await mainState.atp.updateBlockToDisable(props.viewer.blocking)
-      delete props.viewer.blocking
+  if (props.viewer.blocking) {
+    const response = await mainState.atp.updateBlockToDisable(props.viewer.blocking)
+    state.processing = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "BlockButton/toggleBlock")
+      return
+    }
+    delete props.viewer.blocking
 
-      // ブロックユーザー一覧の更新
-      mainState.currentBlockingUsers = mainState.currentBlockingUsers.filter((user: TTUser) => {
+    // ブロックユーザー一覧の更新
+    mainState.currentBlockingUsers = mainState.currentBlockingUsers
+      .filter((user: TTUser) => {
         return user.did !== props.did
       })
-    } else {
-      const blocking = await mainState.atp.updateBlockToEnable(props.did)
-      if (blocking != null) props.viewer.blocking = blocking
-    }
-  } finally {
+  } else {
+    const response = await mainState.atp.updateBlockToEnable(props.did)
     state.processing = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "BlockButton/toggleBlock")
+      return
+    }
+    props.viewer.blocking = response
   }
 }
 </script>

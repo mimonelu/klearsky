@@ -11,34 +11,53 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 async function onActivate () {
-  if (props.user?.viewer.blocking == null) await block()
-  else await unblock()
+  if (props.user?.viewer.blocking == null) {
+    await block()
+  } else {
+    await unblock()
+  }
 }
 
 async function block () {
   emit("close")
-  if (mainState.centerLoaderDisplay) return
-  if (props.user?.viewer.blocking != null) return
+  if (mainState.centerLoaderDisplay) {
+    return
+  }
+  if (props.user?.viewer.blocking != null) {
+    return
+  }
   mainState.centerLoaderDisplay = true
-  const blocking = await mainState.atp.updateBlockToEnable(props.user?.did as string)
-  if (blocking != null && props.user != null)
-    props.user.viewer.blocking = blocking
+  const response = await mainState.atp.updateBlockToEnable(props.user?.did as string)
   mainState.centerLoaderDisplay = false
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "ToggleBlock/block")
+    return
+  }
+  if (props.user != null) {
+    props.user.viewer.blocking = response
+  }
 }
 
 async function unblock () {
   emit("close")
-  if (mainState.centerLoaderDisplay) return
-  if (props.user?.viewer.blocking == null) return
+  if (mainState.centerLoaderDisplay) {
+    return
+  }
+  if (props.user?.viewer.blocking == null) {
+    return
+  }
   mainState.centerLoaderDisplay = true
-  await mainState.atp.updateBlockToDisable(props.user.viewer.blocking)
-
-  mainState.currentBlockingUsers = mainState.currentBlockingUsers.filter((user: TTUser) => {
-    return user.viewer.blocking !== props.user?.viewer.blocking
-  })
-
-  delete props.user.viewer.blocking
+  const response = await mainState.atp.updateBlockToDisable(props.user.viewer.blocking)
   mainState.centerLoaderDisplay = false
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "ToggleBlock/unblock")
+    return
+  }
+  mainState.currentBlockingUsers = mainState.currentBlockingUsers
+    .filter((user: TTUser) => {
+      return user.viewer.blocking !== props.user?.viewer.blocking
+    })
+  delete props.user.viewer.blocking
 }
 </script>
 

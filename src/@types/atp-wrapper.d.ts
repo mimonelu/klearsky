@@ -105,8 +105,8 @@ interface TIAtpWrapper {
   saveData (this: TIAtpWrapper)
   signUp (this: TIAtpWrapper, service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<undefined | Error>
   unmuteChatConvo (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
-  updateBlockToDisable (this: TIAtpWrapper, uri: string): Promise<boolean>
-  updateBlockToEnable (this: TIAtpWrapper, did: string): Promise<null | string>
+  updateBlockToDisable (this: TIAtpWrapper, uri: string): Promise<undefined | Error>
+  updateBlockToEnable (this: TIAtpWrapper, did: string): Promise<Error | string>
   updateChatConvoRead (this: TIAtpWrapper, convoId: string, messageId?: string): Promise<Error | TIChatConvo>
   updateJwt (this: TIAtpWrapper, onRefreshSession?: () => void): Promise<undefined | Error>
   updateList (this: TIAtpWrapper, list: TTList, avatarBlobRef?: BlobRef): Promise<undefined | Error>
