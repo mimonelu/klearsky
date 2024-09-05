@@ -103,6 +103,42 @@ function callback (type: "deletePost" | "updatePost") {
       v-if="post != null"
       class="list-menu"
     >
+      <!-- プロフィール -->
+      <RouterLink
+        :to="{ name: 'profile-feeds', query: { account: post.author.did } }"
+        @click="emit('close')"
+      >
+        <!-- プロフィール - 相互フォロー -->
+        <SVGIcon
+          v-if="post.author?.viewer?.followedBy && post.author?.viewer?.following"
+          name="like"
+          class="list-menu__no-color-icon"
+        />
+
+        <!-- プロフィール - フォロー中 -->
+        <SVGIcon
+          v-else-if="post.author?.viewer?.followedBy"
+          name="likeHalf"
+          data-reverse-h="true"
+        />
+
+        <!-- プロフィール - 被フォロー中 -->
+        <SVGIcon
+          v-else-if="post.author?.viewer?.following"
+          name="likeHalf"
+        />
+
+        <!-- プロフィール - 非相互フォロー -->
+        <SVGIcon
+          v-else
+          name="likeOutline"
+        />
+
+        <span>{{ $t("profile") }}</span>
+      </RouterLink>
+
+      <hr />
+
       <!-- テキストを翻訳する -->
       <MenuTickerTranslateText
         :text="post.record?.text"

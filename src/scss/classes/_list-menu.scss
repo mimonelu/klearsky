@@ -43,7 +43,8 @@
       }
     }
 
-    & > .svg-icon {
+    & > .svg-icon,
+    & > .svg-icon.list-menu__no-color-icon {
       fill: rgb(var(--accent-color));
     }
     & > .svg-icon--feed {

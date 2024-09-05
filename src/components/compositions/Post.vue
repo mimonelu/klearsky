@@ -900,7 +900,7 @@ function toggleOldestQuotedPostDisplay () {
             </template>
           </DisplayName>
 
-          <div class="body__right__header__handle-and-indexed-at">
+          <div class="body__right__header__detail">
             <!-- ハンドル -->
             <AuthorHandle
               class="body__right__header__author-handle"
@@ -1680,7 +1680,7 @@ function toggleOldestQuotedPostDisplay () {
     }
   }
 
-  &__handle-and-indexed-at {
+  &__detail {
     grid-area: h;
     display: grid;
     align-items: center;
