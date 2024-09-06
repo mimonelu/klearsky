@@ -129,7 +129,15 @@ const state = reactive<{
     ) {
       return "unset"
     }
-    return `1 / ${state.video.aspectRatio.height / state.video.aspectRatio.width}`
+    const aspectHeight = state.video.aspectRatio.height / state.video.aspectRatio.width
+    if (!mainState.currentSetting.imageMaxHeightRatio) {
+      return `1 / ${aspectHeight}`
+    }
+    const computedHeight = Math.min(
+      aspectHeight,
+      mainState.currentSetting.imageMaxHeightRatio
+    )
+    return `1 / ${computedHeight}`
   }),
   hasMedia: computed((): boolean => state.images.length > 0 || state.video != null),
 
