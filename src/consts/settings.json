@@ -67,6 +67,10 @@
     { "label": "disabled", "value": false },
     { "label": "enabled", "value": true }
   ],
+  "VIDEO_PRELOAD": [
+    { "label": "disabled", "value": "none" },
+    { "label": "enabled", "value": "metadata" }
+  ],
   "LINKCARD_LAYOUT": [
     { "label": "linkcardLayoutVertical", "value": "vertical" },
     { "label": "linkcardLayoutHorizontal", "value": "horizontal" },

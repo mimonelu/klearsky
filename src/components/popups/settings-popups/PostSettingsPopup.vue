@@ -122,13 +122,13 @@ const mainState = inject("state") as MainState
           </div>
         </div>
 
-        <!-- 画像 -->
+        <!-- メディア -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
             <span>{{ $t("image") }}</span>
           </div>
           <div class="settings-popup__form__body">
-            <!-- 画像 - 画像の制御 -->
+            <!-- メディア - メディアの制御 -->
             <div class="settings-popup__form__header">
               <span>{{ $t("imageFolding") }}</span>
             </div>
@@ -140,7 +140,7 @@ const mainState = inject("state") as MainState
               @update="$emit('saveSetting')"
             />
 
-            <!-- 画像 - 画像の高さの最大値 -->
+            <!-- メディア - メディアの高さの最大値 -->
             <div class="settings-popup__form__header">
               <span>{{ $t("imageMaxHeightRatio") }}</span>
             </div>
@@ -152,7 +152,7 @@ const mainState = inject("state") as MainState
               @update="$emit('saveSetting')"
             />
 
-            <!-- 画像 - アニメーション画像の自動再生 -->
+            <!-- メディア - アニメーション画像の自動再生 -->
             <div class="settings-popup__form__header">
               <span>{{ $t("imageAutoPlay") }}</span>
             </div>
@@ -160,6 +160,18 @@ const mainState = inject("state") as MainState
               :state="mainState.currentSetting"
               model="imageAutoPlay"
               :options="SETTINGS.IMAGE_AUTO_PLAY"
+              layout="horizontal"
+              @update="$emit('saveSetting')"
+            />
+
+            <!-- メディア - 動画の先読み -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("videoPreload") }}</span>
+            </div>
+            <Radios
+              :state="mainState.currentSetting"
+              model="videoPreload"
+              :options="SETTINGS.VIDEO_PRELOAD"
               layout="horizontal"
               @update="$emit('saveSetting')"
             />

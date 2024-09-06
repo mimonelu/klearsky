@@ -425,6 +425,8 @@
 
   "imageAutoPlay": "Autoplay animated images",
 
+  "videoPreload": "Video preload",
+
   "linkcard": "Link card",
   "linkCardControl": "Link Card Control",
   "linkcardLayout": "Link Card Layout",

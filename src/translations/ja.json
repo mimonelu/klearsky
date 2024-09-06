@@ -425,6 +425,8 @@
 
   "imageAutoPlay": "アニメーション画像の自動再生",
 
+  "videoPreload": "動画の先読み",
+
   "linkcard": "リンクカード",
   "linkCardControl": "リンクカードの制御",
   "linkcardLayout": "リンクカードのレイアウト",

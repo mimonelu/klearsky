@@ -1066,9 +1066,8 @@ function toggleOldestQuotedPostDisplay () {
                       controls
                       loading="lazy"
                       loop
-                      muted
                       :poster="state.video.thumbnail"
-                      preload="metadata"
+                      :preload="mainState.currentSetting.videoPreload ?? 'metadata'"
                       width="100%"
                       :style="{ 'aspect-ratio': state.videoAspectRatio }"
                       @click.stop

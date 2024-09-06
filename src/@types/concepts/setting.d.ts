@@ -35,6 +35,7 @@ type TTSetting = {
   timeControl?: string
   uiLanguage?: string
   userSearchKeywordHistory?: Array<string>
+  videoPreload?: "none" | "metadata"
   wordMute?: Array<TTWordMute>
   [k: string]: any
 }

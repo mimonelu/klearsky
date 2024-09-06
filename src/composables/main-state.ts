@@ -793,6 +793,9 @@ function saveSettings () {
   if (state.settings[did].imageAutoPlay == null) {
     state.settings[did].imageAutoPlay = true
   }
+  if (state.settings[did].videoPreload == null) {
+    state.settings[did].videoPreload = "metadata"
+  }
   if (state.settings[did].linkcardLayout == null) {
     state.settings[did].linkcardLayout = "vertical"
   }
