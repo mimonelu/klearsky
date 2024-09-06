@@ -56,7 +56,19 @@ function onChange (event: Event) {
 }
 
 function resetFiles () {
-  if (props.maxNumber != null) state.files.splice(props.maxNumber)
+  // ファイル配列を最大数まで切り詰め
+  if (props.maxNumber != null) {
+    state.files.splice(props.maxNumber)
+  }
+
+  // ファイル配列に動画が含まれる場合は最初の動画以外削除
+  const firstVideo = state.files.find((file) => {
+    return file.type?.startsWith("video/")
+  })
+  if (firstVideo != null) {
+    state.files.splice(0, state.files.length, firstVideo)
+  }
+
   setPreviews(state.files)
 }
 
@@ -81,16 +93,23 @@ function deleteFile (index: number) {
   emit("change", state.files)
 }
 
-// 動画の aspectRatio 取得用
+// 動画の aspectRatio 対応
 // EasyForm から呼び出し
-function getVideoSizes (): Array<{
-  width?: number
-  height?: number
+function getVideoSizes (): Array<undefined | {
+  width: number
+  height: number
 }> {
-  return media.value?.map((value: any) => ({
-    width: value?.videoWidth,
-    height: value?.videoHeight,
-  })) ?? []
+  return media.value?.map((value: any) => {
+    if (value?.videoWidth == null ||
+        value?.videoHeight == null
+    ) {
+      return
+    }
+    return {
+      width: value.videoWidth,
+      height: value.videoHeight,
+    }
+  }) ?? []
 }
 </script>
 

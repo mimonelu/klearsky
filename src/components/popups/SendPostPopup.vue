@@ -186,14 +186,11 @@ async function submitCallback () {
     return
   }
 
-  // 動画の aspectRatio 取得用
+  // 動画の aspectRatio 対応
   // WANT: `_videoAspectRatio` の注入なしで換装したい
   const videoSizes = (easyForm.value?.getVideoSizes() ?? [[]])[0]
   easyFormState.medias.forEach((media, index) => {
-    (media as any)._videoAspectRatio = videoSizes[index] ?? {
-      width: undefined,
-      height: undefined,
-    }
+    (media as any)._videoAspectRatio = videoSizes[index]
   })
 
   // ポップアップを閉じる

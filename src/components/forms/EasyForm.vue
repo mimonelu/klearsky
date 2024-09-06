@@ -150,11 +150,11 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
   })
 }
 
-// 動画の aspectRatio 取得用
+// 動画の aspectRatio 対応
 // SendPostPopup から呼び出し
-function getVideoSizes (): Array<Array<{
-  width?: number
-  height?: number
+function getVideoSizes (): Array<Array<undefined | {
+  width: number
+  height: number
 }>> {
   return fileBox.value?.map((value: any) => {
     return value?.getVideoSizes() ?? []

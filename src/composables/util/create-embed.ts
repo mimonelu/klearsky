@@ -170,7 +170,6 @@ export default async function (
     }
     video = {
       $type: "app.bsky.embed.video",
-      aspectRatio: (file as any)._videoAspectRatio,
       video: videoBlob,
       alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "", // Injected
     }
@@ -183,11 +182,15 @@ export default async function (
     }
     video = {
       $type: "app.bsky.embed.video",
-      aspectRatio: (file as any)._videoAspectRatio,
       video: response.data.jobStatus?.blob,
       alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "", // Injected
     }
     */
+
+    // 動画の aspectRatio 対応
+    if ((file as any)._videoAspectRatio != null) {
+      video.aspectRatio = (file as any)._videoAspectRatio
+    }
   }
 
   // 引用リポスト
