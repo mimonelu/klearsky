@@ -180,9 +180,9 @@ getEmbeddedContentId()
     <!-- 不正な URL -->
     <div
       v-if="isInvalidUrl"
-      class="external--invalid textlabel--alert"
+      class="external--invalid textlabel"
     >
-      <div class="textlabel__text">
+      <div class="textlabel__text--alert">
         <SVGIcon name="alert" />{{ $t("invalidUrlError") }}
       </div>
     </div>

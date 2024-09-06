@@ -415,7 +415,7 @@
   "showImage": "メディアを表示する",
   "hideImage": "メディアを隠す",
 
-  "imageMaxHeightRatio": "画像の最大高さの割合",
+  "imageMaxHeightRatio": "メディアの最大高さの割合",
   "imageMaxHeightRatio1": "x0.5",
   "imageMaxHeightRatio2": "x0.75",
   "imageMaxHeightRatio3": "x1.0",
@@ -565,10 +565,9 @@
   "timeFeeds": "タイムフィード",
 
   "threadgate": "リプライ制限",
-  "threadgateAllowMention": "メンションされたユーザーを許可",
-  "threadgateAllowFollowing": "あなたのフォロワーを許可",
-  "threadgateAllowList": "リストを許可",
-  "threadgateNotification1": "5項目まで選択できます。",
+  "threadgateAllowMention": "メンションされたユーザー",
+  "threadgateAllowFollowing": "あなたのフォロワー",
+  "threadgateNotification1": "リプライを許可する対象を5つまで選択できます。",
   "threadgateNotification2": "何もチェックせずに適用するとあなた以外リプライできなくなります。",
 
   "sortInAsc": "昇順でソート",

@@ -415,7 +415,7 @@
   "showImage": "Show medias",
   "hideImage": "Hide medias",
 
-  "imageMaxHeightRatio": "Image Max Height Ratio",
+  "imageMaxHeightRatio": "Media Max Height Ratio",
   "imageMaxHeightRatio1": "x0.5",
   "imageMaxHeightRatio2": "x0.75",
   "imageMaxHeightRatio3": "x1.0",
@@ -565,10 +565,9 @@
   "timeFeeds": "Timefeed",
 
   "threadgate": "Reply controls",
-  "threadgateAllowMention": "Allow mention users",
-  "threadgateAllowFollowing": "Allow following users",
-  "threadgateAllowList": "Allow list",
-  "threadgateNotification1": "Up to 5 items can be selected.",
+  "threadgateAllowMention": "Mention users",
+  "threadgateAllowFollowing": "Following users",
+  "threadgateNotification1": "You can select up to 5 targets to allow reply.",
   "threadgateNotification2": "If apply without checking anything, only you will be able to reply.",
 
   "sortInAsc": "Sort in asc",

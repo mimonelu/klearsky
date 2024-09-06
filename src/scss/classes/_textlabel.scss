@@ -6,7 +6,8 @@
   flex-wrap: wrap;
   grid-gap: 0.25em 0.5em;
 
-  &__text {
+  &__text,
+  &__text--alert {
     display: flex;
     align-items: center;
     grid-gap: 0.25em 0.5em;
@@ -23,14 +24,15 @@
     fill: rgb(var(--fg-color));
   }
 
+  &__text--alert {
+    color: rgb(var(--notice-color));
+
+    & > .svg-icon {
+      fill: rgb(var(--notice-color));
+    }
+  }
+
   &__item {
     color: rgb(var(--fg-color));
-  }
-}
-.textlabel--alert {
-  color: rgb(var(--notice-color));
-
-  .textlabel__text > .svg-icon {
-    fill: rgb(var(--notice-color));
   }
 }

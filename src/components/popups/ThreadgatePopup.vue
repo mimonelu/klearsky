@@ -4,6 +4,7 @@ import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import DESIGN_CONSTS from "@/consts/design-consts.json"
 
 const NUMBER_OF_SELECTABLE_ITEMS = 5
 
@@ -82,7 +83,11 @@ const easyFormState = reactive<{
         return aTerm < bTerm ? - 1 : aTerm > bTerm ? 1 : 0
       })
       .forEach((myList: TTList) => {
-        results.push({ label: `${$t("threadgateAllowList")}: ${myList.name}`, value: myList.uri })
+        results.push({
+          label: myList.name,
+          value: myList.uri,
+          icon: DESIGN_CONSTS.LIST_PURPOSE_ICON_MAP[myList.purpose] ?? "help",
+        })
       })
 
     return results
@@ -201,19 +206,17 @@ async function update () {
       </h2>
     </template>
     <template #body>
-      <EasyForm v-bind="easyFormProps" />
-
       <!-- 注意文 -->
       <div class="textlabel">
         <div class="textlabel__text">
           <SVGIcon name="point" />{{ $t("threadgateNotification1") }}
         </div>
-      </div>
-      <div class="textlabel--alert">
-        <div class="textlabel__text">
+        <div class="textlabel__text--alert">
           <SVGIcon name="point" />{{ $t("threadgateNotification2") }}
         </div>
       </div>
+
+      <EasyForm v-bind="easyFormProps" />
 
       <div class="button-container">
         <!-- 解除ボタン -->
@@ -254,6 +257,24 @@ async function update () {
   &__state--off {
     background-color: var(--fg-color-0125);
     color: var(--fg-color-075);
+  }
+
+  &:deep() {
+    // リストラジオボタンのアイコン
+    .easy-form .checkboxes {
+      .svg-icon--person {
+        fill: rgb(var(--share-color));
+      }
+      .svg-icon--personOff {
+        fill: rgb(var(--notice-color));
+      }
+      .svg-icon--cards {
+        fill: rgb(var(--like-color));
+      }
+      .svg-icon--help {
+        fill: var(--fg-color-05);
+      }
+    }
   }
 }
 
