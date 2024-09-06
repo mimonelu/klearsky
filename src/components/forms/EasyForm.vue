@@ -12,6 +12,7 @@ const emit = defineEmits<{(event: string): void}>()
 defineExpose({
   forceUpdate,
   setFocus,
+  getVideoSizes,
 })
 
 const props = defineProps<{
@@ -33,6 +34,8 @@ const state = reactive<{
 })
 
 const easyForm = ref(null)
+
+const fileBox = ref()
 
 onMounted(setFocus)
 
@@ -145,6 +148,17 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
     if (target == null) return
     target.setSelectionRange(params.endIndex, params.endIndex)
   })
+}
+
+// 動画の aspectRatio 取得用
+// SendPostPopup から呼び出し
+function getVideoSizes (): Array<Array<{
+  width?: number
+  height?: number
+}>> {
+  return fileBox.value?.map((value: any) => {
+    return value?.getVideoSizes() ?? []
+  }) ?? []
 }
 </script>
 
@@ -265,6 +279,7 @@ function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
               <FileBox
                 v-else-if="item.type === 'file'"
                 v-bind="item.attrs"
+                ref="fileBox"
                 :files="item.state[item.model]"
                 :disabled="item.disabled"
                 :accept="item.accept"

@@ -1,10 +1,14 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, watch } from "vue"
+import { onMounted, reactive, ref, watch } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import VideoSource from "@/components/images/VideoSource.vue"
 
 const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
+
+defineExpose({
+  getVideoSizes,
+})
 
 const props = defineProps<{
   files?: Array<File>
@@ -15,8 +19,6 @@ const props = defineProps<{
   quadLayout?: boolean
 }>()
 
-const mainState = inject("state") as MainState
-
 const state = reactive<{
   files: Array<File>
   previews: Array<string>
@@ -24,6 +26,8 @@ const state = reactive<{
   files: props.files != null ? props.files : [],
   previews: [],
 })
+
+const media = ref()
 
 // D&D用処置
 watch(() => props.files, (value?: Array<File>) => {
@@ -75,6 +79,18 @@ function deleteFile (index: number) {
   state.files.splice(index, 1)
   state.previews.splice(index, 1)
   emit("change", state.files)
+}
+
+// 動画の aspectRatio 取得用
+// EasyForm から呼び出し
+function getVideoSizes (): Array<{
+  width?: number
+  height?: number
+}> {
+  return media.value?.map((value: any) => ({
+    width: value?.videoWidth,
+    height: value?.videoHeight,
+  })) ?? []
 }
 </script>
 
@@ -132,6 +148,7 @@ function deleteFile (index: number) {
             <!-- 動画プレビュー -->
             <div v-if="files != null && files[index]?.type?.startsWith('video/')">
               <video
+                ref="media"
                 controls
                 loading="lazy"
                 loop
@@ -149,6 +166,7 @@ function deleteFile (index: number) {
             <!-- 画像プレビュー -->
             <LazyImage
               v-else
+              ref="media"
               :src="preview"
               @click.prevent.stop
             />

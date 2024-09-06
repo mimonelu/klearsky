@@ -163,33 +163,27 @@ export default async function (
 
   // 動画ファイルがある場合
   } else if (params.medias != null) {
-    const videoBlob = await atp.createFileBlobRef({
-      file: params.medias[videoFileIndex],
-    })
+    const file = params.medias[videoFileIndex]
+    const videoBlob = await atp.createFileBlobRef({ file })
     if (videoBlob == null) {
       return Error("createFileBlobRefError")
     }
     video = {
       $type: "app.bsky.embed.video",
-
-      // TODO:
-      // aspectRatio: {},
-
+      aspectRatio: (file as any)._videoAspectRatio,
       video: videoBlob,
       alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "", // Injected
     }
 
     /* TODO: APIが実装され次第、コメントアウト
-    const response = await atp.createVideo(params.medias[videoFileIndex])
+    const file = params.medias[videoFileIndex]
+    const response = await atp.createVideo(file)
     if (response instanceof Error) {
       return response
     }
     video = {
       $type: "app.bsky.embed.video",
-
-      // TODO:
-      // aspectRatio: {},
-
+      aspectRatio: (file as any)._videoAspectRatio,
       video: response.data.jobStatus?.blob,
       alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "", // Injected
     }

@@ -107,9 +107,9 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
-const popup = ref(null)
+const popup = ref()
 
-const easyForm = ref(null)
+const easyForm = ref()
 
 // ポップアップを開いた際のUX改善処置
 watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
@@ -124,8 +124,8 @@ watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
     // プレビューリンクカード
     PreviewLinkCardFeature.execute()
 
-    ;(popup.value as any)?.scrollToTop()
-    ;(easyForm.value as any)?.setFocus()
+    popup.value?.scrollToTop()
+    easyForm.value?.setFocus()
   }, 0)
 })
 
@@ -186,6 +186,16 @@ async function submitCallback () {
     return
   }
 
+  // 動画の aspectRatio 取得用
+  // WANT: `_videoAspectRatio` の注入なしで換装したい
+  const videoSizes = (easyForm.value?.getVideoSizes() ?? [[]])[0]
+  easyFormState.medias.forEach((media, index) => {
+    (media as any)._videoAspectRatio = videoSizes[index] ?? {
+      width: undefined,
+      height: undefined,
+    }
+  })
+
   // ポップアップを閉じる
   close()
 
@@ -240,7 +250,7 @@ function onInputUrl () {
   urlHasImageItem.display = !!easyFormState.url && easyFormState.medias.length === 0
 
   // TODO: 要修正
-  ;(easyForm.value as any)?.forceUpdate()
+  easyForm.value?.forceUpdate()
 }
 
 function onClickClearButton () {
