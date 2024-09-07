@@ -37,7 +37,6 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.3.2",
     "@types/encoding-japanese": "^2.0.1",
     "@types/node": "^20.3.2",
     "@vitejs/plugin-vue": "^4.6.2",
