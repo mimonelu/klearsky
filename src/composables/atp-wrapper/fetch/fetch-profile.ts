@@ -1,4 +1,5 @@
 import type { AppBskyActorGetProfile, AtpAgent } from "@atproto/api"
+import { PROFILE_ERRORS } from "@/consts/errors.json"
 
 export default async function (
   this: TIAtpWrapper,
@@ -13,18 +14,19 @@ export default async function (
       .catch((error) => error)
   console.log("[klearsky/getProfile]", response)
   if (response instanceof Error) {
-    // 無効化されたアカウントの場合、空のプロフィールを返す
+    // エラーアカウントの場合、空のプロフィールを返す
     // WANT: message ではなく、より適切な判定方法に換装したい
-    if (response.message === "Account is deactivated") {
+    const profileError = (PROFILE_ERRORS as { [k: string]: string })[response.message]
+    if (profileError != null) {
       return {
         avatar: "",
         banner: "",
         description: "",
         did: actor,
-        displayName: "deactivatedAccount",
+        displayName: "",
         followersCount: 0,
         followsCount: 0,
-        handle: "deactivatedAccount",
+        handle: profileError,
         labels: [],
         postsCount: 0,
         viewer: {

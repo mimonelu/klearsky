@@ -4,5 +4,11 @@
   ],
   "REPLACE": [
     "sessionExpired"
-  ]
+  ],
+  "PROFILE_ERRORS": {
+    "Account has been suspended": "suspendedAccount",
+    "Account is deactivated": "deactivatedAccount",
+    "Profile not found": "notFoundAccount",
+    "Unable to resolve handle": "unresolvedAccount"
+  }
 }

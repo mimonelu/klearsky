@@ -67,6 +67,7 @@ import WordMutePopup from "@/components/popups/WordMutePopup.vue"
 import { state } from "@/composables/main-state"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
+import { PROFILE_ERRORS } from "@/consts/errors.json"
 
 const $t = inject("$t") as Function
 state.$setCurrentLanguage = inject("$setCurrentLanguage") as Function
@@ -612,10 +613,13 @@ async function processProfilePage (account?: string): Promise<undefined | Error>
       return response
     }
 
-    // 無効化されたアカウントの場合、ハンドルと表示名を変更
-    if (state.currentProfile?.handle === "deactivatedAccount") {
-      state.currentProfile.displayName = $t("deactivatedAccount")
-      state.currentProfile.handle = $t("deactivatedAccount")
+    // エラーアカウントの場合、ハンドルを変更
+    if (state.currentProfile?.handle != null) {
+      const profileError = Object.values(PROFILE_ERRORS)
+        .find((error) => error === state.currentProfile?.handle)
+      if (profileError != null) {
+        state.currentProfile.handle = $t(profileError)
+      }
     }
   }
   if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
