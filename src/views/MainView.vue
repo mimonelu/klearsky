@@ -422,7 +422,7 @@ async function moveToDefaultHome () {
 }
 
 async function processPage (pageName?: null | string) {
-  let account: null | string = null
+  let account: undefined | string
   switch (pageName) {
     case "profile-feeds":
     case "profile-feeds-with-replies":
@@ -435,7 +435,7 @@ async function processPage (pageName?: null | string) {
     case "profile-follower":
     case "profile-starter-packs":
     case "profile-suggested-follows": {
-      account = state.currentQuery.account as LocationQueryValue
+      account = (state.currentQuery.account as LocationQueryValue) ?? undefined
       if (!account) {
         await router.push({ name: "home" })
         break
@@ -448,13 +448,9 @@ async function processPage (pageName?: null | string) {
   try {
     switch (pageName) {
       case "profile-feeds": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentAuthorFeeds.length === 0) {
           await state.fetchCurrentAuthorFeed("new")
@@ -462,13 +458,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-feeds-with-replies": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentAuthorFeedsWithReplies.length === 0) {
           await state.fetchCurrentAuthorFeed("new", "posts_with_replies")
@@ -476,13 +468,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-feeds-with-media": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentAuthorFeedsWithMedia.length === 0) {
           await state.fetchCurrentAuthorFeed("new", "posts_with_media")
@@ -490,13 +478,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-repost": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentAuthorReposts.length === 0) {
           await state.fetchAuthorReposts("new")
@@ -504,13 +488,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-like": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentAuthorLikes.length === 0) {
           await state.fetchAuthorLikes("new")
@@ -518,13 +498,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-list": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.isMyProfile() && (!state.inSameProfilePage || state.currentAuthorLists.length === 0)) {
           await state.fetchAuthorLists("new")
@@ -532,13 +508,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-feed-generators": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentAuthorFeedGenerators.length === 0) {
           await state.fetchCurrentAuthorFeedGenerators("new")
@@ -546,13 +518,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-starter-packs": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentAuthorStarterPacks.length === 0) {
           await state.fetchAuthorStarterPacks("new")
@@ -560,13 +528,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-following": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentFollowings.length === 0) {
           await state.fetchFollowings("new")
@@ -574,13 +538,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-follower": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentFollowers.length === 0) {
           await state.fetchFollowers("new")
@@ -588,13 +548,9 @@ async function processPage (pageName?: null | string) {
         break
       }
       case "profile-suggested-follows": {
-        if (account !== state.currentProfile?.handle &&
-            account !== state.currentProfile?.did) {
-          // DIDやブロック情報などを先に取得するために並列処理はしない
-          await state.fetchCurrentProfile(account as string)
-        }
-        if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-          state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
         }
         if (!state.inSameProfilePage || state.currentSuggestedFollows.length === 0) {
           await state.fetchSuggestedFollows()
@@ -640,6 +596,29 @@ async function processPage (pageName?: null | string) {
       pageName?.startsWith("search-post")) {
     // TODO: "search-post" 特有の問題のために setTimeout している。使わずに対処すること
     setTimeout(state.updatePageTitle, 1)
+  }
+}
+
+async function processProfilePage (account?: string): Promise<undefined | Error> {
+  if (account == null) {
+    return
+  }
+  if (account !== state.currentProfile?.handle &&
+      account !== state.currentProfile?.did) {
+    // DIDやブロック情報などを先に取得するために並列処理はしない
+    const response = await state.fetchCurrentProfile(account)
+    if (response instanceof Error) {
+      return response
+    }
+
+    // 無効化されたアカウントの場合、ハンドルと表示名を変更
+    if (state.currentProfile?.handle === "deactivatedAccount") {
+      state.currentProfile.displayName = $t("deactivatedAccount")
+      state.currentProfile.handle = $t("deactivatedAccount")
+    }
+  }
+  if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
+    state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
   }
 }
 

@@ -10,14 +10,14 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const isInvalid = props.handle === "handle.invalid"
+const isInvalidHandle = props.handle === "handle.invalid"
 
 const state = reactive<{
   handle?: ComputedRef<string>
 }>({
   handle: computed((): string => props.anonymizable && mainState.currentSetting.postAnonymization
     ? ""
-    : isInvalid
+    : isInvalidHandle
       ? $t("invalidHandle")
       : props.handle
   ),
@@ -27,7 +27,7 @@ const state = reactive<{
 <template>
   <div
     class="author-handle"
-    :data-is-invalid="isInvalid"
+    :data-is-invalid-handle="isInvalidHandle"
   >{{ state.handle }}</div>
 </template>
 
@@ -39,7 +39,7 @@ const state = reactive<{
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  &[data-is-invalid="true"] {
+  &[data-is-invalid-handle="true"] {
     --fg-color: var(--notice-color);
     font-weight: bold;
   }

@@ -105,7 +105,7 @@ const state = reactive<{
     return mainState.currentProfile?.associated?.labeler ?? false
   }),
   numberOfPostsPerDay: computed((): undefined | number => {
-    if (mainState.currentProfile == null) {
+    if (mainState.currentProfile?.createdAt == null) {
       return
     }
     const days = differenceInDays(

@@ -46,6 +46,7 @@
   "help": "ヘルプ",
   "media": "メディア",
   "invalidHandle": "(不正なハンドル)",
+  "deactivatedAccount": "(無効化されたアカウント)",
   "share": "共有する",
   "postFeatures": "機能",
   "showDetail": "詳細を表示",

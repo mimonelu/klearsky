@@ -1138,7 +1138,7 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
   }
 }
 
-async function fetchCurrentProfile (did: string) {
+async function fetchCurrentProfile (did: string): Promise<undefined | Error> {
   state.currentProfile = null
   state.currentAuthorReposts.splice(0)
   state.currentAuthorLikes.splice(0)
@@ -1151,7 +1151,7 @@ async function fetchCurrentProfile (did: string) {
   const currentProfile = await state.atp.fetchProfile(did)
   if (currentProfile instanceof Error) {
     state.currentProfile = null
-    return
+    return currentProfile
   }
   state.currentProfile = currentProfile
 

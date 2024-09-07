@@ -1,6 +1,6 @@
 type TTProfile = {
   __log?: any // Injected
-  createdAt: string
+  createdAt?: string
   associated?: TIAssociated
   avatar: string
   banner: string
@@ -10,7 +10,7 @@ type TTProfile = {
   followersCount: number
   followsCount: number
   handle: string
-  indexedAt: string
+  indexedAt?: string
   labels?: Array<TTLabel>
   postsCount: number
   joinedViaStarterPack?: TIStarterPack
