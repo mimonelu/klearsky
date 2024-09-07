@@ -1072,6 +1072,10 @@ function toggleOldestQuotedPostDisplay () {
                       :style="{ 'aspect-ratio': state.videoAspectRatio }"
                       @click.stop
                     >
+                      <source
+                        :src="state.video.playlist"
+                        type="application/x-mpegURL"
+                      />
                       <Suspense>
                         <VideoSource
                           :did="post.author.did"
