@@ -2,6 +2,7 @@ import Package from "@/../package.json"
 import type { AppBskyFeedPost, AtpAgent } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
+import { LIMIT_OF_LIST_MENTION_ACCOUNTS } from "@/consts/consts.json"
 
 export default async function (
   this: TIAtpWrapper,
@@ -49,6 +50,31 @@ export default async function (
     } else {
       record.facets = richText.facets
     }
+  }
+
+  // リストメンション
+  if (!!params.listMentionDids?.length) {
+    if (record.facets == null) {
+      record.facets = []
+    }
+    params.listMentionDids.forEach((did) => {
+      record.facets?.push({
+        $type: "app.bsky.richtext.facet",
+        features: [
+          {
+            $type: "app.bsky.richtext.facet#mention",
+            did,
+          },
+        ],
+        index: {
+          byteEnd: 0,
+          byteStart: 0,
+        }
+      })
+    })
+
+    // ユーザーの切り詰め
+    record.facets = record.facets.splice(0, LIMIT_OF_LIST_MENTION_ACCOUNTS)
   }
 
   // カスタムフィールド - Lightning

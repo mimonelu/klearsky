@@ -643,7 +643,16 @@ state.threadgatePopupProps = {
 state.openThreadgatePopup = openThreadgatePopup
 state.closeThreadgatePopup = closeThreadgatePopup
 
-// ポップアップ - HTML ポップアップ
+// ポップアップ - リストメンションポップアップ
+state.listMentionPopupProps = {
+  display: false,
+  list: undefined,
+  dids: [],
+}
+state.openListMentionPopup = openListMentionPopup
+state.closeListMentionPopup = closeListMentionPopup
+
+  // ポップアップ - HTML ポップアップ
 state.htmlPopupProps = {
   display: false,
   type: undefined,
@@ -2216,6 +2225,8 @@ async function closeSendPostPopup (done: boolean, hidden: boolean) {
     state.sendPostPopupProps.fileList = undefined
     state.currentPostTags.splice(0)
     state.postDatePopupDate = undefined
+    state.listMentionPopupProps.list = undefined
+    state.listMentionPopupProps.dids.splice(0)
   }
   state.sendPostPopupProps.visibility = false
 }
@@ -2233,7 +2244,7 @@ function closeMyTagPopup () {
 
 // ポップアップ - ポスト日時選択ポップアップ
 
-function openPostDatePopup () {
+function openPostDatePopup (_payload: MouseEvent) {
   state.postDatePopupDisplay = true
 }
 
@@ -2256,6 +2267,17 @@ function closeThreadgatePopup (params: any) {
   if (state.threadgatePopupProps.onClosed != null)
     state.threadgatePopupProps.onClosed(params)
   state.threadgatePopupProps.display = false
+}
+
+// ポップアップ - Threadgate ポップアップ
+
+function openListMentionPopup () {
+  state.listMentionPopupProps.dids.splice(0)
+  state.listMentionPopupProps.display = true
+}
+
+function closeListMentionPopup () {
+  state.listMentionPopupProps.display = false
 }
 
 // ポップアップ - HTML ポップアップ

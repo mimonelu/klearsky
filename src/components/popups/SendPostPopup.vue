@@ -205,6 +205,7 @@ async function submitCallback () {
       createdAt: state.postDatePopupDate,
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
+      listMentionDids: mainState.listMentionPopupProps.dids,
       tags: mainState.currentPostTags,
 
       // Lightning
@@ -306,6 +307,10 @@ function openThreadgatePopup () {
       }
     },
   })
+}
+
+function openListMentionPopup () {
+  mainState.openListMentionPopup()
 }
 
 // プレビューリンクカード
@@ -455,6 +460,43 @@ const PreviewLinkCardFeature: {
               <b v-if="mainState.currentSetting.postLanguages?.length">{{ mainState.currentSetting.postLanguages?.join(", ") }}</b>
             </button>
 
+            <!-- ポストラベル選択ポップアップトリガー -->
+            <LabelButton
+              type="post"
+              :parentState="state"
+            />
+
+            <!-- Threadgate ポップアップトリガー -->
+            <button
+              class="button--bordered on-off-button"
+              :disabled="type === 'reply'"
+              @click.prevent="openThreadgatePopup"
+            >
+              <SVGIcon :name="state.draftThreadgate.applied ? 'lock' : 'unlock'" />
+              <span>{{ $t("threadgate") }}</span>
+              <b v-if="state.draftThreadgate.applied">ON</b>
+            </button>
+
+            <!-- リストメンションポップアップトリガー -->
+            <button
+              class="button--bordered on-off-button"
+              @click.prevent="openListMentionPopup"
+            >
+              <SVGIcon name="list" />
+              <span>{{ $t("listMention") }}</span>
+              <b v-if="mainState.listMentionPopupProps.list != null">ON</b>
+            </button>
+
+            <!-- ポスト日時選択ポップアップトリガー -->
+            <button
+              class="button--bordered post-date-button"
+              @click.prevent="mainState.openPostDatePopup"
+            >
+              <SVGIcon name="history" />
+              <span>{{ $t("date") }}</span>
+              <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
+            </button>
+
             <!-- マイタグポップアップトリガー -->
             <button
               class="button--bordered post-tag-button"
@@ -474,33 +516,6 @@ const PreviewLinkCardFeature: {
                   <span>{{ tag.text }}</span>
                 </div>
               </div>
-            </button>
-
-            <!-- ポストラベル選択ポップアップトリガー -->
-            <LabelButton
-              type="post"
-              :parentState="state"
-            />
-
-            <!-- Threadgate ポップアップトリガー -->
-            <button
-              class="button--bordered threadgate-button"
-              :disabled="type === 'reply'"
-              @click.prevent="openThreadgatePopup"
-            >
-              <SVGIcon :name="state.draftThreadgate.applied ? 'lock' : 'unlock'" />
-              <span>{{ $t("threadgate") }}</span>
-              <b v-if="state.draftThreadgate.applied">ON</b>
-            </button>
-
-            <!-- ポスト日時選択ポップアップトリガー -->
-            <button
-              class="button--bordered post-date-button"
-              @click.prevent="mainState.openPostDatePopup"
-            >
-              <SVGIcon name="history" />
-              <span>{{ $t("date") }}</span>
-              <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
             </button>
           </div>
         </template>
@@ -636,7 +651,7 @@ const PreviewLinkCardFeature: {
         font-size: 0.75rem;
       }
     }
-    .threadgate-button > b {
+    .on-off-button > b {
       color: rgb(var(--notice-color));
     }
     .post-date-button > b {

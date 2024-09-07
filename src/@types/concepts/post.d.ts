@@ -141,6 +141,7 @@ type TTCreatePostParams = {
   alts?: Array<string>
   languages?: Array<string>
   labels?: Array<string>
+  listMentionDids?: Array<string>
   lightning?: string
   tags?: Array<TTMyTag>
 }

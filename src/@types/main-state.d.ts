@@ -581,13 +581,18 @@ type MainState = {
   // ポップアップ - ポスト日時選択ポップアップ
   postDatePopupDisplay: boolean
   postDatePopupDate?: string
-  openPostDatePopup: Function
+  openPostDatePopup: (payload: MouseEvent) => void
   closePostDatePopup: Function
 
   // ポップアップ - Threadgate ポップアップ
   threadgatePopupProps: TTThreadgatePopupProps
   openThreadgatePopup: Function
   closeThreadgatePopup: Function
+
+  // ポップアップ - リストメンションポップアップ
+  listMentionPopupProps: TIListMentionPopupProps
+  openListMentionPopup: Function
+  closeListMentionPopup: Function
 
   // ポップアップ - HTML ポップアップ
   htmlPopupProps: TTHtmlPopupProps
