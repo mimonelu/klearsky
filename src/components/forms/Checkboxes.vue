@@ -34,6 +34,7 @@ function onChange () {
       :key="option.value"
       class="checkbox"
       :data-checked="state[model]?.includes(option.value)"
+      :data-disabled="disabled ?? false"
     >
       <input
         v-model="state[model]"
@@ -41,7 +42,7 @@ function onChange () {
         :name="model.toString()"
         :value="option.value"
         :required="required ?? false"
-        :data-disabled="disabled ?? false"
+        :disabled="disabled ?? false"
         @change="onChange"
       >
       <SVGIcon :name="state[model]?.includes(option.value) ? 'checkboxOn' : 'checkboxOff'" />

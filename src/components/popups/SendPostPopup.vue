@@ -31,7 +31,7 @@ const state = reactive<{
 }>({
   labels: [],
   draftThreadgate: {
-    applied: false,
+    action: "none",
     allowMention: false,
     allowFollowing: false,
     listUris: [],
@@ -216,7 +216,7 @@ async function submitCallback () {
       mainState.openErrorPopup($t(result.message), "SendPostPopup/submitCallback")
     } else {
       // Threadgate の適用
-      if (state.draftThreadgate.applied) {
+      if (state.draftThreadgate.action !== "none") {
         const responseOfUpdate = await mainState.atp.updateThreadgate(
           result.uri,
           state.draftThreadgate.allowMention,
@@ -293,17 +293,28 @@ function openThreadgatePopup () {
   mainState.openThreadgatePopup({
     mode: "send",
     draftThreadgate: state.draftThreadgate,
-    onClosed (params: any) {
-      if (params == null) return
-      state.draftThreadgate.applied = !params.reset
-      if (state.draftThreadgate.applied) {
-        state.draftThreadgate.allowMention = params.allowMention
-        state.draftThreadgate.allowFollowing = params.allowFollowing
-        state.draftThreadgate.listUris.splice(0, state.draftThreadgate.listUris.length, ...(params.listUris ?? []))
-      } else {
-        state.draftThreadgate.allowMention = false
-        state.draftThreadgate.allowFollowing = false
-        state.draftThreadgate.listUris.splice(0)
+    onClosed (params?: TICloseThreadgatePopupProps) {
+      if (params == null) {
+        return
+      }
+      state.draftThreadgate.action = params.action
+      switch (state.draftThreadgate.action) {
+        case "none": {
+          state.draftThreadgate.allowMention = false
+          state.draftThreadgate.allowFollowing = false
+          state.draftThreadgate.listUris.splice(0)
+          break
+        }
+        case "custom": {
+          state.draftThreadgate.allowMention = params.allowMention ?? false
+          state.draftThreadgate.allowFollowing = params.allowFollowing ?? false
+          state.draftThreadgate.listUris.splice(
+            0,
+            state.draftThreadgate.listUris.length,
+            ...(params.listUris ?? [])
+          )
+          break
+        }
       }
     },
   })
@@ -472,9 +483,9 @@ const PreviewLinkCardFeature: {
               :disabled="type === 'reply'"
               @click.prevent="openThreadgatePopup"
             >
-              <SVGIcon :name="state.draftThreadgate.applied ? 'lock' : 'unlock'" />
+              <SVGIcon :name="state.draftThreadgate.action !== 'none' ? 'lock' : 'unlock'" />
               <span>{{ $t("threadgate") }}</span>
-              <b v-if="state.draftThreadgate.applied">ON</b>
+              <b v-if="state.draftThreadgate.action !== 'none'">ON</b>
             </button>
 
             <!-- リストメンションポップアップトリガー -->

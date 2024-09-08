@@ -569,6 +569,8 @@
   "timeFeeds": "タイムフィード",
 
   "threadgate": "リプライ制限",
+  "threadgateNoAction": "誰でもリプライ可",
+  "threadgateCustomAction": "許可されたユーザーのみリプライ可",
   "threadgateAllowMention": "メンションされたユーザー",
   "threadgateAllowFollowing": "あなたのフォロワー",
   "threadgateNotification1": "リプライを許可する対象を5つまで選択できます。",

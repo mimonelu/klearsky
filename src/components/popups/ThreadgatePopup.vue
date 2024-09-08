@@ -1,14 +1,16 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject, reactive, ref } from "vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import { LIMIT_OF_THREADGATE_ITEMS } from "@/consts/consts.json"
 import DESIGN_CONSTS from "@/consts/design-consts.json"
 
-const NUMBER_OF_SELECTABLE_ITEMS = 5
-
-const emit = defineEmits<{(event: string, params: any): void}>()
+const emit = defineEmits<{(
+  event: string,
+  params: TICloseThreadgatePopupProps
+): void}>()
 
 const props = defineProps<{
   display: boolean
@@ -27,13 +29,28 @@ const state = reactive<{
   applied: boolean
 }>({
   loaderDisplay: false,
-  applied: props.draftThreadgate?.applied ?? props.postThreadgate != null,
+  applied: props.draftThreadgate != null
+    ? props.draftThreadgate.action !== "none"
+    : props.postThreadgate != null,
 })
 
 const easyFormState = reactive<{
+  action: TTThreadgateAction
+  actionOptions: Array<TTOption>
   allows: Array<string>
-  options: Array<TTOption>
+  allowOptions: Array<TTOption>
 }>({
+  action: props.draftThreadgate?.action ?? (props.postThreadgate != null ? "custom" : "none"),
+  actionOptions: [
+  {
+      label: "threadgateNoAction",
+      value: "none",
+    },
+    {
+      label: "threadgateCustomAction",
+      value: "custom",
+    },
+  ],
   allows: (() => {
     // 送信ポスト用
     if (props.mode === "send") {
@@ -69,7 +86,7 @@ const easyFormState = reactive<{
 
     return []
   })(),
-  options: (() => {
+  allowOptions: (() => {
     const results: Array<TTOption> = [
       { label: $t("threadgateAllowMention"), value: "allowMention" },
       { label: $t("threadgateAllowFollowing"), value: "allowFollowing" },
@@ -84,7 +101,7 @@ const easyFormState = reactive<{
       })
       .forEach((myList: TTList) => {
         results.push({
-          label: myList.name,
+          label: `${myList.name} (${myList.listItemCount ?? myList.items?.length ?? "-"})`,
           value: myList.uri,
           icon: DESIGN_CONSTS.LIST_PURPOSE_ICON_MAP[myList.purpose] ?? "help",
         })
@@ -99,39 +116,41 @@ const easyFormProps: TTEasyForm = {
   data: [
     {
       state: easyFormState,
+      model: "action",
+      type: "radio",
+      options: easyFormState.actionOptions,
+
+      onUpdate () {
+        // 許可リストの無効化処理
+        easyFormProps.data[1].disabled = easyFormState.action === "none"
+
+        // 許可リストの初期化
+        if (easyFormState.action === "none") {
+          easyFormState.allows.splice(0)
+        }
+
+        if (easyForm.value != null) {
+          easyForm.value.forceUpdate()
+        }
+      },
+    },
+    {
+      state: easyFormState,
       model: "allows",
       type: "checkbox",
-      options: easyFormState.options,
-      limit: NUMBER_OF_SELECTABLE_ITEMS,
+      options: easyFormState.allowOptions,
+      limit: LIMIT_OF_THREADGATE_ITEMS,
+      disabled: props.draftThreadgate != null
+        ? props.draftThreadgate.action === "none"
+        : props.postThreadgate == null,
     },
   ],
 }
 
-function close (params: any) {
+const easyForm = ref()
+
+function close (params: TICloseThreadgatePopupProps) {
   emit("close", params)
-}
-
-async function reset () {
-  Util.blurElement()
-
-  // 送信ポスト用
-  if (props.mode === "send") {
-    close({
-      updated: true,
-      reset: true,
-    })
-    return
-  }
-
-  if (state.loaderDisplay || props.postUri == null) return
-  state.loaderDisplay = true
-  const response = await mainState.atp.deleteThreadgate(props.postUri)
-  state.loaderDisplay = false
-  if (!response || response instanceof Error) {
-    mainState.openErrorPopup("errorApiFailed", response)
-  } else {
-    close({ updated: true })
-  }
 }
 
 async function update () {
@@ -141,12 +160,16 @@ async function update () {
 
   // 許可リスト
   let listUris: undefined | Array<string> = easyFormState.allows
-    .filter((allow: string) => allow.startsWith("at://"))
-  if (listUris.length === 0) listUris = undefined
+    .filter((allow: string) => {
+      return allow.startsWith("at://")
+    })
+  if (listUris.length === 0) {
+    listUris = undefined
+  }
 
-  // 送信ポスト用
   if (props.mode === "send") {
     close({
+      action: easyFormState.action,
       updated: true,
       allowMention,
       allowFollowing,
@@ -155,7 +178,12 @@ async function update () {
     return
   }
 
-  if (state.loaderDisplay || props.postUri == null) return
+  // ポスト送信ポップアップの対応はここまで
+  // ポストコンポーネントの対応は最後まで
+
+  if (state.loaderDisplay || props.postUri == null) {
+    return
+  }
   state.loaderDisplay = true
 
   // Threadgate が設定済みの場合は削除
@@ -168,6 +196,17 @@ async function update () {
     }
   }
 
+  // Threadgate の削除はここまで
+  if (easyFormState.action === "none") {
+    state.loaderDisplay = false
+    close({
+      action: easyFormState.action,
+      updated: props.postThreadgate != null,
+    })
+    return
+  }
+
+  // Threadgate の設定
   const responseOfUpdate = await mainState.atp.updateThreadgate(
     props.postUri,
     allowMention,
@@ -175,10 +214,13 @@ async function update () {
     listUris
   )
   state.loaderDisplay = false
-  if (!responseOfUpdate || responseOfUpdate instanceof Error) {
+  if (responseOfUpdate instanceof Error) {
     mainState.openErrorPopup("errorApiFailed", responseOfUpdate)
   } else {
-    close({ updated: true })
+    close({
+      action: easyFormState.action,
+      updated: true,
+    })
   }
 }
 </script>
@@ -188,13 +230,14 @@ async function update () {
     class="threadgate-popup"
     :hasCloseButton="true"
     :loaderDisplay="state.loaderDisplay"
-    :data-has-threadgate="state.applied"
     @close="close"
   >
     <template #header>
       <h2>
         <SVGIcon name="lock" />
         <span>{{ $t("threadgate") }}</span>
+
+        <!-- ON/OFFアイコン -->
         <span
           v-if="state.applied"
           class="threadgate-popup__state--on"
@@ -206,38 +249,31 @@ async function update () {
       </h2>
     </template>
     <template #body>
-      <!-- 注意文 -->
-      <div class="textlabel">
-        <div class="textlabel__text">
-          <SVGIcon name="point" />{{ $t("threadgateNotification1") }}
-        </div>
-        <div class="textlabel__text--alert">
-          <SVGIcon name="point" />{{ $t("threadgateNotification2") }}
-        </div>
-      </div>
+      <EasyForm
+        v-bind="easyFormProps"
+        ref="easyForm"
+      >
+        <template #free-1>
+          <!-- 注意文 -->
+          <div class="textlabel">
+            <div class="textlabel__text">
+              <SVGIcon name="point" />{{ $t("threadgateNotification1") }}
+            </div>
+            <div class="textlabel__text--alert">
+              <SVGIcon name="point" />{{ $t("threadgateNotification2") }}
+            </div>
+          </div>
+        </template>
+      </EasyForm>
 
-      <EasyForm v-bind="easyFormProps" />
-
-      <div class="button-container">
-        <!-- 解除ボタン -->
-        <button
-          v-if="state.applied"
-          class="button"
-          @click.stop="reset"
-        >
-          <SVGIcon name="unlock" />
-          <span>{{ $t("release") }}</span>
-        </button>
-
-        <!-- 適用ボタン -->
-        <button
-          class="button--important"
-          @click.stop="update"
-        >
-          <SVGIcon name="lock" />
-          <span>{{ $t("apply") }}</span>
-        </button>
-      </div>
+      <!-- 適用ボタン -->
+      <button
+        class="button--important"
+        @click.stop="update"
+      >
+        <SVGIcon name="lock" />
+        <span>{{ $t("apply") }}</span>
+      </button>
     </template>
   </Popup>
 </template>
@@ -275,18 +311,6 @@ async function update () {
         fill: var(--fg-color-05);
       }
     }
-  }
-}
-
-.button-container {
-  display: flex;
-  grid-gap: 1rem;
-
-  [data-has-threadgate="true"] & > * {
-    flex-basis: 50%;
-  }
-  [data-has-threadgate="false"] & > * {
-    flex-grow: 1;
   }
 }
 </style>

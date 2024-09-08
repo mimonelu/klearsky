@@ -2263,9 +2263,10 @@ function openThreadgatePopup (props: TTThreadgatePopupProps) {
   state.threadgatePopupProps.display = true
 }
 
-function closeThreadgatePopup (params: any) {
-  if (state.threadgatePopupProps.onClosed != null)
+function closeThreadgatePopup (params: TICloseThreadgatePopupProps) {
+  if (state.threadgatePopupProps.onClosed != null) {
     state.threadgatePopupProps.onClosed(params)
+  }
   state.threadgatePopupProps.display = false
 }
 

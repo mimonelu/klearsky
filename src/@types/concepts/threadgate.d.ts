@@ -26,8 +26,10 @@ type TTThreadgateList = {
   }
 }
 
+type TTThreadgateAction = "none" | "custom"
+
 type TTDraftThreadgate = {
-  applied: boolean
+  action: TTThreadgateAction
   allowMention: boolean
   allowFollowing: boolean
   listUris: Array<string>
@@ -40,4 +42,13 @@ type TTThreadgatePopupProps = {
   postThreadgate?: TTThreadgate
   postUri?: string
   onClosed?: Function
+}
+
+interface TICloseThreadgatePopupProps {
+  action: TTThreadgateAction
+  updated: boolean
+  reset?: boolean
+  allowMention?: boolean
+  allowFollowing?: boolean
+  listUris?: Array<string>
 }
