@@ -213,6 +213,7 @@ function scrollListener () {
 }
 
 .popup-header {
+  border-bottom: 1px solid var(--fg-color-0125);
   cursor: pointer;
   display: flex;
   position: relative;
@@ -273,10 +274,7 @@ function scrollListener () {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: none;
-  padding: 1.5rem;
+  padding: 1rem;
   @include scroll-bar("transparent");
-  &:first-child {
-    padding-top: 1.5rem;
-  }
 }
 </style>

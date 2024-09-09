@@ -67,15 +67,9 @@ function apply () {
 
 <style lang="scss" scoped>
 .confirmation-popup {
-  &:deep() .popup-body {
-    padding-top: 0;
-  }
-
   .post {
-    background-color: var(--fg-color-00625);
     border-radius: var(--border-radius-middle);
     font-size: 1em;
-    padding: 0.75em;
 
     &:deep() > * {
       font-size: 0.75em;

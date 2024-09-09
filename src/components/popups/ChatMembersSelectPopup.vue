@@ -233,7 +233,7 @@ function unselect (index: number) {
   }
 
   .easy-form {
-    margin: 0 1rem 1rem;
+    margin: 1rem;
   }
 
   &__user-box-container {

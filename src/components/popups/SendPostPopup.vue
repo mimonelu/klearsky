@@ -585,8 +585,6 @@ const PreviewLinkCardFeature: {
 
     // プレビューポスト
     .post[data-position="preview"] {
-      margin: 0.5rem -0.5rem 0;
-
       .text {
         pointer-events: fill;
         user-select: text;
