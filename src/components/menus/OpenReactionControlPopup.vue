@@ -16,7 +16,7 @@ function onActivate () {
   if (props.post == null) {
     return
   }
-  mainState.openThreadgatePopup({
+  mainState.openReactionControlPopup({
     mode: "post",
     postThreadgate: props.post.threadgate,
     postUri: props.post.uri,

@@ -44,6 +44,7 @@ import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
 import PsySafetySettingsPopup from "@/components/popups/settings-popups/PsySafetySettingsPopup.vue"
 import QuoteRepostsPopup from "@/components/popups/QuoteRepostsPopup.vue"
+import ReactionControlPopup from "@/components/popups/ReactionControlPopup.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
 import ScrollButton from "@/components/buttons/ScrollButton.vue"
 import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
@@ -60,7 +61,6 @@ import StarterPackCardPopover from "@/components/popovers/StarterPackCardPopover
 import StarterPackEditPopup from "@/components/popups/StarterPackEditPopup.vue"
 import SubMenu from "@/components/shells/SubMenu.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import ThreadgatePopup from "@/components/popups/ThreadgatePopup.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import UiLanguageSettingsPopup from "@/components/popups/settings-popups/UiLanguageSettingsPopup.vue"
 import WordMutePopup from "@/components/popups/WordMutePopup.vue"
@@ -1265,12 +1265,12 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
         />
       </Transition>
 
-      <!-- Threadgate ポップアップ -->
+      <!-- 反応制御ポップアップ -->
       <Transition>
-        <ThreadgatePopup
-          v-if="state.threadgatePopupProps.display"
-          v-bind="state.threadgatePopupProps"
-          @close="state.closeThreadgatePopup"
+        <ReactionControlPopup
+          v-if="state.reactionControlPopupProps.display"
+          v-bind="state.reactionControlPopupProps"
+          @close="state.closeReactionControlPopup"
         />
       </Transition>
 

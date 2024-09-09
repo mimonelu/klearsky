@@ -26,12 +26,12 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   labels: Array<string>
-  draftThreadgate: TTDraftThreadgate
+  draftReactionControl: TTDraftReactionControl
   postDatePopupDate: ComputedRef<undefined | string>
 }>({
   labels: [],
-  draftThreadgate: {
-    action: "none",
+  draftReactionControl: {
+    threadgateAction: "none",
     allowMention: false,
     allowFollowing: false,
     listUris: [],
@@ -216,12 +216,12 @@ async function submitCallback () {
       mainState.openErrorPopup($t(result.message), "SendPostPopup/submitCallback")
     } else {
       // Threadgate の適用
-      if (state.draftThreadgate.action !== "none") {
+      if (state.draftReactionControl.threadgateAction !== "none") {
         const responseOfUpdate = await mainState.atp.updateThreadgate(
           result.uri,
-          state.draftThreadgate.allowMention,
-          state.draftThreadgate.allowFollowing,
-          state.draftThreadgate.listUris
+          state.draftReactionControl.allowMention,
+          state.draftReactionControl.allowFollowing,
+          state.draftReactionControl.listUris
         )
         if (!responseOfUpdate || responseOfUpdate instanceof Error) {
           mainState.openErrorPopup(responseOfUpdate, "SendPostPopup/updateThreadgate")
@@ -289,28 +289,28 @@ function onChangeImage () {
   onInputUrl()
 }
 
-function openThreadgatePopup () {
-  mainState.openThreadgatePopup({
+function openReactionControlPopup () {
+  mainState.openReactionControlPopup({
     mode: "send",
-    draftThreadgate: state.draftThreadgate,
-    onClosed (params?: TICloseThreadgatePopupProps) {
+    draftReactionControl: state.draftReactionControl,
+    onClosed (params?: TICloseReactionControlPopupProps) {
       if (params == null) {
         return
       }
-      state.draftThreadgate.action = params.action
-      switch (state.draftThreadgate.action) {
+      state.draftReactionControl.threadgateAction = params.threadgateAction
+      switch (state.draftReactionControl.threadgateAction) {
         case "none": {
-          state.draftThreadgate.allowMention = false
-          state.draftThreadgate.allowFollowing = false
-          state.draftThreadgate.listUris.splice(0)
+          state.draftReactionControl.allowMention = false
+          state.draftReactionControl.allowFollowing = false
+          state.draftReactionControl.listUris.splice(0)
           break
         }
         case "custom": {
-          state.draftThreadgate.allowMention = params.allowMention ?? false
-          state.draftThreadgate.allowFollowing = params.allowFollowing ?? false
-          state.draftThreadgate.listUris.splice(
+          state.draftReactionControl.allowMention = params.allowMention ?? false
+          state.draftReactionControl.allowFollowing = params.allowFollowing ?? false
+          state.draftReactionControl.listUris.splice(
             0,
-            state.draftThreadgate.listUris.length,
+            state.draftReactionControl.listUris.length,
             ...(params.listUris ?? [])
           )
           break
@@ -481,11 +481,11 @@ const PreviewLinkCardFeature: {
             <button
               class="button--bordered on-off-button"
               :disabled="type === 'reply'"
-              @click.prevent="openThreadgatePopup"
+              @click.prevent="openReactionControlPopup"
             >
-              <SVGIcon :name="state.draftThreadgate.action !== 'none' ? 'lock' : 'unlock'" />
+              <SVGIcon :name="state.draftReactionControl.threadgateAction !== 'none' ? 'lock' : 'unlock'" />
               <span>{{ $t("threadgate") }}</span>
-              <b v-if="state.draftThreadgate.action !== 'none'">ON</b>
+              <b v-if="state.draftReactionControl.threadgateAction !== 'none'">ON</b>
             </button>
 
             <!-- リストメンションポップアップトリガー -->

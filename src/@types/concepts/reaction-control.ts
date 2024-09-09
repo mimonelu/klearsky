@@ -28,26 +28,25 @@ type TTThreadgateList = {
 
 type TTThreadgateAction = "none" | "custom"
 
-type TTDraftThreadgate = {
-  action: TTThreadgateAction
+type TTDraftReactionControl = {
+  threadgateAction: TTThreadgateAction
   allowMention: boolean
   allowFollowing: boolean
   listUris: Array<string>
 }
 
-type TTThreadgatePopupProps = {
+type TTReactionControlPopupProps = {
   display: boolean
   mode?: "send" | "post"
-  draftThreadgate?: TTDraftThreadgate
+  draftReactionControl?: TTDraftReactionControl
   postThreadgate?: TTThreadgate
   postUri?: string
   onClosed?: Function
 }
 
-interface TICloseThreadgatePopupProps {
-  action: TTThreadgateAction
+interface TICloseReactionControlPopupProps {
   updated: boolean
-  reset?: boolean
+  threadgateAction: TTThreadgateAction
   allowMention?: boolean
   allowFollowing?: boolean
   listUris?: Array<string>

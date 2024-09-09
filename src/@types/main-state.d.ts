@@ -584,10 +584,10 @@ type MainState = {
   openPostDatePopup: (payload: MouseEvent) => void
   closePostDatePopup: Function
 
-  // ポップアップ - Threadgate ポップアップ
-  threadgatePopupProps: TTThreadgatePopupProps
-  openThreadgatePopup: Function
-  closeThreadgatePopup: Function
+  // ポップアップ - 反応制御ポップアップ
+  reactionControlPopupProps: TTReactionControlPopupProps
+  openReactionControlPopup: Function
+  closeReactionControlPopup: Function
 
   // ポップアップ - リストメンションポップアップ
   listMentionPopupProps: TIListMentionPopupProps

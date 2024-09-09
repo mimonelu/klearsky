@@ -9,13 +9,13 @@ import DESIGN_CONSTS from "@/consts/design-consts.json"
 
 const emit = defineEmits<{(
   event: string,
-  params: TICloseThreadgatePopupProps
+  params: TICloseReactionControlPopupProps
 ): void}>()
 
 const props = defineProps<{
   display: boolean
   mode?: "send" | "post"
-  draftThreadgate?: TTDraftThreadgate
+  draftReactionControl?: TTDraftReactionControl
   postThreadgate?: TTThreadgate
   postUri?: string
 }>()
@@ -29,19 +29,19 @@ const state = reactive<{
   applied: boolean
 }>({
   loaderDisplay: false,
-  applied: props.draftThreadgate != null
-    ? props.draftThreadgate.action !== "none"
+  applied: props.draftReactionControl != null
+    ? props.draftReactionControl.threadgateAction !== "none"
     : props.postThreadgate != null,
 })
 
 const easyFormState = reactive<{
-  action: TTThreadgateAction
-  actionOptions: Array<TTOption>
+  threadgateAction: TTThreadgateAction
+  threadgateActionOptions: Array<TTOption>
   allows: Array<string>
   allowOptions: Array<TTOption>
 }>({
-  action: props.draftThreadgate?.action ?? (props.postThreadgate != null ? "custom" : "none"),
-  actionOptions: [
+  threadgateAction: props.draftReactionControl?.threadgateAction ?? (props.postThreadgate != null ? "custom" : "none"),
+  threadgateActionOptions: [
   {
       label: "threadgateNoAction",
       value: "none",
@@ -55,13 +55,13 @@ const easyFormState = reactive<{
     // 送信ポスト用
     if (props.mode === "send") {
       const allows: Array<string> = []
-      if (props.draftThreadgate?.allowMention) {
+      if (props.draftReactionControl?.allowMention) {
         allows.push("allowMention")
       }
-      if (props.draftThreadgate?.allowFollowing) {
+      if (props.draftReactionControl?.allowFollowing) {
         allows.push("allowFollowing")
       }
-      props.draftThreadgate?.listUris
+      props.draftReactionControl?.listUris
         .forEach((listUri: string) => {
           allows.push(listUri)
         })
@@ -116,16 +116,16 @@ const easyFormProps: TTEasyForm = {
   data: [
     {
       state: easyFormState,
-      model: "action",
+      model: "threadgateAction",
       type: "radio",
-      options: easyFormState.actionOptions,
+      options: easyFormState.threadgateActionOptions,
 
       onUpdate () {
         // 許可リストの無効化処理
-        easyFormProps.data[1].disabled = easyFormState.action === "none"
+        easyFormProps.data[1].disabled = easyFormState.threadgateAction === "none"
 
         // 許可リストの初期化
-        if (easyFormState.action === "none") {
+        if (easyFormState.threadgateAction === "none") {
           easyFormState.allows.splice(0)
         }
 
@@ -140,8 +140,8 @@ const easyFormProps: TTEasyForm = {
       type: "checkbox",
       options: easyFormState.allowOptions,
       limit: LIMIT_OF_THREADGATE_ITEMS,
-      disabled: props.draftThreadgate != null
-        ? props.draftThreadgate.action === "none"
+      disabled: props.draftReactionControl != null
+        ? props.draftReactionControl.threadgateAction === "none"
         : props.postThreadgate == null,
     },
   ],
@@ -149,7 +149,7 @@ const easyFormProps: TTEasyForm = {
 
 const easyForm = ref()
 
-function close (params: TICloseThreadgatePopupProps) {
+function close (params: TICloseReactionControlPopupProps) {
   emit("close", params)
 }
 
@@ -169,7 +169,7 @@ async function update () {
 
   if (props.mode === "send") {
     close({
-      action: easyFormState.action,
+      threadgateAction: easyFormState.threadgateAction,
       updated: true,
       allowMention,
       allowFollowing,
@@ -197,10 +197,10 @@ async function update () {
   }
 
   // Threadgate の削除はここまで
-  if (easyFormState.action === "none") {
+  if (easyFormState.threadgateAction === "none") {
     state.loaderDisplay = false
     close({
-      action: easyFormState.action,
+      threadgateAction: easyFormState.threadgateAction,
       updated: props.postThreadgate != null,
     })
     return
@@ -218,7 +218,7 @@ async function update () {
     mainState.openErrorPopup("errorApiFailed", responseOfUpdate)
   } else {
     close({
-      action: easyFormState.action,
+      threadgateAction: easyFormState.threadgateAction,
       updated: true,
     })
   }

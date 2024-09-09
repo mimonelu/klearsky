@@ -634,14 +634,14 @@ state.postDatePopupDate = undefined
 state.openPostDatePopup = openPostDatePopup
 state.closePostDatePopup = closePostDatePopup
 
-// ポップアップ - Threadgate ポップアップ
-state.threadgatePopupProps = {
+// ポップアップ - 反応制御ポップアップ
+state.reactionControlPopupProps = {
   display: false,
   postThreadgate: undefined,
   postUri: undefined,
 }
-state.openThreadgatePopup = openThreadgatePopup
-state.closeThreadgatePopup = closeThreadgatePopup
+state.openReactionControlPopup = openReactionControlPopup
+state.closeReactionControlPopup = closeReactionControlPopup
 
 // ポップアップ - リストメンションポップアップ
 state.listMentionPopupProps = {
@@ -2252,25 +2252,25 @@ function closePostDatePopup () {
   state.postDatePopupDisplay = false
 }
 
-// ポップアップ - Threadgate ポップアップ
+// ポップアップ - 反応制御ポップアップ
 
-function openThreadgatePopup (props: TTThreadgatePopupProps) {
-  state.threadgatePopupProps.mode = props.mode
-  state.threadgatePopupProps.draftThreadgate = props.draftThreadgate
-  state.threadgatePopupProps.postThreadgate = props.postThreadgate
-  state.threadgatePopupProps.postUri = props.postUri
-  state.threadgatePopupProps.onClosed = props.onClosed
-  state.threadgatePopupProps.display = true
+function openReactionControlPopup (props: TTReactionControlPopupProps) {
+  state.reactionControlPopupProps.mode = props.mode
+  state.reactionControlPopupProps.draftReactionControl = props.draftReactionControl
+  state.reactionControlPopupProps.postThreadgate = props.postThreadgate
+  state.reactionControlPopupProps.postUri = props.postUri
+  state.reactionControlPopupProps.onClosed = props.onClosed
+  state.reactionControlPopupProps.display = true
 }
 
-function closeThreadgatePopup (params: TICloseThreadgatePopupProps) {
-  if (state.threadgatePopupProps.onClosed != null) {
-    state.threadgatePopupProps.onClosed(params)
+function closeReactionControlPopup (params: TICloseReactionControlPopupProps) {
+  if (state.reactionControlPopupProps.onClosed != null) {
+    state.reactionControlPopupProps.onClosed(params)
   }
-  state.threadgatePopupProps.display = false
+  state.reactionControlPopupProps.display = false
 }
 
-// ポップアップ - Threadgate ポップアップ
+// ポップアップ - 反応制御ポップアップ
 
 function openListMentionPopup () {
   state.listMentionPopupProps.dids.splice(0)

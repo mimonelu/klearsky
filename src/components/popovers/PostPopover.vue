@@ -5,8 +5,8 @@ import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
 import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.vue"
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"
+import MenuTickerOpenReactionControlPopup from "@/components/menus/OpenReactionControlPopup.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
-import MenuTickerOpenThreadgatePopup from "@/components/menus/OpenThreadgatePopup.vue"
 import MenuTickerPostFeaturesWrapper from "@/components/menus/PostFeaturesWrapper.vue"
 import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menus/WebShare.vue"
@@ -158,8 +158,8 @@ function callback (type: "deletePost" | "updatePost") {
         @close="emit('close')"
       />
 
-      <!-- Threadgate ポップアップトリガー -->
-      <MenuTickerOpenThreadgatePopup
+      <!-- 反応制御ポップアップトリガー -->
+      <MenuTickerOpenReactionControlPopup
         v-if="state.isUser"
         :disabled="post.record?.reply != null"
         :post="post"
