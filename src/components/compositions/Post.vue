@@ -1302,17 +1302,17 @@ function toggleOldestQuotedPostDisplay () {
             />
           </div>
           <div>
-            <!-- 引用リポストボタン -->
-            <QuoteRepostButton
-              :post="post"
-              @click.stop="createQuoteRepost"
-            />
-          </div>
-          <div>
             <!-- いいねボタン -->
             <LikeButton
               :post="post"
               @click.stop="onActivateLikeButton"
+            />
+          </div>
+          <div>
+            <!-- 引用リポストボタン -->
+            <QuoteRepostButton
+              :post="post"
+              @click.stop="createQuoteRepost"
             />
           </div>
           <div>
