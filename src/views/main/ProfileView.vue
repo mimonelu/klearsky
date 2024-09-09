@@ -311,13 +311,14 @@ function removeThisPost () {
     </Portal>
 
     <!-- バナー -->
-    <LazyImage
+    <div
       v-if="state.loaderDisplay || (state.accountContentDisplay && state.accountMediaDisplay)"
       class="banner"
-      :src="mainState.currentProfile?.banner"
       :data-has-banner="!!mainState.currentProfile?.banner"
       @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
-    />
+    >
+      <LazyImage :src="mainState.currentProfile?.banner" />
+    </div>
 
     <div class="profile-view__top-wrapper">
       <div class="profile-view__top">
@@ -842,6 +843,7 @@ function removeThisPost () {
 // バナー
 .banner {
   aspect-ratio: 3 / 1;
+  background-color: var(--fg-color-0125);
   object-fit: cover;
   &[data-has-banner="true"] {
     cursor: pointer;
@@ -856,11 +858,6 @@ function removeThisPost () {
   @include media-not-sp-layout() {
     position: absolute;
     bottom: 0;
-  }
-
-  &:deep() > img {
-    background-color: rgb(var(--bg-color));
-    box-shadow: 0 0 0 2px rgb(var(--bg-color));
   }
 }
 

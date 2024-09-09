@@ -37,6 +37,9 @@ function openImagePopup () {
   display: block;
 
   & > .lazy-image {
+    background-color: rgb(var(--bg-color));
+    box-shadow: 0 0 0 4px rgb(var(--bg-color));
+    opacity: 0;
     min-width: 1em;
     max-width: 1em;
     min-height: 1em;
