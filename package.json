@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "knip": "knip"
   },
   "browserslist": [
     "> 0.1%",
@@ -25,8 +26,6 @@
     "extend": "^3.0.2",
     "file-saver": "^2.0.5",
     "hotkeys-js": "^3.10.3",
-    "json-cycle": "^1.5.0",
-    "json-cyclic": "^1.0.2",
     "jszip": "^3.10.1",
     "jwt-decode": "^4.0.0",
     "multiformats": "^12.0.1",
@@ -37,14 +36,14 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@types/encoding-japanese": "^2.0.1",
-    "@types/node": "^20.3.2",
+    "@types/node": "^20.16.5",
     "@vitejs/plugin-vue": "^4.6.2",
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/tsconfig": "^0.4.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.43.0",
     "eslint-plugin-vue": "^9.19.2",
+    "knip": "^5.30.1",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.24",
     "rollup-plugin-visualizer": "^5.9.2",

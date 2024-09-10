@@ -15,6 +15,13 @@ Klearsky is deployed on Cloudflare.
 * Node: v18.17.1 (based on Cloudflare)
 * Framework: Vite + Vue3 (see `package.json` )
 
+## npm run
+* `npm run dev` http://localhost:5173/
+* `npm run build`
+  * `/coproduct/stats.html` rollup-plugin-visualizer によるバンドルファイルの一覧を副次的に生成
+* `npm run type-check`
+* `npm run knip` https://knip.dev/
+
 ## Custom fields
 * `POST.record.via?: string` Client name (Klearsky)
 * `POST.record.lightning?: string` Used in Zap! link
@@ -24,13 +31,11 @@ Klearsky is deployed on Cloudflare.
 * MyMemory: 自動翻訳で使用。ユーザーのメールアドレスを自動付与している
 * Lightning Network: Zap! リンク／ボタンで使用。 `lightning:` プロトコルでリンクしているだけ
 
-## Coproduct
-* `/coproduct/stats.html`: `npm run build` で rollup-plugin-visualizer によるバンドルファイルの一覧を副次的に生成
-
 ## Design resources
 * Logo font: https://fonts.google.com/specimen/Albert+Sans?preview.text=Klearsky&preview.size=64&preview.text_type=custom&category=Sans+Serif,Display
 * SVG icons: https://pictogrammers.com/library/mdi/
 
-## Others
+## Media
+* Community Showcase: https://docs.bsky.app/showcase?operator=AND&tags=favorite&tags=client&tags=opensource
 * AT Protocol Ecosystem: https://github.com/bluesky-social/atproto-ecosystem
 * Scrapbox: https://scrapbox.io/Bluesky/%E9%96%A2%E9%80%A3%E3%83%84%E3%83%BC%E3%83%AB
