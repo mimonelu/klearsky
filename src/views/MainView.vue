@@ -210,9 +210,9 @@ function updatePageTitle () {
   window.document.title = title
 }
 
-async function signUp (service: string, email: string, handle: string, password: string, inviteCode?: string) {
+async function signUp (service: string, email: string, identifier: string, password: string, authFactorToken?: string, inviteCode?: string) {
   state.loaderDisplay = true
-  const response = await state.atp.signUp(service, email, handle, password, inviteCode)
+  const response = await state.atp.signUp(service, email, identifier, password, inviteCode)
   state.loaderDisplay = false
   if (response instanceof Error) {
     state.openErrorPopup($t("getSessionError"), response)
@@ -222,7 +222,7 @@ async function signUp (service: string, email: string, handle: string, password:
   await Util.wait(1000)
   state.loaderDisplay = false
   state.loginPopupDisplay = false
-  await manualLogin(service, email, handle, password)
+  await manualLogin(service, email, identifier, password, authFactorToken)
 }
 
 async function autoLogin () {
