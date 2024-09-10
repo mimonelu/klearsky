@@ -3,13 +3,20 @@ import type { AppBskyActorPutPreferences, AtpAgent } from "@atproto/api"
 export default async function (
   this: TIAtpWrapper,
   preferences: Array<TTPreference>,
-): Promise<boolean> {
-  if (this.agent == null) return false
+): Promise<Error | undefined> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyActorPutPreferences.InputSchema = { preferences }
-  const response: AppBskyActorPutPreferences.Response =
+  const response: Error | AppBskyActorPutPreferences.Response =
     await (this.agent as AtpAgent).app.bsky.actor.putPreferences(query)
-      .then((value: AppBskyActorPutPreferences.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/putPreferences]", response)
-  return !!response.success
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 }

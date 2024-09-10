@@ -22,16 +22,22 @@ async function toggleFollow () {
   Util.blurElement()
   if (state.processing) return
   state.processing = true
-  try {
-    if (props.viewer.following != null) {
-      await mainState.atp.deleteFollow(props.viewer.following)
-      props.viewer.following = undefined
-    } else {
-      const uri = await mainState.atp.createFollow(props.declarationDid)
-      if (uri != null) props.viewer.following = uri
-    }
-  } finally {
+  if (props.viewer.following != null) {
+    const response = await mainState.atp.deleteFollow(props.viewer.following)
     state.processing = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "FollowButton/toggleFollow")
+      return
+    }
+    props.viewer.following = response
+  } else {
+    const uri = await mainState.atp.createFollow(props.declarationDid)
+    state.processing = false
+    if (uri instanceof Error) {
+      mainState.openErrorPopup(uri, "FollowButton/toggleFollow")
+      return
+    }
+    props.viewer.following = uri
   }
 }
 </script>

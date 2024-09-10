@@ -11,7 +11,7 @@ export default async function (
   let host = server ?? "https://bsky.social"
   if (server == null) {
     const logJson = await this.fetchLogAudit(did)
-    if (logJson != null) {
+    if (!(logJson instanceof Error) && logJson != null) {
       host = (
         Array.isArray(logJson)
           // did:plc:

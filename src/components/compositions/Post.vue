@@ -466,17 +466,17 @@ async function createRepost () {
     return
   }
   state.processing = true
-  try {
-    const result = await mainState.atp.createRepost(
-      props.post.uri,
-      props.post.cid
-    )
-    if (result) {
-      await updatePostThread()
-    }
-  } finally {
+  const response = await mainState.atp.createRepost(
+    props.post.uri,
+    props.post.cid
+  )
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "Post/createRepost")
     state.processing = false
+    return
   }
+  await updatePostThread()
+  state.processing = false
 }
 
 async function deleteRepost () {
@@ -493,12 +493,14 @@ async function deleteRepost () {
     return
   }
   state.processing = true
-  try {
-    await mainState.atp.deleteRepost(props.post.viewer.repost)
-    await updatePostThread()
-  } finally {
+  const response = await mainState.atp.deleteRepost(props.post.viewer.repost)
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "Post/deleteRepost")
     state.processing = false
+    return
   }
+  await updatePostThread()
+  state.processing = false
 }
 
 async function createQuoteRepost () {
@@ -529,16 +531,16 @@ async function onActivateLikeButton () {
   }
   Util.blurElement()
   state.processing = true
-  try {
-    if (props.post.viewer?.like != null) {
-      await mainState.atp.deleteLike(props.post.viewer.like as string)
-    } else {
-      await mainState.atp.createLike(props.post.uri, props.post.cid)
-    }
-    await updatePostThread()
-  } finally {
+  const response = props.post.viewer?.like != null
+    ? await mainState.atp.deleteLike(props.post.viewer.like as string)
+    : await mainState.atp.createLike(props.post.uri, props.post.cid)
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "Post/onActivateLikeButton")
     state.processing = false
+    return
   }
+  await updatePostThread()
+  state.processing = false
 }
 
 function openPostPopover ($event: Event) {
@@ -575,12 +577,13 @@ async function deletePost (uri: string) {
     return
   }
   state.processing = true
-  try {
-    await mainState.atp.deletePost(uri)
-  } finally {
-    state.processing = false
-    emit("removeThisPost", uri)
+  const response = await mainState.atp.deletePost(uri)
+  state.processing = false
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "Post/deletePost")
+    return
   }
+  emit("removeThisPost", uri)
 }
 
 async function updatePost () {
@@ -598,8 +601,12 @@ async function updatePostThread () {
   // TODO: 原因不明に付き暫定対応、後日再検証すること
   await Util.wait(375)
 
-  const posts: undefined | false | Array<TTPost> = await mainState.atp.fetchPosts([props.post.uri])
-  if (!posts || posts.length === 0) {
+  const posts = await mainState.atp.fetchPosts([props.post.uri])
+  if (posts instanceof Error) {
+    mainState.openErrorPopup(posts, "Post/updatePostThread")
+    return
+  }
+  if (posts.length === 0) {
     return
   }
   emit("updateThisPostThread", posts)

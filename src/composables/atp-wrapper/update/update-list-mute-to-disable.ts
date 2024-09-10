@@ -4,7 +4,9 @@ export default async function (
   this: TIAtpWrapper,
   listUri: string
 ): Promise<undefined | Error> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const response: AppBskyGraphUnmuteActorList.Response | Error =
     await (this.agent as AtpAgent).unmuteModList(listUri)
       .then((value: AppBskyGraphUnmuteActorList.Response) => value)

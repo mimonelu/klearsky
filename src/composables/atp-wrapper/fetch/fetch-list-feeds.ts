@@ -12,7 +12,9 @@ export default async function (
   direction?: TTDirection,
   checkIdentity?: (params: any) => boolean
 ): Promise<Error | undefined | string> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
 
   const query: AppBskyFeedGetListFeed.QueryParams = { list }
   if (limit != null) query.limit = limit

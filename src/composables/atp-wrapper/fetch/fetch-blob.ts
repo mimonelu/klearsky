@@ -2,10 +2,12 @@ export default async function (
   this: TIAtpWrapper,
   cid: string,
   did?: string
-): Promise<null | Blob> {
+): Promise<Error | Blob> {
   // PDS移管に伴うアニメーション画像再生の不具合対応
   // TODO: PDS分割に伴う暫定処置
-  if (this.session == null) return null
+  if (this.session == null) {
+    return Error("noSessionError")
+  }
   did = did ?? (this.session.did as string)
   const query: Record<string, string> = {
     did,
@@ -17,6 +19,8 @@ export default async function (
     did,
     query
   )
-  if (response instanceof Error) return null
+  if (response instanceof Error) {
+    return response
+  }
   return await response.blob()
 }

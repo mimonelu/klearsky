@@ -12,7 +12,9 @@ export default async function (
   direction?: TTDirection,
   checkIdentity?: (params: any) => boolean
 ): Promise<undefined | string | Error> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
 
   // 暫定処置
   if (!feed) return

@@ -6,7 +6,9 @@ export default async function (
   list: TTList,
   avatarBlobRef?: BlobRef
 ): Promise<undefined | Error> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const rkey = Util.getRkey(list.uri)
   const query: ComAtprotoRepoPutRecord.InputSchema = {
     repo: this.session?.did as string,

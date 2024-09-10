@@ -8,7 +8,9 @@ export default async function (
   allowFollowing: boolean,
   listUris?: Array<string>
 ): Promise<Error | TTCidUri> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   if (this.session == null) return Error("noSessionError")
   const query: ComAtprotoRepoCreateRecord.InputSchema = {
     repo: this.session.did,

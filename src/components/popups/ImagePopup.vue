@@ -41,9 +41,11 @@ onBeforeMount(() => {
 
   props.images.forEach(async (image: TTImagePopupPropsImages, index: number) => {
     state.blobs[index] = undefined
-    if (image.blob == null) return
-    const url: undefined | string = await mainState.atp.fetchBlobUrl(props.did, image.blob)
-    if (url == null) {
+    if (image.blob == null) {
+      return
+    }
+    const url = await mainState.atp.fetchBlobUrl(props.did, image.blob)
+    if (url instanceof Error) {
       state.blobs[index] = props.images[index]?.largeUri
       return
     }

@@ -96,13 +96,14 @@ async function updateLabelPreferences () {
   })
   mainState.myLabeler.cleanLabelPreferences()
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
-  if (!result) {
-    mainState.openErrorPopup("errorApiFailed", "LabelerSettingsPopup/close")
-  } else {
-    // セッションキャッシュの更新
-    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("myLabeler", mainState.myLabeler.labelers)
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "LabelerSettingsPopup/close")
+    return
   }
+
+  // セッションキャッシュの更新
+  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker.setSessionCache("myLabeler", mainState.myLabeler.labelers)
 
   // labelMap の更新も同時に行う
   mainState.myLabeler.updateLabelMap()

@@ -5,8 +5,10 @@ export default async function (
   users: Array<TTUser>,
   limit?: number,
   cursor?: string
-): Promise<undefined | string> {
-  if (this.agent == null) return
+): Promise<Error | undefined | string> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyGraphGetMutes.QueryParams = {
     limit,
     cursor,
@@ -15,15 +17,25 @@ export default async function (
     this.agent as AtpAgent
   ).app.bsky.graph.getMutes(query)
   console.log("[klearsky/getMutes]", response)
-  if (!response.success) return
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   const newUsers: Array<TTUser> = []
-  ;(response.data.mutes as Array<any>).forEach((newUser: TTUser) => {
-    if (!users.some((user: TTUser) => user.did === newUser.did))
-      newUsers.push(newUser)
-  })
-  if (cursor == null) users.unshift(...newUsers)
-  else users.push(...newUsers)
+  ;(response.data.mutes as Array<any>)
+    .forEach((newUser: TTUser) => {
+      if (!users.some((user: TTUser) => user.did === newUser.did)) {
+        newUsers.push(newUser)
+      }
+    })
+  if (cursor == null) {
+    users.unshift(...newUsers)
+  } else {
+    users.push(...newUsers)
+  }
 
   /* TODO: 不要であれば削除すること
   users.sort((a: TTUser, b: TTUser) => {
@@ -33,5 +45,5 @@ export default async function (
   })
   */
 
-  return response.data.cursor
+  return response.data?.cursor
 }

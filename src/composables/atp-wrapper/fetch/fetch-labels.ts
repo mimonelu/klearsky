@@ -5,7 +5,9 @@ export default async function (
   since?: number,
   limit?: number
 ): Promise<Error | Array<TTLabel>> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: ComAtprotoTempFetchLabels.QueryParams = {}
   if (since != null) query.since = since
   if (limit != null) query.limit = limit

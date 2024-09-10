@@ -5,25 +5,37 @@ export default async function (
   users: Array<TTUser>,
   limit?: number,
   cursor?: string
-): Promise<undefined | string> {
-  if (this.agent == null) return
+): Promise<Error | undefined | string> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyGraphGetBlocks.QueryParams = {
     limit,
     cursor,
   }
-  const response: AppBskyGraphGetBlocks.Response = await (
-    this.agent as AtpAgent
-  ).app.bsky.graph.getBlocks(query)
+  const response: Error | AppBskyGraphGetBlocks.Response =
+    await (this.agent as AtpAgent).app.bsky.graph.getBlocks(query)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getBlocks]", response)
-  if (!response.success) return
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   const newUsers: Array<TTUser> = []
   ;(response.data.blocks as Array<any>).forEach((newUser: TTUser) => {
-    if (!users.some((user: TTUser) => user.did === newUser.did))
+    if (!users.some((user: TTUser) => user.did === newUser.did)) {
       newUsers.push(newUser)
+    }
   })
-  if (cursor == null) users.unshift(...newUsers)
-  else users.push(...newUsers)
+  if (cursor == null) {
+    users.unshift(...newUsers)
+  } else {
+    users.push(...newUsers)
+  }
 
   /* TODO: 不要であれば削除すること
   users.sort((a: TTUser, b: TTUser) => {

@@ -29,22 +29,23 @@ async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
   if (state.processing) return
   state.processing = true
-  try {
-    const cursor: undefined | string = await mainState.atp.fetchBlockingUsers(
-      mainState.currentBlockingUsers as Array<TTUser>,
-      CONSTS.LIMIT_OF_FETCH_BLOCKING_USERS,
-      direction === "old" ? mainState.currentBlockingUsersCursor : undefined
+  const cursor = await mainState.atp.fetchBlockingUsers(
+    mainState.currentBlockingUsers as Array<TTUser>,
+    CONSTS.LIMIT_OF_FETCH_BLOCKING_USERS,
+    direction === "old" ? mainState.currentBlockingUsersCursor : undefined
+  )
+  state.processing = false
+  if (cursor instanceof Error) {
+    mainState.openErrorPopup(cursor, "BlockingUsersPopup/fetchContinuousResults")
+    return
+  }
+  if (cursor != null && (
+    direction === "old" || (
+      direction === "new" &&
+      mainState.currentBlockingUsersCursor == null
     )
-    if (cursor != null && (
-      direction === "old" || (
-        direction === "new" &&
-        mainState.currentBlockingUsersCursor == null
-      )
-    )) {
-      mainState.currentBlockingUsersCursor = cursor
-    }
-  } finally {
-    state.processing = false
+  )) {
+    mainState.currentBlockingUsersCursor = cursor
   }
 }
 

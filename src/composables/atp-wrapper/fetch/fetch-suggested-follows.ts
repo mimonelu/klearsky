@@ -5,7 +5,9 @@ export default async function (
   users: Array<TTUser>,
   actor: string
 ): Promise<Error | undefined> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyGraphGetSuggestedFollowsByActor.QueryParams = { actor }
   const response: Error | AppBskyGraphGetSuggestedFollowsByActor.Response =
     await (this.agent as AtpAgent).app.bsky.graph.getSuggestedFollowsByActor(query)

@@ -6,32 +6,46 @@ export default async function (
   uri: string,
   limit?: number,
   cursor?: string
-): Promise<undefined | string> {
-  if (this.agent == null) return
+): Promise<Error | undefined | string> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyFeedGetLikes.QueryParams = {
     uri,
     limit,
     cursor,
   }
-  const response: AppBskyFeedGetLikes.Response = await (
-    this.agent as AtpAgent
-  ).getLikes(query)
+  const response: Error | AppBskyFeedGetLikes.Response =
+    await (this.agent as AtpAgent).getLikes(query)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getLikes]", response)
-  if (!response.success) return
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   // ブロックユーザーをフィルタリング
-  response.data.likes = (response.data.likes as Array<any>).filter((like: any) => {
-    return !(like.actor as TTUser).viewer?.blocking && !(like.actor as TTUser).viewer?.blockedBy
-  })
+  response.data.likes = (response.data.likes as Array<any>)
+    .filter((like: any) => {
+      return !(like.actor as TTUser).viewer?.blocking && !(like.actor as TTUser).viewer?.blockedBy
+    })
 
   const newUsers: Array<TTUser> = []
-  ;(response.data.likes as Array<any>).forEach((like: any) => {
-    const target = like.actor as TTUser
-    if (!users.some((user: TTUser) => user.did === target.did))
-      newUsers.push(target)
-  })
-  if (cursor == null) users.unshift(...newUsers)
-  else users.push(...newUsers)
+  ;(response.data.likes as Array<any>)
+    .forEach((like: any) => {
+      const target = like.actor as TTUser
+      if (!users.some((user: TTUser) => user.did === target.did)) {
+        newUsers.push(target)
+      }
+    })
+  if (cursor == null) {
+    users.unshift(...newUsers)
+  } else {
+    users.push(...newUsers)
+  }
 
   return response.data.cursor
 }

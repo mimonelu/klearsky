@@ -4,9 +4,17 @@ export default async function (
   this: TIAtpWrapper,
   uri: string,
   cid: string
-): Promise<undefined | string> {
-  if (this.agent == null) return undefined
-  const response: TTCidUri = await (this.agent as AtpAgent).like(uri, cid)
+): Promise<Error | string> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
+  const response: Error | TTCidUri =
+    await (this.agent as AtpAgent).like(uri, cid)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/like]", response)
-  return response?.uri ?? undefined
+  if (response instanceof Error) {
+    return response
+  }
+  return response.uri
 }

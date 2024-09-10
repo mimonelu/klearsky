@@ -1,25 +1,6 @@
 import type { BlobRef, AtpAgent, ComAtprotoRepoUploadBlob } from "@atproto/api"
 import imageCompression from "browser-image-compression/dist/browser-image-compression"
 
-function convertBlobTo(
-  blob: Blob,
-  method:
-    | "readAsArrayBuffer"
-    | "readAsBinaryString"
-    | "readAsDataURL"
-    | "readAsText"
-): Promise<null | string | ArrayBuffer> {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader()
-    fileReader.onload = () => {
-      const buffer: null | string | ArrayBuffer = fileReader.result
-      if (buffer == null) reject(null)
-      resolve(buffer)
-    }
-    fileReader[method](blob)
-  })
-}
-
 const convertMapForCompress: { [mimeType: string]: string } = {
   "image/apng": "image/jpeg",
   "image/avif": "image/jpeg",
@@ -34,9 +15,13 @@ const convertMapForCompress: { [mimeType: string]: string } = {
 export default async function (
   this: TIAtpWrapper,
   params: TTCreateFileBlobRefParams
-): Promise<null | BlobRef> {
-  if (this.agent == null) return null
-  if (params.file == null) return null
+): Promise<Error | BlobRef> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
+  if (params.file == null) {
+    return Error("paramError")
+  }
 
   let mimeType = ""
   let blob: undefined | Error | Blob
@@ -61,7 +46,9 @@ export default async function (
       blob = Error("imageCompressionError")
     }
 
-    if (blob instanceof Error) return null
+    if (blob instanceof Error) {
+      return blob
+    }
 
   // ファイルサイズ上限未満または変換不可能なファイルの場合はそのまま
   } else {
@@ -70,7 +57,9 @@ export default async function (
   }
 
   const arrayBuffer = await convertBlobTo(blob, "readAsArrayBuffer")
-  if (arrayBuffer == null) return null
+  if (arrayBuffer == null) {
+    return Error("apiError")
+  }
   const input: Uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)
   const options: ComAtprotoRepoUploadBlob.CallOptions = {
     encoding: mimeType,
@@ -78,13 +67,34 @@ export default async function (
   const response: Error | ComAtprotoRepoUploadBlob.Response =
     await (this.agent as AtpAgent).uploadBlob(input, options)
       .then((value) => value)
-      .catch((error: Error) => error)
+      .catch((error) => error)
   console.log("[klearsky/uploadBlob]", response)
   if (response instanceof Error) {
-    return null
+    return response
   }
   if (!response.success) {
-    return null
+    return Error("apiError")
   }
   return response.data.blob
+}
+
+function convertBlobTo(
+  blob: Blob,
+  method:
+    | "readAsArrayBuffer"
+    | "readAsBinaryString"
+    | "readAsDataURL"
+    | "readAsText"
+): Promise<null | string | ArrayBuffer> {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader()
+    fileReader.onload = () => {
+      const buffer: null | string | ArrayBuffer = fileReader.result
+      if (buffer == null) {
+        reject(null)
+      }
+      resolve(buffer)
+    }
+    fileReader[method](blob)
+  })
 }

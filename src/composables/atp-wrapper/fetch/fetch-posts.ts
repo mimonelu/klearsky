@@ -5,12 +5,18 @@ import CONSTS from "@/consts/consts.json"
 export default async function (
   this: TIAtpWrapper,
   uris: Array<string>
-): Promise<undefined | false | Array<TTPost>> {
-  if (this.agent == null) return
-  if (this.session == null) return
+): Promise<Error | Array<TTPost>> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
+  if (this.session == null) {
+    return Error("noSessionError")
+  }
 
   // 空配列はエラーとなるため却下
-  if (uris.length === 0) return
+  if (uris.length === 0) {
+    return []
+  }
 
   const results: Array<TTPost> = []
 
@@ -20,8 +26,8 @@ export default async function (
     .map(async (uris: string[]) => {
       const query: AppBskyFeedGetPosts.QueryParams = { uris }
       return (this.agent as AtpAgent).getPosts(query)
-        .then((value: AppBskyFeedGetPosts.Response) => value)
-        .catch((error: any) => error)
+        .then((value) => value)
+        .catch((error) => error)
     })
   const responses = await Promise.allSettled(tasks)
   responses.forEach((response: PromiseSettledResult<any>) => {

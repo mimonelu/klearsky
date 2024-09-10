@@ -5,7 +5,9 @@ export default async function (
   listUri: string,
   userDid: string
 ): Promise<string | Error> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   if (this.session == null) return Error("noSessionError")
   const createdAt = new Date().toISOString()
   const query: ComAtprotoRepoCreateRecord.InputSchema = {

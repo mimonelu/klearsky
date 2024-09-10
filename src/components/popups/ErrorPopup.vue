@@ -42,6 +42,9 @@ function close () {
 
 <style lang="scss" scoped>
 .error-popup:deep() {
+  // Loader より上に配置
+  z-index: 4;
+
   .popup {
     --fg-color: var(--notice-color);
   }

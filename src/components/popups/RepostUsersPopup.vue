@@ -27,25 +27,28 @@ function close () {
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
-  if (state.processing) return
+  if (state.processing) {
+    return
+  }
   state.processing = true
-  try {
-    const cursor: undefined | string = await mainState.atp.fetchRepostUsers(
-      mainState.currentRepostUsers as Array<TTUser>,
-      mainState.currentRepostUsersUri as string,
-      CONSTS.LIMIT_OF_FETCH_REPOST_USERS,
-      direction === "old" ? mainState.currentRepostUsersCursor : undefined
+  const cursor = await mainState.atp.fetchRepostUsers(
+    mainState.currentRepostUsers as Array<TTUser>,
+    mainState.currentRepostUsersUri as string,
+    CONSTS.LIMIT_OF_FETCH_REPOST_USERS,
+    direction === "old" ? mainState.currentRepostUsersCursor : undefined
+  )
+  state.processing = false
+  if (cursor instanceof Error) {
+    mainState.openErrorPopup(cursor, "RepostUsersPopup/fetchContinuousResults")
+    return
+  }
+  if (cursor != null && (
+    direction === "old" || (
+      direction === "new" &&
+      mainState.currentRepostUsersCursor == null
     )
-    if (cursor != null && (
-      direction === "old" || (
-        direction === "new" &&
-        mainState.currentRepostUsersCursor == null
-      )
-    )) {
-      mainState.currentRepostUsersCursor = cursor
-    }
-  } finally {
-    state.processing = false
+  )) {
+    mainState.currentRepostUsersCursor = cursor
   }
 }
 

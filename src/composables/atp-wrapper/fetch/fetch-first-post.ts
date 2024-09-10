@@ -1,7 +1,7 @@
 export default async function (
   this: TIAtpWrapper,
   did: string
-): Promise<undefined | Error | TTPost> {
+): Promise<Error | undefined | TTPost> {
   const response = await this.fetchRecords(
     did,
     "app.bsky.feed.post",
@@ -17,5 +17,8 @@ export default async function (
     return
   }
   const posts = await this.fetchPosts([response.records[0].uri])
-  return posts ? posts[0] : undefined
+  if (posts instanceof Error) {
+    return posts
+  }
+  return posts[0]
 }

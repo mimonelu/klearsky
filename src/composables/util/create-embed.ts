@@ -15,7 +15,10 @@ export default async function (
     const postUri = Util.isPostAtUri(params.url) ? params.url : null
     if (postUri != null) {
       const posts = await atp.fetchPosts([postUri])
-      if (!posts || posts[0] == null) {
+      if (posts instanceof Error) {
+        return posts
+      }
+      if (posts[0] == null) {
         return Error("noPost")
       }
       manualQuoteRepost = posts[0]
@@ -43,9 +46,9 @@ export default async function (
           ? params.url
           : convertListUriToAtUri(params.url)
         if (listUri != null) {
-          const list: Error | TTList = await atp.fetchList(listUri)
+          const list = await atp.fetchList(listUri)
           if (list instanceof Error) {
-            return Error("noListError")
+            return list
           }
           feedOrLinkOrStarterPackCard = {
             $type: "app.bsky.embed.record",
@@ -103,8 +106,8 @@ export default async function (
 
   // 動画ファイルがない場合
   if (videoFileIndex === - 1) {
-    const fileBlobRefs: Array<null | BlobRef> = await Promise.all(
-      params.medias?.map((file: File): Promise<null | BlobRef> => {
+    const fileBlobRefs: Array<null | Error | BlobRef> = await Promise.all(
+      params.medias?.map((file: File): Promise<null | Error | BlobRef> => {
         return atp.createFileBlobRef({
           file,
           maxWidth: 2000,
@@ -113,8 +116,8 @@ export default async function (
         })
       }) ?? []
     )
-    if (fileBlobRefs.some((fileBlobRef: null | BlobRef) => {
-      return fileBlobRef == null
+    if (fileBlobRefs.some((fileBlobRef) => {
+      return fileBlobRef instanceof Error || fileBlobRef == null
     })) {
       return Error("imageCompressionError")
     }
@@ -140,8 +143,8 @@ export default async function (
 
     if (fileBlobRefs.length > 0) {
       const imageObjects = fileBlobRefs
-        .map((fileBlobRef: null | BlobRef, index: number): null | AppBskyEmbedImages.Image => {
-          if (fileBlobRef == null) {
+        .map((fileBlobRef, index: number): null | AppBskyEmbedImages.Image => {
+          if (fileBlobRef instanceof Error || fileBlobRef == null) {
             return null
           }
           const result: AppBskyEmbedImages.Image = {
@@ -165,8 +168,8 @@ export default async function (
   } else if (params.medias != null) {
     const file = params.medias[videoFileIndex]
     const videoBlob = await atp.createFileBlobRef({ file })
-    if (videoBlob == null) {
-      return Error("createFileBlobRefError")
+    if (videoBlob instanceof Error) {
+      return videoBlob
     }
     video = {
       $type: "app.bsky.embed.video",

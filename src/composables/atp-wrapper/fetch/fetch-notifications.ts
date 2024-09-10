@@ -5,21 +5,31 @@ export default async function (
   currentValues: Array<TTNotificationGroup>,
   limit?: number,
   cursor?: string
-): Promise<undefined | false | {
+): Promise<Error | {
   cursor?: string
   newNotificationCount: number
 }> {
-  if (this.agent == null) return
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyNotificationListNotifications.QueryParams = {}
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
   const response: Error | AppBskyNotificationListNotifications.Response =
     await (this.agent as AtpAgent).listNotifications(query)
-      .then((value: AppBskyNotificationListNotifications.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/listNotifications]", response)
-  if (response instanceof Error) return false
-  if (!response.success) return false
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   let newNotificationCount = 0
 
@@ -32,8 +42,12 @@ export default async function (
           return value.cid === notification.cid
         })
       })
-      if (existence) return
-      if (cursor == null) newNotificationCount ++
+      if (existence) {
+        return
+      }
+      if (cursor == null) {
+        newNotificationCount ++
+      }
       const reason =
         // フィードジェネレーターへのいいねかどうか
         notification.reason === "like" && isSubjectFeedGenerator(notification.reasonSubject)
@@ -63,7 +77,8 @@ export default async function (
       const existenceGroup = newValues.find((value: TTNotificationGroup) => {
         return value.reason === reason && value.reasonSubject === reasonSubject
       })
-      if (existenceGroup == null) newValues.push({
+      if (existenceGroup == null) {
+        newValues.push({
           id: notification.cid,
           indexedAt: new Date(notification.indexedAt),
           notifications: [newNotification],
@@ -71,65 +86,97 @@ export default async function (
           reasonSubject,
           __folding: true,
         })
-      else existenceGroup.notifications.push(newNotification)
+      } else {
+        existenceGroup.notifications.push(newNotification)
+      }
     }
   )
 
   // ポスト詳細の取得
   const postUris: Set<string> = new Set()
   newValues.forEach((group: TTNotificationGroup) => {
-    if (group.post != null) return
+    if (group.post != null) {
+      return
+    }
     if (group.reason !== "like" &&
         group.reason !== "quote" &&
         group.reason !== "reply" &&
-        group.reason !== "repost") return
+        group.reason !== "repost") {
+      return
+    }
 
     if (group.reason === "quote") {
       // フィードジェネレーターの引用RPはスキップ
-      if (isSubjectFeedGenerator(group.reasonSubject)) return
+      if (isSubjectFeedGenerator(group.reasonSubject)) {
+        return
+      }
 
       // リストの引用RPはスキップ
-      if (isSubjectList(group.reasonSubject)) return
+      if (isSubjectList(group.reasonSubject)) {
+        return
+      }
 
       // スターターパックの引用RPはスキップ
-      if (isSubjectStarterPack(group.reasonSubject)) return
+      if (isSubjectStarterPack(group.reasonSubject)) {
+        return
+      }
     }
 
     postUris.add(group.reasonSubject as string)
   })
-  const posts: undefined | false | Array<TTPost> = await this.fetchPosts(Array.from(postUris))
-  if (Array.isArray(posts))
+  const posts: Error | Array<TTPost> = await this.fetchPosts(Array.from(postUris))
+  if (posts instanceof Error) {
+    return posts
+  }
+
+  if (Array.isArray(posts)) {
     newValues.forEach((value: TTNotificationGroup) => {
       const post: undefined | TTPost = posts.find((post: TTPost) => {
         return value.reasonSubject === post.uri
       })
-      if (post != null) value.post = post
+      if (post != null) {
+        value.post = post
+      }
     })
+  }
 
   // フィードジェネレーターの取得
   const generatorUris: Set<string> = new Set()
   newValues.forEach((group: TTNotificationGroup) => {
-    if (group.generator != null) return
+    if (group.generator != null) {
+      return
+    }
     if (group.reason === "likeGenerator" ||
-        (group.reason === "quote" && isSubjectFeedGenerator(group.reasonSubject))) {
+      (
+        group.reason === "quote" &&
+        isSubjectFeedGenerator(group.reasonSubject)
+      )
+    ) {
       generatorUris.add(group.reasonSubject as string)
     }
   })
   if (generatorUris.size > 0) {
     const generators: Error | Array<TTFeedGenerator> =
       await this.fetchFeedGenerators(Array.from(generatorUris))
-    if (!(generators instanceof Error))
+    if (!(generators instanceof Error)) {
       newValues.forEach((value: TTNotificationGroup) => {
-        const generator: undefined | TTFeedGenerator =
-          generators.find((generator: TTFeedGenerator) => value.reasonSubject === generator.uri)
-        if (generator != null) value.generator = generator
+        const generator: undefined | TTFeedGenerator = generators
+          .find((generator: TTFeedGenerator) => {
+            return value.reasonSubject === generator.uri
+          })
+        if (generator != null) {
+          value.generator = generator
+        }
       })
+    }
   }
 
   // リストの取得
   const listUris: Set<string> = new Set()
   newValues.forEach((group: TTNotificationGroup) => {
-    if (group.list != null) return
+    if (group.list != null) {
+      return
+    }
     if (group.reason === "quote" && isSubjectList(group.reasonSubject)) {
       listUris.add(group.reasonSubject as string)
     }
@@ -137,9 +184,13 @@ export default async function (
   if (listUris.size > 0) {
     const lists: Array<TTList> = await this.fetchLists(Array.from(listUris))
     newValues.forEach((value: TTNotificationGroup) => {
-      const list: undefined | TTList =
-        lists.find((list: TTList) => value.reasonSubject === list.uri)
-      if (list != null) value.list = list
+      const list: undefined | TTList = lists
+        .find((list: TTList) => {
+          return value.reasonSubject === list.uri
+        })
+      if (list != null) {
+        value.list = list
+      }
     })
   }
 
@@ -157,9 +208,10 @@ export default async function (
     const starterPacks = await this.fetchStarterPacks(Array.from(starterPackUris))
     if (!(starterPacks instanceof Error)) {
       newValues.forEach((value) => {
-        const starterPack = starterPacks.find((starterPack) => {
-          return value.reasonSubject === starterPack.uri
-        })
+        const starterPack = starterPacks
+          .find((starterPack) => {
+            return value.reasonSubject === starterPack.uri
+          })
         if (starterPack != null) {
           value.starterPack = starterPack
         }
@@ -170,12 +222,18 @@ export default async function (
   currentValues.splice(0, currentValues.length, ...newValues)
 
   // 新着通知があればフォールディングを展開する（いいねとリポスト以外）
-  if (cursor === undefined)
+  if (cursor === undefined) {
     currentValues.forEach((value: TTNotificationGroup) => {
-      if (value.reason === "repost" || value.reason === "like") return
-      const hasRead = value.notifications.some((notification: TTNotification) => !notification.isRead)
+      if (value.reason === "repost" || value.reason === "like") {
+        return
+      }
+      const hasRead = value.notifications
+        .some((notification: TTNotification) => {
+          return !notification.isRead
+        })
       value.__folding = !hasRead
     })
+  }
 
   // 通知配列のソート
   currentValues.forEach((value: TTNotificationGroup) => {
@@ -190,7 +248,9 @@ export default async function (
   currentValues.forEach((group: TTNotificationGroup) => {
     group.notifications.forEach((notification: TTNotification) => {
       const date = new Date(notification.indexedAt)
-      if (group.indexedAt < date) group.indexedAt = date
+      if (group.indexedAt < date) {
+        group.indexedAt = date
+      }
     })
   })
   currentValues.sort((a: TTNotificationGroup, b: TTNotificationGroup) => {

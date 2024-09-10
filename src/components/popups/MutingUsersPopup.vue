@@ -27,24 +27,27 @@ function close () {
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
-  if (state.processing) return
+  if (state.processing) {
+    return
+  }
   state.processing = true
-  try {
-    const cursor: undefined | string = await mainState.atp.fetchMutingUsers(
-      mainState.currentMutingUsers as Array<TTUser>,
-      CONSTS.LIMIT_OF_FETCH_MUTING_USERS,
-      direction === "old" ? mainState.currentMutingUsersCursor : undefined
+  const cursor = await mainState.atp.fetchMutingUsers(
+    mainState.currentMutingUsers as Array<TTUser>,
+    CONSTS.LIMIT_OF_FETCH_MUTING_USERS,
+    direction === "old" ? mainState.currentMutingUsersCursor : undefined
+  )
+  state.processing = false
+  if (cursor instanceof Error) {
+    mainState.openErrorPopup(cursor, "MutingUsersPopup/fetchContinuousResults")
+    return
+  }
+  if (cursor != null && (
+    direction === "old" || (
+      direction === "new" &&
+      mainState.currentMutingUsersCursor == null
     )
-    if (cursor != null && (
-      direction === "old" || (
-        direction === "new" &&
-        mainState.currentMutingUsersCursor == null
-      )
-    )) {
-      mainState.currentMutingUsersCursor = cursor
-    }
-  } finally {
-    state.processing = false
+  )) {
+    mainState.currentMutingUsersCursor = cursor
   }
 }
 

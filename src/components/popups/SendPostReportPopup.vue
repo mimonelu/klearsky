@@ -84,15 +84,15 @@ async function submitCallback () {
     props.post.uri
   )
   state.popupLoaderDisplay = false
-  if (response) {
-    mainState.openMessagePopup({
-      title: $t("success"),
-      text: $t("successMessage"),
-    })
-    close()
-  } else {
-    mainState.openErrorPopup("errorApiFailed", "SendPostReportPopup/createReport")
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "SendPostReportPopup/createReport")
+    return
   }
+  mainState.openMessagePopup({
+    title: $t("success"),
+    text: $t("successMessage"),
+  })
+  close()
 }
 </script>
 

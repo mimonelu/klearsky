@@ -45,37 +45,43 @@ async function fetchNewResults () {
   mainState.currentSearchLastUserTerm = mainState.currentSearchTerm
   mainState.currentSearchUsers.splice(0)
   state.processing = true
-  try {
-    // おすすめアカウントの取得
-    if (mainState.currentSearchTerm === "") {
-      await mainState.fetchSuggestions("new")
-      mainState.currentSearchUsers.splice(
-        0,
-        mainState.currentSearchUsers.length,
-        ...mainState.currentSearchSuggestionResults
-      )
-      state.mode = "recommended"
 
-    // アカウント検索結果の取得
-    } else {
-      mainState.currentSearchUsersCursor =
-        await mainState.atp.fetchUserSearch(
-          mainState.currentSearchUsers,
-          mainState.currentSearchTerm,
-          CONSTS.LIMIT_OF_FETCH_USER_SEARCH
-        )
-        state.mode = "related"
-    }
-  } finally {
+  // おすすめアカウントの取得
+  if (mainState.currentSearchTerm === "") {
+    await mainState.fetchSuggestions("new")
     state.processing = false
-    updateRouter()
+    mainState.currentSearchUsers.splice(
+      0,
+      mainState.currentSearchUsers.length,
+      ...mainState.currentSearchSuggestionResults
+    )
+    state.mode = "recommended"
+
+  // アカウント検索結果の取得
+  } else {
+    const cursor = await mainState.atp.fetchUserSearch(
+      mainState.currentSearchUsers,
+      mainState.currentSearchTerm,
+      CONSTS.LIMIT_OF_FETCH_USER_SEARCH
+    )
+    state.processing = false
+    if (cursor instanceof Error) {
+      return
+    }
+    mainState.currentSearchUsersCursor = cursor
+    state.mode = "related"
   }
+  updateRouter()
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
-  if (state.processing) return
-  if (mainState.currentSearchTerm === "") return
+  if (state.processing) {
+    return
+  }
+  if (mainState.currentSearchTerm === "") {
+    return
+  }
   if (mainState.currentSearchLastUserTerm !== mainState.currentSearchTerm) {
     mainState.currentSearchLastUserTerm = mainState.currentSearchTerm
     mainState.currentSearchUsers.splice(0)
@@ -83,17 +89,17 @@ async function fetchContinuousResults (direction: "new" | "old") {
     updateRouter()
   }
   state.processing = true
-  try {
-    mainState.currentSearchUsersCursor =
-      await mainState.atp.fetchUserSearch(
-        mainState.currentSearchUsers,
-        mainState.currentSearchTerm,
-        CONSTS.LIMIT_OF_FETCH_USER_SEARCH,
-        direction === "new" ? undefined : mainState.currentSearchUsersCursor
-      )
-  } finally {
-    state.processing = false
+  const cursor = await mainState.atp.fetchUserSearch(
+    mainState.currentSearchUsers,
+    mainState.currentSearchTerm,
+    CONSTS.LIMIT_OF_FETCH_USER_SEARCH,
+    direction === "new" ? undefined : mainState.currentSearchUsersCursor
+  )
+  state.processing = false
+  if (cursor instanceof Error) {
+    return
   }
+  mainState.currentSearchUsersCursor = cursor
 }
 
 function updateRouter () {

@@ -5,7 +5,9 @@ export default async function (
   q?: string,
   limit?: number
 ): Promise<Error | Array<TTUser>> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyActorSearchActorsTypeahead.QueryParams = {}
   if (q != null) query.q = q
   if (limit != null) query.limit = limit

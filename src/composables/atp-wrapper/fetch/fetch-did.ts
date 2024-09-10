@@ -4,7 +4,9 @@ export default async function (
   this: TIAtpWrapper,
   handle: string
 ): Promise<Error | string> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: ComAtprotoIdentityResolveHandle.QueryParams = { handle }
   const response: Error | ComAtprotoIdentityResolveHandle.Response =
     await (this.agent as AtpAgent).resolveHandle(query)

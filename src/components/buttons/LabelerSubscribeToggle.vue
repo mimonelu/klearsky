@@ -72,15 +72,14 @@ async function toggleLabelerSubscribe () {
   state.processing = true
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   state.processing = false
-  if (!result) {
-    mainState.openErrorPopup("errorApiFailed", "ProfileView/updatePreferences")
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "ProfileView/updatePreferences")
+    return
   }
 
   // セッションキャッシュの更新
-  if (result) {
-    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("myLabeler", mainState.myLabeler.labelers)
-  }
+  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker.setSessionCache("myLabeler", mainState.myLabeler.labelers)
 }
 </script>
 

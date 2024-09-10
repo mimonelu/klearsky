@@ -9,25 +9,31 @@ export default async function (
   cursor?: string,
   filter?: string,
   direction?: TTDirection
-): Promise<undefined | string> {
-  if (this.agent == null) return
+): Promise<Error | undefined | string> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyFeedGetAuthorFeed.QueryParams = { actor: author }
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
-  if (filter != null) query.filter = filter
-  let responseTemp: any = undefined
-  await (this.agent as AtpAgent)
-    .getAuthorFeed(query)
-    .catch(() => {
-      // if (error.error === "BlockedActor") ブロックしている
-    })
-    .then((value: any) => {
-      responseTemp = value
-    })
-  console.log("[klearsky/getAuthorFeed]", responseTemp)
-  if (responseTemp == null) return
-  const response: AppBskyFeedGetAuthorFeed.Response = responseTemp
-  if (!response.success) return
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
+  if (filter != null) {
+    query.filter = filter
+  }
+  const response: Error | AppBskyFeedGetAuthorFeed.Response =
+    await (this.agent as AtpAgent).getAuthorFeed(query)
+      .then((value) => value)
+      .catch((error) => error)
+  console.log("[klearsky/getAuthorFeed]", response)
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   // TODO:
   Util.sanitizePostsOrFeeds(response.data.feed)
@@ -40,11 +46,15 @@ export default async function (
   )
   if (!isFirstFetch && isAllNew && (cursor == null || direction === "middle")) {
     const initialFeed = response.data.feed[0]
-    if (initialFeed != null) initialFeed.__cursor = response.data.cursor
+    if (initialFeed != null) {
+      initialFeed.__cursor = response.data.cursor
+    }
   }
   // Util.sortFeeds(oldFeeds)
 
-  if (direction !== "old" && !isFirstFetch) return
+  if (direction !== "old" && !isFirstFetch) {
+    return
+  }
 
   return response.data.cursor
 }

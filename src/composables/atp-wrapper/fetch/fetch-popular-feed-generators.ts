@@ -7,7 +7,9 @@ export default async function (
   cursor?: string,
   term?: string
 ): Promise<Error | undefined | string> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
 
   const query: AppBskyUnspeccedGetPopularFeedGenerators.QueryParams = {}
   if (limit != null) query.limit = limit

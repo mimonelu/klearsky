@@ -6,16 +6,28 @@ export default async function (
   handle: string,
   limit?: number,
   cursor?: string
-): Promise<undefined | string> {
-  if (this.agent == null) return undefined
+): Promise<Error | undefined | string> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyGraphGetFollowers.QueryParams = { actor: handle }
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
-  const response: AppBskyGraphGetFollowers.Response = await (
-    this.agent as AtpAgent
-  ).getFollowers(query)
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
+  const response: Error | AppBskyGraphGetFollowers.Response =
+    await (this.agent as AtpAgent).getFollowers(query)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getFollowers]", response)
-  if (!response.success) return undefined
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   // ブロックユーザーをフィルタリング
   response.data.followers = (response.data.followers as Array<TTUser>)
@@ -25,8 +37,9 @@ export default async function (
 
   ;(response.data.followers as Array<TTUser>)
     .forEach((follower: TTUser) => {
-      if (!users.some((user: TTUser) => user.did === follower.did))
+      if (!users.some((user: TTUser) => user.did === follower.did)) {
         users.push(follower)
+      }
     })
 
   return response.data.cursor

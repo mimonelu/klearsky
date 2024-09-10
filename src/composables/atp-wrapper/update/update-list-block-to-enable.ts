@@ -4,7 +4,9 @@ export default async function (
   this: TIAtpWrapper,
   listUri: string
 ): Promise<string | Error> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const response: TTCidUri | Error =
     await (this.agent as AtpAgent).blockModList(listUri)
       .then((value: TTCidUri) => value)

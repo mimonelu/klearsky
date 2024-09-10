@@ -7,7 +7,9 @@ export default async function (
   limit?: number,
   cursor?: string
 ): Promise<undefined | string | Error> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyGraphGetList.QueryParams = { list }
   if (limit != null) query.limit = limit
   if (cursor != null) query.cursor = cursor

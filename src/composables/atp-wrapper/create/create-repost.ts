@@ -4,11 +4,16 @@ export default async function (
   this: TIAtpWrapper,
   uri: string,
   cid: string
-): Promise<boolean> {
-  if (this.agent == null) return false
-  const response: ComAtprotoRepoCreateRecord.OutputSchema = await (
-    this.agent as AtpAgent
-  ).repost(uri, cid)
+): Promise<Error | undefined> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
+  const response: Error | ComAtprotoRepoCreateRecord.OutputSchema =
+    await (this.agent as AtpAgent).repost(uri, cid)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/repost]", response)
-  return true
+  if (response instanceof Error) {
+    return response
+  }
 }

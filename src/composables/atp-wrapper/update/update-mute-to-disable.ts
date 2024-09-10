@@ -3,11 +3,19 @@ import type { AppBskyGraphUnmuteActor, AtpAgent } from "@atproto/api"
 export default async function (
   this: TIAtpWrapper,
   did: string
-): Promise<boolean> {
-  if (this.agent == null) return false
-  const response: AppBskyGraphUnmuteActor.Response = await (
-    this.agent as AtpAgent
-  ).unmute(did)
+): Promise<Error | undefined> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
+  const response: Error | AppBskyGraphUnmuteActor.Response =
+    await (this.agent as AtpAgent).unmute(did)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/unmute]", response)
-  return true
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 }

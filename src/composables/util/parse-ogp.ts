@@ -79,7 +79,9 @@ export default async function (
       maxHeight: 2000,
       maxSize: 0.953671875,
     })
-    if (blobRef == null) return external
+    if (blobRef instanceof Error) {
+      return external
+    }
     external.thumb = blobRef
   }
 

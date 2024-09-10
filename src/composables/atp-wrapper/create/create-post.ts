@@ -8,7 +8,9 @@ export default async function (
   this: TIAtpWrapper,
   params: TTCreatePostParams
 ): Promise<Error | TTCidUri> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
 
   const record: AppBskyFeedPost.Record = {
     $type: "app.bsky.feed.post",

@@ -153,7 +153,7 @@ async function submitCallback () {
     await mainState.atp.fetchList(props.list?.uri ?? result as string)
   state.loaderDisplay = false
   if (response instanceof Error) {
-    mainState.openErrorPopup("errorApiFailed", "ListEditPopup/fetchList")
+    mainState.openErrorPopup(response, "ListEditPopup/fetchList")
     return
   }
 
@@ -170,7 +170,9 @@ async function submitCallback () {
 
 async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
   // サムネイルの取り外しが指定されている場合はスキップ
-  if (easyFormState.detachAvatar.includes(true)) return
+  if (easyFormState.detachAvatar.includes(true)) {
+    return
+  }
 
   // サムネイルが指定されている場合は作成
   if (easyFormState.avatar != null && easyFormState.avatar[0] != null) {
@@ -181,7 +183,9 @@ async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
       maxHeight: 2000,
       maxSize: 0.953671875,
     })
-    if (blobRef == null) return Error("makeAvatarBlobRefError")
+    if (blobRef instanceof Error) {
+      return Error("makeAvatarBlobRefError")
+    }
     return blobRef
   }
 
@@ -189,12 +193,18 @@ async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
   if (props.list?.avatar != null) {
     const uri = props.list.avatar
     const blocks = uri.match(/\/([^\/]+?)@/)
-    if (blocks == null || blocks[1] == null) return Error("makeAvatarBlobRefError")
+    if (blocks == null || blocks[1] == null) {
+      return Error("makeAvatarBlobRefError")
+    }
     const cid = blocks[1]
     const blob = await mainState.atp.fetchBlob(cid)
-    if (blob == null) return Error("makeAvatarBlobRefError")
+    if (blob instanceof Error) {
+      return blob
+    }
     const blobRef = new BlobRef({ $link: cid } as any, blob.type, blob.size)
-    if (blobRef == null) return Error("makeAvatarBlobRefError")
+    if (blobRef == null) {
+      return Error("makeAvatarBlobRefError")
+    }
     return blobRef
   }
 }

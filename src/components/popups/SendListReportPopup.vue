@@ -85,15 +85,15 @@ async function submitCallback () {
     "list"
   )
   state.popupLoaderDisplay = false
-  if (response) {
-    mainState.openMessagePopup({
-      title: $t("success"),
-      text: $t("successMessage"),
-    })
-    close()
-  } else {
-    mainState.openErrorPopup("errorApiFailed", "SendListReportPopup/createReport")
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "SendListReportPopup/createReport")
+    return
   }
+  mainState.openMessagePopup({
+    title: $t("success"),
+    text: $t("successMessage"),
+  })
+  close()
 }
 </script>
 

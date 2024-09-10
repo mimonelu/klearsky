@@ -41,23 +41,26 @@ function cancelEdit () {
 }
 
 async function saveMyFeed () {
-  if (state.processing) return
-  if (mainState.currentFeedPreference == null) return
+  if (state.processing) {
+    return
+  }
+  if (mainState.currentFeedPreference == null) {
+    return
+  }
   state.processing = true
   mainState.sortFeedPreferencesSavedAndPinned()
   mainState.myFeeds.saveCustomItemSettings()
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   state.processing = false
-  if (!result) {
-    mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "MyFeedList/saveMyFeed")
+    return
   }
   state.editMode = false
 
   // セッションキャッシュの更新
-  if (result) {
-    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
-  }
+  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
 }
 
 function isPinned (uri: string): boolean {

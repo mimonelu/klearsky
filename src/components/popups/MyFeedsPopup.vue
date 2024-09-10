@@ -26,15 +26,15 @@ async function close () {
     mainState.myFeeds.saveCustomItemSettings()
     const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
     state.popupLoaderDisplay = false
-    if (!result) {
-      mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/updatePreferences")
+    if (result instanceof Error) {
+      mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/close")
+      emit("close")
+      return
     }
 
     // セッションキャッシュの更新
-    if (result) {
-      mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-      mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
-    }
+    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+    mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
   }
   emit("close")
 }

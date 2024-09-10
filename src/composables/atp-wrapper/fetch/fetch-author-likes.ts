@@ -6,24 +6,40 @@ export default async function (
   repo: string,
   limit?: number,
   cursor?: string
-): Promise<undefined | string> {
-  if (this.agent == null) return
+): Promise<Error | undefined | string> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: ComAtprotoRepoListRecords.QueryParams = {
     collection: "app.bsky.feed.like",
     repo,
   }
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
   const response: ComAtprotoRepoListRecords.Response =
     await (this.agent as AtpAgent).api.com.atproto.repo.listRecords(query)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/listRecords/like]", response)
-  if (!response.success) return
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
-  const uris: Array<string> = response.data.records.map((record: any) => {
-    return record.value.subject.uri
-  })
-  const posts: undefined | false | Array<TTPost> = await this.fetchPosts(uris)
-  if (posts === false) return
+  const uris: Array<string> = response.data.records
+    .map((record: any) => {
+      return record.value.subject.uri
+    })
+  const posts: Error | Array<TTPost> = await this.fetchPosts(uris)
+  if (posts instanceof Error) {
+    return
+  }
   if (posts != null) {
     const newFeeds: Array<TTFeed> = posts
       .filter((post: TTPost) => {

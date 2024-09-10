@@ -1,18 +1,28 @@
 import type { AtpAgent, ComAtprotoServerDeleteSession } from "@atproto/api"
 
-export default async function (this: TIAtpWrapper): Promise<boolean> {
-  if (this.agent == null) return false
-  if (this.session == null) return false
+export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
+  if (this.session == null) {
+    return Error("noSessionError")
+  }
 
   // TODO: API は成功するが、セッションが削除されない。要調査
-  const response: ComAtprotoServerDeleteSession.Response = await (
-    this.agent as AtpAgent
-  ).api.com.atproto.server.deleteSession(undefined, {
-    headers: {
-      authorization: `Bearer ${this.session.refreshJwt}`,
-    },
-  })
+  const response: Error | ComAtprotoServerDeleteSession.Response =
+    await (this.agent as AtpAgent).api.com.atproto.server.deleteSession(undefined, {
+      headers: {
+        authorization: `Bearer ${this.session.refreshJwt}`,
+      },
+    })
+      .then((value) => value)
+      .catch((error) => error)
 
   console.log("[klearsky/deleteSession]", response)
-  return response.success
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 }

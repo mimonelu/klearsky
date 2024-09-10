@@ -4,7 +4,9 @@ export default async function (
   this: TIAtpWrapper,
   params: TTUpdateProfileParams
 ): Promise<undefined | Error> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
 
   // クエリーオブジェクト
   const profileSchema: AppBskyActorProfile.Record = {}
@@ -34,7 +36,7 @@ export default async function (
     }
 
   // 画像処理
-  const fileBlobRefs: Array<null | BlobRef> = await Promise.all([
+  const fileBlobRefs: Array<null | Error | BlobRef> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
       ? this.createFileBlobRef({
           file: params.avatar[0],
@@ -52,10 +54,14 @@ export default async function (
         })
       : null,
   ])
-  const avatarSchema: null | BlobRef = fileBlobRefs[0]
-  const bannerSchema: null | BlobRef = fileBlobRefs[1]
-  if (avatarSchema != null) profileSchema.avatar = avatarSchema
-  if (bannerSchema != null) profileSchema.banner = bannerSchema
+  const avatarSchema = fileBlobRefs[0]
+  if (!(avatarSchema instanceof Error) && avatarSchema != null) {
+    profileSchema.avatar = avatarSchema
+  }
+  const bannerSchema = fileBlobRefs[1]
+  if (!(bannerSchema instanceof Error) && bannerSchema != null) {
+    profileSchema.banner = bannerSchema
+  }
 
   // 固定ポスト
   if (params.pinnedPost != null) {

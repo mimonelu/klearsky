@@ -1,23 +1,23 @@
 import type { AppBskyActorGetPreferences, AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 
-export default async function (this: TIAtpWrapper): Promise<undefined | Array<TTPreference>> {
+export default async function (this: TIAtpWrapper): Promise<Error | Array<TTPreference>> {
   if (this.agent == null) {
-    return
+    return Error("noAgentError")
   }
-  const response: AppBskyActorGetPreferences.Response =
+  const response: Error | AppBskyActorGetPreferences.Response =
     await (this.agent as AtpAgent).app.bsky.actor.getPreferences()
-      .then((value: AppBskyActorGetPreferences.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getPreferences]", response)
   if (response instanceof Error) {
-    return
+    return response
   }
   if (!response.success) {
-    return
+    return Error("apiError")
   }
   if (response.data?.preferences == null) {
-    return
+    return Error("apiError")
   }
   const preferences = response.data.preferences as Array<TTPreference>
   Util.sanitizePreferences(preferences)

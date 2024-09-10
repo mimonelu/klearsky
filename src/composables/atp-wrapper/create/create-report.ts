@@ -8,8 +8,10 @@ export default async function (
   cid?: string,
   uri?: string,
   type?: string
-): Promise<boolean> {
-  if (this.agent == null) return false
+): Promise<Error | undefined> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: ComAtprotoModerationCreateReport.InputSchema = {
     reasonType,
     reason,
@@ -23,10 +25,15 @@ export default async function (
       type,
     },
   }
-  const response: ComAtprotoModerationCreateReport.Response =
+  const response: Error | ComAtprotoModerationCreateReport.Response =
     await (this.agent as AtpAgent).com.atproto.moderation.createReport(query)
-      .then((value: ComAtprotoModerationCreateReport.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/createReport]", response)
-  return response.success
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 }

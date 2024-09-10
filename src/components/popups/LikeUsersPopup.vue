@@ -29,23 +29,24 @@ async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
   if (state.processing) return
   state.processing = true
-  try {
-    const cursor: undefined | string = await mainState.atp.fetchLikeUsers(
-      mainState.currentLikeUsers as Array<TTUser>,
-      mainState.currentLikeUsersUri as string,
-      CONSTS.LIMIT_OF_FETCH_LIKE_USERS,
-      direction === "old" ? mainState.currentLikeUsersCursor : undefined
+  const cursor = await mainState.atp.fetchLikeUsers(
+    mainState.currentLikeUsers as Array<TTUser>,
+    mainState.currentLikeUsersUri as string,
+    CONSTS.LIMIT_OF_FETCH_LIKE_USERS,
+    direction === "old" ? mainState.currentLikeUsersCursor : undefined
+  )
+  state.processing = false
+  if (cursor instanceof Error) {
+    mainState.openErrorPopup(cursor, "LikeUsersPopup/fetchContinuousResults")
+    return
+  }
+  if (cursor != null && (
+    direction === "old" || (
+      direction === "new" &&
+      mainState.currentLikeUsersCursor == null
     )
-    if (cursor != null && (
-      direction === "old" || (
-        direction === "new" &&
-        mainState.currentLikeUsersCursor == null
-      )
-    )) {
-      mainState.currentLikeUsersCursor = cursor
-    }
-  } finally {
-    state.processing = false
+  )) {
+    mainState.currentLikeUsersCursor = cursor
   }
 }
 

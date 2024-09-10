@@ -70,6 +70,8 @@ async function updateNotificationSeen () {
   if (mainState.notificationCount <= 0) {
     return
   }
+
+  // エラーが頻発するためエラーポップアップは開かない
   await mainState.atp.updateNotificationSeen(mainState.lastFetchNotificationsDate)
 }
 

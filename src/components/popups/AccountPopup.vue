@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import AccountList from "@/components/lists/AccountList.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -29,14 +30,15 @@ async function newLogin () {
 async function logout () {
   close()
   mainState.loaderDisplay = true
-  try {
-    await mainState.atp.deleteSession()
-  } finally {
-    mainState.atp.logout()
-    await router.push({ name: "home" })
-    location.reload()
-    mainState.loaderDisplay = false
+  const response = await mainState.atp.deleteSession()
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "AccountPopup/logout")
+    await Util.waitProp(() => mainState.errorPopupProps.display, false)
   }
+  mainState.atp.logout()
+  await router.push({ name: "home" })
+  location.reload()
+  mainState.loaderDisplay = false
 }
 </script>
 

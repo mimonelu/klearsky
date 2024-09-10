@@ -115,36 +115,36 @@ async function toggleSavedOrPinned (type: TTPreferenceFeedType) {
 
 async function likeFeedGenerator (generator: TTFeedGenerator) {
   const uri = await mainState.atp.createLike(generator.uri, generator.cid)
-  if (uri != null) {
-    generator.viewer.like = uri
-    generator.likeCount ++
-  } else {
-    mainState.openErrorPopup("errorApiFailed", "FeedCard/createLike")
+  if (uri instanceof Error) {
+    mainState.openErrorPopup(uri, "FeedCard/createLike")
+    return
   }
+  generator.viewer.like = uri
+  generator.likeCount ++
 }
 
 async function unlikeFeedGenerator (generator: TTFeedGenerator) {
-  if (await mainState.atp.deleteLike(generator.viewer.like as string)) {
-    delete generator.viewer.like
-    generator.likeCount --
-  } else {
-    mainState.openErrorPopup("errorApiFailed", "FeedCard/deleteLike")
+  const result = await mainState.atp.deleteLike(generator.viewer.like as string)
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "FeedCard/deleteLike")
+    return
   }
+  delete generator.viewer.like
+  generator.likeCount --
 }
 
 async function updatePreferences () {
   state.loaderDisplay = true
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   state.loaderDisplay = false
-  if (!result) {
-    mainState.openErrorPopup("errorApiFailed", "FeedCard/updatePreferences")
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "FeedCard/updatePreferences")
+    return
   }
 
   // セッションキャッシュの更新
-  if (result) {
-    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
-  }
+  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
 }
 
 function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {

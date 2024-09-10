@@ -19,23 +19,32 @@ const state = reactive<{
 
 async function toggleMute () {
   Util.blurElement()
-  if (state.processing) return
+  if (state.processing) {
+    return
+  }
   state.processing = true
-  try {
-    if (props.viewer.muted) {
-      await mainState.atp.updateMuteToDisable(props.did)
-      props.viewer.muted = false
+  if (props.viewer.muted) {
+    const response = await mainState.atp.updateMuteToDisable(props.did)
+    state.processing = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "MuteButton/toggleMute")
+      return
+    }
+    props.viewer.muted = false
 
-      // ミュートユーザー一覧の更新
-      mainState.currentMutingUsers = mainState.currentMutingUsers.filter((user: TTUser) => {
+    // ミュートユーザー一覧の更新
+    mainState.currentMutingUsers = mainState.currentMutingUsers
+      .filter((user: TTUser) => {
         return user.viewer.blocking !== props.viewer.blocking
       })
-    } else {
-      await mainState.atp.updateMuteToEnable(props.did)
-      props.viewer.muted = true
-    }
-  } finally {
+  } else {
+    const response = await mainState.atp.updateMuteToEnable(props.did)
     state.processing = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "MuteButton/toggleMute")
+      return
+    }
+    props.viewer.muted = true
   }
 }
 </script>

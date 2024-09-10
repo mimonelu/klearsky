@@ -3,7 +3,7 @@ import Util from "@/composables/util"
 export default async function (
   this: TIAtpWrapper,
   did: string
-): Promise<undefined | any> {
+): Promise<Error | undefined | any> {
   const url = did.startsWith("did:plc:")
     // did:plc:
     ? `https://plc.directory/${did}/log/audit`
@@ -13,13 +13,21 @@ export default async function (
 
   // TODO: 読込中も考慮すること
   let logJson: undefined | any = Util.cache.get("logAudit", url)
-  if (logJson != null) return logJson
+  if (logJson != null) {
+    return logJson
+  }
   const log = await Util.fetchWithTimeout(url)
     .then((value: any) => value)
     .catch((error: any) => error)
-  if (log == null) return
-  if (log instanceof Error) return
-  if (!log.ok) return
+  if (log instanceof Error) {
+    return log
+  }
+  if (log == null) {
+    return
+  }
+  if (!log.ok) {
+    return Error("apiError")
+  }
   logJson = await log.json()
   console.log("[klearsky/log/audit]", logJson)
 

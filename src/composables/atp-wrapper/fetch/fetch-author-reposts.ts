@@ -4,7 +4,7 @@ export default async function (
   repo: string,
   limit?: number,
   cursor?: string
-): Promise<undefined | string> {
+): Promise<Error | undefined | string> {
   const response = await this.fetchRecords(
     repo,
     "app.bsky.feed.repost",
@@ -12,18 +12,19 @@ export default async function (
     cursor
   )
   if (response instanceof Error) {
-    return
+    return response
   }
   if (response.records == null) {
     return
   }
 
-  const uris: Array<string> = response.records.map((record: TICommonRecord) => {
-    return record.value.subject.uri
-  })
-  const posts: undefined | false | Array<TTPost> = await this.fetchPosts(uris)
-  if (posts === false) {
-    return
+  const uris: Array<string> = response.records
+    .map((record: TICommonRecord) => {
+      return record.value.subject.uri
+    })
+  const posts: Error | Array<TTPost> = await this.fetchPosts(uris)
+  if (posts instanceof Error) {
+    return posts
   }
   if (posts != null) {
     const newFeeds: Array<TTFeed> = posts

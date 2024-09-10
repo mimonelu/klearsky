@@ -214,15 +214,14 @@ async function updatePreferences () {
   state.loaderDisplay = true
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   state.loaderDisplay = false
-  if (!result) {
-    mainState.openErrorPopup("errorApiFailed", "ListCard/updatePreferences")
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "ListCard/updatePreferences")
+    return
   }
 
   // セッションキャッシュの更新
-  if (result) {
-    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
-  }
+  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
 }
 
 function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {

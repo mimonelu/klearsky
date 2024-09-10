@@ -7,7 +7,9 @@ export default async function (
   description?: string,
   avatarBlobRef?: BlobRef
 ): Promise<string | Error> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   if (this.session == null) return Error("noSessionError")
   const createdAt = new Date().toISOString()
   const query: ComAtprotoRepoCreateRecord.InputSchema = {

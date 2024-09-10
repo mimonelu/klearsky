@@ -11,7 +11,7 @@ const props = defineProps<{
 let host: undefined | string
 if (props.did != null && props.cid != null) {
   const logJson = await mainState.atp.fetchLogAudit(props.did)
-  if (logJson != null) {
+  if (!(logJson instanceof Error) && logJson != null) {
     host = (
       Array.isArray(logJson)
         // did:plc:

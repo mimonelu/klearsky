@@ -11,29 +11,43 @@ export default async function (
   this: TIAtpWrapper,
   uri: string,
   depth?: number
-): Promise<undefined | false | Array<TTPost>> {
-  if (this.agent == null) return
+): Promise<Error | Array<TTPost>> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyFeedGetPostThread.QueryParams = { uri }
-  if (depth != null) query.depth = depth
-  const response: AppBskyFeedGetPostThread.Response =
+  if (depth != null) {
+    query.depth = depth
+  }
+  const response: Error | AppBskyFeedGetPostThread.Response =
     await (this.agent as AtpAgent).getPostThread(query)
-      .then((value: AppBskyFeedGetPostThread.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getPostThread]", response)
-  if (!response.success) return false
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
   const posts: Array<TTPost> = []
-  traverseThread(response.data.thread as unknown as TTThread, posts)
+  if (response.data?.thread != null) {
+    traverseThread(response.data.thread as unknown as TTThread, posts)
+  }
   Util.sanitizePostsOrFeeds(posts)
   return posts
 }
 
 function traverseThread (thread: TTThread, results: Array<TTPost>) {
-  if (thread.parent != null)
+  if (thread.parent != null) {
     traverseThread(thread.parent, results)
-  if (thread.post != null)
+  }
+  if (thread.post != null) {
     results.push(thread.post)
-  if (thread.replies != null)
+  }
+  if (thread.replies != null) {
     thread.replies.forEach((reply: TTThread) => {
       traverseThread(reply, results)
     })
+  }
 }

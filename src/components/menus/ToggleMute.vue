@@ -12,22 +12,31 @@ const mainState = inject("state") as MainState
 
 async function toggleMute () {
   emit("close")
-  if (mainState.centerLoaderDisplay) return
+  if (mainState.centerLoaderDisplay) {
+    return
+  }
   mainState.centerLoaderDisplay = true
-  try {
-    if (props.user?.viewer.muted) {
-      await mainState.atp.updateMuteToDisable(props.user.did)
-      props.user.viewer.muted = false
+  if (props.user?.viewer.muted) {
+    const response = await mainState.atp.updateMuteToDisable(props.user.did)
+    mainState.centerLoaderDisplay = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "ToggleMute/toggleMute")
+      return
+    }
+    props.user.viewer.muted = false
 
-      mainState.currentMutingUsers = mainState.currentMutingUsers.filter((user: TTUser) => {
+    mainState.currentMutingUsers = mainState.currentMutingUsers
+      .filter((user: TTUser) => {
         return user.did !== props.user?.did
       })
-    } else if (props.user != null) {
-      await mainState.atp.updateMuteToEnable(props.user.did)
-      props.user.viewer.muted = true
-    }
-  } finally {
+  } else if (props.user != null) {
+    const response = await mainState.atp.updateMuteToEnable(props.user.did)
     mainState.centerLoaderDisplay = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "ToggleMute/toggleMute")
+      return
+    }
+    props.user.viewer.muted = true
   }
 }
 </script>

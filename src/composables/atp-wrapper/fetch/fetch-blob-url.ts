@@ -5,8 +5,10 @@ export default async function (
   this: TIAtpWrapper,
   did: string,
   image: BlobRef
-): Promise<undefined | string> {
-  if (this.agent == null) return
+): Promise<Error | string> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
 
   const cid = (image as any).cid != null
     ? (image as any).cid
@@ -16,11 +18,15 @@ export default async function (
 
   // キャッシュがあればキャッシュを使用
   let url: null | string = Util.cache.get("blob", cid)
-  if (url != null) return url
+  if (url != null) {
+    return url
+  }
 
   // キャッシュがなければダウンロード
   const data = await this.fetchBlob(cid, did)
-  if (data == null) return
+  if (data instanceof Error) {
+    return data
+  }
 
   // キャッシュに保存
   url = URL.createObjectURL(new Blob([data], {

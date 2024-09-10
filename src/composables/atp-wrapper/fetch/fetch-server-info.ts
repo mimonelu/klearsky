@@ -1,7 +1,9 @@
 import type { AtpAgent, ComAtprotoServerDescribeServer } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper): Promise<Error | TTServerInfo> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const response: Error | ComAtprotoServerDescribeServer.Response =
     await (this.agent as AtpAgent).com.atproto.server.describeServer()
       .then((value: ComAtprotoServerDescribeServer.Response) => value)

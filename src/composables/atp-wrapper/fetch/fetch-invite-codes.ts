@@ -1,7 +1,9 @@
 import type { AtpAgent, ComAtprotoServerGetAccountInviteCodes } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper): Promise<Error | TTInviteCode[]> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: ComAtprotoServerGetAccountInviteCodes.QueryParams = {
     includeUsed: true,
     createAvailable: true,

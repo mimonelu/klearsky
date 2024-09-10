@@ -9,20 +9,31 @@ export default async function (
   limit?: number,
   cursor?: string,
   direction?: TTDirection
-): Promise<undefined | false | string> {
-  if (this.agent == null) return
+): Promise<Error | undefined | string> {
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyFeedGetTimeline.QueryParams = {
     // TODO: 要調査
     algorithm: "reverse-chronological",
   }
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
-  const response: AppBskyFeedGetTimeline.Response =
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
+  const response: Error | AppBskyFeedGetTimeline.Response =
     await (this.agent as AtpAgent).getTimeline(query)
-      .then((value: AppBskyFeedGetTimeline.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getTimeline]", response)
-  if (!response.success) return false
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   // 折り畳みプロパティをインジェクト
   Util.injectFoldingToFeeds(
@@ -43,11 +54,15 @@ export default async function (
   )
   if (!isFirstFetch && isAllNew && (cursor == null || direction === "middle")) {
     const initialFeed = response.data.feed[0]
-    if (initialFeed != null) initialFeed.__cursor = response.data.cursor
+    if (initialFeed != null) {
+      initialFeed.__cursor = response.data.cursor
+    }
   }
   // Util.sortFeeds(oldFeeds)
 
-  if (direction !== "old" && !isFirstFetch) return
+  if (direction !== "old" && !isFirstFetch) {
+    return
+  }
 
   return response.data.cursor
 }

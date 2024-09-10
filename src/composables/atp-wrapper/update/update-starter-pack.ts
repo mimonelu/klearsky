@@ -5,7 +5,9 @@ export default async function (
   this: TIAtpWrapper,
   starterPack: TIStarterPack,
 ): Promise<undefined | Error> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const rkey = Util.getRkey(starterPack.uri)
   const query: ComAtprotoRepoPutRecord.InputSchema = {
     repo: this.session?.did as string,

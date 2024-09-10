@@ -940,10 +940,7 @@ function updateColorThemeSetting () {
 // 通知
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
-  const result: undefined | false | {
-    cursor?: string
-    newNotificationCount: number
-  } = await state.atp.fetchNotifications(
+  const result = await state.atp.fetchNotifications(
     state.notifications,
     limit,
     direction === "new" ? undefined : state.notificationCursor
@@ -952,24 +949,24 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
   // 最後に通知を取得した日時を保存（ updateSeenNotifications で使用）
   state.lastFetchNotificationsDate = new Date()
 
-  if (result === false) {
+  if (result instanceof Error) {
     state.openErrorPopup("errorApiFailed", "main-state/fetchNotifications")
-  } else if (result != null) {
-    if (result.cursor == null) {
-      return
-    }
-    if (state.notificationCursor == null) {
-      state.notificationCursor = result.cursor
-      return
-    }
-    const oldDate = new Date(state.notificationCursor)
-    const newDate = new Date(result.cursor)
-    if (Number.isNaN(oldDate.getTime()) ||
-        Number.isNaN(newDate.getTime()) ||
-        oldDate > newDate
-    ) {
-      state.notificationCursor = result.cursor
-    }
+    return
+  }
+  if (result.cursor == null) {
+    return
+  }
+  if (state.notificationCursor == null) {
+    state.notificationCursor = result.cursor
+    return
+  }
+  const oldDate = new Date(state.notificationCursor)
+  const newDate = new Date(result.cursor)
+  if (Number.isNaN(oldDate.getTime()) ||
+      Number.isNaN(newDate.getTime()) ||
+      oldDate > newDate
+  ) {
+    state.notificationCursor = result.cursor
   }
 }
 
@@ -993,7 +990,8 @@ function updateNotificationInterval () {
 }
 
 async function updateNotifications () {
-  const count = await state.atp.fetchNotificationCount() ?? 0
+  const response = await state.atp.fetchNotificationCount()
+  const count = response instanceof Error ? 0 : response
   const canFetched = state.notificationCount < count
   if (count > 0) {
     state.notificationCount = count
@@ -1009,7 +1007,9 @@ async function updateNotifications () {
 
 async function fetchPreferences (): Promise<boolean> {
   const preferences = await state.atp.fetchPreferences()
-  if (preferences == null) {
+  if (preferences instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(preferences, "mainState/fetchPreferences")
     return false
   }
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
@@ -1184,7 +1184,7 @@ async function updateCurrentLogAudit () {
     return
   }
   const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
-  if (logJson == null) {
+  if (logJson instanceof Error || logJson == null) {
     return
   }
   if (state.currentProfile == null) {
@@ -1210,7 +1210,12 @@ async function fetchPinnedPost (profile?: TTProfile) {
 
     // 固定ポストの取得
     const posts = await state.atp.fetchPosts([uri])
-    if (posts != null && posts !== false && posts[0] != null) {
+    if (posts instanceof Error) {
+      // TODO:
+      // state.openErrorPopup(posts, "mainState/fetchPinnedPost")
+      return
+    }
+    if (posts[0] != null) {
       state.currentAuthorPinnedPost = posts[0]
     }
   } else {
@@ -1236,8 +1241,14 @@ async function fetchCurrentAuthorFeedGenerators (direction: "new" | "old") {
       CONSTS.LIMIT_OF_FETCH_AUTHOR_CUSTOM_FEEDS,
       direction === "old" ? state.currentAuthorFeedGeneratorsCursor : undefined
     )
-  if (cursor instanceof Error) return
-  if (cursor != null) state.currentAuthorFeedGeneratorsCursor = cursor
+  if (cursor instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(cursor, "mainState/fetchCurrentAuthorFeedGenerators")
+    return
+  }
+  if (cursor != null) {
+    state.currentAuthorFeedGeneratorsCursor = cursor
+  }
 }
 
 async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, middleCursor?: string) {
@@ -1262,7 +1273,7 @@ async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, 
       ? state.currentAuthorFeedsWithMediaCursor
       : state.currentAuthorFeedsCursor
 
-  const resultCursor: undefined | string =
+  const resultCursor =
     await state.atp.fetchAuthorFeed(
       feeds as Array<TTFeed>,
       account,
@@ -1271,35 +1282,53 @@ async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, 
       filter ?? "posts_no_replies",
       direction
     )
-  if (resultCursor != null)
+  if (resultCursor instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(resultCursor, "mainState/fetchCurrentAuthorFeed")
+    return
+  }
+  if (resultCursor != null) {
     filter === "posts_with_replies"
       ? state.currentAuthorFeedsWithRepliesCursor = resultCursor
       : filter === "posts_with_media" 
         ? state.currentAuthorFeedsWithMediaCursor = resultCursor
         : state.currentAuthorFeedsCursor = resultCursor
+  }
 }
 
 async function fetchAuthorReposts (direction: TTDirection) {
   const account = state.currentQuery.account as LocationQueryValue
-  if (!account) return
-  const cursor: undefined | string = await state.atp.fetchAuthorReposts(
+  if (!account) {
+    return
+  }
+  const cursor = await state.atp.fetchAuthorReposts(
     state.currentAuthorReposts,
     account,
     CONSTS.LIMIT_OF_FETCH_AUTHOR_REPOSTS,
     direction === "new" ? undefined : state.currentAuthorRepostsCursor
   )
+  if (cursor instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(cursor, "mainState/fetchAuthorReposts")
+    return
+  }
   state.currentAuthorRepostsCursor = cursor
 }
 
 async function fetchAuthorLikes (direction: TTDirection) {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) return
-  const cursor: undefined | string = await state.atp.fetchAuthorLikes(
+  const cursor = await state.atp.fetchAuthorLikes(
     state.currentAuthorLikes,
     account,
     CONSTS.LIMIT_OF_FETCH_AUTHOR_LIKES,
     direction === "new" ? undefined : state.currentAuthorLikesCursor
   )
+  if (cursor instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(cursor, "mainState/fetchAuthorLikes")
+    return
+  }
   state.currentAuthorLikesCursor = cursor
 }
 
@@ -1321,6 +1350,7 @@ async function fetchAuthorLists (direction: "new" | "old") {
   )
   if (cursor instanceof Error) {
     // TODO:
+    // state.openErrorPopup(cursor, "mainState/fetchAuthorLists")
     return
   }
   state.currentAuthorListsCursor = cursor
@@ -1344,6 +1374,7 @@ async function fetchAuthorStarterPacks (direction: "new" | "old") {
   )
   if (cursor instanceof Error) {
     // TODO:
+    // state.openErrorPopup(cursor, "mainState/fetchAuthorStarterPacks")
     return
   }
   state.currentAuthorStarterPacksCursor = cursor
@@ -1351,55 +1382,84 @@ async function fetchAuthorStarterPacks (direction: "new" | "old") {
 
 async function fetchFollowers (direction: "new" | "old") {
   const account = state.currentQuery.account as LocationQueryValue
-  if (!account) return
+  if (!account) {
+    return
+  }
 
   // ブロックしている
-  if (state.currentProfile?.viewer.blocking != null) return
+  if (state.currentProfile?.viewer.blocking != null) {
+    return
+  }
 
   // ブロックされている
-  if (state.currentProfile?.viewer.blockedBy) return
+  if (state.currentProfile?.viewer.blockedBy) {
+    return
+  }
 
-  const cursor: undefined | string = await state.atp.fetchFollowers(
+  const cursor = await state.atp.fetchFollowers(
     state.currentFollowers,
     account,
     CONSTS.LIMIT_OF_FETCH_FOLLOWS,
     direction === "new" ? undefined : state.currentFollowersCursor
   )
+  if (cursor instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(cursor, "mainState/fetchFollowers")
+    return
+  }
   state.currentFollowersCursor = cursor
 }
 
 async function fetchFollowings (direction: "new" | "old") {
   const account = state.currentQuery.account as LocationQueryValue
-  if (!account) return
+  if (!account) {
+    return
+  }
 
   // ブロックしている
-  if (state.currentProfile?.viewer.blocking != null) return
+  if (state.currentProfile?.viewer.blocking != null) {
+    return
+  }
 
   // ブロックされている
-  if (state.currentProfile?.viewer.blockedBy) return
+  if (state.currentProfile?.viewer.blockedBy) {
+    return
+  }
 
-  const cursor: undefined | string = await state.atp.fetchFollowings(
+  const cursor = await state.atp.fetchFollowings(
     state.currentFollowings,
     account,
     CONSTS.LIMIT_OF_FETCH_FOLLOWS,
     direction === "new" ? undefined : state.currentFollowingsCursor
   )
+  if (cursor instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(cursor, "mainState/fetchFollowings")
+    return
+  }
   state.currentFollowingsCursor = cursor
 }
 
 async function fetchSuggestedFollows () {
   const account = state.currentQuery.account as LocationQueryValue
-  if (!account) return
+  if (!account) {
+    return
+  }
   await state.atp.fetchSuggestedFollows(state.currentSuggestedFollows, account)
 }
 
 async function fetchSuggestions (direction: "new" | "old") {
-  state.currentSearchSuggestionCursor =
-    await state.atp.fetchSuggestions(
-      state.currentSearchSuggestionResults,
-      CONSTS.LIMIT_OF_FETCH_SUGGESTION_SEARCH,
-      direction === "new" ? undefined : state.currentSearchSuggestionCursor
-    )
+  const cursor = await state.atp.fetchSuggestions(
+    state.currentSearchSuggestionResults,
+    CONSTS.LIMIT_OF_FETCH_SUGGESTION_SEARCH,
+    direction === "new" ? undefined : state.currentSearchSuggestionCursor
+  )
+  if (cursor instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(cursor, "mainState/fetchSuggestions")
+    return
+  }
+  state.currentSearchSuggestionCursor = cursor
 }
 
 // ポストスレッド
@@ -1410,30 +1470,44 @@ async function fetchPostThread () {
     // uri パラメータがない場合は handle と rkey パラメータがあるものとみなす
     const handle = state.currentQuery.handle as LocationQueryValue
     const rkey = state.currentQuery.rkey as LocationQueryValue
-    if (!handle || !rkey) return
+    if (!handle || !rkey) {
+      return
+    }
     const did = await state.atp.fetchDid(handle)
-    if (did instanceof Error) return
+    if (did instanceof Error) {
+      return
+    }
     uri = `at://${did}/app.bsky.feed.post/${rkey}`
   }
   state.currentPosts?.splice(0)
   const posts = await state.atp.fetchPostThread(uri, CONSTS.LIMIT_OF_FETCH_POST_THREAD) ?? []
-  if (posts) state.currentPosts = posts
+  if (posts instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(posts, "mainState/fetchPostThread")
+    return
+  }
+  state.currentPosts = posts
 }
 
 // フォロー中フィード
 
 async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
-  const cursor: undefined | false | string =
-    await state.atp.fetchTimeline(
-      state.timelineFeeds,
-      state.currentSetting.replyFolding,
-      state.currentSetting.repostFolding,
-      CONSTS.LIMIT_OF_FETCH_TIMELINE,
-      direction === "old" ? state.timelineCursor : middleCursor,
-      direction
-    )
-  if (cursor === false) state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
-  else if (cursor != null) state.timelineCursor = cursor
+  const cursor = await state.atp.fetchTimeline(
+    state.timelineFeeds,
+    state.currentSetting.replyFolding,
+    state.currentSetting.repostFolding,
+    CONSTS.LIMIT_OF_FETCH_TIMELINE,
+    direction === "old" ? state.timelineCursor : middleCursor,
+    direction
+  )
+  if (cursor instanceof Error) {
+    // TODO:
+    // state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
+    return
+  }
+  if (cursor != null) {
+    state.timelineCursor = cursor
+  }
 }
 
 // 検索
@@ -1555,13 +1629,9 @@ function removeFeedPreferenceByUri (type: TTPreferenceFeedType, uri: string): bo
 // リスト
 
 async function fetchCurrentList (listUri: string): Promise<boolean> {
-  const response: TTList | Error =
-    await state.atp.fetchList(listUri)
+  const response: TTList | Error = await state.atp.fetchList(listUri)
   if (response instanceof Error) {
-    state.openErrorPopup(
-      "errorApiFailed",
-      "main-state/fetchList"
-    )
+    state.openErrorPopup(response, "main-state/fetchList")
     return false
   }
   state.currentList = response

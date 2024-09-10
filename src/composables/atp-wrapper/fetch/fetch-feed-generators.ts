@@ -4,7 +4,9 @@ export default async function (
   this: TIAtpWrapper,
   feeds: Array<string>
 ): Promise<Error | Array<TTFeedGenerator>> {
-  if (this.agent == null) return Error("noAgentError")
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
   const query: AppBskyFeedGetFeedGenerators.QueryParams = { feeds }
   const response: AppBskyFeedGetFeedGenerators.Response =
     await (this.agent as AtpAgent).app.bsky.feed.getFeedGenerators(query)
