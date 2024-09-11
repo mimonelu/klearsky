@@ -18,7 +18,7 @@ import RepostButton from "@/components/buttons/RepostButton.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
-import VideoSource from "@/components/images/VideoSource.vue"
+import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
@@ -50,6 +50,7 @@ const state = reactive<{
   images: ComputedRef<Array<TTImage>>
   video: ComputedRef<undefined | TIVideo>
   videoAspectRatio: ComputedRef<string>
+  videoType?: string
   hasMedia: ComputedRef<boolean>
   displayMedia: ComputedRef<boolean>
   foldingMedia: boolean
@@ -139,6 +140,7 @@ const state = reactive<{
     )
     return `1 / ${computedHeight}`
   }),
+  videoType: undefined,
   hasMedia: computed((): boolean => state.images.length > 0 || state.video != null),
 
   // メディアの折り畳み
@@ -643,6 +645,10 @@ function openImagePopup (imageIndex: number) {
   mainState.imagePopupProps.display = true
 }
 
+function updateVideoType (videoType: string) {
+  state.videoType = videoType
+}
+
 // 自動翻訳
 async function translateText (forceTranslate: boolean) {
   if (props.post.__custom?.translatedText != null) {
@@ -1069,28 +1075,28 @@ function toggleOldestQuotedPostDisplay () {
                     v-if="state.video != null"
                     class="video-container"
                   >
-                    <video
-                      controls
-                      loading="lazy"
-                      loop
+                    <VideoPlayer
+                      :playlist="state.video.playlist"
+                      :did="post.author.did"
+                      :cid="state.video.cid"
                       :poster="state.video.thumbnail"
-                      :preload="mainState.currentSetting.videoPreload ?? 'metadata'"
-                      width="100%"
+                      :preload="mainState.currentSetting.videoPreload"
                       :style="{ 'aspect-ratio': state.videoAspectRatio }"
+                      @updateVideoType="updateVideoType"
                       @click.stop
-                    >
-                      <source
-                        :src="state.video.playlist"
-                        type="application/x-mpegURL"
-                      />
-                      <Suspense>
-                        <VideoSource
-                          :did="post.author.did"
-                          :cid="state.video.cid"
-                        />
-                      </Suspense>
-                    </video>
-                    <p v-if="state.video.alt">{{ state.video.alt }}</p>
+                    />
+                    <p
+                      v-if="state.videoType === 'blob'"
+                      class="video-container__message"
+                    >{{ $t("videoIsBlob") }}</p>
+                    <p
+                      v-else-if="state.videoType === 'none'"
+                      class="video-container__message"
+                    >{{ $t("videoIsNone") }}</p>
+                    <p
+                      v-if="state.video.alt"
+                      class="video-container__alt"
+                    >{{ state.video.alt }}</p>
                   </div>
                 </template>
               </template>
@@ -1825,13 +1831,30 @@ function toggleOldestQuotedPostDisplay () {
 }
 
 .video-container {
+  position: relative;
+
   & > video {
     background-color: var(--fg-color-0125);
     border-radius: var(--border-radius-middle);
     max-height: 75vh;
   }
 
-  & > p {
+  &__message {
+    background-color: var(--notice-color-075);
+    border-radius: var(--border-radius-middle);
+    color: white;
+    font-size: 0.75em;
+    font-weight: bold;
+    overflow: hidden;
+    padding: 0.25em 0.5em;
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    max-width: 100%;
+    white-space: nowrap;
+  }
+
+  &__alt {
     color: var(--fg-color-075);
     font-size: 0.875em;
     margin-top: 0.5em;

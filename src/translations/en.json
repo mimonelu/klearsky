@@ -430,6 +430,8 @@
   "imageAutoPlay": "Autoplay animated images",
 
   "videoPreload": "Video preload",
+  "videoIsBlob": "Non-streaming",
+  "videoIsNone": "Not playable",
 
   "linkcard": "Link card",
   "linkCardControl": "Link Card Control",

@@ -430,6 +430,8 @@
   "imageAutoPlay": "アニメーション画像の自動再生",
 
   "videoPreload": "動画の先読み",
+  "videoIsBlob": "ストリーミングできません",
+  "videoIsNone": "再生できません",
 
   "linkcard": "リンクカード",
   "linkCardControl": "リンクカードの制御",

@@ -2,7 +2,6 @@
 import { onMounted, reactive, ref, watch } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import VideoSource from "@/components/images/VideoSource.vue"
 
 const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
 
@@ -176,9 +175,7 @@ function getVideoSizes (): Array<undefined | {
                 width="100%"
                 height="100%"
               >
-                <Suspense>
-                  <VideoSource :src="preview" />
-                </Suspense>
+                <source :src="preview" />
               </video>
             </div>
 
