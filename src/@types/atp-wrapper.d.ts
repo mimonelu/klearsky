@@ -38,17 +38,17 @@ interface TIAtpWrapper {
   deleteAccount
     (this: TIAtpWrapper, did?: string)
   deleteChatDeclaration
-    (this: TIAtpWrapper, repo: string, uri: string): Promise<Error | void>
+    (this: TIAtpWrapper, repo: string, uri: string): Promise<Error | undefined>
   deleteChatMessage
-    (this: TIAtpWrapper, convoId: string, messageId: string): Promise<Error | boolean>
+    (this: TIAtpWrapper, convoId: string, messageId: string): Promise<Error | undefined>
   deleteFollow
     (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   deleteLike
     (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   deleteList
-    (this: TIAtpWrapper, listUri: string): Promise<Error | true>
+    (this: TIAtpWrapper, listUri: string): Promise<Error | undefined>
   deleteListUser
-    (this: TIAtpWrapper, userUri: string): Promise<Error | true>
+    (this: TIAtpWrapper, userUri: string): Promise<Error | undefined>
   deletePost
     (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   deleteRecord
@@ -60,7 +60,7 @@ interface TIAtpWrapper {
   deleteStarterPack
     (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   deleteThreadgate
-    (this: TIAtpWrapper, postUri: string): Promise<Error | boolean>
+    (this: TIAtpWrapper, postUri: string): Promise<Error | undefined>
   fetchActorLists
     (this: TIAtpWrapper, currentLists: Array<TTList>, actor: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchActorStarterPacks
@@ -186,13 +186,13 @@ interface TIAtpWrapper {
   hasLogin
     (this: TIAtpWrapper): boolean
   leaveChatConvo
-    (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
+    (this: TIAtpWrapper, convoId: string): Promise<Error | undefined>
   login
     (this: TIAtpWrapper, service?: string, identifier?: string, password?: string, authFactorToken?: string, onRefreshSession?: () => void): Promise<Error | undefined>
   logout
     (this: TIAtpWrapper)
   muteChatConvo
-    (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
+    (this: TIAtpWrapper, convoId: string): Promise<Error | undefined>
   refreshSession
     (this: TIAtpWrapper): Promise<Error | undefined>
   resetSession
@@ -204,7 +204,7 @@ interface TIAtpWrapper {
   signUp
     (this: TIAtpWrapper, service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<Error | undefined>
   unmuteChatConvo
-    (this: TIAtpWrapper, convoId: string): Promise<Error | boolean>
+    (this: TIAtpWrapper, convoId: string): Promise<Error | undefined>
   updateBlockToDisable
     (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   updateBlockToEnable
@@ -240,9 +240,9 @@ interface TIAtpWrapper {
   updateThreadgate
     (this: TIAtpWrapper, postUri: string, allowMention: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
   updateThreadMuteToDisable
-    (this: TIAtpWrapper, uri: string): Promise<Error | boolean>
+    (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   updateThreadMuteToEnable
-    (this: TIAtpWrapper, uri: string): Promise<Error | boolean>
+    (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   updateStarterPack
     (this: TIAtpWrapper, starterPack: TIStarterPack): Promise<Error | undefined>
 }

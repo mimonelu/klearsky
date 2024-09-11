@@ -12,8 +12,8 @@ export default async function (
   }
   const response: Error | AppBskyGraphGetStarterPack.Response =
     await (this.agent as AtpAgent).app.bsky.graph.getStarterPack(query)
-      .then((value: AppBskyGraphGetStarterPack.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getStarterPack]", response)
   if (response instanceof Error) {
     return response

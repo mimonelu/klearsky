@@ -17,8 +17,8 @@ export default async function (
     return logJson
   }
   const log = await Util.fetchWithTimeout(url)
-    .then((value: any) => value)
-    .catch((error: any) => error)
+    .then((value) => value)
+    .catch((error) => error)
   if (log instanceof Error) {
     return log
   }

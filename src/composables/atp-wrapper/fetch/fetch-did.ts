@@ -10,10 +10,14 @@ export default async function (
   const query: ComAtprotoIdentityResolveHandle.QueryParams = { handle }
   const response: Error | ComAtprotoIdentityResolveHandle.Response =
     await (this.agent as AtpAgent).resolveHandle(query)
-      .then((value: ComAtprotoIdentityResolveHandle.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/resolveHandle]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
   return response.data.did
 }

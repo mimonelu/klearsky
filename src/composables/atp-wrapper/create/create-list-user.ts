@@ -4,11 +4,13 @@ export default async function (
   this: TIAtpWrapper,
   listUri: string,
   userDid: string
-): Promise<string | Error> {
+): Promise<Error | string> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
-  if (this.session == null) return Error("noSessionError")
+  if (this.session == null) {
+    return Error("noSessionError")
+  }
   const createdAt = new Date().toISOString()
   const query: ComAtprotoRepoCreateRecord.InputSchema = {
     repo: this.session.did,
@@ -22,10 +24,14 @@ export default async function (
   }
   const response: Error | ComAtprotoRepoCreateRecord.Response =
     await (this.agent as AtpAgent).com.atproto.repo.createRecord(query)
-      .then((value: ComAtprotoRepoCreateRecord.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/createRecord]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
   return response.data.uri
 }

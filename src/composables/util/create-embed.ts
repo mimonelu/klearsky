@@ -106,8 +106,8 @@ export default async function (
 
   // 動画ファイルがない場合
   if (videoFileIndex === - 1) {
-    const fileBlobRefs: Array<null | Error | BlobRef> = await Promise.all(
-      params.medias?.map((file: File): Promise<null | Error | BlobRef> => {
+    const fileBlobRefs: Array<Error | null | BlobRef> = await Promise.all(
+      params.medias?.map((file: File): Promise<Error | null | BlobRef> => {
         return atp.createFileBlobRef({
           file,
           maxWidth: 2000,

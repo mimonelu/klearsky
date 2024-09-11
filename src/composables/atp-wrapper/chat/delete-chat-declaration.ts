@@ -5,7 +5,7 @@ export default async function (
   this: TIAtpWrapper,
   repo: string,
   uri: string
-): Promise<Error | void> {
+): Promise<Error | undefined> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
@@ -17,16 +17,15 @@ export default async function (
   if (this.proxies.chat != null) {
     headers["atproto-proxy"] = this.proxies.chat
   }
-  const response = await (this.agent as AtpAgent).api.chat.bsky.actor.declaration
-    .delete({
+  const response: Error | undefined =
+    await (this.agent as AtpAgent).api.chat.bsky.actor.declaration.delete({
       repo,
-      rkey
+      rkey,
     }, headers)
-      .then((value: void) => value)
-      .catch((error: Error) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/api.chat.bsky.actor.declaration.delete]", response)
   if (response instanceof Error) {
     return response
   }
-  return response
 }

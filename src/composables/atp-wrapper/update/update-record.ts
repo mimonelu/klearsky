@@ -29,8 +29,8 @@ export default async function (
   }
   const response: Error | ComAtprotoRepoPutRecord.Response =
     await (this.agent as AtpAgent).com.atproto.repo.putRecord(query)
-      .then((value: ComAtprotoRepoPutRecord.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/putRecord]", response)
   if (response instanceof Error) {
     return response

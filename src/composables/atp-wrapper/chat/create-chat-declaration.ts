@@ -12,10 +12,10 @@ export default async function (
     return Error("noSessionError")
   }
   const headers = { "atproto-proxy": "did:web:api.bsky.chat#bsky_chat" }
-  const response = await (this.agent as AtpAgent).api.chat.bsky.actor.declaration
-    .create({ repo }, { allowIncoming }, headers)
-      .then((value: TTCidUri) => value)
-      .catch((error: Error) => error)
+  const response: Error | TTCidUri =
+    await (this.agent as AtpAgent).api.chat.bsky.actor.declaration.create({ repo }, { allowIncoming }, headers)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/api.chat.bsky.actor.declaration.create]", response)
   if (response instanceof Error) {
     return response

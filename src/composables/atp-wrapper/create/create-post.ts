@@ -113,9 +113,11 @@ export default async function (
 
   const response: Error | TTCidUri =
     await (this.agent as AtpAgent).post(record)
-      .then((value: TTCidUri) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/post]", response)
-  if (response instanceof Error) return response
+  if (response instanceof Error) {
+    return response
+  }
   return response
 }

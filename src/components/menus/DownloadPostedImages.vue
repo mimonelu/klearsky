@@ -52,12 +52,12 @@ async function donwloadPostedImages () {
   })
   for (let i = 0; i < urls.length; i ++) {
     const url = urls[i]
-    const response =
+    const response: Error | Response =
       await Util.fetchWithTimeout(`https://mimonelu.net:4649/${url}`, {
         headers: { "user-agent": "Klearsky" },
       })
-        .then((response: any) => response)
-        .catch((error: any) => error)
+        .then((value) => value)
+        .catch((error) => error)
 
     // 進捗ポップアップのインクリメント
     mainState.progressPopupProps.value = (i / urls.length) * 100

@@ -24,20 +24,25 @@ async function fetchTrendTags () {
   }
   mainState.currentTrendTags.splice(0)
   state.loaderDisplay = true
-  const response = await Util.fetchWithTimeout(
+  const response: Error | Response = await Util.fetchWithTimeout(
     "https://skyfeed-trending-tags.b-cdn.net/xrpc/app.skyfeed.feed.getTrendingTags?minutes=60",
     { mode: "cors" },
   )
-    .then((value: Response) => value)
-    .catch((error: Error) => error)
+    .then((value) => value)
+    .catch((error) => error)
 
   // DoS攻撃対策
   await Util.wait(1000)
 
   console.log("[klearsky/app.skyfeed.feed.getTrendingTags]", response)
-  if (response instanceof Error || !response.ok) {
+  if (response instanceof Error) {
     state.loaderDisplay = false
     mainState.openErrorPopup(response, "TrendTags/fetchTrendTags")
+    return
+  }
+  if (!response.ok) {
+    state.loaderDisplay = false
+    mainState.openErrorPopup(Error("apiError"), "TrendTags/fetchTrendTags")
     return
   }
   const trendTags = await response.json()

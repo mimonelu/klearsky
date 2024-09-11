@@ -8,11 +8,7 @@ export default async function (
   password?: string,
   authFactorToken?: string,
   onRefreshSession?: () => void
-): Promise<undefined | Error> {
-  if (!window.navigator.onLine) {
-    return Error("offlineError")
-  }
-
+): Promise<Error | undefined> {
   const session = this.data.sessions[this.data.did]
   service ??= session?.__service ?? "https://bsky.social"
   if (!this.createAgent(service, session?.__pdsUrl)) {
@@ -52,8 +48,8 @@ export default async function (
     }
     const response: Error | ComAtprotoServerCreateSession.Response =
       await (this.agent as AtpAgent).login(optinos)
-        .then((value: ComAtprotoServerCreateSession.Response) => value)
-        .catch((error: any) => error)
+        .then((value) => value)
+        .catch((error) => error)
     console.log("[klearsky/login]", response)
     if (response instanceof Error) {
       // 2FAエラー - トークン要求

@@ -19,10 +19,7 @@ async function updatePinnedPost (uri?: string) {
   const pinned = await mainState.atp.updatePinnedPost(uri)
   mainState.centerLoaderDisplay = false
   if (pinned instanceof Error) {
-    mainState.openErrorPopup(
-      pinned.message,
-      "TogglePinnedPost/updatePinnedPost"
-    )
+    mainState.openErrorPopup(pinned, "TogglePinnedPost/updatePinnedPost")
     return
   }
   if (mainState.userProfile == null) {

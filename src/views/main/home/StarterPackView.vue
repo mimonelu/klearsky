@@ -44,10 +44,10 @@ onMounted(async () => {
 
   mainState.currentStarterPack = undefined
   mainState.centerLoaderDisplay = true
-  const starterPack: undefined | Error | TIStarterPack = await mainState.atp.fetchStarterPack(uri)
+  const starterPack: Error | TIStarterPack = await mainState.atp.fetchStarterPack(uri)
   mainState.centerLoaderDisplay = false
-  if (starterPack == null || starterPack instanceof Error) {
-    mainState.openErrorPopup("errorApiFailed", "StarterPackView/fetchStarterPack")
+  if (starterPack instanceof Error) {
+    mainState.openErrorPopup(starterPack, "StarterPackView/fetchStarterPack")
     return
   }
   mainState.currentStarterPack = starterPack

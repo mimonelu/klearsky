@@ -16,8 +16,8 @@ export default async function (
   }
   const response: Error | ComAtprotoRepoDescribeRepo.Response =
     await (this.agent as AtpAgent).com.atproto.repo.describeRepo(query)
-      .then((value: ComAtprotoRepoDescribeRepo.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/describeRepo]", response)
   if (response instanceof Error) {
     return response

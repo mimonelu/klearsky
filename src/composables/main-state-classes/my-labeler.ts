@@ -111,7 +111,7 @@ export default class MyLabeler {
   async fetchLabeler (did: string): Promise<undefined | TILabeler> {
     const response = await this.mainState.atp.fetchLabelers([did], true)
     if (response instanceof Error) {
-      this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/fetchLabeler")
+      this.mainState.openErrorPopup(response, "MyLabeler/fetchLabeler")
       return
     }
     return response[0]
@@ -127,7 +127,7 @@ export default class MyLabeler {
     const response = await this.mainState.atp.fetchLabelers(myLabelerDids, true)
     if (response instanceof Error) {
       // Sandbox PDS では存在しないためコメントアウト
-      // this.mainState.openErrorPopup("errorApiFailed", "MyLabeler/updateMyLabelers")
+      // this.mainState.openErrorPopup(response, "MyLabeler/updateMyLabelers")
 
       return false
     }

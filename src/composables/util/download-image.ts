@@ -1,6 +1,6 @@
 import Util from "@/composables/util"
 
-export default async (url: string): Promise<undefined | Error> => {
+export default async (url: string): Promise<Error | undefined> => {
   const anchorElement: HTMLAnchorElement = document.createElement("a")
   if (url.startsWith("blob:")) {
     const response = await Util.fetchWithTimeout(url)

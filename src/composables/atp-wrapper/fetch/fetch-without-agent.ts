@@ -25,8 +25,8 @@ export default async function (
   const url = `${host}/xrpc/${pathToXrpc}?${params}`
   const response: Error | Response =
     await Util.fetchWithTimeout(url)
-      .then((value: any) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log(`[klearsky/${host}/xrpc/${pathToXrpc}]`, response)
   if (response instanceof Error) {
     return response

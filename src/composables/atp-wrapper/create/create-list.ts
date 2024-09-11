@@ -6,11 +6,13 @@ export default async function (
   name: string,
   description?: string,
   avatarBlobRef?: BlobRef
-): Promise<string | Error> {
+): Promise<Error | string> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
-  if (this.session == null) return Error("noSessionError")
+  if (this.session == null) {
+    return Error("noSessionError")
+  }
   const createdAt = new Date().toISOString()
   const query: ComAtprotoRepoCreateRecord.InputSchema = {
     repo: this.session.did,
@@ -23,13 +25,19 @@ export default async function (
       purpose: `app.bsky.graph.defs#${purpose}`,
     },
   }
-  if (avatarBlobRef != null) (query.record as any).avatar = avatarBlobRef
+  if (avatarBlobRef != null) {
+    (query.record as any).avatar = avatarBlobRef
+  }
   const response: Error | ComAtprotoRepoCreateRecord.Response =
     await (this.agent as AtpAgent).com.atproto.repo.createRecord(query)
-      .then((value: ComAtprotoRepoCreateRecord.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/createRecord]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
   return response.data.uri
 }

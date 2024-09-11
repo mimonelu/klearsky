@@ -12,7 +12,7 @@ export default class {
   async fetchAll () {
     const account = this.mainState.atp.session?.did
     if (!account) return
-    let cursor: undefined | string | Error
+    let cursor: Error | undefined | string
 
     // ミュートリストを取得
     cursor = undefined

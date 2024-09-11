@@ -8,7 +8,7 @@ export default async function (
     return Error("noAgentError")
   }
   const query: AppBskyVideoUploadVideo.InputSchema = file
-  const response: AppBskyVideoUploadVideo.Response | Error =
+  const response: Error | AppBskyVideoUploadVideo.Response =
     await (this.agent as AtpAgent).app.bsky.video.uploadVideo(query)
       .then((value) => value)
       .catch((error) => error)

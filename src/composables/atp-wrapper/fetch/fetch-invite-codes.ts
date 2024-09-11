@@ -10,10 +10,14 @@ export default async function (this: TIAtpWrapper): Promise<Error | TTInviteCode
   }
   const response: Error | ComAtprotoServerGetAccountInviteCodes.Response =
     await (this.agent as AtpAgent).com.atproto.server.getAccountInviteCodes(query)
-      .then((value: ComAtprotoServerGetAccountInviteCodes.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getAccountInviteCodes]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
   return response.data.codes
 }

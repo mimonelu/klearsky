@@ -4,7 +4,7 @@ export default async function (
   actor: string,
   limit?: number,
   cursor?: string
-): Promise<undefined | string | Error> {
+): Promise<Error | undefined | string> {
   if (this.agent == null) {
     return Error("noAgentError")
   }

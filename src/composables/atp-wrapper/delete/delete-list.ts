@@ -4,21 +4,25 @@ import Util from "@/composables/util"
 export default async function (
   this: TIAtpWrapper,
   listUri: string
-): Promise<true | Error> {
+): Promise<Error | undefined> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
-  if (this.session == null) return Error("noSessionError")
+  if (this.session == null) {
+    return Error("noSessionError")
+  }
   const rkey = Util.getRkey(listUri)
   const query: ComAtprotoRepoDeleteRecord.InputSchema = {
     repo: this.session.did,
     collection: "app.bsky.graph.list",
     rkey,
   }
-  const response: undefined | Error =
+  const response: Error | undefined =
     await (this.agent as AtpAgent).com.atproto.repo.deleteRecord(query)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/deleteRecord]", response)
-  if (response instanceof Error) return response
-  return true
+  if (response instanceof Error) {
+    return response
+  }
 }

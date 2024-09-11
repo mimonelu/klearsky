@@ -14,7 +14,7 @@ const state = reactive<{
     if (uri == null) return
 
     // 現在のフィードジェネレーターをマイフィードジェネレーターとポピュラーフィードジェネレーターから検索
-    let generator: undefined | Error | TTFeedGenerator = [
+    let generator: Error | undefined | TTFeedGenerator = [
       ...mainState.myFeeds.feedGenerators,
       ...mainState.currentPopularFeedGenerators,
     ]
@@ -24,7 +24,7 @@ const state = reactive<{
     if (generator == null) {
       generator = await mainState.atp.fetchFeedGenerator(uri)
       if (generator instanceof Error) {
-        mainState.openErrorPopup("errorApiFailed", "FeedsTimelineView/fetchFeedGenerator")
+        mainState.openErrorPopup(generator, "FeedsTimelineView/fetchFeedGenerator")
         return
       }
     }

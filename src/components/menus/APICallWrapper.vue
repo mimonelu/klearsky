@@ -51,14 +51,14 @@ function close () {
 
 async function activate (type: string) {
   emit("close")
-  let response: undefined | Error | any = undefined
+  let response: Error | undefined | any = undefined
   mainState.loaderDisplay = true
   switch (type) {
     case "getRecommendedDidCredentials": {
       response = await (mainState.atp.agent as AtpAgent).com.atproto.identity
         .getRecommendedDidCredentials()
           .then((value) => value)
-          .catch((error: Error) => error)
+          .catch((error) => error)
       break
     }
     case "resolveHandle": {
@@ -68,7 +68,7 @@ async function activate (type: string) {
         { handle: props.user.handle }
       )
         .then((value) => value)
-        .catch((error: Error) => error)
+        .catch((error) => error)
       break
     }
     case "describeRepo": {
@@ -78,14 +78,14 @@ async function activate (type: string) {
         { repo: props.user.did }
       )
         .then((value) => value)
-        .catch((error: Error) => error)
+        .catch((error) => error)
       break
     }
     case "listMissingBlobs": {
       response = await (mainState.atp.agent as AtpAgent).com.atproto.repo
         .listMissingBlobs()
           .then((value) => value)
-          .catch((error: Error) => error)
+          .catch((error) => error)
       break
     }
     case "listRecords": {
@@ -98,14 +98,14 @@ async function activate (type: string) {
         }
       )
         .then((value) => value)
-        .catch((error: Error) => error)
+        .catch((error) => error)
       break
     }
     case "checkAccountStatus": {
       response = await (mainState.atp.agent as AtpAgent).com.atproto.server
         .checkAccountStatus()
           .then((value) => value)
-          .catch((error: Error) => error)
+          .catch((error) => error)
       break
     }
     /* NOTICE: 重量過多のためコメントアウト
@@ -116,7 +116,7 @@ async function activate (type: string) {
         { did: props.user.did }
       )
         .then((value) => value)
-        .catch((error: Error) => error)
+        .catch((error) => error)
       break
     }
     */
@@ -127,7 +127,7 @@ async function activate (type: string) {
         { did: props.user.did }
       )
         .then((value) => value)
-        .catch((error: Error) => error)
+        .catch((error) => error)
       break
     }
     case "getLatestCommit": {
@@ -137,7 +137,7 @@ async function activate (type: string) {
         { did: props.user.did }
       )
         .then((value) => value)
-        .catch((error: Error) => error)
+        .catch((error) => error)
       break
     }
     /* NOTICE: 重量過多のためコメントアウト
@@ -148,7 +148,7 @@ async function activate (type: string) {
         { did: props.user.did }
       )
         .then((value) => value)
-        .catch((error: Error) => error)
+        .catch((error) => error)
       break
     }
     */
@@ -159,7 +159,7 @@ async function activate (type: string) {
         { did: props.user.did }
       )
         .then((value) => value)
-        .catch((error: Error) => error)
+        .catch((error) => error)
       break
     }
     case "listRepos": {
@@ -169,7 +169,7 @@ async function activate (type: string) {
         { did: props.user.did }
       )
         .then((value) => value)
-        .catch((error: Error) => error)
+        .catch((error) => error)
       break
     }
   }

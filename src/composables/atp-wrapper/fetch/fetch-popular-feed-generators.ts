@@ -10,25 +10,36 @@ export default async function (
   if (this.agent == null) {
     return Error("noAgentError")
   }
-
   const query: AppBskyUnspeccedGetPopularFeedGenerators.QueryParams = {}
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
-  if (term != null) query.query = term
-
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
+  if (term != null) {
+    query.query = term
+  }
   const response: Error | AppBskyUnspeccedGetPopularFeedGenerators.Response =
     await (this.agent as AtpAgent).app.bsky.unspecced.getPopularFeedGenerators(query)
-      .then((value: AppBskyUnspeccedGetPopularFeedGenerators.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getPopularFeedGenerators]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
-  ;(response.data.feeds as Array<TTFeedGenerator>).forEach((newGenerator: TTFeedGenerator) => {
-    if (currentValues.every((currentGenerator: TTFeedGenerator) => {
-      return newGenerator.cid !== currentGenerator.cid
-    })) currentValues.push(newGenerator)
-  })
+  ;(response.data.feeds as Array<TTFeedGenerator>)
+    .forEach((newGenerator: TTFeedGenerator) => {
+      if (currentValues.every((currentGenerator: TTFeedGenerator) => {
+        return newGenerator.cid !== currentGenerator.cid
+      })) {
+        currentValues.push(newGenerator)
+      }
+    })
 
   return response.data.cursor
 }

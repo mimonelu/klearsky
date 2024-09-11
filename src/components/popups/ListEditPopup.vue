@@ -118,13 +118,13 @@ async function submitCallback () {
   Util.blurElement()
   if (props.mode !== "create" && props.list == null) return
   state.loaderDisplay = true
-  const avatarBlobRef: undefined | Error | BlobRef = await makeAvatarBlobRef()
+  const avatarBlobRef = await makeAvatarBlobRef()
   if (avatarBlobRef instanceof Error) {
     state.loaderDisplay = false
     mainState.openErrorPopup(avatarBlobRef, "ListEditPopup/makeAvatarBlobRef")
     return
   }
-  const result: undefined | string | Error = props.mode === "create"
+  const result: Error | undefined | string = props.mode === "create"
     ? await mainState.atp.createList(
       easyFormState.purpose,
       easyFormState.name,
@@ -139,7 +139,7 @@ async function submitCallback () {
     }, avatarBlobRef)
   if (result instanceof Error) {
     state.loaderDisplay = false
-    mainState.openErrorPopup("errorApiFailed", "ListEditPopup/updateList")
+    mainState.openErrorPopup(result, "ListEditPopup/updateList")
     return
   }
 
@@ -149,8 +149,7 @@ async function submitCallback () {
 
   // 作成データの取得
   // WANT: avatar を手動で構築してAPIをコールしないようにしたい
-  const response: TTList | Error =
-    await mainState.atp.fetchList(props.list?.uri ?? result as string)
+  const response = await mainState.atp.fetchList(props.list?.uri ?? result as string)
   state.loaderDisplay = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "ListEditPopup/fetchList")
@@ -158,7 +157,9 @@ async function submitCallback () {
   }
 
   // マイリストに items を追加
-  if (response.items == null) response.items = []
+  if (response.items == null) {
+    response.items = []
+  }
 
   // コールバック
   if (props.callback != null) {
@@ -168,7 +169,7 @@ async function submitCallback () {
   close()
 }
 
-async function makeAvatarBlobRef (): Promise<undefined | Error | BlobRef> {
+async function makeAvatarBlobRef (): Promise<Error | undefined | BlobRef> {
   // サムネイルの取り外しが指定されている場合はスキップ
   if (easyFormState.detachAvatar.includes(true)) {
     return

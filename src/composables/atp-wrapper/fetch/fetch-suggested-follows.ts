@@ -11,11 +11,15 @@ export default async function (
   const query: AppBskyGraphGetSuggestedFollowsByActor.QueryParams = { actor }
   const response: Error | AppBskyGraphGetSuggestedFollowsByActor.Response =
     await (this.agent as AtpAgent).app.bsky.graph.getSuggestedFollowsByActor(query)
-      .then((value: AppBskyGraphGetSuggestedFollowsByActor.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getSuggestedFollowsByActor]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
   ;(response.data.suggestions as Array<TTUser>)
     // ブロックユーザーをフィルタリング
     .filter((follow: TTUser) => {

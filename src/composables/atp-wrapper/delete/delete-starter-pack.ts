@@ -4,7 +4,7 @@ import Util from "@/composables/util"
 export default async function (
   this: TIAtpWrapper,
   uri: string
-): Promise<undefined | Error> {
+): Promise<Error | undefined> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
@@ -12,9 +12,9 @@ export default async function (
     repo: this.session?.did as string,
     rkey: Util.getRkey(uri),
   }
-  const response: undefined | Error =
+  const response: Error | undefined =
     await (this.agent as AtpAgent).app.bsky.graph.starterpack.delete(query)
-      .catch((error: any) => error)
+      .catch((error) => error)
   console.log("[klearsky/deleteStarterPack]", response)
   if (response instanceof Error) {
     return response

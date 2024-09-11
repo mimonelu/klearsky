@@ -215,7 +215,7 @@ async function signUp (service: string, email: string, identifier: string, passw
   const response = await state.atp.signUp(service, email, identifier, password, inviteCode)
   state.loaderDisplay = false
   if (response instanceof Error) {
-    state.openErrorPopup($t("getSessionError"), response)
+    state.openErrorPopup(response, $t("getSessionError"))
     return
   }
   state.loaderDisplay = true
@@ -237,12 +237,10 @@ async function autoLogin () {
       onRefreshSession
     )
     if (response instanceof Error) {
-      state.openErrorPopup(
-        typeof(response.message) === "string"
-          ? $t(response.message)
-          : response,
-        "MainView/autoLogin"
-      )
+      const errorMessage = typeof(response.message) === "string"
+        ? $t(response.message)
+        : response
+      state.openErrorPopup(errorMessage, "MainView/autoLogin")
       return
     }
     await processAfterLogin()
@@ -356,8 +354,8 @@ async function processAfterLogin () {
 
       // チャット一覧の更新
       state.myChat.updateConvosAll()
-        .then((result) => {
-          if (!result) {
+        .then((value) => {
+          if (!value) {
             return
           }
 
@@ -601,7 +599,7 @@ async function processPage (pageName?: null | string) {
   }
 }
 
-async function processProfilePage (account?: string): Promise<undefined | Error> {
+async function processProfilePage (account?: string): Promise<Error | undefined> {
   if (account == null) {
     return
   }

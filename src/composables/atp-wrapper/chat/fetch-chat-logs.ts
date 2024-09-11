@@ -24,13 +24,16 @@ export default async function (
   if (options.headers != null && this.proxies.chat != null) {
     options.headers["atproto-proxy"] = this.proxies.chat
   }
-  const response = await (this.agent as AtpAgent).api.chat.bsky.convo
-    .getLog(query, options)
-      .then((value: ChatBskyConvoGetLog.Response) => value)
-      .catch((error: Error) => error)
+  const response: Error | ChatBskyConvoGetLog.Response =
+    await (this.agent as AtpAgent).api.chat.bsky.convo.getLog(query, options)
+      .then((value) => value)
+      .catch((error) => error)
   if (response instanceof Error) {
     console.warn("[klearsky/api.chat.bsky.convo.getLog]", response)
     return response
+  }
+  if (!response.success) {
+    return Error("apiError")
   }
   return response.data.logs as unknown as Array<TIChatLog>
 }

@@ -9,14 +9,22 @@ export default async function (
     return Error("noAgentError")
   }
   const query: ComAtprotoTempFetchLabels.QueryParams = {}
-  if (since != null) query.since = since
-  if (limit != null) query.limit = limit
+  if (since != null) {
+    query.since = since
+  }
+  if (limit != null) {
+    query.limit = limit
+  }
   const response: Error | ComAtprotoTempFetchLabels.Response =
     await (this.agent as AtpAgent).api.com.atproto.temp.fetchLabels(query)
-      .then((value: ComAtprotoTempFetchLabels.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/fetchLabels]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
   return response.data.labels
 }

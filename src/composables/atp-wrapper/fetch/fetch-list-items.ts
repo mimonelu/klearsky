@@ -6,27 +6,38 @@ export default async function (
   list: string,
   limit?: number,
   cursor?: string
-): Promise<undefined | string | Error> {
+): Promise<Error | undefined | string> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
   const query: AppBskyGraphGetList.QueryParams = { list }
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
-
-  const response: AppBskyGraphGetList.Response =
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
+  const response: Error | AppBskyGraphGetList.Response =
     await (this.agent as AtpAgent).app.bsky.graph.getList(query)
-      .then((value: AppBskyGraphGetList.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getList(fetchListItems)]", response)
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   const newListItems: Array<TTListItem> =
     (response.data.items as unknown as Array<TTListItem>)
       .filter((listItem: TTListItem) => !currentListItems
         .some((current: TTListItem) => listItem.uri === current.uri))
-  if (cursor == null) currentListItems.unshift(...newListItems)
-  else currentListItems.push(...newListItems)
+  if (cursor == null) {
+    currentListItems.unshift(...newListItems)
+  } else {
+    currentListItems.push(...newListItems)
+  }
 
   return newListItems.length < (limit ?? 1) ? undefined : response.data.cursor
 }

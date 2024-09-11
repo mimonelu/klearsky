@@ -950,7 +950,7 @@ async function fetchNotifications (limit: number, direction: "new" | "old") {
   state.lastFetchNotificationsDate = new Date()
 
   if (result instanceof Error) {
-    state.openErrorPopup("errorApiFailed", "main-state/fetchNotifications")
+    state.openErrorPopup(result, "mainState/fetchNotifications")
     return
   }
   if (result.cursor == null) {
@@ -1140,14 +1140,11 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
   const response = await state.atp.updateProfile(profile)
   state.loaderDisplay = false
   if (response instanceof Error) {
-    state.openErrorPopup(
-      response,
-      "main-state/updateUserProfile"
-    )
+    state.openErrorPopup(response, "mainState/updateUserProfile")
   }
 }
 
-async function fetchCurrentProfile (did: string): Promise<undefined | Error> {
+async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
   state.currentProfile = null
   state.currentAuthorReposts.splice(0)
   state.currentAuthorLikes.splice(0)
@@ -1502,7 +1499,7 @@ async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
   )
   if (cursor instanceof Error) {
     // TODO:
-    // state.openErrorPopup("errorApiFailed", "main-state/fetchTimeline")
+    // state.openErrorPopup("errorApiFailed", "mainState/fetchTimeline")
     return
   }
   if (cursor != null) {
@@ -1533,10 +1530,7 @@ async function fetchSearchPosts (cursor?: string) {
       cursor
     )
   if (newCursor instanceof Error) {
-    state.openErrorPopup(
-      "errorApiFailed",
-      "main-state/fetchSearchPosts"
-    )
+    state.openErrorPopup(newCursor, "mainState/fetchSearchPosts")
     return
   }
   if (newCursor == null) return
@@ -1553,10 +1547,7 @@ async function fetchSearchFeeds (direction: "old" | "new") {
       state.currentSearchTerm
     )
   if (cursor instanceof Error) {
-    state.openErrorPopup(
-      "errorApiFailed",
-      "main-state/fetchSearchFeeds"
-    )
+    state.openErrorPopup(cursor, "mainState/fetchSearchFeeds")
   } else if (cursor != null) {
     state.currentSearchFeedsCursor = cursor
   }
@@ -1569,19 +1560,18 @@ async function fetchCustomFeeds (direction: TTDirection, middleCursor?: string) 
     state.currentCustomFeeds.splice(0)
     state.currentCustomFeedsCursor = undefined
   }
-  const cursor: undefined | string | Error =
-    await state.atp.fetchCustomFeeds(
-      state.currentCustomFeeds,
-      state.currentQuery.feed,
-      state.currentSetting.replyFolding,
-      state.currentSetting.repostFolding,
-      CONSTS.LIMIT_OF_FETCH_FEEDS,
-      direction === "old" ? state.currentCustomFeedsCursor : middleCursor,
-      direction,
-      (feedUri: any): boolean => feedUri === state.currentQuery.feed,
-    )
+  const cursor = await state.atp.fetchCustomFeeds(
+    state.currentCustomFeeds,
+    state.currentQuery.feed,
+    state.currentSetting.replyFolding,
+    state.currentSetting.repostFolding,
+    CONSTS.LIMIT_OF_FETCH_FEEDS,
+    direction === "old" ? state.currentCustomFeedsCursor : middleCursor,
+    direction,
+    (feedUri: any): boolean => feedUri === state.currentQuery.feed,
+  )
   if (cursor instanceof Error) {
-    state.openErrorPopup(cursor, "main-state/fetchCustomFeeds")
+    state.openErrorPopup(cursor, "mainState/fetchCustomFeeds")
   } else if (cursor != null) {
     state.currentCustomFeedsCursor = cursor
   }
@@ -1596,10 +1586,7 @@ async function fetchPopularFeedGenerators (direction: "old" | "new") {
       direction === "old" ? state.currentPopularFeedGeneratorsCursor : undefined
     )
   if (cursor instanceof Error) {
-    state.openErrorPopup(
-      "errorApiFailed",
-      "main-state/fetchPopularFeedGenerators"
-    )
+    state.openErrorPopup(cursor, "mainState/fetchPopularFeedGenerators")
   } else if (cursor != null) {
     state.currentPopularFeedGeneratorsCursor = cursor
   }
@@ -1629,9 +1616,9 @@ function removeFeedPreferenceByUri (type: TTPreferenceFeedType, uri: string): bo
 // リスト
 
 async function fetchCurrentList (listUri: string): Promise<boolean> {
-  const response: TTList | Error = await state.atp.fetchList(listUri)
+  const response = await state.atp.fetchList(listUri)
   if (response instanceof Error) {
-    state.openErrorPopup(response, "main-state/fetchList")
+    state.openErrorPopup(response, "mainState/fetchList")
     return false
   }
   state.currentList = response
@@ -1640,18 +1627,14 @@ async function fetchCurrentList (listUri: string): Promise<boolean> {
 
 async function fetchCurrentListItems (direction: "old" | "new"): Promise<boolean> {
   if (state.currentList == null) return false
-  const cursor: undefined | string | Error =
-    await state.atp.fetchListItems(
-      state.currentListItems,
-      state.currentList.uri,
-      CONSTS.LIMIT_OF_FETCH_LIST_ITEMS,
-      direction === "old" ? state.currentListItemsCursor : undefined
-    )
+  const cursor = await state.atp.fetchListItems(
+    state.currentListItems,
+    state.currentList.uri,
+    CONSTS.LIMIT_OF_FETCH_LIST_ITEMS,
+    direction === "old" ? state.currentListItemsCursor : undefined
+  )
   if (cursor instanceof Error) {
-    state.openErrorPopup(
-      "errorApiFailed",
-      "main-state/fetchListItems"
-    )
+    state.openErrorPopup(cursor, "mainState/fetchListItems")
     return false
   }
   if (cursor != null) {
@@ -1662,22 +1645,18 @@ async function fetchCurrentListItems (direction: "old" | "new"): Promise<boolean
 
 async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: string): Promise<boolean> {
   if (state.currentList == null) return false
-  const cursor: undefined | string | Error =
-    await state.atp.fetchListFeeds(
-      state.currentListFeeds,
-      state.currentList.uri,
-      state.currentSetting.replyFolding,
-      state.currentSetting.repostFolding,
-      CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
-      direction === "old" ? state.currentListFeedsCursor : middleCursor,
-      direction,
-      (listUri: any): boolean => listUri === state.currentList?.uri,
-    )
+  const cursor = await state.atp.fetchListFeeds(
+    state.currentListFeeds,
+    state.currentList.uri,
+    state.currentSetting.replyFolding,
+    state.currentSetting.repostFolding,
+    CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
+    direction === "old" ? state.currentListFeedsCursor : middleCursor,
+    direction,
+    (listUri: any): boolean => listUri === state.currentList?.uri,
+  )
   if (cursor instanceof Error) {
-    state.openErrorPopup(
-      "errorApiFailed",
-      "main-state/fetchListFeeds"
-    )
+    state.openErrorPopup(cursor, "mainState/fetchListFeeds")
     return false
   }
   if (cursor != null) {
@@ -1695,22 +1674,18 @@ async function fetchCurrentStarterPackListFeeds (
   if (state.currentStarterPack?.list == null) {
     return false
   }
-  const cursor: undefined | string | Error =
-    await state.atp.fetchListFeeds(
-      state.currentStarterPackListFeeds,
-      state.currentStarterPack.list.uri,
-      state.currentSetting.replyFolding,
-      state.currentSetting.repostFolding,
-      CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
-      direction === "old" ? state.currentStarterPackListFeedsCursor : middleCursor,
-      direction,
-      (listUri: any): boolean => listUri === state.currentStarterPack?.list?.uri,
-    )
+  const cursor = await state.atp.fetchListFeeds(
+    state.currentStarterPackListFeeds,
+    state.currentStarterPack.list.uri,
+    state.currentSetting.replyFolding,
+    state.currentSetting.repostFolding,
+    CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
+    direction === "old" ? state.currentStarterPackListFeedsCursor : middleCursor,
+    direction,
+    (listUri: any): boolean => listUri === state.currentStarterPack?.list?.uri,
+  )
   if (cursor instanceof Error) {
-    state.openErrorPopup(
-      "errorApiFailed",
-      "main-state/fetchCurrentStarterPackListFeeds"
-    )
+    state.openErrorPopup(cursor, "mainState/fetchCurrentStarterPackListFeeds")
     return false
   }
   if (cursor != null) {

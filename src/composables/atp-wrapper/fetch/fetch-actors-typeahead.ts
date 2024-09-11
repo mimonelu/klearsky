@@ -13,10 +13,14 @@ export default async function (
   if (limit != null) query.limit = limit
   const response: AppBskyActorSearchActorsTypeahead.Response =
     await (this.agent as AtpAgent).searchActorsTypeahead(query)
-      .then((value: AppBskyActorSearchActorsTypeahead.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/searchActorsTypeahead]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
   return response.data.actors as Array<TTUser>
 }

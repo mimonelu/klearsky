@@ -7,10 +7,7 @@ export default async function (
   handle: string,
   password: string,
   inviteCode?: string
-): Promise<undefined | Error> {
-  if (!window.navigator.onLine) {
-    return Error("offlineError")
-  }
+): Promise<Error | undefined> {
   if (!this.createAgent(service)) {
     return Error("noAgentError")
   }
@@ -25,8 +22,10 @@ export default async function (
   }
   const response: Error | ComAtprotoServerCreateAccount.Response =
     await (this.agent as AtpAgent).createAccount(query)
-      .then((value: ComAtprotoServerCreateAccount.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/signUp]", response)
-  return response instanceof Error ? response : undefined
+  if (response instanceof Error) {
+    return response
+  }
 }

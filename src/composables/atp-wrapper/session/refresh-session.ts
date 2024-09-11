@@ -1,7 +1,7 @@
 // import type { AtpAgent, ComAtprotoServerRefreshSession } from "@atproto/api"
 import Util from "@/composables/util"
 
-export default async function (this: TIAtpWrapper): Promise<undefined | Error> {
+export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
   // TODO: 本来は @atproto/api の `com.atproto.server.refreshSession` を使用するべきだが、
   //       不明なエラーが発生するため直接サーバを叩いている。原因がわかり次第差し替えること
   const session = this.data.sessions[this.data.did]
@@ -21,9 +21,10 @@ export default async function (this: TIAtpWrapper): Promise<undefined | Error> {
     method: "POST",
     headers: { "Authorization": `Bearer ${session.refreshJwt}` },
   }
-  const response: Response = await Util.fetchWithTimeout(url, request)
-    .then((response: Response) => response)
-    .catch((error: any) => error)
+  const response: Error | Response =
+    await Util.fetchWithTimeout(url, request)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/refreshSession]", response)
   if (response instanceof Error) {
     return Error("refreshSessionError")
@@ -32,8 +33,8 @@ export default async function (this: TIAtpWrapper): Promise<undefined | Error> {
     return Error("refreshSessionError")
   }
   const json: Error | any = await response.json()
-    .then((response: any) => response)
-    .catch((error: any) => error)
+    .then((value) => value)
+    .catch((error) => error)
   if (json instanceof Error) {
     return Error("refreshSessionError")
   }
@@ -56,10 +57,10 @@ export default async function (this: TIAtpWrapper): Promise<undefined | Error> {
   if (this.session == null) {
     return Error("noSessionError")
   }
-  const response: undefined | Error =
+  const response: Error | undefined =
     await (this.agent as AtpAgent).refreshSession()
       .then(() => {})
-      .catch((error: any) => error)
+      .catch((error) => error)
   console.log("[klearsky/refreshSession]", response)
   if (response instanceof Error) {
     return Error("refreshSessionError")

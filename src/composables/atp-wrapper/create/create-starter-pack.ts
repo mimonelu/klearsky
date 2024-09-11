@@ -13,10 +13,10 @@ export default async function (
     repo: this.session?.did as string,
     collection: "app.bsky.graph.starterpack",
   }
-  const response: ComAtprotoRepoCreateRecord.Response | Error =
+  const response: Error | ComAtprotoRepoCreateRecord.Response =
     await (this.agent as AtpAgent).com.atproto.repo.createRecord(query)
-      .then((value: ComAtprotoRepoCreateRecord.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/createStarterPack]", response)
   if (response instanceof Error) {
     return response

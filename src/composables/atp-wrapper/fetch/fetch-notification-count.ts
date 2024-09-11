@@ -8,8 +8,8 @@ export default async function (this: TIAtpWrapper): Promise<Error | number> {
     await (this.agent as AtpAgent).countUnreadNotifications()
       .then((value) => value)
       .catch((error) => error)
-  // console.log("[klearsky/countUnreadNotifications]", response)
   if (response instanceof Error) {
+    console.warn("[klearsky/countUnreadNotifications]", response)
     return response
   }
   if (!response.success) {

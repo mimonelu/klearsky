@@ -189,9 +189,9 @@ async function update () {
   // Threadgate が設定済みの場合は削除
   if (props.postThreadgate != null) {
     const responseOfDelete = await mainState.atp.deleteThreadgate(props.postUri)
-    if (!responseOfDelete || responseOfDelete instanceof Error) {
+    if (responseOfDelete instanceof Error) {
       state.loaderDisplay = false
-      mainState.openErrorPopup("errorApiFailed", responseOfDelete)
+      mainState.openErrorPopup(responseOfDelete, "ReactionControlPopup/update")
       return
     }
   }
@@ -215,13 +215,14 @@ async function update () {
   )
   state.loaderDisplay = false
   if (responseOfUpdate instanceof Error) {
-    mainState.openErrorPopup("errorApiFailed", responseOfUpdate)
-  } else {
-    close({
-      threadgateAction: easyFormState.threadgateAction,
-      updated: true,
-    })
+    mainState.openErrorPopup(responseOfUpdate, "ReactionControlPopup/update")
+    return
   }
+
+  close({
+    threadgateAction: easyFormState.threadgateAction,
+    updated: true,
+  })
 }
 </script>
 

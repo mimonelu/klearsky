@@ -4,7 +4,7 @@ import Util from "@/composables/util"
 export default async function (
   this: TIAtpWrapper,
   starterPack: TIStarterPack,
-): Promise<undefined | Error> {
+): Promise<Error | undefined> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
@@ -24,10 +24,10 @@ export default async function (
       updatedAt: (new Date()).toISOString(),
     },
   }
-  const response: ComAtprotoRepoPutRecord.Response | Error =
+  const response: Error | ComAtprotoRepoPutRecord.Response =
     await (this.agent as AtpAgent).com.atproto.repo.putRecord(query)
-      .then((value: ComAtprotoRepoPutRecord.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/updateStarterPack]", response)
   if (response instanceof Error) {
     return response

@@ -23,8 +23,8 @@ export default async function (
       handle: session.handle,
       status: session.status,
     })
-      .then((value: ComAtprotoServerGetSession.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/resumeSession]", response)
   if (response instanceof Error) {
     return Error("resumeSessionError")

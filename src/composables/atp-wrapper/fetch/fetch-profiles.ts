@@ -9,8 +9,8 @@ export default async function (
   }
   const response: Error | AppBskyActorGetProfiles.Response =
     await (this.agent as AtpAgent).getProfiles({ actors })
-      .then((value: AppBskyActorGetProfiles.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getProfiles]", response)
   if (response instanceof Error) {
     return response

@@ -159,7 +159,7 @@ async function submitCallback () {
     const result = await mainState.atp.createStarterPack(query)
     if (result instanceof Error) {
       state.loaderDisplay = false
-      mainState.openErrorPopup("errorApiFailed", "StarterPackEditPopup/createStarterPack")
+      mainState.openErrorPopup(result, "StarterPackEditPopup/createStarterPack")
       return
     }
 
@@ -171,7 +171,7 @@ async function submitCallback () {
     const newStarterPack: Error | TIStarterPack =
       await mainState.atp.fetchStarterPack(result.uri)
     if (newStarterPack instanceof Error) {
-      mainState.openErrorPopup("errorApiFailed", "StarterPackEditPopup/fetchStarterPack")
+      mainState.openErrorPopup(newStarterPack, "StarterPackEditPopup/fetchStarterPack")
       return
     }
 
@@ -180,10 +180,10 @@ async function submitCallback () {
 
   // 更新
   } else if (props.mode === "edit") {
-    const result: undefined | Error = await mainState.atp.updateStarterPack(query)
+    const result = await mainState.atp.updateStarterPack(query)
     if (result instanceof Error) {
       state.loaderDisplay = false
-      mainState.openErrorPopup("errorApiFailed", "StarterPackEditPopup/updateStarterPack")
+      mainState.openErrorPopup(result, "StarterPackEditPopup/updateStarterPack")
       return
     }
     if (props.starterPack == null) {
@@ -198,7 +198,7 @@ async function submitCallback () {
     const newStarterPack: Error | TIStarterPack =
       await mainState.atp.fetchStarterPack(props.starterPack.uri)
     if (newStarterPack instanceof Error) {
-      mainState.openErrorPopup("errorApiFailed", "StarterPackEditPopup/fetchStarterPack")
+      mainState.openErrorPopup(newStarterPack, "StarterPackEditPopup/fetchStarterPack")
       return
     }
 

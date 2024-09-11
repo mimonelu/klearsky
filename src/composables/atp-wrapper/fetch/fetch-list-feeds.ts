@@ -15,21 +15,29 @@ export default async function (
   if (this.agent == null) {
     return Error("noAgentError")
   }
-
   const query: AppBskyFeedGetListFeed.QueryParams = { list }
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
-
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
   const response: Error | AppBskyFeedGetListFeed.Response =
     await (this.agent as AtpAgent).app.bsky.feed.getListFeed(query)
-      .then((value: AppBskyFeedGetListFeed.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getListFeed]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   // 現在のフィードと異なるフィードかどうかの判定
-  if (checkIdentity != null && !checkIdentity(list)) return
+  if (checkIdentity != null && !checkIdentity(list)) {
+    return
+  }
 
   // 折り畳みプロパティをインジェクト
   Util.injectFoldingToFeeds(
@@ -50,10 +58,14 @@ export default async function (
   )
   if (!isFirstFetch && isAllNew && (cursor == null || direction === "middle")) {
     const initialFeed = response.data.feed[0]
-    if (initialFeed != null) initialFeed.__cursor = response.data.cursor
+    if (initialFeed != null) {
+      initialFeed.__cursor = response.data.cursor
+    }
   }
 
-  if (direction !== "old" && !isFirstFetch) return
+  if (direction !== "old" && !isFirstFetch) {
+    return
+  }
 
   return response.data.cursor
 }

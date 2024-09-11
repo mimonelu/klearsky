@@ -10,43 +10,51 @@ export default async function (
   const query: AppBskyFeedGetFeedGenerators.QueryParams = { feeds }
   const response: AppBskyFeedGetFeedGenerators.Response =
     await (this.agent as AtpAgent).app.bsky.feed.getFeedGenerators(query)
-      .then((value: AppBskyFeedGetFeedGenerators.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getFeedGenerators]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   // ジェネレーターのソート
   const generators: Array<TTFeedGenerator> = []
   feeds.forEach((uri: string) => {
     const currentGenerator = (response.data.feeds as Array<TTFeedGenerator>)
       .find((generator: TTFeedGenerator) => generator.uri === uri)
-    if (currentGenerator != null) generators.push(currentGenerator)
+    if (currentGenerator != null) {
+      generators.push(currentGenerator)
+    }
 
     // TODO: カスタムフィードのURIではない場合（リストフィードなど）は空の TTFeedGenerator を作成
     //       リスト対応後に再実装すること
-    else generators.push({
-      avatar: "",
-      cid: "",
-      creator: {
-        avatar: undefined,
-        description: undefined,
-        did: "",
-        displayName: "",
-        handle: "",
-        labels: undefined,
-        viewer: {
-          muted: false,
+    else {
+      generators.push({
+        avatar: "",
+        cid: "",
+        creator: {
+          avatar: undefined,
+          description: undefined,
+          did: "",
+          displayName: "",
+          handle: "",
+          labels: undefined,
+          viewer: {
+            muted: false,
+          },
         },
-      },
-      description: uri,
-      did: "",
-      displayName: "(Unknown feed)",
-      indexedAt: new Date().toISOString(),
-      likeCount: 0,
-      uri,
-      viewer: {},
-    })
+        description: uri,
+        did: "",
+        displayName: "(Unknown feed)",
+        indexedAt: new Date().toISOString(),
+        likeCount: 0,
+        uri,
+        viewer: {},
+      })
+    }
   })
 
   return generators

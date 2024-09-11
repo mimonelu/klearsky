@@ -49,7 +49,7 @@ async function fetchContinuousResults () {
     mainState.currentQuoteRepostsCursor
   )
   if (cursor instanceof Error) {
-    mainState.openErrorPopup("errorApiFailed", cursor)
+    mainState.openErrorPopup(cursor, "QuoteRepostsPopup/fetchContinuousResults")
     return
   }
   if (cursor != null) {

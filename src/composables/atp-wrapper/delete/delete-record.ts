@@ -25,8 +25,8 @@ export default async function (
   }
   const response: Error | ComAtprotoRepoDeleteRecord.Response =
     await (this.agent as AtpAgent).com.atproto.repo.deleteRecord(query)
-      .then((value: ComAtprotoRepoDeleteRecord.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/deleteRecord]", response)
   if (response instanceof Error) {
     return response

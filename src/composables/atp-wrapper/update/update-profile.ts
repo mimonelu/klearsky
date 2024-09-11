@@ -3,7 +3,7 @@ import type { AppBskyActorProfile, BlobRef, AtpAgent } from "@atproto/api"
 export default async function (
   this: TIAtpWrapper,
   params: TTUpdateProfileParams
-): Promise<undefined | Error> {
+): Promise<Error | undefined> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
@@ -36,7 +36,7 @@ export default async function (
     }
 
   // 画像処理
-  const fileBlobRefs: Array<null | Error | BlobRef> = await Promise.all([
+  const fileBlobRefs: Array<Error | null | BlobRef> = await Promise.all([
     params.avatar != null && params.avatar[0] != null
       ? this.createFileBlobRef({
           file: params.avatar[0],

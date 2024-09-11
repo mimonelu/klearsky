@@ -9,13 +9,13 @@ export default async function (
     await Util.fetchWithTimeout(`https://cardyb.bsky.app/v1/extract?url=${uri}`, {
       headers: { "user-agent": "Klearsky" },
     })
-    .then((response: Response) => {
-      if (!response.ok) {
+    .then((value) => {
+      if (!value.ok) {
         return Error("fetchOgpError")
       }
-      return response.json()
+      return value.json()
     })
-    .catch((error: any) => error)
+    .catch((error) => error)
   console.log("[klearsky/parse-ogp", response)
 
   // エラーをスルー
@@ -55,13 +55,13 @@ export default async function (
       await Util.fetchWithTimeout(imageFetchUrl, {
         headers: { "user-agent": "Klearsky" },
       })
-      .then((response: Response) => {
-        if (!response.ok) {
+      .then((value) => {
+        if (!value.ok) {
           return Error("fetchOgpImageError")
         }
-        return response
+        return value
       })
-      .catch((error: any) => error)
+      .catch((error) => error)
     if (response instanceof Error) {
       // エラーをスルー
       return external

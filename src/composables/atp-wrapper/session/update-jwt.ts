@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode"
 export default async function (
   this: TIAtpWrapper,
   onRefreshSession?: () => void
-): Promise<undefined | Error> {
+): Promise<Error | undefined> {
   const session = this.data.sessions[this.data.did]
   if (session == null) {
     return Error("noSessionError")

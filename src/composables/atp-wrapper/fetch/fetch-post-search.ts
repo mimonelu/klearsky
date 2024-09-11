@@ -19,11 +19,14 @@ export default async function (
   if (cursor != null) {
     query.cursor = cursor
   }
-  const response: AppBskyFeedSearchPosts.Response =
+  const response: Error | AppBskyFeedSearchPosts.Response =
     await (this.agent as AtpAgent).app.bsky.feed.searchPosts(query)
-      .then((value: AppBskyFeedSearchPosts.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/fetchPostSearch]", response)
+  if (response instanceof Error) {
+    return response
+  }
   if (!response.success) {
     return Error("apiError")
   }

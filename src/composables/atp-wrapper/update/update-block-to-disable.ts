@@ -4,7 +4,7 @@ import Util from "@/composables/util"
 export default async function (
   this: TIAtpWrapper,
   uri: string
-): Promise<undefined | Error> {
+): Promise<Error | undefined> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
@@ -13,8 +13,9 @@ export default async function (
     repo: this.session?.did as string,
     rkey,
   }
-  const response: Error | void =
+  const response: Error | undefined =
     await (this.agent as AtpAgent).app.bsky.graph.block.delete(query)
+      .then((value) => value)
       .catch((error) => error)
   if (response instanceof Error) {
     return response

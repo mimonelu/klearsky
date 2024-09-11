@@ -2,7 +2,7 @@ import Util from "@/composables/util"
 
 export default async function (this: TIAtpWrapper, starterPack: TIStarterPack): Promise<Error | string> {
   const rkey = Util.getRkey(starterPack.uri)
-  const response = await Util.fetchWithTimeout("https://go.bsky.app/link", {
+  const response: Error | Response = await Util.fetchWithTimeout("https://go.bsky.app/link", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -12,8 +12,8 @@ export default async function (this: TIAtpWrapper, starterPack: TIStarterPack): 
     }),
     mode: "cors",
   })
-    .then((value: Response) => value)
-    .catch((error: Error) => error)
+    .then((value) => value)
+    .catch((error) => error)
 
   // DoS攻撃対策
   await Util.wait(1000)

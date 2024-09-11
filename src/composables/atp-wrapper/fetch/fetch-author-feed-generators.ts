@@ -15,18 +15,27 @@ export default async function (
   if (cursor != null) query.cursor = cursor
   const response: Error | AppBskyFeedGetActorFeeds.Response =
     await (this.agent as AtpAgent).app.bsky.feed.getActorFeeds(query)
-      .then((value: AppBskyFeedGetActorFeeds.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getActorFeeds]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
 
   const newGenerators = (response.data.feeds as Array<TTFeedGenerator>)
-    .filter((feed: TTFeedGenerator) =>
-      !generators.some((generator: TTFeedGenerator) => generator.cid === feed.cid)
-    )
-  if (cursor == null) generators.unshift(...newGenerators)
-  else generators.push(...newGenerators)
+    .filter((feed: TTFeedGenerator) => {
+      return !generators.some((generator: TTFeedGenerator) => {
+        return generator.cid === feed.cid
+      })
+    })
+  if (cursor == null) {
+    generators.unshift(...newGenerators)
+  } else {
+    generators.push(...newGenerators)
+  }
 
   return response.data.cursor
 }

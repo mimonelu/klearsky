@@ -58,10 +58,14 @@ async function toggleThreadMute () {
   const response = state.rootPost?.viewer?.threadMuted
     ? await mainState.atp.updateThreadMuteToDisable(state.rootPost?.uri)
     : await mainState.atp.updateThreadMuteToEnable(state.rootPost?.uri)
-  if (response && state.rootPost.viewer != null) {
+  mainState.centerLoaderDisplay = false
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "PostView/toggleThreadMute")
+    return
+  }
+  if (state.rootPost.viewer != null) {
     state.rootPost.viewer.threadMuted = !state.rootPost.viewer.threadMuted
   }
-  mainState.centerLoaderDisplay = false
 }
 </script>
 

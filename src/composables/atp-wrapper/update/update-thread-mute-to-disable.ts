@@ -3,18 +3,20 @@ import type { AppBskyGraphUnmuteThread, AtpAgent } from "@atproto/api"
 export default async function (
   this: TIAtpWrapper,
   uri: string
-): Promise<Error | boolean> {
+): Promise<Error | undefined> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
   const query: AppBskyGraphUnmuteThread.InputSchema = { root: uri }
   const response: Error | AppBskyGraphUnmuteThread.Response =
     await (this.agent as AtpAgent).app.bsky.graph.unmuteThread(query)
-      .then((value: AppBskyGraphUnmuteThread.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/unmuteThread]", response)
   if (response instanceof Error) {
     return response
   }
-  return response.success
+  if (!response.success) {
+    return Error("apiError")
+  }
 }

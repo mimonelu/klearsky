@@ -7,7 +7,7 @@ export default async function (
   if (this.agent == null) {
     return Error("noAgentError")
   }
-  const response: Error | void =
+  const response: Error | undefined =
     await (this.agent as AtpAgent).deleteLike(uri)
       .then((value) => value)
       .catch((error) => error)

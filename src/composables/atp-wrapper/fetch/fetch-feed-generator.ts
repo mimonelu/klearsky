@@ -10,10 +10,14 @@ export default async function (
   const query: AppBskyFeedGetFeedGenerator.QueryParams = { feed }
   const response: AppBskyFeedGetFeedGenerator.Response =
     await (this.agent as AtpAgent).app.bsky.feed.getFeedGenerator(query)
-      .then((value: AppBskyFeedGetFeedGenerator.Response) => value)
-      .catch((error: any) => error)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getFeedGenerator]", response)
-  if (response instanceof Error) return response
-  if (!response.success) return Error("apiError")
+  if (response instanceof Error) {
+    return response
+  }
+  if (!response.success) {
+    return Error("apiError")
+  }
   return response.data.view as TTFeedGenerator
 }

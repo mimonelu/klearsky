@@ -24,7 +24,7 @@ export default async function (
   }
 
   let mimeType = ""
-  let blob: undefined | Error | Blob
+  let blob: Error | undefined | Blob
   const fileSizeMb = params.file.size / 1024 / 1024
   const imageMimeType = convertMapForCompress[params.file.type]
 

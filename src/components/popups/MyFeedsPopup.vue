@@ -27,7 +27,7 @@ async function close () {
     const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
     state.popupLoaderDisplay = false
     if (result instanceof Error) {
-      mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/close")
+      mainState.openErrorPopup(result, "MyFeedsPopup/close")
       emit("close")
       return
     }
