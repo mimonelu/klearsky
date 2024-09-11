@@ -221,7 +221,7 @@ type MainState = {
   settingsPopoverSelector: string
   settingsPopoverDirection: "toRight" | "toUp"
   openSettingsPopover: Function
-  closeSettingsPopover: Function
+  closeSettingsPopover: () => void
 
   // ポップオーバー - プロフィールポップオーバー
   profilePopoverProps: {
@@ -232,7 +232,7 @@ type MainState = {
   profilePopoverSelector?: string | HTMLElement
   profilePopoverFrom?: string
   openProfilePopover: Function
-  closeProfilePopover: Function
+  closeProfilePopover: () => void
 
   // ポップオーバー - ポストポップオーバー
   postPopoverProps: {
@@ -242,7 +242,7 @@ type MainState = {
   postPopoverSelector?: string | HTMLElement
   postPopoverCallback?: (type: "deletePost" | "updatePost") => Promise<void>
   openPostPopover: Function
-  closePostPopover: Function
+  closePostPopover: () => void
 
   // ポップオーバー - フィードカードポップオーバー
   feedCardPopoverProps: {
@@ -251,7 +251,7 @@ type MainState = {
   }
   feedCardPopoverSelector?: string | HTMLElement
   openFeedCardPopover: Function
-  closeFeedCardPopover: Function
+  closeFeedCardPopover: () => void
 
   // ポップオーバー - リストカードポップオーバー
   listCardPopoverProps: {
@@ -261,7 +261,7 @@ type MainState = {
   listCardPopoverSelector?: string | HTMLElement
   listCardPopoverCallback?: (type: "startAwait" | "endAwait" | "deleteList") => Promise<void>
   openListCardPopover: Function
-  closeListCardPopover: Function
+  closeListCardPopover: () => void
 
   // ポップオーバー - スターターパックカードポップオーバー
   starterPackCardPopoverProps: {
@@ -271,7 +271,7 @@ type MainState = {
   starterPackCardPopoverSelector?: string | HTMLElement
   starterPackCardPopoverCallback?: (type: "startAwait" | "endAwait" | "editStarterPack" | "deleteStarterPack") => Promise<void>
   openStarterPackCardPopover: Function
-  closeStarterPackCardPopover: Function
+  closeStarterPackCardPopover: () => void
 
   // ポップオーバー - マイフィードソートポップオーバー
   myFeedsSortPopoverProps: {
@@ -280,7 +280,7 @@ type MainState = {
   myFeedsSortPopoverSelector?: string | HTMLElement
   myFeedsSortPopoverCallback?: Function
   openMyFeedsSortPopover: Function
-  closeMyFeedsSortPopover: Function
+  closeMyFeedsSortPopover: () => void
 
   // ポップオーバー - チャットルームポップオーバー
   chatConvoPopoverProps: {
@@ -290,7 +290,7 @@ type MainState = {
   chatConvoPopoverSelector?: string | HTMLElement
   chatConvoPopoverCallback?: Function
   openChatConvoPopover: Function
-  closeChatConvoPopover: Function
+  closeChatConvoPopover: () => void
 
   // ポップオーバー - チャット公開設定ポップオーバー
   chatDeclarationSelectPopoverProps: {
@@ -299,7 +299,7 @@ type MainState = {
   chatDeclarationSelectPopoverSelector?: string | HTMLElement
   chatDeclarationSelectPopoverCallback?: Function
   openChatDeclarationSelectPopover: Function
-  closeChatDeclarationSelectPopover: Function
+  closeChatDeclarationSelectPopover: () => void
 
   // ポップオーバー - チャットメッセージポップオーバー
   chatMessagePopoverProps: {
@@ -310,7 +310,7 @@ type MainState = {
   chatMessagePopoverSelector?: string | HTMLElement
   chatMessagePopoverCallback?: Function
   openChatMessagePopover: Function
-  closeChatMessagePopover: Function
+  closeChatMessagePopover: () => void
 
   // ポップオーバー - キーワード履歴ポップオーバー
   keywordHistoryPopoverProps: {
@@ -321,7 +321,7 @@ type MainState = {
     callback?: Function
   }
   openKeywordHistoryPopover: Function
-  closeKeywordHistoryPopover: Function
+  closeKeywordHistoryPopover: () => void
   addKeywordHistory: Function
 
   // ポップアップ
@@ -333,7 +333,7 @@ type MainState = {
     description: any
   }
   openErrorPopup: (error: any, description: any) => void
-  closeErrorPopup: Function
+  closeErrorPopup: () => void
 
   // ポップアップ - メッセージポップアップ
   messagePopupProps: TTMessagePopupProps
@@ -353,37 +353,37 @@ type MainState = {
   // ポップアップ - アカウントポップアップ
   accountPopupDisplay: boolean
   openAccountPopup: Function
-  closeAccountPopup: Function
+  closeAccountPopup: () => void
 
   // ポップアップ - 通知ポップアップ
   notificationPopupDisplay: boolean
   openNotificationPopup: Function
-  closeNotificationPopup: Function
+  closeNotificationPopup: () => void
 
   // ポップアップ - UI言語設定ポップアップ
   uiLanguageSettingsPopupDisplay: boolean
   openUiLanguageSettingsPopup: Function
-  closeUiLanguageSettingsPopup: Function
+  closeUiLanguageSettingsPopup: () => void
 
   // ポップアップ - デザイン設定ポップアップ
   designSettingsPopupDisplay: boolean
   openDesignSettingsPopup: Function
-  closeDesignSettingsPopup: Function
+  closeDesignSettingsPopup: () => void
 
   // ポップアップ - ポスト設定ポップアップ
   postSettingsPopupDisplay: boolean
   openPostSettingsPopup: Function
-  closePostSettingsPopup: Function
+  closePostSettingsPopup: () => void
 
   // ポップアップ - 心理的安全性設定ポップアップ
   psySafetySettingsPopupDisplay: boolean
   openPsySafetySettingsPopup: Function
-  closePsySafetySettingsPopup: Function
+  closePsySafetySettingsPopup: () => void
 
   // ポップアップ - その他設定ポップアップ
   otherSettingsPopupDisplay: boolean
   openOtherSettingsPopup: Function
-  closeOtherSettingsPopup: Function
+  closeOtherSettingsPopup: () => void
 
   // ポップアップ - 説明用ポップアップ
   htmlPopupDisplay: boolean
@@ -392,39 +392,39 @@ type MainState = {
   // ポップアップ - 招待コードポップアップ
   inviteCodesPopupDisplay: boolean
   openInviteCodesPopup: Function
-  closeInviteCodesPopup: Function
+  closeInviteCodesPopup: () => void
 
   // ポップアップ - コンテンツ言語ポップアップ
   contentLanguagesPopupDisplay: boolean
   openContentLanguagesPopup: Function
-  closeContentLanguagesPopup: Function
+  closeContentLanguagesPopup: () => void
 
   // ポップアップ - ポスト言語ポップアップ
   postLanguagesPopupDisplay: boolean
   openPostLanguagesPopup: Function
-  closePostLanguagesPopup: Function
+  closePostLanguagesPopup: () => void
 
   // ポップアップ - ミュートユーザーリストポップアップ
   mutingUsersPopupDisplay: boolean
   openMutingUsersPopup: Function
-  closeMutingUsersPopup: Function
+  closeMutingUsersPopup: () => void
 
   // ポップアップ - ブロックユーザーリストポップアップ
   blockingUsersPopupDisplay: boolean
   openBlockingUsersPopup: Function
-  closeBlockingUsersPopup: Function
+  closeBlockingUsersPopup: () => void
 
   // ポップアップ - ワードミュートポップアップ
   wordMutePopupDisplay: boolean
   openWordMutePopup: Function
-  closeWordMutePopup: Function
+  closeWordMutePopup: () => void
 
   // ポップアップ - チャット一覧ポップアップ
   chatListPopupProps: {
     display: boolean
   }
   openChatListPopup: Function
-  closeChatListPopup: Function
+  closeChatListPopup: () => void
 
   // ポップアップ - チャットルームポップアップ
   chatConvoPopupProps: {
@@ -432,7 +432,7 @@ type MainState = {
     myConvo?: TIMyConvo
   }
   openChatConvoPopup: Function
-  closeChatConvoPopup: Function
+  closeChatConvoPopup: () => void
 
   // ポップアップ - チャットメンバー選択ポップアップ
   chatMembersSelectPopupProps: {
@@ -441,7 +441,7 @@ type MainState = {
     limit: number
   }
   openChatMembersSelectPopup: Function
-  closeChatMembersSelectPopup: Function
+  closeChatMembersSelectPopup: () => void
 
   // ポップアップ - ラベラー一覧ポップアップ
   labelerListPopupProps: {
@@ -450,7 +450,7 @@ type MainState = {
     labelers: Array<TILabeler>
   }
   openLabelerListPopup: Function
-  closeLabelerListPopup: Function
+  closeLabelerListPopup: () => void
 
   //ポップアップ - 　ラベラー設定ポップアップ
   labelerSettingsPopupProps: {
@@ -458,13 +458,13 @@ type MainState = {
     labeler?: TILabeler
   }
   openLabelerSettingsPopup: Function
-  closeLabelerSettingsPopup: Function
+  closeLabelerSettingsPopup: () => void
 
   // ポップアップ - ラベル選択ポップアップ
   selectLabelsPopupDisplay: boolean
   selectLabelsPopupState: any
   openSelectLabelsPopup: Function
-  closeSelectLabelsPopup: Function
+  closeSelectLabelsPopup: () => void
 
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {
@@ -472,7 +472,7 @@ type MainState = {
     user?: TTUser
   }
   openSendAccountReportPopup: Function
-  closeSendAccountReportPopup: Function
+  closeSendAccountReportPopup: () => void
 
   // ポップアップ - ポストレポート送信ポップアップ
   sendPostReportPopupProps: {
@@ -480,7 +480,7 @@ type MainState = {
     post?: TTPost
   }
   openSendPostReportPopup: Function
-  closeSendPostReportPopup: Function
+  closeSendPostReportPopup: () => void
 
   // ポップアップ - フィードレポート送信ポップアップ
   sendFeedReportPopupProps: {
@@ -488,7 +488,7 @@ type MainState = {
     generator?: TTFeedGenerator
   }
   openSendFeedReportPopup: Function
-  closeSendFeedReportPopup: Function
+  closeSendFeedReportPopup: () => void
 
   // ポップアップ - リストレポート送信ポップアップ
   sendListReportPopupProps: {
@@ -496,7 +496,7 @@ type MainState = {
     list?: TTList
   }
   openSendListReportPopup: Function
-  closeSendListReportPopup: Function
+  closeSendListReportPopup: () => void
 
   // ポップアップ - イメージポップアップ
   imagePopupProps: {
@@ -534,27 +534,27 @@ type MainState = {
   // ポップアップ - マイフィードポップアップ
   myFeedsPopupDisplay: boolean
   openMyFeedsPopup: Function
-  closeMyFeedsPopup: Function
+  closeMyFeedsPopup: () => void
 
   // ポップアップ - マイリストポップアップ
   myListPopupDisplay: boolean
   openMyListPopup: Function
-  closeMyListPopup: Function
+  closeMyListPopup: () => void
 
   // ポップアップ - リスト編集ポップアップ
   listEditPopupProps: TTListEditPopupProps
   openListEditPopup: Function
-  closeListEditPopup: Function
+  closeListEditPopup: () => void
 
   // ポップアップ - リストユーザー管理ポップアップ
   listUserManagementPopupProps: TTListUserManagementPopupProps
   openListUserManagementPopup: Function
-  closeListUserManagementPopup: Function
+  closeListUserManagementPopup: () => void
 
   // ポップアップ - スターターパック編集ポップアップ
   starterPackEditPopupProps: TIStarterPackEditPopupProps
   openStarterPackEditPopup: (props: TIStarterPackEditPopupProps) => void
-  closeStarterPackEditPopup: Function
+  closeStarterPackEditPopup: () => void
 
   // ポップアップ - タイムフィードポップアップ
   currentTimeFeeds: Array<TTPost>
@@ -576,28 +576,28 @@ type MainState = {
   currentPostTags: Array<TTTag>
   myTagPopupProps: TTTagPopupProps
   openMyTagPopup: Function
-  closeMyTagPopup: Function
+  closeMyTagPopup: () => void
 
   // ポップアップ - ポスト日時選択ポップアップ
   postDatePopupDisplay: boolean
   postDatePopupDate?: string
   openPostDatePopup: (payload: MouseEvent) => void
-  closePostDatePopup: Function
+  closePostDatePopup: () => void
 
   // ポップアップ - 反応制御ポップアップ
   reactionControlPopupProps: TTReactionControlPopupProps
   openReactionControlPopup: Function
-  closeReactionControlPopup: Function
+  closeReactionControlPopup: (params: TICloseReactionControlPopupProps) => void
 
   // ポップアップ - リストメンションポップアップ
   listMentionPopupProps: TIListMentionPopupProps
   openListMentionPopup: Function
-  closeListMentionPopup: Function
+  closeListMentionPopup: () => void
 
   // ポップアップ - HTML ポップアップ
   htmlPopupProps: TTHtmlPopupProps
-  openHtmlPopup: Function
-  closeHtmlPopup: Function
+  openHtmlPopup: (type: string) => void
+  closeHtmlPopup: () => void
 
   // ポップアップ - 進捗ポップアップ
   progressPopupDisplay: boolean
@@ -606,5 +606,5 @@ type MainState = {
     message?: string
   }
   openProgressPopup: Function
-  closeProgressPopup: Function
+  closeProgressPopup: () => void
 }
