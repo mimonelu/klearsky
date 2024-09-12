@@ -366,7 +366,7 @@ async function processAfterLogin () {
         })
     })
 
-  // 動画ファイルの各種リミットの取得
+  // 動画ファイルのアップロード権限と各種リミットの取得
   /*
   const videoLimits = await state.atp.fetchVideoLimits()
   if (!(videoLimits instanceof Error)) {

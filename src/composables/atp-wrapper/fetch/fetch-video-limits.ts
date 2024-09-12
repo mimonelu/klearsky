@@ -1,3 +1,4 @@
+import { AtpAgent as AtpAgentClass } from "@atproto/api"
 import type { AtpAgent, AppBskyVideoGetUploadLimits } from "@atproto/api"
 
 export default async function (
@@ -6,8 +7,20 @@ export default async function (
   if (this.agent == null) {
     return Error("noAgentError")
   }
+  const token = await this.fetchServiceAuth(
+    "did:web:video.bsky.app",
+    "app.bsky.video.getUploadLimits"
+  )
+  if (token instanceof Error) {
+    return token
+  }
+  const videoAgent = new AtpAgentClass({
+    service: "https://video.bsky.app",
+  })
   const response: Error | AppBskyVideoGetUploadLimits.Response =
-    await (this.agent as AtpAgent).app.bsky.video.getUploadLimits()
+    await videoAgent.app.bsky.video.getUploadLimits({}, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getUploadLimits]", response)

@@ -77,6 +77,7 @@ import fetchRecords from "@/composables/atp-wrapper/fetch/fetch-records"
 import fetchRepo from "@/composables/atp-wrapper/fetch/fetch-repo"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch/fetch-repost-users"
 import fetchServerInfo from "@/composables/atp-wrapper/fetch/fetch-server-info"
+import fetchServiceAuth from "@/composables/atp-wrapper/fetch/fetch-service-auth"
 import fetchStarterPackSharedUrl from "@/composables/atp-wrapper/fetch/fetch-starter-pack-shared-url"
 import fetchStarterPack from "@/composables/atp-wrapper/fetch/fetch-starter-pack"
 import fetchStarterPacks from "@/composables/atp-wrapper/fetch/fetch-starter-packs"
@@ -234,6 +235,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchRepo = fetchRepo
   fetchRepostUsers = fetchRepostUsers
   fetchServerInfo = fetchServerInfo
+  fetchServiceAuth = fetchServiceAuth
   fetchStarterPackSharedUrl = fetchStarterPackSharedUrl
   fetchStarterPack = fetchStarterPack
   fetchStarterPacks = fetchStarterPacks

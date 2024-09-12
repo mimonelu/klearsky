@@ -34,7 +34,7 @@ interface TIAtpWrapper {
   createStarterPack
     (this: TIAtpWrapper, starterPack: TIStarterPack): Promise<Error | TTCidUri>
   createVideo
-    (this: TIAtpWrapper, file: File): Promise<Error | AppBskyVideoUploadVideo.OutputSchema>
+    (this: TIAtpWrapper, file: File): Promise<Error | BlobRef>
   deleteAccount
     (this: TIAtpWrapper, did?: string)
   deleteChatDeclaration
@@ -161,6 +161,8 @@ interface TIAtpWrapper {
     (this: TIAtpWrapper, repo: string): Promise<Error | {}>
   fetchRepostUsers
     (this: TIAtpWrapper, users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
+  fetchServiceAuth
+    (this: TIAtpWrapper, aud: string, lxm?: string, exp?: number): Promise<Error | string>
   fetchServerInfo
     (this: TIAtpWrapper): Promise<Error | TTServerInfo>
   fetchStarterPackSharedUrl

@@ -1,4 +1,4 @@
-import type { AppBskyEmbedImages, BlobRef } from "@atproto/api"
+import type { AppBskyEmbedImages, AppBskyEmbedVideo, BlobRef } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -99,7 +99,7 @@ export default async function (
   const images: Array<AppBskyEmbedImages.Image> = []
 
   // 動画
-  let video: undefined | any
+  let video: undefined | AppBskyEmbedVideo.Main
   const videoFileIndex = params.medias?.findIndex((media) => {
     return media.type?.startsWith("video/") ?? false
   }) ?? - 1
@@ -167,33 +167,32 @@ export default async function (
   // 動画ファイルがある場合
   } else if (params.medias != null) {
     const file = params.medias[videoFileIndex]
-    const videoBlob = await atp.createFileBlobRef({ file })
-    if (videoBlob instanceof Error) {
-      return videoBlob
-    }
-    video = {
-      $type: "app.bsky.embed.video",
-      video: videoBlob,
-      alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "", // Injected
-    }
-
-    /* TODO: APIが実装され次第、コメントアウト
-    const file = params.medias[videoFileIndex]
     const response = await atp.createVideo(file)
     if (response instanceof Error) {
       return response
     }
     video = {
       $type: "app.bsky.embed.video",
-      video: response.data.jobStatus?.blob,
-      alt: params.alts != null ? params.alts[videoFileIndex] ?? "" : "", // Injected
+      video: response,
     }
-    */
 
-    // 動画の aspectRatio 対応
+    // 動画の alt を設定
+    if (params.alts?.[videoFileIndex] != null) {
+      video.alt = params.alts?.[videoFileIndex]
+    }
+
+    // 動画の aspectRatio を設定
     if ((file as any)._videoAspectRatio != null) {
       video.aspectRatio = (file as any)._videoAspectRatio
     }
+
+    /*
+    // 動画の字幕ファイルを設定
+    // TODO: UIを実装すること
+    if (params.captions?.[videoFileIndex] != null) {
+      video.captions = params.captions?.[videoFileIndex]
+    }
+    */
   }
 
   // 引用リポスト
