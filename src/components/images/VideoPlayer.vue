@@ -34,8 +34,10 @@ onMounted(async () => {
   ) {
     isPlaylistExisting = await isUriExisting(props.playlist)
     if (isPlaylistExisting) {
-      hls.loadSource(props.playlist)
-      hls.attachMedia(video.value)
+      if (video.value != null) {
+        hls.loadSource(props.playlist)
+        hls.attachMedia(video.value)
+      }
       emit("updateVideoType", "hls")
       return
     }
@@ -50,8 +52,10 @@ onMounted(async () => {
       isPlaylistExisting = await isUriExisting(props.playlist)
     }
     if (isPlaylistExisting) {
-      video.value.src = props.playlist
-      video.value.load()
+      if (video.value != null) {
+        video.value.src = props.playlist
+        video.value.load()
+      }
       emit("updateVideoType", "browser")
       return
     }
@@ -67,8 +71,10 @@ onMounted(async () => {
 
         // did:plc: 以外
         : logJson?.didDocument?.service?.[0]?.serviceEndpoint
-      video.value.src = `${host}/xrpc/com.atproto.sync.getBlob?did=${props.did}&cid=${props.cid}`
-      // video.value.load()
+      if (video.value != null) {
+        video.value.src = `${host}/xrpc/com.atproto.sync.getBlob?did=${props.did}&cid=${props.cid}`
+        // video.value.load()
+      }
       emit("updateVideoType", "blob")
       return
     }
