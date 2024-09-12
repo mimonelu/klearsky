@@ -28,6 +28,7 @@ const state = reactive<{
   labels: Array<string>
   draftReactionControl: TTDraftReactionControl
   postDatePopupDate: ComputedRef<undefined | string>
+  videoLimits?: TIVideoLimits
 }>({
   labels: [],
   draftReactionControl: {
@@ -42,6 +43,7 @@ const state = reactive<{
     if (Number.isNaN(date.getTime())) return
     return format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'")
   }),
+  videoLimits: undefined,
 })
 
 const easyFormState = reactive<{
@@ -138,10 +140,21 @@ watch(() => props.fileList, (value?: FileList) => {
   onChangeImage()
 })
 
-onMounted(() => {
-  if (props.fileList != null) easyFormState.medias = Array.from(props.fileList)
+onMounted(async () => {
+  if (props.fileList != null) {
+    easyFormState.medias = Array.from(props.fileList)
+  }
   onInputUrl()
   onChangeImage()
+
+  // 動画ファイルのアップロード権限と各種リミットの取得
+  const videoLimits = await mainState.atp.fetchVideoLimits()
+  if (videoLimits instanceof Error) {
+    // TODO:
+    state.videoLimits = undefined
+  } else {
+    state.videoLimits = videoLimits
+  }
 })
 
 async function close () {
@@ -530,6 +543,30 @@ const PreviewLinkCardFeature: {
             </button>
           </div>
         </template>
+        <template #beforeButton>
+          <!-- 動画アップロード情報 -->
+          <div class="video-upload-info">
+            <div
+              v-if="state.videoLimits != null && !state.videoLimits.canUpload"
+              class="textlabel"
+            >
+              <div class="textlabel__text--alert">
+                <SVGIcon name="alert" />{{ $t("videoCanNotUpload") }}
+              </div>
+            </div>
+            <div
+              v-else-if="state.videoLimits?.canUpload"
+              class="textlabel"
+            >
+              <dl class="textlabel__text">
+                <dt>{{ $t("videoRemainingDailyNumber") }}</dt>
+                <dd>{{ (state.videoLimits.remainingDailyVideos ?? 0).toLocaleString() }}</dd>
+                <dt>{{ $t("videoRemainingDailyBytes") }}</dt>
+                <dd>{{ (((state.videoLimits.remainingDailyBytes ?? 0) / 1024 / 1024 / 1024).toFixed(2)).toLocaleString() }} GB</dd>
+              </dl>
+            </div>
+          </div>
+        </template>
       </EasyForm>
     </template>
   </Popup>
@@ -579,10 +616,6 @@ const PreviewLinkCardFeature: {
       padding-top: 0;
     }
 
-    .textlabel {
-      margin: 0 -0.5rem;
-    }
-
     // プレビューポスト
     .post[data-position="preview"] {
       .text {
@@ -615,6 +648,25 @@ const PreviewLinkCardFeature: {
 
   .link-card-loader {
     font-size: 0.75rem;
+  }
+
+  // 動画アップロード情報
+  .video-upload-info {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+
+    dl {
+      display: grid;
+      grid-gap: 0.5rem;
+      grid-template-columns: auto 1fr;
+
+      & > dt {
+        color: var(--fg-color-05);
+      }
+    }
   }
 
   .button-container {

@@ -432,6 +432,9 @@
   "videoPreload": "Video preload",
   "videoIsBlob": "Non-streaming",
   "videoIsNone": "Not playable",
+  "videoCanNotUpload": "Video posts are not allowed.",
+  "videoRemainingDailyNumber": "Postable  number of video today",
+  "videoRemainingDailyBytes": "Postable video bytes today",
 
   "linkcard": "Link card",
   "linkCardControl": "Link Card Control",

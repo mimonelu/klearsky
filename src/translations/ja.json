@@ -432,6 +432,9 @@
   "videoPreload": "動画の先読み",
   "videoIsBlob": "ストリーミングできません",
   "videoIsNone": "再生できません",
+  "videoCanNotUpload": "動画の投稿は許可されていません",
+  "videoRemainingDailyNumber": "本日の投稿可能な動画数",
+  "videoRemainingDailyBytes": "本日の投稿可能な動画サイズ",
 
   "linkcard": "リンクカード",
   "linkCardControl": "リンクカードの制御",

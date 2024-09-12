@@ -345,6 +345,7 @@ function getVideoSizes (): Array<Array<undefined | {
         </dl>
       </template>
     </div>
+    <slot name="beforeButton" />
     <button
       v-if="hasSubmitButton ?? true"
       class="button submit-button"

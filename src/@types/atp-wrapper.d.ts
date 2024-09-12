@@ -182,7 +182,7 @@ interface TIAtpWrapper {
   fetchUserSearch
     (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchVideoLimits
-    (this: TIAtpWrapper): Promise<Error | AppBskyVideoGetUploadLimits.OutputSchema>
+    (this: TIAtpWrapper): Promise<Error | TIVideoLimits>
   fetchWithoutAgent
     (this: TIAtpWrapper, pathToXrpc: string, did: string, query: Record<string, any>, server?: string): Promise<Error | Response>
   hasLogin

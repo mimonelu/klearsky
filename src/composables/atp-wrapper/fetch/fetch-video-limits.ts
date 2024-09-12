@@ -3,7 +3,7 @@ import type { AtpAgent, AppBskyVideoGetUploadLimits } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper
-): Promise<Error | AppBskyVideoGetUploadLimits.OutputSchema> {
+): Promise<Error | TIVideoLimits> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
