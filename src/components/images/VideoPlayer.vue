@@ -89,10 +89,18 @@ async function isUriExisting (url: string): Promise<boolean> {
   }
   return response.ok
 }
+
+function pause () {
+  if (video.value == null) {
+    return
+  }
+  ;(video.value as HTMLVideoElement).pause()
+}
 </script>
 
 <template>
   <video
+    v-intersection-observer="{ outboundHandler: pause }"
     ref="video"
     controls
     loading="lazy"

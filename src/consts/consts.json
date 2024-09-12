@@ -4,7 +4,7 @@
   "TIMEOUT_DETAILS": [
     {
       "url": "app.bsky.video.uploadVideo",
-      "timeout": 1500000
+      "timeout": 600000
     },
     {
       "url": "com.atproto.repo.uploadBlob",

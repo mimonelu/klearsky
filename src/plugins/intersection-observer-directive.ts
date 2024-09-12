@@ -1,7 +1,8 @@
 import type { Directive, DirectiveBinding } from "vue"
 
 interface IntersectionObserverOptions {
-  handler: () => void
+  inboundHandler?: () => void
+  outboundHandler?: () => void
   options?: IntersectionObserverInit
 }
 
@@ -10,16 +11,27 @@ const intersectionObserver: Directive = {
     element: HTMLElement,
     binding: DirectiveBinding<IntersectionObserverOptions>
   ) {
+    let intersected = false
     const options = binding.value ?? {}
     const observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          options.handler()
-          observer.disconnect()
+          intersected = true
+          options.inboundHandler?.()
+        } else {
+          if (intersected) {
+            intersected = false
+            options.outboundHandler?.()
+          }
         }
       })
     }, options.options ?? {})
     observer.observe(element)
+    ;(element as any).__observer__ = observer
+  },
+
+  unmounted (element: HTMLElement) {
+    ;(element as any).__observer__?.disconnect()
   },
 }
 
