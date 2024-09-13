@@ -320,6 +320,6 @@ export default class MyLabeler {
       return Error("noAgentError")
     }
     const myLabelerDids = this.makeMyLabelerPreferenceDids()
-    this.mainState.atp.agent.configureLabelersHeader(myLabelerDids)
+    this.mainState.atp.agent.configureLabelers(myLabelerDids)
   }
 }
