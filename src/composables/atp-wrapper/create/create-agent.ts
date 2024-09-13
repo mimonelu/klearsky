@@ -2,7 +2,11 @@ import { AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
-export default function (this: TIAtpWrapper, service: string, pdsUrl?: string): boolean {
+export default function (
+  this: TIAtpWrapper,
+  service: string,
+  pdsUrl?: string
+): boolean {
   this.agent = new AtpAgent({
     service: pdsUrl ?? service,
     persistSession: (event, session) => {

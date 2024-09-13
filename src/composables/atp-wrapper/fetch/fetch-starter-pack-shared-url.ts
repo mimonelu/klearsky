@@ -1,6 +1,9 @@
 import Util from "@/composables/util"
 
-export default async function (this: TIAtpWrapper, starterPack: TIStarterPack): Promise<Error | string> {
+export default async function (
+  this: TIAtpWrapper,
+  starterPack: TIStarterPack
+): Promise<Error | string> {
   const rkey = Util.getRkey(starterPack.uri)
   const response: Error | Response = await Util.fetchWithTimeout("https://go.bsky.app/link", {
     method: "POST",

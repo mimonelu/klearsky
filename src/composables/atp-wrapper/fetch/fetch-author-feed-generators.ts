@@ -11,8 +11,12 @@ export default async function (
     return Error("noAgentError")
   }
   const query: AppBskyFeedGetActorFeeds.QueryParams = { actor: author }
-  if (limit != null) query.limit = limit
-  if (cursor != null) query.cursor = cursor
+  if (limit != null) {
+    query.limit = limit
+  }
+  if (cursor != null) {
+    query.cursor = cursor
+  }
   const response: Error | AppBskyFeedGetActorFeeds.Response =
     await (this.agent as AtpAgent).app.bsky.feed.getActorFeeds(query)
       .then((value) => value)

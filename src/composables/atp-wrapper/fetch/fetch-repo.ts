@@ -11,9 +11,7 @@ export default async function (
   if (this.session == null) {
     return Error("noSessionError")
   }
-  const query: ComAtprotoRepoDescribeRepo.QueryParams = {
-    repo,
-  }
+  const query: ComAtprotoRepoDescribeRepo.QueryParams = { repo }
   const response: Error | ComAtprotoRepoDescribeRepo.Response =
     await (this.agent as AtpAgent).com.atproto.repo.describeRepo(query)
       .then((value) => value)

@@ -9,8 +9,12 @@ export default async function (
     return Error("noAgentError")
   }
   const query: AppBskyActorSearchActorsTypeahead.QueryParams = {}
-  if (q != null) query.q = q
-  if (limit != null) query.limit = limit
+  if (q != null) {
+    query.q = q
+  }
+  if (limit != null) {
+    query.limit = limit
+  }
   const response: AppBskyActorSearchActorsTypeahead.Response =
     await (this.agent as AtpAgent).searchActorsTypeahead(query)
       .then((value) => value)

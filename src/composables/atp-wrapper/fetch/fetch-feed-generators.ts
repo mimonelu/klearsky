@@ -24,7 +24,9 @@ export default async function (
   const generators: Array<TTFeedGenerator> = []
   feeds.forEach((uri: string) => {
     const currentGenerator = (response.data.feeds as Array<TTFeedGenerator>)
-      .find((generator: TTFeedGenerator) => generator.uri === uri)
+      .find((generator: TTFeedGenerator) => {
+        return generator.uri === uri
+      })
     if (currentGenerator != null) {
       generators.push(currentGenerator)
     }

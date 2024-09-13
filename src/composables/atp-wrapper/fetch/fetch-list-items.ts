@@ -31,8 +31,11 @@ export default async function (
 
   const newListItems: Array<TTListItem> =
     (response.data.items as unknown as Array<TTListItem>)
-      .filter((listItem: TTListItem) => !currentListItems
-        .some((current: TTListItem) => listItem.uri === current.uri))
+      .filter((listItem: TTListItem) => {
+        return !currentListItems.some((current: TTListItem) => {
+          return listItem.uri === current.uri
+        })
+      })
   if (cursor == null) {
     currentListItems.unshift(...newListItems)
   } else {

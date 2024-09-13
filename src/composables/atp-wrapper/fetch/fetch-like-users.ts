@@ -30,7 +30,10 @@ export default async function (
   // ブロックユーザーをフィルタリング
   response.data.likes = (response.data.likes as Array<any>)
     .filter((like: any) => {
-      return !(like.actor as TTUser).viewer?.blocking && !(like.actor as TTUser).viewer?.blockedBy
+      return (
+        !(like.actor as TTUser).viewer?.blocking &&
+        !(like.actor as TTUser).viewer?.blockedBy
+      )
     })
 
   const newUsers: Array<TTUser> = []

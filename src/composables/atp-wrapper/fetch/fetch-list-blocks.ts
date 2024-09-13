@@ -29,8 +29,11 @@ export default async function (
   }
 
   const newLists: Array<TTList> = (response.data.lists as Array<TTList>)
-    .filter((list: TTList) => !lists
-      .some((current: TTList) => list.uri === current.uri))
+    .filter((list: TTList) => {
+      return !lists.some((current: TTList) => {
+        return list.uri === current.uri
+      })
+    })
   if (cursor == null) {
     lists.unshift(...newLists)
   } else {

@@ -14,9 +14,12 @@ export default async function (
 
   const record: AppBskyFeedPost.Record = {
     $type: "app.bsky.feed.post",
+
+    // TODO: 最後に回す
     createdAt: params.createdAt != null
       ? params.createdAt
       : new Date().toISOString(),
+
     text: params.text ?? "",
 
     // カスタムフィールド - via
@@ -24,16 +27,22 @@ export default async function (
   }
 
   // ポスト言語
-  if (params.languages != null && params.languages.length > 0)
+  if (params.languages != null && params.languages.length > 0) {
     record.langs = params.languages
+  }
 
   // ポストタグ
-  if (params.tags != null && params.tags.length > 0)
+  if (params.tags != null && params.tags.length > 0) {
     record.tags = params.tags.map((tag: TTMyTag) => tag.text)
+  }
 
   // Zapリンク
-  if (params.lightning)
-    record.text = record.text.replace(/@zap(?=\W|$)/gi, `[⚡️Zap!](lightning:${params.lightning})`)
+  if (params.lightning) {
+    record.text = record.text.replace(
+      /@zap(?=\W|$)/gi,
+      `[⚡️Zap!](lightning:${params.lightning})`
+    )
+  }
 
   // カスタムリンク
   const customLinks = Util.makeCustomLinks(record.text)
@@ -62,12 +71,10 @@ export default async function (
     params.listMentionDids.forEach((did) => {
       record.facets?.push({
         $type: "app.bsky.richtext.facet",
-        features: [
-          {
-            $type: "app.bsky.richtext.facet#mention",
-            did,
-          },
-        ],
+        features: [{
+          $type: "app.bsky.richtext.facet#mention",
+          did,
+        }],
         index: {
           byteEnd: 0,
           byteStart: 0,
@@ -105,11 +112,12 @@ export default async function (
   }
 
   // セルフポストラベル
-  if (params.labels != null && params.labels.length > 0)
+  if (params.labels != null && params.labels.length > 0) {
     record.labels = {
       "$type": "com.atproto.label.defs#selfLabels",
       values: params.labels.map((label: string) => ({ val: label })),
     }
+  }
 
   const response: Error | TTCidUri =
     await (this.agent as AtpAgent).post(record)

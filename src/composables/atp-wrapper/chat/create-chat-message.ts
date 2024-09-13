@@ -17,7 +17,10 @@ export default async function (
 
   // Zapリンク
   if (params.lightning != null) {
-    message.text = message.text.replace(/@zap(?=\W|$)/gi, `[⚡️Zap!](lightning:${params.lightning})`)
+    message.text = message.text.replace(
+      /@zap(?=\W|$)/gi,
+      `[⚡️Zap!](lightning:${params.lightning})`
+    )
   }
 
   // カスタムリンク

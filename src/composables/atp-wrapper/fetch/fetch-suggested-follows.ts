@@ -27,7 +27,8 @@ export default async function (
     })
 
     .forEach((following: TTUser) => {
-      if (!users.some((user: TTUser) => user.did === following.did))
+      if (!users.some((user: TTUser) => user.did === following.did)) {
         users.push(following)
+      }
     })
 }

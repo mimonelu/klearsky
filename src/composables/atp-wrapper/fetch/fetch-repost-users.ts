@@ -36,8 +36,9 @@ export default async function (
   const newUsers: Array<TTUser> = []
   ;(response.data.repostedBy as Array<TTUser>)
     .forEach((target: TTUser) => {
-      if (!users.some((user: TTUser) => user.did === target.did))
+      if (!users.some((user: TTUser) => user.did === target.did)) {
         newUsers.push(target)
+      }
     })
   if (cursor == null) {
     users.unshift(...newUsers)

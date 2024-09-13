@@ -14,6 +14,7 @@ export default async function (
   }
   const response: Error | undefined =
     await (this.agent as AtpAgent).app.bsky.graph.starterpack.delete(query)
+      .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/deleteStarterPack]", response)
   if (response instanceof Error) {

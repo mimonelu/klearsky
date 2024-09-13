@@ -13,7 +13,11 @@ export default async function (
   }
   const headers = { "atproto-proxy": "did:web:api.bsky.chat#bsky_chat" }
   const response: Error | TTCidUri =
-    await (this.agent as AtpAgent).api.chat.bsky.actor.declaration.create({ repo }, { allowIncoming }, headers)
+    await (this.agent as AtpAgent).api.chat.bsky.actor.declaration.create(
+      { repo },
+      { allowIncoming },
+      headers
+    )
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/api.chat.bsky.actor.declaration.create]", response)

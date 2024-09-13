@@ -100,7 +100,7 @@ export default async function (
   return Error("apiError")
 
   /*
-  // ライブラリAPIを用いたアップロード
+  // APIライブラリを用いたアップロード
   // TODO: 後で消す、もしくはこちらで代替すること
   const videoAgent = new AtpAgentClass({
     service: "https://video.bsky.app",

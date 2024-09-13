@@ -60,7 +60,7 @@ export default async function (
   if (arrayBuffer == null) {
     return Error("apiError")
   }
-  const input: Uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)
+  const input = new Uint8Array(arrayBuffer as ArrayBuffer)
   const options: ComAtprotoRepoUploadBlob.CallOptions = {
     encoding: mimeType,
   }

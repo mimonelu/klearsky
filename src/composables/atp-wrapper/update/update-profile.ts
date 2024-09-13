@@ -22,7 +22,7 @@ export default async function (
   }
 
   // アカウントラベル
-  if (params.labels.length > 0)
+  if (params.labels.length > 0) {
     profileSchema.labels = {
       $type: "com.atproto.label.defs#selfLabels",
       values: params.labels.map((label: string) => {
@@ -34,6 +34,7 @@ export default async function (
         }
       }),
     }
+  }
 
   // 画像処理
   const fileBlobRefs: Array<Error | null | BlobRef> = await Promise.all([
