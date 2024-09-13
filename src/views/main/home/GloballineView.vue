@@ -44,13 +44,12 @@ onBeforeUnmount(() => {
 async function connect () {
   state.subscriber = new SubscribeRepos(onError, undefined, undefined, undefined, onPost)
   let hostName = mainState.atp.session?.__service ?? ""
-  try {
-    const url = new URL(hostName)
-    hostName = url.hostname
-  } catch (error) {
-    console.warn("[klearsky/GloballineView]", error)
+  const url = Util.safeUrl(hostName)
+  if (url == null) {
+    console.warn("[klearsky/GloballineView]", hostName)
     return
   }
+  hostName = url.hostname
   if (hostName.match(/bsky\.(?:network|social)$/)) {
     hostName = "bsky.network"
   }

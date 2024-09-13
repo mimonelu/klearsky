@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import type { Entity, Facet, RichTextOpts, RichTextProps } from "@atproto/api"
 import { RichText } from "@atproto/api"
+import Util from "@/composables/util"
 
 type RichParam = {
   type: "externalLink" | "internalLink" | "mention" | "tag" | "text"
@@ -83,14 +84,9 @@ const state = reactive<{
 })
 
 function transformInternalLink (uri: string): undefined | string {
-  let url: undefined | URL
-  try {
-    url = new URL(uri)
-  } catch (error) {
-    console.warn(`[klearsky/transformInternalLink/${uri}]`, error)
-    return
-  }
+  const url: undefined | URL = Util.safeUrl(uri)
   if (url == null) {
+    console.warn(`[klearsky/transformInternalLink/${uri}]`, uri)
     return
   }
   switch (url.hostname) {
@@ -183,7 +179,7 @@ function transformInternalLink (uri: string): undefined | string {
 }
 
 async function openWindowIfCan (segment: RichParam) {
-  const urlObject: undefined | URL = getUrlObject(segment.param ?? "")
+  const urlObject: undefined | URL = Util.safeUrl(segment.param ?? "")
   if (urlObject == null) return
   const valid = validateUrl(urlObject, segment.text)
   if (valid || await mainState.openConfirmationPopup({
@@ -196,12 +192,6 @@ async function openWindowIfCan (segment: RichParam) {
     else
       window.open(segment.param, "_blank")
   }
-}
-
-function getUrlObject (url: string): undefined | URL {
-  try {
-    return new URL(url)
-  } catch (error) { /**/ }
 }
 
 function validateUrl (urlObject: URL, text: string): boolean {

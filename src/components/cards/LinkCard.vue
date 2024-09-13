@@ -2,6 +2,7 @@
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const props = defineProps<{
   external: TTExternal
@@ -48,14 +49,11 @@ watch(() => mainState.currentSetting.linkcardEmbeddedControl, () => {
 onMounted(updateEmbeddedContents)
 
 function getEmbeddedContentId () {
-  let url: undefined | URL
-  try {
-    url = new URL(props.external.uri)
-  } catch (error) {
+  const url: undefined | URL = Util.safeUrl(props.external.uri)
+  if (url == null) {
     isInvalidUrl = true
     return
   }
-  if (url == null) return
 
   // 埋込型リンクカード - Apple Music
   if (url.hostname.endsWith("music.apple.com")) {

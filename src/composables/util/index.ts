@@ -15,6 +15,7 @@ import makeCustomLinks from "@/composables/util/make-custom-links"
 import mergeFeeds from "@/composables/util/merge-feeds"
 import parseOgp from "@/composables/util/parse-ogp"
 import safeJson from "@/composables/util/safe-json"
+import safeUrl from "@/composables/util/safe-url"
 import setArray from "@/composables/util/set-array"
 import sortFeeds from "@/composables/util/sort-feeds"
 import storage from "@/composables/util/storage"
@@ -48,6 +49,7 @@ export default {
   mergeFeeds,
   parseOgp,
   ...safeJson,
+  safeUrl,
   setArray,
   sortFeeds,
   ...storage,

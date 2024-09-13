@@ -9,13 +9,12 @@ export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
     return Error("noSessionError")
   }
   let hostName = ""
-  try {
-    const url = new URL(session.__service)
-    hostName = url.hostname
-  } catch (error) {
-    console.warn("[klearsky/refreshSession]", error)
+  const serviceUrl: undefined | URL = Util.safeUrl(session.__service)
+  if (serviceUrl == null) {
+    console.warn("[klearsky/refreshSession]", session.__service)
     return Error("refreshSessionError")
   }
+  hostName = serviceUrl.hostname
   const url = `https://${hostName}/xrpc/com.atproto.server.refreshSession`
   const request: RequestInit = {
     method: "POST",
