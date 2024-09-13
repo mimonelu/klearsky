@@ -1,0 +1,14 @@
+@mixin list-icon-styles {
+  .svg-icon--person {
+    fill: rgb(var(--curate-list-color));
+  }
+  .svg-icon--personOff {
+    fill: rgb(var(--mod-list-color));
+  }
+  .svg-icon--cards {
+    fill: rgb(var(--reference-list-color));
+  }
+  .svg-icon--help {
+    fill: var(--unknown-list-color);
+  }
+}

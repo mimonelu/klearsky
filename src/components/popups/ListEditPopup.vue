@@ -56,9 +56,21 @@ const easyFormProps: TTEasyForm = {
       required: true,
       options: [
         // 大文字・小文字注意
-        { label: $t("curatelist"), value: "curatelist" },
-        { label: $t("modlist"), value: "modlist" },
-        { label: $t("referencelist"), value: "referencelist" },
+        {
+          label: $t("curatelist"),
+          value: "curatelist",
+          icon: "person",
+        },
+        {
+          label: $t("modlist"),
+          value: "modlist",
+          icon: "personOff",
+        },
+        {
+          label: $t("referencelist"),
+          value: "referencelist",
+          icon: "cards",
+        },
       ],
     },
     {
@@ -238,6 +250,11 @@ async function makeAvatarBlobRef (): Promise<Error | undefined | BlobRef> {
   &:deep() {
     .popup-header > h2 > .svg-icon--list {
       fill: rgb(var(--accent-color));
+    }
+
+    // リストアイコン
+    .easy-form .radios {
+      @include list-icon-styles;
     }
   }
 }

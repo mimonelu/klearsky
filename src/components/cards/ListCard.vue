@@ -506,20 +506,20 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     grid-gap: 0.375em;
     line-height: var(--line-height-low);
     &[data-purpose="curatelist"] {
-      --color: rgb(var(--share-color));
+      --color: rgb(var(--curate-list-color));
     }
     &[data-purpose="modlist"] {
-      --color: rgb(var(--notice-color));
+      --color: rgb(var(--mod-list-color));
     }
     &[data-purpose="referencelist"] {
-      --color: rgb(var(--like-color));
+      --color: rgb(var(--reference-list-color));
 
       & > .svg-icon {
         font-size: 0.875em;
       }
     }
     &[data-purpose="unknownlist"] {
-      --color: var(--fg-color-05);
+      --color: var(--unknown-list-color);
     }
 
     & > .svg-icon {

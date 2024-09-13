@@ -297,20 +297,9 @@ async function update () {
   }
 
   &:deep() {
-    // リストラジオボタンのアイコン
+    // リストアイコン
     .easy-form .checkboxes {
-      .svg-icon--person {
-        fill: rgb(var(--share-color));
-      }
-      .svg-icon--personOff {
-        fill: rgb(var(--notice-color));
-      }
-      .svg-icon--cards {
-        fill: rgb(var(--like-color));
-      }
-      .svg-icon--help {
-        fill: var(--fg-color-05);
-      }
+      @include list-icon-styles;
     }
   }
 }

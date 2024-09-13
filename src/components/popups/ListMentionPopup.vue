@@ -128,20 +128,9 @@ function close (params: any) {
   }
 
   &:deep() {
-    // ラジオボタンのアイコン
+    // リストアイコン
     .easy-form .radios {
-      .svg-icon--person {
-        fill: rgb(var(--share-color));
-      }
-      .svg-icon--personOff {
-        fill: rgb(var(--notice-color));
-      }
-      .svg-icon--cards {
-        fill: rgb(var(--like-color));
-      }
-      .svg-icon--help {
-        fill: var(--fg-color-05);
-      }
+      @include list-icon-styles;
     }
   }
 }
