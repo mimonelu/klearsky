@@ -166,6 +166,20 @@ export default async function (
 
   // 動画ファイルがある場合
   } else if (params.medias != null) {
+    /*
+    // PDSに直接アップロード
+    // TODO: 不要であれば削除すること
+    const file = params.medias[videoFileIndex]
+    const videoBlob = await atp.createFileBlobRef({ file })
+    if (videoBlob == null) {
+      return Error("createFileBlobRefError")
+    }
+    video = {
+      $type: "app.bsky.embed.video",
+      video: videoBlob,
+    }
+    */
+
     const file = params.medias[videoFileIndex]
     const response = await atp.createVideo(file)
     if (response instanceof Error) {
