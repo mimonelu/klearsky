@@ -29,7 +29,7 @@ const state = reactive<{
 
   // マイリストにおける自分が作成したリストの配列
   lists: computed((): Array<TTList> => {
-    return mainState.myLists.items.filter((list: TTList) => {
+    return mainState.myLists!.items.filter((list: TTList) => {
       return list.creator.did === mainState.atp.session?.did
     })
   }),
@@ -115,7 +115,7 @@ async function clicked (list: TTList) {
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
 }
 </script>
 

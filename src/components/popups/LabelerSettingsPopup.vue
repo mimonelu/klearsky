@@ -28,13 +28,13 @@ const state = reactive<{
   pseudoDefinitions: Array<TIPseudoLabelerDefinition>
 }>({
   isMyLabeler: computed((): boolean => {
-    const myLabelers = mainState.myLabeler.getMyLabelerPreferences()
+    const myLabelers = mainState.myLabeler!.getMyLabelerPreferences()
     return myLabelers.findIndex((myLabeler) => {
-      return myLabeler.did === props.labeler?.creator.did
+      return myLabeler!.did === props.labeler?.creator.did
     }) !== - 1
   }),
   pseudoDefinitions: props.labeler?.policies.labelValueDefinitions?.map((definition) => {
-    const locale = mainState.myLabeler.getProperLocale(definition.locales)
+    const locale = mainState.myLabeler!.getProperLocale(definition.locales)
     const setting = getLabelPreferenceVisibility(definition)
     const options: Array<TTOption> = makeOptions(definition)
     return {
@@ -56,7 +56,7 @@ function getLabelPreferenceVisibility (definition: TILabelerDefinition): TTConte
   if (props.labeler == null) {
     return definition.defaultSetting
   }
-  const labelPreference = mainState.myLabeler.getLabelPreference(
+  const labelPreference = mainState.myLabeler!.getLabelPreference(
     props.labeler.creator.did,
     definition.identifier
   )
@@ -88,13 +88,13 @@ async function updateLabelPreferences () {
     if (props.labeler == null) {
       return
     }
-    mainState.myLabeler.addLabelPreference(
+    mainState.myLabeler!.addLabelPreference(
       props.labeler.creator.did,
       pseudoDefinition.identifier,
       pseudoDefinition.setting
     )
   })
-  mainState.myLabeler.cleanLabelPreferences()
+  mainState.myLabeler!.cleanLabelPreferences()
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   if (result instanceof Error) {
     mainState.openErrorPopup(result, "LabelerSettingsPopup/close")
@@ -102,11 +102,11 @@ async function updateLabelPreferences () {
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-  mainState.myWorker.setSessionCache("myLabeler", mainState.myLabeler.labelers)
+  mainState.myWorker!.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker!.setSessionCache("myLabeler", mainState.myLabeler!.labelers)
 
   // labelMap の更新も同時に行う
-  mainState.myLabeler.updateLabelMap()
+  mainState.myLabeler!.updateLabelMap()
 }
 
 let updated = false

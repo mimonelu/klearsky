@@ -32,7 +32,7 @@ const state = reactive<{
     if (props.user.labels == null) {
       return []
     }
-    return mainState.myLabeler.getSpecificLabels(props.user.labels, ["hide", "warn"], ["content", "media", "none"])
+    return mainState.myLabeler!.getSpecificLabels(props.user.labels, ["hide", "warn"], ["content", "media", "none"])
   }),
   hasAppliedHarmfulLabel: computed((): boolean => {
     return state.appliedHarmfulLabels.length > 0
@@ -114,7 +114,7 @@ function onActivateContentFilteringToggle () {
         <!-- ラベラーアイコン -->
         <template v-if="user.associated?.labeler">
           <SVGIcon
-            v-if="mainState.myLabeler.isSubscribed(user.did)"
+            v-if="mainState.myLabeler!.isSubscribed(user.did)"
             name="labeler"
             class="account-labeler-icon"
           />

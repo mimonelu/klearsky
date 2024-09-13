@@ -1,4 +1,3 @@
-import type { AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -14,7 +13,7 @@ export default async function (
     rkey,
   }
   const response: Error | undefined =
-    await (this.agent as AtpAgent).app.bsky.graph.block.delete(query)
+    await this.agent.app.bsky.graph.block.delete(query)
       .then((value) => value)
       .catch((error) => error)
   if (response instanceof Error) {

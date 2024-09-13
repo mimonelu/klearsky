@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoRepoDeleteRecord } from "@atproto/api"
+import type { ComAtprotoRepoDeleteRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -18,7 +18,7 @@ export default async function (
     rkey,
   }
   const response: Error | undefined =
-    await (this.agent as AtpAgent).com.atproto.repo.deleteRecord(query)
+    await this.agent.com.atproto.repo.deleteRecord(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/deleteRecord]", response)

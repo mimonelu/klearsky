@@ -119,7 +119,6 @@ import updateThreadMuteToEnable from "@/composables/atp-wrapper/update/update-th
 import updateStarterPack from "@/composables/atp-wrapper/update/update-starter-pack"
 import Util from "@/composables/util"
 
-// @ts-ignore
 class AtpWrapper implements TIAtpWrapper {
   agent: null | AtpAgent
 
@@ -129,8 +128,7 @@ class AtpWrapper implements TIAtpWrapper {
 
   session?: TTSession
 
-  // @ts-ignore
-  constructor (this: TIAtpWrapper) {
+  constructor () {
     this.agent = null
     this.proxies = {
       chat: "did:web:api.bsky.chat#bsky_chat",

@@ -1,4 +1,4 @@
-import type { AtpAgent, ChatBskyConvoLeaveConvo } from "@atproto/api"
+import type { ChatBskyConvoLeaveConvo } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -19,7 +19,7 @@ export default async function (
     options.headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | ChatBskyConvoLeaveConvo.Response =
-    await (this.agent as AtpAgent).api.chat.bsky.convo.leaveConvo(query, options)
+    await this.agent.api.chat.bsky.convo.leaveConvo(query, options)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/api.chat.bsky.convo.leaveConvo]", response)

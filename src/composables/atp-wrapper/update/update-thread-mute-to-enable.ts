@@ -1,4 +1,4 @@
-import type { AppBskyGraphMuteThread, AtpAgent } from "@atproto/api"
+import type { AppBskyGraphMuteThread } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -9,7 +9,7 @@ export default async function (
   }
   const query: AppBskyGraphMuteThread.InputSchema = { root: uri }
   const response: Error | AppBskyGraphMuteThread.Response =
-    await (this.agent as AtpAgent).app.bsky.graph.muteThread(query)
+    await this.agent.app.bsky.graph.muteThread(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/muteThread]", response)

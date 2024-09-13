@@ -1,4 +1,4 @@
-import type { AppBskyGraphMuteActorList, AtpAgent } from "@atproto/api"
+import type { AppBskyGraphMuteActorList } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -8,7 +8,7 @@ export default async function (
     return Error("noAgentError")
   }
   const response: Error | AppBskyGraphMuteActorList.Response =
-    await (this.agent as AtpAgent).muteModList(listUri)
+    await this.agent.muteModList(listUri)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/muteModList]", response)

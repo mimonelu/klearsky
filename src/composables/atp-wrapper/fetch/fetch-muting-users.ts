@@ -1,4 +1,4 @@
-import type { AppBskyGraphGetMutes, AtpAgent } from "@atproto/api"
+import type { AppBskyGraphGetMutes } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -13,9 +13,10 @@ export default async function (
     limit,
     cursor,
   }
-  const response: AppBskyGraphGetMutes.Response = await (
-    this.agent as AtpAgent
-  ).app.bsky.graph.getMutes(query)
+  const response: AppBskyGraphGetMutes.Response =
+    await this.agent.app.bsky.graph.getMutes(query)
+      .then((value) => value)
+      .catch((error) => error)
   console.log("[klearsky/getMutes]", response)
   if (response instanceof Error) {
     return response

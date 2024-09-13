@@ -1,4 +1,4 @@
-import type { AtpAgent, BlobRef } from "@atproto/api"
+import type { BlobRef } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -13,7 +13,7 @@ export default async function (
   }
 
   // 動画アップロード用トークンの取得
-  const pdsUrl = (this.agent as AtpAgent).serviceUrl.hostname ?? "bsky.social"
+  const pdsUrl = this.agent.serviceUrl.hostname ?? "bsky.social"
   const token = await this.fetchServiceAuth(
     `did:web:${pdsUrl}`,
     "com.atproto.repo.uploadBlob",

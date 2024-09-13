@@ -1,4 +1,4 @@
-import type { AppBskyUnspeccedGetPopularFeedGenerators, AtpAgent } from "@atproto/api"
+import type { AppBskyUnspeccedGetPopularFeedGenerators } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -21,7 +21,7 @@ export default async function (
     query.query = term
   }
   const response: Error | AppBskyUnspeccedGetPopularFeedGenerators.Response =
-    await (this.agent as AtpAgent).app.bsky.unspecced.getPopularFeedGenerators(query)
+    await this.agent.app.bsky.unspecced.getPopularFeedGenerators(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getPopularFeedGenerators]", response)

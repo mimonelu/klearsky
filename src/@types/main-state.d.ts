@@ -1,4 +1,4 @@
-type MainState = {
+interface MainState {
   $setCurrentLanguage?: Function
   $getCurrentLanguage?: Function
   atp: TIAtpWrapper
@@ -14,7 +14,7 @@ type MainState = {
   updatePageTitle: () => void
 
   // MyWorker
-  myWorker: TIMyWorker
+  myWorker?: TIMyWorker
 
   // D&D
   isDragOver: boolean
@@ -46,7 +46,7 @@ type MainState = {
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
 
   // 通知タイマー
-  notificationTimer: null | number = null
+  notificationTimer: null | NodeJS.Timeout = null
   clearNotificationInterval: () => void
   updateNotifications: () => Promise<void>
   updateNotificationInterval: () => void
@@ -68,11 +68,11 @@ type MainState = {
   getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel>
 
   // ラベラー
-  myLabeler: TIMyLabeler
+  myLabeler?: TIMyLabeler
   currentLabeler?: TILabeler
 
   // チャット
-  myChat: TIMyChat
+  myChat?: TIMyChat
   chatListTimer: undefined | any
   endChatListTimer: () => void
   startChatListTimer: () => void
@@ -188,7 +188,7 @@ type MainState = {
   removeFeedPreferenceByUri: (type: TTPreferenceFeedType, uri: string) => boolean
 
   // マイフィード
-  myFeeds: TTMyFeeds
+  myFeeds?: TTMyFeeds
 
   // リスト
   currentList?: TTList
@@ -201,7 +201,7 @@ type MainState = {
   fetchCurrentListFeeds: (direction: TTDirection, middleCursor?: string) => Promise<boolean>
 
   // マイリスト
-  myLists: TTMyLists
+  myLists?: TTMyLists
 
   // スターターパック
   currentStarterPack?: TIStarterPack
@@ -384,10 +384,6 @@ type MainState = {
   otherSettingsPopupDisplay: boolean
   openOtherSettingsPopup: Function
   closeOtherSettingsPopup: () => void
-
-  // ポップアップ - 説明用ポップアップ
-  htmlPopupDisplay: boolean
-  htmlPopupType?: string
 
   // ポップアップ - 招待コードポップアップ
   inviteCodesPopupDisplay: boolean

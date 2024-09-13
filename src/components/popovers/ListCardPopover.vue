@@ -68,7 +68,7 @@ async function toggleListMute () {
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
 }
 
 async function toggleListBlock () {
@@ -102,7 +102,7 @@ async function toggleListBlock () {
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
 }
 
 async function deleteList () {

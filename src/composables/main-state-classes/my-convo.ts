@@ -35,7 +35,7 @@ export default class MyConvo {
     this.messages.push(message)
     this.sortMessages()
     this.data.lastMessage = message
-    this.mainState.myChat.sortMyConvos()
+    this.mainState.myChat!.sortMyConvos()
     return true
   }
 
@@ -85,7 +85,7 @@ export default class MyConvo {
     if (this.data?.lastMessage != null) {
       delete this.data.lastMessage.text
     }
-    this.mainState.myChat.sortMyConvos()
+    this.mainState.myChat!.sortMyConvos()
     return true
   }
 
@@ -99,7 +99,7 @@ export default class MyConvo {
       return false
     }
     this.data.unreadCount = 0
-    this.mainState.myChat.updateUnread()
+    this.mainState.myChat!.updateUnread()
     return true
   }
 
@@ -112,13 +112,13 @@ export default class MyConvo {
       this.mainState.openErrorPopup(result, "MyChat/mute")
       return false
     }
-    const myConvo = this.mainState.myChat.myConvos.find((myConvo) => {
+    const myConvo = this.mainState.myChat!.myConvos.find((myConvo) => {
       return myConvo.data?.id === this.data?.id
     })
     if (myConvo.data != null) {
       myConvo.data.muted = true
     }
-    this.mainState.myChat.sortMyConvos()
+    this.mainState.myChat!.sortMyConvos()
     return true
   }
 
@@ -131,13 +131,13 @@ export default class MyConvo {
       this.mainState.openErrorPopup(result, "MyChat/unmute")
       return false
     }
-    const myConvo = this.mainState.myChat.myConvos.find((myConvo) => {
+    const myConvo = this.mainState.myChat!.myConvos.find((myConvo) => {
       return myConvo.data?.id === this.data?.id
     })
     if (myConvo.data != null) {
       myConvo.data.muted = false
     }
-    this.mainState.myChat.sortMyConvos()
+    this.mainState.myChat!.sortMyConvos()
     return true
   }
 
@@ -150,11 +150,11 @@ export default class MyConvo {
       this.mainState.openErrorPopup(result, "MyChat/leave")
       return false
     }
-    const index = this.mainState.myChat.myConvos.findIndex((myConvo) => {
+    const index = this.mainState.myChat!.myConvos.findIndex((myConvo) => {
       return myConvo.data?.id === this.data?.id
     })
     if (index !== - 1) {
-      this.mainState.myChat.myConvos.splice(index, 1)
+      this.mainState.myChat!.myConvos.splice(index, 1)
     }
     return true
   }

@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetQuotes, AtpAgent } from "@atproto/api"
+import type { AppBskyFeedGetQuotes } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -16,7 +16,7 @@ export default async function (
     cursor,
   }
   const response: Error | AppBskyFeedGetQuotes.Response =
-    await (this.agent as AtpAgent).app.bsky.feed.getQuotes(query)
+    await this.agent.app.bsky.feed.getQuotes(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getQuotes]", response)

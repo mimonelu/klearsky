@@ -33,7 +33,7 @@ async function openChatMembersSelectPopup () {
   }
   const dids = mainState.chatMembersSelectPopupProps.users.map((user) => user.did)
   mainState.loaderDisplay = true
-  const myConvo = await mainState.myChat.fetchMyConvo(dids)
+  const myConvo = await mainState.myChat!.fetchMyConvo(dids)
   mainState.loaderDisplay = false
   if (myConvo == null) {
     return
@@ -54,7 +54,7 @@ function openChatDeclarationSelectPopover ($event: Event) {
 
 async function chatDeclarationSelectPopoverCallback (type: TTAllowIncoming) {
   mainState.loaderDisplay = true
-  if (await mainState.myChat.setDeclaration(type)) {
+  if (await mainState.myChat!.setDeclaration(type)) {
     if (mainState.userProfile?.associated?.chat != null) {
       mainState.userProfile.associated.chat.allowIncoming = type
     }
@@ -142,7 +142,7 @@ function isMine (message: TIChatMessage): boolean {
     </template>
     <template #body>
       <div
-        v-if="mainState.myChat.myConvos.length === 0"
+        v-if="mainState.myChat!.myConvos.length === 0"
         class="textlabel chat-list-popup__no-chat"
       >
         <div class="textlabel__text">
@@ -151,7 +151,7 @@ function isMine (message: TIChatMessage): boolean {
       </div>
       <template v-else>
         <div
-          v-for="myConvo,myConvoIndex of mainState.myChat.myConvos"
+          v-for="myConvo,myConvoIndex of mainState.myChat!.myConvos"
           :key="myConvoIndex"
           class="convo-card"
           :data-has-unread-messages="myConvo.data?.unreadCount > 0"

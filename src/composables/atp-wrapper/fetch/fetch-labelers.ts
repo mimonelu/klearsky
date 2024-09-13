@@ -1,4 +1,4 @@
-import type { AppBskyLabelerGetServices, AtpAgent } from "@atproto/api"
+import type { AppBskyLabelerGetServices } from "@atproto/api"
 import CONSTS from "@/consts/consts.json"
 
 export default async function (
@@ -14,7 +14,7 @@ export default async function (
     query.detailed = detailed
   }
   const response: Error | AppBskyLabelerGetServices.Response =
-    await (this.agent as AtpAgent).app.bsky.labeler.getServices(query)
+    await this.agent.app.bsky.labeler.getServices(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/fetchLabelers]", response)

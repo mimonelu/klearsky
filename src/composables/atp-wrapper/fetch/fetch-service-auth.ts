@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoServerGetServiceAuth } from "@atproto/api"
+import type { ComAtprotoServerGetServiceAuth } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -10,7 +10,7 @@ export default async function (
     return Error("noAgentError")
   }
   const response: Error | ComAtprotoServerGetServiceAuth.Response =
-    await (this.agent as AtpAgent).com.atproto.server.getServiceAuth({
+    await this.agent.com.atproto.server.getServiceAuth({
       aud,
       lxm,
       exp,

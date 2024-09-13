@@ -1,5 +1,5 @@
 import Package from "@/../package.json"
-import type { AppBskyFeedPost, AtpAgent } from "@atproto/api"
+import type { AppBskyFeedPost } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
 import { LIMIT_OF_LIST_MENTION_ACCOUNTS } from "@/consts/consts.json"
@@ -120,7 +120,7 @@ export default async function (
   }
 
   const response: Error | TTCidUri =
-    await (this.agent as AtpAgent).post(record)
+    await this.agent.post(record)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/post]", response)

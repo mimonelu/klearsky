@@ -1,4 +1,4 @@
-import type { AppBskyGraphGetStarterPacks, AtpAgent } from "@atproto/api"
+import type { AppBskyGraphGetStarterPacks } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -9,7 +9,7 @@ export default async function (
   }
   const query: AppBskyGraphGetStarterPacks.QueryParams = { uris }
   const response: Error | AppBskyGraphGetStarterPacks.Response =
-    await (this.agent as AtpAgent).app.bsky.graph.getStarterPacks(query)
+    await this.agent.app.bsky.graph.getStarterPacks(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getStarterPacks]", response)

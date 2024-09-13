@@ -42,7 +42,7 @@ const easyFormState = reactive<{
     const results: Array<TTOption> = []
 
     // マイフィードを選択肢に追加
-    Array.from(mainState.myFeeds.items)
+    Array.from(mainState.myFeeds!.items)
       .filter((item) => {
         return item.kind === "feed"
       })
@@ -60,7 +60,7 @@ const easyFormState = reactive<{
     const results: Array<TTOption> = []
 
     // マイリストを選択肢に追加
-    Array.from(mainState.myLists.items)
+    Array.from(mainState.myLists!.items)
       .sort((a, b): number => {
         const aTerm = a.name || a.indexedAt
         const bTerm = b.name || b.indexedAt
@@ -150,9 +150,11 @@ async function submitCallback () {
   query.record.list = easyFormState.list
 
   // `descriptionFacets` の設定
-  const richText = new RichText({ text: easyFormState.description })
-  await richText.detectFacets(mainState.atp.agent)
-  query.record.descriptionFacets = richText.facets
+  if (mainState.atp.agent != null) {
+    const richText = new RichText({ text: easyFormState.description })
+    await richText.detectFacets(mainState.atp.agent)
+    query.record.descriptionFacets = richText.facets
+  }
 
   // 作成
   if (props.mode === "create") {

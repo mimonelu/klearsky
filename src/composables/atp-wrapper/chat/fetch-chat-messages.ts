@@ -1,4 +1,4 @@
-import type { AtpAgent, ChatBskyConvoGetMessages } from "@atproto/api"
+import type { ChatBskyConvoGetMessages } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -24,7 +24,7 @@ export default async function (
     options.headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | ChatBskyConvoGetMessages.Response =
-    await (this.agent as AtpAgent).api.chat.bsky.convo.getMessages(query, options)
+    await this.agent.api.chat.bsky.convo.getMessages(query, options)
       .then((value) => value)
       .catch((error) => error)
   if (response instanceof Error) {

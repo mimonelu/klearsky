@@ -1,4 +1,3 @@
-import type { AtpAgent } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -18,7 +17,7 @@ export default async function (
     headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | undefined =
-    await (this.agent as AtpAgent).api.chat.bsky.actor.declaration.delete({
+    await this.agent.api.chat.bsky.actor.declaration.delete({
       repo,
       rkey,
     }, headers)

@@ -39,7 +39,7 @@ const state = reactive<{
   }),
   loaderDisplay: false,
   saved: computed((): boolean => {
-    return mainState.myFeeds.findIndexByUri(props.generator.uri) !== - 1
+    return mainState.myFeeds!.findIndexByUri(props.generator.uri) !== - 1
   }),
   pinned: computed((): boolean => {
     return mainState.currentFeedPreference?.pinned
@@ -91,7 +91,7 @@ async function toggleSavedOrPinned (type: TTPreferenceFeedType) {
     }
 
     if (type === "saved") {
-      mainState.myFeeds.removeItem(props.generator.uri)
+      mainState.myFeeds!.removeItem(props.generator.uri)
     }
     if (!mainState.removeFeedPreferenceByUri(type, props.generator.uri)) {
       return
@@ -105,7 +105,7 @@ async function toggleSavedOrPinned (type: TTPreferenceFeedType) {
     }
 
     if (type === "saved") {
-      mainState.myFeeds.addItem(props.generator)
+      mainState.myFeeds!.addItem(props.generator)
     }
     mainState.currentFeedPreference[type].push(props.generator.uri)
   }
@@ -143,8 +143,8 @@ async function updatePreferences () {
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-  mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
+  mainState.myWorker!.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker!.setSessionCache("myFeedsItems", mainState.myFeeds!.items)
 }
 
 function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {

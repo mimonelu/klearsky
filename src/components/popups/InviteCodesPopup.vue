@@ -29,7 +29,7 @@ async function updateInviteCodes () {
   mainState.loaderDisplay = false
 
   // セッションキャッシュの更新
-  if (result) mainState.myWorker.setSessionCache("inviteCodes", mainState.inviteCodes)
+  if (result) mainState.myWorker!.setSessionCache("inviteCodes", mainState.inviteCodes)
 }
 
 async function copyCode (code: string) {

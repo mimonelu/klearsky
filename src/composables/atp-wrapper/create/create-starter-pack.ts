@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { ComAtprotoRepoCreateRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -14,7 +14,7 @@ export default async function (
     collection: "app.bsky.graph.starterpack",
   }
   const response: Error | ComAtprotoRepoCreateRecord.Response =
-    await (this.agent as AtpAgent).com.atproto.repo.createRecord(query)
+    await this.agent.com.atproto.repo.createRecord(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/createStarterPack]", response)

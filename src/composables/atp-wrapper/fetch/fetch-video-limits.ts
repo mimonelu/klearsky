@@ -1,5 +1,5 @@
 import { AtpAgent as AtpAgentClass } from "@atproto/api"
-import type { AtpAgent, AppBskyVideoGetUploadLimits } from "@atproto/api"
+import type { AppBskyVideoGetUploadLimits } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper

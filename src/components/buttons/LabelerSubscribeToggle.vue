@@ -27,12 +27,12 @@ const state = reactive<{
 
   // 登録済みラベラーかどうか
   isLabelerSubscribing: computed((): boolean => {
-    return mainState.myLabeler.isSubscribed(props.labeler?.creator.did)
+    return mainState.myLabeler!.isSubscribed(props.labeler?.creator.did)
   }),
 
   // 公式ラベラーかどうか
   isLabelerOfficial: computed((): boolean => {
-    return mainState.myLabeler.isOfficial(props.labeler?.creator.did)
+    return mainState.myLabeler!.isOfficial(props.labeler?.creator.did)
   }),
 })
 
@@ -46,13 +46,13 @@ async function toggleLabelerSubscribe () {
   }
   if (state.isLabelerSubscribing) {
     // ラベラーの解除
-    if (!mainState.myLabeler.unsubscribe(props.labeler.creator.did)) {
+    if (!mainState.myLabeler!.unsubscribe(props.labeler.creator.did)) {
       return
     }
     emit("unsubscribed")
   } else {
     // ラベラーの上限値チェック
-    if (!mainState.myLabeler.belowMyLabelerLimit()) {
+    if (!mainState.myLabeler!.belowMyLabelerLimit()) {
       mainState.openMessagePopup({
         title: $t("error"),
         text: $t("labelerOverLimit"),
@@ -61,7 +61,7 @@ async function toggleLabelerSubscribe () {
     }
 
     // ラベラーの登録
-    if (!mainState.myLabeler.subscribe(props.labeler.creator.did, props.labeler)) {
+    if (!mainState.myLabeler!.subscribe(props.labeler.creator.did, props.labeler)) {
       return
     }
 
@@ -78,8 +78,8 @@ async function toggleLabelerSubscribe () {
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-  mainState.myWorker.setSessionCache("myLabeler", mainState.myLabeler.labelers)
+  mainState.myWorker!.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker!.setSessionCache("myLabeler", mainState.myLabeler!.labelers)
 }
 </script>
 

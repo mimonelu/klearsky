@@ -134,7 +134,7 @@ const state = reactive<{
     if (mainState.currentProfile?.labels == null) {
       return []
     }
-    return mainState.myLabeler.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "media", "none"])
+    return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "media", "none"])
   }),
   contentFilteringToggleDisplay: computed((): boolean => {
     return state.contentFilteringLabels.length > 0
@@ -145,7 +145,7 @@ const state = reactive<{
     if (mainState.currentProfile?.labels == null) {
       return true
     }
-    return mainState.myLabeler.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "none"]).length > 0
+    return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "none"]).length > 0
   }),
   accountContentDisplay: computed((): boolean => {
     return !state.enabledContentMask || !state.hasBlurredContent
@@ -156,7 +156,7 @@ const state = reactive<{
     if (mainState.currentProfile?.labels == null) {
       return true
     }
-    return mainState.myLabeler.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["media"]).length > 0
+    return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["media"]).length > 0
   }),
   accountMediaDisplay: computed((): boolean => {
     return !state.enabledContentMask || !state.hasBlurredMedia

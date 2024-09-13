@@ -17,7 +17,7 @@ function openMyListPopup () {
 
 function openLabelerListPopup () {
   Util.blurElement()
-  mainState.openLabelerListPopup("myLabeler", mainState.myLabeler.labelers)
+  mainState.openLabelerListPopup("myLabeler", mainState.myLabeler!.labelers)
 }
 </script>
 

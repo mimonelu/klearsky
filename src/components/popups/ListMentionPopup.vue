@@ -23,7 +23,7 @@ const easyFormState = reactive<{
     ]
 
     // マイリストを選択肢に追加
-    Array.from(mainState.myLists.items)
+    Array.from(mainState.myLists!.items)
       .sort((a: TTList, b: TTList): number => {
         const aTerm = a.name || a.indexedAt
         const bTerm = b.name || b.indexedAt
@@ -53,7 +53,7 @@ const easyFormProps: TTEasyForm = {
       // リストメンションの対象リストと対象DID配列の更新
       onUpdate () {
         if (mainState.listMentionPopupProps.list != null) {
-          const list = mainState.myLists.items.find((item) => {
+          const list = mainState.myLists!.items.find((item) => {
             return item.uri === mainState.listMentionPopupProps.list
           })
           if (list != null) {

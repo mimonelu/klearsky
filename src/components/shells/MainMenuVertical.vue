@@ -129,9 +129,9 @@ function moveToBottom () {
 
           <!-- 未読チャットバッジ -->
           <div
-            v-if="mainState.myChat.unread > 0 && !mainState.currentSetting.hideNotificationBadge"
+            v-if="mainState.myChat!.unread > 0 && !mainState.currentSetting.hideNotificationBadge"
             class="unread-badge"
-          >{{ mainState.myChat.unread }}</div>
+          >{{ mainState.myChat!.unread }}</div>
         </div>
         <div class="label">{{ $t("chat") }}</div>
       </button>

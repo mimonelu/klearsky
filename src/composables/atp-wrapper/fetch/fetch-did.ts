@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoIdentityResolveHandle } from "@atproto/api"
+import type { ComAtprotoIdentityResolveHandle } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -9,7 +9,7 @@ export default async function (
   }
   const query: ComAtprotoIdentityResolveHandle.QueryParams = { handle }
   const response: Error | ComAtprotoIdentityResolveHandle.Response =
-    await (this.agent as AtpAgent).resolveHandle(query)
+    await this.agent.resolveHandle(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/resolveHandle]", response)

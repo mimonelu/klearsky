@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { ComAtprotoRepoCreateRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -11,7 +11,7 @@ export default async function (
     repo: this.session?.did as string,
   }
   const response: Error | ComAtprotoRepoCreateRecord.OutputSchema =
-    await (this.agent as AtpAgent).app.bsky.graph.block.create(query, {
+    await this.agent.app.bsky.graph.block.create(query, {
       createdAt: new Date().toISOString(),
       subject: did,
     })

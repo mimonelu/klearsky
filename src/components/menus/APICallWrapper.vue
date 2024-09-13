@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { AtpAgent } from "@atproto/api"
 import { inject, nextTick, reactive, ref } from "vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -51,11 +50,14 @@ function close () {
 
 async function activate (type: string) {
   emit("close")
+  if (mainState.atp.agent == null) {
+    return
+  }
   let response: Error | undefined | Response = undefined
   mainState.loaderDisplay = true
   switch (type) {
     case "getRecommendedDidCredentials": {
-      response = await (mainState.atp.agent as AtpAgent).com.atproto.identity
+      response = await mainState.atp.agent.com.atproto.identity
         .getRecommendedDidCredentials()
           .then((value) => value)
           .catch((error) => error)
@@ -82,7 +84,7 @@ async function activate (type: string) {
       break
     }
     case "listMissingBlobs": {
-      response = await (mainState.atp.agent as AtpAgent).com.atproto.repo
+      response = await mainState.atp.agent.com.atproto.repo
         .listMissingBlobs()
           .then((value) => value)
           .catch((error) => error)
@@ -102,7 +104,7 @@ async function activate (type: string) {
       break
     }
     case "checkAccountStatus": {
-      response = await (mainState.atp.agent as AtpAgent).com.atproto.server
+      response = await mainState.atp.agent.com.atproto.server
         .checkAccountStatus()
           .then((value) => value)
           .catch((error) => error)

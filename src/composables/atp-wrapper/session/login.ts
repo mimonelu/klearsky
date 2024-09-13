@@ -1,4 +1,4 @@
-import type { AtpAgentLoginOpts, AtpAgent, ComAtprotoServerCreateSession } from "@atproto/api"
+import type { AtpAgentLoginOpts, ComAtprotoServerCreateSession } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -41,13 +41,16 @@ export default async function (
 
   // 新規ログイン
   } else {
+    if (this.agent == null) {
+      return Error("noAgentError")
+    }
     const optinos: AtpAgentLoginOpts = {
       identifier,
       password,
       authFactorToken,
     }
     const response: Error | ComAtprotoServerCreateSession.Response =
-      await (this.agent as AtpAgent).login(optinos)
+      await this.agent.login(optinos)
         .then((value) => value)
         .catch((error) => error)
     console.log("[klearsky/login]", response)

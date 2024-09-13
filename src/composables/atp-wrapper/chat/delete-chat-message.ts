@@ -1,4 +1,4 @@
-import type { AtpAgent, ChatBskyConvoDeleteMessageForSelf } from "@atproto/api"
+import type { ChatBskyConvoDeleteMessageForSelf } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -23,7 +23,7 @@ export default async function (
     options.headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | ChatBskyConvoDeleteMessageForSelf.Response =
-    await (this.agent as AtpAgent).api.chat.bsky.convo.deleteMessageForSelf(query, options)
+    await this.agent.api.chat.bsky.convo.deleteMessageForSelf(query, options)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/api.chat.bsky.convo.deleteMessageForSelf]", response)

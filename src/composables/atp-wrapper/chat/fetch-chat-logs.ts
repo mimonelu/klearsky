@@ -1,4 +1,4 @@
-import type { AtpAgent, ChatBskyConvoGetLog } from "@atproto/api"
+import type { ChatBskyConvoGetLog } from "@atproto/api"
 
 interface TIChatLog {
   rev: string
@@ -25,7 +25,7 @@ export default async function (
     options.headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | ChatBskyConvoGetLog.Response =
-    await (this.agent as AtpAgent).api.chat.bsky.convo.getLog(query, options)
+    await this.agent.api.chat.bsky.convo.getLog(query, options)
       .then((value) => value)
       .catch((error) => error)
   if (response instanceof Error) {

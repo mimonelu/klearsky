@@ -36,7 +36,7 @@ const easyFormState = reactive<{
   avatar: null,
   detachAvatar: [],
   purpose: props.list != null
-    ? mainState.myLists.getShortPurpose(props.list?.purpose)
+    ? mainState.myLists!.getShortPurpose(props.list?.purpose)
     : "curatelist",
   name: props.list?.name ?? "",
   description: props.list?.description ?? "",
@@ -147,7 +147,7 @@ async function submitCallback () {
       ...props.list as TTList,
       name: easyFormState.name,
       description: easyFormState.description,
-      purpose: mainState.myLists.getLongPurpose(easyFormState.purpose),
+      purpose: mainState.myLists!.getLongPurpose(easyFormState.purpose),
     }, avatarBlobRef)
   if (result instanceof Error) {
     state.loaderDisplay = false

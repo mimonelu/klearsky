@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { ComAtprotoRepoCreateRecord } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -9,7 +9,7 @@ export default async function (
     return Error("noAgentError")
   }
   const response: Error | ComAtprotoRepoCreateRecord.OutputSchema =
-    await (this.agent as AtpAgent).repost(uri, cid)
+    await this.agent.repost(uri, cid)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/repost]", response)

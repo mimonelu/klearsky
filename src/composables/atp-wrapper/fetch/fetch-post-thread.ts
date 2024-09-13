@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetPostThread, AtpAgent } from "@atproto/api"
+import type { AppBskyFeedGetPostThread } from "@atproto/api"
 import Util from "@/composables/util"
 
 interface TTThread {
@@ -20,7 +20,7 @@ export default async function (
     query.depth = depth
   }
   const response: Error | AppBskyFeedGetPostThread.Response =
-    await (this.agent as AtpAgent).getPostThread(query)
+    await this.agent.getPostThread(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getPostThread]", response)

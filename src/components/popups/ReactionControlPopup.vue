@@ -93,7 +93,7 @@ const easyFormState = reactive<{
     ]
 
     // マイリストを選択肢に追加
-    Array.from(mainState.myLists.items)
+    Array.from(mainState.myLists!.items)
       .sort((a: TTList, b: TTList): number => {
         const aTerm = a.name || a.indexedAt
         const bTerm = b.name || b.indexedAt

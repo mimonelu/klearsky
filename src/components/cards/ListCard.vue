@@ -70,7 +70,7 @@ const state = reactive<{
     return mainState.formatDate(props.list.indexedAt)
   }),
   purpose: computed((): string => {
-    return mainState.myLists.getShortPurpose(props.list.purpose)
+    return mainState.myLists!.getShortPurpose(props.list.purpose)
   }),
   isOwn: computed((): boolean => {
     return props.list.creator.did === mainState.atp.session?.did
@@ -82,7 +82,7 @@ const state = reactive<{
     mainState.currentPath === "/home/list-users" &&
     mainState.currentQuery.list === props.list.uri,
   saved: computed((): boolean => {
-    return mainState.myFeeds.findIndexByUri(props.list.uri) !== - 1
+    return mainState.myFeeds!.findIndexByUri(props.list.uri) !== - 1
   }),
   pinned: computed((): boolean => {
     return mainState.currentFeedPreference?.pinned
@@ -146,7 +146,7 @@ function updateList (list: TTList) {
   props.list.purpose = list.purpose
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
 }
 
 async function deleteList () {
@@ -160,14 +160,14 @@ async function deleteList () {
   emit("deleteList", props.list)
 
   // マイフィードから削除
-  if (mainState.myFeeds.removeItem(props.list.uri)) {
+  if (mainState.myFeeds!.removeItem(props.list.uri)) {
     mainState.sortFeedPreferencesSavedAndPinned()
-    mainState.myFeeds.saveCustomItemSettings()
+    mainState.myFeeds!.saveCustomItemSettings()
     await updatePreferences()
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
 
   // 削除したマイリストのリストフィード／ユーザーページにいる場合、リスト作成ユーザーのリスト一覧ページへ強制遷移
   if (props.list.creator.did === mainState.atp.session?.did &&
@@ -191,7 +191,7 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
     // フィードブックマークの削除はフィードピンが有効の場合のみ
     if (type === "saved" && state.pinned) return
 
-    if (type === "saved") mainState.myFeeds.removeItem(props.list.uri)
+    if (type === "saved") mainState.myFeeds!.removeItem(props.list.uri)
     const index = mainState.currentFeedPreference[type].findIndex((uri: string) => {
       return uri === props.list.uri
     })
@@ -203,7 +203,7 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
     // ピンの追加はフィードブックマークが無効の場合のみ
     if (type === "pinned" && !state.saved) return
 
-    if (type === "saved") mainState.myFeeds.addItem(props.list)
+    if (type === "saved") mainState.myFeeds!.addItem(props.list)
     mainState.currentFeedPreference[type].push(props.list.uri)
   }
 
@@ -220,8 +220,8 @@ async function updatePreferences () {
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-  mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
+  mainState.myWorker!.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker!.setSessionCache("myFeedsItems", mainState.myFeeds!.items)
 }
 
 function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {

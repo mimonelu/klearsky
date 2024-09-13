@@ -1,4 +1,4 @@
-import type { AppBskyGraphGetFollows, AtpAgent } from "@atproto/api"
+import type { AppBskyGraphGetFollows } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -18,7 +18,7 @@ export default async function (
     query.cursor = cursor
   }
   const response: Error | AppBskyGraphGetFollows.Response =
-    await (this.agent as AtpAgent).getFollows(query)
+    await this.agent.getFollows(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getFollows]", response)

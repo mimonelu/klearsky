@@ -277,7 +277,7 @@ const state = reactive<{
     ]
   }),
   hideLabels: computed((): Array<TILabelSetting> => {
-    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide"], ["none", "content", "media"])
+    return mainState.myLabeler!.getSpecificLabels(state.allLabels, ["hide"], ["none", "content", "media"])
   }),
   hideLabelNames: computed((): Array<string> => {
     return state.hideLabels.map((label) => {
@@ -285,10 +285,10 @@ const state = reactive<{
     })
   }),
   blurContentLabels: computed((): Array<TILabelSetting> => {
-    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide", "warn"], ["none", "content"])
+    return mainState.myLabeler!.getSpecificLabels(state.allLabels, ["hide", "warn"], ["none", "content"])
   }),
   blurMediaLabels: computed((): Array<TILabelSetting> => {
-    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide", "warn"], ["media"])
+    return mainState.myLabeler!.getSpecificLabels(state.allLabels, ["hide", "warn"], ["media"])
   }),
 
   // ラベル対応 - ポストコンテンツ
@@ -699,12 +699,12 @@ async function translateText (forceTranslate: boolean) {
 
 // マイリストの削除
 async function deleteList (list: TTList) {
-  if (!mainState.myLists.remove(list.uri)) {
+  if (!mainState.myLists!.remove(list.uri)) {
     return
   }
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
 
   delete props.post.embed?.record
 }
@@ -909,7 +909,7 @@ function toggleOldestQuotedPostDisplay () {
             <!-- ラベラーアイコン -->
             <template v-if="post.author?.associated?.labeler">
               <SVGIcon
-                v-if="mainState.myLabeler.isSubscribed(post.author?.did)"
+                v-if="mainState.myLabeler!.isSubscribed(post.author?.did)"
                 name="labeler"
                 class="account-labeler-icon"
               />

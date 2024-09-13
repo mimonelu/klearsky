@@ -1,5 +1,3 @@
-import type { AtpAgent } from "@atproto/api"
-
 export default async function (
   this: TIAtpWrapper,
   uri: string,
@@ -9,7 +7,7 @@ export default async function (
     return Error("noAgentError")
   }
   const response: Error | TTCidUri =
-    await (this.agent as AtpAgent).like(uri, cid)
+    await this.agent.like(uri, cid)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/like]", response)

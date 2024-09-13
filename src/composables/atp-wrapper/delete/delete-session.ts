@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoServerDeleteSession } from "@atproto/api"
+import type { ComAtprotoServerDeleteSession } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
   if (this.agent == null) {
@@ -10,7 +10,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
 
   // TODO: API は成功するが、セッションが削除されない。要調査
   const response: Error | ComAtprotoServerDeleteSession.Response =
-    await (this.agent as AtpAgent).api.com.atproto.server.deleteSession(undefined, {
+    await this.agent.api.com.atproto.server.deleteSession(undefined, {
       headers: {
         authorization: `Bearer ${this.session.refreshJwt}`,
       },

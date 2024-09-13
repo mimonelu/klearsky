@@ -85,7 +85,7 @@ function process (type: string) {
       break
     }
     case "myLabeler": {
-      mainState.openLabelerListPopup("myLabeler", mainState.myLabeler.labelers)
+      mainState.openLabelerListPopup("myLabeler", mainState.myLabeler!.labelers)
       break
     }
     case "mutingUsers": {

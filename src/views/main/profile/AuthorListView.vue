@@ -9,7 +9,7 @@ const state = reactive<{
 }>({
   lists: computed((): Array<TTList> => {
     return mainState.isMyProfile()
-      ? mainState.myLists.items
+      ? mainState.myLists!.items
       : mainState.currentAuthorLists
   }),
 })

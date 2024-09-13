@@ -23,7 +23,7 @@ async function close () {
   if (state.orderChanged) {
     state.popupLoaderDisplay = true
     mainState.sortFeedPreferencesSavedAndPinned()
-    mainState.myFeeds.saveCustomItemSettings()
+    mainState.myFeeds!.saveCustomItemSettings()
     const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
     state.popupLoaderDisplay = false
     if (result instanceof Error) {
@@ -33,8 +33,8 @@ async function close () {
     }
 
     // セッションキャッシュの更新
-    mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-    mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
+    mainState.myWorker!.setSessionCache("currentPreferences", mainState.currentPreferences)
+    mainState.myWorker!.setSessionCache("myFeedsItems", mainState.myFeeds!.items)
   }
   emit("close")
 }
@@ -51,14 +51,14 @@ async function fetchMyFeeds () {
 
   // ブックマークが存在しない
   if (mainState.currentFeedPreference?.saved == null) {
-    mainState.myFeeds.clearItems()
+    mainState.myFeeds!.clearItems()
     state.popupLoaderDisplay = false
     return
   }
 
   // マイフィードジェネレーターの取得
-  await mainState.myFeeds.fetchItems()
-  mainState.myFeeds.sortItems()
+  await mainState.myFeeds!.fetchItems()
+  mainState.myFeeds!.sortItems()
   state.popupLoaderDisplay = false
 }
 
@@ -74,7 +74,7 @@ async function sortMyFeeds (
   // 特殊フィードの保存
   const specialKinds: TTMyFeedsItemKind[] = ["followings", "globalline"]
   const specialItems: TISpecialItem[] = specialKinds.map((kind: TTMyFeedsItemKind) => {
-    const index = mainState.myFeeds.items.findIndex((item: TTMyFeedsItem) => {
+    const index = mainState.myFeeds!.items.findIndex((item: TTMyFeedsItem) => {
       return item.kind === kind
     })
     return {
@@ -92,7 +92,7 @@ async function sortMyFeeds (
   switch (type) {
     // フィードのいいね順
     case "like": {
-      mainState.myFeeds.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
+      mainState.myFeeds!.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
         if (a.kind === "feed" && b.kind === "feed") {
           return a.value.likeCount < b.value.likeCount
             ? orderB
@@ -113,7 +113,7 @@ async function sortMyFeeds (
 
     // 名前順
     case "name": {
-      mainState.myFeeds.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
+      mainState.myFeeds!.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
         const aIsTarget = a.kind === "feed" || a.kind === "list"
         const bIsTarget = b.kind === "feed" || b.kind === "list"
         if (aIsTarget && bIsTarget) {
@@ -138,7 +138,7 @@ async function sortMyFeeds (
 
     // URI順
     case "uri": {
-      mainState.myFeeds.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
+      mainState.myFeeds!.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
         const aIsTarget = a.kind === "feed" || a.kind === "list"
         const bIsTarget = b.kind === "feed" || b.kind === "list"
         if (aIsTarget && bIsTarget) {
@@ -161,7 +161,7 @@ async function sortMyFeeds (
 
     // 作成日順
     case "indexedAt": {
-      mainState.myFeeds.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
+      mainState.myFeeds!.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
         const aIsTarget = a.kind === "feed" || a.kind === "list"
         const bIsTarget = b.kind === "feed" || b.kind === "list"
         if (aIsTarget && bIsTarget) {
@@ -185,11 +185,11 @@ async function sortMyFeeds (
 
   // 特殊フィードの復帰
   specialItems.forEach((specialItem: TISpecialItem) => {
-    const currentIndex = mainState.myFeeds.items.findIndex((item: TTMyFeedsItem) => {
+    const currentIndex = mainState.myFeeds!.items.findIndex((item: TTMyFeedsItem) => {
       return item.kind === specialItem.kind
     })
     if (currentIndex === - 1 || specialItem.index === - 1) return
-    moveArray(mainState.myFeeds.items, currentIndex, specialItem.index)
+    moveArray(mainState.myFeeds!.items, currentIndex, specialItem.index)
   })
 
   state.orderChanged = true
@@ -210,21 +210,21 @@ function moveArray <T>(array: T[], fromIndex: number, toIndex: number) {
 function changeCustomFeedOrder (params: any) {
   const direction = params.direction as "top" | "up" | "down" | "bottom"
   const item = params.item as TTMyFeedsItemValue
-  const index = mainState.myFeeds.findIndexByUri(item.uri)
+  const index = mainState.myFeeds!.findIndexByUri(item.uri)
   if (index === - 1) return
-  const lastIndex = mainState.myFeeds.items.length - 1
+  const lastIndex = mainState.myFeeds!.items.length - 1
   if (direction === "top" && index !== 0) {
-    const temp = mainState.myFeeds.items[index]
-    mainState.myFeeds.items.splice(index, 1)
-    mainState.myFeeds.items.unshift(temp)
+    const temp = mainState.myFeeds!.items[index]
+    mainState.myFeeds!.items.splice(index, 1)
+    mainState.myFeeds!.items.unshift(temp)
   } else if (direction === "up" && index > 0) {
-    mainState.myFeeds.swapItem(index, index - 1)
+    mainState.myFeeds!.swapItem(index, index - 1)
   } else if (direction === "down" && index < lastIndex) {
-    mainState.myFeeds.swapItem(index, index + 1)
+    mainState.myFeeds!.swapItem(index, index + 1)
   } else if (direction === "bottom" && index !== lastIndex) {
-    const temp = mainState.myFeeds.items[index]
-    mainState.myFeeds.items.splice(index, 1)
-    mainState.myFeeds.items.push(temp)
+    const temp = mainState.myFeeds!.items[index]
+    mainState.myFeeds!.items.splice(index, 1)
+    mainState.myFeeds!.items.push(temp)
   }
   state.orderChanged = true
 }
@@ -264,7 +264,7 @@ function openMyFeedsSortPopover ($event: Event) {
     </template>
     <template #body>
       <div
-        v-if="!state.popupLoaderDisplay && mainState.myFeeds.items.length === 0"
+        v-if="!state.popupLoaderDisplay && mainState.myFeeds!.items.length === 0"
         class="textlabel"
       >
         <div class="textlabel__text">
@@ -273,7 +273,7 @@ function openMyFeedsSortPopover ($event: Event) {
       </div>
       <template v-else>
         <template
-          v-for="item of mainState.myFeeds.items"
+          v-for="item of mainState.myFeeds!.items"
           :key="item.value.uri"
         >
           <!-- フォロー中フィード -->

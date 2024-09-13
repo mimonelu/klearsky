@@ -1,4 +1,4 @@
-import type { AppBskyNotificationUpdateSeen, AtpAgent } from "@atproto/api"
+import type { AppBskyNotificationUpdateSeen } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper, seenAtDate?: Date): Promise<Error | undefined> {
   if (this.agent == null) {
@@ -6,7 +6,7 @@ export default async function (this: TIAtpWrapper, seenAtDate?: Date): Promise<E
   }
   const seenAt = (seenAtDate ?? new Date()).toISOString()
   const response: Error | AppBskyNotificationUpdateSeen.Response =
-    await (this.agent as AtpAgent).updateSeenNotifications(seenAt)
+    await this.agent.updateSeenNotifications(seenAt)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/updateSeenNotifications]", response)

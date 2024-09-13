@@ -1,4 +1,4 @@
-import type { AppBskyGraphGetListBlocks, AtpAgent } from "@atproto/api"
+import type { AppBskyGraphGetListBlocks } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -17,7 +17,7 @@ export default async function (
     query.cursor = cursor
   }
   const response: Error | AppBskyGraphGetListBlocks.Response =
-    await (this.agent as AtpAgent).app.bsky.graph.getListBlocks(query)
+    await this.agent.app.bsky.graph.getListBlocks(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getListBlocks]", response)

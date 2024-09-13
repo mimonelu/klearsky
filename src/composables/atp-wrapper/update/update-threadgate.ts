@@ -1,4 +1,4 @@
-import type { AppBskyFeedThreadgate, AtpAgent, ComAtprotoRepoCreateRecord } from "@atproto/api"
+import type { AppBskyFeedThreadgate, ComAtprotoRepoCreateRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -41,7 +41,7 @@ export default async function (
     createdAt: new Date().toISOString(),
   }
   const response: Error | TTCidUri =
-    await (this.agent as AtpAgent).app.bsky.feed.threadgate.create(query, record)
+    await this.agent.app.bsky.feed.threadgate.create(query, record)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/updateThreadgate]", response)

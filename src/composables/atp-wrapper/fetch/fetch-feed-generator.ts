@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetFeedGenerator, AtpAgent } from "@atproto/api"
+import type { AppBskyFeedGetFeedGenerator } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -9,7 +9,7 @@ export default async function (
   }
   const query: AppBskyFeedGetFeedGenerator.QueryParams = { feed }
   const response: AppBskyFeedGetFeedGenerator.Response =
-    await (this.agent as AtpAgent).app.bsky.feed.getFeedGenerator(query)
+    await this.agent.app.bsky.feed.getFeedGenerator(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getFeedGenerator]", response)

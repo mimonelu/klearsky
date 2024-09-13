@@ -22,7 +22,7 @@ export default class MyLabeler {
 
     // プリファレンスへ追加
     const myLabelers = this.getMyLabelerPreferences()
-    if (myLabelers.every((myLabeler) => myLabeler.did !== did)) {
+    if (myLabelers.every((myLabeler) => myLabeler!.did !== did)) {
       myLabelers?.push({ did })
     }
 
@@ -47,7 +47,7 @@ export default class MyLabeler {
 
     // プリファレンスから削除
     const myLabelers = this.getMyLabelerPreferences()
-    const myLabelerIndex = myLabelers.findIndex((myLabeler) => myLabeler.did === did)
+    const myLabelerIndex = myLabelers.findIndex((myLabeler) => myLabeler!.did === did)
     if (myLabelerIndex !== - 1) {
       myLabelers.splice(myLabelerIndex, 1)
     }
@@ -95,7 +95,7 @@ export default class MyLabeler {
 
     // 公式ラベラーを追加
     if (myLabelers.every((myLabeler) => {
-      return myLabeler.did !== CONSTS.OFFICIAL_LABELER_DID
+      return myLabeler!.did !== CONSTS.OFFICIAL_LABELER_DID
     })) {
       myLabelers.unshift({ did: CONSTS.OFFICIAL_LABELER_DID })
     }
@@ -105,7 +105,7 @@ export default class MyLabeler {
 
   makeMyLabelerPreferenceDids (): string[] {
     const myLabelers = this.getMyLabelerPreferences()
-    return myLabelers.map((myLabeler) => myLabeler.did) ?? []
+    return myLabelers.map((myLabeler) => myLabeler!.did) ?? []
   }
 
   async fetchLabeler (did: string): Promise<undefined | TILabeler> {
@@ -315,7 +315,10 @@ export default class MyLabeler {
     this.mainState.currentPreferences.splice(0, this.mainState.currentPreferences.length, ...results)
   }
 
-  setAtprotoAcceptLabelers () {
+  setAtprotoAcceptLabelers (): Error | undefined {
+    if (this.mainState.atp.agent == null) {
+      return Error("noAgentError")
+    }
     const myLabelerDids = this.makeMyLabelerPreferenceDids()
     this.mainState.atp.agent.configureLabelersHeader(myLabelerDids)
   }

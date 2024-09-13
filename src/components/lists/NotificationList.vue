@@ -88,10 +88,10 @@ function makeSubjectTo (notification: TTNotification): any {
 // マイリストの削除
 async function deleteList (notificationGroup: TTNotificationGroup) {
   if (notificationGroup.list == null) return
-  if (!mainState.myLists.remove(notificationGroup.list.uri)) return
+  if (!mainState.myLists!.remove(notificationGroup.list.uri)) return
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
 
   delete notificationGroup.list
 }

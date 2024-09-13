@@ -63,7 +63,7 @@ async function autoScrollSliderMenu () {
         ref="sliderMenu"
       >
         <template
-          v-for="item of mainState.myFeeds.pinnedItems"
+          v-for="item of mainState.myFeeds!.pinnedItems"
           :key="item.value.uri"
         >
           <!-- フォロー中フィード -->

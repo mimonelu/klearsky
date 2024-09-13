@@ -32,7 +32,7 @@ const state = reactive<{
   labelerLabels: computed((): Array<undefined | TILabelSetting> => {
     return mainState.getLabelerLabels(props.labels)
       .map((label) => {
-        return mainState.myLabeler.labelMap[`${label.src}-${label.val}`]
+        return mainState.myLabeler!.labelMap[`${label.src}-${label.val}`]
       })
 
       // ラベラーラベルは「バッジを表示」以外の設定では表示しない
@@ -54,7 +54,7 @@ const state = reactive<{
 })
 
 function openLabelerSettingsPopup (did?: string) {
-  const labeler = mainState.myLabeler.labelers.find((labeler) => {
+  const labeler = mainState.myLabeler!.labelers.find((labeler) => {
     return labeler.creator.did === did
   })
   if (labeler == null) {
@@ -67,7 +67,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   if (label == null) {
     return ""
   }
-  return mainState.myLabeler.labelers.find((labeler) => {
+  return mainState.myLabeler!.labelers.find((labeler) => {
     return labeler.creator.did === label.did
   })?.creator.avatar ?? ""
 }

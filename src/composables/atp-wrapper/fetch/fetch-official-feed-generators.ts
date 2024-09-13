@@ -1,11 +1,11 @@
-import type { AppBskyFeedDescribeFeedGenerator, AtpAgent } from "@atproto/api"
+import type { AppBskyFeedDescribeFeedGenerator } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper): Promise<Error | Array<TTFeedGenerator>> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
   const response: Error | AppBskyFeedDescribeFeedGenerator.Response =
-    await (this.agent as AtpAgent).app.bsky.feed.describeFeedGenerator()
+    await this.agent.app.bsky.feed.describeFeedGenerator()
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/describeFeedGenerator]", response)

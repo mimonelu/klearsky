@@ -1,11 +1,11 @@
-import type { AppBskyNotificationGetUnreadCount, AtpAgent } from "@atproto/api"
+import type { AppBskyNotificationGetUnreadCount } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper): Promise<Error | number> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
   const response: Error | AppBskyNotificationGetUnreadCount.Response =
-    await (this.agent as AtpAgent).countUnreadNotifications()
+    await this.agent.countUnreadNotifications()
       .then((value) => value)
       .catch((error) => error)
   if (response instanceof Error) {

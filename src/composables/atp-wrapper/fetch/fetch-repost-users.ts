@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetRepostedBy, AtpAgent } from "@atproto/api"
+import type { AppBskyFeedGetRepostedBy } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -16,7 +16,7 @@ export default async function (
     cursor,
   }
   const response: Error | AppBskyFeedGetRepostedBy.Response =
-    await (this.agent as AtpAgent).getRepostedBy(query)
+    await this.agent.getRepostedBy(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getRepostedBy]", response)

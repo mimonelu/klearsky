@@ -16,10 +16,10 @@ async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
 
 // マイリストの削除
 async function deleteList (list: TTList) {
-  if (!mainState.myLists.remove(list.uri)) return
+  if (!mainState.myLists!.remove(list.uri)) return
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("myList", mainState.myLists.items)
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {

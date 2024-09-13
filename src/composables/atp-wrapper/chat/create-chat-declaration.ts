@@ -1,5 +1,3 @@
-import type { AtpAgent } from "@atproto/api"
-
 export default async function (
   this: TIAtpWrapper,
   repo: string,
@@ -13,7 +11,7 @@ export default async function (
   }
   const headers = { "atproto-proxy": "did:web:api.bsky.chat#bsky_chat" }
   const response: Error | TTCidUri =
-    await (this.agent as AtpAgent).api.chat.bsky.actor.declaration.create(
+    await this.agent.api.chat.bsky.actor.declaration.create(
       { repo },
       { allowIncoming },
       headers

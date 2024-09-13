@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoModerationCreateReport } from "@atproto/api"
+import type { ComAtprotoModerationCreateReport } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -26,7 +26,7 @@ export default async function (
     },
   }
   const response: Error | ComAtprotoModerationCreateReport.Response =
-    await (this.agent as AtpAgent).com.atproto.moderation.createReport(query)
+    await this.agent.com.atproto.moderation.createReport(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/createReport]", response)

@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetListFeed, AtpAgent } from "@atproto/api"
+import type { AppBskyFeedGetListFeed } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -23,7 +23,7 @@ export default async function (
     query.cursor = cursor
   }
   const response: Error | AppBskyFeedGetListFeed.Response =
-    await (this.agent as AtpAgent).app.bsky.feed.getListFeed(query)
+    await this.agent.app.bsky.feed.getListFeed(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getListFeed]", response)

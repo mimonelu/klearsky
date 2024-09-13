@@ -1,4 +1,4 @@
-import type { AppBskyActorPutPreferences, AtpAgent } from "@atproto/api"
+import type { AppBskyActorPutPreferences } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -9,7 +9,7 @@ export default async function (
   }
   const query: AppBskyActorPutPreferences.InputSchema = { preferences }
   const response: Error | AppBskyActorPutPreferences.Response =
-    await (this.agent as AtpAgent).app.bsky.actor.putPreferences(query)
+    await this.agent.app.bsky.actor.putPreferences(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/putPreferences]", response)

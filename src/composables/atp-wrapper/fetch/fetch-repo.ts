@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoRepoDescribeRepo } from "@atproto/api"
+import type { ComAtprotoRepoDescribeRepo } from "@atproto/api"
 
 // NOTICE: 異なる PDS のリポジトリに対して実行するとエラーとなる
 export default async function (
@@ -13,7 +13,7 @@ export default async function (
   }
   const query: ComAtprotoRepoDescribeRepo.QueryParams = { repo }
   const response: Error | ComAtprotoRepoDescribeRepo.Response =
-    await (this.agent as AtpAgent).com.atproto.repo.describeRepo(query)
+    await this.agent.com.atproto.repo.describeRepo(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/describeRepo]", response)

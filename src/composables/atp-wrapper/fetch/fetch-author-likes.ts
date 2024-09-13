@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoRepoListRecords } from "@atproto/api"
+import type { ComAtprotoRepoListRecords } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -21,7 +21,7 @@ export default async function (
     query.cursor = cursor
   }
   const response: ComAtprotoRepoListRecords.Response =
-    await (this.agent as AtpAgent).api.com.atproto.repo.listRecords(query)
+    await this.agent.api.com.atproto.repo.listRecords(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/listRecords/like]", response)

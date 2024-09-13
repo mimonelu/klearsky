@@ -80,7 +80,7 @@ provide("state", state)
 
 // ワーカーの削除
 window.addEventListener("beforeunload", () => {
-  state.myWorker.close()
+  state.myWorker!.close()
 })
 
 onBeforeMount(() => {
@@ -176,7 +176,7 @@ router.afterEach(async (to: RouteLocationNormalized) => {
 
 // ページタイトルの更新
 function updatePageTitle () {
-  const unreadCount = state.notificationCount + state.myChat.unread
+  const unreadCount = state.notificationCount + state.myChat!.unread
   let title = unreadCount === 0 ? "" : `(${unreadCount}) `
   title += "Klearsky"
 
@@ -284,7 +284,7 @@ async function manualLogin (
 
 function onRefreshSession () {
   // セッションデータの同期
-  state.myWorker.setSessionCache("session", state.atp.session)
+  state.myWorker!.setSessionCache("session", state.atp.session)
 }
 
 async function processAfterLogin () {
@@ -304,56 +304,56 @@ async function processAfterLogin () {
 
   // プリファレンスとユーザープロフィールの取得 - セッションキャッシュの設定
   if (tasks.currentPreferences != null) {
-    state.myWorker.setSessionCache("currentPreferences", state.currentPreferences)
+    state.myWorker!.setSessionCache("currentPreferences", state.currentPreferences)
   }
   if (tasks.userProfile != null) {
-    state.myWorker.setSessionCache("userProfile", state.userProfile)
+    state.myWorker!.setSessionCache("userProfile", state.userProfile)
   }
 
   // ラベラーの取得
-  if (state.myLabeler.labelers.length === 0) {
-    await state.myLabeler.updateMyLabelers()
+  if (state.myLabeler!.labelers.length === 0) {
+    await state.myLabeler!.updateMyLabelers()
       .then(() => {
         // ラベラーのHTTPヘッダーを設定
-        state.myLabeler.setAtprotoAcceptLabelers()
+        state.myLabeler!.setAtprotoAcceptLabelers()
 
         // セッションキャッシュの設定
-        state.myWorker.setSessionCache("myLabeler", state.myLabeler.labelers)
+        state.myWorker!.setSessionCache("myLabeler", state.myLabeler!.labelers)
       })
   }
 
   // マイフィードの取得
-  if (state.myFeeds.items.length === 0) {
-    state.myFeeds.fetchItems()
+  if (state.myFeeds!.items.length === 0) {
+    state.myFeeds!.fetchItems()
       .then(() => {
-        state.myFeeds.sortItems()
-        state.myFeeds.synchronizeToMyList()
+        state.myFeeds!.sortItems()
+        state.myFeeds!.synchronizeToMyList()
 
         // セッションキャッシュの設定
-        state.myWorker.setSessionCache("myFeedsItems", state.myFeeds.items)
+        state.myWorker!.setSessionCache("myFeedsItems", state.myFeeds!.items)
       })
   }
 
   // 全マイリストと全マイリストユーザーの取得
-  if (state.myLists.items.length === 0) {
-    state.myLists.fetchAll()
+  if (state.myLists!.items.length === 0) {
+    state.myLists!.fetchAll()
       .then(() => {
-        state.myFeeds.synchronizeToMyList()
+        state.myFeeds!.synchronizeToMyList()
 
         // セッションキャッシュの設定
-        state.myWorker.setSessionCache("myList", state.myLists.items)
+        state.myWorker!.setSessionCache("myList", state.myLists!.items)
       })
   }
 
   // チャットの利用可否を更新
-  state.myChat.updateDisabled()
+  state.myChat!.updateDisabled()
     .then(() => {
-      if (state.myChat.disabled) {
+      if (state.myChat!.disabled) {
         return
       }
 
       // チャット一覧の更新
-      state.myChat.updateConvosAll()
+      state.myChat!.updateConvosAll()
         .then((value) => {
           if (!value) {
             return
@@ -372,7 +372,7 @@ async function processAfterLogin () {
       .then(() => {
 
         // セッションキャッシュの設定
-        state.myWorker.setSessionCache("inviteCodes", state.inviteCodes)
+        state.myWorker!.setSessionCache("inviteCodes", state.inviteCodes)
       })
   }
 
@@ -388,7 +388,7 @@ async function processAfterLogin () {
 }
 
 async function moveToDefaultHome () {
-  const pinnedItems = state.myFeeds.pinnedItems
+  const pinnedItems = state.myFeeds!.pinnedItems
   const firstPinnedItem = pinnedItems[0]
   if (firstPinnedItem == null) {
     await router.replace("/home/timeline")
@@ -613,11 +613,11 @@ async function processProfilePage (account?: string): Promise<Error | undefined>
     }
   }
   if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-    state.myLabeler.updateCurrentLabeler(state.currentProfile.did)
+    state.myLabeler!.updateCurrentLabeler(state.currentProfile.did)
   }
 }
 
-let updateJwtTimer: null | number = null
+let updateJwtTimer: null | NodeJS.Timeout = null
 
 function clearUpdateJwtInterval () {
   if (updateJwtTimer != null) {
@@ -628,7 +628,6 @@ function clearUpdateJwtInterval () {
 
 async function setupUpdateJwtInterval () {
   clearUpdateJwtInterval()
-  // @ts-ignore // TODO:
   updateJwtTimer = setInterval(() => {
     state.atp.updateJwt(onRefreshSession)
   }, CONSTS.INTERVAL_OF_UPDATE_JWT)
@@ -653,7 +652,7 @@ async function updateCurrentList () {
   // 現在のリストを取得
   // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
   state.currentList = undefined
-  state.currentList = state.myLists.items.find((list: TTList) => {
+  state.currentList = state.myLists!.items.find((list: TTList) => {
     return list.uri === listUri
   })
   if (state.currentList == null) {

@@ -21,19 +21,19 @@ const state = reactive<{
   backupMyFeedsItems: [],
   backupPinned: [],
   pinnedMyFeedsItems: computed((): Array<TTMyFeedsItem> => {
-    return mainState.myFeeds.pinnedItems
+    return mainState.myFeeds!.pinnedItems
   }),
   processing: false,
 })
 
 function startEdit () {
-  state.backupMyFeedsItems = Util.cloneJson(mainState.myFeeds.items) ?? []
+  state.backupMyFeedsItems = Util.cloneJson(mainState.myFeeds!.items) ?? []
   state.backupPinned = Util.cloneJson(mainState.currentFeedPreference?.pinned ?? []) ?? []
   state.editMode = true
 }
 
 function cancelEdit () {
-  mainState.myFeeds.items = state.backupMyFeedsItems
+  mainState.myFeeds!.items = state.backupMyFeedsItems
   if (mainState.currentFeedPreference?.pinned != null) {
     mainState.currentFeedPreference.pinned = state.backupPinned
   }
@@ -49,7 +49,7 @@ async function saveMyFeed () {
   }
   state.processing = true
   mainState.sortFeedPreferencesSavedAndPinned()
-  mainState.myFeeds.saveCustomItemSettings()
+  mainState.myFeeds!.saveCustomItemSettings()
   const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
   state.processing = false
   if (result instanceof Error) {
@@ -59,8 +59,8 @@ async function saveMyFeed () {
   state.editMode = false
 
   // セッションキャッシュの更新
-  mainState.myWorker.setSessionCache("currentPreferences", mainState.currentPreferences)
-  mainState.myWorker.setSessionCache("myFeedsItems", mainState.myFeeds.items)
+  mainState.myWorker!.setSessionCache("currentPreferences", mainState.currentPreferences)
+  mainState.myWorker!.setSessionCache("myFeedsItems", mainState.myFeeds!.items)
 }
 
 function isPinned (uri: string): boolean {
@@ -84,7 +84,7 @@ function removeMyFeed (uri: string) {
     const index = mainState.currentFeedPreference.pinned.indexOf(uri)
     if (index !== - 1) mainState.currentFeedPreference.pinned.splice(index, 1)
   }
-  mainState.myFeeds.removeItem(uri)
+  mainState.myFeeds!.removeItem(uri)
 }
 </script>
 
@@ -209,7 +209,7 @@ function removeMyFeed (uri: string) {
       v-else
       v-slot="{ item, focused }"
       class="my-feed-list__body"
-      :items="mainState.myFeeds.items"
+      :items="mainState.myFeeds!.items"
     >
       <div
         class="my-feed-list__item"

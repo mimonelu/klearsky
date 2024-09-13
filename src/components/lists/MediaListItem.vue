@@ -25,7 +25,7 @@ const state = reactive<{
     ]
   }),
   blurMediaLabels: computed((): Array<TILabelSetting> => {
-    return mainState.myLabeler.getSpecificLabels(state.allLabels, ["hide", "warn"], ["media", "none"])
+    return mainState.myLabeler!.getSpecificLabels(state.allLabels, ["hide", "warn"], ["media", "none"])
   }),
   hasBlurredMedia: computed((): boolean => {
     return state.blurMediaLabels.length > 0

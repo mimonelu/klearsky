@@ -1,4 +1,4 @@
-import type { AppBskyActorSearchActors, AtpAgent } from "@atproto/api"
+import type { AppBskyActorSearchActors } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -21,7 +21,7 @@ export default async function (
     query.cursor = cursor
   }
   const response: Error | AppBskyActorSearchActors.Response =
-    await (this.agent as AtpAgent).searchActors(query)
+    await this.agent.searchActors(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/searchActors]", response)

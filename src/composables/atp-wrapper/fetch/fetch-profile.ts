@@ -1,4 +1,4 @@
-import type { AppBskyActorGetProfile, AtpAgent } from "@atproto/api"
+import type { AppBskyActorGetProfile } from "@atproto/api"
 import { PROFILE_ERRORS } from "@/consts/errors.json"
 
 export default async function (
@@ -9,7 +9,7 @@ export default async function (
     return Error("noAgentError")
   }
   const response: Error | AppBskyActorGetProfile.Response =
-    await (this.agent as AtpAgent).getProfile({ actor })
+    await this.agent.getProfile({ actor })
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getProfile]", response)

@@ -1,4 +1,4 @@
-import type { AppBskyFeedGetLikes, AtpAgent } from "@atproto/api"
+import type { AppBskyFeedGetLikes } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -16,7 +16,7 @@ export default async function (
     cursor,
   }
   const response: Error | AppBskyFeedGetLikes.Response =
-    await (this.agent as AtpAgent).getLikes(query)
+    await this.agent.getLikes(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getLikes]", response)

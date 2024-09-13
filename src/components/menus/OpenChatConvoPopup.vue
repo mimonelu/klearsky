@@ -27,7 +27,7 @@ async function onActivate () {
     return
   }
   mainState.loaderDisplay = true
-  const myConvo = await mainState.myChat.fetchMyConvo([props.user.did])
+  const myConvo = await mainState.myChat!.fetchMyConvo([props.user.did])
   mainState.loaderDisplay = false
   if (myConvo != null) {
     mainState.openChatConvoPopup(myConvo)

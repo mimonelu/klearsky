@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoServerGetAccountInviteCodes } from "@atproto/api"
+import type { ComAtprotoServerGetAccountInviteCodes } from "@atproto/api"
 
 export default async function (this: TIAtpWrapper): Promise<Error | TTInviteCode[]> {
   if (this.agent == null) {
@@ -9,7 +9,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | TTInviteCode
     createAvailable: true,
   }
   const response: Error | ComAtprotoServerGetAccountInviteCodes.Response =
-    await (this.agent as AtpAgent).com.atproto.server.getAccountInviteCodes(query)
+    await this.agent.com.atproto.server.getAccountInviteCodes(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/getAccountInviteCodes]", response)

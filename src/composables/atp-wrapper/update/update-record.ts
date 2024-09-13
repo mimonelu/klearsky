@@ -1,4 +1,4 @@
-import type { AtpAgent, ComAtprotoRepoPutRecord } from "@atproto/api"
+import type { ComAtprotoRepoPutRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -28,7 +28,7 @@ export default async function (
     swapCommit,
   }
   const response: Error | ComAtprotoRepoPutRecord.Response =
-    await (this.agent as AtpAgent).com.atproto.repo.putRecord(query)
+    await this.agent.com.atproto.repo.putRecord(query)
       .then((value) => value)
       .catch((error) => error)
   console.log("[klearsky/putRecord]", response)
