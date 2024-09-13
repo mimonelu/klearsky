@@ -28,10 +28,9 @@ export default async function (
       return
     }
 
-    // @ts-ignore
     const feeds: TTFeed[] = [{
+      __id: oldPosts.length.toString(),
       post: {
-        __id: oldPosts.length.toString(),
         __custom: {},
         author,
         uri: record.uri,
@@ -41,9 +40,9 @@ export default async function (
           createdAt: record.value.createdAt,
           text: record.value.text as string,
         },
-        likeCount: 0,
         replyCount: 0,
         repostCount: 0,
+        likeCount: 0,
         quoteCount: 0,
         indexedAt: record.value.createdAt,
         viewer: {},

@@ -28,7 +28,7 @@ const state = reactive<{
   <div
     class="author-handle"
     :data-is-invalid-handle="isInvalidHandle"
-  >{{ state.handle }}</div>
+  >{{ state.handle || "&emsp;" }}</div>
 </template>
 
 <style lang="scss" scoped>

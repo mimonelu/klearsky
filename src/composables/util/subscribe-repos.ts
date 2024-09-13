@@ -149,15 +149,26 @@ export default class {
       return
     }
 
+    const uri = `at://${did ?? ''}/app.bsky.feed.post/${rkey ?? ''}`
     const feeds: Array<TTFeed> = [{
-      // @ts-ignore
+      __id: uri,
       post: {
-        uri: `at://${did ?? ''}/app.bsky.feed.post/${rkey ?? ''}`,
+        __custom: {},
+        author: {
+          did: "",
+          displayName: "",
+          handle: "",
+          viewer: {
+            muted: false,
+          },
+        },
+        uri,
         cid,
         record,
         replyCount: 0,
         repostCount: 0,
         likeCount: 0,
+        quoteCount: 0,
         indexedAt: record.createdAt,
         viewer: {},
       },
