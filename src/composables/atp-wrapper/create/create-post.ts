@@ -14,12 +14,7 @@ export default async function (
 
   const record: AppBskyFeedPost.Record = {
     $type: "app.bsky.feed.post",
-
-    // TODO: 最後に回す
-    createdAt: params.createdAt != null
-      ? params.createdAt
-      : new Date().toISOString(),
-
+    createdAt: params.createdAt ?? new Date().toISOString(),
     text: params.text ?? "",
 
     // カスタムフィールド - via
@@ -118,6 +113,10 @@ export default async function (
       values: params.labels.map((label: string) => ({ val: label })),
     }
   }
+
+  // 投稿日時の設定
+  // NOTICE: 途中の createEmbed における時間経過を考慮
+  record.createdAt = params.createdAt ?? new Date().toISOString()
 
   const response: Error | TTCidUri =
     await this.agent.post(record)
