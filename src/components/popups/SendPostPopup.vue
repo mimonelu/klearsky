@@ -561,7 +561,7 @@ const PreviewLinkCardFeature: {
                 <dt>{{ $t("videoRemainingDailyNumber") }}</dt>
                 <dd>{{ (state.videoLimits.remainingDailyVideos ?? 0).toLocaleString() }}</dd>
                 <dt>{{ $t("videoRemainingDailyBytes") }}</dt>
-                <dd>{{ (((state.videoLimits.remainingDailyBytes ?? 0) / 1024 / 1024 / 1024).toFixed(2)).toLocaleString() }} GB</dd>
+                <dd>{{ (((state.videoLimits.remainingDailyBytes ?? 0) / 1000 / 1000 / 1000).toFixed(2)).toLocaleString() }} GB</dd>
               </dl>
             </div>
           </div>

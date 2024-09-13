@@ -433,8 +433,8 @@
   "videoIsBlob": "Non-streaming",
   "videoIsNone": "Not playable",
   "videoCanNotUpload": "Video posts are not allowed.",
-  "videoRemainingDailyNumber": "Postable  number of video today",
-  "videoRemainingDailyBytes": "Postable video bytes today",
+  "videoRemainingDailyNumber": "Postable number of video today",
+  "videoRemainingDailyBytes": "Postable video capacity today",
 
   "linkcard": "Link card",
   "linkCardControl": "Link Card Control",
