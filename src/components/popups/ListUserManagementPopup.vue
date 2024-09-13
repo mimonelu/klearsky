@@ -92,14 +92,14 @@ async function clicked (list: TTList) {
   } else {
     // リストユーザーをマイリストに追加
     state.loaderDisplayMap[list.uri] = true
-    const result = await mainState.atp.createListUser(list.uri, props.user.did)
+    const listUserUri = await mainState.atp.createListUser(list.uri, props.user.did)
     state.loaderDisplayMap[list.uri] = false
-    if (result instanceof Error) {
+    if (listUserUri instanceof Error) {
       // TODO:
       return
     }
     const newListItem: TTListItem = {
-      uri: result,
+      uri: listUserUri,
       subject: props.user,
     }
     myList.items.unshift(newListItem)

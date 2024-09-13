@@ -1231,13 +1231,12 @@ async function fetchCurrentAuthorFeedGenerators (direction: "new" | "old") {
   // ブロックされている
   if (state.currentProfile?.viewer.blockedBy) return
 
-  const cursor: Error | undefined | string =
-    await state.atp.fetchAuthorFeedGenerators(
-      state.currentAuthorFeedGenerators as Array<TTFeedGenerator>,
-      account,
-      CONSTS.LIMIT_OF_FETCH_AUTHOR_CUSTOM_FEEDS,
-      direction === "old" ? state.currentAuthorFeedGeneratorsCursor : undefined
-    )
+  const cursor = await state.atp.fetchAuthorFeedGenerators(
+    state.currentAuthorFeedGenerators as Array<TTFeedGenerator>,
+    account,
+    CONSTS.LIMIT_OF_FETCH_AUTHOR_CUSTOM_FEEDS,
+    direction === "old" ? state.currentAuthorFeedGeneratorsCursor : undefined
+  )
   if (cursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(cursor, "mainState/fetchCurrentAuthorFeedGenerators")
@@ -1270,15 +1269,14 @@ async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, 
       ? state.currentAuthorFeedsWithMediaCursor
       : state.currentAuthorFeedsCursor
 
-  const resultCursor =
-    await state.atp.fetchAuthorFeed(
-      feeds as Array<TTFeed>,
-      account,
-      CONSTS.LIMIT_OF_FETCH_AUTHOR_FEEDS,
-      direction === "old" ? cursor : middleCursor,
-      filter ?? "posts_no_replies",
-      direction
-    )
+  const resultCursor = await state.atp.fetchAuthorFeed(
+    feeds as Array<TTFeed>,
+    account,
+    CONSTS.LIMIT_OF_FETCH_AUTHOR_FEEDS,
+    direction === "old" ? cursor : middleCursor,
+    filter ?? "posts_no_replies",
+    direction
+  )
   if (resultCursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(resultCursor, "mainState/fetchCurrentAuthorFeed")
@@ -1442,7 +1440,14 @@ async function fetchSuggestedFollows () {
   if (!account) {
     return
   }
-  await state.atp.fetchSuggestedFollows(state.currentSuggestedFollows, account)
+  const response = await state.atp.fetchSuggestedFollows(
+    state.currentSuggestedFollows,
+    account
+  )
+  if (response instanceof Error) {
+    // TODO:
+    // state.openErrorPopup(response, "mainState/fetchSuggestedFollows")
+  }
 }
 
 async function fetchSuggestions (direction: "new" | "old") {
@@ -1521,14 +1526,13 @@ async function fetchSearchPosts (cursor?: string) {
     params.author = state.currentSearchPostFormState.author[0]
   }
 
-  const newCursor: Error | undefined | string =
-    await state.atp.fetchPostSearch(
-      state.currentSearchPostResults,
-      state.currentSearchTerm,
-      params,
-      CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
-      cursor
-    )
+  const newCursor = await state.atp.fetchPostSearch(
+    state.currentSearchPostResults,
+    state.currentSearchTerm,
+    params,
+    CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
+    cursor
+  )
   if (newCursor instanceof Error) {
     state.openErrorPopup(newCursor, "mainState/fetchSearchPosts")
     return
@@ -1539,16 +1543,17 @@ async function fetchSearchPosts (cursor?: string) {
 
 // 検索 - 現在のフィード検索結果
 async function fetchSearchFeeds (direction: "old" | "new") {
-  const cursor: Error | undefined | string =
-    await state.atp.fetchPopularFeedGenerators(
-      state.currentSearchFeeds,
-      CONSTS.LIMIT_OF_FETCH_POPULAR_FEED_GENERATORS,
-      direction === "old" ? state.currentSearchFeedsCursor : undefined,
-      state.currentSearchTerm
-    )
+  const cursor = await state.atp.fetchPopularFeedGenerators(
+    state.currentSearchFeeds,
+    CONSTS.LIMIT_OF_FETCH_POPULAR_FEED_GENERATORS,
+    direction === "old" ? state.currentSearchFeedsCursor : undefined,
+    state.currentSearchTerm
+  )
   if (cursor instanceof Error) {
     state.openErrorPopup(cursor, "mainState/fetchSearchFeeds")
-  } else if (cursor != null) {
+    return
+  }
+  if (cursor != null) {
     state.currentSearchFeedsCursor = cursor
   }
 }
@@ -1572,22 +1577,25 @@ async function fetchCustomFeeds (direction: TTDirection, middleCursor?: string) 
   )
   if (cursor instanceof Error) {
     state.openErrorPopup(cursor, "mainState/fetchCustomFeeds")
-  } else if (cursor != null) {
+    return
+  }
+  if (cursor != null) {
     state.currentCustomFeedsCursor = cursor
   }
   state.currentCustomFeedsUri = state.currentQuery.feed
 }
 
 async function fetchPopularFeedGenerators (direction: "old" | "new") {
-  const cursor: Error | undefined | string =
-    await state.atp.fetchPopularFeedGenerators(
-      state.currentPopularFeedGenerators,
-      CONSTS.LIMIT_OF_FETCH_POPULAR_FEED_GENERATORS,
-      direction === "old" ? state.currentPopularFeedGeneratorsCursor : undefined
-    )
+  const cursor = await state.atp.fetchPopularFeedGenerators(
+    state.currentPopularFeedGenerators,
+    CONSTS.LIMIT_OF_FETCH_POPULAR_FEED_GENERATORS,
+    direction === "old" ? state.currentPopularFeedGeneratorsCursor : undefined
+  )
   if (cursor instanceof Error) {
     state.openErrorPopup(cursor, "mainState/fetchPopularFeedGenerators")
-  } else if (cursor != null) {
+    return
+  }
+  if (cursor != null) {
     state.currentPopularFeedGeneratorsCursor = cursor
   }
 }

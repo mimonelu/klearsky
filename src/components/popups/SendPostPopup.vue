@@ -150,7 +150,6 @@ onMounted(async () => {
   // 動画ファイルのアップロード権限と各種リミットの取得
   const videoLimits = await mainState.atp.fetchVideoLimits()
   if (videoLimits instanceof Error) {
-    // TODO:
     state.videoLimits = undefined
   } else {
     state.videoLimits = videoLimits
@@ -236,7 +235,7 @@ async function submitCallback () {
           state.draftReactionControl.allowFollowing,
           state.draftReactionControl.listUris
         )
-        if (!responseOfUpdate || responseOfUpdate instanceof Error) {
+        if (responseOfUpdate instanceof Error) {
           mainState.openErrorPopup(responseOfUpdate, "SendPostPopup/updateThreadgate")
           return
         }

@@ -51,7 +51,7 @@ function close () {
 
 async function activate (type: string) {
   emit("close")
-  let response: Error | undefined | any = undefined
+  let response: Error | undefined | Response = undefined
   mainState.loaderDisplay = true
   switch (type) {
     case "getRecommendedDidCredentials": {

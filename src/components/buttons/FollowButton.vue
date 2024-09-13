@@ -29,7 +29,7 @@ async function toggleFollow () {
       mainState.openErrorPopup(response, "FollowButton/toggleFollow")
       return
     }
-    props.viewer.following = response
+    props.viewer.following = undefined
   } else {
     const uri = await mainState.atp.createFollow(props.declarationDid)
     state.processing = false
