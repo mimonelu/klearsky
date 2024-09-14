@@ -33,6 +33,17 @@ const state = reactive<{
       return []
     }
 
+    // visibility が未設定、もしくは public のもののみ
+    results.records = results.records.filter((record) => {
+      if (record.value == null) {
+        return false
+      }
+      return (
+        record.value.visibility == null ||
+        record.value.visibility === "public"
+      )
+    })
+
     // テンプレート構文用プロパティのインジェクション
     results.records.forEach((record) => {
       if (record.value == null) {
@@ -58,11 +69,6 @@ const state = reactive<{
     <div class="white-winds__container">
       <template v-for="record of state.records">
         <a
-          v-if="
-            record.value.visibility == null ||
-            record.value.visibility === 'public' ||
-            record.value.visibility === 'url'
-          "
           class="white-winds__item"
           :href="record.value.__href"
           rel="noreferrer"
