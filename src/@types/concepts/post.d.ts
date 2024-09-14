@@ -91,6 +91,10 @@ interface TIVideo {
   thumbnail: string
   aspectRatio?: TTAspectRatio
   alt?: string // Injected
+  video?: {
+    $type: "blob"
+    ref: Blob
+  }
 }
 
 type TTReason = {

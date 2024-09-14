@@ -116,12 +116,18 @@ const state = reactive<{
   }),
 
   // メディア
-  images: computed(() => props.post.embed?.images ?? props.post.record?.embed?.images ?? []),
+  images: computed(() => {
+    return props.post.embed?.images ?? props.post.record?.embed?.images ?? []
+  }),
   video: computed(() => {
-    const embed = props.post.embed
-    return embed == null || embed.$type !== "app.bsky.embed.video#view"
+    const embed = props.post.embed ?? props.post.record?.embed
+    return embed == null
       ? undefined
-      : embed as unknown as TIVideo
+      : embed.$type?.startsWith("app.bsky.embed.video")
+        ? embed as unknown as TIVideo
+        : (embed.media as unknown as TIVideo)?.$type?.startsWith("app.bsky.embed.video")
+          ? embed.media as unknown as TIVideo
+          : undefined
   }),
   videoAspectRatio: computed((): string => {
     if (state.video?.aspectRatio == null ||
@@ -1078,7 +1084,7 @@ function toggleOldestQuotedPostDisplay () {
                     <VideoPlayer
                       :playlist="state.video.playlist"
                       :did="post.author.did"
-                      :cid="state.video.cid"
+                      :cid="state.video.cid ?? state.video.video?.ref?.toString()"
                       :poster="state.video.thumbnail"
                       :preload="mainState.currentSetting.videoPreload"
                       :style="{ 'aspect-ratio': state.videoAspectRatio }"
