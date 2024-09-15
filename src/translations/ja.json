@@ -565,6 +565,8 @@
   "showTimeFeeds": "タイムフィードで見る",
   "timeFeeds": "タイムフィード",
 
+  "reactionControl": "反応制限",
+
   "threadgate": "リプライ制限",
   "threadgateNoAction": "誰でもリプライ可",
   "threadgateCustomAction": "許可されたユーザーのみリプライ可",

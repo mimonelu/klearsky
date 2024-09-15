@@ -565,6 +565,8 @@
   "showTimeFeeds": "Show in timefeed",
   "timeFeeds": "Timefeed",
 
+  "reactionControl": "Reaction controls",
+
   "threadgate": "Reply controls",
   "threadgateNoAction": "Anyone can reply",
   "threadgateCustomAction": "Only allowed users can reply",

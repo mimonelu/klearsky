@@ -40,6 +40,6 @@ function onActivate () {
 <template>
   <button @click.prevent.stop="onActivate">
     <SVGIcon name="lock" />
-    <span>{{ $t("threadgate") }}</span>
+    <span>{{ $t("reactionControl") }}</span>
   </button>
 </template>

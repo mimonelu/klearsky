@@ -236,7 +236,7 @@ async function update () {
     <template #header>
       <h2>
         <SVGIcon name="lock" />
-        <span>{{ $t("threadgate") }}</span>
+        <span>{{ $t("reactionControl") }}</span>
 
         <!-- ON/OFFアイコン -->
         <span
@@ -254,6 +254,9 @@ async function update () {
         v-bind="easyFormProps"
         ref="easyForm"
       >
+        <template #free-0>
+          <h3>{{ $t("threadgate") }}</h3>
+        </template>
         <template #free-1>
           <!-- 注意文 -->
           <div class="textlabel">
@@ -297,6 +300,11 @@ async function update () {
   }
 
   &:deep() {
+    h3 {
+      font-size: 1.125rem;
+      font-weight: bold;
+    }
+
     // リストアイコン
     .easy-form .checkboxes {
       @include list-icon-styles;

@@ -495,7 +495,7 @@ const PreviewLinkCardFeature: {
               @click.prevent="openReactionControlPopup"
             >
               <SVGIcon :name="state.draftReactionControl.threadgateAction !== 'none' ? 'lock' : 'unlock'" />
-              <span>{{ $t("threadgate") }}</span>
+              <span>{{ $t("reactionControl") }}</span>
               <b v-if="state.draftReactionControl.threadgateAction !== 'none'">ON</b>
             </button>
 
