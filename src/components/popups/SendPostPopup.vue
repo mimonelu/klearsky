@@ -323,6 +323,7 @@ function onChangeImage () {
 function openReactionControlPopup () {
   mainState.openReactionControlPopup({
     mode: "send",
+    isReply: false,
     draftReactionControl: state.draftReactionControl,
     onClosed (params?: TICloseReactionControlPopupProps) {
       if (params == null) {

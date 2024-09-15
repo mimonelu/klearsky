@@ -18,6 +18,7 @@ function onActivate () {
   }
   mainState.openReactionControlPopup({
     mode: "post",
+    isReply: props.post.record?.reply != null,
     postThreadgate: props.post.threadgate,
     postUri: props.post.uri,
     onClosed: async (params: any) => {

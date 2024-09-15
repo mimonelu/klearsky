@@ -652,6 +652,7 @@ export const state: MainState = reactive<MainState>({
   // ポップアップ - 反応制御ポップアップ
   reactionControlPopupProps: {
     display: false,
+    isReply: false,
     postThreadgate: undefined,
     postUri: undefined,
   },
@@ -2323,6 +2324,7 @@ function closePostDatePopup () {
 
 function openReactionControlPopup (props: TTReactionControlPopupProps) {
   state.reactionControlPopupProps.mode = props.mode
+  state.reactionControlPopupProps.isReply = props.isReply
   state.reactionControlPopupProps.draftReactionControl = props.draftReactionControl
   state.reactionControlPopupProps.postThreadgate = props.postThreadgate
   state.reactionControlPopupProps.postUri = props.postUri

@@ -15,6 +15,7 @@ const emit = defineEmits<{(
 const props = defineProps<{
   display: boolean
   mode?: "send" | "post"
+  isReply: boolean
   draftReactionControl?: TTDraftReactionControl
   postThreadgate?: TTThreadgate
   postUri?: string
@@ -146,6 +147,7 @@ const easyFormProps: TTEasyForm = {
     {
       state: easyFormState,
       model: "threadgateAction",
+      display: !props.isReply,
       type: "radio",
       options: easyFormState.threadgateActionOptions,
       onUpdate () {
@@ -165,6 +167,7 @@ const easyFormProps: TTEasyForm = {
     {
       state: easyFormState,
       model: "threadgateAllows",
+      display: !props.isReply,
       type: "checkbox",
       options: easyFormState.threadgateAllowOptions,
       limit: LIMIT_OF_THREADGATE_ITEMS,
@@ -234,7 +237,7 @@ async function update () {
   }
 
   // Threadgate の削除／設定済みの場合も削除
-  if (props.postThreadgate != null) {
+  if (!props.isReply && props.postThreadgate != null) {
     const responseOfDelete = await mainState.atp.deleteThreadgate(props.postUri)
     if (responseOfDelete instanceof Error) {
       state.loaderDisplay = false
@@ -245,7 +248,7 @@ async function update () {
   }
 
   // Threadgate の更新
-  if (easyFormState.threadgateAction !== "none") {
+  if (!props.isReply && easyFormState.threadgateAction !== "none") {
     const responseOfUpdate = await mainState.atp.updateThreadgate(
       props.postUri,
       allowMention,
@@ -317,10 +320,16 @@ async function fetchPostgate () {
         <template #free-0>
           <h3>{{ $t("postgate") }}</h3>
         </template>
-        <template #free-1>
+        <template
+          v-if="!props.isReply"
+          #free-1
+        >
           <h3>{{ $t("threadgate") }}</h3>
         </template>
-        <template #free-2>
+        <template
+          v-if="!props.isReply"
+          #free-2
+        >
           <!-- 注意文 -->
           <div class="textlabel">
             <div class="textlabel__text">

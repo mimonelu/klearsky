@@ -47,6 +47,7 @@ type TTDraftReactionControl = {
 type TTReactionControlPopupProps = {
   display: boolean
   mode?: "send" | "post"
+  isReply: boolean
   draftReactionControl?: TTDraftReactionControl
   postThreadgate?: TTThreadgate
   postUri?: string

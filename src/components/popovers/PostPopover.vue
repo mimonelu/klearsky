@@ -161,7 +161,6 @@ function callback (type: "deletePost" | "updatePost") {
       <!-- 反応制御ポップアップトリガー -->
       <MenuTickerOpenReactionControlPopup
         v-if="state.isUser"
-        :disabled="post.record?.reply != null"
         :post="post"
         @close="emit('close')"
       />
