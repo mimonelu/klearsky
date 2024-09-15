@@ -104,7 +104,7 @@ function removeThisPost (uri: string) {
           :container="state.postContainer"
           :hasReplyIcon="post.record.reply != null"
           :hasQuoteRepostIcon="post.record.embed?.record != null"
-          :hideQuoteRepost="true"
+          :forceHideQuoteRepost="true"
           @click.exact="close"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"

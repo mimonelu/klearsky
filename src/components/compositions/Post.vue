@@ -34,7 +34,7 @@ const props = defineProps<{
   hasQuoteRepostIcon?: boolean
   noLink?: boolean
   forceHideMedia?: boolean
-  hideQuoteRepost?: boolean
+  forceHideQuoteRepost?: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -1180,17 +1180,11 @@ function toggleOldestQuotedPostDisplay () {
           :customDisplay="false"
         />
 
-        <!-- 引用リポスト／リストカード -->
+        <!-- 引用リポスト -->
         <template v-if="post.embed?.record != null">
-          <!-- 引用リポスト／リストカード - 見つからない -->
+          <!-- 引用リポスト - 見つからない -->
           <div
-            v-if="
-              post.embed.record.$type === 'app.bsky.embed.record#viewNotFound' ||
-              (
-                post.embed.record.$type === 'app.bsky.embed.record#viewDetached' &&
-                !hideQuoteRepost
-              )
-            "
+            v-if="post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'"
             class="textlabel repost"
           >
             <div class="textlabel__text">
@@ -1198,7 +1192,20 @@ function toggleOldestQuotedPostDisplay () {
             </div>
           </div>
 
-          <!-- 引用リポスト／リストカード - ブロック中／被ブロック中 -->
+          <!-- 引用リポスト - 切り離された -->
+          <div
+            v-else-if="
+              post.embed.record.$type === 'app.bsky.embed.record#viewDetached' &&
+              !forceHideQuoteRepost
+            "
+            class="textlabel repost"
+          >
+            <div class="textlabel__text">
+              <SVGIcon name="alert" />{{ $t("postDetached") }}
+            </div>
+          </div>
+
+          <!-- 引用リポスト - ブロック中／被ブロック中 -->
           <div
             v-else-if="
               post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
@@ -1215,7 +1222,7 @@ function toggleOldestQuotedPostDisplay () {
           <!-- 引用リポスト -->
           <template v-else-if="
             post.embed.record.$type === 'app.bsky.embed.record#viewRecord' &&
-            !hideQuoteRepost
+            !forceHideQuoteRepost
           ">
             <!-- 最古の引用元ポストトグル -->
             <div

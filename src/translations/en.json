@@ -144,6 +144,7 @@
   "blocking": "Blocking",
   "postBlocked": "This post cannot be displayed.",
   "postNotFound": "This post does not exist.",
+  "postDetached": "This post was detached.",
 
   "reportSendAccount": "Report user",
   "reportSendPost": "Report post",

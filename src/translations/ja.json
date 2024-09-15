@@ -144,6 +144,7 @@
   "blocking": "ブロック中",
   "postBlocked": "このポストを表示することはできません。",
   "postNotFound": "このポストは存在しません。",
+  "postDetached": "このポストは切り離されました。",
 
   "reportSendAccount": "ユーザーをレポートする",
   "reportSendPost": "ポストをレポートする",
