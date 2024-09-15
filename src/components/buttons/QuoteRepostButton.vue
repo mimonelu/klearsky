@@ -32,7 +32,7 @@ const mainState = inject("state") as MainState
   }
 
   & > .svg-icon--lock {
-    fill: var(--fg-color-025);
+    fill: rgb(var(--fg-color), 0.25);
   }
 
   & > .icon-container {

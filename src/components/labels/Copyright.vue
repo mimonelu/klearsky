@@ -38,7 +38,7 @@ const yyyy = (new Date).getFullYear()
 
 <style lang="scss" scoped>
 .copyright {
-  color: var(--fg-color-05);
+  color: rgb(var(--fg-color), 0.5);
   line-height: var(--line-height-high);
 
   & > * {
@@ -54,7 +54,7 @@ const yyyy = (new Date).getFullYear()
   }
 
   .textlink--underline {
-    --accent-color: var(--fg-color-05);
+    --accent-color: rgb(var(--fg-color), 0.5);
   }
 }
 </style>

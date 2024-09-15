@@ -164,7 +164,7 @@ async function openSendPostPopup () {
   max-height: var(--sp-menu-size);
 
   & > .svg-icon {
-    fill: var(--fg-color-075);
+    fill: rgb(var(--fg-color), 0.75);
     font-size: 1.5rem;
   }
 

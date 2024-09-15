@@ -123,8 +123,8 @@ function close (params: any) {
     color: rgb(var(--notice-color));
   }
   &__state--off {
-    background-color: var(--fg-color-0125);
-    color: var(--fg-color-075);
+    background-color: rgb(var(--fg-color), 0.125);
+    color: rgb(var(--fg-color), 0.75);
   }
 
   &:deep() {

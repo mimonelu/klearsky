@@ -409,7 +409,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   padding: 1em;
   position: relative;
   &[data-purpose="unknownlist"] {
-    background-color: var(--fg-color-00625);
+    background-color: rgb(var(--fg-color), 0.0625);
   }
 
   // リスト詳細
@@ -478,7 +478,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       padding: 0.5em 0.5em 0;
 
       & > .svg-icon {
-        fill: var(--fg-color-05);
+        fill: rgb(var(--fg-color), 0.5);
         font-size: 0.875em;
       }
 
@@ -542,7 +542,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   // リスト作成日時
   &__indexed-at {
     grid-area: i;
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
@@ -550,7 +550,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     line-height: var(--line-height-low);
 
     & > .svg-icon {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
       font-size: 0.75em;
     }
 
@@ -565,7 +565,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   // フィードピン・フィードブックマーク
   &__pin,
   &__bookmark {
-    --color: var(--accent-color-0875);
+    --color: rgb(var(--accent-color), 0.875);
     cursor: pointer;
     margin: -0.625em -0.125em -0.625em -0.625em;
     padding: 0.625em;
@@ -591,13 +591,13 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // リストポップオーバートリガー
   &__menu-button {
-    --color: var(--fg-color-075);
+    --color: rgb(var(--fg-color), 0.75);
     grid-area: m;
     cursor: pointer;
     margin: -0.625em;
     padding: 0.625em;
     &:focus, &:hover {
-      --color: var(--fg-color-0875);
+      --color: rgb(var(--fg-color), 0.875);
     }
 
     & > .svg-icon {
@@ -609,7 +609,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // リスト説明文
   &__description {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     font-size: 0.875em;
     line-height: var(--line-height-high);
     white-space: pre-wrap;
@@ -650,7 +650,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   &__edit-button {
     font-size: 0.875em;
     &.button--plane {
-      background-color: var(--accent-color-025);
+      background-color: rgb(var(--accent-color), 0.25);
     }
 
     & > span {
@@ -685,7 +685,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         fill: rgb(var(--fg-color));
       }
       &[data-checked="false"] {
-        fill: var(--fg-color-025);
+        fill: rgb(var(--fg-color), 0.25);
       }
     }
   }

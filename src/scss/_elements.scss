@@ -1,44 +1,34 @@
-*, * > * {
+*,
+* > * {
   line-height: 1;
 }
 
-// 中間色
-* {
-  $colors:
-    --fg-color,
-    --accent-color,
-    --notice-color,
-    --post-color,
-    --like-color,
-    --share-color;
-  @each $color in $colors {
-    #{$color}-00625: rgb(var(#{$color}), 0.0625);
-    #{$color}-0125: rgb(var(#{$color}), 0.125);
-    #{$color}-025: rgb(var(#{$color}), 0.25);
-    #{$color}-0375: rgb(var(#{$color}), 0.375);
-    #{$color}-05: rgb(var(#{$color}), 0.5);
-    #{$color}-0625: rgb(var(#{$color}), 0.625);
-    #{$color}-075: rgb(var(#{$color}), 0.75);
-    #{$color}-0875: rgb(var(#{$color}), 0.875);
-
-    /* TODO: `color-mix` は一般に浸透したら使うこと
-    #{$color}-00625: color-mix(in srgb, rgb(var(#{$color})) 6.25%, rgb(var(--bg-color)));
-    #{$color}-0125: color-mix(in srgb, rgb(var(#{$color})) 12.5%, rgb(var(--bg-color)));
-    #{$color}-025: color-mix(in srgb, rgb(var(#{$color})) 25%, rgb(var(--bg-color)));
-    #{$color}-0375: color-mix(in srgb, rgb(var(#{$color})) 37.5%, rgb(var(--bg-color)));
-    #{$color}-05: color-mix(in srgb, rgb(var(#{$color})) 50%, rgb(var(--bg-color)));
-    #{$color}-0625: color-mix(in srgb, rgb(var(#{$color})) 62.5%, rgb(var(--bg-color)));
-    #{$color}-075: color-mix(in srgb, rgb(var(#{$color})) 75%, rgb(var(--bg-color)));
-    #{$color}-0875: color-mix(in srgb, rgb(var(#{$color})) 87.5%, rgb(var(--bg-color)));
-    */
-  }
-}
-
-::selection {
-  background-color: var(--accent-color-05);
-}
-
 :root {
+  // フォントファミリー
+  font-family:
+    // 基本的にWeb版Twitterと等しくする
+    "Segoe UI",
+    Meiryo,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  // フォントサイズ
+  font-size: 15px;
+  &[data-font-size="small"] {
+    font-size: 13px;
+  }
+  &[data-font-size="medium"] {
+    font-size: 15px;
+  }
+  &[data-font-size="large"] {
+    font-size: 17px;
+  }
+
   // フォントのカーニング
   &[data-font-kerning="true"] {
     font-feature-settings: "palt";
@@ -51,12 +41,32 @@
   }
 }
 
+// デフォルトカラーテーマ
+:root {
+  @include color-theme-light;
+}
+
+// ダークモード用デフォルトカラーテーマ
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include color-theme-dark;
+  }
+}
+
+// 各種カラーテーマ
+// NOTICE: `:root` 以外でも使用
+[data-color-theme="light"] { @include color-theme-light; }
+[data-color-theme="lightGray"] { @include color-theme-light-gray; }
+[data-color-theme="dark"] { @include color-theme-dark; }
+[data-color-theme="darkGray"] { @include color-theme-dark-gray; }
+
+// 各種変数
 body {
   // リストアイコンの配色
   --curate-list-color: var(--share-color);
   --mod-list-color: var(--notice-color);
   --reference-list-color: var(--like-color);
-  --unknown-list-color: var(--fg-color-05);
+  --unknown-list-color: rgb(var(--fg-color), 0.5);
 
   --border-radius-small: 0.125em;
   --border-radius-middle: 0.25em;
@@ -67,7 +77,9 @@ body {
   --main-area-opacity: 1.0;
   --sp-menu-size: calc(100vw / 7);
   --sp-menu-height: calc(var(--sp-menu-size) + env(safe-area-inset-bottom));
+}
 
+body {
   background-attachment: fixed;
   background-color: rgb(var(--bg-color));
   background-position: center center;
@@ -85,15 +97,9 @@ body {
   @include scroll-bar("transparent");
 }
 
-// カラーテーマ
-:root { @include color-theme-light; } // デフォルトカラーテーマ
-@media (prefers-color-scheme: dark) {
-  :root { @include color-theme-dark; } // ダークモード時のデフォルトカラーテーマ
+::selection {
+  background-color: rgb(var(--accent-color), 0.5);
 }
-[data-color-theme="light"] { @include color-theme-light; }
-[data-color-theme="lightGray"] { @include color-theme-light-gray; }
-[data-color-theme="dark"] { @include color-theme-dark; }
-[data-color-theme="darkGray"] { @include color-theme-dark-gray; }
 
 img {
   vertical-align: middle;
@@ -105,14 +111,25 @@ p {
   grid-gap: 0.5em;
   line-height: var(--line-height-high);
   word-break: break-all;
-
-  & > .svg-icon {
-    top: 0.125em;
-  }
 }
 
 pre {
   margin: 0;
+}
+
+// iOS における font-size: 16px; 未満のフォームパーツにフォーカスするとビューポートがスケーリングされる仕様対策
+input,
+textarea {
+  font-size: 18px;
+  [data-font-size="small"] & {
+    font-size: 16px;
+  }
+  [data-font-size="medium"] & {
+    font-size: 18px;
+  }
+  [data-font-size="large"] & {
+    font-size: 20px;
+  }
 }
 
 video {

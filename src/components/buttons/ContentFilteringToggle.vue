@@ -44,7 +44,7 @@ const state = reactive<{
 <style lang="scss" scoped>
 .content-filtering-toggle {
   --alpha: 0.75;
-  background-color: var(--notice-color-0125);
+  background-color: rgb(var(--notice-color), 0.125);
   border: 1px solid rgb(var(--notice-color), calc(var(--alpha) / 2));
   display: grid;
   grid-template-columns: auto 1fr auto;

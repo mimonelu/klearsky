@@ -135,6 +135,6 @@ function removeThisPost (uri: string) {
 }
 
 .post[data-focus="true"] {
-  background-color: var(--accent-color-0125);
+  background-color: rgb(var(--accent-color), 0.125);
 }
 </style>

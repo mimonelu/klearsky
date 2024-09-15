@@ -203,7 +203,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   position: relative;
 
   & > span {
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
     font-weight: bold;
     position: relative;
     white-space: nowrap;
@@ -212,7 +212,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   &::before,
   &::after {
     content: "";
-    background-color: var(--fg-color-025);
+    background-color: rgb(var(--fg-color), 0.25);
     display: block;
     position: relative;
     top: 50%;

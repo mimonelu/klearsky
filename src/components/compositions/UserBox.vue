@@ -239,7 +239,7 @@ function onActivateContentFilteringToggle () {
   }
 
   &:deep() > span {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     font-size: 0.875em;
   }
 }
@@ -266,15 +266,8 @@ function onActivateContentFilteringToggle () {
   height: 100%;
 
   & > .svg-icon {
-    fill: var(--fg-color-05);
+    fill: rgb(var(--fg-color), 0.5);
     pointer-events: none;
-  }
-  &:focus, &:hover {
-    --fg-color-0125: var(--fg-color-025);
-
-    & > .svg-icon {
-      --fg-color-05: var(--fg-color-075);
-    }
   }
 }
 

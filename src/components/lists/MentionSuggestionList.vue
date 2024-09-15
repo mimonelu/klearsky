@@ -216,7 +216,7 @@ function selectUser (user?: TTUser) {
 <style lang="scss" scoped>
 .mention-suggestion-list {
   &__suggestion {
-    border: 1px solid var(--fg-color-025);
+    border: 1px solid rgb(var(--fg-color), 0.25);
     border-radius: var(--border-radius-middle);
     display: flex;
     flex-direction: column;
@@ -227,7 +227,7 @@ function selectUser (user?: TTUser) {
 
     &__item {
       background-clip: padding-box;
-      background-color: var(--fg-color-0125);
+      background-color: rgb(var(--fg-color), 0.125);
       cursor: pointer;
       display: grid;
       grid-template-columns: auto auto 1fr;
@@ -236,7 +236,7 @@ function selectUser (user?: TTUser) {
       padding: 0.25em 0.5em;
       white-space: nowrap;
       &:not(:last-child) {
-        border-bottom: 1px solid var(--fg-color-025);
+        border-bottom: 1px solid rgb(var(--fg-color), 0.25);
       }
 
       .lazy-image {
@@ -262,13 +262,13 @@ function selectUser (user?: TTUser) {
       }
 
       &__handle {
-        color: var(--fg-color-075);
+        color: rgb(var(--fg-color), 0.75);
         font-size: 0.75em;
       }
     }
     &[data-input-mode="keyboard"] &__item[data-focus="true"],
     &[data-input-mode="mouse"] &__item:hover {
-      background-color: var(--accent-color-025);
+      background-color: rgb(var(--accent-color), 0.25);
     }
   }
 }

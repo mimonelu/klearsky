@@ -41,7 +41,7 @@ function close () {
 }
 
 .message-string {
-  background-color: var(--notice-color-0125);
+  background-color: rgb(var(--notice-color), 0.125);
   line-height: var(--line-height-high);
   padding: 1rem;
   user-select: text;

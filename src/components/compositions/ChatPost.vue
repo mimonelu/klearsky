@@ -96,12 +96,12 @@ async function chatMessagePopoverCallback (type: string) {
 
 <style lang="scss" scoped>
 .chat-post {
-  --chat-post-bg-color: var(--fg-color-0125);
+  --chat-post-bg-color: rgb(var(--fg-color), 0.125);
   &[data-is-mine="true"] {
-    --chat-post-bg-color: var(--accent-color-025);
+    --chat-post-bg-color: rgb(var(--accent-color), 0.25);
   }
   &[data-is-mine="false"] {
-    --chat-post-bg-color: var(--fg-color-0125);
+    --chat-post-bg-color: rgb(var(--fg-color), 0.125);
   }
 
   &:deep() > .body > .body__right > .post__content {
@@ -144,7 +144,7 @@ async function chatMessagePopoverCallback (type: string) {
           margin-right: -1em;
 
           & > .display-name {
-            color: var(--fg-color-05);
+            color: rgb(var(--fg-color), 0.5);
           }
 
           & > .button--plane {

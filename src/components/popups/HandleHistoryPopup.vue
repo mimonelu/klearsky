@@ -131,7 +131,7 @@ function getLabelerEndpoint (item: any): undefined | string {
 
   // createdAt
   .created-at {
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
     word-break: break-all;
   }
 
@@ -168,11 +168,11 @@ function getLabelerEndpoint (item: any): undefined | string {
     // ATProto エンドポイント
     &__atproto {
       & > .svg-icon {
-        fill: var(--fg-color-05);
+        fill: rgb(var(--fg-color), 0.5);
       }
 
       & > span {
-        color: var(--fg-color-075);
+        color: rgb(var(--fg-color), 0.75);
       }
     }
 

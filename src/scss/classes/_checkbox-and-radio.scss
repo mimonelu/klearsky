@@ -15,14 +15,14 @@
   & > .checkbox,
   & > .radio {
     background-clip: padding-box;
-    border: 1px solid var(--fg-color-025);
+    border: 1px solid rgb(var(--fg-color), 0.25);
     cursor: pointer;
     display: flex;
     align-items: center;
     padding: 0.5rem 0.75rem;
     position: relative;
     &[data-checked="true"] {
-      background-color: var(--accent-color-025);
+      background-color: rgb(var(--accent-color), 0.25);
     }
     &[data-disabled="true"] {
       filter: grayscale(1.0);
@@ -40,7 +40,7 @@
     }
 
     & > .svg-icon {
-      fill: var(--accent-color-05);
+      fill: rgb(var(--accent-color), 0.5);
       margin-right: 0.5rem;
     }
     &[data-checked="true"] > .svg-icon {
@@ -48,7 +48,7 @@
     }
 
     & > span {
-      color: var(--fg-color-075);
+      color: rgb(var(--fg-color), 0.75);
       font-weight: bold;
       line-height: var(--line-height-middle);
       word-break: break-all;
@@ -72,7 +72,7 @@
         border-bottom-right-radius: var(--border-radius-middle);
       }
       &:not(:first-child) {
-        border-left-color: var(--fg-color-0125);
+        border-left-color: rgb(var(--fg-color), 0.125);
       }
       &:not(:last-child) {
         border-right-style: none;
@@ -91,7 +91,7 @@
         border-bottom-right-radius: var(--border-radius-middle);
       }
       &:not(:first-child) {
-        border-top-color: var(--fg-color-0125);
+        border-top-color: rgb(var(--fg-color), 0.125);
       }
       &:not(:last-child) {
         border-bottom-style: none;
@@ -101,15 +101,15 @@
   &[data-layout="vertical-2columns"] {
     & > .checkbox,
     & > .radio {
-      border-color: var(--fg-color-0125);
+      border-color: rgb(var(--fg-color), 0.125);
       border-right-style: none;
       border-bottom-style: none;
       &:nth-child(even) {
-        border-right: 1px solid var(--fg-color-025);
+        border-right: 1px solid rgb(var(--fg-color), 0.25);
       }
       &:nth-last-child(1),
       &:nth-last-child(2) {
-        border-bottom: 1px solid var(--fg-color-025);
+        border-bottom: 1px solid rgb(var(--fg-color), 0.25);
       }
       &:first-child {
         border-radius: var(--border-radius-middle) 0 0 0;

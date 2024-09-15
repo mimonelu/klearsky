@@ -294,7 +294,7 @@ function isMine (message: TIChatMessage): boolean {
           <template #after>
             <button
               type="button"
-              class="button--important chat-convo-popup__submit-button"
+              class="button chat-convo-popup__submit-button"
               @click="submitCallback"
             >
               <SVGIcon name="chat" />
@@ -363,7 +363,7 @@ function isMine (message: TIChatMessage): boolean {
 
   &__submit-button {
     --bg-color: 255, 255, 255;
-    --notice-color: var(--accent-color);
+    --fg-color: var(--accent-color);
     .svg-icon--chat {
       font-size: 1.5rem;
     }

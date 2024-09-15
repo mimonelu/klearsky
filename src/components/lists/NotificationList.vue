@@ -256,7 +256,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 .notification-group {
   padding: 1rem;
   &[data-is-new="true"] {
-    background-color: var(--accent-color-0125);
+    background-color: rgb(var(--accent-color), 0.125);
   }
 
   // reason ごとの処理
@@ -267,7 +267,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   }
   &[data-reason="follow"] {
     .text {
-      color: var(--fg-color-075);
+      color: rgb(var(--fg-color), 0.75);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -277,7 +277,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   // 通知フォルダー開閉ボタンを持つ通知グループの処理
   &[data-has-folder="true"] {
     .notification-folder {
-      border: 1px solid var(--fg-color-025);
+      border: 1px solid rgb(var(--fg-color), 0.25);
       border-radius: var(--border-radius-middle);
     }
 
@@ -290,12 +290,12 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   & > .feed-card,
   & > .list-card,
   & > .starter-pack-card {
-    background-color: var(--accent-color-0125);
-    border: 1px solid var(--accent-color-025);
+    background-color: rgb(var(--accent-color), 0.125);
+    border: 1px solid rgb(var(--accent-color), 0.25);
     border-radius: var(--border-radius-middle);
     margin-top: 0.5rem;
     &:focus, &:hover {
-      border-color: var(--accent-color-05);
+      border-color: rgb(var(--accent-color), 0.5);
     }
   }
 }
@@ -365,7 +365,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
     }
 
     .indexed-at {
-      color: var(--fg-color-075);
+      color: rgb(var(--fg-color), 0.75);
     }
   }
 
@@ -386,7 +386,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 
 // reason アイコン
 .icon--reason {
-  fill: var(--fg-color-05);
+  fill: rgb(var(--fg-color), 0.5);
   [data-reason="follow"] & {
     fill: rgb(var(--fg-color));
   }
@@ -423,13 +423,13 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   font-size: 0.875rem;
 
   &:deep() > span {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
   }
 }
 
 // リアクション日時
 .indexed-at {
-  color: var(--fg-color-05);
+  color: rgb(var(--fg-color), 0.5);
   font-size: 0.875rem;
   line-height: 1.25;
   overflow: hidden;
@@ -448,8 +448,8 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 
 // ユーザーポスト
 .post {
-  background-color: var(--fg-color-0125);
-  border: 1px solid var(--fg-color-025);
+  background-color: rgb(var(--fg-color), 0.125);
+  border: 1px solid rgb(var(--fg-color), 0.25);
   border-radius: var(--border-radius-middle);
   font-size: 0.875rem;
   margin-top: 0.5rem;

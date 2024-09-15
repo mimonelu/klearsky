@@ -85,7 +85,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     grid-area: a;
     border-radius: var(--border-radius-middle);
     display: block;
-    fill: var(--fg-color-05);
+    fill: rgb(var(--fg-color), 0.5);
     overflow: hidden;
     min-width: 3em;
     max-width: 3em;
@@ -107,7 +107,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   // フィード説明
   &__description {
     grid-area: d;
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
     font-size: 0.875em;
     line-height: var(--line-height-high);
     word-break: break-all;

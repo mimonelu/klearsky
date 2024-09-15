@@ -84,9 +84,9 @@ function apply () {
     word-break: break-word;
   }
   .detail {
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     padding: 0.5rem 1rem;
   }
 

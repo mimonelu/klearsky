@@ -250,7 +250,7 @@ function getVideoSizes (): Array<undefined | {
 }
 
 .thumbnail {
-  background-color: var(--fg-color-0125);
+  background-color: rgb(var(--fg-color), 0.125);
   border-radius: var(--border-radius-middle);
   cursor: unset !important;
   display: flex;
@@ -278,7 +278,7 @@ function getVideoSizes (): Array<undefined | {
   right: 0.25rem;
 
   & > .svg-icon {
-    fill: var(--notice-color-075);
+    fill: rgb(var(--notice-color), 0.75);
   }
 
   &:focus, &:hover {

@@ -90,16 +90,16 @@ function onActivatePostContentToggle () {
   &[data-image-display="false"] {
     background-image: linear-gradient(
       -45deg,
-      var(--fg-color-0125) 49.875%,
+      rgb(var(--fg-color), 0.125) 49.875%,
       rgb(var(--bg-color)) 49.875%,
       rgb(var(--bg-color)) 50.125%,
-      var(--fg-color-0125) 50.125%
+      rgb(var(--fg-color), 0.125) 50.125%
     );
   }
 
   .lazy-image {
     aspect-ratio: 1 / 1;
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     object-fit: cover;
     width: 100%; // for Firefox
   }

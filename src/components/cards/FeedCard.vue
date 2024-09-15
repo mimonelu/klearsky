@@ -295,7 +295,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   padding: 1em;
   position: relative;
   &[data-is-unknown="true"] {
-    background-color: var(--fg-color-00625);
+    background-color: rgb(var(--fg-color), 0.0625);
   }
 
   // テキスト選択
@@ -341,7 +341,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       padding: 0.5em 0.5em 0;
 
       & > .svg-icon {
-        fill: var(--fg-color-05);
+        fill: rgb(var(--fg-color), 0.5);
         font-size: 0.875em;
       }
 
@@ -383,13 +383,13 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // フィードライク数
   &__like-count {
-    --color: var(--fg-color-05);
+    --color: rgb(var(--fg-color), 0.5);
     grid-area: l;
     cursor: pointer;
     margin: -0.5em;
     padding: 0.5em;
     &[data-on="true"] {
-      --color: var(--like-color-075);
+      --color: rgb(var(--like-color), 0.75);
       &:focus, &:hover {
         --color: rgb(var(--like-color));
       }
@@ -414,17 +414,17 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   // フィード作成日時
   &__indexed-at {
     grid-area: i;
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
 
     & > .svg-icon {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
     }
   }
 
   // フィードピン・フィードブックマーク
   &__pin,
   &__bookmark {
-    --color: var(--accent-color-0875);
+    --color: rgb(var(--accent-color), 0.875);
     cursor: pointer;
     margin: -0.625em -0.125em -0.625em -0.625em;
     padding: 0.625em;
@@ -450,13 +450,13 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // フィードカードメニュートリガー
   &__menu-button {
-    --color: var(--fg-color-075);
+    --color: rgb(var(--fg-color), 0.75);
     grid-area: m;
     cursor: pointer;
     margin: -0.625em;
     padding: 0.625em;
     &:focus, &:hover {
-      --color: var(--fg-color-0875);
+      --color: rgb(var(--fg-color), 0.875);
     }
 
     & > .svg-icon {
@@ -468,7 +468,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // フィード説明文
   &__description {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     font-size: 0.875em;
     line-height: var(--line-height-high);
     white-space: pre-wrap;
@@ -493,7 +493,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     }
 
     &__via {
-      color: var(--fg-color-05);
+      color: rgb(var(--fg-color), 0.5);
       line-height: var(--line-height-high);
       word-break: break-word;
     }

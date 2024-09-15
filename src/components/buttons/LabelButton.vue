@@ -33,14 +33,12 @@ const state = reactive<{
 
 <style lang="scss" scoped>
 .label-button {
-  --fg-color: var(--notice-color);
-
   & > span {
     white-space: nowrap;
   }
 
   & > b {
-    color: rgb(var(--fg-color));
+    color: rgb(var(--notice-color));
     font-weight: bold;
     line-height: var(--line-height-high);
     word-break: break-all;

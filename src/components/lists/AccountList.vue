@@ -260,11 +260,11 @@ function onClickFileBox (event: Event) {
   grid-gap: 1rem;
 
   &__no-my-accounts-message {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     font-size: 0.875rem;
 
     .svg-icon {
-      fill: var(--fg-color-075);
+      fill: rgb(var(--fg-color), 0.75);
     }
   }
 
@@ -275,7 +275,7 @@ function onClickFileBox (event: Event) {
 }
 
 .service {
-  color: var(--fg-color-05);
+  color: rgb(var(--fg-color), 0.5);
   font-weight: bold;
   line-height: 1.25;
   overflow: hidden;
@@ -305,7 +305,7 @@ function onClickFileBox (event: Event) {
     --color: var(--fg-color);
     background-clip: padding-box;
     background-color: rgb(var(--bg-color));
-    border: 1px solid var(--fg-color-025);
+    border: 1px solid rgb(var(--fg-color), 0.25);
     border-bottom-style: none;
     cursor: pointer;
     display: grid;
@@ -323,10 +323,10 @@ function onClickFileBox (event: Event) {
     }
   }
   &:not(:first-child) &__left {
-    border-top-color: var(--fg-color-0125);
+    border-top-color: rgb(var(--fg-color), 0.125);
   }
   &[data-is-me="true"] &__left {
-    background-color: var(--accent-color-025);
+    background-color: rgb(var(--accent-color), 0.25);
   }
 
   &__image {
@@ -408,7 +408,7 @@ function onClickFileBox (event: Event) {
     min-height: 3rem;
 
     & > .svg-icon {
-      fill: var(--notice-color-075);
+      fill: rgb(var(--notice-color), 0.75);
     }
     &:focus, &:hover {
       & > .svg-icon {

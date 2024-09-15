@@ -843,7 +843,7 @@ function removeThisPost () {
 // バナー
 .banner {
   aspect-ratio: 3 / 1;
-  background-color: var(--fg-color-0125);
+  background-color: rgb(var(--fg-color), 0.125);
   object-fit: cover;
   &[data-has-banner="true"] {
     cursor: pointer;
@@ -915,11 +915,11 @@ function removeThisPost () {
     overflow: hidden;
 
     & > .svg-icon {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
     }
     [data-log-loaded="true"] & {
       & > .svg-icon {
-        fill: var(--accent-color-0875);
+        fill: rgb(var(--accent-color), 0.875);
       }
       &:focus, &:hover {
         & > .svg-icon {
@@ -932,7 +932,7 @@ function removeThisPost () {
     }
 
     & > .author-handle {
-      color: var(--fg-color-05);
+      color: rgb(var(--fg-color), 0.5);
       font-size: 1rem;
       font-weight: bold;
       line-height: 1.25;
@@ -942,7 +942,7 @@ function removeThisPost () {
       white-space: nowrap;
     }
     [data-log-loaded="true"] & > .author-handle {
-      color: var(--accent-color-0875);
+      color: rgb(var(--accent-color), 0.875);
       cursor: pointer;
       &:focus, &:hover {
         color: rgb(var(--accent-color));
@@ -1017,7 +1017,7 @@ function removeThisPost () {
   font-size: 1.25rem;
 
   &[data-no-unauthenticated="true"] > .svg-icon {
-    fill: var(--fg-color-05);
+    fill: rgb(var(--fg-color), 0.5);
   }
   &[data-no-unauthenticated="false"] > .svg-icon {
     fill: rgb(var(--fg-color));
@@ -1072,7 +1072,7 @@ function removeThisPost () {
     overflow: hidden;
 
     & > dt {
-      color: var(--fg-color-075);
+      color: rgb(var(--fg-color), 0.75);
       font-size: 0.875rem;
       line-height: 1.25;
     }

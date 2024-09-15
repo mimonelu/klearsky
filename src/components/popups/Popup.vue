@@ -186,7 +186,7 @@ function scrollListener () {
 
 .popup {
   background-color: rgb(var(--bg-color));
-  border: 1px solid var(--fg-color-025);
+  border: 1px solid rgb(var(--fg-color), 0.25);
   border-radius: var(--border-radius-large);
   box-shadow: 0 0 1rem 0 rgb(0, 0, 0, 0.5);
   color: rgb(var(--fg-color));
@@ -213,7 +213,7 @@ function scrollListener () {
 }
 
 .popup-header {
-  border-bottom: 1px solid var(--fg-color-0125);
+  border-bottom: 1px solid rgb(var(--fg-color), 0.125);
   cursor: pointer;
   display: flex;
   position: relative;
@@ -229,7 +229,7 @@ function scrollListener () {
       min-width: 3rem;
 
       & > .svg-icon {
-        fill: var(--fg-color-075);
+        fill: rgb(var(--fg-color), 0.75);
       }
 
       &:focus, &:hover {

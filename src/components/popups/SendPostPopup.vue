@@ -663,7 +663,7 @@ const PreviewLinkCardFeature: {
       grid-template-columns: auto 1fr;
 
       & > dt {
-        color: var(--fg-color-05);
+        color: rgb(var(--fg-color), 0.5);
       }
     }
   }

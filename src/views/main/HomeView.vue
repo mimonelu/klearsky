@@ -167,7 +167,7 @@ async function autoScrollSliderMenu () {
     max-width: 50%;
     min-height: 3rem;
     max-height: 3rem;
-    --color: var(--fg-color-075);
+    --color: rgb(var(--fg-color), 0.75);
     &:focus, &:hover {
       --color: rgb(var(--fg-color));
     }
@@ -194,7 +194,7 @@ async function autoScrollSliderMenu () {
       max-height: 1.5em;
     }
     .svg-icon--shimmer {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
     }
 
     & > span {

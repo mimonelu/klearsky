@@ -256,7 +256,7 @@ function unselect (index: number) {
       fill: rgb(var(--share-color));
     }
     & > .svg-icon--cross {
-      fill: var(--fg-color-025);
+      fill: rgb(var(--fg-color), 0.25);
     }
     & > .svg-icon--personHeart {
       fill: rgb(var(--fg-color));
@@ -270,7 +270,7 @@ function unselect (index: number) {
       font-weight: bold;
     }
     [data-can-chat="false"] {
-      color: var(--fg-color-025);
+      color: rgb(var(--fg-color), 0.25);
       font-weight: bold;
     }
 
@@ -281,7 +281,7 @@ function unselect (index: number) {
       color: rgb(var(--fg-color));
     }
     [data-allow-incoming="none"] {
-      color: var(--fg-color-025);
+      color: rgb(var(--fg-color), 0.25);
     }
   }
 

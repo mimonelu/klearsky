@@ -243,7 +243,7 @@ function reset () {
 
   // ラベラーカード
   .labeler-card {
-    background-color: var(--fg-color-00625);
+    background-color: rgb(var(--fg-color), 0.0625);
   }
 
   // メインコンテンツ
@@ -256,7 +256,7 @@ function reset () {
 
   // ポリシー説明
   &__policy-description {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     line-height: var(--line-height-middle);
     font-style: italic;
     word-break: break-word;
@@ -280,7 +280,7 @@ function reset () {
       padding: 0.5rem;
 
       & > .svg-icon {
-        fill: var(--fg-color-05);
+        fill: rgb(var(--fg-color), 0.5);
         font-size: 0.875rem;
       }
 
@@ -299,9 +299,9 @@ function reset () {
 
       // Blurs
       & > i {
-        background-color: var(--fg-color-0125);
+        background-color: rgb(var(--fg-color), 0.125);
         border-radius: var(--border-radius-small);
-        color: var(--fg-color-075);
+        color: rgb(var(--fg-color), 0.75);
         font-size: 0.75rem;
         padding: 0.25rem;
         white-space: nowrap;
@@ -311,7 +311,7 @@ function reset () {
 
   // ラベル説明
   &__label-description {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     line-height: var(--line-height-middle);
     word-break: break-word;
   }

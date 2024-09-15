@@ -358,8 +358,8 @@ getEmbeddedContentId()
 
   // 不正なリンクカード
   &--invalid {
-    background-color: var(--fg-color-0125);
-    border: 1px solid var(--fg-color-025);
+    background-color: rgb(var(--fg-color), 0.125);
+    border: 1px solid rgb(var(--fg-color), 0.25);
     border-radius: var(--border-radius-middle);
     padding: 0.5em 0.75em;
     pointer-events: none;
@@ -368,14 +368,14 @@ getEmbeddedContentId()
 
   // 通常のリンクカード
   &--default {
-    background-color: var(--fg-color-0125);
-    border: 1px solid var(--fg-color-025);
+    background-color: rgb(var(--fg-color), 0.125);
+    border: 1px solid rgb(var(--fg-color), 0.25);
     border-radius: var(--border-radius-middle);
     display: flex;
     overflow: hidden;
     position: relative;
     &:focus, &:hover {
-      border-color: var(--fg-color-0375);
+      border-color: rgb(var(--fg-color), 0.375);
     }
 
     // 横レイアウト
@@ -438,25 +438,25 @@ getEmbeddedContentId()
     }
 
     &__uri {
-      color: var(--fg-color-05);
+      color: rgb(var(--fg-color), 0.5);
       font-size: 0.75em;
     }
 
     &__description {
-      color: var(--fg-color-075);
+      color: rgb(var(--fg-color), 0.75);
       font-size: 0.875em;
     }
   }
 
   // 埋込型リンクカード - Apple Music
   &--applemusic {
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
   }
 
   // 埋込型リンクカード - Giphy
   &--giphy {
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
   }
   // 埋込型リンクカード - Giphy - SP幅未満
@@ -469,7 +469,7 @@ getEmbeddedContentId()
 
   // 埋込型リンクカード - Graysky
   &--graysky {
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
     width: 100%;
   }
@@ -478,7 +478,7 @@ getEmbeddedContentId()
   &--nicovideo:deep() {
     iframe[src^="https://embed.nicovideo."] {
       aspect-ratio: 640 / 360;
-      background-color: var(--fg-color-0125);
+      background-color: rgb(var(--fg-color), 0.125);
       border-radius: var(--border-radius-middle);
       height: unset !important;
     }
@@ -486,14 +486,14 @@ getEmbeddedContentId()
 
   // 埋込型リンクカード - Spotify
   &--spotify {
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: 1rem;
   }
 
   // 埋込型リンクカード - Tenor
   &--tenor {
     aspect-ratio: 560 / 300;
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
     display: flex;
     justify-content: center;
@@ -503,21 +503,21 @@ getEmbeddedContentId()
   // 埋込型リンクカード - Twitch
   &--twitch {
     aspect-ratio: 1 / 0.6;
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
   }
 
   // 埋込型リンクカード - YouTube
   &--youtube {
     aspect-ratio: 16 / 9;
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
   }
 
   // 埋込型リンクカード - Vimeo
   &--vimeo {
     aspect-ratio: 4 / 3;
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
   }
 }

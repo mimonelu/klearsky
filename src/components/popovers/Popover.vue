@@ -231,7 +231,7 @@ function makeStyle (left?: number, top?: number) {
   &__inner {
     @include scroll-bar("transparent");
     background-color: rgb(var(--bg-color));
-    border: 1px solid var(--fg-color-025);
+    border: 1px solid rgb(var(--fg-color), 0.25);
     border-radius: var(--border-radius-middle);
     overflow-y: auto;
     overscroll-behavior: none;

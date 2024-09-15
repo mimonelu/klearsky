@@ -5,7 +5,7 @@
   &:disabled {
     & > .icon-container {
       & > .svg-icon {
-        fill: var(--fg-color-025);
+        fill: rgb(var(--fg-color), 0.25);
       }
     }
   }
@@ -28,13 +28,13 @@
     pointer-events: none;
 
     & > .svg-icon {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
       font-size: 1em;
     }
   }
 
   & > span {
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
     font-weight: bold;
     overflow: hidden;
     pointer-events: none;

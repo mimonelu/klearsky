@@ -177,19 +177,19 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   // ラベラー
   &:deep(.label-tags__labeler) {
     --color: rgb(var(--share-color), var(--alpha, 1.0));
-    background-color: var(--share-color-0125);
+    background-color: rgb(var(--share-color), 0.125);
   }
 
   // 外部公開状態ラベル
   &__unauthenticated-label {
     --color: rgb(var(--accent-color));
-    background-color: var(--accent-color-025);
+    background-color: rgb(var(--accent-color), 0.25);
   }
 
   // 有害なラベル
   &__harmful-label {
     --color: rgb(var(--notice-color), var(--alpha, 1.0));
-    background-color: var(--notice-color-0125);
+    background-color: rgb(var(--notice-color), 0.125);
     border-color: rgb(var(--notice-color), calc(var(--alpha) / 2));
     cursor: pointer;
     &:focus,
@@ -201,7 +201,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   // ラベラーによるラベル
   &__labelers-label {
     --color: rgb(var(--share-color), var(--alpha, 1.0));
-    background-color: var(--share-color-0125);
+    background-color: rgb(var(--share-color), 0.125);
     border-color: rgb(var(--share-color), calc(var(--alpha) / 2));
     cursor: pointer;
     grid-gap: 0.5em;
@@ -223,7 +223,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   // カスタムラベル
   &__custom-label {
     --color: rgb(var(--fg-color), var(--alpha, 1.0));
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
   }
 }
 </style>

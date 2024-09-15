@@ -4,9 +4,9 @@
 
   & > select {
     background-color: rgb(var(--bg-color), 0.25);
-    border: 1px solid var(--fg-color-025);
+    border: 1px solid rgb(var(--fg-color), 0.25);
     border-radius: var(--border-radius-middle);
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     cursor: pointer;
     display: block;
     font-weight: bold;
@@ -14,7 +14,7 @@
     padding: 0.5em 2.5em 0.5em 1em;
     width: 100%;
     &:focus, &:hover {
-      border-color: var(--fg-color-0375);
+      border-color: rgb(var(--fg-color), 0.375);
       color: rgb(var(--fg-color));
     }
 
@@ -25,7 +25,7 @@
   }
 
   &::after {
-    background-color: var(--fg-color-05);
+    background-color: rgb(var(--fg-color), 0.5);
     color: rgb(var(--fg-color));
     content: "";
     display: flex;

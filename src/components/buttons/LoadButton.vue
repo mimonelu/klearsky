@@ -37,7 +37,7 @@ function onActivate () {
 
 <style lang="scss" scoped>
 .load-button {
-  --fill-color: var(--fg-color-05);
+  --fill-color: rgb(var(--fg-color), 0.5);
   background-clip: content-box;
   cursor: pointer;
   display: flex;
@@ -48,7 +48,7 @@ function onActivate () {
 
   // 抜け漏れ取得ボタン
   &[data-direction="middle"] {
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
   }
 
   & > .svg-icon {

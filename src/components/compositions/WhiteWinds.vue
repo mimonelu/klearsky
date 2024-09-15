@@ -162,7 +162,7 @@ const state = reactive<{
   }
 
   &__content {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     flex-grow: 1;
     font-size: 0.875em;
     line-height: var(--line-height-middle);
@@ -172,7 +172,7 @@ const state = reactive<{
   }
 
   &__createdAt {
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
     font-size: 0.75em;
     line-height: var(--line-height-middle);
     text-align: right;

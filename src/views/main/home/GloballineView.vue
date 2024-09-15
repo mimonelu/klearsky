@@ -434,7 +434,7 @@ function onMutated () {
 
   // 停止ライン
   &:not(:first-child)[data-is-latest="true"] {
-    border-top: 0.5em solid var(--fg-color-0125);
+    border-top: 0.5em solid rgb(var(--fg-color), 0.125);
     margin-top: 1px;
   }
 }
@@ -459,13 +459,13 @@ function onMutated () {
 
     & > dt {
       & > .svg-icon {
-        fill: var(--fg-color-05);
+        fill: rgb(var(--fg-color), 0.5);
         font-size: 0.875rem;
       }
     }
 
     & > dd {
-      color: var(--fg-color-075);
+      color: rgb(var(--fg-color), 0.75);
       font-family: monospace;
       line-height: 1.25;
       overflow: hidden;
@@ -489,7 +489,7 @@ function onMutated () {
 
   &[data-is-on="true"] {
     & > .svg-icon {
-      fill: var(--notice-color-075);
+      fill: rgb(var(--notice-color), 0.75);
     }
     &:focus, &:hover {
       & > .svg-icon {

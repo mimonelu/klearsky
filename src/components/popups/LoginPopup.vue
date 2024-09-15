@@ -263,7 +263,7 @@ function submitCallback () {
 $width: 768px;
 
 .login-popup {
-  background-color: var(--fg-color-00625);
+  background-color: rgb(var(--fg-color), 0.0625);
   display: flex;
   justify-content: center;
   min-height: 100vh;
@@ -325,7 +325,7 @@ $width: 768px;
 }
 
 .description {
-  color: var(--fg-color-075);
+  color: rgb(var(--fg-color), 0.75);
   font-size: 1.25rem;
 }
 

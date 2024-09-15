@@ -20,7 +20,7 @@
     min-height: 2.5rem;
 
     & > span {
-      color: var(--fg-color-075);
+      color: rgb(var(--fg-color), 0.75);
       font-weight: bold;
       line-height: var(--line-height-high);
       overflow: hidden;
@@ -30,7 +30,7 @@
     }
 
     & > .svg-icon {
-      fill: var(--fg-color-075);
+      fill: rgb(var(--fg-color), 0.75);
       pointer-events: none;
     }
 

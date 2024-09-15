@@ -117,7 +117,7 @@ async function fetchTrendTags () {
   font-size: 1rem;
   padding: 0.5em;
   &:focus, &:hover {
-    background-color: var(--accent-color-025);
+    background-color: rgb(var(--accent-color), 0.25);
   }
 
   // フォントサイズの変更
@@ -137,7 +137,7 @@ async function fetchTrendTags () {
   }
 
   &__count {
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
   }
 }
 </style>

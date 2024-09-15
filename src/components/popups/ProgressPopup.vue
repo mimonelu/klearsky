@@ -41,7 +41,7 @@ defineProps<{
   }
 
   &__bar {
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: 1rem;
     overflow: hidden;
     width: 240px;

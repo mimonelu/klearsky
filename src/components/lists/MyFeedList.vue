@@ -355,13 +355,13 @@ function removeMyFeed (uri: string) {
     max-height: 1.5em;
 
     .svg-icon--drag {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
     }
     .svg-icon--pin {
-      fill: var(--accent-color-075);
+      fill: rgb(var(--accent-color), 0.75);
     }
     .svg-icon--pinOutline {
-      fill: var(--fg-color-025);
+      fill: rgb(var(--fg-color), 0.25);
     }
     .svg-icon--cross {
       fill: rgb(var(--notice-color), 0.75);
@@ -372,7 +372,7 @@ function removeMyFeed (uri: string) {
         fill: rgb(var(--accent-color));
       }
       .svg-icon--pinOutline {
-        fill: var(--fg-color-05);
+        fill: rgb(var(--fg-color), 0.5);
       }
       .svg-icon--cross {
         fill: rgb(var(--notice-color));
@@ -401,11 +401,11 @@ function removeMyFeed (uri: string) {
     }
 
     .svg-icon--shimmer {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
     }
 
     span {
-      color: var(--fg-color-05);
+      color: rgb(var(--fg-color), 0.5);
       line-height: var(--line-height-high);
       overflow: hidden;
       text-overflow: ellipsis;

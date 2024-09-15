@@ -7,7 +7,7 @@
   user-select: none;
 
   &__header {
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
     font-weight: bold;
     overflow: hidden;
     padding: 0.25rem 1rem 0.5rem 1rem;
@@ -33,7 +33,7 @@
     padding: 0.5rem 1rem;
     white-space: nowrap;
     &:focus, &:hover {
-      background-color: var(--accent-color-025);
+      background-color: rgb(var(--accent-color), 0.25);
     }
     &:disabled {
       cursor: default;
@@ -73,7 +73,7 @@
     }
 
     & > span {
-      color: var(--fg-color-0875);
+      color: rgb(var(--fg-color), 0.875);
     }
     &[data-selected="true"] > span {
       color: rgb(var(--accent-color));
@@ -81,7 +81,7 @@
   }
 
   & > hr {
-    border-bottom: 1px solid var(--fg-color-0125);
+    border-bottom: 1px solid rgb(var(--fg-color), 0.125);
     margin: 0 0.5rem;
   }
 }

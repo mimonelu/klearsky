@@ -251,7 +251,7 @@ async function deleteStarterPack () {
   padding: 1em;
   position: relative;
   &[data-purpose="unknownlist"] {
-    background-color: var(--fg-color-00625);
+    background-color: rgb(var(--fg-color), 0.0625);
   }
 
   // スターターパック詳細
@@ -268,7 +268,7 @@ async function deleteStarterPack () {
   // サムネイル
   &__icon {
     grid-area: a;
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
     display: flex;
     align-items: center;
@@ -298,7 +298,7 @@ async function deleteStarterPack () {
       padding: 0.5em 0.5em 0;
 
       & > .svg-icon {
-        fill: var(--fg-color-05);
+        fill: rgb(var(--fg-color), 0.5);
         font-size: 0.875em;
       }
 
@@ -322,7 +322,7 @@ async function deleteStarterPack () {
   &__list_item_count,
   &__joined_count,
   &__indexed-at {
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
@@ -330,7 +330,7 @@ async function deleteStarterPack () {
     line-height: var(--line-height-high);
 
     & > .svg-icon {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
       font-size: 0.75em;
     }
 
@@ -364,13 +364,13 @@ async function deleteStarterPack () {
 
   // ポップオーバートリガー
   &__menu-button {
-    --color: var(--fg-color-075);
+    --color: rgb(var(--fg-color), 0.75);
     grid-area: m;
     cursor: pointer;
     margin: -0.625em;
     padding: 0.625em;
     &:focus, &:hover {
-      --color: var(--fg-color-0875);
+      --color: rgb(var(--fg-color), 0.875);
     }
 
     & > .svg-icon {
@@ -382,7 +382,7 @@ async function deleteStarterPack () {
 
   // 説明文
   &__description {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     font-size: 0.875em;
     line-height: var(--line-height-high);
     white-space: pre-wrap;

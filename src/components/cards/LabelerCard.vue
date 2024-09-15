@@ -212,7 +212,7 @@ function openProfilePopover ($event: Event) {
       padding: 0.5em 0.5em 0;
 
       & > .svg-icon {
-        fill: var(--fg-color-05);
+        fill: rgb(var(--fg-color), 0.5);
         font-size: 0.875em;
       }
 
@@ -256,13 +256,13 @@ function openProfilePopover ($event: Event) {
 
   // ラベラーライク数
   &__like-count {
-    --color: var(--fg-color-05);
+    --color: rgb(var(--fg-color), 0.5);
     grid-area: l;
     cursor: pointer;
     margin: -0.5em;
     padding: 0.5em;
     &[data-on="true"] {
-      --color: var(--like-color-075);
+      --color: rgb(var(--like-color), 0.75);
       &:focus, &:hover {
         --color: rgb(var(--like-color));
       }
@@ -287,10 +287,10 @@ function openProfilePopover ($event: Event) {
   // ラベラー作成日時
   &__indexed-at {
     grid-area: i;
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
 
     & > .svg-icon {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
     }
   }
 
@@ -307,13 +307,13 @@ function openProfilePopover ($event: Event) {
 
   // ラベラーカードメニュートリガー
   &__menu-button {
-    --color: var(--fg-color-075);
+    --color: rgb(var(--fg-color), 0.75);
     grid-area: m;
     cursor: pointer;
     margin: -0.625em;
     padding: 0.625em;
     &:focus, &:hover {
-      --color: var(--fg-color-0875);
+      --color: rgb(var(--fg-color), 0.875);
     }
 
     & > .svg-icon {
@@ -346,7 +346,7 @@ function openProfilePopover ($event: Event) {
   &__profile-button {
     font-size: 0.875em;
     &.button--plane {
-      background-color: var(--accent-color-025);
+      background-color: rgb(var(--accent-color), 0.25);
     }
 
     & > span {

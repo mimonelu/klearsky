@@ -236,7 +236,7 @@ function removeCurrentPostTag (index: number) {
 
 // タグ
 .tag {
-  border: 2px solid var(--fg-color-0125);
+  border: 2px solid rgb(var(--fg-color), 0.125);
   border-radius: var(--border-radius-middle);
   display: flex;
 
@@ -274,14 +274,14 @@ function removeCurrentPostTag (index: number) {
     cursor: pointer;
     padding-left: 0.5rem;
     &:focus, &:hover {
-      background-color: var(--accent-color-025);
+      background-color: rgb(var(--accent-color), 0.25);
     }
     &[data-selected="true"] {
       border-color: rgb(var(--accent-color));
     }
 
     & > .svg-icon {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
     }
 
     &__text {

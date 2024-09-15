@@ -49,7 +49,7 @@ defineProps<{
 
   // ユーザー
   &__user {
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
     display: flex;
     align-items: center;
@@ -95,8 +95,8 @@ defineProps<{
 
   // もっと見るボタン
   &__more-button {
-    --color-1: var(--fg-color-0125);
-    --color-2: var(--fg-color-05);
+    --color-1: rgb(var(--fg-color), 0.125);
+    --color-2: rgb(var(--fg-color), 0.5);
     background-color: var(--color-1);
     border-radius: var(--border-radius-middle);
     display: flex;
@@ -109,7 +109,7 @@ defineProps<{
     max-width: 7rem;
     height: 9rem;
     &:focus, &:hover {
-      --color-1: var(--fg-color-025);
+      --color-1: rgb(var(--fg-color), 0.25);
       --color-2: rgb(var(--fg-color));
     }
 

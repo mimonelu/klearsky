@@ -268,10 +268,10 @@ function isMine (message: TIChatMessage): boolean {
   padding: 1rem 0 1rem 1rem;
   position: relative;
   &[data-has-unread-messages="true"] {
-    background-color: var(--accent-color-0125);
+    background-color: rgb(var(--accent-color), 0.125);
   }
   &[data-muted="true"] {
-    background-color: var(--fg-color-00625);
+    background-color: rgb(var(--fg-color), 0.0625);
   }
 
   &__unread-count {
@@ -383,7 +383,7 @@ function isMine (message: TIChatMessage): boolean {
   }
 
   &__last-message {
-    border: 1px solid var(--fg-color-0125);
+    border: 1px solid rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
     font-size: 0.875rem;
     overflow: hidden;

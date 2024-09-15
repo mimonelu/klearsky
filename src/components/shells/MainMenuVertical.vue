@@ -197,7 +197,7 @@ function moveToBottom () {
 
     &[data-is-focus="true"],
     &:not([data-is-focus]).router-link-active {
-      background-color: var(--accent-color-025);
+      background-color: rgb(var(--accent-color), 0.25);
     }
   }
 
@@ -325,13 +325,13 @@ function moveToBottom () {
     min-height: 2rem;
 
     .svg-icon {
-      fill: var(--fg-color-075);
+      fill: rgb(var(--fg-color), 0.75);
       font-size: 1.5rem;
     }
   }
 
   .label {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     font-size: 1.25rem;
     font-weight: bold;
     line-height: 1.25;
@@ -367,11 +367,11 @@ function moveToBottom () {
   // ポスト送信ポップアップトリガー
   &.send-post-button {
     .svg-icon {
-      fill: var(--post-color-075);
+      fill: rgb(var(--post-color), 0.75);
     }
 
     .label {
-      color: var(--post-color-075);
+      color: rgb(var(--post-color), 0.75);
     }
 
     .loader {
@@ -414,7 +414,7 @@ function moveToBottom () {
   min-height: 3rem;
 
   .svg-icon {
-    fill: var(--fg-color-025);
+    fill: rgb(var(--fg-color), 0.25);
   }
   &:focus , &:hover {
     .svg-icon {

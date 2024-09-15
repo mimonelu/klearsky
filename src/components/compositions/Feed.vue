@@ -137,7 +137,7 @@ function removeThisPost (uri: string) {
     position: relative;
 
     & > .svg-icon {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
       font-size: 1.5em;
       position: relative;
     }
@@ -146,10 +146,10 @@ function removeThisPost (uri: string) {
       content: "";
       background-image: linear-gradient(
         to right,
-        var(--fg-color-025) 45%,
+        rgb(var(--fg-color), 0.25) 45%,
         transparent 45%,
         transparent 55%,
-        var(--fg-color-025) 55%
+        rgb(var(--fg-color), 0.25) 55%
       );
       display: block;
       position: absolute;
@@ -170,10 +170,6 @@ function removeThisPost (uri: string) {
   padding: 0.75em;
   &:focus, &:hover {
     --alpha: 0.75;
-
-    .folder__item  > .author-handle {
-      --fg-color-05: unset;
-    }
   }
 
   & > .svg-icon {
@@ -199,7 +195,6 @@ function removeThisPost (uri: string) {
     }
 
     & > .author-handle {
-      --fg-color-05: var(--fg-color-025);
       font-size: 0.75em;
     }
   }

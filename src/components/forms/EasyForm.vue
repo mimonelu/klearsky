@@ -429,7 +429,7 @@ function getVideoSizes (): Array<Array<undefined | {
   height: 2rem;
 
   & > .svg-icon {
-    fill: var(--fg-color-075);
+    fill: rgb(var(--fg-color), 0.75);
     font-size: 0.75rem;
   }
   &:focus > .svg-icon,
@@ -439,7 +439,7 @@ function getVideoSizes (): Array<Array<undefined | {
 }
 
 .footnote {
-  color: var(--fg-color-075);
+  color: rgb(var(--fg-color), 0.75);
   font-size: 0.875rem;
   line-height: var(--line-height-middle);
   text-align: right;

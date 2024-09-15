@@ -33,7 +33,7 @@ const state = reactive<{
 
 <style lang="scss" scoped>
 .author-handle {
-  color: var(--fg-color-05);
+  color: rgb(var(--fg-color), 0.5);
   font-size: 0.75em;
   line-height: 1.25;
   overflow: hidden;

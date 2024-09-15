@@ -36,7 +36,7 @@
 }
 
 .button {
-  background-color: var(--fg-color-0875);
+  background-color: rgb(var(--fg-color), 0.875);
   color: rgb(var(--bg-color));
   &:focus, &:hover {
     background-color: rgb(var(--fg-color));
@@ -53,10 +53,10 @@
 
 .button--bordered {
   background-color: rgb(var(--bg-color), 0.25);
-  border: 1px solid var(--fg-color-025);
-  color: var(--fg-color-075);
+  border: 1px solid rgb(var(--fg-color), 0.25);
+  color: rgb(var(--fg-color), 0.75);
   &:focus, &:hover {
-    border-color: var(--fg-color-0375);
+    border-color: rgb(var(--fg-color), 0.375);
     color: rgb(var(--fg-color));
 
     & > .svg-icon {
@@ -65,12 +65,12 @@
   }
 
   & > .svg-icon {
-    fill: var(--fg-color-075);
+    fill: rgb(var(--fg-color), 0.75);
   }
 }
 
 .button--important {
-  background-color: var(--notice-color-0875);
+  background-color: rgb(var(--notice-color), 0.875);
   color: rgb(var(--bg-color));
   &:focus, &:hover {
     background-color: rgb(var(--notice-color));
@@ -79,7 +79,7 @@
 
 .button--bordered--important {
   &[data-enabled="true"] {
-    background-color: var(--notice-color-0875);
+    background-color: rgb(var(--notice-color), 0.875);
     color: rgb(var(--bg-color));
     &:focus, &:hover {
       background-color: rgb(var(--notice-color));
@@ -87,10 +87,10 @@
   }
   &[data-enabled="false"] {
     background-color: transparent;
-    border-color: var(--notice-color-0875);
-    color: var(--notice-color-0875);
+    border-color: rgb(var(--notice-color), 0.875);
+    color: rgb(var(--notice-color), 0.875);
     .svg-icon {
-      fill: var(--notice-color-0875);
+      fill: rgb(var(--notice-color), 0.875);
     }
     &:focus, &:hover {
       border-color: rgb(var(--notice-color));
@@ -103,7 +103,7 @@
 }
 
 .button--plane {
-  color: var(--fg-color-0875);
+  color: rgb(var(--fg-color), 0.875);
   &:focus, &:hover {
     color: rgb(var(--fg-color));
 
@@ -113,7 +113,7 @@
   }
 
   & > .svg-icon {
-    fill: var(--fg-color-0875);
+    fill: rgb(var(--fg-color), 0.875);
   }
 }
 
@@ -129,7 +129,7 @@
 }
 
 .button__suffix {
-  color: var(--fg-color-05);
+  color: rgb(var(--fg-color), 0.5);
   font-size: 0.875em;
   font-weight: bold;
   line-height: var(--line-height-high);
@@ -163,6 +163,6 @@
   }
   & > .button--bordered,
   & > .button--plane {
-    border-color: var(--fg-color-025);
+    border-color: rgb(var(--fg-color), 0.25);
   }
 }

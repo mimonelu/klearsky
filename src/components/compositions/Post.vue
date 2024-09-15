@@ -1368,7 +1368,7 @@ function toggleOldestQuotedPostDisplay () {
 
   // フォーカスポスト
   .post-view &[data-focus="true"]:not([data-position="preview"]) {
-    background-color: var(--accent-color-0125);
+    background-color: rgb(var(--accent-color), 0.125);
 
     .body > .body__right {
       user-select: text;
@@ -1499,13 +1499,13 @@ function toggleOldestQuotedPostDisplay () {
     }
   }
   &[data-has-child="true"]::before {
-    background-color: var(--fg-color-025);
+    background-color: rgb(var(--fg-color), 0.25);
   }
   &[data-has-child="false"]:not(:last-child)::before {
     background-image: linear-gradient(
       to bottom,
-      var(--fg-color-025) 0,
-      var(--fg-color-025) 3px,
+      rgb(var(--fg-color), 0.25) 0,
+      rgb(var(--fg-color), 0.25) 3px,
       transparent 3px
     );
     background-size: 6px 6px;
@@ -1568,16 +1568,16 @@ function toggleOldestQuotedPostDisplay () {
     --post-color: var(--fg-color);
 
     & > .svg-icon {
-      fill: var(--fg-color-05);
+      fill: rgb(var(--fg-color), 0.5);
     }
 
     & > span {
-      color: var(--fg-color-05);
+      color: rgb(var(--fg-color), 0.5);
       font-size: 0.875em;
     }
 
     & > .author-handle {
-      color: var(--fg-color-025);
+      color: rgb(var(--fg-color), 0.25);
     }
   }
 
@@ -1589,7 +1589,7 @@ function toggleOldestQuotedPostDisplay () {
     font-size: 0.875em;
   }
   &[disabled="true"] > &__display-name {
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
   }
 }
 
@@ -1603,19 +1603,15 @@ function toggleOldestQuotedPostDisplay () {
       .replier__display-name {
         color: rgb(var(--post-color));
       }
-
-      .author-handle {
-        --fg-color-05: var(--fg-color-075);
-      }
     }
   }
 
   & > .svg-icon {
-    fill: var(--post-color-075);
+    fill: rgb(var(--post-color), 0.75);
   }
 
   &__display-name {
-    color: var(--post-color-075);
+    color: rgb(var(--post-color), 0.75);
   }
 
   .author-handle {
@@ -1633,19 +1629,15 @@ function toggleOldestQuotedPostDisplay () {
       .reposter__display-name {
         color: rgb(var(--share-color));
       }
-
-      .author-handle {
-        --fg-color-05: var(--fg-color-075);
-      }
     }
   }
 
   & > .svg-icon {
-    fill: var(--share-color-075);
+    fill: rgb(var(--share-color), 0.75);
   }
 
   &__display-name {
-    color: var(--share-color-075);
+    color: rgb(var(--share-color), 0.75);
   }
 
   .author-handle {
@@ -1698,7 +1690,7 @@ function toggleOldestQuotedPostDisplay () {
 
   &__display-name {
     grid-area: d;
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     display: flex;
     align-items: center;
     grid-gap: 0.5em;
@@ -1723,12 +1715,12 @@ function toggleOldestQuotedPostDisplay () {
   // &__author-handle {}
 
   &__point {
-    fill: var(--fg-color-025);
+    fill: rgb(var(--fg-color), 0.25);
     font-size: 0.5em;
   }
 
   &__indexed-at {
-    color: var(--fg-color-05);
+    color: rgb(var(--fg-color), 0.5);
     font-size: 0.75em;
     overflow: hidden;
     white-space: nowrap;
@@ -1794,9 +1786,9 @@ function toggleOldestQuotedPostDisplay () {
 }
 
 .translated-text {
-  border-top: 1px solid var(--fg-color-0125);
+  border-top: 1px solid rgb(var(--fg-color), 0.125);
   padding-top: 0.5em;
-  color: var(--fg-color-075);
+  color: rgb(var(--fg-color), 0.75);
   font-style: italic;
   line-height: var(--line-height-high);
   white-space: pre-wrap;
@@ -1840,13 +1832,13 @@ function toggleOldestQuotedPostDisplay () {
   position: relative;
 
   & > video {
-    background-color: var(--fg-color-0125);
+    background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
     max-height: 75vh;
   }
 
   &__message {
-    background-color: var(--notice-color-075);
+    background-color: rgb(var(--notice-color), 0.75);
     border-radius: var(--border-radius-middle);
     color: white;
     font-size: 0.75em;
@@ -1861,7 +1853,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   &__alt {
-    color: var(--fg-color-075);
+    color: rgb(var(--fg-color), 0.75);
     font-size: 0.875em;
     margin-top: 0.5em;
   }
@@ -1880,10 +1872,10 @@ function toggleOldestQuotedPostDisplay () {
 
 .repost {
   grid-area: r;
-  border: 1px solid var(--fg-color-025);
+  border: 1px solid rgb(var(--fg-color), 0.25);
   border-radius: var(--border-radius-middle);
   &:focus, &:hover {
-    border-color: var(--fg-color-0375);
+    border-color: rgb(var(--fg-color), 0.375);
   }
 
   :not([data-position="slim"]) & > .post {
@@ -1905,16 +1897,16 @@ function toggleOldestQuotedPostDisplay () {
 .feed-card,
 .list-card,
 .starter-pack-card {
-  border: 1px solid var(--accent-color-025);
+  border: 1px solid rgb(var(--accent-color), 0.25);
   border-radius: var(--border-radius-middle);
   &:focus, &:hover {
-    border-color: var(--accent-color-05);
+    border-color: rgb(var(--accent-color), 0.5);
   }
 }
 
 // フィードカード
 .feed-card {
-  background-color: var(--accent-color-0125);
+  background-color: rgb(var(--accent-color), 0.125);
 }
 
 // ポストタグ
@@ -1988,7 +1980,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   & > .svg-icon--lock {
-    fill: var(--fg-color-025);
+    fill: rgb(var(--fg-color), 0.25);
     margin-top: -0.25em;
   }
 
