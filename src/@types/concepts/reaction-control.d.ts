@@ -1,3 +1,11 @@
+interface TIPostgate {
+  $type: "app.bsky.feed.postgate"
+  createdAt: string
+  detachedEmbeddingUris?: Array<string>
+  embeddingRules?: Array<{ [k: string]: string }>
+  post: string
+}
+
 type TTThreadgate = {
   uri: string
   cid: string
@@ -29,6 +37,7 @@ type TTThreadgateList = {
 type TTThreadgateAction = "none" | "custom"
 
 type TTDraftReactionControl = {
+  postgateAllow: boolean
   threadgateAction: TTThreadgateAction
   allowMention: boolean
   allowFollowing: boolean
@@ -46,6 +55,7 @@ type TTReactionControlPopupProps = {
 
 interface TICloseReactionControlPopupProps {
   updated: boolean
+  postgateAllow: boolean
   threadgateAction: TTThreadgateAction
   allowMention?: boolean
   allowFollowing?: boolean

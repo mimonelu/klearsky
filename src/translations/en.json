@@ -567,6 +567,10 @@
 
   "reactionControl": "Reaction controls",
 
+  "postgate": "Quote controls",
+  "postgateAllow": "Quote allowed",
+  "postgateNotAllow": "Quote not allowed",
+
   "threadgate": "Reply controls",
   "threadgateNoAction": "Anyone can reply",
   "threadgateCustomAction": "Only allowed users can reply",

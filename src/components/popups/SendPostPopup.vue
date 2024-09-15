@@ -27,16 +27,24 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   labels: Array<string>
   draftReactionControl: TTDraftReactionControl
+  isDraftReactionControlOn: ComputedRef<boolean>
   postDatePopupDate: ComputedRef<undefined | string>
   videoLimits?: TIVideoLimits
 }>({
   labels: [],
   draftReactionControl: {
+    postgateAllow: true,
     threadgateAction: "none",
     allowMention: false,
     allowFollowing: false,
     listUris: [],
   },
+  isDraftReactionControlOn: computed((): boolean => {
+    return (
+      !state.draftReactionControl.postgateAllow ||
+      state.draftReactionControl.threadgateAction !== "none"
+    )
+  }),
   postDatePopupDate: computed((): undefined | string => {
     if (mainState.postDatePopupDate == null) return
     const date = new Date(mainState.postDatePopupDate)
@@ -226,16 +234,28 @@ async function submitCallback () {
       mainState.openSendPostPopup()
       mainState.openErrorPopup($t(result.message), "SendPostPopup/submitCallback")
     } else {
+      // Postgate の適用
+      if (!state.draftReactionControl.postgateAllow) {
+        const responseOfPostgate = await mainState.atp.updatePostgate(
+          result.uri,
+          state.draftReactionControl.postgateAllow
+        )
+        if (responseOfPostgate instanceof Error) {
+          mainState.openErrorPopup(responseOfPostgate, "SendPostPopup/submitCallback")
+          return
+        }
+      }
+
       // Threadgate の適用
       if (state.draftReactionControl.threadgateAction !== "none") {
-        const responseOfUpdate = await mainState.atp.updateThreadgate(
+        const responseOfThreadgate = await mainState.atp.updateThreadgate(
           result.uri,
           state.draftReactionControl.allowMention,
           state.draftReactionControl.allowFollowing,
           state.draftReactionControl.listUris
         )
-        if (responseOfUpdate instanceof Error) {
-          mainState.openErrorPopup(responseOfUpdate, "SendPostPopup/updateThreadgate")
+        if (responseOfThreadgate instanceof Error) {
+          mainState.openErrorPopup(responseOfThreadgate, "SendPostPopup/submitCallback")
           return
         }
       }
@@ -308,6 +328,7 @@ function openReactionControlPopup () {
       if (params == null) {
         return
       }
+      state.draftReactionControl.postgateAllow = params.postgateAllow
       state.draftReactionControl.threadgateAction = params.threadgateAction
       switch (state.draftReactionControl.threadgateAction) {
         case "none": {
@@ -494,9 +515,9 @@ const PreviewLinkCardFeature: {
               :disabled="type === 'reply'"
               @click.prevent="openReactionControlPopup"
             >
-              <SVGIcon :name="state.draftReactionControl.threadgateAction !== 'none' ? 'lock' : 'unlock'" />
+              <SVGIcon :name="state.isDraftReactionControlOn ? 'lock' : 'unlock'" />
               <span>{{ $t("reactionControl") }}</span>
-              <b v-if="state.draftReactionControl.threadgateAction !== 'none'">ON</b>
+              <b v-if="state.isDraftReactionControlOn">ON</b>
             </button>
 
             <!-- リストメンションポップアップトリガー -->

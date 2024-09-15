@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive, ref } from "vue"
+import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -26,20 +26,43 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   loaderDisplay: boolean
-  applied: boolean
+  applied: ComputedRef<boolean>
+  existingPostgate?: TIPostgate
+  existingPostgateAllow: ComputedRef<boolean>
 }>({
   loaderDisplay: false,
-  applied: props.draftReactionControl != null
-    ? props.draftReactionControl.threadgateAction !== "none"
-    : props.postThreadgate != null,
+  applied: computed((): boolean => {
+    return props.draftReactionControl != null
+      ? (
+        !props.draftReactionControl.postgateAllow ||
+        props.draftReactionControl.threadgateAction !== "none"
+      )
+      : (
+        !state.existingPostgateAllow ||
+        props.postThreadgate != null
+      )
+  }),
+  existingPostgate: undefined,
+  existingPostgateAllow: computed((): boolean => {
+    return state.existingPostgate?.embeddingRules?.find((rule) => {
+      return rule.$type === "app.bsky.feed.postgate#disableRule"
+    }) == null
+  }),
 })
 
 const easyFormState = reactive<{
+  postgateAllow: boolean
+  postgateAllowOptions: Array<TTOption>
   threadgateAction: TTThreadgateAction
   threadgateActionOptions: Array<TTOption>
-  allows: Array<string>
-  allowOptions: Array<TTOption>
+  threadgateAllows: Array<string>
+  threadgateAllowOptions: Array<TTOption>
 }>({
+  postgateAllow: props.draftReactionControl?.postgateAllow ?? true,
+  postgateAllowOptions: [
+    { label: $t("postgateAllow"), value: true },
+    { label: $t("postgateNotAllow"), value: false },
+  ],
   threadgateAction: props.draftReactionControl?.threadgateAction ?? (props.postThreadgate != null ? "custom" : "none"),
   threadgateActionOptions: [
   {
@@ -51,7 +74,7 @@ const easyFormState = reactive<{
       value: "custom",
     },
   ],
-  allows: (() => {
+  threadgateAllows: (() => {
     // 送信ポスト用
     if (props.mode === "send") {
       const allows: Array<string> = []
@@ -86,7 +109,7 @@ const easyFormState = reactive<{
 
     return []
   })(),
-  allowOptions: (() => {
+  threadgateAllowOptions: (() => {
     const results: Array<TTOption> = [
       { label: $t("threadgateAllowMention"), value: "allowMention" },
       { label: $t("threadgateAllowFollowing"), value: "allowFollowing" },
@@ -116,17 +139,22 @@ const easyFormProps: TTEasyForm = {
   data: [
     {
       state: easyFormState,
+      model: "postgateAllow",
+      type: "radio",
+      options: easyFormState.postgateAllowOptions,
+    },
+    {
+      state: easyFormState,
       model: "threadgateAction",
       type: "radio",
       options: easyFormState.threadgateActionOptions,
-
       onUpdate () {
         // 許可リストの無効化処理
-        easyFormProps.data[1].disabled = easyFormState.threadgateAction === "none"
+        easyFormProps.data[2].disabled = easyFormState.threadgateAction === "none"
 
         // 許可リストの初期化
         if (easyFormState.threadgateAction === "none") {
-          easyFormState.allows.splice(0)
+          easyFormState.threadgateAllows.splice(0)
         }
 
         if (easyForm.value != null) {
@@ -136,9 +164,9 @@ const easyFormProps: TTEasyForm = {
     },
     {
       state: easyFormState,
-      model: "allows",
+      model: "threadgateAllows",
       type: "checkbox",
-      options: easyFormState.allowOptions,
+      options: easyFormState.threadgateAllowOptions,
       limit: LIMIT_OF_THREADGATE_ITEMS,
       disabled: props.draftReactionControl != null
         ? props.draftReactionControl.threadgateAction === "none"
@@ -149,17 +177,21 @@ const easyFormProps: TTEasyForm = {
 
 const easyForm = ref()
 
+onMounted(async () => {
+  await fetchPostgate()
+})
+
 function close (params: TICloseReactionControlPopupProps) {
   emit("close", params)
 }
 
 async function update () {
   Util.blurElement()
-  const allowMention = easyFormState.allows.includes("allowMention")
-  const allowFollowing = easyFormState.allows.includes("allowFollowing")
+  const allowMention = easyFormState.threadgateAllows.includes("allowMention")
+  const allowFollowing = easyFormState.threadgateAllows.includes("allowFollowing")
 
   // 許可リスト
-  let listUris: undefined | Array<string> = easyFormState.allows
+  let listUris: undefined | Array<string> = easyFormState.threadgateAllows
     .filter((allow: string) => {
       return allow.startsWith("at://")
     })
@@ -167,10 +199,12 @@ async function update () {
     listUris = undefined
   }
 
+  // ポスト送信ポップアップ上での対応はここまで
   if (props.mode === "send") {
     close({
-      threadgateAction: easyFormState.threadgateAction,
       updated: true,
+      postgateAllow: easyFormState.postgateAllow,
+      threadgateAction: easyFormState.threadgateAction,
       allowMention,
       allowFollowing,
       listUris,
@@ -178,15 +212,28 @@ async function update () {
     return
   }
 
-  // ポスト送信ポップアップの対応はここまで
-  // ポストコンポーネントの対応は最後まで
-
+  // ここからポストコンポーネント上での対応
   if (state.loaderDisplay || props.postUri == null) {
     return
   }
   state.loaderDisplay = true
+  let updated = false
 
-  // Threadgate が設定済みの場合は削除
+  // Postgate の更新
+  if (state.existingPostgateAllow !== easyFormState.postgateAllow) {
+    const responseOfPostgate = await mainState.atp.updatePostgate(
+      props.postUri,
+      easyFormState.postgateAllow,
+      state.existingPostgate?.detachedEmbeddingUris
+    )
+    if (responseOfPostgate instanceof Error) {
+      mainState.openErrorPopup(responseOfPostgate, "ReactionControlPopup/update")
+      return
+    }
+    updated = true
+  }
+
+  // Threadgate の削除／設定済みの場合も削除
   if (props.postThreadgate != null) {
     const responseOfDelete = await mainState.atp.deleteThreadgate(props.postUri)
     if (responseOfDelete instanceof Error) {
@@ -194,35 +241,48 @@ async function update () {
       mainState.openErrorPopup(responseOfDelete, "ReactionControlPopup/update")
       return
     }
+    updated = true
   }
 
-  // Threadgate の削除はここまで
-  if (easyFormState.threadgateAction === "none") {
-    state.loaderDisplay = false
-    close({
-      threadgateAction: easyFormState.threadgateAction,
-      updated: props.postThreadgate != null,
-    })
-    return
+  // Threadgate の更新
+  if (easyFormState.threadgateAction !== "none") {
+    const responseOfUpdate = await mainState.atp.updateThreadgate(
+      props.postUri,
+      allowMention,
+      allowFollowing,
+      listUris
+    )
+    if (responseOfUpdate instanceof Error) {
+      mainState.openErrorPopup(responseOfUpdate, "ReactionControlPopup/update")
+      return
+    }
+    updated = true
   }
 
-  // Threadgate の設定
-  const responseOfUpdate = await mainState.atp.updateThreadgate(
-    props.postUri,
-    allowMention,
-    allowFollowing,
-    listUris
-  )
   state.loaderDisplay = false
-  if (responseOfUpdate instanceof Error) {
-    mainState.openErrorPopup(responseOfUpdate, "ReactionControlPopup/update")
-    return
-  }
 
   close({
+    updated,
+    postgateAllow: easyFormState.postgateAllow,
     threadgateAction: easyFormState.threadgateAction,
-    updated: true,
   })
+}
+
+// 既存ポストの Postgate の取得
+async function fetchPostgate () {
+  if (props.mode !== "post" || props.postUri == null) {
+    return
+  }
+  state.loaderDisplay = true
+  const response = await mainState.atp.fetchPostgate(props.postUri)
+  state.loaderDisplay = false
+  if (response instanceof Error) {
+    // NOTICE: Postgate レコードが存在しない場合はエラーを表示しない
+    // mainState.openErrorPopup(response, "ReactionControlPopup/onMounted")
+    return
+  }
+  state.existingPostgate = response.value
+  easyFormState.postgateAllow = state.existingPostgateAllow
 }
 </script>
 
@@ -255,9 +315,12 @@ async function update () {
         ref="easyForm"
       >
         <template #free-0>
-          <h3>{{ $t("threadgate") }}</h3>
+          <h3>{{ $t("postgate") }}</h3>
         </template>
         <template #free-1>
+          <h3>{{ $t("threadgate") }}</h3>
+        </template>
+        <template #free-2>
           <!-- 注意文 -->
           <div class="textlabel">
             <div class="textlabel__text">

@@ -65,6 +65,7 @@ import fetchNotifications from "@/composables/atp-wrapper/fetch/fetch-notificati
 import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-official-feed-generators"
 import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-popular-feed-generators"
 import fetchPostedImageRefs from "@/composables/atp-wrapper/fetch/fetch-posted-image-refs"
+import fetchPostgate from "@/composables/atp-wrapper/fetch/fetch-postgate"
 import fetchPosts from "@/composables/atp-wrapper/fetch/fetch-posts"
 import fetchPostSearch from "@/composables/atp-wrapper/fetch/fetch-post-search"
 import fetchPostThread from "@/composables/atp-wrapper/fetch/fetch-post-thread"
@@ -110,6 +111,7 @@ import updateMuteToDisable from "@/composables/atp-wrapper/update/update-mute-to
 import updateMuteToEnable from "@/composables/atp-wrapper/update/update-mute-to-enable"
 import updateNotificationSeen from "@/composables/atp-wrapper/update/update-notification-seen"
 import updatePinnedPost from "@/composables/atp-wrapper/update/update-pinned-post"
+import updatePostgate from "@/composables/atp-wrapper/update/update-postgate"
 import updatePreferences from "@/composables/atp-wrapper/update/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update/update-profile"
 import updateRecord from "@/composables/atp-wrapper/update/update-record"
@@ -221,6 +223,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
   fetchPopularFeedGenerators = fetchPopularFeedGenerators
   fetchPostedImageRefs = fetchPostedImageRefs
+  fetchPostgate = fetchPostgate
   fetchPosts = fetchPosts
   fetchPostSearch = fetchPostSearch
   fetchPostThread = fetchPostThread
@@ -272,6 +275,7 @@ class AtpWrapper implements TIAtpWrapper {
   updateMuteToEnable = updateMuteToEnable
   updateNotificationSeen = updateNotificationSeen
   updatePinnedPost = updatePinnedPost
+  updatePostgate = updatePostgate
   updatePreferences = updatePreferences
   updateProfile = updateProfile
   updateRecord = updateRecord

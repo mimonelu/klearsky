@@ -137,6 +137,8 @@ interface TIAtpWrapper {
     (currentValues: Array<TTFeedGenerator>, limit?: number, cursor?: string, term?: string): Promise<Error | undefined | string>
   fetchPostedImageRefs
     (did: string): Promise<Error | string[]>
+  fetchPostgate
+    (this: TIAtpWrapper, post: string): Promise<Error | { uri: string; cid: string; value: TIPostgate; }>
   fetchPosts
     (uris: Array<string>): Promise<Error | Array<TTPost>>
   fetchPostSearch
@@ -231,6 +233,8 @@ interface TIAtpWrapper {
     (seenAtDate?: Date): Promise<Error | undefined>
   updatePinnedPost
     (uri?: string): Promise<Error | boolean>
+  updatePostgate
+    (this: TIAtpWrapper, post: string, allow: boolean, detachedEmbeddingUris?: Array<string>): Promise<Error | TTCidUri>
   updatePreferences 
     (preferences: Array<TTPreference>): Promise<Error | undefined>
   updateProfile

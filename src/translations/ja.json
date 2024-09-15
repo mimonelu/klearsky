@@ -567,6 +567,10 @@
 
   "reactionControl": "反応制限",
 
+  "postgate": "引用制限",
+  "postgateAllow": "引用可",
+  "postgateNotAllow": "引用不可",
+
   "threadgate": "リプライ制限",
   "threadgateNoAction": "誰でもリプライ可",
   "threadgateCustomAction": "許可されたユーザーのみリプライ可",
