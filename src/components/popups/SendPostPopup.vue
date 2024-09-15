@@ -538,8 +538,19 @@ const PreviewLinkCardFeature: {
               <dl class="textlabel__text">
                 <dt>{{ $t("videoRemainingDailyNumber") }}</dt>
                 <dd>{{ (state.videoLimits.remainingDailyVideos ?? 0).toLocaleString() }}</dd>
+              </dl>
+              <dl class="textlabel__text">
                 <dt>{{ $t("videoRemainingDailyBytes") }}</dt>
                 <dd>{{ (((state.videoLimits.remainingDailyBytes ?? 0) / 1000 / 1000 / 1000).toFixed(2)).toLocaleString() }} GB</dd>
+              </dl>
+            </div>
+            <div
+              v-else
+              class="textlabel"
+            >
+              <dl class="textlabel__text">
+                <dt>&emsp;</dt>
+                <dd>&emsp;</dd>
               </dl>
             </div>
           </div>
@@ -636,9 +647,10 @@ const PreviewLinkCardFeature: {
     font-weight: bold;
 
     dl {
-      display: grid;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
       grid-gap: 0.5rem;
-      grid-template-columns: auto 1fr;
 
       & > dt {
         color: rgb(var(--fg-color), 0.5);
