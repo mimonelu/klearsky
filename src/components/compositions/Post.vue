@@ -1168,25 +1168,6 @@ function toggleOldestQuotedPostDisplay () {
               @onActivateHashTag="$emit('click', $event)"
             />
           </template>
-
-          <!-- ポストタグ -->
-          <div
-            v-if="
-              post.record?.tags != null &&
-              position !== 'slim'
-            "
-            class="post-tag-container"
-          >
-            <RouterLink
-              v-for="postTag of post.record.tags"
-              :to="`/search/post?text=${encodeURIComponent(postTag)}`"
-              class="post-tag"
-              @click.stop
-            >
-              <SVGIcon name="tag" />
-              <span>{{ postTag }}</span>
-            </RouterLink>
-          </div>
         </div>
 
         <!-- ラベルタグ -->
@@ -1907,24 +1888,6 @@ function toggleOldestQuotedPostDisplay () {
 // フィードカード
 .feed-card {
   background-color: rgb(var(--accent-color), 0.125);
-}
-
-// ポストタグ
-.post-tag-container {
-  display: flex;
-  flex-wrap: wrap;
-  grid-gap: 0.25em;
-  &:empty {
-    display: contents;
-  }
-
-  .post-tag {
-    font-size: 0.75em;
-    &:focus, &:hover {
-      --alpha: 1.0;
-      --fg-color: var(--accent-color);
-    }
-  }
 }
 
 // ラベルタグ

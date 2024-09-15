@@ -80,10 +80,6 @@ function process (type: string) {
       mainState.openMyListPopup()
       break
     }
-    case "myTag": {
-      mainState.openMyTagPopup({ mode: 'edit' })
-      break
-    }
     case "myLabeler": {
       mainState.openLabelerListPopup("myLabeler", mainState.myLabeler!.labelers)
       break
@@ -182,16 +178,6 @@ function process (type: string) {
       >
         <SVGIcon name="list" />
         <span>{{ $t("myList") }}</span>
-      </button>
-
-      <!-- マイタグポップアップトリガー -->
-      <button
-        type="button"
-        data-type="myTag"
-        @click.prevent="process('myTag')"
-      >
-        <SVGIcon name="tag" />
-        <span>{{ $t("myTag") }}</span>
       </button>
 
       <!-- マイラベラーポップアップトリガー -->
@@ -308,7 +294,6 @@ function process (type: string) {
   button[data-type="postLanguages"] > .svg-icon { fill: rgb(var(--fg-color)); }
   button[data-type="myFeeds"] > .svg-icon { /**/ }
   button[data-type="myList"] > .svg-icon { /**/ }
-  button[data-type="myTag"] > .svg-icon { /**/ }
   button[data-type="myLabeler"] > .svg-icon { fill: rgb(var(--share-color)); }
   button[data-type="contentFiltering"] > .svg-icon { /**/ }
   button[data-type="mutingUsers"] > .svg-icon { /**/ }

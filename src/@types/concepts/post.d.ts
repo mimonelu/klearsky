@@ -147,7 +147,6 @@ type TTCreatePostParams = {
   labels?: Array<string>
   listMentionDids?: Array<string>
   lightning?: string
-  tags?: Array<TTMyTag>
 }
 
 type TTSendPostPopupParams = {

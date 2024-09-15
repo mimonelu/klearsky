@@ -218,7 +218,6 @@ async function submitCallback () {
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
       listMentionDids: mainState.listMentionPopupProps.dids,
-      tags: mainState.currentPostTags,
 
       // Lightning
       lightning: mainState.currentSetting.lightning,
@@ -519,27 +518,6 @@ const PreviewLinkCardFeature: {
               <span>{{ $t("date") }}</span>
               <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
             </button>
-
-            <!-- マイタグポップアップトリガー -->
-            <button
-              class="button--bordered post-tag-button"
-              @click.prevent="mainState.openMyTagPopup('select')"
-            >
-              <SVGIcon name="tag" />
-              <span>{{ $t("tags") }}</span>
-              <div
-                v-if="mainState.currentPostTags?.length"
-                class="post-tag-container"
-              >
-                <div
-                  v-for="tag, index of mainState.currentPostTags"
-                  :key="index"
-                  class="post-tag"
-                >
-                  <span>{{ tag.text }}</span>
-                </div>
-              </div>
-            </button>
           </div>
         </template>
         <template #beforeButton>
@@ -699,18 +677,7 @@ const PreviewLinkCardFeature: {
       color: rgb(var(--fg-color));
       text-transform: uppercase;
     }
-    .post-tag-button {
-      .post-tag-container {
-        display: flex;
-        flex-wrap: wrap;
-        grid-gap: 0.25rem;
-      }
 
-      .post-tag {
-        --alpha: 1;
-        font-size: 0.75rem;
-      }
-    }
     .on-off-button > b {
       color: rgb(var(--notice-color));
     }

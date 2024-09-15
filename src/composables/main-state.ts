@@ -643,15 +643,6 @@ export const state: MainState = reactive<MainState>({
   openSendPostPopup: openSendPostPopup,
   closeSendPostPopup: closeSendPostPopup,
 
-  // ポップアップ - マイタグポップアップ
-  currentPostTags: [],
-  myTagPopupProps: {
-    display: false,
-    mode: "select",
-  },
-  openMyTagPopup: openMyTagPopup,
-  closeMyTagPopup: closeMyTagPopup,
-
   // ポップアップ - ポスト日時選択ポップアップ
   postDatePopupDisplay: false,
   postDatePopupDate: undefined,
@@ -816,9 +807,6 @@ function saveSettings () {
   }
   if (state.settings[did].notificationFetchInterval == null) {
     state.settings[did].notificationFetchInterval = 30000
-  }
-  if (state.settings[did].tags == null) {
-    state.settings[did].tags = []
   }
   if (state.settings[did].wordMute == null) {
     state.settings[did].wordMute = []
@@ -2314,23 +2302,11 @@ async function closeSendPostPopup (done: boolean, hidden: boolean) {
     state.sendPostPopupProps.type = "post"
     state.sendPostPopupProps.url = undefined
     state.sendPostPopupProps.fileList = undefined
-    state.currentPostTags.splice(0)
     state.postDatePopupDate = undefined
     state.listMentionPopupProps.list = undefined
     state.listMentionPopupProps.dids.splice(0)
   }
   state.sendPostPopupProps.visibility = false
-}
-
-// ポップアップ - マイタグポップアップ
-
-function openMyTagPopup (props?: TTMyTagPopupProps) {
-  state.myTagPopupProps.mode = props?.mode ?? "select"
-  state.myTagPopupProps.display = true
-}
-
-function closeMyTagPopup () {
-  state.myTagPopupProps.display = false
 }
 
 // ポップアップ - ポスト日時選択ポップアップ

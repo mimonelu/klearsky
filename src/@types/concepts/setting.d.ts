@@ -31,7 +31,6 @@ type TTSetting = {
   postSearchKeywordHistory?: Array<string>
   replyFolding?: Array<number>
   repostFolding?: Array<number>
-  tags?: Array<TTMyTag>
   timeControl?: string
   uiLanguage?: string
   userSearchKeywordHistory?: Array<string>

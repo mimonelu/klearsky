@@ -35,7 +35,6 @@ import MutingUsersPopup from "@/components/popups/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
 import MyFeedsSortPopover from "@/components/popovers/MyFeedsSortPopover.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
-import MyTagPopup from "@/components/popups/MyTagPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
@@ -1205,15 +1204,6 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
           :fileList="state.sendPostPopupProps.fileList"
           :createdAt="state.sendPostPopupProps.createdAt"
           @closeSendPostPopup="closeSendPostPopup"
-        />
-      </Transition>
-
-      <!-- マイタグポップアップ -->
-      <Transition>
-        <MyTagPopup
-          v-if="state.myTagPopupProps.display"
-          v-bind="state.myTagPopupProps"
-          @close="state.closeMyTagPopup"
         />
       </Transition>
 

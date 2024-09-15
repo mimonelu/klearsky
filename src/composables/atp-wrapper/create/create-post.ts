@@ -26,11 +26,6 @@ export default async function (
     record.langs = params.languages
   }
 
-  // ポストタグ
-  if (params.tags != null && params.tags.length > 0) {
-    record.tags = params.tags.map((tag: TTMyTag) => tag.text)
-  }
-
   // Zapリンク
   if (params.lightning) {
     record.text = record.text.replace(

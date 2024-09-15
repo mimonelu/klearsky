@@ -113,15 +113,6 @@
   "errorInvalidChatToken": "Failed to start chat.\nPlease grant chat privileges to App passwords if you are using that.",
   "chatUrlNotification": "The URL format is not a post AT URI.",
 
-  "tag": "Tag",
-  "tags": "Tags",
-  "tagEdit": "Edit my tags",
-  "myTag": "My Tags",
-  "newTag": "New tag",
-  "noTag": "No tags. Please add it.",
-  "deleteTag": "Delete tag",
-  "deleteTagMessage": "This tag will be deleted. Are you sure?",
-
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
 
