@@ -1200,8 +1200,17 @@ function toggleOldestQuotedPostDisplay () {
             "
             class="textlabel repost"
           >
-            <div class="textlabel__text">
-              <SVGIcon name="alert" />{{ $t("postDetached") }}
+          <div
+              v-if="post.embed.record.uri.startsWith(`at://${mainState.atp.session?.did}/`)"
+              class="textlabel__text--alert"
+            >
+              <SVGIcon name="alert" />{{ $t("postDetachedBySelf") }}
+            </div>
+            <div
+              v-else
+              class="textlabel__text"
+            >
+              <SVGIcon name="alert" />{{ $t("postDetachedByOther") }}
             </div>
           </div>
 
@@ -1874,7 +1883,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   &.textlabel {
-    opacity: 0.5;
+    opacity: 0.75;
     padding: 0.75em;
   }
 }

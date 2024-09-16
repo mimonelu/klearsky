@@ -144,7 +144,8 @@
   "blocking": "Blocking",
   "postBlocked": "This post cannot be displayed.",
   "postNotFound": "This post does not exist.",
-  "postDetached": "This post was detached.",
+  "postDetachedBySelf": "This post was detached by you.",
+  "postDetachedByOther": "This post was detached.",
 
   "reportSendAccount": "Report user",
   "reportSendPost": "Report post",
@@ -570,6 +571,8 @@
   "postgate": "Quote controls",
   "postgateAllow": "Quote allowed",
   "postgateNotAllow": "Quote not allowed",
+  "attachQuote": "Attach quote",
+  "detachQuote": "Detach quote",
 
   "threadgate": "Reply controls",
   "threadgateNoAction": "Anyone can reply",

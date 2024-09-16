@@ -8,6 +8,7 @@ import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUs
 import MenuTickerOpenReactionControlPopup from "@/components/menus/OpenReactionControlPopup.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
 import MenuTickerPostFeaturesWrapper from "@/components/menus/PostFeaturesWrapper.vue"
+import MenuTickerToggleQuoteAttachment from "@/components/menus/ToggleQuoteAttachment.vue"
 import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menus/WebShare.vue"
 import Popover from "@/components/popovers/Popover.vue"
@@ -155,6 +156,15 @@ function callback (type: "deletePost" | "updatePost") {
       <!-- チャットを開始する -->
       <MenuTickerOpenChatConvoPopup
         :user="post.author"
+        @close="emit('close')"
+      />
+
+      <!-- 引用の切断と接続 -->
+      <MenuTickerToggleQuoteAttachment
+        v-if="post.embed?.record?.uri.startsWith(`at://${mainState.atp.session?.did}/`)"
+        :quotedUri="post.embed.record.uri"
+        :quoterUri="post.uri"
+        :detached="post.embed.record.detached ?? false"
         @close="emit('close')"
       />
 
