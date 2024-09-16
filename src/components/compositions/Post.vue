@@ -1192,27 +1192,33 @@ function toggleOldestQuotedPostDisplay () {
             </div>
           </div>
 
-          <!-- 引用リポスト - 切り離された -->
-          <div
-            v-else-if="
-              post.embed.record.$type === 'app.bsky.embed.record#viewDetached' &&
-              !forceHideQuoteRepost
-            "
-            class="textlabel repost"
-          >
-          <div
+          <!-- 引用リポスト - 切断時 -->
+          <template v-else-if="
+            post.embed.record.$type === 'app.bsky.embed.record#viewDetached' &&
+            !forceHideQuoteRepost
+          ">
+            <!-- 引用リポスト - 切断時 - 自身のポスト -->
+            <RouterLink
               v-if="post.embed.record.uri.startsWith(`at://${mainState.atp.session?.did}/`)"
-              class="textlabel__text--alert"
+              :to="{ name: 'post', query: { uri: post.embed.record.uri } }"
+              class="textlabel repost"
+              @click.prevent.stop
             >
-              <SVGIcon name="alert" />{{ $t("postDetachedBySelf") }}
-            </div>
+              <div class="textlabel__text--alert">
+                <SVGIcon name="alert" />{{ $t("postDetachedBySelf") }}
+              </div>
+            </RouterLink>
+
+            <!-- 引用リポスト - 切断時 - 他ユーザーのポスト -->
             <div
               v-else
-              class="textlabel__text"
+              class="textlabel repost"
             >
-              <SVGIcon name="alert" />{{ $t("postDetachedByOther") }}
+              <div class="textlabel__text">
+                <SVGIcon name="alert" />{{ $t("postDetachedByOther") }}
+              </div>
             </div>
-          </div>
+          </template>
 
           <!-- 引用リポスト - ブロック中／被ブロック中 -->
           <div
