@@ -144,7 +144,7 @@
   "blocking": "ブロック中",
   "postBlocked": "このポストを表示することはできません。",
   "postNotFound": "このポストは存在しません。",
-  "postDetachedBySelf": "あなたの引用は切り離されました。",
+  "postDetachedBySelf": "引用は切り離し済みです。",
   "postDetachedByOther": "この引用は切り離されました。",
 
   "reportSendAccount": "ユーザーをレポートする",
@@ -571,8 +571,8 @@
   "postgate": "引用制限",
   "postgateAllow": "引用可",
   "postgateNotAllow": "引用不可",
-  "attachQuote": "引用を接続",
-  "detachQuote": "引用を切断",
+  "attachQuote": "引用を付け直す",
+  "detachQuote": "引用を切り離す",
 
   "threadgate": "リプライ制限",
   "threadgateNoAction": "誰でもリプライ可",

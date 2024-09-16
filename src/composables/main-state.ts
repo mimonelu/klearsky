@@ -2339,7 +2339,7 @@ function closeReactionControlPopup (params: TICloseReactionControlPopupProps) {
   state.reactionControlPopupProps.display = false
 }
 
-// ポップアップ - 反応制御ポップアップ
+// ポップアップ - リストメンションポップアップ
 
 function openListMentionPopup () {
   state.listMentionPopupProps.dids.splice(0)

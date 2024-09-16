@@ -64,8 +64,12 @@ function scrolledToBottom () {
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.currentQuoteReposts.forEach((post: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) => post.cid === newPost.cid)
-    if (newPost != null) Util.updatePostProps(mainState.currentQuoteReposts[index], newPost)
+    const newPost = newPosts.find((newPost: TTPost) => {
+      return post.uri === newPost.uri
+    })
+    if (newPost != null) {
+      Util.updatePostProps(mainState.currentQuoteReposts[index], newPost)
+    }
   })
 }
 
@@ -104,7 +108,8 @@ function removeThisPost (uri: string) {
           :container="state.postContainer"
           :hasReplyIcon="post.record.reply != null"
           :hasQuoteRepostIcon="post.record.embed?.record != null"
-          :forceHideQuoteRepost="true"
+          :forceHideQuoteRepost="post.embed?.record?.detached !== true"
+          :forceUpdatePostThread="true"
           @click.exact="close"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"

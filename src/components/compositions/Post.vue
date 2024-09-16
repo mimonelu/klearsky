@@ -35,6 +35,7 @@ const props = defineProps<{
   noLink?: boolean
   forceHideMedia?: boolean
   forceHideQuoteRepost?: boolean
+  forceUpdatePostThread?: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -598,6 +599,11 @@ async function updatePost () {
   state.processing = true
   if (mainState.currentPath.startsWith("/post")) {
     await mainState.fetchPostThread()
+
+    // 引用リポスト一覧からの Postgate 操作用
+    if (props.forceUpdatePostThread) {
+      await updatePostThread()
+    }
   } else {
     await updatePostThread()
   }

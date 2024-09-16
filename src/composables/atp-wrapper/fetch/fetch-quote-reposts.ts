@@ -1,4 +1,5 @@
 import type { AppBskyFeedGetQuotes } from "@atproto/api"
+import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -27,16 +28,23 @@ export default async function (
     return Error("apiError")
   }
 
+  // TODO:
+  Util.sanitizePostsOrFeeds(response.data.posts)
+
   // ブロックユーザーを除去
   response.data.posts = (response.data.posts as Array<TTPost>)
     .filter((post) => {
       return !post.viewer?.blocking && !post.viewer?.blockedBy
     })
 
-  // detached されたポストを除去
+  // 他ユーザーの切り離されたポストを除去
   response.data.posts = (response.data.posts as Array<TTPost>)
     .filter((post) => {
-      return !post.embed?.record?.detached
+      return (
+        post.author.did === this.session?.did ||
+        !post.embed?.record?.detached ||
+        post.embed?.record?.uri.startsWith(`at://${this.session?.did}/`)
+      )
     })
 
   const newPosts: Array<TTPost> = []
