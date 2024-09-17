@@ -8,7 +8,7 @@ export default async function (
 ): Promise<Error | undefined> {
   // リンクカード
   let manualQuoteRepost: undefined | TTPost = undefined
-  let external: null | any = null
+  let external: undefined | TTExternal = undefined
   let feedOrLinkOrStarterPackCard: undefined | any
   if (params.url != null && params.url.length > 0) {
     // AT URI指定引用リポスト
@@ -78,17 +78,19 @@ export default async function (
 
           // リンクカード - リンクカード
           } else {
-            external = await Util.parseOgp(
+            const response = await Util.parseOgp(
               atp,
               params.url,
               params.urlHasImage?.includes(true) ?? false
             )
-            if (external == null) {
-              return Error("parseOgpError")
+            if (response instanceof Error) {
+              return response
             }
-            if (external instanceof Error) {
-              return external
-            }
+            external = response
+
+            // FYI: OGPを無視して値を書き換える場合
+            // external.title = "これはリンクカードのタイトルです"
+            // external.description = "これはリンクカードの説明です"
           }
         }
       }
