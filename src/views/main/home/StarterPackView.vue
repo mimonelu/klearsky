@@ -181,6 +181,15 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-direction: column;
   flex-grow: 1;
 
+  & > .starter-pack-card {
+    background-color: rgb(var(--starter-pack-color), 0.125);
+    margin-bottom: 1rem;
+    @include media-show-sub-menu-layout() {
+      border: 1px solid rgb(var(--starter-pack-color), 0.25);
+      border-radius: var(--border-radius-middle);
+    }
+  }
+
   .strike-header {
     margin: 0 1rem;
   }

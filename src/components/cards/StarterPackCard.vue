@@ -279,7 +279,7 @@ async function deleteStarterPack () {
     max-height: 3em;
 
     & > .svg-icon {
-      fill: rgb(var(--like-color));
+      fill: rgb(var(--starter-pack-color));
       font-size: 2em;
     }
   }

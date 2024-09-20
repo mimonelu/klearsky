@@ -62,6 +62,11 @@
 
 // 各種変数
 body {
+  // 各機能の配色
+  --feed-color: var(--post-color);
+  --list-color: var(--fg-color);
+  --starter-pack-color: var(--like-color);
+
   // リストアイコンの配色
   --curate-list-color: var(--share-color);
   --mod-list-color: var(--notice-color);

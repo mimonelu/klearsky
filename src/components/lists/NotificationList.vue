@@ -287,16 +287,23 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   }
 
   // フィードカード・リストカード・スターターパックカード
+  --card-color: var(--fg-color);
   & > .feed-card,
   & > .list-card,
   & > .starter-pack-card {
-    background-color: rgb(var(--accent-color), 0.125);
-    border: 1px solid rgb(var(--accent-color), 0.25);
+    background-color: rgb(var(--card-color), 0.125);
+    border: 1px solid rgb(var(--card-color), 0.25);
     border-radius: var(--border-radius-middle);
     margin-top: 0.5rem;
-    &:focus, &:hover {
-      border-color: rgb(var(--accent-color), 0.5);
-    }
+  }
+  & > .feed-card {
+    --card-color: var(--feed-color);
+  }
+  & > .list-card {
+    --card-color: var(--list-color);
+  }
+  & > .starter-pack-card {
+    --card-color: var(--starter-pack-color);
   }
 }
 

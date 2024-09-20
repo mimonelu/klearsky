@@ -1086,7 +1086,7 @@ function removeThisPost () {
 
 // 登録時に使用したスターターパック
 .joined-starter-pack {
-  --fg-color: var(--like-color);
+  --fg-color: var(--starter-pack-color);
   margin: -0.5em -0.5em -0.5em -0.25em;
   padding: 0.5em;
 }
@@ -1119,7 +1119,8 @@ function removeThisPost () {
 
 // 固定ポスト
 .pinned-post {
-  background-color: rgb(var(--like-color), 0.125);
+  --pinned-post-color: var(--like-color);
+  background-color: rgb(var(--pinned-post-color), 0.125);
 
   &__header {
     display: flex;
@@ -1131,11 +1132,11 @@ function removeThisPost () {
     white-space: nowrap;
 
     & > .svg-icon {
-      fill: rgb(var(--like-color));
+      fill: rgb(var(--pinned-post-color));
     }
 
     & > span {
-      color: rgb(var(--like-color));
+      color: rgb(var(--pinned-post-color));
       font-weight: bold;
       overflow: hidden;
       text-overflow: ellipsis;

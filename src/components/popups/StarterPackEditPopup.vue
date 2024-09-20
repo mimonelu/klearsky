@@ -260,7 +260,7 @@ async function submitCallback () {
 .starter-pack-edit-popup {
   &:deep() {
     .popup-header > h2 > .svg-icon--cards {
-      fill: rgb(var(--like-color));
+      fill: rgb(var(--starter-pack-color));
     }
 
     // リストアイコン

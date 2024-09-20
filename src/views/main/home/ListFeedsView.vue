@@ -108,6 +108,14 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
   flex-direction: column;
   flex-grow: 1;
 
+  & > .list-card {
+    background-color: rgb(var(--list-color), 0.125);
+    @include media-show-sub-menu-layout() {
+      border: 1px solid rgb(var(--list-color), 0.25);
+      border-radius: var(--border-radius-middle);
+    }
+  }
+
   &__list-card-skeleton {
     min-height: 8rem;
   }

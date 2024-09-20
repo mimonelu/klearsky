@@ -1874,8 +1874,8 @@ function toggleOldestQuotedPostDisplay () {
 
 .repost {
   grid-area: r;
-  background-color: rgba(var(--accent-color), 0.125);
-  border: 1px solid rgb(var(--accent-color), 0.25);
+  background-color: rgba(var(--post-color), 0.125);
+  border: 1px solid rgb(var(--post-color), 0.25);
   border-radius: var(--border-radius-middle);
 
   :not([data-position="slim"]) & > .post {
@@ -1897,11 +1897,19 @@ function toggleOldestQuotedPostDisplay () {
 .feed-card,
 .list-card,
 .starter-pack-card {
-  border: 1px solid rgb(var(--accent-color), 0.25);
+  --card-color: var(--fg-color);
+  background-color: rgb(var(--card-color), 0.125);
+  border: 1px solid rgb(var(--card-color), 0.25);
   border-radius: var(--border-radius-middle);
-  &:focus, &:hover {
-    border-color: rgb(var(--accent-color), 0.5);
-  }
+}
+.feed-card {
+  --card-color: var(--feed-color);
+}
+.list-card {
+  --card-color: var(--list-color);
+}
+.starter-pack-card {
+  --card-color: var(--starter-pack-color);
 }
 
 // フィードカード

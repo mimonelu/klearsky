@@ -249,7 +249,7 @@ async function makeAvatarBlobRef (): Promise<Error | undefined | BlobRef> {
 .list-edit-popup {
   &:deep() {
     .popup-header > h2 > .svg-icon--list {
-      fill: rgb(var(--accent-color));
+      fill: rgb(var(--list-color));
     }
 
     // リストアイコン

@@ -207,9 +207,16 @@ getEmbeddedContentId()
 
       <!-- 通常のリンクカードの情報 -->
       <div class="external__meta">
-        <div class="external__meta__title">{{ external.title ?? '' }}</div>
-        <div class="external__meta__uri">{{ external.uri }}</div>
-        <div class="external__meta__description">{{ external.description ?? '' }}</div>
+        <div class="external__meta__title">
+          <span>{{ external.title || "&emsp;" }}</span>
+        </div>
+        <div class="external__meta__uri">
+          <SVGIcon name="link" />
+          <span>{{ external.uri }}</span>
+        </div>
+        <div class="external__meta__description">
+          <span>{{ external.description || "&emsp;" }}</span>
+        </div>
       </div>
     </Component>
 
@@ -342,9 +349,16 @@ getEmbeddedContentId()
         target="_blank"
         @click.stop
       >
-        <div class="external__meta__title">{{ external.title ?? '' }}</div>
-        <div class="external__meta__uri">{{ external.uri }}</div>
-        <div class="external__meta__description">{{ external.description ?? '' }}</div>
+        <div class="external__meta__title">
+          <span>{{ external.title || "" }}</span>
+        </div>
+        <div class="external__meta__uri">
+          <SVGIcon name="link" />
+          <span>{{ external.uri }}</span>
+        </div>
+        <div class="external__meta__description">
+          <span>{{ external.description || "" }}</span>
+        </div>
       </a>
     </div>
 
@@ -374,9 +388,6 @@ getEmbeddedContentId()
     display: flex;
     overflow: hidden;
     position: relative;
-    &:focus, &:hover {
-      border-color: rgb(var(--fg-color), 0.375);
-    }
 
     // 横レイアウト
     &[data-layout="horizontal"] {
@@ -418,18 +429,27 @@ getEmbeddedContentId()
       display: grid;
       grid-template-rows: auto auto auto;
       margin-top: 0.5em;
-      &:focus, &:hover {
-        --fg-color: var(--accent-color);
-      }
     }
 
     &__title,
     &__uri,
     &__description {
-      line-height: var(--line-height-high);
+      display: flex;
+      align-items: center;
+      grid-gap: 0.5em;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color), 0.5);
+        font-size: 0.875em;
+      }
+
+      & > span {
+        line-height: var(--line-height-high);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
     &__title {

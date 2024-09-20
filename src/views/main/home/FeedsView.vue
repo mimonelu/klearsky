@@ -66,6 +66,14 @@ const state = reactive<{
   &[data-processing="true"] .feed-list {
     margin-top: 9rem;
   }
+
+  & > .feed-card {
+    background-color: rgb(var(--feed-color), 0.125);
+    @include media-show-sub-menu-layout() {
+      border: 1px solid rgb(var(--feed-color), 0.25);
+      border-radius: var(--border-radius-middle);
+    }
+  }
 }
 
 .feed-list:deep() {
