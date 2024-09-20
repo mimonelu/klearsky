@@ -132,6 +132,7 @@ function onActivateAlt (alt: string) {
 <style lang="scss" scoped>
 .thumbnail {
   background-color: rgb(var(--fg-color), 0.125);
+  border: 1px solid rgb(var(--fg-color), 0.25);
   border-radius: var(--border-radius-middle);
   cursor: pointer;
   display: flex;

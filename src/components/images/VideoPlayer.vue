@@ -107,6 +107,7 @@ function pause () {
 <template>
   <video
     v-intersection-observer="{ outboundHandler: pause }"
+    class="video-player"
     ref="video"
     controls
     loading="lazy"
@@ -116,6 +117,3 @@ function pause () {
     width="100%"
   />
 </template>
-
-<style lang="scss" scoped>
-</style>
