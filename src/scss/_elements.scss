@@ -1,20 +1,22 @@
+// https://fonts.google.com/noto/specimen/Noto+Sans+JP?lang=ja_Jpan
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+
 *,
 * > * {
   line-height: 1;
 }
-
+// var(--m3-ui-family),"-apple-system","BlinkMacSystemFont",sans-serif;
 :root {
   // フォントファミリー
   font-family:
-    // 基本的にWeb版Twitterと等しくする
     "Segoe UI",
-    Meiryo,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    Roboto,
-    Helvetica,
+    "Meiryo",
+    "system-ui",
+    "Noto Sans JP",
+    "-apple-system",
+    "BlinkMacSystemFont",
     Arial,
+    Helvetica,
     sans-serif;
 
   // フォントサイズ
@@ -91,6 +93,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   color: rgb(var(--fg-color));
+  font-optical-sizing: auto;
   overflow-x: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
