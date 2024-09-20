@@ -1872,11 +1872,9 @@ function toggleOldestQuotedPostDisplay () {
 
 .repost {
   grid-area: r;
-  border: 1px solid rgb(var(--fg-color), 0.25);
+  background-color: rgba(var(--accent-color), 0.125);
+  border: 1px solid rgb(var(--accent-color), 0.25);
   border-radius: var(--border-radius-middle);
-  &:focus, &:hover {
-    border-color: rgb(var(--fg-color), 0.375);
-  }
 
   :not([data-position="slim"]) & > .post {
     padding: 0.75em;
