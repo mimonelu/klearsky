@@ -66,7 +66,10 @@ const state = reactive<{
 
 <template>
   <div class="white-winds">
-    <div class="white-winds__container">
+    <div
+      v-if="state.records.length > 0"
+      class="white-winds__container"
+    >
       <template v-for="record of state.records">
         <a
           class="white-winds__item"
@@ -89,9 +92,10 @@ const state = reactive<{
 
 <style lang="scss" scoped>
 .white-winds {
+  --white-winds-color: var(--accent-color);
   display:  grid;
 
-  .pinned-post ~ & {
+  .pinned-post ~ &:not(:empty) {
     margin-top: 0.5rem;
   }
 
@@ -104,7 +108,12 @@ const state = reactive<{
   }
 
   &__item {
-    background-color: rgb(var(--accent-color), 0.25);
+    background-color: rgb(var(--white-winds-color), 0.25);
+    @include media-show-sub-menu-layout(){
+      border: 1px solid rgb(var(--white-winds-color), 0.25);
+      border-radius: var(--border-radius-middle);
+    }
+
     color: var(--fg-color);
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -139,11 +148,11 @@ const state = reactive<{
     font-size: 0.875em;
 
     & > .svg-icon {
-      fill: rgb(var(--accent-color));
+      fill: rgb(var(--white-winds-color));
     }
 
     & > span {
-      color: rgb(var(--accent-color));
+      color: rgb(var(--white-winds-color));
       font-weight: bold;
       line-height: var(--line-height-middle);
       overflow: hidden;

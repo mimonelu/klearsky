@@ -1121,6 +1121,10 @@ function removeThisPost () {
 .pinned-post {
   --pinned-post-color: var(--like-color);
   background-color: rgb(var(--pinned-post-color), 0.125);
+  @include media-show-sub-menu-layout(){
+    border: 1px solid rgb(var(--pinned-post-color), 0.25);
+    border-radius: var(--border-radius-middle);
+  }
 
   &__header {
     display: flex;
