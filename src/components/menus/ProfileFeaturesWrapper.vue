@@ -74,17 +74,21 @@ function close () {
           @close="emit('close')"
         />
 
-        <!-- 最初のポストを見る -->
-        <MenuTickerFirstPost
-          :did="user.did"
-          @close="emit('close')"
-        />
+        <hr />
 
         <!-- このユーザーのポストを検索 -->
         <MenuTickerSearchAccountPost
           :user="user"
           @close="emit('close')"
         />
+
+        <!-- 最初のポストを見る -->
+        <MenuTickerFirstPost
+          :did="user.did"
+          @close="emit('close')"
+        />
+
+        <hr />
 
         <!-- 投稿画像をダウンロード -->
         <MenuTickerDownloadPostedImages

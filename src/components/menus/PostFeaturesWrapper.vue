@@ -76,6 +76,20 @@ function close () {
           @close="emit('close')"
         />
 
+        <!-- タイムフィードで見る -->
+        <MenuTickerOpenTimeFeedsPopup
+          :post="post"
+          @close="emit('close')"
+        />
+
+        <!-- このポストの直後に投稿する -->
+        <MenuTickerSendPostAfter
+          :createdAt="post.record?.createdAt"
+          @close="emit('close')"
+        />
+
+        <hr />
+
         <!-- リポストユーザーリストポップアップトリガー -->
         <MenuTickerShowRepostUsers
           :uri="post.uri"
@@ -94,21 +108,11 @@ function close () {
           @close="emit('close')"
         />
 
+        <hr />
+
         <!-- 固定ポストトグル -->
         <MenuTickerTogglePinnedPost
           :post="post"
-          @close="emit('close')"
-        />
-
-        <!-- タイムフィードで見る -->
-        <MenuTickerOpenTimeFeedsPopup
-          :post="post"
-          @close="emit('close')"
-        />
-
-        <!-- このポストの直後に投稿する -->
-        <MenuTickerSendPostAfter
-          :createdAt="post.record?.createdAt"
           @close="emit('close')"
         />
       </menu>

@@ -45,31 +45,42 @@
 
     & > .svg-icon,
     & > .svg-icon.list-menu__no-color-icon {
-      fill: rgb(var(--accent-color));
+      --icon-color: var(--fg-color);
+      fill: rgb(var(--icon-color), 0.75);
     }
     & > .svg-icon--feed {
-      fill: rgb(var(--accent-color));
+      --icon-color: var(--accent-color);
     }
     & > .svg-icon--at,
+    & > .svg-icon--chat,
+    & > .svg-icon--link,
     & > .svg-icon--post {
-      fill: rgb(var(--post-color));
+      --icon-color: var(--post-color);
     }
     & > .svg-icon--repost,
     & > .svg-icon--quoteRepost {
-      fill: rgb(var(--share-color));
+      --icon-color: var(--share-color);
     }
     & > .svg-icon--like {
-      fill: rgb(var(--like-color));
+      --icon-color: var(--like-color);
+    }
+    & > .svg-icon--list {
+      --icon-color: var(--list-color);
+    }
+    & > .svg-icon--pinOutline,
+    & > .svg-icon--pinOffOutline {
+      --icon-color: var(--like-color);
     }
     & > .svg-icon--alert,
     & > .svg-icon--contentFiltering,
+    & > .svg-icon--lock,
     & > .svg-icon--person,
     & > .svg-icon--personOff,
     & > .svg-icon--remove,
     & > .svg-icon--volumeOn,
     & > .svg-icon--volumeOff,
     & > .svg-icon--wordMute {
-      fill: rgb(var(--notice-color));
+      --icon-color: var(--notice-color);
     }
 
     & > span {

@@ -289,20 +289,23 @@ function process (type: string) {
     }
   }
 
-  button[data-type="uiLanguage"] > .svg-icon { fill: rgb(var(--fg-color)); }
-  button[data-type="contentLanguages"] > .svg-icon { fill: rgb(var(--fg-color)); }
-  button[data-type="postLanguages"] > .svg-icon { fill: rgb(var(--fg-color)); }
-  button[data-type="myFeeds"] > .svg-icon { /**/ }
-  button[data-type="myList"] > .svg-icon { /**/ }
-  button[data-type="myLabeler"] > .svg-icon { fill: rgb(var(--share-color)); }
-  button[data-type="contentFiltering"] > .svg-icon { /**/ }
-  button[data-type="mutingUsers"] > .svg-icon { /**/ }
-  button[data-type="blockingUsers"] > .svg-icon { /**/ }
-  button[data-type="wordMute"] > .svg-icon { /**/ }
-  button[data-type="design"] > .svg-icon { fill: rgb(var(--fg-color)); }
-  button[data-type="post"] > .svg-icon { /**/ }
+  button > .svg-icon {
+    --icon-color: var(--fg-color);
+    fill: rgb(var(--icon-color), 0.75);
+  }
+  button[data-type="uiLanguage"] > .svg-icon { /**/ }
+  button[data-type="contentLanguages"] > .svg-icon { /**/ }
+  button[data-type="postLanguages"] > .svg-icon { /**/ }
+  button[data-type="myFeeds"] > .svg-icon { --icon-color: var(--feed-color); }
+  button[data-type="myList"] > .svg-icon { --icon-color: var(--list-color); }
+  button[data-type="myLabeler"] > .svg-icon { --icon-color: var(--share-color); }
+  button[data-type="mutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
+  button[data-type="blockingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
+  button[data-type="wordMute"] > .svg-icon { --icon-color: var(--notice-color); }
+  button[data-type="design"] > .svg-icon { /**/ }
+  button[data-type="post"] > .svg-icon { --icon-color: var(--post-color); }
   button[data-type="psySafety"] > .svg-icon { /**/ }
   button[data-type="etc"] > .svg-icon { /**/ }
-  button[data-type="inviteCode"] > .svg-icon { fill: rgb(var(--fg-color)); }
+  button[data-type="inviteCode"] > .svg-icon { /**/ }
 }
 </style>
