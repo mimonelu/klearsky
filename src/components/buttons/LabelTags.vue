@@ -153,7 +153,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   &__harmful-label,
   &__labelers-label,
   &__custom-label {
-    border: 1px solid transparent;
+    // border: 1px solid transparent;
     border-radius: var(--border-radius-middle);
     display: flex;
     align-items: center;
@@ -190,7 +190,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   &__harmful-label {
     --color: rgb(var(--notice-color), var(--alpha, 1.0));
     background-color: rgb(var(--notice-color), 0.125);
-    border-color: rgb(var(--notice-color), calc(var(--alpha) / 2));
+    // border-color: rgb(var(--notice-color), calc(var(--alpha) / 2));
     cursor: pointer;
     &:focus,
     &:hover {
@@ -202,7 +202,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   &__labelers-label {
     --color: rgb(var(--share-color), var(--alpha, 1.0));
     background-color: rgb(var(--share-color), 0.125);
-    border-color: rgb(var(--share-color), calc(var(--alpha) / 2));
+    // border-color: rgb(var(--share-color), calc(var(--alpha) / 2));
     cursor: pointer;
     grid-gap: 0.5em;
     padding: 0.125em 0.5em 0.125em 0.125em;
@@ -213,10 +213,12 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
     & > .lazy-image {
       border-radius: var(--border-radius-small);
-      min-width: 1.5em;
-      max-width: 1.5em;
-      min-height: 1.5em;
-      max-height: 1.5em;
+      font-size: 1.5em;
+      min-width: 1em;
+      max-width: 1em;
+      min-height: 1em;
+      max-height: 1em;
+      opacity: var(--alpha) !important;
     }
   }
 
