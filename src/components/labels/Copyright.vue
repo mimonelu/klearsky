@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import Package from "@/../package.json"
+import { inject } from "vue"
+
+const mainState = inject("state") as MainState
 
 const atprotoApiVersion = (Package.dependencies["@atproto/api"] ?? "").replace(/^[\^|~]/, "")
 
@@ -8,7 +11,16 @@ const yyyy = (new Date).getFullYear()
 
 <template>
   <div class="copyright">
-    <small>Klearsky v{{ Package.version }} alpha (@atproto/api v{{ atprotoApiVersion }}) &copy; {{ yyyy }} mimonelu</small>
+    <small>Klearsky</small>
+    <RouterLink
+      v-if="mainState.atp.hasLogin()"
+      class="textlink--underline"
+      :to="{ path: '/search/post', query: { text: 'from:mimonelu.net ⭐ Klearsky | 🔥 Klearsky' } }"
+    >
+      <span>v{{ Package.version }}</span>
+    </RouterLink>
+    <span v-else>v{{ Package.version }}</span>
+    <small>alpha (@atproto/api v{{ atprotoApiVersion }}) &copy; {{ yyyy }} mimonelu</small>
     <a
       class="textlink--underline"
       href="https://github.com/mimonelu/klearsky"
