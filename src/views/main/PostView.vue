@@ -121,7 +121,27 @@ async function toggleThreadMute () {
   }
 }
 
-.post[data-focus="true"] {
+// フォーカスポスト
+.post[data-focus="true"]:not([data-position="preview"]) {
   scroll-margin: 3.25rem;
+
+  // フォーカスポスト - アクセント
+  background-color: rgb(var(--accent-color), 0.125);
+  @include media-show-sub-menu-layout() {
+    border: 1px solid rgb(var(--accent-color), 0.25);
+    border-radius: var(--border-radius-large);
+  }
+
+  &:deep() {
+    // フォーカスポスト - フォントサイズの拡大
+    .html-text {
+      font-size: 1.125em;
+    }
+
+    // フォーカスポスト - テキスト選択の有効化
+    & > .body > .body__right > .post__content > .html-text {
+      user-select: text;
+    }
+  }
 }
 </style>

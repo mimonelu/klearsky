@@ -1557,8 +1557,8 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
   min-width: $menu-max-width;
   max-width: $menu-max-width;
 
-  // サブメニュー非表示
-  @media not all and (min-width: 1024px) {
+  // サブメニュー非表示レイアウト
+  @include media-hide-sub-menu-layout() {
     display: none;
   }
 

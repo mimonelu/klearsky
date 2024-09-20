@@ -1375,15 +1375,6 @@ function toggleOldestQuotedPostDisplay () {
   padding: 0.75em;
   position: relative;
 
-  // フォーカスポスト
-  .post-view &[data-focus="true"]:not([data-position="preview"]) {
-    background-color: rgb(var(--accent-color), 0.125);
-
-    .body > .body__right {
-      user-select: text;
-    }
-  }
-
   // 引用ポスト
   &[data-position="postInPost"] {
     font-size: 0.9375em;

@@ -26,6 +26,20 @@ $sp-width: 512px;
   }
 }
 
+// サブメニュー非表示レイアウト
+@mixin media-hide-sub-menu-layout () {
+  @media not all and (min-width: 1024px) {
+    @content;
+  }
+}
+
+// サブメニュー表示レイアウト
+@mixin media-show-sub-menu-layout () {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
 // フルレイアウト
 @mixin media-full-layout () {
   @media not all and (max-width: $max-width-with-scrollbar) {
