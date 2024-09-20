@@ -143,7 +143,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 .label-tags {
   display: flex;
   flex-wrap: wrap;
-  grid-gap: 0.5em;
+  grid-gap: 0.25em;
   &:empty {
     display: contents;
   }
@@ -176,8 +176,8 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
   // ラベラー
   &:deep(.label-tags__labeler) {
-    --color: rgb(var(--share-color), var(--alpha, 1.0));
-    background-color: rgb(var(--share-color), 0.125);
+    --color: rgb(var(--label-color), var(--alpha, 1.0));
+    background-color: rgb(var(--label-color), 0.125);
   }
 
   // 外部公開状態ラベル
@@ -200,12 +200,12 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
   // ラベラーによるラベル
   &__labelers-label {
-    --color: rgb(var(--share-color), var(--alpha, 1.0));
-    background-color: rgb(var(--share-color), 0.125);
-    // border-color: rgb(var(--share-color), calc(var(--alpha) / 2));
+    --color: rgb(var(--label-color), var(--alpha, 1.0));
+    background-color: rgb(var(--label-color), 0.125);
+    // border-color: rgb(var(--label-color), calc(var(--alpha) / 3));
     cursor: pointer;
     grid-gap: 0.5em;
-    padding: 0.125em 0.5em 0.125em 0.125em;
+    padding-left: 0.25em;
     &:focus,
     &:hover {
       --alpha: 1.0;
@@ -213,7 +213,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
     & > .lazy-image {
       border-radius: var(--border-radius-small);
-      font-size: 1.5em;
+      font-size: 1.25em;
       min-width: 1em;
       max-width: 1em;
       min-height: 1em;
@@ -226,6 +226,10 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   &__custom-label {
     --color: rgb(var(--fg-color), var(--alpha, 1.0));
     background-color: rgb(var(--fg-color), 0.125);
+
+    & > .svg-icon {
+      fill: rgb(var(--orange-color), var(--alpha, 1.0));
+    }
   }
 }
 </style>

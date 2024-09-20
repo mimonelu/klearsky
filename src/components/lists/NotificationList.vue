@@ -256,7 +256,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 .notification-group {
   padding: 1rem;
   &[data-is-new="true"] {
-    background-color: rgb(var(--accent-color), 0.125);
+    background-color: rgb(var(--yellow-color), 0.125);
   }
 
   // reason ごとの処理

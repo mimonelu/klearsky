@@ -232,7 +232,7 @@ function reset () {
   &:deep() {
     .popup {
       &-header > h2 > .svg-icon {
-        fill: rgb(var(--share-color));
+        fill: rgb(var(--label-color));
       }
 
       &-body {

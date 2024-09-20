@@ -312,6 +312,10 @@ function isMine (message: TIChatMessage): boolean {
     .popup {
       flex-grow: 1;
 
+      &-header > h2 > .svg-icon {
+        fill: rgb(var(--post-color));
+      }
+
       &-body {
         flex-grow: 1;
         grid-gap: 1px;

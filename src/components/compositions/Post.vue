@@ -1698,7 +1698,7 @@ function toggleOldestQuotedPostDisplay () {
 
     // ラベラーアイコン
     .account-labeler-icon {
-      fill: rgb(var(--share-color));
+      fill: rgb(var(--label-color));
     }
   }
 

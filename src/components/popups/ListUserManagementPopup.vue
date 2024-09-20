@@ -169,7 +169,7 @@ async function clicked (list: TTList) {
   &:deep() {
     .popup {
       &-header > h2 > .svg-icon {
-        fill: rgb(var(--accent-color));
+        fill: rgb(var(--list-color));
       }
 
       &-body {

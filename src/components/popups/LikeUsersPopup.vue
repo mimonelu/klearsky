@@ -94,14 +94,8 @@ function scrolledToBottom () {
 <style lang="scss" scoped>
 .like-users-popup:deep() {
   .popup {
-    &-header {
-      & > h2 {
-        color: rgb(var(--like-color));
-
-        & > .svg-icon {
-          fill: rgb(var(--like-color));
-        }
-      }
+    &-header > h2 > .svg-icon {
+      fill: rgb(var(--like-color));
     }
 
     &-body > .users {

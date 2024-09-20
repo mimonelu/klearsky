@@ -372,6 +372,10 @@ async function fetchPostgate () {
   }
 
   &:deep() {
+    .popup-header > h2 > .svg-icon {
+      fill: rgb(var(--notice-color));
+    }
+
     h3 {
       font-size: 1.125rem;
       font-weight: bold;

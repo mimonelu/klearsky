@@ -232,10 +232,16 @@ function isMine (message: TIChatMessage): boolean {
 <style lang="scss" scoped>
 .chat-list-popup {
   &:deep() {
-    .popup-body {
-      flex-grow: 1;
-      grid-gap: 1px;
-      padding: unset;
+    .popup {
+      &-header > h2 > .svg-icon {
+        fill: rgb(var(--post-color));
+      }
+
+      &-body {
+        flex-grow: 1;
+        grid-gap: 1px;
+        padding: unset;
+      }
     }
   }
 

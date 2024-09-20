@@ -865,8 +865,8 @@ function removeThisPost () {
 .folding-toggle {
   float: right;
   font-size: 0.75rem;
-  margin-left: 0.5rem;
-  padding: 0.25em 0.5em;
+  margin-left: 1rem;
+  padding: 0.375em 1em;
   white-space: nowrap;
 
   & > span {
@@ -1119,7 +1119,6 @@ function removeThisPost () {
 
 // 固定ポスト
 .pinned-post {
-  --pinned-post-color: var(--like-color);
   background-color: rgb(var(--pinned-post-color), 0.125);
   @include media-show-sub-menu-layout(){
     border: 1px solid rgb(var(--pinned-post-color), 0.25);

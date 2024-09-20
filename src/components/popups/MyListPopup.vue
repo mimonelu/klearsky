@@ -44,10 +44,8 @@ function close () {
 .my-list-popup {
   &:deep() {
     .popup {
-      &-header > h2 {
-        & > .svg-icon {
-          fill: rgb(var(--accent-color));
-        }
+      &-header > h2 > .svg-icon {
+        fill: rgb(var(--list-color));
       }
 
       &-body {

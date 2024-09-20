@@ -128,6 +128,10 @@ function close (params: any) {
   }
 
   &:deep() {
+    .popup-header > h2 > .svg-icon--list {
+      fill: rgb(var(--list-color));
+    }
+
     // リストアイコン
     .easy-form .radios {
       @include list-icon-styles;

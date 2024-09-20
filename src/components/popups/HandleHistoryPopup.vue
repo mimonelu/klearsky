@@ -179,11 +179,11 @@ function getLabelerEndpoint (item: any): undefined | string {
     // ラベラーエンドポイント
     &__labeler {
       & > .svg-icon {
-        fill: rgb(var(--share-color));
+        fill: rgb(var(--label-color));
       }
 
       & > span {
-        color: rgb(var(--share-color));
+        color: rgb(var(--label-color));
       }
     }
   }

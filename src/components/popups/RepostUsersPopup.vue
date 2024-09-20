@@ -96,14 +96,8 @@ function scrolledToBottom () {
 <style lang="scss" scoped>
 .repost-users-popup:deep() {
   .popup {
-    &-header {
-      & > h2 {
-        color: rgb(var(--share-color));
-
-        & > .svg-icon {
-          fill: rgb(var(--share-color));
-        }
-      }
+    &-header > h2 > .svg-icon {
+      fill: rgb(var(--share-color));
     }
 
     &-body > .users {

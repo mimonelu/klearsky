@@ -298,7 +298,7 @@ function process (type: string) {
   button[data-type="postLanguages"] > .svg-icon { /**/ }
   button[data-type="myFeeds"] > .svg-icon { --icon-color: var(--feed-color); }
   button[data-type="myList"] > .svg-icon { --icon-color: var(--list-color); }
-  button[data-type="myLabeler"] > .svg-icon { --icon-color: var(--share-color); }
+  button[data-type="myLabeler"] > .svg-icon { --icon-color: var(--label-color); }
   button[data-type="mutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="blockingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="wordMute"] > .svg-icon { --icon-color: var(--notice-color); }

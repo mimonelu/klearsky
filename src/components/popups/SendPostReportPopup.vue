@@ -139,12 +139,8 @@ async function submitCallback () {
 <style lang="scss" scoped>
 .send-post-report-popup {
   &:deep() {
-    .popup-header > h2 {
-      color: rgb(var(--notice-color));
-
-      & > .svg-icon {
-        fill: rgb(var(--notice-color));
-      }
+    .popup-header > h2 > .svg-icon {
+      fill: rgb(var(--notice-color));
     }
   }
 

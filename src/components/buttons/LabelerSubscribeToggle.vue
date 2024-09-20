@@ -98,7 +98,7 @@ async function toggleLabelerSubscribe () {
 
 <style lang="scss" scoped>
 .labeler-subscribe-toggle {
-  --fg-color: var(--share-color);
+  --fg-color: var(--label-color);
   position: relative;
   &[data-is-processing="true"] {
     pointer-events: none;

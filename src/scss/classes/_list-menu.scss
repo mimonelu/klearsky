@@ -48,17 +48,22 @@
       --icon-color: var(--fg-color);
       fill: rgb(var(--icon-color), 0.75);
     }
+    & > .svg-icon--cards {
+      --icon-color: var(--starter-pack-color);
+    }
     & > .svg-icon--feed {
-      --icon-color: var(--accent-color);
+      --icon-color: var(--feed-color);
     }
     & > .svg-icon--at,
     & > .svg-icon--chat,
     & > .svg-icon--link,
-    & > .svg-icon--post {
+    & > .svg-icon--post,
+    & > .svg-icon--posts {
       --icon-color: var(--post-color);
     }
     & > .svg-icon--repost,
-    & > .svg-icon--quoteRepost {
+    & > .svg-icon--quoteRepost,
+    & > .svg-icon--share {
       --icon-color: var(--share-color);
     }
     & > .svg-icon--like {
@@ -69,7 +74,7 @@
     }
     & > .svg-icon--pinOutline,
     & > .svg-icon--pinOffOutline {
-      --icon-color: var(--like-color);
+      --icon-color: var(--pinned-post-color);
     }
     & > .svg-icon--alert,
     & > .svg-icon--contentFiltering,

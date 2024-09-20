@@ -115,12 +115,8 @@ function add () {
 
 <style lang="scss" scoped>
 .word-mute-popup {
-  .popup-header > h2 {
-    color: rgb(var(--notice-color));
-
-    & > .svg-icon {
-      fill: rgb(var(--notice-color));
-    }
+  .popup-header > h2 > .svg-icon {
+    fill: rgb(var(--notice-color));
   }
 }
 </style>

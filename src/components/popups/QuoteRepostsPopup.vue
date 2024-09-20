@@ -130,14 +130,8 @@ function removeThisPost (uri: string) {
 <style lang="scss" scoped>
 .quote-reposts-popup:deep() {
   .popup {
-    &-header {
-      & > h2 {
-        color: rgb(var(--share-color));
-
-        & > .svg-icon {
-          fill: rgb(var(--share-color));
-        }
-      }
+    &-header > h2 > .svg-icon {
+      fill: rgb(var(--share-color));
     }
 
     &-body {

@@ -92,7 +92,6 @@ const state = reactive<{
 
 <style lang="scss" scoped>
 .white-winds {
-  --white-winds-color: var(--accent-color);
   display:  grid;
 
   .pinned-post ~ &:not(:empty) {
@@ -108,7 +107,7 @@ const state = reactive<{
   }
 
   &__item {
-    background-color: rgb(var(--white-winds-color), 0.25);
+    background-color: rgb(var(--white-winds-color), 0.125);
     @include media-show-sub-menu-layout(){
       border: 1px solid rgb(var(--white-winds-color), 0.25);
       border-radius: var(--border-radius-middle);

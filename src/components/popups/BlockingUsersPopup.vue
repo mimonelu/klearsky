@@ -101,14 +101,8 @@ function scrolledToBottom () {
 <style lang="scss" scoped>
 .blocking-users-popup:deep() {
   .popup {
-    &-header {
-      & > h2 {
-        color: rgb(var(--notice-color));
-
-        & > .svg-icon {
-          fill: rgb(var(--notice-color));
-        }
-      }
+    &-header > h2 > .svg-icon {
+      fill: rgb(var(--notice-color));
     }
 
     &-body {

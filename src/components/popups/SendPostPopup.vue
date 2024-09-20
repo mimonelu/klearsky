@@ -613,7 +613,6 @@ const PreviewLinkCardFeature: {
       border-bottom-style: none;
 
       & > h2 {
-        color: rgb(var(--type-color));
         margin-right: 3rem;
 
         & > .svg-icon {
@@ -643,6 +642,11 @@ const PreviewLinkCardFeature: {
       border-right-style: none;
       border-radius: 0;
       margin: 0 -1.5rem;
+    }
+
+    // 送信ボタン
+    .submit-button {
+      --fg-color: var(--type-color);
     }
   }
 

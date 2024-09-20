@@ -198,7 +198,7 @@ function onActivateContentFilteringToggle () {
 // ラベルタグ
 .label-tags {
   grid-area: l;
-  --alpha: 0.5;
+  --alpha: 0.75;
   font-size: 0.75em;
   &:not(:last-child) {
     margin-bottom: 0.5em;
@@ -232,7 +232,7 @@ function onActivateContentFilteringToggle () {
     font-size: 0.875em;
   }
   .account-labeler-icon {
-    fill: rgb(var(--share-color));
+    fill: rgb(var(--label-color));
   }
   .account-label-icon {
     fill: rgb(var(--notice-color));

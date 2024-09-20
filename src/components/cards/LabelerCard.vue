@@ -297,11 +297,11 @@ function openProfilePopover ($event: Event) {
   // 公式マーカー
   &__official-marker {
     grid-area: o;
-    color: rgb(var(--share-color));
+    color: rgb(var(--label-color));
     font-weight: bold;
 
     & > .svg-icon {
-      fill: rgb(var(--share-color));
+      fill: rgb(var(--label-color));
     }
   }
 

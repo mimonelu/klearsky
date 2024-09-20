@@ -220,11 +220,15 @@ function unselect (index: number) {
   &:deep() {
     .popup {
       flex-grow: 1;
-    }
 
-    .popup-body {
-      flex-grow: 1;
-      padding: 0 1rem;
+      &-header > h2 > .svg-icon {
+        fill: rgb(var(--post-color));
+      }
+
+      &-body {
+        flex-grow: 1;
+        padding: 0 1rem;
+      }
     }
   }
   &[data-limit="1"]:deep() {

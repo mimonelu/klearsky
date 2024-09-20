@@ -140,7 +140,7 @@ function close () {
         v-if="state.isOwn"
         @click.prevent.stop="editStarterPack"
       >
-        <SVGIcon name="edit" />
+        <SVGIcon name="cards" />
         <span>{{ $t("starterPackEdit") }}</span>
       </button>
 

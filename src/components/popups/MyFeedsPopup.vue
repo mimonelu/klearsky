@@ -328,10 +328,8 @@ function openMyFeedsSortPopover ($event: Event) {
 .my-feeds-popup {
   &:deep() {
     .popup {
-      &-header {
-        & > h2 > .svg-icon {
-          fill: rgb(var(--accent-color));
-        }
+      &-header > h2 > .svg-icon {
+        fill: rgb(var(--feed-color));
       }
 
       &-body {
