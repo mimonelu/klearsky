@@ -251,19 +251,21 @@ function moveToBottom () {
 .profile-button {
   --size: 4.5rem;
   --padding: 1rem;
-  --color: var(--fg-color);
-  --alpha: 0.75;
 
   display: grid;
   grid-gap: 0.5rem;
   justify-content: center;
   padding: var(--padding);
   &:focus, &:hover {
-    --alpha: 1.0;
+    & > .label {
+      color: rgb(var(--fg-color));
+    }
   }
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
-    --color: var(--accent-color);
+    & > .label {
+      color: rgb(var(--fg-color));
+    }
   }
 
   & > .lazy-image {
@@ -282,7 +284,7 @@ function moveToBottom () {
   }
 
   & > .label {
-    color: rgb(var(--color), var(--alpha));
+    color: rgb(var(--fg-color), 0.5);
     font-size: 1.125rem;
     font-weight: bold;
     line-height: 1.25;
