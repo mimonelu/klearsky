@@ -499,7 +499,7 @@
   "LinkCardPlaceHolder": "Link card's URL/AT URI",
   "urlHasImage": "Attach OGP image to link card",
   "imageBoxes": "Medias",
-  "alts": "ALT texts",
+  "alts": "ALTernative text",
   "submit": "Submit",
   "sendPostNotification1": "You can also link with [TEXT](URL) .",
   "sendPostNotification2": "You can make Zap link with @zap (lightning setting required).",
