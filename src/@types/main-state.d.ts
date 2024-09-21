@@ -529,7 +529,7 @@ interface MainState {
 
   // ポップアップ - マイフィードポップアップ
   myFeedsPopupDisplay: boolean
-  openMyFeedsPopup: Function
+  openMyFeedsPopup: () => void
   closeMyFeedsPopup: () => void
 
   // ポップアップ - マイリストポップアップ

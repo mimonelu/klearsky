@@ -327,11 +327,15 @@ function removeMyFeed (uri: string) {
     grid-gap: 0.25rem;
     &:focus, &:hover {
       .my-feed-list__content {
+        & > .lazy-image {
+          opacity: 1.0 !important;
+        }
+
         & > span {
           color: rgb(var(--fg-color));
         }
         &.router-link-active[data-is-selected="true"] > span {
-          color: rgb(var(--accent-color));
+          color: rgb(var(--fg-color));
         }
       }
     }
@@ -341,7 +345,7 @@ function removeMyFeed (uri: string) {
     cursor: grab;
     padding: calc(0.25rem - 2px) 0 0.25rem;
     &[data-focused="true"] {
-      border-top-color: rgb(var(--accent-color));
+      border-top-color: rgb(var(--fg-color));
     }
   }
 
@@ -392,12 +396,13 @@ function removeMyFeed (uri: string) {
 
     .svg-icon--shimmer,
     .lazy-image {
-      border-radius: 1px;
+      border-radius: var(--border-radius-small);
+      opacity: 0.5 !important;
       overflow: hidden;
-      min-width: 1.5em;
-      max-width: 1.5em;
-      min-height: 1.5em;
-      max-height: 1.5em;
+      min-width: 1.25em;
+      max-width: 1.25em;
+      min-height: 1.25em;
+      max-height: 1.25em;
     }
 
     .svg-icon--shimmer {
@@ -414,15 +419,15 @@ function removeMyFeed (uri: string) {
 
     &.router-link-active[data-is-selected="true"] {
       .svg-icon--shimmer {
-        fill: rgb(var(--accent-color));
+        fill: rgb(var(--fg-color));
       }
-
+      .svg-icon--shimmer,
       .lazy-image {
-        box-shadow: 0 0 0 2px rgb(var(--accent-color));
+        opacity: 1.0 !important;
       }
 
       & > span {
-        color: rgb(var(--accent-color));
+        color: rgb(var(--fg-color));
         font-weight: bold;
       }
     }
@@ -430,6 +435,16 @@ function removeMyFeed (uri: string) {
   &[data-edit-mode="false"] &__content {
     border-top: 2px solid transparent;
     padding: calc(0.25rem - 2px) 0 0.25rem 2px;
+  }
+
+  // グレーアウト処理
+  &__content[data-is-selected="false"] {
+    filter: grayscale(100%);
+    transition: filter 250ms ease-out;
+  }
+  &:focus &__content,
+  &:hover &__content {
+    filter: grayscale(0%);
   }
 }
 </style>
