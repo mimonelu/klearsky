@@ -149,8 +149,6 @@ async function autoScrollSliderMenu () {
   overflow-y: hidden;
   @include scroll-bar("transparent");
 
-  --link-border-width: 2px;
-
   &::before {
     content: "";
     display: block;
@@ -158,8 +156,6 @@ async function autoScrollSliderMenu () {
   }
 
   &__link {
-    border-top: var(--link-border-width) solid transparent;
-    border-bottom: var(--link-border-width) solid transparent;
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;
@@ -167,48 +163,58 @@ async function autoScrollSliderMenu () {
     max-width: 50%;
     min-height: 3rem;
     max-height: 3rem;
-    --color: rgb(var(--fg-color), 0.75);
-    &:focus, &:hover {
-      --color: rgb(var(--fg-color));
-    }
+    &:focus, &:hover,
     &.router-link-active[data-is-selected="true"] {
-      --color: rgb(var(--accent-color));
-      border-top-color: rgb(var(--accent-color));
-
-      .svg-icon--shimmer {
-        fill: rgb(var(--accent-color));
+      .svg-icon--shimmer,
+      .lazy-image {
+        opacity: 1.0 !important;
       }
 
-      .lazy-image {
-        box-shadow: 0 0 0 2px rgb(var(--accent-color));
+      & > span {
+        color: rgb(var(--fg-color));
+      }
+    }
+    &.router-link-active[data-is-selected="true"] {
+      & > span {
+        font-weight: bold;
       }
     }
 
     .svg-icon--shimmer,
     .lazy-image {
-      border-radius: 1px;
+      border-radius: var(--border-radius-small);
+      opacity: 0.5 !important;
       overflow: hidden;
-      min-width: 1.5em;
-      max-width: 1.5em;
-      min-height: 1.5em;
-      max-height: 1.5em;
+      min-width: 1.25em;
+      max-width: 1.25em;
+      min-height: 1.25em;
+      max-height: 1.25em;
     }
     .svg-icon--shimmer {
-      fill: rgb(var(--fg-color), 0.5);
+      fill: rgb(var(--fg-color));
     }
 
     & > span {
-      color: var(--color);
+      color: rgb(var(--fg-color), 0.5);
       cursor: pointer;
       display: block;
       font-size: 0.875rem;
-      font-weight: bold;
       line-height: var(--line-height-high);
       overflow: hidden;
       max-width: 8rem;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  // グレーアウト処理
+  &__link[data-is-selected="false"] {
+    filter: grayscale(100%);
+    transition: filter 250ms ease-out;
+  }
+  &:focus &__link,
+  &:hover &__link {
+    filter: grayscale(0%);
   }
 }
 </style>
