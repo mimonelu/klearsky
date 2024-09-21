@@ -358,6 +358,7 @@ function moveToBottom () {
 
     .label {
       color: rgb(var(--fg-color));
+      font-weight: bold;
     }
   }
 
