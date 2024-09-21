@@ -186,7 +186,7 @@ function scrollListener () {
 
 .popup {
   background-color: rgb(var(--bg-color));
-  border: 1px solid rgb(var(--fg-color), 0.25);
+  // BORDERED_DESIGN: border: 1px solid rgb(var(--fg-color), 0.25);
   border-radius: var(--border-radius-large);
   box-shadow: 0 0 1rem 0 rgb(0, 0, 0, 0.5);
   color: rgb(var(--fg-color));
@@ -277,10 +277,12 @@ function scrollListener () {
   padding: 1rem;
   @include scroll-bar("transparent");
   &:not(:first-child) {
-    border-top: 1px solid rgb(var(--fg-color), 0.25);
+    // BORDERED_DESIGN: border-top: 1px solid rgb(var(--fg-color), 0.25);
+    border-top: 1px solid rgb(var(--bg-sub-color));
   }
   &:not(:last-child) {
-    border-bottom: 1px solid rgb(var(--fg-color), 0.25);
+    // BORDERED_DESIGN: border-bottom: 1px solid rgb(var(--fg-color), 0.25);
+    border-bottom: 1px solid rgb(var(--bg-sub-color));
   }
 }
 </style>

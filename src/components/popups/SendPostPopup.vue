@@ -642,13 +642,14 @@ const PreviewLinkCardFeature: {
     }
 
     .textarea {
-      border-left-style: none;
-      border-right-style: none;
+      // BORDERED_DESIGN: border-left-style: none;
+      // BORDERED_DESIGN: border-right-style: none;
+      border-style: none;
       border-radius: 0;
       margin: 0 -1.5rem;
     }
     .easy-form:first-child #easy-form--default__0 {
-      border-top-style: none;
+      // BORDERED_DESIGN: border-top-style: none;
     }
 
     // 送信ボタン

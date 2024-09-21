@@ -145,7 +145,7 @@ async function openSendPostPopup () {
 
 <style lang="scss" scoped>
 .main-menu-horizontal {
-  border-top: 1px solid rgb(var(--fg-color), 0.25);
+  // BORDERED_DESIGN: border-top: 1px solid rgb(var(--fg-color), 0.25);
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   min-height: var(--sp-menu-height);

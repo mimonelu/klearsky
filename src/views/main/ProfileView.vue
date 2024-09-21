@@ -1093,8 +1093,8 @@ function removeThisPost () {
 
 .tab-container {
   background-color: rgb(var(--bg-color), var(--main-area-opacity));
-  border-top: 1px solid rgb(var(--fg-color), 0.25);
-  border-bottom: 1px solid rgb(var(--fg-color), 0.25);
+  // BORDERED_DESIGN: border-top: 1px solid rgb(var(--fg-color), 0.25);
+  // BORDERED_DESIGN: border-bottom: 1px solid rgb(var(--fg-color), 0.25);
   position: sticky;
   top: 3rem;
   z-index: 1;

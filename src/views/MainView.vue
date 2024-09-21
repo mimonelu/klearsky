@@ -1489,7 +1489,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 
 // メインメニュー
 .main-menu-vertical-wrapper {
-  border-right: 1px solid rgb(var(--fg-color), 0.25);
+  // BORDERED_DESIGN: border-right: 1px solid rgb(var(--fg-color), 0.25);
   overflow: hidden;
   position: relative;
 
@@ -1525,7 +1525,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 .router-view-wrapper {
   background-color: rgb(var(--bg-sub-color), var(--main-area-opacity));
   @include media-not-sp-layout() {
-    border-right: 1px solid rgb(var(--fg-color), 0.25);
+    // BORDERED_DESIGN: border-right: 1px solid rgb(var(--fg-color), 0.25);
   }
   display: flex;
   flex-direction: column;
@@ -1541,7 +1541,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     // ルータービューヘッダー
   &__header {
     background-color: rgb(var(--bg-color), var(--main-area-opacity));
-    border-bottom: 1px solid rgb(var(--fg-color), 0.25);
+    // BORDERED_DESIGN: border-bottom: 1px solid rgb(var(--fg-color), 0.25);
     display: grid;
     position: sticky;
     top: 0;

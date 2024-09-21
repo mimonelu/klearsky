@@ -319,7 +319,7 @@ function isMine (message: TIChatMessage): boolean {
       &-body {
         flex-grow: 1;
         grid-gap: 1px;
-        padding: 1rem 0 0;
+        padding: 1rem 0;
       }
     }
 

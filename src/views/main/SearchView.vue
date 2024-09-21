@@ -95,8 +95,12 @@ const state = reactive<{
         flex-grow: 1;
       }
 
-      .svg-icon {
+      .svg-icon--history {
         font-size: 1.25rem;
+      }
+
+      .easy-form {
+        grid-column: span 2;
       }
     }
   }
