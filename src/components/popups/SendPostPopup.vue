@@ -610,8 +610,6 @@ const PreviewLinkCardFeature: {
     }
 
     .popup-header {
-      border-bottom-style: none;
-
       & > h2 {
         margin-right: 3rem;
 
@@ -627,6 +625,8 @@ const PreviewLinkCardFeature: {
 
     // プレビューポスト
     .post[data-position="preview"] {
+      margin-top: 1rem;
+
       .text {
         pointer-events: fill;
         user-select: text;
@@ -637,11 +637,18 @@ const PreviewLinkCardFeature: {
       }
     }
 
+    .easy-form__body {
+      grid-gap: 0.5rem;
+    }
+
     .textarea {
       border-left-style: none;
       border-right-style: none;
       border-radius: 0;
       margin: 0 -1.5rem;
+    }
+    .easy-form:first-child #easy-form--default__0 {
+      border-top-style: none;
     }
 
     // 送信ボタン
@@ -687,7 +694,7 @@ const PreviewLinkCardFeature: {
   .button-container {
     display: flex;
     flex-wrap: wrap;
-    grid-gap: 1rem 0.5rem;
+    grid-gap: 0.5rem;
 
     .button--bordered:deep() {
       font-size: 0.875rem;

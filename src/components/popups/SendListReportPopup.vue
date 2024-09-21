@@ -110,7 +110,7 @@ async function submitCallback () {
         <span>{{ $t("reportSendList") }}</span>
       </h2>
     </template>
-    <template #body>
+    <template #header-after>
       <ListCard
         :list="list"
         :menuDisplay="false"
@@ -119,6 +119,8 @@ async function submitCallback () {
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
+    </template>
+    <template #body>
       <EasyForm v-bind="easyFormProps">
         <template #free-1>
           <div class="send-list-report-popup__link-container">
@@ -148,9 +150,7 @@ async function submitCallback () {
 
   .list-card {
     --fg-color: var(--notice-color);
-    background-color: rgb(var(--notice-color), 0.125);
-    font-size: 0.875rem;
-    opacity: 0.875;
+    --accent-color: var(--notice-color);
     pointer-events: none;
   }
 

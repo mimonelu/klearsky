@@ -227,13 +227,7 @@ function unselect (index: number) {
 
       &-body {
         flex-grow: 1;
-        padding: 0 1rem;
       }
-    }
-  }
-  &[data-limit="1"]:deep() {
-    .popup-body {
-      padding: 0 1rem 1rem;
     }
   }
 

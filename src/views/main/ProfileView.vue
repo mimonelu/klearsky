@@ -584,7 +584,7 @@ function removeThisPost () {
               <Component
                 :is="state.isPagePostFeeds ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :data-selected="state.isPagePostFeeds"
+                :disabled="state.isPagePostFeeds"
                 :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -596,7 +596,7 @@ function removeThisPost () {
               <Component
                 :is="state.isPagePostFeedsWithReplies ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :data-selected="state.isPagePostFeedsWithReplies"
+                :disabled="state.isPagePostFeedsWithReplies"
                 :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -608,7 +608,7 @@ function removeThisPost () {
               <Component
                 :is="state.isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :data-selected="state.isPagePostFeedsWithMedia"
+                :disabled="state.isPagePostFeedsWithMedia"
                 :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -620,7 +620,7 @@ function removeThisPost () {
               <Component
                 :is="state.isPageRepostList ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :data-selected="state.isPageRepostList"
+                :disabled="state.isPageRepostList"
                 :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -633,7 +633,7 @@ function removeThisPost () {
                 v-if="mainState.isMyProfile()"
                 :is="state.isPageLikeList ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :data-selected="state.isPageLikeList"
+                :disabled="state.isPageLikeList"
                 :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -843,7 +843,7 @@ function removeThisPost () {
 // バナー
 .banner {
   aspect-ratio: 3 / 1;
-  background-color: rgb(var(--fg-color), 0.125);
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
   object-fit: cover;
   &[data-has-banner="true"] {
     cursor: pointer;
@@ -1092,6 +1092,9 @@ function removeThisPost () {
 }
 
 .tab-container {
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+  border-top: 1px solid rgb(var(--fg-color), 0.25);
+  border-bottom: 1px solid rgb(var(--fg-color), 0.25);
   position: sticky;
   top: 3rem;
   z-index: 1;
@@ -1119,10 +1122,6 @@ function removeThisPost () {
 // 固定ポスト
 .pinned-post {
   background-color: rgb(var(--pinned-post-color), 0.125);
-  @include media-show-sub-menu-layout(){
-    border: 1px solid rgb(var(--pinned-post-color), 0.25);
-    border-radius: var(--border-radius-middle);
-  }
 
   &__header {
     display: flex;

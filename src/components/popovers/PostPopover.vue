@@ -161,7 +161,7 @@ function callback (type: "deletePost" | "updatePost") {
 
       <!-- 引用の切断と接続 -->
       <MenuTickerToggleQuoteAttachment
-        v-if="post.embed?.record?.uri.startsWith(`at://${mainState.atp.session?.did}/`)"
+        v-if="post.embed?.record?.uri?.startsWith(`at://${mainState.atp.session?.did}/`)"
         :quotedUri="post.embed.record.uri"
         :quoterUri="post.uri"
         :detached="post.embed.record.detached ?? false"

@@ -118,5 +118,17 @@ function add () {
   .popup-header > h2 > .svg-icon {
     fill: rgb(var(--notice-color));
   }
+
+  &:deep() {
+    .easy-form {
+      &__body {
+        grid-gap: 0.5rem;
+      }
+
+      .checkbox {
+        min-height: 3rem;
+      }
+    }
+  }
 }
 </style>

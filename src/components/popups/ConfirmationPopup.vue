@@ -94,7 +94,7 @@ function apply () {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 1rem;
-    margin: 0 1rem 1rem 1rem;
+    margin: 1rem;
   }
 }
 </style>

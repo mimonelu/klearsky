@@ -87,6 +87,7 @@ async function fetchTrendTags () {
 
 <style lang="scss" scoped>
 .trend-tags {
+  padding: 1rem;
   position: relative;
 
   &__header {

@@ -35,7 +35,8 @@
     &:focus, &:hover {
       background-color: rgb(var(--accent-color), 0.25);
     }
-    &:disabled {
+    &:disabled,
+    &[disabled="true"] {
       cursor: default;
       opacity: 0.5;
       &:focus, &:hover {
@@ -90,9 +91,6 @@
 
     & > span {
       color: rgb(var(--fg-color), 0.875);
-    }
-    &[data-selected="true"] > span {
-      color: rgb(var(--accent-color));
     }
   }
 

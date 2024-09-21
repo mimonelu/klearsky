@@ -154,7 +154,7 @@ function reset () {
     </template>
     <template
       v-if="labeler != null"
-      #body
+      #header-after
     >
       <!-- ラベラーカード -->
       <LabelerCard
@@ -168,7 +168,11 @@ function reset () {
         @onActivateMention="close"
         @onActivateHashTag="close"
       />
-
+    </template>
+    <template
+      v-if="labeler != null"
+      #body
+    >
       <!-- メインコンテンツ -->
       <div class="labeler-settings-popup__content">
         <!-- ポリシー説明 -->
@@ -234,16 +238,7 @@ function reset () {
       &-header > h2 > .svg-icon {
         fill: rgb(var(--label-color));
       }
-
-      &-body {
-        padding: unset;
-      }
     }
-  }
-
-  // ラベラーカード
-  .labeler-card {
-    background-color: rgb(var(--fg-color), 0.0625);
   }
 
   // メインコンテンツ
@@ -251,7 +246,6 @@ function reset () {
     display: flex;
     flex-direction: column;
     grid-gap: 1rem;
-    padding: 0 1rem 1rem;
   }
 
   // ポリシー説明

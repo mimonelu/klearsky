@@ -131,7 +131,7 @@ async function clicked (list: TTList) {
         <span>{{ $t("listUserManagementDetail") }}</span>
       </h2>
     </template>
-    <template #body>
+    <template #header-after>
       <!-- 対象リストユーザー -->
       <UserBox
         v-if="user != null"
@@ -140,7 +140,8 @@ async function clicked (list: TTList) {
         :contentWarningDisabled="false"
         :viewerDisplay="true"
       />
-
+    </template>
+    <template #body>
       <!-- リスト一覧 -->
       <ListCardList
         v-slot="{ list }"

@@ -43,7 +43,7 @@ export default async function (
       return (
         post.author.did === this.session?.did ||
         !post.embed?.record?.detached ||
-        post.embed?.record?.uri.startsWith(`at://${this.session?.did}/`)
+        post.embed?.record?.uri?.startsWith(`at://${this.session?.did}/`)
       )
     })
 

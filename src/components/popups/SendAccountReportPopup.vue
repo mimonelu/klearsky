@@ -107,7 +107,7 @@ async function submitCallback () {
         <span>{{ $t("reportSendAccount") }}</span>
       </h2>
     </template>
-    <template #body>
+    <template #header-after>
       <UserBox
         :user="user"
         :menuDisplay="false"
@@ -116,6 +116,8 @@ async function submitCallback () {
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
+    </template>
+    <template #body>
       <EasyForm v-bind="easyFormProps">
         <template #free-1>
           <div class="send-account-report-popup__link-container">
@@ -144,10 +146,8 @@ async function submitCallback () {
   }
 
   .user-box {
-    background-color: rgb(var(--notice-color), 0.125);
-    border-radius: var(--border-radius-middle);
-    font-size: 0.75em;
-    padding: 0.75rem;
+    --fg-color: var(--notice-color);
+    padding: 1rem;
     pointer-events: none;
   }
 

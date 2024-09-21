@@ -179,14 +179,14 @@ function openKeywordHistoryPopover ($event: Event) {
       >
         <SVGIcon name="history" />
       </button>
-    </Portal>
-    <div class="post-search-view__main">
+
       <!-- ポスト検索フォーム -->
       <EasyForm
         v-bind="easyFormProps"
         @change="fetchNewResults"
       />
-
+    </Portal>
+    <div class="post-search-view__main">
       <LoadButton
         direction="new"
         :processing="state.processing"

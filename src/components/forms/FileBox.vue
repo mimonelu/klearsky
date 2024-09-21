@@ -203,7 +203,7 @@ function getVideoSizes (): Array<undefined | {
 <style lang="scss" scoped>
 .filebox {
   display: flex;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
 
   // SPレイアウト
   @include media-sp-layout() {

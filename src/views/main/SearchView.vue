@@ -81,8 +81,8 @@ const state = reactive<{
   flex-grow: 1;
 
   &__form {
-    background-color: rgb(var(--bg-color), var(--main-area-opacity));
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
     grid-gap: 0.5rem;
     padding: 0.5rem;
     &:empty {

@@ -491,6 +491,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     }
 
     &__label {
+      color: rgb(var(--fg-color));
       font-weight: bold;
       line-height: var(--line-height-low);
       word-break: break-word;

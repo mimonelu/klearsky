@@ -1372,7 +1372,10 @@ function toggleOldestQuotedPostDisplay () {
 
   display: flex;
   flex-direction: column;
-  padding: 0.75em;
+  padding: 1em;
+  @include media-sp-layout() {
+    padding: 0.75em;
+  }
   position: relative;
 
   // 引用ポスト

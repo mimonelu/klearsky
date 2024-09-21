@@ -56,7 +56,6 @@ function onActivateBackButton () {
 
 <style lang="scss" scoped>
 .page-header {
-  background-color: rgb(var(--bg-color), var(--main-area-opacity));
   cursor: pointer;
   display: flex;
   align-items: center;

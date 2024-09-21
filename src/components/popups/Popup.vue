@@ -213,7 +213,6 @@ function scrollListener () {
 }
 
 .popup-header {
-  border-bottom: 1px solid rgb(var(--fg-color), 0.125);
   cursor: pointer;
   display: flex;
   position: relative;
@@ -267,6 +266,7 @@ function scrollListener () {
 }
 
 .popup-body {
+  background-color: rgb(var(--bg-sub-color));
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -276,5 +276,11 @@ function scrollListener () {
   overscroll-behavior: none;
   padding: 1rem;
   @include scroll-bar("transparent");
+  &:not(:first-child) {
+    border-top: 1px solid rgb(var(--fg-color), 0.25);
+  }
+  &:not(:last-child) {
+    border-bottom: 1px solid rgb(var(--fg-color), 0.25);
+  }
 }
 </style>

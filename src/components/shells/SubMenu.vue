@@ -89,6 +89,12 @@ function openKeywordHistoryPopover ($event: Event) {
 .logo {
   font-size: 2rem;
   margin-bottom: 2rem;
+
+  &:deep() {
+    .svg-icon {
+      fill: rgb(var(--fg-color));
+    }
+  }
 }
 
 // ポスト検索フォーム

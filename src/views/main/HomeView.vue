@@ -142,7 +142,6 @@ async function autoScrollSliderMenu () {
 }
 
 .slider-menu {
-  background-color: rgb(var(--bg-color), var(--main-area-opacity));
   display: flex;
   align-items: center;
   overflow-x: auto;

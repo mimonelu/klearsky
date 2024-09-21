@@ -405,7 +405,6 @@ function onMutated () {
 
   // グローバルフィードヘッダー
   &__header {
-    background-color: rgb(var(--bg-color), var(--main-area-opacity));
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;

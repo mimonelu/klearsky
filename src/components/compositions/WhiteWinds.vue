@@ -94,25 +94,17 @@ const state = reactive<{
 .white-winds {
   display:  grid;
 
-  .pinned-post ~ &:not(:empty) {
-    margin-top: 0.5rem;
-  }
-
   &__container {
     display: flex;
     grid-gap: 0.5em;
     overflow-x: auto;
     overflow-y: hidden;
+    padding: 0.5rem;
     @include scroll-bar(transparent);
   }
 
   &__item {
     background-color: rgb(var(--white-winds-color), 0.125);
-    @include media-show-sub-menu-layout(){
-      border: 1px solid rgb(var(--white-winds-color), 0.25);
-      border-radius: var(--border-radius-middle);
-    }
-
     color: var(--fg-color);
     display: grid;
     grid-template-rows: auto 1fr auto;

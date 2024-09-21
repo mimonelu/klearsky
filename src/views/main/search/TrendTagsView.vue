@@ -16,7 +16,6 @@ import TrendTags from "@/components/compositions/TrendTags.vue";
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 1rem;
   }
 
   .trend-tags {

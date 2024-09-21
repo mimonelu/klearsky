@@ -133,10 +133,6 @@ function removeThisPost (uri: string) {
     &-header > h2 > .svg-icon {
       fill: rgb(var(--share-color));
     }
-
-    &-body {
-      padding: 0;
-    }
   }
 }
 </style>

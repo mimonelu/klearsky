@@ -263,7 +263,7 @@ function submitCallback () {
 $width: 768px;
 
 .login-popup {
-  background-color: rgb(var(--fg-color), 0.0625);
+  background-color: rgb(var(--bg-color));
   display: flex;
   justify-content: center;
   min-height: 100vh;
@@ -277,7 +277,7 @@ $width: 768px;
   }
 
   &__header {
-    background-color: rgb(var(--bg-color));
+    background-color: rgb(var(--bg-sub-color));
     display: flex;
     flex-direction: column;
     align-items: center;

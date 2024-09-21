@@ -197,6 +197,6 @@ async function submit () {
 }
 
 .easy-form {
-  padding: 2rem;
+  padding: 1rem;
 }
 </style>

@@ -123,14 +123,8 @@ async function toggleThreadMute () {
 
 // フォーカスポスト
 .post[data-focus="true"]:not([data-position="preview"]) {
-  scroll-margin: 3.25rem;
-
-  // フォーカスポスト - アクセント
   background-color: rgb(var(--accent-color), 0.125);
-  @include media-show-sub-menu-layout() {
-    border: 1px solid rgb(var(--accent-color), 0.25);
-    border-radius: var(--border-radius-large);
-  }
+  scroll-margin: 3.25rem;
 
   &:deep() {
     // フォーカスポスト - フォントサイズの拡大

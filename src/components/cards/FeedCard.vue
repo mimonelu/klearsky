@@ -346,6 +346,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       }
 
       & > span {
+        color: rgb(var(--fg-color));
         font-weight: bold;
         line-height: var(--line-height-low);
         word-break: break-word;
