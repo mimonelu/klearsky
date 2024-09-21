@@ -150,6 +150,13 @@ async function submitCallback () {
     --fg-color: var(--notice-color);
     padding: 1rem;
     pointer-events: none;
+
+    &:deep() {
+      .html-text {
+        @include line-clamp(3);
+        white-space: wrap;
+      }
+    }
   }
 
   &__link-container {

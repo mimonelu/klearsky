@@ -605,7 +605,6 @@ const PreviewLinkCardFeature: {
     }
 
     .popup {
-      border-color: rgb(var(--type-color), 0.25);
       max-height: $router-view-width;
     }
 
@@ -634,6 +633,10 @@ const PreviewLinkCardFeature: {
 
       .textlink {
         pointer-events: none;
+      }
+
+      .html-text {
+        white-space: wrap;
       }
     }
 

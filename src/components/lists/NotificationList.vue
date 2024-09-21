@@ -449,5 +449,11 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   font-size: 0.875rem;
   margin-top: 0.5rem;
   padding: 0.5rem;
+
+  &:deep() {
+    .text--slim {
+      @include line-clamp(3);
+    }
+  }
 }
 </style>

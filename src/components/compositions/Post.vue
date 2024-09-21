@@ -1114,7 +1114,10 @@ function toggleOldestQuotedPostDisplay () {
               </template>
               <template v-else>
                 <!-- イメージリスト（通知ポップアップ） -->
-                <div class="image-list">
+                <div
+                  v-if="state.images.length > 0"
+                  class="image-list"
+                >
                   <Thumbnail
                     v-for="image, imageIndex of state.images"
                     :key="imageIndex"
