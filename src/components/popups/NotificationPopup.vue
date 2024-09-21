@@ -112,7 +112,7 @@ function scrolledToBottom () {
     <template #header>
       <h2>
         <SVGIcon name="bell" />
-        <span>{{ $t("notifications") }} ({{ state.numberByReason.all }})</span>
+        <span>{{ $t("notifications") }}</span>
       </h2>
     </template>
     <template #header-after>
@@ -126,6 +126,10 @@ function scrolledToBottom () {
           @click="setReasonFilter()"
         >
           <SVGIcon name="shimmer" />
+          <span
+            v-if="state.numberByReason.all > 0"
+            class="tab__button__badge"
+          >{{ clipBadge(state.numberByReason.all) }}</span>
         </button>
 
         <!-- 通知フィルタータブ - リプライ -->
@@ -253,6 +257,13 @@ function scrolledToBottom () {
     & > .tab__button {
       & > .svg-icon {
         font-size: 1.25rem;
+        opacity: 0.5;
+      }
+      &:focus, &:hover,
+      &[data-focused="true"] {
+        & > .svg-icon {
+          opacity: 1.0
+        }
       }
 
       &--reply > .svg-icon,

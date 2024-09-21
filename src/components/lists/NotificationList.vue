@@ -256,7 +256,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 .notification-group {
   padding: 1rem;
   &[data-is-new="true"] {
-    background-color: rgb(var(--yellow-color), 0.125);
+    background-color: rgb(var(--accent-color), 0.125);
   }
 
   // reason ごとの処理
@@ -335,7 +335,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   }
 
   & > .icon--cursor {
-    fill: rgb(var(--fg-color));
+    fill: rgb(var(--fg-color), 0.5);
     margin-left: auto;
   }
 }
@@ -366,14 +366,6 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   }
   &:focus, &:hover {
     cursor: pointer;
-
-    .display-name {
-      color: rgb(var(--fg-color));
-    }
-
-    .indexed-at {
-      color: rgb(var(--fg-color), 0.75);
-    }
   }
 
   & > .new {
@@ -384,9 +376,9 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 // 新着通知アイコン
 .new {
   background-color: rgb(var(--bg-color));
-  border: 1px solid rgb(var(--accent-color));
+  border: 1px solid rgb(var(--yellow-color));
   border-radius: var(--border-radius-middle);
-  color: rgb(var(--accent-color));
+  color: rgb(var(--yellow-color));
   font-weight: bold;
   padding: 0.25rem 0.5rem;
 }
@@ -428,16 +420,12 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 // 表示名
 .display-name {
   font-size: 0.875rem;
-
-  &:deep() > span {
-    color: rgb(var(--fg-color), 0.75);
-  }
 }
 
 // リアクション日時
 .indexed-at {
   color: rgb(var(--fg-color), 0.5);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
