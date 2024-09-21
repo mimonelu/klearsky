@@ -246,6 +246,7 @@ function isMine (message: TIChatMessage): boolean {
   }
 
   &__create-convo-button > .svg-icon {
+    --fg-color: var(--post-color);
     font-size: 1.25rem;
   }
 
@@ -253,6 +254,9 @@ function isMine (message: TIChatMessage): boolean {
     font-size: 1.25rem;
     &.svg-icon--people {
       --fg-color: var(--share-color);
+    }
+    &.svg-icon--personHeart {
+      --fg-color: var(--like-color);
     }
     &.svg-icon--personOff {
       --fg-color: var(--notice-color);

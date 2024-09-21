@@ -107,7 +107,7 @@ async function callback (type: TTAllowIncoming) {
       fill: rgb(var(--share-color));
     }
     .svg-icon--personHeart {
-      fill: rgb(var(--fg-color));
+      fill: rgb(var(--like-color));
     }
     .svg-icon--personOff {
       fill: rgb(var(--notice-color));

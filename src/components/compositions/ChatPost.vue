@@ -98,7 +98,7 @@ async function chatMessagePopoverCallback (type: string) {
 .chat-post {
   --chat-post-bg-color: rgb(var(--fg-color), 0.125);
   &[data-is-mine="true"] {
-    --chat-post-bg-color: rgb(var(--accent-color), 0.25);
+    --chat-post-bg-color: rgb(var(--accent-color), 0.125);
   }
   &[data-is-mine="false"] {
     --chat-post-bg-color: rgb(var(--fg-color), 0.125);
