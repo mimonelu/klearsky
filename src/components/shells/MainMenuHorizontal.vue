@@ -154,7 +154,6 @@ async function openSendPostPopup () {
 
 // 各種ボタン
 .link-button {
-  border-top: 2px solid transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -164,7 +163,7 @@ async function openSendPostPopup () {
   max-height: var(--sp-menu-size);
 
   & > .svg-icon {
-    fill: rgb(var(--fg-color), 0.75);
+    fill: rgb(var(--fg-color), 0.5);
     font-size: 1.5rem;
   }
 
@@ -175,17 +174,15 @@ async function openSendPostPopup () {
   }
   &[data-is-focus="true"],
   &:not([data-is-focus]).router-link-active {
-    border-top-color: rgb(var(--accent-color));
-
     & > .svg-icon {
-      fill: rgb(var(--accent-color));
+      fill: rgb(var(--fg-color));
     }
   }
 
   &.profile-button {
     --button-size: 2.125rem;
 
-    .lazy-image {
+    & > .lazy-image {
       border-radius: var(--border-radius-large);
       font-size: var(--button-size);
       object-fit: cover;
@@ -193,13 +190,17 @@ async function openSendPostPopup () {
       max-width: var(--button-size);
       min-height: var(--button-size);
       max-height: var(--button-size);
+      transition: border-radius 125ms ease-out;
+    }
+    &:hover > .lazy-image {
+      border-radius: 1px;
     }
   }
 
   // ポスト送信ポップアップトリガー
   &.send-post-button {
     .svg-icon {
-      fill: rgb(var(--post-color));
+      --fg-color: var(--post-color);
     }
 
     .loader {
