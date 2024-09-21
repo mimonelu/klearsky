@@ -5,8 +5,6 @@
   max-height: 3rem;
 
   &__button {
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -20,8 +18,7 @@
     min-height: 2.5rem;
 
     & > span {
-      color: rgb(var(--fg-color), 0.75);
-      font-weight: bold;
+      color: rgb(var(--fg-color), 0.5);
       line-height: var(--line-height-high);
       overflow: hidden;
       pointer-events: none;
@@ -30,7 +27,7 @@
     }
 
     & > .svg-icon {
-      fill: rgb(var(--fg-color), 0.75);
+      fill: rgb(var(--fg-color), 0.5);
       pointer-events: none;
     }
 
@@ -47,7 +44,13 @@
     }
 
     &[data-disabled="true"] {
-      filter: contrast(0);
+      & > span {
+        color: rgb(var(--fg-color), 0.25);
+      }
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color), 0.25);
+      }
     }
     &:focus, &:hover {
       & > span {
@@ -60,14 +63,13 @@
     }
     &.router-link-active,
     &[data-focused="true"] {
-      border-top-color: rgb(var(--accent-color));
-
       & > span {
-        color: rgb(var(--accent-color));
+        color: rgb(var(--fg-color));
+        font-weight: bold;
       }
 
       & > .svg-icon {
-        fill: rgb(var(--accent-color));
+        fill: rgb(var(--fg-color));
       }
     }
   }

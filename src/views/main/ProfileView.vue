@@ -1061,7 +1061,7 @@ function removeThisPost () {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  grid-gap: 0.5rem 1rem;
+  grid-gap: 0.5rem;
   padding-right: 2rem;
   position: relative;
 
@@ -1072,13 +1072,13 @@ function removeThisPost () {
     overflow: hidden;
 
     & > dt {
-      color: rgb(var(--fg-color), 0.75);
+      color: rgb(var(--fg-color), 0.5);
       font-size: 0.875rem;
       line-height: 1.25;
     }
 
     & > dd {
-      color: rgb(var(--fg-color));
+      color: rgb(var(--fg-color), 0.75);
       font-weight: bold;
     }
   }
@@ -1096,7 +1096,6 @@ function removeThisPost () {
   top: 3rem;
   z-index: 1;
   &[data-disabled="true"] {
-    opacity: 0.9375;
     pointer-events: none;
   }
 
