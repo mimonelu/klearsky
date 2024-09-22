@@ -185,9 +185,9 @@ function scrollListener () {
 }
 
 .popup {
-  background-color: rgb(var(--bg-color));
+  background-color: rgb(var(--bg-sub-color));
   // BORDERED_DESIGN: border: 1px solid rgb(var(--fg-color), 0.25);
-  border: 1px solid rgb(var(--bg-color));
+  border: 1px solid rgb(var(--fg-color), 0.125);
   border-radius: var(--border-radius-large);
   box-shadow: 0 0 1rem 0 rgb(0, 0, 0, 0.5);
   color: rgb(var(--fg-color));
@@ -267,7 +267,7 @@ function scrollListener () {
 }
 
 .popup-body {
-  background-color: rgb(var(--bg-sub-color));
+  background-color: rgb(var(--bg-color));
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -279,11 +279,11 @@ function scrollListener () {
   @include scroll-bar("transparent");
   &:not(:first-child) {
     // BORDERED_DESIGN: border-top: 1px solid rgb(var(--fg-color), 0.25);
-    border-top: 1px solid rgb(var(--bg-sub-color));
+    border-top: 1px solid rgb(var(--bg-color));
   }
   &:not(:last-child) {
     // BORDERED_DESIGN: border-bottom: 1px solid rgb(var(--fg-color), 0.25);
-    border-bottom: 1px solid rgb(var(--bg-sub-color));
+    border-bottom: 1px solid rgb(var(--bg-color));
   }
 }
 </style>

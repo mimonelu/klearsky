@@ -1523,7 +1523,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
 
 // ルータービュー
 .router-view-wrapper {
-  background-color: rgb(var(--bg-sub-color), var(--main-area-opacity));
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
   @include media-not-sp-layout() {
     // BORDERED_DESIGN: border-right: 1px solid rgb(var(--fg-color), 0.25);
   }

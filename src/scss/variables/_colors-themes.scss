@@ -1,7 +1,7 @@
 @mixin color-theme-light {
   color-scheme: light;
-  --bg-color: 240, 240, 240;
-  --bg-sub-color: 255, 255, 255;
+  --bg-color: 255, 255, 255;
+  --bg-sub-color: 240, 240, 240;
   --fg-color: 32, 32, 32;
   --red-color: 240, 32, 32;
   --orange-color: 240, 128, 32;
@@ -16,8 +16,8 @@
 
 @mixin color-theme-light-gray {
   color-scheme: light;
-  --bg-color: 224, 220, 216;
-  --bg-sub-color: 240, 238, 232;
+  --bg-color: 240, 238, 232;
+  --bg-sub-color: 224, 220, 216;
   --fg-color: 32, 28, 24;
   --red-color: 240, 32, 32;
   --orange-color: 240, 128, 32;
@@ -32,8 +32,8 @@
 
 @mixin color-theme-dark {
   color-scheme: dark;
-  --bg-color: 24, 24, 24;
-  --bg-sub-color: 0, 0, 0;
+  --bg-color: 0, 0, 0;
+  --bg-sub-color: 24, 24, 24;
   --fg-color: 224, 224, 224;
   --red-color: 240, 32, 32;
   --orange-color: 240, 128, 32;
@@ -48,8 +48,8 @@
 
 @mixin color-theme-dark-gray {
   color-scheme: dark;
-  --bg-color: 24, 28, 32;
-  --bg-sub-color: 16, 20, 24;
+  --bg-color: 16, 20, 24;
+  --bg-sub-color: 24, 28, 32;
   --fg-color: 216, 220, 224;
   --red-color: 240, 32, 32;
   --orange-color: 240, 128, 32;
