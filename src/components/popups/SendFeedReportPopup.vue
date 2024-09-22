@@ -113,7 +113,7 @@ async function submitCallback () {
       <FeedCard
         :generator="generator"
         :menuDisplay="false"
-        :detailDisplay="true"
+        :detailDisplay="false"
         :orderButtonDisplay="false"
         :creatorDisplay="true"
         @keydown.prevent.stop
@@ -152,13 +152,6 @@ async function submitCallback () {
     --fg-color: var(--notice-color);
     --accent-color: var(--notice-color);
     pointer-events: none;
-
-    &:deep() {
-      .html-text {
-        @include line-clamp(3);
-        white-space: wrap;
-      }
-    }
   }
 
   &__link-container {

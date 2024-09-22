@@ -114,6 +114,7 @@ async function submitCallback () {
         position="preview"
         :post="post"
         :noLink="true"
+        :forceHideQuoteRepost="true"
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
