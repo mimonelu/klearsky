@@ -291,7 +291,7 @@ async function fetchPostgate () {
 
 <template>
   <Popup
-    class="threadgate-popup"
+    class="reaction-control-popup"
     :hasCloseButton="true"
     :loaderDisplay="state.loaderDisplay"
     @close="close"
@@ -304,11 +304,11 @@ async function fetchPostgate () {
         <!-- ON/OFFアイコン -->
         <span
           v-if="state.applied"
-          class="threadgate-popup__state--on"
+          class="reaction-control-popup__state--on"
         >ON</span>
         <span
           v-else
-          class="threadgate-popup__state--off"
+          class="reaction-control-popup__state--off"
         >OFF</span>
       </h2>
     </template>
@@ -341,10 +341,11 @@ async function fetchPostgate () {
           </div>
         </template>
       </EasyForm>
-
+    </template>
+    <template #footer>
       <!-- 適用ボタン -->
       <button
-        class="button--important"
+        class="button--important reaction-control-popup__submit-button"
         @click.stop="update"
       >
         <SVGIcon name="lock" />
@@ -355,7 +356,7 @@ async function fetchPostgate () {
 </template>
 
 <style lang="scss" scoped>
-.threadgate-popup {
+.reaction-control-popup {
   &__state--on,
   &__state--off {
     border-radius: var(--border-radius-middle);
@@ -369,6 +370,11 @@ async function fetchPostgate () {
   &__state--off {
     background-color: rgb(var(--fg-color), 0.125);
     color: rgb(var(--fg-color), 0.75);
+  }
+
+  // 適用ボタン
+  &__submit-button {
+    margin: 1rem;
   }
 
   &:deep() {
