@@ -559,7 +559,7 @@ function openPostPopover ($event: Event) {
   mainState.openPostPopover($event.target)
 }
 
-async function postPopoverCallback (type: "deletePost" | "updatePost") {
+async function postPopoverCallback (type: "deletePost" | "updatePost" | "createPostBookmark" | "deletePostBookmark") {
   switch (type) {
     case "deletePost": {
       await deletePost(props.post.uri)
@@ -567,6 +567,14 @@ async function postPopoverCallback (type: "deletePost" | "updatePost") {
     }
     case "updatePost": {
       await updatePost()
+      break
+    }
+    case "createPostBookmark": {
+      await createPostBookmark(props.post.uri)
+      break
+    }
+    case "deletePostBookmark": {
+      await deletePostBookmark(props.post.uri)
       break
     }
   }
@@ -624,6 +632,59 @@ async function updatePostThread () {
     return
   }
   emit("updateThisPostThread", posts)
+}
+
+async function createPostBookmark (uri: string) {
+  if (state.processing) {
+    return
+  }
+  state.processing = true
+  const response = await mainState.atp.updateRecord(
+    mainState.atp.session!.did,
+    "net.mimonelu.klearsky.postBookmark",
+    uri,
+    {
+      createdAt: new Date().toISOString(),
+      uri,
+    },
+  )
+  state.processing = false
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "Post/createPostBookmark")
+    return
+  }
+  if (mainState.currentPostBookmarkPosts.every((post) => {
+    return post.uri !== uri
+  })) {
+    mainState.currentPostBookmarkPosts.unshift(props.post)
+  }
+
+  // セッションキャッシュの設定
+  mainState.myWorker!.setSessionCache("postBookmarkPosts", mainState.currentPostBookmarkPosts)
+}
+
+async function deletePostBookmark (uri: string) {
+  if (state.processing) {
+    return
+  }
+  state.processing = true
+  const response = await mainState.atp.deleteRecord(
+    mainState.atp.session!.did,
+    "net.mimonelu.klearsky.postBookmark",
+    uri
+  )
+  state.processing = false
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "Post/deletePostBookmark")
+    return
+  }
+  mainState.currentPostBookmarkPosts = mainState.currentPostBookmarkPosts
+    .filter((post) => {
+      return post.uri !== uri
+    })
+
+  // セッションキャッシュの設定
+  mainState.myWorker!.setSessionCache("postBookmarkPosts", mainState.currentPostBookmarkPosts)
 }
 
 // 画像ポップアップ

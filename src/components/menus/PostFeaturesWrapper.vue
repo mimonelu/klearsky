@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { nextTick, reactive, ref } from "vue"
 import MenuTickerOpenTimeFeedsPopup from "@/components/menus/OpenTimeFeedsPopup.vue"
+import MenuTickerTogglePostBookmark from "@/components/menus/TogglePostBookmark.vue"
 import MenuTickerSendMention from "@/components/menus/SendMention.vue"
 import MenuTickerSendPostAfter from "@/components/menus/SendPostAfter.vue"
 import MenuTickerShowLikeUsers from "@/components/menus/ShowLikeUsers.vue"
@@ -79,6 +80,12 @@ function close () {
         <!-- タイムフィードで見る -->
         <MenuTickerOpenTimeFeedsPopup
           :post="post"
+          @close="emit('close')"
+        />
+
+        <!-- ポストブックマーク -->
+        <MenuTickerTogglePostBookmark
+          :uri="post.uri"
           @close="emit('close')"
         />
 

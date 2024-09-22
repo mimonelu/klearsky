@@ -56,6 +56,7 @@
       --icon-color: var(--feed-color);
     }
     & > .svg-icon--at,
+    & > .svg-icon--bookmark,
     & > .svg-icon--chat,
     & > .svg-icon--link,
     & > .svg-icon--post,
@@ -78,6 +79,7 @@
       --icon-color: var(--pinned-post-color);
     }
     & > .svg-icon--alert,
+    & > .svg-icon--bookmarkOff,
     & > .svg-icon--contentFiltering,
     & > .svg-icon--lock,
     & > .svg-icon--person,

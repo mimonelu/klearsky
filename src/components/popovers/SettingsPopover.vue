@@ -84,6 +84,10 @@ function process (type: string) {
       mainState.openLabelerListPopup("myLabeler", mainState.myLabeler!.labelers)
       break
     }
+    case "postBookmark": {
+      mainState.openPostBookmarkPopup()
+      break
+    }
     case "mutingUsers": {
       mainState.openMutingUsersPopup()
       break
@@ -188,6 +192,16 @@ function process (type: string) {
       >
         <SVGIcon name="labeler" />
         <span>{{ $t("myLabeler") }}</span>
+      </button>
+
+      <!-- ポストブックマークポップアップトリガー -->
+      <button
+        type="button"
+        data-type="postBookmark"
+        @click.prevent="process('postBookmark')"
+      >
+        <SVGIcon name="bookmark" />
+        <span>{{ $t("postBookmark") }}</span>
       </button>
 
       <hr />
@@ -299,6 +313,7 @@ function process (type: string) {
   button[data-type="myFeeds"] > .svg-icon { --icon-color: var(--feed-color); }
   button[data-type="myList"] > .svg-icon { --icon-color: var(--list-color); }
   button[data-type="myLabeler"] > .svg-icon { --icon-color: var(--label-color); }
+  button[data-type="postBookmark"] > .svg-icon { --icon-color: var(--post-color); }
   button[data-type="mutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="blockingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="wordMute"] > .svg-icon { --icon-color: var(--notice-color); }

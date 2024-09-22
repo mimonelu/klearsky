@@ -240,7 +240,7 @@ interface MainState {
     post?: TTPost
   }
   postPopoverSelector?: string | HTMLElement
-  postPopoverCallback?: (type: "deletePost" | "updatePost") => Promise<void>
+  postPopoverCallback?: (type: "deletePost" | "updatePost" | "createPostBookmark" | "deletePostBookmark") => Promise<void>
   openPostPopover: Function
   closePostPopover: () => void
 
@@ -561,6 +561,13 @@ interface MainState {
   }
   openTimeFeedsPopup: (post: TTPost, direction: "old" | "new") => void
   closeTimeFeedsPopup: () => void
+
+  // ポップアップ - ポストブックマークポップアップ
+  currentPostBookmarkPosts: Array<TTPost>
+  currentPostBookmarkPostsCursor?: string
+  postBookmarkPopupDisplay: boolean
+  openPostBookmarkPopup: () => void
+  closePostBookmarkPopup: () => void
 
   // ポップアップ - ポスト送信ポップアップ
   sendPostPopupProps: TTSendPostPopupParams

@@ -631,6 +631,13 @@ export const state: MainState = reactive<MainState>({
   openTimeFeedsPopup: openTimeFeedsPopup,
   closeTimeFeedsPopup: closeTimeFeedsPopup,
 
+  // ポップアップ - ポストブックマークポップアップ
+  currentPostBookmarkPosts: [],
+  currentPostBookmarkPostsCursor: undefined,
+  postBookmarkPopupDisplay: false,
+  openPostBookmarkPopup: openPostBookmarkPopup,
+  closePostBookmarkPopup: closePostBookmarkPopup,
+
   // ポップアップ - ポスト送信ポップアップ
   sendPostPopupProps: {
     display: false,
@@ -2273,6 +2280,16 @@ function openTimeFeedsPopup (post: TTPost, direction: "old" | "new") {
 
 function closeTimeFeedsPopup () {
   state.timeFeedsPopupDisplay = false
+}
+
+// ポップアップ - ポストブックマークポップアップ
+
+function openPostBookmarkPopup () {
+  state.postBookmarkPopupDisplay = true
+}
+
+function closePostBookmarkPopup () {
+  state.postBookmarkPopupDisplay = false
 }
 
 // ポップアップ - ポスト送信ポップアップ

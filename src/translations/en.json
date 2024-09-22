@@ -582,6 +582,10 @@
   "threadgateNotification1": "You can select up to 5 targets to allow reply.",
   "threadgateNotification2": "If apply without checking anything, only you will be able to reply.",
 
+  "postBookmark": "Bookmarks",
+  "createPostBookmark": "Create bookmark",
+  "deletePostBookmark": "Delete bookmark",
+
   "listMention": "List mention",
   "listMentionNotification": "Sends notifications to users in the selected list(up to 30 users). Mentions are not displayed in your post, and ostensibly the users to be notified are not known.",
 

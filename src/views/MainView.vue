@@ -37,6 +37,7 @@ import MyFeedsSortPopover from "@/components/popovers/MyFeedsSortPopover.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
+import PostBookmarkPopup from "@/components/popups/PostBookmarkPopup.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
 import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
@@ -365,11 +366,24 @@ async function processAfterLogin () {
         })
     })
 
+  // ポストブックマークの取得
+  if (state.currentPostBookmarkPosts.length === 0) {
+    state.atp.fetchPostBookmarks(
+      state.currentPostBookmarkPosts,
+      state.atp.session!.did,
+      100,
+      undefined
+    )
+      .then(() => {
+        // セッションキャッシュの設定
+        state.myWorker!.setSessionCache("postBookmarkPosts", state.currentPostBookmarkPosts)
+      })
+  }
+
   // 招待コードの取得
   if (state.inviteCodes.length === 0) {
     state.updateInviteCodes()
       .then(() => {
-
         // セッションキャッシュの設定
         state.myWorker!.setSessionCache("inviteCodes", state.inviteCodes)
       })
@@ -1011,6 +1025,14 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
         />
       </Transition>
 
+      <!-- ポストブックマークポップアップ -->
+      <Transition>
+        <PostBookmarkPopup
+          v-if="state.postBookmarkPopupDisplay"
+          @close="state.closePostBookmarkPopup"
+        />
+      </Transition>
+
       <!-- リポストユーザーリストポップアップ -->
       <Transition>
         <RepostUsersPopup
@@ -1538,7 +1560,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     max-width: 100%;
   }
 
-    // ルータービューヘッダー
+  // ルータービューヘッダー
   &__header {
     background-color: rgb(var(--bg-color), var(--main-area-opacity));
     // BORDERED_DESIGN: border-bottom: 1px solid rgb(var(--fg-color), 0.25);
@@ -1550,10 +1572,6 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     &:empty {
       display: none;
     }
-  }
-
-  & > .feed-list {
-    flex-grow: 1;
   }
 }
 

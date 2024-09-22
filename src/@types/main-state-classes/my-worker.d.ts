@@ -17,6 +17,7 @@ interface TIMyWorkerSessionCache {
   myFeedsItems?: Array<TTMyFeedsItem>
   myLabeler?: Array<TILabeler>
   myList?: Array<TTList>
+  postBookmarkPosts?: Array<TTPost>
   serverInfo?: TTServerInfo
   userProfile?: TTProfile
 }

@@ -135,6 +135,8 @@ interface TIAtpWrapper {
     (): Promise<Error | Array<TTFeedGenerator>>
   fetchPopularFeedGenerators
     (currentValues: Array<TTFeedGenerator>, limit?: number, cursor?: string, term?: string): Promise<Error | undefined | string>
+  fetchPostBookmarks
+    (this: TIAtpWrapper, currentPosts: Array<TTPost>, did: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchPostedImageRefs
     (did: string): Promise<Error | string[]>
   fetchPostgate

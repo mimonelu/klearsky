@@ -85,7 +85,7 @@ function close () {
   emit("close")
 }
 
-function callback (type: "deletePost" | "updatePost") {
+function callback (type: "deletePost" | "updatePost" | "createPostBookmark" | "deletePostBookmark") {
   Util.blurElement()
   close()
   if (mainState.postPopoverCallback != null) {
