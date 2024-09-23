@@ -4,7 +4,7 @@ export default async function (
   this: TIAtpWrapper,
   uri: string,
   cid?: string,
-  category?: TICustomBookmarkCategory
+  tags?: Array<string>
 ): Promise<Error | TTCidUri> {
   if (this.agent == null) {
     return Error("noAgentError")
@@ -16,7 +16,7 @@ export default async function (
     createdAt: new Date().toISOString(),
     uri,
     cid,
-    category,
+    tags,
   }
   const response = await this.updateRecord(
     this.session.did,

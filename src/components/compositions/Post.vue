@@ -639,11 +639,8 @@ async function createCustomBookmark (uri: string, cid: string) {
     return
   }
   state.processing = true
-  const category: TICustomBookmarkCategory = {
-    label: "test",
-    code: "test",
-  }
-  const response = await mainState.atp.updateCustomBookmarks(uri, cid, category)
+  const tags = ["demo"]
+  const response = await mainState.atp.updateCustomBookmarks(uri, cid, tags)
   state.processing = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "Post/createCustomBookmark")
@@ -657,7 +654,7 @@ async function createCustomBookmark (uri: string, cid: string) {
         createdAt: new Date().toISOString(),
         uri: props.post.uri,
         cid: props.post.cid,
-        category,
+        tags,
       },
       post: props.post,
     })

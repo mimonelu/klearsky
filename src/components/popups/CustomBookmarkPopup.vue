@@ -16,36 +16,28 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
   postContainer: ComputedRef<undefined | HTMLElement>
-  customBookmarkCategory: TICustomBookmarkCategory
-  customBookmarkCategories: ComputedRef<Array<TICustomBookmarkCategory>>
+  customBookmarkTag?: string
+  customBookmarkTags: ComputedRef<Array<undefined | string>>
   customBookmarkPosts: ComputedRef<Array<TTPost>>
 }>({
   processing: false,
   postContainer: computed((): undefined | HTMLElement => {
     return postContainer.value?.closest(".popup-body") ?? undefined
   }),
-  customBookmarkCategory: {
-    label: "ALL",
-    code: undefined,
-  },
-  customBookmarkCategories: computed((): Array<TICustomBookmarkCategory> => {
+  customBookmarkTag: undefined,
+  customBookmarkTags: computed((): Array<undefined | string> => {
+    const tags: Set<undefined | string> = new Set()
+    mainState.currentCustomBookmarkPacks.forEach((pack) => {
+      if (pack.bookmark.tags == null) {
+        return
+      }
+      pack.bookmark.tags.forEach((tag) => {
+        tags.add(tag)
+      })
+    })
     return [
-      {
-        label: "ALL",
-        code: undefined,
-      },
-      ...mainState.currentCustomBookmarkPacks
-        .filter((pack) => {
-          return !!pack.bookmark.category
-        })
-        .map((pack) => {
-          return pack.bookmark.category
-        })
-        .filter((category, index, self) => {
-          return index === self.findIndex((target) => {
-            return target!.code === category!.code
-          })
-        }) as Array<TICustomBookmarkCategory>
+      undefined,
+      ...tags
     ]
   }),
   customBookmarkPosts: computed((): Array<TTPost> => {
@@ -54,8 +46,8 @@ const state = reactive<{
         return (
           pack.post != null &&
           (
-            state.customBookmarkCategory.code == null ||
-            state.customBookmarkCategory.code === pack.bookmark.category?.code
+            state.customBookmarkTag == null ||
+            pack.bookmark.tags?.includes(state.customBookmarkTag)
           )
         )
       })
@@ -113,8 +105,8 @@ function scrolledToBottom () {
   fetchContinuousResults("old")
 }
 
-function setCustomBookmarkCategory (category: TICustomBookmarkCategory) {
-  state.customBookmarkCategory = category
+function setCustomBookmarkTag (tag?: string) {
+  state.customBookmarkTag = tag
   popup.value.scrollToTop()
 }
 
@@ -190,17 +182,14 @@ async function outputJsonForSkyFeed () {
         class="slider-menu"
         ref="sliderMenu"
       >
-        <template
-          v-for="category of state.customBookmarkCategories"
-          :key="category.code"
-        >
+        <template v-for="tag of state.customBookmarkTags">
           <button
             class="slider-menu__link"
-            :data-is-selected-on-button="category.code === state.customBookmarkCategory.code"
-            @click.stop="setCustomBookmarkCategory(category)"
+            :data-is-selected-on-button="tag === state.customBookmarkTag"
+            @click.stop="setCustomBookmarkTag(tag)"
           >
             <SVGIcon name="bookmark" />
-            <span>{{ $t(category.label) }}</span>
+            <span>{{ tag ?? "All" }}</span>
           </button>
         </template>
       </div>
