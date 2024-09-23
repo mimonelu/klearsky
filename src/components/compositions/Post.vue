@@ -20,6 +20,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import Util from "@/composables/util"
+import { THIRD_PARTY_DOMAIN_BOOKMARK } from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -559,7 +560,7 @@ function openPostPopover ($event: Event) {
   mainState.openPostPopover($event.target)
 }
 
-async function postPopoverCallback (type: "deletePost" | "updatePost" | "createPostBookmark" | "deletePostBookmark") {
+async function postPopoverCallback (type: "deletePost" | "updatePost" | "createCustomBookmark" | "deleteCustomBookmark") {
   switch (type) {
     case "deletePost": {
       await deletePost(props.post.uri)
@@ -569,12 +570,12 @@ async function postPopoverCallback (type: "deletePost" | "updatePost" | "createP
       await updatePost()
       break
     }
-    case "createPostBookmark": {
-      await createPostBookmark(props.post.uri)
+    case "createCustomBookmark": {
+      await createCustomBookmark(props.post.uri, props.post.cid)
       break
     }
-    case "deletePostBookmark": {
-      await deletePostBookmark(props.post.uri)
+    case "deleteCustomBookmark": {
+      await deleteCustomBookmark(props.post.uri)
       break
     }
   }
@@ -634,57 +635,45 @@ async function updatePostThread () {
   emit("updateThisPostThread", posts)
 }
 
-async function createPostBookmark (uri: string) {
+async function createCustomBookmark (uri: string, cid: string) {
   if (state.processing) {
     return
   }
   state.processing = true
-  const response = await mainState.atp.updateRecord(
-    mainState.atp.session!.did,
-    "net.mimonelu.klearsky.postBookmark",
-    uri,
-    {
-      createdAt: new Date().toISOString(),
-      uri,
-    },
-  )
+  const response = await mainState.atp.updateCustomBookmarks(uri, cid)
   state.processing = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "Post/createPostBookmark")
+    mainState.openErrorPopup(response, "Post/createCustomBookmark")
     return
   }
-  if (mainState.currentPostBookmarkPosts.every((post) => {
+  if (mainState.currentCustomBookmarkPosts.every((post) => {
     return post.uri !== uri
   })) {
-    mainState.currentPostBookmarkPosts.unshift(props.post)
+    mainState.currentCustomBookmarkPosts.unshift(props.post)
   }
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("postBookmarkPosts", mainState.currentPostBookmarkPosts)
+  mainState.myWorker!.setSessionCache("customBookmarkPosts", mainState.currentCustomBookmarkPosts)
 }
 
-async function deletePostBookmark (uri: string) {
+async function deleteCustomBookmark (uri: string) {
   if (state.processing) {
     return
   }
   state.processing = true
-  const response = await mainState.atp.deleteRecord(
-    mainState.atp.session!.did,
-    "net.mimonelu.klearsky.postBookmark",
-    uri
-  )
+  const response = await mainState.atp.deleteCustomBookmark(uri)
   state.processing = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "Post/deletePostBookmark")
+    mainState.openErrorPopup(response, "Post/deleteCustomBookmark")
     return
   }
-  mainState.currentPostBookmarkPosts = mainState.currentPostBookmarkPosts
+  mainState.currentCustomBookmarkPosts = mainState.currentCustomBookmarkPosts
     .filter((post) => {
       return post.uri !== uri
     })
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("postBookmarkPosts", mainState.currentPostBookmarkPosts)
+  mainState.myWorker!.setSessionCache("customBookmarkPosts", mainState.currentCustomBookmarkPosts)
 }
 
 // 画像ポップアップ

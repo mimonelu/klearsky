@@ -24,7 +24,7 @@ const state = reactive<{
 const postContainer = ref()
 
 onBeforeMount(async () => {
-  if (mainState.currentPostBookmarkPosts.length === 0) {
+  if (mainState.currentCustomBookmarkPosts.length === 0) {
     await fetchContinuousResults("new")
   }
 })
@@ -39,28 +39,28 @@ async function fetchContinuousResults (direction: "new" | "old") {
     return
   }
   state.processing = true
-  const cursor = await mainState.atp.fetchPostBookmarks(
-    mainState.currentPostBookmarkPosts,
+  const cursor = await mainState.atp.fetchCustomBookmarks(
+    mainState.currentCustomBookmarkPosts,
     mainState.atp.session!.did,
-    CONSTS.LIMIT_OF_FETCH_POST_BOOKMARKS,
-    direction === "old" ? mainState.currentPostBookmarkPostsCursor : undefined
+    CONSTS.LIMIT_OF_FETCH_CUSTOM_BOOKMARKS,
+    direction === "old" ? mainState.currentCustomBookmarkPostsCursor : undefined
   )
   state.processing = false
   if (cursor instanceof Error) {
-    mainState.openErrorPopup(cursor, "PostBookmarkPopup/fetchContinuousResults")
+    mainState.openErrorPopup(cursor, "customBookmarkPopup/fetchContinuousResults")
     return
   }
   if (cursor != null && (
     direction === "old" || (
       direction === "new" &&
-      mainState.currentPostBookmarkPostsCursor == null
+      mainState.currentCustomBookmarkPostsCursor == null
     )
   )) {
-    mainState.currentPostBookmarkPostsCursor = cursor
+    mainState.currentCustomBookmarkPostsCursor = cursor
   }
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("postBookmarkPosts", mainState.currentPostBookmarkPosts)
+  mainState.myWorker!.setSessionCache("customBookmarkPosts", mainState.currentCustomBookmarkPosts)
 }
 
 function scrolledToBottom () {
@@ -68,18 +68,18 @@ function scrolledToBottom () {
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
-  mainState.currentPostBookmarkPosts.forEach((post: TTPost, index: number) => {
+  mainState.currentCustomBookmarkPosts.forEach((post: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => {
       return post.cid === newPost.cid
     })
     if (newPost != null) {
-      Util.updatePostProps(mainState.currentPostBookmarkPosts[index], newPost)
+      Util.updatePostProps(mainState.currentCustomBookmarkPosts[index], newPost)
     }
   })
 }
 
 function removeThisPost (uri: string) {
-  mainState.currentPostBookmarkPosts = mainState.currentPostBookmarkPosts
+  mainState.currentCustomBookmarkPosts = mainState.currentCustomBookmarkPosts
     .filter((post: TTPost) => {
       return post.uri !== uri
     })
@@ -88,7 +88,7 @@ function removeThisPost (uri: string) {
 
 <template>
   <Popup
-    class="post-bookmark-popup"
+    class="custom-bookmark-popup"
     :hasCloseButton="true"
     @close="close"
     @scrolledToBottom="scrolledToBottom"
@@ -96,7 +96,7 @@ function removeThisPost (uri: string) {
     <template #header>
       <h2>
         <SVGIcon name="bookmark" />
-        <span>{{ $t("postBookmark") }}</span>
+        <span>{{ $t("customBookmark") }}</span>
       </h2>
     </template>
     <template #header-after>
@@ -108,11 +108,11 @@ function removeThisPost (uri: string) {
     </template>
     <template #body>
       <div
-        class="post-bookmark-popup__posts"
+        class="custom-bookmark-popup__posts"
         ref="postContainer"
       >
         <Post
-          v-for="post of mainState.currentPostBookmarkPosts"
+          v-for="post of mainState.currentCustomBookmarkPosts"
           :key="post.cid"
           position="post"
           :post="post"
@@ -137,7 +137,7 @@ function removeThisPost (uri: string) {
 </template>
 
 <style lang="scss" scoped>
-.post-bookmark-popup:deep() {
+.custom-bookmark-popup:deep() {
   .popup {
     flex-grow: 1;
 

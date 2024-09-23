@@ -101,9 +101,9 @@ export default class {
           this.mainState.currentServerInfo = sessionCache.serverInfo
         }
 
-        // セッションキャッシュの反映 - ポストブックマーク
-        if (sessionCache.postBookmarkPosts != null) {
-          this.mainState.currentPostBookmarkPosts = sessionCache.postBookmarkPosts
+        // セッションキャッシュの反映 - カスタムブックマーク
+        if (sessionCache.customBookmarkPosts != null) {
+          this.mainState.currentCustomBookmarkPosts = sessionCache.customBookmarkPosts
         }
 
         // セッションキャッシュの反映 - 招待コード

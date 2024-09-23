@@ -16,6 +16,7 @@ import createVideo from "@/composables/atp-wrapper/create/create-video"
 import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
 import deleteChatDeclaration from "@/composables/atp-wrapper/chat/delete-chat-declaration"
 import deleteChatMessage from "@/composables/atp-wrapper/chat/delete-chat-message"
+import deleteCustomBookmark from "@/composables/atp-wrapper/delete/delete-custom-bookmark"
 import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
 import deleteList from "@/composables/atp-wrapper/delete/delete-list"
@@ -41,6 +42,7 @@ import fetchChatConvos from "@/composables/atp-wrapper/chat/fetch-chat-convos"
 import fetchChatDeclarations from "@/composables/atp-wrapper/chat/fetch-chat-declarations"
 import fetchChatLogs from "@/composables/atp-wrapper/chat/fetch-chat-logs"
 import fetchChatMessages from "@/composables/atp-wrapper/chat/fetch-chat-messages"
+import fetchCustomBookmarks from "@/composables/atp-wrapper/fetch/fetch-custom-bookmarks"
 import fetchCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-custom-feeds"
 import fetchDid from "@/composables/atp-wrapper/fetch/fetch-did"
 import fetchFeedGenerator from "@/composables/atp-wrapper/fetch/fetch-feed-generator"
@@ -64,7 +66,6 @@ import fetchNotificationCount from "@/composables/atp-wrapper/fetch/fetch-notifi
 import fetchNotifications from "@/composables/atp-wrapper/fetch/fetch-notifications"
 import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-official-feed-generators"
 import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-popular-feed-generators"
-import fetchPostBookmarks from "@/composables/atp-wrapper/fetch/fetch-post-bookmarks"
 import fetchPostedImageRefs from "@/composables/atp-wrapper/fetch/fetch-posted-image-refs"
 import fetchPostgate from "@/composables/atp-wrapper/fetch/fetch-postgate"
 import fetchPosts from "@/composables/atp-wrapper/fetch/fetch-posts"
@@ -102,6 +103,7 @@ import unmuteChatConvo from "@/composables/atp-wrapper/chat/unmute-chat-convo"
 import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
 import updateChatConvoRead from "@/composables/atp-wrapper/chat/update-chat-convo-read"
+import updateCustomBookmarks from "@/composables/atp-wrapper/update/update-custom-bookmark"
 import updateJwt from "@/composables/atp-wrapper/session/update-jwt"
 import updateList from "@/composables/atp-wrapper/update/update-list"
 import updateListBlockToDisable from "@/composables/atp-wrapper/update/update-list-block-to-disable"
@@ -175,6 +177,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteAccount = deleteAccount
   deleteChatDeclaration = deleteChatDeclaration
   deleteChatMessage = deleteChatMessage
+  deleteCustomBookmark = deleteCustomBookmark
   deleteFollow = deleteFollow
   deleteLike = deleteLike
   deleteList = deleteList
@@ -200,6 +203,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchChatDeclarations = fetchChatDeclarations
   fetchChatLogs = fetchChatLogs
   fetchChatMessages = fetchChatMessages
+  fetchCustomBookmarks = fetchCustomBookmarks
   fetchCustomFeeds = fetchCustomFeeds
   fetchDid = fetchDid
   fetchFeedGenerator = fetchFeedGenerator
@@ -223,7 +227,6 @@ class AtpWrapper implements TIAtpWrapper {
   fetchNotifications = fetchNotifications
   fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
   fetchPopularFeedGenerators = fetchPopularFeedGenerators
-  fetchPostBookmarks = fetchPostBookmarks
   fetchPostedImageRefs = fetchPostedImageRefs
   fetchPostgate = fetchPostgate
   fetchPosts = fetchPosts
@@ -267,6 +270,7 @@ class AtpWrapper implements TIAtpWrapper {
   updateBlockToDisable = updateBlockToDisable
   updateBlockToEnable = updateBlockToEnable
   updateChatConvoRead = updateChatConvoRead
+  updateCustomBookmarks = updateCustomBookmarks
   updateJwt = updateJwt
   updateList = updateList
   updateListBlockToDisable = updateListBlockToDisable

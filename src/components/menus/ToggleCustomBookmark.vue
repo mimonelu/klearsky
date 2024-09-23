@@ -12,48 +12,48 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  isPostBookmark: ComputedRef<boolean>
+  isCustomBookmark: ComputedRef<boolean>
 }>({
-  isPostBookmark: computed((): boolean => {
-    return mainState.currentPostBookmarkPosts.some((post) => {
+  isCustomBookmark: computed((): boolean => {
+    return mainState.currentCustomBookmarkPosts.some((post) => {
       return post.uri === props.uri
     })
   }),
 })
 
-async function createPostBookmark () {
+async function createCustomBookmark () {
   Util.blurElement()
   emit("close")
-  mainState.postPopoverCallback?.("createPostBookmark")
+  mainState.postPopoverCallback?.("createCustomBookmark")
 }
 
-async function deletePostBookmark () {
+async function deleteCustomBookmark () {
   Util.blurElement()
   emit("close")
-  mainState.postPopoverCallback?.("deletePostBookmark")
+  mainState.postPopoverCallback?.("deleteCustomBookmark")
 }
 
 </script>
 
 <template>
   <button
-    v-if="!state.isPostBookmark"
-    @click.stop="createPostBookmark"
+    v-if="!state.isCustomBookmark"
+    @click.stop="createCustomBookmark"
   >
     <SVGIcon name="bookmark" />
-    <span>{{ $t("createPostBookmark") }}</span>
+    <span>{{ $t("createCustomBookmark") }}</span>
   </button>
   <button
     v-else
-    @click.stop="deletePostBookmark"
+    @click.stop="deleteCustomBookmark"
   >
     <SVGIcon name="bookmarkOff" />
-    <span>{{ $t("deletePostBookmark") }}</span>
+    <span>{{ $t("deleteCustomBookmark") }}</span>
   </button>
 </template>
 
 <style lang="scss" scoped>
-.toggle-post-bookmark{
+.toggle-custom-bookmark{
   &[data-detached="false"] {
     .svg-icon {
       fill: rgb(var(--notice-color));

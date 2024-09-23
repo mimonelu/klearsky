@@ -37,7 +37,7 @@ import MyFeedsSortPopover from "@/components/popovers/MyFeedsSortPopover.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
-import PostBookmarkPopup from "@/components/popups/PostBookmarkPopup.vue"
+import CustomBookmarkPopup from "@/components/popups/CustomBookmarkPopup.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
 import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
@@ -366,17 +366,18 @@ async function processAfterLogin () {
         })
     })
 
-  // ポストブックマークの取得
-  if (state.currentPostBookmarkPosts.length === 0) {
-    state.atp.fetchPostBookmarks(
-      state.currentPostBookmarkPosts,
+  // カスタムブックマークの取得
+  // TODO: ここで取得したくないが、カスタムブックマークトリガーの出し分けで必要。要検討
+  if (state.currentCustomBookmarkPosts.length === 0) {
+    state.atp.fetchCustomBookmarks(
+      state.currentCustomBookmarkPosts,
       state.atp.session!.did,
       100,
       undefined
     )
       .then(() => {
         // セッションキャッシュの設定
-        state.myWorker!.setSessionCache("postBookmarkPosts", state.currentPostBookmarkPosts)
+        state.myWorker!.setSessionCache("customBookmarkPosts", state.currentCustomBookmarkPosts)
       })
   }
 
@@ -1025,11 +1026,11 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
         />
       </Transition>
 
-      <!-- ポストブックマークポップアップ -->
+      <!-- カスタムブックマークポップアップ -->
       <Transition>
-        <PostBookmarkPopup
-          v-if="state.postBookmarkPopupDisplay"
-          @close="state.closePostBookmarkPopup"
+        <CustomBookmarkPopup
+          v-if="state.customBookmarkPopupDisplay"
+          @close="state.closeCustomBookmarkPopup"
         />
       </Transition>
 

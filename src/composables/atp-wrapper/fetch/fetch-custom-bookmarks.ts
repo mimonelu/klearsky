@@ -1,4 +1,5 @@
 import Util from "@/composables/util"
+import { THIRD_PARTY_DOMAIN_BOOKMARK } from "@/consts/consts.json"
 
 export default async function (
   this: TIAtpWrapper,
@@ -14,9 +15,10 @@ export default async function (
     return Error("noSessionError")
   }
 
+  // カスタムブックマークの取得
   const records = await this.fetchRecords(
     did,
-    "net.mimonelu.klearsky.postBookmark",
+    THIRD_PARTY_DOMAIN_BOOKMARK,
     limit,
     cursor
   )
@@ -24,11 +26,12 @@ export default async function (
     return records
   }
 
-  const postBookmarkUris = records.records.map((record) => {
+  // カスタムブックマークポストの取得
+  const customBookmarkUris = records.records.map((record) => {
     return record.value.uri
   }) as Array<string>
 
-  const posts = await this.fetchPosts(postBookmarkUris)
+  const posts = await this.fetchPosts(customBookmarkUris)
   if (posts instanceof Error) {
     return posts
   }

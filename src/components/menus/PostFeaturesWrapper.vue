@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { nextTick, reactive, ref } from "vue"
 import MenuTickerOpenTimeFeedsPopup from "@/components/menus/OpenTimeFeedsPopup.vue"
-import MenuTickerTogglePostBookmark from "@/components/menus/TogglePostBookmark.vue"
+import MenuTickerToggleCustomBookmark from "@/components/menus/ToggleCustomBookmark.vue"
 import MenuTickerSendMention from "@/components/menus/SendMention.vue"
 import MenuTickerSendPostAfter from "@/components/menus/SendPostAfter.vue"
 import MenuTickerShowLikeUsers from "@/components/menus/ShowLikeUsers.vue"
@@ -83,12 +83,6 @@ function close () {
           @close="emit('close')"
         />
 
-        <!-- ポストブックマーク -->
-        <MenuTickerTogglePostBookmark
-          :uri="post.uri"
-          @close="emit('close')"
-        />
-
         <!-- このポストの直後に投稿する -->
         <MenuTickerSendPostAfter
           :createdAt="post.record?.createdAt"
@@ -116,6 +110,12 @@ function close () {
         />
 
         <hr />
+
+        <!-- カスタムブックマークトグル -->
+        <MenuTickerToggleCustomBookmark
+          :uri="post.uri"
+          @close="emit('close')"
+        />
 
         <!-- 固定ポストトグル -->
         <MenuTickerTogglePinnedPost

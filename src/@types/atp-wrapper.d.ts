@@ -39,6 +39,8 @@ interface TIAtpWrapper {
     (repo: string, uri: string): Promise<Error | undefined>
   deleteChatMessage
     (convoId: string, messageId: string): Promise<Error | undefined>
+  deleteCustomBookmark
+    (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   deleteFollow
     (uri: string): Promise<Error | undefined>
   deleteLike
@@ -89,6 +91,8 @@ interface TIAtpWrapper {
     (cursor?: string): Promise<Error | Array<TIChatLog>>
   fetchChatMessages
     (convoId: string, limit?: number, cursor?: string): Promise<Error | { cursor?: string; messages: Array<TIChatMessage> }>
+  fetchCustomBookmarks
+    (this: TIAtpWrapper, currentPosts: Array<TTPost>, did: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchCustomFeeds
     (oldFeeds: Array<TTFeed>, feed: string, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<Error | undefined | string>
   fetchDid
@@ -135,8 +139,6 @@ interface TIAtpWrapper {
     (): Promise<Error | Array<TTFeedGenerator>>
   fetchPopularFeedGenerators
     (currentValues: Array<TTFeedGenerator>, limit?: number, cursor?: string, term?: string): Promise<Error | undefined | string>
-  fetchPostBookmarks
-    (this: TIAtpWrapper, currentPosts: Array<TTPost>, did: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchPostedImageRefs
     (did: string): Promise<Error | string[]>
   fetchPostgate
@@ -215,6 +217,8 @@ interface TIAtpWrapper {
     (did: string): Promise<Error | string>
   updateChatConvoRead
     (convoId: string, messageId?: string): Promise<Error | TIChatConvo>
+  updateCustomBookmarks
+    (this: TIAtpWrapper, uri: string, cid?: string): Promise<Error | TTCidUri>
   updateJwt
     (onRefreshSession?: () => void): Promise<Error | undefined>
   updateList
