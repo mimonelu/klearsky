@@ -9,6 +9,8 @@ import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
@@ -84,6 +86,31 @@ function removeThisPost (uri: string) {
       return post.uri !== uri
     })
 }
+
+async function outputJsonForSkyFeed () {
+  Util.blurElement()
+  if (!(await mainState.openConfirmationPopup({
+    text: $t("customBookmarkOutputConfirmation"),
+  }))) {
+    return
+  }
+  const blocks = mainState.currentCustomBookmarkPosts
+    .map((post) => {
+      return {
+        type: "input",
+        inputType: "post",
+        postUri: post.uri,
+      }
+    })
+    .reverse()
+  const jsonObject = {
+    displayName: "",
+    blocks,
+    license: "EUPL-1.2",
+  }
+  const jsonText = JSON.stringify(jsonObject, null, 2)
+  navigator.clipboard.writeText(jsonText)
+}
 </script>
 
 <template>
@@ -94,6 +121,14 @@ function removeThisPost (uri: string) {
     @scrolledToBottom="scrolledToBottom"
   >
     <template #header>
+      <!-- JSON出力ボタン -->
+      <button
+        class="button--plane output-json-button"
+        @click.stop="outputJsonForSkyFeed"
+      >
+        <SVGIcon name="json" />
+      </button>
+
       <h2>
         <SVGIcon name="bookmark" />
         <span>{{ $t("customBookmark") }}</span>
@@ -149,5 +184,10 @@ function removeThisPost (uri: string) {
       padding: 0;
     }
   }
+}
+
+// JSON出力ボタン
+.output-json-button {
+  font-size: 1.5rem;
 }
 </style>

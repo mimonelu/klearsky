@@ -585,6 +585,7 @@
   "customBookmark": "ブックマーク",
   "createCustomBookmark": "ブックマークを作成",
   "deleteCustomBookmark": "ブックマークを削除",
+  "customBookmarkOutputConfirmation": "読み込み済みのポストをSkyFeedのJSONとしてクリップボードにコピーします。",
 
   "listMention": "リストメンション",
   "listMentionNotification": "選択したリストのユーザーに通知を送信します（最大30人まで）。本文にメンションは表示されず、表向きには通知先のユーザーはわかりません。",
