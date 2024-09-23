@@ -218,7 +218,7 @@ interface TIAtpWrapper {
   updateChatConvoRead
     (convoId: string, messageId?: string): Promise<Error | TIChatConvo>
   updateCustomBookmarks
-    (this: TIAtpWrapper, uri: string, cid?: string): Promise<Error | TTCidUri>
+    (this: TIAtpWrapper, uri: string, cid?: string, category?: TICustomBookmarkCategory): Promise<Error | TTCidUri>
   updateJwt
     (onRefreshSession?: () => void): Promise<Error | undefined>
   updateList

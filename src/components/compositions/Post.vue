@@ -20,7 +20,6 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import Util from "@/composables/util"
-import { THIRD_PARTY_DOMAIN_BOOKMARK } from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -640,7 +639,11 @@ async function createCustomBookmark (uri: string, cid: string) {
     return
   }
   state.processing = true
-  const response = await mainState.atp.updateCustomBookmarks(uri, cid)
+  const category: TICustomBookmarkCategory = {
+    label: "test",
+    code: "test",
+  }
+  const response = await mainState.atp.updateCustomBookmarks(uri, cid, category)
   state.processing = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "Post/createCustomBookmark")
@@ -654,10 +657,7 @@ async function createCustomBookmark (uri: string, cid: string) {
         createdAt: new Date().toISOString(),
         uri: props.post.uri,
         cid: props.post.cid,
-        category: {
-          label: "test",
-          code: "test",
-        },
+        category,
       },
       post: props.post,
     })

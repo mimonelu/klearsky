@@ -3,7 +3,8 @@ import { THIRD_PARTY_DOMAIN_BOOKMARK } from "@/consts/consts.json"
 export default async function (
   this: TIAtpWrapper,
   uri: string,
-  cid?: string
+  cid?: string,
+  category?: TICustomBookmarkCategory
 ): Promise<Error | TTCidUri> {
   if (this.agent == null) {
     return Error("noAgentError")
@@ -11,15 +12,17 @@ export default async function (
   if (this.session == null) {
     return Error("noSessionError")
   }
+  const value: TICustomBookmark = {
+    createdAt: new Date().toISOString(),
+    uri,
+    cid,
+    category,
+  }
   const response = await this.updateRecord(
     this.session.did,
     THIRD_PARTY_DOMAIN_BOOKMARK,
     uri,
-    {
-      createdAt: new Date().toISOString(),
-      uri,
-      cid,
-    },
+    value,
   )
   if (response instanceof Error) {
     return response
