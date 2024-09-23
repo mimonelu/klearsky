@@ -368,16 +368,16 @@ async function processAfterLogin () {
 
   // カスタムブックマークの取得
   // TODO: ここで取得したくないが、カスタムブックマークトリガーの出し分けで必要。要検討
-  if (state.currentCustomBookmarkPosts.length === 0) {
-    state.atp.fetchCustomBookmarks(
-      state.currentCustomBookmarkPosts,
+  if (state.currentCustomBookmarkPacks.length === 0) {
+    state.atp.fetchCustomBookmarkPacks(
+      state.currentCustomBookmarkPacks,
       state.atp.session!.did,
       100,
       undefined
     )
       .then(() => {
         // セッションキャッシュの設定
-        state.myWorker!.setSessionCache("customBookmarkPosts", state.currentCustomBookmarkPosts)
+        state.myWorker!.setSessionCache("customBookmarkPacks", state.currentCustomBookmarkPacks)
       })
   }
 

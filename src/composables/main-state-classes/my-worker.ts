@@ -102,8 +102,8 @@ export default class {
         }
 
         // セッションキャッシュの反映 - カスタムブックマーク
-        if (sessionCache.customBookmarkPosts != null) {
-          this.mainState.currentCustomBookmarkPosts = sessionCache.customBookmarkPosts
+        if (sessionCache.customBookmarkPacks != null) {
+          this.mainState.currentCustomBookmarkPacks = sessionCache.customBookmarkPacks
         }
 
         // セッションキャッシュの反映 - 招待コード

@@ -15,8 +15,8 @@ const state = reactive<{
   isCustomBookmark: ComputedRef<boolean>
 }>({
   isCustomBookmark: computed((): boolean => {
-    return mainState.currentCustomBookmarkPosts.some((post) => {
-      return post.uri === props.uri
+    return mainState.currentCustomBookmarkPacks.some((pack) => {
+      return pack.bookmark.uri === props.uri
     })
   }),
 })

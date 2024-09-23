@@ -563,8 +563,8 @@ interface MainState {
   closeTimeFeedsPopup: () => void
 
   // ポップアップ - カスタムブックマークポップアップ
-  currentCustomBookmarkPosts: Array<TTPost>
-  currentCustomBookmarkPostsCursor?: string
+  currentCustomBookmarkPacks: Array<TICustomBookmarkPack>
+  currentCustomBookmarkPacksCursor?: string
   customBookmarkPopupDisplay: boolean
   openCustomBookmarkPopup: () => void
   closeCustomBookmarkPopup: () => void

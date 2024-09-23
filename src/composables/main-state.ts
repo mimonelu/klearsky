@@ -632,8 +632,8 @@ export const state: MainState = reactive<MainState>({
   closeTimeFeedsPopup: closeTimeFeedsPopup,
 
   // ポップアップ - カスタムブックマークポップアップ
-  currentCustomBookmarkPosts: [],
-  currentCustomBookmarkPostsCursor: undefined,
+  currentCustomBookmarkPacks: [],
+  currentCustomBookmarkPacksCursor: undefined,
   customBookmarkPopupDisplay: false,
   openCustomBookmarkPopup: openCustomBookmarkPopup,
   closeCustomBookmarkPopup: closeCustomBookmarkPopup,

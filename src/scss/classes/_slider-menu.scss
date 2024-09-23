@@ -3,6 +3,8 @@
   align-items: center;
   overflow-x: auto;
   overflow-y: hidden;
+  min-height: 3rem;
+  max-height: 3rem;
   @include scroll-bar("transparent");
 
   &::before {
@@ -12,6 +14,7 @@
   }
 
   &__link {
+    cursor: pointer;
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;
@@ -20,6 +23,7 @@
     min-height: 3rem;
     max-height: 3rem;
     &:focus, &:hover,
+    &[data-is-selected-on-button="true"],
     &.router-link-active[data-is-selected="true"] {
       .svg-icon,
       .lazy-image {
@@ -30,6 +34,7 @@
         color: rgb(var(--fg-color));
       }
     }
+    &[data-is-selected-on-button="true"],
     &.router-link-active[data-is-selected="true"] {
       & > span {
         font-weight: bold;
@@ -41,10 +46,10 @@
       border-radius: var(--border-radius-small);
       opacity: 0.5 !important;
       overflow: hidden;
-      min-width: 1.25em;
-      max-width: 1.25em;
-      min-height: 1.25em;
-      max-height: 1.25em;
+      min-width: 1.25em !important;
+      max-width: 1.25em !important;
+      min-height: 1.25em !important;
+      max-height: 1.25em !important;
     }
     .svg-icon {
       fill: rgb(var(--fg-color));

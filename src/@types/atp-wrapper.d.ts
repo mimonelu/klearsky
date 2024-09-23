@@ -91,8 +91,8 @@ interface TIAtpWrapper {
     (cursor?: string): Promise<Error | Array<TIChatLog>>
   fetchChatMessages
     (convoId: string, limit?: number, cursor?: string): Promise<Error | { cursor?: string; messages: Array<TIChatMessage> }>
-  fetchCustomBookmarks
-    (this: TIAtpWrapper, currentPosts: Array<TTPost>, did: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
+  fetchCustomBookmarkPacks
+    (this: TIAtpWrapper, currentCustomBookmarkPacks: Array<TICustomBookmarkPack>, did: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchCustomFeeds
     (oldFeeds: Array<TTFeed>, feed: string, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<Error | undefined | string>
   fetchDid

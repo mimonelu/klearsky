@@ -42,7 +42,7 @@ import fetchChatConvos from "@/composables/atp-wrapper/chat/fetch-chat-convos"
 import fetchChatDeclarations from "@/composables/atp-wrapper/chat/fetch-chat-declarations"
 import fetchChatLogs from "@/composables/atp-wrapper/chat/fetch-chat-logs"
 import fetchChatMessages from "@/composables/atp-wrapper/chat/fetch-chat-messages"
-import fetchCustomBookmarks from "@/composables/atp-wrapper/fetch/fetch-custom-bookmarks"
+import fetchCustomBookmarkPacks from "@/composables/atp-wrapper/fetch/fetch-custom-bookmark-packs"
 import fetchCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-custom-feeds"
 import fetchDid from "@/composables/atp-wrapper/fetch/fetch-did"
 import fetchFeedGenerator from "@/composables/atp-wrapper/fetch/fetch-feed-generator"
@@ -203,7 +203,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchChatDeclarations = fetchChatDeclarations
   fetchChatLogs = fetchChatLogs
   fetchChatMessages = fetchChatMessages
-  fetchCustomBookmarks = fetchCustomBookmarks
+  fetchCustomBookmarkPacks = fetchCustomBookmarkPacks
   fetchCustomFeeds = fetchCustomFeeds
   fetchDid = fetchDid
   fetchFeedGenerator = fetchFeedGenerator

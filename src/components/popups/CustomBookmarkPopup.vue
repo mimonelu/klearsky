@@ -16,17 +16,61 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
   postContainer: ComputedRef<undefined | HTMLElement>
+  customBookmarkCategory: TICustomBookmarkCategory
+  customBookmarkCategories: ComputedRef<Array<TICustomBookmarkCategory>>
+  customBookmarkPosts: ComputedRef<Array<TTPost>>
 }>({
   processing: false,
   postContainer: computed((): undefined | HTMLElement => {
     return postContainer.value?.closest(".popup-body") ?? undefined
   }),
+  customBookmarkCategory: {
+    label: "ALL",
+    code: undefined,
+  },
+  customBookmarkCategories: computed((): Array<TICustomBookmarkCategory> => {
+    return [
+      {
+        label: "ALL",
+        code: undefined,
+      },
+      ...mainState.currentCustomBookmarkPacks
+        .filter((pack) => {
+          return !!pack.bookmark.category
+        })
+        .map((pack) => {
+          return pack.bookmark.category
+        })
+        .filter((category, index, self) => {
+          return index === self.findIndex((target) => {
+            return target!.code === category!.code
+          })
+        }) as Array<TICustomBookmarkCategory>
+    ]
+  }),
+  customBookmarkPosts: computed((): Array<TTPost> => {
+    return mainState.currentCustomBookmarkPacks
+      .filter((pack) => {
+        return (
+          pack.post != null &&
+          (
+            state.customBookmarkCategory.code == null ||
+            state.customBookmarkCategory.code === pack.bookmark.category?.code
+          )
+        )
+      })
+      .map((pack) => {
+        return pack.post
+      }) as Array<TTPost>
+  }),
 })
+
+const popup = ref()
 
 const postContainer = ref()
 
 onBeforeMount(async () => {
-  if (mainState.currentCustomBookmarkPosts.length === 0) {
+  if (mainState.currentCustomBookmarkPacks.length === 0) {
     await fetchContinuousResults("new")
   }
 })
@@ -41,11 +85,11 @@ async function fetchContinuousResults (direction: "new" | "old") {
     return
   }
   state.processing = true
-  const cursor = await mainState.atp.fetchCustomBookmarks(
-    mainState.currentCustomBookmarkPosts,
+  const cursor = await mainState.atp.fetchCustomBookmarkPacks(
+    mainState.currentCustomBookmarkPacks,
     mainState.atp.session!.did,
     CONSTS.LIMIT_OF_FETCH_CUSTOM_BOOKMARKS,
-    direction === "old" ? mainState.currentCustomBookmarkPostsCursor : undefined
+    direction === "old" ? mainState.currentCustomBookmarkPacksCursor : undefined
   )
   state.processing = false
   if (cursor instanceof Error) {
@@ -55,35 +99,40 @@ async function fetchContinuousResults (direction: "new" | "old") {
   if (cursor != null && (
     direction === "old" || (
       direction === "new" &&
-      mainState.currentCustomBookmarkPostsCursor == null
+      mainState.currentCustomBookmarkPacksCursor == null
     )
   )) {
-    mainState.currentCustomBookmarkPostsCursor = cursor
+    mainState.currentCustomBookmarkPacksCursor = cursor
   }
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("customBookmarkPosts", mainState.currentCustomBookmarkPosts)
+  mainState.myWorker!.setSessionCache("customBookmarkPacks", mainState.currentCustomBookmarkPacks)
 }
 
 function scrolledToBottom () {
   fetchContinuousResults("old")
 }
 
+function setCustomBookmarkCategory (category: TICustomBookmarkCategory) {
+  state.customBookmarkCategory = category
+  popup.value.scrollToTop()
+}
+
 function updateThisPostThread (newPosts: Array<TTPost>) {
-  mainState.currentCustomBookmarkPosts.forEach((post: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) => {
-      return post.cid === newPost.cid
+  mainState.currentCustomBookmarkPacks.forEach((pack, index) => {
+    const newPost = newPosts.find((newPost) => {
+      return pack.post?.uri === newPost.cid
     })
     if (newPost != null) {
-      Util.updatePostProps(mainState.currentCustomBookmarkPosts[index], newPost)
+      Util.updatePostProps(mainState.currentCustomBookmarkPacks[index].post as TTPost, newPost)
     }
   })
 }
 
 function removeThisPost (uri: string) {
-  mainState.currentCustomBookmarkPosts = mainState.currentCustomBookmarkPosts
-    .filter((post: TTPost) => {
-      return post.uri !== uri
+  mainState.currentCustomBookmarkPacks = mainState.currentCustomBookmarkPacks
+    .filter((pack) => {
+      return pack.post?.uri !== uri
     })
 }
 
@@ -94,11 +143,11 @@ async function outputJsonForSkyFeed () {
   }))) {
     return
   }
-  const blocks = mainState.currentCustomBookmarkPosts
+  const blocks = state.customBookmarkPosts
     .map((post) => {
       return {
         type: "input",
-        inputType: "post",
+        inputType: "pack",
         postUri: post.uri,
       }
     })
@@ -116,6 +165,7 @@ async function outputJsonForSkyFeed () {
 <template>
   <Popup
     class="custom-bookmark-popup"
+    ref="popup"
     :hasCloseButton="true"
     @close="close"
     @scrolledToBottom="scrolledToBottom"
@@ -135,6 +185,26 @@ async function outputJsonForSkyFeed () {
       </h2>
     </template>
     <template #header-after>
+      <!-- スライダーメニュー -->
+      <div
+        class="slider-menu"
+        ref="sliderMenu"
+      >
+        <template
+          v-for="category of state.customBookmarkCategories"
+          :key="category.code"
+        >
+          <button
+            class="slider-menu__link"
+            :data-is-selected-on-button="category.code === state.customBookmarkCategory.code"
+            @click.stop="setCustomBookmarkCategory(category)"
+          >
+            <SVGIcon name="bookmark" />
+            <span>{{ $t(category.label) }}</span>
+          </button>
+        </template>
+      </div>
+
       <LoadButton
         direction="new"
         :processing="state.processing"
@@ -147,8 +217,8 @@ async function outputJsonForSkyFeed () {
         ref="postContainer"
       >
         <Post
-          v-for="post of mainState.currentCustomBookmarkPosts"
-          :key="post.cid"
+          v-for="post of state.customBookmarkPosts"
+          :key="post.uri"
           position="post"
           :post="post"
           :container="state.postContainer"
@@ -189,5 +259,10 @@ async function outputJsonForSkyFeed () {
 // JSON出力ボタン
 .output-json-button {
   font-size: 1.5rem;
+}
+
+// スライダーメニュー
+.slider-menu {
+  font-size: 0.875rem;
 }
 </style>

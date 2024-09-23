@@ -646,14 +646,25 @@ async function createCustomBookmark (uri: string, cid: string) {
     mainState.openErrorPopup(response, "Post/createCustomBookmark")
     return
   }
-  if (mainState.currentCustomBookmarkPosts.every((post) => {
-    return post.uri !== uri
+  if (mainState.currentCustomBookmarkPacks.every((pack) => {
+    return pack.bookmark.uri !== uri
   })) {
-    mainState.currentCustomBookmarkPosts.unshift(props.post)
+    mainState.currentCustomBookmarkPacks.unshift({
+      bookmark: {
+        createdAt: new Date().toISOString(),
+        uri: props.post.uri,
+        cid: props.post.cid,
+        category: {
+          label: "test",
+          code: "test",
+        },
+      },
+      post: props.post,
+    })
   }
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("customBookmarkPosts", mainState.currentCustomBookmarkPosts)
+  mainState.myWorker!.setSessionCache("customBookmarkPacks", mainState.currentCustomBookmarkPacks)
 }
 
 async function deleteCustomBookmark (uri: string) {
@@ -667,13 +678,13 @@ async function deleteCustomBookmark (uri: string) {
     mainState.openErrorPopup(response, "Post/deleteCustomBookmark")
     return
   }
-  mainState.currentCustomBookmarkPosts = mainState.currentCustomBookmarkPosts
-    .filter((post) => {
-      return post.uri !== uri
+  mainState.currentCustomBookmarkPacks = mainState.currentCustomBookmarkPacks
+    .filter((pack) => {
+      return pack.bookmark.uri !== uri
     })
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("customBookmarkPosts", mainState.currentCustomBookmarkPosts)
+  mainState.myWorker!.setSessionCache("customBookmarkPacks", mainState.currentCustomBookmarkPacks)
 }
 
 // 画像ポップアップ
