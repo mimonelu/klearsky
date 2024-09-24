@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import MenuTickerCopyTextWrapper from "@/components/menus/CopyTextWrapper.vue"
-import MenuTickerDelteCustomBookmark from "@/components/menus/DelteCustomBookmark.vue"
+import MenuTickerDeleteCustomBookmark from "@/components/menus/DeleteCustomBookmark.vue"
 import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
 import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.vue"
@@ -168,7 +168,7 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       />
 
       <!-- カスタムブックマークを削除 -->
-      <MenuTickerDelteCustomBookmark
+      <MenuTickerDeleteCustomBookmark
         :uri="post.uri"
         @close="emit('close')"
       />
