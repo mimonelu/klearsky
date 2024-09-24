@@ -569,6 +569,11 @@ interface MainState {
   openCustomBookmarkPopup: () => void
   closeCustomBookmarkPopup: () => void
 
+  // ポップアップ - カスタムブックマーク管理ポップアップ
+  customBookmarkManagementPopupProps: TICustomBookmarkManagementPopupProps
+  openCustomBookmarkManagementPopup: Function
+  closeCustomBookmarkManagementPopup: () => void
+
   // ポップアップ - ポスト送信ポップアップ
   sendPostPopupProps: TTSendPostPopupParams
   sendPostPopupProcessing: boolean

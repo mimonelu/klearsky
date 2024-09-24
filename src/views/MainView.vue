@@ -12,6 +12,8 @@ import ChatListPopup from "@/components/popups/ChatListPopup.vue"
 import ChatMembersSelectPopup from "@/components/popups/ChatMembersSelectPopup.vue"
 import ChatMessagePopover from "@/components/popovers/ChatMessagePopover.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
+import CustomBookmarkPopup from "@/components/popups/CustomBookmarkPopup.vue"
+import CustomBookmarkManagementPopup from "@/components/popups/CustomBookmarkManagementPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
 import FeedCardPopover from "@/components/popovers/FeedCardPopover.vue"
@@ -37,7 +39,6 @@ import MyFeedsSortPopover from "@/components/popovers/MyFeedsSortPopover.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
-import CustomBookmarkPopup from "@/components/popups/CustomBookmarkPopup.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
 import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
@@ -1031,6 +1032,15 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
         <CustomBookmarkPopup
           v-if="state.customBookmarkPopupDisplay"
           @close="state.closeCustomBookmarkPopup"
+        />
+      </Transition>
+
+      <!-- カスタムブックマーク管理ポップアップ -->
+      <Transition>
+        <CustomBookmarkManagementPopup
+          v-if="state.customBookmarkManagementPopupProps.display"
+          v-bind="state.customBookmarkManagementPopupProps"
+          @close="state.closeCustomBookmarkManagementPopup"
         />
       </Transition>
 

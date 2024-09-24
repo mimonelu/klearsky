@@ -113,7 +113,7 @@ function setCustomBookmarkTag (tag?: string) {
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.currentCustomBookmarkPacks.forEach((pack, index) => {
     const newPost = newPosts.find((newPost) => {
-      return pack.post?.uri === newPost.cid
+      return newPost.uri === pack.post?.uri
     })
     if (newPost != null) {
       Util.updatePostProps(mainState.currentCustomBookmarkPacks[index].post as TTPost, newPost)

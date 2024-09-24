@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import MenuTickerCopyTextWrapper from "@/components/menus/CopyTextWrapper.vue"
+import MenuTickerDelteCustomBookmark from "@/components/menus/DelteCustomBookmark.vue"
 import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
 import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.vue"
+import MenuTickerOpenCustomBookmarkManagementPopup from "@/components/menus/OpenCustomBookmarkManagementPopup.vue"
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"
 import MenuTickerOpenReactionControlPopup from "@/components/menus/OpenReactionControlPopup.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
@@ -147,7 +149,7 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
         @close="emit('close')"
       />
 
-      <!-- リストに追加する -->
+      <!-- リストで管理する -->
       <MenuTickerOpenListUserManagementPopup
         :user="post.author"
         @close="emit('close')"
@@ -156,6 +158,18 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       <!-- チャットを開始する -->
       <MenuTickerOpenChatConvoPopup
         :user="post.author"
+        @close="emit('close')"
+      />
+
+      <!-- カスタムブックマークを管理 -->
+      <MenuTickerOpenCustomBookmarkManagementPopup
+        :post="post"
+        @close="emit('close')"
+      />
+
+      <!-- カスタムブックマークを削除 -->
+      <MenuTickerDelteCustomBookmark
+        :uri="post.uri"
         @close="emit('close')"
       />
 

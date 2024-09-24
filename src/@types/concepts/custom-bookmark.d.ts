@@ -9,3 +9,8 @@ interface TICustomBookmark {
   cid?: string
   tags?: Array<string>
 }
+
+interface TICustomBookmarkManagementPopupProps {
+  display: boolean
+  post?: TTPost
+}

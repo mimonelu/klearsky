@@ -21,43 +21,19 @@ const state = reactive<{
   }),
 })
 
-async function createCustomBookmark () {
-  Util.blurElement()
-  emit("close")
-  mainState.postPopoverCallback?.("createCustomBookmark")
-}
-
 async function deleteCustomBookmark () {
   Util.blurElement()
   emit("close")
   mainState.postPopoverCallback?.("deleteCustomBookmark")
 }
-
 </script>
 
 <template>
   <button
-    v-if="!state.isCustomBookmark"
-    @click.stop="createCustomBookmark"
-  >
-    <SVGIcon name="bookmark" />
-    <span>{{ $t("createCustomBookmark") }}</span>
-  </button>
-  <button
-    v-else
+    v-if="state.isCustomBookmark"
     @click.stop="deleteCustomBookmark"
   >
     <SVGIcon name="bookmarkOff" />
     <span>{{ $t("deleteCustomBookmark") }}</span>
   </button>
 </template>
-
-<style lang="scss" scoped>
-.toggle-custom-bookmark{
-  &[data-detached="false"] {
-    .svg-icon {
-      fill: rgb(var(--notice-color));
-    }
-  }
-}
-</style>

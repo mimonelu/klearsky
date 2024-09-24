@@ -638,6 +638,14 @@ export const state: MainState = reactive<MainState>({
   openCustomBookmarkPopup: openCustomBookmarkPopup,
   closeCustomBookmarkPopup: closeCustomBookmarkPopup,
 
+  // ポップアップ - カスタムブックマーク管理ポップアップ
+  customBookmarkManagementPopupProps: {
+    display: false,
+    post: undefined,
+  },
+  openCustomBookmarkManagementPopup: openCustomBookmarkManagementPopup,
+  closeCustomBookmarkManagementPopup: closeCustomBookmarkManagementPopup,
+
   // ポップアップ - ポスト送信ポップアップ
   sendPostPopupProps: {
     display: false,
@@ -2290,6 +2298,17 @@ function openCustomBookmarkPopup () {
 
 function closeCustomBookmarkPopup () {
   state.customBookmarkPopupDisplay = false
+}
+
+// ポップアップ - カスタムブックマーク管理ポップアップ
+
+function openCustomBookmarkManagementPopup (props: TICustomBookmarkManagementPopupProps) {
+  state.customBookmarkManagementPopupProps.post = props.post
+  state.customBookmarkManagementPopupProps.display = true
+}
+
+function closeCustomBookmarkManagementPopup () {
+  state.customBookmarkManagementPopupProps.display = false
 }
 
 // ポップアップ - ポスト送信ポップアップ
