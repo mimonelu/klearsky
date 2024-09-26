@@ -176,8 +176,12 @@ async function activate (type: string) {
     }
   }
   mainState.loaderDisplay = false
-  if (response == null || response instanceof Error) {
-    // TODO:
+  if (response == null) {
+    mainState.openErrorPopup("apiError", "APICallWrapper/activate")
+    return
+  }
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "APICallWrapper/activate")
     return
   }
   if (response instanceof Response) {
