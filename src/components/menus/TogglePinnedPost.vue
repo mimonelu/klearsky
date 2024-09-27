@@ -10,16 +10,16 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-async function updatePinnedPost (uri?: string) {
+async function updatePinnedPost (uri?: string, cid?: string) {
   emit("close")
   if (mainState.centerLoaderDisplay) {
     return
   }
   mainState.centerLoaderDisplay = true
-  const pinned = await mainState.atp.updatePinnedPost(uri)
+  const response = await mainState.atp.updatePinnedPost(uri, cid)
   mainState.centerLoaderDisplay = false
-  if (pinned instanceof Error) {
-    mainState.openErrorPopup(pinned, "TogglePinnedPost/updatePinnedPost")
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "TogglePinnedPost/updatePinnedPost")
     return
   }
   if (mainState.userProfile == null) {
@@ -27,8 +27,11 @@ async function updatePinnedPost (uri?: string) {
   }
 
   // 固定ポスト作成時
-  if (pinned) {
-    mainState.userProfile.pinnedPost = uri
+  if (response) {
+    mainState.userProfile.pinnedPost = {
+      uri: uri as string,
+      cid: cid as string,
+    }
     if (mainState.currentProfile?.did === mainState.userProfile.did) {
       mainState.currentAuthorPinnedPost = props.post
     }
@@ -46,7 +49,7 @@ async function updatePinnedPost (uri?: string) {
 <template>
   <!-- 固定ポストの解除 -->
   <button
-    v-if="mainState.userProfile?.pinnedPost === post.uri"
+    v-if="mainState.userProfile?.pinnedPost?.uri === post.uri"
     type="button"
     @click.prevent.stop="updatePinnedPost()"
   >
@@ -58,7 +61,7 @@ async function updatePinnedPost (uri?: string) {
   <button
     v-else
     type="button"
-    @click.prevent.stop="updatePinnedPost(post.uri)"
+    @click.prevent.stop="updatePinnedPost(post.uri, post.cid)"
   >
     <SVGIcon name="pinOutline" />
     <span>{{ $t("pinnedPostOn") }}</span>

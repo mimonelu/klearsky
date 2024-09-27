@@ -12,12 +12,10 @@ type TTProfile = {
   handle: string
   indexedAt?: string
   labels?: Array<TTLabel>
+  pinnedPost?: TTCidUri
   postsCount: number
   joinedViaStarterPack?: TIStarterPack
   viewer: TTUserViewer
-
-  // 固定ポスト
-  pinnedPost?: string
 
   // WhiteWind
   __whiteWinds?: Array<TICommonRecord>
@@ -31,7 +29,5 @@ type TTUpdateProfileParams = {
   detachAvatar: Array<boolean>
   banner: null | Array<File>
   detachBanner: Array<boolean>
-
-  // 固定ポスト
-  pinnedPost?: string
+  pinnedPost?: TTCidUri
 }

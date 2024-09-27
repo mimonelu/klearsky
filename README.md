@@ -25,7 +25,7 @@ Klearsky is deployed on Cloudflare.
 ## Custom fields
 * `POST.record.via?: string` Client name (Klearsky)
 * `POST.record.lightning?: string` Used in Zap! link
-* `PROFILE.record.pinnedPost?: string` Used in pinned post
+* ~~`PROFILE.record.pinnedPost?: string` Used in pinned post~~
 
 ## External linkage services
 * MyMemory: 自動翻訳で使用。ユーザーのメールアドレスを自動付与している

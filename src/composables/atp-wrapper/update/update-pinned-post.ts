@@ -2,7 +2,8 @@ import type { AppBskyActorProfile } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
-  uri?: string
+  uri?: string,
+  cid?: string
 ): Promise<Error | boolean> {
   if (this.agent == null) {
     return Error("noAgentError")
@@ -12,13 +13,13 @@ export default async function (
     await this.agent.upsertProfile((existing?: any): AppBskyActorProfile.Record => {
       // プロフィールレコード未作成時
       if (existing == null) {
-        return { pinnedPost: uri }
+        return { pinnedPost: { uri, cid } }
       }
 
       // 固定ポストフィールドの作成
       if (uri != null) {
         pinned = true
-        existing.pinnedPost = uri
+        existing.pinnedPost = { uri, cid }
 
       // 固定ポストフィールドの削除
       } else {
