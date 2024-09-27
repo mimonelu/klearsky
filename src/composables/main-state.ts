@@ -1219,21 +1219,8 @@ async function updateCurrentLogAudit () {
 
 // 固定ポストの取得
 async function fetchPinnedPost (profile?: TTProfile) {
-  if (profile == null) {
-    return
-  }
-
-  // プロフィールレコード（固定ポストURI）の取得
-  const records = await state.atp.fetchRecords(profile.did, "app.bsky.actor.profile")
-  if (records instanceof Error) {
-    return
-  }
-  const uri = records.records?.[0]?.value?.pinnedPost
-  if (uri != null) {
-    profile.pinnedPost = uri
-
-    // 固定ポストの取得
-    const posts = await state.atp.fetchPosts([uri])
+  if (profile?.pinnedPost?.uri != null) {
+    const posts = await state.atp.fetchPosts([profile.pinnedPost.uri])
     if (posts instanceof Error) {
       // TODO:
       // state.openErrorPopup(posts, "mainState/fetchPinnedPost")
@@ -1243,7 +1230,6 @@ async function fetchPinnedPost (profile?: TTProfile) {
       state.currentAuthorPinnedPost = posts[0]
     }
   } else {
-    delete profile.pinnedPost
     state.currentAuthorPinnedPost = undefined
   }
 }

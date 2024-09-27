@@ -232,7 +232,7 @@ interface TIAtpWrapper {
   updateNotificationSeen
     (seenAtDate?: Date): Promise<Error | undefined>
   updatePinnedPost
-    (uri?: string): Promise<Error | boolean>
+    (uri?: string, cid?: string): Promise<Error | boolean>
   updatePostgate
     (this: TIAtpWrapper, post: string, allow: boolean, detachedEmbeddingUris?: Array<string>): Promise<Error | TTCidUri>
   updatePreferences 
