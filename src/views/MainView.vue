@@ -37,6 +37,7 @@ import MutingUsersPopup from "@/components/popups/MutingUsersPopup.vue"
 import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
 import MyFeedsSortPopover from "@/components/popovers/MyFeedsSortPopover.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
+import MyWordPopup from "@/components/popups/MyWordPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
@@ -1260,6 +1261,15 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
           :state="state.selectLabelsPopupState"
           @close="state.closeSelectLabelsPopup"
           @change=""
+        />
+      </Transition>
+
+      <!-- マイワードポップアップ -->
+      <Transition>
+        <MyWordPopup
+          v-if="state.myWordPopupProps.display"
+          v-bind="state.myWordPopupProps"
+          @close="state.closeMyWordPopup"
         />
       </Transition>
 

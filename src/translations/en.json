@@ -113,6 +113,12 @@
   "errorInvalidChatToken": "Failed to start chat.\nPlease grant chat privileges to App passwords if you are using that.",
   "chatUrlNotification": "The URL format is not a post AT URI.",
 
+  "myWord": "My words",
+  "newMyWord": "New my word",
+  "noMyWord": "No my words. Please add it.",
+  "deleteMyWord": "Delete my word",
+  "deleteMyWordMessage": "This my word will be deleted. Are you sure?",
+
   "success": "Process Completion",
   "successMessage": "The process has been successfully completed.",
 

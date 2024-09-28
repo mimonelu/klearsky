@@ -85,6 +85,8 @@ const easyFormProps: TTEasyForm = {
       rows: 6,
       hasMentionSuggestion: true,
       focus: true,
+      onBlur: onBlurOrInputText,
+      onInput: onBlurOrInputText,
     },
     {
       state: easyFormState,
@@ -357,6 +359,37 @@ function openListMentionPopup () {
   mainState.openListMentionPopup()
 }
 
+// マイワード
+
+let textareaSelectionStart = 0
+
+mainState.myWordPopupCallback = (myWord: string) => {
+  const textarea = getTextarea()
+  if (textarea != null) {
+    const before = easyFormState.text.substring(0, textareaSelectionStart)
+    const after = easyFormState.text.substring(textareaSelectionStart)
+    if (before !== "" && !before.match(/[\s\r\n]$/)) {
+      myWord = " " + myWord
+    }
+    if (after !== "" && !after.match(/^[\s\r\n]/)) {
+      myWord += " "
+    }
+    easyFormState.text = before + myWord + after
+    textareaSelectionStart += myWord.length
+  }
+}
+
+function onBlurOrInputText () {
+  const textarea = getTextarea()
+  if (textarea != null) {
+    textareaSelectionStart = textarea.selectionStart
+  }
+}
+
+function getTextarea (): null | HTMLTextAreaElement {
+  return document.querySelector("#easy-form--default__0")
+}
+
 // プレビューリンクカード
 const PreviewLinkCardFeature: {
   timer?: any
@@ -529,6 +562,15 @@ const PreviewLinkCardFeature: {
               <SVGIcon name="list" />
               <span>{{ $t("listMention") }}</span>
               <b v-if="mainState.listMentionPopupProps.list != null">ON</b>
+            </button>
+
+            <!-- マイワードポップアップトリガー -->
+            <button
+              class="button--bordered my-word-button"
+              @click.prevent="mainState.openMyWordPopup('select')"
+            >
+              <SVGIcon name="alphaA" />
+              <span>{{ $t("myWord") }}</span>
             </button>
 
             <!-- ポスト日時選択ポップアップトリガー -->

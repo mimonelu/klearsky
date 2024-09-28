@@ -658,6 +658,15 @@ export const state: MainState = reactive<MainState>({
   openSendPostPopup: openSendPostPopup,
   closeSendPostPopup: closeSendPostPopup,
 
+  // ポップアップ - マイワードポップアップ
+  myWordPopupProps: {
+    display: false,
+    mode: "select",
+  },
+  openMyWordPopup: openMyWordPopup,
+  closeMyWordPopup: closeMyWordPopup,
+  myWordPopupCallback: undefined,
+
   // ポップアップ - ポスト日時選択ポップアップ
   postDatePopupDisplay: false,
   postDatePopupDate: undefined,
@@ -823,6 +832,9 @@ function saveSettings () {
   }
   if (state.settings[did].notificationFetchInterval == null) {
     state.settings[did].notificationFetchInterval = 30000
+  }
+  if (state.settings[did].myWords == null) {
+    state.settings[did].myWords = []
   }
   if (state.settings[did].wordMute == null) {
     state.settings[did].wordMute = []
@@ -2330,6 +2342,17 @@ async function closeSendPostPopup (done: boolean, hidden: boolean) {
     state.listMentionPopupProps.dids.splice(0)
   }
   state.sendPostPopupProps.visibility = false
+}
+
+// ポップアップ - マイワードポップアップ
+
+function openMyWordPopup (props?: TIMyWordPopupProps) {
+  state.myWordPopupProps.mode = props?.mode ?? "select"
+  state.myWordPopupProps.display = true
+}
+
+function closeMyWordPopup () {
+  state.myWordPopupProps.display = false
 }
 
 // ポップアップ - ポスト日時選択ポップアップ

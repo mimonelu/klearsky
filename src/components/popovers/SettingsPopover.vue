@@ -84,6 +84,10 @@ function process (type: string) {
       mainState.openLabelerListPopup("myLabeler", mainState.myLabeler!.labelers)
       break
     }
+    case "myWord": {
+      mainState.openMyWordPopup({ mode: 'edit' })
+      break
+    }
     case "customBookmark": {
       mainState.openCustomBookmarkPopup()
       break
@@ -192,6 +196,16 @@ function process (type: string) {
       >
         <SVGIcon name="labeler" />
         <span>{{ $t("myLabeler") }}</span>
+      </button>
+
+      <!-- マイワードポップアップトリガー -->
+      <button
+        type="button"
+        data-type="myWord"
+        @click.prevent="process('myWord')"
+      >
+        <SVGIcon name="alphaA" />
+        <span>{{ $t("myWord") }}</span>
       </button>
 
       <!-- カスタムブックマークポップアップトリガー -->
@@ -312,6 +326,7 @@ function process (type: string) {
   button[data-type="postLanguages"] > .svg-icon { /**/ }
   button[data-type="myFeeds"] > .svg-icon { --icon-color: var(--feed-color); }
   button[data-type="myList"] > .svg-icon { --icon-color: var(--list-color); }
+  button[data-type="myWord"] > .svg-icon { /**/ }
   button[data-type="myLabeler"] > .svg-icon { --icon-color: var(--label-color); }
   button[data-type="customBookmark"] > .svg-icon { --icon-color: var(--post-color); }
   button[data-type="mutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }

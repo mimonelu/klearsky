@@ -580,7 +580,13 @@ interface MainState {
   openSendPostPopup: (params?: TTSendPostPopupParams) => Promise<boolean>
   closeSendPostPopup: (done: boolean, hidden: boolean) => void
 
-  // ポップアップ - ポスト日時選択ポップアップ
+  // ポップアップ - マイワードポップアップ
+  myWordPopupProps: TIMyWordPopupProps
+  openMyWordPopup: Function
+  closeMyWordPopup: () => void
+  myWordPopupCallback?: (myWord: string) => void
+
+// ポップアップ - ポスト日時選択ポップアップ
   postDatePopupDisplay: boolean
   postDatePopupDate?: string
   openPostDatePopup: (payload: MouseEvent) => void

@@ -113,6 +113,12 @@
   "errorInvalidChatToken": "チャットの開始に失敗しました。\nアプリパスワードを使用中の場合はチャット権限を付与してください。",
   "chatUrlNotification": "URLの形式がポストのAT URIではありません。",
 
+  "myWord": "マイワード",
+  "newMyWord": "新しいマイワード",
+  "noMyWord": "マイワードがありません。追加してください。",
+  "deleteMyWord": "マイワードの削除",
+  "deleteMyWordMessage": "このマイワードを削除します。よろしいですか？",
+
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
 
