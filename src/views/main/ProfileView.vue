@@ -1051,6 +1051,9 @@ function removeThisPost () {
 }
 
 .description {
+  background-color: rgb(var(--fg-color), 0.0625);
+  border-radius: var(--border-radius-middle);
+  padding: 1rem;
   line-height: var(--line-height-high);
   user-select: text;
   white-space: pre-wrap;

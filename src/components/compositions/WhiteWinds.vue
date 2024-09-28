@@ -99,7 +99,7 @@ const state = reactive<{
     grid-gap: 0.5em;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 0.5rem;
+    padding: 0.5rem 0;
     @include scroll-bar(transparent);
   }
 

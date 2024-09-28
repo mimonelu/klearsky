@@ -91,18 +91,30 @@ function getLabelerEndpoint (item: any): undefined | string {
           <!-- エンドポイント -->
           <li class="endpoint">
             <!-- ATProto エンドポイント -->
-            <div class="endpoint__atproto">
-              <SVGIcon name="database" />
-              <span>{{ getAtProtoEndpoint(item) }}</span>
+            <div>
+              <a
+                class="endpoint__atproto"
+                :href="getAtProtoEndpoint(item)"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <SVGIcon name="database" />
+                <span>{{ getAtProtoEndpoint(item) }}</span>
+              </a>
             </div>
 
-            <!-- ラベラーエンドポイント -->
-            <div
-              v-if="getLabelerEndpoint(item)"
-              class="endpoint__labeler"
-            >
-              <SVGIcon name="labeler" />
-              <span>{{ getLabelerEndpoint(item) }}</span>
+            <div>
+              <!-- ラベラーエンドポイント -->
+              <a
+                v-if="getLabelerEndpoint(item)"
+                class="endpoint__labeler"
+                :href="getLabelerEndpoint(item)"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <SVGIcon name="labeler" />
+                <span>{{ getLabelerEndpoint(item) }}</span>
+              </a>
             </div>
           </li>
         </ol>
@@ -147,13 +159,19 @@ function getLabelerEndpoint (item: any): undefined | string {
   .endpoint {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     grid-gap: 0.25rem;
 
     &__atproto,
     &__labeler {
+      cursor: pointer;
       display: flex;
       align-items: center;
       grid-gap: 0.375rem;
+      &:hover {
+        text-decoration: underline;
+        text-underline-offset: 0.25em;
+      }
 
       & > .svg-icon {
         font-size: 0.875rem;
@@ -167,23 +185,23 @@ function getLabelerEndpoint (item: any): undefined | string {
 
     // ATProto エンドポイント
     &__atproto {
-      & > .svg-icon {
-        fill: rgb(var(--fg-color), 0.5);
-      }
+      color: rgb(var(--accent-color));
 
-      & > span {
-        color: rgb(var(--fg-color), 0.75);
+      & > .svg-icon {
+        fill: rgb(var(--accent-color), 0.75);
       }
     }
 
     // ラベラーエンドポイント
     &__labeler {
-      & > .svg-icon {
-        fill: rgb(var(--label-color));
+      color: rgb(var(--label-color));
+
+      &:hover {
+        border-color: rgb(var(--label-color));
       }
 
-      & > span {
-        color: rgb(var(--label-color));
+      & > .svg-icon {
+        fill: rgb(var(--label-color));
       }
     }
   }
