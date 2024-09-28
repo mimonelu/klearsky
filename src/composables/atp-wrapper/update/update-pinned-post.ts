@@ -13,7 +13,9 @@ export default async function (
     await this.agent.upsertProfile((existing?: any): AppBskyActorProfile.Record => {
       // プロフィールレコード未作成時
       if (existing == null) {
-        return { pinnedPost: { uri, cid } }
+        return uri != null && cid != null
+          ? { pinnedPost: { uri, cid } }
+          : {}
       }
 
       // 固定ポストフィールドの作成

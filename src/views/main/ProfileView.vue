@@ -281,13 +281,13 @@ function onActivateAccountMaskToggle () {
 // 固定ポスト
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
-  if (mainState.currentAuthorPinnedPost != null) {
-    Util.updatePostProps(mainState.currentAuthorPinnedPost, newPosts[0])
+  if (mainState.currentAuthorPostOfPinnedPost != null) {
+    Util.updatePostProps(mainState.currentAuthorPostOfPinnedPost, newPosts[0])
   }
 }
 
 function removeThisPost () {
-  mainState.currentAuthorPinnedPost = undefined
+  mainState.currentAuthorPostOfPinnedPost = undefined
 }
 </script>
 
@@ -716,10 +716,10 @@ function removeThisPost () {
     <Post
       v-if="
         state.isPagePostFeeds &&
-        mainState.currentAuthorPinnedPost != null
+        mainState.currentAuthorPostOfPinnedPost != null
       "
       position="post"
-      :post="mainState.currentAuthorPinnedPost"
+      :post="mainState.currentAuthorPostOfPinnedPost"
       class="pinned-post"
       @updateThisPostThread="updateThisPostThread"
       @removeThisPost="removeThisPost"

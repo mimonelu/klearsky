@@ -150,7 +150,7 @@ export const state: MainState = reactive<MainState>({
   currentAuthorLikesCursor: undefined,
   currentAuthorLists: [],
   currentAuthorListsCursor: undefined,
-  currentAuthorPinnedPost: undefined,
+  currentAuthorPostOfPinnedPost: undefined,
   currentAuthorStarterPacks: [],
   currentAuthorStarterPacksCursor: undefined,
   currentFollowers: [],
@@ -1148,7 +1148,7 @@ function resetProfileState () {
   resetArray(state, "currentFollowings")
   state.currentFollowingsCursor = undefined
   resetArray(state, "currentSuggestedFollows")
-  state.currentAuthorPinnedPost = undefined
+  state.currentAuthorPostOfPinnedPost = undefined
 }
 
 function resetArray (state: any, key: string) {
@@ -1195,7 +1195,7 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
   state.currentFollowers.splice(0)
   state.currentFollowings.splice(0)
   state.currentSuggestedFollows.splice(0)
-  state.currentAuthorPinnedPost = undefined
+  state.currentAuthorPostOfPinnedPost = undefined
   const currentProfile = await state.atp.fetchProfile(did)
   if (currentProfile instanceof Error) {
     state.currentProfile = null
@@ -1242,10 +1242,10 @@ async function fetchPinnedPost (profile?: TTProfile) {
       return
     }
     if (posts[0] != null) {
-      state.currentAuthorPinnedPost = posts[0]
+      state.currentAuthorPostOfPinnedPost = posts[0]
     }
   } else {
-    state.currentAuthorPinnedPost = undefined
+    state.currentAuthorPostOfPinnedPost = undefined
   }
 }
 

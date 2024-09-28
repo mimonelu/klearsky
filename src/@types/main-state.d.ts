@@ -105,7 +105,7 @@ interface MainState {
   currentAuthorLikesCursor?: string
   currentAuthorLists: Array<TTList>
   currentAuthorListsCursor?: string
-  currentAuthorPinnedPost?: TTPost
+  currentAuthorPostOfPinnedPost?: TTPost
   currentAuthorStarterPacks: Array<TIStarterPack>
   currentAuthorStarterPacksCursor?: string
   currentFollowers: Array<TTUser>

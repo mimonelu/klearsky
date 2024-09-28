@@ -27,6 +27,7 @@ type TTPost = {
     replyDisabled?: boolean
     threadMuted?: boolean
     embeddingDisabled?: boolean
+    pinned?: boolean
     [k: string]: unknown
   }
   [k: string]: unknown
