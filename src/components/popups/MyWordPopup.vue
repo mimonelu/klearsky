@@ -26,7 +26,7 @@ const state = reactive<{
 }>({
   mode: props.mode,
   easyFormProps: {
-    gridColumns: "1fr auto",
+    gridColumns: "auto 1fr auto",
     hasSubmitButton: false,
     submitCallback () {
       addNewMyWord(formState.newMyWord)
@@ -36,7 +36,7 @@ const state = reactive<{
       {
         state: formState,
         model: "newMyWord",
-        type: "text",
+        type: "textarea",
         maxlength: 300,
         maxLengthIndicator: true,
         maxLengthIndicatorByGrapheme: true,
@@ -45,8 +45,21 @@ const state = reactive<{
       },
       {
         type: "button",
-        classes: "button--bordered",
+        classes: "button--important",
+        icon: "remove",
+        buttonLabel: $t("reset"),
+        onClick () {
+          resetNewMyWord()
+        },
+      },
+      {
+        type: "space",
+      },
+      {
+        type: "button",
+        classes: "button",
         icon: "plus",
+        buttonLabel: $t("add"),
         onClick () {
           addNewMyWord(formState.newMyWord)
         },
@@ -61,6 +74,17 @@ function close () {
 
 function toggleMode () {
   state.mode = state.mode === 'edit' ? 'select' : 'edit'
+}
+
+async function resetNewMyWord () {
+  if (formState.newMyWord === "") {
+    return
+  }
+  if (await mainState.openConfirmationPopup({
+    text: $t("resetTextarea"),
+  })) {
+    formState.newMyWord = ""
+  }
 }
 
 function addNewMyWord (newMyWord: string) {
@@ -96,10 +120,11 @@ async function removeMyWord (index: number) {
 }
 
 function insertMyWord (myWord: string) {
-  if (state.mode !== "select") {
-    return
+  if (state.mode === "edit") {
+    formState.newMyWord = myWord
+  } else if (state.mode === "select") {
+    mainState.myWordPopupCallback?.(myWord)
   }
-  mainState.myWordPopupCallback?.(myWord)
 }
 </script>
 <template>
@@ -145,21 +170,23 @@ function insertMyWord (myWord: string) {
         class="my-word-list"
       >
         <!-- マイワード -->
-        <div
+        <button
           v-for="myWord, index of mainState.currentSetting.myWords"
           :key="index"
+          type="button"
           class="my-word"
           @click.prevent="insertMyWord(myWord)"
         >
           <div class="my-word__text">{{ myWord }}</div>
           <button
             v-if="state.mode === 'edit'"
+            type="button"
             class="button--plane my-word__remove-button"
             @click.prevent="removeMyWord(index)"
           >
             <SVGIcon name="cross" />
           </button>
-        </div>
+        </button>
       </div>
     </template>
   </Popup>
@@ -180,6 +207,12 @@ function insertMyWord (myWord: string) {
       align-items: flex-start;
     }
   }
+
+  &:deep() {
+    dl:first-child {
+      grid-column-end: span 3;
+    }
+  }
 }
 
 .my-word-list {
@@ -192,6 +225,7 @@ function insertMyWord (myWord: string) {
 .my-word {
   border: 2px solid rgb(var(--fg-color), 0.125);
   border-radius: var(--border-radius-middle);
+  cursor: pointer;
   display: flex;
 
   & > .svg-icon {

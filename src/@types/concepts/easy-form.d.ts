@@ -10,7 +10,7 @@ type TTEasyForm = {
 
 type TTEasyFormItem = {
   name?: string // ユーザー用
-  type: string
+  type: TTEasyFormItemType
   accept?: string
   attrs?: { [k: string]: any }
   autocomplete?: string
@@ -49,3 +49,17 @@ type TTEasyFormItem = {
   onInput?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onUpdate?: (item: TTEasyFormItem, form: TTEasyForm) => void
 }
+
+type TTEasyFormItemType =
+  "datetime-local" |
+  "password" |
+  "text" |
+  "url" |
+  "textarea" |
+  "checkbox" |
+  "radio" |
+  "select" |
+  "file" |
+  "button" |
+  "space" |
+  string
