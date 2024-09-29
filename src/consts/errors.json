@@ -9,6 +9,7 @@
     "Account has been suspended": "suspendedAccount",
     "Account is deactivated": "deactivatedAccount",
     "Profile not found": "notFoundAccount",
+    "The server gave an invalid response and may be out of date.": "invalidResponse",
     "Unable to resolve handle": "unresolvedAccount"
   }
 }

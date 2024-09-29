@@ -51,6 +51,7 @@
   "suspendedAccount": "(Suspended account)",
   "deactivatedAccount": "(Deactivated account)",
   "notFoundAccount": "(Account not found)",
+  "invalidResponse": "(Invalid response)",
   "unresolvedAccount": "(Unresolved handle)",
   "share": "Share",
   "postFeatures": "Features",

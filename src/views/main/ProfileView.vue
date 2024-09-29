@@ -480,7 +480,10 @@ function removeThisPost () {
 
             <!-- 説明文 -->
             <HtmlText
-              v-if="state.accountContentDisplay"
+              v-if="
+                state.accountContentDisplay &&
+                !!mainState.currentProfile?.description
+              "
               class="description"
               dir="auto"
               :text="mainState.currentProfile?.description ?? '&emsp;'"

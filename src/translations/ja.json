@@ -51,6 +51,7 @@
   "suspendedAccount": "(停止中のアカウント)",
   "deactivatedAccount": "(無効化されたアカウント)",
   "notFoundAccount": "(存在しないアカウント)",
+  "invalidResponse": "(不正なレスポンス)",
   "unresolvedAccount": "(解決できないハンドル)",
   "share": "共有する",
   "postFeatures": "機能",
