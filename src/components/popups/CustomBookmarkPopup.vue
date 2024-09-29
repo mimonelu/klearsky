@@ -200,7 +200,10 @@ async function outputJsonForSkyFeed () {
         class="slider-menu"
         ref="sliderMenu"
       >
-        <template v-for="tag of state.customBookmarkTags">
+        <template
+          v-for="tag, tagIndex of state.customBookmarkTags"
+          :key="tagIndex"
+        >
           <button
             class="slider-menu__link"
             :data-is-selected-on-button="tag === state.customBookmarkTag"
@@ -223,36 +226,50 @@ async function outputJsonForSkyFeed () {
         class="custom-bookmark-popup__posts"
         ref="postContainer"
       >
-        <template v-for="pack of state.customBookmarkPacks">
-          <Post
-            v-if="pack.post != null"
-            position="post"
-            :post="pack.post"
-            :container="state.postContainer"
-            :hasReplyIcon="pack.post.record.reply != null"
-            :hasQuoteRepostIcon="pack.post.record.embed?.record != null"
-            @click.exact="close"
-            @updateThisPostThread="updateThisPostThread"
-            @removeThisPost="removeThisPost"
-            @onActivateHashTag="close"
-          />
-
-          <!-- 存在しないポスト -->
-          <div
-            v-else
-            class="post-not-exists"
-          >
-            <p class="post-not-exists__message">{{ $t("postNotFound") }}</p>
-            <p class="post-not-exists__uri">{{ pack.bookmark.uri }}</p>
-            <button
-              type="button"
-              class="post-not-exists__button button--important"
-              @click.stop="deleteCustomBookmark(pack.bookmark.uri)"
-            >
-              <SVGIcon name="remove" />
-              <span>{{ $t("delete") }}</span>
-            </button>
+        <!-- ブックマークなし -->
+        <template v-if="state.customBookmarkPacks.length === 0">
+          <div class="no-bookmark textlabel">
+            <div class="textlabel__text">
+              <SVGIcon name="alert" />{{ $t("noCustomBookmark") }}
+            </div>
           </div>
+        </template>
+
+        <template v-else>
+          <template
+            v-for="pack of state.customBookmarkPacks"
+            :key="pack.bookmark.uri"
+          >
+            <Post
+              v-if="pack.post != null"
+              position="post"
+              :post="pack.post"
+              :container="state.postContainer"
+              :hasReplyIcon="pack.post.record.reply != null"
+              :hasQuoteRepostIcon="pack.post.record.embed?.record != null"
+              @click.exact="close"
+              @updateThisPostThread="updateThisPostThread"
+              @removeThisPost="removeThisPost"
+              @onActivateHashTag="close"
+            />
+
+            <!-- 存在しないポスト -->
+            <div
+              v-else
+              class="post-not-exists"
+            >
+              <p class="post-not-exists__message">{{ $t("postNotFound") }}</p>
+              <p class="post-not-exists__uri">{{ pack.bookmark.uri }}</p>
+              <button
+                type="button"
+                class="post-not-exists__button button--important"
+                @click.stop="deleteCustomBookmark(pack.bookmark.uri)"
+              >
+                <SVGIcon name="remove" />
+                <span>{{ $t("delete") }}</span>
+              </button>
+            </div>
+          </template>
         </template>
       </div>
     </template>
@@ -269,8 +286,6 @@ async function outputJsonForSkyFeed () {
 <style lang="scss" scoped>
 .custom-bookmark-popup:deep() {
   .popup {
-    flex-grow: 1;
-
     &-header > h2 > .svg-icon {
       fill: rgb(var(--post-color));
     }
@@ -289,6 +304,11 @@ async function outputJsonForSkyFeed () {
 // スライダーメニュー
 .slider-menu {
   font-size: 0.875rem;
+}
+
+// ブックマークなし
+.no-bookmark {
+  padding: 1rem;
 }
 
 // 存在しないポスト

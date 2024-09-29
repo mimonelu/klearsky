@@ -591,6 +591,7 @@
   "threadgateNotification2": "If apply without checking anything, only you will be able to reply.",
 
   "customBookmark": "Bookmarks",
+  "noCustomBookmark": "No bookmarks",
   "deleteCustomBookmark": "Delete bookmark",
   "customBookmarkManagement": "Manage bookmark",
   "customBookmarkManagementDetail": "Add/update bookmark",

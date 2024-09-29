@@ -591,6 +591,7 @@
   "threadgateNotification2": "何もチェックせずに適用するとあなた以外リプライできなくなります。",
 
   "customBookmark": "ブックマーク",
+  "noCustomBookmark": "ブックマークがありません。",
   "deleteCustomBookmark": "ブックマークを削除",
   "customBookmarkManagement": "ブックマークを管理",
   "customBookmarkManagementDetail": "ブックマークの作成／更新",
