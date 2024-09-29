@@ -18,7 +18,7 @@ const state = reactive<{
   postContainer: ComputedRef<undefined | HTMLElement>
   customBookmarkTag?: string
   customBookmarkTags: ComputedRef<Array<undefined | string>>
-  customBookmarkPosts: ComputedRef<Array<TTPost>>
+  customBookmarkPacks: ComputedRef<Array<TICustomBookmarkPack>>
 }>({
   processing: false,
   postContainer: computed((): undefined | HTMLElement => {
@@ -40,20 +40,14 @@ const state = reactive<{
       ...tags
     ]
   }),
-  customBookmarkPosts: computed((): Array<TTPost> => {
+  customBookmarkPacks: computed((): Array<TICustomBookmarkPack> => {
     return mainState.currentCustomBookmarkPacks
       .filter((pack) => {
         return (
-          pack.post != null &&
-          (
-            state.customBookmarkTag == null ||
-            pack.bookmark.tags?.includes(state.customBookmarkTag)
-          )
+          state.customBookmarkTag == null ||
+          pack.bookmark.tags?.includes(state.customBookmarkTag)
         )
       })
-      .map((pack) => {
-        return pack.post
-      }) as Array<TTPost>
   }),
 })
 
@@ -110,6 +104,27 @@ function setCustomBookmarkTag (tag?: string) {
   popup.value.scrollToTop()
 }
 
+async function deleteCustomBookmark (uri: string) {
+  Util.blurElement()
+  if (state.processing) {
+    return
+  }
+  state.processing = true
+  const response = await mainState.atp.deleteCustomBookmark(uri)
+  state.processing = false
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "CustomBookmarkPopup/deleteCustomBookmark")
+    return
+  }
+  mainState.currentCustomBookmarkPacks = mainState.currentCustomBookmarkPacks
+    .filter((pack) => {
+      return pack.bookmark.uri !== uri
+    })
+
+  // セッションキャッシュの設定
+  mainState.myWorker!.setSessionCache("customBookmarkPacks", mainState.currentCustomBookmarkPacks)
+}
+
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.currentCustomBookmarkPacks.forEach((pack, index) => {
     const newPost = newPosts.find((newPost) => {
@@ -135,12 +150,15 @@ async function outputJsonForSkyFeed () {
   }))) {
     return
   }
-  const blocks = state.customBookmarkPosts
-    .map((post) => {
+  const blocks = state.customBookmarkPacks
+    .filter((pack) => {
+      return pack.post != null
+    })
+    .map((pack) => {
       return {
         type: "input",
-        inputType: "pack",
-        postUri: post.uri,
+        inputType: "post",
+        postUri: pack.post!.uri,
       }
     })
     .reverse()
@@ -205,19 +223,37 @@ async function outputJsonForSkyFeed () {
         class="custom-bookmark-popup__posts"
         ref="postContainer"
       >
-        <Post
-          v-for="post of state.customBookmarkPosts"
-          :key="post.uri"
-          position="post"
-          :post="post"
-          :container="state.postContainer"
-          :hasReplyIcon="post.record.reply != null"
-          :hasQuoteRepostIcon="post.record.embed?.record != null"
-          @click.exact="close"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
-          @onActivateHashTag="close"
-        />
+        <template v-for="pack of state.customBookmarkPacks">
+          <Post
+            v-if="pack.post != null"
+            position="post"
+            :post="pack.post"
+            :container="state.postContainer"
+            :hasReplyIcon="pack.post.record.reply != null"
+            :hasQuoteRepostIcon="pack.post.record.embed?.record != null"
+            @click.exact="close"
+            @updateThisPostThread="updateThisPostThread"
+            @removeThisPost="removeThisPost"
+            @onActivateHashTag="close"
+          />
+
+          <!-- 存在しないポスト -->
+          <div
+            v-else
+            class="post-not-exists"
+          >
+            <p class="post-not-exists__message">{{ $t("postNotFound") }}</p>
+            <p class="post-not-exists__uri">{{ pack.bookmark.uri }}</p>
+            <button
+              type="button"
+              class="post-not-exists__button button--important"
+              @click.stop="deleteCustomBookmark(pack.bookmark.uri)"
+            >
+              <SVGIcon name="remove" />
+              <span>{{ $t("delete") }}</span>
+            </button>
+          </div>
+        </template>
       </div>
     </template>
     <template #footer>
@@ -253,5 +289,29 @@ async function outputJsonForSkyFeed () {
 // スライダーメニュー
 .slider-menu {
   font-size: 0.875rem;
+}
+
+// 存在しないポスト
+.post-not-exists {
+  background-color: rgb(var(--fg-color), 0.125);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.5rem;
+  padding: 0.75rem;
+
+  &__message,
+  &__uri {
+    grid-column-end: span 2;
+  }
+
+  &__uri {
+    color: rgb(var(--fg-color), 0.75);
+    font-size: 0.875rem;
+    user-select: text;
+  }
+
+  &__button {
+    grid-column-start: 2;
+  }
 }
 </style>
