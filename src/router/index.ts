@@ -38,6 +38,15 @@ import TrendTagsView from "@/views/main/search/TrendTagsView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
+
+  // スクロールポジションの復帰
+  scrollBehavior (_to, _from, savedPosition) {
+    if (savedPosition != null) {
+      return savedPosition
+    }
+    return { left: 0, top: 0 }
+  },
+
   routes: [
     {
       path: "/",
