@@ -18,5 +18,7 @@ interface TIMyLabeler {
   getLabelPreference (did: string, label: string): undefined | TTPreference
   addLabelPreference (did: string, label: string, visibility: TTContentVisibility)
   cleanLabelPreferences (): void
+  async like (uri: string, cid: string): Promise<Error | string>
+  async unlike (uri: string, likeUri: string): Promise<Error | undefined>
   setAtprotoAcceptLabelers (): void
 }

@@ -315,6 +315,46 @@ export default class MyLabeler {
     this.mainState.currentPreferences.splice(0, this.mainState.currentPreferences.length, ...results)
   }
 
+  async like (uri: string, cid: string): Promise<Error | string> {
+    const response = await this.mainState.atp.createLike(uri, cid)
+    if (response instanceof Error) {
+      return response
+    }
+    const labeler = this.labelers.find((labeler) => {
+      return labeler.uri === uri
+    })
+    if (labeler == null) {
+      return response
+    }
+    if (labeler.likeCount != null) {
+      labeler.likeCount ++
+    }
+    if (labeler.viewer == null) {
+      labeler.viewer = {}
+    }
+    labeler.viewer.like = response
+    return response
+  }
+
+  async unlike (uri: string, likeUri: string): Promise<Error | undefined> {
+    const response = await this.mainState.atp.deleteLike(likeUri)
+    if (response instanceof Error) {
+      return response
+    }
+    const labeler = this.labelers.find((labeler) => {
+      return labeler.uri === uri
+    })
+    if (labeler == null) {
+      return
+    }
+    if (labeler.likeCount != null) {
+      labeler.likeCount --
+    }
+    if (labeler.viewer != null) {
+      delete labeler.viewer.like
+    }
+  }
+
   setAtprotoAcceptLabelers (): Error | undefined {
     if (this.mainState.atp.agent == null) {
       return Error("noAgentError")

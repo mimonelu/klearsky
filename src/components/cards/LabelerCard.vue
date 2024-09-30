@@ -23,12 +23,10 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  likeUri?: string
   loaderDisplay: boolean
   detailDisplay: boolean
   isProfileFeedsPage: boolean
 }>({
-  likeUri: props.labeler.viewer?.like,
   loaderDisplay: false,
   detailDisplay: props.detailDisplay,
   isProfileFeedsPage:
@@ -46,9 +44,12 @@ async function toggleLike () {
   if (state.loaderDisplay) {
     return
   }
-  if (state.likeUri == null) {
+  if (mainState.myLabeler == null) {
+    return
+  }
+  if (props.labeler.viewer?.like == null) {
     state.loaderDisplay = true
-    const response = await mainState.atp.createLike(
+    const response = await mainState.myLabeler.like(
       props.labeler.uri,
       props.labeler.cid
     )
@@ -57,22 +58,32 @@ async function toggleLike () {
       mainState.openErrorPopup(response, "LabelerCard/toggleLike")
       return
     }
-    state.likeUri = response
-    if (props.labeler.likeCount != null) {
-      props.labeler.likeCount ++
-    }
   } else {
     state.loaderDisplay = true
-    const response = await mainState.atp.deleteLike(state.likeUri)
+    const response = await mainState.myLabeler.unlike(
+      props.labeler.uri,
+      props.labeler.viewer.like
+    )
     state.loaderDisplay = false
     if (response instanceof Error) {
       mainState.openErrorPopup(response, "LabelerCard/toggleLike")
       return
     }
-    state.likeUri = undefined
-    if (props.labeler.likeCount != null) {
-      props.labeler.likeCount --
+  }
+
+  // TODO: 要リファクタリング
+  // LabelerCard に渡される labeler は mainState.currentLabeler であり、
+  // MyLabeler で管理しているラベラーの参照ではない
+  // 両者の整合性を維持するため、別途 mainState.currentLabeler を更新している
+  if (mainState.currentLabeler != null) {
+    const labeler = mainState.myLabeler.labelers.find((labeler) => {
+      return labeler.uri === props.labeler.uri
+    })
+    if (labeler == null) {
+      return
     }
+    mainState.currentLabeler.likeCount = labeler.likeCount
+    mainState.currentLabeler.viewer = labeler.viewer
   }
 }
 
@@ -112,7 +123,7 @@ function openProfilePopover ($event: Event) {
       <button
         type="button"
         class="labeler-card__like-count"
-        :data-on="state.likeUri != null"
+        :data-on="props.labeler.viewer?.like != null"
         @click.prevent.stop="toggleLike"
       >
         <SVGIcon name="like" />
