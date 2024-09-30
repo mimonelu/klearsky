@@ -27,6 +27,7 @@ type TTUserViewer = {
   blockingByList?: any
   followedBy?: string
   following?: string
+  like?: string
   muted: boolean
   mutedByList?: any
   knownFollowers?: {

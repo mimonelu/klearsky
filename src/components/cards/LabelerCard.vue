@@ -23,10 +23,12 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  likeUri?: string
   loaderDisplay: boolean
   detailDisplay: boolean
   isProfileFeedsPage: boolean
 }>({
+  likeUri: props.labeler.viewer?.like,
   loaderDisplay: false,
   detailDisplay: props.detailDisplay,
   isProfileFeedsPage:
@@ -37,6 +39,41 @@ const state = reactive<{
 function toggleDetailDisplay () {
   Util.blurElement()
   state.detailDisplay = !state.detailDisplay
+}
+
+async function toggleLike () {
+  Util.blurElement()
+  if (state.loaderDisplay) {
+    return
+  }
+  if (state.likeUri == null) {
+    state.loaderDisplay = true
+    const response = await mainState.atp.createLike(
+      props.labeler.uri,
+      props.labeler.cid
+    )
+    state.loaderDisplay = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "LabelerCard/toggleLike")
+      return
+    }
+    state.likeUri = response
+    if (props.labeler.likeCount != null) {
+      props.labeler.likeCount ++
+    }
+  } else {
+    state.loaderDisplay = true
+    const response = await mainState.atp.deleteLike(state.likeUri)
+    state.loaderDisplay = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "LabelerCard/toggleLike")
+      return
+    }
+    state.likeUri = undefined
+    if (props.labeler.likeCount != null) {
+      props.labeler.likeCount --
+    }
+  }
 }
 
 function openProfilePopover ($event: Event) {
@@ -71,11 +108,12 @@ function openProfilePopover ($event: Event) {
         </button>
       </div>
 
-      <!-- ラベラーライク数 -->
+      <!-- ラベラーライクボタン -->
       <button
         type="button"
         class="labeler-card__like-count"
-        :data-on="false"
+        :data-on="state.likeUri != null"
+        @click.prevent.stop="toggleLike"
       >
         <SVGIcon name="like" />
         <span>{{ labeler.likeCount }}</span>
@@ -230,7 +268,7 @@ function openProfilePopover ($event: Event) {
     }
   }
 
-  // ラベラーライク数
+  // ラベラーライクボタン
   // ラベラー作成日時
   // 公式マーカー
   &__like-count,
@@ -254,7 +292,7 @@ function openProfilePopover ($event: Event) {
     }
   }
 
-  // ラベラーライク数
+  // ラベラーライクボタン
   &__like-count {
     --color: rgb(var(--fg-color), 0.5);
     grid-area: l;
