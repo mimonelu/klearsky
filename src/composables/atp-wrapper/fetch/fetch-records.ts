@@ -27,16 +27,16 @@ export default async function (
   if (reverse != null) {
     query.reverse = reverse
   }
-  const response: Error | Response =
+  const response =
     await this.fetchWithoutAgent(
       "com.atproto.repo.listRecords",
       repo,
-      query as unknown as Record<string, string>
+      query as unknown as Record<string, string>,
+      undefined,
+      "json"
     )
   if (response instanceof Error) {
     return response
   }
-  const json = await response.json()
-  console.log("[klearsky/fetchRecords", json)
-  return json
+  return response
 }

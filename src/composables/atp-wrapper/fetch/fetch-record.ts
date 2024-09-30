@@ -24,14 +24,16 @@ export default async function (
   if (cid != null) {
     query.cid = cid
   }
-  const response: Error | Response =
+  const response =
     await this.fetchWithoutAgent(
       "com.atproto.repo.getRecord",
       repo,
-      query as unknown as Record<string, string>
+      query as unknown as Record<string, string>,
+      undefined,
+      "json"
     )
   if (response instanceof Error) {
     return response
   }
-  return await response.json()
+  return response
 }

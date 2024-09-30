@@ -188,7 +188,7 @@ interface TIAtpWrapper {
   fetchVideoLimits
     (): Promise<Error | TIVideoLimits>
   fetchWithoutAgent
-    (pathToXrpc: string, did: string, query: Record<string, any>, server?: string): Promise<Error | Response>
+    (pathToXrpc: string, did: string, query: Record<string, any>, server?: string, method?: "blob" | "json"): Promise<Error | Response | any | Blob>
   hasLogin
     (): boolean
   leaveChatConvo
