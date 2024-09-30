@@ -1224,7 +1224,7 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
   }
 
   // ハンドル履歴の取得
-  await updateCurrentLogAudit()
+  updateCurrentLogAudit()
 
   // 固定ポストのインポート
   fetchPinnedPost(state.currentProfile)
@@ -1239,7 +1239,7 @@ async function updateCurrentLogAudit () {
     return
   }
   if (state.currentProfile == null) {
-    return // await　中に初期化される恐れがあるため
+    return // await 中に初期化される恐れがあるため
   }
   state.currentProfile.__log = logJson
 }
