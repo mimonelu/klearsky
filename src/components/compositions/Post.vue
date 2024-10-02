@@ -33,6 +33,7 @@ const props = defineProps<{
   hasReplyIcon?: boolean
   hasQuoteRepostIcon?: boolean
   noLink?: boolean
+  noLabelTags?: boolean
   forceHideMedia?: boolean
   forceHideQuoteRepost?: boolean
   forceUpdatePostThread?: boolean
@@ -1239,7 +1240,7 @@ function toggleOldestQuotedPostDisplay () {
 
         <!-- ラベルタグ -->
         <LabelTags
-          v-if="position !== 'preview' && position !== 'slim'"
+          v-if="!noLabelTags && position !== 'preview' && position !== 'slim'"
           :labels="state.allLabels"
           :labelerDisplay="false"
           :unauthenticatedDisplay="false"

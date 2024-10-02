@@ -76,6 +76,7 @@ async function chatMessagePopoverCallback (type: string) {
     position="chatMessage"
     :post="state.post"
     :noLink="true"
+    :noLabelTags="true"
     :data-is-mine="isMine"
     :data-is-last-message="message == null"
     :data-is-message-empty="!state.post.record.text"
