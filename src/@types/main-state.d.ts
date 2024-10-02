@@ -45,11 +45,18 @@ interface MainState {
   lastFetchNotificationsDate?: Date
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
 
-  // 通知タイマー
+  // 新着通知タイマー
   notificationTimer: null | NodeJS.Timeout = null
   clearNotificationInterval: () => void
   updateNotifications: () => Promise<void>
   updateNotificationInterval: () => void
+
+  // 新着フォロー中フィードタイマー
+  hasTimelineNewArrival: boolean
+  timelineTimer: null | NodeJS.Timeout = null
+  clearTimelineInterval: () => void
+  updateTimeline: () => Promise<void>
+  updateTimelineInterval: () => void
 
   // 招待コード
   inviteCodes: Array<TTInviteCode>

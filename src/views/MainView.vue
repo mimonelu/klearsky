@@ -123,6 +123,7 @@ onBeforeUnmount(() => {
 onUnmounted(() => {
   clearUpdateJwtInterval()
   state.clearNotificationInterval()
+  state.clearTimelineInterval()
   state.endChatListTimer()
 })
 
@@ -398,7 +399,8 @@ async function processAfterLogin () {
     await moveToDefaultHome()
     return
   }
-  processPage(router.currentRoute.value.name as undefined | null | string)
+  await processPage(router.currentRoute.value.name as undefined | null | string)
+  setupTimelineInterval()
 }
 
 async function moveToDefaultHome () {
@@ -650,6 +652,10 @@ async function setupUpdateJwtInterval () {
 async function setupNotificationInterval () {
   state.updateNotificationInterval()
   await state.updateNotifications()
+}
+
+async function setupTimelineInterval () {
+  state.updateTimelineInterval()
 }
 
 async function updateCurrentList () {

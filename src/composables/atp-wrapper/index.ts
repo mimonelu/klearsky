@@ -88,6 +88,7 @@ import fetchSuggestedFollows from "@/composables/atp-wrapper/fetch/fetch-suggest
 import fetchSuggestions from "@/composables/atp-wrapper/fetch/fetch-suggestions"
 import fetchTimeFeeds from "@/composables/atp-wrapper/fetch/fetch-time-feeds"
 import fetchTimeline from "@/composables/atp-wrapper/fetch/fetch-timeline"
+import fetchTimelineNewArrival from "@/composables/atp-wrapper/fetch/fetch-timeline-new-arrival"
 import fetchUserSearch from "@/composables/atp-wrapper/fetch/fetch-user-search"
 import fetchVideoLimits from "@/composables/atp-wrapper/fetch/fetch-video-limits"
 import fetchWithoutAgent from "@/composables/atp-wrapper/fetch/fetch-without-agent"
@@ -249,6 +250,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchSuggestions = fetchSuggestions
   fetchTimeFeeds = fetchTimeFeeds
   fetchTimeline = fetchTimeline
+  fetchTimelineNewArrival = fetchTimelineNewArrival
   fetchUserSearch = fetchUserSearch
   fetchVideoLimits = fetchVideoLimits
   fetchWithoutAgent = fetchWithoutAgent

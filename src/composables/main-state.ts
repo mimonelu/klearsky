@@ -73,9 +73,16 @@ export const state: MainState = reactive<MainState>({
 
   // 新着通知タイマー
   notificationTimer: null,
-  clearNotificationInterval: clearNotificationInterval,
-  updateNotifications: updateNotifications,
-  updateNotificationInterval: updateNotificationInterval,
+  clearNotificationInterval,
+  updateNotifications,
+  updateNotificationInterval,
+
+  // 新着フォロー中フィードタイマー
+  hasTimelineNewArrival: false,
+  timelineTimer: null,
+  clearTimelineInterval,
+  updateTimeline,
+  updateTimelineInterval,
 
   // 招待コード
   inviteCodes: [],
@@ -1057,6 +1064,40 @@ async function updateNotifications () {
   }
 }
 
+// 新着フォロー中フィードタイマー
+
+function clearTimelineInterval () {
+  if (state.timelineTimer != null) {
+    clearInterval(state.timelineTimer)
+    state.timelineTimer = null
+  }
+}
+
+function updateTimelineInterval () {
+  state.clearTimelineInterval()
+  state.timelineTimer = setInterval(
+    state.updateTimeline,
+    state.currentSetting.timelineFetchInterval ?? CONSTS.DEFAULT_TIMELINE_FETCH_INTERVAL
+  )
+}
+
+async function updateTimeline () {
+  const response = await state.atp.fetchTimelineNewArrival()
+  if (response instanceof Error) {
+    return
+  }
+
+  // 稀に空配列が返るため
+  if (response.length === 0) {
+    return
+  }
+
+  const latestPostUri = state.timelineFeeds[0]?.post?.uri
+  state.hasTimelineNewArrival = response.every((feed) => {
+    return feed.post?.uri !== latestPostUri
+  })
+}
+
 // プリファレンス
 
 async function fetchPreferences (): Promise<boolean> {
@@ -1534,6 +1575,9 @@ async function fetchPostThread () {
 // フォロー中フィード
 
 async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
+  // 新着フォロー中フィードフラグをリセット
+  state.hasTimelineNewArrival = false
+
   const cursor = await state.atp.fetchTimeline(
     state.timelineFeeds,
     state.currentSetting.replyFolding,

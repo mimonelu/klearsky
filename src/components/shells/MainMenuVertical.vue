@@ -86,6 +86,12 @@ function moveToBottom () {
       >
         <div class="icon">
           <SVGIcon name="home" />
+
+          <!-- 新着フォロー中フィードバッジ -->
+          <div
+            v-if="mainState.hasTimelineNewArrival"
+            class="timeline-new-arrival-badge"
+          />
         </div>
         <div class="label">{{ $t("home") }}</div>
       </RouterLink>
@@ -380,6 +386,18 @@ function moveToBottom () {
       }
     }
   }
+}
+
+// 新着フォロー中フィードバッジ
+.timeline-new-arrival-badge {
+  background-color: rgb(var(--notice-color));
+  border: 1px solid rgb(var(--bg-color));
+  border-radius: 100%;
+  position: absolute;
+  right: 0rem;
+  top: 0rem;
+  width: 0.625rem;
+  height: 0.625rem;
 }
 
 // 未読バッジ

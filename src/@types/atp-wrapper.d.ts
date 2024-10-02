@@ -183,6 +183,8 @@ interface TIAtpWrapper {
     (oldPosts: Array<TTPost>, direction: "new" | "old", author: TTUser, limit?: number): Promise<Error | undefined | string>
   fetchTimeline
     (oldFeeds: Array<TTFeed>, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection): Promise<Error | undefined | string>
+  fetchTimelineNewArrival
+    (): Promise<Error | Array<TTFeed>>
   fetchUserSearch
     (users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchVideoLimits
