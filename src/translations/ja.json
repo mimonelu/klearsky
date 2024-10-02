@@ -381,7 +381,7 @@
   "timeControlAbsolute": "絶対表記",
 
   "timelineFetchInterval": "新着フォロー中フィードをチェックする間隔",
-  "timelineFetchInterval1": "取得しない",
+  "timelineFetchInterval1": "チェックしない",
   "timelineFetchInterval2": "10秒ごと",
   "timelineFetchInterval3": "30秒ごと",
   "timelineFetchInterval4": "1分ごと",
