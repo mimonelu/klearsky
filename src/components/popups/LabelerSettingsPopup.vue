@@ -61,7 +61,9 @@ function getLabelPreferenceVisibility (definition: TILabelerDefinition): TTConte
     props.labeler.creator.did,
     definition.identifier
   )
-  return labelPreference?.visibility ?? definition.defaultSetting
+  return labelPreference?.visibility ?? (
+    definition.defaultSetting === "inform" ? "warn" : definition.defaultSetting
+  ) ?? "ignore"
 }
 
 // 選択肢の作成
@@ -136,7 +138,9 @@ async function resetAfterConfirmation () {
 
 function reset () {
   state.pseudoDefinitions.forEach((pseudoDefinition) => {
-    pseudoDefinition.setting = pseudoDefinition.defaultSetting
+    pseudoDefinition.setting = pseudoDefinition.defaultSetting === "inform"
+      ? "warn"
+      : pseudoDefinition.defaultSetting
   })
 }
 

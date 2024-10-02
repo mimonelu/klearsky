@@ -1,5 +1,5 @@
 // TODO: "show" が不要であれば削除すること
-type TTContentVisibility = "hide" | "show" | "warn" | "ignore"
+type TTContentVisibility = "hide" | "show" | "warn" | "ignore" | string
 
 type TTLabel = {
   cid?: string // Only post
