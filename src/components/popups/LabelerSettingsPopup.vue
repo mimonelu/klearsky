@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import HtmlText from "@/components/labels/HtmlText.vue"
 import LabelerCard from "@/components/cards/LabelerCard.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Radios from "@/components/forms/Radios.vue"
@@ -138,6 +139,14 @@ function reset () {
     pseudoDefinition.setting = pseudoDefinition.defaultSetting
   })
 }
+
+function getDescription (pseudoDefinition: TIPseudoLabelerDefinition): string {
+  return pseudoDefinition.locale?.description || $t(`label-description-${pseudoDefinition.identifier}`)
+}
+
+function translate (text: string) {
+  Util.translateInExternalService(text)
+}
 </script>
 
 <template>
@@ -200,10 +209,13 @@ function reset () {
           </div>
 
           <!-- ラベル説明 -->
-          <div
+          <HtmlText
             v-if="pseudoDefinition.detailDisplay"
             class="labeler-settings-popup__label-description"
-          >{{ pseudoDefinition.locale?.description || $t(`label-description-${pseudoDefinition.identifier}`) }}</div>
+            :text="getDescription(pseudoDefinition)"
+            :hasTranslateLink="pseudoDefinition.locale?.lang !== mainState.currentSetting.uiLanguage"
+            @translate="translate(getDescription(pseudoDefinition))"
+          />
 
           <!-- 設定ラジオボタン -->
           <Radios
