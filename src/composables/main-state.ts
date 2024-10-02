@@ -1100,11 +1100,16 @@ async function updateTimeline () {
 
   // 稀に空配列が返るため
   if (response.length === 0) {
+    state.hasTimelineNewArrival = false
     return
   }
 
-  const latestPostUri = state.timelineFeeds[0]?.post?.uri
-  state.hasTimelineNewArrival = response.every((feed) => {
+  const latestPostUri = response[0].post?.uri
+  if (latestPostUri == null) {
+    state.hasTimelineNewArrival = false
+    return
+  }
+  state.hasTimelineNewArrival = state.timelineFeeds.every((feed) => {
     return feed.post?.uri !== latestPostUri
   })
 }
@@ -1586,9 +1591,6 @@ async function fetchPostThread () {
 // フォロー中フィード
 
 async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
-  // 新着フォロー中フィードフラグをリセット
-  state.hasTimelineNewArrival = false
-
   const cursor = await state.atp.fetchTimeline(
     state.timelineFeeds,
     state.currentSetting.replyFolding,
@@ -1597,6 +1599,10 @@ async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
     direction === "old" ? state.timelineCursor : middleCursor,
     direction
   )
+
+  // 新着フォロー中フィードフラグをリセット
+  state.hasTimelineNewArrival = false
+
   if (cursor instanceof Error) {
     // TODO:
     // state.openErrorPopup("errorApiFailed", "mainState/fetchTimeline")
