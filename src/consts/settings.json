@@ -28,6 +28,14 @@
     { "label": "timeControlRelative", "value": "relative" },
     { "label": "timeControlAbsolute", "value": "absolute" }
   ],
+  "TIMELINE_FETCH_INTERVAL": [
+    { "label": "timelineFetchInterval1", "value": 0 },
+    { "label": "timelineFetchInterval2", "value": 10000 },
+    { "label": "timelineFetchInterval3", "value": 30000 },
+    { "label": "timelineFetchInterval4", "value": 60000 },
+    { "label": "timelineFetchInterval5", "value": 120000 },
+    { "label": "timelineFetchInterval6", "value": 180000 }
+  ],
   "NOTIFICATION_FETCH_INTERVAL": [
     { "label": "notificationFetchInterval1", "value": 0 },
     { "label": "notificationFetchInterval2", "value": 15000 },

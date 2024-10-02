@@ -380,6 +380,14 @@
   "timeControlRelative": "Relative",
   "timeControlAbsolute": "Absolute",
 
+  "timelineFetchInterval": "Interval to Check Following Feed",
+  "timelineFetchInterval1": "OFF",
+  "timelineFetchInterval2": "Every 10 sec.",
+  "timelineFetchInterval3": "Every 30 sec.",
+  "timelineFetchInterval4": "Every 1 min.",
+  "timelineFetchInterval5": "Every 2 min.",
+  "timelineFetchInterval6": "Every 3 min.",
+
   "notificationFetchInterval": "Interval to Fetch Notifications",
   "notificationFetchInterval1": "OFF",
   "notificationFetchInterval2": "Every 15 sec.",

@@ -380,6 +380,14 @@
   "timeControlRelative": "相対表記",
   "timeControlAbsolute": "絶対表記",
 
+  "timelineFetchInterval": "新着フォロー中フィードをチェックする間隔",
+  "timelineFetchInterval1": "取得しない",
+  "timelineFetchInterval2": "10秒ごと",
+  "timelineFetchInterval3": "30秒ごと",
+  "timelineFetchInterval4": "1分ごと",
+  "timelineFetchInterval5": "2分ごと",
+  "timelineFetchInterval6": "3分ごと",
+
   "notificationFetchInterval": "新着通知を取得する間隔",
   "notificationFetchInterval1": "取得しない",
   "notificationFetchInterval2": "15秒ごと",

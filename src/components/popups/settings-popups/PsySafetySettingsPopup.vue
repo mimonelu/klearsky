@@ -22,6 +22,29 @@ const mainState = inject("state") as MainState
     </template>
     <template #body>
       <div class="settings-popup__form-page">
+        <!-- 新着フォロー中フィード取得間隔 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("timelineFetchInterval") }}</span>
+          </div>
+          <div class="settings-popup__form__body">
+            <label class="selectbox">
+              <select
+                v-model="mainState.currentSetting.timelineFetchInterval"
+                name="timelineFetchInterval"
+                @change="$emit('changeSetting')"
+              >
+                <option
+                  v-for="interval, intervalIndex in SETTINGS.TIMELINE_FETCH_INTERVAL"
+                  :key="intervalIndex"
+                  :value="interval.value"
+                  :selected="interval.value === mainState.currentSetting.timelineFetchInterval"
+                >{{ $t(interval.label) }}</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
         <!-- 新着通知取得間隔 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">

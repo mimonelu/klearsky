@@ -89,7 +89,7 @@ function moveToBottom () {
 
           <!-- 新着フォロー中フィードバッジ -->
           <div
-            v-if="mainState.hasTimelineNewArrival"
+            v-if="mainState.hasTimelineNewArrival && !mainState.currentSetting.hideNotificationBadge"
             class="timeline-new-arrival-badge"
           />
         </div>

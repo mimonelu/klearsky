@@ -794,6 +794,9 @@ function updateSettings () {
   updateFontSetting()
   updateColorThemeSetting()
 
+  // 新着フォロー中フィードタイマーの更新
+  updateTimelineInterval()
+
   // 新着通知タイマーの更新
   updateNotificationInterval()
 
@@ -839,6 +842,9 @@ function saveSettings () {
   }
   if (state.settings[did].notificationFetchInterval == null) {
     state.settings[did].notificationFetchInterval = 30000
+  }
+  if (state.settings[did].timelineFetchInterval == null) {
+    state.settings[did].timelineFetchInterval = 10000
   }
   if (state.settings[did].myWords == null) {
     state.settings[did].myWords = []
@@ -1043,7 +1049,9 @@ function clearNotificationInterval () {
 
 function updateNotificationInterval () {
   state.clearNotificationInterval()
-  if (state.currentSetting.notificationFetchInterval === 0) return
+  if (state.currentSetting.notificationFetchInterval === 0) {
+    return
+  }
   state.notificationTimer = setInterval(
     state.updateNotifications,
     state.currentSetting.notificationFetchInterval ?? CONSTS.DEFAULT_NOTIFICATION_FETCH_INTERVAL
@@ -1075,6 +1083,9 @@ function clearTimelineInterval () {
 
 function updateTimelineInterval () {
   state.clearTimelineInterval()
+  if (state.currentSetting.timelineFetchInterval === 0) {
+    return
+  }
   state.timelineTimer = setInterval(
     state.updateTimeline,
     state.currentSetting.timelineFetchInterval ?? CONSTS.DEFAULT_TIMELINE_FETCH_INTERVAL

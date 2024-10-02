@@ -33,6 +33,7 @@ type TTSetting = {
   replyFolding?: Array<number>
   repostFolding?: Array<number>
   timeControl?: string
+  timelineFetchInterval?: number
   uiLanguage?: string
   userSearchKeywordHistory?: Array<string>
   videoPreload?: "none" | "metadata"
