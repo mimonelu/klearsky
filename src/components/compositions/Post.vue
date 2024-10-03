@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
-import { useRouter } from "vue-router"
+import { RouterLink, useRouter } from "vue-router"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarButton from "@/components/buttons/AvatarButton.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
@@ -968,29 +968,29 @@ function toggleOldestQuotedPostDisplay () {
           />
 
           <!-- 表示名 -->
-          <DisplayName
-            class="body__right__header__display-name"
-            :displayName="(
-              position === 'chatMessage'
-                ? (post.author?.displayName || post.author?.handle)
-                : post.author?.displayName
-            ) || '　'"
-            :anonymizable="true"
-          >
-            <!-- ラベラーアイコン -->
-            <template v-if="post.author?.associated?.labeler">
-              <SVGIcon
-                v-if="mainState.myLabeler!.isSubscribed(post.author?.did)"
-                name="labeler"
-                class="account-labeler-icon"
-              />
-              <SVGIcon
-                v-else
-                name="labelerOff"
-                class="account-labeler-icon"
-              />
-            </template>
-          </DisplayName>
+          <div class="body__right__header__display-name">
+            <RouterLink
+              :to="{ name: 'profile-feeds', query: { account: post.author?.did } }"
+              @click.stop
+            >
+              <DisplayName
+                :displayName="(
+                  position === 'chatMessage'
+                    ? (post.author?.displayName || post.author?.handle)
+                    : post.author?.displayName
+                ) || '　'"
+                :anonymizable="true"
+              >
+                <!-- ラベラーアイコン -->
+                <template v-if="post.author?.associated?.labeler">
+                  <SVGIcon
+                    :name="mainState.myLabeler?.isSubscribed(post.author?.did) ? 'labeler' : 'labelerOff'"
+                    class="account-labeler-icon"
+                  />
+                </template>
+              </DisplayName>
+            </RouterLink>
+          </div>
 
           <div class="body__right__header__detail">
             <!-- ハンドル -->
@@ -1750,17 +1750,24 @@ function toggleOldestQuotedPostDisplay () {
     font-size: 2em;
   }
 
+  // 表示名
   &__display-name {
     grid-area: d;
-    color: rgb(var(--fg-color), 0.75);
-    display: flex;
-    align-items: center;
-    grid-gap: 0.5em;
-    font-size: 0.875em;
 
-    // ラベラーアイコン
-    .account-labeler-icon {
-      fill: rgb(var(--label-color));
+    .display-name {
+      color: rgb(var(--fg-color), 0.75);
+      display: inline-flex;
+      align-items: center;
+      grid-gap: 0.5em;
+      font-size: 0.875em;
+      &:focus, &:hover {
+        color: rgb(var(--fg-color));
+      }
+
+      // ラベラーアイコン
+      .account-labeler-icon {
+        fill: rgb(var(--label-color));
+      }
     }
   }
 
