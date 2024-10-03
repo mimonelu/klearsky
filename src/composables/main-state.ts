@@ -1601,7 +1601,9 @@ async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
   )
 
   // 新着フォロー中フィードフラグをリセット
-  state.hasTimelineNewArrival = false
+  if (direction === "new" && middleCursor == null) {
+    state.hasTimelineNewArrival = false
+  }
 
   if (cursor instanceof Error) {
     // TODO:
