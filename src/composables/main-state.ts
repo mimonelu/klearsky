@@ -1567,16 +1567,22 @@ async function fetchPostThread () {
   let uri = state.currentQuery.uri as LocationQueryValue
   if (!uri) {
     // uri パラメータがない場合は handle と rkey パラメータがあるものとみなす
-    const handle = state.currentQuery.handle as LocationQueryValue
+    let identifier = state.currentQuery.handle as LocationQueryValue as null | string
     const rkey = state.currentQuery.rkey as LocationQueryValue
-    if (!handle || !rkey) {
+    if (!identifier || !rkey) {
       return
     }
-    const did = await state.atp.fetchDid(handle)
-    if (did instanceof Error) {
-      return
+
+    // 渡されたのがDIDではない場合
+    if (!identifier.startsWith("did:")) {
+      const did = await state.atp.fetchDid(identifier)
+      if (did instanceof Error) {
+        return
+      }
+      identifier = did
     }
-    uri = `at://${did}/app.bsky.feed.post/${rkey}`
+
+    uri = `at://${identifier}/app.bsky.feed.post/${rkey}`
   }
   state.currentPosts?.splice(0)
   const posts = await state.atp.fetchPostThread(uri, CONSTS.LIMIT_OF_FETCH_POST_THREAD) ?? []

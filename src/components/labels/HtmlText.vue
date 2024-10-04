@@ -27,7 +27,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   segments: ComputedRef<Array<RichParam>>;
 }>({
-  segments: computed(() => {
+  segments: computed((): Array<RichParam> => {
     const rtProps: RichTextProps = { text: props.text ?? "" }
     if (props.facets != null) rtProps.facets = props.facets
     if (props.entities != null) rtProps.entities = props.entities
@@ -144,10 +144,6 @@ function transformInternalLink (uri: string): undefined | string {
             // ポストスレッドページ
             case "post": {
               if (!paths[4]) {
-                return
-              }
-              if (paths[2].startsWith("did:")) {
-                // TODO: DID の場合はハンドルを取得すること
                 return
               }
               return `/post?handle=${paths[2]}&rkey=${paths[4]}`
