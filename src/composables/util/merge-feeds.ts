@@ -11,8 +11,8 @@ export default function (
   // 重複フィード（リポスト）を除去
   const map = new Map()
   targetFeeds.reverse().forEach((targetFeed: TTFeed) => {
-    if (!map.has(targetFeed.post.cid)) {
-      map.set(targetFeed.post.cid, targetFeed)
+    if (!map.has(targetFeed.post.uri)) {
+      map.set(targetFeed.post.uri, targetFeed)
     }
   })
 
@@ -26,7 +26,7 @@ export default function (
     }
 
     const oldIndex: number = oldFeeds.findIndex((oldFeed: TTFeed) => {
-      return oldFeed.post?.cid === targetFeed.post?.cid
+      return oldFeed.post?.uri === targetFeed.post?.uri
     })
 
     // 新規フィード

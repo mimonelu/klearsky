@@ -214,7 +214,7 @@ function isPostVisible (post: TTPost): boolean {
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.globallinePosts.forEach((post: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => {
-      return post.cid === newPost.cid
+      return post.uri === newPost.uri
     })
     if (newPost != null) {
       Util.updatePostProps(mainState.globallinePosts[index], newPost)

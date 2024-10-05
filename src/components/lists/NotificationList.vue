@@ -149,7 +149,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
           <!-- 通知 -->
           <RouterLink
             v-for="notification of notificationGroup.notifications"
-            :key="notification.cid"
+            :key="notification.uri"
             :to="makeSubjectTo(notification)"
             class="notification"
             :data-is-new="!notification.isRead"

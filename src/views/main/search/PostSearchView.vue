@@ -131,7 +131,7 @@ function updateRouter () {
 function updateThisPostThread (newPosts: Array<TTPost>) {
   const posts = mainState.currentSearchPostResults
   posts.forEach((oldPost: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) => oldPost.cid === newPost.cid)
+    const newPost = newPosts.find((newPost: TTPost) => oldPost.uri === newPost.uri)
     if (newPost != null) Util.updatePostProps(posts[index], newPost)
   })
 }
@@ -195,7 +195,7 @@ function openKeywordHistoryPopover ($event: Event) {
       <div class="post-container">
         <template
           v-for="post of mainState.currentSearchPostResults"
-          :key="post.cid"
+          :key="post.uri"
         >
           <!-- NOTICE: ミュートユーザーは非表示 -->
           <Post

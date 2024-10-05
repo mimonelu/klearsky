@@ -39,7 +39,7 @@ export default async function (
     .forEach((notification: AppBskyNotificationListNotifications.Notification) => {
       const existence = currentValues.some((valueGroup: TTNotificationGroup) => {
         return valueGroup.notifications.some((value: TTNotification) => {
-          return value.cid === notification.cid
+          return value.uri === notification.uri
         })
       })
       if (existence) {

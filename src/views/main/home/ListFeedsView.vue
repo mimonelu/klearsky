@@ -27,11 +27,11 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
   // WANT: このために「画面には1つのフィードのみ表示する」としているが、何とかしたい
   mainState.currentListFeeds?.forEach((feed: TTFeed) => {
     newPosts.forEach((newPost: TTPost) => {
-      if (feed.post?.cid === newPost.cid)
+      if (feed.post?.uri === newPost.uri)
         Util.updatePostProps(feed.post, newPost)
-      if (feed.reply?.parent?.cid === newPost.cid)
+      if (feed.reply?.parent?.uri === newPost.uri)
         Util.updatePostProps(feed.reply.parent, newPost)
-      if (feed.reply?.root?.cid === newPost.cid)
+      if (feed.reply?.root?.uri === newPost.uri)
         Util.updatePostProps(feed.reply.root, newPost)
     })
   })

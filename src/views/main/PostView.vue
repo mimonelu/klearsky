@@ -25,7 +25,7 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
   // MEMO: ポストスレッドの全同一ポストに最新のデータを反映する
   mainState.currentPosts.forEach((post: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => {
-      return post?.cid === newPost.cid
+      return post?.uri === newPost.uri
     })
     if (newPost != null) {
       Util.updatePostProps(mainState.currentPosts[index], newPost)
@@ -96,10 +96,10 @@ async function toggleThreadMute () {
     </Portal>
     <Post
       v-for="post, postIndex of mainState.currentPosts"
-      :key="post.cid"
+      :key="post.uri"
       position="post"
       :post="post"
-      :data-has-child="post.cid === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.cid"
+      :data-has-child="post.uri === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.uri"
       @updateThisPostThread="updateThisPostThread"
       @removeThisPost="removeThisPost"
     />

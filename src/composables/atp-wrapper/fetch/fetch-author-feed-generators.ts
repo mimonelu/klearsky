@@ -32,7 +32,7 @@ export default async function (
   const newGenerators = (response.data.feeds as Array<TTFeedGenerator>)
     .filter((feed: TTFeedGenerator) => {
       return !generators.some((generator: TTFeedGenerator) => {
-        return generator.cid === feed.cid
+        return generator.uri === feed.uri
       })
     })
   if (cursor == null) {

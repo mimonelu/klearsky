@@ -41,7 +41,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
     <div class="feed-card-container">
       <FeedCard
         v-for="generator of mainState.currentAuthorFeedGenerators"
-        :key="generator.cid"
+        :key="generator.uri"
         :generator="generator"
         :menuDisplay="true"
         :detailDisplay="true"

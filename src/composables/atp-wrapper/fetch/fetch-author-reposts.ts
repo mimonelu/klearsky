@@ -30,20 +30,20 @@ export default async function (
     const newFeeds: Array<TTFeed> = posts
       .filter((post: TTPost) => {
         return currentFeeds.every((oldFeed: TTFeed) => {
-          return oldFeed.__id !== post.cid
+          return oldFeed.__id !== post.uri
         })
       })
       .map((post: TTPost) => {
         // ソート用プロパティ `__createdAt` の作成
         const record = response.records.find((record: TICommonRecord) => {
-          return record.value.subject.cid === post.cid
+          return record.value.subject.uri === post.uri
         })
         const createdAt = record != null
           ? record.value.createdAt
           : post.indexedAt
 
         return {
-          __id: post.cid,
+          __id: post.uri,
           __createdAt: createdAt,
           post,
         }

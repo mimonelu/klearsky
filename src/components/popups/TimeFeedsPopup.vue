@@ -58,7 +58,7 @@ function scrolledToBottom () {
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
   mainState.currentTimeFeeds.forEach((post: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) => post.cid === newPost.cid)
+    const newPost = newPosts.find((newPost: TTPost) => post.uri === newPost.uri)
     if (newPost != null) Util.updatePostProps(mainState.currentTimeFeeds[index], newPost)
   })
 }
@@ -99,7 +99,7 @@ function removeThisPost (uri: string) {
       >
         <Post
           v-for="post of mainState.currentTimeFeeds"
-          :key="post.cid"
+          :key="post.uri"
           position="post"
           :post="post"
           :container="state.postContainer"

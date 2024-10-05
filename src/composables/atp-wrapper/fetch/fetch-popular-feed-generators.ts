@@ -35,7 +35,7 @@ export default async function (
   ;(response.data.feeds as Array<TTFeedGenerator>)
     .forEach((newGenerator: TTFeedGenerator) => {
       if (currentValues.every((currentGenerator: TTFeedGenerator) => {
-        return newGenerator.cid !== currentGenerator.cid
+        return newGenerator.uri !== currentGenerator.uri
       })) {
         currentValues.push(newGenerator)
       }

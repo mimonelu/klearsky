@@ -68,7 +68,7 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       <template v-else>
         <StarterPackCard
           v-for="starterPack of mainState.currentAuthorStarterPacks"
-          :key="starterPack.cid"
+          :key="starterPack.uri"
           :starterPack="starterPack"
           :menuDisplay="true"
           :detailDisplay="true"

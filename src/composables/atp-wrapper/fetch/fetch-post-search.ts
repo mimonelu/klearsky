@@ -33,7 +33,7 @@ export default async function (
   const newPosts: Array<TTPost> = (response.data.posts as Array<TTPost>)
     .filter((post: TTPost) => {
       return currentPosts.every((currentPost: TTPost) => {
-        return currentPost.cid !== post.cid
+        return currentPost.uri !== post.uri
       })
     })
 

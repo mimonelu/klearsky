@@ -79,11 +79,11 @@ function removeThisPost (uri: string) {
       <template v-if="feed.__replyDisplay && (feed.reply?.root != null || feed.reply?.parent != null)">
         <!-- ルートポスト -->
         <Post
-          v-if="feed.reply?.root != null && !feed.reply?.root.notFound && feed.reply.root.cid !== feed.reply.parent?.cid"
+          v-if="feed.reply?.root != null && !feed.reply?.root.notFound && feed.reply.root.uri !== feed.reply.parent?.uri"
           position="root"
           :post="feed.reply.root"
           :isInFeed="true"
-          :data-has-child="feed.reply.root.cid === feed.reply?.parent?.record.reply?.parent?.cid"
+          :data-has-child="feed.reply.root.uri === feed.reply?.parent?.record.reply?.parent?.uri"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         />
@@ -101,7 +101,7 @@ function removeThisPost (uri: string) {
               : undefined
           "
           :isInFeed="true"
-          :data-has-child="feed.reply.parent.cid === feed.post?.record?.reply?.parent?.cid"
+          :data-has-child="feed.reply.parent.uri === feed.post?.record?.reply?.parent?.uri"
           @updateThisPostThread="updateThisPostThread"
           @removeThisPost="removeThisPost"
         />
