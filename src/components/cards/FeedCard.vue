@@ -258,10 +258,26 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         </RouterLink>
 
         <!-- SkyFeed ラベル -->
-        <div
+        <a
           v-if="generator.did === 'did:web:skyfeed.me'"
-          class="feed-card__creator__via"
-        >(SkyFeed)</div>
+          class="feed-card__creator__via textlink--underline"
+          href="https://skyfeed.app/"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <span>(SkyFeed)</span>
+        </a>
+
+        <!-- Starrysky ラベル -->
+        <a
+          v-if="generator.did === 'did:web:starrysky-proxy.usounds.work'"
+          class="feed-card__creator__via textlink--underline"
+          href="https://starrysky-console.pages.dev/"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <span>(Starrysky)</span>
+        </a>
       </div>
     </div>
 
