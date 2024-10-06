@@ -9,7 +9,10 @@ export default async function (
   if (this.session == null) {
     return Error("noSessionError")
   }
-  const headers = { "atproto-proxy": "did:web:api.bsky.chat#bsky_chat" }
+  const headers: Record<string, string> = {}
+  if (this.proxies.chat != null) {
+    headers["atproto-proxy"] = this.proxies.chat
+  }
   const response: Error | TTCidUri =
     await this.agent.api.chat.bsky.actor.declaration.create(
       { repo },
