@@ -1,4 +1,4 @@
-import type { Directive, DirectiveBinding } from "vue"
+import type { DirectiveBinding } from "vue"
 
 interface IntersectionObserverOptions {
   inboundHandler?: () => void
@@ -6,7 +6,8 @@ interface IntersectionObserverOptions {
   options?: IntersectionObserverInit
 }
 
-const intersectionObserver: Directive = {
+// 交差オブザーバー
+export default {
   mounted (
     element: HTMLElement,
     binding: DirectiveBinding<IntersectionObserverOptions>
@@ -34,5 +35,3 @@ const intersectionObserver: Directive = {
     ;(element as any).__observer__?.disconnect()
   },
 }
-
-export default intersectionObserver

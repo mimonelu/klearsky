@@ -105,6 +105,7 @@ function pause () {
 </script>
 
 <template>
+  <!-- 交差オブザーバーで画面外への移動を検出したら一時停止する -->
   <video
     v-intersection-observer="{ outboundHandler: pause }"
     class="video-player"

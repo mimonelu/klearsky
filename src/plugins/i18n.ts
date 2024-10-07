@@ -1,27 +1,27 @@
 import type { App } from "vue"
 import Util from "@/composables/util"
 
-type TTTranslations = {
+interface TITranslationMap {
   [k: string]: {
     [k: string]: string
   }
 }
 
+// 翻訳
 export default {
-  install(app: App, translations: TTTranslations) {
+  install(app: App, translationMap: TITranslationMap) {
     let currentLanguage = Util.getUserLanguage() ?? "en"
 
-    const $setCurrentLanguage = (newLanguage: string) => {
+    app.provide("$setCurrentLanguage", (newLanguage: string) => {
       currentLanguage = newLanguage
-    }
-    app.provide("$setCurrentLanguage", $setCurrentLanguage)
+    })
 
-    const $getCurrentLanguage = (): string => currentLanguage
-    app.provide("$getCurrentLanguage", $getCurrentLanguage)
+    app.provide("$getCurrentLanguage", (): string => {
+      return currentLanguage
+    })
 
-    const $t = (key: string): string => {
-      const translation = translations[currentLanguage] ?? translations.en
-      return translation[key] ?? translations.en[key] ?? key
+    function $t (key: string): string {
+      return translationMap[currentLanguage]?.[key] ?? translationMap.en?.[key] ?? key
     }
     app.config.globalProperties.$t = $t
     app.provide("$t", $t)

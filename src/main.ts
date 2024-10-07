@@ -1,26 +1,34 @@
+// Sass
 import "@/scss/main.scss"
 
 import { createApp } from "vue"
-import PortalVue from "portal-vue"
-import App from "@/App.vue"
-import i18n from "@/plugins/i18n"
-import IntersectionObserverDirective from "@/plugins/intersection-observer-directive"
 import router from "@/router"
+import App from "@/App.vue"
+
+// ポータル
+import PortalVue from "portal-vue"
 
 // 翻訳
+import i18n from "@/plugins/i18n"
 import translationEn from "@/translations/en.json"
 import translationJa from "@/translations/ja.json"
 
+// 交差オブザーバー
+import IntersectionObserverDirective from "@/plugins/intersection-observer-directive"
+
 const app = createApp(App)
 app.use(router)
+
+// ポータル
 app.use(PortalVue)
-app.directive("intersection-observer", IntersectionObserverDirective)
 
 // 翻訳
-const translations = {
+app.use(i18n, {
   en: translationEn,
   ja: translationJa,
-}
-app.use(i18n, translations)
+})
+
+// 交差オブザーバー
+app.directive("intersection-observer", IntersectionObserverDirective)
 
 app.mount("#app")
