@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue"
-import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -29,11 +28,14 @@ const popupBody = ref()
 
 onMounted(() => {
   // インフィニットスクロール用処理
-  useEventListener(popupBody, "scroll", scrollListener)
+  popupBody.value?.addEventListener("scroll", onScroll)
 })
 
 onBeforeMount(() => {
   hotkeys("esc", close)
+
+  // インフィニットスクロール用処理
+  popupBody.value?.removeEventListener("scroll", onScroll)
 })
 
 onBeforeUnmount(() => {
@@ -76,7 +78,7 @@ function diffScrollBottom (): undefined | number {
 
 // インフィニットスクロール用処理
 let isEnter = false
-function scrollListener () {
+function onScroll () {
   if (popupBody?.value == null) {
     return
   }

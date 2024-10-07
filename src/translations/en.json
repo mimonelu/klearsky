@@ -628,6 +628,9 @@
   "pnVimeo": "Vimeo",
   "pnNicovideo": "Nicovideo",
 
+  "globalError": "An unknown error occured.",
+  "unhandledRejectionError": "An unhandled rejection error occured.",
+  "rejectionHandledError": "A rejection handled error occured.",
   "apiError": "An error occurred while connecting to the API.",
   "cidEncodeError": "An error occurred while encoding the CID.",
   "downloadImageError": "An error occurred while downloading images.",

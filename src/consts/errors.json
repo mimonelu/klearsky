@@ -1,10 +1,4 @@
 {
-  "IGNORE": [
-    "AuthenticationRequired"
-  ],
-  "REPLACE": [
-    "sessionExpired"
-  ],
   "PROFILE_ERRORS": {
     "Account has been suspended": "suspendedAccount",
     "Account is deactivated": "deactivatedAccount",

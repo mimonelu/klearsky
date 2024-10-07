@@ -628,6 +628,9 @@
   "pnVimeo": "Vimeo",
   "pnNicovideo": "ニコニコ動画",
 
+  "globalError": "不明なエラーが発生しました。",
+  "unhandledRejectionError": "Unhandled rejectionエラーが発生しました。",
+  "rejectionHandledError": "Rejection handledエラーが発生しました。",
   "apiError": "APIへの接続中にエラーが発生しました。",
   "cidEncodeError": "CIDのエンコードでエラーが発生しました。",
   "downloadImageError": "画像のダウンロード中にエラーが発生しました。",

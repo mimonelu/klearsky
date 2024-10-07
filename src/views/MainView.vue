@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, provide, ref } from "vue"
 import { useRouter, type LocationQueryValue, type RouteLocationNormalized } from "vue-router"
-import { useEventListener } from "@vueuse/core"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
@@ -108,16 +107,22 @@ onMounted(async () => {
   state.updatePageTitle()
 
   // ペースト用処理
-  useEventListener(window, "paste", onPaste)
+  window.addEventListener("paste", onPaste)
 
   // インフィニットスクロール用処理
-  useEventListener(window, "scroll", scrollListener)
+  window.addEventListener("scroll", onScroll)
 
   state.mounted = true
 })
 
 onBeforeUnmount(() => {
   hotkeys.unbind("n")
+
+  // ペースト用処理
+  window.removeEventListener("paste", onPaste)
+
+  // インフィニットスクロール用処理
+  window.removeEventListener("scroll", onScroll)
 })
 
 onUnmounted(() => {
@@ -711,7 +716,7 @@ function changeSetting () {
 // インフィニットスクロール用処理
 
 let isEnter = false
-function scrollListener () {
+function onScroll () {
   const threshold = 64
   const diff = Math.abs(window.scrollY - (
     window.document.documentElement.scrollHeight -
