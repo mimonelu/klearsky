@@ -14,6 +14,7 @@ import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
 import CustomBookmarkPopup from "@/components/popups/CustomBookmarkPopup.vue"
 import CustomBookmarkManagementPopup from "@/components/popups/CustomBookmarkManagementPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
+import DropFiles from "@/components/next/DropFiles/Main.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
 import FeedCardPopover from "@/components/popovers/FeedCardPopover.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
@@ -39,6 +40,7 @@ import MyListPopup from "@/components/popups/MyListPopup.vue"
 import MyWordPopup from "@/components/popups/MyWordPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
+import PasteFiles from "@/components/next/PasteFiles/Main.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
 import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
@@ -77,6 +79,8 @@ state.updatePageTitle = updatePageTitle
 
 const loginPopup = ref(null)
 
+const dropFiles = ref(null)
+
 provide("state", state)
 
 // ワーカーの削除
@@ -106,9 +110,6 @@ onMounted(async () => {
   state.loaderDisplay = false
   state.updatePageTitle()
 
-  // ペースト用処理
-  window.addEventListener("paste", onPaste)
-
   // インフィニットスクロール用処理
   window.addEventListener("scroll", onScroll)
 
@@ -117,9 +118,6 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   hotkeys.unbind("n")
-
-  // ペースト用処理
-  window.removeEventListener("paste", onPaste)
 
   // インフィニットスクロール用処理
   window.removeEventListener("scroll", onScroll)
@@ -735,65 +733,6 @@ function onScroll () {
     isEnter = false
   }
 }
-
-// D&D用処理
-
-function onDragEnter (event: DragEvent) {
-  const types = event.dataTransfer?.types
-  if (types == null || !types.includes("Files")) return
-  state.isDragOver = true
-}
-
-function onDragLeave () {
-  state.isDragOver = false
-}
-
-function onDrop (event: DragEvent) {
-  state.isDragOver = false
-  if (!state.atp.hasLogin()) return
-  if (event.dataTransfer?.items == null) return
-  attachFilesToPost(event.dataTransfer.items)
-}
-
-// ペースト用処理
-
-function onPaste (event: ClipboardEvent) {
-  if (!state.atp.hasLogin()) return
-  if (event.clipboardData?.items == null) return
-  if (attachFilesToPost(event.clipboardData.items)) {
-    // ファイル名がテキストエリアにペーストされる現象を回避
-    event.preventDefault()
-  }
-}
-
-// D&D・ペースト用処理共通
-
-function attachFilesToPost (items: DataTransferItemList): boolean {
-  const attachingItems = Array.from(items)
-    .filter((item: DataTransferItem) => {
-      // 対象はメディアファイルのみ
-      return item.kind === "file" && (
-        item.type.startsWith("image/") ||
-        item.type.startsWith("video/")
-      )
-    })
-  if (attachingItems.length === 0) {
-    return false
-  }
-  const fileList = attachingItems
-    .map((item: DataTransferItem) => {
-      return item.getAsFile()
-    }) as unknown as FileList
-  if (state.sendPostPopupProps.visibility) {
-    state.sendPostPopupProps.fileList = fileList
-  } else {
-    state.openSendPostPopup({
-      type: "post",
-      fileList,
-    })
-  }
-  return true
-}
 </script>
 
 <template>
@@ -804,7 +743,7 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     :style="{
       '--main-area-opacity': state.currentSetting.mainAreaOpacity ?? 1.0,
     }"
-    @dragenter.prevent="onDragEnter"
+    @dragenter.prevent="(dropFiles as any)?.onDragEnter"
   >
     <!-- 壁紙 -->
     <div
@@ -1391,20 +1330,9 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
         </HtmlPopup>
       </Transition>
 
-      <!-- 　D&Dオーバーレイ -->
-      <Transition>
-        <div
-          v-if="state.isDragOver"
-          class="drag-and-drop-overlay"
-          @click="onDragLeave"
-          @dragenter.prevent
-          @dragover.prevent
-          @dragleave.prevent="onDragLeave"
-          @drop.prevent.stop="onDrop"
-        >
-          <SVGIcon name="image" />
-        </div>
-      </Transition>
+      <PasteFiles />
+
+      <DropFiles ref="dropFiles" />
 
       <!-- ログインポップアップ -->
       <Transition>
@@ -1628,27 +1556,6 @@ function attachFilesToPost (items: DataTransferItemList): boolean {
     min-width: $menu-max-width;
     max-width: $menu-max-width;
     height: 100%;
-  }
-}
-
-// D&Dオーバーレイ
-.drag-and-drop-overlay {
-  background-color: rgb(var(--bg-color), 0.5);
-  border: 0.5rem  solid rgb(var(--accent-color));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-
-  & > .svg-icon {
-    fill: rgb(var(--accent-color));
-    font-size: 4rem;
-    pointer-events: none;
   }
 }
 

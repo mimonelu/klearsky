@@ -1,4 +1,4 @@
-import MyConvo from "@/composables/main-state-classes/my-convo"
+import MyConvo from "@/composables/main-state/my-convo"
 
 export default class MyChat {
   mainState: MainState

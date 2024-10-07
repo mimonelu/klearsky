@@ -12,12 +12,10 @@ interface MainState {
   forceUpdate: () => void
   formatDate: (dateString?: string) => string
   updatePageTitle: () => void
+  attachFilesToPost: (this: MainState, items: DataTransferItemList) => boolean
 
   // MyWorker
   myWorker?: TIMyWorker
-
-  // D&D
-  isDragOver: boolean
 
   // インフィニットスクロール用プロパティ
   scrolledToBottom: boolean
