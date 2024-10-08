@@ -15,6 +15,7 @@
   "feeds": "フィード",
   "feedsAll": "すべてのフィード",
   "feedsPinned": "ピン留めフィード",
+  "notSet": "未設定",
   "reset": "リセットする",
   "resetTextarea": "テキストエリアをリセットします。よろしいですか？",
   "show": "表示する",

@@ -534,7 +534,14 @@ const PreviewLinkCardFeature: {
             >
               <SVGIcon name="translate" />
               <span>{{ $t("languages") }}</span>
-              <b v-if="mainState.currentSetting.postLanguages?.length">{{ mainState.currentSetting.postLanguages?.join(", ") }}</b>
+              <b
+                v-if="mainState.currentSetting.postLanguages?.length"
+                class="post-language-button__set"
+              >{{ mainState.currentSetting.postLanguages?.join(", ") }}</b>
+              <b
+                v-else
+                class="post-language-button__not-set"
+              >{{ $t("notSet") }}</b>
             </button>
 
             <!-- ポストラベル選択ポップアップトリガー -->
@@ -764,9 +771,15 @@ const PreviewLinkCardFeature: {
         word-break: break-all;
       }
     }
-    .post-language-button > b {
-      color: rgb(var(--fg-color));
-      text-transform: uppercase;
+    .post-language-button {
+      &__set {
+        color: rgb(var(--fg-color));
+        text-transform: uppercase;
+      }
+
+      &__not-set {
+        color: rgb(var(--notice-color));
+      }
     }
 
     .on-off-button > b {
