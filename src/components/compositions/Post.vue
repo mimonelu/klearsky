@@ -1753,6 +1753,11 @@ function toggleOldestQuotedPostDisplay () {
   // 表示名
   &__display-name {
     grid-area: d;
+    overflow: hidden;
+
+    & > a {
+      display: inline-block;
+    }
 
     .display-name {
       color: rgb(var(--fg-color), 0.75);
