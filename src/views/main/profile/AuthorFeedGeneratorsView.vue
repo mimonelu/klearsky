@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { inject, watch } from "vue"
+import { inject } from "vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -14,10 +15,15 @@ async function fetchAuthorFeedGenerators (direction: "new" | "old") {
   mainState.listLoaderDisplay = false
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchAuthorFeedGenerators("old")
-})
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !mainState.listLoaderDisplay
+  ) {
+    fetchAuthorFeedGenerators("old")
+  }
+}
 </script>
 
 <template>
@@ -53,6 +59,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       direction="old"
       :processing="mainState.listLoaderDisplay"
       @activate="fetchAuthorFeedGenerators('old')"
+    />
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
     />
   </div>
 </template>

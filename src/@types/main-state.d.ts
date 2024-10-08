@@ -17,9 +17,6 @@ interface MainState {
   // MyWorker
   myWorker?: TIMyWorker
 
-  // インフィニットスクロール用プロパティ
-  scrolledToBottom: boolean
-
   // 現在のサーバ情報
   currentServerInfo?: TTServerInfo
   fetchCurrentServerInfo: () => void

@@ -2,6 +2,7 @@
 import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
@@ -23,11 +24,6 @@ const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, (value:
   if (value != null) mainState.currentSearchTerm = value
 }, { immediate: true })
 
-// インフィニットスクロール
-const unwatchOnScroll = watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchContinuousResults("old")
-})
-
 onMounted(async () => {
   const textbox = document.getElementById("user-term-textbox")
   if (textbox != null) textbox.focus()
@@ -37,7 +33,6 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   unwatchOnQuery()
-  unwatchOnScroll()
 })
 
 async function fetchNewResults () {
@@ -119,6 +114,16 @@ function openKeywordHistoryPopover ($event: Event) {
     }
   )
 }
+
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !state.processing
+  ) {
+    fetchContinuousResults("old")
+  }
+}
 </script>
 
 <template>
@@ -174,6 +179,12 @@ function openKeywordHistoryPopover ($event: Event) {
         @activate="fetchContinuousResults('old')"
       />
     </div>
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
+    />
   </div>
 </template>
 

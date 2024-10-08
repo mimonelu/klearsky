@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, watch, type ComputedRef } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -30,10 +31,15 @@ function openStarterPackEditPopup () {
   })
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchStarterPacks("old")
-})
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !mainState.listLoaderDisplay
+  ) {
+    fetchStarterPacks("old")
+  }
+}
 </script>
 
 <template>
@@ -82,7 +88,13 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :processing="mainState.listLoaderDisplay"
       @activate="fetchStarterPacks('old')"
     />
-</div>
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, watch, type ComputedRef } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import ListCardList from "@/components/lists/ListCardList.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 
 const mainState = inject("state") as MainState
 
@@ -23,10 +24,15 @@ async function fetchLists (direction: "new" | "old") {
   mainState.listLoaderDisplay = false
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchLists("old")
-})
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !mainState.listLoaderDisplay
+  ) {
+    fetchLists("old")
+  }
+}
 </script>
 
 <template>
@@ -38,6 +44,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       :loaderDisplay="!mainState.isMyProfile()"
       :isCompact="false"
       @fetch="fetchLists"
+    />
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
     />
   </div>
 </template>

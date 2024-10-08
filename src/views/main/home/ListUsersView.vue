@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { inject, watch } from "vue"
+import { inject } from "vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
@@ -30,10 +31,15 @@ function openListUserManagementPopup (user: TTUser) {
   mainState.openListUserManagementPopup({ user })
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchListItems("old")
-})
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !mainState.listLoaderDisplay
+  ) {
+    fetchListItems("old")
+  }
+}
 </script>
 
 <template>
@@ -80,6 +86,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       direction="old"
       :processing="mainState.listLoaderDisplay"
       @activate="fetchListItems('old')"
+    />
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
     />
   </div>
 </template>

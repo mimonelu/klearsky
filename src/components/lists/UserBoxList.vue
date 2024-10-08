@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { inject, watch } from "vue"
+import { inject } from "vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Loader from "@/components/shells/Loader.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
 
@@ -41,13 +42,16 @@ async function fetchUsers (direction: "new" | "old") {
   }
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  // おすすめユーザーはページネーションなし
-  if (props.type === "suggestedFollows") return
-
-  if (value) fetchUsers("old")
-})
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !mainState.listLoaderDisplay &&
+    props.type !== "suggestedFollows"
+  ) {
+    fetchUsers("old")
+  }
+}
 </script>
 
 <template>
@@ -84,6 +88,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
 
     <!-- おすすめユーザー用ローダー -->
     <Loader v-if="type === 'suggestedFollows' && mainState.listLoaderDisplay" />
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
+    />
   </div>
 </template>
 

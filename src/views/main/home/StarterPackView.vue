@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive, watch, type ComputedRef } from "vue"
+import { computed, inject, onMounted, reactive, type ComputedRef } from "vue"
 import { type RouteLocationRaw } from "vue-router"
 import Feed from "@/components/compositions/Feed.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import UserSlider from "@/components/compositions/UserSlider.vue"
 import Util from "@/composables/util"
@@ -89,10 +90,15 @@ function removeThisPost (uri: string) {
   })
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchFeeds("old")
-})
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !mainState.listLoaderDisplay
+  ) {
+    fetchFeeds("old")
+  }
+}
 </script>
 
 <template>
@@ -172,6 +178,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
         @activate="fetchFeeds('old')"
       />
     </template>
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
+    />
   </div>
 </template>
 

@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, watch, type ComputedRef } from "vue"
+import { computed, inject, reactive, type ComputedRef } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import MediaList from "@/components/lists/MediaList.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -32,10 +33,15 @@ async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   mainState.listLoaderDisplay = false
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchCurrentAuthorFeed("old")
-})
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !mainState.listLoaderDisplay
+  ) {
+    fetchCurrentAuthorFeed("old")
+  }
+}
 </script>
 
 <template>
@@ -50,6 +56,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       direction="old"
       :processing="mainState.listLoaderDisplay"
       @activate="fetchCurrentAuthorFeed('old')"
+    />
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
     />
   </div>
 </template>

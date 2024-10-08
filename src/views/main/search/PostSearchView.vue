@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Post from "@/components/compositions/Post.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -61,11 +62,6 @@ const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, async (
     await fetchNewResults()
 }, { immediate: true })
 
-// インフィニットスクロール
-const unwatchOnScroll = watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchContinuousResults("old")
-})
-
 onMounted(async () => {
   const textbox = document.getElementById("post-term-textbox")
   if (textbox != null) textbox.focus()
@@ -76,7 +72,6 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   unwatchOnQuery()
-  unwatchOnScroll()
 })
 
 function updateSearchPostTerm (text: string) {
@@ -151,6 +146,16 @@ function openKeywordHistoryPopover ($event: Event) {
     }
   )
 }
+
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !state.processing
+  ) {
+    fetchContinuousResults("old")
+  }
+}
 </script>
 
 <template>
@@ -216,6 +221,12 @@ function openKeywordHistoryPopover ($event: Event) {
         @activate="fetchContinuousResults('old')"
       />
     </div>
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
+    />
   </div>
 </template>
 

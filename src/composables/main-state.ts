@@ -37,9 +37,6 @@ export const state: MainState = reactive<MainState>({
   // MyWorker
   myWorker: undefined,
 
-  // インフィニットスクロール用プロパティ
-  scrolledToBottom: false,
-
   // 現在のサーバ情報
   currentServerInfo: undefined,
   fetchCurrentServerInfo: fetchCurrentServerInfo,

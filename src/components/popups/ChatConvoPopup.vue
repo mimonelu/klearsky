@@ -166,7 +166,7 @@ async function updateMessagesOnTick () {
   if (props.myConvo == null) {
     return
   }
-  const diff = (popup.value as any).diffScrollBottom()
+  const diff = (popup as any)?.value?.scrollObserver?.diffScrollBottom()
 
   // TODO:
   // 通信量削減のため、通常は1つのみ取得し、段階的に取得数を増やしている
@@ -178,7 +178,7 @@ async function updateMessagesOnTick () {
     }
   }
 
-  if (diff >= - 8) {
+  if (diff <= 8) {
     scrollToBottom()
   }
   if (numberOfNewMessages >= 1) {

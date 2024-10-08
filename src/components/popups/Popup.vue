@@ -2,15 +2,20 @@
 import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import hotkeys from "hotkeys-js"
 import Loader from "@/components/shells/Loader.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
+
+const popupBody = ref()
+
+const scrollObserver = ref()
 
 defineExpose({
   scrollToTop,
   scrollToBottom,
   scrollTop,
-  diffScrollBottom,
+  scrollObserver,
 })
 
 defineProps<{
@@ -18,24 +23,8 @@ defineProps<{
   loaderDisplay?: boolean
 }>()
 
-const state = reactive<{
-  scrolledToBottom: boolean
-}>({
-  scrolledToBottom: false,
-})
-
-const popupBody = ref()
-
-onMounted(() => {
-  // インフィニットスクロール用処理
-  popupBody.value?.addEventListener("scroll", onScroll)
-})
-
 onBeforeMount(() => {
   hotkeys("esc", close)
-
-  // インフィニットスクロール用処理
-  popupBody.value?.removeEventListener("scroll", onScroll)
 })
 
 onBeforeUnmount(() => {
@@ -46,7 +35,7 @@ function close () {
   emit("close")
 }
 
-function scrollToTop (behavior: undefined | string) {
+function scrollToTop (behavior?: string) {
   popupBody?.value?.scrollTo({
     left: 0,
     top: 0,
@@ -54,7 +43,7 @@ function scrollToTop (behavior: undefined | string) {
   })
 }
 
-function scrollToBottom (behavior: undefined | string) {
+function scrollToBottom (behavior?: string) {
   popupBody?.value?.scrollTo({
     left: 0,
     top: Number.MAX_SAFE_INTEGER,
@@ -64,36 +53,6 @@ function scrollToBottom (behavior: undefined | string) {
 
 function scrollTop (): undefined | number {
   return popupBody?.value?.scrollTop
-}
-
-function diffScrollBottom (): undefined | number {
-  if (popupBody?.value == null) {
-    return
-  }
-  return popupBody.value.scrollTop - (
-    popupBody.value.scrollHeight -
-    popupBody.value.clientHeight
-  )
-}
-
-// インフィニットスクロール用処理
-let isEnter = false
-function onScroll () {
-  if (popupBody?.value == null) {
-    return
-  }
-  const threshold = 64
-  const diff = Math.abs(diffScrollBottom() as number)
-  state.scrolledToBottom = false
-  if (diff < threshold) {
-    if (!isEnter) {
-      state.scrolledToBottom = true
-      emit("scrolledToBottom")
-    }
-    isEnter = true
-  } else {
-    isEnter = false
-  }
 }
 </script>
 
@@ -123,6 +82,12 @@ function onScroll () {
         ref="popupBody"
       >
         <slot name="body" />
+
+        <!-- スクロールオブザーバー -->
+        <ScrollObserver
+          ref="scrollObserver"
+          @scrolledToBottom="emit('scrolledToBottom')"
+        />
       </div>
       <slot name="footer" />
       <Loader v-if="loaderDisplay" />

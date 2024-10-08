@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { inject, watch } from "vue"
+import { inject } from "vue"
 import Feed from "@/components/compositions/Feed.vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
@@ -48,10 +49,15 @@ function removeThisPost (uri: string) {
   })
 }
 
-// インフィニットスクロール
-watch(() => mainState.scrolledToBottom, (value: boolean) => {
-  if (value) fetchFeeds("old")
-})
+// スクロールオブザーバー
+function onScrolledToBottom () {
+  if (
+    mainState.atp.hasLogin() &&
+    !mainState.listLoaderDisplay
+  ) {
+    fetchFeeds("old")
+  }
+}
 </script>
 
 <template>
@@ -98,6 +104,12 @@ watch(() => mainState.scrolledToBottom, (value: boolean) => {
       direction="old"
       :processing="mainState.listLoaderDisplay"
       @activate="fetchFeeds('old')"
+    />
+
+    <!-- スクロールオブザーバー -->
+    <ScrollObserver
+      :isWindow="true"
+      @scrolledToBottom="onScrolledToBottom"
     />
   </div>
 </template>

@@ -63,7 +63,6 @@ import SplashScreen from "@/components/shells/SplashScreen.vue"
 import StarterPackCardPopover from "@/components/popovers/StarterPackCardPopover.vue"
 import StarterPackEditPopup from "@/components/popups/StarterPackEditPopup.vue"
 import SubMenu from "@/components/shells/SubMenu.vue"
-import SVGIcon from "@/components/images/SVGIcon.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import UiLanguageSettingsPopup from "@/components/popups/settings-popups/UiLanguageSettingsPopup.vue"
 import WordMutePopup from "@/components/popups/WordMutePopup.vue"
@@ -109,18 +108,11 @@ onMounted(async () => {
   await autoLogin()
   state.loaderDisplay = false
   state.updatePageTitle()
-
-  // インフィニットスクロール用処理
-  window.addEventListener("scroll", onScroll)
-
   state.mounted = true
 })
 
 onBeforeUnmount(() => {
   hotkeys.unbind("n")
-
-  // インフィニットスクロール用処理
-  window.removeEventListener("scroll", onScroll)
 })
 
 onUnmounted(() => {
@@ -709,29 +701,6 @@ function saveSetting () {
 function changeSetting () {
   state.saveSettings()
   state.updateSettings()
-}
-
-// インフィニットスクロール用処理
-
-let isEnter = false
-function onScroll () {
-  const threshold = 64
-  const diff = Math.abs(window.scrollY - (
-    window.document.documentElement.scrollHeight -
-    window.document.documentElement.clientHeight
-  ))
-  state.scrolledToBottom = false
-  if (diff < threshold) {
-    if (!isEnter &&
-      state.mounted &&
-      state.atp.hasLogin() &&
-      !state.loaderDisplay &&
-      !state.listLoaderDisplay
-    ) state.scrolledToBottom = true
-    isEnter = true
-  } else {
-    isEnter = false
-  }
 }
 </script>
 
