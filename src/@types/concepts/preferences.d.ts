@@ -1,25 +1,37 @@
 type TTPreferenceFeedType = "pinned" | "saved"
 
-type TTPreference = {
-  $type: string
+type TTPreference =
+  TTPreferenceLabel |
+  TTPreferenceLabeler |
+  TTPreferenceCustomFeedV1 |
+  TTPreferenceCustomFeedV2
 
-  // ラベル
-  enabled?: boolean
+type TTPreferenceLabel = {
+  $type: "app.bsky.actor.defs#contentLabelPref"
+  // enabled?: boolean
   label?: string
-  visibility?: TTContentVisibility
-
-  // ラベラー
-  labelers?: Array<{ did: string }>
   labelerDid?: string
+  visibility?: TTContentVisibility
+}
 
-  // カスタムフィード - savedFeedsPref
+type TTPreferenceLabeler = {
+  $type: "app.bsky.actor.defs#labelersPref"
+  labelers?: Array<{ did: string }>
+  // labelerDid?: string
+}
+
+type TTPreferenceCustomFeedV1 = {
+  $type: "app.bsky.actor.defs#savedFeedsPref"
   pinned?: Array<string>
   saved?: Array<string>
+}
 
-  // カスタムフィード - savedFeedsPrefV2
+type TTPreferenceCustomFeedV2 = {
+  $type: "app.bsky.actor.defs#savedFeedsPrefV2"
   items?: Array<{
-    pinned?: Array<string>
-    saved?: Array<string>
-    timelineIndex?: number
+    id?: string
+    type?: "timeline" | "feed" | "list"
+    value?: string
+    pinned?: boolean
   }>
 }

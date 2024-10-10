@@ -16,7 +16,7 @@ export default function (preferences: Array<TTPreference>) {
   const savedFeedsPrefV1 = preferences
     .find((preference: TTPreference) => {
       return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
-    })
+    }) as TTPreferenceCustomFeedV1
   if (savedFeedsPrefV1 != null) {
     if (savedFeedsPrefV1.pinned != null) {
       savedFeedsPrefV1.pinned = Array.from(new Set(savedFeedsPrefV1.pinned))
