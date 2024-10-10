@@ -89,7 +89,7 @@ async function isUriExisting (url: string): Promise<boolean> {
     headers: { range: "bytes=0-0" },
   })
     .then((value) => value)
-    .then((error) => error)
+    .catch((error) => error)
   if (response instanceof Error) {
     return false
   }
