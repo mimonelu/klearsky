@@ -49,7 +49,7 @@ async function updatePinnedPost (uri?: string, cid?: string) {
 <template>
   <!-- 固定ポストの解除 -->
   <button
-    v-if="mainState.userProfile?.pinnedPost?.uri === post.uri"
+    v-if="post.uri === mainState.userProfile?.pinnedPost?.uri"
     type="button"
     @click.prevent.stop="updatePinnedPost()"
   >
@@ -57,9 +57,9 @@ async function updatePinnedPost (uri?: string, cid?: string) {
     <span>{{ $t("pinnedPostOff") }}</span>
   </button>
 
-  <!-- 固定ポストの選択 -->
+  <!-- 固定ポストの選択（自身のポストのみ） -->
   <button
-    v-else
+    v-else-if="post.author?.did === mainState.atp.data.did"
     type="button"
     @click.prevent.stop="updatePinnedPost(post.uri, post.cid)"
   >
