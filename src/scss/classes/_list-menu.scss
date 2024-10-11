@@ -99,5 +99,9 @@
   & > hr {
     border-bottom: 1px solid rgb(var(--fg-color), 0.125);
     margin: 0 0.5rem;
+    &:first-child,
+    &:last-child {
+      display: none;
+    }
   }
 }
