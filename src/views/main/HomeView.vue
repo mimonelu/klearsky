@@ -68,7 +68,7 @@ async function autoScrollSliderMenu () {
         >
           <!-- フォロー中フィード -->
           <RouterLink
-            v-if="item.kind === 'followings'"
+            v-if="item.kind === 'following'"
             class="slider-menu__link"
             to="/home/timeline"
             :data-is-selected="true"

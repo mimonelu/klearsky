@@ -1,7 +1,8 @@
 export default function (preferences: Array<TTPreference>) {
+  /*
   // savedFeedsPrefV1 がなければ作成
   const hasSavedFeedsPrefV1 = preferences
-    .some((preference: TTPreference) => {
+    .some((preference) => {
       return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
     })
   if (!hasSavedFeedsPrefV1) {
@@ -14,7 +15,7 @@ export default function (preferences: Array<TTPreference>) {
 
   // savedFeedsPrefV1 の重複する保存されたフィードとピン留めされたフィードを丸める
   const savedFeedsPrefV1 = preferences
-    .find((preference: TTPreference) => {
+    .find((preference) => {
       return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
     }) as TTPreferenceCustomFeedV1
   if (savedFeedsPrefV1 != null) {
@@ -25,11 +26,11 @@ export default function (preferences: Array<TTPreference>) {
       savedFeedsPrefV1.saved = Array.from(new Set(savedFeedsPrefV1.saved))
     }
   }
+  */
 
-  /*
   // savedFeedsPrefV2 がなければ作成
   const hasSavedFeedsPrefV2 = preferences
-    .some((preference: TTPreference) => {
+    .some((preference) => {
       return preference.$type === "app.bsky.actor.defs#savedFeedsPrefV2"
     })
   if (!hasSavedFeedsPrefV2) {
@@ -39,15 +40,14 @@ export default function (preferences: Array<TTPreference>) {
     })
   }
 
-  // savedFeedsPrefV2 の重複する保存されたフィードとピン留めされたフィードを丸める
+  // savedFeedsPrefV2 の重複するフィードを丸める
   const savedFeedsPrefV2 = preferences
-    .find((preference: TTPreference) => {
+    .find((preference) => {
       return preference.$type === "app.bsky.actor.defs#savedFeedsPrefV2"
-    })
+    }) as undefined | TTPreferenceCustomFeedV2
   if (savedFeedsPrefV2 != null) {
     if (savedFeedsPrefV2.items != null) {
       savedFeedsPrefV2.items = Array.from(new Set(savedFeedsPrefV2.items))
     }
   }
-  */
 }

@@ -24,7 +24,7 @@ type TTMyFeedsItem = {
   kind: "list",
   value: TTList
 } | {
-  kind: "followings" | "globalline"
+  kind: "following" | "globalline"
   value: {
     uri: string
     displayName: string
@@ -34,6 +34,6 @@ type TTMyFeedsItem = {
   value: any
 }
 
-type TTMyFeedsItemKind = "feed" | "list" | "followings" | "globalline" | "unknown"
+type TTMyFeedsItemKind = "feed" | "list" | "following" | "globalline" | "unknown"
 
 type TTMyFeedsItemValue = TTFeedGenerator | TTList

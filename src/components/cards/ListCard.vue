@@ -212,10 +212,9 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
 
 async function updatePreferences () {
   state.loaderDisplay = true
-  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+  const result = await mainState.updatePreferences()
   state.loaderDisplay = false
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "ListCard/updatePreferences")
+  if (!result) {
     return
   }
 

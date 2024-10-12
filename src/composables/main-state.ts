@@ -106,6 +106,7 @@ export const state: MainState = reactive<MainState>({
   // プリファレンス
   currentPreferences: [],
   fetchPreferences: fetchPreferences,
+  updatePreferences: updatePreferences,
 
   // ラベル
   hasLabel: hasLabel,
@@ -230,11 +231,7 @@ export const state: MainState = reactive<MainState>({
   currentCustomFeedsCursor: undefined,
   currentPopularFeedGenerators: [],
   currentPopularFeedGeneratorsCursor: undefined,
-  currentFeedPreference: computed((): undefined | TTPreference => {
-    return state.currentPreferences.find((preference: TTPreference) => {
-      return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
-    })
-  }),
+  currentFeedPreference: currentFeedPreference(),
   fetchCustomFeeds: fetchCustomFeeds,
   fetchPopularFeedGenerators: fetchPopularFeedGenerators,
   sortFeedPreferencesSavedAndPinned: sortFeedPreferencesSavedAndPinned,
@@ -1115,11 +1112,67 @@ async function updateTimeline () {
 async function fetchPreferences (): Promise<boolean> {
   const preferences = await state.atp.fetchPreferences()
   if (preferences instanceof Error) {
-    // TODO:
-    // state.openErrorPopup(preferences, "mainState/fetchPreferences")
+    state.openErrorPopup(preferences, "mainState/fetchPreferences")
     return false
   }
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
+  return true
+}
+
+async function updatePreferences (): Promise<boolean> {
+  // V1 形式の内部データを V2 に変換して上書き
+  let preferencesV2 = state.currentPreferences.find((preference) => {
+    return preference.$type === "app.bsky.actor.defs#savedFeedsPrefV2"
+  }) as undefined | TTPreferenceCustomFeedV2
+  if (preferencesV2 == null) {
+    preferencesV2 = {
+      $type: "app.bsky.actor.defs#savedFeedsPrefV2",
+      items: [],
+    }
+  }
+  if (preferencesV2.items == null) {
+    preferencesV2.items = []
+  }
+  const idMap: { [k: string]: undefined | string } = {}
+  state.myFeeds?.items?.forEach((item) => {
+    const itemV2 = preferencesV2!.items!.find((itemV2) => {
+      return itemV2.value === item.value.uri
+    })
+    if (itemV2 == null) {
+      // TODO: ここで新規 __id を取得
+      return
+    }
+    idMap[item.value.uri] = itemV2.id
+  })
+  const itemsV2 = state.myFeeds?.items
+    ?.filter((item) => {
+      return idMap[item.value.uri] != null
+    })
+    .map((item) => {
+      const type = item.kind === "following"
+        ? "timeline"
+        : item.kind
+      const pinned = item.kind === "following"
+        ? true
+        : state.myFeeds?.pinnedUris?.some((uri) => {
+          return uri === item.value.uri
+        })
+      return {
+        id: idMap[item.value.uri] as string,
+        type,
+        value: item.value.uri,
+        pinned,
+      }
+    }) ?? []
+  console.log(111, itemsV2, preferencesV2.items)
+  // TODO:
+  // preferencesV2.items = itemsV2 as any
+
+  const result = await state.atp.updatePreferences(state.currentPreferences)
+  if (result instanceof Error) {
+    state.openErrorPopup(result, "mainState/updatePreferences")
+    return false
+  }
   return true
 }
 
@@ -1664,6 +1717,34 @@ async function fetchSearchFeeds (direction: "old" | "new") {
 }
 
 // カスタムフィード
+
+function currentFeedPreference () {
+  return computed((): undefined | TTPreferenceCustomFeedV1 => {
+    // V2 を V1 形式に変換している
+    const preferences = state.currentPreferences.find((preference) => {
+      return preference.$type === "app.bsky.actor.defs#savedFeedsPrefV2"
+    }) as undefined | TTPreferenceCustomFeedV2
+    if (preferences == null) {
+      return
+    }
+    return {
+      $type: "app.bsky.actor.defs#savedFeedsPref",
+      pinned: (preferences.items
+        ?.filter((preference) => {
+          return !!preference.pinned
+        })
+        .map((preference) => {
+          // URI に "following" が入る点に注意
+          return preference.value
+        }) ?? []) as Array<string>,
+      saved: (preferences.items
+        ?.map((preference) => {
+          // URI に "following" が入る点に注意
+          return preference.value
+        }) ?? []) as Array<string>,
+    }
+  })
+}
 
 async function fetchCustomFeeds (direction: TTDirection, middleCursor?: string) {
   if (state.currentCustomFeedsUri !== state.currentQuery.feed) {

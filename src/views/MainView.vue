@@ -322,7 +322,7 @@ async function processAfterLogin () {
   if (state.myFeeds!.items.length === 0) {
     state.myFeeds!.fetchItems()
       .then(() => {
-        state.myFeeds!.sortItems()
+        // state.myFeeds!.sortItems()
         state.myFeeds!.synchronizeToMyList()
 
         // セッションキャッシュの設定

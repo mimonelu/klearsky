@@ -98,9 +98,8 @@ async function updateLabelPreferences () {
     )
   })
   mainState.myLabeler!.cleanLabelPreferences()
-  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "LabelerSettingsPopup/close")
+  const result = await mainState.updatePreferences()
+  if (!result) {
     return
   }
 

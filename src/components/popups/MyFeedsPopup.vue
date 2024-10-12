@@ -24,10 +24,9 @@ async function close () {
     state.popupLoaderDisplay = true
     mainState.sortFeedPreferencesSavedAndPinned()
     mainState.myFeeds!.saveCustomItemSettings()
-    const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+    const result = await mainState.updatePreferences()
     state.popupLoaderDisplay = false
-    if (result instanceof Error) {
-      mainState.openErrorPopup(result, "MyFeedsPopup/close")
+    if (!result) {
       emit("close")
       return
     }
@@ -58,7 +57,7 @@ async function fetchMyFeeds () {
 
   // マイフィードジェネレーターの取得
   await mainState.myFeeds!.fetchItems()
-  mainState.myFeeds!.sortItems()
+  // mainState.myFeeds!.sortItems()
   state.popupLoaderDisplay = false
 }
 
@@ -72,7 +71,7 @@ async function sortMyFeeds (
   }
 
   // 特殊フィードの保存
-  const specialKinds: TTMyFeedsItemKind[] = ["followings", "globalline"]
+  const specialKinds: TTMyFeedsItemKind[] = ["following", "globalline"]
   const specialItems: TISpecialItem[] = specialKinds.map((kind: TTMyFeedsItemKind) => {
     const index = mainState.myFeeds!.items.findIndex((item: TTMyFeedsItem) => {
       return item.kind === kind
@@ -278,7 +277,7 @@ function openMyFeedsSortPopover ($event: Event) {
         >
           <!-- フォロー中フィード -->
           <SpecialFeedCard
-            v-if="item.kind === 'followings'"
+            v-if="item.kind === 'following'"
             :item="item"
             @click.exact="close"
             @changeCustomFeedOrder="changeCustomFeedOrder"

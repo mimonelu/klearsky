@@ -50,10 +50,9 @@ async function saveMyFeed () {
   state.processing = true
   mainState.sortFeedPreferencesSavedAndPinned()
   mainState.myFeeds!.saveCustomItemSettings()
-  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+  const result = await mainState.updatePreferences()
   state.processing = false
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "MyFeedList/saveMyFeed")
+  if (!result) {
     return
   }
   state.editMode = false
@@ -148,7 +147,7 @@ function removeMyFeed (uri: string) {
       >
         <!-- フォロー中フィード -->
         <RouterLink
-          v-if="item.kind === 'followings'"
+          v-if="item.kind === 'following'"
           to="/home/timeline"
           class="my-feed-list__content"
           :data-is-selected="true"

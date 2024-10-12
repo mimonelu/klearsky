@@ -13,7 +13,7 @@ const state = reactive<{
   routerLinkToFeedsPage: ComputedRef<any>
 }>({
   routerLinkToFeedsPage: computed(() => {
-    return props.item.kind === "followings"
+    return props.item.kind === "following"
       ? { to: "/home/timeline" }
       : props.item.kind === "globalline"
         ? { to: "/home/globalline" }

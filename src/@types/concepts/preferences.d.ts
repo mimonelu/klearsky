@@ -30,7 +30,7 @@ type TTPreferenceCustomFeedV2 = {
   $type: "app.bsky.actor.defs#savedFeedsPrefV2"
   items?: Array<{
     id?: string
-    type?: "timeline" | "feed" | "list"
+    type?: "feed" | "list" | "timeline"
     value?: string
     pinned?: boolean
   }>

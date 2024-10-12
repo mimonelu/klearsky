@@ -63,24 +63,6 @@ export default class {
   async fetchItems (): Promise<boolean> {
     this.items.splice(0)
 
-    // フォロー中フィードの追加
-    this.items.push({
-      kind: "followings",
-      value: {
-        uri: "followings",
-        displayName: "followings",
-      },
-    })
-
-    // グローバルフィードの追加
-    this.items.push({
-      kind: "globalline",
-      value: {
-        uri: "globalline",
-        displayName: "globalline",
-      },
-    })
-
     // フィードジェネレーターのURL配列を取得
     const savedFeeds: undefined | Array<string> =
       this.mainState.currentFeedPreference?.saved?.filter((uri: string) => {
@@ -107,6 +89,9 @@ export default class {
       })
     }
 
+    // フィード＆リストマップ
+    const feedAndListMap: { [k: string]: any } = {}
+
     const responses = await Promise.allSettled(tasks)
     responses.forEach((response: PromiseSettledResult<any>) => {
       if (response == null ||
@@ -118,32 +103,35 @@ export default class {
         return
       }
 
-      // マイフィードにフィードジェネレーターを追加
+      // フィード＆リストマップにフィードジェネレーターを追加
       if (Array.isArray(response.value)) {
         response.value.forEach((generator: TTFeedGenerator) => {
-          this.items.push({
-            kind: "feed",
-            value: generator,
-          })
+          feedAndListMap[generator.uri] = generator
         })
 
-      // マイフィードにリストを追加
+      // フィード＆リストマップにリストを追加
       } else {
-        this.items.push({
-          kind: "list",
-          value: response.value,
-        })
+        feedAndListMap[response.value.uri] = response.value
       }
     })
 
-    // 不明なアイテムの処理
-    this.mainState.currentFeedPreference?.saved?.forEach((uri: string, index: number) => {
-      if (this.items.findIndex((item: TTMyFeedsItem) => {
-        return item.value.uri === uri
-      }) !== - 1) return
+    // プリファレンスの順番通りにフィードアイテムを構築
+    this.mainState.currentFeedPreference?.saved?.forEach((uri: string) => {
       const kind = this.detectItemKind(uri)
-      const value = kind === "feed"
-        ? {
+
+      // フィード＆リストマップにあればそれを追加
+      if (feedAndListMap[uri] != null) {
+        this.items.push({
+          kind,
+          value: feedAndListMap[uri],
+        })
+        return
+      }
+
+      // フィード＆リストマップにない場合
+      let value = undefined
+      if (kind === "feed") {
+        value = {
           avatar: "",
           cid: "",
           creator: {
@@ -162,25 +150,41 @@ export default class {
           uri,
           viewer: {},
         }
-        : kind === "list"
-          ? {
-            uri,
-            cid: "",
-            creator: {
-              did: "",
-              handle: "",
-            },
-            listItemCount: 0,
-            name: "(Unknown list)",
-            purpose: "unknownlist",
-            description: uri,
-            indexedAt: new Date().toISOString(),
-          }
-          : {
-            uri,
-            displayName: "(Unknown item)",
-          }
-      this.items.splice(index, 0, { kind, value } as TTMyFeedsItem)
+      } else if (kind === "list") {
+        value = {
+          uri,
+          cid: "",
+          creator: {
+            did: "",
+            handle: "",
+          },
+          listItemCount: 0,
+          name: "(Unknown list)",
+          purpose: "unknownlist",
+          description: uri,
+          indexedAt: new Date().toISOString(),
+        }
+      } else if (kind === "following") {
+        value = {
+          uri: "following",
+          displayName: "followings",
+        }
+      } else {
+        value = {
+          uri,
+          displayName: "(Unknown item)",
+        }
+      }
+      this.items.push({ kind, value } as TTMyFeedsItem)
+    })
+
+    // グローバルフィードの追加
+    this.items.push({
+      kind: "globalline",
+      value: {
+        uri: "globalline",
+        displayName: "globalline",
+      },
     })
 
     return true
@@ -212,8 +216,13 @@ export default class {
   }
 
   detectItemKind (uri: string): TTMyFeedsItemKind {
-    if (uri.indexOf("/app.bsky.feed.generator/") !== - 1) return "feed"
-    else if (uri.indexOf("/app.bsky.graph.list/") !== - 1) return "list"
+    if (uri.indexOf("/app.bsky.feed.generator/") !== - 1) {
+      return "feed"
+    } else if (uri.indexOf("/app.bsky.graph.list/") !== - 1) {
+      return "list"
+    } else if (uri === "following") {
+      return uri
+    }
     return "unknown"
   }
 
@@ -255,8 +264,9 @@ export default class {
   }
 
   saveCustomItemSettings () {
-    if (this.mainState.currentSetting.myFeedsIndex == null)
+    if (this.mainState.currentSetting.myFeedsIndex == null) {
       this.mainState.currentSetting.myFeedsIndex = []
+    }
     this.mainState.currentSetting.myFeedsIndex.splice(0)
     this.mainState.currentSetting.myFeedsIndex.push(
       ...this.items.map((item: TTMyFeedsItem) => {
