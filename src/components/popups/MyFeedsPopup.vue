@@ -23,7 +23,6 @@ async function close () {
   if (state.orderChanged) {
     state.popupLoaderDisplay = true
     mainState.sortFeedPreferencesSavedAndPinned()
-    mainState.myFeeds!.saveCustomItemSettings()
     const result = await mainState.updatePreferences()
     state.popupLoaderDisplay = false
     if (!result) {
@@ -71,7 +70,7 @@ async function sortMyFeeds (
   }
 
   // 特殊フィードの保存
-  const specialKinds: TTMyFeedsItemKind[] = ["following", "globalline"]
+  const specialKinds: TTMyFeedsItemKind[] = ["following", "space.aoisora.preference.feed.extra"]
   const specialItems: TISpecialItem[] = specialKinds.map((kind: TTMyFeedsItemKind) => {
     const index = mainState.myFeeds!.items.findIndex((item: TTMyFeedsItem) => {
       return item.kind === kind
@@ -285,7 +284,7 @@ function openMyFeedsSortPopover ($event: Event) {
 
           <!-- グローバルフィード -->
           <SpecialFeedCard
-            v-else-if="item.kind === 'globalline'"
+            v-else-if="item.kind === 'space.aoisora.preference.feed.extra'"
             :item="item"
             @click.exact="close"
             @changeCustomFeedOrder="changeCustomFeedOrder"

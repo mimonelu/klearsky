@@ -162,7 +162,6 @@ async function deleteList () {
   // マイフィードから削除
   if (mainState.myFeeds!.removeItem(props.list.uri)) {
     mainState.sortFeedPreferencesSavedAndPinned()
-    mainState.myFeeds!.saveCustomItemSettings()
     await updatePreferences()
   }
 

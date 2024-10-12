@@ -28,10 +28,12 @@ type TTPreferenceCustomFeedV1 = {
 
 type TTPreferenceCustomFeedV2 = {
   $type: "app.bsky.actor.defs#savedFeedsPrefV2"
-  items?: Array<{
-    id?: string
-    type?: "feed" | "list" | "timeline"
-    value?: string
-    pinned?: boolean
-  }>
+  items?: Array<TTPreferenceCustomFeedV2Item>
+}
+
+type TTPreferenceCustomFeedV2Item = {
+  id?: string
+  type?: "feed" | "list" | "timeline" | "space.aoisora.preference.feed.extra"
+  value?: string
+  pinned?: boolean
 }

@@ -918,9 +918,6 @@ function saveSettings () {
   if (state.settings[did].hideNumberOfReaction == null) {
     state.settings[did].hideNumberOfReaction = false
   }
-  if (state.settings[did].myFeedsIndex == null) {
-    state.settings[did].myFeedsIndex = []
-  }
   if (state.settings[did].postAnonymization == null) {
     state.settings[did].postAnonymization = false
   }
@@ -1121,52 +1118,7 @@ async function fetchPreferences (): Promise<boolean> {
 
 async function updatePreferences (): Promise<boolean> {
   // V1 形式の内部データを V2 に変換して上書き
-  let preferencesV2 = state.currentPreferences.find((preference) => {
-    return preference.$type === "app.bsky.actor.defs#savedFeedsPrefV2"
-  }) as undefined | TTPreferenceCustomFeedV2
-  if (preferencesV2 == null) {
-    preferencesV2 = {
-      $type: "app.bsky.actor.defs#savedFeedsPrefV2",
-      items: [],
-    }
-  }
-  if (preferencesV2.items == null) {
-    preferencesV2.items = []
-  }
-  const idMap: { [k: string]: undefined | string } = {}
-  state.myFeeds?.items?.forEach((item) => {
-    const itemV2 = preferencesV2!.items!.find((itemV2) => {
-      return itemV2.value === item.value.uri
-    })
-    if (itemV2 == null) {
-      // TODO: ここで新規 __id を取得
-      return
-    }
-    idMap[item.value.uri] = itemV2.id
-  })
-  const itemsV2 = state.myFeeds?.items
-    ?.filter((item) => {
-      return idMap[item.value.uri] != null
-    })
-    .map((item) => {
-      const type = item.kind === "following"
-        ? "timeline"
-        : item.kind
-      const pinned = item.kind === "following"
-        ? true
-        : state.myFeeds?.pinnedUris?.some((uri) => {
-          return uri === item.value.uri
-        })
-      return {
-        id: idMap[item.value.uri] as string,
-        type,
-        value: item.value.uri,
-        pinned,
-      }
-    }) ?? []
-  console.log(111, itemsV2, preferencesV2.items)
-  // TODO:
-  // preferencesV2.items = itemsV2 as any
+  state.myFeeds?.convertV1ToV2()
 
   const result = await state.atp.updatePreferences(state.currentPreferences)
   if (result instanceof Error) {
@@ -1734,12 +1686,12 @@ function currentFeedPreference () {
           return !!preference.pinned
         })
         .map((preference) => {
-          // URI に "following" が入る点に注意
+          // URI に "following" 等が入る点に注意
           return preference.value
         }) ?? []) as Array<string>,
       saved: (preferences.items
         ?.map((preference) => {
-          // URI に "following" が入る点に注意
+          // URI に "following" 等が入る点に注意
           return preference.value
         }) ?? []) as Array<string>,
     }

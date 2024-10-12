@@ -49,7 +49,6 @@ async function saveMyFeed () {
   }
   state.processing = true
   mainState.sortFeedPreferencesSavedAndPinned()
-  mainState.myFeeds!.saveCustomItemSettings()
   const result = await mainState.updatePreferences()
   state.processing = false
   if (!result) {
@@ -63,26 +62,45 @@ async function saveMyFeed () {
 }
 
 function isPinned (uri: string): boolean {
-  return mainState.currentFeedPreference?.pinned?.includes(uri) ?? false
+  return mainState.myFeeds?.pinnedItems.some((item) => {
+    return item.value.uri === uri
+  }) ?? false
+  // return mainState.currentFeedPreference?.pinned?.includes(uri) ?? false
 }
 
 function togglePinned (uri: string) {
-  if (mainState.currentFeedPreference == null) return
-  if (mainState.currentFeedPreference.pinned == null) mainState.currentFeedPreference.pinned = [] // pinned の作成
+  mainState.myFeeds!.togglePin(uri)
+  /*
+  if (mainState.currentFeedPreference == null) {
+    return
+  }
+  if (mainState.currentFeedPreference.pinned == null) {
+    mainState.currentFeedPreference.pinned = [] // pinned の作成
+  }
   const index = mainState.currentFeedPreference.pinned.indexOf(uri)
-  if (index === - 1) mainState.currentFeedPreference.pinned.push(uri)
-  else mainState.currentFeedPreference.pinned.splice(index, 1)
+  if (index === - 1) {
+    mainState.currentFeedPreference.pinned.push(uri)
+  } else {
+    mainState.currentFeedPreference.pinned.splice(index, 1)
+  }
+  */
 }
 
 function removeMyFeed (uri: string) {
+  /*
   if (mainState.currentFeedPreference?.saved != null) {
     const index = mainState.currentFeedPreference.saved.indexOf(uri)
-    if (index !== - 1) mainState.currentFeedPreference.saved.splice(index, 1)
+    if (index !== - 1) {
+      mainState.currentFeedPreference.saved.splice(index, 1)
+    }
   }
   if (mainState.currentFeedPreference?.pinned != null) {
     const index = mainState.currentFeedPreference.pinned.indexOf(uri)
-    if (index !== - 1) mainState.currentFeedPreference.pinned.splice(index, 1)
+    if (index !== - 1) {
+      mainState.currentFeedPreference.pinned.splice(index, 1)
+    }
   }
+  */
   mainState.myFeeds!.removeItem(uri)
 }
 </script>
@@ -158,7 +176,7 @@ function removeMyFeed (uri: string) {
 
         <!-- グローバルフィード -->
         <RouterLink
-          v-else-if="item.kind === 'globalline'"
+          v-else-if="item.kind === 'space.aoisora.preference.feed.extra'"
           to="/home/globalline"
           class="my-feed-list__content"
           :data-is-selected="true"

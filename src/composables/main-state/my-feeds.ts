@@ -1,3 +1,5 @@
+import { TID } from "@atproto/common-web"
+
 export default class {
   public mainState: MainState
   public items: Array<TTMyFeedsItem>
@@ -129,9 +131,8 @@ export default class {
       }
 
       // フィード＆リストマップにない場合
-      let value = undefined
       if (kind === "feed") {
-        value = {
+        const value = {
           avatar: "",
           cid: "",
           creator: {
@@ -150,8 +151,9 @@ export default class {
           uri,
           viewer: {},
         }
+        this.items.push({ kind, value } as TTMyFeedsItem)
       } else if (kind === "list") {
-        value = {
+        const value = {
           uri,
           cid: "",
           creator: {
@@ -164,28 +166,53 @@ export default class {
           description: uri,
           indexedAt: new Date().toISOString(),
         }
+        this.items.push({ kind, value } as TTMyFeedsItem)
       } else if (kind === "following") {
-        value = {
+        const value = {
           uri: "following",
           displayName: "followings",
         }
+        this.items.push({ kind, value } as TTMyFeedsItem)
+      } else if (kind === "space.aoisora.preference.feed.extra") {
+        const value = {
+          uri: "globalline",
+          displayName: "globalline",
+        }
+        this.items.push({ kind, value } as TTMyFeedsItem)
       } else {
-        value = {
+        const value = {
           uri,
           displayName: "(Unknown item)",
         }
+        this.items.push({ kind, value } as TTMyFeedsItem)
       }
-      this.items.push({ kind, value } as TTMyFeedsItem)
     })
 
-    // グローバルフィードの追加
-    this.items.push({
-      kind: "globalline",
-      value: {
-        uri: "globalline",
-        displayName: "globalline",
-      },
-    })
+    // フォロー中フィードがなければ追加
+    if (!this.items.some((item) => {
+      return item.kind === "following"
+    })) {
+      this.items.unshift({
+        kind: "following",
+        value: {
+          uri: "following",
+          displayName: "followings",
+        },
+      })
+    }
+
+    // グローバルフィードがなければ追加
+    if (!this.items.some((item) => {
+      return item.kind === "space.aoisora.preference.feed.extra"
+    })) {
+      this.items.push({
+        kind: "space.aoisora.preference.feed.extra",
+        value: {
+          uri: "globalline",
+          displayName: "globalline",
+        },
+      })
+    }
 
     return true
   }
@@ -193,16 +220,13 @@ export default class {
   sortItems () {
     const saved = this.mainState.currentFeedPreference?.saved
     if (saved == null) return
-    const myFeedsIndex = this.mainState.currentSetting.myFeedsIndex ?? []
     this.items.sort((a: TTMyFeedsItem, b: TTMyFeedsItem) => {
-      let aIndex = myFeedsIndex.indexOf(a.value.uri)
-      if (aIndex === - 1) aIndex = saved.indexOf(a.value.uri)
+      let aIndex = saved.indexOf(a.value.uri)
       if (aIndex === - 1) {
         if (a.kind !== "feed" && a.kind !== "list") aIndex = 0
         else aIndex = Number.MAX_SAFE_INTEGER
       }
-      let bIndex = myFeedsIndex.indexOf(b.value.uri)
-      if (bIndex === - 1) bIndex = saved.indexOf(b.value.uri)
+      let bIndex = saved.indexOf(b.value.uri)
       if (bIndex === - 1) {
         if (b.kind !== "feed" && b.kind !== "list") bIndex = 0
         else bIndex = Number.MAX_SAFE_INTEGER
@@ -222,6 +246,8 @@ export default class {
       return "list"
     } else if (uri === "following") {
       return uri
+    } else if (uri === "globalline") {
+      return "space.aoisora.preference.feed.extra"
     }
     return "unknown"
   }
@@ -244,11 +270,6 @@ export default class {
   }
 
   removeItem (uri: string): boolean {
-    /*
-    this.items = this.items.filter((item: TTMyFeedsItem) => {
-      return item.uri !== uri
-    })
-    */
     const index = this.items.findIndex((item: TTMyFeedsItem) => {
       return item.value.uri === uri
     })
@@ -263,17 +284,15 @@ export default class {
     [this.items[aIndex], this.items[bIndex]] = [this.items[bIndex], this.items[aIndex]]
   }
 
-  saveCustomItemSettings () {
-    if (this.mainState.currentSetting.myFeedsIndex == null) {
-      this.mainState.currentSetting.myFeedsIndex = []
-    }
-    this.mainState.currentSetting.myFeedsIndex.splice(0)
-    this.mainState.currentSetting.myFeedsIndex.push(
-      ...this.items.map((item: TTMyFeedsItem) => {
-        return item.value.uri
-      })
-    )
-    this.mainState.saveSettings()
+  togglePin (uri: string) {
+    const items = this.getFeedPreferenceItems()
+    items?.some((item) => {
+      if (item.value === uri) {
+        item.pinned = !item.pinned
+        return true
+      }
+      return false
+    })
   }
 
   synchronizeToMyList () {
@@ -284,5 +303,72 @@ export default class {
       if (index === - 1) return
       this.items[index].value = myList
     })
+  }
+
+  getFeedPreferenceItems (): undefined | Array<TTPreferenceCustomFeedV2Item> {
+    return (this.mainState.currentPreferences.find((preference) => {
+      return preference.$type === "app.bsky.actor.defs#savedFeedsPrefV2"
+    }) as undefined | TTPreferenceCustomFeedV2)?.items
+  }
+
+  convertV1ToV2 () {
+    let preferencesV2 = this.mainState.currentPreferences.find((preference) => {
+      return preference.$type === "app.bsky.actor.defs#savedFeedsPrefV2"
+    }) as undefined | TTPreferenceCustomFeedV2
+    if (preferencesV2 == null) {
+      preferencesV2 = {
+        $type: "app.bsky.actor.defs#savedFeedsPrefV2",
+        items: [],
+      }
+    }
+    if (preferencesV2.items == null) {
+      preferencesV2.items = []
+    }
+    const idMap: { [k: string]: undefined | string } = {}
+    this.items.forEach((item) => {
+      const uri = item.value.uri
+      const itemV2 = preferencesV2!.items!.find((itemV2) => {
+        return itemV2.value === uri
+      })
+      if (itemV2 == null) {
+        // 新規フィードの id を生成
+        // id は rkey 同様 TID 形式。現在時刻を元に生成する
+        for (let i = 0; i < 100; i ++) {
+          const id = TID.next().str
+          if (Object.keys(idMap).every((mapId) => {
+            return mapId !== id
+          })) {
+            idMap[uri] = id
+            break
+          }
+        }
+        if (idMap[uri] == null) {
+          // TODO:
+        }
+        return
+      }
+      idMap[uri] = itemV2.id
+    })
+    const itemsV2 = this.items
+      ?.filter((item) => {
+        return idMap[item.value.uri] != null
+      })
+      .map((item) => {
+        const type = item.kind === "following"
+          ? "timeline"
+          : item.kind
+        const pinned = item.kind === "following" || item.kind === "space.aoisora.preference.feed.extra"
+          ? true
+          : this.pinnedUris?.some((uri) => {
+            return uri === item.value.uri
+          })
+        return {
+          id: idMap[item.value.uri] as string,
+          type,
+          value: item.value.uri,
+          pinned,
+        }
+      }) ?? []
+    preferencesV2.items.splice(0, preferencesV2.items.length, ...itemsV2 as any)
   }
 }
