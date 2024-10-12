@@ -65,42 +65,13 @@ function isPinned (uri: string): boolean {
   return mainState.myFeeds?.pinnedItems.some((item) => {
     return item.value.uri === uri
   }) ?? false
-  // return mainState.currentFeedPreference?.pinned?.includes(uri) ?? false
 }
 
 function togglePinned (uri: string) {
   mainState.myFeeds!.togglePin(uri)
-  /*
-  if (mainState.currentFeedPreference == null) {
-    return
-  }
-  if (mainState.currentFeedPreference.pinned == null) {
-    mainState.currentFeedPreference.pinned = [] // pinned の作成
-  }
-  const index = mainState.currentFeedPreference.pinned.indexOf(uri)
-  if (index === - 1) {
-    mainState.currentFeedPreference.pinned.push(uri)
-  } else {
-    mainState.currentFeedPreference.pinned.splice(index, 1)
-  }
-  */
 }
 
 function removeMyFeed (uri: string) {
-  /*
-  if (mainState.currentFeedPreference?.saved != null) {
-    const index = mainState.currentFeedPreference.saved.indexOf(uri)
-    if (index !== - 1) {
-      mainState.currentFeedPreference.saved.splice(index, 1)
-    }
-  }
-  if (mainState.currentFeedPreference?.pinned != null) {
-    const index = mainState.currentFeedPreference.pinned.indexOf(uri)
-    if (index !== - 1) {
-      mainState.currentFeedPreference.pinned.splice(index, 1)
-    }
-  }
-  */
   mainState.myFeeds!.removeItem(uri)
 }
 </script>

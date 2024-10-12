@@ -343,7 +343,7 @@ export default class {
           }
         }
         if (idMap[uri] == null) {
-          // TODO:
+          // TODO: ここに到達することはまずないが、何かしらエラーメッセージを表示すること
         }
         return
       }

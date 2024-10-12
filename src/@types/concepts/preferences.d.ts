@@ -8,7 +8,6 @@ type TTPreference =
 
 type TTPreferenceLabel = {
   $type: "app.bsky.actor.defs#contentLabelPref"
-  // enabled?: boolean
   label?: string
   labelerDid?: string
   visibility?: TTContentVisibility
@@ -17,7 +16,6 @@ type TTPreferenceLabel = {
 type TTPreferenceLabeler = {
   $type: "app.bsky.actor.defs#labelersPref"
   labelers?: Array<{ did: string }>
-  // labelerDid?: string
 }
 
 type TTPreferenceCustomFeedV1 = {
