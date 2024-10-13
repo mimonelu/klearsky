@@ -14,6 +14,7 @@ import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPop
 import LabelerSubscribeToggle from "@/components/buttons/LabelerSubscribeToggle.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
+import Linkat from "@/components/next/Linkat/Main.vue"
 import KnownFollowers from "@/components/lists/KnownFollowers.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
@@ -489,6 +490,9 @@ function removeThisPost () {
               :text="mainState.currentProfile?.description ?? '&emsp;'"
               :processHashTag="true"
             />
+
+            <!-- Linkat -->
+            <Linkat :profile="mainState.currentProfile ?? undefined" />
 
             <div
               v-if="state.accountContentDisplay"
