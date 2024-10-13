@@ -9,6 +9,8 @@ import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
@@ -42,7 +44,7 @@ async function fetchMyFeeds () {
   state.popupLoaderDisplay = true
   const preferences = await mainState.fetchPreferences()
   if (!preferences) {
-    mainState.openErrorPopup("errorApiFailed", "MyFeedsPopup/fetchPreferences")
+    mainState.openErrorPopup("myFeedsFetchItemsError", "MyFeedsPopup/fetchPreferences")
     state.popupLoaderDisplay = false
     return
   }
@@ -55,9 +57,13 @@ async function fetchMyFeeds () {
   }
 
   // マイフィードジェネレーターの取得
-  await mainState.myFeeds!.fetchItems()
-  // mainState.myFeeds!.sortItems()
+  await mainState.myFeeds?.fetchItems()
   state.popupLoaderDisplay = false
+  /*
+  if (!response) {
+    mainState.openErrorPopup("myFeedsFetchItemsError", "MyFeedsPopup/fetchPreferences")
+  }
+  */
 }
 
 async function sortMyFeeds (
@@ -232,6 +238,29 @@ function openMyFeedsSortPopover ($event: Event) {
   mainState.myFeedsSortPopoverCallback = sortMyFeeds
   mainState.openMyFeedsSortPopover($event.target)
 }
+
+async function mergeV1ToV2 () {
+  Util.blurElement()
+  if (!(await mainState.openConfirmationPopup({
+    text: $t("mergeV1ToV2Confirmation"),
+  }))) {
+    return
+  }
+  if (!mainState.myFeeds?.mergeV1ToV2()) {
+    mainState.openErrorPopup("mergeV1ToV2Canceled", "MyFeedsPopup/mergeV1ToV2")
+    return
+  }
+  mainState.loaderDisplay = true
+  await mainState.myFeeds?.fetchItems()
+  mainState.loaderDisplay = false
+  /*
+  if (!response) {
+    mainState.openErrorPopup("myFeedsFetchItemsError", "MyFeedsPopup/mergeV1ToV2")
+    return
+  }
+  */
+  state.orderChanged = true
+}
 </script>
 
 <template>
@@ -261,6 +290,19 @@ function openMyFeedsSortPopover ($event: Event) {
       </h2>
     </template>
     <template #body>
+      <!-- カスタムフィードマージボタン -->
+      <div class="my-feeds-popup__merge-button-container">
+        <button
+          type="button"
+          class="button--bordered"
+          @click.stop="mergeV1ToV2"
+        >
+          <SVGIcon name="alert" />
+          <span>{{ $t("mergeV1ToV2") }}</span>
+        </button>
+      </div>
+
+      <!-- ゼロフィードメッセージ -->
       <div
         v-if="!state.popupLoaderDisplay && mainState.myFeeds!.items.length === 0"
         class="textlabel"
@@ -269,6 +311,7 @@ function openMyFeedsSortPopover ($event: Event) {
           <SVGIcon name="alert" />{{ $t("noMyFeeds") }}
         </div>
       </div>
+
       <template v-else>
         <template
           v-for="item of mainState.myFeeds!.items"
@@ -344,6 +387,15 @@ function openMyFeedsSortPopover ($event: Event) {
     & > .svg-icon {
       font-size: 1.25rem;
       pointer-events: none;
+    }
+  }
+
+  // カスタムフィードマージボタン
+  &__merge-button-container {
+    padding: 0.5rem;
+
+    .button--bordered > .svg-icon {
+      fill: rgb(var(--notice-color));
     }
   }
 

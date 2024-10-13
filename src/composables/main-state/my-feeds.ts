@@ -94,14 +94,15 @@ export default class {
     // フィード＆リストマップ
     const feedAndListMap: { [k: string]: any } = {}
 
+    let hasError = false
+
     const responses = await Promise.allSettled(tasks)
     responses.forEach((response: PromiseSettledResult<any>) => {
       if (response == null ||
           response.status === "rejected" ||
-          response.value instanceof Error) {
-        // TODO: いったん退避
-        // this.mainState.openErrorPopup("errorApiFailed", "MyFeeds/fetchItems")
-
+          response.value instanceof Error
+      ) {
+        hasError = true
         return
       }
 
@@ -214,7 +215,7 @@ export default class {
       })
     }
 
-    return true
+    return !hasError
   }
 
   sortItems () {
@@ -370,5 +371,37 @@ export default class {
         }
       }) ?? []
     preferencesV2.items.splice(0, preferencesV2.items.length, ...itemsV2 as any)
+  }
+
+  // Preferences の V1 フィードを currentFeedPreference にマージ
+  mergeV1ToV2 (): boolean {
+    const preferencesV1 = this.mainState.currentPreferences.find((preference) => {
+      return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
+    }) as undefined | TTPreferenceCustomFeedV1
+    if (preferencesV1?.saved == null ||
+        this.mainState.currentFeedPreference?.saved == null
+    ) {
+      return false
+    }
+    preferencesV1.saved.forEach((uri) => {
+      const index = this.mainState.currentFeedPreference.saved.indexOf(uri)
+      if (index !== - 1) {
+        return
+      }
+      this.mainState.currentFeedPreference.saved.push(uri)
+    })
+    if (preferencesV1?.pinned == null ||
+        this.mainState.currentFeedPreference?.pinned == null
+    ) {
+      return false
+    }
+    preferencesV1.pinned.forEach((uri) => {
+      const index = this.mainState.currentFeedPreference.pinned.indexOf(uri)
+      if (index !== - 1) {
+        return
+      }
+      this.mainState.currentFeedPreference.pinned.push(uri)
+    })
+    return true
   }
 }

@@ -629,6 +629,11 @@
   "pnVimeo": "Vimeo",
   "pnNicovideo": "Nicovideo",
 
+  "mergeV1ToV2": "Merge v1 feeds into v2 feeds",
+  "mergeV1ToV2Confirmation": "Add v1 format custom feeds to v2 format custom feeds.\n\n* This is for users who have been using Klearsky since v0.9.85 or earlier.\n* This operation will resume synchronization with the official client.\n* Please perform this operation only once.",
+  "mergeV1ToV2Canceled": "An error occurred while merging feeds.\nA custom feeds in v1 format may not exist. In that case, merging is not necessary. Please ignore this error.",
+  "myFeedsFetchItemsError": "An error occurred while retrieving My Feeds.\nKlearsky may have failed to retrieve some feed generator or list. If there is a problem with the content of My Feeds, please reload your browser without closing My Feeds popup.",
+
   "globalError": "An unknown error occured.",
   "unhandledRejectionError": "An unhandled rejection error occured.",
   "rejectionHandledError": "A rejection handled error occured.",

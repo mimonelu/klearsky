@@ -17,6 +17,7 @@ interface TTMyFeeds {
   synchronizeToMyList (): void
   getFeedPreferenceItems (): undefined | Array<TTPreferenceCustomFeedV2Item>
   convertV1ToV2 (): void
+  mergeV1ToV2 (): boolean
 }
 
 type TTMyFeedsItem = {
