@@ -61,11 +61,6 @@ const router = createRouter({
           component: EditProfileView,
         },
         {
-          path: "/home",
-          name: "home",
-          component: TimelineView,
-        },
-        {
           path: "/post",
           name: "post",
           meta: { label: "post" },

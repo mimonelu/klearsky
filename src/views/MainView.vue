@@ -399,29 +399,87 @@ async function processAfterLogin () {
 }
 
 async function moveToDefaultHome () {
-  const pinnedItems = state.myFeeds!.pinnedItems
-  const firstPinnedItem = pinnedItems[0]
+  const firstPinnedItem = state.myFeeds!.pinnedItems[0]
+
+  // 読込未完了時またはマイフィードにピン留めフィードがない場合
   if (firstPinnedItem == null) {
-    await router.replace("/home/timeline")
-  } else if (firstPinnedItem.kind === "feed") {
-    await router.replace({
-      path: "/home/feeds",
-      query: {
-        feed: firstPinnedItem.value.uri,
-        displayName: firstPinnedItem.value.displayName,
-      },
-    })
-  } else if (firstPinnedItem.kind === "list") {
-    await router.replace({
-      path: "/home/list-feeds",
-      query: {
-        list: firstPinnedItem.value.uri,
-        displayName: firstPinnedItem.value.name,
-      },
-    })
+    const uri = state.currentFeedPreference?.pinned?.[0]
+
+    // Preferences にピン留めフィードがある場合
+    if (uri != null) {
+      const kind = state.myFeeds!.detectItemKind(uri)
+      switch (kind) {
+        case "feed": {
+          await router.replace({
+            path: "/home/feeds",
+            query: { feed: uri },
+          })
+          return
+        }
+        case "list": {
+          await router.replace({
+            path: "/home/list-feeds",
+            query: { list: uri },
+          })
+          return
+        }
+        case "following": {
+          await router.push("/home/timeline")
+          return
+        }
+        case "space.aoisora.preference.feed.extra": {
+          await router.push("/home/globalline")
+          return
+        }
+        default: {
+          break
+        }
+      }
+
+    // どちらにもピン留めフィードがない場合
+    } else {
+      await router.replace("/home/timeline")
+      return
+    }
+
+  // 読込完了時かつマイフィードにピン留めフィードがある場合
   } else {
-    await router.push("/home/timeline")
+    switch (firstPinnedItem.kind) {
+      case "feed": {
+        await router.replace({
+          path: "/home/feeds",
+          query: {
+            feed: firstPinnedItem.value.uri,
+            displayName: firstPinnedItem.value.displayName,
+          },
+        })
+        return
+      }
+      case "list": {
+        await router.replace({
+          path: "/home/list-feeds",
+          query: {
+            list: firstPinnedItem.value.uri,
+            displayName: firstPinnedItem.value.name,
+          },
+        })
+        return
+      }
+      case "following": {
+        await router.push("/home/timeline")
+        return
+      }
+      case "space.aoisora.preference.feed.extra": {
+        await router.push("/home/globalline")
+        return
+      }
+      default: {
+        break
+      }
+    }
   }
+
+  await router.push("/home/timeline")
 }
 
 async function processPage (pageName?: null | string) {
