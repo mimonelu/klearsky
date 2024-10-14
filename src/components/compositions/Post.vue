@@ -80,10 +80,13 @@ const state = reactive<{
   // 対象ポスト言語
   postLanguages: ComputedRef<undefined | Array<string>>
 
-  // 翻訳リンクの設置可否
-  hasOtherLanguages: ComputedRef<boolean>
+  // 翻訳リンクの設置可否 - 本文用
+  hasOtherLanguagesForText: ComputedRef<boolean>
 
-  // コンテンツ言語の判定
+  // 翻訳リンクの設置可否 - alt 用
+  hasOtherLanguagesForAlt: ComputedRef<boolean>
+
+// コンテンツ言語の判定
   noContentLanguage: ComputedRef<boolean>
 
   translation: "none" | "ignore" | "waiting" | "done" | "failed";
@@ -244,15 +247,24 @@ const state = reactive<{
     return props.post.record?.langs ?? props.post.value?.langs
   }),
 
-  // 翻訳リンクの設置可否
-  hasOtherLanguages: computed((): boolean => {
+  // 翻訳リンクの設置可否 - 本文用
+  hasOtherLanguagesForText: computed((): boolean => {
     if (props.noLink) return false
     if (!state.text) return false
-    if (state.postLanguages == null) return false
-    if (state.postLanguages.length === 0) return false
-    if (state.postLanguages.length >= 2) return true
+    if (!state.postLanguages?.length) return false
     const userLanguage = Util.getUserLanguage() ?? "en"
-    return state.postLanguages[0] !== userLanguage
+    return state.postLanguages.every((language) => {
+      return language !== userLanguage
+    })
+  }),
+
+  // 翻訳リンクの設置可否 - alt 用
+  hasOtherLanguagesForAlt: computed((): boolean => {
+    if (!state.postLanguages?.length) return false
+    const userLanguage = Util.getUserLanguage() ?? "en"
+    return state.postLanguages.every((language) => {
+      return language !== userLanguage
+    })
   }),
 
   // コンテンツ言語の判定
@@ -1056,7 +1068,7 @@ function toggleOldestQuotedPostDisplay () {
               :facets="post.record?.facets ?? post.value?.facets"
               :entities="post.record?.entities ?? post.value?.entities"
               :processHashTag="false"
-              :hasTranslateLink="state.hasOtherLanguages"
+              :hasTranslateLink="state.hasOtherLanguagesForText"
               :data-is-text-only-emoji="state.isTextOnlyEmoji"
               @onActivateHashTag="onActivateHashTag"
               @translate="onForceTranslate"
@@ -1135,7 +1147,7 @@ function toggleOldestQuotedPostDisplay () {
                       <Thumbnail
                         :image="image"
                         :did="post.author.did"
-                        :hasTranslateLink="state.hasOtherLanguages"
+                        :hasTranslateLink="state.hasOtherLanguagesForAlt"
                         @click.stop="openImagePopup(imageIndex)"
                       />
                     </div>

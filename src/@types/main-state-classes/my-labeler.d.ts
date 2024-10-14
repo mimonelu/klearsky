@@ -15,7 +15,7 @@ interface TIMyLabeler {
   updateLabelMap (): void
   getProperLocale (locales: Array<TILabelerDefinitionLocale>): undefined | TILabelerDefinitionLocale
   getSpecificLabels (labels: Array<TTLabel>, visibility: Array<TTContentVisibility>, blurs: Array<TTLabelBlurs>): Array<TILabelSetting>
-  getLabelPreference (did: string, label: string): undefined | TTPreference
+  getLabelPreference (did: string, label: string): undefined | TTPreferenceLabel
   addLabelPreference (did: string, label: string, visibility: TTContentVisibility)
   cleanLabelPreferences (): void
   async like (uri: string, cid: string): Promise<Error | string>

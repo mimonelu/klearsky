@@ -13,8 +13,11 @@ interface TTMyFeeds {
   addItem (target: TTMyFeedsItemValue): void
   removeItem (uri: string): boolean
   swapItem (aIndex: number, bIndex: number): void
-  saveCustomItemSettings (): void
+  togglePin (uri: string): void
   synchronizeToMyList (): void
+  getFeedPreferenceItems (): undefined | Array<TTPreferenceCustomFeedV2Item>
+  convertV1ToV2 (): void
+  mergeV1ToV2 (): boolean
 }
 
 type TTMyFeedsItem = {
@@ -24,7 +27,7 @@ type TTMyFeedsItem = {
   kind: "list",
   value: TTList
 } | {
-  kind: "followings" | "globalline"
+  kind: "following" | "space.aoisora.preference.feed.extra"
   value: {
     uri: string
     displayName: string
@@ -34,6 +37,6 @@ type TTMyFeedsItem = {
   value: any
 }
 
-type TTMyFeedsItemKind = "feed" | "list" | "followings" | "globalline" | "unknown"
+type TTMyFeedsItemKind = "feed" | "list" | "following" | "space.aoisora.preference.feed.extra" | "unknown"
 
 type TTMyFeedsItemValue = TTFeedGenerator | TTList

@@ -24,7 +24,6 @@ type TTSetting = {
   linkcardEmbeddedControl?: Array<string>
   linkcardLayout?: "none" | "horizontal" | "vertical"
   mainAreaOpacity?: number
-  myFeedsIndex?: Array<string>
   myWords?: Array<string>
   notificationFetchInterval?: number
   postAnonymization?: boolean

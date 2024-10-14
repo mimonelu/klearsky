@@ -15,6 +15,7 @@
   "feeds": "フィード",
   "feedsAll": "すべてのフィード",
   "feedsPinned": "ピン留めフィード",
+  "notSet": "未設定",
   "reset": "リセットする",
   "resetTextarea": "テキストエリアをリセットします。よろしいですか？",
   "show": "表示する",
@@ -331,6 +332,7 @@
   "settings": "設定",
   "designSettings": "デザイン設定",
   "postSettings": "ポスト設定",
+  "timeSettings": "時間設定",
   "psySafetySettings": "心理的安全性の設定",
   "etcSettings": "その他の設定",
 
@@ -627,6 +629,11 @@
   "pnYoutube": "Youtube",
   "pnVimeo": "Vimeo",
   "pnNicovideo": "ニコニコ動画",
+
+  "mergeV1ToV2": "v1フィードにv2フィードをマージ",
+  "mergeV1ToV2Confirmation": "v2形式のカスタムフィードにv1形式のカスタムフィードを追加します。\n\n・v0.9.85以前からKlearskyをお使いになられてきた方が対象です。\n・この操作を行うことで公式クライアントとの同期が再開されます。\n・この操作は1回だけ行ってください。",
+  "mergeV1ToV2Canceled": "フィードのマージ中にエラーが発生しました。\nv1形式のカスタムフィードが存在しない可能性があります。その場合、マージは不要です。このエラーは無視してください。",
+  "myFeedsFetchItemsError": "マイフィードの取得中にエラーが発生しました。\n何らかのフィードジェネレーターまたはリストの取得に失敗した可能性があります。マイフィードの内容に問題がある場合、マイフィードポップアップを閉じずにブラウザをリロードしてください。",
 
   "globalError": "不明なエラーが発生しました。",
   "unhandledRejectionError": "Unhandled rejectionエラーが発生しました。",

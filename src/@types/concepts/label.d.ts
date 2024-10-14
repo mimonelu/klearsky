@@ -22,7 +22,7 @@ interface TILabelSetting {
   definition: TILabelerDefinition
   isBadge: boolean
   locale: TILabelerDefinitionLocale
-  preference?: TTPreference
+  preference?: TTPreferenceLabel
 }
 
 interface TTLabelBehavior {

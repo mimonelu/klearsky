@@ -13,9 +13,9 @@ const state = reactive<{
   routerLinkToFeedsPage: ComputedRef<any>
 }>({
   routerLinkToFeedsPage: computed(() => {
-    return props.item.kind === "followings"
+    return props.item.kind === "following"
       ? { to: "/home/timeline" }
-      : props.item.kind === "globalline"
+      : props.item.kind === "space.aoisora.preference.feed.extra"
         ? { to: "/home/globalline" }
         : { to: "/home/timeline" }
   }),

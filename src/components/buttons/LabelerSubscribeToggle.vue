@@ -70,10 +70,9 @@ async function toggleLabelerSubscribe () {
 
   // プリファレンスの保存
   state.processing = true
-  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+  const result = await mainState.updatePreferences()
   state.processing = false
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "ProfileView/updatePreferences")
+  if (!result) {
     return
   }
 

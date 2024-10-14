@@ -49,11 +49,9 @@ async function saveMyFeed () {
   }
   state.processing = true
   mainState.sortFeedPreferencesSavedAndPinned()
-  mainState.myFeeds!.saveCustomItemSettings()
-  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+  const result = await mainState.updatePreferences()
   state.processing = false
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "MyFeedList/saveMyFeed")
+  if (!result) {
     return
   }
   state.editMode = false
@@ -64,26 +62,16 @@ async function saveMyFeed () {
 }
 
 function isPinned (uri: string): boolean {
-  return mainState.currentFeedPreference?.pinned?.includes(uri) ?? false
+  return mainState.myFeeds?.pinnedItems.some((item) => {
+    return item.value.uri === uri
+  }) ?? false
 }
 
 function togglePinned (uri: string) {
-  if (mainState.currentFeedPreference == null) return
-  if (mainState.currentFeedPreference.pinned == null) mainState.currentFeedPreference.pinned = [] // pinned の作成
-  const index = mainState.currentFeedPreference.pinned.indexOf(uri)
-  if (index === - 1) mainState.currentFeedPreference.pinned.push(uri)
-  else mainState.currentFeedPreference.pinned.splice(index, 1)
+  mainState.myFeeds!.togglePin(uri)
 }
 
 function removeMyFeed (uri: string) {
-  if (mainState.currentFeedPreference?.saved != null) {
-    const index = mainState.currentFeedPreference.saved.indexOf(uri)
-    if (index !== - 1) mainState.currentFeedPreference.saved.splice(index, 1)
-  }
-  if (mainState.currentFeedPreference?.pinned != null) {
-    const index = mainState.currentFeedPreference.pinned.indexOf(uri)
-    if (index !== - 1) mainState.currentFeedPreference.pinned.splice(index, 1)
-  }
   mainState.myFeeds!.removeItem(uri)
 }
 </script>
@@ -148,7 +136,7 @@ function removeMyFeed (uri: string) {
       >
         <!-- フォロー中フィード -->
         <RouterLink
-          v-if="item.kind === 'followings'"
+          v-if="item.kind === 'following'"
           to="/home/timeline"
           class="my-feed-list__content"
           :data-is-selected="true"
@@ -159,7 +147,7 @@ function removeMyFeed (uri: string) {
 
         <!-- グローバルフィード -->
         <RouterLink
-          v-else-if="item.kind === 'globalline'"
+          v-else-if="item.kind === 'space.aoisora.preference.feed.extra'"
           to="/home/globalline"
           class="my-feed-list__content"
           :data-is-selected="true"

@@ -16,12 +16,28 @@ const mainState = inject("state") as MainState
   >
     <template #header>
       <h2>
-        <SVGIcon name="setting" />
-        <span>{{ $t("psySafetySettings") }}</span>
+        <SVGIcon name="clock" />
+        <span>{{ $t("timeSettings") }}</span>
       </h2>
     </template>
     <template #body>
       <div class="settings-popup__form-page">
+        <!-- 時間表記 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("timeControl") }}</span>
+          </div>
+          <div class="settings-popup__form__body">
+            <Radios
+              :state="mainState.currentSetting"
+              model="timeControl"
+              :options="SETTINGS.TIME_CONTROLS"
+              layout="horizontal"
+              @update="$emit('saveSetting')"
+            />
+          </div>
+        </div>
+
         <!-- 新着フォロー中フィード取得間隔 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">
@@ -88,54 +104,6 @@ const mainState = inject("state") as MainState
                 >{{ $t(interval.label) }}</option>
               </select>
             </label>
-          </div>
-        </div>
-
-        <!-- 新着バッジの非表示 -->
-        <div class="settings-popup__form">
-          <div class="settings-popup__form__header">
-            <span>{{ $t("hideNotificationBadge") }}</span>
-          </div>
-          <div class="settings-popup__form__body">
-            <Radios
-              :state="mainState.currentSetting"
-              model="hideNotificationBadge"
-              :options="SETTINGS.HIDE_NOTIFICATION_BADGE"
-              layout="horizontal"
-              @update="$emit('saveSetting')"
-            />
-          </div>
-        </div>
-
-        <!-- リアクション数の非表示 -->
-        <div class="settings-popup__form">
-          <div class="settings-popup__form__header">
-            <span>{{ $t("hideNumberOfReaction") }}</span>
-          </div>
-          <div class="settings-popup__form__body">
-            <Radios
-              :state="mainState.currentSetting"
-              model="hideNumberOfReaction"
-              :options="SETTINGS.HIDE_NUMBER_OF_REACTION"
-              layout="horizontal"
-              @update="$emit('saveSetting')"
-            />
-          </div>
-        </div>
-
-        <!-- ポストの匿名化 -->
-        <div class="settings-popup__form">
-          <div class="settings-popup__form__header">
-            <span>{{ $t("postAnonymization") }}</span>
-          </div>
-          <div class="settings-popup__form__body">
-            <Radios
-              :state="mainState.currentSetting"
-              model="postAnonymization"
-              :options="SETTINGS.POST_ANONYMIZATION"
-              layout="horizontal"
-              @update="$emit('saveSetting')"
-            />
           </div>
         </div>
       </div>

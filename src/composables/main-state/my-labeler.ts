@@ -89,9 +89,11 @@ export default class MyLabeler {
   }
 
   getMyLabelerPreferences (): Array<{ did: string }> {
-    const myLabelers = this.mainState.currentPreferences?.find((preference) => {
-      return preference.$type === "app.bsky.actor.defs#labelersPref"
-    })?.labelers ?? []
+    const myLabelers = (this.mainState.currentPreferences as Array<TTPreferenceLabeler>)
+      ?.find((preference) => {
+        return preference.$type === "app.bsky.actor.defs#labelersPref"
+      })
+      ?.labelers ?? []
 
     // 公式ラベラーを追加
     if (myLabelers.every((myLabeler) => {
@@ -246,7 +248,7 @@ export default class MyLabeler {
       }) as Array<TILabelSetting>
   }
 
-  getLabelPreference (did: string, label: string): undefined | TTPreference {
+  getLabelPreference (did: string, label: string): undefined | TTPreferenceLabel {
     return this.mainState.currentPreferences?.find((preference) => {
       return preference.$type === "app.bsky.actor.defs#contentLabelPref" &&
              preference.label === label &&
@@ -257,7 +259,7 @@ export default class MyLabeler {
                  CONSTS.OFFICIAL_SPECIAL_LABELERS.includes(label)
                )
              )
-    })
+    }) as undefined | TTPreferenceLabel
   }
 
   addLabelPreference (did: string, label: string, visibility: TTContentVisibility) {
@@ -306,7 +308,7 @@ export default class MyLabeler {
     })
 
     // 特別な公式ラベルの labelerDid を削除
-    results.forEach((result) => {
+    ;(results as Array<TTPreferenceLabel>).forEach((result) => {
       if (result.label != null && CONSTS.OFFICIAL_SPECIAL_LABELERS.includes(result.label)) {
         delete result.labelerDid
       }

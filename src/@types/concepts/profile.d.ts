@@ -17,6 +17,9 @@ type TTProfile = {
   joinedViaStarterPack?: TIStarterPack
   viewer: TTUserViewer
 
+  // Linkat
+  __linkat?: Array<TICommonRecord>
+
   // WhiteWind
   __whiteWinds?: Array<TICommonRecord>
 }

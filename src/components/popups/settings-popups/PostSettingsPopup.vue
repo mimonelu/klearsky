@@ -17,28 +17,12 @@ const mainState = inject("state") as MainState
   >
     <template #header>
       <h2>
-        <SVGIcon name="setting" />
+        <SVGIcon name="post" />
         <span>{{ $t("postSettings") }}</span>
       </h2>
     </template>
     <template #body>
       <div class="settings-popup__form-page">
-        <!-- 時間表記 -->
-        <div class="settings-popup__form">
-          <div class="settings-popup__form__header">
-            <span>{{ $t("timeControl") }}</span>
-          </div>
-          <div class="settings-popup__form__body">
-            <Radios
-              :state="mainState.currentSetting"
-              model="timeControl"
-              :options="SETTINGS.TIME_CONTROLS"
-              layout="horizontal"
-              @update="$emit('saveSetting')"
-            />
-          </div>
-        </div>
-
         <!-- 自動翻訳 -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">

@@ -106,6 +106,7 @@ export const state: MainState = reactive<MainState>({
   // プリファレンス
   currentPreferences: [],
   fetchPreferences: fetchPreferences,
+  updatePreferences: updatePreferences,
 
   // ラベル
   hasLabel: hasLabel,
@@ -230,11 +231,7 @@ export const state: MainState = reactive<MainState>({
   currentCustomFeedsCursor: undefined,
   currentPopularFeedGenerators: [],
   currentPopularFeedGeneratorsCursor: undefined,
-  currentFeedPreference: computed((): undefined | TTPreference => {
-    return state.currentPreferences.find((preference: TTPreference) => {
-      return preference.$type === "app.bsky.actor.defs#savedFeedsPref"
-    })
-  }),
+  currentFeedPreference: currentFeedPreference(),
   fetchCustomFeeds: fetchCustomFeeds,
   fetchPopularFeedGenerators: fetchPopularFeedGenerators,
   sortFeedPreferencesSavedAndPinned: sortFeedPreferencesSavedAndPinned,
@@ -439,10 +436,10 @@ export const state: MainState = reactive<MainState>({
   openPostSettingsPopup: openPostSettingsPopup,
   closePostSettingsPopup: closePostSettingsPopup,
 
-  // ポップアップ - 心理的安全性設定ポップアップ
-  psySafetySettingsPopupDisplay: false,
-  openPsySafetySettingsPopup: openPsySafetySettingsPopup,
-  closePsySafetySettingsPopup: closePsySafetySettingsPopup,
+  // ポップアップ - 時間設定ポップアップ
+  timeSettingsPopupDisplay: false,
+  openTimeSettingsPopup: openTimeSettingsPopup,
+  closeTimeSettingsPopup: closeTimeSettingsPopup,
 
   // ポップアップ - その他設定ポップアップ
   otherSettingsPopupDisplay: false,
@@ -921,9 +918,6 @@ function saveSettings () {
   if (state.settings[did].hideNumberOfReaction == null) {
     state.settings[did].hideNumberOfReaction = false
   }
-  if (state.settings[did].myFeedsIndex == null) {
-    state.settings[did].myFeedsIndex = []
-  }
   if (state.settings[did].postAnonymization == null) {
     state.settings[did].postAnonymization = false
   }
@@ -1115,11 +1109,22 @@ async function updateTimeline () {
 async function fetchPreferences (): Promise<boolean> {
   const preferences = await state.atp.fetchPreferences()
   if (preferences instanceof Error) {
-    // TODO:
-    // state.openErrorPopup(preferences, "mainState/fetchPreferences")
+    state.openErrorPopup(preferences, "mainState/fetchPreferences")
     return false
   }
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
+  return true
+}
+
+async function updatePreferences (): Promise<boolean> {
+  // V1 形式の内部データを V2 に変換して上書き
+  state.myFeeds?.convertV1ToV2()
+
+  const result = await state.atp.updatePreferences(state.currentPreferences)
+  if (result instanceof Error) {
+    state.openErrorPopup(result, "mainState/updatePreferences")
+    return false
+  }
   return true
 }
 
@@ -1665,6 +1670,34 @@ async function fetchSearchFeeds (direction: "old" | "new") {
 
 // カスタムフィード
 
+function currentFeedPreference () {
+  return computed((): undefined | TTPreferenceCustomFeedV1 => {
+    // V2 を V1 形式に変換している
+    const preferences = state.currentPreferences.find((preference) => {
+      return preference.$type === "app.bsky.actor.defs#savedFeedsPrefV2"
+    }) as undefined | TTPreferenceCustomFeedV2
+    if (preferences == null) {
+      return
+    }
+    return {
+      $type: "app.bsky.actor.defs#savedFeedsPref",
+      pinned: (preferences.items
+        ?.filter((preference) => {
+          return !!preference.pinned
+        })
+        .map((preference) => {
+          // URI に "following" 等が入る点に注意
+          return preference.value
+        }) ?? []) as Array<string>,
+      saved: (preferences.items
+        ?.map((preference) => {
+          // URI に "following" 等が入る点に注意
+          return preference.value
+        }) ?? []) as Array<string>,
+    }
+  })
+}
+
 async function fetchCustomFeeds (direction: TTDirection, middleCursor?: string) {
   if (state.currentCustomFeedsUri !== state.currentQuery.feed) {
     state.currentCustomFeeds.splice(0)
@@ -2047,14 +2080,14 @@ function closePostSettingsPopup () {
   state.postSettingsPopupDisplay = false
 }
 
-// ポップアップ - 心理的安全性設定ポップアップ
+// ポップアップ - 時間設定ポップアップ
 
-function openPsySafetySettingsPopup () {
-  state.psySafetySettingsPopupDisplay = true
+function openTimeSettingsPopup () {
+  state.timeSettingsPopupDisplay = true
 }
 
-function closePsySafetySettingsPopup () {
-  state.psySafetySettingsPopupDisplay = false
+function closeTimeSettingsPopup () {
+  state.timeSettingsPopupDisplay = false
 }
 
 // ポップアップ - その他設定ポップアップ

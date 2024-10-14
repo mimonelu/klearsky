@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import Popup from "@/components/popups/Popup.vue"
+import Radios from "@/components/forms/Radios.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import SETTINGS from "@/consts/settings.json"
 
 const $t = inject("$t") as Function
 
@@ -28,7 +30,7 @@ async function resetSettings () {
   >
     <template #header>
       <h2>
-        <SVGIcon name="setting" />
+        <SVGIcon name="shimmer" />
         <span>{{ $t("etcSettings") }}</span>
       </h2>
     </template>
@@ -56,6 +58,54 @@ async function resetSettings () {
               placeholder="sample@wallet.com, lnurlxxx, lnbcxxx, ..."
               @change="$emit('changeSetting')"
             >
+          </div>
+        </div>
+
+        <!-- 心理的安全性 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("psySafetySettings") }}</span>
+          </div>
+          <div class="settings-popup__form__body">
+            <!-- 新着バッジの非表示 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("hideNotificationBadge") }}</span>
+            </div>
+            <Radios
+              :state="mainState.currentSetting"
+              model="hideNotificationBadge"
+              :options="SETTINGS.HIDE_NOTIFICATION_BADGE"
+              layout="horizontal"
+              @update="$emit('saveSetting')"
+            />
+
+            <!-- リアクション数の非表示 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("hideNumberOfReaction") }}</span>
+            </div>
+            <div class="settings-popup__form__body">
+              <Radios
+                :state="mainState.currentSetting"
+                model="hideNumberOfReaction"
+                :options="SETTINGS.HIDE_NUMBER_OF_REACTION"
+                layout="horizontal"
+                @update="$emit('saveSetting')"
+              />
+            </div>
+
+            <!-- ポストの匿名化 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("postAnonymization") }}</span>
+            </div>
+            <div class="settings-popup__form__body">
+              <Radios
+                :state="mainState.currentSetting"
+                model="postAnonymization"
+                :options="SETTINGS.POST_ANONYMIZATION"
+                layout="horizontal"
+                @update="$emit('saveSetting')"
+              />
+            </div>
           </div>
         </div>
 

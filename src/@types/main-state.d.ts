@@ -62,6 +62,7 @@ interface MainState {
   // プリファレンス
   currentPreferences: Array<TTPreference>
   fetchPreferences: () => Promise<boolean>
+  updatePreferences: () => Promise<boolean>
 
   // ラベル
   hasLabel (target: string, labels?: Array<TTLabel>): boolean
@@ -183,7 +184,7 @@ interface MainState {
   currentCustomFeedsCursor?: string
   currentPopularFeedGenerators: Array<TTFeedGenerator>
   currentPopularFeedGeneratorsCursor?: string
-  currentFeedPreference: ComputedRef<undefined | TTPreference>
+  currentFeedPreference: ComputedRef<undefined | TTPreferenceCustomFeedV1>
   fetchCustomFeeds: (direction: TTDirection, middleCursor?: string) => Promise<void>
   fetchPopularFeedGenerators: (direction: "new" | "old") => Promise<void>
   sortFeedPreferencesSavedAndPinned: () => void
@@ -377,10 +378,10 @@ interface MainState {
   openPostSettingsPopup: Function
   closePostSettingsPopup: () => void
 
-  // ポップアップ - 心理的安全性設定ポップアップ
-  psySafetySettingsPopupDisplay: boolean
-  openPsySafetySettingsPopup: Function
-  closePsySafetySettingsPopup: () => void
+  // ポップアップ - 時間設定ポップアップ
+  timeSettingsPopupDisplay: boolean
+  openTimeSettingsPopup: Function
+  closeTimeSettingsPopup: () => void
 
   // ポップアップ - その他設定ポップアップ
   otherSettingsPopupDisplay: boolean

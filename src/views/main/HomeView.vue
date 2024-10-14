@@ -68,7 +68,7 @@ async function autoScrollSliderMenu () {
         >
           <!-- フォロー中フィード -->
           <RouterLink
-            v-if="item.kind === 'followings'"
+            v-if="item.kind === 'following'"
             class="slider-menu__link"
             to="/home/timeline"
             :data-is-selected="true"
@@ -79,7 +79,7 @@ async function autoScrollSliderMenu () {
 
           <!-- グローバルフィード -->
           <RouterLink
-            v-else-if="item.kind === 'globalline'"
+            v-else-if="item.kind === 'space.aoisora.preference.feed.extra'"
             class="slider-menu__link"
             to="/home/globalline"
             :data-is-selected="true"

@@ -135,10 +135,9 @@ async function unlikeFeedGenerator (generator: TTFeedGenerator) {
 
 async function updatePreferences () {
   state.loaderDisplay = true
-  const result = await mainState.atp.updatePreferences(mainState.currentPreferences)
+  const result = await mainState.updatePreferences()
   state.loaderDisplay = false
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "FeedCard/updatePreferences")
+  if (!result) {
     return
   }
 
