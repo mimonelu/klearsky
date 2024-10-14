@@ -112,8 +112,8 @@ function process (type: string) {
       mainState.openPostSettingsPopup()
       break
     }
-    case "psySafety": {
-      mainState.openPsySafetySettingsPopup()
+    case "time": {
+      mainState.openTimeSettingsPopup()
       break
     }
     case "etc": {
@@ -272,14 +272,14 @@ function process (type: string) {
         <span>{{ $t("postSettings") }}</span>
       </button>
 
-      <!-- 心理的安全性設定ポップアップトリガー -->
+      <!-- 時間設定ポップアップトリガー -->
       <button
         type="button"
-        data-type="psySafety"
-        @click.prevent="process('psySafety')"
+        data-type="time"
+        @click.prevent="process('time')"
       >
-        <SVGIcon name="like" />
-        <span>{{ $t("psySafetySettings") }}</span>
+        <SVGIcon name="clock" />
+        <span>{{ $t("timeSettings") }}</span>
       </button>
 
       <!-- その他設定ポップアップトリガー -->
@@ -334,7 +334,7 @@ function process (type: string) {
   button[data-type="wordMute"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="design"] > .svg-icon { /**/ }
   button[data-type="post"] > .svg-icon { --icon-color: var(--post-color); }
-  button[data-type="psySafety"] > .svg-icon { /**/ }
+  button[data-type="time"] > .svg-icon { /**/ }
   button[data-type="etc"] > .svg-icon { /**/ }
   button[data-type="inviteCode"] > .svg-icon { /**/ }
 }

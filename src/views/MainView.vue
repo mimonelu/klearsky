@@ -45,7 +45,6 @@ import PostPopover from "@/components/popovers/PostPopover.vue"
 import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
-import PsySafetySettingsPopup from "@/components/popups/settings-popups/PsySafetySettingsPopup.vue"
 import QuoteRepostsPopup from "@/components/popups/QuoteRepostsPopup.vue"
 import ReactionControlPopup from "@/components/popups/ReactionControlPopup.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
@@ -64,6 +63,7 @@ import StarterPackCardPopover from "@/components/popovers/StarterPackCardPopover
 import StarterPackEditPopup from "@/components/popups/StarterPackEditPopup.vue"
 import SubMenu from "@/components/shells/SubMenu.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
+import TimeSettingsPopup from "@/components/popups/settings-popups/TimeSettingsPopup.vue"
 import UiLanguageSettingsPopup from "@/components/popups/settings-popups/UiLanguageSettingsPopup.vue"
 import WordMutePopup from "@/components/popups/WordMutePopup.vue"
 import { state } from "@/composables/main-state"
@@ -945,11 +945,11 @@ function changeSetting () {
         />
       </Transition>
 
-      <!-- 設定 - 心理的安全性設定ポップアップ -->
+      <!-- 設定 - 時間設定ポップアップ -->
       <Transition>
-        <PsySafetySettingsPopup
-          v-if="state.psySafetySettingsPopupDisplay"
-          @close="state.closePsySafetySettingsPopup"
+        <TimeSettingsPopup
+          v-if="state.timeSettingsPopupDisplay"
+          @close="state.closeTimeSettingsPopup"
           @saveSetting="saveSetting"
           @changeSetting="changeSetting"
         />

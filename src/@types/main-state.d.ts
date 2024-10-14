@@ -378,10 +378,10 @@ interface MainState {
   openPostSettingsPopup: Function
   closePostSettingsPopup: () => void
 
-  // ポップアップ - 心理的安全性設定ポップアップ
-  psySafetySettingsPopupDisplay: boolean
-  openPsySafetySettingsPopup: Function
-  closePsySafetySettingsPopup: () => void
+  // ポップアップ - 時間設定ポップアップ
+  timeSettingsPopupDisplay: boolean
+  openTimeSettingsPopup: Function
+  closeTimeSettingsPopup: () => void
 
   // ポップアップ - その他設定ポップアップ
   otherSettingsPopupDisplay: boolean

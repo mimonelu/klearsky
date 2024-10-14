@@ -17,7 +17,7 @@ const mainState = inject("state") as MainState
   >
     <template #header>
       <h2>
-        <SVGIcon name="setting" />
+        <SVGIcon name="palette" />
         <span>{{ $t("designSettings") }}</span>
       </h2>
     </template>

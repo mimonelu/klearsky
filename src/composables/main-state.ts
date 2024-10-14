@@ -436,10 +436,10 @@ export const state: MainState = reactive<MainState>({
   openPostSettingsPopup: openPostSettingsPopup,
   closePostSettingsPopup: closePostSettingsPopup,
 
-  // ポップアップ - 心理的安全性設定ポップアップ
-  psySafetySettingsPopupDisplay: false,
-  openPsySafetySettingsPopup: openPsySafetySettingsPopup,
-  closePsySafetySettingsPopup: closePsySafetySettingsPopup,
+  // ポップアップ - 時間設定ポップアップ
+  timeSettingsPopupDisplay: false,
+  openTimeSettingsPopup: openTimeSettingsPopup,
+  closeTimeSettingsPopup: closeTimeSettingsPopup,
 
   // ポップアップ - その他設定ポップアップ
   otherSettingsPopupDisplay: false,
@@ -2080,14 +2080,14 @@ function closePostSettingsPopup () {
   state.postSettingsPopupDisplay = false
 }
 
-// ポップアップ - 心理的安全性設定ポップアップ
+// ポップアップ - 時間設定ポップアップ
 
-function openPsySafetySettingsPopup () {
-  state.psySafetySettingsPopupDisplay = true
+function openTimeSettingsPopup () {
+  state.timeSettingsPopupDisplay = true
 }
 
-function closePsySafetySettingsPopup () {
-  state.psySafetySettingsPopupDisplay = false
+function closeTimeSettingsPopup () {
+  state.timeSettingsPopupDisplay = false
 }
 
 // ポップアップ - その他設定ポップアップ
