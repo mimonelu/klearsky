@@ -6,16 +6,14 @@ export default async function (
   urlHasImage?: boolean
 ): Promise<Error | TTExternal> {
   const response: Error | any =
-    await Util.fetchWithTimeout(`https://cardyb.bsky.app/v1/extract?url=${uri}`, {
-      headers: { "user-agent": "Klearsky" },
-    })
-    .then((value) => {
-      if (!value.ok) {
-        return Error("fetchOgpError")
-      }
-      return value.json()
-    })
-    .catch((error) => error)
+    await Util.fetchWithTimeout(`https://cardyb.bsky.app/v1/extract?url=${uri}`)
+      .then((value) => {
+        if (!value.ok) {
+          return Error("fetchOgpError")
+        }
+        return value.json()
+      })
+      .catch((error) => error)
   console.log("[klearsky/parse-ogp", response)
 
   // エラーをスルー
@@ -52,16 +50,14 @@ export default async function (
 
   if (urlHasImage && imageFetchUrl) {
     const response =
-      await Util.fetchWithTimeout(imageFetchUrl, {
-        headers: { "user-agent": "Klearsky" },
-      })
-      .then((value) => {
-        if (!value.ok) {
-          return Error("fetchOgpImageError")
-        }
-        return value
-      })
-      .catch((error) => error)
+      await Util.fetchWithTimeout(imageFetchUrl)
+        .then((value) => {
+          if (!value.ok) {
+            return Error("fetchOgpImageError")
+          }
+          return value
+        })
+        .catch((error) => error)
     if (response instanceof Error) {
       // エラーをスルー
       return external
