@@ -22,10 +22,14 @@ Klearsky is deployed on Cloudflare.
 * `npm run type-check`
 * `npm run knip` https://knip.dev/
 
+## Custom records(collections)
+* `space.aoisora.bookmark` Bookmark
+* `space.aoisora.preference.feed.extra` to save an index of global feeds
+
 ## Custom fields
-* `POST.record.via?: string` Client name (Klearsky)
-* `POST.record.lightning?: string` Used in Zap! link
-* ~~`PROFILE.record.pinnedPost?: string` Used in pinned post~~
+* `app.bsky.feed.post.record.via` Client user agent (Klearsky)
+* `app.bsky.feed.post.record["space.aoisora.post.lightning"]` Used in "Zap!" link
+* ~~`app.bsky.actor.profile.record.pinnedPost` Used in pinned post~~
 
 ## External linkage services
 * MyMemory: 自動翻訳で使用。ユーザーのメールアドレスを自動付与している

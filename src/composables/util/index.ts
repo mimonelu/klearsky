@@ -12,6 +12,7 @@ import getRkey from "@/composables/util/get-rkey"
 import getUserLanguage from "@/composables/util/get-user-language"
 import injectFoldingToFeeds from "@/composables/util/inject-folding-to-feeds"
 import makeCustomLinks from "@/composables/util/make-custom-links"
+import makeLightningLinks from "@/composables/util/make-lightning-links"
 import mergeFeeds from "@/composables/util/merge-feeds"
 import parseOgp from "@/composables/util/parse-ogp"
 import safeJson from "@/composables/util/safe-json"
@@ -46,6 +47,7 @@ export default {
   getUserLanguage,
   injectFoldingToFeeds,
   makeCustomLinks,
+  makeLightningLinks,
   mergeFeeds,
   parseOgp,
   ...safeJson,

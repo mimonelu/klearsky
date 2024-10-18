@@ -46,7 +46,6 @@ interface TIPostValue {
   entities?: Array<TTEntity>
   facets?: any
   langs?: Array<string>
-  lightning?: string // カスタムフィールド
   reply?: {
     root: {
       cid: string
@@ -57,12 +56,13 @@ interface TIPostValue {
       uri: string
     }
   }
-  text?: string
-  via?: string // カスタムフィールド
   subject?: {
     cid: string
     uri: string
   }
+  text?: string
+  [import("@/consts/consts.json").THIRD_PARTY_DOMAIN_LIGHTNING]?: string // カスタムフィールド
+  via?: string // カスタムフィールド
   [k: string]: unknown
 }
 
@@ -146,8 +146,9 @@ type TTCreatePostParams = {
   alts?: Array<string>
   languages?: Array<string>
   labels?: Array<string>
-  listMentionDids?: Array<string>
   lightning?: string
+  listMentionDids?: Array<string>
+  [k: string]: unknown
 }
 
 type TTSendPostPopupParams = {

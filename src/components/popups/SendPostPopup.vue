@@ -227,10 +227,8 @@ async function submitCallback () {
       createdAt: state.postDatePopupDate,
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
-      listMentionDids: mainState.listMentionPopupProps.dids,
-
-      // Lightning
       lightning: mainState.currentSetting.lightning,
+      listMentionDids: mainState.listMentionPopupProps.dids,
     })
     if (result instanceof Error) {
       mainState.openSendPostPopup()

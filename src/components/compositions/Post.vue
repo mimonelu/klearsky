@@ -20,6 +20,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import Util from "@/composables/util"
+import { THIRD_PARTY_DOMAIN_LIGHTNING } from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -1367,9 +1368,13 @@ function toggleOldestQuotedPostDisplay () {
 
         <!-- リアクションコンテナ -->
         <div
-          v-if="position !== 'chatMessage' && position !== 'postInPost' && position !== 'slim'"
+          v-if="
+            position !== 'chatMessage' &&
+            position !== 'postInPost' &&
+            position !== 'slim'
+          "
           class="reaction-container"
-          :data-has-lightning="!!post.record?.lightning"
+          :data-has-lightning="!!post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]"
         >
           <div>
             <!-- リプライボタン -->
@@ -1420,9 +1425,9 @@ function toggleOldestQuotedPostDisplay () {
           <div>
             <!-- Lightning -->
             <a
-              v-if="post.record?.lightning"
+              v-if="post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]"
               class="icon-button--nolabel lightning-link"
-              :href="`lightning:${post.record?.lightning}`"
+              :href="`lightning:${post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]}`"
               rel="noreferrer"
               @click.stop
             >

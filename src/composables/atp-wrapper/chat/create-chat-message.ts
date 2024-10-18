@@ -16,11 +16,11 @@ export default async function (
   const message: ChatBskyConvoDefs.MessageInput = { text: params.text ?? "" }
 
   // Zapリンク
-  if (params.lightning != null) {
-    message.text = message.text.replace(
-      /@zap(?=\W|$)/gi,
-      `[⚡️Zap!](lightning:${params.lightning})`
-    )
+  if (params.lightning) {
+    message.text = Util.makeLightningLinks(
+      message.text,
+      params.lightning
+    ) ?? message.text
   }
 
   // カスタムリンク

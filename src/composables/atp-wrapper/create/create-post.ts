@@ -2,7 +2,10 @@ import Package from "@/../package.json"
 import type { AppBskyFeedPost } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
-import { LIMIT_OF_LIST_MENTION_ACCOUNTS } from "@/consts/consts.json"
+import {
+  LIMIT_OF_LIST_MENTION_ACCOUNTS,
+  THIRD_PARTY_DOMAIN_LIGHTNING,
+} from "@/consts/consts.json"
 
 export default async function (
   this: TIAtpWrapper,
@@ -28,10 +31,10 @@ export default async function (
 
   // Zapリンク
   if (params.lightning) {
-    record.text = record.text.replace(
-      /@zap(?=\W|$)/gi,
-      `[⚡️Zap!](lightning:${params.lightning})`
-    )
+    record.text = Util.makeLightningLinks(
+      record.text,
+      params.lightning
+    ) ?? record.text
   }
 
   // カスタムリンク
@@ -78,7 +81,7 @@ export default async function (
 
   // カスタムフィールド - Lightning
   if (params.lightning) {
-    record.lightning = params.lightning
+    record[THIRD_PARTY_DOMAIN_LIGHTNING] = params.lightning
   }
 
   // Embed

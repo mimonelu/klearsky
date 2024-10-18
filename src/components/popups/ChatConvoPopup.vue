@@ -220,15 +220,19 @@ async function submitCallback () {
     type: "post",
     text,
     url,
-    /* // TODO: 一時退避
-    urlHasImage: easyFormState.urlHasImage,
-    medias: easyFormState.medias,
-    */
+
+    // TODO: 一時退避
+    // urlHasImage: easyFormState.urlHasImage,
+    // medias: easyFormState.medias,
+
     lightning: mainState.currentSetting.lightning,
   })) {
     easyFormState.text = text
     easyFormState.url = url
-    mainState.openErrorPopup("errorApiFailed", "ChatCOnvoPopup/submitCallback")
+    mainState.openErrorPopup(
+      "errorApiFailed",
+      "ChatCOnvoPopup/submitCallback"
+    )
     return
   }
   easyFormState.url = ""
