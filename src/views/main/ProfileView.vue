@@ -23,7 +23,7 @@ import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
-import WhiteWinds from "@/components/compositions/WhiteWinds.vue"
+import WhiteWind from "@/components/next/WhiteWind/Main.vue"
 import Util from "@/composables/util"
 
 const router = useRouter()
@@ -740,7 +740,7 @@ function removeThisPost () {
     </Post>
 
     <!-- WhiteWind 導線 -->
-    <WhiteWinds
+    <WhiteWind
       v-if="state.isPagePostFeeds"
       :profile="mainState.currentProfile ?? undefined"
     />

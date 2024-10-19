@@ -21,7 +21,7 @@ type TTProfile = {
   __linkat?: Array<TICommonRecord>
 
   // WhiteWind
-  __whiteWinds?: Array<TICommonRecord>
+  __whiteWind?: Array<TICommonRecord>
 }
 
 type TTUpdateProfileParams = {

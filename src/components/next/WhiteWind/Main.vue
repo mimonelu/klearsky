@@ -20,8 +20,8 @@ const state = reactive<{
     }
 
     // プロフィールデータにキャッシュがあれば再利用
-    if (props.profile.__whiteWinds != null) {
-      return props.profile.__whiteWinds
+    if (props.profile.__whiteWind != null) {
+      return props.profile.__whiteWind
     }
 
     const results = await mainState.atp.fetchRecords(
@@ -57,7 +57,7 @@ const state = reactive<{
     })
 
     // プロフィールデータにキャッシュを保存
-    props.profile.__whiteWinds = results.records
+    props.profile.__whiteWind = results.records
 
     return results.records
   }, []),
@@ -65,25 +65,25 @@ const state = reactive<{
 </script>
 
 <template>
-  <div class="white-winds">
+  <div class="white-wind">
     <div
       v-if="state.records.length > 0"
-      class="white-winds__container"
+      class="white-wind__container"
     >
       <template v-for="record of state.records">
         <a
-          class="white-winds__item"
+          class="white-wind__item"
           :href="record.value.__href"
           rel="noreferrer"
           target="_blank"
         >
-          <div class="white-winds__header">
+          <div class="white-wind__header">
             <SVGIcon name="openInApp" />
             <span>{{ $t("WhiteWind") }}</span>
           </div>
-          <div class="white-winds__title">{{ record.value.title }}</div>
-          <div class="white-winds__content">{{ record.value.content }}</div>
-          <div class="white-winds__createdAt">{{ record.value.__createdAt }}</div>
+          <div class="white-wind__title">{{ record.value.title }}</div>
+          <div class="white-wind__content">{{ record.value.content }}</div>
+          <div class="white-wind__createdAt">{{ record.value.__createdAt }}</div>
         </a>
       </template>
     </div>
@@ -91,7 +91,7 @@ const state = reactive<{
 </template>
 
 <style lang="scss" scoped>
-.white-winds {
+.white-wind {
   display:  grid;
 
   &__container {
@@ -104,7 +104,7 @@ const state = reactive<{
   }
 
   &__item {
-    background-color: rgb(var(--white-winds-color), 0.125);
+    background-color: rgb(var(--white-wind-color), 0.125);
     color: var(--fg-color);
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -139,11 +139,11 @@ const state = reactive<{
     font-size: 0.875em;
 
     & > .svg-icon {
-      fill: rgb(var(--white-winds-color));
+      fill: rgb(var(--white-wind-color));
     }
 
     & > span {
-      color: rgb(var(--white-winds-color));
+      color: rgb(var(--white-wind-color));
       font-weight: bold;
       line-height: var(--line-height-middle);
       overflow: hidden;
