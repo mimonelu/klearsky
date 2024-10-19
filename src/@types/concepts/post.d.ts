@@ -62,7 +62,7 @@ interface TIPostValue {
   }
   text?: string
   [import("@/consts/consts.json").THIRD_PARTY_DOMAIN_LIGHTNING]?: string // カスタムフィールド
-  via?: string // カスタムフィールド
+  [import("@/consts/consts.json").THIRD_PARTY_DOMAIN_VIA]?: string // カスタムフィールド
   [k: string]: unknown
 }
 

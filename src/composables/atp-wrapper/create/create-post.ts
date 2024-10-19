@@ -5,6 +5,7 @@ import Util from "@/composables/util"
 import {
   LIMIT_OF_LIST_MENTION_ACCOUNTS,
   THIRD_PARTY_DOMAIN_LIGHTNING,
+  THIRD_PARTY_DOMAIN_VIA,
 } from "@/consts/consts.json"
 
 export default async function (
@@ -19,9 +20,6 @@ export default async function (
     $type: "app.bsky.feed.post",
     createdAt: params.createdAt ?? new Date().toISOString(),
     text: params.text ?? "",
-
-    // カスタムフィールド - via
-    via: `Klearsky v${Package.version}`,
   }
 
   // ポスト言語
@@ -83,6 +81,9 @@ export default async function (
   if (params.lightning) {
     record[THIRD_PARTY_DOMAIN_LIGHTNING] = params.lightning
   }
+
+  // カスタムフィールド - via
+  record[THIRD_PARTY_DOMAIN_VIA] = `Klearsky v${Package.version}`
 
   // Embed
   const embedResult = await Util.createEmbed(this, record, params)

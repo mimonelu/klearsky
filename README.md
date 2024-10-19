@@ -27,7 +27,7 @@ Klearsky is deployed on Cloudflare.
 * `space.aoisora.preference.feed.extra` to save an index of global feeds
 
 ## Custom fields
-* `app.bsky.feed.post.record.via` Client user agent (Klearsky)
+* `app.bsky.feed.post.record["space.aoisora.post.via"]` Client user agent (Klearsky)
 * `app.bsky.feed.post.record["space.aoisora.post.lightning"]` Used in "Zap!" link
 * ~~`app.bsky.actor.profile.record.pinnedPost` Used in pinned post~~
 
