@@ -739,7 +739,7 @@ function removeThisPost () {
       </template>
     </Post>
 
-    <!-- WhiteWind 導線 -->
+    <!-- WhiteWind -->
     <WhiteWind
       v-if="state.isPagePostFeeds"
       :profile="mainState.currentProfile ?? undefined"

@@ -1257,6 +1257,7 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
 }
 
 async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
+  // 各種プロフィール関連データの初期化
   state.currentProfile = null
   state.currentAuthorReposts.splice(0)
   state.currentAuthorLikes.splice(0)
@@ -1266,6 +1267,8 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
   state.currentFollowings.splice(0)
   state.currentSuggestedFollows.splice(0)
   state.currentAuthorPostOfPinnedPost = undefined
+
+  // プロフィールデータの取得
   const currentProfile = await state.atp.fetchProfile(did)
   if (currentProfile instanceof Error) {
     state.currentProfile = null
@@ -1273,7 +1276,7 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
   }
   state.currentProfile = currentProfile
 
-  // 現在のプロフィールがユーザーのプロフィールの場合
+  // 現在のプロフィールがユーザープロフィールの場合
   if (did === state.atp.session?.did) {
     state.userProfile = state.currentProfile
 
@@ -1281,28 +1284,17 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
     state.myWorker!.setSessionCache("userProfile", state.userProfile)
   }
 
-  // ハンドル履歴の取得
-  updateCurrentLogAudit()
-
   // 固定ポストのインポート
   fetchPinnedPost(state.currentProfile)
+
+  // ハンドル履歴の取得
+  updateCurrentLog()
+    .then(() => {
+      // describeRepo の取得
+      updateCurrentRepo()
+    })
 }
 
-async function updateCurrentLogAudit () {
-  if (state.currentProfile == null) {
-    return
-  }
-  const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
-  if (logJson instanceof Error || logJson == null) {
-    return
-  }
-  if (state.currentProfile == null) {
-    return // await 中に初期化される恐れがあるため
-  }
-  state.currentProfile.__log = logJson
-}
-
-// 固定ポストの取得
 async function fetchPinnedPost (profile?: TTProfile) {
   if (profile?.pinnedPost?.uri != null) {
     const posts = await state.atp.fetchPosts([profile.pinnedPost.uri])
@@ -1317,6 +1309,46 @@ async function fetchPinnedPost (profile?: TTProfile) {
   } else {
     state.currentAuthorPostOfPinnedPost = undefined
   }
+}
+
+async function updateCurrentLog () {
+  if (state.currentProfile == null) {
+    return
+  }
+  const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
+  if (logJson instanceof Error || logJson == null) {
+    return
+  }
+  if (state.currentProfile == null) {
+    return // await 中に初期化される恐れがあるため
+  }
+  state.currentProfile.__log = logJson
+}
+
+async function updateCurrentRepo () {
+  if (state.currentProfile == null) {
+    return
+  }
+  const response = await state.atp.fetchWithoutAgent(
+    "com.atproto.repo.describeRepo",
+    state.currentProfile.did,
+    { repo: state.currentProfile.did }
+  )
+    .then((value) => value)
+    .catch((error) => error)
+  if (response == null) {
+    // state.openErrorPopup("apiError", "mainState/updateCurrentRepo")
+    return
+  }
+  if (response instanceof Error) {
+    // state.openErrorPopup(response, "mainState/updateCurrentRepo")
+    return
+  }
+  const json = await response.json()
+  if (state.currentProfile == null) {
+    return // await 中に初期化される恐れがあるため
+  }
+  state.currentProfile.__repo = json
 }
 
 async function fetchCurrentAuthorFeedGenerators (direction: "new" | "old") {

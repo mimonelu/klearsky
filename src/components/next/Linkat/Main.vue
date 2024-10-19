@@ -24,6 +24,11 @@ const state = reactive<{
       return props.profile.__linkat
     }
 
+    // プロフィールデータのコレクションに該当レコードがなければ中止
+    if (!props.profile.__repo?.collections?.includes("blue.linkat.board")) {
+      return []
+    }
+
     const results = await mainState.atp.fetchRecords(
       props.profile.did,
       "blue.linkat.board",

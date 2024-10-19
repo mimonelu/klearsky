@@ -24,6 +24,11 @@ const state = reactive<{
       return props.profile.__whiteWind
     }
 
+    // プロフィールデータのコレクションに該当レコードがなければ中止
+    if (!props.profile.__repo?.collections?.includes("com.whtwnd.blog.entry")) {
+      return []
+    }
+
     const results = await mainState.atp.fetchRecords(
       props.profile.did,
       "com.whtwnd.blog.entry",
