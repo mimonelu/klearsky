@@ -65,6 +65,7 @@ const state = reactive<{
       <span>{{ $t("Linkat") }}</span>
     </a>
     <template v-for="record of state.records">
+      <!-- リンクあり -->
       <a
         v-if="record.url"
         class="linkat__link textlink--icon"
@@ -72,13 +73,22 @@ const state = reactive<{
         rel="noreferrer"
         target="_blank"
       >
-        <SVGIcon name="link" />
+        <i v-if="record.emoji">{{ record.emoji }}</i>
+        <SVGIcon
+          v-else
+          name="link"
+        />
         <span>{{ record.text || record.url }}</span>
       </a>
+
+      <!-- テキストのみ -->
       <div
         v-else
         class="linkat__text"
-      >{{ record.text }}</div>
+      >
+        <i v-if="record.emoji">{{ record.emoji }}</i>
+        <span>{{ record.text }}</span>
+      </div>
     </template>
   </div>
 </template>
@@ -130,11 +140,21 @@ const state = reactive<{
   }
 
   &__text {
-    line-height: var(--line-height-middle);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    user-select: text;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5em;
+
+    & > i,
+    & > span {
+      line-height: var(--line-height-middle);
+    }
+
+    & > span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      user-select: text;
+      white-space: nowrap;
+    }
   }
 }
 </style>
