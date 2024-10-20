@@ -84,7 +84,7 @@ const state = reactive<{
         >
           <div class="white-wind__header">
             <SVGIcon name="openInApp" />
-            <span>{{ $t("WhiteWind") }}</span>
+            <span>{{ $t("pnWhiteWind") }}</span>
           </div>
           <div class="white-wind__title">{{ record.value.title }}</div>
           <div class="white-wind__content">{{ record.value.content }}</div>

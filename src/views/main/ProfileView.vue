@@ -8,6 +8,7 @@ import BlockButton from "@/components/buttons/BlockButton.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
+import Frontpage from "@/components/next/Frontpage/Main.vue"
 import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPopupTrigger.vue"
@@ -493,6 +494,9 @@ function removeThisPost () {
 
             <!-- Linkat -->
             <Linkat :profile="mainState.currentProfile ?? undefined" />
+
+            <!-- Frontpage -->
+            <Frontpage :profile="mainState.currentProfile ?? undefined" />
 
             <div
               v-if="state.accountContentDisplay"

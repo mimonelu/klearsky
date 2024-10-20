@@ -18,6 +18,9 @@ type TTProfile = {
   joinedViaStarterPack?: TIStarterPack
   viewer: TTUserViewer
 
+  // Frontpage
+  __frontpage?: Array<TICommonRecord>
+
   // Linkat
   __linkat?: Array<TICommonRecord>
 

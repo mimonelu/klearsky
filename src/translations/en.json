@@ -629,6 +629,9 @@
   "pnYoutube": "Youtube",
   "pnVimeo": "Vimeo",
   "pnNicovideo": "Nicovideo",
+  "pnFrontpage": "Frontpage",
+  "pnLinkat": "Linkat",
+  "pnWhiteWind": "WhiteWind",
 
   "mergeV1ToV2": "Merge v1 feeds into v2 feeds",
   "mergeV1ToV2Confirmation": "Add v1 format custom feeds to v2 format custom feeds.\n\n* This is for users who have been using Klearsky since v0.9.85 or earlier.\n* This operation will resume synchronization with the official client.\n* Please perform this operation only once.",

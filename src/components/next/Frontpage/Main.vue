@@ -3,7 +3,7 @@ import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
-const NUMBER_OF_FETCH_RECORDS = 1
+const NUMBER_OF_FETCH_RECORDS = 5
 
 const props = defineProps<{
   profile?: TTProfile
@@ -20,32 +20,32 @@ const state = reactive<{
     }
 
     // プロフィールデータにキャッシュがあれば再利用
-    if (props.profile.__linkat != null) {
-      return props.profile.__linkat
+    if (props.profile.__frontpage != null) {
+      return props.profile.__frontpage
     }
 
     // プロフィールデータのコレクションに該当レコードがなければ中止
-    if (!props.profile.__repo?.collections?.includes("blue.linkat.board")) {
+    if (!props.profile.__repo?.collections?.includes("fyi.unravel.frontpage.post")) {
       return []
     }
 
     const results = await mainState.atp.fetchRecords(
       props.profile.did,
-      "blue.linkat.board",
+      "fyi.unravel.frontpage.post",
       NUMBER_OF_FETCH_RECORDS,
     )
     if (results instanceof Error) {
       return []
     }
-    const cards = results.records?.[0].value?.cards
-    if (cards == null) {
+    const records = results.records
+    if (records == null) {
       return []
     }
 
     // プロフィールデータにキャッシュを保存
-    props.profile.__linkat = cards
+    props.profile.__frontpage = records
 
-    return cards
+    return records
   }, []),
 })
 </script>
@@ -53,48 +53,33 @@ const state = reactive<{
 <template>
   <div
     v-if="state.records.length > 0"
-    class="linkat"
+    class="frontpage"
   >
     <a
-      class="linkat__header"
-      :href="`https://linkat.blue/${profile?.handle}`"
+      class="frontpage__header"
+      :href="`https://frontpage.fyi/profile/${profile?.handle}`"
       rel="noreferrer"
       target="_blank"
     >
       <SVGIcon name="openInApp" />
-      <span>{{ $t("pnLinkat") }}</span>
+      <span>{{ $t("pnFrontpage") }}</span>
     </a>
     <template v-for="record of state.records">
-      <!-- リンクあり -->
       <a
-        v-if="record.url"
-        class="linkat__link textlink--icon"
-        :href="record.url"
+        class="textlink--icon"
+        :href="record.value?.url"
         rel="noreferrer"
         target="_blank"
       >
-        <i v-if="record.emoji">{{ record.emoji }}</i>
-        <SVGIcon
-          v-else
-          name="link"
-        />
-        <span>{{ record.text || record.url }}</span>
+        <SVGIcon name="link" />
+        <span>{{ record.value?.title }}</span>
       </a>
-
-      <!-- テキストのみ -->
-      <div
-        v-else
-        class="linkat__text"
-      >
-        <i v-if="record.emoji">{{ record.emoji }}</i>
-        <span>{{ record.text }}</span>
-      </div>
     </template>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.linkat {
+.frontpage {
   background-color: rgb(var(--cyan-dark-color), 0.125);
   border-radius: var(--border-radius-middle);
   display: flex;
@@ -129,24 +114,6 @@ const state = reactive<{
   .textlink--icon {
     & > .svg-icon {
       font-size: 0.875em;
-    }
-
-    & > span {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      user-select: text;
-      white-space: nowrap;
-    }
-  }
-
-  &__text {
-    display: flex;
-    align-items: center;
-    grid-gap: 0.5em;
-
-    & > i,
-    & > span {
-      line-height: var(--line-height-middle);
     }
 
     & > span {
