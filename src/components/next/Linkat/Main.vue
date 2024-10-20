@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
+import Atmosphere from "@/components/next/Atmosphere/Main.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const NUMBER_OF_FETCH_RECORDS = 1
@@ -51,78 +52,51 @@ const state = reactive<{
 </script>
 
 <template>
-  <div
+  <Atmosphere
     v-if="state.records.length > 0"
     class="linkat"
+    title="pnLinkat"
+    :uri="`https://linkat.blue/${profile?.handle}`"
   >
-    <a
-      class="linkat__header"
-      :href="`https://linkat.blue/${profile?.handle}`"
-      rel="noreferrer"
-      target="_blank"
-    >
-      <SVGIcon name="openInApp" />
-      <span>{{ $t("pnLinkat") }}</span>
-    </a>
-    <template v-for="record of state.records">
-      <!-- リンクあり -->
-      <a
-        v-if="record.url"
-        class="linkat__link textlink--icon"
-        :href="record.url"
-        rel="noreferrer"
-        target="_blank"
-      >
-        <i v-if="record.emoji">{{ record.emoji }}</i>
-        <SVGIcon
-          v-else
-          name="link"
-        />
-        <span>{{ record.text || record.url }}</span>
-      </a>
+    <template #body>
+      <template v-for="record of state.records">
+        <!-- リンクあり -->
+        <a
+          v-if="record.url"
+          class="linkat__link textlink--icon"
+          :href="record.url"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <i v-if="record.emoji">{{ record.emoji }}</i>
+          <SVGIcon
+            v-else
+            name="link"
+          />
+          <span>{{ record.text || record.url }}</span>
+        </a>
 
-      <!-- テキストのみ -->
-      <div
-        v-else
-        class="linkat__text"
-      >
-        <i v-if="record.emoji">{{ record.emoji }}</i>
-        <span>{{ record.text }}</span>
-      </div>
+        <!-- テキストのみ -->
+        <div
+          v-else
+          class="linkat__text"
+        >
+          <i v-if="record.emoji">{{ record.emoji }}</i>
+          <span>{{ record.text }}</span>
+        </div>
+      </template>
     </template>
-  </div>
+  </Atmosphere>
 </template>
 
 <style lang="scss" scoped>
 .linkat {
-  background-color: rgb(var(--cyan-dark-color), 0.125);
-  border-radius: var(--border-radius-middle);
-  display: flex;
-  flex-direction: column;
-  grid-gap: 0.5em;
-  padding: 1em;
-
-  &__header {
-    --alpha: 0.75;
-    display: grid;
-    grid-gap: 0.5em;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    &:focus, &:hover {
-      --alpha: 1.0;
-    }
-
-    & > .svg-icon {
-      fill: rgb(var(--cyan-dark-color), var(--alpha));
-    }
-
-    & > span {
-      color: rgb(var(--cyan-dark-color), var(--alpha));
-      font-weight: bold;
-      line-height: var(--line-height-middle);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+  &:deep() {
+    .atmosphere__body {
+      display: flex;
+      flex-direction: column;
+      grid-gap: 0.5em;
+      padding: 1em;
     }
   }
 

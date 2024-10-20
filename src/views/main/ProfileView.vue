@@ -493,7 +493,7 @@ function removeThisPost () {
             />
 
             <!-- Atmosphere -->
-            <div class="atmosphere">
+            <div class="atmosphere-container">
               <!-- Linkat -->
               <Linkat :profile="mainState.currentProfile ?? undefined" />
 
@@ -1071,10 +1071,11 @@ function removeThisPost () {
   word-break: break-word;
 }
 
-.atmosphere {
+.atmosphere-container {
+  background-color: rgb(var(--cyan-dark-color), 0.125);
+  border-radius: var(--border-radius-middle);
   display: flex;
   flex-direction: column;
-  grid-gap: 0.5rem;
 }
 
 .statistics {

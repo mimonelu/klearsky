@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
-import SVGIcon from "@/components/images/SVGIcon.vue"
+import Atmosphere from "@/components/next/Atmosphere/Main.vue"
 
 const NUMBER_OF_FETCH_RECORDS = 5
 
@@ -70,52 +70,64 @@ const state = reactive<{
 </script>
 
 <template>
-  <div
+  <Atmosphere
     v-if="state.records.length > 0"
     class="white-wind"
+    title="pnWhiteWind"
+    :uri="`https://whtwnd.com/${profile?.handle}`"
   >
-    <div class="white-wind__container">
-      <template v-for="record of state.records">
-        <a
-          class="white-wind__item"
-          :href="record.value.__href"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <div class="white-wind__header">
-            <SVGIcon name="openInApp" />
-            <span>{{ $t("pnWhiteWind") }}</span>
-          </div>
-          <div class="white-wind__title">{{ record.value.title }}</div>
-          <div class="white-wind__content">{{ record.value.content }}</div>
-          <div class="white-wind__createdAt">{{ record.value.__createdAt }}</div>
-        </a>
-      </template>
-    </div>
-  </div>
+    <template #body>
+      <div class="white-wind__container">
+        <template v-for="record of state.records">
+          <a
+            class="white-wind__item"
+            :href="record.value.__href"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <div class="white-wind__title">{{ record.value.title }}</div>
+            <div class="white-wind__content">{{ record.value.content }}</div>
+            <div class="white-wind__createdAt">{{ record.value.__createdAt }}</div>
+          </a>
+        </template>
+      </div>
+    </template>
+  </Atmosphere>
 </template>
 
 <style lang="scss" scoped>
 .white-wind {
-  display: grid;
+  &:deep() {
+    .atmosphere__body {
+      display: grid;
+    }
+  }
 
   &__container {
     display: flex;
-    grid-gap: 0.5em;
     overflow-x: auto;
     overflow-y: hidden;
     @include scroll-bar(transparent);
   }
 
   &__item {
-    background-color: rgb(var(--accent-color), 0.125);
-    border-radius: var(--border-radius-middle);
-    color: var(--fg-color);
     display: grid;
     grid-template-rows: auto 1fr auto;
     flex-direction: column;
     grid-gap: 0.25em;
-    padding: 0.75em;
+    padding: 1em;
+    position: relative;
+
+    &:not(:last-child)::after {
+      border-right: 1px solid rgb(var(--fg-color), 0.25);
+      content: "";
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 12.5%;
+      width: 1px;
+      height: 75%;
+    }
 
     // レコードが1つの場合
     &:first-child:last-child {
@@ -134,27 +146,6 @@ const state = reactive<{
   &__container:has(&__item:nth-child(2):last-child) &__item {
     min-width: calc(50% - 0.25em);
     max-width: calc(50% - 0.25em);
-  }
-
-  &__header {
-    display: grid;
-    grid-gap: 0.5em;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    font-size: 0.875em;
-
-    & > .svg-icon {
-      fill: rgb(var(--accent-color));
-    }
-
-    & > span {
-      color: rgb(var(--accent-color));
-      font-weight: bold;
-      line-height: var(--line-height-middle);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
   }
 
   &__title {

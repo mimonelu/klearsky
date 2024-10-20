@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
+import Atmosphere from "@/components/next/Atmosphere/Main.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const NUMBER_OF_FETCH_RECORDS = 5
@@ -51,63 +52,36 @@ const state = reactive<{
 </script>
 
 <template>
-  <div
+  <Atmosphere
     v-if="state.records.length > 0"
     class="frontpage"
+    title="pnFrontpage"
+    :uri="`https://frontpage.fyi/profile/${profile?.handle}`"
   >
-    <a
-      class="frontpage__header"
-      :href="`https://frontpage.fyi/profile/${profile?.handle}`"
-      rel="noreferrer"
-      target="_blank"
-    >
-      <SVGIcon name="openInApp" />
-      <span>{{ $t("pnFrontpage") }}</span>
-    </a>
-    <template v-for="record of state.records">
-      <a
-        class="textlink--icon"
-        :href="record.value?.url"
-        rel="noreferrer"
-        target="_blank"
-      >
-        <SVGIcon name="link" />
-        <span>{{ record.value?.title }}</span>
-      </a>
+    <template #body>
+      <template v-for="record of state.records">
+        <a
+          class="textlink--icon"
+          :href="record.value?.url"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <SVGIcon name="link" />
+          <span>{{ record.value?.title }}</span>
+        </a>
+      </template>
     </template>
-  </div>
+  </Atmosphere>
 </template>
 
 <style lang="scss" scoped>
 .frontpage {
-  background-color: rgb(var(--cyan-dark-color), 0.125);
-  border-radius: var(--border-radius-middle);
-  display: flex;
-  flex-direction: column;
-  grid-gap: 0.5em;
-  padding: 1em;
-
-  &__header {
-    --alpha: 0.75;
-    display: grid;
-    grid-gap: 0.5em;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    &:focus, &:hover {
-      --alpha: 1.0;
-    }
-
-    & > .svg-icon {
-      fill: rgb(var(--cyan-dark-color), var(--alpha));
-    }
-
-    & > span {
-      color: rgb(var(--cyan-dark-color), var(--alpha));
-      font-weight: bold;
-      line-height: var(--line-height-middle);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+  &:deep() {
+    .atmosphere__body {
+      display: flex;
+      flex-direction: column;
+      grid-gap: 0.5em;
+      padding: 1em;
     }
   }
 
