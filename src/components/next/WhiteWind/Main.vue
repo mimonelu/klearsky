@@ -70,11 +70,11 @@ const state = reactive<{
 </script>
 
 <template>
-  <div class="white-wind">
-    <div
-      v-if="state.records.length > 0"
-      class="white-wind__container"
-    >
+  <div
+    v-if="state.records.length > 0"
+    class="white-wind"
+  >
+    <div class="white-wind__container">
       <template v-for="record of state.records">
         <a
           class="white-wind__item"
@@ -97,19 +97,19 @@ const state = reactive<{
 
 <style lang="scss" scoped>
 .white-wind {
-  display:  grid;
+  display: grid;
 
   &__container {
     display: flex;
     grid-gap: 0.5em;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 0.5rem 0;
     @include scroll-bar(transparent);
   }
 
   &__item {
-    background-color: rgb(var(--white-wind-color), 0.125);
+    background-color: rgb(var(--accent-color), 0.125);
+    border-radius: var(--border-radius-middle);
     color: var(--fg-color);
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -144,11 +144,11 @@ const state = reactive<{
     font-size: 0.875em;
 
     & > .svg-icon {
-      fill: rgb(var(--white-wind-color));
+      fill: rgb(var(--accent-color));
     }
 
     & > span {
-      color: rgb(var(--white-wind-color));
+      color: rgb(var(--accent-color));
       font-weight: bold;
       line-height: var(--line-height-middle);
       overflow: hidden;

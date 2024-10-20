@@ -492,11 +492,17 @@ function removeThisPost () {
               :processHashTag="true"
             />
 
-            <!-- Linkat -->
-            <Linkat :profile="mainState.currentProfile ?? undefined" />
+            <!-- Atmosphere -->
+            <div class="atmosphere">
+              <!-- Linkat -->
+              <Linkat :profile="mainState.currentProfile ?? undefined" />
 
-            <!-- Frontpage -->
-            <Frontpage :profile="mainState.currentProfile ?? undefined" />
+              <!-- Frontpage -->
+              <Frontpage :profile="mainState.currentProfile ?? undefined" />
+
+              <!-- WhiteWind -->
+              <WhiteWind :profile="mainState.currentProfile ?? undefined" />
+            </div>
 
             <div
               v-if="state.accountContentDisplay"
@@ -742,12 +748,6 @@ function removeThisPost () {
         </div>
       </template>
     </Post>
-
-    <!-- WhiteWind -->
-    <WhiteWind
-      v-if="state.isPagePostFeeds"
-      :profile="mainState.currentProfile ?? undefined"
-    />
 
     <RouterView class="profile-view__router-view" />
 
@@ -1069,6 +1069,12 @@ function removeThisPost () {
   user-select: text;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.atmosphere {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 0.5rem;
 }
 
 .statistics {
