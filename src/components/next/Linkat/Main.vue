@@ -56,6 +56,7 @@ const state = reactive<{
     v-if="state.records.length > 0"
     class="linkat"
     title="pnLinkat"
+    icon="https://linkat.blue/favicon.ico"
     :uri="`https://linkat.blue/${profile?.handle}`"
   >
     <template #body>
@@ -93,16 +94,19 @@ const state = reactive<{
 .linkat {
   &:deep() {
     .atmosphere__body {
-      display: flex;
-      flex-direction: column;
-      grid-gap: 0.5em;
-      padding: 1em;
+      display: grid;
+      grid-gap: 0.5rem;
+      grid-template-columns: auto;
+      padding: 1rem;
     }
   }
 
   .textlink--icon {
+    overflow: hidden;
+
     & > .svg-icon {
-      font-size: 0.875em;
+      fill: rgb(var(--fg-color));
+      font-size: 0.875rem;
     }
 
     & > span {
@@ -116,7 +120,8 @@ const state = reactive<{
   &__text {
     display: flex;
     align-items: center;
-    grid-gap: 0.5em;
+    grid-gap: 0.5rem;
+    overflow: hidden;
 
     & > i,
     & > span {

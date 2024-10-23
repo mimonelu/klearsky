@@ -56,6 +56,7 @@ const state = reactive<{
     v-if="state.records.length > 0"
     class="frontpage"
     title="pnFrontpage"
+    icon="https://frontpage.fyi/frontpage-logo.svg?b5da8167450d2f63"
     :uri="`https://frontpage.fyi/profile/${profile?.handle}`"
   >
     <template #body>
@@ -78,16 +79,19 @@ const state = reactive<{
 .frontpage {
   &:deep() {
     .atmosphere__body {
-      display: flex;
-      flex-direction: column;
-      grid-gap: 0.5em;
-      padding: 1em;
+      display: grid;
+      grid-gap: 0.5rem;
+      grid-template-columns: auto;
+      padding: 1rem;
     }
   }
 
   .textlink--icon {
+    overflow: hidden;
+
     & > .svg-icon {
-      font-size: 0.875em;
+      fill: rgb(var(--fg-color));
+      font-size: 0.875rem;
     }
 
     & > span {

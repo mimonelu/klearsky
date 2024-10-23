@@ -1072,10 +1072,9 @@ function removeThisPost () {
 }
 
 .atmosphere-container {
-  background-color: rgb(var(--cyan-dark-color), 0.125);
-  border-radius: var(--border-radius-middle);
   display: flex;
   flex-direction: column;
+  grid-gap: 0.5rem;
 }
 
 .statistics {

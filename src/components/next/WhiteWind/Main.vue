@@ -74,6 +74,7 @@ const state = reactive<{
     v-if="state.records.length > 0"
     class="white-wind"
     title="pnWhiteWind"
+    icon="https://whtwnd.com/whtwnd.svg"
     :uri="`https://whtwnd.com/${profile?.handle}`"
   >
     <template #body>
@@ -114,12 +115,12 @@ const state = reactive<{
     display: grid;
     grid-template-rows: auto 1fr auto;
     flex-direction: column;
-    grid-gap: 0.25em;
-    padding: 1em;
+    grid-gap: 0.25rem;
+    padding: 1rem;
     position: relative;
 
     &:not(:last-child)::after {
-      border-right: 1px solid rgb(var(--fg-color), 0.25);
+      border-right: 1px solid rgb(var(--blue-color), 0.5);
       content: "";
       display: block;
       position: absolute;
@@ -137,19 +138,19 @@ const state = reactive<{
 
     // レコードが2つ以上の場合（3つ目をチラ見せする）
     &:not(:first-child:last-child) {
-      min-width: calc(50% - 1em);
-      max-width: calc(50% - 1em);
+      min-width: calc(50% - 1rem);
+      max-width: calc(50% - 1rem);
     }
   }
 
   // レコードが2つの場合
   &__container:has(&__item:nth-child(2):last-child) &__item {
-    min-width: calc(50% - 0.25em);
-    max-width: calc(50% - 0.25em);
+    min-width: calc(50% - 0.25rem);
+    max-width: calc(50% - 0.25rem);
   }
 
   &__title {
-    font-size: 0.875em;
+    font-size: 0.875rem;
     font-weight: bold;
     line-height: var(--line-height-middle);
     overflow: hidden;
@@ -160,7 +161,7 @@ const state = reactive<{
   &__content {
     color: rgb(var(--fg-color), 0.75);
     flex-grow: 1;
-    font-size: 0.875em;
+    font-size: 0.875rem;
     line-height: var(--line-height-middle);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -169,7 +170,7 @@ const state = reactive<{
 
   &__createdAt {
     color: rgb(var(--fg-color), 0.5);
-    font-size: 0.75em;
+    font-size: 0.75rem;
     line-height: var(--line-height-middle);
     text-align: right;
     word-break: break-word;
