@@ -1,4 +1,4 @@
-type TTWordMute = {
+interface TIWordMute {
   enabled: Array<boolean>
   keyword: string
 }

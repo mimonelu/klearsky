@@ -20,7 +20,7 @@ const state = reactive<{
       hasSubmitButton: false,
       data: [],
     }
-    result.data = mainState.currentSetting.wordMute?.map((wordMute: TTWordMute, index: number) => {
+    result.data = mainState.currentSetting.wordMute?.map((wordMute, index) => {
       return [
         {
           state: wordMute,

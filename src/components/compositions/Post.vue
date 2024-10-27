@@ -19,6 +19,7 @@ import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
+import WordMuteScript from "@/components/next/WordMute/script"
 import Util from "@/composables/util"
 import { THIRD_PARTY_DOMAIN_LIGHTNING } from "@/consts/consts.json"
 
@@ -87,7 +88,7 @@ const state = reactive<{
   // 翻訳リンクの設置可否 - alt 用
   hasOtherLanguagesForAlt: ComputedRef<boolean>
 
-// コンテンツ言語の判定
+  // コンテンツ言語の判定
   noContentLanguage: ComputedRef<boolean>
 
   translation: "none" | "ignore" | "waiting" | "done" | "failed";
@@ -353,19 +354,7 @@ const state = reactive<{
 
   // ワードミュートの判定
   isWordMute: computed((): boolean => {
-    const target = state.text?.toLowerCase() ?? ""
-    if (!target) {
-      return false
-    }
-    return mainState.currentSetting.wordMute?.some((wordMute: TTWordMute) => {
-      if (!wordMute.enabled[0] || wordMute.keyword === "") return false
-      const keywords = wordMute.keyword.toLowerCase().split(",")
-      const result = keywords.some((keyword: string) => {
-        keyword = keyword.trim()
-        return keyword !== "" && target.indexOf(keyword) !== - 1
-      })
-      return result
-    }) ?? false
+    return WordMuteScript.includes(state.text, mainState.currentSetting.wordMute)
   }),
 })
 

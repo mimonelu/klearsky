@@ -36,6 +36,6 @@ type TTSetting = {
   uiLanguage?: string
   userSearchKeywordHistory?: Array<string>
   videoPreload?: "none" | "metadata"
-  wordMute?: Array<TTWordMute>
+  wordMute?: Array<TIWordMute>
   [k: string]: any
 }
