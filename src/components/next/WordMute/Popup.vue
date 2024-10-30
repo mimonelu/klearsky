@@ -20,14 +20,16 @@ const state = reactive<{
       hasSubmitButton: false,
       data: [],
     }
-    result.data = mainState.currentSetting.wordMute?.map((wordMute, index) => {
+    result.data = mainState.currentSetting.wordMute?.map((wordMute, index): Array<TTEasyFormItem> => {
+      // 新規追加プロパティの初期化
+      if (wordMute.targets == null) {
+        wordMute.targets = ["content", "tag"]
+      }
+      if (wordMute.actorTarget == null) {
+        wordMute.actorTarget = ["exclude-following"]
+      }
+
       return [
-        {
-          state: wordMute,
-          model: "enabled",
-          type: "checkbox",
-          options: [{ label: $t("wordMuteEnabled"), value: true }],
-        },
         {
           state: wordMute,
           model: "keyword",
@@ -36,10 +38,21 @@ const state = reactive<{
           autocomplete: "off",
         },
         {
+          state: wordMute,
+          model: "enabled",
+          type: "checkbox",
+          options: [{ label: $t("wordMuteEnabled"), value: true }],
+        },
+        {
+          type: "space",
+        },
+        {
           type: "button",
+          name: "deleteButton",
           attrs: { "data-enabled": true },
-          classes: "button--bordered--important",
+          classes: "button--important",
           icon: "cross",
+          buttonLabel: $t("delete"),
           index,
           async onClick (item: TTEasyFormItem) {
             if (item.index == null) return
@@ -49,6 +62,25 @@ const state = reactive<{
             })) return
             mainState.currentSetting.wordMute?.splice(item.index, 1)
           },
+        },
+        {
+          state: wordMute,
+          model: "targets",
+          type: "checkbox",
+          layout: "horizontal",
+          options: [
+            { label: $t("本文"), value: "content" },
+            { label: $t("タグ"), value: "tag" },
+            { label: $t("URL"), value: "url" },
+          ],
+        },
+        {
+          state: wordMute,
+          model: "actorTarget",
+          type: "checkbox",
+          options: [
+            { label: $t("フォロー中のユーザーを除く"), value: "exclude-following" },
+          ],
         },
       ]
     }).flat() ?? []
@@ -63,10 +95,14 @@ function close () {
 
 function add () {
   Util.blurElement()
-  if (mainState.currentSetting.wordMute == null) return
-  mainState.currentSetting.wordMute.push({
+  if (mainState.currentSetting.wordMute == null) {
+    return
+  }
+  mainState.currentSetting.wordMute.unshift({
     enabled: [true],
     keyword: "",
+    targets: ["content", "tag"],
+    actorTarget: ["exclude-following"],
   })
 }
 </script>
@@ -78,6 +114,11 @@ function add () {
     @close="close"
   >
     <template #header>
+      <!-- ワードミュート追加ボタン -->
+      <button @click.stop="add">
+        <SVGIcon name="plus" />
+      </button>
+
       <h2>
         <SVGIcon name="wordMute" />
         <span>{{ $t("wordMute") }}</span>
@@ -85,15 +126,6 @@ function add () {
     </template>
     <template #body>
       <slot name="header" />
-
-      <!-- ワードミュート追加ボタン -->
-      <button
-        class="button--bordered"
-        @click.stop="add"
-      >
-        <SVGIcon name="plus" />
-        <span>{{ $t("wordMuteAdd") }}</span>
-      </button>
 
       <!-- ワードミュートがないメッセージ -->
       <div
@@ -125,8 +157,19 @@ function add () {
         grid-gap: 0.5rem;
       }
 
-      .checkbox {
-        min-height: 3rem;
+      .button--important {
+        border-style: none;
+        min-height: unset;
+      }
+
+      dl[data-name="keyword"],
+      dl[data-name="targets"],
+      dl[data-name="actorTarget"] {
+        grid-column-end: span 3;
+      }
+
+      dl[data-name="actorTarget"]:not(:last-child) {
+        margin-bottom: 0.5rem;
       }
     }
   }

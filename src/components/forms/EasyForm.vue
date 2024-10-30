@@ -180,7 +180,10 @@ function getVideoSizes (): Array<Array<undefined | {
         :key="index"
       >
         <slot :name="`free-${index}`" />
-        <dl v-show="item.display !== false">
+        <dl
+          v-show="item.display !== false"
+          :data-name="item.name ?? item.model"
+        >
           <dt v-if="item.label != null">{{ item.label }}</dt>
           <dd>
             <template v-if="item.model != null">
