@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { RouterLink, useRouter } from "vue-router"
+import { RichText } from "@atproto/api"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarButton from "@/components/buttons/AvatarButton.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
@@ -355,9 +356,8 @@ const state = reactive<{
   // ワードミュートの判定
   isWordMute: computed((): boolean => {
     return WordMuteScript.includes(
-      state.text,
+      contentRichText,
       mainState.currentSetting.wordMute,
-      props.post.record?.facets ?? props.post.value?.facets,
       (props.post.author.viewer?.following ?? false) != null
     )
   }),
@@ -368,6 +368,21 @@ state.foldingMedia = !state.displayMedia
 const router = useRouter()
 
 const postElement = ref()
+
+// 本文とワードミュート用に RichText を生成
+const contentRichText = (() => {
+  const facets = props.post.record?.facets ?? props.post.value?.facets
+  const richText = new RichText({
+    text: state.text ?? "",
+    facets,
+  }, {
+    cleanNewlines: true,
+  })
+  if (facets == null) {
+    richText.detectFacetsWithoutResolution()
+  }
+  return richText
+})()
 
 // 自動翻訳
 const observer = mainState.currentSetting.autoTranslation
@@ -1059,9 +1074,7 @@ function toggleOldestQuotedPostDisplay () {
               v-if="position !== 'slim'"
               class="text"
               dir="auto"
-              :text="state.text"
-              :facets="post.record?.facets ?? post.value?.facets"
-              :entities="post.record?.entities ?? post.value?.entities"
+              :richText="contentRichText"
               :processHashTag="false"
               :hasTranslateLink="state.hasOtherLanguagesForText"
               :data-is-text-only-emoji="state.isTextOnlyEmoji"

@@ -1,16 +1,13 @@
-import type { Facet } from "@atproto/api"
+import type { RichTextSegment } from "@atproto/api"
 import { RichText } from "@atproto/api"
 
 export default {
   includes (
-    text?: string,
+    richText: RichText,
     originWordMutes?: Array<TIWordMute>,
-    facets?: Array<Facet>,
     isFollowee?: boolean
   ): boolean {
-    if (!text ||
-        !originWordMutes?.length
-    ) {
+    if (!originWordMutes?.length) {
       return false
     }
 
@@ -31,10 +28,6 @@ export default {
     const targetTags: Array<string> = []
     const targetContents: Array<string> = []
 
-    const richText = new RichText({ text, facets })
-    if (facets == null) {
-      richText.detectFacetsWithoutResolution()
-    }
     for (const segment of richText.segments()) {
       if (segment.isLink()) {
         // リンクのテキスト部分はスキップ（カスタムリンクのテキスト部分は対象外）

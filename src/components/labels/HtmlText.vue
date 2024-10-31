@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import type { Entity, Facet, RichTextOpts, RichTextProps } from "@atproto/api"
+import type { Facet } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
 
@@ -13,9 +13,9 @@ type RichParam = {
 const emit = defineEmits<{(name: string, text: string): void}>()
 
 const props = defineProps<{
+  richText?: RichText
   text?: string
   facets?: Facet[]
-  entities?: Entity[]
   processHashTag?: boolean
   hasTranslateLink?: boolean
 }>()
@@ -28,12 +28,23 @@ const state = reactive<{
   segments: ComputedRef<Array<RichParam>>;
 }>({
   segments: computed((): Array<RichParam> => {
-    const rtProps: RichTextProps = { text: props.text ?? "" }
-    if (props.facets != null) rtProps.facets = props.facets
-    if (props.entities != null) rtProps.entities = props.entities
-    const rtOptions: RichTextOpts = { cleanNewlines: true }
-    const richText = new RichText(rtProps, rtOptions)
-    if (props.facets == null) richText.detectFacetsWithoutResolution()
+    let richText: undefined | RichText
+    if (props.richText != null) {
+      richText = props.richText
+    } else {
+      richText = new RichText(
+        {
+          text: props.text ?? "",
+          facets: props.facets,
+        }, {
+          cleanNewlines: true,
+        }
+      )
+      if (props.facets == null) {
+        richText.detectFacetsWithoutResolution()
+      }
+    }
+
     const results: Array<RichParam> = []
     for (const segment of richText.segments()) {
       // リンク
