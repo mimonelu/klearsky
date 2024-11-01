@@ -1,5 +1,5 @@
-import type { RichTextSegment } from "@atproto/api"
 import { RichText } from "@atproto/api"
+import isBefore from "date-fns/isBefore"
 
 export default {
   includes (
@@ -11,14 +11,16 @@ export default {
       return false
     }
 
+    const dateNow = new Date()
     const wordMutes = originWordMutes.filter((wordMute) => {
       return wordMute.enabled[0] &&
         wordMute.keyword !== "" &&
         (wordMute.targets?.length ?? 0) > 0 &&
         (
           !isFollowee ||
-          (isFollowee && !wordMute.actorTarget?.includes("exclude-following"))
-        )
+          !wordMute.actorTarget?.includes("exclude-following")
+        ) &&
+        !this.expired(dateNow, wordMute.expiresAt)
     })
     if (wordMutes.length === 0) {
       return false
@@ -82,4 +84,11 @@ export default {
         })
     })
   },
+
+  expired (dateNow: Date, expiresAt?: string): boolean {
+    if (expiresAt == null) {
+      return false
+    }
+    return !isBefore(dateNow, new Date(expiresAt))
+  }
 }

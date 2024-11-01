@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import format from "date-fns/format"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import WordMuteScript from "@/components/next/WordMute/script"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -10,6 +12,23 @@ const emit = defineEmits<{(event: string): void}>()
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const expiresAtOptions = ((): Array<TTOption> => {
+  const options: Array<TTOption> = [{
+    label: $t("wordMuteNoTerm"),
+    value: undefined,
+  }]
+  for (let i = 0; i < 7; i ++) {
+    const date = new Date()
+    date.setDate(date.getDate() + i + 1)
+    const value = format(date, "yyyy-MM-dd HH:mm:ss")
+    options.push({
+      label: `${$t("wordMuteTerm")}: ${value}`,
+      value,
+    })
+  }
+  return options
+})()
 
 const state = reactive<{
   easyFormProps: ComputedRef<TTEasyForm>
@@ -28,14 +47,55 @@ const state = reactive<{
       if (wordMute.actorTarget == null) {
         wordMute.actorTarget = ["exclude-following"]
       }
+      if (wordMute.expiresAt == null) {
+        wordMute.expiresAt = undefined
+      }
+
+      // 期限切れかどうか
+      const expired = WordMuteScript.expired(new Date(), wordMute.expiresAt)
 
       return [
         {
           state: wordMute,
           model: "keyword",
           type: "text",
+          label: `${$t("wordMute")} ${index + 1}`,
           placeholder: $t("wordMutePlaceholder"),
           autocomplete: "off",
+        },
+        {
+          state: wordMute,
+          model: "targets",
+          type: "checkbox",
+          layout: "horizontal",
+          options: [
+            { label: $t("wordMuteContent"), value: "content" },
+            { label: $t("wordMuteTag"), value: "tag" },
+            { label: $t("wordMuteUrl"), value: "url" },
+          ],
+        },
+        {
+          state: wordMute,
+          model: "actorTarget",
+          type: "checkbox",
+          options: [
+            { label: $t("wordMuteExcludeFollowing"), value: "exclude-following" },
+          ],
+        },
+        {
+          state: wordMute,
+          model: "expiresAt",
+          type: "select",
+          options: ((): Array<TTOption> => {
+            const options: Array<TTOption> = []
+            options.push({
+              label: `${$t("wordMuteCurrentTerm")}: ${wordMute.expiresAt == null ? $t("wordMuteNoTerm") : wordMute.expiresAt}`,
+              value: wordMute.expiresAt,
+            })
+            options.push(...expiresAtOptions)
+            return options
+          })(),
+          attrs: { 'data-expired': expired },
         },
         {
           state: wordMute,
@@ -49,38 +109,21 @@ const state = reactive<{
         {
           type: "button",
           name: "deleteButton",
-          attrs: { "data-enabled": true },
           classes: "button--important",
-          icon: "cross",
-          buttonLabel: $t("delete"),
+          icon: "remove",
           index,
           async onClick (item: TTEasyFormItem) {
-            if (item.index == null) return
+            if (item.index == null) {
+              return
+            }
             if (wordMute.keyword && !await mainState.openConfirmationPopup({
               title: $t("wordMuteRemoveConfirmation"),
               text: `${$t("wordMuteRemoveConfirmationMessage")}\n"${wordMute.keyword}"`,
-            })) return
+            })) {
+              return
+            }
             mainState.currentSetting.wordMute?.splice(item.index, 1)
           },
-        },
-        {
-          state: wordMute,
-          model: "targets",
-          type: "checkbox",
-          layout: "horizontal",
-          options: [
-            { label: $t("本文"), value: "content" },
-            { label: $t("タグ"), value: "tag" },
-            { label: $t("URL"), value: "url" },
-          ],
-        },
-        {
-          state: wordMute,
-          model: "actorTarget",
-          type: "checkbox",
-          options: [
-            { label: $t("フォロー中のユーザーを除く"), value: "exclude-following" },
-          ],
         },
       ]
     }).flat() ?? []
@@ -103,6 +146,7 @@ function add () {
     keyword: "",
     targets: ["content", "tag"],
     actorTarget: ["exclude-following"],
+    expiresAt: undefined,
   })
 }
 </script>
@@ -157,19 +201,30 @@ function add () {
         grid-gap: 0.5rem;
       }
 
+      // 削除ボタンの高さを他フォームパーツに合わせる
       .button--important {
-        border-style: none;
+        padding: 0.75rem 1.5rem;
         min-height: unset;
       }
 
+      // グリッドのセル結合
       dl[data-name="keyword"],
       dl[data-name="targets"],
-      dl[data-name="actorTarget"] {
+      dl[data-name="actorTarget"],
+      dl[data-name="expiresAt"] {
         grid-column-end: span 3;
       }
 
-      dl[data-name="actorTarget"]:not(:last-child) {
-        margin-bottom: 0.5rem;
+      // セパレータ
+      dl[data-name="keyword"]:not(:first-child) {
+        border-top: 1px solid rgb(var(--fg-color), 0.125);
+        margin-top: 1rem;
+        padding-top: 1rem;
+      }
+
+      // 期限切れ
+      [data-expired="true"] {
+        --fg-color: var(--notice-color);
       }
     }
   }

@@ -3,4 +3,5 @@ interface TIWordMute {
   keyword: string
   targets?: Array<"content" | "tag" | "url">
   actorTarget?: Array<"exclude-following">
+  expiresAt?: string
 }

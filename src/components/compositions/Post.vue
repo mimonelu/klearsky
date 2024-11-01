@@ -169,9 +169,9 @@ const state = reactive<{
         // 自身である
         props.post.author?.did === mainState.atp.session?.did ||
         // フォロイーである
-        (props.post.author.viewer?.following ?? false) != null ||
+        props.post.author.viewer?.following != null ||
         // フォロイーのリポストである
-        (props.post.__custom?.reason?.by.viewer?.following ?? false) != null ||
+        props.post.__custom?.reason?.by.viewer?.following != null ||
         // プロフィールユーザーである
         (
           mainState.currentPath.startsWith('/profile/') &&
@@ -358,7 +358,7 @@ const state = reactive<{
     return WordMuteScript.includes(
       contentRichText,
       mainState.currentSetting.wordMute,
-      (props.post.author.viewer?.following ?? false) != null
+      props.post.author.viewer?.following != null
     )
   }),
 })
