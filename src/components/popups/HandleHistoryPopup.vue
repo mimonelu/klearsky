@@ -15,7 +15,7 @@ const mainState = inject("state") as MainState
 const rootLog = props.log != null
   ? Array.isArray(props.log)
     ? props.log
-    : [props.log.didDocument] ?? undefined
+    : [props.log.didDocument]
   : undefined
 
 function close () {
@@ -136,7 +136,8 @@ function getLabelerEndpoint (item: any): undefined | string {
     flex-direction: column;
     grid-gap: 0.25rem;
     user-select: text;
-    &:not(:last-child) {
+    &:not(:nth-last-child(2)) {
+      border-bottom: 1px solid rgb(var(--fg-color), 0.125);
       padding-bottom: 1rem;
     }
   }
