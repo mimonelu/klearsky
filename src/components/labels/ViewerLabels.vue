@@ -75,11 +75,11 @@ defineProps<{
     padding: 0.25em 0.5em;
 
     & > .svg-icon {
-      fill: white;
+      fill: rgb(var(--notice-fg-color));
     }
 
     & > span {
-      color: white;
+      color: rgb(var(--notice-fg-color));
       font-weight: bold;
       line-height: var(--line-height-high);
       word-break: break-all;
