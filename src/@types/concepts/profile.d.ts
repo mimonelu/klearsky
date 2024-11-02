@@ -24,6 +24,9 @@ type TTProfile = {
   // Linkat
   __linkat?: Array<TICommonRecord>
 
+  // SmokeSignal
+  __smokeSignal?: Array<TICommonRecord>
+
   // WhiteWind
   __whiteWind?: Array<TICommonRecord>
 }

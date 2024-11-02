@@ -22,6 +22,7 @@ import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/compositions/Post.vue"
+import SmokeSignal from "@/components/next/SmokeSignal/Main.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
 import WhiteWind from "@/components/next/WhiteWind/Main.vue"
@@ -494,6 +495,9 @@ function removeThisPost () {
 
             <!-- Atmosphere -->
             <div class="atmosphere-container">
+              <!-- SmokeSignal -->
+              <SmokeSignal :profile="mainState.currentProfile ?? undefined" />
+
               <!-- Linkat -->
               <Linkat :profile="mainState.currentProfile ?? undefined" />
 

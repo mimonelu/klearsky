@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
+import isBefore from "date-fns/isBefore"
 import { computedAsync } from "@vueuse/core"
 import Atmosphere from "@/components/next/Atmosphere/Main.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const NUMBER_OF_FETCH_RECORDS = 5
 
@@ -12,57 +15,43 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  records: Ref<Array<TICommonRecord>>
+  records: Ref<Array<any>>
 }>({
-  records: computedAsync<Array<TICommonRecord>>(async () => {
+  records: computedAsync<Array<any>>(async () => {
     if (props.profile == null) {
       return []
     }
 
     // プロフィールデータにキャッシュがあれば再利用
-    if (props.profile.__whiteWind != null) {
-      return props.profile.__whiteWind
+    if (props.profile.__smokeSignal != null) {
+      return props.profile.__smokeSignal
     }
 
     // プロフィールデータのコレクションに該当レコードがなければ中止
-    if (!props.profile.__repo?.collections?.includes("com.whtwnd.blog.entry")) {
+    if (!props.profile.__repo?.collections?.includes("events.smokesignal.calendar.event")) {
       return []
     }
 
     const results = await mainState.atp.fetchRecords(
       props.profile.did,
-      "com.whtwnd.blog.entry",
+      "events.smokesignal.calendar.event",
       NUMBER_OF_FETCH_RECORDS,
     )
     if (results instanceof Error) {
       return []
     }
+    if (results.records == null) {
+      return []
+    }
 
-    // visibility が未設定、もしくは public のもののみ
+    // 終了日時を過ぎているものを除く
+    const dateNow = new Date()
     results.records = results.records.filter((record) => {
-      if (record.value == null) {
-        return false
-      }
-      return (
-        record.value.visibility == null ||
-        record.value.visibility === "public"
-      )
-    })
-
-    // テンプレート構文用プロパティのインジェクション
-    results.records.forEach((record) => {
-      if (record.value == null) {
-        record.value = {}
-      }
-      const partOfHref = record.uri
-        .replace("at://", "")
-        .replace("com.whtwnd.blog.entry/", "")
-      record.value.__href = `https://whtwnd.com/${partOfHref}/${record.cid}`
-      record.value.__createdAt = mainState.formatDate(record.value.createdAt)
+      return isBefore(dateNow, new Date(record.value.endsAt))
     })
 
     // プロフィールデータにキャッシュを保存
-    props.profile.__whiteWind = results.records
+    props.profile.__smokeSignal = results.records
 
     return results.records
   }, []),
@@ -72,23 +61,26 @@ const state = reactive<{
 <template>
   <Atmosphere
     v-if="state.records.length > 0"
-    class="white-wind"
-    title="pnWhiteWind"
-    icon="https://whtwnd.com/whtwnd.svg"
-    :uri="`https://whtwnd.com/${profile?.handle}`"
+    class="smoke-signal"
+    title="pnSmokeSignal"
+    icon="https://smokesignal.events/static/favicon.ico"
+    :uri="`https://smokesignal.events/${profile?.did}`"
   >
     <template #body>
-      <div class="white-wind__container">
+      <div class="smoke-signal__container">
         <template v-for="record of state.records">
           <a
-            class="white-wind__item"
-            :href="record.value.__href"
+            class="smoke-signal__item"
+            :href="`https://smokesignal.events/${profile?.did}/${Util.getRkey(record.uri)}`"
             rel="noreferrer"
             target="_blank"
           >
-            <div class="white-wind__title">{{ record.value.title }}</div>
-            <div class="white-wind__description">{{ record.value.content }}</div>
-            <div class="white-wind__createdAt">{{ record.value.__createdAt }}</div>
+            <div class="smoke-signal__title">{{ record.value.name ?? "" }}</div>
+            <div class="smoke-signal__description">{{ record.value.text ?? "" }}</div>
+            <div class="smoke-signal__endsAt">
+              <SVGIcon name="fire" />
+              <span>{{ mainState.formatDate(record.value.startsAt) }} - {{ mainState.formatDate(record.value.endsAt) }}</span>
+            </div>
           </a>
         </template>
       </div>
@@ -97,7 +89,7 @@ const state = reactive<{
 </template>
 
 <style lang="scss" scoped>
-.white-wind {
+.smoke-signal {
   &:deep() {
     .atmosphere__body {
       display: grid;
@@ -162,12 +154,23 @@ const state = reactive<{
     white-space: nowrap;
   }
 
-  &__createdAt {
-    color: rgb(var(--fg-color), 0.5);
-    font-size: 0.75rem;
+  &__endsAt {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-gap: 0.25rem;
+    font-size: 0.875rem;
     line-height: var(--line-height-middle);
-    text-align: right;
-    word-break: break-word;
+
+    & > .svg-icon {
+      fill: rgb(var(--notice-color));
+    }
+
+    & > span {
+      color: rgb(var(--notice-color));
+      font-weight: bold;
+      word-break: break-word;
+    }
   }
 }
 </style>
