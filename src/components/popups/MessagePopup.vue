@@ -31,7 +31,6 @@ function translate () {
     <template #body>
       <HtmlText
         :text="mainState.messagePopupProps.text"
-        :processHashTag="true"
         :hasTranslateLink="mainState.messagePopupProps.hasTranslateLink"
         @onActivateHashTag="close"
         @onActivateMention="close"

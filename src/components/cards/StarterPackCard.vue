@@ -215,7 +215,6 @@ async function deleteStarterPack () {
           dir="auto"
           :text="starterPack.record?.description"
           :facets="starterPack.record?.descriptionFacets"
-          :processHashTag="true"
           @onActivateMention="$emit('onActivateMention')"
           @onActivateHashTag="$emit('onActivateHashTag')"
         />

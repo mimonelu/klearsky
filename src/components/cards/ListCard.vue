@@ -326,7 +326,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         dir="auto"
         :text="list.description"
         :facets="list.descriptionFacets"
-        :processHashTag="true"
         @onActivateMention="$emit('onActivateMention')"
         @onActivateHashTag="$emit('onActivateHashTag')"
       />

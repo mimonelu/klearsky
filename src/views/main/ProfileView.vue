@@ -490,7 +490,6 @@ function removeThisPost () {
               class="description"
               dir="auto"
               :text="mainState.currentProfile?.description ?? '&emsp;'"
-              :processHashTag="true"
             />
 
             <!-- Atmosphere -->

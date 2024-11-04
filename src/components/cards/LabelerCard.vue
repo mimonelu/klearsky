@@ -161,7 +161,6 @@ function openProfilePopover ($event: Event) {
         class="labeler-card__description"
         dir="auto"
         :text="labeler.creator.description ?? '&emsp;'"
-        :processHashTag="true"
         @onActivateMention="emit('onActivateMention')"
         @onActivateHashTag="emit('onActivateHashTag')"
       />

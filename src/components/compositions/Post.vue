@@ -612,6 +612,12 @@ async function onForceTranslate () {
   }
 }
 
+function onTranslateVideoAlt () {
+  if (state.video?.alt != null) {
+    Util.translateInExternalService(state.video.alt)
+  }
+}
+
 async function deletePost (uri: string) {
   if (state.processing) {
     return
@@ -1075,7 +1081,6 @@ function toggleOldestQuotedPostDisplay () {
               class="text"
               dir="auto"
               :richText="contentRichText"
-              :processHashTag="false"
               :hasTranslateLink="state.hasOtherLanguagesForText"
               :data-is-text-only-emoji="state.isTextOnlyEmoji"
               @onActivateHashTag="onActivateHashTag"
@@ -1184,10 +1189,15 @@ function toggleOldestQuotedPostDisplay () {
                       v-else-if="state.videoType === 'none'"
                       class="video-container__message"
                     >{{ $t("videoIsNone") }}</p>
-                    <p
+                    <HtmlText
                       v-if="state.video.alt"
                       class="video-container__alt"
-                    >{{ state.video.alt }}</p>
+                      dir="auto"
+                      :text="state.video.alt"
+                      :hasTranslateLink="state.hasOtherLanguagesForText"
+                      @onActivateHashTag="onActivateHashTag"
+                      @translate="onTranslateVideoAlt"
+                    />
                   </div>
                 </template>
               </template>
@@ -1955,7 +1965,10 @@ function toggleOldestQuotedPostDisplay () {
   &__alt {
     color: rgb(var(--fg-color), 0.75);
     font-size: 0.875em;
+    line-height: var(--line-height-high);
     margin-top: 0.5em;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 }
 

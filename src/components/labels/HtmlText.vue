@@ -16,7 +16,6 @@ const props = defineProps<{
   richText?: RichText
   text?: string
   facets?: Facet[]
-  processHashTag?: boolean
   hasTranslateLink?: boolean
 }>()
 

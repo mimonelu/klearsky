@@ -128,7 +128,7 @@ async function toggleThreadMute () {
 
   &:deep() {
     // フォーカスポスト - フォントサイズの拡大
-    .html-text {
+    .text {
       font-size: 1.125em;
     }
 
