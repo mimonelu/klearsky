@@ -730,13 +730,13 @@ function forceUpdate () {
   state.updateKey = new Date().getTime()
 }
 
-function formatDate (dateString?: string): string {
+function formatDate (dateString?: string, absoluteNotation?: boolean): string {
   if (dateString == null) return ""
   const now = new Date()
   const the = new Date(dateString)
 
   // 今日
-  if (endOfYesterday() < the) {
+  if (endOfYesterday() < the && !absoluteNotation) {
     // 絶対表記
     if (state.currentSetting.timeControl === "absolute")
       return format(the, "HH:mm")

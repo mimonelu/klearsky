@@ -10,7 +10,7 @@ interface MainState {
   listLoaderDisplay: boolean
   updateKey: number
   forceUpdate: () => void
-  formatDate: (dateString?: string) => string
+  formatDate: (dateString?: string, absoluteNotation?: boolean) => string
   updatePageTitle: () => void
   attachFilesToPost: (this: MainState, items: DataTransferItemList) => boolean
 

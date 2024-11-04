@@ -79,7 +79,7 @@ const state = reactive<{
             <div class="smoke-signal__description">{{ record.value.text ?? "" }}</div>
             <div class="smoke-signal__endsAt">
               <SVGIcon name="fire" />
-              <span>{{ mainState.formatDate(record.value.startsAt) }} - {{ mainState.formatDate(record.value.endsAt) }}</span>
+              <span>{{ mainState.formatDate(record.value.startsAt, true) }} - {{ mainState.formatDate(record.value.endsAt, true) }}</span>
             </div>
           </a>
         </template>
