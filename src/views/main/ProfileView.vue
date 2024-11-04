@@ -66,7 +66,6 @@ const state = reactive<{
   joinedStarterPackUrl: ComputedRef<undefined | string>
 
   // ラベル対応
-  enabledContentMask: boolean
   hasNoUnauthenticated: ComputedRef<boolean>
   contentFilteringLabels: ComputedRef<Array<TILabelSetting>>
   contentFilteringToggleDisplay: ComputedRef<boolean>
@@ -129,7 +128,6 @@ const state = reactive<{
   }),
 
   // ラベル対応
-  enabledContentMask: true,
   hasNoUnauthenticated: computed((): boolean => {
     return mainState.hasLabel("!no-unauthenticated", mainState.currentProfile?.labels)
   }),
@@ -151,7 +149,7 @@ const state = reactive<{
     return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "none"]).length > 0
   }),
   accountContentDisplay: computed((): boolean => {
-    return !state.enabledContentMask || !state.hasBlurredContent
+    return !!mainState.currentProfile?.__enabledContentMask || !state.hasBlurredContent
   }),
 
   // ラベル対応 - アカウントメディア
@@ -162,7 +160,7 @@ const state = reactive<{
     return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["media"]).length > 0
   }),
   accountMediaDisplay: computed((): boolean => {
-    return !state.enabledContentMask || !state.hasBlurredMedia
+    return !!mainState.currentProfile?.__enabledContentMask || !state.hasBlurredMedia
   }),
 })
 
@@ -222,7 +220,7 @@ async function toggleNoUnauthenticated () {
   await mainState.updateUserProfile(params)
   const did = mainState.atp.session?.did
   if (did != null) {
-    await Util.wait(500)
+    await Util.wait(1000)
     await mainState.fetchCurrentProfile(did)
   }
   mainState.centerLoaderDisplay = false
@@ -278,7 +276,12 @@ function closeProfilePostPopver () {
 // ラベル対応
 
 function onActivateAccountMaskToggle () {
-  state.enabledContentMask = !state.enabledContentMask
+  if (mainState.currentProfile == null) {
+    return
+  }
+  mainState.currentProfile.__enabledContentMask ??= false
+  mainState.currentProfile.__enabledContentMask = !mainState.currentProfile.__enabledContentMask
+  // state.enabledContentMask = !state.enabledContentMask
 }
 
 // 固定ポスト
@@ -315,13 +318,24 @@ function removeThisPost () {
 
     <!-- バナー -->
     <div
-      v-if="state.loaderDisplay || (state.accountContentDisplay && state.accountMediaDisplay)"
+      v-if="state.loaderDisplay"
+      class="banner--transparent"
+    />
+    <div
+      v-else-if="
+        !!mainState.currentProfile?.banner &&
+        state.accountContentDisplay &&
+        state.accountMediaDisplay
+      "
       class="banner"
-      :data-has-banner="!!mainState.currentProfile?.banner"
       @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
     >
       <LazyImage :src="mainState.currentProfile?.banner" />
     </div>
+    <div
+      v-else
+      class="banner--filled"
+    />
 
     <div class="profile-view__top-wrapper">
       <div class="profile-view__top">
@@ -329,7 +343,7 @@ function removeThisPost () {
         <ContentFilteringToggle
           v-if="state.contentFilteringToggleDisplay"
           :labels="state.contentFilteringLabels"
-          :display="!state.enabledContentMask"
+          :display="!!mainState.currentProfile?.__enabledContentMask"
           :togglable="true"
           @click.prevent.stop="onActivateAccountMaskToggle"
         />
@@ -787,6 +801,8 @@ function removeThisPost () {
   // 折り畳み
   &[data-folding="true"] {
     .banner,
+    .banner--transparent,
+    .banner--filled,
     .label-tags,
     .known-followers,
     .profile-view__details__bottom {
@@ -855,13 +871,21 @@ function removeThisPost () {
 }
 
 // バナー
-.banner {
+.banner,
+.banner--transparent,
+.banner--filled {
   aspect-ratio: 3 / 1;
-  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+}
+.banner {
+  cursor: pointer;
   object-fit: cover;
-  &[data-has-banner="true"] {
-    cursor: pointer;
-  }
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+}
+.banner--transparent {
+  background-color: rgb(var(--bg-color), var(--main-area-opacity));
+}
+.banner--filled {
+  background-color: rgb(var(--fg-color), 0.125);
 }
 
 // アバターボタン

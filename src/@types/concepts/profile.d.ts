@@ -1,6 +1,7 @@
 type TTProfile = {
   __log?: any // Injected
   __repo?: any // Injected
+  __enabledContentMask?: boolean // Injected
   createdAt?: string
   associated?: TIAssociated
   avatar: string
