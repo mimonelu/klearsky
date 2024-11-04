@@ -18,7 +18,7 @@ const expiresAtOptions = ((): Array<TTOption> => {
     label: $t("wordMuteNoTerm"),
     value: undefined,
   }]
-  for (let i = 0; i < 7; i ++) {
+  for (let i = 0; i < 30; i ++) {
     const date = new Date()
     date.setDate(date.getDate() + i + 1)
     const value = format(date, "yyyy-MM-dd HH:mm:ss")
