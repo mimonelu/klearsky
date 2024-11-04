@@ -10,8 +10,13 @@ const state = reactive<{
   generator: Ref<undefined | TTFeedGenerator>
 }>({
   generator: computedAsync(async () => {
+    if (!mainState.atp.hasLogin()) {
+      return
+    }
     const uri = mainState.currentQuery.feed
-    if (uri == null) return
+    if (uri == null) {
+      return
+    }
 
     // 現在のフィードジェネレーターをマイフィードジェネレーターとポピュラーフィードジェネレーターから検索
     let generator: Error | undefined | TTFeedGenerator = [
