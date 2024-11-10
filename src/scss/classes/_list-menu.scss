@@ -91,6 +91,11 @@
       --icon-color: var(--notice-color);
     }
 
+    & > img {
+      min-width: 1rem;
+      max-width: 1rem;
+    }
+
     & > span {
       color: rgb(var(--fg-color), 0.875);
     }

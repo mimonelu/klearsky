@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, nextTick, reactive, ref } from "vue"
 import Popover from "@/components/popovers/Popover.vue"
+import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 import OTHER_APPS from "@/consts/other-apps.json"
@@ -127,7 +128,14 @@ function openOtherApp (app: any) {
               v-else
               @click.prevent.stop="openOtherApp(app)"
             >
-              <SVGIcon name="openInApp" />
+              <SVGIcon
+                v-if="app.favicon == null"
+                name="openInApp"
+              />
+              <LazyImage
+                v-else
+                :src="app.favicon"
+              />
               <span>{{ $t(app.name) }}</span>
             </button>
           </template>
@@ -144,5 +152,9 @@ function openOtherApp (app: any) {
       padding: 0.5rem;
     }
   }
+}
+
+.lazy-image {
+  background-color: unset;
 }
 </style>

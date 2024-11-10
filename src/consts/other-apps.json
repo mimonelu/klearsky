@@ -3,20 +3,24 @@
     "name": "officialApp",
     "generator": "https://bsky.app/profile/{uri}",
     "list": "https://bsky.app/profile/{handle}/lists/{rkey}",
-    "starterPack": "https://bsky.app/starter-pack/{did}/{rkey}"
+    "starterPack": "https://bsky.app/starter-pack/{did}/{rkey}",
+    "favicon": "https://bsky.app/static/favicon-32x32.png"
   },
   {
     "name": "officialAppPost",
-    "post": "https://bsky.app/profile/{handle}/post/{rkey}"
+    "post": "https://bsky.app/profile/{handle}/post/{rkey}",
+    "favicon": "https://bsky.app/static/favicon-32x32.png"
   },
   {
     "name": "officialAppProfile",
     "post": "https://bsky.app/profile/{handle}",
-    "profile": "https://bsky.app/profile/{handle}"
+    "profile": "https://bsky.app/profile/{handle}",
+    "favicon": "https://bsky.app/static/favicon-32x32.png"
   },
   {
     "name": "officialAppRss",
-    "profile": "https://bsky.app/profile/{did}/rss"
+    "profile": "https://bsky.app/profile/{did}/rss",
+    "favicon": "https://bsky.app/static/favicon-32x32.png"
   },
   {
     "list": "separator",
@@ -27,7 +31,8 @@
     "name": "tokimekiApp",
     "list": "https://tokimeki.blue/profile/{did}/lists/{rkey}",
     "post": "https://tokimeki.blue/profile/{handle}/post/{rkey}",
-    "profile": "https://tokimeki.blue/profile/{handle}"
+    "profile": "https://tokimeki.blue/profile/{handle}",
+    "favicon": "https://tokimeki.blue/favicon.png"
   },
   {
     "post": "separator",
@@ -36,12 +41,14 @@
   {
     "name": "Bluesky Debug Page",
     "post": "https://bsky-debug.app/handle?handle={handle}",
-    "profile": "https://bsky-debug.app/handle?handle={handle}"
+    "profile": "https://bsky-debug.app/handle?handle={handle}",
+    "favicon": "https://bsky-debug.app/static/icon.png"
   },
   {
     "name": "uniresolverApp",
     "post": "https://dev.uniresolver.io/#{did}",
-    "profile": "https://dev.uniresolver.io/#{did}"
+    "profile": "https://dev.uniresolver.io/#{did}",
+    "favicon": "https://dev.uniresolver.io/favicon.ico"
   },
   {
     "name": "didApp",
@@ -51,6 +58,7 @@
   {
     "name": "atlasApp",
     "post": "https://bsky.jazco.dev/thread/view?author_did={did}&post={rkey}",
-    "profile": "https://bsky.jazco.dev/atlas?s={handle}"
+    "profile": "https://bsky.jazco.dev/atlas?s={handle}",
+    "favicon": "https://bsky.jazco.dev/vite.svg"
   }
 ]
