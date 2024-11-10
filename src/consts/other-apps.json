@@ -63,6 +63,10 @@
     "profile": "https://web.plc.directory/did/{did}"
   },
   {
+    "name": "pdslsApp",
+    "profile": "https://pdsls.dev/at/{did}"
+  },
+  {
     "name": "atlasApp",
     "post": "https://bsky.jazco.dev/thread/view?author_did={did}&post={rkey}",
     "profile": "https://bsky.jazco.dev/atlas?s={handle}",
