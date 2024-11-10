@@ -28,6 +28,13 @@
     "profile": "separator"
   },
   {
+    "name": "ouranosApp",
+    "list": "https://useouranos.app/dashboard/user/{handle}/lists/{rkey}?uri={uri}",
+    "post": "https://useouranos.app/dashboard/user/{handle}/post/{rkey}",
+    "profile": "https://useouranos.app/dashboard/user/{handle}",
+    "favicon": "https://useouranos.app/ouranos.svg"
+  },
+  {
     "name": "tokimekiApp",
     "list": "https://tokimeki.blue/profile/{did}/lists/{rkey}",
     "post": "https://tokimeki.blue/profile/{handle}/post/{rkey}",
