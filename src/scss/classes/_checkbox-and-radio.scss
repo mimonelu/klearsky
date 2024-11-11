@@ -47,15 +47,25 @@
       fill: rgb(var(--accent-color));
     }
 
-    & > span {
+    & > div {
       color: rgb(var(--fg-color), 0.75);
-      font-weight: bold;
-      line-height: var(--line-height-middle);
+      display: flex;
+      flex-direction: column;
       word-break: break-all;
+
+      & > .label {
+        font-weight: bold;
+        line-height: var(--line-height-middle);
+      }
+
+      & > .description {
+        font-size: 0.875rem;
+        line-height: var(--line-height-low);
+      }
     }
-    &[data-checked="true"] > span,
-    &:focus > span,
-    &:hover > span {
+    &[data-checked="true"] > p,
+    &:focus > p,
+    &:hover > p {
       color: rgb(var(--fg-color));
     }
   }

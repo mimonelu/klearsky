@@ -15,6 +15,7 @@ type TTDirection = "new" | "old" | "middle"
 type TTOption = {
   label: string
   value: any
+  description?: string
   classes?: string
   icon?: string
 }
