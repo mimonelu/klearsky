@@ -50,7 +50,13 @@ function onChange () {
         v-if="option.icon != null"
         :name="option.icon"
       />
-      <span>{{ $t(option.label) }}</span>
+      <div>
+        <span class="label">{{ $t(option.label) }}</span>
+        <span
+          v-if="option.description != null"
+          class="description"
+        >{{ $t(option.description) }}</span>
+      </div>
     </label>
   </div>
 </template>

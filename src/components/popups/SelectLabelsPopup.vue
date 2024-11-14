@@ -19,6 +19,7 @@ const options = Object.keys(LABEL_BEHAVIORS)
     return {
       label: key,
       value: key,
+      description: `${key}-description`,
     }
   })
 
