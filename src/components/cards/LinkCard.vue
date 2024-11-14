@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
+import { useRouter } from "vue-router"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -168,6 +169,17 @@ function updateEmbeddedContents () {
 }
 
 getEmbeddedContentId()
+
+// 通常のリンクカード - URL検索ボタン
+
+const router = useRouter()
+
+function searchUrl () {
+  router.push({
+    name: "post-search",
+    query: { text: props.external.uri }
+  })
+}
 </script>
 
 <template>
@@ -205,7 +217,7 @@ getEmbeddedContentId()
         :src="external.thumb"
       />
 
-      <!-- 通常のリンクカードの情報 -->
+      <!-- 通常のリンクカード - 各種情報 -->
       <div class="external__meta">
         <div class="external__meta__title">
           <span>{{ external.title || "&emsp;" }}</span>
@@ -218,6 +230,15 @@ getEmbeddedContentId()
           <span>{{ external.description || "&emsp;" }}</span>
         </div>
       </div>
+
+      <!-- 通常のリンクカード - URL検索ボタン -->
+      <button
+        v-if="!noLink"
+        class="external__search-button"
+        @click.prevent="searchUrl"
+      >
+        <SVGIcon name="search" />
+      </button>
     </Component>
 
     <!-- 埋込型リンクカード -->
@@ -370,7 +391,7 @@ getEmbeddedContentId()
 .external {
   position: relative;
 
-  // 不正なリンクカード
+  // 不正な URL
   &--invalid {
     background-color: rgb(var(--fg-color), 0.125);
     border: 1px solid rgb(var(--fg-color), 0.25);
@@ -415,7 +436,7 @@ getEmbeddedContentId()
     cursor: pointer;
   }
 
-  // リンクカードの情報
+  // 通常のリンクカード - 各種情報
   &__meta {
     display: grid;
     align-items: center;
@@ -465,6 +486,32 @@ getEmbeddedContentId()
     &__description {
       color: rgb(var(--fg-color), 0.75);
       font-size: 0.875em;
+
+      // URL検索ボタンの横幅分だけマージンを取る
+      margin-right: 2em;
+    }
+  }
+
+  // 通常のリンクカード - URL検索ボタン
+  &__search-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 2.5em;
+    height: 2.5em;
+    &:focus, &:hover {
+      cursor: pointer;
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color));
+      }
+    }
+
+    & > .svg-icon {
+      fill: rgb(var(--fg-color), 0.5);
     }
   }
 
