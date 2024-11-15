@@ -382,6 +382,7 @@ function removeThisPost () {
                 :unauthenticatedDisplay="true"
                 :harmfulDisplay="true"
                 :customDisplay="true"
+                :userCreatedAt="mainState.currentProfile?.createdAt"
               />
 
               <!-- 表示名 -->

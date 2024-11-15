@@ -91,6 +91,8 @@
   "inviteCode": "Invite code",
   "noHistory": "No history",
   "unauthenticated": "Public",
+  "beginner": "New user",
+  "beginnerInPost": "Initial post",
 
   "privacyPolicy": "Privacy policy",
   "termsOfService": "Terms of service",

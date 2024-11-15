@@ -93,6 +93,7 @@ function onActivateContentFilteringToggle () {
         :unauthenticatedDisplay="false"
         :harmfulDisplay="true"
         :customDisplay="true"
+        :userCreatedAt="user.createdAt"
       />
 
       <!-- Viewer ラベル -->

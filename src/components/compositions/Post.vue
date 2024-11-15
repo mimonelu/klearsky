@@ -1276,6 +1276,8 @@ function toggleOldestQuotedPostDisplay () {
           :unauthenticatedDisplay="false"
           :harmfulDisplay="false"
           :customDisplay="false"
+          :userCreatedAt="post.author.createdAt"
+          :postIndexedAt="post.indexedAt"
         />
 
         <!-- 引用リポスト -->

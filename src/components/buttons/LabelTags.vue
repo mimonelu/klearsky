@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import { differenceInDays } from "date-fns"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import CONSTS from "@/consts/consts.json"
@@ -10,6 +11,10 @@ const props = defineProps<{
   unauthenticatedDisplay: boolean
   harmfulDisplay: boolean
   customDisplay: boolean
+
+  // 新規アカウントラベル用
+  userCreatedAt?: string
+  postIndexedAt?: string
 }>()
 
 const mainState = inject("state") as MainState
@@ -19,6 +24,9 @@ const state = reactive<{
   harmfulLabels: ComputedRef<Array<TTLabel>>
   labelerLabels: ComputedRef<Array<undefined | TILabelSetting>>
   customLabels: ComputedRef<Array<TTLabel>>
+
+  // 新規アカウントフラグ
+  isBeginner: ComputedRef<boolean>
 }>({
   hasNoUnauthenticated: computed((): boolean => {
     if (props.labels == null) {
@@ -51,6 +59,16 @@ const state = reactive<{
   customLabels: computed((): Array<TTLabel> => {
     return props.customDisplay ? mainState.getCustomLabels(props.labels) : []
   }),
+
+  // 新規アカウントフラグ
+  isBeginner: computed((): boolean => {
+    const now = props.postIndexedAt != null
+      ? new Date(props.postIndexedAt)
+      : new Date()
+    return props.userCreatedAt != null
+      ? differenceInDays(now, new Date(props.userCreatedAt)) <= 7
+      : false
+  }),
 })
 
 function openLabelerSettingsPopup (did?: string) {
@@ -80,10 +98,20 @@ function getLabelerAvatar (label?: TILabelSetting): string {
       (unauthenticatedDisplay && !state.hasNoUnauthenticated) ||
       state.harmfulLabels.length > 0 ||
       state.labelerLabels.length > 0 ||
-      state.customLabels.length > 0
+      state.customLabels.length > 0 ||
+      state.isBeginner
     "
     class="label-tags"
   >
+    <!-- 新規アカウントラベル -->
+    <div
+      v-if="state.isBeginner"
+      class="label-tags__beginner-label"
+    >
+      <SVGIcon name="sprout" />
+      <span>{{ $t(postIndexedAt != null ? "beginnerInPost" : "beginner") }}</span>
+    </div>
+
     <!-- 外部公開状態ラベル -->
     <div
       v-if="unauthenticatedDisplay && !state.hasNoUnauthenticated"
@@ -149,6 +177,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   }
 
   &:deep(.label-tags__labeler),
+  &__beginner-label,
   &__unauthenticated-label,
   &__harmful-label,
   &__labelers-label,
@@ -178,6 +207,12 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   &:deep(.label-tags__labeler) {
     --color: rgb(var(--label-color), var(--alpha, 1.0));
     background-color: rgb(var(--label-color), 0.125);
+  }
+
+  // 新規アカウントラベル
+  &__beginner-label {
+    --color: rgb(var(--accent-color));
+    background-color: rgb(var(--accent-color), 0.25);
   }
 
   // 外部公開状態ラベル

@@ -1,6 +1,7 @@
 type TTUser = {
   associated?: TIAssociated
   avatar?: string
+  createdAt?: string
   description?: string
   did: string
   displayName: string

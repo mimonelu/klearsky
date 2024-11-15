@@ -91,6 +91,8 @@
   "inviteCode": "招待コード",
   "noHistory": "履歴はありません。",
   "unauthenticated": "公開",
+  "beginner": "新規ユーザー",
+  "beginnerInPost": "初期ポスト",
 
   "privacyPolicy": "プライバシーポリシー",
   "termsOfService": "利用規約",
