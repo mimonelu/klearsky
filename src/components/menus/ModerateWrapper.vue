@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { nextTick, reactive, ref } from "vue"
+import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
 import MenuTickerSendAccountReport from "@/components/menus/SendAccountReport.vue"
 import MenuTickerSendFeedReport from "@/components/menus/SendFeedReport.vue"
 import MenuTickerSendListReport from "@/components/menus/SendListReport.vue"
@@ -11,7 +11,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
-defineProps<{
+const props = defineProps<{
   isUser?: boolean
   user?: TTUser
   post?: TTPost
@@ -20,10 +20,16 @@ defineProps<{
   container?: HTMLElement
 }>()
 
+const mainState = inject("state") as MainState
+
 const state = reactive<{
   display: boolean
+  isMyList: ComputedRef<boolean>
 }>({
   display: false,
+  isMyList: computed((): boolean => {
+    return props.list?.creator.did === mainState.atp.session?.did
+  }),
 })
 
 const trigger = ref(null)
@@ -74,6 +80,8 @@ function close () {
       @close="close"
     >
       <menu class="list-menu">
+        <slot name="before" />
+
         <!-- ミュートのトグル -->
         <MenuTickerToggleMute
           v-if="!isUser && generator == null && list == null"
@@ -111,10 +119,12 @@ function close () {
 
         <!-- リストレポート送信ポップアップを開く -->
         <MenuTickerSendListReport
-          v-if="list != null"
+          v-if="list != null && !state.isMyList"
           :list="list"
           @close="emit('close')"
         />
+
+        <slot name="after" />
       </menu>
     </Popover>
   </button>

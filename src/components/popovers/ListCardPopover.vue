@@ -24,7 +24,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   isMuted: ComputedRef<boolean>
   isBlocked: ComputedRef<boolean>
-  isOwn: ComputedRef<boolean>
+  isMyList: ComputedRef<boolean>
 }>({
   isMuted: computed((): boolean => {
     return props.list?.viewer?.muted ?? false
@@ -32,7 +32,7 @@ const state = reactive<{
   isBlocked: computed((): boolean => {
     return props.list?.viewer?.blocked != null
   }),
-  isOwn: computed((): boolean => {
+  isMyList: computed((): boolean => {
     return props.list?.creator.did === mainState.atp.session?.did
   }),
 })
@@ -168,21 +168,9 @@ function close () {
         @close="emit('close')"
       />
 
-      <!-- リストミュートのトグル -->
-      <button @click.prevent.stop="toggleListMute">
-        <SVGIcon :name="state.isMuted ? 'volumeOff' : 'volumeOn'" />
-        <span>{{ $t(state.isMuted ? "muteOff" : "muteOn") }}</span>
-      </button>
-
-      <!-- リストブロックのトグル -->
-      <button @click.prevent.stop="toggleListBlock">
-        <SVGIcon :name="state.isBlocked ? 'personOff' : 'person'" />
-        <span>{{ $t(state.isBlocked ? "unblock" : "block") }}</span>
-      </button>
-
       <!-- リストを削除する -->
       <button
-        v-if="state.isOwn"
+        v-if="state.isMyList"
         @click.prevent.stop="deleteList"
       >
         <SVGIcon name="remove" />
@@ -201,10 +189,23 @@ function close () {
 
       <!-- モデレートする -->
       <MenuTickerModerateWrapper
-        v-if="!state.isOwn"
         :list="list"
         @close="emit('close')"
-      />
+      >
+        <template #before>
+          <!-- リストミュートのトグル -->
+          <button @click.prevent.stop="toggleListMute">
+            <SVGIcon :name="state.isMuted ? 'volumeOff' : 'volumeOn'" />
+            <span>{{ $t(state.isMuted ? "muteOff" : "muteOn") }}</span>
+          </button>
+
+          <!-- リストブロックのトグル -->
+          <button @click.prevent.stop="toggleListBlock">
+            <SVGIcon :name="state.isBlocked ? 'personOff' : 'person'" />
+            <span>{{ $t(state.isBlocked ? "unblock" : "block") }}</span>
+          </button>
+        </template>
+      </MenuTickerModerateWrapper>
 
       <!-- 外部アプリで開く -->
       <MenuTickerOpenAppWrapper
