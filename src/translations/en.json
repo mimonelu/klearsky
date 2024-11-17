@@ -583,6 +583,8 @@
   "listEditShort": "Edit",
   "listDelete": "Delete list",
   "listDeleteMessage": "This list will be deleted. Are you sure?",
+  "listDetectFollowings": "Check your followings",
+  "listDetectFollowingsNoUsers": "There don't appear to be any following users on this list.\nHowever, it is uncertain if there are more than 5000 list users.",
   "listAvatar": "Thumbnail",
   "listName": "Name",
   "listDescription": "Description",

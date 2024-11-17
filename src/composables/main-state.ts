@@ -627,7 +627,9 @@ export const state: MainState = reactive<MainState>({
   // ポップアップ - ユーザーリストポップアップ
   userListPopupProps: {
     display: false,
-    users: []
+    users: [],
+    title: "",
+    noUsersMessage: "",
   },
   openUserListPopup: openUserListPopup,
   closeUserListPopup: closeUserListPopup,

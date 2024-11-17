@@ -559,6 +559,8 @@ interface MainState {
   userListPopupProps: {
     display: boolean
     users: Array<TTUser>
+    title: string
+    noUsersMessage: string
   }
   openUserListPopup: () => void
   closeUserListPopup: () => void

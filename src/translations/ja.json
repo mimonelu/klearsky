@@ -583,6 +583,8 @@
   "listEditShort": "編集",
   "listDelete": "リストを削除する",
   "listDeleteMessage": "このリストを削除します。よろしいですか？",
+  "listDetectFollowings": "フォロー中ユーザーの検証",
+  "listDetectFollowingsNoUsers": "このリストにフォロー中ユーザーはいないようです。\nただし、リストユーザーが5000人以上の場合は保証できません。",
   "listAvatar": "サムネイル",
   "listName": "名前",
   "listDescription": "説明",

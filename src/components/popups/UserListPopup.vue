@@ -21,42 +21,50 @@ function close () {
   >
     <template #header>
       <h2>
-        <SVGIcon name="volumeOff" />
-        <span>{{ $t("mutingUsers") }}</span>
+        <SVGIcon name="people" />
+        <span>{{ $t(mainState.userListPopupProps.title) }}</span>
       </h2>
     </template>
     <template #body>
       <div class="users">
-        <UserBox
-          v-for="user of mainState.userListPopupProps.users"
-          :key="user.did"
-          class="user"
-          :user="user"
-          :menuDisplay="true"
-          :contentWarningDisabled="false"
-          :viewerDisplay="true"
-          @link="close"
-        />
+        <p
+          v-if="mainState.userListPopupProps.users.length === 0"
+          class="message"
+        >{{ $t(mainState.userListPopupProps.noUsersMessage) }}</p>
+        <template v-else>
+          <UserBox
+            v-for="user of mainState.userListPopupProps.users"
+            :key="user.did"
+            class="user"
+            :user="user"
+            :menuDisplay="true"
+            :contentWarningDisabled="false"
+            :viewerDisplay="true"
+            @link="close"
+          />
+        </template>
       </div>
     </template>
   </Popup>
 </template>
 
 <style lang="scss" scoped>
-.user-list-popup:deep() {
-  .popup {
-    &-header > h2 > .svg-icon {
-      fill: rgb(var(--notice-color));
-    }
+.user-list-popup {
+  .message {
+    white-space: pre-wrap;
+  }
 
-    &-body {
-      & > .users {
-        display: flex;
-        flex-direction: column;
-        grid-gap: 1rem;
+  &:deep() {
+    .popup {
+      &-body {
+        & > .users {
+          display: flex;
+          flex-direction: column;
+          grid-gap: 1rem;
 
-        & > .user-box {
-          cursor: pointer;
+          & > .user-box {
+            cursor: pointer;
+          }
         }
       }
     }

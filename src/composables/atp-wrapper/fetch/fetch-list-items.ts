@@ -42,5 +42,5 @@ export default async function (
     currentListItems.push(...newListItems)
   }
 
-  return newListItems.length < (limit ?? 1) ? undefined : response.data.cursor
+  return newListItems.length === 0 ? undefined : response.data.cursor
 }

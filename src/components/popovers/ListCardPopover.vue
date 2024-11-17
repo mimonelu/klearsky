@@ -108,28 +108,33 @@ async function toggleListBlock () {
 async function detectFollowingsInList () {
   Util.blurElement()
   emit("close")
-  /*
-  const isConfirmed = await mainState.openConfirmationPopup({
-    title: $t("listDetectFollowings"),
-    text: $t("listDetectFollowingsMessage"),
-  })
-  if (!isConfirmed) {
-    return
-  }
-  */
-  if (props.list == null || mainState.myLists == null || mainState.listCardPopoverCallback == null) {
+  if (
+    props.list == null ||
+    mainState.myLists == null ||
+    mainState.listCardPopoverCallback == null
+  ) {
     return
   }
   await mainState.listCardPopoverCallback("startAwait")
   const followings = (await mainState.myLists.fetchAllListItems(props.list.uri))
-    .filter((item) => {
-      return item.subject?.viewer?.following != null
-    })
     .map((item) => {
       return item.subject
     })
-    await mainState.listCardPopoverCallback("endAwait")
+    .filter((user: TTUser) => {
+      return (
+        user.viewer?.following != null ||
+        user.did === mainState.atp.data.did
+      )
+    })
+    .sort((a, b) => {
+      const aIsMe = a.did === mainState.atp.data.did
+      const bIsMe = b.did === mainState.atp.data.did
+      return aIsMe ? - 1 : (bIsMe ? 1 : 0)
+    })
+  await mainState.listCardPopoverCallback("endAwait")
   mainState.userListPopupProps.users = followings
+  mainState.userListPopupProps.title = "listDetectFollowings"
+  mainState.userListPopupProps.noUsersMessage = "listDetectFollowingsNoUsers"
   mainState.openUserListPopup()
 }
 
@@ -198,7 +203,7 @@ function close () {
 
       <!-- フォロー中ユーザーの存在判定 -->
       <button @click.prevent.stop="detectFollowingsInList">
-        <SVGIcon name="check" />
+        <SVGIcon name="people" />
         <span>{{ $t("listDetectFollowings") }}</span>
       </button>
 
