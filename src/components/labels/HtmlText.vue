@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
+import { useRouter } from "vue-router"
 import type { Facet } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
@@ -93,6 +94,8 @@ const state = reactive<{
   }),
 })
 
+const router = useRouter()
+
 function transformInternalLink (uri: string): undefined | string {
   const url: undefined | URL = Util.safeUrl(uri)
   if (url == null) {
@@ -123,8 +126,8 @@ function transformInternalLink (uri: string): undefined | string {
                 return
               }
               if (!paths[2].startsWith("did:")) {
-                // TODO: ハンドルの場合は DID を取得すること
-                return
+                // ハンドル指定の場合はクリック時に DID を取得できるようマークアップ
+                return `/home/feeds?feed=at://{{${paths[2]}}}/app.bsky.feed.generator/${paths[4]}`
               }
               return `/home/feeds?feed=at://${paths[2]}/app.bsky.feed.generator/${paths[4]}`
             }
@@ -135,8 +138,8 @@ function transformInternalLink (uri: string): undefined | string {
                 return
               }
               if (!paths[2].startsWith("did:")) {
-                // TODO: ハンドルの場合は DID を取得すること
-                return
+                // ハンドル指定の場合はクリック時に DID を取得できるようマークアップ
+                return `/home/list-feeds?list=at://{{${paths[2]}}}/app.bsky.graph.list/${paths[4]}`
               }
               return `/home/list-feeds?list=at://${paths[2]}/app.bsky.graph.list/${paths[4]}`
             }
@@ -200,6 +203,23 @@ async function openWindowIfCan (segment: RichParam) {
   }
 }
 
+async function openInternalLink (uri: string) {
+  // uri にハンドルが含まれる場合は DID を取得して置換
+  const handle = uri.match(/\{\{(.+?)\}\}/)?.[1]
+  if (handle != null) {
+    mainState.loaderDisplay = true
+    const did = await mainState.atp.fetchDid(handle)
+    mainState.loaderDisplay = false
+    if (did instanceof Error) {
+      mainState.openErrorPopup(did, "HtmlText/openInternalLink")
+      return
+    }
+    uri = uri.replace(/\{\{.+?\}\}/, did)
+  }
+
+  router.push(uri)
+}
+
 function validateUrl (urlObject: URL, text: string): boolean {
   // 末尾のスラッシュを削除して照合
   const pathname = urlObject.pathname.replace(/\/$/, "")
@@ -230,13 +250,13 @@ function validateUrl (urlObject: URL, text: string): boolean {
 
       <!-- 内部リンク -->
       <template v-else-if="segment.type === 'internalLink'">
-        <RouterLink
+        <a
           class="textlink internal-link"
-          :to="segment.param"
-          @click.stop
+          :href="segment.param"
+          @click.prevent.stop="openInternalLink(segment.param)"
         >
           <span>{{ segment.text }}</span>
-        </RouterLink>
+        </a>
       </template>
 
       <!-- メンション -->
