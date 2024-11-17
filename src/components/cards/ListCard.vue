@@ -92,13 +92,6 @@ const state = reactive<{
   detailDisplay: props.detailDisplay,
 })
 
-const iconMap = {
-  "app.bsky.graph.defs#curatelist": "person",
-  "app.bsky.graph.defs#modlist": "personOff",
-  "app.bsky.graph.defs#referencelist": "cards",
-  "app.bsky.graph.defs#unknownlist": "help",
-}
-
 function toggleDetailDisplay () {
   Util.blurElement()
   if (props.isCompact) {

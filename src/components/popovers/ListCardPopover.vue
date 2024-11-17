@@ -105,6 +105,34 @@ async function toggleListBlock () {
   mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
 }
 
+async function detectFollowingsInList () {
+  Util.blurElement()
+  emit("close")
+  /*
+  const isConfirmed = await mainState.openConfirmationPopup({
+    title: $t("listDetectFollowings"),
+    text: $t("listDetectFollowingsMessage"),
+  })
+  if (!isConfirmed) {
+    return
+  }
+  */
+  if (props.list == null || mainState.myLists == null || mainState.listCardPopoverCallback == null) {
+    return
+  }
+  await mainState.listCardPopoverCallback("startAwait")
+  const followings = (await mainState.myLists.fetchAllListItems(props.list.uri))
+    .filter((item) => {
+      return item.subject?.viewer?.following != null
+    })
+    .map((item) => {
+      return item.subject
+    })
+    await mainState.listCardPopoverCallback("endAwait")
+  mainState.userListPopupProps.users = followings
+  mainState.openUserListPopup()
+}
+
 async function deleteList () {
   Util.blurElement()
   emit("close")
@@ -167,6 +195,12 @@ function close () {
         :text="list.description"
         @close="emit('close')"
       />
+
+      <!-- フォロー中ユーザーの存在判定 -->
+      <button @click.prevent.stop="detectFollowingsInList">
+        <SVGIcon name="check" />
+        <span>{{ $t("listDetectFollowings") }}</span>
+      </button>
 
       <!-- リストを削除する -->
       <button

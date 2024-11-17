@@ -555,6 +555,14 @@ interface MainState {
   openStarterPackEditPopup: (props: TIStarterPackEditPopupProps) => void
   closeStarterPackEditPopup: () => void
 
+  // ポップアップ - ユーザーリストポップアップ
+  userListPopupProps: {
+    display: boolean
+    users: Array<TTUser>
+  }
+  openUserListPopup: () => void
+  closeUserListPopup: () => void
+
   // ポップアップ - タイムフィードポップアップ
   currentTimeFeeds: Array<TTPost>
   timeFeedsPopupDisplay: boolean

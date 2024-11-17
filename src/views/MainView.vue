@@ -65,6 +65,7 @@ import SubMenu from "@/components/shells/SubMenu.vue"
 import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import TimeSettingsPopup from "@/components/popups/settings-popups/TimeSettingsPopup.vue"
 import UiLanguageSettingsPopup from "@/components/popups/settings-popups/UiLanguageSettingsPopup.vue"
+import UserListPopup from "@/components/popups/UserListPopup.vue"
 import WordMutePopup from "@/components/next/WordMute/Popup.vue"
 import { state } from "@/composables/main-state"
 import Util from "@/composables/util"
@@ -1075,6 +1076,15 @@ function changeSetting () {
           v-if="state.starterPackEditPopupProps.display"
           v-bind="state.starterPackEditPopupProps"
           @close="state.closeStarterPackEditPopup"
+        />
+      </Transition>
+
+      <!-- ユーザーリストポップアップ -->
+      <Transition>
+        <UserListPopup
+          v-if="state.userListPopupProps.display"
+          v-bind="state.userListPopupProps"
+          @close="state.closeUserListPopup"
         />
       </Transition>
 

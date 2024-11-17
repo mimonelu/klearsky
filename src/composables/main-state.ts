@@ -624,6 +624,14 @@ export const state: MainState = reactive<MainState>({
   openStarterPackEditPopup: openStarterPackEditPopup,
   closeStarterPackEditPopup: closeStarterPackEditPopup,
 
+  // ポップアップ - ユーザーリストポップアップ
+  userListPopupProps: {
+    display: false,
+    users: []
+  },
+  openUserListPopup: openUserListPopup,
+  closeUserListPopup: closeUserListPopup,
+
   // ポップアップ - タイムフィードポップアップ
   currentTimeFeeds: [],
   timeFeedsPopupDisplay: false,
@@ -2392,6 +2400,7 @@ function closeListUserManagementPopup () {
 }
 
 // ポップアップ - スターターパック編集ポップアップ
+
 function openStarterPackEditPopup (props: TIStarterPackEditPopupProps) {
   state.starterPackEditPopupProps.mode = props.mode
   state.starterPackEditPopupProps.starterPack = props.starterPack
@@ -2402,7 +2411,17 @@ function closeStarterPackEditPopup () {
   state.starterPackEditPopupProps.display = false
 }
 
-// ポップアップ - タイムフィードポップアップ
+// ポップアップ - ユーザーリストポップアップ
+
+function openUserListPopup () {
+  state.userListPopupProps.display = true
+}
+
+function closeUserListPopup () {
+  state.userListPopupProps.display = false
+}
+
+  // ポップアップ - タイムフィードポップアップ
 
 function openTimeFeedsPopup (post: TTPost, direction: "old" | "new") {
   state.currentTimeFeeds.splice(0)

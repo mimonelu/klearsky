@@ -62,23 +62,30 @@ export default class {
 
     // 全マイリストユーザーの取得
     for (const list of this.items) {
-      cursor = undefined
-      list.items = []
-      for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS_ITERATION; i ++) {
-        const result = await this.mainState.atp.fetchListItems(
-          list.items,
-          list.uri,
-          CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS,
-          cursor
-        )
-        if (result instanceof Error) {
-          // TODO:
-          break
-        }
-        if (result == null) break
-        cursor = result
-      }
+      list.items = await this.fetchAllListItems(list.uri)
     }
+  }
+
+  async fetchAllListItems (uri: string): Promise<Array<TTListItem>> {
+    const items: Array<TTListItem> = []
+    let cursor = undefined
+    for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS_ITERATION; i ++) {
+      const result = await this.mainState.atp.fetchListItems(
+        items,
+        uri,
+        CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS,
+        cursor
+      )
+      if (result instanceof Error) {
+        // TODO:
+        break
+      }
+      if (result == null) {
+        break
+      }
+      cursor = result
+    }
+    return items
   }
 
   remove (uri: string): boolean {
