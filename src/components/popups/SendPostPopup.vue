@@ -486,14 +486,17 @@ const PreviewLinkCardFeature: {
       </h2>
     </template>
     <template #body>
+      <!-- プレビューポスト -->
       <Post
         v-if="type === 'reply' || type === 'quoteRepost'"
+        :key="post?.uri"
         position="preview"
         :post="post as TTPost"
         :noLink="true"
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
+
       <EasyForm
         v-bind="easyFormProps"
         ref="easyForm"
