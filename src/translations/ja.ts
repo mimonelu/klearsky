@@ -1,4 +1,4 @@
-{
+export default () => ({
   "title": "Klearsky",
 
   "cancel": "キャンセル",
@@ -682,4 +682,4 @@
   "refreshSessionError": "セッションの更新中にエラーが発生しました。再ログインしてください。",
   "resumeSessionError": "セッションの復帰中にエラーが発生しました。\nセッションが切れている可能性があります。再ログインしてください。",
   "translationError": "翻訳中にエラーが発生しました。"
-}
+})

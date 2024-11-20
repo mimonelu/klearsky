@@ -1,4 +1,4 @@
-{
+export default () => ({
   "title": "Klearsky",
 
   "cancel": "Cancel",
@@ -682,4 +682,4 @@
   "refreshSessionError": "An error occurred while refreshing the session. Please log in again.",
   "resumeSessionError": "An error occurred while restoring the session.\nThe session may be expired. Please log in again.",
   "translationError": "An error occurred during translation."
-}
+})

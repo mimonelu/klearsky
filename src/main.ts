@@ -10,8 +10,8 @@ import PortalVue from "portal-vue"
 
 // 翻訳
 import i18n from "@/plugins/i18n"
-import translationEn from "@/translations/en.json"
-import translationJa from "@/translations/ja.json"
+import translationEn from "@/translations/en"
+import translationJa from "@/translations/ja"
 
 // 交差オブザーバー
 import IntersectionObserverDirective from "@/plugins/intersection-observer-directive"
@@ -24,8 +24,8 @@ app.use(PortalVue)
 
 // 翻訳
 app.use(i18n, {
-  en: translationEn,
-  ja: translationJa,
+  en: translationEn(),
+  ja: translationJa(),
 })
 
 // 交差オブザーバー
