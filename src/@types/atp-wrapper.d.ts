@@ -169,12 +169,14 @@ interface TIAtpWrapper {
     (aud: string, lxm?: string, exp?: number): Promise<Error | string>
   fetchServerInfo
     (): Promise<Error | TTServerInfo>
-  fetchStarterPackSharedUrl
-    (starterPack: TIStarterPack): Promise<Error | string>
   fetchStarterPack
     (uri: string): Promise<Error | TIStarterPack>
   fetchStarterPacks
     (uris: Array<string>): Promise<Error | Array<TIStarterPack>>
+  fetchStarterPackSharedUrl
+    (starterPack: TIStarterPack): Promise<Error | string>
+  fetchStarterPacksSearch
+    (q: string): Promise<Error | Array<TIStarterPack>>
   fetchSuggestedFollows
     (users: Array<TTUser> | Array<TTUser>, actor: string): Promise<Error | undefined>
   fetchSuggestions
