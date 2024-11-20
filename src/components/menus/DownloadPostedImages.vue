@@ -18,14 +18,14 @@ const props = defineProps<{
   user: TTUser
 }>()
 
-async function donwloadPostedImages () {
+async function downloadPostedImages () {
   Util.blurElement()
   emit("close")
 
   // 確認
   if (!await mainState.openConfirmationPopup({
     title: $t("confirmation"),
-    text: $t("donwloadPostedImagesOnConfirmation"),
+    text: $t("downloadPostedImagesOnConfirmation"),
   })) {
     return
   }
@@ -43,7 +43,7 @@ async function donwloadPostedImages () {
   let numberOfFailed = 0
 
   // 進捗ポップアップを開く
-  mainState.openProgressPopup(0, $t("donwloadPostedImagesOnProgress"))
+  mainState.openProgressPopup(0, $t("downloadPostedImagesOnProgress"))
 
   // 画像 blob の取得
   const blobs: Blob[] = []
@@ -77,8 +77,8 @@ async function donwloadPostedImages () {
   // 画像がない場合
   if (blobs.length === 0) {
     mainState.openMessagePopup({
-      title: $t("donwloadPostedImages"),
-      text: $t("donwloadPostedImagesOnCancel"),
+      title: $t("downloadPostedImages"),
+      text: $t("downloadPostedImagesOnCancel"),
     })
     return
   }
@@ -97,15 +97,15 @@ async function donwloadPostedImages () {
 
   // 完了
   mainState.openMessagePopup({
-    title: $t("donwloadPostedImages"),
-    text: $t("donwloadPostedImagesOnComplete") + `\n\nSucceed: ${numberOfSucceed}\nFailed: ${numberOfFailed}`,
+    title: $t("downloadPostedImages"),
+    text: $t("downloadPostedImagesOnComplete") + `\n\nSucceed: ${numberOfSucceed}\nFailed: ${numberOfFailed}`,
   })
 }
 </script>
 
 <template>
-  <button @click.prevent.stop="donwloadPostedImages">
+  <button @click.prevent.stop="downloadPostedImages">
     <SVGIcon name="image" />
-    <span>{{ $t("donwloadPostedImages") }}</span>
+    <span>{{ $t("downloadPostedImages") }}</span>
   </button>
 </template>
