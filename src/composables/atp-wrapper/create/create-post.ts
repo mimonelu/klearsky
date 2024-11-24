@@ -45,6 +45,10 @@ export default async function (
   // Facets
   const richText = new RichText({ text: record.text })
   await richText.detectFacets(this.agent)
+
+  // URLのトリム
+  Util.shortenLinks(richText)
+
   record.text = richText.text
   if (richText.facets != null) {
     if (record.facets != null) {
