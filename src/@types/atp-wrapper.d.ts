@@ -176,7 +176,7 @@ interface TIAtpWrapper {
   fetchStarterPackSharedUrl
     (starterPack: TIStarterPack): Promise<Error | string>
   fetchStarterPacksSearch
-    (q: string): Promise<Error | Array<TIStarterPack>>
+    (currentStarterPacks: Array<TIStarterPack>, q: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchSuggestedFollows
     (users: Array<TTUser> | Array<TTUser>, actor: string): Promise<Error | undefined>
   fetchSuggestions
