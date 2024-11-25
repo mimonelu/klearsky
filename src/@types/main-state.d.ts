@@ -559,7 +559,7 @@ interface MainState {
   userListPopupProps: {
     display: boolean
     users: Array<TTUser>
-    title: string
+    headerLabel: string
     noUsersMessage: string
   }
   openUserListPopup: () => void

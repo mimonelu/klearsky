@@ -22,7 +22,7 @@ function close () {
     <template #header>
       <h2>
         <SVGIcon name="people" />
-        <span>{{ $t(mainState.userListPopupProps.title) }}</span>
+        <span>{{ $t(mainState.userListPopupProps.headerLabel) }}</span>
       </h2>
     </template>
     <template #body>

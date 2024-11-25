@@ -126,14 +126,14 @@ async function detectFollowingsInList () {
         user.did === mainState.atp.data.did
       )
     })
-    .sort((a, b) => {
+    .sort((a: TTUser, b: TTUser) => {
       const aIsMe = a.did === mainState.atp.data.did
       const bIsMe = b.did === mainState.atp.data.did
       return aIsMe ? - 1 : (bIsMe ? 1 : 0)
     })
   await mainState.listCardPopoverCallback("endAwait")
   mainState.userListPopupProps.users = followings
-  mainState.userListPopupProps.title = "listDetectFollowings"
+  mainState.userListPopupProps.headerLabel = "listDetectFollowings"
   mainState.userListPopupProps.noUsersMessage = "listDetectFollowingsNoUsers"
   mainState.openUserListPopup()
 }
