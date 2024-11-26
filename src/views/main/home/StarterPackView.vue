@@ -6,6 +6,7 @@ import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import UserSlider from "@/components/compositions/UserSlider.vue"
 import Util from "@/composables/util"
 
@@ -113,12 +114,14 @@ function onScrolledToBottom () {
     />
 
     <template v-if="!mainState.centerLoaderDisplay">
+      <!-- フィード -->
       <template v-if="(mainState.currentStarterPack?.feeds?.length ?? 0) > 0">
+        <!-- フィード - ヘッダー -->
         <div class="strike-header">
           <span>{{ $t("feeds") }}</span>
         </div>
 
-        <!-- スターターパックフィードカード -->
+        <!-- フィード - スターターパックフィードカード -->
         <div class="starter-pack-view__feed-card-container">
           <FeedCard
             v-for="generator of mainState.currentStarterPack?.feeds"
@@ -132,18 +135,34 @@ function onScrolledToBottom () {
         </div>
       </template>
 
+      <!-- ユーザー -->
       <template v-if="(state.users?.length ?? 0) > 0">
+        <!-- ユーザー - ヘッダー -->
         <div class="strike-header">
           <span>{{ $t("users") }}</span>
         </div>
 
-        <!-- スターターパックリストユーザースライダー -->
+        <!-- ユーザー - スターターパックリストユーザースライダー -->
         <UserSlider
           :users="state.users"
           :showMoreButton="mainState.currentStarterPack?.record.list != null"
           :moreLocation="state.listLocation"
         />
       </template>
+
+      <!-- スターターパックリストユーザーへのリンク -->
+      <div
+        v-if="state.listLocation != null"
+        class="link-to-list-users"
+      >
+        <RouterLink
+          class="textlink--icon"
+          :to="state.listLocation"
+        >
+          <SVGIcon name="cursorRight" />
+          <span>{{ $t("showStarterPackListUsers") }}</span>
+        </RouterLink>
+      </div>
 
       <!-- スターターパックリストフィード -->
       <LoadButton
@@ -205,6 +224,16 @@ function onScrolledToBottom () {
   }
 }
 
+// スターターパックリストユーザーへのリンク
+.link-to-list-users {
+  text-align: right;
+
+  & > a {
+    padding: 0.5rem;
+  }
+}
+
+// ヘッダー
 .strike-header {
   display: flex;
   grid-gap: 1rem;
