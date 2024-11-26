@@ -134,6 +134,11 @@ async function duplicateList () {
     mainState.openErrorPopup(dstList, "ListCardPopover/duplicateList")
     return
   }
+  mainState.myLists!.items.unshift(dstList)
+
+  // セッションキャッシュの更新
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
+
   router.push({
     path: "/home/list-users",
     query: {
