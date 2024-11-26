@@ -22,7 +22,9 @@ export default async function (
       createdAt,
       description,
       name,
-      purpose: `app.bsky.graph.defs#${purpose}`,
+      purpose: purpose.startsWith("app.bsky.graph.defs#")
+        ? purpose
+        : `app.bsky.graph.defs#${purpose}`,
     },
   }
   if (avatarBlobRef != null) {

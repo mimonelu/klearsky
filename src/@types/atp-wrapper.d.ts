@@ -11,6 +11,8 @@ interface TIAtpWrapper {
     (repo: string, allowIncoming: TTAllowIncoming): Promise<Error | TTCidUri>
   createChatMessage
     (convoId: string, params: TTCreatePostParams): Promise<Error | TIChatMessage>
+  createDuplicatedList
+    (listUri: string): Promise<Error | string>
   createFileBlobRef
     (params: TTCreateFileBlobRefParams): Promise<Error | BlobRef>
   createFollow

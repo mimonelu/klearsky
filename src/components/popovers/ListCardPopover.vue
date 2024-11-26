@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
+import { useRouter } from "vue-router"
 import MenuTickerCopyTextWrapper from "@/components/menus/CopyTextWrapper.vue"
 import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
@@ -36,6 +37,8 @@ const state = reactive<{
     return props.list?.creator.did === mainState.atp.session?.did
   }),
 })
+
+const router = useRouter()
 
 async function toggleListMute () {
   if (props.list == null || mainState.listCardPopoverCallback == null) return
@@ -103,6 +106,41 @@ async function toggleListBlock () {
 
   // セッションキャッシュの更新
   mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
+}
+
+// リストの複製
+async function duplicateList () {
+  Util.blurElement()
+  emit("close")
+  if (props.list == null) {
+    return
+  }
+  const isConfirmed = await mainState.openConfirmationPopup({
+    title: $t("listDuplicate"),
+    text: $t("listDuplicateMessage"),
+  })
+  if (!isConfirmed) {
+    return
+  }
+  mainState.loaderDisplay = true
+  const dstListUri = await mainState.atp.createDuplicatedList(props.list.uri)
+  mainState.loaderDisplay = false
+  if (dstListUri instanceof Error) {
+    mainState.openErrorPopup(dstListUri, "ListCardPopover/duplicateList")
+    return
+  }
+  const dstList = await mainState.atp.fetchList(dstListUri)
+  if (dstList instanceof Error) {
+    mainState.openErrorPopup(dstList, "ListCardPopover/duplicateList")
+    return
+  }
+  router.push({
+    path: "/home/list-users",
+    query: {
+      list: dstList.uri,
+      displayName: dstList.name,
+    },
+  })
 }
 
 async function detectFollowingsInList () {
@@ -200,6 +238,12 @@ function close () {
         :text="list.description"
         @close="emit('close')"
       />
+
+      <!-- リストの複製 -->
+      <button @click.prevent.stop="duplicateList">
+        <SVGIcon name="list" />
+        <span>{{ $t("listDuplicate") }}</span>
+      </button>
 
       <!-- フォロー中ユーザーの存在判定 -->
       <button @click.prevent.stop="detectFollowingsInList">

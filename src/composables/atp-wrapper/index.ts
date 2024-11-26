@@ -2,6 +2,7 @@ import type { AtpAgent } from "@atproto/api"
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
 import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
+import createDuplicatedList  from "@/composables/atp-wrapper/create/create-duplicated-list"
 import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob-ref"
 import createFollow from "@/composables/atp-wrapper/create/create-follow"
 import createLike from "@/composables/atp-wrapper/create/create-like"
@@ -165,6 +166,7 @@ class AtpWrapper implements TIAtpWrapper {
   createAgent = createAgent
   createChatDeclaration = createChatDeclaration
   createChatMessage = createChatMessage
+  createDuplicatedList = createDuplicatedList
   createFileBlobRef = createFileBlobRef
   createFollow = createFollow
   createLike = createLike

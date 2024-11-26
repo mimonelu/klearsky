@@ -583,6 +583,8 @@ export default () => ({
   "listEditShort": "編集",
   "listDelete": "リストを削除する",
   "listDeleteMessage": "このリストを削除します。よろしいですか？",
+  "listDuplicate": "リストの複製",
+  "listDuplicateMessage": "このリストを複製します。\n\n* 最大で5000人まで複製します。\n* 大量のユーザーが登録されたリストを複製すると、1回でレートリミットを超えてしまう可能性があります。100人ほどのリストまでにしてください。\n* サムネイルは複製されません。",
   "listDetectFollowings": "フォロー中ユーザーの検証",
   "listDetectFollowingsNoUsers": "このリストにフォロー中ユーザーはいないようです。\nただし、リストユーザーが5000人以上の場合は保証できません。",
   "listAvatar": "サムネイル",

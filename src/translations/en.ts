@@ -583,6 +583,8 @@ export default () => ({
   "listEditShort": "Edit",
   "listDelete": "Delete list",
   "listDeleteMessage": "This list will be deleted. Are you sure?",
+  "listDuplicate": "Duplicate list",
+  "listDuplicateMessage": "Duplicate this list.\n\n* Duplicate up to a maximum of 5000 users.\n* Duplicating a list with a large number of users may cause the rate limit to be exceeded at one time. Duplication of lists of more than 100 users is not recommended.\n* Thumbnails will not be duplicated.",
   "listDetectFollowings": "Check your followings",
   "listDetectFollowingsNoUsers": "There don't appear to be any following users on this list.\nHowever, it is uncertain if there are more than 5000 list users.",
   "listAvatar": "Thumbnail",
