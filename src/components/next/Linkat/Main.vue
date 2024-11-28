@@ -57,7 +57,7 @@ const state = reactive<{
     class="linkat"
     title="pnLinkat"
     icon="https://linkat.blue/favicon.ico"
-    :uri="`https://linkat.blue/${profile?.handle}`"
+    :uri="`https://linkat.blue/${profile?.did}`"
   >
     <template #body>
       <template v-for="record of state.records">
