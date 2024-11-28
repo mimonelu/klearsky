@@ -50,6 +50,7 @@ const easyFormProps: TTEasyForm = {
       rows: 1,
       hasMentionSuggestion: true,
       focus: false,
+      autoResizeTextarea: false,
       onFocus (item: TTEasyFormItem) {
         item.rows = 3
 

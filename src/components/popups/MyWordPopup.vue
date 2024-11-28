@@ -42,6 +42,7 @@ const state = reactive<{
         maxLengthIndicatorByGrapheme: true,
         placeholder: $t("newMyWord"),
         autocomplete: "off",
+        autoResizeTextarea: true,
       },
       {
         type: "button",

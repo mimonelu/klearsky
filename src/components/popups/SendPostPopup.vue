@@ -85,6 +85,7 @@ const easyFormProps: TTEasyForm = {
       rows: 6,
       hasMentionSuggestion: true,
       focus: true,
+      autoResizeTextarea: true,
       onBlur: onBlurOrInputText,
       onInput: onBlurOrInputText,
     },
@@ -314,6 +315,7 @@ function onChangeImage () {
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
       rows: 3,
+      autoResizeTextarea: true,
     })
   })
 
@@ -695,14 +697,14 @@ const PreviewLinkCardFeature: {
     }
 
     .textarea {
-      // BORDERED_DESIGN: border-left-style: none;
-      // BORDERED_DESIGN: border-right-style: none;
-      border-style: none;
+      // テキストエリアの自動伸縮時に border-width が影響する点に注意
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-left-style: none;
+      border-right-style: none;
+
       border-radius: 0;
       margin: 0 -1.5rem;
-    }
-    .easy-form:first-child #easy-form--default__0 {
-      // BORDERED_DESIGN: border-top-style: none;
     }
 
     // 送信ボタン

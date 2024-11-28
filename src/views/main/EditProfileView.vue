@@ -59,6 +59,7 @@ const easyFormProps: TTEasyForm = {
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
       rows: 8,
+      autoResizeTextarea: true,
     },
     {
       state,

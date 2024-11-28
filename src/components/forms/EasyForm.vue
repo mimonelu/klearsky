@@ -121,6 +121,17 @@ function onInput (item: TTEasyFormItem) {
   if (item.onInput != null) item.onInput(item, props)
 }
 
+function onInputTextarea (event: Event, item: TTEasyFormItem) {
+  // テキストエリアの自動伸縮
+  const textarea = event.target as HTMLTextAreaElement
+  if (item.autoResizeTextarea && textarea != null) {
+    textarea.style.height = "auto"
+    textarea.style.height = `${textarea.scrollHeight + 2}px` // `2` = border-width
+  }
+
+  onInput(item)
+}
+
 function onEnterKeyDownOnInput (event: KeyboardEvent, item: TTEasyFormItem) {
   if (item.submitWhenEnter ||
       (!event.isComposing && (event.ctrlKey || event.metaKey))
@@ -227,7 +238,7 @@ function getVideoSizes (): Array<Array<undefined | {
                 :class="item.classes"
                 @focus="onFocus(item)"
                 @blur="onBlur(item)"
-                @input="onInput(item)"
+                @input="onInputTextarea($event, item)"
                 @keydown.enter="onEnterKeyDownOnTextarea"
               />
 
