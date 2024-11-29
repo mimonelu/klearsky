@@ -1,7 +1,7 @@
 // SEE: https://github.com/bluesky-social/social-app/blob/main/src/lib/strings/rich-text-manip.ts
 import {AppBskyRichtextFacet, RichText, UnicodeString} from "@atproto/api"
 
-// RichText 内のURL文字列をトリム
+// RichText 内のURL文字列の省略表記
 export default function shortenLinks (rt: RichText) {
   if (!rt.facets?.length) {
     return
@@ -23,7 +23,7 @@ export default function shortenLinks (rt: RichText) {
   }
 }
 
-// URL文字列のトリム
+// URL文字列の省略表記
 function toShortUrl (urlString: string): string {
   try {
     const url = new URL(urlString)

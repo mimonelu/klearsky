@@ -38,24 +38,25 @@ export default async function (
   // カスタムリンク
   const customLinks = Util.makeCustomLinks(record.text)
   record.text = customLinks.text
-  if (customLinks.facets.length > 0) {
-    record.facets = customLinks.facets
-  }
 
   // Facets
   const richText = new RichText({ text: record.text })
   await richText.detectFacets(this.agent)
+  if (richText.facets != null) {
+    richText.facets.push(...customLinks.facets)
+  } else {
+    richText.facets = customLinks.facets
+  }
 
-  // URLのトリム
-  Util.shortenLinks(richText)
+  // URL文字列の省略表記
+  // TODO: カスタムリンクと共存できるようにすること
+  // Util.shortenLinks(richText)
 
   record.text = richText.text
-  if (richText.facets != null) {
-    if (record.facets != null) {
-      record.facets.push(...richText.facets)
-    } else {
-      record.facets = richText.facets
-    }
+  if (record.facets != null) {
+    record.facets.push(...richText.facets)
+  } else {
+    record.facets = richText.facets
   }
 
   // リストメンション

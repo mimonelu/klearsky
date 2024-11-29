@@ -37,5 +37,9 @@ export default function (text: string): { text: string; facets: Array<Facet> } {
 const BYTE_LENGTH_REGEXP = /%../g
 
 function getByteLength (text: string): number {
-  return encodeURIComponent(text).replace(BYTE_LENGTH_REGEXP, "x").length
+  try {
+    return encodeURIComponent(text).replace(BYTE_LENGTH_REGEXP, "x").length
+  } catch {
+    return 0
+  }
 }
