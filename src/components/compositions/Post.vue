@@ -465,17 +465,14 @@ async function onActivateReplyButton () {
   Util.blurElement()
   const done = await mainState.openSendPostPopup({ type: "reply", post: props.post })
   state.processing = true
-  try {
-    if (done) {
-      if (mainState.currentPath.startsWith("/post")) {
-        await mainState.fetchPostThread()
-      } else {
-        await updatePostThread()
-      }
+  if (done) {
+    if (mainState.currentPath.startsWith("/post")) {
+      await mainState.fetchPostThread()
+    } else {
+      await updatePostThread()
     }
-  } finally {
-    state.processing = false
   }
+  state.processing = false
 }
 
 async function onActivateRepostButton () {
@@ -503,8 +500,8 @@ async function createRepost () {
     props.post.cid
   )
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "Post/createRepost")
     state.processing = false
+    mainState.openErrorPopup(response, "Post/createRepost")
     return
   }
   await updatePostThread()
@@ -527,8 +524,8 @@ async function deleteRepost () {
   state.processing = true
   const response = await mainState.atp.deleteRepost(props.post.viewer.repost)
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "Post/deleteRepost")
     state.processing = false
+    mainState.openErrorPopup(response, "Post/deleteRepost")
     return
   }
   await updatePostThread()
@@ -567,10 +564,21 @@ async function onActivateLikeButton () {
     ? await mainState.atp.deleteLike(props.post.viewer.like as string)
     : await mainState.atp.createLike(props.post.uri, props.post.cid)
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "Post/onActivateLikeButton")
     state.processing = false
+    mainState.openErrorPopup(response, "Post/onActivateLikeButton")
     return
   }
+  /*
+  if (props.post.viewer != null) {
+    if (props.post.viewer.like != null) {
+      props.post.viewer.like = undefined
+      props.post.likeCount --
+    } else {
+      props.post.viewer.like = response
+      props.post.likeCount ++
+    }
+  }
+  */
   await updatePostThread()
   state.processing = false
 }
@@ -605,11 +613,8 @@ async function postPopoverCallback (type: "deletePost" | "updatePost" | "createC
 
 async function onForceTranslate () {
   state.processing = true
-  try {
-    await translateText(true)
-  } finally {
-    state.processing = false
-  }
+  await translateText(true)
+  state.processing = false
 }
 
 function onTranslateVideoAlt () {
