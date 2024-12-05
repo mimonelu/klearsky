@@ -18,6 +18,18 @@ const rootLog = props.log != null
     : [props.log.didDocument]
   : undefined
 
+const handles = rootLog?.map((item) => {
+  return getHandle(item)
+}) ?? []
+
+const endpoints = rootLog?.map((item) => {
+  return getAtProtoEndpoint(item)
+}) ?? []
+
+const labelerEndpoints = rootLog?.map((item) => {
+  return getLabelerEndpoint(item)
+}) ?? []
+
 function close () {
   emit("close")
 }
@@ -42,6 +54,7 @@ function getAtProtoEndpoint (item: any): undefined | string {
     if (key === "service" && !Array.isArray(value)) {
       result = value
     } else if (key === "atproto_pds") {
+      // `did_prefix.endpoint` はスルー
       result = value?.endpoint
     } else if (key === "serviceEndpoint" && parent.type === "AtprotoPersonalDataServer") {
       result = value
@@ -86,34 +99,36 @@ function getLabelerEndpoint (item: any): undefined | string {
           <li class="created-at">{{ mainState.formatDate(item.createdAt) }}</li>
 
           <!-- ハンドル -->
-          <li class="handle">{{ getHandle(item) }}</li>
+          <li class="handle">{{ handles[itemIndex] ?? `(${$t("handleHistoryNoHandle")})` }}</li>
 
           <!-- エンドポイント -->
           <li class="endpoint">
             <!-- ATProto エンドポイント -->
             <div>
               <a
+                 v-if="endpoints[itemIndex] != null"
                 class="endpoint__atproto"
-                :href="getAtProtoEndpoint(item)"
+                :href="endpoints[itemIndex]"
                 rel="noreferrer"
                 target="_blank"
               >
                 <SVGIcon name="database" />
-                <span>{{ getAtProtoEndpoint(item) }}</span>
+                <span>{{ endpoints[itemIndex] }}</span>
               </a>
+              <p v-else>({{ $t("handleHistoryNoEndpoint") }})</p>
             </div>
 
             <div>
               <!-- ラベラーエンドポイント -->
               <a
-                v-if="getLabelerEndpoint(item)"
+                v-if="labelerEndpoints[itemIndex] != null"
                 class="endpoint__labeler"
-                :href="getLabelerEndpoint(item)"
+                :href="labelerEndpoints[itemIndex]"
                 rel="noreferrer"
                 target="_blank"
               >
                 <SVGIcon name="labeler" />
-                <span>{{ getLabelerEndpoint(item) }}</span>
+                <span>{{ labelerEndpoints[itemIndex] }}</span>
               </a>
             </div>
           </li>
@@ -204,6 +219,11 @@ function getLabelerEndpoint (item: any): undefined | string {
       & > .svg-icon {
         fill: rgb(var(--label-color));
       }
+    }
+
+    p {
+      color: rgb(var(--fg-color), 0.75);
+      word-break: break-all;
     }
   }
 }

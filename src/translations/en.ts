@@ -279,6 +279,9 @@ export default () => ({
   "sendQuoteRepost": "Quote repost",
 
   "handleHistory": "Handle Change History",
+  "handleHistoryNoHandle": "Handle not found",
+  "handleHistoryNoEndpoint": "Available endpoint not found",
+
   "postsCount": "Posts",
   "numberOfPostsPerDay": "Per day",
   "startedAt": "Started on",

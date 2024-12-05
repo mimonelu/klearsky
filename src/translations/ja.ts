@@ -279,6 +279,9 @@ export default () => ({
   "sendQuoteRepost": "引用リポストする",
 
   "handleHistory": "ハンドル変更履歴",
+  "handleHistoryNoHandle": "ハンドルが見つかりません",
+  "handleHistoryNoEndpoint": "有効なエンドポイントが見つかりません",
+
   "postsCount": "ポスト",
   "numberOfPostsPerDay": "1日あたり",
   "startedAt": "開始日",
