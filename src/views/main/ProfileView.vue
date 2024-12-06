@@ -2,30 +2,27 @@
 import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import { differenceInDays } from "date-fns"
+import AtmosphereContainer from "@/components/next/Atmosphere/Container.vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarImageButton from "@/components/buttons/AvatarImageButton.vue"
 import BlockButton from "@/components/buttons/BlockButton.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
-import Frontpage from "@/components/next/Frontpage/Main.vue"
 import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPopupTrigger.vue"
 import LabelerSubscribeToggle from "@/components/buttons/LabelerSubscribeToggle.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
-import Linkat from "@/components/next/Linkat/Main.vue"
 import KnownFollowers from "@/components/lists/KnownFollowers.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/compositions/Post.vue"
-import SmokeSignal from "@/components/next/SmokeSignal/Main.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
-import WhiteWind from "@/components/next/WhiteWind/Main.vue"
 import Util from "@/composables/util"
 
 const router = useRouter()
@@ -508,19 +505,7 @@ function removeThisPost () {
             />
 
             <!-- Atmosphere -->
-            <div class="atmosphere-container">
-              <!-- SmokeSignal -->
-              <SmokeSignal :profile="mainState.currentProfile ?? undefined" />
-
-              <!-- Linkat -->
-              <Linkat :profile="mainState.currentProfile ?? undefined" />
-
-              <!-- Frontpage -->
-              <Frontpage :profile="mainState.currentProfile ?? undefined" />
-
-              <!-- WhiteWind -->
-              <WhiteWind :profile="mainState.currentProfile ?? undefined" />
-            </div>
+            <AtmosphereContainer />
 
             <div
               v-if="state.accountContentDisplay"
@@ -1097,12 +1082,6 @@ function removeThisPost () {
   user-select: text;
   white-space: pre-wrap;
   word-break: break-word;
-}
-
-.atmosphere-container {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 0.5rem;
 }
 
 .statistics {
