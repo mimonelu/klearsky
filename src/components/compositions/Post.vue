@@ -49,6 +49,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
   text: ComputedRef<undefined | string>
+  indexedAt: ComputedRef<undefined | string>
   isTextOnlyEmoji: ComputedRef<boolean>
 
   // メディア
@@ -114,6 +115,9 @@ const state = reactive<{
   isWordMute: ComputedRef<boolean>
 }>({
   processing: false,
+  indexedAt: computed((): string => {
+    return props.post.record?.createdAt ?? props.post.value?.createdAt ?? props.post.indexedAt ?? ""
+  }),
   text: computed((): undefined | string => {
     return props.post.record?.text ?? props.post.value?.text
   }),
@@ -1040,9 +1044,9 @@ function toggleOldestQuotedPostDisplay () {
 
             <!-- ポスト時間 -->
             <div
-              v-if="post.indexedAt"
+              v-if="state.indexedAt"
               class="body__right__header__indexed-at"
-            >{{ mainState.formatDate(post.indexedAt) }}</div>
+            >{{ mainState.formatDate(state.indexedAt) }}</div>
           </div>
 
           <!-- ポストポップオーバートリガー -->
