@@ -9,10 +9,10 @@ defineProps<{
 </script>
 
 <template>
-  <div class="atmosphere">
-    <div class="atmosphere__header">
+  <div class="atmosphere-item">
+    <div class="atmosphere-item__header">
       <!-- サービスタイトル -->
-      <div class="atmosphere__title">
+      <div class="atmosphere-item__title">
         <img
           :src="icon"
           alt=""
@@ -23,7 +23,7 @@ defineProps<{
       <!-- サービスリンク -->
       <a
         v-if="uri"
-        class="atmosphere__link"
+        class="atmosphere-item__link"
         :href="uri"
         rel="noreferrer"
         target="_blank"
@@ -31,14 +31,14 @@ defineProps<{
         <SVGIcon name="openInApp" />
       </a>
     </div>
-    <div class="atmosphere__body">
+    <div class="atmosphere-item__body">
       <slot name="body" />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.atmosphere {
+.atmosphere-item {
   background-color: rgb(var(--blue-color), 0.125);
   border: 1px solid rgb(var(--blue-color), 0.5);
   border-radius: var(--border-radius-middle);

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
-import Atmosphere from "@/components/next/Atmosphere/Main.vue"
+import AtmosphereItem from "@/components/next/Atmosphere/Item.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const NUMBER_OF_FETCH_RECORDS = 1
@@ -52,7 +52,7 @@ const state = reactive<{
 </script>
 
 <template>
-  <Atmosphere
+  <AtmosphereItem
     v-if="state.records.length > 0"
     class="linkat"
     title="pnLinkat"
@@ -87,13 +87,13 @@ const state = reactive<{
         </div>
       </template>
     </template>
-  </Atmosphere>
+  </AtmosphereItem>
 </template>
 
 <style lang="scss" scoped>
 .linkat {
   &:deep() {
-    .atmosphere__body {
+    .atmosphere-item__body {
       display: grid;
       grid-gap: 0.5rem;
       grid-template-columns: auto;

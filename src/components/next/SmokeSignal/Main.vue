@@ -2,7 +2,7 @@
 import { inject, reactive, type Ref } from "vue"
 import isBefore from "date-fns/isBefore"
 import { computedAsync } from "@vueuse/core"
-import Atmosphere from "@/components/next/Atmosphere/Main.vue"
+import AtmosphereItem from "@/components/next/Atmosphere/Item.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -59,7 +59,7 @@ const state = reactive<{
 </script>
 
 <template>
-  <Atmosphere
+  <AtmosphereItem
     v-if="state.records.length > 0"
     class="smoke-signal"
     title="pnSmokeSignal"
@@ -85,13 +85,13 @@ const state = reactive<{
         </template>
       </div>
     </template>
-  </Atmosphere>
+  </AtmosphereItem>
 </template>
 
 <style lang="scss" scoped>
 .smoke-signal {
   &:deep() {
-    .atmosphere__body {
+    .atmosphere-item__body {
       display: grid;
     }
   }
