@@ -820,6 +820,9 @@ function saveSettings () {
       ? state.$getCurrentLanguage()
       : window.navigator.language
   }
+  if (state.settings[did].atmosphereDisplay == null) {
+    state.settings[did].atmosphereDisplay = true
+  }
   if (state.settings[did].autoTranslation == null) {
     state.settings[did].autoTranslation = false
   }

@@ -1,4 +1,5 @@
 type TTSetting = {
+  atmosphereDisplay?: boolean
   autoTranslation?: boolean
   autoTranslationIgnoreLanguage?: string
   backgroundImage?: string

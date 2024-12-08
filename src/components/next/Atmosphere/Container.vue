@@ -11,20 +11,24 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   hasItem: ComputedRef<boolean>,
-  visibility: boolean
+  display: boolean
 }>({
   hasItem: computed((): boolean => {
     return AtmosphereHelper.some(mainState.currentProfile)
   }),
-  visibility: true,
+  display: true,
 })
 
 onMounted(() => {
-  state.visibility = true
+  state.display = mainState.currentSetting?.atmosphereDisplay ?? true
 })
 
 function toggle () {
-  state.visibility = !state.visibility
+  state.display = !state.display
+  if (mainState.currentSetting != null) {
+    mainState.currentSetting.atmosphereDisplay = state.display
+    mainState.saveSettings()
+  }
 }
 </script>
 
@@ -41,10 +45,10 @@ function toggle () {
     >
       <SVGIcon name="at" />
       <span>{{ $t("atmosphere") }}</span>
-      <SVGIcon :name="state.visibility ? 'cursorDown' : 'cursorUp'" />
+      <SVGIcon :name="state.display ? 'cursorDown' : 'cursorUp'" />
     </button>
     <div
-      v-if="state.visibility"
+      v-if="state.display"
       class="atmosphere-container__content"
     >
       <!-- SmokeSignal -->
@@ -64,7 +68,6 @@ function toggle () {
 
 <style lang="scss" scoped>
 .atmosphere-container {
-  // background-color: rgb(var(--blue-color), 0.25);
   background-image: linear-gradient(
     135deg,
     rgb(var(--blue-color), 0.375),
