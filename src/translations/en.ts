@@ -1,6 +1,7 @@
 export default () => ({
   "title": "Klearsky",
 
+  "atmosphere": "Atmosphere",
   "cancel": "Cancel",
   "yes": "Yes",
   "no": "No",

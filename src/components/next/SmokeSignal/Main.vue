@@ -2,6 +2,7 @@
 import { inject, reactive, type Ref } from "vue"
 import isBefore from "date-fns/isBefore"
 import { computedAsync } from "@vueuse/core"
+import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/Item.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -28,13 +29,13 @@ const state = reactive<{
     }
 
     // プロフィールデータのコレクションに該当レコードがなければ中止
-    if (!props.profile.__repo?.collections?.includes("events.smokesignal.calendar.event")) {
+    if (!AtmosphereHelper.includes("smokesignal", mainState.currentProfile)) {
       return []
     }
 
     const results = await mainState.atp.fetchRecords(
       props.profile.did,
-      "events.smokesignal.calendar.event",
+      AtmosphereHelper.lexicons["smokesignal"],
       NUMBER_OF_FETCH_RECORDS,
     )
     if (results instanceof Error) {

@@ -505,7 +505,7 @@ function removeThisPost () {
             />
 
             <!-- Atmosphere -->
-            <AtmosphereContainer />
+            <AtmosphereContainer :key="mainState.currentProfile?.did" />
 
             <div
               v-if="state.accountContentDisplay"

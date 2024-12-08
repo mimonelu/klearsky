@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
+import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/Item.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
@@ -26,13 +27,13 @@ const state = reactive<{
     }
 
     // プロフィールデータのコレクションに該当レコードがなければ中止
-    if (!props.profile.__repo?.collections?.includes("fyi.unravel.frontpage.post")) {
+    if (!AtmosphereHelper.includes("frontpage", mainState.currentProfile)) {
       return []
     }
 
     const results = await mainState.atp.fetchRecords(
       props.profile.did,
-      "fyi.unravel.frontpage.post",
+      AtmosphereHelper.lexicons["frontpage"],
       NUMBER_OF_FETCH_RECORDS,
     )
     if (results instanceof Error) {

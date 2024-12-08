@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
+import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/Item.vue"
 
 const NUMBER_OF_FETCH_RECORDS = 5
@@ -25,13 +26,13 @@ const state = reactive<{
     }
 
     // プロフィールデータのコレクションに該当レコードがなければ中止
-    if (!props.profile.__repo?.collections?.includes("com.whtwnd.blog.entry")) {
+    if (!AtmosphereHelper.includes("whitewind", mainState.currentProfile)) {
       return []
     }
 
     const results = await mainState.atp.fetchRecords(
       props.profile.did,
-      "com.whtwnd.blog.entry",
+      AtmosphereHelper.lexicons["whitewind"],
       NUMBER_OF_FETCH_RECORDS,
     )
     if (results instanceof Error) {
