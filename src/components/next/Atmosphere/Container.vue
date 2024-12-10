@@ -89,6 +89,12 @@ function toggle () {
     flex-direction: column;
     grid-gap: 0.5rem;
     padding-bottom: 0.5rem;
+
+    // TODO: Atmosphere コンテンツのコレクションはあるが、コンテンツ自体はない場合（削除した場合など）の対応をすること
+    &:empty {
+      margin-top: -0.5rem;
+      padding-bottom: 0;
+    }
   }
 }
 </style>
