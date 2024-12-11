@@ -28,13 +28,13 @@
     pointer-events: none;
 
     & > .svg-icon {
-      fill: rgb(var(--fg-color), 0.5);
+      fill: rgb(var(--fg-color), 0.375);
       font-size: 1em;
     }
   }
 
   & > span {
-    color: rgb(var(--fg-color), 0.5);
+    color: rgb(var(--fg-color), 0.375);
     font-weight: bold;
     overflow: hidden;
     pointer-events: none;

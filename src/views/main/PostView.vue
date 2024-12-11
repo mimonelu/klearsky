@@ -133,7 +133,7 @@ async function toggleThreadMute () {
     }
 
     // フォーカスポスト - テキスト選択の有効化
-    & > .body > .body__right > .post__content > .html-text {
+    & > .body > .post__content > .html-text {
       user-select: text;
     }
   }

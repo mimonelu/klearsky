@@ -125,6 +125,13 @@ function removeThisPost (uri: string) {
 
 <style lang="scss" scoped>
 .feed {
+  // SPレイアウトでは上部にボーダーを表示
+  &:not([data-has-child]) {
+    @include media-sp-layout() {
+      border-top: 1px solid rgb(var(--fg-color), 0.125);
+    }
+  }
+
   // 新規取得ラインと抜け漏れ取得ボタンとの間に隙間を取る
   [data-direction="middle"] ~ & > &__fetching-line {
     margin-top: 1em;

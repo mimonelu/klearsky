@@ -853,7 +853,7 @@ function toggleOldestQuotedPostDisplay () {
     >
       <slot name="header-before" />
 
-      <!-- 引用リポスト - リプライ／引用リポストアイコン -->
+      <!-- ポストヘッダー - 引用リポストのリプライアイコン -->
       <div
         v-if="hasReplyIcon"
         class="reply-icon"
@@ -861,6 +861,8 @@ function toggleOldestQuotedPostDisplay () {
         <SVGIcon name="reply" />
         <span>{{ $t("reply") }}</span>
       </div>
+
+      <!-- ポストヘッダー - 引用リポストの引用リポストアイコン -->
       <div
         v-if="hasQuoteRepostIcon"
         class="quote-repost-icon"
@@ -869,9 +871,9 @@ function toggleOldestQuotedPostDisplay () {
         <span>{{ $t("quoteRepost") }}</span>
       </div>
 
-      <!-- リプライ先ユーザー -->
+      <!-- ポストヘッダー - リプライ先ユーザー -->
       <template v-if="parentPost != null">
-        <!-- リプライ先ポストは存在しない -->
+        <!-- ポストヘッダー - リプライ先ユーザー - リプライ先ポストは存在しない -->
         <div
           v-if="parentPost.notFound"
           class="replier"
@@ -881,7 +883,7 @@ function toggleOldestQuotedPostDisplay () {
           <span>{{ $t("replyUnknown") }}</span>
         </div>
 
-        <!-- リプライ先ポストは存在する -->
+        <!-- ポストヘッダー - リプライ先ユーザー - リプライ先ポストは存在する -->
         <button
           v-else
           class="replier"
@@ -900,7 +902,7 @@ function toggleOldestQuotedPostDisplay () {
         </button>
       </template>
 
-      <!-- リプライ先のリプライ先 -->
+      <!-- ポストヘッダー - リプライ先のリプライ先 -->
       <div
         v-if="grandparentAuthor != null"
         class="replier"
@@ -918,7 +920,7 @@ function toggleOldestQuotedPostDisplay () {
         />
       </div>
 
-      <!-- リポストユーザー -->
+      <!-- ポストヘッダー - リポストユーザー -->
       <button
         v-if="post.__custom?.reason != null"
         class="reposter"
@@ -947,27 +949,30 @@ function toggleOldestQuotedPostDisplay () {
         ? 'cursorDown'
         : 'cursorUp'
       " />
+
+      <!-- ポストマスク - コンテンツ言語なし -->
       <SVGIcon
         v-show="state.noContentLanguage"
         name="translate"
       />
 
-      <!-- アカウントラベル＆ポストラベル -->
+      <!-- ポストマスク - アカウントラベル＆ポストラベル -->
       <template v-if="state.hideLabelNames.length > 0">
         <SVGIcon name="contentFiltering" />
         <div class="post__mask__content-warning">{{ state.hideLabelNames.join(", ") }}</div>
       </template>
 
+      <!-- ポストマスク - ワードミュート -->
       <SVGIcon
         v-show="state.isWordMute"
         name="wordMute"
       />
+
       <DisplayName
         class="post__mask__display-name"
         :displayName="post.author?.displayName"
         :anonymizable="true"
       />
-      <!-- TODO: -->
       <div class="post__mask__handle">{{
         !mainState.currentSetting.postAnonymization
           ? post.author?.handle
@@ -982,508 +987,511 @@ function toggleOldestQuotedPostDisplay () {
     >
       <slot name="body-before" />
 
-      <!-- アバターリンク -->
-      <AvatarButton
-        v-if="position !== 'chatMessage' && position !== 'postInPost' && position !== 'slim'"
-        :isLabeler="post.author?.associated?.labeler"
-        :did="post.author?.did"
-        :image="post.author?.avatar"
-        @click.stop="$emit('click', $event)"
-      />
-
-      <div class="body__right">
-        <div class="body__right__header">
-          <!-- アバターリンク -->
+      <!-- ポストボディ - ヘッダー -->
+      <div class="body__header">
+        <!-- アバターリンク -->
+        <div class="body__header__avatar">
           <AvatarButton
-            v-if="position === 'chatMessage' || position === 'postInPost' || position === 'slim'"
-            class="body__right__header__avatar-in-post"
             :did="post.author?.did"
             :image="post.author?.avatar"
             :isLabeler="post.author?.associated?.labeler"
             :noLink="position === 'chatMessage'"
             @click.stop="$emit('click', $event)"
           />
-
-          <!-- 表示名 -->
-          <div class="body__right__header__display-name">
-            <RouterLink
-              :to="{ name: 'profile-feeds', query: { account: post.author?.did } }"
-              @click.stop
-            >
-              <DisplayName
-                :displayName="(
-                  position === 'chatMessage'
-                    ? (post.author?.displayName || post.author?.handle)
-                    : post.author?.displayName
-                ) || '　'"
-                :anonymizable="true"
-              >
-                <!-- ラベラーアイコン -->
-                <template v-if="post.author?.associated?.labeler">
-                  <SVGIcon
-                    :name="mainState.myLabeler?.isSubscribed(post.author?.did) ? 'labeler' : 'labelerOff'"
-                    class="account-labeler-icon"
-                  />
-                </template>
-              </DisplayName>
-            </RouterLink>
-          </div>
-
-          <div class="body__right__header__detail">
-            <!-- ハンドル -->
-            <AuthorHandle
-              class="body__right__header__author-handle"
-              :handle="post.author?.handle"
-              :anonymizable="true"
-            />
-
-            <SVGIcon
-              class="body__right__header__point"
-              name="point"
-            />
-
-            <!-- ポスト時間 -->
-            <div
-              v-if="state.indexedAt"
-              class="body__right__header__indexed-at"
-            >{{ mainState.formatDate(state.indexedAt) }}</div>
-          </div>
-
-          <!-- ポストポップオーバートリガー -->
-          <button
-            v-if="
-              position !== 'chatMessage' &&
-              position !== 'postInPost' &&
-              position !== 'preview' &&
-              position !== 'slim'
-            "
-            class="icon-button--nolabel body__right__header__menu-button"
-            @click.stop="openPostPopover"
-          >
-            <div class="icon-container">
-              <SVGIcon name="menu" />
-            </div>
-          </button>
-
-          <slot name="header-after" />
         </div>
 
-        <!-- ポストコンテンツトグル -->
+        <!-- 表示名 -->
+        <div class="body__header__display-name">
+          <RouterLink
+            :to="{ name: 'profile-feeds', query: { account: post.author?.did } }"
+            @click.stop
+          >
+            <DisplayName
+              :displayName="(
+                position === 'chatMessage'
+                  ? (post.author?.displayName || post.author?.handle)
+                  : post.author?.displayName
+              ) || '　'"
+              :anonymizable="true"
+            >
+              <!-- ラベラーアイコン -->
+              <template v-if="post.author?.associated?.labeler">
+                <SVGIcon
+                  :name="mainState.myLabeler?.isSubscribed(post.author?.did) ? 'labeler' : 'labelerOff'"
+                  class="account-labeler-icon"
+                />
+              </template>
+            </DisplayName>
+          </RouterLink>
+        </div>
+
+        <div class="body__header__detail">
+          <!-- ハンドル -->
+          <AuthorHandle
+            class="body__header__author-handle"
+            :handle="post.author?.handle"
+            :anonymizable="true"
+          />
+
+          <SVGIcon
+            class="body__header__point"
+            name="point"
+          />
+
+          <!-- ポスト時間 -->
+          <div
+            v-if="state.indexedAt"
+            class="body__header__indexed-at"
+          >{{ mainState.formatDate(state.indexedAt) }}</div>
+        </div>
+
+        <!-- ポストポップオーバートリガー -->
+        <button
+          v-if="
+            position !== 'chatMessage' &&
+            position !== 'postInPost' &&
+            position !== 'preview' &&
+            position !== 'slim'
+          "
+          class="icon-button--nolabel body__header__menu-button"
+          @click.stop="openPostPopover"
+        >
+          <div class="icon-container">
+            <SVGIcon name="menu" />
+          </div>
+        </button>
+
+        <slot name="header-after" />
+      </div>
+
+      <!-- ポストボディ - ポストコンテンツトグル -->
+      <div
+        v-if="state.hasBlurredContent"
+        class="post__content-filtering-toggle"
+      >
         <ContentFilteringToggle
-          v-if="state.hasBlurredContent"
           type="blur"
           :labels="state.blurContentLabels"
           :display="state.blurredContentClicked"
           :togglable="true"
           @click.prevent.stop="onActivatePostContentToggle"
         />
+      </div>
 
-        <!-- ポストコンテンツ -->
-        <div
-          v-if="state.postContentDisplay"
-          class="post__content"
-        >
-          <!-- 本文 -->
-          <template v-if="state.text !== ''">
-            <HtmlText
-              v-if="position !== 'slim'"
-              class="text"
-              dir="auto"
-              :richText="contentRichText"
-              :hasTranslateLink="state.hasOtherLanguagesForText"
-              :data-is-text-only-emoji="state.isTextOnlyEmoji"
-              @onActivateHashTag="onActivateHashTag"
-              @translate="onForceTranslate"
-            />
-            <div
-              v-else
-              class="text--slim"
-              dir="auto"
-            >{{ state.text }}</div>
-          </template>
-
-          <!-- 自動翻訳 -->
-          <div
-            v-if="state.translation !== 'none' && state.translation !== 'ignore'"
-            class="translated-text"
+      <!-- ポストボディ - ポストコンテンツ -->
+      <div
+        v-if="state.postContentDisplay"
+        class="post__content"
+      >
+        <!-- 本文 -->
+        <template v-if="state.text !== ''">
+          <HtmlText
+            v-if="position !== 'slim'"
+            class="text"
             dir="auto"
-          >
-            <template v-if="state.translation === 'waiting'">（翻訳中）</template>
-            <template v-else-if="state.translation === 'failed'">（翻訳に失敗しました）</template>
-            <template v-else-if="state.translation === 'done'">{{ props.post.__custom?.translatedText }}</template>
-          </div>
-
-          <!-- ポストメディアトグル -->
-          <ContentFilteringToggle
-            v-if="state.hasBlurredMedia"
-            type="blur-media"
-            :labels="state.blurMediaLabels"
-            :display="state.blurredMediaClicked"
-            :togglable="true"
-            @click.prevent.stop="onActivatePostMediaToggle"
+            :richText="contentRichText"
+            :hasTranslateLink="state.hasOtherLanguagesForText"
+            :data-is-text-only-emoji="state.isTextOnlyEmoji"
+            @onActivateHashTag="onActivateHashTag"
+            @translate="onForceTranslate"
           />
+          <div
+            v-else
+            class="text--slim"
+            dir="auto"
+          >{{ state.text }}</div>
+        </template>
 
-          <!-- ポストメディア -->
-          <template v-if="state.postMediaDisplay">
-            <!-- 画像 -->
-            <template v-if="state.hasMedia">
-              <template v-if="forceHideMedia">
-                <div class="omit-images">
-                  <SVGIcon
-                    v-for="_, index of state.images"
-                    :key="index"
-                    name="image"
-                  />
-                </div>
-              </template>
-              <template v-else-if="position !== 'slim'">
-                <!-- メディアフォルダーボタン -->
-                <button
-                  v-if="!state.displayMedia"
-                  class="button--bordered image-folder-button"
-                  @click.prevent.stop="onActivateImageFolderButton"
-                >
-                  <template v-if="state.foldingMedia">
-                    <SVGIcon name="image" />
-                    <span>{{ $t("showImage") }}</span>
-                  </template>
-                  <template v-else>
-                    <SVGIcon name="offImage" />
-                    <span>{{ $t("hideImage") }}</span>
-                  </template>
-                </button>
+        <!-- 自動翻訳 -->
+        <div
+          v-if="state.translation !== 'none' && state.translation !== 'ignore'"
+          class="translated-text"
+          dir="auto"
+        >
+          <template v-if="state.translation === 'waiting'">（翻訳中）</template>
+          <template v-else-if="state.translation === 'failed'">（翻訳に失敗しました）</template>
+          <template v-else-if="state.translation === 'done'">{{ props.post.__custom?.translatedText }}</template>
+        </div>
 
-                <!-- メディアボックス -->
-                <template v-if="state.displayMedia || (!state.displayMedia && !state.foldingMedia)">
-                  <!-- 画像 -->
-                  <div
-                    v-if="state.images.length > 0"
-                    class="quad-images"
-                    :data-number-of-images="state.images.length"
-                  >
-                    <div
-                      v-for="image, imageIndex of state.images"
-                      :key="imageIndex"
-                      class="quad-image"
-                    >
-                      <Thumbnail
-                        :image="image"
-                        :did="post.author.did"
-                        :hasTranslateLink="state.hasOtherLanguagesForAlt"
-                        @click.stop="openImagePopup(imageIndex)"
-                      />
-                    </div>
-                  </div>
+        <!-- ポストメディアトグル -->
+        <ContentFilteringToggle
+          v-if="state.hasBlurredMedia"
+          type="blur-media"
+          :labels="state.blurMediaLabels"
+          :display="state.blurredMediaClicked"
+          :togglable="true"
+          @click.prevent.stop="onActivatePostMediaToggle"
+        />
 
-                  <!-- 動画 -->
-                  <div
-                    v-if="state.video != null"
-                    class="video-container"
-                  >
-                    <VideoPlayer
-                      :playlist="state.video.playlist"
-                      :did="post.author.did"
-                      :cid="state.video.cid ?? state.video.video?.ref?.toString()"
-                      :poster="state.video.thumbnail"
-                      :preload="mainState.currentSetting.videoPreload"
-                      :style="{ 'aspect-ratio': state.videoAspectRatio }"
-                      @updateVideoType="updateVideoType"
-                      @click.stop
-                    />
-                    <p
-                      v-if="state.videoType === 'blob'"
-                      class="video-container__message"
-                    >{{ $t("videoIsBlob") }}</p>
-                    <p
-                      v-else-if="state.videoType === 'none'"
-                      class="video-container__message"
-                    >{{ $t("videoIsNone") }}</p>
-                    <HtmlText
-                      v-if="state.video.alt"
-                      class="video-container__alt"
-                      dir="auto"
-                      :text="state.video.alt"
-                      :hasTranslateLink="state.hasOtherLanguagesForText"
-                      @onActivateHashTag="onActivateHashTag"
-                      @translate="onTranslateVideoAlt"
-                    />
-                  </div>
+        <!-- ポストメディア -->
+        <template v-if="state.postMediaDisplay">
+          <!-- 画像 -->
+          <template v-if="state.hasMedia">
+            <template v-if="forceHideMedia">
+              <div class="omit-images">
+                <SVGIcon
+                  v-for="_, index of state.images"
+                  :key="index"
+                  name="image"
+                />
+              </div>
+            </template>
+            <template v-else-if="position !== 'slim'">
+              <!-- メディアフォルダーボタン -->
+              <button
+                v-if="!state.displayMedia"
+                class="button--bordered image-folder-button"
+                @click.prevent.stop="onActivateImageFolderButton"
+              >
+                <template v-if="state.foldingMedia">
+                  <SVGIcon name="image" />
+                  <span>{{ $t("showImage") }}</span>
                 </template>
-              </template>
-              <template v-else>
-                <!-- イメージリスト（通知ポップアップ） -->
+                <template v-else>
+                  <SVGIcon name="offImage" />
+                  <span>{{ $t("hideImage") }}</span>
+                </template>
+              </button>
+
+              <!-- メディアボックス -->
+              <template v-if="state.displayMedia || (!state.displayMedia && !state.foldingMedia)">
+                <!-- 画像 -->
                 <div
                   v-if="state.images.length > 0"
-                  class="image-list"
+                  class="quad-images"
+                  :data-number-of-images="state.images.length"
                 >
-                  <Thumbnail
+                  <div
                     v-for="image, imageIndex of state.images"
                     :key="imageIndex"
-                    :image="image"
+                    class="quad-image"
+                  >
+                    <Thumbnail
+                      :image="image"
+                      :did="post.author.did"
+                      :hasTranslateLink="state.hasOtherLanguagesForAlt"
+                      @click.stop="openImagePopup(imageIndex)"
+                    />
+                  </div>
+                </div>
+
+                <!-- 動画 -->
+                <div
+                  v-if="state.video != null"
+                  class="video-container"
+                >
+                  <VideoPlayer
+                    :playlist="state.video.playlist"
                     :did="post.author.did"
-                    @click.stop="openImagePopup(imageIndex)"
+                    :cid="state.video.cid ?? state.video.video?.ref?.toString()"
+                    :poster="state.video.thumbnail"
+                    :preload="mainState.currentSetting.videoPreload"
+                    :style="{ 'aspect-ratio': state.videoAspectRatio }"
+                    @updateVideoType="updateVideoType"
+                    @click.stop
+                  />
+                  <p
+                    v-if="state.videoType === 'blob'"
+                    class="video-container__message"
+                  >{{ $t("videoIsBlob") }}</p>
+                  <p
+                    v-else-if="state.videoType === 'none'"
+                    class="video-container__message"
+                  >{{ $t("videoIsNone") }}</p>
+                  <HtmlText
+                    v-if="state.video.alt"
+                    class="video-container__alt"
+                    dir="auto"
+                    :text="state.video.alt"
+                    :hasTranslateLink="state.hasOtherLanguagesForText"
+                    @onActivateHashTag="onActivateHashTag"
+                    @translate="onTranslateVideoAlt"
                   />
                 </div>
               </template>
             </template>
-
-            <!-- リンクカード -->
-            <LinkCard
-              v-if="state.hasLinkCard"
-              :external="state.linkCard as TTExternal"
-              :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
-              :displayImage="!forceHideMedia"
-              :noLink="false"
-              :noEmbedded="forceHideMedia === true"
-            />
-
-            <!-- フィードカード -->
-            <FeedCard
-              v-if="state.hasFeedCard"
-              :generator="post.embed?.record as unknown as TTFeedGenerator"
-              :menuDisplay="true"
-              :detailDisplay="false"
-              :orderButtonDisplay="false"
-              :creatorDisplay="true"
-              @click="$emit('click', $event)"
-              @onActivateMention="$emit('click', $event)"
-              @onActivateHashTag="$emit('click', $event)"
-            />
-
-            <!-- リストカード -->
-            <ListCard
-              v-if="state.hasListCard"
-              :list="(post.embed as any).record"
-              :menuDisplay="true"
-              :detailDisplay="false"
-              :orderButtonDisplay="false"
-              @click.prevent.stop
-              @deleteList="deleteList"
-              @onActivateMention="$emit('click', $event)"
-              @onActivateHashTag="$emit('click', $event)"
-            />
-
-            <!-- スターターパックカード -->
-            <StarterPackCard
-              v-if="state.hasStarterPackCard && state.pseudoStarterPack != null"
-              :starterPack="state.pseudoStarterPack"
-              :menuDisplay="true"
-              :detailDisplay="false"
-              :creatorDisplay="true"
-              :unclickable="false"
-              @onActivateMention="$emit('click', $event)"
-              @onActivateHashTag="$emit('click', $event)"
-            />
-          </template>
-        </div>
-
-        <!-- ラベルタグ -->
-        <LabelTags
-          v-if="!noLabelTags && position !== 'preview' && position !== 'slim'"
-          :labels="state.allLabels"
-          :labelerDisplay="false"
-          :unauthenticatedDisplay="false"
-          :harmfulDisplay="false"
-          :customDisplay="false"
-          :userCreatedAt="post.author.createdAt"
-          :postIndexedAt="post.indexedAt"
-        />
-
-        <!-- 引用リポスト -->
-        <template v-if="post.embed?.record != null">
-          <!-- 引用リポスト - 見つからない -->
-          <div
-            v-if="post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'"
-            class="textlabel repost"
-          >
-            <div class="textlabel__text">
-              <SVGIcon name="alert" />{{ $t("postNotFound") }}
-            </div>
-          </div>
-
-          <!-- 引用リポスト - 切断時 -->
-          <template v-else-if="
-            post.embed.record.$type === 'app.bsky.embed.record#viewDetached' &&
-            !forceHideQuoteRepost
-          ">
-            <!-- 引用リポスト - 切断時 - 自身のポスト -->
-            <RouterLink
-              v-if="post.embed.record.uri.startsWith(`at://${mainState.atp.session?.did}/`)"
-              :to="{ name: 'post', query: { uri: post.embed.record.uri } }"
-              class="textlabel repost"
-              @click.prevent.stop
-            >
-              <div class="textlabel__text--alert">
-                <SVGIcon name="alert" />{{ $t("postDetachedBySelf") }}
-              </div>
-            </RouterLink>
-
-            <!-- 引用リポスト - 切断時 - 他ユーザーのポスト -->
-            <div
-              v-else
-              class="textlabel repost"
-            >
-              <div class="textlabel__text">
-                <SVGIcon name="alert" />{{ $t("postDetachedByOther") }}
-              </div>
-            </div>
-          </template>
-
-          <!-- 引用リポスト - ブロック中／被ブロック中 -->
-          <div
-            v-else-if="
-              post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
-              post.embed.record.author?.viewer?.blockedBy ||
-              post.embed.record.author?.viewer?.blocking != null
-            "
-            class="textlabel repost"
-          >
-            <div class="textlabel__text">
-              <SVGIcon name="alert" />{{ $t("postBlocked") }}
-            </div>
-          </div>
-
-          <!-- 引用リポスト -->
-          <template v-else-if="
-            post.embed.record.$type === 'app.bsky.embed.record#viewRecord' &&
-            !forceHideQuoteRepost
-          ">
-            <!-- 最古の引用元ポストトグル -->
-            <div
-              v-if="state.isOldestQuotedPost"
-              class="oldest-quoted-post-toggle"
-            >
-              <button
-                class="button--plane"
-                @click.prevent.stop="toggleOldestQuotedPostDisplay"
+            <template v-else>
+              <!-- イメージリスト（通知ポップアップ） -->
+              <div
+                v-if="state.images.length > 0"
+                class="image-list"
               >
-                <template v-if="post.__custom?.oldestQuotedPostDisplay">
-                  <SVGIcon name="cursorUp" />
-                  <span>{{ $t("hideOldestQuotedPost") }}</span>
-                </template>
-                <template v-else>
-                  <SVGIcon name="cursorDown" />
-                  <span>{{ $t("showOldestQuotedPost") }}</span>
-                </template>
-              </button>
-            </div>
-
-            <div v-if="
-              !state.isOldestQuotedPost ||
-              (
-                state.isOldestQuotedPost &&
-                post.__custom?.oldestQuotedPostDisplay
-              )
-            "
-              class="repost"
-            >
-              <Post
-                :level="(level ?? 1) + 1"
-                :position="position === 'chatMessage'
-                  ? 'postInPost'
-                  : position === 'slim'
-                    ? 'slim'
-                    : 'postInPost'
-                "
-                :post="post.embed.record as TTPost"
-                :hasReplyIcon="post.embed.record.value?.reply != null"
-                :noLink="position === 'chatMessage' ? false : noLink"
-                @click="$emit('click', $event)"
-              />
-            </div>
+                <Thumbnail
+                  v-for="image, imageIndex of state.images"
+                  :key="imageIndex"
+                  :image="image"
+                  :did="post.author.did"
+                  @click.stop="openImagePopup(imageIndex)"
+                />
+              </div>
+            </template>
           </template>
+
+          <!-- リンクカード -->
+          <LinkCard
+            v-if="state.hasLinkCard"
+            :external="state.linkCard as TTExternal"
+            :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
+            :displayImage="!forceHideMedia"
+            :noLink="false"
+            :noEmbedded="forceHideMedia === true"
+          />
+
+          <!-- フィードカード -->
+          <FeedCard
+            v-if="state.hasFeedCard"
+            :generator="post.embed?.record as unknown as TTFeedGenerator"
+            :menuDisplay="true"
+            :detailDisplay="false"
+            :orderButtonDisplay="false"
+            :creatorDisplay="true"
+            @click="$emit('click', $event)"
+            @onActivateMention="$emit('click', $event)"
+            @onActivateHashTag="$emit('click', $event)"
+          />
+
+          <!-- リストカード -->
+          <ListCard
+            v-if="state.hasListCard"
+            :list="(post.embed as any).record"
+            :menuDisplay="true"
+            :detailDisplay="false"
+            :orderButtonDisplay="false"
+            @click.prevent.stop
+            @deleteList="deleteList"
+            @onActivateMention="$emit('click', $event)"
+            @onActivateHashTag="$emit('click', $event)"
+          />
+
+          <!-- スターターパックカード -->
+          <StarterPackCard
+            v-if="state.hasStarterPackCard && state.pseudoStarterPack != null"
+            :starterPack="state.pseudoStarterPack"
+            :menuDisplay="true"
+            :detailDisplay="false"
+            :creatorDisplay="true"
+            :unclickable="false"
+            @onActivateMention="$emit('click', $event)"
+            @onActivateHashTag="$emit('click', $event)"
+          />
         </template>
-
-        <!-- リアクションコンテナ -->
-        <div
-          v-if="
-            position !== 'chatMessage' &&
-            position !== 'postInPost' &&
-            position !== 'slim'
-          "
-          class="reaction-container"
-          :data-has-lightning="!!post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]"
-        >
-          <div>
-            <!-- リプライボタン -->
-            <button
-              class="icon-button reply_count"
-              :disabled="state.threadgate === 'lock'"
-              :data-has-threadgate="state.threadgate !== 'none'"
-              @click.stop="onActivateReplyButton"
-            >
-              <!-- Threadgate -->
-              <SVGIcon
-                v-if="state.threadgate === 'lock'"
-                name="lock"
-              />
-              <SVGIcon
-                v-else-if="state.threadgate === 'unlock'"
-                name="unlock"
-              />
-              <div v-else class="ignore" />
-
-              <div class="icon-container">
-                <SVGIcon name="reply" />
-              </div>
-              <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
-            </button>
-          </div>
-          <div>
-            <!-- リポストボタン -->
-            <RepostButton
-              :post="post"
-              @click.stop="onActivateRepostButton"
-            />
-          </div>
-          <div>
-            <!-- いいねボタン -->
-            <LikeButton
-              :post="post"
-              @click.stop="onActivateLikeButton"
-            />
-          </div>
-          <div>
-            <!-- 引用リポストボタン -->
-            <QuoteRepostButton
-              :post="post"
-              @click.stop="createQuoteRepost"
-            />
-          </div>
-          <div>
-            <!-- Lightning -->
-            <a
-              v-if="post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]"
-              class="icon-button--nolabel lightning-link"
-              :href="`lightning:${post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]}`"
-              rel="noreferrer"
-              @click.stop
-            >
-              <div class="icon-container">
-                <SVGIcon name="lightning" />
-              </div>
-            </a>
-          </div>
-        </div>
       </div>
 
-      <slot name="body-after" />
+      <!-- ポストボディ - ラベルタグ -->
+      <LabelTags
+        v-if="!noLabelTags && position !== 'preview' && position !== 'slim'"
+        :labels="state.allLabels"
+        :labelerDisplay="false"
+        :unauthenticatedDisplay="false"
+        :harmfulDisplay="false"
+        :customDisplay="false"
+        :userCreatedAt="post.author.createdAt"
+        :postIndexedAt="post.indexedAt"
+      />
+
+      <!-- ポストボディ - 引用リポスト -->
+      <template v-if="post.embed?.record != null">
+        <!-- ポストボディ - 引用リポスト - 見つからない -->
+        <div
+          v-if="post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'"
+          class="textlabel repost"
+        >
+          <div class="textlabel__text">
+            <SVGIcon name="alert" />{{ $t("postNotFound") }}
+          </div>
+        </div>
+
+        <!-- ポストボディ - 引用リポスト - 切断時 -->
+        <template v-else-if="
+          post.embed.record.$type === 'app.bsky.embed.record#viewDetached' &&
+          !forceHideQuoteRepost
+        ">
+          <!-- ポストボディ - 引用リポスト - 切断時 - 自身のポスト -->
+          <RouterLink
+            v-if="post.embed.record.uri.startsWith(`at://${mainState.atp.session?.did}/`)"
+            :to="{ name: 'post', query: { uri: post.embed.record.uri } }"
+            class="textlabel repost"
+            @click.prevent.stop
+          >
+            <div class="textlabel__text--alert">
+              <SVGIcon name="alert" />{{ $t("postDetachedBySelf") }}
+            </div>
+          </RouterLink>
+
+          <!-- ポストボディ - 引用リポスト - 切断時 - 他ユーザーのポスト -->
+          <div
+            v-else
+            class="textlabel repost"
+          >
+            <div class="textlabel__text">
+              <SVGIcon name="alert" />{{ $t("postDetachedByOther") }}
+            </div>
+          </div>
+        </template>
+
+        <!-- ポストボディ - 引用リポスト - ブロック中／被ブロック中 -->
+        <div
+          v-else-if="
+            post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
+            post.embed.record.author?.viewer?.blockedBy ||
+            post.embed.record.author?.viewer?.blocking != null
+          "
+          class="textlabel repost"
+        >
+          <div class="textlabel__text">
+            <SVGIcon name="alert" />{{ $t("postBlocked") }}
+          </div>
+        </div>
+
+        <!-- ポストボディ - 引用リポスト -->
+        <template v-else-if="
+          post.embed.record.$type === 'app.bsky.embed.record#viewRecord' &&
+          !forceHideQuoteRepost
+        ">
+          <!-- 最古の引用元ポストトグル -->
+          <div
+            v-if="state.isOldestQuotedPost"
+            class="oldest-quoted-post-toggle"
+          >
+            <button
+              class="button--plane"
+              @click.prevent.stop="toggleOldestQuotedPostDisplay"
+            >
+              <template v-if="post.__custom?.oldestQuotedPostDisplay">
+                <SVGIcon name="cursorUp" />
+                <span>{{ $t("hideOldestQuotedPost") }}</span>
+              </template>
+              <template v-else>
+                <SVGIcon name="cursorDown" />
+                <span>{{ $t("showOldestQuotedPost") }}</span>
+              </template>
+            </button>
+          </div>
+
+          <div v-if="
+            !state.isOldestQuotedPost ||
+            (
+              state.isOldestQuotedPost &&
+              post.__custom?.oldestQuotedPostDisplay
+            )
+          "
+            class="repost"
+          >
+            <Post
+              :level="(level ?? 1) + 1"
+              :position="position === 'chatMessage'
+                ? 'postInPost'
+                : position === 'slim'
+                  ? 'slim'
+                  : 'postInPost'
+              "
+              :post="post.embed.record as TTPost"
+              :hasReplyIcon="post.embed.record.value?.reply != null"
+              :noLink="position === 'chatMessage' ? false : noLink"
+              @click="$emit('click', $event)"
+            />
+          </div>
+        </template>
+      </template>
+
+      <!-- ポストボディ - リアクションコンテナ -->
+      <div
+        v-if="
+          position !== 'chatMessage' &&
+          position !== 'postInPost' &&
+          position !== 'slim'
+        "
+        class="reaction-container"
+        :data-has-lightning="!!post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]"
+      >
+        <div>
+          <!-- リプライボタン -->
+          <button
+            class="icon-button reply_count"
+            :disabled="state.threadgate === 'lock'"
+            :data-has-threadgate="state.threadgate !== 'none'"
+            @click.stop="onActivateReplyButton"
+          >
+            <!-- Threadgate -->
+            <SVGIcon
+              v-if="state.threadgate === 'lock'"
+              name="lock"
+            />
+            <SVGIcon
+              v-else-if="state.threadgate === 'unlock'"
+              name="unlock"
+            />
+            <div v-else class="ignore" />
+
+            <div class="icon-container">
+              <SVGIcon name="reply" />
+            </div>
+            <span v-if="!mainState.currentSetting.hideNumberOfReaction">{{ post.replyCount > 0 ? post.replyCount : "" }}</span>
+          </button>
+        </div>
+        <div>
+          <!-- リポストボタン -->
+          <RepostButton
+            :post="post"
+            @click.stop="onActivateRepostButton"
+          />
+        </div>
+        <div>
+          <!-- いいねボタン -->
+          <LikeButton
+            :post="post"
+            @click.stop="onActivateLikeButton"
+          />
+        </div>
+        <div>
+          <!-- 引用リポストボタン -->
+          <QuoteRepostButton
+            :post="post"
+            @click.stop="createQuoteRepost"
+          />
+        </div>
+        <div
+          v-if="post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]"
+          class="lightning-link"
+        >
+          <!-- Lightning -->
+          <a
+            class="icon-button--nolabel"
+            :href="`lightning:${post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]}`"
+            rel="noreferrer"
+            @click.stop
+          >
+            <div class="icon-container">
+              <SVGIcon name="lightning" />
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
+
+    <slot name="body-after" />
     <Loader v-if="state.processing" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .post {
+  --post-padding: 0.75em;
+  --left-space: 0;
   --avatar-size: 3em;
 
   display: flex;
   flex-direction: column;
-  padding: 0.75em;
+  padding: var(--post-padding);
   position: relative;
+
+  @include media-sp-layout() {
+    --avatar-size: 2.125em;
+  }
 
   // 引用ポスト
   &[data-position="postInPost"] {
+    --avatar-size: 2em;
     font-size: 0.9375em;
   }
 
@@ -1529,8 +1537,8 @@ function toggleOldestQuotedPostDisplay () {
     }
 
     .post__mask {
-      margin: -0.75em -0.75em 0;
-      padding: 0.75em;
+      margin: calc(var(--post-padding) * -1) calc(var(--post-padding) * -1) 0;
+      padding: var(--post-padding);
     }
   }
   &__mask {
@@ -1579,11 +1587,22 @@ function toggleOldestQuotedPostDisplay () {
     }
   }
 
+  // 左側のスペース
+  &[data-has-child="true"],
+  &[data-has-child="false"] {
+    --left-space: calc(var(--avatar-size) + 0.5em);
+  }
+  @include media-not-sp-layout() {
+    &:not([data-position="postInPost"]) {
+      --left-space: calc(var(--avatar-size) + 0.5em);
+    }
+  }
+
   // リプライライン
   &[data-has-child="true"],
   &[data-has-child="false"] {
-    --top: 0.75em;
-    --gap: 0.75em;
+    --top: var(--post-padding);
+    --gap: var(--post-padding);
     &[data-has-mask="true"],
     &[data-has-grandparent-author="true"] {
       --top: 1.75em;
@@ -1600,7 +1619,7 @@ function toggleOldestQuotedPostDisplay () {
       display: block;
       position: absolute;
       top: calc(var(--top) + var(--avatar-size) + var(--gap));
-      left: calc(2.25em - 1.5px);
+      left: calc(var(--post-padding) + var(--avatar-size) / 2 - 1.5px);
       width: 3px;
       height: calc(100% - var(--avatar-size) - var(--gap) - var(--gap));
     }
@@ -1666,8 +1685,8 @@ function toggleOldestQuotedPostDisplay () {
   grid-template-columns: auto auto 1fr;
   align-items: center;
   grid-gap: 0.5em;
-  margin: -0.75em -0.75em -0.5em;
-  padding: 0.75em;
+  margin: calc(var(--post-padding) * -1) calc(var(--post-padding) * -1) -0.5em;
+  padding: var(--post-padding);
   &:not([disabled="true"]) {
     cursor: pointer;
   }
@@ -1754,45 +1773,40 @@ function toggleOldestQuotedPostDisplay () {
 
 .body {
   display: grid;
-  grid-template-columns: var(--avatar-size) 1fr;
-  grid-gap: 0.75em;
+  grid-template-columns: 1fr;
+  grid-gap: 0.5em;
   align-items: flex-start;
   position: relative;
 }
-.post[data-position="chatMessage"],
-.post[data-position="postInPost"],
-.post[data-position="slim"] {
+.post[data-position="chatMessage"] {
   .body {
     display: unset;
   }
 }
 
-.avatar-button {
-  font-size: var(--avatar-size);
-  position: relative;
-}
-
-.body__right {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  grid-gap: 0.5em;
-}
-
-.body__right__header {
-  grid-area: h;
+.body__header {
   display: grid;
   align-items: center;
-  grid-template-areas:
-    "d m"
-    "h m";
-  grid-template-columns: 1fr auto;
   grid-gap: 0.125em 0.5em;
-  // overflow: hidden;
+  grid-template-areas:
+    "a d m"
+    "a h m";
+  grid-template-columns: auto 1fr auto;
 
-  &__avatar-in-post {
+  &__avatar {
     grid-area: a;
-    font-size: 2em;
+    position: relative;
+    width: var(--avatar-size);
+    height: 2em;
+
+    & > .avatar-button {
+      font-size: var(--avatar-size);
+      position: absolute;
+
+      // 縦中央
+      // margin-top: -0.5em;
+      // top: 50%;
+    }
   }
 
   // 表示名
@@ -1852,17 +1866,12 @@ function toggleOldestQuotedPostDisplay () {
     position: relative;
   }
 }
-.post[data-position="chatMessage"],
-.post[data-position="postInPost"],
-.post[data-position="slim"] {
-  .body__right__header {
-    grid-template-areas:
-      "a d m"
-      "a h m";
-    grid-template-columns: auto 1fr auto;
-  }
-}
 
+// ポストコンテンツトグル
+.post__content-filtering-toggle {
+  display: grid;
+  margin-left: var(--left-space);
+}
 .content-filtering-toggle {
   font-size: 0.875em;
 }
@@ -1873,6 +1882,7 @@ function toggleOldestQuotedPostDisplay () {
   flex-direction: column;
   flex-grow: 1;
   grid-gap: 0.5em;
+  padding-left: var(--left-space);
   position: relative;
   &:empty {
     display: contents;
@@ -1995,10 +2005,10 @@ function toggleOldestQuotedPostDisplay () {
 }
 
 .repost {
-  grid-area: r;
   background-color: rgba(var(--post-color), 0.125);
   border: 1px solid rgb(var(--post-color), 0.25);
   border-radius: var(--border-radius-middle);
+  margin-left: var(--left-space);
 
   :not([data-position="slim"]) & > .post {
     padding: 0.75em;
@@ -2042,14 +2052,18 @@ function toggleOldestQuotedPostDisplay () {
 // ラベルタグ
 .label-tags {
   --alpha: 0.75;
-  font-size: 0.75em;
+  padding-left: var(--left-space);
+
+  &:deep() > * {
+    font-size: 0.75em;
+  }
 }
 
 .reaction-container {
-  grid-area: f;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr; // for Android
   align-items: center;
+  padding-left: var(--left-space);
   &[data-has-lightning="true"] {
     grid-template-columns: 1fr 1fr 1fr 1fr auto; // for Android
   }
@@ -2057,9 +2071,8 @@ function toggleOldestQuotedPostDisplay () {
     margin-top: 0.25em;
   }
 
-  & > div:last-child {
+  .lightning-link {
     display: flex;
-    margin-left: auto;
   }
 
   .icon-button:deep() > span {
