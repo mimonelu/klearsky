@@ -24,12 +24,12 @@ function removeThisPost (uri: string) {
 </script>
 
 <template>
-  <div class="feed">
+  <div
+    class="feed"
+    :data-fetching-line="feed.__fetchingLine === true"
+  >
     <!-- 新規取得ライン -->
-    <div
-      v-if="feed.__fetchingLine === true"
-      class="feed__fetching-line"
-    >
+    <div class="feed__fetching-line">
       <SVGIcon name="shimmer" />
     </div>
 
@@ -127,7 +127,7 @@ function removeThisPost (uri: string) {
 .feed {
   // SPレイアウトでは上部にボーダーを表示
   /*
-  &:not([data-has-child]) {
+  &[data-fetching-line="false"]:not(:first-child):not([data-has-child]) {
     @include media-sp-layout() {
       border-top: 1px solid rgb(var(--fg-color), 0.125);
     }
@@ -141,12 +141,12 @@ function removeThisPost (uri: string) {
 
   // 新規取得ライン
   &__fetching-line {
-    display: flex;
+    display: none;
     justify-content: center;
     position: relative;
 
     & > .svg-icon {
-      fill: rgb(var(--fg-color), 0.5);
+      fill: rgb(var(--fg-color), 0.25);
       font-size: 1.5em;
       position: relative;
     }
@@ -155,17 +155,20 @@ function removeThisPost (uri: string) {
       content: "";
       background-image: linear-gradient(
         to right,
-        rgb(var(--fg-color), 0.25) 45%,
+        rgb(var(--fg-color), 0.125) 45%,
         transparent 45%,
         transparent 55%,
-        rgb(var(--fg-color), 0.25) 55%
+        rgb(var(--fg-color), 0.125) 55%
       );
       display: block;
       position: absolute;
-      top: 50%;
+      top: calc(50% - 1px);
       width: 100%;
-      height: 1px;
+      height: 2px;
     }
+  }
+  &[data-fetching-line="true"] &__fetching-line {
+    display: flex;
   }
 }
 

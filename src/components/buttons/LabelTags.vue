@@ -182,7 +182,6 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   &__harmful-label,
   &__labelers-label,
   &__custom-label {
-    // border: 1px solid transparent;
     border-radius: var(--border-radius-middle);
     display: flex;
     align-items: center;
@@ -196,7 +195,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
     & > span {
       color: var(--color);
-      font-weight: bold;
+      // font-weight: bold;
       line-height: var(--line-height-low);
       user-select: none;
       word-break: break-all;

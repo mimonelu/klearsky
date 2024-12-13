@@ -251,7 +251,7 @@ function getVideoSizes (): Array<undefined | {
 
 .thumbnail {
   background-color: rgb(var(--fg-color), 0.125);
-  border: 1px solid rgb(var(--fg-color), 0.25);
+  border: 1px solid rgb(var(--fg-color), 0.125);
   border-radius: var(--border-radius-middle);
   cursor: unset !important;
   display: flex;

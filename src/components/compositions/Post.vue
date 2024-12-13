@@ -1946,6 +1946,27 @@ function toggleOldestQuotedPostDisplay () {
 .quad-images,
 .video-container {
   grid-area: i;
+
+  // SPレイアウト時に画像と動画を横幅いっぱいまで広げる
+  @include media-sp-layout() {
+    .post[data-position="post"]:not([data-has-child]) > .body > .post__content > & {
+      grid-gap: 1px;
+      margin-left: calc(var(--post-padding) * -1);
+      margin-right: calc(var(--post-padding) * -1);
+      width: calc(100% + var(--post-padding) * 2);
+
+      .thumbnail,
+      video {
+        border: unset;
+        border-radius: unset;
+      }
+
+      & > .html-text {
+        margin-left: var(--post-padding);
+        margin-right: var(--post-padding);
+      }
+    }
+  }
 }
 
 .image-list {
