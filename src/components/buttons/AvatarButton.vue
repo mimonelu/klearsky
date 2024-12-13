@@ -25,8 +25,17 @@ const mainState = inject("state") as MainState
 
 <style lang="scss" scoped>
 .avatar-button {
+  background-color: rgb(var(--fg-color), 0.125);
   display: block;
+  overflow: hidden;
   position: relative;
+  transition: border-radius 125ms ease-out;
+  &[data-is-labeler="false"] {
+    border-radius: var(--border-radius-large);
+  }
+  &[data-is-labeler="true"] {
+    border-radius: var(--border-radius-small);
+  }
 
   & > .lazy-image {
     display: block;
@@ -34,19 +43,12 @@ const mainState = inject("state") as MainState
     max-width: 1em;
     min-height: 1em;
     max-height: 1em;
-    transition: border-radius 125ms ease-out;
-  }
-  &[data-is-labeler="false"] > .lazy-image {
-    border-radius: var(--border-radius-large);
-  }
-  &[data-is-labeler="true"] > .lazy-image {
-    border-radius: var(--border-radius-small);
   }
 }
 a.avatar-button {
   cursor: pointer;
 
-  &:hover > .lazy-image {
+  &:hover {
     border-radius: 1px;
   }
 }

@@ -35,13 +35,10 @@ const state = reactive<{
   flex-direction: row-reverse;
 
   & > .avatar-button {
+    box-shadow: 0 0 0 2px rgb(var(--bg-color));
     position: relative;
     &:not(:last-child) {
       margin-left: -0.125em;
-    }
-
-    &:deep() > img {
-      box-shadow: 0 0 0 2px rgb(var(--bg-color));
     }
   }
 }
