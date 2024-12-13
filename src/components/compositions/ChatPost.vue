@@ -105,11 +105,11 @@ async function chatMessagePopoverCallback (type: string) {
     --chat-post-bg-color: rgb(var(--fg-color), 0.125);
   }
 
-  &:deep() > .body > .body__right > .post__content {
+  &:deep() > .body > .post__content {
     position: relative;
     width: fit-content;
   }
-  &[data-is-message-empty="true"]:deep() > .body > .body__right > .post__content {
+  &[data-is-message-empty="true"]:deep() > .body > .post__content {
     display: none;
   }
 
@@ -118,7 +118,7 @@ async function chatMessagePopoverCallback (type: string) {
     background-color: var(--chat-post-bg-color);
     pointer-events: none;
 
-    &:deep() > .body > .body__right {
+    &:deep() > .body {
       & > .post__content {
         border-radius: var(--border-radius-middle);
         max-width: 100%;
@@ -137,37 +137,35 @@ async function chatMessagePopoverCallback (type: string) {
     padding: 0 1em;
 
     &:deep() > .body {
-      & > .body__right {
-        grid-gap: 0.5em;
+      grid-gap: 0.5em;
 
-        & > .body__right__header {
-          grid-template-columns: auto 1fr auto auto;
-          margin-right: -1em;
+      & > .body__header {
+        grid-template-columns: auto 1fr auto auto;
+        margin-right: -1em;
 
-          & > .display-name {
-            color: rgb(var(--fg-color), 0.5);
-          }
-
-          & > .button--plane {
-            grid-area: m;
-            margin: 0 0.5em 0 -0.5em;
-          }
+        & > .display-name {
+          color: rgb(var(--fg-color), 0.5);
         }
 
-        & > .post__content {
-          background-color: var(--chat-post-bg-color);
-          padding: 0.5em 1em;
+        & > .button--plane {
+          grid-area: m;
+          margin: 0 0.5em 0 -0.5em;
         }
+      }
 
-        & > .repost {
-          font-size: 0.875em;
-        }
+      & > .post__content {
+        background-color: var(--chat-post-bg-color);
+        padding: 0.5em 1em;
+      }
+
+      & > .repost {
+        font-size: 0.875em;
       }
     }
 
     // 自分のチャットメッセージ
     &[data-is-mine="true"] {
-      &:deep() > .body > .body__right {
+      &:deep() > .body {
         & > .post__content {
           border-radius:
             var(--border-radius-large)
@@ -185,7 +183,7 @@ async function chatMessagePopoverCallback (type: string) {
 
     // 自分以外のチャットメッセージ
     &[data-is-mine="false"] {
-      &:deep() > .body > .body__right > .post__content {
+      &:deep() > .body > .post__content {
         border-radius:
           0
           var(--border-radius-large)

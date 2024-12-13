@@ -128,7 +128,7 @@ async function toggleThreadMute () {
 
   &:deep() {
     // フォーカスポスト - フォントサイズの拡大
-    .text {
+    .text:not([data-is-text-only-emoji="true"]) {
       font-size: 1.125em;
     }
 

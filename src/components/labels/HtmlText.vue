@@ -286,8 +286,7 @@ function validateUrl (urlObject: URL, text: string): boolean {
     </template>
 
     <!-- 翻訳リンク -->
-    <template v-if="hasTranslateLink">
-      &nbsp;<a
+    <template v-if="hasTranslateLink">&nbsp;<a
         v-if="hasTranslateLink"
         class="textlink translate-link"
         @click.prevent.stop="$emit('translate')"

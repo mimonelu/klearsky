@@ -1495,8 +1495,14 @@ function toggleOldestQuotedPostDisplay () {
     font-size: 0.9375em;
   }
 
+  // チャットポスト
+  &[data-position="chatMessage"] {
+    --avatar-size: 2em;
+  }
+
   // プレビューポスト
   &[data-position="preview"] {
+    --avatar-size: 2em;
     font-size: 0.875em;
     padding: 0;
     pointer-events: none;
@@ -1512,6 +1518,11 @@ function toggleOldestQuotedPostDisplay () {
     .reaction-container {
       display: none;
     }
+  }
+
+  // スリムポスト
+  &[data-position="slim"] {
+    --avatar-size: 2em;
   }
 
   // マスク
@@ -1593,7 +1604,7 @@ function toggleOldestQuotedPostDisplay () {
     --left-space: calc(var(--avatar-size) + 0.5em);
   }
   @include media-not-sp-layout() {
-    &:not([data-position="postInPost"]) {
+    &:not([data-position="chatMessage"]):not([data-position="postInPost"]):not([data-position="preview"]):not([data-position="slim"]) {
       --left-space: calc(var(--avatar-size) + 0.5em);
     }
   }
@@ -1777,11 +1788,6 @@ function toggleOldestQuotedPostDisplay () {
   grid-gap: 0.5em;
   align-items: flex-start;
   position: relative;
-}
-.post[data-position="chatMessage"] {
-  .body {
-    display: unset;
-  }
 }
 
 .body__header {
