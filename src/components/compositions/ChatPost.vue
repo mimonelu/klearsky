@@ -121,6 +121,7 @@ async function chatMessagePopoverCallback (type: string) {
     &:deep() > .body {
       & > .post__content {
         border-radius: var(--border-radius-middle);
+        width: 100%;
         max-width: 100%;
         overflow: hidden;
 
