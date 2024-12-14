@@ -122,6 +122,7 @@ async function chatMessagePopoverCallback (type: string) {
       & > .post__content {
         border-radius: var(--border-radius-middle);
         max-width: 100%;
+        overflow: hidden;
 
         & > .html-text {
           overflow: hidden;
