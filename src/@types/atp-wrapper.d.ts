@@ -189,6 +189,8 @@ interface TIAtpWrapper {
     (oldFeeds: Array<TTFeed>, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection): Promise<Error | undefined | string>
   fetchTimelineNewArrival
     (): Promise<Error | Array<TTFeed>>
+    fetchTrendingTopics
+    (this: TIAtpWrapper, viewer?: string, limit?: number): Promise<Error | AppBskyUnspeccedGetTrendingTopics.OutputSchema>
   fetchUserSearch
     (users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchVideoLimits
