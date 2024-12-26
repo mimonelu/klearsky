@@ -20,7 +20,9 @@ Klearsky is deployed on Cloudflare.
 * `npm run build`
   * `/coproduct/stats.html` rollup-plugin-visualizer によるバンドルファイルの一覧を副次的に生成
 * `npm run type-check`
-* `npm run knip` https://knip.dev/
+
+## npx
+* `npx knip` https://knip.dev/
 
 ## Custom records(collections)
 * `space.aoisora.bookmark` Bookmark
