@@ -25,7 +25,7 @@
     "date-fns": "^2.30.0",
     "extend": "^3.0.2",
     "file-saver": "^2.0.5",
-    "hls.js": "^1.5.15",
+    "hls.js": "^1.5.18",
     "hotkeys-js": "^3.10.3",
     "jszip": "^3.10.1",
     "jwt-decode": "^4.0.0",
