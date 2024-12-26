@@ -100,13 +100,12 @@ function remove (index: number) {
           <span>{{ keyword }}</span>
 
           <!-- キーワード履歴削除ボタン -->
-          <button
-            type="button"
+          <div
             class="keyword-history-popover__remove-button button--plane"
             @click.stop="remove(index)"
           >
             <SVGIcon name="cross" />
-          </button>
+          </div>
         </button>
       </template>
     </menu>
