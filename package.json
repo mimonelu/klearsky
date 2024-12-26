@@ -18,7 +18,7 @@
   "dependencies": {
     "@atproto/api": "^0.13.23",
     "@ipld/car": "^5.1.1",
-    "@vueuse/core": "^10.2.0",
+    "@vueuse/core": "^10.11.1",
     "browser-image-compression": "^2.0.2",
     "cbor-x": "^1.5.3",
     "crypto-js": "^4.1.1",
