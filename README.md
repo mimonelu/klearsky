@@ -17,8 +17,6 @@ Klearsky is deployed on Cloudflare.
 
 ## npm run
 * `npm run dev` http://localhost:5173/
-* `npm run build`
-  * `/coproduct/stats.html` rollup-plugin-visualizer によるバンドルファイルの一覧を副次的に生成
 * `npm run type-check`
 
 ## npx

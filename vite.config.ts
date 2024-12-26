@@ -5,9 +5,6 @@ import vue from "@vitejs/plugin-vue"
 // Minify HTML
 import { createHtmlPlugin } from "vite-plugin-html"
 
-// Rollup Visualizer
-import { visualizer } from "rollup-plugin-visualizer"
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -45,13 +42,6 @@ export default defineConfig({
             return "vendor"
         },
       },
-
-      // Rollup Visualizer
-      plugins: [
-        visualizer({
-          filename: "coproduct/stats.html",
-        }),
-      ],
     },
   },
 
