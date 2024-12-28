@@ -310,7 +310,7 @@ export default () => ({
   "starterPackDeleteMessage": "Remove this starter pack. Are you sure?\nThe list referenced by this starter pack will not be deleted.",
 
   "home": "Home",
-  "followingsDescription": "Show posts of users you follow.",
+  "followingDescription": "Show posts of users you follow.",
   "globalline": "Global feed",
   "globallineDescription": "Show all posts in real time.",
   "globallineContentLanguages": "Content language for global feed",
@@ -341,6 +341,7 @@ export default () => ({
   "trendTags": "Trend Tags with SkyFeed",
 
   "trends": "Trends",
+  "trendsDescription": "Show trending topics.",
 
   "notifications": "Notifications",
 

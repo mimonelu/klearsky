@@ -52,7 +52,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       <!-- フィード説明 -->
       <div class="special-feed-card__description">
-        <span>{{ $t(`${item.kind}Description`) }}</span>
+        <span>{{ $t(`${item.value.uri}Description`) }}</span>
       </div>
     </div>
 

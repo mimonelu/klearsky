@@ -310,7 +310,7 @@ export default () => ({
   "starterPackDeleteMessage": "このスターターパックを削除します。よろしいですか？\nスターターパックが参照しているリストは削除されません。",
 
   "home": "ホーム",
-  "followingsDescription": "あなたがフォローしているユーザーのポストを表示します。",
+  "followingDescription": "あなたがフォローしているユーザーのポストを表示します。",
   "globalline": "グローバルフィード",
   "globallineDescription": "すべてのポストをリアルタイムに表示します。",
   "globallineContentLanguages": "グローバルフィード用コンテンツ言語",
@@ -341,6 +341,7 @@ export default () => ({
   "trendTags": "トレンドタグ with SkyFeed",
 
   "trends": "トレンド",
+  "trendsDescription": "話題のトレンドトピックを表示します。",
 
   "notifications": "通知",
 
