@@ -154,7 +154,7 @@ function removeMyFeed (uri: string) {
             class="my-feed-list__content"
             :data-is-selected="true"
           >
-            <SVGIcon name="shimmer" />
+            <SVGIcon name="trending" />
             <span>{{ $t(item.value.displayName) }}</span>
           </RouterLink>
 
@@ -397,6 +397,7 @@ function removeMyFeed (uri: string) {
     overflow: hidden;
 
     .svg-icon--shimmer,
+    .svg-icon--trending,
     .lazy-image {
       border-radius: var(--border-radius-small);
       opacity: 0.5 !important;
@@ -407,7 +408,8 @@ function removeMyFeed (uri: string) {
       max-height: 1.25em;
     }
 
-    .svg-icon--shimmer {
+    .svg-icon--shimmer,
+    .svg-icon--trending {
       fill: rgb(var(--fg-color), 0.5);
     }
 
@@ -420,10 +422,12 @@ function removeMyFeed (uri: string) {
     }
 
     &.router-link-active[data-is-selected="true"] {
-      .svg-icon--shimmer {
+      .svg-icon--shimmer,
+      .svg-icon--trending {
         fill: rgb(var(--fg-color));
       }
       .svg-icon--shimmer,
+      .svg-icon--trending,
       .lazy-image {
         opacity: 1.0 !important;
       }

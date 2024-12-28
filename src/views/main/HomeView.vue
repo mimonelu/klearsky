@@ -86,7 +86,7 @@ async function autoScrollSliderMenu () {
               to="/home/trends"
               :data-is-selected="true"
             >
-              <SVGIcon name="shimmer" />
+              <SVGIcon name="trending" />
               <span>{{ $t(item.value.displayName) }}</span>
             </RouterLink>
 

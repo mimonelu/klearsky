@@ -42,7 +42,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- フィード画像 -->
       <SVGIcon
         class="special-feed-card__avatar"
-        name="shimmer"
+        :name="item.value.uri === 'trends' ? 'trending' : 'shimmer'"
       />
 
       <!-- フィード名 -->
@@ -87,10 +87,8 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   // フィード画像
   &__avatar {
     grid-area: a;
-    border-radius: var(--border-radius-middle);
     display: block;
     fill: rgb(var(--fg-color), 0.5);
-    overflow: hidden;
     min-width: 3em;
     max-width: 3em;
     min-height: 3em;

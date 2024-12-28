@@ -74,6 +74,10 @@ interface MainState {
   myLabeler?: TIMyLabeler
   currentLabeler?: TILabeler
 
+  // トレンド
+  currentSuggestedTopics: Array<TTopic>
+  currentTrendingTopics: Array<TTopic>
+
   // チャット
   myChat?: TIMyChat
   chatListTimer: undefined | any

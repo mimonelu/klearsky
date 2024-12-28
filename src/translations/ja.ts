@@ -37,6 +37,7 @@ export default () => ({
   "postWithReplies": "リプライ付きポスト",
   "postWithMedia": "メディア付きポスト",
   "reload": "リロード",
+  "refresh": "更新する",
   "loading": "読込中...",
   "more": "もっと見る",
   "klearsky": "Klearsky",
@@ -341,7 +342,9 @@ export default () => ({
   "trendTags": "トレンドタグ with SkyFeed",
 
   "trends": "トレンド",
-  "trendsDescription": "話題のトレンドトピックを表示します。",
+  "trendsDescription": "トレンドトピックを表示します。",
+  "suggestedTopics": "おすすめのトピック",
+  "trendingTopics": "話題のトピック",
 
   "notifications": "通知",
 

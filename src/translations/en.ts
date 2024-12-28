@@ -37,6 +37,7 @@ export default () => ({
   "postWithReplies": "Posts with replies",
   "postWithMedia": "Posts with media",
   "reload": "Reload",
+  "refresh": "Refresh",
   "loading": "Loading...",
   "more": "See more",
   "klearsky": "Klearsky",
@@ -340,8 +341,10 @@ export default () => ({
   "recommendedUsers": "Recommended Users",
   "trendTags": "Trend Tags with SkyFeed",
 
-  "trends": "Trends",
+  "trends": "Trending",
   "trendsDescription": "Show trending topics.",
+  "suggestedTopics": "Suggested Topics",
+  "trendingTopics": "Trending Topics",
 
   "notifications": "Notifications",
 

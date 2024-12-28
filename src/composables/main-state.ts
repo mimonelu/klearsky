@@ -118,6 +118,10 @@ export const state: MainState = reactive<MainState>({
   myLabeler: undefined,
   currentLabeler: undefined,
 
+  // トレンド
+  currentSuggestedTopics: [],
+  currentTrendingTopics: [],
+
   // チャット
   myChat: undefined,
 
