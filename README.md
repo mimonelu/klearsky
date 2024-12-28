@@ -24,7 +24,7 @@ Klearsky is deployed on Cloudflare.
 
 ## Custom records(collections)
 * `space.aoisora.bookmark` Bookmark
-* `space.aoisora.preference.feed.extra` to save an index of trends page and global feeds
+* `space.aoisora.preference.feed.extra` to save an index of trendings page and global feeds
 
 ## Custom fields
 * `app.bsky.feed.post.record["space.aoisora.post.via"]` Client user agent (Klearsky)

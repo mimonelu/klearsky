@@ -149,8 +149,8 @@ function removeMyFeed (uri: string) {
         <template v-else-if="item.kind === 'space.aoisora.preference.feed.extra'">
           <!-- トレンド一覧ページ -->
           <RouterLink
-            v-if="item.value.uri === 'trends'"
-            to="/home/trends"
+            v-if="item.value.uri === 'trending'"
+            to="/home/trending"
             class="my-feed-list__content"
             :data-is-selected="true"
           >

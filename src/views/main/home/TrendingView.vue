@@ -26,7 +26,7 @@ async function updateTrendingTopics () {
   const response = await mainState.atp.fetchTrendingTopics(mainState.atp.data.did)
   state.processing = false
   if (response instanceof Error || response == null) {
-    mainState.openErrorPopup(response, "TrendsView/fetchTrendingTopics")
+    mainState.openErrorPopup(response, "TrendingView/fetchTrendingTopics")
     return
   }
   mainState.currentSuggestedTopics.splice(0, mainState.currentSuggestedTopics.length, ...response.suggested)
@@ -35,22 +35,22 @@ async function updateTrendingTopics () {
 </script>
 
 <template>
-  <div class="trends-view">
-    <div class="trends-view__container">
+  <div class="trending-view">
+    <div class="trending-view__container">
       <div
         v-if="mainState.currentTrendingTopics.length > 0"
-        class="trends-view__topics-container"
+        class="trending-view__topics-container"
       >
         <h2>
           <SVGIcon name="trending" />
           <span>{{ $t("trendingTopics") }}</span>
         </h2>
-        <div class="trends-view__topics">
+        <div class="trending-view__topics">
           <RouterLink
             v-for="topic, topicIndex in mainState.currentTrendingTopics"
             :key="topicIndex"
             :to="{ name: 'post-search', query: { text: topic.topic } }"
-            class="button--plane trends-view__topic"
+            class="button--plane trending-view__topic"
           >
             <span>{{ topic.topic }}</span>
           </RouterLink>
@@ -58,28 +58,28 @@ async function updateTrendingTopics () {
       </div>
       <div
         v-if="mainState.currentSuggestedTopics.length > 0"
-        class="trends-view__topics-container"
+        class="trending-view__topics-container"
       >
         <h2>
           <SVGIcon name="trending" />
           <span>{{ $t("suggestedTopics") }}</span>
         </h2>
-        <div class="trends-view__topics">
+        <div class="trending-view__topics">
           <RouterLink
             v-for="topic, topicIndex in mainState.currentSuggestedTopics"
             :key="topicIndex"
             :to="{ name: 'post-search', query: { text: topic.topic } }"
-            class="button--plane trends-view__topic"
+            class="button--plane trending-view__topic"
           >
             <span>{{ topic.topic }}</span>
           </RouterLink>
         </div>
       </div>
     </div>
-    <div class="trends-view__button-container">
+    <div class="trending-view__button-container">
       <button
         type="button"
-        class="trends-view__refresh-button button--plane"
+        class="trending-view__refresh-button button--plane"
         :disabled="state.processing"
         @click.prevent="updateTrendingTopics"
       >
@@ -92,7 +92,7 @@ async function updateTrendingTopics () {
 </template>
 
 <style lang="scss" scoped>
-.trends-view {
+.trending-view {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

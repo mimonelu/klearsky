@@ -1,4 +1,4 @@
-interface TTopic {
+interface TTrendingTopic {
   topic: string
   link: string
 }

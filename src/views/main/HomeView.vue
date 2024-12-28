@@ -81,9 +81,9 @@ async function autoScrollSliderMenu () {
           <template v-else-if="item.kind === 'space.aoisora.preference.feed.extra'">
             <!-- トレンド一覧ページ -->
             <RouterLink
-              v-if="item.value.uri === 'trends'"
+              v-if="item.value.uri === 'trending'"
               class="slider-menu__link"
-              to="/home/trends"
+              to="/home/trending"
               :data-is-selected="true"
             >
               <SVGIcon name="trending" />

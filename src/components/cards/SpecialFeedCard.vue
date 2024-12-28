@@ -16,8 +16,8 @@ const state = reactive<{
     return props.item.kind === "following"
       ? { to: "/home/timeline" }
       : props.item.kind === "space.aoisora.preference.feed.extra"
-        ? props.item.value.uri === "trends"
-          ? { to: "/home/trends" }
+        ? props.item.value.uri === "trending"
+          ? { to: "/home/trending" }
           : props.item.value.uri === "globalline"
             ? { to: "/home/globalline" }
             : {}
@@ -42,7 +42,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- フィード画像 -->
       <SVGIcon
         class="special-feed-card__avatar"
-        :name="item.value.uri === 'trends' ? 'trending' : 'shimmer'"
+        :name="item.value.uri === 'trending' ? 'trending' : 'shimmer'"
       />
 
       <!-- フィード名 -->

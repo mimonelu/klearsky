@@ -175,10 +175,10 @@ export default class {
         }
         this.items.push({ kind, value } as TTMyFeedsItem)
       } else if (kind === "space.aoisora.preference.feed.extra") {
-        if (uri === "trends") {
+        if (uri === "trending") {
           const value = {
-            uri: "trends",
-            displayName: "trends",
+            uri: "trending",
+            displayName: "trending",
           }
           this.items.push({ kind, value } as TTMyFeedsItem)
         } else if (uri === "globalline") {
@@ -214,14 +214,14 @@ export default class {
     if (!this.items.some((item) => {
       return (
         item.kind === "space.aoisora.preference.feed.extra" &&
-        item.value.uri === "trends"
+        item.value.uri === "trending"
       )
     })) {
       this.items.splice(1, 0,{
         kind: "space.aoisora.preference.feed.extra",
         value: {
-          uri: "trends",
-          displayName: "trends",
+          uri: "trending",
+          displayName: "trending",
         },
       })
     }
@@ -274,7 +274,7 @@ export default class {
       return "list"
     } else if (uri === "following") {
       return uri
-    } else if (uri === "trends" || uri === "globalline") {
+    } else if (uri === "trending" || uri === "globalline") {
       return "space.aoisora.preference.feed.extra"
     }
     return "unknown"

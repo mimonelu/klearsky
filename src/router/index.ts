@@ -12,7 +12,7 @@ import TimelineView from "@/views/main/home/TimelineView.vue"
 import FeedsView from "@/views/main/home/FeedsView.vue"
 import ListFeedsView from "@/views/main/home/ListFeedsView.vue"
 import ListUsersView from "@/views/main/home/ListUsersView.vue"
-import TrendsView from "@/views/main/home/TrendsView.vue"
+import TrendingView from "@/views/main/home/TrendingView.vue"
 import StarterPackView from "@/views/main/home/StarterPackView.vue"
 import GloballineView from "@/views/main/home/GloballineView.vue"
 
@@ -97,10 +97,10 @@ const router = createRouter({
               component: ListUsersView,
             },
             {
-              path: "trends",
-              name: "trends-home",
-              meta: { label: "trends" },
-              component: TrendsView,
+              path: "trending",
+              name: "trending-home",
+              meta: { label: "trending" },
+              component: TrendingView,
             },
             {
               path: "starter-pack",

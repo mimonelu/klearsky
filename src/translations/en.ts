@@ -341,8 +341,8 @@ export default () => ({
   "recommendedUsers": "Recommended Users",
   "trendTags": "Trend Tags with SkyFeed",
 
-  "trends": "Trending",
-  "trendsDescription": "Show trending topics.",
+  "trending": "Trending",
+  "trendingDescription": "Show trending topics.",
   "suggestedTopics": "Suggested Topics",
   "trendingTopics": "Trending Topics",
 

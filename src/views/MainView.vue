@@ -429,8 +429,8 @@ async function moveToDefaultHome () {
           return
         }
         case "space.aoisora.preference.feed.extra": {
-          if (uri === "trends") {
-            await router.push("/home/trends")
+          if (uri === "trending") {
+            await router.push("/home/trending")
             return
           } else if (uri === "globalline") {
             await router.push("/home/globalline")
@@ -476,8 +476,8 @@ async function moveToDefaultHome () {
         return
       }
       case "space.aoisora.preference.feed.extra": {
-        if (firstPinnedItem.value.uri === "trends") {
-          await router.push("/home/trends")
+        if (firstPinnedItem.value.uri === "trending") {
+          await router.push("/home/trending")
           return
         } else if (firstPinnedItem.value.uri === "globalline") {
           await router.push("/home/globalline")

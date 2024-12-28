@@ -329,7 +329,7 @@ async function mergeV1ToV2 () {
           <template v-else-if="item.kind === 'space.aoisora.preference.feed.extra'">
             <!-- トレンド一覧ページ -->
             <SpecialFeedCard
-              v-if="item.value.uri === 'trends'"
+              v-if="item.value.uri === 'trending'"
               :item="item"
               @click.exact="close"
               @changeCustomFeedOrder="changeCustomFeedOrder"

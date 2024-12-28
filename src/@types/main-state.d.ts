@@ -75,8 +75,8 @@ interface MainState {
   currentLabeler?: TILabeler
 
   // トレンド
-  currentSuggestedTopics: Array<TTopic>
-  currentTrendingTopics: Array<TTopic>
+  currentSuggestedTopics: Array<TTrendingTopic>
+  currentTrendingTopics: Array<TTrendingTopic>
 
   // チャット
   myChat?: TIMyChat
