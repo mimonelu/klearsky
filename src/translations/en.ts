@@ -340,6 +340,8 @@ export default () => ({
   "recommendedUsers": "Recommended Users",
   "trendTags": "Trend Tags with SkyFeed",
 
+  "trends": "Trends",
+
   "notifications": "Notifications",
 
   "settings": "Settings",

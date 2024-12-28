@@ -145,16 +145,30 @@ function removeMyFeed (uri: string) {
           <span>{{ $t(item.value.displayName) }}</span>
         </RouterLink>
 
-        <!-- グローバルフィード -->
-        <RouterLink
-          v-else-if="item.kind === 'space.aoisora.preference.feed.extra'"
-          to="/home/globalline"
-          class="my-feed-list__content"
-          :data-is-selected="true"
-        >
-          <SVGIcon name="shimmer" />
-          <span>{{ $t(item.value.displayName) }}</span>
-        </RouterLink>
+        <!-- `space.aoisora.preference.feed.extra` -->
+        <template v-else-if="item.kind === 'space.aoisora.preference.feed.extra'">
+          <!-- トレンド一覧ページ -->
+          <RouterLink
+            v-if="item.value.uri === 'trends'"
+            to="/home/trends"
+            class="my-feed-list__content"
+            :data-is-selected="true"
+          >
+            <SVGIcon name="shimmer" />
+            <span>{{ $t(item.value.displayName) }}</span>
+          </RouterLink>
+
+          <!-- グローバルフィード -->
+          <RouterLink
+            v-else-if="item.value.uri === 'globalline'"
+            to="/home/globalline"
+            class="my-feed-list__content"
+            :data-is-selected="true"
+          >
+            <SVGIcon name="shimmer" />
+            <span>{{ $t(item.value.displayName) }}</span>
+          </RouterLink>
+        </template>
 
         <!-- カスタムフィード -->
         <RouterLink

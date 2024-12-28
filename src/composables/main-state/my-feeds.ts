@@ -175,11 +175,19 @@ export default class {
         }
         this.items.push({ kind, value } as TTMyFeedsItem)
       } else if (kind === "space.aoisora.preference.feed.extra") {
-        const value = {
-          uri: "globalline",
-          displayName: "globalline",
+        if (uri === "trends") {
+          const value = {
+            uri: "trends",
+            displayName: "trends",
+          }
+          this.items.push({ kind, value } as TTMyFeedsItem)
+        } else if (uri === "globalline") {
+          const value = {
+            uri: "globalline",
+            displayName: "globalline",
+          }
+          this.items.push({ kind, value } as TTMyFeedsItem)
         }
-        this.items.push({ kind, value } as TTMyFeedsItem)
       } else {
         const value = {
           uri,
@@ -202,9 +210,28 @@ export default class {
       })
     }
 
+    // トレンド一覧ページがなければ追加
+    if (!this.items.some((item) => {
+      return (
+        item.kind === "space.aoisora.preference.feed.extra" &&
+        item.value.uri === "trends"
+      )
+    })) {
+      this.items.splice(1, 0,{
+        kind: "space.aoisora.preference.feed.extra",
+        value: {
+          uri: "trends",
+          displayName: "trends",
+        },
+      })
+    }
+
     // グローバルフィードがなければ追加
     if (!this.items.some((item) => {
-      return item.kind === "space.aoisora.preference.feed.extra"
+      return (
+        item.kind === "space.aoisora.preference.feed.extra" &&
+        item.value.uri === "globalline"
+      )
     })) {
       this.items.push({
         kind: "space.aoisora.preference.feed.extra",
@@ -247,7 +274,7 @@ export default class {
       return "list"
     } else if (uri === "following") {
       return uri
-    } else if (uri === "globalline") {
+    } else if (uri === "trends" || uri === "globalline") {
       return "space.aoisora.preference.feed.extra"
     }
     return "unknown"

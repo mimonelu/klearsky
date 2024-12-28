@@ -77,16 +77,30 @@ async function autoScrollSliderMenu () {
             <span>{{ $t(item.value.displayName) }}</span>
           </RouterLink>
 
-          <!-- グローバルフィード -->
-          <RouterLink
-            v-else-if="item.kind === 'space.aoisora.preference.feed.extra'"
-            class="slider-menu__link"
-            to="/home/globalline"
-            :data-is-selected="true"
-          >
-            <SVGIcon name="shimmer" />
-            <span>{{ $t(item.value.displayName) }}</span>
-          </RouterLink>
+          <!-- `space.aoisora.preference.feed.extra` -->
+          <template v-else-if="item.kind === 'space.aoisora.preference.feed.extra'">
+            <!-- トレンド一覧ページ -->
+            <RouterLink
+              v-if="item.value.uri === 'trends'"
+              class="slider-menu__link"
+              to="/home/trends"
+              :data-is-selected="true"
+            >
+              <SVGIcon name="shimmer" />
+              <span>{{ $t(item.value.displayName) }}</span>
+            </RouterLink>
+
+            <!-- グローバルフィード -->
+            <RouterLink
+              v-else-if="item.value.uri === 'globalline'"
+              class="slider-menu__link"
+              to="/home/globalline"
+              :data-is-selected="true"
+            >
+              <SVGIcon name="shimmer" />
+              <span>{{ $t(item.value.displayName) }}</span>
+            </RouterLink>
+          </template>
 
           <!-- カスタムフィード -->
           <RouterLink

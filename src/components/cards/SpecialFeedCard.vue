@@ -16,7 +16,11 @@ const state = reactive<{
     return props.item.kind === "following"
       ? { to: "/home/timeline" }
       : props.item.kind === "space.aoisora.preference.feed.extra"
-        ? { to: "/home/globalline" }
+        ? props.item.value.uri === "trends"
+          ? { to: "/home/trends" }
+          : props.item.value.uri === "globalline"
+            ? { to: "/home/globalline" }
+            : {}
         : { to: "/home/timeline" }
   }),
 })

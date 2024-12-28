@@ -325,13 +325,24 @@ async function mergeV1ToV2 () {
             @changeCustomFeedOrder="changeCustomFeedOrder"
           />
 
-          <!-- グローバルフィード -->
-          <SpecialFeedCard
-            v-else-if="item.kind === 'space.aoisora.preference.feed.extra'"
-            :item="item"
-            @click.exact="close"
-            @changeCustomFeedOrder="changeCustomFeedOrder"
-          />
+          <!-- `space.aoisora.preference.feed.extra` -->
+          <template v-else-if="item.kind === 'space.aoisora.preference.feed.extra'">
+            <!-- トレンド一覧ページ -->
+            <SpecialFeedCard
+              v-if="item.value.uri === 'trends'"
+              :item="item"
+              @click.exact="close"
+              @changeCustomFeedOrder="changeCustomFeedOrder"
+            />
+
+            <!-- グローバルフィード -->
+            <SpecialFeedCard
+              v-else-if="item.value.uri === 'globalline'"
+              :item="item"
+              @click.exact="close"
+              @changeCustomFeedOrder="changeCustomFeedOrder"
+            />
+          </template>
 
           <!-- フィードカード -->
           <FeedCard
