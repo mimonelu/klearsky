@@ -126,7 +126,7 @@ async function updateHotPosts () {
         <RouterLink
           v-for="image, imageIndex in mainState.currentTrendingImages"
           :key="imageIndex"
-          :to="{ name: 'post-search', query: { text: image.topic } }"
+          :to="{ name: 'post-search', query: { text: image.topic, sort: 'top' } }"
           class="trending-view__image"
         >
           <LazyImage
@@ -151,7 +151,7 @@ async function updateHotPosts () {
           <RouterLink
             v-for="topic, topicIndex in mainState.currentTrendingTopics"
             :key="topicIndex"
-            :to="{ name: 'post-search', query: { text: topic.topic } }"
+            :to="{ name: 'post-search', query: { text: topic.topic, sort: 'top' } }"
             class="button--plane trending-view__topic"
           >
             <span>{{ topic.topic }}</span>
@@ -172,7 +172,7 @@ async function updateHotPosts () {
           <RouterLink
             v-for="topic, topicIndex in mainState.currentSuggestedTopics"
             :key="topicIndex"
-            :to="{ name: 'post-search', query: { text: topic.topic } }"
+            :to="{ name: 'post-search', query: { text: topic.topic, sort: 'top' } }"
             class="button--plane trending-view__topic"
           >
             <span>{{ topic.topic }}</span>

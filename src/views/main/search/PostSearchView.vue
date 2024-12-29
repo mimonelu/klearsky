@@ -55,19 +55,30 @@ const easyFormProps: TTEasyForm = {
 
 const router = useRouter()
 
-const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, async (value: any) => {
-  if (value != null) mainState.currentSearchTerm = value
+const unwatchOnQuery = watch(() => router.currentRoute.value.query, async (value: any) => {
+  if (value?.text != null) {
+    mainState.currentSearchTerm = value.text
+  }
+  if (value?.sort === "latest" || value?.sort === "top") {
+    mainState.currentSearchPostFormState.sort = value.sort
+  }
   if (mainState.currentSearchTerm !== "" &&
-      mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm)
+      mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm
+  ) {
     await fetchNewResults()
+  }
 }, { immediate: true })
 
 onMounted(async () => {
   const textbox = document.getElementById("post-term-textbox")
-  if (textbox != null) textbox.focus()
+  if (textbox != null) {
+    textbox.focus()
+  }
   if (mainState.currentSearchTerm &&
-      mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm)
+      mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm
+  ) {
     await fetchNewResults()
+  }
 })
 
 onBeforeUnmount(() => {
@@ -76,7 +87,9 @@ onBeforeUnmount(() => {
 
 function updateSearchPostTerm (text: string) {
   const textDecoded = decodeURIComponent(text)
-  if (!textDecoded || mainState.currentSearchTerm === textDecoded) return
+  if (!textDecoded || mainState.currentSearchTerm === textDecoded) {
+    return
+  }
   mainState.currentSearchTerm = textDecoded
   fetchNewResults()
 }
@@ -84,14 +97,20 @@ function updateSearchPostTerm (text: string) {
 async function fetchNewResults () {
   // 検索ワードを変えておきながら検索せずに画面遷移した場合、
   // `watch` が後から反応してしまい、ポスト検索画面に遷移してしまう不具合への対応
-  if (router.currentRoute.value.name !== "post-search") return
+  if (router.currentRoute.value.name !== "post-search") {
+    return
+  }
 
-  if (state.processing) return
+  if (state.processing) {
+    return
+  }
   mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
   mainState.currentSearchPostResults.splice(0)
   mainState.currentSearchPostCursor = undefined
   updateRouter()
-  if (!mainState.currentSearchTerm) return
+  if (!mainState.currentSearchTerm) {
+    return
+  }
   state.processing = true
   await mainState.fetchSearchPosts()
   state.processing = false
@@ -99,14 +118,18 @@ async function fetchNewResults () {
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
-  if (state.processing) return
+  if (state.processing) {
+    return
+  }
   if (mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm) {
     mainState.currentSearchPostsLastTerm = mainState.currentSearchTerm
     mainState.currentSearchPostResults.splice(0)
     mainState.currentSearchPostCursor = undefined
     updateRouter()
   }
-  if (!mainState.currentSearchTerm) return
+  if (!mainState.currentSearchTerm) {
+    return
+  }
   state.processing = true
   await mainState.fetchSearchPosts(
     direction === "new"
@@ -118,7 +141,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
 
 function updateRouter () {
   const query = mainState.currentSearchTerm !== ""
-    ? { text: mainState.currentSearchTerm }
+    ? { text: mainState.currentSearchTerm, sort: mainState.currentSearchPostFormState.sort }
     : undefined
   router.push({ name: "post-search", query })
 }
@@ -127,7 +150,9 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
   const posts = mainState.currentSearchPostResults
   posts.forEach((oldPost: TTPost, index: number) => {
     const newPost = newPosts.find((newPost: TTPost) => oldPost.uri === newPost.uri)
-    if (newPost != null) Util.updatePostProps(posts[index], newPost)
+    if (newPost != null) {
+      Util.updatePostProps(posts[index], newPost)
+    }
   })
 }
 
