@@ -27,7 +27,8 @@ async function updateTrendingTopics () {
   const response = await mainState.atp.fetchTrendingTopics(mainState.atp.data.did)
   state.processing = false
   if (response instanceof Error || response == null) {
-    mainState.openErrorPopup(response, "TrendingView/fetchTrendingTopics")
+    // 3rd PDS 向けにエラーメッセージは非表示
+    // mainState.openErrorPopup(response, "TrendingView/fetchTrendingTopics")
     return
   }
   mainState.currentSuggestedTopics.splice(0, mainState.currentSuggestedTopics.length, ...response.suggested)
