@@ -77,6 +77,7 @@ interface MainState {
   // トレンド
   currentSuggestedTopics: Array<TTrendingTopic>
   currentTrendingTopics: Array<TTrendingTopic>
+  currentTrendingImages: Array<TTrendingImage>
 
   // チャット
   myChat?: TIMyChat
