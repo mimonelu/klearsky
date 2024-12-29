@@ -32,34 +32,58 @@ async function updateTrendingTopics () {
   }
   mainState.currentSuggestedTopics.splice(0, mainState.currentSuggestedTopics.length, ...response.suggested)
   mainState.currentTrendingTopics.splice(0, mainState.currentTrendingTopics.length, ...response.topics)
+
+  // 連動してホット画像データを更新
   if (mainState.currentTrendingTopics.length > 0) {
     await updateHotPosts()
   }
 }
 
+// ホットトピックの最大数
+const MAX_HOT_TOPICS = 5
+
+// ホットトピックごとに取得するホットポストの最大数
+const MAX_HOT_POSTS = 5
+
+// ホット画像データの最大数
+const MAX_HOT_TRENDING_IMAGES = 5
+
 async function updateHotPosts () {
+  // ホットポスト
   const hotPosts: Array<Array<TTPost>> = []
-  const hotTopics = mainState.currentTrendingTopics.slice(0, 7)
+
+  // 検索対象となるホットトピックを取得
+  const hotTopics = mainState.currentTrendingTopics.slice(0, MAX_HOT_TOPICS)
+
+  // ホットトピックごとにホットポストを取得
   const tasks = hotTopics.map((topic, index) => {
     hotPosts[index] = []
     return mainState.atp.fetchPostSearch(
       hotPosts[index],
       topic.topic,
-      { sort: top },
-      5
+      { sort: "top" },
+      MAX_HOT_POSTS
     )
   })
   await Promise.all(tasks)
+
+  // ホットポストにトピック情報を追加
   hotTopics.forEach((topic, index) => {
     hotPosts[index]?.forEach((post) => {
       post.__topic = topic.topic
     })
   })
+
+  // ホット画像データを抽出
   const hotImages: Array<TTrendingImage> = hotPosts
     .flat()
+
+    // 画像を持つポストのみを抽出
     .filter((post) => {
       return post.embed?.images?.[0]?.thumb != null
     })
+
+    // ホットポストからホット画像データに変換
     .map((post) => {
       return {
         topic: post.__topic as string,
@@ -67,10 +91,25 @@ async function updateHotPosts () {
         text: post.record.text as string,
       }
     })
-    .slice(0, 5)
+
+    // 重複するトピックを削除
+    .reduce((results: Array<TTrendingImage>, current: TTrendingImage) => {
+      if (results.findIndex((hotImage) => {
+        return hotImage.topic === current.topic
+      }) === - 1) {
+        results.push(current)
+      }
+      return results
+    }, [])
+
+    // 最大 5 件に制限
+    .slice(0, MAX_HOT_TRENDING_IMAGES)
+
+  // 画像が偶数の場合は最後の要素を削除（レイアウト都合）
   if ((hotImages.length % 2) === 0) {
     hotImages.pop()
   }
+
   mainState.currentTrendingImages.splice(0, mainState.currentTrendingImages.length, ...hotImages)
 }
 </script>
@@ -78,6 +117,7 @@ async function updateHotPosts () {
 <template>
   <div class="trending-view">
     <div class="trending-view__container">
+      <!-- ホット画像 -->
       <div
         v-if="mainState.currentTrendingImages.length > 0"
         class="trending-view__image-container"
@@ -96,6 +136,8 @@ async function updateHotPosts () {
           <div class="trending-view__image-text">{{ image.text }}</div>
         </RouterLink>
       </div>
+
+      <!-- 話題のトピック -->
       <div
         v-if="mainState.currentTrendingTopics.length > 0"
         class="trending-view__topics-container"
@@ -115,6 +157,8 @@ async function updateHotPosts () {
           </RouterLink>
         </div>
       </div>
+
+      <!-- おすすめのトピック -->
       <div
         v-if="mainState.currentSuggestedTopics.length > 0"
         class="trending-view__topics-container"
@@ -135,6 +179,8 @@ async function updateHotPosts () {
         </div>
       </div>
     </div>
+
+    <!-- 更新ボタン -->
     <div class="trending-view__button-container">
       <button
         type="button"
@@ -146,6 +192,7 @@ async function updateHotPosts () {
         <span>{{ $t("refresh") }}</span>
       </button>
     </div>
+
     <Loader v-if="state.processing" />
   </div>
 </template>
