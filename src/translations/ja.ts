@@ -339,7 +339,6 @@ export default () => ({
   "searchAccountPost": "ポストを検索",
   "popularFeeds": "人気フィード",
   "recommendedUsers": "オススメユーザー",
-  "trendTags": "トレンドタグ with SkyFeed",
 
   "trending": "トレンド",
   "trendingDescription": "トレンドトピックを表示します。",

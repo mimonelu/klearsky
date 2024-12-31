@@ -227,9 +227,6 @@ export const state: MainState = reactive<MainState>({
   currentSearchUsersCursor: undefined,
   currentSearchLastUserTerm: undefined,
 
-  // 検索 - トレンドタグ
-  currentTrendTags: [],
-
   // カスタムフィード
   currentCustomFeedsUri: undefined,
   currentCustomFeeds: [],

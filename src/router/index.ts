@@ -35,7 +35,6 @@ import SearchView from "@/views/main/SearchView.vue"
 import PostSearchView from "@/views/main/search/PostSearchView.vue"
 import FeedSearchView from "@/views/main/search/FeedSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
-import TrendTagsView from "@/views/main/search/TrendTagsView.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -212,12 +211,6 @@ const router = createRouter({
               name: "user-search",
               meta: { label: "userSearch" },
               component: UserSearchView,
-            },
-            {
-              path: "trend-tags",
-              name: "trend-tags",
-              meta: { label: "trendTags" },
-              component: TrendTagsView,
             },
           ],
         },

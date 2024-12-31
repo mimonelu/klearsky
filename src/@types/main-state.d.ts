@@ -180,9 +180,6 @@ interface MainState {
   currentSearchUsersCursor?: string
   currentSearchLastUserTerm?: string
 
-  // 検索 - トレンドタグ
-  currentTrendTags: Array<TITrendTag>
-
   // カスタムフィード
   currentCustomFeedsUri?: string
   currentCustomFeeds: Array<TTFeed>

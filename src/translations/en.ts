@@ -339,7 +339,6 @@ export default () => ({
   "searchAccountPost": "Search post",
   "popularFeeds": "Popular Feeds",
   "recommendedUsers": "Recommended Users",
-  "trendTags": "Trend Tags with SkyFeed",
 
   "trending": "Trending",
   "trendingDescription": "Show trending topics.",
