@@ -222,12 +222,12 @@ function searchUrl () {
         <div class="external__meta__title">
           <span>{{ external.title || "&emsp;" }}</span>
         </div>
+        <div class="external__meta__description">
+          <span>{{ external.description || "&emsp;" }}</span>
+        </div>
         <div class="external__meta__uri">
           <SVGIcon name="link" />
           <span>{{ external.uri }}</span>
-        </div>
-        <div class="external__meta__description">
-          <span>{{ external.description || "&emsp;" }}</span>
         </div>
       </div>
 
@@ -373,12 +373,12 @@ function searchUrl () {
         <div class="external__meta__title">
           <span>{{ external.title || "" }}</span>
         </div>
+        <div class="external__meta__description">
+          <span>{{ external.description || "" }}</span>
+        </div>
         <div class="external__meta__uri">
           <SVGIcon name="link" />
           <span>{{ external.uri }}</span>
-        </div>
-        <div class="external__meta__description">
-          <span>{{ external.description || "" }}</span>
         </div>
       </a>
     </div>
@@ -389,6 +389,7 @@ function searchUrl () {
 
 <style lang="scss" scoped>
 .external {
+  --size: 6rem;
   position: relative;
 
   // 不正な URL
@@ -415,8 +416,8 @@ function searchUrl () {
       .lazy-image {
         aspect-ratio: 1 / 1;
         object-fit: cover;
-        min-width: 6rem;
-        max-width: 6rem;
+        min-width: var(--size);
+        max-width: var(--size);
       }
     }
 
@@ -439,9 +440,11 @@ function searchUrl () {
   // 通常のリンクカード - 各種情報
   &__meta {
     display: grid;
+    flex-grow: 1;
     align-items: center;
     grid-template-rows: auto auto auto;
-    padding: 0.75em;
+    padding: 0.5em 0.75em;
+    min-height: var(--size);
     [data-layout="horizontal"] & {
       grid-template-rows: 1fr auto 1fr;
     }
@@ -466,7 +469,7 @@ function searchUrl () {
       }
 
       & > span {
-        line-height: var(--line-height-high);
+        line-height: var(--line-height-middle);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -479,8 +482,12 @@ function searchUrl () {
     }
 
     &__uri {
+      border-top: 1px solid rgb(var(--fg-color), 0.125);
       color: rgb(var(--fg-color), 0.5);
       font-size: 0.75em;
+      margin-right: 2.5em;
+      padding-top: 0.5em;
+      width: calc(100% - 2.5em);
     }
 
     &__description {
