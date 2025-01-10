@@ -63,7 +63,8 @@ export const state: MainState = reactive<MainState>({
   notificationCursor: undefined,
   notificationCount: 0,
   notificationFetchedFirst: false,
-  notificationReasonFilter: undefined,
+  notificationRemoteFilter: [],
+  notificationLocalFilter: undefined,
   lastFetchNotificationsDate: undefined,
   fetchNotifications: fetchNotifications,
 
@@ -1015,7 +1016,7 @@ function updateColorThemeSetting () {
 async function fetchNotifications (limit: number, direction: "new" | "old") {
   const result = await state.atp.fetchNotifications(
     state.notifications,
-    undefined,
+    state.notificationRemoteFilter,
     limit,
     direction === "new" ? undefined : state.notificationCursor
   )

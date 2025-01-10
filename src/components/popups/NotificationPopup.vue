@@ -90,13 +90,27 @@ async function fetchNotifications (direction: "new" | "old") {
   state.processing = false
 }
 
-function openRemoteNotificationFilterPopup () {
+async function openRemoteNotificationFilterPopup () {
   Util.blurElement()
+  const filter1 = [...mainState.notificationRemoteFilter].sort()
+  mainState.notificationRemoteFilter.push("reply")
+  const filter2 = [...mainState.notificationRemoteFilter].sort()
+
+  // リモート通知フィルターに変更があれば通知データをリセットして再取得
+  if (
+    filter1.length === filter2.length &&
+    filter1.every((v, i) => v === filter2[i])
+  ) {
+    mainState.notifications.splice(0)
+    mainState.notificationCursor = undefined
+    mainState.notificationCount = 0
+    await fetchNotifications("new")
+  }
 }
 
 function setLocalNotificationFilter (reason?: TTNotificationReason) {
   Util.blurElement()
-  mainState.notificationReasonFilter = reason
+  mainState.notificationLocalFilter = reason
   popup.value?.scrollToTop()
 }
 
@@ -135,7 +149,7 @@ function scrolledToBottom () {
         <button
           type="button"
           class="tab__button"
-          :data-focused="mainState.notificationReasonFilter == null"
+          :data-focused="mainState.notificationLocalFilter == null"
           @click="setLocalNotificationFilter()"
         >
           <SVGIcon name="shimmer" />
@@ -149,7 +163,7 @@ function scrolledToBottom () {
         <button
           type="button"
           class="tab__button tab__button--reply"
-          :data-focused="mainState.notificationReasonFilter == 'reply'"
+          :data-focused="mainState.notificationLocalFilter == 'reply'"
           @click="setLocalNotificationFilter('reply')"
         >
           <SVGIcon name="reply" />
@@ -163,7 +177,7 @@ function scrolledToBottom () {
         <button
           type="button"
           class="tab__button tab__button--mention"
-          :data-focused="mainState.notificationReasonFilter == 'mention'"
+          :data-focused="mainState.notificationLocalFilter == 'mention'"
           @click="setLocalNotificationFilter('mention')"
         >
           <SVGIcon name="at" />
@@ -177,7 +191,7 @@ function scrolledToBottom () {
         <button
           type="button"
           class="tab__button tab__button--quoteRepost"
-          :data-focused="mainState.notificationReasonFilter == 'quote'"
+          :data-focused="mainState.notificationLocalFilter == 'quote'"
           @click="setLocalNotificationFilter('quote')"
         >
           <SVGIcon name="quoteRepost" />
@@ -191,7 +205,7 @@ function scrolledToBottom () {
         <button
           type="button"
           class="tab__button tab__button--repost"
-          :data-focused="mainState.notificationReasonFilter == 'repost'"
+          :data-focused="mainState.notificationLocalFilter == 'repost'"
           @click="setLocalNotificationFilter('repost')"
         >
           <SVGIcon name="repost" />
@@ -205,7 +219,7 @@ function scrolledToBottom () {
         <button
           type="button"
           class="tab__button tab__button--like"
-          :data-focused="mainState.notificationReasonFilter == 'like'"
+          :data-focused="mainState.notificationLocalFilter == 'like'"
           @click="setLocalNotificationFilter('like')"
         >
           <SVGIcon name="like" />
@@ -219,7 +233,7 @@ function scrolledToBottom () {
         <button
           type="button"
           class="tab__button tab__button--follow"
-          :data-focused="mainState.notificationReasonFilter == 'follow'"
+          :data-focused="mainState.notificationLocalFilter == 'follow'"
           @click="setLocalNotificationFilter('follow')"
         >
           <SVGIcon name="person" />

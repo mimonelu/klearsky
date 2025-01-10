@@ -15,24 +15,24 @@ const state = reactive<{
   filteredNotifications: ComputedRef<TTNotificationGroup[]>
 }>({
   filteredNotifications: computed((): TTNotificationGroup[] => {
-    if (mainState.notificationReasonFilter == null) {
+    if (mainState.notificationLocalFilter == null) {
       return mainState.notifications
     }
     return mainState.notifications
       .filter((notificationGroup: TTNotificationGroup) => {
         // フィードジェネレーターへのいいねは通常のいいねとセットで返す
-        if (mainState.notificationReasonFilter === "like") {
+        if (mainState.notificationLocalFilter === "like") {
           return notificationGroup.reason === "like" ||
                  notificationGroup.reason === "likeGenerator"
         }
 
         // スターターパック使用時はフォローとセットで返す
-        if (mainState.notificationReasonFilter === "follow") {
+        if (mainState.notificationLocalFilter === "follow") {
           return notificationGroup.reason === "follow" ||
                  notificationGroup.reason === "starterpack-joined"
         }
 
-        return notificationGroup.reason === mainState.notificationReasonFilter
+        return notificationGroup.reason === mainState.notificationLocalFilter
       })
   }),
 })
