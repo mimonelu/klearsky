@@ -3,6 +3,7 @@ import type { AppBskyNotificationListNotifications } from "@atproto/api"
 export default async function (
   this: TIAtpWrapper,
   currentValues: Array<TTNotificationGroup>,
+  reasons?: Array<TTNotificationStrictReason>,
   limit?: number,
   cursor?: string
 ): Promise<Error | {
@@ -13,6 +14,9 @@ export default async function (
     return Error("noAgentError")
   }
   const query: AppBskyNotificationListNotifications.QueryParams = {}
+  if (reasons != null) {
+    query.reasons = reasons
+  }
   if (limit != null) {
     query.limit = limit
   }

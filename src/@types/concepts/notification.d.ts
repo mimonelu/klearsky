@@ -1,10 +1,13 @@
-type TTNotificationReason =
+type TTNotificationStrictReason =
   "reply" |
   "quote" |
   "mention" |
   "repost" |
   "like" |
-  "follow" |
+  "follow"
+
+type TTNotificationReason =
+  TTNotificationStrictReason |
   "likeGenerator" |
   "starterpack-joined"
   (string & {})

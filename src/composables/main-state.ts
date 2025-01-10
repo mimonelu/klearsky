@@ -1015,6 +1015,7 @@ function updateColorThemeSetting () {
 async function fetchNotifications (limit: number, direction: "new" | "old") {
   const result = await state.atp.fetchNotifications(
     state.notifications,
+    undefined,
     limit,
     direction === "new" ? undefined : state.notificationCursor
   )
