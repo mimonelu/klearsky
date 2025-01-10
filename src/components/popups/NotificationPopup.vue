@@ -13,9 +13,13 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
+  enableRemoteNotificationFilter: ComputedRef<boolean>
   numberByReason: ComputedRef<any>
 }>({
   processing: false,
+  enableRemoteNotificationFilter: computed((): boolean => {
+    return mainState.notificationRemoteFilter.length > 0
+  }),
   numberByReason: computed((): any => {
     const results: { [k: string]: number } = {
       all: 0,
@@ -92,14 +96,20 @@ async function fetchNotifications (direction: "new" | "old") {
 
 async function openRemoteNotificationFilterPopup () {
   Util.blurElement()
+
+  // TODO:
   const filter1 = [...mainState.notificationRemoteFilter].sort()
-  mainState.notificationRemoteFilter.push("reply")
+  if (state.enableRemoteNotificationFilter) {
+    mainState.notificationRemoteFilter.splice(0)
+  } else {
+    mainState.notificationRemoteFilter.push("reply", "mention", "quote")
+  }
   const filter2 = [...mainState.notificationRemoteFilter].sort()
 
   // リモート通知フィルターに変更があれば通知データをリセットして再取得
   if (
-    filter1.length === filter2.length &&
-    filter1.every((v, i) => v === filter2[i])
+    filter1.length !== filter2.length ||
+    filter1.some((v, i) => v !== filter2[i])
   ) {
     mainState.notifications.splice(0)
     mainState.notificationCursor = undefined
@@ -132,9 +142,10 @@ function scrolledToBottom () {
       <button
         type="button"
         class="button--plane notification-popup__filter-button"
+        :data-enable-remote-notification-filter="state.enableRemoteNotificationFilter"
         @click.stop="openRemoteNotificationFilterPopup"
       >
-        <SVGIcon name="setting" />
+        <SVGIcon :name="state.enableRemoteNotificationFilter ? 'setting' : 'settingOff'" />
       </button>
 
       <h2>
@@ -282,6 +293,10 @@ function scrolledToBottom () {
   // リモート通知フィルターボタン
   &__filter-button {
     font-size: 1.25rem;
+
+    &[data-enable-remote-notification-filter="true"] > .svg-icon {
+      --fg-color: var(--notice-color);
+    }
   }
 
   // ローカル通知フィルタータブ
