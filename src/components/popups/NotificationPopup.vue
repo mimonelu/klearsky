@@ -90,7 +90,11 @@ async function fetchNotifications (direction: "new" | "old") {
   state.processing = false
 }
 
-function setReasonFilter (reason?: TTNotificationReason) {
+function openRemoteNotificationFilterPopup () {
+  Util.blurElement()
+}
+
+function setLocalNotificationFilter (reason?: TTNotificationReason) {
   Util.blurElement()
   mainState.notificationReasonFilter = reason
   popup.value?.scrollToTop()
@@ -110,20 +114,29 @@ function scrolledToBottom () {
     @scrolledToBottom="scrolledToBottom"
   >
     <template #header>
+      <!-- リモート通知フィルターボタン -->
+      <button
+        type="button"
+        class="button--plane notification-popup__filter-button"
+        @click.stop="openRemoteNotificationFilterPopup"
+      >
+        <SVGIcon name="setting" />
+      </button>
+
       <h2>
         <SVGIcon name="bell" />
         <span>{{ $t("notifications") }}</span>
       </h2>
     </template>
     <template #header-after>
-      <!-- 通知フィルタータブ -->
+      <!-- ローカル通知フィルタータブ -->
       <div class="tab notification-popup__filter-tab">
-        <!-- 通知フィルタータブ - すべて -->
+        <!-- ローカル通知フィルタータブ - すべて -->
         <button
           type="button"
           class="tab__button"
           :data-focused="mainState.notificationReasonFilter == null"
-          @click="setReasonFilter()"
+          @click="setLocalNotificationFilter()"
         >
           <SVGIcon name="shimmer" />
           <span
@@ -132,12 +145,12 @@ function scrolledToBottom () {
           >{{ clipBadge(state.numberByReason.all) }}</span>
         </button>
 
-        <!-- 通知フィルタータブ - リプライ -->
+        <!-- ローカル通知フィルタータブ - リプライ -->
         <button
           type="button"
           class="tab__button tab__button--reply"
           :data-focused="mainState.notificationReasonFilter == 'reply'"
-          @click="setReasonFilter('reply')"
+          @click="setLocalNotificationFilter('reply')"
         >
           <SVGIcon name="reply" />
           <span
@@ -146,12 +159,12 @@ function scrolledToBottom () {
           >{{ clipBadge(state.numberByReason.reply) }}</span>
         </button>
 
-        <!-- 通知フィルタータブ - メンション -->
+        <!-- ローカル通知フィルタータブ - メンション -->
         <button
           type="button"
           class="tab__button tab__button--mention"
           :data-focused="mainState.notificationReasonFilter == 'mention'"
-          @click="setReasonFilter('mention')"
+          @click="setLocalNotificationFilter('mention')"
         >
           <SVGIcon name="at" />
           <span
@@ -160,12 +173,12 @@ function scrolledToBottom () {
           >{{ clipBadge(state.numberByReason.mention) }}</span>
         </button>
 
-        <!-- 通知フィルタータブ - 引用リポスト -->
+        <!-- ローカル通知フィルタータブ - 引用リポスト -->
         <button
           type="button"
           class="tab__button tab__button--quoteRepost"
           :data-focused="mainState.notificationReasonFilter == 'quote'"
-          @click="setReasonFilter('quote')"
+          @click="setLocalNotificationFilter('quote')"
         >
           <SVGIcon name="quoteRepost" />
           <span
@@ -174,12 +187,12 @@ function scrolledToBottom () {
           >{{ clipBadge(state.numberByReason.quote) }}</span>
         </button>
 
-        <!-- 通知フィルタータブ - リポスト -->
+        <!-- ローカル通知フィルタータブ - リポスト -->
         <button
           type="button"
           class="tab__button tab__button--repost"
           :data-focused="mainState.notificationReasonFilter == 'repost'"
-          @click="setReasonFilter('repost')"
+          @click="setLocalNotificationFilter('repost')"
         >
           <SVGIcon name="repost" />
           <span
@@ -188,12 +201,12 @@ function scrolledToBottom () {
           >{{ clipBadge(state.numberByReason.repost) }}</span>
         </button>
 
-        <!-- 通知フィルタータブ - いいね -->
+        <!-- ローカル通知フィルタータブ - いいね -->
         <button
           type="button"
           class="tab__button tab__button--like"
           :data-focused="mainState.notificationReasonFilter == 'like'"
-          @click="setReasonFilter('like')"
+          @click="setLocalNotificationFilter('like')"
         >
           <SVGIcon name="like" />
           <span
@@ -202,12 +215,12 @@ function scrolledToBottom () {
           >{{ clipBadge(state.numberByReason.like) }}</span>
         </button>
 
-        <!-- 通知フィルタータブ - フォロー -->
+        <!-- ローカル通知フィルタータブ - フォロー -->
         <button
           type="button"
           class="tab__button tab__button--follow"
           :data-focused="mainState.notificationReasonFilter == 'follow'"
-          @click="setReasonFilter('follow')"
+          @click="setLocalNotificationFilter('follow')"
         >
           <SVGIcon name="person" />
           <span
@@ -252,7 +265,12 @@ function scrolledToBottom () {
     }
   }
 
-  // 通知フィルタータブ
+  // リモート通知フィルターボタン
+  &__filter-button {
+    font-size: 1.25rem;
+  }
+
+  // ローカル通知フィルタータブ
   &__filter-tab {
     & > .tab__button {
       & > .svg-icon {
