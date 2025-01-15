@@ -28,7 +28,7 @@ export default async function (
 
   let title = response.title || ""
   let description = response.description || ""
-  let imageFetchUrl = response.image || ""
+  const imageFetchUrl = response.image || ""
 
   // 最大文字数まで切り詰め
   // SEE: https://github.com/bluesky-social/atproto/blob/ad0d976188d1f07401b9675b5c6045c91e82a84e/lexicons/app/bsky/embed/external.json#L21-L30

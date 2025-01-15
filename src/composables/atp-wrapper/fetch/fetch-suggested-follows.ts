@@ -20,7 +20,7 @@ export default async function (
   if (!response.success) {
     return Error("apiError")
   }
-  ;(response.data.suggestions as Array<TTUser>)
+  (response.data.suggestions as Array<TTUser>)
     // ブロックユーザーをフィルタリング
     .filter((follow: TTUser) => {
       return !follow.viewer?.blocking && !follow.viewer?.blockedBy

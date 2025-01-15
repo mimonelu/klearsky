@@ -32,7 +32,7 @@ export default async function (
     return Error("apiError")
   }
 
-  ;(response.data.feeds as Array<TTFeedGenerator>)
+  (response.data.feeds as Array<TTFeedGenerator>)
     .forEach((newGenerator: TTFeedGenerator) => {
       if (currentValues.every((currentGenerator: TTFeedGenerator) => {
         return newGenerator.uri !== currentGenerator.uri

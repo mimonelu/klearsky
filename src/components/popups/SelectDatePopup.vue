@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import format from "date-fns/format"
+import { format } from "date-fns/format"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"

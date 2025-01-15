@@ -135,7 +135,7 @@ function onInputUrl () {
   */
 
   // TODO: 要修正
-  ;(easyForm.value as any)?.forceUpdate()
+  (easyForm.value as any)?.forceUpdate()
 }
 
 function close () {

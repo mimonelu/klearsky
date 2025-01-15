@@ -25,7 +25,7 @@ function open () {
   if (popover.value == null) {
     return
   }
-  ;(popover.value as typeof Popover).open(
+  (popover.value as typeof Popover).open(
     mainState.chatConvoPopoverSelector,
     {
       positionX: "right",

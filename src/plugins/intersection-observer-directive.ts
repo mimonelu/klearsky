@@ -32,6 +32,6 @@ export default {
   },
 
   unmounted (element: HTMLElement) {
-    ;(element as any).__observer__?.disconnect()
+    (element as any).__observer__?.disconnect()
   },
 }

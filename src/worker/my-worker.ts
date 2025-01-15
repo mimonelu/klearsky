@@ -5,7 +5,7 @@ const sessionCaches: TIMyWorkerSessionCaches = {}
 const notificationTimerNows: { [did: string]: number } = {}
 
 function main () {
-  ;(self as any).onconnect = (event: MessageEvent) => {
+  (self as any).onconnect = (event: MessageEvent) => {
     onConnect(event)
   }
   // startPeriodicProcess()

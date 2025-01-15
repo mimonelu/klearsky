@@ -11,7 +11,7 @@ export default async (url: string): Promise<Error | undefined> => {
     url = URL.createObjectURL(blobData)
   }
   anchorElement.href = url
-  let fileName: undefined | string = getFileNameFromUrl(url)
+  const fileName: undefined | string = getFileNameFromUrl(url)
   if (fileName == null) {
     return Error("downloadImageError")
   }

@@ -30,7 +30,7 @@ async function open () {
   if (trigger.value == null || popover.value == null) {
     return
   }
-  ;(popover.value as typeof Popover).open(
+  (popover.value as typeof Popover).open(
     trigger.value,
     {
       positionX: "left",

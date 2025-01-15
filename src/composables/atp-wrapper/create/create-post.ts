@@ -60,7 +60,7 @@ export default async function (
   }
 
   // リストメンション
-  if (!!params.listMentionDids?.length) {
+  if (params.listMentionDids?.length) {
     if (record.facets == null) {
       record.facets = []
     }

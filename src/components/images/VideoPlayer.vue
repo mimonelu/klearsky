@@ -100,7 +100,7 @@ function pause () {
   if (video.value == null) {
     return
   }
-  ;(video.value as HTMLVideoElement).pause()
+  (video.value as HTMLVideoElement).pause()
 }
 </script>
 

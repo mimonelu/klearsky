@@ -1,5 +1,5 @@
 import { RichText } from "@atproto/api"
-import isBefore from "date-fns/isBefore"
+import { isBefore } from "date-fns/isBefore"
 
 export default {
   includes (
