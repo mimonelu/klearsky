@@ -1453,7 +1453,7 @@ function changeSetting () {
       &.popup-overlay,
       & > .popup-overlay {
         & > .popup {
-          --margin: #{map-get($margins, $i)}rem;
+          --margin: #{map.get($margins, $i)}rem;
         }
       }
     }

@@ -56,7 +56,14 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         // NOTICE: 実体のある CSS を読み込まないこと
-        additionalData: "@use 'sass:math'; @import '@/scss/_variables.scss';",
+        additionalData: "@use 'sass:map'; @use 'sass:math'; @import '@/scss/_variables.scss';",
+
+        // 下記の警告を抑制
+        // * `Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.`
+        // * `Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.`
+        // * `Deprecation Warning [mixed-decls]: Sass's behavior for declarations that appear after nested rules will be changing to match the behavior specified by CSS in an upcoming version. To keep the existing behavior, move the declaration above the nested rule. To opt into the new behavior, wrap the declaration in \`& {}\`.`
+        // SEE: https://sass-lang.com/documentation/js-api/interfaces/deprecations/
+        silenceDeprecations: ["import", "legacy-js-api", "mixed-decls"],
       },
     },
     postcss: {
