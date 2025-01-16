@@ -44,6 +44,14 @@
     { "label": "notificationFetchInterval5", "value": 180000 },
     { "label": "notificationFetchInterval6", "value": 300000 }
   ],
+  "NOTIFICATION_REMOTE_FILTER": [
+    { "label": "notificationRemoteFilter1", "value": "reply" },
+    { "label": "notificationRemoteFilter2", "value": "quote" },
+    { "label": "notificationRemoteFilter3", "value": "mention" },
+    { "label": "notificationRemoteFilter4", "value": "repost" },
+    { "label": "notificationRemoteFilter5", "value": "like" },
+    { "label": "notificationRemoteFilter6", "value": "follow" }
+  ],
   "REPLY_FOLDINGS": [
     { "label": "replyFolding1", "value": 1 },
     { "label": "replyFolding2", "value": 2 },

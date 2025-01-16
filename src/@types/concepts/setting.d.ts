@@ -27,6 +27,7 @@ type TTSetting = {
   mainAreaOpacity?: number
   myWords?: Array<string>
   notificationFetchInterval?: number
+  notificationRemoteFilter?: Array<TTNotificationStrictReason>
   postAnonymization?: boolean
   postLanguages?: Array<string>
   postSearchKeywordHistory?: Array<string>

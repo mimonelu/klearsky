@@ -18,7 +18,7 @@ const state = reactive<{
 }>({
   processing: false,
   enableRemoteNotificationFilter: computed((): boolean => {
-    return mainState.notificationRemoteFilter.length > 0
+    return (mainState.currentSetting.notificationRemoteFilter?.length ?? 0) > 0
   }),
   numberByReason: computed((): any => {
     const results: { [k: string]: number } = {
@@ -96,15 +96,19 @@ async function fetchNotifications (direction: "new" | "old") {
 
 async function openRemoteNotificationFilterPopup () {
   Util.blurElement()
+  if (mainState.currentSetting.notificationRemoteFilter == null) {
+    return
+  }
 
   // TODO:
-  const filter1 = [...mainState.notificationRemoteFilter].sort()
+  const filter1 = [...mainState.currentSetting.notificationRemoteFilter].sort()
   if (state.enableRemoteNotificationFilter) {
-    mainState.notificationRemoteFilter.splice(0)
+    mainState.currentSetting.notificationRemoteFilter.splice(0)
   } else {
-    mainState.notificationRemoteFilter.push("reply", "mention", "quote")
+    mainState.currentSetting.notificationRemoteFilter.push("reply", "mention", "quote")
   }
-  const filter2 = [...mainState.notificationRemoteFilter].sort()
+  const filter2 = [...mainState.currentSetting.notificationRemoteFilter].sort()
+  mainState.saveSettings()
 
   // リモート通知フィルターに変更があれば通知データをリセットして再取得
   if (

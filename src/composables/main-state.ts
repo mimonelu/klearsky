@@ -852,6 +852,9 @@ function saveSettings () {
   if (state.settings[did].notificationFetchInterval == null) {
     state.settings[did].notificationFetchInterval = 30000
   }
+  if (state.settings[did].notificationRemoteFilter == null) {
+    state.settings[did].notificationRemoteFilter = []
+  }
   if (state.settings[did].timelineFetchInterval == null) {
     state.settings[did].timelineFetchInterval = 10000
   }
@@ -1016,7 +1019,7 @@ function updateColorThemeSetting () {
 async function fetchNotifications (limit: number, direction: "new" | "old") {
   const result = await state.atp.fetchNotifications(
     state.notifications,
-    state.notificationRemoteFilter,
+    state.currentSetting.notificationRemoteFilter,
     limit,
     direction === "new" ? undefined : state.notificationCursor
   )
