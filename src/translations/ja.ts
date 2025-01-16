@@ -421,6 +421,14 @@ export default () => ({
   "notificationFetchInterval5": "3分ごと",
   "notificationFetchInterval6": "5分ごと",
 
+  "notificationRemoteFilter": "通知フィルター",
+  "notificationRemoteFilterReply": "リプライ",
+  "notificationRemoteFilterQuote": "引用リポスト",
+  "notificationRemoteFilterMention": "メンション",
+  "notificationRemoteFilterRepost": "リポスト",
+  "notificationRemoteFilterLike": "いいね",
+  "notificationRemoteFilterFollow": "フォロー",
+
   "chatFetchInterval": "新着チャットを取得する間隔",
   "chatFetchInterval1": "取得しない",
   "chatFetchInterval2": "15秒ごと",

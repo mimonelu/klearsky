@@ -421,6 +421,14 @@ export default () => ({
   "notificationFetchInterval5": "Every 3 min.",
   "notificationFetchInterval6": "Every 5 min.",
 
+  "notificationRemoteFilter": "Notification Filter",
+  "notificationRemoteFilterReply": "Reply",
+  "notificationRemoteFilterQuote": "Quote",
+  "notificationRemoteFilterMention": "Mention",
+  "notificationRemoteFilterRepost": "Repost",
+  "notificationRemoteFilterLike": "Like",
+  "notificationRemoteFilterFollow": "Follow",
+
   "chatFetchInterval": "Interval to Fetch Chats",
   "chatFetchInterval1": "OFF",
   "chatFetchInterval2": "Every 15 sec.",

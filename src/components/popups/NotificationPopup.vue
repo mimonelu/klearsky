@@ -99,14 +99,9 @@ async function openRemoteNotificationFilterPopup () {
   if (mainState.currentSetting.notificationRemoteFilter == null) {
     return
   }
-
-  // TODO:
+  mainState.openNotificationRemoteFilterPopup()
   const filter1 = [...mainState.currentSetting.notificationRemoteFilter].sort()
-  if (state.enableRemoteNotificationFilter) {
-    mainState.currentSetting.notificationRemoteFilter.splice(0)
-  } else {
-    mainState.currentSetting.notificationRemoteFilter.push("reply", "mention", "quote")
-  }
+  await Util.waitProp(() => mainState.notificationRemoteFilterPopupDisplay, false)
   const filter2 = [...mainState.currentSetting.notificationRemoteFilter].sort()
   mainState.saveSettings()
 
@@ -143,14 +138,17 @@ function scrolledToBottom () {
   >
     <template #header>
       <!-- リモート通知フィルターボタン -->
-      <button
-        type="button"
-        class="button--plane notification-popup__filter-button"
-        :data-enable-remote-notification-filter="state.enableRemoteNotificationFilter"
-        @click.stop="openRemoteNotificationFilterPopup"
-      >
-        <SVGIcon :name="state.enableRemoteNotificationFilter ? 'setting' : 'settingOff'" />
-      </button>
+      <div class="notification-popup__filter-button-container">
+        <button
+          type="button"
+          class="button--plane"
+          :data-enable-remote-notification-filter="state.enableRemoteNotificationFilter"
+          @click.stop="openRemoteNotificationFilterPopup"
+        >
+          <SVGIcon :name="state.enableRemoteNotificationFilter ? 'setting' : 'settingOff'" />
+          <span>{{ $t(state.enableRemoteNotificationFilter ? "on" : "off") }}</span>
+        </button>
+      </div>
 
       <h2>
         <SVGIcon name="bell" />
@@ -292,14 +290,37 @@ function scrolledToBottom () {
       grid-gap: 0;
       padding: 0;
     }
+
+    .popup-closer {
+      margin-left: 3rem;
+    }
   }
 
   // リモート通知フィルターボタン
-  &__filter-button {
-    font-size: 1.25rem;
+  &__filter-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    &[data-enable-remote-notification-filter="true"] > .svg-icon {
-      --fg-color: var(--notice-color);
+    & > button {
+      & > .svg-icon {
+        font-size: 1.25rem;
+      }
+
+      & > span {
+        font-size: 0.875rem;
+      }
+
+      &[data-enable-remote-notification-filter="false"] {
+        opacity: 0.5;
+      }
+      &[data-enable-remote-notification-filter="true"] {
+        --fg-color: var(--notice-color);
+
+        & > span {
+          color: rgb(var(--fg-color));
+        }
+      }
     }
   }
 

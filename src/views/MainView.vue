@@ -39,6 +39,7 @@ import MyFeedsSortPopover from "@/components/popovers/MyFeedsSortPopover.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
 import MyWordPopup from "@/components/popups/MyWordPopup.vue"
 import NotificationPopup from "@/components/popups/NotificationPopup.vue"
+import NotificationRemoteFilterPopup from "@/components/popups/NotificationRemoteFilterPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
 import PasteFiles from "@/components/next/PasteFiles/Main.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
@@ -922,6 +923,14 @@ function changeSetting () {
           v-if="state.notificationPopupDisplay"
           @close="state.closeNotificationPopup"
           @updatePageTitle="state.updatePageTitle"
+        />
+      </Transition>
+
+      <!-- リモート通知フィルターポップアップ -->
+      <Transition>
+        <NotificationRemoteFilterPopup
+          v-if="state.notificationRemoteFilterPopupDisplay"
+          @close="state.closeNotificationRemoteFilterPopup"
         />
       </Transition>
 
