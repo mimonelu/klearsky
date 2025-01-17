@@ -291,6 +291,7 @@ async function mergeV1ToV2 () {
     </template>
     <template #body>
       <!-- カスタムフィードマージボタン -->
+      <!-- TODO: 後で関連実装ごと削除すること
       <div class="my-feeds-popup__merge-button-container">
         <button
           type="button"
@@ -301,6 +302,7 @@ async function mergeV1ToV2 () {
           <span>{{ $t("mergeV1ToV2") }}</span>
         </button>
       </div>
+      -->
 
       <!-- ゼロフィードメッセージ -->
       <div
