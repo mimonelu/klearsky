@@ -354,7 +354,7 @@ function removeThisPost () {
             >
               <AvatarImageButton
                 :isLabeler="state.isLabeler"
-                :image="mainState.currentProfile?.avatar"
+                :image="mainState.currentProfile?.avatar ?? '/img/void.png'"
               />
             </div>
 
