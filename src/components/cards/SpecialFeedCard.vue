@@ -38,6 +38,14 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     class="special-feed-card"
     v-bind="state.routerLinkToFeedsPage"
   >
+    <!-- オーダーボタン -->
+    <OrderButtons
+      @moveTop="changeCustomFeedOrder('top')"
+      @moveUp="changeCustomFeedOrder('up')"
+      @moveDown="changeCustomFeedOrder('down')"
+      @moveBottom="changeCustomFeedOrder('bottom')"
+    />
+
     <div class="special-feed-card__detail">
       <!-- フィード画像 -->
       <SVGIcon
@@ -55,14 +63,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         <span>{{ $t(`${item.value.uri}Description`) }}</span>
       </div>
     </div>
-
-    <!-- オーダーボタン -->
-    <OrderButtons
-      @moveTop="changeCustomFeedOrder('top')"
-      @moveUp="changeCustomFeedOrder('up')"
-      @moveDown="changeCustomFeedOrder('down')"
-      @moveBottom="changeCustomFeedOrder('bottom')"
-    />
   </RouterLink>
 </template>
 
@@ -119,6 +119,9 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 // オーダーボタン
 .order-buttons {
   font-size: 0.875em;
-  justify-content: flex-end;
+
+  &:deep() > button {
+    border-color: rgb(var(--fg-color), 0.125);
+  }
 }
 </style>

@@ -1245,7 +1245,7 @@ function toggleOldestQuotedPostDisplay () {
             :detailDisplay="false"
             :orderButtonDisplay="false"
             :creatorDisplay="true"
-            @click="$emit('click', $event)"
+            @click.prevent.stop
             @onActivateMention="$emit('click', $event)"
             @onActivateHashTag="$emit('click', $event)"
           />

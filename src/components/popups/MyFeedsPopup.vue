@@ -354,7 +354,7 @@ async function mergeV1ToV2 () {
             :detailDisplay="false"
             :orderButtonDisplay="true"
             :creatorDisplay="true"
-            @click.exact="close"
+            @close="close"
             @changeCustomFeedOrder="changeCustomFeedOrder"
             @onActivateMention="close"
             @onActivateHashTag="close"

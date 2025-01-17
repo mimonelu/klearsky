@@ -26,6 +26,7 @@ const state = reactive<{
   saved: ComputedRef<boolean>
   pinned: ComputedRef<boolean>
   detailDisplay: boolean
+  isFeedsPage: boolean
   isUnknown: boolean
 }>({
   routerLinkToFeedsPage: computed(() => {
@@ -46,6 +47,9 @@ const state = reactive<{
       .some((uri: string) => uri === props.generator.uri) ?? false
   }),
   detailDisplay: props.detailDisplay,
+  isFeedsPage:
+    mainState.currentPath === "/home/feeds" &&
+    mainState.currentQuery.feed === props.generator.uri,
   isUnknown: !props.generator.cid
 })
 
@@ -155,16 +159,20 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 </script>
 
 <template>
-  <component
+  <div
     class="feed-card"
-    :is="unclickable || state.isUnknown ? 'div' : 'RouterLink'"
-    v-bind="unclickable || state.isUnknown ? null : {
-      to: state.routerLinkToFeedsPage,
-    }"
     :data-is-unknown="state.isUnknown"
     :data-unclickable="unclickable"
-    @click.stop
   >
+    <!-- オーダーボタン -->
+    <OrderButtons
+      v-if="orderButtonDisplay"
+      @moveTop="changeCustomFeedOrder('top')"
+      @moveUp="changeCustomFeedOrder('up')"
+      @moveDown="changeCustomFeedOrder('down')"
+      @moveBottom="changeCustomFeedOrder('bottom')"
+    />
+
     <div class="feed-card__detail">
       <!-- フィード画像 -->
       <LazyImage :src="generator.avatar" />
@@ -195,32 +203,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         <SVGIcon name="clock" />
         <span>{{ mainState.formatDate(generator.indexedAt) }}</span>
       </div>
-
-      <!-- フィードピン -->
-      <button
-        class="feed-card__pin"
-        @click.prevent.stop="toggleSavedOrPinned('pinned')"
-      >
-        <SVGIcon :name="state.pinned
-          ? 'pin'
-          : state.saved
-            ? 'pinOutline'
-            : 'pinOffOutline'
-        " />
-      </button>
-
-      <!-- フィードブックマーク -->
-      <button
-        class="feed-card__bookmark"
-        @click.prevent.stop="toggleSavedOrPinned('saved')"
-      >
-        <SVGIcon :name="state.saved
-          ? state.pinned
-            ? 'bookmarkOff'
-            : 'bookmark'
-          : 'bookmarkOutline'
-        " />
-      </button>
 
       <!-- フィードカードポップオーバートリガー -->
       <button
@@ -279,25 +261,58 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </div>
     </div>
 
-    <!-- その他のボタンコンテナ -->
-    <div
-      v-if="orderButtonDisplay"
-      class="feed-card__etc-button-container"
-    >
-      <!-- オーダーボタン -->
-      <OrderButtons
-        @moveTop="changeCustomFeedOrder('top')"
-        @moveUp="changeCustomFeedOrder('up')"
-        @moveDown="changeCustomFeedOrder('down')"
-        @moveBottom="changeCustomFeedOrder('bottom')"
-      />
+    <!-- フィードボタンコンテナ -->
+    <div class="feed-card__feed-button-container group-buttons">
+      <!-- フィードボタン -->
+      <component
+        :is="state.isFeedsPage || unclickable || state.isUnknown ? 'div' : 'RouterLink'"
+        v-bind="state.isFeedsPage || unclickable || state.isUnknown ? null : {
+          to: state.routerLinkToFeedsPage,
+        }"
+        class="button--plane feed-card__feeds-button"
+        :disabled="state.isFeedsPage || unclickable || state.isUnknown"
+        @click.prevent="$emit('close')"
+      >
+        <SVGIcon name="post" />
+        <span>{{ $t("feeds") }}</span>
+      </component>
+
+      <!-- フィードピン -->
+      <button
+        class="button--plane feed-card__pin"
+        :data-is-on="state.pinned"
+        @click.prevent.stop="toggleSavedOrPinned('pinned')"
+      >
+        <SVGIcon :name="state.pinned
+          ? 'pin'
+          : state.saved
+            ? 'pinOutline'
+            : 'pinOffOutline'
+        " />
+        <span>{{ $t(state.pinned ? "unpinOnCard" : "pinOnCard") }}</span>
+      </button>
+
+      <!-- フィードブックマーク -->
+      <button
+        class="button--plane feed-card__bookmark"
+        :data-is-on="state.saved"
+        @click.prevent.stop="toggleSavedOrPinned('saved')"
+      >
+        <SVGIcon :name="state.saved
+          ? state.pinned
+            ? 'bookmarkOff'
+            : 'bookmark'
+          : 'bookmarkOutline'
+        " />
+        <span>{{ $t(state.saved ? "deleteOnCard" : "saveOnCard") }}</span>
+      </button>
     </div>
 
     <Loader
       v-if="state.loaderDisplay"
       @click.prevent
     />
-  </component>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -321,11 +336,11 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   &__detail {
     display: grid;
     grid-gap: 0 0.75em;
-    grid-template-columns: auto auto 1fr auto auto auto;
+    grid-template-columns: auto auto 1fr auto;
     grid-template-areas:
-      "v v v v v v"
-      "a n n p b m"
-      "a l i i i m";
+      "v v v v"
+      "a n n m"
+      "a l i m";
     align-items: flex-start;
   }
 
@@ -436,33 +451,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     }
   }
 
-  // フィードピン・フィードブックマーク
-  &__pin,
-  &__bookmark {
-    --color: rgb(var(--accent-color), 0.875);
-    cursor: pointer;
-    margin: -0.625em -0.125em -0.625em -0.625em;
-    padding: 0.625em;
-    &:focus, &:hover {
-      --color: rgb(var(--accent-color));
-    }
-
-    & > .svg-icon {
-      fill: var(--color);
-      font-size: 1.25em;
-    }
-  }
-
-  // フィードピン
-  &__pin {
-    grid-area: p;
-  }
-
-  // フィードブックマーク
-  &__bookmark {
-    grid-area: b;
-  }
-
   // フィードカードメニュートリガー
   &__menu-button {
     --color: rgb(var(--fg-color), 0.75);
@@ -514,16 +502,82 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     }
   }
 
-  // その他のボタンコンテナ
-  &__etc-button-container {
-    display: flex;
+  // フィードボタンコンテナ
+  &__feed-button-container {
     justify-content: flex-end;
-    grid-gap: 0.5em;
+  }
+
+  // フィードボタン
+  &__feeds-button {
+    font-size: 0.875em;
+    &[disabled="true"] {
+      background-color: rgb(var(--fg-color), 0.125);
+    }
+
+    & > span {
+      white-space: nowrap;
+    }
+
+    &[disabled="true"] {
+      opacity: unset;
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color));
+      }
+
+      & > span {
+        color: rgb(var(--fg-color));
+      }
+    }
+  }
+
+  // フィードピン・フィードブックマーク
+  &__pin,
+  &__bookmark {
+    --color: rgb(var(--accent-color), 0.875);
+    font-size: 0.875em;
+    &:focus, &:hover {
+      --color: rgb(var(--accent-color));
+    }
+    &[data-is-on="true"] {
+      background-color: rgb(var(--accent-color), 0.25);
+    }
+
+    & > .svg-icon {
+      fill: var(--color);
+      font-size: 1em;
+    }
+
+    & > span {
+      white-space: nowrap;
+    }
+  }
+
+  // ボタンコンテナのリキッドデザイン
+  @include media-tablet-layout() {
+    &__feeds-button {
+      & > .svg-icon {
+        display: none;
+      }
+    }
+
+    &__pin,
+    &__bookmark {
+      grid-gap: unset;
+
+      & > span {
+        width: 0;
+      }
+    }
   }
 }
 
 // オーダーボタン
 .order-buttons {
   font-size: 0.875em;
+
+  &:deep() > button {
+    border-color: rgb(var(--fg-color), 0.125);
+  }
 }
 </style>
