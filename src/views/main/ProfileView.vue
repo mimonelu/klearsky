@@ -359,16 +359,6 @@ function removeThisPost () {
             </div>
 
             <div class="profile-view__details__top__right">
-              <!-- 折り畳みトグル -->
-              <button
-                v-if="!state.loaderDisplay"
-                class="button--bordered folding-toggle"
-                @click="toggleFolding"
-              >
-                <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
-                <span>{{ $t(mainState.profileFolding ? "showDetail" : "hideDetail") }}</span>
-              </button>
-
               <!-- Viewer ラベル -->
               <ViewerLabels :viewer="mainState.currentProfile?.viewer" />
 
@@ -398,6 +388,16 @@ function removeThisPost () {
                   />
                 </a>
               </div>
+
+              <!-- 折り畳みトグル -->
+              <button
+                v-if="!state.loaderDisplay"
+                class="button--bordered folding-toggle"
+                @click="toggleFolding"
+              >
+                <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
+                <span>{{ $t(mainState.profileFolding ? "showDetail" : "hideDetail") }}</span>
+              </button>
             </div>
           </div>
           <div class="profile-view__details__bottom">
@@ -889,7 +889,7 @@ function removeThisPost () {
 .folding-toggle {
   float: right;
   font-size: 0.75rem;
-  margin-left: 1rem;
+  margin-top: 0.5rem;
   padding: 0.375em 1em;
   white-space: nowrap;
 
