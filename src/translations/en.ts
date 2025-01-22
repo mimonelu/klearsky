@@ -327,10 +327,6 @@ export default () => ({
   "customFeeds": "Custom Feeds",
   "myFeeds": "My Feeds",
   "myFeedsEdit": "Edit my feeds",
-  "pinOnCard": "Pin",
-  "unpinOnCard": "Pinned",
-  "saveOnCard": "Subscribe",
-  "deleteOnCard": "Subscribed",
 
   "search": "Search",
   "suggestionSearch": "Suggestions",

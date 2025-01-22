@@ -327,10 +327,6 @@ export default () => ({
   "customFeeds": "カスタムフィード",
   "myFeeds": "マイフィード",
   "myFeedsEdit": "マイフィードを編集する",
-  "pinOnCard": "ピン留めする",
-  "unpinOnCard": "ピン留め中",
-  "saveOnCard": "購読する",
-  "deleteOnCard": "購読中",
 
   "search": "検索",
   "suggestionSearch": "おすすめ",

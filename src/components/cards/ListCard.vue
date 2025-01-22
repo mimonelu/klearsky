@@ -366,7 +366,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
             ? 'pinOutline'
             : 'pinOffOutline'
         " />
-        <span>{{ $t(state.pinned ? "unpinOnCard" : "pinOnCard") }}</span>
+        <span>&#160;</span>
       </button>
 
       <!-- フィードブックマーク -->
@@ -381,7 +381,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
             : 'bookmark'
           : 'bookmarkOutline'
         " />
-        <span>{{ $t(state.saved ? "deleteOnCard" : "saveOnCard") }}</span>
+        <span>&#160;</span>
       </button>
     </div>
 
@@ -630,6 +630,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   &__bookmark {
     --color: rgb(var(--accent-color), 0.875);
     font-size: 0.875em;
+    grid-gap: unset;
     &:focus, &:hover {
       --color: rgb(var(--accent-color));
     }
@@ -643,7 +644,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     }
 
     & > span {
-      white-space: nowrap;
+      width: 0;
     }
   }
 
@@ -654,15 +655,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     &__edit-button {
       & > .svg-icon {
         display: none;
-      }
-    }
-
-    &__pin,
-    &__bookmark {
-      grid-gap: unset;
-
-      & > span {
-        width: 0;
       }
     }
   }
