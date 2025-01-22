@@ -63,7 +63,6 @@ export const state: MainState = reactive<MainState>({
   notificationCursor: undefined,
   notificationCount: 0,
   notificationFetchedFirst: false,
-  notificationRemoteFilter: [],
   notificationLocalFilter: undefined,
   lastFetchNotificationsDate: undefined,
   fetchNotifications: fetchNotifications,
