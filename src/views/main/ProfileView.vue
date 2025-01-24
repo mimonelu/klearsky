@@ -738,6 +738,7 @@ function removeThisPost () {
         state.isPagePostFeeds &&
         mainState.currentAuthorPostOfPinnedPost != null
       "
+      :key="mainState.currentAuthorPostOfPinnedPost.uri"
       position="post"
       :post="mainState.currentAuthorPostOfPinnedPost"
       class="pinned-post"

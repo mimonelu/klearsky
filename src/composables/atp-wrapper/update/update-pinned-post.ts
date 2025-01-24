@@ -18,7 +18,7 @@ export default async function (
           : {}
       }
 
-      // 固定ポストフィールドの作成
+      // 固定ポストフィールドの作成／変更
       if (uri != null) {
         pinned = true
         existing.pinnedPost = { uri, cid }

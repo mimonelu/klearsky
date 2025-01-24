@@ -26,7 +26,7 @@ async function updatePinnedPost (uri?: string, cid?: string) {
     return
   }
 
-  // 固定ポスト作成時
+  // 固定ポスト作成／変更時
   if (response) {
     mainState.userProfile.pinnedPost = {
       uri: uri as string,
