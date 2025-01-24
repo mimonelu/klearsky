@@ -192,7 +192,7 @@ async function copyCode (code: string) {
     width: 100%;
 
     & > span {
-      line-height: 1.125;
+      line-height: var(--line-height-low);
       overflow: hidden;
       text-overflow: ellipsis;
     }

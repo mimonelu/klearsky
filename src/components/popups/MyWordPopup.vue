@@ -251,7 +251,7 @@ function insertMyWord (myWord: string) {
 
   &__text {
     font-weight: bold;
-    line-height: 1.25;
+    line-height: var(--line-height-low);
     padding: 0.5rem 0.25rem;
     word-break: break-all;
     &:first-child {

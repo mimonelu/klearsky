@@ -293,7 +293,7 @@ function moveToBottom () {
     color: rgb(var(--fg-color), 0.5);
     font-size: 1.125rem;
     font-weight: bold;
-    line-height: 1.25;
+    line-height: var(--line-height-low);
     overflow: hidden;
     text-align: center;
     text-overflow: ellipsis;
@@ -341,7 +341,7 @@ function moveToBottom () {
   .label {
     color: rgb(var(--fg-color), 0.5);
     font-size: 1.25rem;
-    line-height: 1.25;
+    line-height: var(--line-height-low);
     overflow: hidden;
     padding-right: 0.5rem;
     text-overflow: ellipsis;

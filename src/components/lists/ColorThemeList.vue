@@ -43,7 +43,7 @@ function onActivate (colorValue: string) {
     align-items: center;
     justify-content: center;
     grid-gap: 0.25rem;
-    line-height: 1.25;
+    line-height: var(--line-height-low);
     overflow: hidden;
     min-height: 3rem;
     &[data-selected="true"] {

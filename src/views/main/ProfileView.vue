@@ -960,7 +960,7 @@ function removeThisPost () {
       color: rgb(var(--fg-color), 0.5);
       font-size: 1rem;
       font-weight: bold;
-      line-height: 1.25;
+      line-height: var(--line-height-middle);
       overflow: hidden;
       text-overflow: ellipsis;
       user-select: text;
@@ -1102,7 +1102,7 @@ function removeThisPost () {
     & > dt {
       color: rgb(var(--fg-color), 0.5);
       font-size: 0.875rem;
-      line-height: 1.25;
+      line-height: var(--line-height-middle);
     }
 
     & > dd {

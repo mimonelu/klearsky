@@ -277,7 +277,7 @@ function onClickFileBox (event: Event) {
 .service {
   color: rgb(var(--fg-color), 0.5);
   font-weight: bold;
-  line-height: 1.25;
+  line-height: var(--line-height-low);
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -355,7 +355,7 @@ function onClickFileBox (event: Event) {
     grid-area: h;
     color: rgb(var(--color));
     font-weight: bold;
-    line-height: 1.25;
+    line-height: var(--line-height-low);
     overflow: hidden;
     padding-top: 0.25rem;
     text-overflow: ellipsis;
@@ -369,7 +369,7 @@ function onClickFileBox (event: Event) {
     align-items: center;
     grid-gap: 0.25rem;
     font-size: 0.875rem;
-    line-height: 1.25;
+    line-height: var(--line-height-low);
     overflow: hidden;
     padding-bottom: 0.25rem;
 

@@ -35,7 +35,7 @@ const state = reactive<{
 
   & > span {
     font-weight: bold;
-    line-height: 1.25;
+    line-height: var(--line-height-low);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

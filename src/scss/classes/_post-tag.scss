@@ -15,7 +15,7 @@
 
   & > span {
     color: rgb(var(--fg-color), var(--alpha));
-    line-height: 1.25;
+    line-height: var(--line-height-low);
     word-break: break-all;
   }
 }

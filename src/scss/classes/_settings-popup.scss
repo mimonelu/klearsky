@@ -20,7 +20,7 @@
       font-weight: bold;
 
       & > span {
-        line-height: 1.25;
+        line-height: var(--line-height-low);
         overflow: hidden;
         word-wrap: break-word;
       }

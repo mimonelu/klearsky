@@ -167,7 +167,7 @@ function getLabelerEndpoint (item: any): undefined | string {
   .handle {
     font-size: 1.25rem;
     font-weight: bold;
-    line-height: 1.25;
+    line-height: var(--line-height-low);
     word-break: break-all;
   }
 
@@ -194,7 +194,7 @@ function getLabelerEndpoint (item: any): undefined | string {
       }
 
       & > span {
-        line-height: 1.25;
+        line-height: var(--line-height-low);
         word-break: break-all;
       }
     }

@@ -426,7 +426,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 .indexed-at {
   color: rgb(var(--fg-color), 0.5);
   font-size: 0.75rem;
-  line-height: 1.25;
+  line-height: var(--line-height-low);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

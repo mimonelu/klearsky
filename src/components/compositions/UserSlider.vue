@@ -82,7 +82,7 @@ defineProps<{
         color: white;
         font-size: 0.75rem;
         font-weight: bold;
-        line-height: 1.25;
+        line-height: var(--line-height-low);
         overflow: hidden;
         padding: 0.25rem 0.5rem;
         pointer-events: none;

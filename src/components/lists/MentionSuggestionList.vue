@@ -251,7 +251,7 @@ function selectUser (user?: TTUser) {
 
       &__display-name,
       &__handle {
-        line-height: 1.25;
+        line-height: var(--line-height-low);
         overflow: hidden;
         text-overflow: ellipsis;
       }

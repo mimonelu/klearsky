@@ -133,7 +133,7 @@ function remove (index: number) {
     padding: 0.25rem 0 0.25rem 1rem;
 
     & > span {
-      line-height: 1.125;
+      line-height: var(--line-height-low);
       overflow: hidden;
       text-overflow: ellipsis;
     }

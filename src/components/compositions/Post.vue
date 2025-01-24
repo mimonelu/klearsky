@@ -1575,7 +1575,7 @@ function toggleOldestQuotedPostDisplay () {
 
     &__content-warning,
     &__handle {
-      line-height: 1.25;
+      line-height: var(--line-height-low);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

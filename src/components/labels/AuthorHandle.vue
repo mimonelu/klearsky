@@ -35,7 +35,7 @@ const state = reactive<{
 .author-handle {
   color: rgb(var(--fg-color), 0.5);
   font-size: 0.75em;
-  line-height: 1.25;
+  line-height: var(--line-height-low);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

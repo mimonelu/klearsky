@@ -252,7 +252,7 @@ function onActivateContentFilteringToggle () {
 .description {
   grid-area: d;
   font-size: 0.875em;
-  line-height: 1.25;
+  line-height: var(--line-height-low);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -277,7 +277,7 @@ function onActivateContentFilteringToggle () {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  line-height: 1.25;
+  line-height: var(--line-height-low);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
