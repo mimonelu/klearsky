@@ -644,9 +644,6 @@ export default () => ({
   "addingCustomBookmarkTag": "New bookmark tag",
   "customBookmarkOutputConfirmation": "Copy the loaded posts to your clipboard as SkyFeed JSON.",
 
-  "listMention": "List mention",
-  "listMentionNotification": "Sends notifications to users in the selected list(up to 30 users). Mentions are not displayed in your post, and ostensibly the users to be notified are not known.",
-
   "sortInAsc": "Sort in asc",
   "sortInDesc": "Sort in desc",
   "sortByLike": "Sort by likes",
