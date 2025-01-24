@@ -65,7 +65,7 @@ function onActivateBackButton () {
 
   & > h1,
   & > h2 {
-    line-height: var(--line-height-low);
+    line-height: var(--line-height-middle);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

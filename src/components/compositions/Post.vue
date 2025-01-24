@@ -1861,6 +1861,7 @@ function toggleOldestQuotedPostDisplay () {
   &__indexed-at {
     color: rgb(var(--fg-color), 0.5);
     font-size: 0.75em;
+    line-height: var(--line-height-low);
     overflow: hidden;
     white-space: nowrap;
   }
