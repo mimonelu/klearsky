@@ -222,6 +222,7 @@ function translate (text: string) {
 
           <!-- 設定ラジオボタン -->
           <Radios
+            class="radios--nowrap"
             :state="pseudoDefinition"
             model="setting"
             :options="pseudoDefinition.options"

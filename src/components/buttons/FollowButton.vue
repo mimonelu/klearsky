@@ -44,7 +44,7 @@ async function toggleFollow () {
 
 <template>
   <button
-    class="follow-button"
+    class="follow-button button--nowrap"
     :class="viewer.following != null ? 'button' : 'button--bordered'"
     :data-is-following="viewer.following != null"
     :data-is-processing="state.processing"

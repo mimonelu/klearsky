@@ -51,7 +51,7 @@ async function toggleMute () {
 
 <template>
   <button
-    class="button--bordered--important mute-button"
+    class="button--bordered--important button--nolabel mute-button"
     :disabled="viewer.mutedByList != null"
     :data-enabled="viewer.muted"
     :data-is-processing="state.processing"
@@ -63,6 +63,7 @@ async function toggleMute () {
     <template v-else>
       <SVGIcon name="volumeOn" />
     </template>
+    <span>&#160;</span>
     <Loader v-if="state.processing" />
   </button>
 </template>

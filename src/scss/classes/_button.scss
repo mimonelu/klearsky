@@ -132,6 +132,23 @@
   }
 }
 
+.button--nowrap {
+  overflow: hidden;
+
+  & > span {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+.button--nolabel {
+  grid-gap: unset;
+
+  & > span {
+    width: 0;
+  }
+}
+
 .button-is-wide {
   border-radius: unset;
 }

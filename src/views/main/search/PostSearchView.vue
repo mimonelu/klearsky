@@ -26,6 +26,7 @@ const easyFormProps: TTEasyForm = {
       state: mainState.currentSearchPostFormState,
       model: "sort",
       type: "radio",
+      classes: "radios--nowrap",
       layout: "horizontal",
       options: [
         { label: $t("postSearchLatest"), value: "latest" },
@@ -36,6 +37,7 @@ const easyFormProps: TTEasyForm = {
       state: mainState.currentSearchPostFormState,
       model: "lang",
       type: "checkbox",
+      classes: "checkboxes--nowrap",
       layout: "horizontal",
       options: [
         { label: (Util.getUserLanguage() ?? "-").toUpperCase(), value: Util.getUserLanguage() },
@@ -45,6 +47,7 @@ const easyFormProps: TTEasyForm = {
       state: mainState.currentSearchPostFormState,
       model: "author",
       type: "checkbox",
+      classes: "checkboxes--nowrap",
       layout: "horizontal",
       options: [
         { label: "me", value: mainState.atp.data.did },
@@ -263,9 +266,19 @@ function onScrolledToBottom () {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+  }
+}
 
-    .easy-form {
-      padding: 0 0.5rem;
+.easy-form {
+  margin-right: -0.5rem;
+  overflow: hidden;
+
+  &:deep(.easy-form__body) {
+    overflow: hidden;
+    position: relative;
+
+    & > dl {
+      overflow: hidden;
     }
   }
 }

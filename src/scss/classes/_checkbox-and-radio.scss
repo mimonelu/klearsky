@@ -135,6 +135,24 @@
       }
     }
   }
+
+  // 折り返しなし
+  &--nowrap {
+    & > .checkbox,
+    & > .radio {
+      overflow: hidden;
+
+      & > div {
+        overflow: hidden;
+      }
+    }
+
+    .label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
 }
 .checkboxes-is-wide,
 .radios-is-wide {

@@ -51,7 +51,7 @@ async function toggleBlock () {
 
 <template>
   <button
-    class="button--bordered--important block-button"
+    class="button--bordered--important button--nolabel block-button"
     :disabled="viewer.blockingByList != null"
     :data-enabled="viewer.blocking != null"
     :data-is-processing="state.processing"
@@ -63,6 +63,7 @@ async function toggleBlock () {
     <template v-else>
       <SVGIcon name="person" />
     </template>
+    <span>&#160;</span>
     <Loader v-if="state.processing" />
   </button>
 </template>

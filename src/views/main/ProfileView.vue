@@ -447,16 +447,6 @@ function removeThisPost () {
                   <SVGIcon :name="state.hasNoUnauthenticated ? 'earthOff' : 'earth'" />
                 </button>
 
-                <!-- 高さ合わせ兼セパレータ用ボタン -->
-                <button
-                  type="button"
-                  class="button button-container__hidden-button"
-                  tabindex="-1"
-                >
-                  <SVGIcon name="like" />
-                  <span>-</span>
-                </button>
-
                 <!-- ミュートトグル -->
                 <MuteButton
                   v-if="!mainState.isMyProfile()"
@@ -473,10 +463,11 @@ function removeThisPost () {
 
                 <!-- プロフィールポップオーバートグル -->
                 <button
-                  class="button--bordered menu-button"
+                  class="button--bordered button--nolabel menu-button"
                   @click.stop="openProfilePopover"
                 >
                   <SVGIcon name="menu" />
+                  <span>&#160;</span>
                 </button>
               </div>
             </div>
@@ -997,15 +988,6 @@ function removeThisPost () {
     flex-grow: 1;
     grid-gap: 0.5rem;
   }
-
-  // 高さ合わせ兼セパレータ用ボタン
-  &__hidden-button {
-    flex-grow: 1;
-    font-size: 0.875rem;
-    padding-left: 0;
-    padding-right: 0;
-    visibility: hidden;
-  }
 }
 
 // Known Followers
@@ -1040,6 +1022,7 @@ function removeThisPost () {
   display: flex;
   align-items: center;
   font-size: 1.25rem;
+  margin-right: auto;
 
   &[data-no-unauthenticated="true"] > .svg-icon {
     fill: rgb(var(--fg-color), 0.5);
@@ -1050,6 +1033,7 @@ function removeThisPost () {
 }
 
 .mute-button {
+  margin-left: auto;
   min-width: 3rem;
   max-width: 3rem;
 }
