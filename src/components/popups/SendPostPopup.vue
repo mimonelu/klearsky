@@ -229,6 +229,7 @@ async function submitCallback () {
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
       lightning: mainState.currentSetting.lightning,
+      listMentionDids: mainState.listMentionPopupProps.dids,
     })
     if (result instanceof Error) {
       mainState.openSendPostPopup()
@@ -352,6 +353,10 @@ function openReactionControlPopup () {
       }
     },
   })
+}
+
+function openListMentionPopup () {
+  mainState.openListMentionPopup()
 }
 
 // マイワード
@@ -557,6 +562,16 @@ const PreviewLinkCardFeature: {
               <SVGIcon :name="state.isDraftReactionControlOn ? 'lock' : 'unlock'" />
               <span>{{ $t("reactionControl") }}</span>
               <b v-if="state.isDraftReactionControlOn">ON</b>
+            </button>
+
+            <!-- リストメンションポップアップトリガー -->
+            <button
+              class="button--bordered on-off-button"
+              @click.prevent="openListMentionPopup"
+            >
+              <SVGIcon name="list" />
+              <span>{{ $t("listMention") }}</span>
+              <b v-if="mainState.listMentionPopupProps.list != null">ON</b>
             </button>
 
             <!-- マイワードポップアップトリガー -->

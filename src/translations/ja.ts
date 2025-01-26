@@ -644,6 +644,9 @@ export default () => ({
   "addingCustomBookmarkTag": "新しいブックマークタグ",
   "customBookmarkOutputConfirmation": "読み込み済みのポストをSkyFeedのJSONとしてクリップボードにコピーします。",
 
+  "listMention": "リストメンション",
+  "listMentionNotification": "選択したリストのユーザーに通知を送信します（最大30人まで）。本文にメンションは表示されず、表向きには通知先のユーザーはわかりません。",
+
   "sortInAsc": "昇順でソート",
   "sortInDesc": "降順でソート",
   "sortByLike": "いいね数でソート",

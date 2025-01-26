@@ -700,7 +700,16 @@ export const state: MainState = reactive<MainState>({
   openReactionControlPopup: openReactionControlPopup,
   closeReactionControlPopup: closeReactionControlPopup,
 
-  // ポップアップ - HTML ポップアップ
+  // ポップアップ - リストメンションポップアップ
+  listMentionPopupProps: {
+    display: false,
+    list: undefined,
+    dids: [],
+  },
+  openListMentionPopup: openListMentionPopup,
+  closeListMentionPopup: closeListMentionPopup,
+
+    // ポップアップ - HTML ポップアップ
   htmlPopupProps: {
     display: false,
     type: undefined,
@@ -2528,6 +2537,8 @@ async function closeSendPostPopup (done: boolean, hidden: boolean) {
     state.sendPostPopupProps.url = undefined
     state.sendPostPopupProps.fileList = undefined
     state.postDatePopupDate = undefined
+    state.listMentionPopupProps.list = undefined
+    state.listMentionPopupProps.dids.splice(0)
   }
   state.sendPostPopupProps.visibility = false
 }
@@ -2570,6 +2581,17 @@ function closeReactionControlPopup (params: TICloseReactionControlPopupProps) {
     state.reactionControlPopupProps.onClosed(params)
   }
   state.reactionControlPopupProps.display = false
+}
+
+// ポップアップ - リストメンションポップアップ
+
+function openListMentionPopup () {
+  state.listMentionPopupProps.dids.splice(0)
+  state.listMentionPopupProps.display = true
+}
+
+function closeListMentionPopup () {
+  state.listMentionPopupProps.display = false
 }
 
 // ポップアップ - HTML ポップアップ

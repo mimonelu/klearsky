@@ -617,6 +617,11 @@ interface MainState {
   openReactionControlPopup: Function
   closeReactionControlPopup: (params: TICloseReactionControlPopupProps) => void
 
+  // ポップアップ - リストメンションポップアップ
+  listMentionPopupProps: TIListMentionPopupProps
+  openListMentionPopup: Function
+  closeListMentionPopup: () => void
+
   // ポップアップ - HTML ポップアップ
   htmlPopupProps: TTHtmlPopupProps
   openHtmlPopup: (type: string) => void
