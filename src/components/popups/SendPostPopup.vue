@@ -29,6 +29,7 @@ const state = reactive<{
   draftReactionControl: TTDraftReactionControl
   isDraftReactionControlOn: ComputedRef<boolean>
   postDatePopupDate: ComputedRef<undefined | string>
+  hiddenFeaturesDisplay: boolean
   videoLimits?: TIVideoLimits
 }>({
   labels: [],
@@ -51,6 +52,7 @@ const state = reactive<{
     if (Number.isNaN(date.getTime())) return
     return format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'")
   }),
+  hiddenFeaturesDisplay: false,
   videoLimits: undefined,
 })
 
@@ -390,6 +392,11 @@ function getTextarea (): null | HTMLTextAreaElement {
   return document.querySelector("#easy-form--default__0")
 }
 
+// 隠し機能のトグル
+function toggleHiddenFeatures () {
+  state.hiddenFeaturesDisplay = !state.hiddenFeaturesDisplay
+}
+
 // プレビューリンクカード
 const PreviewLinkCardFeature: {
   timer?: any
@@ -564,16 +571,6 @@ const PreviewLinkCardFeature: {
               <b v-if="state.isDraftReactionControlOn">ON</b>
             </button>
 
-            <!-- リストメンションポップアップトリガー -->
-            <button
-              class="button--bordered on-off-button"
-              @click.prevent="openListMentionPopup"
-            >
-              <SVGIcon name="list" />
-              <span>{{ $t("listMention") }}</span>
-              <b v-if="mainState.listMentionPopupProps.list != null">ON</b>
-            </button>
-
             <!-- マイワードポップアップトリガー -->
             <button
               class="button--bordered my-word-button"
@@ -582,19 +579,9 @@ const PreviewLinkCardFeature: {
               <SVGIcon name="alphaA" />
               <span>{{ $t("myWord") }}</span>
             </button>
-
-            <!-- ポスト日時選択ポップアップトリガー -->
-            <button
-              class="button--bordered post-date-button"
-              @click.prevent="mainState.openPostDatePopup"
-            >
-              <SVGIcon name="history" />
-              <span>{{ $t("date") }}</span>
-              <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
-            </button>
           </div>
         </template>
-        <template #beforeButton>
+        <template #after>
           <!-- 動画アップロード情報 -->
           <div class="video-upload-info">
             <div
@@ -627,6 +614,39 @@ const PreviewLinkCardFeature: {
                 <dd>&emsp;</dd>
               </dl>
             </div>
+          </div>
+
+          <!-- 隠し機能 -->
+          <div class="hidden-features">
+            <button
+              class="button--bordered hidden-features-toggle"
+              @click.prevent="toggleHiddenFeatures"
+            >
+              <SVGIcon :name="state.hiddenFeaturesDisplay ? 'cursorLeft' : 'cursorRight'" />
+              <span v-if="!state.hiddenFeaturesDisplay">{{ $t("hiddenFeatures") }}</span>
+            </button>
+
+            <template v-if="state.hiddenFeaturesDisplay">
+              <!-- ポスト日時選択ポップアップトリガー -->
+              <button
+                class="button--bordered post-date-button"
+                @click.prevent="mainState.openPostDatePopup"
+              >
+                <SVGIcon name="history" />
+                <span>{{ $t("date") }}</span>
+                <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
+              </button>
+
+              <!-- リストメンションポップアップトリガー -->
+              <button
+                class="button--bordered on-off-button"
+                @click.prevent="openListMentionPopup"
+              >
+                <SVGIcon name="list" />
+                <span>{{ $t("listMention") }}</span>
+                <b v-if="mainState.listMentionPopupProps.list != null">ON</b>
+              </button>
+            </template>
           </div>
         </template>
       </EasyForm>
@@ -790,6 +810,18 @@ const PreviewLinkCardFeature: {
     }
     .post-date-button > b {
       color: rgb(var(--fg-color));
+    }
+  }
+
+  // 隠し機能
+  .hidden-features {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 0.5rem;
+    font-size: 0.875rem;
+
+    &-toggle {
+      border-color: transparent;
     }
   }
 }

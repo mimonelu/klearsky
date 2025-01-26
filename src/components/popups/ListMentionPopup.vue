@@ -103,6 +103,7 @@ function close (params: any) {
       <!-- 注意文 -->
       <div class="textlabel">
         <div class="textlabel__text">{{ $t("listMentionNotification") }}</div>
+        <div class="textlabel__text--alert">{{ $t("listMentionNotification2") }}</div>
       </div>
 
       <EasyForm v-bind="easyFormProps" />

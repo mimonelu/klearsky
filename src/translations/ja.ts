@@ -644,8 +644,11 @@ export default () => ({
   "addingCustomBookmarkTag": "新しいブックマークタグ",
   "customBookmarkOutputConfirmation": "読み込み済みのポストをSkyFeedのJSONとしてクリップボードにコピーします。",
 
+  "hiddenFeatures": "非推奨機能",
+
   "listMention": "リストメンション",
   "listMentionNotification": "選択したリストのユーザーに通知を送信します（最大30人まで）。本文にメンションは表示されず、表向きには通知先のユーザーはわかりません。",
+  "listMentionNotification2": "この機能は非推奨です。 bsky.social では spam ラベルが貼られます。",
 
   "sortInAsc": "昇順でソート",
   "sortInDesc": "降順でソート",

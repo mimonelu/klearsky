@@ -644,8 +644,11 @@ export default () => ({
   "addingCustomBookmarkTag": "New bookmark tag",
   "customBookmarkOutputConfirmation": "Copy the loaded posts to your clipboard as SkyFeed JSON.",
 
+  "hiddenFeatures": "Duplicated features",
+
   "listMention": "List mention",
   "listMentionNotification": "Sends notifications to users in the selected list(up to 30 users). Mentions are not displayed in your post, and ostensibly the users to be notified are not known.",
+  "listMentionNotification2": "This feature is deprecated. On bsky.social, a spam label is applied.",
 
   "sortInAsc": "Sort in asc",
   "sortInDesc": "Sort in desc",
