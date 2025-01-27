@@ -264,6 +264,7 @@ export default () => ({
   "officialAppPost": "公式アプリ - ポスト",
   "officialAppRss": "公式アプリ - RSS",
   "ouranosApp": "Ouranos",
+  "atprotoBrowserApp": "ATProto Browser",
   "pdslsApp": "PDSls",
   "wrapperApp": "Bluesky Wrapper",
   "tokimekiApp": "TOKIMEKI Bluesky",

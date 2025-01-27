@@ -63,6 +63,14 @@
     "profile": "https://web.plc.directory/did/{did}"
   },
   {
+    "name": "atprotoBrowserApp",
+    "post": "https://atproto-browser.vercel.app/at/{did}/app.bsky.feed.post/{rkey}",
+    "profile": "https://atproto-browser.vercel.app/at/{did}",
+    "generator": "https://atproto-browser.vercel.app/at/{did}/app.bsky.feed.generator/{rkey}",
+    "list": "https://atproto-browser.vercel.app/at/{did}/app.bsky.graph.list/{rkey}",
+    "starterPack": "https://atproto-browser.vercel.app/at/{did}/app.bsky.graph.starterpack/{rkey}"
+  },
+  {
     "name": "pdslsApp",
     "post": "https://pdsls.dev/at/{did}/app.bsky.feed.post/{rkey}",
     "profile": "https://pdsls.dev/at/{did}",
