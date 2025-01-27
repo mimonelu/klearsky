@@ -642,7 +642,7 @@ export default () => ({
   "customBookmarkManagement": "ブックマークを管理",
   "customBookmarkManagementDetail": "ブックマークの作成／更新",
   "addingCustomBookmarkTag": "新しいブックマークタグ",
-  "customBookmarkOutputConfirmation": "読み込み済みのポストをSkyFeedのJSONとしてクリップボードにコピーします。",
+  "customBookmarkOutputConfirmation": "読み込み済みのポストをSkyFeedのJSONとしてクリップボードにコピーします（最新の30件まで）。",
 
   "hiddenFeatures": "非推奨機能",
 

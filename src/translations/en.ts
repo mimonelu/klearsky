@@ -642,7 +642,7 @@ export default () => ({
   "customBookmarkManagement": "Manage bookmark",
   "customBookmarkManagementDetail": "Add/update bookmark",
   "addingCustomBookmarkTag": "New bookmark tag",
-  "customBookmarkOutputConfirmation": "Copy the loaded posts to your clipboard as SkyFeed JSON.",
+  "customBookmarkOutputConfirmation": "Copy the loaded posts to your clipboard as SkyFeed JSON. (Up to the latest 30 posts)",
 
   "hiddenFeatures": "Duplicated features",
 

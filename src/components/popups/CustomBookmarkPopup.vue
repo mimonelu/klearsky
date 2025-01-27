@@ -154,6 +154,10 @@ async function outputJsonForSkyFeed () {
     .filter((pack) => {
       return pack.post != null
     })
+
+    // SkyFeeds のポスト数上限を考慮
+    .slice(0, 30)
+
     .map((pack) => {
       return {
         type: "input",
