@@ -58,8 +58,14 @@ function openOtherApp (app: any) {
   let uri = ""
   switch (props.type) {
     case "generator": {
+      const rkey = Util.getRkey(props.uri)
+      const officialUri = (props.uri ?? "")
+        .replace('at://', '')
+        .replace('app.bsky.feed.generator', 'feed')
       uri = app.generator
-        .replace("{uri}", props.uri)
+        .replace("{did}", props.did)
+        .replace("{rkey}", rkey)
+        .replace("{uri}", officialUri)
         .replace("{uriWithoutFeed}", props.uri?.replace("/feed", "") ?? "")
       break
     }

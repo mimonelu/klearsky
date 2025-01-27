@@ -102,7 +102,8 @@ function close () {
       <!-- 外部アプリで開く -->
       <MenuTickerOpenAppWrapper
         type="generator"
-        :uri="generator.uri.replace('at://', '').replace('app.bsky.feed.generator', 'feed')"
+        :did="generator.creator.did"
+        :uri="generator.uri"
         @close="emit('close')"
       />
 
