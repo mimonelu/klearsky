@@ -21,6 +21,7 @@ import ProfileView from "@/views/main/ProfileView.vue"
 import AuthorFeedsView from "@/views/main/profile/AuthorFeedsView.vue"
 import AuthorFeedsWithRepliesView from "@/views/main/profile/AuthorFeedsWithRepliesView.vue"
 import AuthorFeedsWithMediaView from "@/views/main/profile/AuthorFeedsWithMediaView.vue"
+import AuthorFeedsWithVideoView from "@/views/main/profile/AuthorFeedsWithVideoView.vue"
 import AuthorFeedGeneratorsView from "@/views/main/profile/AuthorFeedGeneratorsView.vue"
 import AuthorListView from "@/views/main/profile/AuthorListView.vue"
 import AuthorRepostView from "@/views/main/profile/AuthorRepostView.vue"
@@ -137,6 +138,12 @@ const router = createRouter({
               name: "profile-feeds-with-media",
               meta: { label: "postWithMedia" },
               component: AuthorFeedsWithMediaView,
+            },
+            {
+              path: "feeds-with-video",
+              name: "profile-feeds-with-video",
+              meta: { label: "postWithVideo" },
+              component: AuthorFeedsWithVideoView,
             },
             {
               path: "feed-generators",

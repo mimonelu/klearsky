@@ -500,6 +500,7 @@ async function processPage (pageName?: null | string) {
     case "profile-feeds":
     case "profile-feeds-with-replies":
     case "profile-feeds-with-media":
+    case "profile-feeds-with-video":
     case "profile-feed-generators":
     case "profile-repost":
     case "profile-like":
@@ -547,6 +548,16 @@ async function processPage (pageName?: null | string) {
         }
         if (!state.inSameProfilePage || state.currentAuthorFeedsWithMedia.length === 0) {
           await state.fetchCurrentAuthorFeed("new", "posts_with_media")
+        }
+        break
+      }
+      case "profile-feeds-with-video": {
+        const response = await processProfilePage(account)
+        if (response instanceof Error) {
+          break
+        }
+        if (!state.inSameProfilePage || state.currentAuthorFeedsWithVideo.length === 0) {
+          await state.fetchCurrentAuthorFeed("new", "posts_with_video")
         }
         break
       }

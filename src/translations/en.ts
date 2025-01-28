@@ -34,8 +34,9 @@ export default () => ({
   "off": "Off",
   "official": "Official",
   "posts": "Posts",
-  "postWithReplies": "Posts with replies",
+  "postWithReplies": "Posts and replies",
   "postWithMedia": "Posts with media",
+  "postWithVideo": "Posts with video",
   "reload": "Reload",
   "refresh": "Refresh",
   "loading": "Loading...",
@@ -473,6 +474,7 @@ export default () => ({
 
   "imageAutoPlay": "Autoplay animated images",
 
+  "video": "Video",
   "videoPreload": "Video preload",
   "videoIsBlob": "Non-streaming",
   "videoIsNone": "Not playable",

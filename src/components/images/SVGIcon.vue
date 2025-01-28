@@ -100,6 +100,7 @@ import star from "@/svg/star.svg?raw"
 import translate from "@/svg/translate.svg?raw"
 import trending from "@/svg/trending-up.svg?raw"
 import unlock from "@/svg/unlock.svg?raw"
+import video from "@/svg/video.svg?raw"
 import volumeOff from "@/svg/volume-off.svg?raw"
 import volumeOn from "@/svg/volume-on.svg?raw"
 import wallpaper from "@/svg/wallpaper.svg?raw"
@@ -206,6 +207,7 @@ const icons: { [k: string]: string } = {
   translate,
   trending,
   unlock,
+  video,
   volumeOff,
   volumeOn,
   wallpaper,

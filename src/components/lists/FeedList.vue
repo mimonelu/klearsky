@@ -10,6 +10,7 @@ const props = defineProps<{
   type:
     "authorFeeds" |
     "authorFeedsWithReplies" |
+    "authorFeedsWithVideo" |
     "authorReposts" |
     "authorLikes" |
     "feeds" |
@@ -33,6 +34,10 @@ async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
       }
       case "authorFeedsWithReplies": {
         await mainState.fetchCurrentAuthorFeed(direction, "posts_with_replies", middleCursor)
+        break
+      }
+      case "authorFeedsWithVideo": {
+        await mainState.fetchCurrentAuthorFeed(direction, "posts_with_video", middleCursor)
         break
       }
       case "authorReposts": {

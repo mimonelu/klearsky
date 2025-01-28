@@ -151,6 +151,8 @@ export const state: MainState = reactive<MainState>({
   currentAuthorFeedsWithRepliesCursor: undefined,
   currentAuthorFeedsWithMedia: [],
   currentAuthorFeedsWithMediaCursor: undefined,
+  currentAuthorFeedsWithVideo: [],
+  currentAuthorFeedsWithVideoCursor: undefined,
   currentAuthorFeedGenerators: [],
   currentAuthorFeedGeneratorsCursor: undefined,
   currentAuthorReposts: [],
@@ -1227,6 +1229,8 @@ function resetProfileState () {
   state.currentAuthorFeedsWithRepliesCursor = undefined
   resetArray(state, "currentAuthorFeedsWithMedia")
   state.currentAuthorFeedsWithMediaCursor = undefined
+  resetArray(state, "currentAuthorFeedsWithVideo")
+  state.currentAuthorFeedsWithVideoCursor = undefined
   resetArray(state, "currentAuthorFeedGenerators")
   state.currentAuthorFeedGeneratorsCursor = undefined
   resetArray(state, "currentAuthorReposts")
@@ -1415,13 +1419,17 @@ async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, 
     ? state.currentAuthorFeedsWithReplies
     : filter === "posts_with_media"
       ? state.currentAuthorFeedsWithMedia
-      : state.currentAuthorFeeds
+      : filter === "posts_with_video"
+        ? state.currentAuthorFeedsWithVideo
+        : state.currentAuthorFeeds
 
   const cursor = filter === "posts_with_replies"
     ? state.currentAuthorFeedsWithRepliesCursor
     : filter === "posts_with_media" 
       ? state.currentAuthorFeedsWithMediaCursor
-      : state.currentAuthorFeedsCursor
+      : filter === "posts_with_video"
+        ? state.currentAuthorFeedsWithVideoCursor
+        : state.currentAuthorFeedsCursor
 
   const resultCursor = await state.atp.fetchAuthorFeed(
     feeds as Array<TTFeed>,
@@ -1439,9 +1447,11 @@ async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, 
   if (resultCursor != null) {
     filter === "posts_with_replies"
       ? state.currentAuthorFeedsWithRepliesCursor = resultCursor
-      : filter === "posts_with_media" 
+      : filter === "posts_with_media"
         ? state.currentAuthorFeedsWithMediaCursor = resultCursor
-        : state.currentAuthorFeedsCursor = resultCursor
+        : filter === "posts_with_video"
+          ?state.currentAuthorFeedsWithVideoCursor = resultCursor
+          : state.currentAuthorFeedsCursor = resultCursor
   }
 }
 

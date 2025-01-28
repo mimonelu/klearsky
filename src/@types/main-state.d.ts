@@ -105,6 +105,8 @@ interface MainState {
   currentAuthorFeedsWithRepliesCursor?: string
   currentAuthorFeedsWithMedia: Array<TTFeed>
   currentAuthorFeedsWithMediaCursor?: string
+  currentAuthorFeedsWithVideo: Array<TTFeed>
+  currentAuthorFeedsWithVideoCursor?: string
   currentAuthorFeedGenerators: Array<TTFeedGenerator>
   currentAuthorFeedGeneratorsCursor?: string
   currentAuthorReposts: Array<TTFeed>

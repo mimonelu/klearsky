@@ -34,8 +34,9 @@ export default () => ({
   "off": "オフ",
   "official": "公式",
   "posts": "ポスト",
-  "postWithReplies": "リプライ付きポスト",
+  "postWithReplies": "ポスト＋リプライ",
   "postWithMedia": "メディア付きポスト",
+  "postWithVideo": "動画付きポスト",
   "reload": "リロード",
   "refresh": "更新する",
   "loading": "読込中...",
@@ -473,6 +474,7 @@ export default () => ({
 
   "imageAutoPlay": "アニメーション画像の自動再生",
 
+  "video": "動画",
   "videoPreload": "動画の先読み",
   "videoIsBlob": "ストリーミングできません",
   "videoIsNone": "再生できません",

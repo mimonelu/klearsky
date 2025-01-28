@@ -33,6 +33,7 @@ const svgIconNamesOfPostTabButton: { [k: string]: string } = {
   "profile-feeds": "post",
   "profile-feeds-with-replies": "posts",
   "profile-feeds-with-media": "image",
+  "profile-feeds-with-video": "video",
   "profile-repost": "repost",
   "profile-like": "like",
 }
@@ -41,6 +42,7 @@ const labelsOfPostTabButton: { [k: string]: string } = {
   "profile-feeds": "post",
   "profile-feeds-with-replies": "reply",
   "profile-feeds-with-media": "media",
+  "profile-feeds-with-video": "video",
   "profile-repost": "reposts",
   "profile-like": "likes",
 }
@@ -53,6 +55,7 @@ const state = reactive<{
   isPagePostFeeds: ComputedRef<boolean>
   isPagePostFeedsWithReplies: ComputedRef<boolean>
   isPagePostFeedsWithMedia: ComputedRef<boolean>
+  isPagePostFeedsWithVideo: ComputedRef<boolean>
   isPageRepostList: ComputedRef<boolean>
   isPageLikeList: ComputedRef<boolean>
   isLabeler: ComputedRef<boolean>
@@ -93,6 +96,9 @@ const state = reactive<{
   }),
   isPagePostFeedsWithMedia: computed((): boolean => {
     return router.currentRoute.value.name === "profile-feeds-with-media"
+  }),
+  isPagePostFeedsWithVideo: computed((): boolean => {
+    return router.currentRoute.value.name === "profile-feeds-with-video"
   }),
   isPageRepostList: computed((): boolean => {
     return router.currentRoute.value.name === "profile-repost"
@@ -571,6 +577,7 @@ function removeThisPost () {
             state.isPagePostFeeds ||
             state.isPagePostFeedsWithReplies ||
             state.isPagePostFeedsWithMedia ||
+            state.isPagePostFeedsWithVideo ||
             state.isPageRepostList ||
             state.isPageLikeList
               ? 'router-link-active'
@@ -625,6 +632,18 @@ function removeThisPost () {
               >
                 <SVGIcon name="image" />
                 <span>{{ $t("postWithMedia") }}</span>
+              </Component>
+
+              <!-- 動画一覧ページリンク -->
+              <Component
+                :is="state.isPagePostFeedsWithVideo ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :disabled="state.isPagePostFeedsWithVideo"
+                :to="{ path: '/profile/feeds-with-video', query: { account: mainState.currentProfile?.did } }"
+                @click.stop="closeProfilePostPopver"
+              >
+                <SVGIcon name="video" />
+                <span>{{ $t("postWithVideo") }}</span>
               </Component>
 
               <!-- リポスト一覧ページリンク -->
