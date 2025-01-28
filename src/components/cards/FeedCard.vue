@@ -220,6 +220,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         class="feed-card__description"
         dir="auto"
         :text="generator.description ?? '&emsp;'"
+        :facets="generator.descriptionFacets"
         @onActivateMention="emit('onActivateMention')"
         @onActivateHashTag="emit('onActivateHashTag')"
       />

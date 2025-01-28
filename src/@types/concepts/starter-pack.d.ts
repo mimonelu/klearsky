@@ -5,7 +5,7 @@ interface TIStarterPack {
     $type: string
     createdAt: string
     description?: string
-    descriptionFacets?: Array<any>
+    descriptionFacets?: AppBskyRichtextFacet.Main[]
     feeds?: Array<{
       uri: string
     } | TTFeedGenerator>

@@ -20,6 +20,7 @@ type TTFeedGenerator = {
   cid: string
   creator: TTUser
   description: string
+  descriptionFacets?: AppBskyRichtextFacet.Main[]
   did: string
   displayName: string
   indexedAt: string
