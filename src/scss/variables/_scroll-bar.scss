@@ -4,31 +4,27 @@
     $bgColor: rgb(var(--fg-color), 0.0625);
   }
 
+  scrollbar-color: rgb(var(--fg-color), 0.25) $bgColor;
+
   // 幅は変更しない
-  // --scrollbar-width: thin;
+  // scrollbar-width: var(--scrollbar-width);
   // --scrollbar-width-legacy: 1rem;
 
-  @supports (scrollbar-width: auto) {
-    & {
-      scrollbar-color: rgb(var(--fg-color), 0.25) $bgColor;
+  // for Safari
+  @supports selector(::-webkit-scrollbar) {
+    &::-webkit-scrollbar {
+      background-color: rgb(var(--fg-color), 0.125);
 
       // 幅は変更しない
-      // scrollbar-width: var(--scrollbar-width);
+      // max-width: var(--scrollbar-width-legacy);
+      // max-height: var(--scrollbar-width-legacy);
     }
   }
 
-  @supports selector(::-webkit-scrollbar) {
-    // 幅は変更しない
-    // &::-webkit-scrollbar {
-    //   max-width: var(--scrollbar-width-legacy);
-    //   max-height: var(--scrollbar-width-legacy);
-    // }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: rgb(var(--fg-color), 0.25);
-    }
-    &::-webkit-scrollbar-track {
-      background-color: $bgColor;
-    }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--fg-color), 0.25);
+  }
+  &::-webkit-scrollbar-track {
+    background-color: $bgColor;
   }
 }
