@@ -79,6 +79,13 @@ async function updateHotPosts () {
   const hotImages: Array<TTrendingImage> = hotPosts
     .flat()
 
+    // 有害なラベルが設定されているポストを除外
+    .filter((post) => {
+      const harmfulAuthorLabels = mainState.getHarmfulLabels(post.author.labels ?? [])
+      const harmfulPostLabels = mainState.getHarmfulLabels(post.labels ?? [])
+      return harmfulAuthorLabels.length === 0 && harmfulPostLabels.length === 0
+    })
+
     // 画像を持つポストのみを抽出
     .filter((post) => {
       return post.embed?.images?.[0]?.thumb != null
