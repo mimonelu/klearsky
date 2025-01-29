@@ -39,7 +39,7 @@ function removeThisPost (uri: string) {
       class="folder"
       @click="feed.__folding = !feed.__folding"
     >
-      <SVGIcon name="cursorUp" />
+      <SVGIcon name="cursorDown" />
 
       <!-- 折り畳みリプライオープナー -->
       <div

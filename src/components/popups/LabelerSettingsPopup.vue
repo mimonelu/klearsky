@@ -207,7 +207,7 @@ function translate (text: string) {
             >
               <span>{{ pseudoDefinition.locale?.name || $t(`label-name-${pseudoDefinition.identifier}`) }}</span>
               <i>{{ pseudoDefinition.blurs }}</i>
-              <SVGIcon :name="pseudoDefinition.detailDisplay ? 'cursorDown' : 'cursorUp'" />
+              <SVGIcon :name="pseudoDefinition.detailDisplay ? 'cursorUp' : 'cursorDown'" />
             </button>
           </div>
 

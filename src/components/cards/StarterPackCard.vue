@@ -157,7 +157,7 @@ async function deleteStarterPack () {
           type="button"
           @click.prevent.stop="toggleDetailDisplay"
         >
-          <SVGIcon :name="state.detailDisplay ? 'cursorDown' : 'cursorUp'" />
+          <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
           <span class="starter-pack-card__name__label">{{ starterPack.record?.name }}</span>
         </button>
       </div>

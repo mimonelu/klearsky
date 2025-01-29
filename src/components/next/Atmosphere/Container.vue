@@ -45,7 +45,7 @@ function toggle () {
     >
       <SVGIcon name="at" />
       <span>{{ $t("atmosphere") }}</span>
-      <SVGIcon :name="state.display ? 'cursorDown' : 'cursorUp'" />
+      <SVGIcon :name="state.display ? 'cursorUp' : 'cursorDown'" />
     </button>
     <div
       v-if="state.display"

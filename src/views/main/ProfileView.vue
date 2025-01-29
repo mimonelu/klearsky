@@ -588,7 +588,7 @@ function removeThisPost () {
         >
           <SVGIcon :name="state.svgIconNameOfPostTabButton" />
           <span>{{ $t(state.labelOfPostTabButton) }}</span>
-          <SVGIcon name="cursorDown" />
+          <SVGIcon :name="state.profilePostPopverDisplay ? 'cursorUp' : 'cursorDown'" />
 
           <!-- プロフィールポストポップオーバー -->
           <Popover
@@ -1133,12 +1133,18 @@ function removeThisPost () {
     pointer-events: none;
   }
 
+  // SPレイアウトではタブボタンを小さめに
+  @include media-sp-layout() {
+    .tab__button {
+      & > .svg-icon,
+      & > span {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
   .tab__button--post {
     min-width: 28.75%;
-
-    & > .svg-icon--cursorDown {
-      font-size: 0.75rem;
-    }
   }
 }
 

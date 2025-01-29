@@ -946,8 +946,8 @@ function toggleOldestQuotedPostDisplay () {
       @click.stop="onActivatePostMask"
     >
       <SVGIcon :name="post.__custom?.unmask
-        ? 'cursorDown'
-        : 'cursorUp'
+        ? 'cursorUp'
+        : 'cursorDown'
       " />
 
       <!-- ポストマスク - コンテンツ言語なし -->

@@ -183,7 +183,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
           type="button"
           @click.prevent.stop="toggleDetailDisplay"
         >
-          <SVGIcon :name="state.detailDisplay ? 'cursorDown' : 'cursorUp'" />
+          <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
           <span>{{ generator.displayName }}</span>
         </button>
       </div>

@@ -114,7 +114,7 @@ function openProfilePopover ($event: Event) {
           type="button"
           @click.prevent.stop="toggleDetailDisplay"
         >
-          <SVGIcon :name="state.detailDisplay ? 'cursorDown' : 'cursorUp'" />
+          <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
           <span>{{ labeler.creator.displayName || labeler.creator.handle }}</span>
         </button>
       </div>
