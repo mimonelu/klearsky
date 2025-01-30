@@ -32,8 +32,8 @@ function onLoad () {
   <img
     v-if="!state.hasError && src"
     class="lazy-image lazy-image--src"
-    loading="lazy"
     decoding="async"
+    loading="lazy"
     :src="src"
     :alt="alt ?? ''"
     :data-has-load="state.hasLoad"
@@ -43,8 +43,8 @@ function onLoad () {
   <img
     v-else
     class="lazy-image"
-    loading="lazy"
     decoding="async"
+    loading="lazy"
     src="/img/void.png"
     :alt="alt ?? ''"
   >
