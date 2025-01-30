@@ -16,7 +16,7 @@
     "not dead"
   ],
   "dependencies": {
-    "@atproto/api": "^0.13.29",
+    "@atproto/api": "^0.13.31",
     "@ipld/car": "^5.4.0",
     "@vueuse/core": "^10.11.1",
     "browser-image-compression": "^2.0.2",
