@@ -263,6 +263,9 @@ async function submitCallback () {
         }
       }
 
+      // ポスト送信後にフォロー中フィードを更新
+      mainState.fetchTimeline("new")
+
       emit("closeSendPostPopup", true, false)
     }
   } finally {
