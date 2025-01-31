@@ -11,6 +11,7 @@ type TTLabel = {
   uri: string
   val: string
   ver?: number
+  __isAuthorLabel?: boolean // Injected
 }
 
 type TTLabelBlurs = "content" | "media" | "none"

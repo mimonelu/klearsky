@@ -299,7 +299,12 @@ const state = reactive<{
   // ラベル対応
   allLabels: computed((): Array<TTLabel> => {
     return [
-      ...(props.post.author?.labels ?? []),
+      ...((props.post.author?.labels ?? []).map((label) => {
+        return {
+          ...label,
+          __isAuthorLabel: true,
+        }
+      })),
       ...(props.post.labels ?? [])
     ]
   }),
@@ -1283,7 +1288,7 @@ function toggleOldestQuotedPostDisplay () {
         :labels="state.allLabels"
         :labelerDisplay="false"
         :unauthenticatedDisplay="false"
-        :harmfulDisplay="false"
+        :harmfulDisplay="true"
         :customDisplay="false"
         :userCreatedAt="post.author.createdAt"
         :postIndexedAt="post.indexedAt"

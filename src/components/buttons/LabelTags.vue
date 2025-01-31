@@ -48,8 +48,17 @@ const state = reactive<{
         if (labelSetting == null) {
           return false
         }
-        if (labelSetting.isBadge &&
-          (labelSetting.preference?.visibility ?? labelSetting.definition.defaultSetting) === "warn"
+        const visibility =
+          labelSetting.preference?.visibility ??
+          labelSetting.definition.defaultSetting
+        if (
+          (
+            labelSetting.isBadge &&
+            (
+              visibility === "inform" ||
+              visibility === "warn"
+            )
+          ) || visibility === "hide"
         ) {
           return true
         }
@@ -138,7 +147,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
       class="label-tags__harmful-label"
       @click.prevent.stop="openLabelerSettingsPopup(CONSTS.OFFICIAL_LABELER_DID)"
     >
-      <SVGIcon name="label" />
+      <SVGIcon :name="label.__isAuthorLabel ? 'person' : 'label'" />
       <span>{{ $t(label.val) }}</span>
     </button>
 

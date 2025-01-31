@@ -13,7 +13,7 @@ import MyLists from "@/composables/main-state/my-lists"
 import MyWorker from "@/composables/main-state/my-worker"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
-// import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
+import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
 import LANGUAGES from "@/consts/languages"
 
 // TODO:
@@ -1164,13 +1164,14 @@ function hasLabel (target: string, labels?: Array<TTLabel>): boolean {
 
 function getHarmfulLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {
-    return label.src === CONSTS.OFFICIAL_LABELER_DID // LABEL_BEHAVIORS[label.val] != null
+    return LABEL_BEHAVIORS[label.val] != null
+    // return label.src === CONSTS.OFFICIAL_LABELER_DID
   }) ?? []
 }
 
 function getLabelerLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {
-    return label.src !== CONSTS.OFFICIAL_LABELER_DID &&
+    return LABEL_BEHAVIORS[label.val] == null &&
            (label.ver ?? 0) >= 1
   }) ?? []
 }
@@ -1180,7 +1181,7 @@ function getCustomLabels (labels?: Array<TTLabel>): Array<TTLabel> {
     if (label.val === "!no-unauthenticated") {
       return false
     }
-    return label.src !== CONSTS.OFFICIAL_LABELER_DID &&
+    return LABEL_BEHAVIORS[label.val] == null &&
            !label.ver
   }) ?? []
 }
