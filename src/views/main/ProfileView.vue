@@ -453,19 +453,22 @@ function removeThisPost () {
                   <SVGIcon :name="state.hasNoUnauthenticated ? 'earthOff' : 'earth'" />
                 </button>
 
-                <!-- ミュートトグル -->
-                <MuteButton
-                  v-if="!mainState.isMyProfile()"
-                  :did="mainState.currentProfile.did"
-                  :viewer="mainState.currentProfile.viewer"
-                />
+                <!-- モデレーションボタンコンテナ -->
+                <div class="moderation-button-container group-parts">
+                  <!-- ミュートトグル -->
+                  <MuteButton
+                    v-if="!mainState.isMyProfile()"
+                    :did="mainState.currentProfile.did"
+                    :viewer="mainState.currentProfile.viewer"
+                  />
 
-                <!-- ブロックトグル -->
-                <BlockButton
-                  v-if="!mainState.isMyProfile()"
-                  :did="mainState.currentProfile.did"
-                  :viewer="mainState.currentProfile.viewer"
-                />
+                  <!-- ブロックトグル -->
+                  <BlockButton
+                    v-if="!mainState.isMyProfile()"
+                    :did="mainState.currentProfile.did"
+                    :viewer="mainState.currentProfile.viewer"
+                  />
+                </div>
 
                 <!-- プロフィールポップオーバートグル -->
                 <button
@@ -1051,12 +1054,12 @@ function removeThisPost () {
   }
 }
 
-.mute-button {
+// モデレーションボタンコンテナ
+.moderation-button-container {
   margin-left: auto;
-  min-width: 3rem;
-  max-width: 3rem;
 }
 
+.mute-button,
 .block-button {
   min-width: 3rem;
   max-width: 3rem;
