@@ -81,11 +81,6 @@ export default defineConfig({
         silenceDeprecations: ["import", "legacy-js-api", "mixed-decls"],
       },
     },
-    postcss: {
-      plugins: [
-        require("autoprefixer"),
-      ],
-    },
   },
 
   // for `TypeError: xx is not a constructor`
