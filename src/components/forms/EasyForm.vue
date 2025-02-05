@@ -96,13 +96,6 @@ function onChange (item: TTEasyFormItem) {
   if (item.onUpdate != null) item.onUpdate(item, props)
 }
 
-function onClickClearButton (item: TTEasyFormItem) {
-  Util.blurElement()
-  if (item.model == null) return
-  item.state[item.model] = ""
-  emit("clickClearButton")
-}
-
 function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
   if (item.model == null) return
   item.state[item.model] = files
@@ -322,16 +315,6 @@ function getVideoSizes (): Array<Array<undefined | {
               <span v-if="item.buttonLabel != null">{{ item.buttonLabel }}</span>
             </button>
 
-            <!-- クリアボタン -->
-            <button
-              v-if="item.clearButton"
-              class="clear-button"
-              :class="item.classes"
-              @click.prevent="onClickClearButton(item)"
-            >
-              <SVGIcon name="cross" />
-            </button>
-
             <!-- 最大文字数インジケータ -->
             <div
               v-if="item.maxLengthIndicator"
@@ -349,6 +332,8 @@ function getVideoSizes (): Array<Array<undefined | {
               :text="item.state[item.model]"
               @select="(params: any) => { onUpdateText(item, index, params) }"
             />
+
+            <slot :name="`item-content-after-${index}`" />
           </dd>
 
           <!-- 脚注 -->
@@ -425,30 +410,6 @@ function getVideoSizes (): Array<Array<undefined | {
         }
       }
     }
-  }
-}
-
-.clear-button {
-  background-color: rgb(var(--bg-color));
-  border-radius: var(--border-radius-middle);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: -1rem;
-  position: absolute;
-  top: 50%;
-  right: 0.375rem;
-  width: 2rem;
-  height: 2rem;
-
-  & > .svg-icon {
-    fill: rgb(var(--fg-color), 0.75);
-    font-size: 0.75rem;
-  }
-  &:focus > .svg-icon,
-  &:hover > .svg-icon {
-    fill: rgb(var(--fg-color));
   }
 }
 

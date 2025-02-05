@@ -98,7 +98,6 @@ const easyFormProps: TTEasyForm = {
       placeholder: $t("LinkCardPlaceHolder"),
       autocomplete: "url",
       inputmode: "url",
-      clearButton: true,
       onInput: onInputUrl,
     },
     {
@@ -289,6 +288,8 @@ function onInputUrl () {
 }
 
 function onClickClearButton () {
+  Util.blurElement()
+  easyFormState.url = ""
   onInputUrl()
 }
 
@@ -512,8 +513,17 @@ const PreviewLinkCardFeature: {
       <EasyForm
         v-bind="easyFormProps"
         ref="easyForm"
-        @clickClearButton="onClickClearButton"
       >
+        <template #item-content-after-1>
+          <!-- クリアボタン -->
+          <button
+            type="button"
+            class="button--bordered"
+            @click.prevent="onClickClearButton"
+          >
+            <SVGIcon name="cross" />
+          </button>
+        </template>
         <template #free-3>
           <!-- プレビューリンクカード -->
           <LinkCard
@@ -716,6 +726,13 @@ const PreviewLinkCardFeature: {
     }
 
     .easy-form__body {
+      grid-gap: 0.5rem;
+    }
+
+    // クリアボタン
+    .easy-form dl[data-name="url"] dd {
+      display: flex;
+      flex-direction: row;
       grid-gap: 0.5rem;
     }
 

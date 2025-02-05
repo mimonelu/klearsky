@@ -75,7 +75,6 @@ const easyFormProps: TTEasyForm = {
       placeholder: $t("chatUrlPlaceholder"),
       autocomplete: "url",
       inputmode: "url",
-      clearButton: true,
       onInput: onInputUrl,
     },
     /* // TODO: 一時退避
@@ -136,6 +135,11 @@ function onInputUrl () {
 
   // TODO: 要修正
   (easyForm.value as any)?.forceUpdate()
+}
+
+function onClickClearButton () {
+  Util.blurElement()
+  easyFormState.url = ""
 }
 
 function close () {
@@ -296,6 +300,16 @@ function isMine (message: TIChatMessage): boolean {
           v-bind="easyFormProps"
           ref="easyForm"
         >
+          <template #item-content-after-1>
+            <!-- クリアボタン -->
+            <button
+              type="button"
+              class="button--bordered"
+              @click.prevent="onClickClearButton"
+            >
+              <SVGIcon name="cross" />
+            </button>
+          </template>
           <template #after>
             <button
               type="button"
@@ -332,6 +346,7 @@ function isMine (message: TIChatMessage): boolean {
       display: grid;
       grid-gap: 0.5rem;
       grid-template-columns: 1fr auto;
+      margin-right: -0.5rem;
 
       &__body {
         display: contents;
@@ -340,6 +355,13 @@ function isMine (message: TIChatMessage): boolean {
         & > dl:nth-child(1) {
           grid-column: 2 span;
         }
+      }
+
+      // クリアボタン
+      dl[data-name="url"] dd {
+        display: flex;
+        flex-direction: row;
+        grid-gap: 0.5rem;
       }
     }
 
