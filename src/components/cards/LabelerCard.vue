@@ -169,7 +169,7 @@ function openProfilePopover ($event: Event) {
     <!-- ボタンコンテナ -->
     <div
       v-if="menuDisplay"
-      class="labeler-card__button-container group-buttons"
+      class="labeler-card__button-container group-parts"
     >
       <!-- ラベラーサブスクライブトグル -->
       <LabelerSubscribeToggle

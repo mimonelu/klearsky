@@ -87,7 +87,7 @@ function clicked (list?: TTList) {
     <!-- リストヘッダー -->
     <div
       v-if="headerDisplay"
-      class="list-card-list__header group-buttons"
+      class="list-card-list__header group-parts"
     >
       <!-- マイリスト更新ボタン -->
       <button

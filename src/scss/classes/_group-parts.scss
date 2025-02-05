@@ -1,0 +1,29 @@
+.group-parts {
+  display: flex;
+  align-items: center;
+
+  & > .button,
+  & > .button--bordered,
+  & > .button--important,
+  & > .button--plane,
+  & > .textbox {
+    &:not(:last-child) {
+      border-right-style: none;
+    }
+    &:first-child:not(:last-child) {
+      border-top-right-radius: unset;
+      border-bottom-right-radius: unset;
+    }
+    &:last-child:not(:first-child) {
+      border-top-left-radius: unset;
+      border-bottom-left-radius: unset;
+    }
+    &:not(:first-child):not(:last-child) {
+      border-radius: unset;
+    }
+  }
+  & > .button--bordered,
+  & > .button--plane {
+    border-color: rgb(var(--fg-color), 0.25);
+  }
+}

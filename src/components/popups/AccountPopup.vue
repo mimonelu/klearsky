@@ -56,7 +56,7 @@ async function logout () {
     </template>
     <template #body>
       <div class="account-popup__body">
-        <div class="account-popup__button-container group-buttons">
+        <div class="account-popup__button-container group-parts">
           <!-- 新規ログインボタン -->
           <button
             class="button"

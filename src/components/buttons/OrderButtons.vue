@@ -3,7 +3,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 </script>
 
 <template>
-  <div class="order-buttons group-buttons">
+  <div class="order-buttons group-parts">
     <button
       class="button--bordered"
       @click.prevent.stop="$emit('moveTop')"

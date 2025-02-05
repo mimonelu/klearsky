@@ -320,7 +320,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     <!-- リストボタンコンテナ -->
     <div
       v-if="!!props.list.cid && !isCompact && menuDisplay"
-      class="list-card__list-button-container group-buttons"
+      class="list-card__list-button-container group-parts"
     >
       <!-- リストフィードボタン -->
       <RouterLink

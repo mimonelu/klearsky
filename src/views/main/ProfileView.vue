@@ -481,7 +481,7 @@ function removeThisPost () {
             <!-- ラベラー行 -->
             <div
               v-if="state.isLabeler"
-              class="group-buttons"
+              class="group-parts"
             >
               <!-- ラベラーサブスクライブトグル -->
               <LabelerSubscribeToggle :labeler="mainState.currentLabeler" />

@@ -263,7 +263,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     </div>
 
     <!-- フィードボタンコンテナ -->
-    <div class="feed-card__feed-button-container group-buttons">
+    <div class="feed-card__feed-button-container group-parts">
       <!-- フィードボタン -->
       <component
         :is="state.isFeedsPage || unclickable || state.isUnknown ? 'div' : 'RouterLink'"

@@ -72,7 +72,7 @@ const easyFormProps: TTEasyForm = {
       state: easyFormState,
       model: "url",
       type: "text",
-      parentClasses: "group-buttons",
+      parentClasses: "group-parts",
       placeholder: $t("chatUrlPlaceholder"),
       autocomplete: "url",
       inputmode: "url",

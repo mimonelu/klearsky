@@ -227,7 +227,7 @@ function onClickFileBox (event: Event) {
       </div>
     </div>
 
-    <div class="button-container group-buttons">
+    <div class="button-container group-parts">
       <!-- エクスポートボタン -->
       <button
         class="button--bordered"
