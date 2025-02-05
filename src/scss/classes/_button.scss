@@ -170,7 +170,8 @@
   & > .button,
   & > .button--bordered,
   & > .button--important,
-  & > .button--plane {
+  & > .button--plane,
+  & > .textbox {
     &:not(:last-child) {
       border-right-style: none;
     }

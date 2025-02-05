@@ -95,6 +95,7 @@ const easyFormProps: TTEasyForm = {
       state: easyFormState,
       model: "url",
       type: "text",
+      parentClasses: "group-buttons",
       placeholder: $t("LinkCardPlaceHolder"),
       autocomplete: "url",
       inputmode: "url",
@@ -733,7 +734,6 @@ const PreviewLinkCardFeature: {
     .easy-form dl[data-name="url"] dd {
       display: flex;
       flex-direction: row;
-      grid-gap: 0.5rem;
     }
 
     .textarea {

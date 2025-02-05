@@ -16,6 +16,7 @@ type TTEasyFormItem = {
   autocomplete?: string
   buttonLabel?: string
   classes?: string
+  parentClasses?: string
   disabled?: boolean
   display?: boolean
   focus?: boolean

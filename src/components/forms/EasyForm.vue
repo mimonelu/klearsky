@@ -189,7 +189,7 @@ function getVideoSizes (): Array<Array<undefined | {
           :data-name="item.name ?? item.model"
         >
           <dt v-if="item.label != null">{{ item.label }}</dt>
-          <dd>
+          <dd :class="item.parentClasses">
             <template v-if="item.model != null">
               <!-- 各種 input 要素 -->
               <input
