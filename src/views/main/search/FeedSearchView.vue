@@ -91,29 +91,31 @@ function onScrolledToBottom () {
 <template>
   <div class="feed-search-view">
     <Portal to="search-view-header">
-      <!-- キーワードボックス -->
       <form @submit.prevent="fetchNewResults">
-        <input
-          v-model="mainState.currentSearchTerm"
-          id="feed-term-textbox"
-          type="search"
-          :placeholder="$t('feedSearch')"
-          autocapitalize="off"
-          autocomplete="off"
-          inputmode="search"
-          spellcheck="false"
-          class="textbox"
-        >
-      </form>
+        <div class="group-parts">
+          <!-- キーワードボックス -->
+          <input
+            v-model="mainState.currentSearchTerm"
+            id="feed-term-textbox"
+            type="search"
+            :placeholder="$t('feedSearch')"
+            autocapitalize="off"
+            autocomplete="off"
+            inputmode="search"
+            spellcheck="false"
+            class="textbox"
+          >
 
-      <!-- キーワード履歴ポップオーバートリガー -->
-      <button
-        class="button--bordered"
-        type="button"
-        @click.prevent="openKeywordHistoryPopover"
-      >
-        <SVGIcon name="history" />
-      </button>
+          <!-- キーワード履歴ポップオーバートリガー -->
+          <button
+            type="button"
+            class="button--bordered"
+            @click.prevent="openKeywordHistoryPopover"
+          >
+            <SVGIcon name="history" />
+          </button>
+        </div>
+      </form>
     </Portal>
     <div class="feed-search-view__main">
       <div

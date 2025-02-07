@@ -44,29 +44,31 @@ function openKeywordHistoryPopover ($event: Event) {
 
     <!-- ポスト検索フォーム -->
     <div class="search-post-form">
-      <!-- キーワードボックス -->
       <form @submit.prevent="searchPost">
-        <input
-          v-model="state.text"
-          type="search"
-          name="searchPost"
-          :placeholder="$t('postSearch')"
-          autocapitalize="off"
-          autocomplete="off"
-          inputmode="search"
-          spellcheck="false"
-          class="textbox"
-        >
-      </form>
+        <div class="group-parts">
+          <!-- キーワードボックス -->
+          <input
+            v-model="state.text"
+            type="search"
+            name="searchPost"
+            :placeholder="$t('postSearch')"
+            autocapitalize="off"
+            autocomplete="off"
+            inputmode="search"
+            spellcheck="false"
+            class="textbox"
+          >
 
-      <!-- キーワード履歴ポップオーバートリガー -->
-      <button
-        class="button--bordered"
-        type="button"
-        @click.prevent="openKeywordHistoryPopover"
-      >
-        <SVGIcon name="history" />
-      </button>
+          <!-- キーワード履歴ポップオーバートリガー -->
+          <button
+            class="button--bordered"
+            type="button"
+            @click.prevent="openKeywordHistoryPopover"
+          >
+            <SVGIcon name="history" />
+          </button>
+        </div>
+      </form>
     </div>
 
     <!-- マイフィードリスト -->

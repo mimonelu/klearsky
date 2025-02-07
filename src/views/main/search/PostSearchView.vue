@@ -189,29 +189,31 @@ function onScrolledToBottom () {
 <template>
   <div class="post-search-view">
     <Portal to="search-view-header">
-      <!-- キーワードボックス -->
       <form @submit.prevent="fetchNewResults">
-        <input
-          v-model="mainState.currentSearchTerm"
-          id="post-term-textbox"
-          type="search"
-          :placeholder="$t('postSearch')"
-          autocapitalize="off"
-          autocomplete="off"
-          inputmode="search"
-          spellcheck="false"
-          class="textbox"
-        >
-      </form>
+        <div class="group-parts">
+          <!-- キーワードボックス -->
+          <input
+            v-model="mainState.currentSearchTerm"
+            id="post-term-textbox"
+            type="search"
+            :placeholder="$t('postSearch')"
+            autocapitalize="off"
+            autocomplete="off"
+            inputmode="search"
+            spellcheck="false"
+            class="textbox"
+          >
 
-      <!-- キーワード履歴ポップオーバートリガー -->
-      <button
-        class="button--bordered"
-        type="button"
-        @click.prevent="openKeywordHistoryPopover"
-      >
-        <SVGIcon name="history" />
-      </button>
+          <!-- キーワード履歴ポップオーバートリガー -->
+          <button
+            type="button"
+            class="button--bordered"
+            @click.prevent="openKeywordHistoryPopover"
+          >
+            <SVGIcon name="history" />
+          </button>
+        </div>
+      </form>
 
       <!-- ポスト検索フォーム -->
       <EasyForm

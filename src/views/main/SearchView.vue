@@ -72,8 +72,8 @@ const state = reactive<{
   flex-grow: 1;
 
   &__form {
-    display: grid;
-    grid-template-columns: 1fr auto;
+    display: flex;
+    flex-direction: column;
     grid-gap: 0.5rem;
     padding: 0.5rem;
     &:empty {
@@ -81,17 +81,12 @@ const state = reactive<{
     }
 
     &:deep() {
-      form {
-        display: grid;
+      .group-parts > *:first-child {
         flex-grow: 1;
       }
 
       .svg-icon--history {
         font-size: 1.25rem;
-      }
-
-      .easy-form {
-        grid-column: span 2;
       }
     }
   }
