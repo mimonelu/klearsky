@@ -175,6 +175,10 @@ function openKeywordHistoryPopover ($event: Event) {
   )
 }
 
+function openAdvancedSearchPopup () {
+  mainState.openAdvancedSearchPopup()
+}
+
 // スクロールオブザーバー
 function onScrolledToBottom () {
   if (
@@ -211,6 +215,15 @@ function onScrolledToBottom () {
             @click.prevent="openKeywordHistoryPopover"
           >
             <SVGIcon name="history" />
+          </button>
+
+          <!-- 詳細検索ポップアップトリガー -->
+          <button
+            type="button"
+            class="button--bordered"
+            @click.prevent="openAdvancedSearchPopup"
+          >
+            <SVGIcon name="setting" />
           </button>
         </div>
       </form>

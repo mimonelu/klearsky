@@ -13,7 +13,10 @@ type TTEasyFormItem = {
   type: TTEasyFormItemType
   accept?: string
   attrs?: { [k: string]: any }
+  autocapitalize?: string
   autocomplete?: string
+  autocorrect?: string
+  spellcheck?: boolean
   buttonLabel?: string
   classes?: string
   parentClasses?: string

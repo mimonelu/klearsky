@@ -85,7 +85,7 @@ export default () => ({
   "accountLabels": "ユーザーラベル",
   "customLabels": "カスタムラベル",
   "select": "選択",
-  "notSelected": "未選択",
+  "notSelected": "選択なし",
   "users": "ユーザー",
   "moderation": "モデレーション",
   "signUp": "アカウントを作成（開発者向け）",

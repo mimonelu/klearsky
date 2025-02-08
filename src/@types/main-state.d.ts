@@ -397,6 +397,11 @@ interface MainState {
   openOtherSettingsPopup: Function
   closeOtherSettingsPopup: () => void
 
+  // ポップアップ - 詳細検索ポップアップ
+  advancedSearchPopupDisplay: boolean
+  openAdvancedSearchPopup: () => void
+  closeAdvancedSearchPopup: () => void
+
   // ポップアップ - 招待コードポップアップ
   inviteCodesPopupDisplay: boolean
   openInviteCodesPopup: Function

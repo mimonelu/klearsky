@@ -85,7 +85,8 @@ const state = reactive<{
         flex-grow: 1;
       }
 
-      .svg-icon--history {
+      .svg-icon--history,
+      .svg-icon--setting {
         font-size: 1.25rem;
       }
     }

@@ -455,6 +455,11 @@ export const state: MainState = reactive<MainState>({
   openOtherSettingsPopup: openOtherSettingsPopup,
   closeOtherSettingsPopup: closeOtherSettingsPopup,
 
+  // ポップアップ - 詳細検索ポップアップ
+  advancedSearchPopupDisplay: false,
+  openAdvancedSearchPopup: openAdvancedSearchPopup,
+  closeAdvancedSearchPopup: closeAdvancedSearchPopup,
+
   // ポップアップ - 招待コードポップアップ
   inviteCodesPopupDisplay: false,
   openInviteCodesPopup: openInviteCodesPopup,
@@ -2199,6 +2204,16 @@ function openOtherSettingsPopup () {
 
 function closeOtherSettingsPopup () {
   state.otherSettingsPopupDisplay = false
+}
+
+// ポップアップ - 詳細検索ポップアップ
+
+function openAdvancedSearchPopup () {
+  state.advancedSearchPopupDisplay = true
+}
+
+function closeAdvancedSearchPopup () {
+  state.advancedSearchPopupDisplay = false
 }
 
 // ポップアップ - 招待コードポップアップ

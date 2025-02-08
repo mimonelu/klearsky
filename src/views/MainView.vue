@@ -3,6 +3,7 @@ import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounte
 import { useRouter, type LocationQueryValue, type RouteLocationNormalized } from "vue-router"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
+import AdvancedSearchPopup from "@/components/popups/AdvancedSearchPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
 import ChatConvoPopover from "@/components/popovers/ChatConvoPopover.vue"
 import ChatConvoPopup from "@/components/popups/ChatConvoPopup.vue"
@@ -997,7 +998,15 @@ function changeSetting () {
         />
       </Transition>
 
-      <!-- 設定 - 招待コード確認ポップアップ -->
+      <!-- 詳細検索ポップアップ -->
+      <Transition>
+        <AdvancedSearchPopup
+          v-if="state.advancedSearchPopupDisplay"
+          @close="state.closeAdvancedSearchPopup"
+        />
+      </Transition>
+
+      <!-- 招待コード確認ポップアップ -->
       <Transition>
         <InviteCodesPopup
           v-if="state.inviteCodesPopupDisplay"

@@ -202,11 +202,11 @@ function getVideoSizes (): Array<Array<undefined | {
                 :required="item.required ?? false"
                 :pattern="item.pattern"
                 :placeholder="item.placeholder ?? ''"
-                autocapitalize="off"
-                autocorrect="off"
+                :autocorrect="item.autocorrect ?? 'off'"
+                :autocapitalize="item.autocapitalize ?? 'off'"
                 :autocomplete="item.autocomplete ?? ''"
                 :inputmode="item.inputmode ?? undefined"
-                spellcheck="false"
+                :spellcheck="item.spellcheck ?? false"
                 class="textbox"
                 :class="item.classes"
                 @input="onInput(item)"
@@ -268,11 +268,13 @@ function getVideoSizes (): Array<Array<undefined | {
               <label
                 v-else-if="item.type === 'select'"
                 v-bind="item.attrs"
+                :disabled="item.disabled ?? false"
                 class="selectbox"
                 :class="item.classes"
               >
                 <select
                   v-model="item.state[item.model]"
+                  :disabled="item.disabled ?? false"
                   @change="onChange(item)"
                 >
                   <option
