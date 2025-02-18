@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, ref } from "vue"
+import { useRouter } from "vue-router"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -14,24 +15,16 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const easyFormState = reactive<{
-  keyword: string
-  sort: string
-  lang: string
+const router = useRouter()
+
+const easyFormState = reactive<TIPostSearch & {
   noLang: Array<boolean>
-  from: string
-  me: Array<boolean>
-  to: string
-  mentions: string
-  domain: string
-  since: string
-  until: string
+  me: Array<string>
 }>({
-  keyword: "",
   sort: "latest",
   lang: Util.getUserLanguage() ?? "",
   noLang: [true],
-  from: "",
+  author: "",
   me: [],
   to: "",
   mentions: "",
@@ -48,7 +41,6 @@ const easyFormProps: TTEasyForm = {
       model: "currentSearchTerm",
       label: $t("searchKeyword"),
       type: "text",
-      required: true,
       autocomplete: "off",
       inputmode: "search",
       focus: true,
@@ -87,19 +79,19 @@ const easyFormProps: TTEasyForm = {
     {
       state: easyFormState,
       model: "me",
-      label: $t("searchFrom"),
+      label: $t("searchAuthor"),
       type: "checkbox",
       layout: "horizontal",
       options: [
-        { label: $t("me"), value: true },
+        { label: $t("me"), value: mainState.userProfile?.handle || "" },
       ],
-      onUpdate: updateFromData,
+      onUpdate: updateAuthorData,
     },
     {
       state: easyFormState,
-      model: "from",
+      model: "author",
       type: "text",
-      placeholder: "handle.bsky.social",
+      placeholder: "@handle.bsky.social",
       autocomplete: "off",
       hasMentionSuggestion: true,
     },
@@ -108,7 +100,7 @@ const easyFormProps: TTEasyForm = {
       model: "to",
       label: $t("searchTo"),
       type: "text",
-      placeholder: "handle.bsky.social",
+      placeholder: "@handle.bsky.social",
       autocomplete: "off",
       hasMentionSuggestion: true,
     },
@@ -117,7 +109,7 @@ const easyFormProps: TTEasyForm = {
       model: "mentions",
       label: $t("searchMentions"),
       type: "text",
-      placeholder: "handle.bsky.social",
+      placeholder: "@handle.bsky.social",
       autocomplete: "off",
       hasMentionSuggestion: true,
     },
@@ -133,20 +125,20 @@ const easyFormProps: TTEasyForm = {
       state: easyFormState,
       model: "since",
       label: $t("searchSince"),
-      type: "datetime-local",
+      type: "date",
     },
     {
       state: easyFormState,
       model: "until",
       label: $t("searchUntil"),
-      type: "datetime-local",
+      type: "date",
     },
   ],
 }
 
 onMounted(() => {
   updateLangData()
-  updateFromData()
+  updateAuthorData()
 })
 
 function close () {
@@ -163,18 +155,38 @@ function updateLangData () {
   }
 }
 
-function updateFromData () {
-  const fromData = easyFormProps.data.find((prop) => {
-    return prop.model === "from"
+function updateAuthorData () {
+  const authorData = easyFormProps.data.find((prop) => {
+    return prop.model === "author"
   })
-  if (fromData != null) {
-    fromData.disabled = easyFormState.me.length > 0
+  if (authorData != null) {
+    authorData.disabled = easyFormState.me.length > 0
     easyForm.value?.forceUpdate()
   }
 }
 
 async function submitCallback () {
   Util.blurElement()
+  mainState.currentSearchPostFormState.sort = easyFormState.sort
+  mainState.currentSearchPostFormState.lang = easyFormState.noLang.length > 0 ? "" : easyFormState.lang
+  mainState.currentSearchPostFormState.author = easyFormState.me.length > 0 ? "me" : easyFormState.author
+  mainState.currentSearchPostFormState.to = easyFormState.to
+  mainState.currentSearchPostFormState.mentions = easyFormState.mentions
+  mainState.currentSearchPostFormState.domain = easyFormState.domain
+  mainState.currentSearchPostFormState.since = easyFormState.since
+  mainState.currentSearchPostFormState.until = easyFormState.until
+  const query = {
+    text: mainState.currentSearchTerm || undefined,
+    sort: easyFormState.sort || undefined,
+    lang: easyFormState.noLang.length > 0 ? undefined : easyFormState.lang || undefined,
+    author: easyFormState.me.length > 0 ? easyFormState.me[0] : easyFormState.author || undefined,
+    to: easyFormState.to || undefined,
+    mentions: easyFormState.mentions || undefined,
+    domain: easyFormState.domain || undefined,
+    since: easyFormState.since || undefined,
+    until: easyFormState.until || undefined,
+  }
+  router.push({ name: "post-search", query })
   close()
 }
 </script>
@@ -213,10 +225,10 @@ async function submitCallback () {
 
 <style lang="scss" scoped>
 .advanced-search-popup {
-  // from フォームの上部マージンを詰める
+  // author フォームの上部マージンを詰める
   .easy-form:deep() {
     dl[data-name="lang"],
-    dl[data-name="from"] {
+    dl[data-name="author"] {
       margin-top: -0.5rem;
     }
   }

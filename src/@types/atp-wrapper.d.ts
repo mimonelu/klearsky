@@ -148,7 +148,7 @@ interface TIAtpWrapper {
   fetchPosts
     (uris: Array<string>): Promise<Error | Array<TTPost>>
   fetchPostSearch
-    (currentPosts: Array<TTPost>, q: string, params: { [k: string]: any }, limit?: number, cursor?: string): Promise<Error | undefined | string>
+    (currentPosts: Array<TTPost>, q: string, params: TIPostSearch, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchPostThread
     (uri: string, depth?: number): Promise<Error | Array<TTPost>>
   fetchPreferences

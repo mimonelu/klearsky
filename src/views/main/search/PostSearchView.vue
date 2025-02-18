@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
-import EasyForm from "@/components/forms/EasyForm.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Post from "@/components/compositions/Post.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
@@ -18,56 +17,18 @@ const state = reactive<{
   processing: false,
 })
 
-const easyFormProps: TTEasyForm = {
-  hasSubmitButton: false,
-  gridColumns: "auto auto auto 1fr",
-  data: [
-    {
-      state: mainState.currentSearchPostFormState,
-      model: "sort",
-      type: "radio",
-      classes: "radios--nowrap",
-      layout: "horizontal",
-      options: [
-        { label: $t("postSearchLatest"), value: "latest" },
-        { label: $t("postSearchTop"), value: "top" },
-      ],
-    },
-    {
-      state: mainState.currentSearchPostFormState,
-      model: "lang",
-      type: "checkbox",
-      classes: "checkboxes--nowrap",
-      layout: "horizontal",
-      options: [
-        { label: (Util.getUserLanguage() ?? "-").toUpperCase(), value: Util.getUserLanguage() },
-      ],
-    },
-    {
-      state: mainState.currentSearchPostFormState,
-      model: "author",
-      type: "checkbox",
-      classes: "checkboxes--nowrap",
-      layout: "horizontal",
-      options: [
-        { label: "me", value: mainState.atp.data.did },
-      ],
-    },
-  ],
-}
-
 const router = useRouter()
 
 const unwatchOnQuery = watch(() => router.currentRoute.value.query, async (value: any) => {
-  if (value?.text != null) {
-    mainState.currentSearchTerm = value.text
-  }
-  if (value?.sort === "latest" || value?.sort === "top") {
-    mainState.currentSearchPostFormState.sort = value.sort
-  }
-  if (mainState.currentSearchTerm !== "" &&
-      mainState.currentSearchPostsLastTerm !== mainState.currentSearchTerm
+  /*
+  if (
+    mainState.currentSearchTerm !== "" &&
+    mainState.currentSearchTerm !== mainState.currentSearchPostsLastTerm
   ) {
+    await fetchNewResults()
+  }
+  */
+  if (updatedSearchQueries(value)) {
     await fetchNewResults()
   }
 }, { immediate: true })
@@ -88,15 +49,63 @@ onBeforeUnmount(() => {
   unwatchOnQuery()
 })
 
-function updateSearchPostTerm (text: string) {
-  const textDecoded = decodeURIComponent(text)
-  if (!textDecoded || mainState.currentSearchTerm === textDecoded) {
-    return
+async function onSubmit () {
+  // キーワード入力ボックス押下時、未入力であれば検索ステートをクリア
+  if (mainState.currentSearchTerm === "") {
+    resetState()
   }
-  mainState.currentSearchTerm = textDecoded
+
+  await fetchNewResults()
+}
+
+function updatedSearchQueries (value: any): boolean {
+  let diff = false
+  if (mainState.currentSearchTerm !== (value?.text ?? "")) {
+    diff = true
+  }
+  mainState.currentSearchTerm = value?.text ?? ""
+  if (mainState.currentSearchPostFormState.sort !== value?.sort) {
+    diff = true
+  }
+  mainState.currentSearchPostFormState.sort = value?.sort
+  if (mainState.currentSearchPostFormState.lang !== value?.lang) {
+    diff = true
+  }
+  mainState.currentSearchPostFormState.lang = value?.lang
+  if (mainState.currentSearchPostFormState.author !== value?.author) {
+    diff = true
+  }
+  mainState.currentSearchPostFormState.author = value?.author
+  if (mainState.currentSearchPostFormState.to !== value?.to) {
+    diff = true
+  }
+  mainState.currentSearchPostFormState.to = value?.to
+  if (mainState.currentSearchPostFormState.mentions !== value?.mentions) {
+    diff = true
+  }
+  mainState.currentSearchPostFormState.mentions = value?.mentions
+  if (mainState.currentSearchPostFormState.domain !== value?.domain) {
+    diff = true
+  }
+  mainState.currentSearchPostFormState.domain = value?.domain
+  if (mainState.currentSearchPostFormState.since !== value?.since) {
+    diff = true
+  }
+  mainState.currentSearchPostFormState.since = value?.since
+  if (mainState.currentSearchPostFormState.until !== value?.until) {
+    diff = true
+  }
+  mainState.currentSearchPostFormState.until = value?.until
+  return diff
+}
+
+function updateSearchPostTerm (text: string) {
+  mainState.currentSearchTerm = decodeURIComponent(text)
+  resetState()
   fetchNewResults()
 }
 
+// `fetchContinuousResults` 以外のタイミングでコール
 async function fetchNewResults () {
   // 検索ワードを変えておきながら検索せずに画面遷移した場合、
   // `watch` が後から反応してしまい、ポスト検索画面に遷移してしまう不具合への対応
@@ -111,7 +120,7 @@ async function fetchNewResults () {
   mainState.currentSearchPostResults.splice(0)
   mainState.currentSearchPostCursor = undefined
   updateRouter()
-  if (!mainState.currentSearchTerm) {
+  if (!canSearch()) {
     return
   }
   state.processing = true
@@ -119,6 +128,7 @@ async function fetchNewResults () {
   state.processing = false
 }
 
+// ロードボタン押下時と画面最下部到達時にコール
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
   if (state.processing) {
@@ -130,7 +140,7 @@ async function fetchContinuousResults (direction: "new" | "old") {
     mainState.currentSearchPostCursor = undefined
     updateRouter()
   }
-  if (!mainState.currentSearchTerm) {
+  if (!canSearch()) {
     return
   }
   state.processing = true
@@ -142,10 +152,30 @@ async function fetchContinuousResults (direction: "new" | "old") {
   state.processing = false
 }
 
+function resetState () {
+  Object.keys(mainState.currentSearchPostFormState).forEach((key) => {
+    (mainState.currentSearchPostFormState as any)[key] = undefined
+  })
+}
+
+function canSearch (): boolean {
+  return (
+    mainState.currentSearchTerm !== "" ||
+    Object.keys(mainState.currentSearchPostFormState)
+      .filter((key) => {
+        return key !== "sort"
+      })
+      .some((key) => {
+        return (mainState.currentSearchPostFormState as any)[key] != null
+      })
+  )
+}
+
 function updateRouter () {
-  const query = mainState.currentSearchTerm !== ""
-    ? { text: mainState.currentSearchTerm, sort: mainState.currentSearchPostFormState.sort }
-    : undefined
+  const query: { [k: string]: undefined | string } = { text: mainState.currentSearchTerm || undefined }
+  Object.keys(mainState.currentSearchPostFormState).forEach((key) => {
+    query[key] = (mainState.currentSearchPostFormState as any)[key] || undefined
+  })
   router.push({ name: "post-search", query })
 }
 
@@ -170,6 +200,7 @@ function openKeywordHistoryPopover ($event: Event) {
     mainState.currentSetting.postSearchKeywordHistory,
     (keyword: string) => {
       mainState.currentSearchTerm = keyword
+      resetState()
       fetchNewResults()
     }
   )
@@ -193,9 +224,9 @@ function onScrolledToBottom () {
 <template>
   <div class="post-search-view">
     <Portal to="search-view-header">
-      <form @submit.prevent="fetchNewResults">
+      <form @submit.prevent="onSubmit">
         <div class="group-parts">
-          <!-- キーワードボックス -->
+          <!-- キーワード入力ボックス -->
           <input
             v-model="mainState.currentSearchTerm"
             id="post-term-textbox"
@@ -227,12 +258,6 @@ function onScrolledToBottom () {
           </button>
         </div>
       </form>
-
-      <!-- ポスト検索フォーム -->
-      <EasyForm
-        v-bind="easyFormProps"
-        @change="fetchNewResults"
-      />
     </Portal>
     <div class="post-search-view__main">
       <LoadButton
@@ -281,20 +306,6 @@ function onScrolledToBottom () {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-  }
-}
-
-.easy-form {
-  margin-right: -0.5rem;
-  overflow: hidden;
-
-  &:deep(.easy-form__body) {
-    overflow: hidden;
-    position: relative;
-
-    & > dl {
-      overflow: hidden;
-    }
   }
 }
 

@@ -57,7 +57,7 @@ function makeItemId (index: number) {
   return `easy-form--${props.id ?? 'default'}__${index}`
 }
 
-const inputList = [ "datetime-local", "password", "text", "url" ]
+const inputList = [ "date", "datetime-local", "password", "text", "url" ]
 function isInput (type?: string): boolean {
   return type != null ? inputList.includes(type) : true
 }

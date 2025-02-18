@@ -155,11 +155,7 @@ interface MainState {
   currentSearchTerm: string
 
   // 検索 - 現在のポスト検索フォーム
-  currentSearchPostFormState: {
-    sort: "top" | "latest"
-    lang?: Array<string>
-    author?: Array<string>
-  }
+  currentSearchPostFormState: TIPostSearch
 
   // 検索 - 現在のポスト検索結果
   currentSearchPostResults: Array<TTPost>

@@ -204,8 +204,13 @@ export const state: MainState = reactive<MainState>({
   // 検索 - 現在のポスト検索フォーム
   currentSearchPostFormState: {
     sort: "latest",
-    lang: [],
-    author: [],
+    lang: "",
+    author: "",
+    to: "",
+    mentions: "",
+    domain: "",
+    since: "",
+    until: "",
   },
 
   // 検索 - 現在のポスト検索結果
@@ -1722,20 +1727,10 @@ async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
 
 // 検索 - 現在のポスト検索結果
 async function fetchSearchPosts (cursor?: string) {
-  // ポスト検索フォームの設定
-  const params: { [k: string]: any } = {}
-  params.sort = state.currentSearchPostFormState.sort
-  if (state.currentSearchPostFormState.lang?.[0] != null) {
-    params.lang = state.currentSearchPostFormState.lang[0]
-  }
-  if (state.currentSearchPostFormState.author?.[0] != null) {
-    params.author = state.currentSearchPostFormState.author[0]
-  }
-
   const newCursor = await state.atp.fetchPostSearch(
     state.currentSearchPostResults,
     state.currentSearchTerm,
-    params,
+    state.currentSearchPostFormState,
     CONSTS.LIMIT_OF_FETCH_POST_SEARCH,
     cursor
   )
@@ -1743,7 +1738,9 @@ async function fetchSearchPosts (cursor?: string) {
     state.openErrorPopup(newCursor, "mainState/fetchSearchPosts")
     return
   }
-  if (newCursor == null) return
+  if (newCursor == null) {
+    return
+  }
   state.currentSearchPostCursor = newCursor
 }
 
