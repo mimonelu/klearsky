@@ -19,14 +19,19 @@ const router = useRouter()
 
 const easyFormState = reactive<TIPostSearch & {
   noLang: Array<boolean>
-  me: Array<string>
+  authorIsMe: Array<string>
+  mentionsIsMe: Array<string>
 }>({
   sort: "latest",
   lang: Util.getUserLanguage() ?? "",
   noLang: [true],
   author: "",
-  me: [],
-  to: "",
+  authorIsMe: [],
+
+  // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
+  // to: "",
+
+  mentionsIsMe: [],
   mentions: "",
   domain: "",
   since: "",
@@ -78,12 +83,12 @@ const easyFormProps: TTEasyForm = {
     },
     {
       state: easyFormState,
-      model: "me",
+      model: "authorIsMe",
       label: $t("searchAuthor"),
       type: "checkbox",
       layout: "horizontal",
       options: [
-        { label: $t("searchMe"), value: mainState.userProfile?.handle || "" },
+        { label: $t("searchMyPosts"), value: mainState.userProfile?.handle || "" },
       ],
       onUpdate: updateAuthorData,
     },
@@ -95,6 +100,9 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "off",
       hasMentionSuggestion: true,
     },
+
+    /*
+    // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
     {
       state: easyFormState,
       model: "to",
@@ -104,10 +112,22 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "off",
       hasMentionSuggestion: true,
     },
+    */
+
+    {
+      state: easyFormState,
+      model: "mentionsIsMe",
+      label: $t("searchMentions"),
+      type: "checkbox",
+      layout: "horizontal",
+      options: [
+        { label: $t("searchMentionsToMe"), value: mainState.userProfile?.handle || "" },
+      ],
+      onUpdate: updateMentionsData,
+    },
     {
       state: easyFormState,
       model: "mentions",
-      label: $t("searchMentions"),
       type: "text",
       placeholder: "@handle.bsky.social",
       autocomplete: "off",
@@ -139,6 +159,7 @@ const easyFormProps: TTEasyForm = {
 onMounted(() => {
   updateLangData()
   updateAuthorData()
+  updateMentionsData()
 })
 
 function close () {
@@ -160,7 +181,17 @@ function updateAuthorData () {
     return prop.model === "author"
   })
   if (authorData != null) {
-    authorData.disabled = easyFormState.me.length > 0
+    authorData.disabled = easyFormState.authorIsMe.length > 0
+    easyForm.value?.forceUpdate()
+  }
+}
+
+function updateMentionsData () {
+  const mentionsData = easyFormProps.data.find((prop) => {
+    return prop.model === "mentions"
+  })
+  if (mentionsData != null) {
+    mentionsData.disabled = easyFormState.mentionsIsMe.length > 0
     easyForm.value?.forceUpdate()
   }
 }
@@ -169,25 +200,38 @@ async function submitCallback () {
   Util.blurElement()
   mainState.currentSearchPostFormState.sort = easyFormState.sort
   mainState.currentSearchPostFormState.lang = easyFormState.noLang.length > 0 ? "" : easyFormState.lang
-  mainState.currentSearchPostFormState.author = easyFormState.me.length > 0 ? "me" : easyFormState.author
-  mainState.currentSearchPostFormState.to = easyFormState.to
-  mainState.currentSearchPostFormState.mentions = easyFormState.mentions
-  mainState.currentSearchPostFormState.domain = easyFormState.domain
+  mainState.currentSearchPostFormState.author = easyFormState.authorIsMe.length > 0 ? "me" : modifyHandle(easyFormState.author)
+
+  // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
+  // mainState.currentSearchPostFormState.to = modifyHandle(easyFormState.to)
+
+  mainState.currentSearchPostFormState.mentions = easyFormState.mentionsIsMe.length > 0 ? easyFormState.mentionsIsMe[0] : modifyHandle(easyFormState.mentions)
+  mainState.currentSearchPostFormState.domain = easyFormState.domain?.trim()
   mainState.currentSearchPostFormState.since = easyFormState.since
   mainState.currentSearchPostFormState.until = easyFormState.until
   const query = {
     text: mainState.currentSearchTerm || undefined,
-    sort: easyFormState.sort || undefined,
-    lang: easyFormState.noLang.length > 0 ? undefined : easyFormState.lang || undefined,
-    author: easyFormState.me.length > 0 ? easyFormState.me[0] : easyFormState.author || undefined,
-    to: easyFormState.to || undefined,
-    mentions: easyFormState.mentions || undefined,
+    sort: easyFormState.sort,
+    lang: easyFormState.noLang.length > 0 ? undefined : easyFormState.lang,
+    author: easyFormState.authorIsMe.length > 0 ? easyFormState.authorIsMe[0] : modifyHandle(easyFormState.author) || undefined,
+
+    // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
+    // to: modifyHandle(easyFormState.to),
+
+    mentions: easyFormState.mentionsIsMe.length > 0 ? easyFormState.mentionsIsMe[0] : modifyHandle(easyFormState.mentions) || undefined,
     domain: easyFormState.domain || undefined,
-    since: easyFormState.since || undefined,
-    until: easyFormState.until || undefined,
+    since: easyFormState.since,
+    until: easyFormState.until,
   }
   router.push({ name: "post-search", query })
   close()
+}
+
+function modifyHandle (handle?: string): undefined | string {
+  if (handle == null) {
+    return
+  }
+  return handle.replace(/^@/, "").trim()
 }
 </script>
 
@@ -225,10 +269,11 @@ async function submitCallback () {
 
 <style lang="scss" scoped>
 .advanced-search-popup {
-  // author フォームの上部マージンを詰める
+  // lang, author, mentions フォームの上部マージンを詰める
   .easy-form:deep() {
     dl[data-name="lang"],
-    dl[data-name="author"] {
+    dl[data-name="author"],
+    dl[data-name="mentions"] {
       margin-top: -0.5rem;
     }
   }
