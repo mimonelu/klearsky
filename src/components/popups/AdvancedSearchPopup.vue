@@ -63,7 +63,7 @@ const easyFormProps: TTEasyForm = {
       type: "checkbox",
       layout: "horizontal",
       options: [
-        { label: $t("noLang"), value: true },
+        { label: $t("searchNoLang"), value: true },
       ],
       onUpdate: updateLangData,
     },
@@ -83,7 +83,7 @@ const easyFormProps: TTEasyForm = {
       type: "checkbox",
       layout: "horizontal",
       options: [
-        { label: $t("me"), value: mainState.userProfile?.handle || "" },
+        { label: $t("searchMe"), value: mainState.userProfile?.handle || "" },
       ],
       onUpdate: updateAuthorData,
     },

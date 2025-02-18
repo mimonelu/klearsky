@@ -20,14 +20,6 @@ const state = reactive<{
 const router = useRouter()
 
 const unwatchOnQuery = watch(() => router.currentRoute.value.query, async (value: any) => {
-  /*
-  if (
-    mainState.currentSearchTerm !== "" &&
-    mainState.currentSearchTerm !== mainState.currentSearchPostsLastTerm
-  ) {
-    await fetchNewResults()
-  }
-  */
   if (updatedSearchQueries(value)) {
     await fetchNewResults()
   }
