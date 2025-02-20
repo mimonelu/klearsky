@@ -21,22 +21,30 @@ const easyFormState = reactive<TIPostSearch & {
   noLang: Array<boolean>
   authorIsMe: Array<string>
   mentionsIsMe: Array<string>
-}>({
-  sort: "latest",
-  lang: Util.getUserLanguage() ?? "",
-  noLang: [true],
-  author: "",
-  authorIsMe: [],
+}>((() => {
+  const authorIsMe =
+    mainState.currentSearchPostFormState.author != null &&
+    mainState.currentSearchPostFormState.author === mainState.userProfile?.handle
+  const mentionsIsMe =
+    mainState.currentSearchPostFormState.mentions != null &&
+    mainState.currentSearchPostFormState.mentions === mainState.userProfile?.handle
+  return {
+    sort: mainState.currentSearchPostFormState.sort ?? "latest",
+    noLang: mainState.currentSearchPostFormState.lang != null ? [] : [true],
+    lang: mainState.currentSearchPostFormState.lang ?? Util.getUserLanguage() ?? "",
+    authorIsMe: authorIsMe ? [mainState.currentSearchPostFormState.author as string] : [],
+    author: authorIsMe ? "" : mainState.currentSearchPostFormState.author ?? "",
 
-  // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
-  // to: "",
+    // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
+    // to: "",
 
-  mentionsIsMe: [],
-  mentions: "",
-  domain: "",
-  since: "",
-  until: "",
-})
+    mentionsIsMe: mentionsIsMe ? [mainState.currentSearchPostFormState.mentions as string] : [],
+    mentions: mentionsIsMe ? "" : mainState.currentSearchPostFormState.mentions ?? "",
+    domain: mainState.currentSearchPostFormState.domain ?? "",
+    since: mainState.currentSearchPostFormState.since ?? "",
+    until: mainState.currentSearchPostFormState.until ?? "",
+  }
+})())
 
 const easyFormProps: TTEasyForm = {
   submitCallback,
