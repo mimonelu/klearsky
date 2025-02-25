@@ -14,14 +14,14 @@ export default async function (
     headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | TTCidUri =
-    await this.agent.api.chat.bsky.actor.declaration.create(
+    await this.agent.chat.bsky.actor.declaration.create(
       { repo },
       { allowIncoming },
       headers
     )
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/api.chat.bsky.actor.declaration.create]", response)
+  console.log("[klearsky/chat.bsky.actor.declaration.create]", response)
   if (response instanceof Error) {
     return response
   }

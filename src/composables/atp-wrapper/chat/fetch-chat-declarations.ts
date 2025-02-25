@@ -22,10 +22,10 @@ export default async function (
     query.cursor = cursor
   }
   const response: Error | TIFetchChatDeclarationsResponse =
-    await this.agent.api.chat.bsky.actor.declaration.list(query)
+    await this.agent.chat.bsky.actor.declaration.list(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/api.chat.bsky.actor.declaration.list]", response)
+  console.log("[klearsky/chat.bsky.actor.declaration.list]", response)
   if (response instanceof Error) {
     return response
   }

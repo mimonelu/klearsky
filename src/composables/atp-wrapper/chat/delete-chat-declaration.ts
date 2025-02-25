@@ -17,13 +17,13 @@ export default async function (
     headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | undefined =
-    await this.agent.api.chat.bsky.actor.declaration.delete({
+    await this.agent.chat.bsky.actor.declaration.delete({
       repo,
       rkey,
     }, headers)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/api.chat.bsky.actor.declaration.delete]", response)
+  console.log("[klearsky/chat.bsky.actor.declaration.delete]", response)
   if (response instanceof Error) {
     return response
   }

@@ -19,10 +19,10 @@ export default async function (
     options.headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | ChatBskyConvoUnmuteConvo.Response =
-    await this.agent.api.chat.bsky.convo.unmuteConvo(query, options)
+    await this.agent.chat.bsky.convo.unmuteConvo(query, options)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/api.chat.bsky.convo.unmuteConvo]", response)
+  console.log("[klearsky/chat.bsky.convo.unmuteConvo]", response)
   if (response instanceof Error) {
     return response
   }

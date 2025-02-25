@@ -60,10 +60,10 @@ export default async function (
     options.headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | ChatBskyConvoSendMessage.Response =
-    await this.agent.api.chat.bsky.convo.sendMessage(query, options)
+    await this.agent.chat.bsky.convo.sendMessage(query, options)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/api.chat.bsky.convo.sendMessage]", response)
+  console.log("[klearsky/chat.bsky.convo.sendMessage]", response)
   if (response instanceof Error) {
     return response
   }

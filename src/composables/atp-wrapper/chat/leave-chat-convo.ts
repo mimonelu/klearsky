@@ -19,10 +19,10 @@ export default async function (
     options.headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | ChatBskyConvoLeaveConvo.Response =
-    await this.agent.api.chat.bsky.convo.leaveConvo(query, options)
+    await this.agent.chat.bsky.convo.leaveConvo(query, options)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/api.chat.bsky.convo.leaveConvo]", response)
+  console.log("[klearsky/chat.bsky.convo.leaveConvo]", response)
   if (response instanceof Error) {
     return response
   }

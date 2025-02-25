@@ -23,10 +23,10 @@ export default async function (
     options.headers["atproto-proxy"] = this.proxies.chat
   }
   const response: Error | ChatBskyConvoDeleteMessageForSelf.Response =
-    await this.agent.api.chat.bsky.convo.deleteMessageForSelf(query, options)
+    await this.agent.chat.bsky.convo.deleteMessageForSelf(query, options)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/api.chat.bsky.convo.deleteMessageForSelf]", response)
+  console.log("[klearsky/chat.bsky.convo.deleteMessageForSelf]", response)
   if (response instanceof Error) {
     return response
   }
