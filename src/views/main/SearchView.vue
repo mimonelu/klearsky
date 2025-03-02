@@ -8,8 +8,23 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  postQuery: ComputedRef<string>
   query: ComputedRef<string>
 }>({
+  postQuery: computed((): string => {
+    const queries: string[] = []
+    if (mainState.currentSearchTerm) {
+      queries.push(`text=${mainState.currentSearchTerm}`)
+    }
+    Object.keys(mainState.currentSearchPostFormState).forEach((key) => {
+      const value = (mainState.currentSearchPostFormState as any)[key]
+      if (value) {
+        queries.push(`${key}=${value}`)
+      }
+    })
+    const query = queries.join("&")
+    return query ? `?${query}` : ""
+  }),
   query: computed((): string => {
     return mainState.currentSearchTerm
       ? `?text=${mainState.currentSearchTerm}`
@@ -33,7 +48,7 @@ const state = reactive<{
         <!-- ポスト検索ページ -->
         <RouterLink
           class="tab__button"
-          :to="`/search/post${state.query}`"
+          :to="`/search/post${state.postQuery}`"
           :title="$t('postSearch')"
         >
           <SVGIcon name="post" />

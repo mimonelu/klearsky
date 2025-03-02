@@ -1,4 +1,5 @@
 interface TIPostSearch {
+  text: string
   sort?: "top" | "latest"
   lang?: string
   author?: string

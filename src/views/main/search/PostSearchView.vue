@@ -56,10 +56,10 @@ function updatedSearchQueries (value: any): boolean {
     diff = true
   }
   mainState.currentSearchTerm = value?.text ?? ""
-  if (mainState.currentSearchPostFormState.sort !== value?.sort) {
+  if (mainState.currentSearchPostFormState.sort !== (value?.sort ?? "latest")) {
     diff = true
   }
-  mainState.currentSearchPostFormState.sort = value?.sort
+  mainState.currentSearchPostFormState.sort = value?.sort ?? "latest"
   if (mainState.currentSearchPostFormState.lang !== value?.lang) {
     diff = true
   }

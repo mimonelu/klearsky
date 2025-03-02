@@ -12,9 +12,18 @@ const state = reactive<{
   isAtProfilePage: ComputedRef<boolean>
 }>({
   query: computed((): string => {
-    return mainState.currentSearchTerm
-      ? `?text=${mainState.currentSearchTerm}`
-      : ""
+    const queries: string[] = []
+    if (mainState.currentSearchTerm) {
+      queries.push(`text=${mainState.currentSearchTerm}`)
+    }
+    Object.keys(mainState.currentSearchPostFormState).forEach((key) => {
+      const value = (mainState.currentSearchPostFormState as any)[key]
+      if (value) {
+        queries.push(`${key}=${value}`)
+      }
+    })
+    const query = queries.join("&")
+    return query ? `?${query}` : ""
   }),
   isAtProfilePage: computed((): boolean => {
     return (

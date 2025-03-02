@@ -23,26 +23,31 @@ const easyFormState = reactive<TIPostSearch & {
   mentionsIsMe: Array<string>
 }>((() => {
   const authorIsMe =
-    mainState.currentSearchPostFormState.author != null &&
-    mainState.currentSearchPostFormState.author === mainState.userProfile?.handle
+    mainState.currentSearchPostFormState.author && (
+      mainState.currentSearchPostFormState.author === "me" ||
+      mainState.currentSearchPostFormState.author === mainState.userProfile?.handle
+    )
   const mentionsIsMe =
-    mainState.currentSearchPostFormState.mentions != null &&
-    mainState.currentSearchPostFormState.mentions === mainState.userProfile?.handle
+    mainState.currentSearchPostFormState.mentions && (
+      mainState.currentSearchPostFormState.mentions === "me" ||
+      mainState.currentSearchPostFormState.mentions === mainState.userProfile?.handle
+    )
   return {
-    sort: mainState.currentSearchPostFormState.sort ?? "latest",
-    noLang: mainState.currentSearchPostFormState.lang != null ? [] : [true],
-    lang: mainState.currentSearchPostFormState.lang ?? Util.getUserLanguage() ?? "",
-    authorIsMe: authorIsMe ? [mainState.currentSearchPostFormState.author as string] : [],
-    author: authorIsMe ? "" : mainState.currentSearchPostFormState.author ?? "",
+    text: mainState.currentSearchTerm || "",
+    sort: mainState.currentSearchPostFormState.sort || "latest",
+    noLang: mainState.currentSearchPostFormState.lang ? [] : [true],
+    lang: mainState.currentSearchPostFormState.lang || (Util.getUserLanguage() ?? ""),
+    authorIsMe: authorIsMe ? [mainState.userProfile?.handle || ""] : [],
+    author: authorIsMe ? "" : mainState.currentSearchPostFormState.author || "",
 
     // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
     // to: "",
 
-    mentionsIsMe: mentionsIsMe ? [mainState.currentSearchPostFormState.mentions as string] : [],
-    mentions: mentionsIsMe ? "" : mainState.currentSearchPostFormState.mentions ?? "",
-    domain: mainState.currentSearchPostFormState.domain ?? "",
-    since: mainState.currentSearchPostFormState.since ?? "",
-    until: mainState.currentSearchPostFormState.until ?? "",
+    mentionsIsMe: mentionsIsMe ? [mainState.userProfile?.handle || ""] : [],
+    mentions: mentionsIsMe ? "" : mainState.currentSearchPostFormState.mentions || "",
+    domain: mainState.currentSearchPostFormState.domain || "",
+    since: mainState.currentSearchPostFormState.since || "",
+    until: mainState.currentSearchPostFormState.until || "",
   }
 })())
 
@@ -50,8 +55,8 @@ const easyFormProps: TTEasyForm = {
   submitCallback,
   data: [
     {
-      state: mainState,
-      model: "currentSearchTerm",
+      state: easyFormState,
+      model: "text",
       label: $t("searchKeyword"),
       type: "text",
       autocomplete: "off",
@@ -206,30 +211,19 @@ function updateMentionsData () {
 
 async function submitCallback () {
   Util.blurElement()
-  mainState.currentSearchPostFormState.sort = easyFormState.sort
-  mainState.currentSearchPostFormState.lang = easyFormState.noLang.length > 0 ? "" : easyFormState.lang
-  mainState.currentSearchPostFormState.author = easyFormState.authorIsMe.length > 0 ? "me" : modifyHandle(easyFormState.author)
-
-  // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
-  // mainState.currentSearchPostFormState.to = modifyHandle(easyFormState.to)
-
-  mainState.currentSearchPostFormState.mentions = easyFormState.mentionsIsMe.length > 0 ? easyFormState.mentionsIsMe[0] : modifyHandle(easyFormState.mentions)
-  mainState.currentSearchPostFormState.domain = easyFormState.domain?.trim()
-  mainState.currentSearchPostFormState.since = easyFormState.since
-  mainState.currentSearchPostFormState.until = easyFormState.until
   const query = {
-    text: mainState.currentSearchTerm || undefined,
+    text: easyFormState.text || undefined,
     sort: easyFormState.sort,
-    lang: easyFormState.noLang.length > 0 ? undefined : easyFormState.lang,
-    author: easyFormState.authorIsMe.length > 0 ? easyFormState.authorIsMe[0] : modifyHandle(easyFormState.author) || undefined,
+    lang: easyFormState.noLang.length > 0 ? undefined : easyFormState.lang || undefined,
+    author: easyFormState.authorIsMe.length > 0 ? easyFormState.authorIsMe[0] || undefined : modifyHandle(easyFormState.author),
 
     // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
     // to: modifyHandle(easyFormState.to),
 
-    mentions: easyFormState.mentionsIsMe.length > 0 ? easyFormState.mentionsIsMe[0] : modifyHandle(easyFormState.mentions) || undefined,
+    mentions: easyFormState.mentionsIsMe.length > 0 ? easyFormState.mentionsIsMe[0] || undefined : modifyHandle(easyFormState.mentions),
     domain: easyFormState.domain || undefined,
-    since: easyFormState.since,
-    until: easyFormState.until,
+    since: easyFormState.since || undefined,
+    until: easyFormState.until || undefined,
   }
   router.push({ name: "post-search", query })
   close()
@@ -239,7 +233,7 @@ function modifyHandle (handle?: string): undefined | string {
   if (handle == null) {
     return
   }
-  return handle.replace(/^@/, "").trim()
+  return handle.replace(/^@/, "").trim() || undefined
 }
 </script>
 
