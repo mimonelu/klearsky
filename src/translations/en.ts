@@ -338,7 +338,9 @@ export default () => ({
   "postSearchTop": "Popular",
   "feedSearch": "Find Feeds",
   "keyword": "Keyword",
-  "searchAccountPost": "Search post",
+  "searchUserLatestPost": "Search latest posts",
+  "searchUserTopPost": "Search top posts",
+  "searchUserMentions": "Search mentions",
   "popularFeeds": "Popular Feeds",
   "recommendedUsers": "Recommended Users",
 

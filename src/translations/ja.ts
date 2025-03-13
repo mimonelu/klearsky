@@ -338,7 +338,9 @@ export default () => ({
   "postSearchTop": "人気",
   "feedSearch": "フィードを見つける",
   "keyword": "キーワード",
-  "searchAccountPost": "ポストを検索",
+  "searchUserLatestPost": "最近のポストを検索",
+  "searchUserTopPost": "人気ポストを検索",
+  "searchUserMentions": "メンションを検索",
   "popularFeeds": "人気フィード",
   "recommendedUsers": "オススメユーザー",
 

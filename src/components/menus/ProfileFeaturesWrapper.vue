@@ -2,7 +2,7 @@
 import { nextTick, reactive, ref } from "vue"
 import MenuTickerDownloadPostedImages from "@/components/menus/DownloadPostedImages.vue"
 import MenuTickerFirstPost from "@/components/menus/FirstPost.vue"
-import MenuTickerSearchAccountPost from "@/components/menus/SearchAccountPost.vue"
+import MenuTickerSearchPost from "@/components/menus/SearchPost.vue"
 import MenuTickerSendMention from "@/components/menus/SendMention.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -77,8 +77,23 @@ function close () {
         <hr />
 
         <!-- このユーザーのポストを検索 -->
-        <MenuTickerSearchAccountPost
-          :user="user"
+        <MenuTickerSearchPost
+          label="searchUserLatestPost"
+          :query="{ text: '', author: user.handle }"
+          @close="emit('close')"
+        />
+
+        <!-- このユーザーの人気ポストを検索 -->
+        <MenuTickerSearchPost
+          label="searchUserTopPost"
+          :query="{ text: '', author: user.handle, sort: 'top' }"
+          @close="emit('close')"
+        />
+
+        <!-- このユーザーへのメンションを検索 -->
+        <MenuTickerSearchPost
+          label="searchUserMentions"
+          :query="{ text: '', mentions: user.handle }"
           @close="emit('close')"
         />
 
