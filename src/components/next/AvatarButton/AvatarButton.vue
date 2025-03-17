@@ -23,7 +23,7 @@ function openImagePopup () {
 
 <template>
   <button
-    class="avatar"
+    class="avatar-button"
     :data-is-labeler="!!isLabeler"
     @click.stop="openImagePopup"
   >
@@ -32,7 +32,7 @@ function openImagePopup () {
 </template>
 
 <style lang="scss" scoped>
-.avatar {
+.avatar-button {
   cursor: pointer;
   display: block;
 

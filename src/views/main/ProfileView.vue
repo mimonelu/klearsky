@@ -4,7 +4,7 @@ import { RouterView, useRouter } from "vue-router"
 import { differenceInDays } from "date-fns"
 import AtmosphereContainer from "@/components/next/Atmosphere/AtmosphereContainer.vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
-import AvatarImageButton from "@/components/buttons/AvatarImageButton.vue"
+import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
 import BlockButton from "@/components/buttons/BlockButton.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
@@ -358,7 +358,7 @@ function removeThisPost () {
               v-if="state.loaderDisplay || (state.accountContentDisplay && state.accountMediaDisplay)"
               class="profile-view__details__top__left"
             >
-              <AvatarImageButton
+              <AvatarButton
                 :isLabeler="state.isLabeler"
                 :image="mainState.currentProfile?.avatar ?? '/img/void.png'"
               />
@@ -810,7 +810,7 @@ function removeThisPost () {
     }
 
     .profile-view__details,
-    .avatar {
+    .avatar-button {
       --avatar-size: 5rem;
       position: unset;
     }
@@ -889,7 +889,7 @@ function removeThisPost () {
 }
 
 // アバターボタン
-.avatar {
+.avatar-button {
   font-size: var(--avatar-size);
 
   // 非SPレイアウト
