@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router"
-import GlobalError from "@/components/next/GlobalError/Main.vue"
-import MemoryInfo from "@/components/next/MemoryInfo/Main.vue"
+import GlobalError from "@/components/next/GlobalError/GlobalError.vue"
+import MemoryInfo from "@/components/next/MemoryInfo/MemoryInfo.vue"
 
 const isDevelopment = import.meta.env.MODE === "development"
 const useMemoryInfo = import.meta.env.VITE_MEMORY_INFO === "1"

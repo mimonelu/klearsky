@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import ListCardList from "@/components/lists/ListCardList.vue"
-import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 
 const mainState = inject("state") as MainState
 

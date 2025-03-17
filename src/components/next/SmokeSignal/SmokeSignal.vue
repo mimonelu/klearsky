@@ -3,7 +3,7 @@ import { inject, reactive, type Ref } from "vue"
 import { isBefore } from "date-fns/isBefore"
 import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
-import AtmosphereItem from "@/components/next/Atmosphere/Item.vue"
+import AtmosphereItem from "@/components/next/Atmosphere/AtmosphereItem.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 

@@ -3,7 +3,7 @@ import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 

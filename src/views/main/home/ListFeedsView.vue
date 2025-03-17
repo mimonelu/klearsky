@@ -3,7 +3,7 @@ import { inject } from "vue"
 import Feed from "@/components/compositions/Feed.vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

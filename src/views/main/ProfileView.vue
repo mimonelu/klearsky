@@ -2,7 +2,7 @@
 import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import { differenceInDays } from "date-fns"
-import AtmosphereContainer from "@/components/next/Atmosphere/Container.vue"
+import AtmosphereContainer from "@/components/next/Atmosphere/AtmosphereContainer.vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarImageButton from "@/components/buttons/AvatarImageButton.vue"
 import BlockButton from "@/components/buttons/BlockButton.vue"

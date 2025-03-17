@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"

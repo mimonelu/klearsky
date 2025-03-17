@@ -3,7 +3,7 @@ import { inject } from "vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Loader from "@/components/shells/Loader.vue"
-import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
 

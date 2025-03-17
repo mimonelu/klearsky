@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted, onBeforeUnmount, reactive } from "vue"
-import Overlay from "@/components/next/GlobalError/Overlay.vue"
+import Overlay from "@/components/next/GlobalError/GlobalErrorOverlay.vue"
 
 const $t = inject("$t") as Function
 

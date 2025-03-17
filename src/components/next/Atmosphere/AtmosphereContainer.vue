@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, type ComputedRef } from "vue"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
-import Frontpage from "@/components/next/Frontpage/Main.vue"
-import Linkat from "@/components/next/Linkat/Main.vue"
-import SmokeSignal from "@/components/next/SmokeSignal/Main.vue"
+import Frontpage from "@/components/next/Frontpage/Frontpage.vue"
+import Linkat from "@/components/next/Linkat/Linkat.vue"
+import SmokeSignal from "@/components/next/SmokeSignal/SmokeSignal.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import WhiteWind from "@/components/next/WhiteWind/Main.vue"
+import WhiteWind from "@/components/next/WhiteWind/WhiteWind.vue"
 
 const mainState = inject("state") as MainState
 

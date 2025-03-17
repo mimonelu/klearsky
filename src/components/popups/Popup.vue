@@ -2,7 +2,7 @@
 import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import hotkeys from "hotkeys-js"
 import Loader from "@/components/shells/Loader.vue"
-import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()

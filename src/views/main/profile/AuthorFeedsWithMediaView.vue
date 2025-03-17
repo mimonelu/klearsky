@@ -2,7 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import MediaList from "@/components/lists/MediaList.vue"
-import ScrollObserver from "@/components/next/ScrollObserver/Main.vue"
+import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState

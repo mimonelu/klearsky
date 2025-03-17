@@ -2,7 +2,7 @@
 import { inject, reactive, type Ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
-import AtmosphereItem from "@/components/next/Atmosphere/Item.vue"
+import AtmosphereItem from "@/components/next/Atmosphere/AtmosphereItem.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const NUMBER_OF_FETCH_RECORDS = 5
