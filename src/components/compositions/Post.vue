@@ -3,7 +3,7 @@ import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type Compu
 import { RouterLink, useRouter } from "vue-router"
 import { RichText } from "@atproto/api"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
-import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
+import AvatarLink from "@/components/next/AvatarLink/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
@@ -996,7 +996,7 @@ function toggleOldestQuotedPostDisplay () {
       <div class="body__header">
         <!-- アバターリンク -->
         <div class="body__header__avatar">
-          <AvatarButton
+          <AvatarLink
             :did="post.author?.did"
             :image="post.author?.avatar"
             :isLabeler="post.author?.associated?.labeler"
@@ -1810,7 +1810,7 @@ function toggleOldestQuotedPostDisplay () {
     width: var(--avatar-size);
     height: 2em;
 
-    & > .avatar-button {
+    & > .avatar-link {
       font-size: var(--avatar-size);
       position: absolute;
 

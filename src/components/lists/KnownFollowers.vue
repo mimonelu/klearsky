@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, computed, type ComputedRef } from "vue"
-import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
+import AvatarLink from "@/components/next/AvatarLink/AvatarLink.vue"
 
 const props = defineProps<{
   followers: Array<TTUser>
@@ -17,7 +17,7 @@ const state = reactive<{
 
 <template>
   <div class="known-followers">
-    <AvatarButton
+    <AvatarLink
       v-for="follower, index of state.followers"
       :key="index"
       :did="follower.did"
@@ -34,7 +34,7 @@ const state = reactive<{
   align-items: flex-end;
   flex-direction: row-reverse;
 
-  & > .avatar-button {
+  & > .avatar-link {
     box-shadow: 0 0 0 2px rgb(var(--bg-color));
     position: relative;
     &:not(:last-child) {

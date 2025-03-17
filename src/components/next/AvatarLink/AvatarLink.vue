@@ -16,7 +16,7 @@ const mainState = inject("state") as MainState
   <Component
     :is="noLink ? 'div' : 'RouterLink'"
     :to="{ name: 'profile-feeds', query: { account: did } }"
-    class="avatar-button"
+    class="avatar-link"
     :data-is-labeler="!!isLabeler"
   >
     <LazyImage :src="mainState.currentSetting.postAnonymization ? undefined : image" />
@@ -24,7 +24,7 @@ const mainState = inject("state") as MainState
 </template>
 
 <style lang="scss" scoped>
-.avatar-button {
+.avatar-link {
   background-color: rgb(var(--fg-color), 0.125);
   display: block;
   overflow: hidden;
@@ -45,7 +45,7 @@ const mainState = inject("state") as MainState
     max-height: 1em;
   }
 }
-a.avatar-button {
+a.avatar-link {
   cursor: pointer;
 
   &:hover {

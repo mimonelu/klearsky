@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
-import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
+import AvatarLink from "@/components/next/AvatarLink/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
@@ -102,7 +102,7 @@ function onActivateContentFilteringToggle () {
         :viewer="user.viewer"
       />
 
-      <AvatarButton
+      <AvatarLink
         :noLink="noLink"
         :isLabeler="user.associated?.labeler"
         :did="user.did"
@@ -215,7 +215,7 @@ function onActivateContentFilteringToggle () {
   }
 }
 
-.avatar-button {
+.avatar-link {
   grid-area: a;
   font-size: 3em;
 }

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
+import AvatarLink from "@/components/next/AvatarLink/AvatarLink.vue"
 import ChatPost from "@/components/compositions/ChatPost.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -167,7 +167,7 @@ function isMine (message: TIChatMessage): boolean {
           </div>
           <div class="convo-card__avatars">
             <template v-for="member of myConvo.data?.members">
-              <AvatarButton
+              <AvatarLink
                 v-if="member.did !== mainState.atp.data.did"
                 :isLabeler="member.associated?.labeler"
                 :did="member.did"
@@ -190,7 +190,7 @@ function isMine (message: TIChatMessage): boolean {
                   v-if="member.did !== mainState.atp.data.did"
                   class="convo-card__user-list__item"
                 >
-                  <AvatarButton
+                  <AvatarLink
                     :did="member.did"
                     :image="member.avatar"
                     :isLabeler="member.associated?.labeler"
@@ -351,7 +351,7 @@ function isMine (message: TIChatMessage): boolean {
     margin-right: 1rem;
     max-width: 3rem;
 
-    & > .avatar-button {
+    & > .avatar-link {
       font-size: 3rem;
 
       &:not(:first-child) {
@@ -379,7 +379,7 @@ function isMine (message: TIChatMessage): boolean {
       grid-gap: 0.25em;
       overflow: hidden;
 
-      & > .avatar-button {
+      & > .avatar-link {
         font-size: 1rem;
       }
     }
