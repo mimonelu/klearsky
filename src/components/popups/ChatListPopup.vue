@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import AvatarButton from "@/components/buttons/AvatarButton.vue"
+import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
 import ChatPost from "@/components/compositions/ChatPost.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"

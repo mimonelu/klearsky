@@ -3,7 +3,7 @@ import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type Compu
 import { RouterLink, useRouter } from "vue-router"
 import { RichText } from "@atproto/api"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
-import AvatarButton from "@/components/buttons/AvatarButton.vue"
+import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"

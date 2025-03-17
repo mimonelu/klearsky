@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
-import AvatarButton from "@/components/buttons/AvatarButton.vue"
+import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"

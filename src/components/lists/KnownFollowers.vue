@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, computed, type ComputedRef } from "vue"
-import AvatarButton from "@/components/buttons/AvatarButton.vue"
+import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
 
 const props = defineProps<{
   followers: Array<TTUser>

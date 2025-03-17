@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
-import AvatarButton from "@/components/buttons/AvatarButton.vue"
+import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import ListCard from "@/components/cards/ListCard.vue"
