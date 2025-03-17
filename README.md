@@ -19,9 +19,6 @@ Klearsky is deployed on Cloudflare.
 * `npm run dev` http://localhost:5173/
 * `npm run type-check`
 
-## npx
-* `npx knip` https://knip.dev/
-
 ## Custom records(collections)
 * `space.aoisora.bookmark` Bookmark
 * `space.aoisora.preference.feed.extra` to save an index of trendings page and global feeds
