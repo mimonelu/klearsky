@@ -364,7 +364,7 @@ function searchUrl () {
 
       <!-- 埋込型リンクカードの情報 -->
       <a
-        class="external__meta--special"
+        class="external__meta"
         :href="external.uri"
         rel="noreferrer"
         target="_blank"
@@ -382,6 +382,15 @@ function searchUrl () {
         </div>
       </a>
     </div>
+
+    <!-- 埋込型リンクカード - URL検索ボタン -->
+    <button
+      v-if="!noLink"
+      class="external__search-button"
+      @click.prevent.stop="searchUrl"
+    >
+      <SVGIcon name="search" />
+    </button>
 
     <slot name="after" />
   </div>
@@ -447,12 +456,6 @@ function searchUrl () {
     min-height: var(--size);
     [data-layout="horizontal"] & {
       grid-template-rows: 1fr auto 1fr;
-    }
-
-    &--special {
-      display: grid;
-      grid-template-rows: auto auto auto;
-      margin-top: 0.5em;
     }
 
     &__title,
