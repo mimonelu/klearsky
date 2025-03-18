@@ -2,33 +2,13 @@
 import "@/scss/main.scss"
 
 import { createApp } from "vue"
-import router from "@/router"
 import App from "@/App.vue"
-
-// ポータル
-import PortalVue from "portal-vue"
-
-// 翻訳
-import i18n from "@/plugins/i18n"
-import translationEn from "@/translations/en"
-import translationJa from "@/translations/ja"
-
-// 交差オブザーバー
-import IntersectionObserverDirective from "@/plugins/intersection-observer-directive"
+import { registerPlugins } from "@/plugins"
 
 const app = createApp(App)
-app.use(router)
 
-// ポータル
-app.use(PortalVue)
+// プラグインの登録
+registerPlugins(app)
 
-// 翻訳
-app.use(i18n, {
-  en: translationEn(),
-  ja: translationJa(),
-})
-
-// 交差オブザーバー
-app.directive("intersection-observer", IntersectionObserverDirective)
-
+// アプリケーションのマウント
 app.mount("#app")
