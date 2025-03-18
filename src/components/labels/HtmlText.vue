@@ -221,15 +221,12 @@ async function openInternalLink (uri: string) {
 }
 
 function validateUrl (urlObject: URL, text: string): boolean {
-  // 末尾のスラッシュを削除して照合
-  const pathname = urlObject.pathname.replace(/\/$/, "")
-
   return (
     urlObject.origin !== "null" &&
     urlObject.host !== "" &&
     (
-      text.startsWith(urlObject.origin + pathname) ||
-      text.startsWith(urlObject.host + pathname)
+      text.startsWith(urlObject.origin) ||
+      text.startsWith(urlObject.host)
     )
   )
 }
