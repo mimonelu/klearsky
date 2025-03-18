@@ -472,7 +472,7 @@ function searchUrl () {
       }
 
       & > span {
-        line-height: var(--line-height-middle);
+        line-height: var(--line-height-low);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

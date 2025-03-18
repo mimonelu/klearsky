@@ -141,7 +141,10 @@ async function updateHotPosts () {
             :alt="image.text"
           />
           <div class="trending-view__image-topic">{{ image.topic }}</div>
-          <div class="trending-view__image-text">{{ image.text }}</div>
+          <div
+            v-if="image.text"
+            class="trending-view__image-text"
+          >{{ image.text }}</div>
         </RouterLink>
       </div>
 
@@ -227,7 +230,7 @@ async function updateHotPosts () {
 
   &__image {
     aspect-ratio: 16 / 9;
-    border-radius: var(--border-radius-large);
+    border-radius: var(--border-radius-middle);
     display: block;
     overflow: hidden;
     position: relative;
@@ -235,11 +238,11 @@ async function updateHotPosts () {
       grid-column: span 2;
 
       .trending-view__image-topic {
-        font-size: 1.5rem;
+        font-size: min(1.25rem, 4vmin);
       }
 
       .trending-view__image-text {
-        font-size: 1rem;
+        font-size: min(1.0rem, 3vmin);
       }
     }
 
@@ -251,9 +254,9 @@ async function updateHotPosts () {
 
     &-topic {
       background-color: rgb(0, 0, 0, 0.75);
-      border-radius: 0 0 var(--border-radius-large) 0;
+      border-radius: 0 0 var(--border-radius-middle) 0;
       color: rgb(255, 255, 255);
-      font-size: 1rem;
+      font-size: min(1rem, 3vmin);
       font-weight: bold;
       overflow: hidden;
       padding: 0.5em;
@@ -267,7 +270,7 @@ async function updateHotPosts () {
     &-text {
       background-color: rgb(0, 0, 0, 0.75);
       color: rgb(224, 224, 224);
-      font-size: 0.875rem;
+      font-size: min(0.875rem, 2vmin);
       font-style: italic;
       overflow: hidden;
       padding: 0.5em;

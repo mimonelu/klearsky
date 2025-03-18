@@ -413,14 +413,15 @@ function moveToBottom () {
 .unread-badge {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
-  border-radius: var(--border-radius-middle);
+  border-radius: var(--border-radius-large);
   color: white;
   font-size: 0.75rem;
   font-weight: bold;
+  line-height: var(--line-height-low);
   padding: 0.125rem 0.25rem;
   position: absolute;
-  right: 0rem;
-  top: 0rem;
+  right: -0.25rem;
+  top: -0.25rem;
 }
 
 // スクロールボタン
