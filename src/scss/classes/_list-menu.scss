@@ -10,7 +10,7 @@
     color: rgb(var(--fg-color), 0.5);
     font-weight: bold;
     overflow: hidden;
-    padding: 0.25rem 1rem 0.5rem 1rem;
+    padding: 0.25rem 1rem 0.5rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     &:not(:first-child) {

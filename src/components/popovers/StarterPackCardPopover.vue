@@ -216,7 +216,7 @@ function close () {
 .starter-pack-card-popover {
   &:deep() {
     & > .popover__content {
-      padding: 0 0.5rem 0.5rem 0.5rem;
+      padding: 0 0.5rem 0.5rem;
     }
   }
 }

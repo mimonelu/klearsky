@@ -111,7 +111,7 @@ async function callback (type: "unreadConvo" | "muteConvo" | "unmuteConvo" | "le
 .chat-convo-popover {
   &:deep() {
     & > .popover__content {
-      padding: 0 0.5rem 0.5rem 0.5rem;
+      padding: 0 0.5rem 0.5rem;
     }
   }
 }

@@ -96,11 +96,6 @@ function scrollTop (): undefined | number {
 </template>
 
 <style lang="scss" scoped>
-@keyframes popup-overlay-animation {
-  0% {}
-  100% {}
-}
-
 @keyframes popup-content-animation {
   0% {
     transform: translateY(1rem);
@@ -136,15 +131,11 @@ function scrollTop (): undefined | number {
     pointer-events: unset;
   }
   &.v-enter-active {
-    animation: popup-overlay-animation 125ms linear;
-
     .popup {
       animation: popup-content-animation 125ms ease-out;
     }
   }
   &.v-leave-active {
-    animation: popup-overlay-animation 125ms linear reverse;
-
     .popup {
       animation: popup-content-animation 125ms ease-out reverse;
     }

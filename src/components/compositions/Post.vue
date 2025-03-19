@@ -1874,7 +1874,7 @@ function toggleOldestQuotedPostDisplay () {
   &__menu-button {
     grid-area: m;
     margin: -0.5em -0.75em -0.5em 0;
-    padding: 1em 1em;
+    padding: 1em;
     position: relative;
   }
 }

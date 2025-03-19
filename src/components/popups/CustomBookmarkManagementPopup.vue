@@ -32,7 +32,7 @@ const state = reactive<{
 
     // 対象ポストのカスタムブックマークタグを選択肢に追加
     if (pack?.bookmark.tags != null) {
-      tags.push(...pack?.bookmark.tags)
+      tags.push(...pack.bookmark.tags)
     }
 
     return tags

@@ -408,7 +408,7 @@ function onMutated () {
     display: flex;
     align-items: center;
     grid-gap: 0.5rem;
-    padding: 0 0.5rem 0 0.5rem;
+    padding: 0 0.5rem;
     min-height: 3rem;
   }
 }
