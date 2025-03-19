@@ -2,6 +2,7 @@
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { RichText } from "@atproto/api"
+import { differenceInDays } from "date-fns"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarLink from "@/components/next/AvatarLink/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
@@ -377,6 +378,10 @@ state.foldingMedia = !state.displayMedia
 const router = useRouter()
 
 const postElement = ref()
+
+const isOldPost = state.indexedAt != null
+  ? differenceInDays(new Date(), new Date(state.indexedAt)) >= 1
+  : false
 
 // 本文とワードミュート用に RichText を生成
 const contentRichText = (() => {
@@ -1047,6 +1052,7 @@ function toggleOldestQuotedPostDisplay () {
           <div
             v-if="state.indexedAt"
             class="body__header__indexed-at"
+            :data-is-old-post="isOldPost"
           >{{ mainState.formatDate(state.indexedAt) }}</div>
         </div>
 
@@ -1864,11 +1870,18 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   &__indexed-at {
-    color: rgb(var(--fg-color), 0.5);
     font-size: 0.75em;
     line-height: var(--line-height-low);
     overflow: hidden;
     white-space: nowrap;
+
+    // 古いポストの日時表記はやや目立つ色合いにする
+    &[data-is-old-post="true"] {
+      color: rgb(var(--fg-color), 0.75);
+    }
+    &[data-is-old-post="false"] {
+      color: rgb(var(--fg-color), 0.5);
+    }
   }
 
   &__menu-button {
