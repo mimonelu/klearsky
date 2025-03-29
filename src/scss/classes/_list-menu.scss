@@ -30,6 +30,7 @@
     align-items: center;
     grid-gap: 0.5rem;
     font-weight: bold;
+    overflow: hidden;
     padding: 0.5rem 1rem;
     white-space: nowrap;
     &:focus, &:hover {
@@ -98,6 +99,8 @@
 
     & > span {
       color: rgb(var(--fg-color), 0.875);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
