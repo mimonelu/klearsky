@@ -379,9 +379,6 @@ export default () => ({
   "contentLanguagesDetail2": "Les publications non conformes seront repliées.",
   "contentLanguagesDetail3": "Ne s'applique pas si la langue n'est pas définie.",
   "contentLanguagesDetail4": "Si rien n'est sélectionné, tout sera affiché.",
-  "english": "Anglais",
-  "japanese": "Japonais",
-  "french": "Français",
 
   "postLanguages": "Langues des publications",
   "postLanguagesEdit": "Sélectionner les langues",

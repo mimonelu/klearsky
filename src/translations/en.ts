@@ -380,7 +380,8 @@ export default () => ({
   "contentLanguagesDetail3": "If the appropriate languages is not set for the post, the above does not apply.",
   "contentLanguagesDetail4": "If none are selected, all posts will be displayed.",
   "english": "English",
-  "japanese": "Japanese",
+  "french": "Français",
+  "japanese": "日本語",
 
   "postLanguages": "Post Languages",
   "postLanguagesEdit": "Select post languages",

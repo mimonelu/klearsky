@@ -379,8 +379,6 @@ export default () => ({
   "contentLanguagesDetail2": "選択した言語と合致しないポストは折り畳まれます。",
   "contentLanguagesDetail3": "ポストに適切な言語が設定されていない場合は上記の限りではありません。",
   "contentLanguagesDetail4": "ひとつも選択しない場合はすべてのポストが表示されます。",
-  "english": "英語",
-  "japanese": "日本語",
 
   "postLanguages": "ポスト言語",
   "postLanguagesEdit": "ポスト言語を選択する",

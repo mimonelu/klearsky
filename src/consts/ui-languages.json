@@ -1,4 +1,5 @@
 [
   { "label": "english", "value": "en" },
+  { "label": "french", "value": "fr" },
   { "label": "japanese", "value": "ja" }
 ]
