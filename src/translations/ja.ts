@@ -649,7 +649,8 @@ export default () => ({
   "threadgateNoAction": "誰でもリプライ可",
   "threadgateCustomAction": "許可されたユーザーのみリプライ可",
   "threadgateAllowMention": "メンションされたユーザー",
-  "threadgateAllowFollowing": "あなたのフォロワー",
+  "threadgateAllowFollower": "あなたのフォロワー",
+  "threadgateAllowFollowing": "あなたがフォローしているユーザー",
   "threadgateNotification1": "リプライを許可する対象を5つまで選択できます。",
   "threadgateNotification2": "何もチェックせずに適用するとあなた以外リプライできなくなります。",
 

@@ -256,7 +256,7 @@ interface TIAtpWrapper {
   updateRecord
     (repo: string, collection: string, uri: string, record: { [k: string]: any }, validate?: boolean, swapCommit?: string, swapRecord?: string): Promise<Error | TTCidUri>
   updateThreadgate
-    (postUri: string, allowMention: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
+    (postUri: string, allowMention: boolean, allowFollower: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
   updateThreadMuteToDisable
     (uri: string): Promise<Error | undefined>
   updateThreadMuteToEnable

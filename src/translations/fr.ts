@@ -649,6 +649,7 @@ export default () => ({
   "threadgateNoAction": "Tout le monde peut répondre",
   "threadgateCustomAction": "Réponses restreintes",
   "threadgateAllowMention": "Mentions",
+  "threadgateAllowFollower": "Abonnés",
   "threadgateAllowFollowing": "Abonnements",
   "threadgateNotification1": "Maximum 5 listes autorisées.",
   "threadgateNotification2": "Si rien n'est coché, seul toi pourras répondre.",

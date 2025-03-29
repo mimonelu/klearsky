@@ -652,6 +652,7 @@ export default () => ({
   "threadgateNoAction": "Anyone can reply",
   "threadgateCustomAction": "Only allowed users can reply",
   "threadgateAllowMention": "Mention users",
+  "threadgateAllowFollower": "Followers",
   "threadgateAllowFollowing": "Following users",
   "threadgateNotification1": "You can select up to 5 targets to allow reply.",
   "threadgateNotification2": "If apply without checking anything, only you will be able to reply.",

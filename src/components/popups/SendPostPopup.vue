@@ -37,6 +37,7 @@ const state = reactive<{
     postgateAllow: true,
     threadgateAction: "none",
     allowMention: false,
+    allowFollower: false,
     allowFollowing: false,
     listUris: [],
   },
@@ -254,6 +255,7 @@ async function submitCallback () {
         const responseOfThreadgate = await mainState.atp.updateThreadgate(
           result.uri,
           state.draftReactionControl.allowMention,
+          state.draftReactionControl.allowFollower,
           state.draftReactionControl.allowFollowing,
           state.draftReactionControl.listUris
         )
@@ -343,12 +345,14 @@ function openReactionControlPopup () {
       switch (state.draftReactionControl.threadgateAction) {
         case "none": {
           state.draftReactionControl.allowMention = false
+          state.draftReactionControl.allowFollower = false
           state.draftReactionControl.allowFollowing = false
           state.draftReactionControl.listUris.splice(0)
           break
         }
         case "custom": {
           state.draftReactionControl.allowMention = params.allowMention ?? false
+          state.draftReactionControl.allowFollower = params.allowFollower ?? false
           state.draftReactionControl.allowFollowing = params.allowFollowing ?? false
           state.draftReactionControl.listUris.splice(
             0,

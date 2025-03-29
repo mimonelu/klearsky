@@ -5,6 +5,7 @@ export default async function (
   this: TIAtpWrapper,
   postUri: string,
   allowMention: boolean,
+  allowFollower: boolean,
   allowFollowing: boolean,
   listUris?: Array<string>
 ): Promise<Error | TTCidUri> {
@@ -24,6 +25,9 @@ export default async function (
   if (allowMention) {
     allow.push({ $type: "app.bsky.feed.threadgate#mentionRule" })
   }
+  if (allowFollower) {
+    allow.push({ $type: "app.bsky.feed.threadgate#followerRule" })
+  }
   if (allowFollowing) {
     allow.push({ $type: "app.bsky.feed.threadgate#followingRule" })
   }
@@ -36,6 +40,7 @@ export default async function (
     })
   }
   const record: AppBskyFeedThreadgate.Record = {
+    $type: "app.bsky.feed.threadgate",
     post: postUri,
     allow,
     createdAt: new Date().toISOString(),

@@ -82,6 +82,9 @@ const easyFormState = reactive<{
       if (props.draftReactionControl?.allowMention) {
         allows.push("allowMention")
       }
+      if (props.draftReactionControl?.allowFollower) {
+        allows.push("allowFollower")
+      }
       if (props.draftReactionControl?.allowFollowing) {
         allows.push("allowFollowing")
       }
@@ -98,6 +101,8 @@ const easyFormState = reactive<{
         ?.map((allow: TTThreadgateAllow) => {
           if (allow.$type.startsWith("app.bsky.feed.threadgate#mentionRule")) {
             return "allowMention"
+          } else if (allow.$type.startsWith("app.bsky.feed.threadgate#followerRule")) {
+            return "allowFollower"
           } else if (allow.$type.startsWith("app.bsky.feed.threadgate#followingRule")) {
             return "allowFollowing"
           } else if (allow.$type.startsWith("app.bsky.feed.threadgate#listRule")) {
@@ -113,6 +118,7 @@ const easyFormState = reactive<{
   threadgateAllowOptions: (() => {
     const results: Array<TTOption> = [
       { label: $t("threadgateAllowMention"), value: "allowMention" },
+      { label: $t("threadgateAllowFollower"), value: "allowFollower" },
       { label: $t("threadgateAllowFollowing"), value: "allowFollowing" },
     ]
 
@@ -191,6 +197,7 @@ function close (params: TICloseReactionControlPopupProps) {
 async function update () {
   Util.blurElement()
   const allowMention = easyFormState.threadgateAllows.includes("allowMention")
+  const allowFollower = easyFormState.threadgateAllows.includes("allowFollower")
   const allowFollowing = easyFormState.threadgateAllows.includes("allowFollowing")
 
   // 許可リスト
@@ -209,6 +216,7 @@ async function update () {
       postgateAllow: easyFormState.postgateAllow,
       threadgateAction: easyFormState.threadgateAction,
       allowMention,
+      allowFollower,
       allowFollowing,
       listUris,
     })
@@ -252,6 +260,7 @@ async function update () {
     const responseOfUpdate = await mainState.atp.updateThreadgate(
       props.postUri,
       allowMention,
+      allowFollower,
       allowFollowing,
       listUris
     )

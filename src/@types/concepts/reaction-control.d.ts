@@ -40,6 +40,7 @@ type TTDraftReactionControl = {
   postgateAllow: boolean
   threadgateAction: TTThreadgateAction
   allowMention: boolean
+  allowFollower: boolean
   allowFollowing: boolean
   listUris: Array<string>
 }
@@ -59,6 +60,7 @@ interface TICloseReactionControlPopupProps {
   postgateAllow: boolean
   threadgateAction: TTThreadgateAction
   allowMention?: boolean
+  allowFollower?: boolean
   allowFollowing?: boolean
   listUris?: Array<string>
 }
