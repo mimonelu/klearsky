@@ -16,7 +16,7 @@
   ],
   "type": "module",
   "dependencies": {
-    "@atproto/api": "^0.14.10",
+    "@atproto/api": "^0.14.16",
     "@ipld/car": "^5.4.0",
     "@vueuse/core": "^10.11.1",
     "browser-image-compression": "^2.0.2",
