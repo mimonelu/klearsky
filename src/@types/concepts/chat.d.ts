@@ -24,7 +24,7 @@ interface TIChatMessage {
 
 interface TIChatReaction {
   createdAt: string
-  sender: string
+  sender: { did: string }
   value: string
 }
 

@@ -53,6 +53,14 @@ async function callback (type: "deleteMessage") {
     mainState.chatMessagePopoverCallback(type)
   }
 }
+
+function toggleReaction (reaction: string) {
+  Util.blurElement()
+  close()
+  if (mainState.chatMessagePopoverCallback != null) {
+    mainState.chatMessagePopoverCallback("toggleReaction", reaction)
+  }
+}
 </script>
 
 <template>
@@ -65,6 +73,42 @@ async function callback (type: "deleteMessage") {
       v-if="message != null"
       class="list-menu"
     >
+      <!-- リアクション -->
+      <div class="chat-message-popover__reactions">
+        <button
+          class="button--plane"
+          @click.prevent="toggleReaction('👍')"
+        >
+          <span>👍</span>
+        </button>
+        <button
+          class="button--plane"
+          @click.prevent="toggleReaction('😀')"
+        >
+          <span>😀</span>
+        </button>
+        <button
+          class="button--plane"
+          @click.prevent="toggleReaction('⭐️')"
+        >
+          <span>⭐️</span>
+        </button>
+        <button
+          class="button--plane"
+          @click.prevent="toggleReaction('👀')"
+        >
+          <span>👀</span>
+        </button>
+        <button
+          class="button--plane"
+          @click.prevent="toggleReaction('😢')"
+        >
+          <span>😢</span>
+        </button>
+      </div>
+
+      <hr />
+
       <!-- テキストを翻訳する -->
       <MenuTickerTranslateText
         :text="message.text"
@@ -100,6 +144,15 @@ async function callback (type: "deleteMessage") {
   &:deep() {
     & > .popover__content {
       padding: 0 0.5rem 0.5rem;
+    }
+  }
+
+  &__reactions {
+    display: flex;
+    padding: 0 0.5rem;
+
+    & > button {
+      padding: 0.5em;
     }
   }
 }
