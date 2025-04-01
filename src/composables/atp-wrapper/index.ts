@@ -2,6 +2,7 @@ import type { AtpAgent } from "@atproto/api"
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
 import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
+import createChatReaction  from "@/composables/atp-wrapper/chat/create-chat-reaction"
 import createDuplicatedList  from "@/composables/atp-wrapper/create/create-duplicated-list"
 import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob-ref"
 import createFollow from "@/composables/atp-wrapper/create/create-follow"
@@ -17,6 +18,7 @@ import createVideo from "@/composables/atp-wrapper/create/create-video"
 import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
 import deleteChatDeclaration from "@/composables/atp-wrapper/chat/delete-chat-declaration"
 import deleteChatMessage from "@/composables/atp-wrapper/chat/delete-chat-message"
+import deleteChatReaction  from "@/composables/atp-wrapper/chat/delete-chat-reaction"
 import deleteCustomBookmark from "@/composables/atp-wrapper/delete/delete-custom-bookmark"
 import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
@@ -167,6 +169,7 @@ class AtpWrapper implements TIAtpWrapper {
   createAgent = createAgent
   createChatDeclaration = createChatDeclaration
   createChatMessage = createChatMessage
+  createChatReaction = createChatReaction
   createDuplicatedList = createDuplicatedList
   createFileBlobRef = createFileBlobRef
   createFollow = createFollow
@@ -182,6 +185,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteAccount = deleteAccount
   deleteChatDeclaration = deleteChatDeclaration
   deleteChatMessage = deleteChatMessage
+  deleteChatReaction = deleteChatReaction
   deleteCustomBookmark = deleteCustomBookmark
   deleteFollow = deleteFollow
   deleteLike = deleteLike

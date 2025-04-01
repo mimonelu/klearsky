@@ -68,6 +68,26 @@ async function chatMessagePopoverCallback (type: string) {
     }
   }
 }
+
+async function removeReaction (reaction: TIChatReaction) {
+  if (
+    props.myConvo.data?.id == null ||
+    props.message?.id == null ||
+    props.message?.reactions == null
+  ) {
+    return
+  }
+  Util.blurElement()
+  const result = await mainState.atp.deleteChatReaction(
+    props.myConvo.data.id,
+    props.message.id,
+    reaction.value
+  )
+  if (result instanceof Error) {
+    return
+  }
+  Util.setArray(props.message.reactions, result.reactions)
+}
 </script>
 
 <template>
@@ -100,11 +120,13 @@ async function chatMessagePopoverCallback (type: string) {
       #body-after
     >
       <div class="chat-post__reactions">
-        <div
+        <button
           v-for="reaction, reactionIndex of message?.reactions"
           :key="reactionIndex"
+          type="button"
           :title="mainState.formatDate(reaction.createdAt)"
-        >{{ reaction.value }}</div>
+          @click.prevent="removeReaction(reaction)"
+        >{{ reaction.value }}</button>
       </div>
     </template>
   </Post>
@@ -232,11 +254,17 @@ async function chatMessagePopoverCallback (type: string) {
     grid-gap: 0.25em;
     margin-top: 0.25em;
 
-    & > div {
+    & > button {
       background-color: var(--chat-post-bg-color);
+      border: 2px solid transparent;
       border-radius: var(--border-radius-large);
+      cursor: pointer;
       font-size: 1.25em;
       padding: 0.25em 0.25em;
+      &:hover,
+      &:focus {
+        border-color: rgb(var(--accent-color), 0.75);
+      }
     }
   }
 }

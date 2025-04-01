@@ -11,6 +11,8 @@ interface TIAtpWrapper {
     (repo: string, allowIncoming: TTAllowIncoming): Promise<Error | TTCidUri>
   createChatMessage
     (convoId: string, params: TTCreatePostParams): Promise<Error | TIChatMessage>
+  createChatReaction
+    (convoId: string, messageId: string, value: string): Promise<Error | TIChatMessage>
   createDuplicatedList
     (listUri: string): Promise<Error | string>
   createFileBlobRef
@@ -41,6 +43,8 @@ interface TIAtpWrapper {
     (repo: string, uri: string): Promise<Error | undefined>
   deleteChatMessage
     (convoId: string, messageId: string): Promise<Error | undefined>
+  deleteChatReaction
+    (convoId: string, messageId: string, value: string): Promise<Error | TIChatMessage>
   deleteCustomBookmark
     (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   deleteFollow
