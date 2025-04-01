@@ -14,11 +14,18 @@ interface TIChatMessage {
   embed?: any
   facets?: any
   id: string
+  reactions?: TIChatReaction[]
   rev: string
   sender: { did: string }
   sentAt: string
   text?: string
   [k: string]: unknown
+}
+
+interface TIChatReaction {
+  createdAt: string
+  sender: string
+  value: string
 }
 
 interface TIFetchChatDeclarationsResponse {

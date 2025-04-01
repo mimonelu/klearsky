@@ -81,6 +81,7 @@ async function chatMessagePopoverCallback (type: string) {
     :data-is-last-message="message == null"
     :data-is-message-empty="!state.post.record.text"
   >
+    <!-- チャットメニュー -->
     <template
       v-if="message != null"
       #header-after
@@ -91,6 +92,20 @@ async function chatMessagePopoverCallback (type: string) {
       >
         <SVGIcon name="menu" />
       </button>
+    </template>
+
+    <!-- リアクション -->
+    <template
+      v-if="(message?.reactions ?? []).length > 0"
+      #body-after
+    >
+      <div class="chat-post__reactions">
+        <div
+          v-for="reaction, reactionIndex of message?.reactions"
+          :key="reactionIndex"
+          :title="mainState.formatDate(reaction.createdAt)"
+        >{{ reaction.value }}</div>
+      </div>
     </template>
   </Post>
 </template>
@@ -142,7 +157,7 @@ async function chatMessagePopoverCallback (type: string) {
       grid-gap: 0.5em;
 
       & > .body__header {
-        grid-template-columns: auto 1fr auto auto;
+        grid-template-columns: auto auto auto auto;
         margin-right: -1em;
 
         & > .display-name {
@@ -168,6 +183,10 @@ async function chatMessagePopoverCallback (type: string) {
     // 自分のチャットメッセージ
     &[data-is-mine="true"] {
       &:deep() > .body {
+        & > .body__header {
+          justify-content: flex-end;
+        }
+
         & > .post__content {
           border-radius:
             var(--border-radius-large)
@@ -181,17 +200,43 @@ async function chatMessagePopoverCallback (type: string) {
           justify-content: flex-end;
         }
       }
+
+      // リアクション
+      .chat-post__reactions {
+        justify-content: flex-end;
+      }
     }
 
     // 自分以外のチャットメッセージ
     &[data-is-mine="false"] {
-      &:deep() > .body > .post__content {
-        border-radius:
-          0
-          var(--border-radius-large)
-          var(--border-radius-large)
-          var(--border-radius-large);
+      &:deep() > .body {
+        & > .body__header {
+          justify-content: flex-start;
+        }
+
+        & > .post__content {
+          border-radius:
+            0
+            var(--border-radius-large)
+            var(--border-radius-large)
+            var(--border-radius-large);
+        }
       }
+    }
+  }
+
+  // リアクション
+  &__reactions {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 0.25em;
+    margin-top: 0.25em;
+
+    & > div {
+      background-color: var(--chat-post-bg-color);
+      border-radius: var(--border-radius-large);
+      font-size: 1.25em;
+      padding: 0.25em 0.25em;
     }
   }
 }

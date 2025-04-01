@@ -372,7 +372,7 @@ function isMine (message: TIChatMessage): boolean {
 
   &__messages {
     display: grid;
-    grid-gap: 0.5rem;
+    grid-gap: 1rem;
   }
 
   &__message {
