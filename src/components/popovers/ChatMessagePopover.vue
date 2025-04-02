@@ -74,7 +74,7 @@ function toggleReaction (reaction: string) {
       v-if="message != null"
       class="list-menu"
     >
-      <!-- リアクション -->
+      <!-- 固定チャットリアクション -->
       <div
         v-for="reactions, reactionsIndex of Consts.DEFAULT_CHAT_REACTIONS"
         :key="reactionsIndex"
@@ -84,6 +84,12 @@ function toggleReaction (reaction: string) {
           v-for="reaction, reactionIndex of reactions"
           :key="reactionIndex"
           class="button--plane"
+          :disabled="message.reactions?.some((r) => {
+            return r.value === reaction && r.sender.did !== mainState.atp.data.did
+          })"
+          :data-is-existing="message.reactions?.some((r) => {
+            return r.value === reaction
+          })"
           @click.prevent="toggleReaction(reaction)"
         >
           <span>{{ reaction }}</span>
@@ -130,16 +136,23 @@ function toggleReaction (reaction: string) {
     }
   }
 
+  // 固定チャットリアクション
   &__reactions {
     display: flex;
-    padding: 0 0.5rem;
+    justify-content: center;
+    grid-gap: 0.25rem;
+    margin-bottom: 0.125rem;
+    padding: 0 0.25rem;
 
     & > button {
-      padding: 0.5em;
+      padding: 0.25em;
+      &[data-is-existing="true"]:not(:disabled) {
+        background-color: rgb(var(--accent-color), 0.25);
+      }
 
       & > span {
         font-size: 1.25rem;
-        line-height: 1;
+        line-height: var(--line-height-low);
       }
     }
   }

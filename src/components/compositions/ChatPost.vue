@@ -157,7 +157,7 @@ async function removeReaction (reaction: TIChatReaction) {
       </button>
     </template>
 
-    <!-- リアクション -->
+    <!-- チャットリアクション -->
     <template
       v-if="(message?.reactions ?? []).length > 0"
       #body-after
@@ -267,7 +267,7 @@ async function removeReaction (reaction: TIChatReaction) {
         }
       }
 
-      // リアクション
+      // チャットリアクション
       .chat-post__reactions {
         justify-content: flex-end;
       }
@@ -291,7 +291,7 @@ async function removeReaction (reaction: TIChatReaction) {
     }
   }
 
-  // リアクション
+  // チャットリアクション
   &__reactions {
     display: flex;
     flex-wrap: wrap;
@@ -299,6 +299,7 @@ async function removeReaction (reaction: TIChatReaction) {
     margin-top: 0.25em;
 
     & > button {
+      animation: reaction-animation 250ms ease-in-out;
       border: 2px solid transparent;
       border-radius: var(--border-radius-large);
       font-size: 1.25em;
@@ -311,6 +312,18 @@ async function removeReaction (reaction: TIChatReaction) {
           border-color: rgb(var(--accent-color), 0.75);
         }
       }
+    }
+  }
+
+  @keyframes reaction-animation {
+    0% {
+      transform: scale(1.0);
+    }
+    50% {
+      transform: scale(1.25);
+    }
+    100% {
+      transform: scale(1.0);
     }
   }
 }
