@@ -6,6 +6,7 @@ import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import Consts from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -74,36 +75,18 @@ function toggleReaction (reaction: string) {
       class="list-menu"
     >
       <!-- リアクション -->
-      <div class="chat-message-popover__reactions">
+      <div
+        v-for="reactions, reactionsIndex of Consts.DEFAULT_CHAT_REACTIONS"
+        :key="reactionsIndex"
+        class="chat-message-popover__reactions"
+      >
         <button
+          v-for="reaction, reactionIndex of reactions"
+          :key="reactionIndex"
           class="button--plane"
-          @click.prevent="toggleReaction('👍')"
+          @click.prevent="toggleReaction(reaction)"
         >
-          <span>👍</span>
-        </button>
-        <button
-          class="button--plane"
-          @click.prevent="toggleReaction('😀')"
-        >
-          <span>😀</span>
-        </button>
-        <button
-          class="button--plane"
-          @click.prevent="toggleReaction('⭐️')"
-        >
-          <span>⭐️</span>
-        </button>
-        <button
-          class="button--plane"
-          @click.prevent="toggleReaction('👀')"
-        >
-          <span>👀</span>
-        </button>
-        <button
-          class="button--plane"
-          @click.prevent="toggleReaction('😢')"
-        >
-          <span>😢</span>
+          <span>{{ reaction }}</span>
         </button>
       </div>
 
@@ -153,6 +136,11 @@ function toggleReaction (reaction: string) {
 
     & > button {
       padding: 0.5em;
+
+      & > span {
+        font-size: 1.25rem;
+        line-height: 1;
+      }
     }
   }
 }

@@ -62,5 +62,9 @@
   "LIMIT_OF_LIST_MENTION_ACCOUNTS": 30,
   "THIRD_PARTY_DOMAIN_BOOKMARK": "space.aoisora.bookmark",
   "THIRD_PARTY_DOMAIN_LIGHTNING": "space.aoisora.post.lightning",
-  "THIRD_PARTY_DOMAIN_VIA": "space.aoisora.post.via"
+  "THIRD_PARTY_DOMAIN_VIA": "space.aoisora.post.via",
+  "DEFAULT_CHAT_REACTIONS": [
+    [ "👍", "😆", "❤️", "👀", "😢" ],
+    [ "✅", "😊", "🚀", "🤔", "😭" ]
+  ]
 }
