@@ -176,8 +176,8 @@ async function updateMessagesOnTick () {
 
   // TODO:
   // 通信量削減のため、通常は1つのみ取得し、段階的に取得数を増やしている
-  const numberOfNewMessages = await props.myConvo.updateMessages(1)
-  if (numberOfNewMessages >= 1) {
+  const numberOfNewMessages = await props.myConvo.updateMessages(3)
+  if (numberOfNewMessages >= 3) {
     const numberOfNewMessages = await props.myConvo.updateMessages(10)
     if (numberOfNewMessages >= 10) {
       await props.myConvo.updateMessages(30)

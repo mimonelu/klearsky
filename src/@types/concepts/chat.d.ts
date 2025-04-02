@@ -3,6 +3,11 @@ type TTAllowIncoming = "all" | "none" | "following" | (string & {})
 interface TIChatConvo {
   id: string
   lastMessage?: TIChatMessage
+  lastReaction?: {
+    $type: string
+    message: TIChatMessage
+    reaction: TIChatReaction
+  }
   members: TTProfile[]
   muted: boolean
   rev: string
