@@ -28,7 +28,7 @@
     background-color: rgb(var(--accent-color));
     border-radius: 0.25em;
     width: 0.25em;
-    height: 1.5em;
+    height: 1.25em;
   }
   @for $i from 1 through 5 {
     & > div:nth-child(#{$i}) {
@@ -38,7 +38,7 @@
 }
 
 @keyframes loader-animation {
-  0% { transform: scaleY(25%); }
-  100% { transform: scaleY(100%); }
+  0% { height: 0.5em; }
+  100% { height: 1.25em; }
 }
 </style>
