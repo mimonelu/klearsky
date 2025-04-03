@@ -1945,6 +1945,7 @@ function toggleOldestQuotedPostDisplay () {
   color: rgb(var(--fg-color), 0.75);
   font-style: italic;
   line-height: var(--line-height-high);
+  user-select: text;
   white-space: pre-wrap;
   word-break: break-word;
 }
