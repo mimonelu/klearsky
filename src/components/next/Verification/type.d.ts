@@ -1,5 +1,5 @@
 interface TIVerification {
-  trustedVerifierStatus: "none" | "trusted"
+  trustedVerifierStatus: "none" | "valid"
   verifications: TIVerifier[]
   verifiedStatus: "none" | "valid"
 }

@@ -7,6 +7,7 @@ import DisplayName from "@/components/labels/DisplayName.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
 import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
 
@@ -127,6 +128,9 @@ function onActivateContentFilteringToggle () {
           />
         </template>
 
+        <!-- 認証者アイコン -->
+        <VerifierIcon :verification="user?.verification" />
+
         <!-- 認証済みアイコン -->
         <VerifiedIcon :verification="user?.verification" />
 
@@ -232,9 +236,11 @@ function onActivateContentFilteringToggle () {
 
   // ラベラーアイコン
   // アカウントラベルアイコン
+  // 認証者アイコン
   // 認証済みアイコン
   .account-labeler-icon,
   .account-label-icon,
+  .verifier-icon,
   .verified-icon {
     font-size: 0.875em;
   }

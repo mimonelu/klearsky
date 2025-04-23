@@ -101,6 +101,7 @@ import translate from "@/svg/translate.svg?raw"
 import trending from "@/svg/trending-up.svg?raw"
 import unlock from "@/svg/unlock.svg?raw"
 import verified from "@/svg/verified.svg?raw"
+import verifier from "@/svg/verifier.svg?raw"
 import video from "@/svg/video.svg?raw"
 import volumeOff from "@/svg/volume-off.svg?raw"
 import volumeOn from "@/svg/volume-on.svg?raw"
@@ -209,6 +210,7 @@ const icons: { [k: string]: string } = {
   trending,
   unlock,
   verified,
+  verifier,
   video,
   volumeOff,
   volumeOn,

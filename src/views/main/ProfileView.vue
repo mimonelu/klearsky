@@ -22,6 +22,7 @@ import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
 import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
 import Util from "@/composables/util"
@@ -385,6 +386,9 @@ function removeThisPost () {
                   :displayName="mainState.currentProfile?.displayName ?? '&emsp;'"
                   :anonymizable="false"
                 />
+
+                <!-- 認証者アイコン -->
+                <VerifierIcon :verification="mainState.currentProfile?.verification" />
 
                 <!-- 認証済みアイコン -->
                 <VerifiedIcon :verification="mainState.currentProfile?.verification" />
@@ -863,11 +867,21 @@ function removeThisPost () {
     }
   }
 
-  &__name .verified-icon {
-    display: inline-block;
-    font-size: 1.25rem;
-    margin-left: 0.5rem;
-    vertical-align: text-bottom;
+  &__name {
+    .display-name {
+      display: inline;
+      vertical-align: middle;
+    }
+
+    // 認証者アイコン
+    // 認証済みアイコン
+    .verifier-icon,
+    .verified-icon {
+      display: inline-block;
+      font-size: 1.25rem;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
   }
 }
 

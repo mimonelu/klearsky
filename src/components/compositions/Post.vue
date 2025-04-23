@@ -20,6 +20,7 @@ import RepostButton from "@/components/buttons/RepostButton.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
+import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
 import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import WordMuteScript from "@/components/next/WordMute/script"
@@ -1034,6 +1035,9 @@ function toggleOldestQuotedPostDisplay () {
             class="account-labeler-icon"
           />
 
+          <!-- 認証者アイコン -->
+          <VerifierIcon :verification="post.author?.verification" />
+
           <!-- 認証済みアイコン -->
           <VerifiedIcon :verification="post.author?.verification" />
         </div>
@@ -1834,7 +1838,7 @@ function toggleOldestQuotedPostDisplay () {
     grid-area: d;
     display: flex;
     align-items: center;
-    grid-gap: 0.5em;
+    grid-gap: 0.25em;
     overflow: hidden;
 
     & > a {
@@ -1854,12 +1858,17 @@ function toggleOldestQuotedPostDisplay () {
   // ラベラーアイコン
   .account-labeler-icon {
     fill: rgb(var(--label-color));
-    font-size: 0.75em;
+    font-size: 0.875em;
+  }
+
+  // 認証者アイコン
+  .verifier-icon {
+    font-size: 0.875em;
   }
 
   // 認証済みアイコン
   .verified-icon {
-    font-size: 0.75em;
+    font-size: 0.875em;
   }
 
   &__detail {
