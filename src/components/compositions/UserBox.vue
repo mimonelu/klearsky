@@ -7,6 +7,7 @@ import DisplayName from "@/components/labels/DisplayName.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
 
 const emit = defineEmits<(name: string) => void>()
@@ -126,6 +127,9 @@ function onActivateContentFilteringToggle () {
           />
         </template>
 
+        <!-- 認証済みアイコン -->
+        <VerifiedIcon :verification="user?.verification" />
+
         <!-- アカウントラベルアイコン -->
         <SVGIcon
           v-if="state.hasAppliedHarmfulLabel"
@@ -224,12 +228,14 @@ function onActivateContentFilteringToggle () {
   grid-area: n;
   display: flex;
   align-items: center;
-  grid-gap: 0.5em;
+  grid-gap: 0.25em;
 
   // ラベラーアイコン
   // アカウントラベルアイコン
+  // 認証済みアイコン
   .account-labeler-icon,
-  .account-label-icon {
+  .account-label-icon,
+  .verified-icon {
     font-size: 0.875em;
   }
   .account-labeler-icon {

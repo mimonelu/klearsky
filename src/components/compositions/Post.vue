@@ -20,6 +20,7 @@ import RepostButton from "@/components/buttons/RepostButton.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
+import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import WordMuteScript from "@/components/next/WordMute/script"
 import Util from "@/composables/util"
@@ -1023,16 +1024,18 @@ function toggleOldestQuotedPostDisplay () {
                   : post.author?.displayName
               ) || '　'"
               :anonymizable="true"
-            >
-              <!-- ラベラーアイコン -->
-              <template v-if="post.author?.associated?.labeler">
-                <SVGIcon
-                  :name="mainState.myLabeler?.isSubscribed(post.author?.did) ? 'labeler' : 'labelerOff'"
-                  class="account-labeler-icon"
-                />
-              </template>
-            </DisplayName>
+            />
           </RouterLink>
+
+          <!-- ラベラーアイコン -->
+          <SVGIcon
+            v-if="post.author?.associated?.labeler"
+            :name="mainState.myLabeler?.isSubscribed(post.author?.did) ? 'labeler' : 'labelerOff'"
+            class="account-labeler-icon"
+          />
+
+          <!-- 認証済みアイコン -->
+          <VerifiedIcon :verification="post.author?.verification" />
         </div>
 
         <div class="body__header__detail">
@@ -1829,6 +1832,9 @@ function toggleOldestQuotedPostDisplay () {
   // 表示名
   &__display-name {
     grid-area: d;
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5em;
     overflow: hidden;
 
     & > a {
@@ -1837,19 +1843,23 @@ function toggleOldestQuotedPostDisplay () {
 
     .display-name {
       color: rgb(var(--fg-color), 0.75);
-      display: inline-flex;
-      align-items: center;
-      grid-gap: 0.5em;
+      display: grid;
       font-size: 0.875em;
       &:focus, &:hover {
         color: rgb(var(--fg-color));
       }
-
-      // ラベラーアイコン
-      .account-labeler-icon {
-        fill: rgb(var(--label-color));
-      }
     }
+  }
+
+  // ラベラーアイコン
+  .account-labeler-icon {
+    fill: rgb(var(--label-color));
+    font-size: 0.75em;
+  }
+
+  // 認証済みアイコン
+  .verified-icon {
+    font-size: 0.75em;
   }
 
   &__detail {

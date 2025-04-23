@@ -7,6 +7,7 @@ type TTUser = {
   displayName: string
   handle: string
   labels?: Array<TTLabel>
+  verification?: TIVerification
   viewer: TTUserViewer
   [k: string]: unknown
 }
