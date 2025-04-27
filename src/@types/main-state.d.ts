@@ -540,6 +540,11 @@ interface MainState {
   openLikeUsersPopup: (uri: string) => void
   closeLikeUsersPopup: () => void
 
+  // ポップアップ - 認証者一覧ポップアップ
+  verifiersPopupProps: TIVerifiersPopupProps
+  openVerifiersPopup: (props?: Omit<TIVerifiersPopupProps, "display">) => void
+  closeVerifiersPopup: () => void
+
   // ポップアップ - 認証アカウント一覧ポップアップ
   verifiedAccountsPopupProps: TIVerifiedAccountsPopupProps
   openVerifiedAccountsPopup: (props?: Omit<TIVerifiedAccountsPopupProps, "display">) => void

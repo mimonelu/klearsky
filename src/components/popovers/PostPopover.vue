@@ -16,6 +16,7 @@ import MenuTickerWebShare from "@/components/menus/WebShare.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import VerifiedAccountsPopupOpener from "@/components/next/Verification/VerifiedAccountsPopupOpener.vue"
+import VerifiersPopupOpener from "@/components/next/Verification/VerifiersPopupOpener.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -142,6 +143,14 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       </RouterLink>
 
       <hr />
+
+      <!-- 認証者一覧 -->
+      <VerifiersPopupOpener
+        :did="post.author?.did"
+        :displayName="post.author?.displayName"
+        :verification="post.author?.verification"
+        @close="emit('close')"
+      />
 
       <!-- 認証アカウント一覧 -->
       <VerifiedAccountsPopupOpener

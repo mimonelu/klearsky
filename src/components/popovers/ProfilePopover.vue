@@ -12,6 +12,7 @@ import MenuTickerWebShare from "@/components/menus/WebShare.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import ProfileFeaturesWrapper from "@/components/menus/ProfileFeaturesWrapper.vue"
 import VerifiedAccountsPopupOpener from "@/components/next/Verification/VerifiedAccountsPopupOpener.vue"
+import VerifiersPopupOpener from "@/components/next/Verification/VerifiersPopupOpener.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -82,6 +83,14 @@ function close () {
         class="list-menu__header"
       >{{ mainState.atp.session?.email ?? "&nbsp;" }}</div>
       <hr v-if="isUser" />
+
+      <!-- 認証者一覧 -->
+      <VerifiersPopupOpener
+        :did="user?.did"
+        :displayName="user.displayName"
+        :verification="user.verification"
+        @close="emit('close')"
+      />
 
       <!-- 認証アカウント一覧 -->
       <VerifiedAccountsPopupOpener

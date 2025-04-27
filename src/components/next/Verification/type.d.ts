@@ -11,6 +11,12 @@ interface TIVerifier {
   uri: string
 }
 
+interface TIVerifiersPopupProps {
+  display: boolean
+  displayName?: string
+  verification?: TIVerification
+}
+
 interface TIVerifiedAccountsPopupProps {
   display: boolean
   did?: string
