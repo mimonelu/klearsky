@@ -1,21 +1,22 @@
 <script lang="ts" setup>
-// import { inject } from "vue"
+import { inject } from "vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
+  did?: string
   verification?: TIVerification
 }>()
 
-// const mainState = inject("state") as MainState
+const mainState = inject("state") as MainState
 
 async function onActivate () {
   emit("close")
-  if (props.verification == null) {
+  if (props.did == null) {
     return
   }
-  // mainState.openVerifierPopup(props.verification)
+  mainState.openVerifiedAccountsPopup(props.did)
 }
 </script>
 

@@ -85,6 +85,7 @@ function close () {
 
       <!-- 認証アカウント一覧 -->
       <VerifiedAccountsPopupOpener
+        :did="user?.did"
         :verification="user.verification"
         @close="emit('close')"
       />

@@ -145,6 +145,7 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
 
       <!-- 認証アカウント一覧 -->
       <VerifiedAccountsPopupOpener
+        :did="post.author?.did"
         :verification="post.author?.verification"
         @close="emit('close')"
       />

@@ -68,6 +68,7 @@ import TimeFeedsPopup from "@/components/popups/TimeFeedsPopup.vue"
 import TimeSettingsPopup from "@/components/popups/settings-popups/TimeSettingsPopup.vue"
 import UiLanguageSettingsPopup from "@/components/popups/settings-popups/UiLanguageSettingsPopup.vue"
 import UserListPopup from "@/components/popups/UserListPopup.vue"
+import VerifiedAccountsPopup from "@/components/next/Verification/VerifiedAccountsPopup.vue"
 import WordMutePopup from "@/components/next/WordMute/WordMutePopup.vue"
 import { state } from "@/composables/main-state"
 import Util from "@/composables/util"
@@ -1076,11 +1077,20 @@ function changeSetting () {
         />
       </Transition>
 
-      <!-- ライクユーザーリストポップアップ -->
+      <!-- いいねユーザーリストポップアップ -->
       <Transition>
         <LikeUsersPopup
           v-if="state.likeUsersPopupDisplay"
           @close="state.closeLikeUsersPopup"
+        />
+      </Transition>
+
+      <!-- 認証アカウント一覧ポップアップ -->
+      <Transition>
+        <VerifiedAccountsPopup
+          v-if="state.verifiedAccountsPopupProps.display"
+          v-bind="state.verifiedAccountsPopupProps"
+          @close="state.closeVerifiedAccountsPopup"
         />
       </Transition>
 

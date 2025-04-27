@@ -461,7 +461,7 @@ interface MainState {
   openLabelerListPopup: Function
   closeLabelerListPopup: () => void
 
-  //ポップアップ - 　ラベラー設定ポップアップ
+  //ポップアップ - ラベラー設定ポップアップ
   labelerSettingsPopupProps: {
     display: boolean
     labeler?: TILabeler
@@ -539,6 +539,11 @@ interface MainState {
   likeUsersPopupDisplay: boolean
   openLikeUsersPopup: (uri: string) => void
   closeLikeUsersPopup: () => void
+
+  // ポップアップ - 認証アカウント一覧ポップアップ
+  verifiedAccountsPopupProps: TIVerifiedAccountsPopupProps
+  openVerifiedAccountsPopup: (did?: string) => void
+  closeVerifiedAccountsPopup: () => void
 
   // ポップアップ - マイフィードポップアップ
   myFeedsPopupDisplay: boolean

@@ -10,3 +10,8 @@ interface TIVerifier {
   isValid: boolean
   uri: string
 }
+
+interface TIVerifiedAccountsPopupProps {
+  display: boolean
+  did?: string
+}

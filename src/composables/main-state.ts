@@ -607,6 +607,14 @@ export const state: MainState = reactive<MainState>({
   openLikeUsersPopup: openLikeUsersPopup,
   closeLikeUsersPopup: closeLikeUsersPopup,
 
+  // ポップアップ - 認証アカウント一覧ポップアップ
+  verifiedAccountsPopupProps: {
+    display: false,
+    verification: undefined,
+  },
+  openVerifiedAccountsPopup,
+  closeVerifiedAccountsPopup,
+
   // ポップアップ - マイフィードポップアップ
   myFeedsPopupDisplay: false,
   openMyFeedsPopup: openMyFeedsPopup,
@@ -2426,6 +2434,16 @@ async function openLikeUsersPopup (uri: string) {
 
 function closeLikeUsersPopup () {
   state.likeUsersPopupDisplay = false
+}
+
+// ポップアップ - 認証アカウント一覧ポップアップ
+function openVerifiedAccountsPopup (did?: string) {
+  state.verifiedAccountsPopupProps.did = did
+  state.verifiedAccountsPopupProps.display = true
+}
+
+function closeVerifiedAccountsPopup () {
+  state.verifiedAccountsPopupProps.display = false
 }
 
 // ポップアップ - マイフィードポップアップ
