@@ -1036,10 +1036,18 @@ function toggleOldestQuotedPostDisplay () {
           />
 
           <!-- 認証者アイコン -->
-          <VerifierIcon :verification="post.author?.verification" />
+          <VerifierIcon
+            :did="post.author?.did"
+            :displayName="post.author?.displayName"
+            :verification="post.author?.verification"
+          />
 
           <!-- 認証済みアイコン -->
-          <VerifiedIcon :verification="post.author?.verification" />
+          <VerifiedIcon
+            :did="post.author?.did"
+            :displayName="post.author?.displayName"
+            :verification="post.author?.verification"
+          />
         </div>
 
         <div class="body__header__detail">

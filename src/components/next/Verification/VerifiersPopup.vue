@@ -83,7 +83,7 @@ async function fetchVerifiers () {
           :key="account.did"
           :user="account"
           :contentWarningDisabled="false"
-          :menuDisplay="false"
+          :menuDisplay="true"
           :viewerDisplay="true"
           @click="(event) => onClickAccount(event as MouseEvent)"
         />

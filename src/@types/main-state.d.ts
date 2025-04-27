@@ -542,12 +542,12 @@ interface MainState {
 
   // ポップアップ - 認証者一覧ポップアップ
   verifiersPopupProps: TIVerifiersPopupProps
-  openVerifiersPopup: (props?: Omit<TIVerifiersPopupProps, "display">) => void
+  openVerifiersPopup: (props?: Omit<TIVerifiersPopupProps, "display">) => Promise<void>
   closeVerifiersPopup: () => void
 
   // ポップアップ - 認証アカウント一覧ポップアップ
   verifiedAccountsPopupProps: TIVerifiedAccountsPopupProps
-  openVerifiedAccountsPopup: (props?: Omit<TIVerifiedAccountsPopupProps, "display">) => void
+  openVerifiedAccountsPopup: (props?: Omit<TIVerifiedAccountsPopupProps, "display">) => Promise<void>
   closeVerifiedAccountsPopup: () => void
 
   // ポップアップ - マイフィードポップアップ

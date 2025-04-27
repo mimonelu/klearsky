@@ -1,22 +1,52 @@
 <script lang="ts" setup>
+import { inject } from "vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
-defineProps<{
+const mainState = inject("state") as MainState
+
+const props = defineProps<{
+  did?: string
+  displayName?: string
   verification?: TIVerification
 }>()
+
+async function onActivate () {
+  Util.blurElement()
+  if (props.did == null) {
+    return
+  }
+  mainState.openVerifiersPopup({
+    displayName: props.displayName,
+    verification: props.verification,
+  })
+}
 </script>
 
 <template>
-  <SVGIcon
+  <button
     v-if="verification?.verifiedStatus === 'valid'"
-    name="verified"
+    type="button"
     class="verified-icon"
     :title="$t('verified')"
-  />
+    @click.prevent.stop="onActivate"
+  >
+    <SVGIcon name="verified" />
+  </button>
 </template>
 
 <style lang="scss" scoped>
 .verified-icon {
-  fill: rgb(var(--accent-color));
+  cursor: pointer;
+
+  .svg-icon {
+    fill: rgb(var(--accent-color), 0.875);
+  }
+  &:focus,
+  &:hover {
+    .svg-icon {
+      fill: rgb(var(--accent-color));
+    }
+  }
 }
 </style>

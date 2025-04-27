@@ -388,10 +388,18 @@ function removeThisPost () {
                 />
 
                 <!-- 認証者アイコン -->
-                <VerifierIcon :verification="mainState.currentProfile?.verification" />
+                <VerifierIcon
+                  :did="mainState.currentProfile?.did"
+                  :displayName="mainState.currentProfile?.displayName"
+                  :verification="mainState.currentProfile?.verification"
+                />
 
                 <!-- 認証済みアイコン -->
-                <VerifiedIcon :verification="mainState.currentProfile?.verification" />
+                <VerifiedIcon
+                  :did="mainState.currentProfile?.did"
+                  :displayName="mainState.currentProfile?.displayName"
+                  :verification="mainState.currentProfile?.verification"
+                />
               </div>
 
               <!-- ハンドル -->

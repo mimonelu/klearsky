@@ -129,10 +129,18 @@ function onActivateContentFilteringToggle () {
         </template>
 
         <!-- 認証者アイコン -->
-        <VerifierIcon :verification="user?.verification" />
+        <VerifierIcon
+          :did="user.did"
+          :displayName="user.displayName"
+          :verification="user.verification"
+        />
 
         <!-- 認証済みアイコン -->
-        <VerifiedIcon :verification="user?.verification" />
+        <VerifiedIcon
+          :did="user.did"
+          :displayName="user.displayName"
+          :verification="user.verification"
+        />
 
         <!-- アカウントラベルアイコン -->
         <SVGIcon

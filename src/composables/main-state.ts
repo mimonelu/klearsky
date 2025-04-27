@@ -2,7 +2,7 @@ import { endOfYesterday } from "date-fns/endOfYesterday"
 import { format } from "date-fns/format"
 import { intlFormatDistance } from "date-fns/intlFormatDistance"
 import { isSameYear } from "date-fns/isSameYear"
-import { computed, reactive } from "vue"
+import { computed, nextTick, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import attachFilesToPost from "@/composables/main-state/attach-files-to-post"
@@ -2447,7 +2447,11 @@ function closeLikeUsersPopup () {
 }
 
 // ポップアップ - 認証者一覧ポップアップ
-function openVerifiersPopup (props?: Omit<TIVerifiersPopupProps, "display">) {
+async function openVerifiersPopup (props?: Omit<TIVerifiersPopupProps, "display">) {
+  if (state.verifiersPopupProps.display) {
+    state.verifiersPopupProps.display = false
+    await nextTick()
+  }
   state.verifiersPopupProps.displayName = props?.displayName
   state.verifiersPopupProps.verification = props?.verification
   state.verifiersPopupProps.display = true
@@ -2458,7 +2462,11 @@ function closeVerifiersPopup () {
 }
 
 // ポップアップ - 認証アカウント一覧ポップアップ
-function openVerifiedAccountsPopup (props?: Omit<TIVerifiedAccountsPopupProps, "display">) {
+async function openVerifiedAccountsPopup (props?: Omit<TIVerifiedAccountsPopupProps, "display">) {
+  if (state.verifiedAccountsPopupProps.display) {
+    state.verifiedAccountsPopupProps.display = false
+    await nextTick()
+  }
   state.verifiedAccountsPopupProps.did = props?.did
   state.verifiedAccountsPopupProps.displayName = props?.displayName
   state.verifiedAccountsPopupProps.display = true
