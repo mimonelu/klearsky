@@ -14,4 +14,5 @@ interface TIVerifier {
 interface TIVerifiedAccountsPopupProps {
   display: boolean
   did?: string
+  displayName?: string
 }

@@ -542,7 +542,7 @@ interface MainState {
 
   // ポップアップ - 認証アカウント一覧ポップアップ
   verifiedAccountsPopupProps: TIVerifiedAccountsPopupProps
-  openVerifiedAccountsPopup: (did?: string) => void
+  openVerifiedAccountsPopup: (props?: Omit<TIVerifiedAccountsPopupProps, "display">) => void
   closeVerifiedAccountsPopup: () => void
 
   // ポップアップ - マイフィードポップアップ

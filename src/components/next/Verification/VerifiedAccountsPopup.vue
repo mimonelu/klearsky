@@ -96,6 +96,10 @@ function scrolledToBottom () {
       <h2>
         <SVGIcon name="verified" />
         <span>{{ $t("verifiedAccounts") }}</span>
+        <template v-if="mainState.verifiedAccountsPopupProps.displayName">
+          <span>-</span>
+          <span>{{ mainState.verifiedAccountsPopupProps.displayName }}</span>
+        </template>
       </h2>
     </template>
     <template #header-after>
@@ -137,8 +141,14 @@ function scrolledToBottom () {
 <style lang="scss" scoped>
 .verified-accounts-popup {
   &:deep(.popup) {
-    .popup-header .svg-icon {
-      --fg-color: var(--accent-color);
+    .popup-header {
+      .svg-icon {
+        --fg-color: var(--accent-color);
+      }
+
+      span:first-of-type {
+        overflow: unset;
+      }
     }
 
     .popup-body {

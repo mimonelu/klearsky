@@ -6,6 +6,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   did?: string
+  displayName?: string
   verification?: TIVerification
 }>()
 
@@ -16,7 +17,10 @@ async function onActivate () {
   if (props.did == null) {
     return
   }
-  mainState.openVerifiedAccountsPopup(props.did)
+  mainState.openVerifiedAccountsPopup({
+    did: props.did,
+    displayName: props.displayName,
+  })
 }
 </script>
 

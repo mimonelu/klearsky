@@ -2437,8 +2437,9 @@ function closeLikeUsersPopup () {
 }
 
 // ポップアップ - 認証アカウント一覧ポップアップ
-function openVerifiedAccountsPopup (did?: string) {
-  state.verifiedAccountsPopupProps.did = did
+function openVerifiedAccountsPopup (props?: Omit<TIVerifiedAccountsPopupProps, "display">) {
+  state.verifiedAccountsPopupProps.did = props?.did
+  state.verifiedAccountsPopupProps.displayName = props?.displayName
   state.verifiedAccountsPopupProps.display = true
 }
 
