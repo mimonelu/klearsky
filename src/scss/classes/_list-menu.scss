@@ -91,6 +91,10 @@
     & > .svg-icon--wordMute {
       --icon-color: var(--notice-color);
     }
+    & > .svg-icon--verified,
+    & > .svg-icon--verifier {
+      --icon-color: var(--accent-color);
+    }
 
     & > img {
       min-width: 1rem;

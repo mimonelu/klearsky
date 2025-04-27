@@ -679,6 +679,11 @@ export default () => ({
   "sortByIndexedAt": "Sort by date",
   "sortMyFeedsConfirmation": "My Feeds will be sorted.\nYou cannot redo this operation. Are you sure?",
 
+  "verified": "Verified",
+  "verifiedAccounts": "Verified accounts",
+  "verifier": "Verifier",
+  "verifiers": "Verifiers",
+
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",

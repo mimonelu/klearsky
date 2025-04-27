@@ -676,6 +676,11 @@ export default () => ({
   "sortByIndexedAt": "更新日でソート",
   "sortMyFeedsConfirmation": "マイフィードをソートします。\nこの操作をやり直すことはできません。よろしいですか？",
 
+  "verified": "認証アカウント",
+  "verifiedAccounts": "認証アカウント一覧",
+  "verifier": "認証者",
+  "verifiers": "認証者一覧",
+
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",

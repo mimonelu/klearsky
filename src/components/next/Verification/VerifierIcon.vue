@@ -11,6 +11,7 @@ defineProps<{
     v-if="verification?.trustedVerifierStatus === 'valid'"
     name="verifier"
     class="verifier-icon"
+    :title="$t('verifier')"
   />
 </template>
 

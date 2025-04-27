@@ -11,6 +11,7 @@ import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menus/WebShare.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import ProfileFeaturesWrapper from "@/components/menus/ProfileFeaturesWrapper.vue"
+import VerifiedAccountsPopupOpener from "@/components/next/Verification/VerifiedAccountsPopupOpener.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -81,6 +82,12 @@ function close () {
         class="list-menu__header"
       >{{ mainState.atp.session?.email ?? "&nbsp;" }}</div>
       <hr v-if="isUser" />
+
+      <!-- 認証アカウント一覧 -->
+      <VerifiedAccountsPopupOpener
+        :verification="user.verification"
+        @close="emit('close')"
+      />
 
       <!-- テキストを翻訳する -->
       <MenuTickerTranslateText

@@ -676,6 +676,11 @@ export default () => ({
   "sortByIndexedAt": "Trier par date",
   "sortMyFeedsConfirmation": "Trier Mes fils.\nIrréversible. Continuer?",
 
+  "verified": "Vérifié",
+  "verifiedAccounts": "Comptes vérifiés",
+  "verifier": "Vérificateur",
+  "verifiers": "Vérificateurs",
+
   "pnAppleMusic": "Apple Music",
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",
