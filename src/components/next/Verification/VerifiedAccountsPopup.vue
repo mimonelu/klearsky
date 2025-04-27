@@ -41,10 +41,10 @@ let cursor: undefined | string
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
-  if (state.processing) {
-    return
-  }
-  if (mainState.verifiedAccountsPopupProps.did == null) {
+  if (
+    state.processing ||
+    mainState.verifiedAccountsPopupProps.did == null
+  ) {
     return
   }
   state.processing = true
@@ -60,14 +60,19 @@ async function fetchContinuousResults (direction: "new" | "old") {
     mainState.openErrorPopup(response, "VerifiedAccountsPopup/fetchContinuousResults")
     return
   }
+  const newRecords = response.records.filter((record) => {
+    return state.accounts.every((account) => {
+      return account.uri !== record.uri
+    })
+  })
   if (direction === "new") {
-    state.accounts.unshift(...response.records)
+    state.accounts.unshift(...newRecords)
   } else if (direction === "old") {
-    state.accounts.push(...response.records)
+    state.accounts.push(...newRecords)
   }
-  if (response.cursor != null && (
-    direction === "old" || (
-      direction === "new" &&
+  if ((
+    response.cursor != null && (
+      direction === "old" ||
       cursor == null
     )
   )) {
