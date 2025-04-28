@@ -425,6 +425,7 @@ onMounted(() => {
 // 自動翻訳
 onBeforeUnmount(() => {
   observer?.unobserve(postElement.value)
+  observer?.disconnect()
 })
 
 function isFocused (): boolean {
