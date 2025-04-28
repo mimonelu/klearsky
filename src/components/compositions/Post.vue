@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+/* eslint-disable vue/no-mutating-props */
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { RichText } from "@atproto/api"
@@ -218,7 +219,7 @@ const state = reactive<{
       return
     }
     const uri = props.post.record.embed.record.uri ?? ""
-    const did = (uri.match(/at:\/\/([^\/]+)/) ?? ["", ""])[1]
+    const did = (uri.match(/at:\/\/([^/]+)/) ?? ["", ""])[1]
     return {
       uri,
       cid: props.post.record.embed.record.cid ?? "",
@@ -841,6 +842,8 @@ function toggleOldestQuotedPostDisplay () {
     props.post.__custom.oldestQuotedPostDisplay = !props.post.__custom.oldestQuotedPostDisplay
   }
 }
+
+/* eslint-enable vue/no-mutating-props */
 </script>
 
 <template>
@@ -1024,7 +1027,7 @@ function toggleOldestQuotedPostDisplay () {
                 position === 'chatMessage'
                   ? (post.author?.displayName || post.author?.handle)
                   : post.author?.displayName
-              ) || '　'"
+              ) || '&nbsp;'"
               :anonymizable="true"
             />
           </RouterLink>
@@ -1119,7 +1122,7 @@ function toggleOldestQuotedPostDisplay () {
             :richText="contentRichText"
             :hasTranslateLink="state.hasOtherLanguagesForText"
             :data-is-text-only-emoji="state.isTextOnlyEmoji"
-            @onActivateHashTag="onActivateHashTag"
+            @onActivateHashTag="(tag) => onActivateHashTag(tag as string)"
             @translate="onForceTranslate"
           />
           <div
@@ -1214,7 +1217,7 @@ function toggleOldestQuotedPostDisplay () {
                     :poster="state.video.thumbnail"
                     :preload="mainState.currentSetting.videoPreload"
                     :style="{ 'aspect-ratio': state.videoAspectRatio }"
-                    @updateVideoType="updateVideoType"
+                    @updateVideoType="(videoType) => updateVideoType(videoType as string)"
                     @click.stop
                   />
                   <p
@@ -1231,7 +1234,7 @@ function toggleOldestQuotedPostDisplay () {
                     dir="auto"
                     :text="state.video.alt"
                     :hasTranslateLink="state.hasOtherLanguagesForText"
-                    @onActivateHashTag="onActivateHashTag"
+                    @onActivateHashTag="(tag) => onActivateHashTag(tag as string)"
                     @translate="onTranslateVideoAlt"
                   />
                 </div>
@@ -1285,7 +1288,7 @@ function toggleOldestQuotedPostDisplay () {
             :detailDisplay="false"
             :orderButtonDisplay="false"
             @click.prevent.stop
-            @deleteList="deleteList"
+            @deleteList="(list) => deleteList(list as TTList)"
             @onActivateMention="$emit('click', $event)"
             @onActivateHashTag="$emit('click', $event)"
           />
