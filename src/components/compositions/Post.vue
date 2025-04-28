@@ -50,6 +50,8 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
+const EMOJI_REGEX = /^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,7}$/u
+
 const state = reactive<{
   text: ComputedRef<undefined | string>
   indexedAt: ComputedRef<undefined | string>
@@ -125,7 +127,7 @@ const state = reactive<{
 
   // デカ絵文字
   isTextOnlyEmoji: computed((): boolean => {
-    return state.text?.match(/^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,7}$/u) != null
+    return state.text?.match(EMOJI_REGEX) != null
   }),
 
   // メディア
