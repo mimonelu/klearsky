@@ -51,7 +51,6 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  processing: boolean
   text: ComputedRef<undefined | string>
   indexedAt: ComputedRef<undefined | string>
   isTextOnlyEmoji: ComputedRef<boolean>
@@ -118,7 +117,6 @@ const state = reactive<{
   // ワードミュートの判定
   isWordMute: ComputedRef<boolean>
 }>({
-  processing: false,
   indexedAt: computed((): string => {
     return props.post.record?.createdAt ?? props.post.value?.createdAt ?? props.post.indexedAt ?? ""
   }),
@@ -382,6 +380,8 @@ const router = useRouter()
 
 const postElement = ref()
 
+const processing = ref(false)
+
 const isOldPost = state.indexedAt != null
   ? differenceInDays(new Date(), new Date(state.indexedAt)) >= 1
   : false
@@ -482,7 +482,7 @@ function onActivatePostMediaToggle () {
 async function onActivateReplyButton () {
   Util.blurElement()
   const done = await mainState.openSendPostPopup({ type: "reply", post: props.post })
-  state.processing = true
+  processing.value = true
   if (done) {
     if (mainState.currentPath.startsWith("/post")) {
       await mainState.fetchPostThread()
@@ -490,7 +490,7 @@ async function onActivateReplyButton () {
       await updatePostThread()
     }
   }
-  state.processing = false
+  processing.value = false
 }
 
 async function onActivateRepostButton () {
@@ -512,18 +512,18 @@ async function createRepost () {
   if (!result) {
     return
   }
-  state.processing = true
+  processing.value = true
   const response = await mainState.atp.createRepost(
     props.post.uri,
     props.post.cid
   )
   if (response instanceof Error) {
-    state.processing = false
+    processing.value = false
     mainState.openErrorPopup(response, "Post/createRepost")
     return
   }
   await updatePostThread()
-  state.processing = false
+  processing.value = false
 }
 
 async function deleteRepost () {
@@ -539,15 +539,15 @@ async function deleteRepost () {
   if (!result) {
     return
   }
-  state.processing = true
+  processing.value = true
   const response = await mainState.atp.deleteRepost(props.post.viewer.repost)
   if (response instanceof Error) {
-    state.processing = false
+    processing.value = false
     mainState.openErrorPopup(response, "Post/deleteRepost")
     return
   }
   await updatePostThread()
-  state.processing = false
+  processing.value = false
 }
 
 async function createQuoteRepost () {
@@ -573,16 +573,16 @@ async function createQuoteRepost () {
 }
 
 async function onActivateLikeButton () {
-  if (state.processing) {
+  if (processing.value) {
     return
   }
   Util.blurElement()
-  state.processing = true
+  processing.value = true
   const response = props.post.viewer?.like != null
     ? await mainState.atp.deleteLike(props.post.viewer.like as string)
     : await mainState.atp.createLike(props.post.uri, props.post.cid)
   if (response instanceof Error) {
-    state.processing = false
+    processing.value = false
     mainState.openErrorPopup(response, "Post/onActivateLikeButton")
     return
   }
@@ -598,7 +598,7 @@ async function onActivateLikeButton () {
   }
   */
   await updatePostThread()
-  state.processing = false
+  processing.value = false
 }
 
 function openPostPopover ($event: Event) {
@@ -630,9 +630,9 @@ async function postPopoverCallback (type: "deletePost" | "updatePost" | "createC
 }
 
 async function onForceTranslate () {
-  state.processing = true
+  processing.value = true
   await translateText(true)
-  state.processing = false
+  processing.value = false
 }
 
 function onTranslateVideoAlt () {
@@ -642,12 +642,12 @@ function onTranslateVideoAlt () {
 }
 
 async function deletePost (uri: string) {
-  if (state.processing) {
+  if (processing.value) {
     return
   }
-  state.processing = true
+  processing.value = true
   const response = await mainState.atp.deletePost(uri)
-  state.processing = false
+  processing.value = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "Post/deletePost")
     return
@@ -656,7 +656,7 @@ async function deletePost (uri: string) {
 }
 
 async function updatePost () {
-  state.processing = true
+  processing.value = true
   if (mainState.currentPath.startsWith("/post")) {
     await mainState.fetchPostThread()
 
@@ -667,7 +667,7 @@ async function updatePost () {
   } else {
     await updatePostThread()
   }
-  state.processing = false
+  processing.value = false
 }
 
 async function updatePostThread () {
@@ -687,13 +687,13 @@ async function updatePostThread () {
 }
 
 async function createCustomBookmark (uri: string, cid: string) {
-  if (state.processing) {
+  if (processing.value) {
     return
   }
-  state.processing = true
+  processing.value = true
   const tags = ["demo"]
   const response = await mainState.atp.updateCustomBookmarks(uri, cid, tags)
-  state.processing = false
+  processing.value = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "Post/createCustomBookmark")
     return
@@ -717,12 +717,12 @@ async function createCustomBookmark (uri: string, cid: string) {
 }
 
 async function deleteCustomBookmark (uri: string) {
-  if (state.processing) {
+  if (processing.value) {
     return
   }
-  state.processing = true
+  processing.value = true
   const response = await mainState.atp.deleteCustomBookmark(uri)
-  state.processing = false
+  processing.value = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "Post/deleteCustomBookmark")
     return
@@ -1500,7 +1500,7 @@ function toggleOldestQuotedPostDisplay () {
     </div>
 
     <slot name="body-after" />
-    <Loader v-if="state.processing" />
+    <Loader v-if="processing" />
   </div>
 </template>
 
