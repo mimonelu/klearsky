@@ -31,7 +31,7 @@
     grid-gap: 0.5rem;
     font-weight: bold;
     overflow: hidden;
-    padding: 0.5rem 1rem;
+    padding: 0.25rem 1rem;
     white-space: nowrap;
     &:focus, &:hover {
       background-color: rgb(var(--accent-color), 0.25);
@@ -103,6 +103,7 @@
 
     & > span {
       color: rgb(var(--fg-color), 0.875);
+      line-height: var(--line-height-high);
       overflow: hidden;
       text-overflow: ellipsis;
     }

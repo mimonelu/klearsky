@@ -171,10 +171,6 @@ function scrolledToBottom () {
     align-items: center;
     justify-content: start;
     padding: 1rem;
-    &:hover,
-    &:focus {
-      background-color: rgb(var(--fg-color), 0.05);
-    }
 
     .svg-icon--verified {
       grid-area: i;
@@ -185,7 +181,7 @@ function scrolledToBottom () {
     &__display-name {
       grid-area: d;
       font-weight: bold;
-      line-height: var(--line-height-high);
+      line-height: var(--line-height-middle);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
