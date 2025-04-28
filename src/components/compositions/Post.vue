@@ -1584,7 +1584,7 @@ function toggleOldestQuotedPostDisplay () {
     --alpha: 0.5;
     cursor: pointer;
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto 1fr;
+    grid-template-columns: repeat(6, auto) 1fr;
     align-items: center;
     grid-gap: 0.5em;
     &:focus, &:hover {
