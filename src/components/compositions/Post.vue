@@ -62,7 +62,6 @@ const state = reactive<{
   videoType?: string
   hasMedia: ComputedRef<boolean>
   displayMedia: ComputedRef<boolean>
-  foldingMedia: boolean
 
   // リンクカード
   linkCard: ComputedRef<undefined | TTExternal>
@@ -193,9 +192,6 @@ const state = reactive<{
 
     return false
   }),
-
-  // TODO: displayMedia 共々 post に内包するべき
-  foldingMedia: false,
 
   // リンクカード
   linkCard: computed(() => props.post.embed?.external ?? props.post.record?.embed?.external),
@@ -374,13 +370,13 @@ const state = reactive<{
   }),
 })
 
-state.foldingMedia = !state.displayMedia
-
 const router = useRouter()
 
 const postElement = ref()
 
 const processing = ref(false)
+
+const foldingMedia = ref(!state.displayMedia)
 
 const isOldPost = state.indexedAt != null
   ? differenceInDays(new Date(), new Date(state.indexedAt)) >= 1
@@ -468,7 +464,7 @@ async function onActivateProfileLink (did: string) {
 }
 
 function onActivateImageFolderButton () {
-  state.foldingMedia = !state.foldingMedia
+  foldingMedia.value = !foldingMedia.value
 }
 
 function onActivatePostContentToggle () {
@@ -1173,7 +1169,7 @@ function toggleOldestQuotedPostDisplay () {
                 class="button--bordered image-folder-button"
                 @click.prevent.stop="onActivateImageFolderButton"
               >
-                <template v-if="state.foldingMedia">
+                <template v-if="state.displayMedia">
                   <SVGIcon name="image" />
                   <span>{{ $t("showImage") }}</span>
                 </template>
@@ -1184,7 +1180,7 @@ function toggleOldestQuotedPostDisplay () {
               </button>
 
               <!-- メディアボックス -->
-              <template v-if="state.displayMedia || (!state.displayMedia && !state.foldingMedia)">
+              <template v-if="state.displayMedia || (!state.displayMedia && !foldingMedia)">
                 <!-- 画像 -->
                 <div
                   v-if="state.images.length > 0"
