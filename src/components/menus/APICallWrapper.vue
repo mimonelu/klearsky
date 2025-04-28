@@ -184,10 +184,11 @@ async function activate (type: string) {
     mainState.openErrorPopup(response, "APICallWrapper/activate")
     return
   }
+  const url = response.url
   if (response instanceof Response) {
     response = await response.json()
   }
-  Util.displayJson(response)
+  Util.displayJson(response, url)
 }
 </script>
 

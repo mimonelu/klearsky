@@ -1,4 +1,4 @@
-export default function (json: unknown) {
+export default function (json: unknown, title?: string) {
   const windowObject = window.open()
   const jsonHtml = JSON.stringify(json, null, 2)
     .replace(/</g, "&lt;")
@@ -22,6 +22,10 @@ export default function (json: unknown) {
       font-family: monospace;
       padding: 1rem;
     }
+    h1 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
     pre {
       word-break: break-all;
       white-space: pre-wrap;
@@ -29,6 +33,7 @@ export default function (json: unknown) {
     </style>
   </head>
   <body>
+    ${title ? "<h1>" + title + "</h1>" : ""}
     <pre>${jsonHtml}</pre>
   </body>
 </html>`)
