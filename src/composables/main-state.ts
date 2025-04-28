@@ -924,15 +924,15 @@ function saveSettings () {
   }
   if (state.settings[did].linkcardEmbeddedControl == null) {
     state.settings[did].linkcardEmbeddedControl = [
-      "applemusic",
+      // "applemusic",
       "giphy",
-      "graysky",
-      "spotify",
+      // "graysky",
+      // "spotify",
       "tenor",
-      "twitch",
+      // "twitch",
       "youtube",
-      "vimeo",
-      "nicovideo",
+      // "vimeo",
+      // "nicovideo",
     ]
   }
   if (state.settings[did].globallineContentLanguages == null) {
