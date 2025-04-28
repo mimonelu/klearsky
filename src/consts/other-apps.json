@@ -63,6 +63,10 @@
     "profile": "https://web.plc.directory/did/{did}"
   },
   {
+    "name": "oplogsApp",
+    "profile": "https://boat.kelinci.net/plc-oplogs?q={did}"
+  },
+  {
     "name": "atprotoBrowserApp",
     "post": "https://atproto-browser.vercel.app/at/{did}/app.bsky.feed.post/{rkey}",
     "profile": "https://atproto-browser.vercel.app/at/{did}",

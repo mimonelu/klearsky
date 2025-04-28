@@ -271,6 +271,7 @@ export default () => ({
   "tokimekiApp": "TOKIMEKI Bluesky",
   "uniresolverApp": "Universal Resolver",
   "didApp": "Répertoire did:plc",
+  "oplogsApp": "PLC operation logs",
   "atlasApp": "Expériences BSky",
   "atscanApp": "ATScan",
   "showSource": "Montrer la source",
