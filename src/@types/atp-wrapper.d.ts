@@ -5,6 +5,8 @@ interface TIAtpWrapper {
   session?: TTSession
   canLogin
     (): boolean
+  createActorStatus
+    (type: string, durationMinutes?: number, embed?: { uri: string, title: string, description: string }): Promise<Error | TTCidUri>
   createAgent
     (service: string, pdsUrl?: string): boolean
   createChatDeclaration
@@ -39,6 +41,8 @@ interface TIAtpWrapper {
     (file: File): Promise<Error | BlobRef>
   deleteAccount
     (did?: string)
+  deleteActorStatus
+    (did: string): Promise<Error | undefined>
   deleteChatDeclaration
     (repo: string, uri: string): Promise<Error | undefined>
   deleteChatMessage
@@ -67,6 +71,8 @@ interface TIAtpWrapper {
     (uri: string): Promise<Error | undefined>
   deleteThreadgate
     (postUri: string): Promise<Error | undefined>
+  fetchActorStatus
+    (did: string): Promise<Error | AppBskyActorStatus.Record>
   fetchActorLists
     (currentLists: Array<TTList>, actor: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchActorStarterPacks

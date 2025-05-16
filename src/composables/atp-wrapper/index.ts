@@ -1,4 +1,5 @@
 import type { AtpAgent } from "@atproto/api"
+import createActorStatus from "@/composables/atp-wrapper/create/create-actor-status"
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
 import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
@@ -16,6 +17,7 @@ import createRepost from "@/composables/atp-wrapper/create/create-repost"
 import createStarterPack from "@/composables/atp-wrapper/create/create-starter-pack"
 import createVideo from "@/composables/atp-wrapper/create/create-video"
 import deleteAccount from "@/composables/atp-wrapper/delete/delete-account"
+import deleteActorStatus from "@/composables/atp-wrapper/delete/delete-actor-status"
 import deleteChatDeclaration from "@/composables/atp-wrapper/chat/delete-chat-declaration"
 import deleteChatMessage from "@/composables/atp-wrapper/chat/delete-chat-message"
 import deleteChatReaction  from "@/composables/atp-wrapper/chat/delete-chat-reaction"
@@ -30,6 +32,7 @@ import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
 import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
 import deleteStarterPack from "@/composables/atp-wrapper/delete/delete-starter-pack"
 import deleteThreadgate from "@/composables/atp-wrapper/delete/delete-threadgate"
+import fetchActorStatus from "@/composables/atp-wrapper/fetch/fetch-actor-status"
 import fetchActorLists from "@/composables/atp-wrapper/fetch/fetch-actor-lists"
 import fetchActorStarterPacks from "@/composables/atp-wrapper/fetch/fetch-actor-starter-packs"
 import fetchActorsTypeahead from "@/composables/atp-wrapper/fetch/fetch-actors-typeahead"
@@ -166,6 +169,7 @@ class AtpWrapper implements TIAtpWrapper {
   canLogin (this: TIAtpWrapper): boolean {
     return this.data.sessions[this.data.did] != null
   }
+  createActorStatus = createActorStatus
   createAgent = createAgent
   createChatDeclaration = createChatDeclaration
   createChatMessage = createChatMessage
@@ -183,6 +187,7 @@ class AtpWrapper implements TIAtpWrapper {
   createStarterPack = createStarterPack
   createVideo = createVideo
   deleteAccount = deleteAccount
+  deleteActorStatus = deleteActorStatus
   deleteChatDeclaration = deleteChatDeclaration
   deleteChatMessage = deleteChatMessage
   deleteChatReaction = deleteChatReaction
@@ -197,6 +202,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteSession = deleteSession
   deleteStarterPack = deleteStarterPack
   deleteThreadgate = deleteThreadgate
+  fetchActorStatus = fetchActorStatus
   fetchActorLists = fetchActorLists
   fetchActorStarterPacks = fetchActorStarterPacks
   fetchActorsTypeahead = fetchActorsTypeahead
