@@ -34,5 +34,10 @@ const display = ref(false)
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
+  & > button > span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 </style>

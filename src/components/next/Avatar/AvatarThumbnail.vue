@@ -82,6 +82,7 @@ const hasLive = computed((): boolean => {
   &__kanban {
     background-color: rgb(var(--red-color));
     border-radius: 0.25em;
+    color: rgb(var(--white-color));
     font-size: 0.25em;
     font-weight: bold;
     line-height: var(--line-height-low);

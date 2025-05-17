@@ -171,6 +171,14 @@ const state = reactive<{
   }),
 })
 
+// アクターステータス - LIVE
+const hasLive = computed((): boolean => {
+  return (
+    mainState.currentProfile?.status?.isActive == true &&
+    mainState.currentProfile?.status.status === "app.bsky.actor.status#live"
+  )
+})
+
 function toggleFolding () {
   Util.blurElement()
   mainState.profileFolding = !mainState.profileFolding
@@ -428,6 +436,24 @@ function removeThisPost () {
             </div>
           </div>
           <div class="profile-view__details__bottom">
+            <!-- アクターステータス - LIVE -->
+            <template v-if="hasLive">
+              <Accordion
+                buttonClass="button--important"
+                icon="video"
+                :label="`LIVE: ${mainState.currentProfile!.status!.embed?.external?.title}`"
+              >
+                <LinkCard
+                  v-if="mainState.currentProfile!.status!.embed?.external != null"
+                  :external="mainState.currentProfile!.status!.embed.external"
+                  :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
+                  :displayImage="true"
+                  :noLink="false"
+                  :noEmbedded="false"
+                />
+              </Accordion>
+            </template>
+
             <!-- ボタンコンテナ -->
             <div
               v-if="mainState.currentProfile != null"
@@ -513,32 +539,6 @@ function removeThisPost () {
               <!-- ラベラー設定ポップアップトリガー -->
               <LabelerSettingsPopupTrigger :labeler="mainState.currentLabeler" />
             </div>
-
-            <!-- アクターステータス -->
-            <template v-if="mainState.currentProfile?.status?.isActive">
-              <!-- アクターステータス - LIVE -->
-              <div v-if="mainState.currentProfile.status.status === 'app.bsky.actor.status#live'">
-                <Accordion
-                  buttonClass="button--bordered"
-                  icon="fire"
-                  :label="`LIVE: ${mainState.currentProfile.status.embed?.external?.title}`"
-                >
-                  <LinkCard
-                    v-if="mainState.currentProfile.status.embed?.external != null"
-                    :external="mainState.currentProfile.status.embed.external"
-                    :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
-                    :displayImage="true"
-                    :noLink="false"
-                    :noEmbedded="false"
-                  />
-                </Accordion>
-              </div>
-
-              <!-- アクターステータス - 不明なステータス -->
-              <div v-else>
-                <div>{{ (mainState.currentProfile.status.status.match(/#(\w+)$/) ?? ["", ""])[1].toUpperCase() }}</div>
-              </div>
-            </template>
 
             <!-- 説明文 -->
             <HtmlText
