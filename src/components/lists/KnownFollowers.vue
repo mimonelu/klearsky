@@ -24,6 +24,7 @@ const state = reactive<{
       :image="follower.avatar"
       :isLabeler="follower.associated?.labeler"
       :noLink="false"
+      :actorStatus="follower.status"
     />
   </div>
 </template>
@@ -41,7 +42,7 @@ const state = reactive<{
     margin-left: -0.125em;
   }
 
-  &:deep(.avatar-thumbnail) {
+  &:deep(.avatar-thumbnail__inner) {
     box-shadow: 0 0 0 2px rgb(var(--bg-color));
   }
 }

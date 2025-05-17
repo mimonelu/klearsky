@@ -169,9 +169,11 @@ function isMine (message: TIChatMessage): boolean {
             <template v-for="member of myConvo.data?.members">
               <AvatarLink
                 v-if="member.did !== mainState.atp.data.did"
-                :isLabeler="member.associated?.labeler"
+                :key="member.did"
                 :did="member.did"
                 :image="member.avatar"
+                :isLabeler="member.associated?.labeler"
+                :actorStatus="member.status"
                 :title="member.displayName || member.handle"
                 @click.stop="close"
               />
@@ -188,6 +190,7 @@ function isMine (message: TIChatMessage): boolean {
               <template v-for="member of myConvo.data?.members">
                 <div
                   v-if="member.did !== mainState.atp.data.did"
+                  :key="member.did"
                   class="convo-card__user-list__item"
                 >
                   <AvatarLink

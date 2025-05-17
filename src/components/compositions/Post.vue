@@ -1010,6 +1010,7 @@ function toggleOldestQuotedPostDisplay () {
             :image="post.author?.avatar"
             :isLabeler="post.author?.associated?.labeler"
             :noLink="position === 'chatMessage'"
+            :actorStatus="post.author?.status"
             @click.stop="$emit('click', $event)"
           />
         </div>

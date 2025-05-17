@@ -6,6 +6,7 @@ defineProps<{
   image?: string
   isLabeler?: boolean
   noLink?: boolean
+  actorStatus?: TTActorStatus
 }>()
 </script>
 
@@ -18,6 +19,7 @@ defineProps<{
     <AvatarThumbnail
       :image="image"
       :isLabeler="isLabeler"
+      :actorStatus="actorStatus"
     />
   </Component>
 </template>

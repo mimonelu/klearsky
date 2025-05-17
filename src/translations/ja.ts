@@ -96,6 +96,7 @@ export default () => ({
   "unauthenticated": "公開",
   "beginner": "新規ユーザー",
   "beginnerInPost": "初期ポスト",
+  "live": "LIVE",
 
   "privacyPolicy": "プライバシーポリシー",
   "termsOfService": "利用規約",

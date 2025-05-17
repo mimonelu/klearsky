@@ -363,8 +363,9 @@ function removeThisPost () {
               class="profile-view__details__top__left"
             >
               <AvatarButton
-                :isLabeler="state.isLabeler"
                 :image="mainState.currentProfile?.avatar ?? '/img/void.png'"
+                :isLabeler="state.isLabeler"
+                :actorStatus="mainState.currentProfile?.status"
               />
             </div>
 

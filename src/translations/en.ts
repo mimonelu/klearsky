@@ -96,6 +96,7 @@ export default () => ({
   "unauthenticated": "Public",
   "beginner": "New user",
   "beginnerInPost": "Initial post",
+  "live": "LIVE",
 
   "privacyPolicy": "Privacy policy",
   "termsOfService": "Terms of service",

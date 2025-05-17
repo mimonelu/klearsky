@@ -105,10 +105,11 @@ function onActivateContentFilteringToggle () {
       />
 
       <AvatarLink
-        :noLink="noLink"
-        :isLabeler="user.associated?.labeler"
         :did="user.did"
         :image="user.avatar"
+        :isLabeler="user.associated?.labeler"
+        :noLink="noLink"
+        :actorStatus="user.status"
       />
       <DisplayName
         :displayName="user.displayName"

@@ -5,6 +5,7 @@ import AvatarThumbnail from "@/components/next/Avatar/AvatarThumbnail.vue"
 const props = defineProps<{
   image?: string
   isLabeler?: boolean
+  actorStatus?: TTActorStatus
 }>()
 
 const mainState = inject("state") as MainState
@@ -30,12 +31,13 @@ function openImagePopup () {
     <AvatarThumbnail
       :image="image"
       :isLabeler="isLabeler"
+      :actorStatus="actorStatus"
     />
   </button>
 </template>
 
 <style lang="scss" scoped>
-.avatar-thumbnail {
+.avatar-thumbnail:deep(.avatar-thumbnail__inner) {
   box-shadow: 0 0 0 4px rgb(var(--bg-color));
   min-width: 1em;
   max-width: 1em;
