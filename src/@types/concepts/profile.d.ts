@@ -17,6 +17,7 @@ type TTProfile = {
   pinnedPost?: TTCidUri
   postsCount: number
   joinedViaStarterPack?: TIStarterPack
+  status?: TTActorStatus
   verification?: TIVerification
   viewer: TTUserViewer
 

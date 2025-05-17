@@ -2,6 +2,7 @@
 import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import { differenceInDays } from "date-fns"
+import Accordion from "@/components/next/Accordion/Accordion.vue"
 import AtmosphereContainer from "@/components/next/Atmosphere/AtmosphereContainer.vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarButton from "@/components/next/AvatarButton/AvatarButton.vue"
@@ -15,6 +16,7 @@ import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPop
 import LabelerSubscribeToggle from "@/components/buttons/LabelerSubscribeToggle.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
+import LinkCard from "@/components/cards/LinkCard.vue"
 import KnownFollowers from "@/components/lists/KnownFollowers.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
@@ -510,6 +512,32 @@ function removeThisPost () {
               <!-- ラベラー設定ポップアップトリガー -->
               <LabelerSettingsPopupTrigger :labeler="mainState.currentLabeler" />
             </div>
+
+            <!-- アクターステータス -->
+            <template v-if="mainState.currentProfile?.status?.isActive">
+              <!-- アクターステータス - LIVE -->
+              <div v-if="mainState.currentProfile.status.status === 'app.bsky.actor.status#live'">
+                <Accordion
+                  buttonClass="button--bordered"
+                  icon="fire"
+                  :label="`LIVE: ${mainState.currentProfile.status.embed?.external?.title}`"
+                >
+                  <LinkCard
+                    v-if="mainState.currentProfile.status.embed?.external != null"
+                    :external="mainState.currentProfile.status.embed.external"
+                    :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
+                    :displayImage="true"
+                    :noLink="false"
+                    :noEmbedded="false"
+                  />
+                </Accordion>
+              </div>
+
+              <!-- アクターステータス - 不明なステータス -->
+              <div v-else>
+                <div>{{ (mainState.currentProfile.status.status.match(/#(\w+)$/) ?? ["", ""])[1].toUpperCase() }}</div>
+              </div>
+            </template>
 
             <!-- 説明文 -->
             <HtmlText
