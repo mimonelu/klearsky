@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, computed, type ComputedRef } from "vue"
-import AvatarLink from "@/components/next/AvatarLink/AvatarLink.vue"
+import AvatarLink from "@/components/next/Avatar/AvatarLink.vue"
 
 const props = defineProps<{
   followers: Array<TTUser>
@@ -33,13 +33,16 @@ const state = reactive<{
   display: flex;
   align-items: flex-end;
   flex-direction: row-reverse;
+}
 
-  & > .avatar-link {
+.avatar-link {
+  position: relative;
+  &:not(:last-child) {
+    margin-left: -0.125em;
+  }
+
+  &:deep(.avatar-thumbnail) {
     box-shadow: 0 0 0 2px rgb(var(--bg-color));
-    position: relative;
-    &:not(:last-child) {
-      margin-left: -0.125em;
-    }
   }
 }
 </style>

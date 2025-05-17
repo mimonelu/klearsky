@@ -3,29 +3,26 @@ import { inject } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 
 defineProps<{
-  did?: string
   image?: string
   isLabeler?: boolean
-  noLink?: boolean
 }>()
 
 const mainState = inject("state") as MainState
 </script>
 
 <template>
-  <Component
-    :is="noLink ? 'div' : 'RouterLink'"
-    :to="{ name: 'profile-feeds', query: { account: did } }"
-    class="avatar-link"
+  <div
+    class="avatar-thumbnail"
     :data-is-labeler="!!isLabeler"
   >
     <LazyImage :src="mainState.currentSetting.postAnonymization ? undefined : image" />
-  </Component>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.avatar-link {
+.avatar-thumbnail {
   background-color: rgb(var(--fg-color), 0.125);
+  cursor: pointer;
   display: block;
   overflow: hidden;
   position: relative;
@@ -36,6 +33,9 @@ const mainState = inject("state") as MainState
   &[data-is-labeler="true"] {
     border-radius: var(--border-radius-small);
   }
+  &:hover {
+    border-radius: 1px;
+  }
 
   & > .lazy-image {
     display: block;
@@ -43,13 +43,6 @@ const mainState = inject("state") as MainState
     max-width: 1em;
     min-height: 1em;
     max-height: 1em;
-  }
-}
-a.avatar-link {
-  cursor: pointer;
-
-  &:hover {
-    border-radius: 1px;
   }
 }
 </style>
