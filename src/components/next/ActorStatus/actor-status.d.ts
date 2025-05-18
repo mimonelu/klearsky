@@ -1,4 +1,4 @@
-interface TTActorStatus {
+interface TIActorStatus {
   embed?: {
     $type: string
     external: TTExternal
@@ -16,4 +16,8 @@ interface TTActorStatus {
     status: string
   }
   status: string
+}
+
+interface TIActorStatusEditPopupProps {
+  display: boolean
 }

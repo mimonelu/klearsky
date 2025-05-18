@@ -102,6 +102,10 @@ export default () => ({
   "privacyPolicy": "Politique de confidentialité",
   "termsOfService": "Conditions d'utilisation",
 
+  "actorStatusLiveEdit": "Paramètres du statut en direct",
+  "actorStatusLiveUri": "URL de diffusion en direct",
+  "actorStatusLiveDurationMinutes": "Durée d’affichage (minutes)",
+
   "chat": "Clavardage",
   "noChat": "Aucun clavardage.",
   "noChatMessage": "Aucun message.",

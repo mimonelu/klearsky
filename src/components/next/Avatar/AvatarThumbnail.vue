@@ -5,7 +5,7 @@ import LazyImage from "@/components/images/LazyImage.vue"
 const props = defineProps<{
   image?: string
   isLabeler?: boolean
-  actorStatus?: TTActorStatus
+  actorStatus?: TIActorStatus
 }>()
 
 const mainState = inject("state") as MainState

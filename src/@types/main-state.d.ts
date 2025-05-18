@@ -393,6 +393,11 @@ interface MainState {
   openOtherSettingsPopup: Function
   closeOtherSettingsPopup: () => void
 
+  // ポップアップ - アクターステータス編集ポップアップ
+  actorStatusEditPopupProps: TIActorStatusEditPopupProps
+  openActorStatusEditPopup: Function
+  closeActorStatusEditPopup: () => void
+
   // ポップアップ - 詳細検索ポップアップ
   advancedSearchPopupDisplay: boolean
   openAdvancedSearchPopup: () => void

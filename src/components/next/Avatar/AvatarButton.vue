@@ -5,7 +5,7 @@ import AvatarThumbnail from "@/components/next/Avatar/AvatarThumbnail.vue"
 const props = defineProps<{
   image?: string
   isLabeler?: boolean
-  actorStatus?: TTActorStatus
+  actorStatus?: TIActorStatus
 }>()
 
 const mainState = inject("state") as MainState

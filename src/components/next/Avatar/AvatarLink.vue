@@ -6,7 +6,7 @@ defineProps<{
   image?: string
   isLabeler?: boolean
   noLink?: boolean
-  actorStatus?: TTActorStatus
+  actorStatus?: TIActorStatus
 }>()
 </script>
 

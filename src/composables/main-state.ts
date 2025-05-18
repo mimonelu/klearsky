@@ -460,6 +460,13 @@ export const state: MainState = reactive<MainState>({
   openOtherSettingsPopup: openOtherSettingsPopup,
   closeOtherSettingsPopup: closeOtherSettingsPopup,
 
+  // ポップアップ - アクターステータス編集ポップアップ
+  actorStatusEditPopupProps: {
+    display: false,
+  },
+  openActorStatusEditPopup: openActorStatusEditPopup,
+  closeActorStatusEditPopup: closeActorStatusEditPopup,
+
   // ポップアップ - 詳細検索ポップアップ
   advancedSearchPopupDisplay: false,
   openAdvancedSearchPopup: openAdvancedSearchPopup,
@@ -2219,6 +2226,16 @@ function openOtherSettingsPopup () {
 
 function closeOtherSettingsPopup () {
   state.otherSettingsPopupDisplay = false
+}
+
+// ポップアップ - アクターステータス編集ポップアップ
+
+function openActorStatusEditPopup () {
+  state.actorStatusEditPopupProps.display = true
+}
+
+function closeActorStatusEditPopup () {
+  state.actorStatusEditPopupProps.display = false
 }
 
 // ポップアップ - 詳細検索ポップアップ

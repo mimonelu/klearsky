@@ -241,6 +241,11 @@ async function toggleNoUnauthenticated () {
   mainState.centerLoaderDisplay = false
 }
 
+function openActorStatusEditPopup () {
+  Util.blurElement()
+  mainState.openActorStatusEditPopup()
+}
+
 function openHandleHistoryPopup () {
   if (mainState.currentProfile?.__log == null) return
   state.handleHistoryPopupDisplay = true
@@ -496,6 +501,7 @@ function removeThisPost () {
 
                   <!-- 外部公開状態トグル -->
                   <button
+                    type="button"
                     class="button no-unauthenticated-toggle"
                     :data-no-unauthenticated="state.hasNoUnauthenticated"
                     @click.stop="toggleNoUnauthenticated"
@@ -504,10 +510,12 @@ function removeThisPost () {
                     <span>{{ $t(state.hasNoUnauthenticated ? "authenticated" : "unauthenticated") }}</span>
                   </button>
 
-                  <!-- アクターステータス - LIVE設定ボタン -->
+                  <!-- アクターステータス編集ボタン -->
                   <button
+                    type="button"
                     class="button actor-status-edit-button"
                     :data-has-live="hasLive"
+                    @click.stop="openActorStatusEditPopup"
                   >
                     <span>{{ $t("live") }}</span>
                   </button>
@@ -1128,7 +1136,7 @@ function removeThisPost () {
   }
 }
 
-// アクターステータス - LIVE設定ボタン
+// アクターステータス編集ボタン
 .actor-status-edit-button {
   &[data-has-live="true"] {
     --bg-color: var(--white-color);

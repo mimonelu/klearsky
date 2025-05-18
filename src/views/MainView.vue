@@ -3,6 +3,7 @@ import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounte
 import { useRouter, type LocationQueryValue, type RouteLocationNormalized } from "vue-router"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
+import ActorStatusEditPopup from "@/components/next/ActorStatus/ActorStatusEditPopup.vue"
 import AdvancedSearchPopup from "@/components/popups/AdvancedSearchPopup.vue"
 import BlockingUsersPopup from "@/components/popups/BlockingUsersPopup.vue"
 import ChatConvoPopover from "@/components/popovers/ChatConvoPopover.vue"
@@ -997,6 +998,14 @@ function changeSetting () {
           @saveSetting="saveSetting"
           @changeSetting="changeSetting"
           @showDescription="state.openHtmlPopup"
+        />
+      </Transition>
+
+      <!-- アクターステータス編集ポップアップ -->
+      <Transition>
+        <ActorStatusEditPopup
+          v-if="state.actorStatusEditPopupProps.display"
+          @close="state.closeActorStatusEditPopup"
         />
       </Transition>
 

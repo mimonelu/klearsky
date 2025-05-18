@@ -102,6 +102,10 @@ export default () => ({
   "privacyPolicy": "プライバシーポリシー",
   "termsOfService": "利用規約",
 
+  "actorStatusLiveEdit": "LIVEステータスの設定",
+  "actorStatusLiveUri": "LIVE配信URL",
+  "actorStatusLiveDurationMinutes": "表示期間（分）",
+
   "chat": "チャット",
   "noChat": "チャットがありません。",
   "noChatMessage": "メッセージがありません。",

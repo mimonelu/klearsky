@@ -1,4 +1,4 @@
-import type { AppBskyActorStatus, Un$Typed } from "@atproto/api"
+import type { AppBskyActorStatus, BlobRef, Un$Typed } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -8,6 +8,7 @@ export default async function (
     uri: string
     title: string
     description: string
+    thumb?: BlobRef
   }
 ): Promise<Error | TTCidUri> {
   if (this.agent == null) {
@@ -26,7 +27,7 @@ export default async function (
         uri: embed.uri,
         title: embed.title,
         description: embed.description,
-        // thumb: null,
+        thumb: embed.thumb,
       },
     }
   }
