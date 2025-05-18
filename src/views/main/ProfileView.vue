@@ -480,26 +480,38 @@ function removeThisPost () {
 
               <!-- 段落ちなしボタンコンテナ -->
               <div class="button-container__nodropoff">
-                <!-- プロフィール編集ボタン -->
-                <RouterLink
+                <!-- 利用中ユーザー用ボタンコンテナ -->
+                <div
                   v-if="mainState.isMyProfile()"
-                  to="/profile/edit"
-                  class="button edit-button"
+                  class="group-parts"
                 >
-                  <SVGIcon name="edit" />
-                  <span>{{ $t("editProfile") }}</span>
-                </RouterLink>
+                  <!-- プロフィール編集ボタン -->
+                  <RouterLink
+                    to="/profile/edit"
+                    class="button edit-button"
+                  >
+                    <SVGIcon name="edit" />
+                    <span>{{ $t("editProfile") }}</span>
+                  </RouterLink>
 
-                <!-- 外部公開状態トグル -->
-                <button
-                  v-if="mainState.isMyProfile()"
-                  class="button no-unauthenticated-toggle"
-                  :data-no-unauthenticated="state.hasNoUnauthenticated"
-                  @click.stop="toggleNoUnauthenticated"
-                >
-                  <SVGIcon :name="state.hasNoUnauthenticated ? 'earthOff' : 'earth'" />
-                  <span>{{ $t(state.hasNoUnauthenticated ? "authenticated" : "unauthenticated") }}</span>
-                </button>
+                  <!-- 外部公開状態トグル -->
+                  <button
+                    class="button no-unauthenticated-toggle"
+                    :data-no-unauthenticated="state.hasNoUnauthenticated"
+                    @click.stop="toggleNoUnauthenticated"
+                  >
+                    <SVGIcon :name="state.hasNoUnauthenticated ? 'earthOff' : 'earth'" />
+                    <span>{{ $t(state.hasNoUnauthenticated ? "authenticated" : "unauthenticated") }}</span>
+                  </button>
+
+                  <!-- アクターステータス - LIVE設定ボタン -->
+                  <button
+                    class="button actor-status-edit-button"
+                    :data-has-live="hasLive"
+                  >
+                    <span>{{ $t("live") }}</span>
+                  </button>
+                </div>
 
                 <!-- モデレーションボタンコンテナ -->
                 <div class="moderation-button-container group-parts">
@@ -1084,6 +1096,7 @@ function removeThisPost () {
 
 .edit-button,
 .no-unauthenticated-toggle,
+.actor-status-edit-button,
 .follow-button,
 .mute-button,
 .block-button,
@@ -1112,6 +1125,14 @@ function removeThisPost () {
   &[data-no-unauthenticated="false"] {
     --bg-color: var(--white-color);
     --fg-color: var(--accent-color);
+  }
+}
+
+// アクターステータス - LIVE設定ボタン
+.actor-status-edit-button {
+  &[data-has-live="true"] {
+    --bg-color: var(--white-color);
+    --fg-color: var(--red-color);
   }
 }
 
