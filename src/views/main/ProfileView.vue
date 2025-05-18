@@ -493,11 +493,12 @@ function removeThisPost () {
                 <!-- 外部公開状態トグル -->
                 <button
                   v-if="mainState.isMyProfile()"
-                  class="button--bordered no-unauthenticated-toggle"
+                  class="button no-unauthenticated-toggle"
                   :data-no-unauthenticated="state.hasNoUnauthenticated"
                   @click.stop="toggleNoUnauthenticated"
                 >
                   <SVGIcon :name="state.hasNoUnauthenticated ? 'earthOff' : 'earth'" />
+                  <span>{{ $t(state.hasNoUnauthenticated ? "authenticated" : "unauthenticated") }}</span>
                 </button>
 
                 <!-- モデレーションボタンコンテナ -->
@@ -1082,6 +1083,7 @@ function removeThisPost () {
 }
 
 .edit-button,
+.no-unauthenticated-toggle,
 .follow-button,
 .mute-button,
 .block-button,
@@ -1096,10 +1098,9 @@ function removeThisPost () {
     }
   }
 }
-
 .edit-button {
   & > .svg-icon {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
   }
 }
 
@@ -1107,14 +1108,10 @@ function removeThisPost () {
 .no-unauthenticated-toggle {
   display: flex;
   align-items: center;
-  font-size: 1.25rem;
   margin-right: auto;
-
-  &[data-no-unauthenticated="true"] > .svg-icon {
-    fill: rgb(var(--fg-color), 0.5);
-  }
-  &[data-no-unauthenticated="false"] > .svg-icon {
-    fill: rgb(var(--fg-color));
+  &[data-no-unauthenticated="false"] {
+    --bg-color: var(--white-color);
+    --fg-color: var(--accent-color);
   }
 }
 
