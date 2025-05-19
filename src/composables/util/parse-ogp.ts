@@ -60,14 +60,16 @@ export default async function (
         .catch((error) => error)
     if (response instanceof Error) {
       // エラーをスルー
+      console.log("[klearsky/parse-ogp]", response)
       return external
     }
     const blob = await response.blob()
 
     // NOTICE: 横幅の規定値チェック
     // TODO: 間に合わせの処理のため要検討
-    const size = await imagesize(blob as File)
-    if ((size?.width ?? 0) < (548 / 2)) return external
+    // TODO: 不要な処理と思われるためコメントアウト。要検討
+    // const size = await imagesize(blob as File)
+    // if ((size?.width ?? 0) < (548 / 2)) return external
 
     const blobRef = await atpWrapper.createFileBlobRef({
       file: blob as File,
@@ -84,6 +86,7 @@ export default async function (
   return external
 }
 
+/* // TODO: 不要な処理と思われるためコメントアウト。要検討
 async function imagesize (file: File): Promise<{ width: number; height: number; }> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -101,3 +104,4 @@ async function imagesize (file: File): Promise<{ width: number; height: number; 
     img.src = URL.createObjectURL(file)
   })
 }
+*/

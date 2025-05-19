@@ -108,25 +108,42 @@ async function createActorStatus () {
   const durationMinutes = isNumeric(formState.durationMinutes)
     ? Number(formState.durationMinutes)
     : undefined
+  if (uri == null || durationMinutes == null) {
+    return
+  }
   popupLoaderDisplay.value = true
 
-  // アクターステータスが存在する場合はいったん削除
-  if (isExisting.value) {
-    await mainState.atp.deleteActorStatus(mainState.atp.session!.did)
+  // OGP情報の取得
+  const external = await Util.parseOgp(
+    mainState.atp,
+    uri,
+    true // 本番用に付き画像をアップロードする
+  )
+  if (external instanceof Error) {
+    popupLoaderDisplay.value = false
+    mainState.openErrorPopup(external, "ActorStatusEditPopup/createActorStatus")
+    return
   }
 
-  const response = await mainState.atp.createActorStatus("live", durationMinutes, {
-    uri: uri ?? "",
-    title: linkCardProps.value?.external?.title ?? "",
-    description: linkCardProps.value?.external?.description ?? "",
-    // TODO:
-    // thumb: linkCardProps.value?.external?.thumb,
-  })
-  popupLoaderDisplay.value = false
+  // アクターステータスが存在する場合は削除
+  if (isExisting.value) {
+    const response = await mainState.atp.deleteActorStatus(mainState.atp.session!.did)
+    if (response instanceof Error) {
+      popupLoaderDisplay.value = false
+      mainState.openErrorPopup(response, "ActorStatusEditPopup/createActorStatus")
+      return
+    }
+  }
+
+  // アクターステータスの作成
+  const response = await mainState.atp.createActorStatus("live", durationMinutes, external)
   if (response instanceof Error) {
+    popupLoaderDisplay.value = false
     mainState.openErrorPopup(response, "ActorStatusEditPopup/createActorStatus")
     return
   }
+
+  popupLoaderDisplay.value = false
 
   // TODO: 現在のプロフィールデータ内にあるアクターステータスの更新
 
@@ -164,12 +181,16 @@ async function updateLinkCard () {
     linkCardProps.value = undefined
     return
   }
+
   // TODO: threashold
+
+  // OGP情報の取得
   const external = await Util.parseOgp(
     mainState.atp,
     formState.uri,
-    false
+    false // プレビュー用に付き画像はアップロードしない
   )
+
   if (external instanceof Error) {
     linkCardProps.value = undefined
     return

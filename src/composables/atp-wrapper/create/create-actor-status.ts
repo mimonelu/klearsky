@@ -4,12 +4,7 @@ export default async function (
   this: TIAtpWrapper,
   type: string,
   durationMinutes?: number,
-  embed?: {
-    uri: string
-    title: string
-    description: string
-    thumb?: BlobRef
-  }
+  embed?: TTExternal
 ): Promise<Error | TTCidUri> {
   if (this.agent == null) {
     return Error("noAgentError")
@@ -24,10 +19,10 @@ export default async function (
       $type: "app.bsky.embed.external",
       external: {
         $type: "app.bsky.embed.external#external",
-        uri: embed.uri,
-        title: embed.title,
-        description: embed.description,
-        thumb: embed.thumb,
+        uri: embed.uri ?? "",
+        title: embed.title ?? "",
+        description: embed.description ?? "",
+        thumb: embed.thumb as unknown as BlobRef,
       },
     }
   }

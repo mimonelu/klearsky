@@ -6,7 +6,7 @@ interface TIAtpWrapper {
   canLogin
     (): boolean
   createActorStatus
-    (type: string, durationMinutes?: number, embed?: { uri: string, title: string, description: string }): Promise<Error | TTCidUri>
+    (type: string, durationMinutes?: number, embed?: TTExternal): Promise<Error | TTCidUri>
   createAgent
     (service: string, pdsUrl?: string): boolean
   createChatDeclaration
