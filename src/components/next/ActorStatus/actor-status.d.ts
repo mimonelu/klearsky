@@ -5,17 +5,22 @@ interface TIActorStatus {
   }
   expiresAt: string
   isActive: boolean
-  record: {
+  record: TIActorStatusRecord
+  status: string
+}
+
+interface TIActorStatusRecord {
+  $type: string
+  createdAt: string
+  durationMinutes?: number
+  embed?: {
     $type: string
-    createdAt: string
-    durationMinutes?: number
-    embed?: {
-      $type: string
-      external: TTExternal
-    }
-    status: string
+    external: TTExternal
   }
   status: string
+
+  // Injected
+  __expiredAt: string
 }
 
 interface TIActorStatusEditPopupProps {

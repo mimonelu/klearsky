@@ -72,7 +72,7 @@ interface TIAtpWrapper {
   deleteThreadgate
     (postUri: string): Promise<Error | undefined>
   fetchActorStatus
-    (did: string): Promise<Error | AppBskyActorStatus.Record>
+    (did: string): Promise<Error | TIActorStatusRecord>
   fetchActorLists
     (currentLists: Array<TTList>, actor: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchActorStarterPacks

@@ -103,6 +103,7 @@ export default () => ({
   "termsOfService": "Conditions d'utilisation",
 
   "actorStatusLiveEdit": "Paramètres du statut en direct",
+  "actorStatusLiveExpiredAt": "L'affichage expire à",
   "actorStatusLiveUri": "URL de diffusion en direct",
   "actorStatusLiveDurationMinutes": "Durée d’affichage (minutes)",
 

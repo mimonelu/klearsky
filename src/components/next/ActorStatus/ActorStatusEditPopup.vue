@@ -14,6 +14,10 @@ const mainState = inject("state") as MainState
 
 const isExisting = ref(false)
 
+const isActive = ref(false)
+
+const expiredAt = ref("")
+
 const popupLoaderDisplay = ref(false)
 
 const formState = reactive<{
@@ -45,6 +49,7 @@ const easyFormProps: TTEasyForm = {
       model: "durationMinutes",
       label: $t("actorStatusLiveDurationMinutes"),
       type: "text",
+      required: true,
       inputmode: "numeric",
       pattern: "\\d*",
     },
@@ -68,6 +73,8 @@ onMounted(async () => {
   // 現在のアクターステータスが存在しない場合
   if (currentStatus instanceof Error) {
     isExisting.value = false
+    isActive.value = false
+    expiredAt.value = ""
     formState.uri = undefined
     formState.durationMinutes = undefined
   }
@@ -75,8 +82,12 @@ onMounted(async () => {
   // 現在のアクターステータスが存在する場合
   else {
     isExisting.value = true
+    isActive.value = new Date() < new Date(currentStatus.__expiredAt)
+    expiredAt.value = currentStatus.__expiredAt
     formState.uri = currentStatus.embed?.external?.uri
-    formState.durationMinutes = currentStatus.durationMinutes
+    formState.durationMinutes = currentStatus.durationMinutes != null
+      ? String(currentStatus.durationMinutes)
+      : undefined
 
     // リンクカードを更新
     await updateLinkCard()
@@ -138,6 +149,7 @@ async function deleteActorStatus () {
     return
   }
   isExisting.value = false
+  isActive.value = false
   formState.uri = undefined
   formState.durationMinutes = undefined
   linkCardProps.value = undefined
@@ -180,7 +192,8 @@ async function updateLinkCard () {
     class="actor-status-edit-popup"
     :hasCloseButton="true"
     :loaderDisplay="popupLoaderDisplay"
-    :data-is-active="isExisting"
+    :data-is-existing="isExisting"
+    :data-is-active="isActive"
     @close="close"
   >
     <template #header>
@@ -192,6 +205,13 @@ async function updateLinkCard () {
     <template #body>
       <EasyForm v-bind="easyFormProps">
         <template #beforeButton>
+          <dl
+            v-if="isExisting"
+            class="expired-at"
+          >
+            <dt>{{ $t("actorStatusLiveExpiredAt") }}</dt>
+            <dd>{{ mainState.formatDate(expiredAt, true) }}</dd>
+          </dl>
           <LinkCard
             v-if="linkCardProps != null"
             v-bind="linkCardProps"
@@ -212,15 +232,16 @@ async function updateLinkCard () {
 
 <style lang="scss" scoped>
 .actor-status-edit-popup {
-  &[data-is-active="false"] .easy-form {
+  &[data-is-existing="false"] .easy-form {
     grid-template-areas:
       "b b"
       "l l"
       "s s";
   }
-  &[data-is-active="true"] .easy-form {
+  &[data-is-existing="true"] .easy-form {
     grid-template-areas:
       "b b"
+      "e e"
       "l l"
       "d s";
   }
@@ -230,6 +251,17 @@ async function updateLinkCard () {
 
   .easy-form__body {
     grid-area: b;
+  }
+
+  .expired-at {
+    grid-area: e;
+
+    dd {
+      padding: 0.5rem 1rem;
+      [data-is-active="false"] & {
+        color: rgb(var(--notice-color));
+      }
+    }
   }
 
   .external {

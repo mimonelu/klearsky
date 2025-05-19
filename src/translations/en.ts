@@ -103,6 +103,7 @@ export default () => ({
   "termsOfService": "Terms of service",
 
   "actorStatusLiveEdit": "LIVE status settings",
+  "actorStatusLiveExpiredAt": "Display expires at",
   "actorStatusLiveUri": "LIVE streaming URL",
   "actorStatusLiveDurationMinutes": "Display duration (minutes)",
 
