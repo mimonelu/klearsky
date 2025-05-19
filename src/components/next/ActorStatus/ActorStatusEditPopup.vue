@@ -65,7 +65,7 @@ const linkCardProps: Ref<undefined | {
 }> = ref(undefined)
 
 onMounted(async () => {
-  // 現在のアクターステータスを取得
+  // 現在のアクターステータスを再取得
   popupLoaderDisplay.value = true
   const currentStatus = await mainState.atp.fetchActorStatus(mainState.atp.session!.did)
   popupLoaderDisplay.value = false
@@ -143,10 +143,10 @@ async function createActorStatus () {
     return
   }
 
+  // 現在のアクターステータスを再取得
+  await updateProfileStatus()
+
   popupLoaderDisplay.value = false
-
-  // TODO: 現在のプロフィールデータ内にあるアクターステータスの更新
-
   close()
 }
 
@@ -170,9 +170,7 @@ async function deleteActorStatus () {
   formState.uri = undefined
   formState.durationMinutes = undefined
   linkCardProps.value = undefined
-
-  // TODO: 現在のプロフィールデータ内にあるアクターステータスの更新
-
+  await updateProfileStatus()
   close()
 }
 
@@ -204,6 +202,19 @@ async function updateLinkCard () {
     displayImage: true,
     noLink: true,
     noEmbedded: true,
+  }
+}
+
+async function updateProfileStatus () {
+  const did = mainState.atp.session!.did
+  const profile = await mainState.atp.fetchProfile(did)
+  if (!(profile instanceof Error)) {
+    if (mainState.userProfile != null) {
+      mainState.userProfile.status = profile.status
+    }
+    if (mainState.currentProfile?.did === did) {
+      mainState.currentProfile.status = profile.status
+    }
   }
 }
 </script>
