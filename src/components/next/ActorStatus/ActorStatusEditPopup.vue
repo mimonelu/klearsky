@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, ref, type Ref } from "vue"
+import { computed, inject, onMounted, reactive, ref, type Ref } from "vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -14,9 +14,11 @@ const mainState = inject("state") as MainState
 
 const isExisting = ref(false)
 
-const isActive = ref(false)
-
-const expiredAt = ref("")
+const expiredAt = computed((): string => {
+  return formState.durationMinutes != null
+    ? new Date(Date.now() + Number(formState.durationMinutes) * 60 * 1000).toISOString()
+    : ""
+})
 
 const popupLoaderDisplay = ref(false)
 
@@ -73,8 +75,6 @@ onMounted(async () => {
   // 現在のアクターステータスが存在しない場合
   if (currentStatus instanceof Error) {
     isExisting.value = false
-    isActive.value = false
-    expiredAt.value = ""
     formState.uri = undefined
     formState.durationMinutes = undefined
   }
@@ -82,8 +82,6 @@ onMounted(async () => {
   // 現在のアクターステータスが存在する場合
   else {
     isExisting.value = true
-    isActive.value = new Date() < new Date(currentStatus.__expiredAt)
-    expiredAt.value = currentStatus.__expiredAt
     formState.uri = currentStatus.embed?.external?.uri
     formState.durationMinutes = currentStatus.durationMinutes != null
       ? String(currentStatus.durationMinutes)
@@ -166,7 +164,6 @@ async function deleteActorStatus () {
     return
   }
   isExisting.value = false
-  isActive.value = false
   formState.uri = undefined
   formState.durationMinutes = undefined
   linkCardProps.value = undefined
@@ -225,7 +222,6 @@ async function updateProfileStatus () {
     :hasCloseButton="true"
     :loaderDisplay="popupLoaderDisplay"
     :data-is-existing="isExisting"
-    :data-is-active="isActive"
     @close="close"
   >
     <template #header>
@@ -237,12 +233,9 @@ async function updateProfileStatus () {
     <template #body>
       <EasyForm v-bind="easyFormProps">
         <template #beforeButton>
-          <dl
-            v-if="isExisting"
-            class="expired-at"
-          >
+          <dl class="expired-at">
             <dt>{{ $t("actorStatusLiveExpiredAt") }}</dt>
-            <dd>{{ mainState.formatDate(expiredAt, true) }}</dd>
+            <dd>{{ expiredAt ? mainState.formatDate(expiredAt, true) : "" }}</dd>
           </dl>
           <LinkCard
             v-if="linkCardProps != null"
@@ -267,6 +260,7 @@ async function updateProfileStatus () {
   &[data-is-existing="false"] .easy-form {
     grid-template-areas:
       "b b"
+      "e e"
       "l l"
       "s s";
   }
@@ -290,9 +284,6 @@ async function updateProfileStatus () {
 
     dd {
       padding: 0.5rem 1rem;
-      [data-is-active="false"] & {
-        color: rgb(var(--notice-color));
-      }
     }
   }
 
