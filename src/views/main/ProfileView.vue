@@ -1014,10 +1014,13 @@ function removeThisPost () {
   }
 
   &:deep(.accordion__content:not(:empty)) {
-    padding: 0.5rem;
+    background-color: rgb(var(--bg-color));
+    border-radius: var(--border-radius-middle);
+    margin: 0 0.5rem 0.5rem;
+    overflow: hidden;
 
-    .external > a {
-      background-color: rgb(var(--bg-color));
+    .external--embedded iframe {
+      border-radius: 0;
     }
   }
 }

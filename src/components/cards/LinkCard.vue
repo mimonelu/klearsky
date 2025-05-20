@@ -242,7 +242,10 @@ function searchUrl () {
     </Component>
 
     <!-- 埋込型リンクカード -->
-    <div v-else>
+    <div
+      v-else
+      class="external--embedded"
+    >
       <!-- 埋込型リンクカード - Apple Music -->
       <iframe
         v-if="state.type === 'applemusic'"
