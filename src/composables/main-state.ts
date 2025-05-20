@@ -1688,36 +1688,12 @@ async function fetchPostThread () {
     uri = `at://${identifier}/app.bsky.feed.post/${rkey}`
   }
   state.currentPosts?.splice(0)
-  let posts = await state.atp.fetchPostThread(uri, CONSTS.LIMIT_OF_FETCH_POST_THREAD) ?? []
+  const posts = await state.atp.fetchPostThread(uri, CONSTS.LIMIT_OF_FETCH_POST_THREAD) ?? []
   if (posts instanceof Error) {
     // TODO:
     // state.openErrorPopup(posts, "mainState/fetchPostThread")
     return
   }
-
-  // ルートユーザーによる自分自身へのポストを先頭に持ってくる
-  const rootUserPosts = posts.filter((post) => {
-    return post.author.did === (posts as Array<TTPost>)[0]?.author.did
-  })
-  const rootUserPostsToSelf = rootUserPosts
-    .filter((post) => {
-      return (
-        post.record.reply?.parent.uri === post.record.reply?.root.uri ||
-        rootUserPosts.findIndex((target) => {
-          return post.record.reply?.parent.uri === target.uri
-        }) !== - 1
-      )
-    })
-  const notRootUserPostsToSelf = posts.filter((post) => {
-    return rootUserPostsToSelf.findIndex((target) => {
-      return post.uri === target.uri
-    }) === - 1
-  })
-  posts = [
-    ...rootUserPostsToSelf,
-    ...notRootUserPostsToSelf,
-  ]
-
   state.currentPosts = posts
 }
 
