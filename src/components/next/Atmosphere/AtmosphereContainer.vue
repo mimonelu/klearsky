@@ -70,8 +70,8 @@ function toggle () {
 .atmosphere-container {
   background-image: linear-gradient(
     135deg,
-    rgb(var(--blue-color), 0.375),
-    rgb(var(--blue-color), 0.625)
+    rgb(var(--blue-color)),
+    rgb(var(--blue-color), 0.75)
   );
   border-radius: var(--border-radius-middle);
   display: flex;

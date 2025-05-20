@@ -2,19 +2,24 @@
 import { ref } from "vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
-defineProps<{
+const props = defineProps<{
   buttonClass?: string
+  defaultDisplay?: boolean
   icon?: string
   label: string
 }>()
 
-const display = ref(false)
+const display = ref(props.defaultDisplay ?? false)
 </script>
 
 <template>
-  <div class="accordion">
+  <div
+    class="accordion"
+    :data-display="display"
+  >
     <button
       type="button"
+      class="accordion__button"
       :class="buttonClass ?? 'button'"
       @click.stop="() => (display = !display)"
     >
@@ -25,7 +30,9 @@ const display = ref(false)
       <span>{{ label }}</span>
       <SVGIcon :name="display ? 'cursorUp' : 'cursorDown'" />
     </button>
-    <slot v-if="display" />
+    <div class="accordion__content">
+      <slot v-if="display" />
+    </div>
   </div>
 </template>
 

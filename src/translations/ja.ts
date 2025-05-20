@@ -102,6 +102,7 @@ export default () => ({
   "privacyPolicy": "プライバシーポリシー",
   "termsOfService": "利用規約",
 
+  "actorStatusLiveUntil": "LIVE配信中",
   "actorStatusLiveEdit": "配信ステータスの設定",
   "actorStatusLiveExpiredAt": "表示終了日時",
   "actorStatusLiveUri": "配信URL",

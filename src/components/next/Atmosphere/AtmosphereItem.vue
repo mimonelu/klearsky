@@ -39,7 +39,7 @@ defineProps<{
 
 <style lang="scss" scoped>
 .atmosphere-item {
-  background-color: rgb(var(--bg-color), 0.5);
+  background-color: rgb(var(--bg-color), 0.75);
   border: 1px solid rgb(var(--blue-color), 0.5);
   border-radius: var(--border-radius-middle);
   overflow: hidden;

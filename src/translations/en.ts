@@ -102,6 +102,7 @@ export default () => ({
   "privacyPolicy": "Privacy policy",
   "termsOfService": "Terms of service",
 
+  "actorStatusLiveUntil": "LIVE until",
   "actorStatusLiveEdit": "LIVE status settings",
   "actorStatusLiveExpiredAt": "Display expires at",
   "actorStatusLiveUri": "LIVE streaming URL",

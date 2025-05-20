@@ -444,14 +444,15 @@ function removeThisPost () {
             <!-- アクターステータス - LIVE -->
             <template v-if="hasLive">
               <Accordion
-                buttonClass="button--important"
+                buttonClass="button"
+                :defaultDisplay="true"
                 icon="video"
-                :label="`LIVE: ${mainState.currentProfile!.status!.embed?.external?.title}`"
+                :label="`${$t('actorStatusLiveUntil')} ${mainState.formatDate(mainState.currentProfile!.status!.expiresAt, true)}`"
               >
                 <LinkCard
                   v-if="mainState.currentProfile!.status!.embed?.external != null"
                   :external="mainState.currentProfile!.status!.embed.external"
-                  :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
+                  layout="vertical"
                   :displayImage="true"
                   :noLink="false"
                   :noEmbedded="false"
@@ -994,6 +995,30 @@ function removeThisPost () {
 
   & > span {
     line-height: var(--line-height-low);
+  }
+}
+
+// アクターステータス - LIVE
+.accordion {
+  background-image: linear-gradient(
+    135deg,
+    rgb(var(--red-color)),
+    rgb(var(--red-color), 0.75)
+  );
+  border-radius: var(--border-radius-middle);
+  gap: 0;
+
+  &:deep(.accordion__button) {
+    --bg-color: var(--white-color);
+    background-color: unset;
+  }
+
+  &:deep(.accordion__content:not(:empty)) {
+    padding: 0.5rem;
+
+    .external > a {
+      background-color: rgb(var(--bg-color));
+    }
   }
 }
 
