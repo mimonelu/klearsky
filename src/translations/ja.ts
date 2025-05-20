@@ -107,6 +107,7 @@ export default () => ({
   "actorStatusLiveExpiredAt": "表示終了日時",
   "actorStatusLiveUri": "配信URL",
   "actorStatusLiveDurationMinutes": "表示期間（分）",
+  "actorStatusOpenLivePage": "配信ページを開く",
 
   "chat": "チャット",
   "noChat": "チャットがありません。",

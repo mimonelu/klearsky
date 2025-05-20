@@ -6,6 +6,7 @@ import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
 import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.vue"
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"
+import MenuTickerOpenLivePage from "@/components/menus/OpenLivePage.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
 import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menus/WebShare.vue"
@@ -97,6 +98,12 @@ function close () {
         :did="user?.did"
         :displayName="user.displayName"
         :verification="user.verification"
+        @close="emit('close')"
+      />
+
+      <!-- アクターステータス - LIVE -->
+      <MenuTickerOpenLivePage
+        :actorStatus="user.status"
         @close="emit('close')"
       />
 

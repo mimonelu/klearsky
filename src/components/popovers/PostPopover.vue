@@ -7,6 +7,7 @@ import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
 import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.vue"
 import MenuTickerOpenCustomBookmarkManagementPopup from "@/components/menus/OpenCustomBookmarkManagementPopup.vue"
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"
+import MenuTickerOpenLivePage from "@/components/menus/OpenLivePage.vue"
 import MenuTickerOpenReactionControlPopup from "@/components/menus/OpenReactionControlPopup.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
 import MenuTickerPostFeaturesWrapper from "@/components/menus/PostFeaturesWrapper.vue"
@@ -157,6 +158,12 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
         :did="post.author?.did"
         :displayName="post.author?.displayName"
         :verification="post.author?.verification"
+        @close="emit('close')"
+      />
+
+      <!-- アクターステータス - LIVE -->
+      <MenuTickerOpenLivePage
+        :actorStatus="post.author?.status"
         @close="emit('close')"
       />
 

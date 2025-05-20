@@ -95,6 +95,9 @@
     & > .svg-icon--verifier {
       --icon-color: var(--accent-color);
     }
+    & > .svg-icon--video {
+      --icon-color: var(--red-color);
+    }
 
     & > img {
       min-width: 1rem;

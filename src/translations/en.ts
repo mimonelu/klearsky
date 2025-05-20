@@ -102,11 +102,12 @@ export default () => ({
   "privacyPolicy": "Privacy policy",
   "termsOfService": "Terms of service",
 
-  "actorStatusLiveUntil": "LIVE until",
-  "actorStatusLiveEdit": "LIVE status settings",
+  "actorStatusLiveUntil": "Live until",
+  "actorStatusLiveEdit": "Live status settings",
   "actorStatusLiveExpiredAt": "Display expires at",
-  "actorStatusLiveUri": "LIVE streaming URL",
+  "actorStatusLiveUri": "Live streaming URL",
   "actorStatusLiveDurationMinutes": "Display duration (minutes)",
+  "actorStatusOpenLivePage": "Open the live page",
 
   "chat": "Chat",
   "noChat": "No chat.",

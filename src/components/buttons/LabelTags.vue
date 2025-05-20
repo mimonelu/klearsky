@@ -204,7 +204,6 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
     & > span {
       color: var(--color);
-      // font-weight: bold;
       line-height: var(--line-height-low);
       user-select: none;
       word-break: break-all;
