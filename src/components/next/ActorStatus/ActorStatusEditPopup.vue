@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive, ref, type Ref } from "vue"
+import { computed, inject, onMounted, reactive, ref, watch, type Ref } from "vue"
+import { debounce } from "lodash-es"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -42,9 +43,6 @@ const easyFormProps: TTEasyForm = {
       label: $t("actorStatusLiveUri"),
       type: "text",
       required: true,
-      async onInput () {
-        await updateLinkCard()
-      },
     },
     {
       state: formState,
@@ -65,6 +63,12 @@ const linkCardProps: Ref<undefined | {
   noLink?: boolean
   noEmbedded?: boolean
 }> = ref(undefined)
+
+const debouncedUpdateLinkCard = debounce(updateLinkCard, 1000)
+
+watch(() => formState.uri, () => {
+  debouncedUpdateLinkCard()
+})
 
 onMounted(async () => {
   // 現在のアクターステータスを再取得
@@ -176,8 +180,6 @@ async function updateLinkCard () {
     linkCardProps.value = undefined
     return
   }
-
-  // TODO: threashold
 
   // OGP情報の取得
   const external = await Util.parseOgp(
