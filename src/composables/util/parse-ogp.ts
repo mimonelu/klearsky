@@ -14,17 +14,13 @@ export default async function (
         return value.json()
       })
       .catch((error) => error)
-  console.log("[klearsky/parse-ogp", response)
-
-  // エラーをスルー
-  /*
+  console.log("[klearsky/parse-ogp/cardyb", response)
   if (response instanceof Error) {
     return response
   }
   if (response.error) {
-    return Error("fetchOgpError")
+    return Error(`fetchOgpError: ${response.error}`)
   }
-  */
 
   let title = response.title || ""
   let description = response.description || ""
@@ -48,6 +44,7 @@ export default async function (
     preview: response.image,
   }
 
+  // OGP画像の処理
   if (urlHasImage && imageFetchUrl) {
     const response =
       await Util.fetchWithTimeout(imageFetchUrl)
@@ -58,10 +55,9 @@ export default async function (
           return value
         })
         .catch((error) => error)
+    console.log("[klearsky/parse-ogp/imageFetchUrl]", response)
     if (response instanceof Error) {
-      // エラーをスルー
-      console.log("[klearsky/parse-ogp]", response)
-      return external
+      return response
     }
     const blob = await response.blob()
 
@@ -78,7 +74,7 @@ export default async function (
       maxSize: 0.953671875,
     })
     if (blobRef instanceof Error) {
-      return external
+      return blobRef
     }
     external.thumb = blobRef
   }

@@ -119,6 +119,16 @@ async function createActorStatus () {
   }
   popupLoaderDisplay.value = true
 
+  // アクターステータスが存在する場合は削除
+  if (isExisting.value) {
+    const response = await mainState.atp.deleteActorStatus(mainState.atp.session!.did)
+    if (response instanceof Error) {
+      popupLoaderDisplay.value = false
+      mainState.openErrorPopup(response, "ActorStatusEditPopup/createActorStatus/deleteActorStatus")
+      return
+    }
+  }
+
   // OGP情報の取得
   const external = await Util.parseOgp(
     mainState.atp,
@@ -127,25 +137,15 @@ async function createActorStatus () {
   )
   if (external instanceof Error) {
     popupLoaderDisplay.value = false
-    mainState.openErrorPopup(external, "ActorStatusEditPopup/createActorStatus")
+    mainState.openErrorPopup(external, "ActorStatusEditPopup/createActorStatus/parseOgp")
     return
-  }
-
-  // アクターステータスが存在する場合は削除
-  if (isExisting.value) {
-    const response = await mainState.atp.deleteActorStatus(mainState.atp.session!.did)
-    if (response instanceof Error) {
-      popupLoaderDisplay.value = false
-      mainState.openErrorPopup(response, "ActorStatusEditPopup/createActorStatus")
-      return
-    }
   }
 
   // アクターステータスの作成
   const response = await mainState.atp.createActorStatus("live", durationMinutes, external)
   if (response instanceof Error) {
     popupLoaderDisplay.value = false
-    mainState.openErrorPopup(response, "ActorStatusEditPopup/createActorStatus")
+    mainState.openErrorPopup(response, "ActorStatusEditPopup/createActorStatus/createActorStatus")
     return
   }
 
@@ -241,7 +241,7 @@ async function updateProfileStatus () {
         <template #beforeButton>
           <dl class="expired-at">
             <dt>{{ $t("actorStatusLiveExpiredAt") }}</dt>
-            <dd>{{ expiredAt ? mainState.formatDate(expiredAt, true) : "" }}</dd>
+            <dd>{{ expiredAt ? mainState.formatDate(expiredAt, true) : "-" }}</dd>
           </dl>
           <LinkCard
             v-if="linkCardProps != null"
