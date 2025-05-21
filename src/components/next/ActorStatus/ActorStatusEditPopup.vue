@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive, ref, watch, type Ref } from "vue"
+import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, watch, type Ref } from "vue"
 import { debounce } from "lodash-es"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
@@ -94,6 +94,10 @@ onMounted(async () => {
     // リンクカードを更新
     await updateLinkCard()
   }
+})
+
+onBeforeUnmount(() => {
+  debouncedUpdateLinkCard.cancel()
 })
 
 function close () {
