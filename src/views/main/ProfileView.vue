@@ -2,7 +2,7 @@
 import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import { differenceInDays } from "date-fns"
-import Accordion from "@/components/next/Accordion/Accordion.vue"
+import ActorStatusLivePanel from "@/components/next/ActorStatus/ActorStatusLivePanel.vue"
 import AtmosphereContainer from "@/components/next/Atmosphere/AtmosphereContainer.vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarButton from "@/components/next/Avatar/AvatarButton.vue"
@@ -16,7 +16,6 @@ import LabelerSettingsPopupTrigger from "@/components/buttons/LabelerSettingsPop
 import LabelerSubscribeToggle from "@/components/buttons/LabelerSubscribeToggle.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
-import LinkCard from "@/components/cards/LinkCard.vue"
 import KnownFollowers from "@/components/lists/KnownFollowers.vue"
 import MuteButton from "@/components/buttons/MuteButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
@@ -442,23 +441,10 @@ function removeThisPost () {
           </div>
           <div class="profile-view__details__bottom">
             <!-- アクターステータス - LIVE -->
-            <template v-if="hasLive">
-              <Accordion
-                buttonClass="button"
-                :defaultDisplay="true"
-                icon="video"
-                :label="`${$t('actorStatusLiveUntil')} ${mainState.formatDate(mainState.currentProfile!.status!.expiresAt, true)}`"
-              >
-                <LinkCard
-                  v-if="mainState.currentProfile!.status!.embed?.external != null"
-                  :external="mainState.currentProfile!.status!.embed.external"
-                  layout="vertical"
-                  :displayImage="true"
-                  :noLink="false"
-                  :noEmbedded="false"
-                />
-              </Accordion>
-            </template>
+            <ActorStatusLivePanel
+              v-if="hasLive"
+              :status="mainState.currentProfile?.status"
+            />
 
             <!-- ボタンコンテナ -->
             <div
@@ -995,33 +981,6 @@ function removeThisPost () {
 
   & > span {
     line-height: var(--line-height-low);
-  }
-}
-
-// アクターステータス - LIVE
-.accordion {
-  background-image: linear-gradient(
-    135deg,
-    rgb(var(--red-color)),
-    rgb(var(--red-color), 0.75)
-  );
-  border-radius: var(--border-radius-middle);
-  gap: 0;
-
-  &:deep(.accordion__button) {
-    --bg-color: var(--white-color);
-    background-color: unset;
-  }
-
-  &:deep(.accordion__content:not(:empty)) {
-    background-color: rgb(var(--bg-color));
-    border-radius: var(--border-radius-middle);
-    margin: 0 0.5rem 0.5rem;
-    overflow: hidden;
-
-    .external--embedded iframe {
-      border-radius: 0;
-    }
   }
 }
 

@@ -864,6 +864,9 @@ function saveSettings () {
       ? state.$getCurrentLanguage()
       : window.navigator.language
   }
+  if (state.settings[did].actorStatusLiveDisplay == null) {
+    state.settings[did].actorStatusLiveDisplay = true
+  }
   if (state.settings[did].atmosphereDisplay == null) {
     state.settings[did].atmosphereDisplay = true
   }

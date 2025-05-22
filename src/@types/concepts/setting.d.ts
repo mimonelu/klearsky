@@ -1,4 +1,5 @@
 type TTSetting = {
+  actorStatusLiveDisplay?: boolean
   atmosphereDisplay?: boolean
   autoTranslation?: boolean
   autoTranslationIgnoreLanguage?: string

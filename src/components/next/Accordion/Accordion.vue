@@ -2,6 +2,10 @@
 import { ref } from "vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
+const emit = defineEmits<{
+  (event: "toggleDisplay", display: boolean): void
+}>()
+
 const props = defineProps<{
   buttonClass?: string
   defaultDisplay?: boolean
@@ -10,6 +14,11 @@ const props = defineProps<{
 }>()
 
 const display = ref(props.defaultDisplay ?? false)
+
+function toggleDisplay () {
+  display.value = !display.value
+  emit("toggleDisplay", display.value)
+}
 </script>
 
 <template>
@@ -21,7 +30,7 @@ const display = ref(props.defaultDisplay ?? false)
       type="button"
       class="accordion__button"
       :class="buttonClass ?? 'button'"
-      @click.stop="() => (display = !display)"
+      @click.stop="toggleDisplay"
     >
       <SVGIcon
         v-if="icon != null"
