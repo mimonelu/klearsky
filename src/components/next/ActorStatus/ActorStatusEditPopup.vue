@@ -175,7 +175,10 @@ async function deleteActorStatus () {
   formState.uri = undefined
   formState.durationMinutes = undefined
   linkCardProps.value = undefined
+
+  // 現在のアクターステータスを再取得
   await updateProfileStatus()
+
   close()
 }
 
@@ -210,6 +213,10 @@ async function updateLinkCard () {
 
 async function updateProfileStatus () {
   const did = mainState.atp.session!.did
+
+  // サーバデータの反映遅延対策
+  await Util.wait(1000)
+
   const profile = await mainState.atp.fetchProfile(did)
   if (!(profile instanceof Error)) {
     if (mainState.userProfile != null) {
