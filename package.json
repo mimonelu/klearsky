@@ -16,7 +16,7 @@
   ],
   "type": "module",
   "dependencies": {
-    "@atproto/api": "^0.15.6",
+    "@atproto/api": "^0.15.8",
     "@ipld/car": "^5.4.0",
     "@types/lodash-es": "^4.17.12",
     "@vueuse/core": "^10.11.1",
