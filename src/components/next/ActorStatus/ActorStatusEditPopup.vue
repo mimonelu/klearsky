@@ -13,6 +13,8 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
+const easyForm = ref()
+
 const isExisting = ref(false)
 
 const expiredAt = computed((): string => {
@@ -33,9 +35,8 @@ const formState = reactive<{
 
 const easyFormProps: TTEasyForm = {
   blurOnSubmit: true,
-  hasSubmitButton: true,
-  submitButtonLabel: $t("submit"),
-  submitCallback,
+  hasSubmitButton: false,
+  submitCallback: submit,
   data: [
     {
       state: formState,
@@ -104,9 +105,11 @@ function close () {
   emit("close")
 }
 
-async function submitCallback () {
+async function submit () {
   Util.blurElement()
-  await createActorStatus()
+  if (easyForm.value?.validate()) {
+    await createActorStatus()
+  }
 }
 
 async function createActorStatus () {
@@ -244,7 +247,10 @@ async function updateProfileStatus () {
       </h2>
     </template>
     <template #body>
-      <EasyForm v-bind="easyFormProps">
+      <EasyForm
+        v-bind="easyFormProps"
+        ref="easyForm"
+      >
         <template #beforeButton>
           <dl class="expired-at">
             <dt>{{ $t("actorStatusLiveExpiredAt") }}</dt>
@@ -254,16 +260,27 @@ async function updateProfileStatus () {
             v-if="linkCardProps != null"
             v-bind="linkCardProps"
           />
-          <button
-            v-if="isExisting"
-            type="button"
-            class="button--important delete-button"
-            @click="deleteActorStatus"
-          >
-            <span>{{ $t("delete") }}</span>
-          </button>
         </template>
       </EasyForm>
+    </template>
+    <template #footer>
+      <div class="actor-status-edit-popup__footer">
+        <button
+          v-if="isExisting"
+          type="button"
+          class="button--important delete-button"
+          @click.stop="deleteActorStatus"
+        >
+          <span>{{ $t("delete") }}</span>
+        </button>
+        <button
+          type="button"
+          class="button"
+          @click.stop="submit"
+        >
+          <span>{{ $t("submit") }}</span>
+        </button>
+      </div>
     </template>
   </Popup>
 </template>
@@ -274,15 +291,23 @@ async function updateProfileStatus () {
     grid-template-areas:
       "b b"
       "e e"
-      "l l"
-      "s s";
+      "l l";
   }
   &[data-is-existing="true"] .easy-form {
     grid-template-areas:
       "b b"
       "e e"
-      "l l"
-      "d s";
+      "l l";
+  }
+
+  &__footer {
+    display: flex;
+    grid-gap: 0.5rem;
+    padding: 1rem;
+
+    & > * {
+      flex-grow: 1;
+    }
   }
 }
 .easy-form:deep() {
@@ -302,14 +327,6 @@ async function updateProfileStatus () {
 
   .external {
     grid-area: l;
-  }
-
-  .delete-button {
-    grid-area: d;
-  }
-
-  .submit-button {
-    grid-area: s;
   }
 }
 </style>

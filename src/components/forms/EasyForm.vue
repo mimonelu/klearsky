@@ -12,7 +12,9 @@ const emit = defineEmits<{(event: string): void}>()
 defineExpose({
   forceUpdate,
   setFocus,
+  submit,
   getVideoSizes,
+  validate,
 })
 
 const props = defineProps<{
@@ -72,7 +74,7 @@ function getCharacterLength (item: TTEasyFormItem): number {
   }
 }
 
-async function onSubmit () {
+async function submit () {
   if (props.blurOnSubmit) Util.blurElement()
   if (state.processing) return
   if (props.submitCallback == null) {
@@ -131,7 +133,7 @@ function onEnterKeyDownOnInput (event: KeyboardEvent, item: TTEasyFormItem) {
   ) {
     const formElement = easyForm.value as unknown as HTMLFormElement
     if (formElement?.reportValidity()) {
-      onSubmit()
+      submit()
     }
   } else {
     event.preventDefault()
@@ -139,7 +141,7 @@ function onEnterKeyDownOnInput (event: KeyboardEvent, item: TTEasyFormItem) {
 }
 
 function onEnterKeyDownOnTextarea (event: KeyboardEvent) {
-  if (!event.isComposing && (event.ctrlKey || event.metaKey)) onSubmit()
+  if (!event.isComposing && (event.ctrlKey || event.metaKey)) submit()
 }
 
 function onUpdateText (item: TTEasyFormItem, itemIndex: number, params: any) {
@@ -164,6 +166,10 @@ function getVideoSizes (): Array<Array<undefined | {
     return value?.getVideoSizes() ?? []
   }) ?? []
 }
+
+function validate (): boolean {
+  return (easyForm.value as unknown as undefined | HTMLFormElement)?.reportValidity() ?? false
+}
 </script>
 
 <template>
@@ -172,7 +178,7 @@ function getVideoSizes (): Array<Array<undefined | {
     class="easy-form"
     :data-grid-columns="gridColumns != null"
     :style="gridColumns != null ? `--grid-columns: ${gridColumns};` : ''"
-    @submit.prevent.stop="onSubmit"
+    @submit.prevent.stop="submit"
   >
     <slot name="before" />
     <div
