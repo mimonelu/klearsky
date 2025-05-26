@@ -1,5 +1,5 @@
-// SEE: https://fonts.google.com/noto/specimen/Noto+Sans+JP?lang=ja_Jpan
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+// SEE: https://fonts.google.com/selection/embed
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 *,
 * > * {
@@ -9,15 +9,17 @@
 :root {
   // フォントファミリー
   font-family:
-    "Segoe UI",
+    InterVariable,
     "system-ui",
-    "Noto Sans JP",
-    "Meiryo",
     "-apple-system",
-    "BlinkMacSystemFont",
-    Arial,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
     Helvetica,
-    sans-serif;
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
 
   // フォントサイズ
   font-size: 15px;
