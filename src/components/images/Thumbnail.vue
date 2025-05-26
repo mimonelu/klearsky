@@ -53,24 +53,29 @@ const BLOB_MIME_TYPES = [
 ]
 
 onMounted(async () => {
-  if (props.image == null) return
+  if (props.image == null) {
+    return
+  }
 
+  // `image` がURLの場合
   if (typeof props.image === "string") {
     state.src = props.image
     state.loaded = true
     return
   }
 
-  // アニメーション画像向け対応
-  // ※指定された MIME の画像は blob を表示する
-  if (props.image.image != null &&
-      mainState.currentSetting.imageAutoPlay &&
-      BLOB_MIME_TYPES.includes(props.image.image.mimeType)) {
+  // `image.image` が blob の場合
+  // ※アニメーション画像の再生対応
+  if (
+    props.image.image != null &&
+    mainState.currentSetting.imageAutoPlay &&
+    BLOB_MIME_TYPES.includes(props.image.image.mimeType)
+  ) {
     setBlobToSrc(props.image.image as unknown as BlobRef)
     return
   }
 
-  // サムネイル URL　があれば表示する
+  // `image.thumb` が存在する場合
   if (props.image.thumb != null) {
     state.src = props.image.thumb
     state.loaded = true
@@ -82,13 +87,18 @@ onMounted(async () => {
 
 async function setBlobToSrc (image: BlobRef) {
   const url = await mainState.atp.fetchBlobUrl(props.did as string, image)
-  state.errored = url instanceof Error
   if (url instanceof Error) {
     state.src = props.image?.thumb ?? "/img/void.png"
+
+    // 元画像の取得に失敗した場合＆サムネイルが存在しない場合はエラー
+    // ※非Bluesky CDNに元画像がある場合、CORSで取得できないことなどがある
+    state.errored = props.image?.thumb == null
+
     state.loaded = true
     return
   }
   state.src = url
+  state.errored = false
   state.loaded = true
 }
 

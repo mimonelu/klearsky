@@ -581,7 +581,7 @@ export default () => ({
   "sendPostNotification1": "Tu peux aussi utiliser [TEXTE](URL).",
   "sendPostNotification2": "Crée un lien Zap avec @zap (configuration Lightning requise).",
   "sendPostNotification3": "L'URL peut être une page web, une URI AT de publication, de fil ou de liste.",
-  "sendPostNotification4": "Images animées supportées en .gif/.apng/.webp (non officiel).",
+  "sendPostNotification4": "Images animées supportées en .gif / .apng / .webp (non officiel).",
   "sendPostNotification5": "Possible de dépasser la limite de caractères.",
   "sendPostReset": "Tout réinitialiser",
   "sendPostResetMessage": "Tout réinitialiser. Es-tu sûr?",
