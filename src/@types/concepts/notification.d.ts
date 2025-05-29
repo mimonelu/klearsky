@@ -8,8 +8,11 @@ type TTNotificationStrictReason =
 
 type TTNotificationReason =
   TTNotificationStrictReason |
-  "likeGenerator" |
-  "starterpack-joined"
+  "likeGenerator" | // Klearsky 独自仕様
+  "starterpack-joined" |
+  "verified" |
+  "like-via-repost" |
+  "repost-via-repost"
   (string & {})
 
 type TTNotification = {

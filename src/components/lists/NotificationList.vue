@@ -23,7 +23,14 @@ const state = reactive<{
         // フィードジェネレーターへのいいねは通常のいいねとセットで返す
         if (mainState.notificationLocalFilter === "like") {
           return notificationGroup.reason === "like" ||
-                 notificationGroup.reason === "likeGenerator"
+                 notificationGroup.reason === "likeGenerator" ||
+                 notificationGroup.reason === "like-via-repost"
+        }
+
+        // リポストはリポスト経由リポストとセットで返す
+        if (mainState.notificationLocalFilter === "repost") {
+          return notificationGroup.reason === "repost" ||
+                 notificationGroup.reason === "repost-via-repost"
         }
 
         // スターターパック使用時はフォローとセットで返す
@@ -43,9 +50,12 @@ const iconMap: { [reason in TTNotificationReason]: string } = {
   quote: "quoteRepost",
   reply: "reply",
   repost: "repost",
+  "repost-via-repost": "repost",
   like: "like",
   likeGenerator: "like",
+  "like-via-repost": "like",
   "starterpack-joined": "cards",
+  "verified": "verified",
 }
 
 function notificationGroupHasNew (notificationGroup: TTNotificationGroup): boolean {
@@ -67,7 +77,9 @@ function makeSubjectTo (notification: TTNotification): any {
   switch (notification.reason) {
     case "follow":
     case "repost":
+    case "repost-via-repost":
     case "like":
+    case "like-via-repost":
     case "starterpack-joined": {
       return { name: "profile-feeds", query: { account: notification.did } }
     }
@@ -398,10 +410,12 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   [data-reason="reply"] & {
     fill: rgb(var(--post-color));
   }
-  [data-reason="repost"] & {
+  [data-reason="repost"] &,
+  [data-reason="repost-via-repost"] & {
     fill: rgb(var(--share-color));
   }
-  [data-reason="like"] & {
+  [data-reason="like"] &,
+  [data-reason="like-via-repost"] & {
     fill: rgb(var(--like-color));
   }
   [data-reason="likeGenerator"] & {

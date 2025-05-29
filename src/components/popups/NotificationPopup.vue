@@ -34,11 +34,16 @@ const state = reactive<{
       .forEach((notificationGroup: TTNotificationGroup) => {
         const numberOfNotifications = notificationGroup.notifications.length
         results.all += numberOfNotifications
-        const reason = notificationGroup.reason === "likeGenerator"
+        const reason = (
+          notificationGroup.reason === "likeGenerator" ||
+          notificationGroup.reason === "like-via-repost"
+        )
           ? "like"
-          : notificationGroup.reason === "starterpack-joined"
-            ? "follow"
-            : notificationGroup.reason
+          : notificationGroup.reason === "repost-via-repost"
+            ? "repost"
+            : notificationGroup.reason === "starterpack-joined"
+              ? "follow"
+              : notificationGroup.reason
         results[reason] += numberOfNotifications
       })
     return results
