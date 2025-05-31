@@ -111,6 +111,8 @@ type TTReason = {
     avatar: string
     viewer: TTUserViewer
   }
+  cid: string
+  uri: string
   indexedAt: string
 }
 

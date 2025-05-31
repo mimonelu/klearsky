@@ -510,10 +510,15 @@ async function createRepost () {
   if (!result) {
     return
   }
+
+  // repost-via-repost 対応
+  const via = makeViaRepost()
+
   processing.value = true
   const response = await mainState.atp.createRepost(
     props.post.uri,
-    props.post.cid
+    props.post.cid,
+    via
   )
   if (response instanceof Error) {
     processing.value = false
@@ -576,9 +581,13 @@ async function onActivateLikeButton () {
   }
   Util.blurElement()
   processing.value = true
+
+  // like-via-repost 対応
+  const via = makeViaRepost()
+
   const response = props.post.viewer?.like != null
     ? await mainState.atp.deleteLike(props.post.viewer.like as string)
-    : await mainState.atp.createLike(props.post.uri, props.post.cid)
+    : await mainState.atp.createLike(props.post.uri, props.post.cid, via)
   if (response instanceof Error) {
     processing.value = false
     mainState.openErrorPopup(response, "Post/onActivateLikeButton")
@@ -597,6 +606,18 @@ async function onActivateLikeButton () {
   */
   await updatePostThread()
   processing.value = false
+}
+
+function makeViaRepost (): undefined | TTCidUri {
+  return (
+    props.post.__custom?.reason?.cid != null &&
+    props.post.__custom?.reason?.uri != null
+  )
+    ? {
+      cid: props.post.__custom.reason.cid,
+      uri: props.post.__custom.reason.uri,
+    }
+    : undefined
 }
 
 function openPostPopover ($event: Event) {

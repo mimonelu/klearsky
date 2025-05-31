@@ -22,7 +22,7 @@ interface TIAtpWrapper {
   createFollow
     (declarationDid: string): Promise<Error | string>
   createLike
-    (uri: string, cid: string): Promise<Error | string>
+    (uri: string, cid: string, via?: TTCidUri): Promise<Error | string>
   createList
     (purpose: string, name: string, description?: string, avatarBlobRef?: BlobRef): Promise<Error | string>
   createListUser
@@ -34,7 +34,7 @@ interface TIAtpWrapper {
   createReport
     (reasonType: string, reason: string, did?: string, cid?: string, uri?: string, type?: string): Promise<Error | undefined>
   createRepost
-    (uri: string, cid: string): Promise<Error | undefined>
+    (uri: string, cid: string, via?: TTCidUri): Promise<Error | undefined>
   createStarterPack
     (starterPack: TIStarterPack): Promise<Error | TTCidUri>
   createVideo
