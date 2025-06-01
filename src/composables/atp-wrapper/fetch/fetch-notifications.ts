@@ -10,9 +10,12 @@ export default async function (
   cursor?: string
   newNotificationCount: number
 }> {
+  // エージェントの存在確認
   if (this.agent == null) {
     return Error("noAgentError")
   }
+
+  // クエリパラメータの設定
   const query: AppBskyNotificationListNotifications.QueryParams = {}
   if (reasons != null) {
     query.reasons = reasons
@@ -23,6 +26,8 @@ export default async function (
   if (cursor != null) {
     query.cursor = cursor
   }
+
+  // 通知を取得
   const response: Error | AppBskyNotificationListNotifications.Response =
     await this.agent.listNotifications(query)
       .then((value) => value)
@@ -35,12 +40,16 @@ export default async function (
     return Error("apiError")
   }
 
+  // 新着通知数
   let newNotificationCount = 0
 
+  // 新しい通知グループを作成
   const newValues: Array<TTNotificationGroup> = [...currentValues]
 
+  // 取得した通知を処理
   response.data.notifications
     .forEach((notification: AppBskyNotificationListNotifications.Notification) => {
+      // 既存の通知かどうかを確認
       const existence = currentValues.some((valueGroup: TTNotificationGroup) => {
         return valueGroup.notifications.some((value: TTNotification) => {
           return value.uri === notification.uri
@@ -49,20 +58,37 @@ export default async function (
       if (existence) {
         return
       }
+
+      // 新着通知数のカウント
       if (cursor == null) {
         newNotificationCount ++
       }
+
+      // 通知種別
       const reason =
-        // フィードジェネレーターへのいいねかどうか
+        // フィードジェネレーターへのいいねは `likeGenerator` として扱う
         notification.reason === "like" && isSubjectFeedGenerator(notification.reasonSubject)
           ? "likeGenerator"
           : notification.reason
-      const reasonSubject =
-        notification.reason === "mention"
-          ? notification.uri
-          : notification.reason === "follow"
-            ? notification.author.handle
-            : notification.reasonSubject
+
+      // 通知対象を設定
+      const reasonSubject = (() => {
+        switch (notification.reason) {
+          case "mention": {
+            return notification.uri
+          }
+          case "follow": {
+            return notification.author.handle
+          }
+          case "like-via-repost":
+          case "repost-via-repost": {
+            return (notification.record as any).subject.uri
+          }
+        }
+        return notification.reasonSubject
+      })()
+
+      // 新しい通知オブジェクトの作成
       const newNotification = {
         avatar: notification.author.avatar,
         cid: notification.cid,
@@ -78,6 +104,8 @@ export default async function (
         uri: notification.uri,
         isRead: notification.isRead,
       }
+
+      // 通知グループの検索と追加
       const existenceGroup = newValues.find((value: TTNotificationGroup) => {
         return value.reason === reason && value.reasonSubject === reasonSubject
       })
@@ -102,37 +130,45 @@ export default async function (
     if (group.post != null) {
       return
     }
-    if (group.reason !== "like" &&
-        group.reason !== "quote" &&
-        group.reason !== "reply" &&
-        group.reason !== "repost") {
-      return
+
+    // ポスト関連の通知のみを処理
+    if (
+      group.reason === "like" ||
+      group.reason === "like-via-repost" ||
+      group.reason === "quote" ||
+      group.reason === "reply" ||
+      group.reason === "repost" ||
+      group.reason === "repost-via-repost"
+    ) {
+      // 特殊なケースの処理
+      if (group.reason === "quote") {
+        // フィードジェネレーターの引用リポストはスキップ
+        if (isSubjectFeedGenerator(group.reasonSubject)) {
+          return
+        }
+
+        // リストの引用リポストはスキップ
+        if (isSubjectList(group.reasonSubject)) {
+          return
+        }
+
+        // スターターパックの引用リポストはスキップ
+        if (isSubjectStarterPack(group.reasonSubject)) {
+          return
+        }
+      }
+
+      postUris.add(group.reasonSubject as string)
     }
-
-    if (group.reason === "quote") {
-      // フィードジェネレーターの引用RPはスキップ
-      if (isSubjectFeedGenerator(group.reasonSubject)) {
-        return
-      }
-
-      // リストの引用RPはスキップ
-      if (isSubjectList(group.reasonSubject)) {
-        return
-      }
-
-      // スターターパックの引用RPはスキップ
-      if (isSubjectStarterPack(group.reasonSubject)) {
-        return
-      }
-    }
-
-    postUris.add(group.reasonSubject as string)
   })
+
+  // ポスト情報の取得と設定
   const posts: Error | Array<TTPost> = await this.fetchPosts(Array.from(postUris))
   if (posts instanceof Error) {
     return posts
   }
 
+  // ポスト情報の設定
   if (Array.isArray(posts)) {
     newValues.forEach((value: TTNotificationGroup) => {
       const post: undefined | TTPost = posts.find((post: TTPost) => {
@@ -223,12 +259,18 @@ export default async function (
     }
   }
 
+  // 現在の通知グループを更新
   currentValues.splice(0, currentValues.length, ...newValues)
 
   // 新着通知があればフォールディングを展開する（いいねとリポスト以外）
   if (cursor === undefined) {
     currentValues.forEach((value: TTNotificationGroup) => {
-      if (value.reason === "repost" || value.reason === "like") {
+      if (
+        value.reason === "like" ||
+        value.reason === "like-via-repost" ||
+        value.reason === "repost" ||
+        value.reason === "repost-via-repost"
+      ) {
         return
       }
       const hasRead = value.notifications
@@ -239,7 +281,7 @@ export default async function (
     })
   }
 
-  // 通知配列のソート
+  // 通知配列のソート（時系列順）
   currentValues.forEach((value: TTNotificationGroup) => {
     value.notifications.sort((a: TTNotification, b: TTNotification) => {
       const aDate = new Date(a.indexedAt)
@@ -248,7 +290,7 @@ export default async function (
     })
   })
 
-  // 通知グループのソート
+  // 通知グループのソート（時系列順）
   currentValues.forEach((group: TTNotificationGroup) => {
     group.notifications.forEach((notification: TTNotification) => {
       const date = new Date(notification.indexedAt)
@@ -267,14 +309,17 @@ export default async function (
   }
 }
 
+// 通知の対象がフィードジェネレーターかどうかを判定
 function isSubjectFeedGenerator (reasonSubject?: string): boolean {
   return (reasonSubject?.indexOf("/app.bsky.feed.generator/") ?? - 1) !== - 1
 }
 
+// 通知の対象がリストかどうかを判定
 function isSubjectList (reasonSubject?: string): boolean {
   return (reasonSubject?.indexOf("/app.bsky.graph.list/") ?? - 1) !== - 1
 }
 
+// 通知の対象がスターターパックかどうかを判定
 function isSubjectStarterPack (reasonSubject?: string): boolean {
   return (reasonSubject?.indexOf("/app.bsky.graph.starterpack/") ?? - 1) !== - 1
 }

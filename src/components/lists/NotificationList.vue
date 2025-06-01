@@ -20,20 +20,20 @@ const state = reactive<{
     }
     return mainState.notifications
       .filter((notificationGroup: TTNotificationGroup) => {
-        // フィードジェネレーターへのいいねは通常のいいねとセットで返す
+        // いいねフィルター選択時：フィードジェネレーターへのいいねとリポスト経由いいねもセットで返す
         if (mainState.notificationLocalFilter === "like") {
           return notificationGroup.reason === "like" ||
                  notificationGroup.reason === "likeGenerator" ||
                  notificationGroup.reason === "like-via-repost"
         }
 
-        // リポストはリポスト経由リポストとセットで返す
+        // リポストフィルター選択時：リポスト経由リポストとセットで返す
         if (mainState.notificationLocalFilter === "repost") {
           return notificationGroup.reason === "repost" ||
                  notificationGroup.reason === "repost-via-repost"
         }
 
-        // スターターパック使用時はフォローとセットで返す
+        // フォローフィルター選択時：スターターパックとセットで返す
         if (mainState.notificationLocalFilter === "follow") {
           return notificationGroup.reason === "follow" ||
                  notificationGroup.reason === "starterpack-joined"
@@ -65,11 +65,15 @@ function notificationGroupHasNew (notificationGroup: TTNotificationGroup): boole
 
 // 通知フォルダーを持つ通知かどうか
 function isGroupingReason (reason: string): boolean {
-  return reason === "like" ||
+  return (
+    reason === "like" ||
+    reason === "like-via-repost" ||
     reason === "likeGenerator" ||
     reason === "quote" ||
     reason === "reply" ||
-    reason === "repost"
+    reason === "repost" ||
+    reason === "repost-via-repost"
+  )
 }
 
 // 通知押下時の遷移先
@@ -144,6 +148,24 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             class="icon icon--reason"
             :name="iconMap[notificationGroup.reason] ?? 'help'"
           />
+
+          <!-- like/repost-via-repost 用アイコン -->
+          <template
+            v-if="
+              notificationGroup.reason === 'like-via-repost' ||
+              notificationGroup.reason === 'repost-via-repost'
+            "
+          >
+            <SVGIcon
+              class="icon icon--reason"
+              name="arrowRight"
+            />
+            <SVGIcon
+              class="icon icon--reason"
+              name="repost"
+            />
+          </template>
+
           <span>+ {{ notificationGroup.notifications.length }}</span>
           <SVGIcon
             class="icon icon--cursor"
