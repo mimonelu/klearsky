@@ -483,6 +483,10 @@ export default () => ({
   "repostFolding4": "Fold reposts of posts by users you don't follow",
   "repostFolding5": "Fold reposts of posts by users you follow",
 
+  "disableActionViaRepostControl": "Notification control for repost on repost / like on repost",
+  "disableLikeViaRepost": "Don't notify the reposting user when liking a repost",
+  "disableRepostViaRepost": "Don't notify the reposting user when reposting a repost",
+
   "image": "Media Control",
   "imageFolding": "Media Folding",
   "imageFolding1": "None",

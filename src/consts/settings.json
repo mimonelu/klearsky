@@ -1,4 +1,8 @@
 {
+  "ACTION_VIA_REPOST": [
+    { "label": "disableRepostViaRepost", "value": "repost" },
+    { "label": "disableLikeViaRepost", "value": "like" }
+  ],
   "AUTO_TRANSLATIONS": [
     { "label": "disabled", "value": false },
     { "label": "enabled", "value": true }

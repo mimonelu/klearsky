@@ -8,6 +8,7 @@ type TTSetting = {
   chatFetchInterval?: number
   colorTheme?: string
   contentLanguages?: Array<string>
+  disableActionViaRepost?: Array<string>
   feedSearchKeywordHistory?: Array<string>
   fontAntialiasing?: boolean
   fontKerning?: boolean

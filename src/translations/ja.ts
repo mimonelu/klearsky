@@ -480,6 +480,10 @@ export default () => ({
   "repostFolding4": "あなたがフォローしていないユーザーによるポストのリポスト",
   "repostFolding5": "あなたがフォローしているユーザーによるポストのリポスト",
 
+  "disableActionViaRepostControl": "リポスト経由リポスト／いいねの通知制御",
+  "disableLikeViaRepost": "リポストをいいねした際にリポストしたユーザーに通知を送らない",
+  "disableRepostViaRepost": "リポストをリポストした際にリポストしたユーザーに通知を送らない",
+
   "image": "メディアの制御",
   "imageFolding": "メディアの折り畳み",
   "imageFolding1": "なし",

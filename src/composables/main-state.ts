@@ -864,6 +864,9 @@ function saveSettings () {
       ? state.$getCurrentLanguage()
       : window.navigator.language
   }
+  if (state.settings[did].disableActionViaRepost == null) {
+    state.settings[did].disableActionViaRepost = []
+  }
   if (state.settings[did].actorStatusLiveDisplay == null) {
     state.settings[did].actorStatusLiveDisplay = true
   }

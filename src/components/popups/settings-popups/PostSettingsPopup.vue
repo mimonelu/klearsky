@@ -106,6 +106,21 @@ const mainState = inject("state") as MainState
           </div>
         </div>
 
+        <!-- リポスト経由アクションの制御 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("disableActionViaRepostControl") }}</span>
+          </div>
+          <div class="settings-popup__form__body">
+            <Checkboxes
+              :state="mainState.currentSetting"
+              model="disableActionViaRepost"
+              :options="SETTINGS.ACTION_VIA_REPOST"
+              @update="$emit('saveSetting')"
+            />
+          </div>
+        </div>
+
         <!-- メディア -->
         <div class="settings-popup__form">
           <div class="settings-popup__form__header">

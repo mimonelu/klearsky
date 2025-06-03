@@ -480,6 +480,10 @@ export default () => ({
   "repostFolding4": "Partages des non-suivis",
   "repostFolding5": "Partages des abonnements",
 
+  "disableActionViaRepostControl": "Contrôle des notifs pour republis sur republis / likes sur republis",
+  "disableLikeViaRepost": "Pas de notif à l’auteur du republi quand like",
+  "disableRepostViaRepost": "Pas de notif à l’auteur du republi quand republi",
+
   "image": "Contrôle des médias",
   "imageFolding": "Repli des médias",
   "imageFolding1": "Aucun",

@@ -511,8 +511,8 @@ async function createRepost () {
     return
   }
 
-  // repost-via-repost 対応
-  const via = makeViaRepost()
+  // リポスト経由リポスト／いいね対応
+  const via = makeActionViaRepost("repost")
 
   processing.value = true
   const response = await mainState.atp.createRepost(
@@ -582,8 +582,8 @@ async function onActivateLikeButton () {
   Util.blurElement()
   processing.value = true
 
-  // like-via-repost 対応
-  const via = makeViaRepost()
+  // リポスト経由リポスト／いいね対応
+  const via = makeActionViaRepost("like")
 
   const response = props.post.viewer?.like != null
     ? await mainState.atp.deleteLike(props.post.viewer.like as string)
@@ -608,8 +608,12 @@ async function onActivateLikeButton () {
   processing.value = false
 }
 
-function makeViaRepost (): undefined | TTCidUri {
+function makeActionViaRepost (actionType: "like" | "repost"): undefined | TTCidUri {
+  const disabled = (mainState.currentSetting.disableActionViaRepost?.findIndex((action: string) => {
+    return action === actionType
+  }) ?? - 1) === - 1
   return (
+    disabled &&
     props.post.__custom?.reason?.cid != null &&
     props.post.__custom?.reason?.uri != null
   )
