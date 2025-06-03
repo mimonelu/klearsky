@@ -149,22 +149,14 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             :name="iconMap[notificationGroup.reason] ?? 'help'"
           />
 
-          <!-- like/repost-via-repost 用アイコン -->
-          <template
+          <!-- リポスト経由いいね／リポスト用アイコン -->
+          <div
             v-if="
               notificationGroup.reason === 'like-via-repost' ||
               notificationGroup.reason === 'repost-via-repost'
             "
-          >
-            <SVGIcon
-              class="icon icon--reason"
-              name="arrowRight"
-            />
-            <SVGIcon
-              class="icon icon--reason"
-              name="repost"
-            />
-          </template>
+            class="icon--action-via-repost"
+          />
 
           <span>+ {{ notificationGroup.notifications.length }}</span>
           <SVGIcon
@@ -199,6 +191,15 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             <SVGIcon
               class="icon icon--reason"
               :name="iconMap[notification.reason] ?? 'help'"
+            />
+
+            <!-- リポスト経由いいね／リポスト用アイコン -->
+            <div
+              v-if="
+                notificationGroup.reason === 'like-via-repost' ||
+                notificationGroup.reason === 'repost-via-repost'
+              "
+              class="icon--action-via-repost"
             />
 
             <!-- アバターリンク -->
@@ -353,6 +354,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   align-items: center;
   grid-gap: 0.5rem;
   padding: 0.75rem;
+  position: relative;
   &:focus, &:hover {
     cursor: pointer;
   }
@@ -381,6 +383,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   align-items: center;
   grid-gap: 0 0.5rem;
   overflow: hidden;
+  position: relative;
   [data-reason="like"] &,
   [data-reason="likeGenerator"] &,
   [data-reason="repost"] &,
@@ -446,6 +449,18 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   [data-reason="starterpack-joined"] & {
     fill: rgb(var(--like-color));
   }
+}
+
+.icon--action-via-repost {
+  background-color: rgb(var(--share-color));
+  border: 2px solid rgb(var(--bg-color));
+  border-radius: 1rem;
+  box-sizing: content-box;
+  position: absolute;
+  left: 1.25rem;
+  top: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
 }
 
 // アバターリンク
