@@ -4,7 +4,7 @@ import MenuTickerSendAccountReport from "@/components/menus/SendAccountReport.vu
 import MenuTickerSendFeedReport from "@/components/menus/SendFeedReport.vue"
 import MenuTickerSendListReport from "@/components/menus/SendListReport.vue"
 import MenuTickerSendPostReport from "@/components/menus/SendPostReport.vue"
-import MenuTickerToggleBlock from "@/components/menus/ToggleBlock.vue"
+import MenuTickerToggleBlock from "@/components/next/UserBlock/ToggleBlock.vue"
 import MenuTickerToggleMute from "@/components/next/UserMute/ToggleMute.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"

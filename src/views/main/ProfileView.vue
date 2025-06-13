@@ -6,7 +6,7 @@ import ActorStatusLivePanel from "@/components/next/ActorStatus/ActorStatusLiveP
 import AtmosphereContainer from "@/components/next/Atmosphere/AtmosphereContainer.vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarButton from "@/components/next/Avatar/AvatarButton.vue"
-import BlockButton from "@/components/buttons/BlockButton.vue"
+import BlockButton from "@/components/next/UserBlock/BlockButton.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
