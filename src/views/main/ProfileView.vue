@@ -17,7 +17,7 @@ import LabelerSubscribeToggle from "@/components/buttons/LabelerSubscribeToggle.
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import KnownFollowers from "@/components/lists/KnownFollowers.vue"
-import MuteButton from "@/components/buttons/MuteButton.vue"
+import MuteButton from "@/components/next/UserMute/MuteButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
