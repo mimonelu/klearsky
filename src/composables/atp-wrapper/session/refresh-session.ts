@@ -62,7 +62,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
     return Error("refreshSessionError")
   }
 
-  const json: Error | any = await response.json()
+  const json: Error | TTSession = await response.json()
     .then((value) => value)
     .catch((error) => error)
 

@@ -56,7 +56,7 @@ export default async function (
     console.log("[klearsky/login]", response)
     if (response instanceof Error) {
       // 2FAエラー - トークン要求
-      if ((response as any).error === "AuthFactorTokenRequired") {
+      if ('error' in response && response.error === "AuthFactorTokenRequired") {
         return Error("AuthFactorTokenRequired")
       }
 

@@ -1,5 +1,4 @@
 type TTSession = {
-  [index: string]: any
   active: boolean
   accessJwt?: string
   refreshJwt?: string
@@ -21,4 +20,11 @@ type TTSession = {
 
   // 最終ログイン日時（JWT強制削除用）
   __loggedinVersion?: number // Injected
+
+  // didDoc（セッション復元時に使用される可能性がある）
+  didDoc?: {
+    service?: Array<{
+      serviceEndpoint?: string
+    }>
+  }
 }
