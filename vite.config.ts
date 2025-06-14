@@ -46,14 +46,28 @@ export default defineConfig({
 
     outDir: "docs",
 
+    // Tree shakingを強化
     rollupOptions: {
       output: {
         manualChunks (id: string) {
-          if (id.includes("@atproto_api"))
-            return "atproto-api"
-          if (id.includes("node_modules"))
+          // @atproto/api関連を分離
+          if (id.includes("@atproto/api") || id.includes("@atproto")) {
+            return "atproto"
+          }
+          // Vue関連を分離
+          if (id.includes("vue") || id.includes("@vue")) {
+            return "vue"
+          }
+          // その他のnode_modules
+          if (id.includes("node_modules")) {
             return "vendor"
+          }
         },
+      },
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        unknownGlobalSideEffects: false,
       },
     },
   },
