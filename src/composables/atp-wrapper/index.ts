@@ -101,12 +101,19 @@ import fetchUserSearch from "@/composables/atp-wrapper/fetch/fetch-user-search"
 import fetchVideoLimits from "@/composables/atp-wrapper/fetch/fetch-video-limits"
 import fetchWithoutAgent from "@/composables/atp-wrapper/fetch/fetch-without-agent"
 import leaveChatConvo from "@/composables/atp-wrapper/chat/leave-chat-convo"
+import login from "@/composables/atp-wrapper/session/login"
+import logout from "@/composables/atp-wrapper/session/logout"
 import muteChatConvo from "@/composables/atp-wrapper/chat/mute-chat-convo"
+import refreshSession from "@/composables/atp-wrapper/session/refresh-session"
+import resetSession from "@/composables/atp-wrapper/session/reset-session"
+import resumeSession from "@/composables/atp-wrapper/session/resume-session"
+import signUp from "@/composables/atp-wrapper/session/sign-up"
 import unmuteChatConvo from "@/composables/atp-wrapper/chat/unmute-chat-convo"
 import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
 import updateChatConvoRead from "@/composables/atp-wrapper/chat/update-chat-convo-read"
 import updateCustomBookmarks from "@/composables/atp-wrapper/update/update-custom-bookmark"
+import updateJwt from "@/composables/atp-wrapper/session/update-jwt"
 import updateList from "@/composables/atp-wrapper/update/update-list"
 import updateListBlockToDisable from "@/composables/atp-wrapper/update/update-list-block-to-disable"
 import updateListBlockToEnable from "@/composables/atp-wrapper/update/update-list-block-to-enable"
@@ -267,15 +274,22 @@ class AtpWrapper implements TIAtpWrapper {
     return this.session != null
   }
   leaveChatConvo = leaveChatConvo
+  login = login
+  logout = logout
   muteChatConvo = muteChatConvo
+  refreshSession = refreshSession
+  resetSession = resetSession
+  resumeSession = resumeSession
   saveData (this: TIAtpWrapper) {
     Util.saveStorage("atp", this.data)
   }
+  signUp = signUp
   unmuteChatConvo = unmuteChatConvo
   updateBlockToDisable = updateBlockToDisable
   updateBlockToEnable = updateBlockToEnable
   updateChatConvoRead = updateChatConvoRead
   updateCustomBookmarks = updateCustomBookmarks
+  updateJwt = updateJwt
   updateList = updateList
   updateListBlockToDisable = updateListBlockToDisable
   updateListBlockToEnable = updateListBlockToEnable

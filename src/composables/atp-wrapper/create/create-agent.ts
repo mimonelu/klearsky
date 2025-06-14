@@ -19,9 +19,7 @@ export default function (
       // JWT強制削除 - ログインバージョンを設定
       (session as TTSession).__loggedinVersion = CONSTS.LOGGEDIN_VERSION
 
-      // セッション情報を直接設定
-      this.session = session as TTSession
-      this.data.did = this.session.did
+      this.resetSession(session, service)
     },
     fetch: Util.fetchWithTimeout,
   })

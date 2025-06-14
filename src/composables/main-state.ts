@@ -5,7 +5,6 @@ import { isSameYear } from "date-fns/isSameYear"
 import { computed, nextTick, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
-import { BlueskyAuthProvider } from "@/composables/auth/bluesky-auth-provider"
 import attachFilesToPost from "@/composables/main-state/attach-files-to-post"
 import MyChat from "@/composables/main-state/my-chat"
 import MyFeeds from "@/composables/main-state/my-feeds"
@@ -23,7 +22,6 @@ export const state: MainState = reactive<MainState>({
   $setCurrentLanguage: undefined,
   $getCurrentLanguage: undefined,
   atp: new AtpWrapper(),
-  authProvider: new BlueskyAuthProvider(),
   currentPath: "",
   currentQuery: {},
   mounted: false,
@@ -2687,23 +2685,4 @@ function openProgressPopup (value = 0, message?: string) {
 
 function closeProgressPopup () {
   state.progressPopupDisplay = false
-}
-
-// AuthProvider初期化
-if (state.authProvider) {
-  // セッション更新時のコールバック設定
-  state.authProvider.onSessionUpdated = (session) => {
-    if (session) {
-      console.log("[AuthProvider] Session updated:", session.handle)
-      // 必要に応じて既存のAtpWrapperとの同期処理を追加
-    } else {
-      console.log("[AuthProvider] Session cleared")
-    }
-  }
-
-  // 認証エラー時のコールバック設定
-  state.authProvider.onAuthError = (error) => {
-    console.error("[AuthProvider] Auth error:", error)
-    state.openErrorPopup("authError", error)
-  }
 }

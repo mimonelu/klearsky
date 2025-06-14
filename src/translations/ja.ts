@@ -735,10 +735,9 @@ export default () => ({
   "noGeneratorError": "フィードジェネレーターがありません。",
   "noListError": "リストがありません。",
   "noSessionError": "有効なセッションがありません。再ログインしてください。",
-  "networkError": "サーバーに接続できません。サーバーが存在しないか、ネットワークに問題がある可能性があります。",
   "offlineError": "インターネットに接続されていません。",
   "parseOgpError": "OGPの解析中にエラーが発生しました。WebページがOGPに対応していない可能性があります。OGP画像を添付せずに再度送信してください。",
-  "refreshJwtExpired": "セッションの有効期限が切れています。再度ログインしてください。",
+  "refreshJwtExpired": "refreshJWTの期限が切れました。再ログインしてください。",
   "refreshSessionError": "セッションの更新中にエラーが発生しました。再ログインしてください。",
   "resumeSessionError": "セッションの復帰中にエラーが発生しました。\nセッションが切れている可能性があります。再ログインしてください。",
   "translationError": "翻訳中にエラーが発生しました。"

@@ -210,89 +210,40 @@ function updatePageTitle () {
   window.document.title = title
 }
 
-async function signUp (
-  service: string,
-  email: string,
-  identifier: string,
-  password: string,
-  authFactorToken?: string,
-  inviteCode?: string
-) {
-  if (!state.authProvider) {
-    console.error("AuthProvider not initialized")
-    return
-  }
-
+async function signUp (service: string, email: string, identifier: string, password: string, authFactorToken?: string, inviteCode?: string) {
   state.loaderDisplay = true
-
-  const result = await state.authProvider.signUp({
-    email,
-    handle: identifier,
-    password,
-    inviteCode,
-    service,
-    authFactorToken
-  })
-
-  if (!result.success) {
-    if (result.error) {
-      state.openErrorPopup(result.error, $t("getSessionError"))
-    }
-    state.loaderDisplay = false
+  const response = await state.atp.signUp(service, email, identifier, password, inviteCode)
+  state.loaderDisplay = false
+  if (response instanceof Error) {
+    state.openErrorPopup(response, $t("getSessionError"))
     return
   }
-
+  state.loaderDisplay = true
   await Util.wait(1000)
   state.loaderDisplay = false
   state.loginPopupDisplay = false
-  await processAfterLogin()
+  await manualLogin(service, email, identifier, password, authFactorToken)
 }
 
 async function autoLogin () {
-  if (!state.authProvider) {
-    console.error("AuthProvider not initialized")
-    return
-  }
-  try {
-    if (state.authProvider.isAuthenticated()) {
-      // 認証済みでもAgentがない場合は再度ログイン処理を実行
-      if (!state.authProvider.getAgent()) {
-        const result = await state.authProvider.login({
-          identifier: "",
-          password: ""
-        })
-        if (!result.success) {
-          console.error("Auto login failed:", result.error)
-          return
-        }
-      }
-      await processAfterLogin()
+  if (state.atp.hasLogin()) {
+    await processAfterLogin()
+  } else if (state.atp.canLogin()) {
+    const response = await state.atp.login(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      onRefreshSession
+    )
+    if (response instanceof Error) {
+      const errorMessage = typeof(response.message) === "string"
+        ? $t(response.message)
+        : response
+      state.openErrorPopup(errorMessage, "MainView/autoLogin")
       return
     }
-    if (state.authProvider.canLogin()) {
-      const result = await state.authProvider.login({
-        identifier: "",
-        password: ""
-      })
-      if (!result.success) {
-        // セッションが見つからない場合は静かに失敗（ログイン画面へ）
-        if (result.error?.includes("No current session")) {
-          return
-        }
-
-        // その他のエラーは表示
-        if (result.error) {
-          const errorMessage = $t(result.error) || result.error
-          state.openErrorPopup(errorMessage, "MainView/autoLogin")
-        }
-
-        return
-      }
-      await processAfterLogin()
-    }
-  } catch (error: any) {
-    const errorMessage = error?.message || "Unknown error during auto login"
-    state.openErrorPopup(errorMessage, "MainView/autoLogin")
+    await processAfterLogin()
   }
 }
 
@@ -303,56 +254,37 @@ async function manualLogin (
   password: string,
   authFactorToken?: string
 ) {
-  if (!state.authProvider) {
-    console.error("AuthProvider not initialized")
-    return
-  }
   state.loaderDisplay = true
-  try {
-    const result = await state.authProvider.login({
-      identifier,
-      password,
-      service,
-      authFactorToken
-    })
-    if (!result.success) {
-      // 2FAエラー - トークン要求
-      if (result.requires2FA) {
-        (loginPopup.value as any)?.setHasAuthFactorToken(true)
-        return
-      }
-
-      // 手動ログインエラー
-      if (result.error) {
-        const errorMessage = $t("getSessionError")
-        state.openErrorPopup(errorMessage, "MainView/manualLogin")
-        return
-      }
+  const response = await state.atp.login(
+    service,
+    identifier,
+    password,
+    authFactorToken,
+    onRefreshSession
+  )
+  state.loaderDisplay = false
+  if (response instanceof Error) {
+    // 2FAエラー - トークン要求
+    if (response.message === "AuthFactorTokenRequired") {
+      (loginPopup.value as any)?.setHasAuthFactorToken(true)
+      return
     }
-    state.loginPopupDisplay = false
-    await processAfterLogin()
-  } catch (error: any) {
-    const errorMessage = error?.message || "Unknown error during manual login"
-    state.openErrorPopup(errorMessage, "MainView/manualLogin")
-  } finally {
-    state.loaderDisplay = false
+
+    // 手動ログインエラー
+    if (!state.atp.hasLogin()) {
+      state.openErrorPopup($t("getSessionError"), "MainView/manualLogin")
+      return
+    }
   }
+  state.loginPopupDisplay = false
+  state.loaderDisplay = true
+  await processAfterLogin()
+  state.loaderDisplay = false
 }
 
 function onRefreshSession () {
-  // AuthProviderからAtpWrapperにセッションデータとAgentを同期
-  if (state.authProvider) {
-    const currentSession = state.authProvider.getCurrentSession()
-    const currentAgent = state.authProvider.getAgent()
-    if (currentSession) {
-      state.atp.session = currentSession
-      state.atp.data.did = currentSession.did
-      state.myWorker!.setSessionCache("session", currentSession)
-    }
-    if (currentAgent) {
-      state.atp.agent = currentAgent
-    }
-  }
+  // セッションデータの同期
+  state.myWorker!.setSessionCache("session", state.atp.session)
 }
 
 async function processAfterLogin () {
@@ -361,12 +293,6 @@ async function processAfterLogin () {
   setupNotificationInterval()
 
   window.scrollTo(0, 0)
-
-  // Agentの初期化を確認
-  if (!state.atp.agent) {
-    console.warn("AtpWrapper.agent is not set after login")
-    return
-  }
 
   // プリファレンスとユーザープロフィールの取得
   const tasks: { [k: string]: any } = {}
@@ -515,7 +441,6 @@ async function moveToDefaultHome () {
             await router.push("/home/globalline")
             return
           }
-          break
         }
         default: {
           break
@@ -563,7 +488,6 @@ async function moveToDefaultHome () {
           await router.push("/home/globalline")
           return
         }
-        break
       }
       default: {
         break
@@ -800,17 +724,8 @@ function clearUpdateJwtInterval () {
 
 async function setupUpdateJwtInterval () {
   clearUpdateJwtInterval()
-  updateJwtTimer = setInterval(async () => {
-    if (state.authProvider) {
-      const result = await state.authProvider.updateJwt()
-      if (result.success) {
-        onRefreshSession()
-      } else {
-        // JWT更新失敗時はログアウト
-        console.warn("JWT update failed, logging out...", result.error)
-        await state.authProvider.logout()
-      }
-    }
+  updateJwtTimer = setInterval(() => {
+    state.atp.updateJwt(onRefreshSession)
   }, CONSTS.INTERVAL_OF_UPDATE_JWT)
 }
 
@@ -835,7 +750,7 @@ async function updateCurrentList () {
   state.currentListItemsCursor = undefined
 
   // 現在のリストを取得
-  // マイリスト → 現在のプロフィールユーザーリスト → APIの順で取得
+  // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
   state.currentList = undefined
   state.currentList = state.myLists!.items.find((list: TTList) => {
     return list.uri === listUri
