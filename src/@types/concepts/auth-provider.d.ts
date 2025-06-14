@@ -69,14 +69,16 @@ interface IAuthProvider {
 // Bluesky特有の認証プロバイダーインターフェース
 interface IBlueskyAuthProvider extends IAuthProvider {
   // Bluesky特有の機能
-  handleInviteCode(code: string): Promise<boolean>
-  validateHandle(handle: string): Promise<boolean>
+  handleInviteCode (code: string): Promise<boolean>
+  validateHandle (handle: string): Promise<boolean>
 
   // PDS関連
-  resolvePdsUrl(identifier: string): Promise<string | null>
+  resolvePdsUrl (identifier: string): Promise<string | null>
 
   // 2FA関連
-  handle2FA(authFactorToken: string): Promise<AuthResult>
+  handle2FA (authFactorToken: string): Promise<AuthResult>
+  is2FARequired (): boolean
+  has2FAEnabled (): boolean
 }
 
 // セッションストレージインターフェース
