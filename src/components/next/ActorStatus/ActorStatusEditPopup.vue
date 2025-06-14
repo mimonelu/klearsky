@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, watch, type Ref } from "vue"
-import { debounce } from "lodash-es"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -65,7 +64,7 @@ const linkCardProps: Ref<undefined | {
   noEmbedded?: boolean
 }> = ref(undefined)
 
-const debouncedUpdateLinkCard = debounce(updateLinkCard, 1000)
+const debouncedUpdateLinkCard = Util.debounce(updateLinkCard, 1000)
 
 watch(() => formState.uri, () => {
   debouncedUpdateLinkCard()

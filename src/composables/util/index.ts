@@ -1,6 +1,7 @@
 import blurElement from "@/composables/util/blur-element"
 import cache from "@/composables/util/cache"
 import cipher from "@/composables/util/cipher"
+import debounce from "@/composables/util/debounce"
 import sanitizePostsOrFeeds from "@/composables/util/sanitize-posts-or-feeds"
 import createEmbed from "@/composables/util/create-embed"
 import displayJson from "@/composables/util/display-json"
@@ -37,6 +38,7 @@ export default {
   blurElement,
   cache,
   ...cipher,
+  debounce,
   sanitizePostsOrFeeds,
   createEmbed,
   displayJson,
