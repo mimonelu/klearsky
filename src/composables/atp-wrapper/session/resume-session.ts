@@ -1,5 +1,18 @@
 import type { ComAtprotoServerGetSession } from "@atproto/api"
 
+/**
+ * 保存されたセッション情報を使ってサーバーからセッション詳細を取得
+ *
+ * 役割:
+ * 1. 保存されたaccessJwt/refreshJwtを使ってagentにセッションを復元
+ * 2. サーバーから最新のセッション情報を取得
+ * 3. セッションの有効性を確認
+ *
+ * 使用場面:
+ * - アプリ起動時の自動ログイン
+ * - ローカルストレージからのセッション復元
+ * - セッション有効性の確認
+ */
 export default async function (
   this: TIAtpWrapper,
   session: TTSession

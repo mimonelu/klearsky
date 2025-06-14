@@ -1,5 +1,18 @@
 import { jwtDecode } from "jwt-decode"
 
+/**
+ * JWT（アクセス・リフレッシュトークン）の有効期限をチェックし、必要に応じて更新
+ *
+ * 役割:
+ * 1. accessJwtとrefreshJwtの有効期限をチェック（5分前バッファ付き）
+ * 2. accessJwtが期限切れの場合、refreshSessionを呼び出してトークン更新
+ * 3. refreshJwtが期限切れの場合、エラーを返す（再ログインが必要）
+ *
+ * 使用場面:
+ * - API呼び出し前のトークン有効性確認
+ * - 定期的なセッション維持（MainView.vueから定期実行）
+ * - 自動ログイン時のトークン検証
+ */
 export default async function (
   this: TIAtpWrapper,
   onRefreshSession?: () => void

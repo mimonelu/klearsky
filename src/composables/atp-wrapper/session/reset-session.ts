@@ -1,5 +1,18 @@
 import { LOGGEDIN_VERSION } from "@/consts/consts.json"
 
+/**
+ * セッションデータの統合・更新を行う
+ *
+ * 役割:
+ * 1. 新しいセッション情報と既存セッション情報をマージ
+ * 2. サービスURLやPDS URLの更新
+ * 3. JWT強制削除機能（アプリバージョンアップ時など）
+ *
+ * 使用場面:
+ * - ログイン成功後のセッション情報更新
+ * - refreshSession成功後のセッション情報更新
+ * - セッション復元後のデータ同期
+ */
 export default function (
   this: TIAtpWrapper,
   newSession: TTSession,
