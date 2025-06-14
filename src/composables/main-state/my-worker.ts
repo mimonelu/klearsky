@@ -51,10 +51,12 @@ export default class {
         }
 
         // セッションキャッシュの反映 - セッションデータ
-        if (sessionCache.session != null) {
-          const responseOfResetSession = this.mainState.atp.resetSession(sessionCache.session)
-          if (responseOfResetSession instanceof Error) {
-            return responseOfResetSession
+        if (sessionCache.session != null && this.mainState.authProvider) {
+          try {
+            await this.mainState.authProvider.resetSession()
+          } catch (error) {
+            console.error("Failed to reset session in worker:", error)
+            return new Error("Session reset failed")
           }
         }
 

@@ -737,7 +737,8 @@ export default () => ({
   "noSessionError": "Aucune session active. Reconnecte-toi.",
   "offlineError": "Pas de connexion Internet.",
   "parseOgpError": "Erreur d'analyse OGP. OGP peut être absent.",
-  "refreshJwtExpired": "refreshJWT expiré. Reconnecte-toi.",
+  "refreshJwtExpired": "Session expirée. Reconnecte-toi.",
+  "networkError": "Impossible de se connecter au serveur. Le serveur n'existe peut-être pas ou il y a un problème de réseau.",
   "refreshSessionError": "Erreur de rafraîchissement. Reconnecte-toi.",
   "resumeSessionError": "Erreur de restauration.\nSession peut être expirée. Reconnecte-toi.",
   "translationError": "Erreur de traduction."

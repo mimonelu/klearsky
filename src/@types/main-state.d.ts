@@ -2,6 +2,7 @@ interface MainState {
   $setCurrentLanguage?: Function
   $getCurrentLanguage?: Function
   atp: TIAtpWrapper
+  authProvider?: IBlueskyAuthProvider
   currentPath: string
   currentQuery: LocationQuery
   mounted: boolean

@@ -211,22 +211,10 @@ interface TIAtpWrapper {
     (): boolean
   leaveChatConvo
     (convoId: string): Promise<Error | undefined>
-  login
-    (service?: string, identifier?: string, password?: string, authFactorToken?: string, onRefreshSession?: () => void): Promise<Error | undefined>
-  logout
-    ()
   muteChatConvo
     (convoId: string): Promise<Error | undefined>
-  refreshSession
-    (): Promise<Error | undefined>
-  resetSession
-    (newSession: TTSession, service?: string): Error | undefined
-  resumeSession
-    (session: TTSession): Promise<Error | ComAtprotoServerGetSession.OutputSchema>
   saveData
     ()
-  signUp
-    (service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<Error | undefined>
   unmuteChatConvo
     (convoId: string): Promise<Error | undefined>
   updateBlockToDisable
@@ -237,8 +225,6 @@ interface TIAtpWrapper {
     (convoId: string, messageId?: string): Promise<Error | TIChatConvo>
   updateCustomBookmarks
     (this: TIAtpWrapper, uri: string, cid?: string, tags?: Array<string>): Promise<Error | TTCidUri>
-  updateJwt
-    (onRefreshSession?: () => void): Promise<Error | undefined>
   updateList
     (list: TTList, avatarBlobRef?: BlobRef): Promise<Error | undefined>
   updateListBlockToDisable

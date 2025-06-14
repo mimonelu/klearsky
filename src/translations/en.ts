@@ -740,7 +740,8 @@ export default () => ({
   "noSessionError": "No active session. Please log in again.",
   "offlineError": "No Internet connection.",
   "parseOgpError": "An error occurred while parsing OGP. The web page may not be using OGP. please send again without the OGP image attached.",
-  "refreshJwtExpired": "refreshJWT has expired. Please log in again.",
+  "refreshJwtExpired": "Session has expired. Please log in again.",
+  "networkError": "Cannot connect to the server. The server may not exist or there may be a network issue.",
   "refreshSessionError": "An error occurred while refreshing the session. Please log in again.",
   "resumeSessionError": "An error occurred while restoring the session.\nThe session may be expired. Please log in again.",
   "translationError": "An error occurred during translation."

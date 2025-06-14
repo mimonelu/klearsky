@@ -20,22 +20,26 @@ function close () {
 
 async function newLogin () {
   close()
-  mainState.loaderDisplay = true
-  mainState.atp.logout()
-  await router.push({ name: "home" })
-  location.reload()
-  mainState.loaderDisplay = false
+  // 単にログイン画面を表示するだけ
+  mainState.loginPopupDisplay = true
 }
 
 async function logout () {
   close()
   mainState.loaderDisplay = true
+
+  // セッション削除
   const response = await mainState.atp.deleteSession()
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "AccountPopup/logout")
     await Util.waitProp(() => mainState.errorPopupProps.display, false)
   }
-  mainState.atp.logout()
+
+  // AuthProviderでログアウト
+  if (mainState.authProvider) {
+    await mainState.authProvider.logout()
+  }
+
   await router.push({ name: "home" })
   location.reload()
   mainState.loaderDisplay = false
