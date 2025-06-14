@@ -91,14 +91,21 @@ export class BlueskyAuthProvider implements IBlueskyAuthProvider {
       if (!this.agent) {
         throw new AuthError("service_unavailable" as AuthErrorType, "Could not create agent")
       }
-      const response = await this.agent.createAccount({
+      const createAccountParams: any = {
         email: params.email,
         handle: params.handle,
         password: params.password,
         inviteCode: params.inviteCode,
         verificationCode: params.verificationCode,
         verificationPhone: params.verificationPhone,
-      })
+      }
+
+      // authFactorTokenが提供されている場合のみ追加
+      if (params.authFactorToken) {
+        createAccountParams.authFactorToken = params.authFactorToken
+      }
+
+      const response = await this.agent.createAccount(createAccountParams)
       if (response.success && response.data) {
         const session = this.convertAtpSessionToTTSession(response.data, service)
         this.setCurrentSession(session)
@@ -312,15 +319,6 @@ export class BlueskyAuthProvider implements IBlueskyAuthProvider {
   async handle2FA (authFactorToken: string): Promise<AuthResult> {
     // 2FA処理実装
     return { success: false, error: "2FA not implemented" }
-  }
-
-  // 2FA関連のユーティリティメソッド
-  is2FARequired (): boolean {
-    return this.currentSession?.emailAuthFactor === true
-  }
-
-  has2FAEnabled (): boolean {
-    return this.currentSession?.emailAuthFactor === true
   }
 
   // プライベートメソッド
