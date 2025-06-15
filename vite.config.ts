@@ -46,8 +46,8 @@ export default defineConfig({
       output: {
         manualChunks (id: string) {
           // @atproto/api関連を分離
-          if (id.includes("@atproto")) {
-            return "atproto"
+          if (id.includes("@atproto_api")) {
+            return "atproto-api"
           }
           // Vue関連を分離
           if (id.includes("vue")) {
