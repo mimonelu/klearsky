@@ -315,6 +315,9 @@ export default () => ({
   "language": "Language",
   "languages": "Langs",
   "uiLanguage": "UI Language",
+  "english": "English",
+  "french": "Français",
+  "japanese": "日本語",
   "contentLanguages": "Content Languages",
   "contentLanguagesEdit": "Select content languages",
   "contentLanguagesDetail1": "Multiple selections allowed.",
@@ -882,12 +885,5 @@ export default () => ({
   // LEGAL
   // ============================================================================
   "privacyPolicy": "Privacy policy",
-  "termsOfService": "Terms of service",
-
-  // ============================================================================
-  // UNCATEGORIZED (要分類)
-  // ============================================================================
-  "english": "English",
-  "french": "Français",
-  "japanese": "日本語",
+  "termsOfService": "Terms of service"
 })
