@@ -315,6 +315,7 @@ export default () => ({
   "language": "Langue",
   "languages": "Langues",
   "uiLanguage": "Langue de l'interface",
+  "deutsch": "Deutsch",
   "english": "English",
   "french": "Français",
   "japanese": "日本語",

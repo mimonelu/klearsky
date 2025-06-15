@@ -2,6 +2,7 @@ import { type App } from "vue"
 import router from "@/router"
 import PortalVue from "portal-vue"
 import i18n from "@/plugins/i18n"
+import translationDe from "@/translations/de"
 import translationEn from "@/translations/en"
 import translationFr from "@/translations/fr"
 import translationJa from "@/translations/ja"
@@ -16,6 +17,7 @@ export function registerPlugins (app: App) {
 
   // 翻訳
   app.use(i18n, {
+    de: translationDe(),
     en: translationEn(),
     fr: translationFr(),
     ja: translationJa(),

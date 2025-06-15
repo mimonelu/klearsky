@@ -1,0 +1,892 @@
+export default () => ({
+  // ============================================================================
+  // APPLICATION INFO
+  // ============================================================================
+  "title": "Klearsky",
+  "klearsky": "Klearsky",
+  "bluesky": "Bluesky",
+  "atmosphere": "Atmosphäre",
+
+  // ============================================================================
+  // COMMON ACTIONS & STATES
+  // ============================================================================
+  "cancel": "Abbrechen",
+  "yes": "Ja",
+  "no": "Nein",
+  "confirmation": "Bestätigung",
+  "apply": "Anwenden",
+  "release": "Freigeben",
+  "add": "Hinzufügen",
+  "save": "Speichern",
+  "enabled": "Aktiviert",
+  "disabled": "Deaktiviert",
+  "show": "Anzeigen",
+  "hide": "Verbergen",
+  "fold": "Einklappen",
+  "on": "Ein",
+  "off": "Aus",
+  "create": "Erstellen",
+  "delete": "Löschen",
+  "edit": "Bearbeiten",
+  "copy": "Kopieren",
+  "select": "Auswählen",
+  "notSelected": "Nicht ausgewählt",
+  "reset": "Zurücksetzen",
+  "reload": "Neu laden",
+  "refresh": "Aktualisieren",
+  "loading": "Laden...",
+  "more": "Mehr anzeigen",
+  "submit": "Senden",
+  "success": "Vorgang abgeschlossen",
+  "successMessage": "Der Vorgang wurde erfolgreich abgeschlossen.",
+
+  // ============================================================================
+  // NAVIGATION & VIEWS
+  // ============================================================================
+  "home": "Startseite",
+  "notifications": "Benachrichtigungen",
+  "profile": "Profil",
+  "account": "Konto",
+  "accounts": "Konten",
+  "help": "Hilfe",
+  "followingDescription": "Zeigt Beiträge von Nutzern an, denen Sie folgen.",
+  "globalline": "Globaler Feed",
+  "globallineDescription": "Zeigt alle Beiträge in Echtzeit an.",
+  "trending": "Trends",
+  "trendingDescription": "Zeigt Trend-Themen an.",
+
+  // ============================================================================
+  // AUTHENTICATION & LOGIN
+  // ============================================================================
+  "login": "Anmelden",
+  "service": "Hosting-Anbieter",
+  "identifier": "E-Mail oder Handle oder DID",
+  "password": "Passwort oder App-Passwort",
+  "getAppPassword": "App-Passwort erhalten",
+  "authFactorToken": "Bestätigungscode",
+  "authFactorTokenMessage": "Ein Bestätigungscode für 2FA wurde an Sie gesendet. Geben Sie ihn in das obige Feld ein und melden Sie sich erneut an.",
+  "myAccounts": "Meine Konten",
+  "loginFailed": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.",
+  "sessionExpired": "Sitzung abgelaufen. Bitte melden Sie sich erneut an.",
+  "newLogin": "Neue Anmeldung",
+  "logout": "Abmelden",
+  "removeAccountHistory": "Konto löschen",
+  "removeAccountHistoryMessage": "Dieses Konto wird aus Meine Konten entfernt. Sind Sie sicher?",
+  "accountExport": "Exportieren",
+  "accountImport": "Importieren",
+  "accountImportNotification": "Kontodaten importieren.\n\n* Überschreibt vorhandene Daten mit Eingabedaten. Keine Löschung.\n* Aktuell angemeldete Daten werden nicht überschrieben.\n\nMöchten Sie fortfahren?",
+  "noMyAccounts": "Keine Konten. Bitte melden Sie sich zuerst an. Sie können ein Konto in der offiziellen App erstellen.",
+  "signUp": "Konto erstellen (für Entwickler)",
+  "email": "E-Mail",
+  "handle": "Handle",
+  "inviteCode": "Einladungscode",
+  "inviteCodes": "Einladungscodes",
+  "confirmInviteCodes": "Einladungscodes bestätigen",
+  "copyInviteCode": "Kopieren",
+  "userOfInviteCode": "Verwendet",
+  "noInviteCodes": "Keine Einladungscodes. Beachten Sie, dass bei App-Passwörtern keine Einladungscodes abgerufen werden können.",
+
+  // ============================================================================
+  // PROFILE EDITING
+  // ============================================================================
+  "editProfile": "Bearbeiten",
+  "displayName": "Anzeigename",
+  "description": "Beschreibung",
+  "avatar": "Avatar",
+  "detachAvatar": "Avatar entfernen",
+  "banner": "Banner",
+  "detachBanner": "Banner entfernen",
+
+  // ============================================================================
+  // POSTS & CONTENT
+  // ============================================================================
+  "post": "Beitrag",
+  "posts": "Beiträge",
+  "postsCount": "Beiträge",
+  "reply": "Antwort",
+  "replies": "Antworten",
+  "replyUnknown": "Antwort-Adresse unbekannt",
+  "like": "Gefällt mir",
+  "likes": "Gefällt mir",
+  "repost": "Repost",
+  "reposts": "Reposts",
+  "quoteRepost": "Zitat-Repost",
+  "createRepost": "Reposten",
+  "createRepostConfirmation": "Diesen Beitrag reposten. Sind Sie sicher?",
+  "deleteRepost": "Repost löschen",
+  "deleteRepostConfirmation": "Den Repost dieses Beitrags abbrechen. Sind Sie sicher?",
+  "sendQuoteRepost": "Zitat-Repost",
+  "postWithReplies": "Beiträge und Antworten",
+  "postWithMedia": "Beiträge mit Medien",
+  "postWithVideo": "Beiträge mit Video",
+  "text": "Text",
+  "sendPost": "Neuer Beitrag",
+  "sendPostNotification1": "Sie können auch [TEXT](URL) verwenden.",
+  "sendPostNotification2": "Sie können Zap-Links mit @zap erstellen (Lightning-Einstellung erforderlich).",
+  "sendPostNotification3": "Die URL der Linkkarte kann eine Webseiten-URL, AT URI eines Beitrags, AT URI eines Feeds oder AT URI einer Liste sein.",
+  "sendPostNotification4": "Animierte Bilder werden in .gif / .apng / .webp unterstützt (nicht offiziell unterstützt).",
+  "sendPostNotification5": "Es ist möglich, mehr als die maximale Anzahl von Zeichen zu senden.",
+  "sendPostReset": "Alle Eingaben zurücksetzen",
+  "sendPostResetMessage": "Alle Eingaben zurücksetzen. Sind Sie sicher?",
+  "postDate": "Beitragsdatum",
+  "postDatePopupTitle": "Beitragsdatum festlegen",
+  "postDatePopupDescription": "Dieser Beitrag wird mit dem folgenden Datum gesendet.\nNur gültig vom Jahr 10 n. Chr. bis zum aktuellen Datum und Uhrzeit.",
+  "postDatePopupReset": "Datum zurücksetzen",
+  "postDatePopupResetDescription": "Das Datum zurücksetzen. Sind Sie sicher?",
+  "emptyPostConfirmation": "Leerer Beitrag Bestätigung",
+  "emptyPostConfirmationMessage": "Dieser Beitrag scheint leer zu sein. Möchten Sie ihn trotzdem veröffentlichen?",
+
+  // ============================================================================
+  // POST ACTIONS
+  // ============================================================================
+  "copyHandle": "Handle kopieren",
+  "copyOfficialUrl": "Offizielle URL kopieren",
+  "copyAtUri": "URI kopieren",
+  "copyDid": "DID kopieren",
+  "copyDisplayName": "Anzeigename kopieren",
+  "likeUsers": "Gefällt mir von",
+  "quoteRepostsList": "Zitat-Reposts",
+  "repostUsers": "Repostet von",
+  "pinnedPost": "Angehefteter Beitrag",
+  "pinnedPostOn": "Diesen Beitrag anheften",
+  "pinnedPostOff": "Diesen Beitrag lösen",
+  "copyPostText": "Text kopieren",
+  "firstPost": "Ersten Beitrag zeigen",
+  "sendMention": "Erwähnung senden",
+  "sendPostAfter": "Beitrag nach diesem senden",
+  "sendLinkCard": "Als Linkkarte senden",
+  "warpPostNotification": "Dieser Beitrag wird mit dem folgenden Datum gesendet:",
+  "deletePost": "Beitrag löschen",
+  "deletePostMessage": "Dieser Beitrag wird gelöscht. Sind Sie sicher?",
+
+  // ============================================================================
+  // POST STATES
+  // ============================================================================
+  "postBlocked": "Dieser Beitrag kann nicht angezeigt werden.",
+  "postNotFound": "Dieser Beitrag existiert nicht.",
+  "postDetachedBySelf": "Dieser Beitrag wurde von Ihnen getrennt.",
+  "postDetachedByOther": "Dieser Beitrag wurde getrennt.",
+
+  // ============================================================================
+  // USER ACTIONS
+  // ============================================================================
+  "follow": "Folgen",
+  "followed": "Folgt Ihnen",
+  "follower": "Follower",
+  "followers": "Follower",
+  "following": "Folgt",
+  "followings": "Folgt",
+  "followingCount": "Folgt",
+  "followersCount": "Follower",
+  "muteOn": "Stummschalten",
+  "muteOff": "Stummschaltung aufheben",
+  "muting": "Stummgeschaltet",
+  "block": "Blockieren",
+  "unblock": "Blockierung aufheben",
+  "blocked": "Blockiert",
+  "blocking": "Blockierung",
+  "users": "Benutzer",
+
+  // ============================================================================
+  // USER MANAGEMENT
+  // ============================================================================
+  "mutingUsers": "Stummgeschaltete Benutzer",
+  "checkMutingUsers": "Stummgeschaltete Benutzer überprüfen",
+  "blockingUsers": "Blockierte Benutzer",
+  "checkBlockingUsers": "Blockierte Benutzer überprüfen",
+  "noFollowings": "Dieser Benutzer folgt niemandem.",
+  "noFollowers": "Diesem Benutzer folgt niemand.",
+  "recommendedUsers": "Empfohlene Benutzer",
+
+  // ============================================================================
+  // FEEDS
+  // ============================================================================
+  "feed": "Feed",
+  "feeds": "Feeds",
+  "feedsAll": "Alle Feeds",
+  "feedsPinned": "Angeheftete Feeds",
+  "customFeeds": "Benutzerdefinierte Feeds",
+  "myFeeds": "Meine Feeds",
+  "myFeedsEdit": "Meine Feeds bearbeiten",
+  "noMyFeeds": "Keine Feeds. Bitte speichern Sie Feeds.",
+  "noPostsInFeed": "Keine Beiträge in diesem Feed.",
+  "noAuthorFeeds": "Es gibt keine Feeds, die von diesem Benutzer verwaltet werden.",
+  "feedControl": "Feed-Kontrolle",
+  "feedControlDescription": "Wirksam ab dem nächsten Download.",
+  "popularFeeds": "Beliebte Feeds",
+
+  // ============================================================================
+  // MYFEEDS SORTS
+  // ============================================================================
+  "sortInAsc": "Aufsteigend sortieren",
+  "sortInDesc": "Absteigend sortieren",
+  "sortByLike": "Nach Gefällt mir sortieren",
+  "sortByName": "Nach Name sortieren",
+  "sortByUri": "Nach URI sortieren",
+  "sortByIndexedAt": "Nach Datum sortieren",
+  "sortMyFeedsConfirmation": "Meine Feeds werden sortiert.\nDieser Vorgang kann nicht rückgängig gemacht werden. Sind Sie sicher?",
+
+  // ============================================================================
+  // TIME FEEDS
+  // ============================================================================
+  "showTimeFeeds": "Im Zeitfeed anzeigen",
+  "timeFeeds": "Zeitfeed",
+
+  // ============================================================================
+  // SEARCH
+  // ============================================================================
+  "search": "Suchen",
+  "suggestionSearch": "Vorschläge",
+  "userSearch": "Benutzer finden",
+  "postSearch": "Beiträge finden",
+  "postSearchLatest": "Neueste",
+  "postSearchTop": "Beliebt",
+  "feedSearch": "Feeds finden",
+  "keyword": "Stichwort",
+  "searchUserLatestPost": "Neueste Beiträge suchen",
+  "searchUserTopPost": "Top-Beiträge suchen",
+  "searchUserMentions": "Erwähnungen suchen",
+  "advancedSearch": "Erweiterte Suche",
+  "searchKeyword": "Suchstichwort",
+  "searchSort": "Sortieren",
+  "searchLang": "In dieser Beitragssprache suchen",
+  "searchNoLang": "Beitragssprache nicht angeben",
+  "searchAuthor": "Beiträge dieses Benutzers suchen",
+  "searchMyPosts": "Meine Beiträge suchen",
+  "searchTo": "Antworten an diesen Benutzer suchen",
+  "searchMentions": "Erwähnungen dieses Benutzers suchen",
+  "searchMentionsToMe": "Erwähnungen von mir suchen",
+  "searchDomain": "Beiträge mit dieser Domain suchen",
+  "searchSince": "Startdatum der Suche",
+  "searchUntil": "Enddatum der Suche",
+
+  // ============================================================================
+  // TRENDING
+  // ============================================================================
+  "suggestedTopics": "Vorgeschlagene Themen",
+  "trendingTopics": "Trending-Themen",
+
+  // ============================================================================
+  // MEDIA & IMAGES
+  // ============================================================================
+  "media": "Medien",
+  "medias": "Medien",
+  "image": "Medienkontrolle",
+  "imageBoxes": "Medien",
+  "alts": "Alternativer Text",
+  "showImage": "Medien anzeigen",
+  "hideImage": "Medien verbergen",
+  "imageFolding": "Medien einklappen",
+  "imageFolding1": "Keine",
+  "imageFolding2": "Moderat",
+  "imageFolding3": "Alle",
+  "imageMaxHeightRatio": "Maximales Höhenverhältnis der Medien",
+  "imageMaxHeightRatio1": "x0.5",
+  "imageMaxHeightRatio2": "x0.75",
+  "imageMaxHeightRatio3": "x1.0",
+  "imageMaxHeightRatio4": "x1.5",
+  "imageMaxHeightRatio5": "x2.0",
+  "imageMaxHeightRatio6": "Unbegrenzt",
+  "imageAutoPlay": "Automatische Wiedergabe animierter Bilder",
+  "video": "Video",
+  "videoPreload": "Video-Vorladen",
+  "videoIsBlob": "Nicht-Streaming",
+  "videoIsNone": "Nicht abspielbar",
+  "videoCanNotUpload": "Video-Beiträge sind nicht erlaubt.",
+  "videoRemainingDailyNumber": "Postbare Anzahl Videos heute",
+  "videoRemainingDailyBytes": "Postbare Videokapazität heute",
+
+  // ============================================================================
+  // LINK CARDS
+  // ============================================================================
+  "linkcard": "Linkkarte",
+  "linkCardControl": "Linkkarten-Kontrolle",
+  "linkcardLayout": "Linkkarten-Layout",
+  "linkcardLayoutVertical": "Vertikal",
+  "linkcardLayoutHorizontal": "Horizontal",
+  "linkcardLayoutNone": "Kein Bild",
+  "linkcardEmbeddedControl": "Linkkarten eingebettete Inhaltskontrolle",
+  "LinkCardPlaceHolder": "URL/AT URI der Linkkarte",
+  "urlHasImage": "OGP-Bild an Linkkarte anhängen",
+
+  // ============================================================================
+  // LANGUAGE & TRANSLATION
+  // ============================================================================
+  "language": "Sprache",
+  "languages": "Sprachen",
+  "uiLanguage": "UI-Sprache",
+  "deutsch": "Deutsch",
+  "english": "English",
+  "french": "Français",
+  "japanese": "日本語",
+  "german": "Deutsch",
+  "contentLanguages": "Inhaltssprachen",
+  "contentLanguagesEdit": "Inhaltssprachen auswählen",
+  "contentLanguagesDetail1": "Mehrfachauswahl möglich.",
+  "contentLanguagesDetail2": "Beiträge, die nicht den ausgewählten Sprachen entsprechen, werden eingeklappt.",
+  "contentLanguagesDetail3": "Wenn die entsprechende Sprache für den Beitrag nicht festgelegt ist, gilt das oben Gesagte nicht.",
+  "contentLanguagesDetail4": "Wenn keine ausgewählt sind, werden alle Beiträge angezeigt.",
+  "postLanguages": "Beitragssprachen",
+  "postLanguagesEdit": "Beitragssprachen auswählen",
+  "postLanguagesDetail1": "Wählen Sie bis zu 3 Sprachen für Ihren Beitrag aus.",
+  "postLanguagesDetail2": "Diese Einstellung wird mit den Inhaltssprachen des Betrachters abgeglichen.",
+  "autoTranslation": "Automatische Übersetzung",
+  "autoTranslationRemarks1": "Die automatische Übersetzung verwendet die API von MyMemory, einem Übersetzungsspeicher von Translated.",
+  "autoTranslationRemarks2": "Ihre E-Mail-Adresse wird den automatischen Übersetzungs-API-Aufrufen zugeordnet. Daher kann Ihre E-Mail-Adresse mit Translated und den externen Partnern von Translated geteilt werden.",
+  "autoTranslationRemarks3": "Es gibt ein tägliches Zeichenlimit für die automatischen Übersetzungs-API-Aufrufe.",
+  "autoTranslationRemarks4": "Weitere Informationen finden Sie auf der MyMemory-Website.",
+  "autoTranslationIgnoreLanguage": "Automatische Übersetzung - Ausgeschlossene Sprachen",
+  "translate": "Übersetzen",
+
+  // ============================================================================
+  // LABELS & MODERATION
+  // ============================================================================
+  "label": "Label",
+  "labels": "Labels",
+  "accountLabels": "Konto-Labels",
+  "customLabels": "Benutzerdefinierte Labels",
+  "profileLabel": "Benutzer-Labels",
+  "postLabel": "Beitrags-Labels",
+  "labeler": "Labeler",
+  "labelerSettings": "Labeler-Einstellungen",
+  "subscribeLabel": "Labeler abonnieren",
+  "unsubscribeLabel": "Labeler-Abonnement",
+  "labelerOverLimit": "Kann diesen Labeler nicht registrieren, da die Obergrenze der abonnierten Labeler erreicht ist.",
+  "labelerReset": "Alle Einstellungen zurücksetzen",
+  "labelerResetMessage": "Alle Einstellungen zurücksetzen. Sind Sie sicher?",
+  "myLabeler": "Mein Labeler",
+  "moderation": "Moderation",
+  "moderate": "Moderieren",
+  "contentFiltering": "Inhaltsfilterung",
+  "modifyContentFiltering": "Inhaltsfilterung ändern",
+  "contentFilteringDescription": "Nachdem Sie die Kontrollen für jedes Inhaltslabel festgelegt haben, drücken Sie die Schaltfläche \"Anwenden\".",
+  "selectLabels": "Labels auswählen",
+
+  // ============================================================================
+  // LABELS
+  // ============================================================================
+  "nsfw": "NSFW",
+  "nsfw-porn": "NSFW (Porno)",
+  "suggestive": "Anzüglich",
+  "suggestive-sexual": "Anzüglich (Sexuell)",
+  "hate": "Hass/Intoleranz",
+  "hate-intolerant": "Hass (Intoleranz)",
+  "always-hide": "Zum Verbergen zwingen",
+  "always-warn": "Warnung erzwingen",
+  "!hide": "Zum Verbergen zwingen",
+  "!warn": "Warnung erzwingen",
+  "sexual": "Sexuell",
+  "sexual-description": "Bilder für Erwachsene",
+  "nudity": "Nacktheit",
+  "nudity-description": "Künstlerische oder nicht-erotische Nacktheit",
+  "porn": "Porno",
+  "porn-description": "Sexuelle Aktivität oder erotische Nacktheit",
+  "graphic-media": "Grafische Medien",
+  "graphic-media-description": "Medien, die für einige Zielgruppen störend oder unangemessen sein können",
+  "sexual-figurative": "Sexuell anzüglich (Cartoon)",
+  "self-harm": "Selbstverletzung",
+  "sensitive": "Sensibel",
+  "extremist": "Extremist",
+  "intolerant": "Intolerant",
+  "threat": "Bedrohung",
+  "rude": "Unhöflich",
+  "illicit": "Unerlaubt",
+  "security": "Sicherheitsbedenken",
+  "unsafe-link": "Unsicherer Link",
+  "impersonation": "Identitätsdiebstahl",
+  "misinformation": "Fehlinformation",
+  "scam": "Betrug",
+  "engagement-farming": "Engagement-Farming",
+  "spam": "Spam",
+  "rumor": "Gerücht",
+  "misleading": "Irreführend",
+  "inauthentic": "Unauthentisch",
+
+  // ============================================================================
+  // OFFICIAL LABELS
+  // ============================================================================
+  "label-name-porn": "Erwachseneninhalte",
+  "label-description-porn": "Explizite sexuelle Bilder.",
+  "label-name-sexual": "Sexuell anzüglich",
+  "label-description-sexual": "Enthält keine Nacktheit.",
+  "label-name-graphic-media": "Grafische Medien",
+  "label-description-graphic-media": "Explizite oder potenziell störende Medien.",
+  "label-name-nudity": "Nicht-sexuelle Nacktheit",
+  "label-description-nudity": "Z.B. künstlerische Akte.",
+
+  // ============================================================================
+  // REPORTS
+  // ============================================================================
+  "reportSendAccount": "Benutzer melden",
+  "reportSendPost": "Beitrag melden",
+  "reportSendFeed": "Benutzerdefinierten Feed melden",
+  "reportSendList": "Liste melden",
+  "reportSendConfirmation": "Bestätigung der Meldung senden",
+  "reportSendConfirmationMessage": "Diese Meldung wird gesendet. Sind Sie sicher?",
+  "reportReasonType": "Grund",
+  "reportReason": "Details (optional)",
+  "reportReasonDescription": "Geben Sie hier zusätzliche Informationen ein.",
+  "reportReasonMisleading": "Irreführend: Identitätsdiebstahl, Falsche Behauptungen",
+  "reportReasonSpam": "Spam: Postet häufig unerwünschte Inhalte",
+  "reportReasonSexual": "Sexuell: Nacktheit, Pornografie",
+  "reportReasonViolation": "Verletzung: Urheberrechtsverletzung, Verstoß gegen Nutzungsbedingungen",
+  "reportReasonRude": "Unhöflich: Belästigung, Trolling, Intoleranz",
+  "reportReasonOther": "Andere",
+  "reportCopyrightViolation": "Urheberrechtsverletzung melden",
+
+  // ============================================================================
+  // WORD MUTE
+  // ============================================================================
+  "wordMute": "Stummgeschaltete Wörter",
+  "wordMuteEnabled": "EIN",
+  "wordMutePlaceholder": "Wort1, Wort2, ...",
+  "wordMuteRemoveConfirmation": "Stummgeschaltetes Wort löschen",
+  "wordMuteRemoveConfirmationMessage": "Das folgende stummgeschaltete Wort löschen. Sind Sie sicher?",
+  "wordMuteEmpty": "Es gibt keine stummgeschalteten Wörter.",
+  "wordMuteTerm": "Begriff",
+  "wordMuteNoTerm": "Kein Begriff",
+  "wordMuteCurrentTerm": "Aktueller Begriff",
+  "wordMuteContent": "Text",
+  "wordMuteTag": "Tag",
+  "wordMuteUrl": "URL",
+  "wordMuteExcludeFollowing": "Benutzer ausschließen, denen Sie folgen",
+
+  // ============================================================================
+  // PSYCHOLOGICAL SAFETY
+  // ============================================================================
+  "psySafety": "Psychologische Sicherheit",
+  "hideNotificationBadge": "Badge für neue Nachrichten verbergen",
+  "hideNotificationBadgeOff": "Deaktivieren",
+  "hideNotificationBadgeOn": "Aktivieren",
+  "hideNumberOfReaction": "Anzahl der Reaktionen verbergen",
+  "hideNumberOfReactionOff": "Deaktivieren",
+  "hideNumberOfReactionOn": "Aktivieren",
+  "postAnonymization": "Beitrags-Anonymisierung",
+  "postAnonymizationOff": "Deaktivieren",
+  "postAnonymizationOn": "Aktivieren",
+  "anonymous": "(Anonym)",
+
+  // ============================================================================
+  // LISTS
+  // ============================================================================
+  "list": "Liste",
+  "lists": "Listen",
+  "listPurpose": "Typ",
+  "noList": "Es gibt keine Listen, die von diesem Benutzer verwaltet werden.",
+  "modlist": "Moderationsliste",
+  "curatelist": "Benutzerliste",
+  "referencelist": "Referenzliste",
+  "unknownlist": "Unbekannte Liste",
+  "listFeeds": "Listen-Feeds",
+  "listUsers": "Listen-Benutzer",
+  "listAdd": "Liste hinzufügen",
+  "listUpdate": "Listen aktualisieren",
+  "listEdit": "Liste bearbeiten",
+  "listEditShort": "Bearbeiten",
+  "listDelete": "Liste löschen",
+  "listDeleteMessage": "Diese Liste wird gelöscht. Sind Sie sicher?",
+  "listDuplicate": "Liste duplizieren",
+  "listDuplicateMessage": "Diese Liste duplizieren.\n\n* Maximal 5000 Benutzer duplizieren.\n* Das Duplizieren einer Liste mit vielen Benutzern kann dazu führen, dass das Rate-Limit auf einmal überschritten wird. Duplizierung von Listen mit mehr als 100 Benutzern wird nicht empfohlen.\n* Thumbnails werden nicht dupliziert.",
+  "listDetectFollowings": "Ihre Follower überprüfen",
+  "listDetectFollowingsNoUsers": "Es scheint keine folgenden Benutzer in dieser Liste zu geben.\nEs ist jedoch ungewiss, wenn es mehr als 5000 Listen-Benutzer gibt.",
+  "listAvatar": "Thumbnail",
+  "listName": "Name",
+  "listDescription": "Beschreibung",
+  "listUserManagement": "Liste",
+  "listUserManagementDetail": "Listen-Benutzer hinzufügen/löschen",
+  "listMuted": "Stummgeschaltet",
+  "listMuting": "Listen-Stummschaltung",
+  "listBlocked": "Blockiert",
+  "listBlocking": "Listen-Blockierung",
+  "by": "von",
+  "myList": "Meine Liste",
+  "myListConfirmation": "Meine Liste aktualisieren.\nDies kann je nach Anzahl der Listen ein zeitaufwändiger Prozess sein, ist das in Ordnung?",
+
+  // ============================================================================
+  // CHAT
+  // ============================================================================
+  "chat": "Chat",
+  "noChat": "Kein Chat.",
+  "noChatMessage": "Keine Nachricht.",
+  "startChat": "Chat",
+  "addChatMember": "Chat-Mitglied auswählen",
+  "chatMemberPlaceholder": "Anzeigename oder Handle",
+  "chatOk": "Chat OK",
+  "chatNo": "Kein Chat",
+  "allow-incoming-all": "Alle OK",
+  "allow-incoming-none": "Alle Nein",
+  "allow-incoming-following": "Nur Folgende",
+  "unreadChatConvo": "Ungelesen",
+  "muteChatConvo": "Stummschalten",
+  "unmuteChatConvo": "Stummschaltung aufheben",
+  "leaveChatConvo": "Verlassen",
+  "deleteChatMessage": "Für mich löschen",
+  "chatMessagePlaceholder": "Nachricht",
+  "chatUrlPlaceholder": "AT URI für eingebetteten Beitrag",
+  "leaveChatConvoConfirmation": "Sie werden den Chat verlassen. Sie können wieder eintreten, aber Sie werden Ihre aktuellen Nachrichten nicht abrufen können. Sind Sie sicher?",
+  "errorInvalidChatToken": "Chat-Start fehlgeschlagen.\nBitte gewähren Sie Chat-Berechtigungen für App-Passwörter, wenn Sie diese verwenden.",
+  "chatUrlNotification": "Das URL-Format ist keine Beitrags-AT-URI.",
+  "chatFetchInterval": "Intervall zum Abrufen von Chats",
+  "chatFetchInterval1": "AUS",
+  "chatFetchInterval2": "Alle 15 Sek.",
+  "chatFetchInterval3": "Alle 30 Sek.",
+  "chatFetchInterval4": "Alle 1 Min.",
+  "chatFetchInterval5": "Alle 5 Min.",
+  "chatFetchInterval6": "Alle 10 Min.",
+
+  // ============================================================================
+  // STARTER PACKS
+  // ============================================================================
+  "packs": "Pakete",
+  "starterPacks": "Starter-Pakete",
+  "joinedStarterPack": "über Starter-Paket",
+  "noStarterPacks": "Es gibt keine Starter-Pakete, die von diesem Benutzer verwaltet werden.",
+  "showStarterPackListFeeds": "Listen-Feeds anzeigen",
+  "showStarterPackListUsers": "Listen-Benutzer anzeigen",
+  "starterPackShare": "Geteilten Link kopieren",
+  "starterPackCreate": "Starter-Paket erstellen",
+  "starterPackEdit": "Starter-Paket bearbeiten",
+  "starterPackName": "Name",
+  "starterPackDescription": "Beschreibung",
+  "starterPackDelete": "Starter-Paket löschen",
+  "starterPackDeleteMessage": "Dieses Starter-Paket entfernen. Sind Sie sicher?\nDie von diesem Starter-Paket referenzierte Liste wird nicht gelöscht.",
+
+  // ============================================================================
+  // VERIFICATIONS
+  // ============================================================================
+  "verified": "Verifiziert",
+  "verifiedAccounts": "Verifizierte Konten",
+  "verifier": "Verifizierer",
+  "verifiers": "Verifizierer",
+
+  // ============================================================================
+  // POSTGATES
+  // ============================================================================
+  "postgate": "Zitat-Kontrollen",
+  "postgateAllow": "Zitat erlaubt",
+  "postgateNotAllow": "Zitat nicht erlaubt",
+  "attachQuote": "Zitat anhängen",
+  "detachQuote": "Zitat trennen",
+
+  // ============================================================================
+  // THREADGATES
+  // ============================================================================
+  "threadgate": "Antwort-Kontrollen",
+  "threadgateNoAction": "Jeder kann antworten",
+  "threadgateCustomAction": "Nur erlaubte Benutzer können antworten",
+  "threadgateAllowMention": "Erwähnte Benutzer",
+  "threadgateAllowFollower": "Follower",
+  "threadgateAllowFollowing": "Folgende Benutzer",
+  "threadgateNotification1": "Sie können bis zu 5 Ziele auswählen, um Antworten zu erlauben.",
+  "threadgateNotification2": "Wenn Sie anwenden, ohne etwas zu überprüfen, können nur Sie antworten.",
+
+  // ============================================================================
+  // REACTION CONTROL
+  // ============================================================================
+  "reactionControl": "Reaktions-Kontrollen",
+
+  // ============================================================================
+  // SETTINGS
+  // ============================================================================
+  "settings": "Einstellungen",
+  "designSettings": "Design-Einstellungen",
+  "postSettings": "Beitrags-Einstellungen",
+  "timeSettings": "Zeit-Einstellungen",
+  "psySafetySettings": "Psychologische Sicherheit",
+  "etcSettings": "Andere Einstellungen",
+  "font": "Schriftart",
+  "fontSize": "Schriftgröße",
+  "fontSizeSmall": "Klein",
+  "fontSizeMedium": "Mittel",
+  "fontSizeLarge": "Groß",
+  "fontKerning": "Schriftart-Kerning (umgebungsabhängig)",
+  "fontAntialiasing": "Schriftart-Anti-Aliasing (umgebungsabhängig)",
+  "colorTheme": "Farbthema",
+  "colorThemeAuto": "Auto",
+  "colorThemeLight": "Hell",
+  "colorThemeLightGray": "Hellgrau",
+  "colorThemeDark": "Dunkel",
+  "colorThemeDarkGray": "Dunkelgrau",
+  "mainAreaOpacity": "Transparenz des Hauptbereichs",
+  "background": "Hintergrundbild",
+  "backgroundImage": "Hintergrundbild-URL",
+  "backgroundOpacity": "Hintergrundbild-Transparenz",
+  "backgroundImage1": "Je nach Server, auf dem das Hintergrundbild platziert ist, wird es möglicherweise nicht angezeigt.",
+  "backgroundImage2": "Sie können auch den Wert der CSS-Eigenschaft `background-image` festlegen.\nz.B. linear-gradient(to bottom, pink, cyan)",
+  "development": "Entwicklung",
+  "resetSettings": "Einstellungen zurücksetzen",
+  "resetSettingsDetail": "Die Einstellungen dieses Kontos zurücksetzen. Sind Sie sicher?",
+
+  // ============================================================================
+  // TIME SETTINGS
+  // ============================================================================
+  "date": "Datum",
+  "timeControl": "Zeitdarstellung",
+  "timeControlRelative": "Relativ",
+  "timeControlAbsolute": "Absolut",
+  "timelineFetchInterval": "Intervall zur Überprüfung des Following-Feeds",
+  "timelineFetchInterval1": "AUS",
+  "timelineFetchInterval2": "Alle 10 Sek.",
+  "timelineFetchInterval3": "Alle 30 Sek.",
+  "timelineFetchInterval4": "Alle 1 Min.",
+  "timelineFetchInterval5": "Alle 2 Min.",
+  "timelineFetchInterval6": "Alle 3 Min.",
+  "notificationFetchInterval": "Intervall zum Abrufen von Benachrichtigungen",
+  "notificationFetchInterval1": "AUS",
+  "notificationFetchInterval2": "Alle 15 Sek.",
+  "notificationFetchInterval3": "Alle 30 Sek.",
+  "notificationFetchInterval4": "Alle 1 Min.",
+  "notificationFetchInterval5": "Alle 3 Min.",
+  "notificationFetchInterval6": "Alle 5 Min.",
+  "daysAgo": "Tage her",
+  "startedAt": "Gestartet am",
+  "numberOfPostsPerDay": "Pro Tag",
+
+  // ============================================================================
+  // NOTIFICATION FILTERS
+  // ============================================================================
+  "notificationRemoteFilter": "Benachrichtigungsfilter",
+  "notificationRemoteFilterReply": "Antwort",
+  "notificationRemoteFilterQuote": "Zitat",
+  "notificationRemoteFilterMention": "Erwähnung",
+  "notificationRemoteFilterRepost": "Repost",
+  "notificationRemoteFilterLike": "Gefällt mir",
+  "notificationRemoteFilterFollow": "Folgen",
+
+  // ============================================================================
+  // CONTENT FOLDING
+  // ============================================================================
+  "replyFolding": "Antworten einklappen",
+  "replyFolding1": "Antworten an die Benutzer selbst einklappen",
+  "replyFolding2": "Antworten an Sie einklappen",
+  "replyFolding3": "Antworten an Benutzer einklappen, die Ihnen nicht folgen",
+  "replyFolding4": "Antworten an Benutzer einklappen, denen Sie nicht folgen",
+  "replyFolding5": "Antworten an Benutzer einklappen, denen Sie folgen",
+  "repostFolding": "Reposts einklappen",
+  "repostFolding1": "Reposts von Beiträgen der Benutzer selbst einklappen",
+  "repostFolding2": "Reposts von Beiträgen von Ihnen einklappen",
+  "repostFolding3": "Reposts von Beiträgen von Benutzern einklappen, die Ihnen nicht folgen",
+  "repostFolding4": "Reposts von Beiträgen von Benutzern einklappen, denen Sie nicht folgen",
+  "repostFolding5": "Reposts von Beiträgen von Benutzern einklappen, denen Sie folgen",
+
+  // ============================================================================
+  // REPOST CONTROL
+  // ============================================================================
+  "disableActionViaRepostControl": "Benachrichtigungskontrolle für Repost bei Repost / Gefällt mir bei Repost",
+  "disableLikeViaRepost": "Den repostenden Benutzer nicht benachrichtigen, wenn ein Repost gefällt",
+  "disableRepostViaRepost": "Den repostenden Benutzer nicht benachrichtigen, wenn ein Repost repostet wird",
+
+  // ============================================================================
+  // GLOBALLINE SETTINGS
+  // ============================================================================
+  "globallineContentLanguages": "Inhaltssprache für globalen Feed",
+  "globallineSkipPostHasNoLanguage": "Beiträge ohne Beitragssprache filtern",
+  "globallinePostTypes": "Beiträge nach Typ filtern",
+  "globallineFollowersCountThreshold": "Beiträge nach Anzahl der Follower filtern",
+  "globallineFollowersCountThresholdPlaceholder": "Keine Filterung",
+  "globallineFollowersCountThresholdDescription": "Eine positive Zahl entspricht N oder mehr, eine negative Zahl entspricht N oder weniger, und 0 entspricht 0.",
+  "globallineLayout": "Beitrags-Layout",
+  "globallineLayoutPost": "Normal",
+  "globallineLayoutSlim": "Schlank",
+
+  // ============================================================================
+  // CUSTOM_BOOKMARKS
+  // ============================================================================
+  "customBookmark": "Lesezeichen",
+  "noCustomBookmark": "Keine Lesezeichen",
+  "deleteCustomBookmark": "Lesezeichen löschen",
+  "customBookmarkManagement": "Lesezeichen verwalten",
+  "customBookmarkManagementDetail": "Lesezeichen hinzufügen/aktualisieren",
+  "addingCustomBookmarkTag": "Neues Lesezeichen-Tag",
+  "customBookmarkOutputConfirmation": "Die geladenen Beiträge als SkyFeed JSON in die Zwischenablage kopieren. (Bis zu den neuesten 30 Beiträgen)",
+
+  // ============================================================================
+  // MY WORDS
+  // ============================================================================
+  "myWord": "Meine Wörter",
+  "newMyWord": "Neues Wort",
+  "noMyWord": "Keine Wörter. Bitte fügen Sie eines hinzu.",
+  "deleteMyWord": "Mein Wort löschen",
+  "deleteMyWordMessage": "Dieses Wort wird gelöscht. Sind Sie sicher?",
+
+  // ============================================================================
+  // LIGHTNING
+  // ============================================================================
+  "lightning": "Lightning",
+  "lightningDescription": "Sobald Sie die LN-URL oder Lightning-Adresse als Zahlungsziel für Lightning-Zahlungen einrichten, wird Ihren Beiträgen ein Zahlungslink (auch bekannt als Zap-Button) hinzugefügt.",
+
+  // ============================================================================
+  // LIVE STATUS
+  // ============================================================================
+  "live": "LIVE",
+  "actorStatusLiveUntil": "Live bis",
+  "actorStatusLiveEdit": "Live-Status-Einstellungen",
+  "actorStatusLiveExpiredAt": "Anzeige läuft ab am",
+  "actorStatusLiveUri": "Live-Streaming-URL",
+  "actorStatusLiveDurationMinutes": "Anzeigedauer (Minuten)",
+  "actorStatusOpenLivePage": "Live-Seite öffnen",
+
+  // ============================================================================
+  // EXTERNAL SERVICES
+  // ============================================================================
+  "pnAppleMusic": "Apple Music",
+  "pnGiphy": "Giphy",
+  "pnGraysky": "Graysky",
+  "pnSpotify": "Spotify",
+  "pnTenor": "Tenor",
+  "pnTwitch": "Twitch",
+  "pnYoutube": "Youtube",
+  "pnVimeo": "Vimeo",
+  "pnNicovideo": "Nicovideo",
+  "pnFrontpage": "Frontpage",
+  "pnLinkat": "Linkat",
+  "pnSmokeSignal": "Smoke Signal",
+  "pnWhiteWind": "WhiteWind",
+
+  // ============================================================================
+  // EXTERNAL APPS
+  // ============================================================================
+  "openOtherApp": "In anderen Apps öffnen",
+  "officialApp": "Offizielle App",
+  "officialAppProfile": "Offizielle App - Profil",
+  "officialAppPost": "Offizielle App - Beitrag",
+  "officialAppRss": "Offizielle App - RSS",
+  "ouranosApp": "Ouranos",
+  "atprotoBrowserApp": "ATProto Browser",
+  "pdslsApp": "PDSls",
+  "wrapperApp": "Bluesky Wrapper",
+  "tokimekiApp": "TOKIMEKI Bluesky",
+  "uniresolverApp": "Universal Resolver",
+  "didApp": "did:plc Directory",
+  "oplogsApp": "PLC operation logs",
+  "atlasApp": "BSky Experiments",
+  "atscanApp": "ATScan",
+
+  // ============================================================================
+  // DOWNLOAD FEATURES
+  // ============================================================================
+  "downloadPostedImages": "Gepostete Bilder herunterladen",
+  "downloadPostedImagesOnConfirmation": "Von diesem Benutzer gepostete Bilder herunterladen.\n\n* Diese Funktion ist nur für persönliche Betrachtungszwecke.\n* Die Bilder werden in eine .zip-Datei kompiliert.\n\n* Bis zu 100 Bilder aus den letzten 1000 Beiträgen herunterladen.\n* Reposts sind nicht enthalten.\n* Bilder in niedrigster Qualität herunterladen.\n* Kann mehrere Minuten dauern.",
+  "downloadPostedImagesOnCancel": "Es gab keine Bilder, die von diesem Benutzer gepostet wurden.",
+  "downloadPostedImagesOnComplete": "Von diesem Benutzer gepostete Bilder heruntergeladen.",
+  "downloadPostedImagesOnProgress": "Jetzt herunterladen...",
+
+  // ============================================================================
+  // LIST MENTIONS
+  // ============================================================================
+  "listMention": "Listen-Erwähnung",
+  "listMentionNotification": "Sendet Benachrichtigungen an Benutzer in der ausgewählten Liste (bis zu 30 Benutzer). Erwähnungen werden nicht in Ihrem Beitrag angezeigt, und offensichtlich sind die zu benachrichtigenden Benutzer nicht bekannt.",
+  "listMentionNotification2": "Diese Funktion ist veraltet. Auf bsky.social wird ein Spam-Label angewendet.",
+
+  // ============================================================================
+  // HIDDEN FEATURES
+  // ============================================================================
+  "hiddenFeatures": "Duplizierte Funktionen",
+
+  // ============================================================================
+  // UI ELEMENTS
+  // ============================================================================
+  "notSet": "Nicht gesetzt",
+  "resetTextarea": "Textbereich zurücksetzen. Sind Sie sicher?",
+  "showOldestQuotedPost": "Zitat anzeigen",
+  "hideOldestQuotedPost": "Zitat verbergen",
+  "showBadge": "Badge anzeigen",
+  "alt": "ALT",
+  "official": "Offiziell",
+  "suggestedFollows": "Vorgeschlagen",
+  "share": "Teilen",
+  "postFeatures": "Funktionen",
+  "showDetail": "Details anzeigen",
+  "hideDetail": "Details verbergen",
+  "noHistory": "Keine Historie",
+
+  // ============================================================================
+  // CONFIRMATION DIALOGS
+  // ============================================================================
+  "confirmUrl": "URL-Bestätigung",
+  "confirmUrlNotification": "Die folgende URL öffnen. Sind Sie sicher?",
+
+  // ============================================================================
+  // USER STATUS
+  // ============================================================================
+  "authenticated": "Privat",
+  "unauthenticated": "Öffentlich",
+  "beginner": "Neuer Benutzer",
+  "beginnerInPost": "Erster Beitrag",
+
+  // ============================================================================
+  // ERROR MESSAGES
+  // ============================================================================
+  "error": "Fehler",
+  "errorMessage": "Ein Fehler ist aufgetreten.",
+  "warning": "Warnung",
+  "warn": "Warnen",
+  "errorNotification": "Bitte laden Sie Ihren Browser neu, bevor Sie es erneut versuchen.\nWenn der Fehler erneut auftritt, kontaktieren Sie mich bitte mit den Fehlerdetails.",
+  "errorApiFailed": "API-Anfrage fehlgeschlagen.",
+  "errorDirectAccessFailed": "Direkte Anfrage an XRPC API fehlgeschlagen.",
+  "globalError": "Ein unbekannter Fehler ist aufgetreten.",
+  "unhandledRejectionError": "Ein unbehandelter Ablehnungsfehler ist aufgetreten.",
+  "rejectionHandledError": "Ein behandelter Ablehnungsfehler ist aufgetreten.",
+  "apiError": "Ein Fehler ist beim Verbinden zur API aufgetreten.",
+  "cidEncodeError": "Ein Fehler ist beim Kodieren der CID aufgetreten.",
+  "downloadImageError": "Ein Fehler ist beim Herunterladen von Bildern aufgetreten.",
+  "fetchOgpError": "Ein Fehler ist beim Abrufen von OGP aufgetreten. Die URL kann falsch sein oder Blueskys Link-Server kann ausgefallen sein.",
+  "fetchOgpImageError": "Ein Fehler ist beim Abrufen des OGP-Bildes aufgetreten. Die Webseite verwendet möglicherweise kein OGP. Bitte senden Sie erneut ohne das angehängte OGP-Bild.",
+  "getSessionError": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.",
+  "imageCompressionError": "Ein Fehler ist beim Komprimieren des Bildes aufgetreten.",
+  "invalidCidError": "Ungültige CID.",
+  "invalidJwtError": "Ungültiges JWT.",
+  "invalidUrlError": "Ungültige URL.",
+  "jwtDecodeError": "Ein Fehler ist beim JWT-Kodieren aufgetreten.",
+  "jwtUpdateError": "Aktualisieren Sie Ihre Sitzung.\nBitte melden Sie sich über das Anmeldeformular erneut an.",
+  "noJwtError": "JWT fehlt. Bitte melden Sie sich erneut an.",
+  "makeAvatarBlobRefError": "Ein Fehler ist beim Verarbeiten des Avatar-Bildes aufgetreten.",
+  "noAgentError": "Kein Agent.",
+  "noGeneratorError": "Kein Feed-Generator.",
+  "noListError": "Keine Liste.",
+  "noSessionError": "Keine aktive Sitzung. Bitte melden Sie sich erneut an.",
+  "offlineError": "Keine Internetverbindung.",
+  "parseOgpError": "Ein Fehler ist beim Parsen von OGP aufgetreten. Die Webseite verwendet möglicherweise kein OGP. Bitte senden Sie erneut ohne das angehängte OGP-Bild.",
+  "refreshJwtExpired": "refreshJWT ist abgelaufen. Bitte melden Sie sich erneut an.",
+  "refreshSessionError": "Ein Fehler ist beim Aktualisieren der Sitzung aufgetreten. Bitte melden Sie sich erneut an.",
+  "resumeSessionError": "Ein Fehler ist beim Wiederherstellen der Sitzung aufgetreten.\nDie Sitzung kann abgelaufen sein. Bitte melden Sie sich erneut an.",
+  "translationError": "Ein Fehler ist bei der Übersetzung aufgetreten.",
+
+  // ============================================================================
+  // INVALID HANDLE
+  // ============================================================================
+  "invalidHandle": "(Ungültiges Handle)",
+  "suspendedAccount": "(Gesperrtes Konto)",
+  "deactivatedAccount": "(Deaktiviertes Konto)",
+  "notFoundAccount": "(Konto nicht gefunden)",
+  "invalidResponse": "(Ungültige Antwort)",
+  "unresolvedAccount": "(Ungelöstes Handle)",
+
+  // ============================================================================
+  // DEBUG TOOLS
+  // ============================================================================
+  "showSource": "Quelle anzeigen",
+  "callApi": "API aufrufen",
+
+  // ============================================================================
+  // HANDLE HISTORY
+  // ============================================================================
+  "handleHistory": "Handle-Änderungshistorie",
+  "handleHistoryNoHandle": "Handle nicht gefunden",
+  "handleHistoryNoEndpoint": "Verfügbarer Endpunkt nicht gefunden",
+
+  // ============================================================================
+  // FEED MIGRATION
+  // ============================================================================
+  "mergeV1ToV2": "v1-Feeds in v2-Feeds zusammenführen",
+  "mergeV1ToV2Confirmation": "v1-Format benutzerdefinierte Feeds zu v2-Format benutzerdefinierten Feeds hinzufügen.\n\n* Dies ist für Benutzer, die Klearsky seit v0.9.85 oder früher verwenden.\n* Dieser Vorgang wird die Synchronisation mit dem offiziellen Client wieder aufnehmen.\n* Bitte führen Sie diesen Vorgang nur einmal durch.",
+  "mergeV1ToV2Canceled": "Ein Fehler ist beim Zusammenführen von Feeds aufgetreten.\nEin benutzerdefinierter Feed im v1-Format existiert möglicherweise nicht. In diesem Fall ist das Zusammenführen nicht erforderlich. Bitte ignorieren Sie diesen Fehler.",
+  "myFeedsFetchItemsError": "Ein Fehler ist beim Abrufen von Meine Feeds aufgetreten.\nKlearsky hat möglicherweise einige Feed-Generatoren oder Listen nicht abrufen können. Wenn es ein Problem mit dem Inhalt von Meine Feeds gibt, laden Sie bitte Ihren Browser neu, ohne das Meine Feeds Popup zu schließen.",
+
+  // ============================================================================
+  // LEGAL
+  // ============================================================================
+  "privacyPolicy": "Datenschutzrichtlinie",
+  "termsOfService": "Nutzungsbedingungen",
+
+})
