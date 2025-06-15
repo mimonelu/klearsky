@@ -1,6 +1,6 @@
-import AES from "crypto-js/aes.js"
-import enc from "crypto-js/enc-utf8.js"
-import MD5 from "crypto-js/md5.js"
+import AES from "crypto-js/aes"
+import enc from "crypto-js/enc-utf8"
+import MD5 from "crypto-js/md5"
 
 const key = "way_to_reach_there_is_hard"
 

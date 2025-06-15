@@ -38,15 +38,10 @@ export default defineConfig({
   base: "/",
 
   build: {
-    // for `TypeError: xx is not a constructor`
-    // SEE: stackoverflow.com/a/73470097
-    // commonjsOptions: { include: [] },
-
     chunkSizeWarningLimit: 600,
 
     outDir: "docs",
 
-    // Tree shakingを強化
     rollupOptions: {
       output: {
         manualChunks (id: string) {
@@ -63,17 +58,6 @@ export default defineConfig({
             return "vendor"
           }
         },
-      },
-      treeshake: {
-        moduleSideEffects: (id: string) => {
-          // @atproto/apiやその依存関係では副作用を保持
-          if (id.includes("@atproto") || id.includes("multiformats") || id.includes("@ipld")) {
-            return true
-          }
-          return false
-        },
-        propertyReadSideEffects: false,
-        unknownGlobalSideEffects: false,
       },
     },
   },
@@ -100,14 +84,6 @@ export default defineConfig({
       },
     },
   },
-
-  // for `TypeError: xx is not a constructor`
-  // SEE: stackoverflow.com/a/73470097
-  /*
-  optimizeDeps: {
-    disabled: false,
-  },
-  */
 
   server,
 })
