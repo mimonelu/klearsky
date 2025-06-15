@@ -1,6 +1,6 @@
 [
-  { "label": "deutsch", "value": "de" },
   { "label": "english", "value": "en" },
   { "label": "french", "value": "fr" },
+  { "label": "german", "value": "de" },
   { "label": "japanese", "value": "ja" }
 ]
