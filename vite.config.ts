@@ -38,21 +38,19 @@ export default defineConfig({
   base: "/",
 
   build: {
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 1000,
 
     outDir: "docs",
 
     rollupOptions: {
-      // Tree-shakingを完全に無効化してランタイムエラーを回避
-      treeshake: false,
       output: {
         manualChunks (id: string) {
           // @atproto/api関連を分離
-          if (id.includes("@atproto/api") || id.includes("@atproto")) {
+          if (id.includes("@atproto")) {
             return "atproto"
           }
           // Vue関連を分離
-          if (id.includes("vue") || id.includes("@vue")) {
+          if (id.includes("vue")) {
             return "vue"
           }
           // その他のnode_modules
