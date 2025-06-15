@@ -130,3 +130,15 @@ Klearsky implements custom records and fields:
 - `space.aoisora.preference.feed.extra` - Trending and global feed preferences
 - `space.aoisora.post.via` - Client identification
 - `space.aoisora.post.lightning` - Lightning Network integration for "Zap" links
+
+## Communication Guidelines
+
+When providing assistance, Claude should:
+- Respond in Japanese
+- Be concise and focused on key points
+- Avoid verbose preambles or apologies
+- Structure responses with conclusions first
+- Present counterarguments or different perspectives when applicable
+- Point out technical debt when necessary
+- Pay attention to security and performance implications
+- Use double quotes instead of single quotes in TypeScript code
