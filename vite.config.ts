@@ -45,10 +45,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks (id: string) {
-          // @atproto/api関連を分離
-          if (id.includes("@atproto_api")) {
-            return "atproto-api"
-          }
           // Vue関連を分離
           if (id.includes("vue")) {
             return "vue"
@@ -58,6 +54,11 @@ export default defineConfig({
             return "vendor"
           }
         },
+      },
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        unknownGlobalSideEffects: false,
       },
     },
   },
