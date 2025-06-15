@@ -42,6 +42,11 @@ export default defineConfig({
 
     outDir: "docs",
 
+    // CommonJSとESモジュールの混在による "Object.defineProperty called on non-object" エラーを解決
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
+
     rollupOptions: {
       output: {
         manualChunks (id: string) {
@@ -83,6 +88,14 @@ export default defineConfig({
         silenceDeprecations: ["import", "legacy-js-api", "mixed-decls"],
       },
     },
+  },
+
+  // 依存関係の事前バンドリングでCommonJS変換エラーを回避
+  optimizeDeps: {
+    include: [
+      '@atproto/api',
+      'crypto-js',
+    ],
   },
 
   server,
