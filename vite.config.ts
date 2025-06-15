@@ -65,7 +65,13 @@ export default defineConfig({
         },
       },
       treeshake: {
-        moduleSideEffects: false,
+        moduleSideEffects: (id: string) => {
+          // @atproto/apiやその依存関係では副作用を保持
+          if (id.includes("@atproto") || id.includes("multiformats") || id.includes("@ipld")) {
+            return true
+          }
+          return false
+        },
         propertyReadSideEffects: false,
         unknownGlobalSideEffects: false,
       },
