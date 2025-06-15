@@ -319,6 +319,7 @@ export default () => ({
   "french": "Français",
   "german": "Deutsch",
   "japanese": "日本語",
+  "korean": "한국어",
   "contentLanguages": "Langues de contenu",
   "contentLanguagesEdit": "Sélectionner les langues",
   "contentLanguagesDetail1": "Choix multiple possible.",

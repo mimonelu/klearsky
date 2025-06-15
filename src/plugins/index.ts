@@ -6,6 +6,7 @@ import translationDe from "@/translations/de"
 import translationEn from "@/translations/en"
 import translationFr from "@/translations/fr"
 import translationJa from "@/translations/ja"
+import translationKo from "@/translations/ko"
 import IntersectionObserverDirective from "@/plugins/intersection-observer-directive"
 
 export function registerPlugins (app: App) {
@@ -21,6 +22,7 @@ export function registerPlugins (app: App) {
     en: translationEn(),
     fr: translationFr(),
     ja: translationJa(),
+    ko: translationKo(),
   })
 
   // 交差オブザーバー
