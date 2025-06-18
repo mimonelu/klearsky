@@ -1,3 +1,5 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E81GN7CG)
+
 ![Klearsky](./public/img/ogp.png "Klearsky")
 
 # Klearsky
