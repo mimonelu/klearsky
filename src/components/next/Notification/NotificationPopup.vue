@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onBeforeUnmount, onMounted, reactive, ref, type ComputedRef } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import NotificationList from "@/components/lists/NotificationList.vue"
+import NotificationList from "@/components/next/Notification/NotificationList.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
