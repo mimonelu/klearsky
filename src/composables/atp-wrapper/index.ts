@@ -122,6 +122,7 @@ import updateListMuteToDisable from "@/composables/atp-wrapper/update/update-lis
 import updateListMuteToEnable from "@/composables/atp-wrapper/update/update-list-mute-to-enable"
 import updateMuteToDisable from "@/composables/atp-wrapper/update/update-mute-to-disable"
 import updateMuteToEnable from "@/composables/atp-wrapper/update/update-mute-to-enable"
+import updateNotificationPreferences from "@/composables/atp-wrapper/update/update-notification-preferences"
 import updateNotificationSeen from "@/composables/atp-wrapper/update/update-notification-seen"
 import updatePinnedPost from "@/composables/atp-wrapper/update/update-pinned-post"
 import updatePostgate from "@/composables/atp-wrapper/update/update-postgate"
@@ -299,6 +300,7 @@ class AtpWrapper implements TIAtpWrapper {
   updateListMuteToEnable = updateListMuteToEnable
   updateMuteToDisable = updateMuteToDisable
   updateMuteToEnable = updateMuteToEnable
+  updateNotificationPreferences = updateNotificationPreferences
   updateNotificationSeen = updateNotificationSeen
   updatePinnedPost = updatePinnedPost
   updatePostgate = updatePostgate

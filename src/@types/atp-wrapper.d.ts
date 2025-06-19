@@ -255,6 +255,8 @@ interface TIAtpWrapper {
     (did: string): Promise<Error | undefined>
   updateMuteToEnable
     (did: string): Promise<Error | undefined>
+  updateNotificationPreferences
+    (preferences: Partial<TTNotificationPreferences["preferences"]>): Promise<Error | TTNotificationPreferences>
   updateNotificationSeen
     (seenAtDate?: Date): Promise<Error | undefined>
   updatePinnedPost
