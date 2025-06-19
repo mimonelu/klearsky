@@ -69,6 +69,7 @@ import fetchLists from "@/composables/atp-wrapper/fetch/fetch-lists"
 import fetchLogAudit from "@/composables/atp-wrapper/fetch/fetch-log-audit"
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch/fetch-notification-count"
+import fetchNotificationPreferences from "@/composables/atp-wrapper/fetch/fetch-notification-preferences"
 import fetchNotifications from "@/composables/atp-wrapper/fetch/fetch-notifications"
 import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-official-feed-generators"
 import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-popular-feed-generators"
@@ -239,6 +240,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchLogAudit = fetchLogAudit
   fetchMutingUsers = fetchMutingUsers
   fetchNotificationCount = fetchNotificationCount
+  fetchNotificationPreferences = fetchNotificationPreferences
   fetchNotifications = fetchNotifications
   fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
   fetchPopularFeedGenerators = fetchPopularFeedGenerators

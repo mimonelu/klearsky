@@ -145,6 +145,8 @@ interface TIAtpWrapper {
     (users: Array<TTUser>, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchNotificationCount
     (): Promise<Error | number>
+  fetchNotificationPreferences
+    (): Promise<Error | TTNotificationPreferences>
   fetchNotifications
     (values: Array<TTNotificationGroup>, reasons?: Array<TTNotificationStrictReason>, limit?: number, cursor?: string): Promise<Error | { cursor?: string; newNotificationCount: number }>
   fetchOfficialFeedGenerators
