@@ -645,13 +645,18 @@ export default () => ({
   // ============================================================================
   // NOTIFICATION FILTERS
   // ============================================================================
-  "notificationRemoteFilter": "通知フィルター",
-  "notificationRemoteFilterReply": "リプライ",
-  "notificationRemoteFilterQuote": "引用リポスト",
-  "notificationRemoteFilterMention": "メンション",
-  "notificationRemoteFilterRepost": "リポスト",
-  "notificationRemoteFilterLike": "いいね",
-  "notificationRemoteFilterFollow": "フォロー",
+  "notificationFilter": "通知フィルター",
+  "notificationFilterList": "この通知を受け取る",
+  "notificationFilterIncludeAll": "誰でも",
+  "notificationFilterIncludeFollows": "フォロー中",
+  "notificationFilterReply": "リプライ通知",
+  "notificationFilterMention": "メンション通知",
+  "notificationFilterQuote": "引用リポスト通知",
+  "notificationFilterRepost": "リポスト通知",
+  "notificationFilterRepostViaRepost": "リポストのリポスト通知",
+  "notificationFilterLike": "いいね通知",
+  "notificationFilterLikeViaRepost": "リポストへのいいね通知",
+  "notificationFilterFollow": "フォロー通知",
 
   // ============================================================================
   // CONTENT FOLDING

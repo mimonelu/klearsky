@@ -645,13 +645,18 @@ export default () => ({
   // ============================================================================
   // NOTIFICATION FILTERS
   // ============================================================================
-  "notificationRemoteFilter": "알림 필터",
-  "notificationRemoteFilterReply": "답글",
-  "notificationRemoteFilterQuote": "인용 리포스트",
-  "notificationRemoteFilterMention": "멘션",
-  "notificationRemoteFilterRepost": "리포스트",
-  "notificationRemoteFilterLike": "좋아요",
-  "notificationRemoteFilterFollow": "팔로우",
+  "notificationFilter": "알림 필터",
+  "notificationFilterList": "알림 받기",
+  "notificationFilterIncludeAll": "모든 사람",
+  "notificationFilterIncludeFollows": "팔로잉",
+  "notificationFilterReply": "답글 알림",
+  "notificationFilterMention": "멘션 알림",
+  "notificationFilterQuote": "인용 리포스트 알림",
+  "notificationFilterRepost": "리포스트 알림",
+  "notificationFilterRepostViaRepost": "리포스트의 리포스트 알림",
+  "notificationFilterLike": "좋아요 알림",
+  "notificationFilterLikeViaRepost": "리포스트 좋아요 알림",
+  "notificationFilterFollow": "팔로우 알림",
 
   // ============================================================================
   // CONTENT FOLDING

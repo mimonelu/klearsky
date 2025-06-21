@@ -16,6 +16,7 @@ type TTEasyFormItem = {
   autocapitalize?: string
   autocomplete?: string
   autocorrect?: string
+  booleanboxLabel?: string
   spellcheck?: boolean
   buttonLabel?: string
   classes?: string
@@ -60,6 +61,7 @@ type TTEasyFormItemType =
   "text" |
   "url" |
   "textarea" |
+  "boolean" |
   "checkbox" |
   "radio" |
   "select" |

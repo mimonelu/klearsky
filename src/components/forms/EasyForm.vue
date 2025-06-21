@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { nextTick, onMounted, reactive, ref } from "vue"
+import Booleanbox from "@/components/forms/Booleanbox.vue"
 import Checkboxes from "@/components/forms/Checkboxes.vue"
 import FileBox from "@/components/forms/FileBox.vue"
 import MentionSuggestionList from "@/components/lists/MentionSuggestionList.vue"
@@ -239,6 +240,19 @@ function validate (): boolean {
                 @blur="onBlur(item)"
                 @input="onInputTextarea($event, item)"
                 @keydown.enter="onEnterKeyDownOnTextarea"
+              />
+
+              <!-- Boolean 型チェックボックス -->
+              <Booleanbox
+                v-else-if="item.type === 'boolean'"
+                v-bind="item.attrs"
+                :state="item.state"
+                :model="item.model"
+                :disabled="item.disabled"
+                :required="item.required ?? false"
+                :class="item.classes"
+                :booleanboxLabel="item.booleanboxLabel"
+                @update="onChange(item)"
               />
 
               <!-- チェックボックス -->

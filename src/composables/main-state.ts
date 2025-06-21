@@ -64,7 +64,10 @@ export const state: MainState = reactive<MainState>({
   notificationCount: 0,
   notificationFetchedFirst: false,
   notificationCurrentTab: undefined,
+  notificationPreferences: undefined,
   lastFetchNotificationsDate: undefined,
+  fetchNotificationPreferences: fetchNotificationPreferences,
+  updateNotificationPreferences: updateNotificationPreferences,
   fetchNotifications: fetchNotifications,
 
   // 新着通知タイマー
@@ -899,9 +902,6 @@ function saveSettings () {
   if (state.settings[did].notificationFetchInterval == null) {
     state.settings[did].notificationFetchInterval = 30000
   }
-  if (state.settings[did].notificationRemoteFilter == null) {
-    state.settings[did].notificationRemoteFilter = []
-  }
   if (state.settings[did].timelineFetchInterval == null) {
     state.settings[did].timelineFetchInterval = 10000
   }
@@ -1063,10 +1063,37 @@ function updateColorThemeSetting () {
 
 // 通知
 
+async function fetchNotificationPreferences () {
+  const response = await state.atp.fetchNotificationPreferences()
+  if (response instanceof Error) {
+    // TODO:
+    return
+  }
+  state.notificationPreferences = response
+}
+
+async function updateNotificationPreferences () {
+  if (state.notificationPreferences?.preferences == null) {
+    return
+  }
+  const response = await state.atp.updateNotificationPreferences(state.notificationPreferences.preferences)
+  if (response instanceof Error) {
+    // TODO:
+    return
+  }
+}
+
 async function fetchNotifications (limit: number, direction: "new" | "old") {
+  // 通知設定から取得する通知種別の配列を生成
+  const reasons = state.notificationPreferences?.preferences != null
+    ? Object.keys(state.notificationPreferences.preferences).filter((key) => {
+      return state.notificationPreferences!.preferences[key].list
+    })
+    : []
+
   const result = await state.atp.fetchNotifications(
     state.notifications,
-    state.currentSetting.notificationRemoteFilter,
+    reasons as TTNotificationStrictReason[],
     limit,
     direction === "new" ? undefined : state.notificationCursor
   )

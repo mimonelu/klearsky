@@ -13,12 +13,29 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
-  enabledNotificationRemoteFilter: ComputedRef<boolean>
+  enabledNotificationFilter: ComputedRef<boolean>
   numberByReason: ComputedRef<any>
 }>({
   processing: false,
-  enabledNotificationRemoteFilter: computed((): boolean => {
-    return (mainState.currentSetting.notificationRemoteFilter?.length ?? 0) > 0
+  enabledNotificationFilter: computed((): boolean => {
+    if (mainState.notificationPreferences?.preferences == null) {
+      return false
+    }
+    return ![
+      "reply",
+      "mention",
+      "quote",
+      "repost",
+      "repostViaRepost",
+      "like",
+      "likeViaRepost",
+      "follow",
+    ].every((key) => {
+      return (
+        (mainState.notificationPreferences!.preferences as any)[key].list &&
+        (mainState.notificationPreferences!.preferences as any)[key].include === "all"
+      )
+    })
   }),
   numberByReason: computed((): any => {
     const results: { [k: string]: number } = {
@@ -101,20 +118,13 @@ async function fetchNotifications (direction: "new" | "old") {
 
 async function openNotificationFilterPopup () {
   Util.blurElement()
-  if (mainState.currentSetting.notificationRemoteFilter == null) {
-    return
-  }
   mainState.openNotificationFilterPopup()
-  const filter1 = [...mainState.currentSetting.notificationRemoteFilter].sort()
+  const preferences1 = JSON.stringify(mainState.notificationPreferences)
   await Util.waitProp(() => mainState.notificationFilterPopupDisplay, false)
-  const filter2 = [...mainState.currentSetting.notificationRemoteFilter].sort()
-  mainState.saveSettings()
+  const preferences2 = JSON.stringify(mainState.notificationPreferences)
 
-  // リモート通知フィルターに変更があれば通知データをリセットして再取得
-  if (
-    filter1.length !== filter2.length ||
-    filter1.some((v, i) => v !== filter2[i])
-  ) {
+  // 通知設定に変更があれば通知データをリセットして再取得
+  if (preferences1 !== preferences2) {
     mainState.notifications.splice(0)
     mainState.notificationCursor = undefined
     mainState.notificationCount = 0
@@ -147,11 +157,11 @@ function scrolledToBottom () {
         <button
           type="button"
           class="button--plane"
-          :data-enable-remote-notification-filter="state.enabledNotificationRemoteFilter"
+          :data-enable-notification-filter="state.enabledNotificationFilter"
           @click.stop="openNotificationFilterPopup"
         >
-          <SVGIcon :name="state.enabledNotificationRemoteFilter ? 'setting' : 'settingOff'" />
-          <span>{{ $t(state.enabledNotificationRemoteFilter ? "on" : "off") }}</span>
+          <SVGIcon :name="state.enabledNotificationFilter ? 'setting' : 'settingOff'" />
+          <span>{{ $t(state.enabledNotificationFilter ? "on" : "off") }}</span>
         </button>
       </div>
 
@@ -316,10 +326,10 @@ function scrolledToBottom () {
         font-size: 0.875rem;
       }
 
-      &[data-enable-remote-notification-filter="false"] {
+      &[data-enable-notification-filter="false"] {
         opacity: 0.5;
       }
-      &[data-enable-remote-notification-filter="true"] {
+      &[data-enable-notification-filter="true"] {
         --fg-color: var(--notice-color);
 
         & > span {

@@ -37,7 +37,10 @@ interface MainState {
   notificationCount: number
   notificationFetchedFirst: boolean
   notificationCurrentTab?: TTNotificationReason
+  notificationPreferences?: TTNotificationPreferences
   lastFetchNotificationsDate?: Date
+  fetchNotificationPreferences: () => Promise<void>
+  updateNotificationPreferences: () => Promise<void>
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
 
   // 新着通知タイマー

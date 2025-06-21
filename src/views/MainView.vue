@@ -312,6 +312,9 @@ async function processAfterLogin () {
     state.myWorker!.setSessionCache("userProfile", state.userProfile)
   }
 
+  // 通知設定の取得
+  state.fetchNotificationPreferences()
+
   // ラベラーの取得
   if (state.myLabeler!.labelers.length === 0) {
     await state.myLabeler!.updateMyLabelers()
@@ -441,6 +444,7 @@ async function moveToDefaultHome () {
             await router.push("/home/globalline")
             return
           }
+          return
         }
         default: {
           break
@@ -488,6 +492,7 @@ async function moveToDefaultHome () {
           await router.push("/home/globalline")
           return
         }
+        return
       }
       default: {
         break

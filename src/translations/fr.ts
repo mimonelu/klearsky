@@ -645,13 +645,18 @@ export default () => ({
   // ============================================================================
   // NOTIFICATION FILTERS
   // ============================================================================
-  "notificationRemoteFilter": "Filtre de notifications",
-  "notificationRemoteFilterReply": "Réponses",
-  "notificationRemoteFilterQuote": "Citations",
-  "notificationRemoteFilterMention": "Mentions",
-  "notificationRemoteFilterRepost": "Partages",
-  "notificationRemoteFilterLike": "J'aime",
-  "notificationRemoteFilterFollow": "Abonnements",
+  "notificationFilter": "Filtre de notifications",
+  "notificationFilterList": "Recevoir les notifications",
+  "notificationFilterIncludeAll": "Tout le monde",
+  "notificationFilterIncludeFollows": "Abonnements",
+  "notificationFilterReply": "Notifications de réponse",
+  "notificationFilterMention": "Notifications de mention",
+  "notificationFilterQuote": "Notifications de citation repost",
+  "notificationFilterRepost": "Notifications de repost",
+  "notificationFilterRepostViaRepost": "Notifications de repost de repost",
+  "notificationFilterLike": "Notifications de like",
+  "notificationFilterLikeViaRepost": "Notifications de likes sur reposts",
+  "notificationFilterFollow": "Notifications de suivi",
 
   // ============================================================================
   // CONTENT FOLDING
