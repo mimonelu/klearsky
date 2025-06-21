@@ -13,11 +13,11 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
-  enableRemoteNotificationFilter: ComputedRef<boolean>
+  enabledNotificationRemoteFilter: ComputedRef<boolean>
   numberByReason: ComputedRef<any>
 }>({
   processing: false,
-  enableRemoteNotificationFilter: computed((): boolean => {
+  enabledNotificationRemoteFilter: computed((): boolean => {
     return (mainState.currentSetting.notificationRemoteFilter?.length ?? 0) > 0
   }),
   numberByReason: computed((): any => {
@@ -99,14 +99,14 @@ async function fetchNotifications (direction: "new" | "old") {
   state.processing = false
 }
 
-async function openRemoteNotificationFilterPopup () {
+async function openNotificationFilterPopup () {
   Util.blurElement()
   if (mainState.currentSetting.notificationRemoteFilter == null) {
     return
   }
-  mainState.openNotificationRemoteFilterPopup()
+  mainState.openNotificationFilterPopup()
   const filter1 = [...mainState.currentSetting.notificationRemoteFilter].sort()
-  await Util.waitProp(() => mainState.notificationRemoteFilterPopupDisplay, false)
+  await Util.waitProp(() => mainState.notificationFilterPopupDisplay, false)
   const filter2 = [...mainState.currentSetting.notificationRemoteFilter].sort()
   mainState.saveSettings()
 
@@ -122,7 +122,7 @@ async function openRemoteNotificationFilterPopup () {
   }
 }
 
-function setLocalNotificationFilter (reason?: TTNotificationReason) {
+function setNotificationCurrentTab (reason?: TTNotificationReason) {
   Util.blurElement()
   mainState.notificationCurrentTab = reason
   popup.value?.scrollToTop()
@@ -147,11 +147,11 @@ function scrolledToBottom () {
         <button
           type="button"
           class="button--plane"
-          :data-enable-remote-notification-filter="state.enableRemoteNotificationFilter"
-          @click.stop="openRemoteNotificationFilterPopup"
+          :data-enable-remote-notification-filter="state.enabledNotificationRemoteFilter"
+          @click.stop="openNotificationFilterPopup"
         >
-          <SVGIcon :name="state.enableRemoteNotificationFilter ? 'setting' : 'settingOff'" />
-          <span>{{ $t(state.enableRemoteNotificationFilter ? "on" : "off") }}</span>
+          <SVGIcon :name="state.enabledNotificationRemoteFilter ? 'setting' : 'settingOff'" />
+          <span>{{ $t(state.enabledNotificationRemoteFilter ? "on" : "off") }}</span>
         </button>
       </div>
 
@@ -168,7 +168,7 @@ function scrolledToBottom () {
           type="button"
           class="tab__button"
           :data-focused="mainState.notificationCurrentTab == null"
-          @click="setLocalNotificationFilter()"
+          @click="setNotificationCurrentTab()"
         >
           <SVGIcon name="shimmer" />
           <span
@@ -182,7 +182,7 @@ function scrolledToBottom () {
           type="button"
           class="tab__button tab__button--reply"
           :data-focused="mainState.notificationCurrentTab == 'reply'"
-          @click="setLocalNotificationFilter('reply')"
+          @click="setNotificationCurrentTab('reply')"
         >
           <SVGIcon name="reply" />
           <span
@@ -196,7 +196,7 @@ function scrolledToBottom () {
           type="button"
           class="tab__button tab__button--mention"
           :data-focused="mainState.notificationCurrentTab == 'mention'"
-          @click="setLocalNotificationFilter('mention')"
+          @click="setNotificationCurrentTab('mention')"
         >
           <SVGIcon name="at" />
           <span
@@ -210,7 +210,7 @@ function scrolledToBottom () {
           type="button"
           class="tab__button tab__button--quoteRepost"
           :data-focused="mainState.notificationCurrentTab == 'quote'"
-          @click="setLocalNotificationFilter('quote')"
+          @click="setNotificationCurrentTab('quote')"
         >
           <SVGIcon name="quoteRepost" />
           <span
@@ -224,7 +224,7 @@ function scrolledToBottom () {
           type="button"
           class="tab__button tab__button--repost"
           :data-focused="mainState.notificationCurrentTab == 'repost'"
-          @click="setLocalNotificationFilter('repost')"
+          @click="setNotificationCurrentTab('repost')"
         >
           <SVGIcon name="repost" />
           <span
@@ -238,7 +238,7 @@ function scrolledToBottom () {
           type="button"
           class="tab__button tab__button--like"
           :data-focused="mainState.notificationCurrentTab == 'like'"
-          @click="setLocalNotificationFilter('like')"
+          @click="setNotificationCurrentTab('like')"
         >
           <SVGIcon name="like" />
           <span
@@ -252,7 +252,7 @@ function scrolledToBottom () {
           type="button"
           class="tab__button tab__button--follow"
           :data-focused="mainState.notificationCurrentTab == 'follow'"
-          @click="setLocalNotificationFilter('follow')"
+          @click="setNotificationCurrentTab('follow')"
         >
           <SVGIcon name="person" />
           <span

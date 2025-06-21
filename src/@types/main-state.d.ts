@@ -363,10 +363,10 @@ interface MainState {
   openNotificationPopup: Function
   closeNotificationPopup: () => void
 
-  // ポップアップ - リモート通知フィルターポップアップ
-  notificationRemoteFilterPopupDisplay: boolean
-  openNotificationRemoteFilterPopup: Function
-  closeNotificationRemoteFilterPopup: () => void
+  // ポップアップ - 通知フィルターポップアップ
+  notificationFilterPopupDisplay: boolean
+  openNotificationFilterPopup: Function
+  closeNotificationFilterPopup: () => void
 
   // ポップアップ - UI言語設定ポップアップ
   uiLanguageSettingsPopupDisplay: boolean

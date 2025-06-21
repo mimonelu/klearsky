@@ -40,8 +40,8 @@ import MyFeedsPopup from "@/components/popups/MyFeedsPopup.vue"
 import MyFeedsSortPopover from "@/components/popovers/MyFeedsSortPopover.vue"
 import MyListPopup from "@/components/popups/MyListPopup.vue"
 import MyWordPopup from "@/components/popups/MyWordPopup.vue"
+import NotificationFilterPopup from "@/components/next/Notification/NotificationFilterPopup.vue"
 import NotificationPopup from "@/components/next/Notification/NotificationPopup.vue"
-import NotificationRemoteFilterPopup from "@/components/next/Notification/NotificationRemoteFilterPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
 import PasteFiles from "@/components/next/PasteFiles/PasteFiles.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
@@ -750,7 +750,7 @@ async function updateCurrentList () {
   state.currentListItemsCursor = undefined
 
   // 現在のリストを取得
-  // マイリスト → 現在のプロフィールユーザーリスト →　APIの順で取得
+  // マイリスト → 現在のプロフィールユーザーリスト → APIの順で取得
   state.currentList = undefined
   state.currentList = state.myLists!.items.find((list: TTList) => {
     return list.uri === listUri
@@ -941,11 +941,11 @@ function changeSetting () {
         />
       </Transition>
 
-      <!-- リモート通知フィルターポップアップ -->
+      <!-- 通知フィルターポップアップ -->
       <Transition>
-        <NotificationRemoteFilterPopup
-          v-if="state.notificationRemoteFilterPopupDisplay"
-          @close="state.closeNotificationRemoteFilterPopup"
+        <NotificationFilterPopup
+          v-if="state.notificationFilterPopupDisplay"
+          @close="state.closeNotificationFilterPopup"
         />
       </Transition>
 

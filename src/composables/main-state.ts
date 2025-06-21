@@ -430,10 +430,10 @@ export const state: MainState = reactive<MainState>({
   openNotificationPopup: openNotificationPopup,
   closeNotificationPopup: closeNotificationPopup,
 
-  // ポップアップ - リモート通知フィルターポップアップ
-  notificationRemoteFilterPopupDisplay: false,
-  openNotificationRemoteFilterPopup: openNotificationRemoteFilterPopup,
-  closeNotificationRemoteFilterPopup: closeNotificationRemoteFilterPopup,
+  // ポップアップ - 通知フィルターポップアップ
+  notificationFilterPopupDisplay: false,
+  openNotificationFilterPopup: openNotificationFilterPopup,
+  closeNotificationFilterPopup: closeNotificationFilterPopup,
 
   // ポップアップ - UI言語設定ポップアップ
   uiLanguageSettingsPopupDisplay: false,
@@ -2150,14 +2150,14 @@ function closeNotificationPopup () {
   state.notificationPopupDisplay = false
 }
 
-// ポップアップ - リモート通知フィルターポップアップ
+// ポップアップ - 通知フィルターポップアップ
 
-function openNotificationRemoteFilterPopup () {
-  state.notificationRemoteFilterPopupDisplay = true
+function openNotificationFilterPopup () {
+  state.notificationFilterPopupDisplay = true
 }
 
-function closeNotificationRemoteFilterPopup () {
-  state.notificationRemoteFilterPopupDisplay = false
+function closeNotificationFilterPopup () {
+  state.notificationFilterPopupDisplay = false
 }
 
 // ポップアップ - UI言語設定ポップアップ
