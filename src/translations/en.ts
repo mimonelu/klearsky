@@ -646,7 +646,7 @@ export default () => ({
   // NOTIFICATION FILTERS
   // ============================================================================
   "notificationFilter": "Notification Filter",
-  "notificationFilterList": "Receive notifications",
+  "notificationFilterList": "Show this notification",
   "notificationFilterIncludeAll": "Everyone",
   "notificationFilterIncludeFollows": "Followings",
   "notificationFilterReply": "Reply notifications",

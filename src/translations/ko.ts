@@ -646,7 +646,7 @@ export default () => ({
   // NOTIFICATION FILTERS
   // ============================================================================
   "notificationFilter": "알림 필터",
-  "notificationFilterList": "알림 받기",
+  "notificationFilterList": "알림 이 알림 표시",
   "notificationFilterIncludeAll": "모든 사람",
   "notificationFilterIncludeFollows": "팔로잉",
   "notificationFilterReply": "답글 알림",

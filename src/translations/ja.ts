@@ -646,7 +646,7 @@ export default () => ({
   // NOTIFICATION FILTERS
   // ============================================================================
   "notificationFilter": "通知フィルター",
-  "notificationFilterList": "この通知を受け取る",
+  "notificationFilterList": "この通知を表示する",
   "notificationFilterIncludeAll": "誰でも",
   "notificationFilterIncludeFollows": "フォロー中",
   "notificationFilterReply": "リプライ通知",
