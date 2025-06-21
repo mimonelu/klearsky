@@ -15,31 +15,31 @@ const state = reactive<{
   filteredNotifications: ComputedRef<TTNotificationGroup[]>
 }>({
   filteredNotifications: computed((): TTNotificationGroup[] => {
-    if (mainState.notificationLocalFilter == null) {
+    if (mainState.notificationCurrentTab == null) {
       return mainState.notifications
     }
     return mainState.notifications
       .filter((notificationGroup: TTNotificationGroup) => {
-        // いいねフィルター選択時：フィードジェネレーターへのいいねとリポスト経由いいねもセットで返す
-        if (mainState.notificationLocalFilter === "like") {
+        // いいね通知タブ選択時：フィードジェネレーターへのいいねとリポスト経由いいねもセットで返す
+        if (mainState.notificationCurrentTab === "like") {
           return notificationGroup.reason === "like" ||
                  notificationGroup.reason === "likeGenerator" ||
                  notificationGroup.reason === "like-via-repost"
         }
 
-        // リポストフィルター選択時：リポスト経由リポストとセットで返す
-        if (mainState.notificationLocalFilter === "repost") {
+        // リポスト通知タブ選択時：リポスト経由リポストとセットで返す
+        if (mainState.notificationCurrentTab === "repost") {
           return notificationGroup.reason === "repost" ||
                  notificationGroup.reason === "repost-via-repost"
         }
 
-        // フォローフィルター選択時：スターターパックとセットで返す
-        if (mainState.notificationLocalFilter === "follow") {
+        // フォロー通知タブ選択時：スターターパックとセットで返す
+        if (mainState.notificationCurrentTab === "follow") {
           return notificationGroup.reason === "follow" ||
                  notificationGroup.reason === "starterpack-joined"
         }
 
-        return notificationGroup.reason === mainState.notificationLocalFilter
+        return notificationGroup.reason === mainState.notificationCurrentTab
       })
   }),
 })

@@ -36,7 +36,7 @@ interface MainState {
   notificationCursor?: string
   notificationCount: number
   notificationFetchedFirst: boolean
-  notificationLocalFilter?: TTNotificationReason
+  notificationCurrentTab?: TTNotificationReason
   lastFetchNotificationsDate?: Date
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
 
