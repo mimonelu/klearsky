@@ -1084,11 +1084,33 @@ async function updateNotificationPreferences () {
 }
 
 async function fetchNotifications (limit: number, direction: "new" | "old") {
+  // 通知種別をキャメルケースからハイフン区切りに変換するマップ
+  const reasonMapping: Record<keyof TTNotificationPreferences["preferences"], string> = {
+    chat: "chat",
+    follow: "follow",
+    like: "like",
+    likeViaRepost: "like-via-repost",
+    mention: "mention",
+    quote: "quote",
+    reply: "reply",
+    repost: "repost",
+    repostViaRepost: "repost-via-repost",
+    starterpackJoined: "starterpack-joined",
+    subscribedPost: "subscribed-post",
+    unverified: "unverified",
+    verified: "verified"
+  }
+
   // 通知設定から取得する通知種別の配列を生成
   const reasons = state.notificationPreferences?.preferences != null
-    ? Object.keys(state.notificationPreferences.preferences).filter((key) => {
-      return state.notificationPreferences!.preferences[key].list
-    })
+    ? (Object.keys(state.notificationPreferences.preferences) as Array<keyof TTNotificationPreferences["preferences"]>)
+      .filter((key) => {
+        const pref = state.notificationPreferences!.preferences[key]
+        return "list" in pref ? pref.list : false
+      })
+      .map((reason) => {
+        return reasonMapping[reason]
+      })
     : []
 
   const result = await state.atp.fetchNotifications(

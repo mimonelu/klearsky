@@ -12,7 +12,8 @@ type TTNotificationReason =
   "starterpack-joined" |
   "verified" |
   "like-via-repost" |
-  "repost-via-repost"
+  "repost-via-repost" |
+  "subscribed-post"
   (string & {})
 
 type TTNotification = {
