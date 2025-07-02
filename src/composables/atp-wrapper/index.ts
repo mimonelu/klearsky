@@ -1,4 +1,5 @@
 import type { AtpAgent } from "@atproto/api"
+import createActivitySubscription from "@/composables/atp-wrapper/create/create-activity-subscription"
 import createActorStatus from "@/composables/atp-wrapper/create/create-actor-status"
 import createAgent from "@/composables/atp-wrapper/create/create-agent"
 import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
@@ -32,6 +33,7 @@ import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
 import deleteSession from "@/composables/atp-wrapper/delete/delete-session"
 import deleteStarterPack from "@/composables/atp-wrapper/delete/delete-starter-pack"
 import deleteThreadgate from "@/composables/atp-wrapper/delete/delete-threadgate"
+import fetchActivitySubscriptions from "@/composables/atp-wrapper/fetch/fetch-activity-subscriptions"
 import fetchActorStatus from "@/composables/atp-wrapper/fetch/fetch-actor-status"
 import fetchActorLists from "@/composables/atp-wrapper/fetch/fetch-actor-lists"
 import fetchActorStarterPacks from "@/composables/atp-wrapper/fetch/fetch-actor-starter-packs"
@@ -171,6 +173,7 @@ class AtpWrapper implements TIAtpWrapper {
   canLogin (this: TIAtpWrapper): boolean {
     return this.data.sessions[this.data.did] != null
   }
+  createActivitySubscription = createActivitySubscription
   createActorStatus = createActorStatus
   createAgent = createAgent
   createChatDeclaration = createChatDeclaration
@@ -204,6 +207,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteSession = deleteSession
   deleteStarterPack = deleteStarterPack
   deleteThreadgate = deleteThreadgate
+  fetchActivitySubscriptions = fetchActivitySubscriptions
   fetchActorStatus = fetchActorStatus
   fetchActorLists = fetchActorLists
   fetchActorStarterPacks = fetchActorStarterPacks

@@ -5,6 +5,8 @@ interface TIAtpWrapper {
   session?: TTSession
   canLogin
     (): boolean
+  createActivitySubscription
+    (subject: string, post: boolean, reply: boolean): Promise<TTActivitySubscription | Error>
   createActorStatus
     (type: string, durationMinutes?: number, embed?: TTExternal): Promise<Error | TTCidUri>
   createAgent
@@ -71,6 +73,8 @@ interface TIAtpWrapper {
     (uri: string): Promise<Error | undefined>
   deleteThreadgate
     (postUri: string): Promise<Error | undefined>
+  fetchActivitySubscriptions
+    (cursor?: string): Promise<TTActivitySubscriptionList | Error>
   fetchActorStatus
     (did: string): Promise<Error | TIActorStatusRecord>
   fetchActorLists
