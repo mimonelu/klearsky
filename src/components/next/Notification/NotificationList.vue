@@ -55,6 +55,7 @@ const iconMap: { [reason in TTNotificationReason]: string } = {
   likeGenerator: "like",
   "like-via-repost": "like",
   "starterpack-joined": "cards",
+  "subscribed-post": "post",
   "verified": "verified",
 }
 
@@ -72,7 +73,8 @@ function isGroupingReason (reason: string): boolean {
     reason === "quote" ||
     reason === "reply" ||
     reason === "repost" ||
-    reason === "repost-via-repost"
+    reason === "repost-via-repost" ||
+    reason === "subscribed-post"
   )
 }
 
@@ -92,7 +94,8 @@ function makeSubjectTo (notification: TTNotification): any {
     }
     case "mention":
     case "quote":
-    case "reply": {
+    case "reply":
+    case "subscribed-post": {
       return { name: "post", query: { uri: notification.uri } }
     }
     default: {
@@ -308,6 +311,11 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
       white-space: nowrap;
     }
   }
+  &[data-reason="subscribed-post"] {
+    .text {
+      color: rgb(var(--fg-color), 0.75);
+    }
+  }
 
   // 通知フォルダー開閉ボタンを持つ通知グループの処理
   &[data-has-folder="true"] {
@@ -448,6 +456,9 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   }
   [data-reason="starterpack-joined"] & {
     fill: rgb(var(--like-color));
+  }
+  [data-reason="subscribed-post"] & {
+    fill: rgb(var(--post-color));
   }
 }
 
