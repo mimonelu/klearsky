@@ -89,7 +89,7 @@ export default async function (
       })()
 
       // 新しい通知オブジェクトの作成
-      const newNotification = {
+      const newNotification: TTNotification = {
         avatar: notification.author.avatar,
         cid: notification.cid,
         did: notification.author.did,
@@ -97,10 +97,13 @@ export default async function (
         handle: notification.author.handle,
         following: notification.author.viewer?.following != null,
         indexedAt: notification.indexedAt,
+        isSubscribedReply:
+          notification.reason === "subscribed-post" &&
+          notification.record?.reply != null,
         reason: notification.reason as TTNotificationReason,
         text: notification.reason === "follow"
           ? notification.author.description
-          : (notification.record as any)?.text,
+          : notification.record?.text as undefined | string,
         uri: notification.uri,
         isRead: notification.isRead,
       }

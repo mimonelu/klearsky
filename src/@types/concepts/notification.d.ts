@@ -24,6 +24,7 @@ type TTNotification = {
   handle: string
   following: boolean
   indexedAt: string
+  isSubscribedReply: boolean
   reason: TTNotificationReason
   text?: string
   uri: string

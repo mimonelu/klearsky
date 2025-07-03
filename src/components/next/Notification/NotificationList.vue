@@ -182,6 +182,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             :to="makeSubjectTo(notification)"
             class="notification"
             :data-is-new="!notification.isRead"
+            :data-is-subscribed-reply="notification.isSubscribedReply"
             @click="$emit('close')"
           >
             <!-- 新着通知アイコン -->
@@ -227,11 +228,19 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             <!-- リアクション日時 -->
             <div class="indexed-at">{{ mainState.formatDate(notification.indexedAt) }}</div>
 
-            <!-- 本文 -->
-            <div
-              v-if="notification.text"
-              class="text"
-            >{{ notification.text }}</div>
+            <div class="notification__body">
+              <!-- ポスト購読用リプライアイコン -->
+              <SVGIcon
+                v-if="notification.isSubscribedReply"
+                name="reply"
+              />
+
+              <!-- 本文 -->
+              <span
+                v-if="notification.text"
+                class="text"
+              >{{ notification.text }}</span>
+            </div>
           </RouterLink>
         </template>
       </div>
@@ -312,8 +321,11 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
     }
   }
   &[data-reason="subscribed-post"] {
-    .text {
+    [data-is-subscribed-reply="false"] .text {
       color: rgb(var(--fg-color), 0.75);
+    }
+    [data-is-subscribed-reply="true"] .text {
+      color: rgb(var(--post-color));
     }
   }
 
@@ -405,7 +417,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   &[data-is-new="true"] {
     grid-template-columns: min-content min-content min-content auto 1fr auto;
 
-    .text {
+    .notification__body {
       grid-column: 4 / 7;
     }
   }
@@ -494,11 +506,22 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   white-space: nowrap;
 }
 
+.notification__body {
+  grid-column: 3 / 6;
+
+  // ポスト購読用リプライアイコン
+  .svg-icon--reply {
+    display: inline-block;
+    fill: rgb(var(--post-color));
+    margin-right: 0.25rem;
+    vertical-align: middle;
+  }
+}
+
 // 本文
 .text {
   color: rgb(var(--post-color));
   font-size: 0.875rem;
-  grid-column: 3 / 6;
   line-height: var(--line-height-high);
   word-break: break-all;
 }
