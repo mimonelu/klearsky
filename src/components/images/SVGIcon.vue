@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 // SEE: https://pictogrammers.com/library/mdi/
+import activitySubscription from "@/svg/activity-subscription.svg?raw"
 import alert from "@/svg/alert.svg?raw"
 import alphaA from "@/svg/alpha-a.svg?raw"
 import arrowBottom from "@/svg/arrow-bottom.svg?raw"
@@ -109,6 +110,7 @@ import wallpaper from "@/svg/wallpaper.svg?raw"
 import wordMute from "@/svg/word-mute.svg?raw"
 
 const icons: { [k: string]: string } = {
+  activitySubscription,
   alert,
   alphaA,
   arrowBottom,

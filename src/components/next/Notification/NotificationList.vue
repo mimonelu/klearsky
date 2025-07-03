@@ -55,7 +55,7 @@ const iconMap: { [reason in TTNotificationReason]: string } = {
   likeGenerator: "like",
   "like-via-repost": "like",
   "starterpack-joined": "cards",
-  "subscribed-post": "post",
+  "subscribed-post": "activitySubscription",
   "verified": "verified",
 }
 
