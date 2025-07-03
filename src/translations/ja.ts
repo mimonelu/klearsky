@@ -18,6 +18,8 @@ export default () => ({
   "release": "解除する",
   "add": "追加する",
   "save": "保存する",
+  "subscribe": "購読する",
+  "unsubscribe": "購読をやめる",
   "enabled": "有効",
   "disabled": "無効",
   "show": "表示する",

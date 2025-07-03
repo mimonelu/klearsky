@@ -25,6 +25,10 @@ interface TIAssociated {
 }
 
 type TTUserViewer = {
+  activitySubscription?: {
+    post: boolean
+    reply: boolean
+  }
   blockedBy?: boolean
   blocking?: string
   blockingByList?: any

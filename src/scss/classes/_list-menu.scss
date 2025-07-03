@@ -61,7 +61,8 @@
     & > .svg-icon--chat,
     & > .svg-icon--link,
     & > .svg-icon--post,
-    & > .svg-icon--posts {
+    & > .svg-icon--posts,
+    & > .svg-icon--activitySubscription {
       --icon-color: var(--post-color);
     }
     & > .svg-icon--repost,

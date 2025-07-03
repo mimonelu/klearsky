@@ -18,6 +18,8 @@ export default () => ({
   "release": "Freigeben",
   "add": "Hinzufügen",
   "save": "Speichern",
+  "subscribe": "Abonnieren",
+  "unsubscribe": "Abbestellen",
   "enabled": "Aktiviert",
   "disabled": "Deaktiviert",
   "show": "Anzeigen",

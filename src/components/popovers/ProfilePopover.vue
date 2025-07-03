@@ -12,6 +12,7 @@ import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menus/WebShare.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import ProfileFeaturesWrapper from "@/components/menus/ProfileFeaturesWrapper.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import VerifiedAccountsPopupOpener from "@/components/next/Verification/VerifiedAccountsPopupOpener.vue"
 import VerifiersPopupOpener from "@/components/next/Verification/VerifiersPopupOpener.vue"
 import Util from "@/composables/util"
@@ -64,6 +65,32 @@ function open () {
 
 function close () {
   emit("close")
+}
+
+async function toggleActivitySubscription () {
+  close()
+  if (props.user?.did) {
+    const isSubscribed = !!props.user.viewer?.activitySubscription
+    mainState.centerLoaderDisplay = true
+    const response = await mainState.atp.createActivitySubscription(
+      props.user.did,
+      !isSubscribed, // post: 購読していない場合は true
+      !isSubscribed  // reply: 購読していない場合は true
+    )
+    mainState.centerLoaderDisplay = false
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "ProfilePopover/toggleActivitySubscription")
+      return
+    }
+    // プロフィールデータを更新
+    if (props.user.viewer) {
+      // eslint-disable-next-line vue/no-mutating-props
+      props.user.viewer.activitySubscription = isSubscribed ? undefined : {
+        post: true,
+        reply: true,
+      }
+    }
+  }
 }
 </script>
 
@@ -124,6 +151,17 @@ function close () {
         :user="user"
         @close="emit('close')"
       />
+
+      <!-- 購読 -->
+      <button
+        v-if="!isUser"
+        type="button"
+        :disabled="!user.viewer?.following"
+        @click.stop="toggleActivitySubscription"
+      >
+        <SVGIcon name="activitySubscription" />
+        <span>{{ $t(user.viewer?.activitySubscription ? "unsubscribe" : "subscribe") }}</span>
+      </button>
 
       <!-- プロフィール機能メニュー -->
       <ProfileFeaturesWrapper
