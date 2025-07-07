@@ -8,11 +8,11 @@ import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"
 import MenuTickerOpenLivePage from "@/components/menus/OpenLivePage.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
+import MenuTickerToggleActivitySubscription from "@/components/menus/ToggleActivitySubscription.vue"
 import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menus/WebShare.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import ProfileFeaturesWrapper from "@/components/menus/ProfileFeaturesWrapper.vue"
-import SVGIcon from "@/components/images/SVGIcon.vue"
 import VerifiedAccountsPopupOpener from "@/components/next/Verification/VerifiedAccountsPopupOpener.vue"
 import VerifiersPopupOpener from "@/components/next/Verification/VerifiersPopupOpener.vue"
 import Util from "@/composables/util"
@@ -39,35 +39,6 @@ const state = reactive<{
   }),
 })
 
-const canSubscribe = computed((): boolean => {
-  // 購読許可情報
-  const allowSubscriptions = props.user?.associated?.activitySubscription?.allowSubscriptions
-
-  // 購読許可情報がなければ許可
-  if (allowSubscriptions == null) {
-    return true
-  }
-
-  // 購読許可状態が不許可の場合
-  if (allowSubscriptions === "none") {
-    return false
-  }
-
-  // 購読許可状態がフォロワー限定の場合
-  if (allowSubscriptions === "followers") {
-    return props.user?.viewer?.following != null
-  }
-
-  // 購読許可状態が相互フォロー限定の場合
-  if (allowSubscriptions === "mutuals") {
-    return (
-      props.user?.viewer?.following != null &&
-      props.user?.viewer?.followedBy != null
-    )
-  }
-
-  return true
-})
 
 const popover = ref(null)
 
@@ -95,32 +66,6 @@ function open () {
 
 function close () {
   emit("close")
-}
-
-async function toggleActivitySubscription () {
-  close()
-  if (props.user?.did) {
-    const isSubscribed = !!props.user.viewer?.activitySubscription
-    mainState.centerLoaderDisplay = true
-    const response = await mainState.atp.createActivitySubscription(
-      props.user.did,
-      !isSubscribed, // post: 購読していない場合は true
-      !isSubscribed  // reply: 購読していない場合は true
-    )
-    mainState.centerLoaderDisplay = false
-    if (response instanceof Error) {
-      mainState.openErrorPopup(response, "ProfilePopover/toggleActivitySubscription")
-      return
-    }
-    // プロフィールデータを更新
-    if (props.user.viewer) {
-      // eslint-disable-next-line vue/no-mutating-props
-      props.user.viewer.activitySubscription = isSubscribed ? undefined : {
-        post: true,
-        reply: true,
-      }
-    }
-  }
 }
 </script>
 
@@ -183,15 +128,11 @@ async function toggleActivitySubscription () {
       />
 
       <!-- 購読 -->
-      <button
+      <MenuTickerToggleActivitySubscription
         v-if="!isUser"
-        type="button"
-        :disabled="!canSubscribe"
-        @click.stop="toggleActivitySubscription"
-      >
-        <SVGIcon name="activitySubscription" />
-        <span>{{ $t(user.viewer?.activitySubscription ? "unsubscribe" : "subscribe") }}</span>
-      </button>
+        :user="user"
+        @close="emit('close')"
+      />
 
       <!-- プロフィール機能メニュー -->
       <ProfileFeaturesWrapper
