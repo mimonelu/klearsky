@@ -759,6 +759,7 @@ export default () => ({
   "officialAppPost": "App officielle - Publication",
   "officialAppRss": "App officielle - RSS",
   "ouranosApp": "Ouranos",
+  "atprotoAtApp": "atproto.at",
   "atprotoBrowserApp": "Navigateur ATProto",
   "pdslsApp": "PDSls",
   "wrapperApp": "Wrapper Bluesky",

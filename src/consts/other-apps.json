@@ -67,19 +67,28 @@
     "profile": "https://boat.kelinci.net/plc-oplogs?q={did}"
   },
   {
+    "name": "atprotoAtApp",
+    "generator": "https://atproto.at/viewer?uri={did}/app.bsky.feed.generator/{rkey}",
+    "list": "https://atproto.at/viewer?uri={did}/app.bsky.graph.list/{rkey}",
+    "post": "https://atproto.at/viewer?uri={did}/app.bsky.feed.post/{rkey}",
+    "profile": "https://atproto.at/viewer?uri={did}",
+    "starterPack": "https://atproto.at/viewer?uri={did}/app.bsky.graph.starterpack/{rkey}",
+    "favicon": "https://atproto.at/favicon.ico"
+  },
+  {
     "name": "atprotoBrowserApp",
-    "post": "https://atproto-browser.vercel.app/at/{did}/app.bsky.feed.post/{rkey}",
-    "profile": "https://atproto-browser.vercel.app/at/{did}",
     "generator": "https://atproto-browser.vercel.app/at/{did}/app.bsky.feed.generator/{rkey}",
     "list": "https://atproto-browser.vercel.app/at/{did}/app.bsky.graph.list/{rkey}",
+    "post": "https://atproto-browser.vercel.app/at/{did}/app.bsky.feed.post/{rkey}",
+    "profile": "https://atproto-browser.vercel.app/at/{did}",
     "starterPack": "https://atproto-browser.vercel.app/at/{did}/app.bsky.graph.starterpack/{rkey}"
   },
   {
     "name": "pdslsApp",
-    "post": "https://pdsls.dev/at/{did}/app.bsky.feed.post/{rkey}",
-    "profile": "https://pdsls.dev/at/{did}",
     "generator": "https://pdsls.dev/at/{did}/app.bsky.feed.generator/{rkey}",
     "list": "https://pdsls.dev/at/{did}/app.bsky.graph.list/{rkey}",
+    "post": "https://pdsls.dev/at/{did}/app.bsky.feed.post/{rkey}",
+    "profile": "https://pdsls.dev/at/{did}",
     "starterPack": "https://pdsls.dev/at/{did}/app.bsky.graph.starterpack/{rkey}",
     "favicon": "https://pdsls.dev/favicon.png"
   },
