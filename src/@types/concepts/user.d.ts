@@ -14,6 +14,9 @@ type TTUser = {
 }
 
 interface TIAssociated {
+  activitySubscription?: {
+    allowSubscriptions: "followers" | "mutuals" | "none"
+  }
   chat?: {
     allowIncoming: TTAllowIncoming
   }
