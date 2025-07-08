@@ -78,6 +78,14 @@ function isGroupingReason (reason: string): boolean {
   )
 }
 
+// リポスト経由いいね／リポスト用かどうか
+function viaRepost (reason: string): boolean {
+  return (
+    reason === "like-via-repost" ||
+    reason === "repost-via-repost"
+  )
+}
+
 // 通知押下時の遷移先
 function makeSubjectTo (notification: TTNotification): any {
   switch (notification.reason) {
@@ -126,8 +134,11 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
       tabindex="0"
       :data-reason="notificationGroup.reason"
       :data-is-new="notificationGroupHasNew(notificationGroup)"
-      :data-has-folder="isGroupingReason(notificationGroup.reason) &&
-        notificationGroup.notifications.length >= 2"
+      :data-has-folder="
+        isGroupingReason(notificationGroup.reason) &&
+        notificationGroup.notifications.length >= 2
+      "
+      :data-via-repost="viaRepost(notificationGroup.reason)"
     >
       <!-- 通知フォルダー -->
       <div class="notification-folder">
@@ -154,12 +165,11 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 
           <!-- リポスト経由いいね／リポスト用アイコン -->
           <div
-            v-if="
-              notificationGroup.reason === 'like-via-repost' ||
-              notificationGroup.reason === 'repost-via-repost'
-            "
+            v-if="viaRepost(notificationGroup.reason)"
             class="icon--action-via-repost"
-          />
+          >
+            <SVGIcon name="repost" />
+          </div>
 
           <span>+ {{ notificationGroup.notifications.length }}</span>
           <SVGIcon
@@ -199,12 +209,11 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 
             <!-- リポスト経由いいね／リポスト用アイコン -->
             <div
-              v-if="
-                notificationGroup.reason === 'like-via-repost' ||
-                notificationGroup.reason === 'repost-via-repost'
-              "
+              v-if="viaRepost(notificationGroup.reason)"
               class="icon--action-via-repost"
-            />
+            >
+              <SVGIcon name="repost" />
+            </div>
 
             <!-- アバターリンク -->
             <AvatarLink
@@ -414,6 +423,8 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   &:last-child:not(:first-child) {
     margin-bottom: 0.25rem;
   }
+
+  // 新着通知
   &[data-is-new="true"] {
     grid-template-columns: min-content min-content min-content auto 1fr auto;
 
@@ -421,6 +432,17 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
       grid-column: 4 / 7;
     }
   }
+
+  // リポスト経由いいね／リポスト用
+  [data-via-repost="true"] & {
+    grid-template-columns: min-content min-content min-content auto 1fr auto;
+  }
+
+  // 新着通知＋リポスト経由いいね／リポスト用
+  [data-via-repost="true"] &[data-is-new="true"] {
+    grid-template-columns: min-content min-content min-content min-content auto 1fr auto;
+  }
+
   &:focus, &:hover {
     cursor: pointer;
   }
@@ -474,16 +496,20 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   }
 }
 
+// リポスト経由いいね／リポスト用アイコン
 .icon--action-via-repost {
   background-color: rgb(var(--share-color));
-  border: 2px solid rgb(var(--bg-color));
-  border-radius: 1rem;
-  box-sizing: content-box;
-  position: absolute;
-  left: 1.25rem;
-  top: 0.5rem;
-  width: 0.5rem;
-  height: 0.5rem;
+  border-radius: var(--border-radius-small);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+
+  & > .svg-icon {
+    fill: rgb(var(--bg-color));
+    font-size: 0.625rem;
+  }
 }
 
 // アバターリンク
