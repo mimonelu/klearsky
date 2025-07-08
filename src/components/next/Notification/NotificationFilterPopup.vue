@@ -179,3 +179,14 @@ function close () {
     </template>
   </Popup>
 </template>
+
+<style lang="scss" scoped>
+// フォームのギャップ調整
+.notification-filter-popup:deep(.easy-form__body) {
+  grid-gap: 0.5rem;
+
+  dl[data-name="list"]:not(:first-child) {
+    margin-top: 0.5rem;
+  }
+}
+</style>
