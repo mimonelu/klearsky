@@ -29,6 +29,9 @@ const state = reactive<{
           label: $t("notificationFilterReply"),
           type: "boolean",
           booleanboxLabel: "notificationFilterList",
+          onUpdate () {
+            updateRadioDisabled("reply", preferences.reply.list)
+          },
         },
         {
           state: preferences.reply,
@@ -36,6 +39,7 @@ const state = reactive<{
           type: "radio",
           layout: "horizontal",
           options: NOTIFICATION_FILTER,
+          disabled: !preferences.reply.list,
         },
 
         // mention
@@ -45,6 +49,9 @@ const state = reactive<{
           label: $t("notificationFilterMention"),
           type: "boolean",
           booleanboxLabel: "notificationFilterList",
+          onUpdate () {
+            updateRadioDisabled("mention", preferences.mention.list)
+          },
         },
         {
           state: preferences.mention,
@@ -52,6 +59,7 @@ const state = reactive<{
           type: "radio",
           layout: "horizontal",
           options: NOTIFICATION_FILTER,
+          disabled: !preferences.mention.list,
         },
 
         // quote
@@ -61,6 +69,9 @@ const state = reactive<{
           label: $t("notificationFilterQuote"),
           type: "boolean",
           booleanboxLabel: "notificationFilterList",
+          onUpdate () {
+            updateRadioDisabled("quote", preferences.quote.list)
+          },
         },
         {
           state: preferences.quote,
@@ -68,6 +79,7 @@ const state = reactive<{
           type: "radio",
           layout: "horizontal",
           options: NOTIFICATION_FILTER,
+          disabled: !preferences.quote.list,
         },
 
         // repost
@@ -77,6 +89,9 @@ const state = reactive<{
           label: $t("notificationFilterRepost"),
           type: "boolean",
           booleanboxLabel: "notificationFilterList",
+          onUpdate () {
+            updateRadioDisabled("repost", preferences.repost.list)
+          },
         },
         {
           state: preferences.repost,
@@ -84,6 +99,7 @@ const state = reactive<{
           type: "radio",
           layout: "horizontal",
           options: NOTIFICATION_FILTER,
+          disabled: !preferences.repost.list,
         },
 
         // repostViaRepost
@@ -93,6 +109,9 @@ const state = reactive<{
           label: $t("notificationFilterRepostViaRepost"),
           type: "boolean",
           booleanboxLabel: "notificationFilterList",
+          onUpdate () {
+            updateRadioDisabled("repostViaRepost", preferences.repostViaRepost.list)
+          },
         },
         {
           state: preferences.repostViaRepost,
@@ -100,6 +119,7 @@ const state = reactive<{
           type: "radio",
           layout: "horizontal",
           options: NOTIFICATION_FILTER,
+          disabled: !preferences.repostViaRepost.list,
         },
 
         // like
@@ -109,6 +129,9 @@ const state = reactive<{
           label: $t("notificationFilterLike"),
           type: "boolean",
           booleanboxLabel: "notificationFilterList",
+          onUpdate () {
+            updateRadioDisabled("like", preferences.like.list)
+          },
         },
         {
           state: preferences.like,
@@ -116,6 +139,7 @@ const state = reactive<{
           type: "radio",
           layout: "horizontal",
           options: NOTIFICATION_FILTER,
+          disabled: !preferences.like.list,
         },
 
         // likeViaRepost
@@ -125,6 +149,9 @@ const state = reactive<{
           label: $t("notificationFilterLikeViaRepost"),
           type: "boolean",
           booleanboxLabel: "notificationFilterList",
+          onUpdate () {
+            updateRadioDisabled("likeViaRepost", preferences.likeViaRepost.list)
+          },
         },
         {
           state: preferences.likeViaRepost,
@@ -132,6 +159,7 @@ const state = reactive<{
           type: "radio",
           layout: "horizontal",
           options: NOTIFICATION_FILTER,
+          disabled: !preferences.likeViaRepost.list,
         },
 
         // follow
@@ -141,6 +169,9 @@ const state = reactive<{
           label: $t("notificationFilterFollow"),
           type: "boolean",
           booleanboxLabel: "notificationFilterList",
+          onUpdate () {
+            updateRadioDisabled("follow", preferences.follow.list)
+          },
         },
         {
           state: preferences.follow,
@@ -148,6 +179,7 @@ const state = reactive<{
           type: "radio",
           layout: "horizontal",
           options: NOTIFICATION_FILTER,
+          disabled: !preferences.follow.list,
         },
       ]
     })(),
@@ -159,6 +191,19 @@ function close () {
   mainState.updateNotificationPreferences()
 
   emit("close")
+}
+
+function updateRadioDisabled (type: keyof TTNotificationPreferences["preferences"], isEnabled: boolean) {
+  const radioItem = state.easyFormProps.data.find((item) => {
+    return (
+      item.state?.constructor.name === "Object" &&
+      item.model === "include" &&
+      item.state === mainState.notificationPreferences?.preferences?.[type]
+    )
+  })
+  if (radioItem) {
+    radioItem.disabled = !isEnabled
+  }
 }
 </script>
 
