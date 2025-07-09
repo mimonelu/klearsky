@@ -18,8 +18,6 @@ export default () => ({
   "release": "Release",
   "add": "Add",
   "save": "Save",
-  "subscribe": "Subscribe",
-  "unsubscribe": "Unsubscribe",
   "enabled": "Enabled",
   "disabled": "Disabled",
   "show": "Show",
@@ -659,6 +657,14 @@ export default () => ({
   "notificationFilterLike": "Like notifications",
   "notificationFilterLikeViaRepost": "Likes on reposts notifications",
   "notificationFilterFollow": "Follow notifications",
+
+  // ============================================================================
+  // ACTIVITY SUBSCRIPTION
+  // ============================================================================
+  "subscribe": "Subscribe",
+  "unsubscribe": "Unsubscribe",
+  "activitySubscription": "Subscription",
+  "activitySubscriptionList": "Subscription List",
 
   // ============================================================================
   // CONTENT FOLDING

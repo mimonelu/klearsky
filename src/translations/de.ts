@@ -18,8 +18,6 @@ export default () => ({
   "release": "Freigeben",
   "add": "Hinzufügen",
   "save": "Speichern",
-  "subscribe": "Abonnieren",
-  "unsubscribe": "Abbestellen",
   "enabled": "Aktiviert",
   "disabled": "Deaktiviert",
   "show": "Anzeigen",
@@ -659,6 +657,14 @@ export default () => ({
   "notificationFilterLike": "Like-Benachrichtigungen",
   "notificationFilterLikeViaRepost": "Likes-auf-Reposts-Benachrichtigungen",
   "notificationFilterFollow": "Follow-Benachrichtigungen",
+
+  // ============================================================================
+  // ACTIVITY SUBSCRIPTION
+  // ============================================================================
+  "subscribe": "Abonnieren",
+  "unsubscribe": "Abbestellen",
+  "activitySubscription": "Abonnement",
+  "activitySubscriptionList": "Abonnementsliste",
 
   // ============================================================================
   // CONTENT FOLDING

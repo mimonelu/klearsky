@@ -3,6 +3,7 @@ import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounte
 import { useRouter, type LocationQueryValue, type RouteLocationNormalized } from "vue-router"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
+import ActivitySubscriptionListPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionListPopup.vue"
 import ActorStatusEditPopup from "@/components/next/ActorStatus/ActorStatusEditPopup.vue"
 import AdvancedSearchPopup from "@/components/popups/AdvancedSearchPopup.vue"
 import BlockingUsersPopup from "@/components/next/UserBlock/BlockingUsersPopup.vue"
@@ -1211,6 +1212,15 @@ function changeSetting () {
           v-if="state.labelerSettingsPopupProps.display"
           v-bind="state.labelerSettingsPopupProps"
           @close="state.closeLabelerSettingsPopup"
+        />
+      </Transition>
+
+      <!-- 購読一覧ポップアップ -->
+      <Transition>
+        <ActivitySubscriptionListPopup
+          v-if="state.activitySubscriptionListPopupProps.display"
+          v-bind="state.activitySubscriptionListPopupProps"
+          @close="state.closeActivitySubscriptionListPopup"
         />
       </Transition>
 

@@ -74,7 +74,7 @@ interface TIAtpWrapper {
   deleteThreadgate
     (postUri: string): Promise<Error | undefined>
   fetchActivitySubscriptions
-    (cursor?: string): Promise<TTActivitySubscriptionList | Error>
+    (items: Array<TTUser>, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchActorStatus
     (did: string): Promise<Error | TIActorStatusRecord>
   fetchActorLists

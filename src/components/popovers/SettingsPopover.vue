@@ -84,6 +84,10 @@ function process (type: string) {
       mainState.openLabelerListPopup("myLabeler", mainState.myLabeler!.labelers)
       break
     }
+    case "activitySubscriptionList": {
+      mainState.openActivitySubscriptionListPopup()
+      break
+    }
     case "myWord": {
       mainState.openMyWordPopup({ mode: 'edit' })
       break
@@ -168,6 +172,8 @@ function process (type: string) {
         <span v-if="state.numberOfPostLanguages > 0">({{ state.numberOfPostLanguages }})</span>
       </button>
 
+      <hr />
+
       <!-- マイフィードポップアップトリガー -->
       <button
         type="button"
@@ -196,6 +202,16 @@ function process (type: string) {
       >
         <SVGIcon name="labeler" />
         <span>{{ $t("myLabeler") }}</span>
+      </button>
+
+      <!-- 購読一覧ポップアップトリガー -->
+      <button
+        type="button"
+        data-type="activitySubscriptionList"
+        @click.prevent="process('activitySubscriptionList')"
+      >
+        <SVGIcon name="activitySubscription" />
+        <span>{{ $t("activitySubscriptionList") }}</span>
       </button>
 
       <!-- マイワードポップアップトリガー -->
@@ -321,21 +337,22 @@ function process (type: string) {
     --icon-color: var(--fg-color);
     fill: rgb(var(--icon-color), 0.75);
   }
-  button[data-type="uiLanguage"] > .svg-icon { /**/ }
-  button[data-type="contentLanguages"] > .svg-icon { /**/ }
-  button[data-type="postLanguages"] > .svg-icon { /**/ }
+  // button[data-type="uiLanguage"] > .svg-icon {}
+  // button[data-type="contentLanguages"] > .svg-icon {}
+  // button[data-type="postLanguages"] > .svg-icon {}
   button[data-type="myFeeds"] > .svg-icon { --icon-color: var(--feed-color); }
   button[data-type="myList"] > .svg-icon { --icon-color: var(--list-color); }
-  button[data-type="myWord"] > .svg-icon { /**/ }
+  // button[data-type="myWord"] > .svg-icon {}
   button[data-type="myLabeler"] > .svg-icon { --icon-color: var(--label-color); }
+  button[data-type="activitySubscriptionList"] > .svg-icon { --icon-color: var(--post-color); }
   button[data-type="customBookmark"] > .svg-icon { --icon-color: var(--post-color); }
   button[data-type="mutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="blockingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="wordMute"] > .svg-icon { --icon-color: var(--notice-color); }
-  button[data-type="design"] > .svg-icon { /**/ }
+  // button[data-type="design"] > .svg-icon {}
   button[data-type="post"] > .svg-icon { --icon-color: var(--post-color); }
-  button[data-type="time"] > .svg-icon { /**/ }
-  button[data-type="etc"] > .svg-icon { /**/ }
-  button[data-type="inviteCode"] > .svg-icon { /**/ }
+  // button[data-type="time"] > .svg-icon {}
+  // button[data-type="etc"] > .svg-icon {}
+  // button[data-type="inviteCode"] > .svg-icon {}
 }
 </style>

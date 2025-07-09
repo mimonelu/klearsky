@@ -18,8 +18,6 @@ export default () => ({
   "release": "解除する",
   "add": "追加する",
   "save": "保存する",
-  "subscribe": "購読する",
-  "unsubscribe": "購読をやめる",
   "enabled": "有効",
   "disabled": "無効",
   "show": "表示する",
@@ -659,6 +657,14 @@ export default () => ({
   "notificationFilterLike": "いいね通知",
   "notificationFilterLikeViaRepost": "リポストへのいいね通知",
   "notificationFilterFollow": "フォロー通知",
+
+  // ============================================================================
+  // ACTIVITY SUBSCRIPTION
+  // ============================================================================
+  "subscribe": "購読する",
+  "unsubscribe": "購読をやめる",
+  "activitySubscription": "購読",
+  "activitySubscriptionList": "購読リスト",
 
   // ============================================================================
   // CONTENT FOLDING

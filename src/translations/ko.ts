@@ -18,8 +18,6 @@ export default () => ({
   "release": "해제",
   "add": "추가",
   "save": "저장",
-  "subscribe": "구독",
-  "unsubscribe": "구독 해제",
   "enabled": "활성화",
   "disabled": "비활성화",
   "show": "표시",
@@ -659,6 +657,14 @@ export default () => ({
   "notificationFilterLike": "좋아요 알림",
   "notificationFilterLikeViaRepost": "리포스트 좋아요 알림",
   "notificationFilterFollow": "팔로우 알림",
+
+  // ============================================================================
+  // ACTIVITY SUBSCRIPTION
+  // ============================================================================
+  "subscribe": "구독",
+  "unsubscribe": "구독 해제",
+  "activitySubscription": "구독",
+  "activitySubscriptionList": "구독 목록",
 
   // ============================================================================
   // CONTENT FOLDING

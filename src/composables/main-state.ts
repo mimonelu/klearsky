@@ -121,6 +121,10 @@ export const state: MainState = reactive<MainState>({
   myLabeler: undefined,
   currentLabeler: undefined,
 
+  // 購読
+  activitySubscriptions: [],
+  activitySubscriptionsCursor: undefined,
+
   // トレンド
   currentSuggestedTopics: [],
   currentTrendingTopics: [],
@@ -551,6 +555,13 @@ export const state: MainState = reactive<MainState>({
   selectLabelsPopupState: undefined,
   openSelectLabelsPopup: openSelectLabelsPopup,
   closeSelectLabelsPopup: closeSelectLabelsPopup,
+
+  // ポップアップ - 購読一覧ポップアップ
+  activitySubscriptionListPopupProps: {
+    display: false,
+  },
+  openActivitySubscriptionListPopup: openActivitySubscriptionListPopup,
+  closeActivitySubscriptionListPopup: closeActivitySubscriptionListPopup,
 
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {
@@ -2403,6 +2414,16 @@ function openSelectLabelsPopup (params: any) {
 
 function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
+}
+
+// ポップアップ - 購読一覧ポップアップ
+
+function openActivitySubscriptionListPopup () {
+  state.activitySubscriptionListPopupProps.display = true
+}
+
+function closeActivitySubscriptionListPopup () {
+  state.activitySubscriptionListPopupProps.display = false
 }
 
 // ポップアップ - アカウントレポート送信ポップアップ

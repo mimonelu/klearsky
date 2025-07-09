@@ -77,6 +77,10 @@ interface MainState {
   myLabeler?: TIMyLabeler
   currentLabeler?: TILabeler
 
+  // 購読
+  activitySubscriptions: Array<TTUser>
+  activitySubscriptionsCursor?: string
+
   // トレンド
   currentSuggestedTopics: Array<TTrendingTopic>
   currentTrendingTopics: Array<TTrendingTopic>
@@ -469,7 +473,7 @@ interface MainState {
   openLabelerListPopup: Function
   closeLabelerListPopup: () => void
 
-  //ポップアップ - ラベラー設定ポップアップ
+  // ポップアップ - ラベラー設定ポップアップ
   labelerSettingsPopupProps: {
     display: boolean
     labeler?: TILabeler
@@ -482,6 +486,13 @@ interface MainState {
   selectLabelsPopupState: any
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: () => void
+
+  // ポップアップ - 購読一覧ポップアップ
+  activitySubscriptionListPopupProps: {
+    display: boolean
+  }
+  openActivitySubscriptionListPopup: Function
+  closeActivitySubscriptionListPopup: () => void
 
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {
