@@ -665,6 +665,9 @@ export default () => ({
   "unsubscribe": "Unsubscribe",
   "activitySubscription": "Subscription",
   "activitySubscriptionList": "Subscription List",
+  "allowSubscription-followers": "Followers only",
+  "allowSubscription-mutuals": "Mutual followers only",
+  "allowSubscription-none": "No subscription",
 
   // ============================================================================
   // CONTENT FOLDING

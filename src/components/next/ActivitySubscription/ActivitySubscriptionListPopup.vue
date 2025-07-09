@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { inject, onBeforeMount, reactive } from "vue"
-import EasyForm from "@/components/forms/EasyForm.vue"
+import { inject, onBeforeMount, reactive, ref } from "vue"
+import ActivitySubscriptionForm from "@/components/next/ActivitySubscription/ActivitySubscriptionForm.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
@@ -20,42 +19,20 @@ const state = reactive<{
   processing: false
 })
 
-const easyFormStates: Array<{
-  _did: string
-  states: Array<"post" | "reply">
-}> = reactive([])
-
-const easyFormProps: Array<TTEasyForm> = []
+const activitySubscriptionForm = ref([])
 
 onBeforeMount(async () => {
   await fetchContinuousResults("new")
 })
 
 async function close () {
-  emit("close")
-
+  const tasks = (activitySubscriptionForm.value as Array<typeof ActivitySubscriptionForm>).map(form => form.update)
   mainState.loaderDisplay = true
-  for (const newState of easyFormStates) {
-    const oldState = mainState.activitySubscriptions.find((user) => user.did === newState._did)
-    if (oldState == null) {
-      continue
-    }
-    const post = newState.states.includes("post")
-    const reply = newState.states.includes("reply")
-    if (
-      post !== oldState.viewer?.activitySubscription?.post ||
-      reply !== oldState.viewer?.activitySubscription?.reply
-    ) {
-      if (oldState.viewer?.activitySubscription != null) {
-        oldState.viewer.activitySubscription.post = post
-        oldState.viewer.activitySubscription.reply = reply
-      }
-
-      await mainState.atp.createActivitySubscription(newState._did, false, false)
-      await mainState.atp.createActivitySubscription(newState._did, post, reply)
-    }
+  for (const task of tasks) {
+    await task()
   }
   mainState.loaderDisplay = false
+  emit("close")
 }
 
 async function fetchContinuousResults (direction: "new" | "old") {
@@ -82,41 +59,6 @@ async function fetchContinuousResults (direction: "new" | "old") {
   )) {
     mainState.activitySubscriptionsCursor = cursor
   }
-
-  mainState.activitySubscriptions.forEach((user, userIndex) => {
-    if (easyFormStates[userIndex] == null) {
-      const states: Array<"post" | "reply"> = []
-      if (user.viewer?.activitySubscription?.post) {
-        states.push("post")
-      }
-      if (user.viewer?.activitySubscription?.reply) {
-        states.push("reply")
-      }
-      easyFormStates[userIndex] = {
-        _did: user.did,
-        states,
-      }
-    }
-
-    if (easyFormProps[userIndex] == null) {
-      easyFormProps[userIndex] = {
-        blurOnSubmit: false,
-        hasSubmitButton: false,
-        data: [
-          {
-            state: easyFormStates[userIndex],
-            model: "states",
-            type: "checkbox",
-            layout: "horizontal",
-            options: [
-              { label: "post", value: "post" },
-              { label: "reply", value: "reply" },
-            ],
-          },
-        ],
-      }
-    }
-  })
 }
 
 function scrolledToBottom () {
@@ -146,26 +88,12 @@ function scrolledToBottom () {
     </template>
     <template #body>
       <div class="activity-subscriptions">
-        <div
-          v-for="user, userIndex of mainState.activitySubscriptions"
+        <ActivitySubscriptionForm
+          v-for="user of mainState.activitySubscriptions"
           :key="user.did"
-           class="activity-subscription"
-        >
-          <UserBox
-            :user="user"
-            :menuDisplay="true"
-            :contentWarningDisabled="false"
-            :viewerDisplay="true"
-            @link="close"
-          >
-            <template #content>{{ user.associated?.activitySubscription?.allowSubscriptions }}</template>
-          </UserBox>
-
-          <EasyForm
-            v-if="easyFormProps[userIndex] != null"
-            v-bind="easyFormProps[userIndex]"
-          />
-        </div>
+          ref="activitySubscriptionForm"
+          :user="user"
+        />
       </div>
     </template>
     <template #footer>
@@ -192,12 +120,6 @@ function scrolledToBottom () {
     display: flex;
     flex-direction: column;
     grid-gap: 1rem;
-  }
-
-  .activity-subscription {
-    display: flex;
-    flex-direction: column;
-    grid-gap: 0.5rem;
   }
 }
 </style>

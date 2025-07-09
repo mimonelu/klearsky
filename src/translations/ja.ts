@@ -665,6 +665,9 @@ export default () => ({
   "unsubscribe": "購読をやめる",
   "activitySubscription": "購読",
   "activitySubscriptionList": "購読リスト",
+  "allowSubscription-followers": "フォロワーのみ",
+  "allowSubscription-mutuals": "相互フォロワーのみ",
+  "allowSubscription-none": "購読不可",
 
   // ============================================================================
   // CONTENT FOLDING

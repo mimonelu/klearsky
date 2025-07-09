@@ -665,6 +665,9 @@ export default () => ({
   "unsubscribe": "Abbestellen",
   "activitySubscription": "Abonnement",
   "activitySubscriptionList": "Abonnementsliste",
+  "allowSubscription-followers": "Nur Follower",
+  "allowSubscription-mutuals": "Nur gegenseitige Follower",
+  "allowSubscription-none": "Kein Abonnement",
 
   // ============================================================================
   // CONTENT FOLDING

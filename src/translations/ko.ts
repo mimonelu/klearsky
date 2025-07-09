@@ -665,6 +665,9 @@ export default () => ({
   "unsubscribe": "구독 해제",
   "activitySubscription": "구독",
   "activitySubscriptionList": "구독 목록",
+  "allowSubscription-followers": "팔로워만",
+  "allowSubscription-mutuals": "상호 팔로워만",
+  "allowSubscription-none": "구독 불가",
 
   // ============================================================================
   // CONTENT FOLDING
