@@ -4,6 +4,7 @@ import { useRouter, type LocationQueryValue, type RouteLocationNormalized } from
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
 import ActivitySubscriptionListPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionListPopup.vue"
+import ActivitySubscriptionPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionPopup.vue"
 import ActorStatusEditPopup from "@/components/next/ActorStatus/ActorStatusEditPopup.vue"
 import AdvancedSearchPopup from "@/components/popups/AdvancedSearchPopup.vue"
 import BlockingUsersPopup from "@/components/next/UserBlock/BlockingUsersPopup.vue"
@@ -315,6 +316,12 @@ async function processAfterLogin () {
 
   // 通知設定の取得
   state.fetchNotificationPreferences()
+
+  // 購読リストの取得
+  state.atp.fetchActivitySubscriptions(
+    state.activitySubscriptions as Array<TTUser>,
+    CONSTS.LIMIT_OF_FETCH_ACTIVITY_SUBSCRIPTIONS
+  )
 
   // ラベラーの取得
   if (state.myLabeler!.labelers.length === 0) {
@@ -1212,6 +1219,15 @@ function changeSetting () {
           v-if="state.labelerSettingsPopupProps.display"
           v-bind="state.labelerSettingsPopupProps"
           @close="state.closeLabelerSettingsPopup"
+        />
+      </Transition>
+
+      <!-- 購読ポップアップ -->
+      <Transition>
+        <ActivitySubscriptionPopup
+          v-if="state.activitySubscriptionPopupProps.display"
+          v-bind="state.activitySubscriptionPopupProps"
+          @close="state.closeActivitySubscriptionPopup"
         />
       </Transition>
 

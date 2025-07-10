@@ -487,6 +487,14 @@ interface MainState {
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: () => void
 
+  // ポップアップ - 購読ポップアップ
+  activitySubscriptionPopupProps: {
+    display: boolean
+    user: TTUser
+  }
+  openActivitySubscriptionPopup: Function
+  closeActivitySubscriptionPopup: () => void
+
   // ポップアップ - 購読一覧ポップアップ
   activitySubscriptionListPopupProps: {
     display: boolean

@@ -69,17 +69,28 @@ async function update () {
   const hasReply = easyFormStates.states.includes("reply")
   const userIndex = mainState.activitySubscriptions.findIndex(user => user.did === props.user.did)
 
-  // 作成
-  if (userIndex === - 1) {
-    await mainState.atp.createActivitySubscription(props.user.did, hasPost, hasReply)
-    mainState.activitySubscriptions.unshift(props.user)
+  // 削除
+  if (!hasPost && !hasReply) {
+    if (props.user.viewer != null) {
+      updateUserViewerActivitySubscription(false, false)
+    }
+
+    // 購読リストに存在する場合
+    if (userIndex !== - 1) {
+      await mainState.atp.createActivitySubscription(props.user.did, false, false)
+      mainState.activitySubscriptions.splice(userIndex, 1)
+    }
+
     return
   }
 
-  // 削除
-  if (!hasPost && !hasReply) {
-    await mainState.atp.createActivitySubscription(props.user.did, false, false)
-    mainState.activitySubscriptions.splice(userIndex, 1)
+  // 作成
+  if (userIndex === - 1) {
+    if (props.user.viewer != null) {
+      updateUserViewerActivitySubscription(hasPost, hasReply)
+    }
+    await mainState.atp.createActivitySubscription(props.user.did, hasPost, hasReply)
+    mainState.activitySubscriptions.unshift(props.user)
     return
   }
 
@@ -88,17 +99,28 @@ async function update () {
     hasPost !== props.user.viewer?.activitySubscription?.post ||
     hasReply !== props.user.viewer?.activitySubscription?.reply
   ) {
-    if (props.user.viewer?.activitySubscription != null) {
-      /* eslint-disable vue/no-mutating-props */
-      props.user.viewer.activitySubscription.post = hasPost
-      props.user.viewer.activitySubscription.reply = hasReply
-      /* eslint-enable vue/no-mutating-props */
+    if (props.user.viewer != null) {
+      updateUserViewerActivitySubscription(hasPost, hasReply)
     }
 
     // 変更＝削除してから作成
     await mainState.atp.createActivitySubscription(props.user.did, false, false)
     await mainState.atp.createActivitySubscription(props.user.did, hasPost, hasReply)
   }
+}
+
+function updateUserViewerActivitySubscription (hasPost: boolean, hasReply: boolean) {
+  /* eslint-disable vue/no-mutating-props */
+  if (props.user.viewer.activitySubscription == null) {
+    props.user.viewer.activitySubscription = {
+      post: hasPost,
+      reply: hasReply,
+    }
+  } else {
+    props.user.viewer.activitySubscription.post = hasPost
+    props.user.viewer.activitySubscription.reply = hasReply
+  }
+  /* eslint-enable vue/no-mutating-props */
 }
 
 defineExpose({

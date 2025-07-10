@@ -556,6 +556,13 @@ export const state: MainState = reactive<MainState>({
   openSelectLabelsPopup: openSelectLabelsPopup,
   closeSelectLabelsPopup: closeSelectLabelsPopup,
 
+  // ポップアップ - 購読ポップアップ
+  activitySubscriptionPopupProps: {
+    display: false,
+  },
+  openActivitySubscriptionPopup: openActivitySubscriptionPopup,
+  closeActivitySubscriptionPopup: closeActivitySubscriptionPopup,
+
   // ポップアップ - 購読一覧ポップアップ
   activitySubscriptionListPopupProps: {
     display: false,
@@ -2414,6 +2421,17 @@ function openSelectLabelsPopup (params: any) {
 
 function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
+}
+
+// ポップアップ - 購読ポップアップ
+
+function openActivitySubscriptionPopup (user: TTUser) {
+  state.activitySubscriptionPopupProps.user = user
+  state.activitySubscriptionPopupProps.display = true
+}
+
+function closeActivitySubscriptionPopup () {
+  state.activitySubscriptionPopupProps.display = false
 }
 
 // ポップアップ - 購読一覧ポップアップ

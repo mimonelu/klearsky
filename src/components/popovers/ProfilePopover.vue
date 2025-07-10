@@ -8,7 +8,7 @@ import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"
 import MenuTickerOpenLivePage from "@/components/menus/OpenLivePage.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
-import MenuTickerToggleActivitySubscription from "@/components/menus/ToggleActivitySubscription.vue"
+import MenuTickerOpenActivitySubscriptionPopup from "@/components/menus/OpenActivitySubscriptionPopup.vue"
 import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menus/WebShare.vue"
 import Popover from "@/components/popovers/Popover.vue"
@@ -128,7 +128,7 @@ function close () {
       />
 
       <!-- 購読 -->
-      <MenuTickerToggleActivitySubscription
+      <MenuTickerOpenActivitySubscriptionPopup
         v-if="!isUser"
         :user="user"
         @close="emit('close')"

@@ -8,7 +8,6 @@ const props = defineProps<{
   user: TTUser
 }>()
 
-const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const canSubscribe = computed((): boolean => {
@@ -41,29 +40,10 @@ const canSubscribe = computed((): boolean => {
   return true
 })
 
-async function toggleActivitySubscription () {
+async function openActivitySubscriptionPopup () {
   emit("close")
-  if (props.user?.did) {
-    const isSubscribed = !!props.user.viewer?.activitySubscription
-    mainState.centerLoaderDisplay = true
-    const response = await mainState.atp.createActivitySubscription(
-      props.user.did,
-      !isSubscribed, // post: 購読していない場合は true
-      !isSubscribed  // reply: 購読していない場合は true
-    )
-    mainState.centerLoaderDisplay = false
-    if (response instanceof Error) {
-      mainState.openErrorPopup(response, "MenuTickerToggleActivitySubscription/toggleActivitySubscription")
-      return
-    }
-    // プロフィールデータを更新
-    if (props.user.viewer) {
-      // eslint-disable-next-line vue/no-mutating-props
-      props.user.viewer.activitySubscription = isSubscribed ? undefined : {
-        post: true,
-        reply: true,
-      }
-    }
+  if (props.user != null) {
+    mainState.openActivitySubscriptionPopup(props.user)
   }
 }
 </script>
@@ -72,9 +52,9 @@ async function toggleActivitySubscription () {
   <button
     type="button"
     :disabled="!canSubscribe"
-    @click.stop="toggleActivitySubscription"
+    @click.stop="openActivitySubscriptionPopup"
   >
     <SVGIcon name="activitySubscription" />
-    <span>{{ $t(user.viewer?.activitySubscription ? "unsubscribe" : "subscribe") }}</span>
+    <span>{{ $t("activitySubscription") }}</span>
   </button>
 </template>
