@@ -50,11 +50,20 @@ async function openActivitySubscriptionPopup () {
 
 <template>
   <button
+    class="open-activity-subscription-popup"
     type="button"
-    :disabled="!canSubscribe"
+    :data-can-subscribe="canSubscribe"
     @click.stop="openActivitySubscriptionPopup"
   >
-    <SVGIcon name="activitySubscription" />
+    <SVGIcon :name="canSubscribe ? 'activitySubscription' : 'cross'" />
     <span>{{ $t("activitySubscription") }}</span>
   </button>
 </template>
+
+<style lang="scss" scoped>
+.open-activity-subscription-popup {
+  &[data-can-subscribe="false"] .svg-icon {
+    fill: rgb(var(--notice-color));
+  }
+}
+</style>
