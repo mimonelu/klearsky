@@ -3,8 +3,9 @@ import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUnmounte
 import { useRouter, type LocationQueryValue, type RouteLocationNormalized } from "vue-router"
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
-import ActivitySubscriptionListPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionListPopup.vue"
 import ActivitySubscriptionItemPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionItemPopup.vue"
+import ActivitySubscriptionListPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionListPopup.vue"
+import ActivitySubscriptionPermissionPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionPermissionPopup.vue"
 import ActorStatusEditPopup from "@/components/next/ActorStatus/ActorStatusEditPopup.vue"
 import AdvancedSearchPopup from "@/components/popups/AdvancedSearchPopup.vue"
 import BlockingUsersPopup from "@/components/next/UserBlock/BlockingUsersPopup.vue"
@@ -1237,6 +1238,15 @@ function changeSetting () {
           v-if="state.activitySubscriptionListPopupProps.display"
           v-bind="state.activitySubscriptionListPopupProps"
           @close="state.closeActivitySubscriptionListPopup"
+        />
+      </Transition>
+
+      <!-- 購読許可設定ポップアップ -->
+      <Transition>
+        <ActivitySubscriptionPermissionPopup
+          v-if="state.activitySubscriptionPermissionPopupProps.display"
+          v-bind="state.activitySubscriptionPermissionPopupProps"
+          @close="state.closeActivitySubscriptionPermissionPopup"
         />
       </Transition>
 

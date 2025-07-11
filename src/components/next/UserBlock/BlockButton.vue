@@ -72,6 +72,7 @@ async function toggleBlock () {
   }
   &[data-enabled="true"] {
     --bg-color: var(--notice-color);
+    --fg-color: var(--white-color);
   }
 
   & > .loader {

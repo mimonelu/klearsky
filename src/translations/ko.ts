@@ -668,6 +668,10 @@ export default () => ({
   "allowSubscription-followers": "팔로워만",
   "allowSubscription-mutuals": "상호 팔로워만",
   "allowSubscription-none": "구독 불가",
+  "activitySubscriptionPermission": "구독 권한 설정",
+  "allowSubscriptionsFollowers": "팔로워만 구독 가능",
+  "allowSubscriptionsMutuals": "상호 팔로워만 구독 가능",
+  "allowSubscriptionsNone": "구독 불가",
 
   // ============================================================================
   // CONTENT FOLDING

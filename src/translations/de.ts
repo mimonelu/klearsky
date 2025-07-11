@@ -668,6 +668,10 @@ export default () => ({
   "allowSubscription-followers": "Nur Follower",
   "allowSubscription-mutuals": "Nur gegenseitige Follower",
   "allowSubscription-none": "Kein Abonnement",
+  "activitySubscriptionPermission": "Abonnement-Berechtigung",
+  "allowSubscriptionsFollowers": "Nur Follower",
+  "allowSubscriptionsMutuals": "Nur Mutuals",
+  "allowSubscriptionsNone": "Kein Abonnement erlaubt",
 
   // ============================================================================
   // CONTENT FOLDING

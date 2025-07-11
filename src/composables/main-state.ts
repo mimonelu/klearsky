@@ -572,6 +572,13 @@ export const state: MainState = reactive<MainState>({
   openActivitySubscriptionListPopup: openActivitySubscriptionListPopup,
   closeActivitySubscriptionListPopup: closeActivitySubscriptionListPopup,
 
+  // ポップアップ - 購読許可設定ポップアップ
+  activitySubscriptionPermissionPopupProps: {
+    display: false,
+  },
+  openActivitySubscriptionPermissionPopup: openActivitySubscriptionPermissionPopup,
+  closeActivitySubscriptionPermissionPopup: closeActivitySubscriptionPermissionPopup,
+
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {
     display: false,
@@ -2444,6 +2451,16 @@ function openActivitySubscriptionListPopup () {
 
 function closeActivitySubscriptionListPopup () {
   state.activitySubscriptionListPopupProps.display = false
+}
+
+// ポップアップ - 購読許可設定ポップアップ
+
+function openActivitySubscriptionPermissionPopup () {
+  state.activitySubscriptionPermissionPopupProps.display = true
+}
+
+function closeActivitySubscriptionPermissionPopup () {
+  state.activitySubscriptionPermissionPopupProps.display = false
 }
 
 // ポップアップ - アカウントレポート送信ポップアップ

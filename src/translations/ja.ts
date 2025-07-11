@@ -668,6 +668,10 @@ export default () => ({
   "allowSubscription-followers": "フォロワーのみ",
   "allowSubscription-mutuals": "相互フォロワーのみ",
   "allowSubscription-none": "購読不可",
+  "activitySubscriptionPermission": "購読の許可設定",
+  "allowSubscriptionsFollowers": "フォロワーのみ購読可",
+  "allowSubscriptionsMutuals": "相互フォロワーのみ購読可",
+  "allowSubscriptionsNone": "購読不可",
 
   // ============================================================================
   // CONTENT FOLDING

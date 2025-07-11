@@ -245,6 +245,11 @@ function openActorStatusEditPopup () {
   mainState.openActorStatusEditPopup()
 }
 
+function openActivitySubscriptionPermissionPopup () {
+  Util.blurElement()
+  mainState.openActivitySubscriptionPermissionPopup()
+}
+
 function openHandleHistoryPopup () {
   if (mainState.currentProfile?.__log == null) return
   state.handleHistoryPopupDisplay = true
@@ -540,7 +545,16 @@ function removeThisPost () {
                     :data-has-live="hasLive"
                     @click.stop="openActorStatusEditPopup"
                   >
-                    <span>{{ $t("live") }}</span>
+                    <SVGIcon name="video" />
+                  </button>
+
+                  <!-- 購読許可設定ポップアップトリガー -->
+                  <button
+                    type="button"
+                    class="button activity-subscription-permission-popup-trigger"
+                    @click.stop="openActivitySubscriptionPermissionPopup"
+                  >
+                    <SVGIcon name="bell" />
                   </button>
                 </div>
               </div>

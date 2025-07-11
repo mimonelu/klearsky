@@ -505,6 +505,13 @@ interface MainState {
   openActivitySubscriptionListPopup: Function
   closeActivitySubscriptionListPopup: () => void
 
+  // ポップアップ - 購読許可設定ポップアップ
+  activitySubscriptionPermissionPopupProps: {
+    display: boolean
+  }
+  openActivitySubscriptionPermissionPopup: Function
+  closeActivitySubscriptionPermissionPopup: () => void
+
   // ポップアップ - アカウントレポート送信ポップアップ
   sendAccountReportPopupProps: {
     display: boolean

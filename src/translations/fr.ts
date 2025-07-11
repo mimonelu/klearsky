@@ -668,6 +668,10 @@ export default () => ({
   "allowSubscription-followers": "Abonnés uniquement",
   "allowSubscription-mutuals": "Abonnés mutuels uniquement",
   "allowSubscription-none": "Aucun abonnement",
+  "activitySubscriptionPermission": "Permission d'abonnement",
+  "allowSubscriptionsFollowers": "Abonnés uniquement",
+  "allowSubscriptionsMutuals": "Mutuels uniquement",
+  "allowSubscriptionsNone": "Aucun abonnement autorisé",
 
   // ============================================================================
   // CONTENT FOLDING
