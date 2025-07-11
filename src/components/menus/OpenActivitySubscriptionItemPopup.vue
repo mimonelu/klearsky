@@ -40,20 +40,20 @@ const canSubscribe = computed((): boolean => {
   return true
 })
 
-async function openActivitySubscriptionPopup () {
+async function openActivitySubscriptionItemPopup () {
   emit("close")
   if (props.user != null) {
-    mainState.openActivitySubscriptionPopup(props.user)
+    mainState.openActivitySubscriptionItemPopup(props.user)
   }
 }
 </script>
 
 <template>
   <button
-    class="open-activity-subscription-popup"
+    class="open-activity-subscription-item-popup"
     type="button"
     :data-can-subscribe="canSubscribe"
-    @click.stop="openActivitySubscriptionPopup"
+    @click.stop="openActivitySubscriptionItemPopup"
   >
     <SVGIcon :name="canSubscribe ? 'activitySubscription' : 'cross'" />
     <span>{{ $t("activitySubscription") }}</span>
@@ -61,7 +61,7 @@ async function openActivitySubscriptionPopup () {
 </template>
 
 <style lang="scss" scoped>
-.open-activity-subscription-popup {
+.open-activity-subscription-item-popup {
   &[data-can-subscribe="false"] .svg-icon {
     fill: rgb(var(--notice-color));
   }

@@ -4,7 +4,7 @@ import { useRouter, type LocationQueryValue, type RouteLocationNormalized } from
 import hotkeys from "hotkeys-js"
 import AccountPopup from "@/components/popups/AccountPopup.vue"
 import ActivitySubscriptionListPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionListPopup.vue"
-import ActivitySubscriptionPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionPopup.vue"
+import ActivitySubscriptionItemPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionItemPopup.vue"
 import ActorStatusEditPopup from "@/components/next/ActorStatus/ActorStatusEditPopup.vue"
 import AdvancedSearchPopup from "@/components/popups/AdvancedSearchPopup.vue"
 import BlockingUsersPopup from "@/components/next/UserBlock/BlockingUsersPopup.vue"
@@ -1224,10 +1224,10 @@ function changeSetting () {
 
       <!-- 購読ポップアップ -->
       <Transition>
-        <ActivitySubscriptionPopup
-          v-if="state.activitySubscriptionPopupProps.display"
-          v-bind="state.activitySubscriptionPopupProps"
-          @close="state.closeActivitySubscriptionPopup"
+        <ActivitySubscriptionItemPopup
+          v-if="state.activitySubscriptionItemPopupProps.display"
+          v-bind="state.activitySubscriptionItemPopupProps"
+          @close="state.closeActivitySubscriptionItemPopup"
         />
       </Transition>
 

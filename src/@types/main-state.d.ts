@@ -487,13 +487,13 @@ interface MainState {
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: () => void
 
-  // ポップアップ - 購読ポップアップ
-  activitySubscriptionPopupProps: {
+  // ポップアップ - 個別購読ポップアップ
+  activitySubscriptionItemPopupProps: {
     display: boolean
-    user: TTUser
+    user?: TTUser
   }
-  openActivitySubscriptionPopup: Function
-  closeActivitySubscriptionPopup: () => void
+  openActivitySubscriptionItemPopup: Function
+  closeActivitySubscriptionItemPopup: () => void
 
   // ポップアップ - 購読一覧ポップアップ
   activitySubscriptionListPopupProps: {

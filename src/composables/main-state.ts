@@ -556,12 +556,13 @@ export const state: MainState = reactive<MainState>({
   openSelectLabelsPopup: openSelectLabelsPopup,
   closeSelectLabelsPopup: closeSelectLabelsPopup,
 
-  // ポップアップ - 購読ポップアップ
-  activitySubscriptionPopupProps: {
+  // ポップアップ - 個別購読ポップアップ
+  activitySubscriptionItemPopupProps: {
     display: false,
+    user: undefined,
   },
-  openActivitySubscriptionPopup: openActivitySubscriptionPopup,
-  closeActivitySubscriptionPopup: closeActivitySubscriptionPopup,
+  openActivitySubscriptionItemPopup: openActivitySubscriptionItemPopup,
+  closeActivitySubscriptionItemPopup: closeActivitySubscriptionItemPopup,
 
   // ポップアップ - 購読一覧ポップアップ
   activitySubscriptionListPopupProps: {
@@ -2423,15 +2424,15 @@ function closeSelectLabelsPopup () {
   state.selectLabelsPopupDisplay = false
 }
 
-// ポップアップ - 購読ポップアップ
+// ポップアップ - 個別購読ポップアップ
 
-function openActivitySubscriptionPopup (user: TTUser) {
-  state.activitySubscriptionPopupProps.user = user
-  state.activitySubscriptionPopupProps.display = true
+function openActivitySubscriptionItemPopup (user: TTUser) {
+  state.activitySubscriptionItemPopupProps.user = user
+  state.activitySubscriptionItemPopupProps.display = true
 }
 
-function closeActivitySubscriptionPopup () {
-  state.activitySubscriptionPopupProps.display = false
+function closeActivitySubscriptionItemPopup () {
+  state.activitySubscriptionItemPopupProps.display = false
 }
 
 // ポップアップ - 購読一覧ポップアップ

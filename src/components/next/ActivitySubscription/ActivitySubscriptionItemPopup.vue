@@ -26,7 +26,7 @@ async function close () {
 
 <template>
   <Popup
-    class="activity-subscription-popup"
+    class="activity-subscription-item-popup"
     :hasCloseButton="true"
     @close="close"
   >
@@ -46,7 +46,7 @@ async function close () {
 </template>
 
 <style lang="scss" scoped>
-.activity-subscription-popup {
+.activity-subscription-item-popup {
   &:deep() {
     .popup {
       &-header > h2 > .svg-icon {
