@@ -336,26 +336,62 @@ function removeThisPost () {
       </PageHeader>
     </Portal>
 
-    <!-- バナー -->
-    <div
-      v-if="state.loaderDisplay"
-      class="banner--transparent"
-    />
-    <div
-      v-else-if="
-        !!mainState.currentProfile?.banner &&
-        state.accountContentDisplay &&
-        state.accountMediaDisplay
-      "
-      class="banner"
-      @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
-    >
-      <LazyImage :src="mainState.currentProfile?.banner" />
+    <!-- バナーコンテナ -->
+    <div class="banner-container">
+      <!-- バナー -->
+      <div
+        v-if="state.loaderDisplay"
+        class="banner--transparent"
+      />
+      <div
+        v-else-if="
+          !!mainState.currentProfile?.banner &&
+          state.accountContentDisplay &&
+          state.accountMediaDisplay
+        "
+        class="banner"
+        @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
+      >
+        <LazyImage :src="mainState.currentProfile?.banner" />
+      </div>
+      <div
+        v-else
+        class="banner--filled"
+      />
+
+      <!-- バナーコンテナ内ボタンコンテナ -->
+      <div class="banner-container__button-container">
+        <!-- モデレーションボタンコンテナ -->
+        <div
+          v-if="
+            !mainState.isMyProfile() &&
+            mainState.currentProfile != null
+          "
+          class="moderation-button-container group-parts"
+        >
+          <!-- ミュートトグル -->
+          <MuteButton
+            :did="mainState.currentProfile.did"
+            :viewer="mainState.currentProfile.viewer"
+          />
+
+          <!-- ブロックトグル -->
+          <BlockButton
+            :did="mainState.currentProfile.did"
+            :viewer="mainState.currentProfile.viewer"
+          />
+        </div>
+
+        <!-- プロフィールポップオーバートグル -->
+        <button
+          class="button--bordered button--nolabel menu-button"
+          @click.stop="openProfilePopover"
+        >
+          <SVGIcon name="menu" />
+          <span>&#160;</span>
+        </button>
+      </div>
     </div>
-    <div
-      v-else
-      class="banner--filled"
-    />
 
     <div class="profile-view__top-wrapper">
       <div class="profile-view__top">
@@ -383,6 +419,15 @@ function removeThisPost () {
             </div>
 
             <div class="profile-view__details__top__right">
+              <!-- 折り畳みトグル -->
+              <button
+                v-if="!state.loaderDisplay"
+                class="button--bordered folding-toggle"
+                @click="toggleFolding"
+              >
+                <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
+              </button>
+
               <!-- Viewer ラベル -->
               <ViewerLabels :viewer="mainState.currentProfile?.viewer" />
 
@@ -428,16 +473,6 @@ function removeThisPost () {
                   />
                 </a>
               </div>
-
-              <!-- 折り畳みトグル -->
-              <button
-                v-if="!state.loaderDisplay"
-                class="button--bordered folding-toggle"
-                @click="toggleFolding"
-              >
-                <SVGIcon :name="mainState.profileFolding ? 'cursorDown' : 'cursorUp'" />
-                <span>{{ $t(mainState.profileFolding ? "showDetail" : "hideDetail") }}</span>
-              </button>
             </div>
           </div>
           <div class="profile-view__details__bottom">
@@ -508,32 +543,6 @@ function removeThisPost () {
                     <span>{{ $t("live") }}</span>
                   </button>
                 </div>
-
-                <!-- モデレーションボタンコンテナ -->
-                <div class="moderation-button-container group-parts">
-                  <!-- ミュートトグル -->
-                  <MuteButton
-                    v-if="!mainState.isMyProfile()"
-                    :did="mainState.currentProfile.did"
-                    :viewer="mainState.currentProfile.viewer"
-                  />
-
-                  <!-- ブロックトグル -->
-                  <BlockButton
-                    v-if="!mainState.isMyProfile()"
-                    :did="mainState.currentProfile.did"
-                    :viewer="mainState.currentProfile.viewer"
-                  />
-                </div>
-
-                <!-- プロフィールポップオーバートグル -->
-                <button
-                  class="button--bordered button--nolabel menu-button"
-                  @click.stop="openProfilePopover"
-                >
-                  <SVGIcon name="menu" />
-                  <span>&#160;</span>
-                </button>
               </div>
             </div>
 
@@ -859,6 +868,7 @@ function removeThisPost () {
     .banner,
     .banner--transparent,
     .banner--filled,
+    .banner-container__button-container,
     .label-tags,
     .known-followers,
     .profile-view__details__bottom {
@@ -867,7 +877,7 @@ function removeThisPost () {
 
     .profile-view__details,
     .avatar-button {
-      --avatar-size: 5rem;
+      --avatar-size: 3.5rem;
       position: unset;
     }
   }
@@ -943,6 +953,20 @@ function removeThisPost () {
   }
 }
 
+// バナーコンテナ
+.banner-container {
+  position: relative;
+
+  // バナーコンテナ内ボタンコンテナ
+  &__button-container {
+    display: flex;
+    grid-gap: 0.5rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
 // バナー
 .banner,
 .banner--transparent,
@@ -961,6 +985,13 @@ function removeThisPost () {
   background-color: rgb(var(--fg-color), 0.125);
 }
 
+// プロフィールポップオーバートグル
+.menu-button {
+  background-color: rgb(var(--bg-color));
+  min-width: 4rem;
+  max-width: 4rem;
+}
+
 // アバターボタン
 .avatar-button {
   font-size: var(--avatar-size);
@@ -975,14 +1006,8 @@ function removeThisPost () {
 // 折り畳みトグル
 .folding-toggle {
   float: right;
-  font-size: 0.75rem;
-  margin-top: 0.5rem;
+  margin-left: 0.5rem;
   padding: 0.375em 1em;
-  white-space: nowrap;
-
-  & > span {
-    line-height: var(--line-height-low);
-  }
 }
 
 // Viewer ラベル
@@ -1132,22 +1157,9 @@ function removeThisPost () {
   }
 }
 
-// モデレーションボタンコンテナ
-.moderation-button-container {
-  margin-left: auto;
-}
-
-.mute-button,
 .block-button {
   min-width: 3rem;
   max-width: 3rem;
-}
-
-.menu-button {
-  grid-gap: 0;
-  position: relative;
-  min-width: 4rem;
-  max-width: 4rem;
 }
 
 // ラベラーサブスクライブトグル

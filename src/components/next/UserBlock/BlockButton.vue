@@ -51,18 +51,13 @@ async function toggleBlock () {
 
 <template>
   <button
-    class="button--bordered--important button--nolabel block-button"
+    class="button--bordered button--nolabel block-button"
     :disabled="viewer.blockingByList != null"
     :data-enabled="viewer.blocking != null"
     :data-is-processing="state.processing"
     @click.prevent="toggleBlock"
   >
-    <template v-if="viewer.blocking != null">
-      <SVGIcon name="personOff" />
-    </template>
-    <template v-else>
-      <SVGIcon name="person" />
-    </template>
+    <SVGIcon name="personOff" />
     <span>&#160;</span>
     <Loader v-if="state.processing" />
   </button>
@@ -70,9 +65,13 @@ async function toggleBlock () {
 
 <style lang="scss" scoped>
 .block-button {
+  background-color: rgb(var(--bg-color));
   position: relative;
   &[data-is-processing="true"] {
     pointer-events: none;
+  }
+  &[data-enabled="true"] {
+    --bg-color: var(--notice-color);
   }
 
   & > .loader {
