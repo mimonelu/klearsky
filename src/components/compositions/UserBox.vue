@@ -186,7 +186,6 @@ function onActivateContentFilteringToggle () {
   display: grid;
   grid-gap: 0 0.75em;
   grid-template-columns: min-content auto 1fr auto;
-  grid-template-rows: auto auto auto 1fr;
   grid-template-areas:
     "c c c c"
     "l l l l"
