@@ -23,6 +23,7 @@ const props = defineProps<{
   display: boolean
   isUser: boolean
   user?: TTUser
+  showActivitySubscription?: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -38,7 +39,6 @@ const state = reactive<{
     return `https://bsky.app/profile/${props.user?.handle}`
   }),
 })
-
 
 const popover = ref(null)
 
@@ -127,9 +127,9 @@ function close () {
         @close="emit('close')"
       />
 
-      <!-- 購読 -->
+      <!-- 購読する -->
       <MenuTickerOpenActivitySubscriptionItemPopup
-        v-if="!isUser"
+        v-if="!isUser && showActivitySubscription"
         :user="user"
         @close="emit('close')"
       />

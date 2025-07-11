@@ -156,10 +156,6 @@ defineExpose({
   flex-direction: column;
   grid-gap: 0.5rem;
 
-  .user-box {
-    pointer-events: none;
-  }
-
   &__allow-subscriptions {
     display: flex;
     align-items: center;

@@ -56,6 +56,7 @@ function openProfilePopover ($event: Event) {
   Util.blurElement()
   mainState.profilePopoverProps.isUser = props.user.did === mainState.atp.session?.did
   mainState.profilePopoverProps.user = props.user
+  mainState.profilePopoverProps.showActivitySubscription = false
   mainState.profilePopoverFrom = undefined
   mainState.openProfilePopover($event.target)
 }

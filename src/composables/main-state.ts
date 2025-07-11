@@ -294,6 +294,7 @@ export const state: MainState = reactive<MainState>({
     display: false,
     isUser: false,
     user: undefined,
+    showActivitySubscription: undefined,
   },
   profilePopoverSelector: undefined,
   profilePopoverFrom: undefined,
