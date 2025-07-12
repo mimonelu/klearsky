@@ -91,7 +91,6 @@ function openProfilePopover ($event: Event) {
   Util.blurElement()
   mainState.profilePopoverProps.isUser = props.labeler.creator.did === mainState.atp.data.did
   mainState.profilePopoverProps.user = props.labeler.creator
-  mainState.profilePopoverProps.showActivitySubscription = false
   mainState.profilePopoverFrom = "labeler-card"
   mainState.openProfilePopover($event.target)
 }

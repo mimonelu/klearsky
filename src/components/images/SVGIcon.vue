@@ -11,6 +11,7 @@ import arrowTop from "@/svg/arrow-top.svg?raw"
 import arrowUp from "@/svg/arrow-up.svg?raw"
 import at from "@/svg/at.svg?raw"
 import bell from "@/svg/bell.svg?raw"
+import bellOff from "@/svg/bell-off.svg?raw"
 import bluesky from "@/svg/bluesky.svg?raw"
 import bookmark from "@/svg/bookmark.svg?raw"
 import bookmarkOff from "@/svg/bookmark-off.svg?raw"
@@ -121,6 +122,7 @@ const icons: { [k: string]: string } = {
   arrowUp,
   at,
   bell,
+  bellOff,
   bluesky,
   bookmark,
   bookmarkOff,

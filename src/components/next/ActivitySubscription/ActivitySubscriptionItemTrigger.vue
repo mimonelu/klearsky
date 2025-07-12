@@ -2,10 +2,8 @@
 import { computed, inject } from "vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
-const emit = defineEmits<{(event: string): void}>()
-
 const props = defineProps<{
-  user: TTUser
+  user?: TTUser
 }>()
 
 const mainState = inject("state") as MainState
@@ -40,8 +38,14 @@ const canSubscribe = computed((): boolean => {
   return true
 })
 
+const isSubscribed = computed((): boolean => {
+  return (
+    (props.user?.viewer?.activitySubscription?.post ?? false) ||
+    (props.user?.viewer?.activitySubscription?.reply ?? false)
+  )
+})
+
 async function openActivitySubscriptionItemPopup () {
-  emit("close")
   if (props.user != null) {
     mainState.openActivitySubscriptionItemPopup(props.user)
   }
@@ -50,20 +54,24 @@ async function openActivitySubscriptionItemPopup () {
 
 <template>
   <button
-    class="open-activity-subscription-item-popup"
+    class="button--nolabel activity-subscription-item-trigger"
+    :class="isSubscribed ? 'button' : 'button--bordered'"
     type="button"
     :data-can-subscribe="canSubscribe"
+    :data-is-subscribed="isSubscribed"
     @click.stop="openActivitySubscriptionItemPopup"
   >
-    <SVGIcon :name="canSubscribe ? 'activitySubscription' : 'cross'" />
-    <span>{{ $t("activitySubscription") }}</span>
+    <SVGIcon :name="canSubscribe ? 'bell' : 'bellOff'" />
+    <span>&#160;</span>
   </button>
 </template>
 
 <style lang="scss" scoped>
-.open-activity-subscription-item-popup {
-  &[data-can-subscribe="false"] .svg-icon {
-    fill: rgb(var(--notice-color));
+.activity-subscription-item-trigger {
+  --fg-color: var(--like-color);
+
+  & > span {
+    font-size: 0.875rem;
   }
 }
 </style>

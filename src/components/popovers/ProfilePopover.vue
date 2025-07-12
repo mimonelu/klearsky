@@ -8,7 +8,6 @@ import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"
 import MenuTickerOpenLivePage from "@/components/menus/OpenLivePage.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
-import MenuTickerOpenActivitySubscriptionItemPopup from "@/components/menus/OpenActivitySubscriptionItemPopup.vue"
 import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import MenuTickerWebShare from "@/components/menus/WebShare.vue"
 import Popover from "@/components/popovers/Popover.vue"
@@ -23,7 +22,6 @@ const props = defineProps<{
   display: boolean
   isUser: boolean
   user?: TTUser
-  showActivitySubscription?: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -123,13 +121,6 @@ function close () {
 
       <!-- チャットを開始する -->
       <MenuTickerOpenChatConvoPopup
-        :user="user"
-        @close="emit('close')"
-      />
-
-      <!-- 購読する -->
-      <MenuTickerOpenActivitySubscriptionItemPopup
-        v-if="!isUser && showActivitySubscription"
         :user="user"
         @close="emit('close')"
       />

@@ -238,9 +238,6 @@ interface MainState {
     display: boolean
     isUser: boolean
     user?: TTUser
-
-    // viewer の activitySubscription が入ってくるのはプロフィールページのみ、その判定用
-    showActivitySubscription?: boolean
   }
   profilePopoverSelector?: string | HTMLElement
   profilePopoverFrom?: string

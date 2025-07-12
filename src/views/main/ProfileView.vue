@@ -2,6 +2,7 @@
 import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import { differenceInDays } from "date-fns"
+import ActivitySubscriptionItemTrigger from "@/components/next/ActivitySubscription/ActivitySubscriptionItemTrigger.vue"
 import ActorStatusLivePanel from "@/components/next/ActorStatus/ActorStatusLivePanel.vue"
 import AtmosphereContainer from "@/components/next/Atmosphere/AtmosphereContainer.vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
@@ -263,7 +264,6 @@ function openProfilePopover ($event: Event) {
   Util.blurElement()
   mainState.profilePopoverProps.isUser = mainState.isMyProfile()
   mainState.profilePopoverProps.user = mainState.currentProfile as TTProfile
-  mainState.profilePopoverProps.showActivitySubscription = true
   mainState.profilePopoverFrom = "profile-view"
   mainState.openProfilePopover($event.target)
 }
@@ -503,6 +503,9 @@ function removeThisPost () {
                   :did="mainState.currentProfile.did"
                   :declarationDid="mainState.currentProfile.did"
                 />
+
+                <!-- 個別購読ポップアップトリガー -->
+                <ActivitySubscriptionItemTrigger :user="mainState.currentProfile" />
 
                 <!-- Known Followers -->
                 <KnownFollowers
@@ -1112,7 +1115,7 @@ function removeThisPost () {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    grid-gap: 0.5rem 0.75rem;
+    grid-gap: 0.5rem;
   }
 
   // 段落ちなしボタンコンテナ
