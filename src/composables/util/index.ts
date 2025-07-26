@@ -23,7 +23,6 @@ import sortFeeds from "@/composables/util/sort-feeds"
 import storage from "@/composables/util/storage"
 import sanitizePreferences from "@/composables/util/sanitize-preferences"
 import shortenLinks from "@/composables/util/shorten-links"
-import SubscribeRepos from "@/composables/util/subscribe-repos"
 // import translateInDeepL from "@/composables/util/translate-in-deep-l" // DeepL: 未使用
 import translateInExternalService from "@/composables/util/translate-in-external-service"
 import translateInMyMemory from "@/composables/util/translate-in-my-memory"
@@ -60,7 +59,6 @@ export default {
   ...storage,
   sanitizePreferences,
   shortenLinks,
-  SubscribeRepos,
   // translateInDeepL, // DeepL: 未使用
   translateInExternalService,
   translateInMyMemory,

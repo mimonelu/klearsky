@@ -1,21 +1,4 @@
-import { addExtension, decode, decodeMultiple } from "cbor-x/decode"
-import { CarBufferReader } from "@ipld/car/buffer-reader"
-import { CID } from "multiformats/cid"
 import Util from "@/composables/util"
-
-addExtension({
-  Class: CID,
-  tag: 42,
-  encode () {
-    throw Error("cidEncodeError")
-  },
-  decode (bytes: Uint8Array) {
-    if (bytes[0] !== 0) {
-      throw Error("invalidCidError")
-    }
-    return CID.decode(bytes.subarray(1))
-  },
-})
 
 export default class {
   socket?: WebSocket
@@ -69,7 +52,7 @@ export default class {
   }
 
   onError (event: Event) {
-    console.warn("[klearsky/subscribeRepos]", event)
+    console.warn("[klearsky/subscribeJetstream]", event)
     if (this.errorCallback != null) {
       this.errorCallback(event)
     }
@@ -89,67 +72,22 @@ export default class {
   }
 
   async onMessage (messageEvent: MessageEvent) {
-    if (!(messageEvent.data instanceof Blob)) {
-      return
-    }
-    const arrayBuffer = await messageEvent.data.arrayBuffer()
-    const uint8Array: Uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)
-    const data = decodeMultiple(uint8Array) as Array<any>
-    const header = data[0]
-    if (header?.op !== 1) {
-      console.warn("[klearsky/subscribeRepos]", "header?.op !== 1", data)
-      return
-    }
-    const body = data[1]
-    if (body?.blocks == null) {
-      // 例： `{t: '#handle', op: 1}`: 新規ユーザー
-      console.warn("[klearsky/subscribeRepos]", "body?.blocks == null", data)
-      return
-    }
-    let car
-
-    // Unexpected end of data 対策
-    try {
-      car = CarBufferReader.fromBytes(body.blocks)
-    } catch (error: any) {
-      console.warn("[klearsky/CarBufferReader.fromBytes]", error)
-    }
-
     if (this.messageCallback != null) {
       this.messageCallback()
     }
-
-    let cid = undefined
-    const did = body.repo
-    let rkey = undefined
-    let record = undefined
-    for (const op of body.ops) {
-      // 何らかのレコードが削除された
-      if (!op.cid) {
-        continue
-      }
-      const block = car?.get(op.cid)
-      if (!block) {
-        continue
-      }
-      const currentRecord = decode(block.bytes)
-      if (currentRecord == null) {
-        continue
-      }
-      // ポスト・引用リポスト・リプライのみ処理
-      if (typeof currentRecord.$type === "string" &&
-          currentRecord.$type !== "app.bsky.feed.post") {
-        return
-      }
-      cid = op.cid.toString()
-      rkey = op.path.split("/").at(- 1)
-      record = currentRecord
-    }
-    if (record == null) {
+    const data = Util.parse(messageEvent.data)
+    if (
+      data?.did == null ||
+      data?.commit?.rkey == null ||
+      data?.commit?.record == null ||
+      data?.commit?.collection !== "app.bsky.feed.post" ||
+      data?.commit?.operation !== "create"
+    ) {
       return
     }
-
-    const uri = `at://${did ?? ''}/app.bsky.feed.post/${rkey ?? ''}`
+    const did = data.did
+    const uri = `at://${did ?? ''}/app.bsky.feed.post/${data.commit?.rkey ?? ''}`
+    const record = data.commit?.record
     const feeds: Array<TTFeed> = [{
       __id: uri,
       post: {
@@ -158,25 +96,22 @@ export default class {
           did: "",
           displayName: "",
           handle: "",
-          viewer: {
-            muted: false,
-          },
+          viewer: {},
         },
         uri,
-        cid,
+        cid: data.commit?.cid,
         record,
         replyCount: 0,
         repostCount: 0,
         likeCount: 0,
         quoteCount: 0,
-        indexedAt: record.createdAt,
+        indexedAt: record?.createdAt,
         viewer: {},
       },
     }]
-    Util.sanitizePostsOrFeeds(feeds)
-    const post = feeds[0].post
     if (this.postCallback != null) {
-      this.postCallback(did, post)
+      Util.sanitizePostsOrFeeds(feeds)
+      this.postCallback(did, feeds[0].post)
     }
   }
 }

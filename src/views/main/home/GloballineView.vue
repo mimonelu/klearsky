@@ -5,13 +5,13 @@ import Loader from "@/components/shells/Loader.vue"
 import Post from "@/components/compositions/Post.vue"
 import SelectLanguagesPopup from "@/components/popups/SelectLanguagesPopup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import SubscribeRepos from "@/composables/util/subscribe-repos"
+import SubscribeJetstream from "@/composables/util/subscribe-jetstream"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  subscriber?: SubscribeRepos
+  subscriber?: SubscribeJetstream
   globallineSettingsPopupDisplay: boolean
   globallineContentLanguagesSettingsPopupDisplay: boolean
 }>({
@@ -39,21 +39,12 @@ onBeforeUnmount(() => {
   destroyProfileTimer()
 })
 
-// subscribeRepo
-
 async function connect () {
-  state.subscriber = new SubscribeRepos(onError, undefined, undefined, undefined, onPost)
-  let hostName = mainState.atp.session?.__service ?? ""
-  const url = Util.safeUrl(hostName)
-  if (url == null) {
-    console.warn("[klearsky/GloballineView]", hostName)
-    return
-  }
-  hostName = url.hostname
-  if (hostName.match(/bsky\.(?:network|social)$/)) {
-    hostName = "bsky.network"
-  }
-  state.subscriber.connect(`wss://${hostName}/xrpc/com.atproto.sync.subscribeRepos`)
+  state.subscriber = new SubscribeJetstream(onError, undefined, undefined, undefined, onPost)
+
+  // SEE: https://github.com/bluesky-social/jetstream/blob/main/README.md#public-instances
+  state.subscriber.connect("wss://jetstream1.us-west.bsky.network/subscribe?wantedCollections=app.bsky.feed.post")
+
   createProfileTimer()
 }
 
@@ -149,7 +140,7 @@ function toggleConnect () {
 
 // グローバルフィードプロフィールの取得
 
-let timer: undefined | NodeJS.Timeout = undefined
+let timer: undefined | ReturnType<typeof setTimeout> = undefined
 
 function createProfileTimer () {
   timer = setTimeout(async () => {
@@ -191,7 +182,7 @@ function createProfileTimer () {
 }
 
 function destroyProfileTimer () {
-  clearInterval(timer)
+  clearTimeout(timer)
   timer = undefined
 }
 
@@ -368,8 +359,8 @@ function onMutated () {
           :hasReplyIcon="post.record.reply != null"
           :hasQuoteRepostIcon="post.record.embed?.record != null"
           :forceHideMedia="true"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
+          @updateThisPostThread="updateThisPostThread as any"
+          @removeThisPost="removeThisPost as any"
         />
       </div>
     </div>
