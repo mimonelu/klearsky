@@ -68,6 +68,7 @@ import fetchListItems from "@/composables/atp-wrapper/fetch/fetch-list-items"
 import fetchListMutes from "@/composables/atp-wrapper/fetch/fetch-list-mutes"
 import fetchListFeeds from "@/composables/atp-wrapper/fetch/fetch-list-feeds"
 import fetchLists from "@/composables/atp-wrapper/fetch/fetch-lists"
+import fetchListsWithMembership from "@/composables/atp-wrapper/fetch/fetch-lists-with-membership"
 import fetchLogAudit from "@/composables/atp-wrapper/fetch/fetch-log-audit"
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch/fetch-muting-users"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch/fetch-notification-count"
@@ -242,6 +243,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchListMutes = fetchListMutes
   fetchListFeeds = fetchListFeeds
   fetchLists = fetchLists
+  fetchListsWithMembership = fetchListsWithMembership
   fetchLogAudit = fetchLogAudit
   fetchMutingUsers = fetchMutingUsers
   fetchNotificationCount = fetchNotificationCount

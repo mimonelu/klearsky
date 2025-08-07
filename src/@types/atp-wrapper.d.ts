@@ -143,6 +143,11 @@ interface TIAtpWrapper {
     (lists: Array<TTList>, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchLists
     (lists: string[]): Promise<TTList[]>
+  fetchListsWithMembership
+    (actor: string, limit?: number, cursor?: string): Promise<Error | {
+      cursor?: string
+      lists: TTList[]
+    }>
   fetchLogAudit:
     (did: string) => Promise<Error | undefined | any>
   fetchMutingUsers
