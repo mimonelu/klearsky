@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 /* eslint-disable vue/no-mutating-props */
-import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type ComputedRef } from "vue"
+import { computed, inject, onMounted, onBeforeUnmount, reactive, ref } from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { RichText } from "@atproto/api"
 import { differenceInDays } from "date-fns"
@@ -50,326 +50,24 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const EMOJI_REGEX = /^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,7}$/u
-
 const state = reactive<{
-  text: ComputedRef<undefined | string>
-  indexedAt: ComputedRef<undefined | string>
-  isTextOnlyEmoji: ComputedRef<boolean>
-
   // メディア
-  images: ComputedRef<Array<TTImage>>
-  video: ComputedRef<undefined | TIVideo>
-  videoAspectRatio: ComputedRef<string>
   videoType?: string
-  hasMedia: ComputedRef<boolean>
-  displayMedia: ComputedRef<boolean>
 
-  // リンクカード
-  linkCard: ComputedRef<undefined | TTExternal>
-  hasLinkCard: ComputedRef<boolean>
-
-  // フィードカード
-  hasFeedCard: ComputedRef<boolean>
-
-  // リストカード
-  hasListCard: ComputedRef<boolean>
-
-  // スターターパックカード
-  hasStarterPackCard: ComputedRef<boolean>
-  pseudoStarterPack: ComputedRef<undefined | TIStarterPack>
-
-  // 最古の引用元ポストかどうか
-  isOldestQuotedPost: ComputedRef<boolean>
-
-  // ポストマスクの表示
-  masked: ComputedRef<boolean>
-
-  // 対象ポスト言語
-  postLanguages: ComputedRef<undefined | Array<string>>
-
-  // 翻訳リンクの設置可否 - 本文用
-  hasOtherLanguagesForText: ComputedRef<boolean>
-
-  // 翻訳リンクの設置可否 - alt 用
-  hasOtherLanguagesForAlt: ComputedRef<boolean>
-
-  // コンテンツ言語の判定
-  noContentLanguage: ComputedRef<boolean>
-
-  translation: "none" | "ignore" | "waiting" | "done" | "failed";
+  translationStep: "none" | "ignore" | "waiting" | "done" | "failed";
 
   // ラベル対応
-  allLabels: ComputedRef<Array<TTLabel>>
-  hideLabels: ComputedRef<Array<TILabelSetting>>
-  hideLabelNames: ComputedRef<Array<string>>
-  blurContentLabels: ComputedRef<Array<TILabelSetting>>
-  blurMediaLabels: ComputedRef<Array<TILabelSetting>>
-  hasBlurredContent: ComputedRef<boolean>
   blurredContentClicked: boolean
-  postContentDisplay: ComputedRef<boolean>
-  hasBlurredMedia: ComputedRef<boolean>
   blurredMediaClicked: boolean
-  postMediaDisplay: ComputedRef<boolean>
-
-  // Threadgate
-  threadgate: ComputedRef<"none" | "lock" | "unlock">
-
-  // ワードミュートの判定
-  isWordMute: ComputedRef<boolean>
 }>({
-  indexedAt: computed((): string => {
-    return props.post.record?.createdAt ?? props.post.value?.createdAt ?? props.post.indexedAt ?? ""
-  }),
-  text: computed((): undefined | string => {
-    return props.post.record?.text ?? props.post.value?.text
-  }),
-
-  // デカ絵文字
-  isTextOnlyEmoji: computed((): boolean => {
-    return state.text?.match(EMOJI_REGEX) != null
-  }),
-
   // メディア
-  images: computed(() => {
-    return props.post.embed?.images ?? props.post.record?.embed?.images ?? []
-  }),
-  video: computed(() => {
-    const embed = props.post.embed ?? props.post.record?.embed
-    return embed == null
-      ? undefined
-      : embed.$type?.startsWith("app.bsky.embed.video")
-        ? embed as unknown as TIVideo
-        : (embed.media as unknown as TIVideo)?.$type?.startsWith("app.bsky.embed.video")
-          ? embed.media as unknown as TIVideo
-          : undefined
-  }),
-  videoAspectRatio: computed((): string => {
-    if (state.video?.aspectRatio == null ||
-        state.video.aspectRatio.width == null ||
-        state.video.aspectRatio.height == null
-    ) {
-      return "unset"
-    }
-    const aspectHeight = state.video.aspectRatio.height / state.video.aspectRatio.width
-    if (!mainState.currentSetting.imageMaxHeightRatio) {
-      return `1 / ${aspectHeight}`
-    }
-    const computedHeight = Math.min(
-      aspectHeight,
-      mainState.currentSetting.imageMaxHeightRatio
-    )
-    return `1 / ${computedHeight}`
-  }),
   videoType: undefined,
-  hasMedia: computed((): boolean => state.images.length > 0 || state.video != null),
 
-  // メディアの折り畳み
-  // TODO: 引用リポストに対応すること
-  displayMedia: computed((): boolean => {
-    // なし - すべて表示
-    if (mainState.currentSetting.imageFolding === "none") return true
-
-    // 適度 - 自身とフォロイーとフォロイーのリポスト、およびプロフィールユーザーのみ表示
-    else if (mainState.currentSetting.imageFolding === "recommended") {
-      if (
-        // 自身である
-        props.post.author?.did === mainState.atp.session?.did ||
-        // フォロイーである
-        props.post.author.viewer?.following != null ||
-        // フォロイーのリポストである
-        props.post.__custom?.reason?.by.viewer?.following != null ||
-        // プロフィールユーザーである
-        (
-          mainState.currentPath.startsWith('/profile/') &&
-          props.post.author?.did === mainState.currentProfile?.did
-        )
-      ) return true
-    }
-
-    // すべて - 自身以外
-    else if (mainState.currentSetting.imageFolding === "all") {
-      if (props.post.author?.did === mainState.atp.session?.did) return true
-    }
-
-    return false
-  }),
-
-  // リンクカード
-  linkCard: computed(() => props.post.embed?.external ?? props.post.record?.embed?.external),
-  hasLinkCard: computed((): boolean => state.linkCard != null && props.position !== 'slim'),
-
-  // フィードカード
-  hasFeedCard: computed((): boolean => props.post.embed?.record?.$type === "app.bsky.feed.defs#generatorView"),
-
-  // リストカード
-  hasListCard: computed((): boolean => props.post.embed?.record?.$type === "app.bsky.graph.defs#listView"),
-
-  // スターターパックカード
-  hasStarterPackCard: computed((): boolean => props.post.embed?.record?.$type === "app.bsky.graph.starterpack"),
-  pseudoStarterPack: computed((): undefined | TIStarterPack => {
-    if (!state.hasStarterPackCard ||
-        props.post.embed?.record == null ||
-        props.post.record?.embed?.record == null
-    ) {
-      return
-    }
-    const uri = props.post.record.embed.record.uri ?? ""
-    const did = (uri.match(/at:\/\/([^/]+)/) ?? ["", ""])[1]
-    return {
-      uri,
-      cid: props.post.record.embed.record.cid ?? "",
-      record: props.post.embed.record as any,
-      creator: {
-        did,
-        displayName: "",
-        handle: "",
-        viewer: { muted: false },
-      },
-      listItemCount: undefined,
-      joinedWeekCount: undefined,
-      joinedAllTimeCount: undefined,
-      labels: undefined,
-      indexedAt: props.post.embed.record.createdAt as string,
-    }
-  }),
-
-  // 最古の引用元ポストかどうか
-  isOldestQuotedPost: computed((): boolean => (props.level ?? 1) >= 3 - 1),
-
-  // ポストマスクの表示
-  masked: computed((): boolean => {
-    return (
-      state.noContentLanguage ||
-      state.hideLabels.length > 0 ||
-      state.isWordMute
-    ) && (
-      props.position !== "preview" &&
-      props.position !== "slim"
-    )
-  }),
-
-  // 対象ポスト言語
-  postLanguages: computed((): undefined | Array<string> => {
-    return props.post.record?.langs ?? props.post.value?.langs
-  }),
-
-  // 翻訳リンクの設置可否 - 本文用
-  hasOtherLanguagesForText: computed((): boolean => {
-    if (props.noLink) return false
-    if (!state.text) return false
-    if (!state.postLanguages?.length) return false
-    const userLanguage = Util.getUserLanguage() ?? "en"
-    return state.postLanguages.every((language) => {
-      return language !== userLanguage
-    })
-  }),
-
-  // 翻訳リンクの設置可否 - alt 用
-  hasOtherLanguagesForAlt: computed((): boolean => {
-    if (!state.postLanguages?.length) return false
-    const userLanguage = Util.getUserLanguage() ?? "en"
-    return state.postLanguages.every((language) => {
-      return language !== userLanguage
-    })
-  }),
-
-  // コンテンツ言語の判定
-  noContentLanguage: computed((): boolean => {
-    // コンテンツ言語設定はポストスレッドとプロフィールポストでは無効
-    if (mainState.currentPath === "/post" ||
-        mainState.currentPath.startsWith("/profile/")
-    ) {
-      return false
-    }
-
-    if (!(mainState.currentSetting.contentLanguages?.length)) {
-      return false
-    }
-    if (!(state.postLanguages?.length)) {
-      return false
-    }
-    return !(state.postLanguages?.some((language: any) => {
-      return mainState.currentSetting.contentLanguages?.includes(language) ?? false
-    }) ?? false)
-  }),
-
-  translation: "none",
+  translationStep: "none",
 
   // ラベル対応
-  allLabels: computed((): Array<TTLabel> => {
-    return [
-      ...((props.post.author?.labels ?? []).map((label) => {
-        return {
-          ...label,
-          __isAuthorLabel: true,
-        }
-      })),
-      ...(props.post.labels ?? [])
-    ]
-  }),
-  hideLabels: computed((): Array<TILabelSetting> => {
-    return mainState.myLabeler!.getSpecificLabels(state.allLabels, ["hide"], ["none", "content", "media"])
-  }),
-  hideLabelNames: computed((): Array<string> => {
-    return state.hideLabels.map((label) => {
-      return $t(label.locale?.name || label.definition?.identifier || "")
-    })
-  }),
-  blurContentLabels: computed((): Array<TILabelSetting> => {
-    return mainState.myLabeler!.getSpecificLabels(state.allLabels, ["hide", "warn"], ["none", "content"])
-  }),
-  blurMediaLabels: computed((): Array<TILabelSetting> => {
-    return mainState.myLabeler!.getSpecificLabels(state.allLabels, ["hide", "warn"], ["media"])
-  }),
-
-  // ラベル対応 - ポストコンテンツ
-  hasBlurredContent: computed((): boolean => {
-    return state.blurContentLabels.length > 0
-  }),
   blurredContentClicked: false,
-  postContentDisplay: computed((): boolean => {
-    return !state.hasBlurredContent ||
-      (
-        state.hasBlurredContent &&
-        state.blurredContentClicked
-      )
-  }),
-
-  // ラベル対応 - ポストメディア
-  hasBlurredMedia: computed((): boolean => {
-    return (
-      state.hasMedia ||
-      state.hasLinkCard ||
-      state.hasFeedCard
-    ) && state.blurMediaLabels.length > 0
-  }),
   blurredMediaClicked: false,
-  postMediaDisplay: computed((): boolean => {
-    return !state.hasBlurredMedia ||
-      (
-        state.hasBlurredMedia &&
-        state.blurredMediaClicked
-      )
-  }),
-
-  // Threadgate
-  threadgate: computed((): "none" | "lock" | "unlock" => {
-    const threadgate = props.post.threadgate as any
-    if (threadgate == null) {
-      return "none"
-    }
-    return props.post.viewer?.replyDisabled ? "lock" : "unlock"
-  }),
-
-  // ワードミュートの判定
-  isWordMute: computed((): boolean => {
-    return WordMuteScript.includes(
-      contentRichText,
-      mainState.currentSetting.wordMute,
-      props.post.author.viewer?.following != null
-    )
-  }),
 })
 
 const router = useRouter()
@@ -378,17 +76,308 @@ const postElement = ref()
 
 const processing = ref(false)
 
-const foldingMedia = ref(!state.displayMedia)
+// 本文
+const text = computed((): undefined | string => {
+  return props.post.record?.text ?? props.post.value?.text
+})
 
-const isOldPost = state.indexedAt != null
-  ? differenceInDays(new Date(), new Date(state.indexedAt)) >= 1
+// 投稿日時
+const indexedAt = computed((): string => {
+  return props.post.record?.createdAt ?? props.post.value?.createdAt ?? props.post.indexedAt ?? ""
+})
+
+// デカ絵文字
+const EMOJI_REGEX = /^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,7}$/u
+const isTextOnlyEmoji = computed((): boolean => {
+  return text.value?.match(EMOJI_REGEX) != null
+})
+
+// メディア - 画像
+const embeddedImages = computed(() => {
+  return props.post.embed?.images ?? props.post.record?.embed?.images ?? []
+})
+
+// メディア - 動画
+const embeddedVideo = computed(() => {
+  const embed = props.post.embed ?? props.post.record?.embed
+  return embed == null
+    ? undefined
+    : embed.$type?.startsWith("app.bsky.embed.video")
+      ? embed as unknown as TIVideo
+      : (embed.media as unknown as TIVideo)?.$type?.startsWith("app.bsky.embed.video")
+        ? embed.media as unknown as TIVideo
+        : undefined
+})
+
+// メディア - 動画のアスペクト比
+const embeddedVideoAspectRatio = computed((): string => {
+  if (embeddedVideo.value?.aspectRatio == null ||
+      embeddedVideo.value.aspectRatio.width == null ||
+      embeddedVideo.value.aspectRatio.height == null
+  ) {
+    return "unset"
+  }
+  const aspectHeight =
+    embeddedVideo.value.aspectRatio.height /
+    embeddedVideo.value.aspectRatio.width
+  if (!mainState.currentSetting.imageMaxHeightRatio) {
+    return `1 / ${aspectHeight}`
+  }
+  const computedHeight = Math.min(
+    aspectHeight,
+    mainState.currentSetting.imageMaxHeightRatio
+  )
+  return `1 / ${computedHeight}`
+})
+
+const hasMedia = computed((): boolean => {
+  return embeddedImages.value.length > 0 || embeddedVideo.value != null
+})
+
+// メディアの折り畳み
+// TODO: 引用リポストに対応すること
+const displayMedia = computed((): boolean => {
+  // なし - すべて表示
+  if (mainState.currentSetting.imageFolding === "none") {
+    return true
+  }
+
+  // 適度 - 自身とフォロイーとフォロイーのリポスト、およびプロフィールユーザーのみ表示
+  else if (mainState.currentSetting.imageFolding === "recommended") {
+    if (
+      // 自身である
+      props.post.author?.did === mainState.atp.session?.did ||
+      // フォロイーである
+      props.post.author.viewer?.following != null ||
+      // フォロイーのリポストである
+      props.post.__custom?.reason?.by.viewer?.following != null ||
+      // プロフィールユーザーである
+      (
+        mainState.currentPath.startsWith('/profile/') &&
+        props.post.author?.did === mainState.currentProfile?.did
+      )
+    ) {
+      return true
+    }
+  }
+
+  // すべて - 自身以外
+  else if (mainState.currentSetting.imageFolding === "all") {
+    if (props.post.author?.did === mainState.atp.session?.did) {
+      return true
+    }
+  }
+
+  return false
+})
+
+// リンクカード
+const linkCard = computed(() => {
+  return props.post.embed?.external ?? props.post.record?.embed?.external
+})
+const hasLinkCard = computed((): boolean => {
+  return linkCard.value != null && props.position !== 'slim'
+})
+
+// フィードカード
+const hasFeedCard = computed((): boolean => {
+  return props.post.embed?.record?.$type === "app.bsky.feed.defs#generatorView"
+})
+
+// リストカード
+const hasListCard = computed((): boolean => {
+  return props.post.embed?.record?.$type === "app.bsky.graph.defs#listView"
+})
+
+// スターターパックカード
+const hasStarterPackCard = computed((): boolean => {
+  return props.post.embed?.record?.$type === "app.bsky.graph.starterpack"
+})
+const pseudoStarterPack = computed((): undefined | TIStarterPack => {
+  if (!hasStarterPackCard.value ||
+      props.post.embed?.record == null ||
+      props.post.record?.embed?.record == null
+  ) {
+    return
+  }
+  const uri = props.post.record.embed.record.uri ?? ""
+  const did = (uri.match(/at:\/\/([^/]+)/) ?? ["", ""])[1]
+  return {
+    uri,
+    cid: props.post.record.embed.record.cid ?? "",
+    record: props.post.embed.record as any,
+    creator: {
+      did,
+      displayName: "",
+      handle: "",
+      viewer: { muted: false },
+    },
+    listItemCount: undefined,
+    joinedWeekCount: undefined,
+    joinedAllTimeCount: undefined,
+    labels: undefined,
+    indexedAt: props.post.embed.record.createdAt as string,
+  }
+})
+
+// 最古の引用元ポストかどうか
+const isOldestQuotedPost = computed((): boolean => {
+  return (props.level ?? 1) >= 3 - 1
+})
+
+// ポストマスクの表示
+const masked = computed((): boolean => {
+  return (
+    noContentLanguage.value ||
+    hideLabels.value.length > 0 ||
+    isWordMute.value
+  ) && (
+    props.position !== "preview" &&
+    props.position !== "slim"
+  )
+})
+
+// 対象ポスト言語
+const postLanguages = computed((): undefined | Array<string> => {
+  return props.post.record?.langs ?? props.post.value?.langs
+})
+
+// 翻訳リンクの設置可否 - 本文用
+const hasOtherLanguagesForText = computed((): boolean => {
+  if (props.noLink) return false
+  if (!text.value) return false
+  if (!postLanguages.value?.length) return false
+  const userLanguage = Util.getUserLanguage() ?? "en"
+  return postLanguages.value.every((language) => {
+    return language !== userLanguage
+  })
+})
+
+// 翻訳リンクの設置可否 - alt 用
+const hasOtherLanguagesForAlt = computed((): boolean => {
+  if (!postLanguages.value?.length) return false
+  const userLanguage = Util.getUserLanguage() ?? "en"
+  return postLanguages.value.every((language) => {
+    return language !== userLanguage
+  })
+})
+
+// コンテンツ言語の判定
+const noContentLanguage = computed((): boolean => {
+  // コンテンツ言語設定はポストスレッドとプロフィールポストでは無効
+  if (mainState.currentPath === "/post" ||
+      mainState.currentPath.startsWith("/profile/")
+  ) {
+    return false
+  }
+
+  if (!(mainState.currentSetting.contentLanguages?.length)) {
+    return false
+  }
+  if (!(postLanguages.value?.length)) {
+    return false
+  }
+  return !(postLanguages.value?.some((language: any) => {
+    return mainState.currentSetting.contentLanguages?.includes(language) ?? false
+  }) ?? false)
+})
+
+// ラベル対応
+const allLabels = computed((): Array<TTLabel> => {
+  return [
+    ...((props.post.author?.labels ?? []).map((label) => {
+      return {
+        ...label,
+        __isAuthorLabel: true,
+      }
+    })),
+    ...(props.post.labels ?? [])
+  ]
+})
+const hideLabels = computed((): Array<TILabelSetting> => {
+  return mainState.myLabeler!.getSpecificLabels(
+    allLabels.value,
+    ["hide"],
+    ["none", "content", "media"]
+  )
+})
+const hideLabelNames = computed((): Array<string> => {
+  return hideLabels.value.map((label) => {
+    return $t(label.locale?.name || label.definition?.identifier || "")
+  })
+})
+const blurContentLabels = computed((): Array<TILabelSetting> => {
+  return mainState.myLabeler!.getSpecificLabels(
+    allLabels.value,
+    ["hide", "warn"],
+    ["none", "content"]
+  )
+})
+const blurMediaLabels = computed((): Array<TILabelSetting> => {
+  return mainState.myLabeler!.getSpecificLabels(
+    allLabels.value,
+    ["hide", "warn"],
+    ["media"]
+  )
+})
+
+// ラベル対応 - ポストコンテンツ
+const hasBlurredContent = computed((): boolean => {
+  return blurContentLabels.value.length > 0
+})
+const postContentDisplay = computed((): boolean => {
+  return !hasBlurredContent.value ||
+    (
+      hasBlurredContent.value &&
+      state.blurredContentClicked
+    )
+})
+
+// ラベル対応 - ポストメディア
+const hasBlurredMedia = computed((): boolean => {
+  return (
+    hasMedia.value ||
+    hasLinkCard.value ||
+    hasFeedCard.value
+  ) && blurMediaLabels.value.length > 0
+})
+const postMediaDisplay = computed((): boolean => {
+  return !hasBlurredMedia.value ||
+    (
+      hasBlurredMedia.value &&
+      state.blurredMediaClicked
+    )
+})
+
+// Threadgate
+const threadgate = computed((): "none" | "lock" | "unlock" => {
+  const threadgate = props.post.threadgate as any
+  if (threadgate == null) {
+    return "none"
+  }
+  return props.post.viewer?.replyDisabled ? "lock" : "unlock"
+})
+
+// ワードミュートの判定
+const isWordMute = computed((): boolean => {
+  return WordMuteScript.includes(
+    contentRichText,
+    mainState.currentSetting.wordMute,
+    props.post.author.viewer?.following != null
+  )
+})
+
+const foldingMedia = ref(!displayMedia.value)
+
+const isOldPost = indexedAt.value != null
+  ? differenceInDays(new Date(), new Date(indexedAt.value)) >= 1
   : false
 
 // 本文とワードミュート用に RichText を生成
 const contentRichText = (() => {
   const facets = props.post.record?.facets ?? props.post.value?.facets
   const richText = new RichText({
-    text: state.text ?? "",
+    text: text.value ?? "",
     facets,
   }, {
     cleanNewlines: true,
@@ -407,10 +396,10 @@ const observer = mainState.currentSetting.autoTranslation
         return
       }
       const cid = item.target.getAttribute("data-cid")
-      if (cid !== props.post.cid || state.translation !== "none") {
+      if (cid !== props.post.cid || state.translationStep !== "none") {
         return
       }
-      state.translation = "waiting"
+      state.translationStep = "waiting"
       translateText(false) // No await
     })
   })
@@ -433,7 +422,7 @@ function isFocused (): boolean {
 
 async function onActivatePost (post: TTPost, event: Event) {
   // ポストマスクの無効化
-  if (!props.post.__custom?.unmask && state.masked) {
+  if (!props.post.__custom?.unmask && masked.value) {
     props.post.__custom.unmask = true
     return
   }
@@ -659,8 +648,8 @@ async function onForceTranslate () {
 }
 
 function onTranslateVideoAlt () {
-  if (state.video?.alt != null) {
-    Util.translateInExternalService(state.video.alt)
+  if (embeddedVideo.value?.alt != null) {
+    Util.translateInExternalService(embeddedVideo.value.alt)
   }
 }
 
@@ -761,13 +750,13 @@ async function deleteCustomBookmark (uri: string) {
 
 // 画像ポップアップ
 function openImagePopup (imageIndex: number) {
-  if (state.images[imageIndex].fullsize == null &&
-      state.images[imageIndex].image == null
+  if (embeddedImages.value[imageIndex].fullsize == null &&
+      embeddedImages.value[imageIndex].image == null
   ) {
     return
   }
   mainState.imagePopupProps.did = props.post.author.did
-  mainState.imagePopupProps.images = state.images.map((image: TTImage) => {
+  mainState.imagePopupProps.images = embeddedImages.value.map((image: TTImage) => {
     const result: TTImagePopupPropsImages = {
       smallUri: image.thumb ?? "/img/void.png",
       largeUri: image.fullsize ?? "/img/void.png",
@@ -785,7 +774,7 @@ function openImagePopup (imageIndex: number) {
 
     return result
   })
-  mainState.imagePopupProps.alts = state.images.map((image: TTImage) => image.alt)
+  mainState.imagePopupProps.alts = embeddedImages.value.map((image: TTImage) => image.alt)
   mainState.imagePopupProps.index = imageIndex
   mainState.imagePopupProps.display = true
 }
@@ -797,16 +786,16 @@ function updateVideoType (videoType: string) {
 // 自動翻訳
 async function translateText (forceTranslate: boolean) {
   if (props.post.__custom?.translatedText != null) {
-    state.translation = "done"
+    state.translationStep = "done"
     return
   }
-  if (state.text == null) {
-    state.translation = "ignore"
+  if (text.value == null) {
+    state.translationStep = "ignore"
     return
   }
-  const srcLanguages = state.postLanguages
+  const srcLanguages = postLanguages.value
   if (!srcLanguages?.length) {
-    state.translation = "ignore"
+    state.translationStep = "ignore"
     return
   }
   if (!forceTranslate) {
@@ -815,28 +804,28 @@ async function translateText (forceTranslate: boolean) {
       const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/g, "").split(",")
       const ignored = ignoreLanguages.some((ignore: string) => srcLanguages.includes(ignore))
       if (ignored) {
-        state.translation = "ignore"
+        state.translationStep = "ignore"
         return
       }
     }
   }
   const dstLanguage = Util.getUserLanguage() ?? "en"
   if (srcLanguages.length === 1 && srcLanguages[0] === dstLanguage) {
-    state.translation = "ignore"
+    state.translationStep = "ignore"
     return
   }
   const langpair = srcLanguages.find((srcLanguage: string) => srcLanguage !== dstLanguage)
   const response: Error | string = await Util.translateInMyMemory({
-    text: state.text,
+    text: text.value,
     langpair,
     dstLanguage,
     email: mainState.atp.session?.email,
   })
   if (response instanceof Error) {
-    state.translation = "failed"
+    state.translationStep = "failed"
     return
   }
-  state.translation = "done"
+  state.translationStep = "done"
   if (props.post.__custom != null) {
     props.post.__custom.translatedText = response
   }
@@ -877,9 +866,9 @@ function toggleOldestQuotedPostDisplay () {
     :data-position="position"
     :data-repost="post.__custom?.reason != null"
     :data-focus="isFocused()"
-    :data-has-mask="state.masked"
+    :data-has-mask="masked"
     :data-has-grandparent-author="grandparentAuthor != null"
-    :data-is-masked="!(post.__custom?.unmask) && state.masked"
+    :data-is-masked="!(post.__custom?.unmask) && masked"
     @click.prevent.stop="onActivatePost(post, $event)"
   >
     <slot name="post-before" />
@@ -980,7 +969,7 @@ function toggleOldestQuotedPostDisplay () {
 
     <!-- ポストマスク -->
     <button
-      v-if="state.masked"
+      v-if="masked"
       class="post__mask"
       @click.stop="onActivatePostMask"
     >
@@ -991,19 +980,19 @@ function toggleOldestQuotedPostDisplay () {
 
       <!-- ポストマスク - コンテンツ言語なし -->
       <SVGIcon
-        v-show="state.noContentLanguage"
+        v-show="noContentLanguage"
         name="translate"
       />
 
       <!-- ポストマスク - アカウントラベル＆ポストラベル -->
-      <template v-if="state.hideLabelNames.length > 0">
+      <template v-if="hideLabelNames.length > 0">
         <SVGIcon name="contentFiltering" />
-        <div class="post__mask__content-warning">{{ state.hideLabelNames.join(", ") }}</div>
+        <div class="post__mask__content-warning">{{ hideLabelNames.join(", ") }}</div>
       </template>
 
       <!-- ポストマスク - ワードミュート -->
       <SVGIcon
-        v-show="state.isWordMute"
+        v-show="isWordMute"
         name="wordMute"
       />
 
@@ -1021,7 +1010,7 @@ function toggleOldestQuotedPostDisplay () {
 
     <!-- ポストボディ -->
     <div
-      v-if="post.__custom?.unmask || !state.masked"
+      v-if="post.__custom?.unmask || !masked"
       class="body"
     >
       <slot name="body-before" />
@@ -1093,10 +1082,10 @@ function toggleOldestQuotedPostDisplay () {
 
           <!-- ポスト時間 -->
           <div
-            v-if="state.indexedAt"
+            v-if="indexedAt"
             class="body__header__indexed-at"
             :data-is-old-post="isOldPost"
-          >{{ mainState.formatDate(state.indexedAt) }}</div>
+          >{{ mainState.formatDate(indexedAt) }}</div>
         </div>
 
         <!-- ポストポップオーバートリガー -->
@@ -1120,12 +1109,12 @@ function toggleOldestQuotedPostDisplay () {
 
       <!-- ポストボディ - ポストコンテンツトグル -->
       <div
-        v-if="state.hasBlurredContent"
+        v-if="hasBlurredContent"
         class="post__content-filtering-toggle"
       >
         <ContentFilteringToggle
           type="blur"
-          :labels="state.blurContentLabels"
+          :labels="blurContentLabels"
           :display="state.blurredContentClicked"
           :togglable="true"
           @click.prevent.stop="onActivatePostContentToggle"
@@ -1134,18 +1123,18 @@ function toggleOldestQuotedPostDisplay () {
 
       <!-- ポストボディ - ポストコンテンツ -->
       <div
-        v-if="state.postContentDisplay"
+        v-if="postContentDisplay"
         class="post__content"
       >
         <!-- 本文 -->
-        <template v-if="state.text !== ''">
+        <template v-if="text !== ''">
           <HtmlText
             v-if="position !== 'slim'"
             class="text"
             dir="auto"
             :richText="contentRichText"
-            :hasTranslateLink="state.hasOtherLanguagesForText"
-            :data-is-text-only-emoji="state.isTextOnlyEmoji"
+            :hasTranslateLink="hasOtherLanguagesForText"
+            :data-is-text-only-emoji="isTextOnlyEmoji"
             @onActivateHashTag="(tag) => onActivateHashTag(tag as string)"
             @translate="onForceTranslate"
           />
@@ -1153,38 +1142,38 @@ function toggleOldestQuotedPostDisplay () {
             v-else
             class="text--slim"
             dir="auto"
-          >{{ state.text }}</div>
+          >{{ text }}</div>
         </template>
 
         <!-- 自動翻訳 -->
         <div
-          v-if="state.translation !== 'none' && state.translation !== 'ignore'"
+          v-if="state.translationStep !== 'none' && state.translationStep !== 'ignore'"
           class="translated-text"
           dir="auto"
         >
-          <template v-if="state.translation === 'waiting'">（翻訳中）</template>
-          <template v-else-if="state.translation === 'failed'">（翻訳に失敗しました）</template>
-          <template v-else-if="state.translation === 'done'">{{ props.post.__custom?.translatedText }}</template>
+          <template v-if="state.translationStep === 'waiting'">（翻訳中）</template>
+          <template v-else-if="state.translationStep === 'failed'">（翻訳に失敗しました）</template>
+          <template v-else-if="state.translationStep === 'done'">{{ props.post.__custom?.translatedText }}</template>
         </div>
 
         <!-- ポストメディアトグル -->
         <ContentFilteringToggle
-          v-if="state.hasBlurredMedia"
+          v-if="hasBlurredMedia"
           type="blur-media"
-          :labels="state.blurMediaLabels"
+          :labels="blurMediaLabels"
           :display="state.blurredMediaClicked"
           :togglable="true"
           @click.prevent.stop="onActivatePostMediaToggle"
         />
 
         <!-- ポストメディア -->
-        <template v-if="state.postMediaDisplay">
+        <template v-if="postMediaDisplay">
           <!-- 画像 -->
-          <template v-if="state.hasMedia">
+          <template v-if="hasMedia">
             <template v-if="forceHideMedia">
               <div class="omit-images">
                 <SVGIcon
-                  v-for="_, index of state.images"
+                  v-for="_, index of embeddedImages"
                   :key="index"
                   name="image"
                 />
@@ -1193,11 +1182,11 @@ function toggleOldestQuotedPostDisplay () {
             <template v-else-if="position !== 'slim'">
               <!-- メディアフォルダーボタン -->
               <button
-                v-if="!state.displayMedia"
+                v-if="!displayMedia"
                 class="button--bordered image-folder-button"
                 @click.prevent.stop="onActivateImageFolderButton"
               >
-                <template v-if="state.displayMedia">
+                <template v-if="displayMedia">
                   <SVGIcon name="image" />
                   <span>{{ $t("showImage") }}</span>
                 </template>
@@ -1208,22 +1197,22 @@ function toggleOldestQuotedPostDisplay () {
               </button>
 
               <!-- メディアボックス -->
-              <template v-if="state.displayMedia || (!state.displayMedia && !foldingMedia)">
+              <template v-if="displayMedia || (!displayMedia && !foldingMedia)">
                 <!-- 画像 -->
                 <div
-                  v-if="state.images.length > 0"
+                  v-if="embeddedImages.length > 0"
                   class="quad-images"
-                  :data-number-of-images="state.images.length"
+                  :data-number-of-images="embeddedImages.length"
                 >
                   <div
-                    v-for="image, imageIndex of state.images"
+                    v-for="image, imageIndex of embeddedImages"
                     :key="imageIndex"
                     class="quad-image"
                   >
                     <Thumbnail
                       :image="image"
                       :did="post.author.did"
-                      :hasTranslateLink="state.hasOtherLanguagesForAlt"
+                      :hasTranslateLink="hasOtherLanguagesForAlt"
                       @click.stop="openImagePopup(imageIndex)"
                     />
                   </div>
@@ -1231,16 +1220,16 @@ function toggleOldestQuotedPostDisplay () {
 
                 <!-- 動画 -->
                 <div
-                  v-if="state.video != null"
+                  v-if="embeddedVideo != null"
                   class="video-container"
                 >
                   <VideoPlayer
-                    :playlist="state.video.playlist"
+                    :playlist="embeddedVideo.playlist"
                     :did="post.author.did"
-                    :cid="state.video.cid ?? state.video.video?.ref?.toString()"
-                    :poster="state.video.thumbnail"
+                    :cid="embeddedVideo.cid ?? embeddedVideo.video?.ref?.toString()"
+                    :poster="embeddedVideo.thumbnail"
                     :preload="mainState.currentSetting.videoPreload"
-                    :style="{ 'aspect-ratio': state.videoAspectRatio }"
+                    :style="{ 'aspect-ratio': embeddedVideoAspectRatio }"
                     @updateVideoType="(videoType) => updateVideoType(videoType as string)"
                     @click.stop
                   />
@@ -1253,11 +1242,11 @@ function toggleOldestQuotedPostDisplay () {
                     class="video-container__message"
                   >{{ $t("videoIsNone") }}</p>
                   <HtmlText
-                    v-if="state.video.alt"
+                    v-if="embeddedVideo.alt"
                     class="video-container__alt"
                     dir="auto"
-                    :text="state.video.alt"
-                    :hasTranslateLink="state.hasOtherLanguagesForText"
+                    :text="embeddedVideo.alt"
+                    :hasTranslateLink="hasOtherLanguagesForText"
                     @onActivateHashTag="(tag) => onActivateHashTag(tag as string)"
                     @translate="onTranslateVideoAlt"
                   />
@@ -1267,11 +1256,11 @@ function toggleOldestQuotedPostDisplay () {
             <template v-else>
               <!-- イメージリスト（通知ポップアップ） -->
               <div
-                v-if="state.images.length > 0"
+                v-if="embeddedImages.length > 0"
                 class="image-list"
               >
                 <Thumbnail
-                  v-for="image, imageIndex of state.images"
+                  v-for="image, imageIndex of embeddedImages"
                   :key="imageIndex"
                   :image="image"
                   :did="post.author.did"
@@ -1283,8 +1272,8 @@ function toggleOldestQuotedPostDisplay () {
 
           <!-- リンクカード -->
           <LinkCard
-            v-if="state.hasLinkCard"
-            :external="state.linkCard as TTExternal"
+            v-if="hasLinkCard"
+            :external="linkCard as TTExternal"
             :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
             :displayImage="!forceHideMedia"
             :noLink="false"
@@ -1293,7 +1282,7 @@ function toggleOldestQuotedPostDisplay () {
 
           <!-- フィードカード -->
           <FeedCard
-            v-if="state.hasFeedCard"
+            v-if="hasFeedCard"
             :generator="post.embed?.record as unknown as TTFeedGenerator"
             :menuDisplay="true"
             :detailDisplay="false"
@@ -1306,7 +1295,7 @@ function toggleOldestQuotedPostDisplay () {
 
           <!-- リストカード -->
           <ListCard
-            v-if="state.hasListCard"
+            v-if="hasListCard"
             :list="(post.embed as any).record"
             :menuDisplay="true"
             :detailDisplay="false"
@@ -1319,8 +1308,8 @@ function toggleOldestQuotedPostDisplay () {
 
           <!-- スターターパックカード -->
           <StarterPackCard
-            v-if="state.hasStarterPackCard && state.pseudoStarterPack != null"
-            :starterPack="state.pseudoStarterPack"
+            v-if="hasStarterPackCard && pseudoStarterPack != null"
+            :starterPack="pseudoStarterPack"
             :menuDisplay="true"
             :detailDisplay="false"
             :creatorDisplay="true"
@@ -1334,7 +1323,7 @@ function toggleOldestQuotedPostDisplay () {
       <!-- ポストボディ - ラベルタグ -->
       <LabelTags
         v-if="!noLabelTags && position !== 'preview' && position !== 'slim'"
-        :labels="state.allLabels"
+        :labels="allLabels"
         :labelerDisplay="false"
         :unauthenticatedDisplay="false"
         :harmfulDisplay="true"
@@ -1404,7 +1393,7 @@ function toggleOldestQuotedPostDisplay () {
         ">
           <!-- 最古の引用元ポストトグル -->
           <div
-            v-if="state.isOldestQuotedPost"
+            v-if="isOldestQuotedPost"
             class="oldest-quoted-post-toggle"
           >
             <button
@@ -1423,9 +1412,9 @@ function toggleOldestQuotedPostDisplay () {
           </div>
 
           <div v-if="
-            !state.isOldestQuotedPost ||
+            !isOldestQuotedPost ||
             (
-              state.isOldestQuotedPost &&
+              isOldestQuotedPost &&
               post.__custom?.oldestQuotedPostDisplay
             )
           "
@@ -1462,17 +1451,17 @@ function toggleOldestQuotedPostDisplay () {
           <!-- リプライボタン -->
           <button
             class="icon-button reply_count"
-            :disabled="state.threadgate === 'lock'"
-            :data-has-threadgate="state.threadgate !== 'none'"
+            :disabled="threadgate === 'lock'"
+            :data-has-threadgate="threadgate !== 'none'"
             @click.stop="onActivateReplyButton"
           >
             <!-- Threadgate -->
             <SVGIcon
-              v-if="state.threadgate === 'lock'"
+              v-if="threadgate === 'lock'"
               name="lock"
             />
             <SVGIcon
-              v-else-if="state.threadgate === 'unlock'"
+              v-else-if="threadgate === 'unlock'"
               name="unlock"
             />
             <div v-else class="ignore" />

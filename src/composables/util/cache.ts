@@ -35,6 +35,6 @@ class Cache {
 }
 
 export default new Cache({
-  blob: 32,
-  logAudit: 64,
+  blob: 8,
+  logAudit: 16,
 })
