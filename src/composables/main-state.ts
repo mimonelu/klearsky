@@ -46,7 +46,7 @@ export const state: MainState = reactive<MainState>({
   backgroundImage: computed((): string => {
     if (state.currentSetting?.backgroundImage == null) return ""
     const backgroundImage: string = state.currentSetting.backgroundImage
-      .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;")
+      .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
     return backgroundImage.match(/^\/|^\w+:\/+/)
       ? `url(${backgroundImage})`
       : backgroundImage
@@ -1225,7 +1225,7 @@ function updateTimelineInterval () {
 }
 
 async function updateTimeline () {
-  const response = await state.atp.fetchTimelineNewArrival()
+  let response = await state.atp.fetchTimelineNewArrival()
   if (response instanceof Error) {
     return
   }
@@ -1237,6 +1237,10 @@ async function updateTimeline () {
   }
 
   const latestPostUri = response[0].post?.uri
+
+  // @ts-ignore
+  response = null
+
   if (latestPostUri == null) {
     state.hasTimelineNewArrival = false
     return

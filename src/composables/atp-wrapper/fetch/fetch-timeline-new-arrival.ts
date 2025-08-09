@@ -13,7 +13,7 @@ export default async function (
     limit: 1,
     cursor: undefined,
   }
-  const response: Error | AppBskyFeedGetTimeline.Response =
+  let response: Error | AppBskyFeedGetTimeline.Response =
     await this.agent.getTimeline(query)
       .then((value) => value)
       .catch((error) => error)
@@ -25,5 +25,10 @@ export default async function (
     console.log("[klearsky/getTimeline]", response)
     return Error("apiError")
   }
-  return response.data.feed as Array<TTFeed>
+  const feed = response.data.feed as Array<TTFeed>
+
+  // @ts-ignore
+  response = null
+
+  return feed
 }

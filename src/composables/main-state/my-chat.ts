@@ -73,7 +73,7 @@ export default class MyChat {
   }
 
   async updateConvos (limit?: number): Promise<undefined | string> {
-    const result = await this.mainState.atp.fetchChatConvos(limit)
+    let result = await this.mainState.atp.fetchChatConvos(limit)
     if (result instanceof Error) {
       // エラーメッセージは表示しない
       return
@@ -83,7 +83,12 @@ export default class MyChat {
     })
     this.sortMyConvos()
     this.updateUnread()
-    return result.cursor
+    const cursor = result.cursor
+
+    // @ts-ignore
+    result = null
+
+    return cursor
   }
 
   async updateConvosAll (): Promise<boolean> {
