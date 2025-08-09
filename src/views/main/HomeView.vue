@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, ref, watch } from "vue"
+import { inject, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 import LazyImage from "@/components/images/LazyImage.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
@@ -15,16 +15,20 @@ const router = useRouter()
 
 const sliderMenu = ref(null)
 
+const unwatchRoute = watch(() => router.currentRoute.value.fullPath, async () => {
+  // HomeView 内における画面遷移時
+  await Util.wait(125)
+  await autoScrollSliderMenu()
+})
+
 onMounted(async () => {
   // 画面遷移時
   await Util.wait(125)
   await autoScrollSliderMenu()
 })
 
-watch(() => router.currentRoute.value.fullPath, async () => {
-  // HomeView 内における画面遷移時
-  await Util.wait(125)
-  await autoScrollSliderMenu()
+onBeforeUnmount(() => {
+  unwatchRoute()
 })
 
 async function autoScrollSliderMenu () {

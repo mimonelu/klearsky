@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watch } from "vue"
+import { onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
@@ -29,7 +29,7 @@ const state = reactive<{
 const media = ref()
 
 // D&D用処置
-watch(() => props.files, (value?: Array<File>) => {
+const unwatchFiles = watch(() => props.files, (value?: Array<File>) => {
   state.files = value ?? []
   resetFiles()
 })
@@ -37,6 +37,10 @@ watch(() => props.files, (value?: Array<File>) => {
 // D&D用処置
 onMounted(() => {
   resetFiles()
+})
+
+onBeforeUnmount(() => {
+  unwatchFiles()
 })
 
 // input[type="file"] で同一ファイルを選択すると change が発火しない仕様への対策
