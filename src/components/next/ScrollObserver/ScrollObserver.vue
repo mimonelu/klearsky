@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -11,6 +12,10 @@ const selfElement = ref()
 
 let target: undefined | Window | HTMLElement
 
+let debouncedOnScroll: EventListener
+
+let isEnter = false
+
 defineExpose({
   diffScrollBottom,
 })
@@ -21,33 +26,13 @@ onMounted(() => {
   } else {
     target = selfElement?.value?.parentNode
   }
-
-  target?.addEventListener("scroll", onScroll)
+  debouncedOnScroll = Util.debounce(onScroll, 16)
+  target?.addEventListener("scroll", debouncedOnScroll, { passive: true })
 })
 
 onBeforeUnmount(() => {
-  target?.removeEventListener("scroll", onScroll)
+  target?.removeEventListener("scroll", debouncedOnScroll)
 })
-
-function diffScrollBottom (): undefined | number {
-  if (target == null) {
-    return
-  }
-
-  if (props.isWindow) {
-    return Math.abs(window.scrollY - (
-      window.document.documentElement.scrollHeight -
-      window.document.documentElement.clientHeight
-    ))
-  }
-
-  return Math.abs((target as HTMLElement).scrollTop - (
-    (target as HTMLElement).scrollHeight -
-    (target as HTMLElement).clientHeight
-  ))
-}
-
-let isEnter = false
 
 function onScroll () {
   if (target == null) {
@@ -63,6 +48,22 @@ function onScroll () {
   } else {
     isEnter = false
   }
+}
+
+function diffScrollBottom (): undefined | number {
+  if (target == null) {
+    return
+  }
+  if (props.isWindow) {
+    return Math.abs(window.scrollY - (
+      window.document.documentElement.scrollHeight -
+      window.document.documentElement.clientHeight
+    ))
+  }
+  return Math.abs((target as HTMLElement).scrollTop - (
+    (target as HTMLElement).scrollHeight -
+    (target as HTMLElement).clientHeight
+  ))
 }
 </script>
 
