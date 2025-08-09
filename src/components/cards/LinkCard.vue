@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, nextTick, onMounted, ref, watch } from "vue"
+import { computed, inject, ref } from "vue"
 import { useRouter } from "vue-router"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -39,12 +39,6 @@ let embeddedContentId: null | string = null
 const klearskyHostname = window.location.hostname
 let SoptifyType: string = "album"
 
-watch(() => mainState.currentSetting.linkcardEmbeddedControl, () => {
-  nextTick(updateEmbeddedContents)
-})
-
-onMounted(updateEmbeddedContents)
-
 function getEmbeddedContentId () {
   const url: undefined | URL = Util.safeUrl(props.external.uri)
   if (url == null) {
@@ -82,7 +76,7 @@ function getEmbeddedContentId () {
     }
   }
 
-  // 埋込型リンクカード - Nicovideo 1
+  // 埋込型リンクカード - Nicovideo
   else if (url.hostname === "www.nicovideo.jp") {
     const matches = url.pathname.match(/\/watch\/([^/]+)/)
     if (matches != null && matches[1] != null) {
@@ -148,18 +142,6 @@ function getEmbeddedContentId () {
       embeddedContentType = "vimeo"
       embeddedContentId = matches[1]
       return
-    }
-  }
-}
-
-function updateEmbeddedContents () {
-  // 埋込型リンクカード - Nicovideo 2
-  if (embeddedType.value === "nicovideo") {
-    const parent = externalComponent.value.querySelector(".external--nicovideo")
-    if (parent.children.length === 0) {
-      const script = document.createElement("script")
-      script.setAttribute("src", `https://embed.nicovideo.jp/watch/${embeddedContentId}/script`)
-      parent.appendChild(script)
     }
   }
 }
@@ -290,9 +272,17 @@ function searchUrl () {
       </video>
 
       <!-- 埋込型リンクカード - Nicovideo -->
-      <div
+      <iframe
         v-else-if="embeddedType === 'nicovideo'"
         class="external--nicovideo"
+        :src="`https://ext.nicovideo.jp/thumb/${embeddedContentId}`"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        allowfullscreen
+        frameborder="0"
+        loading="lazy"
+        scrolling="no"
+        width="100%"
+        height="176"
       />
 
       <!-- 埋込型リンクカード - Spotify -->
@@ -551,13 +541,10 @@ function searchUrl () {
   }
 
   // 埋込型リンクカード - Nicovideo
-  &--nicovideo:deep() {
-    iframe[src^="https://embed.nicovideo."] {
-      aspect-ratio: 640 / 360;
-      background-color: rgb(var(--fg-color), 0.125);
-      border-radius: var(--border-radius-middle);
-      height: unset !important;
-    }
+  &--nicovideo {
+    aspect-ratio: 565 / 176;
+    background-color: rgb(var(--fg-color), 0.125);
+    border-radius: var(--border-radius-middle);
   }
 
   // 埋込型リンクカード - Spotify
