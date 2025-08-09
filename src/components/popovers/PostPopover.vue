@@ -200,7 +200,10 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
 
       <!-- 引用の切断と接続 -->
       <MenuTickerToggleQuoteAttachment
-        v-if="post.embed?.record?.uri?.startsWith(`at://${mainState.atp.session?.did}/`)"
+        v-if="
+          post.embed?.record?.value?.$type === 'app.bsky.feed.post' &&
+          post.embed?.record?.uri?.startsWith(`at://${mainState.atp.session?.did}/`)
+        "
         :quotedUri="post.embed.record.uri"
         :quoterUri="post.uri"
         :detached="post.embed.record.detached ?? false"
