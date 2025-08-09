@@ -24,26 +24,27 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const segments = computed((): Array<RichParam> => {
-  let richText: undefined | RichText
+const richTextSegments = computed(() => {
   if (props.richText != null) {
-    richText = props.richText
-  } else {
-    richText = new RichText(
-      {
-        text: props.text ?? "",
-        facets: props.facets,
-      }, {
-        cleanNewlines: true,
-      }
-    )
-    if (props.facets == null) {
-      richText.detectFacetsWithoutResolution()
-    }
+    return props.richText.segments()
   }
+  const rt = new RichText(
+    {
+      text: props.text ?? "",
+      facets: props.facets,
+    }, {
+      cleanNewlines: true,
+    }
+  )
+  if (props.facets == null) {
+    rt.detectFacetsWithoutResolution()
+  }
+  return rt.segments()
+})
 
+const segments = computed((): Array<RichParam> => {
   const results: Array<RichParam> = []
-  for (const segment of richText.segments()) {
+  for (const segment of richTextSegments.value) {
     // リンク
     if (segment.isLink()) {
       const uri = transformInternalLink(segment.link?.uri ?? "")
