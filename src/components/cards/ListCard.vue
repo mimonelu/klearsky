@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, ref, type ComputedRef } from "vue"
+import { computed, inject, reactive } from "vue"
 import { useRouter } from "vue-router"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
@@ -28,68 +28,68 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  routerLinkToListFeeds: ComputedRef<any>
-  routerLinkToListUsers: ComputedRef<any>
-  isMuted: ComputedRef<boolean>
-  isBlocked: ComputedRef<boolean>
-  indexedAt: ComputedRef<string>
-  purpose: ComputedRef<string>
-  isOwn: ComputedRef<boolean>
   isListFeedsPage: boolean
   isListUsersPage: boolean
-  saved: ComputedRef<boolean>
-  pinned: ComputedRef<boolean>
   loaderDisplay: boolean
   detailDisplay: boolean
 }>({
-  routerLinkToListFeeds: computed(() => {
-    return {
-      path: "/home/list-feeds",
-      query: {
-        list: props.list.uri,
-        displayName: props.list.name,
-      },
-    }
-  }),
-  routerLinkToListUsers: computed(() => {
-    return {
-      path: "/home/list-users",
-      query: {
-        list: props.list.uri,
-        displayName: props.list.name,
-      },
-    }
-  }),
-  isMuted: computed((): boolean => {
-    return props.list.viewer?.muted ?? false
-  }),
-  isBlocked: computed((): boolean => {
-    return props.list.viewer?.blocked != null
-  }),
-  indexedAt: computed((): string => {
-    return mainState.formatDate(props.list.indexedAt)
-  }),
-  purpose: computed((): string => {
-    return mainState.myLists!.getShortPurpose(props.list.purpose)
-  }),
-  isOwn: computed((): boolean => {
-    return props.list.creator.did === mainState.atp.session?.did
-  }),
   isListFeedsPage:
     mainState.currentPath === "/home/list-feeds" &&
     mainState.currentQuery.list === props.list.uri,
   isListUsersPage:
     mainState.currentPath === "/home/list-users" &&
     mainState.currentQuery.list === props.list.uri,
-  saved: computed((): boolean => {
-    return mainState.myFeeds!.findIndexByUri(props.list.uri) !== - 1
-  }),
-  pinned: computed((): boolean => {
-    return mainState.currentFeedPreference?.pinned
-      .some((uri: string) => uri === props.list.uri) ?? false
-  }),
   loaderDisplay: false,
   detailDisplay: props.detailDisplay,
+})
+
+const routerLinkToListFeeds = computed(() => {
+  return {
+    path: "/home/list-feeds",
+    query: {
+      list: props.list.uri,
+      displayName: props.list.name,
+    },
+  }
+})
+
+const routerLinkToListUsers = computed(() => {
+  return {
+    path: "/home/list-users",
+    query: {
+      list: props.list.uri,
+      displayName: props.list.name,
+    },
+  }
+})
+
+const isMuted = computed((): boolean => {
+  return props.list.viewer?.muted ?? false
+})
+
+const isBlocked = computed((): boolean => {
+  return props.list.viewer?.blocked != null
+})
+
+const indexedAt = computed((): string => {
+  return mainState.formatDate(props.list.indexedAt)
+})
+
+const purpose = computed((): string => {
+  return mainState.myLists!.getShortPurpose(props.list.purpose)
+})
+
+const isOwn = computed((): boolean => {
+  return props.list.creator.did === mainState.atp.session?.did
+})
+
+const saved = computed((): boolean => {
+  return mainState.myFeeds!.findIndexByUri(props.list.uri) !== - 1
+})
+
+const pinned = computed((): boolean => {
+  return mainState.currentFeedPreference?.pinned
+    .some((uri: string) => uri === props.list.uri) ?? false
 })
 
 function toggleDetailDisplay () {
@@ -133,10 +133,12 @@ async function listCardPopoverCallback (type: "startAwait" | "endAwait" | "delet
 }
 
 function updateList (list: TTList) {
+  /* eslint-disable vue/no-mutating-props */
   props.list.avatar = list.avatar
   props.list.name = list.name
   props.list.description = list.description
   props.list.purpose = list.purpose
+  /* eslint-enable vue/no-mutating-props */
 
   // セッションキャッシュの更新
   mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
@@ -179,9 +181,12 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
   if (mainState.currentFeedPreference[type] == null) mainState.currentFeedPreference[type] = []
 
   // フィードブックマーク／フィードピンの削除
-  if (state[type]) {
+  if (
+    (type === "saved" && saved.value) ||
+    (type === "pinned" && pinned.value)
+  ) {
     // フィードブックマークの削除はフィードピンが有効の場合のみ
-    if (type === "saved" && state.pinned) return
+    if (type === "saved" && pinned.value) return
 
     if (type === "saved") mainState.myFeeds!.removeItem(props.list.uri)
     const index = mainState.currentFeedPreference[type].findIndex((uri: string) => {
@@ -193,7 +198,7 @@ async function toggleSavedOrPinned (type: "saved" | "pinned") {
   // フィードブックマーク／フィードピンの追加
   } else {
     // ピンの追加はフィードブックマークが無効の場合のみ
-    if (type === "pinned" && !state.saved) return
+    if (type === "pinned" && !saved.value) return
 
     if (type === "saved") mainState.myFeeds!.addItem(props.list)
     mainState.currentFeedPreference[type].push(props.list.uri)
@@ -227,7 +232,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   <div
     class="list-card"
     :data-is-compact="isCompact"
-    :data-purpose="state.purpose"
+    :data-purpose="purpose"
   >
     <slot :list="list" />
 
@@ -244,7 +249,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     <div class="list-card__detail">
       <!-- Viewer ラベル -->
       <ViewerLabels
-        v-if="state.isMuted || state.isBlocked"
+        v-if="isMuted || isBlocked"
         :viewer="list.viewer as any"
       />
 
@@ -269,17 +274,17 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- リストユーザー数 -->
       <div
         class="list-card__purpose"
-        :data-purpose="state.purpose"
+        :data-purpose="purpose"
       >
         <SVGIcon :name="DESIGN_CONSTS.LIST_PURPOSE_ICON_MAP[list.purpose] ?? 'help'" />
         <span>{{ list.listItemCount }}</span>
-        <span>{{ $t(state.purpose) }}</span>
+        <span>{{ $t(purpose) }}</span>
       </div>
 
       <!-- リスト作成日時 -->
       <div class="list-card__indexed-at">
         <SVGIcon name="clock" />
-        <span>{{ state.indexedAt }}</span>
+        <span>{{ indexedAt }}</span>
       </div>
 
       <!-- リストポップオーバートリガー -->
@@ -293,7 +298,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     </div>
 
     <!-- リスト説明文 -->
-    <div v-if="state.detailDisplay && !isCompact && (list.description || !state.isOwn)">
+    <div v-if="state.detailDisplay && !isCompact && (list.description || !isOwn)">
       <HtmlText
         v-if="list.description"
         class="list-card__description"
@@ -305,7 +310,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       />
 
       <!-- リスト作成者リンク -->
-      <div v-if="!state.isOwn && list.creator.did">
+      <div v-if="!isOwn && list.creator.did">
         <RouterLink
           class="textlink list-card__creator"
           :to="{ name: 'profile-list', query: { account: list.creator.did } }"
@@ -326,7 +331,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <RouterLink
         class="button--plane list-card__feeds-button"
         :disabled="state.isListFeedsPage"
-        :to="state.routerLinkToListFeeds"
+        :to="routerLinkToListFeeds"
         @click.prevent="$emit('close')"
       >
         <SVGIcon name="post" />
@@ -337,7 +342,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <RouterLink
         class="button--plane list-card__users-button"
         :disabled="state.isListUsersPage"
-        :to="state.routerLinkToListUsers"
+        :to="routerLinkToListUsers"
         @click.prevent="$emit('close')"
       >
         <SVGIcon name="people" />
@@ -346,7 +351,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       <!-- リスト編集ボタン -->
       <button
-        v-if="state.isOwn"
+        v-if="isOwn"
         class="button--plane list-card__edit-button"
         @click.stop.prevent="openListEditPopup"
       >
@@ -357,12 +362,12 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- フィードピン -->
       <button
         class="button--plane list-card__pin"
-        :data-is-on="state.pinned"
+        :data-is-on="pinned"
         @click.prevent.stop="toggleSavedOrPinned('pinned')"
       >
-        <SVGIcon :name="state.pinned
+        <SVGIcon :name="pinned
           ? 'pin'
-          : state.saved
+          : saved
             ? 'pinOutline'
             : 'pinOffOutline'
         " />
@@ -372,11 +377,11 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- フィードブックマーク -->
       <button
         class="button--plane list-card__bookmark"
-        :data-is-on="state.saved"
+        :data-is-on="saved"
         @click.prevent.stop="toggleSavedOrPinned('saved')"
       >
-        <SVGIcon :name="state.saved
-          ? state.pinned
+        <SVGIcon :name="saved
+          ? pinned
             ? 'bookmarkOff'
             : 'bookmark'
           : 'bookmarkOutline'

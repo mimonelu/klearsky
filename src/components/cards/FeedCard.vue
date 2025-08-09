@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive } from "vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -21,36 +21,36 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  routerLinkToFeedsPage: ComputedRef<any>
   loaderDisplay: boolean
-  saved: ComputedRef<boolean>
-  pinned: ComputedRef<boolean>
   detailDisplay: boolean
   isFeedsPage: boolean
   isUnknown: boolean
 }>({
-  routerLinkToFeedsPage: computed(() => {
-    return {
-      path: "/home/feeds",
-      query: {
-        feed: props.generator.uri,
-        displayName: props.generator.displayName,
-      },
-    }
-  }),
   loaderDisplay: false,
-  saved: computed((): boolean => {
-    return mainState.myFeeds!.findIndexByUri(props.generator.uri) !== - 1
-  }),
-  pinned: computed((): boolean => {
-    return mainState.currentFeedPreference?.pinned
-      .some((uri: string) => uri === props.generator.uri) ?? false
-  }),
   detailDisplay: props.detailDisplay,
   isFeedsPage:
     mainState.currentPath === "/home/feeds" &&
     mainState.currentQuery.feed === props.generator.uri,
   isUnknown: !props.generator.cid
+})
+
+const routerLinkToFeedsPage = computed(() => {
+  return {
+    path: "/home/feeds",
+    query: {
+      feed: props.generator.uri,
+      displayName: props.generator.displayName,
+    },
+  }
+})
+
+const saved = computed((): boolean => {
+  return mainState.myFeeds!.findIndexByUri(props.generator.uri) !== - 1
+})
+
+const pinned = computed((): boolean => {
+  return mainState.currentFeedPreference?.pinned
+    .some((uri: string) => uri === props.generator.uri) ?? false
 })
 
 function toggleDetailDisplay () {
@@ -88,9 +88,12 @@ async function toggleSavedOrPinned (type: TTPreferenceFeedType) {
   }
 
   // フィードブックマーク／フィードピンの削除
-  if (state[type]) {
+  if (
+    (type === "saved" && saved.value) ||
+    (type === "pinned" && pinned.value)
+  ) {
     // フィードブックマークの削除はフィードピンが有効の場合のみ
-    if (type === "saved" && state.pinned) {
+    if (type === "saved" && pinned.value) {
       return
     }
 
@@ -104,7 +107,7 @@ async function toggleSavedOrPinned (type: TTPreferenceFeedType) {
   // フィードブックマーク／フィードピンの追加
   } else {
     // ピンの追加はフィードブックマークが無効の場合のみ
-    if (type === "pinned" && !state.saved) {
+    if (type === "pinned" && !saved.value) {
       return
     }
 
@@ -271,7 +274,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <component
         :is="state.isFeedsPage || unclickable || state.isUnknown ? 'div' : 'RouterLink'"
         v-bind="state.isFeedsPage || unclickable || state.isUnknown ? null : {
-          to: state.routerLinkToFeedsPage,
+          to: routerLinkToFeedsPage,
         }"
         class="button--plane feed-card__feeds-button"
         :disabled="state.isFeedsPage || unclickable || state.isUnknown"
@@ -284,12 +287,12 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- フィードピン -->
       <button
         class="button--plane feed-card__pin"
-        :data-is-on="state.pinned"
+        :data-is-on="pinned"
         @click.prevent.stop="toggleSavedOrPinned('pinned')"
       >
-        <SVGIcon :name="state.pinned
+        <SVGIcon :name="pinned
           ? 'pin'
-          : state.saved
+          : saved
             ? 'pinOutline'
             : 'pinOffOutline'
         " />
@@ -299,11 +302,11 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- フィードブックマーク -->
       <button
         class="button--plane feed-card__bookmark"
-        :data-is-on="state.saved"
+        :data-is-on="saved"
         @click.prevent.stop="toggleSavedOrPinned('saved')"
       >
-        <SVGIcon :name="state.saved
-          ? state.pinned
+        <SVGIcon :name="saved
+          ? pinned
             ? 'bookmarkOff'
             : 'bookmark'
           : 'bookmarkOutline'

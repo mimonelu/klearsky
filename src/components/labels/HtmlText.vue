@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject } from "vue"
 import { useRouter } from "vue-router"
 import type { Facet } from "@atproto/api"
 import { RichText } from "@atproto/api"
@@ -24,74 +24,70 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  segments: ComputedRef<Array<RichParam>>;
-}>({
-  segments: computed((): Array<RichParam> => {
-    let richText: undefined | RichText
-    if (props.richText != null) {
-      richText = props.richText
-    } else {
-      richText = new RichText(
-        {
-          text: props.text ?? "",
-          facets: props.facets,
-        }, {
-          cleanNewlines: true,
-        }
-      )
-      if (props.facets == null) {
-        richText.detectFacetsWithoutResolution()
+const segments = computed((): Array<RichParam> => {
+  let richText: undefined | RichText
+  if (props.richText != null) {
+    richText = props.richText
+  } else {
+    richText = new RichText(
+      {
+        text: props.text ?? "",
+        facets: props.facets,
+      }, {
+        cleanNewlines: true,
       }
+    )
+    if (props.facets == null) {
+      richText.detectFacetsWithoutResolution()
     }
+  }
 
-    const results: Array<RichParam> = []
-    for (const segment of richText.segments()) {
-      // リンク
-      if (segment.isLink()) {
-        const uri = transformInternalLink(segment.link?.uri ?? "")
+  const results: Array<RichParam> = []
+  for (const segment of richText.segments()) {
+    // リンク
+    if (segment.isLink()) {
+      const uri = transformInternalLink(segment.link?.uri ?? "")
 
-        // 外部リンク
-        if (uri == null)
-          results.push({
-            type: "externalLink",
-            text: segment.text,
-            param: segment.link?.uri ?? "",
-          })
-
-        // 内部リンク
-        else
-          results.push({
-            type: "internalLink",
-            text: segment.text.startsWith("http") ? uri : segment.text,
-            param: uri,
-          })
-
-      // メンション
-      } else if (segment.isMention())
+      // 外部リンク
+      if (uri == null)
         results.push({
-          type: "mention",
+          type: "externalLink",
           text: segment.text,
-          param: segment.mention?.did ?? "",
+          param: segment.link?.uri ?? "",
         })
 
-      // ハッシュタグ
-      else if (segment.isTag())
-        results.push({
-          type: "tag",
-          text: segment.text,
-          param: encodeURIComponent(segment.tag?.tag ?? ""),
-        })
-
+      // 内部リンク
       else
         results.push({
-          type: "text",
-          text: segment.text,
-          param: "",
+          type: "internalLink",
+          text: segment.text.startsWith("http") ? uri : segment.text,
+          param: uri,
         })
-    }
-    return results
-  }),
+
+    // メンション
+    } else if (segment.isMention())
+      results.push({
+        type: "mention",
+        text: segment.text,
+        param: segment.mention?.did ?? "",
+      })
+
+    // ハッシュタグ
+    else if (segment.isTag())
+      results.push({
+        type: "tag",
+        text: segment.text,
+        param: encodeURIComponent(segment.tag?.tag ?? ""),
+      })
+
+    else
+      results.push({
+        type: "text",
+        text: segment.text,
+        param: "",
+      })
+  }
+  return results
 })
 
 const router = useRouter()
@@ -234,49 +230,49 @@ function validateUrl (urlObject: URL, text: string): boolean {
 
 <template>
   <div class="html-text">
-    <template v-for="segment of state.segments">
+    <template v-for="segment, segmentIndex of segments">
       <!-- 外部リンク -->
-      <template v-if="segment.type === 'externalLink'">
-        <a
-          class="textlink external-link"
-          @click.prevent.stop="openWindowIfCan(segment)"
-        >
-          <span>{{ segment.text }}</span>
-        </a>
-      </template>
+      <a
+        v-if="segment.type === 'externalLink'"
+        :key="`externalLink-${segmentIndex}`"
+        class="textlink external-link"
+        @click.prevent.stop="openWindowIfCan(segment)"
+      >
+        <span>{{ segment.text }}</span>
+      </a>
 
       <!-- 内部リンク -->
-      <template v-else-if="segment.type === 'internalLink'">
-        <a
-          class="textlink internal-link"
-          :href="segment.param"
-          @click.prevent.stop="openInternalLink(segment.param)"
-        >
-          <span>{{ segment.text }}</span>
-        </a>
-      </template>
+      <a
+        v-else-if="segment.type === 'internalLink'"
+        :key="`internalLink-${segmentIndex}`"
+        class="textlink internal-link"
+        :href="segment.param"
+        @click.prevent.stop="openInternalLink(segment.param)"
+      >
+        <span>{{ segment.text }}</span>
+      </a>
 
       <!-- メンション -->
-      <template v-else-if="segment.type === 'mention'">
-        <RouterLink
-          class="textlink mention"
-          :to="`/profile/feeds?account=${segment.param}`"
-          @click.stop="$emit('onActivateMention')"
-        >
-          <span>{{ segment.text }}</span>
-        </RouterLink>
-      </template>
+      <RouterLink
+        v-else-if="segment.type === 'mention'"
+        :key="`mention-${segmentIndex}`"
+        class="textlink mention"
+        :to="`/profile/feeds?account=${segment.param}`"
+        @click.stop="$emit('onActivateMention')"
+      >
+        <span>{{ segment.text }}</span>
+      </RouterLink>
 
       <!-- ハッシュタグ -->
-      <template v-else-if="segment.type === 'tag'">
-        <RouterLink
-          class="textlink hash-tag"
-          :to="`/search/post?text=%23${segment.param}`"
-          @click.stop="emit('onActivateHashTag', segment.param)"
-        >
-          <span>{{ segment.text }}</span>
-        </RouterLink>
-      </template>
+      <RouterLink
+        v-else-if="segment.type === 'tag'"
+        :key="`tag-${segmentIndex}`"
+        class="textlink hash-tag"
+        :to="`/search/post?text=%23${segment.param}`"
+        @click.stop="emit('onActivateHashTag', segment.param)"
+      >
+        <span>{{ segment.text }}</span>
+      </RouterLink>
 
       <!-- テキスト -->
       <template v-else>{{ segment.text }}</template>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef } from "vue"
+import { computed, inject, nextTick, onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -15,24 +15,20 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  type: ComputedRef<string>
-}>({
-  type: computed((): string => {
-    if (props.noEmbedded) return ""
-    const settingValues = mainState.currentSetting.linkcardEmbeddedControl
-    if (settingValues == null) return ""
-    if (embeddedContentType === "applemusic" && settingValues.includes("applemusic")) return "applemusic"
-    if (embeddedContentType === "giphy" && settingValues.includes("giphy")) return "giphy"
-    if (embeddedContentType === "graysky" && settingValues.includes("graysky")) return "graysky"
-    if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
-    if (embeddedContentType === "spotify" && settingValues.includes("spotify")) return "spotify"
-    if (embeddedContentType === "tenor" && settingValues.includes("tenor")) return "tenor"
-    if (embeddedContentType === "twitch" && settingValues.includes("twitch")) return "twitch"
-    if (embeddedContentType === "youtube" && settingValues.includes("youtube")) return "youtube"
-    if (embeddedContentType === "vimeo" && settingValues.includes("vimeo")) return "vimeo"
-    return ""
-  }),
+const embeddedType = computed((): string => {
+  if (props.noEmbedded) return ""
+  const settingValues = mainState.currentSetting.linkcardEmbeddedControl
+  if (settingValues == null) return ""
+  if (embeddedContentType === "applemusic" && settingValues.includes("applemusic")) return "applemusic"
+  if (embeddedContentType === "giphy" && settingValues.includes("giphy")) return "giphy"
+  if (embeddedContentType === "graysky" && settingValues.includes("graysky")) return "graysky"
+  if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
+  if (embeddedContentType === "spotify" && settingValues.includes("spotify")) return "spotify"
+  if (embeddedContentType === "tenor" && settingValues.includes("tenor")) return "tenor"
+  if (embeddedContentType === "twitch" && settingValues.includes("twitch")) return "twitch"
+  if (embeddedContentType === "youtube" && settingValues.includes("youtube")) return "youtube"
+  if (embeddedContentType === "vimeo" && settingValues.includes("vimeo")) return "vimeo"
+  return ""
 })
 
 const externalComponent = ref()
@@ -88,7 +84,7 @@ function getEmbeddedContentId () {
 
   // 埋込型リンクカード - Nicovideo 1
   else if (url.hostname === "www.nicovideo.jp") {
-    const matches = url.pathname.match(/\/watch\/([^\/]+)/)
+    const matches = url.pathname.match(/\/watch\/([^/]+)/)
     if (matches != null && matches[1] != null) {
       embeddedContentType = "nicovideo"
       embeddedContentId = matches[1]
@@ -98,7 +94,7 @@ function getEmbeddedContentId () {
 
   // 埋込型リンクカード - Spotify
   else if (url.hostname === "open.spotify.com") {
-    const matches = url.pathname.match(/\/(album|artist|track)\/([^\/]+)/)
+    const matches = url.pathname.match(/\/(album|artist|track)\/([^/]+)/)
     if (matches != null && matches[1] != null && matches[2] != null) {
       embeddedContentType = "spotify"
       embeddedContentId = matches[2]
@@ -117,7 +113,7 @@ function getEmbeddedContentId () {
 
   // 埋込型リンクカード - Twitch
   else if (url.hostname === "www.twitch.tv") {
-    const matches = url.pathname.match(/^\/([^\/]+)/)
+    const matches = url.pathname.match(/^\/([^/]+)/)
     if (matches != null && matches[1] != null) {
       embeddedContentType = "twitch"
       embeddedContentId = matches[1]
@@ -158,7 +154,7 @@ function getEmbeddedContentId () {
 
 function updateEmbeddedContents () {
   // 埋込型リンクカード - Nicovideo 2
-  if (state.type === "nicovideo") {
+  if (embeddedType.value === "nicovideo") {
     const parent = externalComponent.value.querySelector(".external--nicovideo")
     if (parent.children.length === 0) {
       const script = document.createElement("script")
@@ -199,7 +195,7 @@ function searchUrl () {
 
     <!-- 通常のリンクカード -->
     <Component
-      v-else-if="state.type === ''"
+      v-else-if="embeddedType === ''"
       :is="noLink ? 'div' : 'a'"
       class="external--default"
       :data-layout="layout"
@@ -248,7 +244,7 @@ function searchUrl () {
     >
       <!-- 埋込型リンクカード - Apple Music -->
       <iframe
-        v-if="state.type === 'applemusic'"
+        v-if="embeddedType === 'applemusic'"
         class="external--applemusic"
         :src="`https://embed.music.apple.com/${embeddedContentId}`"
         allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
@@ -263,7 +259,7 @@ function searchUrl () {
 
       <!-- 埋込型リンクカード - Giphy -->
       <iframe
-        v-if="state.type === 'giphy'"
+        v-if="embeddedType === 'giphy'"
         class="external--giphy"
         :src="`https://giphy.com/embed/${embeddedContentId}`"
         allowfullScreen
@@ -276,7 +272,7 @@ function searchUrl () {
 
       <!-- 埋込型リンクカード - Graysky -->
       <video
-        v-if="state.type === 'graysky'"
+        v-if="embeddedType === 'graysky'"
         class="external--graysky"
         autoplay
         controls
@@ -295,13 +291,13 @@ function searchUrl () {
 
       <!-- 埋込型リンクカード - Nicovideo -->
       <div
-        v-else-if="state.type === 'nicovideo'"
+        v-else-if="embeddedType === 'nicovideo'"
         class="external--nicovideo"
       />
 
       <!-- 埋込型リンクカード - Spotify -->
       <iframe
-        v-else-if="state.type === 'spotify'"
+        v-else-if="embeddedType === 'spotify'"
         class="external--spotify"
         :src="`https://open.spotify.com/embed/${SoptifyType}/${embeddedContentId}?utm_source=generator`"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -315,7 +311,7 @@ function searchUrl () {
 
       <!-- 埋込型リンクカード - Tenor -->
       <div
-        v-else-if="state.type === 'tenor'"
+        v-else-if="embeddedType === 'tenor'"
         class="external--tenor"
       >
         <img
@@ -328,7 +324,7 @@ function searchUrl () {
 
       <!-- 埋込型リンクカード - Twitch -->
       <iframe
-        v-else-if="state.type === 'twitch'"
+        v-else-if="embeddedType === 'twitch'"
         class="external--twitch"
         :src="`https://player.twitch.tv/?channel=${embeddedContentId}&parent=${klearskyHostname}&autoplay=false`"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -341,7 +337,7 @@ function searchUrl () {
 
       <!-- 埋込型リンクカード - YouTube -->
       <iframe
-        v-else-if="state.type === 'youtube'"
+        v-else-if="embeddedType === 'youtube'"
         class="external--youtube"
         :src="`https://www.youtube-nocookie.com/embed/${embeddedContentId}`"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -354,7 +350,7 @@ function searchUrl () {
 
       <!-- 埋込型リンクカード - Vimeo -->
       <iframe
-        v-else-if="state.type === 'vimeo'"
+        v-else-if="embeddedType === 'vimeo'"
         class="external--vimeo"
         :src="`https://player.vimeo.com/video/${embeddedContentId}`"
         allow="autoplay; fullscreen; picture-in-picture"

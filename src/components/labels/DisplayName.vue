@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject } from "vue"
 
 const props = defineProps<{
   displayName?: string
@@ -10,21 +10,17 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  displayName?: ComputedRef<string>
-}>({
-  displayName: computed((): string => {
-    return props.anonymizable && mainState.currentSetting.postAnonymization
-      ? $t("anonymous")
-      : props.displayName
-  }),
+const displayName = computed((): string => {
+  return props.anonymizable && mainState.currentSetting.postAnonymization
+    ? $t("anonymous")
+    : props.displayName ?? ""
 })
 </script>
 
 <template>
   <div class="display-name">
     <slot />
-    <span>{{ state.displayName || "&emsp;" }}</span>
+    <span>{{ displayName || "&emsp;" }}</span>
   </div>
 </template>
 

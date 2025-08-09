@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject } from "vue"
 import { differenceInDays } from "date-fns"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -19,65 +19,58 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  hasNoUnauthenticated: ComputedRef<boolean>
-  harmfulLabels: ComputedRef<Array<TTLabel>>
-  labelerLabels: ComputedRef<Array<undefined | TILabelSetting>>
-  customLabels: ComputedRef<Array<TTLabel>>
+const hasNoUnauthenticated = computed((): boolean => {
+  if (props.labels == null) {
+    return true
+  }
+  return mainState.hasLabel("!no-unauthenticated", props.labels)
+})
 
-  // 新規アカウントフラグ
-  isBeginner: ComputedRef<boolean>
-}>({
-  hasNoUnauthenticated: computed((): boolean => {
-    if (props.labels == null) {
-      return true
-    }
-    return mainState.hasLabel("!no-unauthenticated", props.labels)
-  }),
-  harmfulLabels: computed((): Array<TTLabel> => {
-    return props.harmfulDisplay ? mainState.getHarmfulLabels(props.labels) : []
-  }),
-  labelerLabels: computed((): Array<undefined | TILabelSetting> => {
-    return mainState.getLabelerLabels(props.labels)
-      .map((label) => {
-        return mainState.myLabeler!.labelMap[`${label.src}-${label.val}`]
-      })
+const harmfulLabels = computed((): Array<TTLabel> => {
+  return props.harmfulDisplay ? mainState.getHarmfulLabels(props.labels) : []
+})
 
-      // ラベラーラベルは「バッジを表示」以外の設定では表示しない
-      .filter((labelSetting) => {
-        if (labelSetting == null) {
-          return false
-        }
-        const visibility =
-          labelSetting.preference?.visibility ??
-          labelSetting.definition.defaultSetting
-        if (
-          (
-            labelSetting.isBadge &&
-            (
-              visibility === "inform" ||
-              visibility === "warn"
-            )
-          ) || visibility === "hide"
-        ) {
-          return true
-        }
+const labelerLabels = computed((): Array<undefined | TILabelSetting> => {
+  return mainState.getLabelerLabels(props.labels)
+    .map((label) => {
+      return mainState.myLabeler!.labelMap[`${label.src}-${label.val}`]
+    })
+
+    // ラベラーラベルは「バッジを表示」以外の設定では表示しない
+    .filter((labelSetting) => {
+      if (labelSetting == null) {
         return false
-      })
-  }),
-  customLabels: computed((): Array<TTLabel> => {
-    return props.customDisplay ? mainState.getCustomLabels(props.labels) : []
-  }),
+      }
+      const visibility =
+        labelSetting.preference?.visibility ??
+        labelSetting.definition.defaultSetting
+      if (
+        (
+          labelSetting.isBadge &&
+          (
+            visibility === "inform" ||
+            visibility === "warn"
+          )
+        ) || visibility === "hide"
+      ) {
+        return true
+      }
+      return false
+    })
+})
 
-  // 新規アカウントフラグ
-  isBeginner: computed((): boolean => {
-    const now = props.postIndexedAt != null
-      ? new Date(props.postIndexedAt)
-      : new Date()
-    return props.userCreatedAt != null
-      ? differenceInDays(now, new Date(props.userCreatedAt)) <= 7
-      : false
-  }),
+const customLabels = computed((): Array<TTLabel> => {
+  return props.customDisplay ? mainState.getCustomLabels(props.labels) : []
+})
+
+// 新規アカウントフラグ
+const isBeginner = computed((): boolean => {
+  const now = props.postIndexedAt != null
+    ? new Date(props.postIndexedAt)
+    : new Date()
+  return props.userCreatedAt != null
+    ? differenceInDays(now, new Date(props.userCreatedAt)) <= 7
+    : false
 })
 
 function openLabelerSettingsPopup (did?: string) {
@@ -104,17 +97,17 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   <div
     v-if="
       labelerDisplay ||
-      (unauthenticatedDisplay && !state.hasNoUnauthenticated) ||
-      state.harmfulLabels.length > 0 ||
-      state.labelerLabels.length > 0 ||
-      state.customLabels.length > 0 ||
-      state.isBeginner
+      (unauthenticatedDisplay && !hasNoUnauthenticated) ||
+      harmfulLabels.length > 0 ||
+      labelerLabels.length > 0 ||
+      customLabels.length > 0 ||
+      isBeginner
     "
     class="label-tags"
   >
     <!-- 新規アカウントラベル -->
     <div
-      v-if="state.isBeginner"
+      v-if="isBeginner"
       class="label-tags__beginner-label"
     >
       <SVGIcon name="sprout" />
@@ -123,7 +116,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
     <!-- 外部公開状態ラベル -->
     <div
-      v-if="unauthenticatedDisplay && !state.hasNoUnauthenticated"
+      v-if="unauthenticatedDisplay && !hasNoUnauthenticated"
       class="label-tags__unauthenticated-label"
     >
       <SVGIcon name="earth" />
@@ -141,7 +134,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
     <!-- 有害なラベル -->
     <button
-      v-for="label, labelIndex of state.harmfulLabels"
+      v-for="label, labelIndex of harmfulLabels"
       :key="labelIndex"
       type="button"
       class="label-tags__harmful-label"
@@ -153,7 +146,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
     <!-- ラベラーによるラベル -->
     <button
-      v-for="label, labelIndex of state.labelerLabels"
+      v-for="label, labelIndex of labelerLabels"
       :key="labelIndex"
       type="button"
       class="label-tags__labelers-label"
@@ -166,7 +159,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
     <!-- カスタムラベル -->
     <div
-      v-for="label, labelIndex of state.customLabels"
+      v-for="label, labelIndex of customLabels"
       :key="labelIndex"
       class="label-tags__custom-label"
     >

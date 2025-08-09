@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject } from "vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const $t = inject("$t") as Function
@@ -11,14 +11,10 @@ const props = defineProps<{
   togglable: boolean
 }>()
 
-const state = reactive<{
-  labelNames: ComputedRef<string>
-}>({
-  labelNames: computed((): string => {
-    return Array.from(new Set((props.labels?.map((label) => {
-      return $t(label.locale.name || label.definition.identifier)
-    }) ?? []))).join(", ")
-  }),
+const labelNames = computed((): string => {
+  return Array.from(new Set((props.labels?.map((label) => {
+    return $t(label.locale.name || label.definition.identifier)
+  }) ?? []))).join(", ")
 })
 </script>
 
@@ -29,7 +25,7 @@ const state = reactive<{
     :data-show="display"
   >
     <SVGIcon name="contentFiltering" />
-    <div class="content-filtering-toggle__label">{{ state.labelNames }}</div>
+    <div class="content-filtering-toggle__label">{{ labelNames }}</div>
     <div
       v-if="display && togglable"
       class="button__suffix"

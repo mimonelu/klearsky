@@ -17,7 +17,8 @@ const mainState = inject("state") as MainState
     <div class="icon-container">
       <!-- Sass の `$number` とそろえること -->
       <div
-        v-for="_i in 8"
+        v-for="i in 8"
+        :key="i"
         class="splash"
       />
 

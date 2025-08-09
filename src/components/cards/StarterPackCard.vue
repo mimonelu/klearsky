@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, reactive } from "vue"
 import { useRouter } from "vue-router"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -23,33 +23,33 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  routerLinkToParticularPage: ComputedRef<any>
-  routerLinkToListPage: ComputedRef<any>
-  indexedAt: ComputedRef<string>
   detailDisplay: boolean
   loaderDisplay: boolean
 }>({
-  routerLinkToParticularPage: computed(() => {
-    return {
-      path: "/home/starter-pack",
-      query: {
-        uri: props.starterPack?.uri,
-      },
-    }
-  }),
-  routerLinkToListPage: computed(() => {
-    return {
-      path: "/profile/starterPacks",
-      query: {
-        account: props.starterPack?.creator.did,
-      },
-    }
-  }),
-  indexedAt: computed((): string => {
-    return mainState.formatDate(props.starterPack?.indexedAt)
-  }),
   detailDisplay: props.detailDisplay,
   loaderDisplay: false,
+})
+
+const routerLinkToParticularPage = computed(() => {
+  return {
+    path: "/home/starter-pack",
+    query: {
+      uri: props.starterPack?.uri,
+    },
+  }
+})
+
+const routerLinkToListPage = computed(() => {
+  return {
+    path: "/profile/starterPacks",
+    query: {
+      account: props.starterPack?.creator.did,
+    },
+  }
+})
+
+const indexedAt = computed((): string => {
+  return mainState.formatDate(props.starterPack?.indexedAt)
 })
 
 function toggleDetailDisplay () {
@@ -139,7 +139,7 @@ async function deleteStarterPack () {
     class="starter-pack-card"
     :is="unclickable ? 'div' : 'RouterLink'"
     v-bind="unclickable ? null : {
-      to: state.routerLinkToParticularPage,
+      to: routerLinkToParticularPage,
     }"
     :data-unclickable="unclickable"
     @click.stop
@@ -193,7 +193,7 @@ async function deleteStarterPack () {
         class="starter-pack-card__indexed-at"
       >
         <SVGIcon name="clock" />
-        <span>{{ state.indexedAt }}</span>
+        <span>{{ indexedAt }}</span>
       </div>
 
       <!-- ポップオーバートリガー -->
@@ -228,7 +228,7 @@ async function deleteStarterPack () {
       ">
         <RouterLink
           class="textlink starter-pack-card__creator"
-          :to="state.routerLinkToListPage"
+          :to="routerLinkToListPage"
           @click.prevent="$emit('onActivateMention')"
         >
           <span class="starter-pack-card__creator__prefix">{{ $t("by") }}</span>
