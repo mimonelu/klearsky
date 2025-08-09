@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, reactive } from "vue"
+import { onBeforeUnmount, onMounted, reactive, ref } from "vue"
 
 defineProps<{
   src?: string
@@ -14,9 +14,19 @@ const state = reactive<{
   hasLoad: false,
 })
 
+const imageRef = ref<HTMLImageElement>()
+
 onMounted(() => {
   state.hasError = false
   state.hasLoad = false
+})
+
+onBeforeUnmount(() => {
+  // 画像メモリの明示的解放
+  if (imageRef.value) {
+    imageRef.value.src = ""
+    imageRef.value.removeAttribute("src")
+  }
 })
 
 function onError () {
@@ -31,6 +41,7 @@ function onLoad () {
 <template>
   <img
     v-if="!state.hasError && src"
+    ref="imageRef"
     class="lazy-image lazy-image--src"
     decoding="async"
     loading="lazy"
