@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, ref } from "vue"
+import { inject, onBeforeUnmount, onMounted, ref } from "vue"
 import HLS from "hls.js"
 import Util from "@/composables/util"
 
@@ -16,6 +16,7 @@ const props = defineProps<{
 }>()
 
 const video = ref()
+let hls: HLS | null = null
 
 onMounted(async () => {
   if (video.value == null) {
@@ -23,7 +24,7 @@ onMounted(async () => {
   }
 
   // SEE: https://www.npmjs.com/package/hls.js
-  const hls = new HLS()
+  hls = new HLS()
 
   // playlist の存在フラグ
   let isPlaylistExisting: undefined | boolean
@@ -81,6 +82,21 @@ onMounted(async () => {
   }
 
   emit("updateVideoType", "none")
+})
+
+onBeforeUnmount(() => {
+  // HLS インスタンスの解放
+  if (hls) {
+    hls.destroy()
+    hls = null
+  }
+
+  // video 要素のリソース解放
+  if (video.value) {
+    video.value.pause()
+    video.value.src = ""
+    video.value.load()
+  }
 })
 
 async function isUriExisting (url: string): Promise<boolean> {
