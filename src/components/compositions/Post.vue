@@ -1166,7 +1166,7 @@ function toggleOldestQuotedPostDisplay () {
                 class="button--bordered image-folder-button"
                 @click.prevent.stop="onActivateImageFolderButton"
               >
-                <template v-if="mediaInfo.shouldDisplayMedia">
+                <template v-if="foldingMedia">
                   <SVGIcon name="image" />
                   <span>{{ $t("showImage") }}</span>
                 </template>
