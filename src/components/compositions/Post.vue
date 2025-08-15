@@ -769,7 +769,7 @@ async function translateText (forceTranslate: boolean) {
     state.translationStep = "done"
     return
   }
-  if (text.value == null) {
+  if (!text.value) {
     state.translationStep = "ignore"
     return
   }
