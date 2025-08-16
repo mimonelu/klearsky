@@ -254,7 +254,7 @@ async function outputJsonForSkyFeed () {
               @click.exact="close"
               @updateThisPostThread="updateThisPostThread as unknown"
               @removeThisPost="removeThisPost as unknown"
-              @onActivateHashTag="close as unknown"
+              @onActivateHashTag="close"
             />
 
             <!-- 存在しないポスト -->

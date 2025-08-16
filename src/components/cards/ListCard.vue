@@ -234,8 +234,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     :data-is-compact="isCompact"
     :data-purpose="purpose"
   >
-    <slot :list="list" />
-
     <!-- オーダーボタン -->
     <OrderButtons
       v-if="orderButtonDisplay && !isCompact"

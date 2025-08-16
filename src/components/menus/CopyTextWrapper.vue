@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, nextTick, reactive, ref, type ComputedRef } from "vue"
+import { computed, nextTick, reactive, ref } from "vue"
 import MenuTickerCopyText from "@/components/menus/CopyText.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -19,32 +19,35 @@ const props = defineProps<{
 
 const state = reactive<{
   display: boolean
-  officialUrl: ComputedRef<undefined | string>
 }>({
   display: false,
-  officialUrl: computed((): undefined | string => {
-    switch (props.place) {
-      case "feed": {
-        const uri = props.uri?.replace('at://', '').replace('app.bsky.feed.generator', 'feed')
-        return `https://bsky.app/profile/${uri}`
-      }
-      case "list": {
-        const rkey = Util.getRkey(props.uri)
-        return `https://bsky.app/profile/${props.handle}/lists/${rkey}`
-      }
-      case "post": {
-        const rkey = Util.getRkey(props.uri)
-        return `https://bsky.app/profile/${props.handle}/post/${rkey}`
-      }
-      case "profile": {
-        return `https://bsky.app/profile/${props.handle}`
-      }
-      case "starterPack": {
-        const rkey = Util.getRkey(props.uri)
-        return `https://bsky.app/starter-pack/${props.did}/${rkey}`
-      }
+})
+
+const officialUrl = computed((): undefined | string => {
+  switch (props.place) {
+    case "feed": {
+      const uri = props.uri?.replace('at://', '').replace('app.bsky.feed.generator', 'feed')
+      return `https://bsky.app/profile/${uri}`
     }
-  }),
+    case "list": {
+      const rkey = Util.getRkey(props.uri)
+      return `https://bsky.app/profile/${props.handle}/lists/${rkey}`
+    }
+    case "post": {
+      const rkey = Util.getRkey(props.uri)
+      return `https://bsky.app/profile/${props.handle}/post/${rkey}`
+    }
+    case "profile": {
+      return `https://bsky.app/profile/${props.handle}`
+    }
+    case "starterPack": {
+      const rkey = Util.getRkey(props.uri)
+      return `https://bsky.app/starter-pack/${props.did}/${rkey}`
+    }
+    default: {
+      return undefined
+    }
+  }
 })
 
 const trigger = ref(null)
@@ -99,7 +102,7 @@ function close () {
         <MenuTickerCopyText
           v-if="place != null"
           label="copyOfficialUrl"
-          :text="state.officialUrl"
+          :text="officialUrl"
           @close="emit('close')"
         />
 

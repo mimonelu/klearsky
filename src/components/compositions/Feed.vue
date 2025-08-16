@@ -119,7 +119,7 @@ function removeThisPost (uri: string) {
         :rootPost="feed.reply?.root"
         :parentPost="feed.reply?.parent"
         :isInFeed="true"
-        @onClickReplier="toggleReplyDisplay as unknown"
+        @onClickReplier="toggleReplyDisplay"
         @updateThisPostThread="updateThisPostThread as unknown"
         @removeThisPost="removeThisPost as unknown"
       />

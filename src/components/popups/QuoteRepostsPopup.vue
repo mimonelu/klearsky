@@ -113,7 +113,7 @@ function removeThisPost (uri: string) {
           @click.exact="close"
           @updateThisPostThread="updateThisPostThread as unknown"
           @removeThisPost="removeThisPost as unknown"
-          @onActivateHashTag="close as unknown"
+          @onActivateHashTag="close"
         />
       </div>
     </template>

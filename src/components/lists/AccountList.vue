@@ -100,7 +100,7 @@ function importAccounts (event: Event) {
         mainState.atp.data.sessions[did] = jsonData[did]
       } else {
         for (const key in jsonData[did]) {
-          mainState.atp.data.sessions[did][key] = jsonData[did][key]
+          (mainState.atp.data.sessions[did] as { [k: string]: any })[key] = jsonData[did][key]
         }
       }
     }

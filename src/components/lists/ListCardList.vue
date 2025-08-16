@@ -129,7 +129,6 @@ function clicked (list?: TTList) {
     <div class="list-card-list__container">
       <ListCard
         v-for="list of state.lists"
-        v-slot="{ list }"
         :key="list.uri"
         :list="list"
         :isCompact="isCompact"

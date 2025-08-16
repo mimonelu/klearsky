@@ -10,6 +10,7 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   sortedInviteCodes: ComputedRef<Array<TTInviteCode>>
 }>({
+  // eslint-disable-next-line
   sortedInviteCodes: computed(() => mainState.inviteCodes
     .sort((a: TTInviteCode, b: TTInviteCode) => {
       const aDate = new Date(a.createdAt)
