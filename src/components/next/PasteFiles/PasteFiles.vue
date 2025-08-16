@@ -23,3 +23,6 @@ function onPaste (event: ClipboardEvent) {
   }
 }
 </script>
+
+<!-- eslint-disable-next-line -->
+<template />
