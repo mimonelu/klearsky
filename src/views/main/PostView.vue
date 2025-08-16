@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject } from "vue"
 import Loader from "@/components/shells/Loader.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
 import Post from "@/components/compositions/Post.vue"
@@ -8,12 +8,8 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  rootPost: ComputedRef<undefined | TTPost>
-}>({
-  rootPost: computed((): undefined | TTPost => {
-    return mainState.currentPosts[0]
-  }),
+const rootPost = computed((): undefined | TTPost => {
+  return mainState.currentPosts[0]
 })
 
 // ポストの更新
@@ -51,20 +47,20 @@ async function updateAll () {
 // スレッドミュートのトグル
 async function toggleThreadMute () {
   Util.blurElement()
-  if (state.rootPost?.uri == null) {
+  if (rootPost.value?.uri == null) {
     return
   }
   mainState.centerLoaderDisplay = true
-  const response = state.rootPost?.viewer?.threadMuted
-    ? await mainState.atp.updateThreadMuteToDisable(state.rootPost?.uri)
-    : await mainState.atp.updateThreadMuteToEnable(state.rootPost?.uri)
+  const response = rootPost.value?.viewer?.threadMuted
+    ? await mainState.atp.updateThreadMuteToDisable(rootPost.value?.uri)
+    : await mainState.atp.updateThreadMuteToEnable(rootPost.value?.uri)
   mainState.centerLoaderDisplay = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "PostView/toggleThreadMute")
     return
   }
-  if (state.rootPost.viewer != null) {
-    state.rootPost.viewer.threadMuted = !state.rootPost.viewer.threadMuted
+  if (rootPost.value.viewer != null) {
+    rootPost.value.viewer.threadMuted = !rootPost.value.viewer.threadMuted
   }
 }
 </script>
@@ -75,7 +71,7 @@ async function toggleThreadMute () {
       <PageHeader
         :hasBackButton="true"
         :title="$t('post')"
-        :subTitle="state.rootPost?.author.displayName ?? ''"
+        :subTitle="rootPost?.author.displayName ?? ''"
       >
         <template #right>
           <!-- 再取得ボタン -->
@@ -86,10 +82,10 @@ async function toggleThreadMute () {
           <!-- スレッドミュートトグル -->
           <button
             class="post-view__thread-mute-toggle"
-            :data-enable="state.rootPost?.viewer?.threadMuted"
+            :data-enable="rootPost?.viewer?.threadMuted"
             @click.stop="toggleThreadMute"
           >
-            <SVGIcon :name="state.rootPost?.viewer?.threadMuted ? 'volumeOff' : 'volumeOn'" />
+            <SVGIcon :name="rootPost?.viewer?.threadMuted ? 'volumeOff' : 'volumeOn'" />
           </button>
         </template>
       </PageHeader>

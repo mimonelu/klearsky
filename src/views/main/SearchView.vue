@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject } from "vue"
 import { RouterView } from "vue-router"
 import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
@@ -7,29 +7,25 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  postQuery: ComputedRef<string>
-  query: ComputedRef<string>
-}>({
-  postQuery: computed((): string => {
-    const queries: string[] = []
-    if (mainState.currentSearchTerm) {
-      queries.push(`text=${mainState.currentSearchTerm}`)
+const postQuery = computed((): string => {
+  const queries: string[] = []
+  if (mainState.currentSearchTerm) {
+    queries.push(`text=${mainState.currentSearchTerm}`)
+  }
+  Object.keys(mainState.currentSearchPostFormState).forEach((key) => {
+    const value = (mainState.currentSearchPostFormState as any)[key]
+    if (value) {
+      queries.push(`${key}=${value}`)
     }
-    Object.keys(mainState.currentSearchPostFormState).forEach((key) => {
-      const value = (mainState.currentSearchPostFormState as any)[key]
-      if (value) {
-        queries.push(`${key}=${value}`)
-      }
-    })
-    const query = queries.join("&")
-    return query ? `?${query}` : ""
-  }),
-  query: computed((): string => {
-    return mainState.currentSearchTerm
-      ? `?text=${mainState.currentSearchTerm}`
-      : ""
-  }),
+  })
+  const query = queries.join("&")
+  return query ? `?${query}` : ""
+})
+
+const query = computed((): string => {
+  return mainState.currentSearchTerm
+    ? `?text=${mainState.currentSearchTerm}`
+    : ""
 })
 </script>
 
@@ -48,7 +44,7 @@ const state = reactive<{
         <!-- ポスト検索ページ -->
         <RouterLink
           class="tab__button"
-          :to="`/search/post${state.postQuery}`"
+          :to="`/search/post${postQuery}`"
           :title="$t('postSearch')"
         >
           <SVGIcon name="post" />
@@ -57,7 +53,7 @@ const state = reactive<{
         <!-- フィード検索ページ -->
         <RouterLink
           class="tab__button"
-          :to="`/search/feed${state.query}`"
+          :to="`/search/feed${query}`"
           :title="$t('feedSearch')"
         >
           <SVGIcon name="feed" />
@@ -66,7 +62,7 @@ const state = reactive<{
         <!-- ユーザー検索ページ -->
         <RouterLink
           class="tab__button"
-          :to="`/search/user${state.query}`"
+          :to="`/search/user${query}`"
           :title="$t('userSearch')"
         >
           <SVGIcon name="person" />

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive, type ComputedRef } from "vue"
+import { computed, inject, onMounted } from "vue"
 import { type RouteLocationRaw } from "vue-router"
 import Feed from "@/components/compositions/Feed.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
@@ -12,27 +12,23 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  users: ComputedRef<undefined | Array<TTUser>>
-  listLocation: ComputedRef<undefined | RouteLocationRaw>
-}>({
-  users: computed((): undefined | Array<TTUser> => {
-    return mainState.currentStarterPack?.listItemsSample?.map((listItem) => {
-      return listItem.subject
-    })
-  }),
-  listLocation: computed((): undefined | RouteLocationRaw => {
-    if (mainState.currentStarterPack == null) {
-      return
-    }
-    return {
-      name: 'list-users-home',
-      query: {
-        list: mainState.currentStarterPack?.list?.uri ?? mainState.currentStarterPack?.record.list,
-        displayName: mainState.currentStarterPack?.record.name,
-      },
-    }
-  }),
+const users = computed((): undefined | Array<TTUser> => {
+  return mainState.currentStarterPack?.listItemsSample?.map((listItem) => {
+    return listItem.subject
+  })
+})
+
+const listLocation = computed((): undefined | RouteLocationRaw => {
+  if (mainState.currentStarterPack == null) {
+    return
+  }
+  return {
+    name: 'list-users-home',
+    query: {
+      list: mainState.currentStarterPack?.list?.uri ?? mainState.currentStarterPack?.record.list,
+      displayName: mainState.currentStarterPack?.record.name,
+    },
+  }
 })
 
 onMounted(async () => {
@@ -125,6 +121,7 @@ function onScrolledToBottom () {
         <div class="starter-pack-view__feed-card-container">
           <FeedCard
             v-for="generator of mainState.currentStarterPack?.feeds"
+            :key="generator.uri"
             :generator="generator"
             :menuDisplay="true"
             :detailDisplay="false"
@@ -136,7 +133,7 @@ function onScrolledToBottom () {
       </template>
 
       <!-- ユーザー -->
-      <template v-if="(state.users?.length ?? 0) > 0">
+      <template v-if="(users?.length ?? 0) > 0">
         <!-- ユーザー - ヘッダー -->
         <div class="strike-header">
           <span>{{ $t("users") }}</span>
@@ -144,20 +141,20 @@ function onScrolledToBottom () {
 
         <!-- ユーザー - スターターパックリストユーザースライダー -->
         <UserSlider
-          :users="state.users"
+          :users="users"
           :showMoreButton="mainState.currentStarterPack?.record.list != null"
-          :moreLocation="state.listLocation"
+          :moreLocation="listLocation"
         />
       </template>
 
       <!-- スターターパックリストユーザーへのリンク -->
       <div
-        v-if="state.listLocation != null"
+        v-if="listLocation != null"
         class="link-to-list-users"
       >
         <RouterLink
           class="textlink--icon"
-          :to="state.listLocation"
+          :to="listLocation"
         >
           <SVGIcon name="cursorRight" />
           <span>{{ $t("showStarterPackListUsers") }}</span>

@@ -1,18 +1,14 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject } from "vue"
 import ListCardList from "@/components/lists/ListCardList.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  lists: ComputedRef<Array<TTList>>
-}>({
-  lists: computed((): Array<TTList> => {
-    return mainState.isMyProfile()
-      ? mainState.myLists!.items
-      : mainState.currentAuthorLists
-  }),
+const lists = computed((): Array<TTList> => {
+  return mainState.isMyProfile()
+    ? mainState.myLists!.items
+    : mainState.currentAuthorLists
 })
 
 async function fetchLists (direction: "new" | "old") {
@@ -39,7 +35,7 @@ function onScrolledToBottom () {
   <div class="author-list">
     <!-- リスト一覧 -->
     <ListCardList
-      :lists="state.lists"
+      :lists="lists"
       :headerDisplay="mainState.isMyProfile()"
       :loaderDisplay="!mainState.isMyProfile()"
       :isCompact="false"

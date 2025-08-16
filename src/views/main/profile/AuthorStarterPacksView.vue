@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
@@ -8,12 +8,8 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  numberOfStarterPacks: ComputedRef<number>
-}>({
-  numberOfStarterPacks: computed((): number => {
-    return mainState.currentProfile?.associated?.starterPacks ?? 0
-  }),
+const numberOfStarterPacks = computed((): number => {
+  return mainState.currentProfile?.associated?.starterPacks ?? 0
 })
 
 async function fetchStarterPacks (direction: "new" | "old") {
@@ -63,7 +59,7 @@ function onScrolledToBottom () {
     <div class="starter-pack-card__container">
       <!-- 空のコンテンツメッセージ -->
       <div
-        v-if="state.numberOfStarterPacks === 0"
+        v-if="numberOfStarterPacks === 0"
         class="textlabel margin1"
       >
         <div class="textlabel__text">

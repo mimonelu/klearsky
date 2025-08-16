@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
+import { computed, inject, nextTick, reactive, ref } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import { differenceInDays } from "date-fns"
 import ActivitySubscriptionItemTrigger from "@/components/next/ActivitySubscription/ActivitySubscriptionItemTrigger.vue"
@@ -52,123 +52,114 @@ const labelsOfPostTabButton: { [k: string]: string } = {
 }
 
 const state = reactive<{
-  loaderDisplay: ComputedRef<boolean>
   handleHistoryPopupDisplay: boolean
-  svgIconNameOfPostTabButton: ComputedRef<string>
-  labelOfPostTabButton: ComputedRef<string>
-  isPagePostFeeds: ComputedRef<boolean>
-  isPagePostFeedsWithReplies: ComputedRef<boolean>
-  isPagePostFeedsWithMedia: ComputedRef<boolean>
-  isPagePostFeedsWithVideo: ComputedRef<boolean>
-  isPageRepostList: ComputedRef<boolean>
-  isPageLikeList: ComputedRef<boolean>
-  isLabeler: ComputedRef<boolean>
-  numberOfPostsPerDay: ComputedRef<undefined | number>
   profilePostPopverDisplay: boolean
-
-  // 登録時に使用したスターターパック
-  joinedStarterPackUrl: ComputedRef<undefined | string>
-
-  // ラベル対応
-  hasNoUnauthenticated: ComputedRef<boolean>
-  contentFilteringLabels: ComputedRef<Array<TILabelSetting>>
-  contentFilteringToggleDisplay: ComputedRef<boolean>
-
-  // ラベル対応 - アカウントコンテンツ
-  hasBlurredContent: ComputedRef<boolean>
-  accountContentDisplay: ComputedRef<boolean>
-
-  // ラベル対応 - アカウントメディア
-  hasBlurredMedia: ComputedRef<boolean>
-  accountMediaDisplay: ComputedRef<boolean>
 }>({
-  loaderDisplay: computed((): boolean => {
-    return mainState.currentProfile == null && mainState.listLoaderDisplay
-  }),
   handleHistoryPopupDisplay: false,
-  svgIconNameOfPostTabButton: computed((): string => {
-    return svgIconNamesOfPostTabButton[(router.currentRoute.value.name ?? "") as string] ?? "post"
-  }),
-  labelOfPostTabButton: computed((): string => {
-    return labelsOfPostTabButton[(router.currentRoute.value.name ?? "") as string] ?? "post"
-  }),
-  isPagePostFeeds: computed((): boolean => {
-    return router.currentRoute.value.name === "profile-feeds"
-  }),
-  isPagePostFeedsWithReplies: computed((): boolean => {
-    return router.currentRoute.value.name === "profile-feeds-with-replies"
-  }),
-  isPagePostFeedsWithMedia: computed((): boolean => {
-    return router.currentRoute.value.name === "profile-feeds-with-media"
-  }),
-  isPagePostFeedsWithVideo: computed((): boolean => {
-    return router.currentRoute.value.name === "profile-feeds-with-video"
-  }),
-  isPageRepostList: computed((): boolean => {
-    return router.currentRoute.value.name === "profile-repost"
-  }),
-  isPageLikeList: computed((): boolean => {
-    return router.currentRoute.value.name === "profile-like"
-  }),
-  isLabeler: computed((): boolean => {
-    return mainState.currentProfile?.associated?.labeler ?? false
-  }),
-  numberOfPostsPerDay: computed((): undefined | number => {
-    if (mainState.currentProfile?.createdAt == null) {
-      return
-    }
-    const days = differenceInDays(
-      new Date(),
-      new Date(mainState.currentProfile.createdAt)
-    )
-    return days > 0
-      ? Math.ceil(mainState.currentProfile.postsCount / days)
-      : mainState.currentProfile.postsCount
-  }),
   profilePostPopverDisplay: false,
+})
 
-  // 登録時に使用したスターターパック
-  joinedStarterPackUrl: computed((): undefined | string => {
-    return mainState.currentProfile?.joinedViaStarterPack != null
-      ? `https://bsky.app/starter-pack/${mainState.currentProfile.joinedViaStarterPack.creator.handle}/${Util.getRkey(mainState.currentProfile.joinedViaStarterPack.uri)}`
-      : undefined
-  }),
+const loaderDisplay = computed((): boolean => {
+  return mainState.currentProfile == null && mainState.listLoaderDisplay
+})
 
-  // ラベル対応
-  hasNoUnauthenticated: computed((): boolean => {
-    return mainState.hasLabel("!no-unauthenticated", mainState.currentProfile?.labels)
-  }),
-  contentFilteringLabels: computed((): Array<TILabelSetting> => {
-    if (mainState.currentProfile?.labels == null) {
-      return []
-    }
-    return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "media", "none"])
-  }),
-  contentFilteringToggleDisplay: computed((): boolean => {
-    return state.contentFilteringLabels.length > 0
-  }),
+const svgIconNameOfPostTabButton = computed((): string => {
+  return svgIconNamesOfPostTabButton[(router.currentRoute.value.name ?? "") as string] ?? "post"
+})
 
-  // ラベル対応 - アカウントコンテンツ
-  hasBlurredContent: computed((): boolean => {
-    if (mainState.currentProfile?.labels == null) {
-      return true
-    }
-    return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "none"]).length > 0
-  }),
-  accountContentDisplay: computed((): boolean => {
-    return !!mainState.currentProfile?.__enabledContentMask || !state.hasBlurredContent
-  }),
+const labelOfPostTabButton = computed((): string => {
+  return labelsOfPostTabButton[(router.currentRoute.value.name ?? "") as string] ?? "post"
+})
 
-  // ラベル対応 - アカウントメディア
-  hasBlurredMedia: computed((): boolean => {
-    if (mainState.currentProfile?.labels == null) {
-      return true
-    }
-    return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["media"]).length > 0
-  }),
-  accountMediaDisplay: computed((): boolean => {
-    return !!mainState.currentProfile?.__enabledContentMask || !state.hasBlurredMedia
-  }),
+const isPagePostFeeds = computed((): boolean => {
+  return router.currentRoute.value.name === "profile-feeds"
+})
+
+const isPagePostFeedsWithReplies = computed((): boolean => {
+  return router.currentRoute.value.name === "profile-feeds-with-replies"
+})
+
+const isPagePostFeedsWithMedia = computed((): boolean => {
+  return router.currentRoute.value.name === "profile-feeds-with-media"
+})
+
+const isPagePostFeedsWithVideo = computed((): boolean => {
+  return router.currentRoute.value.name === "profile-feeds-with-video"
+})
+
+const isPageRepostList = computed((): boolean => {
+  return router.currentRoute.value.name === "profile-repost"
+})
+
+const isPageLikeList = computed((): boolean => {
+  return router.currentRoute.value.name === "profile-like"
+})
+
+const isLabeler = computed((): boolean => {
+  return mainState.currentProfile?.associated?.labeler ?? false
+})
+
+const numberOfPostsPerDay = computed((): undefined | number => {
+  if (mainState.currentProfile?.createdAt == null) {
+    return
+  }
+  const days = differenceInDays(
+    new Date(),
+    new Date(mainState.currentProfile.createdAt)
+  )
+  return days > 0
+    ? Math.ceil(mainState.currentProfile.postsCount / days)
+    : mainState.currentProfile.postsCount
+})
+
+// 登録時に使用したスターターパック
+const joinedStarterPackUrl = computed((): undefined | string => {
+  return mainState.currentProfile?.joinedViaStarterPack != null
+    ? `https://bsky.app/starter-pack/${mainState.currentProfile.joinedViaStarterPack.creator.handle}/${Util.getRkey(mainState.currentProfile.joinedViaStarterPack.uri)}`
+    : undefined
+})
+
+// ラベル対応
+
+const hasNoUnauthenticated = computed((): boolean => {
+  return mainState.hasLabel("!no-unauthenticated", mainState.currentProfile?.labels)
+})
+
+const contentFilteringLabels = computed((): Array<TILabelSetting> => {
+  if (mainState.currentProfile?.labels == null) {
+    return []
+  }
+  return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "media", "none"])
+})
+
+const contentFilteringToggleDisplay = computed((): boolean => {
+  return contentFilteringLabels.value.length > 0
+})
+
+// ラベル対応 - アカウントコンテンツ
+
+const hasBlurredContent = computed((): boolean => {
+  if (mainState.currentProfile?.labels == null) {
+    return true
+  }
+  return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "none"]).length > 0
+})
+
+const accountContentDisplay = computed((): boolean => {
+  return !!mainState.currentProfile?.__enabledContentMask || !hasBlurredContent.value
+})
+
+// ラベル対応 - アカウントメディア
+
+const hasBlurredMedia = computed((): boolean => {
+  if (mainState.currentProfile?.labels == null) {
+    return true
+  }
+  return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["media"]).length > 0
+})
+
+const accountMediaDisplay = computed((): boolean => {
+  return !!mainState.currentProfile?.__enabledContentMask || !hasBlurredMedia.value
 })
 
 // アクターステータス - LIVE
@@ -220,7 +211,7 @@ async function toggleNoUnauthenticated () {
   }
 
   // 外部公開状態の追加／削除
-  if (state.hasNoUnauthenticated) {
+  if (hasNoUnauthenticated.value) {
     const index = params.labels.indexOf("!no-unauthenticated")
     if (index !== - 1) {
       params.labels.splice(index, 1)
@@ -326,7 +317,7 @@ function removeThisPost () {
   <div
     class="profile-view"
     :data-folding="mainState.profileFolding"
-    :data-content-filtering="!(state.accountContentDisplay && state.accountMediaDisplay)"
+    :data-content-filtering="!(accountContentDisplay && accountMediaDisplay)"
     :data-is-my-profile="mainState.isMyProfile()"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
@@ -345,14 +336,14 @@ function removeThisPost () {
     <div class="banner-container">
       <!-- バナー -->
       <div
-        v-if="state.loaderDisplay"
+        v-if="loaderDisplay"
         class="banner--transparent"
       />
       <div
         v-else-if="
           !!mainState.currentProfile?.banner &&
-          state.accountContentDisplay &&
-          state.accountMediaDisplay
+          accountContentDisplay &&
+          accountMediaDisplay
         "
         class="banner"
         @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
@@ -402,8 +393,8 @@ function removeThisPost () {
       <div class="profile-view__top">
         <!-- コンテンツフィルタトグル -->
         <ContentFilteringToggle
-          v-if="state.contentFilteringToggleDisplay"
-          :labels="state.contentFilteringLabels"
+          v-if="contentFilteringToggleDisplay"
+          :labels="contentFilteringLabels"
           :display="!!mainState.currentProfile?.__enabledContentMask"
           :togglable="true"
           @click.prevent.stop="onActivateAccountMaskToggle"
@@ -413,12 +404,12 @@ function removeThisPost () {
           <div class="profile-view__details__top">
             <!-- アバターボタン -->
             <div
-              v-if="state.loaderDisplay || (state.accountContentDisplay && state.accountMediaDisplay)"
+              v-if="loaderDisplay || (accountContentDisplay && accountMediaDisplay)"
               class="profile-view__details__top__left"
             >
               <AvatarButton
                 :image="mainState.currentProfile?.avatar ?? '/img/void.png'"
-                :isLabeler="state.isLabeler"
+                :isLabeler="isLabeler"
                 :actorStatus="mainState.currentProfile?.status"
               />
             </div>
@@ -426,7 +417,7 @@ function removeThisPost () {
             <div class="profile-view__details__top__right">
               <!-- 折り畳みトグル -->
               <button
-                v-if="!state.loaderDisplay"
+                v-if="!loaderDisplay"
                 class="button--bordered folding-toggle"
                 @click="toggleFolding"
               >
@@ -439,7 +430,7 @@ function removeThisPost () {
               <!-- ラベルタグ -->
               <LabelTags
                 :labels="mainState.currentProfile?.labels"
-                :labelerDisplay="state.isLabeler"
+                :labelerDisplay="isLabeler"
                 :unauthenticatedDisplay="true"
                 :harmfulDisplay="true"
                 :customDisplay="true"
@@ -534,11 +525,11 @@ function removeThisPost () {
                   <button
                     type="button"
                     class="button no-unauthenticated-toggle"
-                    :data-no-unauthenticated="state.hasNoUnauthenticated"
+                    :data-no-unauthenticated="hasNoUnauthenticated"
                     @click.stop="toggleNoUnauthenticated"
                   >
-                    <SVGIcon :name="state.hasNoUnauthenticated ? 'earthOff' : 'earth'" />
-                    <span>{{ $t(state.hasNoUnauthenticated ? "authenticated" : "unauthenticated") }}</span>
+                    <SVGIcon :name="hasNoUnauthenticated ? 'earthOff' : 'earth'" />
+                    <span>{{ $t(hasNoUnauthenticated ? "authenticated" : "unauthenticated") }}</span>
                   </button>
 
                   <!-- アクターステータス編集ボタン -->
@@ -565,7 +556,7 @@ function removeThisPost () {
 
             <!-- ラベラー行 -->
             <div
-              v-if="state.isLabeler"
+              v-if="isLabeler"
               class="group-parts"
             >
               <!-- ラベラーサブスクライブトグル -->
@@ -578,7 +569,7 @@ function removeThisPost () {
             <!-- 説明文 -->
             <HtmlText
               v-if="
-                state.accountContentDisplay &&
+                accountContentDisplay &&
                 !!mainState.currentProfile?.description
               "
               class="description"
@@ -590,7 +581,7 @@ function removeThisPost () {
             <AtmosphereContainer :key="mainState.currentProfile?.did" />
 
             <div
-              v-if="state.accountContentDisplay"
+              v-if="accountContentDisplay"
               class="statistics"
             >
               <!-- ポスト数 -->
@@ -601,11 +592,11 @@ function removeThisPost () {
 
               <!-- 1日あたりの投稿数 -->
               <dl
-                v-if="state.numberOfPostsPerDay != null"
+                v-if="numberOfPostsPerDay != null"
                 class="number-of-posts-per-day"
               >
                 <dt>{{ $t("numberOfPostsPerDay") }}</dt>
-                <dd>{{ state.numberOfPostsPerDay.toLocaleString() }}</dd>
+                <dd>{{ numberOfPostsPerDay.toLocaleString() }}</dd>
               </dl>
 
               <!-- フォローイング数 -->
@@ -629,10 +620,10 @@ function removeThisPost () {
                 <dd>{{ mainState.formatDate(mainState.currentProfile.createdAt) }} ({{ differenceInDays(new Date(), new Date(mainState.currentProfile.createdAt)) }}{{ $t("daysAgo") }})</dd>
 
                 <!-- 登録時に使用したスターターパック -->
-                <dd v-if="state.joinedStarterPackUrl != null">
+                <dd v-if="joinedStarterPackUrl != null">
                   <a
                     class="button--plane joined-starter-pack"
-                    :href="state.joinedStarterPackUrl"
+                    :href="joinedStarterPackUrl"
                     rel="noreferrer"
                     target="_blank"
                     :title="$t('joinedStarterPack')"
@@ -650,7 +641,7 @@ function removeThisPost () {
     <!-- タブ -->
     <div
       class="tab-container"
-      :data-disabled="state.loaderDisplay"
+      :data-disabled="loaderDisplay"
     >
       <!-- メインタブ -->
       <div class="tab">
@@ -659,20 +650,20 @@ function removeThisPost () {
           type="button"
           class="tab__button tab__button--post"
           :class="
-            state.isPagePostFeeds ||
-            state.isPagePostFeedsWithReplies ||
-            state.isPagePostFeedsWithMedia ||
-            state.isPagePostFeedsWithVideo ||
-            state.isPageRepostList ||
-            state.isPageLikeList
+            isPagePostFeeds ||
+            isPagePostFeedsWithReplies ||
+            isPagePostFeedsWithMedia ||
+            isPagePostFeedsWithVideo ||
+            isPageRepostList ||
+            isPageLikeList
               ? 'router-link-active'
               : ''
           "
           to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
           @click.stop.self="openProfilePostPopver"
         >
-          <SVGIcon :name="state.svgIconNameOfPostTabButton" />
-          <span>{{ $t(state.labelOfPostTabButton) }}</span>
+          <SVGIcon :name="svgIconNameOfPostTabButton" />
+          <span>{{ $t(labelOfPostTabButton) }}</span>
           <SVGIcon :name="state.profilePostPopverDisplay ? 'cursorUp' : 'cursorDown'" />
 
           <!-- プロフィールポストポップオーバー -->
@@ -685,9 +676,9 @@ function removeThisPost () {
             <menu class="list-menu">
               <!-- ポストページリンク -->
               <Component
-                :is="state.isPagePostFeeds ? 'div' : 'RouterLink'"
+                :is="isPagePostFeeds ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :disabled="state.isPagePostFeeds"
+                :disabled="isPagePostFeeds"
                 :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -697,9 +688,9 @@ function removeThisPost () {
 
               <!-- リプライ付きポストページリンク -->
               <Component
-                :is="state.isPagePostFeedsWithReplies ? 'div' : 'RouterLink'"
+                :is="isPagePostFeedsWithReplies ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :disabled="state.isPagePostFeedsWithReplies"
+                :disabled="isPagePostFeedsWithReplies"
                 :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -709,9 +700,9 @@ function removeThisPost () {
 
               <!-- メディア一覧ページリンク -->
               <Component
-                :is="state.isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
+                :is="isPagePostFeedsWithMedia ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :disabled="state.isPagePostFeedsWithMedia"
+                :disabled="isPagePostFeedsWithMedia"
                 :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -721,9 +712,9 @@ function removeThisPost () {
 
               <!-- 動画一覧ページリンク -->
               <Component
-                :is="state.isPagePostFeedsWithVideo ? 'div' : 'RouterLink'"
+                :is="isPagePostFeedsWithVideo ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :disabled="state.isPagePostFeedsWithVideo"
+                :disabled="isPagePostFeedsWithVideo"
                 :to="{ path: '/profile/feeds-with-video', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -733,9 +724,9 @@ function removeThisPost () {
 
               <!-- リポスト一覧ページリンク -->
               <Component
-                :is="state.isPageRepostList ? 'div' : 'RouterLink'"
+                :is="isPageRepostList ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :disabled="state.isPageRepostList"
+                :disabled="isPageRepostList"
                 :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -746,9 +737,9 @@ function removeThisPost () {
               <!-- いいね一覧ページリンク -->
               <Component
                 v-if="mainState.isMyProfile()"
-                :is="state.isPageLikeList ? 'div' : 'RouterLink'"
+                :is="isPageLikeList ? 'div' : 'RouterLink'"
                 class="list-menu__item"
-                :disabled="state.isPageLikeList"
+                :disabled="isPageLikeList"
                 :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
                 @click.stop="closeProfilePostPopver"
               >
@@ -830,7 +821,7 @@ function removeThisPost () {
     <!-- 固定ポスト -->
     <Post
       v-if="
-        state.isPagePostFeeds &&
+        isPagePostFeeds &&
         mainState.currentAuthorPostOfPinnedPost != null
       "
       :key="mainState.currentAuthorPostOfPinnedPost.uri"
