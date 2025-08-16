@@ -353,9 +353,11 @@ const isOldPost = indexedAt.value != null
 
 // 本文とワードミュート用に RichText を生成
 const contentRichText = computed(() => {
+  // テキストまたはfacetsが変更された場合のみ再生成
+  const currentText = text.value ?? ""
   const facets = props.post.record?.facets ?? props.post.value?.facets
   const richText = new RichText({
-    text: text.value ?? "",
+    text: currentText,
     facets,
   }, {
     cleanNewlines: true,
