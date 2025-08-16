@@ -129,8 +129,8 @@ function onScrolledToBottom () {
         <Feed
           :feed="feed"
           :data-is-middle="feed.__cursor != null"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
+          @updateThisPostThread="updateThisPostThread as unknown"
+          @removeThisPost="removeThisPost as unknown"
         />
 
         <!-- 抜け漏れ取得ボタン -->

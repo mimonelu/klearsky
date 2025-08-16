@@ -30,6 +30,7 @@ async function toggleBlock () {
       mainState.openErrorPopup(response, "BlockButton/toggleBlock")
       return
     }
+    // eslint-disable-next-line
     delete props.viewer.blocking
 
     // ブロックユーザー一覧の更新
@@ -44,6 +45,7 @@ async function toggleBlock () {
       mainState.openErrorPopup(response, "BlockButton/toggleBlock")
       return
     }
+    // eslint-disable-next-line
     props.viewer.blocking = response
   }
 }

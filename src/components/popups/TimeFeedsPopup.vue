@@ -107,9 +107,9 @@ function removeThisPost (uri: string) {
           :hasQuoteRepostIcon="post.record.embed?.record != null"
           :data-focus="mainState.timeFeedsPopupProps?.targetPost.uri === post.uri"
           @click.exact="close"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
-          @onActivateHashTag="close"
+          @updateThisPostThread="updateThisPostThread as unknown"
+          @removeThisPost="removeThisPost as unknown"
+          @onActivateHashTag="close as unknown"
         />
       </div>
     </template>

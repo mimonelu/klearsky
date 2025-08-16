@@ -39,7 +39,7 @@ function onScrolledToBottom () {
       :headerDisplay="mainState.isMyProfile()"
       :loaderDisplay="!mainState.isMyProfile()"
       :isCompact="false"
-      @fetch="fetchLists"
+      @fetch="fetchLists as unknown"
     />
 
     <!-- スクロールオブザーバー -->

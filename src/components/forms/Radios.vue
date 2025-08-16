@@ -30,7 +30,10 @@ function onChange () {
       :data-disabled="disabled ?? false"
     >
       <input
-        v-model="state[model]"
+        v-model="
+          // eslint-disable-next-line
+          state[model]
+        "
         type="radio"
         :name="model.toString()"
         :value="option.value"

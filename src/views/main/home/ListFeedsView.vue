@@ -68,7 +68,7 @@ function onScrolledToBottom () {
       :menuDisplay="true"
       :detailDisplay="false"
       :orderButtonDisplay="false"
-      @deleteList="deleteList"
+      @deleteList="deleteList as unknown"
     />
     <div
       v-else
@@ -87,8 +87,8 @@ function onScrolledToBottom () {
         <Feed
           :feed="feed"
           :data-is-middle="feed.__cursor != null"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
+          @updateThisPostThread="updateThisPostThread as unknown"
+          @removeThisPost="removeThisPost as unknown"
         />
 
         <!-- 抜け漏れ取得ボタン -->

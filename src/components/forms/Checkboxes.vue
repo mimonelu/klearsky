@@ -16,6 +16,7 @@ const props = defineProps<{
 function onChange () {
   // 最大選択可能数の処理
   if (props.limit != null && props.limit <= props.state[props.model].length) {
+    // eslint-disable-next-line
     props.state[props.model].splice(props.limit)
     return
   }
@@ -37,7 +38,10 @@ function onChange () {
       :data-disabled="disabled ?? false"
     >
       <input
-        v-model="state[model]"
+        v-model="
+          // eslint-disable-next-line
+          state[model]
+        "
         type="checkbox"
         :name="model.toString()"
         :value="option.value"

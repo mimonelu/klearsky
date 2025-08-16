@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue"
+import { onBeforeMount, onBeforeUnmount, ref } from "vue"
 import hotkeys from "hotkeys-js"
 import Loader from "@/components/shells/Loader.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"

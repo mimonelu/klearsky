@@ -206,7 +206,7 @@ async function makeAvatarBlobRef (): Promise<Error | undefined | BlobRef> {
   // サムネイルが指定されていない場合、かつ既存のサムネイルが存在する場合は再取得
   if (props.list?.avatar != null) {
     const uri = props.list.avatar
-    const blocks = uri.match(/\/([^\/]+?)@/)
+    const blocks = uri.match(/\/([^/]+?)@/)
     if (blocks == null || blocks[1] == null) {
       return Error("makeAvatarBlobRefError")
     }

@@ -54,7 +54,11 @@ async function toggleListMute () {
       // TODO:
       return
     }
-    if (props.list.viewer == null) props.list.viewer = {}
+    if (props.list.viewer == null) {
+      // eslint-disable-next-line
+      props.list.viewer = {}
+    }
+    // eslint-disable-next-line
     props.list.viewer.muted = false
 
   // リストミュートの有効化
@@ -66,7 +70,11 @@ async function toggleListMute () {
       // TODO:
       return
     }
-    if (props.list.viewer == null) props.list.viewer = {}
+    if (props.list.viewer == null) {
+      // eslint-disable-next-line
+      props.list.viewer = {}
+    }
+    // eslint-disable-next-line
     props.list.viewer.muted = true
   }
 
@@ -88,7 +96,11 @@ async function toggleListBlock () {
       // TODO:
       return
     }
-    if (props.list.viewer == null) props.list.viewer = {}
+    if (props.list.viewer == null) {
+      // eslint-disable-next-line
+      props.list.viewer = {}
+    }
+    // eslint-disable-next-line
     delete props.list.viewer.blocked
 
   // リストブロックの有効化
@@ -100,7 +112,11 @@ async function toggleListBlock () {
       // TODO:
       return
     }
-    if (props.list.viewer == null) props.list.viewer = {}
+    if (props.list.viewer == null) {
+      // eslint-disable-next-line
+      props.list.viewer = {}
+    }
+    // eslint-disable-next-line
     props.list.viewer.blocked = result
   }
 

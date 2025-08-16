@@ -252,9 +252,9 @@ async function outputJsonForSkyFeed () {
               :hasReplyIcon="pack.post.record.reply != null"
               :hasQuoteRepostIcon="pack.post.record.embed?.record != null"
               @click.exact="close"
-              @updateThisPostThread="updateThisPostThread"
-              @removeThisPost="removeThisPost"
-              @onActivateHashTag="close"
+              @updateThisPostThread="updateThisPostThread as unknown"
+              @removeThisPost="removeThisPost as unknown"
+              @onActivateHashTag="close as unknown"
             />
 
             <!-- 存在しないポスト -->

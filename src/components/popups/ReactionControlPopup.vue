@@ -303,7 +303,7 @@ async function fetchPostgate () {
     class="reaction-control-popup"
     :hasCloseButton="true"
     :loaderDisplay="state.loaderDisplay"
-    @close="close"
+    @close="close as unknown"
   >
     <template #header>
       <h2>

@@ -828,8 +828,8 @@ function removeThisPost () {
       position="post"
       :post="mainState.currentAuthorPostOfPinnedPost"
       class="pinned-post"
-      @updateThisPostThread="updateThisPostThread"
-      @removeThisPost="removeThisPost"
+      @updateThisPostThread="updateThisPostThread as unknown"
+      @removeThisPost="removeThisPost as unknown"
     >
       <template #post-before>
         <div class="pinned-post__header">

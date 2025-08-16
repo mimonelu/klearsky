@@ -111,9 +111,9 @@ function removeThisPost (uri: string) {
           :forceHideQuoteRepost="post.embed?.record?.detached !== true"
           :forceUpdatePostThread="true"
           @click.exact="close"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
-          @onActivateHashTag="close"
+          @updateThisPostThread="updateThisPostThread as unknown"
+          @removeThisPost="removeThisPost as unknown"
+          @onActivateHashTag="close as unknown"
         />
       </div>
     </template>

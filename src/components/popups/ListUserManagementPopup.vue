@@ -149,7 +149,7 @@ async function clicked (list: TTList) {
         :headerDisplay="false"
         :loaderDisplay="false"
         :isCompact="true"
-        @clicked="clicked"
+        @clicked="clicked as unknown"
       >
         <!-- リストチェックアイコン -->
         <div

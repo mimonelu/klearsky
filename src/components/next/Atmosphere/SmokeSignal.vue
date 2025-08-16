@@ -52,6 +52,7 @@ const state = reactive<{
     })
 
     // プロフィールデータにキャッシュを保存
+    // eslint-disable-next-line
     props.profile.__smokeSignal = results.records
 
     return results.records
@@ -69,7 +70,10 @@ const state = reactive<{
   >
     <template #body>
       <div class="smoke-signal__container">
-        <template v-for="record of state.records">
+        <template
+          v-for="record, recordIndex of state.records"
+          :key="recordIndex"
+        >
           <a
             class="smoke-signal__item"
             :href="`https://smokesignal.events/${profile?.did}/${Util.getRkey(record.uri)}`"

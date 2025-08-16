@@ -127,19 +127,23 @@ function getUserIcon (user: TTUser): string {
 
 function toggleOrSubmit (user: TTUser) {
   if (props.limit === 1) {
+    // eslint-disable-next-line
     props.users.push(user)
     close()
   } else {
     const index = props.users.findIndex((dst) => dst.did === user.did)
     if (index === - 1) {
+      // eslint-disable-next-line
       props.users.push(user)
     } else {
+      // eslint-disable-next-line
       props.users.splice(index, 1)
     }
   }
 }
 
 function unselect (index: number) {
+  // eslint-disable-next-line
   props.users.splice(index, 1)
 }
 </script>

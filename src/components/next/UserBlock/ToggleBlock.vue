@@ -34,6 +34,7 @@ async function block () {
     return
   }
   if (props.user != null) {
+    // eslint-disable-next-line
     props.user.viewer.blocking = response
   }
 }
@@ -57,6 +58,7 @@ async function unblock () {
     .filter((user: TTUser) => {
       return user.viewer.blocking !== props.user?.viewer.blocking
     })
+  // eslint-disable-next-line
   delete props.user.viewer.blocking
 }
 </script>

@@ -96,8 +96,8 @@ async function toggleThreadMute () {
       position="post"
       :post="post"
       :data-has-child="post.uri === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.uri"
-      @updateThisPostThread="updateThisPostThread"
-      @removeThisPost="removeThisPost"
+      @updateThisPostThread="updateThisPostThread as unknown"
+      @removeThisPost="removeThisPost as unknown"
     />
     <Loader v-if="mainState.listLoaderDisplay" />
   </div>

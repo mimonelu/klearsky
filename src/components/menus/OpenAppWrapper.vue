@@ -127,11 +127,15 @@ function openOtherApp (app: any) {
       @close="close"
     >
       <menu class="list-menu">
-        <template v-for="app of OTHER_APPS">
+        <template v-for="app, appIndex of OTHER_APPS">
           <template v-if="app[type] != null">
-            <hr v-if="app[type] === 'separator'" />
+            <hr
+              v-if="app[type] === 'separator'"
+              :key="`separator-${appIndex}`"
+            />
             <button
               v-else
+              :key="`button-${appIndex}`"
               @click.prevent.stop="openOtherApp(app)"
             >
               <SVGIcon

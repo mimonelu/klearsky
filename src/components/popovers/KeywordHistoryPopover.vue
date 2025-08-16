@@ -65,6 +65,7 @@ function select (keyword: string) {
 
 function remove (index: number) {
   close()
+  // eslint-disable-next-line
   props.keywords.splice(index, 1)
 }
 </script>

@@ -269,9 +269,9 @@ function onScrolledToBottom () {
             :post="post"
             :hasReplyIcon="post.record.reply != null"
             :hasQuoteRepostIcon="post.record.embed?.record != null"
-            @updateThisPostThread="updateThisPostThread"
-            @removeThisPost="removeThisPost"
-            @onActivateHashTag="updateSearchPostTerm"
+            @updateThisPostThread="updateThisPostThread as unknown"
+            @removeThisPost="removeThisPost as unknown"
+            @onActivateHashTag="updateSearchPostTerm as unknown"
           />
         </template>
       </div>

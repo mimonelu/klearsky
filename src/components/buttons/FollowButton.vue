@@ -29,6 +29,7 @@ async function toggleFollow () {
       mainState.openErrorPopup(response, "FollowButton/toggleFollow")
       return
     }
+    // eslint-disable-next-line
     props.viewer.following = undefined
   } else {
     const uri = await mainState.atp.createFollow(props.declarationDid)
@@ -37,6 +38,7 @@ async function toggleFollow () {
       mainState.openErrorPopup(uri, "FollowButton/toggleFollow")
       return
     }
+    // eslint-disable-next-line
     props.viewer.following = uri
   }
 }

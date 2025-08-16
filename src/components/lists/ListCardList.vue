@@ -64,6 +64,7 @@ function openListEditPopup () {
 }
 
 function addList (list: TTList) {
+  // eslint-disable-next-line
   props.lists.unshift(list)
 
   // セッションキャッシュの更新
@@ -137,7 +138,7 @@ function clicked (list?: TTList) {
         :orderButtonDisplay="false"
         @click="clicked(list)"
         @close="$emit('close')"
-        @deleteList="deleteList"
+        @deleteList="deleteList as unknown"
         @onActivateMention="$emit('onActivateMention')"
         @onActivateHashTag="$emit('onActivateHashTag')"
       >

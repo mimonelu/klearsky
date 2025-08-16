@@ -57,6 +57,7 @@ const easyFormProps: TTEasyForm = {
           .split(",")
           .map((label: string) => label.trim())
           .filter(Boolean)
+        // eslint-disable-next-line
         props.state.labels = props.state.labels
           .filter((label: string) => {
             return options.find((option: TTOption) => option.value === label)

@@ -11,6 +11,7 @@ const props = defineProps<{
 }>()
 
 function toggleReplyDisplay () {
+  // eslint-disable-next-line
   props.feed.__replyDisplay = !props.feed.__replyDisplay
 }
 
@@ -37,7 +38,10 @@ function removeThisPost (uri: string) {
     <div
       v-if="feed.__folding"
       class="folder"
-      @click="feed.__folding = !feed.__folding"
+      @click="
+        // eslint-disable-next-line
+        feed.__folding = !feed.__folding
+      "
     >
       <SVGIcon name="cursorDown" />
 
@@ -84,8 +88,8 @@ function removeThisPost (uri: string) {
           :post="feed.reply.root"
           :isInFeed="true"
           :data-has-child="feed.reply.root.uri === feed.reply?.parent?.record.reply?.parent?.uri"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
+          @updateThisPostThread="updateThisPostThread as unknown"
+          @removeThisPost="removeThisPost as unknown"
         />
 
         <!-- 親ポスト -->
@@ -102,8 +106,8 @@ function removeThisPost (uri: string) {
           "
           :isInFeed="true"
           :data-has-child="feed.reply.parent.uri === feed.post?.record?.reply?.parent?.uri"
-          @updateThisPostThread="updateThisPostThread"
-          @removeThisPost="removeThisPost"
+          @updateThisPostThread="updateThisPostThread as unknown"
+          @removeThisPost="removeThisPost as unknown"
         />
       </template>
 
@@ -115,9 +119,9 @@ function removeThisPost (uri: string) {
         :rootPost="feed.reply?.root"
         :parentPost="feed.reply?.parent"
         :isInFeed="true"
-        @onClickReplier="toggleReplyDisplay"
-        @updateThisPostThread="updateThisPostThread"
-        @removeThisPost="removeThisPost"
+        @onClickReplier="toggleReplyDisplay as unknown"
+        @updateThisPostThread="updateThisPostThread as unknown"
+        @removeThisPost="removeThisPost as unknown"
       />
     </template>
   </div>

@@ -63,6 +63,7 @@ const state = reactive<{
     })
 
     // プロフィールデータにキャッシュを保存
+    // eslint-disable-next-line
     props.profile.__whiteWind = results.records
 
     return results.records
@@ -80,7 +81,10 @@ const state = reactive<{
   >
     <template #body>
       <div class="white-wind__container">
-        <template v-for="record of state.records">
+        <template
+          v-for="record, recordIndex of state.records"
+          :key="recordIndex"
+        >
           <a
             class="white-wind__item"
             :href="record.value.__href"

@@ -23,6 +23,7 @@ async function toggleMute () {
       mainState.openErrorPopup(response, "ToggleMute/toggleMute")
       return
     }
+    // eslint-disable-next-line
     props.user.viewer.muted = false
 
     mainState.currentMutingUsers = mainState.currentMutingUsers
@@ -36,6 +37,7 @@ async function toggleMute () {
       mainState.openErrorPopup(response, "ToggleMute/toggleMute")
       return
     }
+    // eslint-disable-next-line
     props.user.viewer.muted = true
   }
 }

@@ -30,6 +30,7 @@ async function toggleMute () {
       mainState.openErrorPopup(response, "MuteButton/toggleMute")
       return
     }
+    // eslint-disable-next-line
     props.viewer.muted = false
 
     // ミュートユーザー一覧の更新
@@ -44,6 +45,7 @@ async function toggleMute () {
       mainState.openErrorPopup(response, "MuteButton/toggleMute")
       return
     }
+    // eslint-disable-next-line
     props.viewer.muted = true
   }
 }

@@ -45,6 +45,7 @@ const state = reactive<{
     }
 
     // プロフィールデータにキャッシュを保存
+    // eslint-disable-next-line
     props.profile.__linkat = cards
 
     return cards
@@ -61,7 +62,10 @@ const state = reactive<{
     :uri="`https://linkat.blue/${profile?.did}`"
   >
     <template #body>
-      <template v-for="record of state.records">
+      <template
+        v-for="record, recordIndex of state.records"
+        :key="recordIndex"
+      >
         <!-- リンクあり -->
         <a
           v-if="record.url"

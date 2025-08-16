@@ -28,7 +28,10 @@ function onChange () {
       :data-disabled="disabled ?? false"
     >
       <input
-        v-model="state[model]"
+        v-model="
+          // eslint-disable-next-line
+          state[model]
+        "
         type="checkbox"
         :name="model.toString()"
         :value="true"

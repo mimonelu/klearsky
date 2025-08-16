@@ -23,5 +23,3 @@ function onPaste (event: ClipboardEvent) {
   }
 }
 </script>
-
-<template />

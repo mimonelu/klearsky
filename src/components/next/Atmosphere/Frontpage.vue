@@ -45,6 +45,7 @@ const state = reactive<{
     }
 
     // プロフィールデータにキャッシュを保存
+    // eslint-disable-next-line
     props.profile.__frontpage = records
 
     return records
@@ -61,7 +62,10 @@ const state = reactive<{
     :uri="`https://frontpage.fyi/profile/${profile?.handle}`"
   >
     <template #body>
-      <template v-for="record of state.records">
+      <template
+        v-for="record, recordIndex of state.records"
+        :key="recordIndex"
+      >
         <a
           class="textlink--icon"
           :href="record.value?.url"
