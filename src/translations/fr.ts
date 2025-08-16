@@ -857,7 +857,7 @@ export default () => ({
   "imageCompressionError": "Erreur de compression d'image.",
   "invalidCidError": "CID invalide.",
   "invalidJwtError": "JWT invalide.",
-  "invalidUrlError": "URL invalide.",
+  "invalidUrlError": "URL invalide",
   "jwtDecodeError": "Erreur d'encodage JWT.",
   "jwtUpdateError": "Mets à jour ta session.\nReconnecte-toi.",
   "noJwtError": "JWT manquant. Reconnecte-toi.",

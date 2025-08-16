@@ -857,7 +857,7 @@ export default () => ({
   "imageCompressionError": "이미지 압축 중 오류가 발생했습니다.",
   "invalidCidError": "잘못된 CID입니다.",
   "invalidJwtError": "잘못된 JWT입니다.",
-  "invalidUrlError": "잘못된 URL입니다.",
+  "invalidUrlError": "잘못된 URL입니다",
   "jwtDecodeError": "JWT 인코딩에서 오류가 발생했습니다.",
   "jwtUpdateError": "세션을 업데이트합니다.\n로그인 폼에서 다시 로그인하세요.",
   "noJwtError": "JWT가 없습니다. 다시 로그인하세요.",

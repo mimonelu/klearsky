@@ -857,7 +857,7 @@ export default () => ({
   "imageCompressionError": "画像の圧縮中にエラーが発生しました。",
   "invalidCidError": "不正なCIDです。",
   "invalidJwtError": "不正なJWTです。",
-  "invalidUrlError": "不正なURLです。",
+  "invalidUrlError": "不正なURLです",
   "jwtDecodeError": "JWTのエンコードでエラーが発生しました。",
   "jwtUpdateError": "セッションをアップデートします。\nログインフォームから再ログインしてください。",
   "noJwtError": "JWTがありません。再ログインしてください。",

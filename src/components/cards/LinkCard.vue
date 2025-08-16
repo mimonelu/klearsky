@@ -171,7 +171,7 @@ function searchUrl () {
       class="external--invalid textlabel"
     >
       <div class="textlabel__text--alert">
-        <SVGIcon name="alert" />{{ $t("invalidUrlError") }}
+        <SVGIcon name="alert" />{{ $t("invalidUrlError") }} ({{ external.uri }})
       </div>
     </div>
 
@@ -374,7 +374,7 @@ function searchUrl () {
 
     <!-- 埋込型リンクカード - URL検索ボタン -->
     <button
-      v-if="!noLink"
+      v-if="!noLink && !isInvalidUrl"
       class="external__search-button"
       @click.prevent.stop="searchUrl"
     >
@@ -398,6 +398,7 @@ function searchUrl () {
     padding: 0.5em 0.75em;
     pointer-events: none;
     user-select: none;
+    word-break: break-all;
   }
 
   // 通常のリンクカード

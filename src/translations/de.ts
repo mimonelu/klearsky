@@ -857,7 +857,7 @@ export default () => ({
   "imageCompressionError": "Ein Fehler ist beim Komprimieren des Bildes aufgetreten.",
   "invalidCidError": "Ungültige CID.",
   "invalidJwtError": "Ungültiges JWT.",
-  "invalidUrlError": "Ungültige URL.",
+  "invalidUrlError": "Ungültige URL",
   "jwtDecodeError": "Ein Fehler ist beim JWT-Kodieren aufgetreten.",
   "jwtUpdateError": "Aktualisieren Sie Ihre Sitzung.\nBitte melden Sie sich über das Anmeldeformular erneut an.",
   "noJwtError": "JWT fehlt. Bitte melden Sie sich erneut an.",
