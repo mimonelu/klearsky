@@ -50,7 +50,7 @@ function onScrolledToBottom () {
       :menuDisplay="true"
       :detailDisplay="false"
       :orderButtonDisplay="false"
-      @deleteList="deleteList"
+      @deleteList="deleteList as unknown"
     />
     <div
       v-else
