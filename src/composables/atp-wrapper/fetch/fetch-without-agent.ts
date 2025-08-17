@@ -2,16 +2,21 @@ import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
-  pathToXrpc: string,
-  did: string,
-  query: Record<string, any>,
-  server?: string,
-  method?: "blob" | "json"
+  params: {
+    path: string
+    did: string
+    query: Record<string, any>
+    server?: string
+    method?: "blob" | "json"
+    bearer?: boolean
+  }
 ): Promise<Error | Response | any | Blob> {
-  const params = new URLSearchParams(query)
-  let host = server ?? "https://bsky.social"
-  if (server == null) {
-    const logJson = await this.fetchLogAudit(did)
+  const searchParams = new URLSearchParams(params.query)
+  let host = params.server ?? "https://bsky.social"
+
+  // `params.server` が指定されていない場合は所属PDSを取得
+  if (params.server == null) {
+    const logJson = await this.fetchLogAudit(params.did)
     if (!(logJson instanceof Error) && logJson != null) {
       host = (
         Array.isArray(logJson)
@@ -23,12 +28,25 @@ export default async function (
       ) ?? host
     }
   }
-  const url = `${host}/xrpc/${pathToXrpc}?${params}`
+  const url = `${host}/xrpc/${params.path}?${searchParams}`
+
+  // Bearer の付与
+  const headers = (
+    params.bearer === true &&
+    this.data.sessions[this.data.did]?.accessJwt != null
+  )
+    ? {
+      headers: {
+        Authorization: `Bearer ${this.data.sessions[this.data.did].accessJwt}`,
+      },
+    }
+    : undefined
+
   const response: Error | Response =
-    await Util.fetchWithTimeout(url)
+    await Util.fetchWithTimeout(url, headers)
       .then((value) => value)
       .catch((error) => error)
-  const logHeader = `[klearsky/${host}/xrpc/${pathToXrpc}]`
+  const logHeader = `[klearsky/${host}/xrpc/${params.path}]`
   if (response instanceof Error) {
     console.log(logHeader, response)
     return response
@@ -39,7 +57,7 @@ export default async function (
   }
 
   // JSON に変換する場合
-  if (method === "json") {
+  if (params.method === "json") {
     const json = await response.json()
       .then((value) => value)
       .catch((error) => error)
@@ -51,7 +69,7 @@ export default async function (
     return json
 
   // Blob に変換する場合
-  } else if (method === "blob") {
+  } else if (params.method === "blob") {
     const blob = await response.blob()
       .then((value) => value)
       .catch((error) => error)

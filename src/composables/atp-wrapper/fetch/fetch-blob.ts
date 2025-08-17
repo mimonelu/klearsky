@@ -14,13 +14,12 @@ export default async function (
     cid,
   }
 
-  const response = await this.fetchWithoutAgent(
-    "com.atproto.sync.getBlob",
+  const response = await this.fetchWithoutAgent({
+    path: "com.atproto.sync.getBlob",
     did,
     query,
-    undefined,
-    "blob"
-  )
+    method: "blob",
+  })
   if (response instanceof Error) {
     return response
   }

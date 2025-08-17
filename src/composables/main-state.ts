@@ -1478,11 +1478,11 @@ async function updateCurrentRepo () {
   if (state.currentProfile == null) {
     return
   }
-  const response = await state.atp.fetchWithoutAgent(
-    "com.atproto.repo.describeRepo",
-    state.currentProfile.did,
-    { repo: state.currentProfile.did }
-  )
+  const response = await state.atp.fetchWithoutAgent({
+    path: "com.atproto.repo.describeRepo",
+    did: state.currentProfile.did,
+    query: { repo: state.currentProfile.did },
+  })
     .then((value) => value)
     .catch((error) => error)
   if (response == null) {

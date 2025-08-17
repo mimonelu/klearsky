@@ -1331,7 +1331,7 @@ function changeSetting () {
           :url="state.sendPostPopupProps.url"
           :fileList="state.sendPostPopupProps.fileList"
           :createdAt="state.sendPostPopupProps.createdAt"
-          @closeSendPostPopup="closeSendPostPopup"
+          @closeSendPostPopup="closeSendPostPopup as unknown"
         />
       </Transition>
 
@@ -1354,7 +1354,6 @@ function changeSetting () {
           v-if="state.selectLabelsPopupDisplay"
           :state="state.selectLabelsPopupState"
           @close="state.closeSelectLabelsPopup"
-          @change=""
         />
       </Transition>
 
@@ -1386,7 +1385,7 @@ function changeSetting () {
         <ReactionControlPopup
           v-if="state.reactionControlPopupProps.display"
           v-bind="state.reactionControlPopupProps"
-          @close="state.closeReactionControlPopup"
+          @close="state.closeReactionControlPopup as unknown"
         />
       </Transition>
 
@@ -1485,8 +1484,8 @@ function changeSetting () {
         <LoginPopup
           v-if="state.loginPopupAutoDisplay"
           ref="loginPopup"
-          @signUp="signUp"
-          @login="manualLogin"
+          @signUp="signUp as unknown"
+          @login="manualLogin as unknown"
         />
       </Transition>
 

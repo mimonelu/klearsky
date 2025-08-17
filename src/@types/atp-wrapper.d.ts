@@ -213,11 +213,11 @@ interface TIAtpWrapper {
     fetchTrendingTopics
     (this: TIAtpWrapper, viewer?: string, limit?: number): Promise<Error | AppBskyUnspeccedGetTrendingTopics.OutputSchema>
   fetchUserSearch
-    (users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
+    (this: TIAtpWrapper, users: Array<TTUser>, q: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchVideoLimits
     (): Promise<Error | TIVideoLimits>
   fetchWithoutAgent
-    (pathToXrpc: string, did: string, query: Record<string, any>, server?: string, method?: "blob" | "json"): Promise<Error | Response | any | Blob>
+    (this: TIAtpWrapper, params: { path: string; did: string; query: Record<string, any>; server?: string; method?: "blob" | "json", bearer?: boolean }): Promise<Error | Response | any | Blob>
   hasLogin
     (): boolean
   leaveChatConvo

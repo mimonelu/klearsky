@@ -27,14 +27,12 @@ export default async function (
   if (reverse != null) {
     query.reverse = reverse
   }
-  const response =
-    await this.fetchWithoutAgent(
-      "com.atproto.repo.listRecords",
-      repo,
-      query as unknown as Record<string, string>,
-      undefined,
-      "json"
-    )
+  const response = await this.fetchWithoutAgent({
+    path: "com.atproto.repo.listRecords",
+    did: repo,
+    query: query as unknown as Record<string, string>,
+    method: "json",
+  })
   if (response instanceof Error) {
     return response
   }

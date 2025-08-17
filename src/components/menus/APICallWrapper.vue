@@ -64,21 +64,21 @@ async function activate (type: string) {
       break
     }
     case "resolveHandle": {
-      response = await mainState.atp.fetchWithoutAgent(
-        "com.atproto.identity.resolveHandle",
-        props.user.did,
-        { handle: props.user.handle }
-      )
+      response = await mainState.atp.fetchWithoutAgent({
+        path: "com.atproto.identity.resolveHandle",
+        did: props.user.did,
+        query: { handle: props.user.handle },
+      })
         .then((value) => value)
         .catch((error) => error)
       break
     }
     case "describeRepo": {
-      response = await mainState.atp.fetchWithoutAgent(
-        "com.atproto.repo.describeRepo",
-        props.user.did,
-        { repo: props.user.did }
-      )
+      response = await mainState.atp.fetchWithoutAgent({
+        path: "com.atproto.repo.describeRepo",
+        did: props.user.did,
+        query: { repo: props.user.did },
+      })
         .then((value) => value)
         .catch((error) => error)
       break
@@ -91,14 +91,14 @@ async function activate (type: string) {
       break
     }
     case "listRecords": {
-      response = await mainState.atp.fetchWithoutAgent(
-        "com.atproto.repo.listRecords",
-        props.user.did,
-        {
+      response = await mainState.atp.fetchWithoutAgent({
+        path: "com.atproto.repo.listRecords",
+        did: props.user.did,
+        query: {
           collection: "app.bsky.feed.post",
           repo: props.user.did,
-        }
-      )
+        },
+      })
         .then((value) => value)
         .catch((error) => error)
       break
@@ -112,64 +112,64 @@ async function activate (type: string) {
     }
     /* NOTICE: 重量過多のためコメントアウト
     case "getCheckout": {
-      response = await mainState.atp.fetchWithoutAgent(
-        "com.atproto.sync.getCheckout",
-        props.user.did,
-        { did: props.user.did }
-      )
+      response = await mainState.atp.fetchWithoutAgent({
+        path: "com.atproto.sync.getCheckout",
+        did: props.user.did,
+        query: { did: props.user.did },
+      })
         .then((value) => value)
         .catch((error) => error)
       break
     }
     */
     case "getHead": {
-      response = await mainState.atp.fetchWithoutAgent(
-        "com.atproto.sync.getHead",
-        props.user.did,
-        { did: props.user.did }
-      )
+      response = await mainState.atp.fetchWithoutAgent({
+        path: "com.atproto.sync.getHead",
+        did: props.user.did,
+        query: { did: props.user.did },
+      })
         .then((value) => value)
         .catch((error) => error)
       break
     }
     case "getLatestCommit": {
-      response = await mainState.atp.fetchWithoutAgent(
-        "com.atproto.sync.getLatestCommit",
-        props.user.did,
-        { did: props.user.did }
-      )
+      response = await mainState.atp.fetchWithoutAgent({
+        path: "com.atproto.sync.getLatestCommit",
+        did: props.user.did,
+        query: { did: props.user.did },
+      })
         .then((value) => value)
         .catch((error) => error)
       break
     }
     /* NOTICE: 重量過多のためコメントアウト
     case "getRepo": {
-      response = await mainState.atp.fetchWithoutAgent(
-        "com.atproto.sync.getRepo",
-        props.user.did,
-        { did: props.user.did }
-      )
+      response = await mainState.atp.fetchWithoutAgent({
+        path: "com.atproto.sync.getRepo",
+        did: props.user.did,
+        query: { did: props.user.did },
+      })
         .then((value) => value)
         .catch((error) => error)
       break
     }
     */
     case "listBlobs": {
-      response = await mainState.atp.fetchWithoutAgent(
-        "com.atproto.sync.listBlobs",
-        props.user.did,
-        { did: props.user.did }
-      )
+      response = await mainState.atp.fetchWithoutAgent({
+        path: "com.atproto.sync.listBlobs",
+        did: props.user.did,
+        query: { did: props.user.did },
+      })
         .then((value) => value)
         .catch((error) => error)
       break
     }
     case "listRepos": {
-      response = await mainState.atp.fetchWithoutAgent(
-        "com.atproto.sync.listBlobs",
-        props.user.did,
-        { did: props.user.did }
-      )
+      response = await mainState.atp.fetchWithoutAgent({
+        path: "com.atproto.sync.listBlobs",
+        did: props.user.did,
+        query: { did: props.user.did },
+      })
         .then((value) => value)
         .catch((error) => error)
       break
