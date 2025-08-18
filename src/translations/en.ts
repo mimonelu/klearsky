@@ -251,12 +251,12 @@ export default () => ({
   "searchSort": "Sort",
   "searchLang": "Search for this post language",
   "searchNoLang": "All languages",
-  "searchAuthor": "Search posts from a user",
+  "searchAuthor": "Search posts from this user",
   "searchMyPosts": "Search my posts",
-  "searchTo": "Search replies from a user",
-  "searchMentions": "Search mentions of a user",
+  "searchTo": "Search replies from this user",
+  "searchMentions": "Search mentions of this user",
   "searchMentionsToMe": "Search mentions of me",
-  "searchDomain": "Search posts containing a domain",
+  "searchDomain": "Search posts containing this domain",
   "searchSince": "Search start date",
   "searchUntil": "Search end date",
 
@@ -575,10 +575,10 @@ export default () => ({
   // ============================================================================
   "threadgate": "Control Replies",
   "threadgateNoAction": "Anyone can reply",
-  "threadgateCustomAction": "Only certain people can reply",
-  "threadgateAllowMention": "People you mentioned",
-  "threadgateAllowFollower": "People who follow you",
-  "threadgateAllowFollowing": "People who you follow",
+  "threadgateCustomAction": "Only certain users can reply",
+  "threadgateAllowMention": "Users you mentioned",
+  "threadgateAllowFollower": "Users who follow you",
+  "threadgateAllowFollowing": "Users who you follow",
   "threadgateNotification1": "You can select up to 5 targets to allow reply.",
   "threadgateNotification2": "If you don't check any options, only you will be able to reply.",
 
@@ -648,7 +648,7 @@ export default () => ({
   // NOTIFICATION FILTERS
   // ============================================================================
   "notificationFilter": "Notification Filter",
-  "notificationFilterList": "ON",
+  "notificationFilterList": "Receive this notification",
   "notificationFilterIncludeAll": "Everyone",
   "notificationFilterIncludeFollows": "Followings",
   "notificationFilterReply": "Reply notifications",
