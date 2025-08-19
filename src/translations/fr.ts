@@ -786,15 +786,6 @@ export default () => ({
   "atscanApp": "ATScan",
 
   // ============================================================================
-  // DOWNLOAD FEATURES
-  // ============================================================================
-  "downloadPostedImages": "Télécharger les images publiées",
-  "downloadPostedImagesOnConfirmation": "Télécharger les images publiées par cet utilisateur.\n\n* Cette fonction est uniquement pour usage personnel.\n* Les images seront compilées dans un fichier .zip.\n\n* Maximum 100 images sur les 1000 dernières publications.\n* Les partages ne sont pas inclus.\n* Téléchargement en qualité la plus basse.\n* Peut prendre plusieurs minutes.",
-  "downloadPostedImagesOnCancel": "Aucune image publiée par cet utilisateur.",
-  "downloadPostedImagesOnComplete": "Images téléchargées avec succès.",
-  "downloadPostedImagesOnProgress": "Téléchargement en cours...",
-
-  // ============================================================================
   // LIST MENTIONS
   // ============================================================================
   "listMention": "Mention de liste",

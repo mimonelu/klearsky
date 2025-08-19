@@ -786,15 +786,6 @@ export default () => ({
   "atscanApp": "ATScan",
 
   // ============================================================================
-  // DOWNLOAD FEATURES
-  // ============================================================================
-  "downloadPostedImages": "Download posted images",
-  "downloadPostedImagesOnConfirmation": "Download images posted by this user.\n\n* This feature is for personal viewing purposes only.\n* The images will be compiled into a .zip file.\n\n* Download up to 100 images out of the last 1000 posts.\n* Reposts are not included.\n* Download images of the lowest quality.\n* It may take several minutes to complete.",
-  "downloadPostedImagesOnCancel": "There were no images posted by this user.",
-  "downloadPostedImagesOnComplete": "Downloaded images posted by this user.",
-  "downloadPostedImagesOnProgress": "Now downloading...",
-
-  // ============================================================================
   // LIST MENTIONS
   // ============================================================================
   "listMention": "List mention",
