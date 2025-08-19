@@ -337,6 +337,8 @@ export default () => ({
   "autoTranslationRemarks4": "자세한 내용은 MyMemory 웹사이트를 확인하세요.",
   "autoTranslationIgnoreLanguage": "자동 번역 - 제외 언어",
   "translate": "번역",
+  "translating": "(번역 중)",
+  "translationFailed": "(번역 실패)",
 
   // ============================================================================
   // LABELS & MODERATION

@@ -1133,8 +1133,8 @@ function toggleOldestQuotedPostDisplay () {
           class="translated-text"
           dir="auto"
         >
-          <template v-if="state.translationStep === 'waiting'">（翻訳中）</template>
-          <template v-else-if="state.translationStep === 'failed'">（翻訳に失敗しました）</template>
+          <template v-if="state.translationStep === 'waiting'">{{ $t("translating") }}</template>
+          <template v-else-if="state.translationStep === 'failed'">{{ $t("translationFailed") }}</template>
           <template v-else-if="state.translationStep === 'done'">{{ props.post.__custom?.translatedText }}</template>
         </div>
 

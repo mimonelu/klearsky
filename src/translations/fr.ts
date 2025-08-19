@@ -337,6 +337,8 @@ export default () => ({
   "autoTranslationRemarks4": "Pour plus d'infos, consulte MyMemory.",
   "autoTranslationIgnoreLanguage": "Langues exclues de la traduction",
   "translate": "Traduire",
+  "translating": "(Traduction en cours)",
+  "translationFailed": "(Échec de la traduction)",
 
   // ============================================================================
   // LABELS & MODERATION

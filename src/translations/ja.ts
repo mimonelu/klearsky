@@ -337,6 +337,8 @@ export default () => ({
   "autoTranslationRemarks4": "詳しくはMyMemoryのWebサイトでご確認ください。",
   "autoTranslationIgnoreLanguage": "自動翻訳 - 除外する言語",
   "translate": "翻訳する",
+  "translating": "（翻訳中）",
+  "translationFailed": "（翻訳に失敗しました）",
 
   // ============================================================================
   // LABELS & MODERATION
