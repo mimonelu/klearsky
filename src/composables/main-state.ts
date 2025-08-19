@@ -2053,6 +2053,8 @@ function openPostPopover (selector: string | HTMLElement) {
 
 function closePostPopover () {
   state.postPopoverProps.display = false
+  state.postPopoverProps.post = undefined
+  state.postPopoverCallback = undefined
 }
 
 // ポップオーバー - フィードカードポップオーバー
