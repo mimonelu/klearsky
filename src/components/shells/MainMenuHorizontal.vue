@@ -83,12 +83,6 @@ async function openSendPostPopup () {
       to="/home"
     >
       <SVGIcon name="home" />
-
-      <!-- 新着フォロー中フィードバッジ -->
-      <div
-        v-if="mainState.hasTimelineNewArrival && !mainState.currentSetting.hideNotificationBadge"
-        class="timeline-new-arrival-badge"
-      />
     </RouterLink>
 
     <!-- 検索ボタン -->
@@ -222,18 +216,6 @@ async function openSendPostPopup () {
       font-size: 0.5rem;
     }
   }
-}
-
-// 新着フォロー中フィードバッジ
-.timeline-new-arrival-badge {
-  background-color: rgb(var(--notice-color));
-  border: 1px solid rgb(var(--bg-color));
-  border-radius: 100%;
-  position: absolute;
-  right: 0.625rem;
-  top: 0.625rem;
-  width: 0.625rem;
-  height: 0.625rem;
 }
 
 // 通知バッジ
