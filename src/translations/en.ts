@@ -595,7 +595,7 @@ export default () => ({
   "postSettings": "Post Settings",
   "timeSettings": "Time Settings",
   "psySafetySettings": "Psychological Safety",
-  "etcSettings": "Others Settings",
+  "etcSettings": "Other Settings",
   "font": "Font",
   "fontSize": "Font Size",
   "fontSizeSmall": "Small",
