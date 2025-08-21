@@ -210,6 +210,7 @@ export const state: MainState = reactive<MainState>({
 
   // 検索 - 現在のポスト検索フォーム
   currentSearchPostFormState: {
+    text: undefined,
     sort: "latest",
     lang: "",
     author: "",
@@ -909,7 +910,7 @@ function saveSettings () {
     state.settings[did].autoTranslationIgnoreLanguage = undefined
   }
   if (state.settings[did].chatFetchInterval == null) {
-    state.settings[did].chatFetchInterval = 30000
+    state.settings[did].chatFetchInterval = 60000
   }
   if (state.settings[did].contentLanguages == null) {
     state.settings[did].contentLanguages = []
