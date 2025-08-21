@@ -1,4 +1,5 @@
 import type { AppBskyActorProfile, BlobRef } from "@atproto/api"
+import CONSTS from "@/consts/consts.json"
 
 export default async function (
   this: TIAtpWrapper,
@@ -43,7 +44,7 @@ export default async function (
           file: params.avatar[0],
           maxWidth: 2000,
           maxHeight: 2000,
-          maxSize: 0.953671875,
+          maxSize: CONSTS.MAX_IMAGE_FILE_SIZE,
         })
       : null,
     params.banner != null && params.banner[0] != null
@@ -51,7 +52,7 @@ export default async function (
           file: params.banner[0],
           maxWidth: 3000,
           maxHeight: 1000,
-          maxSize: 0.953671875,
+          maxSize: CONSTS.MAX_IMAGE_FILE_SIZE,
         })
       : null,
   ])

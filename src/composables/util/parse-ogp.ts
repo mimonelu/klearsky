@@ -1,4 +1,5 @@
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 export default async function (
   atpWrapper: TIAtpWrapper,
@@ -71,7 +72,7 @@ export default async function (
       file: blob as File,
       maxWidth: 2000,
       maxHeight: 2000,
-      maxSize: 0.953671875,
+      maxSize: CONSTS.MAX_IMAGE_FILE_SIZE,
     })
     if (blobRef instanceof Error) {
       return blobRef
