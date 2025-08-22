@@ -251,17 +251,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         >
           <span>(SkyFeed)</span>
         </a>
-
-        <!-- Starrysky ラベル -->
-        <a
-          v-if="generator.did === 'did:web:starrysky-proxy.usounds.work'"
-          class="feed-card__creator__via textlink--underline"
-          href="https://starrysky-console.pages.dev/"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <span>(Starrysky)</span>
-        </a>
       </div>
     </div>
 
