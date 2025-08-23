@@ -52,6 +52,11 @@ const SCHEMES: {
     label: "goodfeeds",
     href: "https://goodfeeds.jcsalterego.workers.dev/",
   },
+  "did:web:www.bluefeed.app": {
+    label: "Bluefeed",
+    href: "https://www.bluefeed.app/",
+    favicon: "https://www.bluefeed.app/favicon.ico",
+  },
 }
 
 const props = defineProps<{
