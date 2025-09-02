@@ -26,10 +26,10 @@ export default function (
 
       // URLから自動判定して atproto-proxy ヘッダーを付与
       const urlString = (url as URL).href ?? (url as Request).url
-      if (urlString?.includes("/xrpc/app.bsky.")) {
-        headers.set("atproto-proxy", this.proxies.appview ?? "")
-      } else if (urlString?.includes("/xrpc/chat.bsky.")) {
-        headers.set("atproto-proxy", this.proxies.chat ?? "")
+      if (urlString?.includes("/xrpc/app.bsky.") && this.proxies.appview) {
+        headers.set("atproto-proxy", this.proxies.appview)
+      } else if (urlString?.includes("/xrpc/chat.bsky.") && this.proxies.chat) {
+        headers.set("atproto-proxy", this.proxies.chat)
       }
 
       return Util.fetchWithTimeout(url, { ...init, headers })
