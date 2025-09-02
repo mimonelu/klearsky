@@ -21,7 +21,19 @@ export default function (
 
       this.resetSession(session, service)
     },
-    fetch: Util.fetchWithTimeout,
+    fetch: async (url, init) => {
+      const headers = new Headers(init?.headers ?? (url as Request).headers)
+
+      // URLから自動判定して atproto-proxy ヘッダーを付与
+      const urlString = (url as URL).href ?? (url as Request).url
+      if (urlString?.includes("/xrpc/app.bsky.")) {
+        headers.set("atproto-proxy", this.proxies.appview ?? "")
+      } else if (urlString?.includes("/xrpc/chat.bsky.")) {
+        headers.set("atproto-proxy", this.proxies.chat ?? "")
+      }
+
+      return Util.fetchWithTimeout(url, { ...init, headers })
+    },
   })
   return this.agent != null
 }
