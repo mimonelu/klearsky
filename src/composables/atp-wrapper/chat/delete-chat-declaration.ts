@@ -13,9 +13,6 @@ export default async function (
   }
   const rkey = Util.getRkey(uri)
   const headers: Record<string, string> = {}
-  if (this.proxies.chat != null) {
-    headers["atproto-proxy"] = this.proxies.chat
-  }
   const response: Error | undefined =
     await this.agent.chat.bsky.actor.declaration.delete({
       repo,

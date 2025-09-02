@@ -20,9 +20,6 @@ export default async function (
     query.cursor = cursor
   }
   const options: ChatBskyConvoGetMessages.CallOptions = { headers: {} }
-  if (options.headers != null && this.proxies.chat != null) {
-    options.headers["atproto-proxy"] = this.proxies.chat
-  }
   const response: Error | ChatBskyConvoGetMessages.Response =
     await this.agent.chat.bsky.convo.getMessages(query, options)
       .then((value) => value)

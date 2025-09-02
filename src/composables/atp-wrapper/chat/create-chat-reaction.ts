@@ -21,9 +21,6 @@ export default async function (
     headers: {},
     encoding: "application/json",
   }
-  if (options.headers != null && this.proxies.chat != null) {
-    options.headers["atproto-proxy"] = this.proxies.chat
-  }
   const response: Error | ChatBskyConvoAddReaction.Response =
     await this.agent.chat.bsky.convo.addReaction(query, options)
       .then((value) => value)

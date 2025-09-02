@@ -12,9 +12,6 @@ export default async function (
   }
   const query: ChatBskyConvoGetConvoForMembers.QueryParams = { members }
   const options: ChatBskyConvoGetConvoForMembers.CallOptions = { headers: {} }
-  if (options.headers != null && this.proxies.chat != null) {
-    options.headers["atproto-proxy"] = this.proxies.chat
-  }
   const response: Error | ChatBskyConvoGetConvoForMembers.Response =
     await this.agent.chat.bsky.convo.getConvoForMembers(query, options)
       .then((value) => value)
