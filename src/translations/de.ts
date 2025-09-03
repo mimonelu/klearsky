@@ -712,15 +712,15 @@ export default () => ({
   "globallineLayoutSlim": "Schlank",
 
   // ============================================================================
-  // CUSTOM_BOOKMARKS
+  // BOOKMARKS
   // ============================================================================
-  "customBookmark": "Lesezeichen",
-  "noCustomBookmark": "Keine Lesezeichen",
-  "deleteCustomBookmark": "Lesezeichen löschen",
-  "customBookmarkManagement": "Lesezeichen verwalten",
-  "customBookmarkManagementDetail": "Lesezeichen hinzufügen/aktualisieren",
-  "addingCustomBookmarkTag": "Neues Lesezeichen-Tag",
-  "customBookmarkOutputConfirmation": "Die geladenen Beiträge als SkyFeed JSON in die Zwischenablage kopieren. (Bis zu den neuesten 30 Beiträgen)",
+  "bookmark": "Lesezeichen",
+  "noBookmark": "Keine Lesezeichen",
+  "deleteBookmark": "Lesezeichen löschen",
+  "bookmarkManagement": "Lesezeichen verwalten",
+  "bookmarkManagementDetail": "Lesezeichen hinzufügen/aktualisieren",
+  "addingBookmarkTag": "Neues Lesezeichen-Tag",
+  "bookmarkOutputConfirmation": "Die geladenen Beiträge als SkyFeed JSON in die Zwischenablage kopieren. (Bis zu den neuesten 30 Beiträgen)",
 
   // ============================================================================
   // MY WORDS

@@ -1,16 +1,16 @@
-interface TICustomBookmarkPack {
-  bookmark: TICustomBookmark
+interface TIBookmarkPack {
+  bookmark: TIBookmark
   post?: TTPost
 }
 
-interface TICustomBookmark {
+interface TIBookmark {
   createdAt: string
   uri: string
   cid?: string
   tags?: Array<string>
 }
 
-interface TICustomBookmarkManagementPopupProps {
+interface TIBookmarkManagementPopupProps {
   display: boolean
   post?: TTPost
 }

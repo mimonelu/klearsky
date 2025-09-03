@@ -12,28 +12,28 @@ const props = defineProps<{
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  isCustomBookmark: ComputedRef<boolean>
+  isBookmark: ComputedRef<boolean>
 }>({
-  isCustomBookmark: computed((): boolean => {
-    return mainState.currentCustomBookmarkPacks.some((pack) => {
+  isBookmark: computed((): boolean => {
+    return mainState.currentBookmarkPacks.some((pack) => {
       return pack.bookmark.uri === props.uri
     })
   }),
 })
 
-async function deleteCustomBookmark () {
+async function deleteBookmark () {
   Util.blurElement()
   emit("close")
-  mainState.postPopoverCallback?.("deleteCustomBookmark")
+  mainState.postPopoverCallback?.("deleteBookmark")
 }
 </script>
 
 <template>
   <button
-    v-if="state.isCustomBookmark"
-    @click.stop="deleteCustomBookmark"
+    v-if="state.isBookmark"
+    @click.stop="deleteBookmark"
   >
     <SVGIcon name="bookmarkOff" />
-    <span>{{ $t("deleteCustomBookmark") }}</span>
+    <span>{{ $t("deleteBookmark") }}</span>
   </button>
 </template>

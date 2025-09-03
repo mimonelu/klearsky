@@ -602,7 +602,7 @@ function openPostPopover ($event: Event) {
   mainState.openPostPopover($event.target)
 }
 
-async function postPopoverCallback (type: "deletePost" | "updatePost" | "createCustomBookmark" | "deleteCustomBookmark") {
+async function postPopoverCallback (type: "deletePost" | "updatePost" | "createBookmark" | "deleteBookmark") {
   switch (type) {
     case "deletePost": {
       await deletePost(props.post.uri)
@@ -612,12 +612,12 @@ async function postPopoverCallback (type: "deletePost" | "updatePost" | "createC
       await updatePost()
       break
     }
-    case "createCustomBookmark": {
-      await createCustomBookmark(props.post.uri, props.post.cid)
+    case "createBookmark": {
+      await createBookmark(props.post.uri, props.post.cid)
       break
     }
-    case "deleteCustomBookmark": {
-      await deleteCustomBookmark(props.post.uri)
+    case "deleteBookmark": {
+      await deleteBookmark(props.post.uri)
       break
     }
   }
@@ -680,22 +680,22 @@ async function updatePostThread () {
   emit("updateThisPostThread", posts)
 }
 
-async function createCustomBookmark (uri: string, cid: string) {
+async function createBookmark (uri: string, cid: string) {
   if (processing.value) {
     return
   }
   processing.value = true
   const tags = ["demo"]
-  const response = await mainState.atp.updateCustomBookmarks(uri, cid, tags)
+  const response = await mainState.atp.updateBookmarks(uri, cid, tags)
   processing.value = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "Post/createCustomBookmark")
+    mainState.openErrorPopup(response, "Post/createBookmark")
     return
   }
-  if (mainState.currentCustomBookmarkPacks.every((pack) => {
+  if (mainState.currentBookmarkPacks.every((pack) => {
     return pack.bookmark.uri !== uri
   })) {
-    mainState.currentCustomBookmarkPacks.unshift({
+    mainState.currentBookmarkPacks.unshift({
       bookmark: {
         createdAt: new Date().toISOString(),
         uri: props.post.uri,
@@ -707,27 +707,27 @@ async function createCustomBookmark (uri: string, cid: string) {
   }
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("customBookmarkPacks", mainState.currentCustomBookmarkPacks)
+  mainState.myWorker!.setSessionCache("bookmarkPacks", mainState.currentBookmarkPacks)
 }
 
-async function deleteCustomBookmark (uri: string) {
+async function deleteBookmark (uri: string) {
   if (processing.value) {
     return
   }
   processing.value = true
-  const response = await mainState.atp.deleteCustomBookmark(uri)
+  const response = await mainState.atp.deleteBookmark(uri)
   processing.value = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "Post/deleteCustomBookmark")
+    mainState.openErrorPopup(response, "Post/deleteBookmark")
     return
   }
-  mainState.currentCustomBookmarkPacks = mainState.currentCustomBookmarkPacks
+  mainState.currentBookmarkPacks = mainState.currentBookmarkPacks
     .filter((pack) => {
       return pack.bookmark.uri !== uri
     })
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("customBookmarkPacks", mainState.currentCustomBookmarkPacks)
+  mainState.myWorker!.setSessionCache("bookmarkPacks", mainState.currentBookmarkPacks)
 }
 
 // 画像ポップアップ

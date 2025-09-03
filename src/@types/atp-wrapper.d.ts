@@ -45,14 +45,14 @@ interface TIAtpWrapper {
     (did?: string)
   deleteActorStatus
     (did: string): Promise<Error | undefined>
+  deleteBookmark
+    (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   deleteChatDeclaration
     (repo: string, uri: string): Promise<Error | undefined>
   deleteChatMessage
     (convoId: string, messageId: string): Promise<Error | undefined>
   deleteChatReaction
     (convoId: string, messageId: string, value: string): Promise<Error | TIChatMessage>
-  deleteCustomBookmark
-    (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   deleteFollow
     (uri: string): Promise<Error | undefined>
   deleteLike
@@ -97,6 +97,8 @@ interface TIAtpWrapper {
     (did: string, image: BlobRef): Promise<Error | string>
   fetchBlockingUsers
     (users: Array<TTUser>, limit?: number, cursor?: string): Promise<Error | undefined | string>
+  fetchBookmarkPacks
+    (this: TIAtpWrapper, currentBookmarkPacks: Array<TIBookmarkPack>, did: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchChatConvo
     (members: Array<string>): Promise<Error | TIChatConvo>
   fetchChatConvos
@@ -107,8 +109,6 @@ interface TIAtpWrapper {
     (cursor?: string): Promise<Error | Array<TIChatLog>>
   fetchChatMessages
     (convoId: string, limit?: number, cursor?: string): Promise<Error | { cursor?: string; messages: Array<TIChatMessage> }>
-  fetchCustomBookmarkPacks
-    (this: TIAtpWrapper, currentCustomBookmarkPacks: Array<TICustomBookmarkPack>, did: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchCustomFeeds
     (oldFeeds: Array<TTFeed>, feed: string, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<Error | undefined | string>
   fetchDid
@@ -244,10 +244,10 @@ interface TIAtpWrapper {
     (uri: string): Promise<Error | undefined>
   updateBlockToEnable
     (did: string): Promise<Error | string>
+  updateBookmarks
+    (this: TIAtpWrapper, uri: string, cid?: string, tags?: Array<string>): Promise<Error | TTCidUri>
   updateChatConvoRead
     (convoId: string, messageId?: string): Promise<Error | TIChatConvo>
-  updateCustomBookmarks
-    (this: TIAtpWrapper, uri: string, cid?: string, tags?: Array<string>): Promise<Error | TTCidUri>
   updateJwt
     (onRefreshSession?: () => void): Promise<Error | undefined>
   updateList

@@ -110,7 +110,7 @@ Klearsky is deployed on Cloudflare Pages with automatic deployments from the mai
 Klearsky implements several custom AT Protocol records and fields:
 
 ### Custom Records (Collections)
-- `space.aoisora.bookmark` - Custom bookmark system for saving posts
+- `space.aoisora.bookmark` - Custom bookmark system for saving posts (deprecated)
 - `space.aoisora.preference.feed.extra` - Storage for trending page and global feed preferences
 
 ### Custom Fields

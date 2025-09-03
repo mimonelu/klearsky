@@ -16,8 +16,8 @@ import ChatListPopup from "@/components/popups/ChatListPopup.vue"
 import ChatMembersSelectPopup from "@/components/popups/ChatMembersSelectPopup.vue"
 import ChatMessagePopover from "@/components/popovers/ChatMessagePopover.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
-import CustomBookmarkPopup from "@/components/popups/CustomBookmarkPopup.vue"
-import CustomBookmarkManagementPopup from "@/components/popups/CustomBookmarkManagementPopup.vue"
+import BookmarkPopup from "@/components/popups/BookmarkPopup.vue"
+import BookmarkManagementPopup from "@/components/popups/BookmarkManagementPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import DropFiles from "@/components/next/DropFiles/DropFiles.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
@@ -380,18 +380,18 @@ async function processAfterLogin () {
         })
     })
 
-  // カスタムブックマークの取得
-  // TODO: ここで取得したくないが、カスタムブックマークトリガーの出し分けで必要。要検討
-  if (state.currentCustomBookmarkPacks.length === 0) {
-    state.atp.fetchCustomBookmarkPacks(
-      state.currentCustomBookmarkPacks,
+  // ブックマークの取得
+  // TODO: ここで取得したくないが、ブックマークトリガーの出し分けで必要。要検討
+  if (state.currentBookmarkPacks.length === 0) {
+    state.atp.fetchBookmarkPacks(
+      state.currentBookmarkPacks,
       state.atp.session!.did,
       100,
       undefined
     )
       .then(() => {
         // セッションキャッシュの設定
-        state.myWorker!.setSessionCache("customBookmarkPacks", state.currentCustomBookmarkPacks)
+        state.myWorker!.setSessionCache("bookmarkPacks", state.currentBookmarkPacks)
       })
   }
 
@@ -1068,20 +1068,20 @@ function changeSetting () {
         />
       </Transition>
 
-      <!-- カスタムブックマークポップアップ -->
+      <!-- ブックマークポップアップ -->
       <Transition>
-        <CustomBookmarkPopup
-          v-if="state.customBookmarkPopupDisplay"
-          @close="state.closeCustomBookmarkPopup"
+        <BookmarkPopup
+          v-if="state.bookmarkPopupDisplay"
+          @close="state.closeBookmarkPopup"
         />
       </Transition>
 
-      <!-- カスタムブックマーク管理ポップアップ -->
+      <!-- ブックマーク管理ポップアップ -->
       <Transition>
-        <CustomBookmarkManagementPopup
-          v-if="state.customBookmarkManagementPopupProps.display"
-          v-bind="state.customBookmarkManagementPopupProps"
-          @close="state.closeCustomBookmarkManagementPopup"
+        <BookmarkManagementPopup
+          v-if="state.bookmarkManagementPopupProps.display"
+          v-bind="state.bookmarkManagementPopupProps"
+          @close="state.closeBookmarkManagementPopup"
         />
       </Transition>
 

@@ -15,7 +15,7 @@ function onActivate () {
     emit("close")
     return
   }
-  mainState.openCustomBookmarkManagementPopup({
+  mainState.openBookmarkManagementPopup({
     post: props.post,
   })
   emit("close")
@@ -25,6 +25,6 @@ function onActivate () {
 <template>
   <button @click.prevent.stop="onActivate">
     <SVGIcon name="bookmark" />
-    <span>{{ $t("customBookmarkManagement") }}</span>
+    <span>{{ $t("bookmarkManagement") }}</span>
   </button>
 </template>

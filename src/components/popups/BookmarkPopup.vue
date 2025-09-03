@@ -16,18 +16,18 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   processing: boolean
   postContainer: ComputedRef<undefined | HTMLElement>
-  customBookmarkTag?: string
-  customBookmarkTags: ComputedRef<Array<undefined | string>>
-  customBookmarkPacks: ComputedRef<Array<TICustomBookmarkPack>>
+  bookmarkTag?: string
+  bookmarkTags: ComputedRef<Array<undefined | string>>
+  bookmarkPacks: ComputedRef<Array<TIBookmarkPack>>
 }>({
   processing: false,
   postContainer: computed((): undefined | HTMLElement => {
     return postContainer.value?.closest(".popup-body") ?? undefined
   }),
-  customBookmarkTag: undefined,
-  customBookmarkTags: computed((): Array<undefined | string> => {
+  bookmarkTag: undefined,
+  bookmarkTags: computed((): Array<undefined | string> => {
     const tags: Set<undefined | string> = new Set()
-    mainState.currentCustomBookmarkPacks.forEach((pack) => {
+    mainState.currentBookmarkPacks.forEach((pack) => {
       if (pack.bookmark.tags == null) {
         return
       }
@@ -40,12 +40,12 @@ const state = reactive<{
       ...tags
     ]
   }),
-  customBookmarkPacks: computed((): Array<TICustomBookmarkPack> => {
-    return mainState.currentCustomBookmarkPacks
+  bookmarkPacks: computed((): Array<TIBookmarkPack> => {
+    return mainState.currentBookmarkPacks
       .filter((pack) => {
         return (
-          state.customBookmarkTag == null ||
-          pack.bookmark.tags?.includes(state.customBookmarkTag)
+          state.bookmarkTag == null ||
+          pack.bookmark.tags?.includes(state.bookmarkTag)
         )
       })
   }),
@@ -56,7 +56,7 @@ const popup = ref()
 const postContainer = ref()
 
 onBeforeMount(async () => {
-  if (mainState.currentCustomBookmarkPacks.length === 0) {
+  if (mainState.currentBookmarkPacks.length === 0) {
     await fetchContinuousResults("new")
   }
 })
@@ -71,73 +71,73 @@ async function fetchContinuousResults (direction: "new" | "old") {
     return
   }
   state.processing = true
-  const cursor = await mainState.atp.fetchCustomBookmarkPacks(
-    mainState.currentCustomBookmarkPacks,
+  const cursor = await mainState.atp.fetchBookmarkPacks(
+    mainState.currentBookmarkPacks,
     mainState.atp.session!.did,
-    CONSTS.LIMIT_OF_FETCH_CUSTOM_BOOKMARKS,
-    direction === "old" ? mainState.currentCustomBookmarkPacksCursor : undefined
+    CONSTS.LIMIT_OF_FETCH_BOOKMARKS,
+    direction === "old" ? mainState.currentBookmarkPacksCursor : undefined
   )
   state.processing = false
   if (cursor instanceof Error) {
-    mainState.openErrorPopup(cursor, "customBookmarkPopup/fetchContinuousResults")
+    mainState.openErrorPopup(cursor, "BookmarkPopup/fetchContinuousResults")
     return
   }
   if (cursor != null && (
     direction === "old" || (
       direction === "new" &&
-      mainState.currentCustomBookmarkPacksCursor == null
+      mainState.currentBookmarkPacksCursor == null
     )
   )) {
-    mainState.currentCustomBookmarkPacksCursor = cursor
+    mainState.currentBookmarkPacksCursor = cursor
   }
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("customBookmarkPacks", mainState.currentCustomBookmarkPacks)
+  mainState.myWorker!.setSessionCache("bookmarkPacks", mainState.currentBookmarkPacks)
 }
 
 function scrolledToBottom () {
   fetchContinuousResults("old")
 }
 
-function setCustomBookmarkTag (tag?: string) {
-  state.customBookmarkTag = tag
+function setBookmarkTag (tag?: string) {
+  state.bookmarkTag = tag
   popup.value.scrollToTop()
 }
 
-async function deleteCustomBookmark (uri: string) {
+async function deleteBookmark (uri: string) {
   Util.blurElement()
   if (state.processing) {
     return
   }
   state.processing = true
-  const response = await mainState.atp.deleteCustomBookmark(uri)
+  const response = await mainState.atp.deleteBookmark(uri)
   state.processing = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "CustomBookmarkPopup/deleteCustomBookmark")
+    mainState.openErrorPopup(response, "BookmarkPopup/deleteBookmark")
     return
   }
-  mainState.currentCustomBookmarkPacks = mainState.currentCustomBookmarkPacks
+  mainState.currentBookmarkPacks = mainState.currentBookmarkPacks
     .filter((pack) => {
       return pack.bookmark.uri !== uri
     })
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("customBookmarkPacks", mainState.currentCustomBookmarkPacks)
+  mainState.myWorker!.setSessionCache("bookmarkPacks", mainState.currentBookmarkPacks)
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
-  mainState.currentCustomBookmarkPacks.forEach((pack, index) => {
+  mainState.currentBookmarkPacks.forEach((pack, index) => {
     const newPost = newPosts.find((newPost) => {
       return newPost.uri === pack.post?.uri
     })
     if (newPost != null) {
-      Util.updatePostProps(mainState.currentCustomBookmarkPacks[index].post as TTPost, newPost)
+      Util.updatePostProps(mainState.currentBookmarkPacks[index].post as TTPost, newPost)
     }
   })
 }
 
 function removeThisPost (uri: string) {
-  mainState.currentCustomBookmarkPacks = mainState.currentCustomBookmarkPacks
+  mainState.currentBookmarkPacks = mainState.currentBookmarkPacks
     .filter((pack) => {
       return pack.post?.uri !== uri
     })
@@ -146,11 +146,11 @@ function removeThisPost (uri: string) {
 async function outputJsonForSkyFeed () {
   Util.blurElement()
   if (!(await mainState.openConfirmationPopup({
-    text: $t("customBookmarkOutputConfirmation"),
+    text: $t("bookmarkOutputConfirmation"),
   }))) {
     return
   }
-  const blocks = state.customBookmarkPacks
+  const blocks = state.bookmarkPacks
     .filter((pack) => {
       return pack.post != null
     })
@@ -178,7 +178,7 @@ async function outputJsonForSkyFeed () {
 
 <template>
   <Popup
-    class="custom-bookmark-popup"
+    class="bookmark-popup"
     ref="popup"
     :hasCloseButton="true"
     @close="close"
@@ -195,7 +195,7 @@ async function outputJsonForSkyFeed () {
 
       <h2>
         <SVGIcon name="bookmark" />
-        <span>{{ $t("customBookmark") }}</span>
+        <span>{{ $t("bookmark") }}</span>
       </h2>
     </template>
     <template #header-after>
@@ -205,13 +205,13 @@ async function outputJsonForSkyFeed () {
         ref="sliderMenu"
       >
         <template
-          v-for="tag, tagIndex of state.customBookmarkTags"
+          v-for="tag, tagIndex of state.bookmarkTags"
           :key="tagIndex"
         >
           <button
             class="slider-menu__link"
-            :data-is-selected-on-button="tag === state.customBookmarkTag"
-            @click.stop="setCustomBookmarkTag(tag)"
+            :data-is-selected-on-button="tag === state.bookmarkTag"
+            @click.stop="setBookmarkTag(tag)"
           >
             <SVGIcon name="bookmark" />
             <span>{{ tag ?? "All" }}</span>
@@ -227,21 +227,21 @@ async function outputJsonForSkyFeed () {
     </template>
     <template #body>
       <div
-        class="custom-bookmark-popup__posts"
+        class="bookmark-popup__posts"
         ref="postContainer"
       >
         <!-- ブックマークなし -->
-        <template v-if="state.customBookmarkPacks.length === 0">
+        <template v-if="state.bookmarkPacks.length === 0">
           <div class="no-bookmark textlabel">
             <div class="textlabel__text">
-              <SVGIcon name="alert" />{{ $t("noCustomBookmark") }}
+              <SVGIcon name="alert" />{{ $t("noBookmark") }}
             </div>
           </div>
         </template>
 
         <template v-else>
           <template
-            v-for="pack of state.customBookmarkPacks"
+            v-for="pack of state.bookmarkPacks"
             :key="pack.bookmark.uri"
           >
             <Post
@@ -267,7 +267,7 @@ async function outputJsonForSkyFeed () {
               <button
                 type="button"
                 class="post-not-exists__button button--important"
-                @click.stop="deleteCustomBookmark(pack.bookmark.uri)"
+                @click.stop="deleteBookmark(pack.bookmark.uri)"
               >
                 <SVGIcon name="remove" />
                 <span>{{ $t("delete") }}</span>
@@ -288,7 +288,7 @@ async function outputJsonForSkyFeed () {
 </template>
 
 <style lang="scss" scoped>
-.custom-bookmark-popup:deep() {
+.bookmark-popup:deep() {
   .popup {
     &-header > h2 > .svg-icon {
       fill: rgb(var(--post-color));

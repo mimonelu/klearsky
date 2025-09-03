@@ -22,7 +22,7 @@ import deleteActorStatus from "@/composables/atp-wrapper/delete/delete-actor-sta
 import deleteChatDeclaration from "@/composables/atp-wrapper/chat/delete-chat-declaration"
 import deleteChatMessage from "@/composables/atp-wrapper/chat/delete-chat-message"
 import deleteChatReaction  from "@/composables/atp-wrapper/chat/delete-chat-reaction"
-import deleteCustomBookmark from "@/composables/atp-wrapper/delete/delete-custom-bookmark"
+import deleteBookmark from "@/composables/atp-wrapper/delete/delete-bookmark"
 import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
 import deleteList from "@/composables/atp-wrapper/delete/delete-list"
@@ -50,7 +50,7 @@ import fetchChatConvos from "@/composables/atp-wrapper/chat/fetch-chat-convos"
 import fetchChatDeclarations from "@/composables/atp-wrapper/chat/fetch-chat-declarations"
 import fetchChatLogs from "@/composables/atp-wrapper/chat/fetch-chat-logs"
 import fetchChatMessages from "@/composables/atp-wrapper/chat/fetch-chat-messages"
-import fetchCustomBookmarkPacks from "@/composables/atp-wrapper/fetch/fetch-custom-bookmark-packs"
+import fetchBookmarkPacks from "@/composables/atp-wrapper/fetch/fetch-bookmark-packs"
 import fetchCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-custom-feeds"
 import fetchDid from "@/composables/atp-wrapper/fetch/fetch-did"
 import fetchFeedGenerator from "@/composables/atp-wrapper/fetch/fetch-feed-generator"
@@ -116,7 +116,7 @@ import unmuteChatConvo from "@/composables/atp-wrapper/chat/unmute-chat-convo"
 import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
 import updateChatConvoRead from "@/composables/atp-wrapper/chat/update-chat-convo-read"
-import updateCustomBookmarks from "@/composables/atp-wrapper/update/update-custom-bookmark"
+import updateBookmarks from "@/composables/atp-wrapper/update/update-bookmark"
 import updateJwt from "@/composables/atp-wrapper/session/update-jwt"
 import updateList from "@/composables/atp-wrapper/update/update-list"
 import updateListBlockToDisable from "@/composables/atp-wrapper/update/update-list-block-to-disable"
@@ -198,7 +198,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteChatDeclaration = deleteChatDeclaration
   deleteChatMessage = deleteChatMessage
   deleteChatReaction = deleteChatReaction
-  deleteCustomBookmark = deleteCustomBookmark
+  deleteBookmark = deleteBookmark
   deleteFollow = deleteFollow
   deleteLike = deleteLike
   deleteList = deleteList
@@ -226,7 +226,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchChatDeclarations = fetchChatDeclarations
   fetchChatLogs = fetchChatLogs
   fetchChatMessages = fetchChatMessages
-  fetchCustomBookmarkPacks = fetchCustomBookmarkPacks
+  fetchBookmarkPacks = fetchBookmarkPacks
   fetchCustomFeeds = fetchCustomFeeds
   fetchDid = fetchDid
   fetchFeedGenerator = fetchFeedGenerator
@@ -298,7 +298,7 @@ class AtpWrapper implements TIAtpWrapper {
   updateBlockToDisable = updateBlockToDisable
   updateBlockToEnable = updateBlockToEnable
   updateChatConvoRead = updateChatConvoRead
-  updateCustomBookmarks = updateCustomBookmarks
+  updateBookmarks = updateBookmarks
   updateJwt = updateJwt
   updateList = updateList
   updateListBlockToDisable = updateListBlockToDisable

@@ -92,8 +92,8 @@ function process (type: string) {
       mainState.openMyWordPopup({ mode: 'edit' })
       break
     }
-    case "customBookmark": {
-      mainState.openCustomBookmarkPopup()
+    case "bookmark": {
+      mainState.openBookmarkPopup()
       break
     }
     case "mutingUsers": {
@@ -224,14 +224,14 @@ function process (type: string) {
         <span>{{ $t("myWord") }}</span>
       </button>
 
-      <!-- カスタムブックマークポップアップトリガー -->
+      <!-- ブックマークポップアップトリガー -->
       <button
         type="button"
-        data-type="customBookmark"
-        @click.prevent="process('customBookmark')"
+        data-type="bookmark"
+        @click.prevent="process('bookmark')"
       >
         <SVGIcon name="bookmark" />
-        <span>{{ $t("customBookmark") }}</span>
+        <span>{{ $t("bookmark") }}</span>
       </button>
 
       <hr />
@@ -345,7 +345,7 @@ function process (type: string) {
   // button[data-type="myWord"] > .svg-icon {}
   button[data-type="myLabeler"] > .svg-icon { --icon-color: var(--label-color); }
   button[data-type="activitySubscriptionList"] > .svg-icon { --icon-color: var(--post-color); }
-  button[data-type="customBookmark"] > .svg-icon { --icon-color: var(--post-color); }
+  button[data-type="bookmark"] > .svg-icon { --icon-color: var(--post-color); }
   button[data-type="mutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="blockingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="wordMute"] > .svg-icon { --icon-color: var(--notice-color); }

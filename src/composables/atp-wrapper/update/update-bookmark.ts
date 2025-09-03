@@ -12,7 +12,7 @@ export default async function (
   if (this.session == null) {
     return Error("noSessionError")
   }
-  const value: TICustomBookmark = {
+  const value: TIBookmark = {
     createdAt: new Date().toISOString(),
     uri,
     cid,
