@@ -126,7 +126,7 @@ When working with authentication features, always test:
 ## Custom AT Protocol Extensions
 
 Klearsky implements custom records and fields:
-- `space.aoisora.bookmark` - Custom bookmark system (deprecated)
+- `space.aoisora.bookmark` - Custom bookmark system
 - `space.aoisora.preference.feed.extra` - Trending and global feed preferences
 - `space.aoisora.post.via` - Client identification
 - `space.aoisora.post.lightning` - Lightning Network integration for "Zap" links

@@ -250,7 +250,7 @@ interface MainState {
     post?: TTPost
   }
   postPopoverSelector?: string | HTMLElement
-  postPopoverCallback?: (type: "deletePost" | "updatePost" | "createBookmark" | "deleteBookmark") => Promise<void>
+  postPopoverCallback?: (type: "deletePost" | "updatePost" | "createCustomBookmark" | "deleteCustomBookmark") => Promise<void>
   openPostPopover: Function
   closePostPopover: () => void
 
@@ -629,17 +629,17 @@ interface MainState {
   openTimeFeedsPopup: (post: TTPost, direction: "old" | "new") => void
   closeTimeFeedsPopup: () => void
 
-  // ポップアップ - ブックマークポップアップ
-  currentBookmarkPacks: Array<TIBookmarkPack>
-  currentBookmarkPacksCursor?: string
-  bookmarkPopupDisplay: boolean
-  openBookmarkPopup: () => void
-  closeBookmarkPopup: () => void
+  // ポップアップ - カスタムブックマークポップアップ
+  currentCustomBookmarkPacks: Array<TICustomBookmarkPack>
+  currentCustomBookmarkPacksCursor?: string
+  customBookmarkPopupDisplay: boolean
+  openCustomBookmarkPopup: () => void
+  closeCustomBookmarkPopup: () => void
 
-  // ポップアップ - ブックマーク管理ポップアップ
-  bookmarkManagementPopupProps: TIBookmarkManagementPopupProps
-  openBookmarkManagementPopup: Function
-  closeBookmarkManagementPopup: () => void
+  // ポップアップ - カスタムブックマーク管理ポップアップ
+  customBookmarkManagementPopupProps: TICustomBookmarkManagementPopupProps
+  openCustomBookmarkManagementPopup: Function
+  closeCustomBookmarkManagementPopup: () => void
 
   // ポップアップ - ポスト送信ポップアップ
   sendPostPopupProps: TTSendPostPopupParams

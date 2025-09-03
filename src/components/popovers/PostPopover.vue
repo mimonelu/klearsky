@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import MenuTickerCopyTextWrapper from "@/components/menus/CopyTextWrapper.vue"
-import MenuTickerDeleteBookmark from "@/components/menus/DeleteBookmark.vue"
+import MenuTickerDeleteCustomBookmark from "@/components/menus/DeleteCustomBookmark.vue"
 import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
 import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.vue"
-import MenuTickerOpenBookmarkManagementPopup from "@/components/menus/OpenBookmarkManagementPopup.vue"
+import MenuTickerOpenCustomBookmarkManagementPopup from "@/components/menus/OpenCustomBookmarkManagementPopup.vue"
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"
 import MenuTickerOpenLivePage from "@/components/menus/OpenLivePage.vue"
 import MenuTickerOpenReactionControlPopup from "@/components/menus/OpenReactionControlPopup.vue"
@@ -90,7 +90,7 @@ function close () {
   emit("close")
 }
 
-function callback (type: "deletePost" | "updatePost" | "createBookmark" | "deleteBookmark") {
+function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | "deleteCustomBookmark") {
   Util.blurElement()
   close()
   if (mainState.postPopoverCallback != null) {
@@ -186,14 +186,14 @@ function callback (type: "deletePost" | "updatePost" | "createBookmark" | "delet
         @close="emit('close')"
       />
 
-      <!-- ブックマークを管理 -->
-      <MenuTickerOpenBookmarkManagementPopup
+      <!-- カスタムブックマークを管理 -->
+      <MenuTickerOpenCustomBookmarkManagementPopup
         :post="post"
         @close="emit('close')"
       />
 
-      <!-- ブックマークを削除 -->
-      <MenuTickerDeleteBookmark
+      <!-- カスタムブックマークを削除 -->
+      <MenuTickerDeleteCustomBookmark
         :uri="post.uri"
         @close="emit('close')"
       />

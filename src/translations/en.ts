@@ -712,15 +712,15 @@ export default () => ({
   "globallineLayoutSlim": "Slim",
 
   // ============================================================================
-  // BOOKMARKS
+  // CUSTOM_BOOKMARKS
   // ============================================================================
-  "bookmark": "Bookmarks",
-  "noBookmark": "No bookmarks",
-  "deleteBookmark": "Delete bookmark",
-  "bookmarkManagement": "Manage bookmark",
-  "bookmarkManagementDetail": "Add/update bookmark",
-  "addingBookmarkTag": "New bookmark tag",
-  "bookmarkOutputConfirmation": "Copy the loaded posts to your clipboard as SkyFeed JSON. (Up to the latest 30 posts)",
+  "customBookmark": "Bookmarks",
+  "noCustomBookmark": "No bookmarks",
+  "deleteCustomBookmark": "Delete bookmark",
+  "customBookmarkManagement": "Manage bookmark",
+  "customBookmarkManagementDetail": "Add/update bookmark",
+  "addingCustomBookmarkTag": "New bookmark tag",
+  "customBookmarkOutputConfirmation": "Copy the loaded posts to your clipboard as SkyFeed JSON. (Up to the latest 30 posts)",
 
   // ============================================================================
   // MY WORDS

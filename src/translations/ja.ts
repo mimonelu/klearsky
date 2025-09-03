@@ -712,15 +712,15 @@ export default () => ({
   "globallineLayoutSlim": "スリム",
 
   // ============================================================================
-  // BOOKMARKS
+  // CUSTOM_BOOKMARKS
   // ============================================================================
-  "bookmark": "ブックマーク",
-  "noBookmark": "ブックマークがありません。",
-  "deleteBookmark": "ブックマークを削除",
-  "bookmarkManagement": "ブックマークを管理",
-  "bookmarkManagementDetail": "ブックマークの作成／更新",
-  "addingBookmarkTag": "新しいブックマークタグ",
-  "bookmarkOutputConfirmation": "読み込み済みのポストをSkyFeedのJSONとしてクリップボードにコピーします（最新の30件まで）。",
+  "customBookmark": "ブックマーク",
+  "noCustomBookmark": "ブックマークがありません。",
+  "deleteCustomBookmark": "ブックマークを削除",
+  "customBookmarkManagement": "ブックマークを管理",
+  "customBookmarkManagementDetail": "ブックマークの作成／更新",
+  "addingCustomBookmarkTag": "新しいブックマークタグ",
+  "customBookmarkOutputConfirmation": "読み込み済みのポストをSkyFeedのJSONとしてクリップボードにコピーします（最新の30件まで）。",
 
   // ============================================================================
   // MY WORDS

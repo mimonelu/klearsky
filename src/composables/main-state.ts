@@ -715,20 +715,20 @@ export const state: MainState = reactive<MainState>({
   openTimeFeedsPopup: openTimeFeedsPopup,
   closeTimeFeedsPopup: closeTimeFeedsPopup,
 
-  // ポップアップ - ブックマークポップアップ
-  currentBookmarkPacks: [],
-  currentBookmarkPacksCursor: undefined,
-  bookmarkPopupDisplay: false,
-  openBookmarkPopup: openBookmarkPopup,
-  closeBookmarkPopup: closeBookmarkPopup,
+  // ポップアップ - カスタムブックマークポップアップ
+  currentCustomBookmarkPacks: [],
+  currentCustomBookmarkPacksCursor: undefined,
+  customBookmarkPopupDisplay: false,
+  openCustomBookmarkPopup: openCustomBookmarkPopup,
+  closeCustomBookmarkPopup: closeCustomBookmarkPopup,
 
-  // ポップアップ - ブックマーク管理ポップアップ
-  bookmarkManagementPopupProps: {
+  // ポップアップ - カスタムブックマーク管理ポップアップ
+  customBookmarkManagementPopupProps: {
     display: false,
     post: undefined,
   },
-  openBookmarkManagementPopup: openBookmarkManagementPopup,
-  closeBookmarkManagementPopup: closeBookmarkManagementPopup,
+  openCustomBookmarkManagementPopup: openCustomBookmarkManagementPopup,
+  closeCustomBookmarkManagementPopup: closeCustomBookmarkManagementPopup,
 
   // ポップアップ - ポスト送信ポップアップ
   sendPostPopupProps: {
@@ -2668,25 +2668,25 @@ function closeTimeFeedsPopup () {
   state.timeFeedsPopupDisplay = false
 }
 
-// ポップアップ - ブックマークポップアップ
+// ポップアップ - カスタムブックマークポップアップ
 
-function openBookmarkPopup () {
-  state.bookmarkPopupDisplay = true
+function openCustomBookmarkPopup () {
+  state.customBookmarkPopupDisplay = true
 }
 
-function closeBookmarkPopup () {
-  state.bookmarkPopupDisplay = false
+function closeCustomBookmarkPopup () {
+  state.customBookmarkPopupDisplay = false
 }
 
-// ポップアップ - ブックマーク管理ポップアップ
+// ポップアップ - カスタムブックマーク管理ポップアップ
 
-function openBookmarkManagementPopup (props: TIBookmarkManagementPopupProps) {
-  state.bookmarkManagementPopupProps.post = props.post
-  state.bookmarkManagementPopupProps.display = true
+function openCustomBookmarkManagementPopup (props: TICustomBookmarkManagementPopupProps) {
+  state.customBookmarkManagementPopupProps.post = props.post
+  state.customBookmarkManagementPopupProps.display = true
 }
 
-function closeBookmarkManagementPopup () {
-  state.bookmarkManagementPopupProps.display = false
+function closeCustomBookmarkManagementPopup () {
+  state.customBookmarkManagementPopupProps.display = false
 }
 
 // ポップアップ - ポスト送信ポップアップ

@@ -17,30 +17,30 @@ const $t = inject("$t") as Function
 
 const state = reactive<{
   loaderDisplay: boolean
-  bookmarkTags: Array<string>
-  addingBookmarkTag?: string
-  optionsOfBookmarkTags: Array<TTOption>
+  customBookmarkTags: Array<string>
+  addingCustomBookmarkTag?: string
+  optionsOfCustomBookmarkTags: Array<TTOption>
 }>({
   loaderDisplay: false,
-  bookmarkTags: ((): Array<string> => {
+  customBookmarkTags: ((): Array<string> => {
     const tags: Array<string> = []
 
-    // 対象ポストのブックマークパックを取得
-    const pack = mainState.currentBookmarkPacks.find((pack) => {
+    // 対象ポストのカスタムブックマークパックを取得
+    const pack = mainState.currentCustomBookmarkPacks.find((pack) => {
       return pack.bookmark.uri === props.post?.uri
     })
 
-    // 対象ポストのブックマークタグを選択肢に追加
+    // 対象ポストのカスタムブックマークタグを選択肢に追加
     if (pack?.bookmark.tags != null) {
       tags.push(...pack.bookmark.tags)
     }
 
     return tags
   })(),
-  addingBookmarkTag: undefined,
-  optionsOfBookmarkTags: ((): Array<TTOption> => {
+  addingCustomBookmarkTag: undefined,
+  optionsOfCustomBookmarkTags: ((): Array<TTOption> => {
     const tags: Set<undefined | string> = new Set()
-    mainState.currentBookmarkPacks.forEach((pack) => {
+    mainState.currentCustomBookmarkPacks.forEach((pack) => {
       if (pack.bookmark.tags == null) {
         return
       }
@@ -61,13 +61,13 @@ const state = reactive<{
 
 const easyFormProps1: TTEasyForm = {
   hasSubmitButton: false,
-  submitCallback: addBookmarkTag,
+  submitCallback: addCustomBookmarkTag,
   data: [
     {
       state,
-      model: "addingBookmarkTag",
+      model: "addingCustomBookmarkTag",
       type: "text",
-      placeholder: $t("addingBookmarkTag"),
+      placeholder: $t("addingCustomBookmarkTag"),
     },
   ],
 }
@@ -78,9 +78,9 @@ const easyFormProps2: TTEasyForm = {
   data: [
     {
       state,
-      model: "bookmarkTags",
+      model: "customBookmarkTags",
       type: "checkbox",
-      options: state.optionsOfBookmarkTags,
+      options: state.optionsOfCustomBookmarkTags,
     },
   ],
 }
@@ -89,21 +89,21 @@ function close () {
   emit("close")
 }
 
-function addBookmarkTag () {
-  if (!state.addingBookmarkTag) {
+function addCustomBookmarkTag () {
+  if (!state.addingCustomBookmarkTag) {
     return
   }
-  if (state.optionsOfBookmarkTags.some((option) => {
-    return option.value === state.addingBookmarkTag
+  if (state.optionsOfCustomBookmarkTags.some((option) => {
+    return option.value === state.addingCustomBookmarkTag
   })) {
     return
   }
-  state.bookmarkTags.unshift(state.addingBookmarkTag)
-  state.optionsOfBookmarkTags.unshift({
-    label: state.addingBookmarkTag,
-    value: state.addingBookmarkTag,
+  state.customBookmarkTags.unshift(state.addingCustomBookmarkTag)
+  state.optionsOfCustomBookmarkTags.unshift({
+    label: state.addingCustomBookmarkTag,
+    value: state.addingCustomBookmarkTag,
   })
-  state.addingBookmarkTag = undefined
+  state.addingCustomBookmarkTag = undefined
 }
 
 async function submit () {
@@ -113,45 +113,45 @@ async function submit () {
     return
   }
 
-  // ブックマークの作成 or 更新
+  // カスタムブックマークの作成 or 更新
   state.loaderDisplay = true
-  const response = await mainState.atp.updateBookmarks(
+  const response = await mainState.atp.updateCustomBookmarks(
     props.post.uri,
     props.post.cid,
-    state.bookmarkTags
+    state.customBookmarkTags
   )
   state.loaderDisplay = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "BookmarkManagementPopup/submit")
+    mainState.openErrorPopup(response, "CustomBookmarkManagementPopup/submit")
     return
   }
 
-  // 既存のブックマークパックの取得
-  const pack = mainState.currentBookmarkPacks.find((pack) => {
+  // 既存のカスタムブックマークパックの取得
+  const pack = mainState.currentCustomBookmarkPacks.find((pack) => {
     return pack.bookmark.uri === props.post?.uri
   })
 
-  // ブックマークパック配列に追加
+  // カスタムブックマークパック配列に追加
   if (pack == null) {
-    mainState.currentBookmarkPacks.unshift({
+    mainState.currentCustomBookmarkPacks.unshift({
       bookmark: {
         createdAt: new Date().toISOString(),
         uri: props.post.uri,
         cid: props.post.cid,
-        tags: state.bookmarkTags,
+        tags: state.customBookmarkTags,
       },
       post: props.post,
     })
   }
 
-  // 既存のブックマークパックを更新
+  // 既存のカスタムブックマークパックを更新
   else {
     pack.bookmark.cid ??= props.post.cid
-    pack.bookmark.tags?.splice(0, pack.bookmark.tags.length, ...state.bookmarkTags)
+    pack.bookmark.tags?.splice(0, pack.bookmark.tags.length, ...state.customBookmarkTags)
   }
 
   // セッションキャッシュの設定
-  mainState.myWorker!.setSessionCache("bookmarkPacks", mainState.currentBookmarkPacks)
+  mainState.myWorker!.setSessionCache("customBookmarkPacks", mainState.currentCustomBookmarkPacks)
 
   close()
 }
@@ -159,7 +159,7 @@ async function submit () {
 
 <template>
   <Popup
-    class="bookmark-management-popup"
+    class="custom-bookmark-management-popup"
     :hasCloseButton="true"
     :loaderDisplay="state.loaderDisplay"
     @close="close"
@@ -167,7 +167,7 @@ async function submit () {
     <template #header>
       <h2>
         <SVGIcon name="bookmark" />
-        <span>{{ $t("bookmarkManagementDetail") }}</span>
+        <span>{{ $t("customBookmarkManagementDetail") }}</span>
       </h2>
     </template>
     <template #header-after>
@@ -210,7 +210,7 @@ async function submit () {
 </template>
 
 <style lang="scss" scoped>
-.bookmark-management-popup {
+.custom-bookmark-management-popup {
   &:deep() {
     .popup {
       &-header > h2 > .svg-icon {

@@ -110,7 +110,7 @@ KlearskyはCloudflare Pagesでデプロイされ、mainブランチからの自�
 KlearskyはいくつかのカスタムAT Protocolレコードとフィールドを実装：
 
 ### カスタムレコード（コレクション）
-- `space.aoisora.bookmark` - 投稿保存用のカスタムブックマークシステム（廃止）
+- `space.aoisora.bookmark` - 投稿保存用のカスタムブックマークシステム
 - `space.aoisora.preference.feed.extra` - トレンドページとグローバルフィード設定の保存
 
 ### カスタムフィールド
