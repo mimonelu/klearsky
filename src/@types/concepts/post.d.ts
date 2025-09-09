@@ -9,6 +9,7 @@ type TTPost = {
   }
 
   author: TTUser
+  bookmarkCount?: number
   cid: string
   embed?: TIEmbed
   indexedAt: string
@@ -22,6 +23,7 @@ type TTPost = {
   uri: string
   value?: TIPostValue
   viewer?: {
+    bookmarked?: boolean
     repost?: string
     like?: string
     replyDisabled?: boolean

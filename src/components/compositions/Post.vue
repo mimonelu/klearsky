@@ -15,6 +15,7 @@ import LikeButton from "@/components/buttons/LikeButton.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import Loader from "@/components/shells/Loader.vue"
+import OfficialBookmarkButton from "@/components/next/OfficialBookmark/OfficialBookmarkButton.vue"
 import Post from "@/components/compositions/Post.vue"
 import QuoteRepostButton from "@/components/buttons/QuoteRepostButton.vue"
 import RepostButton from "@/components/buttons/RepostButton.vue"
@@ -544,6 +545,28 @@ async function createQuoteRepost () {
     state.processing = false
   }
   */
+}
+
+async function toggleOfficialBookmark () {
+  Util.blurElement()
+  processing.value = true
+  if (props.post.viewer?.bookmarked) {
+    const response = await mainState.atp.deleteOfficialBookmark(props.post.uri)
+    if (response instanceof Error) {
+      processing.value = false
+      mainState.openErrorPopup(response, "Post/deleteOfficialBookmark")
+      return
+    }
+  } else {
+    const response = await mainState.atp.createOfficialBookmark(props.post.uri, props.post.cid)
+    if (response instanceof Error) {
+      processing.value = false
+      mainState.openErrorPopup(response, "Post/createOfficialBookmark")
+      return
+    }
+  }
+  await updatePostThread()
+  processing.value = false
 }
 
 async function onActivateLikeButton () {
@@ -1475,6 +1498,13 @@ function toggleOldestQuotedPostDisplay () {
             @click.stop="createQuoteRepost"
           />
         </div>
+        <div>
+          <!-- 公式ブックマークボタン -->
+          <OfficialBookmarkButton
+            :post="post"
+            @click.stop="toggleOfficialBookmark"
+          />
+        </div>
         <div
           v-if="post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]"
           class="lightning-link"
@@ -2134,11 +2164,11 @@ function toggleOldestQuotedPostDisplay () {
 
 .reaction-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; // for Android
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; // for Android
   align-items: center;
   padding-left: var(--left-space);
   &[data-has-lightning="true"] {
-    grid-template-columns: 1fr 1fr 1fr 1fr auto; // for Android
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto; // for Android
   }
   &:not(:first-child) {
     margin-top: 0.25em;

@@ -47,6 +47,16 @@ export default function updatePostProps (src: TTPost, dst: TTPost) {
     src.record = dst.record
   }
 
+  // 公式ブックマーク数と公式ブックマーク情報の更新
+  src.bookmarkCount = dst.bookmarkCount
+  if (src.viewer != null && dst.viewer != null) {
+    if (dst.viewer.bookmarked == null) {
+      delete src.viewer.bookmarked
+    } else {
+      src.viewer.bookmarked = dst.viewer.bookmarked
+    }
+  }
+
   // Threadgate の更新
   src.threadgate = dst.threadgate
 }

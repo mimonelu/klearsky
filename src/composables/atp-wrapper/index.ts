@@ -11,6 +11,7 @@ import createFollow from "@/composables/atp-wrapper/create/create-follow"
 import createLike from "@/composables/atp-wrapper/create/create-like"
 import createList from "@/composables/atp-wrapper/create/create-list"
 import createListUser from "@/composables/atp-wrapper/create/create-list-user"
+import createOfficialBookmark from "@/composables/atp-wrapper/create/create-official-bookmark"
 import createPost from "@/composables/atp-wrapper/create/create-post"
 import createRecord from "@/composables/atp-wrapper/create/create-record"
 import createReport from "@/composables/atp-wrapper/create/create-report"
@@ -27,6 +28,7 @@ import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
 import deleteList from "@/composables/atp-wrapper/delete/delete-list"
 import deleteListUser from "@/composables/atp-wrapper/delete/delete-list-user"
+import deleteOfficialBookmark from "@/composables/atp-wrapper/delete/delete-official-bookmark"
 import deletePost from "@/composables/atp-wrapper/delete/delete-post"
 import deleteRecord from "@/composables/atp-wrapper/delete/delete-record"
 import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
@@ -187,6 +189,7 @@ class AtpWrapper implements TIAtpWrapper {
   createLike = createLike
   createList = createList
   createListUser = createListUser
+  createOfficialBookmark = createOfficialBookmark
   createPost = createPost
   createRecord = createRecord
   createReport = createReport
@@ -203,6 +206,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteLike = deleteLike
   deleteList = deleteList
   deleteListUser = deleteListUser
+  deleteOfficialBookmark = deleteOfficialBookmark
   deletePost = deletePost
   deleteRecord = deleteRecord
   deleteRepost = deleteRepost
