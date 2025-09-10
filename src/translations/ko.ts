@@ -712,15 +712,21 @@ export default () => ({
   "globallineLayoutSlim": "슬림",
 
   // ============================================================================
+  // OFFICIAL_BOOKMARKS
+  // ============================================================================
+  "officialBookmark": "공식 북마크",
+  "noOfficialBookmark": "공식 북마크가 없습니다.",
+
+  // ============================================================================
   // CUSTOM_BOOKMARKS
   // ============================================================================
-  "customBookmark": "북마크",
-  "noCustomBookmark": "북마크가 없습니다.",
-  "deleteCustomBookmark": "북마크 삭제",
-  "customBookmarkManagement": "북마크 관리",
-  "customBookmarkManagementDetail": "북마크 생성/업데이트",
-  "addingCustomBookmarkTag": "새 북마크 태그",
-  "customBookmarkOutputConfirmation": "로드된 게시물을 SkyFeed JSON으로 클립보드에 복사합니다 (최신 30개까지).",
+  "customBookmark": "확장 북마크",
+  "noCustomBookmark": "확장 북마크가 없습니다.",
+  "deleteCustomBookmark": "확장 북마크 삭제",
+  "customBookmarkManagement": "확장 북마크 관리",
+  "customBookmarkManagementDetail": "확장 북마크 추가/업데이트",
+  "addingCustomBookmarkTag": "새 확장 북마크 태그",
+  "customBookmarkOutputConfirmation": "불러온 게시물을 SkyFeed JSON으로 클립보드에 복사합니다 (최대 30개).",
 
   // ============================================================================
   // MY WORDS

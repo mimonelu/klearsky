@@ -101,6 +101,11 @@ export default class {
           this.mainState.currentServerInfo = sessionCache.serverInfo
         }
 
+        // セッションキャッシュの反映 - 公式ブックマーク
+        if (sessionCache.officialBookmarks != null) {
+          this.mainState.currentOfficialBookmarks = sessionCache.officialBookmarks
+        }
+
         // セッションキャッシュの反映 - カスタムブックマーク
         if (sessionCache.customBookmarkPacks != null) {
           this.mainState.currentCustomBookmarkPacks = sessionCache.customBookmarkPacks

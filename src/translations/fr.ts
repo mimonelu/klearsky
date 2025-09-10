@@ -712,14 +712,20 @@ export default () => ({
   "globallineLayoutSlim": "Minimale",
 
   // ============================================================================
+  // OFFICIAL_BOOKMARKS
+  // ============================================================================
+  "officialBookmark": "Signet officiel",
+  "noOfficialBookmark": "Aucun signet officiel",
+
+  // ============================================================================
   // CUSTOM_BOOKMARKS
   // ============================================================================
-  "customBookmark": "Signets",
-  "noCustomBookmark": "Aucun signet",
-  "deleteCustomBookmark": "Supprimer le signet",
-  "customBookmarkManagement": "Gérer les signets",
+  "customBookmark": "Signet étendu",
+  "noCustomBookmark": "Aucun signet étendu",
+  "deleteCustomBookmark": "Supprimer le signet étendu",
+  "customBookmarkManagement": "Gérer les signets étendus",
   "customBookmarkManagementDetail": "Ajouter/mettre à jour",
-  "addingCustomBookmarkTag": "Nouvelle étiquette de signet",
+  "addingCustomBookmarkTag": "Nouvelle étiquette",
   "customBookmarkOutputConfirmation": "Copier les publications en JSON SkyFeed (max 30).",
 
   // ============================================================================

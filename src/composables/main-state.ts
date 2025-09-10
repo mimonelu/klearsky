@@ -715,6 +715,13 @@ export const state: MainState = reactive<MainState>({
   openTimeFeedsPopup: openTimeFeedsPopup,
   closeTimeFeedsPopup: closeTimeFeedsPopup,
 
+  // ポップアップ - 公式ブックマークポップアップ
+  currentOfficialBookmarks: [],
+  currentOfficialBookmarksCursor: undefined,
+  officialBookmarkPopupDisplay: false,
+  openOfficialBookmarkPopup: openOfficialBookmarkPopup,
+  closeOfficialBookmarkPopup: closeOfficialBookmarkPopup,
+
   // ポップアップ - カスタムブックマークポップアップ
   currentCustomBookmarkPacks: [],
   currentCustomBookmarkPacksCursor: undefined,
@@ -2666,6 +2673,16 @@ function openTimeFeedsPopup (post: TTPost, direction: "old" | "new") {
 
 function closeTimeFeedsPopup () {
   state.timeFeedsPopupDisplay = false
+}
+
+// ポップアップ - 公式ブックマークポップアップ
+
+function openOfficialBookmarkPopup () {
+  state.officialBookmarkPopupDisplay = true
+}
+
+function closeOfficialBookmarkPopup () {
+  state.officialBookmarkPopupDisplay = false
 }
 
 // ポップアップ - カスタムブックマークポップアップ

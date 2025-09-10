@@ -13,6 +13,7 @@ interface TIMyWorkerSessionCache {
   session?: TTSession
   setting?: TTSetting
   currentPreferences?: Array<TTPreference>
+  officialBookmarks?: Array<TTPost>
   customBookmarkPacks?: Array<TICustomBookmarkPack>
   inviteCodes?: Array<TTInviteCode>
   myFeedsItems?: Array<TTMyFeedsItem>

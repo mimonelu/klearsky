@@ -166,7 +166,7 @@ async function submit () {
   >
     <template #header>
       <h2>
-        <SVGIcon name="bookmark" />
+        <SVGIcon name="bookmarkPlus" />
         <span>{{ $t("customBookmarkManagementDetail") }}</span>
       </h2>
     </template>
@@ -214,7 +214,7 @@ async function submit () {
   &:deep() {
     .popup {
       &-header > h2 > .svg-icon {
-        fill: rgb(var(--post-color));
+        fill: rgb(var(--bookmark-color));
       }
     }
 
