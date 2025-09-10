@@ -76,7 +76,11 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
       return newPost.uri === bookmark.uri
     })
     if (newPost != null) {
-      Util.updatePostProps(mainState.currentOfficialBookmarks[index].post as TTPost, newPost)
+      Util.updatePostProps(mainState.currentOfficialBookmarks[index] as TTPost, newPost)
+
+      if (!newPost.viewer?.bookmarked) {
+        removeThisPost(newPost.uri)
+      }
     }
   })
 }
