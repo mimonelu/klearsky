@@ -288,6 +288,7 @@ export default () => ({
   "imageMaxHeightRatio5": "x2.0",
   "imageMaxHeightRatio6": "Unlimited",
   "imageAutoPlay": "Autoplay animated images",
+  "shouldConvertGifToVideo": "Convert GIF to Video",
   "video": "Video",
   "videoPreload": "Video preload",
   "videoIsBlob": "Non-streaming",

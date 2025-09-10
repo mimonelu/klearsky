@@ -62,12 +62,14 @@ const easyFormState = reactive<{
   url: string
   urlHasImage: Array<boolean>
   medias: Array<File>
+  shouldConvertGifToVideo: Array<boolean>
   alts: Array<string>
 }>({
   text: props.text ?? "",
   url: props.url ?? "",
   urlHasImage: [true],
   medias: [],
+  shouldConvertGifToVideo: [true],
   alts: [],
 })
 
@@ -119,6 +121,13 @@ const easyFormProps: TTEasyForm = {
       maxNumberOfFile: 4,
       quadLayout: true,
       onChange: onChangeImage,
+    },
+    {
+      state: easyFormState,
+      model: "shouldConvertGifToVideo",
+      type: "checkbox",
+      options: [{ label: $t("shouldConvertGifToVideo"), value: true }],
+      display: false,
     },
   ],
 }
@@ -283,8 +292,19 @@ function onInputUrl () {
   const urlHasImageItem = easyFormProps.data.find((item: TTEasyFormItem) => {
     return item.model === "urlHasImage"
   })
-  if (urlHasImageItem == null) return
-  urlHasImageItem.display = !!easyFormState.url && easyFormState.medias.length === 0
+  if (urlHasImageItem != null) {
+    urlHasImageItem.display = !!easyFormState.url && easyFormState.medias.length === 0
+  }
+
+  // GIF画像の動画変換チェックボックスの出し分け
+  const shouldConvertGifToVideoItem = easyFormProps.data.find((item: TTEasyFormItem) => {
+    return item.model === "shouldConvertGifToVideo"
+  })
+  if (shouldConvertGifToVideoItem != null) {
+    shouldConvertGifToVideoItem.display = easyFormState.medias.some((media) => {
+      return media.type === "image/gif"
+    })
+  }
 
   // TODO: 要修正
   easyForm.value?.forceUpdate()

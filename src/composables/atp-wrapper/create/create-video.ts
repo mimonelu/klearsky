@@ -1,4 +1,4 @@
-import type { BlobRef } from "@atproto/api"
+import type { AppBskyVideoUploadVideo, BlobRef } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (
@@ -79,7 +79,7 @@ export default async function (
       console.warn("[klearsky/getJobStatus]", response)
       return Error("apiError")
     }
-    const json = await response.json()
+    const json: Error | AppBskyVideoUploadVideo.OutputSchema = await response.json()
       .then((value) => value)
       .catch((error) => error)
     console.log("[klearsky/getJobStatus]", json)
@@ -89,7 +89,10 @@ export default async function (
     if (json?.jobStatus == null) {
       return Error("apiError")
     }
-    if (json.jobStatus.state === "JOB_STATE_COMPLETED") {
+    if (
+      json.jobStatus.state === "JOB_STATE_COMPLETED" &&
+      json.jobStatus.blob != null
+    ) {
       return json.jobStatus.blob
     }
     if (json.jobStatus.state === "JOB_STATE_FAILED") {
@@ -98,27 +101,4 @@ export default async function (
   }
 
   return Error("apiError")
-
-  /*
-  // APIライブラリを用いたアップロード
-  // TODO: 後で消す、もしくはこちらで代替すること
-  const videoAgent = new AtpAgentClass({
-    service: "https://video.bsky.app",
-  })
-  const query: AppBskyVideoUploadVideo.InputSchema = file
-  const response: Error | AppBskyVideoUploadVideo.Response =
-    await videoAgent.app.bsky.video.uploadVideo(query, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((value) => value)
-      .catch((error) => error)
-  console.log("[klearsky/createVideo]", response)
-  if (response instanceof Error) {
-    return response
-  }
-  if (!response.success) {
-    return Error("apiError")
-  }
-  return response.data
-  */
 }

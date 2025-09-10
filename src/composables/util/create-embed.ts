@@ -103,9 +103,21 @@ export default async function (
 
   // 動画
   let video: undefined | AppBskyEmbedVideo.Main
-  const videoFileIndex = params.medias?.findIndex((media) => {
+
+  // 動画のインデックスを取得
+  let videoFileIndex = params.medias?.findIndex((media) => {
     return media.type?.startsWith("video/") ?? false
   }) ?? - 1
+
+  // 動画のインデックスがなければGIF画像を動画としてインデックスを取得
+  if (
+    params.shouldConvertGifToVideo?.includes(true) &&
+    videoFileIndex === - 1
+  ) {
+    videoFileIndex = params.medias?.findIndex((media) => {
+      return media.type === "image/gif"
+    }) ?? - 1
+  }
 
   // 動画ファイルがない場合
   if (videoFileIndex === - 1) {

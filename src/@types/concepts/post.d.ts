@@ -148,6 +148,7 @@ type TTCreatePostParams = {
   urlHasImage?: Array<boolean>
   medias?: Array<File>
   alts?: Array<string>
+  shouldConvertGifToVideo?: Array<boolean>
   languages?: Array<string>
   labels?: Array<string>
   lightning?: string
