@@ -1037,6 +1037,7 @@ function removeThisPost () {
 // 表示名
 .display-name {
   display: contents;
+  pointer-events: none;
 
   &:deep() > span {
     font-size: 1.5rem;

@@ -48,6 +48,7 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "name",
       maxlength: 64,
       maxLengthIndicator: true,
+      maxLengthIndicatorByGrapheme: true,
       focus: true,
     },
     {
