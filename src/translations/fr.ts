@@ -617,7 +617,9 @@ export default () => ({
   "backgroundImage1": "Selon le serveur hébergeant l'image, elle peut ne pas s'afficher.",
   "backgroundImage2": "Tu peux aussi utiliser une propriété CSS comme `background-image`.\nex: linear-gradient(to bottom, pink, cyan)",
   "development": "Développement",
-  "resetSettings": "Réinitialiser les paramètres",
+  "dangerZone": "Opérations sensibles",
+  "atprotoProxySetting": "atproto-proxy (pour app.bsky)",
+  "resetSettings": "Réinitialiser tous les paramètres",
   "resetSettingsDetail": "Réinitialiser les paramètres de ce compte. Es-tu sûr?",
 
   // ============================================================================

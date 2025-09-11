@@ -617,7 +617,9 @@ export default () => ({
   "backgroundImage1": "Je nach Server, auf dem das Hintergrundbild platziert ist, wird es möglicherweise nicht angezeigt.",
   "backgroundImage2": "Sie können auch den Wert der CSS-Eigenschaft `background-image` festlegen.\nz.B. linear-gradient(to bottom, pink, cyan)",
   "development": "Entwicklung",
-  "resetSettings": "Einstellungen zurücksetzen",
+  "dangerZone": "Vorsicht erforderlich",
+  "atprotoProxySetting": "atproto-proxy (für app.bsky)",
+  "resetSettings": "Alle Einstellungen zurücksetzen",
   "resetSettingsDetail": "Die Einstellungen dieses Kontos zurücksetzen. Sind Sie sicher?",
 
   // ============================================================================

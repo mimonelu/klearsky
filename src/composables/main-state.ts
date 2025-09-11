@@ -886,6 +886,9 @@ function updateSettings () {
 
   // 新着チャットタイマーの更新
   state.startChatListTimer()
+
+  // atproto-proxy
+  updateAtprotoProxy()
 }
 
 function saveSettings () {
@@ -909,6 +912,9 @@ function saveSettings () {
   }
   if (state.settings[did].atmosphereDisplay == null) {
     state.settings[did].atmosphereDisplay = true
+  }
+  if (state.settings[did].atprotoProxy == null) {
+    state.settings[did].atprotoProxy = ""
   }
   if (state.settings[did].autoTranslation == null) {
     state.settings[did].autoTranslation = false
@@ -1347,6 +1353,12 @@ async function startChatListTimer () {
     prevCursor = currentCursor
     state.updatePageTitle()
   }, state.currentSetting?.chatFetchInterval ?? 60000)
+}
+
+// atproto-proxy
+
+function updateAtprotoProxy () {
+  state.atp.proxies.appBsky = state.currentSetting.atprotoProxy
 }
 
 // プロフィール

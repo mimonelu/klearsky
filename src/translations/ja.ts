@@ -617,7 +617,9 @@ export default () => ({
   "backgroundImage1": "背景画像を置いているサーバによっては表示できない場合があります。",
   "backgroundImage2": "CSSプロパティ `background-image` の値も設定できます。\n例： linear-gradient(to bottom, pink, cyan)",
   "development": "開発",
-  "resetSettings": "設定をリセットする",
+  "dangerZone": "注意が必要な操作",
+  "atprotoProxySetting": "atproto-proxy（app.bsky用）",
+  "resetSettings": "全設定のリセット",
   "resetSettingsDetail": "このアカウントの設定をリセットします。よろしいですか？",
 
   // ============================================================================

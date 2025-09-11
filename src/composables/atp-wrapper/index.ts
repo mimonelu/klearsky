@@ -153,8 +153,8 @@ class AtpWrapper implements TIAtpWrapper {
   constructor () {
     this.agent = null
     this.proxies = {
-      chat: "did:web:api.bsky.chat#bsky_chat",
-      appview: "did:web:api.bsky.app#bsky_appview",
+      appBsky: "did:web:api.bsky.app#bsky_appview",
+      chatBsky: "did:web:api.bsky.chat#bsky_chat",
     }
     this.data = Util.loadStorage("atp") ?? {
       did: "",
