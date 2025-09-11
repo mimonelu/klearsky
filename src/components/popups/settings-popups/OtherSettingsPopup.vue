@@ -4,11 +4,19 @@ import Popup from "@/components/popups/Popup.vue"
 import Radios from "@/components/forms/Radios.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 import SETTINGS from "@/consts/settings.json"
 
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const emit = defineEmits<{(event: string): void}>()
+
+function setOfficialValueToAtprotoProxyAppBsky () {
+  mainState.currentSetting.atprotoProxyAppBsky = CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY
+  emit("changeSetting")
+}
 
 async function resetSettings () {
   Util.blurElement()
@@ -43,6 +51,7 @@ async function resetSettings () {
 
             <!-- ヘルプボタン -->
             <button
+              type="button"
               class="settings-popup__help-button"
               @click.prevent="$emit('showDescription', 'lightning')"
             >
@@ -123,12 +132,20 @@ async function resetSettings () {
             <div class="settings-popup__form__body">
               <input
                 class="textbox"
-                v-model="mainState.currentSetting.atprotoProxy"
+                v-model="mainState.currentSetting.atprotoProxyAppBsky"
                 type="string"
-                name="atprotoProxy"
-                placeholder="did:web:api.bsky.app#bsky_appview"
+                name="atprotoProxyAppBsky"
                 @blur="$emit('changeSetting')"
               >
+              <div class="settings-popup__form__button-container">
+                <button
+                  type="button"
+                  class="button button--small"
+                  @click.prevent="setOfficialValueToAtprotoProxyAppBsky"
+                >
+                  <span>{{ $t("setOfficialValue") }}</span>
+                </button>
+              </div>
             </div>
 
             <!-- 設定リセット -->
@@ -137,6 +154,7 @@ async function resetSettings () {
             </div>
             <div class="settings-popup__form__body">
               <button
+                type="button"
                 class="button--important"
                 @click.prevent="resetSettings"
               >

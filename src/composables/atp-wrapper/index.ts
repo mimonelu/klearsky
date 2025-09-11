@@ -140,6 +140,7 @@ import updateThreadMuteToDisable from "@/composables/atp-wrapper/update/update-t
 import updateThreadMuteToEnable from "@/composables/atp-wrapper/update/update-thread-mute-to-enable"
 import updateStarterPack from "@/composables/atp-wrapper/update/update-starter-pack"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 class AtpWrapper implements TIAtpWrapper {
   agent: null | AtpAgent
@@ -153,8 +154,8 @@ class AtpWrapper implements TIAtpWrapper {
   constructor () {
     this.agent = null
     this.proxies = {
-      appBsky: "did:web:api.bsky.app#bsky_appview",
-      chatBsky: "did:web:api.bsky.chat#bsky_chat",
+      appBsky: CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY,
+      chatBsky: CONSTS.OFFICIAL_ATPROTO_PROXY_CHAT_BSKY,
     }
     this.data = Util.loadStorage("atp") ?? {
       did: "",

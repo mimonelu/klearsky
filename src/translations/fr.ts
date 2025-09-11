@@ -619,6 +619,7 @@ export default () => ({
   "development": "Développement",
   "dangerZone": "Opérations sensibles",
   "atprotoProxySetting": "atproto-proxy (pour app.bsky)",
+  "setOfficialValue": "Définir valeur officielle",
   "resetSettings": "Réinitialiser tous les paramètres",
   "resetSettingsDetail": "Réinitialiser les paramètres de ce compte. Es-tu sûr?",
 
