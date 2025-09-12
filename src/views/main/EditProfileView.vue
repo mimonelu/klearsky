@@ -56,7 +56,7 @@ const easyFormProps: TTEasyForm = {
       model: "description",
       label: $t("description"),
       type: "textarea",
-      maxlength: 255,
+      maxlength: 256,
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
       rows: 8,
