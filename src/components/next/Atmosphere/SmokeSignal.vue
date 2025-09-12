@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { inject, reactive, type Ref } from "vue"
+import { inject } from "vue"
 import { isBefore } from "date-fns/isBefore"
 import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/AtmosphereItem.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import { ATMOSPHERE_SERVICE_FAVICONS } from "@/consts/consts.json"
 
 const NUMBER_OF_FETCH_RECORDS = 5
 
@@ -15,79 +16,72 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  records: Ref<Array<any>>
-}>({
-  records: computedAsync<Array<any>>(async () => {
-    if (props.profile == null) {
-      return []
-    }
+const records = computedAsync<Array<any>>(async () => {
+  if (props.profile == null) {
+    return []
+  }
 
-    // プロフィールデータにキャッシュがあれば再利用
-    if (props.profile.__smokeSignal != null) {
-      return props.profile.__smokeSignal
-    }
+  // プロフィールデータにキャッシュがあれば再利用
+  if (props.profile.__smokeSignal != null) {
+    return props.profile.__smokeSignal
+  }
 
-    // プロフィールデータのコレクションに該当レコードがなければ中止
-    if (!AtmosphereHelper.includes("smokesignal", mainState.currentProfile)) {
-      return []
-    }
+  // プロフィールデータのコレクションに該当レコードがなければ中止
+  if (!AtmosphereHelper.includes("smokesignal", mainState.currentProfile)) {
+    return []
+  }
 
-    const results = await mainState.atp.fetchRecords(
-      props.profile.did,
-      AtmosphereHelper.lexicons["smokesignal"],
-      NUMBER_OF_FETCH_RECORDS,
-    )
-    if (results instanceof Error) {
-      return []
-    }
-    if (results.records == null) {
-      return []
-    }
+  const results = await mainState.atp.fetchRecords(
+    props.profile.did,
+    AtmosphereHelper.lexicons["smokesignal"],
+    NUMBER_OF_FETCH_RECORDS,
+  )
+  if (results instanceof Error) {
+    return []
+  }
+  if (results.records == null) {
+    return []
+  }
 
-    // 終了日時を過ぎているものを除く
-    const dateNow = new Date()
-    results.records = results.records.filter((record) => {
-      return isBefore(dateNow, new Date(record.value.endsAt))
-    })
+  // 終了日時を過ぎているものを除く
+  const dateNow = new Date()
+  results.records = results.records.filter((record) => {
+    return isBefore(dateNow, new Date(record.value.endsAt))
+  })
 
-    // プロフィールデータにキャッシュを保存
-    // eslint-disable-next-line
-    props.profile.__smokeSignal = results.records
+  // プロフィールデータにキャッシュを保存
+  // eslint-disable-next-line
+  props.profile.__smokeSignal = results.records
 
-    return results.records
-  }, []),
-})
+  return results.records
+}, [])
 </script>
 
 <template>
   <AtmosphereItem
-    v-if="state.records.length > 0"
+    v-if="records.length > 0"
     class="smoke-signal"
     title="pnSmokeSignal"
-    icon="https://smokesignal.events/static/favicon.ico"
+    :icon="ATMOSPHERE_SERVICE_FAVICONS.smokesignal"
     :uri="`https://smokesignal.events/${profile?.did}`"
   >
     <template #body>
       <div class="smoke-signal__container">
-        <template
-          v-for="record, recordIndex of state.records"
+        <a
+          v-for="record, recordIndex of records"
           :key="recordIndex"
+          class="smoke-signal__item"
+          :href="`https://smokesignal.events/${profile?.did}/${Util.getRkey(record.uri)}`"
+          rel="noreferrer"
+          target="_blank"
         >
-          <a
-            class="smoke-signal__item"
-            :href="`https://smokesignal.events/${profile?.did}/${Util.getRkey(record.uri)}`"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <div class="smoke-signal__title">{{ record.value.name ?? "" }}</div>
-            <div class="smoke-signal__description">{{ record.value.text ?? "" }}</div>
-            <div class="smoke-signal__endsAt">
-              <SVGIcon name="fire" />
-              <span>{{ mainState.formatDate(record.value.startsAt, true) }} - {{ mainState.formatDate(record.value.endsAt, true) }}</span>
-            </div>
-          </a>
-        </template>
+          <div class="smoke-signal__title">{{ record.value.name ?? "" }}</div>
+          <div class="smoke-signal__description">{{ record.value.text ?? "" }}</div>
+          <div class="smoke-signal__endsAt">
+            <SVGIcon name="fire" />
+            <span>{{ mainState.formatDate(record.value.startsAt, true) }} - {{ mainState.formatDate(record.value.endsAt, true) }}</span>
+          </div>
+        </a>
       </div>
     </template>
   </AtmosphereItem>

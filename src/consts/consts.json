@@ -65,6 +65,12 @@
   "LIMIT_OF_KEYWORD_HISTORY": 10,
   "LIMIT_OF_THREADGATE_ITEMS": 5,
   "LIMIT_OF_LIST_MENTION_ACCOUNTS": 30,
+  "ATMOSPHERE_SERVICE_FAVICONS": {
+    "smokesignal": "https://smokesignal.events/static/favicon.ico",
+    "linkat": "https://linkat.blue/favicon.ico",
+    "frontpage": "https://frontpage.fyi/frontpage-logo.svg?b5da8167450d2f63",
+    "whtwnd": "https://whtwnd.com/whtwnd.svg"
+  },
   "THIRD_PARTY_DOMAIN_BOOKMARK": "space.aoisora.bookmark",
   "THIRD_PARTY_DOMAIN_LIGHTNING": "space.aoisora.post.lightning",
   "THIRD_PARTY_DOMAIN_VIA": "space.aoisora.post.via",

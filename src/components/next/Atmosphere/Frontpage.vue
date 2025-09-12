@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { inject, reactive, type Ref } from "vue"
+import { inject } from "vue"
 import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/AtmosphereItem.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import { ATMOSPHERE_SERVICE_FAVICONS } from "@/consts/consts.json"
 
 const NUMBER_OF_FETCH_RECORDS = 5
 
@@ -13,57 +14,52 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  records: Ref<Array<any>>
-}>({
-  records: computedAsync<Array<any>>(async () => {
-    if (props.profile == null) {
-      return []
-    }
+const records = computedAsync<Array<any>>(async () => {
+  if (props.profile == null) {
+    return []
+  }
 
-    // プロフィールデータにキャッシュがあれば再利用
-    if (props.profile.__frontpage != null) {
-      return props.profile.__frontpage
-    }
+  // プロフィールデータにキャッシュがあれば再利用
+  if (props.profile.__frontpage != null) {
+    return props.profile.__frontpage
+  }
 
-    // プロフィールデータのコレクションに該当レコードがなければ中止
-    if (!AtmosphereHelper.includes("frontpage", mainState.currentProfile)) {
-      return []
-    }
+  // プロフィールデータのコレクションに該当レコードがなければ中止
+  if (!AtmosphereHelper.includes("frontpage", mainState.currentProfile)) {
+    return []
+  }
 
-    const results = await mainState.atp.fetchRecords(
-      props.profile.did,
-      AtmosphereHelper.lexicons["frontpage"],
-      NUMBER_OF_FETCH_RECORDS,
-    )
-    if (results instanceof Error) {
-      return []
-    }
-    const records = results.records
-    if (records == null) {
-      return []
-    }
+  const results = await mainState.atp.fetchRecords(
+    props.profile.did,
+    AtmosphereHelper.lexicons["frontpage"],
+    NUMBER_OF_FETCH_RECORDS,
+  )
+  if (results instanceof Error) {
+    return []
+  }
+  const records = results.records
+  if (records == null) {
+    return []
+  }
 
-    // プロフィールデータにキャッシュを保存
-    // eslint-disable-next-line
-    props.profile.__frontpage = records
+  // プロフィールデータにキャッシュを保存
+  // eslint-disable-next-line
+  props.profile.__frontpage = records
 
-    return records
-  }, []),
-})
+  return records
+}, [])
 </script>
 
 <template>
   <AtmosphereItem
-    v-if="state.records.length > 0"
     class="frontpage"
     title="pnFrontpage"
-    icon="https://frontpage.fyi/frontpage-logo.svg?b5da8167450d2f63"
+    :icon="ATMOSPHERE_SERVICE_FAVICONS.frontpage"
     :uri="`https://frontpage.fyi/profile/${profile?.handle}`"
   >
     <template #body>
       <template
-        v-for="record, recordIndex of state.records"
+        v-for="record, recordIndex of records"
         :key="recordIndex"
       >
         <a
@@ -88,6 +84,9 @@ const state = reactive<{
       grid-gap: 0.5rem;
       grid-template-columns: auto;
       padding: 1rem;
+      &:empty {
+        display: none;
+      }
     }
   }
 

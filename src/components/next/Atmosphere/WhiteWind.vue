@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { inject, reactive, type Ref } from "vue"
+import { inject } from "vue"
 import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/AtmosphereItem.vue"
+import { ATMOSPHERE_SERVICE_FAVICONS } from "@/consts/consts.json"
 
 const NUMBER_OF_FETCH_RECORDS = 5
 
@@ -12,90 +13,82 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  records: Ref<Array<TICommonRecord>>
-}>({
-  records: computedAsync<Array<TICommonRecord>>(async () => {
-    if (props.profile == null) {
-      return []
-    }
+const records = computedAsync<Array<TICommonRecord>>(async () => {
+  if (props.profile == null) {
+    return []
+  }
 
-    // プロフィールデータにキャッシュがあれば再利用
-    if (props.profile.__whiteWind != null) {
-      return props.profile.__whiteWind
-    }
+  // プロフィールデータにキャッシュがあれば再利用
+  if (props.profile.__whiteWind != null) {
+    return props.profile.__whiteWind
+  }
 
-    // プロフィールデータのコレクションに該当レコードがなければ中止
-    if (!AtmosphereHelper.includes("whitewind", mainState.currentProfile)) {
-      return []
-    }
+  // プロフィールデータのコレクションに該当レコードがなければ中止
+  if (!AtmosphereHelper.includes("whitewind", mainState.currentProfile)) {
+    return []
+  }
 
-    const results = await mainState.atp.fetchRecords(
-      props.profile.did,
-      AtmosphereHelper.lexicons["whitewind"],
-      NUMBER_OF_FETCH_RECORDS,
+  const results = await mainState.atp.fetchRecords(
+    props.profile.did,
+    AtmosphereHelper.lexicons["whitewind"],
+    NUMBER_OF_FETCH_RECORDS,
+  )
+  if (results instanceof Error) {
+    return []
+  }
+
+  // visibility が未設定、もしくは public のもののみ
+  results.records = results.records.filter((record) => {
+    if (record.value == null) {
+      return false
+    }
+    return (
+      record.value.visibility == null ||
+      record.value.visibility === "public"
     )
-    if (results instanceof Error) {
-      return []
+  })
+
+  // テンプレート構文用プロパティのインジェクション
+  results.records.forEach((record) => {
+    if (record.value == null) {
+      record.value = {}
     }
+    const partOfHref = record.uri
+      .replace("at://", "")
+      .replace("com.whtwnd.blog.entry/", "")
+    record.value.__href = `https://whtwnd.com/${partOfHref}/${record.cid}`
+    record.value.__createdAt = mainState.formatDate(record.value.createdAt)
+  })
 
-    // visibility が未設定、もしくは public のもののみ
-    results.records = results.records.filter((record) => {
-      if (record.value == null) {
-        return false
-      }
-      return (
-        record.value.visibility == null ||
-        record.value.visibility === "public"
-      )
-    })
+  // プロフィールデータにキャッシュを保存
+  // eslint-disable-next-line
+  props.profile.__whiteWind = results.records
 
-    // テンプレート構文用プロパティのインジェクション
-    results.records.forEach((record) => {
-      if (record.value == null) {
-        record.value = {}
-      }
-      const partOfHref = record.uri
-        .replace("at://", "")
-        .replace("com.whtwnd.blog.entry/", "")
-      record.value.__href = `https://whtwnd.com/${partOfHref}/${record.cid}`
-      record.value.__createdAt = mainState.formatDate(record.value.createdAt)
-    })
-
-    // プロフィールデータにキャッシュを保存
-    // eslint-disable-next-line
-    props.profile.__whiteWind = results.records
-
-    return results.records
-  }, []),
-})
+  return results.records
+}, [])
 </script>
 
 <template>
   <AtmosphereItem
-    v-if="state.records.length > 0"
     class="white-wind"
     title="pnWhiteWind"
-    icon="https://whtwnd.com/whtwnd.svg"
+    :icon="ATMOSPHERE_SERVICE_FAVICONS.whtwnd"
     :uri="`https://whtwnd.com/${profile?.handle}`"
   >
     <template #body>
       <div class="white-wind__container">
-        <template
-          v-for="record, recordIndex of state.records"
+        <a
+          v-for="record, recordIndex of records"
           :key="recordIndex"
+          class="white-wind__item"
+          :href="record.value.__href"
+          rel="noreferrer"
+          target="_blank"
         >
-          <a
-            class="white-wind__item"
-            :href="record.value.__href"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <div class="white-wind__title">{{ record.value.title }}</div>
-            <div class="white-wind__description">{{ record.value.content }}</div>
-            <div class="white-wind__createdAt">{{ record.value.__createdAt }}</div>
-          </a>
-        </template>
+          <div class="white-wind__title">{{ record.value.title }}</div>
+          <div class="white-wind__description">{{ record.value.content }}</div>
+          <div class="white-wind__createdAt">{{ record.value.__createdAt }}</div>
+        </a>
       </div>
     </template>
   </AtmosphereItem>

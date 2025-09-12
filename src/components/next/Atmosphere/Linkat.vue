@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { inject, reactive, type Ref } from "vue"
+import { inject } from "vue"
 import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/AtmosphereItem.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import { ATMOSPHERE_SERVICE_FAVICONS } from "@/consts/consts.json"
 
 const NUMBER_OF_FETCH_RECORDS = 1
 
@@ -13,57 +14,52 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  records: Ref<Array<any>>
-}>({
-  records: computedAsync<Array<any>>(async () => {
-    if (props.profile == null) {
-      return []
-    }
+const records = computedAsync<Array<any>>(async () => {
+  if (props.profile == null) {
+    return []
+  }
 
-    // プロフィールデータにキャッシュがあれば再利用
-    if (props.profile.__linkat != null) {
-      return props.profile.__linkat
-    }
+  // プロフィールデータにキャッシュがあれば再利用
+  if (props.profile.__linkat != null) {
+    return props.profile.__linkat
+  }
 
-    // プロフィールデータのコレクションに該当レコードがなければ中止
-    if (!AtmosphereHelper.includes("linkat", mainState.currentProfile)) {
-      return []
-    }
+  // プロフィールデータのコレクションに該当レコードがなければ中止
+  if (!AtmosphereHelper.includes("linkat", mainState.currentProfile)) {
+    return []
+  }
 
-    const results = await mainState.atp.fetchRecords(
-      props.profile.did,
-      AtmosphereHelper.lexicons["linkat"],
-      NUMBER_OF_FETCH_RECORDS,
-    )
-    if (results instanceof Error) {
-      return []
-    }
-    const cards = results.records?.[0].value?.cards
-    if (cards == null) {
-      return []
-    }
+  const results = await mainState.atp.fetchRecords(
+    props.profile.did,
+    AtmosphereHelper.lexicons["linkat"],
+    NUMBER_OF_FETCH_RECORDS,
+  )
+  if (results instanceof Error) {
+    return []
+  }
+  const cards = results.records?.[0].value?.cards
+  if (cards == null) {
+    return []
+  }
 
-    // プロフィールデータにキャッシュを保存
-    // eslint-disable-next-line
-    props.profile.__linkat = cards
+  // プロフィールデータにキャッシュを保存
+  // eslint-disable-next-line
+  props.profile.__linkat = cards
 
-    return cards
-  }, []),
-})
+  return cards
+}, [])
 </script>
 
 <template>
   <AtmosphereItem
-    v-if="state.records.length > 0"
     class="linkat"
     title="pnLinkat"
-    icon="https://linkat.blue/favicon.ico"
+    :icon="ATMOSPHERE_SERVICE_FAVICONS.linkat"
     :uri="`https://linkat.blue/${profile?.did}`"
   >
     <template #body>
       <template
-        v-for="record, recordIndex of state.records"
+        v-for="record, recordIndex of records"
         :key="recordIndex"
       >
         <!-- リンクあり -->
@@ -103,6 +99,9 @@ const state = reactive<{
       grid-gap: 0.5rem;
       grid-template-columns: auto;
       padding: 1rem;
+      &:empty {
+        display: none;
+      }
     }
   }
 
