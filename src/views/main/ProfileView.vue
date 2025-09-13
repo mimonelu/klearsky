@@ -336,11 +336,7 @@ function removeThisPost () {
     <div class="banner-container">
       <!-- バナー -->
       <div
-        v-if="loaderDisplay"
-        class="banner--transparent"
-      />
-      <div
-        v-else-if="
+        v-if="
           !!mainState.currentProfile?.banner &&
           accountContentDisplay &&
           accountMediaDisplay
@@ -391,15 +387,6 @@ function removeThisPost () {
 
     <div class="profile-view__top-wrapper">
       <div class="profile-view__top">
-        <!-- コンテンツフィルタトグル -->
-        <ContentFilteringToggle
-          v-if="contentFilteringToggleDisplay"
-          :labels="contentFilteringLabels"
-          :display="!!mainState.currentProfile?.__enabledContentMask"
-          :togglable="true"
-          @click.prevent.stop="onActivateAccountMaskToggle"
-        />
-
         <div class="profile-view__details">
           <div class="profile-view__details__top">
             <!-- アバターボタン -->
@@ -415,6 +402,15 @@ function removeThisPost () {
             </div>
 
             <div class="profile-view__details__top__right">
+              <!-- コンテンツフィルタトグル -->
+              <ContentFilteringToggle
+                v-if="contentFilteringToggleDisplay"
+                :labels="contentFilteringLabels"
+                :display="!!mainState.currentProfile?.__enabledContentMask"
+                :togglable="true"
+                @click.prevent.stop="onActivateAccountMaskToggle"
+              />
+
               <!-- 折り畳みトグル -->
               <button
                 v-if="!loaderDisplay"
@@ -874,7 +870,6 @@ function removeThisPost () {
   // 折り畳み
   &[data-folding="true"] {
     .banner,
-    .banner--transparent,
     .banner--filled,
     .banner-container__button-container,
     .label-tags,
@@ -951,14 +946,8 @@ function removeThisPost () {
 
 // コンテンツフィルタトグル
 .content-filtering-toggle {
-  position: relative;
-  z-index: 1;
-}
-.profile-view[data-folding="false"] .content-filtering-toggle[data-show="true"] {
-  // 非SPレイアウト
-  @include media-not-sp-layout() {
-    margin-left: calc(var(--avatar-size) + 1rem);
-  }
+  margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 // バナーコンテナ
@@ -977,20 +966,16 @@ function removeThisPost () {
 
 // バナー
 .banner,
-.banner--transparent,
 .banner--filled {
   aspect-ratio: 3 / 1;
 }
 .banner {
   cursor: pointer;
   object-fit: cover;
-  background-color: rgb(var(--bg-color), var(--main-area-opacity));
 }
-.banner--transparent {
-  background-color: rgb(var(--bg-color), var(--main-area-opacity));
-}
+.banner,
 .banner--filled {
-  background-color: rgb(var(--fg-color), 0.125);
+  background-color: rgb(var(--bg-sub-color));
 }
 
 // プロフィールポップオーバートグル
@@ -1005,9 +990,10 @@ function removeThisPost () {
   font-size: var(--avatar-size);
 
   // 非SPレイアウト
-  @include media-not-sp-layout() {
-    position: absolute;
-    bottom: 0;
+  .profile-view[data-folding="false"] & {
+    @include media-not-sp-layout() {
+      margin-top: calc(var(--avatar-size) * -0.5 - 1rem);
+    }
   }
 }
 

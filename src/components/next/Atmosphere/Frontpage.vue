@@ -58,20 +58,17 @@ const records = computedAsync<Array<any>>(async () => {
     :uri="`https://frontpage.fyi/profile/${profile?.handle}`"
   >
     <template #body>
-      <template
+      <a
         v-for="record, recordIndex of records"
         :key="recordIndex"
+        class="textlink--icon"
+        :href="record.value?.url"
+        rel="noreferrer"
+        target="_blank"
       >
-        <a
-          class="textlink--icon"
-          :href="record.value?.url"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <SVGIcon name="link" />
-          <span>{{ record.value?.title }}</span>
-        </a>
-      </template>
+        <SVGIcon name="link" />
+        <span>{{ record.value?.title }}</span>
+      </a>
     </template>
   </AtmosphereItem>
 </template>

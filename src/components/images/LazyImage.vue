@@ -63,7 +63,7 @@ function onLoad () {
 
 <style lang="scss" scoped>
 .lazy-image {
-  background-color: rgb(var(--fg-color), 0.125);
+  background-color: rgb(var(--bg-sub-color));
   display: block;
   &[data-has-load="true"] {
     @keyframes fade-in {
