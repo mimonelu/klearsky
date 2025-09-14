@@ -53,6 +53,7 @@ function toggle () {
   <div
     v-if="hasItem"
     class="atmosphere-container"
+    :data-has-item="hasItem"
   >
     <button
       type="button"
@@ -91,7 +92,10 @@ function toggle () {
         :alt="$t('pnWhiteWind')"
       >
 
-      <SVGIcon :name="state.display ? 'cursorUp' : 'cursorDown'" />
+      <SVGIcon
+        v-if="hasItem"
+        :name="state.display ? 'cursorUp' : 'cursorDown'"
+      />
     </button>
     <div
       v-if="state.display"
@@ -126,25 +130,32 @@ function toggle () {
 
 <style lang="scss" scoped>
 .atmosphere-container {
-  background-image: linear-gradient(
-    135deg,
-    rgb(var(--blue-color)),
-    rgb(var(--blue-color), 0.75)
-  );
   border-radius: var(--border-radius-middle);
   display: flex;
   flex-direction: column;
   padding: 0 0.5rem;
+  &[data-has-item="true"] {
+    background-image: linear-gradient(
+      135deg,
+      rgb(var(--blue-color)),
+      rgb(var(--blue-color), 0.75)
+    );
+  }
+  &[data-has-item="false"] {
+    background-color: rgb(var(--fg-color), 0.0625);
+  }
 
   &__button {
-    --fg-color: var(--white-color);
     margin: 0 -0.5rem;
+    [data-has-item="true"] & {
+      --fg-color: var(--white-color);
+    }
 
     // Favicon
     & > img {
-      height: 1rem;
-      min-height: 1rem;
-      max-height: 1rem;
+      width: 1rem;
+      min-width: 1rem;
+      max-width: 1rem;
     }
   }
 
