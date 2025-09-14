@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, ref } from "vue"
 import { isBefore } from "date-fns/isBefore"
 import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
@@ -16,6 +16,8 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+const processing = ref(false)
+
 const records = computedAsync<Array<any>>(async () => {
   if (props.profile == null) {
     return []
@@ -31,11 +33,13 @@ const records = computedAsync<Array<any>>(async () => {
     return []
   }
 
+  processing.value = true
   const results = await mainState.atp.fetchRecords(
     props.profile.did,
     AtmosphereHelper.lexicons["smokesignal"],
     NUMBER_OF_FETCH_RECORDS,
   )
+  processing.value = false
   if (results instanceof Error) {
     return []
   }
@@ -61,6 +65,7 @@ const records = computedAsync<Array<any>>(async () => {
   <AtmosphereItem
     v-if="records.length > 0"
     class="smoke-signal"
+    :processing="processing"
     title="pnSmokeSignal"
     :icon="ATMOSPHERE_SERVICE_FAVICONS.smokesignal"
     :uri="`https://smokesignal.events/${profile?.did}`"

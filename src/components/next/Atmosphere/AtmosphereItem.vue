@@ -1,7 +1,9 @@
 <script lang="ts" setup>
+import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 defineProps<{
+  processing: boolean
   title: string
   icon: string
   uri?: string
@@ -34,6 +36,7 @@ defineProps<{
     <div class="atmosphere-item__body">
       <slot name="body" />
     </div>
+    <Loader v-if="processing" />
   </div>
 </template>
 
@@ -43,6 +46,7 @@ defineProps<{
   border: 1px solid rgb(var(--blue-color), 0.5);
   border-radius: var(--border-radius-middle);
   overflow: hidden;
+  position: relative;
 
   &__header {
     display: flex;
@@ -95,6 +99,10 @@ defineProps<{
     & > .svg-icon {
       fill: rgb(var(--cyan-dark-color), var(--alpha));
     }
+  }
+
+  .loader {
+    font-size: 0.75rem;
   }
 }
 </style>

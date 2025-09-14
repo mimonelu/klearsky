@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/AtmosphereItem.vue"
@@ -12,6 +12,8 @@ const props = defineProps<{
 }>()
 
 const mainState = inject("state") as MainState
+
+const processing = ref(false)
 
 const records = computedAsync<Array<TICommonRecord>>(async () => {
   if (props.profile == null) {
@@ -28,11 +30,13 @@ const records = computedAsync<Array<TICommonRecord>>(async () => {
     return []
   }
 
+  processing.value = true
   const results = await mainState.atp.fetchRecords(
     props.profile.did,
     AtmosphereHelper.lexicons["whitewind"],
     NUMBER_OF_FETCH_RECORDS,
   )
+  processing.value = false
   if (results instanceof Error) {
     return []
   }
@@ -71,6 +75,7 @@ const records = computedAsync<Array<TICommonRecord>>(async () => {
 <template>
   <AtmosphereItem
     class="white-wind"
+    :processing="processing"
     title="pnWhiteWind"
     :icon="ATMOSPHERE_SERVICE_FAVICONS.whtwnd"
     :uri="`https://whtwnd.com/${profile?.handle}`"

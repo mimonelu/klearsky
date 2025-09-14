@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { inject, ref } from "vue"
 import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/AtmosphereItem.vue"
@@ -13,6 +13,8 @@ const props = defineProps<{
 }>()
 
 const mainState = inject("state") as MainState
+
+const processing = ref(false)
 
 const records = computedAsync<Array<any>>(async () => {
   if (props.profile == null) {
@@ -29,11 +31,13 @@ const records = computedAsync<Array<any>>(async () => {
     return []
   }
 
+  processing.value = true
   const results = await mainState.atp.fetchRecords(
     props.profile.did,
     AtmosphereHelper.lexicons["linkat"],
     NUMBER_OF_FETCH_RECORDS,
   )
+  processing.value = false
   if (results instanceof Error) {
     return []
   }
@@ -53,6 +57,7 @@ const records = computedAsync<Array<any>>(async () => {
 <template>
   <AtmosphereItem
     class="linkat"
+    :processing="processing"
     title="pnLinkat"
     :icon="ATMOSPHERE_SERVICE_FAVICONS.linkat"
     :uri="`https://linkat.blue/${profile?.did}`"
