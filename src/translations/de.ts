@@ -77,6 +77,8 @@ export default () => ({
   "accountImportNotification": "Kontodaten importieren.\n\n* Überschreibt Daten\n* Aktuelle Session bleibt\n\nFortfahren?",
   "noMyAccounts": "Keine Konten. Bitte melden Sie sich zuerst an. Sie können ein Konto in der offiziellen App erstellen.",
   "signUp": "Konto erstellen (Dev)",
+  "signUpMode": "Zum Sign-Up-Formular wechseln",
+  "signInMode": "Zum Sign-In-Formular wechseln",
   "email": "E-Mail",
   "handle": "Handle",
   "inviteCode": "Einladungscode",

@@ -77,6 +77,8 @@ export default () => ({
   "accountImportNotification": "Imports account data. \n\n* Overwrites existing data with input data. No deletion. \n* Currently logged in data will not be overwritten.\n\nDo you want to continue?",
   "noMyAccounts": "No My Accounts. Please log in first. You can create an account on the official client.",
   "signUp": "Create account (for dev)",
+  "signUpMode": "Switch to Sign Up Form",
+  "signInMode": "Switch to Sign In Form",
   "email": "Email",
   "handle": "Handle",
   "inviteCode": "Invite code",

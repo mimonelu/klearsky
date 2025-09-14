@@ -77,6 +77,8 @@ export default () => ({
   "accountImportNotification": "계정 데이터를 가져옵니다.\n\n* 입력 데이터로 기존 데이터를 덮어씁니다. 삭제되지 않습니다.\n* 현재 로그인 중인 데이터는 덮어쓰지 않습니다.\n\n계속하시겠습니까?",
   "noMyAccounts": "계정이 없습니다. 먼저 로그인하세요. 계정은 공식 앱에서 생성할 수 있습니다.",
   "signUp": "계정 생성 (개발자용)",
+  "signUpMode": "회원가입 폼으로 전환",
+  "signInMode": "로그인 폼으로 전환",
   "email": "이메일",
   "handle": "핸들",
   "inviteCode": "초대 코드",
