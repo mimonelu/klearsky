@@ -620,7 +620,7 @@ export default () => ({
   "backgroundImage2": "CSS 속성 `background-image`의 값도 설정할 수 있습니다.\n예: linear-gradient(to bottom, pink, cyan)",
   "development": "개발",
   "dangerZone": "주의가 필요한 작업",
-  "atprotoProxySetting": "atproto-proxy (app.bsky용)",
+  "atprotoProxyAppBskySetting": "atproto-proxy (app.bsky용)",
   "setOfficialValue": "공식 값 설정",
   "resetSettings": "모든 설정 초기화",
   "resetSettingsDetail": "이 계정의 설정을 재설정합니다. 괜찮습니까?",

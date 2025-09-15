@@ -117,7 +117,7 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "off",
       inputmode: "text",
       submitWhenEnter: true,
-    }
+    },
   ],
 }
 

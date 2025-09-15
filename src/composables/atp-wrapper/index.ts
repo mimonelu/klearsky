@@ -154,7 +154,7 @@ class AtpWrapper implements TIAtpWrapper {
   constructor () {
     this.agent = null
     this.proxies = {
-      appBsky: CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY,
+      appBsky: "",
       chatBsky: CONSTS.OFFICIAL_ATPROTO_PROXY_CHAT_BSKY,
     }
     this.data = Util.loadStorage("atp") ?? {

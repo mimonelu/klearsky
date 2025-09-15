@@ -127,7 +127,7 @@ async function resetSettings () {
 
             <!-- atproto-proxy -->
             <div class="settings-popup__form__header">
-              <span>{{ $t("atprotoProxySetting") }}</span>
+              <span>{{ $t("atprotoProxyAppBskySetting") }}</span>
             </div>
             <div class="settings-popup__form__body">
               <input

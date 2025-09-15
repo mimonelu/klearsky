@@ -620,7 +620,7 @@ export default () => ({
   "backgroundImage2": "Sie können auch den Wert der CSS-Eigenschaft `background-image` festlegen.\nz.B. linear-gradient(to bottom, pink, cyan)",
   "development": "Entwicklung",
   "dangerZone": "Vorsicht erforderlich",
-  "atprotoProxySetting": "atproto-proxy (für app.bsky)",
+  "atprotoProxyAppBskySetting": "atproto-proxy (für app.bsky)",
   "setOfficialValue": "Offiziellen Wert setzen",
   "resetSettings": "Alle Einstellungen zurücksetzen",
   "resetSettingsDetail": "Die Einstellungen dieses Kontos zurücksetzen. Sind Sie sicher?",

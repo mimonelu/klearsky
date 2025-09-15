@@ -620,7 +620,7 @@ export default () => ({
   "backgroundImage2": "Tu peux aussi utiliser une propriété CSS comme `background-image`.\nex: linear-gradient(to bottom, pink, cyan)",
   "development": "Développement",
   "dangerZone": "Opérations sensibles",
-  "atprotoProxySetting": "atproto-proxy (pour app.bsky)",
+  "atprotoProxyAppBskySetting": "atproto-proxy (pour app.bsky)",
   "setOfficialValue": "Définir valeur officielle",
   "resetSettings": "Réinitialiser tous les paramètres",
   "resetSettingsDetail": "Réinitialiser les paramètres de ce compte. Es-tu sûr?",
