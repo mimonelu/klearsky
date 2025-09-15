@@ -3,6 +3,7 @@ import { computed, inject, onMounted, reactive } from "vue"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import Frontpage from "@/components/next/Atmosphere/Frontpage.vue"
 import Linkat from "@/components/next/Atmosphere/Linkat.vue"
+import SkyBeMoreBlue from "@/components/next/Atmosphere/SkyBeMoreBlue.vue"
 import SmokeSignal from "@/components/next/Atmosphere/SmokeSignal.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import WhiteWind from "@/components/next/Atmosphere/WhiteWind.vue"
@@ -30,6 +31,10 @@ const displayOfLinkat = computed((): boolean => {
 
 const displayOfFrontpage = computed((): boolean => {
   return AtmosphereHelper.includes("frontpage", mainState.currentProfile)
+})
+
+const displayOfSkyBeMoreBlue = computed((): boolean => {
+  return AtmosphereHelper.includes("skybemoreblue", mainState.currentProfile)
 })
 
 const displayOfWhiteWind = computed((): boolean => {
@@ -85,6 +90,13 @@ function toggle () {
         :alt="$t('pnFrontpage')"
       >
 
+      <!-- SkyBeMoreBlue Favicon -->
+      <img
+        v-if="displayOfSkyBeMoreBlue"
+        :src="ATMOSPHERE_SERVICE_FAVICONS.skybemoreblue"
+        :alt="$t('pnSkyBeMoreBlue')"
+      >
+
       <!-- WhiteWind Favicon -->
       <img
         v-if="displayOfWhiteWind"
@@ -116,6 +128,12 @@ function toggle () {
       <!-- Frontpage コンテンツ -->
       <Frontpage
         v-if="displayOfFrontpage"
+        :profile="mainState.currentProfile ?? undefined"
+      />
+
+      <!-- SkyBeMoreBlue コンテンツ -->
+      <SkyBeMoreBlue
+        v-if="displayOfSkyBeMoreBlue"
         :profile="mainState.currentProfile ?? undefined"
       />
 

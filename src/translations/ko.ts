@@ -774,6 +774,7 @@ export default () => ({
   "pnNicovideo": "니코니코 동화",
   "pnFrontpage": "Frontpage",
   "pnLinkat": "Linkat",
+  "pnSkyBeMoreBlue": "SkyBeMoreBlue",
   "pnSmokeSignal": "Smoke Signal",
   "pnWhiteWind": "WhiteWind",
 
