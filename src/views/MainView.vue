@@ -114,6 +114,7 @@ onMounted(async () => {
   state.currentPath = router.currentRoute.value.path
   state.currentQuery = router.currentRoute.value.query
   state.settings = Util.loadStorage("settings") ?? {}
+  state.updateAtprotoProxy(state.settings[state.atp.data.did]?.atprotoProxyAppBsky)
   state.loaderDisplay = true
   await autoLogin()
   state.loaderDisplay = false

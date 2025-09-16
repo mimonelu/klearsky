@@ -29,7 +29,16 @@ export default function (
 
       // app.bsky
       if (urlString?.includes("/xrpc/app.bsky.") && this.proxies.appBsky) {
-        headers.set("atproto-proxy", this.proxies.appBsky)
+        // Preferences API は公式AppViewとする
+        if (
+          urlString?.includes("Preferences") &&
+          this.proxies.appBsky !== "" &&
+          this.proxies.appBsky !== CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY
+        ) {
+          headers.set("atproto-proxy", CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY)
+        } else {
+          headers.set("atproto-proxy", this.proxies.appBsky)
+        }
       }
 
       // app.chat

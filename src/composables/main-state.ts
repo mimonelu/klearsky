@@ -146,6 +146,9 @@ export const state: MainState = reactive<MainState>({
   currentBlockingUsers: [],
   currentBlockingUsersCursor: undefined,
 
+  // atproto-proxy
+  updateAtprotoProxy: updateAtprotoProxy,
+
   // プロフィール
   inSameProfilePage: false,
   profileFolding: false,
@@ -874,6 +877,9 @@ function resetSettings () {
 }
 
 function updateSettings () {
+  // atproto-proxy
+  updateAtprotoProxy()
+
   updateCurrentLanguageSetting()
   updateFontSetting()
   updateColorThemeSetting()
@@ -886,9 +892,6 @@ function updateSettings () {
 
   // 新着チャットタイマーの更新
   state.startChatListTimer()
-
-  // atproto-proxy
-  updateAtprotoProxy()
 }
 
 function saveSettings () {
@@ -1357,8 +1360,8 @@ async function startChatListTimer () {
 
 // atproto-proxy
 
-function updateAtprotoProxy () {
-  state.atp.proxies.appBsky = state.currentSetting.atprotoProxyAppBsky
+function updateAtprotoProxy (proxy?: string) {
+  state.atp.proxies.appBsky = proxy ?? state.currentSetting.atprotoProxyAppBsky ?? ""
 }
 
 // プロフィール

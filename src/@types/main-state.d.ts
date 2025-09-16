@@ -100,6 +100,9 @@ interface MainState {
   currentBlockingUsers: Array<TTUser>
   currentBlockingUsersCursor?: string
 
+  // atproto-proxy
+  updateAtprotoProxy: (proxy?: string) => void
+
   // プロフィール
   inSameProfilePage: boolean
   profileFolding: boolean
