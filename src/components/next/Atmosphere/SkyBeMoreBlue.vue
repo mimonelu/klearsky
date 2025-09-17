@@ -219,7 +219,6 @@ const items = computedAsync<Array<SkyBeMoreBlueItem>>(async () => {
   // 可能であれば2行でトリム
   @supports (-webkit-line-clamp: 2) or (line-clamp: 2) {
     &__introduction {
-      display: box;
       display: -webkit-box;
       line-clamp: 2;
       -webkit-line-clamp: 2;
