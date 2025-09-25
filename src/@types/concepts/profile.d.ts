@@ -16,10 +16,12 @@ type TTProfile = {
   labels?: Array<TTLabel>
   pinnedPost?: TTCidUri
   postsCount: number
+  pronouns?: string
   joinedViaStarterPack?: TIStarterPack
   status?: TIActorStatus
   verification?: TIVerification
   viewer: TTUserViewer
+  website?: string
 
   // Frontpage
   __frontpage?: Array<TICommonRecord>
@@ -40,6 +42,8 @@ type TTProfile = {
 type TTUpdateProfileParams = {
   displayName: string
   description: string
+  pronouns: string
+  website: string
   labels: Array<string>
   avatar: null | Array<File>
   detachAvatar: Array<boolean>

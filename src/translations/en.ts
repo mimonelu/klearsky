@@ -94,6 +94,8 @@ export default () => ({
   "editProfile": "Edit",
   "displayName": "Display Name",
   "description": "Description",
+  "pronouns": "Pronouns",
+  "websiteUrl": "Website URL",
   "avatar": "Avatar",
   "detachAvatar": "Detach avatar image",
   "banner": "Banner",

@@ -94,6 +94,8 @@ export default () => ({
   "editProfile": "편집",
   "displayName": "표시 이름",
   "description": "소개",
+  "pronouns": "대명사 / 호칭",
+  "websiteUrl": "웹사이트 URL",
   "avatar": "아바타",
   "detachAvatar": "아바타 제거",
   "banner": "배너",

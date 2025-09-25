@@ -94,6 +94,8 @@ export default () => ({
   "editProfile": "編集",
   "displayName": "名前",
   "description": "紹介文",
+  "pronouns": "代名詞／呼び方",
+  "websiteUrl": "WebサイトのURL",
   "avatar": "サムネイル",
   "detachAvatar": "サムネイルを取り外す",
   "banner": "バナー",

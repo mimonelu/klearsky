@@ -22,6 +22,16 @@ export default async function (
     profileSchema.description = params.description
   }
 
+  // プロナウンス
+  if (params.pronouns != null) {
+    profileSchema.pronouns = params.pronouns
+  }
+
+  // WebサイトのURL
+  if (params.website != null) {
+    profileSchema.website = params.website
+  }
+
   // アカウントラベル
   if (params.labels.length > 0) {
     profileSchema.labels = {
