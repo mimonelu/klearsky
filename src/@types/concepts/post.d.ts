@@ -110,6 +110,7 @@ type TTReason = {
     }
     handle: string
     displayName: string
+    pronouns?: string
     avatar: string
     viewer: TTUserViewer
   }

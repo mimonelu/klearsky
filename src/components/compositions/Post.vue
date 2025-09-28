@@ -1046,6 +1046,7 @@ function toggleOldestQuotedPostDisplay () {
                   ? (post.author?.displayName || post.author?.handle)
                   : post.author?.displayName
               ) || '&nbsp;'"
+              :pronouns="post.author?.pronouns"
               :anonymizable="true"
             />
           </RouterLink>
@@ -1885,6 +1886,7 @@ function toggleOldestQuotedPostDisplay () {
     .display-name {
       color: rgb(var(--fg-color), 0.75);
       display: grid;
+      grid-template-columns: auto 1fr;
       font-size: 0.875em;
       &:focus, &:hover {
         color: rgb(var(--fg-color));

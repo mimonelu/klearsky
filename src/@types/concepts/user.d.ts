@@ -5,6 +5,7 @@ type TTUser = {
   description?: string
   did: string
   displayName: string
+  pronouns?: string
   handle: string
   labels?: Array<TTLabel>
   status?: TIActorStatus

@@ -439,6 +439,7 @@ function removeThisPost () {
                 <!-- 表示名 -->
                 <DisplayName
                   :displayName="mainState.currentProfile?.displayName ?? '&emsp;'"
+                  :pronouns="mainState.currentProfile?.pronouns"
                   :anonymizable="false"
                 />
 
@@ -1027,12 +1028,16 @@ function removeThisPost () {
   display: contents;
   pointer-events: none;
 
-  &:deep() > span {
-    font-size: 1.5rem;
-    user-select: text;
-    white-space: pre-line;
-    word-break: break-all;
-    word-break: break-word;
+  &:deep() {
+    & > span {
+      white-space: pre-line;
+      word-break: break-all;
+      word-break: break-word;
+    }
+
+    .display-name__name {
+      font-size: 1.5rem;
+    }
   }
 }
 
