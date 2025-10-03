@@ -27,6 +27,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
 import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
+import WebsiteLink from "@/components/buttons/WebsiteLink.vue"
 import Util from "@/composables/util"
 
 const router = useRouter()
@@ -574,6 +575,12 @@ function removeThisPost () {
               class="description"
               dir="auto"
               :text="mainState.currentProfile?.description ?? '&emsp;'"
+            />
+
+            <!-- Webサイトリンク -->
+            <WebsiteLink
+              v-if="mainState.currentProfile?.website != null"
+              :url="mainState.currentProfile.website"
             />
 
             <!-- Atmosphere -->
