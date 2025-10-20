@@ -218,6 +218,16 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </button>
     </div>
 
+    <!-- フィードインタラクション -->
+    <div
+      v-if="generator.acceptsInteractions"
+      class="textlabel feed-card__feed-interaction-notice"
+    >
+      <div class="textlabel__text">
+        <SVGIcon name="star" />{{ $t("feedInteractionSupportedDescription") }}
+      </div>
+    </div>
+
     <div v-if="state.detailDisplay">
       <!-- フィード説明文 -->
       <HtmlText
@@ -457,6 +467,25 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       fill: var(--color);
       font-size: 1.25em;
       pointer-events: none;
+    }
+  }
+
+  // フィードインタラクション
+  &__feed-interaction-notice {
+    background-color: rgb(var(--feed-interaction-color), 0.125);
+    border-radius: var(--border-radius-middle);
+    color: rgb(var(--feed-interaction-color));
+    line-height: var(--line-height-middle);
+    padding: 0.5em;
+    font-size: 0.875em;
+    font-weight: bold;
+
+    .svg-icon {
+      fill: rgb(var(--feed-interaction-color));
+    }
+
+    & > .textlabel__text {
+      word-break: break-word;
     }
   }
 
