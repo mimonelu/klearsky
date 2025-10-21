@@ -20,7 +20,7 @@ interface TIAtpWrapper {
   createDuplicatedList
     (listUri: string): Promise<Error | string>
   createFeedInteractions
-    (interactions: TTFeedInteraction[]): Promise<Error | true>
+    (interactions: TTFeedInteraction[], feedGeneratorDid: string): Promise<Error | true>
   createFileBlobRef
     (params: TTCreateFileBlobRefParams): Promise<Error | BlobRef>
   createFollow

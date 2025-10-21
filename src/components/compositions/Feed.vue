@@ -8,6 +8,7 @@ const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
   feed: TTFeed
+  feedGeneratorDid?: string
 }>()
 
 function toggleReplyDisplay () {
@@ -118,6 +119,7 @@ function removeThisPost (uri: string) {
         :post="feed.post"
         :rootPost="feed.reply?.root"
         :parentPost="feed.reply?.parent"
+        :feedGeneratorDid="feedGeneratorDid"
         :feedContext="feed.feedContext"
         :reqId="feed.reqId"
         :isInFeed="true"

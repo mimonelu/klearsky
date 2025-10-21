@@ -29,8 +29,11 @@ export default function (
 
       // app.bsky
       if (urlString?.includes("/xrpc/app.bsky.") && this.proxies.appBsky) {
+        // フィードインタラクション（ sendInteractions ）
+        if (urlString?.includes("sendInteractions") && headers.has("atproto-proxy")) { /**/ }
+
         // Preferences API は公式AppViewとする
-        if (
+        else if (
           urlString?.includes("Preferences") &&
           this.proxies.appBsky !== "" &&
           this.proxies.appBsky !== CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY

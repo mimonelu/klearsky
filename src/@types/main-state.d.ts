@@ -253,6 +253,7 @@ interface MainState {
     post?: TTPost
 
     // フィードインタラクション
+    feedGeneratorDid?: string,
     feedContext?: string
     reqId?: string
   }

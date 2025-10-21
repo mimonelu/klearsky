@@ -28,6 +28,7 @@ const props = defineProps<{
   post?: TTPost
 
   // フィードインタラクション
+  feedGeneratorDid?: string
   feedContext?: string
   reqId?: string
 }>()
@@ -154,6 +155,7 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       <template v-if="feedContext != null || reqId != null">
         <MenuTickerFeedInteraction
           :uri="post?.uri"
+          :feedGeneratorDid="feedGeneratorDid"
           :feedContext="feedContext"
           :reqId="reqId"
           @close="emit('close')"

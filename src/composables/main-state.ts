@@ -310,6 +310,7 @@ export const state: MainState = reactive<MainState>({
     post: undefined,
 
     // フィードインタラクション
+    feedGeneratorDid: undefined,
     feedContext: undefined,
     reqId: undefined,
   },

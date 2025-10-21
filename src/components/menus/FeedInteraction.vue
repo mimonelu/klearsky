@@ -7,6 +7,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   uri?: string
+  feedGeneratorDid?: string
   feedContext?: string
   reqId?: string
 }>()
@@ -15,7 +16,11 @@ const mainState = inject("state") as MainState
 
 async function sendFeedInteraction (event: TTFeedInteraction["event"]) {
   Util.blurElement()
-  if (props.uri == null || mainState.loaderDisplay) {
+  if (
+    props.uri == null ||
+    props.feedGeneratorDid == null ||
+    mainState.loaderDisplay
+  ) {
     return
   }
   emit("close")
@@ -24,8 +29,8 @@ async function sendFeedInteraction (event: TTFeedInteraction["event"]) {
     item: props.uri,
     event,
     feedContext: props.feedContext,
-    reqId: props.reqId,
-  }])
+    reqId: props.reqId ?? "",
+  }], props.feedGeneratorDid)
   mainState.loaderDisplay = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "FeedInteraction/sendFeedInteraction")

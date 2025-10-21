@@ -19,6 +19,7 @@ const props = defineProps<{
   feeds: null | Array<TTFeed>
   hasLoadButton?: boolean
   disabledInfinitScroll?: boolean
+  feedGeneratorDid?: string
 }>()
 
 const mainState = inject("state") as MainState
@@ -128,6 +129,7 @@ function onScrolledToBottom () {
       >
         <Feed
           :feed="feed"
+          :feedGeneratorDid="feedGeneratorDid"
           :data-is-middle="feed.__cursor != null"
           @updateThisPostThread="updateThisPostThread as unknown"
           @removeThisPost="removeThisPost as unknown"
