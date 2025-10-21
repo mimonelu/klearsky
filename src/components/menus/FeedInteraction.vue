@@ -28,7 +28,7 @@ async function sendFeedInteraction (event: TTFeedInteraction["event"]) {
   const response = await mainState.atp.createFeedInteractions([{
     item: props.uri,
     event,
-    feedContext: props.feedContext,
+    feedContext: props.feedContext ?? "",
     reqId: props.reqId ?? "",
   }], props.feedGeneratorDid)
   mainState.loaderDisplay = false

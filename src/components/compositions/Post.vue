@@ -47,6 +47,7 @@ const props = defineProps<{
   forceUpdatePostThread?: boolean
 
   // フィードインタラクション
+  feedAcceptsInteractions?: boolean
   feedGeneratorDid?: string
   feedContext?: string
   reqId?: string
@@ -628,6 +629,7 @@ function openPostPopover ($event: Event) {
   mainState.postPopoverProps.post = props.post
 
   // フィードインタラクション
+  mainState.postPopoverProps.feedAcceptsInteractions = props.feedAcceptsInteractions
   mainState.postPopoverProps.feedGeneratorDid = props.feedGeneratorDid
   mainState.postPopoverProps.feedContext = props.feedContext
   mainState.postPopoverProps.reqId = props.reqId

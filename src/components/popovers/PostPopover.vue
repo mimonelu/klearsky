@@ -28,6 +28,7 @@ const props = defineProps<{
   post?: TTPost
 
   // フィードインタラクション
+  feedAcceptsInteractions?: boolean
   feedGeneratorDid?: string
   feedContext?: string
   reqId?: string
@@ -152,7 +153,7 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       <hr />
 
       <!-- フィードインタラクション -->
-      <template v-if="feedContext != null || reqId != null">
+      <template v-if="feedAcceptsInteractions === true && feedGeneratorDid != null">
         <MenuTickerFeedInteraction
           :uri="post?.uri"
           :feedGeneratorDid="feedGeneratorDid"

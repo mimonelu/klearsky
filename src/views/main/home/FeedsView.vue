@@ -57,6 +57,7 @@ const state = reactive<{
       type="feeds"
       :feeds="mainState.currentCustomFeeds"
       :hasLoadButton="true"
+      :feedAcceptsInteractions="state.generator?.acceptsInteractions"
       :feedGeneratorDid="state.generator?.did"
     />
   </div>

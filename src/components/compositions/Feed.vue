@@ -8,6 +8,7 @@ const emit = defineEmits<{(event: string, params?: any): void}>()
 
 const props = defineProps<{
   feed: TTFeed
+  feedAcceptsInteractions?: boolean
   feedGeneratorDid?: string
 }>()
 
@@ -119,6 +120,7 @@ function removeThisPost (uri: string) {
         :post="feed.post"
         :rootPost="feed.reply?.root"
         :parentPost="feed.reply?.parent"
+        :feedAcceptsInteractions="feedAcceptsInteractions"
         :feedGeneratorDid="feedGeneratorDid"
         :feedContext="feed.feedContext"
         :reqId="feed.reqId"
