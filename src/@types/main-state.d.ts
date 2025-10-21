@@ -251,6 +251,10 @@ interface MainState {
   postPopoverProps: {
     display: boolean
     post?: TTPost
+
+    // フィードインタラクション
+    feedContext?: string
+    reqId?: string
   }
   postPopoverSelector?: string | HTMLElement
   postPopoverCallback?: (type: "deletePost" | "updatePost" | "createCustomBookmark" | "deleteCustomBookmark") => Promise<void>

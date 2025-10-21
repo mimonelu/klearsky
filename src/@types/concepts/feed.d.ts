@@ -7,8 +7,8 @@ type TTFeed = {
     [k: string]: unknown
   }
   reason?: TTReason
-  feedContext?: string
-  reqId?: string
+  feedContext?: string // フィードインタラクション
+  reqId?: string // フィードインタラクション
   __cursor?: string // Injected
   __id: string // Injected
   __folding?: boolean // Injected

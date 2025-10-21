@@ -308,6 +308,10 @@ export const state: MainState = reactive<MainState>({
   postPopoverProps: {
     display: false,
     post: undefined,
+
+    // フィードインタラクション
+    feedContext: undefined,
+    reqId: undefined,
   },
   postPopoverSelector: undefined,
   postPopoverCallback: undefined,

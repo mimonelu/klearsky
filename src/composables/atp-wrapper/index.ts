@@ -6,6 +6,7 @@ import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-de
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
 import createChatReaction  from "@/composables/atp-wrapper/chat/create-chat-reaction"
 import createDuplicatedList  from "@/composables/atp-wrapper/create/create-duplicated-list"
+import createFeedInteractions from "@/composables/atp-wrapper/create/create-feed-interactions"
 import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob-ref"
 import createFollow from "@/composables/atp-wrapper/create/create-follow"
 import createLike from "@/composables/atp-wrapper/create/create-like"
@@ -186,6 +187,7 @@ class AtpWrapper implements TIAtpWrapper {
   createChatMessage = createChatMessage
   createChatReaction = createChatReaction
   createDuplicatedList = createDuplicatedList
+  createFeedInteractions = createFeedInteractions
   createFileBlobRef = createFileBlobRef
   createFollow = createFollow
   createLike = createLike

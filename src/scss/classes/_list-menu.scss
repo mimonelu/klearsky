@@ -22,9 +22,9 @@
     }
   }
 
-  & > a,
-  & > button,
-  & > &__item {
+  a,
+  button,
+  &__item {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -93,6 +93,10 @@
     }
     & > .svg-icon--bookmarkPlus {
       --icon-color: var(--bookmark-color);
+    }
+    & > .svg-icon--thumbUp,
+    & > .svg-icon--thumbDown {
+      --icon-color: var(--feed-interaction-color);
     }
     & > .svg-icon--verified,
     & > .svg-icon--verifier {

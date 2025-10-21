@@ -45,6 +45,10 @@ const props = defineProps<{
   forceHideMedia?: boolean
   forceHideQuoteRepost?: boolean
   forceUpdatePostThread?: boolean
+
+  // フィードインタラクション
+  feedContext?: string
+  reqId?: string
 }>()
 
 const $t = inject("$t") as Function
@@ -621,6 +625,11 @@ function makeActionViaRepost (actionType: "like" | "repost"): undefined | TTCidU
 function openPostPopover ($event: Event) {
   Util.blurElement()
   mainState.postPopoverProps.post = props.post
+
+  // フィードインタラクション
+  mainState.postPopoverProps.feedContext = props.feedContext
+  mainState.postPopoverProps.reqId = props.reqId
+
   mainState.postPopoverCallback = postPopoverCallback
   mainState.openPostPopover($event.target)
 }

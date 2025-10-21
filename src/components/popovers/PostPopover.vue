@@ -2,6 +2,7 @@
 import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import MenuTickerCopyTextWrapper from "@/components/menus/CopyTextWrapper.vue"
 import MenuTickerDeleteCustomBookmark from "@/components/menus/DeleteCustomBookmark.vue"
+import MenuTickerFeedInteraction from "@/components/menus/FeedInteraction.vue"
 import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
 import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.vue"
@@ -25,6 +26,10 @@ const emit = defineEmits<{(event: string): void}>()
 const props = defineProps<{
   display: boolean
   post?: TTPost
+
+  // フィードインタラクション
+  feedContext?: string
+  reqId?: string
 }>()
 
 const $t = inject("$t") as Function
@@ -144,6 +149,18 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       </RouterLink>
 
       <hr />
+
+      <!-- フィードインタラクション -->
+      <template v-if="feedContext != null || reqId != null">
+        <MenuTickerFeedInteraction
+          :uri="post?.uri"
+          :feedContext="feedContext"
+          :reqId="reqId"
+          @close="emit('close')"
+        />
+
+        <hr />
+      </template>
 
       <!-- 認証者一覧 -->
       <VerifiersPopupOpener

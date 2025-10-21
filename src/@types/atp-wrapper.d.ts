@@ -19,6 +19,8 @@ interface TIAtpWrapper {
     (convoId: string, messageId: string, value: string): Promise<Error | TIChatMessage>
   createDuplicatedList
     (listUri: string): Promise<Error | string>
+  createFeedInteractions
+    (interactions: TTFeedInteraction[]): Promise<Error | true>
   createFileBlobRef
     (params: TTCreateFileBlobRefParams): Promise<Error | BlobRef>
   createFollow

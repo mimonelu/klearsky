@@ -100,6 +100,8 @@ import shimmer from "@/svg/shimmer.svg?raw"
 import sort from "@/svg/sort.svg?raw"
 import sprout from "@/svg/sprout.svg?raw"
 import star from "@/svg/star.svg?raw"
+import thumbUp from "@/svg/thumb-up.svg?raw"
+import thumbDown from "@/svg/thumb-down.svg?raw"
 import translate from "@/svg/translate.svg?raw"
 import trending from "@/svg/trending-up.svg?raw"
 import unlock from "@/svg/unlock.svg?raw"
@@ -212,6 +214,8 @@ const icons: { [k: string]: string } = {
   sort,
   sprout,
   star,
+  thumbUp,
+  thumbDown,
   translate,
   trending,
   unlock,
