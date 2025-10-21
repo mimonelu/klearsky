@@ -218,6 +218,9 @@ export default () => ({
   "feedControl": "フィードの制御",
   "feedControlDescription": "次のダウンロードから有効です。",
   "popularFeeds": "人気フィード",
+  "feedInteractionMore": "このような投稿の表示を増やす",
+  "feedInteractionLess": "このような投稿の表示を減らす",
+  "feedInteractionSupportedDescription": "フィードインタラクション対応",
 
   // ============================================================================
   // MYFEEDS SORTS

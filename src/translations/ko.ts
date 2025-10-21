@@ -218,6 +218,9 @@ export default () => ({
   "feedControl": "피드 제어",
   "feedControlDescription": "다음 다운로드부터 적용됩니다.",
   "popularFeeds": "인기 피드",
+  "feedInteractionMore": "이런 게시물 더 보기",
+  "feedInteractionLess": "이런 게시물 덜 보기",
+  "feedInteractionSupportedDescription": "피드 인터랙션 지원",
 
   // ============================================================================
   // MYFEEDS SORTS

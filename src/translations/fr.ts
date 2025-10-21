@@ -218,6 +218,9 @@ export default () => ({
   "feedControl": "Contrôle des fils",
   "feedControlDescription": "Effectif au prochain téléchargement.",
   "popularFeeds": "Fils populaires",
+  "feedInteractionMore": "Afficher plus comme ceci",
+  "feedInteractionLess": "Afficher moins comme ceci",
+  "feedInteractionSupportedDescription": "Prend en charge Feed Interactions",
 
   // ============================================================================
   // MYFEEDS SORTS
