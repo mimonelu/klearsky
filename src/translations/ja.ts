@@ -550,6 +550,7 @@ export default () => ({
   "packs": "パック",
   "starterPacks": "スターターパック",
   "joinedStarterPack": "スターターパック",
+  "latestActivityDate": "最新の更新",
   "noStarterPacks": "このユーザーの管理するスターターパックはありません。",
   "showStarterPackListFeeds": "リストフィードを見る",
   "showStarterPackListUsers": "リストユーザーを見る",

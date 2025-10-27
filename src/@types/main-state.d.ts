@@ -128,6 +128,7 @@ interface MainState {
   currentAuthorPostOfPinnedPost?: TTPost
   currentAuthorStarterPacks: Array<TIStarterPack>
   currentAuthorStarterPacksCursor?: string
+  currentAuthorLatestActivityDate?: string
   currentFollowers: Array<TTUser>
   currentFollowersCursor?: string
   currentFollowings: Array<TTUser>

@@ -638,6 +638,15 @@ function removeThisPost () {
                   </a>
                 </dd>
               </dl>
+
+              <!-- 最終アクティビティ日時 -->
+              <dl
+                v-if="mainState.currentAuthorLatestActivityDate != null"
+                class="latest-activity-date"
+              >
+                <dt>{{ $t("latestActivityDate") }}</dt>
+                <dd>{{ mainState.formatDate(mainState.currentAuthorLatestActivityDate) }}</dd>
+              </dl>
             </div>
           </div>
         </div>
