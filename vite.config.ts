@@ -5,21 +5,6 @@ import vue from "@vitejs/plugin-vue"
 // Minify HTML
 import { createHtmlPlugin } from "vite-plugin-html"
 
-// `measureUserAgentSpecificMemory` を実行可能にするためにクロスオリジン分離状態を有効化する
-// SEE: https://web.dev/articles/monitor-total-page-memory-usage?hl=ja
-const env = loadEnv("development", process.cwd(), "")
-const server = (
-  env.NODE_ENV === "development" &&
-  env.VITE_MEMORY_INFO === "1"
-)
-? {
-  headers: {
-    "Cross-Origin-Opener-Policy": "same-origin",
-    "Cross-Origin-Embedder-Policy": "require-corp",
-  },
-}
-: undefined
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -85,6 +70,4 @@ export default defineConfig({
       },
     },
   },
-
-  server,
 })
