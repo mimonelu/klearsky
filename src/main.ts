@@ -2,6 +2,7 @@
 import "@/scss/main.scss"
 
 import { createApp } from "vue"
+import "@/composables/logger"
 import App from "@/App.vue"
 import { registerPlugins } from "@/plugins"
 

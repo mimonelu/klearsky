@@ -3,7 +3,7 @@ export default {
     try {
       return JSON.stringify(json)
     } catch (error: any) {
-      console.warn("[klearsky/safeJson/stringify]", error)
+      $warn("safeJson/stringify", error)
     }
     return null
   },
@@ -13,7 +13,7 @@ export default {
       try {
         return JSON.parse(jsonString)
       } catch (error: any) {
-        console.warn("[klearsky/safeJson/parse]", error)
+        $warn("safeJson/parse", error)
       }
     }
     return null

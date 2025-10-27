@@ -57,5 +57,5 @@ export default function (
   }
 
   this.data.sessions[this.data.did] = this.session = currentSession
-  console.log("[klearsky/resetSession]")
+  $log("[klearsky/resetSession]")
 }

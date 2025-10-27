@@ -52,7 +52,7 @@ export default class {
   }
 
   onError (event: Event) {
-    console.warn("[klearsky/subscribeJetstream]", event)
+    $warn("subscribeJetstream", event)
     if (this.errorCallback != null) {
       this.errorCallback(event)
     }

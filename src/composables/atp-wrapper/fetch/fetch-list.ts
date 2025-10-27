@@ -15,7 +15,7 @@ export default async function (
     await this.agent.app.bsky.graph.getList(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getList(fetchList)]", response)
+  $log("getList(fetchList)", response)
   if (response instanceof Error) {
     return response
   }

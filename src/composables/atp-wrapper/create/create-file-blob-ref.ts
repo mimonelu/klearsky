@@ -42,7 +42,7 @@ export default async function (
         useWebWorker: true,
       })
     } catch (error) {
-      console.warn("[klearsky/imageCompression]", error)
+      $warn("imageCompression", error)
       blob = Error("imageCompressionError")
     }
 

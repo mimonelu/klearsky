@@ -43,7 +43,7 @@ function validateTranslationKeys (translationMap: TITranslationMap) {
 
   // キー数の統計を表示
   const keyCountsText = languageKeys.map(({ language, count }) => `${language.toUpperCase()}:${count}`).join(', ')
-  console.log(`Translation keys count: ${keyCountsText}`)
+  $log("i18n", `Translation keys count: ${keyCountsText}`)
 
   // すべてのキーの集合を作成（最も多いキーを持つ言語をベースにする）
   const allKeys = new Set<string>()
@@ -63,22 +63,22 @@ function validateTranslationKeys (translationMap: TITranslationMap) {
   const minCount = Math.min(...keyCounts)
 
   if (maxCount !== minCount) {
-    console.error(`⚠️ Translation key mismatch! Expected: ${allKeys.size}, Found: Min=${minCount}, Max=${maxCount} (diff: ${maxCount - minCount})`)
+    $error("i18n", `⚠️ Translation key mismatch! Expected: ${allKeys.size}, Found: Min=${minCount}, Max=${maxCount} (diff: ${maxCount - minCount})`)
 
     // 詳細な不足キー情報を表示
     missingKeysReport.forEach(({ language, count, missing }) => {
       if (missing.length > 0) {
-        console.error(`   ❌ ${language.toUpperCase()}: ${count} keys (missing ${missing.length} keys)`)
+        $error("i18n", `   ❌ ${language.toUpperCase()}: ${count} keys (missing ${missing.length} keys)`)
         if (missing.length <= 10) {
-          console.error(`      Missing keys: ${missing.join(', ')}`)
+          $error("i18n", `      Missing keys: ${missing.join(', ')}`)
         } else {
-          console.error(`      Missing keys: ${missing.slice(0, 10).join(', ')} ... and ${missing.length - 10} more`)
+          $error("i18n", `      Missing keys: ${missing.slice(0, 10).join(', ')} ... and ${missing.length - 10} more`)
         }
       } else {
-        console.log(`   ✅ ${language.toUpperCase()}: ${count} keys`)
+        $log("i18n", `   ✅ ${language.toUpperCase()}: ${count} keys`)
       }
     })
   } else {
-    console.log(`✅ All translation files have ${maxCount} keys`)
+    $log("i18n", `✅ All translation files have ${maxCount} keys`)
   }
 }

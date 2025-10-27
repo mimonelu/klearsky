@@ -26,7 +26,7 @@ export default async function (
       .then((value) => value)
       .catch((error) => error)
   if (response instanceof Error) {
-    console.warn("[klearsky/chat.bsky.convo.getLog]", response)
+    $warn("chat.bsky.convo.getLog", response)
     return response
   }
   if (!response.success) {

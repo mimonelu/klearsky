@@ -39,17 +39,17 @@ export default async function (
       .then((value) => value)
       .catch((error) => error)
   if (responseOfUploadVideo instanceof Error) {
-    console.warn("[klearsky/createVideo]", responseOfUploadVideo)
+    $warn("createVideo", responseOfUploadVideo)
     return responseOfUploadVideo
   }
   if (!(responseOfUploadVideo?.ok)) {
-    console.warn("[klearsky/createVideo]", responseOfUploadVideo)
+    $warn("createVideo", responseOfUploadVideo)
     return Error("apiError")
   }
   const jsonOfUploadVideo = await responseOfUploadVideo.json()
     .then((value) => value)
     .catch((error) => error)
-  console.log("[klearsky/createVideo]", jsonOfUploadVideo)
+  $log("createVideo", jsonOfUploadVideo)
   if (jsonOfUploadVideo instanceof Error) {
     return jsonOfUploadVideo
   }
@@ -72,17 +72,17 @@ export default async function (
         .then((value) => value)
         .catch((error) => error)
     if (response instanceof Error) {
-      console.warn("[klearsky/getJobStatus]", response)
+      $warn("getJobStatus", response)
       return response
     }
     if (!(response?.ok)) {
-      console.warn("[klearsky/getJobStatus]", response)
+      $warn("getJobStatus", response)
       return Error("apiError")
     }
     const json: Error | AppBskyVideoUploadVideo.OutputSchema = await response.json()
       .then((value) => value)
       .catch((error) => error)
-    console.log("[klearsky/getJobStatus]", json)
+    $log("getJobStatus", json)
     if (json instanceof Error) {
       return json
     }

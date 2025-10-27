@@ -15,7 +15,7 @@ export default async function (
         return value.json()
       })
       .catch((error) => error)
-  console.log("[klearsky/parse-ogp/cardyb", response)
+  $log("parse-ogp/cardyb", response)
   if (response instanceof Error) {
     return response
   }
@@ -56,7 +56,7 @@ export default async function (
           return value
         })
         .catch((error) => error)
-    console.log("[klearsky/parse-ogp/imageFetchUrl]", response)
+    $log("parse-ogp/imageFetchUrl", response)
     if (response instanceof Error) {
       return response
     }

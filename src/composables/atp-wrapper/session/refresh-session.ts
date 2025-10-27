@@ -28,7 +28,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
   // サービスURLからホスト名を取得
   const serviceUrl: undefined | URL = Util.safeUrl(session.__service)
   if (serviceUrl == null) {
-    console.warn("[klearsky/refreshSession] Invalid service URL:", session.__service)
+    $warn("refreshSession", "Invalid service URL", session.__service)
     return Error("refreshSessionError")
   }
 
@@ -50,15 +50,15 @@ export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
       .then((value) => value)
       .catch((error) => error)
 
-  console.log("[klearsky/refreshSession] Response:", response)
+  $log("refreshSession", "Response", response)
 
   if (response instanceof Error) {
-    console.error("[klearsky/refreshSession] Network error:", response)
+    $error("refreshSession", "Network error", response)
     return Error("refreshSessionError")
   }
 
   if (!response.ok) {
-    console.error("[klearsky/refreshSession] HTTP error:", response.status, response.statusText)
+    $error("refreshSession", "HTTP error", response.status, response.statusText)
     return Error("refreshSessionError")
   }
 
@@ -67,12 +67,12 @@ export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
     .catch((error) => error)
 
   if (json instanceof Error) {
-    console.error("[klearsky/refreshSession] JSON parse error:", json)
+    $error("refreshSession", "JSON parse error", json)
     return Error("refreshSessionError")
   }
 
   if (json?.did == null) {
-    console.error("[klearsky/refreshSession] Invalid response data:", json)
+    $error("refreshSession", "Invalid response data", json)
     return Error("refreshSessionError")
   }
 
@@ -80,10 +80,10 @@ export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
   this.data.did = json.did
   const responseOfResetSession = this.resetSession(json)
   if (responseOfResetSession instanceof Error) {
-    console.error("[klearsky/refreshSession] Reset session error:", responseOfResetSession)
+    $error("refreshSession", "Reset session error", responseOfResetSession)
     return responseOfResetSession
   }
 
   Util.saveStorage("atp", this.data)
-  console.log("[klearsky/refreshSession] Session refreshed successfully")
+  $log("refreshSession", "Session refreshed successfully")
 }
