@@ -1,16 +1,28 @@
 class Logger {
-  private prefix = "[klearsky]"
+  private formatArgs (args: any[]): any[] {
+    if (args.length > 0 && typeof args[0] === "string") {
+      return [
+        `%c[⭐️Klearsky]%c ${args[0]}`,
+        "color: inherit", "color: #0080ff; font-weight: bold",
+        ...args.slice(1),
+      ]
+    }
+    return [
+      "[⭐️Klearsky]",
+      ...args,
+    ]
+  }
 
   log (...args: any[]) {
-    console.log(this.prefix, ...args)
+    console.log(...this.formatArgs(args))
   }
 
   warn (...args: any[]) {
-    console.warn(this.prefix, ...args)
+    console.warn(...this.formatArgs(args))
   }
 
   error (...args: any[]) {
-    console.error(this.prefix, ...args)
+    console.error(...this.formatArgs(args))
   }
 }
 
