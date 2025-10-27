@@ -12,7 +12,7 @@ export default async function (
     await this.agent.resolveHandle(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/resolveHandle]", response)
+  $log("resolveHandle", response)
   if (response instanceof Error) {
     return response
   }

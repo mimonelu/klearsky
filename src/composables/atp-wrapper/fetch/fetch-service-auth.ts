@@ -17,7 +17,7 @@ export default async function (
     })
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getServiceAuth]", response)
+  $log("getServiceAuth", response)
   if (response instanceof Error) {
     return response
   }

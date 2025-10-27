@@ -23,7 +23,7 @@ export default async function (
     await this.agent.app.bsky.graph.getListsWithMembership(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getListsWithMembership]", response)
+  $log("getListsWithMembership", response)
   if (response instanceof Error) {
     return response
   }

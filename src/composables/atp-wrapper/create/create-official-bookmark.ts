@@ -19,7 +19,7 @@ export default async function (
     await this.agent.app.bsky.bookmark.createBookmark(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/createBookmark]", response)
+  $log("createBookmark", response)
   if (response instanceof Error) {
     return response
   }

@@ -25,7 +25,7 @@ export default async function (
     await this.agent.chat.bsky.convo.addReaction(query, options)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/chat.bsky.convo.addReaction]", response)
+  $log("chat.bsky.convo.addReaction", response)
   if (response instanceof Error) {
     return response
   }

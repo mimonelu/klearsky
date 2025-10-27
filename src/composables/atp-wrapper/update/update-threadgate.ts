@@ -49,7 +49,7 @@ export default async function (
     await this.agent.app.bsky.feed.threadgate.create(query, record)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/updateThreadgate]", response)
+  $log("updateThreadgate", response)
   if (response instanceof Error) {
     return response
   }

@@ -11,7 +11,7 @@ export default async function (
     await this.agent.muteModList(listUri)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/muteModList]", response)
+  $log("muteModList", response)
   if (response instanceof Error) {
     return response
   }

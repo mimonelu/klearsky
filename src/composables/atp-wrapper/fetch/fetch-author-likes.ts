@@ -24,7 +24,7 @@ export default async function (
     await this.agent.api.com.atproto.repo.listRecords(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/listRecords/like]", response)
+  $log("listRecords/like", response)
   if (response instanceof Error) {
     return response
   }

@@ -17,7 +17,7 @@ export default async function (
     await this.agent.getSuggestions(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getSuggestions]", response)
+  $log("getSuggestions", response)
   if (response instanceof Error) {
     return response
   }

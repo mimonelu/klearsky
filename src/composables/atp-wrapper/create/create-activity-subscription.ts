@@ -19,7 +19,7 @@ export default async function (
     })
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/createActivitySubscription]", response)
+  $log("createActivitySubscription", response)
   if (response instanceof Error) {
     return response
   }

@@ -101,7 +101,7 @@ export default async function (
       }
     )
   } catch (error: any) {
-    console.log("[klearsky/upsertProfile]", error)
+    $log("upsertProfile", error)
     return error
   }
 }

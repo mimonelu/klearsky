@@ -12,7 +12,7 @@ export default async function (
     await this.agent.app.bsky.actor.putPreferences(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/putPreferences]", response)
+  $log("putPreferences", response)
   if (response instanceof Error) {
     return response
   }

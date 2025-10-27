@@ -29,7 +29,7 @@ export default async function (
     return Error("apiError")
   }
   logJson = await log.json()
-  console.log("[klearsky/log/audit]", logJson)
+  $log("log/audit", logJson)
 
   // TODO: 配列型以外では Sandbox　で不具合が生じる可能性あり。要検証
   if (Array.isArray(logJson)) {

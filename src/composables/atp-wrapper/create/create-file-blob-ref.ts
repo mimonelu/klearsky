@@ -68,7 +68,7 @@ export default async function (
     await this.agent.uploadBlob(input, options)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/uploadBlob]", response)
+  $log("uploadBlob", response)
   if (response instanceof Error) {
     return response
   }

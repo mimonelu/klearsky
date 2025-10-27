@@ -19,7 +19,7 @@ export default async function (
     await this.agent.chat.bsky.convo.unmuteConvo(query, options)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/chat.bsky.convo.unmuteConvo]", response)
+  $log("chat.bsky.convo.unmuteConvo", response)
   if (response instanceof Error) {
     return response
   }

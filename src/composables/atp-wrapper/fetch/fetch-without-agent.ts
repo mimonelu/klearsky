@@ -46,7 +46,7 @@ export default async function (
     await Util.fetchWithTimeout(url, headers)
       .then((value) => value)
       .catch((error) => error)
-  const logHeader = `[klearsky/${host}/xrpc/${params.path}]`
+  const logHeader = `${host}/xrpc/${params.path}`
   if (response instanceof Error) {
     $log("fetchWithoutAgent", logHeader, response)
     return response

@@ -12,7 +12,7 @@ export default async function (
     await this.agent.getProfile({ actor })
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getProfile]", response)
+  $log("getProfile", response)
   if (response instanceof Error) {
     // エラーアカウントの場合、空のプロフィールを返す
     // WANT: message ではなく、より適切な判定方法に換装したい

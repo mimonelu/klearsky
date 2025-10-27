@@ -24,7 +24,7 @@ export default async function (
     await this.agent.app.bsky.bookmark.getBookmarks(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getBookmarks]", response)
+  $log("getBookmarks", response)
   if (response instanceof Error) {
     return response
   }

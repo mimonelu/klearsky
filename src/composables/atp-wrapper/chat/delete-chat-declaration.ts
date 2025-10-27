@@ -20,7 +20,7 @@ export default async function (
     }, headers)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/chat.bsky.actor.declaration.delete]", response)
+  $log("chat.bsky.actor.declaration.delete", response)
   if (response instanceof Error) {
     return response
   }

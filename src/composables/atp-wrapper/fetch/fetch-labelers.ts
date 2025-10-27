@@ -17,7 +17,7 @@ export default async function (
     await this.agent.app.bsky.labeler.getServices(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/fetchLabelers]", response)
+  $log("fetchLabelers", response)
   if (response instanceof Error) {
     return response
   }

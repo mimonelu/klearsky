@@ -19,7 +19,7 @@ export default async function (
     await this.agent.getLikes(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getLikes]", response)
+  $log("getLikes", response)
   if (response instanceof Error) {
     return response
   }

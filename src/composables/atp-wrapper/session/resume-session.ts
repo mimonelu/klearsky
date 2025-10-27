@@ -38,7 +38,7 @@ export default async function (
     })
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/resumeSession]", response)
+  $log("resumeSession", response)
   if (response instanceof Error) {
     return Error("resumeSessionError")
   }
