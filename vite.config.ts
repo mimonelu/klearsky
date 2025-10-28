@@ -41,7 +41,14 @@ export default defineConfig({
         },
       },
       treeshake: {
-        moduleSideEffects: false,
+        moduleSideEffects: (id) => {
+          // Logger は除外
+          if (id.includes("composables/logger")) {
+            return true
+          }
+
+          return false
+        },
         propertyReadSideEffects: false,
         unknownGlobalSideEffects: false,
       },
