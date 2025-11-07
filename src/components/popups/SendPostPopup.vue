@@ -145,6 +145,11 @@ watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
   }, 0)
 })
 
+// Logga in tempo reale il testo inserito dall'utente
+watch(() => easyFormState.text, (val) => {
+  console.log(val)
+})
+
 // D&D用処置
 watch(() => props.fileList, (value?: FileList) => {
   const files = value != null ? Array.from(value) : []
