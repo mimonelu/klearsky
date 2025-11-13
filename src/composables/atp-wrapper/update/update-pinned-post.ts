@@ -33,7 +33,7 @@ export default async function (
     })
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/upsertProfile]", response)
+  $log("upsertProfile", response)
   if (response instanceof Error) {
     return response
   }

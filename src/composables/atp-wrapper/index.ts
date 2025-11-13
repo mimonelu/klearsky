@@ -6,11 +6,13 @@ import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-de
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
 import createChatReaction  from "@/composables/atp-wrapper/chat/create-chat-reaction"
 import createDuplicatedList  from "@/composables/atp-wrapper/create/create-duplicated-list"
+import createFeedInteractions from "@/composables/atp-wrapper/create/create-feed-interactions"
 import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob-ref"
 import createFollow from "@/composables/atp-wrapper/create/create-follow"
 import createLike from "@/composables/atp-wrapper/create/create-like"
 import createList from "@/composables/atp-wrapper/create/create-list"
 import createListUser from "@/composables/atp-wrapper/create/create-list-user"
+import createOfficialBookmark from "@/composables/atp-wrapper/create/create-official-bookmark"
 import createPost from "@/composables/atp-wrapper/create/create-post"
 import createRecord from "@/composables/atp-wrapper/create/create-record"
 import createReport from "@/composables/atp-wrapper/create/create-report"
@@ -27,6 +29,7 @@ import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
 import deleteList from "@/composables/atp-wrapper/delete/delete-list"
 import deleteListUser from "@/composables/atp-wrapper/delete/delete-list-user"
+import deleteOfficialBookmark from "@/composables/atp-wrapper/delete/delete-official-bookmark"
 import deletePost from "@/composables/atp-wrapper/delete/delete-post"
 import deleteRecord from "@/composables/atp-wrapper/delete/delete-record"
 import deleteRepost from "@/composables/atp-wrapper/delete/delete-repost"
@@ -74,6 +77,7 @@ import fetchMutingUsers from "@/composables/atp-wrapper/fetch/fetch-muting-users
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch/fetch-notification-count"
 import fetchNotificationPreferences from "@/composables/atp-wrapper/fetch/fetch-notification-preferences"
 import fetchNotifications from "@/composables/atp-wrapper/fetch/fetch-notifications"
+import fetchOfficialBookmarks from "@/composables/atp-wrapper/fetch/fetch-official-bookmarks"
 import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-official-feed-generators"
 import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-popular-feed-generators"
 import fetchPostedImageRefs from "@/composables/atp-wrapper/fetch/fetch-posted-image-refs"
@@ -137,6 +141,7 @@ import updateThreadMuteToDisable from "@/composables/atp-wrapper/update/update-t
 import updateThreadMuteToEnable from "@/composables/atp-wrapper/update/update-thread-mute-to-enable"
 import updateStarterPack from "@/composables/atp-wrapper/update/update-starter-pack"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 class AtpWrapper implements TIAtpWrapper {
   agent: null | AtpAgent
@@ -150,7 +155,8 @@ class AtpWrapper implements TIAtpWrapper {
   constructor () {
     this.agent = null
     this.proxies = {
-      chat: "did:web:api.bsky.chat#bsky_chat",
+      appBsky: "",
+      chatBsky: CONSTS.OFFICIAL_ATPROTO_PROXY_CHAT_BSKY,
     }
     this.data = Util.loadStorage("atp") ?? {
       did: "",
@@ -181,11 +187,13 @@ class AtpWrapper implements TIAtpWrapper {
   createChatMessage = createChatMessage
   createChatReaction = createChatReaction
   createDuplicatedList = createDuplicatedList
+  createFeedInteractions = createFeedInteractions
   createFileBlobRef = createFileBlobRef
   createFollow = createFollow
   createLike = createLike
   createList = createList
   createListUser = createListUser
+  createOfficialBookmark = createOfficialBookmark
   createPost = createPost
   createRecord = createRecord
   createReport = createReport
@@ -202,6 +210,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteLike = deleteLike
   deleteList = deleteList
   deleteListUser = deleteListUser
+  deleteOfficialBookmark = deleteOfficialBookmark
   deletePost = deletePost
   deleteRecord = deleteRecord
   deleteRepost = deleteRepost
@@ -249,6 +258,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchNotificationCount = fetchNotificationCount
   fetchNotificationPreferences = fetchNotificationPreferences
   fetchNotifications = fetchNotifications
+  fetchOfficialBookmarks = fetchOfficialBookmarks
   fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
   fetchPopularFeedGenerators = fetchPopularFeedGenerators
   fetchPostedImageRefs = fetchPostedImageRefs

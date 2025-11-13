@@ -15,7 +15,7 @@ export default async function (
     })
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/deleteActorStatus]", response)
+  $log("deleteActorStatus", response)
   if (response instanceof Error) {
     return response
   }

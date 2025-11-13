@@ -11,7 +11,7 @@ export default async function (
     await this.agent.like(uri, cid, via)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/like]", response)
+  $log("like", response)
   if (response instanceof Error) {
     return response
   }

@@ -9,7 +9,7 @@ export default async function (this: TIAtpWrapper, seenAtDate?: Date): Promise<E
     await this.agent.updateSeenNotifications(seenAt)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/updateSeenNotifications]", response)
+  $log("updateSeenNotifications", response)
   if (response instanceof Error) {
     return response
   }

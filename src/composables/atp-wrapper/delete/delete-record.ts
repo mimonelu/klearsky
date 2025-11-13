@@ -27,7 +27,7 @@ export default async function (
     await this.agent.com.atproto.repo.deleteRecord(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/deleteRecord]", response)
+  $log("deleteRecord", response)
   if (response instanceof Error) {
     return response
   }

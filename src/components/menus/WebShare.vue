@@ -24,7 +24,7 @@ async function share () {
   try {
     await navigator.share(data)
   } catch (error) {
-    console.warn("[klearsky/WebShare]", error)
+    $warn("WebShare", error)
   }
 }
 </script>

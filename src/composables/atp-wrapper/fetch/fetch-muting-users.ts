@@ -17,7 +17,7 @@ export default async function (
     await this.agent.app.bsky.graph.getMutes(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getMutes]", response)
+  $log("getMutes", response)
   if (response instanceof Error) {
     return response
   }

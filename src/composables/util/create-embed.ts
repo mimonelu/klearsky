@@ -1,5 +1,6 @@
 import type { AppBskyEmbedImages, AppBskyEmbedVideo, BlobRef } from "@atproto/api"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 export default async function (
   atp: TIAtpWrapper,
@@ -102,9 +103,21 @@ export default async function (
 
   // 動画
   let video: undefined | AppBskyEmbedVideo.Main
-  const videoFileIndex = params.medias?.findIndex((media) => {
+
+  // 動画のインデックスを取得
+  let videoFileIndex = params.medias?.findIndex((media) => {
     return media.type?.startsWith("video/") ?? false
   }) ?? - 1
+
+  // 動画のインデックスがなければGIF画像を動画としてインデックスを取得
+  if (
+    params.shouldConvertGifToVideo?.includes(true) &&
+    videoFileIndex === - 1
+  ) {
+    videoFileIndex = params.medias?.findIndex((media) => {
+      return media.type === "image/gif"
+    }) ?? - 1
+  }
 
   // 動画ファイルがない場合
   if (videoFileIndex === - 1) {
@@ -114,7 +127,7 @@ export default async function (
           file,
           maxWidth: 2000,
           maxHeight: 2000,
-          maxSize: 0.953671875,
+          maxSize: CONSTS.MAX_IMAGE_FILE_SIZE,
         })
       }) ?? []
     )
@@ -137,7 +150,7 @@ export default async function (
             height: img.height,
           })
         } catch (error: any) {
-          console.warn("[klearsky/createEmbed]", error)
+          $warn("createEmbed", error)
           aspectRatios.push(undefined)
         }
       }

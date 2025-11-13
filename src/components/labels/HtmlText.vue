@@ -96,7 +96,7 @@ const router = useRouter()
 function transformInternalLink (uri: string): undefined | string {
   const url: undefined | URL = Util.safeUrl(uri)
   if (url == null) {
-    console.warn(`[klearsky/transformInternalLink/${uri}]`, uri)
+    $warn(`transformInternalLink/${uri}`, uri)
     return
   }
   switch (url.hostname) {

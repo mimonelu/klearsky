@@ -24,7 +24,7 @@ export default async function (
     await this.agent.app.bsky.unspecced.getPopularFeedGenerators(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getPopularFeedGenerators]", response)
+  $log("getPopularFeedGenerators", response)
   if (response instanceof Error) {
     return response
   }

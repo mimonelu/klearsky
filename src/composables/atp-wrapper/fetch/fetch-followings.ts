@@ -21,7 +21,7 @@ export default async function (
     await this.agent.getFollows(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getFollows]", response)
+  $log("getFollows", response)
   if (response instanceof Error) {
     return response
   }

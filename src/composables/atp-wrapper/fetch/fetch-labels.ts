@@ -19,7 +19,7 @@ export default async function (
     await this.agent.api.com.atproto.temp.fetchLabels(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/fetchLabels]", response)
+  $log("fetchLabels", response)
   if (response instanceof Error) {
     return response
   }

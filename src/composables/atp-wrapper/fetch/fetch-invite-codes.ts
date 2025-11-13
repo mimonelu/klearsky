@@ -12,7 +12,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | TTInviteCode
     await this.agent.com.atproto.server.getAccountInviteCodes(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getAccountInviteCodes]", response)
+  $log("getAccountInviteCodes", response)
   if (response instanceof Error) {
     return response
   }

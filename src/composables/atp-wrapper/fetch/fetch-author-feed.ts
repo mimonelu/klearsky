@@ -27,7 +27,7 @@ export default async function (
     await this.agent.getAuthorFeed(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getAuthorFeed]", response)
+  $log("getAuthorFeed", response)
   if (response instanceof Error) {
     return response
   }

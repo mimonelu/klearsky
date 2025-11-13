@@ -49,7 +49,7 @@ export default async function (
     await this.agent.app.bsky.feed.searchPosts(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/searchPosts]", response)
+  $log("searchPosts", response)
   if (response instanceof Error) {
     return response
   }

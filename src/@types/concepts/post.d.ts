@@ -9,6 +9,7 @@ type TTPost = {
   }
 
   author: TTUser
+  bookmarkCount?: number
   cid: string
   embed?: TIEmbed
   indexedAt: string
@@ -22,6 +23,7 @@ type TTPost = {
   uri: string
   value?: TIPostValue
   viewer?: {
+    bookmarked?: boolean
     repost?: string
     like?: string
     replyDisabled?: boolean
@@ -108,6 +110,7 @@ type TTReason = {
     }
     handle: string
     displayName: string
+    pronouns?: string
     avatar: string
     viewer: TTUserViewer
   }
@@ -146,6 +149,7 @@ type TTCreatePostParams = {
   urlHasImage?: Array<boolean>
   medias?: Array<File>
   alts?: Array<string>
+  shouldConvertGifToVideo?: Array<boolean>
   languages?: Array<string>
   labels?: Array<string>
   lightning?: string

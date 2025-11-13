@@ -27,7 +27,7 @@ export default async function (
     await this.agent.getTimeline(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getTimeline]", response)
+  $log("getTimeline", response)
   if (response instanceof Error) {
     return response
   }

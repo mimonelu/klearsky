@@ -79,6 +79,12 @@ async function autoScrollSliderMenu () {
           >
             <SVGIcon name="shimmer" />
             <span>{{ $t(item.value.displayName) }}</span>
+
+            <!-- 新着フォロー中フィードバッジ -->
+            <div
+              v-if="mainState.hasTimelineNewArrival && !mainState.currentSetting.hideNotificationBadge"
+              class="slider-menu__dot"
+            />
           </RouterLink>
 
           <!-- `space.aoisora.preference.feed.extra` -->

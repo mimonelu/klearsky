@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive } from "vue"
+import FeedGeneratorLabel from "@/components/labels/FeedGeneratorLabel.vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -217,6 +218,16 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </button>
     </div>
 
+    <!-- フィードインタラクション -->
+    <div
+      v-if="generator.acceptsInteractions"
+      class="textlabel feed-card__feed-interaction-notice"
+    >
+      <div class="textlabel__text">
+        <SVGIcon name="star" />{{ $t("feedInteractionSupportedDescription") }}
+      </div>
+    </div>
+
     <div v-if="state.detailDisplay">
       <!-- フィード説明文 -->
       <HtmlText
@@ -233,35 +244,18 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         v-if="creatorDisplay && generator.creator.did"
         class="feed-card__creator"
       >
+        <div class="feed-card__creator__text">{{ $t("by") }}</div>
         <RouterLink
           class="textlink feed-card__creator__by"
           :to="{ name: 'profile-feed-generators', query: { account: generator.creator.did } }"
           @click.prevent
         >
-          <span>{{ $t("by") }} <b>{{ generator.creator.displayName || generator.creator.handle }}</b></span>
+          <span>{{ generator.creator.displayName || generator.creator.handle }}</span>
         </RouterLink>
+        <div class="feed-card__creator__text">&amp;</div>
 
-        <!-- SkyFeed ラベル -->
-        <a
-          v-if="generator.did === 'did:web:skyfeed.me'"
-          class="feed-card__creator__via textlink--underline"
-          href="https://skyfeed.app/"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <span>(SkyFeed)</span>
-        </a>
-
-        <!-- Starrysky ラベル -->
-        <a
-          v-if="generator.did === 'did:web:starrysky-proxy.usounds.work'"
-          class="feed-card__creator__via textlink--underline"
-          href="https://starrysky-console.pages.dev/"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <span>(Starrysky)</span>
-        </a>
+        <!-- フィードジェネレーターラベル -->
+        <FeedGeneratorLabel :did="generator.did" />
       </div>
     </div>
 
@@ -476,6 +470,25 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     }
   }
 
+  // フィードインタラクション
+  &__feed-interaction-notice {
+    background-color: rgb(var(--feed-interaction-color), 0.125);
+    border-radius: var(--border-radius-middle);
+    color: rgb(var(--feed-interaction-color));
+    line-height: var(--line-height-middle);
+    padding: 0.5em;
+    font-size: 0.875em;
+    font-weight: bold;
+
+    .svg-icon {
+      fill: rgb(var(--feed-interaction-color));
+    }
+
+    & > .textlabel__text {
+      word-break: break-word;
+    }
+  }
+
   // フィード説明文
   &__description {
     color: rgb(var(--fg-color), 0.75);
@@ -496,16 +509,13 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     &__by {
       line-height: var(--line-height-high);
       word-break: break-word;
-
-      b {
-        font-weight: bold;
-      }
     }
 
-    &__via {
+    &__text {
       color: rgb(var(--fg-color), 0.5);
-      line-height: var(--line-height-high);
-      word-break: break-word;
+      &:last-child {
+        display: none;
+      }
     }
   }
 

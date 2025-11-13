@@ -2,6 +2,7 @@ export default {
   lexicons: {
     "frontpage": "fyi.unravel.frontpage.post",
     "linkat": "blue.linkat.board",
+    "skybemoreblue": "com.skybemoreblue.intro.introduction",
     "smokesignal": "events.smokesignal.calendar.event",
     "whitewind": "com.whtwnd.blog.entry",
   } as { [k: string]: string },

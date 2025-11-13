@@ -21,7 +21,7 @@ export default async function (
   // DoS攻撃対策
   await Util.wait(1000)
 
-  console.log("[klearsky/go.bsky.app/link]", response)
+  $log("go.bsky.app/link", response)
   if (response instanceof Error) {
     return response
   }

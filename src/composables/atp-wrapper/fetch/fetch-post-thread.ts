@@ -23,7 +23,7 @@ export default async function (
     await this.agent.getPostThread(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getPostThread]", response)
+  $log("getPostThread", response)
   if (response instanceof Error) {
     return response
   }

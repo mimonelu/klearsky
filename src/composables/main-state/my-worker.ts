@@ -32,14 +32,14 @@ export default class {
 
     // DID が合わないメッセージはスルー
     if (data.did !== this.mainState.atp.data.did) {
-      console.log("[klearsky/worker]", "➖ DID")
+      $log("worker", "➖ DID")
       return
     }
 
-    console.log("[klearsky/worker]", "🔻 GET", data.name)
+    $log("worker", "🔻 GET", data.name)
     switch (data.name) {
       case "echo": {
-        console.log("[klearsky/worker]", "📣", data.value)
+        $log("worker", "📣", data.value)
         break
       }
 
@@ -101,6 +101,11 @@ export default class {
           this.mainState.currentServerInfo = sessionCache.serverInfo
         }
 
+        // セッションキャッシュの反映 - 公式ブックマーク
+        if (sessionCache.officialBookmarks != null) {
+          this.mainState.currentOfficialBookmarks = sessionCache.officialBookmarks
+        }
+
         // セッションキャッシュの反映 - カスタムブックマーク
         if (sessionCache.customBookmarkPacks != null) {
           this.mainState.currentCustomBookmarkPacks = sessionCache.customBookmarkPacks
@@ -123,7 +128,7 @@ export default class {
     if (value == null) {
       return
     }
-    console.log("[klearsky/worker]", "🔺 SET", key)
+    $log("worker", "🔺 SET", key)
 
     // セッションキャッシュの設定
     this.worker?.port.postMessage({

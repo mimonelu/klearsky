@@ -15,6 +15,7 @@ import LikeButton from "@/components/buttons/LikeButton.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
 import ListCard from "@/components/cards/ListCard.vue"
 import Loader from "@/components/shells/Loader.vue"
+import OfficialBookmarkButton from "@/components/next/OfficialBookmark/OfficialBookmarkButton.vue"
 import Post from "@/components/compositions/Post.vue"
 import QuoteRepostButton from "@/components/buttons/QuoteRepostButton.vue"
 import RepostButton from "@/components/buttons/RepostButton.vue"
@@ -44,6 +45,12 @@ const props = defineProps<{
   forceHideMedia?: boolean
   forceHideQuoteRepost?: boolean
   forceUpdatePostThread?: boolean
+
+  // フィードインタラクション
+  feedAcceptsInteractions?: boolean
+  feedGeneratorDid?: string
+  feedContext?: string
+  reqId?: string
 }>()
 
 const $t = inject("$t") as Function
@@ -546,6 +553,28 @@ async function createQuoteRepost () {
   */
 }
 
+async function toggleOfficialBookmark () {
+  Util.blurElement()
+  processing.value = true
+  if (props.post.viewer?.bookmarked) {
+    const response = await mainState.atp.deleteOfficialBookmark(props.post.uri)
+    if (response instanceof Error) {
+      processing.value = false
+      mainState.openErrorPopup(response, "Post/deleteOfficialBookmark")
+      return
+    }
+  } else {
+    const response = await mainState.atp.createOfficialBookmark(props.post.uri, props.post.cid)
+    if (response instanceof Error) {
+      processing.value = false
+      mainState.openErrorPopup(response, "Post/createOfficialBookmark")
+      return
+    }
+  }
+  await updatePostThread()
+  processing.value = false
+}
+
 async function onActivateLikeButton () {
   if (processing.value) {
     return
@@ -598,6 +627,13 @@ function makeActionViaRepost (actionType: "like" | "repost"): undefined | TTCidU
 function openPostPopover ($event: Event) {
   Util.blurElement()
   mainState.postPopoverProps.post = props.post
+
+  // フィードインタラクション
+  mainState.postPopoverProps.feedAcceptsInteractions = props.feedAcceptsInteractions
+  mainState.postPopoverProps.feedGeneratorDid = props.feedGeneratorDid
+  mainState.postPopoverProps.feedContext = props.feedContext
+  mainState.postPopoverProps.reqId = props.reqId
+
   mainState.postPopoverCallback = postPopoverCallback
   mainState.openPostPopover($event.target)
 }
@@ -1023,6 +1059,7 @@ function toggleOldestQuotedPostDisplay () {
                   ? (post.author?.displayName || post.author?.handle)
                   : post.author?.displayName
               ) || '&nbsp;'"
+              :pronouns="post.author?.pronouns"
               :anonymizable="true"
             />
           </RouterLink>
@@ -1133,8 +1170,8 @@ function toggleOldestQuotedPostDisplay () {
           class="translated-text"
           dir="auto"
         >
-          <template v-if="state.translationStep === 'waiting'">（翻訳中）</template>
-          <template v-else-if="state.translationStep === 'failed'">（翻訳に失敗しました）</template>
+          <template v-if="state.translationStep === 'waiting'">{{ $t("translating") }}</template>
+          <template v-else-if="state.translationStep === 'failed'">{{ $t("translationFailed") }}</template>
           <template v-else-if="state.translationStep === 'done'">{{ props.post.__custom?.translatedText }}</template>
         </div>
 
@@ -1473,6 +1510,13 @@ function toggleOldestQuotedPostDisplay () {
           <QuoteRepostButton
             :post="post"
             @click.stop="createQuoteRepost"
+          />
+        </div>
+        <div>
+          <!-- 公式ブックマークボタン -->
+          <OfficialBookmarkButton
+            :post="post"
+            @click.stop="toggleOfficialBookmark"
           />
         </div>
         <div
@@ -1855,6 +1899,7 @@ function toggleOldestQuotedPostDisplay () {
     .display-name {
       color: rgb(var(--fg-color), 0.75);
       display: grid;
+      grid-template-columns: auto 1fr;
       font-size: 0.875em;
       &:focus, &:hover {
         color: rgb(var(--fg-color));
@@ -2134,11 +2179,11 @@ function toggleOldestQuotedPostDisplay () {
 
 .reaction-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; // for Android
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; // for Android
   align-items: center;
   padding-left: var(--left-space);
   &[data-has-lightning="true"] {
-    grid-template-columns: 1fr 1fr 1fr 1fr auto; // for Android
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto; // for Android
   }
   &:not(:first-child) {
     margin-top: 0.25em;

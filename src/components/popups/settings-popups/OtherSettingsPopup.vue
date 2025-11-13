@@ -4,11 +4,19 @@ import Popup from "@/components/popups/Popup.vue"
 import Radios from "@/components/forms/Radios.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 import SETTINGS from "@/consts/settings.json"
 
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const emit = defineEmits<{(event: string): void}>()
+
+function setOfficialValueToAtprotoProxyAppBsky () {
+  mainState.currentSetting.atprotoProxyAppBsky = CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY
+  emit("changeSetting")
+}
 
 async function resetSettings () {
   Util.blurElement()
@@ -43,6 +51,7 @@ async function resetSettings () {
 
             <!-- ヘルプボタン -->
             <button
+              type="button"
               class="settings-popup__help-button"
               @click.prevent="$emit('showDescription', 'lightning')"
             >
@@ -109,21 +118,77 @@ async function resetSettings () {
           </div>
         </div>
 
-        <!-- 設定のリセット -->
-        <div class="settings-popup__form">
+        <!-- Danger zone -->
+        <div class="settings-popup__form danger-zone">
           <div class="settings-popup__form__header">
-            <span>{{ $t("development") }}</span>
+            <span>{{ $t("dangerZone") }}</span>
           </div>
           <div class="settings-popup__form__body">
-            <button
-              class="button--important"
-              @click.prevent="resetSettings"
-            >
+
+            <!-- atproto-proxy -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("atprotoProxyAppBskySetting") }}</span>
+            </div>
+            <div class="settings-popup__form__body">
+              <input
+                class="textbox"
+                v-model="mainState.currentSetting.atprotoProxyAppBsky"
+                type="string"
+                name="atprotoProxyAppBsky"
+                @blur="$emit('changeSetting')"
+              >
+              <div class="settings-popup__form__button-container">
+                <button
+                  type="button"
+                  class="button button--small"
+                  @click.prevent="setOfficialValueToAtprotoProxyAppBsky"
+                >
+                  <span>{{ $t("setOfficialValue") }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 設定リセット -->
+            <div class="settings-popup__form__header">
               <span>{{ $t("resetSettings") }}</span>
-            </button>
+            </div>
+            <div class="settings-popup__form__body">
+              <button
+                type="button"
+                class="button--important"
+                @click.prevent="resetSettings"
+              >
+                <span>{{ $t("reset") }}</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </template>
   </Popup>
 </template>
+
+<style lang="scss" scoped>
+// 以下すべて .danger-zone 用
+
+.settings-popup {
+  &:deep(.popup-body) {
+    padding: unset;
+  }
+}
+
+.settings-popup__form {
+  padding: 0 1rem;
+  &:first-child {
+    padding-top: 1rem;
+  }
+  &:last-child {
+    border-top: 1px solid rgb(var(--fg-color), 0.25);
+    padding: 1rem;
+  }
+}
+
+.danger-zone {
+  background-color: rgb(var(--notice-color), 0.125);
+}
+</style>

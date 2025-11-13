@@ -14,7 +14,7 @@ export default async function (
     await this.agent.app.bsky.graph.getStarterPack(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getStarterPack]", response)
+  $log("getStarterPack", response)
   if (response instanceof Error) {
     return response
   }

@@ -46,13 +46,13 @@ export default async function (
     await Util.fetchWithTimeout(url, headers)
       .then((value) => value)
       .catch((error) => error)
-  const logHeader = `[klearsky/${host}/xrpc/${params.path}]`
+  const logHeader = `${host}/xrpc/${params.path}`
   if (response instanceof Error) {
-    console.log(logHeader, response)
+    $log("fetchWithoutAgent", logHeader, response)
     return response
   }
   if (!response.ok) {
-    console.log(logHeader, response)
+    $log("fetchWithoutAgent", logHeader, response)
     return Error("errorDirectAccessFailed")
   }
 
@@ -62,10 +62,10 @@ export default async function (
       .then((value) => value)
       .catch((error) => error)
     if (json instanceof Error) {
-      console.log(logHeader, response)
+      $log("fetchWithoutAgent", logHeader, response)
       return json
     }
-    console.log(logHeader, json)
+    $log("fetchWithoutAgent", logHeader, json)
     return json
 
   // Blob に変換する場合
@@ -74,14 +74,14 @@ export default async function (
       .then((value) => value)
       .catch((error) => error)
     if (blob instanceof Error) {
-      console.log(logHeader, response)
+      $log("fetchWithoutAgent", logHeader, response)
       return blob
     }
-    console.log(logHeader, blob)
+    $log("fetchWithoutAgent", logHeader, blob)
     return blob
   }
 
   // 変換しない場合
-  console.log(logHeader, response)
+  $log("fetchWithoutAgent", logHeader, response)
   return response
 }

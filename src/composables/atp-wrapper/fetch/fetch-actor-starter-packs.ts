@@ -21,7 +21,7 @@ export default async function (
     await this.agent.app.bsky.graph.getActorStarterPacks(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getActorStarterPacks]", response)
+  $log("getActorStarterPacks", response)
   if (response instanceof Error) {
     return response
   }

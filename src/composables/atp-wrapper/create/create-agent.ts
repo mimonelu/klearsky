@@ -10,9 +10,9 @@ export default function (
   this.agent = new AtpAgent({
     service: pdsUrl ?? service,
     persistSession: (event, session) => {
-      console.log("[klearsky/persistSession]", `event === ${event}`)
+      $log("persistSession", `event === ${event}`)
       if (session == null) {
-        console.warn("[klearsky/persistSession]", "session == null")
+        $warn("persistSession", "session == null")
         return
       }
 
@@ -21,7 +21,36 @@ export default function (
 
       this.resetSession(session, service)
     },
-    fetch: Util.fetchWithTimeout,
+    fetch: async (url, init) => {
+      const headers = new Headers(init?.headers ?? (url as Request).headers)
+
+      // URLから自動判定して atproto-proxy ヘッダーを付与
+      const urlString = (url as URL).href ?? (url as Request).url
+
+      // app.bsky
+      if (urlString?.includes("/xrpc/app.bsky.") && this.proxies.appBsky) {
+        // フィードインタラクション（ sendInteractions ）
+        if (urlString?.includes("sendInteractions") && headers.has("atproto-proxy")) { /**/ }
+
+        // Preferences API は公式AppViewとする
+        else if (
+          urlString?.includes("Preferences") &&
+          this.proxies.appBsky !== "" &&
+          this.proxies.appBsky !== CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY
+        ) {
+          headers.set("atproto-proxy", CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY)
+        } else {
+          headers.set("atproto-proxy", this.proxies.appBsky)
+        }
+      }
+
+      // app.chat
+      else if (urlString?.includes("/xrpc/chat.bsky.") && this.proxies.chatBsky) {
+        headers.set("atproto-proxy", this.proxies.chatBsky)
+      }
+
+      return Util.fetchWithTimeout(url, { ...init, headers })
+    },
   })
   return this.agent != null
 }

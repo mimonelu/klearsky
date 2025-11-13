@@ -13,7 +13,7 @@ export default async function (
     await this.agent.repost(uri, cid, via)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/repost]", response)
+  $log("repost", response)
   if (response instanceof Error) {
     return response
   }

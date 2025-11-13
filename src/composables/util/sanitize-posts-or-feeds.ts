@@ -12,7 +12,7 @@ export default function (responses: Array<any>) {
   // PARENT.embeds[0] -> PARENT.embed
   // おそらく三段階目の引用RP
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "embeds" && child[0] != null && parent.embed == null) {
+    if (key === "embeds" && child?.[0] != null && parent.embed == null) {
       // parent.embed = Util.cloneJson(child[0])
       parent.embed = child[0]
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
@@ -21,7 +21,7 @@ export default function (responses: Array<any>) {
 
   // PARENT.value.embed -> PARENT.embed
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "value" && child.embed != null && parent.embed == null) {
+    if (key === "value" && child?.embed != null && parent.embed == null) {
       // parent.embed = Util.cloneJson(child.embed)
       parent.embed = child.embed
       parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
@@ -31,11 +31,11 @@ export default function (responses: Array<any>) {
   // PARENT.embed.media.external/images -> PARENT.embed.external/images
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
     if (key === "media") {
-      if (child.external != null && parent.external == null) {
+      if (child?.external != null && parent.external == null) {
         parent.external = child.external // Util.cloneJson(child.external)
         parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
       }
-      if (child.images != null && parent.images == null) {
+      if (child?.images != null && parent.images == null) {
         parent.images = child.images // Util.cloneJson(child.images)
         parent.images.__comment = "❗ This 'images' was duplicated by Klearsky."
       }
@@ -44,7 +44,7 @@ export default function (responses: Array<any>) {
 
   // PARENT.record.record -> PARENT.record
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "record" && child.record != null) {
+    if (key === "record" && child?.record != null) {
       parent.record = child.record // Util.cloneJson(child.record)
       parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
     }
@@ -52,7 +52,7 @@ export default function (responses: Array<any>) {
 
   // PARENT.record/value.embed.external/images -> PARENT.embed.external/images
   Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if ((key === "record" || key === "value") && child.embed != null) {
+    if ((key === "record" || key === "value") && child?.embed != null) {
       /* // TODO: 生レコード用。不要であれば削除すること
       if (child.embed.external != null && parent.embed?.external == null) {
         if (parent.embed == null) parent.embed = {}

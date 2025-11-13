@@ -28,7 +28,7 @@ export default async function (
     await this.agent.com.atproto.repo.putRecord(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/updateStarterPack]", response)
+  $log("updateStarterPack", response)
   if (response instanceof Error) {
     return response
   }

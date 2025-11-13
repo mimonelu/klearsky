@@ -15,14 +15,11 @@ export default async function (
     headers: {},
     encoding: "application/json",
   }
-  if (options.headers != null && this.proxies.chat != null) {
-    options.headers["atproto-proxy"] = this.proxies.chat
-  }
   const response: Error | ChatBskyConvoMuteConvo.Response =
     await this.agent.chat.bsky.convo.muteConvo(query, options)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/chat.bsky.convo.muteConvo]", response)
+  $log("chat.bsky.convo.muteConvo", response)
   if (response instanceof Error) {
     return response
   }

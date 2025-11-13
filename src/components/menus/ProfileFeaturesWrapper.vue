@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { nextTick, reactive, ref } from "vue"
-import MenuTickerDownloadPostedImages from "@/components/menus/DownloadPostedImages.vue"
 import MenuTickerFirstPost from "@/components/menus/FirstPost.vue"
 import MenuTickerSearchPost from "@/components/menus/SearchPost.vue"
 import MenuTickerSendMention from "@/components/menus/SendMention.vue"
@@ -100,14 +99,6 @@ function close () {
         <!-- 最初のポストを見る -->
         <MenuTickerFirstPost
           :did="user.did"
-          @close="emit('close')"
-        />
-
-        <hr />
-
-        <!-- 投稿画像をダウンロード -->
-        <MenuTickerDownloadPostedImages
-          :user="user"
           @close="emit('close')"
         />
       </menu>

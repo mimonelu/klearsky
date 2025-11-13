@@ -39,6 +39,11 @@
         width: 100%;
       }
     }
+
+    &__button-container {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 
   // ヘルプボタン

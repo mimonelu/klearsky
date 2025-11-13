@@ -1,6 +1,7 @@
 type TTSetting = {
   actorStatusLiveDisplay?: boolean
   atmosphereDisplay?: boolean
+  atprotoProxyAppBsky?: string
   autoTranslation?: boolean
   autoTranslationIgnoreLanguage?: string
   backgroundImage?: string

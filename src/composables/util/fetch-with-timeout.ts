@@ -5,28 +5,32 @@ export default async function (
   init?: RequestInit
 ): Promise<Response> {
   if (AbortSignal == null) {
-    return await globalThis.fetch(input)
+    return await globalThis.fetch(input, init)
   }
 
   // URLの取得
-  const url: undefined | string = typeof input === "string"
-    ? input
-    : (input as URL).href != null
-      ? (input as URL).href
-      : (input as globalThis.Request).url
+  let urlString: string
+  if (typeof input === "string") {
+    urlString = input
+  } else if (input instanceof URL) {
+    urlString = input.href
+  } else if (input instanceof Request) {
+    urlString = input.url
+  } else {
+    urlString = String(input)
+  }
 
   // タイムアウトの取得
   let timeout = CONSTS.TIMEOUT_DEFAULT
-  CONSTS.TIMEOUT_DETAILS.some((detail) => {
-    if (url.includes(detail.url)) {
+  for (const detail of CONSTS.TIMEOUT_DETAILS) {
+    if (urlString.includes(detail.url)) {
       timeout = detail.timeout
-      return true
+      break
     }
-    return false
-  })
+  }
 
   return await globalThis.fetch(input, {
     ...init,
-    signal: AbortSignal.timeout(timeout),
+    signal: init?.signal ?? AbortSignal.timeout(timeout),
   })
 }

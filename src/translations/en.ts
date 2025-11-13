@@ -70,13 +70,15 @@ export default () => ({
   "sessionExpired": "Session expired. Please login again.",
   "newLogin": "New Login",
   "logout": "Logout",
-  "removeAccountHistory": "Delete my account",
-  "removeAccountHistoryMessage": "This account will be deleted from My Accounts. Are you sure?",
+  "removeAccountHistory": "Remove from Klearsky",
+  "removeAccountHistoryMessage": "This account will be removed from My Accounts. Are you sure?",
   "accountExport": "Export",
   "accountImport": "Import",
   "accountImportNotification": "Imports account data. \n\n* Overwrites existing data with input data. No deletion. \n* Currently logged in data will not be overwritten.\n\nDo you want to continue?",
   "noMyAccounts": "No My Accounts. Please log in first. You can create an account on the official client.",
   "signUp": "Create account (for dev)",
+  "signUpMode": "Switch to Sign Up Form",
+  "signInMode": "Switch to Sign In Form",
   "email": "Email",
   "handle": "Handle",
   "inviteCode": "Invite code",
@@ -92,6 +94,8 @@ export default () => ({
   "editProfile": "Edit",
   "displayName": "Display Name",
   "description": "Description",
+  "pronouns": "Pronouns",
+  "websiteUrl": "Website URL",
   "avatar": "Avatar",
   "detachAvatar": "Detach avatar image",
   "banner": "Banner",
@@ -112,9 +116,9 @@ export default () => ({
   "reposts": "Reposts",
   "quoteRepost": "Quote repost",
   "createRepost": "Repost",
-  "createRepostConfirmation": "Repost this post. Are you sure?",
+  "createRepostConfirmation": "Are you sure you want to repost this?",
   "deleteRepost": "Delete repost",
-  "deleteRepostConfirmation": "Cancel the repost of this post. Are you sure?",
+  "deleteRepostConfirmation": "Are you sure you want to undo this repost?",
   "sendQuoteRepost": "Quote repost",
   "postWithReplies": "Posts and replies",
   "postWithMedia": "Posts with media",
@@ -126,13 +130,13 @@ export default () => ({
   "sendPostNotification3": "The URL of link card can be set to the URL of a web page, AT URI of a post, AT URI of a feed, or AT URI of a list.",
   "sendPostNotification4": "Animated images are supported in .gif / .apng / .webp (not officially supported).",
   "sendPostNotification5": "It is possible to send more than the maximum number of characters.",
-  "sendPostReset": "Reset all entries",
-  "sendPostResetMessage": "Reset all entries. Are you sure?",
+  "sendPostReset": "Discard draft",
+  "sendPostResetMessage": "All fields will be cleared. Are you sure you want discard this draft?",
   "postDate": "Post date",
   "postDatePopupTitle": "Set post date",
-  "postDatePopupDescription": "This post will be sent as the following date.\nValid only from 10 A.D. to the present date and time.",
+  "postDatePopupDescription": "This post will be sent with the following date.\nValid dates are from 10 A.D. to the present date and time.",
   "postDatePopupReset": "Reset date",
-  "postDatePopupResetDescription": "Reset the date. Are you sure?",
+  "postDatePopupResetDescription": "Are you sure you want to reset the date?",
   "emptyPostConfirmation": "Empty Post Confirmation",
   "emptyPostConfirmationMessage": "This post seems to be empty. Do you want to post this as is?",
 
@@ -155,7 +159,7 @@ export default () => ({
   "sendMention": "Send mention",
   "sendPostAfter": "Send post after this",
   "sendLinkCard": "Send as a link card",
-  "warpPostNotification": "This post will be sent as the following date:",
+  "warpPostNotification": "This post will be sent with the following date:",
   "deletePost": "Delete post",
   "deletePostMessage": "This post will be deleted. Are you sure?",
 
@@ -214,12 +218,15 @@ export default () => ({
   "feedControl": "Feeds Control",
   "feedControlDescription": "Effective from the next download.",
   "popularFeeds": "Popular Feeds",
+  "feedInteractionMore": "Show more like this",
+  "feedInteractionLess": "Show fewer like this",
+  "feedInteractionSupportedDescription": "Supports Feed Interactions",
 
   // ============================================================================
   // MYFEEDS SORTS
   // ============================================================================
-  "sortInAsc": "Sort in asc",
-  "sortInDesc": "Sort in desc",
+  "sortInAsc": "Sort",
+  "sortInDesc": "Sort in reverse",
   "sortByLike": "Sort by likes",
   "sortByName": "Sort by name",
   "sortByUri": "Sort by URI",
@@ -249,11 +256,11 @@ export default () => ({
   "advancedSearch": "Advanced Search",
   "searchKeyword": "Search keyword",
   "searchSort": "Sort",
-  "searchLang": "Search with this post language",
-  "searchNoLang": "Do not specify post language",
-  "searchAuthor": "Search posts by this user",
+  "searchLang": "Search for this post language",
+  "searchNoLang": "All languages",
+  "searchAuthor": "Search posts from this user",
   "searchMyPosts": "Search my posts",
-  "searchTo": "Search replies to this user",
+  "searchTo": "Search replies from this user",
   "searchMentions": "Search mentions of this user",
   "searchMentionsToMe": "Search mentions of me",
   "searchDomain": "Search posts containing this domain",
@@ -271,15 +278,15 @@ export default () => ({
   // ============================================================================
   "media": "Media",
   "medias": "Medias",
-  "image": "Media Control",
+  "image": "Media Settings",
   "imageBoxes": "Medias",
   "alts": "ALTernative text",
-  "showImage": "Show medias",
-  "hideImage": "Hide medias",
-  "imageFolding": "Media Folding",
-  "imageFolding1": "None",
-  "imageFolding2": "Moderate",
-  "imageFolding3": "All",
+  "showImage": "Show media",
+  "hideImage": "Hide media",
+  "imageFolding": "Fold Media From",
+  "imageFolding1": "No one",
+  "imageFolding2": "Strangers",
+  "imageFolding3": "Everyone",
   "imageMaxHeightRatio": "Media Max Height Ratio",
   "imageMaxHeightRatio1": "x0.5",
   "imageMaxHeightRatio2": "x0.75",
@@ -288,24 +295,25 @@ export default () => ({
   "imageMaxHeightRatio5": "x2.0",
   "imageMaxHeightRatio6": "Unlimited",
   "imageAutoPlay": "Autoplay animated images",
+  "shouldConvertGifToVideo": "Convert GIF to Video",
   "video": "Video",
   "videoPreload": "Video preload",
   "videoIsBlob": "Non-streaming",
   "videoIsNone": "Not playable",
   "videoCanNotUpload": "Video posts are not allowed.",
-  "videoRemainingDailyNumber": "Postable number of video today",
+  "videoRemainingDailyNumber": "Postable number of videos today",
   "videoRemainingDailyBytes": "Postable video capacity today",
 
   // ============================================================================
   // LINK CARDS
   // ============================================================================
   "linkcard": "Link card",
-  "linkCardControl": "Link Card Control",
+  "linkCardControl": "Link Card Settings",
   "linkcardLayout": "Link Card Layout",
   "linkcardLayoutVertical": "Vertical",
   "linkcardLayoutHorizontal": "Horizontal",
   "linkcardLayoutNone": "No image",
-  "linkcardEmbeddedControl": "Link Card Embedded Content Control",
+  "linkcardEmbeddedControl": "Interactive Link Cards",
   "LinkCardPlaceHolder": "Link card's URL/AT URI",
   "urlHasImage": "Attach OGP image to link card",
 
@@ -337,6 +345,8 @@ export default () => ({
   "autoTranslationRemarks4": "For more information, check MyMemory website.",
   "autoTranslationIgnoreLanguage": "Automatic Translation - Excluded Languages",
   "translate": "Translate",
+  "translating": "(Translating)",
+  "translationFailed": "(Translation failed)",
 
   // ============================================================================
   // LABELS & MODERATION
@@ -349,12 +359,12 @@ export default () => ({
   "postLabel": "Post labels",
   "labeler": "Labeler",
   "labelerSettings": "Labeler Settings",
-  "subscribeLabel": "Subscribe labeler",
-  "unsubscribeLabel": "Subscribing labeler",
+  "subscribeLabel": "Subscribe to labeler",
+  "unsubscribeLabel": "Subscribed to labeler",
   "labelerOverLimit": "Cannot register this labeler because the subscribed labeler has reached the upper limit.",
   "labelerReset": "Reset all settings",
-  "labelerResetMessage": "Reset all settings. Are you sure?",
-  "myLabeler": "My Labeler",
+  "labelerResetMessage": "Are you sure you want to reset this labeler's settings?",
+  "myLabeler": "My Labelers",
   "moderation": "Moderation",
   "moderate": "Moderate",
   "contentFiltering": "Content Filtering",
@@ -412,7 +422,7 @@ export default () => ({
   "label-name-graphic-media": "Graphic Media",
   "label-description-graphic-media": "Explicit or potentially disturbing media.",
   "label-name-nudity": "Non-sexual Nudity",
-  "label-description-nudity": "E.g. artistic nudes.",
+  "label-description-nudity": "e.g. artistic nudes.",
 
   // ============================================================================
   // REPORTS
@@ -421,16 +431,16 @@ export default () => ({
   "reportSendPost": "Report post",
   "reportSendFeed": "Report custom feed",
   "reportSendList": "Report list",
-  "reportSendConfirmation": "Confirmation of sending report",
-  "reportSendConfirmationMessage": "This report will be sent. Are you sure?",
+  "reportSendConfirmation": "Confirm report",
+  "reportSendConfirmationMessage": "Are you sure you want to send this report?",
   "reportReasonType": "Reason",
   "reportReason": "Details (optional)",
   "reportReasonDescription": "Enter any additional information here.",
-  "reportReasonMisleading": "Misleading: Impersonation, False claims",
+  "reportReasonMisleading": "Misleading: Impersonation, false claims",
   "reportReasonSpam": "Spam: Frequently posts unwanted content",
-  "reportReasonSexual": "Sexual: Nudity, Pornography",
-  "reportReasonViolation": "Violation: Copyright violation, Violation of terms of Service",
-  "reportReasonRude": "Rude: Harassment, Trolling, Intolerance",
+  "reportReasonSexual": "Sexual: Nudity, pornography",
+  "reportReasonViolation": "Violation: Copyright violation, terms of service",
+  "reportReasonRude": "Rude: Harassment, trolling, discrimination",
   "reportReasonOther": "Other",
   "reportCopyrightViolation": "Reporting copyright violation",
 
@@ -440,12 +450,12 @@ export default () => ({
   "wordMute": "Muted words",
   "wordMuteEnabled": "ON",
   "wordMutePlaceholder": "Word1, Word2, ...",
-  "wordMuteRemoveConfirmation": "Delete muted word",
-  "wordMuteRemoveConfirmationMessage": "Delete the following muted word. Are you sure?",
+  "wordMuteRemoveConfirmation": "Unmute word",
+  "wordMuteRemoveConfirmationMessage": "Are you sure you want to allow this word from now on?",
   "wordMuteEmpty": "There are no muted words.",
-  "wordMuteTerm": "Term",
-  "wordMuteNoTerm": "No term",
-  "wordMuteCurrentTerm": "Current term",
+  "wordMuteTerm": "Duration",
+  "wordMuteNoTerm": "Forever",
+  "wordMuteCurrentTerm": "Current duration",
   "wordMuteContent": "Text",
   "wordMuteTag": "Tag",
   "wordMuteUrl": "URL",
@@ -455,13 +465,13 @@ export default () => ({
   // PSYCHOLOGICAL SAFETY
   // ============================================================================
   "psySafety": "Psychological Safety",
-  "hideNotificationBadge": "Hide new arrivals badge",
+  "hideNotificationBadge": "Hide badge for unread notifications",
   "hideNotificationBadgeOff": "Disable",
   "hideNotificationBadgeOn": "Enable",
   "hideNumberOfReaction": "Hide number of reactions",
   "hideNumberOfReactionOff": "Disable",
   "hideNumberOfReactionOn": "Enable",
-  "postAnonymization": "Post anonymization",
+  "postAnonymization": "Anonymize post authors",
   "postAnonymizationOff": "Disable",
   "postAnonymizationOn": "Enable",
   "anonymous": "(Anonymous)",
@@ -488,7 +498,7 @@ export default () => ({
   "listDuplicate": "Duplicate list",
   "listDuplicateMessage": "Duplicate this list.\n\n* Duplicate up to a maximum of 5000 users.\n* Duplicating a list with a large number of users may cause the rate limit to be exceeded at one time. Duplication of lists of more than 100 users is not recommended.\n* Thumbnails will not be duplicated.",
   "listDetectFollowings": "Check your followings",
-  "listDetectFollowingsNoUsers": "There don't appear to be any following users on this list.\nHowever, it is uncertain if there are more than 5000 list users.",
+  "listDetectFollowingsNoUsers": "There don't appear to be any following users on this list.\nHowever, this may be inaccurate if there are more than 5000 list users.",
   "listAvatar": "Thumbnail",
   "listName": "Name",
   "listDescription": "Description",
@@ -513,8 +523,8 @@ export default () => ({
   "chatMemberPlaceholder": "Display name or handle",
   "chatOk": "Ok chat",
   "chatNo": "No chat",
-  "allow-incoming-all": "Everyone Ok",
-  "allow-incoming-none": "Everyone No",
+  "allow-incoming-all": "Everyone",
+  "allow-incoming-none": "No one",
   "allow-incoming-following": "Only following",
   "unreadChatConvo": "Unread",
   "muteChatConvo": "Mute",
@@ -524,8 +534,8 @@ export default () => ({
   "chatMessagePlaceholder": "Message",
   "chatUrlPlaceholder": "AT URI for embedded post",
   "leaveChatConvoConfirmation": "You will leave the chat. You can re-enter, but you will not be able to retrieve your current messages. Are you sure?",
-  "errorInvalidChatToken": "Failed to start chat.\nPlease grant chat privileges to App passwords if you are using that.",
-  "chatUrlNotification": "The URL format is not a post AT URI.",
+  "errorInvalidChatToken": "Failed to start chat.\nIf you are using an App password, you may need to grant chat privileges.",
+  "chatUrlNotification": "The URL format needs to be a post AT URI.",
   "chatFetchInterval": "Interval to Fetch Chats",
   "chatFetchInterval1": "OFF",
   "chatFetchInterval2": "Every 15 sec.",
@@ -540,6 +550,7 @@ export default () => ({
   "packs": "Packs",
   "starterPacks": "Starter packs",
   "joinedStarterPack": "via Starter pack",
+  "latestActivityDate": "Latest updated",
   "noStarterPacks": "There are no starter packs managed by this user.",
   "showStarterPackListFeeds": "Show list feeds",
   "showStarterPackListUsers": "Show list users",
@@ -562,28 +573,28 @@ export default () => ({
   // ============================================================================
   // POSTGATES
   // ============================================================================
-  "postgate": "Quote controls",
-  "postgateAllow": "Quote allowed",
-  "postgateNotAllow": "Quote not allowed",
+  "postgate": "Control Quotes",
+  "postgateAllow": "Quotes allowed",
+  "postgateNotAllow": "Quotes not allowed",
   "attachQuote": "Attach quote",
   "detachQuote": "Detach quote",
 
   // ============================================================================
   // THREADGATES
   // ============================================================================
-  "threadgate": "Reply controls",
+  "threadgate": "Control Replies",
   "threadgateNoAction": "Anyone can reply",
-  "threadgateCustomAction": "Only allowed users can reply",
-  "threadgateAllowMention": "Mention users",
-  "threadgateAllowFollower": "Followers",
-  "threadgateAllowFollowing": "Following users",
+  "threadgateCustomAction": "Only certain users can reply",
+  "threadgateAllowMention": "Users you mentioned",
+  "threadgateAllowFollower": "Users who follow you",
+  "threadgateAllowFollowing": "Users who you follow",
   "threadgateNotification1": "You can select up to 5 targets to allow reply.",
-  "threadgateNotification2": "If apply without checking anything, only you will be able to reply.",
+  "threadgateNotification2": "If you don't check any options, only you will be able to reply.",
 
   // ============================================================================
   // REACTION CONTROL
   // ============================================================================
-  "reactionControl": "Reaction controls",
+  "reactionControl": "Response controls",
 
   // ============================================================================
   // SETTINGS
@@ -593,7 +604,7 @@ export default () => ({
   "postSettings": "Post Settings",
   "timeSettings": "Time Settings",
   "psySafetySettings": "Psychological Safety",
-  "etcSettings": "Others Settings",
+  "etcSettings": "Other Settings",
   "font": "Font",
   "fontSize": "Font Size",
   "fontSizeSmall": "Small",
@@ -614,8 +625,11 @@ export default () => ({
   "backgroundImage1": "Depending on the server where the background image is placed, it may not be displayed.",
   "backgroundImage2": "You can also set the value of the CSS property `background-image`.\ne.g. linear-gradient(to bottom, pink, cyan)",
   "development": "Development",
-  "resetSettings": "Reset settings",
-  "resetSettingsDetail": "Reset this account's settings. Are you sure?",
+  "dangerZone": "Caution Required",
+  "atprotoProxyAppBskySetting": "atproto-proxy (for app.bsky)",
+  "setOfficialValue": "Set Official Value",
+  "resetSettings": "Reset All Settings",
+  "resetSettingsDetail": "Are you sure you want to reset this account's settings?",
 
   // ============================================================================
   // TIME SETTINGS
@@ -693,8 +707,8 @@ export default () => ({
   // REPOST CONTROL
   // ============================================================================
   "disableActionViaRepostControl": "Notification control for repost on repost / like on repost",
-  "disableLikeViaRepost": "Don't notify the reposting user when liking a repost",
-  "disableRepostViaRepost": "Don't notify the reposting user when reposting a repost",
+  "disableLikeViaRepost": "Don't notify the reposting user when liking their repost",
+  "disableRepostViaRepost": "Don't notify the reposting user when reposting their repost",
 
   // ============================================================================
   // GLOBALLINE SETTINGS
@@ -710,13 +724,19 @@ export default () => ({
   "globallineLayoutSlim": "Slim",
 
   // ============================================================================
+  // OFFICIAL_BOOKMARKS
+  // ============================================================================
+  "officialBookmark": "Official Bookmark",
+  "noOfficialBookmark": "No official bookmarks",
+
+  // ============================================================================
   // CUSTOM_BOOKMARKS
   // ============================================================================
-  "customBookmark": "Bookmarks",
-  "noCustomBookmark": "No bookmarks",
-  "deleteCustomBookmark": "Delete bookmark",
-  "customBookmarkManagement": "Manage bookmark",
-  "customBookmarkManagementDetail": "Add/update bookmark",
+  "customBookmark": "Extended Bookmarks",
+  "noCustomBookmark": "No extended bookmarks",
+  "deleteCustomBookmark": "Delete extended bookmark",
+  "customBookmarkManagement": "Extended bookmark",
+  "customBookmarkManagementDetail": "Add/update extended bookmark",
   "addingCustomBookmarkTag": "New bookmark tag",
   "customBookmarkOutputConfirmation": "Copy the loaded posts to your clipboard as SkyFeed JSON. (Up to the latest 30 posts)",
 
@@ -760,6 +780,7 @@ export default () => ({
   "pnNicovideo": "Nicovideo",
   "pnFrontpage": "Frontpage",
   "pnLinkat": "Linkat",
+  "pnSkyBeMoreBlue": "SkyBeMoreBlue",
   "pnSmokeSignal": "Smoke Signal",
   "pnWhiteWind": "WhiteWind",
 
@@ -782,15 +803,6 @@ export default () => ({
   "oplogsApp": "PLC operation logs",
   "atlasApp": "BSky Experiments",
   "atscanApp": "ATScan",
-
-  // ============================================================================
-  // DOWNLOAD FEATURES
-  // ============================================================================
-  "downloadPostedImages": "Download posted images",
-  "downloadPostedImagesOnConfirmation": "Download images posted by this user.\n\n* This feature is for personal viewing purposes only.\n* The images will be compiled into a .zip file.\n\n* Download up to 100 images out of the last 1000 posts.\n* Reposts are not included.\n* Download images of the lowest quality.\n* It may take several minutes to complete.",
-  "downloadPostedImagesOnCancel": "There were no images posted by this user.",
-  "downloadPostedImagesOnComplete": "Downloaded images posted by this user.",
-  "downloadPostedImagesOnProgress": "Now downloading...",
 
   // ============================================================================
   // LIST MENTIONS
@@ -825,7 +837,7 @@ export default () => ({
   // CONFIRMATION DIALOGS
   // ============================================================================
   "confirmUrl": "Confirmation of URL",
-  "confirmUrlNotification": "Open the following URL. Are you sure?",
+  "confirmUrlNotification": "Are you sure you want to open this URL?",
 
   // ============================================================================
   // USER STATUS

@@ -17,7 +17,7 @@ export default async function (
     await this.agent.app.bsky.notification.listActivitySubscriptions(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/fetchActivitySubscriptions]", response)
+  $log("fetchActivitySubscriptions", response)
   if (response instanceof Error) {
     return response
   }

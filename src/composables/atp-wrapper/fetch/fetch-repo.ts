@@ -16,7 +16,7 @@ export default async function (
     await this.agent.com.atproto.repo.describeRepo(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/describeRepo]", response)
+  $log("describeRepo", response)
   if (response instanceof Error) {
     return response
   }

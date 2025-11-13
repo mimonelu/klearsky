@@ -52,7 +52,7 @@ function onScrolledToBottom () {
         :menuDisplay="true"
         :detailDisplay="true"
         :orderButtonDisplay="false"
-        :creatorDisplay="false"
+        :creatorDisplay="true"
       />
     </div>
     <LoadButton

@@ -16,6 +16,7 @@ import bluesky from "@/svg/bluesky.svg?raw"
 import bookmark from "@/svg/bookmark.svg?raw"
 import bookmarkOff from "@/svg/bookmark-off.svg?raw"
 import bookmarkOutline from "@/svg/bookmark-outline.svg?raw"
+import bookmarkPlus from "@/svg/bookmark-plus.svg?raw"
 import cards from "@/svg/cards.svg?raw"
 import chat from "@/svg/chat.svg?raw"
 import chatPlus from "@/svg/chat-plus.svg?raw"
@@ -99,6 +100,8 @@ import shimmer from "@/svg/shimmer.svg?raw"
 import sort from "@/svg/sort.svg?raw"
 import sprout from "@/svg/sprout.svg?raw"
 import star from "@/svg/star.svg?raw"
+import thumbUp from "@/svg/thumb-up.svg?raw"
+import thumbDown from "@/svg/thumb-down.svg?raw"
 import translate from "@/svg/translate.svg?raw"
 import trending from "@/svg/trending-up.svg?raw"
 import unlock from "@/svg/unlock.svg?raw"
@@ -127,6 +130,7 @@ const icons: { [k: string]: string } = {
   bookmark,
   bookmarkOff,
   bookmarkOutline,
+  bookmarkPlus,
   cards,
   chat,
   chatPlus,
@@ -210,6 +214,8 @@ const icons: { [k: string]: string } = {
   sort,
   sprout,
   star,
+  thumbUp,
+  thumbDown,
   translate,
   trending,
   unlock,

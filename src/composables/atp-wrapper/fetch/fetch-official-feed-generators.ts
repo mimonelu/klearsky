@@ -8,7 +8,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | Array<TTFeed
     await this.agent.app.bsky.feed.describeFeedGenerator()
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/describeFeedGenerator]", response)
+  $log("describeFeedGenerator", response)
   if (response instanceof Error) {
     return response
   }

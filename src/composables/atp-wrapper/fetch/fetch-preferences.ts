@@ -9,7 +9,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | Array<TTPref
     await this.agent.app.bsky.actor.getPreferences()
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getPreferences]", response)
+  $log("getPreferences", response)
   if (response instanceof Error) {
     return response
   }

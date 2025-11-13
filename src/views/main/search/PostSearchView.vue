@@ -164,11 +164,18 @@ function canSearch (): boolean {
 }
 
 function updateRouter () {
-  const query: { [k: string]: undefined | string } = { text: mainState.currentSearchTerm || undefined }
+  const params = new URLSearchParams()
+  if (mainState.currentSearchTerm != null && mainState.currentSearchTerm !== "") {
+    params.append("text", mainState.currentSearchTerm)
+  }
   Object.keys(mainState.currentSearchPostFormState).forEach((key) => {
-    query[key] = (mainState.currentSearchPostFormState as any)[key] || undefined
+    const value = (mainState.currentSearchPostFormState as any)[key]
+    if (value != null) {
+      params.append(key, value)
+    }
   })
-  router.push({ name: "post-search", query })
+  const param = params.toString()
+  window.history.pushState({}, "", `#/search/post${param !== "" ? "?" + param : ""}`)
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {

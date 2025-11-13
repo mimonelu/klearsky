@@ -19,15 +19,12 @@ export default async function (
     query.cursor = cursor
   }
   const options: ChatBskyConvoListConvos.CallOptions = { headers: {} }
-  if (options.headers != null && this.proxies.chat != null) {
-    options.headers["atproto-proxy"] = this.proxies.chat
-  }
   const response: Error | ChatBskyConvoListConvos.Response =
     await this.agent.chat.bsky.convo.listConvos(query, options)
       .then((value) => value)
       .catch((error) => error)
   if (response instanceof Error) {
-    console.warn("[klearsky/chat.bsky.convo.listConvos]", response)
+    $warn("chat.bsky.convo.listConvos", response)
     return response
   }
   if (!response.success) {
