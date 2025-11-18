@@ -235,11 +235,13 @@ const router = createRouter({
 // 存在するアセットファイルへのアクセスはサーバ側が処理するため考慮していない
 router.beforeEach((_to, _from, next) => {
   const pathname = window.location.pathname
+  const basePath = import.meta.env.BASE_URL
+  const normalizedBasePath = basePath.endsWith("/") ? basePath : basePath + "/"
   if (
-    pathname !== "/" &&
-    pathname !== "/index.html"
+    pathname !== normalizedBasePath &&
+    pathname !== normalizedBasePath + "index.html"
   ) {
-    window.location.href = "/#/error"
+    window.location.href = normalizedBasePath + "#/error"
     return
   }
   next()
