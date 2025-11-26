@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
+import { computed, inject, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
 import { format } from "date-fns/format"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
@@ -9,6 +9,8 @@ import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import debounce from "@/composables/util/debounce"
+
 
 const emit = defineEmits<{(event: string, done: boolean, hidden: boolean): void}>()
 
@@ -145,9 +147,28 @@ watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
   }, 0)
 })
 
-// Logga in tempo reale il testo inserito dall'utente
-watch(() => easyFormState.text, (val) => {
-  console.log(val)
+// get current username safely
+const currentUserLabel = computed(() => (
+  (mainState.userProfile?.displayName?.trim() ||
+   mainState.atp.session?.handle?.trim() ||
+   mainState.atp.session?.did ||
+   "(unknown)")
+))
+
+// logging user input text with timestamp and user info
+const debouncedWatch = debounce((val: string) => {
+  const logEntry = {
+    user: currentUserLabel.value,
+    timestamp: new Date().toISOString(),
+    text: val
+  }
+  console.log(JSON.stringify(logEntry, null, 2))
+}, 500)
+
+watch(() => easyFormState.text, debouncedWatch);
+
+onBeforeUnmount(() => {
+  debouncedWatch.cancel()
 })
 
 // D&D用処置
