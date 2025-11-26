@@ -45,6 +45,7 @@ import MyListPopup from "@/components/popups/MyListPopup.vue"
 import MyWordPopup from "@/components/popups/MyWordPopup.vue"
 import NotificationFilterPopup from "@/components/next/Notification/NotificationFilterPopup.vue"
 import NotificationPopup from "@/components/next/Notification/NotificationPopup.vue"
+import OfficialBookmarkPopup from "@/components/next/OfficialBookmark/OfficialBookmarkPopup.vue"
 import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSettingsPopup.vue"
 import PasteFiles from "@/components/next/PasteFiles/PasteFiles.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
@@ -113,6 +114,7 @@ onMounted(async () => {
   state.currentPath = router.currentRoute.value.path
   state.currentQuery = router.currentRoute.value.query
   state.settings = Util.loadStorage("settings") ?? {}
+  state.updateAtprotoProxy(state.settings[state.atp.data.did]?.atprotoProxyAppBsky)
   state.loaderDisplay = true
   await autoLogin()
   state.loaderDisplay = false
@@ -1065,6 +1067,14 @@ function changeSetting () {
         <TimeFeedsPopup
           v-if="state.timeFeedsPopupDisplay"
           @close="state.closeTimeFeedsPopup"
+        />
+      </Transition>
+
+      <!-- 公式ブックマークポップアップ -->
+      <Transition>
+        <OfficialBookmarkPopup
+          v-if="state.officialBookmarkPopupDisplay"
+          @close="state.closeOfficialBookmarkPopup"
         />
       </Transition>
 

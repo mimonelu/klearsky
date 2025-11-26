@@ -10,9 +10,6 @@ export default async function (
     return Error("noSessionError")
   }
   const headers: Record<string, string> = {}
-  if (this.proxies.chat != null) {
-    headers["atproto-proxy"] = this.proxies.chat
-  }
   const response: Error | TTCidUri =
     await this.agent.chat.bsky.actor.declaration.create(
       { repo },
@@ -21,7 +18,7 @@ export default async function (
     )
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/chat.bsky.actor.declaration.create]", response)
+  $log("chat.bsky.actor.declaration.create", response)
   if (response instanceof Error) {
     return response
   }

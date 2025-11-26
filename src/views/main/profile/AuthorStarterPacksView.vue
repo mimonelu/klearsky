@@ -74,7 +74,7 @@ function onScrolledToBottom () {
           :starterPack="starterPack"
           :menuDisplay="true"
           :detailDisplay="true"
-          :creatorDisplay="false"
+          :creatorDisplay="true"
           :unclickable="false"
         />
       </template>

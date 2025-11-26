@@ -24,7 +24,7 @@ export default async function (
     await this.agent.searchActors(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/searchActors]", response)
+  $log("searchActors", response)
   if (response instanceof Error) {
     return response
   }

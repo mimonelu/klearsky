@@ -32,7 +32,7 @@ export default async function (
     await this.agent.app.bsky.feed.getFeed(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getFeed]", response)
+  $log("getFeed", response)
   if (response instanceof Error) {
     return Error("apiError")
   }

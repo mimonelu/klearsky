@@ -1,3 +1,4 @@
+import { TID } from "@atproto/common-web"
 import { endOfYesterday } from "date-fns/endOfYesterday"
 import { format } from "date-fns/format"
 import { intlFormatDistance } from "date-fns/intlFormatDistance"
@@ -146,6 +147,9 @@ export const state: MainState = reactive<MainState>({
   currentBlockingUsers: [],
   currentBlockingUsersCursor: undefined,
 
+  // atproto-proxy
+  updateAtprotoProxy: updateAtprotoProxy,
+
   // プロフィール
   inSameProfilePage: false,
   profileFolding: false,
@@ -171,6 +175,7 @@ export const state: MainState = reactive<MainState>({
   currentAuthorPostOfPinnedPost: undefined,
   currentAuthorStarterPacks: [],
   currentAuthorStarterPacksCursor: undefined,
+  currentAuthorLatestActivityDate: undefined,
   currentFollowers: [],
   currentFollowersCursor: undefined,
   currentFollowings: [],
@@ -210,6 +215,7 @@ export const state: MainState = reactive<MainState>({
 
   // 検索 - 現在のポスト検索フォーム
   currentSearchPostFormState: {
+    text: undefined,
     sort: "latest",
     lang: "",
     author: "",
@@ -304,6 +310,12 @@ export const state: MainState = reactive<MainState>({
   postPopoverProps: {
     display: false,
     post: undefined,
+
+    // フィードインタラクション
+    feedAcceptsInteractions: undefined,
+    feedGeneratorDid: undefined,
+    feedContext: undefined,
+    reqId: undefined,
   },
   postPopoverSelector: undefined,
   postPopoverCallback: undefined,
@@ -714,6 +726,13 @@ export const state: MainState = reactive<MainState>({
   openTimeFeedsPopup: openTimeFeedsPopup,
   closeTimeFeedsPopup: closeTimeFeedsPopup,
 
+  // ポップアップ - 公式ブックマークポップアップ
+  currentOfficialBookmarks: [],
+  currentOfficialBookmarksCursor: undefined,
+  officialBookmarkPopupDisplay: false,
+  openOfficialBookmarkPopup: openOfficialBookmarkPopup,
+  closeOfficialBookmarkPopup: closeOfficialBookmarkPopup,
+
   // ポップアップ - カスタムブックマークポップアップ
   currentCustomBookmarkPacks: [],
   currentCustomBookmarkPacksCursor: undefined,
@@ -866,6 +885,9 @@ function resetSettings () {
 }
 
 function updateSettings () {
+  // atproto-proxy
+  updateAtprotoProxy()
+
   updateCurrentLanguageSetting()
   updateFontSetting()
   updateColorThemeSetting()
@@ -902,6 +924,9 @@ function saveSettings () {
   if (state.settings[did].atmosphereDisplay == null) {
     state.settings[did].atmosphereDisplay = true
   }
+  if (state.settings[did].atprotoProxyAppBsky == null) {
+    state.settings[did].atprotoProxyAppBsky = ""
+  }
   if (state.settings[did].autoTranslation == null) {
     state.settings[did].autoTranslation = false
   }
@@ -909,7 +934,7 @@ function saveSettings () {
     state.settings[did].autoTranslationIgnoreLanguage = undefined
   }
   if (state.settings[did].chatFetchInterval == null) {
-    state.settings[did].chatFetchInterval = 30000
+    state.settings[did].chatFetchInterval = 60000
   }
   if (state.settings[did].contentLanguages == null) {
     state.settings[did].contentLanguages = []
@@ -1341,6 +1366,12 @@ async function startChatListTimer () {
   }, state.currentSetting?.chatFetchInterval ?? 60000)
 }
 
+// atproto-proxy
+
+function updateAtprotoProxy (proxy?: string) {
+  state.atp.proxies.appBsky = proxy ?? state.currentSetting.atprotoProxyAppBsky ?? ""
+}
+
 // プロフィール
 
 function resetProfileState () {
@@ -1368,6 +1399,7 @@ function resetProfileState () {
   state.currentFollowingsCursor = undefined
   resetArray(state, "currentSuggestedFollows")
   state.currentAuthorPostOfPinnedPost = undefined
+  state.currentAuthorLatestActivityDate = undefined
 }
 
 function resetArray (state: any, key: string) {
@@ -1416,6 +1448,7 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
   state.currentFollowings.splice(0)
   state.currentSuggestedFollows.splice(0)
   state.currentAuthorPostOfPinnedPost = undefined
+  state.currentAuthorLatestActivityDate = undefined
 
   // プロフィールデータの取得
   const currentProfile = await state.atp.fetchProfile(did)
@@ -1442,6 +1475,9 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
       // describeRepo の取得
       updateCurrentRepo()
     })
+
+  // 最終アクティビティ日時の取得（非同期、awaitしない）
+  fetchLatestActivityDate(did)
 }
 
 async function fetchPinnedPost (profile?: TTProfile) {
@@ -1498,6 +1534,29 @@ async function updateCurrentRepo () {
     return // await 中に初期化される恐れがあるため
   }
   state.currentProfile.__repo = json
+}
+
+async function fetchLatestActivityDate (did: string) {
+  const response = await state.atp.fetchWithoutAgent({
+    path: "com.atproto.sync.getLatestCommit",
+    did,
+    query: { did },
+  })
+  if (response instanceof Error) {
+    return
+  }
+  if (!(response instanceof Response)) {
+    return
+  }
+  const json = await response.json()
+  if (json?.rev == null) {
+    return
+  }
+  try {
+    const tid = TID.fromStr(json.rev)
+    const timestamp = Math.floor(tid.timestamp() / 1000)
+    state.currentAuthorLatestActivityDate = new Date(timestamp).toISOString()
+  } catch { /**/ }
 }
 
 async function fetchCurrentAuthorFeedGenerators (direction: "new" | "old") {
@@ -2665,6 +2724,16 @@ function openTimeFeedsPopup (post: TTPost, direction: "old" | "new") {
 
 function closeTimeFeedsPopup () {
   state.timeFeedsPopupDisplay = false
+}
+
+// ポップアップ - 公式ブックマークポップアップ
+
+function openOfficialBookmarkPopup () {
+  state.officialBookmarkPopupDisplay = true
+}
+
+function closeOfficialBookmarkPopup () {
+  state.officialBookmarkPopupDisplay = false
 }
 
 // ポップアップ - カスタムブックマークポップアップ

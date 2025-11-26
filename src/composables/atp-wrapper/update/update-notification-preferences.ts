@@ -9,7 +9,7 @@ export default async function (
     await this.agent.app.bsky.notification.putPreferencesV2(preferences)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/putNotificationPreferencesV2]", response)
+  $log("putNotificationPreferencesV2", response)
   if (response instanceof Error) {
     return response
   }

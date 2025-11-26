@@ -39,7 +39,6 @@ const hasLive = computed((): boolean => {
   position: relative;
 
   &__inner {
-    background-color: rgb(var(--fg-color), 0.125);
     cursor: pointer;
     display: block;
     overflow: hidden;

@@ -17,7 +17,7 @@ export default async function (
     })
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/block.create]", response)
+  $log("block.create", response)
   if (response instanceof Error) {
     return response
   }

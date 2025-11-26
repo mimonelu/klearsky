@@ -22,9 +22,9 @@
     }
   }
 
-  & > a,
-  & > button,
-  & > &__item {
+  a,
+  button,
+  &__item {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -57,7 +57,6 @@
       --icon-color: var(--feed-color);
     }
     & > .svg-icon--at,
-    & > .svg-icon--bookmark,
     & > .svg-icon--chat,
     & > .svg-icon--link,
     & > .svg-icon--post,
@@ -91,6 +90,13 @@
     & > .svg-icon--volumeOff,
     & > .svg-icon--wordMute {
       --icon-color: var(--notice-color);
+    }
+    & > .svg-icon--bookmarkPlus {
+      --icon-color: var(--bookmark-color);
+    }
+    & > .svg-icon--thumbUp,
+    & > .svg-icon--thumbDown {
+      --icon-color: var(--feed-interaction-color);
     }
     & > .svg-icon--verified,
     & > .svg-icon--verifier {

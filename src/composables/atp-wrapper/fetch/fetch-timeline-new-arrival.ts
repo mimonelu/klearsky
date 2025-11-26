@@ -18,11 +18,11 @@ export default async function (
       .then((value) => value)
       .catch((error) => error)
   if (response instanceof Error) {
-    console.log("[klearsky/getTimeline]", response)
+    $log("getTimeline", response)
     return response
   }
   if (!response.success) {
-    console.log("[klearsky/getTimeline]", response)
+    $log("getTimeline", response)
     return Error("apiError")
   }
   const feed = response.data.feed as Array<TTFeed>

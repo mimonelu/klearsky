@@ -9,7 +9,7 @@ export default async function (
     await this.agent.unblockModList(listUri)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/unblockModList]", response)
+  $log("unblockModList", response)
   if (response instanceof Error) {
     return response
   }

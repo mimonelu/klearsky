@@ -27,7 +27,7 @@ export default async function (
     await this.agent.com.atproto.repo.createRecord(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/createRecord]", response)
+  $log("createRecord", response)
   if (response instanceof Error) {
     return response
   }

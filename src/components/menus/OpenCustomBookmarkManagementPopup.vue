@@ -24,7 +24,7 @@ function onActivate () {
 
 <template>
   <button @click.prevent.stop="onActivate">
-    <SVGIcon name="bookmark" />
+    <SVGIcon name="bookmarkPlus" />
     <span>{{ $t("customBookmarkManagement") }}</span>
   </button>
 </template>

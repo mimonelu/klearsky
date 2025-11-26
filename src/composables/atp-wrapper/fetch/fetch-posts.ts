@@ -31,7 +31,7 @@ export default async function (
     })
   const responses = await Promise.allSettled(tasks)
   responses.forEach((response: PromiseSettledResult<any>) => {
-    console.log("[klearsky/getPosts]", response)
+    $log("getPosts", response)
     if (response == null ||
         response.status === "rejected" ||
         response.value instanceof Error ||

@@ -100,6 +100,9 @@ interface MainState {
   currentBlockingUsers: Array<TTUser>
   currentBlockingUsersCursor?: string
 
+  // atproto-proxy
+  updateAtprotoProxy: (proxy?: string) => void
+
   // プロフィール
   inSameProfilePage: boolean
   profileFolding: boolean
@@ -125,6 +128,7 @@ interface MainState {
   currentAuthorPostOfPinnedPost?: TTPost
   currentAuthorStarterPacks: Array<TIStarterPack>
   currentAuthorStarterPacksCursor?: string
+  currentAuthorLatestActivityDate?: string
   currentFollowers: Array<TTUser>
   currentFollowersCursor?: string
   currentFollowings: Array<TTUser>
@@ -248,6 +252,12 @@ interface MainState {
   postPopoverProps: {
     display: boolean
     post?: TTPost
+
+    // フィードインタラクション
+    feedAcceptsInteractions?: boolean,
+    feedGeneratorDid?: string,
+    feedContext?: string
+    reqId?: string
   }
   postPopoverSelector?: string | HTMLElement
   postPopoverCallback?: (type: "deletePost" | "updatePost" | "createCustomBookmark" | "deleteCustomBookmark") => Promise<void>
@@ -628,6 +638,13 @@ interface MainState {
   }
   openTimeFeedsPopup: (post: TTPost, direction: "old" | "new") => void
   closeTimeFeedsPopup: () => void
+
+  // ポップアップ - 公式ブックマークポップアップ
+  currentOfficialBookmarks: Array<TTPost>
+  currentOfficialBookmarksCursor?: string
+  officialBookmarkPopupDisplay: boolean
+  openOfficialBookmarkPopup: () => void
+  closeOfficialBookmarkPopup: () => void
 
   // ポップアップ - カスタムブックマークポップアップ
   currentCustomBookmarkPacks: Array<TICustomBookmarkPack>

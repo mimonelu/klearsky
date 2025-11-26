@@ -231,4 +231,18 @@ const router = createRouter({
   ],
 })
 
+// `/UNKNOWN_PAGE` へのアクセスはエラーページへ遷移させる
+// 存在するアセットファイルへのアクセスはサーバ側が処理するため考慮していない
+router.beforeEach((_to, _from, next) => {
+  const pathname = window.location.pathname
+  if (
+    pathname !== "/" &&
+    pathname !== "/index.html"
+  ) {
+    window.location.href = "/#/error"
+    return
+  }
+  next()
+})
+
 export default router

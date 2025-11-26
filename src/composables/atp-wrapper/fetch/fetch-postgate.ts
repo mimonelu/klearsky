@@ -27,7 +27,7 @@ export default async function (
     await this.agent.app.bsky.feed.postgate.get(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/fetchPostgate]", response)
+  $log("fetchPostgate", response)
   if (response instanceof Error) {
     return response
   }

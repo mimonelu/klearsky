@@ -1,6 +1,6 @@
 {
   "name": "klearsky",
-  "version": "0.9.98",
+  "version": "0.10.0",
   "private": true,
   "scripts": {
     "dev": "vite --mode development",
@@ -16,7 +16,7 @@
   ],
   "type": "module",
   "dependencies": {
-    "@atproto/api": "^0.16.2",
+    "@atproto/api": "^0.17.7",
     "@vueuse/core": "^10.11.1",
     "browser-image-compression": "^2.0.2",
     "crypto-js": "^4.2.0",

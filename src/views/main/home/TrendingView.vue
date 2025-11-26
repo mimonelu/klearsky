@@ -49,6 +49,9 @@ const MAX_HOT_POSTS = 5
 // ホット画像データの最大数
 const MAX_HOT_TRENDING_IMAGES = 5
 
+// ホット画像スケルトンの最大数
+const MAX_HOT_TRENDING_IMAGE_SKELETONS = 3
+
 async function updateHotPosts () {
   // ホットポスト
   const hotPosts: Array<Array<TTPost>> = []
@@ -146,6 +149,18 @@ async function updateHotPosts () {
             class="trending-view__image-text"
           >{{ image.text }}</div>
         </RouterLink>
+      </div>
+
+      <!-- ホット画像スケルトン -->
+      <div
+        v-else
+        class="trending-view__image-container"
+      >
+        <div
+          v-for="index of MAX_HOT_TRENDING_IMAGE_SKELETONS"
+          :key="index"
+          class="trending-view__skeleton"
+        />
       </div>
 
       <!-- 話題のトピック -->
@@ -280,6 +295,15 @@ async function updateHotPosts () {
       text-overflow: ellipsis;
       white-space: nowrap;
       width: 100%;
+    }
+  }
+
+  &__skeleton {
+    aspect-ratio: 16 / 9;
+    background-color: rgba(var(--fg-color), 0.125);
+    border-radius: var(--border-radius-middle);
+    &:first-child {
+      grid-column: span 2;
     }
   }
 

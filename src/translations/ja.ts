@@ -77,6 +77,8 @@ export default () => ({
   "accountImportNotification": "アカウントデータをインポートします。\n\n* 入力データで既存データを上書きします。削除はされません。\n* 現在ログイン中のデータは上書きされません。\n\n処理を続行しますか？",
   "noMyAccounts": "マイアカウントがありません。まずはログインしてください。アカウントは公式クライアントで作成できます。",
   "signUp": "アカウントを作成（開発者向け）",
+  "signUpMode": "新規登録フォームに切替",
+  "signInMode": "ログインフォームに切替",
   "email": "メールアドレス",
   "handle": "ハンドル",
   "inviteCode": "招待コード",
@@ -92,6 +94,8 @@ export default () => ({
   "editProfile": "編集",
   "displayName": "名前",
   "description": "紹介文",
+  "pronouns": "代名詞／呼び方",
+  "websiteUrl": "WebサイトのURL",
   "avatar": "サムネイル",
   "detachAvatar": "サムネイルを取り外す",
   "banner": "バナー",
@@ -214,6 +218,9 @@ export default () => ({
   "feedControl": "フィードの制御",
   "feedControlDescription": "次のダウンロードから有効です。",
   "popularFeeds": "人気フィード",
+  "feedInteractionMore": "このような投稿の表示を増やす",
+  "feedInteractionLess": "このような投稿の表示を減らす",
+  "feedInteractionSupportedDescription": "フィードインタラクション対応",
 
   // ============================================================================
   // MYFEEDS SORTS
@@ -288,6 +295,7 @@ export default () => ({
   "imageMaxHeightRatio5": "x2.0",
   "imageMaxHeightRatio6": "制限なし",
   "imageAutoPlay": "アニメーション画像の自動再生",
+  "shouldConvertGifToVideo": "GIF画像を動画に変換する",
   "video": "動画",
   "videoPreload": "動画の先読み",
   "videoIsBlob": "ストリーミングできません",
@@ -337,6 +345,8 @@ export default () => ({
   "autoTranslationRemarks4": "詳しくはMyMemoryのWebサイトでご確認ください。",
   "autoTranslationIgnoreLanguage": "自動翻訳 - 除外する言語",
   "translate": "翻訳する",
+  "translating": "（翻訳中）",
+  "translationFailed": "（翻訳に失敗しました）",
 
   // ============================================================================
   // LABELS & MODERATION
@@ -540,6 +550,7 @@ export default () => ({
   "packs": "パック",
   "starterPacks": "スターターパック",
   "joinedStarterPack": "スターターパック",
+  "latestActivityDate": "最新の更新",
   "noStarterPacks": "このユーザーの管理するスターターパックはありません。",
   "showStarterPackListFeeds": "リストフィードを見る",
   "showStarterPackListUsers": "リストユーザーを見る",
@@ -614,7 +625,10 @@ export default () => ({
   "backgroundImage1": "背景画像を置いているサーバによっては表示できない場合があります。",
   "backgroundImage2": "CSSプロパティ `background-image` の値も設定できます。\n例： linear-gradient(to bottom, pink, cyan)",
   "development": "開発",
-  "resetSettings": "設定をリセットする",
+  "dangerZone": "注意が必要な操作",
+  "atprotoProxyAppBskySetting": "atproto-proxy（app.bsky用）",
+  "setOfficialValue": "公式の値を設定する",
+  "resetSettings": "全設定のリセット",
   "resetSettingsDetail": "このアカウントの設定をリセットします。よろしいですか？",
 
   // ============================================================================
@@ -710,14 +724,20 @@ export default () => ({
   "globallineLayoutSlim": "スリム",
 
   // ============================================================================
+  // OFFICIAL_BOOKMARKS
+  // ============================================================================
+  "officialBookmark": "公式ブックマーク",
+  "noOfficialBookmark": "公式ブックマークがありません。",
+
+  // ============================================================================
   // CUSTOM_BOOKMARKS
   // ============================================================================
-  "customBookmark": "ブックマーク",
-  "noCustomBookmark": "ブックマークがありません。",
-  "deleteCustomBookmark": "ブックマークを削除",
-  "customBookmarkManagement": "ブックマークを管理",
-  "customBookmarkManagementDetail": "ブックマークの作成／更新",
-  "addingCustomBookmarkTag": "新しいブックマークタグ",
+  "customBookmark": "拡張ブックマーク",
+  "noCustomBookmark": "拡張ブックマークがありません。",
+  "deleteCustomBookmark": "拡張ブックマークを削除",
+  "customBookmarkManagement": "拡張ブックマーク",
+  "customBookmarkManagementDetail": "拡張ブックマークの作成／更新",
+  "addingCustomBookmarkTag": "新しい拡張ブックマークタグ",
   "customBookmarkOutputConfirmation": "読み込み済みのポストをSkyFeedのJSONとしてクリップボードにコピーします（最新の30件まで）。",
 
   // ============================================================================
@@ -760,6 +780,7 @@ export default () => ({
   "pnNicovideo": "ニコニコ動画",
   "pnFrontpage": "Frontpage",
   "pnLinkat": "Linkat",
+  "pnSkyBeMoreBlue": "SkyBeMoreBlue",
   "pnSmokeSignal": "Smoke Signal",
   "pnWhiteWind": "WhiteWind",
 
@@ -782,15 +803,6 @@ export default () => ({
   "oplogsApp": "PLC operation logs",
   "atlasApp": "BSky Experiments",
   "atscanApp": "ATScan",
-
-  // ============================================================================
-  // DOWNLOAD FEATURES
-  // ============================================================================
-  "downloadPostedImages": "投稿画像をダウンロード",
-  "downloadPostedImagesOnConfirmation": "このユーザーが投稿した画像を一括ダウンロードします。\n\n* この機能は個人が閲覧する目的でのみ利用できます。\n* 画像は .zip ファイルにまとめられます。\n* 直近のポスト1000件のうち、100件までの画像をダウンロードします。\n* リポストは対象外です。\n* 最低品質の画像をダウンロードします。\n* 完了まで数分かかる可能性があります。",
-  "downloadPostedImagesOnCancel": "このユーザーが投稿した画像はありませんでした。",
-  "downloadPostedImagesOnComplete": "このユーザーが投稿した画像をダウンロードしました。",
-  "downloadPostedImagesOnProgress": "ダウンロード中...",
 
   // ============================================================================
   // LIST MENTIONS

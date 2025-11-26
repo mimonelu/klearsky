@@ -19,7 +19,7 @@ export default async function (
     await this.agent.getRepostedBy(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getRepostedBy]", response)
+  $log("getRepostedBy", response)
   if (response instanceof Error) {
     return response
   }

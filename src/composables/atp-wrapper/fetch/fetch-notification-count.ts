@@ -9,7 +9,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | number> {
       .then((value) => value)
       .catch((error) => error)
   if (response instanceof Error) {
-    console.warn("[klearsky/countUnreadNotifications]", response)
+    $warn("countUnreadNotifications", response)
     return response
   }
   if (!response.success) {

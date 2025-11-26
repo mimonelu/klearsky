@@ -6,7 +6,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | TTNotificati
     await this.agent.app.bsky.notification.getPreferences()
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getNotificationPreferences]", response)
+  $log("getNotificationPreferences", response)
   if (response instanceof Error) {
     return response
   }

@@ -194,7 +194,7 @@ async function outputJsonForSkyFeed () {
       </button>
 
       <h2>
-        <SVGIcon name="bookmark" />
+        <SVGIcon name="bookmarkPlus" />
         <span>{{ $t("customBookmark") }}</span>
       </h2>
     </template>
@@ -291,7 +291,7 @@ async function outputJsonForSkyFeed () {
 .custom-bookmark-popup:deep() {
   .popup {
     &-header > h2 > .svg-icon {
-      fill: rgb(var(--post-color));
+      fill: rgb(var(--bookmark-color));
     }
 
     &-body {

@@ -77,6 +77,8 @@ export default () => ({
   "accountImportNotification": "계정 데이터를 가져옵니다.\n\n* 입력 데이터로 기존 데이터를 덮어씁니다. 삭제되지 않습니다.\n* 현재 로그인 중인 데이터는 덮어쓰지 않습니다.\n\n계속하시겠습니까?",
   "noMyAccounts": "계정이 없습니다. 먼저 로그인하세요. 계정은 공식 앱에서 생성할 수 있습니다.",
   "signUp": "계정 생성 (개발자용)",
+  "signUpMode": "회원가입 폼으로 전환",
+  "signInMode": "로그인 폼으로 전환",
   "email": "이메일",
   "handle": "핸들",
   "inviteCode": "초대 코드",
@@ -92,6 +94,8 @@ export default () => ({
   "editProfile": "편집",
   "displayName": "표시 이름",
   "description": "소개",
+  "pronouns": "대명사 / 호칭",
+  "websiteUrl": "웹사이트 URL",
   "avatar": "아바타",
   "detachAvatar": "아바타 제거",
   "banner": "배너",
@@ -214,6 +218,9 @@ export default () => ({
   "feedControl": "피드 제어",
   "feedControlDescription": "다음 다운로드부터 적용됩니다.",
   "popularFeeds": "인기 피드",
+  "feedInteractionMore": "이런 게시물 더 보기",
+  "feedInteractionLess": "이런 게시물 덜 보기",
+  "feedInteractionSupportedDescription": "피드 인터랙션 지원",
 
   // ============================================================================
   // MYFEEDS SORTS
@@ -288,6 +295,7 @@ export default () => ({
   "imageMaxHeightRatio5": "x2.0",
   "imageMaxHeightRatio6": "제한 없음",
   "imageAutoPlay": "애니메이션 이미지 자동 재생",
+  "shouldConvertGifToVideo": "GIF를 동영상으로 변환",
   "video": "비디오",
   "videoPreload": "비디오 미리 로드",
   "videoIsBlob": "스트리밍 불가",
@@ -337,6 +345,8 @@ export default () => ({
   "autoTranslationRemarks4": "자세한 내용은 MyMemory 웹사이트를 확인하세요.",
   "autoTranslationIgnoreLanguage": "자동 번역 - 제외 언어",
   "translate": "번역",
+  "translating": "(번역 중)",
+  "translationFailed": "(번역 실패)",
 
   // ============================================================================
   // LABELS & MODERATION
@@ -540,6 +550,7 @@ export default () => ({
   "packs": "팩",
   "starterPacks": "스타터 팩",
   "joinedStarterPack": "스타터 팩",
+  "latestActivityDate": "최근 업데이트",
   "noStarterPacks": "이 사용자가 관리하는 스타터 팩이 없습니다.",
   "showStarterPackListFeeds": "리스트 피드 보기",
   "showStarterPackListUsers": "리스트 사용자 보기",
@@ -614,7 +625,10 @@ export default () => ({
   "backgroundImage1": "배경 이미지를 호스팅하는 서버에 따라 표시되지 않을 수 있습니다.",
   "backgroundImage2": "CSS 속성 `background-image`의 값도 설정할 수 있습니다.\n예: linear-gradient(to bottom, pink, cyan)",
   "development": "개발",
-  "resetSettings": "설정 재설정",
+  "dangerZone": "주의가 필요한 작업",
+  "atprotoProxyAppBskySetting": "atproto-proxy (app.bsky용)",
+  "setOfficialValue": "공식 값 설정",
+  "resetSettings": "모든 설정 초기화",
   "resetSettingsDetail": "이 계정의 설정을 재설정합니다. 괜찮습니까?",
 
   // ============================================================================
@@ -710,15 +724,21 @@ export default () => ({
   "globallineLayoutSlim": "슬림",
 
   // ============================================================================
+  // OFFICIAL_BOOKMARKS
+  // ============================================================================
+  "officialBookmark": "공식 북마크",
+  "noOfficialBookmark": "공식 북마크가 없습니다.",
+
+  // ============================================================================
   // CUSTOM_BOOKMARKS
   // ============================================================================
-  "customBookmark": "북마크",
-  "noCustomBookmark": "북마크가 없습니다.",
-  "deleteCustomBookmark": "북마크 삭제",
-  "customBookmarkManagement": "북마크 관리",
-  "customBookmarkManagementDetail": "북마크 생성/업데이트",
-  "addingCustomBookmarkTag": "새 북마크 태그",
-  "customBookmarkOutputConfirmation": "로드된 게시물을 SkyFeed JSON으로 클립보드에 복사합니다 (최신 30개까지).",
+  "customBookmark": "확장 북마크",
+  "noCustomBookmark": "확장 북마크가 없습니다.",
+  "deleteCustomBookmark": "확장 북마크 삭제",
+  "customBookmarkManagement": "확장 북마크 관리",
+  "customBookmarkManagementDetail": "확장 북마크 추가/업데이트",
+  "addingCustomBookmarkTag": "새 확장 북마크 태그",
+  "customBookmarkOutputConfirmation": "불러온 게시물을 SkyFeed JSON으로 클립보드에 복사합니다 (최대 30개).",
 
   // ============================================================================
   // MY WORDS
@@ -760,6 +780,7 @@ export default () => ({
   "pnNicovideo": "니코니코 동화",
   "pnFrontpage": "Frontpage",
   "pnLinkat": "Linkat",
+  "pnSkyBeMoreBlue": "SkyBeMoreBlue",
   "pnSmokeSignal": "Smoke Signal",
   "pnWhiteWind": "WhiteWind",
 
@@ -782,15 +803,6 @@ export default () => ({
   "oplogsApp": "PLC operation logs",
   "atlasApp": "BSky Experiments",
   "atscanApp": "ATScan",
-
-  // ============================================================================
-  // DOWNLOAD FEATURES
-  // ============================================================================
-  "downloadPostedImages": "게시 이미지 다운로드",
-  "downloadPostedImagesOnConfirmation": "이 사용자가 게시한 이미지를 일괄 다운로드합니다.\n\n* 이 기능은 개인이 열람하는 목적으로만 사용할 수 있습니다.\n* 이미지는 .zip 파일로 묶입니다.\n* 최근 게시물 1000개 중 100개까지의 이미지를 다운로드합니다.\n* 리포스트는 대상 외입니다.\n* 최저 품질 이미지를 다운로드합니다.\n* 완료까지 몇 분 걸릴 수 있습니다.",
-  "downloadPostedImagesOnCancel": "이 사용자가 게시한 이미지가 없었습니다.",
-  "downloadPostedImagesOnComplete": "이 사용자가 게시한 이미지를 다운로드했습니다.",
-  "downloadPostedImagesOnProgress": "다운로드 중...",
 
   // ============================================================================
   // LIST MENTIONS

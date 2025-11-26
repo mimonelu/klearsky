@@ -53,7 +53,7 @@ export default async function (
       await this.agent.login(optinos)
         .then((value) => value)
         .catch((error) => error)
-    console.log("[klearsky/login]", response)
+    $log("login", response)
     if (response instanceof Error) {
       // 2FAエラー - トークン要求
       if ('error' in response && response.error === "AuthFactorTokenRequired") {

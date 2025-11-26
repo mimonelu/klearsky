@@ -19,6 +19,8 @@ interface TIAtpWrapper {
     (convoId: string, messageId: string, value: string): Promise<Error | TIChatMessage>
   createDuplicatedList
     (listUri: string): Promise<Error | string>
+  createFeedInteractions
+    (interactions: TTFeedInteraction[], feedGeneratorDid: string): Promise<Error | true>
   createFileBlobRef
     (params: TTCreateFileBlobRefParams): Promise<Error | BlobRef>
   createFollow
@@ -29,6 +31,8 @@ interface TIAtpWrapper {
     (purpose: string, name: string, description?: string, avatarBlobRef?: BlobRef): Promise<Error | string>
   createListUser
     (listUri: string, userDid: string): Promise<Error | string>
+  createOfficialBookmark
+    (uri: string, cid: string): Promise<Error | undefined>
   createPost
     (params: TTCreatePostParams): Promise<Error | TTCidUri>
   createRecord
@@ -61,6 +65,8 @@ interface TIAtpWrapper {
     (listUri: string): Promise<Error | undefined>
   deleteListUser
     (userUri: string): Promise<Error | undefined>
+  deleteOfficialBookmark
+    (uri: string): Promise<Error | undefined>
   deletePost
     (uri: string): Promise<Error | undefined>
   deleteRecord
@@ -158,6 +164,8 @@ interface TIAtpWrapper {
     (): Promise<Error | TTNotificationPreferences>
   fetchNotifications
     (values: Array<TTNotificationGroup>, reasons?: Array<TTNotificationStrictReason>, limit?: number, cursor?: string): Promise<Error | { cursor?: string; newNotificationCount: number }>
+  fetchOfficialBookmarks
+    (currentOfficialBookmarks: Array<TTPost>, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchOfficialFeedGenerators
     (): Promise<Error | Array<TTFeedGenerator>>
   fetchPopularFeedGenerators

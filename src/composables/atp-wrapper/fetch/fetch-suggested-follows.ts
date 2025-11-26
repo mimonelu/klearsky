@@ -13,7 +13,7 @@ export default async function (
     await this.agent.app.bsky.graph.getSuggestedFollowsByActor(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getSuggestedFollowsByActor]", response)
+  $log("getSuggestedFollowsByActor", response)
   if (response instanceof Error) {
     return response
   }

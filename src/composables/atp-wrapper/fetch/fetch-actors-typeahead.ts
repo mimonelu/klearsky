@@ -19,7 +19,7 @@ export default async function (
     await this.agent.searchActorsTypeahead(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/searchActorsTypeahead]", response)
+  $log("searchActorsTypeahead", response)
   if (response instanceof Error) {
     return response
   }

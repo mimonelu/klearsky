@@ -5,6 +5,7 @@ import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -195,7 +196,7 @@ async function makeAvatarBlobRef (): Promise<Error | undefined | BlobRef> {
       // TODO: 以下要確認
       maxWidth: 2000,
       maxHeight: 2000,
-      maxSize: 0.953671875,
+      maxSize: CONSTS.MAX_IMAGE_FILE_SIZE,
     })
     if (blobRef instanceof Error) {
       return Error("makeAvatarBlobRefError")

@@ -19,6 +19,7 @@
     align-items: center;
     grid-gap: 0.5rem;
     padding: 0 0.75rem;
+    position: relative;
     max-width: 50%;
     min-height: 3rem;
     max-height: 3rem;
@@ -76,5 +77,17 @@
   &:focus &__link,
   &:hover &__link {
     filter: grayscale(0%);
+  }
+
+  // 新着フォロー中フィードバッジ用
+  &__dot {
+    background-color: rgb(var(--notice-color));
+    border: 1px solid rgb(var(--bg-color));
+    border-radius: 100%;
+    position: absolute;
+    top: 0.75rem;
+    left: 1.5rem;
+    width: 0.625rem;
+    height: 0.625rem;
   }
 }

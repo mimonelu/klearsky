@@ -12,7 +12,7 @@ export default async function (
     await this.agent.app.bsky.graph.unmuteThread(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/unmuteThread]", response)
+  $log("unmuteThread", response)
   if (response instanceof Error) {
     return response
   }

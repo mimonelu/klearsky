@@ -23,7 +23,7 @@ export default async function (
     })
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getUploadLimits]", response)
+  $log("getUploadLimits", response)
   if (response instanceof Error) {
     return response
   }

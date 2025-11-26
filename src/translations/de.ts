@@ -77,6 +77,8 @@ export default () => ({
   "accountImportNotification": "Kontodaten importieren.\n\n* Überschreibt Daten\n* Aktuelle Session bleibt\n\nFortfahren?",
   "noMyAccounts": "Keine Konten. Bitte melden Sie sich zuerst an. Sie können ein Konto in der offiziellen App erstellen.",
   "signUp": "Konto erstellen (Dev)",
+  "signUpMode": "Zum Sign-Up-Formular wechseln",
+  "signInMode": "Zum Sign-In-Formular wechseln",
   "email": "E-Mail",
   "handle": "Handle",
   "inviteCode": "Einladungscode",
@@ -92,6 +94,8 @@ export default () => ({
   "editProfile": "Bearbeiten",
   "displayName": "Anzeigename",
   "description": "Beschreibung",
+  "pronouns": "Pronomen",
+  "websiteUrl": "Webseite-URL",
   "avatar": "Avatar",
   "detachAvatar": "Avatar entfernen",
   "banner": "Banner",
@@ -214,6 +218,9 @@ export default () => ({
   "feedControl": "Feed-Kontrolle",
   "feedControlDescription": "Ab nächstem Download aktiv.",
   "popularFeeds": "Beliebte Feeds",
+  "feedInteractionMore": "Mehr solche Beiträge zeigen",
+  "feedInteractionLess": "Weniger solche Beiträge zeigen",
+  "feedInteractionSupportedDescription": "Unterstützt Feed-Interaktionen",
 
   // ============================================================================
   // MYFEEDS SORTS
@@ -288,6 +295,7 @@ export default () => ({
   "imageMaxHeightRatio5": "x2.0",
   "imageMaxHeightRatio6": "Unbegrenzt",
   "imageAutoPlay": "Animationen automatisch abspielen",
+  "shouldConvertGifToVideo": "GIF in Video umwandeln",
   "video": "Video",
   "videoPreload": "Video-Vorladen",
   "videoIsBlob": "Nicht-Streaming",
@@ -337,6 +345,8 @@ export default () => ({
   "autoTranslationRemarks4": "Weitere Informationen finden Sie auf der MyMemory-Website.",
   "autoTranslationIgnoreLanguage": "Automatische Übersetzung - Ausgeschlossene Sprachen",
   "translate": "Übersetzen",
+  "translating": "(Übersetze)",
+  "translationFailed": "(Übersetzung fehlgeschlagen)",
 
   // ============================================================================
   // LABELS & MODERATION
@@ -540,6 +550,7 @@ export default () => ({
   "packs": "Pakete",
   "starterPacks": "Starter-Pakete",
   "joinedStarterPack": "über Starter-Paket",
+  "latestActivityDate": "Zuletzt aktualisiert",
   "noStarterPacks": "Es gibt keine Starter-Pakete, die von diesem Benutzer verwaltet werden.",
   "showStarterPackListFeeds": "Listen-Feeds anzeigen",
   "showStarterPackListUsers": "Listen-Benutzer anzeigen",
@@ -614,7 +625,10 @@ export default () => ({
   "backgroundImage1": "Je nach Server, auf dem das Hintergrundbild platziert ist, wird es möglicherweise nicht angezeigt.",
   "backgroundImage2": "Sie können auch den Wert der CSS-Eigenschaft `background-image` festlegen.\nz.B. linear-gradient(to bottom, pink, cyan)",
   "development": "Entwicklung",
-  "resetSettings": "Einstellungen zurücksetzen",
+  "dangerZone": "Vorsicht erforderlich",
+  "atprotoProxyAppBskySetting": "atproto-proxy (für app.bsky)",
+  "setOfficialValue": "Offiziellen Wert setzen",
+  "resetSettings": "Alle Einstellungen zurücksetzen",
   "resetSettingsDetail": "Die Einstellungen dieses Kontos zurücksetzen. Sind Sie sicher?",
 
   // ============================================================================
@@ -710,15 +724,21 @@ export default () => ({
   "globallineLayoutSlim": "Schlank",
 
   // ============================================================================
+  // OFFICIAL_BOOKMARKS
+  // ============================================================================
+  "officialBookmark": "Offizielles Lesezeichen",
+  "noOfficialBookmark": "Keine offiziellen Lesezeichen",
+
+  // ============================================================================
   // CUSTOM_BOOKMARKS
   // ============================================================================
-  "customBookmark": "Lesezeichen",
-  "noCustomBookmark": "Keine Lesezeichen",
-  "deleteCustomBookmark": "Lesezeichen löschen",
-  "customBookmarkManagement": "Lesezeichen verwalten",
-  "customBookmarkManagementDetail": "Lesezeichen hinzufügen/aktualisieren",
-  "addingCustomBookmarkTag": "Neues Lesezeichen-Tag",
-  "customBookmarkOutputConfirmation": "Die geladenen Beiträge als SkyFeed JSON in die Zwischenablage kopieren. (Bis zu den neuesten 30 Beiträgen)",
+  "customBookmark": "XLesezeichen",
+  "noCustomBookmark": "Keine XLesezeichen",
+  "deleteCustomBookmark": "XLesezeichen löschen",
+  "customBookmarkManagement": "XLesezeichen verwalten",
+  "customBookmarkManagementDetail": "XLesezeichen hinzufügen/aktualisieren",
+  "addingCustomBookmarkTag": "Neues Schlagwort",
+  "customBookmarkOutputConfirmation": "Die geladenen Beiträge als SkyFeed-JSON in die Zwischenablage kopieren (bis zu 30).",
 
   // ============================================================================
   // MY WORDS
@@ -760,6 +780,7 @@ export default () => ({
   "pnNicovideo": "Nicovideo",
   "pnFrontpage": "Frontpage",
   "pnLinkat": "Linkat",
+  "pnSkyBeMoreBlue": "SkyBeMoreBlue",
   "pnSmokeSignal": "Smoke Signal",
   "pnWhiteWind": "WhiteWind",
 
@@ -782,15 +803,6 @@ export default () => ({
   "oplogsApp": "PLC operation logs",
   "atlasApp": "BSky Experiments",
   "atscanApp": "ATScan",
-
-  // ============================================================================
-  // DOWNLOAD FEATURES
-  // ============================================================================
-  "downloadPostedImages": "Gepostete Bilder herunterladen",
-  "downloadPostedImagesOnConfirmation": "Von diesem Benutzer gepostete Bilder herunterladen.\n\n* Diese Funktion ist nur für persönliche Betrachtungszwecke.\n* Die Bilder werden in eine .zip-Datei kompiliert.\n\n* Bis zu 100 Bilder aus den letzten 1000 Beiträgen herunterladen.\n* Reposts sind nicht enthalten.\n* Bilder in niedrigster Qualität herunterladen.\n* Kann mehrere Minuten dauern.",
-  "downloadPostedImagesOnCancel": "Es gab keine Bilder, die von diesem Benutzer gepostet wurden.",
-  "downloadPostedImagesOnComplete": "Von diesem Benutzer gepostete Bilder heruntergeladen.",
-  "downloadPostedImagesOnProgress": "Jetzt herunterladen...",
 
   // ============================================================================
   // LIST MENTIONS

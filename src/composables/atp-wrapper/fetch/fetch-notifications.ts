@@ -32,7 +32,7 @@ export default async function (
     await this.agent.listNotifications(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/listNotifications]", response)
+  $log("listNotifications", response)
   if (response instanceof Error) {
     return response
   }

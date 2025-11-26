@@ -14,7 +14,7 @@ const isInvalidHandle = props.handle === "handle.invalid"
 
 const handle = computed((): string => {
   return props.anonymizable && mainState.currentSetting.postAnonymization
-    ? ""
+    ? $t("anonymous")
     : isInvalidHandle
       ? $t("invalidHandle")
       : props.handle ?? ""

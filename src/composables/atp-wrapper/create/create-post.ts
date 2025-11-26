@@ -126,7 +126,7 @@ export default async function (
     await this.agent.post(record)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/post]", response)
+  $log("post", response)
   if (response instanceof Error) {
     return response
   }

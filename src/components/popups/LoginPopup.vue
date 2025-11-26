@@ -5,6 +5,7 @@ import Copyright from "@/components/labels/Copyright.vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Logo from "@/components/images/Logo.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 defineExpose({
   setHasAuthFactorToken,
@@ -39,7 +40,7 @@ const state = reactive<{
 }>({
   isSignUp: false,
   hasAuthFactorToken: false,
-  service: currentSession?.__service ?? "https://bsky.social",
+  service: currentSession?.__service ?? "",
   email: currentSession?.email ?? "",
   identifier: currentSession?.handle ?? "",
   password: "",
@@ -58,7 +59,6 @@ const easyFormProps: TTEasyForm = {
       model: "service",
       label: $t("service"),
       type: "url",
-      required: true,
       placeholder: "https://bsky.social",
       autocomplete: "url",
       inputmode: "url",
@@ -117,13 +117,14 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "off",
       inputmode: "text",
       submitWhenEnter: true,
-    }
+    },
   ],
 }
 
 const easyForm = ref()
 
-function toggleMode () {
+function toggleSignMode () {
+  Util.blurElement()
   state.isSignUp = !state.isSignUp
   updateEasyFormProps()
 }
@@ -177,7 +178,7 @@ function updateEasyFormProps () {
 function submitCallback () {
   emit(
     state.isSignUp ? "signUp" : "login",
-    state.service,
+    state.service || "https://bsky.social",
     state.email,
     state.identifier,
     state.password,
@@ -239,14 +240,16 @@ function submitCallback () {
               <span>{{ $t("signUp") }}</span>
             </button>
 
-            <!-- モードトグルボタン -->
-            <a
-              class="textlink--icon"
-              @click.prevent="toggleMode"
+            <hr />
+
+            <!-- サインイン／サイトアウトトグルボタン -->
+            <button
+              type="button"
+              class="button--bordered"
+              @click.prevent="toggleSignMode"
             >
-              <SVGIcon name="cursorRight" />
-              <span>{{ state.isSignUp ? $t("login") : $t("signUp") }}</span>
-            </a>
+              <span>{{ state.isSignUp ? $t("signInMode") : $t("signUpMode") }}</span>
+            </button>
           </template>
         </EasyForm>
         <div class="account-container">
@@ -307,6 +310,17 @@ $width: 768px;
       grid-template-columns: 1fr 1fr;
       align-items: flex-start;
     }
+
+    .easy-form:deep() {
+      dt {
+        color: rgb(var(--fg-color), 0.75);
+      }
+    }
+
+    hr {
+      background-color: rgb(var(--fg-color), 0.25);
+      height: 1px;
+    }
   }
 
   &__message {
@@ -342,6 +356,7 @@ $width: 768px;
 }
 
 .account-header {
+  color: rgb(var(--fg-color), 0.75);
   font-weight: bold;
 }
 

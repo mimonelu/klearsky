@@ -11,7 +11,7 @@ export default async function (
     await this.agent.unmute(did)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/unmute]", response)
+  $log("unmute", response)
   if (response instanceof Error) {
     return response
   }

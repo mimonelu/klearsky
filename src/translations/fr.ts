@@ -77,6 +77,8 @@ export default () => ({
   "accountImportNotification": "Importer des données de compte.\n\n* Écrase les données existantes.\n* Ne supprime pas.\n* Les données actuelles ne seront pas écrasées.\n\nContinuer?",
   "noMyAccounts": "Aucun compte. Connecte-toi d'abord. Tu peux en créer un sur l'app officielle.",
   "signUp": "Créer un compte (pour dev)",
+  "signUpMode": "Passer au formulaire de sign-up",
+  "signInMode": "Passer au formulaire de sign-in",
   "email": "Courriel",
   "handle": "Pseudonyme",
   "inviteCode": "Code d'invitation",
@@ -92,6 +94,8 @@ export default () => ({
   "editProfile": "Modifier",
   "displayName": "Nom d'affichage",
   "description": "Description",
+  "pronouns": "Pronoms",
+  "websiteUrl": "URL du site",
   "avatar": "Avatar",
   "detachAvatar": "Détacher l'avatar",
   "banner": "Bannière",
@@ -214,6 +218,9 @@ export default () => ({
   "feedControl": "Contrôle des fils",
   "feedControlDescription": "Effectif au prochain téléchargement.",
   "popularFeeds": "Fils populaires",
+  "feedInteractionMore": "Afficher plus comme ceci",
+  "feedInteractionLess": "Afficher moins comme ceci",
+  "feedInteractionSupportedDescription": "Prend en charge Feed Interactions",
 
   // ============================================================================
   // MYFEEDS SORTS
@@ -288,6 +295,7 @@ export default () => ({
   "imageMaxHeightRatio5": "x2.0",
   "imageMaxHeightRatio6": "Illimité",
   "imageAutoPlay": "Lecture auto des images animées",
+  "shouldConvertGifToVideo": "Convertir GIF en vidéo",
   "video": "Vidéo",
   "videoPreload": "Préchargement vidéo",
   "videoIsBlob": "Non-streaming",
@@ -337,6 +345,8 @@ export default () => ({
   "autoTranslationRemarks4": "Pour plus d'infos, consulte MyMemory.",
   "autoTranslationIgnoreLanguage": "Langues exclues de la traduction",
   "translate": "Traduire",
+  "translating": "(Traduction en cours)",
+  "translationFailed": "(Échec de la traduction)",
 
   // ============================================================================
   // LABELS & MODERATION
@@ -540,6 +550,7 @@ export default () => ({
   "packs": "Packs",
   "starterPacks": "Packs de départ",
   "joinedStarterPack": "via Pack de départ",
+  "latestActivityDate": "Dernière mise à jour",
   "noStarterPacks": "Aucun pack de départ géré par cet utilisateur.",
   "showStarterPackListFeeds": "Voir les fils de liste",
   "showStarterPackListUsers": "Voir les utilisateurs de liste",
@@ -614,7 +625,10 @@ export default () => ({
   "backgroundImage1": "Selon le serveur hébergeant l'image, elle peut ne pas s'afficher.",
   "backgroundImage2": "Tu peux aussi utiliser une propriété CSS comme `background-image`.\nex: linear-gradient(to bottom, pink, cyan)",
   "development": "Développement",
-  "resetSettings": "Réinitialiser les paramètres",
+  "dangerZone": "Opérations sensibles",
+  "atprotoProxyAppBskySetting": "atproto-proxy (pour app.bsky)",
+  "setOfficialValue": "Définir valeur officielle",
+  "resetSettings": "Réinitialiser tous les paramètres",
   "resetSettingsDetail": "Réinitialiser les paramètres de ce compte. Es-tu sûr?",
 
   // ============================================================================
@@ -710,14 +724,20 @@ export default () => ({
   "globallineLayoutSlim": "Minimale",
 
   // ============================================================================
+  // OFFICIAL_BOOKMARKS
+  // ============================================================================
+  "officialBookmark": "Signet officiel",
+  "noOfficialBookmark": "Aucun signet officiel",
+
+  // ============================================================================
   // CUSTOM_BOOKMARKS
   // ============================================================================
-  "customBookmark": "Signets",
-  "noCustomBookmark": "Aucun signet",
-  "deleteCustomBookmark": "Supprimer le signet",
-  "customBookmarkManagement": "Gérer les signets",
+  "customBookmark": "Signet étendu",
+  "noCustomBookmark": "Aucun signet étendu",
+  "deleteCustomBookmark": "Supprimer le signet étendu",
+  "customBookmarkManagement": "Gérer les signets étendus",
   "customBookmarkManagementDetail": "Ajouter/mettre à jour",
-  "addingCustomBookmarkTag": "Nouvelle étiquette de signet",
+  "addingCustomBookmarkTag": "Nouvelle étiquette",
   "customBookmarkOutputConfirmation": "Copier les publications en JSON SkyFeed (max 30).",
 
   // ============================================================================
@@ -760,6 +780,7 @@ export default () => ({
   "pnNicovideo": "Nicovideo",
   "pnFrontpage": "Frontpage",
   "pnLinkat": "Linkat",
+  "pnSkyBeMoreBlue": "SkyBeMoreBlue",
   "pnSmokeSignal": "Smoke Signal",
   "pnWhiteWind": "WhiteWind",
 
@@ -782,15 +803,6 @@ export default () => ({
   "oplogsApp": "PLC operation logs",
   "atlasApp": "Expériences BSky",
   "atscanApp": "ATScan",
-
-  // ============================================================================
-  // DOWNLOAD FEATURES
-  // ============================================================================
-  "downloadPostedImages": "Télécharger les images publiées",
-  "downloadPostedImagesOnConfirmation": "Télécharger les images publiées par cet utilisateur.\n\n* Cette fonction est uniquement pour usage personnel.\n* Les images seront compilées dans un fichier .zip.\n\n* Maximum 100 images sur les 1000 dernières publications.\n* Les partages ne sont pas inclus.\n* Téléchargement en qualité la plus basse.\n* Peut prendre plusieurs minutes.",
-  "downloadPostedImagesOnCancel": "Aucune image publiée par cet utilisateur.",
-  "downloadPostedImagesOnComplete": "Images téléchargées avec succès.",
-  "downloadPostedImagesOnProgress": "Téléchargement en cours...",
 
   // ============================================================================
   // LIST MENTIONS

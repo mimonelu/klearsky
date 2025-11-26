@@ -8,7 +8,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | TTServerInfo
     await this.agent.com.atproto.server.describeServer()
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/describeServer]", response)
+  $log("describeServer", response)
   if (response instanceof Error) {
     return response
   }

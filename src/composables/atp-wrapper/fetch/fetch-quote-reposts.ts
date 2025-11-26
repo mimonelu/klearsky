@@ -20,7 +20,7 @@ export default async function (
     await this.agent.app.bsky.feed.getQuotes(query)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/getQuotes]", response)
+  $log("getQuotes", response)
   if (response instanceof Error) {
     return response
   }

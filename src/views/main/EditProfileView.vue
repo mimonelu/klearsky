@@ -13,6 +13,8 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   displayName: string,
   description: string,
+  pronouns: string,
+  website: string,
   labels: Array<string>,
   avatar: null | File
   detachAvatar: Array<boolean>,
@@ -22,6 +24,8 @@ const state = reactive<{
 }>({
   displayName: "",
   description: "",
+  pronouns: "",
+  website: "",
   labels: [],
   avatar: null,
   detachAvatar: [],
@@ -48,6 +52,7 @@ const easyFormProps: TTEasyForm = {
       autocomplete: "name",
       maxlength: 64,
       maxLengthIndicator: true,
+      maxLengthIndicatorByGrapheme: true,
       focus: true,
     },
     {
@@ -55,11 +60,26 @@ const easyFormProps: TTEasyForm = {
       model: "description",
       label: $t("description"),
       type: "textarea",
-      maxlength: 255,
+      maxlength: 256,
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
       rows: 8,
       autoResizeTextarea: true,
+    },
+    {
+      state,
+      model: "pronouns",
+      label: $t("pronouns"),
+      type: "text",
+      maxlength: 20,
+      maxLengthIndicator: true,
+      maxLengthIndicatorByGrapheme: true,
+    },
+    {
+      state,
+      model: "website",
+      label: $t("websiteUrl"),
+      type: "text",
     },
     {
       state,
@@ -118,6 +138,8 @@ async function setDefaultValues () {
   state.processing = true
   state.displayName = mainState.userProfile?.displayName ?? ""
   state.description = mainState.userProfile?.description ?? ""
+  state.pronouns = mainState.userProfile?.pronouns ?? ""
+  state.website = mainState.userProfile?.website ?? ""
   state.labels = mainState.userProfile?.labels
     ?.filter((label) => {
       return !label.ver
@@ -164,7 +186,7 @@ async function submit () {
       v-bind="easyFormProps"
       ref="easyForm"
     >
-      <template #free-2>
+      <template #free-4>
         <!-- アカウントラベル選択ポップアップトリガー -->
         <dl>
           <dt>{{ $t("accountLabels") }}</dt>

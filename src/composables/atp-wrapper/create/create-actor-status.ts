@@ -32,7 +32,7 @@ export default async function (
     }, record)
       .then((value) => value)
       .catch((error) => error)
-  console.log("[klearsky/createActorStatus]", response)
+  $log("createActorStatus", response)
   if (response instanceof Error) {
     return response
   }
