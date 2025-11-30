@@ -22,7 +22,9 @@ function onActivateHeader () {
 
 function onActivateBackButton () {
   Util.blurElement()
-  if (history.state.back != null) router.back()
+  if (window.history.state?.back != null) {
+    router.back()
+  }
 }
 </script>
 
