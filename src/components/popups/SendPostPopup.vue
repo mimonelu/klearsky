@@ -530,6 +530,7 @@ const PreviewLinkCardFeature: {
         :key="post?.uri"
         position="preview"
         :post="post as TTPost"
+        :hasOldPostNotification="true"
         :noLink="true"
         @keydown.prevent.stop
         @keyup.prevent.stop

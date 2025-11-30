@@ -551,6 +551,7 @@ export default () => ({
   "starterPacks": "Starter packs",
   "joinedStarterPack": "via Starter pack",
   "latestActivityDate": "Latest updated",
+  "oldPostNotification": "This post is over 1 day old",
   "noStarterPacks": "There are no starter packs managed by this user.",
   "showStarterPackListFeeds": "Show list feeds",
   "showStarterPackListUsers": "Show list users",

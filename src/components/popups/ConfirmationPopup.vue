@@ -39,6 +39,7 @@ function apply () {
         v-if="mainState.confirmationPopupProps.post != null"
         :post="mainState.confirmationPopupProps.post"
         position="preview"
+        :hasOldPostNotification="true"
       />
       <div
         v-if="mainState.confirmationPopupProps.detail != null"

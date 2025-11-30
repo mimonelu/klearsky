@@ -38,6 +38,7 @@ const props = defineProps<{
   rootPost?: TTPost
   parentPost?: TTPost
   grandparentAuthor?: TTProfile
+  hasOldPostNotification?: boolean
   hasReplyIcon?: boolean
   hasQuoteRepostIcon?: boolean
   noLink?: boolean
@@ -354,10 +355,6 @@ const isWordMute = computed((): boolean => {
 
 const foldingMedia = ref(!mediaInfo.value.shouldDisplayMedia)
 
-const isOldPost = indexedAt.value != null
-  ? differenceInDays(new Date(), new Date(indexedAt.value)) >= 1
-  : false
-
 // 本文とワードミュート用に RichText を生成
 const contentRichText = computed(() => {
   // テキストまたはfacetsが変更された場合のみ再生成
@@ -408,6 +405,11 @@ onBeforeUnmount(() => {
 function isFocused (): boolean {
   return props.post.uri === mainState.currentQuery.uri
 }
+
+// 古いポスト警告
+const displayOldPostNotification = props.hasOldPostNotification && indexedAt.value != null
+  ? differenceInDays(new Date(), new Date(indexedAt.value)) >= 1
+  : false
 
 async function onActivatePost (post: TTPost, event: Event) {
   // ポストマスクの無効化
@@ -891,6 +893,16 @@ function toggleOldestQuotedPostDisplay () {
   >
     <slot name="post-before" />
 
+    <!-- 古いポスト警告 -->
+    <div
+      v-if="displayOldPostNotification"
+      class="old-post-notification textlabel"
+    >
+      <div class="textlabel__text--warning">
+        <SVGIcon name="clock" />{{ $t("oldPostNotification") }}
+      </div>
+    </div>
+
     <!-- ポストヘッダー -->
     <div
       v-if="position !== 'preview'"
@@ -1103,7 +1115,6 @@ function toggleOldestQuotedPostDisplay () {
           <div
             v-if="indexedAt"
             class="body__header__indexed-at"
-            :data-is-old-post="isOldPost"
           >{{ mainState.formatDate(indexedAt) }}</div>
         </div>
 
@@ -1719,6 +1730,11 @@ function toggleOldestQuotedPostDisplay () {
   }
 }
 
+// 古いポスト警告
+.old-post-notification {
+  margin-bottom: 0.5em;
+}
+
 .header:not(:empty) {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1941,18 +1957,11 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   &__indexed-at {
+    color: rgb(var(--fg-color), 0.5);
     font-size: 0.75em;
     line-height: var(--line-height-low);
     overflow: hidden;
     white-space: nowrap;
-
-    // 古いポストの日時表記はやや目立つ色合いにする
-    &[data-is-old-post="true"] {
-      color: rgb(var(--fg-color), 0.75);
-    }
-    &[data-is-old-post="false"] {
-      color: rgb(var(--fg-color), 0.5);
-    }
   }
 
   &__menu-button {

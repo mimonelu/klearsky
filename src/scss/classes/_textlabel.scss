@@ -1,5 +1,6 @@
 .textlabel,
-.textlabel--alert {
+.textlabel--alert,
+.textlabel--warning {
   border-radius: var(--border-radius-middle);
   display: flex;
   flex-direction: column;
@@ -7,7 +8,8 @@
   grid-gap: 0.25em 0.5em;
 
   &__text,
-  &__text--alert {
+  &__text--alert,
+  &__text--warning {
     display: flex;
     align-items: center;
     grid-gap: 0.25em 0.5em;
@@ -29,6 +31,14 @@
 
     & > .svg-icon {
       fill: rgb(var(--notice-color));
+    }
+  }
+
+  &__text--warning {
+    color: rgb(var(--pink-color));
+
+    & > .svg-icon {
+      fill: rgb(var(--pink-color));
     }
   }
 
