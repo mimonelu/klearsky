@@ -143,7 +143,10 @@ async function updateHotPosts () {
             :src="image.image"
             :alt="image.text"
           />
-          <div class="trending-view__image-topic">{{ image.topic }}</div>
+          <div
+            class="trending-view__image-topic"
+            translate="no"
+          >{{ image.topic }}</div>
           <div
             v-if="image.text"
             class="trending-view__image-text"
@@ -179,7 +182,7 @@ async function updateHotPosts () {
             :to="{ name: 'post-search', query: { text: topic.topic, sort: 'top' } }"
             class="button--plane trending-view__topic"
           >
-            <span>{{ topic.topic }}</span>
+            <span translate="no">{{ topic.topic }}</span>
           </RouterLink>
         </div>
       </div>
@@ -200,7 +203,7 @@ async function updateHotPosts () {
             :to="{ name: 'post-search', query: { text: topic.topic, sort: 'top' } }"
             class="button--plane trending-view__topic"
           >
-            <span>{{ topic.topic }}</span>
+            <span translate="no">{{ topic.topic }}</span>
           </RouterLink>
         </div>
       </div>

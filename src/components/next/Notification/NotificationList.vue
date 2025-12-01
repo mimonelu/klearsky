@@ -200,6 +200,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             <div
               v-if="!notification.isRead"
               class="new"
+              translate="no"
             >NEW</div>
 
             <!-- reason アイコン -->
