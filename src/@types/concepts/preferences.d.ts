@@ -4,7 +4,8 @@ type TTPreference =
   TTPreferenceLabel |
   TTPreferenceLabeler |
   TTPreferenceCustomFeedV1 |
-  TTPreferenceCustomFeedV2
+  TTPreferenceCustomFeedV2 |
+  TTPreferenceThreadView
 
 type TTPreferenceLabel = {
   $type: "app.bsky.actor.defs#contentLabelPref"
@@ -34,4 +35,9 @@ type TTPreferenceCustomFeedV2Item = {
   type?: "feed" | "list" | "timeline" | "space.aoisora.preference.feed.extra"
   value?: string
   pinned?: boolean
+}
+
+type TTPreferenceThreadView = {
+  $type: "app.bsky.actor.defs#threadViewPref"
+  sort?: "oldest" | "newest" | "most-likes" | "hotness"
 }

@@ -63,6 +63,46 @@ async function toggleThreadMute () {
     rootPost.value.viewer.threadMuted = !rootPost.value.viewer.threadMuted
   }
 }
+
+// スレッドソート
+const sortModes = [
+  "oldest",
+  "newest",
+  "most-likes",
+  "hotness",
+] as const
+
+function getThreadViewPref (): TTPreferenceThreadView | undefined {
+  return mainState.currentPreferences.find((pref) => {
+    return pref.$type === "app.bsky.actor.defs#threadViewPref"
+  }) as TTPreferenceThreadView | undefined
+}
+
+async function toggleSort () {
+  Util.blurElement()
+  const currentPref = getThreadViewPref()
+  const currentSort = currentPref?.sort ?? "oldest"
+  const currentIndex = sortModes.indexOf(currentSort)
+  const nextIndex = (currentIndex + 1) % sortModes.length
+  const nextSort = sortModes[nextIndex]
+
+  // Preference を更新
+  if (currentPref != null) {
+    currentPref.sort = nextSort
+  } else {
+    mainState.currentPreferences.push({
+      $type: "app.bsky.actor.defs#threadViewPref",
+      sort: nextSort,
+    })
+  }
+
+  mainState.centerLoaderDisplay = true
+  const success = await mainState.updatePreferences()
+  if (success) {
+    await mainState.fetchPostThread()
+  }
+  mainState.centerLoaderDisplay = false
+}
 </script>
 
 <template>
@@ -86,6 +126,14 @@ async function toggleThreadMute () {
             @click.stop="toggleThreadMute"
           >
             <SVGIcon :name="rootPost?.viewer?.threadMuted ? 'volumeOff' : 'volumeOn'" />
+          </button>
+
+          <!-- ポストソートボタン -->
+          <button
+            class="post-view__sort-button"
+            @click.stop="toggleSort"
+          >
+            <SVGIcon name="sort" />
           </button>
         </template>
       </PageHeader>
