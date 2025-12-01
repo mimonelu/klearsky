@@ -122,13 +122,16 @@ async function applySort (sort: "oldest" | "newest" | "most-likes" | "hotness") 
             <SVGIcon :name="rootPost?.viewer?.threadMuted ? 'volumeOff' : 'volumeOn'" />
           </button>
 
+          <!-- TODO: app.bsky.unspecced.getPostThreadV2 が正式実装され次第コメントアウト -->
           <!-- ポストスレッドソートボタン -->
+          <!--
           <button
             class="post-view__sort-button"
             @click.stop="openPostThreadSortPopover"
           >
             <SVGIcon name="sort" />
           </button>
+          -->
         </template>
       </PageHeader>
     </Portal>
