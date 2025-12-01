@@ -119,7 +119,7 @@ async function applySort (sort: "oldest" | "newest" | "most-likes" | "hotness") 
             :data-enable="rootPost?.viewer?.threadMuted"
             @click.stop="toggleThreadMute"
           >
-            <SVGIcon :name="rootPost?.viewer?.threadMuted ? 'volumeOff' : 'volumeOn'" />
+            <SVGIcon :name="rootPost?.viewer?.threadMuted ? 'bellOff' : 'bell'" />
           </button>
 
           <!-- TODO: app.bsky.unspecced.getPostThreadV2 が正式実装され次第コメントアウト -->
