@@ -65,34 +65,28 @@ async function toggleThreadMute () {
 }
 
 // スレッドソート
-const sortModes = [
-  "oldest",
-  "newest",
-  "most-likes",
-  "hotness",
-] as const
-
 function getThreadViewPref (): TTPreferenceThreadView | undefined {
   return mainState.currentPreferences.find((pref) => {
     return pref.$type === "app.bsky.actor.defs#threadViewPref"
   }) as TTPreferenceThreadView | undefined
 }
 
-async function toggleSort () {
+function openPostThreadSortPopover ($event: Event) {
   Util.blurElement()
-  const currentPref = getThreadViewPref()
-  const currentSort = currentPref?.sort ?? "oldest"
-  const currentIndex = sortModes.indexOf(currentSort)
-  const nextIndex = (currentIndex + 1) % sortModes.length
-  const nextSort = sortModes[nextIndex]
+  mainState.postThreadSortPopoverCallback = applySort
+  mainState.openPostThreadSortPopover($event.target)
+}
 
-  // Preference を更新
+async function applySort (sort: "oldest" | "newest" | "most-likes" | "hotness") {
+  const currentPref = getThreadViewPref()
+
+  // Preferenceを更新
   if (currentPref != null) {
-    currentPref.sort = nextSort
+    currentPref.sort = sort
   } else {
     mainState.currentPreferences.push({
       $type: "app.bsky.actor.defs#threadViewPref",
-      sort: nextSort,
+      sort,
     })
   }
 
@@ -128,10 +122,10 @@ async function toggleSort () {
             <SVGIcon :name="rootPost?.viewer?.threadMuted ? 'volumeOff' : 'volumeOn'" />
           </button>
 
-          <!-- ポストソートボタン -->
+          <!-- ポストスレッドソートボタン -->
           <button
             class="post-view__sort-button"
-            @click.stop="toggleSort"
+            @click.stop="openPostThreadSortPopover"
           >
             <SVGIcon name="sort" />
           </button>
@@ -162,6 +156,11 @@ async function toggleSort () {
   // スレッドミュートトグル
   &__thread-mute-toggle[data-enable="true"] {
     --fg-color: var(--notice-color);
+  }
+
+  // ポストスレッドソートボタン
+  &__sort-button > .svg-icon {
+    pointer-events: none;
   }
 }
 

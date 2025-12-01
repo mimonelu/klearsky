@@ -360,6 +360,15 @@ export const state: MainState = reactive<MainState>({
   openMyFeedsSortPopover: openMyFeedsSortPopover,
   closeMyFeedsSortPopover: closeMyFeedsSortPopover,
 
+  // ポップオーバー - ポストスレッドソートポップオーバー
+  postThreadSortPopoverProps: {
+    display: false,
+  },
+  postThreadSortPopoverSelector: undefined,
+  postThreadSortPopoverCallback: undefined,
+  openPostThreadSortPopover: openPostThreadSortPopover,
+  closePostThreadSortPopover: closePostThreadSortPopover,
+
   // ポップオーバー - チャットルームポップオーバー
   chatConvoPopoverProps: {
     display: false,
@@ -2156,6 +2165,17 @@ function openMyFeedsSortPopover (selector: string | HTMLElement) {
 
 function closeMyFeedsSortPopover () {
   state.myFeedsSortPopoverProps.display = false
+}
+
+// ポップオーバー - ポストスレッドソートポップオーバー
+
+function openPostThreadSortPopover (selector: string | HTMLElement) {
+  state.postThreadSortPopoverSelector = selector
+  state.postThreadSortPopoverProps.display = true
+}
+
+function closePostThreadSortPopover () {
+  state.postThreadSortPopoverProps.display = false
 }
 
 // ポップオーバー - チャットルームポップオーバー

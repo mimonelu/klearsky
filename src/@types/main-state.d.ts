@@ -302,6 +302,15 @@ interface MainState {
   openMyFeedsSortPopover: Function
   closeMyFeedsSortPopover: () => void
 
+  // ポップオーバー - ポストスレッドソートポップオーバー
+  postThreadSortPopoverProps: {
+    display: boolean
+  }
+  postThreadSortPopoverSelector?: string | HTMLElement
+  postThreadSortPopoverCallback?: Function
+  openPostThreadSortPopover: Function
+  closePostThreadSortPopover: () => void
+
   // ポップオーバー - チャットルームポップオーバー
   chatConvoPopoverProps: {
     display: boolean

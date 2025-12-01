@@ -234,6 +234,14 @@ export default () => ({
   "sortMyFeedsConfirmation": "My Feeds will be sorted.\nYou cannot redo this operation. Are you sure?",
 
   // ============================================================================
+  // POST THREAD SORTS
+  // ============================================================================
+  "postThreadSortOldest": "Oldest",
+  "postThreadSortNewest": "Newest",
+  "postThreadSortMostLikes": "Most Likes",
+  "postThreadSortHotness": "Hotness",
+
+  // ============================================================================
   // TIME FEEDS
   // ============================================================================
   "showTimeFeeds": "Show in timefeed",

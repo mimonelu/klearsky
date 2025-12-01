@@ -53,8 +53,14 @@
     & > .svg-icon--cards {
       --icon-color: var(--starter-pack-color);
     }
+    & > .svg-icon--check {
+      --icon-color: var(--green-color);
+    }
     & > .svg-icon--feed {
       --icon-color: var(--feed-color);
+    }
+    & > .svg-icon--fire {
+      --icon-color: var(--red-color);
     }
     & > .svg-icon--at,
     & > .svg-icon--chat,

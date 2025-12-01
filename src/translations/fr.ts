@@ -234,6 +234,14 @@ export default () => ({
   "sortMyFeedsConfirmation": "Trier Mes fils.\nIrréversible. Continuer?",
 
   // ============================================================================
+  // POST THREAD SORTS
+  // ============================================================================
+  "postThreadSortOldest": "Plus ancien",
+  "postThreadSortNewest": "Plus récent",
+  "postThreadSortMostLikes": "Plus de j'aime",
+  "postThreadSortHotness": "Popularité",
+
+  // ============================================================================
   // TIME FEEDS
   // ============================================================================
   "showTimeFeeds": "Montrer dans le fil temporel",

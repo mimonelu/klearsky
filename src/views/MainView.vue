@@ -50,6 +50,7 @@ import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSetting
 import PasteFiles from "@/components/next/PasteFiles/PasteFiles.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
 import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
+import PostThreadSortPopover from "@/components/popovers/PostThreadSortPopover.vue"
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
 import QuoteRepostsPopup from "@/components/popups/QuoteRepostsPopup.vue"
@@ -916,6 +917,13 @@ function changeSetting () {
       v-if="state.myFeedsSortPopoverProps.display"
       v-bind="state.myFeedsSortPopoverProps"
       @close="state.closeMyFeedsSortPopover"
+    />
+
+    <!-- ポストスレッドソートポップオーバー -->
+    <PostThreadSortPopover
+      v-if="state.postThreadSortPopoverProps.display"
+      v-bind="state.postThreadSortPopoverProps"
+      @close="state.closePostThreadSortPopover"
     />
 
     <!-- チャットルームポップオーバー -->

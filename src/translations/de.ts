@@ -234,6 +234,14 @@ export default () => ({
   "sortMyFeedsConfirmation": "Feeds sortieren?\nNicht rückgängig machbar.",
 
   // ============================================================================
+  // POST THREAD SORTS
+  // ============================================================================
+  "postThreadSortOldest": "Älteste",
+  "postThreadSortNewest": "Neueste",
+  "postThreadSortMostLikes": "Meiste Likes",
+  "postThreadSortHotness": "Beliebtheit",
+
+  // ============================================================================
   // TIME FEEDS
   // ============================================================================
   "showTimeFeeds": "In Zeitfeed zeigen",
