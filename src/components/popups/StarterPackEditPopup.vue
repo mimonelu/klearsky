@@ -113,6 +113,7 @@ const easyFormProps: TTEasyForm = {
       type: "checkbox",
       options: easyFormState.feedsOptions,
       limit: 3,
+      translate: "no",
     },
     {
       state: easyFormState,
@@ -121,6 +122,7 @@ const easyFormProps: TTEasyForm = {
       type: "radio",
       options: easyFormState.listOptions,
       required: true,
+      translate: "no",
     },
   ],
 }

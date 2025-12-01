@@ -178,7 +178,10 @@ function insertMyWord (myWord: string) {
           class="my-word"
           @click.prevent="insertMyWord(myWord)"
         >
-          <div class="my-word__text">{{ myWord }}</div>
+          <div
+            class="my-word__text"
+            translate="no"
+          >{{ myWord }}</div>
           <button
             v-if="state.mode === 'edit'"
             type="button"

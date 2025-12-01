@@ -24,7 +24,7 @@ defineProps<{
     >
       <SVGIcon name="volumeOff" />
       <span>{{ $t("listMuting") }}</span>
-      <span>"{{ viewer.mutedByList.name }}"</span>
+      <span translate="no">"{{ viewer.mutedByList.name }}"</span>
     </div>
 
     <!-- 個別ブロックのみしている -->
@@ -44,7 +44,7 @@ defineProps<{
     >
       <SVGIcon name="personOff" />
       <span>{{ $t("listBlocking") }}</span>
-      <span>"{{ viewer.blockingByList.name }}"</span>
+      <span translate="no">"{{ viewer.blockingByList.name }}"</span>
     </div>
 
     <!-- ブロックされている -->

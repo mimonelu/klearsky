@@ -118,7 +118,10 @@ const items = computedAsync<Array<SkyBeMoreBlueItem>>(async () => {
             :image="item.avatar"
             :noLink="true"
           />
-          <div class="sky-be-more-blue__display-name">{{ item.displayName || "&nbsp;" }}</div>
+          <div
+            class="sky-be-more-blue__display-name"
+            translate="no"
+          >{{ item.displayName || "&nbsp;" }}</div>
           <div class="sky-be-more-blue__introduction">{{ item.introduction || "&nbsp;" }}</div>
         </RouterLink>
       </div>

@@ -98,7 +98,7 @@ function remove (index: number) {
           class="keyword-history-popover__item-button"
           @click="select(keyword)"
         >
-          <span>{{ keyword }}</span>
+          <span translate="no">{{ keyword }}</span>
 
           <!-- キーワード履歴削除ボタン -->
           <div

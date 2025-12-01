@@ -141,7 +141,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
       @click.prevent.stop="openLabelerSettingsPopup(CONSTS.OFFICIAL_LABELER_DID)"
     >
       <SVGIcon :name="label.__isAuthorLabel ? 'person' : 'label'" />
-      <span>{{ $t(label.val) }}</span>
+      <span translate="no">{{ $t(label.val) }}</span>
     </button>
 
     <!-- ラベラーによるラベル -->
@@ -154,7 +154,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
       @click.prevent.stop="openLabelerSettingsPopup(label?.did)"
     >
       <LazyImage :src="getLabelerAvatar(label)" />
-      <span>{{ $t(label?.locale.name) }}</span>
+      <span translate="no">{{ $t(label?.locale.name) }}</span>
     </button>
 
     <!-- カスタムラベル -->
@@ -164,7 +164,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
       class="label-tags__custom-label"
     >
       <SVGIcon name="label" />
-      <span>{{ $t(label.val) }}</span>
+      <span translate="no">{{ $t(label.val) }}</span>
     </div>
   </div>
 </template>

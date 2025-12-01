@@ -41,12 +41,18 @@ function onActivateBackButton () {
     >
       <SVGIcon name="arrowLeft" />
     </button>
-    <h1 v-if="title">{{ title }}</h1>
+    <h1
+      v-if="title"
+      translate="no"
+    >{{ title }}</h1>
     <div
       v-if="subTitle"
       class="separator"
     />
-    <h2 v-if="subTitle">{{ subTitle }}</h2>
+    <h2
+      v-if="subTitle"
+      translate="no"
+    >{{ subTitle }}</h2>
     <div
       v-if="$slots.right != null"
       class="right"

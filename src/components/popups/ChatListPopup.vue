@@ -199,7 +199,10 @@ function isMine (message: TIChatMessage): boolean {
                     :isLabeler="member.associated?.labeler"
                     :noLink="true"
                   />
-                  <div class="convo-card__user-list__name">{{ member.displayName || member.handle }}</div>
+                  <div
+                    class="convo-card__user-list__name"
+                    translate="no"
+                  >{{ member.displayName || member.handle }}</div>
                 </div>
               </template>
             </div>

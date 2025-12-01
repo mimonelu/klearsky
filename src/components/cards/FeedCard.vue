@@ -188,7 +188,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
           @click.prevent.stop="toggleDetailDisplay"
         >
           <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
-          <span>{{ generator.displayName }}</span>
+          <span translate="no">{{ generator.displayName }}</span>
         </button>
       </div>
 
@@ -205,7 +205,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- フィード作成日時 -->
       <div class="feed-card__indexed-at">
         <SVGIcon name="clock" />
-        <span>{{ mainState.formatDate(generator.indexedAt) }}</span>
+        <span translate="no">{{ mainState.formatDate(generator.indexedAt) }}</span>
       </div>
 
       <!-- フィードカードポップオーバートリガー -->
@@ -244,13 +244,16 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         v-if="creatorDisplay && generator.creator.did"
         class="feed-card__creator"
       >
-        <div class="feed-card__creator__text">{{ $t("by") }}</div>
+        <div
+          class="feed-card__creator__text"
+          translate="no"
+        >{{ $t("by") }}</div>
         <RouterLink
           class="textlink feed-card__creator__by"
           :to="{ name: 'profile-feed-generators', query: { account: generator.creator.did } }"
           @click.prevent
         >
-          <span>{{ generator.creator.displayName || generator.creator.handle }}</span>
+          <span translate="no">{{ generator.creator.displayName || generator.creator.handle }}</span>
         </RouterLink>
         <div class="feed-card__creator__text">&amp;</div>
 

@@ -146,7 +146,7 @@ function openOtherApp (app: any) {
                 v-else
                 :src="app.favicon"
               />
-              <span>{{ $t(app.name) }}</span>
+              <span translate="no">{{ $t(app.name) }}</span>
             </button>
           </template>
         </template>

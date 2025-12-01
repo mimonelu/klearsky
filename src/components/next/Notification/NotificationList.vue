@@ -156,6 +156,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
               isGroupingReason(notificationGroup.reason) &&
               notificationGroup.notifications.length >= 2"
             class="new"
+            translate="no"
           >NEW</div>
 
           <SVGIcon

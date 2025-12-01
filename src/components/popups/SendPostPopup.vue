@@ -586,6 +586,7 @@ const PreviewLinkCardFeature: {
               <b
                 v-if="mainState.currentSetting.postLanguages?.length"
                 class="post-language-button__set"
+                translate="no"
               >{{ mainState.currentSetting.postLanguages?.join(", ") }}</b>
               <b
                 v-else

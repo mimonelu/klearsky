@@ -78,7 +78,7 @@ async function autoScrollSliderMenu () {
             :data-is-selected="true"
           >
             <SVGIcon name="shimmer" />
-            <span>{{ $t(item.value.displayName) }}</span>
+            <span translate="no">{{ $t(item.value.displayName) }}</span>
 
             <!-- 新着フォロー中フィードバッジ -->
             <div
@@ -97,7 +97,7 @@ async function autoScrollSliderMenu () {
               :data-is-selected="true"
             >
               <SVGIcon name="trending" />
-              <span>{{ $t(item.value.displayName) }}</span>
+              <span translate="no">{{ $t(item.value.displayName) }}</span>
             </RouterLink>
 
             <!-- グローバルフィード -->
@@ -108,7 +108,7 @@ async function autoScrollSliderMenu () {
               :data-is-selected="true"
             >
               <SVGIcon name="shimmer" />
-              <span>{{ $t(item.value.displayName) }}</span>
+              <span translate="no">{{ $t(item.value.displayName) }}</span>
             </RouterLink>
           </template>
 
@@ -126,7 +126,7 @@ async function autoScrollSliderMenu () {
             :data-is-selected="mainState.currentQuery.feed === item.value.uri"
           >
             <LazyImage :src="item.value.avatar" />
-            <span>{{ item.value.displayName }}</span>
+            <span translate="no">{{ item.value.displayName }}</span>
           </RouterLink>
 
           <!-- リストフィード -->
@@ -143,7 +143,7 @@ async function autoScrollSliderMenu () {
             :data-is-selected="mainState.currentQuery.list === item.value.uri"
           >
             <LazyImage :src="item.value.avatar" />
-            <span>{{ item.value.name }}</span>
+            <span translate="no">{{ item.value.name }}</span>
           </RouterLink>
         </template>
       </div>

@@ -46,6 +46,7 @@ type TTEasyFormItem = {
   rows?: number
   state?: any
   submitWhenEnter?: boolean
+  translate?: "no" | "yes"
   autoResizeTextarea?: boolean
   onBlur?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onChange?: (item: TTEasyFormItem, form: TTEasyForm) => void

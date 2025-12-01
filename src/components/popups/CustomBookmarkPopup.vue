@@ -214,7 +214,7 @@ async function outputJsonForSkyFeed () {
             @click.stop="setCustomBookmarkTag(tag)"
           >
             <SVGIcon name="bookmark" />
-            <span>{{ tag ?? "All" }}</span>
+            <span translate="no">{{ tag ?? "All" }}</span>
           </button>
         </template>
       </div>

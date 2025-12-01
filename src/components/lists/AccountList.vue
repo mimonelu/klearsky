@@ -136,7 +136,10 @@ function onClickFileBox (event: Event) {
       :key="service"
       class="account-list__service"
     >
-      <div class="service">{{ service }}</div>
+      <div
+        class="service"
+        translate="no"
+      >{{ service }}</div>
       <div class="account-button-container">
         <div
           v-for="session of sessions"
@@ -162,7 +165,10 @@ function onClickFileBox (event: Event) {
                 :data-has-avatar="session.__avatar != null"
               />
             </div>
-            <div class="account-button__handle">{{ session.handle }}</div>
+            <div
+              class="account-button__handle"
+              translate="no"
+            >{{ session.handle }}</div>
 
             <!-- メールアドレス -->
             <div class="account-button__email">
@@ -176,7 +182,10 @@ function onClickFileBox (event: Event) {
               " />
 
               <SVGIcon name="email" />
-              <span class="account-button__email__text">{{ session.email }}</span>
+              <span
+                class="account-button__email__text"
+                translate="no"
+              >{{ session.email }}</span>
             </div>
           </div>
           <div

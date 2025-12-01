@@ -67,7 +67,7 @@ function toggle () {
       @click.prevent="toggle"
     >
       <SVGIcon name="at" />
-      <span>{{ $t("atmosphere") }}</span>
+      <span translate="no">{{ $t("atmosphere") }}</span>
 
       <!-- SmokeSignal Favicon -->
       <img

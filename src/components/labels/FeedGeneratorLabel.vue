@@ -17,7 +17,7 @@
         v-else
         name="feed"
       />
-      <span>{{ scheme.label }}</span>
+      <span translate="no">{{ scheme.label }}</span>
     </a>
   </div>
 </template>

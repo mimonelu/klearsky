@@ -266,7 +266,10 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
           @click.prevent.stop="toggleDetailDisplay"
         >
           <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
-          <span class="list-card__name__label">{{ list.name }}</span>
+          <span
+            class="list-card__name__label"
+            translate="no"
+          >{{ list.name }}</span>
         </button>
       </div>
 
@@ -284,7 +287,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- リスト作成日時 -->
       <div class="list-card__indexed-at">
         <SVGIcon name="clock" />
-        <span>{{ indexedAt }}</span>
+        <span translate="no">{{ indexedAt }}</span>
       </div>
 
       <!-- リストポップオーバートリガー -->

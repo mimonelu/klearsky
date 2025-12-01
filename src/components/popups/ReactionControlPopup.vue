@@ -180,6 +180,7 @@ const easyFormProps: TTEasyForm = {
       disabled: props.draftReactionControl != null
         ? props.draftReactionControl.threadgateAction === "none"
         : props.postThreadgate == null,
+      translate: "no",
     },
   ],
 }
@@ -314,10 +315,12 @@ async function fetchPostgate () {
         <span
           v-if="state.applied"
           class="reaction-control-popup__state--on"
+          translate="no"
         >ON</span>
         <span
           v-else
           class="reaction-control-popup__state--off"
+          translate="no"
         >OFF</span>
       </h2>
     </template>

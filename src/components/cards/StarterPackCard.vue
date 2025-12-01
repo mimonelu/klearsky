@@ -158,7 +158,10 @@ async function deleteStarterPack () {
           @click.prevent.stop="toggleDetailDisplay"
         >
           <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
-          <span class="starter-pack-card__name__label">{{ starterPack.record?.name }}</span>
+          <span
+            class="starter-pack-card__name__label"
+            translate="no"
+          >{{ starterPack.record?.name }}</span>
         </button>
       </div>
 
@@ -193,7 +196,7 @@ async function deleteStarterPack () {
         class="starter-pack-card__indexed-at"
       >
         <SVGIcon name="clock" />
-        <span>{{ indexedAt }}</span>
+        <span translate="no">{{ indexedAt }}</span>
       </div>
 
       <!-- ポップオーバートリガー -->
@@ -231,8 +234,14 @@ async function deleteStarterPack () {
           :to="routerLinkToListPage"
           @click.prevent="$emit('onActivateMention')"
         >
-          <span class="starter-pack-card__creator__prefix">{{ $t("by") }}</span>
-          <span class="starter-pack-card__creator__display-name">{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
+          <span
+            class="starter-pack-card__creator__prefix"
+            translate="no"
+          >{{ $t("by") }}</span>
+          <span
+            class="starter-pack-card__creator__display-name"
+            translate="no"
+          >{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
         </RouterLink>
       </div>
     </template>

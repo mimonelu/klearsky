@@ -24,7 +24,10 @@ defineProps<{
         :style="{ 'background-image': `url(${user.avatar})` }"
       >
         <!-- ユーザー名 -->
-        <div class="user-slider__user__link__name">{{ user.displayName || user.handle }}</div>
+        <div
+          class="user-slider__user__link__name"
+          translate="no"
+        >{{ user.displayName || user.handle }}</div>
       </RouterLink>
     </div>
 

@@ -213,59 +213,59 @@ async function activate (type: string) {
         <!-- resolveHandle -->
         <button @click.prevent.stop="activate('resolveHandle')">
           <SVGIcon name="at" />
-          <span>resolveHandle</span>
+          <span translate="no">resolveHandle</span>
         </button>
 
         <!-- describeRepo -->
         <button @click.prevent.stop="activate('describeRepo')">
           <SVGIcon name="at" />
-          <span>describeRepo</span>
+          <span translate="no">describeRepo</span>
         </button>
 
         <!-- listRecords -->
         <button @click.prevent.stop="activate('listRecords')">
           <SVGIcon name="at" />
-          <span>listRecords (post)</span>
+          <span translate="no">listRecords (post)</span>
         </button>
 
         <!-- getCheckout -->
         <!-- NOTICE: 重量過多のためコメントアウト
         <button @click.prevent.stop="activate('getCheckout')">
           <SVGIcon name="at" />
-          <span>getCheckout</span>
+          <span translate="no">getCheckout</span>
         </button>
         -->
 
         <!-- getHead -->
         <button @click.prevent.stop="activate('getHead')">
           <SVGIcon name="at" />
-          <span>getHead</span>
+          <span translate="no">getHead</span>
         </button>
 
         <!-- getLatestCommit -->
         <button @click.prevent.stop="activate('getLatestCommit')">
           <SVGIcon name="at" />
-          <span>getLatestCommit</span>
+          <span translate="no">getLatestCommit</span>
         </button>
 
         <!-- getRepo -->
         <!-- NOTICE: 重量過多のためコメントアウト
         <button @click.prevent.stop="activate('getRepo')">
           <SVGIcon name="at" />
-          <span>getRepo</span>
+          <span translate="no">getRepo</span>
         </button>
         -->
 
         <!-- listBlobs -->
         <button @click.prevent.stop="activate('listBlobs')">
           <SVGIcon name="at" />
-          <span>listBlobs</span>
+          <span translate="no">listBlobs</span>
         </button>
 
         <!-- listRepos -->
         <button @click.prevent.stop="activate('listRepos')">
           <SVGIcon name="at" />
-          <span>listRepos</span>
+          <span translate="no">listRepos</span>
         </button>
 
         <template v-if="user.did === mainState.atp.data.did">
@@ -275,19 +275,19 @@ async function activate (type: string) {
           <!-- getRecommendedDidCredentials -->
           <button @click.prevent.stop="activate('getRecommendedDidCredentials')">
             <SVGIcon name="at" />
-            <span>getRecommendedDidCred.</span>
+            <span translate="no">getRecommendedDidCred.</span>
           </button>
 
           <!-- listMissingBlobs -->
           <button @click.prevent.stop="activate('listMissingBlobs')">
             <SVGIcon name="at" />
-            <span>listMissingBlobs</span>
+            <span translate="no">listMissingBlobs</span>
           </button>
 
           <!-- checkAccountStatus -->
           <button @click.prevent.stop="activate('checkAccountStatus')">
             <SVGIcon name="at" />
-            <span>checkAccountStatus</span>
+            <span translate="no">checkAccountStatus</span>
           </button>
         </template>
       </menu>

@@ -214,6 +214,7 @@ function validate (): boolean {
                 :autocomplete="item.autocomplete ?? ''"
                 :inputmode="item.inputmode ?? undefined"
                 :spellcheck="item.spellcheck ?? false"
+                :translate="item.translate"
                 class="textbox"
                 :class="item.classes"
                 @input="onInput(item)"
@@ -234,6 +235,7 @@ function validate (): boolean {
                 autocapitalize="off"
                 autocorrect="off"
                 spellcheck="false"
+                :translate="item.translate"
                 class="textarea"
                 :class="item.classes"
                 @focus="onFocus(item)"
@@ -250,6 +252,7 @@ function validate (): boolean {
                 :model="item.model"
                 :disabled="item.disabled"
                 :required="item.required ?? false"
+                :translate="item.translate"
                 :class="item.classes"
                 :booleanboxLabel="item.booleanboxLabel"
                 @update="onChange(item)"
@@ -266,6 +269,7 @@ function validate (): boolean {
                 :options="item.options as Array<TTOption>"
                 :limit="item.limit"
                 :layout="item.layout"
+                :translate="item.translate"
                 :class="item.classes"
                 @update="onChange(item)"
               />
@@ -280,6 +284,7 @@ function validate (): boolean {
                 :required="item.required ?? false"
                 :options="item.options as Array<TTOption>"
                 :layout="item.layout"
+                :translate="item.translate"
                 :class="item.classes"
                 @update="onChange(item)"
               />
@@ -302,6 +307,7 @@ function validate (): boolean {
                     :key="index"
                     :value="option.value"
                     :selected="option.value === item.state[item.model]"
+                    :translate="item.translate"
                   >{{ $t(option.label) }}</option>
                 </select>
               </label>

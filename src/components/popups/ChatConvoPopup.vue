@@ -269,7 +269,7 @@ function isMine (message: TIChatMessage): boolean {
     <template #header>
       <h2>
         <SVGIcon name="chat" />
-        <span>{{ myConvo != null ? myConvo.getMemberNames().join(", ") : $t("chat") }}</span>
+        <span translate="no">{{ myConvo != null ? myConvo.getMemberNames().join(", ") : $t("chat") }}</span>
       </h2>
     </template>
     <template

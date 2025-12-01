@@ -96,10 +96,16 @@ function getLabelerEndpoint (item: any): undefined | string {
           class="item"
         >
           <!-- createdAt -->
-          <li class="created-at">{{ mainState.formatDate(item.createdAt) }}</li>
+          <li
+            class="created-at"
+            translate="no"
+          >{{ mainState.formatDate(item.createdAt) }}</li>
 
           <!-- ハンドル -->
-          <li class="handle">{{ handles[itemIndex] ?? `(${$t("handleHistoryNoHandle")})` }}</li>
+          <li
+            class="handle"
+            translate="no"
+          >{{ handles[itemIndex] ?? `(${$t("handleHistoryNoHandle")})` }}</li>
 
           <!-- エンドポイント -->
           <li class="endpoint">
@@ -113,7 +119,7 @@ function getLabelerEndpoint (item: any): undefined | string {
                 target="_blank"
               >
                 <SVGIcon name="database" />
-                <span>{{ endpoints[itemIndex] }}</span>
+                <span translate="no">{{ endpoints[itemIndex] }}</span>
               </a>
               <p v-else>({{ $t("handleHistoryNoEndpoint") }})</p>
             </div>
@@ -128,7 +134,7 @@ function getLabelerEndpoint (item: any): undefined | string {
                 target="_blank"
               >
                 <SVGIcon name="labeler" />
-                <span>{{ labelerEndpoints[itemIndex] }}</span>
+                <span translate="no">{{ labelerEndpoints[itemIndex] }}</span>
               </a>
             </div>
           </li>

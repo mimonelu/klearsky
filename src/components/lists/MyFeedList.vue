@@ -142,7 +142,7 @@ function removeMyFeed (uri: string) {
           :data-is-selected="true"
         >
           <SVGIcon name="shimmer" />
-          <span>{{ $t(item.value.displayName) }}</span>
+          <span translate="no">{{ $t(item.value.displayName) }}</span>
         </RouterLink>
 
         <!-- `space.aoisora.preference.feed.extra` -->
@@ -155,7 +155,7 @@ function removeMyFeed (uri: string) {
             :data-is-selected="true"
           >
             <SVGIcon name="trending" />
-            <span>{{ $t(item.value.displayName) }}</span>
+            <span translate="no">{{ $t(item.value.displayName) }}</span>
           </RouterLink>
 
           <!-- グローバルフィード -->
@@ -166,7 +166,7 @@ function removeMyFeed (uri: string) {
             :data-is-selected="true"
           >
             <SVGIcon name="shimmer" />
-            <span>{{ $t(item.value.displayName) }}</span>
+            <span translate="no">{{ $t(item.value.displayName) }}</span>
           </RouterLink>
         </template>
 
@@ -184,7 +184,7 @@ function removeMyFeed (uri: string) {
           :data-is-selected="mainState.currentQuery.feed === item.value.uri"
         >
           <LazyImage :src="item.value.avatar" />
-          <span>{{ item.value.displayName }}</span>
+          <span translate="no">{{ item.value.displayName }}</span>
         </RouterLink>
 
         <!-- リストフィード -->
@@ -201,7 +201,7 @@ function removeMyFeed (uri: string) {
           :data-is-selected="mainState.currentQuery.list === item.value.uri"
         >
           <LazyImage :src="item.value.avatar" />
-          <span>{{ item.value.name }}</span>
+          <span translate="no">{{ item.value.name }}</span>
         </RouterLink>
       </div>
     </div>
@@ -246,14 +246,14 @@ function removeMyFeed (uri: string) {
           class="my-feed-list__content"
         >
           <LazyImage :src="item.value.avatar" />
-          <span>{{ item.value.displayName ?? item.value.name }}</span>
+          <span translate="no">{{ item.value.displayName ?? item.value.name }}</span>
         </div>
         <div
           v-else
           class="my-feed-list__content"
         >
           <SVGIcon name="shimmer" />
-          <span>{{ $t(item.value.displayName) }}</span>
+          <span translate="no">{{ $t(item.value.displayName) }}</span>
         </div>
 
         <!-- フィード削除ボタン -->

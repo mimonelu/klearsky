@@ -24,6 +24,7 @@ function onActivate (colorValue: string) {
       <div
         v-if="colorTheme.value !== 'auto'"
         class="color-theme-list__box__label"
+        translate="no"
       >Aa</div>
     </div>
   </div>

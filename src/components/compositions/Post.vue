@@ -1115,6 +1115,7 @@ function toggleOldestQuotedPostDisplay () {
           <div
             v-if="indexedAt"
             class="body__header__indexed-at"
+            translate="no"
           >{{ mainState.formatDate(indexedAt) }}</div>
         </div>
 

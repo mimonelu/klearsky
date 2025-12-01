@@ -19,7 +19,7 @@ defineProps<{
           :src="icon"
           alt=""
         />
-        <span>{{ $t(title) }}</span>
+        <span translate="no">{{ $t(title) }}</span>
       </div>
 
       <!-- サービスリンク -->

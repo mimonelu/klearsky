@@ -19,10 +19,14 @@ const isAnonymization = computed((): boolean => {
 <template>
   <div class="display-name">
     <slot />
-    <span class="display-name__name">{{ isAnonymization ? $t("anonymous") : (displayName || "&emsp;") }}</span>
+    <span
+      class="display-name__name"
+      translate="no"
+    >{{ isAnonymization ? $t("anonymous") : (displayName || "&emsp;") }}</span>
     <span
       v-if="!isAnonymization && pronouns"
       class="display-name__pronouns"
+      translate="no"
     >{{ pronouns }}</span>
   </div>
 </template>

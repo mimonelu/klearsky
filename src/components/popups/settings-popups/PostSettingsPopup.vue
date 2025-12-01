@@ -205,6 +205,7 @@ const mainState = inject("state") as MainState
                 model="linkcardEmbeddedControl"
                 :options="SETTINGS.LINKCARD_EMBEDDED_CONTROL"
                 layout="vertical"
+                translate="no"
                 @update="$emit('saveSetting')"
               />
             </div>

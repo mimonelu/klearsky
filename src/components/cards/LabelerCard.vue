@@ -115,7 +115,7 @@ function openProfilePopover ($event: Event) {
           @click.prevent.stop="toggleDetailDisplay"
         >
           <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
-          <span>{{ labeler.creator.displayName || labeler.creator.handle }}</span>
+          <span translate="no">{{ labeler.creator.displayName || labeler.creator.handle }}</span>
         </button>
       </div>
 
@@ -133,7 +133,7 @@ function openProfilePopover ($event: Event) {
       <!-- ラベラー作成日時 -->
       <div class="labeler-card__indexed-at">
         <SVGIcon name="clock" />
-        <span>{{ mainState.formatDate(labeler.indexedAt) }}</span>
+        <span translate="no">{{ mainState.formatDate(labeler.indexedAt) }}</span>
       </div>
 
       <!-- 公式マーカー -->

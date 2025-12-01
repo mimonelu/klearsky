@@ -11,39 +11,42 @@ const yyyy = (new Date).getFullYear()
 
 <template>
   <div class="copyright">
-    <small>Klearsky</small>
+    <small translate="no">Klearsky</small>
     <RouterLink
       v-if="mainState.atp.hasLogin()"
       class="textlink--underline"
       :to="{ path: '/search/post', query: { text: 'from:mimonelu.net ⭐ Klearsky | 🔥 Klearsky' } }"
     >
-      <span>v{{ Package.version }}</span>
+      <span translate="no">v{{ Package.version }}</span>
     </RouterLink>
-    <span v-else>v{{ Package.version }}</span>
-    <small>alpha (@atproto/api v{{ atprotoApiVersion }}) &copy; {{ yyyy }} mimonelu</small>
+    <span
+      v-else
+      translate="no"
+    >v{{ Package.version }}</span>
+    <small translate="no">alpha (@atproto/api v{{ atprotoApiVersion }}) &copy; {{ yyyy }} mimonelu</small>
     <a
       class="textlink--underline"
       href="https://github.com/mimonelu/klearsky"
       rel="noreferrer"
       target="_blank"
     >
-      <span>GitHub</span>
+      <span translate="no">GitHub</span>
     </a>
     <RouterLink
       class="textlink--underline"
       :to="{ path: '/profile/feeds', query: { account: 'mimonelu.net' } }"
     >
-      <span>Bluesky</span>
+      <span translate="no">Bluesky</span>
     </RouterLink>
     <span>/</span>
-    <small>Bluesky &copy; {{ yyyy }} Bluesky PBC</small>
+    <small translate="no">Bluesky &copy; {{ yyyy }} Bluesky PBC</small>
     <a
       class="textlink--underline"
       href="https://blueskyweb.xyz/"
       rel="noreferrer"
       target="_blank"
     >
-      <span>Web</span>
+      <span translate="no">Web</span>
     </a>
   </div>
 </template>

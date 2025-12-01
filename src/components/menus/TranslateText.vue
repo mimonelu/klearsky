@@ -20,6 +20,9 @@ function translate () {
   <button @click.prevent.stop="translate">
     <SVGIcon name="translate" />
     <span>{{ $t("translate") }}</span>
-    <span v-if="langs != null && langs.length > 0">({{ langs.join("/").toUpperCase() }})</span>
+    <span
+      v-if="langs != null && langs.length > 0"
+      translate="no"
+    >({{ langs.join("/").toUpperCase() }})</span>
   </button>
 </template>

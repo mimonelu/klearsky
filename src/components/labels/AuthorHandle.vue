@@ -25,6 +25,7 @@ const handle = computed((): string => {
   <div
     class="author-handle"
     :data-is-invalid-handle="isInvalidHandle"
+    translate="no"
   >{{ handle || "&emsp;" }}</div>
 </template>
 
