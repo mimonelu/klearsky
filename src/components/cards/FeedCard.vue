@@ -475,11 +475,9 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // フィードインタラクション
   &__feed-interaction-notice {
-    background-color: rgb(var(--feed-interaction-color), 0.125);
     border-radius: var(--border-radius-middle);
     color: rgb(var(--feed-interaction-color));
     line-height: var(--line-height-middle);
-    padding: 0.5em;
     font-size: 0.875em;
     font-weight: bold;
 

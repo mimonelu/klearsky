@@ -86,7 +86,7 @@ const query = computed((): string => {
     display: flex;
     flex-direction: column;
     grid-gap: 0.5rem;
-    padding: 0.5rem;
+    padding: 0 0.5rem 0.5rem;
     &:empty {
       display: none;
     }
