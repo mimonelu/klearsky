@@ -28,17 +28,19 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 // --- MODERATION STATE ---
-// null = No specific mode selected (Standard posting)
 const moderationMode = ref<'SAFE' | 'REWRITE' | 'INFO' | null>(null);
 
-const suggestedReply = ref(""); 
-const showSuggestedReply = computed(() => {
-  return props.type === "reply" && suggestedReply.value.trim().length > 0
-})
-let textGenerationPipeline: any = null;
+// Store the fetched contextual info here (for INFO mode)
+const contextualInfo = ref(""); 
+const isFetchingInfo = ref(false);
+
+// --- LIVE REWRITE STATE ---
+const liveRewriteSuggestion = ref("");
+const isFetchingLiveRewrite = ref(false);
+let rewriteDebounceTimer: any = null;
 
 // =========================================================
-// ===       API HELPERS (Strict Async/Await)            ===
+// ===       API HELPERS                                 ===
 // =========================================================
 
 async function apiCall(endpoint: string, body: any) {
@@ -51,6 +53,46 @@ async function apiCall(endpoint: string, body: any) {
   return await response.json();
 }
 
+// Helper to fetch rewrite logic (used by watchers)
+async function fetchLiveRewrite(textToRewrite: string) {
+  if (!textToRewrite.trim()) return;
+  
+  isFetchingLiveRewrite.value = true;
+  try {
+    const data = await apiCall("nonToxicRewriting", { text: textToRewrite });
+    liveRewriteSuggestion.value = data.rewritten_text;
+  } catch(e) {
+    console.error("Live rewrite failed", e);
+  } finally {
+    isFetchingLiveRewrite.value = false;
+  }
+}
+
+// =========================================================
+// ===       INFO MODE                                   ===
+// =========================================================
+
+async function activateInfoMode() {
+  moderationMode.value = 'INFO';
+  if (props.type === 'reply' && props.post) {
+    const parentText = props.post?.reply?.parent?.record?.text ?? props.post?.record?.text ?? "";
+    if (!parentText.trim()) return;
+
+    isFetchingInfo.value = true;
+    contextualInfo.value = ""; 
+
+    try {
+      const data = await apiCall("infoMessage", { text: parentText, context: "Social Media Reply Context" });
+      contextualInfo.value = data.contextual_info;
+    } catch (err) {
+      console.error("Failed to fetch info:", err);
+      contextualInfo.value = "Could not fetch context info at this time.";
+    } finally {
+      isFetchingInfo.value = false;
+    }
+  }
+}
+
 // =========================================================
 // ===       STRICT SUBMIT INTERCEPTOR                   ===
 // =========================================================
@@ -58,11 +100,8 @@ async function apiCall(endpoint: string, body: any) {
 async function interceptSubmit() {
   Util.blurElement()
 
-  // 1. Validation: Empty Post Check
-  if (easyFormState.text.trim() === "" &&
-      easyFormState.medias.length === 0 &&
-      easyFormState.url.trim() === ""
-  ) {
+  // 1. Validation
+  if (easyFormState.text.trim() === "" && easyFormState.medias.length === 0 && easyFormState.url.trim() === "") {
     const result = await mainState.openConfirmationPopup({
       title: $t("emptyPostConfirmation"),
       text: $t("emptyPostConfirmationMessage"),
@@ -70,17 +109,15 @@ async function interceptSubmit() {
     if (!result) return;
   }
 
-  // Prevent double clicks
   if (mainState.sendPostPopupProcessing) return;
 
   // 2. CHECK IF MODERATION IS ACTIVE
-  // If no mode is selected, we proceed to standard submit immediately
-  if (moderationMode.value === null) {
+  if (moderationMode.value === null || moderationMode.value === 'INFO') {
     await executeActualSubmit();
     return;
   }
 
-  // 3. START BLOCKING (User cannot do anything now)
+  // 3. START BLOCKING (For Safe/Rewrite modes only)
   mainState.sendPostPopupProcessing = true; 
 
   try {
@@ -88,38 +125,29 @@ async function interceptSubmit() {
 
     // --- CASE A: SAFE SUBMIT MODE ---
     if (moderationMode.value === 'SAFE') {
-      // WAIT for toxicity label
       const data = await apiCall("toxicityHateSpeechPrediction", { text: textToCheck });
-      
       const isToxic = data.predictions.some((p: any) => 
         p.score > 0.50 && 
         ['toxicity', 'severe_toxicity', 'hate_speech', 'threat', 'insult'].includes(p.label)
       );
 
       if (isToxic) {
-        // STOP processing to show UI
         mainState.sendPostPopupProcessing = false; 
-
         const confirm = await mainState.openConfirmationPopup({
           title: "⚠️ Toxicity Detected",
           text: "This post has been flagged by our safety system.\n\nAre you sure you want to publish it?",
         });
-
-        if (!confirm) return; // User cancelled, we stop here.
-        
-        // User said yes, resume processing
+        if (!confirm) return;
         mainState.sendPostPopupProcessing = true;
       }
-      // If Safe, loop continues to executeActualSubmit()
     }
 
-    // --- CASE B: REWRITE MODE ---
+    // --- CASE B: REWRITE MODE (Submit Interception) ---
+    // If the user ignores the live suggestion and clicks submit, we force a check
     else if (moderationMode.value === 'REWRITE') {
-      // WAIT for rewrite generation
       const data = await apiCall("nonToxicRewriting", { text: textToCheck });
       const rewrite = data.rewritten_text;
       
-      // STOP processing to show UI
       mainState.sendPostPopupProcessing = false;
 
       const useRewrite = await mainState.openConfirmationPopup({
@@ -128,66 +156,40 @@ async function interceptSubmit() {
       });
 
       if (useRewrite) {
-        easyFormState.text = rewrite; // Update text
-        mainState.sendPostPopupProcessing = true; // Resume
+        easyFormState.text = rewrite; 
+        mainState.sendPostPopupProcessing = true;
       } else {
-        // User wants original text
         const confirmOriginal = await mainState.openConfirmationPopup({
           title: "Post Original?",
           text: "Do you want to proceed with the original text?"
         });
         if (!confirmOriginal) return;
-        mainState.sendPostPopupProcessing = true; // Resume
+        mainState.sendPostPopupProcessing = true; 
       }
     }
 
-    // --- CASE C: INFO MODE ---
-    else if (moderationMode.value === 'INFO') {
-      // WAIT for info generation
-      const data = await apiCall("infoMessage", { text: textToCheck, context: "Social Media" });
-      
-      // STOP processing to show UI
-      mainState.sendPostPopupProcessing = false;
-
-      const proceed = await mainState.openConfirmationPopup({
-        title: "ℹ️ Content Analysis",
-        text: `${data.contextual_info}\n\nDo you want to proceed?`
-      });
-
-      if (!proceed) return;
-      mainState.sendPostPopupProcessing = true; // Resume
-    }
-
-    // 4. IF WE REACH HERE, EXECUTE SUBMIT
     await executeActualSubmit();
 
   } catch (err) {
     console.error("Moderation Server Error:", err);
     mainState.sendPostPopupProcessing = false;
-    
-    // STRICT FAIL: Do not allow posting if server fails (or ask user)
     const forceSubmit = await mainState.openConfirmationPopup({
       title: "Moderation Error",
       text: "We could not verify the safety of this post (Server Error). Do you want to try posting anyway?"
     });
-    
     if (forceSubmit) {
       await executeActualSubmit();
     }
   }
 }
 
-// The actual function that talks to AT Protocol (Standard Bluesky post logic)
 async function executeActualSubmit() {
   const videoSizes = (easyForm.value?.getVideoSizes() ?? [[]])[0]
   easyFormState.medias.forEach((media, index) => {
     (media as any)._videoAspectRatio = videoSizes[index]
   })
 
-  // Close the popup UI immediately
   close()
-
-  // Ensure loader is ON for the network request
   mainState.sendPostPopupProcessing = true 
 
   try {
@@ -206,7 +208,6 @@ async function executeActualSubmit() {
       mainState.openSendPostPopup()
       mainState.openErrorPopup($t(result.message), "SendPostPopup/submitCallback")
     } else {
-      // Postgate / Threadgate Logic
       if (!state.draftReactionControl.postgateAllow) {
         await mainState.atp.updatePostgate(result.uri, state.draftReactionControl.postgateAllow)
       }
@@ -219,7 +220,6 @@ async function executeActualSubmit() {
           state.draftReactionControl.listUris
         )
       }
-
       mainState.fetchTimeline("new")
       emit("closeSendPostPopup", true, false)
     }
@@ -229,7 +229,7 @@ async function executeActualSubmit() {
 }
 
 // =========================================================
-// ===       EXISTING COMPONENT LOGIC                    ===
+// ===       COMPONENT LOGIC                             ===
 // =========================================================
 
 const state = reactive<{
@@ -281,48 +281,16 @@ const easyFormState = reactive<{
   alts: [],
 })
 
-// --- CLIENT-SIDE TOXICITY BAR (Visual Only) ---
+// --- CLIENT-SIDE TOXICITY ---
 const toxicityScore = ref(0) 
 const modelThreshold = 0.75 
 let toxicityModel: toxicity.ToxicityClassifier | null = null
-
-function getReplyChain(post: any) {
-  const chain: any[] = []
-  let current = toRaw(post)
-
-  while (current?.reply?.parent) {
-    current = toRaw(current.reply.parent)
-    chain.push(current)
-  }
-  return chain
-}
 
 onMounted(async () => {
   try {
     toxicityModel = await toxicity.load(modelThreshold)
   } catch (err) {
     console.warn("Toxicity model failed to load:", err)
-  }
-
-  // Suggested Reply generation (On Mount)
-  if (props.type === "reply" && props.post) {
-    const parentText = props.post?.reply?.parent?.record?.text ?? props.post?.record?.text ?? "";
-    if (parentText.trim()) {
-      try {
-        const prompt = `You are in a social media platform, give the reply a person would give to this message please. Do NOT repeat yourself.\n"${parentText}"\nReply:`
-        const response = await fetch("http://localhost:8000/generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt }),
-        })
-        if (response.ok) {
-           const data = await response.json()
-           suggestedReply.value = data.generated_text ?? data.text ?? ""
-        }
-      } catch (err) {
-        console.error("Failed to generate suggested reply:", err)
-      }
-    }
   }
 
   if (props.fileList != null) {
@@ -346,25 +314,50 @@ function getTextarea (): null | HTMLTextAreaElement {
 watch(toxicityScore, (score) => {
   const textarea = getTextarea();
   if (textarea) {
+    // We still change the text color as a subtle indicator
     textarea.style.color = `hsl(${(1 - score) * 120}, 100%, 30%)`;
   }
 });
 
+// --- WATCHER 1: When Mode Changes ---
+watch(moderationMode, (newMode) => {
+  if (newMode === 'REWRITE' && easyFormState.text.trim()) {
+    fetchLiveRewrite(easyFormState.text);
+  }
+  // Clear suggestions if we switch out of rewrite mode
+  if (newMode !== 'REWRITE') {
+    liveRewriteSuggestion.value = "";
+  }
+})
+
+// --- WATCHER 2: When Text Changes ---
 watch(
   () => easyFormState.text,
   async (newText) => {
-    // Client-side bar check
+    // 1. Reset states if empty
     if (!toxicityModel || !newText.trim()) {
       toxicityScore.value = 0
-    } else {
-      const predictions = await toxicityModel.classify(newText)
-      const toxicityPred = predictions.find(pred => pred.label === "toxicity")
-      toxicityScore.value = toxicityPred ? toxicityPred.results[0].probabilities[1] : 0
+      liveRewriteSuggestion.value = ""
+      return
     }
 
-    if (props.type !== "reply") {
-      suggestedReply.value = ""
-      return
+    // 2. Local Toxicity Classification
+    const predictions = await toxicityModel.classify(newText)
+    const toxicityPred = predictions.find(pred => pred.label === "toxicity")
+    const currentScore = toxicityPred ? toxicityPred.results[0].probabilities[1] : 0
+    toxicityScore.value = currentScore
+
+    // 3. Live Rewrite Logic
+    clearTimeout(rewriteDebounceTimer); 
+
+    // FIXED: Only trigger if the user has EXPLICITLY selected 'REWRITE' mode.
+    // We no longer trigger based on toxicity score automatically.
+    if (moderationMode.value === 'REWRITE') {
+      rewriteDebounceTimer = setTimeout(() => {
+        fetchLiveRewrite(newText);
+      }, 1000); 
+    } else {
+      liveRewriteSuggestion.value = "";
     }
   }
 )
@@ -372,7 +365,7 @@ watch(
 const easyFormProps: TTEasyForm = {
   hasSubmitButton: true,
   submitButtonLabel: $t("submit"),
-  submitCallback: interceptSubmit, // <--- HOOKED TO STRICT INTERCEPTOR
+  submitCallback: interceptSubmit,
   blurOnSubmit: true,
   data: [
     {
@@ -451,7 +444,9 @@ watch(() => props.fileList, (value?: FileList) => {
 })
 
 async function close () {
-  moderationMode.value = null; // Reset mode
+  moderationMode.value = null; 
+  contextualInfo.value = ""; 
+  liveRewriteSuggestion.value = "";
   emit("closeSendPostPopup", false, true)
 }
 
@@ -463,7 +458,9 @@ async function reset () {
   if (!result) return
   emit("closeSendPostPopup", false, false)
   await nextTick()
-  moderationMode.value = null; // Reset mode
+  moderationMode.value = null; 
+  contextualInfo.value = ""; 
+  liveRewriteSuggestion.value = "";
   mainState.openSendPostPopup({
     type: "post",
     post: props.post,
@@ -677,8 +674,8 @@ const PreviewLinkCardFeature: {
           type="button" 
           class="button--bordered" 
           style="border-color: #4CAF50; color: #4CAF50; font-size: 0.75rem; padding: 0 8px;"
-          @click.stop="moderationMode = 'INFO'"
-          title="Info Mode"
+          @click.stop="activateInfoMode"
+          title="Get Info on parent post"
         >
           <span>Info</span>
         </button>
@@ -689,7 +686,7 @@ const PreviewLinkCardFeature: {
         <span v-if="moderationMode === 'REWRITE'" style="color: #2196F3">Mode: Rewrite</span>
         <span v-if="moderationMode === 'INFO'" style="color: #4CAF50">Mode: Analysis</span>
         
-        <button type="button" @click.stop="moderationMode = null" style="cursor: pointer; opacity: 0.6;">
+        <button type="button" @click.stop="moderationMode = null; contextualInfo = ''; liveRewriteSuggestion = ''" style="cursor: pointer; opacity: 0.6;">
            <SVGIcon name="cross" style="transform: scale(0.7);"/>
         </button>
       </div>
@@ -719,21 +716,25 @@ const PreviewLinkCardFeature: {
         </template>
 
         <template #free-0>
-          <div v-if="showSuggestedReply" class="suggested-reply">
-            <div class="suggested-text">Suggested Reply: {{ suggestedReply }}</div>
-            <button @click.prevent="easyFormState.text = suggestedReply">
-              Use this reply
-            </button>
+          <div v-if="liveRewriteSuggestion || isFetchingLiveRewrite" class="live-rewrite-box">
+             <div v-if="isFetchingLiveRewrite" class="rewrite-loader">
+                Generating non-toxic alternative...
+             </div>
+             <div v-else class="rewrite-content">
+                <strong>✨ Suggested Rewrite:</strong>
+                <p>"{{ liveRewriteSuggestion }}"</p>
+                <button class="rewrite-btn" @click.prevent="easyFormState.text = liveRewriteSuggestion">
+                  Use this version
+                </button>
+             </div>
           </div>
 
-          <div class="toxicity-bar-container" :style="{ '--toxicity-color': `hsl(${(1 - toxicityScore) * 120}, 100%, 30%)` }">
-            <div
-              class="toxicity-bar"
-              :style="{
-                width: `${toxicityScore * 100}%`,
-                backgroundColor: `hsl(${(1 - toxicityScore) * 120}, 100%, 50%)`
-              }"
-            ></div>
+          <div v-if="moderationMode === 'INFO'" class="suggested-info">
+             <div v-if="isFetchingInfo" class="info-loader">Analyzing parent post...</div>
+             <div v-else-if="contextualInfo" class="info-content">
+               <strong>ℹ️ Suggested Information:</strong>
+               <p>{{ contextualInfo }}</p>
+             </div>
           </div>
         </template>
 
@@ -1037,40 +1038,72 @@ const PreviewLinkCardFeature: {
       border-color: transparent;
     }
   }
-  
-  .suggested-reply {
+
+  /* NEW STYLES FOR INFO BOX */
+  .suggested-info {
     margin-top: 0.5rem;
-    padding: 0.5rem;
-    border: 1px solid var(--notice-color);
+    padding: 0.75rem;
+    border: 1px solid #4CAF50; /* Green border for info */
     border-radius: 4px;
-    background-color: #f9f9f9;
+    background-color: #f0fdf4; /* Very light green bg */
     font-size: 0.875rem;
+    color: #1b5e20;
 
-    .suggested-text {
-      margin-bottom: 0.25rem;
+    .info-loader {
       font-style: italic;
-      color: black; 
+      color: #666;
     }
 
-    button {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.5rem;
-      cursor: pointer;
+    .info-content {
+      white-space: pre-wrap;
+      
+      strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: #2e7d32;
+      }
     }
   }
 
-  .toxicity-bar-container {
-    height: 4px;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 2px;
-    margin-top: 0.25rem;
-    overflow: hidden;
-  }
+  /* NEW STYLES FOR LIVE REWRITE BOX */
+  .live-rewrite-box {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #FF9800; /* Orange border for warning/suggestion */
+    border-radius: 4px;
+    background-color: #FFF3E0; /* Very light orange bg */
+    font-size: 0.875rem;
+    color: #E65100;
+    
+    .rewrite-loader {
+       font-style: italic;
+       color: #666;
+    }
 
-  .toxicity-bar {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.2s ease, background-color 0.2s ease;
+    .rewrite-content {
+      p {
+        margin: 0.5rem 0;
+        font-style: italic;
+        background: rgba(255,255,255,0.5);
+        padding: 4px;
+        border-radius: 2px;
+      }
+
+      .rewrite-btn {
+        background-color: #FF9800;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 0.75rem;
+        
+        &:hover {
+          background-color: #F57C00;
+        }
+      }
+    }
   }
 }
 </style>
