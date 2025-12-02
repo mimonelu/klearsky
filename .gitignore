@@ -1,4 +1,28 @@
-# Logs
+# ========================
+# ENVIRONMENT VARIABLES
+# ========================
+.env
+.env.local
+.env.*.local
+
+# ========================
+# PYTHON (FastAPI/Backend)
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+
+# ========================
+# LOGS
+# ========================
 logs
 *.log
 npm-debug.log*
@@ -7,6 +31,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# ========================
+# DEPENDENCIES & BUILD
+# ========================
 node_modules
 .DS_Store
 dist
@@ -14,7 +41,9 @@ dist-ssr
 coverage
 *.local
 
-# Editor directories and files
+# ========================
+# EDITOR FILES
+# ========================
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -24,6 +53,9 @@ coverage
 *.sln
 *.sw?
 
+# ========================
+# MISC / CUSTOM
+# ========================
 # Klearsky
 docs
 
