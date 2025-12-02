@@ -10,8 +10,6 @@ import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
-// Note: Removed TensorFlow imports as we are now using the Python Server exclusively
-
 const modelConfig = ref<any>(null);
 
 const emit = defineEmits<{(event: string, done: boolean, hidden: boolean): void}>()
@@ -30,24 +28,63 @@ const mainState = inject("state") as MainState
 // --- MODERATION STATE ---
 const moderationMode = ref<'SAFE' | 'REWRITE' | 'INFO' | 'VISUALIZATION1' | 'VISUALIZATION2' | null>(null);
 
-// Store the fetched contextual info here (for INFO mode)
+// Info Mode State
 const contextualInfo = ref(""); 
 const isFetchingInfo = ref(false);
 
-// --- LIVE REWRITE STATE ---
+// Live Rewrite State
 const liveRewriteSuggestion = ref("");
 const isFetchingLiveRewrite = ref(false);
 let rewriteDebounceTimer: any = null;
 
-// --- TOXICITY BAR STATE (VIS 1) ---
-const toxicityScore = ref(0); // <--- Kept this one
+// Toxicity Bar State (Vis 1)
+const toxicityScore = ref(0); 
 const isFetchingToxicity = ref(false);
 let toxicityDebounceTimer: any = null;
 
-// --- TOXIC SPANS STATE (VIS 2) ---
+// Toxic Spans State (Vis 2)
 const toxicSpans = ref<{word: string, score: number}[]>([]);
 const isFetchingSpans = ref(false);
 let spansDebounceTimer: any = null;
+
+// Auto-Log Timer & State
+let autoLogTimer: any = null;
+const lastLoggedText = ref(""); // Tracks the last text we successfully saved to DB
+
+// =========================================================
+// ===       LOGGING HELPER                              ===
+// =========================================================
+
+async function logActivityToBackend(actionType: string, metaData: any = {}) {
+  // 1. LOGIC CHANGE: Prevent duplicate autosaves
+  // If this is an autosave AND the text hasn't changed since the last save, abort.
+  if (actionType === 'DRAFT_AUTOSAVE' && easyFormState.text === lastLoggedText.value) {
+      return; 
+  }
+
+  // Get current user DID from mainState
+  const userDid = mainState.atp.session?.did || "unknown_user";
+
+  try {
+    await fetch('http://localhost:8000/log_activity', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_did: userDid,
+        action_type: actionType,
+        input_text: easyFormState.text,
+        moderation_mode: moderationMode.value || "STANDARD",
+        meta: metaData
+      })
+    });
+    
+    // Update the last logged text reference after a successful save
+    lastLoggedText.value = easyFormState.text;
+
+  } catch (err) {
+    console.warn("Failed to log activity", err);
+  }
+}
 
 // =========================================================
 // ===       API HELPERS                                 ===
@@ -63,21 +100,49 @@ async function apiCall(endpoint: string, body: any) {
   return await response.json();
 }
 
-// Helper: Live Rewrite
-async function fetchLiveRewrite(textToRewrite: string) {
-  if (!textToRewrite.trim()) return;
-  isFetchingLiveRewrite.value = true;
+// Helper: Get Score (Internal)
+async function getScore(text: string): Promise<number> {
   try {
-    const data = await apiCall("nonToxicRewriting", { text: textToRewrite });
-    liveRewriteSuggestion.value = data.rewritten_text;
-  } catch(e) {
-    console.error("Live rewrite failed", e);
-  } finally {
-    isFetchingLiveRewrite.value = false;
+    const data = await apiCall("toxicityHateSpeechPrediction", { text });
+    return data.predictions.reduce((max: number, p: any) => p.score > max ? p.score : max, 0);
+  } catch (e) {
+    console.error("Score check failed", e);
+    return 0;
   }
 }
 
-// Helper: Toxicity Score (Vis 1 - Server Side)
+// Helper: Live Rewrite (Gated by Toxicity)
+async function fetchLiveRewrite(textToRewrite: string) {
+  if (!textToRewrite.trim()) {
+    liveRewriteSuggestion.value = "";
+    return;
+  }
+  
+  isFetchingLiveRewrite.value = true;
+  
+  // 1. Check Toxicity First
+  const score = await getScore(textToRewrite);
+  
+  // 2. Only rewrite if toxic (> 60%)
+  if (score > 0.60) {
+    try {
+      const data = await apiCall("nonToxicRewriting", { text: textToRewrite });
+      liveRewriteSuggestion.value = data.rewritten_text;
+      
+      // LOG
+      logActivityToBackend("REWRITE_SUGGESTED", { original: textToRewrite, suggestion: data.rewritten_text, score: score });
+
+    } catch(e) {
+      console.error("Live rewrite failed", e);
+    }
+  } else {
+    liveRewriteSuggestion.value = ""; 
+  }
+  
+  isFetchingLiveRewrite.value = false;
+}
+
+// Helper: Toxicity Score (Vis 1)
 async function fetchServerToxicityScore(textToCheck: string) {
   if (!textToCheck.trim()) {
     toxicityScore.value = 0;
@@ -85,11 +150,12 @@ async function fetchServerToxicityScore(textToCheck: string) {
   }
   isFetchingToxicity.value = true;
   try {
-    const data = await apiCall("toxicityHateSpeechPrediction", { text: textToCheck });
-    const maxScore = data.predictions.reduce((max: number, p: any) => p.score > max ? p.score : max, 0);
-    toxicityScore.value = maxScore;
-  } catch(e) {
-    console.error("Server toxicity check failed", e);
+    const score = await getScore(textToCheck);
+    toxicityScore.value = score;
+    
+    // LOG
+    logActivityToBackend("VISUALIZATION_1_UPDATE", { score: score });
+
   } finally {
     isFetchingToxicity.value = false;
   }
@@ -105,6 +171,10 @@ async function fetchToxicSpans(textToCheck: string) {
   try {
     const data = await apiCall("toxicSpans", { text: textToCheck });
     toxicSpans.value = data.spans;
+
+    // LOG
+    logActivityToBackend("VISUALIZATION_2_UPDATE", { spans: data.spans });
+
   } catch(e) {
     console.error("Toxic spans check failed", e);
   } finally {
@@ -128,6 +198,10 @@ async function activateInfoMode() {
     try {
       const data = await apiCall("infoMessage", { text: parentText, context: "Social Media Reply Context" });
       contextualInfo.value = data.contextual_info;
+
+      // LOG
+      logActivityToBackend("INFO_REQUESTED", { parent_post: parentText });
+
     } catch (err) {
       console.error("Failed to fetch info:", err);
       contextualInfo.value = "Could not fetch context info at this time.";
@@ -157,6 +231,7 @@ async function interceptSubmit() {
 
   // 2. CHECK IF MODERATION IS ACTIVE
   if (moderationMode.value === null || moderationMode.value === 'INFO' || moderationMode.value === 'VISUALIZATION1' || moderationMode.value === 'VISUALIZATION2') {
+    logActivityToBackend("POST_SUBMITTED", { final_mode: moderationMode.value || "STANDARD" });
     await executeActualSubmit();
     return;
   }
@@ -169,48 +244,60 @@ async function interceptSubmit() {
 
     // --- CASE A: SAFE SUBMIT MODE ---
     if (moderationMode.value === 'SAFE') {
-      const data = await apiCall("toxicityHateSpeechPrediction", { text: textToCheck });
-      const isToxic = data.predictions.some((p: any) => 
-        p.score > 0.50 && 
-        ['toxicity', 'severe_toxicity', 'hate_speech', 'threat', 'insult'].includes(p.label)
-      );
+      const score = await getScore(textToCheck);
+      const isToxic = score > 0.50;
 
       if (isToxic) {
+        // LOG Block
+        logActivityToBackend("SUBMIT_BLOCKED_SAFE_MODE", { score: score });
+
         mainState.sendPostPopupProcessing = false; 
         const confirm = await mainState.openConfirmationPopup({
           title: "⚠️ Toxicity Detected",
           text: "This post has been flagged by our safety system.\n\nAre you sure you want to publish it?",
         });
-        if (!confirm) return;
+        if (!confirm) {
+            logActivityToBackend("SUBMIT_CANCELLED_BY_USER");
+            return;
+        }
+        logActivityToBackend("SUBMIT_FORCED_BY_USER");
         mainState.sendPostPopupProcessing = true;
       }
     }
 
     // --- CASE B: REWRITE MODE ---
     else if (moderationMode.value === 'REWRITE') {
-      const data = await apiCall("nonToxicRewriting", { text: textToCheck });
-      const rewrite = data.rewritten_text;
+      const score = await getScore(textToCheck);
       
-      mainState.sendPostPopupProcessing = false;
+      if (score > 0.60) {
+         const data = await apiCall("nonToxicRewriting", { text: textToCheck });
+         const rewrite = data.rewritten_text;
+         
+         mainState.sendPostPopupProcessing = false;
 
-      const useRewrite = await mainState.openConfirmationPopup({
-        title: "✨ Non-Toxic Rewrite",
-        text: `We have rewritten your text to be more constructive:\n\n"${rewrite}"\n\nClick OK to use this version, or Cancel to keep yours.`
-      });
+         const useRewrite = await mainState.openConfirmationPopup({
+           title: "✨ Non-Toxic Rewrite",
+           text: `We have rewritten your text to be more constructive:\n\n"${rewrite}"\n\nClick OK to use this version, or Cancel to keep yours.`
+         });
 
-      if (useRewrite) {
-        easyFormState.text = rewrite; 
-        mainState.sendPostPopupProcessing = true;
-      } else {
-        const confirmOriginal = await mainState.openConfirmationPopup({
-          title: "Post Original?",
-          text: "Do you want to proceed with the original text?"
-        });
-        if (!confirmOriginal) return;
-        mainState.sendPostPopupProcessing = true; 
-      }
+         if (useRewrite) {
+           easyFormState.text = rewrite; 
+           logActivityToBackend("REWRITE_ACCEPTED_AT_SUBMIT");
+           mainState.sendPostPopupProcessing = true;
+         } else {
+           const confirmOriginal = await mainState.openConfirmationPopup({
+             title: "Post Original?",
+             text: "Do you want to proceed with the original text?"
+           });
+           if (!confirmOriginal) return;
+           logActivityToBackend("REWRITE_REJECTED_AT_SUBMIT");
+           mainState.sendPostPopupProcessing = true; 
+         }
+      } 
     }
 
+    // If we reach here, proceed to submit
+    logActivityToBackend("POST_SUBMITTED", { final_mode: moderationMode.value });
     await executeActualSubmit();
 
   } catch (err) {
@@ -221,6 +308,7 @@ async function interceptSubmit() {
       text: "We could not verify the safety of this post (Server Error). Do you want to try posting anyway?"
     });
     if (forceSubmit) {
+      logActivityToBackend("POST_SUBMITTED_ON_ERROR");
       await executeActualSubmit();
     }
   }
@@ -236,6 +324,7 @@ async function executeActualSubmit() {
   mainState.sendPostPopupProcessing = true 
 
   try {
+    // 1. Create the post
     const result = await mainState.atp.createPost({
       ...easyFormState,
       type: props.type,
@@ -248,9 +337,25 @@ async function executeActualSubmit() {
     })
     
     if (result instanceof Error) {
+      // Error handling
       mainState.openSendPostPopup()
       mainState.openErrorPopup($t(result.message), "SendPostPopup/submitCallback")
+      
+      // LOG ERROR
+      logActivityToBackend("POST_SUBMISSION_FAILED", { error: result.message });
     } else {
+      // --- SUCCESS BLOCK ---
+      
+      // 2. The 'result' object contains the CID and URI immediately!
+      // result usually looks like: { uri: "at://...", cid: "bafyre..." }
+      
+      await logActivityToBackend("POST_PUBLISHED", { 
+          final_mode: moderationMode.value || "STANDARD",
+          cid: result.cid, // <--- HERE IS THE CID
+          uri: result.uri  // <--- HERE IS THE URI
+      });
+
+      // 3. Handle Postgates / Threadgates (Existing logic)
       if (!state.draftReactionControl.postgateAllow) {
         await mainState.atp.updatePostgate(result.uri, state.draftReactionControl.postgateAllow)
       }
@@ -263,6 +368,7 @@ async function executeActualSubmit() {
           state.draftReactionControl.listUris
         )
       }
+      
       mainState.fetchTimeline("new")
       emit("closeSendPostPopup", true, false)
     }
@@ -324,8 +430,6 @@ const easyFormState = reactive<{
   alts: [],
 })
 
-// REMOVED DUPLICATE STATE DECLARATIONS HERE
-
 onMounted(async () => {
   if (props.fileList != null) {
     easyFormState.medias = Array.from(props.fileList)
@@ -374,7 +478,7 @@ watch(moderationMode, (newMode) => {
     fetchToxicSpans(easyFormState.text); 
   }
   
-  // Cleanup when leaving modes
+  // Cleanup
   if (newMode !== 'REWRITE') liveRewriteSuggestion.value = "";
   if (newMode !== 'VISUALIZATION2') toxicSpans.value = [];
   
@@ -388,7 +492,17 @@ watch(moderationMode, (newMode) => {
 watch(
   () => easyFormState.text,
   async (newText) => {
-    // 1. REWRITE MODE
+    
+    // --- A. AUTO-LOGGING (2 seconds inactivity) ---
+    clearTimeout(autoLogTimer);
+    if (newText.trim()) {
+      autoLogTimer = setTimeout(() => {
+        // This call will now check if newText is different from lastLoggedText
+        logActivityToBackend("DRAFT_AUTOSAVE", { length: newText.length });
+      }, 2000); // 2 seconds
+    }
+
+    // --- B. REWRITE MODE ---
     clearTimeout(rewriteDebounceTimer); 
     if (moderationMode.value === 'REWRITE') {
       if (newText.trim()) {
@@ -400,7 +514,7 @@ watch(
       liveRewriteSuggestion.value = "";
     }
 
-    // 2. VISUALIZATION 1 (Bar)
+    // --- C. VISUALIZATION 1 (Bar) ---
     clearTimeout(toxicityDebounceTimer);
     if (moderationMode.value === 'VISUALIZATION1') {
         if (newText.trim()) {
@@ -410,7 +524,7 @@ watch(
         }
     }
 
-    // 3. VISUALIZATION 2 (Spans)
+    // --- D. VISUALIZATION 2 (Spans) ---
     clearTimeout(spansDebounceTimer);
     if (moderationMode.value === 'VISUALIZATION2') {
         if (newText.trim()) {
@@ -801,7 +915,7 @@ const PreviewLinkCardFeature: {
 
         <template #free-0>
           <div v-if="liveRewriteSuggestion || isFetchingLiveRewrite" class="live-rewrite-box">
-             <div v-if="isFetchingLiveRewrite" class="rewrite-loader">Generating...</div>
+             <div v-if="isFetchingLiveRewrite" class="rewrite-loader">Checking toxicity...</div>
              <div v-else class="rewrite-content">
                 <strong>✨ Suggested Rewrite:</strong>
                 <p>"{{ liveRewriteSuggestion }}"</p>
