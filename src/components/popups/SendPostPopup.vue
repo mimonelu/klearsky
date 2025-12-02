@@ -9,8 +9,8 @@ import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
-import * as tf from "@tensorflow/tfjs"
-import * as toxicity from "@tensorflow-models/toxicity"
+
+// Note: Removed TensorFlow imports as we are now using the Python Server exclusively
 
 const modelConfig = ref<any>(null);
 
@@ -28,7 +28,7 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 // --- MODERATION STATE ---
-const moderationMode = ref<'SAFE' | 'REWRITE' | 'INFO' | null>(null);
+const moderationMode = ref<'SAFE' | 'REWRITE' | 'INFO' | 'VISUALIZATION1' | 'VISUALIZATION2' | null>(null);
 
 // Store the fetched contextual info here (for INFO mode)
 const contextualInfo = ref(""); 
@@ -38,6 +38,16 @@ const isFetchingInfo = ref(false);
 const liveRewriteSuggestion = ref("");
 const isFetchingLiveRewrite = ref(false);
 let rewriteDebounceTimer: any = null;
+
+// --- TOXICITY BAR STATE (VIS 1) ---
+const toxicityScore = ref(0); // <--- Kept this one
+const isFetchingToxicity = ref(false);
+let toxicityDebounceTimer: any = null;
+
+// --- TOXIC SPANS STATE (VIS 2) ---
+const toxicSpans = ref<{word: string, score: number}[]>([]);
+const isFetchingSpans = ref(false);
+let spansDebounceTimer: any = null;
 
 // =========================================================
 // ===       API HELPERS                                 ===
@@ -53,10 +63,9 @@ async function apiCall(endpoint: string, body: any) {
   return await response.json();
 }
 
-// Helper to fetch rewrite logic (used by watchers)
+// Helper: Live Rewrite
 async function fetchLiveRewrite(textToRewrite: string) {
   if (!textToRewrite.trim()) return;
-  
   isFetchingLiveRewrite.value = true;
   try {
     const data = await apiCall("nonToxicRewriting", { text: textToRewrite });
@@ -65,6 +74,41 @@ async function fetchLiveRewrite(textToRewrite: string) {
     console.error("Live rewrite failed", e);
   } finally {
     isFetchingLiveRewrite.value = false;
+  }
+}
+
+// Helper: Toxicity Score (Vis 1 - Server Side)
+async function fetchServerToxicityScore(textToCheck: string) {
+  if (!textToCheck.trim()) {
+    toxicityScore.value = 0;
+    return;
+  }
+  isFetchingToxicity.value = true;
+  try {
+    const data = await apiCall("toxicityHateSpeechPrediction", { text: textToCheck });
+    const maxScore = data.predictions.reduce((max: number, p: any) => p.score > max ? p.score : max, 0);
+    toxicityScore.value = maxScore;
+  } catch(e) {
+    console.error("Server toxicity check failed", e);
+  } finally {
+    isFetchingToxicity.value = false;
+  }
+}
+
+// Helper: Toxic Spans (Vis 2)
+async function fetchToxicSpans(textToCheck: string) {
+  if (!textToCheck.trim()) {
+    toxicSpans.value = [];
+    return;
+  }
+  isFetchingSpans.value = true;
+  try {
+    const data = await apiCall("toxicSpans", { text: textToCheck });
+    toxicSpans.value = data.spans;
+  } catch(e) {
+    console.error("Toxic spans check failed", e);
+  } finally {
+    isFetchingSpans.value = false;
   }
 }
 
@@ -112,7 +156,7 @@ async function interceptSubmit() {
   if (mainState.sendPostPopupProcessing) return;
 
   // 2. CHECK IF MODERATION IS ACTIVE
-  if (moderationMode.value === null || moderationMode.value === 'INFO') {
+  if (moderationMode.value === null || moderationMode.value === 'INFO' || moderationMode.value === 'VISUALIZATION1' || moderationMode.value === 'VISUALIZATION2') {
     await executeActualSubmit();
     return;
   }
@@ -142,8 +186,7 @@ async function interceptSubmit() {
       }
     }
 
-    // --- CASE B: REWRITE MODE (Submit Interception) ---
-    // If the user ignores the live suggestion and clicks submit, we force a check
+    // --- CASE B: REWRITE MODE ---
     else if (moderationMode.value === 'REWRITE') {
       const data = await apiCall("nonToxicRewriting", { text: textToCheck });
       const rewrite = data.rewritten_text;
@@ -281,18 +324,9 @@ const easyFormState = reactive<{
   alts: [],
 })
 
-// --- CLIENT-SIDE TOXICITY ---
-const toxicityScore = ref(0) 
-const modelThreshold = 0.75 
-let toxicityModel: toxicity.ToxicityClassifier | null = null
+// REMOVED DUPLICATE STATE DECLARATIONS HERE
 
 onMounted(async () => {
-  try {
-    toxicityModel = await toxicity.load(modelThreshold)
-  } catch (err) {
-    console.warn("Toxicity model failed to load:", err)
-  }
-
   if (props.fileList != null) {
     easyFormState.medias = Array.from(props.fileList)
   }
@@ -314,19 +348,39 @@ function getTextarea (): null | HTMLTextAreaElement {
 watch(toxicityScore, (score) => {
   const textarea = getTextarea();
   if (textarea) {
-    // We still change the text color as a subtle indicator
-    textarea.style.color = `hsl(${(1 - score) * 120}, 100%, 30%)`;
+    if (moderationMode.value === 'VISUALIZATION1') {
+       textarea.style.color = `hsl(${(1 - score) * 120}, 100%, 30%)`;
+    } else {
+       textarea.style.color = ''; 
+    }
   }
 });
 
 // --- WATCHER 1: When Mode Changes ---
 watch(moderationMode, (newMode) => {
+  // Clear Timers
+  clearTimeout(rewriteDebounceTimer);
+  clearTimeout(toxicityDebounceTimer);
+  clearTimeout(spansDebounceTimer);
+
+  // Trigger Immediate Actions if text exists
   if (newMode === 'REWRITE' && easyFormState.text.trim()) {
     fetchLiveRewrite(easyFormState.text);
   }
-  // Clear suggestions if we switch out of rewrite mode
-  if (newMode !== 'REWRITE') {
-    liveRewriteSuggestion.value = "";
+  else if (newMode === 'VISUALIZATION1' && easyFormState.text.trim()) {
+    fetchServerToxicityScore(easyFormState.text); 
+  }
+  else if (newMode === 'VISUALIZATION2' && easyFormState.text.trim()) {
+    fetchToxicSpans(easyFormState.text); 
+  }
+  
+  // Cleanup when leaving modes
+  if (newMode !== 'REWRITE') liveRewriteSuggestion.value = "";
+  if (newMode !== 'VISUALIZATION2') toxicSpans.value = [];
+  
+  const textarea = getTextarea();
+  if (newMode !== 'VISUALIZATION1' && textarea) {
+    textarea.style.color = ''; 
   }
 })
 
@@ -334,30 +388,36 @@ watch(moderationMode, (newMode) => {
 watch(
   () => easyFormState.text,
   async (newText) => {
-    // 1. Reset states if empty
-    if (!toxicityModel || !newText.trim()) {
-      toxicityScore.value = 0
-      liveRewriteSuggestion.value = ""
-      return
-    }
-
-    // 2. Local Toxicity Classification
-    const predictions = await toxicityModel.classify(newText)
-    const toxicityPred = predictions.find(pred => pred.label === "toxicity")
-    const currentScore = toxicityPred ? toxicityPred.results[0].probabilities[1] : 0
-    toxicityScore.value = currentScore
-
-    // 3. Live Rewrite Logic
+    // 1. REWRITE MODE
     clearTimeout(rewriteDebounceTimer); 
-
-    // FIXED: Only trigger if the user has EXPLICITLY selected 'REWRITE' mode.
-    // We no longer trigger based on toxicity score automatically.
     if (moderationMode.value === 'REWRITE') {
-      rewriteDebounceTimer = setTimeout(() => {
-        fetchLiveRewrite(newText);
-      }, 1000); 
+      if (newText.trim()) {
+        rewriteDebounceTimer = setTimeout(() => fetchLiveRewrite(newText), 1000); 
+      } else {
+        liveRewriteSuggestion.value = "";
+      }
     } else {
       liveRewriteSuggestion.value = "";
+    }
+
+    // 2. VISUALIZATION 1 (Bar)
+    clearTimeout(toxicityDebounceTimer);
+    if (moderationMode.value === 'VISUALIZATION1') {
+        if (newText.trim()) {
+          toxicityDebounceTimer = setTimeout(() => fetchServerToxicityScore(newText), 800);
+        } else {
+          toxicityScore.value = 0;
+        }
+    }
+
+    // 3. VISUALIZATION 2 (Spans)
+    clearTimeout(spansDebounceTimer);
+    if (moderationMode.value === 'VISUALIZATION2') {
+        if (newText.trim()) {
+          spansDebounceTimer = setTimeout(() => fetchToxicSpans(newText), 1500);
+        } else {
+          toxicSpans.value = [];
+        }
     }
   }
 )
@@ -447,6 +507,7 @@ async function close () {
   moderationMode.value = null; 
   contextualInfo.value = ""; 
   liveRewriteSuggestion.value = "";
+  toxicSpans.value = [];
   emit("closeSendPostPopup", false, true)
 }
 
@@ -461,6 +522,7 @@ async function reset () {
   moderationMode.value = null; 
   contextualInfo.value = ""; 
   liveRewriteSuggestion.value = "";
+  toxicSpans.value = [];
   mainState.openSendPostPopup({
     type: "post",
     post: props.post,
@@ -679,14 +741,36 @@ const PreviewLinkCardFeature: {
         >
           <span>Info</span>
         </button>
+
+        <button 
+          type="button" 
+          class="button--bordered" 
+          style="border-color: #9C27B0; color: #9C27B0; font-size: 0.75rem; padding: 0 8px;"
+          @click.stop="moderationMode = 'VISUALIZATION1'"
+          title="Dynamic Toxicity Bar"
+        >
+          <span>Vis 1</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="button--bordered" 
+          style="border-color: #FF5722; color: #FF5722; font-size: 0.75rem; padding: 0 8px;"
+          @click.stop="moderationMode = 'VISUALIZATION2'"
+          title="Toxic Spans Explanation"
+        >
+          <span>Vis 2</span>
+        </button>
       </div>
 
       <div v-else style="margin-left: auto; font-size: 0.8rem; font-weight: bold; display: flex; gap: 5px; align-items: center;">
         <span v-if="moderationMode === 'SAFE'" style="color: var(--notice-color)">Mode: Safe Submit</span>
         <span v-if="moderationMode === 'REWRITE'" style="color: #2196F3">Mode: Rewrite</span>
         <span v-if="moderationMode === 'INFO'" style="color: #4CAF50">Mode: Analysis</span>
+        <span v-if="moderationMode === 'VISUALIZATION1'" style="color: #9C27B0">Mode: Vis 1 (Bar)</span>
+        <span v-if="moderationMode === 'VISUALIZATION2'" style="color: #FF5722">Mode: Vis 2 (Spans)</span>
         
-        <button type="button" @click.stop="moderationMode = null; contextualInfo = ''; liveRewriteSuggestion = ''" style="cursor: pointer; opacity: 0.6;">
+        <button type="button" @click.stop="moderationMode = null; contextualInfo = ''; liveRewriteSuggestion = ''; toxicSpans = []" style="cursor: pointer; opacity: 0.6;">
            <SVGIcon name="cross" style="transform: scale(0.7);"/>
         </button>
       </div>
@@ -717,23 +801,46 @@ const PreviewLinkCardFeature: {
 
         <template #free-0>
           <div v-if="liveRewriteSuggestion || isFetchingLiveRewrite" class="live-rewrite-box">
-             <div v-if="isFetchingLiveRewrite" class="rewrite-loader">
-                Generating non-toxic alternative...
-             </div>
+             <div v-if="isFetchingLiveRewrite" class="rewrite-loader">Generating...</div>
              <div v-else class="rewrite-content">
                 <strong>✨ Suggested Rewrite:</strong>
                 <p>"{{ liveRewriteSuggestion }}"</p>
-                <button class="rewrite-btn" @click.prevent="easyFormState.text = liveRewriteSuggestion">
-                  Use this version
-                </button>
+                <button class="rewrite-btn" @click.prevent="easyFormState.text = liveRewriteSuggestion">Use this</button>
              </div>
           </div>
 
           <div v-if="moderationMode === 'INFO'" class="suggested-info">
-             <div v-if="isFetchingInfo" class="info-loader">Analyzing parent post...</div>
+             <div v-if="isFetchingInfo" class="info-loader">Analyzing...</div>
              <div v-else-if="contextualInfo" class="info-content">
                <strong>ℹ️ Suggested Information:</strong>
                <p>{{ contextualInfo }}</p>
+             </div>
+          </div>
+
+          <div v-if="moderationMode === 'VISUALIZATION1'" class="toxicity-bar-container" :style="{ '--toxicity-color': `hsl(${(1 - toxicityScore) * 120}, 100%, 30%)` }">
+            <div v-if="isFetchingToxicity" style="height: 100%; background: #eee; width: 100%; text-align: center; font-size: 0.6rem; line-height: 4px;">Loading...</div>
+            <div v-else class="toxicity-bar" :style="{ width: `${toxicityScore * 100}%`, backgroundColor: `hsl(${(1 - toxicityScore) * 120}, 100%, 50%)` }"></div>
+            
+            <div style="font-size: 0.75rem; text-align: right; margin-top: 4px; color: var(--toxicity-color)">
+               Toxicity Score: {{ (toxicityScore * 100).toFixed(1) }}%
+            </div>
+          </div>
+
+          <div v-if="moderationMode === 'VISUALIZATION2'" class="toxic-spans-container">
+             <div v-if="isFetchingSpans" style="text-align: center; font-size: 0.75rem; color: #666; font-style: italic;">Calculating word impact...</div>
+             <div v-else class="spans-wrapper">
+               <span 
+                 v-for="(item, idx) in toxicSpans" 
+                 :key="idx" 
+                 class="toxic-span"
+                 :style="{ backgroundColor: `rgba(255, 0, 0, ${item.score * 2})` }"
+                 :title="`Toxicity Contribution: ${(item.score * 100).toFixed(1)}%`"
+               >
+                 {{ item.word }}
+               </span>
+             </div>
+             <div style="font-size: 0.7rem; color: #666; margin-top: 5px;">
+               * Darker red indicates words that increase toxicity the most.
              </div>
           </div>
         </template>
@@ -1103,6 +1210,44 @@ const PreviewLinkCardFeature: {
           background-color: #F57C00;
         }
       }
+    }
+  }
+
+  /* RE-ADDED STYLES FOR TOXICITY BAR */
+  .toxicity-bar-container {
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    margin-top: 0.25rem;
+    overflow: hidden;
+  }
+
+  .toxicity-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.2s ease, background-color 0.2s ease;
+  }
+
+  /* NEW STYLES FOR TOXIC SPANS */
+  .toxic-spans-container {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    
+    .spans-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .toxic-span {
+      padding: 0 2px;
+      border-radius: 2px;
+      transition: background-color 0.2s ease;
     }
   }
 }
