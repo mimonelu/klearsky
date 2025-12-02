@@ -2,6 +2,7 @@ import os
 import logging
 import uvicorn
 import datetime
+import re
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -38,7 +39,6 @@ class ActivityLog(Base):
     moderation_mode = Column(String)            
     metadata_json = Column(JSON)                
 
-# Create tables
 Base.metadata.create_all(bind=engine)
 
 # ==============================================================================
@@ -104,6 +104,24 @@ class LogRequest(BaseModel):
 # ==============================================================================
 
 def save_log_to_db(log_data: LogRequest):
+    # --- DEBUG PRINTING ---
+    print("\n" + "="*50)
+    print(f"📝 NEW ACTIVITY LOG: {log_data.action_type}")
+    print(f"👤 User: {log_data.user_did}")
+    
+    if log_data.meta:
+        p_cid = log_data.meta.get("parent_cid")
+        p_text = log_data.meta.get("parent_text")
+        
+        if p_cid or p_text:
+            print(f"🔗 REPLY CONTEXT FOUND:")
+            print(f"   > Parent CID:  {p_cid}")
+            print(f"   > Parent Text: \"{p_text}\"")
+        else:
+            if log_data.meta:
+                print(f"ℹ️ Metadata: {log_data.meta}")
+    print("="*50 + "\n")
+
     db = SessionLocal()
     try:
         db_log = ActivityLog(
@@ -134,7 +152,6 @@ async def predict_toxicity(req: TextRequest):
     if not HF_TOKEN:
         raise HTTPException(status_code=503, detail="HF_TOKEN not set.")
     try:
-        # Unitary Toxic Bert works best for classification
         response = client.text_classification(
             model="unitary/toxic-bert",
             text=req.text
@@ -151,26 +168,30 @@ async def non_toxic_rewriting(req: TextRequest):
     if not HF_TOKEN:
         raise HTTPException(status_code=503, detail="HF_TOKEN not set.")
     try:
-        # Qwen 2.5 Instruction Format
-        messages = [
-            {"role": "system", "content": "You are a helpful assistant. Rewrite the user's text to be non-toxic, polite, and constructive. Keep the original meaning. Do NOT output anything else (like 'Here is the rewrite')."},
-            {"role": "user", "content": f"Rewrite this text: \"{req.text}\""}
-        ]
-        
-        # MODEL CHANGED: Qwen/Qwen2.5-7B-Instruct (SOTA & Ungated)
-        response = client.chat_completion(
-            model="Qwen/Qwen2.5-7B-Instruct",
-            messages=messages,
-            max_tokens=200,
-            temperature=0.5,
-            stream=False # Ensure streaming is OFF to prevent StopIteration errors
+        # MANUAL QWEN 2.5 PROMPT
+        prompt = (
+            "<|im_start|>system\n"
+            "You are a helpful moderation assistant. Rewrite the user's text to be non-toxic, polite, and constructive. "
+            "Keep the original meaning. Do NOT output conversational filler like 'Here is the rewrite'. Output ONLY the rewritten text.<|im_end|>\n"
+            "<|im_start|>user\n"
+            f"Rewrite this text: \"{req.text}\"<|im_end|>\n"
+            "<|im_start|>assistant\n"
         )
         
-        if not response.choices:
-             raise ValueError("Model returned empty response")
-             
-        clean_text = response.choices[0].message.content.strip().strip('"')
+        response = client.text_generation(
+            model="Qwen/Qwen2.5-7B-Instruct",
+            prompt=prompt,
+            max_new_tokens=200,
+            temperature=0.1,
+            stop_sequences=["<|im_end|>"], 
+            return_full_text=False
+        )
+        
+        clean_text = response.strip().strip('"')
+        clean_text = re.sub(r'^(Here is|The rewritten|Rewritten|Polite version|Output):', '', clean_text, flags=re.IGNORECASE).strip()
+
         return RewritingResponse(rewritten_text=clean_text)
+        
     except Exception as e:
         logger.error(f"Rewriting failed: {repr(e)}")
         raise HTTPException(status_code=500, detail=f"API Error: {str(e)}")
@@ -181,27 +202,29 @@ async def provide_info_message(req: TextRequest):
     if not HF_TOKEN:
         raise HTTPException(status_code=503, detail="HF_TOKEN not set.")
     try:
-        target_text = req.text 
-        messages = [
-            {
-                "role": "system", 
-                "content": f"You are a helpful aide. Context: {req.context or 'General'}. Analyze this post and provide brief context cues to help the user reply."
-            },
-            {"role": "user", "content": f"Analyze this:\n\"{target_text}\""}
-        ]
+        # The input 'req.text' will now contain the full thread history from Vue
+        thread_history = req.text 
         
-        # MODEL CHANGED: Qwen/Qwen2.5-7B-Instruct
-        response = client.chat_completion(
-            model="Qwen/Qwen2.5-7B-Instruct",
-            messages=messages,
-            max_tokens=300,
-            stream=False
+        prompt = (
+            "<|im_start|>system\n"
+            f"You are a helpful communication coach. Context: {req.context or 'Social Media'}. "
+            "Read the conversation thread below. The user is about to reply to the LAST message. "
+            "Provide 2-3 sentences of context, identifying any underlying conflict, tone, or misunderstanding, to help the user write a calm and informed reply.<|im_end|>\n"
+            "<|im_start|>user\n"
+            f"Conversation Thread:\n{thread_history}<|im_end|>\n"
+            "<|im_start|>assistant\n"
         )
         
-        if not response.choices:
-             raise ValueError("Model returned empty response")
-
-        info = response.choices[0].message.content.strip()
+        response = client.text_generation(
+            model="Qwen/Qwen2.5-7B-Instruct",
+            prompt=prompt,
+            max_new_tokens=300,
+            temperature=0.5,
+            stop_sequences=["<|im_end|>"],
+            return_full_text=False
+        )
+        
+        info = response.strip()
         return InfoResponse(contextual_info=info)
     except Exception as e:
         logger.error(f"Info generation failed: {repr(e)}")
@@ -218,27 +241,30 @@ async def explain_toxicity(req: TextRequest):
         return ToxicSpansResponse(spans=[])
 
     try:
-        # 1. Baseline
+        def calculate_mass(predictions):
+            bad_labels = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
+            return sum([p.score for p in predictions if p.label in bad_labels])
+
         base_resp = client.text_classification(model="unitary/toxic-bert", text=text)
-        bad_labels = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
-        base_score = max([p.score for p in base_resp if p.label in bad_labels] or [0])
+        base_mass = calculate_mass(base_resp)
 
         words = text.split()
         spans = []
 
-        # 2. Perturbation Loop
         for i in range(len(words)):
             masked_text = " ".join(words[:i] + words[i+1:])
             
             if not masked_text.strip():
-                score_drop = base_score
+                mass_drop = base_mass
             else:
                 masked_resp = client.text_classification(model="unitary/toxic-bert", text=masked_text)
-                masked_score = max([p.score for p in masked_resp if p.label in bad_labels] or [0])
-                score_drop = base_score - masked_score
+                masked_mass = calculate_mass(masked_resp)
+                mass_drop = base_mass - masked_mass
 
-            importance = max(0.0, score_drop)
-            spans.append(SpanScore(word=words[i], score=importance))
+            importance = max(0.0, mass_drop)
+            visual_score = min(1.0, importance) 
+
+            spans.append(SpanScore(word=words[i], score=visual_score))
 
         return ToxicSpansResponse(spans=spans)
 
