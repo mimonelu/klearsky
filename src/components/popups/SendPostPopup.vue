@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
+import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef, type Ref, toRaw } from "vue"
 import { format } from "date-fns/format"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
@@ -9,8 +9,10 @@ import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
-import debounce from "@/composables/util/debounce"
+import * as tf from "@tensorflow/tfjs"
+import * as toxicity from "@tensorflow-models/toxicity"
 
+const modelConfig = ref<any>(null);
 
 const emit = defineEmits<{(event: string, done: boolean, hidden: boolean): void}>()
 
@@ -23,8 +25,212 @@ const props = defineProps<{
 }>()
 
 const $t = inject("$t") as Function
-
 const mainState = inject("state") as MainState
+
+// --- MODERATION STATE ---
+// null = No specific mode selected (Standard posting)
+const moderationMode = ref<'SAFE' | 'REWRITE' | 'INFO' | null>(null);
+
+const suggestedReply = ref(""); 
+const showSuggestedReply = computed(() => {
+  return props.type === "reply" && suggestedReply.value.trim().length > 0
+})
+let textGenerationPipeline: any = null;
+
+// =========================================================
+// ===       API HELPERS (Strict Async/Await)            ===
+// =========================================================
+
+async function apiCall(endpoint: string, body: any) {
+  const response = await fetch(`http://localhost:8000/${endpoint}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+  return await response.json();
+}
+
+// =========================================================
+// ===       STRICT SUBMIT INTERCEPTOR                   ===
+// =========================================================
+
+async function interceptSubmit() {
+  Util.blurElement()
+
+  // 1. Validation: Empty Post Check
+  if (easyFormState.text.trim() === "" &&
+      easyFormState.medias.length === 0 &&
+      easyFormState.url.trim() === ""
+  ) {
+    const result = await mainState.openConfirmationPopup({
+      title: $t("emptyPostConfirmation"),
+      text: $t("emptyPostConfirmationMessage"),
+    })
+    if (!result) return;
+  }
+
+  // Prevent double clicks
+  if (mainState.sendPostPopupProcessing) return;
+
+  // 2. CHECK IF MODERATION IS ACTIVE
+  // If no mode is selected, we proceed to standard submit immediately
+  if (moderationMode.value === null) {
+    await executeActualSubmit();
+    return;
+  }
+
+  // 3. START BLOCKING (User cannot do anything now)
+  mainState.sendPostPopupProcessing = true; 
+
+  try {
+    const textToCheck = easyFormState.text;
+
+    // --- CASE A: SAFE SUBMIT MODE ---
+    if (moderationMode.value === 'SAFE') {
+      // WAIT for toxicity label
+      const data = await apiCall("toxicityHateSpeechPrediction", { text: textToCheck });
+      
+      const isToxic = data.predictions.some((p: any) => 
+        p.score > 0.50 && 
+        ['toxicity', 'severe_toxicity', 'hate_speech', 'threat', 'insult'].includes(p.label)
+      );
+
+      if (isToxic) {
+        // STOP processing to show UI
+        mainState.sendPostPopupProcessing = false; 
+
+        const confirm = await mainState.openConfirmationPopup({
+          title: "⚠️ Toxicity Detected",
+          text: "This post has been flagged by our safety system.\n\nAre you sure you want to publish it?",
+        });
+
+        if (!confirm) return; // User cancelled, we stop here.
+        
+        // User said yes, resume processing
+        mainState.sendPostPopupProcessing = true;
+      }
+      // If Safe, loop continues to executeActualSubmit()
+    }
+
+    // --- CASE B: REWRITE MODE ---
+    else if (moderationMode.value === 'REWRITE') {
+      // WAIT for rewrite generation
+      const data = await apiCall("nonToxicRewriting", { text: textToCheck });
+      const rewrite = data.rewritten_text;
+      
+      // STOP processing to show UI
+      mainState.sendPostPopupProcessing = false;
+
+      const useRewrite = await mainState.openConfirmationPopup({
+        title: "✨ Non-Toxic Rewrite",
+        text: `We have rewritten your text to be more constructive:\n\n"${rewrite}"\n\nClick OK to use this version, or Cancel to keep yours.`
+      });
+
+      if (useRewrite) {
+        easyFormState.text = rewrite; // Update text
+        mainState.sendPostPopupProcessing = true; // Resume
+      } else {
+        // User wants original text
+        const confirmOriginal = await mainState.openConfirmationPopup({
+          title: "Post Original?",
+          text: "Do you want to proceed with the original text?"
+        });
+        if (!confirmOriginal) return;
+        mainState.sendPostPopupProcessing = true; // Resume
+      }
+    }
+
+    // --- CASE C: INFO MODE ---
+    else if (moderationMode.value === 'INFO') {
+      // WAIT for info generation
+      const data = await apiCall("infoMessage", { text: textToCheck, context: "Social Media" });
+      
+      // STOP processing to show UI
+      mainState.sendPostPopupProcessing = false;
+
+      const proceed = await mainState.openConfirmationPopup({
+        title: "ℹ️ Content Analysis",
+        text: `${data.contextual_info}\n\nDo you want to proceed?`
+      });
+
+      if (!proceed) return;
+      mainState.sendPostPopupProcessing = true; // Resume
+    }
+
+    // 4. IF WE REACH HERE, EXECUTE SUBMIT
+    await executeActualSubmit();
+
+  } catch (err) {
+    console.error("Moderation Server Error:", err);
+    mainState.sendPostPopupProcessing = false;
+    
+    // STRICT FAIL: Do not allow posting if server fails (or ask user)
+    const forceSubmit = await mainState.openConfirmationPopup({
+      title: "Moderation Error",
+      text: "We could not verify the safety of this post (Server Error). Do you want to try posting anyway?"
+    });
+    
+    if (forceSubmit) {
+      await executeActualSubmit();
+    }
+  }
+}
+
+// The actual function that talks to AT Protocol (Standard Bluesky post logic)
+async function executeActualSubmit() {
+  const videoSizes = (easyForm.value?.getVideoSizes() ?? [[]])[0]
+  easyFormState.medias.forEach((media, index) => {
+    (media as any)._videoAspectRatio = videoSizes[index]
+  })
+
+  // Close the popup UI immediately
+  close()
+
+  // Ensure loader is ON for the network request
+  mainState.sendPostPopupProcessing = true 
+
+  try {
+    const result = await mainState.atp.createPost({
+      ...easyFormState,
+      type: props.type,
+      post: props.post,
+      createdAt: state.postDatePopupDate,
+      languages: mainState.currentSetting.postLanguages,
+      labels: state.labels,
+      lightning: mainState.currentSetting.lightning,
+      listMentionDids: mainState.listMentionPopupProps.dids,
+    })
+    
+    if (result instanceof Error) {
+      mainState.openSendPostPopup()
+      mainState.openErrorPopup($t(result.message), "SendPostPopup/submitCallback")
+    } else {
+      // Postgate / Threadgate Logic
+      if (!state.draftReactionControl.postgateAllow) {
+        await mainState.atp.updatePostgate(result.uri, state.draftReactionControl.postgateAllow)
+      }
+      if (state.draftReactionControl.threadgateAction !== "none") {
+        await mainState.atp.updateThreadgate(
+          result.uri,
+          state.draftReactionControl.allowMention,
+          state.draftReactionControl.allowFollower,
+          state.draftReactionControl.allowFollowing,
+          state.draftReactionControl.listUris
+        )
+      }
+
+      mainState.fetchTimeline("new")
+      emit("closeSendPostPopup", true, false)
+    }
+  } finally {
+    mainState.sendPostPopupProcessing = false
+  }
+}
+
+// =========================================================
+// ===       EXISTING COMPONENT LOGIC                    ===
+// =========================================================
 
 const state = reactive<{
   labels: Array<string>
@@ -75,17 +281,106 @@ const easyFormState = reactive<{
   alts: [],
 })
 
+// --- CLIENT-SIDE TOXICITY BAR (Visual Only) ---
+const toxicityScore = ref(0) 
+const modelThreshold = 0.75 
+let toxicityModel: toxicity.ToxicityClassifier | null = null
+
+function getReplyChain(post: any) {
+  const chain: any[] = []
+  let current = toRaw(post)
+
+  while (current?.reply?.parent) {
+    current = toRaw(current.reply.parent)
+    chain.push(current)
+  }
+  return chain
+}
+
+onMounted(async () => {
+  try {
+    toxicityModel = await toxicity.load(modelThreshold)
+  } catch (err) {
+    console.warn("Toxicity model failed to load:", err)
+  }
+
+  // Suggested Reply generation (On Mount)
+  if (props.type === "reply" && props.post) {
+    const parentText = props.post?.reply?.parent?.record?.text ?? props.post?.record?.text ?? "";
+    if (parentText.trim()) {
+      try {
+        const prompt = `You are in a social media platform, give the reply a person would give to this message please. Do NOT repeat yourself.\n"${parentText}"\nReply:`
+        const response = await fetch("http://localhost:8000/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt }),
+        })
+        if (response.ok) {
+           const data = await response.json()
+           suggestedReply.value = data.generated_text ?? data.text ?? ""
+        }
+      } catch (err) {
+        console.error("Failed to generate suggested reply:", err)
+      }
+    }
+  }
+
+  if (props.fileList != null) {
+    easyFormState.medias = Array.from(props.fileList)
+  }
+  onInputUrl()
+  onChangeImage()
+
+  const videoLimits = await mainState.atp.fetchVideoLimits()
+  if (videoLimits instanceof Error) {
+    state.videoLimits = undefined
+  } else {
+    state.videoLimits = videoLimits
+  }
+})
+
+function getTextarea (): null | HTMLTextAreaElement {
+  return document.querySelector("#easy-form--default__0 textarea") as HTMLTextAreaElement | null;
+}
+
+watch(toxicityScore, (score) => {
+  const textarea = getTextarea();
+  if (textarea) {
+    textarea.style.color = `hsl(${(1 - score) * 120}, 100%, 30%)`;
+  }
+});
+
+watch(
+  () => easyFormState.text,
+  async (newText) => {
+    // Client-side bar check
+    if (!toxicityModel || !newText.trim()) {
+      toxicityScore.value = 0
+    } else {
+      const predictions = await toxicityModel.classify(newText)
+      const toxicityPred = predictions.find(pred => pred.label === "toxicity")
+      toxicityScore.value = toxicityPred ? toxicityPred.results[0].probabilities[1] : 0
+    }
+
+    if (props.type !== "reply") {
+      suggestedReply.value = ""
+      return
+    }
+  }
+)
+
 const easyFormProps: TTEasyForm = {
   hasSubmitButton: true,
   submitButtonLabel: $t("submit"),
-  submitCallback,
+  submitCallback: interceptSubmit, // <--- HOOKED TO STRICT INTERCEPTOR
   blurOnSubmit: true,
   data: [
     {
       state: easyFormState,
       model: "text",
       type: "textarea",
-      placeholder: $t("text"),
+      placeholder: "Enter text...",
+      classes: "toxicity-textarea",
       maxlength: 300,
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
@@ -118,7 +413,6 @@ const easyFormProps: TTEasyForm = {
       model: "medias",
       type: "file",
       placeholder: $t("imageBoxes"),
-      // accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
       isMultipleFile: true,
       maxNumberOfFile: 4,
       quadLayout: true,
@@ -135,52 +429,19 @@ const easyFormProps: TTEasyForm = {
 }
 
 const popup = ref()
-
 const easyForm = ref()
 
-// ポップアップを開いた際のUX改善処置
 watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
   if (!value) return
   setTimeout(() => {
-    // 「メンションを送る」使用時の対策
     if (props.text) easyFormState.text = `${props.text} ${easyFormState.text}`
-
-    // 「リンクカードにする」使用時の対策
     if (props.url) easyFormState.url = props.url
-
-    // プレビューリンクカード
     PreviewLinkCardFeature.execute()
-
     popup.value?.scrollToTop()
     easyForm.value?.setFocus()
   }, 0)
 })
 
-// get current username safely
-const currentUserLabel = computed(() => (
-  (mainState.userProfile?.displayName?.trim() ||
-   mainState.atp.session?.handle?.trim() ||
-   mainState.atp.session?.did ||
-   "(unknown)")
-))
-
-// logging user input text with timestamp and user info
-const debouncedWatch = debounce((val: string) => {
-  const logEntry = {
-    user: currentUserLabel.value,
-    timestamp: new Date().toISOString(),
-    text: val
-  }
-  console.log(JSON.stringify(logEntry, null, 2))
-}, 500)
-
-watch(() => easyFormState.text, debouncedWatch);
-
-onBeforeUnmount(() => {
-  debouncedWatch.cancel()
-})
-
-// D&D用処置
 watch(() => props.fileList, (value?: FileList) => {
   const files = value != null ? Array.from(value) : []
   files.unshift(...easyFormState.medias)
@@ -189,23 +450,8 @@ watch(() => props.fileList, (value?: FileList) => {
   onChangeImage()
 })
 
-onMounted(async () => {
-  if (props.fileList != null) {
-    easyFormState.medias = Array.from(props.fileList)
-  }
-  onInputUrl()
-  onChangeImage()
-
-  // 動画ファイルのアップロード権限と各種リミットの取得
-  const videoLimits = await mainState.atp.fetchVideoLimits()
-  if (videoLimits instanceof Error) {
-    state.videoLimits = undefined
-  } else {
-    state.videoLimits = videoLimits
-  }
-})
-
 async function close () {
+  moderationMode.value = null; // Reset mode
   emit("closeSendPostPopup", false, true)
 }
 
@@ -214,125 +460,26 @@ async function reset () {
     title: $t("sendPostReset"),
     text: $t("sendPostResetMessage"),
   })
-  if (!result) {
-    return
-  }
+  if (!result) return
   emit("closeSendPostPopup", false, false)
   await nextTick()
+  moderationMode.value = null; // Reset mode
   mainState.openSendPostPopup({
     type: "post",
     post: props.post,
   })
 }
 
-async function submitCallback () {
-  Util.blurElement()
-
-  // 空ポストの確認ポップアップを表示
-  if (easyFormState.text.trim() === "" &&
-      easyFormState.medias.length === 0 &&
-      easyFormState.url.trim() === ""
-  ) {
-    const result = await mainState.openConfirmationPopup({
-      title: $t("emptyPostConfirmation"),
-      text: $t("emptyPostConfirmationMessage"),
-    })
-    if (!result) {
-      return
-    }
-  }
-
-  // 送信中であれば中断
-  if (mainState.sendPostPopupProcessing) {
-    return
-  }
-
-  // 動画の aspectRatio 対応
-  // WANT: `_videoAspectRatio` の注入なしで換装したい
-  const videoSizes = (easyForm.value?.getVideoSizes() ?? [[]])[0]
-  easyFormState.medias.forEach((media, index) => {
-    (media as any)._videoAspectRatio = videoSizes[index]
-  })
-
-  // ポップアップを閉じる
-  close()
-
-  mainState.sendPostPopupProcessing = true
-  try {
-    const result = await mainState.atp.createPost({
-      ...easyFormState,
-      type: props.type,
-      post: props.post,
-      createdAt: state.postDatePopupDate,
-      languages: mainState.currentSetting.postLanguages,
-      labels: state.labels,
-      lightning: mainState.currentSetting.lightning,
-      listMentionDids: mainState.listMentionPopupProps.dids,
-    })
-    if (result instanceof Error) {
-      mainState.openSendPostPopup()
-      mainState.openErrorPopup($t(result.message), "SendPostPopup/submitCallback")
-    } else {
-      // Postgate の適用
-      if (!state.draftReactionControl.postgateAllow) {
-        const responseOfPostgate = await mainState.atp.updatePostgate(
-          result.uri,
-          state.draftReactionControl.postgateAllow
-        )
-        if (responseOfPostgate instanceof Error) {
-          mainState.openErrorPopup(responseOfPostgate, "SendPostPopup/submitCallback")
-          return
-        }
-      }
-
-      // Threadgate の適用
-      if (state.draftReactionControl.threadgateAction !== "none") {
-        const responseOfThreadgate = await mainState.atp.updateThreadgate(
-          result.uri,
-          state.draftReactionControl.allowMention,
-          state.draftReactionControl.allowFollower,
-          state.draftReactionControl.allowFollowing,
-          state.draftReactionControl.listUris
-        )
-        if (responseOfThreadgate instanceof Error) {
-          mainState.openErrorPopup(responseOfThreadgate, "SendPostPopup/submitCallback")
-          return
-        }
-      }
-
-      // ポスト送信後にフォロー中フィードを更新
-      mainState.fetchTimeline("new")
-
-      emit("closeSendPostPopup", true, false)
-    }
-  } finally {
-    mainState.sendPostPopupProcessing = false
-  }
-}
-
 function onInputUrl () {
-  // プレビューリンクカード
   PreviewLinkCardFeature.threshold()
-
-  // リンクカードの画像添付チェックボックスの出し分け
-  const urlHasImageItem = easyFormProps.data.find((item: TTEasyFormItem) => {
-    return item.model === "urlHasImage"
-  })
+  const urlHasImageItem = easyFormProps.data.find((item: TTEasyFormItem) => item.model === "urlHasImage")
   if (urlHasImageItem != null) {
     urlHasImageItem.display = !!easyFormState.url && easyFormState.medias.length === 0
   }
-
-  // GIF画像の動画変換チェックボックスの出し分け
-  const shouldConvertGifToVideoItem = easyFormProps.data.find((item: TTEasyFormItem) => {
-    return item.model === "shouldConvertGifToVideo"
-  })
+  const shouldConvertGifToVideoItem = easyFormProps.data.find((item: TTEasyFormItem) => item.model === "shouldConvertGifToVideo")
   if (shouldConvertGifToVideoItem != null) {
-    shouldConvertGifToVideoItem.display = easyFormState.medias.some((media) => {
-      return media.type === "image/gif"
-    })
+    shouldConvertGifToVideoItem.display = easyFormState.medias.some((media) => media.type === "image/gif")
   }
-
-  // TODO: 要修正
   easyForm.value?.forceUpdate()
 }
 
@@ -343,15 +490,10 @@ function onClickClearButton () {
 }
 
 function onChangeImage () {
-  // ファイルがひとつ以上選択されているか否かでリンクカード／フィードカードの表示状態を切り替える
-  const urlItem = easyFormProps.data.find((item: TTEasyFormItem) => {
-    return item.model === "url"
-  })
+  const urlItem = easyFormProps.data.find((item: TTEasyFormItem) => item.model === "url")
   if (urlItem == null) return
   urlItem.display = easyFormState.medias.length === 0
 
-  // alt の更新
-  // TODO: 意図しない alt が削除される不具合を修正すること
   easyFormState.alts.splice(easyFormState.medias.length)
   easyFormProps.data.splice(
     0,
@@ -373,7 +515,6 @@ function onChangeImage () {
       autoResizeTextarea: true,
     })
   })
-
   onInputUrl()
 }
 
@@ -383,9 +524,7 @@ function openReactionControlPopup () {
     isReply: false,
     draftReactionControl: state.draftReactionControl,
     onClosed (params?: TICloseReactionControlPopupProps) {
-      if (params == null) {
-        return
-      }
+      if (params == null) return
       state.draftReactionControl.postgateAllow = params.postgateAllow
       state.draftReactionControl.threadgateAction = params.threadgateAction
       switch (state.draftReactionControl.threadgateAction) {
@@ -400,11 +539,7 @@ function openReactionControlPopup () {
           state.draftReactionControl.allowMention = params.allowMention ?? false
           state.draftReactionControl.allowFollower = params.allowFollower ?? false
           state.draftReactionControl.allowFollowing = params.allowFollowing ?? false
-          state.draftReactionControl.listUris.splice(
-            0,
-            state.draftReactionControl.listUris.length,
-            ...(params.listUris ?? [])
-          )
+          state.draftReactionControl.listUris.splice(0, state.draftReactionControl.listUris.length, ...(params.listUris ?? []))
           break
         }
       }
@@ -416,10 +551,7 @@ function openListMentionPopup () {
   mainState.openListMentionPopup()
 }
 
-// マイワード
-
 let textareaSelectionStart = 0
-
 mainState.myWordPopupCallback = (myWord: string) => {
   const textarea = getTextarea()
   if (textarea != null) {
@@ -443,16 +575,10 @@ function onBlurOrInputText () {
   }
 }
 
-function getTextarea (): null | HTMLTextAreaElement {
-  return document.querySelector("#easy-form--default__0")
-}
-
-// 隠し機能のトグル
 function toggleHiddenFeatures () {
   state.hiddenFeaturesDisplay = !state.hiddenFeaturesDisplay
 }
 
-// プレビューリンクカード
 const PreviewLinkCardFeature: {
   timer?: any
   loading: Ref<boolean>
@@ -461,47 +587,32 @@ const PreviewLinkCardFeature: {
   execute: () => Promise<void>
 } = {
   timer: undefined,
-
   loading: ref(false),
-
   external: reactive({
     uri: "",
     title: undefined,
     description: undefined,
     thumb: undefined,
   }),
-
   threshold () {
-    if (this.timer != null) {
-      clearTimeout(this.timer)
-    }
+    if (this.timer != null) clearTimeout(this.timer)
     this.timer = setTimeout(() => {
       this.timer = undefined
       this.execute()
     }, 1000)
   },
-
   async execute () {
-    if (this.external.uri === easyFormState.url) {
-      return
-    }
-
-    // `http` or `https` から始まるURLライクな文字列のみ処理
+    if (this.external.uri === easyFormState.url) return
     if (!easyFormState.url.match(/https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/)) {
       this.external.uri = ""
       return
     }
-
     this.external.uri = easyFormState.url
     this.external.title = undefined
     this.external.description = undefined
     this.external.thumb = undefined
     this.loading.value = true
-    const external = await Util.parseOgp(
-      mainState.atp,
-      easyFormState.url,
-      false
-    )
+    const external = await Util.parseOgp(mainState.atp, easyFormState.url, false)
     this.loading.value = false
     if (external instanceof Error) {
       this.external.uri = ""
@@ -510,8 +621,6 @@ const PreviewLinkCardFeature: {
     this.external.uri = external.uri
     this.external.title = external.title
     this.external.description = external.description
-
-    // プロキシサーバから送られたプレビュー用イメージを設定
     this.external.thumb = external.preview
   },
 }
@@ -519,6 +628,7 @@ const PreviewLinkCardFeature: {
 
 <template>
   <Popup
+    :key="post?.uri || type + '-new'"
     class="send-post-popup"
     ref="popup"
     :hasCloseButton="true"
@@ -527,20 +637,11 @@ const PreviewLinkCardFeature: {
     @close="close"
   >
     <template #header>
-      <!-- ヘルプボタン -->
-      <button
-        type="button"
-        @click.stop="mainState.openHtmlPopup('post')"
-      >
+      <button type="button" @click.stop="mainState.openHtmlPopup('post')">
         <SVGIcon name="help" />
       </button>
 
-      <!-- リセットボタン -->
-      <button
-        type="button"
-        class="reset-button"
-        @click.stop="reset"
-      >
+      <button type="button" class="reset-button" @click.stop="reset">
         <SVGIcon name="remove" />
       </button>
 
@@ -548,9 +649,54 @@ const PreviewLinkCardFeature: {
         <SVGIcon :name="type" />
         <span>{{ $t(type) }}</span>
       </h2>
+
+      <div v-if="moderationMode === null" style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+        
+        <button 
+          type="button" 
+          class="button--bordered" 
+          style="border-color: var(--notice-color); color: var(--notice-color); font-size: 0.75rem; padding: 0 8px;"
+          @click.stop="moderationMode = 'SAFE'"
+          title="Safe Submit Mode"
+        >
+          <span>Safe Submit</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="button--bordered" 
+          style="border-color: #2196F3; color: #2196F3; font-size: 0.75rem; padding: 0 8px;"
+          @click.stop="moderationMode = 'REWRITE'"
+          title="Rewrite Mode"
+        >
+          <span>Rewrite</span>
+        </button>
+
+        <button 
+          v-if="type === 'reply'"
+          type="button" 
+          class="button--bordered" 
+          style="border-color: #4CAF50; color: #4CAF50; font-size: 0.75rem; padding: 0 8px;"
+          @click.stop="moderationMode = 'INFO'"
+          title="Info Mode"
+        >
+          <span>Info</span>
+        </button>
+      </div>
+
+      <div v-else style="margin-left: auto; font-size: 0.8rem; font-weight: bold; display: flex; gap: 5px; align-items: center;">
+        <span v-if="moderationMode === 'SAFE'" style="color: var(--notice-color)">Mode: Safe Submit</span>
+        <span v-if="moderationMode === 'REWRITE'" style="color: #2196F3">Mode: Rewrite</span>
+        <span v-if="moderationMode === 'INFO'" style="color: #4CAF50">Mode: Analysis</span>
+        
+        <button type="button" @click.stop="moderationMode = null" style="cursor: pointer; opacity: 0.6;">
+           <SVGIcon name="cross" style="transform: scale(0.7);"/>
+        </button>
+      </div>
+
     </template>
+
     <template #body>
-      <!-- プレビューポスト -->
       <Post
         v-if="type === 'reply' || type === 'quoteRepost'"
         :key="post?.uri"
@@ -561,12 +707,8 @@ const PreviewLinkCardFeature: {
         @keyup.prevent.stop
       />
 
-      <EasyForm
-        v-bind="easyFormProps"
-        ref="easyForm"
-      >
+      <EasyForm v-bind="easyFormProps" ref="easyForm">
         <template #item-content-after-1>
-          <!-- クリアボタン -->
           <button
             type="button"
             class="button--bordered"
@@ -575,8 +717,27 @@ const PreviewLinkCardFeature: {
             <SVGIcon name="cross" />
           </button>
         </template>
+
+        <template #free-0>
+          <div v-if="showSuggestedReply" class="suggested-reply">
+            <div class="suggested-text">Suggested Reply: {{ suggestedReply }}</div>
+            <button @click.prevent="easyFormState.text = suggestedReply">
+              Use this reply
+            </button>
+          </div>
+
+          <div class="toxicity-bar-container" :style="{ '--toxicity-color': `hsl(${(1 - toxicityScore) * 120}, 100%, 30%)` }">
+            <div
+              class="toxicity-bar"
+              :style="{
+                width: `${toxicityScore * 100}%`,
+                backgroundColor: `hsl(${(1 - toxicityScore) * 120}, 100%, 50%)`
+              }"
+            ></div>
+          </div>
+        </template>
+
         <template #free-3>
-          <!-- プレビューリンクカード -->
           <LinkCard
             v-if="
               !!PreviewLinkCardFeature.external.uri &&
@@ -601,7 +762,6 @@ const PreviewLinkCardFeature: {
           </LinkCard>
 
           <div class="button-container">
-            <!-- ポスト言語選択ポップアップトリガー -->
             <button
               class="button--bordered post-language-button"
               @click.prevent="mainState.openPostLanguagesPopup()"
@@ -618,13 +778,8 @@ const PreviewLinkCardFeature: {
               >{{ $t("notSet") }}</b>
             </button>
 
-            <!-- ポストラベル選択ポップアップトリガー -->
-            <LabelButton
-              type="post"
-              :parentState="state"
-            />
+            <LabelButton type="post" :parentState="state" />
 
-            <!-- Threadgate ポップアップトリガー -->
             <button
               class="button--bordered on-off-button"
               :disabled="type === 'reply'"
@@ -635,7 +790,6 @@ const PreviewLinkCardFeature: {
               <b v-if="state.isDraftReactionControlOn">ON</b>
             </button>
 
-            <!-- マイワードポップアップトリガー -->
             <button
               class="button--bordered my-word-button"
               @click.prevent="mainState.openMyWordPopup('select')"
@@ -645,8 +799,8 @@ const PreviewLinkCardFeature: {
             </button>
           </div>
         </template>
+
         <template #after>
-          <!-- 動画アップロード情報 -->
           <div class="video-upload-info">
             <div
               v-if="state.videoLimits != null && !state.videoLimits.canUpload"
@@ -656,23 +810,17 @@ const PreviewLinkCardFeature: {
                 <SVGIcon name="alert" />{{ $t("videoCanNotUpload") }}
               </div>
             </div>
-            <div
-              v-else-if="state.videoLimits?.canUpload"
-              class="textlabel"
-            >
+            <div v-else-if="state.videoLimits?.canUpload" class="textlabel">
               <dl class="textlabel__text">
                 <dt>{{ $t("videoRemainingDailyNumber") }}</dt>
                 <dd>{{ (state.videoLimits.remainingDailyVideos ?? 0).toLocaleString() }}</dd>
               </dl>
               <dl class="textlabel__text">
                 <dt>{{ $t("videoRemainingDailyBytes") }}</dt>
-                <dd>{{ (((state.videoLimits.remainingDailyBytes ?? 0) / 1000 / 1000 / 1000).toFixed(2)).toLocaleString() }} GB</dd>
+                <dd>{{ (((state.videoLimits.remainingDailyBytes ?? 0) / 1_000_000_000).toFixed(2)).toLocaleString() }} GB</dd>
               </dl>
             </div>
-            <div
-              v-else
-              class="textlabel"
-            >
+            <div v-else class="textlabel">
               <dl class="textlabel__text">
                 <dt>&emsp;</dt>
                 <dd>&emsp;</dd>
@@ -680,7 +828,6 @@ const PreviewLinkCardFeature: {
             </div>
           </div>
 
-          <!-- 隠し機能 -->
           <div class="hidden-features">
             <button
               class="button--bordered hidden-features-toggle"
@@ -691,7 +838,6 @@ const PreviewLinkCardFeature: {
             </button>
 
             <template v-if="state.hiddenFeaturesDisplay">
-              <!-- ポスト日時選択ポップアップトリガー -->
               <button
                 class="button--bordered post-date-button"
                 @click.prevent="mainState.openPostDatePopup"
@@ -701,7 +847,6 @@ const PreviewLinkCardFeature: {
                 <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
               </button>
 
-              <!-- リストメンションポップアップトリガー -->
               <button
                 class="button--bordered on-off-button"
                 @click.prevent="openListMentionPopup"
@@ -720,45 +865,52 @@ const PreviewLinkCardFeature: {
 
 <style lang="scss" scoped>
 .send-post-popup {
-  // ポスト種別に応じて配色を変更
   --type-color: var(--fg-color);
+
   &[data-type="reply"] {
     --type-color: var(--post-color);
   }
+
   &[data-type="quoteRepost"] {
     --type-color: var(--share-color);
   }
 
   &:deep() {
-    // ポップアップとテキストエリアを縦に最大化
-    .popup,
-    .popup-body,
-    .easy-form,
-    .easy-form__body,
-    .easy-form__body > dl:first-child,
-    .easy-form__body > dl:first-child > dd {
-      flex-grow: 1;
-    }
+    flex-grow: 1;
 
     .popup {
       max-height: $router-view-width;
-    }
-
-    .popup-header {
-      & > h2 {
-        margin-right: 3rem;
-
-        & > .svg-icon {
-          fill: rgb(var(--type-color));
-        }
-      }
     }
 
     .popup-body {
       padding-top: 0;
     }
 
-    // プレビューポスト
+    .popup-header > h2 {
+      margin-right: 1rem; // Adjusted for space
+
+      .svg-icon {
+        fill: rgb(var(--type-color));
+      }
+    }
+
+    .easy-form__body {
+      grid-gap: 0.5rem;
+
+      :deep(.easy-form__body dl > dd > textarea),
+      :deep(.easy-form__body dl > dd > textarea:focus),
+      :deep(.easy-form__body dl > dd > textarea:hover) {
+        color: var(--toxicity-color) !important;
+        transition: color 0.2s ease;
+      }
+
+      :deep(.toxicity-textarea),
+      :deep(.toxicity-textarea textarea) {
+        color: var(--toxicity-color) !important;
+        transition: color 0.2s ease;
+      }
+    }
+
     .post[data-position="preview"] {
       margin-top: 1rem;
 
@@ -776,39 +928,30 @@ const PreviewLinkCardFeature: {
       }
     }
 
-    .easy-form__body {
-      grid-gap: 0.5rem;
+    .textarea {
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-left-style: none;
+      border-right-style: none;
+      border-radius: 0;
+      margin: 0 -1.5rem;
+      transition: color 0.2s ease;
     }
 
-    // クリアボタン
     .easy-form dl[data-name="url"] dd {
       display: flex;
       flex-direction: row;
     }
 
-    .textarea {
-      // テキストエリアの自動伸縮時に border-width が影響する点に注意
-      border-top-color: transparent;
-      border-bottom-color: transparent;
-      border-left-style: none;
-      border-right-style: none;
-
-      border-radius: 0;
-      margin: 0 -1.5rem;
-    }
-
-    // 送信ボタン
     .submit-button {
       --fg-color: var(--type-color);
     }
   }
 
-  // ヘルプボタン
   .svg-icon--help {
     font-size: 1.25rem;
   }
 
-  // リセットボタン
   .reset-button > .svg-icon {
     --fg-color: var(--notice-color);
   }
@@ -817,7 +960,6 @@ const PreviewLinkCardFeature: {
     font-size: 0.75rem;
   }
 
-  // 動画アップロード情報
   .video-upload-info {
     display: flex;
     flex-direction: column;
@@ -831,7 +973,7 @@ const PreviewLinkCardFeature: {
       flex-wrap: wrap;
       grid-gap: 0.5rem;
 
-      & > dt {
+      dt {
         color: rgb(var(--fg-color), 0.5);
       }
     }
@@ -847,43 +989,44 @@ const PreviewLinkCardFeature: {
       overflow: hidden;
       min-height: 2.625rem;
 
-      & > .svg-icon {
+      .svg-icon {
         font-size: 0.875rem;
       }
 
-      & > span,
-      & > b {
+      span,
+      b {
         text-overflow: ellipsis;
       }
-      & > span {
+
+      span {
         white-space: nowrap;
       }
-      & > b {
+
+      b {
         font-weight: bold;
         line-height: var(--line-height-high);
         word-break: break-all;
       }
     }
-    .post-language-button {
-      &__set {
-        color: rgb(var(--fg-color));
-        text-transform: uppercase;
-      }
 
-      &__not-set {
-        color: rgb(var(--notice-color));
-      }
+    .post-language-button__set {
+      color: rgb(var(--fg-color));
+      text-transform: uppercase;
+    }
+
+    .post-language-button__not-set {
+      color: rgb(var(--notice-color));
     }
 
     .on-off-button > b {
       color: rgb(var(--notice-color));
     }
+
     .post-date-button > b {
       color: rgb(var(--fg-color));
     }
   }
 
-  // 隠し機能
   .hidden-features {
     display: flex;
     flex-wrap: wrap;
@@ -893,6 +1036,41 @@ const PreviewLinkCardFeature: {
     &-toggle {
       border-color: transparent;
     }
+  }
+  
+  .suggested-reply {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--notice-color);
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    font-size: 0.875rem;
+
+    .suggested-text {
+      margin-bottom: 0.25rem;
+      font-style: italic;
+      color: black; 
+    }
+
+    button {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+    }
+  }
+
+  .toxicity-bar-container {
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    margin-top: 0.25rem;
+    overflow: hidden;
+  }
+
+  .toxicity-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.2s ease, background-color 0.2s ease;
   }
 }
 </style>
