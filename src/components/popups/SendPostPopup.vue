@@ -56,8 +56,7 @@ const lastLoggedText = ref(""); // Tracks the last text we successfully saved to
 // =========================================================
 
 async function logActivityToBackend(actionType: string, metaData: any = {}) {
-  // 1. LOGIC CHANGE: Prevent duplicate autosaves
-  // If this is an autosave AND the text hasn't changed since the last save, abort.
+  // 1. DEDUPLICATION LOGIC: 
   if (actionType === 'DRAFT_AUTOSAVE' && easyFormState.text === lastLoggedText.value) {
       return; 
   }
@@ -65,7 +64,23 @@ async function logActivityToBackend(actionType: string, metaData: any = {}) {
   // Get current user DID from mainState
   const userDid = mainState.atp.session?.did || "unknown_user";
 
+  // 2. GET PARENT POST INFO (If replying)
+  let parentData = {};
+  if (props.type === 'reply' && props.post) {
+      const parentCid = props.post.cid;
+      const parentText = props.post.record?.text || "";
+      parentData = { parent_cid: parentCid, parent_text: parentText };
+  }
+
   try {
+    // 3. Update the tracker immediately
+    if (actionType === 'DRAFT_AUTOSAVE' || actionType === 'POST_SUBMITTED' || actionType === 'POST_PUBLISHED') {
+        lastLoggedText.value = easyFormState.text;
+    }
+
+    // Merge metadata with parent info
+    const finalMeta = { ...metaData, ...parentData };
+
     await fetch('http://localhost:8000/log_activity', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -74,12 +89,9 @@ async function logActivityToBackend(actionType: string, metaData: any = {}) {
         action_type: actionType,
         input_text: easyFormState.text,
         moderation_mode: moderationMode.value || "STANDARD",
-        meta: metaData
+        meta: finalMeta
       })
     });
-    
-    // Update the last logged text reference after a successful save
-    lastLoggedText.value = easyFormState.text;
 
   } catch (err) {
     console.warn("Failed to log activity", err);
@@ -183,28 +195,63 @@ async function fetchToxicSpans(textToCheck: string) {
 }
 
 // =========================================================
-// ===       INFO MODE                                   ===
+// ===       INFO MODE (UPDATED FOR FULL THREAD)         ===
 // =========================================================
 
 async function activateInfoMode() {
   moderationMode.value = 'INFO';
+  
   if (props.type === 'reply' && props.post) {
-    const parentText = props.post?.reply?.parent?.record?.text ?? props.post?.record?.text ?? "";
-    if (!parentText.trim()) return;
-
     isFetchingInfo.value = true;
     contextualInfo.value = ""; 
 
     try {
-      const data = await apiCall("infoMessage", { text: parentText, context: "Social Media Reply Context" });
-      contextualInfo.value = data.contextual_info;
+      // 1. FETCH FULL THREAD CONTEXT
+      // depth=0 (no children), parentHeight=1000 (MAX allowed ancestors to reach root)
+      const response = await mainState.atp.agent.getPostThread({
+        uri: props.post.uri,
+        depth: 0,
+        parentHeight: 1000 // <--- Gets the full chain up to the root
+      });
 
-      // LOG
-      logActivityToBackend("INFO_REQUESTED", { parent_post: parentText });
+      if (!response.success) throw new Error("Failed to fetch thread");
+
+      // 2. BUILD CONVERSATION TRANSCRIPT
+      // Traverse from current post (leaf) up to root
+      let history: string[] = [];
+      let currentPost: any = response.data.thread;
+
+      while (currentPost) {
+        const handle = currentPost.post?.author?.handle || "Unknown";
+        const text = currentPost.post?.record?.text || "[Image/Media]";
+        
+        // Prepend to history so the root is at the top
+        history.unshift(`User @${handle}: "${text}"`);
+        
+        currentPost = currentPost.parent;
+      }
+
+      const fullTranscript = history.join("\n\n");
+
+      // 3. SEND TRANSCRIPT TO BACKEND
+      const data = await apiCall("infoMessage", { 
+          text: fullTranscript, 
+          context: "Bluesky Conversation Thread" 
+      });
+      
+      contextualInfo.value = data.contextual_info;
+      logActivityToBackend("INFO_REQUESTED", { thread_length: history.length });
 
     } catch (err) {
-      console.error("Failed to fetch info:", err);
-      contextualInfo.value = "Could not fetch context info at this time.";
+      console.error("Failed to fetch info context:", err);
+      // Fallback to just the immediate parent if thread fetch fails
+      const fallbackText = props.post.record?.text || "";
+      if(fallbackText) {
+           const data = await apiCall("infoMessage", { text: fallbackText, context: "Social Media Reply (Fallback)" });
+           contextualInfo.value = data.contextual_info;
+      } else {
+           contextualInfo.value = "Could not fetch conversation context.";
+      }
     } finally {
       isFetchingInfo.value = false;
     }
@@ -248,9 +295,7 @@ async function interceptSubmit() {
       const isToxic = score > 0.50;
 
       if (isToxic) {
-        // LOG Block
         logActivityToBackend("SUBMIT_BLOCKED_SAFE_MODE", { score: score });
-
         mainState.sendPostPopupProcessing = false; 
         const confirm = await mainState.openConfirmationPopup({
           title: "⚠️ Toxicity Detected",
@@ -296,8 +341,6 @@ async function interceptSubmit() {
       } 
     }
 
-    // If we reach here, proceed to submit
-    logActivityToBackend("POST_SUBMITTED", { final_mode: moderationMode.value });
     await executeActualSubmit();
 
   } catch (err) {
@@ -337,25 +380,17 @@ async function executeActualSubmit() {
     })
     
     if (result instanceof Error) {
-      // Error handling
       mainState.openSendPostPopup()
       mainState.openErrorPopup($t(result.message), "SendPostPopup/submitCallback")
-      
-      // LOG ERROR
       logActivityToBackend("POST_SUBMISSION_FAILED", { error: result.message });
     } else {
       // --- SUCCESS BLOCK ---
-      
-      // 2. The 'result' object contains the CID and URI immediately!
-      // result usually looks like: { uri: "at://...", cid: "bafyre..." }
-      
       await logActivityToBackend("POST_PUBLISHED", { 
           final_mode: moderationMode.value || "STANDARD",
-          cid: result.cid, // <--- HERE IS THE CID
-          uri: result.uri  // <--- HERE IS THE URI
+          cid: result.cid, 
+          uri: result.uri 
       });
 
-      // 3. Handle Postgates / Threadgates (Existing logic)
       if (!state.draftReactionControl.postgateAllow) {
         await mainState.atp.updatePostgate(result.uri, state.draftReactionControl.postgateAllow)
       }
@@ -368,7 +403,6 @@ async function executeActualSubmit() {
           state.draftReactionControl.listUris
         )
       }
-      
       mainState.fetchTimeline("new")
       emit("closeSendPostPopup", true, false)
     }
@@ -493,13 +527,12 @@ watch(
   () => easyFormState.text,
   async (newText) => {
     
-    // --- A. AUTO-LOGGING (2 seconds inactivity) ---
+    // --- A. AUTO-LOGGING (1 second inactivity) ---
     clearTimeout(autoLogTimer);
     if (newText.trim()) {
       autoLogTimer = setTimeout(() => {
-        // This call will now check if newText is different from lastLoggedText
         logActivityToBackend("DRAFT_AUTOSAVE", { length: newText.length });
-      }, 2000); // 2 seconds
+      }, 1000); 
     }
 
     // --- B. REWRITE MODE ---
@@ -915,7 +948,7 @@ const PreviewLinkCardFeature: {
 
         <template #free-0>
           <div v-if="liveRewriteSuggestion || isFetchingLiveRewrite" class="live-rewrite-box">
-             <div v-if="isFetchingLiveRewrite" class="rewrite-loader">Checking toxicity...</div>
+             <div v-if="isFetchingLiveRewrite" class="rewrite-loader">Generating...</div>
              <div v-else class="rewrite-content">
                 <strong>✨ Suggested Rewrite:</strong>
                 <p>"{{ liveRewriteSuggestion }}"</p>
@@ -1362,6 +1395,8 @@ const PreviewLinkCardFeature: {
       padding: 0 2px;
       border-radius: 2px;
       transition: background-color 0.2s ease;
+      color: #000; /* Force black text */
+      font-weight: 600; /* Make it bold */
     }
   }
 }
