@@ -11,7 +11,7 @@ from huggingface_hub import InferenceClient
 from dotenv import load_dotenv, find_dotenv
 
 # Database Imports
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text, JSON
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text, JSON, event
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -25,7 +25,20 @@ logger = logging.getLogger("uvicorn.error")
 # DATABASE SETUP
 # ==============================================================================
 SQLALCHEMY_DATABASE_URL = "sqlite:///./user_activity.db" 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, 
+    connect_args={"check_same_thread": False, "timeout": 30}
+)
+
+# Enable Write-Ahead Logging (WAL) for better concurrency
+@event.listens_for(engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA journal_mode=WAL")
+    cursor.execute("PRAGMA synchronous=NORMAL")
+    cursor.close()
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -36,7 +49,9 @@ class ActivityLog(Base):
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
     action_type = Column(String)                
     input_text = Column(Text)                   
-    moderation_mode = Column(String)            
+    moderation_mode = Column(String)
+    # --- NEW COLUMN HERE ---
+    popup_session_id = Column(String, index=True)            
     metadata_json = Column(JSON)                
 
 Base.metadata.create_all(bind=engine)
@@ -96,6 +111,8 @@ class LogRequest(BaseModel):
     user_did: str
     action_type: str
     input_text: Optional[str] = ""
+    # --- NEW FIELD HERE ---
+    popup_session_id: Optional[str] = None
     moderation_mode: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
 
@@ -108,6 +125,7 @@ def save_log_to_db(log_data: LogRequest):
     print("\n" + "="*50)
     print(f"📝 NEW ACTIVITY LOG: {log_data.action_type}")
     print(f"👤 User: {log_data.user_did}")
+    print(f"🆔 Session: {log_data.popup_session_id}") 
     
     if log_data.meta:
         p_cid = log_data.meta.get("parent_cid")
@@ -129,6 +147,8 @@ def save_log_to_db(log_data: LogRequest):
             action_type=log_data.action_type,
             input_text=log_data.input_text,
             moderation_mode=log_data.moderation_mode,
+            # --- SAVE NEW COLUMN ---
+            popup_session_id=log_data.popup_session_id,
             metadata_json=log_data.meta
         )
         db.add(db_log)
@@ -168,7 +188,6 @@ async def non_toxic_rewriting(req: TextRequest):
     if not HF_TOKEN:
         raise HTTPException(status_code=503, detail="HF_TOKEN not set.")
     try:
-        # UPDATED: Use chat_completion for Instruct models
         messages = [
             {
                 "role": "system", 
@@ -187,7 +206,6 @@ async def non_toxic_rewriting(req: TextRequest):
             temperature=0.1
         )
         
-        # Parse the structured chat response
         raw_content = response.choices[0].message.content
         
         clean_text = raw_content.strip().strip('"')
@@ -205,10 +223,8 @@ async def provide_info_message(req: TextRequest):
     if not HF_TOKEN:
         raise HTTPException(status_code=503, detail="HF_TOKEN not set.")
     try:
-        # The input 'req.text' will now contain the full thread history from Vue
         thread_history = req.text 
         
-        # UPDATED: Use chat_completion for Instruct models
         messages = [
             {
                 "role": "system", 
