@@ -51,6 +51,9 @@ let spansDebounceTimer: any = null;
 let autoLogTimer: any = null;
 const lastLoggedText = ref(""); // Tracks the last text we successfully saved to DB
 
+// --- NEW: SESSION TRACKING ---
+const popupSessionId = ref("");
+
 // =========================================================
 // ===       LOGGING HELPER                              ===
 // =========================================================
@@ -78,8 +81,12 @@ async function logActivityToBackend(actionType: string, metaData: any = {}) {
         lastLoggedText.value = easyFormState.text;
     }
 
-    // Merge metadata with parent info
-    const finalMeta = { ...metaData, ...parentData };
+    // Merge metadata with parent info AND Session ID
+    const finalMeta = { 
+      ...metaData, 
+      ...parentData,
+      popup_session_id: popupSessionId.value // <--- Attach the unique ID to every log
+    };
 
     await fetch('http://localhost:8000/log_activity', {
       method: 'POST',
@@ -631,8 +638,21 @@ const easyFormProps: TTEasyForm = {
 const popup = ref()
 const easyForm = ref()
 
+// --- WATCHER 3 (CRITICAL FIX): Monitor Visibility for Open/Close events ---
 watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
   if (!value) return
+  
+  // 1. Generate NEW Session ID every time it opens
+  const userDid = mainState.atp.session?.did || "unknown_user";
+  const timestamp = Date.now();
+  popupSessionId.value = `${userDid}_${timestamp}`;
+
+  // 2. Log the OPEN event
+  logActivityToBackend("POPUP_OPENED", { 
+    timestamp_ms: timestamp,
+    popup_session_id: popupSessionId.value
+  });
+
   setTimeout(() => {
     if (props.text) easyFormState.text = `${props.text} ${easyFormState.text}`
     if (props.url) easyFormState.url = props.url
@@ -651,6 +671,12 @@ watch(() => props.fileList, (value?: FileList) => {
 })
 
 async function close () {
+  // --- LOG CLOSING WITH SAME SESSION ID ---
+  // Using the ID generated at opening allows us to pair "Open" and "Close" events in the DB
+  logActivityToBackend("POPUP_CLOSED", { 
+    duration_ms: Date.now() - Number(popupSessionId.value.split('_').pop() || Date.now()) 
+  });
+
   moderationMode.value = null; 
   contextualInfo.value = ""; 
   liveRewriteSuggestion.value = "";
