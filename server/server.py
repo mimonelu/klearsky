@@ -168,26 +168,29 @@ async def non_toxic_rewriting(req: TextRequest):
     if not HF_TOKEN:
         raise HTTPException(status_code=503, detail="HF_TOKEN not set.")
     try:
-        # MANUAL QWEN 2.5 PROMPT
-        prompt = (
-            "<|im_start|>system\n"
-            "You are a helpful moderation assistant. Rewrite the user's text to be non-toxic, polite, and constructive. "
-            "Keep the original meaning. Do NOT output conversational filler like 'Here is the rewrite'. Output ONLY the rewritten text.<|im_end|>\n"
-            "<|im_start|>user\n"
-            f"Rewrite this text: \"{req.text}\"<|im_end|>\n"
-            "<|im_start|>assistant\n"
-        )
+        # UPDATED: Use chat_completion for Instruct models
+        messages = [
+            {
+                "role": "system", 
+                "content": (
+                    "You are a helpful moderation assistant. Rewrite the user's text to be non-toxic, polite, and constructive. "
+                    "Keep the original meaning. Do NOT output conversational filler like 'Here is the rewrite'. Output ONLY the rewritten text."
+                )
+            },
+            {"role": "user", "content": f"Rewrite this text: \"{req.text}\""}
+        ]
         
-        response = client.text_generation(
+        response = client.chat_completion(
             model="Qwen/Qwen2.5-7B-Instruct",
-            prompt=prompt,
-            max_new_tokens=200,
-            temperature=0.1,
-            stop_sequences=["<|im_end|>"], 
-            return_full_text=False
+            messages=messages,
+            max_tokens=200,
+            temperature=0.1
         )
         
-        clean_text = response.strip().strip('"')
+        # Parse the structured chat response
+        raw_content = response.choices[0].message.content
+        
+        clean_text = raw_content.strip().strip('"')
         clean_text = re.sub(r'^(Here is|The rewritten|Rewritten|Polite version|Output):', '', clean_text, flags=re.IGNORECASE).strip()
 
         return RewritingResponse(rewritten_text=clean_text)
@@ -205,27 +208,29 @@ async def provide_info_message(req: TextRequest):
         # The input 'req.text' will now contain the full thread history from Vue
         thread_history = req.text 
         
-        prompt = (
-            "<|im_start|>system\n"
-            f"You are a helpful communication coach. Context: {req.context or 'Social Media'}. "
-            "Read the conversation thread below. The user is about to reply to the LAST message. "
-            "Provide 2-3 sentences of context, identifying any underlying conflict, tone, or misunderstanding, to help the user write a calm and informed reply.<|im_end|>\n"
-            "<|im_start|>user\n"
-            f"Conversation Thread:\n{thread_history}<|im_end|>\n"
-            "<|im_start|>assistant\n"
-        )
+        # UPDATED: Use chat_completion for Instruct models
+        messages = [
+            {
+                "role": "system", 
+                "content": (
+                    f"You are a helpful communication coach. Context: {req.context or 'Social Media'}. "
+                    "Read the conversation thread below. The user is about to reply to the LAST message. "
+                    "Provide 2-3 sentences of context, identifying any underlying conflict, tone, or misunderstanding, to help the user write a calm and informed reply."
+                )
+            },
+            {"role": "user", "content": f"Conversation Thread:\n{thread_history}"}
+        ]
         
-        response = client.text_generation(
+        response = client.chat_completion(
             model="Qwen/Qwen2.5-7B-Instruct",
-            prompt=prompt,
-            max_new_tokens=300,
-            temperature=0.5,
-            stop_sequences=["<|im_end|>"],
-            return_full_text=False
+            messages=messages,
+            max_tokens=300,
+            temperature=0.5
         )
         
-        info = response.strip()
+        info = response.choices[0].message.content.strip()
         return InfoResponse(contextual_info=info)
+
     except Exception as e:
         logger.error(f"Info generation failed: {repr(e)}")
         raise HTTPException(status_code=500, detail=f"API Error: {str(e)}")
