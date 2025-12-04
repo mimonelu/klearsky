@@ -39,6 +39,7 @@ import database from "@/svg/database.svg?raw"
 import drag from "@/svg/drag.svg?raw"
 import earth from "@/svg/earth.svg?raw"
 import earthOff from "@/svg/earth-off.svg?raw"
+import easterEgg from "@/svg/egg-easter.svg?raw"
 import edit from "@/svg/edit.svg?raw"
 import email from "@/svg/email.svg?raw"
 import feed from "@/svg/feed.svg?raw"
@@ -153,6 +154,7 @@ const icons: { [k: string]: string } = {
   drag,
   earth,
   earthOff,
+  easterEgg,
   edit,
   email,
   feed,

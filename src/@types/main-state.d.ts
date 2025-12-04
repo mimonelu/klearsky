@@ -311,6 +311,15 @@ interface MainState {
   openPostThreadSortPopover: Function
   closePostThreadSortPopover: () => void
 
+  // ポップオーバー - イースターエッグポップオーバー
+  easterEggPopoverProps: {
+    display: boolean
+  }
+  easterEggPopoverSelector?: string | HTMLElement
+  easterEggPopoverCallback?: Function
+  openEasterEggPopover: Function
+  closeEasterEggPopover: () => void
+
   // ポップオーバー - チャットルームポップオーバー
   chatConvoPopoverProps: {
     display: boolean

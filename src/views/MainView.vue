@@ -20,6 +20,7 @@ import CustomBookmarkPopup from "@/components/popups/CustomBookmarkPopup.vue"
 import CustomBookmarkManagementPopup from "@/components/popups/CustomBookmarkManagementPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import DropFiles from "@/components/next/DropFiles/DropFiles.vue"
+import EasterEggPopover from "@/components/popovers/EasterEggPopover.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
 import FeedCardPopover from "@/components/popovers/FeedCardPopover.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
@@ -924,6 +925,13 @@ function changeSetting () {
       v-if="state.postThreadSortPopoverProps.display"
       v-bind="state.postThreadSortPopoverProps"
       @close="state.closePostThreadSortPopover"
+    />
+
+    <!-- イースターエッグポップオーバー -->
+    <EasterEggPopover
+      v-if="state.easterEggPopoverProps.display"
+      v-bind="state.easterEggPopoverProps"
+      @close="state.closeEasterEggPopover"
     />
 
     <!-- チャットルームポップオーバー -->

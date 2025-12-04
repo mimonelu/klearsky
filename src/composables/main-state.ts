@@ -369,6 +369,15 @@ export const state: MainState = reactive<MainState>({
   openPostThreadSortPopover: openPostThreadSortPopover,
   closePostThreadSortPopover: closePostThreadSortPopover,
 
+  // ポップオーバー - イースターエッグポップオーバー
+  easterEggPopoverProps: {
+    display: false,
+  },
+  easterEggPopoverSelector: undefined,
+  easterEggPopoverCallback: undefined,
+  openEasterEggPopover: openEasterEggPopover,
+  closeEasterEggPopover: closeEasterEggPopover,
+
   // ポップオーバー - チャットルームポップオーバー
   chatConvoPopoverProps: {
     display: false,
@@ -2176,6 +2185,17 @@ function openPostThreadSortPopover (selector: string | HTMLElement) {
 
 function closePostThreadSortPopover () {
   state.postThreadSortPopoverProps.display = false
+}
+
+// ポップオーバー - イースターエッグポップオーバー
+
+function openEasterEggPopover (selector: string | HTMLElement) {
+  state.easterEggPopoverSelector = selector
+  state.easterEggPopoverProps.display = true
+}
+
+function closeEasterEggPopover () {
+  state.easterEggPopoverProps.display = false
 }
 
 // ポップオーバー - チャットルームポップオーバー

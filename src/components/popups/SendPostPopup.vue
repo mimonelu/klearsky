@@ -421,6 +421,43 @@ function getTextarea (): null | HTMLTextAreaElement {
   return document.querySelector("#easy-form--default__0")
 }
 
+// イースターエッグポップオーバー
+
+function openEasterEggPopover ($event: Event) {
+  Util.blurElement()
+  mainState.easterEggPopoverCallback = easterEggPopoverCallback
+  mainState.openEasterEggPopover($event.target)
+}
+
+function easterEggPopoverCallback (type: string) {
+  switch (type) {
+    case "invertText": {
+      const textarea = getTextarea()
+      let start = 0
+      let end = easyFormState.text.length
+
+      // 選択範囲がある場合はその範囲を使用
+      if (textarea != null) {
+        const selStart = textarea.selectionStart
+        const selEnd = textarea.selectionEnd
+        if (selStart !== selEnd) {
+          start = selStart
+          end = selEnd
+        }
+      }
+
+      // 指定範囲を反転
+      const before = easyFormState.text.substring(0, start)
+      const target = easyFormState.text.substring(start, end)
+      const after = easyFormState.text.substring(end)
+      const reversed = Array.from(target).reverse().join("")
+      easyFormState.text = before + reversed + after
+      break
+    }
+    default: break
+  }
+}
+
 // 隠し機能のトグル
 function toggleHiddenFeatures () {
   state.hiddenFeaturesDisplay = !state.hiddenFeaturesDisplay
@@ -578,6 +615,7 @@ const PreviewLinkCardFeature: {
           <div class="button-container">
             <!-- ポスト言語選択ポップアップトリガー -->
             <button
+              type="button"
               class="button--bordered post-language-button"
               @click.prevent="mainState.openPostLanguagesPopup()"
             >
@@ -602,6 +640,7 @@ const PreviewLinkCardFeature: {
 
             <!-- Threadgate ポップアップトリガー -->
             <button
+              type="button"
               class="button--bordered on-off-button"
               :disabled="type === 'reply'"
               @click.prevent="openReactionControlPopup"
@@ -613,11 +652,21 @@ const PreviewLinkCardFeature: {
 
             <!-- マイワードポップアップトリガー -->
             <button
+              type="button"
               class="button--bordered my-word-button"
               @click.prevent="mainState.openMyWordPopup('select')"
             >
               <SVGIcon name="alphaA" />
               <span>{{ $t("myWord") }}</span>
+            </button>
+
+            <!-- イースターエッグポップオーバートリガー -->
+            <button
+              type="button"
+              class="button--plane easter-egg-button"
+              @click.prevent="openEasterEggPopover"
+            >
+              <SVGIcon name="easterEgg" />
             </button>
           </div>
         </template>
@@ -856,6 +905,11 @@ const PreviewLinkCardFeature: {
     }
     .post-date-button > b {
       color: rgb(var(--fg-color));
+    }
+
+    .easter-egg-button {
+      font-size: 1.25rem;
+      padding: 0 1rem;
     }
   }
 
