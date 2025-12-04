@@ -262,6 +262,13 @@ function openProfilePopover ($event: Event) {
   mainState.openProfilePopover($event.target)
 }
 
+function makeLabelWithSuffix (label: string, value?: number): string {
+  if (!value) {
+    return label
+  }
+  return `${value.toLocaleString()} ${label.toLowerCase()}`
+}
+
 // プロフィールポストポップオーバー
 
 const popover = ref(null)
@@ -773,7 +780,7 @@ function removeThisPost () {
           :data-disabled="!mainState.currentProfile?.associated?.feedgens"
         >
           <SVGIcon name="feed" />
-          <span>{{ $t("feeds") }}</span>
+          <span>{{ makeLabelWithSuffix($t("feeds"), mainState.currentProfile?.associated?.feedgens) }}</span>
         </RouterLink>
 
         <!-- リストタブボタン -->
@@ -784,7 +791,7 @@ function removeThisPost () {
           :data-disabled="!mainState.currentProfile?.associated?.lists"
         >
           <SVGIcon name="list" />
-          <span>{{ $t("lists") }}</span>
+          <span>{{ makeLabelWithSuffix($t("lists"), mainState.currentProfile?.associated?.lists) }}</span>
         </RouterLink>
 
         <!-- スターターパックタブボタン -->
@@ -795,7 +802,7 @@ function removeThisPost () {
           :data-disabled="!mainState.currentProfile?.associated?.starterPacks"
         >
           <SVGIcon name="cards" />
-          <span>{{ $t("packs") }}</span>
+          <span>{{ makeLabelWithSuffix($t("packs"), mainState.currentProfile?.associated?.starterPacks) }}</span>
         </RouterLink>
       </div>
 
