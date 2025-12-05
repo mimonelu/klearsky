@@ -63,54 +63,58 @@ function onClickItem (type: string) {
     @close="close"
   >
     <div class="easter-egg-content list-menu">
+      <div class="list-menu__header">
+        <span>{{ $t("easterEggFancyText") }}</span>
+      </div>
+      <hr />
       <div
         class="list-menu__item"
         @click.stop="onClickItem('invertText')"
       >
-        <SVGIcon name="translate" />
-        <span>{{ $t("テキストを反転する") }}</span>
+        <SVGIcon name="formatFont" />
+        <span>{{ $t("easterEggInvert") }}</span>
       </div>
       <div
         class="list-menu__item"
         @click.stop="onClickItem('punctuateText')"
       >
-        <SVGIcon name="translate" />
-        <span>{{ $t("テキストを空白で区切る") }}</span>
+        <SVGIcon name="formatFont" />
+        <span>{{ $t("easterEggSpaceOut") }}</span>
       </div>
       <div
         class="list-menu__item"
         @click.stop="onClickItem('makeTextBold')"
       >
-        <SVGIcon name="translate" />
-        <span>{{ $t("英数字を太字にする") }}</span>
+        <SVGIcon name="formatFont" />
+        <span>{{ $t("easterEggBold") }}</span>
       </div>
       <div
         class="list-menu__item"
         @click.stop="onClickItem('italicizeText')"
       >
-        <SVGIcon name="translate" />
-        <span>{{ $t("英字を斜体にする") }}</span>
+        <SVGIcon name="formatFont" />
+        <span>{{ $t("easterEggItalic") }}</span>
       </div>
       <div
         class="list-menu__item"
         @click.stop="onClickItem('strikethroughText')"
       >
-        <SVGIcon name="translate" />
-        <span>{{ $t("打ち消し線を引く") }}</span>
+        <SVGIcon name="formatFont" />
+        <span>{{ $t("easterEggStrikethrough") }}</span>
       </div>
       <div
         class="list-menu__item"
         @click.stop="onClickItem('convertToZenkaku')"
       >
-        <SVGIcon name="translate" />
-        <span>{{ $t("全角にする") }}</span>
+        <SVGIcon name="formatFont" />
+        <span>{{ $t("easterEggFullWidth") }}</span>
       </div>
       <div
         class="list-menu__item"
         @click.stop="onClickItem('convertToHankaku')"
       >
-        <SVGIcon name="translate" />
-        <span>{{ $t("半角にする") }}</span>
+        <SVGIcon name="formatFont" />
+        <span>{{ $t("easterEggHalfWidth") }}</span>
       </div>
       <hr />
       <div
@@ -118,8 +122,8 @@ function onClickItem (type: string) {
         :disabled="isRestoreDisabled"
         @click.stop="onClickItem('restoreText')"
       >
-        <SVGIcon name="translate" />
-        <span>{{ $t("テキストを元に戻す") }}</span>
+        <SVGIcon name="formatFont" />
+        <span>{{ $t("easterEggRestore") }}</span>
       </div>
     </div>
   </Popover>

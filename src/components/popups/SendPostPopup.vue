@@ -640,7 +640,7 @@ const PreviewLinkCardFeature: {
               class="button--plane easter-egg-button"
               @click.prevent="openEasterEggPopover"
             >
-              <SVGIcon name="easterEgg" />
+              <SVGIcon name="formatFont" />
             </button>
           </div>
         </template>

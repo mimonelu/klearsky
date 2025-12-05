@@ -926,6 +926,19 @@ export default () => ({
   "myFeedsFetchItemsError": "An error occurred while retrieving My Feeds.\nKlearsky may have failed to retrieve some feed generator or list. If there is a problem with the content of My Feeds, please reload your browser without closing My Feeds popup.",
 
   // ============================================================================
+  // EASTER EGG
+  // ============================================================================
+  "easterEggFancyText": "Fancy text",
+  "easterEggInvert": "Invert",
+  "easterEggSpaceOut": "Space out",
+  "easterEggBold": "Bold",
+  "easterEggItalic": "Italic",
+  "easterEggStrikethrough": "Strikethrough",
+  "easterEggFullWidth": "Full-width",
+  "easterEggHalfWidth": "Half-width",
+  "easterEggRestore": "Restore",
+
+  // ============================================================================
   // LEGAL
   // ============================================================================
   "privacyPolicy": "Privacy policy",

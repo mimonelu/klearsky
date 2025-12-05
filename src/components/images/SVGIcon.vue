@@ -46,6 +46,7 @@ import feed from "@/svg/feed.svg?raw"
 import fileExport from "@/svg/file-export.svg?raw"
 import fileImport from "@/svg/file-import.svg?raw"
 import fire from "@/svg/fire.svg?raw"
+import formatFont from "@/svg/format-font.svg?raw"
 import hash from "@/svg/hash.svg?raw"
 import help from "@/svg/help.svg?raw"
 import history from "@/svg/history.svg?raw"
@@ -161,6 +162,7 @@ const icons: { [k: string]: string } = {
   fileExport,
   fileImport,
   fire,
+  formatFont,
   hash,
   help,
   history,

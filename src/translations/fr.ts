@@ -926,6 +926,19 @@ export default () => ({
   "myFeedsFetchItemsError": "Erreur de récupération.\nCertains fils peuvent manquer. Recharge ton navigateur.",
 
   // ============================================================================
+  // EASTER EGG
+  // ============================================================================
+  "easterEggFancyText": "Fantaisie",
+  "easterEggInvert": "Inverser",
+  "easterEggSpaceOut": "Espacer",
+  "easterEggBold": "Gras",
+  "easterEggItalic": "Italique",
+  "easterEggStrikethrough": "Barrer",
+  "easterEggFullWidth": "Pleine chasse",
+  "easterEggHalfWidth": "Demi-chasse",
+  "easterEggRestore": "Restaurer",
+
+  // ============================================================================
   // LEGAL
   // ============================================================================
   "privacyPolicy": "Politique de confidentialité",
