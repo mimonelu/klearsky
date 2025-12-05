@@ -192,6 +192,8 @@ interface TIAtpWrapper {
     (repo: string, collection: string, uri: string, cid?: string): Promise<Error | { uri: string; cid?: string; value: {} }>
   fetchRecords
     (repo: string, collection: string, limit?: number, cursor?: string, reverse?: boolean): Promise<Error | { cursor?: string; records: TICommonRecord[] }>
+  fetchRelationships
+    (actor: string, others?: string[]): Promise<Error | AppBskyGraphGetRelationships.OutputSchema["relationships"]>
   fetchRepo
     (repo: string): Promise<Error | {}>
   fetchRepostUsers

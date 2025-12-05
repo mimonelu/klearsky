@@ -91,6 +91,7 @@ import fetchProfiles from "@/composables/atp-wrapper/fetch/fetch-profiles"
 import fetchQuoteReposts from "@/composables/atp-wrapper/fetch/fetch-quote-reposts"
 import fetchRecord from "@/composables/atp-wrapper/fetch/fetch-record"
 import fetchRecords from "@/composables/atp-wrapper/fetch/fetch-records"
+import fetchRelationships from "@/composables/atp-wrapper/fetch/fetch-relationships"
 import fetchRepo from "@/composables/atp-wrapper/fetch/fetch-repo"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch/fetch-repost-users"
 import fetchServerInfo from "@/composables/atp-wrapper/fetch/fetch-server-info"
@@ -272,6 +273,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchQuoteReposts = fetchQuoteReposts
   fetchRecord = fetchRecord
   fetchRecords = fetchRecords
+  fetchRelationships = fetchRelationships
   fetchRepo = fetchRepo
   fetchRepostUsers = fetchRepostUsers
   fetchServerInfo = fetchServerInfo
