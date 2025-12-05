@@ -98,6 +98,20 @@ function onClickItem (type: string) {
         <SVGIcon name="translate" />
         <span>{{ $t("打ち消し線を引く") }}</span>
       </div>
+      <div
+        class="list-menu__item"
+        @click.stop="onClickItem('convertToZenkaku')"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("全角にする") }}</span>
+      </div>
+      <div
+        class="list-menu__item"
+        @click.stop="onClickItem('convertToHankaku')"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("半角にする") }}</span>
+      </div>
       <hr />
       <div
         class="list-menu__item"

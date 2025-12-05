@@ -25,6 +25,7 @@
     "file-saver": "^2.0.5",
     "hls.js": "^1.5.19",
     "hotkeys-js": "^3.13.9",
+    "jaconv": "^1.1.2",
     "jszip": "^3.10.1",
     "jwt-decode": "^4.0.0",
     "portal-vue": "^3.0.0",

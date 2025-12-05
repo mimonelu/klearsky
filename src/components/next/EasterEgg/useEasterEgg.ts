@@ -1,4 +1,5 @@
 import { ref } from "vue"
+import jaconv from "jaconv"
 
 export function useEasterEgg (
   easyFormState: { text: string },
@@ -88,6 +89,22 @@ export function useEasterEgg (
     })
   }
 
+  function convertToZenkaku () {
+    applyTransformation((text) => {
+      let result = jaconv.toZenAscii(text)
+      result = jaconv.toZenKana(result)
+      return result
+    })
+  }
+
+  function convertToHankaku () {
+    applyTransformation((text) => {
+      let result = jaconv.toHanAscii(text)
+      result = jaconv.toHanKana(result)
+      return result
+    })
+  }
+
   function restoreText () {
     if (savedText.value !== "") {
       easyFormState.text = savedText.value
@@ -115,6 +132,12 @@ export function useEasterEgg (
         break
       case "strikethroughText":
         strikethroughText()
+        break
+      case "convertToZenkaku":
+        convertToZenkaku()
+        break
+      case "convertToHankaku":
+        convertToHankaku()
         break
       case "restoreText":
         restoreText()
