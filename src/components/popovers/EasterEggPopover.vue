@@ -63,6 +63,34 @@ function onClickItem (type: string) {
         <SVGIcon name="translate" />
         <span>{{ $t("テキストを反転する") }}</span>
       </div>
+      <div
+        class="list-menu__item"
+        @click.stop="onClickItem('punctuateText')"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("テキストを空白で区切る") }}</span>
+      </div>
+      <div
+        class="list-menu__item"
+        @click.stop="onClickItem('makeTextBold')"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("英数字を太字にする") }}</span>
+      </div>
+      <div
+        class="list-menu__item"
+        @click.stop="onClickItem('italicizeText')"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("英字を斜体にする") }}</span>
+      </div>
+      <div
+        class="list-menu__item"
+        @click.stop="onClickItem('strikethroughText')"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("打ち消し線を引く") }}</span>
+      </div>
     </div>
   </Popover>
 </template>

@@ -431,6 +431,7 @@ function openEasterEggPopover ($event: Event) {
 
 function easterEggPopoverCallback (type: string) {
   switch (type) {
+    // テキストを反転する
     case "invertText": {
       const textarea = getTextarea()
       let start = 0
@@ -454,6 +455,141 @@ function easterEggPopoverCallback (type: string) {
       easyFormState.text = before + reversed + after
       break
     }
+
+    // テキストを空白で区切る
+    case "punctuateText": {
+      const textarea = getTextarea()
+      let start = 0
+      let end = easyFormState.text.length
+
+      // 選択範囲がある場合はその範囲を使用
+      if (textarea != null) {
+        const selStart = textarea.selectionStart
+        const selEnd = textarea.selectionEnd
+        if (selStart !== selEnd) {
+          start = selStart
+          end = selEnd
+        }
+      }
+
+      // 指定範囲を空白で区切る
+      const before = easyFormState.text.substring(0, start)
+      const target = easyFormState.text.substring(start, end)
+      const after = easyFormState.text.substring(end)
+      const punctuated = Array.from(target).join(" ")
+      easyFormState.text = before + punctuated + after
+      break
+    }
+
+    // 英数字を太字にする
+    case "makeTextBold": {
+      const textarea = getTextarea()
+      let start = 0
+      let end = easyFormState.text.length
+
+      // 選択範囲がある場合はその範囲を使用
+      if (textarea != null) {
+        const selStart = textarea.selectionStart
+        const selEnd = textarea.selectionEnd
+        if (selStart !== selEnd) {
+          start = selStart
+          end = selEnd
+        }
+      }
+
+      // 指定範囲の英数字を太字に変換
+      const before = easyFormState.text.substring(0, start)
+      const target = easyFormState.text.substring(start, end)
+      const after = easyFormState.text.substring(end)
+
+      const bolded = Array.from(target).map((char) => {
+        const code = char.charCodeAt(0)
+        // A-Z → 𝐀-𝐙
+        if (code >= 0x41 && code <= 0x5A) {
+          return String.fromCodePoint(code - 0x41 + 0x1D400)
+        }
+        // a-z → 𝐚-𝐳
+        if (code >= 0x61 && code <= 0x7A) {
+          return String.fromCodePoint(code - 0x61 + 0x1D41A)
+        }
+        // 0-9 → 𝟎-𝟗
+        if (code >= 0x30 && code <= 0x39) {
+          return String.fromCodePoint(code - 0x30 + 0x1D7CE)
+        }
+        return char
+      }).join("")
+
+      easyFormState.text = before + bolded + after
+      break
+    }
+
+    // 英字を斜体にする
+    case "italicizeText": {
+      const textarea = getTextarea()
+      let start = 0
+      let end = easyFormState.text.length
+
+      // 選択範囲がある場合はその範囲を使用
+      if (textarea != null) {
+        const selStart = textarea.selectionStart
+        const selEnd = textarea.selectionEnd
+        if (selStart !== selEnd) {
+          start = selStart
+          end = selEnd
+        }
+      }
+
+      // 指定範囲の英字を斜体に変換
+      const before = easyFormState.text.substring(0, start)
+      const target = easyFormState.text.substring(start, end)
+      const after = easyFormState.text.substring(end)
+
+      const italicized = Array.from(target).map((char) => {
+        const code = char.charCodeAt(0)
+        // A-Z → 𝐴-𝑍
+        if (code >= 0x41 && code <= 0x5A) {
+          return String.fromCodePoint(code - 0x41 + 0x1D434)
+        }
+        // h → ℎ (U+210E) - 数学用斜体小文字の h (U+1D455) は欠番
+        if (code === 0x68) {
+          return String.fromCodePoint(0x210E)
+        }
+        // a-g, i-z → 𝑎-𝑔, 𝑖-𝑧
+        if (code >= 0x61 && code <= 0x7A) {
+          return String.fromCodePoint(code - 0x61 + 0x1D44E)
+        }
+        return char
+      }).join("")
+
+      easyFormState.text = before + italicized + after
+      break
+    }
+
+    // 打ち消し線を引く
+    case "strikethroughText": {
+      const textarea = getTextarea()
+      let start = 0
+      let end = easyFormState.text.length
+
+      // 選択範囲がある場合はその範囲を使用
+      if (textarea != null) {
+        const selStart = textarea.selectionStart
+        const selEnd = textarea.selectionEnd
+        if (selStart !== selEnd) {
+          start = selStart
+          end = selEnd
+        }
+      }
+
+      // 指定範囲に打ち消し線を引く（U+0336 COMBINING LONG STROKE OVERLAY）
+      const before = easyFormState.text.substring(0, start)
+      const target = easyFormState.text.substring(start, end)
+      const after = easyFormState.text.substring(end)
+      const strikethrough = Array.from(target).map((char) => char + "\u0336").join("")
+      easyFormState.text = before + strikethrough + after
+      break
+    }
+
     default: break
   }
 }
