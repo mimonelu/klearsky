@@ -1,7 +1,11 @@
+import { ref } from "vue"
+
 export function useEasterEgg (
   easyFormState: { text: string },
   getTextarea: () => HTMLTextAreaElement | null
 ) {
+  const savedText = ref<string>("")
+
   function getSelectionRange (): { start: number; end: number } {
     const textarea = getTextarea()
     let start = 0
@@ -18,6 +22,9 @@ export function useEasterEgg (
   }
 
   function applyTransformation (transformer: (text: string) => string) {
+    // 変換前にテキストを保存
+    savedText.value = easyFormState.text
+
     const { start, end } = getSelectionRange()
     const before = easyFormState.text.substring(0, start)
     const target = easyFormState.text.substring(start, end)
@@ -81,6 +88,17 @@ export function useEasterEgg (
     })
   }
 
+  function restoreText () {
+    if (savedText.value !== "") {
+      easyFormState.text = savedText.value
+      savedText.value = ""
+    }
+  }
+
+  function hasSavedText (): boolean {
+    return savedText.value !== ""
+  }
+
   function applyEasterEgg (type: string) {
     switch (type) {
       case "invertText":
@@ -98,6 +116,9 @@ export function useEasterEgg (
       case "strikethroughText":
         strikethroughText()
         break
+      case "restoreText":
+        restoreText()
+        break
       default:
         break
     }
@@ -105,5 +126,6 @@ export function useEasterEgg (
 
   return {
     applyEasterEgg,
+    hasSavedText,
   }
 }

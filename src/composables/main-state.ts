@@ -375,6 +375,7 @@ export const state: MainState = reactive<MainState>({
   },
   easterEggPopoverSelector: undefined,
   easterEggPopoverCallback: undefined,
+  easterEggPopoverHasSavedText: undefined,
   openEasterEggPopover: openEasterEggPopover,
   closeEasterEggPopover: closeEasterEggPopover,
 

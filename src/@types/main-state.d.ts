@@ -317,6 +317,7 @@ interface MainState {
   }
   easterEggPopoverSelector?: string | HTMLElement
   easterEggPopoverCallback?: Function
+  easterEggPopoverHasSavedText?: Function
   openEasterEggPopover: Function
   closeEasterEggPopover: () => void
 

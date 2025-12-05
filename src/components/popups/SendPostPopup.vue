@@ -423,11 +423,12 @@ function getTextarea (): null | HTMLTextAreaElement {
 }
 
 // イースターエッグポップオーバー
-const { applyEasterEgg } = useEasterEgg(easyFormState, getTextarea)
+const { applyEasterEgg, hasSavedText } = useEasterEgg(easyFormState, getTextarea)
 
 function openEasterEggPopover ($event: Event) {
   Util.blurElement()
   mainState.easterEggPopoverCallback = applyEasterEgg
+  mainState.easterEggPopoverHasSavedText = hasSavedText
   mainState.openEasterEggPopover($event.target)
 }
 

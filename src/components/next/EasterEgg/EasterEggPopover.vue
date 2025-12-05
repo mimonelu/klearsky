@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, ref } from "vue"
+import { computed, inject, onMounted, ref } from "vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -13,6 +13,13 @@ defineProps<{
 const mainState = inject("state") as MainState
 
 const popover = ref(null)
+
+const isRestoreDisabled = computed(() => {
+  return (
+    mainState.easterEggPopoverHasSavedText == null ||
+    !mainState.easterEggPopoverHasSavedText()
+  )
+})
 
 onMounted(open)
 
@@ -55,7 +62,7 @@ function onClickItem (type: string) {
     ref="popover"
     @close="close"
   >
-    <div class="easter-egg-content">
+    <div class="easter-egg-content list-menu">
       <div
         class="list-menu__item"
         @click.stop="onClickItem('invertText')"
@@ -90,6 +97,15 @@ function onClickItem (type: string) {
       >
         <SVGIcon name="translate" />
         <span>{{ $t("打ち消し線を引く") }}</span>
+      </div>
+      <hr />
+      <div
+        class="list-menu__item"
+        :disabled="isRestoreDisabled"
+        @click.stop="onClickItem('restoreText')"
+      >
+        <SVGIcon name="translate" />
+        <span>{{ $t("テキストを元に戻す") }}</span>
       </div>
     </div>
   </Popover>
