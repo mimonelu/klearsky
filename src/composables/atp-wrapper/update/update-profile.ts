@@ -10,7 +10,9 @@ export default async function (
   }
 
   // クエリーオブジェクト
-  const profileSchema: AppBskyActorProfile.Record = {}
+  const profileSchema: AppBskyActorProfile.Record = {
+    $type: "app.bsky.actor.profile",
+  }
 
   // 表示名
   if (params.displayName != null) {
@@ -28,7 +30,8 @@ export default async function (
   }
 
   // WebサイトのURL
-  if (params.website != null) {
+  // NOTICE: 空文字列の `website` がバリデーションで弾かれる現象対策
+  if (params.website?.length >= 1) {
     profileSchema.website = params.website
   }
 
