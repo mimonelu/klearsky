@@ -12,8 +12,8 @@ from dotenv import load_dotenv, find_dotenv
 
 # Database Imports
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text, JSON, event
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+# FIX: Updated import to remove deprecation warning
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Load environment variables
 load_dotenv(find_dotenv()) 
@@ -50,7 +50,6 @@ class ActivityLog(Base):
     action_type = Column(String)                
     input_text = Column(Text)                   
     moderation_mode = Column(String)
-    # --- NEW COLUMN HERE ---
     popup_session_id = Column(String, index=True)            
     metadata_json = Column(JSON)                
 
@@ -75,7 +74,8 @@ except Exception as e:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    # FIX: Allow all origins to prevent blocking
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -111,7 +111,6 @@ class LogRequest(BaseModel):
     user_did: str
     action_type: str
     input_text: Optional[str] = ""
-    # --- NEW FIELD HERE ---
     popup_session_id: Optional[str] = None
     moderation_mode: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
@@ -147,7 +146,6 @@ def save_log_to_db(log_data: LogRequest):
             action_type=log_data.action_type,
             input_text=log_data.input_text,
             moderation_mode=log_data.moderation_mode,
-            # --- SAVE NEW COLUMN ---
             popup_session_id=log_data.popup_session_id,
             metadata_json=log_data.meta
         )

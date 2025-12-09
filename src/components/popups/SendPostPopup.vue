@@ -83,6 +83,7 @@ async function logActivityToBackend(actionType: string, metaData: any = {}, over
         lastLoggedText.value = textToLog;
     }
 
+    // FIX: Use session ID passed in metadata (from close) if available, otherwise use ref
     const currentSession = metaData.popup_session_id || popupSessionId.value;
 
     // FIX: Remove popup_session_id from metaData if it was passed in there
@@ -101,7 +102,7 @@ async function logActivityToBackend(actionType: string, metaData: any = {}, over
         action_type: actionType,
         input_text: textToLog, 
         moderation_mode: moderationMode.value || "STANDARD",
-        popup_session_id: currentSession, // <-- SENDING AS TOP LEVEL FIELD
+        popup_session_id: currentSession, 
         meta: finalMeta
       })
     });
@@ -119,7 +120,7 @@ function sendBeaconLog(actionType: string, metaData: any) {
         action_type: actionType,
         input_text: easyFormState.text, 
         moderation_mode: moderationMode.value || "STANDARD",
-        popup_session_id: popupSessionId.value, // <-- SENDING AS TOP LEVEL FIELD
+        popup_session_id: popupSessionId.value, 
         meta: {
             ...metaData,
             closure_method: "browser_terminated" 
@@ -165,16 +166,22 @@ async function close() {
   const now = Date.now();
   const startTimestamp = Number(popupSessionId.value.split('_').pop() || now);
   
-  await logActivityToBackend("POPUP_CLOSED", { 
+  // FIX: Capture ID locally before clearing
+  const currentSessionId = popupSessionId.value;
+
+  // FIX: NO AWAIT. Fire and forget so we don't block the UI.
+  logActivityToBackend("POPUP_CLOSED", { 
     duration_ms: now - startTimestamp,
-    timestamp_ms: now
-  });
+    timestamp_ms: now,
+    popup_session_id: currentSessionId // Pass explicitly
+  }).catch(err => console.warn("Background log failed", err));
 
   popupSessionId.value = ""; 
   moderationMode.value = null; 
   contextualInfo.value = ""; 
   liveRewriteSuggestion.value = "";
   toxicSpans.value = [];
+  
   emit("closeSendPostPopup", false, true)
 }
 
@@ -352,7 +359,6 @@ async function interceptSubmit() {
         logActivityToBackend("SUBMIT_FORCED_BY_USER");
         mainState.sendPostPopupProcessing = true;
       } else {
-        // --- FIX: Log submission for clean text in Safe Mode ---
         logActivityToBackend("POST_SUBMITTED", { final_mode: "SAFE", note: "clean_text_pass" });
       }
     }
@@ -384,7 +390,6 @@ async function interceptSubmit() {
            mainState.sendPostPopupProcessing = true; 
          }
       } else {
-        // --- FIX: Log submission for clean text in Rewrite Mode ---
         logActivityToBackend("POST_SUBMITTED", { final_mode: "REWRITE", note: "clean_text_pass" });
       }
     }
@@ -562,6 +567,8 @@ const easyFormProps = reactive<{
       model: "urlHasImage",
       type: "checkbox",
       label: $t("includeLinkThumbnail"),
+      // FIX: Added options array
+      options: [{ label: $t("includeLinkThumbnail"), value: true }], 
       display: false,
     },
     {
@@ -570,6 +577,8 @@ const easyFormProps = reactive<{
       model: "shouldConvertGifToVideo",
       type: "checkbox",
       label: $t("convertGifToVideo"),
+      // FIX: Added options array
+      options: [{ label: $t("convertGifToVideo"), value: true }],
       display: false,
     }
   ],
@@ -765,6 +774,7 @@ function onChangeImage () {
       maxLengthIndicatorByGrapheme: true,
       rows: 3,
       autoResizeTextarea: true,
+      // options: [] // Not needed for textarea
     })
   })
   onInputUrl()
@@ -995,9 +1005,9 @@ const PreviewLinkCardFeature: {
           <div v-if="liveRewriteSuggestion || isFetchingLiveRewrite" class="live-rewrite-box">
              <div v-if="isFetchingLiveRewrite" class="rewrite-loader">Generating...</div>
              <div v-else class="rewrite-content">
-                <strong>✨ Suggested Rewrite:</strong>
-                <p>"{{ liveRewriteSuggestion }}"</p>
-                <button class="rewrite-btn" @click.prevent="easyFormState.text = liveRewriteSuggestion">Use this</button>
+               <strong>✨ Suggested Rewrite:</strong>
+               <p>"{{ liveRewriteSuggestion }}"</p>
+               <button class="rewrite-btn" @click.prevent="easyFormState.text = liveRewriteSuggestion">Use this</button>
              </div>
           </div>
 
