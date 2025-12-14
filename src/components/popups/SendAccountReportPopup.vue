@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject, reactive, ref } from "vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -13,6 +13,8 @@ const props = defineProps<{
   user: TTUser
 }>()
 
+const easyForm = ref()
+
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
@@ -25,9 +27,11 @@ const state = reactive<{
 
 const formState = reactive<{
   reasonType?: string
+  reasonItem?: string
   reason?: string
 }>({
   reasonType: undefined,
+  reasonItem: undefined,
   reason: undefined,
 })
 
@@ -43,7 +47,30 @@ const easyFormProps: TTEasyForm = {
       label: $t("reportReasonType"),
       type: "radio",
       required: true,
-      options: OPTIONS.ACCOUNT_REPORT_REASON,
+      options: OPTIONS.REPORT_REASON_TYPES,
+      layout: "vertical",
+
+      // レポートタイプ選択時にレポートアイテムの選択肢を変更
+      onUpdate (_, form) {
+        const items = OPTIONS.REPORT_REASON_ITEMS.filter((item) => {
+          return item.type === formState.reasonType
+        })
+        form.data[1].options?.splice(0, form.data[1].options.length, ...items)
+        form.data[1].display = true
+        formState.reasonItem = items.length === 1
+          ? items[0].value
+          : undefined
+        easyForm.value.forceUpdate()
+      },
+    },
+    {
+      state: formState,
+      model: "reasonItem",
+      label: $t("reportReasonItem"),
+      type: "radio",
+      required: true,
+      options: [],
+      display: false,
       layout: "vertical",
     },
     {
@@ -78,7 +105,7 @@ async function submitCallback () {
   if (state.popupLoaderDisplay) return
   state.popupLoaderDisplay = true
   const response = await mainState.atp.createReport(
-    formState.reasonType as string,
+    formState.reasonItem as string,
     formState.reason as string,
     props.user.did
   )
@@ -119,8 +146,11 @@ async function submitCallback () {
       />
     </template>
     <template #body>
-      <EasyForm v-bind="easyFormProps">
-        <template #free-1>
+      <EasyForm
+        v-bind="easyFormProps"
+        ref="easyForm"
+      >
+        <template #free-2>
           <div class="send-account-report-popup__link-container">
             <a
               class="textlink--icon"
