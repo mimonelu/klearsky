@@ -1,4 +1,4 @@
-import { BskyAgent } from "@atproto/api"
+import { AtpAgent } from "@atproto/api"
 
 async function notifyToBluesky () {
   const BLUESKY_HANDLE = process.env.BLUESKY_HANDLE
@@ -14,7 +14,7 @@ async function notifyToBluesky () {
   }
 
   try {
-    const agent = new BskyAgent({ service: "https://bsky.social" })
+    const agent = new AtpAgent({ service: "https://bsky.social" })
 
     await agent.login({
       identifier: BLUESKY_HANDLE,
@@ -37,12 +37,12 @@ async function notifyToBluesky () {
         if (payload.action === "opened") {
           message = `📝 New issue opened in ${REPOSITORY}\n` +
                    `"${payload.issue?.title}"\n` +
-                   `by @${ACTOR}\n` +
+                   `by ${ACTOR} cc @mimonelu.net\n` +
                    `${payload.issue?.html_url}`
         } else if (payload.action === "closed") {
           message = `✅ Issue closed in ${REPOSITORY}\n` +
                    `"${payload.issue?.title}"\n` +
-                   `by @${ACTOR}\n` +
+                   `by ${ACTOR} cc @mimonelu.net\n` +
                    `${payload.issue?.html_url}`
         }
         break
@@ -51,12 +51,12 @@ async function notifyToBluesky () {
         if (payload.action === "opened") {
           message = `🔀 New PR opened in ${REPOSITORY}\n` +
                    `"${payload.pull_request?.title}"\n` +
-                   `by @${ACTOR}\n` +
+                   `by ${ACTOR} cc @mimonelu.net\n` +
                    `${payload.pull_request?.html_url}`
         } else if (payload.action === "closed" && payload.pull_request?.merged) {
           message = `✅ PR merged in ${REPOSITORY}\n` +
                    `"${payload.pull_request?.title}"\n` +
-                   `by @${ACTOR}\n` +
+                   `by ${ACTOR} cc @mimonelu.net\n` +
                    `${payload.pull_request?.html_url}`
         }
         break
@@ -65,7 +65,7 @@ async function notifyToBluesky () {
         if (payload.action === "created") {
           message = `💬 New comment on issue in ${REPOSITORY}\n` +
                    `"${payload.issue?.title}"\n` +
-                   `by @${ACTOR}\n` +
+                   `by ${ACTOR} cc @mimonelu.net\n` +
                    `${payload.comment?.html_url}`
         }
         break
@@ -74,7 +74,7 @@ async function notifyToBluesky () {
         if (payload.action === "submitted") {
           message = `👀 New review on PR in ${REPOSITORY}\n` +
                    `"${payload.pull_request?.title}"\n` +
-                   `by @${ACTOR}\n` +
+                   `by ${ACTOR} cc @mimonelu.net\n` +
                    `${payload.review?.html_url}`
         }
         break
@@ -84,7 +84,7 @@ async function notifyToBluesky () {
         const commitCount = commits.length
         if (commitCount > 0) {
           message = `🚀 ${commitCount} commit${commitCount > 1 ? "s" : ""} pushed to ${REPOSITORY}\n` +
-                   `by @${ACTOR}\n` +
+                   `by ${ACTOR} cc @mimonelu.net\n` +
                    `${payload.compare}`
         }
         break
@@ -93,13 +93,13 @@ async function notifyToBluesky () {
         if (payload.action === "published") {
           message = `🎉 New release published in ${REPOSITORY}\n` +
                    `"${payload.release?.name || payload.release?.tag_name}"\n` +
-                   `by @${ACTOR}\n` +
+                   `by ${ACTOR} cc @mimonelu.net\n` +
                    `${payload.release?.html_url}`
         }
         break
 
       default:
-        message = `🔔 ${EVENT_NAME} event in ${REPOSITORY} by @${ACTOR}`
+        message = `🔔 ${EVENT_NAME} event in ${REPOSITORY} by ${ACTOR} cc @mimonelu.net`
     }
 
     if (!message) {
