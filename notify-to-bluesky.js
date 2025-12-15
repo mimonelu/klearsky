@@ -1,4 +1,4 @@
-import { AtpAgent } from "@atproto/api"
+import { AtpAgent, RichText } from "@atproto/api"
 
 async function notifyToBluesky () {
   const BLUESKY_HANDLE = process.env.BLUESKY_HANDLE
@@ -111,8 +111,13 @@ async function notifyToBluesky () {
       message = message.substring(0, 297) + "..."
     }
 
+    const rt = new RichText({ text: message })
+
+    await rt.detectFacets(agent)
+
     const result = await agent.post({
-      text: message,
+      text: rt.text,
+      facets: rt.facets,
       createdAt: new Date().toISOString(),
     })
 
