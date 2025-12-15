@@ -189,16 +189,19 @@ const hasListCard = embedRecord?.$type === "app.bsky.graph.defs#listView"
 
 const hasStarterPackCard = embedRecord?.$type === "app.bsky.graph.starterpack"
 
-const pseudoStarterPack: undefined | TIStarterPack = (() => {
-  if (!embedRecord) {
-    return
-  }
-  const uri = embedRecord.uri ?? ""
+function makePseudoStarterPack (): undefined | TIStarterPack {
+  const uri =
+    props.post.record?.embed?.record?.uri ??
+    props.post.value?.embed?.record?.uri ??
+    ""
   const did = (uri.match(/at:\/\/([^/]+)/) ?? ["", ""])[1]
   return {
     uri,
-    cid: embedRecord.cid ?? "",
-    record: embedRecord as any,
+    cid:
+      props.post.record?.embed?.record?.cid ??
+      props.post.value?.embed?.record?.cid ??
+      "",
+    record: props.post.embed?.record as any,
     creator: {
       did,
       displayName: "",
@@ -209,9 +212,9 @@ const pseudoStarterPack: undefined | TIStarterPack = (() => {
     joinedWeekCount: undefined,
     joinedAllTimeCount: undefined,
     labels: undefined,
-    indexedAt: embedRecord.createdAt as string,
+    indexedAt: props.post.embed?.record?.createdAt as undefined | string,
   }
-})()
+}
 
 // 最古の引用元ポストかどうか
 const isOldestQuotedPost = (props.level ?? 1) >= 3 - 1
@@ -1347,7 +1350,7 @@ function toggleOldestQuotedPostDisplay () {
           <!-- スターターパックカード -->
           <StarterPackCard
             v-if="hasStarterPackCard"
-            :starterPack="pseudoStarterPack"
+            :starterPack="makePseudoStarterPack()"
             :menuDisplay="true"
             :detailDisplay="false"
             :creatorDisplay="true"
