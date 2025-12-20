@@ -551,7 +551,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
   color: rgb(var(--post-color));
   font-size: 0.875rem;
   line-height: var(--line-height-high);
-  word-break: break-all;
+  word-break: break-word;
 }
 
 // ユーザーポスト
