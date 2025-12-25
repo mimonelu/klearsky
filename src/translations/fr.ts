@@ -600,7 +600,7 @@ export default () => ({
   "starterPacks": "Packs de départ",
   "joinedStarterPack": "via Pack de départ",
   "latestActivityDate": "Dernière mise à jour",
-  "oldPostNotification": "Ce post a plus d'un jour",
+  "oldPostNotification": "Ce message date de plus de deux jours",
   "noStarterPacks": "Aucun pack de départ géré par cet utilisateur.",
   "showStarterPackListFeeds": "Voir les fils de liste",
   "showStarterPackListUsers": "Voir les utilisateurs de liste",

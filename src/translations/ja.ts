@@ -600,7 +600,7 @@ export default () => ({
   "starterPacks": "スターターパック",
   "joinedStarterPack": "スターターパック",
   "latestActivityDate": "最新の更新",
-  "oldPostNotification": "1日以上前のポストです",
+  "oldPostNotification": "2日以上前のポストです",
   "noStarterPacks": "このユーザーの管理するスターターパックはありません。",
   "showStarterPackListFeeds": "リストフィードを見る",
   "showStarterPackListUsers": "リストユーザーを見る",

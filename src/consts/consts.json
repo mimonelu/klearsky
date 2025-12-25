@@ -65,6 +65,7 @@
   "LIMIT_OF_KEYWORD_HISTORY": 10,
   "LIMIT_OF_THREADGATE_ITEMS": 5,
   "LIMIT_OF_LIST_MENTION_ACCOUNTS": 30,
+  "OLD_POST_NOTIFICATION_DAYS": 2,
   "ATMOSPHERE_SERVICE_FAVICONS": {
     "frontpage": "https://frontpage.fyi/frontpage-logo.svg?b5da8167450d2f63",
     "linkat": "https://linkat.blue/favicon.ico",

@@ -27,7 +27,10 @@ import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import WordMuteScript from "@/components/next/WordMute/script"
 import Util from "@/composables/util"
-import { THIRD_PARTY_DOMAIN_LIGHTNING } from "@/consts/consts.json"
+import {
+  OLD_POST_NOTIFICATION_DAYS,
+  THIRD_PARTY_DOMAIN_LIGHTNING
+} from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -418,7 +421,7 @@ function isFocused (): boolean {
 
 // 古いポスト警告
 const displayOldPostNotification = props.hasOldPostNotification && indexedAt != null
-  ? differenceInDays(new Date(), new Date(indexedAt)) >= 1
+  ? differenceInDays(new Date(), new Date(indexedAt)) >= OLD_POST_NOTIFICATION_DAYS
   : false
 
 async function onActivatePost (post: TTPost, event: Event) {
