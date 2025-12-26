@@ -882,6 +882,9 @@ export default () => ({
   "showDetail": "상세 표시",
   "hideDetail": "상세 숨기기",
   "noHistory": "이력이 없습니다.",
+  "unknownFeed": "알 수 없는 피드",
+  "unknownItem": "알 수 없는 항목",
+  "unknownList": "알 수 없는 리스트",
 
   // ============================================================================
   // CONFIRMATION DIALOGS

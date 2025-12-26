@@ -1,4 +1,5 @@
 import type { AppBskyFeedGetFeedGenerators } from "@atproto/api"
+import { $t } from "@/plugins/i18n"
 
 export default async function (
   this: TIAtpWrapper,
@@ -50,7 +51,7 @@ export default async function (
         },
         description: uri,
         did: "",
-        displayName: "(Unknown feed)",
+        displayName: `(${$t("unknownFeed")})`,
         indexedAt: new Date().toISOString(),
         likeCount: 0,
         uri,

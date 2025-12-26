@@ -1,4 +1,5 @@
 import { TID } from "@atproto/common-web"
+import { $t } from "@/plugins/i18n"
 
 export default class {
   public mainState: MainState
@@ -146,7 +147,7 @@ export default class {
           },
           description: uri,
           did: "",
-          displayName: "(Unknown feed)",
+          displayName: `(${$t("unknownFeed")})`,
           indexedAt: new Date().toISOString(),
           likeCount: 0,
           uri,
@@ -162,7 +163,7 @@ export default class {
             handle: "",
           },
           listItemCount: 0,
-          name: "(Unknown list)",
+          name: `(${$t("unknownList")})`,
           purpose: "unknownlist",
           description: uri,
           indexedAt: new Date().toISOString(),
@@ -191,7 +192,7 @@ export default class {
       } else {
         const value = {
           uri,
-          displayName: "(Unknown item)",
+          displayName: `(${$t("unknownItem")})`,
         }
         this.items.push({ kind, value } as TTMyFeedsItem)
       }

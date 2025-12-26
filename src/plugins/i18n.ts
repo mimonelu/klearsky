@@ -7,6 +7,17 @@ interface TITranslationMap {
   }
 }
 
+// グローバルな翻訳関数への参照（.tsファイルから使用可能にするため）
+let globalT: ((key: string) => string) | null = null
+
+// .tsファイルから使用するための翻訳関数
+export function $t (key: string): string {
+  if (globalT === null) {
+    throw new Error("i18n plugin not installed")
+  }
+  return globalT(key)
+}
+
 // 翻訳
 export default {
   install(app: App, translationMap: TITranslationMap) {
@@ -28,6 +39,10 @@ export default {
     function $t (key: string): string {
       return translationMap[currentLanguage]?.[key] ?? translationMap.en?.[key] ?? key
     }
+
+    // グローバル参照に保存（.tsファイルから使用可能にするため）
+    globalT = $t
+
     app.config.globalProperties.$t = $t
     app.provide("$t", $t)
   },

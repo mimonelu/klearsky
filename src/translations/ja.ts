@@ -882,6 +882,9 @@ export default () => ({
   "showDetail": "詳細を表示",
   "hideDetail": "詳細を隠す",
   "noHistory": "履歴はありません。",
+  "unknownFeed": "不明なフィード",
+  "unknownItem": "不明なアイテム",
+  "unknownList": "不明なリスト",
 
   // ============================================================================
   // CONFIRMATION DIALOGS

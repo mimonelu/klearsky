@@ -882,6 +882,9 @@ export default () => ({
   "showDetail": "Show details",
   "hideDetail": "Hide details",
   "noHistory": "No history",
+  "unknownFeed": "Unknown feed",
+  "unknownItem": "Unknown item",
+  "unknownList": "Unknown list",
 
   // ============================================================================
   // CONFIRMATION DIALOGS

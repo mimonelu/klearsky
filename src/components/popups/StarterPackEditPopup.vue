@@ -57,7 +57,7 @@ const easyFormState = reactive<{
         return result.value === feed.uri
       }) === - 1) {
         results.push({
-          label: `(Unknown feed: ${feed.uri})`,
+          label: `(${$t("unknownFeed")}: ${feed.uri})`,
           value: feed.uri,
         })
       }
