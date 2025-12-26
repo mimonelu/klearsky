@@ -137,6 +137,8 @@ const popup = ref()
 
 const easyForm = ref()
 
+const urlRegex = /^https?:\/\//
+
 // ポップアップを開いた際のUX改善処置
 watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
   if (!value) return
@@ -294,7 +296,10 @@ function onInputUrl () {
     return item.model === "urlHasImage"
   })
   if (urlHasImageItem != null) {
-    urlHasImageItem.display = !!easyFormState.url && easyFormState.medias.length === 0
+    urlHasImageItem.display =
+      !!easyFormState.url &&
+      easyFormState.url.match(urlRegex) != null &&
+      easyFormState.medias.length === 0
   }
 
   // GIF画像の動画変換チェックボックスの出し分け
@@ -471,8 +476,8 @@ const PreviewLinkCardFeature: {
       return
     }
 
-    // `http` or `https` から始まるURLライクな文字列のみ処理
-    if (!easyFormState.url.match(/https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/)) {
+    // `http://` or `https://` から始まる文字列のみ処理
+    if (!easyFormState.url.match(urlRegex)) {
       this.external.uri = ""
       return
     }
