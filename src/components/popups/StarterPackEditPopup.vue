@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive, ref } from "vue"
+import { inject, reactive } from "vue"
 import { RichText } from "@atproto/api"
 import extend from "extend"
 import EasyForm from "@/components/forms/EasyForm.vue"
@@ -14,8 +14,6 @@ const props = defineProps<{
   mode?: "create" | "edit"
   starterPack?: TIStarterPack
 }>()
-
-const easyForm = ref()
 
 const $t = inject("$t") as Function
 
@@ -52,6 +50,18 @@ const easyFormState = reactive<{
           value: item.value.uri,
         })
       })
+
+    // マイフィードに存在しないフィードを選択肢に追加
+    props.starterPack?.record.feeds?.forEach((feed) => {
+      if (results.findIndex((result) => {
+        return result.value === feed.uri
+      }) === - 1) {
+        results.push({
+          label: `(Unknown feed: ${feed.uri})`,
+          value: feed.uri,
+        })
+      }
+    })
 
     return results
   })(),
@@ -251,10 +261,7 @@ async function submitCallback () {
       </h2>
     </template>
     <template #body>
-      <EasyForm
-        v-bind="easyFormProps"
-        ref="easyForm"
-      />
+      <EasyForm v-bind="easyFormProps" />
     </template>
   </Popup>
 </template>
