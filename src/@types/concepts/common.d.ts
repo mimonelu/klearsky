@@ -19,3 +19,5 @@ type TTOption = {
   classes?: string
   icon?: string
 }
+
+type TTTranslationStep = "none" | "ignore" | "waiting" | "done" | "failed"

@@ -22,6 +22,7 @@ import RepostButton from "@/components/buttons/RepostButton.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
+import TranslatedText from "@/components/labels/TranslatedText.vue"
 import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
 import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
@@ -66,7 +67,7 @@ const state = reactive<{
   videoType?: string
 
   // 翻訳ステータス
-  translationStep: "none" | "ignore" | "waiting" | "done" | "failed"
+  translationStep: TTTranslationStep
 
   // ラベル対応
   blurredContentClicked: boolean
@@ -396,7 +397,6 @@ const observer = mainState.currentSetting.autoTranslation
       if (cid !== props.post.cid || state.translationStep !== "none") {
         return
       }
-      state.translationStep = "waiting"
       translateText(false) // No await
     })
   })
@@ -822,38 +822,24 @@ async function translateText (forceTranslate: boolean) {
     state.translationStep = "done"
     return
   }
-  if (!text) {
-    state.translationStep = "ignore"
+  if (
+    state.translationStep === "ignore" ||
+    state.translationStep === "waiting"
+  ) {
     return
   }
-  const srcLanguages = postLanguages
-  if (!srcLanguages?.length) {
-    state.translationStep = "ignore"
-    return
-  }
-  if (!forceTranslate) {
-    const autoTranslationIgnoreLanguage = mainState.currentSetting.autoTranslationIgnoreLanguage
-    if (autoTranslationIgnoreLanguage != null) {
-      const ignoreLanguages = autoTranslationIgnoreLanguage.replace(/\s/g, "").split(",")
-      const ignored = ignoreLanguages.some((ignore: string) => srcLanguages.includes(ignore))
-      if (ignored) {
-        state.translationStep = "ignore"
-        return
-      }
-    }
-  }
-  const dstLanguage = Util.getUserLanguage() ?? "en"
-  if (srcLanguages.length === 1 && srcLanguages[0] === dstLanguage) {
-    state.translationStep = "ignore"
-    return
-  }
-  const langpair = srcLanguages.find((srcLanguage: string) => srcLanguage !== dstLanguage)
-  const response: Error | string = await Util.translateInMyMemory({
+  state.translationStep = "waiting"
+  const response = await Util.translateText(
     text,
-    langpair,
-    dstLanguage,
-    email: mainState.atp.session?.email,
-  })
+    postLanguages,
+    mainState.currentSetting.autoTranslationIgnoreLanguage,
+    mainState.atp.session?.email,
+    forceTranslate
+  )
+  if (response == null) {
+    state.translationStep = "ignore"
+    return
+  }
   if (response instanceof Error) {
     state.translationStep = "failed"
     return
@@ -1190,15 +1176,10 @@ function toggleOldestQuotedPostDisplay () {
         </template>
 
         <!-- 自動翻訳 -->
-        <div
-          v-if="state.translationStep !== 'none' && state.translationStep !== 'ignore'"
-          class="translated-text"
-          dir="auto"
-        >
-          <template v-if="state.translationStep === 'waiting'">{{ $t("translating") }}</template>
-          <template v-else-if="state.translationStep === 'failed'">{{ $t("translationFailed") }}</template>
-          <template v-else-if="state.translationStep === 'done'">{{ props.post.__custom?.translatedText }}</template>
-        </div>
+        <TranslatedText
+          :step="state.translationStep"
+          :text="props.post.__custom?.translatedText"
+        />
 
         <!-- ポストメディアトグル -->
         <ContentFilteringToggle
@@ -2031,17 +2012,6 @@ function toggleOldestQuotedPostDisplay () {
     font-size: 2.5em;
     line-height: 1;
   }
-}
-
-.translated-text {
-  border-top: 1px solid rgb(var(--fg-color), 0.125);
-  padding-top: 0.5em;
-  color: rgb(var(--fg-color), 0.75);
-  font-style: italic;
-  line-height: var(--line-height-high);
-  user-select: text;
-  white-space: pre-wrap;
-  word-break: break-word;
 }
 
 .omit-images {

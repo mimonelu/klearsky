@@ -26,6 +26,7 @@ import shortenLinks from "@/composables/util/shorten-links"
 // import translateInDeepL from "@/composables/util/translate-in-deep-l" // DeepL: 未使用
 import translateInExternalService from "@/composables/util/translate-in-external-service"
 import translateInMyMemory from "@/composables/util/translate-in-my-memory"
+import translateText from "@/composables/util/translate-text"
 import traverseJson from "@/composables/util/traverse-json"
 import unicodeSubstring from "@/composables/util/unicode-substring"
 import updatePostProps from "@/composables/util/update-post-props"
@@ -62,6 +63,7 @@ export default {
   // translateInDeepL, // DeepL: 未使用
   translateInExternalService,
   translateInMyMemory,
+  translateText,
   traverseJson,
   unicodeSubstring,
   updatePostProps,

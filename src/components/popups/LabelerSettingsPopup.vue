@@ -2,9 +2,11 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LabelerCard from "@/components/cards/LabelerCard.vue"
+import Loader from "@/components/shells/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Radios from "@/components/forms/Radios.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import TranslatedText from "@/components/labels/TranslatedText.vue"
 import Util from "@/composables/util"
 
 interface TIPseudoLabelerDefinition extends TILabelerDefinition {
@@ -12,6 +14,8 @@ interface TIPseudoLabelerDefinition extends TILabelerDefinition {
   setting: TTContentVisibility
   options: Array<TTOption>
   detailDisplay: boolean
+  translationStep: TTTranslationStep
+  translatedDescription: undefined | string
 }
 
 const emit = defineEmits<{(event: string): void}>()
@@ -44,6 +48,8 @@ const state = reactive<{
       setting,
       options,
       detailDisplay: false,
+      translationStep: "none",
+      translatedDescription: undefined,
     }
   }) ?? [],
 })
@@ -147,8 +153,36 @@ function getDescription (pseudoDefinition: TIPseudoLabelerDefinition): string {
   return pseudoDefinition.locale?.description || $t(`label-description-${pseudoDefinition.identifier}`)
 }
 
-function translate (text: string) {
-  Util.translateInExternalService(text)
+async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
+  if (pseudoDefinition.translatedDescription != null) {
+    pseudoDefinition.translationStep = "done"
+    return
+  }
+  if (
+    pseudoDefinition.translationStep === "ignore" ||
+    pseudoDefinition.translationStep === "waiting"
+  ) {
+    return
+  }
+  pseudoDefinition.translationStep = "waiting"
+  const description = getDescription(pseudoDefinition)
+  const response = await Util.translateText(
+    description,
+    pseudoDefinition.locale?.lang != null ? [pseudoDefinition.locale.lang] : [],
+    undefined,
+    mainState.atp.session?.email,
+    true
+  )
+  if (response == null) {
+    pseudoDefinition.translationStep = "ignore"
+    return
+  }
+  if (response instanceof Error) {
+    pseudoDefinition.translationStep = "failed"
+    return
+  }
+  pseudoDefinition.translationStep = "done"
+  pseudoDefinition.translatedDescription = response
 }
 </script>
 
@@ -217,7 +251,14 @@ function translate (text: string) {
             class="labeler-settings-popup__label-description"
             :text="getDescription(pseudoDefinition)"
             :hasTranslateLink="pseudoDefinition.locale?.lang !== mainState.currentSetting.uiLanguage"
-            @translate="translate(getDescription(pseudoDefinition))"
+            @translate="translate(pseudoDefinition)"
+          />
+
+          <!-- ラベル説明 - 自動翻訳 -->
+          <TranslatedText
+            v-if="pseudoDefinition.detailDisplay"
+            :step="pseudoDefinition.translationStep"
+            :text="pseudoDefinition.translatedDescription"
           />
 
           <!-- 設定ラジオボタン -->
@@ -230,6 +271,12 @@ function translate (text: string) {
             layout="horizontal"
             @update="update"
           />
+
+          <!-- ラベル説明用ローダー -->
+          <Loader v-if="
+            pseudoDefinition.detailDisplay &&
+            pseudoDefinition.translationStep === 'waiting'
+          " />
         </div>
 
         <!-- リセットボタン -->
@@ -277,6 +324,7 @@ function translate (text: string) {
     display: flex;
     flex-direction: column;
     grid-gap: 0.5rem;
+    position: relative;
   }
 
   // ラベル名（ラベル説明トグル）
