@@ -21,7 +21,7 @@ import CustomBookmarkManagementPopup from "@/components/popups/CustomBookmarkMan
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import DropFiles from "@/components/next/DropFiles/DropFiles.vue"
 import EasterEggPopover from "@/components/next/EasterEgg/EasterEggPopover.vue"
-import EditPostPopup from "@/components/popups/EditPostPopup.vue"
+import EditPostPopup from "@/components/next/EditPost/EditPostPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
 import FeedCardPopover from "@/components/popovers/FeedCardPopover.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
