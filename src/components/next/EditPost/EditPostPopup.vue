@@ -5,6 +5,7 @@ import EasyForm from "@/components/forms/EasyForm.vue"
 import Loader from "@/components/shells/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import { useEditPost } from "@/components/next/EditPost/useEditPost"
 import Util from "@/composables/util"
 import Consts from "@/consts/consts.json"
 
@@ -46,12 +47,19 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
+const { canEditPost } = useEditPost(
+  mainState.editPostPopupProps.post,
+  mainState.atp.session?.did
+)
+
 function close () {
   emit("close")
 }
 
 async function submitCallback () {
   Util.blurElement()
+
+  // 必須プロパティの存在チェック
   if (
     mainState.editPostPopupProps.post == null ||
     mainState.atp.agent == null ||
@@ -60,6 +68,13 @@ async function submitCallback () {
     // TODO: エラーメッセージ
     return
   }
+
+  // ポスト編集が許可されている状態かチェック
+  if (!canEditPost()) {
+    // TODO: エラーメッセージ
+    return
+  }
+
   state.loaderDisplay = true
 
   // オリジナルポストの取得

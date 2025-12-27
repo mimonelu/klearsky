@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject } from "vue"
-import { differenceInMinutes } from "date-fns"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import CONSTS from "@/consts/consts.json"
+import { useEditPost } from "@/components/next/EditPost/useEditPost"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -12,19 +11,17 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
-const display = computed((): boolean => {
-  // 自分のポストでなければ編集不可
-  if (props.post.author.did !== mainState.atp.session?.did) {
-    return false
-  }
+const { canEditPost } = useEditPost(props.post, mainState.atp.session?.did)
 
-  // 投稿から指定時間以内のみ編集可能
-  const createdAt = new Date(props.post.record.createdAt)
-  const minutesPassed = differenceInMinutes(new Date(), createdAt)
-  return minutesPassed <= CONSTS.EDIT_POST_TIME_LIMIT_MINUTES
-})
+const display = computed((): boolean => canEditPost())
 
 function onActivate () {
+  // ポスト編集が許可されている状態かチェック
+  if (!canEditPost()) {
+    // TODO: エラーメッセージ
+    return
+  }
+
   mainState.openEditPostPopup({ post: props.post })
   emit("close")
 }
