@@ -18,7 +18,7 @@ const display = computed((): boolean => canEditPost())
 function onActivate () {
   // ポスト編集が許可されている状態かチェック
   if (!canEditPost()) {
-    // TODO: エラーメッセージ
+    mainState.openErrorPopup("Post editing is not allowed.", "OpenEditPostPopup/onActivate")
     emit("close")
     return
   }

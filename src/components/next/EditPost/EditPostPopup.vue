@@ -93,13 +93,13 @@ async function submitCallback () {
     mainState.atp.agent == null ||
     mainState.atp.session?.did == null
   ) {
-    // TODO: エラーメッセージ
+    mainState.openErrorPopup("Required property is missing.", "EditPostPopup/submitCallback")
     return
   }
 
   // ポスト編集が許可されている状態かチェック
   if (!canEditPost()) {
-    // TODO: エラーメッセージ
+    mainState.openErrorPopup("Post editing is not allowed.", "EditPostPopup/submitCallback")
     return
   }
 
@@ -115,7 +115,7 @@ async function submitCallback () {
     originalPostsResponse[0] == null
   ) {
     state.loaderDisplay = false
-    // TODO: エラーメッセージ
+    mainState.openErrorPopup(originalPostsResponse, "EditPostPopup/submitCallback")
     return
   }
   const post = originalPostsResponse[0]
@@ -168,7 +168,7 @@ async function submitCallback () {
         .catch((error) => error)
     if (createDummyPostResponse instanceof Error) {
       state.loaderDisplay = false
-      // TODO: エラーメッセージ
+      mainState.openErrorPopup(createDummyPostResponse, "EditPostPopup/submitCallback")
       return
     }
   }
@@ -177,7 +177,7 @@ async function submitCallback () {
   const deletePostResponse = await mainState.atp.deletePost(post.uri)
   if (deletePostResponse instanceof Error) {
     state.loaderDisplay = false
-    // TODO: エラーメッセージ
+    mainState.openErrorPopup(deletePostResponse, "EditPostPopup/submitCallback")
     return
   }
 
@@ -204,7 +204,7 @@ async function submitCallback () {
       .catch((error) => error)
   if (createPostResponse instanceof Error) {
     state.loaderDisplay = false
-    // TODO: エラーメッセージ
+    mainState.openErrorPopup(createPostResponse, "EditPostPopup/submitCallback")
     return
   }
 
@@ -213,7 +213,7 @@ async function submitCallback () {
     const deleteDummyPostResponse = await mainState.atp.deletePost(createDummyPostResponse.uri)
     if (deleteDummyPostResponse instanceof Error) {
       state.loaderDisplay = false
-      // TODO: エラーメッセージ
+      mainState.openErrorPopup(deleteDummyPostResponse, "EditPostPopup/submitCallback")
       return
     }
   }
