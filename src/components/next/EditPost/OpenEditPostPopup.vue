@@ -19,6 +19,7 @@ function onActivate () {
   // ポスト編集が許可されている状態かチェック
   if (!canEditPost()) {
     // TODO: エラーメッセージ
+    emit("close")
     return
   }
 

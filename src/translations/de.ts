@@ -167,6 +167,9 @@ export default () => ({
   // POST EDIT
   // ============================================================================
   "editPost": "Beitrag bearbeiten",
+  "editPostDescription1": "Verbleibende Zeit",
+  "editPostDescription2": "Dies ist eine riskante Funktion. Wir empfehlen sie nicht.",
+  "editPostDescription3": "Die angezeigte Anzahl für jede Reaktion wird auf 0 zurückgesetzt.",
 
   // ============================================================================
   // POST STATES

@@ -167,6 +167,9 @@ export default () => ({
   // POST EDIT
   // ============================================================================
   "editPost": "Edit post",
+  "editPostDescription1": "Time remaining",
+  "editPostDescription2": "This is a risky feature. We do not recommend using it.",
+  "editPostDescription3": "The displayed count for each reaction will be reset to 0.",
 
   // ============================================================================
   // POST STATES

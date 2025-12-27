@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import type { AppBskyFeedPost } from "@atproto/api"
 import { RichText } from "@atproto/api"
-import { inject, reactive } from "vue"
+import { computed, inject, onBeforeUnmount, reactive, ref } from "vue"
+import { differenceInSeconds } from "date-fns"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Loader from "@/components/shells/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import { useEditPost } from "@/components/next/EditPost/useEditPost"
 import Util from "@/composables/util"
-import Consts from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -52,6 +53,32 @@ const { canEditPost } = useEditPost(
   mainState.editPostPopupProps.post,
   mainState.atp.session?.did
 )
+
+const timeRemainingNow = ref(new Date())
+
+const timeRemaining = computed((): string => {
+  const post = mainState.editPostPopupProps.post
+  if (post == null) {
+    return "00:00"
+  }
+  const dateA = new Date(post.record.createdAt)
+  dateA.setMinutes(dateA.getMinutes() + CONSTS.EDIT_POST_TIME_LIMIT_MINUTES)
+  const remainingSeconds = differenceInSeconds(dateA, timeRemainingNow.value)
+  if (remainingSeconds <= 0) {
+    return "00:00"
+  }
+  const minutes = Math.floor(remainingSeconds / 60)
+  const seconds = remainingSeconds % 60
+  return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+})
+
+const timeRemainingIntervalId = setInterval(() => {
+  timeRemainingNow.value = new Date()
+}, 1000)
+
+onBeforeUnmount(() => {
+  clearInterval(timeRemainingIntervalId)
+})
 
 function close () {
   emit("close")
@@ -161,7 +188,7 @@ async function submitCallback () {
     text,
 
     // 編集済みカスタムフィールドの追加
-    [Consts.THIRD_PARTY_DOMAIN_POST_UPDATEDAT]: new Date().toISOString(),
+    [CONSTS.THIRD_PARTY_DOMAIN_POST_UPDATEDAT]: new Date().toISOString(),
   }
   const createPostResponse: Error | TTCidUri =
     await mainState.atp.agent.app.bsky.feed.post.create(
@@ -209,6 +236,13 @@ async function submitCallback () {
       </h2>
     </template>
     <template #body>
+      <!-- メッセージ -->
+      <ul class="bullet-points">
+        <li>{{ $t("editPostDescription1") }}: {{ timeRemaining }}</li>
+        <li>{{ $t("editPostDescription2") }}</li>
+        <li>{{ $t("editPostDescription3") }}</li>
+      </ul>
+
       <!-- フォーム -->
       <EasyForm
         v-bind="easyFormProps"
@@ -231,5 +265,11 @@ async function submitCallback () {
     border-radius: 0;
     margin: 0 -1.5rem;
   }
+}
+
+.bullet-points {
+  --fg-color: var(--notice-color);
+  color: rgb(var(--notice-color));
+  font-size: 0.875rem;
 }
 </style>
