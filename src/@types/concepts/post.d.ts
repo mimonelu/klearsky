@@ -167,3 +167,8 @@ type TTSendPostPopupParams = {
   fileList?: FileList
   createdAt?: string
 }
+
+type TTEditPostPopupParams = {
+  display?: boolean
+  post?: TTPost
+}

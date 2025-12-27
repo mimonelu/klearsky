@@ -779,6 +779,14 @@ export const state: MainState = reactive<MainState>({
   openSendPostPopup: openSendPostPopup,
   closeSendPostPopup: closeSendPostPopup,
 
+  // ポップアップ - ポスト編集ポップアップ
+  editPostPopupProps: {
+    display: false,
+    post: undefined,
+  },
+  openEditPostPopup: openEditPostPopup,
+  closeEditPostPopup: closeEditPostPopup,
+
   // ポップアップ - マイワードポップアップ
   myWordPopupProps: {
     display: false,
@@ -2831,6 +2839,20 @@ async function closeSendPostPopup (done: boolean, hidden: boolean) {
     state.listMentionPopupProps.dids.splice(0)
   }
   state.sendPostPopupProps.visibility = false
+}
+
+// ポップアップ - ポスト編集ポップアップ
+
+function openEditPostPopup (params?: TTEditPostPopupParams) {
+  if (params?.post != null) {
+    state.editPostPopupProps.post = params.post
+  }
+  state.editPostPopupProps.display = true
+}
+
+function closeEditPostPopup () {
+  state.editPostPopupProps.display = false
+  state.editPostPopupProps.post = undefined
 }
 
 // ポップアップ - マイワードポップアップ

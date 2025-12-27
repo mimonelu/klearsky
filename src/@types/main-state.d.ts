@@ -683,6 +683,11 @@ interface MainState {
   openSendPostPopup: (params?: TTSendPostPopupParams) => Promise<boolean>
   closeSendPostPopup: (done: boolean, hidden: boolean) => void
 
+  // ポップアップ - ポスト編集ポップアップ
+  editPostPopupProps: TTEditPostPopupParams
+  openEditPostPopup: (params?: TTEditPostPopupParams) => void
+  closeEditPostPopup: () => void
+
   // ポップアップ - マイワードポップアップ
   myWordPopupProps: TIMyWordPopupProps
   openMyWordPopup: Function

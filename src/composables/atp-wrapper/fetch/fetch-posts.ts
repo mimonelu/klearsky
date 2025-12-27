@@ -4,7 +4,8 @@ import CONSTS from "@/consts/consts.json"
 
 export default async function (
   this: TIAtpWrapper,
-  uris: Array<string>
+  uris: Array<string>,
+  noSanitize = false
 ): Promise<Error | Array<TTPost>> {
   if (this.agent == null) {
     return Error("noAgentError")
@@ -40,7 +41,9 @@ export default async function (
     }
 
     // TODO:
-    Util.sanitizePostsOrFeeds(response.value.data.posts)
+    if (!noSanitize) {
+      Util.sanitizePostsOrFeeds(response.value.data.posts)
+    }
 
     results.push(...(response.value.data.posts as Array<TTPost>))
   })

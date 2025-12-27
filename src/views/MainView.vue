@@ -21,6 +21,7 @@ import CustomBookmarkManagementPopup from "@/components/popups/CustomBookmarkMan
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
 import DropFiles from "@/components/next/DropFiles/DropFiles.vue"
 import EasterEggPopover from "@/components/next/EasterEgg/EasterEggPopover.vue"
+import EditPostPopup from "@/components/popups/EditPostPopup.vue"
 import ErrorPopup from "@/components/popups/ErrorPopup.vue"
 import FeedCardPopover from "@/components/popovers/FeedCardPopover.vue"
 import HtmlPopup from "@/components/popups/HtmlPopup.vue"
@@ -1343,6 +1344,14 @@ function changeSetting () {
           v-if="state.imagePopupProps.display"
           v-bind="state.imagePopupProps"
           @close="state.imagePopupProps.display = false"
+        />
+      </Transition>
+
+      <!-- ポスト編集ポップアップ -->
+      <Transition>
+        <EditPostPopup
+          v-if="state.editPostPopupProps.display"
+          @close="state.closeEditPostPopup"
         />
       </Transition>
 

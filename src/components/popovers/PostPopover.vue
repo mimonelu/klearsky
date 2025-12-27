@@ -7,6 +7,7 @@ import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
 import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.vue"
 import MenuTickerOpenCustomBookmarkManagementPopup from "@/components/menus/OpenCustomBookmarkManagementPopup.vue"
+import MenuTickerOpenEditPostPopup from "@/components/menus/OpenEditPostPopup.vue"
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"
 import MenuTickerOpenLivePage from "@/components/menus/OpenLivePage.vue"
 import MenuTickerOpenReactionControlPopup from "@/components/menus/OpenReactionControlPopup.vue"
@@ -233,6 +234,12 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       <!-- 反応制御ポップアップトリガー -->
       <MenuTickerOpenReactionControlPopup
         v-if="state.isUser"
+        :post="post"
+        @close="emit('close')"
+      />
+
+      <!-- ポストを編集する -->
+      <MenuTickerOpenEditPostPopup
         :post="post"
         @close="emit('close')"
       />

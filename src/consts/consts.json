@@ -66,6 +66,7 @@
   "LIMIT_OF_THREADGATE_ITEMS": 5,
   "LIMIT_OF_LIST_MENTION_ACCOUNTS": 30,
   "OLD_POST_NOTIFICATION_DAYS": 2,
+  "EDIT_POST_TIME_LIMIT_MINUTES": 10,
   "ATMOSPHERE_SERVICE_FAVICONS": {
     "frontpage": "https://frontpage.fyi/frontpage-logo.svg?b5da8167450d2f63",
     "linkat": "https://linkat.blue/favicon.ico",
@@ -76,6 +77,7 @@
   "THIRD_PARTY_DOMAIN_BOOKMARK": "space.aoisora.bookmark",
   "THIRD_PARTY_DOMAIN_LIGHTNING": "space.aoisora.post.lightning",
   "THIRD_PARTY_DOMAIN_VIA": "space.aoisora.post.via",
+  "THIRD_PARTY_DOMAIN_POST_UPDATEDAT": "space.aoisora.post.updatedAt",
   "DEFAULT_CHAT_REACTIONS": [
     [ "👍", "😆", "❤️", "👀", "😢" ],
     [ "✅", "😊", "🚀", "🤔", "😭" ]

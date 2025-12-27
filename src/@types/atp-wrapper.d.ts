@@ -175,7 +175,7 @@ interface TIAtpWrapper {
   fetchPostgate
     (this: TIAtpWrapper, post: string): Promise<Error | { uri: string; cid: string; value: TIPostgate; }>
   fetchPosts
-    (uris: Array<string>): Promise<Error | Array<TTPost>>
+    (uris: Array<string>, noSanitize = false): Promise<Error | Array<TTPost>>
   fetchPostSearch
     (currentPosts: Array<TTPost>, q: string, params: TIPostSearch, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchPostThread
