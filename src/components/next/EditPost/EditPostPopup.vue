@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { AppBskyFeedPost } from "@atproto/api"
+import { RichText } from "@atproto/api"
 import { inject, reactive } from "vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -92,6 +93,32 @@ async function submitCallback () {
   }
   const post = originalPostsResponse[0]
 
+  // 新テキスト
+  let text = easyFormState.text
+
+  // テキスト編集 - カスタムリンクの作成
+  const customLinks = Util.makeCustomLinks(text)
+  text = customLinks.text
+
+  // facets
+  const richText = new RichText({ text })
+  await richText.detectFacets(mainState.atp.agent)
+  if (richText.facets != null) {
+    richText.facets.push(...customLinks.facets)
+  } else {
+    richText.facets = customLinks.facets
+  }
+
+  // facets - URL文字列の省略表記
+  // TODO: カスタムリンクと共存できるようにすること
+  // Util.shortenLinks(richText)
+
+  text = richText.text
+
+  // facets - 既存 facets とのマージが困難であるため、ポスト編集時は facets を上書きする
+  // これにより少なくともZapリンクとリストメンションは無効化されるが許容するものとする
+  post.record.facets = richText.facets
+
   // ダミーポストの作成
   // 添付ファイルの参照カウントを 0 にして blob が削除されないようにする施策
   let createDummyPostResponse: undefined | Error | TTCidUri = undefined
@@ -131,7 +158,7 @@ async function submitCallback () {
   const record: AppBskyFeedPost.Record = {
     ...post.record as AppBskyFeedPost.Record,
     createdAt: new Date(post.record.createdAt).toISOString(),
-    text: easyFormState.text,
+    text,
 
     // 編集済みカスタムフィールドの追加
     [Consts.THIRD_PARTY_DOMAIN_POST_UPDATEDAT]: new Date().toISOString(),
