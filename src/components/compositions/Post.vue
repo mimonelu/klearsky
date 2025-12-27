@@ -91,9 +91,10 @@ const postElement = ref()
 const processing = ref(false)
 
 // 本文
-const text =
+const text = ref(
   props.post.record?.text ??
   props.post.value?.text
+)
 
 // 投稿日時
 const indexedAt =
@@ -104,7 +105,7 @@ const indexedAt =
 
 // デカ絵文字
 const EMOJI_REGEX = /^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,7}$/u
-const isTextOnlyEmoji = text?.match(EMOJI_REGEX) != null
+const isTextOnlyEmoji = text.value?.match(EMOJI_REGEX) != null
 
 // メディア - 画像
 const embeddedImages: readonly TTImage[] =
@@ -256,7 +257,7 @@ const hasOtherLanguagesForText = computed((): boolean => {
   if (props.noLink) {
     return false
   }
-  if (!text) {
+  if (!text.value) {
     return false
   }
   return hasOtherLanguages.value
@@ -372,7 +373,7 @@ const foldingMedia = ref(!shouldDisplayMedia.value)
 // 本文とワードミュート用に RichText を生成
 const contentRichText = computed(() => {
   // テキストまたはfacetsが変更された場合のみ再生成
-  const currentText = text ?? ""
+  const currentText = text.value ?? ""
   const facets = props.post.record?.facets ?? props.post.value?.facets
   const richText = new RichText({
     text: currentText,
@@ -729,6 +730,10 @@ async function updatePostThread () {
     return
   }
   emit("updateThisPostThread", posts)
+
+  // ポスト編集後に内容を更新する
+  // このために text を ref にしている
+  text.value = props.post.record.text
 }
 
 async function createCustomBookmark (uri: string, cid: string) {

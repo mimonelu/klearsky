@@ -220,6 +220,7 @@ async function submitCallback () {
 
   state.loaderDisplay = false
   close()
+  mainState.postPopoverCallback?.("updatePost")
 }
 </script>
 
