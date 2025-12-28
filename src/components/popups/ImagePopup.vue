@@ -239,10 +239,6 @@ function close () {
 
   // タッチジェスチャーを無効化
   touch-action: none;
-
-  &[data-mode="false"] {
-    padding: 1rem;
-  }
 }
 
 // サムネイル画像 / ラージ画像
