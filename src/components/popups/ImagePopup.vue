@@ -277,13 +277,13 @@ function close () {
 
   // 非SPレイアウト
   @include media-not-sp-layout() {
-    margin-top: 1rem;
+    padding: 1rem;
   }
 
   // SPレイアウト
   @include media-sp-layout() {
     font-size: 0.875rem;
-    margin: 1rem 0 calc(5rem + env(safe-area-inset-bottom));
+    padding: 1rem 1rem calc(5rem + env(safe-area-inset-bottom));
   }
 
   &:empty,
