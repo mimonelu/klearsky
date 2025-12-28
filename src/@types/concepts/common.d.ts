@@ -21,3 +21,13 @@ type TTOption = {
 }
 
 type TTTranslationStep = "none" | "ignore" | "waiting" | "done" | "failed"
+
+type TTCreateReportParams = {
+  reasonType: string
+  reason: string
+  atprotoLabeler?: string
+  did?: string
+  cid?: string
+  uri?: string
+  type?: string
+}

@@ -38,7 +38,7 @@ interface TIAtpWrapper {
   createRecord
     (repo: string, collection: string, record: { [k: string]: any }, rkey?: string, validate?: boolean, swapCommit?: string): Promise<Error | TTCidUri>
   createReport
-    (reasonType: string, reason: string, did?: string, cid?: string, uri?: string, type?: string): Promise<Error | undefined>
+    (params: TTCreateReportParams): Promise<Error | undefined>
   createRepost
     (uri: string, cid: string, via?: TTCidUri): Promise<Error | undefined>
   createStarterPack

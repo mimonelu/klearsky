@@ -5,6 +5,7 @@ import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 import OPTIONS from "@/consts/options.json"
 
 const emit = defineEmits<{(event: string): void}>()
@@ -29,10 +30,12 @@ const formState = reactive<{
   reasonType?: string
   reasonItem?: string
   reason?: string
+  atprotoLabeler?: string
 }>({
   reasonType: undefined,
   reasonItem: undefined,
   reason: undefined,
+  atprotoLabeler: undefined,
 })
 
 const easyFormProps: TTEasyForm = {
@@ -75,6 +78,22 @@ const easyFormProps: TTEasyForm = {
     },
     {
       state: formState,
+      model: "atprotoLabeler",
+      label: $t("labeler"),
+      type: "radio",
+      required: true,
+      options: mainState.myLabeler?.labelers?.map((labeler): TTOption => {
+        return {
+          label: labeler.creator.displayName || labeler.creator.handle,
+          value: labeler.creator.did === CONSTS.OFFICIAL_LABELER_DID
+            ? undefined
+            : labeler.creator.did,
+        }
+      }) ?? [],
+      layout: "vertical",
+    },
+    {
+      state: formState,
       model: "reason",
       label: $t("reportReason"),
       type: "textarea",
@@ -104,11 +123,12 @@ async function submitCallback () {
 
   if (state.popupLoaderDisplay) return
   state.popupLoaderDisplay = true
-  const response = await mainState.atp.createReport(
-    formState.reasonItem as string,
-    formState.reason as string,
-    props.user.did
-  )
+  const response = await mainState.atp.createReport({
+    reasonType: formState.reasonItem as string,
+    reason: formState.reason as string,
+    atprotoLabeler: formState.atprotoLabeler,
+    did: props.user.did,
+  })
   state.popupLoaderDisplay = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "SendAccountReportPopup/createReport")
