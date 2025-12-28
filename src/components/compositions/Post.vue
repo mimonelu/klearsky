@@ -835,7 +835,7 @@ async function translateText (forceTranslate: boolean) {
   }
   state.translationStep = "waiting"
   const response = await Util.translateText(
-    text,
+    text.value,
     postLanguages,
     mainState.currentSetting.autoTranslationIgnoreLanguage,
     mainState.atp.session?.email,
