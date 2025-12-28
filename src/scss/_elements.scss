@@ -108,6 +108,7 @@ body {
   font-optical-sizing: auto;
   overflow-x: hidden;
   overflow-y: scroll;
+  overscroll-behavior: none;
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
   -ms-text-size-adjust: 100%;

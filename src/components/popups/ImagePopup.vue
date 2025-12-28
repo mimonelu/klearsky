@@ -145,18 +145,18 @@ function close () {
         background-image: url(${
           images[index].blob != null
             ? state.blobs[index] != null
-              ? ''
+              ? '/img/void.png'
               : images[index].smallUri
             : images[index].smallUri
         });
         background-position: ${state.x * 100}% ${state.y * 100}%;
       `"
-      @mousedown="startDrag"
-      @touchstart.passive="startDrag"
-      @mousemove="moveDrag"
-      @touchmove.passive="moveDrag"
+      @mousedown.prevent="startDrag"
+      @touchstart.prevent="startDrag"
+      @mousemove.prevent="moveDrag"
+      @touchmove.prevent="moveDrag"
       @mouseup="endDrag"
-      @touchend.passive="endDrag"
+      @touchend="endDrag"
     >
       <!-- ラージ画像 -->
       <div
@@ -236,6 +236,10 @@ function close () {
   z-index: 2;
   width: 100%;
   height: 100%;
+
+  // タッチジェスチャーを無効化
+  touch-action: none;
+
   &[data-mode="false"] {
     padding: 1rem;
   }
@@ -250,16 +254,17 @@ function close () {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: background-position 100ms ease-out;
+
+  // タッチジェスチャーを無効化
+  touch-action: none;
+
+  // 補間アニメーションは重くなるため撤去
+  // transition: background-position 100ms ease-out;
+
   [data-mode="false"] & {
     background-size: contain;
     cursor: grab;
   }
-}
-
-// ラージ画像の読込判断用 img 要素
-.large-image-loader {
-  display: contents;
 }
 
 .loader {
