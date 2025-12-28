@@ -1710,6 +1710,16 @@ function changeSetting () {
     &:empty {
       display: none;
     }
+
+    // SPでルータービューヘッダーの上部に隙間が生じる不具合対策
+    &::before {
+      background-color: rgb(var(--bg-color), var(--main-area-opacity));
+      content: "";
+      display: block;
+      margin-top: -1px;
+      width: 100%;
+      height: 1px;
+    }
   }
 }
 
