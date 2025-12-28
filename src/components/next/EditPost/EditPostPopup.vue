@@ -242,6 +242,7 @@ async function submitCallback () {
         <li>{{ $t("editPostDescription1") }}: {{ timeRemaining }}</li>
         <li>{{ $t("editPostDescription2") }}</li>
         <li>{{ $t("editPostDescription3") }}</li>
+        <li>{{ $t("editPostDescription4") }}</li>
       </ul>
 
       <!-- フォーム -->
@@ -269,8 +270,12 @@ async function submitCallback () {
 }
 
 .bullet-points {
-  --fg-color: var(--notice-color);
-  color: rgb(var(--notice-color));
   font-size: 0.875rem;
+
+  li:nth-child(n + 3) {
+    --fg-color: var(--notice-color);
+    color: rgb(var(--notice-color));
+    font-weight: bold;
+  }
 }
 </style>

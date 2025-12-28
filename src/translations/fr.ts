@@ -168,8 +168,9 @@ export default () => ({
   // ============================================================================
   "editPost": "Modifier la publication",
   "editPostDescription1": "Temps restant",
-  "editPostDescription2": "Fonctionnalité risquée. Utilisation non recommandée.",
-  "editPostDescription3": "Le nombre de réactions affiché sera réinitialisé à 0.",
+  "editPostDescription2": "Vous pouvez modifier le texte dans le délai imparti.",
+  "editPostDescription3": "Fonctionnalité risquée. Utilisation non recommandée.",
+  "editPostDescription4": "Le nombre de réactions affiché sera réinitialisé à 0.",
 
   // ============================================================================
   // POST STATES

@@ -168,8 +168,9 @@ export default () => ({
   // ============================================================================
   "editPost": "Beitrag bearbeiten",
   "editPostDescription1": "Verbleibende Zeit",
-  "editPostDescription2": "Dies ist eine riskante Funktion. Wir empfehlen sie nicht.",
-  "editPostDescription3": "Die angezeigte Anzahl für jede Reaktion wird auf 0 zurückgesetzt.",
+  "editPostDescription2": "Sie können den Text innerhalb der Zeitspanne bearbeiten.",
+  "editPostDescription3": "Dies ist eine riskante Funktion. Wir empfehlen sie nicht.",
+  "editPostDescription4": "Die angezeigte Anzahl für jede Reaktion wird auf 0 zurückgesetzt.",
 
   // ============================================================================
   // POST STATES
