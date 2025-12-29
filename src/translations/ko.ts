@@ -454,6 +454,8 @@ export default () => ({
   "reportReasonItem": "신고 사유",
   "reportReason": "세부사항 (선택사항)",
   "reportReasonDescription": "기타 정보가 있으면 기입하세요.",
+  "reportCustomAtprotoLabeler": "사용자 지정 atproto-labeler",
+  "reportCustomAtprotoLabelerPlaceholder": "예: did:web:localhost%3A3000",
   "reportCopyrightViolation": "저작권 침해 신고 관련",
   "reportReasonMisleading": "오해 소지",
   "reportReasonSexualAdultContent": "성인 콘텐츠",

@@ -12,6 +12,7 @@ const props = defineProps<{
     reasonItem?: string
     reason?: string
     atprotoLabeler?: string
+    customAtprotoLabeler?: string
   }
 }>()
 
@@ -69,15 +70,38 @@ const easyFormProps: TTEasyForm = {
       label: $t("labeler"),
       type: "radio",
       required: true,
-      options: mainState.myLabeler?.labelers?.map((labeler): TTOption => {
-        return {
-          label: labeler.creator.displayName || labeler.creator.handle,
-          value: labeler.creator.did === CONSTS.OFFICIAL_LABELER_DID
-            ? undefined
-            : labeler.creator.did,
-        }
-      }) ?? [],
+      options: [
+        ...mainState.myLabeler?.labelers?.map((labeler): TTOption => {
+          return {
+            label: labeler.creator.displayName || labeler.creator.handle,
+            value: labeler.creator.did === CONSTS.OFFICIAL_LABELER_DID
+              ? undefined
+              : labeler.creator.did,
+          }
+        }) ?? [],
+        {
+          label: $t("reportCustomAtprotoLabeler"),
+          value: "customAtprotoLabeler",
+        },
+      ],
       layout: "vertical",
+
+      // カスタムラベラー選択時にカスタムラベラー入力欄の表示状態を設定
+      onUpdate (_, form) {
+        form.data[3].display = props.formState.atprotoLabeler === "customAtprotoLabeler"
+        if (!form.data[3].display) {
+          props.formState.customAtprotoLabeler = undefined
+        }
+        easyForm.value.forceUpdate()
+      },
+    },
+    {
+      state: props.formState,
+      model: "customAtprotoLabeler",
+      label: $t("reportCustomAtprotoLabeler"),
+      type: "text",
+      placeholder: $t("reportCustomAtprotoLabelerPlaceholder"),
+      display: false,
     },
     {
       state: props.formState,

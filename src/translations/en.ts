@@ -454,6 +454,8 @@ export default () => ({
   "reportReasonItem": "Reason",
   "reportReason": "Details (optional)",
   "reportReasonDescription": "Enter any additional information here.",
+  "reportCustomAtprotoLabeler": "Custom atproto-labeler",
+  "reportCustomAtprotoLabelerPlaceholder": "e.g. did:web:localhost%3A3000",
   "reportCopyrightViolation": "Reporting copyright violation",
   "reportReasonMisleading": "Misleading",
   "reportReasonSexualAdultContent": "Adult Content",

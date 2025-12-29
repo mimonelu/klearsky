@@ -27,11 +27,13 @@ const formState = reactive<{
   reasonItem?: string
   reason?: string
   atprotoLabeler?: string
+  customAtprotoLabeler?: string
 }>({
   reasonType: undefined,
   reasonItem: undefined,
   reason: undefined,
   atprotoLabeler: undefined,
+  customAtprotoLabeler: undefined,
 })
 
 function close () {
@@ -50,10 +52,13 @@ async function submitCallback () {
 
   if (state.popupLoaderDisplay) return
   state.popupLoaderDisplay = true
+  const atprotoLabeler = formState.atprotoLabeler === "customAtprotoLabeler"
+    ? formState.customAtprotoLabeler
+    : formState.atprotoLabeler
   const response = await mainState.atp.createReport({
     reasonType: formState.reasonItem as string,
     reason: formState.reason as string,
-    atprotoLabeler: formState.atprotoLabeler,
+    atprotoLabeler,
     cid: props.list.cid,
     uri: props.list.uri,
     type: "list",
