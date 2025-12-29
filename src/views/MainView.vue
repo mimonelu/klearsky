@@ -1136,6 +1136,24 @@ function changeSetting () {
         />
       </Transition>
 
+      <!-- ラベラー一覧ポップアップ -->
+      <Transition>
+        <LabelerListPopup
+          v-if="state.labelerListPopupProps.display"
+          v-bind="state.labelerListPopupProps"
+          @close="state.closeLabelerListPopup"
+        />
+      </Transition>
+
+      <!-- ラベラー設定ポップアップ -->
+      <Transition>
+        <LabelerSettingsPopup
+          v-if="state.labelerSettingsPopupProps.display"
+          v-bind="state.labelerSettingsPopupProps"
+          @close="state.closeLabelerSettingsPopup"
+        />
+      </Transition>
+
       <!-- 認証者一覧ポップアップ -->
       <Transition>
         <VerifiersPopup
@@ -1229,24 +1247,6 @@ function changeSetting () {
           v-if="state.chatMembersSelectPopupProps.display"
           v-bind="state.chatMembersSelectPopupProps"
           @close="state.closeChatMembersSelectPopup"
-        />
-      </Transition>
-
-      <!-- ラベラー一覧ポップアップ -->
-      <Transition>
-        <LabelerListPopup
-          v-if="state.labelerListPopupProps.display"
-          v-bind="state.labelerListPopupProps"
-          @close="state.closeLabelerListPopup"
-        />
-      </Transition>
-
-      <!-- ラベラー設定ポップアップ -->
-      <Transition>
-        <LabelerSettingsPopup
-          v-if="state.labelerSettingsPopupProps.display"
-          v-bind="state.labelerSettingsPopupProps"
-          @close="state.closeLabelerSettingsPopup"
         />
       </Transition>
 
