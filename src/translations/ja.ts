@@ -454,7 +454,7 @@ export default () => ({
   "reportReasonItem": "レポート事由",
   "reportReason": "詳細（任意）",
   "reportReasonDescription": "その他、情報があれば記入してください。",
-  "reportCustomAtprotoLabeler": "任意の atproto-labeler",
+  "reportCustomAtprotoLabeler": "任意の atproto_labeler",
   "reportCustomAtprotoLabelerPlaceholder": "例： did:web:localhost%3A3000",
   "reportCopyrightViolation": "著作権侵害の報告について",
   "reportReasonMisleading": "誤解を招くこと",
