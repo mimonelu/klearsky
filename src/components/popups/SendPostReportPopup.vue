@@ -2,7 +2,7 @@
 import { inject, reactive } from "vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/compositions/Post.vue"
-import ReportForm from "@/components/forms/ReportForm.vue"
+import ReportForm, { type TTReportFormState } from "@/components/forms/ReportForm.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -22,13 +22,7 @@ const state = reactive<{
   popupLoaderDisplay: false,
 })
 
-const formState = reactive<{
-  reasonType?: string
-  reasonItem?: string
-  reason?: string
-  atprotoLabeler?: string
-  customAtprotoLabeler?: string
-}>({
+const formState = reactive<TTReportFormState>({
   reasonType: undefined,
   reasonItem: undefined,
   reason: undefined,

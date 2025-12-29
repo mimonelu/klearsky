@@ -6,14 +6,16 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import CONSTS from "@/consts/consts.json"
 import OPTIONS from "@/consts/options.json"
 
+export type TTReportFormState = {
+  reasonType?: string
+  reasonItem?: string
+  reason?: string
+  atprotoLabeler?: string
+  customAtprotoLabeler?: string
+}
+
 const props = defineProps<{
-  formState: {
-    reasonType?: string
-    reasonItem?: string
-    reason?: string
-    atprotoLabeler?: string
-    customAtprotoLabeler?: string
-  }
+  formState: TTReportFormState
 }>()
 
 const emit = defineEmits<{
