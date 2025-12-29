@@ -159,6 +159,7 @@ function scrolledToBottom () {
   &__accounts {
     display: flex;
     flex-direction: column;
+    padding: 0.5rem 0;
   }
 
   &__account {
@@ -170,7 +171,7 @@ function scrolledToBottom () {
     gap: 0 0.5rem;
     align-items: center;
     justify-content: start;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
 
     .svg-icon--verified {
       grid-area: i;

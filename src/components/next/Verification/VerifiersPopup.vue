@@ -113,6 +113,7 @@ async function fetchVerifiers () {
   &__accounts {
     display: flex;
     flex-direction: column;
+    padding: 0.5rem 0;
   }
 
   .loader {
@@ -121,7 +122,7 @@ async function fetchVerifiers () {
   }
 
   .user-box {
-    padding: 1rem;
+    padding: 0.5rem 1rem;
   }
 }
 </style>
