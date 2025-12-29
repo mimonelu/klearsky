@@ -3,7 +3,7 @@ import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
-  currentOfficialBookmarks: Array<TTPost>,
+  currentOfficialBookmarks: Array<TTOfficialBookmark>,
   limit?: number,
   cursor?: string
 ): Promise<Error | undefined | string> {
@@ -31,9 +31,9 @@ export default async function (
   if (response.data?.bookmarks == null) {
     return Error("apiError")
   }
-  const addingOfficialBookmarks: Array<TTPost> = []
+  const addingOfficialBookmarks: Array<TTOfficialBookmark> = []
   response.data.bookmarks.forEach((bookmark) => {
-    const newPost = bookmark.item as unknown as undefined | TTPost
+    const newPost = bookmark.item as unknown as undefined | TTOfficialBookmark
     if (newPost?.uri == null) {
       return
     }

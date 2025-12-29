@@ -165,7 +165,7 @@ interface TIAtpWrapper {
   fetchNotifications
     (values: Array<TTNotificationGroup>, reasons?: Array<TTNotificationStrictReason>, limit?: number, cursor?: string): Promise<Error | { cursor?: string; newNotificationCount: number }>
   fetchOfficialBookmarks
-    (currentOfficialBookmarks: Array<TTPost>, limit?: number, cursor?: string): Promise<Error | undefined | string>
+    (currentOfficialBookmarks: Array<TTOfficialBookmark>, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchOfficialFeedGenerators
     (): Promise<Error | Array<TTFeedGenerator>>
   fetchPopularFeedGenerators

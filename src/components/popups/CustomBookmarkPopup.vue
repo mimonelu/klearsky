@@ -3,6 +3,7 @@ import { computed, inject, onBeforeMount, reactive, ref, type ComputedRef } from
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/compositions/Post.vue"
+import PostNotExists from "@/components/compositions/PostNotExists.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
@@ -258,21 +259,11 @@ async function outputJsonForSkyFeed () {
             />
 
             <!-- 存在しないポスト -->
-            <div
+            <PostNotExists
               v-else
-              class="post-not-exists"
-            >
-              <p class="post-not-exists__message">{{ $t("postNotFound") }}</p>
-              <p class="post-not-exists__uri">{{ pack.bookmark.uri }}</p>
-              <button
-                type="button"
-                class="post-not-exists__button button--important"
-                @click.stop="deleteCustomBookmark(pack.bookmark.uri)"
-              >
-                <SVGIcon name="remove" />
-                <span>{{ $t("delete") }}</span>
-              </button>
-            </div>
+              :uri="pack.bookmark.uri"
+              @delete="deleteCustomBookmark"
+            />
           </template>
         </template>
       </div>
@@ -313,29 +304,5 @@ async function outputJsonForSkyFeed () {
 // ブックマークなし
 .no-bookmark {
   padding: 1rem;
-}
-
-// 存在しないポスト
-.post-not-exists {
-  background-color: rgb(var(--fg-color), 0.125);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 0.5rem;
-  padding: 0.75rem;
-
-  &__message,
-  &__uri {
-    grid-column-end: span 2;
-  }
-
-  &__uri {
-    color: rgb(var(--fg-color), 0.75);
-    font-size: 0.875rem;
-    user-select: text;
-  }
-
-  &__button {
-    grid-column-start: 2;
-  }
 }
 </style>

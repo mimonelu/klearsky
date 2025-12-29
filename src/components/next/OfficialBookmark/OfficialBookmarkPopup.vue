@@ -3,6 +3,7 @@ import { computed, inject, onBeforeMount, reactive, ref, type ComputedRef } from
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/compositions/Post.vue"
+import PostNotExists from "@/components/compositions/PostNotExists.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
@@ -22,8 +23,6 @@ const state = reactive<{
     return postContainer.value?.closest(".popup-body") ?? undefined
   }),
 })
-
-const popup = ref()
 
 const postContainer = ref()
 
@@ -66,6 +65,17 @@ async function fetchContinuousResults (direction: "new" | "old") {
   mainState.myWorker!.setSessionCache("officialBookmarks", mainState.currentOfficialBookmarks)
 }
 
+async function deleteOfficialBookmark (uri: string) {
+  mainState.loaderDisplay = true
+  const response = await mainState.atp.deleteOfficialBookmark(uri)
+  mainState.loaderDisplay = false
+  if (response instanceof Error) {
+    mainState.openErrorPopup(response, "OfficialBookmarkPopup/deleteOfficialBookmark")
+    return
+  }
+  removeThisPost(uri)
+}
+
 function scrolledToBottom () {
   fetchContinuousResults("old")
 }
@@ -90,6 +100,9 @@ function removeThisPost (uri: string) {
     .filter((bookmark) => {
       return bookmark.uri !== uri
     })
+
+  // セッションキャッシュの設定
+  mainState.myWorker!.setSessionCache("officialBookmarks", mainState.currentOfficialBookmarks)
 }
 </script>
 
@@ -133,13 +146,18 @@ function removeThisPost (uri: string) {
             v-for="bookmark of mainState.currentOfficialBookmarks"
             :key="bookmark.uri"
           >
+            <PostNotExists
+              v-if="bookmark?.notFound"
+              :uri="bookmark.uri"
+              @delete="deleteOfficialBookmark"
+            />
             <Post
-              v-if="bookmark != null"
+              v-else-if="bookmark != null"
               position="post"
               :post="bookmark"
               :container="state.postContainer"
-              :hasReplyIcon="bookmark.record.reply != null"
-              :hasQuoteRepostIcon="bookmark.record.embed?.record != null"
+              :hasReplyIcon="bookmark.record?.reply != null"
+              :hasQuoteRepostIcon="bookmark.record?.embed?.record != null"
               @click.exact="close"
               @updateThisPostThread="updateThisPostThread as unknown"
               @removeThisPost="removeThisPost as unknown"

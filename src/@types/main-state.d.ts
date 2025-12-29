@@ -659,7 +659,7 @@ interface MainState {
   closeTimeFeedsPopup: () => void
 
   // ポップアップ - 公式ブックマークポップアップ
-  currentOfficialBookmarks: Array<TTPost>
+  currentOfficialBookmarks: Array<TTOfficialBookmark>
   currentOfficialBookmarksCursor?: string
   officialBookmarkPopupDisplay: boolean
   openOfficialBookmarkPopup: () => void
