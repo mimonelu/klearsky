@@ -417,7 +417,11 @@ onBeforeUnmount(() => {
 })
 
 function isFocused (): boolean {
-  return props.post.uri === mainState.currentQuery.uri
+  const rkey = Util.getRkey(props.post.uri)
+  return (
+    props.post.uri === mainState.currentQuery.uri ||
+    rkey === mainState.currentQuery.rkey
+  )
 }
 
 // 古いポスト警告
