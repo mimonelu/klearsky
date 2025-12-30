@@ -90,7 +90,7 @@
     "post": "https://pdsls.dev/at/{did}/app.bsky.feed.post/{rkey}",
     "profile": "https://pdsls.dev/at/{did}",
     "starterPack": "https://pdsls.dev/at/{did}/app.bsky.graph.starterpack/{rkey}",
-    "favicon": "https://pdsls.dev/favicon.png"
+    "favicon": "https://pdsls.dev/favicon.ico"
   },
   {
     "name": "atlasApp",
