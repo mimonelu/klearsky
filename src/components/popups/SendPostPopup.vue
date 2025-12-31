@@ -681,6 +681,10 @@ const PreviewLinkCardFeature: {
                 <dt>&emsp;</dt>
                 <dd>&emsp;</dd>
               </dl>
+              <dl class="textlabel__text">
+                <dt>&emsp;</dt>
+                <dd>&emsp;</dd>
+              </dl>
             </div>
           </div>
 
