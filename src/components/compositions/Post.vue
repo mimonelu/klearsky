@@ -28,6 +28,7 @@ import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import WordMuteScript from "@/components/next/WordMute/script"
 import Util from "@/composables/util"
+import { useContentLabels } from "@/composables/util/use-content-labels"
 import {
   OLD_POST_NOTIFICATION_DAYS,
   THIRD_PARTY_DOMAIN_LIGHTNING
@@ -284,42 +285,20 @@ const noContentLanguage = computed((): boolean => {
 })
 
 // ラベル対応
-const allLabels = computed((): Array<TTLabel> => {
-  return [
-    ...((props.post.author?.labels ?? []).map((label) => {
-      return {
-        ...label,
-        __isAuthorLabel: true,
-      }
-    })),
-    ...(props.post.labels ?? [])
-  ]
-})
-const hideLabels = computed((): Array<TILabelSetting> => {
-  return mainState.myLabeler!.getSpecificLabels(
-    allLabels.value,
-    ["hide"],
-    ["none", "content", "media"]
-  )
-})
+const {
+  allLabels,
+  hideLabels,
+  blurContentLabels,
+  blurMediaLabels
+} = useContentLabels(
+  computed(() => props.post.author?.labels),
+  computed(() => props.post.labels)
+)
+
 const hideLabelNames = computed((): Array<string> => {
   return hideLabels.value.map((label) => {
     return $t(label.locale?.name || label.definition?.identifier || "")
   })
-})
-const blurContentLabels = computed((): Array<TILabelSetting> => {
-  return mainState.myLabeler!.getSpecificLabels(
-    allLabels.value,
-    ["hide", "warn"],
-    ["none", "content"]
-  )
-})
-const blurMediaLabels = computed((): Array<TILabelSetting> => {
-  return mainState.myLabeler!.getSpecificLabels(
-    allLabels.value,
-    ["hide", "warn"],
-    ["media"]
-  )
 })
 
 // ラベル対応 - ポストコンテンツ

@@ -3,6 +3,7 @@ import { computed, inject, reactive, type ComputedRef } from "vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import { useContentLabels } from "@/composables/util/use-content-labels"
 
 const props = defineProps<{
   media: TTMedia
@@ -10,31 +11,36 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+const {
+  blurContentLabels,
+  blurMediaLabels
+} = useContentLabels(
+  computed(() => props.media.post.author?.labels),
+  computed(() => props.media.post.labels)
+)
+
+// 元のロジック: ["media", "none"]
+const mediaFilteringLabels = computed((): Array<TILabelSetting> => {
+  return [
+    ...blurContentLabels.value.filter((label) => label.definition.blurs === "none"),
+    ...blurMediaLabels.value
+  ]
+})
+
+const hasBlurredMedia = computed((): boolean => {
+  return mediaFilteringLabels.value.length > 0
+})
+
 const state = reactive<{
-  allLabels: ComputedRef<Array<TTLabel>>
-  blurMediaLabels: ComputedRef<Array<TILabelSetting>>
-  hasBlurredMedia: ComputedRef<boolean>
   contentFilteringDisplay: boolean
   imageDisplay: ComputedRef<boolean>
   createdAt: string
 }>({
-  allLabels: computed((): Array<TTLabel> => {
-    return [
-      ...(props.media.post.author?.labels ?? []),
-      ...(props.media.post.labels ?? [])
-    ]
-  }),
-  blurMediaLabels: computed((): Array<TILabelSetting> => {
-    return mainState.myLabeler!.getSpecificLabels(state.allLabels, ["hide", "warn"], ["media", "none"])
-  }),
-  hasBlurredMedia: computed((): boolean => {
-    return state.blurMediaLabels.length > 0
-  }),
   contentFilteringDisplay: false,
   imageDisplay: computed((): boolean => {
-    return !state.hasBlurredMedia ||
+    return !hasBlurredMedia.value ||
       (
-        state.hasBlurredMedia &&
+        hasBlurredMedia.value &&
         state.contentFilteringDisplay
       )
   }),
@@ -60,9 +66,9 @@ function onActivatePostContentToggle () {
 
     <!-- ポストコンテンツトグル -->
     <ContentFilteringToggle
-      v-if="state.hasBlurredMedia"
+      v-if="hasBlurredMedia"
       type="blur"
-      :labels="state.blurMediaLabels"
+      :labels="mediaFilteringLabels"
       :display="state.contentFilteringDisplay"
       :togglable="true"
       @click.prevent="onActivatePostContentToggle"

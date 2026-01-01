@@ -29,6 +29,7 @@ import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
 import WebsiteLink from "@/components/buttons/WebsiteLink.vue"
 import Util from "@/composables/util"
+import { useContentLabels } from "@/composables/util/use-content-labels"
 
 const router = useRouter()
 
@@ -126,15 +127,23 @@ const hasNoUnauthenticated = computed((): boolean => {
   return mainState.hasLabel("!no-unauthenticated", mainState.currentProfile?.labels)
 })
 
+// ラベル対応
+const {
+  blurContentLabels,
+  blurMediaLabels,
+  hasBlurContentLabel,
+  hasBlurMediaLabel
+} = useContentLabels(
+  computed(() => undefined),
+  computed(() => mainState.currentProfile?.labels)
+)
+
 const contentFilteringLabels = computed((): Array<TILabelSetting> => {
-  if (mainState.currentProfile?.labels == null) {
-    return []
-  }
-  return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "media", "none"])
+  return [...blurContentLabels.value, ...blurMediaLabels.value]
 })
 
 const contentFilteringToggleDisplay = computed((): boolean => {
-  return contentFilteringLabels.value.length > 0
+  return hasBlurContentLabel.value || hasBlurMediaLabel.value
 })
 
 // ラベル対応 - アカウントコンテンツ
@@ -143,7 +152,7 @@ const hasBlurredContent = computed((): boolean => {
   if (mainState.currentProfile?.labels == null) {
     return true
   }
-  return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["content", "none"]).length > 0
+  return hasBlurContentLabel.value
 })
 
 const accountContentDisplay = computed((): boolean => {
@@ -156,7 +165,7 @@ const hasBlurredMedia = computed((): boolean => {
   if (mainState.currentProfile?.labels == null) {
     return true
   }
-  return mainState.myLabeler!.getSpecificLabels(mainState.currentProfile.labels, ["hide", "warn"], ["media"]).length > 0
+  return hasBlurMediaLabel.value
 })
 
 const accountMediaDisplay = computed((): boolean => {

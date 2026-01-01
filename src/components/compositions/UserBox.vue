@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
+import { computed, inject, onMounted, reactive } from "vue"
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarLink from "@/components/next/Avatar/AvatarLink.vue"
 import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
@@ -7,6 +7,7 @@ import DisplayName from "@/components/labels/DisplayName.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import { useContentLabels } from "@/composables/util/use-content-labels"
 import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
 import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
@@ -23,29 +24,36 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+// ラベル対応
+const {
+  blurContentLabels,
+  blurMediaLabels,
+  hasBlurContentLabel,
+  hasBlurMediaLabel
+} = useContentLabels(
+  computed(() => undefined),
+  computed(() => props.user.labels)
+)
+
+const appliedHarmfulLabels = computed((): Array<TILabelSetting> => {
+  return [
+    ...blurContentLabels.value,
+    ...blurMediaLabels.value,
+  ]
+})
+
+const hasAppliedHarmfulLabel = computed((): boolean => {
+  return hasBlurContentLabel.value || hasBlurMediaLabel.value
+})
+
 const state = reactive<{
-  // ラベル対応
-  appliedHarmfulLabels: ComputedRef<Array<TILabelSetting>>
-  hasAppliedHarmfulLabel: ComputedRef<boolean>
   contentFilteringToggleDisplay: boolean
 }>({
-  // ラベル対応
-  appliedHarmfulLabels: computed((): Array<TILabelSetting> => {
-    if (props.user.labels == null) {
-      return []
-    }
-    return mainState.myLabeler!.getSpecificLabels(props.user.labels, ["hide", "warn"], ["content", "media", "none"])
-  }),
-  hasAppliedHarmfulLabel: computed((): boolean => {
-    return state.appliedHarmfulLabels.length > 0
-  }),
   contentFilteringToggleDisplay: false,
 })
 
-const profileMenuTrigger = ref()
-
 onMounted(() => {
-  state.contentFilteringToggleDisplay = !state.hasAppliedHarmfulLabel
+  state.contentFilteringToggleDisplay = !hasAppliedHarmfulLabel.value
 })
 
 function onActivateLink () {
@@ -77,8 +85,8 @@ function onActivateContentFilteringToggle () {
   >
     <!-- プロフィールトグル -->
     <ContentFilteringToggle
-      v-if="state.hasAppliedHarmfulLabel"
-      :labels="state.appliedHarmfulLabels"
+      v-if="hasAppliedHarmfulLabel"
+      :labels="appliedHarmfulLabels"
       :display="state.contentFilteringToggleDisplay"
       :togglable="!contentWarningDisabled"
       @click.prevent.stop="onActivateContentFilteringToggle"
@@ -145,7 +153,7 @@ function onActivateContentFilteringToggle () {
 
         <!-- アカウントラベルアイコン -->
         <SVGIcon
-          v-if="state.hasAppliedHarmfulLabel"
+          v-if="hasAppliedHarmfulLabel"
           name="contentFiltering"
           class="account-label-icon"
         />
@@ -166,7 +174,6 @@ function onActivateContentFilteringToggle () {
       <button
         v-if="menuDisplay"
         class="menu-button"
-        ref="profileMenuTrigger"
         @click.prevent.stop="openProfilePopover"
       >
         <SVGIcon name="menu" />
