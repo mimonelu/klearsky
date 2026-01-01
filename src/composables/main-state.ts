@@ -2523,8 +2523,9 @@ function closeLabelerListPopup () {
 
 // ポップアップ - ラベラー設定ポップアップ
 
-function openLabelerSettingsPopup (labeler: TILabeler) {
+function openLabelerSettingsPopup (labeler: TILabeler, focusIdentifier?: string) {
   state.labelerSettingsPopupProps.labeler = labeler
+  state.labelerSettingsPopupProps.focusIdentifier = focusIdentifier
   state.labelerSettingsPopupProps.display = true
 }
 

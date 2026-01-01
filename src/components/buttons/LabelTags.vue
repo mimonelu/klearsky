@@ -73,14 +73,14 @@ const isBeginner = computed((): boolean => {
     : false
 })
 
-function openLabelerSettingsPopup (did?: string) {
+function openLabelerSettingsPopup (did?: string, focusIdentifier?: string) {
   const labeler = mainState.myLabeler!.labelers.find((labeler) => {
     return labeler.creator.did === did
   })
   if (labeler == null) {
     return
   }
-  mainState.openLabelerSettingsPopup(labeler)
+  mainState.openLabelerSettingsPopup(labeler, focusIdentifier)
 }
 
 function getLabelerAvatar (label?: TILabelSetting): string {
@@ -138,7 +138,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
       :key="labelIndex"
       type="button"
       class="label-tags__harmful-label"
-      @click.prevent.stop="openLabelerSettingsPopup(CONSTS.OFFICIAL_LABELER_DID)"
+      @click.prevent.stop="openLabelerSettingsPopup(CONSTS.OFFICIAL_LABELER_DID, label.val)"
     >
       <SVGIcon :name="label.__isAuthorLabel ? 'person' : 'label'" />
       <span translate="no">{{ $t(label.val) }}</span>
@@ -151,7 +151,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
       type="button"
       class="label-tags__labelers-label"
       :title="label?.locale.description ?? ''"
-      @click.prevent.stop="openLabelerSettingsPopup(label?.did)"
+      @click.prevent.stop="openLabelerSettingsPopup(label?.did, label?.definition.identifier)"
     >
       <LazyImage :src="getLabelerAvatar(label)" />
       <span translate="no">{{ $t(label?.locale.name) }}</span>

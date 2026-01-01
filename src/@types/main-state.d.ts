@@ -506,8 +506,9 @@ interface MainState {
   labelerSettingsPopupProps: {
     display: boolean
     labeler?: TILabeler
+    focusIdentifier?: string
   }
-  openLabelerSettingsPopup: Function
+  openLabelerSettingsPopup: (labeler: TILabeler, focusIdentifier?: string) => void
   closeLabelerSettingsPopup: () => void
 
   // ポップアップ - ラベル選択ポップアップ

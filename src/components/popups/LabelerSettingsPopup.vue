@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LabelerCard from "@/components/cards/LabelerCard.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -22,6 +22,7 @@ const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
   labeler?: TILabeler
+  focusIdentifier?: string
 }>()
 
 const $t = inject("$t") as Function
@@ -47,11 +48,22 @@ const state = reactive<{
       locale,
       setting,
       options,
-      detailDisplay: false,
+      detailDisplay: props.focusIdentifier === definition.identifier,
       translationStep: "none",
       translatedDescription: undefined,
     }
   }) ?? [],
+})
+
+const focusLabel = ref()
+
+onMounted(() => {
+  if (focusLabel.value?.[0] != null) {
+    focusLabel.value[0].scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    })
+  }
 })
 
 function close () {
@@ -231,6 +243,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
         <div
           v-for="pseudoDefinition of state.pseudoDefinitions"
           :key="pseudoDefinition.identifier"
+          :ref="pseudoDefinition.identifier === focusIdentifier ? 'focusLabel' : undefined"
           class="labeler-settings-popup__label-setting"
         >
           <!-- ラベル名（ラベル説明トグル） -->
