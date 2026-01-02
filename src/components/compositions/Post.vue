@@ -70,9 +70,9 @@ const state = reactive<{
   // 翻訳ステータス
   translationStep: TTTranslationStep
 
-  // ラベル対応
-  blurredContentClicked: boolean
-  blurredMediaClicked: boolean
+  // ラベル
+  blurContentClicked: boolean
+  blurMediaClicked: boolean
 }>({
   // メディア
   videoType: undefined,
@@ -80,9 +80,9 @@ const state = reactive<{
   // 翻訳ステータス
   translationStep: "none",
 
-  // ラベル対応
-  blurredContentClicked: false,
-  blurredMediaClicked: false,
+  // ラベル
+  blurContentClicked: false,
+  blurMediaClicked: false,
 })
 
 const router = useRouter()
@@ -149,7 +149,7 @@ const embeddedVideoAspectRatio = computed((): string => {
   return `1 / ${computedHeight}`
 })
 
-// メディア表示判定
+// メディア - メディア表示判定
 const shouldDisplayMedia = computed(() => {
   const setting = mainState.currentSetting.imageFolding
 
@@ -176,6 +176,9 @@ const shouldDisplayMedia = computed(() => {
 
   return false
 })
+
+// メディア - メディアの折り畳み状態
+const foldingMedia = ref(!shouldDisplayMedia.value)
 
 const linkCard: undefined | Readonly<TTExternal> =
   props.post.embed?.external ??
@@ -225,11 +228,11 @@ function makePseudoStarterPack (): undefined | TIStarterPack {
 // 最古の引用元ポストかどうか
 const isOldestQuotedPost = (props.level ?? 1) >= 3 - 1
 
-// ポストマスクの表示
+// ポストマスクの表示状態
 const masked = computed((): boolean => {
   return (
     noContentLanguage.value ||
-    hideLabels.value.length > 0 ||
+    hasHideLabel.value ||
     isWordMute.value
   ) && (
     props.position !== "preview" &&
@@ -284,48 +287,45 @@ const noContentLanguage = computed((): boolean => {
   }) ?? false)
 })
 
-// ラベル対応
+// ラベル
 const {
   allLabels,
   hideLabels,
   blurContentLabels,
-  blurMediaLabels
+  blurMediaLabels,
+  hasHideLabel,
+  hasBlurContentLabel,
+  hasBlurMediaLabel
 } = useContentLabels(
   computed(() => props.post.author?.labels),
   computed(() => props.post.labels)
 )
 
+// ラベル - ポストマスクに表示する文字列
 const hideLabelNames = computed((): Array<string> => {
   return hideLabels.value.map((label) => {
-    return $t(label.locale?.name || label.definition?.identifier || "")
+    return label.locale?.name || label.definition?.identifier || ""
   })
 })
 
-// ラベル対応 - ポストコンテンツ
-const hasBlurredContent = computed((): boolean => {
-  return blurContentLabels.value.length > 0
-})
+// ラベル - ポストコンテンツ
 const postContentDisplay = computed((): boolean => {
-  return !hasBlurredContent.value ||
+  return !hasBlurContentLabel.value ||
     (
-      hasBlurredContent.value &&
-      state.blurredContentClicked
+      hasBlurContentLabel.value &&
+      state.blurContentClicked
     )
 })
 
-// ラベル対応 - ポストメディア
-const hasBlurredMedia = computed((): boolean => {
-  return (
-    hasMedia ||
-    hasLinkCard ||
-    hasFeedCard
-  ) && blurMediaLabels.value.length > 0
+// ラベル - ポストメディア
+const hasBlurMedia = computed((): boolean => {
+  return (hasMedia || hasLinkCard || hasFeedCard) && hasBlurMediaLabel.value
 })
 const postMediaDisplay = computed((): boolean => {
-  return !hasBlurredMedia.value ||
+  return !hasBlurMedia.value ||
     (
-      hasBlurredMedia.value &&
-      state.blurredMediaClicked
+      hasBlurMedia.value &&
+      state.blurMediaClicked
     )
 })
 
@@ -338,7 +338,7 @@ const threadgate = computed((): "none" | "lock" | "unlock" => {
   return props.post.viewer?.replyDisabled ? "lock" : "unlock"
 })
 
-// ワードミュートの判定
+// ワードミュート - ワードミュートの判定
 const isWordMute = computed((): boolean => {
   return WordMuteScript.includes(
     contentRichText.value,
@@ -347,9 +347,7 @@ const isWordMute = computed((): boolean => {
   )
 })
 
-const foldingMedia = ref(!shouldDisplayMedia.value)
-
-// 本文とワードミュート用に RichText を生成
+// ワードミュート - 本文とワードミュート用に RichText を生成
 const contentRichText = computed(() => {
   // テキストまたはfacetsが変更された場合のみ再生成
   const currentText = text.value ?? ""
@@ -447,11 +445,11 @@ function onActivateImageFolderButton () {
 }
 
 function onActivatePostContentToggle () {
-  state.blurredContentClicked = !state.blurredContentClicked
+  state.blurContentClicked = !state.blurContentClicked
 }
 
 function onActivatePostMediaToggle () {
-  state.blurredMediaClicked = !state.blurredMediaClicked
+  state.blurMediaClicked = !state.blurMediaClicked
 }
 
 async function onActivateReplyButton () {
@@ -1127,13 +1125,13 @@ function toggleOldestQuotedPostDisplay () {
 
       <!-- ポストボディ - ポストコンテンツトグル -->
       <div
-        v-if="hasBlurredContent"
+        v-if="hasBlurContentLabel"
         class="post__content-filtering-toggle"
       >
         <ContentFilteringToggle
           type="blur"
           :labels="blurContentLabels"
-          :display="state.blurredContentClicked"
+          :display="state.blurContentClicked"
           :togglable="true"
           @click.prevent.stop="onActivatePostContentToggle"
         />
@@ -1171,10 +1169,10 @@ function toggleOldestQuotedPostDisplay () {
 
         <!-- ポストメディアトグル -->
         <ContentFilteringToggle
-          v-if="hasBlurredMedia"
+          v-if="hasBlurMedia"
           type="blur-media"
           :labels="blurMediaLabels"
-          :display="state.blurredMediaClicked"
+          :display="state.blurMediaClicked"
           :togglable="true"
           @click.prevent.stop="onActivatePostMediaToggle"
         />
