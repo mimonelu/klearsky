@@ -155,9 +155,23 @@ async function resetAfterConfirmation () {
 
 function reset () {
   state.pseudoDefinitions.forEach((pseudoDefinition) => {
-    pseudoDefinition.setting = pseudoDefinition.defaultSetting === "inform"
-      ? "warn"
-      : pseudoDefinition.defaultSetting
+    const hasOption = pseudoDefinition.options.some((opt) => {
+      return opt.value === pseudoDefinition.defaultSetting
+    })
+    if (hasOption) {
+      // options に defaultSetting が存在する
+      pseudoDefinition.setting = pseudoDefinition.defaultSetting
+    } else {
+      // options に defaultSetting が存在しない
+      // -> warn にフォールバック
+      // -> warn もなければ options の最初の値にフォールバック
+      const hasWarn = pseudoDefinition.options.some((opt) => {
+        return opt.value === "warn"
+      })
+      pseudoDefinition.setting = hasWarn
+        ? "warn"
+        : pseudoDefinition.options[0]?.value
+    }
   })
 }
 
