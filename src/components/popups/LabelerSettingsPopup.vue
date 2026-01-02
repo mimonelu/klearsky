@@ -41,8 +41,10 @@ const state = reactive<{
   }),
   pseudoDefinitions: props.labeler?.policies.labelValueDefinitions?.map((definition) => {
     const locale = mainState.myLabeler!.getProperLocale(definition.locales)
-    const setting = getLabelPreferenceVisibility(definition)
     const options: Array<TTOption> = makeOptions(definition)
+    const initialSetting = getLabelPreferenceVisibility(definition)
+    const setting = resolveSetting(initialSetting, options)
+
     return {
       ...definition,
       locale,
@@ -82,6 +84,23 @@ function getLabelPreferenceVisibility (definition: TILabelerDefinition): TTConte
   return labelPreference?.visibility ?? (
     definition.defaultSetting === "inform" ? "warn" : definition.defaultSetting
   ) ?? "ignore"
+}
+
+// 設定値のフォールバック処理（防御的プログラミング）
+function resolveSetting (
+  desiredSetting: TTContentVisibility,
+  options: Array<TTOption>
+): TTContentVisibility {
+  // options に desiredSetting が存在するか確認
+  const hasOption = options.some((opt) => opt.value === desiredSetting)
+  if (hasOption) {
+    return desiredSetting
+  }
+
+  // options に存在しない場合は "warn" にフォールバック、なければ options[0]
+  // ("show" や "inform" など非標準値も含む)
+  const hasWarn = options.some((opt) => opt.value === "warn")
+  return hasWarn ? "warn" : options[0]?.value
 }
 
 // 選択肢の作成
@@ -155,23 +174,10 @@ async function resetAfterConfirmation () {
 
 function reset () {
   state.pseudoDefinitions.forEach((pseudoDefinition) => {
-    const hasOption = pseudoDefinition.options.some((opt) => {
-      return opt.value === pseudoDefinition.defaultSetting
-    })
-    if (hasOption) {
-      // options に defaultSetting が存在する
-      pseudoDefinition.setting = pseudoDefinition.defaultSetting
-    } else {
-      // options に defaultSetting が存在しない
-      // -> warn にフォールバック
-      // -> warn もなければ options の最初の値にフォールバック
-      const hasWarn = pseudoDefinition.options.some((opt) => {
-        return opt.value === "warn"
-      })
-      pseudoDefinition.setting = hasWarn
-        ? "warn"
-        : pseudoDefinition.options[0]?.value
-    }
+    pseudoDefinition.setting = resolveSetting(
+      pseudoDefinition.defaultSetting,
+      pseudoDefinition.options
+    )
   })
 }
 

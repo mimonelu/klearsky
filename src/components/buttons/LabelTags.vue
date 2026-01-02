@@ -49,6 +49,7 @@ const labelerLabels = computed((): Array<undefined | TILabelSetting> => {
           labelSetting.isBadge &&
           (
             visibility === "inform" ||
+            visibility === "show" ||
             visibility === "warn"
           )
         ) || visibility === "hide"
