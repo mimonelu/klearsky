@@ -1255,7 +1255,7 @@ function removeThisPost () {
   // BORDERED_DESIGN: border-bottom: 1px solid rgb(var(--fg-color), 0.25);
   position: sticky;
   top: 3rem;
-  z-index: 1;
+  z-index: 2;
   &[data-disabled="true"] {
     pointer-events: none;
   }

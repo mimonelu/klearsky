@@ -1870,6 +1870,7 @@ function toggleOldestQuotedPostDisplay () {
     position: relative;
     width: var(--avatar-size);
     height: 2em;
+    z-index: 1;
 
     & > .avatar-link {
       font-size: var(--avatar-size);
