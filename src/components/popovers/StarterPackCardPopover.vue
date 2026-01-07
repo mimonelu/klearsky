@@ -52,7 +52,7 @@ async function shareStarterPack () {
     mainState.openErrorPopup(sharedUrl, "StarterPackCardPopover/shareStarterPack")
     return
   }
-  await navigator.clipboard.writeText(sharedUrl)
+  await Util.writeTextToClipboard(sharedUrl)
 }
 
 async function editStarterPack () {

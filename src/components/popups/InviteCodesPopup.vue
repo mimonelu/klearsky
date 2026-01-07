@@ -2,6 +2,7 @@
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -38,7 +39,7 @@ async function updateInviteCodes () {
 }
 
 async function copyCode (code: string) {
-  await navigator.clipboard.writeText(code)
+  await Util.writeTextToClipboard(code)
 }
 </script>
 

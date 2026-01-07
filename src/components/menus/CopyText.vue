@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -11,7 +12,7 @@ const props = defineProps<{
 async function copy () {
   emit("close")
   if (props.text == null) return
-  await navigator.clipboard.writeText(props.text)
+  await Util.writeTextToClipboard(props.text)
 }
 </script>
 

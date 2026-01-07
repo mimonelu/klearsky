@@ -33,6 +33,7 @@ import updatePostProps from "@/composables/util/update-post-props"
 import uri from "@/composables/util/uri"
 import wait from "@/composables/util/wait"
 import waitProp from "@/composables/util/wait-prop"
+import writeTextToClipboard from "@/composables/util/write-text-to-clipboard"
 
 export default {
   blurElement,
@@ -70,4 +71,5 @@ export default {
   ...uri,
   wait,
   waitProp,
+  writeTextToClipboard,
 }

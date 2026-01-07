@@ -173,7 +173,7 @@ async function outputJsonForSkyFeed () {
     license: "EUPL-1.2",
   }
   const jsonText = JSON.stringify(jsonObject, null, 2)
-  navigator.clipboard.writeText(jsonText)
+  await Util.writeTextToClipboard(jsonText)
 }
 </script>
 
