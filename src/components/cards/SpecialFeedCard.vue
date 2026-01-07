@@ -99,6 +99,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   // フィード名
   &__display-name {
     grid-area: n;
+    color: rgtb(var(--fg-color));
     display: inline;
     font-weight: bold;
     line-height: var(--line-height-high);
