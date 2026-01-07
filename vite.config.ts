@@ -62,6 +62,12 @@ export default defineConfig({
       : [],
   },
 
+  // Android Studio から `10.0.2.2:5173` で localhost にアクセスするために必要
+  server: {
+    host: "0.0.0.0",
+    port: 5173,
+  },
+
   css: {
     preprocessorOptions: {
       scss: {
