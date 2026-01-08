@@ -106,7 +106,7 @@ interface MainState {
   // プロフィール
   inSameProfilePage: boolean
   profileFolding: boolean
-  userProfile: null | TTProfile
+  userProfile?: TTProfile
   currentProfile: null | TTProfile
   // -------------------------------- resetProfileState() 対象エリア
   currentAuthorFeeds: Array<TTFeed>

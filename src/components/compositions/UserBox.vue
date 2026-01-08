@@ -15,7 +15,7 @@ import ViewerLabels from "@/components/labels/ViewerLabels.vue"
 const emit = defineEmits<(name: string) => void>()
 
 const props = defineProps<{
-  user: TTUser
+  user?: TTUser
   noLink?: boolean
   contentWarningDisabled: boolean
   menuDisplay: boolean
@@ -32,7 +32,7 @@ const {
   hasBlurMediaLabel
 } = useContentLabels(
   computed(() => undefined),
-  computed(() => props.user.labels)
+  computed(() => props.user?.labels)
 )
 
 const appliedHarmfulLabels = computed((): Array<TILabelSetting> => {
@@ -62,7 +62,7 @@ function onActivateLink () {
 
 function openProfilePopover ($event: Event) {
   Util.blurElement()
-  mainState.profilePopoverProps.isUser = props.user.did === mainState.atp.session?.did
+  mainState.profilePopoverProps.isUser = props.user?.did === mainState.atp.session?.did
   mainState.profilePopoverProps.user = props.user
   mainState.profilePopoverFrom = undefined
   mainState.openProfilePopover($event.target)
@@ -77,6 +77,7 @@ function onActivateContentFilteringToggle () {
 
 <template>
   <Component
+    v-if="user != null"
     :is="noLink ? 'div' : 'RouterLink'"
     class="user-box"
     :to="{ name: 'profile-feeds', query: { account: user.did } }"

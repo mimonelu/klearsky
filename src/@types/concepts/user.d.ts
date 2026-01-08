@@ -5,9 +5,9 @@ type TTUser = {
   description?: string
   did: string
   displayName: string
-  pronouns?: string
   handle: string
   labels?: Array<TTLabel>
+  pronouns?: string
   status?: TIActorStatus
   verification?: TIVerification
   viewer: TTUserViewer

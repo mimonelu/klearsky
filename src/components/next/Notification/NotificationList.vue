@@ -8,6 +8,7 @@ import ListCard from "@/components/cards/ListCard.vue"
 import Post from "@/components/compositions/Post.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import UserBox from "@/components/compositions/UserBox.vue"
 
 const mainState = inject("state") as MainState
 
@@ -304,6 +305,16 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
           @onActivateMention="$emit('close')"
           @onActivateHashTag="$emit('close')"
         />
+
+        <!-- ラベラー -->
+        <UserBox
+          v-if="notificationGroup.reasonSubject?.endsWith('/app.bsky.labeler.service/self')"
+          :user="mainState.userProfile"
+          :noLink="true"
+          :menuDisplay="false"
+          :contentWarningDisabled="false"
+          :viewerDisplay="false"
+        />
       </template>
     </div>
   </div>
@@ -555,18 +566,28 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
 }
 
 // ユーザーポスト
-.post {
+// UserBox
+.post,
+.user-box {
   background-color: rgb(var(--fg-color), 0.125);
   border: 1px solid rgb(var(--fg-color), 0.25);
   border-radius: var(--border-radius-middle);
   font-size: 0.875rem;
   margin-top: 0.5rem;
   padding: 0.5rem;
+}
 
+// ユーザーポスト
+.post {
   &:deep() {
     .text--slim {
       @include line-clamp(3);
     }
   }
+}
+
+// UserBox
+.user-box {
+  pointer-events: none;
 }
 </style>

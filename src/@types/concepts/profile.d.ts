@@ -1,26 +1,14 @@
-type TTProfile = {
+type TTProfile = TTUser & {
   __log?: any // Injected
   __repo?: any // Injected
   __enabledContentMask?: boolean // Injected
-  createdAt?: string
-  associated?: TIAssociated
-  avatar: string
   banner: string
-  description?: string
-  did: string
-  displayName: string
   followersCount: number
   followsCount: number
-  handle: string
   indexedAt?: string
-  labels?: Array<TTLabel>
+  joinedViaStarterPack?: TIStarterPack
   pinnedPost?: TTCidUri
   postsCount: number
-  pronouns?: string
-  joinedViaStarterPack?: TIStarterPack
-  status?: TIActorStatus
-  verification?: TIVerification
-  viewer: TTUserViewer
   website?: string
 
   // Frontpage
