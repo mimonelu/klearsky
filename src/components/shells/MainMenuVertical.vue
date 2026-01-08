@@ -81,6 +81,7 @@ function moveToBottom () {
         ) ||
         mainState.currentPath.startsWith('/profile/edit')
       "
+      :data-is-labeler="mainState.userProfile?.associated?.labeler ?? false"
     >
       <LazyImage :src="mainState.userProfile?.avatar" />
       <div class="label">{{ mainState.userProfile?.handle ?? "&nbsp;" }}</div>
@@ -287,6 +288,9 @@ function moveToBottom () {
     min-height: var(--size);
     max-height: var(--size);
     transition: border-radius 125ms ease-out;
+  }
+  &[data-is-labeler="true"] > .lazy-image {
+    border-radius: var(--border-radius-small);
   }
   &:hover > .lazy-image {
     border-radius: 1px;

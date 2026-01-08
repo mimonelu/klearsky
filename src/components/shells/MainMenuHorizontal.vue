@@ -73,6 +73,7 @@ async function openSendPostPopup () {
       class="link-button profile-button"
       :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.did } }"
       :data-is-focus="state.isAtProfilePage"
+      :data-is-labeler="mainState.userProfile?.associated?.labeler ?? false"
     >
       <LazyImage :src="mainState.userProfile?.avatar" />
     </RouterLink>
@@ -200,6 +201,9 @@ async function openSendPostPopup () {
       min-height: var(--button-size);
       max-height: var(--button-size);
       transition: border-radius 125ms ease-out;
+    }
+    &[data-is-labeler="true"] > .lazy-image {
+      border-radius: var(--border-radius-small);
     }
     &:hover > .lazy-image {
       border-radius: 1px;
