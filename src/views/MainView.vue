@@ -1672,7 +1672,7 @@ function changeSetting () {
   position: fixed;
   bottom: -1px;
   left: 0;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
 
   // 非SPレイアウト
