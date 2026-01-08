@@ -1046,6 +1046,27 @@ function toggleOldestQuotedPostDisplay () {
 
         <!-- 表示名 -->
         <div class="body__header__display-name">
+          <!-- 認証者アイコン -->
+          <VerifierIcon
+            :did="post.author?.did"
+            :displayName="post.author?.displayName"
+            :verification="post.author?.verification"
+          />
+
+          <!-- 認証済みアイコン -->
+          <VerifiedIcon
+            :did="post.author?.did"
+            :displayName="post.author?.displayName"
+            :verification="post.author?.verification"
+          />
+
+          <!-- ラベラーアイコン -->
+          <SVGIcon
+            v-if="post.author?.associated?.labeler"
+            :name="mainState.myLabeler?.isSubscribed(post.author?.did) ? 'labeler' : 'labelerOff'"
+            class="account-labeler-icon"
+          />
+
           <RouterLink
             :to="{ name: 'profile-feeds', query: { account: post.author?.did } }"
             @click.stop
@@ -1060,27 +1081,6 @@ function toggleOldestQuotedPostDisplay () {
               :anonymizable="true"
             />
           </RouterLink>
-
-          <!-- ラベラーアイコン -->
-          <SVGIcon
-            v-if="post.author?.associated?.labeler"
-            :name="mainState.myLabeler?.isSubscribed(post.author?.did) ? 'labeler' : 'labelerOff'"
-            class="account-labeler-icon"
-          />
-
-          <!-- 認証者アイコン -->
-          <VerifierIcon
-            :did="post.author?.did"
-            :displayName="post.author?.displayName"
-            :verification="post.author?.verification"
-          />
-
-          <!-- 認証済みアイコン -->
-          <VerifiedIcon
-            :did="post.author?.did"
-            :displayName="post.author?.displayName"
-            :verification="post.author?.verification"
-          />
         </div>
 
         <div class="body__header__detail">
