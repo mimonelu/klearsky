@@ -404,6 +404,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
   &__label-description {
     color: rgb(var(--fg-color), 0.75);
     line-height: var(--line-height-middle);
+    white-space: pre-wrap;
     word-break: break-word;
   }
 }
