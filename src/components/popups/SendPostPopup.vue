@@ -278,7 +278,10 @@ async function submitCallback () {
       }
 
       // ポスト送信後にフォロー中フィードを更新
-      mainState.fetchTimeline("new")
+      // NOTICE: 取得が早すぎると不完全なデータが返ってくるため間を空ける
+      setTimeout(() => {
+        mainState.fetchTimeline("new")
+      }, 1000)
 
       emit("closeSendPostPopup", true, false)
     }
