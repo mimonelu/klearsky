@@ -1,6 +1,7 @@
 import type { Router } from "vue-router"
 import CONSTS from "@/consts/consts.json"
 import { state } from "@/composables/main-state"
+import Util from "@/composables/util"
 
 type Options = {
   router: Router
@@ -28,21 +29,31 @@ export function useMainViewBootstrap (options: Options) {
 
     window.scrollTo(0, 0)
 
-    const tasks: { [k: string]: any } = {}
-    if (state.currentPreferences.length === 0) {
-      tasks.currentPreferences = state.fetchPreferences()
-    }
-    if (state.userProfile == null) {
-      tasks.userProfile = state.fetchUserProfile()
-    }
-    await Promise.allSettled(Object.values(tasks))
+    const tasks: Array<Promise<unknown>> = []
 
-    if (tasks.currentPreferences != null) {
-      state.myWorker?.setSessionCache("currentPreferences", state.currentPreferences)
+    const cachedPreferences = loadCachedPreferences()
+    if (cachedPreferences != null) {
+      applyCachedPreferences(cachedPreferences)
     }
-    if (tasks.userProfile != null) {
-      state.myWorker?.setSessionCache("userProfile", state.userProfile)
+    const preferencesPromise = fetchPreferencesFromNetwork()
+    if (state.currentPreferences.length === 0) {
+      tasks.push(preferencesPromise)
+    } else {
+      void preferencesPromise.catch(() => {})
     }
+
+    const cachedUserProfile = loadCachedUserProfile()
+    if (cachedUserProfile != null) {
+      applyCachedUserProfile(cachedUserProfile)
+    }
+    const userProfilePromise = fetchUserProfileFromNetwork()
+    if (state.userProfile == null) {
+      tasks.push(userProfilePromise)
+    } else {
+      void userProfilePromise.catch(() => {})
+    }
+
+    await Promise.allSettled(tasks)
 
     state.fetchNotificationPreferences()
 
@@ -135,4 +146,65 @@ export function useMainViewBootstrap (options: Options) {
   return {
     processAfterLogin,
   }
+}
+
+const STORAGE_KEYS = {
+  currentPreferences: "cache:currentPreferences",
+  userProfile: "cache:userProfile",
+}
+
+function getCurrentDid (): string | undefined {
+  return state.atp.session?.did ?? state.atp.data.did
+}
+
+function loadCachedPreferences (): Array<TTPreference> | null {
+  return loadCachedData<Array<TTPreference>>(STORAGE_KEYS.currentPreferences)
+}
+
+function loadCachedUserProfile (): TTProfile | null {
+  return loadCachedData<TTProfile>(STORAGE_KEYS.userProfile)
+}
+
+function loadCachedData<T> (key: string): T | null {
+  const did = getCurrentDid()
+  if (did == null) return null
+  const cached = Util.loadStorage(key)
+  if (cached?.did !== did) return null
+  return cached.payload as T
+}
+
+function saveCachedData (key: string, payload: unknown) {
+  const did = getCurrentDid()
+  if (did == null) return
+  Util.saveStorage(key, { did, payload })
+}
+
+function applyCachedPreferences (preferences: Array<TTPreference>) {
+  state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
+  state.myWorker?.setSessionCache("currentPreferences", state.currentPreferences)
+}
+
+function applyCachedUserProfile (profile: TTProfile) {
+  state.userProfile = profile
+  state.myWorker?.setSessionCache("userProfile", state.userProfile)
+}
+
+function fetchPreferencesFromNetwork () {
+  return state.fetchPreferences()
+    .then((result) => {
+      state.myWorker?.setSessionCache("currentPreferences", state.currentPreferences)
+      saveCachedData(STORAGE_KEYS.currentPreferences, state.currentPreferences)
+      return result
+    })
+}
+
+function fetchUserProfileFromNetwork () {
+  return state.fetchUserProfile()
+    .then((result) => {
+      state.myWorker?.setSessionCache("userProfile", state.userProfile)
+      if (state.userProfile != null) {
+        saveCachedData(STORAGE_KEYS.userProfile, state.userProfile)
+      }
+      return result
+    })
 }
