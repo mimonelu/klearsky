@@ -24,11 +24,14 @@ onMounted(async () => {
 
 async function updateTrendingTopics () {
   state.processing = true
+  mainState.currentTrendingImagesFetched = false
   const response = await mainState.atp.fetchTrendingTopics(mainState.atp.data.did)
-  state.processing = false
   if (response instanceof Error || response == null) {
+    state.processing = false
+
     // 3rd PDS 向けにエラーメッセージは非表示
     // mainState.openErrorPopup(response, "TrendingView/fetchTrendingTopics")
+
     return
   }
   mainState.currentSuggestedTopics.splice(0, mainState.currentSuggestedTopics.length, ...response.suggested)
@@ -38,6 +41,9 @@ async function updateTrendingTopics () {
   if (mainState.currentTrendingTopics.length > 0) {
     await updateHotPosts()
   }
+
+  state.processing = false
+  mainState.currentTrendingImagesFetched = true
 }
 
 // ホットトピックの最大数
@@ -130,7 +136,7 @@ async function updateHotPosts () {
     <div class="trending-view__container">
       <!-- ホット画像 -->
       <div
-        v-if="mainState.currentTrendingImages.length > 0"
+        v-if="mainState.currentTrendingImagesFetched"
         class="trending-view__image-container"
       >
         <RouterLink

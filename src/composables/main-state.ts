@@ -130,6 +130,7 @@ export const state: MainState = reactive<MainState>({
   currentSuggestedTopics: [],
   currentTrendingTopics: [],
   currentTrendingImages: [],
+  currentTrendingImagesFetched: false,
 
   // チャット
   myChat: undefined,
