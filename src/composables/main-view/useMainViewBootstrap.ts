@@ -25,18 +25,18 @@ export function useMainViewBootstrap (options: Options) {
   async function processAfterLogin () {
     onRefreshSession()
     setupUpdateJwtInterval()
-    setupNotificationInterval()
 
     window.scrollTo(0, 0)
 
     const tasks: Array<Promise<unknown>> = []
 
+    // プリファレンスの取得
     const cachedPreferences = loadCachedPreferences()
     if (cachedPreferences != null) {
-      applyCachedPreferences(cachedPreferences)
+      applyPreferences(cachedPreferences)
     }
     const preferencesPromise = fetchPreferencesFromNetwork()
-    if (state.currentPreferences.length === 0) {
+    if (cachedPreferences == null) {
       tasks.push(preferencesPromise)
     } else {
       preferencesPromise.catch((error) => {
@@ -44,12 +44,13 @@ export function useMainViewBootstrap (options: Options) {
       })
     }
 
+    // ユーザープロフィールの取得
     const cachedUserProfile = loadCachedUserProfile()
     if (cachedUserProfile != null) {
-      applyCachedUserProfile(cachedUserProfile)
+      applyUserProfile(cachedUserProfile)
     }
     const userProfilePromise = fetchUserProfileFromNetwork()
-    if (state.userProfile == null) {
+    if (cachedUserProfile == null) {
       tasks.push(userProfilePromise)
     } else {
       userProfilePromise.catch((error) => {
@@ -59,20 +60,16 @@ export function useMainViewBootstrap (options: Options) {
 
     await Promise.allSettled(tasks)
 
+    // 通知設定の取得
     state.fetchNotificationPreferences()
       .catch((error) => {
         $error("useMainViewBootstrap", "Failed to fetch notification preferences", error)
       })
 
-    state.atp.fetchActivitySubscriptions(
-      state.activitySubscriptions as Array<TTUser>,
-      CONSTS.LIMIT_OF_FETCH_ACTIVITY_SUBSCRIPTIONS
-    )
-      .catch((error) => {
-        $error("useMainViewBootstrap", "Failed to fetch activity subscriptions", error)
-      })
-
+    // ラベラーの取得
     if (state.myLabeler!.labelers.length === 0) {
+      // `atproto-accept-labelers` 構築のために非同期としている
+      // TODO: これもキャッシュで制御したい
       await state.myLabeler!.updateMyLabelers()
         .then(() => {
           state.myLabeler!.setAtprotoAcceptLabelers()
@@ -80,6 +77,7 @@ export function useMainViewBootstrap (options: Options) {
         })
     }
 
+    // カスタムフィードの取得
     if (state.myFeeds!.items.length === 0) {
       state.myFeeds!.fetchItems()
         .then(() => {
@@ -91,6 +89,7 @@ export function useMainViewBootstrap (options: Options) {
         })
     }
 
+    // リストの取得
     if (state.myLists!.items.length === 0) {
       state.myLists!.fetchAll()
         .then(() => {
@@ -102,17 +101,23 @@ export function useMainViewBootstrap (options: Options) {
         })
     }
 
+    // チャットの利用可能状態を取得
     state.myChat!.updateDisabled()
       .then(() => {
         if (state.myChat!.disabled) {
           return
         }
+
+        // チャットを取得
         state.myChat!.updateConvosAll()
           .then((value) => {
             if (!value) {
               return
             }
             state.startChatListTimer()
+
+            // ページタイトルの更新
+            // チャット通知があれば表示するため
             state.updatePageTitle()
           })
           .catch((error) => {
@@ -123,6 +128,20 @@ export function useMainViewBootstrap (options: Options) {
         $error("useMainViewBootstrap", "Failed to update chat disabled status", error)
       })
 
+    // 購読リストの取得
+    state.atp.fetchActivitySubscriptions(
+      state.activitySubscriptions as Array<TTUser>,
+      CONSTS.LIMIT_OF_FETCH_ACTIVITY_SUBSCRIPTIONS
+    )
+      .catch((error) => {
+        $error("useMainViewBootstrap", "Failed to fetch activity subscriptions", error)
+      })
+      .finally(() => {
+        state.updateNotificationInterval()
+        state.updateNotifications()
+      })
+
+    // 拡張ブックマークの取得
     if (state.currentCustomBookmarkPacks.length === 0) {
       state.atp.fetchCustomBookmarkPacks(
         state.currentCustomBookmarkPacks,
@@ -138,6 +157,7 @@ export function useMainViewBootstrap (options: Options) {
         })
     }
 
+    // 招待コードの取得
     if (state.inviteCodes.length === 0) {
       state.updateInviteCodes()
         .then(() => {
@@ -148,6 +168,7 @@ export function useMainViewBootstrap (options: Options) {
         })
     }
 
+    // サーバ情報の取得
     state.fetchCurrentServerInfo()
 
     changeSetting()
@@ -156,15 +177,6 @@ export function useMainViewBootstrap (options: Options) {
       return
     }
     await processPage(router.currentRoute.value.name as undefined | null | string)
-    setupTimelineInterval()
-  }
-
-  async function setupNotificationInterval () {
-    state.updateNotificationInterval()
-    await state.updateNotifications()
-  }
-
-  function setupTimelineInterval () {
     state.updateTimelineInterval()
   }
 
@@ -204,12 +216,12 @@ function saveCachedData (key: string, payload: unknown) {
   Util.saveStorage(key, { did, payload })
 }
 
-function applyCachedPreferences (preferences: Array<TTPreference>) {
+function applyPreferences (preferences: Array<TTPreference>) {
   state.currentPreferences.splice(0, state.currentPreferences.length, ...preferences)
   state.myWorker?.setSessionCache("currentPreferences", state.currentPreferences)
 }
 
-function applyCachedUserProfile (profile: TTProfile) {
+function applyUserProfile (profile: TTProfile) {
   state.userProfile = profile
   state.myWorker?.setSessionCache("userProfile", state.userProfile)
 }

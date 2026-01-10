@@ -154,7 +154,7 @@ export const state: MainState = reactive<MainState>({
   // プロフィール
   inSameProfilePage: false,
   profileFolding: false,
-  userProfile: null,
+  userProfile: undefined,
   currentProfile: null,
   // -------------------------------- resetProfileState() 対象エリア
   currentAuthorFeeds: [],
@@ -1445,7 +1445,7 @@ function isMyProfile (): boolean {
 async function fetchUserProfile () {
   const userProfile = await state.atp.fetchProfile(state.atp.session?.did as string)
   if (userProfile instanceof Error) {
-    state.userProfile = null
+    state.userProfile = undefined
     return
   }
   state.userProfile = userProfile
