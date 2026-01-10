@@ -265,6 +265,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
           :key="pseudoDefinition.identifier"
           :ref="pseudoDefinition.identifier === focusIdentifier ? 'focusLabel' : undefined"
           class="labeler-settings-popup__label-setting"
+          :data-focus="pseudoDefinition.identifier === focusIdentifier"
         >
           <!-- ラベル名（ラベル説明トグル） -->
           <div class="labeler-settings-popup__label-name">
@@ -315,7 +316,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
         <!-- リセットボタン -->
         <div v-if="state.isMyLabeler">
           <div
-            class="textlink--icon"
+            class="textlink--icon reset-button"
             @click="resetAfterConfirmation"
           >
             <SVGIcon name="alert"/>
@@ -334,6 +335,10 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
       &-header > h2 > .svg-icon {
         fill: rgb(var(--label-color));
       }
+
+      &-body {
+        padding: 0;
+      }
     }
   }
 
@@ -341,7 +346,6 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
   &__content {
     display: flex;
     flex-direction: column;
-    grid-gap: 1rem;
   }
 
   // ポリシー説明
@@ -357,7 +361,15 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
     display: flex;
     flex-direction: column;
     grid-gap: 0.5rem;
+    padding: 1rem 1rem 0;
     position: relative;
+    &[data-focus="true"] {
+      background-color: rgb(var(--accent-color), 0.125);
+      padding-bottom: 1rem;
+      &:not(:first-child) {
+        margin-top: 1rem;
+      }
+    }
   }
 
   // ラベル名（ラベル説明トグル）
@@ -406,6 +418,11 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
     line-height: var(--line-height-middle);
     white-space: pre-wrap;
     word-break: break-word;
+  }
+
+  // リセットボタン
+  .reset-button {
+    margin: 1rem;
   }
 }
 </style>
