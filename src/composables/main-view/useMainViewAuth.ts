@@ -53,12 +53,11 @@ export function useMainViewAuth (options: Options) {
       password,
       inviteCode
     )
-    state.loaderDisplay = false
     if (response instanceof Error) {
+      state.loaderDisplay = false
       state.openErrorPopup(response, $t("getSessionError"))
       return
     }
-    state.loaderDisplay = true
     await Util.wait(1000)
     state.loaderDisplay = false
     state.loginPopupDisplay = false
@@ -108,19 +107,19 @@ export function useMainViewAuth (options: Options) {
       authFactorToken,
       onRefreshSession
     )
-    state.loaderDisplay = false
     if (response instanceof Error) {
       if (response.message === "AuthFactorTokenRequired") {
-        (loginPopup.value as any)?.setHasAuthFactorToken(true)
+        state.loaderDisplay = false
+        ;(loginPopup.value as any)?.setHasAuthFactorToken(true)
         return
       }
       if (!state.atp.hasLogin()) {
+        state.loaderDisplay = false
         state.openErrorPopup($t("getSessionError"), "MainView/manualLogin")
         return
       }
     }
     state.loginPopupDisplay = false
-    state.loaderDisplay = true
     await processAfterLogin()
     state.loaderDisplay = false
   }
