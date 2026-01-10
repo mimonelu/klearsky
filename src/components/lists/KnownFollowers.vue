@@ -17,14 +17,16 @@ const state = reactive<{
 
 <template>
   <div class="known-followers">
+    <!-- TODO: `blur` を実装すること -->
     <AvatarLink
       v-for="follower, index of state.followers"
       :key="index"
       :did="follower.did"
       :image="follower.avatar"
+      :blur="false"
       :isLabeler="follower.associated?.labeler"
-      :noLink="false"
       :actorStatus="follower.status"
+      :noLink="false"
     />
   </div>
 </template>

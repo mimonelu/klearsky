@@ -8,7 +8,7 @@ interface TIChatConvo {
     message: TIChatMessage
     reaction: TIChatReaction
   }
-  members: TTProfile[]
+  members: TTUser[]
   muted: boolean
   rev: string
   unreadCount: number

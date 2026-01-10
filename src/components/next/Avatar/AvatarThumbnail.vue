@@ -4,6 +4,7 @@ import LazyImage from "@/components/images/LazyImage.vue"
 
 const props = defineProps<{
   image?: string
+  blur?: boolean
   isLabeler?: boolean
   actorStatus?: TIActorStatus
 }>()
@@ -19,6 +20,7 @@ const hasLive = computed((): boolean => {
 <template>
   <div
     class="avatar-thumbnail"
+    :data-blur="blur"
     :data-is-labeler="!!isLabeler"
     :data-has-live="hasLive"
   >
@@ -43,6 +45,16 @@ const hasLive = computed((): boolean => {
     display: block;
     overflow: hidden;
     transition: border-radius 125ms ease-out;
+  }
+
+  // ぼかし
+  &[data-blur="true"] &__inner {
+    // `filter: blur` で背景が透けて見える現象対策
+    background-color: rgb(var(--bg-color));
+
+    .lazy-image {
+      filter: blur(0.125em);
+    }
   }
 
   // アクターステータス - LIVE

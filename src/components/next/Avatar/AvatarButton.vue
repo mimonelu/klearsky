@@ -4,6 +4,7 @@ import AvatarThumbnail from "@/components/next/Avatar/AvatarThumbnail.vue"
 
 const props = defineProps<{
   image?: string
+  blur?: boolean
   isLabeler?: boolean
   actorStatus?: TIActorStatus
 }>()
@@ -30,6 +31,7 @@ function openImagePopup () {
   >
     <AvatarThumbnail
       :image="image"
+      :blur="blur"
       :isLabeler="isLabeler"
       :actorStatus="actorStatus"
     />

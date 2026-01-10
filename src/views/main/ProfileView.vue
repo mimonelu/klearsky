@@ -142,13 +142,13 @@ const contentFilteringLabels = computed((): Array<TILabelSetting> => {
   return [...blurContentLabels.value, ...blurMediaLabels.value]
 })
 
-const contentFilteringToggleDisplay = computed((): boolean => {
+const hasBlurLabel = computed((): boolean => {
   return hasBlurContentLabel.value || hasBlurMediaLabel.value
 })
 
 // ラベル対応 - アカウントコンテンツ
 
-const hasBlurredContent = computed((): boolean => {
+const hasBlurContent = computed((): boolean => {
   if (mainState.currentProfile?.labels == null) {
     return true
   }
@@ -156,12 +156,12 @@ const hasBlurredContent = computed((): boolean => {
 })
 
 const accountContentDisplay = computed((): boolean => {
-  return !!mainState.currentProfile?.__enabledContentMask || !hasBlurredContent.value
+  return !!mainState.currentProfile?.__enabledContentMask || !hasBlurContent.value
 })
 
 // ラベル対応 - アカウントメディア
 
-const hasBlurredMedia = computed((): boolean => {
+const hasBlurMedia = computed((): boolean => {
   if (mainState.currentProfile?.labels == null) {
     return true
   }
@@ -169,7 +169,7 @@ const hasBlurredMedia = computed((): boolean => {
 })
 
 const accountMediaDisplay = computed((): boolean => {
-  return !!mainState.currentProfile?.__enabledContentMask || !hasBlurredMedia.value
+  return !!mainState.currentProfile?.__enabledContentMask || !hasBlurMedia.value
 })
 
 // アクターステータス - LIVE
@@ -415,6 +415,7 @@ function removeThisPost () {
             >
               <AvatarButton
                 :image="mainState.currentProfile?.avatar ?? '/img/void.png'"
+                :blur="hasBlurLabel && !mainState.currentProfile?.__enabledContentMask"
                 :isLabeler="isLabeler"
                 :actorStatus="mainState.currentProfile?.status"
               />
@@ -423,7 +424,7 @@ function removeThisPost () {
             <div class="profile-view__details__top__right">
               <!-- コンテンツフィルタトグル -->
               <ContentFilteringToggle
-                v-if="contentFilteringToggleDisplay"
+                v-if="hasBlurLabel"
                 :labels="contentFilteringLabels"
                 :display="!!mainState.currentProfile?.__enabledContentMask"
                 :togglable="true"

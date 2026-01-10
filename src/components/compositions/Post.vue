@@ -329,6 +329,11 @@ const postMediaDisplay = computed((): boolean => {
     )
 })
 
+// ラベル - ぼかし
+const hasBlurLabel = computed((): boolean => {
+  return hasBlurContentLabel.value || hasBlurMediaLabel.value
+})
+
 // Threadgate
 const threadgate = computed((): "none" | "lock" | "unlock" => {
   const threadgate = props.post.threadgate as any
@@ -1034,12 +1039,14 @@ function toggleOldestQuotedPostDisplay () {
       <div class="body__header">
         <!-- アバターリンク -->
         <div class="body__header__avatar">
+          <!-- TODO: `blur` はポストのラベルでのみ判断すること -->
           <AvatarLink
             :did="post.author?.did"
             :image="post.author?.avatar"
+            :blur="hasBlurLabel"
             :isLabeler="post.author?.associated?.labeler"
-            :noLink="position === 'chatMessage'"
             :actorStatus="post.author?.status"
+            :noLink="position === 'chatMessage'"
             @click.stop="$emit('click', $event)"
           />
         </div>

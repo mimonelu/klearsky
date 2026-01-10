@@ -16,12 +16,8 @@ type TTNotificationReason =
   "subscribed-post"
   (string & {})
 
-type TTNotification = {
-  avatar?: string
+type TTNotification = TTUser & {
   cid: string
-  did: string
-  displayName?: string
-  handle: string
   following: boolean
   indexedAt: string
   isSubscribedReply: boolean

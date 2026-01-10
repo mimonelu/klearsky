@@ -112,12 +112,16 @@ const items = computedAsync<Array<SkyBeMoreBlueItem>>(async () => {
           :to="{ name: 'profile-feeds', query: { account: item.did } }"
           class="sky-be-more-blue__item"
         >
+          <!-- NOTICE: `blur` `isLabeler` `actorStatus` を判断できない -->
           <AvatarLink
             class="sky-be-more-blue__avatar"
             :did="item.did"
             :image="item.avatar"
+            :blur="false"
+            :isLabeler="false"
             :noLink="true"
           />
+
           <div
             class="sky-be-more-blue__display-name"
             translate="no"

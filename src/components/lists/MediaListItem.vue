@@ -27,7 +27,7 @@ const mediaFilteringLabels = computed((): Array<TILabelSetting> => {
   ]
 })
 
-const hasBlurredMedia = computed((): boolean => {
+const hasBlurMedia = computed((): boolean => {
   return mediaFilteringLabels.value.length > 0
 })
 
@@ -38,9 +38,9 @@ const state = reactive<{
 }>({
   contentFilteringDisplay: false,
   imageDisplay: computed((): boolean => {
-    return !hasBlurredMedia.value ||
+    return !hasBlurMedia.value ||
       (
-        hasBlurredMedia.value &&
+        hasBlurMedia.value &&
         state.contentFilteringDisplay
       )
   }),
@@ -66,7 +66,7 @@ function onActivatePostContentToggle () {
 
     <!-- ポストコンテンツトグル -->
     <ContentFilteringToggle
-      v-if="hasBlurredMedia"
+      v-if="hasBlurMedia"
       type="blur"
       :labels="mediaFilteringLabels"
       :display="state.contentFilteringDisplay"

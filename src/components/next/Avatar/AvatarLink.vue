@@ -4,9 +4,10 @@ import AvatarThumbnail from "@/components/next/Avatar/AvatarThumbnail.vue"
 defineProps<{
   did?: string
   image?: string
+  blur?: boolean
   isLabeler?: boolean
-  noLink?: boolean
   actorStatus?: TIActorStatus
+  noLink?: boolean
 }>()
 </script>
 
@@ -18,6 +19,7 @@ defineProps<{
   >
     <AvatarThumbnail
       :image="image"
+      :blur="blur"
       :isLabeler="isLabeler"
       :actorStatus="actorStatus"
     />

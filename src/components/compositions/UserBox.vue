@@ -116,6 +116,7 @@ function onActivateContentFilteringToggle () {
       <AvatarLink
         :did="user.did"
         :image="user.avatar"
+        :blur="hasAppliedHarmfulLabel"
         :isLabeler="user.associated?.labeler"
         :noLink="noLink"
         :actorStatus="user.status"

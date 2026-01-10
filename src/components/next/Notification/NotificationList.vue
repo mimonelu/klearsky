@@ -219,9 +219,13 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             </div>
 
             <!-- アバターリンク -->
+            <!-- TODO: `blur` を判断すること -->
             <AvatarLink
               :did="notification.did"
               :image="notification.avatar"
+              :blur="false"
+              :isLabeler="notification.associated?.labeler"
+              :actorStatus="notification.status"
               @click.stop="$emit('close')"
             />
 

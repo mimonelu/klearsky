@@ -151,7 +151,7 @@ function isMine (message: TIChatMessage): boolean {
       </div>
       <template v-else>
         <div
-          v-for="myConvo,myConvoIndex of mainState.myChat!.myConvos"
+          v-for="myConvo, myConvoIndex of mainState.myChat!.myConvos"
           :key="myConvoIndex"
           class="convo-card"
           :data-has-unread-messages="myConvo.data?.unreadCount > 0"
@@ -167,11 +167,13 @@ function isMine (message: TIChatMessage): boolean {
           </div>
           <div class="convo-card__avatars">
             <template v-for="member of myConvo.data?.members">
+              <!-- TODO: `blur` を判断すること -->
               <AvatarLink
                 v-if="member.did !== mainState.atp.data.did"
                 :key="member.did"
                 :did="member.did"
                 :image="member.avatar"
+                :blur="false"
                 :isLabeler="member.associated?.labeler"
                 :actorStatus="member.status"
                 :title="member.displayName || member.handle"
@@ -193,10 +195,13 @@ function isMine (message: TIChatMessage): boolean {
                   :key="member.did"
                   class="convo-card__user-list__item"
                 >
+                  <!-- TODO: `blur` を判断すること -->
                   <AvatarLink
                     :did="member.did"
                     :image="member.avatar"
+                    :blur="false"
                     :isLabeler="member.associated?.labeler"
+                    :actorStatus="member.status"
                     :noLink="true"
                   />
                   <div
