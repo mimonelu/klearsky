@@ -39,7 +39,9 @@ export function useMainViewBootstrap (options: Options) {
     if (state.currentPreferences.length === 0) {
       tasks.push(preferencesPromise)
     } else {
-      void preferencesPromise.catch(() => {})
+      preferencesPromise.catch((error) => {
+        $error("useMainViewBootstrap", "Failed to update preferences in background", error)
+      })
     }
 
     const cachedUserProfile = loadCachedUserProfile()
@@ -50,17 +52,25 @@ export function useMainViewBootstrap (options: Options) {
     if (state.userProfile == null) {
       tasks.push(userProfilePromise)
     } else {
-      void userProfilePromise.catch(() => {})
+      userProfilePromise.catch((error) => {
+        $error("useMainViewBootstrap", "Failed to update user profile in background", error)
+      })
     }
 
     await Promise.allSettled(tasks)
 
     state.fetchNotificationPreferences()
+      .catch((error) => {
+        $error("useMainViewBootstrap", "Failed to fetch notification preferences", error)
+      })
 
     state.atp.fetchActivitySubscriptions(
       state.activitySubscriptions as Array<TTUser>,
       CONSTS.LIMIT_OF_FETCH_ACTIVITY_SUBSCRIPTIONS
     )
+      .catch((error) => {
+        $error("useMainViewBootstrap", "Failed to fetch activity subscriptions", error)
+      })
 
     if (state.myLabeler!.labelers.length === 0) {
       await state.myLabeler!.updateMyLabelers()
@@ -76,6 +86,9 @@ export function useMainViewBootstrap (options: Options) {
           state.myFeeds!.synchronizeToMyList()
           state.myWorker?.setSessionCache("myFeedsItems", state.myFeeds!.items)
         })
+        .catch((error) => {
+          $error("useMainViewBootstrap", "Failed to fetch my feeds", error)
+        })
     }
 
     if (state.myLists!.items.length === 0) {
@@ -84,6 +97,9 @@ export function useMainViewBootstrap (options: Options) {
           state.myFeeds!.synchronizeToMyList()
           state.myWorker?.setSessionCache("myList", state.myLists!.items)
         })
+        .catch((error) => {
+          $error("useMainViewBootstrap", "Failed to fetch my lists", error)
+        })
     }
 
     state.myChat!.updateDisabled()
@@ -91,17 +107,20 @@ export function useMainViewBootstrap (options: Options) {
         if (state.myChat!.disabled) {
           return
         }
-
         state.myChat!.updateConvosAll()
           .then((value) => {
             if (!value) {
               return
             }
-
             state.startChatListTimer()
-
             state.updatePageTitle()
           })
+          .catch((error) => {
+            $error("useMainViewBootstrap", "Failed to update chat conversations", error)
+          })
+      })
+      .catch((error) => {
+        $error("useMainViewBootstrap", "Failed to update chat disabled status", error)
       })
 
     if (state.currentCustomBookmarkPacks.length === 0) {
@@ -114,12 +133,18 @@ export function useMainViewBootstrap (options: Options) {
         .then(() => {
           state.myWorker?.setSessionCache("customBookmarkPacks", state.currentCustomBookmarkPacks)
         })
+        .catch((error) => {
+          $error("useMainViewBootstrap", "Failed to fetch custom bookmark packs", error)
+        })
     }
 
     if (state.inviteCodes.length === 0) {
       state.updateInviteCodes()
         .then(() => {
           state.myWorker?.setSessionCache("inviteCodes", state.inviteCodes)
+        })
+        .catch((error) => {
+          $error("useMainViewBootstrap", "Failed to update invite codes", error)
         })
     }
 
@@ -149,8 +174,8 @@ export function useMainViewBootstrap (options: Options) {
 }
 
 const STORAGE_KEYS = {
-  currentPreferences: "cache:currentPreferences",
-  userProfile: "cache:userProfile",
+  currentPreferences: "cache:preferences",
+  userProfile: "cache:profile",
 }
 
 function getCurrentDid (): string | undefined {
