@@ -28,7 +28,7 @@ import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import WordMuteScript from "@/components/next/WordMute/script"
 import Util from "@/composables/util"
-import { useContentLabels } from "@/composables/util/use-content-labels"
+import { useContentLabels, hasUserBlurLabel } from "@/composables/util/use-content-labels"
 import {
   OLD_POST_NOTIFICATION_DAYS,
   THIRD_PARTY_DOMAIN_LIGHTNING
@@ -329,9 +329,9 @@ const postMediaDisplay = computed((): boolean => {
     )
 })
 
-// ラベル - ぼかし
-const hasBlurLabel = computed((): boolean => {
-  return hasBlurContentLabel.value || hasBlurMediaLabel.value
+// ラベル - アバターぼかし（ユーザーのラベルで判断）
+const hasBlurAvatarLabel = computed((): boolean => {
+  return hasUserBlurLabel(mainState, props.post.author?.labels)
 })
 
 // Threadgate
@@ -1039,11 +1039,10 @@ function toggleOldestQuotedPostDisplay () {
       <div class="body__header">
         <!-- アバターリンク -->
         <div class="body__header__avatar">
-          <!-- TODO: `blur` はポストのラベルでのみ判断すること -->
           <AvatarLink
             :did="post.author?.did"
             :image="post.author?.avatar"
-            :blur="hasBlurLabel"
+            :blur="hasBlurAvatarLabel"
             :isLabeler="post.author?.associated?.labeler"
             :actorStatus="post.author?.status"
             :noLink="position === 'chatMessage'"

@@ -9,6 +9,7 @@ import Post from "@/components/compositions/Post.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import UserBox from "@/components/compositions/UserBox.vue"
+import { hasUserBlurLabel } from "@/composables/util/use-content-labels"
 
 const mainState = inject("state") as MainState
 
@@ -77,6 +78,11 @@ function isGroupingReason (reason: string): boolean {
     reason === "repost-via-repost" ||
     reason === "subscribed-post"
   )
+}
+
+// 通知ユーザーのラベルぼかし
+function hasBlurLabel (notification: TTNotification): boolean {
+  return hasUserBlurLabel(mainState, notification.labels)
 }
 
 // リポスト経由いいね／リポスト用かどうか
@@ -219,11 +225,10 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             </div>
 
             <!-- アバターリンク -->
-            <!-- TODO: `blur` を判断すること -->
             <AvatarLink
               :did="notification.did"
               :image="notification.avatar"
-              :blur="false"
+              :blur="hasBlurLabel(notification)"
               :isLabeler="notification.associated?.labeler"
               :actorStatus="notification.status"
               @click.stop="$emit('close')"

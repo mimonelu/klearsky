@@ -5,6 +5,7 @@ import ChatPost from "@/components/compositions/ChatPost.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import { hasUserBlurLabel } from "@/composables/util/use-content-labels"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -22,6 +23,10 @@ const state = reactive<{
 
 function close () {
   emit("close")
+}
+
+function hasBlurLabel (user: TTUser): boolean {
+  return hasUserBlurLabel(mainState, user.labels)
 }
 
 async function openChatMembersSelectPopup () {
@@ -167,13 +172,12 @@ function isMine (message: TIChatMessage): boolean {
           </div>
           <div class="convo-card__avatars">
             <template v-for="member of myConvo.data?.members">
-              <!-- TODO: `blur` を判断すること -->
               <AvatarLink
                 v-if="member.did !== mainState.atp.data.did"
                 :key="member.did"
                 :did="member.did"
                 :image="member.avatar"
-                :blur="false"
+                :blur="hasBlurLabel(member)"
                 :isLabeler="member.associated?.labeler"
                 :actorStatus="member.status"
                 :title="member.displayName || member.handle"
@@ -195,11 +199,10 @@ function isMine (message: TIChatMessage): boolean {
                   :key="member.did"
                   class="convo-card__user-list__item"
                 >
-                  <!-- TODO: `blur` を判断すること -->
                   <AvatarLink
                     :did="member.did"
                     :image="member.avatar"
-                    :blur="false"
+                    :blur="hasBlurLabel(member)"
                     :isLabeler="member.associated?.labeler"
                     :actorStatus="member.status"
                     :noLink="true"

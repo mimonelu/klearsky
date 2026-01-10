@@ -2,7 +2,8 @@
 import { inject, onMounted, reactive } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import Loader from "@/components/shells/Loader.vue"
-import SVGIcon from "@/components/images/SVGIcon.vue";
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import { hasUserBlurLabel } from "@/composables/util/use-content-labels"
 
 const mainState = inject("state") as MainState
 
@@ -88,11 +89,11 @@ async function updateHotPosts () {
   const hotImages: Array<TTrendingImage> = hotPosts
     .flat()
 
-    // 有害なラベルが設定されているポストを除外
+    // 有害なラベルが設定されているポストを除外（ラベラー設定を考慮）
     .filter((post) => {
-      const harmfulAuthorLabels = mainState.getHarmfulLabels(post.author.labels ?? [])
-      const harmfulPostLabels = mainState.getHarmfulLabels(post.labels ?? [])
-      return harmfulAuthorLabels.length === 0 && harmfulPostLabels.length === 0
+      const hasHarmfulAuthorLabel = hasUserBlurLabel(mainState, post.author.labels)
+      const hasHarmfulPostLabel = hasUserBlurLabel(mainState, post.labels)
+      return !hasHarmfulAuthorLabel && !hasHarmfulPostLabel
     })
 
     // 画像を持つポストのみを抽出

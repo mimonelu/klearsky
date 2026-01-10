@@ -79,3 +79,17 @@ export function useContentLabels(
     hasBlurMediaLabel
   }
 }
+
+// ユーザーラベルがぼかしを必要とするかチェック
+export function hasUserBlurLabel (
+  mainState: MainState,
+  userLabels: Array<TTLabel> | undefined
+): boolean {
+  if (userLabels == null) return false
+  const labels = mainState.myLabeler!.getSpecificLabels(
+    userLabels,
+    ["hide", "warn"],
+    ["none", "content", "media"]
+  )
+  return labels.length > 0
+}
