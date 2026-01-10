@@ -195,24 +195,46 @@ function getCurrentDid (): string | undefined {
 }
 
 function loadCachedPreferences (): Array<TTPreference> | null {
-  return loadCachedData<Array<TTPreference>>(STORAGE_KEYS.currentPreferences)
+  const cached = loadCachedData<Array<TTPreference>>(STORAGE_KEYS.currentPreferences)
+  if (cached == null) {
+    return null
+  }
+  if (!Array.isArray(cached)) {
+    $error("useMainViewBootstrap", "Invalid cached preferences, will fetch from network")
+    return null
+  }
+  return cached
 }
 
 function loadCachedUserProfile (): TTProfile | null {
-  return loadCachedData<TTProfile>(STORAGE_KEYS.userProfile)
+  const cached = loadCachedData<TTProfile>(STORAGE_KEYS.userProfile)
+  if (cached == null) {
+    return null
+  }
+  if (!cached.did || !cached.handle) {
+    $error("useMainViewBootstrap", "Invalid cached user profile, will fetch from network")
+    return null
+  }
+  return cached
 }
 
 function loadCachedData<T> (key: string): T | null {
   const did = getCurrentDid()
-  if (did == null) return null
+  if (did == null) {
+    return null
+  }
   const cached = Util.loadStorage(key)
-  if (cached?.did !== did) return null
+  if (cached?.did !== did) {
+    return null
+  }
   return cached.payload as T
 }
 
 function saveCachedData (key: string, payload: unknown) {
   const did = getCurrentDid()
-  if (did == null) return
+  if (did == null) {
+    return
+  }
   Util.saveStorage(key, { did, payload })
 }
 
