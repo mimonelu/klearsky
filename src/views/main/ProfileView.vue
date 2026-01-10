@@ -8,7 +8,6 @@ import AtmosphereContainer from "@/components/next/Atmosphere/AtmosphereContaine
 import AuthorHandle from "@/components/labels/AuthorHandle.vue"
 import AvatarButton from "@/components/next/Avatar/AvatarButton.vue"
 import BlockButton from "@/components/next/UserBlock/BlockButton.vue"
-import ContentFilteringToggle from "@/components/buttons/ContentFilteringToggle.vue"
 import DisplayName from "@/components/labels/DisplayName.vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
 import HandleHistoryPopup from "@/components/popups/HandleHistoryPopup.vue"
@@ -129,47 +128,16 @@ const hasNoUnauthenticated = computed((): boolean => {
 
 // ラベル対応
 const {
-  blurContentLabels,
-  blurMediaLabels,
   hasBlurContentLabel,
-  hasBlurMediaLabel
+  hasBlurMediaLabel,
+  hasHideLabel,
 } = useContentLabels(
   computed(() => undefined),
   computed(() => mainState.currentProfile?.labels)
 )
 
-const contentFilteringLabels = computed((): Array<TILabelSetting> => {
-  return [...blurContentLabels.value, ...blurMediaLabels.value]
-})
-
 const hasBlurLabel = computed((): boolean => {
   return hasBlurContentLabel.value || hasBlurMediaLabel.value
-})
-
-// ラベル対応 - アカウントコンテンツ
-
-const hasBlurContent = computed((): boolean => {
-  if (mainState.currentProfile?.labels == null) {
-    return true
-  }
-  return hasBlurContentLabel.value
-})
-
-const accountContentDisplay = computed((): boolean => {
-  return !!mainState.currentProfile?.__enabledContentMask || !hasBlurContent.value
-})
-
-// ラベル対応 - アカウントメディア
-
-const hasBlurMedia = computed((): boolean => {
-  if (mainState.currentProfile?.labels == null) {
-    return true
-  }
-  return hasBlurMediaLabel.value
-})
-
-const accountMediaDisplay = computed((): boolean => {
-  return !!mainState.currentProfile?.__enabledContentMask || !hasBlurMedia.value
 })
 
 // アクターステータス - LIVE
@@ -308,17 +276,6 @@ function closeProfilePostPopver () {
   state.profilePostPopverDisplay = false
 }
 
-// ラベル対応
-
-function onActivateAccountMaskToggle () {
-  if (mainState.currentProfile == null) {
-    return
-  }
-  mainState.currentProfile.__enabledContentMask ??= false
-  mainState.currentProfile.__enabledContentMask = !mainState.currentProfile.__enabledContentMask
-  // state.enabledContentMask = !state.enabledContentMask
-}
-
 // 固定ポスト
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
@@ -336,7 +293,6 @@ function removeThisPost () {
   <div
     class="profile-view"
     :data-folding="mainState.profileFolding"
-    :data-content-filtering="!(accountContentDisplay && accountMediaDisplay)"
     :data-is-my-profile="mainState.isMyProfile()"
     :data-log-loaded="mainState.currentProfile?.__log != null"
   >
@@ -357,10 +313,10 @@ function removeThisPost () {
       <div
         v-if="
           !!mainState.currentProfile?.banner &&
-          accountContentDisplay &&
-          accountMediaDisplay
+          !hasHideLabel
         "
         class="banner"
+        :data-blur="hasBlurLabel"
         @click="openImagePopup(mainState.currentProfile?.banner ?? '')"
       >
         <LazyImage :src="mainState.currentProfile?.banner" />
@@ -409,28 +365,21 @@ function removeThisPost () {
         <div class="profile-view__details">
           <div class="profile-view__details__top">
             <!-- アバターボタン -->
-            <div
-              v-if="loaderDisplay || (accountContentDisplay && accountMediaDisplay)"
-              class="profile-view__details__top__left"
-            >
+            <div class="profile-view__details__top__left">
               <AvatarButton
-                :image="mainState.currentProfile?.avatar ?? '/img/void.png'"
-                :blur="hasBlurLabel && !mainState.currentProfile?.__enabledContentMask"
+                :image="
+                  hasHideLabel
+                    ? '/img/void.png'
+                    : mainState.currentProfile?.avatar ?? '/img/void.png'
+                "
+                :blur="hasBlurLabel && !hasHideLabel"
                 :isLabeler="isLabeler"
                 :actorStatus="mainState.currentProfile?.status"
+                :data-ignore="hasHideLabel"
               />
             </div>
 
             <div class="profile-view__details__top__right">
-              <!-- コンテンツフィルタトグル -->
-              <ContentFilteringToggle
-                v-if="hasBlurLabel"
-                :labels="contentFilteringLabels"
-                :display="!!mainState.currentProfile?.__enabledContentMask"
-                :togglable="true"
-                @click.prevent.stop="onActivateAccountMaskToggle"
-              />
-
               <!-- 折り畳みトグル -->
               <button
                 v-if="!loaderDisplay"
@@ -586,7 +535,7 @@ function removeThisPost () {
             <!-- 説明文 -->
             <HtmlText
               v-if="
-                accountContentDisplay &&
+                !hasHideLabel &&
                 !!mainState.currentProfile?.description
               "
               class="description"
@@ -603,10 +552,7 @@ function removeThisPost () {
             <!-- Atmosphere -->
             <AtmosphereContainer :key="mainState.currentProfile?.did" />
 
-            <div
-              v-if="accountContentDisplay"
-              class="statistics"
-            >
+            <div class="statistics">
               <!-- ポスト数 -->
               <dl class="posts-count">
                 <dt>{{ $t("postsCount") }}</dt>
@@ -944,11 +890,6 @@ function removeThisPost () {
       grid-gap: 1rem;
       position: relative;
 
-      // コンテンツフィルタトグル
-      [data-content-filtering="true"] & {
-        grid-template-columns: 1fr;
-      }
-
       &__right {
         flex-grow: 1;
         overflow: hidden;
@@ -980,12 +921,6 @@ function removeThisPost () {
   }
 }
 
-// コンテンツフィルタトグル
-.content-filtering-toggle {
-  margin-bottom: 0.5rem;
-  width: 100%;
-}
-
 // バナーコンテナ
 .banner-container {
   position: relative;
@@ -1008,6 +943,10 @@ function removeThisPost () {
 .banner {
   cursor: pointer;
   object-fit: cover;
+  overflow: hidden;
+  &[data-blur="true"] .lazy-image {
+    filter: blur(1rem);
+  }
 }
 .banner,
 .banner--filled {
@@ -1024,6 +963,9 @@ function removeThisPost () {
 // アバターボタン
 .avatar-button {
   font-size: var(--avatar-size);
+  &[data-ignore="true"] {
+    pointer-events: none;
+  }
 
   // 非SPレイアウト
   .profile-view[data-folding="false"] & {

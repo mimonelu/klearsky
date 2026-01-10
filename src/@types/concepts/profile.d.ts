@@ -1,7 +1,6 @@
 type TTProfile = TTUser & {
   __log?: any // Injected
   __repo?: any // Injected
-  __enabledContentMask?: boolean // Injected
   banner: string
   followersCount: number
   followsCount: number
