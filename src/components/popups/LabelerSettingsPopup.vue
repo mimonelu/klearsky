@@ -59,7 +59,8 @@ const state = reactive<{
 
 const focusLabel = ref()
 
-onMounted(() => {
+onMounted(async () => {
+  await Util.wait(250)
   if (focusLabel.value?.[0] != null) {
     focusLabel.value[0].scrollIntoView({
       behavior: "smooth",

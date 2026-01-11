@@ -31,7 +31,7 @@ export default async function (
   logJson = await log.json()
   $log("log/audit", logJson)
 
-  // TODO: 配列型以外では Sandbox　で不具合が生じる可能性あり。要検証
+  // TODO: 配列型以外では Sandbox で不具合が生じる可能性あり。要検証
   if (Array.isArray(logJson)) {
     logJson.reverse()
   }
