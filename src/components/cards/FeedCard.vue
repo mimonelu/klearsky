@@ -228,7 +228,11 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </div>
     </div>
 
-    <div v-if="state.detailDisplay">
+    <!-- フィードコンテンツ -->
+    <div
+      v-if="state.detailDisplay"
+      class="feed-card__content"
+    >
       <!-- フィード説明文 -->
       <HtmlText
         class="feed-card__description"
@@ -364,6 +368,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   &__display-name {
     grid-area: n;
     margin-bottom: 0.25em;
+    overflow: hidden;
 
     & > button {
       cursor: pointer;
@@ -488,6 +493,11 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     & > .textlabel__text {
       word-break: break-word;
     }
+  }
+
+  // フィードコンテンツ
+  &__content {
+    overflow: hidden;
   }
 
   // フィード説明文

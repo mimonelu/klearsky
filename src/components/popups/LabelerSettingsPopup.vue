@@ -363,6 +363,9 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
     grid-gap: 0.5rem;
     padding: 1rem 1rem 0;
     position: relative;
+    &:last-child {
+      padding-bottom: 1rem;
+    }
     &[data-focus="true"] {
       background-color: rgb(var(--accent-color), 0.125);
       padding-bottom: 1rem;
@@ -380,6 +383,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
       align-items: center;
       grid-gap: 0.5rem;
       margin: -0.5rem;
+      overflow: hidden;
       padding: 0.5rem;
 
       & > .svg-icon {
@@ -416,6 +420,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
   &__label-description {
     color: rgb(var(--fg-color), 0.75);
     line-height: var(--line-height-middle);
+    overflow: hidden;
     white-space: pre-wrap;
     word-break: break-word;
   }

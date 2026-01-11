@@ -155,7 +155,11 @@ function openProfilePopover ($event: Event) {
       </button>
     </div>
 
-    <div v-if="state.detailDisplay">
+    <!-- ラベラーコンテンツ -->
+    <div
+      v-if="state.detailDisplay"
+      class="labeler-card__content"
+    >
       <!-- ラベラー説明文 -->
       <HtmlText
         class="labeler-card__description"
@@ -250,6 +254,7 @@ function openProfilePopover ($event: Event) {
   &__display-name {
     grid-area: n;
     margin-bottom: 0.25em;
+    overflow: hidden;
 
     & > button {
       cursor: pointer;
@@ -369,6 +374,11 @@ function openProfilePopover ($event: Event) {
       font-size: 1.25em;
       pointer-events: none;
     }
+  }
+
+  // ラベラーコンテンツ
+  &__content {
+    overflow: hidden;
   }
 
   // ラベラー説明文

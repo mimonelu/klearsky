@@ -300,8 +300,12 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </button>
     </div>
 
-    <!-- リスト説明文 -->
-    <div v-if="state.detailDisplay && !isCompact && (list.description || !isOwn)">
+    <!-- リストコンテンツ -->
+    <div
+      v-if="state.detailDisplay && !isCompact && (list.description || !isOwn)"
+      class="list-card__content"
+    >
+      <!-- リスト説明文 -->
       <HtmlText
         v-if="list.description"
         class="list-card__description"
@@ -464,6 +468,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   &__name {
     grid-area: n;
     margin-bottom: 0.25em;
+    overflow: hidden;
 
     & > button {
       cursor: pointer;
@@ -575,6 +580,11 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       font-size: 1.25em;
       pointer-events: none;
     }
+  }
+
+  // リストコンテンツ
+  &__content {
+    overflow: hidden;
   }
 
   // リスト説明文

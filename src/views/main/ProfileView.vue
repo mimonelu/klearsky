@@ -907,6 +907,7 @@ function removeThisPost () {
     .display-name {
       display: inline;
       vertical-align: middle;
+      word-break: break-all;
     }
 
     // 認証者アイコン
@@ -1007,7 +1008,6 @@ function removeThisPost () {
     & > span {
       white-space: pre-line;
       word-break: break-all;
-      word-break: break-word;
     }
 
     .display-name__name {

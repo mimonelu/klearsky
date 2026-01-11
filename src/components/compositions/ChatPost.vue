@@ -186,6 +186,9 @@ async function removeReaction (reaction: TIChatReaction) {
     --chat-post-bg-color: rgb(var(--fg-color), 0.125);
   }
 
+  &:deep() > .body {
+    overflow: hidden;
+  }
   &:deep() > .body > .post__content {
     position: relative;
     width: fit-content;

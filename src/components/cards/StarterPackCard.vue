@@ -209,8 +209,12 @@ async function deleteStarterPack () {
       </button>
     </div>
 
-    <!-- 説明文 -->
-    <template v-if="state.detailDisplay">
+    <!-- コンテンツ -->
+    <div
+      v-if="state.detailDisplay"
+      class="starter-pack-card__content"
+    >
+      <!-- 説明文 -->
       <div v-if="starterPack.record?.description">
         <HtmlText
           v-if="starterPack.record?.description"
@@ -244,7 +248,7 @@ async function deleteStarterPack () {
           >{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
         </RouterLink>
       </div>
-    </template>
+    </div>
 
     <Loader v-if="state.loaderDisplay" />
   </component>
@@ -296,6 +300,7 @@ async function deleteStarterPack () {
   &__name {
     grid-area: n;
     margin-bottom: 0.25em;
+    overflow: hidden;
 
     & > button {
       cursor: pointer;
@@ -386,6 +391,11 @@ async function deleteStarterPack () {
       font-size: 1.25em;
       pointer-events: none;
     }
+  }
+
+  // コンテンツ
+  &__content {
+    overflow: hidden;
   }
 
   // 説明文

@@ -175,6 +175,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   display: flex;
   flex-wrap: wrap;
   grid-gap: 0.25em;
+  overflow: hidden;
   &:empty {
     display: contents;
   }
@@ -189,6 +190,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
     display: flex;
     align-items: center;
     grid-gap: 0.25em;
+    overflow: hidden;
     padding: 0.25em 0.5em;
 
     & > .svg-icon {
@@ -199,6 +201,7 @@ function getLabelerAvatar (label?: TILabelSetting): string {
     & > span {
       color: var(--color);
       line-height: var(--line-height-low);
+      overflow: hidden;
       user-select: none;
       word-break: break-all;
     }
