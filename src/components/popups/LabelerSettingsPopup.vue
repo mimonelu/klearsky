@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive, ref, type ComputedRef } from "vue"
+import { computed, inject, nextTick, onMounted, reactive, ref, type ComputedRef } from "vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LabelerCard from "@/components/cards/LabelerCard.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -60,13 +60,12 @@ const state = reactive<{
 const focusLabel = ref()
 
 onMounted(async () => {
-  await Util.wait(250)
-  if (focusLabel.value?.[0] != null) {
-    focusLabel.value[0].scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    })
-  }
+  await nextTick() // DOM OK
+  await Util.wait(0) // Browser layout/paint OK
+  focusLabel?.value?.[0].scrollIntoView({
+    behavior: "auto",
+    block: "center",
+  })
 })
 
 function close () {
