@@ -61,18 +61,11 @@ const focusLabel = ref()
 
 onMounted(async () => {
   await nextTick() // DOM OK
-  await Util.wait(0) // Browser layout/paint OK
-  console.log("focusIdentifier:", props.focusIdentifier)
-  console.log("focusLabel.value:", focusLabel.value)
-  if (focusLabel?.value?.[0] != null) {
-    console.log("scrollIntoView開始")
-    focusLabel.value[0].scrollIntoView({
-      behavior: "auto",
-      block: "center",
-    })
-  } else {
-    console.log("focusLabel.value[0]が存在しません")
-  }
+  await Util.wait(250) // Browser layout/paint OK
+  focusLabel?.value?.[0].scrollIntoView({
+    behavior: "auto",
+    block: "center",
+  })
 })
 
 function close () {

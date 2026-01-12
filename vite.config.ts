@@ -57,7 +57,9 @@ export default defineConfig({
 
   // ビルドプロダクションでは開発用のオブジェクトをドロップ
   esbuild: {
-    drop: [],
+    drop: process.env.NODE_ENV === "production"
+      ? ["console", "debugger"]
+      : [],
   },
 
   // Android Studio から `10.0.2.2:5173` で localhost にアクセスするために必要
