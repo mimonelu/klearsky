@@ -57,15 +57,16 @@ const state = reactive<{
   }) ?? [],
 })
 
-const focusLabel = ref()
-
 onMounted(async () => {
-  await nextTick() // DOM OK
-  await Util.wait(500) // Browser layout/paint OK
-  focusLabel?.value?.[0].scrollIntoView({
-    behavior: "auto",
-    block: "center",
-  })
+  await nextTick()
+  await Util.wait(0)
+  const focusElement = document.querySelector('[data-focus="true"]')
+  if (focusElement != null) {
+    focusElement.scrollIntoView({
+      behavior: "auto",
+      block: "center",
+    })
+  }
 })
 
 function close () {
@@ -263,7 +264,6 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
         <div
           v-for="pseudoDefinition of state.pseudoDefinitions"
           :key="pseudoDefinition.identifier"
-          :ref="pseudoDefinition.identifier === focusIdentifier ? 'focusLabel' : undefined"
           class="labeler-settings-popup__label-setting"
           :data-focus="pseudoDefinition.identifier === focusIdentifier"
         >
