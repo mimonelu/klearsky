@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, nextTick, onMounted, reactive, ref, type ComputedRef } from "vue"
+import { computed, inject, nextTick, reactive, type ComputedRef, type ComponentPublicInstance } from "vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LabelerCard from "@/components/cards/LabelerCard.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -57,17 +57,15 @@ const state = reactive<{
   }) ?? [],
 })
 
-onMounted(async () => {
-  await nextTick()
-  await Util.wait(0)
-  const focusElement = document.querySelector('[data-focus="true"]')
-  if (focusElement != null) {
-    focusElement.scrollIntoView({
+async function setFocusLabel (el: Element | ComponentPublicInstance | null) {
+  if (el != null) {
+    await nextTick()
+    ;(el as Element).scrollIntoView({
       behavior: "auto",
-      block: "center",
+      block: "start",
     })
   }
-})
+}
 
 function close () {
   updateLabelPreferences()
@@ -264,6 +262,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
         <div
           v-for="pseudoDefinition of state.pseudoDefinitions"
           :key="pseudoDefinition.identifier"
+          :ref="pseudoDefinition.identifier === focusIdentifier ? setFocusLabel : undefined"
           class="labeler-settings-popup__label-setting"
           :data-focus="pseudoDefinition.identifier === focusIdentifier"
         >
