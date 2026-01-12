@@ -61,7 +61,7 @@ const focusLabel = ref()
 
 onMounted(async () => {
   await nextTick() // DOM OK
-  await Util.wait(250) // Browser layout/paint OK
+  await Util.wait(500) // Browser layout/paint OK
   focusLabel?.value?.[0].scrollIntoView({
     behavior: "auto",
     block: "center",
