@@ -31,20 +31,22 @@ export default {
     const targetContents: Array<string> = []
 
     for (const segment of richText.segments()) {
+      // リンクのテキスト部分は本文とする
       if (segment.isLink()) {
-        // リンクのテキスト部分はスキップ（カスタムリンクのテキスト部分は対象外）
         targetUrls.push((segment.link?.uri ?? "").toLowerCase())
-        continue
       }
+
+      // メンションはスキップ
       if (segment.isMention()) {
-        // メンションはスキップ
         continue
       }
+
+      // ハッシュタグのテキスト部分はスキップ
       if (segment.isTag()) {
-        // ハッシュタグのテキスト部分はスキップ
         targetTags.push((segment.tag?.tag ?? "").toLowerCase())
         continue
       }
+
       targetContents.push(segment.text.toLowerCase())
     }
 
