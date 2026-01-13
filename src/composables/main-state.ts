@@ -474,6 +474,15 @@ export const state: MainState = reactive<MainState>({
   openNotificationFilterPopup: openNotificationFilterPopup,
   closeNotificationFilterPopup: closeNotificationFilterPopup,
 
+  // ポップアップ - ポストスレッドポップアップ
+  postThreadPopupProps: {
+    display: false,
+    posts: [],
+    focusPostUri: undefined,
+  },
+  openPostThreadPopup,
+  closePostThreadPopup,
+
   // ポップアップ - UI言語設定ポップアップ
   uiLanguageSettingsPopupDisplay: false,
   openUiLanguageSettingsPopup: openUiLanguageSettingsPopup,
@@ -2346,6 +2355,18 @@ function openNotificationFilterPopup () {
 
 function closeNotificationFilterPopup () {
   state.notificationFilterPopupDisplay = false
+}
+
+// ポップアップ - ポストスレッドポップアップ
+
+function openPostThreadPopup () {
+  state.postThreadPopupProps.display = true
+}
+
+function closePostThreadPopup () {
+  state.postThreadPopupProps.display = false
+  state.postThreadPopupProps.posts.splice(0)
+  state.postThreadPopupProps.focusPostUri = undefined
 }
 
 // ポップアップ - UI言語設定ポップアップ

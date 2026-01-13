@@ -405,6 +405,15 @@ interface MainState {
   openNotificationFilterPopup: Function
   closeNotificationFilterPopup: () => void
 
+  // ポップアップ - ポストスレッドポップアップ
+  postThreadPopupProps: {
+    display: boolean
+    posts: TTPost[]
+    focusPostUri?: string
+  }
+  openPostThreadPopup: Function
+  closePostThreadPopup: () => void
+
   // ポップアップ - UI言語設定ポップアップ
   uiLanguageSettingsPopupDisplay: boolean
   openUiLanguageSettingsPopup: Function

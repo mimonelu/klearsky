@@ -42,6 +42,7 @@ const props = defineProps<{
   post: TTPost
   rootPost?: TTPost
   parentPost?: TTPost
+  focusPostUri?: string
   grandparentAuthor?: TTProfile
   hasOldPostNotification?: boolean
   hasReplyIcon?: boolean
@@ -401,7 +402,7 @@ onBeforeUnmount(() => {
 function isFocused (): boolean {
   const rkey = Util.getRkey(props.post.uri)
   return (
-    props.post.uri === mainState.currentQuery.uri ||
+    props.post.uri === props.focusPostUri ||
     rkey === mainState.currentQuery.rkey
   )
 }

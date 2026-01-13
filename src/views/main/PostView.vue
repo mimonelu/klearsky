@@ -2,7 +2,7 @@
 import { computed, inject } from "vue"
 import Loader from "@/components/shells/Loader.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
-import Post from "@/components/compositions/Post.vue"
+import PostThread from "@/components/next/Post/PostThread.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -12,28 +12,11 @@ const rootPost = computed((): undefined | TTPost => {
   return mainState.currentPosts[0]
 })
 
-// ポストの更新
-function updateThisPostThread (newPosts: Array<TTPost>) {
-  if (mainState.currentPosts == null) {
-    return
-  }
-
-  // MEMO: ポストスレッドの全同一ポストに最新のデータを反映する
-  mainState.currentPosts.forEach((post: TTPost, index: number) => {
-    const newPost = newPosts.find((newPost: TTPost) => {
-      return post?.uri === newPost.uri
-    })
-    if (newPost != null) {
-      Util.updatePostProps(mainState.currentPosts[index], newPost)
-    }
-  })
-}
-
-// ポストの削除
 function removeThisPost (uri: string) {
-  mainState.currentPosts = mainState.currentPosts.filter((post: TTPost) => {
-    return post.uri !== uri
-  })
+  mainState.currentPosts =
+    mainState.currentPosts.filter((post: TTPost) => {
+      return post.uri !== uri
+    })
 }
 
 // 再取得
@@ -65,6 +48,7 @@ async function toggleThreadMute () {
 }
 
 // スレッドソート
+/*
 function getThreadViewPref (): TTPreferenceThreadView | undefined {
   return mainState.currentPreferences.find((pref) => {
     return pref.$type === "app.bsky.actor.defs#threadViewPref"
@@ -97,6 +81,7 @@ async function applySort (sort: "oldest" | "newest" | "most-likes" | "hotness") 
   }
   mainState.centerLoaderDisplay = false
 }
+*/
 </script>
 
 <template>
@@ -135,14 +120,10 @@ async function applySort (sort: "oldest" | "newest" | "most-likes" | "hotness") 
         </template>
       </PageHeader>
     </Portal>
-    <Post
-      v-for="post, postIndex of mainState.currentPosts"
-      :key="post.uri"
-      position="post"
-      :post="post"
-      :data-has-child="post.uri === mainState.currentPosts[postIndex + 1]?.record.reply?.parent?.uri"
-      @updateThisPostThread="updateThisPostThread as unknown"
-      @removeThisPost="removeThisPost as unknown"
+    <PostThread
+      :posts="mainState.currentPosts"
+      :focusPostUri="mainState.currentQuery.uri"
+      @removeThisPost="removeThisPost"
     />
     <Loader v-if="mainState.listLoaderDisplay" />
   </div>
@@ -164,24 +145,6 @@ async function applySort (sort: "oldest" | "newest" | "most-likes" | "hotness") 
   // ポストスレッドソートボタン
   &__sort-button > .svg-icon {
     pointer-events: none;
-  }
-}
-
-// フォーカスポスト
-.post[data-focus="true"]:not([data-position="preview"]) {
-  background-color: rgb(var(--accent-color), 0.125);
-  scroll-margin: 3.25rem;
-
-  &:deep() {
-    // フォーカスポスト - フォントサイズの拡大
-    .text:not([data-is-text-only-emoji="true"]) {
-      font-size: 1.125em;
-    }
-
-    // フォーカスポスト - テキスト選択の有効化
-    & > .body > .post__content > .html-text {
-      user-select: text;
-    }
   }
 }
 </style>

@@ -49,6 +49,7 @@ import OtherSettingsPopup from "@/components/popups/settings-popups/OtherSetting
 import PasteFiles from "@/components/next/PasteFiles/PasteFiles.vue"
 import PostPopover from "@/components/popovers/PostPopover.vue"
 import PostSettingsPopup from "@/components/popups/settings-popups/PostSettingsPopup.vue"
+import PostThreadPopup from "@/components/next/Post/PostThreadPopup.vue"
 import PostThreadSortPopover from "@/components/popovers/PostThreadSortPopover.vue"
 import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
@@ -260,6 +261,14 @@ const {
         <NotificationFilterPopup
           v-if="state.notificationFilterPopupDisplay"
           @close="state.closeNotificationFilterPopup"
+        />
+      </Transition>
+
+      <!-- ポストスレッドポップアップ -->
+      <Transition>
+        <PostThreadPopup
+          v-if="state.postThreadPopupProps.display"
+          @close="state.closePostThreadPopup"
         />
       </Transition>
 

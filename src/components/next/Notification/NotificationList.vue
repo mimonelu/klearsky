@@ -10,6 +10,7 @@ import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import UserBox from "@/components/compositions/UserBox.vue"
 import { hasUserBlurLabel } from "@/composables/util/use-content-labels"
+import CONSTS from "@/consts/consts.json"
 
 const mainState = inject("state") as MainState
 
@@ -119,6 +120,36 @@ function makeSubjectTo (notification: TTNotification): any {
   }
 }
 
+async function onClickNotification (event: Event, notification: TTNotification) {
+  const reasons = [
+    "mention",
+    "quote",
+    "reply",
+    "subscribed-post",
+  ]
+  if (reasons.includes(notification.reason)) {
+    event.preventDefault()
+    event.stopPropagation()
+    mainState.loaderDisplay = true
+    const posts = await mainState.atp.fetchPostThread(
+      notification.uri,
+      CONSTS.LIMIT_OF_FETCH_POST_THREAD
+    ) ?? []
+    mainState.loaderDisplay = false
+    if (posts instanceof Error) {
+      mainState.openErrorPopup(posts, "NotificationList/onClickNotification")
+      return
+    }
+    mainState.postThreadPopupProps.posts.splice(
+      0,
+      mainState.postThreadPopupProps.posts.length,
+      ...posts
+    )
+    mainState.postThreadPopupProps.focusPostUri = notification.uri
+    mainState.openPostThreadPopup()
+  }
+}
+
 // マイリストの削除
 async function deleteList (notificationGroup: TTNotificationGroup) {
   if (notificationGroup.list == null) return
@@ -201,7 +232,7 @@ async function deleteList (notificationGroup: TTNotificationGroup) {
             class="notification"
             :data-is-new="!notification.isRead"
             :data-is-subscribed-reply="notification.isSubscribedReply"
-            @click="$emit('close')"
+            @click.capture="onClickNotification($event, notification)"
           >
             <!-- 新着通知アイコン -->
             <div
