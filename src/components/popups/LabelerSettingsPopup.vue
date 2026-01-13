@@ -57,13 +57,16 @@ const state = reactive<{
   }) ?? [],
 })
 
+let doneFocus = false
+
 async function setFocusLabel (el: Element | ComponentPublicInstance | null) {
-  if (el != null) {
+  if (!doneFocus && el != null) {
     await nextTick()
     ;(el as Element).scrollIntoView({
       behavior: "auto",
       block: "start",
     })
+    doneFocus = true
   }
 }
 
