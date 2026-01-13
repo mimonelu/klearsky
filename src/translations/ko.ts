@@ -382,6 +382,8 @@ export default () => ({
   "labelerReset": "설정 재설정",
   "labelerResetMessage": "설정을 재설정합니다. 괜찮습니까?",
   "myLabeler": "내 라벨러",
+  "contentFilteringTemporarilyDisable": "필터 비활성화",
+  "contentFilteringTemporarilyEnable": "필터 활성화",
   "moderation": "모더레이션",
   "moderate": "모더레이트",
   "contentFiltering": "콘텐츠 필터",

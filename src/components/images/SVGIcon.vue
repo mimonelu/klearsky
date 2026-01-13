@@ -42,6 +42,8 @@ import earthOff from "@/svg/earth-off.svg?raw"
 import easterEgg from "@/svg/egg-easter.svg?raw"
 import edit from "@/svg/edit.svg?raw"
 import email from "@/svg/email.svg?raw"
+import eye from "@/svg/eye.svg?raw"
+import eyeOff from "@/svg/eye-off.svg?raw"
 import feed from "@/svg/feed.svg?raw"
 import fileExport from "@/svg/file-export.svg?raw"
 import fileImport from "@/svg/file-import.svg?raw"
@@ -158,6 +160,8 @@ const icons: { [k: string]: string } = {
   easterEgg,
   edit,
   email,
+  eye,
+  eyeOff,
   feed,
   fileExport,
   fileImport,

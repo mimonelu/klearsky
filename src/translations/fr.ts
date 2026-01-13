@@ -382,6 +382,8 @@ export default () => ({
   "labelerReset": "Réinitialiser tous les paramètres",
   "labelerResetMessage": "Réinitialiser tous les paramètres. Es-tu sûr?",
   "myLabeler": "Mon étiqueteur",
+  "contentFilteringTemporarilyDisable": "Désactiver le filtre",
+  "contentFilteringTemporarilyEnable": "Activer le filtre",
   "moderation": "Modération",
   "moderate": "Modérer",
   "contentFiltering": "Filtrage de contenu",

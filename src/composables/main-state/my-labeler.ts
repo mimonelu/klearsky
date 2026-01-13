@@ -8,10 +8,13 @@ export default class MyLabeler {
 
   public labelMap: { [did: string]: TILabelSetting }
 
+  public temporarilyDisabled: boolean
+
   constructor (mainState: MainState) {
     this.mainState = mainState
     this.labelers = []
     this.labelMap = {}
+    this.temporarilyDisabled = false
   }
 
   subscribe (did: string, labeler: TILabeler): boolean {
@@ -222,6 +225,11 @@ export default class MyLabeler {
     visibility: Array<TTContentVisibility>,
     blurs: Array<TTLabelBlurs>
   ): Array<TILabelSetting> {
+    // 一時無効化中は空配列を返す
+    if (this.temporarilyDisabled) {
+      return []
+    }
+
     return labels
       .map((label): undefined | TILabelSetting => {
         let labelSetting = this.labelMap[`${label.src}-${label.val}`]
@@ -355,6 +363,10 @@ export default class MyLabeler {
     if (labeler.viewer != null) {
       delete labeler.viewer.like
     }
+  }
+
+  toggleTemporarilyDisabled (): void {
+    this.temporarilyDisabled = !this.temporarilyDisabled
   }
 
   setAtprotoAcceptLabelers (): Error | undefined {

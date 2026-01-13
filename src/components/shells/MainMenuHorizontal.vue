@@ -129,6 +129,14 @@ async function openSendPostPopup () {
       @click.prevent="openSettingsPopover"
     >
       <SVGIcon name="setting" />
+
+      <!-- コンテンツフィルタ一時無効化バッジ -->
+      <div
+        v-if="mainState.myLabeler?.temporarilyDisabled"
+        class="unread-badge"
+      >
+        <SVGIcon name="eyeOff" />
+      </div>
     </button>
 
     <!-- アカウントポップアップトリガー -->
@@ -235,5 +243,10 @@ async function openSendPostPopup () {
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
+
+  .svg-icon {
+    fill: white;
+    font-size: 1rem;
+  }
 }
 </style>

@@ -2,6 +2,7 @@ interface TIMyLabeler {
   mainState: MainState
   labelers: Array<TILabeler>
   labelMap: { [did: string]: TILabelSetting }
+  temporarilyDisabled: boolean
   subscribe (did: string, labeler: TILabeler): boolean
   unsubscribe (did: string): boolean
   isSubscribed (did?: string): boolean
@@ -20,5 +21,6 @@ interface TIMyLabeler {
   cleanLabelPreferences (): void
   like (uri: string, cid: string): Promise<Error | string>
   unlike (uri: string, likeUri: string): Promise<Error | undefined>
+  toggleTemporarilyDisabled (): void
   setAtprotoAcceptLabelers (): void
 }

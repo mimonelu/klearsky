@@ -153,6 +153,14 @@ function moveToBottom () {
       >
         <div class="icon">
           <SVGIcon name="setting" />
+
+          <!-- コンテンツフィルタ一時無効化バッジ -->
+          <div
+            v-if="mainState.myLabeler?.temporarilyDisabled"
+            class="unread-badge"
+          >
+            <SVGIcon name="eyeOff" />
+          </div>
         </div>
         <div class="label">{{ $t("settings") }}</div>
       </button>
@@ -408,6 +416,12 @@ function moveToBottom () {
   position: absolute;
   right: -0.25rem;
   top: -0.25rem;
+}
+
+// コンテンツフィルタ一時無効化バッジ
+.link-button .unread-badge .svg-icon {
+  fill: white;
+  font-size: 0.75rem;
 }
 
 // スクロールボタン

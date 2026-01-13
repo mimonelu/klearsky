@@ -382,6 +382,8 @@ export default () => ({
   "labelerReset": "Reset all settings",
   "labelerResetMessage": "Are you sure you want to reset this labeler's settings?",
   "myLabeler": "My Labelers",
+  "contentFilteringTemporarilyDisable": "Disable Content Filter",
+  "contentFilteringTemporarilyEnable": "Enable Content Filter",
   "moderation": "Moderation",
   "moderate": "Moderate",
   "contentFiltering": "Content Filtering",

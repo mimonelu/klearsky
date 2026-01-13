@@ -100,6 +100,10 @@ function process (type: string) {
       mainState.openCustomBookmarkPopup()
       break
     }
+    case "contentFilteringToggle": {
+      mainState.myLabeler?.toggleTemporarilyDisabled()
+      break
+    }
     case "mutingUsers": {
       mainState.openMutingUsersPopup()
       break
@@ -250,6 +254,19 @@ function process (type: string) {
 
       <hr />
 
+      <!-- コンテンツフィルタ一時無効化トグル -->
+      <button
+        type="button"
+        data-type="contentFilteringToggle"
+        :data-disabled="mainState.myLabeler?.temporarilyDisabled"
+        @click.prevent="process('contentFilteringToggle')"
+      >
+        <SVGIcon :name="mainState.myLabeler?.temporarilyDisabled ? 'eyeOff' : 'eye'" />
+        <span>{{ $t(mainState.myLabeler?.temporarilyDisabled ? "contentFilteringTemporarilyEnable" : "contentFilteringTemporarilyDisable") }}</span>
+      </button>
+
+      <hr />
+
       <!-- ミュート中のユーザーポップアップトリガー -->
       <button
         type="button"
@@ -358,6 +375,7 @@ function process (type: string) {
   button[data-type="myList"] > .svg-icon { --icon-color: var(--list-color); }
   // button[data-type="myWord"] > .svg-icon {}
   button[data-type="myLabeler"] > .svg-icon { --icon-color: var(--label-color); }
+  button[data-type="contentFilteringToggle"][data-disabled="true"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="activitySubscriptionList"] > .svg-icon { --icon-color: var(--post-color); }
   button[data-type="officialBookmark"] > .svg-icon { --icon-color: var(--bookmark-color); }
   button[data-type="customBookmark"] > .svg-icon { --icon-color: var(--bookmark-color); }

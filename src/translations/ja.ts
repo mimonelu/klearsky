@@ -382,6 +382,8 @@ export default () => ({
   "labelerReset": "設定のリセット",
   "labelerResetMessage": "設定をリセットします。よろしいですか？",
   "myLabeler": "マイラベラー",
+  "contentFilteringTemporarilyDisable": "コンテンツフィルタを無効化",
+  "contentFilteringTemporarilyEnable": "コンテンツフィルタを有効化",
   "moderation": "モデレーション",
   "moderate": "モデレートする",
   "contentFiltering": "コンテンツフィルタ",
