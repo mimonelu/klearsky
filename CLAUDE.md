@@ -127,9 +127,9 @@ When working with authentication features, always test:
 
 Klearsky implements custom records and fields:
 - `space.aoisora.bookmark` - Custom bookmark system
-- `space.aoisora.preference.feed.extra` - Trending and global feed preferences
-- `space.aoisora.post.via` - Client identification
-- `space.aoisora.post.lightning` - Lightning Network integration for "Zap" links
+- `net.mimonelu.klearsky.extraFeed` - Trending and global feed preferences
+- `net.mimonelu.klearsky.via` - Client identification
+- `net.mimonelu.klearsky.lightning` - Lightning Network integration for "Zap" links
 
 ## Communication Guidelines
 

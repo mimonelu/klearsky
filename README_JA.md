@@ -111,11 +111,11 @@ KlearskyはいくつかのカスタムAT Protocolレコードとフィールド�
 
 ### カスタムレコード（コレクション）
 - `space.aoisora.bookmark` - 投稿保存用のカスタムブックマークシステム
-- `space.aoisora.preference.feed.extra` - トレンドページとグローバルフィード設定の保存
+- `net.mimonelu.klearsky.extraFeed` - トレンドページとグローバルフィード設定の保存
 
 ### カスタムフィールド
-- `app.bsky.feed.post.record["space.aoisora.post.via"]` - クライアント識別（Klearsky）
-- `app.bsky.feed.post.record["space.aoisora.post.lightning"]` - Lightning Network決済統合
+- `app.bsky.feed.post.record["net.mimonelu.klearsky.via"]` - クライアント識別（Klearsky）
+- `app.bsky.feed.post.record["net.mimonelu.klearsky.lightning"]` - Lightning Network決済統合
 
 ## 🔗 外部サービス
 

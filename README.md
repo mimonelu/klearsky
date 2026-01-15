@@ -111,11 +111,11 @@ Klearsky implements several custom AT Protocol records and fields:
 
 ### Custom Records (Collections)
 - `space.aoisora.bookmark` - Custom bookmark system for saving posts
-- `space.aoisora.preference.feed.extra` - Storage for trending page and global feed preferences
+- `net.mimonelu.klearsky.extraFeed` - Storage for trending page and global feed preferences
 
 ### Custom Fields
-- `app.bsky.feed.post.record["space.aoisora.post.via"]` - Client identification (Klearsky)
-- `app.bsky.feed.post.record["space.aoisora.post.lightning"]` - Lightning Network payment integration
+- `app.bsky.feed.post.record["net.mimonelu.klearsky.via"]` - Client identification (Klearsky)
+- `app.bsky.feed.post.record["net.mimonelu.klearsky.lightning"]` - Lightning Network payment integration
 
 ## 🔗 External Services
 
