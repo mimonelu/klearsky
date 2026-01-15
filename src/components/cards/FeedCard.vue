@@ -69,7 +69,7 @@ async function toggleFeedGeneratorLike (generator: TTFeedGenerator) {
   Util.blurElement()
   if (state.loaderDisplay) return
   state.loaderDisplay = true
-  if (generator.viewer.like == null)
+  if (generator.viewer?.like == null)
     await likeFeedGenerator(generator)
   else
     await unlikeFeedGenerator(generator)
@@ -127,11 +127,16 @@ async function likeFeedGenerator (generator: TTFeedGenerator) {
     mainState.openErrorPopup(uri, "FeedCard/createLike")
     return
   }
-  generator.viewer.like = uri
+  if (generator.viewer?.like != null) {
+    generator.viewer.like = uri
+  }
   generator.likeCount ++
 }
 
 async function unlikeFeedGenerator (generator: TTFeedGenerator) {
+  if (generator.viewer?.like == null) {
+    return
+  }
   const result = await mainState.atp.deleteLike(generator.viewer.like as string)
   if (result instanceof Error) {
     mainState.openErrorPopup(result, "FeedCard/deleteLike")
@@ -194,6 +199,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       <!-- フィードライク数 -->
       <button
+        v-if="generator.viewer != null"
         class="feed-card__like-count"
         :data-on="generator.viewer.like != null"
         @click.prevent.stop="!state.isUnknown && toggleFeedGeneratorLike(generator)"
@@ -203,14 +209,17 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       </button>
 
       <!-- フィード作成日時 -->
-      <div class="feed-card__indexed-at">
+      <div
+        v-if="generator.indexedAt != null"
+        class="feed-card__indexed-at"
+      >
         <SVGIcon name="clock" />
         <span translate="no">{{ mainState.formatDate(generator.indexedAt) }}</span>
       </div>
 
       <!-- フィードカードポップオーバートリガー -->
       <button
-        v-if="menuDisplay"
+        v-if="menuDisplay && generator.did != null"
         class="feed-card__menu-button"
         @click.prevent.stop="openFeedCardPopover"
       >
@@ -245,7 +254,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       <!-- フィード作成者リンク -->
       <div
-        v-if="creatorDisplay && generator.creator.did"
+        v-if="creatorDisplay && generator.creator != null"
         class="feed-card__creator"
       >
         <div

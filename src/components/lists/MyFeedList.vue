@@ -259,7 +259,7 @@ function removeMyFeed (uri: string) {
 
         <!-- フィード削除ボタン -->
         <button
-          v-if="item.kind === 'feed' || item.kind === 'list'"
+          v-if="item.kind === 'feed' || item.kind === 'list' || item.kind === 'unknown'"
           class="my-feed-list__icon"
           @click.prevent="removeMyFeed(item.value.uri)"
         >

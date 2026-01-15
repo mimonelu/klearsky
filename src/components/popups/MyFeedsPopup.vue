@@ -350,6 +350,19 @@ async function mergeV1ToV2 () {
             />
           </template>
 
+          <!-- リストカード -->
+          <ListCard
+            v-else-if="item.kind === 'list'"
+            :list="item.value"
+            :menuDisplay="true"
+            :detailDisplay="false"
+            :orderButtonDisplay="true"
+            @close="close"
+            @changeCustomFeedOrder="changeCustomFeedOrder"
+            @onActivateMention="close"
+            @onActivateHashTag="close"
+          />
+
           <!-- フィードカード -->
           <FeedCard
             v-else-if="item.kind === 'feed'"
@@ -364,17 +377,16 @@ async function mergeV1ToV2 () {
             @onActivateHashTag="close"
           />
 
-          <!-- リストカード -->
-          <ListCard
-            v-else-if="item.kind === 'list'"
-            :list="item.value"
+          <!-- フィードカード -->
+          <FeedCard
+            v-else
+            :generator="item.value"
             :menuDisplay="true"
             :detailDisplay="false"
             :orderButtonDisplay="true"
+            :creatorDisplay="false"
             @close="close"
             @changeCustomFeedOrder="changeCustomFeedOrder"
-            @onActivateMention="close"
-            @onActivateHashTag="close"
           />
         </template>
       </template>
