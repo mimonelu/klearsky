@@ -156,7 +156,7 @@ function scrolledToBottom () {
       <div class="notification-popup__filter-button-container">
         <button
           type="button"
-          class="button--plane"
+          class="button--plain"
           :data-enable-notification-filter="state.enabledNotificationFilter"
           @click.stop="openNotificationFilterPopup"
         >

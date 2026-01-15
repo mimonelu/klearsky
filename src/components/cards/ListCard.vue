@@ -336,7 +336,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     >
       <!-- リストフィードボタン -->
       <RouterLink
-        class="button--plane list-card__feeds-button"
+        class="button--plain list-card__feeds-button"
         :disabled="state.isListFeedsPage"
         :to="routerLinkToListFeeds"
         @click.prevent="$emit('close')"
@@ -347,7 +347,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       <!-- リストユーザー一覧ボタン -->
       <RouterLink
-        class="button--plane list-card__users-button"
+        class="button--plain list-card__users-button"
         :disabled="state.isListUsersPage"
         :to="routerLinkToListUsers"
         @click.prevent="$emit('close')"
@@ -359,7 +359,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       <!-- リスト編集ボタン -->
       <button
         v-if="isOwn"
-        class="button--plane list-card__edit-button"
+        class="button--plain list-card__edit-button"
         @click.stop.prevent="openListEditPopup"
       >
         <SVGIcon name="edit" />
@@ -368,7 +368,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       <!-- フィードピン -->
       <button
-        class="button--plane list-card__pin"
+        class="button--plain list-card__pin"
         :data-is-on="pinned"
         @click.prevent.stop="toggleSavedOrPinned('pinned')"
       >
@@ -383,7 +383,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       <!-- フィードブックマーク -->
       <button
-        class="button--plane list-card__bookmark"
+        class="button--plain list-card__bookmark"
         :data-is-on="saved"
         @click.prevent.stop="toggleSavedOrPinned('saved')"
       >

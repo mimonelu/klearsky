@@ -432,7 +432,7 @@ function validate (): boolean {
         & > .button--bordered,
         & > .button--important,
         & > .button--bordered--important,
-        & > .button--plane,
+        & > .button--plain,
         & > input {
           min-height: 3rem;
         }

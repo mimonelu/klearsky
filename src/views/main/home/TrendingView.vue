@@ -187,7 +187,7 @@ async function updateHotPosts () {
             v-for="topic, topicIndex in mainState.currentTrendingTopics"
             :key="topicIndex"
             :to="{ name: 'post-search', query: { text: topic.topic, sort: 'top' } }"
-            class="button--plane trending-view__topic"
+            class="button--plain trending-view__topic"
           >
             <span translate="no">{{ topic.topic }}</span>
           </RouterLink>
@@ -208,7 +208,7 @@ async function updateHotPosts () {
             v-for="topic, topicIndex in mainState.currentSuggestedTopics"
             :key="topicIndex"
             :to="{ name: 'post-search', query: { text: topic.topic, sort: 'top' } }"
-            class="button--plane trending-view__topic"
+            class="button--plain trending-view__topic"
           >
             <span translate="no">{{ topic.topic }}</span>
           </RouterLink>
@@ -220,7 +220,7 @@ async function updateHotPosts () {
     <div class="trending-view__button-container">
       <button
         type="button"
-        class="trending-view__refresh-button button--plane"
+        class="trending-view__refresh-button button--plain"
         :disabled="state.processing"
         @click.prevent="updateTrendingTopics"
       >

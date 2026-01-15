@@ -185,7 +185,7 @@ function insertMyWord (myWord: string) {
           <button
             v-if="state.mode === 'edit'"
             type="button"
-            class="button--plane my-word__remove-button"
+            class="button--plain my-word__remove-button"
             @click.prevent="removeMyWord(index)"
           >
             <SVGIcon name="cross" />

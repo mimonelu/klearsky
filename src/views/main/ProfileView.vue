@@ -591,7 +591,7 @@ function removeThisPost () {
                 <!-- 登録時に使用したスターターパック -->
                 <dd v-if="joinedStarterPackUrl != null">
                   <a
-                    class="button--plane joined-starter-pack"
+                    class="button--plain joined-starter-pack"
                     :href="joinedStarterPackUrl"
                     rel="noreferrer"
                     target="_blank"

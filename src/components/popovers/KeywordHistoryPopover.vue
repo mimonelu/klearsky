@@ -102,7 +102,7 @@ function remove (index: number) {
 
           <!-- キーワード履歴削除ボタン -->
           <div
-            class="keyword-history-popover__remove-button button--plane"
+            class="keyword-history-popover__remove-button button--plain"
             @click.stop="remove(index)"
           >
             <SVGIcon name="cross" />

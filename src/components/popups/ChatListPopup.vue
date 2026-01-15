@@ -122,14 +122,14 @@ function isMine (message: TIChatMessage): boolean {
     <template #header>
       <button
         type="button"
-        class="button--plane chat-list-popup__create-convo-button"
+        class="button--plain chat-list-popup__create-convo-button"
         @click.stop="openChatMembersSelectPopup"
       >
         <SVGIcon name="chatPlus" />
       </button>
       <button
         type="button"
-        class="button--plane chat-list-popup__chat-declaration-select-popover-trigger"
+        class="button--plain chat-list-popup__chat-declaration-select-popover-trigger"
         @click.stop="openChatDeclarationSelectPopover"
       >
         <SVGIcon :name="
@@ -231,7 +231,7 @@ function isMine (message: TIChatMessage): boolean {
           </div>
           <div class="convo-card__right">
             <button
-              class="button--plane"
+              class="button--plain"
               @click.stop="openChatConvoPopover($event, myConvo)"
             >
               <SVGIcon name="menu" />

@@ -1415,7 +1415,7 @@ function toggleOldestQuotedPostDisplay () {
             class="oldest-quoted-post-toggle"
           >
             <button
-              class="button--plane"
+              class="button--plain"
               @click.prevent.stop="toggleOldestQuotedPostDisplay"
             >
               <template v-if="post.__custom?.oldestQuotedPostDisplay">

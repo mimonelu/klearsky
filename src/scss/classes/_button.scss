@@ -3,7 +3,7 @@
 .button--bordered,
 .button--important,
 .button--bordered--important,
-.button--plane {
+.button--plain {
   border: 1px solid transparent;
   border-radius: var(--border-radius-middle);
   cursor: pointer;
@@ -110,7 +110,7 @@
   }
 }
 
-.button--plane {
+.button--plain {
   color: rgb(var(--fg-color), 0.875);
   &:focus, &:hover {
     color: rgb(var(--fg-color));

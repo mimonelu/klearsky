@@ -150,7 +150,7 @@ async function removeReaction (reaction: TIChatReaction) {
       #header-after
     >
       <button
-        class="button--plane"
+        class="button--plain"
         @click.stop="openChatMessagePopover"
       >
         <SVGIcon name="menu" />
@@ -233,7 +233,7 @@ async function removeReaction (reaction: TIChatReaction) {
           color: rgb(var(--fg-color), 0.5);
         }
 
-        & > .button--plane {
+        & > .button--plain {
           grid-area: m;
           margin: 0 0.5em 0 -0.5em;
         }

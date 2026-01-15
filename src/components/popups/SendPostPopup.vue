@@ -645,7 +645,7 @@ const PreviewLinkCardFeature: {
             <!-- イースターエッグポップオーバートリガー -->
             <button
               type="button"
-              class="button--plane easter-egg-button"
+              class="button--plain easter-egg-button"
               @click.prevent="openEasterEggPopover"
             >
               <SVGIcon name="formatFont" />

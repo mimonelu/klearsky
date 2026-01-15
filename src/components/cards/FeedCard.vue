@@ -277,7 +277,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         v-bind="state.isFeedsPage || unclickable || state.isUnknown ? null : {
           to: routerLinkToFeedsPage,
         }"
-        class="button--plane feed-card__feeds-button"
+        class="button--plain feed-card__feeds-button"
         :disabled="state.isFeedsPage || unclickable || state.isUnknown"
         @click.prevent="$emit('close')"
       >
@@ -287,7 +287,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       <!-- フィードピン -->
       <button
-        class="button--plane feed-card__pin"
+        class="button--plain feed-card__pin"
         :data-is-on="pinned"
         @click.prevent.stop="toggleSavedOrPinned('pinned')"
       >
@@ -302,7 +302,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
       <!-- フィードブックマーク -->
       <button
-        class="button--plane feed-card__bookmark"
+        class="button--plain feed-card__bookmark"
         :data-is-on="saved"
         @click.prevent.stop="toggleSavedOrPinned('saved')"
       >

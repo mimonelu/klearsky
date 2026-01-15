@@ -62,7 +62,7 @@ function toggle () {
   >
     <button
       type="button"
-      class="button--plane atmosphere-container__button"
+      class="button--plain atmosphere-container__button"
       :disabled="!hasItem"
       @click.prevent="toggle"
     >

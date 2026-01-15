@@ -188,7 +188,7 @@ async function outputJsonForSkyFeed () {
     <template #header>
       <!-- JSON出力ボタン -->
       <button
-        class="button--plane output-json-button"
+        class="button--plain output-json-button"
         @click.stop="outputJsonForSkyFeed"
       >
         <SVGIcon name="json" />

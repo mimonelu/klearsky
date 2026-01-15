@@ -185,7 +185,7 @@ function openProfilePopover ($event: Event) {
 
       <!-- プロフィールリンクボタン -->
       <RouterLink
-        :class="state.isProfileFeedsPage ? 'button--plane' : 'button--bordered'"
+        :class="state.isProfileFeedsPage ? 'button--plain' : 'button--bordered'"
         class="labeler-card__profile-button"
         :to="{
           path: '/profile/feeds',
@@ -403,7 +403,7 @@ function openProfilePopover ($event: Event) {
   // プロフィールリンクボタン
   &__profile-button {
     font-size: 0.875em;
-    &.button--plane {
+    &.button--plain {
       background-color: rgb(var(--accent-color), 0.25);
     }
 

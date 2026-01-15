@@ -83,7 +83,7 @@ function toggleReaction (reaction: string) {
         <button
           v-for="reaction, reactionIndex of reactions"
           :key="reactionIndex"
-          class="button--plane"
+          class="button--plain"
           :disabled="message.reactions?.some((r) => {
             return r.value === reaction && r.sender.did !== mainState.atp.data.did
           })"
