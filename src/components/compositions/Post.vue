@@ -30,7 +30,7 @@ import WordMuteScript from "@/components/next/WordMute/script"
 import Util from "@/composables/util"
 import { useContentLabels, hasUserBlurLabel } from "@/composables/util/use-content-labels"
 import CONSTS from "@/consts/consts.json"
-import OWN_DOMAIN from "@/consts/own-domain.json"
+import OWN_DOMAIN from "@/consts/own-domain"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 

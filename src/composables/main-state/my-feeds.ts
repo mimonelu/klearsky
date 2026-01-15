@@ -1,6 +1,6 @@
 import { TID } from "@atproto/common-web"
 import { $t } from "@/plugins/i18n"
-import OWN_DOMAIN from "@/consts/own-domain.json"
+import OWN_DOMAIN from "@/consts/own-domain"
 
 export default class {
   public mainState: MainState

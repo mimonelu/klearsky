@@ -3,7 +3,7 @@ import type { AppBskyFeedPost } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
-import OWN_DOMAIN from "@/consts/own-domain.json"
+import OWN_DOMAIN from "@/consts/own-domain"
 
 export default async function (
   this: TIAtpWrapper,

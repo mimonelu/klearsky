@@ -6,7 +6,7 @@ import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
-import OWN_DOMAIN from "@/consts/own-domain.json"
+import OWN_DOMAIN from "@/consts/own-domain"
 
 const mainState = inject("state") as MainState
 

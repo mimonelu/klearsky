@@ -2,7 +2,7 @@
 import { computed, reactive, type ComputedRef } from "vue"
 import OrderButtons from "@/components/buttons/OrderButtons.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import OWN_DOMAIN from "@/consts/own-domain.json"
+import OWN_DOMAIN from "@/consts/own-domain"
 
 const emit = defineEmits<{(name: string, params?: any): void}>()
 

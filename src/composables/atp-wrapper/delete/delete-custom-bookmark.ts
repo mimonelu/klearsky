@@ -1,4 +1,4 @@
-import OWN_DOMAIN from "@/consts/own-domain.json"
+import OWN_DOMAIN from "@/consts/own-domain"
 
 export default async function (
   this: TIAtpWrapper,

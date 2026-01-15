@@ -7,7 +7,7 @@ import type {
 } from "vue-router"
 import { state } from "@/composables/main-state"
 import { PROFILE_ERRORS } from "@/consts/errors.json"
-import OWN_DOMAIN from "@/consts/own-domain.json"
+import OWN_DOMAIN from "@/consts/own-domain"
 
 type TranslationFn = (key: string) => string
 

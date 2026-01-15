@@ -5,7 +5,7 @@ import LazyImage from "@/components/images/LazyImage.vue"
 import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
-import OWN_DOMAIN from "@/consts/own-domain.json"
+import OWN_DOMAIN from "@/consts/own-domain"
 
 const $t = inject("$t") as Function
 
