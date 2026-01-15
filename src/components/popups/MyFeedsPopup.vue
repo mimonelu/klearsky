@@ -6,7 +6,7 @@ import Popup from "@/components/popups/Popup.vue"
 import SpecialFeedCard from "@/components/cards/SpecialFeedCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
-import CONSTS from "@/consts/consts.json"
+import OWN_DOMAIN from "@/consts/own-domain.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -79,7 +79,7 @@ async function sortMyFeeds (
   // 特殊フィードの保存
   const specialKinds: TTMyFeedsItemKind[] = [
     "following",
-    CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED,
+    OWN_DOMAIN.OWN_DOMAIN_EXTRA_FEED,
   ]
   const specialItems: TISpecialItem[] = specialKinds.map((kind: TTMyFeedsItemKind) => {
     const index = mainState.myFeeds!.items.findIndex((item: TTMyFeedsItem) => {
@@ -332,7 +332,7 @@ async function mergeV1ToV2 () {
           />
 
           <!-- 特殊フィード -->
-          <template v-else-if="item.kind === CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED">
+          <template v-else-if="item.kind === OWN_DOMAIN.OWN_DOMAIN_EXTRA_FEED">
             <!-- トレンド一覧ページ -->
             <SpecialFeedCard
               v-if="item.value.uri === 'trending'"

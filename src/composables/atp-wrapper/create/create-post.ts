@@ -2,11 +2,8 @@ import Package from "@/../package.json"
 import type { AppBskyFeedPost } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
-import {
-  LIMIT_OF_LIST_MENTION_ACCOUNTS,
-  THIRD_PARTY_DOMAIN_LIGHTNING,
-  THIRD_PARTY_DOMAIN_VIA,
-} from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
+import OWN_DOMAIN from "@/consts/own-domain.json"
 
 export default async function (
   this: TIAtpWrapper,
@@ -79,16 +76,16 @@ export default async function (
     })
 
     // ユーザーの切り詰め
-    record.facets = record.facets.splice(0, LIMIT_OF_LIST_MENTION_ACCOUNTS)
+    record.facets = record.facets.splice(0, CONSTS.LIMIT_OF_LIST_MENTION_ACCOUNTS)
   }
 
   // カスタムフィールド - Lightning
   if (params.lightning) {
-    record[THIRD_PARTY_DOMAIN_LIGHTNING] = params.lightning
+    record[OWN_DOMAIN.OWN_DOMAIN_LIGHTNING] = params.lightning
   }
 
   // カスタムフィールド - via
-  record[THIRD_PARTY_DOMAIN_VIA] = `Klearsky v${Package.version}`
+  record[OWN_DOMAIN.OWN_DOMAIN_VIA] = `Klearsky v${Package.version}`
 
   // Embed
   const embedResult = await Util.createEmbed(this, record, params)

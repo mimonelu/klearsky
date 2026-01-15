@@ -32,7 +32,7 @@ type TTPreferenceCustomFeedV2 = {
 
 type TTPreferenceCustomFeedV2Item = {
   id?: string
-  type?: "feed" | "list" | "timeline" | THIRD_PARTY_DOMAIN_EXTRA_FEED
+  type?: "feed" | "list" | "timeline" | OWN_DOMAIN_EXTRA_FEED
   value?: string
   pinned?: boolean
 }

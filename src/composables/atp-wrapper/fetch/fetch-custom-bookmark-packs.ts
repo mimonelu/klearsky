@@ -1,5 +1,5 @@
 import Util from "@/composables/util"
-import { THIRD_PARTY_DOMAIN_BOOKMARK } from "@/consts/consts.json"
+import OWN_DOMAIN from "@/consts/own-domain.json"
 
 export default async function (
   this: TIAtpWrapper,
@@ -15,7 +15,7 @@ export default async function (
   // カスタムブックマークの取得
   const records = await this.fetchRecords(
     did,
-    THIRD_PARTY_DOMAIN_BOOKMARK,
+    OWN_DOMAIN.OWN_DOMAIN_BOOKMARK,
     limit,
     cursor
   )

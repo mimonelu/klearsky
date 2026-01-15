@@ -29,10 +29,8 @@ import VideoPlayer from "@/components/images/VideoPlayer.vue"
 import WordMuteScript from "@/components/next/WordMute/script"
 import Util from "@/composables/util"
 import { useContentLabels, hasUserBlurLabel } from "@/composables/util/use-content-labels"
-import {
-  OLD_POST_NOTIFICATION_DAYS,
-  THIRD_PARTY_DOMAIN_LIGHTNING
-} from "@/consts/consts.json"
+import CONSTS from "@/consts/consts.json"
+import OWN_DOMAIN from "@/consts/own-domain.json"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -409,7 +407,7 @@ function isFocused (): boolean {
 
 // 古いポスト警告
 const displayOldPostNotification = props.hasOldPostNotification && indexedAt != null
-  ? differenceInDays(new Date(), new Date(indexedAt)) >= OLD_POST_NOTIFICATION_DAYS
+  ? differenceInDays(new Date(), new Date(indexedAt)) >= CONSTS.OLD_POST_NOTIFICATION_DAYS
   : false
 
 async function onActivatePost (post: TTPost, event: Event) {
@@ -1463,7 +1461,7 @@ function toggleOldestQuotedPostDisplay () {
           position !== 'slim'
         "
         class="reaction-container"
-        :data-has-lightning="!!post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]"
+        :data-has-lightning="!!post.record?.[OWN_DOMAIN.OWN_DOMAIN_LIGHTNING]"
       >
         <div>
           <!-- リプライボタン -->
@@ -1519,13 +1517,13 @@ function toggleOldestQuotedPostDisplay () {
           />
         </div>
         <div
-          v-if="post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]"
+          v-if="post.record?.[OWN_DOMAIN.OWN_DOMAIN_LIGHTNING]"
           class="lightning-link"
         >
           <!-- Lightning -->
           <a
             class="icon-button--nolabel"
-            :href="`lightning:${post.record?.[THIRD_PARTY_DOMAIN_LIGHTNING]}`"
+            :href="`lightning:${post.record?.[OWN_DOMAIN.OWN_DOMAIN_LIGHTNING]}`"
             rel="noreferrer"
             @click.stop
           >

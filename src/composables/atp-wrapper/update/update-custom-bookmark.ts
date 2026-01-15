@@ -1,4 +1,4 @@
-import { THIRD_PARTY_DOMAIN_BOOKMARK } from "@/consts/consts.json"
+import OWN_DOMAIN from "@/consts/own-domain.json"
 
 export default async function (
   this: TIAtpWrapper,
@@ -20,7 +20,7 @@ export default async function (
   }
   const response = await this.updateRecord(
     this.session.did,
-    THIRD_PARTY_DOMAIN_BOOKMARK,
+    OWN_DOMAIN.OWN_DOMAIN_BOOKMARK,
     uri,
     value,
   )

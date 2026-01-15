@@ -27,7 +27,7 @@ type TTMyFeedsItem = {
   kind: "list",
   value: TTList
 } | {
-  kind: "following" | THIRD_PARTY_DOMAIN_EXTRA_FEED
+  kind: "following" | OWN_DOMAIN_EXTRA_FEED
   value: {
     uri: string
     displayName: string
@@ -41,7 +41,7 @@ type TTMyFeedsItemKind =
   "feed" |
   "list" |
   "following" |
-  THIRD_PARTY_DOMAIN_EXTRA_FEED |
+  OWN_DOMAIN_EXTRA_FEED |
   "unknown"
 
 type TTMyFeedsItemValue = TTFeedGenerator | TTList

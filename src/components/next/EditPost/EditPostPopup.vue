@@ -10,6 +10,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import { useEditPost } from "@/components/next/EditPost/useEditPost"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
+import OWN_DOMAIN from "@/consts/own-domain.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -188,7 +189,7 @@ async function submitCallback () {
     text,
 
     // 編集済みカスタムフィールドの追加
-    [CONSTS.THIRD_PARTY_DOMAIN_POST_UPDATEDAT]: new Date().toISOString(),
+    [OWN_DOMAIN.OWN_DOMAIN_POST_UPDATEDAT]: new Date().toISOString(),
   }
   const createPostResponse: Error | TTCidUri =
     await mainState.atp.agent.app.bsky.feed.post.create(

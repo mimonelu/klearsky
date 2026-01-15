@@ -1,8 +1,13 @@
 import { nextTick } from "vue"
-import type { Router, RouteLocationNormalizedLoaded, RouteLocationNormalized, LocationQueryValue } from "vue-router"
+import type {
+  Router,
+  RouteLocationNormalizedLoaded,
+  RouteLocationNormalized,
+  LocationQueryValue
+} from "vue-router"
 import { state } from "@/composables/main-state"
 import { PROFILE_ERRORS } from "@/consts/errors.json"
-import CONSTS from "@/consts/consts.json"
+import OWN_DOMAIN from "@/consts/own-domain.json"
 
 type TranslationFn = (key: string) => string
 
@@ -121,7 +126,7 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
             await router.push("/home/timeline")
             return
           }
-          case CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED: {
+          case OWN_DOMAIN.OWN_DOMAIN_EXTRA_FEED: {
             if (uri === "trending") {
               await router.push("/home/trending")
               return
@@ -165,7 +170,7 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
           await router.push("/home/timeline")
           return
         }
-        case CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED: {
+        case OWN_DOMAIN.OWN_DOMAIN_EXTRA_FEED: {
           if (firstPinnedItem.value.uri === "trending") {
             await router.push("/home/trending")
             return

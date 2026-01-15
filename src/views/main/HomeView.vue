@@ -6,7 +6,7 @@ import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
-import CONSTS from "@/consts/consts.json"
+import OWN_DOMAIN from "@/consts/own-domain.json"
 
 const mainState = inject("state") as MainState
 
@@ -89,7 +89,7 @@ async function autoScrollSliderMenu () {
           </RouterLink>
 
           <!-- 特殊フィード -->
-          <template v-else-if="item.kind === CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED">
+          <template v-else-if="item.kind === OWN_DOMAIN.OWN_DOMAIN_EXTRA_FEED">
             <!-- トレンド一覧ページ -->
             <RouterLink
               v-if="item.value.uri === 'trending'"

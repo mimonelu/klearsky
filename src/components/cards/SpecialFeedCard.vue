@@ -2,7 +2,7 @@
 import { computed, reactive, type ComputedRef } from "vue"
 import OrderButtons from "@/components/buttons/OrderButtons.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import CONSTS from "@/consts/consts.json"
+import OWN_DOMAIN from "@/consts/own-domain.json"
 
 const emit = defineEmits<{(name: string, params?: any): void}>()
 
@@ -16,7 +16,7 @@ const state = reactive<{
   routerLinkToFeedsPage: computed(() => {
     return props.item.kind === "following"
       ? { to: "/home/timeline" }
-      : props.item.kind === CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED
+      : props.item.kind === OWN_DOMAIN.OWN_DOMAIN_EXTRA_FEED
         ? props.item.value.uri === "trending"
           ? { to: "/home/trending" }
           : props.item.value.uri === "globalline"

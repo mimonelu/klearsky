@@ -74,11 +74,6 @@
     "smokesignal": "https://smokesignal.events/static/favicon.ico",
     "whtwnd": "https://whtwnd.com/whtwnd.svg"
   },
-  "THIRD_PARTY_DOMAIN_BOOKMARK": "space.aoisora.bookmark",
-  "THIRD_PARTY_DOMAIN_EXTRA_FEED": "space.aoisora.preference.feed.extra",
-  "THIRD_PARTY_DOMAIN_LIGHTNING": "space.aoisora.post.lightning",
-  "THIRD_PARTY_DOMAIN_VIA": "space.aoisora.post.via",
-  "THIRD_PARTY_DOMAIN_POST_UPDATEDAT": "space.aoisora.post.updatedAt",
   "DEFAULT_CHAT_REACTIONS": [
     [ "👍", "😆", "❤️", "👀", "😢" ],
     [ "✅", "😊", "🚀", "🤔", "😭" ]

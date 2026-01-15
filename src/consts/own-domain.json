@@ -1,0 +1,7 @@
+{
+  "OWN_DOMAIN_BOOKMARK": "space.aoisora.bookmark",
+  "OWN_DOMAIN_EXTRA_FEED": "space.aoisora.preference.feed.extra",
+  "OWN_DOMAIN_LIGHTNING": "space.aoisora.post.lightning",
+  "OWN_DOMAIN_VIA": "space.aoisora.post.via",
+  "OWN_DOMAIN_POST_UPDATEDAT": "space.aoisora.post.updatedAt"
+}
