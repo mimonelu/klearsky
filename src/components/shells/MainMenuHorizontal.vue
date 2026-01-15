@@ -133,7 +133,7 @@ async function openSendPostPopup () {
       <!-- コンテンツフィルタ一時無効化バッジ -->
       <div
         v-if="mainState.myLabeler?.temporarilyDisabled"
-        class="unread-badge"
+        class="unread-badge--small"
       >
         <SVGIcon name="eyeOff" />
       </div>
@@ -231,7 +231,8 @@ async function openSendPostPopup () {
 }
 
 // 通知バッジ
-.unread-badge {
+.unread-badge,
+.unread-badge--small {
   background-color: rgb(var(--notice-color));
   border: 1px solid rgb(var(--bg-color));
   border-radius: var(--border-radius-large);
@@ -248,5 +249,8 @@ async function openSendPostPopup () {
     fill: white;
     font-size: 1rem;
   }
+}
+.unread-badge--small .svg-icon {
+  font-size: 0.75rem;
 }
 </style>
