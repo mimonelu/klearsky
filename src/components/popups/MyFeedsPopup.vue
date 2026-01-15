@@ -6,6 +6,7 @@ import Popup from "@/components/popups/Popup.vue"
 import SpecialFeedCard from "@/components/cards/SpecialFeedCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -76,7 +77,10 @@ async function sortMyFeeds (
   }
 
   // 特殊フィードの保存
-  const specialKinds: TTMyFeedsItemKind[] = ["following", "space.aoisora.preference.feed.extra"]
+  const specialKinds: TTMyFeedsItemKind[] = [
+    "following",
+    CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED,
+  ]
   const specialItems: TISpecialItem[] = specialKinds.map((kind: TTMyFeedsItemKind) => {
     const index = mainState.myFeeds!.items.findIndex((item: TTMyFeedsItem) => {
       return item.kind === kind
@@ -327,8 +331,8 @@ async function mergeV1ToV2 () {
             @changeCustomFeedOrder="changeCustomFeedOrder"
           />
 
-          <!-- `space.aoisora.preference.feed.extra` -->
-          <template v-else-if="item.kind === 'space.aoisora.preference.feed.extra'">
+          <!-- 特殊フィード -->
+          <template v-else-if="item.kind === CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED">
             <!-- トレンド一覧ページ -->
             <SpecialFeedCard
               v-if="item.value.uri === 'trending'"

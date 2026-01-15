@@ -1,5 +1,6 @@
 import { TID } from "@atproto/common-web"
 import { $t } from "@/plugins/i18n"
+import CONSTS from "@/consts/consts.json"
 
 export default class {
   public mainState: MainState
@@ -175,7 +176,7 @@ export default class {
           displayName: "followings",
         }
         this.items.push({ kind, value } as TTMyFeedsItem)
-      } else if (kind === "space.aoisora.preference.feed.extra") {
+      } else if (kind === CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED) {
         if (uri === "trending") {
           const value = {
             uri: "trending",
@@ -214,12 +215,12 @@ export default class {
     // トレンド一覧ページがなければ追加
     if (!this.items.some((item) => {
       return (
-        item.kind === "space.aoisora.preference.feed.extra" &&
+        item.kind === CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED &&
         item.value.uri === "trending"
       )
     })) {
       this.items.splice(1, 0,{
-        kind: "space.aoisora.preference.feed.extra",
+        kind: CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED,
         value: {
           uri: "trending",
           displayName: "trending",
@@ -230,12 +231,12 @@ export default class {
     // グローバルフィードがなければ追加
     if (!this.items.some((item) => {
       return (
-        item.kind === "space.aoisora.preference.feed.extra" &&
+        item.kind === CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED &&
         item.value.uri === "globalline"
       )
     })) {
       this.items.push({
-        kind: "space.aoisora.preference.feed.extra",
+        kind: CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED,
         value: {
           uri: "globalline",
           displayName: "globalline",
@@ -276,7 +277,7 @@ export default class {
     } else if (uri === "following") {
       return uri
     } else if (uri === "trending" || uri === "globalline") {
-      return "space.aoisora.preference.feed.extra"
+      return CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED
     }
     return "unknown"
   }
@@ -386,7 +387,7 @@ export default class {
         const type = item.kind === "following"
           ? "timeline"
           : item.kind
-        const pinned = item.kind === "following" || item.kind === "space.aoisora.preference.feed.extra"
+        const pinned = item.kind === "following" || item.kind === CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED
           ? true
           : this.pinnedUris?.some((uri) => {
             return uri === item.value.uri

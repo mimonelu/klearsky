@@ -27,7 +27,7 @@ type TTMyFeedsItem = {
   kind: "list",
   value: TTList
 } | {
-  kind: "following" | "space.aoisora.preference.feed.extra"
+  kind: "following" | THIRD_PARTY_DOMAIN_EXTRA_FEED
   value: {
     uri: string
     displayName: string
@@ -37,6 +37,11 @@ type TTMyFeedsItem = {
   value: any
 }
 
-type TTMyFeedsItemKind = "feed" | "list" | "following" | "space.aoisora.preference.feed.extra" | "unknown"
+type TTMyFeedsItemKind =
+  "feed" |
+  "list" |
+  "following" |
+  THIRD_PARTY_DOMAIN_EXTRA_FEED |
+  "unknown"
 
 type TTMyFeedsItemValue = TTFeedGenerator | TTList

@@ -32,7 +32,7 @@ type TTPreferenceCustomFeedV2 = {
 
 type TTPreferenceCustomFeedV2Item = {
   id?: string
-  type?: "feed" | "list" | "timeline" | "space.aoisora.preference.feed.extra"
+  type?: "feed" | "list" | "timeline" | THIRD_PARTY_DOMAIN_EXTRA_FEED
   value?: string
   pinned?: boolean
 }

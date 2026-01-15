@@ -2,6 +2,7 @@ import { nextTick } from "vue"
 import type { Router, RouteLocationNormalizedLoaded, RouteLocationNormalized, LocationQueryValue } from "vue-router"
 import { state } from "@/composables/main-state"
 import { PROFILE_ERRORS } from "@/consts/errors.json"
+import CONSTS from "@/consts/consts.json"
 
 type TranslationFn = (key: string) => string
 
@@ -120,7 +121,7 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
             await router.push("/home/timeline")
             return
           }
-          case "space.aoisora.preference.feed.extra": {
+          case CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED: {
             if (uri === "trending") {
               await router.push("/home/trending")
               return
@@ -164,7 +165,7 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
           await router.push("/home/timeline")
           return
         }
-        case "space.aoisora.preference.feed.extra": {
+        case CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED: {
           if (firstPinnedItem.value.uri === "trending") {
             await router.push("/home/trending")
             return

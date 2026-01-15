@@ -5,6 +5,7 @@ import LazyImage from "@/components/images/LazyImage.vue"
 import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import CONSTS from "@/consts/consts.json"
 
 const $t = inject("$t") as Function
 
@@ -145,8 +146,8 @@ function removeMyFeed (uri: string) {
           <span translate="no">{{ $t(item.value.displayName) }}</span>
         </RouterLink>
 
-        <!-- `space.aoisora.preference.feed.extra` -->
-        <template v-else-if="item.kind === 'space.aoisora.preference.feed.extra'">
+        <!-- 特殊フィード -->
+        <template v-else-if="item.kind === CONSTS.THIRD_PARTY_DOMAIN_EXTRA_FEED">
           <!-- トレンド一覧ページ -->
           <RouterLink
             v-if="item.value.uri === 'trending'"
