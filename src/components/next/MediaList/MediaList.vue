@@ -1,13 +1,36 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import MediaListItem from "@/components/lists/MediaListItem.vue"
+import MediaListItem from "@/components/next/MediaList/MediaListItem.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
-defineProps<{
+const props = defineProps<{
+  did?: string
   medias: Array<TTMedia>
 }>()
 
 const mainState = inject("state") as MainState
+
+function onClickItem (mediaIndex: number) {
+  if (props.did == null) {
+    return
+  }
+  mainState.imagePopupProps.did = props.did
+  mainState.imagePopupProps.images.splice(
+    0,
+    mainState.imagePopupProps.images.length,
+    ...props.medias.map((media) => ({
+      largeUri: media.largeUri,
+      smallUri: media.smallUri,
+    }))
+  )
+  mainState.imagePopupProps.alts.splice(
+    0,
+    mainState.imagePopupProps.alts.length,
+    ...props.medias.map((media) => media.alt ?? "")
+  )
+  mainState.imagePopupProps.index = mediaIndex
+  mainState.imagePopupProps.display = true
+}
 </script>
 
 <template>
@@ -27,6 +50,7 @@ const mainState = inject("state") as MainState
         v-for="media, mediaIndex of medias"
         :key="mediaIndex"
         :media="media"
+        @clickItem="onClickItem(mediaIndex)"
       />
     </div>
   </div>

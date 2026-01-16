@@ -1,6 +1,7 @@
 type TTMedia = {
   post: TTPost
-  uri: string
+  smallUri: string
+  largeUri: string
   alt?: string
   isRepost?: boolean
 }

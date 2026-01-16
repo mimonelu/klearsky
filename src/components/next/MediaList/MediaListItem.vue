@@ -22,7 +22,9 @@ const {
 // 元のロジック: ["media", "none"]
 const mediaFilteringLabels = computed((): Array<TILabelSetting> => {
   return [
-    ...blurContentLabels.value.filter((label) => label.definition.blurs === "none"),
+    ...blurContentLabels.value.filter((label) => {
+      return label.definition.blurs === "none"
+    }),
     ...blurMediaLabels.value
   ]
 })
@@ -50,17 +52,24 @@ const state = reactive<{
 function onActivatePostContentToggle () {
   state.contentFilteringDisplay = !state.contentFilteringDisplay
 }
+
+function openPostThreadPopup () {
+  mainState.postThreadPopupProps.posts = [props.media.post]
+  // mainState.postThreadPopupProps.focusPostUri = props.media.post.uri
+  mainState.postThreadPopupProps.display = true
+}
 </script>
 
 <template>
-  <RouterLink
-    :to="{ name: 'post', query: { uri: media.post.uri } }"
+  <button
+    type="button"
     class="media-list__item"
     :data-image-display="state.imageDisplay"
+    @click.prevent="$emit('clickItem')"
   >
     <LazyImage
       v-if="state.imageDisplay"
-      :src="media.uri"
+      :src="media.smallUri"
       :alt="media.alt"
     />
 
@@ -71,27 +80,39 @@ function onActivatePostContentToggle () {
       :labels="mediaFilteringLabels"
       :display="state.contentFilteringDisplay"
       :togglable="true"
-      @click.prevent="onActivatePostContentToggle"
+      @click.prevent.stop="onActivatePostContentToggle"
     />
 
-    <!-- キャプション -->
-    <div class="media-list__item__caption">
-      <SVGIcon
-        v-if="media.isRepost"
-        name="repost"
-      />
-      <div
-        class="media-list__item__text"
-        dir="auto"
-      >{{ media.post.record.text }}</div>
-      <div class="media-list__item__created-at">{{ state.createdAt }}</div>
+    <div class="media-list__item__bottom">
+      <!-- ポストスレッドポップアップトリガー -->
+      <button
+        type="button"
+        class="media-list__item__post-thread-popup-trigger"
+        @click.prevent.stop="openPostThreadPopup"
+      >
+        <SVGIcon name="post" />
+      </button>
+
+      <!-- キャプション -->
+      <div class="media-list__item__caption">
+        <SVGIcon
+          v-if="media.isRepost"
+          name="repost"
+        />
+        <div
+          class="media-list__item__text"
+          dir="auto"
+        >{{ media.post.record.text }}</div>
+        <div class="media-list__item__created-at">{{ state.createdAt }}</div>
+      </div>
     </div>
-  </RouterLink>
+  </button>
 </template>
 
 <style lang="scss" scoped>
 .media-list__item {
   aspect-ratio: 1 / 1;
+  cursor: pointer;
   position: relative;
   &[data-image-display="false"] {
     background-image: linear-gradient(
@@ -118,16 +139,42 @@ function onActivatePostContentToggle () {
     left: 0;
   }
 
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    grid-gap: 0.5rem;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  &__post-thread-popup-trigger {
+    background-color: rgb(black, 0.5);
+    border-radius: var(--border-radius-middle);
+    cursor: pointer;
+    font-size: 0.75rem;
+    margin-right: 0.5rem;
+    padding: 1em;
+
+    & > .svg-icon {
+      fill: rgb(white, 0.875);
+    }
+    &:focus, &:hover {
+      & > .svg-icon {
+        fill: white;
+      }
+    }
+  }
+
   &__caption {
     background-color: rgb(black, 0.5);
     color: white;
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    padding: 0.125rem 0.375rem;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    padding: 0.25rem 0.375rem;
     width: 100%;
 
     & > .svg-icon {

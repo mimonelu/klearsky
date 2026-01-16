@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import MediaList from "@/components/lists/MediaList.vue"
+import MediaList from "@/components/next/MediaList/MediaList.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import Util from "@/composables/util"
 
@@ -14,7 +14,8 @@ const medias = computed((): Array<TTMedia> => {
     feed.post.embed.images.forEach((image: TTImage) => {
       results.push({
         post: feed.post,
-        uri: image.thumb as string,
+        smallUri: image.thumb as string,
+        largeUri: image.fullsize as string,
         alt: image.alt,
       })
     })
@@ -47,7 +48,10 @@ function onScrolledToBottom () {
       :processing="mainState.listLoaderDisplay"
       @activate="fetchCurrentAuthorFeed('new')"
     />
-    <MediaList :medias="medias" />
+    <MediaList
+      :did="mainState.currentProfile?.did"
+      :medias="medias"
+    />
     <LoadButton
       direction="old"
       :processing="mainState.listLoaderDisplay"
