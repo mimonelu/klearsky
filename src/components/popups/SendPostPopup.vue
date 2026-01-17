@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
+
 import { format } from "date-fns/format"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
@@ -9,6 +10,10 @@ import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import debounce from "@/composables/util/debounce"
+
+// Generate unique ID for this popup instance
+const uuid = crypto.randomUUID()
 
 const emit = defineEmits<{(event: string, done: boolean, hidden: boolean): void}>()
 
@@ -139,6 +144,7 @@ const easyForm = ref()
 // ポップアップを開いた際のUX改善処置
 watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
   if (!value) return
+  logPostAction('open')
   setTimeout(() => {
     // 「メンションを送る」使用時の対策
     if (props.text) easyFormState.text = `${props.text} ${easyFormState.text}`
@@ -154,9 +160,32 @@ watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
   }, 0)
 })
 
-// Logga in tempo reale il testo inserito dall'utente
+// logging function for post actions
+function logPostAction(action: string, options: { includeDid?: boolean, includeText?: boolean, text?: string } = {}) {
+  const logEntry: any = {
+    uuid,
+    timestamp: new Date().toISOString(),
+    action,
+  }
+  
+  if (options.includeDid) {
+    logEntry.did = mainState.atp.session?.did || "(unknown)"
+  }
+  
+  if (options.includeText && options.text !== undefined) {
+    logEntry.text = options.text
+  }
+  
+  console.log(JSON.stringify(logEntry, null, 2))
+}
+
+// Debouncing 
+const debouncedTextLog = debounce((val: string) => {
+  logPostAction('textModified', { includeText: true, text: val })
+}, 500)
+
 watch(() => easyFormState.text, (val) => {
-  console.log(val)
+  debouncedTextLog(val)
 })
 
 // D&D用処置
@@ -169,6 +198,8 @@ watch(() => props.fileList, (value?: FileList) => {
 })
 
 onMounted(async () => {
+  logPostAction('mounted')
+  
   if (props.fileList != null) {
     easyFormState.medias = Array.from(props.fileList)
   }
@@ -185,6 +216,7 @@ onMounted(async () => {
 })
 
 async function close () {
+  logPostAction('close')
   emit("closeSendPostPopup", false, true)
 }
 
@@ -196,6 +228,7 @@ async function reset () {
   if (!result) {
     return
   }
+  logPostAction('reset')
   emit("closeSendPostPopup", false, false)
   await nextTick()
   mainState.openSendPostPopup({
@@ -206,6 +239,8 @@ async function reset () {
 
 async function submitCallback () {
   Util.blurElement()
+  
+  logPostAction('send', { includeDid: true, includeText: true, text: easyFormState.text })
 
   // 空ポストの確認ポップアップを表示
   if (easyFormState.text.trim() === "" &&
