@@ -1,6 +1,6 @@
 {
   "name": "klearsky",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "private": true,
   "scripts": {
     "dev": "vite --mode development",
@@ -17,6 +17,8 @@
   "type": "module",
   "dependencies": {
     "@atproto/api": "^0.17.7",
+    "@tensorflow-models/toxicity": "^1.2.2",
+    "@tensorflow/tfjs": "^4.22.0",
     "@vueuse/core": "^10.11.1",
     "browser-image-compression": "^2.0.2",
     "crypto-js": "^4.2.0",
