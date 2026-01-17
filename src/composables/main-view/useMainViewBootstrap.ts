@@ -163,6 +163,7 @@ export function useMainViewBootstrap (options: Options) {
         .then((result) => {
           if (!(result instanceof Error)) {
             state.repostMutes.splice(0, state.repostMutes.length, ...result)
+            state.myWorker?.setSessionCache("repostMutes", state.repostMutes)
           }
         })
         .catch((error) => {

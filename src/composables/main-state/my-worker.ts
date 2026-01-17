@@ -96,6 +96,11 @@ export default class {
           this.mainState.myFeeds!.synchronizeToMyList()
         }
 
+        // セッションキャッシュの反映 - リポストミュート
+        if (sessionCache.repostMutes != null) {
+          this.mainState.repostMutes.splice(0, this.mainState.repostMutes.length, ...sessionCache.repostMutes)
+        }
+
         // セッションキャッシュの反映 - サーバ情報
         if (sessionCache.serverInfo != null) {
           this.mainState.currentServerInfo = sessionCache.serverInfo

@@ -20,11 +20,7 @@ const isRepostMuted: ComputedRef<boolean> = computed(() => {
 async function toggle () {
   Util.blurElement()
   emit("close")
-
-  mainState.loaderDisplay = true
-
   let newSubjects: Array<TIRepostMuteSubject>
-
   if (isRepostMuted.value) {
     // リポストミュートを解除
     newSubjects = mainState.repostMutes.filter((subject) => subject.did !== props.did)
@@ -34,19 +30,17 @@ async function toggle () {
       did: props.did,
       createdAt: new Date().toISOString(),
     }
-    newSubjects = [...mainState.repostMutes, newSubject]
+    newSubjects = [newSubject, ...mainState.repostMutes]
   }
-
+  mainState.loaderDisplay = true
   const response = await mainState.atp.updateRepostMutes(newSubjects)
   mainState.loaderDisplay = false
-
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "ToggleRepostMute/toggle")
     return
   }
-
-  // ローカルの状態を更新
   mainState.repostMutes.splice(0, mainState.repostMutes.length, ...newSubjects)
+  mainState.myWorker?.setSessionCache("repostMutes", mainState.repostMutes)
 }
 </script>
 

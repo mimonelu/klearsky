@@ -2,7 +2,7 @@ interface TIMyWorker {
   mainState: MainState
   worker?: SharedWorker
   close: () => void
-  setSessionCache: (key: string, value: any) => void
+  setSessionCache: (key: keyof TIMyWorkerSessionCache, value: any) => void
 }
 
 interface TIMyWorkerSessionCaches {
@@ -19,6 +19,7 @@ interface TIMyWorkerSessionCache {
   myFeedsItems?: Array<TTMyFeedsItem>
   myLabeler?: Array<TILabeler>
   myList?: Array<TTList>
+  repostMutes?: Array<TIRepostMuteSubject>
   serverInfo?: TTServerInfo
   userProfile?: TTProfile
 }
