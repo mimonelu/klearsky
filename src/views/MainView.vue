@@ -445,24 +445,6 @@ const {
         />
       </Transition>
 
-      <!-- 認証者一覧ポップアップ -->
-      <Transition>
-        <VerifiersPopup
-          v-if="state.verifiersPopupProps.display"
-          v-bind="state.verifiersPopupProps"
-          @close="state.closeVerifiersPopup"
-        />
-      </Transition>
-
-      <!-- 認証アカウント一覧ポップアップ -->
-      <Transition>
-        <VerifiedAccountsPopup
-          v-if="state.verifiedAccountsPopupProps.display"
-          v-bind="state.verifiedAccountsPopupProps"
-          @close="state.closeVerifiedAccountsPopup"
-        />
-      </Transition>
-
       <!-- マイフィードポップアップ -->
       <Transition>
         <MyFeedsPopup
@@ -598,6 +580,24 @@ const {
           v-if="state.listUserManagementPopupProps.display"
           v-bind="state.listUserManagementPopupProps"
           @close="state.closeListUserManagementPopup"
+        />
+      </Transition>
+
+      <!-- 認証者一覧ポップアップ -->
+      <Transition>
+        <VerifiersPopup
+          v-if="state.verifiersPopupProps.display"
+          v-bind="state.verifiersPopupProps"
+          @close="state.closeVerifiersPopup"
+        />
+      </Transition>
+
+      <!-- 認証アカウント一覧ポップアップ -->
+      <Transition>
+        <VerifiedAccountsPopup
+          v-if="state.verifiedAccountsPopupProps.display"
+          v-bind="state.verifiedAccountsPopupProps"
+          @close="state.closeVerifiedAccountsPopup"
         />
       </Transition>
 
