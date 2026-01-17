@@ -6,6 +6,7 @@ import MenuTickerSendListReport from "@/components/menus/SendListReport.vue"
 import MenuTickerSendPostReport from "@/components/menus/SendPostReport.vue"
 import MenuTickerToggleBlock from "@/components/next/UserBlock/ToggleBlock.vue"
 import MenuTickerToggleMute from "@/components/next/UserMute/ToggleMute.vue"
+import MenuTickerToggleRepostMute from "@/components/next/RepostMute/ToggleRepostMute.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
@@ -81,6 +82,20 @@ function close () {
     >
       <menu class="list-menu">
         <slot name="before" />
+        <!-- リポストミュートのトグル -->
+        <MenuTickerToggleRepostMute
+          v-if="
+            !isUser &&
+            generator == null &&
+            list == null &&
+            (
+              post == null ||
+              post.__custom.reason?.$type === 'app.bsky.feed.defs#reasonRepost'
+            )
+          "
+          :did="(post?.__custom.reason as TTReason)?.by?.did ?? user?.did"
+          @close="emit('close')"
+        />
 
         <!-- ミュートのトグル -->
         <MenuTickerToggleMute

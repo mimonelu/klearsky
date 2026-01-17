@@ -157,6 +157,19 @@ export function useMainViewBootstrap (options: Options) {
         })
     }
 
+    // リポストミュートの取得
+    if (state.repostMutes.length === 0) {
+      state.atp.fetchRepostMutes()
+        .then((result) => {
+          if (!(result instanceof Error)) {
+            state.repostMutes.splice(0, state.repostMutes.length, ...result)
+          }
+        })
+        .catch((error) => {
+          $error("useMainViewBootstrap", "Failed to fetch repost mutes", error)
+        })
+    }
+
     // 招待コードの取得
     if (state.inviteCodes.length === 0) {
       state.updateInviteCodes()

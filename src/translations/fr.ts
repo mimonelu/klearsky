@@ -771,7 +771,13 @@ export default () => ({
   // ============================================================================
   "disableActionViaRepostControl": "Contrôle des notifs pour republis sur republis / likes sur republis",
   "disableLikeViaRepost": "Pas de notif à l’auteur du republi quand like",
-  "disableRepostViaRepost": "Pas de notif à l’auteur du republi quand republi",
+  "disableRepostViaRepost": "Pas de notif à l'auteur du republi quand republi",
+
+  // ============================================================================
+  // REPOST MUTE
+  // ============================================================================
+  "enableRepost": "Réactiver les republis",
+  "disableRepost": "Masquer les republis",
 
   // ============================================================================
   // GLOBALLINE SETTINGS

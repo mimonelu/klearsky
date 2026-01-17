@@ -196,6 +196,8 @@ interface TIAtpWrapper {
     (actor: string, others?: string[]): Promise<Error | AppBskyGraphGetRelationships.OutputSchema["relationships"]>
   fetchRepo
     (repo: string): Promise<Error | {}>
+  fetchRepostMutes
+    (): Promise<Error | Array<TIRepostMuteSubject>>
   fetchRepostUsers
     (users: Array<TTUser>, uri: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchServiceAuth
@@ -288,6 +290,8 @@ interface TIAtpWrapper {
     (params: TTUpdateProfileParams): Promise<Error | undefined>
   updateRecord
     (repo: string, collection: string, uri: string, record: { [k: string]: any }, validate?: boolean, swapCommit?: string, swapRecord?: string): Promise<Error | TTCidUri>
+  updateRepostMutes
+    (subjects: Array<TIRepostMuteSubject>): Promise<Error | TTCidUri>
   updateThreadgate
     (postUri: string, allowMention: boolean, allowFollower: boolean, allowFollowing: boolean, listUris?: Array<string>): Promise<Error | TTCidUri>
   updateThreadMuteToDisable

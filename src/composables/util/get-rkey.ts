@@ -4,6 +4,11 @@ export default function (text?: string): string {
   if (!text) {
     return ""
   }
-  const { rkey } = new AtUri(text)
-  return rkey
+  try {
+    const { rkey } = new AtUri(text)
+    return rkey
+  } catch (error) {
+    $error("new AtUri", error)
+    return ""
+  }
 }

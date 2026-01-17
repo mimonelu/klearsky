@@ -101,6 +101,9 @@ interface MainState {
   currentBlockingUsers: Array<TTUser>
   currentBlockingUsersCursor?: string
 
+  // リポストミュート
+  repostMutes: Array<TIRepostMuteSubject>
+
   // atproto-proxy
   updateAtprotoProxy: (proxy?: string) => void
 

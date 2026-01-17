@@ -95,6 +95,7 @@ import refresh from "@/svg/refresh.svg?raw"
 import remove from "@/svg/remove.svg?raw"
 import reply from "@/svg/reply.svg?raw"
 import repost from "@/svg/repost.svg?raw"
+import repostOff from "@/svg/repost-off.svg?raw"
 import search from "@/svg/search.svg?raw"
 import sendPost from "@/svg/send-post.svg?raw"
 import setting from "@/svg/setting.svg?raw"
@@ -213,6 +214,7 @@ const icons: { [k: string]: string } = {
   remove,
   reply,
   repost,
+  repostOff,
   search,
   sendPost,
   setting,

@@ -774,6 +774,12 @@ export default () => ({
   "disableRepostViaRepost": "Den repostenden Benutzer nicht benachrichtigen, wenn ein Repost repostet wird",
 
   // ============================================================================
+  // REPOST MUTE
+  // ============================================================================
+  "enableRepost": "Reposts aktivieren",
+  "disableRepost": "Reposts stummschalten",
+
+  // ============================================================================
   // GLOBALLINE SETTINGS
   // ============================================================================
   "globallineContentLanguages": "Inhaltssprache für globalen Feed",

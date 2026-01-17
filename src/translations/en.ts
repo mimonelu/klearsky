@@ -774,6 +774,12 @@ export default () => ({
   "disableRepostViaRepost": "Don't notify the reposting user when reposting their repost",
 
   // ============================================================================
+  // REPOST MUTE
+  // ============================================================================
+  "enableRepost": "Unmute Reposts",
+  "disableRepost": "Mute Reposts",
+
+  // ============================================================================
   // GLOBALLINE SETTINGS
   // ============================================================================
   "globallineContentLanguages": "Content language for global feed",

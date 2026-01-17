@@ -232,7 +232,8 @@ const masked = computed((): boolean => {
   return (
     noContentLanguage.value ||
     hasHideLabel.value ||
-    isWordMute.value
+    isWordMute.value ||
+    isRepostMute.value
   ) && (
     props.position !== "preview" &&
     props.position !== "slim"
@@ -349,6 +350,18 @@ const isWordMute = computed((): boolean => {
     mainState.currentSetting.wordMute,
     props.post.author.viewer?.following != null
   )
+})
+
+// リポストミュート - リポストミュートの判定
+const isRepostMute = computed((): boolean => {
+  if (props.post.__custom.reason?.$type !== "app.bsky.feed.defs#reasonRepost") {
+    return false
+  }
+  const repostByDid = props.post.__custom.reason?.by?.did
+  if (repostByDid == null) {
+    return false
+  }
+  return mainState.repostMutes.some((subject) => subject.did === repostByDid)
 })
 
 // ワードミュート - 本文とワードミュート用に RichText を生成
@@ -1015,6 +1028,12 @@ function toggleOldestQuotedPostDisplay () {
         name="wordMute"
       />
 
+      <!-- ポストマスク - リポストミュート -->
+      <SVGIcon
+        v-show="isRepostMute"
+        name="repostOff"
+      />
+
       <DisplayName
         class="post__mask__display-name"
         :displayName="post.author?.displayName"
@@ -1635,6 +1654,7 @@ function toggleOldestQuotedPostDisplay () {
     }
 
     & > .svg-icon--contentFiltering,
+    & > .svg-icon--repostOff,
     & > .svg-icon--wordMute {
       fill: rgb(var(--notice-color), var(--alpha));
     }

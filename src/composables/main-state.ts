@@ -148,6 +148,9 @@ export const state: MainState = reactive<MainState>({
   currentBlockingUsers: [],
   currentBlockingUsersCursor: undefined,
 
+  // リポストミュート
+  repostMutes: [],
+
   // atproto-proxy
   updateAtprotoProxy: updateAtprotoProxy,
 

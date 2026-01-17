@@ -93,6 +93,7 @@ import fetchRecord from "@/composables/atp-wrapper/fetch/fetch-record"
 import fetchRecords from "@/composables/atp-wrapper/fetch/fetch-records"
 import fetchRelationships from "@/composables/atp-wrapper/fetch/fetch-relationships"
 import fetchRepo from "@/composables/atp-wrapper/fetch/fetch-repo"
+import fetchRepostMutes from "@/composables/atp-wrapper/fetch/fetch-repost-mutes"
 import fetchRepostUsers from "@/composables/atp-wrapper/fetch/fetch-repost-users"
 import fetchServerInfo from "@/composables/atp-wrapper/fetch/fetch-server-info"
 import fetchServiceAuth from "@/composables/atp-wrapper/fetch/fetch-service-auth"
@@ -137,6 +138,7 @@ import updatePostgate from "@/composables/atp-wrapper/update/update-postgate"
 import updatePreferences from "@/composables/atp-wrapper/update/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update/update-profile"
 import updateRecord from "@/composables/atp-wrapper/update/update-record"
+import updateRepostMutes from "@/composables/atp-wrapper/update/update-repost-mutes"
 import updateThreadgate from "@/composables/atp-wrapper/update/update-threadgate"
 import updateThreadMuteToDisable from "@/composables/atp-wrapper/update/update-thread-mute-to-disable"
 import updateThreadMuteToEnable from "@/composables/atp-wrapper/update/update-thread-mute-to-enable"
@@ -275,6 +277,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchRecords = fetchRecords
   fetchRelationships = fetchRelationships
   fetchRepo = fetchRepo
+  fetchRepostMutes = fetchRepostMutes
   fetchRepostUsers = fetchRepostUsers
   fetchServerInfo = fetchServerInfo
   fetchServiceAuth = fetchServiceAuth
@@ -325,6 +328,7 @@ class AtpWrapper implements TIAtpWrapper {
   updatePreferences = updatePreferences
   updateProfile = updateProfile
   updateRecord = updateRecord
+  updateRepostMutes = updateRepostMutes
   updateThreadgate = updateThreadgate
   updateThreadMuteToDisable = updateThreadMuteToDisable
   updateThreadMuteToEnable = updateThreadMuteToEnable
