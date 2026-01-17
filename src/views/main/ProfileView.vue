@@ -22,6 +22,7 @@ import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/compositions/Post.vue"
+import RepostMuteButton from "@/components/next/RepostMute/RepostMuteButton.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
 import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
@@ -336,6 +337,9 @@ function removeThisPost () {
           "
           class="moderation-button-container group-parts"
         >
+          <!-- リポストミュートトグル -->
+          <RepostMuteButton :did="mainState.currentProfile.did" />
+
           <!-- ミュートトグル -->
           <MuteButton
             :did="mainState.currentProfile.did"
