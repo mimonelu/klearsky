@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, onMounted, onBeforeUnmount, reactive, ref, watch, type ComputedRef, type Ref, toRaw } from "vue"
 import { format } from "date-fns/format"
+import { v4 as uuidv4 } from "uuid"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
@@ -54,6 +55,7 @@ const lastLoggedText = ref("");
 // --- SESSION TRACKING ---
 const popupSessionId = ref("");
 const isClosing = ref(false);
+const sessionUUID = ref("");
 
 // --- LOCAL SUBMIT LOCK (Prevents Double Posts) ---
 const isIntercepting = ref(false);
@@ -61,6 +63,30 @@ const isIntercepting = ref(false);
 // =========================================================
 // ===       LOGGING HELPER                              ===
 // =========================================================
+
+function logPostAction(action: string, includeText: boolean = false, includeDid: boolean = false) {
+  const timestamp = new Date().toISOString();
+  const logData: any = {
+    uuid: sessionUUID.value,
+    action: action,
+    timestamp: timestamp
+  };
+
+  if (includeText) {
+    logData.text = easyFormState.text;
+  }
+
+  if (includeDid) {
+    logData.did = mainState.atp.session?.did || "unknown_user";
+  }
+
+  console.log(JSON.stringify(logData, null, 2));
+}
+
+// Debounced version for textModified in watcher
+const debouncedLogTextModified = Util.debounce(() => {
+  logPostAction("textModified", true);
+}, 500);
 
 async function logActivityToBackend(actionType: string, metaData: any = {}, overrideText: string | null = null) {
   
@@ -134,12 +160,16 @@ function sendBeaconLog(actionType: string, metaData: any) {
 // ===       SESSION MANAGEMENT                          ===
 // =========================================================
 
-function startSession() {
+function startSession(isReopening: boolean = false) {
   const userDid = mainState.atp.session?.did || "unknown_user";
   const timestamp = Date.now();
   popupSessionId.value = `${userDid}_${timestamp}`;
+  sessionUUID.value = uuidv4();
   isClosing.value = false;
   logActivityToBackend("POPUP_OPENED", { timestamp_ms: timestamp });
+  if (isReopening) {
+    logPostAction("open");
+  }
 }
 
 function handleBrowserClose() {
@@ -154,6 +184,9 @@ function handleBrowserClose() {
 }
 
 async function close() {
+  // Log close action
+  logPostAction("close");
+  
   // Clear text on close
   easyFormState.text = "";
   
@@ -177,6 +210,7 @@ async function close() {
   }).catch(err => console.warn("Background log failed", err));
 
   popupSessionId.value = ""; 
+  sessionUUID.value = "";
   moderationMode.value = null; 
   contextualInfo.value = ""; 
   liveRewriteSuggestion.value = "";
@@ -269,6 +303,9 @@ async function activateInfoMode() {
     isFetchingInfo.value = true;
     contextualInfo.value = ""; 
     try {
+      if (!mainState.atp.agent) {
+        throw new Error("Agent is not initialized");
+      }
       const response = await mainState.atp.agent.getPostThread({
         uri: props.post.uri,
         depth: 0,
@@ -413,6 +450,9 @@ async function interceptSubmit() {
 }
 
 async function executeActualSubmit() {
+  // Log send action with text and DID
+  logPostAction("send", true, true);
+  
   const videoSizes = (easyForm.value?.getVideoSizes() ?? [[]])[0]
   easyFormState.medias.forEach((media, index) => {
     (media as any)._videoAspectRatio = videoSizes[index]
@@ -599,6 +639,8 @@ onMounted(async () => {
   }
   window.addEventListener("beforeunload", handleBrowserClose);
 
+  logPostAction("mounted");
+
   if (props.fileList != null) {
     easyFormState.medias = Array.from(props.fileList)
   }
@@ -658,6 +700,11 @@ watch(moderationMode, (newMode) => {
 })
 
 watch(() => easyFormState.text, async (newText) => {
+    // Debounced textModified logging
+    if (newText.trim()) {
+      debouncedLogTextModified();
+    }
+    
     clearTimeout(autoLogTimer);
     if (newText.trim()) {
       autoLogTimer = setTimeout(() => {
@@ -695,7 +742,7 @@ watch(() => easyFormState.text, async (newText) => {
 
 watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
   if (value) {
-    startSession(); 
+    startSession(true); 
     setTimeout(() => {
       if (props.text) easyFormState.text = `${props.text} ${easyFormState.text}`
       if (props.url) easyFormState.url = props.url
@@ -720,6 +767,9 @@ async function reset () {
     text: $t("sendPostResetMessage"),
   })
   if (!result) return
+  
+  logPostAction("reset");
+  
   emit("closeSendPostPopup", false, false)
   await nextTick()
   moderationMode.value = null; 

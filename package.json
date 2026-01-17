@@ -31,6 +31,7 @@
     "jwt-decode": "^4.0.0",
     "portal-vue": "^3.0.0",
     "the-new-css-reset": "^1.11.3",
+    "uuid": "^13.0.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
