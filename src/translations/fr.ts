@@ -39,6 +39,7 @@ export default () => ({
   "submit": "Envoyer",
   "success": "Processus complété",
   "successMessage": "Le processus s'est terminé avec succès.",
+  "noContent": "Aucun contenu.",
 
   // ============================================================================
   // NAVIGATION & VIEWS
@@ -207,6 +208,7 @@ export default () => ({
   "checkMutingUsers": "Voir les cachés",
   "blockingUsers": "Utilisateurs bloqués",
   "checkBlockingUsers": "Voir les bloqués",
+  "repostMutingUsers": "Reposts masqués",
   "noFollowings": "Aucun abonnement pour cet utilisateur.",
   "noFollowers": "Aucun abonné pour cet utilisateur.",
   "recommendedUsers": "Utilisateurs recommandés",

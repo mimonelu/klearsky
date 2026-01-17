@@ -1,10 +1,12 @@
 <template>
   <div class="loader">
-    <div />
-    <div />
-    <div />
-    <div />
-    <div />
+    <div class="loader--inner">
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+    </div>
   </div>
 </template>
 
@@ -15,7 +17,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  grid-gap: 0.5em;
   position: absolute;
   left: 0;
   top: 0;
@@ -23,7 +24,15 @@
   width: 100%;
   height: 100%;
 
-  & > div {
+  &--inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-gap: 0.5em;
+    height: 1.25em;
+  }
+
+  &--inner > div {
     animation: loader-animation 200ms ease-in-out infinite alternate-reverse;
     background-color: rgb(var(--accent-color));
     border-radius: 0.25em;
@@ -31,7 +40,7 @@
     height: 1.25em;
   }
   @for $i from 1 through 5 {
-    & > div:nth-child(#{$i}) {
+    &--inner > div:nth-child(#{$i}) {
       animation-delay: #{$i * 75}ms;
     }
   }

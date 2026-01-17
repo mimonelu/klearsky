@@ -117,7 +117,7 @@ async function fetchVerifiers () {
   }
 
   .loader {
-    padding: 1rem;
+    padding: 0.5rem;
     position: unset;
   }
 

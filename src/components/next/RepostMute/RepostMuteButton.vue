@@ -7,6 +7,7 @@ import { useRepostMute } from "./use-repost-mute"
 
 const props = defineProps<{
   did: string
+  hasLabel?: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -35,13 +36,14 @@ async function toggle() {
 
 <template>
   <button
-    class="button--bordered button--nolabel repost-mute-button"
+    class="button--bordered repost-mute-button"
+    :class="hasLabel ? '' : 'button--nolabel'"
     :data-enabled="isRepostMuted"
     :data-is-processing="state.processing"
     @click.prevent="toggle"
   >
     <SVGIcon name="repostOff" />
-    <span>&#160;</span>
+    <span>{{ hasLabel ? $t(isRepostMuted ? "enableRepost" : "disableRepost") : "&#160;" }}</span>
     <Loader v-if="state.processing" />
   </button>
 </template>

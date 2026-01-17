@@ -39,6 +39,7 @@ export default () => ({
   "submit": "전송",
   "success": "완료",
   "successMessage": "성공적으로 완료되었습니다.",
+  "noContent": "콘텐츠가 없습니다.",
 
   // ============================================================================
   // NAVIGATION & VIEWS
@@ -207,6 +208,7 @@ export default () => ({
   "checkMutingUsers": "뮤트한 사용자 확인",
   "blockingUsers": "차단한 사용자",
   "checkBlockingUsers": "차단한 사용자 확인",
+  "repostMutingUsers": "리포스트 뮤트한 사용자",
   "noFollowings": "이 사용자가 팔로우하는 사람이 없습니다.",
   "noFollowers": "이 사용자를 팔로우하는 사람이 없습니다.",
   "recommendedUsers": "추천 사용자",

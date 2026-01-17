@@ -39,6 +39,7 @@ export default () => ({
   "submit": "送信する",
   "success": "処理完了",
   "successMessage": "処理が正常に完了しました。",
+  "noContent": "コンテンツがありません。",
 
   // ============================================================================
   // NAVIGATION & VIEWS
@@ -207,6 +208,7 @@ export default () => ({
   "checkMutingUsers": "ミュート中のユーザーを確認する",
   "blockingUsers": "個別ブロック中のユーザー",
   "checkBlockingUsers": "ブロック中のユーザーを確認する",
+  "repostMutingUsers": "リポストミュート中のユーザー",
   "noFollowings": "このユーザーがフォローしているユーザーはいません。",
   "noFollowers": "このユーザーをフォローしているユーザーはいません。",
   "recommendedUsers": "オススメユーザー",

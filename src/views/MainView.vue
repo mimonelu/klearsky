@@ -55,6 +55,7 @@ import ProfilePopover from "@/components/popovers/ProfilePopover.vue"
 import ProgressPopup from "@/components/popups/ProgressPopup.vue"
 import QuoteRepostsPopup from "@/components/popups/QuoteRepostsPopup.vue"
 import ReactionControlPopup from "@/components/popups/ReactionControlPopup.vue"
+import RepostMutesPopup from "@/components/next/RepostMute/RepostMutesPopup.vue"
 import RepostUsersPopup from "@/components/popups/RepostUsersPopup.vue"
 import ScrollButton from "@/components/buttons/ScrollButton.vue"
 import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
@@ -564,6 +565,14 @@ const {
           v-if="state.activitySubscriptionPermissionPopupProps.display"
           v-bind="state.activitySubscriptionPermissionPopupProps"
           @close="state.closeActivitySubscriptionPermissionPopup"
+        />
+      </Transition>
+
+      <!-- リポストミュートユーザーリストポップアップ -->
+      <Transition>
+        <RepostMutesPopup
+          v-if="state.repostMutesPopupDisplay"
+          @close="state.closeRepostMutesPopup"
         />
       </Transition>
 

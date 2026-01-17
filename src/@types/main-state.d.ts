@@ -467,6 +467,11 @@ interface MainState {
   openPostLanguagesPopup: Function
   closePostLanguagesPopup: () => void
 
+  // ポップアップ - リポストミュートユーザーリストポップアップ
+  repostMutesPopupDisplay: boolean
+  openRepostMutesPopup: Function
+  closeRepostMutesPopup: () => void
+
   // ポップアップ - ミュートユーザーリストポップアップ
   mutingUsersPopupDisplay: boolean
   openMutingUsersPopup: Function

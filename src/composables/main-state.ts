@@ -538,6 +538,11 @@ export const state: MainState = reactive<MainState>({
   openPostLanguagesPopup: openPostLanguagesPopup,
   closePostLanguagesPopup: closePostLanguagesPopup,
 
+  // ポップアップ - リポストミュートユーザーリストポップアップ
+  repostMutesPopupDisplay: false,
+  openRepostMutesPopup: openRepostMutesPopup,
+  closeRepostMutesPopup: closeRepostMutesPopup,
+
   // ポップアップ - ミュートユーザーリストポップアップ
   mutingUsersPopupDisplay: false,
   openMutingUsersPopup: openMutingUsersPopup,
@@ -2470,6 +2475,16 @@ function openPostLanguagesPopup () {
 
 function closePostLanguagesPopup () {
   state.postLanguagesPopupDisplay = false
+}
+
+// ポップアップ - リポストミュートユーザーリストポップアップ
+
+function openRepostMutesPopup () {
+  state.repostMutesPopupDisplay = true
+}
+
+function closeRepostMutesPopup () {
+  state.repostMutesPopupDisplay = false
 }
 
 // ポップアップ - ミュートユーザーリストポップアップ
