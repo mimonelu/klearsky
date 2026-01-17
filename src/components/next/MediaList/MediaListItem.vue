@@ -177,8 +177,8 @@ function openPostThreadPopup () {
     padding: 0.25rem 0.375rem;
     width: 100%;
 
-    & > .svg-icon {
-      fill: rgb(var(--bg-color));
+    & > .svg-icon--repost {
+      fill: rgb(var(--share-color));
       font-size: 0.75rem;
       margin-right: 0.375rem;
     }
