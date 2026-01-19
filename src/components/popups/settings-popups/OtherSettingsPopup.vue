@@ -11,7 +11,10 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const emit = defineEmits<{(event: string): void}>()
+const emit = defineEmits<{
+  (event: string): void,
+  (event: string, params: string): void
+}>()
 
 function setOfficialValueToAtprotoProxyAppBsky () {
   mainState.currentSetting.atprotoProxyAppBsky = CONSTS.OFFICIAL_ATPROTO_PROXY_APP_BSKY

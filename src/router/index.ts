@@ -1,40 +1,40 @@
 import { createRouter, createWebHashHistory } from "vue-router"
+import MainView from "@/views/MainView.vue"
 import NotFoundView from "@/views/NotFoundView.vue"
 
 // Main
-import MainView from "@/views/MainView.vue"
 import EditProfileView from "@/views/main/EditProfileView.vue"
+import HomeView from "@/views/main/HomeView.vue"
 import PostView from "@/views/main/PostView.vue"
+import ProfileView from "@/views/main/ProfileView.vue"
+import SearchView from "@/views/main/SearchView.vue"
 
 // Main - Home
-import HomeView from "@/views/main/HomeView.vue"
-import TimelineView from "@/views/main/home/TimelineView.vue"
 import FeedsView from "@/views/main/home/FeedsView.vue"
+import GloballineView from "@/views/main/home/GloballineView.vue"
 import ListFeedsView from "@/views/main/home/ListFeedsView.vue"
 import ListUsersView from "@/views/main/home/ListUsersView.vue"
-import TrendingView from "@/views/main/home/TrendingView.vue"
 import StarterPackView from "@/views/main/home/StarterPackView.vue"
-import GloballineView from "@/views/main/home/GloballineView.vue"
+import TimelineView from "@/views/main/home/TimelineView.vue"
+import TrendingView from "@/views/main/home/TrendingView.vue"
 
 // Main - Profile
-import ProfileView from "@/views/main/ProfileView.vue"
-import AuthorFeedsView from "@/views/main/profile/AuthorFeedsView.vue"
-import AuthorFeedsWithRepliesView from "@/views/main/profile/AuthorFeedsWithRepliesView.vue"
-import AuthorFeedsWithMediaView from "@/views/main/profile/AuthorFeedsWithMediaView.vue"
-import AuthorFeedsWithVideoView from "@/views/main/profile/AuthorFeedsWithVideoView.vue"
 import AuthorFeedGeneratorsView from "@/views/main/profile/AuthorFeedGeneratorsView.vue"
+import AuthorFeedsView from "@/views/main/profile/AuthorFeedsView.vue"
+import AuthorFeedsWithMediaView from "@/views/main/profile/AuthorFeedsWithMediaView.vue"
+import AuthorFeedsWithRepliesView from "@/views/main/profile/AuthorFeedsWithRepliesView.vue"
+import AuthorFeedsWithVideoView from "@/views/main/profile/AuthorFeedsWithVideoView.vue"
+import AuthorFollowerListView from "@/views/main/profile/AuthorFollowerListView.vue"
+import AuthorFollowingListView from "@/views/main/profile/AuthorFollowingListView.vue"
+import AuthorLikeView from "@/views/main/profile/AuthorLikeView.vue"
 import AuthorListView from "@/views/main/profile/AuthorListView.vue"
 import AuthorRepostView from "@/views/main/profile/AuthorRepostView.vue"
-import AuthorLikeView from "@/views/main/profile/AuthorLikeView.vue"
 import AuthorStarterPacksView from "@/views/main/profile/AuthorStarterPacksView.vue"
-import FollowerListView from "@/views/main/profile/FollowerListView.vue"
-import FollowingListView from "@/views/main/profile/FollowingListView.vue"
-import SuggestedFollowsView from "@/views/main/profile/SuggestedFollowsView.vue"
+import AuthorSuggestedFollowsView from "@/views/main/profile/AuthorSuggestedFollowsView.vue"
 
 // Main - Search
-import SearchView from "@/views/main/SearchView.vue"
-import PostSearchView from "@/views/main/search/PostSearchView.vue"
 import FeedSearchView from "@/views/main/search/FeedSearchView.vue"
+import PostSearchView from "@/views/main/search/PostSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
 
 const router = createRouter({
@@ -179,19 +179,19 @@ const router = createRouter({
               path: "follower",
               name: "profile-follower",
               meta: { label: "followers" },
-              component: FollowerListView,
+              component: AuthorFollowerListView,
             },
             {
               path: "following",
               name: "profile-following",
               meta: { label: "followings" },
-              component: FollowingListView,
+              component: AuthorFollowingListView,
             },
             {
               path: "suggested-follows",
               name: "profile-suggested-follows",
               meta: { label: "suggestedFollows" },
-              component: SuggestedFollowsView,
+              component: AuthorSuggestedFollowsView,
             },
           ],
         },

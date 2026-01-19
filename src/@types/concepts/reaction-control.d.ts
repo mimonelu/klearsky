@@ -52,7 +52,7 @@ type TTReactionControlPopupProps = {
   draftReactionControl?: TTDraftReactionControl
   postThreadgate?: TTThreadgate
   postUri?: string
-  onClosed?: Function
+  onClosed?: (...args: unknown[]) => any
 }
 
 interface TICloseReactionControlPopupProps {

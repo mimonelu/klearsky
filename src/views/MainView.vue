@@ -526,8 +526,11 @@ const {
       <!-- 購読ポップアップ -->
       <Transition>
         <ActivitySubscriptionItemPopup
-          v-if="state.activitySubscriptionItemPopupProps.display"
-          v-bind="state.activitySubscriptionItemPopupProps"
+          v-if="
+            state.activitySubscriptionItemPopupProps.display &&
+            state.activitySubscriptionItemPopupProps.user != null
+          "
+          :user="state.activitySubscriptionItemPopupProps.user"
           @close="state.closeActivitySubscriptionItemPopup"
         />
       </Transition>

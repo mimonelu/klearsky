@@ -7,11 +7,11 @@ const mainState = inject("state") as MainState
 </script>
 
 <template>
-  <div class="following-list">
+  <div class="author-following-list">
     <!-- 空メッセージ -->
     <div
       v-if="!mainState.listLoaderDisplay && mainState.currentFollowings.length === 0"
-      class="textlabel following-list__no-followings"
+      class="textlabel author-following-list__no-followings"
     >
       <div class="textlabel__text">
         <SVGIcon name="alert" />{{ $t("noFollowings") }}
@@ -23,7 +23,7 @@ const mainState = inject("state") as MainState
 </template>
 
 <style lang="scss" scoped>
-.following-list {
+.author-following-list {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
