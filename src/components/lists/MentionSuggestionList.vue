@@ -167,7 +167,10 @@ function moveSuggestButtonFocus (direction: "up" | "down") {
   nextTick(() => {
     const focusElement = document.querySelector(".mention-suggestion-list__suggestion__item[data-focus='true']")
     if (focusElement == null) return
-    focusElement.scrollIntoView({ block: "nearest" })
+    focusElement.scrollIntoView({
+      behavior: "auto",
+      block: "start",
+    })
   })
 }
 

@@ -17,7 +17,7 @@ async function setFocusPost (el: Element | ComponentPublicInstance | null) {
     const element = (el as any)?.$el ?? el
     element.scrollIntoView({
       behavior: "auto",
-      block: "center",
+      block: "start",
     })
   }
 }

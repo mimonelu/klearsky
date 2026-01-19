@@ -426,10 +426,12 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
 
   function scrollToFocused () {
     const focusElement = document.querySelector("[data-focus='true']")
-    if (focusElement != null) focusElement.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    })
+    if (focusElement != null) {
+      focusElement.scrollIntoView({
+        behavior: "auto",
+        block: "start",
+      })
+    }
   }
 
   return {
