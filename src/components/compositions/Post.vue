@@ -1994,7 +1994,6 @@ function toggleOldestQuotedPostDisplay () {
   flex-direction: column;
   flex-grow: 1;
   grid-gap: 0.5em;
-  overflow: hidden;
   padding-left: var(--left-space);
   position: relative;
   &:empty {
