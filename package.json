@@ -16,7 +16,7 @@
   ],
   "type": "module",
   "dependencies": {
-    "@atproto/api": "^0.18.13",
+    "@atproto/api": "^0.18.16",
     "@vueuse/core": "^10.11.1",
     "browser-image-compression": "^2.0.2",
     "crypto-js": "^4.2.0",
