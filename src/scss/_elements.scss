@@ -59,21 +59,47 @@
 // デフォルトカラーテーマ
 :root {
   @include color-theme-light;
+  color-scheme: light;
 }
 
 // ダークモード用デフォルトカラーテーマ
 @media (prefers-color-scheme: dark) {
   :root {
     @include color-theme-dark;
+    color-scheme: dark;
   }
 }
 
 // 各種カラーテーマ
 // NOTICE: `:root` 以外でも使用
-[data-color-theme="light"] { @include color-theme-light; }
-[data-color-theme="lightGray"] { @include color-theme-light-gray; }
-[data-color-theme="dark"] { @include color-theme-dark; }
-[data-color-theme="darkGray"] { @include color-theme-dark-gray; }
+:root,
+.color-theme-list__box {
+  &[data-color-theme="light"] {
+    @include color-theme-light;
+    color-scheme: light;
+  }
+}
+:root,
+.color-theme-list__box {
+  &[data-color-theme="lightGray"] {
+    @include color-theme-light-gray;
+    color-scheme: light;
+  }
+}
+:root,
+.color-theme-list__box {
+  &[data-color-theme="dark"] {
+    @include color-theme-dark;
+    color-scheme: dark;
+  }
+}
+:root,
+.color-theme-list__box {
+  &[data-color-theme="darkGray"] {
+    @include color-theme-dark-gray;
+    color-scheme: dark;
+  }
+}
 
 // 各種変数
 body {
@@ -129,11 +155,13 @@ body {
   @include scroll-bar("transparent");
 }
 
-::selection {
-  background-color: rgb(var(--accent-color), 0.5);
-}
+// NOTICE: テキストの選択色を変更したい場合は以下を修正
+// ::selection {
+//   background-color: rgb(var(--notice-color), 0.5);
+// }
 
-img {
+img,
+video {
   vertical-align: middle;
 }
 
@@ -162,8 +190,4 @@ textarea {
   [data-font-size="large"] & {
     font-size: 20px;
   }
-}
-
-video {
-  vertical-align: middle;
 }
