@@ -8,7 +8,7 @@ export default async function (
   password: string,
   inviteCode?: string
 ): Promise<Error | undefined> {
-  if (!this.createAgent(service)) {
+  if (!this.createAgentWithPassword(service)) {
     return Error("noAgentError")
   }
   if (this.agent == null) {

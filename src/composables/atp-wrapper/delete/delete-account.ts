@@ -1,14 +1,9 @@
-import Util from "@/composables/util"
+import { state } from "@/composables/main-state"
 
 export default function (this: TIAtpWrapper, did?: string) {
-  // ログイン中のアカウント
-  if (did == null) {
-    delete this.data.sessions[this.data.did]
-
-  // ログインしていない他のアカウント
-  } else {
-    delete this.data.sessions[did]
+  // MySession経由でアカウント削除
+  if (state.mySession) {
+    const targetDid = did ?? state.mySession.did
+    state.mySession.removeAccount(targetDid)
   }
-
-  Util.saveStorage("atp", this.data)
 }

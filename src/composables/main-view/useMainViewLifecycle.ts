@@ -39,6 +39,11 @@ export function registerMainViewLifecycle (options: Options) {
   })
 
   onMounted(async () => {
+    // URLにエラーパラメータが含まれていたらクリーニング（OAuthキャンセル時など）
+    if (location.search && new URLSearchParams(location.search).has("error")) {
+      history.replaceState(null, "", location.pathname + location.hash)
+    }
+
     state.currentPath = router.currentRoute.value.path
     state.currentQuery = router.currentRoute.value.query
     state.settings = Util.loadStorage("settings") ?? {}

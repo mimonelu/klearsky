@@ -1,7 +1,9 @@
 import type { AtpAgent } from "@atproto/api"
+import type { BrowserOAuthClient } from "@atproto/oauth-client-browser"
 import createActivitySubscription from "@/composables/atp-wrapper/create/create-activity-subscription"
 import createActorStatus from "@/composables/atp-wrapper/create/create-actor-status"
-import createAgent from "@/composables/atp-wrapper/create/create-agent"
+import createAgentWithOAuth from "@/composables/atp-wrapper/create/create-agent-with-oauth"
+import createAgentWithPassword from "@/composables/atp-wrapper/create/create-agent-with-password"
 import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
 import createChatReaction  from "@/composables/atp-wrapper/chat/create-chat-reaction"
@@ -110,12 +112,13 @@ import fetchTrendingTopics from "@/composables/atp-wrapper/fetch/fetch-trending-
 import fetchUserSearch from "@/composables/atp-wrapper/fetch/fetch-user-search"
 import fetchVideoLimits from "@/composables/atp-wrapper/fetch/fetch-video-limits"
 import fetchWithoutAgent from "@/composables/atp-wrapper/fetch/fetch-without-agent"
+import fetchWrapper from "@/composables/atp-wrapper/session/fetch-wrapper"
 import leaveChatConvo from "@/composables/atp-wrapper/chat/leave-chat-convo"
+import initOAuth from "@/composables/atp-wrapper/session/init-oauth"
 import login from "@/composables/atp-wrapper/session/login"
 import logout from "@/composables/atp-wrapper/session/logout"
 import muteChatConvo from "@/composables/atp-wrapper/chat/mute-chat-convo"
 import refreshSession from "@/composables/atp-wrapper/session/refresh-session"
-import resetSession from "@/composables/atp-wrapper/session/reset-session"
 import resumeSession from "@/composables/atp-wrapper/session/resume-session"
 import signUp from "@/composables/atp-wrapper/session/sign-up"
 import unmuteChatConvo from "@/composables/atp-wrapper/chat/unmute-chat-convo"
@@ -149,43 +152,83 @@ import CONSTS from "@/consts/consts.json"
 class AtpWrapper implements TIAtpWrapper {
   agent: null | AtpAgent
 
+  oauthClient: null | BrowserOAuthClient
+
   proxies: { [k: string]: undefined | string }
 
-  data: { did: string; sessions: { [did: string]: TTSession } }
+  // MySessionへの参照（循環参照回避のため後から設定）
+  private _mySession?: TIMySession
 
-  session?: TTSession
+  // 互換性のためのフォールバックデータ
+  private _fallbackData: { did: string; sessions: { [did: string]: TTSession } }
+
+  // MySessionと連携するゲッター/セッター
+  get data (): { did: string; sessions: { [did: string]: TTSession } } {
+    if (this._mySession) {
+      return {
+        did: this._mySession.did,
+        sessions: this._mySession.sessions,
+      }
+    }
+    return this._fallbackData
+  }
+
+  set data (value: { did: string; sessions: { [did: string]: TTSession } }) {
+    if (this._mySession) {
+      // MySessionがある場合は無視（MySession経由で更新すべき）
+      return
+    }
+    this._fallbackData = value
+  }
+
+  get session (): TTSession | undefined {
+    return this._mySession?.current
+  }
+
+  set session (value: TTSession | undefined) {
+    // MySession経由で更新すべきなので、直接設定は無視
+  }
+
+  // MySessionを設定するメソッド
+  setMySession (mySession: TIMySession): void {
+    this._mySession = mySession
+  }
 
   constructor () {
     this.agent = null
+    this.oauthClient = null
     this.proxies = {
       appBsky: "",
       chatBsky: CONSTS.OFFICIAL_ATPROTO_PROXY_CHAT_BSKY,
     }
-    this.data = Util.loadStorage("atp") ?? {
+    this._fallbackData = Util.loadStorage("atp") ?? {
       did: "",
       sessions: {},
     }
-    this.session = undefined
 
     // 不正なアカウントデータの修復
     // TODO: このような処理が不要になるように再実装すること
-    if (this.data?.sessions != null) {
-      for (const did in this.data.sessions) {
+    if (this._fallbackData?.sessions != null) {
+      for (const did in this._fallbackData.sessions) {
         if (!did) {
-          const session = this.data.sessions[did]
-          this.data.sessions[session.did] = session
-          delete this.data.sessions[did]
+          const session = this._fallbackData.sessions[did]
+          this._fallbackData.sessions[session.did] = session
+          delete this._fallbackData.sessions[did]
         }
       }
     }
   }
 
   canLogin (this: TIAtpWrapper): boolean {
-    return this.data.sessions[this.data.did] != null
+    const session = this.data.sessions[this.data.did]
+    // セッションが存在し、activeかつJWTがある場合のみ自動ログイン可能
+    return session != null && session.active !== false && session.refreshJwt != null
   }
   createActivitySubscription = createActivitySubscription
   createActorStatus = createActorStatus
-  createAgent = createAgent
+  createAgentWithOAuth = createAgentWithOAuth
+  createAgentWithPassword = createAgentWithPassword
+  initOAuth = initOAuth
   createChatDeclaration = createChatDeclaration
   createChatMessage = createChatMessage
   createChatReaction = createChatReaction
@@ -294,15 +337,15 @@ class AtpWrapper implements TIAtpWrapper {
   fetchUserSearch = fetchUserSearch
   fetchVideoLimits = fetchVideoLimits
   fetchWithoutAgent = fetchWithoutAgent
+  fetchWrapper = fetchWrapper
   hasLogin (this: TIAtpWrapper): boolean {
-    return this.session != null
+    return this.session != null && this.agent != null
   }
   leaveChatConvo = leaveChatConvo
   login = login
   logout = logout
   muteChatConvo = muteChatConvo
   refreshSession = refreshSession
-  resetSession = resetSession
   resumeSession = resumeSession
   saveData (this: TIAtpWrapper) {
     Util.saveStorage("atp", this.data)

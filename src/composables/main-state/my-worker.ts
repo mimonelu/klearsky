@@ -52,10 +52,12 @@ export default class {
 
         // セッションキャッシュの反映 - セッションデータ
         if (sessionCache.session != null) {
-          const responseOfResetSession = this.mainState.atp.resetSession(sessionCache.session)
-          if (responseOfResetSession instanceof Error) {
-            return responseOfResetSession
-          }
+          const authType = sessionCache.session.__authType ?? "password"
+          this.mainState.mySession?.updateSession(
+            sessionCache.session,
+            authType,
+            sessionCache.session.__service
+          )
         }
 
         // セッションキャッシュの反映 - 設定

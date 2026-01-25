@@ -1,15 +1,20 @@
 interface TIAtpWrapper {
   agent: null | import("@atproto/api/dist/atp-agent").AtpAgent
+  oauthClient: null | import("@atproto/oauth-client-browser").BrowserOAuthClient
   proxies: { [k: string]: undefined | string }
   data: { did: string; sessions: { [did: string]: TTSession } }
   session?: TTSession
+  setMySession
+    (mySession: TIMySession): void
   canLogin
     (): boolean
   createActivitySubscription
     (subject: string, post: boolean, reply: boolean): Promise<TTActivitySubscription | Error>
   createActorStatus
     (type: string, durationMinutes?: number, embed?: TTExternal): Promise<Error | TTCidUri>
-  createAgent
+  createAgentWithOAuth
+    (oauthSession: import("@atproto/oauth-client-browser").OAuthSession): boolean
+  createAgentWithPassword
     (service: string, pdsUrl?: string): boolean
   createChatDeclaration
     (repo: string, allowIncoming: TTAllowIncoming): Promise<Error | TTCidUri>
@@ -230,8 +235,12 @@ interface TIAtpWrapper {
     (): Promise<Error | TIVideoLimits>
   fetchWithoutAgent
     (this: TIAtpWrapper, params: { path: string; did: string; query: Record<string, any>; server?: string; method?: "blob" | "json", bearer?: boolean }): Promise<Error | Response | any | Blob>
+  fetchWrapper
+    (this: TIAtpWrapper, input: URL | RequestInfo, init?: RequestInit): Promise<Response>
   hasLogin
     (): boolean
+  initOAuth
+    (targetDid?: string): Promise<TTSession | undefined>
   leaveChatConvo
     (convoId: string): Promise<Error | undefined>
   login
@@ -242,8 +251,6 @@ interface TIAtpWrapper {
     (convoId: string): Promise<Error | undefined>
   refreshSession
     (): Promise<Error | undefined>
-  resetSession
-    (newSession: TTSession, service?: string): Error | undefined
   resumeSession
     (session: TTSession): Promise<Error | ComAtprotoServerGetSession.OutputSchema>
   saveData

@@ -8,14 +8,16 @@ import { registerMainViewLifecycle } from "./useMainViewLifecycle"
 
 export function useMainView () {
   const router = useRouter()
+
+  provide("state", state)
+
   const $t = inject("$t") as (key: string) => string
   state.$setCurrentLanguage = inject("$setCurrentLanguage") as Function
   state.$getCurrentLanguage = inject("$getCurrentLanguage") as Function
 
   const loginPopup = ref(null)
-  const dropFiles = ref(null)
 
-  provide("state", state)
+  const dropFiles = ref(null)
 
   const navigation = useMainViewNavigation(router, $t)
   state.updatePageTitle = navigation.updatePageTitle
@@ -48,6 +50,7 @@ export function useMainView () {
     dropFiles,
     signUp: auth.signUp,
     manualLogin: auth.manualLogin,
+    oauthLogin: auth.oauthLogin,
     saveSetting: settings.saveSetting,
     changeSetting: settings.changeSetting,
     closeSendPostPopup,

@@ -13,7 +13,9 @@ export default async function (
   }
 
   // 動画アップロード用トークンの取得
-  const pdsUrl = this.agent.serviceUrl.hostname ?? "bsky.social"
+  const pdsUrl = this.agent.serviceUrl?.hostname
+    ?? (this.session.__pdsUrl ? Util.safeUrl(this.session.__pdsUrl)?.hostname : null)
+    ?? "bsky.social"
   const token = await this.fetchServiceAuth(
     `did:web:${pdsUrl}`,
     "com.atproto.repo.uploadBlob",

@@ -1,4 +1,5 @@
 import { jwtDecode } from "jwt-decode"
+import { state } from "@/composables/main-state"
 
 /**
  * JWT（アクセス・リフレッシュトークン）の有効期限をチェックし、必要に応じて更新
@@ -17,6 +18,11 @@ export default async function (
   this: TIAtpWrapper,
   onRefreshSession?: () => void
 ): Promise<Error | undefined> {
+  // OAuth認証の場合はライブラリが自動的にトークンを更新するためスキップ
+  if (state.mySession?.authType === "oauth") {
+    return
+  }
+
   const session = this.data.sessions[this.data.did]
   if (session == null) {
     return Error("noSessionError")

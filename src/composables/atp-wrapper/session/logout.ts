@@ -1,7 +1,8 @@
-import Util from "@/composables/util"
+import { state } from "@/composables/main-state"
 
 export default function (this: TIAtpWrapper) {
-  this.data.did = ""
-  Util.saveStorage("atp", this.data)
-  this.session = undefined
+  // MySession経由でログアウト
+  if (state.mySession) {
+    state.mySession.logout()
+  }
 }

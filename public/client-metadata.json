@@ -1,0 +1,12 @@
+{
+  "client_id": "https://klearsky.pages.dev/client-metadata.json",
+  "client_name": "Klearsky",
+  "client_uri": "https://klearsky.pages.dev",
+  "redirect_uris": ["https://klearsky.pages.dev/"],
+  "scope": "atproto transition:email transition:generic transition:chat.bsky",
+  "grant_types": ["authorization_code", "refresh_token"],
+  "response_types": ["code"],
+  "token_endpoint_auth_method": "none",
+  "application_type": "web",
+  "dpop_bound_access_tokens": true
+}

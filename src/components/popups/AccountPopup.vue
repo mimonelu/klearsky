@@ -4,7 +4,6 @@ import { useRouter } from "vue-router"
 import AccountList from "@/components/lists/AccountList.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -18,27 +17,26 @@ function close () {
   emit("close")
 }
 
-async function newLogin () {
+function newLogin () {
   close()
-  mainState.loaderDisplay = true
-  mainState.atp.logout()
-  await router.push({ name: "home" })
+  mainState.mounted = false
+  mainState.mySession?.clearCurrentSession()
+  window.scrollTo(0, 0)
   location.reload()
-  mainState.loaderDisplay = false
 }
 
 async function logout () {
   close()
   mainState.loaderDisplay = true
-  const response = await mainState.atp.deleteSession()
-  if (response instanceof Error) {
-    mainState.openErrorPopup(response, "AccountPopup/logout")
-    await Util.waitProp(() => mainState.errorPopupProps.display, false)
-  }
-  mainState.atp.logout()
+
+  // サーバー側セッション削除（エラーは無視）
+  await mainState.mySession?.deleteSession()
+
+  // カレントセッションを無効化（JWTクリア、アカウント履歴は残す）
+  mainState.mySession?.invalidateCurrentSession()
+
   await router.push({ name: "home" })
   location.reload()
-  mainState.loaderDisplay = false
 }
 </script>
 

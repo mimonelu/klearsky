@@ -9,19 +9,22 @@ type TTSession = {
   handle: string
   status?: string
 
-  // サービスアドレス
-  __service?: string // Injected
+  // 認証方式（存在しなければパスワード認証とみなして良い）
+  __authType?: "oauth" | "password"
 
-  // PDS URL
-  __pdsUrl?: string // Injected
+  // サービスアドレス（基本的に https://bsky.social ）
+  __service?: string
+
+  // PDS URL 🍄
+  __pdsUrl?: string
 
   // アバター画像URL（ AccountList で使用）
-  __avatar?: string // Injected
+  __avatar?: string
 
   // 最終ログイン日時（JWT強制削除用）
-  __loggedinVersion?: number // Injected
+  __loggedinVersion?: number
 
-  // didDoc（セッション復元時に使用される可能性がある）
+  // didDoc
   didDoc?: {
     service?: Array<{
       serviceEndpoint?: string

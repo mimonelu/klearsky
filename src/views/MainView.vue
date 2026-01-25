@@ -85,6 +85,7 @@ const {
   dropFiles,
   signUp,
   manualLogin,
+  oauthLogin,
   saveSetting,
   changeSetting,
   closeSendPostPopup,
@@ -823,6 +824,7 @@ const {
           ref="loginPopup"
           @signUp="signUp as unknown"
           @login="manualLogin as unknown"
+          @oauthLogin="oauthLogin"
         />
       </Transition>
 

@@ -11,15 +11,18 @@ defineExpose({
   setHasAuthFactorToken,
 })
 
-const emit = defineEmits<{(
-  event: string,
-  service: string,
-  email: string,
-  identifier: string,
-  password: string,
-  authFactorToken?: string,
-  inviteCode?: string
-): void}>()
+const emit = defineEmits<{
+  (
+    event: "login" | "signUp",
+    service: string,
+    email: string,
+    identifier: string,
+    password: string,
+    authFactorToken?: string,
+    inviteCode?: string
+  ): void
+  (event: "oauthLogin", handle: string): void
+}>()
 
 const $t = inject("$t") as Function
 
@@ -37,6 +40,7 @@ const state = reactive<{
   password: string
   authFactorToken?: string
   inviteCode?: string
+  oauthHandle: string
 }>({
   isSignUp: false,
   hasAuthFactorToken: false,
@@ -46,6 +50,7 @@ const state = reactive<{
   password: "",
   authFactorToken: undefined,
   inviteCode: undefined,
+  oauthHandle: currentSession?.handle ?? "",
 })
 
 const easyFormProps: TTEasyForm = {
@@ -186,6 +191,11 @@ function submitCallback () {
     state.inviteCode
   )
 }
+
+function oauthLoginCallback () {
+  if (!state.oauthHandle.trim()) return
+  emit("oauthLogin", state.oauthHandle.trim())
+}
 </script>
 
 <template>
@@ -250,6 +260,32 @@ function submitCallback () {
             >
               <span>{{ state.isSignUp ? $t("signInMode") : $t("signUpMode") }}</span>
             </button>
+
+            <!-- OAuthログイン -->
+            <div
+              v-if="!state.isSignUp"
+              class="oauth-section"
+            >
+              <hr />
+              <div class="oauth-section__header">{{ $t("oauthLogin") }}</div>
+              <div class="oauth-section__form">
+                <input
+                  v-model="state.oauthHandle"
+                  type="text"
+                  class="textbox"
+                  :placeholder="$t('oauthHandlePlaceholder')"
+                  @keydown.enter.prevent="oauthLoginCallback"
+                />
+                <button
+                  type="button"
+                  class="button--important"
+                  @click.prevent="oauthLoginCallback"
+                >
+                  <span>{{ $t("oauthLoginButton") }}</span>
+                </button>
+              </div>
+              <p class="oauth-section__description">{{ $t("oauthLoginDescription") }}</p>
+            </div>
           </template>
         </EasyForm>
         <div class="account-container">
@@ -364,5 +400,30 @@ $width: 768px;
   font-size: 0.875rem;
   padding: 0 2rem;
   text-align: center;
+}
+
+.oauth-section {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 0.75rem;
+
+  &__header {
+    color: rgb(var(--fg-color), 0.75);
+    font-weight: bold;
+  }
+
+  &__form {
+    display: flex;
+    grid-gap: 0.5rem;
+
+    .textbox {
+      flex-grow: 1;
+    }
+  }
+
+  &__description {
+    color: rgb(var(--fg-color), 0.5);
+    font-size: 0.8125rem;
+  }
 }
 </style>

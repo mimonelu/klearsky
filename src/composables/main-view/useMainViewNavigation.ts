@@ -22,8 +22,10 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
       state.currentQuery = to.query
 
       if (to.path.startsWith("/profile")) {
-        if (state.currentQuery.account !== state.currentProfile?.handle &&
-            state.currentQuery.account !== state.currentProfile?.did) {
+        if (
+          state.currentQuery.account !== state.currentProfile?.handle &&
+          state.currentQuery.account !== state.currentProfile?.did
+        ) {
           state.profileFolding = false
           state.currentProfile = null
           state.currentLabeler = undefined
@@ -51,7 +53,10 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
       }
       state.updatePageTitle()
 
-      if (to.name === "timeline-home" && state.timelineFeeds.length > 0) {
+      if (
+        to.name === "timeline-home" &&
+        state.timelineFeeds.length > 0
+      ) {
         return
       }
 
@@ -369,9 +374,11 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
       state.listLoaderDisplay = false
     }
 
-    if (pageName?.startsWith("post") ||
-        pageName?.startsWith("profile") ||
-        pageName?.startsWith("search-post")) {
+    if (
+      pageName?.startsWith("post") ||
+      pageName?.startsWith("profile") ||
+      pageName?.startsWith("search-post")
+    ) {
       setTimeout(state.updatePageTitle, 1)
     }
   }
@@ -380,8 +387,10 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
     if (account == null) {
       return
     }
-    if (account !== state.currentProfile?.handle &&
-        account !== state.currentProfile?.did) {
+    if (
+      account !== state.currentProfile?.handle &&
+      account !== state.currentProfile?.did
+    ) {
       const response = await state.fetchCurrentProfile(account)
       if (response instanceof Error) {
         return response
@@ -402,8 +411,12 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
 
   async function updateCurrentList () {
     const listUri: undefined | string = state.currentQuery.list
-    if (listUri == null) return
-    if (state.currentList?.uri === listUri) return
+    if (listUri == null) {
+      return
+    }
+    if (state.currentList?.uri === listUri) {
+      return
+    }
 
     state.currentListFeeds.splice(0)
     state.currentListFeedsCursor = undefined

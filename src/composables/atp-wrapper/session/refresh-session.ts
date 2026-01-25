@@ -1,3 +1,4 @@
+import { state } from "@/composables/main-state"
 import Util from "@/composables/util"
 
 /**
@@ -14,7 +15,8 @@ import Util from "@/composables/util"
  * - MainView.vueの定期実行 → update-jwt.ts → refresh-session.ts の経路
  */
 export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
-  const session = this.data.sessions[this.data.did]
+  // MySessionからセッション取得（フォールバックとして従来のthis.dataも参照）
+  const session = state.mySession?.current ?? this.data.sessions[this.data.did]
   if (session == null) {
     return Error("noSessionError")
   }
@@ -76,14 +78,8 @@ export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
     return Error("refreshSessionError")
   }
 
-  // セッション情報を更新
-  this.data.did = json.did
-  const responseOfResetSession = this.resetSession(json)
-  if (responseOfResetSession instanceof Error) {
-    $error("refreshSession", "Reset session error", responseOfResetSession)
-    return responseOfResetSession
-  }
+  // MySessionでセッション管理
+  state.mySession?.updateSession(json, "password", session.__service)
 
-  Util.saveStorage("atp", this.data)
   $log("refreshSession", "Session refreshed successfully")
 }

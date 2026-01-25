@@ -16,7 +16,7 @@ export default async function (
     query.limit = limit
   }
   const response: Error | ComAtprotoTempFetchLabels.Response =
-    await this.agent.api.com.atproto.temp.fetchLabels(query)
+    await this.agent.com.atproto.temp.fetchLabels(query)
       .then((value) => value)
       .catch((error) => error)
   $log("fetchLabels", response)

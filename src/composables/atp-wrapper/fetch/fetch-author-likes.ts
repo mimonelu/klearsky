@@ -21,7 +21,7 @@ export default async function (
     query.cursor = cursor
   }
   const response: ComAtprotoRepoListRecords.Response =
-    await this.agent.api.com.atproto.repo.listRecords(query)
+    await this.agent.com.atproto.repo.listRecords(query)
       .then((value) => value)
       .catch((error) => error)
   $log("listRecords/like", response)

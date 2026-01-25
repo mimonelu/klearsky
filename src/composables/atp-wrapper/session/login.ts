@@ -1,5 +1,5 @@
 import type { AtpAgentLoginOpts, ComAtprotoServerCreateSession } from "@atproto/api"
-import Util from "@/composables/util"
+import { state } from "@/composables/main-state"
 
 export default async function (
   this: TIAtpWrapper,
@@ -9,9 +9,10 @@ export default async function (
   authFactorToken?: string,
   onRefreshSession?: () => void
 ): Promise<Error | undefined> {
-  const session = this.data.sessions[this.data.did]
+  // MySessionからセッション取得（フォールバックとして従来のthis.dataも参照）
+  const session = state.mySession?.current ?? this.data.sessions[this.data.did]
   service ??= session?.__service ?? "https://bsky.social"
-  if (!this.createAgent(service, session?.__pdsUrl)) {
+  if (!this.createAgentWithPassword(service, session?.__pdsUrl)) {
     return Error("noAgentError")
   }
 
@@ -34,10 +35,8 @@ export default async function (
       return responseOfResumeSession
     }
 
-    const responseOfResetSession = this.resetSession(responseOfResumeSession, service)
-    if (responseOfResetSession instanceof Error) {
-      return responseOfResetSession
-    }
+    // MySessionでセッション管理
+    state.mySession?.updateSession(responseOfResumeSession as TTSession, "password", service)
 
   // 新規ログイン
   } else {
@@ -64,8 +63,6 @@ export default async function (
       return Error("getSessionError")
     }
 
-    // ここで persistSession が入る
+    // persistSession コールバックで MySession.updateSession が呼ばれ、自動保存される
   }
-
-  Util.saveStorage("atp", this.data)
 }

@@ -70,7 +70,40 @@ export function useMainViewAuth (options: Options) {
     )
   }
 
+  // OAuth自動ログイン試行
+  async function tryOAuthAutoLogin (): Promise<boolean> {
+    try {
+      // 期待するDIDを渡して、そのアカウントのセッションを復元
+      const targetDid = state.mySession?.did
+      const oauthSession = await state.atp.initOAuth(targetDid || undefined)
+      if (oauthSession != null) {
+        state.mySession!.updateSession(oauthSession, "oauth", oauthSession.__service)
+        return true
+      }
+    } catch (error) {
+      $warn("tryOAuthAutoLogin", error)
+      // OAuthセッション復元失敗時はエラーを通知
+      state.openErrorPopup($t("oauthSessionRestoreError"), "MainView/tryOAuthAutoLogin")
+      // セッションを無効化（アカウント履歴は残す）
+      state.mySession?.invalidateCurrentSession()
+    }
+    return false
+  }
+
   async function autoLogin () {
+    const currentAuthType = state.mySession?.authType
+    const hasOAuthCallback = new URLSearchParams(location.search).has("code")
+
+    // OAuthコールバックまたはOAuthセッションの復元を試行
+    if (currentAuthType === "oauth" || hasOAuthCallback) {
+      const oauthLoggedIn = await tryOAuthAutoLogin()
+      if (oauthLoggedIn) {
+        await processAfterLogin()
+        return
+      }
+    }
+
+    // パスワード認証フロー
     if (state.atp.hasLogin()) {
       await processAfterLogin()
     } else if (state.atp.canLogin()) {
@@ -86,9 +119,42 @@ export function useMainViewAuth (options: Options) {
           ? $t(response.message)
           : response
         state.openErrorPopup(errorMessage, "MainView/autoLogin")
+        // 自動ログイン失敗時はLoginPopupを表示
+        state.loginPopupDisplay = true
         return
       }
       await processAfterLogin()
+    } else {
+      // セッションは存在するがJWTがない場合（ログアウト済み）
+      const session = state.atp.data.sessions[state.atp.data.did]
+      if (session && (session.active === false || !session.refreshJwt)) {
+        state.openErrorPopup($t("noSessionError"), "MainView/autoLogin")
+        // セッションを無効化（アカウント履歴は残す）
+        state.mySession?.invalidateCurrentSession()
+      }
+    }
+  }
+
+  // OAuthログイン開始
+  async function oauthLogin (handle: string) {
+    state.loaderDisplay = true
+    try {
+      if (state.atp.oauthClient == null) {
+        await state.atp.initOAuth()
+      }
+      await state.atp.oauthClient!.signIn(handle, {
+        signal: new AbortController().signal,
+      })
+      // リダイレクトされるため、この後のコードは実行されない
+    } catch (error) {
+      state.loaderDisplay = false
+      const errorMessage = (error as Error)?.message ?? ""
+      // エラーメッセージをローカライズ
+      if (errorMessage.includes("Failed to resolve identity")) {
+        state.openErrorPopup($t("oauthResolveIdentityError"), "MainView/oauthLogin")
+      } else {
+        state.openErrorPopup(error as Error, "MainView/oauthLogin")
+      }
     }
   }
 
@@ -146,6 +212,7 @@ export function useMainViewAuth (options: Options) {
     signUp,
     autoLogin,
     manualLogin,
+    oauthLogin,
     clearUpdateJwtInterval,
   }
 }

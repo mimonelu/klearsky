@@ -29,6 +29,7 @@ async function resetSettings () {
   })
   if (!result) return
   mainState.resetSettings()
+  mainState.mounted = false
   location.reload()
 }
 </script>

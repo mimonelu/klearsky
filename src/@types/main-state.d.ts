@@ -17,6 +17,9 @@ interface MainState {
   // MyWorker
   myWorker?: TIMyWorker
 
+  // セッション管理
+  mySession?: TIMySession
+
   // 現在のサーバ情報
   currentServerInfo?: TTServerInfo
   fetchCurrentServerInfo: () => void

@@ -11,6 +11,7 @@ import MyChat from "@/composables/main-state/my-chat"
 import MyFeeds from "@/composables/main-state/my-feeds"
 import MyLabeler from "@/composables/main-state/my-labeler"
 import MyLists from "@/composables/main-state/my-lists"
+import MySession from "@/composables/main-state/my-session"
 import MyWorker from "@/composables/main-state/my-worker"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
@@ -37,6 +38,9 @@ export const state: MainState = reactive<MainState>({
 
   // MyWorker
   myWorker: undefined,
+
+  // セッション管理
+  mySession: undefined,
 
   // 現在のサーバ情報
   currentServerInfo: undefined,
@@ -866,6 +870,8 @@ state.myChat = new MyChat(state)
 state.myFeeds = new MyFeeds(state)
 
 state.myLists = new MyLists(state)
+
+state.mySession = new MySession(state)
 
 // -------------------------------- resetProfileState() 対象エリア
 resetProfileState()

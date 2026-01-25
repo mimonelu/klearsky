@@ -40,8 +40,9 @@ const state = reactive<{
 
 async function login (session: TTSession) {
   Util.blurElement()
-  mainState.atp.data.did = session.did
-  mainState.atp.saveData()
+  mainState.mounted = false
+  mainState.mySession?.switchAccount(session.did)
+  window.scrollTo(0, 0)
   location.reload()
 }
 
@@ -56,6 +57,20 @@ async function deleteAccount (session: TTSession) {
 
 function getDidColor (did: string): string {
   return "#" + Util.encryptMD5(did).split("").splice(0, 6).join("")
+}
+
+/**
+ * セッションの認証タイプを推論する
+ * 優先順位:
+ * 1. インポートされたセッションの __authType
+ * 2. 既存セッションの __authType
+ * 3. デフォルトは "password"（後方互換性のため）
+ */
+function inferAuthType (
+  importedSession: TTSession,
+  existingSession?: TTSession
+): "oauth" | "password" {
+  return importedSession.__authType ?? existingSession?.__authType ?? "password"
 }
 
 function exportAccounts () {
@@ -96,19 +111,22 @@ function importAccounts (event: Event) {
       // 現在ログイン中のデータはスキップ
       if (mainState.atp.session?.did === did) continue
 
-      if (mainState.atp.data.sessions[did] == null) {
-        mainState.atp.data.sessions[did] = jsonData[did]
-      } else {
-        for (const key in jsonData[did]) {
-          (mainState.atp.data.sessions[did] as { [k: string]: any })[key] = jsonData[did][key]
-        }
-      }
+      const importedSession = jsonData[did] as TTSession
+      const existingSession = mainState.mySession?.sessions[did]
+      const authType = inferAuthType(importedSession, existingSession)
+
+      // MySession経由でセッションを更新（カレントセッションは変更しない）
+      mainState.mySession?.updateSession(
+        { ...existingSession, ...importedSession },
+        authType,
+        importedSession.__service,
+        false // switchToCurrent
+      )
     }
-    Util.saveStorage("atp", mainState.atp.data)
 
     mainState.loaderDisplay = true
+    mainState.mounted = false
     location.reload()
-    mainState.loaderDisplay = false
   }
   reader.readAsText(file)
 }
