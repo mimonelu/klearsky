@@ -303,6 +303,15 @@ export const state: MainState = reactive<MainState>({
   openSettingsPopover: openSettingsPopover,
   closeSettingsPopover: closeSettingsPopover,
 
+  // ポップオーバー - アカウントポップオーバー
+  accountPopoverProps: {
+    display: false,
+    session: undefined,
+  },
+  accountPopoverSelector: undefined,
+  openAccountPopover,
+  closeAccountPopover,
+
   // ポップオーバー - プロフィールポップオーバー
   profilePopoverProps: {
     display: false,
@@ -2141,6 +2150,18 @@ function openSettingsPopover (selector: string, direction: "toRight" | "toUp") {
 
 function closeSettingsPopover () {
   state.settingsPopoverDisplay = false
+}
+
+// ポップオーバー - アカウントポップオーバー
+
+function openAccountPopover (selector: string | HTMLElement) {
+  state.accountPopoverSelector = selector
+  state.accountPopoverProps.display = true
+}
+
+function closeAccountPopover () {
+  state.accountPopoverProps.display = false
+  state.accountPopoverProps.session = undefined
 }
 
 // ポップオーバー - プロフィールポップオーバー

@@ -73,7 +73,7 @@ async function logout () {
         </div>
 
         <!-- アカウントリスト -->
-        <AccountList :hasDeleteButton="true" />
+        <AccountList />
       </div>
     </template>
   </Popup>

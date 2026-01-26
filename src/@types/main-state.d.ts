@@ -244,6 +244,15 @@ interface MainState {
   openSettingsPopover: Function
   closeSettingsPopover: () => void
 
+  // ポップオーバー - アカウントポップオーバー
+  accountPopoverProps: {
+    display: boolean
+    session?: TTSession
+  }
+  accountPopoverSelector?: string | HTMLElement
+  openAccountPopover: Function
+  closeAccountPopover: () => void
+
   // ポップオーバー - プロフィールポップオーバー
   profilePopoverProps: {
     display: boolean

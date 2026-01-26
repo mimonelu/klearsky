@@ -5,10 +5,6 @@ import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
-defineProps<{
-  hasDeleteButton: boolean
-}>()
-
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
@@ -46,17 +42,13 @@ async function login (session: TTSession) {
   location.reload()
 }
 
-async function deleteAccount (session: TTSession) {
-  Util.blurElement()
-  const result = await mainState.openConfirmationPopup({
-    title: $t("removeAccountHistory"),
-    text: $t("removeAccountHistoryMessage"),
-  })
-  if (result) mainState.atp.deleteAccount(session.did)
-}
-
 function getDidColor (did: string): string {
   return "#" + Util.encryptMD5(did).split("").splice(0, 6).join("")
+}
+
+function openAccountPopover ($event: Event, session: TTSession) {
+  mainState.accountPopoverProps.session = session
+  mainState.openAccountPopover($event.target)
 }
 
 /**
@@ -164,65 +156,62 @@ function onClickFileBox (event: Event) {
           :key="session.did"
           class="account-button"
           :data-is-me="mainState.atp.session?.did === session.did"
+          @click.prevent="login(session)"
         >
+          <!-- アバター -->
           <div
-            class="account-button__left"
-            @click.prevent="login(session)"
+            class="account-button__image"
+            :style="{ '--color': getDidColor(session.did) }"
           >
-            <div
-              class="account-button__image"
-              :style="{ '--color': getDidColor(session.did) }"
-            >
-              <SVGIcon
-                v-if="session.__avatar == null"
-                name="shimmer"
-              />
-              <LazyImage
-                v-else
-                :src="session.__avatar"
-                :data-has-avatar="session.__avatar != null"
-              />
-            </div>
-            <div
-              class="account-button__handle"
+            <SVGIcon
+              v-if="session.__avatar == null"
+              name="shimmer"
+            />
+            <LazyImage
+              v-else
+              :src="session.__avatar"
+              :data-has-avatar="session.__avatar != null"
+            />
+          </div>
+
+          <!-- ハンドル -->
+          <div
+            class="account-button__handle"
+            translate="no"
+          >{{ session.handle }}</div>
+
+          <!-- アカウントステータス -->
+          <div class="account-button__status">
+            <!-- セッションの有効状態
+            <SVGIcon :name="true ? 'lock' : 'unlock'" />
+            -->
+
+            <!-- 認証形式 -->
+            <SVGIcon :name="session.__authType === 'oauth' ? 'alphaACircle' : 'alphaPCircle'" />
+
+            <!-- 2FA -->
+            <SVGIcon
+              v-if="session.emailAuthFactor"
+              name="twoFactorAuthentication"
+            />
+
+            <!-- メールアドレス確認状態 -->
+            <SVGIcon :name="!session.emailConfirmed ? 'emailLock' : 'emailCheck'" />
+
+            <span
+              class="account-button__status__email"
               translate="no"
-            >{{ session.handle }}</div>
-
-            <!-- アカウントステータス -->
-            <div class="account-button__status">
-              <!-- セッションの有効状態
-              <SVGIcon :name="true ? 'lock' : 'unlock'" />
-              -->
-
-              <!-- 認証形式 -->
-              <SVGIcon :name="session.__authType === 'oauth' ? 'alphaACircle' : 'alphaPCircle'" />
-
-              <!-- 2FA -->
-              <SVGIcon
-                v-if="session.emailAuthFactor"
-                name="twoFactorAuthentication"
-              />
-
-              <!-- メールアドレス確認状態 -->
-              <SVGIcon :name="!session.emailConfirmed ? 'emailLock' : 'emailCheck'" />
-
-              <span
-                class="account-button__status__email"
-                translate="no"
-              >{{ session.email }}</span>
-            </div>
+            >{{ session.email }}</span>
           </div>
-          <div
-            v-if="hasDeleteButton"
-            class="account-button__right"
+
+          <!-- アカウントポップオーバートリガー -->
+          <button
+            type="button"
+            class="menu-button"
+            @click.prevent.stop="openAccountPopover($event, session)"
           >
-            <button
-              class="account-button__delete"
-              @click.prevent="deleteAccount(session)"
-            >
-              <SVGIcon name="cross" />
-            </button>
-          </div>
+            <SVGIcon name="menu" />
+          </button>
         </div>
       </div>
 
@@ -321,47 +310,43 @@ function onClickFileBox (event: Event) {
 }
 
 .account-button {
-  display: flex;
-  &:first-child:not(:last-child) &__left {
+  --color: var(--fg-color);
+  background-clip: padding-box;
+  background-color: rgb(var(--bg-color));
+  border: 1px solid rgb(var(--fg-color), 0.25);
+  border-bottom-style: none;
+  cursor: pointer;
+  display: grid;
+  flex-grow: 1;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "i h m"
+    "i e m";
+  grid-gap: 0.125em 0.5rem;
+  align-items: center;
+  &:focus, &:hover {
+    --color: var(--accent-color);
+    --green-color: var(--accent-color);
+  }
+  &[data-is-me="true"] {
+    background-color: rgb(var(--accent-color), 0.25);
+  }
+  &:first-child:not(:last-child) {
     border-radius: var(--border-radius-middle) var(--border-radius-middle) 0 0;
   }
-  &:last-child:not(:first-child) &__left {
+  &:last-child:not(:first-child) {
     border-bottom-style: solid;
     border-radius: 0 0 var(--border-radius-middle) var(--border-radius-middle);
   }
-  &:first-child:last-child &__left {
+  &:first-child:last-child {
     border-bottom-style: solid;
     border-radius: var(--border-radius-middle);
   }
-
-  &__left {
-    --color: var(--fg-color);
-    background-clip: padding-box;
-    background-color: rgb(var(--bg-color));
-    border: 1px solid rgb(var(--fg-color), 0.25);
-    border-bottom-style: none;
-    cursor: pointer;
-    display: grid;
-    flex-grow: 1;
-    grid-template-columns: auto 1fr;
-    grid-template-areas:
-      "i h"
-      "i e";
-    grid-gap: 0.125em 0.5rem;
-    align-items: center;
-    overflow: hidden;
-    padding-right: 0.5rem;
-    &:focus, &:hover {
-      --color: var(--accent-color);
-    }
-  }
-  &:not(:first-child) &__left {
+  &:not(:first-child) {
     border-top-color: rgb(var(--fg-color), 0.125);
   }
-  &[data-is-me="true"] &__left {
-    background-color: rgb(var(--accent-color), 0.25);
-  }
 
+  // アバター
   &__image {
     background-color: var(--color);
     display: flex;
@@ -372,7 +357,7 @@ function onClickFileBox (event: Event) {
     height: 3rem;
 
     & > .svg-icon {
-      fill: white;
+      fill: #ffffff;
       font-size: 1.5rem;
     }
 
@@ -384,6 +369,7 @@ function onClickFileBox (event: Event) {
     }
   }
 
+  // ハンドル
   &__handle {
     grid-area: h;
     color: rgb(var(--color));
@@ -395,6 +381,7 @@ function onClickFileBox (event: Event) {
     white-space: nowrap;
   }
 
+  // アカウントステータス
   &__status {
     grid-area: e;
     color: rgb(var(--color), 0.75);
@@ -426,28 +413,22 @@ function onClickFileBox (event: Event) {
     }
   }
 
-  &__right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__delete {
+  // アカウントポップオーバートリガー
+  .menu-button {
+    grid-area: m;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: -1rem;
-    min-width: 3rem;
-    min-height: 3rem;
-
-    & > .svg-icon {
-      fill: rgb(var(--notice-color), 0.75);
-    }
+    padding: 0 1em;
+    position: relative;
+    height: calc(100% + 2px);
     &:focus, &:hover {
       & > .svg-icon {
-        fill: rgb(var(--notice-color));
+        fill: rgb(var(--fg-color));
       }
+    }
+
+    & > .svg-icon {
+      fill: rgb(var(--fg-color), 0.5);
+      pointer-events: none;
     }
   }
 }

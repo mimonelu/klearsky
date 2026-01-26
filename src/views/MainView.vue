@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AccountPopover from "@/components/next/Account/AccountPopover.vue"
 import AccountPopup from "@/components/next/Account/AccountPopup.vue"
 import ActivitySubscriptionItemPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionItemPopup.vue"
 import ActivitySubscriptionListPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionListPopup.vue"
@@ -161,6 +162,13 @@ const {
     <SettingsPopover
       v-if="state.settingsPopoverDisplay"
       @close="state.closeSettingsPopover"
+    />
+
+    <!-- アカウントポップオーバー -->
+    <AccountPopover
+      v-if="state.accountPopoverProps.display"
+      v-bind="state.accountPopoverProps"
+      @close="state.closeAccountPopover"
     />
 
     <!-- プロフィールポップオーバー -->

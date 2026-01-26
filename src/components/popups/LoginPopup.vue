@@ -290,7 +290,7 @@ function oauthLoginCallback () {
         </EasyForm>
         <div class="account-container">
           <div class="account-header">{{ $t("myAccounts") }}</div>
-          <AccountList :hasDeleteButton="false" />
+          <AccountList />
         </div>
       </div>
       <Copyright />
