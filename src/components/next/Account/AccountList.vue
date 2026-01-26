@@ -334,7 +334,7 @@ function onClickFileBox (event: Event) {
     grid-template-areas:
       "i h"
       "i e";
-    grid-gap: 0 0.5rem;
+    grid-gap: 0.125em 0.5rem;
     align-items: center;
     overflow: hidden;
     padding-right: 0.5rem;
@@ -374,10 +374,10 @@ function onClickFileBox (event: Event) {
   &__handle {
     grid-area: h;
     color: rgb(var(--color));
+    align-self: end;
     font-weight: bold;
     line-height: var(--line-height-low);
     overflow: hidden;
-    padding-top: 0.25rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -386,14 +386,16 @@ function onClickFileBox (event: Event) {
     grid-area: e;
     color: rgb(var(--color), 0.75);
     display: flex;
+    align-self: start;
     align-items: center;
     grid-gap: 0.25rem;
     font-size: 0.875rem;
-    line-height: var(--line-height-low);
     overflow: hidden;
-    padding-bottom: 0.25rem;
 
     // メールアドレス確認状態
+    .svg-icon {
+      line-height: var(--line-height-low);
+    }
     .svg-icon--emailCheck {
       fill: rgb(var(--color), 0.75);
     }
@@ -402,6 +404,7 @@ function onClickFileBox (event: Event) {
     }
 
     &__text {
+      line-height: var(--line-height-low);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
