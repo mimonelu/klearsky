@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import { useRouter } from "vue-router"
-import AccountList from "@/components/lists/AccountList.vue"
+import AccountList from "@/components/next/Account/AccountList.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 

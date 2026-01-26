@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AccountPopup from "@/components/popups/AccountPopup.vue"
+import AccountPopup from "@/components/next/Account/AccountPopup.vue"
 import ActivitySubscriptionItemPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionItemPopup.vue"
 import ActivitySubscriptionListPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionListPopup.vue"
 import ActivitySubscriptionPermissionPopup from "@/components/next/ActivitySubscription/ActivitySubscriptionPermissionPopup.vue"

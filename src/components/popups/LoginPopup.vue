@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, nextTick, reactive, ref } from "vue"
-import AccountList from "@/components/lists/AccountList.vue"
+import AccountList from "@/components/next/Account/AccountList.vue"
 import Copyright from "@/components/labels/Copyright.vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Logo from "@/components/images/Logo.vue"
