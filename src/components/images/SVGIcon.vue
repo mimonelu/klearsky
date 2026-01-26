@@ -3,6 +3,8 @@
 import activitySubscription from "@/svg/activity-subscription.svg?raw"
 import alert from "@/svg/alert.svg?raw"
 import alphaA from "@/svg/alpha-a.svg?raw"
+import alphaACircle from "@/svg/alpha-a-circle.svg?raw"
+import alphaPCircle from "@/svg/alpha-p-circle.svg?raw"
 import arrowBottom from "@/svg/arrow-bottom.svg?raw"
 import arrowDown from "@/svg/arrow-down.svg?raw"
 import arrowLeft from "@/svg/arrow-left.svg?raw"
@@ -111,6 +113,7 @@ import thumbUp from "@/svg/thumb-up.svg?raw"
 import thumbDown from "@/svg/thumb-down.svg?raw"
 import translate from "@/svg/translate.svg?raw"
 import trending from "@/svg/trending-up.svg?raw"
+import twoFactorAuthentication from "@/svg/two-factor-authentication.svg?raw"
 import unlock from "@/svg/unlock.svg?raw"
 import verified from "@/svg/verified.svg?raw"
 import verifier from "@/svg/verifier.svg?raw"
@@ -124,6 +127,8 @@ const icons: { [k: string]: string } = {
   activitySubscription,
   alert,
   alphaA,
+  alphaACircle,
+  alphaPCircle,
   arrowBottom,
   arrowDown,
   arrowLeft,
@@ -232,6 +237,7 @@ const icons: { [k: string]: string } = {
   thumbDown,
   translate,
   trending,
+  twoFactorAuthentication,
   unlock,
   verified,
   verifier,

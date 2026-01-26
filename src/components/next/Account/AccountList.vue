@@ -188,13 +188,26 @@ function onClickFileBox (event: Event) {
               translate="no"
             >{{ session.handle }}</div>
 
-            <!-- メールアドレス -->
-            <div class="account-button__email">
+            <!-- アカウントステータス -->
+            <div class="account-button__status">
+              <!-- セッションの有効状態
+              <SVGIcon :name="true ? 'lock' : 'unlock'" />
+              -->
+
+              <!-- 認証形式 -->
+              <SVGIcon :name="session.__authType === 'oauth' ? 'alphaACircle' : 'alphaPCircle'" />
+
+              <!-- 2FA -->
+              <SVGIcon
+                v-if="session.emailAuthFactor"
+                name="twoFactorAuthentication"
+              />
+
               <!-- メールアドレス確認状態 -->
               <SVGIcon :name="!session.emailConfirmed ? 'emailLock' : 'emailCheck'" />
 
               <span
-                class="account-button__email__text"
+                class="account-button__status__email"
                 translate="no"
               >{{ session.email }}</span>
             </div>
@@ -382,7 +395,7 @@ function onClickFileBox (event: Event) {
     white-space: nowrap;
   }
 
-  &__email {
+  &__status {
     grid-area: e;
     color: rgb(var(--color), 0.75);
     display: flex;
@@ -392,18 +405,20 @@ function onClickFileBox (event: Event) {
     font-size: 0.875rem;
     overflow: hidden;
 
-    // メールアドレス確認状態
     .svg-icon {
+      fill: rgb(var(--color), 0.75);
       line-height: var(--line-height-low);
     }
+
+    // 望ましいアイコンの色
+    .svg-icon--unlock,
+    .svg-icon--alphaACircle,
+    .svg-icon--twoFactorAuthentication,
     .svg-icon--emailCheck {
-      fill: rgb(var(--color), 0.75);
-    }
-    .svg-icon--emailLock {
-      fill: rgb(var(--notice-color));
+      fill: rgb(var(--green-color));
     }
 
-    &__text {
+    &__email {
       line-height: var(--line-height-low);
       overflow: hidden;
       text-overflow: ellipsis;
