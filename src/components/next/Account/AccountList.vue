@@ -191,15 +191,8 @@ function onClickFileBox (event: Event) {
             <!-- メールアドレス -->
             <div class="account-button__email">
               <!-- メールアドレス確認状態 -->
-              <SVGIcon
-                v-if="session.emailConfirmed != null"
-                :data-email-confirmed="session.emailConfirmed"
-                :name="session.emailConfirmed
-                  ? 'check'
-                  : 'question'
-              " />
+              <SVGIcon :name="!session.emailConfirmed ? 'emailLock' : 'emailCheck'" />
 
-              <SVGIcon name="email" />
               <span
                 class="account-button__email__text"
                 translate="no"
@@ -401,15 +394,11 @@ function onClickFileBox (event: Event) {
     padding-bottom: 0.25rem;
 
     // メールアドレス確認状態
-    .svg-icon--check {
-      fill: rgb(var(--color), 0.5);
-    }
-    .svg-icon--question {
+    .svg-icon--emailCheck {
       fill: rgb(var(--color), 0.75);
     }
-
-    .svg-icon--email {
-      fill: rgb(var(--color), 0.5);
+    .svg-icon--emailLock {
+      fill: rgb(var(--notice-color));
     }
 
     &__text {
