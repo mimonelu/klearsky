@@ -83,6 +83,7 @@ import { state } from "@/composables/main-state"
 import { useMainView } from "@/composables/main-view/useMainView"
 
 const {
+  loginPopup,
   dropFiles,
   signUp,
   manualLogin,
