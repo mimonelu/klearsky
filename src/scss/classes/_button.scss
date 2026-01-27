@@ -3,6 +3,7 @@
 .button--bordered,
 .button--important,
 .button--bordered--important,
+.button--accent,
 .button--plain {
   border: 1px solid transparent;
   border-radius: var(--border-radius-middle);
@@ -107,6 +108,19 @@
         fill: rgb(var(--notice-color));
       }
     }
+  }
+}
+
+.button--accent {
+  background-color: rgb(var(--accent-color), 0.875);
+  color: rgb(var(--white-color));
+
+  .svg-icon {
+    fill: rgb(var(--white-color), 0.875);
+  }
+
+  &:focus, &:hover {
+    background-color: rgb(var(--accent-color));
   }
 }
 
