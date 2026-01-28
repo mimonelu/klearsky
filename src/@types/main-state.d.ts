@@ -405,6 +405,7 @@ interface MainState {
   // ポップアップ - ログインポップアップ
   loginPopupDisplay: boolean
   loginPopupAutoDisplay: ComputedRef<boolean>
+  loginFormInitialSession?: TTSession
 
   // ポップアップ - アカウントポップアップ
   accountPopupDisplay: boolean

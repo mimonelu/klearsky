@@ -31,8 +31,9 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const currentSession: undefined | TTSession =
-  mainState.atp.data.sessions[mainState.atp.data.did]
+const initialSession: undefined | TTSession = mainState.loginFormInitialSession
+
+mainState.loginFormInitialSession = undefined
 
 const state = reactive<{
   formMode: TTFormMode
@@ -44,11 +45,11 @@ const state = reactive<{
   authFactorToken?: string
   inviteCode?: string
 }>({
-  formMode: "oauthLogin",
+  formMode: initialSession == null || initialSession.__authType === "oauth" ? "oauthLogin" : "passwordLogin",
   hasAuthFactorToken: false,
-  service: currentSession?.__service ?? "",
-  email: currentSession?.email ?? "",
-  identifier: currentSession?.handle ?? "",
+  service: initialSession?.__service ?? "",
+  email: initialSession?.email ?? "",
+  identifier: initialSession?.handle ?? "",
   password: "",
   authFactorToken: undefined,
   inviteCode: undefined,

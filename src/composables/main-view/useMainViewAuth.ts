@@ -85,6 +85,9 @@ export function useMainViewAuth (options: Options) {
       // OAuthセッション復元失敗時はエラーを通知
       state.openErrorPopup($t("oauthSessionRestoreError"), "MainView/tryOAuthAutoLogin")
 
+      // ログインフォーム用にセッション情報を保持
+      state.loginFormInitialSession = state.mySession?.current
+
       // セッションを無効化（アカウント履歴は残す）
       state.mySession?.invalidateCurrentSession()
     }
@@ -122,6 +125,10 @@ export function useMainViewAuth (options: Options) {
           ? $t(response.message)
           : response
         state.openErrorPopup(errorMessage, "MainView/autoLogin")
+
+        // ログインフォーム用にセッション情報を保持
+        state.loginFormInitialSession = state.atp.data.sessions[state.atp.data.did]
+
         // 自動ログイン失敗時はLoginPopupを表示
         state.loginPopupDisplay = true
         return
@@ -132,6 +139,9 @@ export function useMainViewAuth (options: Options) {
       const session = state.atp.data.sessions[state.atp.data.did]
       if (session && (session.active === false || !session.refreshJwt)) {
         state.openErrorPopup($t("noSessionError"), "MainView/autoLogin")
+
+        // ログインフォーム用にセッション情報を保持
+        state.loginFormInitialSession = session
 
         // セッションを無効化（アカウント履歴は残す）
         state.mySession?.invalidateCurrentSession()

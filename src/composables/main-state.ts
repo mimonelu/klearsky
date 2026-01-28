@@ -475,6 +475,7 @@ export const state: MainState = reactive<MainState>({
   loginPopupAutoDisplay: computed((): boolean => {
     return state.mounted && (!state.atp.hasLogin() || state.loginPopupDisplay)
   }),
+  loginFormInitialSession: undefined,
 
   // ポップアップ - アカウントポップアップ
   accountPopupDisplay: false,
