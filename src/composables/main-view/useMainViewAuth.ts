@@ -84,6 +84,7 @@ export function useMainViewAuth (options: Options) {
       $warn("tryOAuthAutoLogin", error)
       // OAuthセッション復元失敗時はエラーを通知
       state.openErrorPopup($t("oauthSessionRestoreError"), "MainView/tryOAuthAutoLogin")
+
       // セッションを無効化（アカウント履歴は残す）
       state.mySession?.invalidateCurrentSession()
     }
@@ -105,8 +106,10 @@ export function useMainViewAuth (options: Options) {
 
     // パスワード認証フロー
     if (state.atp.hasLogin()) {
+      // ログイン済み
       await processAfterLogin()
     } else if (state.atp.canLogin()) {
+      // ログイン可能
       const response = await state.atp.login(
         undefined,
         undefined,
@@ -129,6 +132,7 @@ export function useMainViewAuth (options: Options) {
       const session = state.atp.data.sessions[state.atp.data.did]
       if (session && (session.active === false || !session.refreshJwt)) {
         state.openErrorPopup($t("noSessionError"), "MainView/autoLogin")
+
         // セッションを無効化（アカウント履歴は残す）
         state.mySession?.invalidateCurrentSession()
       }
@@ -208,11 +212,16 @@ export function useMainViewAuth (options: Options) {
     }, CONSTS.INTERVAL_OF_UPDATE_JWT)
   }
 
+  async function setAccountToLoginForm (session: TTSession) {
+    await (loginPopup.value as any)?.setAccountToLoginForm(session)
+  }
+
   return {
     signUp,
     autoLogin,
     manualLogin,
     oauthLogin,
     clearUpdateJwtInterval,
+    setAccountToLoginForm,
   }
 }

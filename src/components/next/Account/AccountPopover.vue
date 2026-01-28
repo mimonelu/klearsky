@@ -5,7 +5,10 @@ import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
-const emit = defineEmits<{(event: string): void}>()
+const emit = defineEmits<{
+  (event: "close"): void,
+  (event: "setAccountToLoginForm", session: TTSession): void,
+}>()
 
 const props = defineProps<{
   display: boolean
@@ -44,6 +47,14 @@ function close () {
   emit("close")
 }
 
+function setAccountToLoginForm () {
+  Util.blurElement()
+  close()
+  if (props.session != null) {
+    emit("setAccountToLoginForm", props.session)
+  }
+}
+
 async function removeMyAccount () {
   Util.blurElement()
   close()
@@ -70,6 +81,16 @@ async function removeMyAccount () {
       v-if="session != null"
       class="list-menu"
     >
+      <!-- ログインフォームに設定 -->
+      <button
+        v-if="mainState.accountPopoverProps.enableSetAccountToLoginForm"
+        @click.prevent.stop="setAccountToLoginForm"
+      >
+        <SVGIcon :name="session.__authType === 'oauth' ? 'alphaACircle' : 'alphaPCircle'" />
+        <span>{{ $t("setAccountToLoginForm") }}</span>
+      </button>
+
+      <!-- マイアカウントの削除 -->
       <button @click.prevent.stop="removeMyAccount">
         <SVGIcon name="cross" />
         <span>{{ $t("removeAccountHistory") }}</span>

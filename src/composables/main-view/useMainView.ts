@@ -54,5 +54,6 @@ export function useMainView () {
     saveSetting: settings.saveSetting,
     changeSetting: settings.changeSetting,
     closeSendPostPopup,
+    setAccountToLoginForm: auth.setAccountToLoginForm,
   }
 }

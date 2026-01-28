@@ -8,6 +8,7 @@ type TTFormMode = "oauthLogin" | "passwordLogin" | "signUp"
 
 defineExpose({
   setHasAuthFactorToken,
+  setAccountToLoginForm,
 })
 
 const emit = defineEmits<{
@@ -155,6 +156,20 @@ function disableAuthFactorToken () {
   state.authFactorToken = undefined
   state.hasAuthFactorToken = false
   updateEasyFormProps()
+}
+
+async function setAccountToLoginForm (session: TTSession) {
+  const isOAuth = session.__authType === "oauth"
+  setFormMode(isOAuth ? "oauthLogin" : "passwordLogin")
+  state.service = session.__service ?? ""
+  state.identifier = session.handle
+
+  // フォーカス処理
+  await nextTick()
+  const element = window.document.querySelector(
+    isOAuth ? ".button--accent" : "#easy-form--default__3"
+  ) as null | HTMLElement
+  element?.focus()
 }
 
 function updateEasyFormProps () {

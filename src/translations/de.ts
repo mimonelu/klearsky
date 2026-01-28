@@ -75,6 +75,7 @@ export default () => ({
   "signUp": "Konto erstellen (Dev)",
   "signUpShort": "Registrieren",
   "signUpCaution": "Registrierung auf dem offiziellen PDS nicht möglich.",
+  "setAccountToLoginForm": "Formular ausfüllen",
   "removeAccountHistory": "Konto entfernen",
   "removeAccountHistoryMessage": "Konto entfernen. Sicher?",
   "accountExport": "Exportieren",

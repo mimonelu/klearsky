@@ -75,6 +75,7 @@ export default () => ({
   "signUp": "アカウントを作成（開発者向け）",
   "signUpShort": "サインアップ",
   "signUpCaution": "公式PDSにはサインアップできません。",
+  "setAccountToLoginForm": "ログインフォームに設定",
   "removeAccountHistory": "マイアカウントの削除",
   "removeAccountHistoryMessage": "このアカウントをマイアカウントから削除します。よろしいですか？",
   "accountExport": "エクスポート",

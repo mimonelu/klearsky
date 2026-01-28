@@ -75,6 +75,7 @@ export default () => ({
   "signUp": "Create account (for dev)",
   "signUpShort": "Sign Up",
   "signUpCaution": "You cannot sign up on the official PDS.",
+  "setAccountToLoginForm": "Set to login form",
   "removeAccountHistory": "Remove from Klearsky",
   "removeAccountHistoryMessage": "This account will be removed from My Accounts. Are you sure?",
   "accountExport": "Export",

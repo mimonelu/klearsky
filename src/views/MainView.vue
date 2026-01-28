@@ -91,6 +91,7 @@ const {
   saveSetting,
   changeSetting,
   closeSendPostPopup,
+  setAccountToLoginForm,
 } = useMainView()
 </script>
 
@@ -170,6 +171,7 @@ const {
       v-if="state.accountPopoverProps.display"
       v-bind="state.accountPopoverProps"
       @close="state.closeAccountPopover"
+      @setAccountToLoginForm="setAccountToLoginForm as unknown"
     />
 
     <!-- プロフィールポップオーバー -->

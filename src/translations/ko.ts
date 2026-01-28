@@ -75,6 +75,7 @@ export default () => ({
   "signUp": "계정 생성 (개발자용)",
   "signUpShort": "가입",
   "signUpCaution": "공식 PDS에는 가입할 수 없습니다.",
+  "setAccountToLoginForm": "로그인 폼에 설정",
   "removeAccountHistory": "계정 삭제",
   "removeAccountHistoryMessage": "이 계정을 내 계정에서 삭제합니다. 괜찮습니까?",
   "accountExport": "내보내기",

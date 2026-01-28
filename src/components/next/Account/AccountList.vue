@@ -5,6 +5,10 @@ import AccountButton from "@/components/next/Account/AccountButton.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
+defineProps<{
+  enableSetAccountToLoginForm: boolean
+}>()
+
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
@@ -138,6 +142,7 @@ function onClickFileBox (event: Event) {
           v-for="session of sessions"
           :key="session.did"
           :session="session"
+          :enableSetAccountToLoginForm="enableSetAccountToLoginForm"
         />
       </div>
 

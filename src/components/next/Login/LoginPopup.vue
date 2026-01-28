@@ -7,12 +7,17 @@ import Logo from "@/components/images/Logo.vue"
 
 defineExpose({
   setHasAuthFactorToken,
+  setAccountToLoginForm,
 })
 
 const loginForm = ref(null)
 
 async function setHasAuthFactorToken (value: boolean) {
   await (loginForm.value as any)?.setHasAuthFactorToken(value)
+}
+
+async function setAccountToLoginForm (session: TTSession) {
+  await (loginForm.value as any)?.setAccountToLoginForm(session)
 }
 </script>
 
@@ -32,7 +37,7 @@ async function setHasAuthFactorToken (value: boolean) {
         />
         <div class="account-container">
           <div class="account-header">{{ $t("myAccounts") }}</div>
-          <AccountList />
+          <AccountList :enableSetAccountToLoginForm="true" />
         </div>
       </div>
       <Copyright />

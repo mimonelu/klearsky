@@ -6,6 +6,7 @@ import Util from "@/composables/util"
 
 const props = defineProps<{
   session: TTSession
+  enableSetAccountToLoginForm: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -24,6 +25,7 @@ function getDidColor (did: string): string {
 
 function openAccountPopover ($event: Event) {
   mainState.accountPopoverProps.session = props.session
+  mainState.accountPopoverProps.enableSetAccountToLoginForm = props.enableSetAccountToLoginForm
   mainState.openAccountPopover($event.target)
 }
 </script>
@@ -103,6 +105,7 @@ function openAccountPopover ($event: Event) {
     "i e m";
   grid-gap: 0.125em 0.5rem;
   align-items: center;
+  overflow: hidden;
   &:focus, &:hover {
     --color: var(--accent-color);
     --green-color: var(--accent-color);

@@ -307,6 +307,7 @@ export const state: MainState = reactive<MainState>({
   accountPopoverProps: {
     display: false,
     session: undefined,
+    enableSetAccountToLoginForm: false,
   },
   accountPopoverSelector: undefined,
   openAccountPopover,
