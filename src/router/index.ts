@@ -75,7 +75,7 @@ const router = createRouter({
             {
               path: "timeline",
               name: "timeline-home",
-              meta: { label: "The Bluesky Client" },
+              meta: { label: "Alt Web Client for Bluesky" },
               component: TimelineView,
             },
             {

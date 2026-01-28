@@ -26,7 +26,7 @@ async function setAccountToLoginForm (session: TTSession) {
     <div class="login-popup__inner">
       <div class="login-popup__header">
         <Logo />
-        <div class="description">The web client for Bluesky.</div>
+        <div class="description">Alt Web Client for Bluesky</div>
       </div>
       <div class="login-popup__body">
         <LoginForm
@@ -49,7 +49,7 @@ async function setAccountToLoginForm (session: TTSession) {
 $width: 768px;
 
 .login-popup {
-  background-color: rgb(var(--bg-color));
+  background-color: rgb(var(--fg-color), 0.125);
   display: flex;
   justify-content: center;
   min-height: 100vh;
@@ -59,17 +59,18 @@ $width: 768px;
     grid-template-rows: 1fr auto auto;
     flex-grow: 1;
     grid-gap: 2rem;
-    padding-bottom: 4rem;
+    padding-bottom: 2rem;
   }
 
   &__header {
-    background-color: rgb(var(--bg-sub-color));
+    background-color: rgb(var(--bg-color));
+    border-bottom: 1px solid rgb(var(--fg-color), 0.25);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    grid-gap: 1rem;
-    padding: 4rem 2rem;
+    grid-gap: 0.5rem;
+    padding: 6rem 2rem;
   }
 
   &__body {
@@ -108,7 +109,7 @@ $width: 768px;
 
 .description {
   color: rgb(var(--fg-color), 0.75);
-  font-size: 1.25rem;
+  font-size: min(1.25rem, 2vmax);
 }
 
 .account-container {
