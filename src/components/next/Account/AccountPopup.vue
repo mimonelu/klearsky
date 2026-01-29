@@ -27,7 +27,7 @@ function newLogin () {
 
 async function logout () {
   close()
-  mainState.loaderDisplay = true
+  mainState.mounted = false
 
   // サーバー側セッション削除（エラーは無視）
   await mainState.mySession?.deleteSession()
