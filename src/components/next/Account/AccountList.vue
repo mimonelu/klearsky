@@ -18,11 +18,11 @@ const state = reactive<{
   sessionGroups: ComputedRef<{ [service: string]: Array<TTSession> }>
 }>({
   sessionCount: computed((): number => {
-    return Object.keys(mainState.atp.data.sessions).length
+    return Object.keys(mainState.mySession?.sessions ?? {}).length
   }),
   sessionGroups: computed(() => {
     const sessionValues =
-      Object.values(mainState.atp.data.sessions)
+      Object.values(mainState.mySession?.sessions ?? {})
         .sort((a: TTSession, b: TTSession) => {
           const aKey = `${a.__service} ${a.handle}`
           const bKey = `${b.__service} ${b.handle}`
@@ -53,7 +53,7 @@ function inferAuthType (
 }
 
 function exportAccounts () {
-  const jsonData = Util.cloneJson(mainState.atp.data.sessions)
+  const jsonData = Util.cloneJson(mainState.mySession?.sessions ?? {})
   if (jsonData == null) return
 
   // アカウント出力から JWT を削除
@@ -88,7 +88,7 @@ function importAccounts (event: Event) {
     // 既存のセッションデータにインポートしたセッションデータを「上書き」する
     for (const did in jsonData) {
       // 現在ログイン中のデータはスキップ
-      if (mainState.atp.session?.did === did) continue
+      if (mainState.mySession?.did === did) continue
 
       const importedSession = jsonData[did] as TTSession
       const existingSession = mainState.mySession?.sessions[did]
