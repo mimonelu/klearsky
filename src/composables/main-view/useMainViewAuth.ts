@@ -127,7 +127,7 @@ export function useMainViewAuth (options: Options) {
         state.openErrorPopup(errorMessage, "MainView/autoLogin")
 
         // ログインフォーム用にセッション情報を保持
-        state.loginFormInitialSession = state.atp.data.sessions[state.atp.data.did]
+        state.loginFormInitialSession = state.mySession?.current
 
         // 自動ログイン失敗時はLoginPopupを表示
         state.loginPopupDisplay = true
@@ -136,7 +136,7 @@ export function useMainViewAuth (options: Options) {
       await processAfterLogin()
     } else {
       // セッションは存在するがJWTがない場合（ログアウト済み）
-      const session = state.atp.data.sessions[state.atp.data.did]
+      const session = state.mySession?.current
       if (session && (session.active === false || !session.refreshJwt)) {
         state.openErrorPopup($t("noSessionError"), "MainView/autoLogin")
 
