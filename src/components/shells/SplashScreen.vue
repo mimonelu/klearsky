@@ -28,6 +28,8 @@ const mainState = inject("state") as MainState
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  overscroll-behavior: none;
   position: fixed;
   top: 0;
   left: 0;
