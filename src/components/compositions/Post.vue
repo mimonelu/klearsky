@@ -1365,6 +1365,7 @@ function toggleOldestQuotedPostDisplay () {
         :customDisplay="false"
         :userCreatedAt="post.author.createdAt"
         :postIndexedAt="post.indexedAt"
+        :bridgyOriginalUrl="(post.record as any)?.bridgyOriginalUrl"
       />
 
       <!-- ポストボディ - 引用リポスト -->

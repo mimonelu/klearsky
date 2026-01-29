@@ -922,6 +922,7 @@ export default () => ({
   "unauthenticated": "Public",
   "beginner": "Nouvel utilisateur",
   "beginnerInPost": "Première publication",
+  "postViaBridgy": "Publication via Bridgy",
 
   // ============================================================================
   // ERROR MESSAGES

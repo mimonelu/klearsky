@@ -15,7 +15,12 @@ const props = defineProps<{
   // 新規アカウントラベル用
   userCreatedAt?: string
   postIndexedAt?: string
+
+  // Bridgy
+  bridgyOriginalUrl?: string
 }>()
+
+const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
@@ -92,6 +97,16 @@ function getLabelerAvatar (label?: TILabelSetting): string {
     return labeler.creator.did === label.did
   })?.creator.avatar ?? ""
 }
+
+async function openBridgyOriginalUrl () {
+  if (await mainState.openConfirmationPopup({
+    title: $t("confirmUrl"),
+    text: $t("confirmUrlNotification"),
+    detail: props.bridgyOriginalUrl,
+  })) {
+    window.open(props.bridgyOriginalUrl, "_blank")
+  }
+}
 </script>
 
 <template>
@@ -167,6 +182,17 @@ function getLabelerAvatar (label?: TILabelSetting): string {
       <SVGIcon name="label" />
       <span translate="no">{{ $t(label.val) }}</span>
     </div>
+
+    <!-- Bridgy リンク -->
+    <button
+      v-if="bridgyOriginalUrl"
+      type="button"
+      class="label-tags__bridgy-link"
+      @click.prevent.stop="openBridgyOriginalUrl"
+    >
+      <LazyImage src="img/bridgy.png" />
+      <span translate="no">{{ $t("postViaBridgy") }}</span>
+    </button>
   </div>
 </template>
 
@@ -185,7 +211,8 @@ function getLabelerAvatar (label?: TILabelSetting): string {
   &__unauthenticated-label,
   &__harmful-label,
   &__labelers-label,
-  &__custom-label {
+  &__custom-label,
+  &__bridgy-link {
     border-radius: var(--border-radius-middle);
     display: flex;
     align-items: center;
@@ -204,6 +231,18 @@ function getLabelerAvatar (label?: TILabelSetting): string {
       overflow: hidden;
       user-select: none;
       word-break: break-all;
+    }
+  }
+  &__labelers-label,
+  &__bridgy-link {
+    & > .lazy-image {
+      border-radius: var(--border-radius-small);
+      font-size: 1.25em;
+      min-width: 1em;
+      max-width: 1em;
+      min-height: 1em;
+      max-height: 1em;
+      opacity: var(--alpha) !important;
     }
   }
 
@@ -249,16 +288,6 @@ function getLabelerAvatar (label?: TILabelSetting): string {
     &:hover {
       --alpha: 1.0;
     }
-
-    & > .lazy-image {
-      border-radius: var(--border-radius-small);
-      font-size: 1.25em;
-      min-width: 1em;
-      max-width: 1em;
-      min-height: 1em;
-      max-height: 1em;
-      opacity: var(--alpha) !important;
-    }
   }
 
   // カスタムラベル
@@ -268,6 +297,20 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 
     & > .svg-icon {
       fill: rgb(var(--orange-color), var(--alpha, 1.0));
+    }
+  }
+
+  // Bridgy リンク
+  &__bridgy-link {
+    --color: rgb(var(--accent-color), var(--alpha, 1.0));
+    background-color: rgb(var(--accent-color), 0.125);
+    // border-color: rgb(var(--accent-color), calc(var(--alpha) / 3));
+    cursor: pointer;
+    grid-gap: 0.5em;
+    padding-left: 0.25em;
+    &:focus,
+    &:hover {
+      --alpha: 1.0;
     }
   }
 }

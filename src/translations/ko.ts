@@ -922,6 +922,7 @@ export default () => ({
   "unauthenticated": "공개 중",
   "beginner": "신규 사용자",
   "beginnerInPost": "초기 게시물",
+  "postViaBridgy": "Bridgy를 통한 게시물",
 
   // ============================================================================
   // ERROR MESSAGES

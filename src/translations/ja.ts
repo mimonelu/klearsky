@@ -922,6 +922,7 @@ export default () => ({
   "unauthenticated": "公開中",
   "beginner": "新規ユーザー",
   "beginnerInPost": "初期ポスト",
+  "postViaBridgy": "Post via Bridgy",
 
   // ============================================================================
   // ERROR MESSAGES
