@@ -79,7 +79,7 @@ export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
   }
 
   // MySessionでセッション管理
-  state.mySession?.updateSession(json, "password", session.__service)
+  state.mySession?.updateSession(json, state.mySession.authType, session.__service)
 
   $log("refreshSession", "Session refreshed successfully")
 }
