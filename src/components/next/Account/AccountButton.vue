@@ -14,7 +14,12 @@ const mainState = inject("state") as MainState
 async function login () {
   Util.blurElement()
   mainState.mounted = false
-  mainState.mySession?.switchAccount(props.session.did)
+  const switched = mainState.mySession?.switchAccount(props.session.did)
+  if (!switched) {
+    mainState.openErrorPopup("Session not found", "AccountButton/login")
+    mainState.mounted = true
+    return
+  }
   window.scrollTo(0, 0)
   location.reload()
 }
