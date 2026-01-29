@@ -23,7 +23,7 @@ export default async function (
     return
   }
 
-  const session = this.data.sessions[this.data.did]
+  const session = this.session
   if (session == null) {
     return Error("noSessionError")
   }
