@@ -220,7 +220,7 @@ class AtpWrapper implements TIAtpWrapper {
   }
 
   canLogin (this: TIAtpWrapper): boolean {
-    const session = this.data.sessions[this.data.did]
+    const session = this.session
     // セッションが存在し、activeかつJWTがある場合のみ自動ログイン可能
     return session != null && session.active !== false && session.refreshJwt != null
   }
@@ -347,9 +347,6 @@ class AtpWrapper implements TIAtpWrapper {
   muteChatConvo = muteChatConvo
   refreshSession = refreshSession
   resumeSession = resumeSession
-  saveData (this: TIAtpWrapper) {
-    Util.saveStorage("atp", this.data)
-  }
   signUp = signUp
   unmuteChatConvo = unmuteChatConvo
   updateBlockToDisable = updateBlockToDisable

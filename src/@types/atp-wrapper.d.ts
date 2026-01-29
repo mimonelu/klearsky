@@ -253,8 +253,6 @@ interface TIAtpWrapper {
     (): Promise<Error | undefined>
   resumeSession
     (session: TTSession): Promise<Error | ComAtprotoServerGetSession.OutputSchema>
-  saveData
-    ()
   signUp
     (service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<Error | undefined>
   unmuteChatConvo
