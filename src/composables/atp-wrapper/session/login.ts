@@ -43,13 +43,13 @@ export default async function (
     if (this.agent == null) {
       return Error("noAgentError")
     }
-    const optinos: AtpAgentLoginOpts = {
+    const options: AtpAgentLoginOpts = {
       identifier,
       password,
       authFactorToken,
     }
     const response: Error | ComAtprotoServerCreateSession.Response =
-      await this.agent.login(optinos)
+      await this.agent.login(options)
         .then((value) => value)
         .catch((error) => error)
     $log("login", response)
