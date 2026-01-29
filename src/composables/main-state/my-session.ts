@@ -229,9 +229,7 @@ export default class MySession {
       did: this.did,
       sessions: this.sessions,
     }
-    // 両方のキーに保存（後方互換性）
     Util.saveStorage("mySession", data)
-    Util.saveStorage("atp", data)
   }
 
   /**
@@ -253,9 +251,6 @@ export default class MySession {
       this.sessions = data.sessions ?? {}
       this.current = this.sessions[this.did]
       this.authType = this.current?.__authType ?? "password"
-
-      // マイグレーション後は両方のキーに保存
-      this.persist()
     }
     $log("MySession.restore", { did: this.did, authType: this.authType })
   }
