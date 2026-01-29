@@ -229,22 +229,14 @@ export default class MySession {
       did: this.did,
       sessions: this.sessions,
     }
-    Util.saveStorage("mySession", data)
+    Util.saveStorage("atp", data)
   }
 
   /**
    * 復元
    */
   restore (): void {
-    // まず "mySession" キーを確認、なければ "atp" キーからマイグレーション
-    let data = Util.loadStorage("mySession")
-    if (!data || Object.keys(data.sessions ?? {}).length === 0) {
-      const atpData = Util.loadStorage("atp")
-      if (atpData && Object.keys(atpData.sessions ?? {}).length > 0) {
-        data = atpData
-        $log("MySession.restore: migrated from 'atp' key")
-      }
-    }
+    const data = Util.loadStorage("atp")
 
     if (data) {
       this.did = data.did ?? ""
