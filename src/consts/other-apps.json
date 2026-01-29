@@ -97,5 +97,12 @@
     "post": "https://bsky.jazco.dev/thread/view?author_did={did}&post={rkey}",
     "profile": "https://bsky.jazco.dev/atlas?s={handle}",
     "favicon": "https://bsky.jazco.dev/vite.svg"
+  },
+  {
+    "name": "witchskyApp",
+    "generator": "https://witchsky.app/profile/{uri}",
+    "list": "https://witchsky.app/profile/{handle}/lists/{rkey}",
+    "starterPack": "https://witchsky.app/starter-pack/{did}/{rkey}",
+    "favicon": "https://witchsky.app/favicon-32.png"
   }
 ]
