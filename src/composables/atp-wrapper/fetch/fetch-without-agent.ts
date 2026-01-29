@@ -33,11 +33,11 @@ export default async function (
   // Bearer の付与
   const headers = (
     params.bearer === true &&
-    this.data.sessions[this.data.did]?.accessJwt != null
+    this.session?.accessJwt != null
   )
     ? {
       headers: {
-        Authorization: `Bearer ${this.data.sessions[this.data.did].accessJwt}`,
+        Authorization: `Bearer ${this.session.accessJwt}`,
       },
     }
     : undefined
