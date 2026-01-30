@@ -56,6 +56,7 @@ export default async function (this: TIAtpWrapper, targetDid?: string): Promise<
     const result = await this.oauthClient.initCallback(callbackParams)
     session = result?.session ?? null
   }
+
   // 特定のDIDを指定した場合はそのセッションを復元
   else if (targetDid) {
     try {
@@ -65,6 +66,7 @@ export default async function (this: TIAtpWrapper, targetDid?: string): Promise<
       return
     }
   }
+
   // DID指定なしの場合は最後のセッションを復元（initRestoreでコールバック処理をスキップ）
   else {
     const result = await this.oauthClient.initRestore()

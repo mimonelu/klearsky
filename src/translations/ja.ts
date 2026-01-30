@@ -957,6 +957,7 @@ export default () => ({
   "noGeneratorError": "フィードジェネレーターがありません。",
   "noListError": "リストがありません。",
   "noSessionError": "有効なセッションがありません。再ログインしてください。",
+  "reLoginFailed": "再ログイン失敗",
   "offlineError": "インターネットに接続されていません。",
   "parseOgpError": "OGPの解析中にエラーが発生しました。WebページがOGPに対応していない可能性があります。OGP画像を添付せずに再度送信してください。",
   "refreshJwtExpired": "refreshJWTの期限が切れました。再ログインしてください。",

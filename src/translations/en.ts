@@ -957,6 +957,7 @@ export default () => ({
   "noGeneratorError": "No feed generator.",
   "noListError": "No list.",
   "noSessionError": "No active session. Please log in again.",
+  "reLoginFailed": "Re-login failed",
   "offlineError": "No Internet connection.",
   "parseOgpError": "An error occurred while parsing OGP. The web page may not be using OGP. please send again without the OGP image attached.",
   "refreshJwtExpired": "refreshJWT has expired. Please log in again.",

@@ -72,25 +72,14 @@ export function useMainViewAuth (options: Options) {
 
   // OAuth自動ログイン試行
   async function tryOAuthAutoLogin (): Promise<boolean> {
-    try {
-      // 期待するDIDを渡して、そのアカウントのセッションを復元
-      const targetDid = state.mySession?.did
-      const oauthSession = await state.atp.initOAuth(targetDid || undefined)
-      if (oauthSession != null) {
-        state.mySession!.updateSession(oauthSession, "oauth", oauthSession.__service)
-        return true
-      }
-    } catch (error) {
-      $warn("tryOAuthAutoLogin", error)
-      // OAuthセッション復元失敗時はエラーを通知
-      state.openErrorPopup($t("oauthSessionRestoreError"), "MainView/tryOAuthAutoLogin")
-
-      // ログインフォーム用にセッション情報を保持
-      state.loginFormInitialSession = state.mySession?.current
-
-      // セッションを無効化（アカウント履歴は残す）
-      state.mySession?.invalidateCurrentSession()
+    // 期待するDIDを渡して、そのアカウントのセッションを復元
+    const targetDid = state.mySession?.did
+    const oauthSession = await state.atp.initOAuth(targetDid || undefined)
+    if (oauthSession != null) {
+      state.mySession!.updateSession(oauthSession, "oauth", oauthSession.__service)
+      return true
     }
+
     return false
   }
 
@@ -138,7 +127,10 @@ export function useMainViewAuth (options: Options) {
       // セッションは存在するがJWTがない場合（ログアウト済み）
       const session = state.mySession?.current
       if (session && (session.active === false || !session.refreshJwt)) {
-        state.openErrorPopup($t("noSessionError"), "MainView/autoLogin")
+        state.openMessagePopup({
+          title: $t("reLoginFailed"),
+          text: $t("noSessionError"),
+        })
 
         // ログインフォーム用にセッション情報を保持
         state.loginFormInitialSession = session

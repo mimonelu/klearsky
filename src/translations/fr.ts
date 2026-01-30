@@ -957,6 +957,7 @@ export default () => ({
   "noGeneratorError": "Aucun générateur de fil.",
   "noListError": "Aucune liste.",
   "noSessionError": "Aucune session active. Reconnecte-toi.",
+  "reLoginFailed": "Échec de la reconnexion",
   "offlineError": "Pas de connexion Internet.",
   "parseOgpError": "Erreur d'analyse OGP. OGP peut être absent.",
   "refreshJwtExpired": "refreshJWT expiré. Reconnecte-toi.",

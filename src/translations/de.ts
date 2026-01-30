@@ -957,6 +957,7 @@ export default () => ({
   "noGeneratorError": "Kein Feed-Generator.",
   "noListError": "Keine Liste.",
   "noSessionError": "Keine aktive Sitzung. Bitte melden Sie sich erneut an.",
+  "reLoginFailed": "Erneute Anmeldung fehlgeschlagen",
   "offlineError": "Keine Internetverbindung.",
   "parseOgpError": "Ein Fehler ist beim Parsen von OGP aufgetreten. Die Webseite verwendet möglicherweise kein OGP. Bitte senden Sie erneut ohne das angehängte OGP-Bild.",
   "refreshJwtExpired": "refreshJWT ist abgelaufen. Bitte melden Sie sich erneut an.",
