@@ -12,6 +12,8 @@ import UserBox from "@/components/compositions/UserBox.vue"
 import { hasUserBlurLabel } from "@/composables/util/use-content-labels"
 import CONSTS from "@/consts/consts.json"
 
+const emit = defineEmits<{(event: "close"): void}>()
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
@@ -148,6 +150,8 @@ async function onClickNotification (event: Event, notification: TTNotification) 
     mainState.postThreadPopupProps.focusPostUri = notification.uri
     mainState.openPostThreadPopup()
   }
+
+  emit("close")
 }
 
 // マイリストの削除

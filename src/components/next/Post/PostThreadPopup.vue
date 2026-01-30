@@ -36,6 +36,7 @@ function removeThisPost (uri: string) {
       <PostThread
         :posts="mainState.postThreadPopupProps.posts"
         :focusPostUri="mainState.postThreadPopupProps.focusPostUri"
+        @clickNotFocused="close"
         @removeThisPost="removeThisPost"
       />
     </template>

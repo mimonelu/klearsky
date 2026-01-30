@@ -3,7 +3,10 @@ import { nextTick, type ComponentPublicInstance } from "vue"
 import Post from "@/components/compositions/Post.vue"
 import Util from "@/composables/util"
 
-const emit = defineEmits(["removeThisPost"])
+const emit = defineEmits<{
+  (event: "clickNotFocused"): void,
+  (event: "removeThisPost", uri: string): void,
+}>()
 
 const props = defineProps<{
   posts: TTPost[]
@@ -38,6 +41,12 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
     }
   })
 }
+
+function onClick (post: TTPost) {
+  if (post.uri !== props.focusPostUri) {
+    emit("clickNotFocused")
+  }
+}
 </script>
 
 <template>
@@ -49,6 +58,7 @@ function updateThisPostThread (newPosts: Array<TTPost>) {
     :post="post"
     :focusPostUri="focusPostUri"
     :data-has-child="post.uri === posts[postIndex + 1]?.record.reply?.parent?.uri"
+    @click.exact="onClick(post)"
     @updateThisPostThread="updateThisPostThread as unknown"
     @removeThisPost="emit('removeThisPost', post.uri)"
   />
