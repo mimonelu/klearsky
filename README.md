@@ -9,12 +9,13 @@ A powerful, feature-packed web client for the AT Protocol (Bluesky) with extensi
 ## ✨ Features
 
 - **🎨 Rich User Interface**: Clean, modern design with extensive customization options
-- **🌍 Multi-Language Support**: Available in English, Japanese, and French
+- **🌍 Multi-Language Support**: Available in English, Japanese, French, Korean, and German
 - **📱 Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **🔄 Real-Time Sync**: Cross-tab session synchronization using SharedWorker
 - **⚡ Performance Optimized**: Advanced caching, lazy loading, and optimized bundle sizes
 - **🛡️ Privacy-Focused**: Local data storage with optional cloud synchronization
 - **🔧 Advanced Customization**: Extensive settings for feeds, notifications, and UI behavior
+- **🔐 OAuth Support**: Bluesky OAuth authentication
 - **💬 Chat Support**: Integrated Bluesky chat functionality
 - **⚡ Lightning Integration**: Support for Lightning Network "Zap" payments
 - **🏷️ Content Labeling**: Advanced content filtering and moderation tools
@@ -89,7 +90,7 @@ src/
 │   ├── atp-wrapper/    # AT Protocol API abstraction layer
 │   └── main-state/     # Global state management modules
 ├── views/              # Page-level Vue components
-├── translations/       # i18n translation files (en, ja, fr)
+├── translations/       # i18n translation files (en, ja, fr, ko, de)
 ├── consts/            # Application constants and configuration
 ├── plugins/           # Vue plugins and directives
 └── scss/              # Global styles and variables
