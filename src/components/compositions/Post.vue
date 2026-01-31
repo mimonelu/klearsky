@@ -1,3 +1,8 @@
+<script lang="ts">
+// デカ絵文字
+const EMOJI_ONLY_REGEX = /^(?:(?:\p{Emoji_Presentation}|\p{Extended_Pictographic})[\uFE0E\uFE0F]?\p{Emoji_Modifier}?(?:\u200D(?:\p{Emoji_Presentation}|\p{Extended_Pictographic})[\uFE0E\uFE0F]?\p{Emoji_Modifier}?)*){1,7}$/u
+</script>
+
 <script lang="ts" setup>
 /* eslint-disable vue/no-mutating-props */
 import { computed, inject, onMounted, onBeforeUnmount, reactive, ref } from "vue"
@@ -104,8 +109,7 @@ const indexedAt =
   ""
 
 // デカ絵文字
-const EMOJI_REGEX = /^(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}){1,7}$/u
-const isTextOnlyEmoji = text.value?.match(EMOJI_REGEX) != null
+const isTextOnlyEmoji = (text.value?.length ?? 0) <= 80 && EMOJI_ONLY_REGEX.test(text.value ?? "")
 
 // メディア - 画像
 const embeddedImages: readonly TTImage[] =
