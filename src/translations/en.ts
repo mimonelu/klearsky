@@ -865,21 +865,14 @@ export default () => ({
   "officialAppProfile": "Official App - Profile",
   "officialAppPost": "Official App - Post",
   "officialAppRss": "Official App - RSS",
-  "witchskyApp": "Witchsky",
-  "witchskyProfile": "Witchsky - Profile",
-  "witchskyPost": "Witchsky - Post",
-  "witchskyRss": "Witchsky - RSS",
-  "ouranosApp": "Ouranos",
   "atprotoAtApp": "atproto.at",
-  "atprotoBrowserApp": "ATProto Browser",
   "pdslsApp": "PDSls",
   "wrapperApp": "Bluesky Wrapper",
   "tokimekiApp": "TOKIMEKI Bluesky",
+  "witchskyApp": "Witchsky",
   "uniresolverApp": "Universal Resolver",
   "didApp": "did:plc Directory",
   "oplogsApp": "PLC operation logs",
-  "atlasApp": "BSky Experiments",
-  "atscanApp": "ATScan",
 
   // ============================================================================
   // LIST MENTIONS

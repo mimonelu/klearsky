@@ -28,18 +28,20 @@
     "profile": "separator"
   },
   {
-    "name": "ouranosApp",
-    "list": "https://useouranos.app/dashboard/user/{handle}/lists/{rkey}?uri={uri}",
-    "post": "https://useouranos.app/dashboard/user/{handle}/post/{rkey}",
-    "profile": "https://useouranos.app/dashboard/user/{handle}",
-    "favicon": "https://useouranos.app/ouranos.svg"
-  },
-  {
     "name": "tokimekiApp",
     "list": "https://tokimeki.blue/profile/{did}/lists/{rkey}",
     "post": "https://tokimeki.blue/profile/{handle}/post/{rkey}",
     "profile": "https://tokimeki.blue/profile/{handle}",
     "favicon": "https://tokimeki.blue/favicon.png"
+  },
+  {
+    "name": "witchskyApp",
+    "generator": "https://witchsky.app/profile/{uri}",
+    "list": "https://witchsky.app/profile/{handle}/lists/{rkey}",
+    "post": "https://witchsky.app/profile/{did}/post/{rkey}",
+    "profile": "https://witchsky.app/profile/{did}",
+    "starterPack": "https://witchsky.app/starter-pack/{did}/{rkey}",
+    "favicon": "https://witchsky.app/favicon-32.png"
   },
   {
     "post": "separator",
@@ -67,6 +69,11 @@
     "profile": "https://boat.kelinci.net/plc-oplogs?q={did}"
   },
   {
+    "list": "separator",
+    "post": "separator",
+    "profile": "separator"
+  },
+  {
     "name": "atprotoAtApp",
     "generator": "https://atproto.at/viewer?uri={did}/app.bsky.feed.generator/{rkey}",
     "list": "https://atproto.at/viewer?uri={did}/app.bsky.graph.list/{rkey}",
@@ -76,14 +83,6 @@
     "favicon": "https://atproto.at/favicon.ico"
   },
   {
-    "name": "atprotoBrowserApp",
-    "generator": "https://atproto-browser.vercel.app/at/{did}/app.bsky.feed.generator/{rkey}",
-    "list": "https://atproto-browser.vercel.app/at/{did}/app.bsky.graph.list/{rkey}",
-    "post": "https://atproto-browser.vercel.app/at/{did}/app.bsky.feed.post/{rkey}",
-    "profile": "https://atproto-browser.vercel.app/at/{did}",
-    "starterPack": "https://atproto-browser.vercel.app/at/{did}/app.bsky.graph.starterpack/{rkey}"
-  },
-  {
     "name": "pdslsApp",
     "generator": "https://pdsls.dev/at/{did}/app.bsky.feed.generator/{rkey}",
     "list": "https://pdsls.dev/at/{did}/app.bsky.graph.list/{rkey}",
@@ -91,18 +90,5 @@
     "profile": "https://pdsls.dev/at/{did}",
     "starterPack": "https://pdsls.dev/at/{did}/app.bsky.graph.starterpack/{rkey}",
     "favicon": "https://pdsls.dev/favicon.ico"
-  },
-  {
-    "name": "atlasApp",
-    "post": "https://bsky.jazco.dev/thread/view?author_did={did}&post={rkey}",
-    "profile": "https://bsky.jazco.dev/atlas?s={handle}",
-    "favicon": "https://bsky.jazco.dev/vite.svg"
-  },
-  {
-    "name": "witchskyApp",
-    "generator": "https://witchsky.app/profile/{uri}",
-    "list": "https://witchsky.app/profile/{handle}/lists/{rkey}",
-    "starterPack": "https://witchsky.app/starter-pack/{did}/{rkey}",
-    "favicon": "https://witchsky.app/favicon-32.png"
   }
 ]
