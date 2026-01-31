@@ -84,6 +84,7 @@ export function useMainViewAuth (options: Options) {
   }
 
   async function autoLogin () {
+    state.mySession?.restore()
     const currentAuthType = state.mySession?.authType
     const hasOAuthCallback = new URLSearchParams(location.search).has("code")
 

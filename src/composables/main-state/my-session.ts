@@ -23,9 +23,6 @@ export default class MySession {
 
     // AtpWrapper に MySession への参照を設定
     mainState.atp.setMySession(this)
-
-    // セッション復元
-    this.restore()
   }
 
   // ========== セッション状態管理 ==========
