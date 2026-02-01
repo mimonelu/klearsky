@@ -2057,7 +2057,7 @@ function toggleOldestQuotedPostDisplay () {
       width: calc(100% + var(--post-padding) * 2);
 
       .thumbnail,
-      video {
+      .video-player {
         border: unset;
         border-radius: unset;
       }
@@ -2074,9 +2074,14 @@ function toggleOldestQuotedPostDisplay () {
   display: flex;
   grid-gap: 0.5rem;
 
-  & > .thumbnail:deep() {
-    & > img {
+  .thumbnail:deep() {
+    & > .lazy-image {
       height: 4rem;
+    }
+
+    & > .alt-button {
+      font-size: 0.625em;
+      white-space: nowrap;
     }
 
     & > .loader {
@@ -2088,7 +2093,7 @@ function toggleOldestQuotedPostDisplay () {
 .video-container {
   position: relative;
 
-  & > video {
+  .video-player {
     background-color: rgb(var(--fg-color), 0.125);
     border: 1px solid rgb(var(--fg-color), 0.25);
     border-radius: var(--border-radius-middle);
