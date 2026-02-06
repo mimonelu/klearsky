@@ -1,90 +1,148 @@
-import Util from "@/composables/util"
-
 export default function (responses: Array<any>) {
-  // __custom プロパティの作成
-  // TODO: 確実にポスト直下に作成するようにすること
-  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if ((key === "cid" || key === "record") && child != null && parent.__custom == null) {
-      parent.__custom = {}
-    }
-  })
-
-  // PARENT.embeds[0] -> PARENT.embed
-  // おそらく三段階目の引用RP
-  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "embeds" && child?.[0] != null && parent.embed == null) {
-      // parent.embed = Util.cloneJson(child[0])
-      parent.embed = child[0]
-      parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
-    }
-  })
-
-  // PARENT.value.embed -> PARENT.embed
-  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "value" && child?.embed != null && parent.embed == null) {
-      // parent.embed = Util.cloneJson(child.embed)
-      parent.embed = child.embed
-      parent.embed.__comment = "❗ This 'embed' was duplicated by Klearsky."
-    }
-  })
-
-  // PARENT.embed.media.external/images -> PARENT.embed.external/images
-  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "media") {
-      if (child?.external != null && parent.external == null) {
-        parent.external = child.external // Util.cloneJson(child.external)
-        parent.external.__comment = "❗ This 'external' was duplicated by Klearsky."
+  // sanitizePost
+  for (const response of responses) {
+    // Feed
+    if (
+      response?.post != null ||
+      response?.reply != null
+    ) {
+      if (response.post != null) {
+        sanitizePost(response.post)
       }
-      if (child?.images != null && parent.images == null) {
-        parent.images = child.images // Util.cloneJson(child.images)
-        parent.images.__comment = "❗ This 'images' was duplicated by Klearsky."
+      if (response.reply?.root != null) {
+        sanitizePost(response.reply.root)
+      }
+      if (response.reply?.parent != null) {
+        sanitizePost(response.reply.parent)
       }
     }
-  })
 
-  // PARENT.record.record -> PARENT.record
-  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if (key === "record" && child?.record != null) {
-      parent.record = child.record // Util.cloneJson(child.record)
-      parent.record.__comment = "❗ This 'record' was duplicated by Klearsky."
+    // Post
+    else {
+      sanitizePost(response)
     }
-  })
 
-  // PARENT.record/value.embed.external/images -> PARENT.embed.external/images
-  Util.traverseJson(responses, (key: string, child: any, parent: any) => {
-    if ((key === "record" || key === "value") && child?.embed != null) {
-      /* // TODO: 生レコード用。不要であれば削除すること
-      if (child.embed.external != null && parent.embed?.external == null) {
-        if (parent.embed == null) parent.embed = {}
-        parent.embed.external = Util.cloneJson(child.embed.external)
-        parent.embed.external.__comment = "❗ This 'external' was duplicated by Klearsky."
-      }
-      */
-      if (child.embed.images != null) {
-        /* // TODO: 生レコード用。不要であれば削除すること
-        if (parent.embed?.images == null) {
-          if (parent.embed == null) parent.embed = {}
-          parent.embed.images = Util.cloneJson(child.embed.images)
-          parent.embed.images.__comment = "❗ This 'images' was duplicated by Klearsky."
-        }
-        */
-
-        // アニメーション画像向けに BlobRef をコピー
-        if (parent.embed?.images != null) {
-          parent.embed.images.forEach((image: any, index: number) => {
-            if (image.image == null && child.embed.images[index]?.image != null)
-              image.image = child.embed.images[index].image
-              image.__comment = "❗ This 'image' was duplicated by Klearsky."
-          })
-        }
-      }
+    // `reason`
+    if (
+      response.post != null &&
+      response.reason != null &&
+      response.reason.$type?.startsWith("app.bsky.feed.defs#reason")
+    ) {
+      response.post.__custom.reason = response.reason
     }
-  })
+  }
+}
 
-  // Reason
-  Util.traverseJson(responses, (key: string, value: any, parent: any) => {
-    if (key === "reason" && value != null && parent?.post != null) {
-      parent.post.__custom.reason = value
+function sanitizePost (post: any) {
+  // `post.__custom` の追加
+  if (post.__custom == null) {
+    post.__custom = {}
+  }
+
+  // 引用RP - `embeds[0]` -> `embed`
+  if (post.embed?.record?.embeds?.[0] != null) {
+    post.embed.record.embed = post.embed.record.embeds[0]
+    delete post.embed.record.embeds
+  }
+
+  // メディア付き引用RP - `embeds[0]` -> `embed`
+  if (post.embed?.record?.record?.embeds?.[0] != null) {
+    post.embed.record.record.embed = post.embed.record.record.embeds[0]
+    delete post.embed.record.record.embeds
+  }
+
+  // メディア付き引用RP - `record.record` -> `record` - 2階層目
+  if (post.embed?.record?.record?.$type === "app.bsky.embed.record#viewRecord") {
+    post.embed.record = post.embed.record.record
+
+    // `post.__custom` の追加
+    if (post.embed.__custom == null) {
+      post.embed.__custom = {}
     }
-  })
+  }
+
+  // メディア付き引用RP - `record.record` -> `record` - 3階層目
+  if (post.embed?.record?.embed?.record?.record?.$type === "app.bsky.embed.record#viewRecord") {
+    post.embed.record.embed.record = post.embed.record.embed.record.record
+
+    // `post.__custom` の追加
+    if (post.embed.record.embed.__custom == null) {
+      post.embed.record.embed.__custom = {}
+    }
+  }
+
+  // 引用RP - `value` -> `record` - 2階層目
+  if (post.embed?.record?.value?.$type === "app.bsky.feed.post") {
+    post.embed.record.record = post.embed.record.value
+    delete post.embed.record.value
+
+    // `post.__custom` の追加
+    if (post.embed.record.__custom == null) {
+      post.embed.record.__custom = {}
+    }
+  }
+
+  // 引用RP - `value` -> `record` - 3階層目
+  if (post.embed?.record?.embed?.record?.value?.$type === "app.bsky.feed.post") {
+    post.embed.record.embed.record.record = post.embed.record.embed.record.value
+    delete post.embed.record.embed.record.value
+
+    // `post.__custom` の追加
+    if (post.embed.record.embed.record.__custom == null) {
+      post.embed.record.embed.record.__custom = {}
+    }
+  }
+
+  // 通常ポスト - アニメーション画像向けに BlobRef をコピー
+  if (
+    post.record?.embed?.images != null &&
+    post.embed?.images != null
+  ) {
+    copyImages(
+      post.record.embed.images,
+      post.embed.images
+    )
+  }
+
+  // メディア付き引用RP - アニメーション画像向けに BlobRef をコピー
+  if (
+    post.record?.embed?.media?.images != null &&
+    post.embed?.media?.images != null
+  ) {
+    copyImages(
+      post.record.embed.media.images,
+      post.embed.media.images
+    )
+  }
+
+  // 通常ポスト内メディア付き引用RP - アニメーション画像向けに BlobRef をコピー
+  if (
+    post.embed?.record?.record?.embed?.images != null &&
+    post.embed?.record?.embed?.images != null
+  ) {
+    copyImages(
+      post.embed.record.record.embed.images,
+      post.embed.record.embed.images
+    )
+  }
+
+  // 通常ポスト内メディア付き引用RP - アニメーション画像向けに BlobRef をコピー - 2階層目
+  if (
+    post.embed?.record?.record?.embed?.media?.images != null &&
+    post.embed?.record?.embed?.media?.images != null
+  ) {
+    copyImages(
+      post.embed.record.record.embed.media.images,
+      post.embed.record.embed.media.images
+    )
+  }
+}
+
+function copyImages (src: any[], dst: any[]) {
+  for (let i = 0; i < src.length; i ++) {
+    const image = src[i]
+    if (dst[i] != null) {
+      dst[i].image = image.image
+    }
+  }
 }

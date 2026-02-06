@@ -5,7 +5,7 @@ const EMOJI_ONLY_REGEX = /^(?:(?:\p{Emoji_Presentation}|\p{Extended_Pictographic
 
 <script lang="ts" setup>
 /* eslint-disable vue/no-mutating-props */
-import { computed, inject, onMounted, onBeforeUnmount, reactive, ref } from "vue"
+import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, type Ref } from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { RichText } from "@atproto/api"
 import { differenceInDays } from "date-fns"
@@ -36,6 +36,8 @@ import Util from "@/composables/util"
 import { useContentLabels, hasUserBlurLabel } from "@/composables/util/use-content-labels"
 import CONSTS from "@/consts/consts.json"
 import OWN_DOMAIN from "@/consts/own-domain"
+
+type TTQuotePostType = undefined | "NotFound" | "Detached" | "Blocked" | "Record"
 
 const emit = defineEmits<{(event: string, params?: any): void}>()
 
@@ -96,52 +98,72 @@ const postElement = ref()
 const processing = ref(false)
 
 // 本文
-const text = ref(
-  props.post.record?.text ??
-  props.post.value?.text
-)
+const text = ref(props.post.record?.text)
 
 // 投稿日時
 const indexedAt =
   props.post.record?.createdAt ??
-  props.post.value?.createdAt ??
   props.post.indexedAt ??
   ""
 
 // デカ絵文字
-const isTextOnlyEmoji = (text.value?.length ?? 0) <= 80 && EMOJI_ONLY_REGEX.test(text.value ?? "")
+const isTextOnlyEmoji =
+  (text.value?.length ?? 0) <= 80 &&
+  EMOJI_ONLY_REGEX.test(text.value ?? "")
+
+// embed
+const embed =
+  props.post.embed ??
+  props.post.record?.embed
+
+const embedRecord = embed?.record
+
+// リンクカード
+const linkCard: undefined | Readonly<TTExternal> = embed?.external ?? embed?.media?.external
+
+// リンクカードの存在
+const hasLinkCard = linkCard != null
+
+// フィードカードの存在
+const hasFeedCard = embedRecord?.$type === "app.bsky.feed.defs#generatorView"
+
+// リストカードの存在
+const hasListCard = embedRecord?.$type === "app.bsky.graph.defs#listView"
+
+// スターターパックカードの存在
+const hasStarterPack = embedRecord?.record?.$type === "app.bsky.graph.starterpack"
 
 // メディア - 画像
-const embeddedImages: readonly TTImage[] =
-  props.post.embed?.images ??
-  props.post.record?.embed?.images ??
+const embedImages: readonly TTImage[] =
+  embed?.images ??
+  (embed?.media as any)?.images ??
+  props.post.record?.embed?.images ?? // 3階層目の画像
   []
 
 // メディア - 動画
-const embeddedVideo: undefined | Readonly<TIVideo> = (() => {
-  const embed = props.post.embed ?? props.post.record?.embed
-  return embed == null
-    ? undefined
-    : embed.$type?.startsWith("app.bsky.embed.video")
-      ? embed as unknown as TIVideo
-      : (embed.media as unknown as TIVideo)?.$type?.startsWith("app.bsky.embed.video")
-        ? embed.media as unknown as TIVideo
-        : undefined
-})()
+const embedVideo: undefined | Readonly<TIVideo>  =
+  embed?.$type?.startsWith("app.bsky.embed.video")
+    ? embed as unknown as TIVideo
+    : embed?.media?.$type?.startsWith("app.bsky.embed.video")
+      ? embed.media as unknown as TIVideo
+      : undefined
+
+// メディア - 画像または動画を持つかどうか
+const hasMedia = embedImages.length > 0 || embedVideo != null
 
 // メディア - 動画のアスペクト比
 // `imageMaxHeightRatio` を参照しているため computed
-const embeddedVideoAspectRatio = computed((): string => {
+const embedVideoAspectRatio = computed((): string => {
   if (
-    embeddedVideo?.aspectRatio == null ||
-    embeddedVideo.aspectRatio.width == null ||
-    embeddedVideo.aspectRatio.height == null
+    embedVideo?.aspectRatio == null ||
+    embedVideo.aspectRatio.width == null ||
+    embedVideo.aspectRatio.height == null
   ) {
     return "unset"
   }
   const aspectHeight =
-    embeddedVideo.aspectRatio.height /
-    embeddedVideo.aspectRatio.width
+    embedVideo.aspectRatio.height /
+    embedVideo.aspectRatio.width
   if (!mainState.currentSetting.imageMaxHeightRatio) {
     return `1 / ${aspectHeight}`
   }
@@ -165,10 +187,12 @@ const shouldDisplayMedia = computed(() => {
   if (setting === "recommended") {
     return (
       props.post.author?.did === mainState.atp.session?.did ||
-      props.post.author.viewer?.following != null ||
+      props.post.author?.viewer?.following != null ||
       props.post.__custom?.reason?.by.viewer?.following != null ||
-      (mainState.currentPath.startsWith("/profile/") &&
-      props.post.author?.did === mainState.currentProfile?.did)
+      (
+        mainState.currentPath.startsWith("/profile/") &&
+        props.post.author?.did === mainState.currentProfile?.did
+      )
     )
   }
 
@@ -183,50 +207,42 @@ const shouldDisplayMedia = computed(() => {
 // メディア - メディアの折り畳み状態
 const foldingMedia = ref(!shouldDisplayMedia.value)
 
-const linkCard: undefined | Readonly<TTExternal> =
-  props.post.embed?.external ??
-  props.post.record?.embed?.external
+// 引用リポストの種類
+const quotePostType: Ref<TTQuotePostType> = ref(updateQuotePostType())
 
-const embedRecord: undefined | Readonly<TIEmbed["record"]> =
-  props.post.embed?.record ??
-  props.post.record?.embed?.record
-
-const hasMedia = embeddedImages.length > 0 || embeddedVideo != null
-
-const hasLinkCard = linkCard != null && props.position !== "slim"
-
-const hasFeedCard = embedRecord?.$type === "app.bsky.feed.defs#generatorView"
-
-const hasListCard = embedRecord?.$type === "app.bsky.graph.defs#listView"
-
-const hasStarterPackCard = embedRecord?.$type === "app.bsky.graph.starterpack"
-
-function makePseudoStarterPack (): undefined | TIStarterPack {
-  const uri =
-    props.post.record?.embed?.record?.uri ??
-    props.post.value?.embed?.record?.uri ??
-    ""
-  const did = (uri.match(/at:\/\/([^/]+)/) ?? ["", ""])[1]
-  return {
-    uri,
-    cid:
-      props.post.record?.embed?.record?.cid ??
-      props.post.value?.embed?.record?.cid ??
-      "",
-    record: props.post.embed?.record as any,
-    creator: {
-      did,
-      displayName: "",
-      handle: "",
-      viewer: { muted: false },
-    },
-    listItemCount: undefined,
-    joinedWeekCount: undefined,
-    joinedAllTimeCount: undefined,
-    labels: undefined,
-    indexedAt: props.post.embed?.record?.createdAt as undefined | string,
+function updateQuotePostType (): TTQuotePostType {
+  const embed =
+    props.post.embed ??
+    props.post.record?.embed
+  if (
+    embed?.record?.$type === "app.bsky.embed.record#viewRecord" ||
+    embed?.record?.record?.$type === "app.bsky.embed.record#viewRecord"
+  ) {
+    return "Record"
   }
+  if (
+    embed?.record?.$type === "app.bsky.embed.record#viewNotFound" ||
+    embed?.record?.record?.$type === "app.bsky.embed.record#viewNotFound"
+  ) {
+    return "NotFound"
+  }
+  if (
+    embed?.record?.$type === "app.bsky.embed.record#viewDetached" ||
+    embed?.record?.record?.$type === "app.bsky.embed.record#viewDetached"
+  ) {
+    return "Detached"
+  }
+  if (
+    embed?.record?.$type === "app.bsky.embed.record#viewBlocked" ||
+    embed?.record?.record?.$type === "app.bsky.embed.record#viewBlocked"
+  ) {
+    return "Blocked"
+  }
+  return undefined
 }
+
+// 引用リポストのURI
+const quotePostUri = embedRecord?.uri ?? embedRecord?.record?.uri as undefined | string
 
 // 最古の引用元ポストかどうか
 const isOldestQuotedPost = (props.level ?? 1) >= 3 - 1
@@ -352,16 +368,16 @@ const isWordMute = computed((): boolean => {
   return WordMuteScript.includes(
     contentRichText.value,
     mainState.currentSetting.wordMute,
-    props.post.author.viewer?.following != null
+    props.post.author?.viewer?.following != null
   )
 })
 
 // リポストミュート - リポストミュートの判定
 const isRepostMute = computed((): boolean => {
-  if (props.post.__custom.reason?.$type !== "app.bsky.feed.defs#reasonRepost") {
+  if (props.post.__custom?.reason?.$type !== "app.bsky.feed.defs#reasonRepost") {
     return false
   }
-  const repostByDid = props.post.__custom.reason?.by?.did
+  const repostByDid = props.post.__custom?.reason?.by?.did
   if (repostByDid == null) {
     return false
   }
@@ -684,8 +700,8 @@ async function onForceTranslate () {
 }
 
 function onTranslateVideoAlt () {
-  if (embeddedVideo?.alt != null) {
-    Util.translateInExternalService(embeddedVideo.alt)
+  if (embedVideo?.alt != null) {
+    Util.translateInExternalService(embedVideo.alt)
   }
 }
 
@@ -735,7 +751,9 @@ async function updatePostThread () {
 
   // ポスト編集後に内容を更新する
   // このために text を ref にしている
-  text.value = props.post.record.text
+  text.value = props.post.record?.text
+
+  quotePostType.value = updateQuotePostType()
 }
 
 async function createCustomBookmark (uri: string, cid: string) {
@@ -790,13 +808,14 @@ async function deleteCustomBookmark (uri: string) {
 
 // 画像ポップアップ
 function openImagePopup (imageIndex: number) {
-  if (embeddedImages[imageIndex].fullsize == null &&
-      embeddedImages[imageIndex].image == null
+  if (
+    embedImages[imageIndex].fullsize == null &&
+    embedImages[imageIndex].image == null
   ) {
     return
   }
-  mainState.imagePopupProps.did = props.post.author.did
-  mainState.imagePopupProps.images = embeddedImages.map((image: TTImage) => {
+  mainState.imagePopupProps.did = props.post.author?.did
+  mainState.imagePopupProps.images = embedImages.map((image: TTImage) => {
     const result: TTImagePopupPropsImages = {
       smallUri: image.thumb ?? "/img/void.png",
       largeUri: image.fullsize ?? "/img/void.png",
@@ -814,7 +833,7 @@ function openImagePopup (imageIndex: number) {
 
     return result
   })
-  mainState.imagePopupProps.alts = embeddedImages.map((image: TTImage) => image.alt)
+  mainState.imagePopupProps.alts = embedImages.map((image: TTImage) => image.alt)
   mainState.imagePopupProps.index = imageIndex
   mainState.imagePopupProps.display = true
 }
@@ -1212,7 +1231,7 @@ function toggleOldestQuotedPostDisplay () {
             <template v-if="forceHideMedia">
               <div class="omit-images">
                 <SVGIcon
-                  v-for="_, index of embeddedImages"
+                  v-for="_, index of embedImages"
                   :key="index"
                   name="image"
                 />
@@ -1239,18 +1258,18 @@ function toggleOldestQuotedPostDisplay () {
               <template v-if="shouldDisplayMedia || (!shouldDisplayMedia && !foldingMedia)">
                 <!-- 画像 -->
                 <div
-                  v-if="embeddedImages.length > 0"
+                  v-if="embedImages.length > 0"
                   class="quad-images"
-                  :data-number-of-images="embeddedImages.length"
+                  :data-number-of-images="embedImages.length"
                 >
                   <div
-                    v-for="image, imageIndex of embeddedImages"
+                    v-for="image, imageIndex of embedImages"
                     :key="imageIndex"
                     class="quad-image"
                   >
                     <Thumbnail
                       :image="image"
-                      :did="post.author.did"
+                      :did="post.author?.did"
                       :hasTranslateLink="hasOtherLanguages"
                       @click.stop="openImagePopup(imageIndex)"
                     />
@@ -1259,16 +1278,16 @@ function toggleOldestQuotedPostDisplay () {
 
                 <!-- 動画 -->
                 <div
-                  v-if="embeddedVideo != null"
+                  v-if="embedVideo != null"
                   class="video-container"
                 >
                   <VideoPlayer
-                    :playlist="embeddedVideo.playlist"
-                    :did="post.author.did"
-                    :cid="embeddedVideo.cid ?? embeddedVideo.video?.ref?.toString()"
-                    :poster="embeddedVideo.thumbnail"
+                    :playlist="embedVideo.playlist"
+                    :did="post.author?.did"
+                    :cid="embedVideo.cid ?? embedVideo.video?.ref?.toString()"
+                    :poster="embedVideo.thumbnail"
                     :preload="mainState.currentSetting.videoPreload"
-                    :style="{ 'aspect-ratio': embeddedVideoAspectRatio }"
+                    :style="{ 'aspect-ratio': embedVideoAspectRatio }"
                     @updateVideoType="(videoType) => updateVideoType(videoType as string)"
                     @click.stop
                   />
@@ -1281,10 +1300,10 @@ function toggleOldestQuotedPostDisplay () {
                     class="video-container__message"
                   >{{ $t("videoIsNone") }}</p>
                   <HtmlText
-                    v-if="embeddedVideo.alt"
+                    v-if="embedVideo.alt"
                     class="video-container__alt"
                     dir="auto"
-                    :text="embeddedVideo.alt"
+                    :text="embedVideo.alt"
                     :hasTranslateLink="hasOtherLanguagesForText"
                     @onActivateHashTag="(tag) => onActivateHashTag(tag as string)"
                     @translate="onTranslateVideoAlt"
@@ -1295,14 +1314,14 @@ function toggleOldestQuotedPostDisplay () {
             <template v-else>
               <!-- イメージリスト（通知ポップアップ） -->
               <div
-                v-if="embeddedImages.length > 0"
+                v-if="embedImages.length > 0"
                 class="image-list"
               >
                 <Thumbnail
-                  v-for="image, imageIndex of embeddedImages"
+                  v-for="image, imageIndex of embedImages"
                   :key="imageIndex"
                   :image="image"
-                  :did="post.author.did"
+                  :did="post.author?.did"
                   @click.stop="openImagePopup(imageIndex)"
                 />
               </div>
@@ -1311,7 +1330,7 @@ function toggleOldestQuotedPostDisplay () {
 
           <!-- リンクカード -->
           <LinkCard
-            v-if="hasLinkCard"
+            v-if="hasLinkCard && position !== 'slim'"
             :external="linkCard as TTExternal"
             :layout="mainState.currentSetting.linkcardLayout ?? 'vertical'"
             :displayImage="!forceHideMedia"
@@ -1322,7 +1341,7 @@ function toggleOldestQuotedPostDisplay () {
           <!-- フィードカード -->
           <FeedCard
             v-if="hasFeedCard"
-            :generator="post.embed?.record as unknown as TTFeedGenerator"
+            :generator="embedRecord as unknown as TTFeedGenerator"
             :menuDisplay="true"
             :detailDisplay="false"
             :orderButtonDisplay="false"
@@ -1335,7 +1354,7 @@ function toggleOldestQuotedPostDisplay () {
           <!-- リストカード -->
           <ListCard
             v-if="hasListCard"
-            :list="(post.embed as any).record"
+            :list="embedRecord as unknown as TTList"
             :menuDisplay="true"
             :detailDisplay="false"
             :orderButtonDisplay="false"
@@ -1347,8 +1366,8 @@ function toggleOldestQuotedPostDisplay () {
 
           <!-- スターターパックカード -->
           <StarterPackCard
-            v-if="hasStarterPackCard"
-            :starterPack="makePseudoStarterPack()"
+            v-if="hasStarterPack"
+            :starterPack="embedRecord as unknown as TIStarterPack"
             :menuDisplay="true"
             :detailDisplay="false"
             :creatorDisplay="true"
@@ -1367,114 +1386,104 @@ function toggleOldestQuotedPostDisplay () {
         :unauthenticatedDisplay="false"
         :harmfulDisplay="true"
         :customDisplay="false"
-        :userCreatedAt="post.author.createdAt"
+        :userCreatedAt="post.author?.createdAt"
         :postIndexedAt="post.indexedAt"
         :bridgyOriginalUrl="(post.record as any)?.bridgyOriginalUrl"
       />
 
+      <!-- ポストボディ - 引用リポスト - 見つからない -->
+      <div
+        v-if="quotePostType === 'NotFound'"
+        class="textlabel repost"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("postNotFound") }}
+        </div>
+      </div>
+
+      <!-- ポストボディ - 引用リポスト - 切断時 -->
+      <template v-else-if="quotePostType === 'Detached' && !forceHideQuoteRepost">
+        <!-- ポストボディ - 引用リポスト - 切断時 - 自身のポスト -->
+        <RouterLink
+          v-if="quotePostUri?.startsWith(`at://${mainState.atp.session?.did}/`)"
+          :to="{ name: 'post', query: { uri: quotePostUri } }"
+          class="textlabel repost"
+          @click.prevent.stop
+        >
+          <div class="textlabel__text--alert">
+            <SVGIcon name="alert" />{{ $t("postDetachedBySelf") }}
+          </div>
+        </RouterLink>
+
+        <!-- ポストボディ - 引用リポスト - 切断時 - 他ユーザーのポスト -->
+        <div
+          v-else
+          class="textlabel repost"
+        >
+          <div class="textlabel__text">
+            <SVGIcon name="alert" />{{ $t("postDetachedByOther") }}
+          </div>
+        </div>
+      </template>
+
+      <!-- ポストボディ - 引用リポスト - ブロック中／被ブロック中 -->
+      <div
+        v-else-if="quotePostType === 'Blocked'"
+        class="textlabel repost"
+      >
+        <div class="textlabel__text">
+          <SVGIcon name="alert" />{{ $t("postBlocked") }}
+        </div>
+      </div>
+
       <!-- ポストボディ - 引用リポスト -->
-      <template v-if="post.embed?.record != null">
-        <!-- ポストボディ - 引用リポスト - 見つからない -->
+      <template v-else-if="quotePostType === 'Record' && !forceHideQuoteRepost">
+        <!-- 最古の引用元ポストトグル -->
         <div
-          v-if="post.embed.record.$type === 'app.bsky.embed.record#viewNotFound'"
-          class="textlabel repost"
+          v-if="isOldestQuotedPost"
+          class="oldest-quoted-post-toggle"
         >
-          <div class="textlabel__text">
-            <SVGIcon name="alert" />{{ $t("postNotFound") }}
-          </div>
+          <button
+            class="button--plain"
+            @click.prevent.stop="toggleOldestQuotedPostDisplay"
+          >
+            <template v-if="post.__custom?.oldestQuotedPostDisplay">
+              <SVGIcon name="cursorUp" />
+              <span>{{ $t("hideOldestQuotedPost") }}</span>
+            </template>
+            <template v-else>
+              <SVGIcon name="cursorDown" />
+              <span>{{ $t("showOldestQuotedPost") }}</span>
+            </template>
+          </button>
         </div>
 
-        <!-- ポストボディ - 引用リポスト - 切断時 -->
-        <template v-else-if="
-          post.embed.record.$type === 'app.bsky.embed.record#viewDetached' &&
-          !forceHideQuoteRepost
-        ">
-          <!-- ポストボディ - 引用リポスト - 切断時 - 自身のポスト -->
-          <RouterLink
-            v-if="post.embed.record.uri.startsWith(`at://${mainState.atp.session?.did}/`)"
-            :to="{ name: 'post', query: { uri: post.embed.record.uri } }"
-            class="textlabel repost"
-            @click.prevent.stop
-          >
-            <div class="textlabel__text--alert">
-              <SVGIcon name="alert" />{{ $t("postDetachedBySelf") }}
-            </div>
-          </RouterLink>
-
-          <!-- ポストボディ - 引用リポスト - 切断時 - 他ユーザーのポスト -->
-          <div
-            v-else
-            class="textlabel repost"
-          >
-            <div class="textlabel__text">
-              <SVGIcon name="alert" />{{ $t("postDetachedByOther") }}
-            </div>
-          </div>
-        </template>
-
-        <!-- ポストボディ - 引用リポスト - ブロック中／被ブロック中 -->
-        <div
-          v-else-if="
-            post.embed.record.$type === 'app.bsky.embed.record#viewBlocked' ||
-            post.embed.record.author?.viewer?.blockedBy ||
-            post.embed.record.author?.viewer?.blocking != null
-          "
-          class="textlabel repost"
-        >
-          <div class="textlabel__text">
-            <SVGIcon name="alert" />{{ $t("postBlocked") }}
-          </div>
-        </div>
-
-        <!-- ポストボディ - 引用リポスト -->
-        <template v-else-if="
-          post.embed.record.$type === 'app.bsky.embed.record#viewRecord' &&
-          !forceHideQuoteRepost
-        ">
-          <!-- 最古の引用元ポストトグル -->
-          <div
-            v-if="isOldestQuotedPost"
-            class="oldest-quoted-post-toggle"
-          >
-            <button
-              class="button--plain"
-              @click.prevent.stop="toggleOldestQuotedPostDisplay"
-            >
-              <template v-if="post.__custom?.oldestQuotedPostDisplay">
-                <SVGIcon name="cursorUp" />
-                <span>{{ $t("hideOldestQuotedPost") }}</span>
-              </template>
-              <template v-else>
-                <SVGIcon name="cursorDown" />
-                <span>{{ $t("showOldestQuotedPost") }}</span>
-              </template>
-            </button>
-          </div>
-
-          <div v-if="
+        <div v-if="
+          embedRecord != null &&
+          (
             !isOldestQuotedPost ||
             (
               isOldestQuotedPost &&
               post.__custom?.oldestQuotedPostDisplay
             )
-          "
-            class="repost"
-          >
-            <Post
-              :level="(level ?? 1) + 1"
-              :position="position === 'chatMessage'
-                ? 'postInPost'
-                : position === 'slim'
-                  ? 'slim'
-                  : 'postInPost'
-              "
-              :post="post.embed.record as TTPost"
-              :hasReplyIcon="post.embed.record.value?.reply != null"
-              :noLink="position === 'chatMessage' ? false : noLink"
-              @click="$emit('click', $event)"
-            />
-          </div>
-        </template>
+          )
+        "
+          class="repost"
+        >
+          <Post
+            :level="(level ?? 1) + 1"
+            :position="position === 'chatMessage'
+              ? 'postInPost'
+              : position === 'slim'
+                ? 'slim'
+                : 'postInPost'
+            "
+            :post="embedRecord as TTPost"
+            :hasReplyIcon="embedRecord?.record?.reply != null"
+            :noLink="position === 'chatMessage' ? false : noLink"
+            @click="$emit('click', $event)"
+          />
+        </div>
       </template>
 
       <!-- ポストボディ - リアクションコンテナ -->

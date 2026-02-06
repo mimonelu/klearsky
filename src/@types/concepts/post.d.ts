@@ -72,6 +72,7 @@ interface TIEmbed {
   $type: string
   external?: TTExternal
   images?: Array<TTImage>
+  media?: TTMedia
   video?: TIBlob
   record?: TTPost & {
     $type: string
