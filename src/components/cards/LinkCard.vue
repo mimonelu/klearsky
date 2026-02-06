@@ -31,8 +31,6 @@ const embeddedType = computed((): string => {
   return ""
 })
 
-const externalComponent = ref()
-
 let isInvalidUrl = false
 let embeddedContentType: null | string = null
 let embeddedContentId: null | string = null
@@ -162,8 +160,8 @@ function searchUrl () {
 
 <template>
   <div
-    ref="externalComponent"
     class="external"
+    :data-layout="layout"
   >
     <!-- 不正な URL -->
     <div
@@ -180,7 +178,6 @@ function searchUrl () {
       v-else-if="embeddedType === ''"
       :is="noLink ? 'div' : 'a'"
       class="external--default"
-      :data-layout="layout"
       :href="external.uri"
       rel="noreferrer"
       target="_blank"
@@ -198,7 +195,7 @@ function searchUrl () {
       <!-- 通常のリンクカード - 各種情報 -->
       <div class="external__meta">
         <div class="external__meta__title">
-          <span>{{ external.title || "&emsp;" }}</span>
+          <span>{{ external.title || external.uri }}</span>
         </div>
         <div class="external__meta__description">
           <span>{{ external.description || "&emsp;" }}</span>
@@ -305,7 +302,7 @@ function searchUrl () {
         class="external--tenor"
       >
         <img
-          :src="embeddedContentId as string"
+          :src="embeddedContentId as unknown as string"
           alt=""
           decoding="async"
           loading="lazy"
@@ -401,27 +398,26 @@ function searchUrl () {
     word-break: break-all;
   }
 
-  // 通常のリンクカード
-  &--default {
-    background-color: rgb(var(--fg-color), 0.125);
-    border: 1px solid rgb(var(--fg-color), 0.25);
-    border-radius: var(--border-radius-middle);
-    display: flex;
-    overflow: hidden;
-    position: relative;
-
-    // 横レイアウト
-    &[data-layout="horizontal"] {
-      .lazy-image {
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
-        min-width: var(--size);
-        max-width: var(--size);
-      }
+  // 横レイアウト
+  &[data-layout="horizontal"] {
+    .external--default .lazy-image {
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      min-width: var(--size);
+      max-width: var(--size);
     }
 
-    // 縦レイアウト
-    &[data-layout="vertical"] {
+    .external__meta__title,
+    .external__meta__description {
+      & > span {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  // 縦レイアウト
+  &[data-layout="vertical"] {
+    .external--default {
       flex-direction: column;
 
       .lazy-image {
@@ -431,6 +427,33 @@ function searchUrl () {
         min-height: 100%;
       }
     }
+  }
+
+  &:not([data-layout="horizontal"]) {
+    .external__meta__title > span,
+    .external__meta__description > span {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      word-break: break-word;
+    }
+    .external__meta__title > span {
+      line-clamp: 3;
+      -webkit-line-clamp: 3;
+    }
+    .external__meta__description > span {
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+    }
+  }
+
+  // 通常のリンクカード
+  &--default {
+    background-color: rgb(var(--fg-color), 0.125);
+    border: 1px solid rgb(var(--fg-color), 0.25);
+    border-radius: var(--border-radius-middle);
+    display: flex;
+    overflow: hidden;
+    position: relative;
   }
   a.external--default {
     cursor: pointer;
@@ -449,8 +472,8 @@ function searchUrl () {
     }
 
     &__title,
-    &__uri,
-    &__description {
+    &__description,
+    &__uri {
       display: flex;
       align-items: center;
       grid-gap: 0.5em;
@@ -462,33 +485,42 @@ function searchUrl () {
       }
 
       & > span {
-        line-height: var(--line-height-low);
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
       }
     }
 
     &__title {
       color: rgb(var(--fg-color));
       font-weight: bold;
-    }
 
-    &__uri {
-      border-top: 1px solid rgb(var(--fg-color), 0.125);
-      color: rgb(var(--fg-color), 0.5);
-      font-size: 0.75em;
-      margin-right: 2.5em;
-      padding-top: 0.5em;
-      width: calc(100% - 2.5em);
+      & > span {
+        line-height: var(--line-height-high);
+      }
     }
 
     &__description {
       color: rgb(var(--fg-color), 0.75);
       font-size: 0.875em;
 
-      // URL検索ボタンの横幅分だけマージンを取る
-      margin-right: 2em;
+      & > span {
+        line-height: var(--line-height-high);
+      }
+    }
+
+    &__uri {
+      border-top: 1px solid rgb(var(--fg-color), 0.125);
+      color: rgb(var(--fg-color), 0.5);
+      font-size: 0.75em;
+      margin-top: 0.25em;
+      margin-right: 2.5em;
+      padding-top: 0.5em;
+      width: calc(100% - 2.5em);
+
+      & > span {
+        line-height: var(--line-height-low);
+        white-space: nowrap;
+      }
     }
   }
 
