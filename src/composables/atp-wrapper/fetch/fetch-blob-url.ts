@@ -1,5 +1,4 @@
 import type { BlobRef } from "@atproto/api"
-import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,
@@ -16,24 +15,14 @@ export default async function (
       ? (image.ref as any).$link
       : image.ref.toString()
 
-  // キャッシュがあればキャッシュを使用
-  let url: null | string = Util.cache.get("blob", cid)
-  if (url != null) {
-    return url
-  }
-
-  // キャッシュがなければダウンロード
+  // ダウンロード
   const data = await this.fetchBlob(cid, did)
   if (data instanceof Error) {
     return data
   }
 
-  // キャッシュに保存
-  url = URL.createObjectURL(new Blob([data], {
+  // URLオブジェクトに変換
+  return URL.createObjectURL(new Blob([data], {
     type: image.mimeType,
   }))
-  Util.cache.set("blob", cid, url)
-
-  return url
 }
-
