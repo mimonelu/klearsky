@@ -52,7 +52,7 @@ export default async function (
   record.text = richText.text
   if (record.facets != null) {
     record.facets.push(...richText.facets)
-  } else {
+  } else if (richText.facets?.length) {
     record.facets = richText.facets
   }
 
