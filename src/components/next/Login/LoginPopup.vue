@@ -37,7 +37,7 @@ async function setAccountToLoginForm (session: TTSession) {
         />
         <div class="account-container">
           <div class="account-header">{{ $t("myAccounts") }}</div>
-          <AccountList :enableSetAccountToLoginForm="true" />
+          <AccountList :isAtLoginPopup="true" />
         </div>
       </div>
       <Copyright />

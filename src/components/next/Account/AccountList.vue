@@ -6,7 +6,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 defineProps<{
-  enableSetAccountToLoginForm: boolean
+  isAtLoginPopup: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -142,7 +142,7 @@ function onClickFileBox (event: Event) {
           v-for="session of sessions"
           :key="session.did"
           :session="session"
-          :enableSetAccountToLoginForm="enableSetAccountToLoginForm"
+          :isAtLoginPopup="isAtLoginPopup"
         />
       </div>
 

@@ -83,12 +83,27 @@ async function removeMyAccount () {
     >
       <!-- ログインフォームに設定 -->
       <button
-        v-if="mainState.accountPopoverProps.enableSetAccountToLoginForm"
+        v-if="mainState.accountPopoverProps.isAtLoginPopup"
         @click.prevent.stop="setAccountToLoginForm"
       >
         <SVGIcon :name="session.__authType === 'oauth' ? 'alphaACircle' : 'alphaPCircle'" />
         <span>{{ $t("setAccountToLoginForm") }}</span>
       </button>
+
+      <!-- プロフィールページ -->
+      <RouterLink
+        v-else
+        :to="{ name: 'profile-feeds', query: { account: session.did } }"
+        @click="emit('close')"
+      >
+        <SVGIcon
+          name="person"
+          class="no-list-menu-color"
+        />
+        <span>{{ $t("profile") }}</span>
+      </RouterLink>
+
+      <hr />
 
       <!-- マイアカウントの削除 -->
       <button @click.prevent.stop="removeMyAccount">

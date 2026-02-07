@@ -248,7 +248,7 @@ interface MainState {
   accountPopoverProps: {
     display: boolean
     session?: TTSession
-    enableSetAccountToLoginForm: boolean
+    isAtLoginPopup: boolean
   }
   accountPopoverSelector?: string | HTMLElement
   openAccountPopover: Function

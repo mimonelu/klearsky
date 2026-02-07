@@ -73,7 +73,7 @@ async function logout () {
         </div>
 
         <!-- アカウントリスト -->
-        <AccountList :enableSetAccountToLoginForm="false" />
+        <AccountList :isAtLoginPopup="false" />
       </div>
     </template>
   </Popup>
