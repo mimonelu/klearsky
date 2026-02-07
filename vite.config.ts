@@ -25,6 +25,10 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1000,
 
+    // Androidの復帰時グリッチ対策
+    // コンポーネントファイル内CSSが再適用されない不具合対策
+    cssCodeSplit: false,
+
     outDir: "docs",
 
     rollupOptions: {
