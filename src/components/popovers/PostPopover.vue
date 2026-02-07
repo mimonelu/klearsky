@@ -222,8 +222,14 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       <!-- 引用の切断と接続 -->
       <MenuTickerToggleQuoteAttachment
         v-if="
-          post.embed?.record?.$type === 'app.bsky.embed.record#viewRecord' &&
-          post.embed?.record?.author?.did === mainState.atp.session?.did
+          (
+            post.embed?.record?.$type === 'app.bsky.embed.record#viewRecord' &&
+            post.embed?.record?.author?.did === mainState.atp.session?.did
+          ) ||
+          (
+            post.embed?.record?.$type === 'app.bsky.embed.record#viewDetached' &&
+            post.embed?.record?.uri?.startsWith(`at://${mainState.atp.session?.did}/`)
+          )
         "
         :quotedUri="post.embed?.record?.uri"
         :quoterUri="post.uri"
