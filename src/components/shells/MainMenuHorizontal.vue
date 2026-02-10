@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import LazyImage from "@/components/images/LazyImage.vue"
+import AvatarLink from "@/components/next/Avatar/AvatarLink.vue"
 import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -69,14 +69,15 @@ async function openSendPostPopup () {
 <template>
   <div class="main-menu-horizontal">
     <!-- プロフィールボタン -->
-    <RouterLink
+    <AvatarLink
       class="link-button profile-button"
-      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.did } }"
-      :data-is-focus="state.isAtProfilePage"
-      :data-is-labeler="mainState.userProfile?.associated?.labeler ?? false"
-    >
-      <LazyImage :src="mainState.userProfile?.avatar" />
-    </RouterLink>
+      :did="mainState.userProfile?.did"
+      :image="mainState.userProfile?.avatar"
+      :blur="false"
+      :isLabeler="mainState.userProfile?.associated?.labeler"
+      :actorStatus="mainState.userProfile?.status"
+      :noLink="false"
+    />
 
     <!-- ホームボタン -->
     <RouterLink
@@ -200,21 +201,12 @@ async function openSendPostPopup () {
   &.profile-button {
     --button-size: 2.125rem;
 
-    & > .lazy-image {
-      border-radius: var(--border-radius-large);
-      font-size: var(--button-size);
-      object-fit: cover;
-      min-width: var(--button-size);
-      max-width: var(--button-size);
-      min-height: var(--button-size);
-      max-height: var(--button-size);
-      transition: border-radius 125ms ease-out;
-    }
-    &[data-is-labeler="true"] > .lazy-image {
-      border-radius: var(--border-radius-small);
-    }
-    &:hover > .lazy-image {
-      border-radius: 1px;
+    &:deep() {
+      .avatar-thumbnail {
+        display: grid;
+        justify-content: center;
+        font-size: var(--button-size);
+      }
     }
   }
 

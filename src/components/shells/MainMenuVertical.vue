@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
-import LazyImage from "@/components/images/LazyImage.vue"
+import AvatarLink from "@/components/next/Avatar/AvatarLink.vue"
 import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -68,24 +68,19 @@ function moveToBottom () {
 <template>
   <div class="main-menu-vertical">
     <!-- プロフィールボタン -->
-    <RouterLink
+    <AvatarLink
       class="profile-button"
-      :to="{ name: 'profile-feeds', query: { account: mainState.atp.session?.did } }"
-      :data-is-focus="
-        (
-          mainState.currentPath.startsWith('/profile/') &&
-          (
-            mainState.currentQuery.account === mainState.atp.session?.handle ||
-            mainState.currentQuery.account === mainState.atp.session?.did
-          )
-        ) ||
-        mainState.currentPath.startsWith('/profile/edit')
-      "
-      :data-is-labeler="mainState.userProfile?.associated?.labeler ?? false"
+      :did="mainState.userProfile?.did"
+      :image="mainState.userProfile?.avatar"
+      :blur="false"
+      :isLabeler="mainState.userProfile?.associated?.labeler"
+      :actorStatus="mainState.userProfile?.status"
+      :noLink="false"
     >
-      <LazyImage :src="mainState.userProfile?.avatar" />
-      <div class="label">{{ mainState.userProfile?.handle ?? "&nbsp;" }}</div>
-    </RouterLink>
+      <template #after>
+        <div class="label">{{ mainState.userProfile?.handle ?? "&nbsp;" }}</div>
+      </template>
+    </AvatarLink>
 
     <!-- スクローラー -->
     <div class="main-menu-vertical__scroller">
@@ -269,40 +264,10 @@ function moveToBottom () {
 .profile-button {
   --size: 4.5rem;
   --padding: 1rem;
-
   display: grid;
   grid-gap: 0.5rem;
   justify-content: center;
   padding: var(--padding);
-  &:focus, &:hover {
-    & > .label {
-      color: rgb(var(--fg-color));
-    }
-  }
-  &[data-is-focus="true"],
-  &:not([data-is-focus]).router-link-active {
-    & > .label {
-      color: rgb(var(--fg-color));
-    }
-  }
-
-  & > .lazy-image {
-    border-radius: var(--border-radius-large);
-    font-size: var(--size);
-    margin: auto;
-    object-fit: cover;
-    min-width: var(--size);
-    max-width: var(--size);
-    min-height: var(--size);
-    max-height: var(--size);
-    transition: border-radius 125ms ease-out;
-  }
-  &[data-is-labeler="true"] > .lazy-image {
-    border-radius: var(--border-radius-small);
-  }
-  &:hover > .lazy-image {
-    border-radius: 1px;
-  }
 
   & > .label {
     color: rgb(var(--fg-color), 0.5);
@@ -313,6 +278,20 @@ function moveToBottom () {
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &:deep() {
+    .avatar-thumbnail {
+      display: grid;
+      justify-content: center;
+      font-size: var(--size);
+    }
+  }
+
+  &:focus, &:hover {
+    & > .label {
+      color: rgb(var(--fg-color));
+    }
   }
 }
 

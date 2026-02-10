@@ -23,5 +23,6 @@ defineProps<{
       :isLabeler="isLabeler"
       :actorStatus="actorStatus"
     />
+    <slot name="after" />
   </Component>
 </template>
