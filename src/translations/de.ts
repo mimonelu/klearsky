@@ -178,10 +178,10 @@ export default () => ({
   // ============================================================================
   // POST STATES
   // ============================================================================
-  "postBlocked": "Beitrag blockiert.",
+  "postBlocked": "Beitrag eines blockierten/blockierenden Nutzers.",
   "postNotFound": "Beitrag nicht gefunden.",
-  "postDetachedBySelf": "Beitrag von Ihnen getrennt.",
-  "postDetachedByOther": "Beitrag getrennt.",
+  "postDetachedBySelf": "Zitat von Ihnen getrennt.",
+  "postDetachedByOther": "Zitat getrennt.",
 
   // ============================================================================
   // USER ACTIONS

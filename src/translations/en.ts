@@ -178,10 +178,10 @@ export default () => ({
   // ============================================================================
   // POST STATES
   // ============================================================================
-  "postBlocked": "This post cannot be displayed.",
-  "postNotFound": "This post does not exist.",
-  "postDetachedBySelf": "This post was detached by you.",
-  "postDetachedByOther": "This post was detached.",
+  "postBlocked": "Post by a blocked/blocking user.",
+  "postNotFound": "Post not found.",
+  "postDetachedBySelf": "Quote detached by you.",
+  "postDetachedByOther": "Quote detached.",
 
   // ============================================================================
   // USER ACTIONS

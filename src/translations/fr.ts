@@ -178,10 +178,10 @@ export default () => ({
   // ============================================================================
   // POST STATES
   // ============================================================================
-  "postBlocked": "Cette publication ne peut pas être affichée.",
-  "postNotFound": "Cette publication n'existe pas.",
-  "postDetachedBySelf": "Cette publication a été détachée par toi.",
-  "postDetachedByOther": "Cette publication a été détachée.",
+  "postBlocked": "Publication d'un utilisateur bloqué/bloquant.",
+  "postNotFound": "Publication introuvable.",
+  "postDetachedBySelf": "Citation détachée par vous.",
+  "postDetachedByOther": "Citation détachée.",
 
   // ============================================================================
   // USER ACTIONS

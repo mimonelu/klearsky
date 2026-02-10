@@ -1396,45 +1396,42 @@ function toggleOldestQuotedPostDisplay () {
         v-if="quotePostType === 'NotFound'"
         class="textlabel repost"
       >
-        <div class="textlabel__text">
+        <div class="textlabel__text--gray">
           <SVGIcon name="alert" />{{ $t("postNotFound") }}
         </div>
       </div>
 
       <!-- ポストボディ - 引用リポスト - 切断時 -->
-      <template v-else-if="quotePostType === 'Detached' && !forceHideQuoteRepost">
-        <!-- ポストボディ - 引用リポスト - 切断時 - 自身のポスト -->
-        <RouterLink
-          v-if="quotePostUri?.startsWith(`at://${mainState.atp.session?.did}/`)"
-          :to="{ name: 'post', query: { uri: quotePostUri } }"
-          class="textlabel repost"
-          @click.prevent.stop
-        >
-          <div class="textlabel__text--alert">
+      <RouterLink
+        v-else-if="quotePostType === 'Detached' && !forceHideQuoteRepost"
+        :to="{ name: 'post', query: { uri: quotePostUri } }"
+        class="textlabel repost"
+        @click.prevent.stop
+      >
+        <div class="textlabel__text--link">
+          <!-- ポストボディ - 引用リポスト - 切断時 - 他ユーザーのポスト -->
+          <template v-if="quotePostUri?.startsWith(`at://${mainState.atp.session?.did}/`)">
             <SVGIcon name="alert" />{{ $t("postDetachedBySelf") }}
-          </div>
-        </RouterLink>
+          </template>
 
-        <!-- ポストボディ - 引用リポスト - 切断時 - 他ユーザーのポスト -->
-        <div
-          v-else
-          class="textlabel repost"
-        >
-          <div class="textlabel__text">
+          <!-- ポストボディ - 引用リポスト - 切断時 - 他ユーザーのポスト -->
+          <template v-else>
             <SVGIcon name="alert" />{{ $t("postDetachedByOther") }}
-          </div>
+          </template>
         </div>
-      </template>
+      </RouterLink>
 
       <!-- ポストボディ - 引用リポスト - ブロック中／被ブロック中 -->
-      <div
+      <RouterLink
         v-else-if="quotePostType === 'Blocked'"
+        :to="{ name: 'profile-feeds', query: { account: embedRecord?.author?.did } }"
         class="textlabel repost"
+        @click.prevent.stop
       >
-        <div class="textlabel__text">
+        <div class="textlabel__text--link">
           <SVGIcon name="alert" />{{ $t("postBlocked") }}
         </div>
-      </div>
+      </RouterLink>
 
       <!-- ポストボディ - 引用リポスト -->
       <template v-else-if="quotePostType === 'Record' && !forceHideQuoteRepost">
@@ -2160,8 +2157,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   &.textlabel {
-    opacity: 0.75;
-    padding: 0.75em;
+    padding: 0.75em 1em;
   }
 }
 

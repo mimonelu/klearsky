@@ -1,5 +1,7 @@
 .textlabel,
 .textlabel--alert,
+.textlabel--gray,
+.textlabel--link,
 .textlabel--warning {
   border-radius: var(--border-radius-middle);
   display: flex;
@@ -9,6 +11,8 @@
 
   &__text,
   &__text--alert,
+  &__text--gray,
+  &__text--link,
   &__text--warning {
     display: flex;
     align-items: center;
@@ -31,6 +35,27 @@
 
     & > .svg-icon {
       fill: rgb(var(--notice-color));
+    }
+  }
+
+  &__text--gray {
+    color: rgb(var(--fg-color), 0.5);
+
+    & > .svg-icon {
+      fill: rgb(var(--fg-color), 0.5);
+    }
+  }
+
+  &__text--link {
+    --color: rgb(var(--accent-color), 0.875);
+    color: var(--color);
+
+    & > .svg-icon {
+      fill: var(--color);
+    }
+
+    &:focus, &:hover {
+      --color: rgb(var(--accent-color));
     }
   }
 
