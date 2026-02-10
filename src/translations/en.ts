@@ -891,8 +891,10 @@ export default () => ({
   // ============================================================================
   "notSet": "Not set",
   "resetTextarea": "Reset text area. Are you sure?",
-  "showOldestQuotedPost": "Show quote",
-  "hideOldestQuotedPost": "Hide quote",
+  "showQuotePost": "Show quote",
+  "hideQuotePost": "Hide quote",
+  "showQuotePostByMutingUser": "Show quote by user you muted",
+  "hideQuotePostByMutingUser": "Hide quote by user you muted",
   "showBadge": "Show badge",
   "alt": "ALT",
   "official": "Official",

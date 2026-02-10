@@ -5,7 +5,7 @@ type TTPost = {
     reason?: TTReason
     translatedText?: string
     unmask?: boolean
-    oldestQuotedPostDisplay?: boolean
+    quotePostDisplay?: boolean
   }
 
   author: TTUser

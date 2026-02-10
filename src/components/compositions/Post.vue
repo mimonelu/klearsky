@@ -244,8 +244,16 @@ function updateQuotePostType (): TTQuotePostType {
 // 引用リポストのURI
 const quotePostUri = embedRecord?.uri ?? embedRecord?.record?.uri as undefined | string
 
-// 最古の引用元ポストかどうか
-const isOldestQuotedPost = (props.level ?? 1) >= 3 - 1
+// 引用元ポストはミュートユーザーの引用リポストかどうか
+const isQuoteRepostByMutingUser = embedRecord?.author?.viewer?.muted
+
+// 引用元ポストを隠すべきかどうか
+const shoudHideRepost =
+  // ミュートユーザーの引用リポストかどうか
+  isQuoteRepostByMutingUser ||
+
+  // 最古の引用元ポストかどうか
+  (props.level ?? 1) >= 3 - 1
 
 // ポストマスクの表示状態
 const masked = computed((): boolean => {
@@ -892,11 +900,11 @@ function onActivateHashTag (text: string) {
   emit("onActivateHashTag", text)
 }
 
-// 最古の引用元ポストをトグル
-function toggleOldestQuotedPostDisplay () {
+// 引用元ポストをトグル
+function toggleQuotePostDisplay () {
   Util.blurElement()
   if (props.post.__custom != null) {
-    props.post.__custom.oldestQuotedPostDisplay = !props.post.__custom.oldestQuotedPostDisplay
+    props.post.__custom.quotePostDisplay = !props.post.__custom.quotePostDisplay
   }
 }
 
@@ -1435,22 +1443,21 @@ function toggleOldestQuotedPostDisplay () {
 
       <!-- ポストボディ - 引用リポスト -->
       <template v-else-if="quotePostType === 'Record' && !forceHideQuoteRepost">
-        <!-- 最古の引用元ポストトグル -->
-        <div
-          v-if="isOldestQuotedPost"
-          class="oldest-quoted-post-toggle"
-        >
+        <!-- 引用元ポストトグル -->
+        <div class="quoted-post-toggle">
           <button
-            class="button--plain"
-            @click.prevent.stop="toggleOldestQuotedPostDisplay"
+            v-if="shoudHideRepost"
+            type="button"
+            class="button--bordered"
+            @click.prevent.stop="toggleQuotePostDisplay"
           >
-            <template v-if="post.__custom?.oldestQuotedPostDisplay">
+            <template v-if="post.__custom?.quotePostDisplay">
               <SVGIcon name="cursorUp" />
-              <span>{{ $t("hideOldestQuotedPost") }}</span>
+              <span>{{ $t(isQuoteRepostByMutingUser ? "hideQuotePostByMutingUser" : "hideQuotePost") }}</span>
             </template>
             <template v-else>
               <SVGIcon name="cursorDown" />
-              <span>{{ $t("showOldestQuotedPost") }}</span>
+              <span>{{ $t(isQuoteRepostByMutingUser ? "showQuotePostByMutingUser" : "showQuotePost") }}</span>
             </template>
           </button>
         </div>
@@ -1458,10 +1465,10 @@ function toggleOldestQuotedPostDisplay () {
         <div v-if="
           embedRecord != null &&
           (
-            !isOldestQuotedPost ||
+            !shoudHideRepost ||
             (
-              isOldestQuotedPost &&
-              post.__custom?.oldestQuotedPostDisplay
+              shoudHideRepost &&
+              post.__custom?.quotePostDisplay
             )
           )
         "
@@ -2132,14 +2139,13 @@ function toggleOldestQuotedPostDisplay () {
   }
 }
 
-// 最古の引用元ポストトグル
-.oldest-quoted-post-toggle {
-  display: flex;
-  justify-content: flex-end;
+// 引用元ポストトグル
+.quoted-post-toggle {
+  display: grid;
+  margin-left: var(--left-space);
 
-  & > button {
-    font-size: 0.875em;
-    margin: -0.5em -1em -0.5em 0;
+  & > .button--bordered {
+    font-size: 0.875rem;
   }
 }
 
@@ -2157,7 +2163,7 @@ function toggleOldestQuotedPostDisplay () {
   }
 
   &.textlabel {
-    padding: 0.75em 1em;
+    padding: 0.5em 0.75em;
   }
 }
 

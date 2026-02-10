@@ -891,8 +891,10 @@ export default () => ({
   // ============================================================================
   "notSet": "未設定",
   "resetTextarea": "テキストエリアをリセットします。よろしいですか？",
-  "showOldestQuotedPost": "引用元を表示する",
-  "hideOldestQuotedPost": "引用元を隠す",
+  "showQuotePost": "引用元を表示",
+  "hideQuotePost": "引用元を隠す",
+  "showQuotePostByMutingUser": "ミュート中のユーザーによる引用元を表示",
+  "hideQuotePostByMutingUser": "ミュート中のユーザーによる引用元を隠す",
   "showBadge": "バッジを表示",
   "alt": "ALT",
   "official": "公式",

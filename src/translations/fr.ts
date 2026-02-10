@@ -891,8 +891,10 @@ export default () => ({
   // ============================================================================
   "notSet": "Pas défini",
   "resetTextarea": "Réinitialiser la zone de texte. Es-tu sûr?",
-  "showOldestQuotedPost": "Montrer la citation",
-  "hideOldestQuotedPost": "Cacher la citation",
+  "showQuotePost": "Montrer la citation",
+  "hideQuotePost": "Cacher la citation",
+  "showQuotePostByMutingUser": "Voir citation d'un muté",
+  "hideQuotePostByMutingUser": "Masquer citation d'un muté",
   "showBadge": "Montrer le badge",
   "alt": "ALT",
   "official": "Officiel",

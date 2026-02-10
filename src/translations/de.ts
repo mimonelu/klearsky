@@ -891,8 +891,10 @@ export default () => ({
   // ============================================================================
   "notSet": "Nicht gesetzt",
   "resetTextarea": "Textbereich zurücksetzen. Sind Sie sicher?",
-  "showOldestQuotedPost": "Zitat anzeigen",
-  "hideOldestQuotedPost": "Zitat verbergen",
+  "showQuotePost": "Zitat anzeigen",
+  "hideQuotePost": "Zitat verbergen",
+  "showQuotePostByMutingUser": "Zitat von stummem Nutzer zeigen",
+  "hideQuotePostByMutingUser": "Zitat von stummem Nutzer verbergen",
   "showBadge": "Badge anzeigen",
   "alt": "Alt",
   "official": "Offiziell",

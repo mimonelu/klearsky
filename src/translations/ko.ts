@@ -891,8 +891,10 @@ export default () => ({
   // ============================================================================
   "notSet": "설정 안됨",
   "resetTextarea": "텍스트 영역을 재설정합니다. 괜찮습니까?",
-  "showOldestQuotedPost": "인용 원본 표시",
-  "hideOldestQuotedPost": "인용 원본 숨기기",
+  "showQuotePost": "인용 원본 표시",
+  "hideQuotePost": "인용 원본 숨기기",
+  "showQuotePostByMutingUser": "뮤트한 사용자의 인용 표시",
+  "hideQuotePostByMutingUser": "뮤트한 사용자의 인용 숨기기",
   "showBadge": "배지 표시",
   "alt": "ALT",
   "official": "공식",
