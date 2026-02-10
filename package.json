@@ -17,7 +17,7 @@
   ],
   "type": "module",
   "dependencies": {
-    "@atproto/api": "^0.18.18",
+    "@atproto/api": "^0.18.20",
     "@atproto/oauth-client-browser": "^0.3.39",
     "@vueuse/core": "^10.11.1",
     "browser-image-compression": "^2.0.2",
