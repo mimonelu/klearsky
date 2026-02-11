@@ -167,6 +167,10 @@ export default () => ({
   "deletePostMessage": "Cette publication sera supprimée. Es-tu sûr?",
 
   // ============================================================================
+  // DRAFT
+  // ============================================================================
+  "reDraft": "Réutiliser la publication",
+
   // POST EDIT
   // ============================================================================
   "editPost": "Modifier la publication",

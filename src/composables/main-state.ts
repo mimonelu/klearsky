@@ -2882,12 +2882,18 @@ let isSendPostDone = false
 
 async function openSendPostPopup (params?: TTSendPostPopupParams): Promise<boolean> {
   if (params != null) {
+    if (params.action === "reuse") {
+      resetSendPostPopup()
+    }
+    state.sendPostPopupProps.action = params.action
     state.sendPostPopupProps.type = params.type
     state.sendPostPopupProps.post = params.post
     state.sendPostPopupProps.text = params.text
     state.sendPostPopupProps.url = params.url
     state.sendPostPopupProps.fileList = params.fileList
     state.sendPostPopupProps.createdAt = params.createdAt
+    state.sendPostPopupProps.langs = params.langs
+    state.sendPostPopupProps.labels = params.labels
   }
   state.sendPostPopupProps.display = true
   state.sendPostPopupProps.visibility = true
@@ -2899,16 +2905,24 @@ async function closeSendPostPopup (done: boolean, hidden: boolean) {
   isSendPostDone = done
   if (!hidden) {
     state.sendPostPopupProps.display = false
-
-    // ポスト送信ポップアップの入力内容のリセット
-    state.sendPostPopupProps.type = "post"
-    state.sendPostPopupProps.url = undefined
-    state.sendPostPopupProps.fileList = undefined
-    state.postDatePopupDate = undefined
-    state.listMentionPopupProps.list = undefined
-    state.listMentionPopupProps.dids.splice(0)
+    resetSendPostPopup()
   }
   state.sendPostPopupProps.visibility = false
+}
+
+function resetSendPostPopup () {
+  state.sendPostPopupProps.action = undefined
+  state.sendPostPopupProps.type = "post"
+  state.sendPostPopupProps.post = undefined
+  state.sendPostPopupProps.text = undefined
+  state.sendPostPopupProps.url = undefined
+  state.sendPostPopupProps.fileList = undefined
+  state.sendPostPopupProps.createdAt = undefined
+  state.sendPostPopupProps.langs = undefined
+  state.sendPostPopupProps.labels = undefined
+  state.postDatePopupDate = undefined
+  state.listMentionPopupProps.list = undefined
+  state.listMentionPopupProps.dids.splice(0)
 }
 
 // ポップアップ - ポスト編集ポップアップ

@@ -233,7 +233,7 @@ async function submitCallback () {
   >
     <template #header>
       <h2>
-        <SVGIcon name="edit" />
+        <SVGIcon name="sendPost" />
         <span>{{ $t("editPost") }}</span>
       </h2>
     </template>

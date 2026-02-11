@@ -16,6 +16,7 @@ async function sendMention () {
   emit("close")
   if (props.mentionTo == null) return
   await mainState.openSendPostPopup({
+    action: "mention",
     type: "post",
     text: `@${props.mentionTo} `,
   })

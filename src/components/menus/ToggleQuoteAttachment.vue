@@ -68,7 +68,7 @@ async function toggle () {
 .toggle-quote-attachment {
   &[data-detached="false"] {
     .svg-icon {
-      fill: rgb(var(--notice-color));
+      fill: rgb(var(--notice-color), 0.75);
     }
   }
 }

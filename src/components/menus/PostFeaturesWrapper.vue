@@ -6,14 +6,16 @@ import MenuTickerSendPostAfter from "@/components/menus/SendPostAfter.vue"
 import MenuTickerShowLikeUsers from "@/components/menus/ShowLikeUsers.vue"
 import MenuTickerShowQuoteReposts from "@/components/menus/ShowQuoteReposts.vue"
 import MenuTickerShowRepostUsers from "@/components/menus/ShowRepostUsers.vue"
+import MenuTickerReDraft from "@/components/next/Draft/ReDraft.vue"
 import MenuTickerTogglePinnedPost from "@/components/menus/TogglePinnedPost.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
 
-defineProps<{
+const props = defineProps<{
   post: TTPost
+  isUser: boolean
 }>()
 
 const state = reactive<{
@@ -85,6 +87,13 @@ function close () {
         <!-- このポストの直後に投稿する -->
         <MenuTickerSendPostAfter
           :createdAt="post.record?.createdAt"
+          @close="emit('close')"
+        />
+
+        <!-- ポストを再利用する -->
+        <MenuTickerReDraft
+          v-if="props.isUser"
+          :post="post"
           @close="emit('close')"
         />
 

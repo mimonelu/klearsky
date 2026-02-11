@@ -158,15 +158,20 @@ type TTCreatePostParams = {
   [k: string]: unknown
 }
 
+type TTSendPostPopupAction = "mention" | "linkCard" | "reuse"
+
 type TTSendPostPopupParams = {
   display?: boolean
   visibility?: boolean
+  action?: TTSendPostPopupAction
   type: TTPostType
   post?: TTPost
   text?: string
   url?: string
   fileList?: FileList
   createdAt?: string
+  langs?: Array<string>
+  labels?: Array<string>
 }
 
 type TTEditPostPopupParams = {

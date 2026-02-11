@@ -259,9 +259,11 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
         <span>{{ $t("deletePost") }}</span>
       </button>
 
+
       <!-- ポスト機能 -->
       <MenuTickerPostFeaturesWrapper
         :post="post"
+        :isUser="state.isUser"
         @close="emit('close')"
       />
 

@@ -16,6 +16,7 @@ async function sendMention () {
   emit("close")
   if (props.uri == null) return
   await mainState.openSendPostPopup({
+    action: "linkCard",
     type: "post",
     url: props.uri,
   })

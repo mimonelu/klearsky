@@ -674,12 +674,15 @@ const {
         <SendPostPopup
           v-if="state.sendPostPopupProps.display"
           v-show="state.sendPostPopupProps.visibility"
+          :action="state.sendPostPopupProps.action"
           :type="state.sendPostPopupProps.type"
           :post="state.sendPostPopupProps.post"
           :text="state.sendPostPopupProps.text"
           :url="state.sendPostPopupProps.url"
           :fileList="state.sendPostPopupProps.fileList"
           :createdAt="state.sendPostPopupProps.createdAt"
+          :langs="state.sendPostPopupProps.langs"
+          :labels="state.sendPostPopupProps.labels"
           @closeSendPostPopup="closeSendPostPopup as unknown"
         />
       </Transition>

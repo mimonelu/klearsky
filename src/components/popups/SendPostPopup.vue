@@ -14,11 +14,14 @@ import { useEasterEgg } from "@/components/next/EasterEgg/useEasterEgg"
 const emit = defineEmits<{(event: string, done: boolean, hidden: boolean): void}>()
 
 const props = defineProps<{
+  action?: TTSendPostPopupAction
   type: TTPostType
   post?: TTPost
   text?: string
   url?: string
   fileList?: FileList
+  langs?: Array<string>
+  labels?: Array<string>
 }>()
 
 const $t = inject("$t") as Function
@@ -139,23 +142,105 @@ const easyForm = ref()
 
 const urlRegex = /^https?:\/\//
 
+// プレビューリンクカード
+const PreviewLinkCardFeature: {
+  timer?: any
+  loading: Ref<boolean>
+  external: TTExternal
+  threshold: () => void
+  execute: () => Promise<void>
+} = {
+  timer: undefined,
+
+  loading: ref(false),
+
+  external: reactive({
+    uri: "",
+    title: undefined,
+    description: undefined,
+    thumb: undefined,
+  }),
+
+  threshold () {
+    if (this.timer != null) {
+      clearTimeout(this.timer)
+    }
+    this.timer = setTimeout(() => {
+      this.timer = undefined
+      this.execute()
+    }, 1000)
+  },
+
+  async execute () {
+    if (this.external.uri === easyFormState.url) {
+      return
+    }
+
+    // `http://` or `https://` から始まる文字列のみ処理
+    if (!easyFormState.url.match(urlRegex)) {
+      this.external.uri = ""
+      return
+    }
+
+    this.external.uri = easyFormState.url
+    this.external.title = undefined
+    this.external.description = undefined
+    this.external.thumb = undefined
+    this.loading.value = true
+    const external = await Util.parseOgp(
+      mainState.atp,
+      easyFormState.url,
+      false
+    )
+    this.loading.value = false
+    if (external instanceof Error) {
+      this.external.uri = ""
+      return
+    }
+    this.external.uri = external.uri
+    this.external.title = external.title
+    this.external.description = external.description
+
+    // プロキシサーバから送られたプレビュー用イメージを設定
+    this.external.thumb = external.preview
+  },
+}
+
 // ポップアップを開いた際のUX改善処置
-watch(() => mainState.sendPostPopupProps.visibility, (value?: boolean) => {
-  if (!value) return
-  setTimeout(() => {
-    // 「メンションを送る」使用時の対策
-    if (props.text) easyFormState.text = `${props.text} ${easyFormState.text}`
+watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => {
+  if (!value) {
+    return
+  }
+  await nextTick()
 
-    // 「リンクカードにする」使用時の対策
-    if (props.url) easyFormState.url = props.url
+  // 「リンクカードにする」使用時
+  if (props.action === "linkCard" && props.url) {
+    easyFormState.url = props.url
+  }
 
-    // プレビューリンクカード
-    PreviewLinkCardFeature.execute()
+  // 「メンションを送る」使用時
+  if (props.action === "mention" && props.text) {
+    easyFormState.text = `${props.text}${easyFormState.text}`
+  }
 
-    popup.value?.scrollToTop()
-    easyForm.value?.setFocus()
-  }, 0)
-})
+  // 「ポストを再利用する」使用時
+  if (props.action === "reuse") {
+    easyFormState.text = props.text ?? ""
+    easyFormState.url = props.url ?? ""
+    mainState.currentSetting.postLanguages = props.langs ?? []
+    state.labels = props.labels ?? []
+  }
+
+  if (props.fileList != null) {
+    easyFormState.medias = Array.from(props.fileList)
+  }
+
+  onInputUrl()
+  onChangeImage()
+
+  popup.value?.scrollToTop()
+  easyForm.value?.setFocus()
+}, { immediate: true })
 
 // D&D用処置
 watch(() => props.fileList, (value?: FileList) => {
@@ -167,12 +252,6 @@ watch(() => props.fileList, (value?: FileList) => {
 })
 
 onMounted(async () => {
-  if (props.fileList != null) {
-    easyFormState.medias = Array.from(props.fileList)
-  }
-  onInputUrl()
-  onChangeImage()
-
   // 動画ファイルのアップロード権限と各種リミットの取得
   const videoLimits = await mainState.atp.fetchVideoLimits()
   if (videoLimits instanceof Error) {
@@ -443,70 +522,6 @@ function openEasterEggPopover ($event: Event) {
 // 隠し機能のトグル
 function toggleHiddenFeatures () {
   state.hiddenFeaturesDisplay = !state.hiddenFeaturesDisplay
-}
-
-// プレビューリンクカード
-const PreviewLinkCardFeature: {
-  timer?: any
-  loading: Ref<boolean>
-  external: TTExternal
-  threshold: () => void
-  execute: () => Promise<void>
-} = {
-  timer: undefined,
-
-  loading: ref(false),
-
-  external: reactive({
-    uri: "",
-    title: undefined,
-    description: undefined,
-    thumb: undefined,
-  }),
-
-  threshold () {
-    if (this.timer != null) {
-      clearTimeout(this.timer)
-    }
-    this.timer = setTimeout(() => {
-      this.timer = undefined
-      this.execute()
-    }, 1000)
-  },
-
-  async execute () {
-    if (this.external.uri === easyFormState.url) {
-      return
-    }
-
-    // `http://` or `https://` から始まる文字列のみ処理
-    if (!easyFormState.url.match(urlRegex)) {
-      this.external.uri = ""
-      return
-    }
-
-    this.external.uri = easyFormState.url
-    this.external.title = undefined
-    this.external.description = undefined
-    this.external.thumb = undefined
-    this.loading.value = true
-    const external = await Util.parseOgp(
-      mainState.atp,
-      easyFormState.url,
-      false
-    )
-    this.loading.value = false
-    if (external instanceof Error) {
-      this.external.uri = ""
-      return
-    }
-    this.external.uri = external.uri
-    this.external.title = external.title
-    this.external.description = external.description
-
-    // プロキシサーバから送られたプレビュー用イメージを設定
-    this.external.thumb = external.preview
-  },
 }
 </script>
 
