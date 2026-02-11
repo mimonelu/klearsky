@@ -247,13 +247,11 @@ const quotePostUri = embedRecord?.uri ?? embedRecord?.record?.uri as undefined |
 // 引用元ポストはミュートユーザーの引用リポストかどうか
 const isQuoteRepostByMutingUser = embedRecord?.author?.viewer?.muted
 
-// 引用元ポストを隠すべきかどうか
-const shoudHideRepost =
-  // ミュートユーザーの引用リポストかどうか
-  isQuoteRepostByMutingUser ||
+// 最古の引用元ポストかどうか
+const isQuoteRepostOldestPost = (props.level ?? 1) >= 3 - 1
 
-  // 最古の引用元ポストかどうか
-  (props.level ?? 1) >= 3 - 1
+// 引用元ポストを隠すべきかどうか
+const quotePostToggleDisplay = isQuoteRepostByMutingUser || isQuoteRepostOldestPost
 
 // ポストマスクの表示状態
 const masked = computed((): boolean => {
@@ -1444,9 +1442,11 @@ function toggleQuotePostDisplay () {
       <!-- ポストボディ - 引用リポスト -->
       <template v-else-if="quotePostType === 'Record' && !forceHideQuoteRepost">
         <!-- 引用元ポストトグル -->
-        <div class="quoted-post-toggle">
+        <div
+          v-if="quotePostToggleDisplay"
+          class="quote-post-toggle"
+        >
           <button
-            v-if="shoudHideRepost"
             type="button"
             class="button--bordered"
             @click.prevent.stop="toggleQuotePostDisplay"
@@ -1465,9 +1465,9 @@ function toggleQuotePostDisplay () {
         <div v-if="
           embedRecord != null &&
           (
-            !shoudHideRepost ||
+            !quotePostToggleDisplay ||
             (
-              shoudHideRepost &&
+              quotePostToggleDisplay &&
               post.__custom?.quotePostDisplay
             )
           )
@@ -2140,13 +2140,17 @@ function toggleQuotePostDisplay () {
 }
 
 // 引用元ポストトグル
-.quoted-post-toggle {
+.quote-post-toggle {
   display: grid;
   margin-left: var(--left-space);
 
   & > .button--bordered {
     font-size: 0.875rem;
   }
+}
+[data-position="preview"] .quote-post-toggle,
+[data-position="slim"] .quote-post-toggle {
+  display: none;
 }
 
 .repost {
