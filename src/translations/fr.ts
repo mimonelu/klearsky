@@ -160,7 +160,6 @@ export default () => ({
   "copyPostText": "Copier le texte",
   "firstPost": "Voir la première publication",
   "sendMention": "Envoyer une mention",
-  "sendPostAfter": "Envoyer une publication après celle-ci",
   "sendLinkCard": "Envoyer comme carte de lien",
   "warpPostNotification": "Cette publication sera envoyée à la date suivante:",
   "deletePost": "Supprimer la publication",

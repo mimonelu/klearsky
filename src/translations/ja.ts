@@ -160,7 +160,6 @@ export default () => ({
   "copyPostText": "テキストをコピー",
   "firstPost": "最初のポストを見る",
   "sendMention": "メンションを送る",
-  "sendPostAfter": "この直後に投稿する",
   "sendLinkCard": "リンクカードにする",
   "warpPostNotification": "このポストは次の日時として投稿されます：",
   "deletePost": "ポストを削除する",

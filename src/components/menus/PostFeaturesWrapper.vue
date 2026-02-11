@@ -2,7 +2,6 @@
 import { nextTick, reactive, ref } from "vue"
 import MenuTickerOpenTimeFeedsPopup from "@/components/menus/OpenTimeFeedsPopup.vue"
 import MenuTickerSendMention from "@/components/menus/SendMention.vue"
-import MenuTickerSendPostAfter from "@/components/menus/SendPostAfter.vue"
 import MenuTickerShowLikeUsers from "@/components/menus/ShowLikeUsers.vue"
 import MenuTickerShowQuoteReposts from "@/components/menus/ShowQuoteReposts.vue"
 import MenuTickerShowRepostUsers from "@/components/menus/ShowRepostUsers.vue"
@@ -81,12 +80,6 @@ function close () {
         <!-- タイムフィードで見る -->
         <MenuTickerOpenTimeFeedsPopup
           :post="post"
-          @close="emit('close')"
-        />
-
-        <!-- このポストの直後に投稿する -->
-        <MenuTickerSendPostAfter
-          :createdAt="post.record?.createdAt"
           @close="emit('close')"
         />
 

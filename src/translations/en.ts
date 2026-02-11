@@ -160,7 +160,6 @@ export default () => ({
   "copyPostText": "Copy text",
   "firstPost": "Show first post",
   "sendMention": "Send mention",
-  "sendPostAfter": "Send post after this",
   "sendLinkCard": "Send as a link card",
   "warpPostNotification": "This post will be sent with the following date:",
   "deletePost": "Delete post",

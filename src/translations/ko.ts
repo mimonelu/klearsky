@@ -160,7 +160,6 @@ export default () => ({
   "copyPostText": "텍스트 복사",
   "firstPost": "첫 게시물 보기",
   "sendMention": "멘션 보내기",
-  "sendPostAfter": "이 직후에 게시",
   "sendLinkCard": "링크카드로 만들기",
   "warpPostNotification": "이 게시물은 다음 날짜로 게시됩니다:",
   "deletePost": "게시물 삭제",
