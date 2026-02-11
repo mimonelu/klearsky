@@ -22,6 +22,7 @@ const props = defineProps<{
   fileList?: FileList
   langs?: Array<string>
   labels?: Array<string>
+  draftReactionControl?: TTDraftReactionControl
 }>()
 
 const $t = inject("$t") as Function
@@ -229,6 +230,14 @@ watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => 
     easyFormState.url = props.url ?? ""
     mainState.currentSetting.postLanguages = props.langs ?? []
     state.labels = props.labels ?? []
+    if (props.draftReactionControl != null) {
+      state.draftReactionControl.postgateAllow = props.draftReactionControl.postgateAllow
+      state.draftReactionControl.threadgateAction = props.draftReactionControl.threadgateAction
+      state.draftReactionControl.allowMention = props.draftReactionControl.allowMention
+      state.draftReactionControl.allowFollower = props.draftReactionControl.allowFollower
+      state.draftReactionControl.allowFollowing = props.draftReactionControl.allowFollowing
+      state.draftReactionControl.listUris = props.draftReactionControl.listUris
+    }
   }
 
   if (props.fileList != null) {

@@ -20,6 +20,7 @@ type TTPost = {
   replyCount: number
   repostCount: number
   quoteCount: number
+  threadgate?: TTThreadgate
   uri: string
   value?: TIPostValue
   viewer?: {
@@ -172,6 +173,7 @@ type TTSendPostPopupParams = {
   createdAt?: string
   langs?: Array<string>
   labels?: Array<string>
+  draftReactionControl?: TTDraftReactionControl
 }
 
 type TTEditPostPopupParams = {

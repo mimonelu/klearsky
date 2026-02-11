@@ -683,6 +683,7 @@ const {
           :createdAt="state.sendPostPopupProps.createdAt"
           :langs="state.sendPostPopupProps.langs"
           :labels="state.sendPostPopupProps.labels"
+          :draftReactionControl="state.sendPostPopupProps.draftReactionControl"
           @closeSendPostPopup="closeSendPostPopup as unknown"
         />
       </Transition>

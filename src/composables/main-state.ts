@@ -2894,6 +2894,7 @@ async function openSendPostPopup (params?: TTSendPostPopupParams): Promise<boole
     state.sendPostPopupProps.createdAt = params.createdAt
     state.sendPostPopupProps.langs = params.langs
     state.sendPostPopupProps.labels = params.labels
+    state.sendPostPopupProps.draftReactionControl = params.draftReactionControl
   }
   state.sendPostPopupProps.display = true
   state.sendPostPopupProps.visibility = true
@@ -2920,6 +2921,7 @@ function resetSendPostPopup () {
   state.sendPostPopupProps.createdAt = undefined
   state.sendPostPopupProps.langs = undefined
   state.sendPostPopupProps.labels = undefined
+  state.sendPostPopupProps.draftReactionControl = undefined
   state.postDatePopupDate = undefined
   state.listMentionPopupProps.list = undefined
   state.listMentionPopupProps.dids.splice(0)
