@@ -169,6 +169,7 @@ export default () => ({
   // DRAFT
   // ============================================================================
   "reDraft": "Réutiliser la publication",
+  "reDraftCaution": "Les pièces jointes ne peuvent pas être réutilisées.\nRéutiliser quand même ?",
 
   // POST EDIT
   // ============================================================================

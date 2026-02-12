@@ -1,12 +1,6 @@
 type TTImage = {
-  image?: {
-    mimeType: string
-    ref: {
-      $link: string
-      bytes?: Uint8Array
-    }
-    size: number
-  }
+  image?: TIBlob
+  video?: TIBlob
 
   thumb?: string
   fullsize?: string

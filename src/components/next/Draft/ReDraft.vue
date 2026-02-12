@@ -9,6 +9,8 @@ const props = defineProps<{
   post: TTPost
 }>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 async function reDraft () {
@@ -54,6 +56,31 @@ async function makeSendPostPopupPropsFromPost (src: TTPost): Promise<undefined |
   const labels = src.labels
     ?.filter((label) => label.src === src.author.did)
     ?.map((label) => label.val)
+  const medias = (
+    src.record.embed?.images ??
+    src.record.embed?.media?.images ??
+    (
+      src.record.embed?.$type === "app.bsky.embed.video"
+        ? [src.record.embed]
+        : undefined
+    ) ??
+    (
+      src.record.embed?.media?.$type === "app.bsky.embed.video"
+        ? [src.record.embed.media]
+        : undefined
+    )
+  ) as undefined | Array<TTImage>
+
+  // TODO: ポスト再利用機能の添付ファイル対応
+  if (medias != null) {
+    if (!(await mainState.openConfirmationPopup({
+      title: $t("reDraft"),
+      text: $t("reDraftCaution"),
+    }))) {
+      return
+    }
+  }
+
   const draftReactionControl = await fetchReactionControl(src)
   return {
     type,
@@ -62,6 +89,10 @@ async function makeSendPostPopupPropsFromPost (src: TTPost): Promise<undefined |
     url,
     langs,
     labels,
+
+    // TODO: ポスト再利用機能の添付ファイル対応
+    // medias,
+
     draftReactionControl,
   }
 }

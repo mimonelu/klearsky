@@ -169,6 +169,7 @@ export default () => ({
   // DRAFT
   // ============================================================================
   "reDraft": "Beitrag wiederverwenden",
+  "reDraftCaution": "Anhänge können nicht wiederverwendet werden.\nTrotzdem wiederverwenden?",
 
   // POST EDIT
   // ============================================================================

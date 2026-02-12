@@ -22,6 +22,10 @@ const props = defineProps<{
   fileList?: FileList
   langs?: Array<string>
   labels?: Array<string>
+
+  // TODO: ポスト再利用機能の添付ファイル対応
+  // medias?: Array<TTImage>
+
   draftReactionControl?: TTDraftReactionControl
 }>()
 
@@ -230,6 +234,10 @@ watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => 
     easyFormState.url = props.url ?? ""
     mainState.currentSetting.postLanguages = props.langs ?? []
     state.labels = props.labels ?? []
+
+    // TODO: ポスト再利用機能の添付ファイル対応
+    //       ここで `easyFormState.medias` に `props.medias` を設定すること
+
     if (props.draftReactionControl != null) {
       state.draftReactionControl.postgateAllow = props.draftReactionControl.postgateAllow
       state.draftReactionControl.threadgateAction = props.draftReactionControl.threadgateAction

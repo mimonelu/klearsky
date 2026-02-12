@@ -317,14 +317,14 @@ function validate (): boolean {
                 v-else-if="item.type === 'file'"
                 v-bind="item.attrs"
                 ref="fileBox"
-                :files="item.state[item.model]"
+                :items="item.state[item.model]"
                 :disabled="item.disabled"
                 :accept="item.accept"
                 :multiple="item.isMultipleFile"
                 :maxNumber="item.maxNumberOfFile"
                 :quadLayout="item.quadLayout"
                 :class="item.classes"
-                @change="(files: Array<File>) => { onChangeFile(files, item) }"
+                @change="(items: Array<File>) => { onChangeFile(items, item) }"
               />
             </template>
 

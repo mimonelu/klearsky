@@ -2894,6 +2894,10 @@ async function openSendPostPopup (params?: TTSendPostPopupParams): Promise<boole
     state.sendPostPopupProps.createdAt = params.createdAt
     state.sendPostPopupProps.langs = params.langs
     state.sendPostPopupProps.labels = params.labels
+
+    // TODO: ポスト再利用機能の添付ファイル対応
+    // state.sendPostPopupProps.medias = params.medias
+
     state.sendPostPopupProps.draftReactionControl = params.draftReactionControl
   }
   state.sendPostPopupProps.display = true
@@ -2921,6 +2925,10 @@ function resetSendPostPopup () {
   state.sendPostPopupProps.createdAt = undefined
   state.sendPostPopupProps.langs = undefined
   state.sendPostPopupProps.labels = undefined
+
+  // TODO: ポスト再利用機能の添付ファイル対応
+  // state.sendPostPopupProps.medias = undefined
+
   state.sendPostPopupProps.draftReactionControl = undefined
   state.postDatePopupDate = undefined
   state.listMentionPopupProps.list = undefined

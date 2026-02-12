@@ -173,6 +173,10 @@ type TTSendPostPopupParams = {
   createdAt?: string
   langs?: Array<string>
   labels?: Array<string>
+
+  // TODO: ポスト再利用機能の添付ファイル対応
+  // medias?: Array<TTImage>
+
   draftReactionControl?: TTDraftReactionControl
 }
 

@@ -3,14 +3,16 @@ import { onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
-const emit = defineEmits<{(event: "change", value: Array<File>): void}>()
+type TTItem = File
+
+const emit = defineEmits<{(event: "change", value: Array<TTItem>): void}>()
 
 defineExpose({
   getVideoSizes,
 })
 
 const props = defineProps<{
-  files?: Array<File>
+  items?: Array<TTItem>
   disabled?: boolean
   accept?: string
   multiple?: boolean
@@ -19,81 +21,94 @@ const props = defineProps<{
 }>()
 
 const state = reactive<{
-  files: Array<File>
+  items: Array<TTItem>
   previews: Array<string>
 }>({
-  files: props.files != null ? props.files : [],
+  items: props.items ?? [],
   previews: [],
 })
 
 const media = ref()
 
 // D&D用処置
-const unwatchFiles = watch(() => props.files, (value?: Array<File>) => {
-  state.files = value ?? []
-  resetFiles()
+const unwatchItems = watch(() => props.items, (value?: Array<TTItem>) => {
+  state.items = value ?? []
+  resetItems()
 })
 
 // D&D用処置
 onMounted(() => {
-  resetFiles()
+  resetItems()
 })
 
 onBeforeUnmount(() => {
-  unwatchFiles()
+  unwatchItems()
 })
 
 // input[type="file"] で同一ファイルを選択すると change が発火しない仕様への対策
 function onClick (event: Event) {
-  if (event.target != null) (event.target as HTMLInputElement).value = ""
+  if (event.target != null) {
+    (event.target as HTMLInputElement).value = ""
+  }
 }
 
 function onChange (event: Event) {
-  const newFiles = getFiles(event)
-  if (newFiles == null) return
-  // WANT: 同一ファイルを追加できないようにしたい
-  if (props.maxNumber === 1) state.files.unshift(...newFiles)
-  else state.files.push(...newFiles)
-  resetFiles()
-  emit("change", state.files)
-}
-
-function resetFiles () {
-  // ファイル配列を最大数まで切り詰め
-  if (props.maxNumber != null) {
-    state.files.splice(props.maxNumber)
+  const newItems = getItems(event)
+  if (newItems == null) {
+    return
   }
 
-  // ファイル配列に動画が含まれる場合は最初の動画以外削除
-  const firstVideo = state.files.find((file) => {
-    return file.type?.startsWith("video/")
+  // WANT: 同一ファイルを追加できないようにしたい
+  if (props.maxNumber === 1) {
+    state.items.unshift(...newItems)
+  } else {
+    state.items.push(...newItems)
+  }
+
+  resetItems()
+  emit("change", state.items)
+}
+
+function resetItems () {
+  // `items` を最大数まで切り詰め
+  if (props.maxNumber != null) {
+    state.items.splice(props.maxNumber)
+  }
+
+  // `items` に動画が含まれる場合は最初の動画以外削除
+  const firstVideo = state.items.find((item) => {
+    return item.type?.startsWith("video/")
   })
   if (firstVideo != null) {
-    state.files.splice(0, state.files.length, firstVideo)
+    state.items.splice(0, state.items.length, firstVideo)
   }
 
-  setPreviews(state.files)
+  setPreviews(state.items)
 }
 
-function getFiles (event: Event): null | Array<File> {
+function getItems (event: Event): null | Array<TTItem> {
   const fileList = (event.target as HTMLInputElement)?.files ?? null
-  if (fileList == null) return null
+  if (fileList == null) {
+    return null
+  }
   return Array.from(fileList)
 }
 
-function setPreviews (files: Array<File>) {
-  if (files.length === 0) {
+function setPreviews (items: Array<TTItem>) {
+  if (items.length === 0) {
     state.previews.splice(0)
     return
   }
-  const objectUrls = files.map((file: File) => window.URL.createObjectURL(file))
+  const objectUrls = items.map((item) => {
+    return window.URL.createObjectURL(item)
+  })
   state.previews.splice(0, state.previews.length, ...objectUrls)
 }
 
-function deleteFile (index: number) {
-  state.files.splice(index, 1)
+function deleteItem (index: number) {
+  state.items.splice(index, 1)
   state.previews.splice(index, 1)
-  emit("change", state.files)
+  emit("change", state.items)
 }
 
 // 動画の aspectRatio 対応
@@ -147,7 +162,7 @@ function getVideoSizes (): Array<undefined | {
       >
         <button
           class="delete-button"
-          @click.prevent="deleteFile(index)"
+          @click.prevent="deleteItem(index)"
         >
           <SVGIcon name="cross" />
         </button>
@@ -168,7 +183,7 @@ function getVideoSizes (): Array<undefined | {
         >
           <div class="thumbnail">
             <!-- 動画プレビュー -->
-            <div v-if="files != null && files[index]?.type?.startsWith('video/')">
+            <div v-if="items != null && items[index]?.type?.startsWith('video/')">
               <video
                 ref="media"
                 controls
@@ -193,7 +208,7 @@ function getVideoSizes (): Array<undefined | {
 
             <button
               class="delete-button"
-              @click.prevent="deleteFile(index)"
+              @click.prevent="deleteItem(index)"
             >
               <SVGIcon name="cross" />
             </button>
