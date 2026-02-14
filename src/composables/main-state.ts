@@ -538,6 +538,11 @@ export const state: MainState = reactive<MainState>({
   openAdvancedSearchPopup: openAdvancedSearchPopup,
   closeAdvancedSearchPopup: closeAdvancedSearchPopup,
 
+  // ポップアップ - 下書きポップアップ
+  postDraftPopupDisplay: false,
+  openPostDraftPopup: openPostDraftPopup,
+  closePostDraftPopup: closePostDraftPopup,
+
   // ポップアップ - 招待コードポップアップ
   inviteCodesPopupDisplay: false,
   openInviteCodesPopup: openInviteCodesPopup,
@@ -2474,6 +2479,16 @@ function openAdvancedSearchPopup () {
 
 function closeAdvancedSearchPopup () {
   state.advancedSearchPopupDisplay = false
+}
+
+// ポップアップ - 下書きポップアップ
+
+function openPostDraftPopup () {
+  state.postDraftPopupDisplay = true
+}
+
+function closePostDraftPopup () {
+  state.postDraftPopupDisplay = false
 }
 
 // ポップアップ - 招待コードポップアップ

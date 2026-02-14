@@ -96,7 +96,7 @@ async function fetchVerifiers () {
 .verifiers-popup {
   &:deep(.popup) {
     .popup-header {
-      .svg-icon {
+      .svg-icon--verifier {
         --fg-color: var(--accent-color);
       }
 

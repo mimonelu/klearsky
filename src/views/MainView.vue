@@ -17,6 +17,7 @@ import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
 import CustomBookmarkPopup from "@/components/popups/CustomBookmarkPopup.vue"
 import CustomBookmarkManagementPopup from "@/components/popups/CustomBookmarkManagementPopup.vue"
 import DesignSettingsPopup from "@/components/popups/settings-popups/DesignSettingsPopup.vue"
+import PostDraftPopup from "@/components/next/PostDraft/PostDraftPopup.vue"
 import DropFiles from "@/components/next/DropFiles/DropFiles.vue"
 import EasterEggPopover from "@/components/next/EasterEgg/EasterEggPopover.vue"
 import EditPostPopup from "@/components/next/EditPost/EditPostPopup.vue"
@@ -350,6 +351,14 @@ const {
         <AdvancedSearchPopup
           v-if="state.advancedSearchPopupDisplay"
           @close="state.closeAdvancedSearchPopup"
+        />
+      </Transition>
+
+      <!-- 下書きポップアップ -->
+      <Transition>
+        <PostDraftPopup
+          v-if="state.postDraftPopupDisplay"
+          @close="state.closePostDraftPopup"
         />
       </Transition>
 

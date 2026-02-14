@@ -168,6 +168,7 @@ export default () => ({
   // ============================================================================
   // DRAFT
   // ============================================================================
+  "postDraft": "Drafts",
   "reDraft": "Reuse post",
   "reDraftCaution": "Attachments cannot be reused.\nReuse anyway?",
 

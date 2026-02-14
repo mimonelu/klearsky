@@ -88,16 +88,20 @@ function process (type: string) {
       mainState.openActivitySubscriptionListPopup()
       break
     }
-    case "myWord": {
-      mainState.openMyWordPopup({ mode: 'edit' })
-      break
-    }
     case "officialBookmark": {
       mainState.openOfficialBookmarkPopup()
       break
     }
     case "customBookmark": {
       mainState.openCustomBookmarkPopup()
+      break
+    }
+    case "postDraft": {
+      mainState.openPostDraftPopup()
+      break
+    }
+    case "myWord": {
+      mainState.openMyWordPopup({ mode: 'edit' })
       break
     }
     case "contentFilteringToggle": {
@@ -226,16 +230,6 @@ function process (type: string) {
         <span>{{ $t("activitySubscriptionList") }}</span>
       </button>
 
-      <!-- マイワードポップアップトリガー -->
-      <button
-        type="button"
-        data-type="myWord"
-        @click.prevent="process('myWord')"
-      >
-        <SVGIcon name="alphaA" />
-        <span>{{ $t("myWord") }}</span>
-      </button>
-
       <!-- 公式ブックマークポップアップトリガー -->
       <button
         type="button"
@@ -254,6 +248,26 @@ function process (type: string) {
       >
         <SVGIcon name="bookmarkPlus" />
         <span>{{ $t("customBookmark") }}</span>
+      </button>
+
+      <!-- 下書きポップアップトリガー -->
+      <button
+        type="button"
+        data-type="postDraft"
+        @click.prevent="process('postDraft')"
+      >
+        <SVGIcon name="postDraft" />
+        <span>{{ $t("postDraft") }}</span>
+      </button>
+
+      <!-- マイワードポップアップトリガー -->
+      <button
+        type="button"
+        data-type="myWord"
+        @click.prevent="process('myWord')"
+      >
+        <SVGIcon name="alphaA" />
+        <span>{{ $t("myWord") }}</span>
       </button>
 
       <hr />
@@ -393,6 +407,7 @@ function process (type: string) {
   button[data-type="activitySubscriptionList"] > .svg-icon { --icon-color: var(--post-color); }
   button[data-type="officialBookmark"] > .svg-icon { --icon-color: var(--bookmark-color); }
   button[data-type="customBookmark"] > .svg-icon { --icon-color: var(--bookmark-color); }
+  button[data-type="postDraft"] > .svg-icon { --icon-color: var(--share-color); }
   button[data-type="repostMutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="mutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="blockingUsers"] > .svg-icon { --icon-color: var(--notice-color); }

@@ -90,6 +90,7 @@ import play from "@/svg/play.svg?raw"
 import plus from "@/svg/plus.svg?raw"
 import point from "@/svg/point.svg?raw"
 import post from "@/svg/post.svg?raw"
+import postDraft from "@/svg/message-text.svg?raw"
 import posts from "@/svg/comment-multiple.svg?raw"
 import question from "@/svg/question.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
@@ -214,6 +215,7 @@ const icons: { [k: string]: string } = {
   plus,
   point,
   post,
+  postDraft,
   posts,
   question,
   quoteRepost,

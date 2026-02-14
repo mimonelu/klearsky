@@ -142,7 +142,7 @@ function scrolledToBottom () {
 .verified-accounts-popup {
   &:deep(.popup) {
     .popup-header {
-      .svg-icon {
+      .svg-icon--verified {
         --fg-color: var(--accent-color);
       }
 

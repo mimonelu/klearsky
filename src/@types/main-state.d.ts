@@ -466,6 +466,11 @@ interface MainState {
   openAdvancedSearchPopup: () => void
   closeAdvancedSearchPopup: () => void
 
+  // ポップアップ - 下書きポップアップ
+  postDraftPopupDisplay: boolean
+  openPostDraftPopup: () => void
+  closePostDraftPopup: () => void
+
   // ポップアップ - 招待コードポップアップ
   inviteCodesPopupDisplay: boolean
   openInviteCodesPopup: Function
