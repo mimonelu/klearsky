@@ -22,6 +22,8 @@ interface TIAtpWrapper {
     (convoId: string, params: TTCreatePostParams): Promise<Error | TIChatMessage>
   createChatReaction
     (convoId: string, messageId: string, value: string): Promise<Error | TIChatMessage>
+  createDraft
+    (draft: import("@atproto/api").AppBskyDraftDefs.Draft): Promise<Error | string>
   createDuplicatedList
     (listUri: string): Promise<Error | string>
   createFeedInteractions
@@ -60,6 +62,8 @@ interface TIAtpWrapper {
     (convoId: string, messageId: string): Promise<Error | undefined>
   deleteChatReaction
     (convoId: string, messageId: string, value: string): Promise<Error | TIChatMessage>
+  deleteDraft
+    (id: string): Promise<Error | undefined>
   deleteCustomBookmark
     (this: TIAtpWrapper, uri: string): Promise<Error | undefined>
   deleteFollow
@@ -124,6 +128,8 @@ interface TIAtpWrapper {
     (oldFeeds: Array<TTFeed>, feed: string, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<Error | undefined | string>
   fetchDid
     (handle: string): Promise<Error | string>
+  fetchDrafts
+    (limit?: number, cursor?: string): Promise<Error | { cursor?: string; drafts: import("@atproto/api").AppBskyDraftDefs.DraftView[] }>
   fetchFeedGenerator
     (feed: string): Promise<Error | TTFeedGenerator>
   fetchFeedGenerators

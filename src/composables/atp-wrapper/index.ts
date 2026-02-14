@@ -7,6 +7,7 @@ import createAgentWithPassword from "@/composables/atp-wrapper/create/create-age
 import createChatDeclaration from "@/composables/atp-wrapper/chat/create-chat-declaration"
 import createChatMessage  from "@/composables/atp-wrapper/chat/create-chat-message"
 import createChatReaction  from "@/composables/atp-wrapper/chat/create-chat-reaction"
+import createDraft from "@/composables/atp-wrapper/create/create-draft"
 import createDuplicatedList  from "@/composables/atp-wrapper/create/create-duplicated-list"
 import createFeedInteractions from "@/composables/atp-wrapper/create/create-feed-interactions"
 import createFileBlobRef from "@/composables/atp-wrapper/create/create-file-blob-ref"
@@ -26,6 +27,7 @@ import deleteActorStatus from "@/composables/atp-wrapper/delete/delete-actor-sta
 import deleteChatDeclaration from "@/composables/atp-wrapper/chat/delete-chat-declaration"
 import deleteChatMessage from "@/composables/atp-wrapper/chat/delete-chat-message"
 import deleteChatReaction  from "@/composables/atp-wrapper/chat/delete-chat-reaction"
+import deleteDraft from "@/composables/atp-wrapper/delete/delete-draft"
 import deleteCustomBookmark from "@/composables/atp-wrapper/delete/delete-custom-bookmark"
 import deleteFollow from "@/composables/atp-wrapper/delete/delete-follow"
 import deleteLike from "@/composables/atp-wrapper/delete/delete-like"
@@ -58,6 +60,7 @@ import fetchChatMessages from "@/composables/atp-wrapper/chat/fetch-chat-message
 import fetchCustomBookmarkPacks from "@/composables/atp-wrapper/fetch/fetch-custom-bookmark-packs"
 import fetchCustomFeeds from "@/composables/atp-wrapper/fetch/fetch-custom-feeds"
 import fetchDid from "@/composables/atp-wrapper/fetch/fetch-did"
+import fetchDrafts from "@/composables/atp-wrapper/fetch/fetch-drafts"
 import fetchFeedGenerator from "@/composables/atp-wrapper/fetch/fetch-feed-generator"
 import fetchFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-feed-generators"
 import fetchFirstPost from "@/composables/atp-wrapper/fetch/fetch-first-post"
@@ -232,6 +235,7 @@ class AtpWrapper implements TIAtpWrapper {
   createChatDeclaration = createChatDeclaration
   createChatMessage = createChatMessage
   createChatReaction = createChatReaction
+  createDraft = createDraft
   createDuplicatedList = createDuplicatedList
   createFeedInteractions = createFeedInteractions
   createFileBlobRef = createFileBlobRef
@@ -251,6 +255,7 @@ class AtpWrapper implements TIAtpWrapper {
   deleteChatDeclaration = deleteChatDeclaration
   deleteChatMessage = deleteChatMessage
   deleteChatReaction = deleteChatReaction
+  deleteDraft = deleteDraft
   deleteCustomBookmark = deleteCustomBookmark
   deleteFollow = deleteFollow
   deleteLike = deleteLike
@@ -283,6 +288,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchCustomBookmarkPacks = fetchCustomBookmarkPacks
   fetchCustomFeeds = fetchCustomFeeds
   fetchDid = fetchDid
+  fetchDrafts = fetchDrafts
   fetchFeedGenerator = fetchFeedGenerator
   fetchFeedGenerators = fetchFeedGenerators
   fetchFirstPost = fetchFirstPost
