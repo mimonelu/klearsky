@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive } from "vue"
 import type { AppBskyDraftDefs } from "@atproto/api"
+import PostDraftItem from "@/components/next/PostDraft/PostDraftItem.vue"
 import Loader from "@/components/shells/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -31,11 +32,6 @@ async function fetchDrafts () {
 }
 
 async function deleteDraft (id: string) {
-  const response = await mainState.atp.deleteDraft(id)
-  if (response instanceof Error) {
-    mainState.openErrorPopup(response, "DraftPopup/deleteDraft")
-    return
-  }
   state.drafts = state.drafts.filter((d) => d.id !== id)
 }
 
@@ -70,26 +66,13 @@ function close () {
       </div>
 
       <!-- 下書き一覧 -->
-      <div
+      <PostDraftItem
         v-for="draftView of state.drafts"
         :key="draftView.id"
-        class="post-draft-popup__item"
-      >
-        <div class="post-draft-popup__item__body">
-          <div class="post-draft-popup__item__text">{{ draftView.draft.posts[0]?.text }}</div>
-          <div class="post-draft-popup__item__meta">
-            <span>{{ mainState.formatDate(draftView.updatedAt) }}</span>
-            <span v-if="draftView.draft.langs?.length">{{ draftView.draft.langs.join(", ") }}</span>
-          </div>
-        </div>
-        <button
-          type="button"
-          class="post-draft-popup__item__delete"
-          @click.stop="deleteDraft(draftView.id)"
-        >
-          <SVGIcon name="remove" />
-        </button>
-      </div>
+        :draftView="draftView"
+        @close="close"
+        @deleteDraft="deleteDraft"
+      />
     </template>
   </Popup>
 </template>
@@ -102,62 +85,19 @@ function close () {
         --fg-color: var(--share-color);
       }
     }
+
+    .popup-body {
+      grid-gap: 0;
+      padding: 0;
+    }
   }
 
-  &__item {
-    display: flex;
-    align-items: flex-start;
-    grid-gap: 0.5rem;
-    padding: 0.75rem;
-    border-radius: var(--border-radius-middle);
-    &:hover {
-      background-color: rgb(var(--fg-color), 0.0625);
-    }
-
-    &__body {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      grid-gap: 0.25rem;
-      overflow: hidden;
-    }
-
-    &__text {
-      line-height: var(--line-height-high);
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-    }
-
-    &__meta {
-      color: rgb(var(--fg-color), 0.5);
-      display: flex;
-      flex-wrap: wrap;
-      grid-gap: 0.5rem;
-      font-size: 0.875rem;
-    }
-
-    &__delete {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 2rem;
-      min-height: 2rem;
-      & > .svg-icon {
-        fill: rgb(var(--notice-color), 0.75);
-      }
-      &:focus, &:hover {
-        & > .svg-icon {
-          fill: rgb(var(--notice-color));
-        }
-      }
-    }
+  .post-draft-item {
+    padding: 1em;
   }
 
   .loader {
-    padding: 0.5rem;
+    padding: 1rem;
     position: unset;
   }
 }

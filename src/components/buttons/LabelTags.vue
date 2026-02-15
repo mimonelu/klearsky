@@ -124,7 +124,7 @@ async function openBridgyOriginalUrl () {
     <!-- 新規アカウントラベル -->
     <div
       v-if="isBeginner"
-      class="label-tags__beginner-label"
+      class="tag--link label-tags__beginner-label"
     >
       <SVGIcon name="sprout" />
       <span>{{ $t(postIndexedAt != null ? "beginnerInPost" : "beginner") }}</span>
@@ -133,7 +133,7 @@ async function openBridgyOriginalUrl () {
     <!-- 外部公開状態ラベル -->
     <div
       v-if="unauthenticatedDisplay && !hasNoUnauthenticated"
-      class="label-tags__unauthenticated-label"
+      class="tag--link label-tags__unauthenticated-label"
     >
       <SVGIcon name="earth" />
       <span>{{ $t("unauthenticated") }}</span>
@@ -142,7 +142,7 @@ async function openBridgyOriginalUrl () {
     <!-- ラベラー -->
     <div
       v-if="labelerDisplay"
-      class="label-tags__labeler"
+      class="tag--link label-tags__labeler"
     >
       <SVGIcon name="labeler" />
       <span>{{ $t("labeler") }}</span>
@@ -153,7 +153,7 @@ async function openBridgyOriginalUrl () {
       v-for="label, labelIndex of harmfulLabels"
       :key="labelIndex"
       type="button"
-      class="label-tags__harmful-label"
+      class="tag--link label-tags__harmful-label"
       @click.prevent.stop="openLabelerSettingsPopup(CONSTS.OFFICIAL_LABELER_DID, label.val)"
     >
       <SVGIcon :name="label.__isAuthorLabel ? 'person' : 'label'" />
@@ -165,7 +165,7 @@ async function openBridgyOriginalUrl () {
       v-for="label, labelIndex of labelerLabels"
       :key="labelIndex"
       type="button"
-      class="label-tags__labelers-label"
+      class="tag--link label-tags__labelers-label"
       :title="label?.locale.description ?? ''"
       @click.prevent.stop="openLabelerSettingsPopup(label?.did, label?.definition.identifier)"
     >
@@ -177,7 +177,7 @@ async function openBridgyOriginalUrl () {
     <div
       v-for="label, labelIndex of customLabels"
       :key="labelIndex"
-      class="label-tags__custom-label"
+      class="tag--link label-tags__custom-label"
     >
       <SVGIcon name="label" />
       <span translate="no">{{ $t(label.val) }}</span>
@@ -187,7 +187,7 @@ async function openBridgyOriginalUrl () {
     <button
       v-if="bridgyOriginalUrl"
       type="button"
-      class="label-tags__bridgy-link"
+      class="tag--link label-tags__bridgy-link"
       @click.prevent.stop="openBridgyOriginalUrl"
     >
       <LazyImage src="img/bridgy.png" />
@@ -206,94 +206,34 @@ async function openBridgyOriginalUrl () {
     display: contents;
   }
 
-  &:deep(.label-tags__labeler),
-  &__beginner-label,
-  &__unauthenticated-label,
-  &__harmful-label,
-  &__labelers-label,
-  &__custom-label,
-  &__bridgy-link {
-    border-radius: var(--border-radius-middle);
-    display: flex;
-    align-items: center;
-    grid-gap: 0.25em;
-    overflow: hidden;
-    padding: 0.25em 0.5em;
-
-    & > .svg-icon {
-      fill: var(--color);
-      font-size: 0.875em;
-    }
-
-    & > span {
-      color: var(--color);
-      line-height: var(--line-height-low);
-      overflow: hidden;
-      user-select: none;
-      word-break: break-all;
-    }
-  }
-  &__labelers-label,
-  &__bridgy-link {
-    & > .lazy-image {
-      border-radius: var(--border-radius-small);
-      font-size: 1.25em;
-      min-width: 1em;
-      max-width: 1em;
-      min-height: 1em;
-      max-height: 1em;
-      opacity: var(--alpha) !important;
-    }
-  }
-
   // ラベラー
   &:deep(.label-tags__labeler) {
-    --color: rgb(var(--label-color), var(--alpha, 1.0));
-    background-color: rgb(var(--label-color), 0.125);
+    --color: var(--label-color);
   }
 
   // 新規アカウントラベル
   &__beginner-label {
-    --color: rgb(var(--accent-color));
-    background-color: rgb(var(--accent-color), 0.25);
+    --color: var(--accent-color);
   }
 
   // 外部公開状態ラベル
   &__unauthenticated-label {
-    --color: rgb(var(--accent-color));
-    background-color: rgb(var(--accent-color), 0.25);
+    --color: var(--accent-color);
   }
 
   // 有害なラベル
   &__harmful-label {
-    --color: rgb(var(--notice-color), var(--alpha, 1.0));
-    background-color: rgb(var(--notice-color), 0.125);
-    // border-color: rgb(var(--notice-color), calc(var(--alpha) / 2));
-    cursor: pointer;
-    &:focus,
-    &:hover {
-      --alpha: 1.0;
-    }
+    --color: var(--notice-color);
   }
 
   // ラベラーによるラベル
   &__labelers-label {
-    --color: rgb(var(--label-color), var(--alpha, 1.0));
-    background-color: rgb(var(--label-color), 0.125);
-    // border-color: rgb(var(--label-color), calc(var(--alpha) / 3));
-    cursor: pointer;
-    grid-gap: 0.5em;
-    padding-left: 0.25em;
-    &:focus,
-    &:hover {
-      --alpha: 1.0;
-    }
+    --color: var(--label-color);
   }
 
   // カスタムラベル
   &__custom-label {
-    --color: rgb(var(--fg-color), var(--alpha, 1.0));
-    background-color: rgb(var(--fg-color), 0.125);
+    --color: var(--fg-color);
 
     & > .svg-icon {
       fill: rgb(var(--orange-color), var(--alpha, 1.0));
@@ -302,16 +242,7 @@ async function openBridgyOriginalUrl () {
 
   // Bridgy リンク
   &__bridgy-link {
-    --color: rgb(var(--accent-color), var(--alpha, 1.0));
-    background-color: rgb(var(--accent-color), 0.125);
-    // border-color: rgb(var(--accent-color), calc(var(--alpha) / 3));
-    cursor: pointer;
-    grid-gap: 0.5em;
-    padding-left: 0.25em;
-    &:focus,
-    &:hover {
-      --alpha: 1.0;
-    }
+    --color: var(--accent-color);
   }
 }
 </style>

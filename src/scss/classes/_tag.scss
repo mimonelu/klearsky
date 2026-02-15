@@ -1,0 +1,58 @@
+.tag,
+.tag--link {
+  border-radius: var(--border-radius-middle);
+  display: flex;
+  align-items: center;
+  grid-gap: 0.25em;
+  overflow: hidden;
+
+  & > .svg-icon {
+    fill: rgb(var(--color));
+    font-size: 0.875em;
+  }
+
+  & > span {
+    color: rgb(var(--color));
+    line-height: var(--line-height-low);
+    overflow: hidden;
+    user-select: none;
+    word-break: break-all;
+  }
+
+  & > .lazy-image {
+    border-radius: var(--border-radius-small);
+    font-size: 1.25em;
+    min-width: 1em;
+    max-width: 1em;
+    min-height: 1em;
+    max-height: 1em;
+    opacity: var(--alpha) !important;
+  }
+}
+.tag {
+  & > .svg-icon {
+    fill: rgb(var(--color));
+  }
+
+  & > span {
+    color: rgb(var(--color));
+  }
+}
+.tag--link {
+  --alpha: 0.875;
+  background-color: rgb(var(--color), 0.125);
+  cursor: pointer;
+  padding: 0.25em 0.5em;
+  &:focus,
+  &:hover {
+    --alpha: 1.0;
+  }
+
+  & > .svg-icon {
+    fill: rgb(var(--color), var(--alpha));
+  }
+
+  & > span {
+    color: rgb(var(--color), var(--alpha));
+  }
+}

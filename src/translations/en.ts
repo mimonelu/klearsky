@@ -171,6 +171,7 @@ export default () => ({
   "postDraft": "Drafts",
   "reDraft": "Reuse post",
   "reDraftCaution": "Attachments cannot be reused.\nReuse anyway?",
+  "postDraftDeleteConfirmation": "This draft will be deleted. Are you sure?",
 
   // POST EDIT
   // ============================================================================
