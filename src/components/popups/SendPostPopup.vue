@@ -228,14 +228,14 @@ watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => 
     easyFormState.text = `${props.text}${easyFormState.text}`
   }
 
-  // 「ポストを再利用する」使用時
+  // 下書き or ポスト再利用機能使用時
   if (props.action === "reuse") {
     easyFormState.text = props.text ?? ""
     easyFormState.url = props.url ?? ""
     mainState.currentSetting.postLanguages = props.langs ?? []
     state.labels = props.labels ?? []
 
-    // TODO: ポスト再利用機能の添付ファイル対応
+    // TODO: 下書きの添付ファイル対応
     //       ここで `easyFormState.medias` に `props.medias` を設定すること
 
     if (props.draftReactionControl != null) {

@@ -2897,9 +2897,11 @@ let isSendPostDone = false
 
 async function openSendPostPopup (params?: TTSendPostPopupParams): Promise<boolean> {
   if (params != null) {
+    // 下書き or ポスト再利用機能使用時はリセット
     if (params.action === "reuse") {
       resetSendPostPopup()
     }
+
     state.sendPostPopupProps.action = params.action
     state.sendPostPopupProps.type = params.type
     state.sendPostPopupProps.post = params.post
@@ -2910,7 +2912,7 @@ async function openSendPostPopup (params?: TTSendPostPopupParams): Promise<boole
     state.sendPostPopupProps.langs = params.langs
     state.sendPostPopupProps.labels = params.labels
 
-    // TODO: ポスト再利用機能の添付ファイル対応
+    // TODO: 下書きの添付ファイル対応
     // state.sendPostPopupProps.medias = params.medias
 
     state.sendPostPopupProps.draftReactionControl = params.draftReactionControl
