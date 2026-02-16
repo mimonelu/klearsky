@@ -37,10 +37,15 @@ function close () {
       v-if="draftPost.embedExternals?.[0]?.uri != null"
       class="post-draft-item-post__tag-wrapper"
     >
-      <div class="tag--link">
+      <a
+        class="tag--link"
+        :href="draftPost.embedExternals[0].uri"
+        ref="norefferer"
+        target="_blank"
+      >
         <SVGIcon name="link" />
         <span>{{ draftPost.embedExternals[0].uri }}</span>
-      </div>
+      </a>
     </div>
     <div
       v-if="draftPost.embedImages != null"
