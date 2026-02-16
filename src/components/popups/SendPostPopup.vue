@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
 import { format } from "date-fns/format"
+import buildPostDraft from "@/components/next/PostDraft/build-post-draft"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
@@ -83,8 +84,7 @@ const easyFormState = reactive<{
 })
 
 const easyFormProps: TTEasyForm = {
-  hasSubmitButton: true,
-  submitButtonLabel: $t("submit"),
+  hasSubmitButton: false,
   submitCallback,
   blurOnSubmit: true,
   data: [
@@ -386,6 +386,27 @@ async function submitCallback () {
   }
 }
 
+async function saveDraft () {
+  Util.blurElement()
+  const draft = buildPostDraft({
+    text: easyFormState.text,
+    url: easyFormState.url,
+    type: props.type,
+    post: props.post,
+    langs: mainState.currentSetting.postLanguages,
+    labels: state.labels,
+    draftReactionControl: state.draftReactionControl,
+  })
+  mainState.loaderDisplay = true
+  const result = await mainState.atp.createDraft(draft)
+  mainState.loaderDisplay = false
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "SendPostPopup/saveDraft")
+    return
+  }
+  emit("closeSendPostPopup", true, false)
+}
+
 function onInputUrl () {
   // プレビューリンクカード
   PreviewLinkCardFeature.threshold()
@@ -626,7 +647,8 @@ function toggleHiddenFeatures () {
             </template>
           </LinkCard>
 
-          <div class="button-container">
+          <!-- 機能ボタンコンテナ -->
+          <div class="feature-button-container">
             <!-- ポスト言語選択ポップアップトリガー -->
             <button
               type="button"
@@ -677,7 +699,7 @@ function toggleHiddenFeatures () {
             <!-- イースターエッグポップオーバートリガー -->
             <button
               type="button"
-              class="button--plain easter-egg-button"
+              class="button--plain button--nolabel easter-egg-button"
               @click.prevent="openEasterEggPopover"
             >
               <SVGIcon name="formatFont" />
@@ -685,6 +707,28 @@ function toggleHiddenFeatures () {
           </div>
         </template>
         <template #after>
+          <!-- メインボタンコンテナ -->
+          <div class="main-button-container">
+            <!-- 下書き保存ボタン -->
+            <button
+              type="button"
+              class="button--bordered"
+              @click.prevent="saveDraft"
+            >
+              <SVGIcon name="postDraft" />
+              <span>{{ $t("postDraft") }}</span>
+            </button>
+
+            <!-- 送信ボタン -->
+            <button
+              type="submit"
+              class="button submit-button"
+            >
+              <SVGIcon :name="type" />
+              <span>{{ $t("submit") }}</span>
+            </button>
+          </div>
+
           <!-- 動画アップロード情報 -->
           <div class="video-upload-info">
             <div
@@ -726,6 +770,7 @@ function toggleHiddenFeatures () {
           <!-- 隠し機能 -->
           <div class="hidden-features">
             <button
+              type="button"
               class="button--bordered hidden-features-toggle"
               @click.prevent="toggleHiddenFeatures"
             >
@@ -736,6 +781,7 @@ function toggleHiddenFeatures () {
             <template v-if="state.hiddenFeaturesDisplay">
               <!-- ポスト日時選択ポップアップトリガー -->
               <button
+                type="button"
                 class="button--bordered post-date-button"
                 @click.prevent="mainState.openPostDatePopup"
               >
@@ -746,6 +792,7 @@ function toggleHiddenFeatures () {
 
               <!-- リストメンションポップアップトリガー -->
               <button
+                type="button"
                 class="button--bordered on-off-button"
                 @click.prevent="openListMentionPopup"
               >
@@ -839,11 +886,6 @@ function toggleHiddenFeatures () {
       border-radius: 0;
       margin: 0 -1.5rem;
     }
-
-    // 送信ボタン
-    .submit-button {
-      --fg-color: var(--type-color);
-    }
   }
 
   // ヘルプボタン
@@ -880,7 +922,8 @@ function toggleHiddenFeatures () {
     }
   }
 
-  .button-container {
+  // 機能ボタンコンテナ
+  .feature-button-container {
     display: flex;
     flex-wrap: wrap;
     grid-gap: 0.5rem;
@@ -927,8 +970,20 @@ function toggleHiddenFeatures () {
 
     .easter-egg-button {
       font-size: 1.25rem;
-      padding: 0 1rem;
     }
+  }
+
+  // メインボタンコンテナ
+  .main-button-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    grid-gap: 0.5rem;
+  }
+
+  // 送信ボタン
+  .submit-button {
+    --fg-color: var(--type-color);
   }
 
   // 隠し機能
