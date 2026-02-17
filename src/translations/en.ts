@@ -172,6 +172,7 @@ export default () => ({
   "reDraft": "Reuse post",
   "reDraftCaution": "Attachments cannot be reused.\nReuse anyway?",
   "postDraftDeleteConfirmation": "This draft will be deleted. Are you sure?",
+  "postDraftMediaNotFound": "The media data for this draft was not found. Restore without media?",
 
   // POST EDIT
   // ============================================================================

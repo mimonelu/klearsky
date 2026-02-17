@@ -172,6 +172,7 @@ export default () => ({
   "reDraft": "Réutiliser la publication",
   "reDraftCaution": "Les pièces jointes ne peuvent pas être réutilisées.\nRéutiliser quand même ?",
   "postDraftDeleteConfirmation": "Ce brouillon sera supprimé. Êtes-vous sûr ?",
+  "postDraftMediaNotFound": "Les données média de ce brouillon sont introuvables. Restaurer sans média ?",
 
   // POST EDIT
   // ============================================================================

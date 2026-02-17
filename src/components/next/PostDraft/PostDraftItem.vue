@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import type { AppBskyDraftDefs } from "@atproto/api"
-import { deleteDraftMedia, extractSendPostPopupParams } from "@/components/next/PostDraft/post-draft-utils"
+import { deleteDraftMedia, extractSendPostPopupParams, hasDraftMedia } from "@/components/next/PostDraft/post-draft-utils"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import PostDraftItemPost from "@/components/next/PostDraft/PostDraftItemPost.vue"
 
@@ -24,7 +24,21 @@ function close () {
 
 async function applyDraft () {
   const draft = props.draftView.draft
-  const params = extractSendPostPopupParams(draft, mainState.currentSetting.postLanguages)
+
+  // メディアの存在チェック
+  const hasMedia =
+    (draft.posts[0]?.embedImages ?? []).length > 0 ||
+    (draft.posts[0]?.embedVideos ?? []).length > 0
+  if (hasMedia && !(await hasDraftMedia(draft))) {
+    if (!(await mainState.openConfirmationPopup({
+      title: $t("confirmation"),
+      text: $t("postDraftMediaNotFound"),
+    }))) {
+      return
+    }
+  }
+
+  const params = await extractSendPostPopupParams(draft, mainState.currentSetting.postLanguages)
   if (params == null) {
     return
   }
@@ -43,8 +57,6 @@ async function applyDraft () {
     params.type = "quoteRepost"
     params.post = response[0]
   }
-
-  // TODO: 画像・動画の適用
 
   emit("close")
   await mainState.openSendPostPopup(params)

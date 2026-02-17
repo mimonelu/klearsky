@@ -2911,10 +2911,7 @@ async function openSendPostPopup (params?: TTSendPostPopupParams): Promise<boole
     state.sendPostPopupProps.createdAt = params.createdAt
     state.sendPostPopupProps.langs = params.langs
     state.sendPostPopupProps.labels = params.labels
-
-    // TODO: 下書きの添付ファイル対応
-    // state.sendPostPopupProps.medias = params.medias
-
+    state.sendPostPopupProps.medias = params.medias
     state.sendPostPopupProps.draftReactionControl = params.draftReactionControl
   }
   state.sendPostPopupProps.display = true

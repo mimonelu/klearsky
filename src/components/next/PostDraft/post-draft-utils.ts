@@ -1,5 +1,5 @@
 import type { AppBskyDraftDefs } from "@atproto/api"
-import { deleteMedia, saveMedia } from "@/components/next/PostDraft/post-draft-media-store"
+import { deleteMedia, loadMedia, saveMedia } from "@/components/next/PostDraft/post-draft-media-store"
 
 // 下書きの組み立て
 export async function buildPostDraft (params: {
@@ -116,11 +116,36 @@ export async function buildPostDraft (params: {
   return draft
 }
 
+// 下書きのメディアが IndexedDB に存在するか判定
+export async function hasDraftMedia (draft: AppBskyDraftDefs.Draft): Promise<boolean> {
+  for (const post of draft.posts) {
+    for (const image of post.embedImages ?? []) {
+      if (image.localRef?.path == null) {
+        continue
+      }
+      const entry = await loadMedia(image.localRef.path)
+      if (entry instanceof Error || entry == null) {
+        return false
+      }
+    }
+    for (const video of post.embedVideos ?? []) {
+      if (video.localRef?.path == null) {
+        continue
+      }
+      const entry = await loadMedia(video.localRef.path)
+      if (entry instanceof Error || entry == null) {
+        return false
+      }
+    }
+  }
+  return true
+}
+
 // 下書きから TTSendPostPopupParams を組み立て
-export function extractSendPostPopupParams (
+export async function extractSendPostPopupParams (
   draft: AppBskyDraftDefs.Draft,
   fallbackLangs?: Array<string>,
-): TTSendPostPopupParams | undefined {
+): Promise<TTSendPostPopupParams | undefined> {
   const post = draft.posts[0]
 
   // TODO: 連投機能実装後に連投下書きにも対応すること
@@ -144,6 +169,26 @@ export function extractSendPostPopupParams (
 
   // 反応制限
   params.draftReactionControl = extractReactionControl(draft)
+
+  // 画像
+  for (const image of post.embedImages ?? []) {
+    if (image.localRef?.path == null) {
+      continue
+    }
+    const entry = await loadMedia(image.localRef.path)
+    if (entry instanceof Error || entry == null) {
+      continue
+    }
+    if (params.medias == null) {
+      params.medias = []
+    }
+    params.medias.push({
+      image: entry.blob as unknown as TIBlob,
+      alt: image.alt ?? "",
+    })
+  }
+
+  // TODO: 動画
 
   return params
 }

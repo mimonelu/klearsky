@@ -172,6 +172,7 @@ export default () => ({
   "reDraft": "Beitrag wiederverwenden",
   "reDraftCaution": "Anhänge können nicht wiederverwendet werden.\nTrotzdem wiederverwenden?",
   "postDraftDeleteConfirmation": "Dieser Entwurf wird gelöscht. Sind Sie sicher?",
+  "postDraftMediaNotFound": "Die Mediendaten für diesen Entwurf wurden nicht gefunden. Ohne Medien wiederherstellen?",
 
   // POST EDIT
   // ============================================================================

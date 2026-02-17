@@ -23,10 +23,7 @@ const props = defineProps<{
   fileList?: FileList
   langs?: Array<string>
   labels?: Array<string>
-
-  // TODO: ポスト再利用機能の添付ファイル対応
-  // medias?: Array<TTImage>
-
+  medias?: Array<TTImage>
   draftReactionControl?: TTDraftReactionControl
 }>()
 
@@ -230,13 +227,42 @@ watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => 
 
   // 下書き or ポスト再利用機能使用時
   if (props.action === "reuse") {
+    // リセット
     easyFormState.text = props.text ?? ""
     easyFormState.url = props.url ?? ""
-    mainState.currentSetting.postLanguages = props.langs ?? []
+    easyFormState.medias = []
+    easyFormState.alts = []
+    easyFormState.urlHasImage = [true]
     state.labels = props.labels ?? []
+    state.draftReactionControl.postgateAllow = true
+    state.draftReactionControl.threadgateAction = "none"
+    state.draftReactionControl.allowMention = false
+    state.draftReactionControl.allowFollower = false
+    state.draftReactionControl.allowFollowing = false
+    state.draftReactionControl.listUris = []
+    mainState.currentSetting.postLanguages = props.langs ?? []
 
-    // TODO: 下書きの添付ファイル対応
-    //       ここで `easyFormState.medias` に `props.medias` を設定すること
+    // 下書きの添付ファイル
+    if (props.medias != null) {
+      const medias: Array<File> = []
+      const alts: Array<string> = []
+      for (const media of props.medias) {
+        // 画像
+        if (!(media.image instanceof Blob)) {
+          continue
+        }
+        try {
+          medias.push(new File([media.image], "", { type: media.image.type }))
+          alts.push(media.alt)
+        } catch {
+          continue
+        }
+
+        // TODO: 動画
+      }
+      easyFormState.medias = medias
+      easyFormState.alts = alts
+    }
 
     if (props.draftReactionControl != null) {
       state.draftReactionControl.postgateAllow = props.draftReactionControl.postgateAllow

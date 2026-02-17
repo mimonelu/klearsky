@@ -680,7 +680,6 @@ const {
 
       <!-- ポスト送信ポップアップ -->
       <Transition>
-        <!-- TODO: ポスト再利用機能の添付ファイル対応: `medias` を渡すこと -->
         <SendPostPopup
           v-if="state.sendPostPopupProps.display"
           v-show="state.sendPostPopupProps.visibility"
@@ -693,6 +692,7 @@ const {
           :createdAt="state.sendPostPopupProps.createdAt"
           :langs="state.sendPostPopupProps.langs"
           :labels="state.sendPostPopupProps.labels"
+          :medias="state.sendPostPopupProps.medias"
           :draftReactionControl="state.sendPostPopupProps.draftReactionControl"
           @closeSendPostPopup="closeSendPostPopup as unknown"
         />
