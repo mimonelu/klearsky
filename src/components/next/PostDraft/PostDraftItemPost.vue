@@ -55,7 +55,7 @@ function close () {
     </div>
     <HtmlText
       dir="auto"
-      :text="draftPost.text"
+      :text="draftPost.text || '&nbsp;'"
       :hasTranslateLink="false"
       @onActivateHashTag="close"
       @onActivateMention="close"
@@ -166,6 +166,12 @@ function close () {
   .tag--link {
     --color: var(--accent-color);
     font-size: 0.875em;
+    overflow: hidden;
+
+    & > span {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   .label-tags {

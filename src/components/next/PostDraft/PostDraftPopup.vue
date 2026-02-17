@@ -25,7 +25,7 @@ async function fetchDrafts () {
   const response = await mainState.atp.fetchDrafts()
   state.loading = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "DraftPopup/fetchDrafts")
+    mainState.openErrorPopup(response, "PostDraftPopup/fetchDrafts")
     return
   }
   state.drafts = response.drafts
@@ -87,17 +87,11 @@ function close () {
     }
 
     .popup-body {
-      grid-gap: 0;
-      padding: 0;
+      padding: 1rem;
     }
   }
 
-  .post-draft-item {
-    padding: 1em;
-  }
-
   .loader {
-    padding: 1rem;
     position: unset;
   }
 }

@@ -62,7 +62,7 @@ async function applyDraft () {
 async function deleteDraft () {
   const draft = props.draftView.draft
   const text = draft.posts?.[0]?.text?.replace(/\n/g, " ") ?? ""
-  const detail = text.length > 48 ? `${text.substring(0, 48)}...` : text
+  const detail = text.length > 48 ? `${text.substring(0, 48)}...` : (text || " ")
 
   // 通常確認
   if (!(await mainState.openConfirmationPopup({
@@ -107,33 +107,33 @@ async function deleteDraft () {
     <div class="post-draft-item__prop-container">
       <div
         v-if="draftView.updatedAt != null"
-        class="tag post-draft-item__prop post-draft-item__updated-at-prop"
+        class="tag post-draft-item__prop post-draft-item__updated-at"
       >
         <span>{{ mainState.formatDate(draftView.updatedAt) }}</span>
       </div>
       <div
         v-if="draftView.draft.deviceName != null"
-        class="tag post-draft-item__prop post-draft-item__device-name-prop"
+        class="tag post-draft-item__prop post-draft-item__device-name"
       >
         <span>{{ draftView.draft.deviceName }}</span>
       </div>
       <div
         v-if="draftView.draft.langs != null"
-        class="tag post-draft-item__prop post-draft-item__lang-prop"
+        class="tag post-draft-item__prop post-draft-item__lang"
       >
         <SVGIcon name="translate" />
         <span>{{ draftView.draft.langs.join(", ") }}</span>
       </div>
       <div
         v-if="draftView.draft.threadgateAllow != null"
-        class="tag post-draft-item__prop post-draft-item__reaction-control-prop"
+        class="tag post-draft-item__prop post-draft-item__reaction-control"
       >
         <SVGIcon name="lock" />
         <span>{{ $t("threadgate") }}</span>
       </div>
       <div
         v-if="draftView.draft.postgateEmbeddingRules?.[0].$type === 'app.bsky.feed.postgate#disableRule'"
-        class="tag post-draft-item__prop post-draft-item__reaction-control-prop"
+        class="tag post-draft-item__prop post-draft-item__reaction-control"
       >
         <SVGIcon name="lock" />
         <span>{{ $t("postgateNotAllow") }}</span>
@@ -147,10 +147,10 @@ async function deleteDraft () {
         @close="close"
       />
     </div>
-    <div class="group-parts">
+    <div class="button-container">
       <button
         type="button"
-        class="button--bordered button--small"
+        class="button--plain button--small"
         @click.stop="deleteDraft"
       >
         <SVGIcon name="remove" />
@@ -186,26 +186,38 @@ async function deleteDraft () {
     font-size: 0.875em;
   }
 
-  &__updated-at-prop {
+  &__updated-at {
     --color: var(--fg-color);
     opacity: 0.75;
   }
 
-  &__device-name-prop {
+  &__device-name {
     --color: var(--fg-color);
     opacity: 0.75;
   }
 
-  &__lang-prop {
+  &__lang {
     --color: var(--fg-color);
+
+    & > span {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
   }
 
-  &__reaction-control-prop {
+  &__reaction-control {
     --color: var(--notice-color);
   }
 
-  .group-parts {
+  .button-container {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5em;
     margin-left: auto;
+
+    .button {
+      min-width: 10em;
+    }
   }
 }
 </style>
