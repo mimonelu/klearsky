@@ -2,6 +2,7 @@
 import { inject, onMounted, reactive } from "vue"
 import type { AppBskyDraftDefs } from "@atproto/api"
 import PostDraftItem from "@/components/next/PostDraft/PostDraftItem.vue"
+import LoadButton from "@/components/buttons/LoadButton.vue"
 import Loader from "@/components/shells/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -13,30 +14,50 @@ const mainState = inject("state") as MainState
 const state = reactive<{
   drafts: Array<AppBskyDraftDefs.DraftView>
   loading: boolean
+  cursor?: string
 }>({
   drafts: [],
   loading: false,
+  cursor: undefined,
 })
+
+let mounted = false
 
 onMounted(fetchDrafts)
 
+function close () {
+  emit("close")
+}
+
 async function fetchDrafts () {
+  if (state.loading) {
+    return
+  }
   state.loading = true
-  const response = await mainState.atp.fetchDrafts()
+  const response = await mainState.atp.fetchDrafts(25, state.cursor)
   state.loading = false
   if (response instanceof Error) {
     mainState.openErrorPopup(response, "PostDraftPopup/fetchDrafts")
     return
   }
-  state.drafts = response.drafts
+  const existingIds = new Set(state.drafts.map((d) => d.id))
+  for (const draft of response.drafts) {
+    if (!existingIds.has(draft.id)) {
+      state.drafts.push(draft)
+    }
+  }
+  state.cursor = response.cursor || undefined
+  mounted = true
 }
 
 async function deleteDraft (id: string) {
   state.drafts = state.drafts.filter((d) => d.id !== id)
 }
 
-function close () {
-  emit("close")
+function scrolledToBottom () {
+  if (state.cursor != null) {
+    fetchDrafts()
+  }
 }
 </script>
 
@@ -45,6 +66,7 @@ function close () {
     class="post-draft-popup"
     :hasCloseButton="true"
     @close="close"
+    @scrolledToBottom="scrolledToBottom"
   >
     <template #header>
       <h2>
@@ -53,7 +75,7 @@ function close () {
       </h2>
     </template>
     <template #body>
-      <Loader v-if="state.loading" />
+      <Loader v-if="!mounted && state.loading" />
 
       <!-- 下書きがない場合 -->
       <div
@@ -72,6 +94,15 @@ function close () {
         :draftView="draftView"
         @close="close"
         @deleteDraft="deleteDraft"
+      />
+    </template>
+    <template #footer>
+      <LoadButton
+        v-if="mounted"
+        direction="old"
+        :processing="state.loading"
+        :disabled="state.cursor == null"
+        @activate="fetchDrafts"
       />
     </template>
   </Popup>

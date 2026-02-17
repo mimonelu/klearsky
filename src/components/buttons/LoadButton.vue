@@ -7,10 +7,13 @@ const emit = defineEmits<(name: string, direction: "old" | "middle" | "new") => 
 const props = defineProps<{
   direction: "old" | "middle" | "new"
   processing: boolean
+  disabled?: boolean
 }>()
 
 function onActivate () {
-  if (props.processing) return
+  if (props.processing) {
+    return
+  }
   emit("activate", props.direction)
 }
 </script>
@@ -19,6 +22,7 @@ function onActivate () {
   <button
     class="load-button"
     :data-direction="direction"
+    :disabled="disabled"
     @click.prevent="onActivate"
   >
     <template v-if="!processing">
@@ -45,6 +49,9 @@ function onActivate () {
   justify-content: center;
   position: relative;
   min-height: 3rem;
+  &[disabled] {
+    opacity: 0.5;
+  }
 
   // 抜け漏れ取得ボタン
   &[data-direction="middle"] {
@@ -56,7 +63,8 @@ function onActivate () {
     fill: var(--fill-color);
   }
 
-  &:focus, &:hover {
+  &:not([disabled]):focus,
+  &:not([disabled]):hover {
     --fill-color: rgb(var(--fg-color));
   }
 
