@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
 import { format } from "date-fns/format"
-import buildPostDraft from "@/components/next/PostDraft/build-post-draft"
+import { buildPostDraft } from "@/components/next/PostDraft/post-draft-utils"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
@@ -388,15 +388,21 @@ async function submitCallback () {
 
 async function saveDraft () {
   Util.blurElement()
-  const draft = buildPostDraft({
+  const draft = await buildPostDraft({
     text: easyFormState.text,
     url: easyFormState.url,
     type: props.type,
     post: props.post,
     langs: mainState.currentSetting.postLanguages,
     labels: state.labels,
+    medias: easyFormState.medias,
+    alts: easyFormState.alts,
     draftReactionControl: state.draftReactionControl,
   })
+  if (draft instanceof Error) {
+    mainState.openErrorPopup(draft, "SendPostPopup/saveDraft")
+    return
+  }
   mainState.loaderDisplay = true
   const result = await mainState.atp.createDraft(draft)
   mainState.loaderDisplay = false

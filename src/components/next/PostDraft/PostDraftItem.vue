@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import type { AppBskyDraftDefs } from "@atproto/api"
+import { deleteDraftMedia, extractSendPostPopupParams } from "@/components/next/PostDraft/post-draft-utils"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import PostDraftItemPost from "@/components/next/PostDraft/PostDraftItemPost.vue"
 
@@ -23,23 +24,13 @@ function close () {
 
 async function applyDraft () {
   const draft = props.draftView.draft
-  const post = draft.posts[0]
-
-  // TODO: 連投機能実装後に連投下書きにも対応すること
-  if (post == null || draft.posts.length >= 2) {
+  const params = extractSendPostPopupParams(draft, mainState.currentSetting.postLanguages)
+  if (params == null) {
     return
   }
 
-  const params: TTSendPostPopupParams = {
-    action: "reuse",
-    type: "post",
-    text: post.text,
-    url: post.embedExternals?.[0]?.uri,
-    langs: draft.langs ?? mainState.currentSetting.postLanguages,
-    labels: (post.labels as any)?.values?.map((l: any) => l.val),
-  }
-
   // 引用リポスト
+  const post = draft.posts[0]
   if (post.embedRecords?.[0]?.record?.uri != null) {
     const uri = post.embedRecords[0].record.uri
     mainState.loaderDisplay = true
@@ -52,36 +43,6 @@ async function applyDraft () {
     params.type = "quoteRepost"
     params.post = response[0]
   }
-
-  // 反応制限
-  const draftReactionControl: TTDraftReactionControl = {
-    postgateAllow: true,
-    threadgateAction: "none",
-    allowMention: false,
-    allowFollower: false,
-    allowFollowing: false,
-    listUris: [],
-  }
-  if (draft.threadgateAllow != null) {
-    draftReactionControl.threadgateAction = "custom"
-    for (const allow of draft.threadgateAllow) {
-      if (allow.$type.includes("mentionRule")) {
-        draftReactionControl.allowMention = true
-      } else if (allow.$type.includes("followerRule")) {
-        draftReactionControl.allowFollower = true
-      } else if (allow.$type.includes("followingRule")) {
-        draftReactionControl.allowFollowing = true
-      } else if (allow.$type.includes("listRule") && (allow as any).list != null) {
-        draftReactionControl.listUris.push((allow as any).list)
-      }
-    }
-  }
-  if (draft.postgateEmbeddingRules?.some((rule) => {
-    return rule.$type === "app.bsky.feed.postgate#disableRule"
-  })) {
-    draftReactionControl.postgateAllow = false
-  }
-  params.draftReactionControl = draftReactionControl
 
   // TODO: 画像・動画の適用
 
@@ -106,6 +67,14 @@ async function deleteDraft () {
     mainState.openErrorPopup(response, "PostDraftItem/deleteDraft")
     return
   }
+
+  // IndexedDB から画像を削除
+  const mediaResult = await deleteDraftMedia(props.draftView.draft)
+  if (mediaResult instanceof Error) {
+    mainState.openErrorPopup(mediaResult, "PostDraftItem/deleteDraftMedia")
+    return
+  }
+
   emit("deleteDraft", props.draftView.id)
 }
 </script>
