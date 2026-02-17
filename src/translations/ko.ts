@@ -175,6 +175,7 @@ export default () => ({
   "postDraftMediaNotFound": "이 임시 보관함의 미디어 데이터를 찾을 수 없습니다. 미디어 없이 복원하시겠습니까?",
   "postDraftMediaNotFoundOnDevice": "첨부된 미디어가 이 기기에 존재하지 않습니다.",
   "postDraftDeleteWithOrphanedMedia": "첨부된 미디어가 존재하지 않는 임시 보관함을 삭제하면 해당 임시 보관함을 작성한 기기에 미디어 데이터가 남을 수 있습니다.\n그래도 삭제하시겠습니까?",
+  "postDraftThreadUnsupported": "현재 Klearsky에서는 연속 게시물의 임시 보관함을 적용할 수 없습니다.",
 
   // POST EDIT
   // ============================================================================

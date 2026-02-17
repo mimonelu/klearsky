@@ -175,6 +175,7 @@ export default () => ({
   "postDraftMediaNotFound": "The media data for this draft was not found. Restore without media?",
   "postDraftMediaNotFoundOnDevice": "The attached media does not exist on this device.",
   "postDraftDeleteWithOrphanedMedia": "Deleting a draft with missing media may leave media data on the device where the draft was created.\nAre you sure you want to delete?",
+  "postDraftThreadUnsupported": "Currently, Klearsky does not support applying thread drafts.",
 
   // POST EDIT
   // ============================================================================

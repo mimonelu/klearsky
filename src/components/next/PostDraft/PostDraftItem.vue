@@ -147,6 +147,13 @@ async function deleteDraft () {
         @close="close"
       />
     </div>
+    <div
+      v-if="draftView.draft.posts.length >= 2"
+      class="tag post-draft-item__thread-unsupported"
+    >
+      <SVGIcon name="alert" />
+      <span>{{ $t("postDraftThreadUnsupported") }}</span>
+    </div>
     <div class="button-container">
       <button
         type="button"
@@ -207,6 +214,11 @@ async function deleteDraft () {
 
   &__reaction-control {
     --color: var(--notice-color);
+  }
+
+  &__thread-unsupported {
+    --color: var(--fg-color);
+    opacity: 0.5;
   }
 
   .button-container {

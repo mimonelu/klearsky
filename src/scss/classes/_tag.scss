@@ -2,13 +2,14 @@
 .tag--link {
   border-radius: var(--border-radius-middle);
   display: flex;
-  align-items: center;
+  align-items: flex baseline;
   grid-gap: 0.25em;
   overflow: hidden;
 
   & > .svg-icon {
     fill: rgb(var(--color));
     font-size: 0.875em;
+    top: 0.125em;
   }
 
   & > span {

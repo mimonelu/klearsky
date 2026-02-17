@@ -175,6 +175,7 @@ export default () => ({
   "postDraftMediaNotFound": "この下書きのメディアデータが見つかりません。メディアなしで復帰しますか？",
   "postDraftMediaNotFoundOnDevice": "添付されたメディアはこのデバイスに存在しません。",
   "postDraftDeleteWithOrphanedMedia": "添付されたメディアが存在しない下書きを削除すると、その下書きを作成したデバイスにメディアデータが残り続ける可能性があります。\nそれでも削除してよろしいですか？",
+  "postDraftThreadUnsupported": "現状、Klearskyでは連投の下書きを適用することはできません。",
 
   // POST EDIT
   // ============================================================================
