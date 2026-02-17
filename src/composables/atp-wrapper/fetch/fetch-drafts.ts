@@ -1,30 +1,27 @@
 import type { AppBskyDraftGetDrafts } from "@atproto/api"
+import { XRPCInvalidResponseError } from "@atproto/xrpc"
 
-// NOTE: agent.app.bsky.draft.getDrafts() を使用すると
-//       レスポンスバリデーションにより draftPost.text が 300 grapheme 以上の
-//       下書きで XRPCInvalidResponseError が発生するため、
-//       fetchWithoutAgent でバリデーションを回避する
 export default async function (
   this: TIAtpWrapper,
   limit?: number,
   cursor?: string
-): Promise<Error | AppBskyDraftGetDrafts.Response> {
-  const query: AppBskyDraftGetDrafts.QueryParams = {}
-  if (limit != null) {
-    query.limit = limit
+): Promise<Error | AppBskyDraftGetDrafts.OutputSchema> {
+  if (this.agent == null) {
+    return Error("noAgentError")
   }
-  if (cursor != null) {
-    query.cursor = cursor
-  }
-  const response = await this.fetchWithoutAgent({
-    path: "app.bsky.draft.getDrafts",
-    did: this.session?.did ?? "",
-    query,
-    method: "json",
-    bearer: true,
-  })
-  if (response instanceof Error) {
-    return response
-  }
+  const response: Error | AppBskyDraftGetDrafts.OutputSchema =
+    await this.agent.app.bsky.draft.getDrafts({ limit, cursor })
+      .then((value) => value.data)
+      .catch((error) => {
+        // NOTE: draftPost.text のレキシコン定義は maxGraphemes: 1000 だが、
+        //       @atproto/api のバリデータが post の maxGraphemes: 300 で検証するバグがあり、
+        //       300 grapheme 超のテキストを含む下書きで XRPCInvalidResponseError が発生する。
+        //       レスポンス自体は正常なため responseBody からデータを取り出す。
+        if (error instanceof XRPCInvalidResponseError) {
+          return error.responseBody as AppBskyDraftGetDrafts.OutputSchema
+        }
+        return error instanceof Error ? error : Error(String(error))
+      })
+  $log("fetchDrafts", response)
   return response
 }
