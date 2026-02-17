@@ -1,20 +1,30 @@
-import type { AppBskyDraftDefs } from "@atproto/api"
+import type { AppBskyDraftGetDrafts } from "@atproto/api"
 
+// NOTE: agent.app.bsky.draft.getDrafts() を使用すると
+//       レスポンスバリデーションにより draftPost.text が 300 grapheme 以上の
+//       下書きで XRPCInvalidResponseError が発生するため、
+//       fetchWithoutAgent でバリデーションを回避する
 export default async function (
   this: TIAtpWrapper,
   limit?: number,
   cursor?: string
-): Promise<Error | { cursor?: string; drafts: AppBskyDraftDefs.DraftView[] }> {
-  if (this.agent == null) {
-    return Error("noAgentError")
+): Promise<Error | AppBskyDraftGetDrafts.Response> {
+  const query: AppBskyDraftGetDrafts.QueryParams = {}
+  if (limit != null) {
+    query.limit = limit
   }
-  const response =
-    await this.agent.app.bsky.draft.getDrafts({ limit, cursor })
-      .then((value) => value)
-      .catch((error) => error)
-  $log("fetchDrafts", response)
+  if (cursor != null) {
+    query.cursor = cursor
+  }
+  const response = await this.fetchWithoutAgent({
+    path: "app.bsky.draft.getDrafts",
+    did: this.session?.did ?? "",
+    query,
+    method: "json",
+    bearer: true,
+  })
   if (response instanceof Error) {
     return response
   }
-  return response.data
+  return response
 }
