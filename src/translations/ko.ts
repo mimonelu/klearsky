@@ -173,6 +173,8 @@ export default () => ({
   "reDraftCaution": "첨부 파일은 재사용할 수 없습니다.\n그래도 재사용하시겠습니까?",
   "postDraftDeleteConfirmation": "이 임시 보관함이 삭제됩니다. 계속하시겠습니까?",
   "postDraftMediaNotFound": "이 임시 보관함의 미디어 데이터를 찾을 수 없습니다. 미디어 없이 복원하시겠습니까?",
+  "postDraftMediaNotFoundOnDevice": "첨부된 미디어가 이 기기에 존재하지 않습니다.",
+  "postDraftDeleteWithOrphanedMedia": "첨부된 미디어가 존재하지 않는 임시 보관함을 삭제하면 해당 임시 보관함을 작성한 기기에 미디어 데이터가 남을 수 있습니다.\n그래도 삭제하시겠습니까?",
 
   // POST EDIT
   // ============================================================================

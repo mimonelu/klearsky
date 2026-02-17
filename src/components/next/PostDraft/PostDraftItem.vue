@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import type { AppBskyDraftDefs } from "@atproto/api"
-import { deleteDraftMedia, extractSendPostPopupParams, hasDraftMedia } from "@/components/next/PostDraft/post-draft-utils"
+import { deleteDraftMedia, draftHasMedia, draftMediaExistsInStore, extractSendPostPopupParams } from "@/components/next/PostDraft/post-draft-utils"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import PostDraftItemPost from "@/components/next/PostDraft/PostDraftItemPost.vue"
 
@@ -26,10 +26,7 @@ async function applyDraft () {
   const draft = props.draftView.draft
 
   // メディアの存在チェック
-  const hasMedia =
-    (draft.posts[0]?.embedImages ?? []).length > 0 ||
-    (draft.posts[0]?.embedVideos ?? []).length > 0
-  if (hasMedia && !(await hasDraftMedia(draft))) {
+  if (draftHasMedia(draft) && !(await draftMediaExistsInStore(draft))) {
     if (!(await mainState.openConfirmationPopup({
       title: $t("confirmation"),
       text: $t("postDraftMediaNotFound"),
@@ -63,8 +60,11 @@ async function applyDraft () {
 }
 
 async function deleteDraft () {
-  const text = props.draftView.draft.posts?.[0]?.text?.replace(/\n/g, " ") ?? ""
+  const draft = props.draftView.draft
+  const text = draft.posts?.[0]?.text?.replace(/\n/g, " ") ?? ""
   const detail = text.length > 48 ? `${text.substring(0, 48)}...` : text
+
+  // 通常確認
   if (!(await mainState.openConfirmationPopup({
     title: $t("confirmation"),
     text: $t("postDraftDeleteConfirmation"),
@@ -72,6 +72,17 @@ async function deleteDraft () {
   }))) {
     return
   }
+
+  // メディアが存在しない場合の追加確認
+  if (draftHasMedia(draft) && !(await draftMediaExistsInStore(draft))) {
+    if (!(await mainState.openConfirmationPopup({
+      title: $t("confirmation"),
+      text: $t("postDraftDeleteWithOrphanedMedia"),
+    }))) {
+      return
+    }
+  }
+
   mainState.loaderDisplay = true
   const response = await mainState.atp.deleteDraft(props.draftView.id)
   mainState.loaderDisplay = false

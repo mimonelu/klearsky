@@ -173,6 +173,8 @@ export default () => ({
   "reDraftCaution": "Anhänge können nicht wiederverwendet werden.\nTrotzdem wiederverwenden?",
   "postDraftDeleteConfirmation": "Dieser Entwurf wird gelöscht. Sind Sie sicher?",
   "postDraftMediaNotFound": "Die Mediendaten für diesen Entwurf wurden nicht gefunden. Ohne Medien wiederherstellen?",
+  "postDraftMediaNotFoundOnDevice": "Die angehängten Medien existieren nicht auf diesem Gerät.",
+  "postDraftDeleteWithOrphanedMedia": "Beim Löschen eines Entwurfs mit fehlenden Medien können Mediendaten auf dem Gerät verbleiben, auf dem der Entwurf erstellt wurde.\nMöchten Sie trotzdem löschen?",
 
   // POST EDIT
   // ============================================================================

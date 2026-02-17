@@ -116,8 +116,16 @@ export async function buildPostDraft (params: {
   return draft
 }
 
+// 下書きにメディアが含まれるか判定
+export function draftHasMedia (draft: AppBskyDraftDefs.Draft): boolean {
+  return (
+    (draft.posts[0]?.embedImages ?? []).length > 0 ||
+    (draft.posts[0]?.embedVideos ?? []).length > 0
+  )
+}
+
 // 下書きのメディアが IndexedDB に存在するか判定
-export async function hasDraftMedia (draft: AppBskyDraftDefs.Draft): Promise<boolean> {
+export async function draftMediaExistsInStore (draft: AppBskyDraftDefs.Draft): Promise<boolean> {
   for (const post of draft.posts) {
     for (const image of post.embedImages ?? []) {
       if (image.localRef?.path == null) {

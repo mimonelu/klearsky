@@ -173,6 +173,8 @@ export default () => ({
   "reDraftCaution": "添付ファイルは再利用できません。\nこのまま再利用しますか？",
   "postDraftDeleteConfirmation": "この下書きを削除します。よろしいですか？",
   "postDraftMediaNotFound": "この下書きのメディアデータが見つかりません。メディアなしで復帰しますか？",
+  "postDraftMediaNotFoundOnDevice": "添付されたメディアはこのデバイスに存在しません。",
+  "postDraftDeleteWithOrphanedMedia": "添付されたメディアが存在しない下書きを削除すると、その下書きを作成したデバイスにメディアデータが残り続ける可能性があります。\nそれでも削除してよろしいですか？",
 
   // POST EDIT
   // ============================================================================

@@ -173,6 +173,8 @@ export default () => ({
   "reDraftCaution": "Les pièces jointes ne peuvent pas être réutilisées.\nRéutiliser quand même ?",
   "postDraftDeleteConfirmation": "Ce brouillon sera supprimé. Êtes-vous sûr ?",
   "postDraftMediaNotFound": "Les données média de ce brouillon sont introuvables. Restaurer sans média ?",
+  "postDraftMediaNotFoundOnDevice": "Les médias joints n'existent pas sur cet appareil.",
+  "postDraftDeleteWithOrphanedMedia": "La suppression d'un brouillon avec des médias manquants peut laisser des données média sur l'appareil où le brouillon a été créé.\nÊtes-vous sûr de vouloir supprimer ?",
 
   // POST EDIT
   // ============================================================================

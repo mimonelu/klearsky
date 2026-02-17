@@ -173,6 +173,8 @@ export default () => ({
   "reDraftCaution": "Attachments cannot be reused.\nReuse anyway?",
   "postDraftDeleteConfirmation": "This draft will be deleted. Are you sure?",
   "postDraftMediaNotFound": "The media data for this draft was not found. Restore without media?",
+  "postDraftMediaNotFoundOnDevice": "The attached media does not exist on this device.",
+  "postDraftDeleteWithOrphanedMedia": "Deleting a draft with missing media may leave media data on the device where the draft was created.\nAre you sure you want to delete?",
 
   // POST EDIT
   // ============================================================================
