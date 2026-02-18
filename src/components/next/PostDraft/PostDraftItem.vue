@@ -187,6 +187,7 @@ async function deleteDraft () {
     flex-wrap: wrap;
     align-items: center;
     grid-gap: 0.5em;
+    padding: 0 1em;
   }
 
   .tag {
@@ -200,7 +201,7 @@ async function deleteDraft () {
 
   &__device-name {
     --color: var(--fg-color);
-    opacity: 0.75;
+    opacity: 0.5;
   }
 
   &__lang {
@@ -219,13 +220,15 @@ async function deleteDraft () {
   &__thread-unsupported {
     --color: var(--fg-color);
     opacity: 0.5;
+    padding: 0 1em;
   }
 
   .button-container {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     grid-gap: 0.5em;
-    margin-left: auto;
+    padding: 0 1em;
 
     .button {
       min-width: 10em;

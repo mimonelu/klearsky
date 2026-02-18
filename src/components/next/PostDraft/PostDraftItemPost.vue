@@ -114,19 +114,13 @@ function close () {
 
 <style lang="scss" scoped>
 .post-draft-item-post {
-  border: 1px solid rgb(var(--fg-color), 0.25);
+  background-color: rgb(var(--fg-color), 0.0625);
+  border-top: 1px solid rgb(var(--fg-color), 0.125);
+  border-bottom: 1px solid rgb(var(--fg-color), 0.125);
   display: flex;
   flex-direction: column;
   grid-gap: 0.5em;
-  padding: 0.5em;
-  &:first-child {
-    border-top-left-radius: var(--border-radius-middle);
-    border-top-right-radius: var(--border-radius-middle);
-  }
-  &:last-child {
-    border-bottom-left-radius: var(--border-radius-middle);
-    border-bottom-right-radius: var(--border-radius-middle);
-  }
+  padding: 1em;
   &:not(:last-child) {
     border-bottom-style: none;
   }

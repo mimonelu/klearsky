@@ -118,11 +118,12 @@ function scrolledToBottom () {
     }
 
     .popup-body {
-      padding: 1rem;
+      padding: 1rem 0;
     }
   }
 
   .loader {
+    background-color: unset;
     position: unset;
   }
 }
