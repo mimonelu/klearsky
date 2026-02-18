@@ -18,6 +18,7 @@ export default () => ({
   "release": "解除する",
   "add": "追加する",
   "save": "保存する",
+  "load": "読み込む",
   "enabled": "有効",
   "disabled": "無効",
   "show": "表示する",

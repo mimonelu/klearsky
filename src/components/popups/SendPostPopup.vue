@@ -413,6 +413,12 @@ async function submitCallback () {
   }
 }
 
+function openPostDraftPopup () {
+  Util.blurElement()
+  mainState.openPostDraftPopup()
+  close()
+}
+
 async function saveDraft () {
   Util.blurElement()
   const draft = await buildPostDraft({
@@ -748,27 +754,38 @@ function toggleHiddenFeatures () {
           </div>
         </template>
         <template #after>
-          <!-- メインボタンコンテナ -->
-          <div class="main-button-container">
-            <!-- 下書き保存ボタン -->
-            <button
-              type="button"
-              class="button--bordered"
-              @click.prevent="saveDraft"
-            >
-              <SVGIcon name="postDraft" />
-              <span>{{ $t("postDraft") }}</span>
-            </button>
+          <!-- 送信ボタン -->
+          <button
+            type="submit"
+            class="button submit-button"
+          >
+            <SVGIcon :name="type" />
+            <span>{{ $t("submit") }}</span>
+          </button>
 
-            <!-- 送信ボタン -->
-            <button
-              type="submit"
-              class="button submit-button"
-            >
-              <SVGIcon :name="type" />
-              <span>{{ $t("submit") }}</span>
-            </button>
-          </div>
+          <!-- 下書きボタンコンテナ -->
+          <section class="post-draft-button-container">
+            <header>{{ $t("postDraft") }}</header>
+            <div class="group-parts">
+              <!-- 下書き読込ボタン -->
+              <button
+                type="button"
+                class="button--bordered button--small"
+                @click.prevent="openPostDraftPopup"
+              >
+                <span>{{ $t("load") }}</span>
+              </button>
+
+              <!-- 下書き保存ボタン -->
+              <button
+                type="button"
+                class="button button--small"
+                @click.prevent="saveDraft"
+              >
+                <span>{{ $t("save") }}</span>
+              </button>
+            </div>
+          </section>
 
           <!-- 動画アップロード情報 -->
           <div class="video-upload-info">
@@ -852,7 +869,7 @@ function toggleHiddenFeatures () {
 <style lang="scss" scoped>
 .send-post-popup {
   // ポスト種別に応じて配色を変更
-  --type-color: var(--fg-color);
+  --type-color: var(--accent-color);
   &[data-type="reply"] {
     --type-color: var(--post-color);
   }
@@ -1014,17 +1031,27 @@ function toggleHiddenFeatures () {
     }
   }
 
-  // メインボタンコンテナ
-  .main-button-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    grid-gap: 0.5rem;
-  }
-
   // 送信ボタン
   .submit-button {
     --fg-color: var(--type-color);
+  }
+
+  // 下書きボタンコンテナ
+  .post-draft-button-container {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+
+    & > header {
+      font-size: 0.875rem;
+      font-weight: bold;
+      opacity: 0.5;
+    }
+
+    .group-parts > * {
+      flex-grow: 1;
+    }
   }
 
   // 隠し機能

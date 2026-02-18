@@ -18,6 +18,7 @@ export default () => ({
   "release": "Release",
   "add": "Add",
   "save": "Save",
+  "load": "Load",
   "enabled": "Enabled",
   "disabled": "Disabled",
   "show": "Show",
