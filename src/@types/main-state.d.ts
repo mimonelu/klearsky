@@ -467,6 +467,8 @@ interface MainState {
   closeAdvancedSearchPopup: () => void
 
   // ポップアップ - 下書きポップアップ
+  currentPostDrafts: Array<import("@atproto/api").AppBskyDraftDefs.DraftView>
+  currentPostDraftsCursor: string | undefined
   postDraftPopupDisplay: boolean
   openPostDraftPopup: () => void
   closePostDraftPopup: () => void

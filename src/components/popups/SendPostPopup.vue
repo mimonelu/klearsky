@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
 import { format } from "date-fns/format"
+import type { AppBskyDraftDefs } from "@atproto/api"
 import { buildPostDraft } from "@/components/next/PostDraft/post-draft-utils"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
@@ -436,6 +437,14 @@ async function saveDraft () {
     mainState.openErrorPopup(result, "SendPostPopup/saveDraft")
     return
   }
+  const now = new Date().toISOString()
+  const draftView: AppBskyDraftDefs.DraftView = {
+    id: result,
+    draft,
+    createdAt: now,
+    updatedAt: now,
+  }
+  mainState.currentPostDrafts.unshift(draftView)
   emit("closeSendPostPopup", true, false)
 }
 

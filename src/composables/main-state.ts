@@ -539,6 +539,8 @@ export const state: MainState = reactive<MainState>({
   closeAdvancedSearchPopup: closeAdvancedSearchPopup,
 
   // ポップアップ - 下書きポップアップ
+  currentPostDrafts: [],
+  currentPostDraftsCursor: undefined,
   postDraftPopupDisplay: false,
   openPostDraftPopup: openPostDraftPopup,
   closePostDraftPopup: closePostDraftPopup,

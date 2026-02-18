@@ -1,9 +1,7 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive } from "vue"
-import type { AppBskyDraftDefs } from "@atproto/api"
+import { inject, onBeforeMount, reactive } from "vue"
 import PostDraftItem from "@/components/next/PostDraft/PostDraftItem.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
-import Loader from "@/components/shells/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
@@ -12,51 +10,60 @@ const emit = defineEmits<{(event: string): void}>()
 const mainState = inject("state") as MainState
 
 const state = reactive<{
-  drafts: Array<AppBskyDraftDefs.DraftView>
   loading: boolean
-  cursor?: string
 }>({
-  drafts: [],
   loading: false,
-  cursor: undefined,
 })
 
-let mounted = false
+let mounted = mainState.currentPostDrafts.length > 0
 
-onMounted(fetchDrafts)
+onBeforeMount(async () => {
+  if (mainState.currentPostDrafts.length === 0) {
+    await fetchContinuousResults("new")
+  }
+})
 
 function close () {
   emit("close")
 }
 
-async function fetchDrafts () {
+async function fetchContinuousResults (direction: "new" | "old") {
   if (state.loading) {
     return
   }
   state.loading = true
-  const response = await mainState.atp.fetchDrafts(25, state.cursor)
+  const cursor = direction === "old" ? mainState.currentPostDraftsCursor : undefined
+  const response = await mainState.atp.fetchDrafts(25, cursor)
   state.loading = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "PostDraftPopup/fetchDrafts")
+    mainState.openErrorPopup(response, "PostDraftPopup/fetchContinuousResults")
     return
   }
-  const existingIds = new Set(state.drafts.map((d) => d.id))
-  for (const draft of response.drafts) {
-    if (!existingIds.has(draft.id)) {
-      state.drafts.push(draft)
+  const existingIds = new Set(mainState.currentPostDrafts.map((d) => d.id))
+  if (direction === "old") {
+    for (const draft of response.drafts) {
+      if (!existingIds.has(draft.id)) {
+        mainState.currentPostDrafts.push(draft)
+      }
     }
+  } else {
+    const newDrafts = response.drafts.filter((d) => !existingIds.has(d.id))
+    mainState.currentPostDrafts.unshift(...newDrafts)
   }
-  state.cursor = response.cursor || undefined
+  const newCursor = response.cursor || undefined
+  if (direction === "old" || !mounted) {
+    mainState.currentPostDraftsCursor = newCursor
+  }
   mounted = true
 }
 
 async function deleteDraft (id: string) {
-  state.drafts = state.drafts.filter((d) => d.id !== id)
+  mainState.currentPostDrafts = mainState.currentPostDrafts.filter((d) => d.id !== id)
 }
 
 function scrolledToBottom () {
-  if (state.cursor != null) {
-    fetchDrafts()
+  if (mainState.currentPostDraftsCursor != null) {
+    fetchContinuousResults("old")
   }
 }
 </script>
@@ -74,12 +81,17 @@ function scrolledToBottom () {
         <span>{{ $t("postDraft") }}</span>
       </h2>
     </template>
+    <template #header-after>
+      <LoadButton
+        direction="new"
+        :processing="state.loading"
+        @activate="fetchContinuousResults('new')"
+      />
+    </template>
     <template #body>
-      <Loader v-if="!mounted && state.loading" />
-
       <!-- 下書きがない場合 -->
       <div
-        v-if="!state.loading && state.drafts.length === 0"
+        v-if="!state.loading && mainState.currentPostDrafts.length === 0"
         class="textlabel"
       >
         <div class="textlabel__text">
@@ -89,7 +101,7 @@ function scrolledToBottom () {
 
       <!-- 下書き一覧 -->
       <PostDraftItem
-        v-for="draftView of state.drafts"
+        v-for="draftView of mainState.currentPostDrafts"
         :key="draftView.id"
         :draftView="draftView"
         @close="close"
@@ -98,11 +110,10 @@ function scrolledToBottom () {
     </template>
     <template #footer>
       <LoadButton
-        v-if="mounted"
         direction="old"
         :processing="state.loading"
-        :disabled="state.cursor == null"
-        @activate="fetchDrafts"
+        :disabled="mainState.currentPostDraftsCursor == null"
+        @activate="fetchContinuousResults('old')"
       />
     </template>
   </Popup>
@@ -122,9 +133,8 @@ function scrolledToBottom () {
     }
   }
 
-  .loader {
-    background-color: unset;
-    position: unset;
+  .textlabel {
+    margin: 0 1rem;
   }
 }
 </style>

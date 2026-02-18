@@ -202,6 +202,12 @@ async function deleteDraft () {
   &__device-name {
     --color: var(--fg-color);
     opacity: 0.5;
+    overflow: hidden;
+
+    & > span {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   &__lang {
