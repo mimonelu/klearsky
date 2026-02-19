@@ -53,27 +53,47 @@ export async function buildPostDraft (params: {
     }]
   }
 
-  // 画像
+  // メディア
   if (params.medias.length > 0) {
     const embedImages: AppBskyDraftDefs.DraftEmbedImage[] = []
+    const embedVideos: AppBskyDraftDefs.DraftEmbedVideo[] = []
     for (let i = 0; i < params.medias.length; i++) {
-      const key = await saveMedia(params.medias[i])
+      const file = params.medias[i]
+      const key = await saveMedia(file)
       if (key instanceof Error) {
         return key
       }
-      embedImages.push({
-        $type: "app.bsky.draft.defs#draftEmbedImage",
-        localRef: {
-          $type: "app.bsky.draft.defs#draftEmbedLocalRef",
-          path: key,
-        },
-        alt: params.alts[i] ?? "",
-      })
-    }
-    draftPost.embedImages = embedImages
-  }
 
-  // TODO: 動画にも対応すること
+      // 動画
+      if (file.type.startsWith("video/")) {
+        embedVideos.push({
+          $type: "app.bsky.draft.defs#draftEmbedVideo",
+          localRef: {
+            $type: "app.bsky.draft.defs#draftEmbedLocalRef",
+            path: key,
+          },
+          alt: params.alts[i] ?? "",
+        })
+
+      // 画像
+      } else {
+        embedImages.push({
+          $type: "app.bsky.draft.defs#draftEmbedImage",
+          localRef: {
+            $type: "app.bsky.draft.defs#draftEmbedLocalRef",
+            path: key,
+          },
+          alt: params.alts[i] ?? "",
+        })
+      }
+    }
+    if (embedImages.length > 0) {
+      draftPost.embedImages = embedImages
+    }
+    if (embedVideos.length > 0) {
+      draftPost.embedVideos = embedVideos
+    }
+  }
 
   // Draft の組み立て
   const draft: AppBskyDraftDefs.Draft = {
@@ -196,7 +216,23 @@ export async function extractSendPostPopupParams (
     })
   }
 
-  // TODO: 動画
+  // 動画
+  for (const video of post.embedVideos ?? []) {
+    if (video.localRef?.path == null) {
+      continue
+    }
+    const entry = await loadMedia(video.localRef.path)
+    if (entry instanceof Error || entry == null) {
+      continue
+    }
+    if (params.medias == null) {
+      params.medias = []
+    }
+    params.medias.push({
+      video: entry.blob as unknown as TIBlob,
+      alt: video.alt ?? "",
+    })
+  }
 
   return params
 }
@@ -233,12 +269,20 @@ export function extractReactionControl (draft: AppBskyDraftDefs.Draft): TTDraftR
   return rc
 }
 
-// 下書きに紐づく画像を IndexedDB から削除
+// 下書きに紐づくメディアを IndexedDB から削除
 export async function deleteDraftMedia (draft: AppBskyDraftDefs.Draft): Promise<Error | void> {
   for (const post of draft.posts) {
     for (const image of post.embedImages ?? []) {
       if (image.localRef?.path != null) {
         const result = await deleteMedia(image.localRef.path)
+        if (result instanceof Error) {
+          return result
+        }
+      }
+    }
+    for (const video of post.embedVideos ?? []) {
+      if (video.localRef?.path != null) {
+        const result = await deleteMedia(video.localRef.path)
         if (result instanceof Error) {
           return result
         }

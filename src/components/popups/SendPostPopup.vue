@@ -249,17 +249,20 @@ watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => 
       const alts: Array<string> = []
       for (const media of props.medias) {
         // 画像
-        if (!(media.image instanceof Blob)) {
-          continue
-        }
-        try {
-          medias.push(new File([media.image], "", { type: media.image.type }))
-          alts.push(media.alt)
-        } catch {
-          continue
+        if (media.image instanceof Blob) {
+          try {
+            medias.push(new File([media.image], "", { type: media.image.type }))
+            alts.push(media.alt)
+          } catch { /**/ }
         }
 
-        // TODO: 動画
+        // 動画
+        if (media.video instanceof Blob) {
+          try {
+            medias.push(new File([media.video], "", { type: media.video.type }))
+            alts.push(media.alt)
+          } catch { /**/ }
+        }
       }
       easyFormState.medias = medias
       easyFormState.alts = alts

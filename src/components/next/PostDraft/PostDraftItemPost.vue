@@ -15,11 +15,14 @@ const props = defineProps<{
 }>()
 
 const imageUrls = ref<Array<string>>([])
+const videoUrls = ref<Array<string>>([])
 
 const mediaNotFound = ref(false)
 
 onMounted(async () => {
-  const urls: Array<string> = []
+  const imgs: Array<string> = []
+  const vids: Array<string> = []
+
   for (const image of props.draftPost.embedImages ?? []) {
     if (image.localRef?.path == null) {
       continue
@@ -27,16 +30,33 @@ onMounted(async () => {
     const entry = await loadMedia(image.localRef.path)
     if (entry instanceof Error || entry == null) {
       mediaNotFound.value = true
-      urls.forEach((url) => URL.revokeObjectURL(url))
+      imgs.forEach((url) => URL.revokeObjectURL(url))
       return
     }
-    urls.push(URL.createObjectURL(entry.blob))
+    imgs.push(URL.createObjectURL(entry.blob))
   }
-  imageUrls.value = urls
+
+  for (const video of props.draftPost.embedVideos ?? []) {
+    if (video.localRef?.path == null) {
+      continue
+    }
+    const entry = await loadMedia(video.localRef.path)
+    if (entry instanceof Error || entry == null) {
+      mediaNotFound.value = true
+      imgs.forEach((url) => URL.revokeObjectURL(url))
+      vids.forEach((url) => URL.revokeObjectURL(url))
+      return
+    }
+    vids.push(URL.createObjectURL(entry.blob))
+  }
+
+  imageUrls.value = imgs
+  videoUrls.value = vids
 })
 
 onBeforeUnmount(() => {
   imageUrls.value.forEach((url) => URL.revokeObjectURL(url))
+  videoUrls.value.forEach((url) => URL.revokeObjectURL(url))
 })
 
 function close () {
@@ -98,9 +118,25 @@ function close () {
       />
     </div>
 
+    <!-- 動画 -->
     <div
-      v-if="draftPost.embedVideos?.[0]?.localRef != null"
-    >{{ draftPost.embedVideos[0].localRef }}</div>
+      v-else-if="videoUrls.length > 0"
+      class="post-draft-item-post__video-container"
+    >
+      <video
+        v-for="url, urlIndex of videoUrls"
+        :key="urlIndex"
+        class="post-draft-item-post__video"
+        :src="url"
+        :aria-label="draftPost.embedVideos?.[urlIndex]?.alt ?? ''"
+        controls
+        loading="lazy"
+        loop
+        muted
+        preload="metadata"
+      />
+    </div>
+
     <LabelTags
       v-if="(draftPost.labels as any)?.values != null"
       :labels="(draftPost.labels as any).values as TTLabel[]"
@@ -151,6 +187,18 @@ function close () {
     background-color: rgb(var(--fg-color), 0.125);
     display: block;
     object-fit: contain;
+  }
+
+  &__video-container {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 0.5em;
+  }
+
+  &__video {
+    background-color: rgb(var(--fg-color), 0.125);
+    display: block;
+    width: 100%;
   }
 
   &__tag-wrapper {
