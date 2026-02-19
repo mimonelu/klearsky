@@ -485,11 +485,13 @@ async function saveOrUpdateDraft () {
     const now = new Date().toISOString()
     const index = mainState.currentPostDrafts.findIndex((d) => d.id === state.currentDraftId)
     if (index !== -1) {
-      mainState.currentPostDrafts[index] = {
+      const updated = {
         ...mainState.currentPostDrafts[index],
         draft,
         updatedAt: now,
       }
+      mainState.currentPostDrafts.splice(index, 1)
+      mainState.currentPostDrafts.unshift(updated)
     }
 
   // 下書き新規作成
