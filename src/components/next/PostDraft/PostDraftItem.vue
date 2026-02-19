@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import type { AppBskyDraftDefs } from "@atproto/api"
-import { deleteDraftMedia, draftHasMedia, draftMediaExistsInStore, extractSendPostPopupParams } from "@/components/next/PostDraft/post-draft-utils"
+import { deleteDraftWithMedia, draftHasMedia, draftMediaExistsInStore, extractSendPostPopupParams } from "@/components/next/PostDraft/post-draft-utils"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import PostDraftItemPost from "@/components/next/PostDraft/PostDraftItemPost.vue"
 
@@ -84,17 +84,10 @@ async function deleteDraft () {
   }
 
   mainState.loaderDisplay = true
-  const response = await mainState.atp.deleteDraft(props.draftView.id)
+  const result = await deleteDraftWithMedia(mainState.atp, props.draftView)
   mainState.loaderDisplay = false
-  if (response instanceof Error) {
-    mainState.openErrorPopup(response, "PostDraftItem/deleteDraft")
-    return
-  }
-
-  // IndexedDB から画像を削除
-  const mediaResult = await deleteDraftMedia(props.draftView.draft)
-  if (mediaResult instanceof Error) {
-    mainState.openErrorPopup(mediaResult, "PostDraftItem/deleteDraftMedia")
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "PostDraftItem/deleteDraft")
     return
   }
 

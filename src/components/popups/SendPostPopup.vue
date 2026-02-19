@@ -2,7 +2,7 @@
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
 import { format } from "date-fns/format"
 import type { AppBskyDraftDefs } from "@atproto/api"
-import { buildPostDraft } from "@/components/next/PostDraft/post-draft-utils"
+import { buildPostDraft, deleteDraftWithMedia } from "@/components/next/PostDraft/post-draft-utils"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
@@ -388,7 +388,7 @@ async function submitCallback () {
           state.draftReactionControl.postgateAllow
         )
         if (responseOfPostgate instanceof Error) {
-          mainState.openErrorPopup(responseOfPostgate, "SendPostPopup/submitCallback")
+          mainState.openErrorPopup(responseOfPostgate, "SendPostPopup/updatePostgate")
           return
         }
       }
@@ -403,7 +403,7 @@ async function submitCallback () {
           state.draftReactionControl.listUris
         )
         if (responseOfThreadgate instanceof Error) {
-          mainState.openErrorPopup(responseOfThreadgate, "SendPostPopup/submitCallback")
+          mainState.openErrorPopup(responseOfThreadgate, "SendPostPopup/updateThreadgate")
           return
         }
       }
@@ -414,7 +414,27 @@ async function submitCallback () {
         mainState.fetchTimeline("new")
       }, 1000)
 
-      state.currentDraftId = undefined
+      // 下書きの削除確認
+      if (state.currentDraftId != null) {
+        const draftId = state.currentDraftId
+        state.currentDraftId = undefined
+        const confirmed = await mainState.openConfirmationPopup({
+          title: $t("confirmation"),
+          text: $t("postDraftDeleteConfirmation"),
+        })
+        if (confirmed) {
+          const draftView = mainState.currentPostDrafts.find((d) => d.id === draftId)
+          if (draftView != null) {
+            const deleteResult = await deleteDraftWithMedia(mainState.atp, draftView)
+            if (deleteResult instanceof Error) {
+              mainState.openErrorPopup(deleteResult, "SendPostPopup/deleteDraftWithMedia")
+              return
+            }
+            mainState.currentPostDrafts = mainState.currentPostDrafts.filter((d) => d.id !== draftId)
+          }
+        }
+      }
+
       emit("closeSendPostPopup", true, false)
     }
   } finally {

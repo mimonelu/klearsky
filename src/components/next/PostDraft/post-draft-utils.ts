@@ -271,6 +271,18 @@ export function extractReactionControl (draft: AppBskyDraftDefs.Draft): TTDraftR
   return rc
 }
 
+// 下書きの削除（API + IndexedDB メディア）
+export async function deleteDraftWithMedia (
+  atp: TIAtpWrapper,
+  draftView: AppBskyDraftDefs.DraftView,
+): Promise<Error | void> {
+  const response = await atp.deleteDraft(draftView.id)
+  if (response instanceof Error) {
+    return response
+  }
+  return await deleteDraftMedia(draftView.draft)
+}
+
 // 下書きに紐づくメディアを IndexedDB から削除
 export async function deleteDraftMedia (draft: AppBskyDraftDefs.Draft): Promise<Error | void> {
   for (const post of draft.posts) {
