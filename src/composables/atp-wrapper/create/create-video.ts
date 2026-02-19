@@ -28,7 +28,8 @@ export default async function (
   // 動画アップロード
   const urlOfUploadVideo = new URL("https://video.bsky.app/xrpc/app.bsky.video.uploadVideo")
   urlOfUploadVideo.searchParams.append("did", this.session.did)
-  urlOfUploadVideo.searchParams.append("name", file.name)
+  const fileName = file.name || `video.${file.type.split("/")[1] || "mp4"}`
+  urlOfUploadVideo.searchParams.append("name", fileName)
   const responseOfUploadVideo: Error | Response =
     await Util.fetchWithTimeout(urlOfUploadVideo, {
       method: "POST",
