@@ -271,6 +271,8 @@ interface TIAtpWrapper {
     (convoId: string, messageId?: string): Promise<Error | TIChatConvo>
   updateCustomBookmarks
     (this: TIAtpWrapper, uri: string, cid?: string, tags?: Array<string>): Promise<Error | TTCidUri>
+  updateDraft
+    (this: TIAtpWrapper, id: string, draft: import("@atproto/api").AppBskyDraftDefs.Draft): Promise<Error | undefined>
   updateJwt
     (onRefreshSession?: () => void): Promise<Error | undefined>
   updateList

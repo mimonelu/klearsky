@@ -129,6 +129,7 @@ import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
 import updateChatConvoRead from "@/composables/atp-wrapper/chat/update-chat-convo-read"
 import updateCustomBookmarks from "@/composables/atp-wrapper/update/update-custom-bookmark"
+import updateDraft from "@/composables/atp-wrapper/update/update-draft"
 import updateJwt from "@/composables/atp-wrapper/session/update-jwt"
 import updateList from "@/composables/atp-wrapper/update/update-list"
 import updateListBlockToDisable from "@/composables/atp-wrapper/update/update-list-block-to-disable"
@@ -359,6 +360,7 @@ class AtpWrapper implements TIAtpWrapper {
   updateBlockToEnable = updateBlockToEnable
   updateChatConvoRead = updateChatConvoRead
   updateCustomBookmarks = updateCustomBookmarks
+  updateDraft = updateDraft
   updateJwt = updateJwt
   updateList = updateList
   updateListBlockToDisable = updateListBlockToDisable

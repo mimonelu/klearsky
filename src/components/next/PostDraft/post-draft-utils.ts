@@ -171,9 +171,10 @@ export async function draftMediaExistsInStore (draft: AppBskyDraftDefs.Draft): P
 
 // 下書きから TTSendPostPopupParams を組み立て
 export async function extractSendPostPopupParams (
-  draft: AppBskyDraftDefs.Draft,
+  draftView: AppBskyDraftDefs.DraftView,
   fallbackLangs?: Array<string>,
 ): Promise<TTSendPostPopupParams | undefined> {
+  const draft = draftView.draft
   const post = draft.posts[0]
 
   // TODO: 連投機能実装後に連投下書きにも対応すること
@@ -184,6 +185,7 @@ export async function extractSendPostPopupParams (
   const params: TTSendPostPopupParams = {
     action: "reuse",
     type: "post",
+    draftId: draftView.id,
     text: post.text,
     url: post.embedExternals?.[0]?.uri,
     labels: (post.labels as any)?.values?.map((l: any) => l.val),

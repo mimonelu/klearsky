@@ -25,6 +25,7 @@ const props = defineProps<{
   langs?: Array<string>
   labels?: Array<string>
   medias?: Array<TTImage>
+  draftId?: string
   draftReactionControl?: TTDraftReactionControl
 }>()
 
@@ -34,6 +35,7 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   labels: Array<string>
+  currentDraftId: string | undefined
   draftReactionControl: TTDraftReactionControl
   isDraftReactionControlOn: ComputedRef<boolean>
   postDatePopupDate: ComputedRef<undefined | string>
@@ -41,6 +43,7 @@ const state = reactive<{
   videoLimits?: TIVideoLimits
 }>({
   labels: [],
+  currentDraftId: undefined,
   draftReactionControl: {
     postgateAllow: true,
     threadgateAction: "none",
@@ -235,6 +238,7 @@ watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => 
     easyFormState.alts = []
     easyFormState.urlHasImage = [true]
     state.labels = props.labels ?? []
+    state.currentDraftId = props.draftId
     state.draftReactionControl.postgateAllow = true
     state.draftReactionControl.threadgateAction = "none"
     state.draftReactionControl.allowMention = false
@@ -320,6 +324,7 @@ async function reset () {
   if (!result) {
     return
   }
+  state.currentDraftId = undefined
   emit("closeSendPostPopup", false, false)
   await nextTick()
   mainState.openSendPostPopup({
@@ -409,6 +414,7 @@ async function submitCallback () {
         mainState.fetchTimeline("new")
       }, 1000)
 
+      state.currentDraftId = undefined
       emit("closeSendPostPopup", true, false)
     }
   } finally {
@@ -422,7 +428,7 @@ function openPostDraftPopup () {
   close()
 }
 
-async function saveDraft () {
+async function saveOrUpdateDraft () {
   Util.blurElement()
   const draft = await buildPostDraft({
     text: easyFormState.text,
@@ -436,24 +442,47 @@ async function saveDraft () {
     draftReactionControl: state.draftReactionControl,
   })
   if (draft instanceof Error) {
-    mainState.openErrorPopup(draft, "SendPostPopup/saveDraft")
+    mainState.openErrorPopup(draft, "SendPostPopup/saveOrUpdateDraft")
     return
   }
   mainState.loaderDisplay = true
-  const result = await mainState.atp.createDraft(draft)
-  mainState.loaderDisplay = false
-  if (result instanceof Error) {
-    mainState.openErrorPopup(result, "SendPostPopup/saveDraft")
-    return
+
+  // 下書き更新
+  if (state.currentDraftId != null) {
+    const error = await mainState.atp.updateDraft(state.currentDraftId, draft)
+    mainState.loaderDisplay = false
+    if (error instanceof Error) {
+      mainState.openErrorPopup(error, "SendPostPopup/saveOrUpdateDraft")
+      return
+    }
+    const now = new Date().toISOString()
+    const index = mainState.currentPostDrafts.findIndex((d) => d.id === state.currentDraftId)
+    if (index !== -1) {
+      mainState.currentPostDrafts[index] = {
+        ...mainState.currentPostDrafts[index],
+        draft,
+        updatedAt: now,
+      }
+    }
+
+  // 下書き新規作成
+  } else {
+    const result = await mainState.atp.createDraft(draft)
+    mainState.loaderDisplay = false
+    if (result instanceof Error) {
+      mainState.openErrorPopup(result, "SendPostPopup/saveOrUpdateDraft")
+      return
+    }
+    const now = new Date().toISOString()
+    const draftView: AppBskyDraftDefs.DraftView = {
+      id: result,
+      draft,
+      createdAt: now,
+      updatedAt: now,
+    }
+    mainState.currentPostDrafts.unshift(draftView)
   }
-  const now = new Date().toISOString()
-  const draftView: AppBskyDraftDefs.DraftView = {
-    id: result,
-    draft,
-    createdAt: now,
-    updatedAt: now,
-  }
-  mainState.currentPostDrafts.unshift(draftView)
+
   emit("closeSendPostPopup", true, false)
 }
 
@@ -773,19 +802,20 @@ function toggleHiddenFeatures () {
               <!-- 下書き読込ボタン -->
               <button
                 type="button"
-                class="button--bordered button--small"
+                class="button--bordered"
                 @click.prevent="openPostDraftPopup"
               >
                 <span>{{ $t("load") }}</span>
               </button>
 
-              <!-- 下書き保存ボタン -->
+              <!-- 下書き保存／更新ボタン -->
               <button
                 type="button"
-                class="button button--small"
-                @click.prevent="saveDraft"
+                class="button create-or-update-psot-draft-button"
+                :data-type="state.currentDraftId != null ? 'update' : 'save'"
+                @click.prevent="saveOrUpdateDraft"
               >
-                <span>{{ $t("save") }}</span>
+                <span>{{ $t(state.currentDraftId != null ? "update" : "save") }}</span>
               </button>
             </div>
           </section>
@@ -1055,6 +1085,11 @@ function toggleHiddenFeatures () {
     .group-parts > * {
       flex-grow: 1;
     }
+  }
+
+  // 下書き保存／更新ボタン
+  .create-or-update-psot-draft-button[data-type="update"] {
+    --fg-color: var(--share-color);
   }
 
   // 隠し機能

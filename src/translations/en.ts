@@ -19,6 +19,7 @@ export default () => ({
   "add": "Add",
   "save": "Save",
   "load": "Load",
+  "update": "Update",
   "enabled": "Enabled",
   "disabled": "Disabled",
   "show": "Show",

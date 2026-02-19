@@ -174,6 +174,7 @@ type TTSendPostPopupParams = {
   langs?: Array<string>
   labels?: Array<string>
   medias?: Array<TTImage>
+  draftId?: string
   draftReactionControl?: TTDraftReactionControl
 }
 

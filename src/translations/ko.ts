@@ -19,6 +19,7 @@ export default () => ({
   "add": "추가",
   "save": "저장",
   "load": "불러오기",
+  "update": "업데이트",
   "enabled": "활성화",
   "disabled": "비활성화",
   "show": "표시",

@@ -693,6 +693,7 @@ const {
           :langs="state.sendPostPopupProps.langs"
           :labels="state.sendPostPopupProps.labels"
           :medias="state.sendPostPopupProps.medias"
+          :draftId="state.sendPostPopupProps.draftId"
           :draftReactionControl="state.sendPostPopupProps.draftReactionControl"
           @closeSendPostPopup="closeSendPostPopup as unknown"
         />
