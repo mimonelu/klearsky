@@ -2,7 +2,7 @@
 import { computed, inject, nextTick, onMounted, reactive, ref, watch, type ComputedRef, type Ref } from "vue"
 import { format } from "date-fns/format"
 import type { AppBskyDraftDefs } from "@atproto/api"
-import { buildPostDraft, deleteDraftWithMedia } from "@/components/next/PostDraft/post-draft-utils"
+import { buildPostDraft, deleteDraftMedia, deleteDraftWithMedia } from "@/components/next/PostDraft/post-draft-utils"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import LinkCard from "@/components/cards/LinkCard.vue"
@@ -469,12 +469,19 @@ async function saveOrUpdateDraft () {
 
   // 下書き更新
   if (state.currentDraftId != null) {
+    const oldDraftView = mainState.currentPostDrafts.find((d) => d.id === state.currentDraftId)
     const error = await mainState.atp.updateDraft(state.currentDraftId, draft)
     mainState.loaderDisplay = false
     if (error instanceof Error) {
       mainState.openErrorPopup(error, "SendPostPopup/saveOrUpdateDraft")
       return
     }
+
+    // 古いメディアを IndexedDB から削除
+    if (oldDraftView != null) {
+      await deleteDraftMedia(oldDraftView.draft)
+    }
+
     const now = new Date().toISOString()
     const index = mainState.currentPostDrafts.findIndex((d) => d.id === state.currentDraftId)
     if (index !== -1) {
