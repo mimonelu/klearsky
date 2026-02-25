@@ -1058,10 +1058,11 @@ function saveSettings () {
   if (state.settings[did].linkcardEmbeddedControl == null) {
     state.settings[did].linkcardEmbeddedControl = [
       // "applemusic",
+      "bandcamp",
       "giphy",
       // "graysky",
       // "spotify",
-      "tenor",
+      // "tenor",
       // "twitch",
       "youtube",
       // "vimeo",

@@ -855,6 +855,7 @@ export default () => ({
   // EXTERNAL SERVICES
   // ============================================================================
   "pnAppleMusic": "Apple Music",
+  "pnBandcamp": "Bandcamp",
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",
   "pnSpotify": "Spotify",

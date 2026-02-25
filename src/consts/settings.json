@@ -94,6 +94,7 @@
   ],
   "LINKCARD_EMBEDDED_CONTROL": [
     { "label": "pnAppleMusic", "value": "applemusic" },
+    { "label": "pnBandcamp", "value": "bandcamp" },
     { "label": "pnGiphy", "value": "giphy" },
     { "label": "pnGraysky", "value": "graysky" },
     { "label": "pnSpotify", "value": "spotify" },

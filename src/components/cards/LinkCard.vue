@@ -20,6 +20,7 @@ const embeddedType = computed((): string => {
   const settingValues = mainState.currentSetting.linkcardEmbeddedControl
   if (settingValues == null) return ""
   if (embeddedContentType === "applemusic" && settingValues.includes("applemusic")) return "applemusic"
+  if (embeddedContentType === "bandcamp" && settingValues.includes("bandcamp")) return "bandcamp"
   if (embeddedContentType === "giphy" && settingValues.includes("giphy")) return "giphy"
   if (embeddedContentType === "graysky" && settingValues.includes("graysky")) return "graysky"
   if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
@@ -50,6 +51,15 @@ function getEmbeddedContentId () {
     if (matches != null && matches[1] != null) {
       embeddedContentType = "applemusic"
       embeddedContentId = matches[1]
+      return
+    }
+  }
+
+  // 埋込型リンクカード - Bandcamp
+  if (url.hostname.endsWith("bandcamp.com")) {
+    const matches = url.pathname.match(/^\/(?:album|track)\//)
+    if (matches != null) {
+      embeddedContentType = "bandcamp"
       return
     }
   }
@@ -234,6 +244,20 @@ function searchUrl () {
         scrolling="no"
         width="100%"
         height="450"
+      />
+
+      <!-- 埋込型リンクカード - bandcamp -->
+      <iframe
+        v-if="embeddedType === 'bandcamp'"
+        class="external--bandcamp"
+        :src="`https://bandcamp.com/EmbeddedPlayer/url=${encodeURIComponent(external.uri)}/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/`"
+        allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+        allowfullScreen
+        frameBorder="0"
+        loading="lazy"
+        scrolling="no"
+        width="100%"
+        height="120px"
       />
 
       <!-- 埋込型リンクカード - Giphy -->
@@ -504,7 +528,7 @@ function searchUrl () {
       font-size: 0.875em;
 
       & > span {
-        line-height: var(--line-height-high);
+        line-height: var(--line-height-middle);
       }
     }
 
@@ -552,6 +576,9 @@ function searchUrl () {
     background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
   }
+
+  // 埋込型リンクカード - Bandcamp
+  // &--bandcamp {}
 
   // 埋込型リンクカード - Giphy
   &--giphy {
