@@ -373,7 +373,6 @@ async function submitCallback () {
       languages: mainState.currentSetting.postLanguages,
       labels: state.labels,
       lightning: mainState.currentSetting.lightning,
-      listMentionDids: mainState.listMentionPopupProps.dids,
     })
     if (result instanceof Error) {
       mainState.openSendPostPopup()

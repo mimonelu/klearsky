@@ -852,16 +852,7 @@ export const state: MainState = reactive<MainState>({
   openReactionControlPopup: openReactionControlPopup,
   closeReactionControlPopup: closeReactionControlPopup,
 
-  // ポップアップ - リストメンションポップアップ
-  listMentionPopupProps: {
-    display: false,
-    list: undefined,
-    dids: [],
-  },
-  openListMentionPopup: openListMentionPopup,
-  closeListMentionPopup: closeListMentionPopup,
-
-    // ポップアップ - HTML ポップアップ
+  // ポップアップ - HTML ポップアップ
   htmlPopupProps: {
     display: false,
     type: undefined,
@@ -2950,8 +2941,6 @@ function resetSendPostPopup () {
   state.sendPostPopupProps.draftId = undefined
   state.sendPostPopupProps.draftReactionControl = undefined
   state.postDatePopupDate = undefined
-  state.listMentionPopupProps.list = undefined
-  state.listMentionPopupProps.dids.splice(0)
 }
 
 // ポップアップ - ポスト編集ポップアップ
@@ -3006,17 +2995,6 @@ function closeReactionControlPopup (params: TICloseReactionControlPopupProps) {
     state.reactionControlPopupProps.onClosed(params)
   }
   state.reactionControlPopupProps.display = false
-}
-
-// ポップアップ - リストメンションポップアップ
-
-function openListMentionPopup () {
-  state.listMentionPopupProps.dids.splice(0)
-  state.listMentionPopupProps.display = true
-}
-
-function closeListMentionPopup () {
-  state.listMentionPopupProps.display = false
 }
 
 // ポップアップ - HTML ポップアップ

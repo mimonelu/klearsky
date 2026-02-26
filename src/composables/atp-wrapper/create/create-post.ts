@@ -56,29 +56,6 @@ export default async function (
     record.facets = richText.facets
   }
 
-  // リストメンション
-  if (params.listMentionDids?.length) {
-    if (record.facets == null) {
-      record.facets = []
-    }
-    params.listMentionDids.forEach((did) => {
-      record.facets?.push({
-        $type: "app.bsky.richtext.facet",
-        features: [{
-          $type: "app.bsky.richtext.facet#mention",
-          did,
-        }],
-        index: {
-          byteEnd: 0,
-          byteStart: 0,
-        }
-      })
-    })
-
-    // ユーザーの切り詰め
-    record.facets = record.facets.splice(0, CONSTS.LIMIT_OF_LIST_MENTION_ACCOUNTS)
-  }
-
   // カスタムフィールド - Lightning
   if (params.lightning) {
     record[OWN_DOMAIN.OWN_DOMAIN_LIGHTNING] = params.lightning

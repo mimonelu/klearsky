@@ -32,7 +32,6 @@ import LabelerSettingsPopup from "@/components/popups/LabelerSettingsPopup.vue"
 import LikeUsersPopup from "@/components/popups/LikeUsersPopup.vue"
 import ListCardPopover from "@/components/popovers/ListCardPopover.vue"
 import ListEditPopup from "@/components/popups/ListEditPopup.vue"
-import ListMentionPopup from "@/components/popups/ListMentionPopup.vue"
 import ListUserManagementPopup from "@/components/popups/ListUserManagementPopup.vue"
 import Loader from "@/components/shells/Loader.vue"
 import LoginPopup from "@/components/next/Login/LoginPopup.vue"
@@ -750,15 +749,6 @@ const {
           v-if="state.reactionControlPopupProps.display"
           v-bind="state.reactionControlPopupProps"
           @close="state.closeReactionControlPopup as unknown"
-        />
-      </Transition>
-
-      <!-- リストメンションポップアップ -->
-      <Transition>
-        <ListMentionPopup
-          v-if="state.listMentionPopupProps.display"
-          v-bind="state.listMentionPopupProps"
-          @close="state.closeListMentionPopup"
         />
       </Transition>
 

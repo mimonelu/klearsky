@@ -888,13 +888,6 @@ export default () => ({
   "oplogsApp": "PLC operation logs",
 
   // ============================================================================
-  // LIST MENTIONS
-  // ============================================================================
-  "listMention": "List mention",
-  "listMentionNotification": "Sends notifications to users in the selected list(up to 30 users). Mentions are not displayed in your post, and ostensibly the users to be notified are not known.",
-  "listMentionNotification2": "This feature is deprecated. On bsky.social, a spam label is applied.",
-
-  // ============================================================================
   // HIDDEN FEATURES
   // ============================================================================
   "hiddenFeatures": "Duplicated features",

@@ -155,7 +155,6 @@ type TTCreatePostParams = {
   languages?: Array<string>
   labels?: Array<string>
   lightning?: string
-  listMentionDids?: Array<string>
   [k: string]: unknown
 }
 
