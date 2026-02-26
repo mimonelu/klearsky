@@ -39,7 +39,6 @@ const state = reactive<{
   draftReactionControl: TTDraftReactionControl
   isDraftReactionControlOn: ComputedRef<boolean>
   postDatePopupDate: ComputedRef<undefined | string>
-  hiddenFeaturesDisplay: boolean
   videoLimits?: TIVideoLimits
 }>({
   labels: [],
@@ -64,7 +63,6 @@ const state = reactive<{
     if (Number.isNaN(date.getTime())) return
     return format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'")
   }),
-  hiddenFeaturesDisplay: false,
   videoLimits: undefined,
 })
 
@@ -620,10 +618,6 @@ function openReactionControlPopup () {
   })
 }
 
-function openListMentionPopup () {
-  mainState.openListMentionPopup()
-}
-
 // マイワード
 
 let textareaSelectionStart = 0
@@ -663,11 +657,6 @@ function openEasterEggPopover ($event: Event) {
   mainState.easterEggPopoverCallback = applyEasterEgg
   mainState.easterEggPopoverHasSavedText = hasSavedText
   mainState.openEasterEggPopover($event.target)
-}
-
-// 隠し機能のトグル
-function toggleHiddenFeatures () {
-  state.hiddenFeaturesDisplay = !state.hiddenFeaturesDisplay
 }
 </script>
 
@@ -803,6 +792,17 @@ function toggleHiddenFeatures () {
               <b v-if="state.isDraftReactionControlOn">ON</b>
             </button>
 
+            <!-- ポスト日時選択ポップアップトリガー -->
+            <button
+              type="button"
+              class="button--bordered post-date-button"
+              @click.prevent="mainState.openPostDatePopup"
+            >
+              <SVGIcon name="history" />
+              <!-- span>{{ $t("date") }}</span -->
+              <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
+            </button>
+
             <!-- イースターエッグポップオーバートリガー -->
             <button
               type="button"
@@ -872,52 +872,6 @@ function toggleHiddenFeatures () {
                 <dd>&emsp;</dd>
               </dl>
             </div>
-          </div>
-
-          <!-- 隠し機能 -->
-          <div class="hidden-features">
-            <button
-              type="button"
-              class="button--bordered hidden-features-toggle"
-              @click.prevent="toggleHiddenFeatures"
-            >
-              <SVGIcon :name="state.hiddenFeaturesDisplay ? 'cursorLeft' : 'cursorRight'" />
-              <span v-if="!state.hiddenFeaturesDisplay">{{ $t("hiddenFeatures") }}</span>
-            </button>
-
-            <template v-if="state.hiddenFeaturesDisplay">
-              <!-- ポスト日時選択ポップアップトリガー -->
-              <button
-                type="button"
-                class="button--bordered post-date-button"
-                @click.prevent="mainState.openPostDatePopup"
-              >
-                <SVGIcon name="history" />
-                <span>{{ $t("date") }}</span>
-                <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
-              </button>
-
-              <!-- マイワードポップアップトリガー -->
-              <button
-                type="button"
-                class="button--bordered my-word-button"
-                @click.prevent="mainState.openMyWordPopup('select')"
-              >
-                <SVGIcon name="alphaA" />
-                <span>{{ $t("myWord") }}</span>
-              </button>
-
-              <!-- リストメンションポップアップトリガー -->
-              <button
-                type="button"
-                class="button--bordered on-off-button"
-                @click.prevent="openListMentionPopup"
-              >
-                <SVGIcon name="list" />
-                <span>{{ $t("listMention") }}</span>
-                <b v-if="mainState.listMentionPopupProps.list != null">ON</b>
-              </button>
-            </template>
           </div>
         </template>
       </EasyForm>
@@ -1045,7 +999,8 @@ function toggleHiddenFeatures () {
     flex-wrap: wrap;
     grid-gap: 0.5rem;
 
-    .button--bordered:deep() {
+    .button--bordered:deep(),
+    .button--plain:deep() {
       font-size: 0.875rem;
       overflow: hidden;
       min-height: 2.625rem;
@@ -1078,15 +1033,11 @@ function toggleHiddenFeatures () {
       }
     }
 
-    .on-off-button > b {
-      color: rgb(var(--notice-color));
-    }
     .post-date-button > b {
       color: rgb(var(--fg-color));
     }
 
     .easter-egg-button {
-      font-size: 1.25rem;
       margin-left: auto;
     }
   }
@@ -1106,18 +1057,6 @@ function toggleHiddenFeatures () {
   // 送信ボタン
   .submit-button {
     --fg-color: var(--type-color);
-  }
-
-  // 隠し機能
-  .hidden-features {
-    display: flex;
-    flex-wrap: wrap;
-    grid-gap: 0.5rem;
-    font-size: 0.875rem;
-
-    &-toggle {
-      border-color: transparent;
-    }
   }
 }
 </style>

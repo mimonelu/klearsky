@@ -54,6 +54,12 @@ function onClickItem (type: string) {
   }
   close()
 }
+
+function onClickMyWordItem () {
+  Util.blurElement()
+  mainState.openMyWordPopup('select')
+  close()
+}
 </script>
 
 <template>
@@ -63,10 +69,19 @@ function onClickItem (type: string) {
     @close="close"
   >
     <div class="easter-egg-content list-menu">
+      <!-- マイワードポップアップトリガー -->
+      <div
+        class="list-menu__item"
+        @click.stop="onClickMyWordItem"
+      >
+        <SVGIcon name="alphaA" />
+        <span>{{ $t("myWord") }}</span>
+      </div>
+
+      <hr />
       <div class="list-menu__header">
         <span>{{ $t("easterEggFancyText") }}</span>
       </div>
-      <hr />
       <div
         class="list-menu__item"
         @click.stop="onClickItem('invertText')"
@@ -122,7 +137,7 @@ function onClickItem (type: string) {
         :disabled="isRestoreDisabled"
         @click.stop="onClickItem('restoreText')"
       >
-        <SVGIcon name="formatFont" />
+        <SVGIcon name="arrowLeft" />
         <span>{{ $t("easterEggRestore") }}</span>
       </div>
     </div>
