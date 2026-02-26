@@ -757,6 +757,15 @@ function toggleHiddenFeatures () {
 
           <!-- 機能ボタンコンテナ -->
           <div class="feature-button-container">
+            <!-- 下書き読込ボタン -->
+            <button
+              type="button"
+              class="button--bordered"
+              @click.prevent="openPostDraftPopup"
+            >
+              <SVGIcon name="postDraft" />
+            </button>
+
             <!-- ポスト言語選択ポップアップトリガー -->
             <button
               type="button"
@@ -764,7 +773,7 @@ function toggleHiddenFeatures () {
               @click.prevent="mainState.openPostLanguagesPopup()"
             >
               <SVGIcon name="translate" />
-              <span>{{ $t("languages") }}</span>
+              <!-- span>{{ $t("languages") }}</span -->
               <b
                 v-if="mainState.currentSetting.postLanguages?.length"
                 class="post-language-button__set"
@@ -790,18 +799,8 @@ function toggleHiddenFeatures () {
               @click.prevent="openReactionControlPopup"
             >
               <SVGIcon :name="state.isDraftReactionControlOn ? 'lock' : 'unlock'" />
-              <span>{{ $t("reactionControl") }}</span>
+              <!-- span>{{ $t("reactionControl") }}</span -->
               <b v-if="state.isDraftReactionControlOn">ON</b>
-            </button>
-
-            <!-- マイワードポップアップトリガー -->
-            <button
-              type="button"
-              class="button--bordered my-word-button"
-              @click.prevent="mainState.openMyWordPopup('select')"
-            >
-              <SVGIcon name="alphaA" />
-              <span>{{ $t("myWord") }}</span>
             </button>
 
             <!-- イースターエッグポップオーバートリガー -->
@@ -815,39 +814,27 @@ function toggleHiddenFeatures () {
           </div>
         </template>
         <template #after>
-          <!-- 送信ボタン -->
-          <button
-            type="submit"
-            class="button submit-button"
-          >
-            <SVGIcon :name="type" />
-            <span>{{ $t("submit") }}</span>
-          </button>
+          <div class="group-parts submit-button-container">
+            <!-- 下書き保存／更新ボタン -->
+            <button
+              type="button"
+              class="button create-or-update-psot-draft-button"
+              :data-type="state.currentDraftId != null ? 'update' : 'save'"
+              @click.prevent="saveOrUpdateDraft"
+            >
+              <SVGIcon name="postDraft" />
+              <span>{{ $t(state.currentDraftId != null ? "update" : "save") }}</span>
+            </button>
 
-          <!-- 下書きボタンコンテナ -->
-          <section class="post-draft-button-container">
-            <header>{{ $t("postDraft") }}</header>
-            <div class="group-parts">
-              <!-- 下書き読込ボタン -->
-              <button
-                type="button"
-                class="button--bordered"
-                @click.prevent="openPostDraftPopup"
-              >
-                <span>{{ $t("load") }}</span>
-              </button>
-
-              <!-- 下書き保存／更新ボタン -->
-              <button
-                type="button"
-                class="button create-or-update-psot-draft-button"
-                :data-type="state.currentDraftId != null ? 'update' : 'save'"
-                @click.prevent="saveOrUpdateDraft"
-              >
-                <span>{{ $t(state.currentDraftId != null ? "update" : "save") }}</span>
-              </button>
-            </div>
-          </section>
+            <!-- 送信ボタン -->
+            <button
+              type="submit"
+              class="button submit-button"
+            >
+              <SVGIcon :name="type" />
+              <span>{{ $t("submit") }}</span>
+            </button>
+          </div>
 
           <!-- 動画アップロード情報 -->
           <div class="video-upload-info">
@@ -908,6 +895,16 @@ function toggleHiddenFeatures () {
                 <SVGIcon name="history" />
                 <span>{{ $t("date") }}</span>
                 <b v-if="mainState.postDatePopupDate != null">{{ state.postDatePopupDate }}</b>
+              </button>
+
+              <!-- マイワードポップアップトリガー -->
+              <button
+                type="button"
+                class="button--bordered my-word-button"
+                @click.prevent="mainState.openMyWordPopup('select')"
+              >
+                <SVGIcon name="alphaA" />
+                <span>{{ $t("myWord") }}</span>
               </button>
 
               <!-- リストメンションポップアップトリガー -->
@@ -1090,35 +1087,25 @@ function toggleHiddenFeatures () {
 
     .easter-egg-button {
       font-size: 1.25rem;
+      margin-left: auto;
     }
   }
 
-  // 送信ボタン
-  .submit-button {
-    --fg-color: var(--type-color);
-  }
-
-  // 下書きボタンコンテナ
-  .post-draft-button-container {
+  // 確定ボタンコンテナ
+  .submit-button-container {
     display: grid;
-    grid-gap: 0.5rem;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
-
-    & > header {
-      font-size: 0.875rem;
-      font-weight: bold;
-      opacity: 0.5;
-    }
-
-    .group-parts > * {
-      flex-grow: 1;
-    }
   }
 
   // 下書き保存／更新ボタン
   .create-or-update-psot-draft-button[data-type="update"] {
     --fg-color: var(--share-color);
+  }
+
+  // 送信ボタン
+  .submit-button {
+    --fg-color: var(--type-color);
   }
 
   // 隠し機能

@@ -194,7 +194,9 @@ async function submit () {
             <LabelButton
               type="account"
               :parentState="state"
-            />
+            >
+              <span>{{ $t("labels") }}</span>
+            </LabelButton>
           </dd>
         </dl>
       </template>

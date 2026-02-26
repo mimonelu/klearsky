@@ -26,7 +26,7 @@ const state = reactive<{
     @click.prevent="mainState.openSelectLabelsPopup(parentState)"
   >
     <SVGIcon name="label" />
-    <span>{{ $t("labels") }}</span>
+    <slot />
     <b v-if="state.labels.length > 0">{{ state.labels.join(", ") }}</b>
   </button>
 </template>
