@@ -1000,7 +1000,6 @@ function openEasterEggPopover ($event: Event) {
 
     .button--bordered:deep(),
     .button--plain:deep() {
-      font-size: 0.875rem;
       overflow: hidden;
       min-height: 2.625rem;
 
@@ -1016,6 +1015,7 @@ function openEasterEggPopover ($event: Event) {
         white-space: nowrap;
       }
       & > b {
+        font-size: 0.875rem;
         font-weight: bold;
         line-height: var(--line-height-high);
         word-break: break-all;
@@ -1032,8 +1032,12 @@ function openEasterEggPopover ($event: Event) {
       }
     }
 
+    .on-off-button > b {
+      color: rgb(var(--notice-color));
+    }
+
     .post-date-button > b {
-      color: rgb(var(--fg-color));
+      color: rgb(var(--notice-color));
     }
 
     .easter-egg-button {
