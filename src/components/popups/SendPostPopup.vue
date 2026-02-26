@@ -808,7 +808,7 @@ function openEasterEggPopover ($event: Event) {
               class="button--plain button--nolabel easter-egg-button"
               @click.prevent="openEasterEggPopover"
             >
-              <SVGIcon name="formatFont" />
+              <SVGIcon name="menu" />
             </button>
           </div>
         </template>
