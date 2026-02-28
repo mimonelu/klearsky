@@ -7,13 +7,22 @@ const DB_NAME = "post-draft-media"
 const DB_VERSION = 1
 const STORE_NAME = "media"
 
+let dbInstance: IDBDatabase | null = null
+
 function openDb (): Promise<IDBDatabase> {
+  if (dbInstance != null) {
+    return Promise.resolve(dbInstance)
+  }
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION)
     request.onupgradeneeded = () => {
       request.result.createObjectStore(STORE_NAME)
     }
-    request.onsuccess = () => resolve(request.result)
+    request.onsuccess = () => {
+      dbInstance = request.result
+      dbInstance.onclose = () => { dbInstance = null }
+      resolve(dbInstance)
+    }
     request.onerror = () => reject(request.error)
   })
 }
