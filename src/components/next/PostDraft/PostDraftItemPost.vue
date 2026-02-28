@@ -19,18 +19,29 @@ const videoUrls = ref<Array<string>>([])
 
 const mediaNotFound = ref(false)
 
+let unmounted = false
+
 onMounted(async () => {
   const imgs: Array<string> = []
   const vids: Array<string> = []
+
+  const revoke = () => {
+    imgs.forEach((url) => URL.revokeObjectURL(url))
+    vids.forEach((url) => URL.revokeObjectURL(url))
+  }
 
   for (const image of props.draftPost.embedImages ?? []) {
     if (image.localRef?.path == null) {
       continue
     }
     const entry = await loadMedia(image.localRef.path)
+    if (unmounted) {
+      revoke()
+      return
+    }
     if (entry instanceof Error || entry == null) {
       mediaNotFound.value = true
-      imgs.forEach((url) => URL.revokeObjectURL(url))
+      revoke()
       return
     }
     imgs.push(URL.createObjectURL(entry.blob))
@@ -41,10 +52,13 @@ onMounted(async () => {
       continue
     }
     const entry = await loadMedia(video.localRef.path)
+    if (unmounted) {
+      revoke()
+      return
+    }
     if (entry instanceof Error || entry == null) {
       mediaNotFound.value = true
-      imgs.forEach((url) => URL.revokeObjectURL(url))
-      vids.forEach((url) => URL.revokeObjectURL(url))
+      revoke()
       return
     }
     vids.push(URL.createObjectURL(entry.blob))
@@ -55,6 +69,7 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  unmounted = true
   imageUrls.value.forEach((url) => URL.revokeObjectURL(url))
   videoUrls.value.forEach((url) => URL.revokeObjectURL(url))
 })
