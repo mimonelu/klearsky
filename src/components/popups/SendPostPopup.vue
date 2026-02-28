@@ -996,7 +996,7 @@ function openEasterEggPopover ($event: Event) {
   .feature-button-container {
     display: flex;
     flex-wrap: wrap;
-    grid-gap: 0.5rem;
+    grid-gap: 0.25rem;
 
     .button--bordered:deep(),
     .button--plain:deep() {
