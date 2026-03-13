@@ -46,7 +46,6 @@ const BLOB_MIME_TYPES = [
   "image/apng",
   "image/gif",
   "image/svg+xml",
-  "image/webp"
 ]
 
 onMounted(async () => {
