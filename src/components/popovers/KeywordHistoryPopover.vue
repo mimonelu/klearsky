@@ -67,6 +67,7 @@ function remove (index: number) {
   close()
   // eslint-disable-next-line
   props.keywords.splice(index, 1)
+  mainState.saveSettings()
 }
 </script>
 
