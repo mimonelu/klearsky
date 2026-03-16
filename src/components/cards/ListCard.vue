@@ -265,11 +265,11 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
           type="button"
           @click.prevent.stop="toggleDetailDisplay"
         >
-          <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
           <span
             class="list-card__name__label"
             translate="no"
           >{{ list.name }}</span>
+          <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
         </button>
       </div>
 
@@ -317,14 +317,20 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
       />
 
       <!-- リスト作成者リンク -->
-      <div v-if="!isOwn && list.creator.did">
+      <div
+        v-if="!isOwn && list.creator.did"
+        class="list-card__creator"
+      >
+        <div
+          class="list-card__creator__text"
+          translate="no"
+        >{{ $t("by") }}</div>
         <RouterLink
-          class="textlink list-card__creator"
+          class="textlink list-card__creator__link"
           :to="{ name: 'profile-list', query: { account: list.creator.did } }"
           @click.prevent="$emit('onActivateMention')"
         >
-          <span class="list-card__creator__prefix">{{ $t("by") }}</span>
-          <span class="list-card__creator__display-name">{{ list.creator.displayName || list.creator.handle }}</span>
+          <span translate="no">{{ list.creator.displayName || list.creator.handle }}</span>
         </RouterLink>
       </div>
     </div>
@@ -468,7 +474,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   &__name {
     grid-area: n;
     margin-bottom: 0.25em;
-    overflow: hidden;
 
     & > button {
       cursor: pointer;
@@ -598,15 +603,20 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
   // リスト作成者リンク
   &__creator {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     font-size: 0.875em;
-    line-height: var(--line-height-high);
+    grid-gap: 0 0.5rem;
 
-    &__prefix {
-      margin-right: 0.5em;
+    &__text {
+      color: rgb(var(--fg-color), 0.5);
+      line-height: var(--line-height-high);
     }
 
-    &__display-name {
-      font-weight: bold;
+    &__link {
+      line-height: var(--line-height-high);
+      word-break: break-word;
     }
   }
 

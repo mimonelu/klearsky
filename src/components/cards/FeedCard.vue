@@ -192,8 +192,8 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
           type="button"
           @click.prevent.stop="toggleDetailDisplay"
         >
-          <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
           <span translate="no">{{ generator.displayName }}</span>
+          <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
         </button>
       </div>
 
@@ -262,7 +262,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
           translate="no"
         >{{ $t("by") }}</div>
         <RouterLink
-          class="textlink feed-card__creator__by"
+          class="textlink feed-card__creator__link"
           :to="{ name: 'profile-feed-generators', query: { account: generator.creator.did } }"
           @click.prevent
         >
@@ -377,7 +377,6 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
   &__display-name {
     grid-area: n;
     margin-bottom: 0.25em;
-    overflow: hidden;
 
     & > button {
       cursor: pointer;
@@ -526,16 +525,16 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     font-size: 0.875em;
     grid-gap: 0 0.5rem;
 
-    &__by {
-      line-height: var(--line-height-high);
-      word-break: break-word;
-    }
-
     &__text {
       color: rgb(var(--fg-color), 0.5);
       &:last-child {
         display: none;
       }
+    }
+
+    &__link {
+      line-height: var(--line-height-high);
+      word-break: break-word;
     }
   }
 

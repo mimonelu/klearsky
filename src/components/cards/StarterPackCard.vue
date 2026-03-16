@@ -157,11 +157,11 @@ async function deleteStarterPack () {
           type="button"
           @click.prevent.stop="toggleDetailDisplay"
         >
-          <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
           <span
             class="starter-pack-card__name__label"
             translate="no"
           >{{ starterPack.record?.name }}</span>
+          <SVGIcon :name="state.detailDisplay ? 'cursorUp' : 'cursorDown'" />
         </button>
       </div>
 
@@ -228,24 +228,24 @@ async function deleteStarterPack () {
       </div>
 
       <!-- 作成者リンク -->
-      <div v-if="
-        creatorDisplay &&
-        starterPack.creator.did &&
-        starterPack.creator.handle
-      ">
+      <div
+        v-if="
+          creatorDisplay &&
+          starterPack.creator.did &&
+          starterPack.creator.handle
+        "
+        class="starter-pack-card__creator"
+      >
+        <div
+          class="starter-pack-card__creator__text"
+          translate="no"
+        >{{ $t("by") }}</div>
         <RouterLink
-          class="textlink starter-pack-card__creator"
+          class="textlink starter-pack-card__creator__link"
           :to="routerLinkToListPage"
           @click.prevent="$emit('onActivateMention')"
         >
-          <span
-            class="starter-pack-card__creator__prefix"
-            translate="no"
-          >{{ $t("by") }}</span>
-          <span
-            class="starter-pack-card__creator__display-name"
-            translate="no"
-          >{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
+          <span translate="no">{{ starterPack.creator.displayName || starterPack.creator.handle }}</span>
         </RouterLink>
       </div>
     </div>
@@ -300,7 +300,6 @@ async function deleteStarterPack () {
   &__name {
     grid-area: n;
     margin-bottom: 0.25em;
-    overflow: hidden;
 
     & > button {
       cursor: pointer;
@@ -325,7 +324,7 @@ async function deleteStarterPack () {
 
     &__label {
       font-weight: bold;
-      line-height: var(--line-height-high);
+      line-height: var(--line-height-low);
       word-break: break-word;
     }
   }
@@ -413,15 +412,20 @@ async function deleteStarterPack () {
 
   // 作成者リンク
   &__creator {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     font-size: 0.875em;
-    line-height: var(--line-height-high);
+    grid-gap: 0 0.5rem;
 
-    &__prefix {
-      margin-right: 0.5em;
+    &__text {
+      color: rgb(var(--fg-color), 0.5);
+      line-height: var(--line-height-high);
     }
 
-    &__display-name {
-      font-weight: bold;
+    &__link {
+      line-height: var(--line-height-high);
+      word-break: break-word;
     }
   }
 }
