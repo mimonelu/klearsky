@@ -400,6 +400,7 @@ function removeThisPost () {
               <LabelTags
                 :labels="mainState.currentProfile?.labels"
                 :labelerDisplay="isLabeler"
+                :automatedAccountDisplay="true"
                 :unauthenticatedDisplay="true"
                 :harmfulDisplay="true"
                 :customDisplay="true"

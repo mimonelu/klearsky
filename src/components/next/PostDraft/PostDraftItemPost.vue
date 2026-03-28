@@ -156,6 +156,7 @@ function close () {
       v-if="(draftPost.labels as any)?.values != null"
       :labels="(draftPost.labels as any).values as TTLabel[]"
       :labelerDisplay="false"
+      :automatedAccountDisplay="false"
       :unauthenticatedDisplay="false"
       :harmfulDisplay="true"
       :customDisplay="true"

@@ -46,6 +46,8 @@ const hasAppliedHarmfulLabel = computed((): boolean => {
   return hasBlurContentLabel.value || hasBlurMediaLabel.value
 })
 
+const hasAutomatedAccountLabel = props.user?.labels?.some((label) => label.val === "bot") ?? false
+
 const state = reactive<{
   contentFilteringToggleDisplay: boolean
 }>({
@@ -101,6 +103,7 @@ function onActivateContentFilteringToggle () {
       <LabelTags
         :labels="user.labels"
         :labelerDisplay="false"
+        :automatedAccountDisplay="false"
         :unauthenticatedDisplay="false"
         :harmfulDisplay="true"
         :customDisplay="true"
@@ -140,12 +143,11 @@ function onActivateContentFilteringToggle () {
         </template>
 
         <!-- 自動化アカウントアイコン -->
-        <template v-if="false">
-          <SVGIcon
-            name="robot"
-            class="automated-account-icon"
-          />
-        </template>
+        <SVGIcon
+          v-if="hasAutomatedAccountLabel"
+          name="robot"
+          class="automated-account-icon"
+        />
 
         <!-- 認証者アイコン -->
         <VerifierIcon

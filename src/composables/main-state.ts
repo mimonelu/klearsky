@@ -1371,8 +1371,11 @@ function hasLabel (target: string, labels?: Array<TTLabel>): boolean {
 
 function getHarmfulLabels (labels?: Array<TTLabel>): Array<TTLabel> {
   return labels?.filter((label: TTLabel) => {
-    return LABEL_BEHAVIORS[label.val] != null
-    // return label.src === CONSTS.OFFICIAL_LABELER_DID
+    return (
+      LABEL_BEHAVIORS[label.val] != null &&
+      label.val !== "bot"
+      // label.src === CONSTS.OFFICIAL_LABELER_DID
+    )
   }) ?? []
 }
 

@@ -8,6 +8,7 @@ import CONSTS from "@/consts/consts.json"
 const props = defineProps<{
   labels?: Array<TTLabel>
   labelerDisplay: boolean
+  automatedAccountDisplay: boolean
   unauthenticatedDisplay: boolean
   harmfulDisplay: boolean
   customDisplay: boolean
@@ -29,6 +30,10 @@ const hasNoUnauthenticated = computed((): boolean => {
     return true
   }
   return mainState.hasLabel("!no-unauthenticated", props.labels)
+})
+
+const hasAutomatedAccount = computed((): boolean => {
+  return props.labels?.some((label) => label.val === "bot") ?? false
 })
 
 const harmfulLabels = computed((): Array<TTLabel> => {
@@ -110,17 +115,7 @@ async function openBridgyOriginalUrl () {
 </script>
 
 <template>
-  <div
-    v-if="
-      labelerDisplay ||
-      (unauthenticatedDisplay && !hasNoUnauthenticated) ||
-      harmfulLabels.length > 0 ||
-      labelerLabels.length > 0 ||
-      customLabels.length > 0 ||
-      isBeginner
-    "
-    class="label-tags"
-  >
+  <div class="label-tags">
     <!-- 新規アカウントラベル -->
     <div
       v-if="isBeginner"
@@ -146,6 +141,15 @@ async function openBridgyOriginalUrl () {
     >
       <SVGIcon name="labeler" />
       <span>{{ $t("labeler") }}</span>
+    </div>
+
+    <!-- 自動化アカウント -->
+    <div
+      v-if="automatedAccountDisplay && hasAutomatedAccount"
+      class="tag--link label-tags__automated-account"
+    >
+      <SVGIcon name="robot" />
+      <span>{{ $t("bot") }}</span>
     </div>
 
     <!-- 有害なラベル -->
@@ -228,6 +232,11 @@ async function openBridgyOriginalUrl () {
 
   // ラベラーによるラベル
   &__labelers-label {
+    --color: var(--label-color);
+  }
+
+  // 自動化アカウント
+  &__automated-account {
     --color: var(--label-color);
   }
 

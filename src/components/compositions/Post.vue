@@ -343,6 +343,9 @@ const postContentDisplay = computed((): boolean => {
     )
 })
 
+// ラベル - 自動化アカウント
+const hasAutomatedAccountLabel = props.post.author?.labels?.some((label) => label.val === "bot") ?? false
+
 // ラベル - ポストメディア
 const hasBlurMedia = computed((): boolean => {
   return (hasMedia || hasLinkCard || hasFeedCard) && hasBlurMediaLabel.value
@@ -1122,7 +1125,7 @@ function toggleQuotePostDisplay () {
 
           <!-- 自動化アカウントアイコン -->
           <SVGIcon
-            v-if="false"
+            v-if="hasAutomatedAccountLabel"
             name="robot"
             class="automated-account-icon"
           />
@@ -1396,6 +1399,7 @@ function toggleQuotePostDisplay () {
         v-if="!noLabelTags && position !== 'preview' && position !== 'slim'"
         :labels="allLabels"
         :labelerDisplay="false"
+        :automatedAccountDisplay="false"
         :unauthenticatedDisplay="false"
         :harmfulDisplay="true"
         :customDisplay="false"
