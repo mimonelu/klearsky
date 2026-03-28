@@ -1120,6 +1120,13 @@ function toggleQuotePostDisplay () {
             class="account-labeler-icon"
           />
 
+          <!-- 自動化アカウントアイコン -->
+          <SVGIcon
+            v-if="false"
+            name="robot"
+            class="automated-account-icon"
+          />
+
           <RouterLink
             :to="{ name: 'profile-feeds', query: { account: post.author?.did } }"
             @click.stop
@@ -1949,7 +1956,9 @@ function toggleQuotePostDisplay () {
   }
 
   // ラベラーアイコン
-  .account-labeler-icon {
+  // 自動化アカウントアイコン
+  .account-labeler-icon,
+  .automated-account-icon {
     fill: rgb(var(--label-color));
     font-size: 0.875em;
   }

@@ -428,6 +428,8 @@ export default () => ({
   "porn-description": "性行為または性的な表現",
   "graphic-media": "生々しいメディア",
   "graphic-media-description": "一部のユーザーにとって不快または不適切と思われるメディア",
+  "bot": "自動化アカウント",
+  "bot-description": "ボットなどプログラムによって運用されるアカウント",
   "sexual-figurative": "示唆的な性表現",
   "self-harm": "自傷行為",
   "sensitive": "センシティブな表現",

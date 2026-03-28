@@ -428,6 +428,8 @@ export default () => ({
   "porn-description": "Activité sexuelle ou nudité érotique",
   "graphic-media": "Média graphique",
   "graphic-media-description": "Média pouvant être dérangeant ou inapproprié pour certains",
+  "bot": "Compte automatisé",
+  "bot-description": "Compte géré par un bot ou un programme automatisé",
   "sexual-figurative": "Suggestif sexuel (Dessin)",
   "self-harm": "Automutilation",
   "sensitive": "Sensible",

@@ -8,12 +8,15 @@ import LABEL_BEHAVIORS from "@/consts/label-behaviors.json"
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
+  type: "account" | "post"
   state: any
 }>()
 
 const options = Object.keys(LABEL_BEHAVIORS)
   .filter((key: string) => {
-    return LABEL_BEHAVIORS[key].selectable
+    return props.type === "account"
+      ? LABEL_BEHAVIORS[key].selectableAtAccount
+      : LABEL_BEHAVIORS[key].selectableAtPost
   })
   .map((key: string) => {
     return {

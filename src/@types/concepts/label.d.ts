@@ -31,7 +31,8 @@ interface TTLabelBehavior {
   group: string
   configurable: boolean
   warn: TTLabelOnWarn
-  selectable?: boolean
+  selectableAtAccount?: boolean
+  selectableAtPost?: boolean
 }
 
 declare module "@/consts/label-behaviors.json" {

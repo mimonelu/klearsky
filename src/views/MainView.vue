@@ -715,6 +715,7 @@ const {
       <Transition>
         <SelectLabelsPopup
           v-if="state.selectLabelsPopupDisplay"
+          :type="state.selectLabelsPopupType"
           :state="state.selectLabelsPopupState"
           @close="state.closeSelectLabelsPopup"
         />

@@ -552,6 +552,7 @@ interface MainState {
 
   // ポップアップ - ラベル選択ポップアップ
   selectLabelsPopupDisplay: boolean
+  selectLabelsPopupType: "account" | "post"
   selectLabelsPopupState: any
   openSelectLabelsPopup: Function
   closeSelectLabelsPopup: () => void

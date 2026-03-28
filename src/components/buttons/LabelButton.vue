@@ -18,12 +18,16 @@ const state = reactive<{
     return [...(props.parentState.labels?.map((label: string) => $t(label)) ?? [])]
   })
 })
+
+function openSelectLabelsPopup () {
+  mainState.openSelectLabelsPopup(props.type, props.parentState)
+}
 </script>
 
 <template>
   <button
     class="button--bordered label-button"
-    @click.prevent="mainState.openSelectLabelsPopup(parentState)"
+    @click.prevent="openSelectLabelsPopup"
   >
     <SVGIcon name="label" />
     <slot />

@@ -623,6 +623,7 @@ export const state: MainState = reactive<MainState>({
 
   // ポップアップ - ラベル選択ポップアップ
   selectLabelsPopupDisplay: false,
+  selectLabelsPopupType: "account",
   selectLabelsPopupState: undefined,
   openSelectLabelsPopup: openSelectLabelsPopup,
   closeSelectLabelsPopup: closeSelectLabelsPopup,
@@ -2613,8 +2614,9 @@ function closeLabelerSettingsPopup () {
 
 // ポップアップ - ラベル選択ポップアップ
 
-function openSelectLabelsPopup (params: any) {
+function openSelectLabelsPopup (type: "post" | "account", params: any) {
   state.selectLabelsPopupDisplay = true
+  state.selectLabelsPopupType = type
   state.selectLabelsPopupState = params
 }
 

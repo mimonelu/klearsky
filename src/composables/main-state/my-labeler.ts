@@ -235,7 +235,7 @@ export default class MyLabeler {
         let labelSetting = this.labelMap[`${label.src}-${label.val}`]
         if (labelSetting == null) {
           // 特別な公式ラベルの処理
-          if (!LABEL_BEHAVIORS[label.val]?.selectable) {
+          if (!LABEL_BEHAVIORS[label.val]?.selectableAtPost) {
             return
           }
           labelSetting = this.labelMap[`${CONSTS.OFFICIAL_LABELER_DID}-${label.val}`]

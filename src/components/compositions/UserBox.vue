@@ -139,6 +139,14 @@ function onActivateContentFilteringToggle () {
           />
         </template>
 
+        <!-- 自動化アカウントアイコン -->
+        <template v-if="false">
+          <SVGIcon
+            name="robot"
+            class="automated-account-icon"
+          />
+        </template>
+
         <!-- 認証者アイコン -->
         <VerifierIcon
           :did="user.did"
@@ -252,16 +260,19 @@ function onActivateContentFilteringToggle () {
   grid-gap: 0.25em;
 
   // ラベラーアイコン
+  // 自動化アカウントアイコン
   // アカウントラベルアイコン
   // 認証者アイコン
   // 認証済みアイコン
   .account-labeler-icon,
+  .automated-account-icon,
   .account-label-icon,
   .verifier-icon,
   .verified-icon {
     font-size: 0.875em;
   }
-  .account-labeler-icon {
+  .account-labeler-icon,
+  .automated-account-icon {
     fill: rgb(var(--label-color));
   }
   .account-label-icon {
