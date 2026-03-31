@@ -33,6 +33,11 @@ const SCHEMES: {
     favicon?: string
   }
 } = {
+  "did:web:attie.ai": {
+    label: "Attie",
+    href: "https://attie.ai/",
+    favicon: "https://attie.ai/icon.svg",
+  },
   "did:web:api.graze.social": {
     label: "Graze",
     href: "https://www.graze.social/",
