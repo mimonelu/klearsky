@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject } from "vue"
 import Popup from "@/components/popups/Popup.vue"
-import PostThread from "@/components/next/Post/PostThread.vue"
+import PostThread from "@/components/next/PostThread/PostThread.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits(["close", "removeThisPost"])

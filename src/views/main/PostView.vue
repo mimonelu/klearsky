@@ -2,7 +2,7 @@
 import { computed, inject } from "vue"
 import Loader from "@/components/shells/Loader.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
-import PostThread from "@/components/next/Post/PostThread.vue"
+import PostThread from "@/components/next/PostThread/PostThread.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
