@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, reactive, type ComputedRef, type ComponentPublicInstance } from "vue"
 import HtmlText from "@/components/labels/HtmlText.vue"
-import LabelerCard from "@/components/cards/LabelerCard.vue"
+import LabelerCard from "@/components/next/Labeler/LabelerCard.vue"
 import Loader from "@/components/shells/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Radios from "@/components/forms/Radios.vue"

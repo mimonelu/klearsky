@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Popup from "@/components/popups/Popup.vue"
-import LabelerCard from "@/components/cards/LabelerCard.vue"
+import LabelerCard from "@/components/next/Labeler/LabelerCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const emit = defineEmits<{(event: string): void}>()
