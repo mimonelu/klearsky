@@ -607,7 +607,6 @@ export const state: MainState = reactive<MainState>({
   // ポップアップ - ラベラー一覧ポップアップ
   labelerListPopupProps: {
     display: false,
-    title: "",
     labelers: [],
   },
   openLabelerListPopup: openLabelerListPopup,
@@ -2593,8 +2592,7 @@ function closeChatMembersSelectPopup () {
 
 // ポップアップ - ラベラー一覧ポップアップ
 
-function openLabelerListPopup (title: string, labelers: Array<TILabeler>) {
-  state.labelerListPopupProps.title = title
+function openLabelerListPopup (labelers: Array<TILabeler>) {
   state.labelerListPopupProps.labelers = labelers
   state.labelerListPopupProps.display = true
 }

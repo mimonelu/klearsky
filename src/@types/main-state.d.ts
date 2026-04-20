@@ -535,7 +535,6 @@ interface MainState {
   // ポップアップ - ラベラー一覧ポップアップ
   labelerListPopupProps: {
     display: boolean
-    title: string
     labelers: Array<TILabeler>
   }
   openLabelerListPopup: Function

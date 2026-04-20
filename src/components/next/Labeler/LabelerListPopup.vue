@@ -6,7 +6,6 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 const emit = defineEmits<{(event: string): void}>()
 
 defineProps<{
-  title: string
   labelers: Array<TILabeler>
 }>()
 
@@ -24,7 +23,9 @@ function close () {
     <template #header>
       <h2>
         <SVGIcon name="labeler" />
-        <span>{{ $t(title) }}</span>
+
+        <!-- 事実上マイラベラー専用コンポーネントのため、ハードコードしている -->
+        <span>{{ $t("myLabeler") }}</span>
       </h2>
     </template>
     <template #body>
