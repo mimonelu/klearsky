@@ -67,6 +67,7 @@ import SendFeedReportPopup from "@/components/next/Report/SendFeedReportPopup.vu
 import SendListReportPopup from "@/components/next/Report/SendListReportPopup.vue"
 import SendPostPopup from "@/components/popups/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/next/Report/SendPostReportPopup.vue"
+import SendStarterPackReportPopup from "@/components/next/Report/SendStarterPackReportPopup.vue"
 import SettingsPopover from "@/components/popovers/SettingsPopover.vue"
 import SplashScreen from "@/components/shells/SplashScreen.vue"
 import StarterPackCardPopover from "@/components/popovers/StarterPackCardPopover.vue"
@@ -657,6 +658,15 @@ const {
           v-if="state.sendListReportPopupProps.display"
           :list="state.sendListReportPopupProps.list as TTList"
           @close="state.closeSendListReportPopup"
+        />
+      </Transition>
+
+      <!-- スターターパックレポート送信ポップアップ -->
+      <Transition>
+        <SendStarterPackReportPopup
+          v-if="state.sendStarterPackReportPopupProps.display"
+          :starterPack="state.sendStarterPackReportPopupProps.starterPack as TIStarterPack"
+          @close="state.closeSendStarterPackReportPopup"
         />
       </Transition>
 

@@ -4,6 +4,7 @@ import MenuTickerSendAccountReport from "@/components/menus/SendAccountReport.vu
 import MenuTickerSendFeedReport from "@/components/menus/SendFeedReport.vue"
 import MenuTickerSendListReport from "@/components/menus/SendListReport.vue"
 import MenuTickerSendPostReport from "@/components/menus/SendPostReport.vue"
+import MenuTickerSendStarterPackReport from "@/components/menus/SendStarterPackReport.vue"
 import MenuTickerToggleBlock from "@/components/next/UserBlock/ToggleBlock.vue"
 import MenuTickerToggleMute from "@/components/next/UserMute/ToggleMute.vue"
 import MenuTickerToggleRepostMute from "@/components/next/RepostMute/ToggleRepostMute.vue"
@@ -19,6 +20,7 @@ const props = defineProps<{
   generator?: TTFeedGenerator
   list?: TTList
   container?: HTMLElement
+  starterPack?: TIStarterPack
 }>()
 
 const mainState = inject("state") as MainState
@@ -88,6 +90,7 @@ function close () {
             !isUser &&
             generator == null &&
             list == null &&
+            starterPack == null &&
             (
               post == null ||
               post.__custom.reason?.$type === 'app.bsky.feed.defs#reasonRepost'
@@ -99,14 +102,14 @@ function close () {
 
         <!-- ミュートのトグル -->
         <MenuTickerToggleMute
-          v-if="!isUser && generator == null && list == null"
+          v-if="!isUser && generator == null && list == null && starterPack == null"
           :user="user"
           @close="emit('close')"
         />
 
         <!-- ブロックのトグル -->
         <MenuTickerToggleBlock
-          v-if="!isUser && generator == null && list == null"
+          v-if="!isUser && generator == null && list == null && starterPack == null"
           :user="user"
           @close="emit('close')"
         />
@@ -136,6 +139,13 @@ function close () {
         <MenuTickerSendListReport
           v-if="list != null && !state.isMyList"
           :list="list"
+          @close="emit('close')"
+        />
+
+        <!-- スターターパックレポート送信ポップアップを開く -->
+        <MenuTickerSendStarterPackReport
+          v-if="starterPack != null"
+          :starterPack="starterPack"
           @close="emit('close')"
         />
 

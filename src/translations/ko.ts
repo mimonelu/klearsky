@@ -468,6 +468,7 @@ export default () => ({
   "reportSendPost": "게시물 신고",
   "reportSendFeed": "피드 신고",
   "reportSendList": "리스트 신고",
+  "reportSendStarterPack": "스타터 팩 신고",
   "reportSendConfirmation": "신고 전송 확인",
   "reportSendConfirmationMessage": "신고를 전송합니다. 괜찮습니까?",
   "reportReasonType": "카테고리",

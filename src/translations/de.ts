@@ -468,6 +468,7 @@ export default () => ({
   "reportSendPost": "Beitrag melden",
   "reportSendFeed": "Benutzerdefinierten Feed melden",
   "reportSendList": "Liste melden",
+  "reportSendStarterPack": "Starter Pack melden",
   "reportSendConfirmation": "Bestätigung der Meldung senden",
   "reportSendConfirmationMessage": "Diese Meldung wird gesendet. Sind Sie sicher?",
   "reportReasonType": "Kategorie",

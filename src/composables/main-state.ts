@@ -681,6 +681,14 @@ export const state: MainState = reactive<MainState>({
   openSendListReportPopup: openSendListReportPopup,
   closeSendListReportPopup: closeSendListReportPopup,
 
+  // ポップアップ - スターターパックレポート送信ポップアップ
+  sendStarterPackReportPopupProps: {
+    display: false,
+    starterPack: undefined,
+  },
+  openSendStarterPackReportPopup: openSendStarterPackReportPopup,
+  closeSendStarterPackReportPopup: closeSendStarterPackReportPopup,
+
   // ポップアップ - イメージポップアップ
   imagePopupProps: {
     did: "",
@@ -2698,6 +2706,17 @@ function openSendListReportPopup (list: TTList) {
 
 function closeSendListReportPopup () {
   state.sendListReportPopupProps.display = false
+}
+
+// ポップアップ - スターターパックレポート送信ポップアップ
+
+function openSendStarterPackReportPopup (starterPack: TIStarterPack) {
+  state.sendStarterPackReportPopupProps.starterPack = starterPack
+  state.sendStarterPackReportPopupProps.display = true
+}
+
+function closeSendStarterPackReportPopup () {
+  state.sendStarterPackReportPopupProps.display = false
 }
 
 // ポップアップ - リポストユーザーポップアップ

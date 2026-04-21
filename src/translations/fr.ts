@@ -468,6 +468,7 @@ export default () => ({
   "reportSendPost": "Signaler la publication",
   "reportSendFeed": "Signaler le fil personnalisé",
   "reportSendList": "Signaler la liste",
+  "reportSendStarterPack": "Signaler le starter pack",
   "reportSendConfirmation": "Confirmation d'envoi",
   "reportSendConfirmationMessage": "Ce signalement sera envoyé. Es-tu sûr?",
   "reportReasonType": "Catégorie",

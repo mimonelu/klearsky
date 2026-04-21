@@ -610,6 +610,14 @@ interface MainState {
   openSendListReportPopup: Function
   closeSendListReportPopup: () => void
 
+  // ポップアップ - スターターパックレポート送信ポップアップ
+  sendStarterPackReportPopupProps: {
+    display: boolean
+    starterPack?: TIStarterPack
+  }
+  openSendStarterPackReportPopup: Function
+  closeSendStarterPackReportPopup: () => void
+
   // ポップアップ - イメージポップアップ
   imagePopupProps: {
     display: boolean

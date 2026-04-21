@@ -468,6 +468,7 @@ export default () => ({
   "reportSendPost": "Report post",
   "reportSendFeed": "Report custom feed",
   "reportSendList": "Report list",
+  "reportSendStarterPack": "Report starter pack",
   "reportSendConfirmation": "Confirm report",
   "reportSendConfirmationMessage": "Are you sure you want to send this report?",
   "reportReasonType": "Category",
