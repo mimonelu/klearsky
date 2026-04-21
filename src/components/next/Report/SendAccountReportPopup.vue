@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, reactive } from "vue"
+import { inject, reactive, ref } from "vue"
 import Popup from "@/components/popups/Popup.vue"
 import ReportForm, { type TTReportFormState } from "@/components/next/Report/ReportForm.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -30,6 +30,8 @@ const formState = reactive<TTReportFormState>({
   customAtprotoLabeler: undefined,
 })
 
+const reportForm = ref<InstanceType<typeof ReportForm>>()
+
 function close () {
   emit("close")
 }
@@ -42,17 +44,18 @@ async function submitCallback () {
     title: $t("reportSendConfirmation"),
     text: $t("reportSendConfirmationMessage"),
   })
-  if (!result) return
+  if (!result) {
+    return
+  }
 
-  if (state.popupLoaderDisplay) return
+  if (
+    state.popupLoaderDisplay ||
+    reportForm.value == null
+  ) {
+    return
+  }
   state.popupLoaderDisplay = true
-  const atprotoLabeler = formState.atprotoLabeler === "customAtprotoLabeler"
-    ? formState.customAtprotoLabeler
-    : formState.atprotoLabeler
-  const response = await mainState.atp.createReport({
-    reasonType: formState.reasonItem as string,
-    reason: formState.reason as string,
-    atprotoLabeler,
+  const response = await reportForm.value.createReport({
     did: props.user.did,
   })
   state.popupLoaderDisplay = false
@@ -60,10 +63,13 @@ async function submitCallback () {
     mainState.openErrorPopup(response, "SendAccountReportPopup/createReport")
     return
   }
+
+  // 送信完了
   mainState.openMessagePopup({
     title: $t("success"),
     text: $t("successMessage"),
   })
+
   close()
 }
 </script>
@@ -93,6 +99,7 @@ async function submitCallback () {
     </template>
     <template #body>
       <ReportForm
+        ref="reportForm"
         :formState="formState"
         @submit="submitCallback"
       />

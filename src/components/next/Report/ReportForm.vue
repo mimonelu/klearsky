@@ -7,10 +7,19 @@ import CONSTS from "@/consts/consts.json"
 import OPTIONS from "@/consts/options.json"
 
 export type TTReportFormState = {
+  // レポート事由カテゴリー
   reasonType?: string
+
+  // レポート事由アイテム
   reasonItem?: string
+
+  // レポート事由詳細
   reason?: string
+
+  // レポート送信先ラベラー（既存）
   atprotoLabeler?: string
+
+  // レポート送信先ラベラー（任意）
   customAtprotoLabeler?: string
 }
 
@@ -43,7 +52,7 @@ const easyFormProps: TTEasyForm = {
       options: OPTIONS.REPORT_REASON_TYPES,
       layout: "vertical",
 
-      // レポートタイプ選択時にレポートアイテムの選択肢を変更
+      // レポート事由カテゴリー選択時にレポート事由アイテムの選択肢を変更
       onUpdate (_, form) {
         const items = OPTIONS.REPORT_REASON_ITEMS.filter((item) => {
           return item.type === props.formState.reasonType
@@ -88,7 +97,7 @@ const easyFormProps: TTEasyForm = {
       ],
       layout: "vertical",
 
-      // カスタムラベラー選択時にカスタムラベラー入力欄の表示状態を設定
+      // レポート送信先ラベラー（任意）選択時にレポート送信先ラベラー（任意）入力欄の表示状態を設定
       onUpdate (_, form) {
         form.data[3].display = props.formState.atprotoLabeler === "customAtprotoLabeler"
         if (!form.data[3].display) {
@@ -120,8 +129,25 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
+async function createReport (params: {
+  did?: string
+  cid?: string
+  uri?: string
+  type?: string
+}): Promise<Error | undefined> {
+  const atprotoLabeler = props.formState.atprotoLabeler === "customAtprotoLabeler"
+    ? props.formState.customAtprotoLabeler
+    : props.formState.atprotoLabeler
+  return await mainState.atp.createReport({
+    reasonType: props.formState.reasonItem as string,
+    reason: props.formState.reason as string,
+    atprotoLabeler,
+    ...params,
+  })
+}
+
 defineExpose({
-  easyForm,
+  createReport,
 })
 </script>
 
