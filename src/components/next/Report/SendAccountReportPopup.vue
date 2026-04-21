@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import FeedCard from "@/components/cards/FeedCard.vue"
 import Popup from "@/components/popups/Popup.vue"
-import ReportForm, { type TTReportFormState } from "@/components/forms/ReportForm.vue"
+import ReportForm, { type TTReportFormState } from "@/components/next/Report/ReportForm.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  generator: TTFeedGenerator
+  user: TTUser
 }>()
 
 const $t = inject("$t") as Function
@@ -53,13 +53,11 @@ async function submitCallback () {
     reasonType: formState.reasonItem as string,
     reason: formState.reason as string,
     atprotoLabeler,
-    did: props.generator.did,
-    cid: props.generator.cid,
-    uri: props.generator.uri,
+    did: props.user.did,
   })
   state.popupLoaderDisplay = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "SendFeedReportPopup/createReport")
+    mainState.openErrorPopup(response, "SendAccountReportPopup/createReport")
     return
   }
   mainState.openMessagePopup({
@@ -72,7 +70,7 @@ async function submitCallback () {
 
 <template>
   <Popup
-    class="send-feed-report-popup"
+    class="send-account-report-popup"
     :hasCloseButton="true"
     :loaderDisplay="state.popupLoaderDisplay"
     @close="close"
@@ -80,16 +78,15 @@ async function submitCallback () {
     <template #header>
       <h2>
         <SVGIcon name="contentFiltering" />
-        <span>{{ $t("reportSendFeed") }}</span>
+        <span>{{ $t("reportSendAccount") }}</span>
       </h2>
     </template>
     <template #header-after>
-      <FeedCard
-        :generator="generator"
+      <UserBox
+        :user="user"
         :menuDisplay="false"
-        :detailDisplay="false"
-        :orderButtonDisplay="false"
-        :creatorDisplay="true"
+        :contentWarningDisabled="true"
+        :viewerDisplay="true"
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
@@ -104,16 +101,16 @@ async function submitCallback () {
 </template>
 
 <style lang="scss" scoped>
-.send-feed-report-popup {
+.send-account-report-popup {
   &:deep() {
     .popup-header > h2 > .svg-icon {
       fill: rgb(var(--notice-color));
     }
   }
 
-  .feed-card {
+  .user-box {
     --fg-color: var(--notice-color);
-    --accent-color: var(--notice-color);
+    padding: 1rem;
     pointer-events: none;
   }
 }

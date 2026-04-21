@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
+import ListCard from "@/components/cards/ListCard.vue"
 import Popup from "@/components/popups/Popup.vue"
-import ReportForm, { type TTReportFormState } from "@/components/forms/ReportForm.vue"
+import ReportForm, { type TTReportFormState } from "@/components/next/Report/ReportForm.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import UserBox from "@/components/compositions/UserBox.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  user: TTUser
+  list: TTList
 }>()
 
 const $t = inject("$t") as Function
@@ -53,11 +53,13 @@ async function submitCallback () {
     reasonType: formState.reasonItem as string,
     reason: formState.reason as string,
     atprotoLabeler,
-    did: props.user.did,
+    cid: props.list.cid,
+    uri: props.list.uri,
+    type: "list",
   })
   state.popupLoaderDisplay = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "SendAccountReportPopup/createReport")
+    mainState.openErrorPopup(response, "SendListReportPopup/createReport")
     return
   }
   mainState.openMessagePopup({
@@ -70,7 +72,7 @@ async function submitCallback () {
 
 <template>
   <Popup
-    class="send-account-report-popup"
+    class="send-list-report-popup"
     :hasCloseButton="true"
     :loaderDisplay="state.popupLoaderDisplay"
     @close="close"
@@ -78,15 +80,15 @@ async function submitCallback () {
     <template #header>
       <h2>
         <SVGIcon name="contentFiltering" />
-        <span>{{ $t("reportSendAccount") }}</span>
+        <span>{{ $t("reportSendList") }}</span>
       </h2>
     </template>
     <template #header-after>
-      <UserBox
-        :user="user"
+      <ListCard
+        :list="list"
         :menuDisplay="false"
-        :contentWarningDisabled="true"
-        :viewerDisplay="true"
+        :detailDisplay="false"
+        :orderButtonDisplay="false"
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
@@ -101,16 +103,16 @@ async function submitCallback () {
 </template>
 
 <style lang="scss" scoped>
-.send-account-report-popup {
+.send-list-report-popup {
   &:deep() {
     .popup-header > h2 > .svg-icon {
       fill: rgb(var(--notice-color));
     }
   }
 
-  .user-box {
+  .list-card {
     --fg-color: var(--notice-color);
-    padding: 1rem;
+    --accent-color: var(--notice-color);
     pointer-events: none;
   }
 }

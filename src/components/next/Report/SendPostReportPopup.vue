@@ -2,7 +2,7 @@
 import { inject, reactive } from "vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/compositions/Post.vue"
-import ReportForm, { type TTReportFormState } from "@/components/forms/ReportForm.vue"
+import ReportForm, { type TTReportFormState } from "@/components/next/Report/ReportForm.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 

@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
-import ListCard from "@/components/cards/ListCard.vue"
+import FeedCard from "@/components/cards/FeedCard.vue"
 import Popup from "@/components/popups/Popup.vue"
-import ReportForm, { type TTReportFormState } from "@/components/forms/ReportForm.vue"
+import ReportForm, { type TTReportFormState } from "@/components/next/Report/ReportForm.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
 const props = defineProps<{
-  list: TTList
+  generator: TTFeedGenerator
 }>()
 
 const $t = inject("$t") as Function
@@ -53,13 +53,13 @@ async function submitCallback () {
     reasonType: formState.reasonItem as string,
     reason: formState.reason as string,
     atprotoLabeler,
-    cid: props.list.cid,
-    uri: props.list.uri,
-    type: "list",
+    did: props.generator.did,
+    cid: props.generator.cid,
+    uri: props.generator.uri,
   })
   state.popupLoaderDisplay = false
   if (response instanceof Error) {
-    mainState.openErrorPopup(response, "SendListReportPopup/createReport")
+    mainState.openErrorPopup(response, "SendFeedReportPopup/createReport")
     return
   }
   mainState.openMessagePopup({
@@ -72,7 +72,7 @@ async function submitCallback () {
 
 <template>
   <Popup
-    class="send-list-report-popup"
+    class="send-feed-report-popup"
     :hasCloseButton="true"
     :loaderDisplay="state.popupLoaderDisplay"
     @close="close"
@@ -80,15 +80,16 @@ async function submitCallback () {
     <template #header>
       <h2>
         <SVGIcon name="contentFiltering" />
-        <span>{{ $t("reportSendList") }}</span>
+        <span>{{ $t("reportSendFeed") }}</span>
       </h2>
     </template>
     <template #header-after>
-      <ListCard
-        :list="list"
+      <FeedCard
+        :generator="generator"
         :menuDisplay="false"
         :detailDisplay="false"
         :orderButtonDisplay="false"
+        :creatorDisplay="true"
         @keydown.prevent.stop
         @keyup.prevent.stop
       />
@@ -103,14 +104,14 @@ async function submitCallback () {
 </template>
 
 <style lang="scss" scoped>
-.send-list-report-popup {
+.send-feed-report-popup {
   &:deep() {
     .popup-header > h2 > .svg-icon {
       fill: rgb(var(--notice-color));
     }
   }
 
-  .list-card {
+  .feed-card {
     --fg-color: var(--notice-color);
     --accent-color: var(--notice-color);
     pointer-events: none;
