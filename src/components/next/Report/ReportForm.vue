@@ -134,6 +134,8 @@ async function createReport (params: {
   cid?: string
   uri?: string
   type?: string
+  convoId?: string
+  messageId?: string
 }): Promise<Error | undefined> {
   const atprotoLabeler = props.formState.atprotoLabeler === "customAtprotoLabeler"
     ? props.formState.customAtprotoLabeler

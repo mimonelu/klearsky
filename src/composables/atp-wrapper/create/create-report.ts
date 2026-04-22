@@ -7,16 +7,21 @@ export default async function (
   if (this.agent == null) {
     return Error("noAgentError")
   }
+  const $type = params.convoId != null || params.messageId != null
+    ? "chat.bsky.convo.defs#messageRef"
+    : params.cid == null || params.uri == null
+      ? "com.atproto.admin.defs#repoRef"
+      : "com.atproto.repo.strongRef"
   const query: ComAtprotoModerationCreateReport.InputSchema = {
     reasonType: params.reasonType,
     reason: params.reason,
     subject: {
-      $type: params.cid == null || params.uri == null
-        ? "com.atproto.admin.defs#repoRef"
-        : "com.atproto.repo.strongRef",
+      $type,
       did: params.did,
       cid: params.cid,
       uri: params.uri,
+      convoId: params.convoId,
+      messageId: params.messageId,
 
       // 型にはないが、公式アプリではリストレポート時に含めている
       type: params.type,

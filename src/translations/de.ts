@@ -469,6 +469,7 @@ export default () => ({
   "reportSendFeed": "Benutzerdefinierten Feed melden",
   "reportSendList": "Liste melden",
   "reportSendStarterPack": "Starter Pack melden",
+  "reportSendChatMessage": "Nachricht melden",
   "reportSendConfirmation": "Bestätigung der Meldung senden",
   "reportSendConfirmationMessage": "Diese Meldung wird gesendet. Sind Sie sicher?",
   "reportReasonType": "Kategorie",

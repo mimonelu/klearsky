@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, nextTick, reactive, ref, type ComputedRef } from "vue"
 import MenuTickerSendAccountReport from "@/components/next/Report/SendAccountReport.vue"
+import MenuTickerSendChatMessageReport from "@/components/next/Report/SendChatMessageReport.vue"
 import MenuTickerSendFeedReport from "@/components/next/Report/SendFeedReport.vue"
 import MenuTickerSendListReport from "@/components/next/Report/SendListReport.vue"
 import MenuTickerSendPostReport from "@/components/next/Report/SendPostReport.vue"
@@ -19,6 +20,8 @@ const props = defineProps<{
   post?: TTPost
   generator?: TTFeedGenerator
   list?: TTList
+  myConvo?: TIMyConvo
+  message?: TIChatMessage
   container?: HTMLElement
   starterPack?: TIStarterPack
 }>()
@@ -91,6 +94,8 @@ function close () {
             generator == null &&
             list == null &&
             starterPack == null &&
+            myConvo == null &&
+            message == null &&
             (
               post == null ||
               post.__custom.reason?.$type === 'app.bsky.feed.defs#reasonRepost'
@@ -102,14 +107,14 @@ function close () {
 
         <!-- ミュートのトグル -->
         <MenuTickerToggleMute
-          v-if="!isUser && generator == null && list == null && starterPack == null"
+          v-if="!isUser && generator == null && list == null && starterPack == null && myConvo == null && message == null"
           :user="user"
           @close="emit('close')"
         />
 
         <!-- ブロックのトグル -->
         <MenuTickerToggleBlock
-          v-if="!isUser && generator == null && list == null && starterPack == null"
+          v-if="!isUser && generator == null && list == null && starterPack == null && myConvo == null && message == null"
           :user="user"
           @close="emit('close')"
         />
@@ -146,6 +151,14 @@ function close () {
         <MenuTickerSendStarterPackReport
           v-if="starterPack != null"
           :starterPack="starterPack"
+          @close="emit('close')"
+        />
+
+        <!-- チャットメッセージレポート送信ポップアップを開く -->
+        <MenuTickerSendChatMessageReport
+          v-if="myConvo != null && message != null"
+          :myConvo="myConvo"
+          :message="message"
           @close="emit('close')"
         />
 

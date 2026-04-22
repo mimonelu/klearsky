@@ -469,6 +469,7 @@ export default () => ({
   "reportSendFeed": "フィードをレポートする",
   "reportSendList": "リストをレポートする",
   "reportSendStarterPack": "スターターパックをレポートする",
+  "reportSendChatMessage": "チャットメッセージをレポートする",
   "reportSendConfirmation": "レポートの送信確認",
   "reportSendConfirmationMessage": "レポートを送信します。よろしいですか？",
   "reportReasonType": "カテゴリー",

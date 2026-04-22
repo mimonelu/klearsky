@@ -30,4 +30,6 @@ type TTCreateReportParams = {
   cid?: string
   uri?: string
   type?: string
+  convoId?: string
+  messageId?: string
 }

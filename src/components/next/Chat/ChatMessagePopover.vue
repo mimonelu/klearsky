@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue"
 import MenuTickerCopyTextWrapper from "@/components/menus/CopyTextWrapper.vue"
+import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
 import MenuTickerTranslateText from "@/components/menus/TranslateText.vue"
 import Popover from "@/components/popovers/Popover.vue"
@@ -10,8 +11,9 @@ import Consts from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
-defineProps<{
+const props = defineProps<{
   display: boolean
+  myConvo?: TIMyConvo
   message?: TIChatMessage
 }>()
 
@@ -20,6 +22,8 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const popover = ref(null)
+
+const isMine = props.message?.sender.did === mainState.atp.data.did
 
 onMounted(open)
 
@@ -116,6 +120,14 @@ function toggleReaction (reaction: string) {
         <SVGIcon name="remove" />
         <span>{{ $t("deleteChatMessage") }}</span>
       </button>
+
+      <!-- モデレートする -->
+      <MenuTickerModerateWrapper
+        v-if="!isMine"
+        :myConvo="myConvo"
+        :message="message"
+        @close="emit('close')"
+      />
 
       <hr />
 
