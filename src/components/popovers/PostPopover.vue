@@ -5,7 +5,7 @@ import MenuTickerDeleteCustomBookmark from "@/components/menus/DeleteCustomBookm
 import MenuTickerFeedInteraction from "@/components/menus/FeedInteraction.vue"
 import MenuTickerModerateWrapper from "@/components/menus/ModerateWrapper.vue"
 import MenuTickerOpenAppWrapper from "@/components/menus/OpenAppWrapper.vue"
-import MenuTickerOpenChatConvoPopup from "@/components/menus/OpenChatConvoPopup.vue"
+import MenuTickerOpenChatConvoPopup from "@/components/next/Chat/OpenChatConvoPopup.vue"
 import MenuTickerOpenCustomBookmarkManagementPopup from "@/components/menus/OpenCustomBookmarkManagementPopup.vue"
 import MenuTickerOpenEditPostPopup from "@/components/next/EditPost/OpenEditPostPopup.vue"
 import MenuTickerOpenListUserManagementPopup from "@/components/menus/OpenListUserManagementPopup.vue"

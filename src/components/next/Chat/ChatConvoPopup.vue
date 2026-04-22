@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue"
-import ChatPost from "@/components/compositions/ChatPost.vue"
+import ChatPost from "@/components/next/Chat/ChatPost.vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
