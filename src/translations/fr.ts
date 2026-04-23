@@ -603,6 +603,7 @@ export default () => ({
   "startChat": "Clavarder",
   "addChatMember": "Ajouter un membre",
   "chatMemberPlaceholder": "Nom d'affichage ou pseudonyme",
+  "chatDeclarationSelect": "Choisir l'accès chat",
   "chatOk": "Clavardage OK",
   "chatNo": "Pas de clavardage",
   "allow-incoming-all": "Tout le monde OK",

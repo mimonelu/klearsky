@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { inject } from "vue"
 import AvatarLink from "@/components/next/Avatar/AvatarLink.vue"
 import ChatPost from "@/components/next/Chat/ChatPost.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -13,14 +13,6 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const state = reactive<{
-  allowIncoming: ComputedRef<TTAllowIncoming>
-}>({
-  allowIncoming: computed((): TTAllowIncoming => {
-    return mainState.userProfile?.associated?.chat?.allowIncoming ?? "following"
-  }),
-})
-
 function close () {
   emit("close")
 }
@@ -29,42 +21,14 @@ function hasBlurLabel (user: TTUser): boolean {
   return hasUserBlurLabel(mainState, user.labels)
 }
 
-async function openChatMembersSelectPopup () {
+function openChatListPopover ($event: Event) {
   Util.blurElement()
-  mainState.openChatMembersSelectPopup()
-  await Util.waitProp(() => mainState.chatMembersSelectPopupProps.display, false)
-  if (mainState.chatMembersSelectPopupProps.users.length === 0) {
-    return
-  }
-  const dids = mainState.chatMembersSelectPopupProps.users.map((user) => user.did)
-  mainState.loaderDisplay = true
-  const myConvo = await mainState.myChat!.fetchMyConvo(dids)
-  mainState.loaderDisplay = false
-  if (myConvo == null) {
-    return
-  }
-  mainState.openChatConvoPopup(myConvo)
+  mainState.openChatListPopover($event.target)
 }
 
 function openChatConvoPopup (myConvo: TIMyConvo) {
   Util.blurElement()
   mainState.openChatConvoPopup(myConvo)
-}
-
-function openChatDeclarationSelectPopover ($event: Event) {
-  Util.blurElement()
-  mainState.chatDeclarationSelectPopoverCallback = chatDeclarationSelectPopoverCallback
-  mainState.openChatDeclarationSelectPopover($event.target)
-}
-
-async function chatDeclarationSelectPopoverCallback (type: TTAllowIncoming) {
-  mainState.loaderDisplay = true
-  if (await mainState.myChat!.setDeclaration(type)) {
-    if (mainState.userProfile?.associated?.chat != null) {
-      mainState.userProfile.associated.chat.allowIncoming = type
-    }
-  }
-  mainState.loaderDisplay = false
 }
 
 function openChatConvoPopover ($event: Event, myConvo: TIMyConvo) {
@@ -122,23 +86,10 @@ function isMine (message: TIChatMessage): boolean {
     <template #header>
       <button
         type="button"
-        class="button--plain chat-list-popup__create-convo-button"
-        @click.stop="openChatMembersSelectPopup"
+        class="button--plain"
+        @click.stop="openChatListPopover"
       >
-        <SVGIcon name="chatPlus" />
-      </button>
-      <button
-        type="button"
-        class="button--plain chat-list-popup__chat-declaration-select-popover-trigger"
-        @click.stop="openChatDeclarationSelectPopover"
-      >
-        <SVGIcon :name="
-          state.allowIncoming === 'all'
-            ? 'people'
-            : state.allowIncoming === 'following'
-              ? 'personHeart'
-              : 'personOff'
-        " />
+        <SVGIcon name="menu" />
       </button>
       <h2>
         <SVGIcon name="chat" />
@@ -256,24 +207,6 @@ function isMine (message: TIChatMessage): boolean {
         grid-gap: 1px;
         padding: unset;
       }
-    }
-  }
-
-  &__create-convo-button > .svg-icon {
-    --fg-color: var(--post-color);
-    font-size: 1.25rem;
-  }
-
-  &__chat-declaration-select-popover-trigger > .svg-icon {
-    font-size: 1.25rem;
-    &.svg-icon--people {
-      --fg-color: var(--share-color);
-    }
-    &.svg-icon--personHeart {
-      --fg-color: var(--like-color);
-    }
-    &.svg-icon--personOff {
-      --fg-color: var(--notice-color);
     }
   }
 

@@ -603,6 +603,7 @@ export default () => ({
   "startChat": "채팅",
   "addChatMember": "채팅 멤버 선택",
   "chatMemberPlaceholder": "표시 이름 또는 핸들",
+  "chatDeclarationSelect": "채팅 허용 선택",
   "chatOk": "채팅 가능",
   "chatNo": "채팅 불가",
   "allow-incoming-all": "모든 사람 가능",

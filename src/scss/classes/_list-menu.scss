@@ -117,6 +117,10 @@
       --icon-color: var(--red-color);
     }
 
+    & > .svg-icon:nth-child(3) {
+      margin-left: auto;
+    }
+
     & > img {
       min-width: 1rem;
       max-width: 1rem;

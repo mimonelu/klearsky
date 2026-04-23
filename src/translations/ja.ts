@@ -603,6 +603,7 @@ export default () => ({
   "startChat": "チャット",
   "addChatMember": "チャットメンバーの選択",
   "chatMemberPlaceholder": "表示名またはハンドル",
+  "chatDeclarationSelect": "チャット公開設定",
   "chatOk": "チャット可",
   "chatNo": "チャット不可",
   "allow-incoming-all": "全員可",

@@ -338,6 +338,14 @@ interface MainState {
   openEasterEggPopover: Function
   closeEasterEggPopover: () => void
 
+  // ポップオーバー - チャットリストポップオーバー
+  chatListPopoverProps: {
+    display: boolean
+  }
+  chatListPopoverSelector?: string | HTMLElement
+  openChatListPopover: Function
+  closeChatListPopover: () => void
+
   // ポップオーバー - チャットルームポップオーバー
   chatConvoPopoverProps: {
     display: boolean
@@ -347,15 +355,6 @@ interface MainState {
   chatConvoPopoverCallback?: Function
   openChatConvoPopover: Function
   closeChatConvoPopover: () => void
-
-  // ポップオーバー - チャット公開設定ポップオーバー
-  chatDeclarationSelectPopoverProps: {
-    display: boolean
-  }
-  chatDeclarationSelectPopoverSelector?: string | HTMLElement
-  chatDeclarationSelectPopoverCallback?: Function
-  openChatDeclarationSelectPopover: Function
-  closeChatDeclarationSelectPopover: () => void
 
   // ポップオーバー - チャットメッセージポップオーバー
   chatMessagePopoverProps: {

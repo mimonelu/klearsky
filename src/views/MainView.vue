@@ -9,8 +9,8 @@ import AdvancedSearchPopup from "@/components/popups/AdvancedSearchPopup.vue"
 import BlockingUsersPopup from "@/components/next/UserBlock/BlockingUsersPopup.vue"
 import ChatConvoPopover from "@/components/next/Chat/ChatConvoPopover.vue"
 import ChatConvoPopup from "@/components/next/Chat/ChatConvoPopup.vue"
-import ChatDeclarationSelectPopover from "@/components/next/Chat/ChatDeclarationSelectPopover.vue"
 import ChatListPopup from "@/components/next/Chat/ChatListPopup.vue"
+import ChatListPopover from "@/components/next/Chat/ChatListPopover.vue"
 import ChatMembersSelectPopup from "@/components/next/Chat/ChatMembersSelectPopup.vue"
 import ChatMessagePopover from "@/components/next/Chat/ChatMessagePopover.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
@@ -232,18 +232,18 @@ const {
       @close="state.closeEasterEggPopover"
     />
 
+    <!-- チャットリストポップオーバー -->
+    <ChatListPopover
+      v-if="state.chatListPopoverProps.display"
+      v-bind="state.chatListPopoverProps"
+      @close="state.closeChatListPopover"
+    />
+
     <!-- チャットルームポップオーバー -->
     <ChatConvoPopover
       v-if="state.chatConvoPopoverProps.display"
       v-bind="state.chatConvoPopoverProps"
       @close="state.closeChatConvoPopover"
-    />
-
-    <!-- チャット公開設定ポップオーバー -->
-    <ChatDeclarationSelectPopover
-      v-if="state.chatDeclarationSelectPopoverProps.display"
-      v-bind="state.chatDeclarationSelectPopoverProps"
-      @close="state.closeChatDeclarationSelectPopover"
     />
 
     <!-- チャットメッセージポップオーバー -->

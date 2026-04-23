@@ -397,6 +397,14 @@ export const state: MainState = reactive<MainState>({
   openEasterEggPopover: openEasterEggPopover,
   closeEasterEggPopover: closeEasterEggPopover,
 
+  // ポップオーバー - チャットリストポップオーバー
+  chatListPopoverProps: {
+    display: false,
+  },
+  chatListPopoverSelector: undefined,
+  openChatListPopover: openChatListPopover,
+  closeChatListPopover: closeChatListPopover,
+
   // ポップオーバー - チャットルームポップオーバー
   chatConvoPopoverProps: {
     display: false,
@@ -406,15 +414,6 @@ export const state: MainState = reactive<MainState>({
   chatConvoPopoverCallback: undefined,
   openChatConvoPopover: openChatConvoPopover,
   closeChatConvoPopover: closeChatConvoPopover,
-
-  // ポップオーバー - チャット公開設定ポップオーバー
-  chatDeclarationSelectPopoverProps: {
-    display: false,
-  },
-  chatDeclarationSelectPopoverSelector: undefined,
-  chatDeclarationSelectPopoverCallback: undefined,
-  openChatDeclarationSelectPopover: openChatDeclarationSelectPopover,
-  closeChatDeclarationSelectPopover: closeChatDeclarationSelectPopover,
 
   // ポップオーバー - チャットメッセージポップオーバー
   chatMessagePopoverProps: {
@@ -2273,6 +2272,17 @@ function closeEasterEggPopover () {
   state.easterEggPopoverProps.display = false
 }
 
+// ポップオーバー - チャットリストポップオーバー
+
+function openChatListPopover (selector: string | HTMLElement) {
+  state.chatListPopoverSelector = selector
+  state.chatListPopoverProps.display = true
+}
+
+function closeChatListPopover () {
+  state.chatListPopoverProps.display = false
+}
+
 // ポップオーバー - チャットルームポップオーバー
 
 function openChatConvoPopover (selector: string | HTMLElement) {
@@ -2282,17 +2292,6 @@ function openChatConvoPopover (selector: string | HTMLElement) {
 
 function closeChatConvoPopover () {
   state.chatConvoPopoverProps.display = false
-}
-
-// ポップオーバー - チャット公開設置ポップオーバー
-
-function openChatDeclarationSelectPopover (selector: string | HTMLElement) {
-  state.chatDeclarationSelectPopoverSelector = selector
-  state.chatDeclarationSelectPopoverProps.display = true
-}
-
-function closeChatDeclarationSelectPopover () {
-  state.chatDeclarationSelectPopoverProps.display = false
 }
 
 // ポップオーバー - チャットメッセージポップオーバー
