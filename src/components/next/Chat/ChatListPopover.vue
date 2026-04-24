@@ -60,6 +60,25 @@ async function openChatMembersSelectPopup () {
   }
   mainState.openChatConvoPopup(myConvo)
 }
+
+async function updateChatList () {
+  Util.blurElement()
+  close()
+  if (mainState.myChat == null) {
+    return
+  }
+  mainState.loaderDisplay = true
+  const result = await mainState.myChat.updateConvosAll()
+  mainState.loaderDisplay = false
+  if (!result) {
+    $error("ChatListPopover", "Failed to update chat conversations")
+    return
+  }
+
+  // ページタイトルの更新
+  // チャット通知があれば表示するため
+  mainState.updatePageTitle()
+}
 </script>
 
 <template>
@@ -82,6 +101,17 @@ async function openChatMembersSelectPopup () {
       <ChatDeclarationSelectPopoverWrapper
         @close="emit('close')"
       />
+
+      <hr />
+
+      <!-- チャットリスト更新ボタン -->
+      <button
+        type="button"
+        @click.stop="updateChatList"
+      >
+        <SVGIcon name="refresh" />
+        <span>{{ $t("refresh") }}</span>
+      </button>
     </menu>
   </Popover>
 </template>
