@@ -122,7 +122,10 @@ function isMine (message: TIChatMessage): boolean {
             <span>{{ myConvo.data?.unreadCount }}</span>
           </div>
           <div class="convo-card__avatars">
-            <template v-for="member of myConvo.data?.members">
+            <template
+              v-for="member of (myConvo.data as undefined | TIChatConvo)?.members"
+              :key="member.did"
+            >
               <AvatarLink
                 v-if="member.did !== mainState.atp.data.did"
                 :key="member.did"
@@ -144,7 +147,10 @@ function isMine (message: TIChatMessage): boolean {
           </div>
           <div class="convo-card__middle">
             <div class="convo-card__user-list">
-              <template v-for="member of myConvo.data?.members">
+              <template
+                v-for="member of (myConvo.data as undefined | TIChatConvo)?.members"
+                :key="member.did"
+              >
                 <div
                   v-if="member.did !== mainState.atp.data.did"
                   :key="member.did"
@@ -168,6 +174,7 @@ function isMine (message: TIChatMessage): boolean {
             <ChatPost
               v-if="myConvo.data?.lastMessage != null"
               class="convo-card__last-message"
+              :key="(myConvo.data as TIChatConvo).lastMessage?.id"
               :myConvo="myConvo"
               :isMine="isMine(myConvo.data.lastMessage)"
             />
