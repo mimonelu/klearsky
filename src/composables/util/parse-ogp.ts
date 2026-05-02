@@ -72,7 +72,9 @@ export default async function (
       file: blob as File,
       maxWidth: 2000,
       maxHeight: 2000,
-      maxSize: CONSTS.MAX_IMAGE_FILE_SIZE,
+
+      // ポスト画像のアップロード上限は増加されたが、OGP画像は旧来のまま
+      maxSize: CONSTS.MAX_IMAGE_FILE_SIZE_SMALL,
     })
     if (blobRef instanceof Error) {
       return blobRef
