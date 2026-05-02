@@ -196,7 +196,9 @@ async function makeAvatarBlobRef (): Promise<Error | undefined | BlobRef> {
       // TODO: 以下要確認
       maxWidth: 2000,
       maxHeight: 2000,
-      maxSize: CONSTS.MAX_IMAGE_FILE_SIZE,
+
+      // TODO: 以下要確認（ポスト画像のアップロード上限は増加されたが、リストのサムネイル画像は不明のため旧来のまま）
+      maxSize: CONSTS.MAX_IMAGE_FILE_SIZE_SMALL,
     })
     if (blobRef instanceof Error) {
       return Error("makeAvatarBlobRefError")
