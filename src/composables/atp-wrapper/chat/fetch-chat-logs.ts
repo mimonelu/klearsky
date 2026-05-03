@@ -1,5 +1,10 @@
 import type { ChatBskyConvoGetLog } from "@atproto/api"
 
+interface TIFetchChatLogsResponse {
+  logs: Array<TIChatLog>
+  cursor?: string
+}
+
 interface TIChatLog {
   rev: string
   convoId: string
@@ -9,7 +14,7 @@ interface TIChatLog {
 export default async function (
   this: TIAtpWrapper,
   cursor?: string
-): Promise<Error | Array<TIChatLog>> {
+): Promise<Error | TIFetchChatLogsResponse> {
   if (this.agent == null) {
     return Error("noAgentError")
   }
@@ -32,5 +37,8 @@ export default async function (
   if (!response.success) {
     return Error("apiError")
   }
-  return response.data.logs as unknown as Array<TIChatLog>
+  return {
+    logs: response.data.logs as unknown as Array<TIChatLog>,
+    cursor: response.data.cursor,
+  }
 }

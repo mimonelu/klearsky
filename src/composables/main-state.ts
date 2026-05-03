@@ -1429,19 +1429,14 @@ async function startChatListTimer () {
     return
   }
 
-  // 通常は convo を1件のみ取得し、 cursor に差異があれば全件取得する
-  let prevCursor: undefined | string = "UNUSED_CURSOR"
   state.chatListTimer = setInterval(async () => {
     if (!state.currentSetting?.chatFetchInterval) {
       return
     }
-    const currentCursor = await state.myChat!.updateConvos(1)
-    if (prevCursor !== "UNUSED_CURSOR" &&
-        prevCursor !== currentCursor
-    ) {
+    const hasNew = await state.myChat!.checkNewLogs()
+    if (hasNew) {
       await state.myChat!.updateConvosAll()
     }
-    prevCursor = currentCursor
     state.updatePageTitle()
   }, state.currentSetting?.chatFetchInterval ?? 60000)
 }

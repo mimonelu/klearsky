@@ -119,7 +119,7 @@ interface TIAtpWrapper {
   fetchChatDeclarations
     (repo: string, limit?: number, cursor?: string): Promise<Error | TIFetchChatDeclarationsResponse>
   fetchChatLogs
-    (cursor?: string): Promise<Error | Array<TIChatLog>>
+    (cursor?: string): Promise<Error | TIFetchChatLogsResponse>
   fetchChatMessages
     (convoId: string, limit?: number, cursor?: string): Promise<Error | { cursor?: string; messages: Array<TIChatMessage> }>
   fetchCustomBookmarkPacks

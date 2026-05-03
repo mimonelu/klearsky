@@ -9,18 +9,33 @@ export default class MyChat {
 
   unread: number
 
+  logCursor: undefined | string
+
   constructor (mainState: MainState) {
     this.mainState = mainState
     this.disabled = true
     this.myConvos = []
     this.unread = 0
+    this.logCursor = undefined
   }
 
   async updateDisabled (): Promise<void> {
     // 引数なしで getLog() をコールし、失敗すればチャットを利用できない環境とみなしている
     // TODO: AppPasswords にチャット権限がない、もしくは非公式 PDS であるかどうかで判定すること
-    const chatLogs = await this.mainState.atp.fetchChatLogs()
-    this.disabled = chatLogs instanceof Error
+    const result = await this.mainState.atp.fetchChatLogs()
+    this.disabled = result instanceof Error
+    if (!(result instanceof Error)) {
+      this.logCursor = result.cursor ?? this.logCursor
+    }
+  }
+
+  async checkNewLogs (): Promise<boolean> {
+    const result = await this.mainState.atp.fetchChatLogs(this.logCursor)
+    if (result instanceof Error) {
+      return false
+    }
+    this.logCursor = result.cursor ?? this.logCursor
+    return result.logs.length > 0
   }
 
   async setDeclaration (allowIncoming: TTAllowIncoming): Promise<boolean> {

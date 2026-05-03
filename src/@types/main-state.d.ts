@@ -92,7 +92,7 @@ interface MainState {
 
   // チャット
   myChat?: TIMyChat
-  chatListTimer: undefined | any
+  chatListTimer: undefined | number
   endChatListTimer: () => void
   startChatListTimer: () => void
 
