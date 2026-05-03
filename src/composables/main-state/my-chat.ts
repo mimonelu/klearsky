@@ -29,13 +29,13 @@ export default class MyChat {
     }
   }
 
-  async checkNewLogs (): Promise<boolean> {
+  async checkNewLogs (): Promise<Array<string>> {
     const result = await this.mainState.atp.fetchChatLogs(this.logCursor)
     if (result instanceof Error) {
-      return false
+      return []
     }
     this.logCursor = result.cursor ?? this.logCursor
-    return result.logs.length > 0
+    return [...new Set(result.logs.map((log) => log.convoId))]
   }
 
   async setDeclaration (allowIncoming: TTAllowIncoming): Promise<boolean> {
@@ -73,7 +73,7 @@ export default class MyChat {
   }
 
   async fetchMyConvo (dids: Array<string>): Promise<undefined | TIMyConvo> {
-    const convo = await this.mainState.atp.fetchChatConvo(dids)
+    const convo = await this.mainState.atp.fetchChatConvoByDids(dids)
     if (convo instanceof Error) {
       if ((convo as any).error === "InvalidToken") {
         // AppPasswords にチャット権限がない場合は専用メッセージを表示
@@ -87,23 +87,16 @@ export default class MyChat {
     return this.updateMyConvo(convo, "unshift")
   }
 
-  async updateConvos (limit?: number): Promise<undefined | string> {
-    let result = await this.mainState.atp.fetchChatConvos(limit)
-    if (result instanceof Error) {
-      // エラーメッセージは表示しない
-      return
+  async updateConvos (convoIds: Array<string>): Promise<void> {
+    for (const convoId of convoIds) {
+      const result = await this.mainState.atp.fetchChatConvoById(convoId)
+      if (result instanceof Error) {
+        continue
+      }
+      this.updateMyConvo(result, "push")
     }
-    result.convos.forEach((convo) => {
-      this.updateMyConvo(convo, "push")
-    })
     this.sortMyConvos()
     this.updateUnread()
-    const cursor = result.cursor
-
-    // @ts-ignore
-    result = null
-
-    return cursor
   }
 
   async updateConvosAll (): Promise<boolean> {

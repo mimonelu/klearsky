@@ -52,7 +52,8 @@ import fetchAuthorReposts from "@/composables/atp-wrapper/fetch/fetch-author-rep
 import fetchBlob from "@/composables/atp-wrapper/fetch/fetch-blob"
 import fetchBlobUrl from "@/composables/atp-wrapper/fetch/fetch-blob-url"
 import fetchBlockingUsers from "@/composables/atp-wrapper/fetch/fetch-blocking-users"
-import fetchChatConvo from "@/composables/atp-wrapper/chat/fetch-chat-convo"
+import fetchChatConvoByDids from "@/composables/atp-wrapper/chat/fetch-chat-convo-by-dids"
+import fetchChatConvoById from "@/composables/atp-wrapper/chat/fetch-chat-convo-by-id"
 import fetchChatConvos from "@/composables/atp-wrapper/chat/fetch-chat-convos"
 import fetchChatDeclarations from "@/composables/atp-wrapper/chat/fetch-chat-declarations"
 import fetchChatLogs from "@/composables/atp-wrapper/chat/fetch-chat-logs"
@@ -281,7 +282,8 @@ class AtpWrapper implements TIAtpWrapper {
   fetchBlob = fetchBlob
   fetchBlobUrl = fetchBlobUrl
   fetchBlockingUsers = fetchBlockingUsers
-  fetchChatConvo = fetchChatConvo
+  fetchChatConvoByDids = fetchChatConvoByDids
+  fetchChatConvoById = fetchChatConvoById
   fetchChatConvos = fetchChatConvos
   fetchChatDeclarations = fetchChatDeclarations
   fetchChatLogs = fetchChatLogs

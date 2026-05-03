@@ -112,8 +112,10 @@ interface TIAtpWrapper {
     (did: string, image: BlobRef): Promise<Error | string>
   fetchBlockingUsers
     (users: Array<TTUser>, limit?: number, cursor?: string): Promise<Error | undefined | string>
-  fetchChatConvo
+  fetchChatConvoByDids
     (members: Array<string>): Promise<Error | TIChatConvo>
+  fetchChatConvoById
+    (convoId: string): Promise<Error | TIChatConvo>
   fetchChatConvos
     (limit?: number, cursor?: string): Promise<Error | TIFetchChatConvosResponse>
   fetchChatDeclarations

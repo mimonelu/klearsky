@@ -1,16 +1,5 @@
 import type { ChatBskyConvoGetLog } from "@atproto/api"
 
-interface TIFetchChatLogsResponse {
-  logs: Array<TIChatLog>
-  cursor?: string
-}
-
-interface TIChatLog {
-  rev: string
-  convoId: string
-  message?: TIChatMessage
-}
-
 export default async function (
   this: TIAtpWrapper,
   cursor?: string

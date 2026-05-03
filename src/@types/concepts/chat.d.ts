@@ -31,6 +31,17 @@ interface TIChatReaction {
   value: string
 }
 
+interface TIFetchChatLogsResponse {
+  logs: Array<TIChatLog>
+  cursor?: string
+}
+
+interface TIChatLog {
+  rev: string
+  convoId: string
+  message?: TIChatMessage
+}
+
 interface TIFetchChatDeclarationsResponse {
   cursor?: string
   records: {

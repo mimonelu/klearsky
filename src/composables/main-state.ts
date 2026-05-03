@@ -1433,9 +1433,9 @@ async function startChatListTimer () {
     if (!state.currentSetting?.chatFetchInterval) {
       return
     }
-    const hasNew = await state.myChat!.checkNewLogs()
-    if (hasNew) {
-      await state.myChat!.updateConvosAll()
+    const changedConvoIds = await state.myChat!.checkNewLogs()
+    if (changedConvoIds.length > 0) {
+      await state.myChat!.updateConvos(changedConvoIds)
     }
     state.updatePageTitle()
   }, state.currentSetting?.chatFetchInterval ?? 60000)
