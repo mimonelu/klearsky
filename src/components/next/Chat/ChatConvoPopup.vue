@@ -55,7 +55,7 @@ const easyFormProps: TTEasyForm = {
         item.rows = 3
 
         // TODO: 要修正
-        ;(easyForm.value as any)?.forceUpdate()
+        easyForm.value?.forceUpdate()
         scrollToBottom()
       },
       onBlur (item: TTEasyFormItem) {
@@ -64,7 +64,7 @@ const easyFormProps: TTEasyForm = {
           item.rows = 1
 
           // TODO: 要修正
-          ;(easyForm.value as any)?.forceUpdate()
+          easyForm.value?.forceUpdate()
         }, 250)
       },
     },
@@ -101,11 +101,11 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
-const popup = ref(null)
+const popup = ref<InstanceType<typeof Popup>>()
 
-const easyForm = ref(null)
+const easyForm = ref<InstanceType<typeof EasyForm>>()
 
-let timer: undefined | any
+let timer: undefined | number
 
 let unmounted = false
 
@@ -135,7 +135,7 @@ function onInputUrl () {
   */
 
   // TODO: 要修正
-  (easyForm.value as any)?.forceUpdate()
+  easyForm.value?.forceUpdate()
 }
 
 function onClickClearButton () {
@@ -172,7 +172,7 @@ async function updateMessagesOnTick () {
   if (props.myConvo == null) {
     return
   }
-  const diff = (popup as any)?.value?.scrollObserver?.diffScrollBottom()
+  const diff = popup.value?.scrollObserver?.diffScrollBottom()
 
   // TODO:
   // 通信量削減のため、通常は1つのみ取得し、段階的に取得数を増やしている
@@ -246,12 +246,11 @@ async function submitCallback () {
 }
 
 async function scrollToBottom () {
-  const value = popup.value as any
-  if (value == null) {
+  if (popup.value == null) {
     return
   }
   await nextTick()
-  value?.scrollToBottom("smooth")
+  popup.value?.scrollToBottom("smooth")
 }
 
 function isMine (message: TIChatMessage): boolean {

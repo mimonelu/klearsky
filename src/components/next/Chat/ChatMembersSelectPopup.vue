@@ -85,16 +85,16 @@ const easyFormProps: TTEasyForm = {
           easyFormState.users.splice(0)
           await nextTick()
           easyFormState.users.push(...results)
-          ;(popup.value as any)?.scrollToTop()
+          popup.value?.scrollToTop()
         }, 500)
       },
     },
   ],
 }
 
-const popup = ref(null)
+const popup = ref<InstanceType<typeof Popup>>()
 
-let timer: undefined | any
+let timer: undefined | number
 
 function close () {
   emit("close")
