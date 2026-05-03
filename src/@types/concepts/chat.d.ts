@@ -1,16 +1,14 @@
+type TTChatConvoStatus = "accepted" | "request" | "declined"
+
 type TTAllowIncoming = "all" | "none" | "following" | (string & {})
 
 interface TIChatConvo {
   id: string
   lastMessage?: TIChatMessage
-  lastReaction?: {
-    $type: string
-    message: TIChatMessage
-    reaction: TIChatReaction
-  }
   members: TTUser[]
   muted: boolean
   rev: string
+  status: TTChatConvoStatus
   unreadCount: number
 }
 
