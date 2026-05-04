@@ -5,13 +5,16 @@ export default class MyConvo {
 
   messages: Array<TIChatMessage>
 
-  cursor?: string
+  logsCursor?: string
+
+  messagesCursor?: string
 
   constructor (mainState: MainState) {
     this.mainState = mainState
     this.data = undefined
     this.messages = []
-    this.cursor = undefined
+    this.logsCursor = undefined
+    this.messagesCursor = undefined
   }
 
   getMemberNames (): Array<string> {
@@ -43,18 +46,18 @@ export default class MyConvo {
     if (this.data == null) {
       return - 1
     }
-    const messages = await this.mainState.atp.fetchChatMessages(
+    const result = await this.mainState.atp.fetchChatMessages(
       this.data.id,
       limit,
-      isNew ? undefined : this.cursor
+      isNew ? undefined : this.messagesCursor
     )
-    if (messages instanceof Error) {
+    if (result instanceof Error) {
       // エラーメッセージは表示しない
       return - 1
     }
-    this.cursor = messages.cursor
+    this.messagesCursor = result.cursor
     let numberOfNewMessages = 0
-    messages.messages.forEach((dst) => {
+    result.messages.forEach((dst) => {
       const srcIndex = this.messages.findIndex((src) => {
         return src.id === dst.id
       })
@@ -87,6 +90,17 @@ export default class MyConvo {
     }
     this.mainState.myChat!.sortMyConvos()
     return true
+  }
+
+  async checkNewMessages (): Promise<boolean> {
+    const result = await this.mainState.atp.fetchChatLogs(this.logsCursor)
+    if (result instanceof Error) {
+      return false
+    }
+    this.logsCursor = result.cursor ?? this.logsCursor
+    return result.logs.some((log) => {
+      return log.convoId === this.data?.id
+    })
   }
 
   async updateRead (messageId?: string): Promise<boolean> {
@@ -167,7 +181,7 @@ export default class MyConvo {
     })
   }
 
-  findMember (did: string): undefined | TTProfile {
+  findMember (did: string): undefined | TTUser {
     return this.data?.members.find((member) => member.did === did)
   }
 }

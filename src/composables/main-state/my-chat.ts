@@ -9,14 +9,14 @@ export default class MyChat {
 
   unread: number
 
-  logCursor: undefined | string
+  logsCursor: undefined | string
 
   constructor (mainState: MainState) {
     this.mainState = mainState
     this.disabled = true
     this.myConvos = []
     this.unread = 0
-    this.logCursor = undefined
+    this.logsCursor = undefined
   }
 
   async updateDisabled (): Promise<void> {
@@ -25,16 +25,16 @@ export default class MyChat {
     const result = await this.mainState.atp.fetchChatLogs()
     this.disabled = result instanceof Error
     if (!(result instanceof Error)) {
-      this.logCursor = result.cursor ?? this.logCursor
+      this.logsCursor = result.cursor ?? this.logsCursor
     }
   }
 
   async checkNewLogs (): Promise<Array<string>> {
-    const result = await this.mainState.atp.fetchChatLogs(this.logCursor)
+    const result = await this.mainState.atp.fetchChatLogs(this.logsCursor)
     if (result instanceof Error) {
       return []
     }
-    this.logCursor = result.cursor ?? this.logCursor
+    this.logsCursor = result.cursor ?? this.logsCursor
     return [...new Set(result.logs.map((log) => log.convoId))]
   }
 

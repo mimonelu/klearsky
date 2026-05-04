@@ -172,6 +172,10 @@ async function updateMessagesOnTick () {
   if (props.myConvo == null) {
     return
   }
+  const hasNew = await props.myConvo.checkNewMessages()
+  if (!hasNew) {
+    return
+  }
   const diff = popup.value?.scrollObserver?.diffScrollBottom()
 
   // TODO:
