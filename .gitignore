@@ -28,4 +28,4 @@ coverage
 docs
 
 # Claude
-.claude
+.claude/settings.local.json
