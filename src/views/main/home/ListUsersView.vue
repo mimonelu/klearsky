@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject } from "vue"
-import ListCard from "@/components/cards/ListCard.vue"
+import ListCard from "@/components/next/List/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"

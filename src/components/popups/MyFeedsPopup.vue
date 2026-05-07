@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, reactive } from "vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
-import ListCard from "@/components/cards/ListCard.vue"
+import ListCard from "@/components/next/List/ListCard.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SpecialFeedCard from "@/components/cards/SpecialFeedCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"

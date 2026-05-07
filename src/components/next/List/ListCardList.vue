@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, reactive, type ComputedRef } from "vue"
 import { useRouter } from "vue-router"
-import ListCard from "@/components/cards/ListCard.vue"
+import ListCard from "@/components/next/List/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"

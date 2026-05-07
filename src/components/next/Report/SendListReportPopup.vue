@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { inject, reactive, ref } from "vue"
-import ListCard from "@/components/cards/ListCard.vue"
+import ListCard from "@/components/next/List/ListCard.vue"
 import Popup from "@/components/popups/Popup.vue"
 import ReportForm, { type TTReportFormState } from "@/components/next/Report/ReportForm.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
