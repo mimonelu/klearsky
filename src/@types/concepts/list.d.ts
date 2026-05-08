@@ -40,3 +40,18 @@ type TTListUserManagementPopupProps = {
   display: boolean
   user?: TTUser
 }
+
+type TIFetchListsWithMembershipResponse = Promise<Error | {
+  cursor?: string
+
+  // 自身が所有するリスト配列
+  // NOTE: 検索対象ユーザーとは無関係
+  // NOTE: リファレンスリストは含まれない
+  lists: TTList[]
+
+  // 検索対象ユーザーに関する情報
+  actors: {
+    listUri: string
+    listItemUri: string
+  }[]
+}>

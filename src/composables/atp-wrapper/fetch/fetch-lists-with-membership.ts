@@ -5,10 +5,7 @@ export default async function (
   actor: string,
   limit?: number,
   cursor?: string
-): Promise<Error | {
-  cursor?: string
-  lists: TTList[]
-}> {
+): TIFetchListsWithMembershipResponse {
   if (this.agent == null) {
     return Error("noAgentError")
   }
@@ -19,6 +16,10 @@ export default async function (
   if (cursor != null) {
     query.cursor = cursor
   }
+
+  // NOTE: 指定不要。いずれにせよリファレンスリストは返らない
+  // query.purposes = ["curatelist", "modlist", "referencelist"]
+
   const response: Error | AppBskyGraphGetListsWithMembership.Response =
     await this.agent.app.bsky.graph.getListsWithMembership(query)
       .then((value) => value)
@@ -32,8 +33,19 @@ export default async function (
   }
   return {
     cursor: response.data.cursor,
-    lists: response.data.listsWithMembership?.map((listWithMembership) => {
-      return listWithMembership.list
-    }) as TTList[] ?? [],
+    lists: response.data.listsWithMembership?.
+      map((listWithMembership) => {
+        return listWithMembership.list
+      }) as TTList[] ?? [],
+    actors: response.data.listsWithMembership?.
+      filter((listWithMembership) => {
+        return listWithMembership.listItem != null
+      }).
+      map((listWithMembership) => {
+        return {
+          listUri: listWithMembership.list.uri,
+          listItemUri: listWithMembership.listItem!.uri,
+        }
+      }) ?? [],
   }
 }
