@@ -2,7 +2,8 @@ export default function (
   feeds: Array<TTFeed>,
   did?: string,
   replyFoldingSettings?: Array<number>,
-  repostFoldingSettings?: Array<number>
+  repostFoldingSettings?: Array<number>,
+  otherFoldingSettings?: Array<number>
 ) {
   feeds.forEach((feed: TTFeed) => {
     // リプライ
@@ -101,5 +102,13 @@ export default function (
       feed.__folding = true
     }
     */
+
+    // その他 - 自動化アカウントによるポスト
+    if (
+      otherFoldingSettings?.includes(1) &&
+      feed.post.author.labels?.some((label: TTLabel) => label.val === "bot")
+    ) {
+      feed.__folding = true
+    }
   })
 }

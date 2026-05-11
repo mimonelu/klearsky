@@ -786,6 +786,8 @@ export default () => ({
   "repostFolding3": "Partages des non-abonnés",
   "repostFolding4": "Partages des non-suivis",
   "repostFolding5": "Partages des abonnements",
+  "otherFolding": "Autres réductions",
+  "otherFolding1": "Publications des comptes automatisés",
 
   // ============================================================================
   // REPOST CONTROL

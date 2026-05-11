@@ -103,6 +103,17 @@ const mainState = inject("state") as MainState
               :options="SETTINGS.REPOST_FOLDINGS"
               @update="$emit('saveSetting')"
             />
+
+            <!-- フィードの制御 - その他 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("otherFolding") }}</span>
+            </div>
+            <Checkboxes
+              :state="mainState.currentSetting"
+              model="otherFolding"
+              :options="SETTINGS.OTHER_FOLDINGS"
+              @update="$emit('saveSetting')"
+            />
           </div>
         </div>
 

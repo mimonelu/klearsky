@@ -35,6 +35,7 @@ type TTSetting = {
   postSearchKeywordHistory?: Array<string>
   replyFolding?: Array<number>
   repostFolding?: Array<number>
+  otherFolding?: Array<number>
   timeControl?: string
   timelineFetchInterval?: number
   uiLanguage?: string

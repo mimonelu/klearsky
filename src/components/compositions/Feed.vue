@@ -78,6 +78,22 @@ function removeThisPost (uri: string) {
           :anonymizable="true"
         />
       </div>
+
+      <!-- 折り畳みポストオープナー -->
+      <div
+        v-else
+        class="folder__item"
+      >
+        <SVGIcon name="post" />
+        <DisplayName
+          :displayName="feed.post.author.displayName"
+          :anonymizable="true"
+        />
+        <AuthorHandle
+          :handle="feed.post.author.handle"
+          :anonymizable="true"
+        />
+      </div>
     </div>
 
     <!-- 本体 -->

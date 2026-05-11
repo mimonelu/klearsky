@@ -1044,6 +1044,9 @@ function saveSettings () {
   if (state.settings[did].repostFolding == null) {
     state.settings[did].repostFolding = [1, 2, 5]
   }
+  if (state.settings[did].otherFolding == null) {
+    state.settings[did].otherFolding = []
+  }
   if (state.settings[did].timeControl == null) {
     state.settings[did].timeControl = "relative"
   }
@@ -1923,6 +1926,7 @@ async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
     state.timelineFeeds,
     state.currentSetting.replyFolding,
     state.currentSetting.repostFolding,
+    state.currentSetting.otherFolding,
     CONSTS.LIMIT_OF_FETCH_TIMELINE,
     direction === "old" ? state.timelineCursor : middleCursor,
     direction
@@ -2021,6 +2025,7 @@ async function fetchCustomFeeds (direction: TTDirection, middleCursor?: string) 
     state.currentQuery.feed,
     state.currentSetting.replyFolding,
     state.currentSetting.repostFolding,
+    state.currentSetting.otherFolding,
     CONSTS.LIMIT_OF_FETCH_FEEDS,
     direction === "old" ? state.currentCustomFeedsCursor : middleCursor,
     direction,
@@ -2109,6 +2114,7 @@ async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: str
     state.currentList.uri,
     state.currentSetting.replyFolding,
     state.currentSetting.repostFolding,
+    state.currentSetting.otherFolding,
     CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
     direction === "old" ? state.currentListFeedsCursor : middleCursor,
     direction,
@@ -2138,6 +2144,7 @@ async function fetchCurrentStarterPackListFeeds (
     state.currentStarterPack.list.uri,
     state.currentSetting.replyFolding,
     state.currentSetting.repostFolding,
+    state.currentSetting.otherFolding,
     CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
     direction === "old" ? state.currentStarterPackListFeedsCursor : middleCursor,
     direction,

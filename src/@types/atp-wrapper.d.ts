@@ -127,7 +127,7 @@ interface TIAtpWrapper {
   fetchCustomBookmarkPacks
     (this: TIAtpWrapper, currentCustomBookmarkPacks: Array<TICustomBookmarkPack>, did: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchCustomFeeds
-    (oldFeeds: Array<TTFeed>, feed: string, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<Error | undefined | string>
+    (oldFeeds: Array<TTFeed>, feed: string, replyFolding?: Array<number>, repostFolding?: Array<number>, otherFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<Error | undefined | string>
   fetchDid
     (handle: string): Promise<Error | string>
   fetchDrafts
@@ -155,7 +155,7 @@ interface TIAtpWrapper {
   fetchListBlocks
     (lists: Array<TTList>, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchListFeeds
-    (currentFeeds: Array<TTFeed>, list: string, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<Error | undefined | string>
+    (currentFeeds: Array<TTFeed>, list: string, replyFolding?: Array<number>, repostFolding?: Array<number>, otherFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection, checkIdentity?: (params: any) => boolean): Promise<Error | undefined | string>
   fetchListItems
     (currentListItems: Array<TTListItem>, list: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchListMutes
@@ -229,7 +229,7 @@ interface TIAtpWrapper {
   fetchTimeFeeds
     (oldPosts: Array<TTPost>, direction: "new" | "old", author: TTUser, limit?: number): Promise<Error | undefined | string>
   fetchTimeline
-    (oldFeeds: Array<TTFeed>, replyFolding?: Array<number>, repostFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection): Promise<Error | undefined | string>
+    (oldFeeds: Array<TTFeed>, replyFolding?: Array<number>, repostFolding?: Array<number>, otherFolding?: Array<number>, limit?: number, cursor?: string, direction?: TTDirection): Promise<Error | undefined | string>
   fetchTimelineNewArrival
     (): Promise<Error | Array<TTFeed>>
     fetchTrendingTopics

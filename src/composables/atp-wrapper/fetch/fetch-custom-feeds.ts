@@ -7,6 +7,7 @@ export default async function (
   feed: string,
   replyFolding?: Array<number>,
   repostFolding?: Array<number>,
+  otherFolding?: Array<number>,
   limit?: number,
   cursor?: string,
   direction?: TTDirection,
@@ -50,7 +51,8 @@ export default async function (
     response.data.feed as Array<TTFeed>,
     this.session?.did,
     replyFolding,
-    repostFolding
+    repostFolding,
+    otherFolding
   )
 
   // TODO:

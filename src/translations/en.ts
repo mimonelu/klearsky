@@ -786,6 +786,8 @@ export default () => ({
   "repostFolding3": "Fold reposts of posts by users who don't follow you",
   "repostFolding4": "Fold reposts of posts by users you don't follow",
   "repostFolding5": "Fold reposts of posts by users you follow",
+  "otherFolding": "Other Folding",
+  "otherFolding1": "Posts by automated accounts",
 
   // ============================================================================
   // REPOST CONTROL

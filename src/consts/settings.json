@@ -66,6 +66,9 @@
     { "label": "repostFolding4", "value": 4 },
     { "label": "repostFolding5", "value": 5 }
   ],
+  "OTHER_FOLDINGS": [
+    { "label": "otherFolding1", "value": 1 }
+  ],
   "IMAGE_FOLDINGS": [
     { "label": "imageFolding1", "value": "none" },
     { "label": "imageFolding2", "value": "recommended" },

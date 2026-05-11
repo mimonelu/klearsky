@@ -786,6 +786,8 @@ export default () => ({
   "repostFolding3": "Reposts von Beiträgen von Benutzern einklappen, die Ihnen nicht folgen",
   "repostFolding4": "Reposts von Beiträgen von Benutzern einklappen, denen Sie nicht folgen",
   "repostFolding5": "Reposts von Beiträgen von Benutzern einklappen, denen Sie folgen",
+  "otherFolding": "Weitere Einklappoptionen",
+  "otherFolding1": "Beiträge von automatisierten Konten",
 
   // ============================================================================
   // REPOST CONTROL
