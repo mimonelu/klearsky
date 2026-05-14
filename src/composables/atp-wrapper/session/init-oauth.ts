@@ -69,8 +69,13 @@ export default async function (this: TIAtpWrapper, targetDid?: string): Promise<
 
   // DID指定なしの場合は最後のセッションを復元（initRestoreでコールバック処理をスキップ）
   else {
-    const result = await this.oauthClient.initRestore()
-    session = result?.session ?? null
+    try {
+      const result = await this.oauthClient.initRestore()
+      session = result?.session ?? null
+    } catch (error) {
+      $warn("initOAuth: initRestore failed", error)
+      return
+    }
   }
 
   if (session != null) {
