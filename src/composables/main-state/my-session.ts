@@ -48,7 +48,7 @@ export default class MySession {
     const updatedSession: TTSession = {
       active: newData.active ?? existing.active ?? true,
       did,
-      handle: newData.handle ?? existing.handle ?? "",
+      handle: newData.handle || existing.handle || "",
       accessJwt: newData.accessJwt ?? existing.accessJwt,
       refreshJwt: newData.refreshJwt ?? existing.refreshJwt,
       email: newData.email ?? existing.email,
