@@ -95,6 +95,13 @@ export function useMainViewAuth (options: Options) {
         await processAfterLogin()
         return
       }
+
+      // OAuth認証が失敗した場合（ネットワーク切断等）はパスワードフローに進まない
+      // セッション状態を保持し、再接続後のリロードで自動ログインを可能にする
+      // OAuthでログイン中、ネット切断時にリロードするとログアウトされ、かつ接続後にリロードしても自動ログインされない現象への対処
+      if (currentAuthType === "oauth") {
+        return
+      }
     }
 
     // パスワード認証フロー
