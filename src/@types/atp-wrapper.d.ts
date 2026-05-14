@@ -82,8 +82,6 @@ interface TIAtpWrapper {
     (repo: string, collection: string, uri: string, swapCommit?: string, swapRecord?: string): Promise<Error | undefined>
   deleteRepost
     (uri: string): Promise<Error | undefined>
-  deleteSession
-    (): Promise<Error | undefined>
   deleteStarterPack
     (uri: string): Promise<Error | undefined>
   deleteThreadgate
