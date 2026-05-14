@@ -100,6 +100,7 @@
     { "label": "pnBandcamp", "value": "bandcamp" },
     { "label": "pnGiphy", "value": "giphy" },
     { "label": "pnGraysky", "value": "graysky" },
+    { "label": "pnKlipy", "value": "klipy" },
     { "label": "pnSpotify", "value": "spotify" },
     { "label": "pnTenor", "value": "tenor" },
     { "label": "pnTwitch", "value": "twitch" },

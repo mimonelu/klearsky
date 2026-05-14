@@ -1071,6 +1071,7 @@ function saveSettings () {
       "bandcamp",
       "giphy",
       // "graysky",
+      "klipy",
       // "spotify",
       // "tenor",
       // "twitch",

@@ -23,6 +23,7 @@ const embeddedType = computed((): string => {
   if (embeddedContentType === "bandcamp" && settingValues.includes("bandcamp")) return "bandcamp"
   if (embeddedContentType === "giphy" && settingValues.includes("giphy")) return "giphy"
   if (embeddedContentType === "graysky" && settingValues.includes("graysky")) return "graysky"
+  if (embeddedContentType === "klipy" && settingValues.includes("klipy")) return "klipy"
   if (embeddedContentType === "nicovideo" && settingValues.includes("nicovideo")) return "nicovideo"
   if (embeddedContentType === "spotify" && settingValues.includes("spotify")) return "spotify"
   if (embeddedContentType === "tenor" && settingValues.includes("tenor")) return "tenor"
@@ -82,6 +83,14 @@ function getEmbeddedContentId () {
       embeddedContentId = matches[1]
       return
     }
+  }
+
+  // 埋込型リンクカード - Klipy
+  // e.g. https://static.klipy.com/ii/e293a233a303a98e471f78d04e13a1b0/15/07/OclOrPrQ.gif?hh=258&ww=498&mp4=pBTLUEunC6Tn0ePu8&webm=xe7nPDJUNniYDOLOLYC
+  else if (url.hostname.endsWith(".klipy.com")) {
+    embeddedContentType = "klipy"
+    embeddedContentId = url.href
+    return
   }
 
   // 埋込型リンクカード - Nicovideo
@@ -291,6 +300,19 @@ function searchUrl () {
           type="video/mp4"
         />
       </video>
+
+      <!-- 埋込型リンクカード - Klipy -->
+      <div
+        v-else-if="embeddedType === 'klipy'"
+        class="external--klipy"
+      >
+        <img
+          :src="embeddedContentId as unknown as string"
+          alt=""
+          decoding="async"
+          loading="lazy"
+        />
+      </div>
 
       <!-- 埋込型リンクカード - Nicovideo -->
       <iframe
@@ -598,6 +620,16 @@ function searchUrl () {
     background-color: rgb(var(--fg-color), 0.125);
     border-radius: var(--border-radius-middle);
     width: 100%;
+  }
+
+  // 埋込型リンクカード - Klipy
+  &--klipy {
+    aspect-ratio: 560 / 300;
+    background-color: rgb(var(--fg-color), 0.125);
+    border-radius: var(--border-radius-middle);
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
   }
 
   // 埋込型リンクカード - Nicovideo

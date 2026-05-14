@@ -865,6 +865,7 @@ export default () => ({
   "pnBandcamp": "Bandcamp",
   "pnGiphy": "Giphy",
   "pnGraysky": "Graysky",
+  "pnKlipy": "Klipy",
   "pnSpotify": "Spotify",
   "pnTenor": "Tenor",
   "pnTwitch": "Twitch",
