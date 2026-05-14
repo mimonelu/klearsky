@@ -74,7 +74,13 @@ export function useMainViewAuth (options: Options) {
   async function tryOAuthAutoLogin (): Promise<boolean> {
     // 期待するDIDを渡して、そのアカウントのセッションを復元
     const targetDid = state.mySession?.did
-    const oauthSession = await state.atp.initOAuth(targetDid || undefined)
+    let oauthSession: TTSession | undefined
+    try {
+      oauthSession = await state.atp.initOAuth(targetDid || undefined)
+    } catch (error) {
+      state.openErrorPopup(error as Error, "MainView/tryOAuthAutoLogin")
+      return false
+    }
     if (oauthSession != null) {
       state.mySession!.updateSession(oauthSession, "oauth", oauthSession.__service)
       return true
