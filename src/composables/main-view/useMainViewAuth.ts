@@ -106,6 +106,16 @@ export function useMainViewAuth (options: Options) {
       // セッション状態を保持し、再接続後のリロードで自動ログインを可能にする
       // OAuthでログイン中、ネット切断時にリロードするとログアウトされ、かつ接続後にリロードしても自動ログインされない現象への対処
       if (currentAuthType === "oauth") {
+        // 明示的にログアウト済みのセッションは再ログインを促す
+        const session = state.mySession?.current
+        if (session?.active === false) {
+          state.openMessagePopup({
+            title: $t("reLoginFailed"),
+            text: $t("noSessionError"),
+          })
+          state.loginFormInitialSession = session
+        }
+
         return
       }
     }
