@@ -134,22 +134,28 @@ const hasListCard = embedRecord?.$type === "app.bsky.graph.defs#listView"
 const hasStarterPack = embedRecord?.record?.$type === "app.bsky.graph.starterpack"
 
 // メディア - 画像
-const embedImages: readonly TTImage[] =
+const embedImages: TTImage[] =
   embed?.images ??
   (embed?.media as any)?.images ??
   props.post.record?.embed?.images ?? // 3階層目の画像
   []
 
 // メディア - 動画
-const embedVideo: undefined | Readonly<TIVideo>  =
+const embedVideo: undefined | Readonly<TIVideo> =
   embed?.$type?.startsWith("app.bsky.embed.video")
     ? embed as unknown as TIVideo
     : embed?.media?.$type?.startsWith("app.bsky.embed.video")
       ? embed.media as unknown as TIVideo
       : undefined
 
-// メディア - 画像または動画を持つかどうか
-const hasMedia = embedImages.length > 0 || embedVideo != null
+// メディア - ギャラリー
+const embedGalleryItems: TTGalleryItem[] = embed?.items as TTGalleryItem[] ?? []
+
+// メディア - 添付ファイルを持つかどうか
+const hasAttachedFiles =
+  embedImages.length > 0 ||
+  embedVideo != null ||
+  embedGalleryItems.length > 0
 
 // メディア - 動画のアスペクト比
 // `imageMaxHeightRatio` を参照しているため computed
@@ -348,7 +354,7 @@ const hasAutomatedAccountLabel = props.post.author?.labels?.some((label) => labe
 
 // ラベル - ポストメディア
 const hasBlurMedia = computed((): boolean => {
-  return (hasMedia || hasLinkCard || hasFeedCard) && hasBlurMediaLabel.value
+  return (hasAttachedFiles || hasLinkCard || hasFeedCard) && hasBlurMediaLabel.value
 })
 const postMediaDisplay = computed((): boolean => {
   return !hasBlurMedia.value ||
@@ -816,15 +822,15 @@ async function deleteCustomBookmark (uri: string) {
 }
 
 // 画像ポップアップ
-function openImagePopup (imageIndex: number) {
+function openImagePopup (images: TTImage[] | TTGalleryItem[], imageIndex: number) {
   if (
-    embedImages[imageIndex].fullsize == null &&
-    embedImages[imageIndex].image == null
+    images[imageIndex].fullsize == null &&
+    images[imageIndex].image == null
   ) {
     return
   }
   mainState.imagePopupProps.did = props.post.author?.did
-  mainState.imagePopupProps.images = embedImages.map((image: TTImage) => {
+  mainState.imagePopupProps.images = images.map((image: TTImage) => {
     const result: TTImagePopupPropsImages = {
       smallUri: image.thumb ?? "/img/void.png",
       largeUri: image.fullsize ?? "/img/void.png",
@@ -842,7 +848,7 @@ function openImagePopup (imageIndex: number) {
 
     return result
   })
-  mainState.imagePopupProps.alts = embedImages.map((image: TTImage) => image.alt)
+  mainState.imagePopupProps.alts = images.map((image: TTImage) => image.alt)
   mainState.imagePopupProps.index = imageIndex
   mainState.imagePopupProps.display = true
 }
@@ -1242,8 +1248,8 @@ function toggleQuotePostDisplay () {
 
         <!-- ポストメディア -->
         <template v-if="postMediaDisplay">
-          <!-- 画像 -->
-          <template v-if="hasMedia">
+          <!-- 添付ファイル -->
+          <template v-if="hasAttachedFiles">
             <template v-if="forceHideMedia">
               <div class="omit-images">
                 <SVGIcon
@@ -1275,19 +1281,19 @@ function toggleQuotePostDisplay () {
                 <!-- 画像 -->
                 <div
                   v-if="embedImages.length > 0"
-                  class="quad-images"
-                  :data-number-of-images="embedImages.length"
+                  class="attached-items"
+                  :data-number-of-items="embedImages.length"
                 >
                   <div
                     v-for="image, imageIndex of embedImages"
                     :key="imageIndex"
-                    class="quad-image"
+                    class="attached-item"
                   >
                     <Thumbnail
                       :image="image"
                       :did="post.author?.did"
                       :hasTranslateLink="hasOtherLanguages"
-                      @click.stop="openImagePopup(imageIndex)"
+                      @click.stop="openImagePopup(embedImages, imageIndex)"
                     />
                   </div>
                 </div>
@@ -1325,6 +1331,25 @@ function toggleQuotePostDisplay () {
                     @translate="onTranslateVideoAlt"
                   />
                 </div>
+
+                <!-- ギャラリー -->
+                <div
+                  v-if="embedGalleryItems.length > 0"
+                  class="attached-items"
+                  :data-number-of-items="embedGalleryItems.length"
+                >
+                  <div
+                    v-for="item, itemIndex of embedGalleryItems"
+                    :key="itemIndex"
+                    class="attached-item"
+                  >
+                    <Thumbnail
+                      :image="item"
+                      :did="post.author?.did"
+                      @click.stop="openImagePopup(embedGalleryItems, itemIndex)"
+                    />
+                  </div>
+                </div>
               </template>
             </template>
             <template v-else>
@@ -1338,7 +1363,21 @@ function toggleQuotePostDisplay () {
                   :key="imageIndex"
                   :image="image"
                   :did="post.author?.did"
-                  @click.stop="openImagePopup(imageIndex)"
+                  @click.stop="openImagePopup(embedImages, imageIndex)"
+                />
+              </div>
+
+              <!-- ギャラリー -->
+              <div
+                v-if="embedGalleryItems.length > 0"
+                class="image-list"
+              >
+                <Thumbnail
+                  v-for="item, itemIndex of embedGalleryItems"
+                  :key="itemIndex"
+                  :image="item"
+                  :did="post.author?.did"
+                  @click.stop="openImagePopup(embedGalleryItems, itemIndex)"
                 />
               </div>
             </template>
@@ -1624,7 +1663,7 @@ function toggleQuotePostDisplay () {
     .external,
     .content-filtering-toggle,
     .image-folder-button,
-    .quad-images,
+    .attached-items,
     .video-container,
     .feed-card,
     .list-card,
@@ -2070,7 +2109,7 @@ function toggleQuotePostDisplay () {
   font-size: 0.875em;
 }
 
-.quad-images,
+.attached-items,
 .video-container {
   grid-area: i;
 
@@ -2098,9 +2137,14 @@ function toggleQuotePostDisplay () {
 
 .image-list {
   display: flex;
-  grid-gap: 0.5rem;
+  grid-gap: 0.25rem;
+  overflow-x: scroll;
+  overflow-y: hidden;
 
   .thumbnail:deep() {
+    overflow: unset;
+    min-width: fit-content;
+
     & > .lazy-image {
       height: 4rem;
     }

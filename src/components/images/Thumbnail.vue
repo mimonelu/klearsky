@@ -78,6 +78,13 @@ onMounted(async () => {
     return
   }
 
+  // `image.thumbnail` が存在する場合
+  if (props.image.thumbnail != null) {
+    state.src = props.image.thumbnail
+    state.loaded = true
+    return
+  }
+
   setBlobToSrc(props.image.image as unknown as BlobRef)
 })
 

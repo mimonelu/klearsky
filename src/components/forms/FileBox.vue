@@ -173,13 +173,13 @@ function getVideoSizes (): Array<undefined | {
     <template v-else>
       <div
         v-if="state.previews.length > 0"
-        class="quad-images"
-        :data-number-of-images="state.previews.length"
+        class="attached-items"
+        :data-number-of-items="state.previews.length"
       >
         <div
           v-for="preview, index of state.previews"
           :key="index"
-          class="quad-image"
+          class="attached-item"
         >
           <div class="thumbnail">
             <!-- 動画プレビュー -->
