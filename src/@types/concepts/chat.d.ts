@@ -10,6 +10,18 @@ interface TIChatConvo {
   rev: string
   status: TTChatConvoStatus
   unreadCount: number
+  kind: {
+    $type: "chat.bsky.convo.defs#directConvo"
+  } | {
+    $type: "chat.bsky.convo.defs#groupConvo"
+    createdAt: string
+    lockStatus: "locked" | "unlocked"
+    lockStatusModerationOverride: boolean
+    memberCount: number
+    memberLimit: number
+    name: string
+    unreadJoinRequestCount: number
+  }
 }
 
 interface TIChatMessage {

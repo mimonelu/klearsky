@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue"
+import { computed, inject, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import ChatPost from "@/components/next/Chat/ChatPost.vue"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -100,6 +100,15 @@ const easyFormProps: TTEasyForm = {
     */
   ],
 }
+
+const headerLabel = computed((): string => {
+  const result = props.myConvo?.data?.kind.$type === "chat.bsky.convo.defs#directConvo"
+    ? props.myConvo?.getMemberNames().join(", ")
+    : props.myConvo?.data?.kind.$type === "chat.bsky.convo.defs#groupConvo"
+      ? props.myConvo?.data?.kind.name
+      : $t("chat")
+  return result || $t("chat")
+})
 
 const popup = ref<InstanceType<typeof Popup>>()
 
@@ -272,7 +281,7 @@ function isMine (message: TIChatMessage): boolean {
     <template #header>
       <h2>
         <SVGIcon name="chat" />
-        <span translate="no">{{ myConvo != null ? myConvo.getMemberNames().join(", ") : $t("chat") }}</span>
+        <span translate="no">{{ headerLabel }}</span>
       </h2>
     </template>
     <template

@@ -146,7 +146,11 @@ function isMine (message: TIChatMessage): boolean {
             <SVGIcon name="volumeOff" />
           </div>
           <div class="convo-card__middle">
-            <div class="convo-card__user-list">
+            <!-- ダイレクトチャット用ヘッダー -->
+            <div
+              v-if="myConvo.data?.kind.$type === 'chat.bsky.convo.defs#directConvo'"
+              class="convo-card__user-list"
+            >
               <template
                 v-for="member of (myConvo.data as undefined | TIChatConvo)?.members"
                 :key="member.did"
@@ -171,6 +175,19 @@ function isMine (message: TIChatMessage): boolean {
                 </div>
               </template>
             </div>
+
+            <!-- グループチャット用ヘッダー -->
+            <div
+              v-else-if="myConvo.data?.kind.$type === 'chat.bsky.convo.defs#groupConvo'"
+              class="convo-card__group-header"
+            >
+              <SVGIcon name="chat" />
+              <div
+                class="convo-card__group-header__name"
+                translate="no"
+              >{{ myConvo.data?.kind.name || "&nbsp;" }}</div>
+            </div>
+
             <ChatPost
               v-if="myConvo.data?.lastMessage != null"
               class="convo-card__last-message"
@@ -336,6 +353,25 @@ function isMine (message: TIChatMessage): boolean {
       & > .avatar-link {
         font-size: 1rem;
       }
+    }
+
+    &__name {
+      font-weight: bold;
+      line-height: var(--line-height-low);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__group-header {
+    display: flex;
+    align-items: center;
+    grid-gap: 0.25em;
+    font-size: 0.875rem;
+    overflow: hidden;
+
+    & > .svg-icon {
+      fill: rgb(var(--post-color));
     }
 
     &__name {
