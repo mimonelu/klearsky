@@ -13,13 +13,36 @@ interface TIChatConvo {
 }
 
 interface TIChatMessage {
-  $type: string
+  $type: "chat.bsky.convo.defs#messageView"
+  data: {
+    $type: "chat.bsky.convo.defs#systemMessageDataEditGroup"
+    newName: string
+    oldName: string
+  } | {
+    $type:
+      "chat.bsky.convo.defs#systemMessageDataAddMember" |
+      "chat.bsky.convo.defs#systemMessageDataMemberLeave"
+    member: {
+      did: string
+    }
+    role?: string,
+    addedBy?: {
+      did: string
+    }
+  } | {
+    $type:
+      "chat.bsky.convo.defs#systemMessageDataLockConvo" |
+      "chat.bsky.convo.defs#systemMessageDataUnlockConvo"
+    lockedBy: {
+      did: string
+    }
+  }
   embed?: any
   facets?: any
   id: string
   reactions?: TIChatReaction[]
   rev: string
-  sender: { did: string }
+  sender?: { did: string }
   sentAt: string
   text?: string
   [k: string]: unknown

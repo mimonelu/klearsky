@@ -57,7 +57,7 @@ async function submitCallback () {
   }
   state.popupLoaderDisplay = true
   const response = await reportForm.value.createReport({
-    did: props.message?.sender.did,
+    did: props.message?.sender?.did,
     convoId: props.myConvo?.data?.id,
     messageId: props.message?.id,
   })

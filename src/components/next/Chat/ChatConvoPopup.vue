@@ -258,7 +258,7 @@ async function scrollToBottom () {
 }
 
 function isMine (message: TIChatMessage): boolean {
-  return message.sender.did === mainState.atp.data.did
+  return message.sender?.did === mainState.atp.data.did
 }
 </script>
 
@@ -280,19 +280,24 @@ function isMine (message: TIChatMessage): boolean {
       #body
     >
       <div class="chat-convo-popup__messages">
-        <div
+        <template
           v-for="message, messageIndex of myConvo.messages"
           :key="messageIndex"
-          class="chat-convo-popup__message"
-          :data-is-mine="isMine(message)"
         >
-          <ChatPost
-            position="chatMessage"
-            :myConvo="myConvo"
-            :message="message"
-            :isMine="isMine(message)"
-          />
-        </div>
+          <!-- ポストメッセージ -->
+          <div
+            v-if="message.$type === 'chat.bsky.convo.defs#messageView'"
+            class="chat-convo-popup__message"
+            :data-is-mine="isMine(message)"
+          >
+            <ChatPost
+              position="chatMessage"
+              :myConvo="myConvo"
+              :message="message"
+              :isMine="isMine(message)"
+            />
+          </div>
+        </template>
       </div>
     </template>
     <template

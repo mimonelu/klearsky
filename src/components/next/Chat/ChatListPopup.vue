@@ -73,7 +73,7 @@ async function chatConvoPopoverCallback (type: string) {
 }
 
 function isMine (message: TIChatMessage): boolean {
-  return message.sender.did === mainState.atp.data.did
+  return message.sender?.did === mainState.atp.data.did
 }
 </script>
 

@@ -23,7 +23,7 @@ const mainState = inject("state") as MainState
 
 const popover = ref(null)
 
-const isMine = props.message?.sender.did === mainState.atp.data.did
+const isMine = props.message?.sender?.did === mainState.atp.data.did
 
 onMounted(open)
 
@@ -110,7 +110,7 @@ function toggleReaction (reaction: string) {
 
       <!-- コピーする -->
       <MenuTickerCopyTextWrapper
-        :did="message.sender.did"
+        :did="message.sender?.did"
         :text="message.text"
         @close="emit('close')"
       />
