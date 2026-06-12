@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject } from "vue"
 import AvatarLink from "@/components/next/Avatar/AvatarLink.vue"
 import ChatPost from "@/components/next/Chat/ChatPost.vue"
 import Popup from "@/components/popups/Popup.vue"
@@ -12,6 +12,19 @@ const emit = defineEmits<{(event: string): void}>()
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const myConvoWithRepMember = computed(() =>
+  mainState.myChat!.myConvos.map((myConvo) => {
+    const members = (myConvo.data as undefined | TIChatConvo)?.members ?? []
+    let repMember: undefined | TTUser
+    if (myConvo.data?.kind.$type === "chat.bsky.convo.defs#directConvo") {
+      repMember = members.find((m) => m.did !== mainState.atp.data.did)
+    } else if (myConvo.data?.kind.$type === "chat.bsky.convo.defs#groupConvo") {
+      repMember = members[0]
+    }
+    return { myConvo, repMember }
+  })
+)
 
 function close () {
   emit("close")
@@ -107,7 +120,7 @@ function isMine (message: TIChatMessage): boolean {
       </div>
       <template v-else>
         <div
-          v-for="myConvo, myConvoIndex of mainState.myChat!.myConvos"
+          v-for="{ myConvo, repMember }, myConvoIndex of myConvoWithRepMember"
           :key="myConvoIndex"
           class="convo-card"
           :data-has-unread-messages="myConvo.data?.unreadCount > 0"
@@ -121,23 +134,18 @@ function isMine (message: TIChatMessage): boolean {
             <SVGIcon name="chat" />
             <span>{{ myConvo.data?.unreadCount }}</span>
           </div>
-          <div class="convo-card__avatars">
-            <template
-              v-for="member of (myConvo.data as undefined | TIChatConvo)?.members"
-              :key="member.did"
-            >
-              <AvatarLink
-                v-if="member.did !== mainState.atp.data.did"
-                :key="member.did"
-                :did="member.did"
-                :image="member.avatar"
-                :blur="hasBlurLabel(member)"
-                :isLabeler="member.associated?.labeler"
-                :actorStatus="member.status"
-                :title="member.displayName || member.handle"
-                @click.stop="close"
-              />
-            </template>
+          <div class="convo-card__avatar">
+            <AvatarLink
+              v-if="repMember != null"
+              :key="repMember.did"
+              :did="repMember.did"
+              :image="repMember.avatar"
+              :blur="hasBlurLabel(repMember)"
+              :isLabeler="repMember.associated?.labeler"
+              :actorStatus="repMember.status"
+              :title="repMember.displayName || repMember.handle"
+              @click.stop="close"
+            />
           </div>
           <div
             v-if="myConvo.data?.muted"
@@ -314,7 +322,7 @@ function isMine (message: TIChatMessage): boolean {
     }
   }
 
-  &__avatars {
+  &__avatar {
     grid-area: a;
     display: flex;
     flex-wrap: wrap;
