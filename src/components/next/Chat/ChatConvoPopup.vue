@@ -110,7 +110,7 @@ const headerLabel = computed((): string => {
   return result || $t("chat")
 })
 
-const memberDisplayNameByDid = computed((): Function => {
+const memberDisplayNameByDid = computed((): (did: string | undefined) => string => {
   return (did: undefined | string): string => {
     if (did == null) {
       return ""
@@ -316,53 +316,64 @@ function isMine (message: TIChatMessage): boolean {
             />
           </div>
 
-          <!-- システムメッセージ - グループの設定変更 - 名称変更 -->
-          <div
-            v-else-if="
-              message.data.$type === 'chat.bsky.convo.defs#systemMessageDataEditGroup' &&
-              message.data.newName != null
-            "
-            class="chat-convo-popup__system-message"
-          >
-            <span>{{ $t("グループ名が変更されました:") }}</span>
-            <span>{{ message.data.newName }}</span>
-          </div>
+          <!-- システムメッセージ -->
+          <template v-else-if="message.data != null">
+            <!-- システムメッセージ - グループの設定変更 - 名称変更 -->
+            <div
+              v-if="
+                message.data.$type === 'chat.bsky.convo.defs#systemMessageDataEditGroup' &&
+                message.data.newName != null
+              "
+              class="chat-convo-popup__system-message"
+            >
+              <span>{{ $t("グループ名が変更されました:") }}</span>
+              <span>{{ message.data.newName }}</span>
+            </div>
 
-          <!-- システムメッセージ - メンバーの入室 -->
-          <div
-            v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataAddMember'"
-            class="chat-convo-popup__system-message--positive"
-          >
-            <span>{{ $t("メンバーが入室しました:") }}</span>
-            <span>{{ memberDisplayNameByDid(message.data.member?.did) }}</span>
-          </div>
+            <!-- システムメッセージ - メンバーの入室 -->
+            <div
+              v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataAddMember'"
+              class="chat-convo-popup__system-message--positive"
+            >
+              <span>{{ $t("メンバーが入室しました:") }}</span>
+              <span>{{ memberDisplayNameByDid(message.data.member?.did) }}</span>
+            </div>
 
-          <!-- システムメッセージ - メンバーの退室 -->
-          <div
-            v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataMemberLeave'"
-            class="chat-convo-popup__system-message"
-          >
-            <span>{{ $t("メンバーが退室しました:") }}</span>
-            <span>{{ memberDisplayNameByDid(message.data.member?.did) }}</span>
-          </div>
+            <!-- システムメッセージ - メンバーの退室 -->
+            <div
+              v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataMemberLeave'"
+              class="chat-convo-popup__system-message"
+            >
+              <span>{{ $t("メンバーが退室しました:") }}</span>
+              <span>{{ memberDisplayNameByDid(message.data.member?.did) }}</span>
+            </div>
 
-          <!-- システムメッセージ - チャットのロック -->
-          <div
-            v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataLockConvo'"
-            class="chat-convo-popup__system-message--important"
-          >
-            <span>{{ $t("チャットがロックされました") }}</span>
-          </div>
+            <!-- システムメッセージ - チャットのロック -->
+            <div
+              v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataLockConvo'"
+              class="chat-convo-popup__system-message--important"
+            >
+              <span>{{ $t("チャットがロックされました") }}</span>
+            </div>
 
-          <!-- システムメッセージ - チャットのアンロック -->
-          <div
-            v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataUnlockConvo'"
-            class="chat-convo-popup__system-message--important"
-          >
-            <span>{{ $t("チャットのロックが解除されました") }}</span>
-          </div>
+            <!-- システムメッセージ - チャットのアンロック -->
+            <div
+              v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataUnlockConvo'"
+              class="chat-convo-popup__system-message--important"
+            >
+              <span>{{ $t("チャットのロックが解除されました") }}</span>
+            </div>
 
-          <!-- システムメッセージ - 不明なメッセージ -->
+            <!-- システムメッセージ - 不明なシステムメッセージ -->
+            <div
+              v-else
+              class="chat-convo-popup__system-message"
+            >
+              <span>{{ $t("不明なシステムメッセージ") }}</span>
+            </div>
+          </template>
+
+          <!-- 不明なメッセージ -->
           <div
             v-else
             class="chat-convo-popup__system-message"

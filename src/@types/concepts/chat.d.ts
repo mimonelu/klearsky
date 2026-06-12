@@ -26,7 +26,7 @@ interface TIChatConvo {
 
 interface TIChatMessage {
   $type: "chat.bsky.convo.defs#messageView"
-  data: {
+  data?: {
     $type: "chat.bsky.convo.defs#systemMessageDataEditGroup"
     newName: string
     oldName: string
