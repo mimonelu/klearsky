@@ -326,7 +326,7 @@ function isMine (message: TIChatMessage): boolean {
               "
               class="chat-convo-popup__system-message"
             >
-              <span>{{ $t("グループ名が変更されました:") }}</span>
+              <span>{{ $t("chatSystemMessageGroupNameChanged") }}</span>
               <span>{{ message.data.newName }}</span>
             </div>
 
@@ -335,7 +335,7 @@ function isMine (message: TIChatMessage): boolean {
               v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataAddMember'"
               class="chat-convo-popup__system-message--positive"
             >
-              <span>{{ $t("メンバーが入室しました:") }}</span>
+              <span>{{ $t("chatSystemMessageMemberJoined") }}</span>
               <span>{{ memberDisplayNameByDid(message.data.member?.did) }}</span>
             </div>
 
@@ -344,7 +344,7 @@ function isMine (message: TIChatMessage): boolean {
               v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataMemberLeave'"
               class="chat-convo-popup__system-message"
             >
-              <span>{{ $t("メンバーが退室しました:") }}</span>
+              <span>{{ $t("chatSystemMessageMemberLeft") }}</span>
               <span>{{ memberDisplayNameByDid(message.data.member?.did) }}</span>
             </div>
 
@@ -353,7 +353,7 @@ function isMine (message: TIChatMessage): boolean {
               v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataLockConvo'"
               class="chat-convo-popup__system-message--important"
             >
-              <span>{{ $t("チャットがロックされました") }}</span>
+              <span>{{ $t("chatSystemMessageLocked") }}</span>
             </div>
 
             <!-- システムメッセージ - チャットのアンロック -->
@@ -361,7 +361,7 @@ function isMine (message: TIChatMessage): boolean {
               v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataUnlockConvo'"
               class="chat-convo-popup__system-message--important"
             >
-              <span>{{ $t("チャットのロックが解除されました") }}</span>
+              <span>{{ $t("chatSystemMessageUnlocked") }}</span>
             </div>
 
             <!-- システムメッセージ - 不明なシステムメッセージ -->
@@ -369,7 +369,7 @@ function isMine (message: TIChatMessage): boolean {
               v-else
               class="chat-convo-popup__system-message"
             >
-              <span>{{ $t("不明なシステムメッセージ") }}</span>
+              <span>{{ $t("chatSystemMessageUnknownSystem") }}</span>
             </div>
           </template>
 
@@ -378,7 +378,7 @@ function isMine (message: TIChatMessage): boolean {
             v-else
             class="chat-convo-popup__system-message"
           >
-            <span>{{ $t("不明なメッセージ") }}</span>
+            <span>{{ $t("chatSystemMessageUnknown") }}</span>
           </div>
         </template>
       </div>
