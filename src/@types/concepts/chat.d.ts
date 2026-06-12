@@ -15,7 +15,7 @@ interface TIChatConvo {
   } | {
     $type: "chat.bsky.convo.defs#groupConvo"
     createdAt: string
-    lockStatus: "locked" | "unlocked"
+    lockStatus: "unlocked" | "locked" | "locked-permanently"
     lockStatusModerationOverride: boolean
     memberCount: number
     memberLimit: number

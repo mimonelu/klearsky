@@ -127,6 +127,7 @@ function isMine (message: TIChatMessage): boolean {
           :data-muted="myConvo.data?.muted"
           @click="openChatConvoPopup(myConvo)"
         >
+          <!-- 未読メッセージ数 -->
           <div
             v-if="myConvo.data?.unreadCount"
             class="convo-card__unread-count"
@@ -134,6 +135,8 @@ function isMine (message: TIChatMessage): boolean {
             <SVGIcon name="chat" />
             <span>{{ myConvo.data?.unreadCount }}</span>
           </div>
+
+          <!-- 代表アバター -->
           <div class="convo-card__avatar">
             <AvatarLink
               v-if="repMember != null"
@@ -147,41 +150,26 @@ function isMine (message: TIChatMessage): boolean {
               @click.stop="close"
             />
           </div>
+
+          <!-- ミュートアイコン -->
           <div
             v-if="myConvo.data?.muted"
             class="convo-card__muting"
           >
             <SVGIcon name="volumeOff" />
           </div>
+
           <div class="convo-card__middle">
             <!-- ダイレクトチャット用ヘッダー -->
             <div
               v-if="myConvo.data?.kind.$type === 'chat.bsky.convo.defs#directConvo'"
               class="convo-card__user-list"
             >
-              <template
-                v-for="member of (myConvo.data as undefined | TIChatConvo)?.members"
-                :key="member.did"
-              >
-                <div
-                  v-if="member.did !== mainState.atp.data.did"
-                  :key="member.did"
-                  class="convo-card__user-list__item"
-                >
-                  <AvatarLink
-                    :did="member.did"
-                    :image="member.avatar"
-                    :blur="hasBlurLabel(member)"
-                    :isLabeler="member.associated?.labeler"
-                    :actorStatus="member.status"
-                    :noLink="true"
-                  />
-                  <div
-                    class="convo-card__user-list__name"
-                    translate="no"
-                  >{{ member.displayName || member.handle }}</div>
-                </div>
-              </template>
+              <div
+                v-if="repMember != null"
+                class="convo-card__user-list__name"
+                translate="no"
+              >{{ repMember.displayName || repMember.handle }}</div>
             </div>
 
             <!-- グループチャット用ヘッダー -->
@@ -189,11 +177,45 @@ function isMine (message: TIChatMessage): boolean {
               v-else-if="myConvo.data?.kind.$type === 'chat.bsky.convo.defs#groupConvo'"
               class="convo-card__group-header"
             >
-              <SVGIcon name="chat" />
-              <div
-                class="convo-card__group-header__name"
-                translate="no"
-              >{{ myConvo.data?.kind.name || "&nbsp;" }}</div>
+              <div class="convo-card__group-header__top">
+                <div class="convo-card__group-header__item">
+                  <SVGIcon name="chat" />
+                  <div
+                    class="convo-card__group-header__label"
+                    translate="no"
+                  >{{ myConvo.data?.kind.name || "&nbsp;" }}</div>
+                </div>
+              </div>
+              <div class="convo-card__group-header__bottom">
+                <div class="convo-card__group-header__item">
+                  <SVGIcon name="people" />
+                  <div
+                    class="convo-card__group-header__label"
+                    translate="no"
+                  >{{ myConvo.data?.kind.memberCount ?? "-" }} / {{ myConvo.data?.kind.memberLimit ?? "-" }}</div>
+                </div>
+                <div
+                  class="convo-card__group-header__item"
+                  :data-item-type="(myConvo.data?.kind.unreadJoinRequestCount ?? 0) > 0 ? 'positive' : ''"
+                >
+                  <SVGIcon :name="(myConvo.data?.kind.unreadJoinRequestCount ?? 0) > 0 ? 'email' : 'emailCheck'" />
+                  <div
+                    class="convo-card__group-header__label"
+                    translate="no"
+                  >{{ myConvo.data?.kind.unreadJoinRequestCount ?? "-" }}</div>
+                </div>
+                <div
+                  v-if="myConvo.data?.kind.lockStatus !== 'unlocked'"
+                  class="convo-card__group-header__item"
+                  data-item-type="important"
+                >
+                  <SVGIcon name="lock" />
+                  <div
+                    class="convo-card__group-header__label"
+                    translate="no"
+                  >{{ myConvo.data?.kind.lockStatus != null ? $t(`chatLockStatus-${myConvo.data?.kind.lockStatus}`) : "-" }}</div>
+                </div>
+              </div>
             </div>
 
             <ChatPost
@@ -352,17 +374,6 @@ function isMine (message: TIChatMessage): boolean {
     font-size: 0.875rem;
     overflow: hidden;
 
-    &__item {
-      display: flex;
-      align-items: center;
-      grid-gap: 0.25em;
-      overflow: hidden;
-
-      & > .avatar-link {
-        font-size: 1rem;
-      }
-    }
-
     &__name {
       font-weight: bold;
       line-height: var(--line-height-low);
@@ -373,20 +384,54 @@ function isMine (message: TIChatMessage): boolean {
 
   &__group-header {
     display: flex;
-    align-items: center;
-    grid-gap: 0.25em;
+    flex-direction: column;
+    grid-gap: 0.5em;
     font-size: 0.875rem;
     overflow: hidden;
 
-    & > .svg-icon {
-      fill: rgb(var(--post-color));
+    &__top,
+    &__bottom {
+      display: flex;
+      grid-gap: 0.5em;
+      overflow: hidden;
+    }
+    &__top {
+      --alpha: 1.0;
+      font-weight: bold;
+    }
+    &__bottom {
+      --alpha: 0.5;
     }
 
-    &__name {
-      font-weight: bold;
+    &__item {
+      display: grid;
+      align-items: center;
+      grid-gap: 0.25em;
+      grid-template-columns: auto 1fr;
+      color: rgb(var(--fg-color), var(--alpha));
+      overflow: hidden;
+      &[data-item-type="positive"] {
+        --alpha: 1.0;
+        --fg-color: var(--green-color);
+      }
+      &[data-item-type="important"] {
+        --alpha: 1.0;
+        --fg-color: var(--notice-color);
+      }
+
+      & > .svg-icon {
+        fill: rgb(var(--fg-color), var(--alpha));
+      }
+      & > .svg-icon--chat {
+        fill: rgb(var(--post-color));
+      }
+    }
+
+    &__label {
       line-height: var(--line-height-low);
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
