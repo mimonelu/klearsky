@@ -110,6 +110,15 @@ const headerLabel = computed((): string => {
   return result || $t("chat")
 })
 
+const memberDisplayNameByDid = computed((): Function => {
+  return (did: undefined | string): string => {
+    if (did == null) {
+      return ""
+    }
+    return props.myConvo?.findMember(did)?.displayName || did || ""
+  }
+})
+
 const popup = ref<InstanceType<typeof Popup>>()
 
 const easyForm = ref<InstanceType<typeof EasyForm>>()
@@ -296,7 +305,7 @@ function isMine (message: TIChatMessage): boolean {
           <!-- ポストメッセージ -->
           <div
             v-if="message.$type === 'chat.bsky.convo.defs#messageView'"
-            class="chat-convo-popup__message"
+            class="chat-convo-popup__chat-message"
             :data-is-mine="isMine(message)"
           >
             <ChatPost
@@ -305,6 +314,60 @@ function isMine (message: TIChatMessage): boolean {
               :message="message"
               :isMine="isMine(message)"
             />
+          </div>
+
+          <!-- システムメッセージ - グループの設定変更 - 名称変更 -->
+          <div
+            v-else-if="
+              message.data.$type === 'chat.bsky.convo.defs#systemMessageDataEditGroup' &&
+              message.data.newName != null
+            "
+            class="chat-convo-popup__system-message"
+          >
+            <span>{{ $t("グループ名が変更されました:") }}</span>
+            <span>{{ message.data.newName }}</span>
+          </div>
+
+          <!-- システムメッセージ - メンバーの入室 -->
+          <div
+            v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataAddMember'"
+            class="chat-convo-popup__system-message--positive"
+          >
+            <span>{{ $t("メンバーが入室しました:") }}</span>
+            <span>{{ memberDisplayNameByDid(message.data.member?.did) }}</span>
+          </div>
+
+          <!-- システムメッセージ - メンバーの退室 -->
+          <div
+            v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataMemberLeave'"
+            class="chat-convo-popup__system-message"
+          >
+            <span>{{ $t("メンバーが退室しました:") }}</span>
+            <span>{{ memberDisplayNameByDid(message.data.member?.did) }}</span>
+          </div>
+
+          <!-- システムメッセージ - チャットのロック -->
+          <div
+            v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataLockConvo'"
+            class="chat-convo-popup__system-message--important"
+          >
+            <span>{{ $t("チャットがロックされました") }}</span>
+          </div>
+
+          <!-- システムメッセージ - チャットのアンロック -->
+          <div
+            v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataUnlockConvo'"
+            class="chat-convo-popup__system-message--important"
+          >
+            <span>{{ $t("チャットのロックが解除されました") }}</span>
+          </div>
+
+          <!-- システムメッセージ - 不明なメッセージ -->
+          <div
+            v-else
+            class="chat-convo-popup__system-message"
+          >
+            <span>{{ $t("不明なメッセージ") }}</span>
           </div>
         </template>
       </div>
@@ -392,7 +455,7 @@ function isMine (message: TIChatMessage): boolean {
     grid-gap: 1rem;
   }
 
-  &__message {
+  &__chat-message {
     max-width: 87.5%;
     &[data-is-mine="true"] {
       margin-left: auto;
@@ -400,6 +463,32 @@ function isMine (message: TIChatMessage): boolean {
     &[data-is-mine="false"] {
       margin-right: auto;
     }
+  }
+
+  &__system-message,
+  &__system-message--positive,
+  &__system-message--important {
+    --alpha: 0.5;
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 0.25rem;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0 1rem;
+
+    & > span {
+      color: rgb(var(--fg-color), var(--alpha));
+      font-size: 0.875rem;
+      line-height: var(--line-height-middle);
+      word-break: break-word;
+    }
+  }
+  &__system-message--positive {
+    --fg-color: var(--green-color);
+    --alpha: 1.0;
+  }
+  &__system-message--important {
+    --alpha: 1.0;
   }
 
   &__form-container {
