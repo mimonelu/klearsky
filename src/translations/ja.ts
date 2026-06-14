@@ -616,6 +616,7 @@ export default () => ({
   "muteChatConvo": "ミュートする",
   "unmuteChatConvo": "ミュートを解除する",
   "leaveChatConvo": "退室する",
+  "rejectChatRequestConfirmation": "このグループチャットのリクエストを拒否します。よろしいですか？",
   "deleteChatMessage": "自分だけ削除",
   "chatMessagePlaceholder": "メッセージ",
   "chatUrlPlaceholder": "埋め込みポストのAT URI",

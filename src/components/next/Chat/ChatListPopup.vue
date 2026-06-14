@@ -34,14 +34,21 @@ function hasBlurLabel (user: TTUser): boolean {
   return hasUserBlurLabel(mainState, user.labels)
 }
 
-function acceptRequest (myConvo: TIMyConvo) {
+async function acceptRequest (myConvo: TIMyConvo) {
   // chat.bsky.convo.acceptConvo
   console.log(myConvo)
 }
 
-function rejectRequest (myConvo: TIMyConvo) {
-  // chat.bsky.convo.rejectConvo
-  console.log(myConvo)
+async function rejectRequest (myConvo: TIMyConvo) {
+  Util.blurElement()
+  if (await mainState.openConfirmationPopup({
+    title: $t("confirmation"),
+    text: $t("rejectChatRequestConfirmation"),
+  })) {
+    mainState.loaderDisplay = true
+    await myConvo.leave()
+    mainState.loaderDisplay = false
+  }
 }
 
 function openChatListPopover ($event: Event) {

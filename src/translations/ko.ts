@@ -616,6 +616,7 @@ export default () => ({
   "muteChatConvo": "뮤트",
   "unmuteChatConvo": "뮤트 해제",
   "leaveChatConvo": "퇴장",
+  "rejectChatRequestConfirmation": "이 그룹 채팅 요청을 거절하시겠습니까?",
   "deleteChatMessage": "나만 삭제",
   "chatMessagePlaceholder": "메시지",
   "chatUrlPlaceholder": "임베드 게시물 AT URI",

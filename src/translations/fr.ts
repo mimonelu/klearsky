@@ -616,6 +616,7 @@ export default () => ({
   "muteChatConvo": "Cacher",
   "unmuteChatConvo": "Activer le son",
   "leaveChatConvo": "Quitter",
+  "rejectChatRequestConfirmation": "Refuser cette invitation de groupe ?",
   "deleteChatMessage": "Effacer pour moi",
   "chatMessagePlaceholder": "Message",
   "chatUrlPlaceholder": "URI AT pour publication intégrée",
