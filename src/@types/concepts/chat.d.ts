@@ -2,6 +2,8 @@ type TTChatConvoStatus = "accepted" | "request" | "declined"
 
 type TTAllowIncoming = "all" | "none" | "following" | (string & {})
 
+type TTAllowGroupInvites = "all" | "none" | "following" | (string & {})
+
 interface TIChatConvo {
   id: string
   lastMessage?: TIChatMessage
@@ -83,6 +85,7 @@ interface TIFetchChatDeclarationsResponse {
     uri: string
     value: {
       allowIncoming: TTAllowIncoming
+      allowGroupInvites?: TTAllowGroupInvites
     }
   }[]
 }

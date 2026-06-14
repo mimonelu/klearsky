@@ -38,13 +38,27 @@ export default class MyChat {
     return [...new Set(result.logs.map((log) => log.convoId))]
   }
 
-  async setDeclaration (allowIncoming: TTAllowIncoming): Promise<boolean> {
+  async setAllowIncoming (allowIncoming: TTAllowIncoming): Promise<boolean> {
+    const allowGroupInvites = this.mainState.userProfile?.associated?.chat?.allowGroupInvites ?? "following"
+    return await this.setDeclaration(allowIncoming, allowGroupInvites)
+  }
+
+  async setAllowGroupInvites (allowGroupInvites: TTAllowGroupInvites): Promise<boolean> {
+    const allowIncoming = this.mainState.userProfile?.associated?.chat?.allowIncoming ?? "following"
+    return await this.setDeclaration(allowIncoming, allowGroupInvites)
+  }
+
+  async setDeclaration (
+    allowIncoming: TTAllowIncoming,
+    allowGroupInvites: TTAllowGroupInvites
+  ): Promise<boolean> {
     const declarations = await this.mainState.atp.fetchChatDeclarations(this.mainState.atp.data.did, 1)
     if (declarations instanceof Error || declarations.records.length === 0) {
       // 作成
       const result = await this.mainState.atp.createChatDeclaration(
         this.mainState.atp.data.did,
-        allowIncoming
+        allowIncoming,
+        allowGroupInvites
       )
       if (result instanceof Error) {
         this.mainState.openErrorPopup(result, "MyChat/setDeclaration")
@@ -62,6 +76,7 @@ export default class MyChat {
         {
           "$type": "chat.bsky.actor.declaration",
           allowIncoming,
+          allowGroupInvites,
         }
       )
       if (result instanceof Error) {

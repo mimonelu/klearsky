@@ -17,7 +17,7 @@ interface TIAtpWrapper {
   createAgentWithPassword
     (service: string, pdsUrl?: string): boolean
   createChatDeclaration
-    (repo: string, allowIncoming: TTAllowIncoming): Promise<Error | TTCidUri>
+    (repo: string, allowIncoming: TTAllowIncoming, allowGroupInvites: TTAllowGroupInvites): Promise<Error | TTCidUri>
   createChatMessage
     (convoId: string, params: TTCreatePostParams): Promise<Error | TIChatMessage>
   createChatReaction

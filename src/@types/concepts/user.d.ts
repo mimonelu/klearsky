@@ -20,6 +20,7 @@ interface TIAssociated {
   }
   chat?: {
     allowIncoming: TTAllowIncoming
+    allowGroupInvites?: TTAllowGroupInvites
   }
   feedgens?: number
   labeler?: boolean

@@ -10,11 +10,11 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   display: boolean,
-  allowIncoming: ComputedRef<TTAllowIncoming>
+  allowGroupInvites: ComputedRef<TTAllowGroupInvites>
 }>({
   display: false,
-  allowIncoming: computed((): TTAllowIncoming => {
-    return mainState.userProfile?.associated?.chat?.allowIncoming ?? "following"
+  allowGroupInvites: computed((): TTAllowGroupInvites => {
+    return mainState.userProfile?.associated?.chat?.allowGroupInvites ?? "following"
   }),
 })
 
@@ -47,13 +47,13 @@ function close () {
   state.display = false
 }
 
-async function callback (type: TTAllowIncoming) {
+async function callback (allowGroupInvites: TTAllowGroupInvites) {
   Util.blurElement()
   close()
   mainState.loaderDisplay = true
-  if (await mainState.myChat!.setDeclaration(type)) {
+  if (await mainState.myChat!.setAllowGroupInvites(allowGroupInvites)) {
     if (mainState.userProfile?.associated?.chat != null) {
-      mainState.userProfile.associated.chat.allowIncoming = type
+      mainState.userProfile.associated.chat.allowGroupInvites = allowGroupInvites
     }
   }
   mainState.loaderDisplay = false
@@ -62,7 +62,7 @@ async function callback (type: TTAllowIncoming) {
 
 <template>
   <button
-    class="chat-declaration-select-popover-wrapper menu-ticker__sub-trigger"
+    class="chat-allow-group-invites-select-popover-wrapper menu-ticker__sub-trigger"
     ref="trigger"
     type="button"
     @click.prevent.stop
@@ -70,13 +70,13 @@ async function callback (type: TTAllowIncoming) {
     @mouseleave="close"
   >
     <SVGIcon :name="
-      state.allowIncoming === 'all'
+      state.allowGroupInvites === 'all'
         ? 'people'
-        : state.allowIncoming === 'following'
+        : state.allowGroupInvites === 'following'
           ? 'personHeart'
           : 'personOff'
     " />
-    <span>{{ $t("chatDeclarationSelect") }}</span>
+    <span>{{ $t("chatAllowGroupInvitesSelect") }}</span>
     <SVGIcon name="cursorRight" />
 
     <Popover
@@ -87,7 +87,7 @@ async function callback (type: TTAllowIncoming) {
       <menu class="list-menu">
         <!-- 全員可 -->
         <button
-          :disabled="state.allowIncoming === 'all'"
+          :disabled="state.allowGroupInvites === 'all'"
           @click.stop="callback('all')"
         >
           <SVGIcon name="people" />
@@ -96,7 +96,7 @@ async function callback (type: TTAllowIncoming) {
 
         <!-- フォロー中のみ -->
         <button
-          :disabled="state.allowIncoming === 'following'"
+          :disabled="state.allowGroupInvites === 'following'"
           @click.stop="callback('following')"
         >
           <SVGIcon name="personHeart" />
@@ -105,7 +105,7 @@ async function callback (type: TTAllowIncoming) {
 
         <!-- 全員不可 -->
         <button
-          :disabled="state.allowIncoming === 'none'"
+          :disabled="state.allowGroupInvites === 'none'"
           @click.stop="callback('none')"
         >
           <SVGIcon name="personOff" />
@@ -117,7 +117,7 @@ async function callback (type: TTAllowIncoming) {
 </template>
 
 <style lang="scss" scoped>
-.chat-declaration-select-popover-wrapper {
+.chat-allow-group-invites-select-popover-wrapper {
   &:deep() {
     .popover > .popover__content {
       padding: 0.5rem;

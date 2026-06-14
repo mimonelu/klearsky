@@ -1,7 +1,8 @@
 export default async function (
   this: TIAtpWrapper,
   repo: string,
-  allowIncoming: TTAllowIncoming
+  allowIncoming: TTAllowIncoming,
+  allowGroupInvites: TTAllowGroupInvites
 ): Promise<Error | TTCidUri> {
   if (this.agent == null) {
     return Error("noAgentError")
@@ -13,7 +14,10 @@ export default async function (
   const response: Error | TTCidUri =
     await this.agent.chat.bsky.actor.declaration.create(
       { repo },
-      { allowIncoming },
+      {
+        allowIncoming,
+        allowGroupInvites,
+      },
       headers
     )
       .then((value) => value)

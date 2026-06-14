@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue"
-import ChatDeclarationSelectPopoverWrapper from "@/components/next/Chat/ChatDeclarationSelectPopoverWrapper.vue"
+import ChatAllowIncomingSelectPopoverWrapper from "@/components/next/Chat/ChatAllowIncomingSelectPopoverWrapper.vue"
+import ChatAllowGroupInvitesSelectPopoverWrapper from "@/components/next/Chat/ChatAllowGroupInvitesSelectPopoverWrapper.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -97,8 +98,13 @@ async function updateChatList () {
         <span>{{ $t("addChatMember") }}</span>
       </button>
 
-      <!-- チャット公開設定ポップオーバー -->
-      <ChatDeclarationSelectPopoverWrapper
+      <!-- ダイレクトチャット招待設定ポップオーバー -->
+      <ChatAllowIncomingSelectPopoverWrapper
+        @close="emit('close')"
+      />
+
+      <!-- グループチャット招待設定ポップオーバー -->
+      <ChatAllowGroupInvitesSelectPopoverWrapper
         @close="emit('close')"
       />
 
