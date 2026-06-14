@@ -13,6 +13,8 @@ export default () => ({
   "cancel": "キャンセル",
   "yes": "はい",
   "no": "いいえ",
+  "accept": "承諾する",
+  "reject": "拒否する",
   "confirmation": "確認",
   "apply": "適用する",
   "release": "解除する",

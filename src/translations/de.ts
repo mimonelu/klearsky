@@ -13,6 +13,8 @@ export default () => ({
   "cancel": "Abbrechen",
   "yes": "Ja",
   "no": "Nein",
+  "accept": "Annehmen",
+  "reject": "Ablehnen",
   "confirmation": "OK",
   "apply": "Anwenden",
   "release": "Freigeben",

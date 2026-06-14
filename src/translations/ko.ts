@@ -13,6 +13,8 @@ export default () => ({
   "cancel": "취소",
   "yes": "예",
   "no": "아니오",
+  "accept": "수락",
+  "reject": "거절",
   "confirmation": "확인",
   "apply": "적용",
   "release": "해제",

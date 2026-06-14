@@ -34,6 +34,16 @@ function hasBlurLabel (user: TTUser): boolean {
   return hasUserBlurLabel(mainState, user.labels)
 }
 
+function acceptRequest (myConvo: TIMyConvo) {
+  // chat.bsky.convo.acceptConvo
+  console.log(myConvo)
+}
+
+function rejectRequest (myConvo: TIMyConvo) {
+  // chat.bsky.convo.rejectConvo
+  console.log(myConvo)
+}
+
 function openChatListPopover ($event: Event) {
   Util.blurElement()
   mainState.openChatListPopover($event.target)
@@ -41,7 +51,9 @@ function openChatListPopover ($event: Event) {
 
 function openChatConvoPopup (myConvo: TIMyConvo) {
   Util.blurElement()
-  mainState.openChatConvoPopup(myConvo)
+  if (myConvo.data?.status === "accepted") {
+    mainState.openChatConvoPopup(myConvo)
+  }
 }
 
 function openChatConvoPopover ($event: Event, myConvo: TIMyConvo) {
@@ -125,6 +137,7 @@ function isMine (message: TIChatMessage): boolean {
           class="convo-card"
           :data-has-unread-messages="myConvo.data?.unreadCount > 0"
           :data-muted="myConvo.data?.muted"
+          :data-status="myConvo.data?.status"
           @click="openChatConvoPopup(myConvo)"
         >
           <!-- 未読メッセージ数 -->
@@ -218,6 +231,30 @@ function isMine (message: TIChatMessage): boolean {
               </div>
             </div>
 
+            <!-- 受諾可否 -->
+            <div
+              v-if="myConvo.data?.status === 'request'"
+              class="convo-card__request group-parts"
+            >
+              <button
+                type="button"
+                class="button--bordered"
+                @click.stop="rejectRequest(myConvo)"
+              >
+                <SVGIcon name="cross" />
+                <span>{{ $t("reject") }}</span>
+              </button>
+              <button
+                type="button"
+                class="button"
+                @click.stop="acceptRequest(myConvo)"
+              >
+                <SVGIcon name="check" />
+                <span>{{ $t("accept") }}</span>
+              </button>
+            </div>
+
+            <!-- 最新メッセージ -->
             <ChatPost
               v-if="myConvo.data?.lastMessage != null"
               class="convo-card__last-message"
@@ -225,6 +262,7 @@ function isMine (message: TIChatMessage): boolean {
               :myConvo="myConvo"
               :isMine="isMine(myConvo.data.lastMessage)"
             />
+
             <div
               v-else
               class="textlabel convo-card__no-message"
@@ -270,7 +308,6 @@ function isMine (message: TIChatMessage): boolean {
 }
 
 .convo-card {
-  cursor: pointer;
   display: grid;
   grid-gap: 0.5rem 0;
   grid-template-columns: auto 1fr;
@@ -283,6 +320,9 @@ function isMine (message: TIChatMessage): boolean {
   }
   &[data-muted="true"] {
     background-color: rgb(var(--fg-color), 0.0625);
+  }
+  &[data-status="accepted"] {
+    cursor: pointer;
   }
 
   &__unread-count {
@@ -432,6 +472,12 @@ function isMine (message: TIChatMessage): boolean {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+  }
+
+  &__request {
+    & > button {
+      font-size: 0.875rem;
     }
   }
 
