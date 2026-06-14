@@ -35,8 +35,13 @@ function hasBlurLabel (user: TTUser): boolean {
 }
 
 async function acceptRequest (myConvo: TIMyConvo) {
-  // chat.bsky.convo.acceptConvo
-  console.log(myConvo)
+  Util.blurElement()
+  mainState.loaderDisplay = true
+  const result = await myConvo.accept()
+  mainState.loaderDisplay = false
+  if (result) {
+    mainState.openChatConvoPopup(myConvo)
+  }
 }
 
 async function rejectRequest (myConvo: TIMyConvo) {

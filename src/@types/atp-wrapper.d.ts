@@ -8,6 +8,8 @@ interface TIAtpWrapper {
     (mySession: TIMySession): void
   canLogin
     (): boolean
+  acceptChatConvo
+    (convoId: string): Promise<Error | undefined>
   createActivitySubscription
     (subject: string, post: boolean, reply: boolean): Promise<TTActivitySubscription | Error>
   createActorStatus

@@ -12,6 +12,7 @@ interface TIMyConvo {
   async updateRead (messageId?: string): Promise<boolean>
   async mute (): Promise<boolean>
   async unmute (): Promise<boolean>
+  async accept (): Promise<boolean>
   async leave (): Promise<boolean>
   findMember (did: string): undefined | TTUser
 }

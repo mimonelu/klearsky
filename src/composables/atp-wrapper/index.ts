@@ -1,5 +1,6 @@
 import type { AtpAgent } from "@atproto/api"
 import type { BrowserOAuthClient } from "@atproto/oauth-client-browser"
+import acceptChatConvo from "@/composables/atp-wrapper/chat/accept-chat-convo"
 import createActivitySubscription from "@/composables/atp-wrapper/create/create-activity-subscription"
 import createActorStatus from "@/composables/atp-wrapper/create/create-actor-status"
 import createAgentWithOAuth from "@/composables/atp-wrapper/create/create-agent-with-oauth"
@@ -228,6 +229,7 @@ class AtpWrapper implements TIAtpWrapper {
     // セッションが存在し、activeかつJWTがある場合のみ自動ログイン可能
     return session != null && session.active !== false && session.refreshJwt != null
   }
+  acceptChatConvo = acceptChatConvo
   createActivitySubscription = createActivitySubscription
   createActorStatus = createActorStatus
   createAgentWithOAuth = createAgentWithOAuth

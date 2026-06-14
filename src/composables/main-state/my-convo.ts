@@ -155,6 +155,21 @@ export default class MyConvo {
     return true
   }
 
+  async accept (): Promise<boolean> {
+    if (this.data == null) {
+      return false
+    }
+    const result = await this.mainState.atp.acceptChatConvo(this.data.id)
+    if (result instanceof Error) {
+      this.mainState.openErrorPopup(result, "MyChat/accept")
+      return false
+    }
+    if (this.data != null) {
+      this.data.status = "accepted"
+    }
+    return true
+  }
+
   async leave (): Promise<boolean> {
     if (this.data == null) {
       return false
