@@ -160,6 +160,13 @@ export default class MyChat {
       return aDate < bDate ? 1 : aDate > bDate ? - 1 : 0
     })
 
+    // 未読数でソート
+    this.myConvos.sort((a, b) => {
+      const aUnreadCount = a.data?.unreadCount ?? 0
+      const bUnreadCount = b.data?.unreadCount ?? 0
+      return aUnreadCount < bUnreadCount ? 1 : aUnreadCount > bUnreadCount ? - 1 : 0
+    })
+
     // ミュートチャットを最下段へ移動
     this.myConvos.sort((a, b) => {
       const aScore = (a.data?.muted ?? false) ? 0 : 1
