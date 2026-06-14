@@ -304,7 +304,12 @@ function isMine (message: TIChatMessage): boolean {
         >
           <!-- ポストメッセージ -->
           <div
-            v-if="message.$type === 'chat.bsky.convo.defs#messageView'"
+            v-if="
+              message.$type === 'chat.bsky.convo.defs#messageView' || (
+                // 送信直後のポストメッセージが不完全な形式で渡ってくる対策
+                message.text != null && message.data == null
+              )
+            "
             class="chat-convo-popup__chat-message"
             :data-is-mine="isMine(message)"
           >
