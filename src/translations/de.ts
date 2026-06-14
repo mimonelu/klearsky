@@ -624,6 +624,7 @@ export default () => ({
   "chatSystemMessageMemberJoined": "Mitglied beigetreten:",
   "chatSystemMessageMemberLeft": "Mitglied verlassen:",
   "chatSystemMessageLocked": "Chat gesperrt",
+  "chatSystemMessageLockedPermanently": "Chat dauerhaft gesperrt",
   "chatSystemMessageUnlocked": "Chat entsperrt",
   "chatSystemMessageUnknownSystem": "Unbekannte Systemnachricht",
   "chatSystemMessageUnknown": "Unbekannte Nachricht",

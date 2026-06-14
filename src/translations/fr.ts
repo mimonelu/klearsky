@@ -624,6 +624,7 @@ export default () => ({
   "chatSystemMessageMemberJoined": "Membre rejoint :",
   "chatSystemMessageMemberLeft": "Membre parti :",
   "chatSystemMessageLocked": "Clavardage verrouillé",
+  "chatSystemMessageLockedPermanently": "Clavardage verrouillé définitivement",
   "chatSystemMessageUnlocked": "Clavardage déverrouillé",
   "chatSystemMessageUnknownSystem": "Message système inconnu",
   "chatSystemMessageUnknown": "Message inconnu",

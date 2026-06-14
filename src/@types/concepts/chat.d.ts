@@ -46,7 +46,8 @@ interface TIChatMessage {
   } | {
     $type:
       "chat.bsky.convo.defs#systemMessageDataLockConvo" |
-      "chat.bsky.convo.defs#systemMessageDataUnlockConvo"
+      "chat.bsky.convo.defs#systemMessageDataUnlockConvo" |
+      "chat.bsky.convo.defs#systemMessageDataLockConvoPermanently"
     lockedBy: {
       did: string
     }

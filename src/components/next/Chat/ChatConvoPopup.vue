@@ -361,6 +361,14 @@ function isMine (message: TIChatMessage): boolean {
               <span>{{ $t("chatSystemMessageLocked") }}</span>
             </div>
 
+            <!-- システムメッセージ - チャットの永続ロック -->
+            <div
+              v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataLockConvoPermanently'"
+              class="chat-convo-popup__system-message--important"
+            >
+              <span>{{ $t("chatSystemMessageLockedPermanently") }}</span>
+            </div>
+
             <!-- システムメッセージ - チャットのアンロック -->
             <div
               v-else-if="message.data.$type === 'chat.bsky.convo.defs#systemMessageDataUnlockConvo'"

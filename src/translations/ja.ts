@@ -624,6 +624,7 @@ export default () => ({
   "chatSystemMessageMemberJoined": "メンバーが入室しました:",
   "chatSystemMessageMemberLeft": "メンバーが退室しました:",
   "chatSystemMessageLocked": "チャットがロックされました",
+  "chatSystemMessageLockedPermanently": "チャットが恒久的にロックされました",
   "chatSystemMessageUnlocked": "チャットのロックが解除されました",
   "chatSystemMessageUnknownSystem": "不明なシステムメッセージ",
   "chatSystemMessageUnknown": "不明なメッセージ",

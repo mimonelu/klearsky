@@ -624,6 +624,7 @@ export default () => ({
   "chatSystemMessageMemberJoined": "멤버가 입장했습니다:",
   "chatSystemMessageMemberLeft": "멤버가 퇴장했습니다:",
   "chatSystemMessageLocked": "채팅이 잠겼습니다",
+  "chatSystemMessageLockedPermanently": "채팅이 영구적으로 잠겼습니다",
   "chatSystemMessageUnlocked": "채팅 잠금이 해제되었습니다",
   "chatSystemMessageUnknownSystem": "알 수 없는 시스템 메시지",
   "chatSystemMessageUnknown": "알 수 없는 메시지",
