@@ -11,6 +11,7 @@ import ChatConvoPopover from "@/components/next/Chat/ChatConvoPopover.vue"
 import ChatConvoPopup from "@/components/next/Chat/ChatConvoPopup.vue"
 import ChatListPopup from "@/components/next/Chat/ChatListPopup.vue"
 import ChatListPopover from "@/components/next/Chat/ChatListPopover.vue"
+import ChatMembersPopup from "@/components/next/Chat/ChatMembersPopup.vue"
 import ChatMembersSelectPopup from "@/components/next/Chat/ChatMembersSelectPopup.vue"
 import ChatMessagePopover from "@/components/next/Chat/ChatMessagePopover.vue"
 import ConfirmationPopup from "@/components/popups/ConfirmationPopup.vue"
@@ -533,6 +534,15 @@ const {
           v-if="state.chatConvoPopupProps.display"
           v-bind="state.chatConvoPopupProps"
           @close="state.closeChatConvoPopup"
+        />
+      </Transition>
+
+      <!-- チャットメンバーポップアップ -->
+      <Transition>
+        <ChatMembersPopup
+          v-if="state.chatMembersPopupProps.display"
+          v-bind="state.chatMembersPopupProps"
+          @close="state.closeChatMembersPopup"
         />
       </Transition>
 

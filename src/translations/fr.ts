@@ -604,6 +604,7 @@ export default () => ({
   "noChatMessage": "Aucun message.",
   "startChat": "Clavarder",
   "addChatMember": "Ajouter un membre",
+  "chatMembers": "Membres",
   "chatMemberPlaceholder": "Nom d'affichage ou pseudonyme",
   "chatAllowIncomingSelect": "Accès au chat direct",
   "chatAllowGroupInvitesSelect": "Accès au chat de groupe",

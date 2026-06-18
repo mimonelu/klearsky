@@ -170,17 +170,28 @@ function onActivateContentFilteringToggle () {
           class="account-label-icon"
         />
       </DisplayName>
-      <AuthorHandle
-        :handle="user.handle"
-        :anonymizable="true"
-      />
-      <div class="description">
-        <template v-if="$slots.content == null">{{ user.description || "&emsp;" }}</template>
-        <slot
-          v-else
-          name="content"
+
+      <!-- `description` の有無でレイアウトを変更 -->
+      <template v-if="user.description != null">
+        <AuthorHandle
+          :handle="user.handle"
+          :anonymizable="true"
         />
-      </div>
+        <div class="description">
+          <template v-if="$slots.content == null">{{ user.description || "&emsp;" }}</template>
+          <slot
+            v-else
+            name="content"
+          />
+        </div>
+      </template>
+      <template v-else>
+        <AuthorHandle
+          class="description"
+          :handle="user.handle"
+          :anonymizable="true"
+        />
+      </template>
 
       <!-- プロフィールポップオーバートグル -->
       <button

@@ -522,6 +522,14 @@ interface MainState {
   openChatConvoPopup: Function
   closeChatConvoPopup: () => void
 
+  // ポップアップ - チャットメンバーポップアップ
+  chatMembersPopupProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+  }
+  openChatMembersPopup: Function
+  closeChatMembersPopup: () => void
+
   // ポップアップ - チャットメンバー選択ポップアップ
   chatMembersSelectPopupProps: {
     display: boolean

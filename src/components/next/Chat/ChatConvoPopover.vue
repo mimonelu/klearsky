@@ -44,7 +44,13 @@ function close () {
   emit("close")
 }
 
-async function callback (type: "unreadConvo" | "muteConvo" | "unmuteConvo" | "leaveConvo") {
+async function callback (type:
+  "openChatMembers" |
+  "unreadConvo" |
+  "muteConvo" |
+  "unmuteConvo" |
+  "leaveConvo"
+) {
   Util.blurElement()
   close()
   if (mainState.chatConvoPopoverCallback != null) {
@@ -63,8 +69,21 @@ async function callback (type: "unreadConvo" | "muteConvo" | "unmuteConvo" | "le
       v-if="myConvo != null"
       class="list-menu"
     >
+      <!-- チャットメンバーポップアップトリガー -->
+      <template v-if="myConvo.data?.kind.$type === 'chat.bsky.convo.defs#groupConvo'">
+        <button
+          type="button"
+          @click.stop="callback('openChatMembers')"
+        >
+          <SVGIcon name="people" />
+          <span>{{ $t("chatMembers") }}</span>
+        </button>
+        <hr />
+      </template>
+
       <!-- チャットルームの既読化 -->
       <button
+        type="button"
         :disabled="(myConvo?.data?.unreadCount ?? 0) === 0"
         @click.stop="callback('unreadConvo')"
       >
@@ -75,6 +94,7 @@ async function callback (type: "unreadConvo" | "muteConvo" | "unmuteConvo" | "le
       <!-- チャットルームのミュート -->
       <button
         v-if="!myConvo?.data?.muted"
+        type="button"
         @click.stop="callback('muteConvo')"
       >
         <SVGIcon name="volumeOff" />
@@ -84,6 +104,7 @@ async function callback (type: "unreadConvo" | "muteConvo" | "unmuteConvo" | "le
       <!-- チャットルームのミュート解除 -->
       <button
         v-else
+        type="button"
         @click.stop="callback('unmuteConvo')"
       >
         <SVGIcon name="volumeOn" />
@@ -91,7 +112,10 @@ async function callback (type: "unreadConvo" | "muteConvo" | "unmuteConvo" | "le
       </button>
 
       <!-- 退室 -->
-      <button @click.stop="callback('leaveConvo')">
+      <button
+        type="button"
+        @click.stop="callback('leaveConvo')"
+      >
         <SVGIcon name="alert" />
         <span>{{ $t("leaveChatConvo") }}</span>
       </button>

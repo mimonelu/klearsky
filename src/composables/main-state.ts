@@ -594,6 +594,14 @@ export const state: MainState = reactive<MainState>({
   openChatConvoPopup: openChatConvoPopup,
   closeChatConvoPopup: closeChatConvoPopup,
 
+  // ポップアップ - チャットメンバーポップアップ
+  chatMembersPopupProps: {
+    display: false,
+    myConvo: undefined,
+  },
+  openChatMembersPopup: openChatMembersPopup,
+  closeChatMembersPopup: closeChatMembersPopup,
+
   // ポップアップ - チャットメンバー選択ポップアップ
   chatMembersSelectPopupProps: {
     display: false,
@@ -2596,6 +2604,17 @@ function openChatConvoPopup (myConvo: TIMyConvo) {
 
 function closeChatConvoPopup () {
   state.chatConvoPopupProps.display = false
+}
+
+// ポップアップ - チャットメンバーポップアップ
+
+function openChatMembersPopup (myConvo: TIMyConvo) {
+  state.chatMembersPopupProps.myConvo = myConvo
+  state.chatMembersPopupProps.display = true
+}
+
+function closeChatMembersPopup () {
+  state.chatMembersPopupProps.display = false
 }
 
 // ポップアップ - チャットメンバー選択ポップアップ

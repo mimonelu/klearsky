@@ -604,6 +604,7 @@ export default () => ({
   "noChatMessage": "메시지가 없습니다.",
   "startChat": "채팅",
   "addChatMember": "채팅 멤버 선택",
+  "chatMembers": "멤버 목록",
   "chatMemberPlaceholder": "표시 이름 또는 핸들",
   "chatAllowIncomingSelect": "다이렉트 채팅 허용 선택",
   "chatAllowGroupInvitesSelect": "그룹 채팅 허용 선택",

@@ -604,6 +604,7 @@ export default () => ({
   "noChatMessage": "メッセージがありません。",
   "startChat": "チャット",
   "addChatMember": "チャットメンバーの選択",
+  "chatMembers": "メンバー一覧",
   "chatMemberPlaceholder": "表示名またはハンドル",
   "chatAllowIncomingSelect": "ダイレクトチャットの招待設定",
   "chatAllowGroupInvitesSelect": "グループチャットの招待設定",

@@ -604,6 +604,7 @@ export default () => ({
   "noChatMessage": "No message.",
   "startChat": "Chat",
   "addChatMember": "Select chat member",
+  "chatMembers": "Members",
   "chatMemberPlaceholder": "Display name or handle",
   "chatAllowIncomingSelect": "Select direct chat access",
   "chatAllowGroupInvitesSelect": "Select group chat access",
