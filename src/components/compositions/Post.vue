@@ -2138,7 +2138,7 @@ function toggleQuotePostDisplay () {
 .image-list {
   display: flex;
   grid-gap: 0.25rem;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
 
   .thumbnail:deep() {
