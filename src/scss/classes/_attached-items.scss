@@ -52,92 +52,23 @@
     & > .attached-item:nth-child(4) { grid-area: d;}
   }
 
-  &[data-number-of-items="5"] {
-    grid-template-areas: "a b" "a c" "d e";
-    grid-auto-columns: 0.5fr;
-    grid-auto-rows: 0.5fr;
-    aspect-ratio: 10 / 9;
-
-    & > .attached-item:nth-child(1) { grid-area: a;}
-    & > .attached-item:nth-child(2) { grid-area: b;}
-    & > .attached-item:nth-child(3) { grid-area: c;}
-    & > .attached-item:nth-child(4) { grid-area: d;}
-    & > .attached-item:nth-child(5) { grid-area: e;}
-  }
-
-  &[data-number-of-items="6"] {
-    grid-template-areas:
-      "a b"
-      "a c"
-      "e d"
-      "f d";
-    grid-auto-columns: 0.5fr;
-    grid-auto-rows: 0.5fr;
-    aspect-ratio: 1 / 1;
-
-    & > .attached-item:nth-child(1) { grid-area: a;}
-    & > .attached-item:nth-child(2) { grid-area: b;}
-    & > .attached-item:nth-child(3) { grid-area: c;}
-    & > .attached-item:nth-child(4) { grid-area: d;}
-    & > .attached-item:nth-child(5) { grid-area: e;}
-    & > .attached-item:nth-child(6) { grid-area: f;}
-  }
-
-  &[data-number-of-items="7"] {
-    grid-template-areas:
-      "a b"
-      "a c"
-      "d e"
-      "f g";
-    grid-auto-columns: 0.5fr;
-    grid-auto-rows: 0.5fr;
-    aspect-ratio: 1 / 1;
-
-    & > .attached-item:nth-child(1) { grid-area: a;}
-    & > .attached-item:nth-child(2) { grid-area: b;}
-    & > .attached-item:nth-child(3) { grid-area: c;}
-    & > .attached-item:nth-child(4) { grid-area: d;}
-    & > .attached-item:nth-child(5) { grid-area: e;}
-    & > .attached-item:nth-child(6) { grid-area: f;}
-    & > .attached-item:nth-child(7) { grid-area: g;}
-  }
-
-  &[data-number-of-items="8"] {
-    grid-template-columns: repeat(2, 0.5fr);
-
-    & > .attached-item {
-      aspect-ratio: 2 / 1;
-    }
-  }
-
-  &[data-number-of-items="9"] {
-    grid-template-columns: repeat(3, 0.5fr);
-
-    & > .attached-item {
-      aspect-ratio: 1 / 1;
-    }
-  }
-
+  &[data-number-of-items="5"],
+  &[data-number-of-items="6"],
+  &[data-number-of-items="7"],
+  &[data-number-of-items="8"],
+  &[data-number-of-items="9"],
   &[data-number-of-items="10"] {
-    grid-template-areas:
-      "a a a a a a a a a a a a"
-      "b b b b b b c c c c c c"
-      "d d d d e e e e f f f f"
-      "g g g h h h i i i j j j";
-    grid-auto-columns: 0.5fr;
-    grid-template-rows: 0.4fr 0.3fr 0.2fr 0.1fr;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 2 / 1;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 0;
 
-    & > .attached-item:nth-child(1) { grid-area: a;}
-    & > .attached-item:nth-child(2) { grid-area: b;}
-    & > .attached-item:nth-child(3) { grid-area: c;}
-    & > .attached-item:nth-child(4) { grid-area: d;}
-    & > .attached-item:nth-child(5) { grid-area: e;}
-    & > .attached-item:nth-child(6) { grid-area: f;}
-    & > .attached-item:nth-child(7) { grid-area: g;}
-    & > .attached-item:nth-child(8) { grid-area: h;}
-    & > .attached-item:nth-child(9) { grid-area: i;}
-    & > .attached-item:nth-child(10) { grid-area: j;}
+    & > .attached-item {
+      aspect-ratio: 4 / 5;
+      flex-shrink: 0;
+    }
   }
 
   & > .attached-item {
