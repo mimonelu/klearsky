@@ -24,6 +24,7 @@ import OfficialBookmarkButton from "@/components/next/OfficialBookmark/OfficialB
 import Post from "@/components/compositions/Post.vue"
 import QuoteRepostButton from "@/components/buttons/QuoteRepostButton.vue"
 import RepostButton from "@/components/buttons/RepostButton.vue"
+import Slider from "@/components/next/Slider/Slider.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Thumbnail from "@/components/images/Thumbnail.vue"
@@ -1333,7 +1334,7 @@ function toggleQuotePostDisplay () {
                 </div>
 
                 <!-- ギャラリー -->
-                <div
+                <Slider
                   v-if="embedGalleryItems.length > 0"
                   class="attached-items"
                   :data-number-of-items="embedGalleryItems.length"
@@ -1349,7 +1350,7 @@ function toggleQuotePostDisplay () {
                       @click.stop="openImagePopup(embedGalleryItems, itemIndex)"
                     />
                   </div>
-                </div>
+                </Slider>
               </template>
             </template>
             <template v-else>
