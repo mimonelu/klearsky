@@ -5,7 +5,7 @@
 import { onBeforeUnmount, onMounted, ref, type Ref } from "vue"
 
 const DRAG_THRESHOLD = 4
-const DRAG_MULTIPLIER = 1.75
+const DRAG_MULTIPLIER = 1.5
 const slider: Ref<null | HTMLElement> = ref(null)
 
 let moving = false
