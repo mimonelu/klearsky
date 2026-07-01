@@ -14,25 +14,25 @@ let startClientX = 0
 let startScrollLeft = 0
 
 onMounted(() => {
+  window.addEventListener("pointermove", onPointerMove, false)
+  window.addEventListener("pointerup", onPointerUp, false)
+  window.addEventListener("click", onClick, true)
   if (slider.value == null) {
     return
   }
   slider.value.addEventListener("pointerdown", onPointerDown, false)
-  window.addEventListener("pointermove", onPointerMove, false)
-  window.addEventListener("pointerup", onPointerUp, false)
   slider.value.addEventListener("pointercancel", onPointerUp, false)
-  slider.value.addEventListener("click", onClick, true)
 })
 
 onBeforeUnmount(() => {
+  window.removeEventListener("pointermove", onPointerMove, false)
+  window.removeEventListener("pointerup", onPointerUp, false)
+  window.removeEventListener("click", onClick, true)
   if (slider.value == null) {
     return
   }
   slider.value.removeEventListener("pointerdown", onPointerDown, false)
-  window.removeEventListener("pointermove", onPointerMove, false)
-  window.removeEventListener("pointerup", onPointerUp, false)
   slider.value.removeEventListener("pointercancel", onPointerUp, false)
-  slider.value.removeEventListener("click", onClick, true)
 })
 
 function onPointerDown (event: PointerEvent) {
