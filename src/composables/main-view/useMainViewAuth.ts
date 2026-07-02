@@ -181,7 +181,14 @@ export function useMainViewAuth (options: Options) {
       const errorMessage = (error as Error)?.message ?? ""
       // エラーメッセージをローカライズ
       if (errorMessage.includes("Failed to resolve identity")) {
-        state.openErrorPopup($t("oauthResolveIdentityError"), "MainView/oauthLogin")
+        // handle/DIDが実在しない場合だけでなく、ネットワークエラー等も同じメッセージで
+        // ラップされて届くため、原因（cause）が取得できる場合は併記する
+        const cause = (error as { cause?: unknown })?.cause
+        const causeMessage = cause instanceof Error ? cause.message : undefined
+        const message = causeMessage
+          ? `${$t("oauthResolveIdentityError")} (${causeMessage})`
+          : $t("oauthResolveIdentityError")
+        state.openErrorPopup(message, "MainView/oauthLogin")
       } else {
         state.openErrorPopup(error as Error, "MainView/oauthLogin")
       }
