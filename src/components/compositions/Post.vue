@@ -158,29 +158,6 @@ const hasAttachedFiles =
   embedVideo != null ||
   embedGalleryItems.length > 0
 
-// メディア - 動画のアスペクト比
-// `imageMaxHeightRatio` を参照しているため computed
-const embedVideoAspectRatio = computed((): string => {
-  if (
-    embedVideo?.aspectRatio == null ||
-    embedVideo.aspectRatio.width == null ||
-    embedVideo.aspectRatio.height == null
-  ) {
-    return "unset"
-  }
-  const aspectHeight =
-    embedVideo.aspectRatio.height /
-    embedVideo.aspectRatio.width
-  if (!mainState.currentSetting.imageMaxHeightRatio) {
-    return `1 / ${aspectHeight}`
-  }
-  const computedHeight = Math.min(
-    aspectHeight,
-    mainState.currentSetting.imageMaxHeightRatio
-  )
-  return `1 / ${computedHeight}`
-})
-
 // メディア - メディア表示判定
 const shouldDisplayMedia = computed(() => {
   const setting = mainState.currentSetting.imageFolding
@@ -1310,7 +1287,7 @@ function toggleQuotePostDisplay () {
                     :cid="embedVideo.cid ?? embedVideo.video?.ref?.toString()"
                     :poster="embedVideo.thumbnail"
                     :preload="mainState.currentSetting.videoPreload"
-                    :style="{ 'aspect-ratio': embedVideoAspectRatio }"
+                    :style="{ 'aspect-ratio': Util.getAspectRatio(embedVideo?.aspectRatio, mainState.currentSetting.imageMaxHeightRatio) }"
                     @updateVideoType="(videoType) => updateVideoType(videoType as string)"
                     @click.stop
                   />
@@ -1343,6 +1320,7 @@ function toggleQuotePostDisplay () {
                     v-for="item, itemIndex of embedGalleryItems"
                     :key="itemIndex"
                     class="attached-item"
+                    :style="{ 'aspect-ratio': Util.getAspectRatio(item.aspectRatio, mainState.currentSetting.imageMaxHeightRatio) }"
                   >
                     <Thumbnail
                       :image="item"

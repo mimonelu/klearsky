@@ -64,7 +64,9 @@
     min-width: 0;
 
     & > .attached-item {
+      // aspectRatio 未設定の場合のデフォルト値
       aspect-ratio: 4 / 5;
+
       flex-shrink: 0;
     }
   }

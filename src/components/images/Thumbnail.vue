@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive } from "vue"
+import { inject, onMounted, reactive } from "vue"
 import type { BlobRef } from "@atproto/api"
 import LazyImage from "@/components/images/LazyImage.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -24,22 +24,6 @@ const state = reactive<{
   src: null,
   loaded: false,
   errored: false,
-})
-
-// 画像のアスペクト比
-const aspectRatio = computed((): string => {
-  if (props.image?.aspectRatio == null) {
-    return "unset"
-  }
-  const aspectHeight = props.image.aspectRatio.height / props.image.aspectRatio.width
-  if (!mainState.currentSetting.imageMaxHeightRatio) {
-    return `1 / ${aspectHeight}`
-  }
-  const computedHeight = Math.min(
-    aspectHeight,
-    mainState.currentSetting.imageMaxHeightRatio
-  )
-  return `1 / ${computedHeight}`
 })
 
 const BLOB_MIME_TYPES = [
@@ -120,7 +104,7 @@ function onActivateAlt (alt: string) {
     <LazyImage
       :src="state.src ?? undefined"
       :alt="image?.alt"
-      :style="{ 'aspect-ratio': aspectRatio }"
+      :style="{ 'aspect-ratio': Util.getAspectRatio(image?.aspectRatio, mainState.currentSetting.imageMaxHeightRatio) }"
     />
     <button
       v-if="image?.alt"
