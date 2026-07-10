@@ -125,8 +125,8 @@ export default async function (
       params.medias?.map((file: File): Promise<Error | null | BlobRef> => {
         return atp.createFileBlobRef({
           file,
-          maxWidth: 2000,
-          maxHeight: 2000,
+          maxWidth: 4000,
+          maxHeight: 4000,
           maxSize: CONSTS.MAX_IMAGE_FILE_SIZE,
         })
       }) ?? []
